@@ -4,22 +4,58 @@ import {
 	AuthAuditLogService,
 	AuthCacheService,
 	EmailService,
+	OidcClientService,
 	RoleService,
 	SpaceService,
 	TokenService,
 	TokenStorageService,
 	UserService,
 } from "@cocrepo/service";
-import { Test, type TestingModule } from "@nestjs/testing";
 import { ClsService } from "nestjs-cls";
 import { AuthApplicationService } from "../src/auth.application-service";
 
 function buildAccessToken(sub: string, expOffsetSeconds = 3600): string {
 	const exp = Math.floor(Date.now() / 1000) + expOffsetSeconds;
-	const payload = Buffer.from(
-		JSON.stringify({ sub, exp }),
-	).toString("base64url");
+	const payload = Buffer.from(JSON.stringify({ sub, exp })).toString(
+		"base64url",
+	);
 	return `header.${payload}.signature`;
+}
+
+function buildOidcClient(
+	clientId: string,
+	overrides: Partial<{
+		clientSecret: string | null;
+		redirectUri: string;
+		loginUrl: string;
+		defaultReturnTo: string;
+		isActive: boolean;
+	}> = {},
+) {
+	return {
+		id: `${clientId}-db-id`,
+		clientId,
+		clientSecret: `${clientId}-secret`,
+		clientName: `${clientId} app`,
+		redirectUris: [
+			overrides.redirectUri ||
+				`http://localhost:3000/api/v1/auth/callback?clientId=${clientId}`,
+		],
+		loginUrl: overrides.loginUrl || `http://localhost:3000/${clientId}/login`,
+		defaultReturnTo:
+			overrides.defaultReturnTo || `http://localhost:3000/${clientId}`,
+		grantTypes: ["authorization_code", "refresh_token"],
+		responseTypes: ["code"],
+		tokenEndpointAuthMethod: "client_secret_post",
+		scope: "openid profile email roles",
+		isActive: overrides.isActive ?? true,
+		logoUri: null,
+		policyUri: null,
+		tosUri: null,
+		removedAt: null,
+		createdAt: new Date(),
+		updatedAt: new Date(),
+	};
 }
 
 describe("AuthApplicationService", () => {
@@ -33,6 +69,7 @@ describe("AuthApplicationService", () => {
 	let mockAuthAuditLogService: jest.Mocked<AuthAuditLogService>;
 	let mockEmailService: jest.Mocked<EmailService>;
 	let mockOidcFacade: jest.Mocked<OidcFacade>;
+	let mockOidcClientService: jest.Mocked<OidcClientService>;
 	let mockClsService: jest.Mocked<ClsService>;
 
 	beforeEach(async () => {
@@ -40,6 +77,10 @@ describe("AuthApplicationService", () => {
 			getByIdWithTenants: jest.fn(),
 			findUserForAuth: jest.fn(),
 			createUserForSignUp: jest.fn(),
+			changePassword: jest.fn(),
+			unlockAccount: jest.fn(),
+			forceResetPassword: jest.fn(),
+			getSecurityInfo: jest.fn(),
 		} as unknown as jest.Mocked<UserService>;
 
 		mockRolesService = {
@@ -94,35 +135,81 @@ describe("AuthApplicationService", () => {
 		} as unknown as jest.Mocked<ClsService>;
 
 		mockOidcFacade = {
-			createAuthorizationRequest: jest.fn().mockReturnValue({
+			createAuthorizationRequest: jest.fn().mockImplementation((client) => ({
 				state: "state-token",
 				codeVerifier: "verifier-token",
-				authorizationUrl:
-					"http://localhost:3007/oidc/auth?response_type=code&code_challenge=test",
-			}),
+				authorizationUrl: `http://localhost:3007/oidc/auth?client_id=${client.clientId}`,
+			})),
 			exchangeCodeForTokens: jest.fn(),
 			refreshTokens: jest.fn(),
 			revokeToken: jest.fn(),
 		} as unknown as jest.Mocked<OidcFacade>;
 
-		const module: TestingModule = await Test.createTestingModule({
-			providers: [
-				AuthApplicationService,
-				{ provide: UserService, useValue: mockUsersService },
-				{ provide: RoleService, useValue: mockRolesService },
-				{ provide: SpaceService, useValue: mockSpacesService },
-				{ provide: TokenService, useValue: mockTokenService },
-				{ provide: TokenStorageService, useValue: mockTokenStorageService },
-				{ provide: AuthCacheService, useValue: mockAuthCacheService },
-				{ provide: AuthAuditLogService, useValue: mockAuthAuditLogService },
-				{ provide: EmailService, useValue: mockEmailService },
-				{ provide: OidcFacade, useValue: mockOidcFacade },
-				{ provide: ClsService, useValue: mockClsService },
-			],
-		}).compile();
+		mockOidcClientService = {
+			getAuthShellClientByClientId: jest
+				.fn()
+				.mockImplementation(async ({ clientId }) => {
+					if (clientId === "storybook") {
+						return buildOidcClient("storybook", {
+							redirectUri:
+								"http://localhost:6006/api/v1/auth/callback?clientId=storybook",
+							loginUrl: "http://localhost:6006/__storybook_auth/login",
+							defaultReturnTo: "http://localhost:6006/",
+						});
+					}
+					if (clientId === "idp-web") {
+						return buildOidcClient("idp-web", {
+							redirectUri:
+								"http://localhost:3008/api/v1/auth/callback?clientId=idp-web",
+							loginUrl: "http://localhost:3008/auth/login",
+							defaultReturnTo: "http://localhost:3008/dashboard",
+						});
+					}
+					return buildOidcClient("admin-web", {
+						redirectUri:
+							"http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
+						loginUrl: "http://localhost:3000/admin/auth/login",
+						defaultReturnTo: "http://localhost:3000/admin/dashboard",
+					});
+				}),
+			getByClientId: jest.fn().mockImplementation(async (clientId: string) => {
+				if (clientId === "storybook") {
+					return buildOidcClient("storybook", {
+						redirectUri:
+							"http://localhost:6006/api/v1/auth/callback?clientId=storybook",
+						loginUrl: "http://localhost:6006/__storybook_auth/login",
+						defaultReturnTo: "http://localhost:6006/",
+					});
+				}
+				if (clientId === "idp-web") {
+					return buildOidcClient("idp-web", {
+						redirectUri:
+							"http://localhost:3008/api/v1/auth/callback?clientId=idp-web",
+						loginUrl: "http://localhost:3008/auth/login",
+						defaultReturnTo: "http://localhost:3008/dashboard",
+					});
+				}
+				return buildOidcClient("admin-web", {
+					redirectUri:
+						"http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
+					loginUrl: "http://localhost:3000/admin/auth/login",
+					defaultReturnTo: "http://localhost:3000/admin/dashboard",
+				});
+			}),
+		} as unknown as jest.Mocked<OidcClientService>;
 
-		applicationService = module.get<AuthApplicationService>(
-			AuthApplicationService,
+		applicationService = new AuthApplicationService(
+			mockUsersService,
+			mockRolesService,
+			mockSpacesService,
+			mockTokenService,
+			mockTokenStorageService,
+			mockAuthCacheService,
+			mockAuthAuditLogService,
+			mockEmailService,
+			mockOidcClientService,
+			mockOidcFacade,
+			mockClsService,
 		);
 	});
 
@@ -131,14 +218,22 @@ describe("AuthApplicationService", () => {
 	});
 
 	describe("getAuthorizationUrl", () => {
-		it("admin RP 기준으로 state와 returnTo 컨텍스트를 저장해야 한다", async () => {
-			const url = await applicationService.getAuthorizationUrl(
-				"/admin/dashboard",
-			);
+		it("기본 admin-web client 기준으로 state와 returnTo 컨텍스트를 저장해야 한다", async () => {
+			const url =
+				await applicationService.getAuthorizationUrl("/admin/dashboard");
 
 			expect(url).toContain("/oidc/auth?");
+			expect(
+				mockOidcClientService.getAuthShellClientByClientId,
+			).toHaveBeenCalledWith(
+				expect.objectContaining({ clientId: "admin-web" }),
+			);
 			expect(mockOidcFacade.createAuthorizationRequest).toHaveBeenCalledWith(
-				"admin",
+				expect.objectContaining({
+					clientId: "admin-web",
+					redirectUri:
+						"http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
+				}),
 				"/admin/dashboard",
 			);
 			expect(mockTokenStorageService.saveOidcState).toHaveBeenCalledWith(
@@ -146,36 +241,43 @@ describe("AuthApplicationService", () => {
 				"verifier-token",
 				600,
 				"/admin/dashboard",
-				"admin",
+				"admin-web",
 			);
 		});
 
-		it("storybook RP 기준으로 state를 저장해야 한다", async () => {
+		it("idp-web clientId로 별도 authorization request를 생성해야 한다", async () => {
 			await applicationService.getAuthorizationUrl(
-				"http://localhost:6006/?path=/story/button",
-				"storybook",
+				"http://localhost:3008/dashboard",
+				"idp-web",
 			);
 
+			expect(
+				mockOidcClientService.getAuthShellClientByClientId,
+			).toHaveBeenCalledWith(expect.objectContaining({ clientId: "idp-web" }));
 			expect(mockOidcFacade.createAuthorizationRequest).toHaveBeenCalledWith(
-				"storybook",
-				"http://localhost:6006/?path=/story/button",
+				expect.objectContaining({
+					clientId: "idp-web",
+					redirectUri:
+						"http://localhost:3008/api/v1/auth/callback?clientId=idp-web",
+				}),
+				"http://localhost:3008/dashboard",
 			);
 			expect(mockTokenStorageService.saveOidcState).toHaveBeenCalledWith(
 				"state-token",
 				"verifier-token",
 				600,
-				"http://localhost:6006/?path=/story/button",
-				"storybook",
+				"http://localhost:3008/dashboard",
+				"idp-web",
 			);
 		});
 	});
 
 	describe("handleOidcCallback", () => {
-		it("state에 저장된 storybook clientKey로 토큰 교환과 세션 생성을 수행해야 한다", async () => {
+		it("state에 저장된 clientId로 토큰 교환과 세션 생성을 수행해야 한다", async () => {
 			mockTokenStorageService.validateAndConsumeOidcState.mockResolvedValue({
 				codeVerifier: "verifier-token",
-				returnTo: "http://localhost:6006/?path=/story/button",
-				clientKey: "storybook",
+				returnTo: "http://localhost:3008/dashboard",
+				clientId: "idp-web",
 			} as never);
 			mockOidcFacade.exchangeCodeForTokens.mockResolvedValue({
 				access_token: buildAccessToken("user-1"),
@@ -199,39 +301,55 @@ describe("AuthApplicationService", () => {
 				cookie: jest.fn(),
 			} as unknown as never;
 
-			const returnTo = await applicationService.handleOidcCallback(
+			const result = await applicationService.handleOidcCallback(
 				"auth-code",
 				"state-token",
 				req,
 				res,
 			);
 
+			expect(
+				mockOidcClientService.getAuthShellClientByClientId,
+			).toHaveBeenCalledWith(
+				expect.objectContaining({
+					clientId: "idp-web",
+					requireActive: false,
+				}),
+			);
 			expect(mockOidcFacade.exchangeCodeForTokens).toHaveBeenCalledWith(
 				"auth-code",
 				"verifier-token",
-				"storybook",
+				expect.objectContaining({
+					clientId: "idp-web",
+					redirectUri:
+						"http://localhost:3008/api/v1/auth/callback?clientId=idp-web",
+				}),
 			);
 			expect(mockTokenStorageService.saveSession).toHaveBeenCalledWith(
 				"user-1",
-				"storybook.session-raw",
+				"idp-web.session-raw",
 				"refresh-token",
 				expect.objectContaining({
 					userAgent: "test-agent",
 					ipAddress: "127.0.0.1",
-					clientKey: "storybook",
+					clientId: "idp-web",
 				}),
 			);
 			expect((res as { cookie: jest.Mock }).cookie).toHaveBeenCalledWith(
 				"sessionId",
-				"storybook.session-raw",
+				"idp-web.session-raw",
 				expect.any(Object),
 			);
-			expect(returnTo).toBe("http://localhost:6006/?path=/story/button");
+			expect(result).toEqual({
+				returnTo: "http://localhost:3008/dashboard",
+				defaultReturnTo: "http://localhost:3008/dashboard",
+				loginUrl: "http://localhost:3008/auth/login",
+			});
 		});
 	});
 
 	describe("refreshTokenWithIdp", () => {
-		it("sessionId prefix에서 storybook clientKey를 복원해야 한다", async () => {
+		it("sessionId prefix에서 clientId를 복원해야 한다", async () => {
 			mockOidcFacade.refreshTokens.mockResolvedValue({
 				access_token: buildAccessToken("user-1"),
 				refresh_token: "new-refresh-token",
@@ -247,17 +365,24 @@ describe("AuthApplicationService", () => {
 
 			const result = await applicationService.refreshTokenWithIdp(
 				"refresh-token",
-				"storybook.session-raw",
+				"idp-web.session-raw",
 				{} as never,
 			);
 
+			expect(mockOidcClientService.getByClientId).toHaveBeenCalledWith(
+				"idp-web",
+			);
 			expect(mockOidcFacade.refreshTokens).toHaveBeenCalledWith(
 				"refresh-token",
-				"storybook",
+				expect.objectContaining({
+					clientId: "idp-web",
+					redirectUri:
+						"http://localhost:3008/api/v1/auth/callback?clientId=idp-web",
+				}),
 			);
 			expect(mockTokenStorageService.updateSession).toHaveBeenCalledWith(
 				"user-1",
-				"storybook.session-raw",
+				"idp-web.session-raw",
 				"new-refresh-token",
 			);
 			expect(result.refreshToken).toBe("new-refresh-token");
@@ -265,7 +390,7 @@ describe("AuthApplicationService", () => {
 	});
 
 	describe("logoutWithCookie", () => {
-		it("sessionId prefix 기준 RP로 revocation을 수행해야 한다", async () => {
+		it("sessionId prefix 기준 clientId로 revocation을 수행해야 한다", async () => {
 			const accessToken = buildAccessToken("user-1", 3600);
 			const res = {
 				clearCookie: jest.fn(),
@@ -273,13 +398,19 @@ describe("AuthApplicationService", () => {
 
 			const result = await applicationService.logoutWithCookie(
 				accessToken,
-				"storybook.session-raw",
+				"idp-web.session-raw",
 				res,
 			);
 
+			expect(mockOidcClientService.getByClientId).toHaveBeenCalledWith(
+				"idp-web",
+			);
 			expect(mockOidcFacade.revokeToken).toHaveBeenCalledWith(
 				accessToken,
-				"storybook",
+				expect.objectContaining({
+					clientId: "idp-web",
+					clientSecret: "idp-web-secret",
+				}),
 			);
 			expect(mockTokenStorageService.addToBlacklist).toHaveBeenCalledWith(
 				accessToken,
@@ -287,12 +418,12 @@ describe("AuthApplicationService", () => {
 			);
 			expect(mockTokenStorageService.deleteSession).toHaveBeenCalledWith(
 				"user-1",
-				"storybook.session-raw",
+				"idp-web.session-raw",
 			);
 			expect(mockTokenService.clearTokenCookies).toHaveBeenCalledWith(res);
-			expect((res as { clearCookie: jest.Mock }).clearCookie).toHaveBeenCalledWith(
-				"sessionId",
-			);
+			expect(
+				(res as { clearCookie: jest.Mock }).clearCookie,
+			).toHaveBeenCalledWith("sessionId");
 			expect(result).toBe(true);
 		});
 	});
@@ -300,7 +431,9 @@ describe("AuthApplicationService", () => {
 	describe("verifyToken", () => {
 		it("유효한 토큰의 만료 시간과 FULL_ACCESS 여부를 반환해야 한다", () => {
 			const exp = Math.floor(Date.now() / 1000) + 3600;
-			const fakeToken = `header.${Buffer.from(JSON.stringify({ sub: "user-1", exp })).toString("base64url")}.signature`;
+			const fakeToken = `header.${Buffer.from(
+				JSON.stringify({ sub: "user-1", exp }),
+			).toString("base64url")}.signature`;
 			mockClsService.get.mockImplementation((key) => {
 				if (key === CONTEXT_KEYS.TOKEN) {
 					return fakeToken;

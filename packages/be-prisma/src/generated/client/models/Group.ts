@@ -382,6 +382,21 @@ export type GroupUncheckedUpdateManyInput = {
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
+export type GroupScalarRelationFilter = {
+  is?: Prisma.GroupWhereInput
+  isNot?: Prisma.GroupWhereInput
+}
+
+export type GroupListRelationFilter = {
+  every?: Prisma.GroupWhereInput
+  some?: Prisma.GroupWhereInput
+  none?: Prisma.GroupWhereInput
+}
+
+export type GroupOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type GroupCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -416,25 +431,6 @@ export type GroupMinOrderByAggregateInput = {
   label?: Prisma.SortOrder
   spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
-}
-
-export type GroupScalarRelationFilter = {
-  is?: Prisma.GroupWhereInput
-  isNot?: Prisma.GroupWhereInput
-}
-
-export type GroupListRelationFilter = {
-  every?: Prisma.GroupWhereInput
-  some?: Prisma.GroupWhereInput
-  none?: Prisma.GroupWhereInput
-}
-
-export type GroupOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
-export type EnumGroupTypesFieldUpdateOperationsInput = {
-  set?: $Enums.GroupTypes
 }
 
 export type GroupCreateNestedOneWithoutRoleAssociationsInput = {
@@ -561,6 +557,10 @@ export type GroupUpdateOneRequiredWithoutUserAssociationsNestedInput = {
   upsert?: Prisma.GroupUpsertWithoutUserAssociationsInput
   connect?: Prisma.GroupWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.GroupUpdateToOneWithWhereWithoutUserAssociationsInput, Prisma.GroupUpdateWithoutUserAssociationsInput>, Prisma.GroupUncheckedUpdateWithoutUserAssociationsInput>
+}
+
+export type EnumGroupTypesFieldUpdateOperationsInput = {
+  set?: $Enums.GroupTypes
 }
 
 export type GroupCreateWithoutRoleAssociationsInput = {

@@ -479,48 +479,6 @@ export type ProgramSumOrderByAggregateInput = {
   capacity?: Prisma.SortOrder
 }
 
-export type ProgramCreateNestedManyWithoutSessionInput = {
-  create?: Prisma.XOR<Prisma.ProgramCreateWithoutSessionInput, Prisma.ProgramUncheckedCreateWithoutSessionInput> | Prisma.ProgramCreateWithoutSessionInput[] | Prisma.ProgramUncheckedCreateWithoutSessionInput[]
-  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutSessionInput | Prisma.ProgramCreateOrConnectWithoutSessionInput[]
-  createMany?: Prisma.ProgramCreateManySessionInputEnvelope
-  connect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
-}
-
-export type ProgramUncheckedCreateNestedManyWithoutSessionInput = {
-  create?: Prisma.XOR<Prisma.ProgramCreateWithoutSessionInput, Prisma.ProgramUncheckedCreateWithoutSessionInput> | Prisma.ProgramCreateWithoutSessionInput[] | Prisma.ProgramUncheckedCreateWithoutSessionInput[]
-  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutSessionInput | Prisma.ProgramCreateOrConnectWithoutSessionInput[]
-  createMany?: Prisma.ProgramCreateManySessionInputEnvelope
-  connect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
-}
-
-export type ProgramUpdateManyWithoutSessionNestedInput = {
-  create?: Prisma.XOR<Prisma.ProgramCreateWithoutSessionInput, Prisma.ProgramUncheckedCreateWithoutSessionInput> | Prisma.ProgramCreateWithoutSessionInput[] | Prisma.ProgramUncheckedCreateWithoutSessionInput[]
-  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutSessionInput | Prisma.ProgramCreateOrConnectWithoutSessionInput[]
-  upsert?: Prisma.ProgramUpsertWithWhereUniqueWithoutSessionInput | Prisma.ProgramUpsertWithWhereUniqueWithoutSessionInput[]
-  createMany?: Prisma.ProgramCreateManySessionInputEnvelope
-  set?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
-  disconnect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
-  delete?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
-  connect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
-  update?: Prisma.ProgramUpdateWithWhereUniqueWithoutSessionInput | Prisma.ProgramUpdateWithWhereUniqueWithoutSessionInput[]
-  updateMany?: Prisma.ProgramUpdateManyWithWhereWithoutSessionInput | Prisma.ProgramUpdateManyWithWhereWithoutSessionInput[]
-  deleteMany?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
-}
-
-export type ProgramUncheckedUpdateManyWithoutSessionNestedInput = {
-  create?: Prisma.XOR<Prisma.ProgramCreateWithoutSessionInput, Prisma.ProgramUncheckedCreateWithoutSessionInput> | Prisma.ProgramCreateWithoutSessionInput[] | Prisma.ProgramUncheckedCreateWithoutSessionInput[]
-  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutSessionInput | Prisma.ProgramCreateOrConnectWithoutSessionInput[]
-  upsert?: Prisma.ProgramUpsertWithWhereUniqueWithoutSessionInput | Prisma.ProgramUpsertWithWhereUniqueWithoutSessionInput[]
-  createMany?: Prisma.ProgramCreateManySessionInputEnvelope
-  set?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
-  disconnect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
-  delete?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
-  connect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
-  update?: Prisma.ProgramUpdateWithWhereUniqueWithoutSessionInput | Prisma.ProgramUpdateWithWhereUniqueWithoutSessionInput[]
-  updateMany?: Prisma.ProgramUpdateManyWithWhereWithoutSessionInput | Prisma.ProgramUpdateManyWithWhereWithoutSessionInput[]
-  deleteMany?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
-}
-
 export type ProgramCreateNestedManyWithoutRoutineInput = {
   create?: Prisma.XOR<Prisma.ProgramCreateWithoutRoutineInput, Prisma.ProgramUncheckedCreateWithoutRoutineInput> | Prisma.ProgramCreateWithoutRoutineInput[] | Prisma.ProgramUncheckedCreateWithoutRoutineInput[]
   connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutRoutineInput | Prisma.ProgramCreateOrConnectWithoutRoutineInput[]
@@ -563,70 +521,46 @@ export type ProgramUncheckedUpdateManyWithoutRoutineNestedInput = {
   deleteMany?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
 }
 
-export type ProgramCreateWithoutSessionInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  instructorId: string
-  capacity: number
-  name: string
-  level?: string | null
-  routine: Prisma.RoutineCreateNestedOneWithoutProgramsInput
+export type ProgramCreateNestedManyWithoutSessionInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutSessionInput, Prisma.ProgramUncheckedCreateWithoutSessionInput> | Prisma.ProgramCreateWithoutSessionInput[] | Prisma.ProgramUncheckedCreateWithoutSessionInput[]
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutSessionInput | Prisma.ProgramCreateOrConnectWithoutSessionInput[]
+  createMany?: Prisma.ProgramCreateManySessionInputEnvelope
+  connect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
 }
 
-export type ProgramUncheckedCreateWithoutSessionInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  routineId: string
-  instructorId: string
-  capacity: number
-  name: string
-  level?: string | null
+export type ProgramUncheckedCreateNestedManyWithoutSessionInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutSessionInput, Prisma.ProgramUncheckedCreateWithoutSessionInput> | Prisma.ProgramCreateWithoutSessionInput[] | Prisma.ProgramUncheckedCreateWithoutSessionInput[]
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutSessionInput | Prisma.ProgramCreateOrConnectWithoutSessionInput[]
+  createMany?: Prisma.ProgramCreateManySessionInputEnvelope
+  connect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
 }
 
-export type ProgramCreateOrConnectWithoutSessionInput = {
-  where: Prisma.ProgramWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProgramCreateWithoutSessionInput, Prisma.ProgramUncheckedCreateWithoutSessionInput>
+export type ProgramUpdateManyWithoutSessionNestedInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutSessionInput, Prisma.ProgramUncheckedCreateWithoutSessionInput> | Prisma.ProgramCreateWithoutSessionInput[] | Prisma.ProgramUncheckedCreateWithoutSessionInput[]
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutSessionInput | Prisma.ProgramCreateOrConnectWithoutSessionInput[]
+  upsert?: Prisma.ProgramUpsertWithWhereUniqueWithoutSessionInput | Prisma.ProgramUpsertWithWhereUniqueWithoutSessionInput[]
+  createMany?: Prisma.ProgramCreateManySessionInputEnvelope
+  set?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  disconnect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  delete?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  connect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  update?: Prisma.ProgramUpdateWithWhereUniqueWithoutSessionInput | Prisma.ProgramUpdateWithWhereUniqueWithoutSessionInput[]
+  updateMany?: Prisma.ProgramUpdateManyWithWhereWithoutSessionInput | Prisma.ProgramUpdateManyWithWhereWithoutSessionInput[]
+  deleteMany?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
 }
 
-export type ProgramCreateManySessionInputEnvelope = {
-  data: Prisma.ProgramCreateManySessionInput | Prisma.ProgramCreateManySessionInput[]
-  skipDuplicates?: boolean
-}
-
-export type ProgramUpsertWithWhereUniqueWithoutSessionInput = {
-  where: Prisma.ProgramWhereUniqueInput
-  update: Prisma.XOR<Prisma.ProgramUpdateWithoutSessionInput, Prisma.ProgramUncheckedUpdateWithoutSessionInput>
-  create: Prisma.XOR<Prisma.ProgramCreateWithoutSessionInput, Prisma.ProgramUncheckedCreateWithoutSessionInput>
-}
-
-export type ProgramUpdateWithWhereUniqueWithoutSessionInput = {
-  where: Prisma.ProgramWhereUniqueInput
-  data: Prisma.XOR<Prisma.ProgramUpdateWithoutSessionInput, Prisma.ProgramUncheckedUpdateWithoutSessionInput>
-}
-
-export type ProgramUpdateManyWithWhereWithoutSessionInput = {
-  where: Prisma.ProgramScalarWhereInput
-  data: Prisma.XOR<Prisma.ProgramUpdateManyMutationInput, Prisma.ProgramUncheckedUpdateManyWithoutSessionInput>
-}
-
-export type ProgramScalarWhereInput = {
-  AND?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
-  OR?: Prisma.ProgramScalarWhereInput[]
-  NOT?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
-  id?: Prisma.StringFilter<"Program"> | string
-  createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
-  removedAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
-  routineId?: Prisma.StringFilter<"Program"> | string
-  sessionId?: Prisma.StringFilter<"Program"> | string
-  instructorId?: Prisma.StringFilter<"Program"> | string
-  capacity?: Prisma.IntFilter<"Program"> | number
-  name?: Prisma.StringFilter<"Program"> | string
-  level?: Prisma.StringNullableFilter<"Program"> | string | null
+export type ProgramUncheckedUpdateManyWithoutSessionNestedInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutSessionInput, Prisma.ProgramUncheckedCreateWithoutSessionInput> | Prisma.ProgramCreateWithoutSessionInput[] | Prisma.ProgramUncheckedCreateWithoutSessionInput[]
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutSessionInput | Prisma.ProgramCreateOrConnectWithoutSessionInput[]
+  upsert?: Prisma.ProgramUpsertWithWhereUniqueWithoutSessionInput | Prisma.ProgramUpsertWithWhereUniqueWithoutSessionInput[]
+  createMany?: Prisma.ProgramCreateManySessionInputEnvelope
+  set?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  disconnect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  delete?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  connect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  update?: Prisma.ProgramUpdateWithWhereUniqueWithoutSessionInput | Prisma.ProgramUpdateWithWhereUniqueWithoutSessionInput[]
+  updateMany?: Prisma.ProgramUpdateManyWithWhereWithoutSessionInput | Prisma.ProgramUpdateManyWithWhereWithoutSessionInput[]
+  deleteMany?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
 }
 
 export type ProgramCreateWithoutRoutineInput = {
@@ -679,7 +613,35 @@ export type ProgramUpdateManyWithWhereWithoutRoutineInput = {
   data: Prisma.XOR<Prisma.ProgramUpdateManyMutationInput, Prisma.ProgramUncheckedUpdateManyWithoutRoutineInput>
 }
 
-export type ProgramCreateManySessionInput = {
+export type ProgramScalarWhereInput = {
+  AND?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
+  OR?: Prisma.ProgramScalarWhereInput[]
+  NOT?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
+  id?: Prisma.StringFilter<"Program"> | string
+  createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
+  updatedAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
+  removedAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
+  routineId?: Prisma.StringFilter<"Program"> | string
+  sessionId?: Prisma.StringFilter<"Program"> | string
+  instructorId?: Prisma.StringFilter<"Program"> | string
+  capacity?: Prisma.IntFilter<"Program"> | number
+  name?: Prisma.StringFilter<"Program"> | string
+  level?: Prisma.StringNullableFilter<"Program"> | string | null
+}
+
+export type ProgramCreateWithoutSessionInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  instructorId: string
+  capacity: number
+  name: string
+  level?: string | null
+  routine: Prisma.RoutineCreateNestedOneWithoutProgramsInput
+}
+
+export type ProgramUncheckedCreateWithoutSessionInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -691,40 +653,30 @@ export type ProgramCreateManySessionInput = {
   level?: string | null
 }
 
-export type ProgramUpdateWithoutSessionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
-  capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  routine?: Prisma.RoutineUpdateOneRequiredWithoutProgramsNestedInput
+export type ProgramCreateOrConnectWithoutSessionInput = {
+  where: Prisma.ProgramWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProgramCreateWithoutSessionInput, Prisma.ProgramUncheckedCreateWithoutSessionInput>
 }
 
-export type ProgramUncheckedUpdateWithoutSessionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  routineId?: Prisma.StringFieldUpdateOperationsInput | string
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
-  capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+export type ProgramCreateManySessionInputEnvelope = {
+  data: Prisma.ProgramCreateManySessionInput | Prisma.ProgramCreateManySessionInput[]
+  skipDuplicates?: boolean
 }
 
-export type ProgramUncheckedUpdateManyWithoutSessionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  routineId?: Prisma.StringFieldUpdateOperationsInput | string
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
-  capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+export type ProgramUpsertWithWhereUniqueWithoutSessionInput = {
+  where: Prisma.ProgramWhereUniqueInput
+  update: Prisma.XOR<Prisma.ProgramUpdateWithoutSessionInput, Prisma.ProgramUncheckedUpdateWithoutSessionInput>
+  create: Prisma.XOR<Prisma.ProgramCreateWithoutSessionInput, Prisma.ProgramUncheckedCreateWithoutSessionInput>
+}
+
+export type ProgramUpdateWithWhereUniqueWithoutSessionInput = {
+  where: Prisma.ProgramWhereUniqueInput
+  data: Prisma.XOR<Prisma.ProgramUpdateWithoutSessionInput, Prisma.ProgramUncheckedUpdateWithoutSessionInput>
+}
+
+export type ProgramUpdateManyWithWhereWithoutSessionInput = {
+  where: Prisma.ProgramScalarWhereInput
+  data: Prisma.XOR<Prisma.ProgramUpdateManyMutationInput, Prisma.ProgramUncheckedUpdateManyWithoutSessionInput>
 }
 
 export type ProgramCreateManyRoutineInput = {
@@ -769,6 +721,54 @@ export type ProgramUncheckedUpdateManyWithoutRoutineInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type ProgramCreateManySessionInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  routineId: string
+  instructorId: string
+  capacity: number
+  name: string
+  level?: string | null
+}
+
+export type ProgramUpdateWithoutSessionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routine?: Prisma.RoutineUpdateOneRequiredWithoutProgramsNestedInput
+}
+
+export type ProgramUncheckedUpdateWithoutSessionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  routineId?: Prisma.StringFieldUpdateOperationsInput | string
+  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type ProgramUncheckedUpdateManyWithoutSessionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  routineId?: Prisma.StringFieldUpdateOperationsInput | string
   instructorId?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -852,55 +852,19 @@ export type ProgramIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $ProgramPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Program"
   objects: {
-    /**
-     * 루틴 관계
-     */
     routine: Prisma.$RoutinePayload<ExtArgs>
-    /**
-     * 세션 관계
-     */
     session: Prisma.$SessionPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    /**
-     * 고유 식별자
-     */
     id: string
-    /**
-     * 생성 일시
-     */
     createdAt: Date
-    /**
-     * 수정 일시
-     */
     updatedAt: Date | null
-    /**
-     * 삭제 일시
-     */
     removedAt: Date | null
-    /**
-     * 루틴 ID
-     */
     routineId: string
-    /**
-     * 세션 ID
-     */
     sessionId: string
-    /**
-     * 강사 ID
-     */
     instructorId: string
-    /**
-     * 정원 (최대 참여 인원)
-     */
     capacity: number
-    /**
-     * 프로그램 이름
-     */
     name: string
-    /**
-     * 난이도 (초급/중급/고급)
-     */
     level: string | null
   }, ExtArgs["result"]["program"]>
   composites: {}

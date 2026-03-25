@@ -1,5 +1,5 @@
 export {
+	type OidcClientProtocolConfig,
 	OidcFacade,
-	type OidcRpClientKey,
 	type OidcTokenResponse,
 } from "./oidc.facade";

@@ -1,5 +1,6 @@
+const path = require("node:path");
+
 module.exports = {
-	preset: "ts-jest",
 	testEnvironment: "node",
 	rootDir: ".",
 	testRegex: "\\.spec\\.ts$",
@@ -15,7 +16,7 @@ module.exports = {
 	},
 	transform: {
 		"^.+\\.ts$": [
-			"ts-jest",
+			path.join(__dirname, "node_modules", "ts-jest"),
 			{
 				tsconfig: {
 					module: "commonjs",

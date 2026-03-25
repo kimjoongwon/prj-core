@@ -41,8 +41,13 @@ export default defineConfig({
           name: "ui",
           environment: "jsdom",
           globals: true,
+          testTimeout: 15000,
           setupFiles: [path.resolve(dirname, "./test-setup.js")],
-          include: ["../../packages/fe-ui/src/**/*.test.{ts,tsx}"],
+          include: [
+            ".storybook/**/*.test.{js,ts}",
+            "src/**/*.test.{ts,tsx}",
+            "../../packages/fe-ui/src/**/*.test.{ts,tsx}",
+          ],
         },
         resolve: {
           alias: {

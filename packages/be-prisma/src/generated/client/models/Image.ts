@@ -510,24 +510,12 @@ export type ImageUncheckedUpdateOneWithoutAssetNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ImageUpdateToOneWithWhereWithoutAssetInput, Prisma.ImageUpdateWithoutAssetInput>, Prisma.ImageUncheckedUpdateWithoutAssetInput>
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type NullableIntFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
   divide?: number
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
 }
 
 export type ImageCreateWithoutAssetInput = {
@@ -689,7 +677,7 @@ export type $ImagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
      */
     colorSpace: string | null
     /**
-     * @DisplayName 알파 채널 여부
+     * @displayName 알파 채널 여부
      */
     hasAlpha: boolean
     /**

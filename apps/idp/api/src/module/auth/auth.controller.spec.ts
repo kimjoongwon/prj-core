@@ -2,31 +2,12 @@ import { AuthApplicationService } from "@cocrepo/app";
 import { SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
 import type { SignUpPayloadDto } from "@cocrepo/dto";
 import { UnauthorizedException } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { AuthController } from "./auth.controller";
 
 describe("AuthController", () => {
 	let controller: AuthController;
 	let mockAuthApplicationService: jest.Mocked<AuthApplicationService>;
-	let mockConfigService: jest.Mocked<ConfigService>;
-
-	const mockOidcConfig = {
-		clients: {
-			admin: {
-				loginUrl: "http://localhost:3000/admin/auth/login",
-				defaultReturnTo: "http://localhost:3000/admin/dashboard",
-			},
-			storybook: {
-				loginUrl: "http://localhost:6006/__storybook_auth/login",
-				defaultReturnTo: "http://localhost:6006/",
-			},
-			idpWeb: {
-				loginUrl: "http://localhost:3008/auth/login",
-				defaultReturnTo: "http://localhost:3008/dashboard",
-			},
-		},
-	};
 
 	const mockTokenExpiryInfo = {
 		accessTokenExpiresAt: Date.now() + 60 * 60 * 1000,
@@ -56,7 +37,7 @@ describe("AuthController", () => {
 		cookies: {
 			accessToken: "test-access-token",
 			refreshToken: "test-refresh-token",
-			sessionId: "storybook.test-session-id",
+			sessionId: "idp-web.test-session-id",
 		},
 		user: mockUser,
 		headers: { "user-agent": "test-agent" },
@@ -67,6 +48,25 @@ describe("AuthController", () => {
 	beforeEach(async () => {
 		mockAuthApplicationService = {
 			getAuthorizationUrl: jest.fn(),
+			getClientRedirects: jest.fn().mockImplementation(async (clientId) => {
+				switch (clientId) {
+					case "storybook":
+						return {
+							loginUrl: "http://localhost:6006/__storybook_auth/login",
+							defaultReturnTo: "http://localhost:6006/",
+						};
+					case "idp-web":
+						return {
+							loginUrl: "http://localhost:3008/auth/login",
+							defaultReturnTo: "http://localhost:3008/dashboard",
+						};
+					default:
+						return {
+							loginUrl: "http://localhost:3000/admin/auth/login",
+							defaultReturnTo: "http://localhost:3000/admin/dashboard",
+						};
+				}
+			}),
 			handleOidcCallback: jest.fn(),
 			refreshTokenWithIdp: jest.fn(),
 			signUp: jest.fn(),
@@ -84,15 +84,6 @@ describe("AuthController", () => {
 			revokeOtherSessions: jest.fn(),
 		} as unknown as jest.Mocked<AuthApplicationService>;
 
-		mockConfigService = {
-			get: jest.fn().mockImplementation((key: string) => {
-				if (key === "oidc") {
-					return mockOidcConfig;
-				}
-				return undefined;
-			}),
-		} as unknown as jest.Mocked<ConfigService>;
-
 		const module: TestingModule = await Test.createTestingModule({
 			controllers: [AuthController],
 			providers: [
@@ -100,7 +91,6 @@ describe("AuthController", () => {
 					provide: AuthApplicationService,
 					useValue: mockAuthApplicationService,
 				},
-				{ provide: ConfigService, useValue: mockConfigService },
 			],
 		}).compile();
 
@@ -113,58 +103,39 @@ describe("AuthController", () => {
 	});
 
 	describe("login", () => {
-		it("admin RP authorization URL로 리다이렉트해야 한다", async () => {
+		it("admin-web clientId 기준 authorization URL로 리다이렉트해야 한다", async () => {
 			mockAuthApplicationService.getAuthorizationUrl.mockResolvedValue(
-				"https://idp.example.com/oidc/auth?client_id=admin",
+				"https://idp.example.com/oidc/auth?client_id=admin-web",
 			);
 
 			await controller.login(
-				undefined as unknown as string,
+				"admin-web",
+				"/admin/dashboard",
 				mockResponse as unknown as never,
 			);
 
 			expect(
 				mockAuthApplicationService.getAuthorizationUrl,
-			).toHaveBeenCalledWith(undefined, "admin");
+			).toHaveBeenCalledWith("/admin/dashboard", "admin-web");
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
-				"https://idp.example.com/oidc/auth?client_id=admin",
+				"https://idp.example.com/oidc/auth?client_id=admin-web",
 			);
 		});
 
-		it("storybook RP authorization URL로 리다이렉트해야 한다", async () => {
-			mockAuthApplicationService.getAuthorizationUrl.mockResolvedValue(
-				"https://idp.example.com/oidc/auth?client_id=storybook",
-			);
-
-			await controller.storybookLogin(
-				"http://localhost:6006/?path=/story/button",
-				mockResponse as unknown as never,
-			);
-
-			expect(
-				mockAuthApplicationService.getAuthorizationUrl,
-			).toHaveBeenCalledWith(
-				"http://localhost:6006/?path=/story/button",
-				"storybook",
-			);
-			expect(mockResponse.redirect).toHaveBeenCalledWith(
-				"https://idp.example.com/oidc/auth?client_id=storybook",
-			);
-		});
-
-		it("idpWeb RP authorization URL로 리다이렉트해야 한다", async () => {
+		it("idp-web clientId로도 동일한 login flow를 사용해야 한다", async () => {
 			mockAuthApplicationService.getAuthorizationUrl.mockResolvedValue(
 				"https://idp.example.com/oidc/auth?client_id=idp-web",
 			);
 
-			await controller.idpLogin(
+			await controller.login(
+				"idp-web",
 				"http://localhost:3008/dashboard",
 				mockResponse as unknown as never,
 			);
 
 			expect(
 				mockAuthApplicationService.getAuthorizationUrl,
-			).toHaveBeenCalledWith("http://localhost:3008/dashboard", "idpWeb");
+			).toHaveBeenCalledWith("http://localhost:3008/dashboard", "idp-web");
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
 				"https://idp.example.com/oidc/auth?client_id=idp-web",
 			);
@@ -172,12 +143,15 @@ describe("AuthController", () => {
 	});
 
 	describe("handleCallback", () => {
-		it("admin callback 성공 시 기본 대시보드로 리다이렉트해야 한다", async () => {
-			mockAuthApplicationService.handleOidcCallback.mockResolvedValue(
-				undefined,
-			);
+		it("성공 시 returnTo를 우선 리다이렉트해야 한다", async () => {
+			mockAuthApplicationService.handleOidcCallback.mockResolvedValue({
+				returnTo: "http://localhost:3008/custom",
+				defaultReturnTo: "http://localhost:3008/dashboard",
+				loginUrl: "http://localhost:3008/auth/login",
+			} as never);
 
 			await controller.handleCallback(
+				"idp-web",
 				"auth-code",
 				"state-value",
 				undefined as unknown as string,
@@ -195,12 +169,35 @@ describe("AuthController", () => {
 				mockResponse,
 			);
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
+				"http://localhost:3008/custom",
+			);
+		});
+
+		it("returnTo가 없으면 defaultReturnTo로 리다이렉트해야 한다", async () => {
+			mockAuthApplicationService.handleOidcCallback.mockResolvedValue({
+				returnTo: undefined,
+				defaultReturnTo: "http://localhost:3000/admin/dashboard",
+				loginUrl: "http://localhost:3000/admin/auth/login",
+			} as never);
+
+			await controller.handleCallback(
+				"admin-web",
+				"auth-code",
+				"state-value",
+				undefined as unknown as string,
+				undefined as unknown as string,
+				mockRequest as unknown as never,
+				mockResponse as unknown as never,
+			);
+
+			expect(mockResponse.redirect).toHaveBeenCalledWith(
 				"http://localhost:3000/admin/dashboard",
 			);
 		});
 
-		it("admin OIDC 에러는 admin 로그인 페이지로 리다이렉트해야 한다", async () => {
+		it("OIDC 에러는 clientId에 맞는 loginUrl로 리다이렉트해야 한다", async () => {
 			await controller.handleCallback(
+				"storybook",
 				undefined as unknown as string,
 				undefined as unknown as string,
 				"access_denied",
@@ -213,88 +210,17 @@ describe("AuthController", () => {
 				mockAuthApplicationService.handleOidcCallback,
 			).not.toHaveBeenCalled();
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
-				"http://localhost:3000/admin/auth/login?error=%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EA%B1%B0%EB%B6%80%ED%96%88%EC%8A%B5%EB%8B%88%EB%8B%A4",
-			);
-		});
-
-		it("storybook callback 성공 시 returnTo로 리다이렉트해야 한다", async () => {
-			mockAuthApplicationService.handleOidcCallback.mockResolvedValue(
-				"http://localhost:6006/?path=/story/button",
-			);
-
-			await controller.handleStorybookCallback(
-				"auth-code",
-				"state-value",
-				undefined as unknown as string,
-				undefined as unknown as string,
-				mockRequest as unknown as never,
-				mockResponse as unknown as never,
-			);
-
-			expect(mockResponse.redirect).toHaveBeenCalledWith(
-				"http://localhost:6006/?path=/story/button",
-			);
-		});
-
-		it("storybook callback 에러는 storybook 로그인 셸로 리다이렉트해야 한다", async () => {
-			await controller.handleStorybookCallback(
-				undefined as unknown as string,
-				undefined as unknown as string,
-				"access_denied",
-				"사용자가 인증을 거부했습니다",
-				mockRequest as unknown as never,
-				mockResponse as unknown as never,
-			);
-
-			expect(mockResponse.redirect).toHaveBeenCalledWith(
 				"http://localhost:6006/__storybook_auth/login?error=%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EA%B1%B0%EB%B6%80%ED%96%88%EC%8A%B5%EB%8B%88%EB%8B%A4",
 			);
 		});
 
-		it("storybook callback 처리 실패 시 admin 로그인으로 가지 않아야 한다", async () => {
+		it("콜백 처리 실패 시 generic loginUrl로 복귀해야 한다", async () => {
 			mockAuthApplicationService.handleOidcCallback.mockRejectedValue(
 				new UnauthorizedException("OIDC state 검증에 실패했습니다"),
 			);
 
-			await controller.handleStorybookCallback(
-				"auth-code",
-				"invalid-state",
-				undefined as unknown as string,
-				undefined as unknown as string,
-				mockRequest as unknown as never,
-				mockResponse as unknown as never,
-			);
-
-			expect(mockResponse.redirect).toHaveBeenCalledWith(
-				"http://localhost:6006/__storybook_auth/login?error=OIDC+%EC%9D%B8%EC%A6%9D+%EC%BD%9C%EB%B0%B1+%EC%B2%98%EB%A6%AC%EC%97%90+%EC%8B%A4%ED%8C%A8%ED%96%88%EC%8A%B5%EB%8B%88%EB%8B%A4",
-			);
-		});
-
-		it("idpWeb callback 성공 시 기본 대시보드로 리다이렉트해야 한다", async () => {
-			mockAuthApplicationService.handleOidcCallback.mockResolvedValue(
-				undefined,
-			);
-
-			await controller.handleIdpCallback(
-				"auth-code",
-				"state-value",
-				undefined as unknown as string,
-				undefined as unknown as string,
-				mockRequest as unknown as never,
-				mockResponse as unknown as never,
-			);
-
-			expect(mockResponse.redirect).toHaveBeenCalledWith(
-				"http://localhost:3008/dashboard",
-			);
-		});
-
-		it("idpWeb callback 처리 실패 시 idp 로그인으로 리다이렉트해야 한다", async () => {
-			mockAuthApplicationService.handleOidcCallback.mockRejectedValue(
-				new UnauthorizedException("OIDC state 검증에 실패했습니다"),
-			);
-
-			await controller.handleIdpCallback(
+			await controller.handleCallback(
+				"idp-web",
 				"auth-code",
 				"invalid-state",
 				undefined as unknown as string,
@@ -328,7 +254,7 @@ describe("AuthController", () => {
 				mockAuthApplicationService.refreshTokenWithIdp,
 			).toHaveBeenCalledWith(
 				"test-refresh-token",
-				"storybook.test-session-id",
+				"idp-web.test-session-id",
 				mockResponse,
 			);
 			expect(result.accessToken).toBe("new-access-token");
@@ -413,7 +339,7 @@ describe("AuthController", () => {
 
 			expect(mockAuthApplicationService.logoutWithCookie).toHaveBeenCalledWith(
 				"test-access-token",
-				"storybook.test-session-id",
+				"idp-web.test-session-id",
 				mockResponse,
 			);
 			expect(result).toBe(true);

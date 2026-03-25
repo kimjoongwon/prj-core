@@ -305,16 +305,6 @@ export type UserClassificationUncheckedUpdateManyInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
-export type UserClassificationListRelationFilter = {
-  every?: Prisma.UserClassificationWhereInput
-  some?: Prisma.UserClassificationWhereInput
-  none?: Prisma.UserClassificationWhereInput
-}
-
-export type UserClassificationOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
 export type UserClassificationNullableScalarRelationFilter = {
   is?: Prisma.UserClassificationWhereInput | null
   isNot?: Prisma.UserClassificationWhereInput | null
@@ -350,6 +340,48 @@ export type UserClassificationMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
+}
+
+export type UserClassificationListRelationFilter = {
+  every?: Prisma.UserClassificationWhereInput
+  some?: Prisma.UserClassificationWhereInput
+  none?: Prisma.UserClassificationWhereInput
+}
+
+export type UserClassificationOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type UserClassificationCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.UserClassificationCreateWithoutUserInput, Prisma.UserClassificationUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.UserClassificationCreateOrConnectWithoutUserInput
+  connect?: Prisma.UserClassificationWhereUniqueInput
+}
+
+export type UserClassificationUncheckedCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.UserClassificationCreateWithoutUserInput, Prisma.UserClassificationUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.UserClassificationCreateOrConnectWithoutUserInput
+  connect?: Prisma.UserClassificationWhereUniqueInput
+}
+
+export type UserClassificationUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserClassificationCreateWithoutUserInput, Prisma.UserClassificationUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.UserClassificationCreateOrConnectWithoutUserInput
+  upsert?: Prisma.UserClassificationUpsertWithoutUserInput
+  disconnect?: Prisma.UserClassificationWhereInput | boolean
+  delete?: Prisma.UserClassificationWhereInput | boolean
+  connect?: Prisma.UserClassificationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserClassificationUpdateToOneWithWhereWithoutUserInput, Prisma.UserClassificationUpdateWithoutUserInput>, Prisma.UserClassificationUncheckedUpdateWithoutUserInput>
+}
+
+export type UserClassificationUncheckedUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserClassificationCreateWithoutUserInput, Prisma.UserClassificationUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.UserClassificationCreateOrConnectWithoutUserInput
+  upsert?: Prisma.UserClassificationUpsertWithoutUserInput
+  disconnect?: Prisma.UserClassificationWhereInput | boolean
+  delete?: Prisma.UserClassificationWhereInput | boolean
+  connect?: Prisma.UserClassificationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserClassificationUpdateToOneWithWhereWithoutUserInput, Prisma.UserClassificationUpdateWithoutUserInput>, Prisma.UserClassificationUncheckedUpdateWithoutUserInput>
 }
 
 export type UserClassificationCreateNestedManyWithoutCategoryInput = {
@@ -394,36 +426,52 @@ export type UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput = {
   deleteMany?: Prisma.UserClassificationScalarWhereInput | Prisma.UserClassificationScalarWhereInput[]
 }
 
-export type UserClassificationCreateNestedOneWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.UserClassificationCreateWithoutUserInput, Prisma.UserClassificationUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.UserClassificationCreateOrConnectWithoutUserInput
-  connect?: Prisma.UserClassificationWhereUniqueInput
+export type UserClassificationCreateWithoutUserInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  category: Prisma.CategoryCreateNestedOneWithoutUserClassificationsInput
 }
 
-export type UserClassificationUncheckedCreateNestedOneWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.UserClassificationCreateWithoutUserInput, Prisma.UserClassificationUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.UserClassificationCreateOrConnectWithoutUserInput
-  connect?: Prisma.UserClassificationWhereUniqueInput
+export type UserClassificationUncheckedCreateWithoutUserInput = {
+  id?: string
+  categoryId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
 }
 
-export type UserClassificationUpdateOneWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.UserClassificationCreateWithoutUserInput, Prisma.UserClassificationUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.UserClassificationCreateOrConnectWithoutUserInput
-  upsert?: Prisma.UserClassificationUpsertWithoutUserInput
-  disconnect?: Prisma.UserClassificationWhereInput | boolean
-  delete?: Prisma.UserClassificationWhereInput | boolean
-  connect?: Prisma.UserClassificationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserClassificationUpdateToOneWithWhereWithoutUserInput, Prisma.UserClassificationUpdateWithoutUserInput>, Prisma.UserClassificationUncheckedUpdateWithoutUserInput>
+export type UserClassificationCreateOrConnectWithoutUserInput = {
+  where: Prisma.UserClassificationWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserClassificationCreateWithoutUserInput, Prisma.UserClassificationUncheckedCreateWithoutUserInput>
 }
 
-export type UserClassificationUncheckedUpdateOneWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.UserClassificationCreateWithoutUserInput, Prisma.UserClassificationUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.UserClassificationCreateOrConnectWithoutUserInput
-  upsert?: Prisma.UserClassificationUpsertWithoutUserInput
-  disconnect?: Prisma.UserClassificationWhereInput | boolean
-  delete?: Prisma.UserClassificationWhereInput | boolean
-  connect?: Prisma.UserClassificationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserClassificationUpdateToOneWithWhereWithoutUserInput, Prisma.UserClassificationUpdateWithoutUserInput>, Prisma.UserClassificationUncheckedUpdateWithoutUserInput>
+export type UserClassificationUpsertWithoutUserInput = {
+  update: Prisma.XOR<Prisma.UserClassificationUpdateWithoutUserInput, Prisma.UserClassificationUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.UserClassificationCreateWithoutUserInput, Prisma.UserClassificationUncheckedCreateWithoutUserInput>
+  where?: Prisma.UserClassificationWhereInput
+}
+
+export type UserClassificationUpdateToOneWithWhereWithoutUserInput = {
+  where?: Prisma.UserClassificationWhereInput
+  data: Prisma.XOR<Prisma.UserClassificationUpdateWithoutUserInput, Prisma.UserClassificationUncheckedUpdateWithoutUserInput>
+}
+
+export type UserClassificationUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  category?: Prisma.CategoryUpdateOneRequiredWithoutUserClassificationsNestedInput
+}
+
+export type UserClassificationUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserClassificationCreateWithoutCategoryInput = {
@@ -478,54 +526,6 @@ export type UserClassificationScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"UserClassification"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"UserClassification"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"UserClassification"> | Date | string | null
-}
-
-export type UserClassificationCreateWithoutUserInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  category: Prisma.CategoryCreateNestedOneWithoutUserClassificationsInput
-}
-
-export type UserClassificationUncheckedCreateWithoutUserInput = {
-  id?: string
-  categoryId: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-}
-
-export type UserClassificationCreateOrConnectWithoutUserInput = {
-  where: Prisma.UserClassificationWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserClassificationCreateWithoutUserInput, Prisma.UserClassificationUncheckedCreateWithoutUserInput>
-}
-
-export type UserClassificationUpsertWithoutUserInput = {
-  update: Prisma.XOR<Prisma.UserClassificationUpdateWithoutUserInput, Prisma.UserClassificationUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.UserClassificationCreateWithoutUserInput, Prisma.UserClassificationUncheckedCreateWithoutUserInput>
-  where?: Prisma.UserClassificationWhereInput
-}
-
-export type UserClassificationUpdateToOneWithWhereWithoutUserInput = {
-  where?: Prisma.UserClassificationWhereInput
-  data: Prisma.XOR<Prisma.UserClassificationUpdateWithoutUserInput, Prisma.UserClassificationUncheckedUpdateWithoutUserInput>
-}
-
-export type UserClassificationUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  category?: Prisma.CategoryUpdateOneRequiredWithoutUserClassificationsNestedInput
-}
-
-export type UserClassificationUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserClassificationCreateManyCategoryInput = {

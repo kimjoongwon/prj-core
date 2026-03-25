@@ -13,7 +13,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "type-check": "tsc --noEmit",
-    "build": "tsc --build",
+    "build": "rm -rf dist && tsc --build",
     "start:dev": "tsc --build --watch",
     "format": "biome format --write .",
     "test": "jest --passWithNoTests",

@@ -864,55 +864,19 @@ export type ActivityIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type $ActivityPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Activity"
   objects: {
-    /**
-     * 루틴 관계
-     */
     routine: Prisma.$RoutinePayload<ExtArgs>
-    /**
-     * Task 관계 (Task를 통해 Exercise 등 도메인 모델 접근)
-     */
     task: Prisma.$TaskPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    /**
-     * 고유 식별자
-     */
     id: string
-    /**
-     * 생성 일시
-     */
     createdAt: Date
-    /**
-     * 수정 일시
-     */
     updatedAt: Date | null
-    /**
-     * 삭제 일시
-     */
     removedAt: Date | null
-    /**
-     * 루틴 ID
-     */
     routineId: string
-    /**
-     * Task ID (도메인 독립적 참조)
-     */
     taskId: string
-    /**
-     * 루틴 내 실행 순서
-     */
     order: number
-    /**
-     * 반복 횟수 (세트 수)
-     */
     repetitions: number
-    /**
-     * 다음 작업까지 휴식 시간 (초)
-     */
     restTime: number
-    /**
-     * 특별 지시사항
-     */
     notes: string | null
   }, ExtArgs["result"]["activity"]>
   composites: {}

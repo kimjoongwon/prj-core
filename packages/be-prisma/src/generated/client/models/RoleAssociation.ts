@@ -347,48 +347,6 @@ export type RoleAssociationMinOrderByAggregateInput = {
   groupId?: Prisma.SortOrder
 }
 
-export type RoleAssociationCreateNestedManyWithoutGroupInput = {
-  create?: Prisma.XOR<Prisma.RoleAssociationCreateWithoutGroupInput, Prisma.RoleAssociationUncheckedCreateWithoutGroupInput> | Prisma.RoleAssociationCreateWithoutGroupInput[] | Prisma.RoleAssociationUncheckedCreateWithoutGroupInput[]
-  connectOrCreate?: Prisma.RoleAssociationCreateOrConnectWithoutGroupInput | Prisma.RoleAssociationCreateOrConnectWithoutGroupInput[]
-  createMany?: Prisma.RoleAssociationCreateManyGroupInputEnvelope
-  connect?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
-}
-
-export type RoleAssociationUncheckedCreateNestedManyWithoutGroupInput = {
-  create?: Prisma.XOR<Prisma.RoleAssociationCreateWithoutGroupInput, Prisma.RoleAssociationUncheckedCreateWithoutGroupInput> | Prisma.RoleAssociationCreateWithoutGroupInput[] | Prisma.RoleAssociationUncheckedCreateWithoutGroupInput[]
-  connectOrCreate?: Prisma.RoleAssociationCreateOrConnectWithoutGroupInput | Prisma.RoleAssociationCreateOrConnectWithoutGroupInput[]
-  createMany?: Prisma.RoleAssociationCreateManyGroupInputEnvelope
-  connect?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
-}
-
-export type RoleAssociationUpdateManyWithoutGroupNestedInput = {
-  create?: Prisma.XOR<Prisma.RoleAssociationCreateWithoutGroupInput, Prisma.RoleAssociationUncheckedCreateWithoutGroupInput> | Prisma.RoleAssociationCreateWithoutGroupInput[] | Prisma.RoleAssociationUncheckedCreateWithoutGroupInput[]
-  connectOrCreate?: Prisma.RoleAssociationCreateOrConnectWithoutGroupInput | Prisma.RoleAssociationCreateOrConnectWithoutGroupInput[]
-  upsert?: Prisma.RoleAssociationUpsertWithWhereUniqueWithoutGroupInput | Prisma.RoleAssociationUpsertWithWhereUniqueWithoutGroupInput[]
-  createMany?: Prisma.RoleAssociationCreateManyGroupInputEnvelope
-  set?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
-  disconnect?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
-  delete?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
-  connect?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
-  update?: Prisma.RoleAssociationUpdateWithWhereUniqueWithoutGroupInput | Prisma.RoleAssociationUpdateWithWhereUniqueWithoutGroupInput[]
-  updateMany?: Prisma.RoleAssociationUpdateManyWithWhereWithoutGroupInput | Prisma.RoleAssociationUpdateManyWithWhereWithoutGroupInput[]
-  deleteMany?: Prisma.RoleAssociationScalarWhereInput | Prisma.RoleAssociationScalarWhereInput[]
-}
-
-export type RoleAssociationUncheckedUpdateManyWithoutGroupNestedInput = {
-  create?: Prisma.XOR<Prisma.RoleAssociationCreateWithoutGroupInput, Prisma.RoleAssociationUncheckedCreateWithoutGroupInput> | Prisma.RoleAssociationCreateWithoutGroupInput[] | Prisma.RoleAssociationUncheckedCreateWithoutGroupInput[]
-  connectOrCreate?: Prisma.RoleAssociationCreateOrConnectWithoutGroupInput | Prisma.RoleAssociationCreateOrConnectWithoutGroupInput[]
-  upsert?: Prisma.RoleAssociationUpsertWithWhereUniqueWithoutGroupInput | Prisma.RoleAssociationUpsertWithWhereUniqueWithoutGroupInput[]
-  createMany?: Prisma.RoleAssociationCreateManyGroupInputEnvelope
-  set?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
-  disconnect?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
-  delete?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
-  connect?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
-  update?: Prisma.RoleAssociationUpdateWithWhereUniqueWithoutGroupInput | Prisma.RoleAssociationUpdateWithWhereUniqueWithoutGroupInput[]
-  updateMany?: Prisma.RoleAssociationUpdateManyWithWhereWithoutGroupInput | Prisma.RoleAssociationUpdateManyWithWhereWithoutGroupInput[]
-  deleteMany?: Prisma.RoleAssociationScalarWhereInput | Prisma.RoleAssociationScalarWhereInput[]
-}
-
 export type RoleAssociationCreateNestedManyWithoutRoleInput = {
   create?: Prisma.XOR<Prisma.RoleAssociationCreateWithoutRoleInput, Prisma.RoleAssociationUncheckedCreateWithoutRoleInput> | Prisma.RoleAssociationCreateWithoutRoleInput[] | Prisma.RoleAssociationUncheckedCreateWithoutRoleInput[]
   connectOrCreate?: Prisma.RoleAssociationCreateOrConnectWithoutRoleInput | Prisma.RoleAssociationCreateOrConnectWithoutRoleInput[]
@@ -431,58 +389,46 @@ export type RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput = {
   deleteMany?: Prisma.RoleAssociationScalarWhereInput | Prisma.RoleAssociationScalarWhereInput[]
 }
 
-export type RoleAssociationCreateWithoutGroupInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  role: Prisma.RoleCreateNestedOneWithoutAssociationsInput
+export type RoleAssociationCreateNestedManyWithoutGroupInput = {
+  create?: Prisma.XOR<Prisma.RoleAssociationCreateWithoutGroupInput, Prisma.RoleAssociationUncheckedCreateWithoutGroupInput> | Prisma.RoleAssociationCreateWithoutGroupInput[] | Prisma.RoleAssociationUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.RoleAssociationCreateOrConnectWithoutGroupInput | Prisma.RoleAssociationCreateOrConnectWithoutGroupInput[]
+  createMany?: Prisma.RoleAssociationCreateManyGroupInputEnvelope
+  connect?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
 }
 
-export type RoleAssociationUncheckedCreateWithoutGroupInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  roleId: string
+export type RoleAssociationUncheckedCreateNestedManyWithoutGroupInput = {
+  create?: Prisma.XOR<Prisma.RoleAssociationCreateWithoutGroupInput, Prisma.RoleAssociationUncheckedCreateWithoutGroupInput> | Prisma.RoleAssociationCreateWithoutGroupInput[] | Prisma.RoleAssociationUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.RoleAssociationCreateOrConnectWithoutGroupInput | Prisma.RoleAssociationCreateOrConnectWithoutGroupInput[]
+  createMany?: Prisma.RoleAssociationCreateManyGroupInputEnvelope
+  connect?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
 }
 
-export type RoleAssociationCreateOrConnectWithoutGroupInput = {
-  where: Prisma.RoleAssociationWhereUniqueInput
-  create: Prisma.XOR<Prisma.RoleAssociationCreateWithoutGroupInput, Prisma.RoleAssociationUncheckedCreateWithoutGroupInput>
+export type RoleAssociationUpdateManyWithoutGroupNestedInput = {
+  create?: Prisma.XOR<Prisma.RoleAssociationCreateWithoutGroupInput, Prisma.RoleAssociationUncheckedCreateWithoutGroupInput> | Prisma.RoleAssociationCreateWithoutGroupInput[] | Prisma.RoleAssociationUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.RoleAssociationCreateOrConnectWithoutGroupInput | Prisma.RoleAssociationCreateOrConnectWithoutGroupInput[]
+  upsert?: Prisma.RoleAssociationUpsertWithWhereUniqueWithoutGroupInput | Prisma.RoleAssociationUpsertWithWhereUniqueWithoutGroupInput[]
+  createMany?: Prisma.RoleAssociationCreateManyGroupInputEnvelope
+  set?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
+  disconnect?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
+  delete?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
+  connect?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
+  update?: Prisma.RoleAssociationUpdateWithWhereUniqueWithoutGroupInput | Prisma.RoleAssociationUpdateWithWhereUniqueWithoutGroupInput[]
+  updateMany?: Prisma.RoleAssociationUpdateManyWithWhereWithoutGroupInput | Prisma.RoleAssociationUpdateManyWithWhereWithoutGroupInput[]
+  deleteMany?: Prisma.RoleAssociationScalarWhereInput | Prisma.RoleAssociationScalarWhereInput[]
 }
 
-export type RoleAssociationCreateManyGroupInputEnvelope = {
-  data: Prisma.RoleAssociationCreateManyGroupInput | Prisma.RoleAssociationCreateManyGroupInput[]
-  skipDuplicates?: boolean
-}
-
-export type RoleAssociationUpsertWithWhereUniqueWithoutGroupInput = {
-  where: Prisma.RoleAssociationWhereUniqueInput
-  update: Prisma.XOR<Prisma.RoleAssociationUpdateWithoutGroupInput, Prisma.RoleAssociationUncheckedUpdateWithoutGroupInput>
-  create: Prisma.XOR<Prisma.RoleAssociationCreateWithoutGroupInput, Prisma.RoleAssociationUncheckedCreateWithoutGroupInput>
-}
-
-export type RoleAssociationUpdateWithWhereUniqueWithoutGroupInput = {
-  where: Prisma.RoleAssociationWhereUniqueInput
-  data: Prisma.XOR<Prisma.RoleAssociationUpdateWithoutGroupInput, Prisma.RoleAssociationUncheckedUpdateWithoutGroupInput>
-}
-
-export type RoleAssociationUpdateManyWithWhereWithoutGroupInput = {
-  where: Prisma.RoleAssociationScalarWhereInput
-  data: Prisma.XOR<Prisma.RoleAssociationUpdateManyMutationInput, Prisma.RoleAssociationUncheckedUpdateManyWithoutGroupInput>
-}
-
-export type RoleAssociationScalarWhereInput = {
-  AND?: Prisma.RoleAssociationScalarWhereInput | Prisma.RoleAssociationScalarWhereInput[]
-  OR?: Prisma.RoleAssociationScalarWhereInput[]
-  NOT?: Prisma.RoleAssociationScalarWhereInput | Prisma.RoleAssociationScalarWhereInput[]
-  id?: Prisma.StringFilter<"RoleAssociation"> | string
-  createdAt?: Prisma.DateTimeFilter<"RoleAssociation"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"RoleAssociation"> | Date | string | null
-  removedAt?: Prisma.DateTimeNullableFilter<"RoleAssociation"> | Date | string | null
-  roleId?: Prisma.StringFilter<"RoleAssociation"> | string
-  groupId?: Prisma.StringFilter<"RoleAssociation"> | string
+export type RoleAssociationUncheckedUpdateManyWithoutGroupNestedInput = {
+  create?: Prisma.XOR<Prisma.RoleAssociationCreateWithoutGroupInput, Prisma.RoleAssociationUncheckedCreateWithoutGroupInput> | Prisma.RoleAssociationCreateWithoutGroupInput[] | Prisma.RoleAssociationUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.RoleAssociationCreateOrConnectWithoutGroupInput | Prisma.RoleAssociationCreateOrConnectWithoutGroupInput[]
+  upsert?: Prisma.RoleAssociationUpsertWithWhereUniqueWithoutGroupInput | Prisma.RoleAssociationUpsertWithWhereUniqueWithoutGroupInput[]
+  createMany?: Prisma.RoleAssociationCreateManyGroupInputEnvelope
+  set?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
+  disconnect?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
+  delete?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
+  connect?: Prisma.RoleAssociationWhereUniqueInput | Prisma.RoleAssociationWhereUniqueInput[]
+  update?: Prisma.RoleAssociationUpdateWithWhereUniqueWithoutGroupInput | Prisma.RoleAssociationUpdateWithWhereUniqueWithoutGroupInput[]
+  updateMany?: Prisma.RoleAssociationUpdateManyWithWhereWithoutGroupInput | Prisma.RoleAssociationUpdateManyWithWhereWithoutGroupInput[]
+  deleteMany?: Prisma.RoleAssociationScalarWhereInput | Prisma.RoleAssociationScalarWhereInput[]
 }
 
 export type RoleAssociationCreateWithoutRoleInput = {
@@ -527,7 +473,27 @@ export type RoleAssociationUpdateManyWithWhereWithoutRoleInput = {
   data: Prisma.XOR<Prisma.RoleAssociationUpdateManyMutationInput, Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleInput>
 }
 
-export type RoleAssociationCreateManyGroupInput = {
+export type RoleAssociationScalarWhereInput = {
+  AND?: Prisma.RoleAssociationScalarWhereInput | Prisma.RoleAssociationScalarWhereInput[]
+  OR?: Prisma.RoleAssociationScalarWhereInput[]
+  NOT?: Prisma.RoleAssociationScalarWhereInput | Prisma.RoleAssociationScalarWhereInput[]
+  id?: Prisma.StringFilter<"RoleAssociation"> | string
+  createdAt?: Prisma.DateTimeFilter<"RoleAssociation"> | Date | string
+  updatedAt?: Prisma.DateTimeNullableFilter<"RoleAssociation"> | Date | string | null
+  removedAt?: Prisma.DateTimeNullableFilter<"RoleAssociation"> | Date | string | null
+  roleId?: Prisma.StringFilter<"RoleAssociation"> | string
+  groupId?: Prisma.StringFilter<"RoleAssociation"> | string
+}
+
+export type RoleAssociationCreateWithoutGroupInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  role: Prisma.RoleCreateNestedOneWithoutAssociationsInput
+}
+
+export type RoleAssociationUncheckedCreateWithoutGroupInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -535,28 +501,30 @@ export type RoleAssociationCreateManyGroupInput = {
   roleId: string
 }
 
-export type RoleAssociationUpdateWithoutGroupInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.RoleUpdateOneRequiredWithoutAssociationsNestedInput
+export type RoleAssociationCreateOrConnectWithoutGroupInput = {
+  where: Prisma.RoleAssociationWhereUniqueInput
+  create: Prisma.XOR<Prisma.RoleAssociationCreateWithoutGroupInput, Prisma.RoleAssociationUncheckedCreateWithoutGroupInput>
 }
 
-export type RoleAssociationUncheckedUpdateWithoutGroupInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+export type RoleAssociationCreateManyGroupInputEnvelope = {
+  data: Prisma.RoleAssociationCreateManyGroupInput | Prisma.RoleAssociationCreateManyGroupInput[]
+  skipDuplicates?: boolean
 }
 
-export type RoleAssociationUncheckedUpdateManyWithoutGroupInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+export type RoleAssociationUpsertWithWhereUniqueWithoutGroupInput = {
+  where: Prisma.RoleAssociationWhereUniqueInput
+  update: Prisma.XOR<Prisma.RoleAssociationUpdateWithoutGroupInput, Prisma.RoleAssociationUncheckedUpdateWithoutGroupInput>
+  create: Prisma.XOR<Prisma.RoleAssociationCreateWithoutGroupInput, Prisma.RoleAssociationUncheckedCreateWithoutGroupInput>
+}
+
+export type RoleAssociationUpdateWithWhereUniqueWithoutGroupInput = {
+  where: Prisma.RoleAssociationWhereUniqueInput
+  data: Prisma.XOR<Prisma.RoleAssociationUpdateWithoutGroupInput, Prisma.RoleAssociationUncheckedUpdateWithoutGroupInput>
+}
+
+export type RoleAssociationUpdateManyWithWhereWithoutGroupInput = {
+  where: Prisma.RoleAssociationScalarWhereInput
+  data: Prisma.XOR<Prisma.RoleAssociationUpdateManyMutationInput, Prisma.RoleAssociationUncheckedUpdateManyWithoutGroupInput>
 }
 
 export type RoleAssociationCreateManyRoleInput = {
@@ -589,6 +557,38 @@ export type RoleAssociationUncheckedUpdateManyWithoutRoleInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   groupId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type RoleAssociationCreateManyGroupInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  roleId: string
+}
+
+export type RoleAssociationUpdateWithoutGroupInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.RoleUpdateOneRequiredWithoutAssociationsNestedInput
+}
+
+export type RoleAssociationUncheckedUpdateWithoutGroupInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type RoleAssociationUncheckedUpdateManyWithoutGroupInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 

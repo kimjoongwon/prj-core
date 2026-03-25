@@ -26,19 +26,36 @@ export class OidcProviderService {
 			throw new Error("OIDC config is not defined");
 		}
 
+		this.provider = await this.buildProvider(oidcConfig);
+		this.registerEventHandlers();
+
+		this.logger.log("OIDC Provider initialized");
+	}
+
+	async reload(): Promise<void> {
+		const oidcConfig = this.configService.get<OidcConfig>("oidc");
+		if (!oidcConfig) {
+			throw new Error("OIDC config is not defined");
+		}
+
+		this.provider = await this.buildProvider(oidcConfig);
+		this.registerEventHandlers();
+		this.logger.log("OIDC Provider reloaded");
+	}
+
+	private async buildProvider(
+		oidcConfig: OidcConfig,
+	): Promise<OidcProviderInstance> {
 		const { default: OidcProvider } = await import("oidc-provider");
 		const configuration = await this.configurationService.buildConfiguration();
 
-		this.provider = new OidcProvider(
+		const provider = new OidcProvider(
 			oidcConfig.issuer,
 			configuration as Record<string, unknown>,
 		) as unknown as OidcProviderInstance;
 		// Trust ingress forwarded proto/host so resume URLs keep the external https origin.
-		this.provider.proxy = true;
-
-		this.registerEventHandlers();
-
-		this.logger.log("OIDC Provider initialized");
+		provider.proxy = true;
+		return provider;
 	}
 
 	getProvider(): OidcProviderInstance {

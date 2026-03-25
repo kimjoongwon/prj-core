@@ -366,11 +366,6 @@ export type RoutineOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type RoutineScalarRelationFilter = {
-  is?: Prisma.RoutineWhereInput
-  isNot?: Prisma.RoutineWhereInput
-}
-
 export type RoutineCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -402,6 +397,11 @@ export type RoutineMinOrderByAggregateInput = {
   creatorId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
+}
+
+export type RoutineScalarRelationFilter = {
+  is?: Prisma.RoutineWhereInput
+  isNot?: Prisma.RoutineWhereInput
 }
 
 export type RoutineCreateNestedManyWithoutSpaceInput = {
@@ -446,34 +446,6 @@ export type RoutineUncheckedUpdateManyWithoutSpaceNestedInput = {
   deleteMany?: Prisma.RoutineScalarWhereInput | Prisma.RoutineScalarWhereInput[]
 }
 
-export type RoutineCreateNestedOneWithoutProgramsInput = {
-  create?: Prisma.XOR<Prisma.RoutineCreateWithoutProgramsInput, Prisma.RoutineUncheckedCreateWithoutProgramsInput>
-  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutProgramsInput
-  connect?: Prisma.RoutineWhereUniqueInput
-}
-
-export type RoutineUpdateOneRequiredWithoutProgramsNestedInput = {
-  create?: Prisma.XOR<Prisma.RoutineCreateWithoutProgramsInput, Prisma.RoutineUncheckedCreateWithoutProgramsInput>
-  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutProgramsInput
-  upsert?: Prisma.RoutineUpsertWithoutProgramsInput
-  connect?: Prisma.RoutineWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.RoutineUpdateToOneWithWhereWithoutProgramsInput, Prisma.RoutineUpdateWithoutProgramsInput>, Prisma.RoutineUncheckedUpdateWithoutProgramsInput>
-}
-
-export type RoutineCreateNestedOneWithoutActivitiesInput = {
-  create?: Prisma.XOR<Prisma.RoutineCreateWithoutActivitiesInput, Prisma.RoutineUncheckedCreateWithoutActivitiesInput>
-  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutActivitiesInput
-  connect?: Prisma.RoutineWhereUniqueInput
-}
-
-export type RoutineUpdateOneRequiredWithoutActivitiesNestedInput = {
-  create?: Prisma.XOR<Prisma.RoutineCreateWithoutActivitiesInput, Prisma.RoutineUncheckedCreateWithoutActivitiesInput>
-  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutActivitiesInput
-  upsert?: Prisma.RoutineUpsertWithoutActivitiesInput
-  connect?: Prisma.RoutineWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.RoutineUpdateToOneWithWhereWithoutActivitiesInput, Prisma.RoutineUpdateWithoutActivitiesInput>, Prisma.RoutineUncheckedUpdateWithoutActivitiesInput>
-}
-
 export type RoutineCreateNestedManyWithoutCreatorInput = {
   create?: Prisma.XOR<Prisma.RoutineCreateWithoutCreatorInput, Prisma.RoutineUncheckedCreateWithoutCreatorInput> | Prisma.RoutineCreateWithoutCreatorInput[] | Prisma.RoutineUncheckedCreateWithoutCreatorInput[]
   connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutCreatorInput | Prisma.RoutineCreateOrConnectWithoutCreatorInput[]
@@ -514,6 +486,34 @@ export type RoutineUncheckedUpdateManyWithoutCreatorNestedInput = {
   update?: Prisma.RoutineUpdateWithWhereUniqueWithoutCreatorInput | Prisma.RoutineUpdateWithWhereUniqueWithoutCreatorInput[]
   updateMany?: Prisma.RoutineUpdateManyWithWhereWithoutCreatorInput | Prisma.RoutineUpdateManyWithWhereWithoutCreatorInput[]
   deleteMany?: Prisma.RoutineScalarWhereInput | Prisma.RoutineScalarWhereInput[]
+}
+
+export type RoutineCreateNestedOneWithoutActivitiesInput = {
+  create?: Prisma.XOR<Prisma.RoutineCreateWithoutActivitiesInput, Prisma.RoutineUncheckedCreateWithoutActivitiesInput>
+  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutActivitiesInput
+  connect?: Prisma.RoutineWhereUniqueInput
+}
+
+export type RoutineUpdateOneRequiredWithoutActivitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.RoutineCreateWithoutActivitiesInput, Prisma.RoutineUncheckedCreateWithoutActivitiesInput>
+  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutActivitiesInput
+  upsert?: Prisma.RoutineUpsertWithoutActivitiesInput
+  connect?: Prisma.RoutineWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RoutineUpdateToOneWithWhereWithoutActivitiesInput, Prisma.RoutineUpdateWithoutActivitiesInput>, Prisma.RoutineUncheckedUpdateWithoutActivitiesInput>
+}
+
+export type RoutineCreateNestedOneWithoutProgramsInput = {
+  create?: Prisma.XOR<Prisma.RoutineCreateWithoutProgramsInput, Prisma.RoutineUncheckedCreateWithoutProgramsInput>
+  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutProgramsInput
+  connect?: Prisma.RoutineWhereUniqueInput
+}
+
+export type RoutineUpdateOneRequiredWithoutProgramsNestedInput = {
+  create?: Prisma.XOR<Prisma.RoutineCreateWithoutProgramsInput, Prisma.RoutineUncheckedCreateWithoutProgramsInput>
+  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutProgramsInput
+  upsert?: Prisma.RoutineUpsertWithoutProgramsInput
+  connect?: Prisma.RoutineWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RoutineUpdateToOneWithWhereWithoutProgramsInput, Prisma.RoutineUpdateWithoutProgramsInput>, Prisma.RoutineUncheckedUpdateWithoutProgramsInput>
 }
 
 export type RoutineCreateWithoutSpaceInput = {
@@ -580,7 +580,7 @@ export type RoutineScalarWhereInput = {
   label?: Prisma.StringFilter<"Routine"> | string
 }
 
-export type RoutineCreateWithoutProgramsInput = {
+export type RoutineCreateWithoutCreatorInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -588,60 +588,46 @@ export type RoutineCreateWithoutProgramsInput = {
   name: string
   label: string
   space: Prisma.SpaceCreateNestedOneWithoutRoutinesInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedRoutinesInput
   activities?: Prisma.ActivityCreateNestedManyWithoutRoutineInput
+  programs?: Prisma.ProgramCreateNestedManyWithoutRoutineInput
 }
 
-export type RoutineUncheckedCreateWithoutProgramsInput = {
+export type RoutineUncheckedCreateWithoutCreatorInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   spaceId: string
-  creatorId?: string | null
   name: string
   label: string
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutRoutineInput
+  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutRoutineInput
 }
 
-export type RoutineCreateOrConnectWithoutProgramsInput = {
+export type RoutineCreateOrConnectWithoutCreatorInput = {
   where: Prisma.RoutineWhereUniqueInput
-  create: Prisma.XOR<Prisma.RoutineCreateWithoutProgramsInput, Prisma.RoutineUncheckedCreateWithoutProgramsInput>
+  create: Prisma.XOR<Prisma.RoutineCreateWithoutCreatorInput, Prisma.RoutineUncheckedCreateWithoutCreatorInput>
 }
 
-export type RoutineUpsertWithoutProgramsInput = {
-  update: Prisma.XOR<Prisma.RoutineUpdateWithoutProgramsInput, Prisma.RoutineUncheckedUpdateWithoutProgramsInput>
-  create: Prisma.XOR<Prisma.RoutineCreateWithoutProgramsInput, Prisma.RoutineUncheckedCreateWithoutProgramsInput>
-  where?: Prisma.RoutineWhereInput
+export type RoutineCreateManyCreatorInputEnvelope = {
+  data: Prisma.RoutineCreateManyCreatorInput | Prisma.RoutineCreateManyCreatorInput[]
+  skipDuplicates?: boolean
 }
 
-export type RoutineUpdateToOneWithWhereWithoutProgramsInput = {
-  where?: Prisma.RoutineWhereInput
-  data: Prisma.XOR<Prisma.RoutineUpdateWithoutProgramsInput, Prisma.RoutineUncheckedUpdateWithoutProgramsInput>
+export type RoutineUpsertWithWhereUniqueWithoutCreatorInput = {
+  where: Prisma.RoutineWhereUniqueInput
+  update: Prisma.XOR<Prisma.RoutineUpdateWithoutCreatorInput, Prisma.RoutineUncheckedUpdateWithoutCreatorInput>
+  create: Prisma.XOR<Prisma.RoutineCreateWithoutCreatorInput, Prisma.RoutineUncheckedCreateWithoutCreatorInput>
 }
 
-export type RoutineUpdateWithoutProgramsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.StringFieldUpdateOperationsInput | string
-  space?: Prisma.SpaceUpdateOneRequiredWithoutRoutinesNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedRoutinesNestedInput
-  activities?: Prisma.ActivityUpdateManyWithoutRoutineNestedInput
+export type RoutineUpdateWithWhereUniqueWithoutCreatorInput = {
+  where: Prisma.RoutineWhereUniqueInput
+  data: Prisma.XOR<Prisma.RoutineUpdateWithoutCreatorInput, Prisma.RoutineUncheckedUpdateWithoutCreatorInput>
 }
 
-export type RoutineUncheckedUpdateWithoutProgramsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.StringFieldUpdateOperationsInput | string
-  activities?: Prisma.ActivityUncheckedUpdateManyWithoutRoutineNestedInput
+export type RoutineUpdateManyWithWhereWithoutCreatorInput = {
+  where: Prisma.RoutineScalarWhereInput
+  data: Prisma.XOR<Prisma.RoutineUpdateManyMutationInput, Prisma.RoutineUncheckedUpdateManyWithoutCreatorInput>
 }
 
 export type RoutineCreateWithoutActivitiesInput = {
@@ -708,7 +694,7 @@ export type RoutineUncheckedUpdateWithoutActivitiesInput = {
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutRoutineNestedInput
 }
 
-export type RoutineCreateWithoutCreatorInput = {
+export type RoutineCreateWithoutProgramsInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -716,46 +702,60 @@ export type RoutineCreateWithoutCreatorInput = {
   name: string
   label: string
   space: Prisma.SpaceCreateNestedOneWithoutRoutinesInput
+  creator?: Prisma.UserCreateNestedOneWithoutCreatedRoutinesInput
   activities?: Prisma.ActivityCreateNestedManyWithoutRoutineInput
-  programs?: Prisma.ProgramCreateNestedManyWithoutRoutineInput
 }
 
-export type RoutineUncheckedCreateWithoutCreatorInput = {
+export type RoutineUncheckedCreateWithoutProgramsInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   spaceId: string
+  creatorId?: string | null
   name: string
   label: string
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutRoutineInput
-  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutRoutineInput
 }
 
-export type RoutineCreateOrConnectWithoutCreatorInput = {
+export type RoutineCreateOrConnectWithoutProgramsInput = {
   where: Prisma.RoutineWhereUniqueInput
-  create: Prisma.XOR<Prisma.RoutineCreateWithoutCreatorInput, Prisma.RoutineUncheckedCreateWithoutCreatorInput>
+  create: Prisma.XOR<Prisma.RoutineCreateWithoutProgramsInput, Prisma.RoutineUncheckedCreateWithoutProgramsInput>
 }
 
-export type RoutineCreateManyCreatorInputEnvelope = {
-  data: Prisma.RoutineCreateManyCreatorInput | Prisma.RoutineCreateManyCreatorInput[]
-  skipDuplicates?: boolean
+export type RoutineUpsertWithoutProgramsInput = {
+  update: Prisma.XOR<Prisma.RoutineUpdateWithoutProgramsInput, Prisma.RoutineUncheckedUpdateWithoutProgramsInput>
+  create: Prisma.XOR<Prisma.RoutineCreateWithoutProgramsInput, Prisma.RoutineUncheckedCreateWithoutProgramsInput>
+  where?: Prisma.RoutineWhereInput
 }
 
-export type RoutineUpsertWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.RoutineWhereUniqueInput
-  update: Prisma.XOR<Prisma.RoutineUpdateWithoutCreatorInput, Prisma.RoutineUncheckedUpdateWithoutCreatorInput>
-  create: Prisma.XOR<Prisma.RoutineCreateWithoutCreatorInput, Prisma.RoutineUncheckedCreateWithoutCreatorInput>
+export type RoutineUpdateToOneWithWhereWithoutProgramsInput = {
+  where?: Prisma.RoutineWhereInput
+  data: Prisma.XOR<Prisma.RoutineUpdateWithoutProgramsInput, Prisma.RoutineUncheckedUpdateWithoutProgramsInput>
 }
 
-export type RoutineUpdateWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.RoutineWhereUniqueInput
-  data: Prisma.XOR<Prisma.RoutineUpdateWithoutCreatorInput, Prisma.RoutineUncheckedUpdateWithoutCreatorInput>
+export type RoutineUpdateWithoutProgramsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  space?: Prisma.SpaceUpdateOneRequiredWithoutRoutinesNestedInput
+  creator?: Prisma.UserUpdateOneWithoutCreatedRoutinesNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutRoutineNestedInput
 }
 
-export type RoutineUpdateManyWithWhereWithoutCreatorInput = {
-  where: Prisma.RoutineScalarWhereInput
-  data: Prisma.XOR<Prisma.RoutineUpdateManyMutationInput, Prisma.RoutineUncheckedUpdateManyWithoutCreatorInput>
+export type RoutineUncheckedUpdateWithoutProgramsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutRoutineNestedInput
 }
 
 export type RoutineCreateManySpaceInput = {
@@ -959,52 +959,19 @@ export type RoutineIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $RoutinePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Routine"
   objects: {
-    /**
-     * Space 관계
-     */
     space: Prisma.$SpacePayload<ExtArgs>
-    /**
-     * 생성자 관계
-     */
     creator: Prisma.$UserPayload<ExtArgs> | null
-    /**
-     * 활동 목록
-     */
     activities: Prisma.$ActivityPayload<ExtArgs>[]
     programs: Prisma.$ProgramPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    /**
-     * 고유 식별자
-     */
     id: string
-    /**
-     * 생성 일시
-     */
     createdAt: Date
-    /**
-     * 수정 일시
-     */
     updatedAt: Date | null
-    /**
-     * 삭제 일시
-     */
     removedAt: Date | null
-    /**
-     * Space ID (상위 Space 루틴은 하위에서 사용 가능)
-     */
     spaceId: string
-    /**
-     * 생성자 ID
-     */
     creatorId: string | null
-    /**
-     * 이름
-     */
     name: string
-    /**
-     * 라벨
-     */
     label: string
   }, ExtArgs["result"]["routine"]>
   composites: {}

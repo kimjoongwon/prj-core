@@ -1,3 +1,5 @@
+import { createHash, randomBytes } from "node:crypto";
+
 /**
  * IDP 모듈 마이그레이션 E2E 테스트
  *
@@ -11,6 +13,255 @@
  */
 
 const BASE_URL = "http://localhost:3007";
+
+type FirstPartyClient = "admin-web" | "idp-web" | "storybook";
+
+const FIRST_PARTY_CALLBACK_URIS: Record<FirstPartyClient, string> = {
+	"admin-web": "http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
+	"idp-web": "http://localhost:3008/api/v1/auth/callback?clientId=idp-web",
+	storybook: "http://localhost:6006/api/v1/auth/callback?clientId=storybook",
+};
+
+const FIRST_PARTY_LOGIN_URLS: Record<FirstPartyClient, string> = {
+	"admin-web": "http://localhost:3000/admin/auth/login",
+	"idp-web": "http://localhost:3008/auth/login",
+	storybook: "http://localhost:6006/__storybook_auth/login",
+};
+
+const SWAGGER_CLIENT_ID = "prj-core-swagger";
+const SWAGGER_REDIRECT_URI = `${BASE_URL}/api/oauth2-redirect.html`;
+const DEFAULT_ADMIN_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
+const DEFAULT_ADMIN_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
+
+type CookieJar = Map<string, string>;
+
+function buildCookieHeader(jar: CookieJar): string | undefined {
+	if (jar.size === 0) {
+		return undefined;
+	}
+
+	return Array.from(jar.values()).join("; ");
+}
+
+function storeResponseCookies(response: Response, jar: CookieJar) {
+	const setCookies =
+		(
+			response.headers as unknown as {
+				getSetCookie?: () => string[];
+			}
+		).getSetCookie?.() ?? [];
+
+	for (const setCookie of setCookies) {
+		const [cookiePair] = setCookie.split(";");
+		const [name, ...valueParts] = cookiePair.split("=");
+		jar.set(name, `${name}=${valueParts.join("=")}`);
+	}
+}
+
+async function fetchWithCookies(
+	url: string,
+	jar: CookieJar,
+	init: RequestInit = {},
+): Promise<Response> {
+	const headers = new Headers(init.headers);
+	const cookieHeader = buildCookieHeader(jar);
+
+	if (cookieHeader) {
+		headers.set("cookie", cookieHeader);
+	}
+
+	const response = await fetch(url, {
+		...init,
+		headers,
+		redirect: "manual",
+	});
+	storeResponseCookies(response, jar);
+	return response;
+}
+
+function createPkcePair() {
+	const codeVerifier = randomBytes(32).toString("base64url");
+	const codeChallenge = createHash("sha256")
+		.update(codeVerifier)
+		.digest("base64url");
+
+	return { codeVerifier, codeChallenge };
+}
+
+function extractInteractionUid(url: string): string | null {
+	try {
+		const parsed = new URL(url);
+		const match = parsed.pathname.match(/^\/interaction\/([^/]+)$/);
+		return match?.[1] ?? null;
+	} catch {
+		return null;
+	}
+}
+
+async function loginAsFullAccessWithSwaggerClient(): Promise<string> {
+	const jar: CookieJar = new Map();
+	const state = randomBytes(16).toString("hex");
+	const { codeVerifier, codeChallenge } = createPkcePair();
+	const authUrl = new URL("/oidc/auth", BASE_URL);
+
+	authUrl.searchParams.set("response_type", "code");
+	authUrl.searchParams.set("client_id", SWAGGER_CLIENT_ID);
+	authUrl.searchParams.set("redirect_uri", SWAGGER_REDIRECT_URI);
+	authUrl.searchParams.set("scope", "openid profile email roles");
+	authUrl.searchParams.set("state", state);
+	authUrl.searchParams.set("code_challenge", codeChallenge);
+	authUrl.searchParams.set("code_challenge_method", "S256");
+	authUrl.searchParams.set("prompt", "login");
+
+	const authResponse = await fetchWithCookies(authUrl.toString(), jar);
+	expect([302, 303]).toContain(authResponse.status);
+
+	let nextUrl = authResponse.headers.get("location");
+	expect(nextUrl).toBeDefined();
+
+	for (let step = 0; step < 10; step++) {
+		if (!nextUrl) {
+			break;
+		}
+
+		const uid = extractInteractionUid(nextUrl);
+		if (uid) {
+			const interactionRes = await fetchWithCookies(
+				`${BASE_URL}/api/interaction/${uid}`,
+				jar,
+			);
+			expect(interactionRes.status).toBe(200);
+			const interaction = (await interactionRes.json()) as {
+				type: "login" | "consent";
+			};
+
+			if (interaction.type === "login") {
+				const loginRes = await fetchWithCookies(
+					`${BASE_URL}/api/interaction/${uid}/login`,
+					jar,
+					{
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({
+							email: DEFAULT_ADMIN_EMAIL,
+							password: DEFAULT_ADMIN_PASSWORD,
+							remember: false,
+						}),
+					},
+				);
+				expect(loginRes.status).toBe(200);
+				nextUrl = ((await loginRes.json()) as { redirectTo: string }).redirectTo;
+				continue;
+			}
+
+			const consentRes = await fetchWithCookies(
+				`${BASE_URL}/api/interaction/${uid}/confirm`,
+				jar,
+				{
+					method: "POST",
+				},
+			);
+			expect(consentRes.status).toBe(200);
+			nextUrl = ((await consentRes.json()) as { redirectTo: string }).redirectTo;
+			continue;
+		}
+
+		const resumeRes = await fetchWithCookies(nextUrl, jar);
+		expect([302, 303]).toContain(resumeRes.status);
+		const location = resumeRes.headers.get("location");
+		expect(location).toBeDefined();
+
+		const redirectUrl = new URL(location as string, BASE_URL);
+		if (
+			redirectUrl.origin === BASE_URL &&
+			redirectUrl.pathname === "/api/oauth2-redirect.html"
+		) {
+			const code = redirectUrl.searchParams.get("code");
+			const returnedState = redirectUrl.searchParams.get("state");
+			expect(code).toBeDefined();
+			expect(returnedState).toBe(state);
+
+			const tokenRes = await fetchWithCookies(`${BASE_URL}/oidc/token`, jar, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+				},
+				body: new URLSearchParams({
+					grant_type: "authorization_code",
+					client_id: SWAGGER_CLIENT_ID,
+					redirect_uri: SWAGGER_REDIRECT_URI,
+					code: code as string,
+					code_verifier: codeVerifier,
+				}).toString(),
+			});
+			expect(tokenRes.status).toBe(200);
+			const tokenBody = (await tokenRes.json()) as {
+				access_token?: string;
+			};
+			expect(tokenBody.access_token).toBeDefined();
+			return tokenBody.access_token as string;
+		}
+
+		nextUrl = location;
+	}
+
+	throw new Error("Swagger public client login did not finish in time.");
+}
+
+async function fetchAuthorizedJson(
+	url: string,
+	accessToken: string,
+	init: RequestInit = {},
+) {
+	const headers = new Headers(init.headers);
+	headers.set("authorization", `Bearer ${accessToken}`);
+
+	if (init.body && !headers.has("Content-Type")) {
+		headers.set("Content-Type", "application/json");
+	}
+
+	const response = await fetch(url, {
+		...init,
+		headers,
+	});
+	const rawBody = await response.text();
+	const body = (rawBody
+		? (JSON.parse(rawBody) as {
+				data?: unknown;
+				message?: string;
+			})
+		: {}) as {
+		data?: unknown;
+		message?: string;
+	};
+
+	return { response, body };
+}
+
+async function requestManualRedirect(url: string): Promise<Response> {
+	return fetch(url, { redirect: "manual" });
+}
+
+async function expectOidcLoginRedirect(clientId: FirstPartyClient) {
+	const res = await requestManualRedirect(
+		`${BASE_URL}/api/v1/auth/login?clientId=${clientId}`,
+	);
+
+	expect(res.status).toBe(302);
+	const location = res.headers.get("location");
+	expect(location).toBeDefined();
+
+	const url = new URL(location as string);
+	expect(url.pathname).toBe("/oidc/auth");
+	expect(url.searchParams.get("client_id")).toBe(clientId);
+	expect(url.searchParams.get("response_type")).toBe("code");
+	expect(url.searchParams.get("redirect_uri")).toBe(
+		FIRST_PARTY_CALLBACK_URIS[clientId],
+	);
+	expect(url.searchParams.get("code_challenge_method")).toBe("S256");
+
+	return url;
+}
 
 describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 	// =========================================================================
@@ -43,7 +294,8 @@ describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 			const params = new URLSearchParams({
 				response_type: "code",
 				client_id: "admin-web",
-				redirect_uri: "http://localhost:3000/api/v1/auth/callback",
+				redirect_uri:
+					"http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
 				scope: "openid profile email roles",
 				state: "test-state-" + Date.now(),
 				code_challenge: "V81G5rYMWhbkYCZxf985aIHW5Lm0rnRgqlW74RYKmdk",
@@ -117,31 +369,64 @@ describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 	// 4. Auth 경로 (/api/v1/auth)
 	// =========================================================================
 	describe("Auth 경로 (/api/v1/auth)", () => {
-		it("GET /api/v1/auth/login - OIDC 로그인 리다이렉트", async () => {
+		it("GET /api/v1/auth/login - clientId 없이 요청 시 400", async () => {
 			const res = await fetch(`${BASE_URL}/api/v1/auth/login`, {
 				redirect: "manual",
 			});
 
-			// OIDC Authorization URL로 리다이렉트
-			expect(res.status).toBe(302);
-			const location = res.headers.get("location");
-			expect(location).toBeDefined();
-			expect(location).toContain("/oidc/auth");
-			expect(location).toContain("client_id=admin-web");
-			expect(location).toContain("redirect_uri=");
-			expect(location).toContain("response_type=code");
+			expect(res.status).toBe(400);
 		});
 
-		it("GET /api/v1/auth/login?returnTo=/admin/settings - returnTo 파라미터 전달", async () => {
-			const res = await fetch(
-				`${BASE_URL}/api/v1/auth/login?returnTo=/admin/settings`,
-				{ redirect: "manual" },
+		it("GET /api/v1/auth/login?clientId=admin-web - admin-web 로그인 리다이렉트", async () => {
+			const url = await expectOidcLoginRedirect("admin-web");
+
+			expect(url.searchParams.get("prompt")).toBe("login");
+		});
+
+		it("GET /api/v1/auth/login?clientId=idp-web - OIDC 로그인 리다이렉트", async () => {
+			await expectOidcLoginRedirect("idp-web");
+		});
+
+		it("GET /api/v1/auth/login?clientId=storybook - storybook 로그인 리다이렉트", async () => {
+			await expectOidcLoginRedirect("storybook");
+		});
+
+		it("GET /api/v1/auth/login?clientId=idp-web&returnTo=/admin/settings - returnTo 파라미터 전달", async () => {
+			const res = await requestManualRedirect(
+				`${BASE_URL}/api/v1/auth/login?clientId=idp-web&returnTo=/admin/settings`,
 			);
 
 			expect(res.status).toBe(302);
 			const location = res.headers.get("location");
 			expect(location).toBeDefined();
 			expect(location).toContain("/oidc/auth");
+		});
+
+		it("GET /api/v1/auth/login?clientId=does-not-exist - 알 수 없는 clientId는 404", async () => {
+			const res = await fetch(
+				`${BASE_URL}/api/v1/auth/login?clientId=does-not-exist`,
+			);
+
+			expect(res.status).toBe(404);
+			const body = await res.json();
+			expect(body.message).toBe("OIDC 클라이언트를 찾을 수 없습니다");
+		});
+
+		it("GET /api/v1/auth/callback?clientId=storybook&error=access_denied - storybook loginUrl로 복귀", async () => {
+			const res = await requestManualRedirect(
+				`${BASE_URL}/api/v1/auth/callback?clientId=storybook&error=access_denied&error_description=%EC%9D%B8%EC%A6%9D%20%EA%B1%B0%EB%B6%80`,
+			);
+
+			expect(res.status).toBe(302);
+			expect(res.headers.get("location")).toBe(
+				`${FIRST_PARTY_LOGIN_URLS.storybook}?error=%EC%9D%B8%EC%A6%9D+%EA%B1%B0%EB%B6%80`,
+			);
+		});
+
+		it("GET /api/v1/auth/callback - clientId 없이 요청 시 400", async () => {
+			const res = await fetch(`${BASE_URL}/api/v1/auth/callback`);
+
+			expect(res.status).toBe(400);
 		});
 
 		it("POST /api/v1/auth/token/refresh - 리프레시 토큰 없이 요청 시 401", async () => {
@@ -248,6 +533,125 @@ describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 
 			expect(res.status).toBe(401);
 		});
+
+		it("FULL_ACCESS 토큰으로 create/update/toggle-active가 login endpoint에 즉시 반영된다", async () => {
+			const accessToken = await loginAsFullAccessWithSwaggerClient();
+			const suffix = Date.now().toString();
+			const clientId = `e2e-auth-shell-${suffix}`;
+			const initialRedirectUri = `http://localhost:3100/api/v1/auth/callback?clientId=${clientId}`;
+			const updatedRedirectUri = `http://localhost:3200/api/v1/auth/callback?clientId=${clientId}`;
+			const initialLoginUrl = "http://localhost:3100/auth/login";
+			const updatedLoginUrl = "http://localhost:3200/auth/login";
+			let oidcClientId: string | null = null;
+
+			try {
+				const createResult = await fetchAuthorizedJson(
+					`${BASE_URL}/api/v1/oidc-clients`,
+					accessToken,
+					{
+						method: "POST",
+						body: JSON.stringify({
+							clientId,
+							clientSecret: "e2e-secret-change-me",
+							clientName: `E2E Auth Shell ${suffix}`,
+							redirectUris: [initialRedirectUri],
+							loginUrl: initialLoginUrl,
+							defaultReturnTo: "http://localhost:3100/dashboard",
+							grantTypes: ["authorization_code", "refresh_token"],
+							responseTypes: ["code"],
+							tokenEndpointAuthMethod: "client_secret_post",
+							scope: "openid profile email roles",
+						}),
+					},
+				);
+
+				expect(createResult.response.status).toBe(201);
+				const createdClient = createResult.body.data as {
+					id: string;
+					clientId: string;
+				};
+				oidcClientId = createdClient.id;
+				expect(createdClient.clientId).toBe(clientId);
+
+				const createdLoginRes = await requestManualRedirect(
+					`${BASE_URL}/api/v1/auth/login?clientId=${clientId}`,
+				);
+				expect(createdLoginRes.status).toBe(302);
+				const createdLoginUrl = new URL(
+					createdLoginRes.headers.get("location") as string,
+				);
+				expect(createdLoginUrl.searchParams.get("redirect_uri")).toBe(
+					initialRedirectUri,
+				);
+
+				const updateResult = await fetchAuthorizedJson(
+					`${BASE_URL}/api/v1/oidc-clients/${oidcClientId}`,
+					accessToken,
+					{
+						method: "PATCH",
+						body: JSON.stringify({
+							clientName: `E2E Auth Shell Updated ${suffix}`,
+							redirectUris: [updatedRedirectUri],
+							loginUrl: updatedLoginUrl,
+							defaultReturnTo: "http://localhost:3200/dashboard",
+						}),
+					},
+				);
+
+				expect(updateResult.response.status).toBe(200);
+
+				const updatedLoginRes = await requestManualRedirect(
+					`${BASE_URL}/api/v1/auth/login?clientId=${clientId}`,
+				);
+				expect(updatedLoginRes.status).toBe(302);
+				const updatedLoginUrlObj = new URL(
+					updatedLoginRes.headers.get("location") as string,
+				);
+				expect(updatedLoginUrlObj.searchParams.get("redirect_uri")).toBe(
+					updatedRedirectUri,
+				);
+
+				const disableResult = await fetchAuthorizedJson(
+					`${BASE_URL}/api/v1/oidc-clients/${oidcClientId}/toggle-active`,
+					accessToken,
+					{
+						method: "PATCH",
+					},
+				);
+
+				expect(disableResult.response.status).toBe(200);
+				const disabledLoginRes = await fetch(
+					`${BASE_URL}/api/v1/auth/login?clientId=${clientId}`,
+				);
+				expect(disabledLoginRes.status).toBe(400);
+				const disabledBody = await disabledLoginRes.json();
+				expect(disabledBody.message).toBe("비활성화된 OIDC 클라이언트입니다");
+
+				const enableResult = await fetchAuthorizedJson(
+					`${BASE_URL}/api/v1/oidc-clients/${oidcClientId}/toggle-active`,
+					accessToken,
+					{
+						method: "PATCH",
+					},
+				);
+
+				expect(enableResult.response.status).toBe(200);
+				const reenabledLoginRes = await requestManualRedirect(
+					`${BASE_URL}/api/v1/auth/login?clientId=${clientId}`,
+				);
+				expect(reenabledLoginRes.status).toBe(302);
+			} finally {
+				if (oidcClientId) {
+					await fetchAuthorizedJson(
+						`${BASE_URL}/api/v1/oidc-clients/${oidcClientId}`,
+						accessToken,
+						{
+							method: "DELETE",
+						},
+					);
+				}
+			}
+		});
 	});
 
 	// =========================================================================
@@ -326,10 +730,13 @@ describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 	// =========================================================================
 	describe("OIDC 전체 플로우", () => {
 		it("login → OIDC auth → interaction 리다이렉트 체인", async () => {
-			// Step 1: /api/v1/auth/login 호출
-			const loginRes = await fetch(`${BASE_URL}/api/v1/auth/login`, {
-				redirect: "manual",
-			});
+			// Step 1: /api/v1/auth/login?clientId=... 호출
+			const loginRes = await fetch(
+				`${BASE_URL}/api/v1/auth/login?clientId=idp-web`,
+				{
+					redirect: "manual",
+				},
+			);
 			expect(loginRes.status).toBe(302);
 
 			const oidcAuthUrl = loginRes.headers.get("location");
@@ -354,9 +761,12 @@ describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 
 		it("main server(3006)에 /api/v1/auth/login 없음 (404 또는 연결 실패)", async () => {
 			try {
-				const res = await fetch(`${MAIN_SERVER}/api/v1/auth/login`, {
-					redirect: "manual",
-				});
+				const res = await fetch(
+					`${MAIN_SERVER}/api/v1/auth/login?clientId=idp-web`,
+					{
+						redirect: "manual",
+					},
+				);
 				// 서버가 실행 중이면 404, 아니면 연결 실패
 				expect([404, 403]).toContain(res.status);
 			} catch {

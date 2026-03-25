@@ -1,25 +1,16 @@
 import * as crypto from "node:crypto";
-import {
-	Injectable,
-	Logger,
-	UnauthorizedException,
-} from "@nestjs/common";
+import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
-export type OidcRpClientKey = "admin" | "storybook" | "idpWeb";
-
-interface OidcRpClientConfig {
+export interface OidcClientProtocolConfig {
 	clientId: string;
-	clientSecret: string;
+	clientSecret?: string | null;
 	redirectUri: string;
-	loginUrl?: string;
-	defaultReturnTo?: string;
 }
 
 interface OidcServerConfig {
 	issuer: string;
 	jwksUri: string;
-	clients: Record<OidcRpClientKey, OidcRpClientConfig>;
 }
 
 export interface OidcTokenResponse {
@@ -34,29 +25,6 @@ export interface OidcTokenResponse {
 const DEFAULT_OIDC_CONFIG: OidcServerConfig = {
 	issuer: "http://localhost:3007",
 	jwksUri: "http://localhost:3007/oidc/jwks",
-	clients: {
-		admin: {
-			clientId: "admin-web",
-			clientSecret: "admin-secret-change-in-production",
-			redirectUri: "http://localhost:3000/api/v1/auth/callback",
-			loginUrl: "http://localhost:3000/admin/auth/login",
-			defaultReturnTo: "http://localhost:3000/admin/dashboard",
-		},
-		storybook: {
-			clientId: "storybook",
-			clientSecret: "storybook-secret-change-in-production",
-			redirectUri: "http://localhost:6006/api/v1/auth/storybook/callback",
-			loginUrl: "http://localhost:6006/__storybook_auth/login",
-			defaultReturnTo: "http://localhost:6006/",
-		},
-		idpWeb: {
-			clientId: "idp-web",
-			clientSecret: "idp-web-secret-change-in-production",
-			redirectUri: "http://localhost:3008/api/v1/auth/idp/callback",
-			loginUrl: "http://localhost:3008/auth/login",
-			defaultReturnTo: "http://localhost:3008/dashboard",
-		},
-	},
 };
 
 @Injectable()
@@ -65,12 +33,12 @@ export class OidcFacade {
 	private readonly oidcConfig: OidcServerConfig;
 
 	constructor(private readonly configService: ConfigService) {
-		const rawConfig = this.configService.get<OidcServerConfig>("oidc");
+		const rawConfig = this.configService.get<Partial<OidcServerConfig>>("oidc");
 		this.oidcConfig = this.resolveConfig(rawConfig);
 	}
 
 	createAuthorizationRequest(
-		clientKey: OidcRpClientKey = "admin",
+		client: OidcClientProtocolConfig,
 		returnTo?: string,
 	): {
 		state: string;
@@ -78,7 +46,6 @@ export class OidcFacade {
 		authorizationUrl: string;
 		returnTo?: string;
 	} {
-		const clientConfig = this.resolveClientConfig(clientKey);
 		const state = crypto.randomBytes(32).toString("hex");
 		const codeVerifier = crypto.randomBytes(32).toString("base64url");
 		const codeChallenge = crypto
@@ -88,8 +55,8 @@ export class OidcFacade {
 
 		const params = new URLSearchParams({
 			response_type: "code",
-			client_id: clientConfig.clientId,
-			redirect_uri: clientConfig.redirectUri,
+			client_id: client.clientId,
+			redirect_uri: client.redirectUri,
 			scope: "openid profile email roles",
 			state,
 			code_challenge: codeChallenge,
@@ -108,16 +75,15 @@ export class OidcFacade {
 	async exchangeCodeForTokens(
 		code: string,
 		codeVerifier: string,
-		clientKey: OidcRpClientKey = "admin",
+		client: OidcClientProtocolConfig,
 	): Promise<OidcTokenResponse> {
-		const clientConfig = this.resolveClientConfig(clientKey);
 		const tokenUrl = `${this.oidcConfig.issuer}/oidc/token`;
 		const body = new URLSearchParams({
 			grant_type: "authorization_code",
 			code,
-			redirect_uri: clientConfig.redirectUri,
-			client_id: clientConfig.clientId,
-			client_secret: clientConfig.clientSecret,
+			redirect_uri: client.redirectUri,
+			client_id: client.clientId,
+			...(client.clientSecret ? { client_secret: client.clientSecret } : {}),
 			code_verifier: codeVerifier,
 		});
 
@@ -140,15 +106,14 @@ export class OidcFacade {
 
 	async refreshTokens(
 		refreshToken: string,
-		clientKey: OidcRpClientKey = "admin",
+		client: OidcClientProtocolConfig,
 	): Promise<OidcTokenResponse> {
-		const clientConfig = this.resolveClientConfig(clientKey);
 		const tokenUrl = `${this.oidcConfig.issuer}/oidc/token`;
 		const body = new URLSearchParams({
 			grant_type: "refresh_token",
 			refresh_token: refreshToken,
-			client_id: clientConfig.clientId,
-			client_secret: clientConfig.clientSecret,
+			client_id: client.clientId,
+			...(client.clientSecret ? { client_secret: client.clientSecret } : {}),
 		});
 
 		const response = await fetch(tokenUrl, {
@@ -170,14 +135,13 @@ export class OidcFacade {
 
 	async revokeToken(
 		token: string,
-		clientKey: OidcRpClientKey = "admin",
+		client: Pick<OidcClientProtocolConfig, "clientId" | "clientSecret">,
 	): Promise<void> {
-		const clientConfig = this.resolveClientConfig(clientKey);
 		const revocationUrl = `${this.oidcConfig.issuer}/oidc/token/revocation`;
 		const body = new URLSearchParams({
 			token,
-			client_id: clientConfig.clientId,
-			client_secret: clientConfig.clientSecret,
+			client_id: client.clientId,
+			...(client.clientSecret ? { client_secret: client.clientSecret } : {}),
 		});
 
 		try {
@@ -193,11 +157,9 @@ export class OidcFacade {
 		}
 	}
 
-	private resolveClientConfig(clientKey: OidcRpClientKey): OidcRpClientConfig {
-		return this.oidcConfig.clients[clientKey] || this.oidcConfig.clients.admin;
-	}
-
-	private resolveConfig(rawConfig?: OidcServerConfig): OidcServerConfig {
+	private resolveConfig(
+		rawConfig?: Partial<OidcServerConfig>,
+	): OidcServerConfig {
 		if (!rawConfig) {
 			return DEFAULT_OIDC_CONFIG;
 		}
@@ -205,20 +167,6 @@ export class OidcFacade {
 		return {
 			issuer: rawConfig.issuer || DEFAULT_OIDC_CONFIG.issuer,
 			jwksUri: rawConfig.jwksUri || DEFAULT_OIDC_CONFIG.jwksUri,
-			clients: {
-				admin: {
-					...DEFAULT_OIDC_CONFIG.clients.admin,
-					...rawConfig.clients?.admin,
-				},
-				storybook: {
-					...DEFAULT_OIDC_CONFIG.clients.storybook,
-					...rawConfig.clients?.storybook,
-				},
-				idpWeb: {
-					...DEFAULT_OIDC_CONFIG.clients.idpWeb,
-					...rawConfig.clients?.idpWeb,
-				},
-			},
 		};
 	}
 }

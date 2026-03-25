@@ -37,15 +37,6 @@ export const DerivativeKind = {
 export type DerivativeKind = (typeof DerivativeKind)[keyof typeof DerivativeKind]
 
 
-export const WhitelistType = {
-  IP: 'IP',
-  EMAIL_DOMAIN: 'EMAIL_DOMAIN',
-  CORS_ORIGIN: 'CORS_ORIGIN'
-} as const
-
-export type WhitelistType = (typeof WhitelistType)[keyof typeof WhitelistType]
-
-
 export const AuthAuditResult = {
   SUCCESS: 'SUCCESS',
   FAILURE: 'FAILURE',
@@ -55,79 +46,13 @@ export const AuthAuditResult = {
 export type AuthAuditResult = (typeof AuthAuditResult)[keyof typeof AuthAuditResult]
 
 
-export const SMSStatus = {
-  PROGRESS: 'PROGRESS',
-  PENDING: 'PENDING',
-  SENT: 'SENT',
-  FAILED: 'FAILED'
+export const WhitelistType = {
+  IP: 'IP',
+  EMAIL_DOMAIN: 'EMAIL_DOMAIN',
+  CORS_ORIGIN: 'CORS_ORIGIN'
 } as const
 
-export type SMSStatus = (typeof SMSStatus)[keyof typeof SMSStatus]
-
-
-export const ReservationStatus = {
-  PENDING: 'PENDING',
-  CONFIRMED: 'CONFIRMED',
-  CANCELLED: 'CANCELLED'
-} as const
-
-export type ReservationStatus = (typeof ReservationStatus)[keyof typeof ReservationStatus]
-
-
-export const SessionTypes = {
-  ONE_TIME: 'ONE_TIME',
-  ONE_TIME_RANGE: 'ONE_TIME_RANGE',
-  RECURRING: 'RECURRING'
-} as const
-
-export type SessionTypes = (typeof SessionTypes)[keyof typeof SessionTypes]
-
-
-export const RepeatCycleTypes = {
-  WEEKLY: 'WEEKLY',
-  MONTHLY: 'MONTHLY'
-} as const
-
-export type RepeatCycleTypes = (typeof RepeatCycleTypes)[keyof typeof RepeatCycleTypes]
-
-
-export const SessionEndTypes = {
-  NEVER: 'NEVER',
-  ON_DATE: 'ON_DATE',
-  AFTER_OCCURRENCES: 'AFTER_OCCURRENCES'
-} as const
-
-export type SessionEndTypes = (typeof SessionEndTypes)[keyof typeof SessionEndTypes]
-
-
-export const RecurringDayOfWeek = {
-  MONDAY: 'MONDAY',
-  TUESDAY: 'TUESDAY',
-  WEDNESDAY: 'WEDNESDAY',
-  THURSDAY: 'THURSDAY',
-  FRIDAY: 'FRIDAY',
-  SATURDAY: 'SATURDAY',
-  SUNDAY: 'SUNDAY'
-} as const
-
-export type RecurringDayOfWeek = (typeof RecurringDayOfWeek)[keyof typeof RecurringDayOfWeek]
-
-
-export const TemplateNames = {
-  WELCOME: 'WELCOME',
-  EMAIL_VERIFICATION: 'EMAIL_VERIFICATION',
-  RESET_PASSWORD: 'RESET_PASSWORD'
-} as const
-
-export type TemplateNames = (typeof TemplateNames)[keyof typeof TemplateNames]
-
-
-export const QnaStatus = {
-  OPEN: 'OPEN',
-  CLOSED: 'CLOSED'
-} as const
-
-export type QnaStatus = (typeof QnaStatus)[keyof typeof QnaStatus]
+export type WhitelistType = (typeof WhitelistType)[keyof typeof WhitelistType]
 
 
 export const TextTypes = {
@@ -139,24 +64,88 @@ export const TextTypes = {
 export type TextTypes = (typeof TextTypes)[keyof typeof TextTypes]
 
 
-export const CategoryTypes = {
-  Role: 'Role',
-  Space: 'Space',
-  Asset: 'Asset',
-  User: 'User'
+export const TemplateType = {
+  EMAIL: 'EMAIL',
+  SMS: 'SMS',
+  PUSH: 'PUSH'
 } as const
 
-export type CategoryTypes = (typeof CategoryTypes)[keyof typeof CategoryTypes]
+export type TemplateType = (typeof TemplateType)[keyof typeof TemplateType]
 
 
-export const GroupTypes = {
-  Role: 'Role',
-  Space: 'Space',
-  Asset: 'Asset',
-  User: 'User'
+export const LanguageCode = {
+  ko_KR: 'ko_KR',
+  en_US: 'en_US',
+  zh_CN: 'zh_CN',
+  ja_JP: 'ja_JP'
 } as const
 
-export type GroupTypes = (typeof GroupTypes)[keyof typeof GroupTypes]
+export type LanguageCode = (typeof LanguageCode)[keyof typeof LanguageCode]
+
+
+export const AIAgentAction = {
+  DRAFT_GENERATION: 'DRAFT_GENERATION',
+  AUTO_CLASSIFICATION: 'AUTO_CLASSIFICATION',
+  SENTIMENT_ANALYSIS: 'SENTIMENT_ANALYSIS',
+  AUTO_RESPONSE: 'AUTO_RESPONSE',
+  KNOWLEDGE_SEARCH: 'KNOWLEDGE_SEARCH',
+  SUMMARIZATION: 'SUMMARIZATION',
+  TRANSLATION: 'TRANSLATION'
+} as const
+
+export type AIAgentAction = (typeof AIAgentAction)[keyof typeof AIAgentAction]
+
+
+export const InquiryParticipantRole = {
+  CUSTOMER: 'CUSTOMER',
+  AGENT: 'AGENT',
+  SUPERVISOR: 'SUPERVISOR',
+  VIEWER: 'VIEWER'
+} as const
+
+export type InquiryParticipantRole = (typeof InquiryParticipantRole)[keyof typeof InquiryParticipantRole]
+
+
+export const SenderType = {
+  USER: 'USER',
+  AI: 'AI',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type SenderType = (typeof SenderType)[keyof typeof SenderType]
+
+
+export const ThreadStatus = {
+  ACTIVE: 'ACTIVE',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED'
+} as const
+
+export type ThreadStatus = (typeof ThreadStatus)[keyof typeof ThreadStatus]
+
+
+export const MessageContentType = {
+  TEXT: 'TEXT',
+  HTML: 'HTML',
+  MARKDOWN: 'MARKDOWN',
+  IMAGE: 'IMAGE',
+  FILE: 'FILE',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type MessageContentType = (typeof MessageContentType)[keyof typeof MessageContentType]
+
+
+export const AttachmentFileType = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  AUDIO: 'AUDIO',
+  DOCUMENT: 'DOCUMENT',
+  ARCHIVE: 'ARCHIVE',
+  OTHER: 'OTHER'
+} as const
+
+export type AttachmentFileType = (typeof AttachmentFileType)[keyof typeof AttachmentFileType]
 
 
 export const InquiryCategory = {
@@ -217,25 +206,6 @@ export const InquirySource = {
 export type InquirySource = (typeof InquirySource)[keyof typeof InquirySource]
 
 
-export const InquiryParticipantRole = {
-  CUSTOMER: 'CUSTOMER',
-  AGENT: 'AGENT',
-  SUPERVISOR: 'SUPERVISOR',
-  VIEWER: 'VIEWER'
-} as const
-
-export type InquiryParticipantRole = (typeof InquiryParticipantRole)[keyof typeof InquiryParticipantRole]
-
-
-export const SenderType = {
-  USER: 'USER',
-  AI: 'AI',
-  SYSTEM: 'SYSTEM'
-} as const
-
-export type SenderType = (typeof SenderType)[keyof typeof SenderType]
-
-
 export const SentimentType = {
   POSITIVE: 'POSITIVE',
   NEUTRAL: 'NEUTRAL',
@@ -245,66 +215,51 @@ export const SentimentType = {
 export type SentimentType = (typeof SentimentType)[keyof typeof SentimentType]
 
 
-export const ThreadStatus = {
-  ACTIVE: 'ACTIVE',
-  RESOLVED: 'RESOLVED',
-  CLOSED: 'CLOSED'
+export const SessionTypes = {
+  ONE_TIME: 'ONE_TIME',
+  ONE_TIME_RANGE: 'ONE_TIME_RANGE',
+  RECURRING: 'RECURRING'
 } as const
 
-export type ThreadStatus = (typeof ThreadStatus)[keyof typeof ThreadStatus]
+export type SessionTypes = (typeof SessionTypes)[keyof typeof SessionTypes]
 
 
-export const MessageContentType = {
-  TEXT: 'TEXT',
-  HTML: 'HTML',
-  MARKDOWN: 'MARKDOWN',
-  IMAGE: 'IMAGE',
-  FILE: 'FILE',
-  SYSTEM: 'SYSTEM'
+export const RepeatCycleTypes = {
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY'
 } as const
 
-export type MessageContentType = (typeof MessageContentType)[keyof typeof MessageContentType]
+export type RepeatCycleTypes = (typeof RepeatCycleTypes)[keyof typeof RepeatCycleTypes]
 
 
-export const AttachmentFileType = {
-  IMAGE: 'IMAGE',
-  VIDEO: 'VIDEO',
-  AUDIO: 'AUDIO',
-  DOCUMENT: 'DOCUMENT',
-  ARCHIVE: 'ARCHIVE',
-  OTHER: 'OTHER'
+export const RecurringDayOfWeek = {
+  MONDAY: 'MONDAY',
+  TUESDAY: 'TUESDAY',
+  WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY',
+  SATURDAY: 'SATURDAY',
+  SUNDAY: 'SUNDAY'
 } as const
 
-export type AttachmentFileType = (typeof AttachmentFileType)[keyof typeof AttachmentFileType]
+export type RecurringDayOfWeek = (typeof RecurringDayOfWeek)[keyof typeof RecurringDayOfWeek]
 
 
-export const AIAgentAction = {
-  DRAFT_GENERATION: 'DRAFT_GENERATION',
-  AUTO_CLASSIFICATION: 'AUTO_CLASSIFICATION',
-  SENTIMENT_ANALYSIS: 'SENTIMENT_ANALYSIS',
-  AUTO_RESPONSE: 'AUTO_RESPONSE',
-  KNOWLEDGE_SEARCH: 'KNOWLEDGE_SEARCH',
-  SUMMARIZATION: 'SUMMARIZATION',
-  TRANSLATION: 'TRANSLATION'
+export const CategoryTypes = {
+  Role: 'Role',
+  Space: 'Space',
+  Asset: 'Asset',
+  User: 'User'
 } as const
 
-export type AIAgentAction = (typeof AIAgentAction)[keyof typeof AIAgentAction]
+export type CategoryTypes = (typeof CategoryTypes)[keyof typeof CategoryTypes]
 
 
-export const TemplateType = {
-  EMAIL: 'EMAIL',
-  SMS: 'SMS',
-  PUSH: 'PUSH'
+export const GroupTypes = {
+  Role: 'Role',
+  Space: 'Space',
+  Asset: 'Asset',
+  User: 'User'
 } as const
 
-export type TemplateType = (typeof TemplateType)[keyof typeof TemplateType]
-
-
-export const LanguageCode = {
-  ko_KR: 'ko_KR',
-  en_US: 'en_US',
-  zh_CN: 'zh_CN',
-  ja_JP: 'ja_JP'
-} as const
-
-export type LanguageCode = (typeof LanguageCode)[keyof typeof LanguageCode]
+export type GroupTypes = (typeof GroupTypes)[keyof typeof GroupTypes]

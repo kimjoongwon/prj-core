@@ -103,15 +103,15 @@ test.describe("권한 목록 페이지", () => {
 			// Given: 권한 목록 페이지
 			await gotoAbilitiesPage(page);
 
-			// Then: 필터 버튼 확인
+			// Then: HeroUI Select trigger placeholder 확인
 			await expect(
-				page.getByRole("button", { name: "Subject 선택" }),
+				page.locator("button").filter({ hasText: "Subject 선택" }).first(),
 			).toBeVisible();
 			await expect(
-				page.getByRole("button", { name: "Action 선택" }),
+				page.locator("button").filter({ hasText: "Action 선택" }).first(),
 			).toBeVisible();
 			await expect(
-				page.getByRole("button", { name: "유형 선택" }),
+				page.locator("button").filter({ hasText: "유형 선택" }).first(),
 			).toBeVisible();
 		});
 	});

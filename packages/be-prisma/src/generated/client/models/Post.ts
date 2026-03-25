@@ -196,15 +196,15 @@ export type PostOrderByWithRelationInput = {
 
 export type PostWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  contentId?: string
   AND?: Prisma.PostWhereInput | Prisma.PostWhereInput[]
   OR?: Prisma.PostWhereInput[]
   NOT?: Prisma.PostWhereInput | Prisma.PostWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
-  contentId?: Prisma.StringFilter<"Post"> | string
   content?: Prisma.XOR<Prisma.ContentScalarRelationFilter, Prisma.ContentWhereInput>
-}, "id">
+}, "id" | "contentId">
 
 export type PostOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -233,7 +233,7 @@ export type PostCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  content: Prisma.ContentCreateNestedOneWithoutPostsInput
+  content: Prisma.ContentCreateNestedOneWithoutPostInput
 }
 
 export type PostUncheckedCreateInput = {
@@ -249,7 +249,7 @@ export type PostUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  content?: Prisma.ContentUpdateOneRequiredWithoutPostsNestedInput
+  content?: Prisma.ContentUpdateOneRequiredWithoutPostNestedInput
 }
 
 export type PostUncheckedUpdateInput = {
@@ -307,56 +307,41 @@ export type PostMinOrderByAggregateInput = {
   contentId?: Prisma.SortOrder
 }
 
-export type PostListRelationFilter = {
-  every?: Prisma.PostWhereInput
-  some?: Prisma.PostWhereInput
-  none?: Prisma.PostWhereInput
+export type PostNullableScalarRelationFilter = {
+  is?: Prisma.PostWhereInput | null
+  isNot?: Prisma.PostWhereInput | null
 }
 
-export type PostOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type PostCreateNestedOneWithoutContentInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutContentInput, Prisma.PostUncheckedCreateWithoutContentInput>
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutContentInput
+  connect?: Prisma.PostWhereUniqueInput
 }
 
-export type PostCreateNestedManyWithoutContentInput = {
-  create?: Prisma.XOR<Prisma.PostCreateWithoutContentInput, Prisma.PostUncheckedCreateWithoutContentInput> | Prisma.PostCreateWithoutContentInput[] | Prisma.PostUncheckedCreateWithoutContentInput[]
-  connectOrCreate?: Prisma.PostCreateOrConnectWithoutContentInput | Prisma.PostCreateOrConnectWithoutContentInput[]
-  createMany?: Prisma.PostCreateManyContentInputEnvelope
-  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+export type PostUncheckedCreateNestedOneWithoutContentInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutContentInput, Prisma.PostUncheckedCreateWithoutContentInput>
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutContentInput
+  connect?: Prisma.PostWhereUniqueInput
 }
 
-export type PostUncheckedCreateNestedManyWithoutContentInput = {
-  create?: Prisma.XOR<Prisma.PostCreateWithoutContentInput, Prisma.PostUncheckedCreateWithoutContentInput> | Prisma.PostCreateWithoutContentInput[] | Prisma.PostUncheckedCreateWithoutContentInput[]
-  connectOrCreate?: Prisma.PostCreateOrConnectWithoutContentInput | Prisma.PostCreateOrConnectWithoutContentInput[]
-  createMany?: Prisma.PostCreateManyContentInputEnvelope
-  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+export type PostUpdateOneWithoutContentNestedInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutContentInput, Prisma.PostUncheckedCreateWithoutContentInput>
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutContentInput
+  upsert?: Prisma.PostUpsertWithoutContentInput
+  disconnect?: Prisma.PostWhereInput | boolean
+  delete?: Prisma.PostWhereInput | boolean
+  connect?: Prisma.PostWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PostUpdateToOneWithWhereWithoutContentInput, Prisma.PostUpdateWithoutContentInput>, Prisma.PostUncheckedUpdateWithoutContentInput>
 }
 
-export type PostUpdateManyWithoutContentNestedInput = {
-  create?: Prisma.XOR<Prisma.PostCreateWithoutContentInput, Prisma.PostUncheckedCreateWithoutContentInput> | Prisma.PostCreateWithoutContentInput[] | Prisma.PostUncheckedCreateWithoutContentInput[]
-  connectOrCreate?: Prisma.PostCreateOrConnectWithoutContentInput | Prisma.PostCreateOrConnectWithoutContentInput[]
-  upsert?: Prisma.PostUpsertWithWhereUniqueWithoutContentInput | Prisma.PostUpsertWithWhereUniqueWithoutContentInput[]
-  createMany?: Prisma.PostCreateManyContentInputEnvelope
-  set?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
-  disconnect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
-  delete?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
-  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
-  update?: Prisma.PostUpdateWithWhereUniqueWithoutContentInput | Prisma.PostUpdateWithWhereUniqueWithoutContentInput[]
-  updateMany?: Prisma.PostUpdateManyWithWhereWithoutContentInput | Prisma.PostUpdateManyWithWhereWithoutContentInput[]
-  deleteMany?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
-}
-
-export type PostUncheckedUpdateManyWithoutContentNestedInput = {
-  create?: Prisma.XOR<Prisma.PostCreateWithoutContentInput, Prisma.PostUncheckedCreateWithoutContentInput> | Prisma.PostCreateWithoutContentInput[] | Prisma.PostUncheckedCreateWithoutContentInput[]
-  connectOrCreate?: Prisma.PostCreateOrConnectWithoutContentInput | Prisma.PostCreateOrConnectWithoutContentInput[]
-  upsert?: Prisma.PostUpsertWithWhereUniqueWithoutContentInput | Prisma.PostUpsertWithWhereUniqueWithoutContentInput[]
-  createMany?: Prisma.PostCreateManyContentInputEnvelope
-  set?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
-  disconnect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
-  delete?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
-  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
-  update?: Prisma.PostUpdateWithWhereUniqueWithoutContentInput | Prisma.PostUpdateWithWhereUniqueWithoutContentInput[]
-  updateMany?: Prisma.PostUpdateManyWithWhereWithoutContentInput | Prisma.PostUpdateManyWithWhereWithoutContentInput[]
-  deleteMany?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
+export type PostUncheckedUpdateOneWithoutContentNestedInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutContentInput, Prisma.PostUncheckedCreateWithoutContentInput>
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutContentInput
+  upsert?: Prisma.PostUpsertWithoutContentInput
+  disconnect?: Prisma.PostWhereInput | boolean
+  delete?: Prisma.PostWhereInput | boolean
+  connect?: Prisma.PostWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PostUpdateToOneWithWhereWithoutContentInput, Prisma.PostUpdateWithoutContentInput>, Prisma.PostUncheckedUpdateWithoutContentInput>
 }
 
 export type PostCreateWithoutContentInput = {
@@ -378,43 +363,15 @@ export type PostCreateOrConnectWithoutContentInput = {
   create: Prisma.XOR<Prisma.PostCreateWithoutContentInput, Prisma.PostUncheckedCreateWithoutContentInput>
 }
 
-export type PostCreateManyContentInputEnvelope = {
-  data: Prisma.PostCreateManyContentInput | Prisma.PostCreateManyContentInput[]
-  skipDuplicates?: boolean
-}
-
-export type PostUpsertWithWhereUniqueWithoutContentInput = {
-  where: Prisma.PostWhereUniqueInput
+export type PostUpsertWithoutContentInput = {
   update: Prisma.XOR<Prisma.PostUpdateWithoutContentInput, Prisma.PostUncheckedUpdateWithoutContentInput>
   create: Prisma.XOR<Prisma.PostCreateWithoutContentInput, Prisma.PostUncheckedCreateWithoutContentInput>
+  where?: Prisma.PostWhereInput
 }
 
-export type PostUpdateWithWhereUniqueWithoutContentInput = {
-  where: Prisma.PostWhereUniqueInput
+export type PostUpdateToOneWithWhereWithoutContentInput = {
+  where?: Prisma.PostWhereInput
   data: Prisma.XOR<Prisma.PostUpdateWithoutContentInput, Prisma.PostUncheckedUpdateWithoutContentInput>
-}
-
-export type PostUpdateManyWithWhereWithoutContentInput = {
-  where: Prisma.PostScalarWhereInput
-  data: Prisma.XOR<Prisma.PostUpdateManyMutationInput, Prisma.PostUncheckedUpdateManyWithoutContentInput>
-}
-
-export type PostScalarWhereInput = {
-  AND?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
-  OR?: Prisma.PostScalarWhereInput[]
-  NOT?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
-  id?: Prisma.StringFilter<"Post"> | string
-  createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
-  removedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
-  contentId?: Prisma.StringFilter<"Post"> | string
-}
-
-export type PostCreateManyContentInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
 }
 
 export type PostUpdateWithoutContentInput = {
@@ -425,13 +382,6 @@ export type PostUpdateWithoutContentInput = {
 }
 
 export type PostUncheckedUpdateWithoutContentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type PostUncheckedUpdateManyWithoutContentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null

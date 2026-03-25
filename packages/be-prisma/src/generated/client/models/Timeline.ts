@@ -439,20 +439,6 @@ export type TimelineUncheckedUpdateManyWithoutSpaceNestedInput = {
   deleteMany?: Prisma.TimelineScalarWhereInput | Prisma.TimelineScalarWhereInput[]
 }
 
-export type TimelineCreateNestedOneWithoutSessionsInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutSessionsInput, Prisma.TimelineUncheckedCreateWithoutSessionsInput>
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutSessionsInput
-  connect?: Prisma.TimelineWhereUniqueInput
-}
-
-export type TimelineUpdateOneRequiredWithoutSessionsNestedInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutSessionsInput, Prisma.TimelineUncheckedCreateWithoutSessionsInput>
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutSessionsInput
-  upsert?: Prisma.TimelineUpsertWithoutSessionsInput
-  connect?: Prisma.TimelineWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TimelineUpdateToOneWithWhereWithoutSessionsInput, Prisma.TimelineUpdateWithoutSessionsInput>, Prisma.TimelineUncheckedUpdateWithoutSessionsInput>
-}
-
 export type TimelineCreateNestedManyWithoutCreatorInput = {
   create?: Prisma.XOR<Prisma.TimelineCreateWithoutCreatorInput, Prisma.TimelineUncheckedCreateWithoutCreatorInput> | Prisma.TimelineCreateWithoutCreatorInput[] | Prisma.TimelineUncheckedCreateWithoutCreatorInput[]
   connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutCreatorInput | Prisma.TimelineCreateOrConnectWithoutCreatorInput[]
@@ -493,6 +479,20 @@ export type TimelineUncheckedUpdateManyWithoutCreatorNestedInput = {
   update?: Prisma.TimelineUpdateWithWhereUniqueWithoutCreatorInput | Prisma.TimelineUpdateWithWhereUniqueWithoutCreatorInput[]
   updateMany?: Prisma.TimelineUpdateManyWithWhereWithoutCreatorInput | Prisma.TimelineUpdateManyWithWhereWithoutCreatorInput[]
   deleteMany?: Prisma.TimelineScalarWhereInput | Prisma.TimelineScalarWhereInput[]
+}
+
+export type TimelineCreateNestedOneWithoutSessionsInput = {
+  create?: Prisma.XOR<Prisma.TimelineCreateWithoutSessionsInput, Prisma.TimelineUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutSessionsInput
+  connect?: Prisma.TimelineWhereUniqueInput
+}
+
+export type TimelineUpdateOneRequiredWithoutSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.TimelineCreateWithoutSessionsInput, Prisma.TimelineUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutSessionsInput
+  upsert?: Prisma.TimelineUpsertWithoutSessionsInput
+  connect?: Prisma.TimelineWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TimelineUpdateToOneWithWhereWithoutSessionsInput, Prisma.TimelineUpdateWithoutSessionsInput>, Prisma.TimelineUncheckedUpdateWithoutSessionsInput>
 }
 
 export type TimelineCreateWithoutSpaceInput = {
@@ -557,6 +557,54 @@ export type TimelineScalarWhereInput = {
   description?: Prisma.StringNullableFilter<"Timeline"> | string | null
 }
 
+export type TimelineCreateWithoutCreatorInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name: string
+  description?: string | null
+  space: Prisma.SpaceCreateNestedOneWithoutTimelinesInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutTimelineInput
+}
+
+export type TimelineUncheckedCreateWithoutCreatorInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  spaceId: string
+  name: string
+  description?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
+}
+
+export type TimelineCreateOrConnectWithoutCreatorInput = {
+  where: Prisma.TimelineWhereUniqueInput
+  create: Prisma.XOR<Prisma.TimelineCreateWithoutCreatorInput, Prisma.TimelineUncheckedCreateWithoutCreatorInput>
+}
+
+export type TimelineCreateManyCreatorInputEnvelope = {
+  data: Prisma.TimelineCreateManyCreatorInput | Prisma.TimelineCreateManyCreatorInput[]
+  skipDuplicates?: boolean
+}
+
+export type TimelineUpsertWithWhereUniqueWithoutCreatorInput = {
+  where: Prisma.TimelineWhereUniqueInput
+  update: Prisma.XOR<Prisma.TimelineUpdateWithoutCreatorInput, Prisma.TimelineUncheckedUpdateWithoutCreatorInput>
+  create: Prisma.XOR<Prisma.TimelineCreateWithoutCreatorInput, Prisma.TimelineUncheckedCreateWithoutCreatorInput>
+}
+
+export type TimelineUpdateWithWhereUniqueWithoutCreatorInput = {
+  where: Prisma.TimelineWhereUniqueInput
+  data: Prisma.XOR<Prisma.TimelineUpdateWithoutCreatorInput, Prisma.TimelineUncheckedUpdateWithoutCreatorInput>
+}
+
+export type TimelineUpdateManyWithWhereWithoutCreatorInput = {
+  where: Prisma.TimelineScalarWhereInput
+  data: Prisma.XOR<Prisma.TimelineUpdateManyMutationInput, Prisma.TimelineUncheckedUpdateManyWithoutCreatorInput>
+}
+
 export type TimelineCreateWithoutSessionsInput = {
   id?: string
   createdAt?: Date | string
@@ -615,54 +663,6 @@ export type TimelineUncheckedUpdateWithoutSessionsInput = {
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type TimelineCreateWithoutCreatorInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  description?: string | null
-  space: Prisma.SpaceCreateNestedOneWithoutTimelinesInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutTimelineInput
-}
-
-export type TimelineUncheckedCreateWithoutCreatorInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  spaceId: string
-  name: string
-  description?: string | null
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
-}
-
-export type TimelineCreateOrConnectWithoutCreatorInput = {
-  where: Prisma.TimelineWhereUniqueInput
-  create: Prisma.XOR<Prisma.TimelineCreateWithoutCreatorInput, Prisma.TimelineUncheckedCreateWithoutCreatorInput>
-}
-
-export type TimelineCreateManyCreatorInputEnvelope = {
-  data: Prisma.TimelineCreateManyCreatorInput | Prisma.TimelineCreateManyCreatorInput[]
-  skipDuplicates?: boolean
-}
-
-export type TimelineUpsertWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.TimelineWhereUniqueInput
-  update: Prisma.XOR<Prisma.TimelineUpdateWithoutCreatorInput, Prisma.TimelineUncheckedUpdateWithoutCreatorInput>
-  create: Prisma.XOR<Prisma.TimelineCreateWithoutCreatorInput, Prisma.TimelineUncheckedCreateWithoutCreatorInput>
-}
-
-export type TimelineUpdateWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.TimelineWhereUniqueInput
-  data: Prisma.XOR<Prisma.TimelineUpdateWithoutCreatorInput, Prisma.TimelineUncheckedUpdateWithoutCreatorInput>
-}
-
-export type TimelineUpdateManyWithWhereWithoutCreatorInput = {
-  where: Prisma.TimelineScalarWhereInput
-  data: Prisma.XOR<Prisma.TimelineUpdateManyMutationInput, Prisma.TimelineUncheckedUpdateManyWithoutCreatorInput>
 }
 
 export type TimelineCreateManySpaceInput = {
@@ -851,51 +851,18 @@ export type TimelineIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type $TimelinePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Timeline"
   objects: {
-    /**
-     * Space 관계
-     */
     space: Prisma.$SpacePayload<ExtArgs>
-    /**
-     * 생성자 관계
-     */
     creator: Prisma.$UserPayload<ExtArgs> | null
-    /**
-     * 세션 목록
-     */
     sessions: Prisma.$SessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    /**
-     * 고유 식별자
-     */
     id: string
-    /**
-     * 생성 일시
-     */
     createdAt: Date
-    /**
-     * 수정 일시
-     */
     updatedAt: Date | null
-    /**
-     * 삭제 일시
-     */
     removedAt: Date | null
-    /**
-     * Space ID
-     */
     spaceId: string
-    /**
-     * 생성자 ID
-     */
     creatorId: string | null
-    /**
-     * 타임라인 이름 (예: "2025년 10월 첫째 주", "가을 시즌")
-     */
     name: string
-    /**
-     * 타임라인 설명
-     */
     description: string | null
   }, ExtArgs["result"]["timeline"]>
   composites: {}

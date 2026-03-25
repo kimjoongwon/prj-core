@@ -11,7 +11,6 @@
  */
 
 import * as process from 'node:process'
-import * as path from 'node:path'
 globalThis['__dirname'] = __dirname
 
 import * as runtime from "@prisma/client/runtime/client"
@@ -28,8 +27,8 @@ export * from "./enums.js"
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Assets
- * const assets = await prisma.asset.findMany()
+ * // Fetch zero or more Abilities
+ * const abilities = await prisma.ability.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -38,6 +37,51 @@ export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
 
+/**
+ * Model Ability
+ * @displayName 권한
+ */
+export type Ability = Prisma.AbilityModel
+/**
+ * Model Action
+ * @displayName 액션
+ */
+export type Action = Prisma.ActionModel
+/**
+ * Model Grant
+ * @displayName 권한 부여
+ */
+export type Grant = Prisma.GrantModel
+/**
+ * Model Role
+ * @displayName 역할
+ */
+export type Role = Prisma.RoleModel
+/**
+ * Model RoleAssociation
+ * @displayName 역할 그룹
+ */
+export type RoleAssociation = Prisma.RoleAssociationModel
+/**
+ * Model RoleClassification
+ * @displayName 역할 분류
+ */
+export type RoleClassification = Prisma.RoleClassificationModel
+/**
+ * Model Subject
+ * @displayName Subject
+ */
+export type Subject = Prisma.SubjectModel
+/**
+ * Model Album
+ * @displayName 앨범
+ */
+export type Album = Prisma.AlbumModel
+/**
+ * Model AlbumEntry
+ * @displayName 앨범 엔트리
+ */
+export type AlbumEntry = Prisma.AlbumEntryModel
 /**
  * Model Asset
  * @displayName 에셋
@@ -59,35 +103,15 @@ export type Video = Prisma.VideoModel
  */
 export type Document = Prisma.DocumentModel
 /**
+ * Model Derivative
+ * @displayName 파생 리소스
+ */
+export type Derivative = Prisma.DerivativeModel
+/**
  * Model Folder
  * @displayName 폴더
  */
 export type Folder = Prisma.FolderModel
-/**
- * Model Album
- * @displayName 앨범
- */
-export type Album = Prisma.AlbumModel
-/**
- * Model AlbumEntry
- * @displayName 앨범 엔트리
- */
-export type AlbumEntry = Prisma.AlbumEntryModel
-/**
- * Model Derivative
- * @DisplayName 파생 리소스
- */
-export type Derivative = Prisma.DerivativeModel
-/**
- * Model SecurityPolicy
- * @displayName 보안 정책
- */
-export type SecurityPolicy = Prisma.SecurityPolicyModel
-/**
- * Model WhitelistEntry
- * @displayName 화이트리스트 항목
- */
-export type WhitelistEntry = Prisma.WhitelistEntryModel
 /**
  * Model AuthAuditLog
  * @displayName 인증 감사 로그
@@ -99,25 +123,15 @@ export type AuthAuditLog = Prisma.AuthAuditLogModel
  */
 export type PasswordHistory = Prisma.PasswordHistoryModel
 /**
- * Model Category
- * @displayName 카테고리
+ * Model SecurityPolicy
+ * @displayName 보안 정책
  */
-export type Category = Prisma.CategoryModel
+export type SecurityPolicy = Prisma.SecurityPolicyModel
 /**
- * Model Group
- * @displayName 그룹
+ * Model WhitelistEntry
+ * @displayName 화이트리스트 항목
  */
-export type Group = Prisma.GroupModel
-/**
- * Model Tenant
- * @displayName 테넌트
- */
-export type Tenant = Prisma.TenantModel
-/**
- * Model Assignment
- * @displayName 역할 할당
- */
-export type Assignment = Prisma.AssignmentModel
+export type WhitelistEntry = Prisma.WhitelistEntryModel
 /**
  * Model Post
  * @displayName 게시물
@@ -129,105 +143,20 @@ export type Post = Prisma.PostModel
  */
 export type Content = Prisma.ContentModel
 /**
- * Model Subject
- * @displayName Subject
+ * Model Template
+ * @displayName 메시지 템플릿
  */
-export type Subject = Prisma.SubjectModel
+export type Template = Prisma.TemplateModel
 /**
- * Model Action
- * @displayName 액션
+ * Model TemplateVariable
+ * @displayName 템플릿 변수
  */
-export type Action = Prisma.ActionModel
+export type TemplateVariable = Prisma.TemplateVariableModel
 /**
- * Model Ability
- * @displayName 권한
+ * Model Translation
+ * @displayName 번역
  */
-export type Ability = Prisma.AbilityModel
-/**
- * Model Grant
- * @displayName 권한 부여
- */
-export type Grant = Prisma.GrantModel
-/**
- * Model Inquiry
- * @displayName 문의
- */
-export type Inquiry = Prisma.InquiryModel
-/**
- * Model InquiryThread
- * @displayName 문의 스레드
- */
-export type InquiryThread = Prisma.InquiryThreadModel
-/**
- * Model InquiryMessage
- * @displayName 문의 메시지
- */
-export type InquiryMessage = Prisma.InquiryMessageModel
-/**
- * Model InquiryParticipant
- * @displayName 문의 참여자
- */
-export type InquiryParticipant = Prisma.InquiryParticipantModel
-/**
- * Model InquiryAttachment
- * @displayName 문의 첨부파일
- */
-export type InquiryAttachment = Prisma.InquiryAttachmentModel
-/**
- * Model InquiryTag
- * @displayName 문의 태그
- */
-export type InquiryTag = Prisma.InquiryTagModel
-/**
- * Model SentimentAnalysis
- * @displayName 감정 분석
- */
-export type SentimentAnalysis = Prisma.SentimentAnalysisModel
-/**
- * Model AIAgentLog
- * @displayName AI 에이전트 로그
- */
-export type AIAgentLog = Prisma.AIAgentLogModel
-/**
- * Model OidcClient
- * @displayName OIDC 클라이언트
- */
-export type OidcClient = Prisma.OidcClientModel
-/**
- * Model OidcModel
- * @displayName OIDC 모델
- */
-export type OidcModel = Prisma.OidcModelModel
-/**
- * Model Role
- * @displayName 역할
- */
-export type Role = Prisma.RoleModel
-/**
- * Model RoleAssociation
- * @displayName 역할 그룹
- */
-export type RoleAssociation = Prisma.RoleAssociationModel
-/**
- * Model RoleClassification
- * @displayName 역할 분류
- */
-export type RoleClassification = Prisma.RoleClassificationModel
-/**
- * Model SafeWallet
- * @displayName Safe 지갑
- */
-export type SafeWallet = Prisma.SafeWalletModel
-/**
- * Model SafeTransaction
- * @displayName Safe 트랜잭션
- */
-export type SafeTransaction = Prisma.SafeTransactionModel
-/**
- * Model SafeConfirmation
- * @displayName Safe 트랜잭션 서명
- */
-export type SafeConfirmation = Prisma.SafeConfirmationModel
+export type Translation = Prisma.TranslationModel
 /**
  * Model Space
  * @displayName 공간
@@ -249,20 +178,90 @@ export type SpaceAssociation = Prisma.SpaceAssociationModel
  */
 export type Ground = Prisma.GroundModel
 /**
- * Model Timeline
- * @displayName 타임라인
+ * Model Tenant
+ * @displayName 테넌트
  */
-export type Timeline = Prisma.TimelineModel
+export type Tenant = Prisma.TenantModel
 /**
- * Model Session
- * @displayName 세션
+ * Model Assignment
+ * @displayName 역할 할당
  */
-export type Session = Prisma.SessionModel
+export type Assignment = Prisma.AssignmentModel
 /**
- * Model Program
- * @displayName 프로그램
+ * Model User
+ * @displayName 사용자
  */
-export type Program = Prisma.ProgramModel
+export type User = Prisma.UserModel
+/**
+ * Model UserClassification
+ * @displayName 사용자 분류
+ */
+export type UserClassification = Prisma.UserClassificationModel
+/**
+ * Model UserAssociation
+ * @displayName 사용자 그룹
+ */
+export type UserAssociation = Prisma.UserAssociationModel
+/**
+ * Model Profile
+ * @displayName 프로필
+ */
+export type Profile = Prisma.ProfileModel
+/**
+ * Model AIAgentLog
+ * @displayName AI 에이전트 로그
+ */
+export type AIAgentLog = Prisma.AIAgentLogModel
+/**
+ * Model InquiryThread
+ * @displayName 문의 스레드
+ */
+export type InquiryThread = Prisma.InquiryThreadModel
+/**
+ * Model InquiryMessage
+ * @displayName 문의 메시지
+ */
+export type InquiryMessage = Prisma.InquiryMessageModel
+/**
+ * Model InquiryParticipant
+ * @displayName 문의 참여자
+ */
+export type InquiryParticipant = Prisma.InquiryParticipantModel
+/**
+ * Model InquiryAttachment
+ * @displayName 문의 첨부파일
+ */
+export type InquiryAttachment = Prisma.InquiryAttachmentModel
+/**
+ * Model Inquiry
+ * @displayName 문의
+ */
+export type Inquiry = Prisma.InquiryModel
+/**
+ * Model InquiryTag
+ * @displayName 문의 태그
+ */
+export type InquiryTag = Prisma.InquiryTagModel
+/**
+ * Model SentimentAnalysis
+ * @displayName 감정 분석
+ */
+export type SentimentAnalysis = Prisma.SentimentAnalysisModel
+/**
+ * Model OidcClient
+ * @displayName OIDC 클라이언트
+ */
+export type OidcClient = Prisma.OidcClientModel
+/**
+ * Model OidcModel
+ * @displayName OIDC 모델
+ */
+export type OidcModel = Prisma.OidcModelModel
+/**
+ * Model ReferenceDataMigrationHistory
+ * @displayName 기준 데이터 migration 이력
+ */
+export type ReferenceDataMigrationHistory = Prisma.ReferenceDataMigrationHistoryModel
 /**
  * Model Routine
  * @displayName 루틴
@@ -284,37 +283,42 @@ export type Task = Prisma.TaskModel
  */
 export type Exercise = Prisma.ExerciseModel
 /**
- * Model Template
- * @displayName 메시지 템플릿
+ * Model Timeline
+ * @displayName 타임라인
  */
-export type Template = Prisma.TemplateModel
+export type Timeline = Prisma.TimelineModel
 /**
- * Model TemplateVariable
- * @displayName 템플릿 변수
+ * Model Session
+ * @displayName 세션
  */
-export type TemplateVariable = Prisma.TemplateVariableModel
+export type Session = Prisma.SessionModel
 /**
- * Model Translation
- * @displayName 번역
+ * Model Program
+ * @displayName 프로그램
  */
-export type Translation = Prisma.TranslationModel
+export type Program = Prisma.ProgramModel
 /**
- * Model User
- * @displayName 사용자
+ * Model Category
+ * @displayName 카테고리
  */
-export type User = Prisma.UserModel
+export type Category = Prisma.CategoryModel
 /**
- * Model UserClassification
- * @displayName 사용자 분류
+ * Model Group
+ * @displayName 그룹
  */
-export type UserClassification = Prisma.UserClassificationModel
+export type Group = Prisma.GroupModel
 /**
- * Model UserAssociation
- * @displayName 사용자 그룹
+ * Model SafeWallet
+ * @displayName Safe 지갑
  */
-export type UserAssociation = Prisma.UserAssociationModel
+export type SafeWallet = Prisma.SafeWalletModel
 /**
- * Model Profile
- * @displayName 프로필
+ * Model SafeTransaction
+ * @displayName Safe 트랜잭션
  */
-export type Profile = Prisma.ProfileModel
+export type SafeTransaction = Prisma.SafeTransactionModel
+/**
+ * Model SafeConfirmation
+ * @displayName Safe 트랜잭션 서명
+ */
+export type SafeConfirmation = Prisma.SafeConfirmationModel

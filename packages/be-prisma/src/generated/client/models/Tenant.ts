@@ -332,6 +332,16 @@ export type TenantUncheckedUpdateManyInput = {
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
+export type TenantListRelationFilter = {
+  every?: Prisma.TenantWhereInput
+  some?: Prisma.TenantWhereInput
+  none?: Prisma.TenantWhereInput
+}
+
+export type TenantOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type TenantCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -365,30 +375,6 @@ export type TenantMinOrderByAggregateInput = {
 export type TenantScalarRelationFilter = {
   is?: Prisma.TenantWhereInput
   isNot?: Prisma.TenantWhereInput
-}
-
-export type TenantListRelationFilter = {
-  every?: Prisma.TenantWhereInput
-  some?: Prisma.TenantWhereInput
-  none?: Prisma.TenantWhereInput
-}
-
-export type TenantOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
-export type TenantCreateNestedOneWithoutAssignmentsInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutAssignmentsInput, Prisma.TenantUncheckedCreateWithoutAssignmentsInput>
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutAssignmentsInput
-  connect?: Prisma.TenantWhereUniqueInput
-}
-
-export type TenantUpdateOneRequiredWithoutAssignmentsNestedInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutAssignmentsInput, Prisma.TenantUncheckedCreateWithoutAssignmentsInput>
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutAssignmentsInput
-  upsert?: Prisma.TenantUpsertWithoutAssignmentsInput
-  connect?: Prisma.TenantWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutAssignmentsInput, Prisma.TenantUpdateWithoutAssignmentsInput>, Prisma.TenantUncheckedUpdateWithoutAssignmentsInput>
 }
 
 export type TenantCreateNestedManyWithoutRoleInput = {
@@ -475,6 +461,20 @@ export type TenantUncheckedUpdateManyWithoutSpaceNestedInput = {
   deleteMany?: Prisma.TenantScalarWhereInput | Prisma.TenantScalarWhereInput[]
 }
 
+export type TenantCreateNestedOneWithoutAssignmentsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutAssignmentsInput, Prisma.TenantUncheckedCreateWithoutAssignmentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutAssignmentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutAssignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutAssignmentsInput, Prisma.TenantUncheckedCreateWithoutAssignmentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutAssignmentsInput
+  upsert?: Prisma.TenantUpsertWithoutAssignmentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutAssignmentsInput, Prisma.TenantUpdateWithoutAssignmentsInput>, Prisma.TenantUncheckedUpdateWithoutAssignmentsInput>
+}
+
 export type TenantCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutUserInput, Prisma.TenantUncheckedCreateWithoutUserInput> | Prisma.TenantCreateWithoutUserInput[] | Prisma.TenantUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutUserInput | Prisma.TenantCreateOrConnectWithoutUserInput[]
@@ -515,62 +515,6 @@ export type TenantUncheckedUpdateManyWithoutUserNestedInput = {
   update?: Prisma.TenantUpdateWithWhereUniqueWithoutUserInput | Prisma.TenantUpdateWithWhereUniqueWithoutUserInput[]
   updateMany?: Prisma.TenantUpdateManyWithWhereWithoutUserInput | Prisma.TenantUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.TenantScalarWhereInput | Prisma.TenantScalarWhereInput[]
-}
-
-export type TenantCreateWithoutAssignmentsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  role: Prisma.RoleCreateNestedOneWithoutTenantsInput
-  space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
-  user: Prisma.UserCreateNestedOneWithoutTenantsInput
-}
-
-export type TenantUncheckedCreateWithoutAssignmentsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  userId: string
-  spaceId: string
-  roleId: string
-}
-
-export type TenantCreateOrConnectWithoutAssignmentsInput = {
-  where: Prisma.TenantWhereUniqueInput
-  create: Prisma.XOR<Prisma.TenantCreateWithoutAssignmentsInput, Prisma.TenantUncheckedCreateWithoutAssignmentsInput>
-}
-
-export type TenantUpsertWithoutAssignmentsInput = {
-  update: Prisma.XOR<Prisma.TenantUpdateWithoutAssignmentsInput, Prisma.TenantUncheckedUpdateWithoutAssignmentsInput>
-  create: Prisma.XOR<Prisma.TenantCreateWithoutAssignmentsInput, Prisma.TenantUncheckedCreateWithoutAssignmentsInput>
-  where?: Prisma.TenantWhereInput
-}
-
-export type TenantUpdateToOneWithWhereWithoutAssignmentsInput = {
-  where?: Prisma.TenantWhereInput
-  data: Prisma.XOR<Prisma.TenantUpdateWithoutAssignmentsInput, Prisma.TenantUncheckedUpdateWithoutAssignmentsInput>
-}
-
-export type TenantUpdateWithoutAssignmentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
-  space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
-}
-
-export type TenantUncheckedUpdateWithoutAssignmentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TenantCreateWithoutRoleInput = {
@@ -676,6 +620,62 @@ export type TenantUpdateWithWhereUniqueWithoutSpaceInput = {
 export type TenantUpdateManyWithWhereWithoutSpaceInput = {
   where: Prisma.TenantScalarWhereInput
   data: Prisma.XOR<Prisma.TenantUpdateManyMutationInput, Prisma.TenantUncheckedUpdateManyWithoutSpaceInput>
+}
+
+export type TenantCreateWithoutAssignmentsInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  role: Prisma.RoleCreateNestedOneWithoutTenantsInput
+  space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
+  user: Prisma.UserCreateNestedOneWithoutTenantsInput
+}
+
+export type TenantUncheckedCreateWithoutAssignmentsInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  userId: string
+  spaceId: string
+  roleId: string
+}
+
+export type TenantCreateOrConnectWithoutAssignmentsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutAssignmentsInput, Prisma.TenantUncheckedCreateWithoutAssignmentsInput>
+}
+
+export type TenantUpsertWithoutAssignmentsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutAssignmentsInput, Prisma.TenantUncheckedUpdateWithoutAssignmentsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutAssignmentsInput, Prisma.TenantUncheckedCreateWithoutAssignmentsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutAssignmentsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutAssignmentsInput, Prisma.TenantUncheckedUpdateWithoutAssignmentsInput>
+}
+
+export type TenantUpdateWithoutAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TenantCreateWithoutUserInput = {

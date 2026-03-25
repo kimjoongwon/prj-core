@@ -341,48 +341,6 @@ export type AssignmentMinOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
 }
 
-export type AssignmentCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.AssignmentCreateWithoutTenantInput, Prisma.AssignmentUncheckedCreateWithoutTenantInput> | Prisma.AssignmentCreateWithoutTenantInput[] | Prisma.AssignmentUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.AssignmentCreateOrConnectWithoutTenantInput | Prisma.AssignmentCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.AssignmentCreateManyTenantInputEnvelope
-  connect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
-}
-
-export type AssignmentUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.AssignmentCreateWithoutTenantInput, Prisma.AssignmentUncheckedCreateWithoutTenantInput> | Prisma.AssignmentCreateWithoutTenantInput[] | Prisma.AssignmentUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.AssignmentCreateOrConnectWithoutTenantInput | Prisma.AssignmentCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.AssignmentCreateManyTenantInputEnvelope
-  connect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
-}
-
-export type AssignmentUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.AssignmentCreateWithoutTenantInput, Prisma.AssignmentUncheckedCreateWithoutTenantInput> | Prisma.AssignmentCreateWithoutTenantInput[] | Prisma.AssignmentUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.AssignmentCreateOrConnectWithoutTenantInput | Prisma.AssignmentCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.AssignmentUpsertWithWhereUniqueWithoutTenantInput | Prisma.AssignmentUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.AssignmentCreateManyTenantInputEnvelope
-  set?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
-  disconnect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
-  delete?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
-  connect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
-  update?: Prisma.AssignmentUpdateWithWhereUniqueWithoutTenantInput | Prisma.AssignmentUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.AssignmentUpdateManyWithWhereWithoutTenantInput | Prisma.AssignmentUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
-}
-
-export type AssignmentUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.AssignmentCreateWithoutTenantInput, Prisma.AssignmentUncheckedCreateWithoutTenantInput> | Prisma.AssignmentCreateWithoutTenantInput[] | Prisma.AssignmentUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.AssignmentCreateOrConnectWithoutTenantInput | Prisma.AssignmentCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.AssignmentUpsertWithWhereUniqueWithoutTenantInput | Prisma.AssignmentUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.AssignmentCreateManyTenantInputEnvelope
-  set?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
-  disconnect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
-  delete?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
-  connect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
-  update?: Prisma.AssignmentUpdateWithWhereUniqueWithoutTenantInput | Prisma.AssignmentUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.AssignmentUpdateManyWithWhereWithoutTenantInput | Prisma.AssignmentUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
-}
-
 export type AssignmentCreateNestedManyWithoutRoleInput = {
   create?: Prisma.XOR<Prisma.AssignmentCreateWithoutRoleInput, Prisma.AssignmentUncheckedCreateWithoutRoleInput> | Prisma.AssignmentCreateWithoutRoleInput[] | Prisma.AssignmentUncheckedCreateWithoutRoleInput[]
   connectOrCreate?: Prisma.AssignmentCreateOrConnectWithoutRoleInput | Prisma.AssignmentCreateOrConnectWithoutRoleInput[]
@@ -425,58 +383,46 @@ export type AssignmentUncheckedUpdateManyWithoutRoleNestedInput = {
   deleteMany?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
 }
 
-export type AssignmentCreateWithoutTenantInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  role: Prisma.RoleCreateNestedOneWithoutAssignmentsInput
+export type AssignmentCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.AssignmentCreateWithoutTenantInput, Prisma.AssignmentUncheckedCreateWithoutTenantInput> | Prisma.AssignmentCreateWithoutTenantInput[] | Prisma.AssignmentUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.AssignmentCreateOrConnectWithoutTenantInput | Prisma.AssignmentCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.AssignmentCreateManyTenantInputEnvelope
+  connect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
 }
 
-export type AssignmentUncheckedCreateWithoutTenantInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  roleId: string
+export type AssignmentUncheckedCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.AssignmentCreateWithoutTenantInput, Prisma.AssignmentUncheckedCreateWithoutTenantInput> | Prisma.AssignmentCreateWithoutTenantInput[] | Prisma.AssignmentUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.AssignmentCreateOrConnectWithoutTenantInput | Prisma.AssignmentCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.AssignmentCreateManyTenantInputEnvelope
+  connect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
 }
 
-export type AssignmentCreateOrConnectWithoutTenantInput = {
-  where: Prisma.AssignmentWhereUniqueInput
-  create: Prisma.XOR<Prisma.AssignmentCreateWithoutTenantInput, Prisma.AssignmentUncheckedCreateWithoutTenantInput>
+export type AssignmentUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.AssignmentCreateWithoutTenantInput, Prisma.AssignmentUncheckedCreateWithoutTenantInput> | Prisma.AssignmentCreateWithoutTenantInput[] | Prisma.AssignmentUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.AssignmentCreateOrConnectWithoutTenantInput | Prisma.AssignmentCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.AssignmentUpsertWithWhereUniqueWithoutTenantInput | Prisma.AssignmentUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.AssignmentCreateManyTenantInputEnvelope
+  set?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  disconnect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  delete?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  connect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  update?: Prisma.AssignmentUpdateWithWhereUniqueWithoutTenantInput | Prisma.AssignmentUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.AssignmentUpdateManyWithWhereWithoutTenantInput | Prisma.AssignmentUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
 }
 
-export type AssignmentCreateManyTenantInputEnvelope = {
-  data: Prisma.AssignmentCreateManyTenantInput | Prisma.AssignmentCreateManyTenantInput[]
-  skipDuplicates?: boolean
-}
-
-export type AssignmentUpsertWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.AssignmentWhereUniqueInput
-  update: Prisma.XOR<Prisma.AssignmentUpdateWithoutTenantInput, Prisma.AssignmentUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.AssignmentCreateWithoutTenantInput, Prisma.AssignmentUncheckedCreateWithoutTenantInput>
-}
-
-export type AssignmentUpdateWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.AssignmentWhereUniqueInput
-  data: Prisma.XOR<Prisma.AssignmentUpdateWithoutTenantInput, Prisma.AssignmentUncheckedUpdateWithoutTenantInput>
-}
-
-export type AssignmentUpdateManyWithWhereWithoutTenantInput = {
-  where: Prisma.AssignmentScalarWhereInput
-  data: Prisma.XOR<Prisma.AssignmentUpdateManyMutationInput, Prisma.AssignmentUncheckedUpdateManyWithoutTenantInput>
-}
-
-export type AssignmentScalarWhereInput = {
-  AND?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
-  OR?: Prisma.AssignmentScalarWhereInput[]
-  NOT?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
-  id?: Prisma.StringFilter<"Assignment"> | string
-  createdAt?: Prisma.DateTimeFilter<"Assignment"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"Assignment"> | Date | string | null
-  removedAt?: Prisma.DateTimeNullableFilter<"Assignment"> | Date | string | null
-  roleId?: Prisma.StringFilter<"Assignment"> | string
-  tenantId?: Prisma.StringFilter<"Assignment"> | string
+export type AssignmentUncheckedUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.AssignmentCreateWithoutTenantInput, Prisma.AssignmentUncheckedCreateWithoutTenantInput> | Prisma.AssignmentCreateWithoutTenantInput[] | Prisma.AssignmentUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.AssignmentCreateOrConnectWithoutTenantInput | Prisma.AssignmentCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.AssignmentUpsertWithWhereUniqueWithoutTenantInput | Prisma.AssignmentUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.AssignmentCreateManyTenantInputEnvelope
+  set?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  disconnect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  delete?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  connect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  update?: Prisma.AssignmentUpdateWithWhereUniqueWithoutTenantInput | Prisma.AssignmentUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.AssignmentUpdateManyWithWhereWithoutTenantInput | Prisma.AssignmentUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
 }
 
 export type AssignmentCreateWithoutRoleInput = {
@@ -521,7 +467,27 @@ export type AssignmentUpdateManyWithWhereWithoutRoleInput = {
   data: Prisma.XOR<Prisma.AssignmentUpdateManyMutationInput, Prisma.AssignmentUncheckedUpdateManyWithoutRoleInput>
 }
 
-export type AssignmentCreateManyTenantInput = {
+export type AssignmentScalarWhereInput = {
+  AND?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
+  OR?: Prisma.AssignmentScalarWhereInput[]
+  NOT?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
+  id?: Prisma.StringFilter<"Assignment"> | string
+  createdAt?: Prisma.DateTimeFilter<"Assignment"> | Date | string
+  updatedAt?: Prisma.DateTimeNullableFilter<"Assignment"> | Date | string | null
+  removedAt?: Prisma.DateTimeNullableFilter<"Assignment"> | Date | string | null
+  roleId?: Prisma.StringFilter<"Assignment"> | string
+  tenantId?: Prisma.StringFilter<"Assignment"> | string
+}
+
+export type AssignmentCreateWithoutTenantInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  role: Prisma.RoleCreateNestedOneWithoutAssignmentsInput
+}
+
+export type AssignmentUncheckedCreateWithoutTenantInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -529,28 +495,30 @@ export type AssignmentCreateManyTenantInput = {
   roleId: string
 }
 
-export type AssignmentUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.RoleUpdateOneRequiredWithoutAssignmentsNestedInput
+export type AssignmentCreateOrConnectWithoutTenantInput = {
+  where: Prisma.AssignmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.AssignmentCreateWithoutTenantInput, Prisma.AssignmentUncheckedCreateWithoutTenantInput>
 }
 
-export type AssignmentUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+export type AssignmentCreateManyTenantInputEnvelope = {
+  data: Prisma.AssignmentCreateManyTenantInput | Prisma.AssignmentCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
-export type AssignmentUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+export type AssignmentUpsertWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.AssignmentWhereUniqueInput
+  update: Prisma.XOR<Prisma.AssignmentUpdateWithoutTenantInput, Prisma.AssignmentUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.AssignmentCreateWithoutTenantInput, Prisma.AssignmentUncheckedCreateWithoutTenantInput>
+}
+
+export type AssignmentUpdateWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.AssignmentWhereUniqueInput
+  data: Prisma.XOR<Prisma.AssignmentUpdateWithoutTenantInput, Prisma.AssignmentUncheckedUpdateWithoutTenantInput>
+}
+
+export type AssignmentUpdateManyWithWhereWithoutTenantInput = {
+  where: Prisma.AssignmentScalarWhereInput
+  data: Prisma.XOR<Prisma.AssignmentUpdateManyMutationInput, Prisma.AssignmentUncheckedUpdateManyWithoutTenantInput>
 }
 
 export type AssignmentCreateManyRoleInput = {
@@ -583,6 +551,38 @@ export type AssignmentUncheckedUpdateManyWithoutRoleInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type AssignmentCreateManyTenantInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  roleId: string
+}
+
+export type AssignmentUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.RoleUpdateOneRequiredWithoutAssignmentsNestedInput
+}
+
+export type AssignmentUncheckedUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type AssignmentUncheckedUpdateManyWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 

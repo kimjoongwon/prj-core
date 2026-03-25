@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Derivative
- * @DisplayName 파생 리소스
+ * @displayName 파생 리소스
  */
 export type DerivativeModel = runtime.Types.Result.DefaultSelection<Prisma.$DerivativePayload>
 

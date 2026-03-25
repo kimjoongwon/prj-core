@@ -116,6 +116,7 @@ const config = {
       "@cocrepo/enum": join(process.cwd(), "../../../packages/common-enum/src/index.ts"),
       "@cocrepo/type": join(process.cwd(), "../../../packages/common-type/index.ts"),
       "@cocrepo/schema": join(process.cwd(), "../../../packages/common-schema/src/index.ts"),
+      "@cocrepo/hook/nuqs": join(process.cwd(), "../../../packages/fe-hook/src/nuqs.ts"),
       "@cocrepo/hook": join(process.cwd(), "../../../packages/fe-hook/index.ts"),
       "@cocrepo/store": join(process.cwd(), "../../../packages/fe-store/index.ts"),
       "@cocrepo/ui": join(process.cwd(), "../../../packages/fe-ui/index.ts"),

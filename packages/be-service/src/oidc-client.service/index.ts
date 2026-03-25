@@ -2,6 +2,7 @@ import type { QueryOidcClientDto } from "@cocrepo/dto";
 import type { OidcClient } from "@cocrepo/entity";
 import { OidcClientsRepository } from "@cocrepo/repository";
 import {
+	BadRequestException,
 	ConflictException,
 	Injectable,
 	Logger,
@@ -47,6 +48,8 @@ export class OidcClientService {
 		clientSecret?: string | null;
 		clientName: string;
 		redirectUris: string[];
+		loginUrl?: string | null;
+		defaultReturnTo?: string | null;
 		grantTypes: string[];
 		responseTypes: string[];
 		tokenEndpointAuthMethod: string;
@@ -67,6 +70,8 @@ export class OidcClientService {
 			clientSecret: params.clientSecret ?? null,
 			clientName: params.clientName,
 			redirectUris: params.redirectUris,
+			loginUrl: params.loginUrl ?? null,
+			defaultReturnTo: params.defaultReturnTo ?? null,
 			grantTypes: params.grantTypes,
 			responseTypes: params.responseTypes,
 			tokenEndpointAuthMethod: params.tokenEndpointAuthMethod,
@@ -84,6 +89,8 @@ export class OidcClientService {
 			clientSecret?: string | null;
 			clientName?: string;
 			redirectUris?: string[];
+			loginUrl?: string | null;
+			defaultReturnTo?: string | null;
 			grantTypes?: string[];
 			responseTypes?: string[];
 			tokenEndpointAuthMethod?: string;
@@ -101,6 +108,40 @@ export class OidcClientService {
 		}
 
 		return this.repository.updateById(id, params);
+	}
+
+	async getByClientId(clientId: string): Promise<OidcClient> {
+		this.logger.debug(`OIDC 클라이언트 조회: ${clientId}`);
+
+		const client = await this.repository.findByClientId(clientId);
+		if (!client || client.removedAt) {
+			throw new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다");
+		}
+
+		return client;
+	}
+
+	async getAuthShellClientByClientId(params: {
+		clientId: string;
+		requireActive?: boolean;
+	}): Promise<OidcClient> {
+		const client = await this.getByClientId(params.clientId);
+
+		if (params.requireActive !== false && !client.isActive) {
+			throw new BadRequestException("비활성화된 OIDC 클라이언트입니다");
+		}
+
+		if (!client.loginUrl || !client.defaultReturnTo) {
+			throw new BadRequestException(
+				"로그인 셸 URL과 기본 복귀 URL이 설정되지 않았습니다",
+			);
+		}
+
+		if (client.redirectUris.length === 0 || !client.redirectUris[0]) {
+			throw new BadRequestException("Redirect URI가 설정되지 않았습니다");
+		}
+
+		return client;
 	}
 
 	async remove(id: string): Promise<void> {

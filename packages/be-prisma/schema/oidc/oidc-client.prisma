@@ -22,6 +22,10 @@ model OidcClient {
   clientName              String    @map("client_name")
   /// @displayName 리다이렉트 URI 목록
   redirectUris            String[]  @map("redirect_uris")
+  /// @displayName 로그인 셸 URL
+  loginUrl                String?   @map("login_url")
+  /// @displayName 기본 복귀 URL
+  defaultReturnTo         String?   @map("default_return_to")
   /// @displayName 허용된 Grant 타입
   grantTypes              String[]  @default(["authorization_code"]) @map("grant_types")
   /// @displayName 응답 타입

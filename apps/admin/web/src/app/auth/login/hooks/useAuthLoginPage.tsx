@@ -13,12 +13,12 @@ export const useAuthLoginPage = () => {
 
 	useEffect(() => {
 		if (!errorFromCallback) {
-			window.location.href = "/api/v1/auth/login";
+			window.location.href = "/api/v1/auth/login?clientId=admin-web";
 		}
 	}, [errorFromCallback]);
 
 	const onClickRetry = () => {
-		window.location.href = "/api/v1/auth/login";
+		window.location.href = "/api/v1/auth/login?clientId=admin-web";
 	};
 
 	return {

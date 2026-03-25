@@ -5,35 +5,25 @@ import { OidcFacade } from "../src/oidc.facade";
 describe("OidcFacade", () => {
 	let facade: OidcFacade;
 
+	const adminClient = {
+		clientId: "admin-web",
+		clientSecret: "admin-secret",
+		redirectUri:
+			"http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
+	};
+
+	const storybookClient = {
+		clientId: "storybook",
+		clientSecret: "storybook-secret",
+		redirectUri:
+			"http://localhost:6006/api/v1/auth/callback?clientId=storybook",
+	};
+
 	beforeEach(async () => {
 		const mockConfigService = {
 			get: jest.fn().mockReturnValue({
 				issuer: "http://localhost:3007",
 				jwksUri: "http://localhost:3007/oidc/jwks",
-				clients: {
-					admin: {
-						clientId: "test-admin-client",
-						clientSecret: "test-admin-secret",
-						redirectUri: "http://localhost:3000/api/v1/auth/callback",
-						loginUrl: "http://localhost:3000/admin/auth/login",
-						defaultReturnTo: "http://localhost:3000/admin/dashboard",
-					},
-					storybook: {
-						clientId: "test-storybook-client",
-						clientSecret: "test-storybook-secret",
-						redirectUri:
-							"http://localhost:6006/api/v1/auth/storybook/callback",
-						loginUrl: "http://localhost:6006/__storybook_auth/login",
-						defaultReturnTo: "http://localhost:6006/",
-					},
-					idpWeb: {
-						clientId: "test-idp-web-client",
-						clientSecret: "test-idp-web-secret",
-						redirectUri: "http://localhost:3008/api/v1/auth/idp/callback",
-						loginUrl: "http://localhost:3008/auth/login",
-						defaultReturnTo: "http://localhost:3008/dashboard",
-					},
-				},
 			}),
 		};
 
@@ -47,9 +37,9 @@ describe("OidcFacade", () => {
 		facade = module.get<OidcFacade>(OidcFacade);
 	});
 
-	it("authorization request를 생성해야 한다", () => {
+	it("authorization request에서 explicit protocol client config를 사용해야 한다", () => {
 		const result = facade.createAuthorizationRequest(
-			"admin",
+			adminClient,
 			"/admin/dashboard",
 		);
 
@@ -57,35 +47,26 @@ describe("OidcFacade", () => {
 		expect(result.codeVerifier).toBeTruthy();
 		expect(result.returnTo).toBe("/admin/dashboard");
 		expect(result.authorizationUrl).toContain("/oidc/auth?");
-		expect(result.authorizationUrl).toContain("client_id=test-admin-client");
-		expect(result.authorizationUrl).toContain("code_challenge=");
+
+		const url = new URL(result.authorizationUrl);
+		expect(url.searchParams.get("client_id")).toBe(adminClient.clientId);
+		expect(url.searchParams.get("redirect_uri")).toBe(adminClient.redirectUri);
+		expect(url.searchParams.get("scope")).toBe("openid profile email roles");
+		expect(url.searchParams.get("code_challenge")).toBeTruthy();
+		expect(url.searchParams.get("code_challenge_method")).toBe("S256");
 	});
 
-	it("storybook RP 설정으로 authorization request를 생성해야 한다", () => {
+	it("storybook client config도 동일한 방식으로 authorization request를 생성해야 한다", () => {
 		const result = facade.createAuthorizationRequest(
-			"storybook",
+			storybookClient,
 			"http://localhost:6006/?path=/story/example",
 		);
 
-		expect(result.authorizationUrl).toContain(
-			"client_id=test-storybook-client",
+		const url = new URL(result.authorizationUrl);
+		expect(url.searchParams.get("client_id")).toBe(storybookClient.clientId);
+		expect(url.searchParams.get("redirect_uri")).toBe(
+			storybookClient.redirectUri,
 		);
-		expect(result.authorizationUrl).toContain(
-			encodeURIComponent(
-				"http://localhost:6006/api/v1/auth/storybook/callback",
-			),
-		);
-	});
-
-	it("idpWeb RP 설정으로 authorization request를 생성해야 한다", () => {
-		const result = facade.createAuthorizationRequest(
-			"idpWeb",
-			"http://localhost:3008/dashboard",
-		);
-
-		expect(result.authorizationUrl).toContain("client_id=test-idp-web-client");
-		expect(result.authorizationUrl).toContain(
-			encodeURIComponent("http://localhost:3008/api/v1/auth/idp/callback"),
-		);
+		expect(result.returnTo).toBe("http://localhost:6006/?path=/story/example");
 	});
 });

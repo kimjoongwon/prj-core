@@ -526,45 +526,45 @@ export type InquiryParticipantSumOrderByAggregateInput = {
   unreadCount?: Prisma.SortOrder
 }
 
-export type InquiryParticipantCreateNestedManyWithoutInquiryInput = {
-  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput> | Prisma.InquiryParticipantCreateWithoutInquiryInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput[]
-  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput | Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput[]
-  createMany?: Prisma.InquiryParticipantCreateManyInquiryInputEnvelope
+export type InquiryParticipantCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutUserInput, Prisma.InquiryParticipantUncheckedCreateWithoutUserInput> | Prisma.InquiryParticipantCreateWithoutUserInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutUserInput | Prisma.InquiryParticipantCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.InquiryParticipantCreateManyUserInputEnvelope
   connect?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
 }
 
-export type InquiryParticipantUncheckedCreateNestedManyWithoutInquiryInput = {
-  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput> | Prisma.InquiryParticipantCreateWithoutInquiryInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput[]
-  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput | Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput[]
-  createMany?: Prisma.InquiryParticipantCreateManyInquiryInputEnvelope
+export type InquiryParticipantUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutUserInput, Prisma.InquiryParticipantUncheckedCreateWithoutUserInput> | Prisma.InquiryParticipantCreateWithoutUserInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutUserInput | Prisma.InquiryParticipantCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.InquiryParticipantCreateManyUserInputEnvelope
   connect?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
 }
 
-export type InquiryParticipantUpdateManyWithoutInquiryNestedInput = {
-  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput> | Prisma.InquiryParticipantCreateWithoutInquiryInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput[]
-  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput | Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput[]
-  upsert?: Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutInquiryInput | Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutInquiryInput[]
-  createMany?: Prisma.InquiryParticipantCreateManyInquiryInputEnvelope
+export type InquiryParticipantUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutUserInput, Prisma.InquiryParticipantUncheckedCreateWithoutUserInput> | Prisma.InquiryParticipantCreateWithoutUserInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutUserInput | Prisma.InquiryParticipantCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutUserInput | Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.InquiryParticipantCreateManyUserInputEnvelope
   set?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
   disconnect?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
   delete?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
   connect?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
-  update?: Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutInquiryInput | Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutInquiryInput[]
-  updateMany?: Prisma.InquiryParticipantUpdateManyWithWhereWithoutInquiryInput | Prisma.InquiryParticipantUpdateManyWithWhereWithoutInquiryInput[]
+  update?: Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutUserInput | Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.InquiryParticipantUpdateManyWithWhereWithoutUserInput | Prisma.InquiryParticipantUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.InquiryParticipantScalarWhereInput | Prisma.InquiryParticipantScalarWhereInput[]
 }
 
-export type InquiryParticipantUncheckedUpdateManyWithoutInquiryNestedInput = {
-  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput> | Prisma.InquiryParticipantCreateWithoutInquiryInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput[]
-  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput | Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput[]
-  upsert?: Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutInquiryInput | Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutInquiryInput[]
-  createMany?: Prisma.InquiryParticipantCreateManyInquiryInputEnvelope
+export type InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutUserInput, Prisma.InquiryParticipantUncheckedCreateWithoutUserInput> | Prisma.InquiryParticipantCreateWithoutUserInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutUserInput | Prisma.InquiryParticipantCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutUserInput | Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.InquiryParticipantCreateManyUserInputEnvelope
   set?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
   disconnect?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
   delete?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
   connect?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
-  update?: Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutInquiryInput | Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutInquiryInput[]
-  updateMany?: Prisma.InquiryParticipantUpdateManyWithWhereWithoutInquiryInput | Prisma.InquiryParticipantUpdateManyWithWhereWithoutInquiryInput[]
+  update?: Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutUserInput | Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.InquiryParticipantUpdateManyWithWhereWithoutUserInput | Prisma.InquiryParticipantUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.InquiryParticipantScalarWhereInput | Prisma.InquiryParticipantScalarWhereInput[]
 }
 
@@ -614,49 +614,49 @@ export type EnumInquiryParticipantRoleFieldUpdateOperationsInput = {
   set?: $Enums.InquiryParticipantRole
 }
 
-export type InquiryParticipantCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutUserInput, Prisma.InquiryParticipantUncheckedCreateWithoutUserInput> | Prisma.InquiryParticipantCreateWithoutUserInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutUserInput | Prisma.InquiryParticipantCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.InquiryParticipantCreateManyUserInputEnvelope
+export type InquiryParticipantCreateNestedManyWithoutInquiryInput = {
+  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput> | Prisma.InquiryParticipantCreateWithoutInquiryInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput[]
+  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput | Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput[]
+  createMany?: Prisma.InquiryParticipantCreateManyInquiryInputEnvelope
   connect?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
 }
 
-export type InquiryParticipantUncheckedCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutUserInput, Prisma.InquiryParticipantUncheckedCreateWithoutUserInput> | Prisma.InquiryParticipantCreateWithoutUserInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutUserInput | Prisma.InquiryParticipantCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.InquiryParticipantCreateManyUserInputEnvelope
+export type InquiryParticipantUncheckedCreateNestedManyWithoutInquiryInput = {
+  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput> | Prisma.InquiryParticipantCreateWithoutInquiryInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput[]
+  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput | Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput[]
+  createMany?: Prisma.InquiryParticipantCreateManyInquiryInputEnvelope
   connect?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
 }
 
-export type InquiryParticipantUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutUserInput, Prisma.InquiryParticipantUncheckedCreateWithoutUserInput> | Prisma.InquiryParticipantCreateWithoutUserInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutUserInput | Prisma.InquiryParticipantCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutUserInput | Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.InquiryParticipantCreateManyUserInputEnvelope
+export type InquiryParticipantUpdateManyWithoutInquiryNestedInput = {
+  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput> | Prisma.InquiryParticipantCreateWithoutInquiryInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput[]
+  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput | Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput[]
+  upsert?: Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutInquiryInput | Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutInquiryInput[]
+  createMany?: Prisma.InquiryParticipantCreateManyInquiryInputEnvelope
   set?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
   disconnect?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
   delete?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
   connect?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
-  update?: Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutUserInput | Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.InquiryParticipantUpdateManyWithWhereWithoutUserInput | Prisma.InquiryParticipantUpdateManyWithWhereWithoutUserInput[]
+  update?: Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutInquiryInput | Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutInquiryInput[]
+  updateMany?: Prisma.InquiryParticipantUpdateManyWithWhereWithoutInquiryInput | Prisma.InquiryParticipantUpdateManyWithWhereWithoutInquiryInput[]
   deleteMany?: Prisma.InquiryParticipantScalarWhereInput | Prisma.InquiryParticipantScalarWhereInput[]
 }
 
-export type InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutUserInput, Prisma.InquiryParticipantUncheckedCreateWithoutUserInput> | Prisma.InquiryParticipantCreateWithoutUserInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutUserInput | Prisma.InquiryParticipantCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutUserInput | Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.InquiryParticipantCreateManyUserInputEnvelope
+export type InquiryParticipantUncheckedUpdateManyWithoutInquiryNestedInput = {
+  create?: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput> | Prisma.InquiryParticipantCreateWithoutInquiryInput[] | Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput[]
+  connectOrCreate?: Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput | Prisma.InquiryParticipantCreateOrConnectWithoutInquiryInput[]
+  upsert?: Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutInquiryInput | Prisma.InquiryParticipantUpsertWithWhereUniqueWithoutInquiryInput[]
+  createMany?: Prisma.InquiryParticipantCreateManyInquiryInputEnvelope
   set?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
   disconnect?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
   delete?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
   connect?: Prisma.InquiryParticipantWhereUniqueInput | Prisma.InquiryParticipantWhereUniqueInput[]
-  update?: Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutUserInput | Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.InquiryParticipantUpdateManyWithWhereWithoutUserInput | Prisma.InquiryParticipantUpdateManyWithWhereWithoutUserInput[]
+  update?: Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutInquiryInput | Prisma.InquiryParticipantUpdateWithWhereUniqueWithoutInquiryInput[]
+  updateMany?: Prisma.InquiryParticipantUpdateManyWithWhereWithoutInquiryInput | Prisma.InquiryParticipantUpdateManyWithWhereWithoutInquiryInput[]
   deleteMany?: Prisma.InquiryParticipantScalarWhereInput | Prisma.InquiryParticipantScalarWhereInput[]
 }
 
-export type InquiryParticipantCreateWithoutInquiryInput = {
+export type InquiryParticipantCreateWithoutUserInput = {
   id?: string
   joinedAt?: Date | string
   leftAt?: Date | string | null
@@ -666,16 +666,16 @@ export type InquiryParticipantCreateWithoutInquiryInput = {
   lastSeenAt?: Date | string | null
   lastReadAt?: Date | string | null
   unreadCount?: number
+  inquiry: Prisma.InquiryCreateNestedOneWithoutParticipantsInput
   thread?: Prisma.InquiryThreadCreateNestedOneWithoutParticipantsInput
-  user: Prisma.UserCreateNestedOneWithoutInquiryParticipantsInput
 }
 
-export type InquiryParticipantUncheckedCreateWithoutInquiryInput = {
+export type InquiryParticipantUncheckedCreateWithoutUserInput = {
   id?: string
   joinedAt?: Date | string
   leftAt?: Date | string | null
+  inquiryId: string
   threadId?: string | null
-  userId: string
   role?: $Enums.InquiryParticipantRole
   isOnline?: boolean
   isTyping?: boolean
@@ -684,30 +684,30 @@ export type InquiryParticipantUncheckedCreateWithoutInquiryInput = {
   unreadCount?: number
 }
 
-export type InquiryParticipantCreateOrConnectWithoutInquiryInput = {
+export type InquiryParticipantCreateOrConnectWithoutUserInput = {
   where: Prisma.InquiryParticipantWhereUniqueInput
-  create: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput>
+  create: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutUserInput, Prisma.InquiryParticipantUncheckedCreateWithoutUserInput>
 }
 
-export type InquiryParticipantCreateManyInquiryInputEnvelope = {
-  data: Prisma.InquiryParticipantCreateManyInquiryInput | Prisma.InquiryParticipantCreateManyInquiryInput[]
+export type InquiryParticipantCreateManyUserInputEnvelope = {
+  data: Prisma.InquiryParticipantCreateManyUserInput | Prisma.InquiryParticipantCreateManyUserInput[]
   skipDuplicates?: boolean
 }
 
-export type InquiryParticipantUpsertWithWhereUniqueWithoutInquiryInput = {
+export type InquiryParticipantUpsertWithWhereUniqueWithoutUserInput = {
   where: Prisma.InquiryParticipantWhereUniqueInput
-  update: Prisma.XOR<Prisma.InquiryParticipantUpdateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedUpdateWithoutInquiryInput>
-  create: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput>
+  update: Prisma.XOR<Prisma.InquiryParticipantUpdateWithoutUserInput, Prisma.InquiryParticipantUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutUserInput, Prisma.InquiryParticipantUncheckedCreateWithoutUserInput>
 }
 
-export type InquiryParticipantUpdateWithWhereUniqueWithoutInquiryInput = {
+export type InquiryParticipantUpdateWithWhereUniqueWithoutUserInput = {
   where: Prisma.InquiryParticipantWhereUniqueInput
-  data: Prisma.XOR<Prisma.InquiryParticipantUpdateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedUpdateWithoutInquiryInput>
+  data: Prisma.XOR<Prisma.InquiryParticipantUpdateWithoutUserInput, Prisma.InquiryParticipantUncheckedUpdateWithoutUserInput>
 }
 
-export type InquiryParticipantUpdateManyWithWhereWithoutInquiryInput = {
+export type InquiryParticipantUpdateManyWithWhereWithoutUserInput = {
   where: Prisma.InquiryParticipantScalarWhereInput
-  data: Prisma.XOR<Prisma.InquiryParticipantUpdateManyMutationInput, Prisma.InquiryParticipantUncheckedUpdateManyWithoutInquiryInput>
+  data: Prisma.XOR<Prisma.InquiryParticipantUpdateManyMutationInput, Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserInput>
 }
 
 export type InquiryParticipantScalarWhereInput = {
@@ -782,7 +782,7 @@ export type InquiryParticipantUpdateManyWithWhereWithoutThreadInput = {
   data: Prisma.XOR<Prisma.InquiryParticipantUpdateManyMutationInput, Prisma.InquiryParticipantUncheckedUpdateManyWithoutThreadInput>
 }
 
-export type InquiryParticipantCreateWithoutUserInput = {
+export type InquiryParticipantCreateWithoutInquiryInput = {
   id?: string
   joinedAt?: Date | string
   leftAt?: Date | string | null
@@ -792,51 +792,11 @@ export type InquiryParticipantCreateWithoutUserInput = {
   lastSeenAt?: Date | string | null
   lastReadAt?: Date | string | null
   unreadCount?: number
-  inquiry: Prisma.InquiryCreateNestedOneWithoutParticipantsInput
   thread?: Prisma.InquiryThreadCreateNestedOneWithoutParticipantsInput
+  user: Prisma.UserCreateNestedOneWithoutInquiryParticipantsInput
 }
 
-export type InquiryParticipantUncheckedCreateWithoutUserInput = {
-  id?: string
-  joinedAt?: Date | string
-  leftAt?: Date | string | null
-  inquiryId: string
-  threadId?: string | null
-  role?: $Enums.InquiryParticipantRole
-  isOnline?: boolean
-  isTyping?: boolean
-  lastSeenAt?: Date | string | null
-  lastReadAt?: Date | string | null
-  unreadCount?: number
-}
-
-export type InquiryParticipantCreateOrConnectWithoutUserInput = {
-  where: Prisma.InquiryParticipantWhereUniqueInput
-  create: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutUserInput, Prisma.InquiryParticipantUncheckedCreateWithoutUserInput>
-}
-
-export type InquiryParticipantCreateManyUserInputEnvelope = {
-  data: Prisma.InquiryParticipantCreateManyUserInput | Prisma.InquiryParticipantCreateManyUserInput[]
-  skipDuplicates?: boolean
-}
-
-export type InquiryParticipantUpsertWithWhereUniqueWithoutUserInput = {
-  where: Prisma.InquiryParticipantWhereUniqueInput
-  update: Prisma.XOR<Prisma.InquiryParticipantUpdateWithoutUserInput, Prisma.InquiryParticipantUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutUserInput, Prisma.InquiryParticipantUncheckedCreateWithoutUserInput>
-}
-
-export type InquiryParticipantUpdateWithWhereUniqueWithoutUserInput = {
-  where: Prisma.InquiryParticipantWhereUniqueInput
-  data: Prisma.XOR<Prisma.InquiryParticipantUpdateWithoutUserInput, Prisma.InquiryParticipantUncheckedUpdateWithoutUserInput>
-}
-
-export type InquiryParticipantUpdateManyWithWhereWithoutUserInput = {
-  where: Prisma.InquiryParticipantScalarWhereInput
-  data: Prisma.XOR<Prisma.InquiryParticipantUpdateManyMutationInput, Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserInput>
-}
-
-export type InquiryParticipantCreateManyInquiryInput = {
+export type InquiryParticipantUncheckedCreateWithoutInquiryInput = {
   id?: string
   joinedAt?: Date | string
   leftAt?: Date | string | null
@@ -850,7 +810,47 @@ export type InquiryParticipantCreateManyInquiryInput = {
   unreadCount?: number
 }
 
-export type InquiryParticipantUpdateWithoutInquiryInput = {
+export type InquiryParticipantCreateOrConnectWithoutInquiryInput = {
+  where: Prisma.InquiryParticipantWhereUniqueInput
+  create: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput>
+}
+
+export type InquiryParticipantCreateManyInquiryInputEnvelope = {
+  data: Prisma.InquiryParticipantCreateManyInquiryInput | Prisma.InquiryParticipantCreateManyInquiryInput[]
+  skipDuplicates?: boolean
+}
+
+export type InquiryParticipantUpsertWithWhereUniqueWithoutInquiryInput = {
+  where: Prisma.InquiryParticipantWhereUniqueInput
+  update: Prisma.XOR<Prisma.InquiryParticipantUpdateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedUpdateWithoutInquiryInput>
+  create: Prisma.XOR<Prisma.InquiryParticipantCreateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedCreateWithoutInquiryInput>
+}
+
+export type InquiryParticipantUpdateWithWhereUniqueWithoutInquiryInput = {
+  where: Prisma.InquiryParticipantWhereUniqueInput
+  data: Prisma.XOR<Prisma.InquiryParticipantUpdateWithoutInquiryInput, Prisma.InquiryParticipantUncheckedUpdateWithoutInquiryInput>
+}
+
+export type InquiryParticipantUpdateManyWithWhereWithoutInquiryInput = {
+  where: Prisma.InquiryParticipantScalarWhereInput
+  data: Prisma.XOR<Prisma.InquiryParticipantUpdateManyMutationInput, Prisma.InquiryParticipantUncheckedUpdateManyWithoutInquiryInput>
+}
+
+export type InquiryParticipantCreateManyUserInput = {
+  id?: string
+  joinedAt?: Date | string
+  leftAt?: Date | string | null
+  inquiryId: string
+  threadId?: string | null
+  role?: $Enums.InquiryParticipantRole
+  isOnline?: boolean
+  isTyping?: boolean
+  lastSeenAt?: Date | string | null
+  lastReadAt?: Date | string | null
+  unreadCount?: number
+}
+
+export type InquiryParticipantUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -860,16 +860,16 @@ export type InquiryParticipantUpdateWithoutInquiryInput = {
   lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   unreadCount?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiry?: Prisma.InquiryUpdateOneRequiredWithoutParticipantsNestedInput
   thread?: Prisma.InquiryThreadUpdateOneWithoutParticipantsNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutInquiryParticipantsNestedInput
 }
 
-export type InquiryParticipantUncheckedUpdateWithoutInquiryInput = {
+export type InquiryParticipantUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
   threadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTyping?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -878,12 +878,12 @@ export type InquiryParticipantUncheckedUpdateWithoutInquiryInput = {
   unreadCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
-export type InquiryParticipantUncheckedUpdateManyWithoutInquiryInput = {
+export type InquiryParticipantUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
   threadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTyping?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -948,12 +948,12 @@ export type InquiryParticipantUncheckedUpdateManyWithoutThreadInput = {
   unreadCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
-export type InquiryParticipantCreateManyUserInput = {
+export type InquiryParticipantCreateManyInquiryInput = {
   id?: string
   joinedAt?: Date | string
   leftAt?: Date | string | null
-  inquiryId: string
   threadId?: string | null
+  userId: string
   role?: $Enums.InquiryParticipantRole
   isOnline?: boolean
   isTyping?: boolean
@@ -962,7 +962,7 @@ export type InquiryParticipantCreateManyUserInput = {
   unreadCount?: number
 }
 
-export type InquiryParticipantUpdateWithoutUserInput = {
+export type InquiryParticipantUpdateWithoutInquiryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -972,16 +972,16 @@ export type InquiryParticipantUpdateWithoutUserInput = {
   lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   unreadCount?: Prisma.IntFieldUpdateOperationsInput | number
-  inquiry?: Prisma.InquiryUpdateOneRequiredWithoutParticipantsNestedInput
   thread?: Prisma.InquiryThreadUpdateOneWithoutParticipantsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutInquiryParticipantsNestedInput
 }
 
-export type InquiryParticipantUncheckedUpdateWithoutUserInput = {
+export type InquiryParticipantUncheckedUpdateWithoutInquiryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
   threadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTyping?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -990,12 +990,12 @@ export type InquiryParticipantUncheckedUpdateWithoutUserInput = {
   unreadCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
-export type InquiryParticipantUncheckedUpdateManyWithoutUserInput = {
+export type InquiryParticipantUncheckedUpdateManyWithoutInquiryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
   threadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTyping?: Prisma.BoolFieldUpdateOperationsInput | boolean

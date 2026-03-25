@@ -14,8 +14,8 @@ import {
 } from "@heroui/react";
 import { RefreshCw, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { VStack } from "../../../layout/VStack/VStack";
 import { RedirectUriListInput } from "../../../input/RedirectUriListInput/RedirectUriListInput";
+import { VStack } from "../../../layout/VStack/VStack";
 
 /** 폼 상태 인터페이스 */
 export interface OidcClientFormState {
@@ -28,6 +28,8 @@ export interface OidcClientFormState {
 	responseTypes: string[];
 	scope: string;
 	redirectUris: string[];
+	loginUrl: string;
+	defaultReturnTo: string;
 	logoUri: string;
 	policyUri: string;
 	tosUri: string;
@@ -259,6 +261,29 @@ export const OidcClientForm = observer(
 								state.redirectUris = uris;
 							}}
 							errors={state.redirectUriErrors}
+						/>
+					</div>
+				</section>
+				<section>
+					<div className="space-y-6 p-6">
+						<h3 className="text-lg font-semibold">앱 복귀 설정 (선택)</h3>
+						<Input
+							label="로그인 셸 URL"
+							placeholder="/admin/auth/login 또는 https://app.example.com/auth/login"
+							value={state.loginUrl}
+							onValueChange={(v) => {
+								state.loginUrl = v;
+							}}
+							description="`/api/v1/auth/login?clientId=...` 흐름에서 인증 실패 시 복귀할 로그인 화면입니다."
+						/>
+						<Input
+							label="기본 복귀 URL"
+							placeholder="/admin/dashboard 또는 https://app.example.com/dashboard"
+							value={state.defaultReturnTo}
+							onValueChange={(v) => {
+								state.defaultReturnTo = v;
+							}}
+							description="callback에 returnTo가 없을 때 사용할 기본 복귀 경로입니다."
 						/>
 					</div>
 				</section>

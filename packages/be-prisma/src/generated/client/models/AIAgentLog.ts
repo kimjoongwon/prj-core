@@ -492,21 +492,6 @@ export type AIAgentLogUncheckedUpdateManyInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type AIAgentLogListRelationFilter = {
-  every?: Prisma.AIAgentLogWhereInput
-  some?: Prisma.AIAgentLogWhereInput
-  none?: Prisma.AIAgentLogWhereInput
-}
-
-export type AIAgentLogOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
-export type AIAgentLogNullableScalarRelationFilter = {
-  is?: Prisma.AIAgentLogWhereInput | null
-  isNot?: Prisma.AIAgentLogWhereInput | null
-}
-
 export type AIAgentLogCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -566,6 +551,61 @@ export type AIAgentLogSumOrderByAggregateInput = {
   tokenCount?: Prisma.SortOrder
 }
 
+export type AIAgentLogNullableScalarRelationFilter = {
+  is?: Prisma.AIAgentLogWhereInput | null
+  isNot?: Prisma.AIAgentLogWhereInput | null
+}
+
+export type AIAgentLogListRelationFilter = {
+  every?: Prisma.AIAgentLogWhereInput
+  some?: Prisma.AIAgentLogWhereInput
+  none?: Prisma.AIAgentLogWhereInput
+}
+
+export type AIAgentLogOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type EnumAIAgentActionFieldUpdateOperationsInput = {
+  set?: $Enums.AIAgentAction
+}
+
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null
+}
+
+export type AIAgentLogCreateNestedOneWithoutMessageInput = {
+  create?: Prisma.XOR<Prisma.AIAgentLogCreateWithoutMessageInput, Prisma.AIAgentLogUncheckedCreateWithoutMessageInput>
+  connectOrCreate?: Prisma.AIAgentLogCreateOrConnectWithoutMessageInput
+  connect?: Prisma.AIAgentLogWhereUniqueInput
+}
+
+export type AIAgentLogUncheckedCreateNestedOneWithoutMessageInput = {
+  create?: Prisma.XOR<Prisma.AIAgentLogCreateWithoutMessageInput, Prisma.AIAgentLogUncheckedCreateWithoutMessageInput>
+  connectOrCreate?: Prisma.AIAgentLogCreateOrConnectWithoutMessageInput
+  connect?: Prisma.AIAgentLogWhereUniqueInput
+}
+
+export type AIAgentLogUpdateOneWithoutMessageNestedInput = {
+  create?: Prisma.XOR<Prisma.AIAgentLogCreateWithoutMessageInput, Prisma.AIAgentLogUncheckedCreateWithoutMessageInput>
+  connectOrCreate?: Prisma.AIAgentLogCreateOrConnectWithoutMessageInput
+  upsert?: Prisma.AIAgentLogUpsertWithoutMessageInput
+  disconnect?: Prisma.AIAgentLogWhereInput | boolean
+  delete?: Prisma.AIAgentLogWhereInput | boolean
+  connect?: Prisma.AIAgentLogWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AIAgentLogUpdateToOneWithWhereWithoutMessageInput, Prisma.AIAgentLogUpdateWithoutMessageInput>, Prisma.AIAgentLogUncheckedUpdateWithoutMessageInput>
+}
+
+export type AIAgentLogUncheckedUpdateOneWithoutMessageNestedInput = {
+  create?: Prisma.XOR<Prisma.AIAgentLogCreateWithoutMessageInput, Prisma.AIAgentLogUncheckedCreateWithoutMessageInput>
+  connectOrCreate?: Prisma.AIAgentLogCreateOrConnectWithoutMessageInput
+  upsert?: Prisma.AIAgentLogUpsertWithoutMessageInput
+  disconnect?: Prisma.AIAgentLogWhereInput | boolean
+  delete?: Prisma.AIAgentLogWhereInput | boolean
+  connect?: Prisma.AIAgentLogWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AIAgentLogUpdateToOneWithWhereWithoutMessageInput, Prisma.AIAgentLogUpdateWithoutMessageInput>, Prisma.AIAgentLogUncheckedUpdateWithoutMessageInput>
+}
+
 export type AIAgentLogCreateNestedManyWithoutInquiryInput = {
   create?: Prisma.XOR<Prisma.AIAgentLogCreateWithoutInquiryInput, Prisma.AIAgentLogUncheckedCreateWithoutInquiryInput> | Prisma.AIAgentLogCreateWithoutInquiryInput[] | Prisma.AIAgentLogUncheckedCreateWithoutInquiryInput[]
   connectOrCreate?: Prisma.AIAgentLogCreateOrConnectWithoutInquiryInput | Prisma.AIAgentLogCreateOrConnectWithoutInquiryInput[]
@@ -606,124 +646,6 @@ export type AIAgentLogUncheckedUpdateManyWithoutInquiryNestedInput = {
   update?: Prisma.AIAgentLogUpdateWithWhereUniqueWithoutInquiryInput | Prisma.AIAgentLogUpdateWithWhereUniqueWithoutInquiryInput[]
   updateMany?: Prisma.AIAgentLogUpdateManyWithWhereWithoutInquiryInput | Prisma.AIAgentLogUpdateManyWithWhereWithoutInquiryInput[]
   deleteMany?: Prisma.AIAgentLogScalarWhereInput | Prisma.AIAgentLogScalarWhereInput[]
-}
-
-export type AIAgentLogCreateNestedOneWithoutMessageInput = {
-  create?: Prisma.XOR<Prisma.AIAgentLogCreateWithoutMessageInput, Prisma.AIAgentLogUncheckedCreateWithoutMessageInput>
-  connectOrCreate?: Prisma.AIAgentLogCreateOrConnectWithoutMessageInput
-  connect?: Prisma.AIAgentLogWhereUniqueInput
-}
-
-export type AIAgentLogUncheckedCreateNestedOneWithoutMessageInput = {
-  create?: Prisma.XOR<Prisma.AIAgentLogCreateWithoutMessageInput, Prisma.AIAgentLogUncheckedCreateWithoutMessageInput>
-  connectOrCreate?: Prisma.AIAgentLogCreateOrConnectWithoutMessageInput
-  connect?: Prisma.AIAgentLogWhereUniqueInput
-}
-
-export type AIAgentLogUpdateOneWithoutMessageNestedInput = {
-  create?: Prisma.XOR<Prisma.AIAgentLogCreateWithoutMessageInput, Prisma.AIAgentLogUncheckedCreateWithoutMessageInput>
-  connectOrCreate?: Prisma.AIAgentLogCreateOrConnectWithoutMessageInput
-  upsert?: Prisma.AIAgentLogUpsertWithoutMessageInput
-  disconnect?: Prisma.AIAgentLogWhereInput | boolean
-  delete?: Prisma.AIAgentLogWhereInput | boolean
-  connect?: Prisma.AIAgentLogWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AIAgentLogUpdateToOneWithWhereWithoutMessageInput, Prisma.AIAgentLogUpdateWithoutMessageInput>, Prisma.AIAgentLogUncheckedUpdateWithoutMessageInput>
-}
-
-export type AIAgentLogUncheckedUpdateOneWithoutMessageNestedInput = {
-  create?: Prisma.XOR<Prisma.AIAgentLogCreateWithoutMessageInput, Prisma.AIAgentLogUncheckedCreateWithoutMessageInput>
-  connectOrCreate?: Prisma.AIAgentLogCreateOrConnectWithoutMessageInput
-  upsert?: Prisma.AIAgentLogUpsertWithoutMessageInput
-  disconnect?: Prisma.AIAgentLogWhereInput | boolean
-  delete?: Prisma.AIAgentLogWhereInput | boolean
-  connect?: Prisma.AIAgentLogWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AIAgentLogUpdateToOneWithWhereWithoutMessageInput, Prisma.AIAgentLogUpdateWithoutMessageInput>, Prisma.AIAgentLogUncheckedUpdateWithoutMessageInput>
-}
-
-export type EnumAIAgentActionFieldUpdateOperationsInput = {
-  set?: $Enums.AIAgentAction
-}
-
-export type NullableBoolFieldUpdateOperationsInput = {
-  set?: boolean | null
-}
-
-export type AIAgentLogCreateWithoutInquiryInput = {
-  id?: string
-  createdAt?: Date | string
-  action: $Enums.AIAgentAction
-  input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  confidence?: number | null
-  wasAccepted?: boolean | null
-  wasModified?: boolean | null
-  responseTimeMs?: number | null
-  model?: string | null
-  tokenCount?: number | null
-  errorMessage?: string | null
-  message?: Prisma.InquiryMessageCreateNestedOneWithoutAiAgentLogInput
-}
-
-export type AIAgentLogUncheckedCreateWithoutInquiryInput = {
-  id?: string
-  createdAt?: Date | string
-  messageId?: string | null
-  action: $Enums.AIAgentAction
-  input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  confidence?: number | null
-  wasAccepted?: boolean | null
-  wasModified?: boolean | null
-  responseTimeMs?: number | null
-  model?: string | null
-  tokenCount?: number | null
-  errorMessage?: string | null
-}
-
-export type AIAgentLogCreateOrConnectWithoutInquiryInput = {
-  where: Prisma.AIAgentLogWhereUniqueInput
-  create: Prisma.XOR<Prisma.AIAgentLogCreateWithoutInquiryInput, Prisma.AIAgentLogUncheckedCreateWithoutInquiryInput>
-}
-
-export type AIAgentLogCreateManyInquiryInputEnvelope = {
-  data: Prisma.AIAgentLogCreateManyInquiryInput | Prisma.AIAgentLogCreateManyInquiryInput[]
-  skipDuplicates?: boolean
-}
-
-export type AIAgentLogUpsertWithWhereUniqueWithoutInquiryInput = {
-  where: Prisma.AIAgentLogWhereUniqueInput
-  update: Prisma.XOR<Prisma.AIAgentLogUpdateWithoutInquiryInput, Prisma.AIAgentLogUncheckedUpdateWithoutInquiryInput>
-  create: Prisma.XOR<Prisma.AIAgentLogCreateWithoutInquiryInput, Prisma.AIAgentLogUncheckedCreateWithoutInquiryInput>
-}
-
-export type AIAgentLogUpdateWithWhereUniqueWithoutInquiryInput = {
-  where: Prisma.AIAgentLogWhereUniqueInput
-  data: Prisma.XOR<Prisma.AIAgentLogUpdateWithoutInquiryInput, Prisma.AIAgentLogUncheckedUpdateWithoutInquiryInput>
-}
-
-export type AIAgentLogUpdateManyWithWhereWithoutInquiryInput = {
-  where: Prisma.AIAgentLogScalarWhereInput
-  data: Prisma.XOR<Prisma.AIAgentLogUpdateManyMutationInput, Prisma.AIAgentLogUncheckedUpdateManyWithoutInquiryInput>
-}
-
-export type AIAgentLogScalarWhereInput = {
-  AND?: Prisma.AIAgentLogScalarWhereInput | Prisma.AIAgentLogScalarWhereInput[]
-  OR?: Prisma.AIAgentLogScalarWhereInput[]
-  NOT?: Prisma.AIAgentLogScalarWhereInput | Prisma.AIAgentLogScalarWhereInput[]
-  id?: Prisma.StringFilter<"AIAgentLog"> | string
-  createdAt?: Prisma.DateTimeFilter<"AIAgentLog"> | Date | string
-  inquiryId?: Prisma.StringFilter<"AIAgentLog"> | string
-  messageId?: Prisma.StringNullableFilter<"AIAgentLog"> | string | null
-  action?: Prisma.EnumAIAgentActionFilter<"AIAgentLog"> | $Enums.AIAgentAction
-  input?: Prisma.JsonNullableFilter<"AIAgentLog">
-  output?: Prisma.JsonNullableFilter<"AIAgentLog">
-  confidence?: Prisma.FloatNullableFilter<"AIAgentLog"> | number | null
-  wasAccepted?: Prisma.BoolNullableFilter<"AIAgentLog"> | boolean | null
-  wasModified?: Prisma.BoolNullableFilter<"AIAgentLog"> | boolean | null
-  responseTimeMs?: Prisma.IntNullableFilter<"AIAgentLog"> | number | null
-  model?: Prisma.StringNullableFilter<"AIAgentLog"> | string | null
-  tokenCount?: Prisma.IntNullableFilter<"AIAgentLog"> | number | null
-  errorMessage?: Prisma.StringNullableFilter<"AIAgentLog"> | string | null
 }
 
 export type AIAgentLogCreateWithoutMessageInput = {
@@ -804,6 +726,84 @@ export type AIAgentLogUncheckedUpdateWithoutMessageInput = {
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type AIAgentLogCreateWithoutInquiryInput = {
+  id?: string
+  createdAt?: Date | string
+  action: $Enums.AIAgentAction
+  input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confidence?: number | null
+  wasAccepted?: boolean | null
+  wasModified?: boolean | null
+  responseTimeMs?: number | null
+  model?: string | null
+  tokenCount?: number | null
+  errorMessage?: string | null
+  message?: Prisma.InquiryMessageCreateNestedOneWithoutAiAgentLogInput
+}
+
+export type AIAgentLogUncheckedCreateWithoutInquiryInput = {
+  id?: string
+  createdAt?: Date | string
+  messageId?: string | null
+  action: $Enums.AIAgentAction
+  input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confidence?: number | null
+  wasAccepted?: boolean | null
+  wasModified?: boolean | null
+  responseTimeMs?: number | null
+  model?: string | null
+  tokenCount?: number | null
+  errorMessage?: string | null
+}
+
+export type AIAgentLogCreateOrConnectWithoutInquiryInput = {
+  where: Prisma.AIAgentLogWhereUniqueInput
+  create: Prisma.XOR<Prisma.AIAgentLogCreateWithoutInquiryInput, Prisma.AIAgentLogUncheckedCreateWithoutInquiryInput>
+}
+
+export type AIAgentLogCreateManyInquiryInputEnvelope = {
+  data: Prisma.AIAgentLogCreateManyInquiryInput | Prisma.AIAgentLogCreateManyInquiryInput[]
+  skipDuplicates?: boolean
+}
+
+export type AIAgentLogUpsertWithWhereUniqueWithoutInquiryInput = {
+  where: Prisma.AIAgentLogWhereUniqueInput
+  update: Prisma.XOR<Prisma.AIAgentLogUpdateWithoutInquiryInput, Prisma.AIAgentLogUncheckedUpdateWithoutInquiryInput>
+  create: Prisma.XOR<Prisma.AIAgentLogCreateWithoutInquiryInput, Prisma.AIAgentLogUncheckedCreateWithoutInquiryInput>
+}
+
+export type AIAgentLogUpdateWithWhereUniqueWithoutInquiryInput = {
+  where: Prisma.AIAgentLogWhereUniqueInput
+  data: Prisma.XOR<Prisma.AIAgentLogUpdateWithoutInquiryInput, Prisma.AIAgentLogUncheckedUpdateWithoutInquiryInput>
+}
+
+export type AIAgentLogUpdateManyWithWhereWithoutInquiryInput = {
+  where: Prisma.AIAgentLogScalarWhereInput
+  data: Prisma.XOR<Prisma.AIAgentLogUpdateManyMutationInput, Prisma.AIAgentLogUncheckedUpdateManyWithoutInquiryInput>
+}
+
+export type AIAgentLogScalarWhereInput = {
+  AND?: Prisma.AIAgentLogScalarWhereInput | Prisma.AIAgentLogScalarWhereInput[]
+  OR?: Prisma.AIAgentLogScalarWhereInput[]
+  NOT?: Prisma.AIAgentLogScalarWhereInput | Prisma.AIAgentLogScalarWhereInput[]
+  id?: Prisma.StringFilter<"AIAgentLog"> | string
+  createdAt?: Prisma.DateTimeFilter<"AIAgentLog"> | Date | string
+  inquiryId?: Prisma.StringFilter<"AIAgentLog"> | string
+  messageId?: Prisma.StringNullableFilter<"AIAgentLog"> | string | null
+  action?: Prisma.EnumAIAgentActionFilter<"AIAgentLog"> | $Enums.AIAgentAction
+  input?: Prisma.JsonNullableFilter<"AIAgentLog">
+  output?: Prisma.JsonNullableFilter<"AIAgentLog">
+  confidence?: Prisma.FloatNullableFilter<"AIAgentLog"> | number | null
+  wasAccepted?: Prisma.BoolNullableFilter<"AIAgentLog"> | boolean | null
+  wasModified?: Prisma.BoolNullableFilter<"AIAgentLog"> | boolean | null
+  responseTimeMs?: Prisma.IntNullableFilter<"AIAgentLog"> | number | null
+  model?: Prisma.StringNullableFilter<"AIAgentLog"> | string | null
+  tokenCount?: Prisma.IntNullableFilter<"AIAgentLog"> | number | null
+  errorMessage?: Prisma.StringNullableFilter<"AIAgentLog"> | string | null
 }
 
 export type AIAgentLogCreateManyInquiryInput = {

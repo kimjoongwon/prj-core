@@ -5,7 +5,7 @@
 - Storybook manager/preview 진입 전에 기존 IDP 쿠키 세션을 검사합니다.
 
 ## 핵심 동작
-- `/__storybook_auth/login`은 `/api/v1/auth/storybook/login?returnTo=...` 플로우를 감싸는 로컬 로그인 셸을 렌더링합니다.
+- `/__storybook_auth/login`은 `/api/v1/auth/login?clientId=storybook&returnTo=...` 플로우를 감싸는 로컬 로그인 셸을 렌더링합니다.
 - `/__storybook_auth/logout`은 로그아웃 API 호출 뒤 Storybook 관련 local/session storage를 정리하고 로그인 셸로 복귀시킵니다.
 - `/__storybook_auth/session`은 `verify-token`을 프록시 대신 서버 측에서 확인해 JSON 상태를 반환합니다.
 - 로그인 alias(`/admin/auth/login`, `/auth/login`) 요청을 Storybook 로그인 셸로 흡수합니다.

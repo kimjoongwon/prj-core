@@ -871,63 +871,21 @@ export type SessionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $SessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Session"
   objects: {
-    /**
-     * 프로그램 목록
-     */
     programs: Prisma.$ProgramPayload<ExtArgs>[]
-    /**
-     * 타임라인 관계
-     */
     timeline: Prisma.$TimelinePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    /**
-     * 고유 식별자
-     */
     id: string
-    /**
-     * 생성 일시
-     */
     createdAt: Date
-    /**
-     * 수정 일시
-     */
     updatedAt: Date | null
-    /**
-     * 삭제 일시
-     */
     removedAt: Date | null
-    /**
-     * 세션 유형 (일회성/기간형/반복형)
-     */
     type: $Enums.SessionTypes
-    /**
-     * 반복 주기 유형 (주간/월간)
-     */
     repeatCycleType: $Enums.RepeatCycleTypes | null
-    /**
-     * 시작 일시
-     */
     startDateTime: Date | null
-    /**
-     * 종료 일시
-     */
     endDateTime: Date | null
-    /**
-     * 반복 요일
-     */
     recurringDayOfWeek: $Enums.RecurringDayOfWeek | null
-    /**
-     * 타임라인 ID
-     */
     timelineId: string
-    /**
-     * 세션 이름
-     */
     name: string
-    /**
-     * 세션 설명
-     */
     description: string | null
   }, ExtArgs["result"]["session"]>
   composites: {}

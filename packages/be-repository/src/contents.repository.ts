@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient, Content } from "@cocrepo/prisma";
+import { Content, Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
@@ -29,7 +29,7 @@ export class ContentsRepository {
 		const result = await this.txHost.tx.content.findUnique({
 			where: { id },
 			include: {
-				posts: true,
+				post: true,
 				space: true,
 				creator: true,
 			},
@@ -48,7 +48,9 @@ export class ContentsRepository {
 	}
 
 	async findBySpaceIdWithoutRemoved(spaceId: string): Promise<Content[]> {
-		this.logger.debug(`삭제되지 않은 Space별 콘텐츠 조회: ${spaceId.slice(-8)}`);
+		this.logger.debug(
+			`삭제되지 않은 Space별 콘텐츠 조회: ${spaceId.slice(-8)}`,
+		);
 
 		return this.txHost.tx.content.findMany({
 			where: { spaceId, removedAt: null },

@@ -39,6 +39,8 @@ interface OidcClientEditFormState {
 	responseTypes: string[];
 	scope: string;
 	redirectUris: string[];
+	loginUrl: string;
+	defaultReturnTo: string;
 	logoUri: string;
 	policyUri: string;
 	tosUri: string;
@@ -61,7 +63,12 @@ function OidcClientEditPageClient({
 	const router = useRouter();
 
 	const { data: response, isLoading } = useGetOidcClient(oidcClientId);
-	const client = response?.data;
+	const client = response?.data as
+		| (NonNullable<typeof response>["data"] & {
+				loginUrl?: string | null;
+				defaultReturnTo?: string | null;
+		  })
+		| undefined;
 
 	const { mutate: updateClient, isPending } = useUpdateOidcClient({
 		mutation: {
@@ -81,6 +88,8 @@ function OidcClientEditPageClient({
 		responseTypes: [],
 		scope: "",
 		redirectUris: [""],
+		loginUrl: "",
+		defaultReturnTo: "",
 		logoUri: "",
 		policyUri: "",
 		tosUri: "",
@@ -100,6 +109,8 @@ function OidcClientEditPageClient({
 			state.scope = client.scope;
 			state.redirectUris =
 				client.redirectUris.length > 0 ? [...client.redirectUris] : [""];
+			state.loginUrl = client.loginUrl || "";
+			state.defaultReturnTo = client.defaultReturnTo || "";
 			state.logoUri = client.logoUri || "";
 			state.policyUri = client.policyUri || "";
 			state.tosUri = client.tosUri || "";
@@ -174,6 +185,8 @@ function OidcClientEditPageClient({
 				responseTypes: state.responseTypes,
 				scope: state.scope,
 				redirectUris: validUris,
+				loginUrl: state.loginUrl || undefined,
+				defaultReturnTo: state.defaultReturnTo || undefined,
 				logoUri: state.logoUri || undefined,
 				policyUri: state.policyUri || undefined,
 				tosUri: state.tosUri || undefined,

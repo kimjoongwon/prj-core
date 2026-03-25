@@ -519,82 +519,6 @@ export type InquiryThreadNullableScalarRelationFilter = {
   isNot?: Prisma.InquiryThreadWhereInput | null
 }
 
-export type InquiryThreadCreateNestedManyWithoutInquiryInput = {
-  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutInquiryInput, Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput> | Prisma.InquiryThreadCreateWithoutInquiryInput[] | Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput[]
-  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput | Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput[]
-  createMany?: Prisma.InquiryThreadCreateManyInquiryInputEnvelope
-  connect?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
-}
-
-export type InquiryThreadUncheckedCreateNestedManyWithoutInquiryInput = {
-  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutInquiryInput, Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput> | Prisma.InquiryThreadCreateWithoutInquiryInput[] | Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput[]
-  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput | Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput[]
-  createMany?: Prisma.InquiryThreadCreateManyInquiryInputEnvelope
-  connect?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
-}
-
-export type InquiryThreadUpdateManyWithoutInquiryNestedInput = {
-  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutInquiryInput, Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput> | Prisma.InquiryThreadCreateWithoutInquiryInput[] | Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput[]
-  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput | Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput[]
-  upsert?: Prisma.InquiryThreadUpsertWithWhereUniqueWithoutInquiryInput | Prisma.InquiryThreadUpsertWithWhereUniqueWithoutInquiryInput[]
-  createMany?: Prisma.InquiryThreadCreateManyInquiryInputEnvelope
-  set?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
-  disconnect?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
-  delete?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
-  connect?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
-  update?: Prisma.InquiryThreadUpdateWithWhereUniqueWithoutInquiryInput | Prisma.InquiryThreadUpdateWithWhereUniqueWithoutInquiryInput[]
-  updateMany?: Prisma.InquiryThreadUpdateManyWithWhereWithoutInquiryInput | Prisma.InquiryThreadUpdateManyWithWhereWithoutInquiryInput[]
-  deleteMany?: Prisma.InquiryThreadScalarWhereInput | Prisma.InquiryThreadScalarWhereInput[]
-}
-
-export type InquiryThreadUncheckedUpdateManyWithoutInquiryNestedInput = {
-  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutInquiryInput, Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput> | Prisma.InquiryThreadCreateWithoutInquiryInput[] | Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput[]
-  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput | Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput[]
-  upsert?: Prisma.InquiryThreadUpsertWithWhereUniqueWithoutInquiryInput | Prisma.InquiryThreadUpsertWithWhereUniqueWithoutInquiryInput[]
-  createMany?: Prisma.InquiryThreadCreateManyInquiryInputEnvelope
-  set?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
-  disconnect?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
-  delete?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
-  connect?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
-  update?: Prisma.InquiryThreadUpdateWithWhereUniqueWithoutInquiryInput | Prisma.InquiryThreadUpdateWithWhereUniqueWithoutInquiryInput[]
-  updateMany?: Prisma.InquiryThreadUpdateManyWithWhereWithoutInquiryInput | Prisma.InquiryThreadUpdateManyWithWhereWithoutInquiryInput[]
-  deleteMany?: Prisma.InquiryThreadScalarWhereInput | Prisma.InquiryThreadScalarWhereInput[]
-}
-
-export type EnumThreadStatusFieldUpdateOperationsInput = {
-  set?: $Enums.ThreadStatus
-}
-
-export type InquiryThreadCreateNestedOneWithoutMessagesInput = {
-  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutMessagesInput, Prisma.InquiryThreadUncheckedCreateWithoutMessagesInput>
-  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutMessagesInput
-  connect?: Prisma.InquiryThreadWhereUniqueInput
-}
-
-export type InquiryThreadUpdateOneRequiredWithoutMessagesNestedInput = {
-  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutMessagesInput, Prisma.InquiryThreadUncheckedCreateWithoutMessagesInput>
-  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutMessagesInput
-  upsert?: Prisma.InquiryThreadUpsertWithoutMessagesInput
-  connect?: Prisma.InquiryThreadWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.InquiryThreadUpdateToOneWithWhereWithoutMessagesInput, Prisma.InquiryThreadUpdateWithoutMessagesInput>, Prisma.InquiryThreadUncheckedUpdateWithoutMessagesInput>
-}
-
-export type InquiryThreadCreateNestedOneWithoutParticipantsInput = {
-  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutParticipantsInput, Prisma.InquiryThreadUncheckedCreateWithoutParticipantsInput>
-  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutParticipantsInput
-  connect?: Prisma.InquiryThreadWhereUniqueInput
-}
-
-export type InquiryThreadUpdateOneWithoutParticipantsNestedInput = {
-  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutParticipantsInput, Prisma.InquiryThreadUncheckedCreateWithoutParticipantsInput>
-  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutParticipantsInput
-  upsert?: Prisma.InquiryThreadUpsertWithoutParticipantsInput
-  disconnect?: Prisma.InquiryThreadWhereInput | boolean
-  delete?: Prisma.InquiryThreadWhereInput | boolean
-  connect?: Prisma.InquiryThreadWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.InquiryThreadUpdateToOneWithWhereWithoutParticipantsInput, Prisma.InquiryThreadUpdateWithoutParticipantsInput>, Prisma.InquiryThreadUncheckedUpdateWithoutParticipantsInput>
-}
-
 export type InquiryThreadCreateNestedManyWithoutCreatorInput = {
   create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutCreatorInput, Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput> | Prisma.InquiryThreadCreateWithoutCreatorInput[] | Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput[]
   connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutCreatorInput | Prisma.InquiryThreadCreateOrConnectWithoutCreatorInput[]
@@ -637,7 +561,83 @@ export type InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput = {
   deleteMany?: Prisma.InquiryThreadScalarWhereInput | Prisma.InquiryThreadScalarWhereInput[]
 }
 
-export type InquiryThreadCreateWithoutInquiryInput = {
+export type EnumThreadStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ThreadStatus
+}
+
+export type InquiryThreadCreateNestedOneWithoutMessagesInput = {
+  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutMessagesInput, Prisma.InquiryThreadUncheckedCreateWithoutMessagesInput>
+  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutMessagesInput
+  connect?: Prisma.InquiryThreadWhereUniqueInput
+}
+
+export type InquiryThreadUpdateOneRequiredWithoutMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutMessagesInput, Prisma.InquiryThreadUncheckedCreateWithoutMessagesInput>
+  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutMessagesInput
+  upsert?: Prisma.InquiryThreadUpsertWithoutMessagesInput
+  connect?: Prisma.InquiryThreadWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InquiryThreadUpdateToOneWithWhereWithoutMessagesInput, Prisma.InquiryThreadUpdateWithoutMessagesInput>, Prisma.InquiryThreadUncheckedUpdateWithoutMessagesInput>
+}
+
+export type InquiryThreadCreateNestedOneWithoutParticipantsInput = {
+  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutParticipantsInput, Prisma.InquiryThreadUncheckedCreateWithoutParticipantsInput>
+  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutParticipantsInput
+  connect?: Prisma.InquiryThreadWhereUniqueInput
+}
+
+export type InquiryThreadUpdateOneWithoutParticipantsNestedInput = {
+  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutParticipantsInput, Prisma.InquiryThreadUncheckedCreateWithoutParticipantsInput>
+  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutParticipantsInput
+  upsert?: Prisma.InquiryThreadUpsertWithoutParticipantsInput
+  disconnect?: Prisma.InquiryThreadWhereInput | boolean
+  delete?: Prisma.InquiryThreadWhereInput | boolean
+  connect?: Prisma.InquiryThreadWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InquiryThreadUpdateToOneWithWhereWithoutParticipantsInput, Prisma.InquiryThreadUpdateWithoutParticipantsInput>, Prisma.InquiryThreadUncheckedUpdateWithoutParticipantsInput>
+}
+
+export type InquiryThreadCreateNestedManyWithoutInquiryInput = {
+  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutInquiryInput, Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput> | Prisma.InquiryThreadCreateWithoutInquiryInput[] | Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput[]
+  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput | Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput[]
+  createMany?: Prisma.InquiryThreadCreateManyInquiryInputEnvelope
+  connect?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
+}
+
+export type InquiryThreadUncheckedCreateNestedManyWithoutInquiryInput = {
+  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutInquiryInput, Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput> | Prisma.InquiryThreadCreateWithoutInquiryInput[] | Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput[]
+  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput | Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput[]
+  createMany?: Prisma.InquiryThreadCreateManyInquiryInputEnvelope
+  connect?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
+}
+
+export type InquiryThreadUpdateManyWithoutInquiryNestedInput = {
+  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutInquiryInput, Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput> | Prisma.InquiryThreadCreateWithoutInquiryInput[] | Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput[]
+  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput | Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput[]
+  upsert?: Prisma.InquiryThreadUpsertWithWhereUniqueWithoutInquiryInput | Prisma.InquiryThreadUpsertWithWhereUniqueWithoutInquiryInput[]
+  createMany?: Prisma.InquiryThreadCreateManyInquiryInputEnvelope
+  set?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
+  disconnect?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
+  delete?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
+  connect?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
+  update?: Prisma.InquiryThreadUpdateWithWhereUniqueWithoutInquiryInput | Prisma.InquiryThreadUpdateWithWhereUniqueWithoutInquiryInput[]
+  updateMany?: Prisma.InquiryThreadUpdateManyWithWhereWithoutInquiryInput | Prisma.InquiryThreadUpdateManyWithWhereWithoutInquiryInput[]
+  deleteMany?: Prisma.InquiryThreadScalarWhereInput | Prisma.InquiryThreadScalarWhereInput[]
+}
+
+export type InquiryThreadUncheckedUpdateManyWithoutInquiryNestedInput = {
+  create?: Prisma.XOR<Prisma.InquiryThreadCreateWithoutInquiryInput, Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput> | Prisma.InquiryThreadCreateWithoutInquiryInput[] | Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput[]
+  connectOrCreate?: Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput | Prisma.InquiryThreadCreateOrConnectWithoutInquiryInput[]
+  upsert?: Prisma.InquiryThreadUpsertWithWhereUniqueWithoutInquiryInput | Prisma.InquiryThreadUpsertWithWhereUniqueWithoutInquiryInput[]
+  createMany?: Prisma.InquiryThreadCreateManyInquiryInputEnvelope
+  set?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
+  disconnect?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
+  delete?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
+  connect?: Prisma.InquiryThreadWhereUniqueInput | Prisma.InquiryThreadWhereUniqueInput[]
+  update?: Prisma.InquiryThreadUpdateWithWhereUniqueWithoutInquiryInput | Prisma.InquiryThreadUpdateWithWhereUniqueWithoutInquiryInput[]
+  updateMany?: Prisma.InquiryThreadUpdateManyWithWhereWithoutInquiryInput | Prisma.InquiryThreadUpdateManyWithWhereWithoutInquiryInput[]
+  deleteMany?: Prisma.InquiryThreadScalarWhereInput | Prisma.InquiryThreadScalarWhereInput[]
+}
+
+export type InquiryThreadCreateWithoutCreatorInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -647,19 +647,19 @@ export type InquiryThreadCreateWithoutInquiryInput = {
   lastMessageAt?: Date | string | null
   lastMessagePreview?: string | null
   messageCount?: number
-  creator: Prisma.UserCreateNestedOneWithoutCreatedThreadsInput
+  inquiry: Prisma.InquiryCreateNestedOneWithoutThreadsInput
   messages?: Prisma.InquiryMessageCreateNestedManyWithoutThreadInput
   participants?: Prisma.InquiryParticipantCreateNestedManyWithoutThreadInput
 }
 
-export type InquiryThreadUncheckedCreateWithoutInquiryInput = {
+export type InquiryThreadUncheckedCreateWithoutCreatorInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
   closedAt?: Date | string | null
+  inquiryId: string
   title?: string | null
   status?: $Enums.ThreadStatus
-  createdBy: string
   lastMessageAt?: Date | string | null
   lastMessagePreview?: string | null
   messageCount?: number
@@ -667,30 +667,30 @@ export type InquiryThreadUncheckedCreateWithoutInquiryInput = {
   participants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutThreadInput
 }
 
-export type InquiryThreadCreateOrConnectWithoutInquiryInput = {
+export type InquiryThreadCreateOrConnectWithoutCreatorInput = {
   where: Prisma.InquiryThreadWhereUniqueInput
-  create: Prisma.XOR<Prisma.InquiryThreadCreateWithoutInquiryInput, Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput>
+  create: Prisma.XOR<Prisma.InquiryThreadCreateWithoutCreatorInput, Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput>
 }
 
-export type InquiryThreadCreateManyInquiryInputEnvelope = {
-  data: Prisma.InquiryThreadCreateManyInquiryInput | Prisma.InquiryThreadCreateManyInquiryInput[]
+export type InquiryThreadCreateManyCreatorInputEnvelope = {
+  data: Prisma.InquiryThreadCreateManyCreatorInput | Prisma.InquiryThreadCreateManyCreatorInput[]
   skipDuplicates?: boolean
 }
 
-export type InquiryThreadUpsertWithWhereUniqueWithoutInquiryInput = {
+export type InquiryThreadUpsertWithWhereUniqueWithoutCreatorInput = {
   where: Prisma.InquiryThreadWhereUniqueInput
-  update: Prisma.XOR<Prisma.InquiryThreadUpdateWithoutInquiryInput, Prisma.InquiryThreadUncheckedUpdateWithoutInquiryInput>
-  create: Prisma.XOR<Prisma.InquiryThreadCreateWithoutInquiryInput, Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput>
+  update: Prisma.XOR<Prisma.InquiryThreadUpdateWithoutCreatorInput, Prisma.InquiryThreadUncheckedUpdateWithoutCreatorInput>
+  create: Prisma.XOR<Prisma.InquiryThreadCreateWithoutCreatorInput, Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput>
 }
 
-export type InquiryThreadUpdateWithWhereUniqueWithoutInquiryInput = {
+export type InquiryThreadUpdateWithWhereUniqueWithoutCreatorInput = {
   where: Prisma.InquiryThreadWhereUniqueInput
-  data: Prisma.XOR<Prisma.InquiryThreadUpdateWithoutInquiryInput, Prisma.InquiryThreadUncheckedUpdateWithoutInquiryInput>
+  data: Prisma.XOR<Prisma.InquiryThreadUpdateWithoutCreatorInput, Prisma.InquiryThreadUncheckedUpdateWithoutCreatorInput>
 }
 
-export type InquiryThreadUpdateManyWithWhereWithoutInquiryInput = {
+export type InquiryThreadUpdateManyWithWhereWithoutCreatorInput = {
   where: Prisma.InquiryThreadScalarWhereInput
-  data: Prisma.XOR<Prisma.InquiryThreadUpdateManyMutationInput, Prisma.InquiryThreadUncheckedUpdateManyWithoutInquiryInput>
+  data: Prisma.XOR<Prisma.InquiryThreadUpdateManyMutationInput, Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorInput>
 }
 
 export type InquiryThreadScalarWhereInput = {
@@ -862,7 +862,7 @@ export type InquiryThreadUncheckedUpdateWithoutParticipantsInput = {
   messages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutThreadNestedInput
 }
 
-export type InquiryThreadCreateWithoutCreatorInput = {
+export type InquiryThreadCreateWithoutInquiryInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -872,53 +872,12 @@ export type InquiryThreadCreateWithoutCreatorInput = {
   lastMessageAt?: Date | string | null
   lastMessagePreview?: string | null
   messageCount?: number
-  inquiry: Prisma.InquiryCreateNestedOneWithoutThreadsInput
+  creator: Prisma.UserCreateNestedOneWithoutCreatedThreadsInput
   messages?: Prisma.InquiryMessageCreateNestedManyWithoutThreadInput
   participants?: Prisma.InquiryParticipantCreateNestedManyWithoutThreadInput
 }
 
-export type InquiryThreadUncheckedCreateWithoutCreatorInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  closedAt?: Date | string | null
-  inquiryId: string
-  title?: string | null
-  status?: $Enums.ThreadStatus
-  lastMessageAt?: Date | string | null
-  lastMessagePreview?: string | null
-  messageCount?: number
-  messages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutThreadInput
-  participants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutThreadInput
-}
-
-export type InquiryThreadCreateOrConnectWithoutCreatorInput = {
-  where: Prisma.InquiryThreadWhereUniqueInput
-  create: Prisma.XOR<Prisma.InquiryThreadCreateWithoutCreatorInput, Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput>
-}
-
-export type InquiryThreadCreateManyCreatorInputEnvelope = {
-  data: Prisma.InquiryThreadCreateManyCreatorInput | Prisma.InquiryThreadCreateManyCreatorInput[]
-  skipDuplicates?: boolean
-}
-
-export type InquiryThreadUpsertWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.InquiryThreadWhereUniqueInput
-  update: Prisma.XOR<Prisma.InquiryThreadUpdateWithoutCreatorInput, Prisma.InquiryThreadUncheckedUpdateWithoutCreatorInput>
-  create: Prisma.XOR<Prisma.InquiryThreadCreateWithoutCreatorInput, Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput>
-}
-
-export type InquiryThreadUpdateWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.InquiryThreadWhereUniqueInput
-  data: Prisma.XOR<Prisma.InquiryThreadUpdateWithoutCreatorInput, Prisma.InquiryThreadUncheckedUpdateWithoutCreatorInput>
-}
-
-export type InquiryThreadUpdateManyWithWhereWithoutCreatorInput = {
-  where: Prisma.InquiryThreadScalarWhereInput
-  data: Prisma.XOR<Prisma.InquiryThreadUpdateManyMutationInput, Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorInput>
-}
-
-export type InquiryThreadCreateManyInquiryInput = {
+export type InquiryThreadUncheckedCreateWithoutInquiryInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -929,49 +888,34 @@ export type InquiryThreadCreateManyInquiryInput = {
   lastMessageAt?: Date | string | null
   lastMessagePreview?: string | null
   messageCount?: number
+  messages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutThreadInput
+  participants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutThreadInput
 }
 
-export type InquiryThreadUpdateWithoutInquiryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastMessagePreview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
-  creator?: Prisma.UserUpdateOneRequiredWithoutCreatedThreadsNestedInput
-  messages?: Prisma.InquiryMessageUpdateManyWithoutThreadNestedInput
-  participants?: Prisma.InquiryParticipantUpdateManyWithoutThreadNestedInput
+export type InquiryThreadCreateOrConnectWithoutInquiryInput = {
+  where: Prisma.InquiryThreadWhereUniqueInput
+  create: Prisma.XOR<Prisma.InquiryThreadCreateWithoutInquiryInput, Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput>
 }
 
-export type InquiryThreadUncheckedUpdateWithoutInquiryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-  createdBy?: Prisma.StringFieldUpdateOperationsInput | string
-  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastMessagePreview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
-  messages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutThreadNestedInput
-  participants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutThreadNestedInput
+export type InquiryThreadCreateManyInquiryInputEnvelope = {
+  data: Prisma.InquiryThreadCreateManyInquiryInput | Prisma.InquiryThreadCreateManyInquiryInput[]
+  skipDuplicates?: boolean
 }
 
-export type InquiryThreadUncheckedUpdateManyWithoutInquiryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-  createdBy?: Prisma.StringFieldUpdateOperationsInput | string
-  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastMessagePreview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
+export type InquiryThreadUpsertWithWhereUniqueWithoutInquiryInput = {
+  where: Prisma.InquiryThreadWhereUniqueInput
+  update: Prisma.XOR<Prisma.InquiryThreadUpdateWithoutInquiryInput, Prisma.InquiryThreadUncheckedUpdateWithoutInquiryInput>
+  create: Prisma.XOR<Prisma.InquiryThreadCreateWithoutInquiryInput, Prisma.InquiryThreadUncheckedCreateWithoutInquiryInput>
+}
+
+export type InquiryThreadUpdateWithWhereUniqueWithoutInquiryInput = {
+  where: Prisma.InquiryThreadWhereUniqueInput
+  data: Prisma.XOR<Prisma.InquiryThreadUpdateWithoutInquiryInput, Prisma.InquiryThreadUncheckedUpdateWithoutInquiryInput>
+}
+
+export type InquiryThreadUpdateManyWithWhereWithoutInquiryInput = {
+  where: Prisma.InquiryThreadScalarWhereInput
+  data: Prisma.XOR<Prisma.InquiryThreadUpdateManyMutationInput, Prisma.InquiryThreadUncheckedUpdateManyWithoutInquiryInput>
 }
 
 export type InquiryThreadCreateManyCreatorInput = {
@@ -1025,6 +969,62 @@ export type InquiryThreadUncheckedUpdateManyWithoutCreatorInput = {
   inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
+  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastMessagePreview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type InquiryThreadCreateManyInquiryInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  closedAt?: Date | string | null
+  title?: string | null
+  status?: $Enums.ThreadStatus
+  createdBy: string
+  lastMessageAt?: Date | string | null
+  lastMessagePreview?: string | null
+  messageCount?: number
+}
+
+export type InquiryThreadUpdateWithoutInquiryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
+  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastMessagePreview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  creator?: Prisma.UserUpdateOneRequiredWithoutCreatedThreadsNestedInput
+  messages?: Prisma.InquiryMessageUpdateManyWithoutThreadNestedInput
+  participants?: Prisma.InquiryParticipantUpdateManyWithoutThreadNestedInput
+}
+
+export type InquiryThreadUncheckedUpdateWithoutInquiryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
+  createdBy?: Prisma.StringFieldUpdateOperationsInput | string
+  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastMessagePreview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  messages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutThreadNestedInput
+  participants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutThreadNestedInput
+}
+
+export type InquiryThreadUncheckedUpdateManyWithoutInquiryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
+  createdBy?: Prisma.StringFieldUpdateOperationsInput | string
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastMessagePreview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number

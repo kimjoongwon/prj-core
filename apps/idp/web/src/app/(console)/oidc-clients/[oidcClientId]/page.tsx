@@ -1,6 +1,5 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import {
 	useDeleteOidcClient,
 	useGetOidcClient,
@@ -23,7 +22,7 @@ import { Button, Chip, useDisclosure } from "@heroui/react";
 import { ArrowLeft, Edit, Power, PowerOff, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 type OidcClientDetailPageParams = {
 	oidcClientId: string;
@@ -49,7 +48,12 @@ function OidcClientDetailPageClient({
 	const deleteModal = useDisclosure();
 
 	const { data: response, isLoading } = useGetOidcClient(oidcClientId);
-	const client = response?.data;
+	const client = response?.data as
+		| (NonNullable<typeof response>["data"] & {
+				loginUrl?: string | null;
+				defaultReturnTo?: string | null;
+		  })
+		| undefined;
 
 	const { mutate: deleteClient, isPending: isDeleting } = useDeleteOidcClient({
 		mutation: {
@@ -211,6 +215,22 @@ function OidcClientDetailPageClient({
 									<dt className="text-sm text-default-500 mb-1">등록일</dt>
 									<dd>
 										<DateTimeCell value={client.createdAt} />
+									</dd>
+								</div>
+								<div>
+									<dt className="text-sm text-default-500 mb-1">
+										로그인 셸 URL
+									</dt>
+									<dd className="font-mono text-sm break-all">
+										{client.loginUrl || "-"}
+									</dd>
+								</div>
+								<div>
+									<dt className="text-sm text-default-500 mb-1">
+										기본 복귀 URL
+									</dt>
+									<dd className="font-mono text-sm break-all">
+										{client.defaultReturnTo || "-"}
 									</dd>
 								</div>
 							</dl>

@@ -512,38 +512,6 @@ export type SentimentAnalysisSumOrderByAggregateInput = {
   urgency?: Prisma.SortOrder
 }
 
-export type SentimentAnalysisCreateNestedOneWithoutInquiryInput = {
-  create?: Prisma.XOR<Prisma.SentimentAnalysisCreateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedCreateWithoutInquiryInput>
-  connectOrCreate?: Prisma.SentimentAnalysisCreateOrConnectWithoutInquiryInput
-  connect?: Prisma.SentimentAnalysisWhereUniqueInput
-}
-
-export type SentimentAnalysisUncheckedCreateNestedOneWithoutInquiryInput = {
-  create?: Prisma.XOR<Prisma.SentimentAnalysisCreateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedCreateWithoutInquiryInput>
-  connectOrCreate?: Prisma.SentimentAnalysisCreateOrConnectWithoutInquiryInput
-  connect?: Prisma.SentimentAnalysisWhereUniqueInput
-}
-
-export type SentimentAnalysisUpdateOneWithoutInquiryNestedInput = {
-  create?: Prisma.XOR<Prisma.SentimentAnalysisCreateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedCreateWithoutInquiryInput>
-  connectOrCreate?: Prisma.SentimentAnalysisCreateOrConnectWithoutInquiryInput
-  upsert?: Prisma.SentimentAnalysisUpsertWithoutInquiryInput
-  disconnect?: Prisma.SentimentAnalysisWhereInput | boolean
-  delete?: Prisma.SentimentAnalysisWhereInput | boolean
-  connect?: Prisma.SentimentAnalysisWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.SentimentAnalysisUpdateToOneWithWhereWithoutInquiryInput, Prisma.SentimentAnalysisUpdateWithoutInquiryInput>, Prisma.SentimentAnalysisUncheckedUpdateWithoutInquiryInput>
-}
-
-export type SentimentAnalysisUncheckedUpdateOneWithoutInquiryNestedInput = {
-  create?: Prisma.XOR<Prisma.SentimentAnalysisCreateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedCreateWithoutInquiryInput>
-  connectOrCreate?: Prisma.SentimentAnalysisCreateOrConnectWithoutInquiryInput
-  upsert?: Prisma.SentimentAnalysisUpsertWithoutInquiryInput
-  disconnect?: Prisma.SentimentAnalysisWhereInput | boolean
-  delete?: Prisma.SentimentAnalysisWhereInput | boolean
-  connect?: Prisma.SentimentAnalysisWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.SentimentAnalysisUpdateToOneWithWhereWithoutInquiryInput, Prisma.SentimentAnalysisUpdateWithoutInquiryInput>, Prisma.SentimentAnalysisUncheckedUpdateWithoutInquiryInput>
-}
-
 export type SentimentAnalysisCreateNestedOneWithoutMessageInput = {
   create?: Prisma.XOR<Prisma.SentimentAnalysisCreateWithoutMessageInput, Prisma.SentimentAnalysisUncheckedCreateWithoutMessageInput>
   connectOrCreate?: Prisma.SentimentAnalysisCreateOrConnectWithoutMessageInput
@@ -576,6 +544,38 @@ export type SentimentAnalysisUncheckedUpdateOneWithoutMessageNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SentimentAnalysisUpdateToOneWithWhereWithoutMessageInput, Prisma.SentimentAnalysisUpdateWithoutMessageInput>, Prisma.SentimentAnalysisUncheckedUpdateWithoutMessageInput>
 }
 
+export type SentimentAnalysisCreateNestedOneWithoutInquiryInput = {
+  create?: Prisma.XOR<Prisma.SentimentAnalysisCreateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedCreateWithoutInquiryInput>
+  connectOrCreate?: Prisma.SentimentAnalysisCreateOrConnectWithoutInquiryInput
+  connect?: Prisma.SentimentAnalysisWhereUniqueInput
+}
+
+export type SentimentAnalysisUncheckedCreateNestedOneWithoutInquiryInput = {
+  create?: Prisma.XOR<Prisma.SentimentAnalysisCreateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedCreateWithoutInquiryInput>
+  connectOrCreate?: Prisma.SentimentAnalysisCreateOrConnectWithoutInquiryInput
+  connect?: Prisma.SentimentAnalysisWhereUniqueInput
+}
+
+export type SentimentAnalysisUpdateOneWithoutInquiryNestedInput = {
+  create?: Prisma.XOR<Prisma.SentimentAnalysisCreateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedCreateWithoutInquiryInput>
+  connectOrCreate?: Prisma.SentimentAnalysisCreateOrConnectWithoutInquiryInput
+  upsert?: Prisma.SentimentAnalysisUpsertWithoutInquiryInput
+  disconnect?: Prisma.SentimentAnalysisWhereInput | boolean
+  delete?: Prisma.SentimentAnalysisWhereInput | boolean
+  connect?: Prisma.SentimentAnalysisWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SentimentAnalysisUpdateToOneWithWhereWithoutInquiryInput, Prisma.SentimentAnalysisUpdateWithoutInquiryInput>, Prisma.SentimentAnalysisUncheckedUpdateWithoutInquiryInput>
+}
+
+export type SentimentAnalysisUncheckedUpdateOneWithoutInquiryNestedInput = {
+  create?: Prisma.XOR<Prisma.SentimentAnalysisCreateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedCreateWithoutInquiryInput>
+  connectOrCreate?: Prisma.SentimentAnalysisCreateOrConnectWithoutInquiryInput
+  upsert?: Prisma.SentimentAnalysisUpsertWithoutInquiryInput
+  disconnect?: Prisma.SentimentAnalysisWhereInput | boolean
+  delete?: Prisma.SentimentAnalysisWhereInput | boolean
+  connect?: Prisma.SentimentAnalysisWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SentimentAnalysisUpdateToOneWithWhereWithoutInquiryInput, Prisma.SentimentAnalysisUpdateWithoutInquiryInput>, Prisma.SentimentAnalysisUncheckedUpdateWithoutInquiryInput>
+}
+
 export type EnumSentimentTypeFieldUpdateOperationsInput = {
   set?: $Enums.SentimentType
 }
@@ -586,78 +586,6 @@ export type FloatFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
-}
-
-export type SentimentAnalysisCreateWithoutInquiryInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  sentiment: $Enums.SentimentType
-  score: number
-  confidence: number
-  emotions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  keywords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  urgency?: number | null
-  analyzedAt?: Date | string
-  message?: Prisma.InquiryMessageCreateNestedOneWithoutSentimentAnalysisInput
-}
-
-export type SentimentAnalysisUncheckedCreateWithoutInquiryInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  messageId?: string | null
-  sentiment: $Enums.SentimentType
-  score: number
-  confidence: number
-  emotions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  keywords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  urgency?: number | null
-  analyzedAt?: Date | string
-}
-
-export type SentimentAnalysisCreateOrConnectWithoutInquiryInput = {
-  where: Prisma.SentimentAnalysisWhereUniqueInput
-  create: Prisma.XOR<Prisma.SentimentAnalysisCreateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedCreateWithoutInquiryInput>
-}
-
-export type SentimentAnalysisUpsertWithoutInquiryInput = {
-  update: Prisma.XOR<Prisma.SentimentAnalysisUpdateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedUpdateWithoutInquiryInput>
-  create: Prisma.XOR<Prisma.SentimentAnalysisCreateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedCreateWithoutInquiryInput>
-  where?: Prisma.SentimentAnalysisWhereInput
-}
-
-export type SentimentAnalysisUpdateToOneWithWhereWithoutInquiryInput = {
-  where?: Prisma.SentimentAnalysisWhereInput
-  data: Prisma.XOR<Prisma.SentimentAnalysisUpdateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedUpdateWithoutInquiryInput>
-}
-
-export type SentimentAnalysisUpdateWithoutInquiryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  sentiment?: Prisma.EnumSentimentTypeFieldUpdateOperationsInput | $Enums.SentimentType
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
-  confidence?: Prisma.FloatFieldUpdateOperationsInput | number
-  emotions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  keywords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  urgency?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  analyzedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  message?: Prisma.InquiryMessageUpdateOneWithoutSentimentAnalysisNestedInput
-}
-
-export type SentimentAnalysisUncheckedUpdateWithoutInquiryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  messageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sentiment?: Prisma.EnumSentimentTypeFieldUpdateOperationsInput | $Enums.SentimentType
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
-  confidence?: Prisma.FloatFieldUpdateOperationsInput | number
-  emotions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  keywords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  urgency?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  analyzedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SentimentAnalysisCreateWithoutMessageInput = {
@@ -723,6 +651,78 @@ export type SentimentAnalysisUncheckedUpdateWithoutMessageInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  sentiment?: Prisma.EnumSentimentTypeFieldUpdateOperationsInput | $Enums.SentimentType
+  score?: Prisma.FloatFieldUpdateOperationsInput | number
+  confidence?: Prisma.FloatFieldUpdateOperationsInput | number
+  emotions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  keywords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgency?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  analyzedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type SentimentAnalysisCreateWithoutInquiryInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  sentiment: $Enums.SentimentType
+  score: number
+  confidence: number
+  emotions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  keywords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgency?: number | null
+  analyzedAt?: Date | string
+  message?: Prisma.InquiryMessageCreateNestedOneWithoutSentimentAnalysisInput
+}
+
+export type SentimentAnalysisUncheckedCreateWithoutInquiryInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  messageId?: string | null
+  sentiment: $Enums.SentimentType
+  score: number
+  confidence: number
+  emotions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  keywords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgency?: number | null
+  analyzedAt?: Date | string
+}
+
+export type SentimentAnalysisCreateOrConnectWithoutInquiryInput = {
+  where: Prisma.SentimentAnalysisWhereUniqueInput
+  create: Prisma.XOR<Prisma.SentimentAnalysisCreateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedCreateWithoutInquiryInput>
+}
+
+export type SentimentAnalysisUpsertWithoutInquiryInput = {
+  update: Prisma.XOR<Prisma.SentimentAnalysisUpdateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedUpdateWithoutInquiryInput>
+  create: Prisma.XOR<Prisma.SentimentAnalysisCreateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedCreateWithoutInquiryInput>
+  where?: Prisma.SentimentAnalysisWhereInput
+}
+
+export type SentimentAnalysisUpdateToOneWithWhereWithoutInquiryInput = {
+  where?: Prisma.SentimentAnalysisWhereInput
+  data: Prisma.XOR<Prisma.SentimentAnalysisUpdateWithoutInquiryInput, Prisma.SentimentAnalysisUncheckedUpdateWithoutInquiryInput>
+}
+
+export type SentimentAnalysisUpdateWithoutInquiryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sentiment?: Prisma.EnumSentimentTypeFieldUpdateOperationsInput | $Enums.SentimentType
+  score?: Prisma.FloatFieldUpdateOperationsInput | number
+  confidence?: Prisma.FloatFieldUpdateOperationsInput | number
+  emotions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  keywords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgency?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  analyzedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  message?: Prisma.InquiryMessageUpdateOneWithoutSentimentAnalysisNestedInput
+}
+
+export type SentimentAnalysisUncheckedUpdateWithoutInquiryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  messageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sentiment?: Prisma.EnumSentimentTypeFieldUpdateOperationsInput | $Enums.SentimentType
   score?: Prisma.FloatFieldUpdateOperationsInput | number
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number

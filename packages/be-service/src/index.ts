@@ -55,7 +55,7 @@ export {
 	type PutObjectResult,
 	S3CompatibleStorageService,
 } from "./object-storage.service";
-export { OidcClientService } from "./oidc-client.service";
+export { OidcClientService } from "./oidc-client.service/index";
 export {
 	type OidcRedisSession,
 	OidcSessionService,

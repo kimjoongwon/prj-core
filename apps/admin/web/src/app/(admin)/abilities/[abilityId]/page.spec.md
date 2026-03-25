@@ -98,6 +98,10 @@
 | onClickDeleteConfirm | deleteAbility 뮤테이션 실행 → 성공 시 목록으로 이동 |
 | deleteModal.onClose | 삭제 모달 닫기 |
 
+## E2E 검증 메모
+
+- 목록→상세 이동 E2E는 고정 시드 권한명에 의존하지 않고 첫 번째 테이블 행의 `상세` 액션을 클릭해 상세 전환을 검증합니다.
+
 ## 구현 체크리스트
 
 - [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
@@ -136,6 +140,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | 목록→상세 전환 E2E가 고정 시드 권한명 대신 첫 행 `상세` 액션을 사용하도록 검증 기준 보강 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |

@@ -35,7 +35,7 @@
 | 영역 | 구성 요소 | 설명 |
 |------|-----------|------|
 | 페이지 헤더 | `PageTitleBar` + 등록 버튼 | 권한 목록 안내와 이동 액션 |
-| 필터 패널 | `Surface` + search input + select 묶음 | 클라이언트 필터링 조건. 검색 input은 `aria-label="권한 이름 검색"` 접근성 이름을 제공해야 한다. |
+| 필터 패널 | `Surface` + search input + select 묶음 | 클라이언트 필터링 조건. 검색 input은 `aria-label="권한 이름 검색"` 접근성 이름을 제공해야 하며, HeroUI Select trigger에는 `Subject 선택`, `Action 선택`, `유형 선택` placeholder 텍스트가 렌더링되어야 한다. |
 | 목록 패널 | `Surface` + custom table | 권한 메타데이터와 상세 이동 |
 
 ## API 호출
@@ -68,6 +68,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-23 | 필터 Select 검증 기준을 접근성 role name이 아닌 HeroUI trigger placeholder 텍스트로 명시 | codex |
 | 2026-03-23 | 검색 input이 자동화/스크린리더에서 일관되게 식별되도록 `aria-label="권한 이름 검색"` 계약을 추가 | codex |
 | 2026-03-22 | 필터/목록 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | route-layout / page-builder 계약에 맞춰 권한 목록을 `layout.tsx` + content-only `page.tsx` 구조로 재정의 | codex |

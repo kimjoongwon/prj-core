@@ -305,16 +305,6 @@ export type RoleClassificationUncheckedUpdateManyInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
-export type RoleClassificationListRelationFilter = {
-  every?: Prisma.RoleClassificationWhereInput
-  some?: Prisma.RoleClassificationWhereInput
-  none?: Prisma.RoleClassificationWhereInput
-}
-
-export type RoleClassificationOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
 export type RoleClassificationNullableScalarRelationFilter = {
   is?: Prisma.RoleClassificationWhereInput | null
   isNot?: Prisma.RoleClassificationWhereInput | null
@@ -350,6 +340,48 @@ export type RoleClassificationMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
+}
+
+export type RoleClassificationListRelationFilter = {
+  every?: Prisma.RoleClassificationWhereInput
+  some?: Prisma.RoleClassificationWhereInput
+  none?: Prisma.RoleClassificationWhereInput
+}
+
+export type RoleClassificationOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type RoleClassificationCreateNestedOneWithoutRoleInput = {
+  create?: Prisma.XOR<Prisma.RoleClassificationCreateWithoutRoleInput, Prisma.RoleClassificationUncheckedCreateWithoutRoleInput>
+  connectOrCreate?: Prisma.RoleClassificationCreateOrConnectWithoutRoleInput
+  connect?: Prisma.RoleClassificationWhereUniqueInput
+}
+
+export type RoleClassificationUncheckedCreateNestedOneWithoutRoleInput = {
+  create?: Prisma.XOR<Prisma.RoleClassificationCreateWithoutRoleInput, Prisma.RoleClassificationUncheckedCreateWithoutRoleInput>
+  connectOrCreate?: Prisma.RoleClassificationCreateOrConnectWithoutRoleInput
+  connect?: Prisma.RoleClassificationWhereUniqueInput
+}
+
+export type RoleClassificationUpdateOneWithoutRoleNestedInput = {
+  create?: Prisma.XOR<Prisma.RoleClassificationCreateWithoutRoleInput, Prisma.RoleClassificationUncheckedCreateWithoutRoleInput>
+  connectOrCreate?: Prisma.RoleClassificationCreateOrConnectWithoutRoleInput
+  upsert?: Prisma.RoleClassificationUpsertWithoutRoleInput
+  disconnect?: Prisma.RoleClassificationWhereInput | boolean
+  delete?: Prisma.RoleClassificationWhereInput | boolean
+  connect?: Prisma.RoleClassificationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RoleClassificationUpdateToOneWithWhereWithoutRoleInput, Prisma.RoleClassificationUpdateWithoutRoleInput>, Prisma.RoleClassificationUncheckedUpdateWithoutRoleInput>
+}
+
+export type RoleClassificationUncheckedUpdateOneWithoutRoleNestedInput = {
+  create?: Prisma.XOR<Prisma.RoleClassificationCreateWithoutRoleInput, Prisma.RoleClassificationUncheckedCreateWithoutRoleInput>
+  connectOrCreate?: Prisma.RoleClassificationCreateOrConnectWithoutRoleInput
+  upsert?: Prisma.RoleClassificationUpsertWithoutRoleInput
+  disconnect?: Prisma.RoleClassificationWhereInput | boolean
+  delete?: Prisma.RoleClassificationWhereInput | boolean
+  connect?: Prisma.RoleClassificationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RoleClassificationUpdateToOneWithWhereWithoutRoleInput, Prisma.RoleClassificationUpdateWithoutRoleInput>, Prisma.RoleClassificationUncheckedUpdateWithoutRoleInput>
 }
 
 export type RoleClassificationCreateNestedManyWithoutCategoryInput = {
@@ -394,36 +426,52 @@ export type RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput = {
   deleteMany?: Prisma.RoleClassificationScalarWhereInput | Prisma.RoleClassificationScalarWhereInput[]
 }
 
-export type RoleClassificationCreateNestedOneWithoutRoleInput = {
-  create?: Prisma.XOR<Prisma.RoleClassificationCreateWithoutRoleInput, Prisma.RoleClassificationUncheckedCreateWithoutRoleInput>
-  connectOrCreate?: Prisma.RoleClassificationCreateOrConnectWithoutRoleInput
-  connect?: Prisma.RoleClassificationWhereUniqueInput
+export type RoleClassificationCreateWithoutRoleInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  category: Prisma.CategoryCreateNestedOneWithoutRoleClassificationsInput
 }
 
-export type RoleClassificationUncheckedCreateNestedOneWithoutRoleInput = {
-  create?: Prisma.XOR<Prisma.RoleClassificationCreateWithoutRoleInput, Prisma.RoleClassificationUncheckedCreateWithoutRoleInput>
-  connectOrCreate?: Prisma.RoleClassificationCreateOrConnectWithoutRoleInput
-  connect?: Prisma.RoleClassificationWhereUniqueInput
+export type RoleClassificationUncheckedCreateWithoutRoleInput = {
+  id?: string
+  categoryId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
 }
 
-export type RoleClassificationUpdateOneWithoutRoleNestedInput = {
-  create?: Prisma.XOR<Prisma.RoleClassificationCreateWithoutRoleInput, Prisma.RoleClassificationUncheckedCreateWithoutRoleInput>
-  connectOrCreate?: Prisma.RoleClassificationCreateOrConnectWithoutRoleInput
-  upsert?: Prisma.RoleClassificationUpsertWithoutRoleInput
-  disconnect?: Prisma.RoleClassificationWhereInput | boolean
-  delete?: Prisma.RoleClassificationWhereInput | boolean
-  connect?: Prisma.RoleClassificationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.RoleClassificationUpdateToOneWithWhereWithoutRoleInput, Prisma.RoleClassificationUpdateWithoutRoleInput>, Prisma.RoleClassificationUncheckedUpdateWithoutRoleInput>
+export type RoleClassificationCreateOrConnectWithoutRoleInput = {
+  where: Prisma.RoleClassificationWhereUniqueInput
+  create: Prisma.XOR<Prisma.RoleClassificationCreateWithoutRoleInput, Prisma.RoleClassificationUncheckedCreateWithoutRoleInput>
 }
 
-export type RoleClassificationUncheckedUpdateOneWithoutRoleNestedInput = {
-  create?: Prisma.XOR<Prisma.RoleClassificationCreateWithoutRoleInput, Prisma.RoleClassificationUncheckedCreateWithoutRoleInput>
-  connectOrCreate?: Prisma.RoleClassificationCreateOrConnectWithoutRoleInput
-  upsert?: Prisma.RoleClassificationUpsertWithoutRoleInput
-  disconnect?: Prisma.RoleClassificationWhereInput | boolean
-  delete?: Prisma.RoleClassificationWhereInput | boolean
-  connect?: Prisma.RoleClassificationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.RoleClassificationUpdateToOneWithWhereWithoutRoleInput, Prisma.RoleClassificationUpdateWithoutRoleInput>, Prisma.RoleClassificationUncheckedUpdateWithoutRoleInput>
+export type RoleClassificationUpsertWithoutRoleInput = {
+  update: Prisma.XOR<Prisma.RoleClassificationUpdateWithoutRoleInput, Prisma.RoleClassificationUncheckedUpdateWithoutRoleInput>
+  create: Prisma.XOR<Prisma.RoleClassificationCreateWithoutRoleInput, Prisma.RoleClassificationUncheckedCreateWithoutRoleInput>
+  where?: Prisma.RoleClassificationWhereInput
+}
+
+export type RoleClassificationUpdateToOneWithWhereWithoutRoleInput = {
+  where?: Prisma.RoleClassificationWhereInput
+  data: Prisma.XOR<Prisma.RoleClassificationUpdateWithoutRoleInput, Prisma.RoleClassificationUncheckedUpdateWithoutRoleInput>
+}
+
+export type RoleClassificationUpdateWithoutRoleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  category?: Prisma.CategoryUpdateOneRequiredWithoutRoleClassificationsNestedInput
+}
+
+export type RoleClassificationUncheckedUpdateWithoutRoleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RoleClassificationCreateWithoutCategoryInput = {
@@ -478,54 +526,6 @@ export type RoleClassificationScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"RoleClassification"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"RoleClassification"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"RoleClassification"> | Date | string | null
-}
-
-export type RoleClassificationCreateWithoutRoleInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  category: Prisma.CategoryCreateNestedOneWithoutRoleClassificationsInput
-}
-
-export type RoleClassificationUncheckedCreateWithoutRoleInput = {
-  id?: string
-  categoryId: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-}
-
-export type RoleClassificationCreateOrConnectWithoutRoleInput = {
-  where: Prisma.RoleClassificationWhereUniqueInput
-  create: Prisma.XOR<Prisma.RoleClassificationCreateWithoutRoleInput, Prisma.RoleClassificationUncheckedCreateWithoutRoleInput>
-}
-
-export type RoleClassificationUpsertWithoutRoleInput = {
-  update: Prisma.XOR<Prisma.RoleClassificationUpdateWithoutRoleInput, Prisma.RoleClassificationUncheckedUpdateWithoutRoleInput>
-  create: Prisma.XOR<Prisma.RoleClassificationCreateWithoutRoleInput, Prisma.RoleClassificationUncheckedCreateWithoutRoleInput>
-  where?: Prisma.RoleClassificationWhereInput
-}
-
-export type RoleClassificationUpdateToOneWithWhereWithoutRoleInput = {
-  where?: Prisma.RoleClassificationWhereInput
-  data: Prisma.XOR<Prisma.RoleClassificationUpdateWithoutRoleInput, Prisma.RoleClassificationUncheckedUpdateWithoutRoleInput>
-}
-
-export type RoleClassificationUpdateWithoutRoleInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  category?: Prisma.CategoryUpdateOneRequiredWithoutRoleClassificationsNestedInput
-}
-
-export type RoleClassificationUncheckedUpdateWithoutRoleInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RoleClassificationCreateManyCategoryInput = {

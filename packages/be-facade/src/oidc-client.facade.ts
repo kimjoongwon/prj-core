@@ -35,6 +35,8 @@ export class OidcClientFacade {
 			clientSecret: dto.clientSecret,
 			clientName: dto.clientName,
 			redirectUris: dto.redirectUris,
+			loginUrl: dto.loginUrl,
+			defaultReturnTo: dto.defaultReturnTo,
 			grantTypes: dto.grantTypes,
 			responseTypes: dto.responseTypes,
 			tokenEndpointAuthMethod: dto.tokenEndpointAuthMethod,

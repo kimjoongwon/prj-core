@@ -46,7 +46,8 @@ function getLoginPath(requestUrl, returnTo = requestUrl.toString()) {
 }
 
 function buildIdpLoginUrl(requestUrl, returnTo) {
-	const loginUrl = new URL("/api/v1/auth/storybook/login", requestUrl.origin);
+	const loginUrl = new URL("/api/v1/auth/login", requestUrl.origin);
+	loginUrl.searchParams.set("clientId", "storybook");
 	loginUrl.searchParams.set("returnTo", normalizeReturnTo(returnTo, requestUrl));
 	return loginUrl.toString();
 }

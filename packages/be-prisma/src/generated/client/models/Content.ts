@@ -232,7 +232,7 @@ export type ContentWhereInput = {
   creatorId?: Prisma.StringNullableFilter<"Content"> | string | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  posts?: Prisma.PostListRelationFilter
+  post?: Prisma.XOR<Prisma.PostNullableScalarRelationFilter, Prisma.PostWhereInput> | null
 }
 
 export type ContentOrderByWithRelationInput = {
@@ -249,7 +249,7 @@ export type ContentOrderByWithRelationInput = {
   creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   space?: Prisma.SpaceOrderByWithRelationInput
   creator?: Prisma.UserOrderByWithRelationInput
-  posts?: Prisma.PostOrderByRelationAggregateInput
+  post?: Prisma.PostOrderByWithRelationInput
 }
 
 export type ContentWhereUniqueInput = Prisma.AtLeast<{
@@ -269,7 +269,7 @@ export type ContentWhereUniqueInput = Prisma.AtLeast<{
   creatorId?: Prisma.StringNullableFilter<"Content"> | string | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  posts?: Prisma.PostListRelationFilter
+  post?: Prisma.XOR<Prisma.PostNullableScalarRelationFilter, Prisma.PostWhereInput> | null
 }, "id">
 
 export type ContentOrderByWithAggregationInput = {
@@ -318,7 +318,7 @@ export type ContentCreateInput = {
   fileId?: string | null
   space: Prisma.SpaceCreateNestedOneWithoutContentsInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedContentsInput
-  posts?: Prisma.PostCreateNestedManyWithoutContentInput
+  post?: Prisma.PostCreateNestedOneWithoutContentInput
 }
 
 export type ContentUncheckedCreateInput = {
@@ -333,7 +333,7 @@ export type ContentUncheckedCreateInput = {
   fileId?: string | null
   spaceId: string
   creatorId?: string | null
-  posts?: Prisma.PostUncheckedCreateNestedManyWithoutContentInput
+  post?: Prisma.PostUncheckedCreateNestedOneWithoutContentInput
 }
 
 export type ContentUpdateInput = {
@@ -348,7 +348,7 @@ export type ContentUpdateInput = {
   fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   space?: Prisma.SpaceUpdateOneRequiredWithoutContentsNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedContentsNestedInput
-  posts?: Prisma.PostUpdateManyWithoutContentNestedInput
+  post?: Prisma.PostUpdateOneWithoutContentNestedInput
 }
 
 export type ContentUncheckedUpdateInput = {
@@ -363,7 +363,7 @@ export type ContentUncheckedUpdateInput = {
   fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  posts?: Prisma.PostUncheckedUpdateManyWithoutContentNestedInput
+  post?: Prisma.PostUncheckedUpdateOneWithoutContentNestedInput
 }
 
 export type ContentCreateManyInput = {
@@ -463,18 +463,18 @@ export type ContentOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type ContentCreateNestedOneWithoutPostsInput = {
-  create?: Prisma.XOR<Prisma.ContentCreateWithoutPostsInput, Prisma.ContentUncheckedCreateWithoutPostsInput>
-  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutPostsInput
+export type ContentCreateNestedOneWithoutPostInput = {
+  create?: Prisma.XOR<Prisma.ContentCreateWithoutPostInput, Prisma.ContentUncheckedCreateWithoutPostInput>
+  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutPostInput
   connect?: Prisma.ContentWhereUniqueInput
 }
 
-export type ContentUpdateOneRequiredWithoutPostsNestedInput = {
-  create?: Prisma.XOR<Prisma.ContentCreateWithoutPostsInput, Prisma.ContentUncheckedCreateWithoutPostsInput>
-  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutPostsInput
-  upsert?: Prisma.ContentUpsertWithoutPostsInput
+export type ContentUpdateOneRequiredWithoutPostNestedInput = {
+  create?: Prisma.XOR<Prisma.ContentCreateWithoutPostInput, Prisma.ContentUncheckedCreateWithoutPostInput>
+  connectOrCreate?: Prisma.ContentCreateOrConnectWithoutPostInput
+  upsert?: Prisma.ContentUpsertWithoutPostInput
   connect?: Prisma.ContentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ContentUpdateToOneWithWhereWithoutPostsInput, Prisma.ContentUpdateWithoutPostsInput>, Prisma.ContentUncheckedUpdateWithoutPostsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ContentUpdateToOneWithWhereWithoutPostInput, Prisma.ContentUpdateWithoutPostInput>, Prisma.ContentUncheckedUpdateWithoutPostInput>
 }
 
 export type EnumTextTypesFieldUpdateOperationsInput = {
@@ -565,7 +565,7 @@ export type ContentUncheckedUpdateManyWithoutCreatorNestedInput = {
   deleteMany?: Prisma.ContentScalarWhereInput | Prisma.ContentScalarWhereInput[]
 }
 
-export type ContentCreateWithoutPostsInput = {
+export type ContentCreateWithoutPostInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -579,7 +579,7 @@ export type ContentCreateWithoutPostsInput = {
   creator?: Prisma.UserCreateNestedOneWithoutCreatedContentsInput
 }
 
-export type ContentUncheckedCreateWithoutPostsInput = {
+export type ContentUncheckedCreateWithoutPostInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -593,23 +593,23 @@ export type ContentUncheckedCreateWithoutPostsInput = {
   creatorId?: string | null
 }
 
-export type ContentCreateOrConnectWithoutPostsInput = {
+export type ContentCreateOrConnectWithoutPostInput = {
   where: Prisma.ContentWhereUniqueInput
-  create: Prisma.XOR<Prisma.ContentCreateWithoutPostsInput, Prisma.ContentUncheckedCreateWithoutPostsInput>
+  create: Prisma.XOR<Prisma.ContentCreateWithoutPostInput, Prisma.ContentUncheckedCreateWithoutPostInput>
 }
 
-export type ContentUpsertWithoutPostsInput = {
-  update: Prisma.XOR<Prisma.ContentUpdateWithoutPostsInput, Prisma.ContentUncheckedUpdateWithoutPostsInput>
-  create: Prisma.XOR<Prisma.ContentCreateWithoutPostsInput, Prisma.ContentUncheckedCreateWithoutPostsInput>
+export type ContentUpsertWithoutPostInput = {
+  update: Prisma.XOR<Prisma.ContentUpdateWithoutPostInput, Prisma.ContentUncheckedUpdateWithoutPostInput>
+  create: Prisma.XOR<Prisma.ContentCreateWithoutPostInput, Prisma.ContentUncheckedCreateWithoutPostInput>
   where?: Prisma.ContentWhereInput
 }
 
-export type ContentUpdateToOneWithWhereWithoutPostsInput = {
+export type ContentUpdateToOneWithWhereWithoutPostInput = {
   where?: Prisma.ContentWhereInput
-  data: Prisma.XOR<Prisma.ContentUpdateWithoutPostsInput, Prisma.ContentUncheckedUpdateWithoutPostsInput>
+  data: Prisma.XOR<Prisma.ContentUpdateWithoutPostInput, Prisma.ContentUncheckedUpdateWithoutPostInput>
 }
 
-export type ContentUpdateWithoutPostsInput = {
+export type ContentUpdateWithoutPostInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -623,7 +623,7 @@ export type ContentUpdateWithoutPostsInput = {
   creator?: Prisma.UserUpdateOneWithoutCreatedContentsNestedInput
 }
 
-export type ContentUncheckedUpdateWithoutPostsInput = {
+export type ContentUncheckedUpdateWithoutPostInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -648,7 +648,7 @@ export type ContentCreateWithoutSpaceInput = {
   text?: string | null
   fileId?: string | null
   creator?: Prisma.UserCreateNestedOneWithoutCreatedContentsInput
-  posts?: Prisma.PostCreateNestedManyWithoutContentInput
+  post?: Prisma.PostCreateNestedOneWithoutContentInput
 }
 
 export type ContentUncheckedCreateWithoutSpaceInput = {
@@ -662,7 +662,7 @@ export type ContentUncheckedCreateWithoutSpaceInput = {
   text?: string | null
   fileId?: string | null
   creatorId?: string | null
-  posts?: Prisma.PostUncheckedCreateNestedManyWithoutContentInput
+  post?: Prisma.PostUncheckedCreateNestedOneWithoutContentInput
 }
 
 export type ContentCreateOrConnectWithoutSpaceInput = {
@@ -719,7 +719,7 @@ export type ContentCreateWithoutCreatorInput = {
   text?: string | null
   fileId?: string | null
   space: Prisma.SpaceCreateNestedOneWithoutContentsInput
-  posts?: Prisma.PostCreateNestedManyWithoutContentInput
+  post?: Prisma.PostCreateNestedOneWithoutContentInput
 }
 
 export type ContentUncheckedCreateWithoutCreatorInput = {
@@ -733,7 +733,7 @@ export type ContentUncheckedCreateWithoutCreatorInput = {
   text?: string | null
   fileId?: string | null
   spaceId: string
-  posts?: Prisma.PostUncheckedCreateNestedManyWithoutContentInput
+  post?: Prisma.PostUncheckedCreateNestedOneWithoutContentInput
 }
 
 export type ContentCreateOrConnectWithoutCreatorInput = {
@@ -786,7 +786,7 @@ export type ContentUpdateWithoutSpaceInput = {
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creator?: Prisma.UserUpdateOneWithoutCreatedContentsNestedInput
-  posts?: Prisma.PostUpdateManyWithoutContentNestedInput
+  post?: Prisma.PostUpdateOneWithoutContentNestedInput
 }
 
 export type ContentUncheckedUpdateWithoutSpaceInput = {
@@ -800,7 +800,7 @@ export type ContentUncheckedUpdateWithoutSpaceInput = {
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  posts?: Prisma.PostUncheckedUpdateManyWithoutContentNestedInput
+  post?: Prisma.PostUncheckedUpdateOneWithoutContentNestedInput
 }
 
 export type ContentUncheckedUpdateManyWithoutSpaceInput = {
@@ -840,7 +840,7 @@ export type ContentUpdateWithoutCreatorInput = {
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   space?: Prisma.SpaceUpdateOneRequiredWithoutContentsNestedInput
-  posts?: Prisma.PostUpdateManyWithoutContentNestedInput
+  post?: Prisma.PostUpdateOneWithoutContentNestedInput
 }
 
 export type ContentUncheckedUpdateWithoutCreatorInput = {
@@ -854,7 +854,7 @@ export type ContentUncheckedUpdateWithoutCreatorInput = {
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  posts?: Prisma.PostUncheckedUpdateManyWithoutContentNestedInput
+  post?: Prisma.PostUncheckedUpdateOneWithoutContentNestedInput
 }
 
 export type ContentUncheckedUpdateManyWithoutCreatorInput = {
@@ -871,35 +871,6 @@ export type ContentUncheckedUpdateManyWithoutCreatorInput = {
 }
 
 
-/**
- * Count Type ContentCountOutputType
- */
-
-export type ContentCountOutputType = {
-  posts: number
-}
-
-export type ContentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  posts?: boolean | ContentCountOutputTypeCountPostsArgs
-}
-
-/**
- * ContentCountOutputType without action
- */
-export type ContentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ContentCountOutputType
-   */
-  select?: Prisma.ContentCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * ContentCountOutputType without action
- */
-export type ContentCountOutputTypeCountPostsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PostWhereInput
-}
-
 
 export type ContentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -915,8 +886,7 @@ export type ContentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   creatorId?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>
-  posts?: boolean | Prisma.Content$postsArgs<ExtArgs>
-  _count?: boolean | Prisma.ContentCountOutputTypeDefaultArgs<ExtArgs>
+  post?: boolean | Prisma.Content$postArgs<ExtArgs>
 }, ExtArgs["result"]["content"]>
 
 export type ContentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -969,8 +939,7 @@ export type ContentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type ContentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>
-  posts?: boolean | Prisma.Content$postsArgs<ExtArgs>
-  _count?: boolean | Prisma.ContentCountOutputTypeDefaultArgs<ExtArgs>
+  post?: boolean | Prisma.Content$postArgs<ExtArgs>
 }
 export type ContentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -986,7 +955,7 @@ export type $ContentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     space: Prisma.$SpacePayload<ExtArgs>
     creator: Prisma.$UserPayload<ExtArgs> | null
-    posts: Prisma.$PostPayload<ExtArgs>[]
+    post: Prisma.$PostPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1408,7 +1377,7 @@ export interface Prisma__ContentClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   creator<T extends Prisma.Content$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Content$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  posts<T extends Prisma.Content$postsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Content$postsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  post<T extends Prisma.Content$postArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Content$postArgs<ExtArgs>>): Prisma.Prisma__PostClient<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1864,9 +1833,9 @@ export type Content$creatorArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * Content.posts
+ * Content.post
  */
-export type Content$postsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Content$postArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Post
    */
@@ -1880,11 +1849,6 @@ export type Content$postsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   include?: Prisma.PostInclude<ExtArgs> | null
   where?: Prisma.PostWhereInput
-  orderBy?: Prisma.PostOrderByWithRelationInput | Prisma.PostOrderByWithRelationInput[]
-  cursor?: Prisma.PostWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PostScalarFieldEnum | Prisma.PostScalarFieldEnum[]
 }
 
 /**

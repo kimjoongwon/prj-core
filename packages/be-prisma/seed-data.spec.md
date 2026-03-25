@@ -20,8 +20,8 @@
 | 항목 | 설명 |
 |------|------|
 | system space | E2E와 로컬 개발에서 공통으로 쓰는 기준 Space 데이터를 제공합니다. |
-| oidc clients | admin, storybook, mobile, swagger 기본 RP/client seed를 제공합니다. |
-| storybook redirect URI | 로컬 Storybook 인증은 `http://localhost:6006/api/v1/auth/storybook/callback`을 기본 callback으로 사용합니다. |
+| oidc clients | admin, storybook, mobile, swagger 기본 RP/client seed와 auth-shell 메타데이터(loginUrl/defaultReturnTo)를 제공합니다. |
+| storybook redirect URI | 로컬 Storybook 인증은 `http://localhost:6006/api/v1/auth/callback?clientId=storybook`을 기본 callback으로 사용합니다. |
 | 분류 기준 | reference-data, bootstrap default, demo data를 서로 다른 책임으로 유지합니다. |
 
 ## 계층 구분
@@ -36,6 +36,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-25 | OIDC seed callback URI를 clientId 기반 generic route 기준으로 정리 | codex |
 | 2026-03-18 | reference/bootstrap/demo 용어와 실행 경로 설명을 현재 구조 기준으로 정리 | codex |
 | 2026-03-16 | Storybook OIDC seed 표시명을 clientId 기준으로 정리 | codex |
 | 2026-03-16 | Storybook OIDC seed 식별자를 `storybook`으로 단순화하고 계약 설명을 갱신 | codex |

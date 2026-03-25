@@ -7,6 +7,8 @@ export class OidcClient extends AbstractEntity implements OidcClientEntity {
 	clientSecret!: string | null;
 	clientName!: string;
 	redirectUris!: string[];
+	loginUrl!: string | null;
+	defaultReturnTo!: string | null;
 	grantTypes!: string[];
 	responseTypes!: string[];
 	tokenEndpointAuthMethod!: string;

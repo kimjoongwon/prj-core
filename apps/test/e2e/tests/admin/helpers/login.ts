@@ -37,7 +37,7 @@ export async function loginToAdmin(page: Page) {
 		!url.pathname.includes("/auth/login");
 
 	await runOidcLoginFlow(page, {
-		startPath: "/api/v1/auth/login",
+		startPath: "/api/v1/auth/login?clientId=admin-web",
 		finalUrl: isAdminUrl,
 		retryAttempts: 5,
 		retryDelayMs: 1000,

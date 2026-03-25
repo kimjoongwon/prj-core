@@ -13,7 +13,7 @@
 - Vite alias를 통해 워크스페이스 패키지를 직접 해석합니다.
 - `STORYBOOK_DISABLE_CHROMATIC=true`가 주입되면 `@chromatic-com/storybook` addon을 제외해 CI 정적 빌드에서 불필요한 Git 스캔과 파일 디스크립터 사용을 줄입니다.
 - `STORYBOOK_DISABLE_VITEST_ADDON=true`가 주입되면 정적 배포 빌드에서 `@storybook/addon-vitest`를 제외해 테스트 전용 mocker 엔트리가 프로덕션 경로로 새지 않게 합니다.
-- `@cocrepo/api` source alias와 `next/navigation` mock alias를 추가해 react-vite 환경에서 앱 컴포넌트 의존성을 해석합니다.
+- `@cocrepo/api` source alias와 `@cocrepo/hook` source alias, `next/navigation` mock alias를 추가해 react-vite 환경에서 앱 컴포넌트 및 서브패스 의존성을 해석합니다.
 - `start:dev`에서만 `STORYBOOK_REQUIRE_AUTH=true`가 주입되면 로컬 auth shell plugin과 API proxy를 활성화합니다.
 - 로컬 dev auth 모드에서는 Storybook HTML/JSON 진입점을 로그인 셸 뒤로 숨기고, `/api/v1/*` 요청을 core/idp API로 프록시합니다.
 - preview 번들에는 `__STORYBOOK_REQUIRE_AUTH__` define 값을 주입해 런타임 provider가 dev 인증 모드 여부를 감지할 수 있게 합니다.

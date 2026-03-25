@@ -22,6 +22,10 @@ export interface UpdateOidcClientDto {
 	clientName?: string;
 	/** 리다이렉트 URI 목록 */
 	redirectUris?: string[];
+	/** 로그인 셸 URL */
+	loginUrl?: string;
+	/** 인증 성공 후 기본 복귀 URL */
+	defaultReturnTo?: string;
 	/** 허용된 Grant 타입 */
 	grantTypes?: string[];
 	/** 응답 타입 */

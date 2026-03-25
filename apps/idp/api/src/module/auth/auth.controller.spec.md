@@ -13,12 +13,8 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 
 | 메서드 | 경로 | 설명 | 인증 |
 |--------|------|------|------|
-| GET | /login | OIDC Authorization 엔드포인트로 리다이렉트 | Public |
-| GET | /storybook/login | Storybook 전용 RP로 OIDC Authorization 엔드포인트에 리다이렉트 | Public |
-| GET | /idp/login | IDP 콘솔 전용 RP로 OIDC Authorization 엔드포인트에 리다이렉트 | Public |
-| GET | /callback | OIDC 인증 완료 후 Authorization Code 수신 및 토큰 교환 | Public |
-| GET | /storybook/callback | Storybook 전용 RP의 OIDC 콜백 처리 | Public |
-| GET | /idp/callback | IDP 콘솔 전용 RP의 OIDC 콜백 처리 | Public |
+| GET | /login | `clientId` 기준 OIDC Authorization 엔드포인트로 리다이렉트 | Public |
+| GET | /callback | `clientId` 기준 OIDC 인증 완료 후 Authorization Code 수신 및 토큰 교환 | Public |
 | POST | /token/refresh | 리프레시 토큰으로 새 토큰 재발급 | Public (쿠키 기반) |
 | POST | /sign-up | 신규 사용자 계정 생성 | Public |
 | GET | /verify-token | 액세스 토큰 유효성 검증 + FULL_ACCESS 보유 여부 반환 | JWT 인증 필요, SkipSpaceCheck |
@@ -46,12 +42,8 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 
 | 엔드포인트 | 요청 DTO | 응답 DTO |
 |-----------|----------|----------|
-| GET /login | Query: `returnTo` (string) | 302 리다이렉트 |
-| GET /storybook/login | Query: `returnTo` (string) | 302 리다이렉트 |
-| GET /idp/login | Query: `returnTo` (string) | 302 리다이렉트 |
-| GET /callback | Query: `code`, `state`, `error`, `error_description` | 302 리다이렉트 |
-| GET /storybook/callback | Query: `code`, `state`, `error`, `error_description` | 302 리다이렉트 |
-| GET /idp/callback | Query: `code`, `state`, `error`, `error_description` | 302 리다이렉트 |
+| GET /login | Query: `clientId`, `returnTo` | 302 리다이렉트 |
+| GET /callback | Query: `clientId`, `code`, `state`, `error`, `error_description` | 302 리다이렉트 |
 | POST /token/refresh | 쿠키: `refreshToken`, `sessionId` | `TokenRefreshResponseDto` |
 | POST /sign-up | `SignUpPayloadDto` | - |
 | GET /verify-token | - | `VerifyTokenResponseDto` (`valid`, `accessTokenExpiresAt`, `refreshTokenExpiresAt`, `hasFullAccess`) |
@@ -69,10 +61,9 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 
 ## 비즈니스 규칙
 
-- admin 콜백 에러 발생 시 `/admin/auth/login?error=...`으로 리다이렉트
-- storybook 콜백 에러 발생 시 `http://localhost:6006/__storybook_auth/login?error=...`으로 리다이렉트
-- idpWeb 콜백 에러 발생 시 `http://localhost:3008/auth/login?error=...`으로 리다이렉트
-- 성공 시에는 `AuthApplicationService.handleOidcCallback()`이 돌려준 `returnTo`를 우선 사용하고, 없으면 RP별 `defaultReturnTo`를 사용합니다.
+- 로그인 시작은 `clientId` 쿼리로 구분하며, 앱별 login shell URL은 `AuthApplicationService.getClientRedirects()`로 조회합니다.
+- 콜백 에러 발생 시에도 `clientId`에 맞는 login shell URL로 `?error=...`를 붙여 리다이렉트합니다.
+- 성공 시에는 `AuthApplicationService.handleOidcCallback()`이 돌려준 `returnTo`를 우선 사용하고, 없으면 `defaultReturnTo`를 사용합니다.
 - 비밀번호 변경 시 `newPassword !== confirmPassword` 이면 `PASSWORD_MISMATCH` 예외 발생
 - 감사 로그 조회는 페이지네이션 지원 (기본 skip=0, take=20)
 - 세션은 쿠키 기반으로 관리되며, 로그아웃 시 IDP 측 토큰도 무효화
@@ -83,7 +74,6 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 |------------|------|
 | `AuthApplicationService` | 인증 유즈케이스 조율 (로그인, 토큰 교환, 세션 관리 등) |
 | `AuthApplicationService` (`getAuthAuditLogs`, `getAuthAuditLogStats`) | 감사 로그 조회 및 통계 |
-| `ConfigService` | 프론트엔드 도메인 URL 등 환경 설정 |
 
 ## 구현 체크리스트
 
@@ -96,8 +86,9 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-25 | login/callback을 clientId 기반 generic route로 정리 | codex |
 | 2026-03-23 | `GET /verify-token` 응답 계약에 `hasFullAccess`를 추가하고 IDP 웹 메뉴 bootstrap 근거를 명시 | codex |
-| 2026-03-16 | Storybook RP clientKey 명을 `storybook`으로 단순화해 login/callback redirect 계약 표현을 정리 | codex |
+| 2026-03-16 | Storybook RP 식별 기준을 `clientId` 계약으로 단순화해 login/callback redirect 표현을 정리 | codex |
 | 2026-03-16 | Storybook 세션 검증을 위해 `GET /verify-token`에도 `SkipSpaceCheck`를 적용하고 문서 반영 | codex |
 | 2026-03-16 | storybook 전용 login/callback 엔드포인트와 RP별 에러/성공 redirect 규칙을 추가 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |

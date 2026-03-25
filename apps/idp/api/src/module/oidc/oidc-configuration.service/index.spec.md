@@ -34,9 +34,9 @@ oidc-provider 인스턴스 초기화에 필요한 전체 설정 객체(`OidcConf
 - DB에 같은 `client_id`가 있으면 폴백과 DB 설정을 병합하며, 기본 redirect/grant/response 계약은 유지한 채 DB 확장 값을 추가합니다.
 - DB 조회 실패/빈 결과 시에도 동일한 병합 함수를 거친 고유 `client_id` 목록만 반환하여 정적 폴백 중복으로 인한 oidc-provider 초기화 실패를 방지합니다.
 - DB 접근 실패(RLS 등) 시 정적 폴백 클라이언트 5개 사용:
-  - `admin-web`: 어드민 웹 (client_secret_post, authorization_code + refresh_token, localhost:3000 callback)
-  - `storybook`: Storybook RP (client_secret_post, authorization_code + refresh_token, localhost:6006 storybook callback)
-  - `idp-web`: IDP 웹 (client_secret_post, authorization_code + refresh_token, localhost:3008 `/api/v1/auth/idp/callback`)
+  - `admin-web`: 어드민 웹 (client_secret_post, authorization_code + refresh_token, localhost:3000 `/api/v1/auth/callback?clientId=admin-web`)
+  - `storybook`: Storybook RP (client_secret_post, authorization_code + refresh_token, localhost:6006 `/api/v1/auth/callback?clientId=storybook`)
+  - `idp-web`: IDP 웹 (client_secret_post, authorization_code + refresh_token, localhost:3008 `/api/v1/auth/callback?clientId=idp-web`)
   - `prj-core-mobile`: 모바일 앱 (PKCE 필수, none auth method)
   - `prj-core-swagger`: Swagger UI (authorization_code만)
 
@@ -88,6 +88,7 @@ oidc-provider 인스턴스 초기화에 필요한 전체 설정 객체(`OidcConf
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-25 | first-party callback path를 clientId 기반 generic route로 정리 | codex |
 | 2026-03-16 | Storybook fallback client 표시명을 clientId 기준으로 정리 | codex |
 | 2026-03-16 | Storybook fallback client 식별자를 `storybook`으로 단순화하고 관련 병합 규칙 설명을 갱신 | codex |
 | 2026-03-16 | DB의 기존 Storybook client가 남아 있어도 fallback redirect URI/grant/response 계약을 함께 병합하도록 보강 | codex |

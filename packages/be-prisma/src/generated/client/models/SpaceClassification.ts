@@ -305,16 +305,6 @@ export type SpaceClassificationUncheckedUpdateManyInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
-export type SpaceClassificationListRelationFilter = {
-  every?: Prisma.SpaceClassificationWhereInput
-  some?: Prisma.SpaceClassificationWhereInput
-  none?: Prisma.SpaceClassificationWhereInput
-}
-
-export type SpaceClassificationOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
 export type SpaceClassificationNullableScalarRelationFilter = {
   is?: Prisma.SpaceClassificationWhereInput | null
   isNot?: Prisma.SpaceClassificationWhereInput | null
@@ -350,6 +340,48 @@ export type SpaceClassificationMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
+}
+
+export type SpaceClassificationListRelationFilter = {
+  every?: Prisma.SpaceClassificationWhereInput
+  some?: Prisma.SpaceClassificationWhereInput
+  none?: Prisma.SpaceClassificationWhereInput
+}
+
+export type SpaceClassificationOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type SpaceClassificationCreateNestedOneWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.SpaceClassificationCreateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedCreateWithoutSpaceInput>
+  connectOrCreate?: Prisma.SpaceClassificationCreateOrConnectWithoutSpaceInput
+  connect?: Prisma.SpaceClassificationWhereUniqueInput
+}
+
+export type SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.SpaceClassificationCreateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedCreateWithoutSpaceInput>
+  connectOrCreate?: Prisma.SpaceClassificationCreateOrConnectWithoutSpaceInput
+  connect?: Prisma.SpaceClassificationWhereUniqueInput
+}
+
+export type SpaceClassificationUpdateOneWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.SpaceClassificationCreateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedCreateWithoutSpaceInput>
+  connectOrCreate?: Prisma.SpaceClassificationCreateOrConnectWithoutSpaceInput
+  upsert?: Prisma.SpaceClassificationUpsertWithoutSpaceInput
+  disconnect?: Prisma.SpaceClassificationWhereInput | boolean
+  delete?: Prisma.SpaceClassificationWhereInput | boolean
+  connect?: Prisma.SpaceClassificationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceClassificationUpdateToOneWithWhereWithoutSpaceInput, Prisma.SpaceClassificationUpdateWithoutSpaceInput>, Prisma.SpaceClassificationUncheckedUpdateWithoutSpaceInput>
+}
+
+export type SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.SpaceClassificationCreateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedCreateWithoutSpaceInput>
+  connectOrCreate?: Prisma.SpaceClassificationCreateOrConnectWithoutSpaceInput
+  upsert?: Prisma.SpaceClassificationUpsertWithoutSpaceInput
+  disconnect?: Prisma.SpaceClassificationWhereInput | boolean
+  delete?: Prisma.SpaceClassificationWhereInput | boolean
+  connect?: Prisma.SpaceClassificationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceClassificationUpdateToOneWithWhereWithoutSpaceInput, Prisma.SpaceClassificationUpdateWithoutSpaceInput>, Prisma.SpaceClassificationUncheckedUpdateWithoutSpaceInput>
 }
 
 export type SpaceClassificationCreateNestedManyWithoutCategoryInput = {
@@ -394,36 +426,52 @@ export type SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput = {
   deleteMany?: Prisma.SpaceClassificationScalarWhereInput | Prisma.SpaceClassificationScalarWhereInput[]
 }
 
-export type SpaceClassificationCreateNestedOneWithoutSpaceInput = {
-  create?: Prisma.XOR<Prisma.SpaceClassificationCreateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedCreateWithoutSpaceInput>
-  connectOrCreate?: Prisma.SpaceClassificationCreateOrConnectWithoutSpaceInput
-  connect?: Prisma.SpaceClassificationWhereUniqueInput
+export type SpaceClassificationCreateWithoutSpaceInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  category: Prisma.CategoryCreateNestedOneWithoutSpaceClassificationsInput
 }
 
-export type SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput = {
-  create?: Prisma.XOR<Prisma.SpaceClassificationCreateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedCreateWithoutSpaceInput>
-  connectOrCreate?: Prisma.SpaceClassificationCreateOrConnectWithoutSpaceInput
-  connect?: Prisma.SpaceClassificationWhereUniqueInput
+export type SpaceClassificationUncheckedCreateWithoutSpaceInput = {
+  id?: string
+  categoryId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
 }
 
-export type SpaceClassificationUpdateOneWithoutSpaceNestedInput = {
-  create?: Prisma.XOR<Prisma.SpaceClassificationCreateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedCreateWithoutSpaceInput>
-  connectOrCreate?: Prisma.SpaceClassificationCreateOrConnectWithoutSpaceInput
-  upsert?: Prisma.SpaceClassificationUpsertWithoutSpaceInput
-  disconnect?: Prisma.SpaceClassificationWhereInput | boolean
-  delete?: Prisma.SpaceClassificationWhereInput | boolean
-  connect?: Prisma.SpaceClassificationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceClassificationUpdateToOneWithWhereWithoutSpaceInput, Prisma.SpaceClassificationUpdateWithoutSpaceInput>, Prisma.SpaceClassificationUncheckedUpdateWithoutSpaceInput>
+export type SpaceClassificationCreateOrConnectWithoutSpaceInput = {
+  where: Prisma.SpaceClassificationWhereUniqueInput
+  create: Prisma.XOR<Prisma.SpaceClassificationCreateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedCreateWithoutSpaceInput>
 }
 
-export type SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput = {
-  create?: Prisma.XOR<Prisma.SpaceClassificationCreateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedCreateWithoutSpaceInput>
-  connectOrCreate?: Prisma.SpaceClassificationCreateOrConnectWithoutSpaceInput
-  upsert?: Prisma.SpaceClassificationUpsertWithoutSpaceInput
-  disconnect?: Prisma.SpaceClassificationWhereInput | boolean
-  delete?: Prisma.SpaceClassificationWhereInput | boolean
-  connect?: Prisma.SpaceClassificationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceClassificationUpdateToOneWithWhereWithoutSpaceInput, Prisma.SpaceClassificationUpdateWithoutSpaceInput>, Prisma.SpaceClassificationUncheckedUpdateWithoutSpaceInput>
+export type SpaceClassificationUpsertWithoutSpaceInput = {
+  update: Prisma.XOR<Prisma.SpaceClassificationUpdateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedUpdateWithoutSpaceInput>
+  create: Prisma.XOR<Prisma.SpaceClassificationCreateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedCreateWithoutSpaceInput>
+  where?: Prisma.SpaceClassificationWhereInput
+}
+
+export type SpaceClassificationUpdateToOneWithWhereWithoutSpaceInput = {
+  where?: Prisma.SpaceClassificationWhereInput
+  data: Prisma.XOR<Prisma.SpaceClassificationUpdateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedUpdateWithoutSpaceInput>
+}
+
+export type SpaceClassificationUpdateWithoutSpaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  category?: Prisma.CategoryUpdateOneRequiredWithoutSpaceClassificationsNestedInput
+}
+
+export type SpaceClassificationUncheckedUpdateWithoutSpaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type SpaceClassificationCreateWithoutCategoryInput = {
@@ -478,54 +526,6 @@ export type SpaceClassificationScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"SpaceClassification"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"SpaceClassification"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"SpaceClassification"> | Date | string | null
-}
-
-export type SpaceClassificationCreateWithoutSpaceInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  category: Prisma.CategoryCreateNestedOneWithoutSpaceClassificationsInput
-}
-
-export type SpaceClassificationUncheckedCreateWithoutSpaceInput = {
-  id?: string
-  categoryId: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-}
-
-export type SpaceClassificationCreateOrConnectWithoutSpaceInput = {
-  where: Prisma.SpaceClassificationWhereUniqueInput
-  create: Prisma.XOR<Prisma.SpaceClassificationCreateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedCreateWithoutSpaceInput>
-}
-
-export type SpaceClassificationUpsertWithoutSpaceInput = {
-  update: Prisma.XOR<Prisma.SpaceClassificationUpdateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedUpdateWithoutSpaceInput>
-  create: Prisma.XOR<Prisma.SpaceClassificationCreateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedCreateWithoutSpaceInput>
-  where?: Prisma.SpaceClassificationWhereInput
-}
-
-export type SpaceClassificationUpdateToOneWithWhereWithoutSpaceInput = {
-  where?: Prisma.SpaceClassificationWhereInput
-  data: Prisma.XOR<Prisma.SpaceClassificationUpdateWithoutSpaceInput, Prisma.SpaceClassificationUncheckedUpdateWithoutSpaceInput>
-}
-
-export type SpaceClassificationUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  category?: Prisma.CategoryUpdateOneRequiredWithoutSpaceClassificationsNestedInput
-}
-
-export type SpaceClassificationUncheckedUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type SpaceClassificationCreateManyCategoryInput = {

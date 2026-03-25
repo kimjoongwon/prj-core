@@ -23,6 +23,7 @@ export interface SessionMetadata {
 	ipAddress: string;
 	createdAt: string;
 	lastActivityAt: string;
+	clientId?: string;
 	clientKey?: string;
 }
 
@@ -44,6 +45,7 @@ export interface SessionInfo {
 export interface OidcStatePayload {
 	codeVerifier: string;
 	returnTo?: string;
+	clientId?: string;
 	clientKey?: string;
 }
 
@@ -96,7 +98,12 @@ export class TokenStorageService {
 		userId: string,
 		sessionId: string,
 		refreshToken: string,
-		metadata: { userAgent: string; ipAddress: string; clientKey?: string },
+		metadata: {
+			userAgent: string;
+			ipAddress: string;
+			clientId?: string;
+			clientKey?: string;
+		},
 	): Promise<void> {
 		const authConfig = this.configService.get<AuthConfig>("auth");
 		const ttl = parseExpiresInToSeconds(authConfig?.refresh || "7d");
@@ -107,6 +114,7 @@ export class TokenStorageService {
 			refreshToken,
 			userAgent: metadata.userAgent,
 			ipAddress: metadata.ipAddress,
+			clientId: metadata.clientId,
 			createdAt: now,
 			lastActivityAt: now,
 			clientKey: metadata.clientKey,
@@ -192,9 +200,7 @@ export class TokenStorageService {
 					lastActivityAt: session.lastActivityAt,
 					isCurrent: sessionId === currentSessionId,
 				});
-			} catch {
-				continue;
-			}
+			} catch {}
 		}
 
 		// 최근 활동 순 정렬
@@ -381,10 +387,16 @@ export class TokenStorageService {
 		codeVerifier: string,
 		ttlSeconds = 600,
 		returnTo?: string,
+		clientId?: string,
 		clientKey?: string,
 	): Promise<void> {
 		const key = `${REDIS_KEYS.OIDC_STATE}${state}`;
-		const value = JSON.stringify({ codeVerifier, returnTo, clientKey });
+		const value = JSON.stringify({
+			codeVerifier,
+			returnTo,
+			clientId,
+			clientKey,
+		});
 		await this.redisService.set(key, value, ttlSeconds);
 		this.logger.debug(`OIDC state + PKCE 저장: ttl=${ttlSeconds}s`);
 	}
@@ -406,12 +418,16 @@ export class TokenStorageService {
 		// 하위호환: 기존 저장된 plain string(codeVerifier만)도 처리
 		try {
 			const parsed = JSON.parse(raw) as Partial<OidcStatePayload>;
-			if (typeof parsed.codeVerifier !== "string" || parsed.codeVerifier.length === 0) {
+			if (
+				typeof parsed.codeVerifier !== "string" ||
+				parsed.codeVerifier.length === 0
+			) {
 				return null;
 			}
 			return {
 				codeVerifier: parsed.codeVerifier,
 				returnTo: parsed.returnTo,
+				clientId: parsed.clientId,
 				clientKey: parsed.clientKey,
 			};
 		} catch {

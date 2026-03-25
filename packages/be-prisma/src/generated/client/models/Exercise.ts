@@ -669,55 +669,19 @@ export type ExerciseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type $ExercisePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Exercise"
   objects: {
-    /**
-     * Task 관계 (Exercise가 Task를 확장)
-     */
     task: Prisma.$TaskPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    /**
-     * 고유 식별자
-     */
     id: string
-    /**
-     * 생성 일시
-     */
     createdAt: Date
-    /**
-     * 수정 일시
-     */
     updatedAt: Date | null
-    /**
-     * 삭제 일시
-     */
     removedAt: Date | null
-    /**
-     * 지속 시간 (초 단위)
-     */
     duration: number
-    /**
-     * 반복 횟수
-     */
     count: number
-    /**
-     * Task ID (1:1 관계)
-     */
     taskId: string
-    /**
-     * 운동 설명
-     */
     description: string | null
-    /**
-     * 이미지 파일 ID (운동 동작 이미지)
-     */
     imageFileId: string | null
-    /**
-     * 비디오 파일 ID (운동 시연 영상)
-     */
     videoFileId: string | null
-    /**
-     * 운동 이름
-     */
     name: string
   }, ExtArgs["result"]["exercise"]>
   composites: {}

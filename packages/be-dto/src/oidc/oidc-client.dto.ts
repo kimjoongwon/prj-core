@@ -12,8 +12,7 @@ export class OidcClientDto extends AbstractDto implements OidcClient {
 		description: "클라이언트 식별자",
 		maxLength: 64,
 		pattern: "^[a-z0-9-]+$",
-		message:
-			"Client ID는 영소문자, 숫자, 하이픈만 사용 가능합니다",
+		message: "Client ID는 영소문자, 숫자, 하이픈만 사용 가능합니다",
 	})
 	clientId: string;
 
@@ -28,6 +27,12 @@ export class OidcClientDto extends AbstractDto implements OidcClient {
 		each: true,
 	})
 	redirectUris: string[];
+
+	@StringFieldOptional({ description: "로그인 셸 URL" })
+	loginUrl: string | null;
+
+	@StringFieldOptional({ description: "인증 성공 후 기본 복귀 URL" })
+	defaultReturnTo: string | null;
 
 	@StringField({
 		description: "허용된 Grant 타입",

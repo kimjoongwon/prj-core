@@ -13,6 +13,8 @@ export interface OidcClientSeedData {
 	clientSecret: string | null;
 	clientName: string;
 	redirectUris: string[];
+	loginUrl?: string | null;
+	defaultReturnTo?: string | null;
 	grantTypes: string[];
 	responseTypes: string[];
 	tokenEndpointAuthMethod: string;
@@ -33,11 +35,19 @@ function resolveOidcSeedUrl(baseUrl: string, pathname: string): string {
 const oidcAdminBaseUrl =
 	process.env.OIDC_ADMIN_BASE_URL || "http://localhost:3000";
 const oidcAdminClientSecret =
-	process.env.OIDC_ADMIN_CLIENT_SECRET ||
-	"admin-secret-change-in-production";
+	process.env.OIDC_ADMIN_CLIENT_SECRET || "admin-secret-change-in-production";
 const oidcAdminRedirectUri =
 	process.env.OIDC_ADMIN_REDIRECT_URI ||
-	resolveOidcSeedUrl(oidcAdminBaseUrl, "/api/v1/auth/callback");
+	resolveOidcSeedUrl(
+		oidcAdminBaseUrl,
+		"/api/v1/auth/callback?clientId=admin-web",
+	);
+const oidcAdminLoginUrl =
+	process.env.OIDC_ADMIN_LOGIN_URL ||
+	resolveOidcSeedUrl(oidcAdminBaseUrl, "/admin/auth/login");
+const oidcAdminDefaultReturnTo =
+	process.env.OIDC_ADMIN_DEFAULT_RETURN_TO ||
+	resolveOidcSeedUrl(oidcAdminBaseUrl, "/admin/dashboard");
 const oidcStorybookBaseUrl =
 	process.env.OIDC_STORYBOOK_BASE_URL || "http://localhost:6006";
 const oidcStorybookClientSecret =
@@ -45,14 +55,32 @@ const oidcStorybookClientSecret =
 	"storybook-secret-change-in-production";
 const oidcStorybookRedirectUri =
 	process.env.OIDC_STORYBOOK_REDIRECT_URI ||
-	resolveOidcSeedUrl(oidcStorybookBaseUrl, "/api/v1/auth/storybook/callback");
+	resolveOidcSeedUrl(
+		oidcStorybookBaseUrl,
+		"/api/v1/auth/callback?clientId=storybook",
+	);
+const oidcStorybookLoginUrl =
+	process.env.OIDC_STORYBOOK_LOGIN_URL ||
+	resolveOidcSeedUrl(oidcStorybookBaseUrl, "/__storybook_auth/login");
+const oidcStorybookDefaultReturnTo =
+	process.env.OIDC_STORYBOOK_DEFAULT_RETURN_TO ||
+	resolveOidcSeedUrl(oidcStorybookBaseUrl, "/");
 const oidcIdpClientUrl = process.env.IDP_CLIENT_URL || "http://localhost:3008";
 const oidcIdpWebClientSecret =
 	process.env.OIDC_IDP_WEB_CLIENT_SECRET ||
 	"idp-web-secret-change-in-production";
 const oidcIdpWebRedirectUri =
 	process.env.OIDC_IDP_WEB_REDIRECT_URI ||
-	resolveOidcSeedUrl(oidcIdpClientUrl, "/api/v1/auth/idp/callback");
+	resolveOidcSeedUrl(
+		oidcIdpClientUrl,
+		"/api/v1/auth/callback?clientId=idp-web",
+	);
+const oidcIdpWebLoginUrl =
+	process.env.OIDC_IDP_WEB_LOGIN_URL ||
+	resolveOidcSeedUrl(oidcIdpClientUrl, "/auth/login");
+const oidcIdpWebDefaultReturnTo =
+	process.env.OIDC_IDP_WEB_DEFAULT_RETURN_TO ||
+	resolveOidcSeedUrl(oidcIdpClientUrl, "/dashboard");
 const oidcIssuer =
 	process.env.OIDC_ISSUER || oidcIdpClientUrl || "http://localhost:3007";
 const oidcSwaggerRedirectUri =
@@ -69,6 +97,8 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		clientSecret: oidcAdminClientSecret,
 		clientName: "Admin Web",
 		redirectUris: [oidcAdminRedirectUri],
+		loginUrl: oidcAdminLoginUrl,
+		defaultReturnTo: oidcAdminDefaultReturnTo,
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "client_secret_post",
@@ -83,6 +113,8 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		clientSecret: oidcStorybookClientSecret,
 		clientName: "PRJ Core Storybook",
 		redirectUris: [oidcStorybookRedirectUri],
+		loginUrl: oidcStorybookLoginUrl,
+		defaultReturnTo: oidcStorybookDefaultReturnTo,
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "client_secret_post",
@@ -100,6 +132,8 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 			"prjcore://auth/callback",
 			"exp://localhost:8081/--/auth/callback",
 		],
+		loginUrl: null,
+		defaultReturnTo: null,
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "none", // Public client
@@ -114,6 +148,8 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		clientSecret: oidcIdpWebClientSecret,
 		clientName: "IDP Web",
 		redirectUris: [oidcIdpWebRedirectUri],
+		loginUrl: oidcIdpWebLoginUrl,
+		defaultReturnTo: oidcIdpWebDefaultReturnTo,
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "client_secret_post",
@@ -128,6 +164,8 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		clientSecret: null,
 		clientName: "PRJ Core Swagger UI",
 		redirectUris: [oidcSwaggerRedirectUri],
+		loginUrl: null,
+		defaultReturnTo: null,
 		grantTypes: ["authorization_code"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "none",

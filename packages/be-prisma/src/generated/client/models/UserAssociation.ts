@@ -341,48 +341,6 @@ export type UserAssociationMinOrderByAggregateInput = {
   groupId?: Prisma.SortOrder
 }
 
-export type UserAssociationCreateNestedManyWithoutGroupInput = {
-  create?: Prisma.XOR<Prisma.UserAssociationCreateWithoutGroupInput, Prisma.UserAssociationUncheckedCreateWithoutGroupInput> | Prisma.UserAssociationCreateWithoutGroupInput[] | Prisma.UserAssociationUncheckedCreateWithoutGroupInput[]
-  connectOrCreate?: Prisma.UserAssociationCreateOrConnectWithoutGroupInput | Prisma.UserAssociationCreateOrConnectWithoutGroupInput[]
-  createMany?: Prisma.UserAssociationCreateManyGroupInputEnvelope
-  connect?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
-}
-
-export type UserAssociationUncheckedCreateNestedManyWithoutGroupInput = {
-  create?: Prisma.XOR<Prisma.UserAssociationCreateWithoutGroupInput, Prisma.UserAssociationUncheckedCreateWithoutGroupInput> | Prisma.UserAssociationCreateWithoutGroupInput[] | Prisma.UserAssociationUncheckedCreateWithoutGroupInput[]
-  connectOrCreate?: Prisma.UserAssociationCreateOrConnectWithoutGroupInput | Prisma.UserAssociationCreateOrConnectWithoutGroupInput[]
-  createMany?: Prisma.UserAssociationCreateManyGroupInputEnvelope
-  connect?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
-}
-
-export type UserAssociationUpdateManyWithoutGroupNestedInput = {
-  create?: Prisma.XOR<Prisma.UserAssociationCreateWithoutGroupInput, Prisma.UserAssociationUncheckedCreateWithoutGroupInput> | Prisma.UserAssociationCreateWithoutGroupInput[] | Prisma.UserAssociationUncheckedCreateWithoutGroupInput[]
-  connectOrCreate?: Prisma.UserAssociationCreateOrConnectWithoutGroupInput | Prisma.UserAssociationCreateOrConnectWithoutGroupInput[]
-  upsert?: Prisma.UserAssociationUpsertWithWhereUniqueWithoutGroupInput | Prisma.UserAssociationUpsertWithWhereUniqueWithoutGroupInput[]
-  createMany?: Prisma.UserAssociationCreateManyGroupInputEnvelope
-  set?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
-  disconnect?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
-  delete?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
-  connect?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
-  update?: Prisma.UserAssociationUpdateWithWhereUniqueWithoutGroupInput | Prisma.UserAssociationUpdateWithWhereUniqueWithoutGroupInput[]
-  updateMany?: Prisma.UserAssociationUpdateManyWithWhereWithoutGroupInput | Prisma.UserAssociationUpdateManyWithWhereWithoutGroupInput[]
-  deleteMany?: Prisma.UserAssociationScalarWhereInput | Prisma.UserAssociationScalarWhereInput[]
-}
-
-export type UserAssociationUncheckedUpdateManyWithoutGroupNestedInput = {
-  create?: Prisma.XOR<Prisma.UserAssociationCreateWithoutGroupInput, Prisma.UserAssociationUncheckedCreateWithoutGroupInput> | Prisma.UserAssociationCreateWithoutGroupInput[] | Prisma.UserAssociationUncheckedCreateWithoutGroupInput[]
-  connectOrCreate?: Prisma.UserAssociationCreateOrConnectWithoutGroupInput | Prisma.UserAssociationCreateOrConnectWithoutGroupInput[]
-  upsert?: Prisma.UserAssociationUpsertWithWhereUniqueWithoutGroupInput | Prisma.UserAssociationUpsertWithWhereUniqueWithoutGroupInput[]
-  createMany?: Prisma.UserAssociationCreateManyGroupInputEnvelope
-  set?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
-  disconnect?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
-  delete?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
-  connect?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
-  update?: Prisma.UserAssociationUpdateWithWhereUniqueWithoutGroupInput | Prisma.UserAssociationUpdateWithWhereUniqueWithoutGroupInput[]
-  updateMany?: Prisma.UserAssociationUpdateManyWithWhereWithoutGroupInput | Prisma.UserAssociationUpdateManyWithWhereWithoutGroupInput[]
-  deleteMany?: Prisma.UserAssociationScalarWhereInput | Prisma.UserAssociationScalarWhereInput[]
-}
-
 export type UserAssociationCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.UserAssociationCreateWithoutUserInput, Prisma.UserAssociationUncheckedCreateWithoutUserInput> | Prisma.UserAssociationCreateWithoutUserInput[] | Prisma.UserAssociationUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.UserAssociationCreateOrConnectWithoutUserInput | Prisma.UserAssociationCreateOrConnectWithoutUserInput[]
@@ -425,58 +383,46 @@ export type UserAssociationUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.UserAssociationScalarWhereInput | Prisma.UserAssociationScalarWhereInput[]
 }
 
-export type UserAssociationCreateWithoutGroupInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  user: Prisma.UserCreateNestedOneWithoutAssociationsInput
+export type UserAssociationCreateNestedManyWithoutGroupInput = {
+  create?: Prisma.XOR<Prisma.UserAssociationCreateWithoutGroupInput, Prisma.UserAssociationUncheckedCreateWithoutGroupInput> | Prisma.UserAssociationCreateWithoutGroupInput[] | Prisma.UserAssociationUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.UserAssociationCreateOrConnectWithoutGroupInput | Prisma.UserAssociationCreateOrConnectWithoutGroupInput[]
+  createMany?: Prisma.UserAssociationCreateManyGroupInputEnvelope
+  connect?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
 }
 
-export type UserAssociationUncheckedCreateWithoutGroupInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  userId: string
+export type UserAssociationUncheckedCreateNestedManyWithoutGroupInput = {
+  create?: Prisma.XOR<Prisma.UserAssociationCreateWithoutGroupInput, Prisma.UserAssociationUncheckedCreateWithoutGroupInput> | Prisma.UserAssociationCreateWithoutGroupInput[] | Prisma.UserAssociationUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.UserAssociationCreateOrConnectWithoutGroupInput | Prisma.UserAssociationCreateOrConnectWithoutGroupInput[]
+  createMany?: Prisma.UserAssociationCreateManyGroupInputEnvelope
+  connect?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
 }
 
-export type UserAssociationCreateOrConnectWithoutGroupInput = {
-  where: Prisma.UserAssociationWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserAssociationCreateWithoutGroupInput, Prisma.UserAssociationUncheckedCreateWithoutGroupInput>
+export type UserAssociationUpdateManyWithoutGroupNestedInput = {
+  create?: Prisma.XOR<Prisma.UserAssociationCreateWithoutGroupInput, Prisma.UserAssociationUncheckedCreateWithoutGroupInput> | Prisma.UserAssociationCreateWithoutGroupInput[] | Prisma.UserAssociationUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.UserAssociationCreateOrConnectWithoutGroupInput | Prisma.UserAssociationCreateOrConnectWithoutGroupInput[]
+  upsert?: Prisma.UserAssociationUpsertWithWhereUniqueWithoutGroupInput | Prisma.UserAssociationUpsertWithWhereUniqueWithoutGroupInput[]
+  createMany?: Prisma.UserAssociationCreateManyGroupInputEnvelope
+  set?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
+  disconnect?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
+  delete?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
+  connect?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
+  update?: Prisma.UserAssociationUpdateWithWhereUniqueWithoutGroupInput | Prisma.UserAssociationUpdateWithWhereUniqueWithoutGroupInput[]
+  updateMany?: Prisma.UserAssociationUpdateManyWithWhereWithoutGroupInput | Prisma.UserAssociationUpdateManyWithWhereWithoutGroupInput[]
+  deleteMany?: Prisma.UserAssociationScalarWhereInput | Prisma.UserAssociationScalarWhereInput[]
 }
 
-export type UserAssociationCreateManyGroupInputEnvelope = {
-  data: Prisma.UserAssociationCreateManyGroupInput | Prisma.UserAssociationCreateManyGroupInput[]
-  skipDuplicates?: boolean
-}
-
-export type UserAssociationUpsertWithWhereUniqueWithoutGroupInput = {
-  where: Prisma.UserAssociationWhereUniqueInput
-  update: Prisma.XOR<Prisma.UserAssociationUpdateWithoutGroupInput, Prisma.UserAssociationUncheckedUpdateWithoutGroupInput>
-  create: Prisma.XOR<Prisma.UserAssociationCreateWithoutGroupInput, Prisma.UserAssociationUncheckedCreateWithoutGroupInput>
-}
-
-export type UserAssociationUpdateWithWhereUniqueWithoutGroupInput = {
-  where: Prisma.UserAssociationWhereUniqueInput
-  data: Prisma.XOR<Prisma.UserAssociationUpdateWithoutGroupInput, Prisma.UserAssociationUncheckedUpdateWithoutGroupInput>
-}
-
-export type UserAssociationUpdateManyWithWhereWithoutGroupInput = {
-  where: Prisma.UserAssociationScalarWhereInput
-  data: Prisma.XOR<Prisma.UserAssociationUpdateManyMutationInput, Prisma.UserAssociationUncheckedUpdateManyWithoutGroupInput>
-}
-
-export type UserAssociationScalarWhereInput = {
-  AND?: Prisma.UserAssociationScalarWhereInput | Prisma.UserAssociationScalarWhereInput[]
-  OR?: Prisma.UserAssociationScalarWhereInput[]
-  NOT?: Prisma.UserAssociationScalarWhereInput | Prisma.UserAssociationScalarWhereInput[]
-  id?: Prisma.StringFilter<"UserAssociation"> | string
-  createdAt?: Prisma.DateTimeFilter<"UserAssociation"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"UserAssociation"> | Date | string | null
-  removedAt?: Prisma.DateTimeNullableFilter<"UserAssociation"> | Date | string | null
-  userId?: Prisma.StringFilter<"UserAssociation"> | string
-  groupId?: Prisma.StringFilter<"UserAssociation"> | string
+export type UserAssociationUncheckedUpdateManyWithoutGroupNestedInput = {
+  create?: Prisma.XOR<Prisma.UserAssociationCreateWithoutGroupInput, Prisma.UserAssociationUncheckedCreateWithoutGroupInput> | Prisma.UserAssociationCreateWithoutGroupInput[] | Prisma.UserAssociationUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.UserAssociationCreateOrConnectWithoutGroupInput | Prisma.UserAssociationCreateOrConnectWithoutGroupInput[]
+  upsert?: Prisma.UserAssociationUpsertWithWhereUniqueWithoutGroupInput | Prisma.UserAssociationUpsertWithWhereUniqueWithoutGroupInput[]
+  createMany?: Prisma.UserAssociationCreateManyGroupInputEnvelope
+  set?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
+  disconnect?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
+  delete?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
+  connect?: Prisma.UserAssociationWhereUniqueInput | Prisma.UserAssociationWhereUniqueInput[]
+  update?: Prisma.UserAssociationUpdateWithWhereUniqueWithoutGroupInput | Prisma.UserAssociationUpdateWithWhereUniqueWithoutGroupInput[]
+  updateMany?: Prisma.UserAssociationUpdateManyWithWhereWithoutGroupInput | Prisma.UserAssociationUpdateManyWithWhereWithoutGroupInput[]
+  deleteMany?: Prisma.UserAssociationScalarWhereInput | Prisma.UserAssociationScalarWhereInput[]
 }
 
 export type UserAssociationCreateWithoutUserInput = {
@@ -521,7 +467,27 @@ export type UserAssociationUpdateManyWithWhereWithoutUserInput = {
   data: Prisma.XOR<Prisma.UserAssociationUpdateManyMutationInput, Prisma.UserAssociationUncheckedUpdateManyWithoutUserInput>
 }
 
-export type UserAssociationCreateManyGroupInput = {
+export type UserAssociationScalarWhereInput = {
+  AND?: Prisma.UserAssociationScalarWhereInput | Prisma.UserAssociationScalarWhereInput[]
+  OR?: Prisma.UserAssociationScalarWhereInput[]
+  NOT?: Prisma.UserAssociationScalarWhereInput | Prisma.UserAssociationScalarWhereInput[]
+  id?: Prisma.StringFilter<"UserAssociation"> | string
+  createdAt?: Prisma.DateTimeFilter<"UserAssociation"> | Date | string
+  updatedAt?: Prisma.DateTimeNullableFilter<"UserAssociation"> | Date | string | null
+  removedAt?: Prisma.DateTimeNullableFilter<"UserAssociation"> | Date | string | null
+  userId?: Prisma.StringFilter<"UserAssociation"> | string
+  groupId?: Prisma.StringFilter<"UserAssociation"> | string
+}
+
+export type UserAssociationCreateWithoutGroupInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  user: Prisma.UserCreateNestedOneWithoutAssociationsInput
+}
+
+export type UserAssociationUncheckedCreateWithoutGroupInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -529,28 +495,30 @@ export type UserAssociationCreateManyGroupInput = {
   userId: string
 }
 
-export type UserAssociationUpdateWithoutGroupInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  user?: Prisma.UserUpdateOneRequiredWithoutAssociationsNestedInput
+export type UserAssociationCreateOrConnectWithoutGroupInput = {
+  where: Prisma.UserAssociationWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserAssociationCreateWithoutGroupInput, Prisma.UserAssociationUncheckedCreateWithoutGroupInput>
 }
 
-export type UserAssociationUncheckedUpdateWithoutGroupInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+export type UserAssociationCreateManyGroupInputEnvelope = {
+  data: Prisma.UserAssociationCreateManyGroupInput | Prisma.UserAssociationCreateManyGroupInput[]
+  skipDuplicates?: boolean
 }
 
-export type UserAssociationUncheckedUpdateManyWithoutGroupInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+export type UserAssociationUpsertWithWhereUniqueWithoutGroupInput = {
+  where: Prisma.UserAssociationWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserAssociationUpdateWithoutGroupInput, Prisma.UserAssociationUncheckedUpdateWithoutGroupInput>
+  create: Prisma.XOR<Prisma.UserAssociationCreateWithoutGroupInput, Prisma.UserAssociationUncheckedCreateWithoutGroupInput>
+}
+
+export type UserAssociationUpdateWithWhereUniqueWithoutGroupInput = {
+  where: Prisma.UserAssociationWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserAssociationUpdateWithoutGroupInput, Prisma.UserAssociationUncheckedUpdateWithoutGroupInput>
+}
+
+export type UserAssociationUpdateManyWithWhereWithoutGroupInput = {
+  where: Prisma.UserAssociationScalarWhereInput
+  data: Prisma.XOR<Prisma.UserAssociationUpdateManyMutationInput, Prisma.UserAssociationUncheckedUpdateManyWithoutGroupInput>
 }
 
 export type UserAssociationCreateManyUserInput = {
@@ -583,6 +551,38 @@ export type UserAssociationUncheckedUpdateManyWithoutUserInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   groupId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type UserAssociationCreateManyGroupInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  userId: string
+}
+
+export type UserAssociationUpdateWithoutGroupInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutAssociationsNestedInput
+}
+
+export type UserAssociationUncheckedUpdateWithoutGroupInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type UserAssociationUncheckedUpdateManyWithoutGroupInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 

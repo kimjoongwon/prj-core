@@ -39,7 +39,8 @@ const DEFAULT_CONSOLE_BASE_URL =
 	process.env.E2E_IDP_BASE_URL ?? "http://localhost:3008";
 const DEFAULT_API_BASE_URL =
 	process.env.E2E_IDP_API_BASE_URL ?? DEFAULT_CONSOLE_BASE_URL;
-const LOGIN_PATH = process.env.E2E_IDP_LOGIN_PATH ?? "/api/v1/auth/idp/login";
+const LOGIN_PATH =
+	process.env.E2E_IDP_LOGIN_PATH ?? "/api/v1/auth/login?clientId=idp-web";
 const DASHBOARD_PATH = process.env.E2E_IDP_DASHBOARD_PATH ?? "/dashboard";
 const INTERACTION_PATH =
 	process.env.E2E_IDP_INTERACTION_PATH ?? "/api/interaction";
@@ -53,12 +54,26 @@ function ensureLeadingSlash(path: string) {
 	return path.startsWith("/") ? path : `/${path}`;
 }
 
+function buildPathWithQuery(
+	path: string,
+	query: Record<string, string>,
+) {
+	const [rawPath, rawSearch = ""] = path.split("?");
+	const params = new URLSearchParams(rawSearch);
+	for (const [key, value] of Object.entries(query)) {
+		params.set(key, value);
+	}
+	const normalizedPath = ensureLeadingSlash(rawPath);
+	const search = params.toString();
+	return search ? `${normalizedPath}?${search}` : normalizedPath;
+}
+
 const consoleBaseUrl = trimTrailingSlash(DEFAULT_CONSOLE_BASE_URL);
 const apiBaseUrl = trimTrailingSlash(DEFAULT_API_BASE_URL);
 const normalizedDashboardPath = ensureLeadingSlash(DASHBOARD_PATH);
-const loginEntryPath = `${ensureLeadingSlash(LOGIN_PATH)}?returnTo=${encodeURIComponent(
-	`${consoleBaseUrl}${normalizedDashboardPath}`,
-)}`;
+const loginEntryPath = buildPathWithQuery(LOGIN_PATH, {
+	returnTo: `${consoleBaseUrl}${normalizedDashboardPath}`,
+});
 const normalizedInteractionPath = ensureLeadingSlash(INTERACTION_PATH);
 const dashboardUrl = `${consoleBaseUrl}${normalizedDashboardPath}`;
 const authLoginPath = ensureLeadingSlash(AUTH_LOGIN_PATH);

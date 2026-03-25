@@ -417,16 +417,6 @@ export type AbilityUncheckedUpdateManyInput = {
   actionId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
-export type AbilityListRelationFilter = {
-  every?: Prisma.AbilityWhereInput
-  some?: Prisma.AbilityWhereInput
-  none?: Prisma.AbilityWhereInput
-}
-
-export type AbilityOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
 export type StringNullableListFilter<$PrismaModel = never> = {
   equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
   has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
@@ -476,51 +466,48 @@ export type AbilityMinOrderByAggregateInput = {
   actionId?: Prisma.SortOrder
 }
 
+export type AbilityListRelationFilter = {
+  every?: Prisma.AbilityWhereInput
+  some?: Prisma.AbilityWhereInput
+  none?: Prisma.AbilityWhereInput
+}
+
+export type AbilityOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type AbilityScalarRelationFilter = {
   is?: Prisma.AbilityWhereInput
   isNot?: Prisma.AbilityWhereInput
 }
 
-export type AbilityCreateNestedManyWithoutSubjectInput = {
-  create?: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput> | Prisma.AbilityCreateWithoutSubjectInput[] | Prisma.AbilityUncheckedCreateWithoutSubjectInput[]
-  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutSubjectInput | Prisma.AbilityCreateOrConnectWithoutSubjectInput[]
-  createMany?: Prisma.AbilityCreateManySubjectInputEnvelope
-  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+export type AbilityCreatefieldsInput = {
+  set: string[]
 }
 
-export type AbilityUncheckedCreateNestedManyWithoutSubjectInput = {
-  create?: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput> | Prisma.AbilityCreateWithoutSubjectInput[] | Prisma.AbilityUncheckedCreateWithoutSubjectInput[]
-  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutSubjectInput | Prisma.AbilityCreateOrConnectWithoutSubjectInput[]
-  createMany?: Prisma.AbilityCreateManySubjectInputEnvelope
-  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+export type StringFieldUpdateOperationsInput = {
+  set?: string
 }
 
-export type AbilityUpdateManyWithoutSubjectNestedInput = {
-  create?: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput> | Prisma.AbilityCreateWithoutSubjectInput[] | Prisma.AbilityUncheckedCreateWithoutSubjectInput[]
-  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutSubjectInput | Prisma.AbilityCreateOrConnectWithoutSubjectInput[]
-  upsert?: Prisma.AbilityUpsertWithWhereUniqueWithoutSubjectInput | Prisma.AbilityUpsertWithWhereUniqueWithoutSubjectInput[]
-  createMany?: Prisma.AbilityCreateManySubjectInputEnvelope
-  set?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  disconnect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  delete?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  update?: Prisma.AbilityUpdateWithWhereUniqueWithoutSubjectInput | Prisma.AbilityUpdateWithWhereUniqueWithoutSubjectInput[]
-  updateMany?: Prisma.AbilityUpdateManyWithWhereWithoutSubjectInput | Prisma.AbilityUpdateManyWithWhereWithoutSubjectInput[]
-  deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
 }
 
-export type AbilityUncheckedUpdateManyWithoutSubjectNestedInput = {
-  create?: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput> | Prisma.AbilityCreateWithoutSubjectInput[] | Prisma.AbilityUncheckedCreateWithoutSubjectInput[]
-  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutSubjectInput | Prisma.AbilityCreateOrConnectWithoutSubjectInput[]
-  upsert?: Prisma.AbilityUpsertWithWhereUniqueWithoutSubjectInput | Prisma.AbilityUpsertWithWhereUniqueWithoutSubjectInput[]
-  createMany?: Prisma.AbilityCreateManySubjectInputEnvelope
-  set?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  disconnect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  delete?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
-  update?: Prisma.AbilityUpdateWithWhereUniqueWithoutSubjectInput | Prisma.AbilityUpdateWithWhereUniqueWithoutSubjectInput[]
-  updateMany?: Prisma.AbilityUpdateManyWithWhereWithoutSubjectInput | Prisma.AbilityUpdateManyWithWhereWithoutSubjectInput[]
-  deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type AbilityUpdatefieldsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type AbilityCreateNestedManyWithoutActionInput = {
@@ -565,15 +552,6 @@ export type AbilityUncheckedUpdateManyWithoutActionNestedInput = {
   deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
 }
 
-export type AbilityCreatefieldsInput = {
-  set: string[]
-}
-
-export type AbilityUpdatefieldsInput = {
-  set?: string[]
-  push?: string | string[]
-}
-
 export type AbilityCreateNestedOneWithoutGrantsInput = {
   create?: Prisma.XOR<Prisma.AbilityCreateWithoutGrantsInput, Prisma.AbilityUncheckedCreateWithoutGrantsInput>
   connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutGrantsInput
@@ -588,78 +566,46 @@ export type AbilityUpdateOneRequiredWithoutGrantsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AbilityUpdateToOneWithWhereWithoutGrantsInput, Prisma.AbilityUpdateWithoutGrantsInput>, Prisma.AbilityUncheckedUpdateWithoutGrantsInput>
 }
 
-export type AbilityCreateWithoutSubjectInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  description?: string | null
-  fields?: Prisma.AbilityCreatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: boolean
-  reason?: string | null
-  action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
-  grants?: Prisma.GrantCreateNestedManyWithoutAbilityInput
+export type AbilityCreateNestedManyWithoutSubjectInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput> | Prisma.AbilityCreateWithoutSubjectInput[] | Prisma.AbilityUncheckedCreateWithoutSubjectInput[]
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutSubjectInput | Prisma.AbilityCreateOrConnectWithoutSubjectInput[]
+  createMany?: Prisma.AbilityCreateManySubjectInputEnvelope
+  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
 }
 
-export type AbilityUncheckedCreateWithoutSubjectInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  description?: string | null
-  fields?: Prisma.AbilityCreatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: boolean
-  reason?: string | null
-  actionId: string
-  grants?: Prisma.GrantUncheckedCreateNestedManyWithoutAbilityInput
+export type AbilityUncheckedCreateNestedManyWithoutSubjectInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput> | Prisma.AbilityCreateWithoutSubjectInput[] | Prisma.AbilityUncheckedCreateWithoutSubjectInput[]
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutSubjectInput | Prisma.AbilityCreateOrConnectWithoutSubjectInput[]
+  createMany?: Prisma.AbilityCreateManySubjectInputEnvelope
+  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
 }
 
-export type AbilityCreateOrConnectWithoutSubjectInput = {
-  where: Prisma.AbilityWhereUniqueInput
-  create: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput>
+export type AbilityUpdateManyWithoutSubjectNestedInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput> | Prisma.AbilityCreateWithoutSubjectInput[] | Prisma.AbilityUncheckedCreateWithoutSubjectInput[]
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutSubjectInput | Prisma.AbilityCreateOrConnectWithoutSubjectInput[]
+  upsert?: Prisma.AbilityUpsertWithWhereUniqueWithoutSubjectInput | Prisma.AbilityUpsertWithWhereUniqueWithoutSubjectInput[]
+  createMany?: Prisma.AbilityCreateManySubjectInputEnvelope
+  set?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  disconnect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  delete?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  update?: Prisma.AbilityUpdateWithWhereUniqueWithoutSubjectInput | Prisma.AbilityUpdateWithWhereUniqueWithoutSubjectInput[]
+  updateMany?: Prisma.AbilityUpdateManyWithWhereWithoutSubjectInput | Prisma.AbilityUpdateManyWithWhereWithoutSubjectInput[]
+  deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
 }
 
-export type AbilityCreateManySubjectInputEnvelope = {
-  data: Prisma.AbilityCreateManySubjectInput | Prisma.AbilityCreateManySubjectInput[]
-  skipDuplicates?: boolean
-}
-
-export type AbilityUpsertWithWhereUniqueWithoutSubjectInput = {
-  where: Prisma.AbilityWhereUniqueInput
-  update: Prisma.XOR<Prisma.AbilityUpdateWithoutSubjectInput, Prisma.AbilityUncheckedUpdateWithoutSubjectInput>
-  create: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput>
-}
-
-export type AbilityUpdateWithWhereUniqueWithoutSubjectInput = {
-  where: Prisma.AbilityWhereUniqueInput
-  data: Prisma.XOR<Prisma.AbilityUpdateWithoutSubjectInput, Prisma.AbilityUncheckedUpdateWithoutSubjectInput>
-}
-
-export type AbilityUpdateManyWithWhereWithoutSubjectInput = {
-  where: Prisma.AbilityScalarWhereInput
-  data: Prisma.XOR<Prisma.AbilityUpdateManyMutationInput, Prisma.AbilityUncheckedUpdateManyWithoutSubjectInput>
-}
-
-export type AbilityScalarWhereInput = {
-  AND?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
-  OR?: Prisma.AbilityScalarWhereInput[]
-  NOT?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
-  id?: Prisma.StringFilter<"Ability"> | string
-  createdAt?: Prisma.DateTimeFilter<"Ability"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
-  removedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
-  name?: Prisma.StringFilter<"Ability"> | string
-  description?: Prisma.StringNullableFilter<"Ability"> | string | null
-  fields?: Prisma.StringNullableListFilter<"Ability">
-  conditions?: Prisma.JsonNullableFilter<"Ability">
-  inverted?: Prisma.BoolFilter<"Ability"> | boolean
-  reason?: Prisma.StringNullableFilter<"Ability"> | string | null
-  subjectId?: Prisma.StringFilter<"Ability"> | string
-  actionId?: Prisma.StringFilter<"Ability"> | string
+export type AbilityUncheckedUpdateManyWithoutSubjectNestedInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput> | Prisma.AbilityCreateWithoutSubjectInput[] | Prisma.AbilityUncheckedCreateWithoutSubjectInput[]
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutSubjectInput | Prisma.AbilityCreateOrConnectWithoutSubjectInput[]
+  upsert?: Prisma.AbilityUpsertWithWhereUniqueWithoutSubjectInput | Prisma.AbilityUpsertWithWhereUniqueWithoutSubjectInput[]
+  createMany?: Prisma.AbilityCreateManySubjectInputEnvelope
+  set?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  disconnect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  delete?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  connect?: Prisma.AbilityWhereUniqueInput | Prisma.AbilityWhereUniqueInput[]
+  update?: Prisma.AbilityUpdateWithWhereUniqueWithoutSubjectInput | Prisma.AbilityUpdateWithWhereUniqueWithoutSubjectInput[]
+  updateMany?: Prisma.AbilityUpdateManyWithWhereWithoutSubjectInput | Prisma.AbilityUpdateManyWithWhereWithoutSubjectInput[]
+  deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
 }
 
 export type AbilityCreateWithoutActionInput = {
@@ -716,6 +662,24 @@ export type AbilityUpdateWithWhereUniqueWithoutActionInput = {
 export type AbilityUpdateManyWithWhereWithoutActionInput = {
   where: Prisma.AbilityScalarWhereInput
   data: Prisma.XOR<Prisma.AbilityUpdateManyMutationInput, Prisma.AbilityUncheckedUpdateManyWithoutActionInput>
+}
+
+export type AbilityScalarWhereInput = {
+  AND?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
+  OR?: Prisma.AbilityScalarWhereInput[]
+  NOT?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
+  id?: Prisma.StringFilter<"Ability"> | string
+  createdAt?: Prisma.DateTimeFilter<"Ability"> | Date | string
+  updatedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
+  removedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
+  name?: Prisma.StringFilter<"Ability"> | string
+  description?: Prisma.StringNullableFilter<"Ability"> | string | null
+  fields?: Prisma.StringNullableListFilter<"Ability">
+  conditions?: Prisma.JsonNullableFilter<"Ability">
+  inverted?: Prisma.BoolFilter<"Ability"> | boolean
+  reason?: Prisma.StringNullableFilter<"Ability"> | string | null
+  subjectId?: Prisma.StringFilter<"Ability"> | string
+  actionId?: Prisma.StringFilter<"Ability"> | string
 }
 
 export type AbilityCreateWithoutGrantsInput = {
@@ -794,7 +758,22 @@ export type AbilityUncheckedUpdateWithoutGrantsInput = {
   actionId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
-export type AbilityCreateManySubjectInput = {
+export type AbilityCreateWithoutSubjectInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name: string
+  description?: string | null
+  fields?: Prisma.AbilityCreatefieldsInput | string[]
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inverted?: boolean
+  reason?: string | null
+  action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
+  grants?: Prisma.GrantCreateNestedManyWithoutAbilityInput
+}
+
+export type AbilityUncheckedCreateWithoutSubjectInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -806,50 +785,33 @@ export type AbilityCreateManySubjectInput = {
   inverted?: boolean
   reason?: string | null
   actionId: string
+  grants?: Prisma.GrantUncheckedCreateNestedManyWithoutAbilityInput
 }
 
-export type AbilityUpdateWithoutSubjectInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fields?: Prisma.AbilityUpdatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
-  grants?: Prisma.GrantUpdateManyWithoutAbilityNestedInput
+export type AbilityCreateOrConnectWithoutSubjectInput = {
+  where: Prisma.AbilityWhereUniqueInput
+  create: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput>
 }
 
-export type AbilityUncheckedUpdateWithoutSubjectInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fields?: Prisma.AbilityUpdatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  actionId?: Prisma.StringFieldUpdateOperationsInput | string
-  grants?: Prisma.GrantUncheckedUpdateManyWithoutAbilityNestedInput
+export type AbilityCreateManySubjectInputEnvelope = {
+  data: Prisma.AbilityCreateManySubjectInput | Prisma.AbilityCreateManySubjectInput[]
+  skipDuplicates?: boolean
 }
 
-export type AbilityUncheckedUpdateManyWithoutSubjectInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fields?: Prisma.AbilityUpdatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  actionId?: Prisma.StringFieldUpdateOperationsInput | string
+export type AbilityUpsertWithWhereUniqueWithoutSubjectInput = {
+  where: Prisma.AbilityWhereUniqueInput
+  update: Prisma.XOR<Prisma.AbilityUpdateWithoutSubjectInput, Prisma.AbilityUncheckedUpdateWithoutSubjectInput>
+  create: Prisma.XOR<Prisma.AbilityCreateWithoutSubjectInput, Prisma.AbilityUncheckedCreateWithoutSubjectInput>
+}
+
+export type AbilityUpdateWithWhereUniqueWithoutSubjectInput = {
+  where: Prisma.AbilityWhereUniqueInput
+  data: Prisma.XOR<Prisma.AbilityUpdateWithoutSubjectInput, Prisma.AbilityUncheckedUpdateWithoutSubjectInput>
+}
+
+export type AbilityUpdateManyWithWhereWithoutSubjectInput = {
+  where: Prisma.AbilityScalarWhereInput
+  data: Prisma.XOR<Prisma.AbilityUpdateManyMutationInput, Prisma.AbilityUncheckedUpdateManyWithoutSubjectInput>
 }
 
 export type AbilityCreateManyActionInput = {
@@ -908,6 +870,64 @@ export type AbilityUncheckedUpdateManyWithoutActionInput = {
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type AbilityCreateManySubjectInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name: string
+  description?: string | null
+  fields?: Prisma.AbilityCreatefieldsInput | string[]
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inverted?: boolean
+  reason?: string | null
+  actionId: string
+}
+
+export type AbilityUpdateWithoutSubjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fields?: Prisma.AbilityUpdatefieldsInput | string[]
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
+  grants?: Prisma.GrantUpdateManyWithoutAbilityNestedInput
+}
+
+export type AbilityUncheckedUpdateWithoutSubjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fields?: Prisma.AbilityUpdatefieldsInput | string[]
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actionId?: Prisma.StringFieldUpdateOperationsInput | string
+  grants?: Prisma.GrantUncheckedUpdateManyWithoutAbilityNestedInput
+}
+
+export type AbilityUncheckedUpdateManyWithoutSubjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fields?: Prisma.AbilityUpdatefieldsInput | string[]
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actionId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 

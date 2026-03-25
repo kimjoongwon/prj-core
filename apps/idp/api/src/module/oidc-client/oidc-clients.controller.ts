@@ -29,13 +29,17 @@ import {
 	Query,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
+import { OidcProviderService } from "../oidc/oidc-provider.service";
 
 @ApiTags("OIDC_CLIENTS")
 @Controller()
 @Roles([SYSTEM_ROLES.FULL_ACCESS])
 @SkipSpaceCheck()
 export class OidcClientsController {
-	constructor(private readonly oidcClientFacade: OidcClientFacade) {}
+	constructor(
+		private readonly oidcClientFacade: OidcClientFacade,
+		private readonly oidcProviderService: OidcProviderService,
+	) {}
 
 	@Get()
 	@ApiOperation({
@@ -93,7 +97,9 @@ export class OidcClientsController {
 	@ApiResponseEntity(OidcClientDto, HttpStatus.CREATED)
 	@ResponseMessage("OIDC 클라이언트 등록 성공")
 	async createOidcClient(@Body() dto: CreateOidcClientDto) {
-		return this.oidcClientFacade.create(dto);
+		const client = await this.oidcClientFacade.create(dto);
+		await this.oidcProviderService.reload();
+		return client;
 	}
 
 	@Patch(":oidcClientId")
@@ -120,7 +126,9 @@ export class OidcClientsController {
 		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
 		@Body() dto: UpdateOidcClientDto,
 	) {
-		return this.oidcClientFacade.update(oidcClientId, dto);
+		const client = await this.oidcClientFacade.update(oidcClientId, dto);
+		await this.oidcProviderService.reload();
+		return client;
 	}
 
 	@Delete(":oidcClientId")
@@ -142,6 +150,7 @@ export class OidcClientsController {
 		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
 	): Promise<void> {
 		await this.oidcClientFacade.remove(oidcClientId);
+		await this.oidcProviderService.reload();
 	}
 
 	@Patch(":oidcClientId/toggle-active")
@@ -162,6 +171,8 @@ export class OidcClientsController {
 	async toggleActiveOidcClient(
 		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
 	) {
-		return this.oidcClientFacade.toggleActive(oidcClientId);
+		const client = await this.oidcClientFacade.toggleActive(oidcClientId);
+		await this.oidcProviderService.reload();
+		return client;
 	}
 }

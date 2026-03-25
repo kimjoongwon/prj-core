@@ -35,7 +35,6 @@ import {
 	Req,
 	Res,
 } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import {
 	ApiBody,
 	ApiCookieAuth,
@@ -46,37 +45,13 @@ import {
 	ApiTags,
 } from "@nestjs/swagger";
 import { Request, Response } from "express";
-import type {
-	OidcConfig,
-	OidcRpClientConfig,
-	OidcRpClientKey,
-} from "../../config/oidc.config";
-
-const DEFAULT_OIDC_CLIENT_CONFIG: Record<
-	OidcRpClientKey,
-	Pick<OidcRpClientConfig, "loginUrl" | "defaultReturnTo">
-> = {
-	admin: {
-		loginUrl: "http://localhost:3000/admin/auth/login",
-		defaultReturnTo: "http://localhost:3000/admin/dashboard",
-	},
-	storybook: {
-		loginUrl: "http://localhost:6006/__storybook_auth/login",
-		defaultReturnTo: "http://localhost:6006/",
-	},
-	idpWeb: {
-		loginUrl: "http://localhost:3008/auth/login",
-		defaultReturnTo: "http://localhost:3008/dashboard",
-	},
-};
 
 @ApiTags("AUTH")
 @Controller()
 export class AuthController {
 	constructor(
 		private readonly authApplicationService: AuthApplicationService,
-		private readonly configService: ConfigService,
-	) { }
+	) {}
 
 	@Public()
 	@Get("login")
@@ -84,37 +59,20 @@ export class AuthController {
 		operationId: "login",
 		summary: "OIDC 로그인 리다이렉트",
 		description:
-			"IDP의 OIDC Authorization 엔드포인트로 리다이렉트합니다. returnTo 파라미터로 인증 완료 후 리다이렉트할 경로를 지정할 수 있습니다.",
+			"지정한 OIDC clientId 기준으로 IDP Authorization 엔드포인트로 리다이렉트합니다. returnTo 파라미터로 인증 완료 후 복귀 경로를 지정할 수 있습니다.",
 	})
-	async login(@Query("returnTo") returnTo: string, @Res() res: Response) {
-		return this.redirectToAuthorizationUrl("admin", returnTo, res);
-	}
-
-	@Public()
-	@Get("storybook/login")
-	@ApiOperation({
-		operationId: "storybookLogin",
-		summary: "Storybook OIDC 로그인 리다이렉트",
-		description:
-			"Storybook 전용 RP(clientKey=storybook)로 OIDC Authorization 엔드포인트에 리다이렉트합니다.",
-	})
-	async storybookLogin(
+	async login(
+		@Query("clientId") clientId: string,
 		@Query("returnTo") returnTo: string,
 		@Res() res: Response,
 	) {
-		return this.redirectToAuthorizationUrl("storybook", returnTo, res);
-	}
+		if (!clientId) {
+			throw new BadRequestException("clientId 쿼리가 필요합니다");
+		}
 
-	@Public()
-	@Get("idp/login")
-	@ApiOperation({
-		operationId: "idpLogin",
-		summary: "IDP Web OIDC 로그인 리다이렉트",
-		description:
-			"IDP 콘솔 전용 RP(clientKey=idpWeb)로 OIDC Authorization 엔드포인트에 리다이렉트합니다.",
-	})
-	async idpLogin(@Query("returnTo") returnTo: string, @Res() res: Response) {
-		return this.redirectToAuthorizationUrl("idpWeb", returnTo, res);
+		const authorizationUrl =
+			await this.authApplicationService.getAuthorizationUrl(returnTo, clientId);
+		return res.redirect(authorizationUrl);
 	}
 
 	@Public()
@@ -124,9 +82,10 @@ export class AuthController {
 		operationId: "oidcCallback",
 		summary: "OIDC 콜백",
 		description:
-			"IDP에서 인증 완료 후 Authorization Code를 수신하여 토큰을 교환하고 대시보드로 리다이렉트합니다.",
+			"IDP에서 인증 완료 후 Authorization Code를 수신하여 토큰을 교환하고 등록된 기본 복귀 URL 또는 returnTo로 리다이렉트합니다.",
 	})
 	async handleCallback(
+		@Query("clientId") clientId: string,
 		@Query("code") code: string,
 		@Query("state") state: string,
 		@Query("error") error: string,
@@ -134,71 +93,35 @@ export class AuthController {
 		@Req() req: Request,
 		@Res() res: Response,
 	) {
-		return this.handleOidcCallbackForClient(
-			"admin",
-			code,
-			state,
-			error,
-			errorDescription,
-			req,
-			res,
-		);
-	}
+		if (!clientId) {
+			throw new BadRequestException("clientId 쿼리가 필요합니다");
+		}
 
-	@Public()
-	@Get("storybook/callback")
-	@HttpCode(HttpStatus.OK)
-	@ApiOperation({
-		operationId: "storybookOidcCallback",
-		summary: "Storybook OIDC 콜백",
-		description:
-			"Storybook 전용 RP(clientKey=storybook)에서 인증 완료 후 Authorization Code를 수신하여 토큰을 교환합니다.",
-	})
-	async handleStorybookCallback(
-		@Query("code") code: string,
-		@Query("state") state: string,
-		@Query("error") error: string,
-		@Query("error_description") errorDescription: string,
-		@Req() req: Request,
-		@Res() res: Response,
-	) {
-		return this.handleOidcCallbackForClient(
-			"storybook",
-			code,
-			state,
-			error,
-			errorDescription,
-			req,
-			res,
-		);
-	}
+		const { loginUrl } =
+			await this.authApplicationService.getClientRedirects(clientId);
 
-	@Public()
-	@Get("idp/callback")
-	@HttpCode(HttpStatus.OK)
-	@ApiOperation({
-		operationId: "idpOidcCallback",
-		summary: "IDP Web OIDC 콜백",
-		description:
-			"IDP 콘솔 전용 RP(clientKey=idpWeb)에서 인증 완료 후 Authorization Code를 수신하여 토큰을 교환합니다.",
-	})
-	async handleIdpCallback(
-		@Query("code") code: string,
-		@Query("state") state: string,
-		@Query("error") error: string,
-		@Query("error_description") errorDescription: string,
-		@Req() req: Request,
-		@Res() res: Response,
-	) {
-		return this.handleOidcCallbackForClient(
-			"idpWeb",
-			code,
-			state,
-			error,
-			errorDescription,
-			req,
-			res,
-		);
+		if (error) {
+			return res.redirect(
+				this.buildLoginRedirectUrl(loginUrl, errorDescription || error),
+			);
+		}
+
+		try {
+			const callbackResult =
+				await this.authApplicationService.handleOidcCallback(
+					code,
+					state,
+					req,
+					res,
+				);
+			return res.redirect(
+				callbackResult.returnTo || callbackResult.defaultReturnTo,
+			);
+		} catch (_e) {
+			return res.redirect(
+				this.buildLoginRedirectUrl(loginUrl, AUTH_ERRORS.OIDC_CALLBACK_FAILED),
+			);
+		}
 	}
 
 	@Public()
@@ -494,68 +417,10 @@ export class AuthController {
 		return true;
 	}
 
-	private async redirectToAuthorizationUrl(
-		clientKey: OidcRpClientKey,
-		returnTo: string | undefined,
-		res: Response,
-	) {
-		const authorizationUrl =
-			await this.authApplicationService.getAuthorizationUrl(
-				returnTo,
-				clientKey,
-			);
-		return res.redirect(authorizationUrl);
-	}
-
-	private async handleOidcCallbackForClient(
-		clientKey: OidcRpClientKey,
-		code: string,
-		state: string,
-		error: string,
-		errorDescription: string,
-		req: Request,
-		res: Response,
-	) {
-		const clientConfig = this.getOidcClientConfig(clientKey);
-
-		if (error) {
-			return res.redirect(
-				this.buildLoginRedirectUrl(
-					clientConfig.loginUrl,
-					errorDescription || error,
-				),
-			);
-		}
-
-		try {
-			const returnTo = await this.authApplicationService.handleOidcCallback(
-				code,
-				state,
-				req,
-				res,
-			);
-			return res.redirect(returnTo || clientConfig.defaultReturnTo);
-		} catch (_e) {
-			return res.redirect(
-				this.buildLoginRedirectUrl(
-					clientConfig.loginUrl,
-					AUTH_ERRORS.OIDC_CALLBACK_FAILED,
-				),
-			);
-		}
-	}
-
-	private getOidcClientConfig(
-		clientKey: OidcRpClientKey,
-	): Pick<OidcRpClientConfig, "loginUrl" | "defaultReturnTo"> {
-		const oidcConfig = this.configService.get<OidcConfig>("oidc");
-		return (
-			oidcConfig?.clients?.[clientKey] ||
-			DEFAULT_OIDC_CLIENT_CONFIG[clientKey]
-		);
-	}
-
-	private buildLoginRedirectUrl(loginUrl: string, errorMessage: string): string {
+	private buildLoginRedirectUrl(
+		loginUrl: string,
+		errorMessage: string,
+	): string {
 		try {
 			const url = new URL(loginUrl);
 			url.searchParams.set("error", errorMessage);

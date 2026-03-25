@@ -402,34 +402,6 @@ export type TaskUncheckedUpdateManyWithoutSpaceNestedInput = {
   deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
 }
 
-export type TaskCreateNestedOneWithoutActivitiesInput = {
-  create?: Prisma.XOR<Prisma.TaskCreateWithoutActivitiesInput, Prisma.TaskUncheckedCreateWithoutActivitiesInput>
-  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutActivitiesInput
-  connect?: Prisma.TaskWhereUniqueInput
-}
-
-export type TaskUpdateOneRequiredWithoutActivitiesNestedInput = {
-  create?: Prisma.XOR<Prisma.TaskCreateWithoutActivitiesInput, Prisma.TaskUncheckedCreateWithoutActivitiesInput>
-  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutActivitiesInput
-  upsert?: Prisma.TaskUpsertWithoutActivitiesInput
-  connect?: Prisma.TaskWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TaskUpdateToOneWithWhereWithoutActivitiesInput, Prisma.TaskUpdateWithoutActivitiesInput>, Prisma.TaskUncheckedUpdateWithoutActivitiesInput>
-}
-
-export type TaskCreateNestedOneWithoutExerciseInput = {
-  create?: Prisma.XOR<Prisma.TaskCreateWithoutExerciseInput, Prisma.TaskUncheckedCreateWithoutExerciseInput>
-  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutExerciseInput
-  connect?: Prisma.TaskWhereUniqueInput
-}
-
-export type TaskUpdateOneRequiredWithoutExerciseNestedInput = {
-  create?: Prisma.XOR<Prisma.TaskCreateWithoutExerciseInput, Prisma.TaskUncheckedCreateWithoutExerciseInput>
-  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutExerciseInput
-  upsert?: Prisma.TaskUpsertWithoutExerciseInput
-  connect?: Prisma.TaskWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TaskUpdateToOneWithWhereWithoutExerciseInput, Prisma.TaskUpdateWithoutExerciseInput>, Prisma.TaskUncheckedUpdateWithoutExerciseInput>
-}
-
 export type TaskCreateNestedManyWithoutCreatorInput = {
   create?: Prisma.XOR<Prisma.TaskCreateWithoutCreatorInput, Prisma.TaskUncheckedCreateWithoutCreatorInput> | Prisma.TaskCreateWithoutCreatorInput[] | Prisma.TaskUncheckedCreateWithoutCreatorInput[]
   connectOrCreate?: Prisma.TaskCreateOrConnectWithoutCreatorInput | Prisma.TaskCreateOrConnectWithoutCreatorInput[]
@@ -470,6 +442,34 @@ export type TaskUncheckedUpdateManyWithoutCreatorNestedInput = {
   update?: Prisma.TaskUpdateWithWhereUniqueWithoutCreatorInput | Prisma.TaskUpdateWithWhereUniqueWithoutCreatorInput[]
   updateMany?: Prisma.TaskUpdateManyWithWhereWithoutCreatorInput | Prisma.TaskUpdateManyWithWhereWithoutCreatorInput[]
   deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
+}
+
+export type TaskCreateNestedOneWithoutActivitiesInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutActivitiesInput, Prisma.TaskUncheckedCreateWithoutActivitiesInput>
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutActivitiesInput
+  connect?: Prisma.TaskWhereUniqueInput
+}
+
+export type TaskUpdateOneRequiredWithoutActivitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutActivitiesInput, Prisma.TaskUncheckedCreateWithoutActivitiesInput>
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutActivitiesInput
+  upsert?: Prisma.TaskUpsertWithoutActivitiesInput
+  connect?: Prisma.TaskWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TaskUpdateToOneWithWhereWithoutActivitiesInput, Prisma.TaskUpdateWithoutActivitiesInput>, Prisma.TaskUncheckedUpdateWithoutActivitiesInput>
+}
+
+export type TaskCreateNestedOneWithoutExerciseInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutExerciseInput, Prisma.TaskUncheckedCreateWithoutExerciseInput>
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutExerciseInput
+  connect?: Prisma.TaskWhereUniqueInput
+}
+
+export type TaskUpdateOneRequiredWithoutExerciseNestedInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutExerciseInput, Prisma.TaskUncheckedCreateWithoutExerciseInput>
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutExerciseInput
+  upsert?: Prisma.TaskUpsertWithoutExerciseInput
+  connect?: Prisma.TaskWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TaskUpdateToOneWithWhereWithoutExerciseInput, Prisma.TaskUpdateWithoutExerciseInput>, Prisma.TaskUncheckedUpdateWithoutExerciseInput>
 }
 
 export type TaskCreateWithoutSpaceInput = {
@@ -528,6 +528,52 @@ export type TaskScalarWhereInput = {
   removedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
   spaceId?: Prisma.StringFilter<"Task"> | string
   creatorId?: Prisma.StringNullableFilter<"Task"> | string | null
+}
+
+export type TaskCreateWithoutCreatorInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  space: Prisma.SpaceCreateNestedOneWithoutTasksInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutTaskInput
+  exercise?: Prisma.ExerciseCreateNestedOneWithoutTaskInput
+}
+
+export type TaskUncheckedCreateWithoutCreatorInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  spaceId: string
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput
+  exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput
+}
+
+export type TaskCreateOrConnectWithoutCreatorInput = {
+  where: Prisma.TaskWhereUniqueInput
+  create: Prisma.XOR<Prisma.TaskCreateWithoutCreatorInput, Prisma.TaskUncheckedCreateWithoutCreatorInput>
+}
+
+export type TaskCreateManyCreatorInputEnvelope = {
+  data: Prisma.TaskCreateManyCreatorInput | Prisma.TaskCreateManyCreatorInput[]
+  skipDuplicates?: boolean
+}
+
+export type TaskUpsertWithWhereUniqueWithoutCreatorInput = {
+  where: Prisma.TaskWhereUniqueInput
+  update: Prisma.XOR<Prisma.TaskUpdateWithoutCreatorInput, Prisma.TaskUncheckedUpdateWithoutCreatorInput>
+  create: Prisma.XOR<Prisma.TaskCreateWithoutCreatorInput, Prisma.TaskUncheckedCreateWithoutCreatorInput>
+}
+
+export type TaskUpdateWithWhereUniqueWithoutCreatorInput = {
+  where: Prisma.TaskWhereUniqueInput
+  data: Prisma.XOR<Prisma.TaskUpdateWithoutCreatorInput, Prisma.TaskUncheckedUpdateWithoutCreatorInput>
+}
+
+export type TaskUpdateManyWithWhereWithoutCreatorInput = {
+  where: Prisma.TaskScalarWhereInput
+  data: Prisma.XOR<Prisma.TaskUpdateManyMutationInput, Prisma.TaskUncheckedUpdateManyWithoutCreatorInput>
 }
 
 export type TaskCreateWithoutActivitiesInput = {
@@ -640,52 +686,6 @@ export type TaskUncheckedUpdateWithoutExerciseInput = {
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput
-}
-
-export type TaskCreateWithoutCreatorInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  space: Prisma.SpaceCreateNestedOneWithoutTasksInput
-  activities?: Prisma.ActivityCreateNestedManyWithoutTaskInput
-  exercise?: Prisma.ExerciseCreateNestedOneWithoutTaskInput
-}
-
-export type TaskUncheckedCreateWithoutCreatorInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  spaceId: string
-  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput
-  exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput
-}
-
-export type TaskCreateOrConnectWithoutCreatorInput = {
-  where: Prisma.TaskWhereUniqueInput
-  create: Prisma.XOR<Prisma.TaskCreateWithoutCreatorInput, Prisma.TaskUncheckedCreateWithoutCreatorInput>
-}
-
-export type TaskCreateManyCreatorInputEnvelope = {
-  data: Prisma.TaskCreateManyCreatorInput | Prisma.TaskCreateManyCreatorInput[]
-  skipDuplicates?: boolean
-}
-
-export type TaskUpsertWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.TaskWhereUniqueInput
-  update: Prisma.XOR<Prisma.TaskUpdateWithoutCreatorInput, Prisma.TaskUncheckedUpdateWithoutCreatorInput>
-  create: Prisma.XOR<Prisma.TaskCreateWithoutCreatorInput, Prisma.TaskUncheckedCreateWithoutCreatorInput>
-}
-
-export type TaskUpdateWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.TaskWhereUniqueInput
-  data: Prisma.XOR<Prisma.TaskUpdateWithoutCreatorInput, Prisma.TaskUncheckedUpdateWithoutCreatorInput>
-}
-
-export type TaskUpdateManyWithWhereWithoutCreatorInput = {
-  where: Prisma.TaskScalarWhereInput
-  data: Prisma.XOR<Prisma.TaskUpdateManyMutationInput, Prisma.TaskUncheckedUpdateManyWithoutCreatorInput>
 }
 
 export type TaskCreateManySpaceInput = {
@@ -856,47 +856,17 @@ export type TaskIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $TaskPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Task"
   objects: {
-    /**
-     * Space 관계
-     */
     space: Prisma.$SpacePayload<ExtArgs>
-    /**
-     * 생성자 관계
-     */
     creator: Prisma.$UserPayload<ExtArgs> | null
-    /**
-     * 이 Task를 사용하는 Activity 목록 (여러 루틴에서 재사용 가능)
-     */
     activities: Prisma.$ActivityPayload<ExtArgs>[]
-    /**
-     * 운동 도메인 확장 (1:1, optional - 미래에 treatment, service 등 추가 가능)
-     */
     exercise: Prisma.$ExercisePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    /**
-     * 고유 식별자
-     */
     id: string
-    /**
-     * 생성 일시
-     */
     createdAt: Date
-    /**
-     * 수정 일시
-     */
     updatedAt: Date | null
-    /**
-     * 삭제 일시
-     */
     removedAt: Date | null
-    /**
-     * Space ID
-     */
     spaceId: string
-    /**
-     * 생성자 ID
-     */
     creatorId: string | null
   }, ExtArgs["result"]["task"]>
   composites: {}

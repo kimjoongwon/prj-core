@@ -1,18 +1,22 @@
 import { CONTEXT_KEYS, SYSTEM_ROLES, Token } from "@cocrepo/constant";
 import {
+	PageMetaDto,
+	QueryAuthAuditLogDto,
 	SpaceDto,
 	TokenRefreshResponseDto,
 	UserDto,
 	VerifyTokenResponseDto,
-	PageMetaDto,
-	QueryAuthAuditLogDto,
 } from "@cocrepo/dto";
-import { OidcFacade, type OidcRpClientKey } from "@cocrepo/integration";
+import {
+	type OidcClientProtocolConfig,
+	OidcFacade,
+} from "@cocrepo/integration";
 import {
 	AuthAuditLogService,
-	GetAuditLogsResult,
 	AuthCacheService,
 	EmailService,
+	type GetAuditLogsResult,
+	OidcClientService,
 	RoleService,
 	type SessionInfo,
 	SpaceService,
@@ -20,7 +24,7 @@ import {
 	TokenStorageService,
 	UserService,
 } from "@cocrepo/service";
-import { HashedPassword, PlainPassword } from "@cocrepo/vo";
+import { Cookie, HashedPassword, PlainPassword } from "@cocrepo/vo";
 import {
 	BadRequestException,
 	Injectable,
@@ -28,17 +32,36 @@ import {
 	UnauthorizedException,
 } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
-import { Cookie } from "@cocrepo/vo";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { ClsService } from "nestjs-cls";
 
-const DEFAULT_OIDC_CLIENT_KEY: OidcRpClientKey = "admin";
+const DEFAULT_OIDC_CLIENT_ID = "admin-web";
 const OIDC_STATE_CONTEXT_PREFIX = "__oidc_ctx__:";
 const SESSION_ID_SEPARATOR = ".";
 
+const LEGACY_OIDC_CLIENT_ID_MAP = {
+	admin: "admin-web",
+	storybook: "storybook",
+	idpWeb: "idp-web",
+} as const;
+
 interface OidcStateContext {
-	clientKey: OidcRpClientKey;
+	clientId: string;
 	returnTo?: string;
+}
+
+interface ResolvedOidcClient {
+	clientId: string;
+	clientSecret: string | null;
+	redirectUri: string;
+	loginUrl: string;
+	defaultReturnTo: string;
+}
+
+interface OidcCallbackResult {
+	returnTo?: string;
+	defaultReturnTo: string;
+	loginUrl: string;
 }
 
 /**
@@ -51,19 +74,20 @@ interface OidcStateContext {
  */
 @Injectable()
 export class AuthApplicationService {
-	logger: Logger = new Logger(AuthApplicationService.name);
+	private readonly logger = new Logger(AuthApplicationService.name);
 
 	constructor(
-		private usersService: UserService,
-		private rolesService: RoleService,
-		private spacesService: SpaceService,
-		private tokenService: TokenService,
-		private tokenStorageService: TokenStorageService,
-		private authCacheService: AuthCacheService,
-		private authAuditLogService: AuthAuditLogService,
-		private emailService: EmailService,
-		private oidcFacade: OidcFacade,
-		private cls: ClsService,
+		private readonly usersService: UserService,
+		private readonly rolesService: RoleService,
+		private readonly spacesService: SpaceService,
+		private readonly tokenService: TokenService,
+		private readonly tokenStorageService: TokenStorageService,
+		private readonly authCacheService: AuthCacheService,
+		private readonly authAuditLogService: AuthAuditLogService,
+		private readonly emailService: EmailService,
+		private readonly oidcClientService: OidcClientService,
+		private readonly oidcFacade: OidcFacade,
+		private readonly cls: ClsService,
 	) {}
 
 	/**
@@ -73,18 +97,22 @@ export class AuthApplicationService {
 	 */
 	async getAuthorizationUrl(
 		returnTo?: string,
-		clientKey: OidcRpClientKey = DEFAULT_OIDC_CLIENT_KEY,
+		clientId = DEFAULT_OIDC_CLIENT_ID,
 	): Promise<string> {
+		const client = await this.resolveAuthShellClient(clientId);
 		const { state, codeVerifier, authorizationUrl } =
-			this.oidcFacade.createAuthorizationRequest(clientKey, returnTo);
+			this.oidcFacade.createAuthorizationRequest(
+				this.toProtocolClientConfig(client),
+				returnTo,
+			);
 
-		// state와 code_verifier, returnTo/clientKey 컨텍스트를 함께 Redis에 저장
+		// state와 code_verifier, returnTo/clientId 컨텍스트를 함께 Redis에 저장
 		await this.tokenStorageService.saveOidcState(
 			state,
 			codeVerifier,
 			600,
 			returnTo,
-			clientKey,
+			client.clientId,
 		);
 		return authorizationUrl;
 	}
@@ -100,30 +128,37 @@ export class AuthApplicationService {
 		state: string,
 		req: Request,
 		res: Response,
-	): Promise<string | undefined> {
+	): Promise<OidcCallbackResult> {
 		// OIDC state 검증 + PKCE code_verifier 조회 (일회용 - 검증 후 즉시 소비)
 		const stateData =
 			await this.tokenStorageService.validateAndConsumeOidcState(state);
 		if (!stateData) {
-			throw new UnauthorizedException(
-				"OIDC state 검증에 실패했습니다",
-			);
+			throw new UnauthorizedException("OIDC state 검증에 실패했습니다");
 		}
 
-		const { codeVerifier, returnTo: storedReturnTo, clientKey: storedClientKey } =
-			stateData;
-		const { clientKey: legacyClientKey, returnTo: legacyReturnTo } =
+		const {
+			codeVerifier,
+			returnTo: storedReturnTo,
+			clientId: storedClientId,
+			clientKey: legacyStoredClientKey,
+		} = stateData;
+		const { clientId: legacyClientId, returnTo: legacyReturnTo } =
 			this.decodeOidcStateContext(storedReturnTo);
-		const clientKey = this.isOidcClientKey(storedClientKey)
-			? storedClientKey
-			: legacyClientKey;
+		const clientId = this.resolveStoredClientId(
+			storedClientId,
+			legacyStoredClientKey,
+			legacyClientId,
+		);
 		const returnTo = legacyReturnTo ?? storedReturnTo;
+		const client = await this.resolveAuthShellClient(clientId, {
+			requireActive: false,
+		});
 
 		// IDP token endpoint에 code + code_verifier 교환
 		const tokenResponse = await this.oidcFacade.exchangeCodeForTokens(
 			code,
 			codeVerifier,
-			clientKey,
+			this.toProtocolClientConfig(client),
 		);
 
 		// access_token에서 사용자 정보 추출 (sub, exp claim)
@@ -147,7 +182,7 @@ export class AuthApplicationService {
 
 		// 세션 생성 및 저장 (멀티 디바이스 지원)
 		const sessionId = this.buildSessionId(
-			clientKey,
+			client.clientId,
 			this.tokenStorageService.generateSessionId(),
 		);
 		if (tokenResponse.refresh_token) {
@@ -158,7 +193,7 @@ export class AuthApplicationService {
 				{
 					userAgent: req.headers["user-agent"] || "unknown",
 					ipAddress: req.ip || req.socket.remoteAddress || "unknown",
-					clientKey,
+					clientId: client.clientId,
 				},
 			);
 		}
@@ -171,7 +206,11 @@ export class AuthApplicationService {
 		);
 		this.setSessionIdCookie(res, sessionId);
 
-		return returnTo;
+		return {
+			returnTo,
+			defaultReturnTo: client.defaultReturnTo,
+			loginUrl: client.loginUrl,
+		};
 	}
 
 	async refreshTokenWithIdp(
@@ -183,10 +222,14 @@ export class AuthApplicationService {
 			throw new UnauthorizedException("리프레시 토큰이 존재하지 않습니다");
 		}
 
-		const clientKey = this.resolveClientKeyFromSessionId(sessionId);
+		const clientId = this.resolveClientIdFromSessionId(sessionId);
+		const client = await this.resolveOidcClient(clientId, {
+			requireActive: false,
+			requireAuthShell: false,
+		});
 		const tokenResponse = await this.oidcFacade.refreshTokens(
 			refreshToken,
-			clientKey,
+			this.toProtocolClientConfig(client),
 		);
 
 		// 사용자 정보 조회
@@ -199,8 +242,7 @@ export class AuthApplicationService {
 
 		// 세션 활동 시간 및 refresh token 업데이트
 		if (sessionId) {
-			const newRefreshToken =
-				tokenResponse.refresh_token || refreshToken;
+			const newRefreshToken = tokenResponse.refresh_token || refreshToken;
 			await this.tokenStorageService.updateSession(
 				payload.sub,
 				sessionId,
@@ -235,17 +277,23 @@ export class AuthApplicationService {
 		res: Response,
 	): Promise<boolean> {
 		if (accessToken) {
-			const clientKey = this.resolveClientKeyFromSessionId(sessionId);
+			const clientId = this.resolveClientIdFromSessionId(sessionId);
 
 			// 1. IDP에 토큰 무효화 요청 (best-effort)
-			await this.oidcFacade.revokeToken(accessToken, clientKey);
+			const client = await this.resolveOidcClient(clientId, {
+				requireActive: false,
+				requireAuthShell: false,
+			});
+			await this.oidcFacade.revokeToken(
+				accessToken,
+				this.toProtocolClientConfig(client),
+			);
 
 			try {
 				// 2. Access Token 블랙리스트 등록 (JwtAuthGuard에서 차단)
 				const payload = this.decodeAccessToken(accessToken);
 				const expSeconds = (payload as { exp?: number }).exp ?? 0;
-				const remainingSeconds =
-					expSeconds - Math.floor(Date.now() / 1000);
+				const remainingSeconds = expSeconds - Math.floor(Date.now() / 1000);
 				if (remainingSeconds > 0) {
 					await this.tokenStorageService.addToBlacklist(
 						accessToken,
@@ -255,15 +303,10 @@ export class AuthApplicationService {
 
 				// 3. 현재 세션 삭제 (Redis)
 				if (sessionId) {
-					await this.tokenStorageService.deleteSession(
-						payload.sub,
-						sessionId,
-					);
+					await this.tokenStorageService.deleteSession(payload.sub, sessionId);
 				} else {
 					// sessionId가 없으면 사용자 기준으로 세션을 정리합니다.
-					await this.tokenStorageService.deleteRefreshToken(
-						payload.sub,
-					);
+					await this.tokenStorageService.deleteRefreshToken(payload.sub);
 				}
 			} catch (error) {
 				this.logger.warn(`로그아웃 토큰 정리 실패: ${error}`);
@@ -313,7 +356,8 @@ export class AuthApplicationService {
 
 		// JWT exp claim에서 만료 시간 추출
 		const payload = this.decodeAccessToken(token);
-		const accessTokenExpiresAt = ((payload as { exp?: number }).exp || 0) * 1000; // sec → ms
+		const accessTokenExpiresAt =
+			((payload as { exp?: number }).exp || 0) * 1000; // sec → ms
 		const refreshTokenExpiresAt = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30일 (추정)
 		const hasFullAccess =
 			user?.tenants?.some(
@@ -343,9 +387,7 @@ export class AuthApplicationService {
 			new Set(user.tenants.map((t) => t.spaceId)),
 		);
 
-		const spaces = await this.spacesService.findByIdsWithGround(
-			tenantSpaceIds,
-		);
+		const spaces = await this.spacesService.findByIdsWithGround(tenantSpaceIds);
 
 		return spaces.map((space) => plainToInstance(SpaceDto, space));
 	}
@@ -468,17 +510,14 @@ export class AuthApplicationService {
 	/**
 	 * 인증 감사 로그 목록 조회
 	 */
-	async getAuthAuditLogs(
-		query: QueryAuthAuditLogDto,
-	): Promise<{
+	async getAuthAuditLogs(query: QueryAuthAuditLogDto): Promise<{
 		data: GetAuditLogsResult["logs"];
 		meta: PageMetaDto;
 	}> {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 20;
-		const { logs, totalCount } = await this.authAuditLogService.getAuditLogs(
-			query,
-		);
+		const { logs, totalCount } =
+			await this.authAuditLogService.getAuditLogs(query);
 
 		return {
 			data: logs,
@@ -506,10 +545,7 @@ export class AuthApplicationService {
 			throw new UnauthorizedException("인증 정보가 없습니다");
 		}
 
-		return this.tokenStorageService.getUserSessions(
-			userId,
-			currentSessionId,
-		);
+		return this.tokenStorageService.getUserSessions(userId, currentSessionId);
 	}
 
 	/**
@@ -527,12 +563,18 @@ export class AuthApplicationService {
 			sessionId,
 		);
 		if (session?.refreshToken) {
-			const clientKey = this.isOidcClientKey(session.clientKey)
-				? session.clientKey
-				: this.resolveClientKeyFromSessionId(sessionId);
+			const clientId = this.resolveStoredClientId(
+				session.clientId,
+				session.clientKey,
+				this.resolveClientIdFromSessionId(sessionId),
+			);
+			const client = await this.resolveOidcClient(clientId, {
+				requireActive: false,
+				requireAuthShell: false,
+			});
 			await this.oidcFacade.revokeToken(
 				session.refreshToken,
-				clientKey,
+				this.toProtocolClientConfig(client),
 			);
 		}
 
@@ -562,12 +604,18 @@ export class AuthApplicationService {
 						session.sessionId,
 					);
 				if (sessionData?.refreshToken) {
-					const clientKey = this.isOidcClientKey(sessionData.clientKey)
-						? sessionData.clientKey
-						: this.resolveClientKeyFromSessionId(session.sessionId);
+					const clientId = this.resolveStoredClientId(
+						sessionData.clientId,
+						sessionData.clientKey,
+						this.resolveClientIdFromSessionId(session.sessionId),
+					);
+					const client = await this.resolveOidcClient(clientId, {
+						requireActive: false,
+						requireAuthShell: false,
+					});
 					await this.oidcFacade.revokeToken(
 						sessionData.refreshToken,
-						clientKey,
+						this.toProtocolClientConfig(client),
 					);
 				}
 			}
@@ -583,16 +631,30 @@ export class AuthApplicationService {
 	// 쿠키 관리
 	// =========================================================================
 
+	async getClientRedirects(clientId: string): Promise<{
+		loginUrl: string;
+		defaultReturnTo: string;
+	}> {
+		const client = await this.resolveAuthShellClient(clientId, {
+			requireActive: false,
+		});
+
+		return {
+			loginUrl: client.loginUrl,
+			defaultReturnTo: client.defaultReturnTo,
+		};
+	}
+
 	private decodeOidcStateContext(
 		serializedReturnTo?: string,
 	): OidcStateContext {
 		if (!serializedReturnTo) {
-			return { clientKey: DEFAULT_OIDC_CLIENT_KEY };
+			return { clientId: DEFAULT_OIDC_CLIENT_ID };
 		}
 
 		if (!serializedReturnTo.startsWith(OIDC_STATE_CONTEXT_PREFIX)) {
 			return {
-				clientKey: DEFAULT_OIDC_CLIENT_KEY,
+				clientId: DEFAULT_OIDC_CLIENT_ID,
 				returnTo: serializedReturnTo,
 			};
 		}
@@ -603,47 +665,116 @@ export class AuthApplicationService {
 					serializedReturnTo.slice(OIDC_STATE_CONTEXT_PREFIX.length),
 					"base64url",
 				).toString("utf-8"),
-			) as Partial<OidcStateContext>;
+			) as Partial<OidcStateContext & { clientKey?: string }>;
 
 			return {
-				clientKey: this.isOidcClientKey(payload.clientKey)
-					? payload.clientKey
-					: DEFAULT_OIDC_CLIENT_KEY,
+				clientId: this.resolveStoredClientId(
+					payload.clientId,
+					payload.clientKey,
+				),
 				returnTo:
 					typeof payload.returnTo === "string" ? payload.returnTo : undefined,
 			};
 		} catch {
-			return { clientKey: DEFAULT_OIDC_CLIENT_KEY };
+			return { clientId: DEFAULT_OIDC_CLIENT_ID };
 		}
 	}
 
-	private buildSessionId(
-		clientKey: OidcRpClientKey,
-		sessionId: string,
-	): string {
-		return `${clientKey}${SESSION_ID_SEPARATOR}${sessionId}`;
+	private buildSessionId(clientId: string, sessionId: string): string {
+		return `${clientId}${SESSION_ID_SEPARATOR}${sessionId}`;
 	}
 
-	private resolveClientKeyFromSessionId(
-		sessionId?: string,
-	): OidcRpClientKey {
+	private resolveClientIdFromSessionId(sessionId?: string): string {
 		if (!sessionId) {
-			return DEFAULT_OIDC_CLIENT_KEY;
+			return DEFAULT_OIDC_CLIENT_ID;
 		}
 
 		const separatorIndex = sessionId.indexOf(SESSION_ID_SEPARATOR);
 		if (separatorIndex <= 0) {
-			return DEFAULT_OIDC_CLIENT_KEY;
+			return DEFAULT_OIDC_CLIENT_ID;
 		}
 
 		const candidate = sessionId.slice(0, separatorIndex);
-		return this.isOidcClientKey(candidate)
-			? candidate
-			: DEFAULT_OIDC_CLIENT_KEY;
+		return this.resolveStoredClientId(candidate);
 	}
 
-	private isOidcClientKey(value: unknown): value is OidcRpClientKey {
-		return value === "admin" || value === "storybook" || value === "idpWeb";
+	private resolveStoredClientId(
+		clientId?: string,
+		legacyClientKey?: string,
+		fallbackClientId = DEFAULT_OIDC_CLIENT_ID,
+	): string {
+		if (typeof clientId === "string" && clientId.length > 0) {
+			return clientId;
+		}
+
+		const legacyClientId = this.resolveLegacyClientId(legacyClientKey);
+		return legacyClientId ?? fallbackClientId;
+	}
+
+	private resolveLegacyClientId(clientKey?: string): string | undefined {
+		if (!clientKey) {
+			return undefined;
+		}
+
+		return LEGACY_OIDC_CLIENT_ID_MAP[
+			clientKey as keyof typeof LEGACY_OIDC_CLIENT_ID_MAP
+		];
+	}
+
+	private async resolveAuthShellClient(
+		clientId: string,
+		options?: { requireActive?: boolean },
+	): Promise<ResolvedOidcClient> {
+		return this.resolveOidcClient(clientId, {
+			requireActive: options?.requireActive,
+			requireAuthShell: true,
+		});
+	}
+
+	private async resolveOidcClient(
+		clientId: string,
+		options?: {
+			requireActive?: boolean;
+			requireAuthShell?: boolean;
+		},
+	): Promise<ResolvedOidcClient> {
+		const client = options?.requireAuthShell
+			? await this.oidcClientService.getAuthShellClientByClientId({
+					clientId,
+					requireActive: options.requireActive,
+				})
+			: await this.oidcClientService.getByClientId(clientId);
+		const redirectUri = client.redirectUris[0];
+		if (!redirectUri) {
+			throw new BadRequestException("Redirect URI가 설정되지 않았습니다");
+		}
+
+		if (
+			options?.requireAuthShell &&
+			(!client.loginUrl || !client.defaultReturnTo)
+		) {
+			throw new BadRequestException(
+				"로그인 셸 URL과 기본 복귀 URL이 설정되지 않았습니다",
+			);
+		}
+
+		return {
+			clientId: client.clientId,
+			clientSecret: client.clientSecret,
+			redirectUri,
+			loginUrl: client.loginUrl || "/auth/login",
+			defaultReturnTo: client.defaultReturnTo || "/",
+		};
+	}
+
+	private toProtocolClientConfig(
+		client: ResolvedOidcClient,
+	): OidcClientProtocolConfig {
+		return {
+			clientId: client.clientId,
+			clientSecret: client.clientSecret,
+			redirectUri: client.redirectUri,
+		};
 	}
 
 	/**

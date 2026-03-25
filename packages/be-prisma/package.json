@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "type-check": "tsc --noEmit",
-    "generate": "prisma generate",
+    "generate": "prisma generate && node ./scripts/fix-generated-client-module-format.mjs",
     "schema:check": "tsx ./scripts/validate-schema-conventions.ts",
     "build": "rm -rf dist && pnpm run schema:check && tsc --build",
     "start:dev": "tsc --build --watch",

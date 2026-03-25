@@ -434,6 +434,11 @@ export type ActionUncheckedUpdateManyInput = {
   config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
+export type ActionScalarRelationFilter = {
+  is?: Prisma.ActionWhereInput
+  isNot?: Prisma.ActionWhereInput
+}
+
 export type ActionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -482,11 +487,6 @@ export type ActionSumOrderByAggregateInput = {
   order?: Prisma.SortOrder
 }
 
-export type ActionScalarRelationFilter = {
-  is?: Prisma.ActionWhereInput
-  isNot?: Prisma.ActionWhereInput
-}
-
 export type ActionCreateNestedOneWithoutAbilitiesInput = {
   create?: Prisma.XOR<Prisma.ActionCreateWithoutAbilitiesInput, Prisma.ActionUncheckedCreateWithoutAbilitiesInput>
   connectOrCreate?: Prisma.ActionCreateOrConnectWithoutAbilitiesInput
@@ -499,6 +499,14 @@ export type ActionUpdateOneRequiredWithoutAbilitiesNestedInput = {
   upsert?: Prisma.ActionUpsertWithoutAbilitiesInput
   connect?: Prisma.ActionWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.ActionUpdateToOneWithWhereWithoutAbilitiesInput, Prisma.ActionUpdateWithoutAbilitiesInput>, Prisma.ActionUncheckedUpdateWithoutAbilitiesInput>
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type ActionCreateWithoutAbilitiesInput = {

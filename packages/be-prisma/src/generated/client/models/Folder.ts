@@ -1276,7 +1276,7 @@ export type $FolderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
      */
     spaceId: string
     /**
-     * @DisplayName 상위 폴더 ID
+     * @displayName 상위 폴더 ID
      */
     parentFolderId: string | null
     /**
