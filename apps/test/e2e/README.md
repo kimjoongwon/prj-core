@@ -1,6 +1,6 @@
 # E2E 테스트 가이드
 
-Admin/IDP E2E 테스트는 Playwright 워크스페이스(`apps/test/e2e`)에서 공통으로 관리합니다.
+Admin/IDP/Storybook E2E 테스트는 Playwright 워크스페이스(`apps/test/e2e`)에서 공통으로 관리합니다.
 
 ## 실행
 
@@ -21,10 +21,17 @@ pnpm --filter=test-e2e test:admin:mobile
 # IDP 로컬 데스크톱
 pnpm --filter=test-e2e test:idp
 
+# Storybook 로컬 데스크톱
+pnpm --filter=test-e2e test:storybook
+
 # IDP 운영 데스크톱
 E2E_IDP_BASE_URL=https://idp.example.com/ \
 E2E_IDP_API_BASE_URL=https://idp.example.com/ \
 pnpm --filter=test-e2e test:idp:prod
+
+# Storybook 운영 데스크톱
+E2E_STORYBOOK_BASE_URL=https://storybook.example.com/ \
+pnpm --filter=test-e2e test:storybook:prod
 
 # IDP 로컬 모바일
 pnpm --filter=test-e2e test:idp:mobile
@@ -39,6 +46,7 @@ pnpm --filter=test-e2e test:idp:mobile
 
 - `E2E_ADMIN_BASE_URL`: 예) `https://admin.example.com/admin/`
 - `E2E_IDP_BASE_URL`: 예) `https://idp.example.com/`
+- `E2E_STORYBOOK_BASE_URL`: 예) `https://storybook.example.com/`
 - `E2E_CORE_API_BASE_URL`: 필요 시 Core API readiness URL 오버라이드
 - `E2E_IDP_API_BASE_URL`: 필요 시 IDP API readiness URL 오버라이드
 
@@ -46,6 +54,7 @@ pnpm --filter=test-e2e test:idp:mobile
 
 - Admin Playwright 프로젝트는 환경별 storage state를 `tests/admin/helpers/.auth/{env}/admin.json`에 분리 저장합니다.
 - IDP 로그인 helper는 `E2E_IDP_BASE_URL`, `E2E_IDP_API_BASE_URL` 등을 읽어 local/prod 호스트를 자동 전환합니다.
+- Storybook 프로젝트는 `E2E_STORYBOOK_BASE_URL`을 기준으로 로그인 셸과 protected story 진입을 검증합니다.
 
 ## 로컬 IDP one-shot
 
@@ -67,6 +76,7 @@ pnpm --filter=test-e2e test:idp:mobile
 - 앱별 차이(리다이렉트 URL, storageState, localStorage 보정)는 테스트 래퍼에서만 처리합니다.
 - Admin 인증 상태 준비는 `admin-setup` 프로젝트에서 `storageState`를 생성해 재사용합니다.
 - IDP는 테스트 내에서 `loginToConsole`을 호출해 로그인 후 검증을 수행합니다.
+- Storybook은 로그인 셸에서 generic auth endpoint(`clientId=storybook`)와 스토리 복귀를 직접 검증합니다.
 
 ## 공통 헬퍼
 
@@ -104,5 +114,6 @@ pnpm --filter=test-e2e test:idp:mobile
 - `E2E_ENV`: `local|prod` 실행 환경 선택
 - `E2E_ADMIN_BASE_URL`: Admin Web base URL
 - `E2E_IDP_BASE_URL`: IDP Web base URL
+- `E2E_STORYBOOK_BASE_URL`: Storybook base URL
 - `E2E_CORE_API_BASE_URL`: Core API base URL
 - `E2E_IDP_API_BASE_URL`: IDP API base URL

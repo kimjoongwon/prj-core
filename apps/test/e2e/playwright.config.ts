@@ -16,6 +16,8 @@ const shouldUseLocalRuntime = e2eEnvironment === "local";
 const reuseExistingServer = shouldUseLocalRuntime && !process.env.CI;
 const includesAdminTarget = e2eTarget === "admin" || e2eTarget === "all";
 const includesIdpTarget = e2eTarget === "idp" || e2eTarget === "all";
+const includesStorybookTarget =
+	e2eTarget === "storybook" || e2eTarget === "all";
 
 function ensureTrailingSlash(url: string) {
 	return url.endsWith("/") ? url : `${url}/`;
@@ -61,11 +63,17 @@ const idpApiBaseUrl = resolveBaseUrl({
 	localDefault: "http://localhost:3007/",
 	required: false,
 });
+const storybookBaseUrl = resolveBaseUrl({
+	envKey: "E2E_STORYBOOK_BASE_URL",
+	localDefault: "http://localhost:6006/",
+	required: e2eEnvironment === "prod" && includesStorybookTarget,
+});
 
 process.env.E2E_ADMIN_BASE_URL = adminBaseUrl;
 process.env.E2E_IDP_BASE_URL = idpBaseUrl;
 process.env.E2E_CORE_API_BASE_URL = coreApiBaseUrl;
 process.env.E2E_IDP_API_BASE_URL = idpApiBaseUrl;
+process.env.E2E_STORYBOOK_BASE_URL = storybookBaseUrl;
 
 const adminAuthStorageStatePath = path.join(
 	__dirname,
@@ -116,6 +124,14 @@ const idpWebServer = {
 	cwd: "../../..",
 };
 
+const storybookServer = {
+	command: "pnpm --filter=tool-storybook start:dev",
+	url: new URL("/__storybook_auth/login", storybookBaseUrl).toString(),
+	reuseExistingServer,
+	timeout: 120000,
+	cwd: "../../..",
+};
+
 function getWebServers() {
 	if (e2eTarget === "admin") {
 		return [coreApiServer, idpApiServer, adminWebServer, idpWebServer];
@@ -125,7 +141,17 @@ function getWebServers() {
 		return [idpApiServer, idpWebServer];
 	}
 
-	return [coreApiServer, idpApiServer, adminWebServer, idpWebServer];
+	if (e2eTarget === "storybook") {
+		return [idpApiServer, idpWebServer, storybookServer];
+	}
+
+	return [
+		coreApiServer,
+		idpApiServer,
+		adminWebServer,
+		idpWebServer,
+		storybookServer,
+	];
 }
 
 /**
@@ -224,6 +250,17 @@ export default defineConfig({
       use: {
         ...devices["Pixel 5"],
         baseURL: idpBaseUrl,
+      },
+    },
+
+    // ── Storybook ──
+    {
+      name: "storybook-chromium",
+      testMatch: "**/apps/tool/storybook/**/*.e2e.ts",
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: storybookBaseUrl,
+        launchOptions: chromiumLaunchOptions,
       },
     },
   ],

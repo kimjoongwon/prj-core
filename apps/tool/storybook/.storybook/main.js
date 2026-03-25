@@ -128,7 +128,7 @@ const config = {
     };
 
     try {
-      const { default: tailwindcss } = await import("@tailwindcss/vite/dist/index.mjs");
+      const { default: tailwindcss } = await import("@tailwindcss/vite");
       config.plugins.push(tailwindcss());
     } catch {
       // 테스트 환경에서는 @tailwindcss/vite 미설치일 수 있으므로 스킵
