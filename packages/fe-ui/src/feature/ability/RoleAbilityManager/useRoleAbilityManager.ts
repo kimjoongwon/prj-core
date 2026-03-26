@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { useState } from "react";
-import type { AbilityFormData } from "../../../widget/form/AbilityFormModal";
+import type { AbilityFormData } from "../../../form/AbilityFormModal";
 import type { AbilityRule } from "../../../widget/ability/AbilityRuleList";
 import type { RoleAbilityManagerProps } from "./type";
 

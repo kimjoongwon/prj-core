@@ -15,7 +15,7 @@ import { observer } from "mobx-react-lite";
 import {
 	VisibilityCell,
 	type VisibilityStatus,
-} from "../../../primitive/permission/VisibilityCell";
+} from "../../../display/permission/VisibilityCell";
 import { HStack } from "../../../layout/HStack/HStack";
 import { VStack } from "../../../layout/VStack/VStack";
 

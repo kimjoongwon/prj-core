@@ -14,7 +14,7 @@
 | 항목 | 설명 |
 |------|------|
 | SidePanel | 데스크톱 사이드 패널 widget |
-| SidePanelProps | `packages/fe-ui/src/primitive/layout/type.ts`에서 제공하는 props 계약 |
+| SidePanelProps | `packages/fe-ui/src/display/layout/type.ts`에서 제공하는 props 계약 |
 
 ## 변경 이력
 

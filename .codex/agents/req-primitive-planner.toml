@@ -38,7 +38,7 @@ developer_instructions = '''
 ### 출력 위치 (Sidecar Spec - 개별 파일)
 
 ```
-packages/fe-ui/src/primitive/[UIName]/index.spec.md
+packages/fe-ui/src/display/[UIName]/index.spec.md
 ```
 
 각 신규 UI 컴포넌트마다 개별 `index.spec.md` 파일을 생성합니다.
@@ -104,7 +104,7 @@ packages/fe-ui/src/primitive/[UIName]/index.spec.md
 
 ### 레이어 경계 메모
 
-- `packages/fe-ui/src/primitive/layout/Layout.tsx`는 flat Layout primitive다.
+- `packages/fe-ui/src/display/layout/Layout.tsx`는 flat Layout primitive다.
 - `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`처럼 완성된 console shell 블록은 props-only여도 widget으로 분류한다.
 - `primitive/layout` 아래에 임의 하위 디렉터리는 다시 만들지 않는다.
 
@@ -140,8 +140,8 @@ Store 연동이 필요한가?
    - L5-L6 기획 결과 확인
    ↓
 2단계: 기존 컴포넌트 확인
-   - packages/fe-ui/src/primitive/ 확인
-   - packages/fe-ui/src/input/ 확인
+   - packages/fe-ui/src/display/ 확인
+   - packages/fe-ui/src/control/ 확인
    ↓
 3단계: 신규 컴포넌트 도출
    - 화면에서 필요한 UI 요소 식별
@@ -153,7 +153,7 @@ Store 연동이 필요한가?
    - 반응형 대응
    ↓
 5단계: 기획서 작성 (개별 파일)
-   → packages/fe-ui/src/primitive/[UIName]/index.spec.md
+   → packages/fe-ui/src/display/[UIName]/index.spec.md
 ```
 
 ---
@@ -182,7 +182,7 @@ Store 연동이 필요한가?
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
 | req-widget-planner | 다음 단계 | Widget 기획 |
-| fe-primitive-component-builder | 구현 | UI 컴포넌트 생성 |
+| fe-display-component-builder | 구현 | display UI 컴포넌트 생성 |
 
 ---
 
@@ -191,7 +191,7 @@ Store 연동이 필요한가?
 ### 입력
 
 ```
-화면 경로: apps/admin/web/app/(admin)/members/
+화면 경로: apps/admin/web/src/app/(admin)/members/
 도메인: Member
 화면: MemberList
 ```
@@ -211,7 +211,7 @@ Store 연동이 필요한가?
 | Section | layout/Section | 섹션 래퍼 |
 | PageTitleBar | widget/PageTitleBar | 페이지/섹션 헤더 |
 
-**신규 컴포넌트 (packages/fe-ui/src/primitive/MemberStatusBadge/index.spec.md):**
+**신규 컴포넌트 (packages/fe-ui/src/display/MemberStatusBadge/index.spec.md):**
 
 ```markdown
 # MemberStatusBadge UI 기획서

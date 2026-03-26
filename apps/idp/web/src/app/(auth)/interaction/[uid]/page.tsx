@@ -1,14 +1,12 @@
 "use client";
 
-import { useGetInteraction } from "@cocrepo/api/idp/interaction";
 import {
-	AlertBanner,
-	AuthCard,
-	AuthCardHeader,
-	IdpConsent,
-	IdpLogin,
-} from "@cocrepo/ui";
-import { Button, Spinner } from "@heroui/react";
+	useAbortInteraction,
+	useConfirmConsent,
+	useGetInteraction,
+	useSubmitLogin,
+} from "@cocrepo/api/idp/interaction";
+import { IdpInteractionPage, type LoginErrorResponse } from "@cocrepo/ui";
 import type { AxiosError } from "axios";
 import { observer } from "mobx-react-lite";
 import { useParams } from "next/navigation";
@@ -27,16 +25,13 @@ interface InteractionClientProps {
 	uid: string;
 }
 
-/**
- * OIDC Interaction 클라이언트 컴포넌트
- *
- * useGetInteraction 쿼리 훅으로 인터랙션 데이터를 조회하고,
- * type에 따라 IdpLogin 또는 IdpConsent Feature를 렌더링합니다.
- */
 const InteractionClient = observer(function InteractionClient({
 	uid,
 }: InteractionClientProps) {
 	const { data, isLoading, error } = useGetInteraction(uid);
+	const loginMutation = useSubmitLogin();
+	const abortMutation = useAbortInteraction();
+	const consentMutation = useConfirmConsent();
 	const interactionError = error as AxiosError<{
 		message?: string;
 		error?: string;
@@ -50,57 +45,78 @@ const InteractionClient = observer(function InteractionClient({
 			error?.message ||
 			"알 수 없는 오류가 발생했습니다.";
 
+	const onAbortInteraction = async () => {
+		try {
+			const result = await abortMutation.mutateAsync({ uid });
+			if (result.redirectTo) {
+				window.location.href = result.redirectTo;
+			}
+		} catch {
+			// 에러 무시
+		}
+	};
+
+	const onSubmitLogin = async (data: {
+		email: string;
+		password: string;
+		remember: boolean;
+	}): Promise<LoginErrorResponse | null> => {
+		try {
+			const result = await loginMutation.mutateAsync({
+				uid,
+				data,
+			});
+			window.location.href = result.redirectTo;
+			return null;
+		} catch (err) {
+			const axiosError = err as AxiosError<LoginErrorResponse>;
+			if (axiosError.response?.data) {
+				return axiosError.response.data;
+			}
+			return {
+				error: "NETWORK_ERROR",
+				displayMessage: "서버와 통신할 수 없습니다.",
+				hint: "잠시 후 다시 시도하거나 문제가 반복되면 관리자에게 문의하세요.",
+			};
+		}
+	};
+
+	const onConfirmConsent = async (): Promise<string | null> => {
+		try {
+			const result = await consentMutation.mutateAsync({ uid });
+			window.location.href = result.redirectTo;
+			return null;
+		} catch {
+			return "서버와 통신할 수 없습니다.";
+		}
+	};
+
+	const onClickRecoveryButton = () => {
+		if (isExpiredInteraction) {
+			window.location.href = "/auth/login";
+			return;
+		}
+
+		if (window.history.length > 1) {
+			window.history.back();
+			return;
+		}
+
+		window.location.href = "/auth/login";
+	};
+
 	if (isLoading) {
-		return (
-			<AuthCard>
-				<div className="flex flex-col items-center gap-4 py-10 text-center">
-					<Spinner size="lg" />
-					<div className="space-y-1">
-						<p className="font-medium text-foreground">
-							인증 정보를 확인하고 있습니다
-						</p>
-						<p className="text-sm text-default-500">잠시만 기다려 주세요.</p>
-					</div>
-				</div>
-			</AuthCard>
-		);
+		return <IdpInteractionPage mode="loading" />;
 	}
 
 	if (error || !data) {
 		return (
-			<AuthCard variant="danger">
-				<AuthCardHeader
-					iconPath="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
-					iconGradient="from-danger to-danger-400"
-					title="인증을 이어갈 수 없습니다"
-					titleClassName="text-danger"
-					subtitle="세션이 만료되었거나 요청이 올바르지 않습니다."
-				/>
-
-				<AlertBanner type="danger" message={errorMessage} />
-
-				<div className="flex gap-3">
-					<Button
-						className="flex-1 font-semibold"
-						color="primary"
-						onPress={() => {
-							if (isExpiredInteraction) {
-								window.location.href = "/auth/login";
-								return;
-							}
-
-							if (window.history.length > 1) {
-								window.history.back();
-								return;
-							}
-
-							window.location.href = "/auth/login";
-						}}
-					>
-						{isExpiredInteraction ? "다시 로그인" : "돌아가기"}
-					</Button>
-				</div>
-			</AuthCard>
+			<IdpInteractionPage
+				mode="error"
+				errorMessage={errorMessage}
+				isExpiredInteraction={isExpiredInteraction}
+				onClickRecoveryButton={onClickRecoveryButton}
+			/>
 		);
 	}
 
@@ -113,15 +129,25 @@ const InteractionClient = observer(function InteractionClient({
 		};
 		const missingScopes = prompt.details?.missingOIDCScope || [];
 		return (
-			<IdpConsent
-				uid={uid}
+			<IdpInteractionPage
+				mode="consent"
 				client={data.client ?? null}
 				missingScopes={missingScopes}
+				onConfirmConsent={onConfirmConsent}
+				onAbortInteraction={onAbortInteraction}
 			/>
 		);
 	}
 
-	return <IdpLogin uid={uid} client={data.client ?? null} isDev={data.isDev} />;
+	return (
+		<IdpInteractionPage
+			mode="login"
+			client={data.client ?? null}
+			isDev={data.isDev}
+			onSubmitLogin={onSubmitLogin}
+			onAbortInteraction={onAbortInteraction}
+		/>
+	);
 });
 
 export default observer(InteractionPage);

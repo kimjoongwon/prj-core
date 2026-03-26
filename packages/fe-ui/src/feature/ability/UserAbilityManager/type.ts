@@ -3,7 +3,7 @@ import type {
 	AbilityFormData,
 	Action,
 	Subject,
-} from "../../../widget/form/AbilityFormModal";
+} from "../../../form/AbilityFormModal";
 
 /**
  * Ability 관리용 사용자 정보 타입

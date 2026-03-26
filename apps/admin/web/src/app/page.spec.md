@@ -60,7 +60,7 @@
 ## 특이사항
 
 - `page.tsx` 단일 CSR 파일에서 세션 유효성을 확인합니다.
-- 루트 리다이렉트 페이지도 `feature/detail/view` shell 안에서 최소 로딩 본문을 렌더링합니다.
+- 루트 리다이렉트 페이지도 `detail/view` shell 안에서 최소 로딩 본문을 렌더링합니다.
 - 검증 완료 전에는 최소 로딩 화면만 렌더링합니다.
 - `_client.tsx` 없이 page 파일에서 직접 리다이렉트 흐름을 처리합니다.
 
@@ -82,9 +82,10 @@
 
 ## Rendering Decision
 
-- 기본 패턴: `page.tsx` 단일 CSR
+- 기본 패턴: `pure page + thin route container`
 - page role: `detail`
-- reusable target: `feature/detail/view`
+- reusable target: `detail/view`
+- page component path: `packages/fe-ui/src/page/SessionCheckPage/SessionCheckPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -92,6 +93,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-26 | `SessionCheckPage` 경로를 page 폴더 기반 sidecar 구조에 맞게 갱신 | codex |
+| 2026-03-25 | `SessionCheckPage`로 시각 구성을 page 레이어로 이동하고 route page를 thin container로 정리 | codex |
 | 2026-03-22 | 루트 리다이렉트 로딩 상태를 `DetailPage`/`DetailSectionCard` 기반 detail/view shell로 정리 | codex |
 | 2026-03-21 | 루트 진입 page를 `_client.tsx` 없는 단일 CSR 리다이렉트로 정리하고 계약을 detail/view 기준으로 보정 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |

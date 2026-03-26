@@ -17,7 +17,7 @@ OIDC interaction의 로그인 branch를 담당하는 feature입니다.
 |------|------|------|
 | `useSubmitLogin`, `useAbortInteraction` | 재사용 | 인증 프로토콜과 redirect 처리 계약이 이미 맞다. |
 | `OidcLoginForm` | 개선 후 재사용 | 폼 로직과 에러 타입은 유지 가능하지만, 현재는 `AuthCard`에 과도하게 의존해 shell 책임이 섞여 있다. |
-| `packages/fe-ui/src/page/Login/LoginPage.tsx` | 재사용 불가 | 구형 state binding 기반이고 잠금/복구/OIDC client context를 지원하지 않는다. |
+| `packages/fe-ui/src/page/LoginPage/LoginPage.tsx` | 재사용 불가 | 구형 state binding 기반이고 잠금/복구/OIDC client context를 지원하지 않는다. |
 
 ## 사용자 가치
 
@@ -80,7 +80,7 @@ interface IdpLoginProps {
 
 | 컴포넌트 | 타입 | 역할 |
 |----------|------|------|
-| `OidcLoginForm` | widget/form | 로그인 입력, 상태 배너, recovery action |
+| `OidcLoginForm` | form | 로그인 입력, 상태 배너, recovery action |
 
 ## 구현 체크리스트
 
@@ -93,8 +93,9 @@ interface IdpLoginProps {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-26 | 비교 대상 `LoginPage` 경로를 page 폴더 규칙에 맞게 갱신 | codex |
 | 2026-03-23 | 로그인 UX 재기획에 맞춰 feature 책임을 API orchestration으로 재정의하고 shell/폼 책임 분리를 명시 | codex |
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
+| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

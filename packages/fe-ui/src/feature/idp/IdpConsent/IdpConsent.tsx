@@ -5,7 +5,7 @@ import {
 } from "@cocrepo/api/idp/interaction";
 
 import { observer } from "mobx-react-lite";
-import { OidcConsentPanel } from "../../../widget/form/OidcConsentPanel/OidcConsentPanel";
+import { OidcConsentPanel } from "../../../form/OidcConsentPanel/OidcConsentPanel";
 
 export interface IdpConsentProps {
 	/** OIDC 인터랙션 UID */

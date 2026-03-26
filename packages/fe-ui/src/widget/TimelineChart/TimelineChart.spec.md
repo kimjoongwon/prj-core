@@ -50,7 +50,7 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-08 | `TimelineChart`의 런타임 import와 일치하도록 `frappe-gantt`를 `@cocrepo/ui` 패키지 의존성으로 명시 | codex |
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
+| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-06 | widget 디렉토리를 widgets로 통합하며 위치 경로를 정리 | codex |

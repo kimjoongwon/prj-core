@@ -1,17 +1,22 @@
 "use client";
 
-import { IdpForgotPassword } from "@cocrepo/ui";
+import { useRequestPasswordReset } from "@cocrepo/api/idp/password-reset";
+import { IdpForgotPasswordPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 
-function ForgotPasswordPage() {
-	return <ForgotPasswordClient />;
-}
+const ForgotPasswordPage = observer(function ForgotPasswordPage() {
+	const resetMutation = useRequestPasswordReset();
 
-/**
- * 비밀번호 찾기 클라이언트 컴포넌트
- */
-const ForgotPasswordClient = observer(function ForgotPasswordClient() {
-	return <IdpForgotPassword />;
+	const onSubmitForgotPasswordForm = async (email: string) => {
+		try {
+			await resetMutation.mutateAsync({ data: { email } });
+			return null;
+		} catch {
+			return "서버와 통신할 수 없습니다.";
+		}
+	};
+
+	return <IdpForgotPasswordPage onSubmit={onSubmitForgotPasswordForm} />;
 });
 
-export default observer(ForgotPasswordPage);
+export default ForgotPasswordPage;

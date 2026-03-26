@@ -8,7 +8,7 @@
 
 1. 관리자가 이용자 수정 화면에 진입합니다.
 2. 현재 구현은 TODO 상태이며, 뒤로가기 버튼과 placeholder 수정 패널만 렌더링됩니다.
-3. 추후 실제 수정 본문은 `widget/form`의 `UserFormWidget`을 소비하는 구조로 확장됩니다.
+3. 추후 실제 수정 본문은 `form`의 `UserFormWidget`을 소비하는 구조로 확장됩니다.
 
 ## Consumed Layout Contract
 
@@ -25,10 +25,10 @@
 
 - 기본 패턴: `page.tsx` 단일 CSR
 - page role: `form`
-- reusable target: `widget/form`
+- reusable target: `form`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
-- 최종 수정 본문은 `widget/form/UserFormWidget`과 `feature/AiForm` 조합을 사용합니다.
+- 최종 수정 본문은 `form/UserFormWidget`과 `feature/AiForm` 조합을 사용합니다.
 
 ## 콘텐츠 구성
 
@@ -53,7 +53,7 @@
 
 - [x] `page.tsx` 단일 CSR 콘텐츠 파일
 - [x] route skeleton은 상위 `users/layout.tsx`가 소유
-- [x] `Rendering Decision`에 `widget/form` 재사용 타깃 명시
+- [x] `Rendering Decision`에 `form` 재사용 타깃 명시
 - [x] `_client.tsx` 없음
 - [x] `_prefetch.ts` 없음
 
@@ -61,4 +61,4 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-21 | 이용자 수정을 `widget/form` 재사용 타깃으로 재정의하고 route-layout 계약 형식으로 재작성 | codex |
+| 2026-03-21 | 이용자 수정을 `form` 재사용 타깃으로 재정의하고 route-layout 계약 형식으로 재작성 | codex |

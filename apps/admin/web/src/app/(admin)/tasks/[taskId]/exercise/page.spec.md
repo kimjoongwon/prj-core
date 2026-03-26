@@ -150,7 +150,7 @@ Activity를 통해 이 운동을 포함하는 루틴 목록:
 
 - 기본 패턴: `page.tsx` 단일 CSR
 - page role: `detail`
-- reusable target: `feature/detail/view`
+- reusable target: `detail/view`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 

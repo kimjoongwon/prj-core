@@ -22,7 +22,7 @@ developer_instructions = '''
 
 | 레벨 | 명칭 | 담당 에이전트 | 출력 위치 |
 |------|------|--------------|----------|
-| L0-L2 | 컨텍스트/사용자/목표 | req-context-planner | `apps/[app]/app/(admin)/app.spec.md` 업데이트 |
+| L0-L2 | 컨텍스트/사용자/목표 | req-context-planner | `apps/[app]/web/src/app/(admin)/app.spec.md` 업데이트 |
 | L3-L4 | 기능/화면 구조 | req-screen-planner | 각 `page.spec.md` 생성 |
 
 ### FE/BE 기획 (L6-L11)
@@ -146,9 +146,9 @@ developer_instructions = '''
 **새 도메인 생성 시:**
 
 ```
-apps/[app]/app/(admin)/app.spec.md             # L0-L2 (도메인 엔트리 추가)
+apps/[app]/web/src/app/(admin)/app.spec.md             # L0-L2 (도메인 엔트리 추가)
 
-apps/[app]/app/(admin)/[도메인]/
+apps/[app]/web/src/app/(admin)/[도메인]/
 ├── page.spec.md                                # 목록 페이지 기획 (L3-L4)
 ├── [entityId]/
 │   └── page.spec.md                            # 상세 페이지 기획
@@ -205,7 +205,7 @@ apps/core/api/src/module/[module]/
 ┌─────────────────────────────────────────────────────────────┐
 │  2단계: 컨텍스트/사용자/목표 기획 (L0-L2)                      │
 │  Task: req-context-planner                                      │
-│  → apps/[app]/app/(admin)/app.spec.md 업데이트               │
+│  → apps/[app]/web/src/app/(admin)/app.spec.md 업데이트               │
 │    (도메인 목록 테이블에 엔트리 추가)                          │
 └─────────────────────────────────────────────────────────────┘
                               │
@@ -327,11 +327,11 @@ apps/core/api/src/module/[module]/
 ✅ 도메인 기획 완료
 
 📁 생성/수정된 파일:
-   - apps/admin/web/app/(admin)/app.spec.md (업데이트)
-   - apps/admin/web/app/(admin)/members/page.spec.md
-   - apps/admin/web/app/(admin)/members/[memberId]/page.spec.md
-   - apps/admin/web/app/(admin)/members/new/page.spec.md
-   - apps/admin/web/app/(admin)/members/[memberId]/edit/page.spec.md
+   - apps/admin/web/src/app/(admin)/app.spec.md (업데이트)
+   - apps/admin/web/src/app/(admin)/members/page.spec.md
+   - apps/admin/web/src/app/(admin)/members/[memberId]/page.spec.md
+   - apps/admin/web/src/app/(admin)/members/new/page.spec.md
+   - apps/admin/web/src/app/(admin)/members/[memberId]/edit/page.spec.md
    - packages/fe-store/src/stores/memberStore.spec.md
    - packages/be-entity/src/member.entity.spec.md
    - packages/be-app/src/members.application-service/index.spec.md
@@ -352,7 +352,7 @@ apps/core/api/src/module/[module]/
 ## 6. 폴더 구조
 
 ```
-apps/admin/web/app/(admin)/
+apps/admin/web/src/app/(admin)/
 │
 ├── app.spec.md                           # 앱 기획서 (L0-L2, 도메인 목록)
 │
@@ -475,9 +475,9 @@ Asset (Level 0)
 ### UI 컴포넌트
 | 컴포넌트 | 타입 | 위치 |
 |----------|------|------|
-| AssetPreview | Pure UI | packages/fe-ui/src/primitive/ |
-| AssetTypeInfo | Pure UI | packages/fe-ui/src/primitive/ |
-| DerivativeList | Pure UI | packages/fe-ui/src/primitive/ |
+| AssetPreview | Pure UI | packages/fe-ui/src/display/ |
+| AssetTypeInfo | Pure UI | packages/fe-ui/src/display/ |
+| DerivativeList | Pure UI | packages/fe-ui/src/display/ |
 
 ### Widget 컴포넌트
 | 컴포넌트 | 위치 |

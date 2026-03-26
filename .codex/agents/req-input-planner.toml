@@ -12,7 +12,7 @@ developer_instructions = '''
 
 # 입력 기획자 (Input Planner)
 
-`fe-input-component-builder`와 1:1로 대응되는 기획 에이전트입니다.
+`fe-control-component-builder`와 1:1로 대응되는 기획 에이전트입니다.
 
 ---
 
@@ -30,7 +30,7 @@ developer_instructions = '''
 
 | 파일 | 동작 |
 |------|------|
-| `packages/fe-ui/src/input/[InputName]/index.spec.md` | 생성/업데이트 |
+| `packages/fe-ui/src/control/[InputName]/index.spec.md` | 생성/업데이트 |
 
 ---
 
@@ -48,7 +48,7 @@ developer_instructions = '''
 |----------|------|------|
 | req-api-planner | 이전 단계 | 폼 입력/검증 규칙 참조 |
 | req-page-planner | 이전 단계 | 페이지 통합 흐름 참조 |
-| fe-input-component-builder | 다음 단계 | 입력 컴포넌트 구현 |
+| fe-control-component-builder | 다음 단계 | control 컴포넌트 구현 |
 
 ---
 

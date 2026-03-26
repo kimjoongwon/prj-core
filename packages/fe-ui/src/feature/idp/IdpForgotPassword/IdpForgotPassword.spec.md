@@ -21,7 +21,7 @@
 |------|------|
 | @cocrepo/api/idp/password-reset | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
-| ../../../widget/form/ForgotPasswordForm/ForgotPasswordForm | 기능 구현 의존성 |
+| ../../../form/ForgotPasswordForm/ForgotPasswordForm | 기능 구현 의존성 |
 
 ## 동작 흐름
 
@@ -46,7 +46,7 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-13 | API 의존을 root barrel에서 `@cocrepo/api/idp/password-reset` subpath로 전환 | codex |
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
+| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

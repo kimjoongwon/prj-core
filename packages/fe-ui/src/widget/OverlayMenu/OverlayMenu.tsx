@@ -4,7 +4,7 @@ import { Button } from "@heroui/react";
 import { Check, ChevronRight, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import type { OverlayMenuProps } from "../../primitive/layout/type";
+import type { OverlayMenuProps } from "../../display/layout/type";
 
 export const OverlayMenu = observer(function OverlayMenu({
 	title,

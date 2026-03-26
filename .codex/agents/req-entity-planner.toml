@@ -39,7 +39,7 @@ developer_instructions = '''
 | 파일 | 설명 |
 |------|------|
 | `packages/be-entity/src/{entity}.entity.spec.md` | Entity 기획서 (신규 생성) |
-| `apps/[app]/app/(admin)/[domain]/page.spec.md` | Entity 참조 섹션 추가 (선택) |
+| `apps/[app]/web/src/app/(admin)/[domain]/page.spec.md` | Entity 참조 섹션 추가 (선택) |
 
 ### 출력 형식 (entity.spec.md)
 

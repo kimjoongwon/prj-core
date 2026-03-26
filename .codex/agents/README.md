@@ -22,7 +22,7 @@
 - [req-context-planner.toml](./req-context-planner.toml): 시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 레이어를 기획하는 전문가
 - [req-screen-planner.toml](./req-screen-planner.toml): 기능(Feature)과 화면(Screen) 레이어를 기획하는 전문가
 - [req-page-planner.toml](./req-page-planner.toml): route layout contract를 소비하는 `page.spec.md`와 `@slot` 콘텐츠 spec을 상세 기획하는 전문가
-- [req-layout-planner.toml](./req-layout-planner.toml): `packages/fe-ui/src/primitive/layout` flat Layout sidecar spec을 기획하는 전문가
+- [req-layout-planner.toml](./req-layout-planner.toml): `packages/fe-ui/src/display/layout` flat Layout sidecar spec을 기획하는 전문가
 - [req-route-layout-planner.toml](./req-route-layout-planner.toml): route `layout.tsx`의 서버 skeleton, named slot topology, `layout.spec.md`를 기획하는 전문가
 - [req-surface-planner.toml](./req-surface-planner.toml): route layout/page/feature의 Surface ownership과 elevation 배치를 기획하는 전문가
 - [req-feature-planner.toml](./req-feature-planner.toml): 화면별 Feature 컴포넌트를 기획하는 전문가
@@ -66,16 +66,17 @@
 
 ## 프론트엔드
 
-- [fe-page-builder.toml](./fe-page-builder.toml): route layout contract를 소비해 `page.tsx`와 `@slot/**/page.tsx` 콘텐츠를 구현하는 전문가
-- [fe-layout-builder.toml](./fe-layout-builder.toml): `packages/fe-ui/src/primitive/layout`의 flat Layout primitive를 설계하고 생성하는 전문가
+- [fe-ui-page-builder.toml](./fe-ui-page-builder.toml): `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 기준의 pure page component와 sidecar를 생성하는 전문가
+- [fe-page-builder.toml](./fe-page-builder.toml): `apps/*/src/app/**/page.tsx`와 `@slot/**/page.tsx` thin container를 구현하고 folder-based pure page를 연결하는 전문가
+- [fe-layout-builder.toml](./fe-layout-builder.toml): `packages/fe-ui/src/display/layout`의 flat Layout primitive를 설계하고 생성하는 전문가
 - [fe-route-layout-builder.toml](./fe-route-layout-builder.toml): Next.js App Router의 `app/**/layout.tsx`와 named slot topology를 설계하고 생성하는 전문가
 - [fe-feature-builder.toml](./fe-feature-builder.toml): 비즈니스 기능을 담당하는 Feature 컴포넌트를 생성하는 전문가
-- [fe-master-builder.toml](./fe-master-builder.toml): 목록/테이블/그리드 계열 재사용 feature를 생성하고 정리하는 전문가
-- [fe-detail-builder.toml](./fe-detail-builder.toml): 상세 조회/읽기 전용 재사용 feature를 생성하고 정리하는 전문가
-- [fe-form-widget-builder.toml](./fe-form-widget-builder.toml): 생성/수정 입력 화면용 재사용 form widget을 생성하고 정리하는 전문가
+- [fe-master-builder.toml](./fe-master-builder.toml): 목록/테이블/그리드 계열 재사용 master 계층을 생성하고 정리하는 전문가
+- [fe-detail-builder.toml](./fe-detail-builder.toml): 상세 조회/읽기 전용 재사용 detail 계층을 생성하고 정리하는 전문가
+- [fe-form-builder.toml](./fe-form-builder.toml): 생성/수정 입력 화면용 재사용 form 계층을 생성하고 정리하는 전문가
 - [fe-widget-builder.toml](./fe-widget-builder.toml): 재사용 가능한 작은 UI 조각 Widget 컴포넌트를 생성하는 전문가
-- [fe-primitive-component-builder.toml](./fe-primitive-component-builder.toml): Pure UI 컴포넌트를 `packages/fe-ui/src/primitive`에 생성하는 전문가
-- [fe-input-component-builder.toml](./fe-input-component-builder.toml): 폼 입력 컴포넌트를 `packages/fe-ui/src/input`에 생성하는 전문가
+- [fe-display-component-builder.toml](./fe-display-component-builder.toml): Display UI 컴포넌트를 `packages/fe-ui/src/display`에 생성하는 전문가
+- [fe-control-component-builder.toml](./fe-control-component-builder.toml): 사용자 조작/입력 컴포넌트를 `packages/fe-ui/src/control`에 생성하는 전문가
 - [fe-cell-builder.toml](./fe-cell-builder.toml): DataGrid/Table용 Cell 컴포넌트를 계층별로 생성하는 전문가
 - [fe-menu-builder.toml](./fe-menu-builder.toml): 메뉴 시스템 컴포넌트를 생성하는 전문가
 - [fe-store-builder.toml](./fe-store-builder.toml): MobX 기반 Store를 생성하는 전문가
@@ -104,13 +105,14 @@
 - [be-prisma-builder.toml.spec.md](./be-prisma-builder.toml.spec.md)
 - [be-repository-builder.toml.spec.md](./be-repository-builder.toml.spec.md)
 - [fe-detail-builder.toml.spec.md](./fe-detail-builder.toml.spec.md)
-- [fe-form-widget-builder.toml.spec.md](./fe-form-widget-builder.toml.spec.md)
+- [fe-form-builder.toml.spec.md](./fe-form-builder.toml.spec.md)
 - [fe-layout-builder.toml.spec.md](./fe-layout-builder.toml.spec.md)
 - [fe-master-builder.toml.spec.md](./fe-master-builder.toml.spec.md)
 - [fe-route-layout-builder.toml.spec.md](./fe-route-layout-builder.toml.spec.md)
 - [fe-menu-builder.toml.spec.md](./fe-menu-builder.toml.spec.md)
 - [fe-page-builder.toml.spec.md](./fe-page-builder.toml.spec.md)
-- [fe-primitive-component-builder.toml.spec.md](./fe-primitive-component-builder.toml.spec.md)
+- [fe-ui-page-builder.toml.spec.md](./fe-ui-page-builder.toml.spec.md)
+- [fe-display-component-builder.toml.spec.md](./fe-display-component-builder.toml.spec.md)
 - [orch-screen-planner.toml.spec.md](./orch-screen-planner.toml.spec.md)
 - [orch-stage.toml.spec.md](./orch-stage.toml.spec.md)
 - [req-layout-planner.toml.spec.md](./req-layout-planner.toml.spec.md)

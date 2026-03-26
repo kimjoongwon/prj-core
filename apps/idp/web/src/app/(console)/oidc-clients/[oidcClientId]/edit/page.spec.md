@@ -49,13 +49,13 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/oidc-clients/[oidcClientId]/edit/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 `widget/form` 재사용 셸 안에서 입력, 검증, 수정 폼 흐름만 담당합니다.
+- `page.tsx`는 `form` 재사용 셸 안에서 입력, 검증, 수정 폼 흐름만 담당합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `page.tsx` 단일 CSR
 - page role: `form`
-- reusable target: `widget/form`
+- reusable target: `form`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -63,7 +63,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-22 | parent `(console)` layout 참조와 `widget/form` 재사용 셸 기준으로 수정 페이지 계약을 동기화 | codex |
+| 2026-03-22 | parent `(console)` layout 참조와 `form` 재사용 셸 기준으로 수정 페이지 계약을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

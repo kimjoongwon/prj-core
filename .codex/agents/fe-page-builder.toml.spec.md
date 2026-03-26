@@ -6,26 +6,31 @@
 
 ## 역할
 
-페이지 빌더 role을 route skeleton 소비자 기준으로 재정의합니다.
-`layout.tsx`가 화면 뼈대를 소유하고, `fe-page-builder`는 `page.tsx`와 `@slot/**/page.tsx` 콘텐츠를 단일 CSR 기본값으로 구현합니다.
+`fe-page-builder`는 더 이상 page-level visual component 자체를 소유하지 않습니다.
+이제 역할은 `apps/admin/web/src/app/**/page.tsx`, `apps/idp/web/src/app/**/page.tsx`,
+`@slot/**/page.tsx`의 thin route container를 구현하는 것입니다.
+
+순수 page visual composition은 `fe-ui-page-builder`가 `packages/fe-ui/src/page/[PageName]/[PageName].tsx`에 구현하고,
+`fe-page-builder`는 그 page component에 데이터와 핸들러를 연결합니다.
 
 ## 운영 규칙
 
-- 기본 구현은 여전히 `page.tsx` 단일 CSR입니다.
-- `fe-page-builder`는 작업 시작 전에 반드시 sibling `layout.spec.md`를 읽고 `Consumed Layout Contract`를 확인해야 합니다.
-- named slot 콘텐츠 파일(`@slot/**/page.tsx`)도 같은 계약을 소비하며, `default.tsx`는 이 agent 범위가 아닙니다.
-- route-level `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` 조합은 `page.tsx`에서 다시 만들지 않습니다.
+- app route `page.tsx`와 `@slot/**/page.tsx`는 thin container만 허용합니다.
+- 시각 page owner는 반드시 `packages/fe-ui/src/page/[PageName]/[PageName].tsx`입니다.
+- route page는 API 조회, router/search params 해석, redirect, handler wiring만 담당합니다.
+- route page가 feature/widget/page-level 시각 트리를 직접 소유하면 안 됩니다.
+- `Rendering Decision.page component path`는 반드시 `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 형식을 사용합니다.
+- 작업 시작 전에 반드시 sibling `layout.spec.md`와 `page.spec.md`를 읽고 `Consumed Layout Contract`를 확인해야 합니다.
 - `_client.tsx`, `_prefetch.ts`, `HydrationBoundary` 기반 SSR/prefetch 패턴은 개발자 승인된 예외에서만 허용합니다.
-- `page.spec.md`에는 반드시 `## Consumed Layout Contract`와 `## Rendering Decision` 섹션이 있어야 합니다.
-- `Rendering Decision`에는 반드시 `page role`과 `reusable target`이 포함되어야 합니다.
-- `MetaDataGrid` 기반 페이지는 `page role = master`, `reusable target = feature/master/table`로 분류합니다.
-- Create/Edit 입력 화면은 `page role = form`, `reusable target = widget/form`으로 분류합니다.
-- 읽기 전용 상세/inspector 화면은 `page role = detail`, `reusable target = feature/detail/view`으로 분류합니다.
+- `page.spec.md`의 `Rendering Decision`에는 `page role`, `reusable target`, `page component path`가 포함되어야 합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-26 | page owner 경로를 folder-based sidecar 기준으로 구체화 | codex |
+| 2026-03-26 | thin container가 참조하는 page component 경로를 folder-based sidecar 패턴으로 명시 | codex |
+| 2026-03-25 | pure page와 thin route container를 분리하고, fe-page-builder를 app route 전용으로 재정의 | codex |
 | 2026-03-21 | `master/detail/form` 페이지 역할 분류와 `reusable target` 계약을 추가 | codex |
 | 2026-03-21 | route layout ownership 기준에 맞게 page builder를 콘텐츠 전용으로 재정의 | codex |
 | 2026-03-21 | named slot 콘텐츠(`@slot/**/page.tsx`) 지원 규칙을 추가 | codex |

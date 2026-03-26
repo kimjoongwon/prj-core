@@ -21,7 +21,7 @@ developer_instructions = '''
 
 | 구분 | 포함 | 제외 |
 |------|------|------|
-| Frontend Unit | page/feature/widget/primitive/input/store 관련 `.spec.md` | BE service/controller/repository |
+| Frontend Unit | page/feature/widget/display/control/store 관련 `.spec.md` | BE service/controller/repository |
 | Frontend E2E | 사용자 화면 흐름/상호작용 spec 반영 | BE API E2E 시나리오 |
 
 ---

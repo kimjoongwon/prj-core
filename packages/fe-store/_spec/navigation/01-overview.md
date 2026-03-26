@@ -99,5 +99,5 @@ type AbilityChecker = (action: string, subject: string) => boolean;
 | Feature | `packages/fe-ui/src/feature/SubNav/` | 2depth 네비게이션 |
 | Feature | `packages/fe-ui/src/feature/BottomTab/` | 모바일 하단 탭 |
 | Feature | `packages/fe-ui/src/feature/SubMenuList/` | 모바일 서브메뉴 |
-| Layout | `packages/fe-ui/src/primitive/layout/Admin/` | 레이아웃 컴포넌트들 |
+| Layout | `packages/fe-ui/src/display/layout/Admin/` | 레이아웃 컴포넌트들 |
 | 상수 | `packages/common-constant/src/routing/admin-menu.ts` | 메뉴 설정 데이터 |

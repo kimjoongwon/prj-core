@@ -3,7 +3,7 @@
 > 생성일: {{createdDate}}
 > 수정일: {{modifiedDate}}
 > 타입: ui
-> 위치: packages/fe-ui/src/primitive/{{componentName}}/
+> 위치: packages/fe-ui/src/display/{{componentName}}/
 
 ## 역할
 

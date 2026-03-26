@@ -26,6 +26,6 @@
 | 2026-03-18 | `STORYBOOK_DISABLE_CHROMATIC` 환경 변수로 Chromatic addon을 CI 정적 빌드에서 제외할 수 있도록 계약 추가 | codex |
 | 2026-03-16 | `@cocrepo/api`, `next/navigation` alias를 추가해 Storybook react-vite 런타임 해석 범위를 확장 | codex |
 | 2026-03-16 | 로컬 dev 전용 auth shell plugin, API proxy, auth define 주입 계약 추가 | codex |
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
+| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | `@cocrepo/ui` 스토리 루트를 `src/components`에서 `src`로 상향 | codex |
 | 2026-03-06 | components 루트 기준 Storybook 스토리 수집 규칙 문서화 | codex |

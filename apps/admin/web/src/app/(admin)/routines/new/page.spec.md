@@ -193,7 +193,7 @@ Activity 카드 목록 (순서 변경 가능):
 
 - 기본 패턴: `page.tsx` 단일 CSR
 - page role: `form`
-- reusable target: `widget/form`
+- reusable target: `form`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 

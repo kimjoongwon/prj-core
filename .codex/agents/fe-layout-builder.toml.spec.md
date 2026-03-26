@@ -7,11 +7,11 @@
 ## 역할
 
 `fe-layout-builder`를 재사용 Layout primitive 전용 agent로 고정합니다.
-대상은 `packages/fe-ui/src/primitive/layout/**`이며, Next.js `apps/**/layout.tsx`는 범위에서 제외합니다.
+대상은 `packages/fe-ui/src/display/layout/**`이며, Next.js `apps/**/layout.tsx`는 범위에서 제외합니다.
 
 ## 운영 규칙
 
-- `Layout`은 `packages/fe-ui/src/primitive/layout/`에 flat하게 두고 `layout/Layout` 중첩 폴더를 만들지 않습니다.
+- `Layout`은 `packages/fe-ui/src/display/layout/`에 flat하게 두고 `layout/Layout` 중첩 폴더를 만들지 않습니다.
 - `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 widget이므로 이 agent 범위에서 제외합니다.
 - `PageSurface`, `SectionSurface`, `Surface`는 별도 surface 계층으로 남기고, 이 문서는 구조 primitive와의 조합 가능성만 다룹니다.
 - `fe-route-layout-builder`가 실제 route skeleton을 조립하므로, `fe-layout-builder` 문서에는 `layout.tsx` 작성 지시를 남기지 않습니다.

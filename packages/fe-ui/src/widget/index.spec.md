@@ -30,11 +30,12 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-25 | form 재사용 축을 `form`으로 승격하며 widget 루트 배럴 export에서 제거 | codex |
 | 2026-03-22 | layout shell 5종을 `primitive/layout`에서 `widget`으로 재배치하고 공개 export에 추가 | codex |
 | 2026-03-15 | assets 좌측 폴더 탐색에 사용하는 `FolderTree` widget 공개 export를 추가 | codex |
 | 2026-03-15 | 시각 섹션 래퍼 책임을 `surface/SectionSurface`로 이관하고 `widget/Section` 설명을 제거 | codex |
 | 2026-03-11 | `DiagramViewer`/`MarkdownEditor`/`TimelineChart`를 루트 widget 배럴에서 제거하고 `widget-heavy`로 분리 | codex |
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
+| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-06 | `widget`/`widgets` 분리를 제거하고 `widgets` 단일 배럴로 병합 | codex |

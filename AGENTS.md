@@ -717,6 +717,9 @@ spec.md를 수정했다면 하단 "변경 이력"에 변경 내용을 반드시 
 - 기존 코드 파일(`*.ts`, `*.tsx`, `*.js` 등)을 수정하면 같은 위치의 `*.spec.md`를 반드시 함께 수정합니다.
 - `*.spec.md`를 수정한 경우 하단 `## 변경 이력` 표에 당일 변경 내용을 1줄 이상 추가합니다.
 - 코드만 변경하고 spec/변경 이력을 누락한 PR/커밋은 완료로 간주하지 않습니다.
+- `packages/fe-ui/src/page`는 page component와 sidecar를 반드시 동일 이름 폴더에 함께 둡니다.
+- 예: `packages/fe-ui/src/page/AddressEmailVerifyPage/AddressEmailVerifyPage.tsx`, `.spec.md`, `.stories.tsx`, `.stories.spec.md`
+- 금지 예: `packages/fe-ui/src/page/AddressEmailVerifyPage.tsx`, `packages/fe-ui/src/page/AddressEmailVerifyPage.spec.md`
 
 **기존 코드 수정 완료 조건 (Critical):**
 - 코드 변경이 1개라도 있으면 대응되는 `*.spec.md` 업데이트와 `## 변경 이력` 추가가 모두 완료되어야 합니다.
@@ -745,16 +748,24 @@ apps/[app]/web/src/app/(admin)/[도메인]/
     ├── page.spec.md            # 수정 페이지 기획서
     └── page.e2e.ts             # E2E 테스트 ← sidecar
 
-packages/fe-ui/src/components/
-├── feature/[FeatureName]/
-│   ├── index.tsx
-│   └── index.spec.md           # Feature 기획서
-├── widget/[WidgetName]/
-│   ├── index.tsx
-│   └── index.spec.md           # Widget 기획서
-└── ui/[UIName]/
-    ├── index.tsx
-    └── index.spec.md           # UI 기획서
+packages/fe-ui/src/page/
+├── [PageName]/
+│   ├── [PageName].tsx
+│   ├── [PageName].spec.md
+│   ├── [PageName].stories.tsx
+│   └── [PageName].stories.spec.md
+
+packages/fe-ui/src/feature/[FeatureName]/
+├── index.tsx
+└── index.spec.md               # Feature 기획서
+
+packages/fe-ui/src/widget/[WidgetName]/
+├── index.tsx
+└── index.spec.md               # Widget 기획서
+
+packages/fe-ui/src/display/[DisplayName]/
+├── index.tsx
+└── index.spec.md               # Display 기획서
 
 packages/fe-store/src/stores/
 ├── [StoreName].ts
@@ -1069,8 +1080,8 @@ Stage 1: 도메인 기획        → orch-requirement (L0~L4 + BE/Store 스펙) 
 Stage 2: 스키마 구현        → schema → entity → dto → query-dto → seed → [리뷰]
 Stage 3: 백엔드 구현        → repository → service → controller → [리뷰]
 Stage 4: 화면 기획 (페이지별) → orch-screen-planner (L5~L12) → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
-Stage 5: 컴포넌트 (페이지별) → ui → input → cell → widget → layout → feature → store → menu → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
-Stage 6: 페이지 (페이지별)   → fe-page-builder → fe-api-integrator → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
+Stage 5: 컴포넌트 (페이지별) → display → control → cell → widget → layout → feature → store → menu → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
+Stage 6: 페이지 (페이지별)   → fe-ui-page-builder → fe-page-builder → fe-api-integrator → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
 Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰]
 ```
 
@@ -1099,16 +1110,24 @@ apps/[app]/web/src/app/(admin)/[도메인]/
     ├── page.spec.md            # 수정 페이지 기획서
     └── page.e2e.ts             # E2E 테스트 (sidecar)
 
-packages/fe-ui/src/components/
-├── feature/[FeatureName]/
-│   ├── index.tsx
-│   └── index.spec.md           # Feature 기획서
-├── widget/[WidgetName]/
-│   ├── index.tsx
-│   └── index.spec.md           # Widget 기획서
-└── ui/[UIName]/
-    ├── index.tsx
-    └── index.spec.md           # UI 기획서
+packages/fe-ui/src/page/
+├── [PageName]/
+│   ├── [PageName].tsx
+│   ├── [PageName].spec.md
+│   ├── [PageName].stories.tsx
+│   └── [PageName].stories.spec.md
+
+packages/fe-ui/src/feature/[FeatureName]/
+├── index.tsx
+└── index.spec.md               # Feature 기획서
+
+packages/fe-ui/src/widget/[WidgetName]/
+├── index.tsx
+└── index.spec.md               # Widget 기획서
+
+packages/fe-ui/src/display/[DisplayName]/
+├── index.tsx
+└── index.spec.md               # Display 기획서
 
 packages/fe-store/src/stores/
 ├── [StoreName].ts
@@ -1173,8 +1192,8 @@ apps/core/api/src/[module]/
 
 ```
 Stage 5: 컴포넌트 (페이지별)
-├── ui-component-builder
-├── input-component-builder
+├── display-component-builder
+├── control-component-builder
 ├── widget-builder
 ├── feature-builder
 ├── store-builder
@@ -1211,8 +1230,8 @@ Stage 5: 컴포넌트 (페이지별)
 | req-api-planner | 인터랙션(Action)과 API 기획 → `controller.spec.md` + 페이지 API 섹션 |
 | req-app-planner | ApplicationService 유즈케이스 기획 → `application-service.spec.md` |
 | req-entity-planner | Entity/Enum/VO 기획 → `entity.spec.md`, `enum.spec.md`, `vo.spec.md` |
-| req-primitive-planner | Pure UI 컴포넌트 기획(L8) → `primitive/index.spec.md` |
-| req-input-planner | 입력 컴포넌트 기획 → `inputs/index.spec.md` |
+| req-primitive-planner | Pure UI 컴포넌트 기획(L8) → `display/index.spec.md` |
+| req-input-planner | 입력 컴포넌트 기획 → `control/index.spec.md` |
 | req-cell-planner | DataGrid/Table Cell 기획 → `cells/index.spec.md` |
 | req-widget-planner | 화면 Widget 기획(L9) → `widget/index.spec.md` |
 | req-layout-planner | 레이아웃 기획 → `layout/index.spec.md` |
@@ -1231,13 +1250,14 @@ Stage 5: 컴포넌트 (페이지별)
 
 | Agent | 역할 |
 |-------|------|
-| fe-primitive-component-builder | Pure UI 컴포넌트 생성 (packages/fe-ui/src/primitive) |
+| fe-display-component-builder | Display UI 컴포넌트 생성 (packages/fe-ui/src/display) |
 | fe-cell-builder | DataGrid/Table용 Cell 컴포넌트 생성 (계층별) |
-| fe-input-component-builder | Input 컴포넌트 생성 (packages/fe-ui/src/components/inputs) |
+| fe-control-component-builder | Control 컴포넌트 생성 (packages/fe-ui/src/control) |
 | fe-widget-builder | 재사용 가능한 작은 UI 조각 Widget 컴포넌트 생성 |
 | fe-feature-builder | 비즈니스 기능을 담당하는 Feature 컴포넌트 생성 |
 | fe-layout-builder | Layout 컴포넌트 설계 및 생성 |
-| fe-page-builder | 페이지 컴포넌트 생성 (useHandlers 분리) |
+| fe-ui-page-builder | `packages/fe-ui/src/page/[PageName]/[PageName].tsx` pure page 컴포넌트 생성 |
+| fe-page-builder | `apps/*/src/app/**/page.tsx` thin container 생성 |
 | fe-menu-builder | 메뉴 시스템 컴포넌트 생성 |
 | fe-store-builder | MobX 기반 Store 생성 |
 | fe-api-integrator | Orval 생성 React Query 훅을 사용하여 더미 데이터를 실제 API 호출로 교체 |

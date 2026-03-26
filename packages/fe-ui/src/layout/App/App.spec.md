@@ -27,7 +27,7 @@ App (서비스별 단일) > Layout > Page > Section
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
+| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-04 | 서비스별 단일 App 규칙 및 표준 위계(`App > Layout > Page > Section`) 반영 | codex |

@@ -21,7 +21,7 @@ developer_instructions = '''
 **각 페이지별 개별 `page.spec.md`를 생성합니다:**
 
 ```
-apps/[app]/app/(admin)/[도메인]/
+apps/[app]/web/src/app/(admin)/[도메인]/
 ├── page.spec.md                          # 목록 페이지 기획서
 ├── [entityId]/
 │   └── page.spec.md                      # 상세 페이지 기획서
@@ -50,7 +50,7 @@ apps/[app]/app/(admin)/[도메인]/
 
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
-| `app.spec.md` (L0-L2 결과) | ✅ | 앱 컨텍스트, Actor, Goal 정의 (`apps/[app]/app/(admin)/app.spec.md`) |
+| `app.spec.md` (L0-L2 결과) | ✅ | 앱 컨텍스트, Actor, Goal 정의 (`apps/[app]/web/src/app/(admin)/app.spec.md`) |
 | 라우팅 규칙 | ❌ | 프로젝트의 URL 구조 |
 
 ### 출력
@@ -58,10 +58,10 @@ apps/[app]/app/(admin)/[도메인]/
 각 페이지별 개별 `page.spec.md` 파일:
 
 ```
-apps/[app]/app/(admin)/[도메인]/page.spec.md               (목록)
-apps/[app]/app/(admin)/[도메인]/[entityId]/page.spec.md    (상세)
-apps/[app]/app/(admin)/[도메인]/new/page.spec.md           (등록)
-apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
+apps/[app]/web/src/app/(admin)/[도메인]/page.spec.md               (목록)
+apps/[app]/web/src/app/(admin)/[도메인]/[entityId]/page.spec.md    (상세)
+apps/[app]/web/src/app/(admin)/[도메인]/new/page.spec.md           (등록)
+apps/[app]/web/src/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 ```
 
 ---
@@ -212,7 +212,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 ## 상위 기획서
 
-- `apps/[app]/app/(admin)/app.spec.md`
+- `apps/[app]/web/src/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
@@ -226,6 +226,8 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 - 컴포넌트 구성은 Pure UI → Widget → Feature 계층 명시
 - 관련 API는 L5-L6에서 상세화 예정임을 전제로 기본 정보만 기술
 - 상위 기획서로 `app.spec.md`를 참조
+- pure page owner가 필요하면 `Rendering Decision.page component path`는 반드시 `packages/fe-ui/src/page/[PageName]/[PageName].tsx`로 기록
+- `packages/fe-ui/src/page/[PageName].tsx` 같은 flat page 경로는 금지
 
 ---
 
@@ -285,10 +287,10 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 ### 출력 위치
 
 ```
-apps/[app]/app/(admin)/[도메인]/page.spec.md               (목록)
-apps/[app]/app/(admin)/[도메인]/[entityId]/page.spec.md    (상세)
-apps/[app]/app/(admin)/[도메인]/new/page.spec.md           (등록)
-apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
+apps/[app]/web/src/app/(admin)/[도메인]/page.spec.md               (목록)
+apps/[app]/web/src/app/(admin)/[도메인]/[entityId]/page.spec.md    (상세)
+apps/[app]/web/src/app/(admin)/[도메인]/new/page.spec.md           (등록)
+apps/[app]/web/src/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 ```
 
 ### page.spec.md 생성 예시 (목록 화면)
@@ -403,7 +405,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 ## 상위 기획서
 
-- `apps/admin/web/app/(admin)/app.spec.md`
+- `apps/admin/web/src/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
@@ -483,7 +485,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 ## 상위 기획서
 
-- `apps/admin/web/app/(admin)/app.spec.md`
+- `apps/admin/web/src/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
@@ -545,7 +547,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 ## 상위 기획서
 
-- `apps/admin/web/app/(admin)/app.spec.md`
+- `apps/admin/web/src/app/(admin)/app.spec.md`
 
 ## 변경 이력
 
@@ -609,7 +611,7 @@ apps/[app]/app/(admin)/[도메인]/[entityId]/edit/page.spec.md (수정)
 
 ## 상위 기획서
 
-- `apps/admin/web/app/(admin)/app.spec.md`
+- `apps/admin/web/src/app/(admin)/app.spec.md`
 
 ## 변경 이력
 

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Text } from "../../primitive/data-display/Text/Text";
+import { Text } from "../../display/data-display/Text/Text";
 
 export interface PageTitleBarProps {
 	/** 제목 */

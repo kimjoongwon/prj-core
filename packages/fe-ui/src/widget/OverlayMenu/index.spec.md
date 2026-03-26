@@ -14,7 +14,7 @@
 | 항목 | 설명 |
 |------|------|
 | OverlayMenu | 모바일 오버레이 메뉴 widget |
-| OverlayMenuProps | `packages/fe-ui/src/primitive/layout/type.ts`에서 제공하는 props 계약 |
+| OverlayMenuProps | `packages/fe-ui/src/display/layout/type.ts`에서 제공하는 props 계약 |
 
 ## 변경 이력
 

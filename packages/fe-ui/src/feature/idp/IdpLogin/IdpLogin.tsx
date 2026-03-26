@@ -9,7 +9,7 @@ import { observer } from "mobx-react-lite";
 import {
 	OidcLoginForm,
 	type LoginErrorResponse,
-} from "../../../widget/form/OidcLoginForm/OidcLoginForm";
+} from "../../../form/OidcLoginForm/OidcLoginForm";
 
 export interface IdpLoginProps {
 	/** OIDC 인터랙션 UID */

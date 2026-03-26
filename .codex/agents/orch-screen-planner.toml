@@ -20,13 +20,13 @@ developer_instructions = '''
 
 | 레벨 | 명칭 | 담당 에이전트 | 출력 위치 |
 |------|------|--------------|----------|
-| L4+ | 페이지 통합 | req-page-planner | `page.spec.md` 통합 섹션 업데이트 |
+| L4+ | 페이지 통합 | req-page-planner | `page.spec.md` 통합 섹션 업데이트 (`page component path = packages/fe-ui/src/page/[PageName]/[PageName].tsx`) |
 | L5-L6 | 인터랙션/API | req-api-planner | `page.spec.md` API/이벤트 + `apps/core/api/src/module/*/*.controller.spec.md`/`dto.spec.md` |
-| L8 | UI | req-primitive-planner | `packages/fe-ui/src/primitive/[UIName]/index.spec.md` |
-| L8 | Input | req-input-planner | `packages/fe-ui/src/input/[InputName]/index.spec.md` |
-| L8 | Cell | req-cell-planner | `packages/fe-ui/src/primitive/data-display/cell/[CellName]/index.spec.md` |
+| L8 | UI | req-primitive-planner | `packages/fe-ui/src/display/[UIName]/index.spec.md` |
+| L8 | Input | req-input-planner | `packages/fe-ui/src/control/[InputName]/index.spec.md` |
+| L8 | Cell | req-cell-planner | `packages/fe-ui/src/display/data-display/cell/[CellName]/index.spec.md` |
 | L9 | Widget | req-widget-planner | `packages/fe-ui/src/widget/[WidgetName]/index.spec.md` |
-| L10 | Layout | req-layout-planner | `packages/fe-ui/src/primitive/layout/{index,Layout,type}.spec.md` |
+| L10 | Layout | req-layout-planner | `packages/fe-ui/src/display/layout/{index,Layout,type}.spec.md` |
 | L10 | Feature | req-feature-planner | `packages/fe-ui/src/feature/[FeatureName]/index.spec.md` |
 | L10+ | Surface | req-surface-planner | `page.spec.md` Surface/Elevation 섹션 + 관련 layout/feature spec 보강 |
 | L10+ | Menu | req-menu-planner | `packages/common-constant/src/routing/admin-menu.spec.md` |
@@ -46,7 +46,7 @@ developer_instructions = '''
 | 앱 | ✅ | 앱 식별자 | "admin" |
 | 도메인명 | ✅ | 도메인 이름 | "Member" |
 | 화면명 | ✅ | 화면 이름 | "List", "Detail", "Create", "Edit" |
-| 화면 경로 | ✅ | 화면 파일 경로 | "apps/admin/web/app/(admin)/members/" |
+| 화면 경로 | ✅ | 화면 파일 경로 | "apps/admin/web/src/app/(admin)/members/" |
 | `parallel` | △ | 병렬 모드 (`off`/`auto`/`force`), 기본 `auto` | `auto` |
 | `maxConcurrency` | △ | 동시 실행 상한 | `4` |
 
@@ -54,18 +54,18 @@ developer_instructions = '''
 
 ```
 # page.spec.md 통합 + API/이벤트 섹션 업데이트
-apps/[app]/app/(admin)/[도메인]/**/page.spec.md
+apps/[app]/web/src/app/(admin)/[도메인]/**/page.spec.md
 
 # BE/공용 스펙
 apps/core/api/src/module/[module]/[domain].controller.spec.md
 packages/be-dto/src/[domain]/*.dto.spec.md
 
 # FE Sidecar
-packages/fe-ui/src/primitive/[UIName]/index.spec.md
-packages/fe-ui/src/input/[InputName]/index.spec.md
-packages/fe-ui/src/primitive/data-display/cell/[CellName]/index.spec.md
+packages/fe-ui/src/display/[UIName]/index.spec.md
+packages/fe-ui/src/control/[InputName]/index.spec.md
+packages/fe-ui/src/display/data-display/cell/[CellName]/index.spec.md
 packages/fe-ui/src/widget/[WidgetName]/index.spec.md
-packages/fe-ui/src/primitive/layout/{index,Layout,type}.spec.md
+packages/fe-ui/src/display/layout/{index,Layout,type}.spec.md
 packages/fe-ui/src/feature/[FeatureName]/index.spec.md
 
 # 메뉴/API 연동
@@ -83,8 +83,8 @@ apps/[app]/src/app/**/hooks/index.spec.md
 
 | 항목 | 위치 | 확인 방법 |
 |------|------|----------|
-| 앱 기획서 (L0-L2) | `apps/[app]/app/(admin)/app.spec.md` | 파일 존재 확인 |
-| 페이지 기획서 (L3-L4) | `apps/[app]/app/(admin)/[도메인]/page.spec.md` | 파일 존재 확인 |
+| 앱 기획서 (L0-L2) | `apps/[app]/web/src/app/(admin)/app.spec.md` | 파일 존재 확인 |
+| 페이지 기획서 (L3-L4) | `apps/[app]/web/src/app/(admin)/[도메인]/page.spec.md` | 파일 존재 확인 |
 | Entity 기획서 (L7) | `packages/be-entity/src/[entity].entity.spec.md` | 파일 존재 확인 |
 | Store 기획서 (L11, 조건부) | `packages/fe-store/src/stores/[domain]Store.spec.md` | 공용 재사용 상태일 때만 확인 |
 
@@ -168,6 +168,7 @@ Task: req-api-integration-planner
 
 ### 전체 완료 시
 - [ ] page.spec.md에 페이지 통합/API/이벤트 섹션이 반영되었는가?
+- [ ] page.spec.md의 `Rendering Decision.page component path`가 `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 규칙을 따르는가?
 - [ ] `apps/core/api/src/module/*/*.controller.spec.md` 및 dto.spec.md가 업데이트되었는가?
 - [ ] UI/Input/Cell/Widget/Layout/Feature의 index.spec.md가 모두 생성되었는가?
 - [ ] 목록 화면이면 admin-menu.spec.md가 생성/업데이트되었는가?
@@ -221,8 +222,8 @@ Task: req-api-integration-planner
 ❌ 전제조건 미충족
 
 다음 기획서가 필요합니다:
-- apps/admin/web/app/(admin)/app.spec.md (앱 기획서)
-- apps/admin/web/app/(admin)/members/page.spec.md (페이지 기획서)
+- apps/admin/web/src/app/(admin)/app.spec.md (앱 기획서)
+- apps/admin/web/src/app/(admin)/members/page.spec.md (페이지 기획서)
 - packages/be-entity/src/member.entity.spec.md (Entity 기획서)
 - packages/fe-store/src/stores/memberStore.spec.md (Store 기획서)
 
@@ -236,7 +237,7 @@ Task: req-api-integration-planner
 ⚠️ 기존 기획서가 존재합니다
 
 다음 파일이 이미 있습니다:
-- apps/admin/web/app/(admin)/members/page.spec.md (API/이벤트 섹션이 이미 존재)
+- apps/admin/web/src/app/(admin)/members/page.spec.md (API/이벤트 섹션이 이미 존재)
 
 덮어쓰시겠습니까? (y/n)
 ```

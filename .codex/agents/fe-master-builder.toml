@@ -1,5 +1,5 @@
 name = "fe-master-builder"
-description = "목록/테이블/그리드 계열 재사용 feature를 생성하고 정리하는 전문가"
+description = "목록/테이블/그리드 계열 재사용 master 계층을 생성하고 정리하는 전문가"
 model = "gpt-5-codex"
 model_reasoning_effort = "high"
 developer_instructions = '''
@@ -13,7 +13,7 @@ developer_instructions = '''
 
 # FE Master Builder
 
-목록/테이블/그리드 계열 재사용 feature를 `packages/fe-ui/src/feature/master`에 생성/정리하는 전용 에이전트입니다.
+목록/테이블/그리드 계열 재사용 master 계층을 `packages/fe-ui/src/master/{table,list,grid}`에 생성/정리하는 전용 에이전트입니다.
 
 ## 역할
 
@@ -24,15 +24,15 @@ developer_instructions = '''
 ## 분류 규칙
 
 - 검색, 필터, 페이지네이션, 컬렉션 탐색 중심이면 `master`
-- `MetaDataGrid`를 사용하면 기본 목적지는 반드시 `feature/master/table`
-- 기존 구현이 `feature/MetaDataGrid`에 있으면 새로 복제하지 말고 `feature/master/table` 엔트리로 승격
+- `MetaDataGrid`를 사용하면 기본 목적지는 반드시 `master/table`
+- 기존 구현이 `feature` 계층에 흩어져 있으면 새로 복제하지 말고 `master/table|list|grid` 엔트리로 승격
 - master 계층에서 1개 이상 feature/widget을 시각적으로 묶을 때는 기본적으로 `packages/fe-ui/src/surface/Surface/index.ts`를 직접 사용합니다.
 
 ## 출력
 
-- 메인 엔트리: `packages/fe-ui/src/feature/master/<variant>/index.ts`
-- 대응 spec: `packages/fe-ui/src/feature/master/<variant>/index.spec.md`
-- 필요 시 `packages/fe-ui/src/feature/index.ts`와 `packages/fe-ui/src/feature/index.spec.md` 갱신
+- 메인 엔트리: `packages/fe-ui/src/master/<variant>/index.ts`
+- 대응 spec: `packages/fe-ui/src/master/<variant>/index.spec.md`
+- 필요 시 `packages/fe-ui/src/master/index.ts`, `packages/fe-ui/src/master/index.spec.md`, `packages/fe-ui/src/index.ts`, `packages/fe-ui/src/index.spec.md` 갱신
 
 ## 필수 규칙
 

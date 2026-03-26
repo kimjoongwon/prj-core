@@ -23,5 +23,5 @@ master/detail 재사용 wrapper의 기본 표면 primitive로 사용됩니다.
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-22 | `DEFAULT_SURFACE_PADDING` 재노출 계약을 문서에 반영 | codex |
-| 2026-03-22 | `feature/master/table`, `feature/detail/view` wrapper의 기본 surface primitive 용도를 명시 | codex |
+| 2026-03-22 | `master/table`, `detail/view` wrapper의 기본 surface primitive 용도를 명시 | codex |
 | 2026-03-15 | Surface 배럴 신규 생성 | codex |

@@ -4,7 +4,7 @@ import { Button } from "@heroui/react";
 import { X, Zap } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import type { ActionFabProps } from "../../primitive/layout/type";
+import type { ActionFabProps } from "../../display/layout/type";
 
 export const ActionFab = observer(function ActionFab({
 	isOpen,

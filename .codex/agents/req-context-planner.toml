@@ -21,7 +21,7 @@ developer_instructions = '''
 **앱 기획서(`app.spec.md`)를 업데이트합니다:**
 
 ```
-apps/[app]/app/(admin)/
+apps/[app]/web/src/app/(admin)/
 ├── app.spec.md                 # 이 에이전트가 생성/업데이트
 ├── [도메인]/
 │   ├── page.spec.md            # req-screen-planner가 생성
@@ -82,7 +82,7 @@ apps/[app]/app/(admin)/
 ### 1단계: app.spec.md 존재 확인
 
 ```
-apps/[app]/app/(admin)/app.spec.md
+apps/[app]/web/src/app/(admin)/app.spec.md
 ```
 
 - **파일이 없으면**: 2단계부터 시작 (전체 생성)
@@ -227,7 +227,7 @@ apps/[app]/app/(admin)/app.spec.md
 ### 출력 위치
 
 ```
-apps/[app]/app/(admin)/app.spec.md
+apps/[app]/web/src/app/(admin)/app.spec.md
 ```
 
 ### 동작 방식

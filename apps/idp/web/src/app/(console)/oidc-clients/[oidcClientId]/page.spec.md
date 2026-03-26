@@ -59,13 +59,13 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/oidc-clients/[oidcClientId]/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 `feature/detail/view`의 detail shell 안에서 OIDC 클라이언트 읽기 전용 본문과 액션만 담당합니다.
+- `page.tsx`는 `detail/view`의 detail shell 안에서 OIDC 클라이언트 읽기 전용 본문과 액션만 담당합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `page.tsx` 단일 CSR
 - page role: `detail`
-- reusable target: `feature/detail/view`
+- reusable target: `detail/view`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 

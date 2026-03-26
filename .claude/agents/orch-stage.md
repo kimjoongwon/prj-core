@@ -174,14 +174,15 @@ apps/core/api/src/module/[module]/
 
 | page / 구조 | page role | reusable target | Stage 5 전용 에이전트 |
 |-------------|-----------|-----------------|-----------------------|
-| `List` + `MetaDataGrid` | `master` | `feature/master/table` | `fe-master-builder` |
-| `List` + 리스트형 컬렉션 | `master` | `feature/master/list` | `fe-master-builder` |
-| `List` + 카드/썸네일 grid | `master` | `feature/master/grid` | `fe-master-builder` |
-| `Detail` / 읽기 전용 조회 | `detail` | `feature/detail/view` | `fe-detail-builder` |
-| `Create` / `Edit` / 입력 중심 | `form` | `widget/form` | `fe-form-widget-builder` |
+| `List` + `MetaDataGrid` | `master` | `master/table` | `fe-master-builder` |
+| `List` + 리스트형 컬렉션 | `master` | `master/list` | `fe-master-builder` |
+| `List` + 카드/썸네일 grid | `master` | `master/grid` | `fe-master-builder` |
+| `Detail` / 읽기 전용 조회 | `detail` | `detail/view` | `fe-detail-builder` |
+| `Create` / `Edit` / 입력 중심 | `form` | `form` | `fe-form-builder` |
 
 - `fe-page-builder`는 Stage 6에서 위 분류를 다시 검증하고 `page.spec.md`의 `Rendering Decision`에 `page role`, `reusable target`을 기록해야 합니다.
-- `AiForm`이 있어도 Create/Edit의 실제 폼 소유는 `widget/form`입니다.
+- `AiForm`이 있어도 Create/Edit의 실제 폼 소유는 `form`입니다.
+- `master`, `detail`, `form`은 `packages/fe-ui/src/feature/*` 하위가 아니라 `packages/fe-ui/src` 루트에서 `feature`와 같은 위계를 가집니다.
 
 ### 3.6 병렬 실행 파라미터 (신규)
 
@@ -262,7 +263,7 @@ packages/fe-ui/src/feature/[FeatureName]/index.spec.md
 | 2 | 스키마 구현 | 도메인 전체 | Prisma/공용 스키마, Entity, DTO + 테스트 | `targets` fan-out + join | be-prisma-builder, common-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker, be-unit-test-builder, req-be-test-planner, qa-be-testing |
 | 3 | 백엔드 구현 | 도메인 전체 | Repository, Service, ApplicationService, Facade(조건부), Integration Facade(조건부), Controller/Module + 테스트 (Create/Update form bootstrap 계약 포함) | `targets` fan-out + join | be-repository-builder, be-service-builder, be-app-builder, be-facade-builder(조건부), be-integration-builder(조건부), be-controller-builder, be-unit-test-builder, req-be-test-planner, qa-be-testing |
 | 4 | 화면 기획 | **페이지별** | L5-L12 기획 + route layout skeleton / named slot topology 결정 + Surface ownership/elevation 결정 + spec 체크리스트 생성 | `pages` fan-out 가능 | orch-screen-planner, req-route-layout-planner, req-spec-tracker |
-| 5 | 컴포넌트 구현 | **페이지별** | UI/Input/Cell/Widget/재사용 Layout/Feature + `master/detail/form` 전용 계층 구현 + 테스트 + Stage 4 contract 소비 | `pages` fan-out + lock merge | fe-primitive-component-builder, fe-input-component-builder, fe-cell-builder, fe-widget-builder, fe-layout-builder, fe-feature-builder, fe-master-builder, fe-detail-builder, fe-form-widget-builder, fe-store-builder, fe-menu-builder, fe-unit-test-builder, req-fe-test-planner, qa-fe-testing |
+| 5 | 컴포넌트 구현 | **페이지별** | UI/Input/Cell/Widget/재사용 Layout/Feature + `master/detail/form` 전용 계층 구현 + 테스트 + Stage 4 contract 소비 | `pages` fan-out + lock merge | fe-primitive-component-builder, fe-input-component-builder, fe-cell-builder, fe-widget-builder, fe-layout-builder, fe-feature-builder, fe-master-builder, fe-detail-builder, fe-form-builder, fe-store-builder, fe-menu-builder, fe-unit-test-builder, req-fe-test-planner, qa-fe-testing |
 | 6 | 페이지 통합 | **페이지별** | route `layout.tsx` + `@slot/default.tsx` + `page.tsx/@slot page.tsx` 콘텐츠 + API 연동 + route/page contract 검증 + `page role/reusable target` 검증 + 테스트 + spec 체크리스트 동기화 (Create/Update는 AiForm 상단 통합) | `pages` fan-out + lock merge | fe-route-layout-builder, fe-page-builder, fe-api-integrator, /fe-review, fe-unit-test-builder, req-fe-test-planner, qa-fe-testing, req-spec-tracker |
 | 7 | E2E 검증 | 도메인 전체 | E2E 테스트 + 검증 상태 체크리스트 반영 | E2E 전략 + BE/FE 명시 체인 | be-e2e-builder → qa-be-e2e-testing → fe-e2e-builder → qa-fe-e2e-testing → req-spec-tracker |
 
@@ -755,7 +756,7 @@ Task: fe-layout-builder
 Task: fe-feature-builder
 Task: fe-master-builder (page role이 `master`일 때)
 Task: fe-detail-builder (page role이 `detail`일 때)
-Task: fe-form-widget-builder (page role이 `form`일 때)
+Task: fe-form-builder (page role이 `form`일 때)
 Task: fe-store-builder
 Task: fe-menu-builder (목록/탭 route contract가 있을 때)
 Task: fe-unit-test-builder (join 단계, FE 전략 결정)
@@ -766,7 +767,8 @@ Task: qa-fe-testing (join 단계, 단위 테스트 코드 작성/실행)
 **병렬 전략:**
 - `pages` 지정 시 페이지별로 Stage 5 파이프라인을 병렬 fan-out
 - `List/Detail/Create/Edit`는 Stage 4 contract와 page 구조를 바탕으로 `master/detail/form`으로 먼저 분류
-- `master` 페이지는 `fe-master-builder`, `detail` 페이지는 `fe-detail-builder`, `form` 페이지는 `fe-form-widget-builder`를 우선 호출
+- `master` 페이지는 `fe-master-builder`, `detail` 페이지는 `fe-detail-builder`, `form` 페이지는 `fe-form-builder`를 우선 호출
+- `fe-master-builder`/`fe-detail-builder`/`fe-form-builder` 산출물은 각각 `packages/fe-ui/src/master`, `packages/fe-ui/src/detail`, `packages/fe-ui/src/form`에 기록하며 `feature` 하위로 넣지 않음
 - 범용 Feature/Widget이 필요한 경우에만 `fe-feature-builder`, `fe-widget-builder`를 보조적으로 호출
 - `fe-menu-builder`는 목록/탭 route contract가 필요할 때만 실행하며, `admin-menu.ts` 계열 파일 lock 필요
 - `Stage 4`에서 확정한 route layout contract와 Surface ownership/elevation 계획을 각 페이지 파이프라인이 그대로 소비
@@ -820,9 +822,9 @@ Task: qa-fe-testing (join 단계, 단위 테스트 코드 작성/실행)
 - AI patch 적용 후 검증(schema)을 재실행합니다.
 
 **페이지 역할 검증 규칙:**
-- `MetaDataGrid` 기반 목록은 `page role = master`, `reusable target = feature/master/table`
-- 읽기 전용 상세는 `page role = detail`, `reusable target = feature/detail/view`
-- 생성/수정 입력 화면은 `page role = form`, `reusable target = widget/form`
+- `MetaDataGrid` 기반 목록은 `page role = master`, `reusable target = master/table`
+- 읽기 전용 상세는 `page role = detail`, `reusable target = detail/view`
+- 생성/수정 입력 화면은 `page role = form`, `reusable target = form`
 - `fe-page-builder`는 위 분류를 `page.spec.md`에 기록하고 불일치 시 실패 처리합니다.
 
 **⚠️ 페이지별 실행**: `page` 파라미터 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)
@@ -1016,7 +1018,7 @@ Task: req-spec-tracker
 | 2 | be-prisma-builder, common-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker, be-unit-test-builder, req-be-test-planner, qa-be-testing |
 | 3 | be-repository-builder, be-service-builder, be-app-builder, be-facade-builder(조건부), be-integration-builder(조건부), be-controller-builder, be-unit-test-builder, req-be-test-planner, qa-be-testing |
 | 4 | orch-screen-planner, req-route-layout-planner, req-spec-tracker |
-| 5 | fe-primitive-component-builder, fe-input-component-builder, fe-cell-builder, fe-widget-builder, fe-layout-builder, fe-feature-builder, fe-master-builder, fe-detail-builder, fe-form-widget-builder, fe-store-builder, fe-menu-builder, fe-unit-test-builder, req-fe-test-planner, qa-fe-testing |
+| 5 | fe-primitive-component-builder, fe-input-component-builder, fe-cell-builder, fe-widget-builder, fe-layout-builder, fe-feature-builder, fe-master-builder, fe-detail-builder, fe-form-builder, fe-store-builder, fe-menu-builder, fe-unit-test-builder, req-fe-test-planner, qa-fe-testing |
 | 6 | fe-route-layout-builder, fe-page-builder, fe-api-integrator, /fe-review (Skill), fe-unit-test-builder, req-fe-test-planner, qa-fe-testing, req-spec-tracker |
 | 7 | be-e2e-builder → qa-be-e2e-testing → fe-e2e-builder → qa-fe-e2e-testing → req-spec-tracker |
 

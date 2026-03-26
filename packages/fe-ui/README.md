@@ -8,6 +8,16 @@ UI component library for the Cocrepo monorepo.
 
 `@cocrepo/ui` provides a comprehensive collection of reusable React components built with HeroUI, Tailwind CSS, and modern design patterns. Components follow accessibility standards and are optimized for both mobile and desktop experiences.
 
+## Source Structure Rule
+
+- Group folders are allowed only directly under `src/`.
+- Under each root axis (`control`, `display`, `feature`, `form`, `layout`, `master`, `page`, `surface`, `widget`), add real component or entry folders only.
+- Do not add an extra grouping depth such as `src/feature/idp/IdpLogin`.
+- Prefer flattened paths such as `src/feature/IdpLogin`.
+- `src/page` uses mandatory folder-based sidecars. Place each page in `src/page/[PageName]/`.
+- Put the component and its sidecars together, for example `src/page/AddressEmailVerifyPage/AddressEmailVerifyPage.tsx`, `.spec.md`, `.stories.tsx`, `.stories.spec.md`.
+- Do not place flat page sidecars such as `src/page/AddressEmailVerifyPage.tsx` or `src/page/AddressEmailVerifyPage.spec.md` directly under `src/page`.
+
 ## Features
 
 - 🎨 **Modern UI Components** - Built with HeroUI and Tailwind CSS

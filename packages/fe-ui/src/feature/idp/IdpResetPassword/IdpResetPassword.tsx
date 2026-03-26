@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import {
 	ResetPasswordForm,
 	type ResetPasswordStep,
-} from "../../../widget/form/ResetPasswordForm/ResetPasswordForm";
+} from "../../../form/ResetPasswordForm/ResetPasswordForm";
 
 /** API 응답으로부터 PasswordRule[] 생성 */
 function buildPasswordRules(policy: PasswordPolicyDto): PasswordRule[] {

@@ -67,17 +67,17 @@ tools: Read, Write, Grep, Bash
 
 - `page role`은 반드시 `master | detail | form` 중 하나로 결정합니다.
 - `reusable target`은 반드시 아래 중 하나로 결정합니다.
-  - `feature/master/table`
-  - `feature/master/list`
-  - `feature/master/grid`
-  - `feature/detail/view`
-  - `widget/form`
+  - `master/table`
+  - `master/list`
+  - `master/grid`
+  - `detail/view`
+  - `form`
 - 분류 규칙:
   - 컬렉션 탐색, 검색, 필터, 페이지네이션 중심이면 `master`
-  - `MetaDataGrid`를 사용하면 기본값은 `master` + `feature/master/table`
-  - 읽기 전용 조회, inspector, 상세 본문 중심이면 `detail` + `feature/detail/view`
-  - 생성/수정/입력/검증 중심이면 `form` + `widget/form`
-- `Create`/`Edit` 화면이 `AiForm`을 사용하더라도 재사용 소유는 `widget/form`으로 기록합니다.
+  - `MetaDataGrid`를 사용하면 기본값은 `master` + `master/table`
+  - 읽기 전용 조회, inspector, 상세 본문 중심이면 `detail` + `detail/view`
+  - 생성/수정/입력/검증 중심이면 `form` + `form`
+- `Create`/`Edit` 화면이 `AiForm`을 사용하더라도 재사용 소유는 `form`으로 기록합니다.
 
 ---
 

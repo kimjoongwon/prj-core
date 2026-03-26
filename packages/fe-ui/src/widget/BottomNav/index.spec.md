@@ -14,8 +14,8 @@
 | 항목 | 설명 |
 |------|------|
 | BottomNav | 모바일 하단 탭 widget |
-| BottomNavProps | `packages/fe-ui/src/primitive/layout/type.ts`에서 제공하는 props 계약 |
-| BottomNavItem | `packages/fe-ui/src/primitive/layout/type.ts`에서 제공하는 아이템 계약 |
+| BottomNavProps | `packages/fe-ui/src/display/layout/type.ts`에서 제공하는 props 계약 |
+| BottomNavItem | `packages/fe-ui/src/display/layout/type.ts`에서 제공하는 아이템 계약 |
 
 ## 변경 이력
 

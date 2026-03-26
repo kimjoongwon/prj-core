@@ -49,13 +49,13 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/security-policy/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 `widget/form` 재사용 셸 안에서 보안 정책 입력과 저장 흐름만 담당합니다.
+- `page.tsx`는 `form` 재사용 셸 안에서 보안 정책 입력과 저장 흐름만 담당합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `page.tsx` 단일 CSR
 - page role: `form`
-- reusable target: `widget/form`
+- reusable target: `form`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -63,7 +63,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-22 | 보안 정책 화면을 `widget/form` 기준으로 재분류하고 폼 중심 계약으로 동기화 | codex |
+| 2026-03-22 | 보안 정책 화면을 `form` 기준으로 재분류하고 폼 중심 계약으로 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |

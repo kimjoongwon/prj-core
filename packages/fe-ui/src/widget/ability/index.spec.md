@@ -7,7 +7,7 @@
 ## 역할
 
 권한 관리 관련 widget을 `widgets/ability` 하위에서 단일 진입점으로 공개합니다.
-생성/수정 form modal은 `widget/form` 배럴에서 공개합니다.
+생성/수정 form modal은 `form` 배럴에서 공개합니다.
 
 ## 핵심 동작
 
@@ -27,8 +27,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-22 | `AbilityFormModal` 소유를 `widget/form`으로 이동 | codex |
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
+| 2026-03-22 | `AbilityFormModal` 소유를 `form`으로 이동 | codex |
+| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-06 | `widgets/ability`와 `widgets/ability` export를 병합 | codex |

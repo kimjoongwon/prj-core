@@ -14,8 +14,8 @@
 | 항목 | 설명 |
 |------|------|
 | HeaderBar | 콘솔 상단 헤더 widget |
-| HeaderBarProps | `packages/fe-ui/src/primitive/layout/type.ts`에서 제공하는 props 계약 |
-| LayoutUserInfo | `packages/fe-ui/src/primitive/layout/type.ts`에서 제공하는 사용자 정보 계약 |
+| HeaderBarProps | `packages/fe-ui/src/display/layout/type.ts`에서 제공하는 props 계약 |
+| LayoutUserInfo | `packages/fe-ui/src/display/layout/type.ts`에서 제공하는 사용자 정보 계약 |
 
 ## 변경 이력
 

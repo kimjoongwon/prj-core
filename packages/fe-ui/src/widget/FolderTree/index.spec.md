@@ -207,7 +207,7 @@ interface FolderNode {
 | ---------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | 2026-03-15 | assets 남은 폴더 관리 범위를 위해 selected folder 기반 rename/delete header action hook을 추가                            | codex               |
 | 2026-03-15 | assets 목록 Stage 5 최소 구현으로 트리 렌더링/선택/확장 기능을 우선 구현하고 create modal/context menu는 후속 과제로 분리 | codex               |
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일                                      | codex               |
+| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일                                      | codex               |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/\* 기준으로 상향                                                              | codex               |
 | 2026-02-22 | 초기 생성                                                                                                                 | req-widget-planner  |
 | 2026-02-26 | Stage 5 정합화: assets 페이지-컴포넌트 스펙 경로/명칭 일치화                                                              | orch-screen-planner |

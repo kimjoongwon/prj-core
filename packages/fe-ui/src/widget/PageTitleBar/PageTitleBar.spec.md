@@ -21,7 +21,7 @@
 | 모듈 | 용도 |
 |------|------|
 | react | 기능 구현 의존성 |
-| ../../primitive/data-display/Text/Text | 제목/설명 타이포그래피 위계 적용 |
+| ../../display/data-display/Text/Text | 제목/설명 타이포그래피 위계 적용 |
 
 ## 동작 흐름
 
@@ -48,7 +48,7 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-15 | `Text` primitive를 사용해 페이지/섹션 제목과 설명에 타이포그래피 위계를 적용 | codex |
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
+| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |

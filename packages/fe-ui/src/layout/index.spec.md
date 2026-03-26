@@ -15,7 +15,7 @@
 App (서비스별 단일) > Layout > Page > Section
 ```
 
-- `Layout` 계층은 `packages/fe-ui/src/primitive/layout/`에서 제공합니다.
+- `Layout` 계층은 `packages/fe-ui/src/display/layout/`에서 제공합니다.
 - 이 배럴은 위계 중 `App`, `Page`, `Section` 레벨을 노출합니다.
 
 ## 동작
@@ -27,7 +27,7 @@ App (서비스별 단일) > Layout > Page > Section
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
+| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-03 | Shell 접미사 제거 및 불필요한 `Main`/`Header` export 제거 | codex |
 | 2026-03-04 | `App > Layout > Page > Section` 위계 설명 및 Layout 계층 위치 명시 | codex |

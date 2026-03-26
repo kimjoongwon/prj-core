@@ -30,7 +30,7 @@ developer_instructions = '''
 
 | 파일 | 동작 |
 |------|------|
-| `packages/fe-ui/src/primitive/data-display/cell/[CellName]/index.spec.md` | 생성/업데이트 |
+| `packages/fe-ui/src/display/data-display/cell/[CellName]/index.spec.md` | 생성/업데이트 |
 
 ---
 

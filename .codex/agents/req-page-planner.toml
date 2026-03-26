@@ -12,8 +12,10 @@ developer_instructions = '''
 
 # 페이지 기획자 (Page Planner)
 
-`fe-page-builder`와 1:1로 대응되는 기획 에이전트입니다.
-이제 `page.spec.md`는 route `layout.spec.md`가 정의한 skeleton을 소비하는 콘텐츠 계약 문서여야 합니다.
+`fe-ui-page-builder`와 `fe-page-builder`를 잇는 기획 에이전트입니다.
+`page.spec.md`는 route `layout.spec.md`가 정의한 skeleton을 소비하는 thin route container 계약 문서여야 하며,
+동시에 어떤 `packages/fe-ui/src/page/[PageName]/[PageName].tsx` pure page component를 연결할지도 명시해야 합니다.
+이때 pure page 경로는 반드시 `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 패턴을 따릅니다.
 named slot을 쓰는 경우 `@slot/**/page.spec.md`도 같은 규칙을 따릅니다.
 
 ---
@@ -22,9 +24,9 @@ named slot을 쓰는 경우 `@slot/**/page.spec.md`도 같은 규칙을 따릅�
 
 | 항목 | 설명 |
 |------|------|
-| 대상 레이어 | `page.tsx`, `@slot/**/page.tsx` 콘텐츠 통합, 서버/클라이언트 경계, API/이벤트 바인딩 |
+| 대상 레이어 | `page.tsx`, `@slot/**/page.tsx` thin container 통합, 서버/클라이언트 경계, API/이벤트 바인딩, pure page 연결 계약 |
 | 주요 산출물 | `apps/[app]/src/app/**/page.spec.md`, `apps/[app]/src/app/**/@slot/**/page.spec.md` |
-| 대응 빌더 | `fe-page-builder` |
+| 대응 빌더 | `fe-ui-page-builder`, `fe-page-builder` |
 
 ---
 
@@ -58,7 +60,8 @@ named slot을 쓰는 경우 `@slot/**/page.spec.md`도 같은 규칙을 따릅�
   - 대상 콘텐츠 파일 경로 (`page.tsx`, `@slot/**/page.tsx`)
   - page가 직접 소유하지 않는 skeleton 요소
 - `## Rendering Decision`
-  - 기본 패턴: `page.tsx` 단일 CSR
+  - 기본 패턴: `pure page + thin route container`
+  - `page component path` (`packages/fe-ui/src/page/[PageName]/[PageName].tsx`)
   - SSR/prefetch 예외 승인 여부
   - 예외 시 추가 파일 목록과 승인 근거
 - 데이터 조회 훅, 로딩/에러 처리 흐름
@@ -87,5 +90,6 @@ named slot을 쓰는 경우 `@slot/**/page.spec.md`도 같은 규칙을 따릅�
 | `req-api-planner` | 이전 단계 | API/이벤트 정의 |
 | `req-feature-planner` | 이전 단계 | Feature 조합 정의 |
 | `req-surface-planner` | 협업 단계 | surface ownership 경계 검토 |
-| `fe-page-builder` | 다음 단계 | 실제 페이지 코드 구현 |
+| `fe-ui-page-builder` | 다음 단계 | `packages/fe-ui/src/page/[PageName]/[PageName].tsx` pure page 구현 |
+| `fe-page-builder` | 다음 단계 | app route `page.tsx` thin container 구현 |
 '''

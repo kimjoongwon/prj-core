@@ -39,7 +39,7 @@ developer_instructions = '''
 | ApplicationService 기획서 | ✅ | `packages/be-app/src/[name].application-service/index.spec.md` |
 | Service 기획서 | ✅ | `packages/be-service/src/[name].service/index.spec.md` |
 | Controller 기획서 | ✅ | `apps/core/api/src/module/[module]/[domain].controller.spec.md` |
-| 페이지 기획서 | ✅ | `apps/[app]/app/(admin)/[domain]/page.spec.md` |
+| 페이지 기획서 | ✅ | `apps/[app]/web/src/app/(admin)/[domain]/page.spec.md` |
 | Repository 기획서 | ❌ | `packages/be-repository/src/[domain].repository.spec.md` |
 | Store 기획서 (조건부) | ❌ | `packages/fe-store/src/stores/[domain]Store.spec.md` |
 
@@ -330,7 +330,7 @@ packages/be-repository/src/[domain].repository.spec.md   # Repository 규칙 섹
 - packages/be-app/src/users.application-service/index.spec.md
 - packages/be-service/src/users.service/index.spec.md
 - apps/core/api/src/module/users/users.controller.spec.md
-- apps/admin/web/app/(admin)/users/page.spec.md
+- apps/admin/web/src/app/(admin)/users/page.spec.md
 - packages/be-service/src/reservations.service/index.spec.md
 - apps/core/api/src/module/reservations/reservations.controller.spec.md
 ```

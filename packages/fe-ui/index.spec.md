@@ -24,6 +24,6 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-08 | Docker prune 빌드에서 `@cocrepo/constant`, `@cocrepo/toolkit` 런타임 해석이 가능하도록 패키지 의존성 원칙을 명시 | codex |
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
+| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-06 | 내부 utils 공개 export를 제거하고 UI 계층 계약만 유지 | codex |

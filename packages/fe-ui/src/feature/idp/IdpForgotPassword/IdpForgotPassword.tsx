@@ -2,7 +2,7 @@
 import { useRequestPasswordReset } from "@cocrepo/api/idp/password-reset";
 
 import { observer } from "mobx-react-lite";
-import { ForgotPasswordForm } from "../../../widget/form/ForgotPasswordForm/ForgotPasswordForm";
+import { ForgotPasswordForm } from "../../../form/ForgotPasswordForm/ForgotPasswordForm";
 
 /**
  * IDP 비밀번호 찾기 Feature

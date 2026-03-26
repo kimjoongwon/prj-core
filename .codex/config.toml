@@ -50,6 +50,19 @@ facade_layer_allowed = true
 single_root_passthrough_allowed = true
 guard = "Controller는 각 endpoint마다 하나의 주 진입점을 선택한다. 유즈케이스 workflow면 @cocrepo/app ApplicationService를, 경계 조합/응답 composition이면 @cocrepo/facade Facade를, 단일 aggregate root 전달형이면 동일 aggregate root Service pass-through를 사용하며, 같은 endpoint에서 Facade와 ApplicationService를 기본 패턴으로 함께 직접 조합하지 않는다"
 
+[rules.fe_ui]
+root_axis_only = true
+no_namespace_group_depth = true
+guard = "packages/fe-ui/src 아래에는 공개 축만 그룹 폴더로 두고, 그 아래에는 실제 컴포넌트/엔트리만 둔다"
+
+[rules.fe_ui.page]
+folder_required = true
+folder_layout = "packages/fe-ui/src/page/{PageName}/{PageName}.tsx"
+sidecar_spec_file = "packages/fe-ui/src/page/{PageName}/{PageName}.spec.md"
+story_file = "packages/fe-ui/src/page/{PageName}/{PageName}.stories.tsx"
+story_spec_file = "packages/fe-ui/src/page/{PageName}/{PageName}.stories.spec.md"
+guard = "page 계층에서 sidecar 방식(spec/story)을 사용할 때는 반드시 동일 이름 폴더 안에 component와 sidecar를 함께 둔다. packages/fe-ui/src/page/{PageName}.tsx 같은 flat 배치는 금지한다"
+
 [i18n]
 enabled = true
 default_locale = "ko-KR"
@@ -68,11 +81,12 @@ planning = [
   "req-primitive-planner",
 ]
 implementation = [
+  "fe-ui-page-builder",
   "fe-page-builder",
   "fe-feature-builder",
   "fe-widget-builder",
-  "fe-primitive-component-builder",
-  "fe-input-component-builder",
+  "fe-display-component-builder",
+  "fe-control-component-builder",
   "common-schema-builder",
   "be-dto-builder",
   "be-controller-builder",
@@ -184,9 +198,9 @@ config_file = "agents/fe-cell-builder.toml"
 description = "비즈니스 기능을 담당하는 Feature 컴포넌트를 생성하는 전문가"
 config_file = "agents/fe-feature-builder.toml"
 
-[agents.fe-input-component-builder]
-description = "폼 입력 컴포넌트를 packages/fe-ui/src/input에 생성하는 전문가"
-config_file = "agents/fe-input-component-builder.toml"
+[agents.fe-control-component-builder]
+description = "사용자 조작/입력 컴포넌트를 packages/fe-ui/src/control에 생성하는 전문가"
+config_file = "agents/fe-control-component-builder.toml"
 
 [agents.fe-layout-builder]
 description = "packages/fe-ui/src/layout의 재사용 Layout 컴포넌트를 설계하고 생성하는 전문가"
@@ -201,28 +215,32 @@ description = "메뉴 시스템 컴포넌트를 생성하는 전문가"
 config_file = "agents/fe-menu-builder.toml"
 
 [agents.fe-master-builder]
-description = "목록/테이블/그리드 계열 재사용 feature를 생성하고 정리하는 전문가"
+description = "목록/테이블/그리드 계열 재사용 master 계층을 생성하고 정리하는 전문가"
 config_file = "agents/fe-master-builder.toml"
 
 [agents.fe-detail-builder]
-description = "상세 조회/읽기 전용 재사용 feature를 생성하고 정리하는 전문가"
+description = "상세 조회/읽기 전용 재사용 detail 계층을 생성하고 정리하는 전문가"
 config_file = "agents/fe-detail-builder.toml"
 
-[agents.fe-form-widget-builder]
-description = "생성/수정 입력 화면용 재사용 form widget을 생성하고 정리하는 전문가"
-config_file = "agents/fe-form-widget-builder.toml"
+[agents.fe-form-builder]
+description = "생성/수정 입력 화면용 재사용 form 계층을 생성하고 정리하는 전문가"
+config_file = "agents/fe-form-builder.toml"
 
 [agents.fe-page-builder]
-description = "route layout contract를 소비해 page.tsx/@slot/**/page.tsx 콘텐츠를 구현하는 전문가 (다국어 렌더링/문구 키 적용 포함)"
+description = "apps/*/src/app/**/page.tsx와 @slot/**/page.tsx thin container를 구현하는 전문가 (다국어 렌더링/문구 키 적용 포함)"
 config_file = "agents/fe-page-builder.toml"
+
+[agents.fe-ui-page-builder]
+description = "packages/fe-ui/src/page/[PageName]/[PageName].tsx 기준의 pure page component를 생성하는 전문가"
+config_file = "agents/fe-ui-page-builder.toml"
 
 [agents.fe-store-builder]
 description = "MobX 기반 Store를 생성하는 전문가"
 config_file = "agents/fe-store-builder.toml"
 
-[agents.fe-primitive-component-builder]
-description = "Pure UI 컴포넌트를 packages/fe-ui/src/primitive에 생성하는 전문가"
-config_file = "agents/fe-primitive-component-builder.toml"
+[agents.fe-display-component-builder]
+description = "Display UI 컴포넌트를 packages/fe-ui/src/display에 생성하는 전문가"
+config_file = "agents/fe-display-component-builder.toml"
 
 [agents.fe-widget-builder]
 description = "재사용 가능한 작은 UI 조각 Widget 컴포넌트를 생성하는 전문가"

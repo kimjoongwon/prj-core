@@ -5,7 +5,7 @@ import { cn } from "@heroui/react";
 import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import type { SidePanelProps } from "../../primitive/layout/type";
+import type { SidePanelProps } from "../../display/layout/type";
 
 interface SubMenuItemProps {
 	item: NavItem;

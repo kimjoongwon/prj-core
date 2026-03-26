@@ -4,7 +4,7 @@ import { Chip, cn, Tooltip } from "@heroui/react";
 import { AlertCircle, Info } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Textarea } from "../../../input/Textarea/Textarea";
+import { Textarea } from "../../../control/Textarea/Textarea";
 import { HStack } from "../../../layout/HStack/HStack";
 import { VStack } from "../../../layout/VStack/VStack";
 

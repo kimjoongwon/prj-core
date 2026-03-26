@@ -53,7 +53,7 @@ function UserDetailPage() {
 							<p className="mt-1 font-mono text-sm">{userId}</p>
 						</div>
 						<p className="text-default-500">
-							이 상세 화면은 아직 구현 중이며, 최종 본문은 `feature/detail/view`
+							이 상세 화면은 아직 구현 중이며, 최종 본문은 `detail/view`
 							조합으로 확장됩니다.
 						</p>
 					</div>

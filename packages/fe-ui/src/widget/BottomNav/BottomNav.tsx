@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import type { BottomNavProps } from "../../primitive/layout/type";
+import type { BottomNavProps } from "../../display/layout/type";
 
 export const BottomNav = observer(function BottomNav({
 	items,

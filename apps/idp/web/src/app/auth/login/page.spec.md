@@ -55,9 +55,10 @@
 
 ## Rendering Decision
 
-- 기본 패턴: `page.tsx` 단일 CSR
+- 기본 패턴: `pure page + thin route container`
 - page role: `form`
-- reusable target: `widget/form`
+- reusable target: `form`
+- page component path: `packages/fe-ui/src/page/IdpAuthLoginPage/IdpAuthLoginPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -65,6 +66,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-26 | `IdpAuthLoginPage` 경로를 page 폴더 기반 sidecar 구조에 맞게 갱신 | codex |
+| 2026-03-25 | `IdpAuthLoginPage`로 상태 UI를 page 레이어로 이동하고 route page를 thin container로 정리 | codex |
 | 2026-03-21 | `page.tsx` default export를 `observer(...)`로 정리해 client page 규칙을 맞춤 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

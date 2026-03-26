@@ -10,10 +10,10 @@ import {
 import { observer } from "mobx-react-lite";
 import { useRef, useEffect } from "react";
 import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";
-import { TypingIndicator } from "../../primitive/feedback/TypingIndicator/TypingIndicator";
-import { WebSocketConnectionStatus } from "../../primitive/feedback/WebSocketConnectionStatus/WebSocketConnectionStatus";
-import { MessageStatus } from "../../primitive/feedback/MessageStatus/MessageStatus";
-import { InquiryReplyForm } from "../../widget/form/InquiryReplyForm";
+import { TypingIndicator } from "../../display/feedback/TypingIndicator/TypingIndicator";
+import { WebSocketConnectionStatus } from "../../display/feedback/WebSocketConnectionStatus/WebSocketConnectionStatus";
+import { MessageStatus } from "../../display/feedback/MessageStatus/MessageStatus";
+import { InquiryReplyForm } from "../../form/InquiryReplyForm";
 
 export interface RealtimeChatPanelProps {
 	/** 문의 ID */

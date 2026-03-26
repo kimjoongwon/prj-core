@@ -1,8 +1,8 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Button } from "../../input/Button/Button";
-import { Text } from "../../primitive/data-display/Text/Text";
+import { Button } from "../../control/Button/Button";
+import { Text } from "../../display/data-display/Text/Text";
 
 export interface SpaceAlertProps {
 	/** Alert 제목 */

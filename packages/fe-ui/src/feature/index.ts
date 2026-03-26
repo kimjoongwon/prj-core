@@ -7,8 +7,6 @@ export { CollapsibleSidebar } from "./CollapsibleSidebar/CollapsibleSidebarLayou
 export * from "./HeaderSpaceSelector";
 export * from "./InquiryWebSocketProvider";
 export * from "./Logo";
-export * from "./detail";
-export * from "./master";
 export * from "./message-template";
 export * from "./Nav";
 export * from "./ProgramPickerModal";

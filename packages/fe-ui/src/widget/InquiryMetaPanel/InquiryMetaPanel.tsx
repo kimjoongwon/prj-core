@@ -5,7 +5,7 @@ import type { Option } from "@cocrepo/type";
 import { Plus, Tag } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Select } from "../../input/Select/Select";
+import { Select } from "../../control/Select/Select";
 
 export interface InquiryMetaPanelProps {
 	/** 문의 상태 */

@@ -12,7 +12,7 @@ import {
 } from "@heroui/react";
 import { ChevronDown, LogOut } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import type { HeaderBarProps } from "../../primitive/layout/type";
+import type { HeaderBarProps } from "../../display/layout/type";
 
 /**
  * HeaderBar - 관리자 레이아웃 헤더 (v7.0)

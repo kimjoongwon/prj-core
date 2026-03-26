@@ -55,7 +55,7 @@ developer_instructions = '''
 
 | 규칙 | 설명 |
 |------|------|
-| **UI 컴포넌트만 조합** | `src/primitive/` 폴더의 Pure UI만 사용 |
+| **UI 컴포넌트만 조합** | `src/display/` 폴더의 Pure UI만 사용 |
 | **단일 책임** | 하나의 명확한 역할만 수행 |
 | **Pure UI 유지** | 상태/API 호출 금지, props로만 동작 |
 | **displayName 설정** | 디버깅을 위해 필수 |
@@ -231,8 +231,8 @@ Pure UI → Widget → Feature → Page
 | 에이전트 | 관계 |
 |----------|------|
 | req-widget-planner | Widget 기획서(index.spec.md) 기반 구현 |
-| **fe-primitive-component-builder** | Widget이 사용할 Pure UI 컴포넌트 생성 |
-| fe-input-component-builder | Widget에서 사용할 Input 컴포넌트 생성 |
+| **fe-display-component-builder** | Widget이 사용할 Display UI 컴포넌트 생성 |
+| fe-control-component-builder | Widget에서 사용할 Control 컴포넌트 생성 |
 
 ### 후행 에이전트
 
@@ -276,11 +276,11 @@ SpaceDropdown                 → SpaceSelector (PersistStore 연결)
 
 - `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 완성된 layout shell block이므로 widget으로 분류합니다.
 - 위치는 `packages/fe-ui/src/widget/[Name]/`이고, `widget` 아래에 layout 전용 하위 카테고리를 만들지 않습니다.
-- 공용 props 계약은 `packages/fe-ui/src/primitive/layout/type.ts`를 재사용합니다.
+- 공용 props 계약은 `packages/fe-ui/src/display/layout/type.ts`를 재사용합니다.
 
 ### UI 컴포넌트 참조 가능 카테고리
 
-`src/primitive/` 내의 다음 카테고리 컴포넌트를 조합:
+`src/display/` 내의 다음 카테고리 컴포넌트를 조합:
 
 - **data-display**: Avatar, Chip, Icon, Text, User 등
 - **inputs**: Button, Input, Checkbox, Select 등

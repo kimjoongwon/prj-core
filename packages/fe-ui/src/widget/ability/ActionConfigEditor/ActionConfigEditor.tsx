@@ -3,8 +3,8 @@ import { type ActionConfigDto } from "@cocrepo/api/core/actions";
 
 import { Card, CardBody, cn } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { Input } from "../../../input/Input/Input";
-import { Select } from "../../../input/Select/Select";
+import { Input } from "../../../control/Input/Input";
+import { Select } from "../../../control/Select/Select";
 import { HStack } from "../../../layout/HStack/HStack";
 import { VStack } from "../../../layout/VStack/VStack";
 

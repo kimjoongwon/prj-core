@@ -75,7 +75,7 @@
 ## 특이사항
 
 - `"use client"` 컴포넌트 (observer 래핑)
-- `feature/detail/view`의 `DetailPage`, `DetailPageSurface`, `DetailSectionCard` 조합을 사용합니다.
+- `detail/view`의 `DetailPage`, `DetailPageSurface`, `DetailSectionCard` 조합을 사용합니다.
 - 위젯은 모두 스텁 상태 (값이 "-")
 - 프리페칭 없음, 서버 컴포넌트 래퍼 없음
 - E2E에서 로그인 후 콘솔에 hydration recoverable error가 없어야 한다
@@ -96,13 +96,13 @@
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/dashboard/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 `feature/detail/view`의 detail shell 안에서 대시보드 읽기 전용 본문만 담당합니다.
+- `page.tsx`는 `detail/view`의 detail shell 안에서 대시보드 읽기 전용 본문만 담당합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `page.tsx` 단일 CSR
 - page role: `detail`
-- reusable target: `feature/detail/view`
+- reusable target: `detail/view`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 

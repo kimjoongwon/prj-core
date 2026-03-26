@@ -57,7 +57,7 @@
 
 - child `page.tsx`와 `@slot/**/page.tsx`는 자신이 채우는 slot 콘텐츠만 구현합니다.
 - child 페이지는 route-level `Page`, `PageSurface`, `Section`, `SectionSurface`를 직접 다시 조립하지 않습니다.
-- content-level visual grouping은 `Surface`, `feature/detail/view`, `widget/form` 같은 재사용 타깃을 우선 사용합니다.
+- content-level visual grouping은 `Surface`, `detail/view`, `form` 같은 재사용 타깃을 우선 사용합니다.
 - child 페이지 계약은 각 `page.spec.md`의 `Consumed Layout Contract`와 `Rendering Decision`을 따릅니다.
 
 ## 변경 이력
