@@ -3,8 +3,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ENV_FILE_LOCAL="$ROOT_DIR/apps/idp/api/.env.local"
-ENV_FILE_DEFAULT="$ROOT_DIR/apps/idp/api/.env"
+ENV_FILE="$ROOT_DIR/apps/idp/api/.env"
 PLAYWRIGHT_PROJECT="${E2E_PLAYWRIGHT_PROJECT:-idp-chromium}"
 PLAYWRIGHT_BROWSERS_DIR="$ROOT_DIR/apps/test/e2e/browsers"
 IDP_API_LOG_FILE="${IDP_API_LOG_FILE:-/tmp/idp-api-e2e.log}"
@@ -121,12 +120,8 @@ is_local_host() {
 }
 
 load_env() {
-  if [[ -f "$ENV_FILE_LOCAL" ]]; then
-    ENV_FILE="$ENV_FILE_LOCAL"
-  elif [[ -f "$ENV_FILE_DEFAULT" ]]; then
-    ENV_FILE="$ENV_FILE_DEFAULT"
-  else
-    error "IDP API env 파일을 찾지 못했습니다. apps/idp/api/.env.local 또는 .env 가 필요합니다."
+  if [[ ! -f "$ENV_FILE" ]]; then
+    error "IDP API env 파일을 찾지 못했습니다. apps/idp/api/.env 가 필요합니다."
     exit 1
   fi
 
@@ -163,13 +158,13 @@ NODE
 validate_local_targets() {
   if ! is_local_host "$DB_HOST"; then
     error "로컬 E2E 스크립트는 원격 DB를 허용하지 않습니다. 현재 DATABASE_URL 호스트: $DB_HOST"
-    error "apps/idp/api/.env.local 또는 .env 를 localhost/127.0.0.1 대상으로 맞춘 뒤 다시 실행하세요."
+    error "apps/idp/api/.env 를 localhost/127.0.0.1 대상으로 맞춘 뒤 다시 실행하세요."
     exit 1
   fi
 
   if ! is_local_host "$REDIS_HOST"; then
     error "로컬 E2E 스크립트는 원격 Redis를 허용하지 않습니다. 현재 REDIS_HOST: $REDIS_HOST"
-    error "apps/idp/api/.env.local 또는 .env 를 localhost/127.0.0.1 대상으로 맞춘 뒤 다시 실행하세요."
+    error "apps/idp/api/.env 를 localhost/127.0.0.1 대상으로 맞춘 뒤 다시 실행하세요."
     exit 1
   fi
 }

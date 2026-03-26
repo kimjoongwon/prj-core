@@ -15,7 +15,7 @@ Postgres/Redis 준비, Prisma schema push/seed, `idp-api` 기동, Playwright 실
 |------|------|
 | 기본 실행 | `pnpm test:e2e:idp:local` |
 | Playwright 프로젝트 | 기본 `idp-chromium`, `E2E_PLAYWRIGHT_PROJECT=idp-mobile` 로 변경 가능 |
-| env 파일 우선순위 | `apps/idp/api/.env.local` → `apps/idp/api/.env` |
+| env 파일 | `apps/idp/api/.env` |
 | 안전 장치 | `DATABASE_URL`, `REDIS_HOST`가 `localhost/127.0.0.1`가 아니면 즉시 실패 |
 | Postgres 준비 | 로컬 DB일 때만 `prj-core-e2e-postgres` 컨테이너를 자동 생성/재사용 |
 | Redis 준비 | 로컬 Redis일 때만 `prj-core-e2e-redis` 컨테이너를 자동 생성/재사용 |
@@ -26,7 +26,7 @@ Postgres/Redis 준비, Prisma schema push/seed, `idp-api` 기동, Playwright 실
 
 ## 구현 체크리스트
 
-- [x] `.env.local`과 `.env`를 모두 지원
+- [x] `apps/idp/api/.env`만 사용
 - [x] 외부 DB/Redis 호스트를 사용하는 경우 즉시 실패
 - [x] 로컬 포트가 이미 열려 있으면 기존 서비스를 재사용
 - [x] Playwright 브라우저가 없으면 자동 설치

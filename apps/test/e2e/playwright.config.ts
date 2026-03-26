@@ -88,7 +88,7 @@ function buildApiStartCommand(
 ) {
 	return [
 		"bash -lc",
-		`'set -a; if [ -f ${envDir}/.env.local ]; then source ${envDir}/.env.local; elif [ -f ${envDir}/.env ]; then source ${envDir}/.env; fi; set +a; export SMTP_SECURE=\${SMTP_SECURE:-false}; pnpm --filter=${filter} start:dev'`,
+		`'set -a; if [ -f ${envDir}/.env ]; then source ${envDir}/.env; fi; set +a; export SMTP_SECURE=\${SMTP_SECURE:-false}; pnpm --filter=${filter} start:dev'`,
 	].join(" ");
 }
 

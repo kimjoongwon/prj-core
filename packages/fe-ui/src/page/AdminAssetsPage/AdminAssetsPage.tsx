@@ -169,6 +169,15 @@ const getAssetEmptyMessage = (
 	return `${selectedFolder.name} 폴더에 등록된 에셋이 없습니다.`;
 };
 
+const assetsLayoutClassName =
+	"grid min-h-[520px] grid-cols-1 gap-5 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-6";
+
+const assetsSidebarPanelClassName =
+	"overflow-hidden rounded-[1.25rem] border border-divider/70 bg-default-50/70 shadow-sm";
+
+const assetsGridPanelClassName =
+	"min-w-0 rounded-[1.25rem] border border-divider/70 bg-content1/85 px-4 py-4 shadow-sm sm:px-5 sm:py-5";
+
 function buildAssetColumns({
 	isRemoving,
 	onClickDeleteAssetButton,
@@ -315,8 +324,8 @@ const AssetsPageContent = observer(function AssetsPageContent({
 	};
 
 	return (
-		<div className="grid min-h-[520px] grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)]">
-			<div className="border-b border-divider lg:border-b-0 lg:border-r">
+		<div className={assetsLayoutClassName}>
+			<div className={assetsSidebarPanelClassName}>
 				<FolderTree
 					folders={folders}
 					selectedFolderId={selectedFolderId}
@@ -330,7 +339,7 @@ const AssetsPageContent = observer(function AssetsPageContent({
 					className="bg-transparent"
 				/>
 			</div>
-			<div className="min-w-0">
+			<div className={assetsGridPanelClassName}>
 				<MetaDataGrid
 					config={{
 						entity: "Asset",
@@ -351,12 +360,12 @@ const AssetsPageContent = observer(function AssetsPageContent({
 
 function AssetsPageShellFallback() {
 	return (
-		<div className="space-y-5">
+		<div className="space-y-6 md:space-y-7">
 			<PageTitleBar
 				title="에셋 관리"
 				description="업로드된 에셋을 조회, 검색, 필터링하고 삭제할 수 있습니다."
 			/>
-			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+			<Surface className="h-36 rounded-[1.75rem] border-divider/80 bg-content1/75">
 				{null}
 			</Surface>
 		</div>
@@ -373,11 +382,11 @@ function AssetsGridFallback({
 	columns: MetaDataGridColumnConfig<AssetDto>[];
 }) {
 	return (
-		<div className="grid min-h-[520px] grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)]">
-			<div className="border-b border-divider lg:border-b-0 lg:border-r">
+		<div className={assetsLayoutClassName}>
+			<div className={assetsSidebarPanelClassName}>
 				<FolderTree folders={[]} isLoading className="bg-transparent" />
 			</div>
-			<div className="min-w-0">
+			<div className={assetsGridPanelClassName}>
 				<MetaDataGrid
 					config={{
 						entity: "Asset",
@@ -398,7 +407,7 @@ function AssetsGridFallback({
 
 function AssetsSpaceEmptyState() {
 	return (
-		<div className="p-6">
+		<div className="rounded-[1.25rem] border border-dashed border-divider/70 bg-default-50/60 p-8 md:p-10">
 			<EmptyState
 				title="Space를 선택하면 에셋을 조회할 수 있습니다"
 				description="상단 Space 선택기를 통해 관리하려는 공간을 먼저 선택해주세요."
@@ -740,7 +749,7 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 
 	return (
 		<>
-			<div className="space-y-5">
+			<div className="space-y-6 md:space-y-7">
 				<PageTitleBar
 					title="에셋 관리"
 					description="업로드된 에셋을 조회, 검색, 필터링하고 삭제할 수 있습니다."
@@ -748,8 +757,7 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 				/>
 
 				<Surface
-					className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70"
-					padding="none"
+					className="overflow-hidden rounded-[1.75rem] border-divider/80 bg-content1/75"
 				>
 					{!isClientMounted || !isPersistStoreHydrated ? (
 						<AssetsGridFallback

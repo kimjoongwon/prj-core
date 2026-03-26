@@ -13,7 +13,7 @@
 
 | 항목 | 설명 |
 |------|------|
-| 기본 실행 | `packages/be-prisma/.env.local`의 local DB를 점검 |
+| 기본 실행 | `packages/be-prisma/.env`의 local DB를 점검 |
 | `--target=local|stg|prod` | 점검 대상 DB 선택 |
 | `--env-file=...` | 다른 env 파일 경로 지정 |
 

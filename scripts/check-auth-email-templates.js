@@ -18,7 +18,7 @@ function parseArgs(argv) {
   const target = targetArg ? targetArg.split('=')[1] : 'local'
   const envFile = envFileArg
     ? envFileArg.slice('--env-file='.length)
-    : 'packages/be-prisma/.env.local'
+    : 'packages/be-prisma/.env'
 
   if (!TARGETS.has(target)) {
     console.error(`Invalid --target value: ${target}. Allowed: local, stg, prod`)
