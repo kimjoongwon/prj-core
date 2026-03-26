@@ -129,7 +129,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| SSR Prefetch | `prefetchGetRoleByIdQuery` | 역할 상세 프리페치 |
+| 클라이언트 초기 렌더 | `useGetRoleById(roleId)` | 역할 상세 첫 조회 |
 | 클라이언트 | `useGetRoleById(roleId)` | 역할 상세 조회 (GET /api/v1/roles/:id) |
 | 클라이언트 | `useGetAbilitiesByRoleId(roleId)` | 역할별 Ability 목록 조회 |
 | 편집 모드 진입 시 | `useQuery (getAllAbilities)` | 전체 Ability 목록 조회 (GET /api/v1/abilities), 임시 customInstance 사용 |

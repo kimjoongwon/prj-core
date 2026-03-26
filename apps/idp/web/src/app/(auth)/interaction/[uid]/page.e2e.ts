@@ -1,18 +1,21 @@
 import { navigateToConsentForm, navigateToLoginForm } from "@cocrepo/e2e";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 /** 시드 데이터 기준 FULL_ACCESS 계정 */
 const ADMIN_EMAIL = "admin@plate.com";
 const ADMIN_PASSWORD = "rkdmf12!@";
 
+const getLoginHeading = (page: Page) =>
+	page.getByRole("heading", { name: "로그인", exact: true });
+
 const assertLoginFailureHandled = async (
-	page: import("@playwright/test").Page,
+	page: Page,
 ) => {
 	const invalidCredentials = page.getByText(
 		"이메일 또는 비밀번호가 올바르지 않습니다.",
 	);
 	const serverError = page.getByText("로그인 처리 중 오류가 발생했습니다.");
-	const loginHeading = page.getByRole("heading", { name: "로그인" });
+	const loginHeading = getLoginHeading(page);
 
 	await expect(async () => {
 		const hasError = await invalidCredentials
@@ -35,7 +38,7 @@ test.describe("OIDC 로그인 인터랙션", () => {
 			await navigateToLoginForm(page);
 
 			// Then: 로그인 폼 요소가 표시됨
-			await expect(page.getByRole("heading", { name: "로그인" })).toBeVisible();
+			await expect(getLoginHeading(page)).toBeVisible();
 			await expect(page.getByLabel("이메일")).toBeVisible();
 			await expect(page.getByLabel("비밀번호")).toBeVisible();
 			await expect(page.getByRole("button", { name: "로그인" })).toBeVisible();
@@ -167,9 +170,7 @@ test.describe("OIDC 로그인 플로우", () => {
 			await page.getByRole("button", { name: "로그인" }).click();
 
 			// Then: 에러 발생 후 로그인 폼에 머물러야 함
-			await expect(page.getByRole("heading", { name: "로그인" })).toBeVisible({
-				timeout: 10000,
-			});
+			await expect(getLoginHeading(page)).toBeVisible({ timeout: 10000 });
 
 			// Then: 이메일 입력값 유지
 			await expect(emailInput).toHaveValue(ADMIN_EMAIL);
@@ -218,7 +219,7 @@ test.describe("OIDC 로그인 플로우", () => {
 			await page.getByRole("button", { name: "로그인" }).click();
 
 			// Then: 페이지가 로그인 폼에 그대로 머물러야 함 (브라우저 유효성 검증)
-			await expect(page.getByRole("heading", { name: "로그인" })).toBeVisible();
+			await expect(getLoginHeading(page)).toBeVisible();
 			// 서버 에러 배너가 표시되지 않음 (서버까지 요청이 가지 않았으므로)
 			await expect(
 				page.getByText("이메일 또는 비밀번호가 올바르지 않습니다."),
@@ -243,7 +244,7 @@ test.describe("OIDC 로그인 플로우", () => {
 			await page.getByRole("button", { name: "로그인" }).click();
 
 			// Then: 페이지가 로그인 폼에 그대로 머물러야 함
-			await expect(page.getByRole("heading", { name: "로그인" })).toBeVisible();
+			await expect(getLoginHeading(page)).toBeVisible();
 			await expect(
 				page.getByText("이메일 또는 비밀번호가 올바르지 않습니다."),
 			).not.toBeVisible();
@@ -276,9 +277,9 @@ test.describe("OIDC 로그인 플로우", () => {
 
 			// Then: 로그인 성공 → 로그인 폼에서 벗어남 (동의 화면 또는 콜백 리다이렉트)
 			// 동의 화면도 /interaction/ 경로이므로 URL 대신 로그인 heading 소멸로 확인
-			await expect(
-				page.getByRole("heading", { name: "로그인" }),
-			).not.toBeVisible({ timeout: 30000 });
+			await expect(getLoginHeading(page)).not.toBeVisible({
+				timeout: 30000,
+			});
 		});
 	});
 });

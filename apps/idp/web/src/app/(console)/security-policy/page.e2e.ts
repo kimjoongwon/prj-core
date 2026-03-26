@@ -27,7 +27,9 @@ test.describe("보안 정책", () => {
 
 		test("비밀번호 정책 섹션이 표시되어야 한다", async ({ page }) => {
 			// Then: 비밀번호 정책 필드 확인
-			await expect(page.getByText("비밀번호 정책")).toBeVisible();
+			await expect(
+				page.getByRole("heading", { name: "비밀번호 정책", exact: true }),
+			).toBeVisible();
 			await expect(page.getByText("최소 길이")).toBeVisible();
 			await expect(page.getByText("대문자 필수")).toBeVisible();
 			await expect(page.getByText("소문자 필수")).toBeVisible();
@@ -37,7 +39,9 @@ test.describe("보안 정책", () => {
 
 		test("잠금 정책 섹션이 표시되어야 한다", async ({ page }) => {
 			// Then: 잠금 정책 필드 확인
-			await expect(page.getByText("잠금 정책")).toBeVisible();
+			await expect(
+				page.getByRole("heading", { name: "잠금 정책", exact: true }),
+			).toBeVisible();
 			await expect(page.getByText("일시 잠금 임계값")).toBeVisible();
 			await expect(page.getByText("일시 잠금 지속시간")).toBeVisible();
 			await expect(page.getByText("영구 잠금 임계값")).toBeVisible();
@@ -45,7 +49,9 @@ test.describe("보안 정책", () => {
 
 		test("세션 정책 섹션이 표시되어야 한다", async ({ page }) => {
 			// Then: 세션 정책 필드 확인
-			await expect(page.getByText("세션 정책")).toBeVisible();
+			await expect(
+				page.getByRole("heading", { name: "세션 정책", exact: true }),
+			).toBeVisible();
 			await expect(page.getByText("Access Token TTL")).toBeVisible();
 			await expect(page.getByText("Refresh Token TTL")).toBeVisible();
 			await expect(page.getByText("세션 TTL")).toBeVisible();

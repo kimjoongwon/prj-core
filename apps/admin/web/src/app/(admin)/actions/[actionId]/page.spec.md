@@ -97,7 +97,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| SSR Prefetch | `GET /api/v1/actions/:id` (prefetchActionDetailData) | 상세 데이터 프리페치 |
+| 클라이언트 초기 렌더 | `GET /api/v1/actions/:id` (useGetActionById) | 상세 데이터 첫 조회 |
 | 클라이언트 | `GET /api/v1/actions/:id` (useGetActionById) | ActionResponseDto 반환 (config 포함) |
 | 삭제 확인 | `DELETE /api/v1/actions/:id` (useDeleteAction) | Action 삭제 (소프트 삭제) |
 

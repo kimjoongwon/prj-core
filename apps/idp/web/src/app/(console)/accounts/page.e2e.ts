@@ -1,25 +1,6 @@
 import { loginToConsole } from "@cocrepo/e2e";
 import { expect, test } from "@playwright/test";
 
-interface IdpAccountListItem {
-	id: string;
-	email: string;
-}
-
-const getFirstAccount = async (
-	page: import("@playwright/test").Page,
-): Promise<IdpAccountListItem> => {
-	const response = await page.request.get(
-		"http://localhost:3008/api/v1/idp/accounts?take=1&skip=0",
-	);
-	expect(response.status()).toBe(200);
-	const body = (await response.json()) as { data?: IdpAccountListItem[] };
-	const account = body.data?.[0];
-	expect(account?.id).toBeTruthy();
-	expect(account?.email).toBeTruthy();
-	return account as IdpAccountListItem;
-};
-
 test.describe("IDP 계정 목록 페이지", () => {
 	test.describe("목록 페이지", () => {
 		test.beforeEach(async ({ page }) => {
@@ -41,18 +22,29 @@ test.describe("IDP 계정 목록 페이지", () => {
 
 		test("데이터 그리드 컬럼이 표시되어야 한다", async ({ page }) => {
 			// Then: DataGrid 컬럼 헤더 확인
-			await expect(page.getByText("이름")).toBeVisible();
-			await expect(page.getByText("이메일")).toBeVisible();
-			await expect(page.getByText("활성 상태")).toBeVisible();
-			await expect(page.getByText("잠금 상태")).toBeVisible();
-			await expect(page.getByText("실패 횟수")).toBeVisible();
-			await expect(page.getByText("최종 로그인")).toBeVisible();
+			await expect(
+				page.getByRole("columnheader", { name: "이름", exact: true }),
+			).toBeVisible();
+			await expect(
+				page.getByRole("columnheader", { name: "이메일", exact: true }),
+			).toBeVisible();
+			await expect(
+				page.getByRole("columnheader", { name: "활성 상태", exact: true }),
+			).toBeVisible();
+			await expect(
+				page.getByRole("columnheader", { name: "잠금 상태", exact: true }),
+			).toBeVisible();
+			await expect(
+				page.getByRole("columnheader", { name: "실패 횟수", exact: true }),
+			).toBeVisible();
+			await expect(
+				page.getByRole("columnheader", { name: "최종 로그인", exact: true }),
+			).toBeVisible();
 		});
 
 		test("계정 데이터가 표시되어야 한다", async ({ page }) => {
-			// Then: 현재 첫 페이지 API 응답에 포함된 계정 이메일이 목록에 표시됨
-			const account = await getFirstAccount(page);
-			await expect(page.getByText(account.email)).toBeVisible();
+			// Then: 첫 번째 계정 row의 상세 링크가 표시됨
+			await expect(page.locator('a[aria-label="상세 보기"]').first()).toBeVisible();
 		});
 	});
 

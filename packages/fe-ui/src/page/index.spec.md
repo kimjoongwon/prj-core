@@ -25,10 +25,16 @@
 - 금지 예: `packages/fe-ui/src/page/AddressEmailVerifyPage.spec.md`
 - `src/page` 바로 아래에는 page component 폴더와 공용 배럴(`index.ts`, `index.spec.md`)만 둡니다.
 
+## Migration Audit
+
+- admin/idp route page pure page 이관 현황은 `packages/fe-ui/src/page/migration-audit.md`를 기준으로 확인합니다.
+- 전체 이관 완료 여부를 말할 때는 반드시 audit 문서를 먼저 확인합니다.
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-26 | route page pure page 이관 현황 문서(`migration-audit.md`) 참조 규칙 추가 | codex |
 | 2026-03-26 | page 계층 sidecar 파일을 동일 이름 폴더에 묶는 규칙과 새 배럴 경로를 반영 | codex |
 | 2026-03-25 | auth/root route용 page 컴포넌트 export를 추가 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |

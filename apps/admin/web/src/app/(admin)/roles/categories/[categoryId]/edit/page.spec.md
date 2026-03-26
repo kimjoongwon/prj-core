@@ -103,7 +103,7 @@
 
 ## 비고
 
-- SSR Prefetch 미적용 (TODO: Orval codegen 후 추가 예정)
+- 현재 route는 thin container + CSR fetch 패턴을 유지하며 별도 `_prefetch.ts`는 사용하지 않음
 - parentId가 빈 문자열이면 null로 변환하여 최상위 카테고리로 설정
 - 수정 성공 시 해당 카테고리 쿼리 캐시 무효화
 

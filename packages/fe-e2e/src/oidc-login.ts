@@ -11,7 +11,10 @@ interface InputActionable extends Actionable {
 }
 
 export interface E2EPageLike {
-	goto(path: string): Promise<unknown>;
+	goto(
+		path: string,
+		options?: { waitUntil?: "load" | "domcontentloaded" },
+	): Promise<unknown>;
 	waitForTimeout(ms: number): Promise<void>;
 	waitForURL(url: UrlMatcher, options?: { timeout?: number }): Promise<void>;
 	getByRole(role: string, options?: { name?: string }): Actionable;
@@ -63,7 +66,7 @@ export async function navigateToOidcLoginForm(
 
 	for (let attempt = 1; attempt <= retryAttempts; attempt++) {
 		try {
-			await page.goto(startPath);
+			await page.goto(startPath, { waitUntil: "domcontentloaded" });
 			lastError = null;
 			break;
 		} catch (error) {

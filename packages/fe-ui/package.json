@@ -29,8 +29,6 @@
       "import": "./hero.tsx",
       "default": "./hero.tsx"
     },
-    "./style": "./src/style/globals.css",
-    "./style/base": "./src/style/base.css",
     "./package.json": "./package.json"
   },
   "main": "./index.ts",

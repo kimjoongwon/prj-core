@@ -6,16 +6,19 @@ const path = require('path');
 const ROOT = process.cwd();
 const CODE_EXT = new Set(['.ts', '.tsx', '.js', '.jsx', '.prisma']);
 const TS_JS_EXT = ['.ts', '.tsx', '.js', '.jsx'];
+const DOC_TARGET_EXT = ['.html', '.css', '.json', '.sh', '.mjs', '.cjs'];
 const VALID_SCOPES = new Set(['all', 'src']);
 const SKIP_DIR_SEGMENT_RE =
   /(^|\/)(node_modules|dist|coverage|\.next|\.turbo|build|out|\.vercel|\.idea|storybook-static)(\/|$)/;
+const declaredTargetCache = new Map();
 
 function shouldSkipDirectory(relPath) {
   return (
     SKIP_DIR_SEGMENT_RE.test(relPath) ||
     relPath.startsWith('.git/') ||
     relPath.startsWith('.codex/') ||
-    relPath.startsWith('.claude/')
+    relPath.startsWith('.claude/') ||
+    relPath.startsWith('.opencode/')
   );
 }
 
@@ -102,6 +105,41 @@ function collectSpecFiles(allFiles, scope) {
     .sort();
 }
 
+function parseDeclaredTargets(specPath) {
+  if (declaredTargetCache.has(specPath)) {
+    return declaredTargetCache.get(specPath);
+  }
+
+  let text = '';
+  try {
+    text = fs.readFileSync(path.join(ROOT, specPath), 'utf8');
+  } catch {
+    declaredTargetCache.set(specPath, []);
+    return [];
+  }
+
+  const targets = [];
+  for (const line of text.split(/\r?\n/)) {
+    if (!line.startsWith('> 위치: ')) continue;
+    const target = line
+      .slice('> 위치: '.length)
+      .trim()
+      .replace(/^`+/, '')
+      .replace(/`+$/, '');
+    if (target.length > 0) {
+      targets.push(target);
+    }
+  }
+
+  declaredTargetCache.set(specPath, targets);
+  return targets;
+}
+
+function existsTarget(relPath, allFileSet) {
+  if (allFileSet.has(relPath)) return true;
+  return fs.existsSync(path.join(ROOT, relPath));
+}
+
 function createCodeLikeDirectoryMap(allFiles) {
   const map = new Map();
   for (const relPath of allFiles) {
@@ -118,6 +156,11 @@ function createCodeLikeDirectoryMap(allFiles) {
 
 function hasCodeForSpec(specPath, allFileSet, codeDirMap) {
   const name = path.basename(specPath);
+  const declaredTargets = parseDeclaredTargets(specPath);
+  if (declaredTargets.length > 0) {
+    return declaredTargets.every((target) => existsTarget(target, allFileSet));
+  }
+
   if (name === 'app.spec.md') return true;
 
   if (specPath.endsWith('.prisma.spec.md')) {
@@ -126,11 +169,25 @@ function hasCodeForSpec(specPath, allFileSet, codeDirMap) {
   }
 
   const base = specPath.slice(0, -'.spec.md'.length);
+  if (existsTarget(base, allFileSet)) return true;
+
   for (const ext of TS_JS_EXT) {
     if (allFileSet.has(`${base}${ext}`)) return true;
   }
 
   if (allFileSet.has(`${base}.enum.ts`) || allFileSet.has(`${base}.enum.js`)) {
+    return true;
+  }
+
+  for (const ext of DOC_TARGET_EXT) {
+    if (allFileSet.has(`${base}${ext}`)) return true;
+  }
+
+  if (name === 'package.spec.md' && allFileSet.has(path.join(path.dirname(specPath), 'package.json').replace(/\\/g, '/'))) {
+    return true;
+  }
+
+  if (name === 'tsconfig.spec.md' && allFileSet.has(path.join(path.dirname(specPath), 'tsconfig.json').replace(/\\/g, '/'))) {
     return true;
   }
 

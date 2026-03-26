@@ -4,8 +4,21 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = process.cwd();
-const CODE_EXT = new Set(['.ts', '.tsx', '.js', '.jsx']);
+const CODE_EXT = new Set(['.ts', '.tsx', '.js', '.jsx', '.prisma']);
 const DATE = new Date().toISOString().slice(0, 10);
+const VALID_SCOPES = new Set(['all', 'src']);
+const SKIP_DIR_SEGMENT_RE =
+  /(^|\/)(node_modules|dist|coverage|\.next|\.turbo|build|out|\.vercel|\.idea|storybook-static)(\/|$)/;
+
+function shouldSkipDirectory(relPath) {
+  return (
+    SKIP_DIR_SEGMENT_RE.test(relPath) ||
+    relPath.startsWith('.git/') ||
+    relPath.startsWith('.codex/') ||
+    relPath.startsWith('.claude/') ||
+    relPath.startsWith('.opencode/')
+  );
+}
 
 function walk(dir, out = []) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -14,21 +27,7 @@ function walk(dir, out = []) {
     const rel = path.relative(ROOT, abs).replace(/\\/g, '/');
 
     if (entry.isDirectory()) {
-      if (
-        rel.includes('/node_modules/') ||
-        rel.includes('/dist/') ||
-        rel.includes('/coverage/') ||
-        rel.includes('/.next/') ||
-        rel.includes('/.turbo/') ||
-        rel.includes('/build/') ||
-        rel.includes('/out/') ||
-        rel.startsWith('.git/') ||
-        rel.startsWith('.codex/') ||
-        rel.startsWith('.claude/') ||
-        rel.startsWith('apps/tool/storybook/') ||
-        rel.startsWith('apps/test/e2e/') ||
-        rel.startsWith('apps/proposal/')
-      ) {
+      if (shouldSkipDirectory(rel)) {
         continue;
       }
       walk(abs, out);
@@ -40,10 +39,39 @@ function walk(dir, out = []) {
   return out;
 }
 
-function isCodeTarget(relPath) {
-  if (!relPath.startsWith('apps/') && !relPath.startsWith('packages/')) return false;
-  if (!relPath.includes('/src/')) return false;
-  if (relPath.startsWith('packages/fe-api/src/')) return false;
+function parseArgs(argv) {
+  const scopeArg = argv.find((arg) => arg.startsWith('--scope='));
+  const scope = scopeArg ? scopeArg.split('=')[1] : 'all';
+  if (!VALID_SCOPES.has(scope)) {
+    console.error(`Invalid --scope value: ${scope}. Allowed: all, src`);
+    process.exit(1);
+  }
+
+  return {
+    dryRun: argv.includes('--dry-run'),
+    scope,
+    includeGeneratedFeApi: argv.includes('--include-generated-fe-api'),
+  };
+}
+
+function isTargetRoot(relPath, scope) {
+  if (scope === 'src') {
+    return (
+      (relPath.startsWith('apps/') || relPath.startsWith('packages/')) &&
+      relPath.includes('/src/')
+    );
+  }
+  return (
+    relPath.startsWith('apps/') ||
+    relPath.startsWith('packages/') ||
+    relPath.startsWith('scripts/')
+  );
+}
+
+function isCodeTarget(relPath, options) {
+  if (!isTargetRoot(relPath, options.scope)) return false;
+  if (!options.includeGeneratedFeApi && relPath.startsWith('packages/fe-api/src/'))
+    return false;
 
   const ext = path.extname(relPath);
   if (!CODE_EXT.has(ext)) return false;
@@ -51,13 +79,12 @@ function isCodeTarget(relPath) {
   if (relPath.endsWith('.d.ts')) return false;
   if (/\.spec\.[tj]sx?$/.test(relPath)) return false;
   if (/\.test\.[tj]sx?$/.test(relPath)) return false;
-  if (/\.stories\.[tj]sx?$/.test(relPath)) return false;
-  if (/page\.e2e\.ts$/.test(relPath)) return false;
 
   return true;
 }
 
 function sidecarPath(codePath) {
+  if (codePath.endsWith('.prisma')) return `${codePath}.spec.md`;
   return codePath.replace(/\.[^.]+$/, '.spec.md');
 }
 
@@ -77,6 +104,10 @@ function detectKind(relPath) {
   const p = relPath;
   const base = path.basename(p);
 
+  if (/\.stories\.[tj]sx?$/.test(p)) return 'story';
+  if (/\.e2e\.[tj]s$/.test(p)) return 'e2e';
+  if (/\.config\.[cm]?[tj]s$/.test(p) || /^next\.config\.[tj]s$/.test(base))
+    return 'config';
   if (/\/(page)\.[tj]sx?$/.test(p)) return 'page';
   if (/\/_client\.[tj]sx?$/.test(p)) return 'client';
   if (/\/_prefetch\.[tj]sx?$/.test(p)) return 'prefetch';
@@ -279,9 +310,9 @@ function ensureDirFor(filePath) {
 }
 
 function main() {
-  const dryRun = process.argv.includes('--dry-run');
+  const options = parseArgs(process.argv.slice(2));
   const allFiles = walk(ROOT);
-  const codeFiles = allFiles.filter(isCodeTarget).sort();
+  const codeFiles = allFiles.filter((relPath) => isCodeTarget(relPath, options)).sort();
 
   const targets = codeFiles.filter((code) => {
     const spec = sidecarPath(code);
@@ -296,7 +327,7 @@ function main() {
     const specRel = sidecarPath(code);
     const specAbs = path.join(ROOT, specRel);
 
-    if (dryRun) {
+    if (options.dryRun) {
       console.log(`[DRY] ${specRel}`);
       continue;
     }

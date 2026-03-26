@@ -87,7 +87,7 @@
 
 ## 비고
 
-- SSR Prefetch 미적용 (TODO: Orval codegen 후 추가 예정)
+- 현재 route는 thin container + CSR fetch 패턴을 유지하며 별도 `_prefetch.ts`는 사용하지 않음
 - CategoryInfoSection에 `categoriesBasePath="/roles/categories"` 전달 (상위 카테고리 링크 경로)
 - CategoryChildrenSection에 `categoriesBasePath="/roles/categories"` 전달 (하위 카테고리 링크 경로)
 - CategoryInfoSection, CategoryChildrenSection, CategoryRoleListSection은 `@cocrepo/ui` 공용 컴포넌트 사용

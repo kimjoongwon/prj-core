@@ -99,7 +99,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| SSR Prefetch | `GET /api/v1/actions/:id` (prefetchActionEditData) | 상세 데이터 프리페치 |
+| 클라이언트 초기 렌더 | `GET /api/v1/actions/:id` (useGetActionById) | 기존 데이터 첫 조회 |
 | 클라이언트 | `GET /api/v1/actions/:id` (useGetActionById) | 기존 데이터 조회 |
 | 저장 버튼 클릭 | `PATCH /api/v1/actions/:id` (useUpdateAction) | Action 수정 |
 

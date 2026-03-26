@@ -164,16 +164,14 @@ Page + PageTitleBar
 
 ```text
 apps/admin/web/src/app/(admin)/assets/[assetId]/
-├── page.tsx          # 클라이언트 boundary (`dynamic(..., { ssr: false })`)
-├── _client.tsx       # 브라우저 전용 상세 렌더링 (observer)
-└── hooks/
-    └── useAssetDetailPage.ts
+└── page.tsx          # thin container, `@cocrepo/ui`의 `AdminAssetsAssetIdPage` 재수출
 ```
 
-### Browser-only 렌더링 특이사항
+### 현재 구조
 
-- 선택 Space 헤더가 브라우저 PersistStore에 의존하므로 상세 API 호출은 `_client.tsx`에서만 수행합니다.
-- `page.tsx`는 `dynamic(..., { ssr: false })`로 서버 렌더 단계의 상대 URL/Space 헤더 누락 오류를 차단합니다.
+- route `page.tsx`는 `"use client"` thin container입니다.
+- 실제 상세 로직은 `packages/fe-ui/src/page/AdminAssetsAssetIdPage/AdminAssetsAssetIdPage.tsx`가 소유합니다.
+- 데이터 조회/삭제/폴더 이동은 page UI component 내부에서 직접 수행합니다.
 
 ### 클라이언트 핸들러 네이밍
 
@@ -194,12 +192,9 @@ apps/admin/web/src/app/(admin)/assets/[assetId]/
 
 ## 구현 체크리스트
 
-- [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
-- [ ] hooks/useAssetDetailHandlers.ts
-- [ ] AssetPreview Widget
-- [ ] AssetBasicInfo Widget
-- [ ] AssetTypeInfo Widget
-- [ ] DerivativeList Widget
+- [x] route `page.tsx` thin container
+- [x] `AdminAssetsAssetIdPage` page UI component
+- [x] `DetailPage`/`DetailSectionCard` 기반 surface ownership
 - [x] E2E 테스트 (Playwright)
 
 ## 테스트 케이스

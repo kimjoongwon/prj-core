@@ -3,7 +3,7 @@
 > 생성일: 2026-02-19
 > 수정일: 2026-03-13
 > 타입: service
-> 위치: apps/idp-server/src/module/interaction/interaction.service.ts
+> 위치: apps/idp/api/src/module/interaction/interaction.service/index.ts
 
 ## 역할
 

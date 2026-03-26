@@ -80,25 +80,22 @@
 |--------|-----------|----------|------|
 | GET | `/api/v1/spaces/[spaceId]/ground` | `useGetSpaceGround(spaceId)` | 시설 단건 조회 |
 
-### Prefetch
+### Fetch 전략
 
-```typescript
-// _prefetch.ts
-prefetchGetSpaceGroundQuery(spaceId)
-```
+- 별도 `_prefetch.ts`는 없습니다.
+- `AdminSpacesSpaceIdGroundPage` 내부에서 `useGetSpaceGround(spaceId)`를 직접 호출합니다.
 
 ## 컴포넌트 구성
 
 ```
-GroundDetailPage (page.tsx - 서버)
-└── GroundDetailClient (_client.tsx - 클라이언트)
-    └── 페이지 헤더 영역 (title=name, actions=[수정 버튼])
-        ├── 섹션 영역 (title="기본 정보")
-        │   └── GroundDetailInfo (Widget - 기본 정보 표시)
-        ├── 섹션 영역 (title="이미지") [조건부]
-        │   └── GroundImageViewer (Widget - 이미지 미리보기)
-        └── 섹션 영역 (title="연결된 Space")
-            └── SpaceInfoPanel (Widget - Space 정보)
+apps/admin/web/.../spaces/[spaceId]/ground/page.tsx
+└── AdminSpacesSpaceIdGroundPage (@cocrepo/ui export)
+    └── GroundDetailPageClient
+        ├── PageTitleBar (title=ground.name, action="수정")
+        ├── DetailSectionCard
+        │   └── DetailSection ("기본 정보")
+        └── DetailSectionCard
+            └── DetailSection ("연결된 Space")
 ```
 
 

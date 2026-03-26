@@ -1,36 +1,17 @@
 "use client";
 
-import { Button } from "@heroui/react";
-import { ArrowLeft } from "lucide-react";
+import { UserEditPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 
-/**
- * 회원 수정 페이지 (TODO: 구현 예정)
- */
-function UserEditPage() {
+export default observer(function UserEditPageRoute() {
 	const router = useRouter();
 
-	const onClickBackButton = () => {
-		router.back();
-	};
-
 	return (
-		<div className="space-y-6">
-			<Button
-				variant="light"
-				startContent={<ArrowLeft className="h-4 w-4" />}
-				onPress={onClickBackButton}
-			>
-				뒤로
-			</Button>
-
-			<div className="flex flex-col items-center justify-center gap-4 rounded-xl bg-content1 p-8">
-				<h1 className="text-2xl font-bold">회원 수정</h1>
-				<p className="text-default-500">이 기능은 구현 예정입니다.</p>
-			</div>
-		</div>
+		<UserEditPage
+			onClickBackButton={() => {
+				router.back();
+			}}
+		/>
 	);
-}
-
-export default observer(UserEditPage);
+});

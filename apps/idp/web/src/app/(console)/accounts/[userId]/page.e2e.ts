@@ -1,29 +1,27 @@
 import { loginToConsole } from "@cocrepo/e2e";
 import { expect, test } from "@playwright/test";
 
-interface IdpAccountListItem {
-	id: string;
-}
-
-const getFirstAccountId = async (
+const navigateToFirstAccountDetail = async (
 	page: import("@playwright/test").Page,
-): Promise<string> => {
-	const response = await page.request.get(
-		"http://localhost:3008/api/v1/idp/accounts?take=1&skip=0",
-	);
-	expect(response.status()).toBe(200);
-	const body = (await response.json()) as { data?: IdpAccountListItem[] };
-	const accountId = body.data?.[0]?.id;
-	expect(accountId).toBeTruthy();
-	return accountId as string;
+): Promise<void> => {
+	await page.goto("/accounts");
+	await page.waitForLoadState("domcontentloaded");
+
+	const detailLink = page.locator('a[aria-label="상세 보기"]').first();
+	await expect(detailLink).toBeVisible({ timeout: 10000 });
+
+	const href = await detailLink.getAttribute("href");
+	expect(href).toBeTruthy();
+
+	await page.goto(href as string);
+	await page.waitForLoadState("domcontentloaded");
 };
 
 test.describe("IDP 계정 상세 페이지", () => {
 	test("계정 상세 정보가 표시되어야 한다", async ({ page }) => {
 		// Given: 로그인 후 상세 페이지 진입
 		await loginToConsole(page);
-		const accountId = await getFirstAccountId(page);
-		await page.goto(`/accounts/${accountId}`);
+		await navigateToFirstAccountDetail(page);
 
 		// Then: 상세 페이지로 이동하고 보안 정보가 표시됨
 		await expect(page).toHaveURL(/\/accounts\/.+/);
@@ -36,11 +34,12 @@ test.describe("IDP 계정 상세 페이지", () => {
 	test("상세 페이지에서 액션 버튼이 표시되어야 한다", async ({ page }) => {
 		// Given: 로그인 후 상세 페이지 진입
 		await loginToConsole(page);
-		const accountId = await getFirstAccountId(page);
-		await page.goto(`/accounts/${accountId}`);
+		await navigateToFirstAccountDetail(page);
 		await page.waitForLoadState("networkidle");
 
 		// Then: 액션 버튼 확인
-		await expect(page.getByText("목록으로")).toBeVisible();
+		await expect(
+			page.getByRole("button", { name: "목록으로", exact: true }),
+		).toBeVisible();
 	});
 });

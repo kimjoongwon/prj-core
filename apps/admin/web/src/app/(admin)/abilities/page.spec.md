@@ -19,16 +19,16 @@
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/abilities/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 page-local `PageTitleBar`, `Surface` 안의 필터 입력/목록 테이블만 렌더링합니다.
+- `page.tsx`는 데이터 조회/필터 상태/라우팅만 담당하고 시각 조합은 `AbilityListPage`가 소유합니다.
 
 ## Rendering Decision
 
-- 기본 패턴: `page.tsx` 단일 CSR
+- 기본 패턴: `pure page + thin route container`
 - page role: `master`
 - reusable target: `master/list`
+- page component path: `packages/fe-ui/src/page/AbilityListPage/AbilityListPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
-- `Suspense` fallback은 콘텐츠 로딩 상태만 처리합니다.
 
 ## 콘텐츠 구성
 
@@ -42,9 +42,9 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 클라이언트 렌더 | `useGetAbilitiesSuspense()` | 권한 목록 조회 |
-| 클라이언트 렌더 | `useGetSubjectsSuspense()` | Subject 필터 옵션 조회 |
-| 클라이언트 렌더 | `useGetActionsSuspense()` | Action 필터 옵션 조회 |
+| 클라이언트 렌더 | `useGetAbilities()` | 권한 목록 조회 |
+| 클라이언트 렌더 | `useGetSubjects()` | Subject 필터 옵션 조회 |
+| 클라이언트 렌더 | `useGetActions()` | Action 필터 옵션 조회 |
 
 ## 이벤트 핸들러
 
@@ -68,6 +68,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-26 | `AbilityListPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-23 | 필터 Select 검증 기준을 접근성 role name이 아닌 HeroUI trigger placeholder 텍스트로 명시 | codex |
 | 2026-03-23 | 검색 input이 자동화/스크린리더에서 일관되게 식별되도록 `aria-label="권한 이름 검색"` 계약을 추가 | codex |
 | 2026-03-22 | 필터/목록 wrapper를 범용 `Surface` 기준으로 문서화 | codex |

@@ -2,7 +2,7 @@
 
 > 생성일: 2026-03-14
 > 타입: test
-> 위치: packages/be-common/src/interceptor/dto-transform.interceptor.spec.ts
+> 위치: packages/be-common/src/interceptor/dto-transform.interceptor.test.ts
 
 ## 역할
 

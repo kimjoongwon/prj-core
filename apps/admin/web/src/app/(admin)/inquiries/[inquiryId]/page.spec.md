@@ -249,7 +249,7 @@
 ### L6: 데이터 흐름 (API 호출)
 
 ```
-1. SSR Prefetch
+1. Client-side 초기 조회
    - GET /api/v1/inquiries/[inquiryId]/form/update
    - GET /api/v1/inquiries/[inquiryId]
    - GET /api/v1/inquiries/[inquiryId]/messages

@@ -151,7 +151,7 @@ async function postInteractionRedirect(
 export async function loginToConsole(page: ConsoleLoginPageLike) {
 	for (let attempt = 1; attempt <= 3; attempt++) {
 		try {
-			await page.goto(loginEntryPath);
+			await page.goto(loginEntryPath, { waitUntil: "domcontentloaded" });
 
 			for (let step = 0; step < 5; step++) {
 				const currentUrl = page.url();
@@ -173,12 +173,12 @@ export async function loginToConsole(page: ConsoleLoginPageLike) {
 						password: DEFAULT_PASSWORD,
 						remember: false,
 					});
-					await page.goto(redirectTo);
+					await page.goto(redirectTo, { waitUntil: "domcontentloaded" });
 					continue;
 				}
 
 				const redirectTo = await postInteractionRedirect(page, uid, "confirm");
-				await page.goto(redirectTo);
+				await page.goto(redirectTo, { waitUntil: "domcontentloaded" });
 			}
 
 			throw new Error("OIDC console login did not reach dashboard in time.");

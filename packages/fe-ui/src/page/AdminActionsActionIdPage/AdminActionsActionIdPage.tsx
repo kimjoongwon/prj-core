@@ -1,0 +1,301 @@
+"use client";
+import {
+	type ActionResponseDto,
+	useDeleteAction,
+	useGetActionById,
+} from "@cocrepo/api/core/actions";
+
+import {
+	DetailPage,
+	DetailPageSurface,
+	PageTitleBar,
+	DetailSectionCard,
+	VStack,
+} from "@cocrepo/ui";
+import {
+	Button,
+	Chip,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	useDisclosure,
+} from "@heroui/react";
+import { ArrowLeft, Edit, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import type { Route } from "next";
+import { useRouter, useParams } from "next/navigation";
+
+interface ActionDetailPageClientProps {
+	actionId: string;
+}
+
+/**
+ * group 색상 매핑
+ */
+const getGroupColor = (
+	group?: string,
+): "primary" | "secondary" | "success" | "warning" | "danger" | "default" => {
+	switch (group) {
+		case "crud":
+			return "primary";
+		case "visibility":
+			return "secondary";
+		case "workflow":
+			return "success";
+		case "bulk":
+			return "warning";
+		default:
+			return "default";
+	}
+};
+
+/**
+ * Action 상세 페이지 - 클라이언트 컴포넌트
+ */
+function ActionDetailPageClient({ actionId }: ActionDetailPageClientProps) {
+	const router = useRouter();
+	const deleteModal = useDisclosure();
+
+	// API 조회 (ActionResponseDto 반환 - config 포함)
+	const { data: response, isLoading } = useGetActionById(actionId);
+	const action = response?.data as ActionResponseDto | undefined;
+
+	// 삭제 Mutation
+	const { mutate: deleteAction, isPending: isDeleting } = useDeleteAction({
+		mutation: {
+			onSuccess: () => {
+				deleteModal.onClose();
+				router.push("/actions" as Route);
+			},
+		},
+	});
+
+	/**
+	 * 뒤로가기 핸들러
+	 */
+	const onClickBackButton = () => {
+		router.push("/actions" as Route);
+	};
+
+	/**
+	 * 수정 페이지 이동 핸들러
+	 */
+	const onClickEditButton = () => {
+		router.push(`/actions/${actionId}/edit` as Route);
+	};
+
+	/**
+	 * 삭제 확인 핸들러
+	 */
+	const onClickDeleteConfirm = () => {
+		deleteAction({ id: actionId });
+	};
+
+	if (isLoading) {
+		return (
+			<DetailPage top={<PageTitleBar title="Action 상세" description="로딩 중..." />}>
+				<DetailPageSurface>
+					<DetailSectionCard>
+						<div className="flex items-center justify-center p-8">
+							<span className="text-default-500">로딩 중...</span>
+						</div>
+					</DetailSectionCard>
+				</DetailPageSurface>
+			</DetailPage>
+		);
+	}
+
+	if (!action) {
+		return (
+			<DetailPage
+				top={
+					<PageTitleBar
+						title="Action 상세"
+						description="Action을 찾을 수 없습니다."
+					/>
+				}
+			>
+				<DetailPageSurface>
+					<DetailSectionCard>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">Action을 찾을 수 없습니다.</p>
+							<Button variant="flat" onPress={onClickBackButton}>
+								목록으로
+							</Button>
+						</div>
+					</DetailSectionCard>
+				</DetailPageSurface>
+			</DetailPage>
+		);
+	}
+
+	return (
+		<DetailPage
+			top={
+				<PageTitleBar
+					title="Action 상세"
+					description={`${action.displayName || action.name} Action의 상세 정보입니다.`}
+					actions={
+						<div className="flex gap-2">
+							<Button
+								variant="light"
+								startContent={<ArrowLeft className="h-4 w-4" />}
+								onPress={onClickBackButton}
+							>
+								목록으로
+							</Button>
+							{!action.isSystem && (
+								<>
+									<Button
+										variant="flat"
+										color="primary"
+										startContent={<Edit className="h-4 w-4" />}
+										onPress={onClickEditButton}
+									>
+										수정
+									</Button>
+									<Button
+										variant="flat"
+										color="danger"
+										startContent={<Trash2 className="h-4 w-4" />}
+										onPress={deleteModal.onOpen}
+									>
+										삭제
+									</Button>
+								</>
+							)}
+						</div>
+					}
+				/>
+			}
+		>
+			<DetailPageSurface>
+				<VStack gap={4}>
+					{action.isSystem && (
+						<div className="rounded-xl bg-warning-50 p-4 dark:bg-warning-900/20">
+							<p className="text-sm text-warning-700 dark:text-warning-400">
+								<strong>시스템 Action:</strong>이 Action은 시스템에서 기본
+								제공하는 Action으로, 수정하거나 삭제할 수 없습니다.
+							</p>
+						</div>
+					)}
+					<DetailSectionCard>
+						<h3 className="text-lg font-semibold mb-4">기본 정보</h3>
+						<dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div>
+								<dt className="text-sm text-default-500 mb-1">행위 식별자</dt>
+								<dd className="flex items-center gap-2">
+									<span className="font-mono">{action.name}</span>
+									{action.isSystem && (
+										<Chip size="sm" color="warning" variant="flat">
+											시스템
+										</Chip>
+									)}
+								</dd>
+							</div>
+							<div>
+								<dt className="text-sm text-default-500 mb-1">표시명</dt>
+								<dd>{action.displayName || "-"}</dd>
+							</div>
+							<div>
+								<dt className="text-sm text-default-500 mb-1">분류</dt>
+								<dd>
+									{action.group ? (
+										<Chip
+											size="sm"
+											color={getGroupColor(action.group)}
+											variant="flat"
+										>
+											{action.group}
+										</Chip>
+									) : (
+										"-"
+									)}
+								</dd>
+							</div>
+							<div>
+								<dt className="text-sm text-default-500 mb-1">정렬 순서</dt>
+								<dd>{action.order}</dd>
+							</div>
+							<div className="md:col-span-2">
+								<dt className="text-sm text-default-500 mb-1">설명</dt>
+								<dd className="text-default-600">
+									{action.description || "-"}
+								</dd>
+							</div>
+						</dl>
+					</DetailSectionCard>
+					{action.config && (
+						<DetailSectionCard>
+							<h3 className="text-lg font-semibold mb-4">설정 (Config)</h3>
+							<pre className="bg-default-100 dark:bg-default-50/5 rounded-lg p-4 overflow-x-auto text-sm">
+								{JSON.stringify(action.config, null, 2)}
+							</pre>
+						</DetailSectionCard>
+					)}
+					<DetailSectionCard>
+						<h3 className="text-lg font-semibold mb-4">추가 정보</h3>
+						<dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div>
+								<dt className="text-sm text-default-500 mb-1">생성일</dt>
+								<dd>{new Date(action.createdAt).toLocaleString("ko-KR")}</dd>
+							</div>
+							{action.updatedAt && (
+								<div>
+									<dt className="text-sm text-default-500 mb-1">수정일</dt>
+									<dd>{new Date(action.updatedAt).toLocaleString("ko-KR")}</dd>
+								</div>
+							)}
+						</dl>
+					</DetailSectionCard>
+				</VStack>
+			</DetailPageSurface>
+			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
+				<ModalContent>
+					<ModalHeader>Action 삭제</ModalHeader>
+					<ModalBody>
+						<p>
+							<strong>{action.displayName || action.name}</strong>Action을
+							삭제하시겠습니까?
+						</p>
+						<p className="text-sm text-danger mt-2">
+							이 작업은 되돌릴 수 없습니다.
+						</p>
+					</ModalBody>
+					<ModalFooter>
+						<Button
+							variant="flat"
+							onPress={deleteModal.onClose}
+							isDisabled={isDeleting}
+						>
+							취소
+						</Button>
+						<Button
+							color="danger"
+							onPress={onClickDeleteConfirm}
+							isLoading={isDeleting}
+						>
+							삭제
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+		</DetailPage>
+	);
+}
+
+type ActionDetailPageParams = {
+	actionId: string;
+};
+
+const ActionDetailPage = observer(function ActionDetailPage() {
+	const { actionId } = useParams<ActionDetailPageParams>();
+
+	return <ActionDetailPageClient actionId={actionId} />;
+});
+
+export const AdminActionsActionIdPage = ActionDetailPage;
+
+export default AdminActionsActionIdPage;

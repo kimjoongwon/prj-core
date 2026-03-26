@@ -50,7 +50,7 @@
 ## 사용자 시나리오
 
 1. 관리자가 기존 역할의 정보를 수정하기 위해 페이지에 진입한다.
-2. SSR Prefetch로 기존 역할 데이터가 로드되어 폼에 미리 채워진다.
+2. 클라이언트 초기 조회로 기존 역할 데이터가 로드되어 폼에 미리 채워진다.
 3. 시스템 역할(isSystem=true)인 경우 "시스템 역할은 수정할 수 없습니다." 안내와 함께 상세 돌아가기 버튼만 표시된다.
 4. 역할 식별자(name)는 읽기 전용으로 표시된다.
 5. 표시명(displayName)과 설명(description)을 수정할 수 있다.
@@ -89,7 +89,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| SSR Prefetch | `prefetchGetRoleByIdQuery` (../\_prefetch.ts 재사용) | 역할 상세 프리페치 |
+| 클라이언트 초기 렌더 | `useGetRoleById(roleId)` | 역할 상세 첫 조회 |
 | 클라이언트 | `useGetRoleById(roleId)` | 역할 상세 조회 |
 | 폼 제출 | `useUpdateRole` (PATCH /api/v1/roles/:id) | 역할 수정, UpdateRoleDto |
 

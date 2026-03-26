@@ -100,26 +100,22 @@
 }
 ```
 
-### Prefetch
+### Fetch 전략
 
-```typescript
-// _prefetch.ts
-prefetchGetSpaceGroundQuery(spaceId)
-```
+- 별도 `_prefetch.ts`는 없습니다.
+- `AdminSpacesSpaceIdGroundEditPage` 내부에서 `useGetSpaceGround(spaceId)`로 초기값을 로드합니다.
 
 ## 컴포넌트 구성
 
 ```
-GroundEditPage (page.tsx - 서버)
-└── GroundEditClient (_client.tsx - 클라이언트)
-    └── 페이지 헤더 영역 (title="시설 수정")
-        ├── 섹션 영역 (title="기본 정보")
-        │   └── GroundForm (Feature - 기본 정보 폼, defaultValues 주입)
-        ├── 섹션 영역 (title="이미지")
-        │   └── GroundImageForm (Feature - 이미지 업로드 폼, defaultValues 주입)
-        └── 버튼 영역
-            ├── Button ("취소")
-            └── Button ("저장", primary)
+apps/admin/web/.../spaces/[spaceId]/ground/edit/page.tsx
+└── AdminSpacesSpaceIdGroundEditPage (@cocrepo/ui export)
+    └── GroundEditPageClient
+        ├── PageTitleBar ("시설 정보 수정")
+        ├── FormSectionCard
+        │   └── FormSection ("기본 정보")
+        │       └── name / label / address / phone / email / businessNo(default) 입력
+        └── Button 영역 ("취소", "저장")
 ```
 
 

@@ -720,6 +720,8 @@ spec.md를 수정했다면 하단 "변경 이력"에 변경 내용을 반드시 
 - `packages/fe-ui/src/page`는 page component와 sidecar를 반드시 동일 이름 폴더에 함께 둡니다.
 - 예: `packages/fe-ui/src/page/AddressEmailVerifyPage/AddressEmailVerifyPage.tsx`, `.spec.md`, `.stories.tsx`, `.stories.spec.md`
 - 금지 예: `packages/fe-ui/src/page/AddressEmailVerifyPage.tsx`, `packages/fe-ui/src/page/AddressEmailVerifyPage.spec.md`
+- admin/idp route의 pure page 이관 현황은 `packages/fe-ui/src/page/migration-audit.md`를 기준으로 확인합니다.
+- 전체 page 이관 완료 여부를 말하기 전에는 반드시 `packages/fe-ui/src/page/migration-audit.md`를 먼저 확인합니다.
 
 **기존 코드 수정 완료 조건 (Critical):**
 - 코드 변경이 1개라도 있으면 대응되는 `*.spec.md` 업데이트와 `## 변경 이력` 추가가 모두 완료되어야 합니다.

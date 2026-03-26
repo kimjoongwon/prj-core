@@ -85,7 +85,7 @@
 
 ## 비고
 
-- SSR Prefetch 미적용 (TODO: Orval codegen 후 추가 예정)
+- 현재 route는 thin container + CSR fetch 패턴을 유지하며 별도 `_prefetch.ts`는 사용하지 않음
 - GroupInfoSection, GroupRoleListSection은 `@cocrepo/ui` 공용 컴포넌트 사용
 
 ## 구현 체크리스트

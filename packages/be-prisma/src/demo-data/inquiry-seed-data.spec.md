@@ -1,0 +1,32 @@
+# inquiry-seed-data util 기획서
+
+> 생성일: 2026-03-26
+> 타입: util
+> 위치: packages/be-prisma/src/demo-data/inquiry-seed-data.ts
+
+## 역할
+
+이 파일은 util 성격의 경량 구성/배럴 책임을 가집니다.
+
+## 구성 요소
+
+| 항목 | 설명 |
+|------|------|
+| InquirySeedData | 공개 계약 요소 |
+| InquiryThreadSeedData | 공개 계약 요소 |
+| InquiryMessageSeedData | 공개 계약 요소 |
+| InquiryParticipantSeedData | 공개 계약 요소 |
+| InquiryTagMasterSeedData | 공개 계약 요소 |
+| SentimentAnalysisSeedData | 공개 계약 요소 |
+| inquiryTagMasterData | 공개 계약 요소 |
+| inquirySeedData | 공개 계약 요소 |
+| inquiryThreadSeedData | 공개 계약 요소 |
+| inquiryMessageSeedData | 공개 계약 요소 |
+| inquiryParticipantSeedData | 공개 계약 요소 |
+| sentimentAnalysisSeedData | 공개 계약 요소 |
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-03-26 | 누락된 sidecar spec 신규 생성 | codex |

@@ -91,7 +91,7 @@
 
 ## 비고
 
-- SSR Prefetch 미적용 (TODO: Orval codegen 후 추가 예정)
+- 현재 route는 thin container + CSR fetch 패턴을 유지하며 별도 `_prefetch.ts`는 사용하지 않음
 - 수정 성공 시 해당 그룹 쿼리 캐시 무효화
 
 ## 구현 체크리스트

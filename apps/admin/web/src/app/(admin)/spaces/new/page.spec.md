@@ -104,16 +104,14 @@
 ## 컴포넌트 구성
 
 ```
-GroundNewPage (page.tsx - 서버)
-└── GroundNewClient (_client.tsx - 클라이언트)
-    └── 페이지 헤더 영역 (title="시설 등록")
-        ├── 섹션 영역 (title="기본 정보")
-        │   └── GroundForm (Feature - 기본 정보 폼)
-        ├── 섹션 영역 (title="이미지")
-        │   └── GroundImageForm (Feature - 이미지 업로드 폼)
-        └── 버튼 영역
-            ├── Button ("취소")
-            └── Button ("등록", primary)
+apps/admin/web/.../spaces/new/page.tsx
+└── AdminSpacesNewPage (@cocrepo/ui export)
+    └── SpaceNewPageClient
+        ├── PageTitleBar ("공간 등록")
+        ├── FormSectionCard
+        │   └── FormSection ("기본 정보")
+        │       └── name / label / address / phone / email / businessNo 입력
+        └── Button 영역 ("취소", "등록")
 ```
 
 
