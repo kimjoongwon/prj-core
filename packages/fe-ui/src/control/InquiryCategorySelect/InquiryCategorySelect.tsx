@@ -1,5 +1,4 @@
 import {
-	InquiryCategory,
 	InquiryCategoryOptions,
 	type InquiryCategory as InquiryCategoryType,
 } from "@cocrepo/enum";

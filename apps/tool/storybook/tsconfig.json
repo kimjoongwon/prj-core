@@ -20,7 +20,8 @@
     "preserveWatchOutput": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "verbatimModuleSyntax": false
+    "verbatimModuleSyntax": false,
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
   "include": [
     ".storybook",

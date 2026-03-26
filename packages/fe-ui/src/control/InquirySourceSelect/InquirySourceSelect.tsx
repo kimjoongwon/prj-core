@@ -1,5 +1,4 @@
 import {
-	InquirySource,
 	InquirySourceOptions,
 	type InquirySource as InquirySourceType,
 } from "@cocrepo/enum";

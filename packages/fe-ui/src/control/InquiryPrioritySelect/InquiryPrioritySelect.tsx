@@ -1,5 +1,4 @@
 import {
-	InquiryPriority,
 	InquiryPriorityOptions,
 	type InquiryPriority as InquiryPriorityType,
 } from "@cocrepo/enum";

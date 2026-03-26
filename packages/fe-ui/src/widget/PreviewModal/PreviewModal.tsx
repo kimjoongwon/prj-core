@@ -98,7 +98,7 @@ export const PreviewModal = observer(
 		isOpen,
 		onClose,
 		templateId,
-		type,
+		type: _type,
 		variables,
 		onPreview,
 	}: PreviewModalProps) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { MetaDataGrid, type UserRoleCell, useMetaDataGridQueryStates } from "@cocrepo/ui";
+import { MetaDataGrid, useMetaDataGridQueryStates } from "@cocrepo/ui";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
 	DateTimeCell,

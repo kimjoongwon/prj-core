@@ -1,6 +1,5 @@
 import { useFormField } from "@cocrepo/hook";
 import {
-	InquiryCategory,
 	type InquiryCategory as InquiryCategoryType,
 } from "@cocrepo/enum";
 import { tools } from "@cocrepo/toolkit";
@@ -44,4 +43,6 @@ export const InquiryCategorySelect = observer(
 export type {
 	BaseInquiryCategorySelectProps as PureInquiryCategorySelectProps,
 };
-export { InquiryCategorySelect as PureInquiryCategorySelect } from "./InquiryCategorySelect";
+export {
+	InquiryCategorySelect as PureInquiryCategorySelect,
+} from "./InquiryCategorySelect";

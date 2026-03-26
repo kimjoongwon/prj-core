@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardBody, Chip } from "@heroui/react";
+import { Card, CardBody } from "@heroui/react";
 import { Clock, Hash, MessageSquare, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";

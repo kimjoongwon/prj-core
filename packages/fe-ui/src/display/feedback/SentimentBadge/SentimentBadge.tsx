@@ -69,7 +69,7 @@ const SENTIMENT_LABEL: Record<SentimentTypeCode, string> = {
  */
 export const SentimentBadge = ({
 	sentiment,
-	score,
+	score: _score,
 	confidence,
 	className,
 }: SentimentBadgeProps) => {

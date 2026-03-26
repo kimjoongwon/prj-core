@@ -1,4 +1,3 @@
-import { Chip } from "@heroui/react";
 import { Smile, Meh, Frown } from "lucide-react";
 
 /** 감정 분석값 (Prisma Enum 값과 동일) */

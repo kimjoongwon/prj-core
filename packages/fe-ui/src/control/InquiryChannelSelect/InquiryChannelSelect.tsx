@@ -1,5 +1,4 @@
 import {
-	InquiryChannel,
 	InquiryChannelOptions,
 	type InquiryChannel as InquiryChannelType,
 } from "@cocrepo/enum";

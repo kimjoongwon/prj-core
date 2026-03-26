@@ -1,6 +1,5 @@
 import {
 	type InquiryStatus as InquiryStatusType,
-	InquiryStatus,
 	InquiryStatusOptions,
 	getAllowedStatusOptions,
 } from "@cocrepo/enum";

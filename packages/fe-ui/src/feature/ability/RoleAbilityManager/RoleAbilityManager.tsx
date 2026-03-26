@@ -88,21 +88,6 @@ export const RoleAbilityManager = observer(
 			onRoleChange?.(roleId);
 		};
 
-		/**
-		 * Subject 변경 시 필드 로드 (모달에서 Subject 선택 시)
-		 */
-		const _handleSubjectFieldsLoad = async (
-			subjectName: string,
-		): Promise<string[]> => {
-			if (!onLoadSubjectFields) return [];
-
-			try {
-				return await onLoadSubjectFields(subjectName);
-			} catch {
-				return [];
-			}
-		};
-
 		// Role 선택 옵션 변환
 		const roleOptions = roles.map((role) => ({
 			value: role.id,
