@@ -12,7 +12,7 @@ import {
 import { ArrowLeft, Edit, Key, Trash2 } from "lucide-react";
 import { DetailPage, DetailPageSurface, DetailSectionCard } from "../../detail";
 import { Chip } from "../../display";
-import { VStack } from "../../layout";
+import { VStack } from "../../rhythm";
 import { PageTitleBar } from "../../widget";
 
 export interface AbilityDetailPageAbility {
@@ -134,7 +134,7 @@ export function AbilityDetailPage(props: AbilityDetailPageProps) {
 			}
 		>
 			<DetailPageSurface>
-				<VStack gap={4}>
+				<VStack gap="section">
 					<DetailSectionCard>
 						<h3 className="mb-4 text-lg font-semibold">기본 정보</h3>
 						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">

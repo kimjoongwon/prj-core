@@ -15,7 +15,7 @@ import {
 import { RefreshCw, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { RedirectUriListInput } from "../../control/RedirectUriListInput/RedirectUriListInput";
-import { VStack } from "../../layout/VStack/VStack";
+import { VStack } from "../../rhythm/VStack/VStack";
 
 /** 폼 상태 인터페이스 */
 export interface OidcClientFormState {

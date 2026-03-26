@@ -1,12 +1,12 @@
-# Spacer.stories.tsx Spec
+# VStack.stories.tsx Spec
 
 ## 목적
-- `Layouts/Spacer` 스토리의 Storybook 사이드바 분류를 정의합니다.
+- `Rhythm/VStack` 스토리의 Storybook 사이드바 분류를 정의합니다.
 - 실제 컴포넌트 경로와 일치하는 탐색 경로를 유지합니다.
 
 ## 핵심 동작
-- Storybook 사이드바 제목은 `Layouts/Spacer`입니다.
-- 컴포넌트 경로 `layouts/Spacer` 기준으로 노출됩니다.
+- Storybook 사이드바 제목은 `Rhythm/VStack`입니다.
+- 컴포넌트 경로 `rhythm/VStack` 기준으로 노출됩니다.
 
 ## 변경 이력
 

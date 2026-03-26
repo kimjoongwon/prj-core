@@ -1,5 +1,5 @@
 import { Input } from "../../control/Input";
-import { VStack } from "../../layout/VStack/VStack";
+import { VStack } from "../../rhythm/VStack/VStack";
 
 export interface LoginFormProps {
 	/** 로그인 상태 객체 (email, password 필드 포함) */

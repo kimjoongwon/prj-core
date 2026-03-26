@@ -1,4 +1,4 @@
-# layouts 배럴 기획서
+# layout 배럴 기획서
 
 > 생성일: 2026-03-03
 > 타입: layout
@@ -6,8 +6,8 @@
 
 ## 역할
 
-`@cocrepo/ui`의 layout 컴포넌트 export 진입점을 관리합니다.
-공용으로 노출할 layout만 선택적으로 re-export 합니다.
+`@cocrepo/ui`의 구조 layout 컴포넌트 export 진입점을 관리합니다.
+공용으로 노출할 구조 primitive만 선택적으로 re-export 합니다.
 
 ## 표준 위계
 
@@ -16,17 +16,19 @@ App (서비스별 단일) > Layout > Page > Section
 ```
 
 - `Layout` 계층은 `packages/fe-ui/src/display/layout/`에서 제공합니다.
-- 이 배럴은 위계 중 `App`, `Page`, `Section` 레벨을 노출합니다.
+- 이 배럴은 위계 중 `App`, `Page`, `Section`과 구조 래퍼(`Container`, `Modal`)를 노출합니다.
+- 간격/흐름 primitive(`VStack`, `HStack`, `Spacer`)는 `packages/fe-ui/src/rhythm/`이 소유합니다.
 
 ## 동작
 
-- `App`, `Page`, `Section` 등 현재 표준 layout 컴포넌트를 export합니다.
+- `App`, `Page`, `Section`, `Container`, `Modal` 등 현재 표준 layout 컴포넌트를 export합니다.
 - 제거된 컴포넌트(`Main`, `Header`)는 export하지 않습니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-26 | `VStack`/`HStack`/`Spacer`를 `rhythm` 레이어로 분리하고 layout 배럴을 구조 전용으로 정리 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-03 | Shell 접미사 제거 및 불필요한 `Main`/`Header` export 제거 | codex |

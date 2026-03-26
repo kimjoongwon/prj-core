@@ -26,7 +26,7 @@
 | lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
 | ../../RedirectUriListInput/RedirectUriListInput | 기능 구현 의존성 |
-| ../../../layout/VStack/VStack | 기능 구현 의존성 |
+| ../../../rhythm/VStack/VStack | 기능 구현 의존성 |
 
 ## 동작 흐름
 

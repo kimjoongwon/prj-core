@@ -23,7 +23,7 @@
 |------|------|
 | @heroui/react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
-| ../../../layout/VStack/VStack | 기능 구현 의존성 |
+| ../../../rhythm/VStack/VStack | 기능 구현 의존성 |
 | ../../TemplateContentEditor/TemplateContentEditor | 기능 구현 의존성 |
 | ../../TemplateTypeBadge/TemplateTypeBadge | 기능 구현 의존성 |
 | ../../VariableEditTable/VariableEditTable | 기능 구현 의존성 |

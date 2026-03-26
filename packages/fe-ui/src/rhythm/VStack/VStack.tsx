@@ -1,5 +1,12 @@
+import { cn } from "@heroui/react";
 import { cva } from "class-variance-authority";
 import type { ReactNode } from "react";
+import {
+	resolveRhythmValue,
+	rhythmDefaults,
+	type RhythmValue,
+} from "../presets";
+import { getRhythmTailwindGapClass } from "../tokens";
 
 export type VStackProps = {
 	/** 자식 요소들 */
@@ -12,8 +19,8 @@ export type VStackProps = {
 	justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
 	/** 전체 너비 사용 여부 */
 	fullWidth?: boolean;
-	/** 요소 간 간격 (Tailwind spacing 단위) @default 4 */
-	gap?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16 | 20 | 24;
+	/** 요소 간 간격. semantic preset 사용을 권장하고, numeric 값은 legacy 호환용입니다. */
+	gap?: RhythmValue;
 };
 
 const vStackVariants = cva("flex flex-col", {
@@ -37,25 +44,9 @@ const vStackVariants = cva("flex flex-col", {
 			true: "w-full",
 			false: "",
 		},
-		gap: {
-			0: "gap-0",
-			1: "gap-1",
-			2: "gap-2",
-			3: "gap-3",
-			4: "gap-4",
-			5: "gap-5",
-			6: "gap-6",
-			8: "gap-8",
-			10: "gap-10",
-			12: "gap-12",
-			16: "gap-16",
-			20: "gap-20",
-			24: "gap-24",
-		},
 	},
 	defaultVariants: {
 		fullWidth: false,
-		gap: 4,
 	},
 });
 
@@ -66,14 +57,14 @@ const vStackVariants = cva("flex flex-col", {
  * @example
  * ```tsx
  * // 기본 사용
- * <VStack gap={4}>
+ * <VStack gap="section">
  *   <Input label="이름" />
  *   <Input label="이메일" />
  *   <Button>제출</Button>
  * </VStack>
  *
- * // 중앙 정렬
- * <VStack alignItems="center" justifyContent="center" fullWidth>
+ * // 넉넉한 빈 상태 리듬
+ * <VStack gap="roomy" alignItems="center" justifyContent="center" fullWidth>
  *   <Logo />
  *   <Text>환영합니다</Text>
  * </VStack>
@@ -82,16 +73,21 @@ const vStackVariants = cva("flex flex-col", {
 export const VStack = (props: VStackProps) => {
 	const { children, className, alignItems, justifyContent, fullWidth, gap } =
 		props;
+	const gapClassName = getRhythmTailwindGapClass(
+		resolveRhythmValue(gap, rhythmDefaults.vStack),
+	);
 
 	return (
 		<div
-			className={vStackVariants({
-				alignItems,
-				justifyContent,
-				fullWidth,
-				gap,
+			className={cn(
+				vStackVariants({
+					alignItems,
+					justifyContent,
+					fullWidth,
+				}),
+				gapClassName,
 				className,
-			})}
+			)}
 		>
 			{children}
 		</div>

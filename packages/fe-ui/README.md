@@ -12,9 +12,10 @@ Entry points are organized under `src/`:
 - `display`: feedback, tables, data display
 - `feature`: feature-level composites
 - `form`: form flows and form sections
-- `layout`: layout primitives such as `Page`, `Section`, `VStack`, `HStack`
+- `layout`: structural primitives such as `App`, `Page`, `Section`, `Container`
 - `master`: list/table oriented page building blocks
 - `page`: route-level page UI components
+- `rhythm`: spacing and flow primitives such as `VStack`, `HStack`, `Spacer`
 - `surface`: surface and elevation primitives
 - `widget`: reusable domain widgets
 
@@ -36,7 +37,7 @@ import { Button, NotFound, Section, VStack } from "@cocrepo/ui";
 export function Example() {
   return (
     <Section>
-      <VStack spacing={4}>
+      <VStack gap="section">
         <Button>Confirm</Button>
         <NotFound title="Nothing here" description="Try a different route." />
       </VStack>
@@ -47,7 +48,8 @@ export function Example() {
 
 ## Common Exports
 
-- Layout: `Page`, `Section`, `VStack`, `HStack`, `Spacer`
+- Layout: `App`, `Page`, `Section`, `Container`, `Modal`
+- Rhythm: `VStack`, `HStack`, `Spacer`
 - Control: `Button`, `Input`, `Select`, `Tabs`, `Textarea`, `Pagination`
 - Display: `DataGrid`, `NotFound`, `EmptyState`, `Message`, `Skeleton`
 - Form: `LoginForm`, `ForgotPasswordForm`, `ResetPasswordForm`, `OidcClientForm`
@@ -63,3 +65,4 @@ pnpm --filter tool-storybook start:dev
 
 - The package name is already `@cocrepo/ui`.
 - Application state management lives in `@cocrepo/store`.
+- New code should prefer semantic rhythm presets such as `gap="page"`, `gap="section"`, `gap="inline"`, `size="inline"` over raw numeric spacing.

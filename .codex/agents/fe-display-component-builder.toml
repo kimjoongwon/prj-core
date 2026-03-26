@@ -21,7 +21,7 @@ developer_instructions = '''
 | 상황                                | 사용 여부 | 설명                              |
 | ----------------------------------- | :-------: | --------------------------------- |
 | 새로운 기본 UI 요소가 필요할 때     |    ✅     | Button, Card, Badge, Avatar 등    |
-| 레이아웃 컴포넌트가 필요할 때       |    ✅     | VStack, HStack, Container, Spacer |
+| 구조/리듬 primitive가 필요할 때    |    ✅     | VStack, HStack, Container, Spacer |
 | 데이터 표시용 컴포넌트가 필요할 때  |    ✅     | Text, Icon, Skeleton              |
 | HeroUI에 없는 커스텀 UI가 필요할 때 |    ✅     | 프로젝트 전용 스타일 컴포넌트     |
 | 비즈니스 로직이 포함된 컴포넌트     |    ❌     | Feature Builder 사용              |
@@ -322,7 +322,7 @@ Pure UI → Widget → Feature → Page
 packages/fe-ui/src/display/
 ```
 
-> **주의**: widget, feature, layouts, page 컴포넌트는 이 에이전트의 담당이 아닙니다.
+> **주의**: widget, feature, layout shell, page 컴포넌트는 이 에이전트의 담당이 아닙니다.
 
 ---
 
@@ -441,8 +441,8 @@ export function useAdminLayout() {}
 
 - `packages/fe-ui/src/display/Button/Button.tsx`
 - `packages/fe-ui/src/display/Text/Text.tsx`
-- `src/layout/VStack/VStack.tsx`
-- `src/layout/HStack/HStack.tsx`
+- `src/rhythm/VStack/VStack.tsx`
+- `src/rhythm/HStack/HStack.tsx`
 - `src/layout/Page/Page.tsx`
 - `src/layout/Section/Section.tsx`
 - `packages/fe-ui/src/widget/PageTitleBar/PageTitleBar.tsx`
@@ -458,7 +458,8 @@ export function useAdminLayout() {}
 packages/fe-ui/src/
 ├── layout/
 │   ├── Page/
-│   ├── Section/
+│   └── Section/
+├── rhythm/
 │   ├── VStack/
 │   ├── HStack/
 │   └── Spacer/
@@ -485,10 +486,11 @@ packages/fe-ui/src/
 | `Page` | 페이지 shell 슬롯 (`top`, `leftAside`, `rightAside`, `bottom`) |
 | `Section` | 페이지 내부 구역 분할 |
 | `PageTitleBar` | title, description, actions 헤더 |
-| `VStack`, `HStack`, `Spacer` | 정렬/간격 레이아웃 display 컴포넌트 |
+| `VStack`, `HStack`, `Spacer` | 정렬/간격 rhythm primitive |
 
 > **Note**: 새로운 display 컴포넌트는 페이지 래퍼나 헤더 패널을 다시 발명하지 말고 위 컴포넌트와 함께 조합되도록 설계하세요.
 > **Note**: `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 display가 아니라 widget입니다.
+> **Note**: 새로운 stack/spacer 조합은 raw numeric gap보다 `page`, `section`, `block`, `inline`, `dense` 같은 semantic rhythm preset을 우선 사용합니다.
 
 ### 출력 형식
 

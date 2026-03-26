@@ -26,7 +26,7 @@
 | lucide-react | 기능 구현 의존성 |
 | ../../design-system/icon/AppIcon | 앱 전용 정적 아이콘 registry |
 | mobx-react-lite | 기능 구현 의존성 |
-| ../../layout/VStack/VStack | 기능 구현 의존성 |
+| ../../rhythm/VStack/VStack | 기능 구현 의존성 |
 
 ## 동작 흐름
 

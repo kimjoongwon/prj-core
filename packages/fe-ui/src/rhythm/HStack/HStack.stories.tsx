@@ -1,8 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { rhythmPresets } from "../presets";
+import { rhythmScaleValues } from "../tokens";
 import { HStack } from "./HStack";
 
+const rhythmOptions = [
+	...Object.keys(rhythmPresets),
+	...rhythmScaleValues,
+] as const;
+
 const meta = {
-	title: "Layouts/HStack",
+	title: "Rhythm/HStack",
 	component: HStack,
 	parameters: {
 		layout: "centered",
@@ -27,9 +34,10 @@ const meta = {
 		},
 		gap: {
 			control: "select",
-			options: [0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24],
-			description: "아이템 간 간격 (테일위드 스페이싱 단위)",
-			defaultValue: 4,
+			options: rhythmOptions,
+			description:
+				'권장값은 "inline" 같은 semantic rhythm preset이고, numeric 값은 legacy gap 호환입니다.',
+			defaultValue: "inline",
 		},
 		fullWidth: {
 			control: "boolean",
@@ -60,6 +68,7 @@ const 샘플아이템 = ({
 
 export const 기본: Story = {
 	args: {
+		gap: "inline",
 		children: (
 			<>
 				<샘플아이템>아이템 1</샘플아이템>
@@ -71,7 +80,7 @@ export const 기본: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "표준 간격과 정렬을 사용한 기본 수평 스택입니다.",
+				story: "semantic inline rhythm을 사용한 기본 수평 스택입니다.",
 			},
 		},
 	},

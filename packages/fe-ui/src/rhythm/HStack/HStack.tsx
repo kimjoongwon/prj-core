@@ -1,5 +1,17 @@
+import { cn } from "@heroui/react";
 import { cva } from "class-variance-authority";
 import type { ReactNode } from "react";
+import {
+	isRhythmPreset,
+	resolveRhythmValue,
+	rhythmDefaults,
+	type RhythmValue,
+} from "../presets";
+import {
+	getRhythmLegacyPixelGapClass,
+	getRhythmTailwindGapClass,
+	type RhythmScaleValue,
+} from "../tokens";
 
 export interface HStackProps {
 	/** 자식 요소들 */
@@ -12,8 +24,8 @@ export interface HStackProps {
 	justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
 	/** 전체 너비 사용 여부 */
 	fullWidth?: boolean;
-	/** 요소 간 간격 (px 단위) @default 4 */
-	gap?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16 | 20 | 24;
+	/** 요소 간 간격. semantic preset 사용을 권장하고, numeric 값은 legacy px 의미를 유지합니다. */
+	gap?: RhythmValue;
 }
 
 const hStackVariants = cva("flex", {
@@ -37,27 +49,13 @@ const hStackVariants = cva("flex", {
 			true: "w-full",
 			false: "",
 		},
-		gap: {
-			0: "gap-[0px]",
-			1: "gap-[1px]",
-			2: "gap-[2px]",
-			3: "gap-[3px]",
-			4: "gap-[4px]",
-			5: "gap-[5px]",
-			6: "gap-[6px]",
-			8: "gap-[8px]",
-			10: "gap-[10px]",
-			12: "gap-[12px]",
-			16: "gap-[16px]",
-			20: "gap-[20px]",
-			24: "gap-[24px]",
-		},
 	},
 	defaultVariants: {
 		fullWidth: false,
-		gap: 4,
 	},
 });
+
+const HSTACK_DEFAULT_LEGACY_GAP = 4 satisfies RhythmScaleValue;
 
 /**
  * HStack 컴포넌트
@@ -66,7 +64,7 @@ const hStackVariants = cva("flex", {
  * @example
  * ```tsx
  * // 기본 사용
- * <HStack gap={8}>
+ * <HStack gap="inline">
  *   <Button>취소</Button>
  *   <Button color="primary">확인</Button>
  * </HStack>
@@ -88,16 +86,26 @@ export const HStack = (props: HStackProps) => {
 		gap,
 		...rest
 	} = props;
+	const gapClassName =
+		gap === undefined
+			? getRhythmLegacyPixelGapClass(HSTACK_DEFAULT_LEGACY_GAP)
+			: isRhythmPreset(gap)
+				? getRhythmTailwindGapClass(
+						resolveRhythmValue(gap, rhythmDefaults.hStackPreset),
+					)
+				: getRhythmLegacyPixelGapClass(gap);
 
 	return (
 		<div
-			className={hStackVariants({
-				alignItems,
-				justifyContent,
-				fullWidth,
-				gap,
+			className={cn(
+				hStackVariants({
+					alignItems,
+					justifyContent,
+					fullWidth,
+				}),
+				gapClassName,
 				className,
-			})}
+			)}
 			{...rest}
 		>
 			{children}

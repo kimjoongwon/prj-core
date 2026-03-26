@@ -11,8 +11,8 @@ import {
 } from "@heroui/react";
 import { Plus, Search, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { HStack } from "../../../layout/HStack/HStack";
-import { VStack } from "../../../layout/VStack/VStack";
+import { HStack } from "../../../rhythm/HStack/HStack";
+import { VStack } from "../../../rhythm/VStack/VStack";
 import { Text } from "../../../display/data-display/Text/Text";
 import { AbilityFormModal } from "../../../form/AbilityFormModal";
 import { AbilityRuleList } from "../../../widget/ability/AbilityRuleList";

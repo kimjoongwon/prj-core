@@ -29,8 +29,8 @@
 | ../../../control/Input/Input | 기능 구현 의존성 |
 | ../../../control/RadioGroup/RadioGroup | 기능 구현 의존성 |
 | ../../../control/Checkbox/Checkbox | 기능 구현 의존성 |
-| ../../../layout/HStack/HStack | 기능 구현 의존성 |
-| ../../../layout/VStack/VStack | 기능 구현 의존성 |
+| ../../../rhythm/HStack/HStack | 기능 구현 의존성 |
+| ../../../rhythm/VStack/VStack | 기능 구현 의존성 |
 | ../ConditionEditor | 기능 구현 의존성 |
 
 ## 동작 흐름

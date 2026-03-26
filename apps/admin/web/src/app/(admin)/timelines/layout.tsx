@@ -6,7 +6,7 @@ export default function TimelinesLayout({ children }: { children: ReactNode }) {
 		<Page>
 			<PageSurface>
 				<Section>
-					<SectionSurface elevation="flat" padding="none">
+					<SectionSurface elevation="flat">
 						{children}
 					</SectionSurface>
 				</Section>

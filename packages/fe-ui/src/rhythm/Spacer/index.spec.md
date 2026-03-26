@@ -1,12 +1,12 @@
-# Spacer Layout 컴포넌트 기획서
+# Spacer Rhythm 컴포넌트 기획서
 
 > 생성일: 2026-02-18
-> 타입: layout
-> 위치: packages/fe-ui/src/layout/Spacer/
+> 타입: rhythm
+> 위치: packages/fe-ui/src/rhythm/Spacer/
 
 ## 역할
 
-요소 사이에 빈 공간을 생성하는 유틸리티 컴포넌트. 세로/가로 방향 지정 가능.
+요소 사이에 빈 공간을 생성하는 rhythm primitive. 세로/가로 방향 지정 가능하다.
 
 ## 디자인 목업
 
@@ -50,8 +50,12 @@
 
 ```typescript
 interface SpacerProps {
-  /** 공간 크기 (px 단위) @default 4 */
-  size?: number;
+  /** 공간 크기. numeric은 px, semantic preset은 권장 rhythm token */
+  size?: number | "flush" | "dense" | "inline" | "block" | "section" | "page" | "roomy";
+  /** 가로 여백 shortcut */
+  x?: number | "flush" | "dense" | "inline" | "block" | "section" | "page" | "roomy";
+  /** 세로 여백 shortcut */
+  y?: number | "flush" | "dense" | "inline" | "block" | "section" | "page" | "roomy";
   /** 공간 방향 @default "vertical" */
   direction?: "horizontal" | "vertical";
   /** 추가 CSS 클래스 */
@@ -63,8 +67,8 @@ interface SpacerProps {
 
 | direction | 적용 CSS |
 |-----------|----------|
-| vertical | `h-[{size}px]` |
-| horizontal | `w-[{size}px]` |
+| vertical | `h-[{size}px]` 또는 semantic height class |
+| horizontal | `w-[{size}px]` 또는 semantic width class |
 
 `aria-hidden="true"` 접근성 속성 포함.
 
@@ -76,6 +80,7 @@ interface SpacerProps {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-26 | `layout`에서 `rhythm` 레이어로 이동하고 위치/타입 문구를 정리 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

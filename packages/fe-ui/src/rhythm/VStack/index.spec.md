@@ -1,12 +1,12 @@
-# VStack Layout 컴포넌트 기획서
+# VStack Rhythm 컴포넌트 기획서
 
 > 생성일: 2026-02-18
-> 타입: layout
-> 위치: packages/fe-ui/src/layout/VStack/
+> 타입: rhythm
+> 위치: packages/fe-ui/src/rhythm/VStack/
 
 ## 역할
 
-자식 요소들을 세로(수직) 방향으로 배치하는 Flex 컨테이너. cva 기반으로 정렬, 간격 등을 props로 제어한다.
+자식 요소들을 세로(수직) 방향으로 배치하는 rhythm primitive. cva 기반으로 정렬과 간격을 props로 제어한다.
 
 ## 디자인 목업
 
@@ -77,14 +77,15 @@ type VStackProps = {
   justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
   /** 전체 너비 사용 여부 */
   fullWidth?: boolean;
-  /** 요소 간 간격 (Tailwind spacing 단위) @default 4 */
-  gap?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16 | 20 | 24;
+  /** 요소 간 간격. semantic preset 우선, numeric 값은 legacy 호환 */
+  gap?: "flush" | "dense" | "inline" | "block" | "section" | "page" | "roomy"
+    | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16 | 20 | 24;
 };
 ```
 
 ## 기본 스타일
 
-`flex flex-col` + gap/alignItems/justifyContent/fullWidth에 따른 Tailwind 클래스
+`flex flex-col` + semantic rhythm preset 또는 legacy numeric gap + alignItems/justifyContent/fullWidth에 따른 클래스
 
 ## HeroUI 매핑
 
@@ -94,6 +95,7 @@ type VStackProps = {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-26 | `layout`에서 `rhythm` 레이어로 이동하고 위치/타입 문구를 정리 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

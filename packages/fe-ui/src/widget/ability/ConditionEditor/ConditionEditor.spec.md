@@ -25,8 +25,8 @@
 | mobx-react-lite | 기능 구현 의존성 |
 | react | 기능 구현 의존성 |
 | ../../../control/Textarea/Textarea | 기능 구현 의존성 |
-| ../../../layout/HStack/HStack | 기능 구현 의존성 |
-| ../../../layout/VStack/VStack | 기능 구현 의존성 |
+| ../../../rhythm/HStack/HStack | 기능 구현 의존성 |
+| ../../../rhythm/VStack/VStack | 기능 구현 의존성 |
 
 ## 동작 흐름
 

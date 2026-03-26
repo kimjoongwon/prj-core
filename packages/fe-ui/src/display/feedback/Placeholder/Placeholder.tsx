@@ -1,5 +1,5 @@
 import { Text } from "../../data-display/Text/Text";
-import { VStack } from "../../../layout/VStack/VStack";
+import { VStack } from "../../../rhythm/VStack/VStack";
 
 /**
  * Placeholder 컴포넌트

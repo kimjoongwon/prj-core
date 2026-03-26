@@ -11,8 +11,8 @@ import {
 import { AlertTriangle, Info, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { HStack } from "../../../layout/HStack/HStack";
-import { VStack } from "../../../layout/VStack/VStack";
+import { HStack } from "../../../rhythm/HStack/HStack";
+import { VStack } from "../../../rhythm/VStack/VStack";
 
 /**
  * ConfirmModal Props

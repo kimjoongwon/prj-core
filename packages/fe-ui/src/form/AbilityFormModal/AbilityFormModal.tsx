@@ -18,8 +18,8 @@ import { useEffect, useState } from "react";
 import { Input } from "../../control/Input/Input";
 import { RadioGroup } from "../../control/RadioGroup/RadioGroup";
 import { Checkbox } from "../../control/Checkbox/Checkbox";
-import { HStack } from "../../layout/HStack/HStack";
-import { VStack } from "../../layout/VStack/VStack";
+import { HStack } from "../../rhythm/HStack/HStack";
+import { VStack } from "../../rhythm/VStack/VStack";
 import { ConditionEditor } from "../../widget/ability/ConditionEditor";
 
 /**

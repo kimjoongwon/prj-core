@@ -130,9 +130,14 @@ HeroUI 공식 문서(https://heroui.com) 스타일을 따릅니다.
   ```
 
 #### 간격 규칙
-- 섹션 간: `gap-8` 또는 `mt-8`
-- 요소 간: `gap-4`
-- 컴포넌트 내부: `p-4` ~ `p-6`
+- 신규 조합에서는 `VStack`/`HStack`/`Spacer`의 semantic rhythm preset 우선
+- 페이지 큰 블록: `gap="page"`
+- 섹션 내부 기본 리듬: `gap="section"`
+- 제목/본문/작은 블록: `gap="block"`
+- 버튼 행/짧은 수평 그룹: `gap="inline"`
+- 메타데이터/촘촘한 그룹: `gap="dense"`
+- raw `gap-*`, `space-y-*`, `space-x-*`는 legacy 유지나 CSS grid 같은 예외에서만 사용
+- 컴포넌트 내부 padding: `p-4` ~ `p-6`
 
 ### Surface/엘리베이션 시스템 (Critical)
 
@@ -173,7 +178,7 @@ import { Page, PageSurface, PageTitleBar, SectionSurface } from "@cocrepo/ui";
   }
 >
   <PageSurface>
-    <SectionSurface padding="none">
+    <SectionSurface>
       <DataGrid ... />
     </SectionSurface>
   </PageSurface>

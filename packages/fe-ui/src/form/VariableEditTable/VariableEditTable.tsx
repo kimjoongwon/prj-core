@@ -14,7 +14,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Input } from "../../control/Input/Input";
 import { Switch } from "../../control/Switch/Switch";
-import { VStack } from "../../layout/VStack/VStack";
+import { VStack } from "../../rhythm/VStack/VStack";
 
 /** 변수 편집 항목 */
 export interface VariableEditItem {

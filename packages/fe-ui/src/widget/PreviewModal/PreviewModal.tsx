@@ -12,8 +12,8 @@ import {
 } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { VStack } from "../../layout/VStack/VStack";
-import { HStack } from "../../layout/HStack/HStack";
+import { VStack } from "../../rhythm/VStack/VStack";
+import { HStack } from "../../rhythm/HStack/HStack";
 import { VariableInputForm } from "../../form/VariableInputForm";
 import type { TemplateVariable } from "../VariableReadTable";
 import { HtmlContentRenderer } from "../HtmlContentRenderer";

@@ -25,8 +25,8 @@
 | mobx-react-lite | 기능 구현 의존성 |
 | ../../../control/Input/Input | 기능 구현 의존성 |
 | ../../../control/Select/Select | 기능 구현 의존성 |
-| ../../../layout/HStack/HStack | 기능 구현 의존성 |
-| ../../../layout/VStack/VStack | 기능 구현 의존성 |
+| ../../../rhythm/HStack/HStack | 기능 구현 의존성 |
+| ../../../rhythm/VStack/VStack | 기능 구현 의존성 |
 
 ## 동작 흐름
 

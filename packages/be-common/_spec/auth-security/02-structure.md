@@ -248,7 +248,7 @@
 │  ├─ Select (결과: 전체/성공/실패/잠금)
 │  └─ Input (이메일 검색)
 │
-└─ 섹션 영역 padding="none"
+└─ 섹션 영역 기본 padding
    └─ DataGrid
       ├─ 시간 (DateTimeCell)
       ├─ 이메일

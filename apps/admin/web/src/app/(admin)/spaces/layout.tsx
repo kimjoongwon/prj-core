@@ -4,9 +4,9 @@ import type { ReactNode } from "react";
 export default function SpacesLayout({ children }: { children: ReactNode }) {
 	return (
 		<Page>
-			<PageSurface padding="none">
+			<PageSurface>
 				<Section>
-					<SectionSurface elevation="flat" padding="none">
+					<SectionSurface elevation="flat">
 						{children}
 					</SectionSurface>
 				</Section>

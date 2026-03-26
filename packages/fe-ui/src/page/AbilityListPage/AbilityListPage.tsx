@@ -4,7 +4,7 @@ import { Button, Input, Select, SelectItem, Spinner } from "@heroui/react";
 import { Key, Plus, Search } from "lucide-react";
 import type { ReactNode } from "react";
 import { Chip, DateTimeCell } from "../../display";
-import { VStack } from "../../layout";
+import { VStack } from "../../rhythm";
 import { Surface } from "../../surface";
 import { PageTitleBar } from "../../widget";
 
@@ -190,7 +190,7 @@ export function AbilityListPage({
 					</Button>
 				}
 			/>
-			<VStack gap={4}>
+			<VStack gap="section">
 				<Surface className="rounded-2xl border-divider/80 bg-content1/70">
 					<div className="mb-5 border-b border-divider/80 pb-4">
 						<PageTitleBar level={2} title="필터" />

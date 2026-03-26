@@ -24,8 +24,8 @@
 | react | 기능 구현 의존성 |
 | ../../../control/Select/Select | 기능 구현 의존성 |
 | ../../../display/data-display/Text/Text | 기능 구현 의존성 |
-| ../../../layout/HStack/HStack | 기능 구현 의존성 |
-| ../../../layout/VStack/VStack | 기능 구현 의존성 |
+| ../../../rhythm/HStack/HStack | 기능 구현 의존성 |
+| ../../../rhythm/VStack/VStack | 기능 구현 의존성 |
 | ../../../form/AbilityFormModal | 기능 구현 의존성 |
 | ../../../widget/ability/AbilityRuleList | 기능 구현 의존성 |
 | ./type | 기능 구현 의존성 |

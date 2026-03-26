@@ -29,7 +29,7 @@ widget/feature/form/master/detail 등 하위 재사용 계층을 조합해 page-
    - 데이터, 파생 상태, 빈 상태 메시지, CTA 상태, 핸들러는 props로 받음
 3. page component 내부에서 직접 API/라우팅/스토어/runtime context를 읽지 않음
    - 금지 예: Orval hooks, React Query hooks, `useRouter`, `useSearchParams`, `redirect`, `cookies`, `headers`, MobX store 직접 참조
-4. page component는 `widget`, `feature`, `master`, `detail`, `form`, `layout`, `display`, `control` 등 하위 재사용 계층만 조합
+4. page component는 `widget`, `feature`, `master`, `detail`, `form`, `layout`, `rhythm`, `display`, `control` 등 하위 재사용 계층만 조합
 5. `packages/fe-ui/src/page` 아래에는 단순 namespace depth를 만들지 않음
    - 금지 예: `src/page/admin/MemberListPage.tsx`, `src/page/idp/LoginPage.tsx`
    - 허용 예: `src/page/MemberListPage/MemberListPage.tsx`
@@ -185,6 +185,7 @@ rg -n 'handle[A-Z][A-Za-z0-9_]*' "$TARGET_PAGE"
 - page는 pure presentational contract 유지
 - 앱 라우트 data/handler는 page props로 받음
 - lower-layer 조합을 우선하고 page 내부에서 비재사용 책임을 만들지 않음
+- 신규 `VStack`/`HStack`/`Spacer` 호출은 semantic rhythm preset(`page`, `section`, `block`, `inline`, `dense`)을 우선 사용
 - 완료 기준은 `규칙 위반 0 + export 동기화 + spec 동기화`
 
 ---
@@ -204,7 +205,7 @@ export function MembersListPage({
   onClickCreateButton,
 }: MembersListPageProps) {
   return (
-    <VStack gap={6}>
+    <VStack gap="page">
       <MembersSummaryWidget count={members.length} />
       <MembersTableFeature members={members} />
       {isEmpty ? <EmptyState /> : null}

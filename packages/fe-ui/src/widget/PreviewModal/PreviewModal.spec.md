@@ -24,8 +24,8 @@
 | @heroui/react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
 | react | 기능 구현 의존성 |
-| ../../layout/VStack/VStack | 기능 구현 의존성 |
-| ../../layout/HStack/HStack | 기능 구현 의존성 |
+| ../../rhythm/VStack/VStack | 기능 구현 의존성 |
+| ../../rhythm/HStack/HStack | 기능 구현 의존성 |
 | ../../form/VariableInputForm | 기능 구현 의존성 |
 | ../VariableReadTable | 기능 구현 의존성 |
 | ../HtmlContentRenderer | 기능 구현 의존성 |

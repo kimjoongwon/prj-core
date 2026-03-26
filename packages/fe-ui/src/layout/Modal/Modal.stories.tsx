@@ -1,8 +1,8 @@
 import { Card, CardBody } from "@heroui/react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../../control/Button/Button";
-import { HStack } from "../../layout/HStack/HStack";
-import { VStack } from "../../layout/VStack/VStack";
+import { HStack } from "../../rhythm/HStack/HStack";
+import { VStack } from "../../rhythm/VStack/VStack";
 import { Modal } from "./Modal";
 
 const meta: Meta<typeof Modal> = {

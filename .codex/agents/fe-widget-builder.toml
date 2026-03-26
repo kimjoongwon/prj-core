@@ -60,7 +60,7 @@ developer_instructions = '''
 | **Pure UI 유지** | 상태/API 호출 금지, props로만 동작 |
 | **displayName 설정** | 디버깅을 위해 필수 |
 | **라이브러리 타입 기반** | extends/Omit/Pick 활용 |
-| **레이아웃 컴포넌트 사용** | HStack, VStack 등으로 배치 |
+| **rhythm 컴포넌트 사용** | HStack, VStack 등으로 배치 |
 
 ### ♻️ 기존 컴포넌트 우선 원칙 (Critical)
 
@@ -178,7 +178,7 @@ export const StatusBadge = ({ status, label, ...rest }: StatusBadgeProps) => {
 
 ```tsx
 // ✅ 올바른 패턴 - 레이아웃 컴포넌트 사용
-<HStack gap={2} align="center">
+<HStack gap="inline" alignItems="center">
   <Avatar />
   <Text>{name}</Text>
 </HStack>
@@ -285,7 +285,7 @@ SpaceDropdown                 → SpaceSelector (PersistStore 연결)
 - **data-display**: Avatar, Chip, Icon, Text, User 등
 - **inputs**: Button, Input, Checkbox, Select 등
 - **feedback**: Message, Skeleton, Placeholder 등
-- **surfaces**: Container, HStack, VStack, Spacer 등
+- **structure/rhythm**: Container, HStack, VStack, Spacer 등
 
 ### memo 사용 규칙
 

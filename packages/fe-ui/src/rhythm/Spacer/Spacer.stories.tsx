@@ -1,8 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { rhythmPresets } from "../presets";
+import { rhythmScaleValues } from "../tokens";
 import { Spacer } from "./Spacer";
 
+const rhythmOptions = [
+	...Object.keys(rhythmPresets),
+	...rhythmScaleValues,
+] as const;
+
 const meta = {
-	title: "Layouts/Spacer",
+	title: "Rhythm/Spacer",
 	component: Spacer,
 	parameters: {
 		layout: "centered",
@@ -16,9 +23,21 @@ const meta = {
 	tags: ["autodocs"],
 	argTypes: {
 		size: {
-			control: { type: "number", min: 1, max: 200 },
-			description: "Size of the spacer in pixels",
-			defaultValue: 4,
+			control: "select",
+			options: rhythmOptions,
+			description:
+				'Preferred: semantic rhythm presets like "inline" or "section". Numeric values remain pixel-based.',
+			defaultValue: "inline",
+		},
+		x: {
+			control: "select",
+			options: [undefined, ...rhythmOptions],
+			description: "Optional horizontal spacer shortcut",
+		},
+		y: {
+			control: "select",
+			options: [undefined, ...rhythmOptions],
+			description: "Optional vertical spacer shortcut",
 		},
 		direction: {
 			control: "select",
@@ -38,7 +57,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		size: 16,
+		size: "section",
 	},
 	render: (args) => (
 		<div className="border-2 border-gray-300 border-dashed">
@@ -50,7 +69,7 @@ export const Default: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "Default vertical spacer creating space between elements.",
+				story: "Default vertical spacer using the semantic section rhythm.",
 			},
 		},
 	},

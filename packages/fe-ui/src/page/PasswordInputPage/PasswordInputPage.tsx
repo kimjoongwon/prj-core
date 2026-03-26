@@ -3,7 +3,7 @@
 import { observer } from "mobx-react-lite";
 import { Button } from "../../control/Button/Button";
 import { Input } from "../../control/Input";
-import { VStack } from "../../layout/VStack/VStack";
+import { VStack } from "../../rhythm/VStack/VStack";
 
 export interface PasswordInputPageState {
 	/** 비밀번호 */

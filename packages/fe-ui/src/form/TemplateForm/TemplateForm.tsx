@@ -1,7 +1,7 @@
 "use client";
 import { Button, Input, Radio, RadioGroup, Textarea } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { VStack } from "../../layout/VStack/VStack";
+import { VStack } from "../../rhythm/VStack/VStack";
 import { TemplateContentEditor } from "../../widget/TemplateContentEditor/TemplateContentEditor";
 import { TemplateTypeBadge } from "../../widget/TemplateTypeBadge/TemplateTypeBadge";
 import {

@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import type React from "react";
 import { Button } from "../../control/Button/Button";
 import { Input } from "../../control/Input";
-import { VStack } from "../../layout/VStack/VStack";
+import { VStack } from "../../rhythm/VStack/VStack";
 
 export interface State {
 	/** 이메일 */

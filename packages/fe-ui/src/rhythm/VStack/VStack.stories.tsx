@@ -1,8 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { rhythmPresets } from "../presets";
+import { rhythmScaleValues } from "../tokens";
 import { VStack } from "./VStack";
 
+const rhythmOptions = [
+	...Object.keys(rhythmPresets),
+	...rhythmScaleValues,
+] as const;
+
 const meta = {
-	title: "Layouts/VStack",
+	title: "Rhythm/VStack",
 	component: VStack,
 	parameters: {
 		layout: "centered",
@@ -27,9 +34,10 @@ const meta = {
 		},
 		gap: {
 			control: "select",
-			options: [0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24],
-			description: "Gap between items in pixels (Tailwind spacing units)",
-			defaultValue: 4,
+			options: rhythmOptions,
+			description:
+				'Preferred: semantic rhythm presets like "section" or "page". Numeric values remain for legacy compatibility.',
+			defaultValue: "section",
 		},
 		fullWidth: {
 			control: "boolean",
@@ -60,6 +68,7 @@ const SampleItem = ({
 
 export const Default: Story = {
 	args: {
+		gap: "section",
 		children: (
 			<>
 				<SampleItem>Item 1</SampleItem>
@@ -71,7 +80,7 @@ export const Default: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "Default vertical stack with standard gap and alignment.",
+				story: "Default vertical stack using the recommended semantic section rhythm.",
 			},
 		},
 	},

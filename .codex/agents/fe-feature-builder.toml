@@ -204,7 +204,7 @@ export const CommentList = observer<CommentListProps>(
     }
 
     return (
-      <VStack gap={4}>
+      <VStack gap="section">
         {comments.map((comment) => (
           <CommentItem
             key={comment.id}
@@ -429,7 +429,7 @@ const validateForm = (email: string, password: string): string | null => {
 | 허용 | 금지 |
 |------|------|
 | HeroUI 컴포넌트 (Button, Avatar, Dropdown 등) | 직접 Tailwind className 작성 |
-| `<HStack>`, `<VStack>`, `<Spacer />` 레이아웃 컴포넌트 | `className="flex gap-2 mt-4"` |
+| `<HStack>`, `<VStack>`, `<Spacer />` rhythm primitive | `className="flex gap-2 mt-4"` |
 | Widget 컴포넌트 조합 | inline style (`style={{...}}`) |
 
 ### Widget → Feature 분리의 장점

@@ -6,5 +6,6 @@ export * from "./layout";
 export * from "./master";
 export * from "./page";
 export * from "./display";
+export * from "./rhythm";
 export * from "./surface";
 export * from "./widget";

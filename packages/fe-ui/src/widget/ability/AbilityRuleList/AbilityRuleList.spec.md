@@ -25,8 +25,8 @@
 | lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
 | ../../../control/Switch/Switch | 기능 구현 의존성 |
-| ../../../layout/HStack/HStack | 기능 구현 의존성 |
-| ../../../layout/VStack/VStack | 기능 구현 의존성 |
+| ../../../rhythm/HStack/HStack | 기능 구현 의존성 |
+| ../../../rhythm/VStack/VStack | 기능 구현 의존성 |
 
 ## 동작 흐름
 

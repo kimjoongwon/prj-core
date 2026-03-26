@@ -3,7 +3,7 @@
 import { Button } from "@heroui/react";
 import { Eye, Pencil, Send, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { HStack } from "../../../layout/HStack/HStack";
+import { HStack } from "../../../rhythm/HStack/HStack";
 
 export interface TemplateActionsProps {
 	/** 템플릿 ID */

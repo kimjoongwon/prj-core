@@ -75,8 +75,8 @@ interface NotFoundProps {
 
 - `Text` (data-display/Text)
 - `Container` (layouts/Container)
-- `Spacer` (layouts/Spacer)
-- `VStack` (layouts/VStack)
+- `Spacer` (rhythm/Spacer)
+- `VStack` (rhythm/VStack)
 
 ## HeroUI 매핑
 

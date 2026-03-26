@@ -3,7 +3,7 @@
 import { useNavigationStore } from "@cocrepo/store";
 import { cn } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { VStack } from "../../layout/VStack/VStack";
+import { VStack } from "../../rhythm/VStack/VStack";
 
 export interface SubMenuListProps {
 	/** 하위 아이템 클릭 시 콜백 */

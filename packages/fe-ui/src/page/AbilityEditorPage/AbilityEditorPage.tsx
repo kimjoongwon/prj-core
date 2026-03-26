@@ -16,7 +16,7 @@ import {
 	FormSection,
 	FormSectionCard,
 } from "../../form";
-import { VStack } from "../../layout";
+import { VStack } from "../../rhythm";
 import { PageTitleBar } from "../../widget";
 
 export interface AbilityEditorPageOption {
@@ -155,7 +155,7 @@ export function AbilityEditorPage(props: AbilityEditorPageProps) {
 			}
 		>
 			<FormPageSurface>
-				<VStack gap={4}>
+				<VStack gap="section">
 					<FormSectionCard>
 						<FormSection top={<PageTitleBar level={2} title="기본 정보" />}>
 							<div className="grid grid-cols-1 gap-4">
