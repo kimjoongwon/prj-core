@@ -1,15 +1,12 @@
 "use client";
 
 import {
-	type AuthAuditLogDto,
-	type AuthAuditResult,
 	useGetAuthAuditLogStats,
 	useGetAuthAuditLogs,
 } from "@cocrepo/api/idp/auth";
-import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
+import type { InputConfig } from "@cocrepo/type";
 import {
-	AuditResultBadge,
-	DateTimeCell,
+	authAuditLogTableColumns,
 	MetaDataGrid,
 	PageTitleBar,
 	StatsCard,
@@ -23,46 +20,6 @@ import { observer } from "mobx-react-lite";
 function AuthAuditLogsPage() {
 	return <AuthAuditLogsClient />;
 }
-
-/** 컬럼 정의 */
-const columns: MetaDataGridColumnConfig<AuthAuditLogDto>[] = [
-	{
-		field: "createdAt",
-		label: "시간",
-		size: 170,
-		isRequired: true,
-		cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
-	},
-	{
-		field: "email",
-		label: "이메일",
-		size: 200,
-	},
-	{
-		field: "result",
-		label: "결과",
-		size: 100,
-		align: "center",
-		cell: ({ getValue }) => (
-			<AuditResultBadge result={getValue() as AuthAuditResult} />
-		),
-	},
-	{
-		field: "failureReason",
-		label: "실패 사유",
-		size: 200,
-	},
-	{
-		field: "ipAddress",
-		label: "IP 주소",
-		size: 140,
-	},
-	{
-		field: "userAgent",
-		label: "User Agent",
-		size: 250,
-	},
-];
 
 /** 좌측 입력 정의 */
 const leftInputs: InputConfig[] = [
@@ -139,7 +96,7 @@ function AuthAuditLogsClient() {
 						isLoading,
 						queryStates,
 						setQueryStates,
-						columns,
+						columns: authAuditLogTableColumns,
 						leftInputs,
 						emptyMessage: "조회된 감사 로그가 없습니다.",
 					}}

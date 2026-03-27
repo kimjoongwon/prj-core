@@ -1,5 +1,5 @@
 import { Chip } from "@heroui/react";
-import type { InquiryStatusCode } from "../../data-display/cell";
+import type { InquiryStatusCode } from "../../../cell/InquiryStatusCell/InquiryStatusCell";
 
 export interface StatusBadgeProps {
 	/** 문의 상태 코드 */

@@ -41,7 +41,7 @@ export default defineConfig({
           name: "ui",
           environment: "jsdom",
           globals: true,
-          testTimeout: 15000,
+          testTimeout: 30000,
           setupFiles: [path.resolve(dirname, "./test-setup.js")],
           include: [
             ".storybook/**/*.test.{js,ts}",

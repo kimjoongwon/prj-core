@@ -17,7 +17,7 @@ import {
 } from "@cocrepo/api/assets";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
+	buildAssetTableColumns,
 	EmptyState,
 	FolderTree,
 	type FolderTreeItem,
@@ -29,7 +29,6 @@ import {
 import {
 	addToast,
 	Button,
-	Chip,
 	Input,
 	Modal,
 	ModalBody,
@@ -39,10 +38,8 @@ import {
 	useDisclosure,
 } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Trash2, Upload } from "lucide-react";
+import { Upload } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import type { Route } from "next";
-import Link from "next/link";
 import {
 	type ChangeEvent,
 	type ReactNode,
@@ -99,58 +96,6 @@ const queryStateInputs: InputConfig[] = [
 	},
 ];
 
-const getKindLabel = (kind: AssetKind) => {
-	switch (kind) {
-		case "IMAGE":
-			return "이미지";
-		case "VIDEO":
-			return "비디오";
-		case "DOCUMENT":
-			return "문서";
-		default:
-			return kind;
-	}
-};
-
-const getStatusColor = (
-	status: AssetStatus,
-): "success" | "warning" | "danger" => {
-	switch (status) {
-		case "READY":
-			return "success";
-		case "UPLOADING":
-			return "warning";
-		case "FAILED":
-			return "danger";
-		default:
-			return "warning";
-	}
-};
-
-const getStatusLabel = (status: AssetStatus) => {
-	switch (status) {
-		case "READY":
-			return "완료";
-		case "UPLOADING":
-			return "업로드 중";
-		case "FAILED":
-			return "실패";
-		default:
-			return status;
-	}
-};
-
-const formatBytes = (bytes: number) => {
-	if (bytes === 0) {
-		return "0 B";
-	}
-
-	const units = ["B", "KB", "MB", "GB"];
-	const exponent = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), 3);
-	const value = bytes / 1024 ** exponent;
-	return `${value.toFixed(exponent === 0 ? 0 : 1)} ${units[exponent]}`;
-};
-
 const getAssetEmptyMessage = (
 	folders: FolderDto[],
 	selectedFolderId: string | null,
@@ -177,100 +122,6 @@ const assetsSidebarPanelClassName =
 
 const assetsGridPanelClassName =
 	"min-w-0 rounded-[1.25rem] border border-divider/70 bg-content1/85 px-4 py-4 shadow-sm sm:px-5 sm:py-5";
-
-function buildAssetColumns({
-	isRemoving,
-	onClickDeleteAssetButton,
-}: {
-	isRemoving: boolean;
-	onClickDeleteAssetButton: (assetId: string) => void;
-}): MetaDataGridColumnConfig<AssetDto>[] {
-	return [
-		{
-			field: "originalName",
-			label: "파일명",
-			size: 280,
-			isRequired: true,
-			cell: ({ row }) => (
-				<Link
-					href={`/assets/${(row.original as AssetDto).id}` as Route}
-					className="text-primary hover:underline"
-				>
-					{(row.original as AssetDto).originalName}
-				</Link>
-			),
-		},
-		{
-			field: "kind",
-			label: "타입",
-			size: 100,
-			align: "center",
-			cell: ({ row }) => {
-				const kindValue = (row.original as AssetDto).kind;
-				return (
-					<Chip size="sm" variant="flat" color="secondary">
-						{getKindLabel(kindValue)}
-					</Chip>
-				);
-			},
-		},
-		{
-			field: "status",
-			label: "상태",
-			size: 120,
-			align: "center",
-			cell: ({ row }) => {
-				const statusValue = (row.original as AssetDto).status;
-				return (
-					<Chip size="sm" variant="flat" color={getStatusColor(statusValue)}>
-						{getStatusLabel(statusValue)}
-					</Chip>
-				);
-			},
-		},
-		{
-			field: "mimeType",
-			label: "MIME",
-			size: 180,
-			cell: ({ getValue }) => (
-				<span className="font-mono text-xs">{getValue() as string}</span>
-			),
-		},
-		{
-			field: "sizeBytes",
-			label: "크기",
-			size: 120,
-			align: "right",
-			cell: ({ getValue }) => formatBytes(getValue() as number),
-		},
-		{
-			field: "createdAt",
-			label: "등록일",
-			size: 150,
-			cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
-		},
-		{
-			field: "id",
-			label: "액션",
-			size: 100,
-			align: "center",
-			cell: ({ row }) => (
-				<Button
-					size="sm"
-					variant="flat"
-					color="danger"
-					isLoading={isRemoving}
-					startContent={<Trash2 className="h-4 w-4" />}
-					onPress={() =>
-						onClickDeleteAssetButton((row.original as AssetDto).id)
-					}
-				>
-					삭제
-				</Button>
-			),
-		},
-	];
-}
 
 const AssetsPageContent = observer(function AssetsPageContent({
 	queryStates,
@@ -310,7 +161,7 @@ const AssetsPageContent = observer(function AssetsPageContent({
 	const assets = (response?.data ?? []) as AssetDto[];
 	const totalCount = response?.meta?.total ?? 0;
 	const folders = (folderResponse?.data ?? []) as FolderDto[];
-	const columns = buildAssetColumns({
+	const columns = buildAssetTableColumns({
 		isRemoving,
 		onClickDeleteAssetButton,
 	});
@@ -725,7 +576,7 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 		removeAsset({ assetId });
 	};
 
-	const columns = buildAssetColumns({
+	const columns = buildAssetTableColumns({
 		isRemoving,
 		onClickDeleteAssetButton,
 	});
@@ -756,9 +607,7 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 					actions={pageActions}
 				/>
 
-				<Surface
-					className="overflow-hidden rounded-[1.75rem] border-divider/80 bg-content1/75"
-				>
+				<Surface className="overflow-hidden rounded-[1.75rem] border-divider/80 bg-content1/75">
 					{!isClientMounted || !isPersistStoreHydrated ? (
 						<AssetsGridFallback
 							queryStates={queryStates}

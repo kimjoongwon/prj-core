@@ -6,27 +6,13 @@ import {
 	useGetInquiriesSuspense,
 	useGetInquiryStatsSuspense,
 } from "@cocrepo/api/core/inquiries";
-import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
+import type { InputConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
-	InquiryAssigneeCell,
-	InquiryCategoryCell,
-	type InquiryCategoryCode,
-	InquiryChannelCell,
-	type InquiryChannelCode,
-	InquiryPriorityCell,
-	type InquiryPriorityCode,
-	InquirySentimentCell,
-	InquirySLACell,
+	buildInquiryTableColumns,
 	type InquiryStats,
 	InquiryStatsCards,
-	InquiryStatusCell,
-	type InquiryStatusCode,
-	InquiryUnreadCell,
 	MetaDataGrid,
 	PageTitleBar,
-	ProfileAvatarCell,
-	type SentimentTypeCode,
 	type SLAStatus,
 	Surface,
 	useMetaDataGridQueryStates,
@@ -38,25 +24,6 @@ import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
 import { useHandlers } from "./hooks/useHandlers";
-
-interface InquiryRow {
-	id: string;
-	title: string;
-	customerId: string;
-	customerName: string;
-	status: InquiryStatusCode;
-	category: InquiryCategoryCode;
-	channel: InquiryChannelCode;
-	priority: InquiryPriorityCode;
-	assigneeId?: string;
-	assigneeName?: string;
-	sentiment?: SentimentTypeCode;
-	slaStatus?: SLAStatus;
-	slaRemainingMinutes?: number;
-	unreadCount: number;
-	createdAt: string;
-	updatedAt: string;
-}
 
 const FILTERABLE_INQUIRY_STATUSES: InquiryStatus[] = ["NEW", "IN_PROGRESS"];
 
@@ -83,115 +50,6 @@ const leftInputs: InputConfig[] = [
 				{ label: "종료됨", value: "CLOSED" },
 			],
 		},
-	},
-];
-
-const columns: MetaDataGridColumnConfig<InquiryRow>[] = [
-	{
-		field: "customerName",
-		label: "고객",
-		size: 180,
-		isRequired: true,
-		cell: ({ row }) => (
-			<ProfileAvatarCell
-				name={row.original.customerName}
-				subtitle={row.original.customerId}
-			/>
-		),
-	},
-	{
-		field: "title",
-		label: "제목",
-		size: 260,
-		isRequired: true,
-		cell: ({ getValue }) => (
-			<span className="line-clamp-2">{getValue() as string}</span>
-		),
-	},
-	{
-		field: "status",
-		label: "상태",
-		size: 130,
-		align: "center",
-		cell: ({ getValue }) => (
-			<InquiryStatusCell value={getValue() as InquiryStatusCode} />
-		),
-	},
-	{
-		field: "category",
-		label: "카테고리",
-		size: 140,
-		align: "center",
-		cell: ({ getValue }) => (
-			<InquiryCategoryCell value={getValue() as InquiryCategoryCode} />
-		),
-	},
-	{
-		field: "channel",
-		label: "채널",
-		size: 120,
-		align: "center",
-		cell: ({ getValue }) => (
-			<InquiryChannelCell value={getValue() as InquiryChannelCode} />
-		),
-	},
-	{
-		field: "priority",
-		label: "우선순위",
-		size: 130,
-		align: "center",
-		cell: ({ getValue }) => (
-			<InquiryPriorityCell value={getValue() as InquiryPriorityCode} />
-		),
-	},
-	{
-		field: "assigneeName",
-		label: "담당자",
-		size: 150,
-		align: "center",
-		cell: ({ row }) => <InquiryAssigneeCell name={row.original.assigneeName} />,
-	},
-	{
-		field: "sentiment",
-		label: "감성",
-		size: 100,
-		align: "center",
-		cell: ({ getValue }) => (
-			<InquirySentimentCell
-				value={getValue() as SentimentTypeCode | undefined}
-			/>
-		),
-	},
-	{
-		field: "slaStatus",
-		label: "SLA",
-		size: 120,
-		align: "center",
-		cell: ({ row }) => {
-			const status = row.original.slaStatus;
-			const remainingMinutes = row.original.slaRemainingMinutes;
-
-			if (!status || remainingMinutes === undefined) {
-				return <span className="text-default-400">-</span>;
-			}
-
-			return (
-				<InquirySLACell status={status} remainingMinutes={remainingMinutes} />
-			);
-		},
-	},
-	{
-		field: "unreadCount",
-		label: "미확인",
-		size: 100,
-		align: "center",
-		cell: ({ getValue }) => <InquiryUnreadCell count={getValue() as number} />,
-	},
-	{
-		field: "createdAt",
-		label: "접수일",
-		size: 160,
-		cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
 	},
 ];
 
@@ -248,7 +106,7 @@ const getSlaRemainingMinutes = (inquiry: InquiryDto): number | undefined => {
 	);
 };
 
-const mapInquiryRow = (inquiry: InquiryDto): InquiryRow => {
+const mapInquiryRow = (inquiry: InquiryDto) => {
 	return {
 		id: inquiry.id,
 		title: inquiry.title,
@@ -268,6 +126,9 @@ const mapInquiryRow = (inquiry: InquiryDto): InquiryRow => {
 		updatedAt: inquiry.updatedAt,
 	};
 };
+
+const inquiryTableColumns =
+	buildInquiryTableColumns<ReturnType<typeof mapInquiryRow>>();
 
 const InquiriesPageContent = observer(function InquiriesPageContent({
 	queryStates,
@@ -305,7 +166,7 @@ const InquiriesPageContent = observer(function InquiriesPageContent({
 	};
 	const totalCount = inquiriesResponse?.meta?.total ?? 0;
 
-	const onClickInquiryGridRow = (inquiry: InquiryRow) => {
+	const onClickInquiryGridRow = (inquiry: ReturnType<typeof mapInquiryRow>) => {
 		onClickInquiryRow(inquiry.id);
 	};
 
@@ -333,7 +194,7 @@ const InquiriesPageContent = observer(function InquiriesPageContent({
 						isLoading: false,
 						queryStates,
 						setQueryStates,
-						columns,
+						columns: inquiryTableColumns,
 						leftInputs,
 						onRowClick: onClickInquiryGridRow,
 						emptyMessage: "표시할 문의가 없습니다.",
@@ -395,7 +256,7 @@ const InquiriesContentFallback = observer(function InquiriesContentFallback({
 						isLoading: true,
 						queryStates,
 						setQueryStates,
-						columns,
+						columns: inquiryTableColumns,
 						leftInputs,
 						emptyMessage: "표시할 문의가 없습니다.",
 					}}

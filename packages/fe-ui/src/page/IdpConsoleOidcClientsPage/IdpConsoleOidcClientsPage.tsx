@@ -1,18 +1,11 @@
 "use client";
 
+import { useGetOidcClients } from "@cocrepo/api/idp/oidc-clients";
+import type { InputConfig } from "@cocrepo/type";
 import {
-	type OidcClientDto,
-	useGetOidcClients,
-} from "@cocrepo/api/idp/oidc-clients";
-import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
-import {
-	ActiveStatusCell,
-	AuthMethodCell,
-	DateTimeCell,
-	GrantTypeCell,
 	MetaDataGrid,
+	oidcClientTableColumns,
 	PageTitleBar,
-	RowActionsCell,
 	Surface,
 	useMetaDataGridQueryStates,
 	VStack,
@@ -25,67 +18,6 @@ import Link from "next/link";
 function OidcClientsPage() {
 	return <OidcClientsPageClient />;
 }
-
-/**
- * 컬럼 정의
- */
-const columns: MetaDataGridColumnConfig<OidcClientDto>[] = [
-	{
-		field: "clientId",
-		label: "Client ID",
-		size: 200,
-		isRequired: true,
-		cell: ({ getValue }) => (
-			<span className="font-mono text-sm">{getValue() as string}</span>
-		),
-	},
-	{
-		field: "clientName",
-		label: "이름",
-		size: 200,
-	},
-	{
-		field: "tokenEndpointAuthMethod",
-		label: "인증 방식",
-		size: 150,
-		cell: ({ getValue }) => <AuthMethodCell method={getValue() as string} />,
-	},
-	{
-		field: "grantTypes",
-		label: "Grant Types",
-		size: 200,
-		cell: ({ getValue }) => <GrantTypeCell types={getValue() as string[]} />,
-	},
-	{
-		field: "isActive",
-		label: "활성",
-		size: 80,
-		align: "center",
-		cell: ({ getValue }) => (
-			<ActiveStatusCell isActive={getValue() as boolean} />
-		),
-	},
-	{
-		field: "createdAt",
-		label: "등록일",
-		size: 150,
-		cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
-	},
-	{
-		field: "actions",
-		label: "",
-		size: 100,
-		cell: ({ row }) => (
-			<RowActionsCell
-				id={row.original.id}
-				basePath="/oidc-clients"
-				showView
-				showEdit={false}
-				showDelete={false}
-			/>
-		),
-	},
-];
 
 /**
  * 좌측 입력 정의 (검색)
@@ -142,7 +74,7 @@ function OidcClientsPageClient() {
 						isLoading,
 						queryStates,
 						setQueryStates,
-						columns,
+						columns: oidcClientTableColumns,
 						leftInputs,
 						emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
 					}}

@@ -5,6 +5,10 @@ import {
   createStorybookAuthPlugin,
   createStorybookProxyConfig,
 } from "./storybookAuthDevServer.js";
+import {
+  applyFeUiStoryTitleTransform,
+  createFeUiStoryIndexer,
+} from "./feUiStoryTitles.js";
 
 /**
  * This function is used to resolve the absolute path of a package.
@@ -14,7 +18,7 @@ function getAbsolutePath(value) {
   return dirname(require.resolve(join(value, "package.json")));
 }
 
-/** @type { import('@storybook/react-vite').StorybookConfig } */
+/** @type { import('@storybook/nextjs-vite').StorybookConfig } */
 const chromaticAddonDisabled = process.env.STORYBOOK_DISABLE_CHROMATIC === "true";
 const vitestAddonDisabled = process.env.STORYBOOK_DISABLE_VITEST_ADDON === "true";
 const includePlaceholderStories = process.env.STORYBOOK_INCLUDE_PLACEHOLDER === "true";
@@ -80,6 +84,12 @@ const feUiStories = collectStoryFiles(feUiStoryRoot, {
 
 const config = {
   stories: [...localStories, ...feUiStories],
+  experimental_indexers: async (existingIndexers) =>
+    existingIndexers.map((indexer) =>
+      indexer.test?.test("example.stories.tsx")
+        ? createFeUiStoryIndexer(feUiStoryRoot, indexer)
+        : indexer,
+    ),
   addons: [
     ...(chromaticAddonDisabled ? [] : [getAbsolutePath("@chromatic-com/storybook")]),
     getAbsolutePath("@storybook/addon-docs"),
@@ -87,7 +97,7 @@ const config = {
     ...(vitestAddonDisabled ? [] : [getAbsolutePath("@storybook/addon-vitest")]),
   ],
   framework: {
-    name: getAbsolutePath("@storybook/react-vite"),
+    name: getAbsolutePath("@storybook/nextjs-vite"),
     options: {},
   },
   async viteFinal(config, { configType }) {
@@ -120,7 +130,6 @@ const config = {
       "@cocrepo/hook": join(process.cwd(), "../../../packages/fe-hook/index.ts"),
       "@cocrepo/store": join(process.cwd(), "../../../packages/fe-store/index.ts"),
       "@cocrepo/ui": join(process.cwd(), "../../../packages/fe-ui/index.ts"),
-      "next/navigation": join(process.cwd(), "src/runtime/nextNavigationMock.ts"),
     };
     config.define = {
       ...(config.define || {}),
@@ -133,6 +142,26 @@ const config = {
     } catch {
       // 테스트 환경에서는 @tailwindcss/vite 미설치일 수 있으므로 스킵
     }
+    config.plugins.push({
+      name: "fe-ui-story-title-normalizer",
+      enforce: "pre",
+      async transform(code, id) {
+        const transformed = await applyFeUiStoryTitleTransform(
+          code,
+          id,
+          feUiStoryRoot,
+        );
+
+        if (!transformed) {
+          return null;
+        }
+
+        return {
+          code: transformed.code,
+          map: transformed.map ?? null,
+        };
+      },
+    });
     config.plugins.push(
       react({
         jsxImportSource: "react",

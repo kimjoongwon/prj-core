@@ -1,17 +1,20 @@
 import "../tailwind.css";
 import { withStorybookRuntime } from "../src/runtime/StorybookRuntimeProvider";
 
-/** @type { import('@storybook/react-vite').Preview } */
+/** @type { import('@storybook/nextjs-vite').Preview } */
 const preview = {
   decorators: [
     withStorybookRuntime,
   ],
   parameters: {
+    nextjs: {
+      appDirectory: true,
+    },
     options: {
       storySort: {
         method: "alphabetical",
         includeNames: true,
-        order: ["Features", "Inputs", "inputs", "Layouts", "Layout", "Page", "Ui", "UI", "ui", "Cell", "Widget", "Form", "Widgets", "Auto"],
+        order: ["cell", "control", "detail", "display", "feature", "form", "layout", "master", "page", "rhythm", "surface", "widget", "widget-heavy", "Auto"],
       },
     },
     backgrounds: {

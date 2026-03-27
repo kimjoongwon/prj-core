@@ -1,9 +1,8 @@
 "use client";
 
+import { buildAbilityListTableColumns } from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem, Spinner } from "@heroui/react";
 import { Key, Plus, Search } from "lucide-react";
-import type { ReactNode } from "react";
-import { Chip, DateTimeCell } from "../../display";
 import { VStack } from "../../rhythm";
 import { Surface } from "../../surface";
 import { PageTitleBar } from "../../widget";
@@ -49,87 +48,8 @@ export interface AbilityListPageProps {
 	onClickCreateButton: () => void;
 }
 
-interface AbilityColumn {
-	field: string;
-	label: string;
-	size: number;
-	align?: "center";
-	cell: (ability: AbilityListPageAbility) => ReactNode;
-}
-
-const columns: AbilityColumn[] = [
-	{
-		field: "name",
-		label: "권한 이름",
-		size: 180,
-		cell: (ability) => (
-			<span className="font-mono text-sm">{ability.name}</span>
-		),
-	},
-	{
-		field: "subject",
-		label: "Subject",
-		size: 150,
-		cell: (ability) => (
-			<span className="text-sm">{ability.subjectLabel || "-"}</span>
-		),
-	},
-	{
-		field: "action",
-		label: "Action",
-		size: 120,
-		cell: (ability) => (
-			<span className="text-sm">{ability.actionLabel || "-"}</span>
-		),
-	},
-	{
-		field: "inverted",
-		label: "유형",
-		size: 100,
-		align: "center",
-		cell: (ability) => (
-			<Chip
-				size="sm"
-				color={ability.inverted ? "danger" : "success"}
-				variant="flat"
-			>
-				{ability.inverted ? "거부(cannot)" : "허용(can)"}
-			</Chip>
-		),
-	},
-	{
-		field: "fields",
-		label: "필드 수",
-		size: 80,
-		align: "center",
-		cell: (ability) => (
-			<span className="text-sm">
-				{ability.fieldCount === 0 ? "전체" : ability.fieldCount}
-			</span>
-		),
-	},
-	{
-		field: "conditions",
-		label: "조건",
-		size: 80,
-		align: "center",
-		cell: (ability) => (
-			<Chip
-				size="sm"
-				color={ability.hasConditions ? "primary" : "default"}
-				variant="flat"
-			>
-				{ability.hasConditions ? "있음" : "없음"}
-			</Chip>
-		),
-	},
-	{
-		field: "createdAt",
-		label: "생성일",
-		size: 150,
-		cell: (ability) => <DateTimeCell value={ability.createdAt} />,
-	},
-];
+const abilityListTableColumns =
+	buildAbilityListTableColumns<AbilityListPageProps["abilities"][number]>();
 
 function AbilityListPageFallback() {
 	return (
@@ -278,7 +198,7 @@ export function AbilityListPage({
 							<table className="w-full text-sm">
 								<thead>
 									<tr className="border-b border-divider">
-										{columns.map((column) => (
+										{abilityListTableColumns.map((column) => (
 											<th
 												key={column.field}
 												className={`px-4 py-3 text-left font-medium text-default-500 ${column.align === "center" ? "text-center" : ""}`}
@@ -299,7 +219,7 @@ export function AbilityListPage({
 											className="cursor-pointer border-b border-divider transition-colors hover:bg-content2/50"
 											onClick={() => onClickAbilityRow(ability.id)}
 										>
-											{columns.map((column) => (
+											{abilityListTableColumns.map((column) => (
 												<td
 													key={column.field}
 													className={`px-4 py-3 ${column.align === "center" ? "text-center" : ""}`}

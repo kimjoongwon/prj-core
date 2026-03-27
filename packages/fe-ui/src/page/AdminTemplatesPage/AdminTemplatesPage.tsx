@@ -8,13 +8,13 @@ import {
 } from "@cocrepo/api/core/templates";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
+	buildTemplateTableColumns,
 	MetaDataGrid,
 	PageTitleBar,
 	Surface,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
-import { addToast, Button, Switch } from "@heroui/react";
+import { addToast, Button } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -48,55 +48,6 @@ function getTemplatesParams(queryStates: TemplatesQueryStates) {
 					? false
 					: undefined,
 	};
-}
-
-function buildColumns({
-	onClickTemplateCode,
-	onToggleTemplateStatusSwitch,
-}: {
-	onClickTemplateCode: (template: TemplateDto) => void;
-	onToggleTemplateStatusSwitch: (templateId: string) => Promise<void>;
-}): MetaDataGridColumnConfig<TemplateDto>[] {
-	return [
-		{
-			field: "code",
-			label: "템플릿 코드",
-			size: 220,
-			isRequired: true,
-			cell: ({ row }) => (
-				<Button
-					className="justify-start p-0 font-mono text-sm"
-					variant="light"
-					onPress={() => onClickTemplateCode(row.original)}
-				>
-					{row.original.code}
-				</Button>
-			),
-		},
-		{
-			field: "name",
-			label: "템플릿명",
-			size: 220,
-		},
-		{
-			field: "isActive",
-			label: "활성",
-			size: 120,
-			align: "center",
-			cell: ({ row }) => (
-				<Switch
-					isSelected={row.original.isActive}
-					onValueChange={() => onToggleTemplateStatusSwitch(row.original.id)}
-				/>
-			),
-		},
-		{
-			field: "createdAt",
-			label: "생성일",
-			size: 160,
-			cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
-		},
-	];
 }
 
 const TemplatesGridContent = observer(function TemplatesGridContent({
@@ -177,7 +128,7 @@ const TemplatesPageInner = observer(function TemplatesPageInner() {
 		router.push(`/templates/${template.id}`);
 	};
 
-	const columns = buildColumns({
+	const columns = buildTemplateTableColumns({
 		onClickTemplateCode,
 		onToggleTemplateStatusSwitch,
 	});

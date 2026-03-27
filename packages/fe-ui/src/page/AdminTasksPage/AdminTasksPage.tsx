@@ -8,7 +8,7 @@ import {
 } from "@cocrepo/api/core/tasks";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
+	buildTaskTableColumns,
 	MetaDataGrid,
 	PageTitleBar,
 	Surface,
@@ -32,12 +32,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
 
-const formatDuration = (seconds: number) => {
-	const minutes = Math.floor(seconds / 60);
-	const remainSeconds = seconds % 60;
-	return minutes > 0 ? `${minutes}분 ${remainSeconds}초` : `${remainSeconds}초`;
-};
-
 const leftInputs: InputConfig[] = [
 	{
 		type: "search",
@@ -60,20 +54,10 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 
-interface TaskExerciseRow {
-	id: string;
-	name: string;
-	duration: number;
-	count: number;
-	description?: string;
-	createdAt: string;
-	task: TaskDto;
-}
-
 type TasksQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[0];
 type SetTasksQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[1];
 
-function buildTaskRows(tasks: TaskDto[]): TaskExerciseRow[] {
+function buildTaskRows(tasks: TaskDto[]) {
 	return tasks.map((task) => ({
 		id: task.id,
 		name: task.exercise.name,
@@ -95,81 +79,6 @@ function getTaskParams(queryStates: TasksQueryStates) {
 	};
 }
 
-function buildTaskColumns({
-	onClickTaskName,
-	onClickDeleteButton,
-}: {
-	onClickTaskName: (taskId: string) => void;
-	onClickDeleteButton: (task: TaskDto) => void;
-}): MetaDataGridColumnConfig<TaskExerciseRow>[] {
-	return [
-		{
-			field: "name",
-			label: "운동명",
-			size: 200,
-			isRequired: true,
-			cell: ({ getValue, row }) => (
-				<button
-					type="button"
-					className="cursor-pointer text-left text-primary hover:underline"
-					onClick={() => onClickTaskName((row.original as TaskExerciseRow).id)}
-				>
-					{getValue() as string}
-				</button>
-			),
-		},
-		{
-			field: "duration",
-			label: "지속시간",
-			size: 100,
-			align: "center",
-			cell: ({ getValue }) => (
-				<span>{formatDuration(getValue() as number)}</span>
-			),
-		},
-		{
-			field: "count",
-			label: "반복횟수",
-			size: 80,
-			align: "center",
-			cell: ({ getValue }) => <span>{getValue() as number}회</span>,
-		},
-		{
-			field: "description",
-			label: "설명",
-			size: 250,
-			cell: ({ getValue }) => (
-				<span className="line-clamp-2 text-sm text-default-500">
-					{(getValue() as string | undefined) || "-"}
-				</span>
-			),
-		},
-		{
-			field: "createdAt",
-			label: "등록일",
-			size: 150,
-			cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
-		},
-		{
-			field: "id",
-			label: "액션",
-			size: 80,
-			align: "center",
-			cell: ({ row }) => (
-				<button
-					type="button"
-					className="cursor-pointer text-sm text-danger hover:text-danger-600"
-					onClick={() =>
-						onClickDeleteButton((row.original as TaskExerciseRow).task)
-					}
-				>
-					삭제
-				</button>
-			),
-		},
-	];
-}
-
 const TasksPageContent = observer(function TasksPageContent({
 	queryStates,
 	setQueryStates,
@@ -177,7 +86,7 @@ const TasksPageContent = observer(function TasksPageContent({
 }: {
 	queryStates: TasksQueryStates;
 	setQueryStates: SetTasksQueryStates;
-	columns: MetaDataGridColumnConfig<TaskExerciseRow>[];
+	columns: MetaDataGridColumnConfig<ReturnType<typeof buildTaskRows>[number]>[];
 }) {
 	const { data: response } = useGetTasksSuspense(getTaskParams(queryStates));
 	const tasks = (response?.data ?? []) as TaskDto[];
@@ -268,7 +177,9 @@ const TasksPageInner = observer(function TasksPageInner() {
 		);
 	};
 
-	const columns = buildTaskColumns({
+	const columns = buildTaskTableColumns<
+		ReturnType<typeof buildTaskRows>[number]
+	>({
 		onClickTaskName,
 		onClickDeleteButton,
 	});

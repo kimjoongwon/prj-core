@@ -1,3 +1,5 @@
+export * from "./cell";
+export * from "./columns";
 export * from "./detail";
 export * from "./feature";
 export * from "./form";

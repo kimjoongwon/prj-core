@@ -34,4 +34,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-27 | 루틴 목록 `MetaDataGrid` 컬럼 정의를 `@cocrepo/ui` `columns` 레이어 조합으로 이관 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |

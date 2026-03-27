@@ -10,15 +10,19 @@
 
 ## 구성 요소
 
-| 항목 | 설명 |
-|------|------|
-| UserListPageUser | 목록 행 view model 계약 |
-| UserListPageStats | 상단 통계 카드 계약 |
-| UserListPageProps | 공개 계약 요소 |
-| UserListPage | 공개 계약 요소 |
+| 항목              | 설명                    |
+| ----------------- | ----------------------- |
+| UserListPageUser  | 목록 행 view model 계약 |
+| UserListPageStats | 상단 통계 카드 계약     |
+| UserListPageProps | 공개 계약 요소          |
+| UserListPage      | 공개 계약 요소          |
 
 ## 변경 이력
 
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-03-26 | users 목록 route의 page-level UI를 page 레이어로 이동 | codex-worker |
+| 일자       | 내용                                                                                                                         | 작성자       |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| 2026-03-27 | user page는 로컬 row contract를 유지하면서 cell 참조를 루트 `src/cell` 배럴로 고정해 columns refactor와 import 흐름을 단순화 | codex        |
+| 2026-03-27 | `UserRoleCell` import를 이동된 루트 `src/cell` 배럴 기준으로 정리                                                            | codex        |
+| 2026-03-27 | columns 레이어 exported row type import를 제거하고 page contract 기반 user columns builder를 사용하도록 조정                 | codex        |
+| 2026-03-27 | 이용자 목록 `MetaDataGrid` 컬럼 정의를 `@cocrepo/ui` `columns` 레이어 조합으로 이관                                          | codex        |
+| 2026-03-26 | users 목록 route의 page-level UI를 page 레이어로 이동                                                                        | codex-worker |

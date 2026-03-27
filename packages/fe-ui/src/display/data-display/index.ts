@@ -2,7 +2,7 @@ export * from "./Avatar/Avatar";
 export * from "./Chip/Chip";
 export * from "./CircularImage/CircularImage";
 export * from "./Copyright/Copyright";
-export * from "./cell";
+export * from "../../cell";
 export * from "./DataGrid/DataGrid";
 export * from "./DraggableSortableList";
 export * from "./FeeTable/FeeTable";

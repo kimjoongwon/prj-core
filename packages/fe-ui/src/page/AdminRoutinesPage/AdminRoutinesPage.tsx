@@ -8,7 +8,7 @@ import {
 } from "@cocrepo/api/core/routines";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
+	buildRoutineTableColumns,
 	MetaDataGrid,
 	PageTitleBar,
 	Surface,
@@ -25,7 +25,7 @@ import {
 	useDisclosure,
 } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -64,63 +64,6 @@ function getRoutineParams(queryStates: RoutinesQueryStates) {
 		spaceScope:
 			(queryStates.spaceScope as "CURRENT" | "INCLUDE_ANCESTORS") || undefined,
 	};
-}
-
-function buildRoutineColumns({
-	onClickRoutineName,
-	onClickDeleteButton,
-}: {
-	onClickRoutineName: (routine: RoutineDto) => void;
-	onClickDeleteButton: (routine: RoutineDto) => void;
-}): MetaDataGridColumnConfig<RoutineDto>[] {
-	return [
-		{
-			field: "name",
-			label: "루틴명",
-			size: 200,
-			isRequired: true,
-			cell: ({ getValue, row }) => (
-				<button
-					type="button"
-					className="text-primary hover:underline cursor-pointer text-left"
-					onClick={() => onClickRoutineName(row.original as RoutineDto)}
-				>
-					{getValue() as string}
-				</button>
-			),
-		},
-		{
-			field: "label",
-			label: "라벨",
-			size: 150,
-			cell: ({ getValue }) => (
-				<span className="text-default-600">
-					{(getValue() as string) || "-"}
-				</span>
-			),
-		},
-		{
-			field: "createdAt",
-			label: "등록일",
-			size: 150,
-			cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
-		},
-		{
-			field: "id",
-			label: "액션",
-			size: 80,
-			align: "center",
-			cell: ({ row }) => (
-				<button
-					type="button"
-					className="text-danger hover:text-danger-600 cursor-pointer flex items-center justify-center"
-					onClick={() => onClickDeleteButton(row.original as RoutineDto)}
-				>
-					<Trash2 className="size-4" />
-				</button>
-			),
-		},
-	];
 }
 
 const RoutinesPageContent = observer(function RoutinesPageContent({
@@ -220,7 +163,7 @@ const RoutinesPageInner = observer(function RoutinesPageInner() {
 		);
 	};
 
-	const columns = buildRoutineColumns({
+	const columns = buildRoutineTableColumns({
 		onClickRoutineName,
 		onClickDeleteButton,
 	});

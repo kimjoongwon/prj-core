@@ -1,5 +1,5 @@
 import { Chip } from "@heroui/react";
-import type { InquiryPriorityCode } from "../../data-display/cell";
+import type { InquiryPriorityCode } from "../../../cell/InquiryPriorityCell/InquiryPriorityCell";
 
 export interface PriorityBadgeProps {
 	/** 우선순위 코드 */

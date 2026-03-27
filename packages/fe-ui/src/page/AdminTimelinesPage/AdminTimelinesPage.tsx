@@ -8,7 +8,7 @@ import {
 } from "@cocrepo/api/core/timelines";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
+	buildTimelineTableColumns,
 	MetaDataGrid,
 	PageTitleBar,
 	Surface,
@@ -51,64 +51,6 @@ function getTimelineParams(queryStates: TimelinesQueryStates) {
 		skip: queryStates.skip,
 		search: queryStates.search || undefined,
 	};
-}
-
-function buildTimelineColumns({
-	onClickTimelineName,
-	onClickDeleteIcon,
-}: {
-	onClickTimelineName: (timeline: TimelineDto) => void;
-	onClickDeleteIcon: (timeline: TimelineDto) => void;
-}): MetaDataGridColumnConfig<TimelineDto>[] {
-	return [
-		{
-			field: "name",
-			label: "타임라인명",
-			size: 200,
-			isRequired: true,
-			cell: ({ getValue, row }) => (
-				<button
-					type="button"
-					className="text-primary hover:underline cursor-pointer text-left"
-					onClick={() => onClickTimelineName(row.original as TimelineDto)}
-				>
-					{getValue() as string}
-				</button>
-			),
-		},
-		{
-			field: "description",
-			label: "설명",
-			size: 300,
-			cell: ({ getValue }) => (
-				<span className="text-default-500 text-sm line-clamp-1">
-					{(getValue() as string) || "-"}
-				</span>
-			),
-		},
-		{
-			field: "createdAt",
-			label: "등록일",
-			size: 150,
-			cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
-		},
-		{
-			field: "id",
-			label: "액션",
-			size: 80,
-			align: "center",
-			cell: ({ row }) => (
-				<Button
-					size="sm"
-					color="danger"
-					variant="light"
-					onPress={() => onClickDeleteIcon(row.original as TimelineDto)}
-				>
-					삭제
-				</Button>
-			),
-		},
-	];
 }
 
 const TimelinesPageContent = observer(function TimelinesPageContent({
@@ -207,9 +149,9 @@ const TimelinesPageInner = observer(function TimelinesPageInner() {
 		);
 	};
 
-	const columns = buildTimelineColumns({
+	const columns = buildTimelineTableColumns({
 		onClickTimelineName,
-		onClickDeleteIcon,
+		onClickDeleteButton: onClickDeleteIcon,
 	});
 
 	return (

@@ -7,146 +7,24 @@ import {
 	useGetIdpAccounts,
 } from "@cocrepo/api/idp/idp-accounts";
 import { useUnlockAccount } from "@cocrepo/api/idp/auth";
-import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
+import type { InputConfig } from "@cocrepo/type";
 import {
-	ActiveStatusCell,
+	buildIdpAccountTableColumns,
 	ConfirmModal,
-	DateTimeCell,
 	MetaDataGrid,
 	PageTitleBar,
 	Surface,
 	useMetaDataGridQueryStates,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Chip, Link, useDisclosure } from "@heroui/react";
+import { useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Eye, LockOpen } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 
 function AccountsPage() {
 	return <AccountsPageClient />;
 }
-
-/**
- * 잠금 상태 Cell 컴포넌트
- * isPermanentlyLocked, lockedUntil 상태에 따라 Chip을 다르게 렌더링합니다.
- */
-function LockStatusCell({
-	isPermanentlyLocked,
-	lockedUntil,
-}: {
-	isPermanentlyLocked: boolean;
-	lockedUntil?: string | null;
-}) {
-	if (isPermanentlyLocked) {
-		return (
-			<div className="flex w-full justify-center">
-				<Chip size="sm" color="danger" variant="flat">
-					영구잠금
-				</Chip>
-			</div>
-		);
-	}
-
-	if (lockedUntil) {
-		return (
-			<div className="flex w-full justify-center">
-				<Chip size="sm" color="warning" variant="flat">
-					일시잠금
-				</Chip>
-			</div>
-		);
-	}
-
-	return (
-		<div className="flex w-full justify-center">
-			<Chip size="sm" color="success" variant="flat">
-				정상
-			</Chip>
-		</div>
-	);
-}
-
-/**
- * 실패 횟수 Cell 컴포넌트
- * 5회 이상이면 danger 색상으로 표시합니다.
- */
-function FailedAttemptsCell({ count }: { count: number }) {
-	const isDanger = count >= 5;
-
-	return (
-		<div className="flex w-full justify-center">
-			<span className={isDanger ? "font-semibold text-danger" : ""}>
-				{count}
-			</span>
-		</div>
-	);
-}
-
-function isLockedAccount(
-	account: Pick<IdpAccountDto, "isPermanentlyLocked" | "lockedUntil">,
-) {
-	return account.isPermanentlyLocked || !!account.lockedUntil;
-}
-
-/**
- * 컬럼 정의
- */
-const baseColumns: MetaDataGridColumnConfig<IdpAccountDto>[] = [
-	{
-		field: "name",
-		label: "이름",
-		size: 150,
-		isRequired: true,
-	},
-	{
-		field: "email",
-		label: "이메일",
-		size: 200,
-	},
-	{
-		field: "isActive",
-		label: "활성 상태",
-		size: 80,
-		align: "center",
-		cell: ({ getValue }) => (
-			<ActiveStatusCell isActive={getValue() as boolean} />
-		),
-	},
-	{
-		field: "isPermanentlyLocked",
-		label: "잠금 상태",
-		size: 100,
-		align: "center",
-		cell: ({ row }) => (
-			<LockStatusCell
-				isPermanentlyLocked={row.original.isPermanentlyLocked}
-				lockedUntil={row.original.lockedUntil}
-			/>
-		),
-	},
-	{
-		field: "failedLoginAttempts",
-		label: "실패 횟수",
-		size: 80,
-		align: "center",
-		cell: ({ getValue }) => <FailedAttemptsCell count={getValue() as number} />,
-	},
-	{
-		field: "lastLoginAt",
-		label: "최종 로그인",
-		size: 170,
-		cell: ({ getValue }) => (
-			<DateTimeCell value={getValue() as string | null} />
-		),
-	},
-	{
-		field: "actions",
-		label: "",
-		size: 180,
-	},
-];
 
 /**
  * 좌측 입력 정의 (검색)
@@ -216,47 +94,9 @@ function AccountsPageClient() {
 		unlockAccount({ userId: accountToUnlock.id });
 	};
 
-	const columns: MetaDataGridColumnConfig<IdpAccountDto>[] = baseColumns.map(
-		(column) => {
-			if (column.field !== "actions") {
-				return column;
-			}
-
-			return {
-				...column,
-				cell: ({ row }) => {
-					const account = row.original;
-					const isLocked = isLockedAccount(account);
-
-					return (
-						<div className="flex items-center justify-center gap-1">
-							{isLocked && (
-								<Button
-									size="sm"
-									variant="flat"
-									color="primary"
-									startContent={<LockOpen className="h-3.5 w-3.5" />}
-									onPress={() => onClickOpenUnlockModal(account)}
-								>
-									잠금 해제
-								</Button>
-							)}
-							<Button
-								as={Link}
-								href={`/accounts/${account.id}`}
-								size="sm"
-								variant="light"
-								isIconOnly
-								aria-label="상세 보기"
-							>
-								<Eye className="h-4 w-4" />
-							</Button>
-						</div>
-					);
-				},
-			};
-		},
-	);
+	const columns = buildIdpAccountTableColumns({
+		onClickOpenUnlockModal,
+	});
 
 	return (
 		<VStack gap={5}>

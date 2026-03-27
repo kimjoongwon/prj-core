@@ -1,7 +1,6 @@
 "use client";
 
 import {
-	type OidcSessionDto,
 	useGetOidcSessionStats,
 	useGetOidcSessions,
 	useRevokeAllOidcSessions,
@@ -9,15 +8,12 @@ import {
 	useRevokeOidcSessionsByGrant,
 } from "@cocrepo/api/idp/oidc-sessions";
 import { MODEL_TYPE_OPTIONS } from "@cocrepo/constant";
-import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
+import type { InputConfig } from "@cocrepo/type";
 import {
+	buildOidcSessionTableColumns,
 	ConfirmModal,
-	DateTimeCell,
-	ExpiryCell,
 	MetaDataGrid,
-	ModelTypeCell,
 	PageTitleBar,
-	RevokeButtonCell,
 	StatsCard,
 	Surface,
 	useMetaDataGridQueryStates,
@@ -149,86 +145,10 @@ function OidcSessionsPageClient() {
 		revokeAll();
 	};
 
-	const columns: MetaDataGridColumnConfig<OidcSessionDto>[] = [
-		{
-			field: "key",
-			label: "키",
-			size: 140,
-			isRequired: true,
-			cell: ({ getValue }) => {
-				const key = getValue() as string;
-				return (
-					<span className="font-mono text-sm" title={key}>
-						{key.slice(0, 8)}...
-					</span>
-				);
-			},
-		},
-		{
-			field: "modelType",
-			label: "모델 타입",
-			size: 140,
-			cell: ({ getValue }) => <ModelTypeCell type={getValue() as string} />,
-		},
-		{
-			field: "accountId",
-			label: "Account ID",
-			size: 140,
-			cell: ({ getValue }) => {
-				const accountId = getValue() as string | null;
-				if (!accountId) return <span className="text-default-400">-</span>;
-				return (
-					<span className="font-mono text-sm" title={accountId}>
-						{accountId.slice(0, 8)}...
-					</span>
-				);
-			},
-		},
-		{
-			field: "grantId",
-			label: "Grant ID",
-			size: 140,
-			cell: ({ getValue }) => {
-				const grantId = getValue() as string | null;
-				if (!grantId) return <span className="text-default-400">-</span>;
-				return (
-					<Button
-						size="sm"
-						variant="light"
-						className="font-mono text-sm"
-						title={`${grantId}\n클릭하면 이 Grant의 모든 세션/토큰을 일괄 폐기합니다.`}
-						onPress={() => onClickGrantId(grantId)}
-					>
-						{grantId.slice(0, 8)}...
-					</Button>
-				);
-			},
-		},
-		{
-			field: "expiresAt",
-			label: "만료 시간",
-			size: 180,
-			cell: ({ getValue }) => (
-				<ExpiryCell expiresAt={getValue() as string | null} />
-			),
-		},
-		{
-			field: "createdAt",
-			label: "등록일",
-			size: 150,
-			cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
-		},
-		{
-			field: "actions",
-			label: "",
-			size: 100,
-			cell: ({ row }) => (
-				<RevokeButtonCell
-					onRevoke={() => onClickRevokeSession(row.original.key)}
-				/>
-			),
-		},
-	];
+	const columns = buildOidcSessionTableColumns({
+		onClickGrantId,
+		onClickRevokeSession,
+	});
 
 	return (
 		<VStack gap={5}>

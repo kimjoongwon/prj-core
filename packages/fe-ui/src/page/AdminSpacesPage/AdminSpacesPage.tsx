@@ -3,13 +3,13 @@
 import { type SpaceDto, useGetSpacesSuspense } from "@cocrepo/api/core/spaces";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
+	buildSpaceTableColumns,
 	MetaDataGrid,
 	PageTitleBar,
 	Surface,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
-import { Badge, Button } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { Building2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -28,26 +28,15 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 
-interface SpaceGroundRow {
-	id: string;
-	createdAt: string;
-	name: string;
-	label: string | null;
-	businessNo: string;
-	address: string;
-	phone: string;
-	email: string;
-}
-
 function buildRows(spaces: SpaceDto[]) {
-	return spaces
-		.map((space) => {
-			const ground = space.ground;
-			if (!ground) {
-				return null;
-			}
+	return spaces.flatMap((space) => {
+		const ground = space.ground;
+		if (!ground) {
+			return [];
+		}
 
-			return {
+		return [
+			{
 				id: space.id,
 				createdAt: space.createdAt,
 				name: ground.name,
@@ -56,12 +45,12 @@ function buildRows(spaces: SpaceDto[]) {
 				address: ground.address,
 				phone: ground.phone,
 				email: ground.email,
-			} satisfies SpaceGroundRow;
-		})
-		.filter((row): row is SpaceGroundRow => row !== null);
+			},
+		];
+	});
 }
 
-function filterRows(rows: SpaceGroundRow[], search?: string) {
+function filterRows(rows: ReturnType<typeof buildRows>, search?: string) {
 	const searchKeyword = search?.trim().toLowerCase() ?? "";
 	if (searchKeyword.length === 0) {
 		return rows;
@@ -84,7 +73,7 @@ const SpacesGridContent = observer(function SpacesGridContent({
 }: {
 	queryStates: SpacesQueryStates;
 	setQueryStates: SetSpacesQueryStates;
-	columns: MetaDataGridColumnConfig<SpaceGroundRow>[];
+	columns: MetaDataGridColumnConfig<ReturnType<typeof buildRows>[number]>[];
 }) {
 	const { data: response } = useGetSpacesSuspense();
 	const spaces = (response?.data ?? []) as SpaceDto[];
@@ -133,66 +122,9 @@ const SpacesPageInner = observer(function SpacesPageInner() {
 		router.push(`/spaces/${spaceId}/ground` as Route);
 	};
 
-	const columns: MetaDataGridColumnConfig<SpaceGroundRow>[] = [
-		{
-			field: "name",
-			label: "시설명",
-			size: 200,
-			isRequired: true,
-			cell: ({ getValue, row }) => (
-				<button
-					type="button"
-					className="text-primary hover:underline cursor-pointer text-left"
-					onClick={() =>
-						onClickSpaceGroundName((row.original as SpaceGroundRow).id)
-					}
-				>
-					{getValue() as string}
-				</button>
-			),
-		},
-		{
-			field: "label",
-			label: "라벨",
-			size: 120,
-			align: "center",
-			cell: ({ getValue }) => {
-				const label = getValue() as string | null;
-				if (!label) return <span className="text-default-400">-</span>;
-				return (
-					<Badge color="secondary" variant="flat">
-						{label}
-					</Badge>
-				);
-			},
-		},
-		{
-			field: "businessNo",
-			label: "사업자등록번호",
-			size: 160,
-		},
-		{
-			field: "address",
-			label: "주소",
-			size: 250,
-		},
-		{
-			field: "phone",
-			label: "전화번호",
-			size: 140,
-		},
-		{
-			field: "email",
-			label: "이메일",
-			size: 200,
-		},
-		{
-			field: "createdAt",
-			label: "등록일",
-			size: 150,
-			cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
-		},
-	];
+	const columns = buildSpaceTableColumns<ReturnType<typeof buildRows>[number]>({
+		onClickSpaceGroundName,
+	});
 
 	return (
 		<div className="space-y-5">

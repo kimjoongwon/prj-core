@@ -1,73 +1,17 @@
 "use client";
 
-import { type RoleDto, useGetRolesSuspense } from "@cocrepo/api/core/roles";
+import { useGetRolesSuspense } from "@cocrepo/api/core/roles";
 import {
-	DateTimeCell,
+	adminRoleTableColumns,
 	PageTitleBar,
-	StatusChipCell,
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Chip } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { Plus, Shield } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
-import { type ReactNode, Suspense } from "react";
-
-interface RoleColumn {
-	field: string;
-	label: string;
-	size: number;
-	align?: "center";
-	cell: (role: RoleDto) => ReactNode;
-}
-
-const columns: RoleColumn[] = [
-	{
-		field: "name",
-		label: "역할 식별자",
-		size: 180,
-		cell: (role: RoleDto) => (
-			<div className="flex items-center gap-2">
-				<span className="font-mono text-sm">{role.name}</span>
-				{role.isSystem && (
-					<Chip size="sm" color="warning" variant="flat">
-						시스템
-					</Chip>
-				)}
-			</div>
-		),
-	},
-	{
-		field: "displayName",
-		label: "표시명",
-		size: 150,
-		cell: (role: RoleDto) => role.displayName ?? "-",
-	},
-	{
-		field: "description",
-		label: "설명",
-		size: 250,
-		cell: (role: RoleDto) => (
-			<span className="text-default-500 text-sm line-clamp-1">
-				{role.description || "-"}
-			</span>
-		),
-	},
-	{
-		field: "status",
-		label: "상태",
-		size: 100,
-		align: "center",
-		cell: (role: RoleDto) => <StatusChipCell removedAt={role.removedAt} />,
-	},
-	{
-		field: "createdAt",
-		label: "생성일",
-		size: 150,
-		cell: (role: RoleDto) => <DateTimeCell value={role.createdAt} />,
-	},
-] as const;
+import { Suspense } from "react";
 
 const RolesTableContent = observer(function RolesTableContent() {
 	const { data: response } = useGetRolesSuspense();
@@ -89,7 +33,7 @@ const RolesTableContent = observer(function RolesTableContent() {
 			<table className="w-full text-sm">
 				<thead>
 					<tr className="border-b border-divider">
-						{columns.map((column) => (
+						{adminRoleTableColumns.map((column) => (
 							<th
 								key={column.field}
 								className={`px-4 py-3 text-left font-medium text-default-500 ${column.align === "center" ? "text-center" : ""}`}
@@ -109,7 +53,7 @@ const RolesTableContent = observer(function RolesTableContent() {
 							key={role.id}
 							className="border-b border-divider transition-colors hover:bg-content2/50"
 						>
-							{columns.map((column) => (
+							{adminRoleTableColumns.map((column) => (
 								<td
 									key={column.field}
 									className={`px-4 py-3 ${column.align === "center" ? "text-center" : ""}`}

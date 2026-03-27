@@ -4,16 +4,14 @@ import {
 	type ActionDto,
 	useGetActionsSuspense,
 } from "@cocrepo/api/core/actions";
-import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
+import type { InputConfig } from "@cocrepo/type";
 import {
-	DateTimeCell,
+	actionTableColumns,
 	MetaDataGrid,
 	PageTitleBar,
-	StatusChipCell,
 	Surface,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
-import { Chip } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -38,90 +36,6 @@ const groupQueryInputs: InputConfig[] = [
 		props: {
 			defaultValue: "",
 		},
-	},
-];
-
-function getGroupColor(
-	group?: string,
-): "primary" | "secondary" | "success" | "warning" | "danger" | "default" {
-	switch (group) {
-		case "crud":
-			return "primary";
-		case "visibility":
-			return "secondary";
-		case "workflow":
-			return "success";
-		case "bulk":
-			return "warning";
-		default:
-			return "default";
-	}
-}
-
-const columns: MetaDataGridColumnConfig<ActionDto>[] = [
-	{
-		field: "name",
-		label: "행위 식별자",
-		size: 200,
-		isRequired: true,
-		cell: ({ getValue }) => (
-			<span className="font-mono text-sm">{getValue() as string}</span>
-		),
-	},
-	{
-		field: "displayName",
-		label: "표시명",
-		size: 150,
-	},
-	{
-		field: "group",
-		label: "분류",
-		size: 120,
-		align: "center",
-		cell: ({ getValue }) => {
-			const group = getValue() as string | undefined;
-			if (!group) {
-				return <span className="text-default-400">-</span>;
-			}
-			return (
-				<Chip size="sm" color={getGroupColor(group)} variant="flat">
-					{group}
-				</Chip>
-			);
-		},
-	},
-	{
-		field: "order",
-		label: "순서",
-		size: 80,
-		align: "center",
-	},
-	{
-		field: "isSystem",
-		label: "시스템",
-		size: 100,
-		align: "center",
-		cell: ({ getValue }) => {
-			const isSystem = getValue() as boolean;
-			return (
-				<Chip size="sm" color={isSystem ? "warning" : "default"} variant="flat">
-					{isSystem ? "시스템" : "사용자"}
-				</Chip>
-			);
-		},
-	},
-	{
-		field: "createdAt",
-		label: "생성일",
-		size: 150,
-		cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
-	},
-	{
-		field: "removedAt",
-		label: "상태",
-		size: 100,
-		align: "center",
-		cell: ({ row }) => <StatusChipCell removedAt={row.original.removedAt} />,
 	},
 ];
 
@@ -186,7 +100,7 @@ const ActionsPageContent = observer(function ActionsPageContent({
 				isLoading: false,
 				queryStates,
 				setQueryStates,
-				columns,
+				columns: actionTableColumns,
 				leftInputs,
 				rightInputs,
 				emptyMessage: "조회된 Action이 없습니다.",
@@ -239,7 +153,7 @@ const ActionsPageInner = observer(function ActionsPageInner() {
 								isLoading: true,
 								queryStates,
 								setQueryStates,
-								columns,
+								columns: actionTableColumns,
 								leftInputs,
 								rightInputs,
 								emptyMessage: "조회된 Action이 없습니다.",

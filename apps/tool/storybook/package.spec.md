@@ -8,6 +8,7 @@
 
 `tool-storybook` 워크스페이스의 실행 스크립트를 정의합니다.
 Turbo 표준 `build`/`start:dev` 계약에 맞춰 Storybook 개발 서버와 정적 빌드를 연결합니다.
+또한 `@storybook/nextjs-vite` + `next` 의존성을 통해 Next.js App Router 기반 UI 스토리 렌더링을 지원합니다.
 
 ## 공개 계약
 
@@ -33,6 +34,7 @@ Turbo 표준 `build`/`start:dev` 계약에 맞춰 Storybook 개발 서버와 정
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-27 | `@storybook/nextjs-vite`와 `next` 의존성을 사용해 Next.js App Router 기반 Storybook 실행 계약을 명시 | codex |
 | 2026-03-20 | 정적 빌드 후 `iframe.html`의 `/vite-inject-mocker-entry.js`를 상대 경로로 후처리하도록 계약 보강 | codex |
 | 2026-03-20 | 정적 빌드에서 `STORYBOOK_DISABLE_VITEST_ADDON=true`를 기본 주입하도록 계약 보강 | codex |
 | 2026-03-18 | `build`/`build-storybook`가 기본적으로 `STORYBOOK_DISABLE_CHROMATIC=true`를 주입해 Turbo 경유 정적 빌드에서도 Chromatic addon을 끌 수 있도록 조정 | codex |

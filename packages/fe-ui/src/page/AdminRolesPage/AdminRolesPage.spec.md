@@ -31,4 +31,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-27 | `columns` 레이어 이관 후 남은 미사용 `RoleDto` type import를 제거해 page 계약을 단순화 | codex |
+| 2026-03-27 | 역할 목록 raw table 컬럼을 page 내부 inline 선언 대신 `columns` 레이어의 공용 조합으로 이관 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |
