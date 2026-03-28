@@ -15,11 +15,13 @@ Display component builder agent가 실제 레이아웃/페이지 구조 컴포�
 - `rhythm/VStack`, `rhythm/HStack`, `layout/Page`, `layout/Section`, `widget/PageTitleBar`를 구조/리듬 재사용 대상으로 안내합니다.
 - 신규 stack/spacer 조합에서는 semantic rhythm preset 사용을 우선하도록 문맥을 고정합니다.
 - 새로운 display 컴포넌트는 페이지 래퍼나 제목 패널을 중복 생성하지 않고 기존 구조 컴포넌트와 조합되도록 설계합니다.
+- Cell 예시는 현재 `packages/fe-ui/src/cell/**` 경로를 기준으로 안내합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | Cell 예시 경로를 `packages/fe-ui/src/cell/**` 기준으로 정정 | codex |
 | 2026-03-26 | semantic rhythm preset 우선 사용 규칙을 추가 | codex |
 | 2026-03-26 | `VStack`/`HStack` ownership을 `rhythm` 레이어 기준으로 정리 | codex |
 | 2026-03-15 | `surface/*`를 실제 재사용 대상에 포함하고 layout 대체 금지 원칙을 반영 | codex |

@@ -116,10 +116,10 @@ Pure UI Cell → Widget Cell → Feature Cell
 
 | 항목 | 경로 |
 |------|------|
-| Cell 컴포넌트 | `packages/fe-ui/src/display/data-display/cell/[CellName]/[CellName].tsx` |
-| Storybook | `packages/fe-ui/src/display/data-display/cell/[CellName]/[CellName].stories.tsx` |
-| barrel export | `packages/fe-ui/src/display/data-display/cell/[CellName]/index.ts` |
-| cells index | `packages/fe-ui/src/display/data-display/cell/index.ts` (추가) |
+| Cell 컴포넌트 | `packages/fe-ui/src/cell/[CellName]/[CellName].tsx` |
+| Storybook | `packages/fe-ui/src/cell/[CellName]/[CellName].stories.tsx` |
+| barrel export | `packages/fe-ui/src/cell/[CellName]/index.ts` |
+| cells index | `packages/fe-ui/src/cell/index.ts` (추가) |
 
 ---
 
@@ -154,7 +154,7 @@ Pure UI Cell → Widget Cell → Feature Cell
 ### 5.1 Pure UI Cell
 
 ```tsx
-// packages/fe-ui/src/display/data-display/cell/PhoneCell/PhoneCell.tsx
+// packages/fe-ui/src/cell/PhoneCell/PhoneCell.tsx
 
 interface PhoneCellProps {
   /** 전화번호 */
@@ -177,7 +177,7 @@ export const PhoneCell = ({ value }: PhoneCellProps) => {
 ### 5.2 Widget Cell
 
 ```tsx
-// packages/fe-ui/src/display/data-display/cell/TagsCell/TagsCell.tsx
+// packages/fe-ui/src/cell/TagsCell/TagsCell.tsx
 import { Chip } from "@heroui/react";
 
 interface TagsCellProps {
@@ -216,7 +216,7 @@ export const TagsCell = ({ tags, maxDisplay = 3 }: TagsCellProps) => {
 ### 5.3 Feature Cell
 
 ```tsx
-// packages/fe-ui/src/display/data-display/cell/ActionButtonsCell/ActionButtonsCell.tsx
+// packages/fe-ui/src/cell/ActionButtonsCell/ActionButtonsCell.tsx
 import { Button, Tooltip } from "@heroui/react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import type { Route } from "next";
@@ -297,7 +297,7 @@ export const ActionButtonsCell = ({
 ### 5.4 Storybook
 
 ```tsx
-// packages/fe-ui/src/display/data-display/cell/PhoneCell/PhoneCell.stories.tsx
+// packages/fe-ui/src/cell/PhoneCell/PhoneCell.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react";
 import { PhoneCell } from "./PhoneCell";
 
@@ -361,7 +361,7 @@ export type { PhoneCellProps } from "./PhoneCell";
 
 ```bash
 # 기존 Cell 목록 확인
-ls packages/fe-ui/src/display/data-display/cell/
+ls packages/fe-ui/src/cell/
 ```
 
 기존 Cell로 해결 가능하면 새로 만들지 않음.
@@ -372,7 +372,7 @@ ls packages/fe-ui/src/display/data-display/cell/
 
 ### Step 5: Export 추가
 
-`packages/fe-ui/src/display/data-display/cell/index.ts`에 export 추가.
+`packages/fe-ui/src/cell/index.ts`에 export 추가.
 
 ---
 
@@ -390,13 +390,13 @@ ls packages/fe-ui/src/display/data-display/cell/
 
 ### 생성 후
 
-- [ ] `cells/[CellName]/` 폴더에 생성됨
+- [ ] `packages/fe-ui/src/cell/[CellName]/` 폴더에 생성됨
 - [ ] 네이밍이 계층별 규칙에 맞음
 - [ ] Props는 단순 값 타입
 - [ ] null/undefined 처리됨
 - [ ] HeroUI 컴포넌트 활용
 - [ ] Storybook 스토리 생성됨
-- [ ] `cells/index.ts`에 export 추가
+- [ ] `packages/fe-ui/src/cell/index.ts`에 export 추가
 - [ ] `@cocrepo/ui`에서 import 가능
 
 ---
@@ -417,28 +417,28 @@ ls packages/fe-ui/src/display/data-display/cell/
 
 | Cell | 경로 | 용도 |
 |------|------|------|
-| `DefaultCell` | `cells/DefaultCell/` | 기본 텍스트 |
-| `NumberCell` | `cells/NumberCell/` | 숫자 포맷팅 |
-| `DateCell` | `cells/DateCell/` | 날짜 (YYYY-MM-DD) |
-| `DateTimeCell` | `cells/DateTimeCell/` | 날짜+시간 |
-| `BooleanCell` | `cells/BooleanCell/` | O/X 표시 |
-| `LinkCell` | `cells/LinkCell/` | 링크 |
-| `ExpandableCell` | `cells/ExpandableCell/` | 펼침/접힘 |
-| `PhoneCell` | `cells/PhoneCell/` | 전화번호 포맷 |
+| `DefaultCell` | `packages/fe-ui/src/cell/DefaultCell/` | 기본 텍스트 |
+| `NumberCell` | `packages/fe-ui/src/cell/NumberCell/` | 숫자 포맷팅 |
+| `DateCell` | `packages/fe-ui/src/cell/DateCell/` | 날짜 (YYYY-MM-DD) |
+| `DateTimeCell` | `packages/fe-ui/src/cell/DateTimeCell/` | 날짜+시간 |
+| `BooleanCell` | `packages/fe-ui/src/cell/BooleanCell/` | O/X 표시 |
+| `LinkCell` | `packages/fe-ui/src/cell/LinkCell/` | 링크 |
+| `ExpandableCell` | `packages/fe-ui/src/cell/ExpandableCell/` | 펼침/접힘 |
+| `PhoneCell` | `packages/fe-ui/src/cell/PhoneCell/` | 전화번호 포맷 |
 
 ### Widget Cells (`[기능][UI형태]Cell`)
 
 | Cell | 경로 | 용도 |
 |------|------|------|
-| `ProfileAvatarCell` | `cells/ProfileAvatarCell/` | 아바타+이름+부제목 |
-| `StatusChipCell` | `cells/StatusChipCell/` | 상태 Chip |
-| `RoleChipCell` | `cells/RoleChipCell/` | 역할 Chip |
+| `ProfileAvatarCell` | `packages/fe-ui/src/cell/ProfileAvatarCell/` | 아바타+이름+부제목 |
+| `StatusChipCell` | `packages/fe-ui/src/cell/StatusChipCell/` | 상태 Chip |
+| `RoleChipCell` | `packages/fe-ui/src/cell/RoleChipCell/` | 역할 Chip |
 
 ### Feature Cells (`[위치/역할][기능]Cell`)
 
 | Cell | 경로 | 용도 |
 |------|------|------|
-| `RowActionsCell` | `cells/RowActionsCell/` | 행 액션 버튼 (상세/수정/삭제) |
+| `RowActionsCell` | `packages/fe-ui/src/cell/RowActionsCell/` | 행 액션 버튼 (상세/수정/삭제) |
 
 ---
 
@@ -450,10 +450,10 @@ ls packages/fe-ui/src/display/data-display/cell/
 ### [CellName] (계층: Pure UI / Widget / Feature)
 
 **생성된 파일:**
-- `packages/fe-ui/src/display/data-display/cell/[CellName]/[CellName].tsx`
-- `packages/fe-ui/src/display/data-display/cell/[CellName]/[CellName].stories.tsx`
-- `packages/fe-ui/src/display/data-display/cell/[CellName]/index.ts`
-- `packages/fe-ui/src/display/data-display/cell/index.ts` (export 추가)
+- `packages/fe-ui/src/cell/[CellName]/[CellName].tsx`
+- `packages/fe-ui/src/cell/[CellName]/[CellName].stories.tsx`
+- `packages/fe-ui/src/cell/[CellName]/index.ts`
+- `packages/fe-ui/src/cell/index.ts` (export 추가)
 
 **Props:**
 | 이름 | 타입 | 필수 | 설명 |

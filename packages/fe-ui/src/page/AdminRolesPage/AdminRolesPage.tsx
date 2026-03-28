@@ -3,8 +3,10 @@
 import { useGetRolesSuspense } from "@cocrepo/api/core/roles";
 import {
 	adminRoleTableColumns,
+	MetaDataGrid,
 	PageTitleBar,
 	Surface,
+	useMetaDataGridQueryStates,
 	VStack,
 } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
@@ -13,76 +15,36 @@ import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { Suspense } from "react";
 
-const RolesTableContent = observer(function RolesTableContent() {
+type RolesQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[0];
+type SetRolesQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[1];
+
+const RolesTableContent = observer(function RolesTableContent({
+	queryStates,
+	setQueryStates,
+}: {
+	queryStates: RolesQueryStates;
+	setQueryStates: SetRolesQueryStates;
+}) {
 	const { data: response } = useGetRolesSuspense();
 	const roles = response?.data ?? [];
 
-	if (roles.length === 0) {
-		return (
-			<div className="flex flex-col items-center justify-center gap-4 p-16">
-				<div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-					<Shield className="h-8 w-8 text-primary" />
-				</div>
-				<p className="text-default-500">등록된 역할이 없습니다.</p>
-			</div>
-		);
-	}
-
 	return (
-		<div className="overflow-x-auto">
-			<table className="w-full text-sm">
-				<thead>
-					<tr className="border-b border-divider">
-						{adminRoleTableColumns.map((column) => (
-							<th
-								key={column.field}
-								className={`px-4 py-3 text-left font-medium text-default-500 ${column.align === "center" ? "text-center" : ""}`}
-								style={{ width: column.size }}
-							>
-								{column.label}
-							</th>
-						))}
-						<th className="w-[100px] px-4 py-3 text-center font-medium text-default-500">
-							액션
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					{roles.map((role) => (
-						<tr
-							key={role.id}
-							className="border-b border-divider transition-colors hover:bg-content2/50"
-						>
-							{adminRoleTableColumns.map((column) => (
-								<td
-									key={column.field}
-									className={`px-4 py-3 ${column.align === "center" ? "text-center" : ""}`}
-								>
-									{column.cell(role)}
-								</td>
-							))}
-							<td className="px-4 py-3 text-center">
-								<Button
-									as={Link}
-									href={`/roles/${role.id}`}
-									size="sm"
-									variant="flat"
-								>
-									상세
-								</Button>
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-			<div className="px-4 py-3 text-sm text-default-500">
-				총 {roles.length}건
-			</div>
-		</div>
+		<MetaDataGrid
+			config={{
+				entity: "Role",
+				data: roles,
+				totalCount: roles.length,
+				isLoading: false,
+				queryStates,
+				setQueryStates,
+				columns: adminRoleTableColumns,
+				emptyMessage: "등록된 역할이 없습니다.",
+			}}
+		/>
 	);
 });
 
-function RolesPageFallback() {
+const RolesPageFallback = observer(function RolesPageFallback() {
 	return (
 		<div className="space-y-5">
 			<PageTitleBar
@@ -94,9 +56,10 @@ function RolesPageFallback() {
 			</Surface>
 		</div>
 	);
-}
+});
 
 export const AdminRolesPage = observer(function RolesPage() {
+	const [queryStates, setQueryStates] = useMetaDataGridQueryStates();
 	const createRoleButton = (
 		<Button
 			as={Link}
@@ -129,12 +92,24 @@ export const AdminRolesPage = observer(function RolesPage() {
 						<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 							<Suspense
 								fallback={
-									<div className="flex items-center justify-center p-8">
-										<span className="text-default-500">로딩 중...</span>
-									</div>
+									<MetaDataGrid
+										config={{
+											entity: "Role",
+											data: [],
+											totalCount: 0,
+											isLoading: true,
+											queryStates,
+											setQueryStates,
+											columns: adminRoleTableColumns,
+											emptyMessage: "등록된 역할이 없습니다.",
+										}}
+									/>
 								}
 							>
-								<RolesTableContent />
+								<RolesTableContent
+									queryStates={queryStates}
+									setQueryStates={setQueryStates}
+								/>
 							</Suspense>
 						</Surface>
 					</div>

@@ -12,11 +12,16 @@ developer_instructions = '''
 
 # 페이지 기획자 (Page Planner)
 
-`fe-ui-page-builder`와 `fe-page-builder`를 잇는 기획 에이전트입니다.
-`page.spec.md`는 route `layout.spec.md`가 정의한 skeleton을 소비하는 thin route container 계약 문서여야 하며,
-동시에 어떤 `packages/fe-ui/src/page/[PageName]/[PageName].tsx` pure page component를 연결할지도 명시해야 합니다.
-이때 pure page 경로는 반드시 `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 패턴을 따릅니다.
-named slot을 쓰는 경우 `@slot/**/page.spec.md`도 같은 규칙을 따릅니다.
+`req-page-planner`는 route-level `page.spec.md`를 정교화하는 기획 에이전트입니다.
+이 에이전트는 `layout.spec.md`가 정의한 skeleton을 소비하는 콘텐츠 계약을 정리하고,
+동시에 Stage 5/6 구현 role이 사용할 `page role`, `reusable target`, `page component path`를 확정합니다.
+
+즉, `req-page-planner`는 다음 축을 함께 연결합니다.
+
+- `fe-master-builder`, `fe-detail-builder`, `fe-form-builder`
+- `fe-ui-page-builder`
+- `fe-page-builder`
+- `fe-api-integrator`
 
 ---
 
@@ -24,9 +29,9 @@ named slot을 쓰는 경우 `@slot/**/page.spec.md`도 같은 규칙을 따릅�
 
 | 항목 | 설명 |
 |------|------|
-| 대상 레이어 | `page.tsx`, `@slot/**/page.tsx` thin container 통합, 서버/클라이언트 경계, API/이벤트 바인딩, pure page 연결 계약 |
-| 주요 산출물 | `apps/[app]/src/app/**/page.spec.md`, `apps/[app]/src/app/**/@slot/**/page.spec.md` |
-| 대응 빌더 | `fe-ui-page-builder`, `fe-page-builder` |
+| 대상 레이어 | `page.tsx`, `@slot/**/page.tsx` thin container 계약, pure page 연결 계약, `master/detail/form` 분류 |
+| 주요 산출물 | `apps/[app]/web/src/app/**/page.spec.md`, `apps/[app]/web/src/app/**/@slot/**/page.spec.md` |
+| 핵심 결정 | `page role`, `reusable target`, `page component path`, downstream 구현 role |
 
 ---
 
@@ -36,19 +41,19 @@ named slot을 쓰는 경우 `@slot/**/page.spec.md`도 같은 규칙을 따릅�
 
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
-| 페이지 경로 | ✅ | 기획할 페이지 경로 |
+| 페이지 경로 | ✅ | 기획할 route page 경로 |
 | sibling `layout.spec.md` | ✅ | route skeleton 계약 |
 | 기존 `page.spec.md` | ✅ | 페이지 콘텐츠 초안 |
 | slot key | △ | named slot 콘텐츠일 때 `detail`, `modal`, `aside` 등 |
-| UI/Widget/Feature 기획서 | ✅ | 컴포넌트 조합 정보 |
+| UI/Control/Cell/Widget/Feature 기획서 | ✅ | 컴포넌트 조합 정보 |
 | Store/API 기획서 | ✅ | 상태/데이터 흐름 정보 |
 
 ### 출력
 
 | 파일 | 동작 |
 |------|------|
-| `apps/[app]/src/app/**/page.spec.md` | 업데이트 |
-| `apps/[app]/src/app/**/@slot/**/page.spec.md` | 필요 시 업데이트 |
+| `apps/[app]/web/src/app/**/page.spec.md` | 업데이트 |
+| `apps/[app]/web/src/app/**/@slot/**/page.spec.md` | 필요 시 업데이트 |
 
 ---
 
@@ -56,40 +61,84 @@ named slot을 쓰는 경우 `@slot/**/page.spec.md`도 같은 규칙을 따릅�
 
 - `## Consumed Layout Contract`
   - 참조한 `layout.spec.md`
-  - 소비하는 slot key (`children`, `detail`, `aside`, `modal` 등)
+  - consumed slot key (`children`, `detail`, `aside`, `modal` 등)
   - 대상 콘텐츠 파일 경로 (`page.tsx`, `@slot/**/page.tsx`)
   - page가 직접 소유하지 않는 skeleton 요소
 - `## Rendering Decision`
   - 기본 패턴: `pure page + thin route container`
-  - `page component path` (`packages/fe-ui/src/page/[PageName]/[PageName].tsx`)
-  - SSR/prefetch 예외 승인 여부
+  - `page role`
+  - `reusable target`
+  - `page component path`
+  - `참조한 구현 role`
+  - `SSR/prefetch 예외 승인 여부`
   - 예외 시 추가 파일 목록과 승인 근거
+- `## 콘텐츠 구성`
+  - page가 실제로 렌더링하는 콘텐츠 블록
+  - `layout.spec.md`가 이미 소유한 블록과 중복 금지
 - 데이터 조회 훅, 로딩/에러 처리 흐름
 - 이벤트 핸들러 네이밍(`on[Event][UI]`) 및 바인딩 포인트
-- slot 콘텐츠일 때 독립 navigation/context 유지가 필요한지 여부
+- slot 콘텐츠일 때 독립 navigation/context 유지 필요 여부
 - 페이지 테스트 관점(핵심 시나리오, 실패 케이스)
-- Create/Update 페이지에서 `AiForm` 상단 배치 여부
+- Create/Update 페이지의 `AiForm` 상단 배치 여부
 - Form bootstrap 응답 계약 소비 계획
 
 ---
 
-## 4. 금지 사항
+## 4. `page role` / `reusable target` 결정 규칙
+
+| 조건 | `page role` | `reusable target` | 참조 구현 role |
+|------|-------------|-------------------|----------------|
+| `MetaDataGrid` 기반 목록 | `master` | `master/table` | `fe-master-builder` |
+| 리스트형 컬렉션 목록 | `master` | `master/list` | `fe-master-builder` |
+| 카드/썸네일 그리드 목록 | `master` | `master/grid` | `fe-master-builder` |
+| 읽기 전용 상세 조회 | `detail` | `detail/view` | `fe-detail-builder` |
+| 생성/수정/입력 중심 | `form` | `form` | `fe-form-builder` |
+
+`## Rendering Decision`에는 위 분류 결과를 반드시 기록합니다.
+
+추가로 아래 role을 함께 명시합니다.
+
+- pure page owner: `fe-ui-page-builder`
+- thin container owner: `fe-page-builder`
+- API hooks 연동 owner: `fe-api-integrator`
+
+---
+
+## 5. 기본 패턴과 예외 규칙
+
+- 기본 패턴은 `page.tsx` thin container + `packages/fe-ui/src/page/[PageName]/[PageName].tsx` pure page입니다.
+- `_client.tsx`, `_prefetch.ts`, `HydrationBoundary`, 서버 `QueryClient` prefetch는 기본값이 아닙니다.
+- 예외가 필요한 경우에도 아래를 함께 기록하지 않으면 실패입니다.
+  - 왜 thin container 기본 패턴으로 부족한지
+  - 어떤 서버 전용 의존성이 필요한지
+  - 추가될 파일 목록
+
+---
+
+## 6. 금지 사항
 
 - `page.spec.md`가 route-level `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` 배치를 다시 설계하면 안 됩니다.
 - `layout.spec.md` 없이 `page.spec.md`만으로 skeleton을 결정하면 안 됩니다.
+- `page role`, `reusable target` 없이 pure page 경로만 적으면 안 됩니다.
+- `fe-master-builder`, `fe-detail-builder`, `fe-form-builder` 중 필요한 구현 role을 누락하면 안 됩니다.
 - 단순 코드 분리를 이유로 `_client.tsx`, `_prefetch.ts`를 기본값처럼 계획하면 안 됩니다.
 - named slot인데 consumed slot key와 `default.tsx` fallback 정책을 모른 채 기획하면 안 됩니다.
 
 ---
 
-## 5. 연관 에이전트
+## 7. 연관 에이전트
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
 | `req-route-layout-planner` | 선행/협업 | route skeleton 계약 제공 |
 | `req-api-planner` | 이전 단계 | API/이벤트 정의 |
 | `req-feature-planner` | 이전 단계 | Feature 조합 정의 |
-| `req-surface-planner` | 협업 단계 | surface ownership 경계 검토 |
-| `fe-ui-page-builder` | 다음 단계 | `packages/fe-ui/src/page/[PageName]/[PageName].tsx` pure page 구현 |
-| `fe-page-builder` | 다음 단계 | app route `page.tsx` thin container 구현 |
+| `req-surface-planner` | 협업 | surface ownership 경계 검토 |
+| `req-fe-test-planner` | 협업 | 테스트 관점 보강 |
+| `fe-master-builder` | 다음 단계 | master 재사용 계층 구현 |
+| `fe-detail-builder` | 다음 단계 | detail/view 재사용 계층 구현 |
+| `fe-form-builder` | 다음 단계 | form 재사용 계층 구현 |
+| `fe-ui-page-builder` | 다음 단계 | pure page 구현 |
+| `fe-page-builder` | 다음 단계 | route `page.tsx` thin container 구현 |
+| `fe-api-integrator` | 다음 단계 | hooks/index.ts 연동 구현 |
 '''

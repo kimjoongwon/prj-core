@@ -1,8 +1,13 @@
 "use client";
 
-import { buildAbilityListTableColumns } from "@cocrepo/ui";
+import {
+	buildAbilityListTableColumns,
+	MetaDataGrid,
+	useMetaDataGridQueryStates,
+} from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem, Spinner } from "@heroui/react";
-import { Key, Plus, Search } from "lucide-react";
+import { Plus, Search } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import { VStack } from "../../rhythm";
 import { Surface } from "../../surface";
 import { PageTitleBar } from "../../widget";
@@ -51,7 +56,7 @@ export interface AbilityListPageProps {
 const abilityListTableColumns =
 	buildAbilityListTableColumns<AbilityListPageProps["abilities"][number]>();
 
-function AbilityListPageFallback() {
+const AbilityListPageFallback = observer(function AbilityListPageFallback() {
 	return (
 		<div className="space-y-5">
 			<Surface
@@ -74,9 +79,9 @@ function AbilityListPageFallback() {
 			</Surface>
 		</div>
 	);
-}
+});
 
-export function AbilityListPage({
+export const AbilityListPage = observer(function AbilityListPage({
 	abilities,
 	totalCount,
 	subjects,
@@ -91,6 +96,11 @@ export function AbilityListPage({
 	onClickAbilityRow,
 	onClickCreateButton,
 }: AbilityListPageProps) {
+	const [queryStates, setQueryStates] = useMetaDataGridQueryStates();
+	const handleAbilityRowClick = (ability: AbilityListPageAbility) => {
+		onClickAbilityRow(ability.id);
+	};
+
 	if (isLoading) {
 		return <AbilityListPageFallback />;
 	}
@@ -182,71 +192,24 @@ export function AbilityListPage({
 					<div className="mb-4 border-b border-divider/80 pb-4">
 						<PageTitleBar level={2} title="권한 목록" />
 					</div>
-					{abilities.length === 0 ? (
-						<div className="flex flex-col items-center justify-center gap-4 p-16">
-							<div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-								<Key className="h-8 w-8 text-primary" />
-							</div>
-							<p className="text-default-500">
-								{totalCount === 0
+					<MetaDataGrid
+						config={{
+							entity: "Ability",
+							data: abilities,
+							totalCount: abilities.length,
+							isLoading: false,
+							queryStates,
+							setQueryStates,
+							columns: abilityListTableColumns,
+							onRowClick: handleAbilityRowClick,
+							emptyMessage:
+								totalCount === 0
 									? "등록된 권한이 없습니다."
-									: "검색 조건에 맞는 권한이 없습니다."}
-							</p>
-						</div>
-					) : (
-						<div className="overflow-x-auto">
-							<table className="w-full text-sm">
-								<thead>
-									<tr className="border-b border-divider">
-										{abilityListTableColumns.map((column) => (
-											<th
-												key={column.field}
-												className={`px-4 py-3 text-left font-medium text-default-500 ${column.align === "center" ? "text-center" : ""}`}
-												style={{ width: column.size }}
-											>
-												{column.label}
-											</th>
-										))}
-										<th className="w-[100px] px-4 py-3 text-center font-medium text-default-500">
-											액션
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									{abilities.map((ability) => (
-										<tr
-											key={ability.id}
-											className="cursor-pointer border-b border-divider transition-colors hover:bg-content2/50"
-											onClick={() => onClickAbilityRow(ability.id)}
-										>
-											{abilityListTableColumns.map((column) => (
-												<td
-													key={column.field}
-													className={`px-4 py-3 ${column.align === "center" ? "text-center" : ""}`}
-												>
-													{column.cell(ability)}
-												</td>
-											))}
-											<td className="px-4 py-3 text-center">
-												<Button
-													size="sm"
-													variant="flat"
-													onPress={() => onClickAbilityRow(ability.id)}
-												>
-													상세
-												</Button>
-											</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-							<div className="px-4 py-3 text-sm text-default-500">
-								총 {abilities.length}건
-							</div>
-						</div>
-					)}
+									: "검색 조건에 맞는 권한이 없습니다.",
+						}}
+					/>
 				</Surface>
 			</VStack>
 		</div>
 	);
-}
+});

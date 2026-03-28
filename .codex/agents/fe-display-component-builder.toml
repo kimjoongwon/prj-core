@@ -333,7 +333,7 @@ packages/fe-ui/src/display/
 ### Cell 컴포넌트 경로
 
 ```
-packages/fe-ui/src/display/data-display/cell/
+packages/fe-ui/src/cell/
 ├── index.ts           # barrel export
 ├── DateCell/          # 날짜 포맷팅
 ├── DefaultCell/       # 기본 텍스트
@@ -354,13 +354,13 @@ StatusChipCell 컴포넌트를 만들어주세요.
 - status: string (상태값)
 - removedAt?: Date | string | null (삭제 예정 시간)
 
-**경로:** packages/fe-ui/src/display/data-display/cell/StatusChipCell/
+**경로:** packages/fe-ui/src/cell/StatusChipCell/
 ```
 
 ### Cell 컴포넌트 템플릿
 
 ```tsx
-// packages/fe-ui/src/display/data-display/cell/StatusChipCell/StatusChipCell.tsx
+// packages/fe-ui/src/cell/StatusChipCell/StatusChipCell.tsx
 import { Chip } from "@heroui/react";
 
 interface StatusChipCellProps {
@@ -397,11 +397,11 @@ export const StatusChipCell = ({ status, removedAt }: StatusChipCellProps) => {
 
 ### Cell 컴포넌트 체크리스트
 
-- [ ] `packages/fe-ui/src/display/data-display/cell/[CellName]/` 에 생성
+- [ ] `packages/fe-ui/src/cell/[CellName]/` 에 생성
 - [ ] Props는 단순 값 타입 (복잡한 로직 금지)
 - [ ] HeroUI 컴포넌트 활용 (Chip, Avatar, Button 등)
 - [ ] null/undefined 처리 (`-` 또는 빈 상태)
-- [ ] `cells/index.ts`에 export 추가
+- [ ] `packages/fe-ui/src/cell/index.ts`에 export 추가
 - [ ] `@cocrepo/ui`에서 import 가능 확인
 
 ### 스타일링 규칙

@@ -44,6 +44,10 @@
 interface PhoneCellProps {
   /** 전화번호 */
   value?: string | null;
+  /** 추가 클래스 */
+  className?: string;
+  /** title 속성 */
+  title?: string;
 }
 ```
 
@@ -61,6 +65,7 @@ interface PhoneCellProps {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | wrapper 없는 스타일 조정을 위해 className/title 전달 계약을 추가 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

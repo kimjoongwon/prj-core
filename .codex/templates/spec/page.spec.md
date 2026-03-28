@@ -89,7 +89,26 @@
 {{@index + 1}}. {{this}}
 {{/each}}
 
-## 레이아웃 구성
+## Consumed Layout Contract
+
+| 항목 | 값 |
+|------|----|
+| 참조 layout spec | |
+| consumed slot key | `children` |
+| 콘텐츠 파일 | |
+| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+
+## Rendering Decision
+
+- 기본 패턴: `pure page + thin route container`
+- page role:
+- reusable target:
+- page component path:
+- 참조한 구현 role:
+- SSR/prefetch 예외 승인 여부:
+- 추가 예외 파일:
+
+## 콘텐츠 구성
 
 | 영역 | 컴포넌트 | 기획서 |
 |------|----------|--------|
@@ -157,11 +176,12 @@
 
 ## 구현 체크리스트
 
-- [ ] page.tsx (서버 컴포넌트)
-- [ ] _client.tsx (클라이언트 컴포넌트)
-- [ ] _prefetch.ts (데이터 프리페치)
-- [ ] hooks/useHandlers.ts (필요시)
-- [ ] E2E 테스트 (Playwright)
+- [ ] `page.tsx` thin route container 또는 단일 CSR 파일
+- [ ] `packages/fe-ui/src/page/[PageName]/[PageName].tsx`
+- [ ] `hooks/index.ts` (필요 시)
+- [ ] `layout.spec.md` contract 반영 확인
+- [ ] `page.e2e.ts` (Playwright)
+- [ ] SSR/prefetch 예외 파일은 승인된 경우에만 기록
 
 ## 테스트 케이스
 

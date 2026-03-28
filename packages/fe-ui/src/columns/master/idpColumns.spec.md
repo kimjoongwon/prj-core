@@ -22,6 +22,9 @@ OIDC Client, IDP Account, Auth Audit Log, OIDC Session 컬럼 빌딩 흐름을 �
 
 | 일자       | 내용                                                                                                             | 작성자 |
 | ---------- | ---------------------------------------------------------------------------------------------------------------- | ------ |
+| 2026-03-28 | IDP column builder 주석을 영문에서 한글로 정리하고 세션 축약 표시 설명을 보강 | codex  |
+| 2026-03-28 | 주요 IDP column builder 함수에 설명 주석을 추가해 lock/action/session 컬럼 의도를 보강 | codex  |
+| 2026-03-28 | IDP master columns의 인라인 버튼/식별자/잠금 상태 렌더링을 `src/cell` 컴포넌트로 이동 | codex  |
 | 2026-03-27 | IDP builder도 중간 column 변수 적재를 줄이고 최종 조립 시점에 공용 factory를 직접 호출하도록 정리                | codex  |
 | 2026-03-27 | OIDC/IDP 컬럼의 `clientId`, `actions`, `occurredAt`, `grantId` 등 반복 field/label 문자열을 preset helper로 통일 | codex  |
 | 2026-03-27 | 인증/세션 셀 primitive import를 이동된 루트 `src/cell` 배럴로 통일                                               | codex  |

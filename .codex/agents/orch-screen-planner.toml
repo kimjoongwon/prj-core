@@ -18,22 +18,59 @@ developer_instructions = '''
 
 ## 1. 담당 범위
 
-| 레벨 | 명칭 | 담당 에이전트 | 출력 위치 |
-|------|------|--------------|----------|
+| 레벨 | 명칭 | 담당 role | 출력 위치 |
+|------|------|-----------|----------|
 | L4+ | 페이지 통합 | req-page-planner | `page.spec.md` 통합 섹션 업데이트 (`page component path = packages/fe-ui/src/page/[PageName]/[PageName].tsx`) |
 | L5-L6 | 인터랙션/API | req-api-planner | `page.spec.md` API/이벤트 + `apps/core/api/src/module/*/*.controller.spec.md`/`dto.spec.md` |
 | L8 | UI | req-primitive-planner | `packages/fe-ui/src/display/[UIName]/index.spec.md` |
 | L8 | Input | req-input-planner | `packages/fe-ui/src/control/[InputName]/index.spec.md` |
-| L8 | Cell | req-cell-planner | `packages/fe-ui/src/display/data-display/cell/[CellName]/index.spec.md` |
+| L8 | Cell | req-cell-planner | `packages/fe-ui/src/cell/[CellName]/index.spec.md` |
 | L9 | Widget | req-widget-planner | `packages/fe-ui/src/widget/[WidgetName]/index.spec.md` |
 | L10 | Layout | req-layout-planner | `packages/fe-ui/src/display/layout/{index,Layout,type}.spec.md` |
 | L10 | Feature | req-feature-planner | `packages/fe-ui/src/feature/[FeatureName]/index.spec.md` |
 | L10+ | Surface | req-surface-planner | `page.spec.md` Surface/Elevation 섹션 + 관련 layout/feature spec 보강 |
 | L10+ | Menu | req-menu-planner | `packages/common-constant/src/routing/admin-menu.spec.md` |
 | L12 | 테스트 | req-fe-test-planner | 각 기존 `.spec.md`에 "테스트 케이스" 섹션 추가 |
-| L12+ | API 연동 | req-api-integration-planner | `apps/[app]/src/app/**/hooks/index.spec.md` |
+| L12+ | API 연동 | req-api-integration-planner | `apps/[app]/web/src/app/**/hooks/index.spec.md` |
 
 > **참고:** L7(Entity), L11(Store)은 도메인 단위로 기획되므로 별도 처리
+
+### 1.1 Stage 5/6 구현 참조 프로토콜 (Critical)
+
+- 화면 기획을 시작하기 전에 관련 구현 role 문서를 먼저 읽습니다.
+- role 문서 경로는 `.codex/config.toml`의 `[agents.<role>].config_file` 또는 `.codex/agents/<role>.toml`을 source of truth로 사용합니다.
+- 각 req-* planner는 downstream 구현 role 문서에서 최소 다음 4가지를 추출해 spec에 반영합니다.
+  - 출력 파일 경로
+  - 필수 규칙
+  - 금지 규칙
+  - 검증 명령
+- `page.spec.md`의 `## Rendering Decision`에는 반드시 `page role`, `reusable target`, `page component path`, `참조한 구현 role`을 기록합니다.
+- `page role`과 `reusable target`은 Stage 5/6에서 호출할 role과 정확히 일치해야 합니다.
+
+| 기획 role | 구현 role | 구현 문서 | 화면 기획에 반영할 내용 |
+|----------|----------|----------|------------------------|
+| `req-primitive-planner` | `fe-display-component-builder` | `.codex/agents/fe-display-component-builder.toml` | `packages/fe-ui/src/display/**` 출력 경로와 UI 규칙 |
+| `req-input-planner` | `fe-control-component-builder` | `.codex/agents/fe-control-component-builder.toml` | `packages/fe-ui/src/control/**` 출력 경로와 Control 규칙 |
+| `req-cell-planner` | `fe-cell-builder` | `.codex/agents/fe-cell-builder.toml` | `packages/fe-ui/src/cell/**` 출력 경로와 Cell 규칙 |
+| `req-widget-planner` | `fe-widget-builder` | `.codex/agents/fe-widget-builder.toml` | `packages/fe-ui/src/widget/**` 출력 경로와 Widget 규칙 |
+| `req-layout-planner` | `fe-layout-builder` | `.codex/agents/fe-layout-builder.toml` | `packages/fe-ui/src/display/layout/**` 출력 경로와 Layout 규칙 |
+| `req-feature-planner` | `fe-feature-builder` | `.codex/agents/fe-feature-builder.toml` | `packages/fe-ui/src/feature/**` 출력 경로와 Feature 규칙 |
+| `req-page-planner` | `fe-master-builder` | `.codex/agents/fe-master-builder.toml` | `master/table|list|grid` 재사용 계층 기준 |
+| `req-page-planner` | `fe-detail-builder` | `.codex/agents/fe-detail-builder.toml` | `detail/view` 재사용 계층 기준 |
+| `req-page-planner` | `fe-form-builder` | `.codex/agents/fe-form-builder.toml` | `form` 재사용 계층 기준 |
+| `req-page-planner` | `fe-ui-page-builder` | `.codex/agents/fe-ui-page-builder.toml` | `packages/fe-ui/src/page/[PageName]/[PageName].tsx` pure page 기준 |
+| `req-page-planner` | `fe-page-builder` | `.codex/agents/fe-page-builder.toml` | `apps/*/web/src/app/**/page.tsx` thin container 기준 |
+| `req-menu-planner` | `fe-menu-builder` | `.codex/agents/fe-menu-builder.toml` | route/menu contract와 출력 경로 |
+| `req-api-integration-planner` | `fe-api-integrator` | `.codex/agents/fe-api-integrator.toml` | `apps/[app]/web/src/app/**/hooks/index.spec.md` 계약 |
+| `req-fe-test-planner` | `fe-unit-test-builder`, `qa-fe-testing` | `.codex/agents/fe-unit-test-builder.toml`, `.codex/agents/qa-fe-testing.toml` | 테스트 전략, 케이스, 검증 기준 |
+
+### 1.2 page role / reusable target 분류 규칙 (Critical)
+
+| page role | reusable target | Stage 5 구현 role | 반영 대상 |
+|----------|-----------------|-------------------|----------|
+| `master` | `master/table` / `master/list` / `master/grid` | `fe-master-builder` | `packages/fe-ui/src/master/**` |
+| `detail` | `detail/view` | `fe-detail-builder` | `packages/fe-ui/src/detail/view/**` |
+| `form` | `form` | `fe-form-builder` | `packages/fe-ui/src/form/**` |
 
 ---
 
@@ -63,14 +100,20 @@ packages/be-dto/src/[domain]/*.dto.spec.md
 # FE Sidecar
 packages/fe-ui/src/display/[UIName]/index.spec.md
 packages/fe-ui/src/control/[InputName]/index.spec.md
-packages/fe-ui/src/display/data-display/cell/[CellName]/index.spec.md
+packages/fe-ui/src/cell/[CellName]/index.spec.md
 packages/fe-ui/src/widget/[WidgetName]/index.spec.md
 packages/fe-ui/src/display/layout/{index,Layout,type}.spec.md
 packages/fe-ui/src/feature/[FeatureName]/index.spec.md
 
+# Rendering Decision / 재사용 계층 target
+apps/[app]/web/src/app/(admin)/[도메인]/**/page.spec.md   # page role / reusable target / page component path / 참조한 구현 role
+packages/fe-ui/src/master/**                              # page role=master일 때 대상 경로 명시
+packages/fe-ui/src/detail/view/**                         # page role=detail일 때 대상 경로 명시
+packages/fe-ui/src/form/**                                # page role=form일 때 대상 경로 명시
+
 # 메뉴/API 연동
 packages/common-constant/src/routing/admin-menu.spec.md
-apps/[app]/src/app/**/hooks/index.spec.md
+apps/[app]/web/src/app/**/hooks/index.spec.md
 
 # 테스트 케이스는 각 기존 .spec.md에 섹션 추가
 ```
@@ -96,6 +139,7 @@ apps/[app]/src/app/**/hooks/index.spec.md
 2. 기반 단계(순차):
    - `req-page-planner` 실행 (페이지 통합 관점으로 `page.spec.md` 정리)
    - `req-api-planner` 실행 (`page.spec.md` API/이벤트 + `apps/core/api/src/module/*/*.controller.spec.md`/`dto.spec.md`)
+   - `page role`, `reusable target`, 참조할 Stage 5/6 구현 role 확정
 3. 설계 단계(병렬 fan-out, `parallel=auto`):
    - `req-primitive-planner`, `req-input-planner`, `req-cell-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`
    - `req-menu-planner`(목록 화면), `req-api-integration-planner`
@@ -168,9 +212,13 @@ Task: req-api-integration-planner
 
 ### 전체 완료 시
 - [ ] page.spec.md에 페이지 통합/API/이벤트 섹션이 반영되었는가?
+- [ ] page.spec.md의 `Rendering Decision`에 `page role`, `reusable target`, `page component path`, `참조한 구현 role`이 기록되었는가?
 - [ ] page.spec.md의 `Rendering Decision.page component path`가 `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 규칙을 따르는가?
 - [ ] `apps/core/api/src/module/*/*.controller.spec.md` 및 dto.spec.md가 업데이트되었는가?
 - [ ] UI/Input/Cell/Widget/Layout/Feature의 index.spec.md가 모두 생성되었는가?
+- [ ] Cell 경로가 `packages/fe-ui/src/cell/**` 기준으로 기록되었는가?
+- [ ] `page role`에 따라 `master/detail/form` 대상 경로가 명시되었는가?
+- [ ] 관련 Stage 5/6 구현 role 문서의 출력 경로/규칙/검증 명령이 기획서에 반영되었는가?
 - [ ] 목록 화면이면 admin-menu.spec.md가 생성/업데이트되었는가?
 - [ ] hooks/index.spec.md(또는 동등한 API 연동 스펙)가 반영되었는가?
 - [ ] page.spec.md에 Surface owner, elevation, flat 예외 근거가 반영되었는가?
@@ -178,20 +226,20 @@ Task: req-api-integration-planner
 
 ---
 
-## 8. 연관 에이전트
+## 8. 연관 role
 
-### 선행 에이전트
+### 선행 role
 
-| 에이전트 | 관계 | 설명 |
-|----------|------|------|
+| role | 관계 | 설명 |
+|------|------|------|
 | orch-requirement | 상위 | 도메인 기획 (L0-L4) |
 | req-entity-planner | 선행 | Entity 기획 (L7) |
 | req-store-planner | 선행(조건부) | 공용 Store 기획 (L11) |
 
-### 호출 에이전트
+### 호출 role
 
-| 에이전트 | 단계 | 설명 |
-|----------|------|------|
+| role | 단계 | 설명 |
+|------|------|------|
 | req-page-planner | 1 | 페이지 통합 기획 |
 | req-api-planner | 2 | 인터랙션/API 기획 |
 | req-primitive-planner | 3 | UI 컴포넌트 기획 |
@@ -205,11 +253,24 @@ Task: req-api-integration-planner
 | req-fe-test-planner | 11 | 테스트 기획 |
 | req-api-integration-planner | 12 | API 연동 기획 |
 
-### 후행 에이전트
+### 후행 role
 
-| 에이전트 | 관계 | 설명 |
-|----------|------|------|
-| fe-page-builder | 구현 | 페이지 컴포넌트 생성 |
+| role | 관계 | 설명 |
+|------|------|------|
+| fe-display-component-builder | 구현 | Display 컴포넌트 생성 |
+| fe-control-component-builder | 구현 | Control 컴포넌트 생성 |
+| fe-cell-builder | 구현 | Cell 컴포넌트 생성 |
+| fe-widget-builder | 구현 | Widget 컴포넌트 생성 |
+| fe-layout-builder | 구현 | 재사용 Layout primitive 생성 |
+| fe-feature-builder | 구현 | Feature 컴포넌트 생성 |
+| fe-master-builder | 구현 | master 재사용 계층 생성 |
+| fe-detail-builder | 구현 | detail/view 재사용 계층 생성 |
+| fe-form-builder | 구현 | form 재사용 계층 생성 |
+| fe-ui-page-builder | 구현 | pure page component 생성 |
+| fe-page-builder | 구현 | thin route container 생성 |
+| fe-api-integrator | 구현 | API hooks 연동 |
+| fe-unit-test-builder | 구현 | FE 단위 테스트 구조 생성 |
+| qa-fe-testing | 구현 | FE 테스트 코드 작성/실행 |
 | orch-stage | 상위 | 개발 플로우 진행 |
 
 ---

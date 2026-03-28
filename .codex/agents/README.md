@@ -78,6 +78,7 @@
 - [fe-display-component-builder.toml](./fe-display-component-builder.toml): Display UI 컴포넌트를 `packages/fe-ui/src/display`에 생성하는 전문가
 - [fe-control-component-builder.toml](./fe-control-component-builder.toml): 사용자 조작/입력 컴포넌트를 `packages/fe-ui/src/control`에 생성하는 전문가
 - [fe-cell-builder.toml](./fe-cell-builder.toml): DataGrid/Table용 Cell 컴포넌트를 계층별로 생성하는 전문가
+- [fe-columns-builder.toml](./fe-columns-builder.toml): `packages/fe-ui/src/columns` 레이어와 `MetaDataGrid`/`cell` 경계를 정리하는 전문가
 - [fe-menu-builder.toml](./fe-menu-builder.toml): 메뉴 시스템 컴포넌트를 생성하는 전문가
 - [fe-store-builder.toml](./fe-store-builder.toml): MobX 기반 Store를 생성하는 전문가
 - [fe-api-integrator.toml](./fe-api-integrator.toml): Orval 생성 React Query 훅을 사용하여 더미 데이터를 실제 API 호출로 교체하는 전문가

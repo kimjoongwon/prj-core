@@ -1,6 +1,10 @@
 export interface PhoneCellProps {
 	/** 전화번호 */
 	value?: string | null;
+	/** 추가 클래스 */
+	className?: string;
+	/** title 속성 */
+	title?: string;
 }
 
 /**
@@ -8,14 +12,28 @@ export interface PhoneCellProps {
  * - 01012345678 → 010-1234-5678
  * - 이미 포맷팅된 번호는 그대로 표시
  */
-export const PhoneCell = ({ value }: PhoneCellProps) => {
+const joinClassNames = (...values: Array<string | false | null | undefined>) =>
+	values.filter(Boolean).join(" ");
+
+export const PhoneCell = ({ value, className, title }: PhoneCellProps) => {
 	if (!value) {
-		return <span className="text-default-400">-</span>;
+		return (
+			<span
+				className={joinClassNames("text-default-400", className)}
+				title={title}
+			>
+				-
+			</span>
+		);
 	}
 
 	// 이미 하이픈이 포함되어 있으면 그대로 표시
 	if (value.includes("-")) {
-		return <span>{value}</span>;
+		return (
+			<span className={className} title={title}>
+				{value}
+			</span>
+		);
 	}
 
 	// 숫자만 추출
@@ -35,5 +53,9 @@ export const PhoneCell = ({ value }: PhoneCellProps) => {
 		}
 	}
 
-	return <span>{formatted}</span>;
+	return (
+		<span className={className} title={title}>
+			{formatted}
+		</span>
+	);
 };

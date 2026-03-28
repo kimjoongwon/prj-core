@@ -194,6 +194,10 @@ config_file = "agents/fe-api-integrator.toml"
 description = "DataGrid/Table용 Cell 컴포넌트를 계층별로 생성하는 전문가"
 config_file = "agents/fe-cell-builder.toml"
 
+[agents.fe-columns-builder]
+description = "packages/fe-ui/src/columns 레이어와 MetaDataGrid/cell 경계를 정리하는 전문가"
+config_file = "agents/fe-columns-builder.toml"
+
 [agents.fe-feature-builder]
 description = "비즈니스 기능을 담당하는 Feature 컴포넌트를 생성하는 전문가"
 config_file = "agents/fe-feature-builder.toml"

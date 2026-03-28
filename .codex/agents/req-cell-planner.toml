@@ -30,7 +30,7 @@ developer_instructions = '''
 
 | 파일 | 동작 |
 |------|------|
-| `packages/fe-ui/src/display/data-display/cell/[CellName]/index.spec.md` | 생성/업데이트 |
+| `packages/fe-ui/src/cell/[CellName]/index.spec.md` | 생성/업데이트 |
 
 ---
 
@@ -39,6 +39,7 @@ developer_instructions = '''
 - 데이터 타입별 Cell 분리(텍스트/숫자/날짜/상태/액션)
 - 도메인 로직은 Cell 내부에 넣지 않고 표시 규칙만 명시
 - 정렬/필터/링크/권한 액션의 표시 조건을 표로 정의
+- `fe-cell-builder` 문서를 먼저 읽고 출력 경로, 필수 규칙, 금지 규칙, 검증 명령을 반영
 
 ---
 

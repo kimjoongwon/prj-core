@@ -15,12 +15,12 @@
 | 항목       | 설명                                       |
 | ---------- | ------------------------------------------ |
 | `./master` | `MetaDataGrid` 기반 master table 컬럼 조합 |
-| `./raw`    | raw table page용 컬럼 조합                 |
 
 ## 변경 이력
 
 | 일자       | 내용                                                                                         | 작성자 |
 | ---------- | -------------------------------------------------------------------------------------------- | ------ |
+| 2026-03-28 | 역할/권한 목록 페이지를 `MetaDataGrid`로 전환하면서 `raw` 공개 축을 제거하고 `master`만 유지 | codex  |
 | 2026-03-27 | 공개 API는 `master`/`raw`만 노출하고 preset/factory는 `internal`로 숨기도록 구조를 재정리    | codex  |
 | 2026-03-27 | 불필요한 `masterTableColumns.tsx` 중간 배럴을 제거하고 `./master`를 직접 export하도록 단순화 | codex  |
 | 2026-03-27 | 공용 field preset과 raw table page용 columns export를 추가해 `columns` 레이어의 범위를 확장  | codex  |

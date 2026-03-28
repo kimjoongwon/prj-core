@@ -49,6 +49,10 @@ developer_instructions = '''
 
 `orch-screen-planner`는 페이지별로 `req-page-planner`, `req-api-planner`, `req-primitive-planner`, `req-input-planner`, `req-cell-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`, `req-menu-planner`, `req-fe-test-planner`, `req-api-integration-planner`를 조합해 실행합니다。
 
+화면 기획을 위임할 때는 agent 이름만 넘기지 않습니다。`orch-screen-planner`는 관련 Stage 5/6 구현 role 문서를 먼저 읽고, 각 role의 **출력 파일 경로 / 필수 규칙 / 금지 규칙 / 검증 명령**을 `page.spec.md`와 관련 sidecar spec에 반영해야 합니다。
+
+최소 반영 범위는 `display`, `control`, `cell`, `widget`, `layout`, `feature`, `master/detail/form`, `pure page`, `thin container`, `API integration`, `test`입니다。
+
 ---
 
 ## 1.5. 필수 기획서 체크리스트 (Critical)
@@ -73,8 +77,15 @@ developer_instructions = '''
 
 ### 프론트엔드 기획서 (자주 누락됨 ⚠️)
 - [ ] `{Domain}Store.spec.md` - **재사용성 충족 시에만** Store 스펙
+- [ ] `display/{UI}/index.spec.md` - 페이지에서 참조하는 모든 Display
+- [ ] `control/{Input}/index.spec.md` - 페이지에서 참조하는 모든 Control
+- [ ] `cell/{Cell}/index.spec.md` - 컬럼/테이블에서 참조하는 모든 Cell
 - [ ] `widget/{Widget}/index.spec.md` - 페이지에서 참조하는 모든 Widget
 - [ ] `feature/{Feature}/index.spec.md` - 페이지에서 참조하는 모든 Feature
+- [ ] `display/layout/{index,Layout,type}.spec.md` - route/page가 요구하는 재사용 Layout
+- [ ] `page.spec.md`의 `Rendering Decision` - `page role`, `reusable target`, `page component path`
+- [ ] `master/*` / `detail/view` / `form/*` 대상 스펙 - 화면 분류에 맞는 재사용 계층 지정
+- [ ] `hooks/index.spec.md` - API integration이 필요한 화면
 
 ### 검증 방법
 페이지 기획서의 "레이아웃 구성" 테이블에서 참조하는 컴포넌트들이 실제 `.spec.md`로 존재하는지 확인
@@ -472,29 +483,45 @@ Asset (Level 0)
 
 ## 구현 대상 (orch-stage 자동 병렬 실행용)
 
-### UI 컴포넌트
+## Rendering Decision
+- page role: master
+- reusable target: master/table
+- page component path: packages/fe-ui/src/page/AssetListPage/AssetListPage.tsx
+- thin container path: apps/admin/web/src/app/(admin)/assets/page.tsx
+
+### 구현 에이전트 참조
+| 레이어 | 기획 에이전트 | 구현 에이전트 | 출력 기준 |
+|--------|--------------|--------------|----------|
+| Display | req-primitive-planner | fe-display-component-builder | `packages/fe-ui/src/display/**` |
+| Control | req-input-planner | fe-control-component-builder | `packages/fe-ui/src/control/**` |
+| Cell | req-cell-planner | fe-cell-builder | `packages/fe-ui/src/cell/**` |
+| Widget | req-widget-planner | fe-widget-builder | `packages/fe-ui/src/widget/**` |
+| Layout | req-layout-planner | fe-layout-builder | `packages/fe-ui/src/display/layout/**` |
+| Feature | req-feature-planner | fe-feature-builder | `packages/fe-ui/src/feature/**` |
+| Reusable Layer | req-page-planner | fe-master-builder | `packages/fe-ui/src/master/table/index.ts` |
+| Pure Page | req-page-planner | fe-ui-page-builder | `packages/fe-ui/src/page/AssetListPage/AssetListPage.tsx` |
+| Thin Container | req-page-planner | fe-page-builder | `apps/admin/web/src/app/(admin)/assets/page.tsx` |
+| API Integration | req-api-integration-planner | fe-api-integrator | `apps/admin/web/src/app/**/hooks/index.ts` |
+| Test | req-fe-test-planner | fe-unit-test-builder, qa-fe-testing | 관련 테스트 파일 |
+
+### Display / Control / Cell
 | 컴포넌트 | 타입 | 위치 |
 |----------|------|------|
-| AssetPreview | Pure UI | packages/fe-ui/src/display/ |
-| AssetTypeInfo | Pure UI | packages/fe-ui/src/display/ |
-| DerivativeList | Pure UI | packages/fe-ui/src/display/ |
+| AssetPreview | Display | `packages/fe-ui/src/display/` |
+| AssetSearchInput | Control | `packages/fe-ui/src/control/` |
+| AssetStatusCell | Cell | `packages/fe-ui/src/cell/` |
 
-### Widget 컴포넌트
-| 컴포넌트 | 위치 |
-|----------|------|
-| AssetListPanel | packages/fe-ui/src/widget/ |
-| FolderTree | packages/fe-ui/src/widget/ |
-
-### Feature 컴포넌트
-| 컴포넌트 | Store 연결 |
-|----------|-----------|
-| AssetManager | AssetStore |
-| AssetUploader | AssetStore |
+### Widget / Feature / Reusable Layer
+| 컴포넌트 | 분류 | 위치/연결 |
+|----------|------|-----------|
+| AssetListPanel | Widget | `packages/fe-ui/src/widget/` |
+| AssetManager | Feature | `AssetStore` 연결 |
+| AssetTable | master/table | `packages/fe-ui/src/master/table/` |
 
 ### 병렬 실행 가능 항목
-- UI 컴포넌트: 병렬 생성 가능
-- Widget 컴포넌트: 병렬 생성 가능
-- Feature 컴포넌트: Store 완료 후 순차
+- Display / Control / Cell / Widget / Layout: 병렬 생성 가능
+- Feature / API integration: Store 및 API 계약 확정 후 병렬 가능
+- Reusable Layer / Pure Page / Thin Container: `page role`, `reusable target` 확정 후 순차
 ```
 
 ### 7.4 자동 병렬 판단 규칙
@@ -532,6 +559,7 @@ orch-stage는 기획서의 **구현 대상** 섹션을 분석하여:
 - [ ] VO 기획서 생성 (필요시)
 - [ ] **검증**: 페이지 기획서에서 참조하는 컴포넌트가 실제 `.spec.md`로 존재하는지 확인
 - [ ] **구현 대상 섹션**: 모든 기획서에 병렬 실행 정보 포함
+- [ ] **화면 기획 위임 규칙**: `orch-screen-planner`가 Stage 5/6 구현 role 문서의 출력 경로/규칙을 반영했는지 확인
 
 ---
 

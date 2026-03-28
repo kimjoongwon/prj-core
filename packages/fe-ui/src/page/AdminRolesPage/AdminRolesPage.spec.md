@@ -7,6 +7,7 @@
 ## 역할
 
 이 파일은 route thin wrapper가 재사용하는 page 레이어 화면 컴포넌트를 담당합니다.
+역할 목록 시각화는 직접 `<table>`를 그리지 않고 `MetaDataGrid`와 `columns` 레이어 조합만 사용합니다.
 
 ## 공개 계약
 
@@ -31,6 +32,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | 역할 목록 렌더링을 custom table에서 `MetaDataGrid`로 전환하고 상세 액션도 `columns` 레이어로 이동 | codex |
 | 2026-03-27 | `columns` 레이어 이관 후 남은 미사용 `RoleDto` type import를 제거해 page 계약을 단순화 | codex |
 | 2026-03-27 | 역할 목록 raw table 컬럼을 page 내부 inline 선언 대신 `columns` 레이어의 공용 조합으로 이관 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |

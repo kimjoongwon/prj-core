@@ -132,11 +132,11 @@ interface {{componentName}}Props {
 
 ## 구현 체크리스트
 
-- [ ] index.tsx
-- [ ] types.ts
-- [ ] Storybook 스토리
-- [ ] 접근성 테스트
-- [ ] 컴포넌트 테스트 (Vitest)
+- [ ] `{{componentName}}.tsx`
+- [ ] `{{componentName}}.stories.tsx`
+- [ ] `index.ts`
+- [ ] 접근성 요구 반영
+- [ ] 컴포넌트 테스트 (Vitest, 필요 시)
 
 ## 테스트 케이스
 

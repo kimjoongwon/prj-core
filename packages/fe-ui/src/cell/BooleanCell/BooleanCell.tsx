@@ -1,8 +1,27 @@
 import { Chip } from "@heroui/react";
+import { DefaultCell } from "../DefaultCell/DefaultCell";
 
-interface BooleanCellProps {
+type BooleanCellColor =
+	| "default"
+	| "primary"
+	| "secondary"
+	| "success"
+	| "warning"
+	| "danger";
+
+export interface BooleanCellProps {
 	/** 불린 값 */
 	value: boolean | null | undefined;
+	/** 값이 true일 때 라벨 */
+	trueLabel?: string;
+	/** 값이 false일 때 라벨 */
+	falseLabel?: string;
+	/** 값이 true일 때 칩 색상 */
+	trueColor?: BooleanCellColor;
+	/** 값이 false일 때 칩 색상 */
+	falseColor?: BooleanCellColor;
+	/** 값이 없을 때 대체 텍스트 */
+	placeholder?: string;
 }
 
 /**
@@ -16,16 +35,23 @@ interface BooleanCellProps {
  * <BooleanCell value={null} />  // "-"
  * ```
  */
-export const BooleanCell = ({ value }: BooleanCellProps) => {
+export const BooleanCell = ({
+	value,
+	trueLabel = "예",
+	falseLabel = "아니오",
+	trueColor = "success",
+	falseColor = "default",
+	placeholder = "-",
+}: BooleanCellProps) => {
 	if (value === null || value === undefined) {
-		return <p>-</p>;
+		return <DefaultCell value={placeholder} />;
 	}
 
 	const boolValue = Boolean(value);
 
 	return (
-		<Chip color={boolValue ? "success" : "default"} size="sm" variant="flat">
-			{boolValue ? "예" : "아니오"}
+		<Chip color={boolValue ? trueColor : falseColor} size="sm" variant="flat">
+			{boolValue ? trueLabel : falseLabel}
 		</Chip>
 	);
 };

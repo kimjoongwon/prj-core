@@ -6,7 +6,7 @@
 
 ## 역할
 
-불린 값을 "예/아니오" Chip으로 표시하는 Cell 컴포넌트. null/undefined는 "-"로 표시한다.
+불린 값을 의미 있는 라벨/색상 Chip으로 표시하는 Cell 컴포넌트. 기본값은 "예/아니오"이며, 컬럼 문맥에 맞게 라벨과 색상을 주입할 수 있다.
 
 ## 디자인 목업
 
@@ -48,6 +48,16 @@
 interface BooleanCellProps {
   /** 불린 값 */
   value: boolean | null | undefined;
+  /** 값이 true일 때 라벨 */
+  trueLabel?: string;
+  /** 값이 false일 때 라벨 */
+  falseLabel?: string;
+  /** 값이 true일 때 칩 색상 */
+  trueColor?: "default" | "primary" | "secondary" | "success" | "warning" | "danger";
+  /** 값이 false일 때 칩 색상 */
+  falseColor?: "default" | "primary" | "secondary" | "success" | "warning" | "danger";
+  /** 값이 없을 때 대체 텍스트 */
+  placeholder?: string;
 }
 ```
 
@@ -55,9 +65,9 @@ interface BooleanCellProps {
 
 | 값 | 표시 | Chip color |
 |---|---|---|
-| `true` | 예 | success |
-| `false` | 아니오 | default |
-| `null` / `undefined` | - | (plain text) |
+| `true` | trueLabel | trueColor |
+| `false` | falseLabel | falseColor |
+| `null` / `undefined` | placeholder | (plain text) |
 
 ## HeroUI 매핑
 
@@ -67,6 +77,7 @@ interface BooleanCellProps {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | 컬럼 의미별 라벨/색상 주입을 위한 configurable boolean cell 계약으로 확장 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

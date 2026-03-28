@@ -16,10 +16,12 @@
 | `buildColumns`, `buildColumnsWithDefaultCreatedAt` | 내부 조립 helper             |
 | `createNameColumn` 외 field factory                | 내부 preset 기반 컬럼 생성기 |
 | `getActionGroupColor` 외 formatting helper         | 내부 표시 유틸               |
-| `LockStatusCell`, `FailedAttemptsCell`             | IDP 보조 셀                  |
 
 ## 변경 이력
 
 | 일자       | 내용                                                          | 작성자 |
 | ---------- | ------------------------------------------------------------- | ------ |
+| 2026-03-28 | masterFactory 함수 주석을 영문에서 한글로 정리해 preset/helper 의도를 통일 | codex  |
+| 2026-03-28 | master factory 함수에 preset/variant 의도를 설명하는 주석을 추가 | codex  |
+| 2026-03-28 | 기본 text/email/phone/description 컬럼 렌더링을 `src/cell` 공통 셀로 통일하고 IDP 보조 셀은 cell 레이어로 이동 | codex  |
 | 2026-03-27 | `columns/master/shared.tsx`를 내부 builder 전용 파일로 재배치 | codex  |
