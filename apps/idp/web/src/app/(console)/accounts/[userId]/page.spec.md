@@ -34,6 +34,7 @@
 - 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
 - 비정상 입력은 조기 반환 또는 예외 처리합니다.
 - 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
+- 상세 진입 E2E는 목록 행 액션 셀의 실제 링크(`/accounts/:userId`)를 기준으로 첫 계정 상세 페이지에 진입합니다.
 
 ## 콘텐츠 구성
 
@@ -72,6 +73,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | 상세 진입 E2E가 `aria-label` 대신 실제 계정 상세 링크 계약(`/accounts/:userId`)을 사용하도록 기준을 정리 | codex |
 | 2026-03-22 | `(console)` layout contract 변경에 맞춰 primitive skeleton 범위를 보정 | codex |
 | 2026-03-22 | 계정 상세를 `DetailPage`/`DetailSectionCard` 기반 detail/view shell로 정리하고 spec 의존성을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |

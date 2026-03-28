@@ -36,13 +36,16 @@ import {
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import {
-	proposalPageData,
+	type ProposalCareerEntry,
 	type ProposalIconKey,
 	type ProposalMetric,
 	type ProposalNarrativeCard,
 	type ProposalPageData,
+	type ProposalPortfolioItem,
 	type ProposalProcessStep,
+	type ProposalResumeFact,
 	type ProposalStackGroup,
+	proposalPageData,
 	type SectionId,
 } from "./proposal-page-data";
 
@@ -182,6 +185,7 @@ const SECTION_ACTIONS: Record<SectionId, () => void> = {
 	cost: () => scrollToSection("cost"),
 	stack: () => scrollToSection("stack"),
 	fit: () => scrollToSection("fit"),
+	career: () => scrollToSection("career"),
 };
 
 function SectionHeading({ eyebrow, title, description }: SectionHeadingProps) {
@@ -373,6 +377,38 @@ function renderCostLine(item: string) {
 	);
 }
 
+function renderCareerLine(item: string) {
+	return (
+		<li
+			key={item}
+			className={`flex items-start gap-3 text-sm leading-7 ${MUTED_TEXT_CLASS}`}
+		>
+			<BadgeCheck className="mt-1 h-4 w-4 shrink-0 text-secondary" />
+			<span>{item}</span>
+		</li>
+	);
+}
+
+function renderResumeFactCard(item: ProposalResumeFact) {
+	return (
+		<motion.div key={item.label} variants={ITEM_VARIANTS}>
+			<Card className={SURFACE_CARD_ELEVATED_CLASS}>
+				<CardBody className="gap-3 p-6">
+					<p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-primary-700 dark:text-primary-300">
+						{item.label}
+					</p>
+					<p className="text-lg font-semibold text-slate-950 dark:text-white">
+						{item.value}
+					</p>
+					<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
+						{item.description}
+					</p>
+				</CardBody>
+			</Card>
+		</motion.div>
+	);
+}
+
 function renderToolChip(tool: string) {
 	return (
 		<Chip
@@ -383,6 +419,86 @@ function renderToolChip(tool: string) {
 		>
 			{tool}
 		</Chip>
+	);
+}
+
+function renderCareerCard(entry: ProposalCareerEntry) {
+	const Icon = ICONS[entry.iconKey];
+
+	return (
+		<motion.div
+			key={`${entry.organization}-${entry.period}`}
+			variants={ITEM_VARIANTS}
+		>
+			<Card className={SURFACE_CARD_CLASS}>
+				<CardHeader
+					className={`flex-col items-start gap-5 border-b ${PANEL_DIVIDER_CLASS}`}
+				>
+					<div className="flex w-full items-start justify-between gap-4">
+						<div className="space-y-3">
+							<Chip radius="full" variant="flat" color="secondary">
+								{entry.period}
+							</Chip>
+							<div className="space-y-2">
+								<h3 className="text-xl font-semibold text-slate-950 dark:text-white">
+									{entry.organization}
+								</h3>
+								<p className="text-sm font-semibold text-primary-700 dark:text-primary-300">
+									{entry.role}
+								</p>
+								<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
+									{entry.headline}
+								</p>
+							</div>
+						</div>
+						<div className={PANEL_ICON_CLASS}>
+							<Icon className="h-5 w-5" />
+						</div>
+					</div>
+				</CardHeader>
+				<CardBody className="gap-6 p-6 md:p-7">
+					<p className={`text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
+						{entry.description}
+					</p>
+					<ul className="space-y-3">
+						{entry.highlights.map(renderCareerLine)}
+					</ul>
+					<div className="flex flex-row flex-wrap gap-2">
+						{entry.tools.map(renderToolChip)}
+					</div>
+				</CardBody>
+			</Card>
+		</motion.div>
+	);
+}
+
+function renderPortfolioCard(item: ProposalPortfolioItem) {
+	const Icon = ICONS[item.iconKey];
+
+	return (
+		<motion.div key={item.title} variants={ITEM_VARIANTS}>
+			<Card className={SURFACE_CARD_CLASS}>
+				<CardHeader className="items-start gap-4 pb-0">
+					<div className={PANEL_ICON_CLASS}>
+						<Icon className="h-5 w-5" />
+					</div>
+					<div className="space-y-2">
+						<h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+							{item.title}
+						</h3>
+						<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
+							{item.description}
+						</p>
+					</div>
+				</CardHeader>
+				<CardBody className="gap-5 pt-5">
+					<ul className="space-y-3">{item.highlights.map(renderCareerLine)}</ul>
+					<div className="flex flex-row flex-wrap gap-2">
+						{item.tools.map(renderToolChip)}
+					</div>
+				</CardBody>
+			</Card>
+		</motion.div>
 	);
 }
 
@@ -760,6 +876,90 @@ export default observer(function ProposalPage() {
 									</ul>
 								</CardBody>
 							</Card>
+						</LandingSection>
+						<LandingSection
+							id="career"
+							eyebrow="Builder background"
+							title={pageData.career.title}
+							description={pageData.career.description}
+						>
+							<motion.div
+								className="grid gap-6 md:grid-cols-4"
+								initial="hidden"
+								whileInView="show"
+								viewport={VIEWPORT}
+								variants={GRID_VARIANTS}
+							>
+								{pageData.career.summary.map(renderMetricCard)}
+							</motion.div>
+							<motion.div
+								className="grid gap-6 xl:grid-cols-2"
+								initial="hidden"
+								whileInView="show"
+								viewport={VIEWPORT}
+								variants={GRID_VARIANTS}
+							>
+								{pageData.career.entries.map(renderCareerCard)}
+							</motion.div>
+							<div className="grid gap-6 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+								<motion.div
+									className="grid gap-6 sm:grid-cols-2"
+									initial="hidden"
+									whileInView="show"
+									viewport={VIEWPORT}
+									variants={GRID_VARIANTS}
+								>
+									{pageData.career.credentials.map(renderResumeFactCard)}
+								</motion.div>
+								<Card className="border border-slate-200/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(248,250,252,0.88))] shadow-[0_24px_80px_rgba(148,163,184,0.16)] dark:border-white/10 dark:bg-[linear-gradient(160deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] dark:shadow-none">
+									<CardHeader
+										className={`flex-col items-start gap-3 border-b ${PANEL_DIVIDER_CLASS}`}
+									>
+										<Chip radius="full" variant="flat" color="primary">
+											Resume note
+										</Chip>
+										<div className="space-y-2">
+											<h3 className="text-xl font-semibold text-slate-950 dark:text-white">
+												{pageData.career.statement.title}
+											</h3>
+											<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
+												{pageData.career.statement.description}
+											</p>
+										</div>
+									</CardHeader>
+									<CardBody>
+										<ul className="space-y-4">
+											{pageData.career.statement.bullets.map(renderCareerLine)}
+										</ul>
+									</CardBody>
+								</Card>
+							</div>
+							<div className="space-y-6">
+								<div className="space-y-3">
+									<Chip radius="full" variant="flat" color="secondary">
+										Portfolio
+									</Chip>
+									<h3 className="font-display text-2xl font-semibold text-slate-950 dark:text-white">
+										이력서에 포함된 개인 포트폴리오와 학습 프로젝트
+									</h3>
+									<p
+										className={`max-w-3xl text-sm leading-7 ${SOFT_TEXT_CLASS}`}
+									>
+										실서비스에 적용 가능한 구조를 목표로 운영 중인 개인
+										프로젝트도 함께 노출합니다. 실무 경력 외에 어떤 방향으로
+										역량을 확장하고 있는지도 보이도록 구성했습니다.
+									</p>
+								</div>
+								<motion.div
+									className="grid gap-6 md:grid-cols-2"
+									initial="hidden"
+									whileInView="show"
+									viewport={VIEWPORT}
+									variants={GRID_VARIANTS}
+								>
+									{pageData.career.portfolio.map(renderPortfolioCard)}
+								</motion.div>
+							</div>
 						</LandingSection>
 					</Container>
 				</div>

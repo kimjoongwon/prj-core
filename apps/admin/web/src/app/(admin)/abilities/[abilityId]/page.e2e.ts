@@ -18,14 +18,12 @@ test.describe("권한 상세 페이지", () => {
 		// Given: 권한 목록 페이지
 		await gotoAbilitiesPage(page);
 
-		// When: 첫 번째 목록 행의 상세 액션 클릭
+		// When: 첫 번째 목록 행을 클릭
 		const firstRow = page.locator("table tbody tr").first();
 		await expect(firstRow).toBeVisible();
-		const detailButton = firstRow.getByRole("button", { name: "상세" });
-		await expect(detailButton).toBeVisible();
 		await Promise.all([
 			page.waitForURL(/\/abilities\/[^/]+$/),
-			detailButton.click(),
+			firstRow.click(),
 		]);
 
 		// Then: 상세 페이지 URL 확인

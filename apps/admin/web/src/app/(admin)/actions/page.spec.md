@@ -50,6 +50,10 @@
 | `queryStates.search` 변경 | 이름/표시명 클라이언트 필터링 |
 | `queryStates.group` 변경 | group 기준 재조회 |
 
+## E2E 검증 메모
+
+- 시스템 여부 검증은 현재 시드 데이터가 기본 Action을 모두 시스템 값으로 제공하므로 목록 gridcell의 `시스템` 표시를 기준으로 확인합니다.
+
 ## 구현 체크리스트
 
 - [x] `layout.tsx`가 route skeleton 소유
@@ -61,6 +65,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | 목록 E2E가 현재 시드 데이터 기준으로 시스템 컬럼의 `시스템` 표시를 검증하도록 기준을 보강 | codex |
 | 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | Action 목록을 `master/table` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
 | 2026-03-21 | Action 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

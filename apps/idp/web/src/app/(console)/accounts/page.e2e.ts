@@ -29,7 +29,7 @@ test.describe("IDP 계정 목록 페이지", () => {
 				page.getByRole("columnheader", { name: "이메일", exact: true }),
 			).toBeVisible();
 			await expect(
-				page.getByRole("columnheader", { name: "활성 상태", exact: true }),
+				page.getByRole("columnheader", { name: "활성", exact: true }),
 			).toBeVisible();
 			await expect(
 				page.getByRole("columnheader", { name: "잠금 상태", exact: true }),
@@ -44,7 +44,7 @@ test.describe("IDP 계정 목록 페이지", () => {
 
 		test("계정 데이터가 표시되어야 한다", async ({ page }) => {
 			// Then: 첫 번째 계정 row의 상세 링크가 표시됨
-			await expect(page.locator('a[aria-label="상세 보기"]').first()).toBeVisible();
+			await expect(page.locator('a[href^="/accounts/"]').first()).toBeVisible();
 		});
 	});
 

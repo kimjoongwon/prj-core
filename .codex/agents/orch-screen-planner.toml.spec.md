@@ -17,6 +17,7 @@
 - 화면 기획 완료 조건에는 `Rendering Decision.page component path = packages/fe-ui/src/page/[PageName]/[PageName].tsx` 준수 여부도 포함됩니다.
 - 화면 기획은 관련 Stage 5/6 구현 role 문서를 먼저 읽고 출력 경로, 필수 규칙, 금지 규칙, 검증 명령을 spec에 반영해야 합니다.
 - Cell 관련 기획 산출물은 `packages/fe-ui/src/cell/**` 경로를 기준으로 기록합니다.
+- 목록/테이블 화면의 column 기획 산출물은 `packages/fe-ui/src/columns/master/**.spec.md` 경로를 기준으로 기록합니다.
 - `page.spec.md`의 `Rendering Decision`에는 `page role`, `reusable target`, `참조한 구현 role`이 함께 기록되어야 합니다.
 - 입력/출력 예시는 `apps/[app]/web/src/app/**` 기준으로 해석합니다.
 - 문서에서 `.codex/config.toml` 기준 항목은 `role`, 실행 단위는 `agent`로 구분합니다.
@@ -25,6 +26,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | `req-columns-planner`와 `fe-columns-builder` 연동 규칙을 Stage 4 fan-out에 추가 | codex |
 | 2026-03-28 | `web/src/app` 경로와 role 용어 기준으로 출력/참조 표기를 정정 | codex |
 | 2026-03-28 | Stage 5/6 구현 role 참조 프로토콜과 `src/cell` 기준 경로, `page role/reusable target` 기록 규칙을 추가 | codex |
 | 2026-03-26 | Stage 4가 page folder-based sidecar 경로와 `web/src/app` 구조를 기준으로 동작하도록 보강 | codex |

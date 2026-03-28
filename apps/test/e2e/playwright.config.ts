@@ -1,3 +1,4 @@
+import Module from "node:module";
 import path from "node:path";
 import { defineConfig, devices } from "@playwright/test";
 
@@ -5,6 +6,19 @@ import { defineConfig, devices } from "@playwright/test";
 process.env.PLAYWRIGHT_BROWSERS_PATH =
 	process.env.PLAYWRIGHT_BROWSERS_PATH ?? path.join(__dirname, "browsers");
 process.env.E2E_ENV = process.env.E2E_ENV ?? "local";
+
+const workspaceNodeModulesPath = path.join(__dirname, "node_modules");
+const existingNodePath = process.env.NODE_PATH;
+process.env.NODE_PATH = [workspaceNodeModulesPath, existingNodePath]
+	.filter((value): value is string => Boolean(value))
+	.join(path.delimiter);
+
+// Playwright가 모노레포 바깥(out/full) 경로에서 테스트를 로드해도 workspace 의존성을 찾게 합니다.
+(
+	Module as typeof Module & {
+		_initPaths?: () => void;
+	}
+)._initPaths?.();
 
 const e2eEnvironment = process.env.E2E_ENV;
 const skipAdminSetup = process.env.SKIP_ADMIN_SETUP === "1";
@@ -171,6 +185,7 @@ export default defineConfig({
   // 모노레포 루트에서 *.e2e.ts 파일 탐색
   testDir: path.join(__dirname, "../../.."),
   testMatch: "**/*.e2e.ts",
+  testIgnore: ["**/node_modules/**", "**/dist/**", "**/out/**"],
 
   fullyParallel: true,
   forbidOnly: !!process.env.CI,

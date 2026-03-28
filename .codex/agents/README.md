@@ -29,6 +29,7 @@
 - [req-widget-planner.toml](./req-widget-planner.toml): 화면별 Widget 컴포넌트를 기획하는 전문가
 - [req-primitive-planner.toml](./req-primitive-planner.toml): 화면별 Pure UI 컴포넌트를 기획하는 전문가
 - [req-cell-planner.toml](./req-cell-planner.toml): DataGrid/Table Cell sidecar spec을 기획하는 전문가
+- [req-columns-planner.toml](./req-columns-planner.toml): `packages/fe-ui/src/columns` 레이어 계약과 `MetaDataGrid`/`cell` 경계를 기획하는 전문가
 - [req-input-planner.toml](./req-input-planner.toml): 입력 컴포넌트(Inputs) sidecar spec을 기획하는 전문가
 - [req-menu-planner.toml](./req-menu-planner.toml): 메뉴 경로/권한 sidecar spec을 기획하는 전문가
 - [req-store-planner.toml](./req-store-planner.toml): 도메인별 MobX Store를 기획하는 전문가
@@ -119,5 +120,6 @@
 - [req-layout-planner.toml.spec.md](./req-layout-planner.toml.spec.md)
 - [req-route-layout-planner.toml.spec.md](./req-route-layout-planner.toml.spec.md)
 - [req-page-planner.toml.spec.md](./req-page-planner.toml.spec.md)
+- [req-columns-planner.toml.spec.md](./req-columns-planner.toml.spec.md)
 - [req-primitive-planner.toml.spec.md](./req-primitive-planner.toml.spec.md)
 - [req-surface-planner.toml.spec.md](./req-surface-planner.toml.spec.md)

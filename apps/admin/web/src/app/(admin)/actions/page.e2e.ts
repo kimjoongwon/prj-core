@@ -84,10 +84,10 @@ test.describe("Action 목록 페이지", () => {
 			await page.goto("./actions");
 			await page.waitForLoadState("networkidle");
 
-			// Then: 시스템 컬럼에 "사용자" 값이 표시됨
+			// Then: 현재 시드 데이터 기준으로 시스템 컬럼에 "시스템" 값이 표시됨
 			const grid = page.getByRole("grid");
 			await expect(
-				grid.getByRole("gridcell", { name: "사용자" }).first(),
+				grid.getByRole("gridcell", { name: "시스템" }).first(),
 			).toBeVisible();
 		});
 	});

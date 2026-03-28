@@ -25,6 +25,7 @@ developer_instructions = '''
 | L8 | UI | req-primitive-planner | `packages/fe-ui/src/display/[UIName]/index.spec.md` |
 | L8 | Input | req-input-planner | `packages/fe-ui/src/control/[InputName]/index.spec.md` |
 | L8 | Cell | req-cell-planner | `packages/fe-ui/src/cell/[CellName]/index.spec.md` |
+| L8+ | Columns | req-columns-planner | `packages/fe-ui/src/columns/master/[Domain]Columns.spec.md` |
 | L9 | Widget | req-widget-planner | `packages/fe-ui/src/widget/[WidgetName]/index.spec.md` |
 | L10 | Layout | req-layout-planner | `packages/fe-ui/src/display/layout/{index,Layout,type}.spec.md` |
 | L10 | Feature | req-feature-planner | `packages/fe-ui/src/feature/[FeatureName]/index.spec.md` |
@@ -52,6 +53,7 @@ developer_instructions = '''
 | `req-primitive-planner` | `fe-display-component-builder` | `.codex/agents/fe-display-component-builder.toml` | `packages/fe-ui/src/display/**` 출력 경로와 UI 규칙 |
 | `req-input-planner` | `fe-control-component-builder` | `.codex/agents/fe-control-component-builder.toml` | `packages/fe-ui/src/control/**` 출력 경로와 Control 규칙 |
 | `req-cell-planner` | `fe-cell-builder` | `.codex/agents/fe-cell-builder.toml` | `packages/fe-ui/src/cell/**` 출력 경로와 Cell 규칙 |
+| `req-columns-planner` | `fe-columns-builder` | `.codex/agents/fe-columns-builder.toml` | `packages/fe-ui/src/columns/**` 출력 경로와 columns/cell 경계 규칙 |
 | `req-widget-planner` | `fe-widget-builder` | `.codex/agents/fe-widget-builder.toml` | `packages/fe-ui/src/widget/**` 출력 경로와 Widget 규칙 |
 | `req-layout-planner` | `fe-layout-builder` | `.codex/agents/fe-layout-builder.toml` | `packages/fe-ui/src/display/layout/**` 출력 경로와 Layout 규칙 |
 | `req-feature-planner` | `fe-feature-builder` | `.codex/agents/fe-feature-builder.toml` | `packages/fe-ui/src/feature/**` 출력 경로와 Feature 규칙 |
@@ -101,6 +103,7 @@ packages/be-dto/src/[domain]/*.dto.spec.md
 packages/fe-ui/src/display/[UIName]/index.spec.md
 packages/fe-ui/src/control/[InputName]/index.spec.md
 packages/fe-ui/src/cell/[CellName]/index.spec.md
+packages/fe-ui/src/columns/master/[Domain]Columns.spec.md
 packages/fe-ui/src/widget/[WidgetName]/index.spec.md
 packages/fe-ui/src/display/layout/{index,Layout,type}.spec.md
 packages/fe-ui/src/feature/[FeatureName]/index.spec.md
@@ -141,7 +144,7 @@ apps/[app]/web/src/app/**/hooks/index.spec.md
    - `req-api-planner` 실행 (`page.spec.md` API/이벤트 + `apps/core/api/src/module/*/*.controller.spec.md`/`dto.spec.md`)
    - `page role`, `reusable target`, 참조할 Stage 5/6 구현 role 확정
 3. 설계 단계(병렬 fan-out, `parallel=auto`):
-   - `req-primitive-planner`, `req-input-planner`, `req-cell-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`
+   - `req-primitive-planner`, `req-input-planner`, `req-cell-planner`, `req-columns-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`
    - `req-menu-planner`(목록 화면), `req-api-integration-planner`
 4. join 단계:
    - `req-surface-planner` 실행 (Surface ownership, elevation, flat 예외 확정)
@@ -173,6 +176,7 @@ Task: req-api-planner
 Task: req-primitive-planner
 Task: req-input-planner
 Task: req-cell-planner
+Task: req-columns-planner
 Task: req-widget-planner
 Task: req-layout-planner
 Task: req-feature-planner
@@ -217,6 +221,8 @@ Task: req-api-integration-planner
 - [ ] `apps/core/api/src/module/*/*.controller.spec.md` 및 dto.spec.md가 업데이트되었는가?
 - [ ] UI/Input/Cell/Widget/Layout/Feature의 index.spec.md가 모두 생성되었는가?
 - [ ] Cell 경로가 `packages/fe-ui/src/cell/**` 기준으로 기록되었는가?
+- [ ] 목록/테이블 화면이면 `packages/fe-ui/src/columns/master/**.spec.md`가 생성/업데이트되었는가?
+- [ ] column spec이 `packages/fe-ui/src/cell/**` 조합 원칙과 `raw` 금지 규칙을 기록했는가?
 - [ ] `page role`에 따라 `master/detail/form` 대상 경로가 명시되었는가?
 - [ ] 관련 Stage 5/6 구현 role 문서의 출력 경로/규칙/검증 명령이 기획서에 반영되었는가?
 - [ ] 목록 화면이면 admin-menu.spec.md가 생성/업데이트되었는가?
@@ -245,13 +251,14 @@ Task: req-api-integration-planner
 | req-primitive-planner | 3 | UI 컴포넌트 기획 |
 | req-input-planner | 4 | Input 기획 |
 | req-cell-planner | 5 | Cell 기획 (목록 화면) |
-| req-widget-planner | 6 | Widget 기획 |
-| req-layout-planner | 7 | Layout 기획 |
-| req-feature-planner | 8 | Feature 기획 |
-| req-menu-planner | 9 | 메뉴 기획 (목록 화면) |
-| req-surface-planner | 10 | Surface ownership / elevation 기획 |
-| req-fe-test-planner | 11 | 테스트 기획 |
-| req-api-integration-planner | 12 | API 연동 기획 |
+| req-columns-planner | 6 | Columns 선언 계약 기획 (목록/테이블 화면) |
+| req-widget-planner | 7 | Widget 기획 |
+| req-layout-planner | 8 | Layout 기획 |
+| req-feature-planner | 9 | Feature 기획 |
+| req-menu-planner | 10 | 메뉴 기획 (목록 화면) |
+| req-surface-planner | 11 | Surface ownership / elevation 기획 |
+| req-fe-test-planner | 12 | 테스트 기획 |
+| req-api-integration-planner | 13 | API 연동 기획 |
 
 ### 후행 role
 
@@ -260,6 +267,7 @@ Task: req-api-integration-planner
 | fe-display-component-builder | 구현 | Display 컴포넌트 생성 |
 | fe-control-component-builder | 구현 | Control 컴포넌트 생성 |
 | fe-cell-builder | 구현 | Cell 컴포넌트 생성 |
+| fe-columns-builder | 구현 | Columns 선언 계약 구현 및 `raw` 제거 |
 | fe-widget-builder | 구현 | Widget 컴포넌트 생성 |
 | fe-layout-builder | 구현 | 재사용 Layout primitive 생성 |
 | fe-feature-builder | 구현 | Feature 컴포넌트 생성 |

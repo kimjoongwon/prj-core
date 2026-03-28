@@ -75,6 +75,7 @@ planning = [
   "req-context-planner",
   "req-screen-planner",
   "req-page-planner",
+  "req-columns-planner",
   "req-api-planner",
   "req-feature-planner",
   "req-widget-planner",
@@ -83,6 +84,7 @@ planning = [
 implementation = [
   "fe-ui-page-builder",
   "fe-page-builder",
+  "fe-columns-builder",
   "fe-feature-builder",
   "fe-widget-builder",
   "fe-display-component-builder",
@@ -297,6 +299,10 @@ config_file = "agents/req-app-planner.toml"
 [agents.req-cell-planner]
 description = "DataGrid/Table Cell sidecar spec을 기획하는 전문가"
 config_file = "agents/req-cell-planner.toml"
+
+[agents.req-columns-planner]
+description = "packages/fe-ui/src/columns 레이어 계약과 MetaDataGrid/cell 경계를 기획하는 전문가"
+config_file = "agents/req-columns-planner.toml"
 
 [agents.req-context-planner]
 description = "시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 레이어를 기획하는 전문가"

@@ -7,7 +7,7 @@ const navigateToFirstAccountDetail = async (
 	await page.goto("/accounts");
 	await page.waitForLoadState("domcontentloaded");
 
-	const detailLink = page.locator('a[aria-label="상세 보기"]').first();
+	const detailLink = page.locator('a[href^="/accounts/"]').first();
 	await expect(detailLink).toBeVisible({ timeout: 10000 });
 
 	const href = await detailLink.getAttribute("href");

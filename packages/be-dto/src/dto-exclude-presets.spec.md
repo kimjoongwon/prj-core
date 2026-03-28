@@ -20,6 +20,11 @@
 |------|------|
 | ./action.dto | 기능 구현 의존성 |
 
+## 주요 규칙
+
+- `ActionExcludePresets.LIST`는 Action 목록 그리드가 사용하는 `isSystem`을 제외하지 않습니다.
+- `ActionExcludePresets.SUMMARY`만 시스템 여부를 포함하지 않는 요약 응답 용도로 유지합니다.
+
 ## 구현 체크리스트
 
 - [ ] 핵심 입출력/반환 규약이 코드와 일치함
@@ -29,4 +34,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | Action 목록 응답에서 시스템 여부 컬럼을 렌더링할 수 있도록 `LIST` preset에서 `isSystem` 제외를 제거 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
