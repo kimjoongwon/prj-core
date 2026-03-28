@@ -1,7 +1,7 @@
 # IdpLogin Feature 기획서
 
 > 생성일: 2026-02-18
-> 수정일: 2026-03-23
+> 수정일: 2026-03-28
 > 타입: feature
 > 위치: packages/fe-ui/src/feature/idp/IdpLogin/
 
@@ -62,7 +62,7 @@ interface IdpLoginProps {
   uid: string;
   client?: {
     clientId: string;
-    clientName: string;
+    name: string;
     logoUri?: string;
   } | null;
   isDev?: boolean;
@@ -86,13 +86,14 @@ interface IdpLoginProps {
 
 - [ ] feature가 route shell이나 배경 wrapper를 직접 소유하지 않음
 - [ ] 로그인 성공/실패/중단 redirect 흐름이 유지됨
-- [ ] `clientName`, `logoUri`, `isDev`가 UI 우선순위에 맞게 노출됨
+- [ ] `name`, `logoUri`, `isDev`가 UI 우선순위에 맞게 노출됨
 - [ ] 보조 액션이 primary CTA보다 과하게 강조되지 않음
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-03-26 | 비교 대상 `LoginPage` 경로를 page 폴더 규칙에 맞게 갱신 | codex |
 | 2026-03-23 | 로그인 UX 재기획에 맞춰 feature 책임을 API orchestration으로 재정의하고 shell/폼 책임 분리를 명시 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |

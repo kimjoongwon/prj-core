@@ -4,7 +4,7 @@ import { DirectPrismaProvider } from "./direct-prisma.provider";
 export interface OidcClientData {
 	clientId: string;
 	clientSecret: string | null;
-	clientName: string;
+	name: string;
 	redirectUris: string[];
 	grantTypes: string[];
 	responseTypes: string[];
@@ -41,7 +41,7 @@ export class OidcClientRepository {
 		return clients.map((client) => ({
 			clientId: client.clientId,
 			clientSecret: client.clientSecret,
-			clientName: client.clientName,
+			name: client.name,
 			redirectUris: client.redirectUris,
 			grantTypes: client.grantTypes,
 			responseTypes: client.responseTypes,
@@ -63,7 +63,7 @@ export class OidcClientRepository {
 		return {
 			clientId: client.clientId,
 			clientSecret: client.clientSecret,
-			clientName: client.clientName,
+			name: client.name,
 			redirectUris: client.redirectUris,
 			grantTypes: client.grantTypes,
 			responseTypes: client.responseTypes,

@@ -1,7 +1,7 @@
 # Interaction Service 기획서
 
 > 생성일: 2026-02-19
-> 수정일: 2026-03-13
+> 수정일: 2026-03-28
 > 타입: service
 > 위치: apps/idp/api/src/module/interaction/interaction.service/index.ts
 
@@ -59,6 +59,11 @@ OIDC Interaction 흐름(로그인, 동의, 취소)의 비즈니스 로직을 담
 - 누락된 OIDC scope 및 resource scope를 Grant에 추가 후 저장
 - `mergeWithLastSubmission: true`로 기존 제출 내용과 병합
 
+### 클라이언트 표시명 정규화
+
+- `oidc-provider`의 `Client.find()` 결과는 등록 메타데이터 `client_name`을 camelCase한 `clientName`으로 노출합니다.
+- Interaction Service는 외부 경계의 `clientName`을 내부 응답 계약 `name`으로 정규화합니다.
+
 ### 인터랙션 취소
 
 - `error: "access_denied"`, `error_description: "End-User aborted interaction"` 반환
@@ -91,6 +96,8 @@ OIDC Interaction 흐름(로그인, 동의, 취소)의 비즈니스 로직을 담
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | oidc-provider 외부 경계의 `clientName`을 내부 `name`으로 정규화하도록 명시하고 legacy fallback을 제거 | codex |
+| 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-13 | `interaction.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |

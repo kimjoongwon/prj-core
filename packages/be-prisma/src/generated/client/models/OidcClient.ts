@@ -31,7 +31,7 @@ export type OidcClientMinAggregateOutputType = {
   removedAt: Date | null
   clientId: string | null
   clientSecret: string | null
-  clientName: string | null
+  name: string | null
   loginUrl: string | null
   defaultReturnTo: string | null
   tokenEndpointAuthMethod: string | null
@@ -49,7 +49,7 @@ export type OidcClientMaxAggregateOutputType = {
   removedAt: Date | null
   clientId: string | null
   clientSecret: string | null
-  clientName: string | null
+  name: string | null
   loginUrl: string | null
   defaultReturnTo: string | null
   tokenEndpointAuthMethod: string | null
@@ -67,7 +67,7 @@ export type OidcClientCountAggregateOutputType = {
   removedAt: number
   clientId: number
   clientSecret: number
-  clientName: number
+  name: number
   redirectUris: number
   loginUrl: number
   defaultReturnTo: number
@@ -90,7 +90,7 @@ export type OidcClientMinAggregateInputType = {
   removedAt?: true
   clientId?: true
   clientSecret?: true
-  clientName?: true
+  name?: true
   loginUrl?: true
   defaultReturnTo?: true
   tokenEndpointAuthMethod?: true
@@ -108,7 +108,7 @@ export type OidcClientMaxAggregateInputType = {
   removedAt?: true
   clientId?: true
   clientSecret?: true
-  clientName?: true
+  name?: true
   loginUrl?: true
   defaultReturnTo?: true
   tokenEndpointAuthMethod?: true
@@ -126,7 +126,7 @@ export type OidcClientCountAggregateInputType = {
   removedAt?: true
   clientId?: true
   clientSecret?: true
-  clientName?: true
+  name?: true
   redirectUris?: true
   loginUrl?: true
   defaultReturnTo?: true
@@ -220,7 +220,7 @@ export type OidcClientGroupByOutputType = {
   removedAt: Date | null
   clientId: string
   clientSecret: string | null
-  clientName: string
+  name: string
   redirectUris: string[]
   loginUrl: string | null
   defaultReturnTo: string | null
@@ -262,7 +262,7 @@ export type OidcClientWhereInput = {
   removedAt?: Prisma.DateTimeNullableFilter<"OidcClient"> | Date | string | null
   clientId?: Prisma.StringFilter<"OidcClient"> | string
   clientSecret?: Prisma.StringNullableFilter<"OidcClient"> | string | null
-  clientName?: Prisma.StringFilter<"OidcClient"> | string
+  name?: Prisma.StringFilter<"OidcClient"> | string
   redirectUris?: Prisma.StringNullableListFilter<"OidcClient">
   loginUrl?: Prisma.StringNullableFilter<"OidcClient"> | string | null
   defaultReturnTo?: Prisma.StringNullableFilter<"OidcClient"> | string | null
@@ -283,7 +283,7 @@ export type OidcClientOrderByWithRelationInput = {
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   clientId?: Prisma.SortOrder
   clientSecret?: Prisma.SortOrderInput | Prisma.SortOrder
-  clientName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   redirectUris?: Prisma.SortOrder
   loginUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   defaultReturnTo?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -307,7 +307,7 @@ export type OidcClientWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeNullableFilter<"OidcClient"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"OidcClient"> | Date | string | null
   clientSecret?: Prisma.StringNullableFilter<"OidcClient"> | string | null
-  clientName?: Prisma.StringFilter<"OidcClient"> | string
+  name?: Prisma.StringFilter<"OidcClient"> | string
   redirectUris?: Prisma.StringNullableListFilter<"OidcClient">
   loginUrl?: Prisma.StringNullableFilter<"OidcClient"> | string | null
   defaultReturnTo?: Prisma.StringNullableFilter<"OidcClient"> | string | null
@@ -328,7 +328,7 @@ export type OidcClientOrderByWithAggregationInput = {
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   clientId?: Prisma.SortOrder
   clientSecret?: Prisma.SortOrderInput | Prisma.SortOrder
-  clientName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   redirectUris?: Prisma.SortOrder
   loginUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   defaultReturnTo?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -355,7 +355,7 @@ export type OidcClientScalarWhereWithAggregatesInput = {
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OidcClient"> | Date | string | null
   clientId?: Prisma.StringWithAggregatesFilter<"OidcClient"> | string
   clientSecret?: Prisma.StringNullableWithAggregatesFilter<"OidcClient"> | string | null
-  clientName?: Prisma.StringWithAggregatesFilter<"OidcClient"> | string
+  name?: Prisma.StringWithAggregatesFilter<"OidcClient"> | string
   redirectUris?: Prisma.StringNullableListFilter<"OidcClient">
   loginUrl?: Prisma.StringNullableWithAggregatesFilter<"OidcClient"> | string | null
   defaultReturnTo?: Prisma.StringNullableWithAggregatesFilter<"OidcClient"> | string | null
@@ -376,7 +376,7 @@ export type OidcClientCreateInput = {
   removedAt?: Date | string | null
   clientId: string
   clientSecret?: string | null
-  clientName: string
+  name: string
   redirectUris?: Prisma.OidcClientCreateredirectUrisInput | string[]
   loginUrl?: string | null
   defaultReturnTo?: string | null
@@ -397,7 +397,7 @@ export type OidcClientUncheckedCreateInput = {
   removedAt?: Date | string | null
   clientId: string
   clientSecret?: string | null
-  clientName: string
+  name: string
   redirectUris?: Prisma.OidcClientCreateredirectUrisInput | string[]
   loginUrl?: string | null
   defaultReturnTo?: string | null
@@ -418,7 +418,7 @@ export type OidcClientUpdateInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   clientSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   redirectUris?: Prisma.OidcClientUpdateredirectUrisInput | string[]
   loginUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultReturnTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -439,7 +439,7 @@ export type OidcClientUncheckedUpdateInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   clientSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   redirectUris?: Prisma.OidcClientUpdateredirectUrisInput | string[]
   loginUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultReturnTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -460,7 +460,7 @@ export type OidcClientCreateManyInput = {
   removedAt?: Date | string | null
   clientId: string
   clientSecret?: string | null
-  clientName: string
+  name: string
   redirectUris?: Prisma.OidcClientCreateredirectUrisInput | string[]
   loginUrl?: string | null
   defaultReturnTo?: string | null
@@ -481,7 +481,7 @@ export type OidcClientUpdateManyMutationInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   clientSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   redirectUris?: Prisma.OidcClientUpdateredirectUrisInput | string[]
   loginUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultReturnTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -502,7 +502,7 @@ export type OidcClientUncheckedUpdateManyInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   clientSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clientName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   redirectUris?: Prisma.OidcClientUpdateredirectUrisInput | string[]
   loginUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultReturnTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -523,7 +523,7 @@ export type OidcClientCountOrderByAggregateInput = {
   removedAt?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   clientSecret?: Prisma.SortOrder
-  clientName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   redirectUris?: Prisma.SortOrder
   loginUrl?: Prisma.SortOrder
   defaultReturnTo?: Prisma.SortOrder
@@ -544,7 +544,7 @@ export type OidcClientMaxOrderByAggregateInput = {
   removedAt?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   clientSecret?: Prisma.SortOrder
-  clientName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   loginUrl?: Prisma.SortOrder
   defaultReturnTo?: Prisma.SortOrder
   tokenEndpointAuthMethod?: Prisma.SortOrder
@@ -562,7 +562,7 @@ export type OidcClientMinOrderByAggregateInput = {
   removedAt?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   clientSecret?: Prisma.SortOrder
-  clientName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   loginUrl?: Prisma.SortOrder
   defaultReturnTo?: Prisma.SortOrder
   tokenEndpointAuthMethod?: Prisma.SortOrder
@@ -609,7 +609,7 @@ export type OidcClientSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   removedAt?: boolean
   clientId?: boolean
   clientSecret?: boolean
-  clientName?: boolean
+  name?: boolean
   redirectUris?: boolean
   loginUrl?: boolean
   defaultReturnTo?: boolean
@@ -630,7 +630,7 @@ export type OidcClientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   removedAt?: boolean
   clientId?: boolean
   clientSecret?: boolean
-  clientName?: boolean
+  name?: boolean
   redirectUris?: boolean
   loginUrl?: boolean
   defaultReturnTo?: boolean
@@ -651,7 +651,7 @@ export type OidcClientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   removedAt?: boolean
   clientId?: boolean
   clientSecret?: boolean
-  clientName?: boolean
+  name?: boolean
   redirectUris?: boolean
   loginUrl?: boolean
   defaultReturnTo?: boolean
@@ -672,7 +672,7 @@ export type OidcClientSelectScalar = {
   removedAt?: boolean
   clientId?: boolean
   clientSecret?: boolean
-  clientName?: boolean
+  name?: boolean
   redirectUris?: boolean
   loginUrl?: boolean
   defaultReturnTo?: boolean
@@ -686,7 +686,7 @@ export type OidcClientSelectScalar = {
   tosUri?: boolean
 }
 
-export type OidcClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "clientId" | "clientSecret" | "clientName" | "redirectUris" | "loginUrl" | "defaultReturnTo" | "grantTypes" | "responseTypes" | "tokenEndpointAuthMethod" | "scope" | "isActive" | "logoUri" | "policyUri" | "tosUri", ExtArgs["result"]["oidcClient"]>
+export type OidcClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "clientId" | "clientSecret" | "name" | "redirectUris" | "loginUrl" | "defaultReturnTo" | "grantTypes" | "responseTypes" | "tokenEndpointAuthMethod" | "scope" | "isActive" | "logoUri" | "policyUri" | "tosUri", ExtArgs["result"]["oidcClient"]>
 
 export type $OidcClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "OidcClient"
@@ -707,7 +707,7 @@ export type $OidcClientPayload<ExtArgs extends runtime.Types.Extensions.Internal
     /**
      * @displayName 클라이언트 이름
      */
-    clientName: string
+    name: string
     /**
      * @displayName 리다이렉트 URI 목록
      */
@@ -1181,7 +1181,7 @@ export interface OidcClientFieldRefs {
   readonly removedAt: Prisma.FieldRef<"OidcClient", 'DateTime'>
   readonly clientId: Prisma.FieldRef<"OidcClient", 'String'>
   readonly clientSecret: Prisma.FieldRef<"OidcClient", 'String'>
-  readonly clientName: Prisma.FieldRef<"OidcClient", 'String'>
+  readonly name: Prisma.FieldRef<"OidcClient", 'String'>
   readonly redirectUris: Prisma.FieldRef<"OidcClient", 'String[]'>
   readonly loginUrl: Prisma.FieldRef<"OidcClient", 'String'>
   readonly defaultReturnTo: Prisma.FieldRef<"OidcClient", 'String'>

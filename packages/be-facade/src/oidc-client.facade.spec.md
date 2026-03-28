@@ -30,5 +30,6 @@ OIDC 클라이언트 CRUD API의 controller boundary를 담당하고,
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-03-12 | 새 spec 생성 | codex |
 | 2026-03-13 | `@cocrepo/app`에서 `@cocrepo/facade`로 이관 | codex |

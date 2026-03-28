@@ -33,7 +33,7 @@ export class OidcClientFacade {
 		return this.oidcClientService.create({
 			clientId: dto.clientId,
 			clientSecret: dto.clientSecret,
-			clientName: dto.clientName,
+			name: dto.name,
 			redirectUris: dto.redirectUris,
 			loginUrl: dto.loginUrl,
 			defaultReturnTo: dto.defaultReturnTo,

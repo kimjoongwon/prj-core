@@ -183,7 +183,7 @@ export class InteractionController {
 				client: client
 					? {
 							clientId: client.clientId,
-							clientName: client.clientName,
+							name: client.name,
 							logoUri: client.logoUri,
 						}
 					: null,

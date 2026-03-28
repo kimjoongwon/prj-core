@@ -1,7 +1,7 @@
 # OidcClient Entity 기획서
 
 > 생성일: 2026-02-19
-> 수정일: 2026-02-19
+> 수정일: 2026-03-28
 > 타입: entity
 > 위치: packages/be-entity/src/oidc-client.entity.ts
 
@@ -19,7 +19,7 @@ OpenID Connect(OIDC) 클라이언트 애플리케이션 정보를 관리하는 �
 | removedAt | Date \| null | nullable | null | 소프트 삭제 일시 |
 | clientId | string | required, unique | - | OAuth2 클라이언트 ID |
 | clientSecret | string \| null | nullable | null | OAuth2 클라이언트 시크릿 (Public 클라이언트는 null) |
-| clientName | string | required | - | 클라이언트 애플리케이션 이름 |
+| name | string | required | - | 클라이언트 애플리케이션 이름 |
 | redirectUris | string[] | required | [] | 허용된 리다이렉트 URI 목록 |
 | grantTypes | string[] | required | [] | 허용된 Grant 유형 목록 |
 | responseTypes | string[] | required | [] | 허용된 응답 유형 목록 |
@@ -64,4 +64,5 @@ OpenID Connect(OIDC) 클라이언트 애플리케이션 정보를 관리하는 �
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |

@@ -15,7 +15,7 @@ export class InteractionClientDto {
 	clientId!: string;
 
 	@StringField({ description: "클라이언트 이름" })
-	clientName!: string;
+	name!: string;
 
 	@StringFieldOptional({ description: "로고 URI" })
 	logoUri?: string;

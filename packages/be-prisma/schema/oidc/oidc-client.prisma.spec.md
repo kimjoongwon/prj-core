@@ -18,8 +18,9 @@ OIDC 클라이언트 애플리케이션 등록 정보를 정의합니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | OIDC 클라이언트 이름 물리 컬럼을 `name`으로 정리하고 Prisma `@map("client_name")`를 제거 | codex |
+| 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-03-10 | 파일 대표 모델과 실제 aggregate root를 `@schema-owner: true` / `@aggregate-root: true`로 분리 | codex |
 | 2026-03-10 | 스키마 파일을 도메인 폴더 구조로 재배치하고 sidecar 위치 메타데이터를 갱신 | codex |
 | 2026-03-10 | 모델 주석 분류를 주 역할(`@schema-type`)과 보조 태그 체계로 개편 | codex |
 | 2026-03-09 | strict aggregate-root 분할 적용으로 oidc.prisma에서 클라이언트 도메인 분리 | codex |
-

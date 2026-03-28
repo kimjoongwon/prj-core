@@ -5,6 +5,7 @@ import type {
 	KoaLikeRequest,
 	KoaLikeResponse,
 	OidcClientInfo,
+	RawOidcProviderClient,
 } from "../../oidc/types";
 
 export interface InteractionViewData {
@@ -51,7 +52,20 @@ export class InteractionService {
 	 */
 	async findClient(clientId: string): Promise<OidcClientInfo | undefined> {
 		const provider = this.oidcProviderService.getProvider();
-		return provider.Client.find(clientId);
+		const client = await provider.Client.find(clientId);
+		return client ? this.normalizeClientInfo(client) : undefined;
+	}
+
+	private normalizeClientInfo(client: RawOidcProviderClient): OidcClientInfo {
+		return {
+			clientId: client.clientId,
+			name: this.resolveClientName(client),
+			logoUri: client.logoUri,
+		};
+	}
+
+	private resolveClientName(client: RawOidcProviderClient): string | undefined {
+		return client.clientName;
 	}
 
 	/**

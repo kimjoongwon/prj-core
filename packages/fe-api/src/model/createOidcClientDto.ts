@@ -23,7 +23,7 @@ export interface CreateOidcClientDto {
 	 * 클라이언트 이름
 	 * @maxLength 128
 	 */
-	clientName: string;
+	name: string;
 	/** 리다이렉트 URI 목록 */
 	redirectUris: string[];
 	/** 로그인 셸 URL */

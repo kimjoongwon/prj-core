@@ -491,7 +491,7 @@ async function syncOidcClients(db: DbClient): Promise<void> {
 			where: { clientId: clientData.clientId },
 			update: {
 				clientSecret: clientData.clientSecret,
-				clientName: clientData.clientName,
+				name: clientData.name,
 				redirectUris: clientData.redirectUris,
 				loginUrl: clientData.loginUrl ?? null,
 				defaultReturnTo: clientData.defaultReturnTo ?? null,
@@ -508,7 +508,7 @@ async function syncOidcClients(db: DbClient): Promise<void> {
 			create: {
 				clientId: clientData.clientId,
 				clientSecret: clientData.clientSecret,
-				clientName: clientData.clientName,
+				name: clientData.name,
 				redirectUris: clientData.redirectUris,
 				loginUrl: clientData.loginUrl ?? null,
 				defaultReturnTo: clientData.defaultReturnTo ?? null,

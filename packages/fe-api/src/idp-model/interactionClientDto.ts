@@ -16,7 +16,7 @@ export interface InteractionClientDto {
 	/** 클라이언트 ID */
 	clientId: string;
 	/** 클라이언트 이름 */
-	clientName: string;
+	name: string;
 	/** 로고 URI */
 	logoUri?: string;
 }

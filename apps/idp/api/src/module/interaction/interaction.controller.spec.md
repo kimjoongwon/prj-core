@@ -1,7 +1,7 @@
 # Interaction Controller 기획서
 
 > 생성일: 2026-02-19
-> 수정일: 2026-03-13
+> 수정일: 2026-03-28
 > 타입: controller
 > 위치: apps/idp/api/src/module/interaction/interaction.controller.ts
 
@@ -61,6 +61,7 @@ OIDC Authorization Code Flow에서 사용자와의 상호작용(로그인, 동�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-13 | InteractionController가 InteractionService 대신 InteractionFacade 주입으로 변경 | codex |

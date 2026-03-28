@@ -31,7 +31,7 @@ function OidcClientEditPage() {
 }
 
 interface OidcClientEditFormState {
-	clientName: string;
+	name: string;
 	clientSecret: string;
 	isPublic: boolean;
 	tokenEndpointAuthMethod: string;
@@ -80,7 +80,7 @@ function OidcClientEditPageClient({
 
 	const state = useLocalObservable<OidcClientEditFormState>(() => ({
 		clientId: "",
-		clientName: "",
+		name: "",
 		clientSecret: "",
 		isPublic: false,
 		tokenEndpointAuthMethod: "client_secret_basic",
@@ -101,7 +101,7 @@ function OidcClientEditPageClient({
 	// 기존 데이터로 폼 초기화
 	useEffect(() => {
 		if (client && !state.isInitialized) {
-			state.clientName = client.clientName;
+			state.name = client.name;
 			state.clientSecret = client.clientSecret || "";
 			state.tokenEndpointAuthMethod = client.tokenEndpointAuthMethod;
 			state.grantTypes = [...client.grantTypes];
@@ -125,8 +125,8 @@ function OidcClientEditPageClient({
 		const redirectUriErrors: Record<number, string> = {};
 		let isValid = true;
 
-		if (!state.clientName.trim()) {
-			errors.clientName = "이름을 입력해주세요.";
+		if (!state.name.trim()) {
+			errors.name = "이름을 입력해주세요.";
 			isValid = false;
 		}
 
@@ -178,7 +178,7 @@ function OidcClientEditPageClient({
 		updateClient({
 			oidcClientId,
 			data: {
-				clientName: state.clientName,
+				name: state.name,
 				clientSecret: isPublic ? undefined : state.clientSecret || undefined,
 				tokenEndpointAuthMethod: state.tokenEndpointAuthMethod,
 				grantTypes: state.grantTypes,

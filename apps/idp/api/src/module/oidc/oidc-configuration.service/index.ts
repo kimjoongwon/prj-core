@@ -132,7 +132,7 @@ export class OidcConfigurationService {
 			return clients.map((client) => ({
 				client_id: client.clientId,
 				client_secret: client.clientSecret || undefined,
-				client_name: client.clientName,
+				client_name: client.name,
 				redirect_uris: client.redirectUris,
 				grant_types: client.grantTypes,
 				response_types: client.responseTypes,

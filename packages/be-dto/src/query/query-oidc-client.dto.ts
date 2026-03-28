@@ -22,7 +22,7 @@ export class QueryOidcClientDto extends PrismaQueryDto<Prisma.OidcClientWhereInp
 		if (this.search) {
 			autoWhere.OR = [
 				{ clientId: { contains: this.search, mode: "insensitive" } },
-				{ clientName: { contains: this.search, mode: "insensitive" } },
+				{ name: { contains: this.search, mode: "insensitive" } },
 			];
 		}
 

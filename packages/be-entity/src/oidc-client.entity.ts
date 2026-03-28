@@ -5,7 +5,7 @@ import { AbstractEntity } from "./abstract.entity";
 export class OidcClient extends AbstractEntity implements OidcClientEntity {
 	clientId!: string;
 	clientSecret!: string | null;
-	clientName!: string;
+	name!: string;
 	redirectUris!: string[];
 	loginUrl!: string | null;
 	defaultReturnTo!: string | null;

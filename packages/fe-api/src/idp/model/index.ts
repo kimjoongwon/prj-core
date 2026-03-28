@@ -60,6 +60,7 @@ export * from './interactionDataDtoSession';
 export * from './invalidateUserSessions200AllOf';
 export * from './loginErrorDto';
 export * from './loginParams';
+export * from './loginRecoveryActionDto';
 export * from './loginSuccessDto';
 export * from './loginTrendItemDto';
 export * from './oidcCallbackParams';

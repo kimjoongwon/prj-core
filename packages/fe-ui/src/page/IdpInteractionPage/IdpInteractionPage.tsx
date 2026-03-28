@@ -13,7 +13,7 @@ import { AuthCard, AuthCardHeader } from "../../widget";
 
 export interface IdpInteractionClientInfo {
 	clientId: string;
-	clientName: string;
+	name: string;
 	logoUri?: string;
 }
 

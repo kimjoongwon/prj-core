@@ -20,7 +20,7 @@ export class OidcClientDto extends AbstractDto implements OidcClient {
 	clientSecret: string | null;
 
 	@StringField({ description: "클라이언트 이름", maxLength: 128 })
-	clientName: string;
+	name: string;
 
 	@StringField({
 		description: "리다이렉트 URI 목록",

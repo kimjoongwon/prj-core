@@ -36,7 +36,7 @@ function OidcClientNewPageClient() {
 
 	const state = useLocalObservable<OidcClientFormState>(() => ({
 		clientId: "",
-		clientName: "",
+		name: "",
 		clientSecret: "",
 		isPublic: false,
 		tokenEndpointAuthMethod: "client_secret_basic",
@@ -67,8 +67,8 @@ function OidcClientNewPageClient() {
 			isValid = false;
 		}
 
-		if (!state.clientName.trim()) {
-			errors.clientName = "이름을 입력해주세요.";
+		if (!state.name.trim()) {
+			errors.name = "이름을 입력해주세요.";
 			isValid = false;
 		}
 
@@ -121,7 +121,7 @@ function OidcClientNewPageClient() {
 		createClient({
 			data: {
 				clientId: state.clientId,
-				clientName: state.clientName,
+				name: state.name,
 				clientSecret: state.isPublic ? undefined : state.clientSecret,
 				tokenEndpointAuthMethod: state.tokenEndpointAuthMethod,
 				grantTypes: state.grantTypes,

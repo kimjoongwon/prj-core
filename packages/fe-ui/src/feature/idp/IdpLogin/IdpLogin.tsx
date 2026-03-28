@@ -17,7 +17,7 @@ export interface IdpLoginProps {
 	/** 클라이언트 정보 */
 	client?: {
 		clientId: string;
-		clientName: string;
+		name: string;
 		logoUri?: string;
 	} | null;
 	/** DEV 모드 여부 */

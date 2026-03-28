@@ -36,7 +36,7 @@ function buildOidcClient(
 		id: `${clientId}-db-id`,
 		clientId,
 		clientSecret: `${clientId}-secret`,
-		clientName: `${clientId} app`,
+		name: `${clientId} app`,
 		redirectUris: [
 			overrides.redirectUri ||
 				`http://localhost:3000/api/v1/auth/callback?clientId=${clientId}`,

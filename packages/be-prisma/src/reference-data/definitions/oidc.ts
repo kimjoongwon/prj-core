@@ -11,7 +11,7 @@
 export interface OidcClientSeedData {
 	clientId: string;
 	clientSecret: string | null;
-	clientName: string;
+	name: string;
 	redirectUris: string[];
 	loginUrl?: string | null;
 	defaultReturnTo?: string | null;
@@ -95,7 +95,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 	{
 		clientId: "admin-web",
 		clientSecret: oidcAdminClientSecret,
-		clientName: "Admin Web",
+		name: "Admin Web",
 		redirectUris: [oidcAdminRedirectUri],
 		loginUrl: oidcAdminLoginUrl,
 		defaultReturnTo: oidcAdminDefaultReturnTo,
@@ -111,7 +111,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 	{
 		clientId: "storybook",
 		clientSecret: oidcStorybookClientSecret,
-		clientName: "PRJ Core Storybook",
+		name: "PRJ Core Storybook",
 		redirectUris: [oidcStorybookRedirectUri],
 		loginUrl: oidcStorybookLoginUrl,
 		defaultReturnTo: oidcStorybookDefaultReturnTo,
@@ -127,7 +127,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 	{
 		clientId: "prj-core-mobile",
 		clientSecret: null, // Public client (PKCE required)
-		clientName: "PRJ Core Mobile App",
+		name: "PRJ Core Mobile App",
 		redirectUris: [
 			"prjcore://auth/callback",
 			"exp://localhost:8081/--/auth/callback",
@@ -146,7 +146,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 	{
 		clientId: "idp-web",
 		clientSecret: oidcIdpWebClientSecret,
-		clientName: "IDP Web",
+		name: "IDP Web",
 		redirectUris: [oidcIdpWebRedirectUri],
 		loginUrl: oidcIdpWebLoginUrl,
 		defaultReturnTo: oidcIdpWebDefaultReturnTo,
@@ -162,7 +162,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 	{
 		clientId: "prj-core-swagger",
 		clientSecret: null,
-		clientName: "PRJ Core Swagger UI",
+		name: "PRJ Core Swagger UI",
 		redirectUris: [oidcSwaggerRedirectUri],
 		loginUrl: null,
 		defaultReturnTo: null,

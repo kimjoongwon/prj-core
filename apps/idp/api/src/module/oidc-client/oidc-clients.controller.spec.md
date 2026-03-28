@@ -1,7 +1,7 @@
 # OIDC Clients Controller 기획서
 
 > 생성일: 2026-02-19
-> 수정일: 2026-02-19
+> 수정일: 2026-03-28
 > 타입: controller
 > 위치: apps/idp/api/src/module/oidc-client/oidc-clients.controller.ts
 
@@ -43,7 +43,7 @@ OIDC 클라이언트(OAuth2 앱) 관리 CRUD API를 제공합니다. 관리자�
 - Client ID는 등록 후 수정 불가 (보안 정책)
 - 삭제는 소프트 삭제로 처리됨 (실제 데이터 유지)
 - 목록 조회는 페이지네이션 지원 (기본 skip=0, take=20)
-- `CreateOidcClientDto` 필드: clientId, clientSecret, clientName, redirectUris, grantTypes, responseTypes, tokenEndpointAuthMethod, scope, logoUri, policyUri, tosUri
+- `CreateOidcClientDto` 필드: clientId, clientSecret, name, redirectUris, grantTypes, responseTypes, tokenEndpointAuthMethod, scope, logoUri, policyUri, tosUri
 
 ## 의존성
 
@@ -62,6 +62,7 @@ OIDC 클라이언트(OAuth2 앱) 관리 CRUD API를 제공합니다. 관리자�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-12 | 컨트롤러 진입점을 `OidcClientService`로 정렬 | codex |

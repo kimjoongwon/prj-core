@@ -1,7 +1,7 @@
 # OIDC Configuration Service 기획서
 
 > 생성일: 2026-02-19
-> 수정일: 2026-03-03
+> 수정일: 2026-03-28
 > 타입: service
 > 위치: apps/idp/api/src/module/oidc/oidc-configuration.service/index.ts
 
@@ -88,6 +88,7 @@ oidc-provider 인스턴스 초기화에 필요한 전체 설정 객체(`OidcConf
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-03-25 | first-party callback path를 clientId 기반 generic route로 정리 | codex |
 | 2026-03-16 | Storybook fallback client 표시명을 clientId 기준으로 정리 | codex |
 | 2026-03-16 | Storybook fallback client 식별자를 `storybook`으로 단순화하고 관련 병합 규칙 설명을 갱신 | codex |

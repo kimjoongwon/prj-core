@@ -39,7 +39,7 @@ export interface OidcLoginFormProps {
 	/** 클라이언트 정보 */
 	client?: {
 		clientId: string;
-		clientName: string;
+		name: string;
 		logoUri?: string;
 	} | null;
 	/** DEV 모드 여부 */
@@ -133,11 +133,11 @@ export const OidcLoginForm = observer(
 					title="로그인"
 					subtitle={
 						client
-							? `${client.clientName}에서 예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.`
+							? `${client.name}에서 예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.`
 							: "예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요."
 					}
 					logoUri={client?.logoUri}
-					logoAlt={client?.clientName}
+					logoAlt={client?.name}
 				/>
 
 				{isDev && (

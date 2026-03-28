@@ -553,7 +553,7 @@ describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 						body: JSON.stringify({
 							clientId,
 							clientSecret: "e2e-secret-change-me",
-							clientName: `E2E Auth Shell ${suffix}`,
+							name: `E2E Auth Shell ${suffix}`,
 							redirectUris: [initialRedirectUri],
 							loginUrl: initialLoginUrl,
 							defaultReturnTo: "http://localhost:3100/dashboard",
@@ -590,7 +590,7 @@ describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 					{
 						method: "PATCH",
 						body: JSON.stringify({
-							clientName: `E2E Auth Shell Updated ${suffix}`,
+							name: `E2E Auth Shell Updated ${suffix}`,
 							redirectUris: [updatedRedirectUri],
 							loginUrl: updatedLoginUrl,
 							defaultReturnTo: "http://localhost:3200/dashboard",

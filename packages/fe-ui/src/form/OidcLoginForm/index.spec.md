@@ -1,7 +1,7 @@
 # OidcLoginForm Widget 기획서
 
 > 생성일: 2026-02-18
-> 수정일: 2026-03-23
+> 수정일: 2026-03-28
 > 타입: widget
 > 위치: packages/fe-ui/src/form/OidcLoginForm/
 
@@ -91,7 +91,7 @@ interface OidcLoginFormProps {
   onAbort: () => void;
   client?: {
     clientId: string;
-    clientName: string;
+    name: string;
     logoUri?: string;
   } | null;
   isDev?: boolean;
@@ -131,7 +131,7 @@ interface LoginErrorResponse {
 - 실패 후에도 `email` 값은 유지하고 focus만 적절히 복원합니다.
 - 일반 로그인 실패는 잔여 시도 횟수를 함께 보여주되, 공포를 유발하는 문구는 사용하지 않습니다.
 - 잠금 상태에서는 비밀번호 재설정 CTA를 banner 안에 직접 노출합니다.
-- `clientName`이 없으면 "계정으로 계속 진행합니다" 수준의 중립 카피를 사용합니다.
+- `name`이 없으면 "계정으로 계속 진행합니다" 수준의 중립 카피를 사용합니다.
 - `logoUri`가 있으면 아이콘보다 우선합니다.
 - 취소 액션은 text link로 두고 버튼 그룹에 넣지 않습니다.
 
@@ -150,6 +150,7 @@ interface LoginErrorResponse {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-03-26 | 비교 대상 `LoginPage` 경로를 page 폴더 규칙에 맞게 갱신 | codex |
 | 2026-03-23 | 로그인 UX 재기획에 맞춰 shell 책임 제거, 재사용 판단, 상태별 복구 UX 기준을 문서화 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |

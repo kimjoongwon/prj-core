@@ -20,7 +20,7 @@ import { VStack } from "../../rhythm/VStack/VStack";
 /** 폼 상태 인터페이스 */
 export interface OidcClientFormState {
 	clientId: string;
-	clientName: string;
+	name: string;
 	clientSecret: string;
 	isPublic: boolean;
 	tokenEndpointAuthMethod: string;
@@ -128,12 +128,12 @@ export const OidcClientForm = observer(
 						<Input
 							label="이름"
 							placeholder="My Application"
-							value={state.clientName}
+							value={state.name}
 							onValueChange={(v) => {
-								state.clientName = v;
+								state.name = v;
 							}}
-							isInvalid={!!state.errors.clientName}
-							errorMessage={state.errors.clientName}
+							isInvalid={!!state.errors.name}
+							errorMessage={state.errors.name}
 							isRequired
 						/>
 						<div className="space-y-2">

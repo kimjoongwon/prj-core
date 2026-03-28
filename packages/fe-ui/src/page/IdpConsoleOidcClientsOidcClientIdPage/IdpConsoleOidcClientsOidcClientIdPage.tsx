@@ -137,7 +137,7 @@ function OidcClientDetailPageClient({
 				<PageTitleBar
 					title={client.clientId || "OIDC 클라이언트 상세"}
 					description={
-						client.clientName || "등록된 OIDC 클라이언트 설정을 확인합니다."
+						client.name || "등록된 OIDC 클라이언트 설정을 확인합니다."
 					}
 					actions={
 						<div className="flex gap-2">
@@ -203,7 +203,7 @@ function OidcClientDetailPageClient({
 								</div>
 								<div>
 									<dt className="text-sm text-default-500 mb-1">이름</dt>
-									<dd>{client.clientName}</dd>
+									<dd>{client.name}</dd>
 								</div>
 								<div>
 									<dt className="text-sm text-default-500 mb-1">활성 상태</dt>

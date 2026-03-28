@@ -20,7 +20,7 @@ export interface OidcConsentPanelProps {
 	/** 클라이언트 정보 */
 	client?: {
 		clientId: string;
-		clientName: string;
+		name: string;
 		logoUri?: string;
 	} | null;
 	/** 요청된 스코프 목록 */
@@ -56,10 +56,10 @@ export const OidcConsentPanel = observer(
 				<AuthCardHeader
 					iconPath="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
 					iconGradient="from-success to-secondary"
-					title={client?.clientName || "애플리케이션"}
+					title={client?.name || "애플리케이션"}
 					subtitle="서비스 연동을 위해 아래 접근 권한을 확인해 주세요"
 					logoUri={client?.logoUri}
-					logoAlt={client?.clientName}
+					logoAlt={client?.name}
 				/>
 
 				{/* 에러 메시지 */}
@@ -120,7 +120,7 @@ export const OidcConsentPanel = observer(
 				{/* 개인정보 안내 */}
 				<p className="text-center text-default-400 text-xs mt-6">
 					허용하면 예약 조회와 계정 연동에 필요한 정보가{" "}
-					{client?.clientName || "애플리케이션"}과(와) 공유됩니다.
+					{client?.name || "애플리케이션"}과(와) 공유됩니다.
 				</p>
 			</AuthCard>
 		);

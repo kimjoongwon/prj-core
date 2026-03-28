@@ -813,7 +813,7 @@ export const OidcClientScalarFieldEnum = {
   removedAt: 'removedAt',
   clientId: 'clientId',
   clientSecret: 'clientSecret',
-  clientName: 'clientName',
+  name: 'name',
   redirectUris: 'redirectUris',
   loginUrl: 'loginUrl',
   defaultReturnTo: 'defaultReturnTo',

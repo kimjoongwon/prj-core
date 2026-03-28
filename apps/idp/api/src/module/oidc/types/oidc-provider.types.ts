@@ -103,6 +103,13 @@ export interface Grant {
 
 export interface OidcClientInfo {
 	clientId: string;
+	name?: string;
+	logoUri?: string;
+	[key: string]: unknown;
+}
+
+export interface RawOidcProviderClient {
+	clientId: string;
 	clientName?: string;
 	logoUri?: string;
 	[key: string]: unknown;
@@ -135,7 +142,7 @@ export interface OidcProviderInstance {
 		options?: { mergeWithLastSubmission?: boolean },
 	) => Promise<string>;
 	Client: {
-		find: (clientId: string) => Promise<OidcClientInfo | undefined>;
+		find: (clientId: string) => Promise<RawOidcProviderClient | undefined>;
 	};
 	Grant: {
 		new (options: { accountId: string; clientId: string }): Grant;

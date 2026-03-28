@@ -66,7 +66,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * IDP의 OIDC Authorization 엔드포인트로 리다이렉트합니다. returnTo 파라미터로 인증 완료 후 리다이렉트할 경로를 지정할 수 있습니다.
+ * 지정한 OIDC clientId 기준으로 IDP Authorization 엔드포인트로 리다이렉트합니다. returnTo 파라미터로 인증 완료 후 복귀 경로를 지정할 수 있습니다.
  * @summary OIDC 로그인 리다이렉트
  */
 export const login = (
@@ -304,7 +304,7 @@ export const prefetchLoginInfiniteQuery = async <TData = Awaited<ReturnType<type
 
 
 /**
- * IDP에서 인증 완료 후 Authorization Code를 수신하여 토큰을 교환하고 대시보드로 리다이렉트합니다.
+ * IDP에서 인증 완료 후 Authorization Code를 수신하여 토큰을 교환하고 등록된 기본 복귀 URL 또는 returnTo로 리다이렉트합니다.
  * @summary OIDC 콜백
  */
 export const oidcCallback = (

@@ -13,7 +13,7 @@ export interface IdpConsentProps {
 	/** 클라이언트 정보 */
 	client?: {
 		clientId: string;
-		clientName: string;
+		name: string;
 		logoUri?: string;
 	} | null;
 	/** 요청된 스코프 목록 */

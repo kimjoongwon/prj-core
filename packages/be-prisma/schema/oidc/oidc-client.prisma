@@ -19,7 +19,7 @@ model OidcClient {
   /// @displayName 클라이언트 시크릿
   clientSecret            String?   @map("client_secret")
   /// @displayName 클라이언트 이름
-  clientName              String    @map("client_name")
+  name                    String
   /// @displayName 리다이렉트 URI 목록
   redirectUris            String[]  @map("redirect_uris")
   /// @displayName 로그인 셸 URL

@@ -11,10 +11,15 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
+import type { LoginRecoveryActionDto } from './loginRecoveryActionDto';
 
 export interface LoginErrorDto {
   /** 에러 코드 */
   error: string;
+  /** 사용자 표시 메시지 */
+  displayMessage?: string;
+  /** 추가 안내 문구 */
+  hint?: string;
   /** 남은 시도 횟수 */
   remainingAttempts?: number;
   /** 잠금 해제 시간 (ISO 8601) */
@@ -23,4 +28,6 @@ export interface LoginErrorDto {
   temporaryLockThreshold?: number;
   /** 임시 잠금 시간 (분) */
   temporaryLockDurationMin?: number;
+  /** 사용 가능한 복구 액션 */
+  recoveryActions?: LoginRecoveryActionDto[];
 }

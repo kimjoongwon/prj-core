@@ -1,7 +1,7 @@
 # OidcClients Service 기획서
 
 > 생성일: 2026-02-19
-> 수정일: 2026-02-19
+> 수정일: 2026-03-28
 > 타입: service
 > 위치: packages/be-service/src/oidc-client.service/index.ts
 
@@ -39,7 +39,7 @@ OIDC(OpenID Connect) 클라이언트 애플리케이션을 관리합니다.
 |------|------|------|
 | clientId | 필수 | OIDC 클라이언트 ID |
 | clientSecret | 선택 | 클라이언트 시크릿 |
-| clientName | 필수 | 표시 이름 |
+| name | 필수 | 표시 이름 |
 | redirectUris | 필수 | 허용된 리다이렉트 URI 목록 |
 | grantTypes | 필수 | 허용된 grant type 목록 |
 | responseTypes | 필수 | 허용된 response type 목록 |
@@ -67,5 +67,6 @@ OIDC(OpenID Connect) 클라이언트 애플리케이션을 관리합니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-13 | `oidc-client.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |

@@ -46,7 +46,7 @@ export class OidcClientService {
 	async create(params: {
 		clientId: string;
 		clientSecret?: string | null;
-		clientName: string;
+		name: string;
 		redirectUris: string[];
 		loginUrl?: string | null;
 		defaultReturnTo?: string | null;
@@ -68,7 +68,7 @@ export class OidcClientService {
 		return this.repository.create({
 			clientId: params.clientId,
 			clientSecret: params.clientSecret ?? null,
-			clientName: params.clientName,
+			name: params.name,
 			redirectUris: params.redirectUris,
 			loginUrl: params.loginUrl ?? null,
 			defaultReturnTo: params.defaultReturnTo ?? null,
@@ -87,7 +87,7 @@ export class OidcClientService {
 		id: string,
 		params: {
 			clientSecret?: string | null;
-			clientName?: string;
+			name?: string;
 			redirectUris?: string[];
 			loginUrl?: string | null;
 			defaultReturnTo?: string | null;
