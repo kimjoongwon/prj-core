@@ -2,12 +2,15 @@
 
 import { Button } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
+import { observer } from "mobx-react-lite";
 
 export interface UserEditPageProps {
 	onClickBackButton: () => void;
 }
 
-export function UserEditPage({ onClickBackButton }: UserEditPageProps) {
+export const UserEditPage = observer(function UserEditPage({
+	onClickBackButton,
+}: UserEditPageProps) {
 	return (
 		<div className="space-y-6">
 			<Button
@@ -24,4 +27,6 @@ export function UserEditPage({ onClickBackButton }: UserEditPageProps) {
 			</div>
 		</div>
 	);
-}
+});
+
+UserEditPage.displayName = "UserEditPage";

@@ -1,11 +1,6 @@
 "use client";
 
-import {
-	type InquiryDto,
-	type InquiryStatus,
-	useGetInquiriesSuspense,
-	useGetInquiryStatsSuspense,
-} from "@cocrepo/api/core/inquiries";
+import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
 import type { InputConfig } from "@cocrepo/type";
 import {
 	buildInquiryTableColumns,
@@ -15,17 +10,18 @@ import {
 	PageTitleBar,
 	type SLAStatus,
 	Surface,
-	useMetaDataGridQueryStates,
 	VStack,
 } from "@cocrepo/ui";
+import type {
+	InquiryCategoryCell,
+	InquiryChannelCell,
+	InquiryPriorityCell,
+	InquirySentimentCell,
+	InquiryStatusCell,
+} from "../../cell";
 import { Button } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { useRouter } from "next/navigation";
-import { Suspense } from "react";
-import { useHandlers } from "./hooks/useHandlers";
-
-const FILTERABLE_INQUIRY_STATUSES: InquiryStatus[] = ["NEW", "IN_PROGRESS"];
 
 const leftInputs: InputConfig[] = [
 	{
@@ -53,157 +49,46 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 
-const getNumberQueryValue = (value: unknown, fallback: number): number => {
-	return typeof value === "number" ? value : fallback;
-};
+export const adminInquiriesPageQueryInputs = [...leftInputs];
 
-const getSearchQueryValue = (value: unknown): string | undefined => {
-	if (typeof value !== "string") {
-		return undefined;
-	}
+export type AdminInquiriesPageQueryStates = ReturnType<
+	typeof useMetaDataGridQueryStates
+>[0];
+export type AdminInquiriesPageSetQueryStates = ReturnType<
+	typeof useMetaDataGridQueryStates
+>[1];
 
-	const trimmed = value.trim();
-	return trimmed.length > 0 ? trimmed : undefined;
-};
+export interface AdminInquiriesPageInquiry {
+	id: string;
+	title: string;
+	customerId: string;
+	customerName: string;
+	status: Parameters<typeof InquiryStatusCell>[0]["value"];
+	category: Parameters<typeof InquiryCategoryCell>[0]["value"];
+	channel: Parameters<typeof InquiryChannelCell>[0]["value"];
+	priority: Parameters<typeof InquiryPriorityCell>[0]["value"];
+	assigneeId?: string;
+	assigneeName?: string;
+	sentiment?: Parameters<typeof InquirySentimentCell>[0]["value"];
+	slaStatus?: SLAStatus;
+	slaRemainingMinutes?: number;
+	unreadCount: number;
+	createdAt: string;
+	updatedAt: string;
+}
 
-const getInquiryStatusFilter = (value: unknown): InquiryStatus | undefined => {
-	if (typeof value !== "string") {
-		return undefined;
-	}
-
-	return FILTERABLE_INQUIRY_STATUSES.includes(value as InquiryStatus)
-		? (value as InquiryStatus)
-		: undefined;
-};
-
-const getSlaStatus = (inquiry: InquiryDto): SLAStatus | undefined => {
-	if (inquiry.isSlaResponseBreached || inquiry.isSlaResolveBreached) {
-		return "breach";
-	}
-
-	if (!inquiry.slaResponseDue) {
-		return undefined;
-	}
-
-	const remainingMinutes = Math.floor(
-		(new Date(inquiry.slaResponseDue).getTime() - Date.now()) / 60000,
-	);
-
-	if (remainingMinutes <= 60) {
-		return "warning";
-	}
-
-	return "ok";
-};
-
-const getSlaRemainingMinutes = (inquiry: InquiryDto): number | undefined => {
-	if (!inquiry.slaResponseDue) {
-		return undefined;
-	}
-
-	return Math.floor(
-		(new Date(inquiry.slaResponseDue).getTime() - Date.now()) / 60000,
-	);
-};
-
-const mapInquiryRow = (inquiry: InquiryDto) => {
-	return {
-		id: inquiry.id,
-		title: inquiry.title,
-		customerId: inquiry.customerId ?? "-",
-		customerName: inquiry.customerId ?? "고객",
-		status: inquiry.status,
-		category: inquiry.category,
-		channel: inquiry.channel,
-		priority: inquiry.priority,
-		assigneeId: inquiry.assigneeId,
-		assigneeName: inquiry.assigneeId,
-		sentiment: inquiry.sentiment ?? undefined,
-		slaStatus: getSlaStatus(inquiry),
-		slaRemainingMinutes: getSlaRemainingMinutes(inquiry),
-		unreadCount: inquiry.unreadCount ?? 0,
-		createdAt: inquiry.createdAt,
-		updatedAt: inquiry.updatedAt,
-	};
-};
-
-const inquiryTableColumns =
-	buildInquiryTableColumns<ReturnType<typeof mapInquiryRow>>();
-
-const InquiriesPageContent = observer(function InquiriesPageContent({
-	queryStates,
-	setQueryStates,
-	activeStatus,
-	onClickInquiryRow,
-	onClickStatusFilter,
-}: {
-	queryStates: ReturnType<typeof useMetaDataGridQueryStates>[0];
-	setQueryStates: ReturnType<typeof useMetaDataGridQueryStates>[1];
+export interface AdminInquiriesPageProps {
+	inquiries: AdminInquiriesPageInquiry[];
+	totalCount: number;
+	stats: InquiryStats;
 	activeStatus?: string;
+	isLoading: boolean;
+	queryStates: AdminInquiriesPageQueryStates;
+	setQueryStates: AdminInquiriesPageSetQueryStates;
+	onClickNewInquiry: () => void;
 	onClickInquiryRow: (inquiryId: string) => void;
 	onClickStatusFilter: (status: string | undefined) => void;
-}) {
-	const take = getNumberQueryValue(queryStates.take, 20);
-	const skip = getNumberQueryValue(queryStates.skip, 0);
-	const search = getSearchQueryValue(queryStates.search);
-	const inquiryStatus = getInquiryStatusFilter(queryStates.inquiryStatus);
-
-	const { data: inquiriesResponse } = useGetInquiriesSuspense({
-		take,
-		skip,
-		search,
-		inquiryStatus,
-	});
-	const { data: statsResponse } = useGetInquiryStatsSuspense();
-
-	const inquiries = (inquiriesResponse?.data ?? []).map(mapInquiryRow);
-	const stats: InquiryStats = {
-		total: statsResponse?.data?.total ?? 0,
-		newCount: statsResponse?.data?.new ?? 0,
-		inProgress: statsResponse?.data?.inProgress ?? 0,
-		resolved: statsResponse?.data?.resolved ?? 0,
-		slaBreached: statsResponse?.data?.slaBreached ?? 0,
-	};
-	const totalCount = inquiriesResponse?.meta?.total ?? 0;
-
-	const onClickInquiryGridRow = (inquiry: ReturnType<typeof mapInquiryRow>) => {
-		onClickInquiryRow(inquiry.id);
-	};
-
-	return (
-		<VStack gap={4}>
-			<Surface className="rounded-2xl border-divider/80 bg-content1/70">
-				<div className="mb-4 border-b border-divider/80 pb-4">
-					<PageTitleBar level={2} title="문의 현황" />
-				</div>
-				<InquiryStatsCards
-					stats={stats}
-					activeStatus={activeStatus}
-					onStatusClick={onClickStatusFilter}
-				/>
-			</Surface>
-			<Surface className="rounded-2xl border-divider/80 bg-content1/70">
-				<div className="mb-4 border-b border-divider/80 pb-4">
-					<PageTitleBar level={2} title="문의 목록" />
-				</div>
-				<MetaDataGrid
-					config={{
-						entity: "Inquiry",
-						data: inquiries,
-						totalCount,
-						isLoading: false,
-						queryStates,
-						setQueryStates,
-						columns: inquiryTableColumns,
-						leftInputs,
-						onRowClick: onClickInquiryGridRow,
-						emptyMessage: "표시할 문의가 없습니다.",
-					}}
-				/>
-			</Surface>
-		</VStack>
-	);
-});
+}
 
 function InquiriesPageShellFallback() {
 	return (
@@ -215,65 +100,23 @@ function InquiriesPageShellFallback() {
 	);
 }
 
-const InquiriesContentFallback = observer(function InquiriesContentFallback({
+export const AdminInquiriesPage = observer(function AdminInquiriesPage({
+	inquiries,
+	totalCount,
+	stats,
+	activeStatus,
+	isLoading,
 	queryStates,
 	setQueryStates,
-	activeStatus,
+	onClickNewInquiry,
+	onClickInquiryRow,
 	onClickStatusFilter,
-}: {
-	queryStates: ReturnType<typeof useMetaDataGridQueryStates>[0];
-	setQueryStates: ReturnType<typeof useMetaDataGridQueryStates>[1];
-	activeStatus?: string;
-	onClickStatusFilter: (status: string | undefined) => void;
-}) {
-	return (
-		<VStack gap={4}>
-			<Surface className="rounded-2xl border-divider/80 bg-content1/70">
-				<div className="mb-4 border-b border-divider/80 pb-4">
-					<PageTitleBar level={2} title="문의 현황" />
-				</div>
-				<InquiryStatsCards
-					stats={{
-						total: 0,
-						newCount: 0,
-						inProgress: 0,
-						resolved: 0,
-						slaBreached: 0,
-					}}
-					activeStatus={activeStatus}
-					onStatusClick={onClickStatusFilter}
-				/>
-			</Surface>
-			<Surface className="rounded-2xl border-divider/80 bg-content1/70">
-				<div className="mb-4 border-b border-divider/80 pb-4">
-					<PageTitleBar level={2} title="문의 목록" />
-				</div>
-				<MetaDataGrid
-					config={{
-						entity: "Inquiry",
-						data: [],
-						totalCount: 0,
-						isLoading: true,
-						queryStates,
-						setQueryStates,
-						columns: inquiryTableColumns,
-						leftInputs,
-						emptyMessage: "표시할 문의가 없습니다.",
-					}}
-				/>
-			</Surface>
-		</VStack>
-	);
-});
+}: AdminInquiriesPageProps) {
+	const columns = buildInquiryTableColumns<AdminInquiriesPageInquiry>();
 
-const InquiriesPageInner = observer(function InquiriesPageInner() {
-	const router = useRouter();
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
-	const handlers = useHandlers({ router, setQueryStates });
-	const activeStatus =
-		typeof queryStates.inquiryStatus === "string"
-			? queryStates.inquiryStatus
-			: undefined;
+	if (isLoading) {
+		return <InquiriesPageShellFallback />;
+	}
 
 	return (
 		<div className="space-y-5">
@@ -284,39 +127,46 @@ const InquiriesPageInner = observer(function InquiriesPageInner() {
 					<Button
 						color="primary"
 						startContent={<Plus className="size-4" />}
-						onPress={handlers.onClickNewInquiry}
+						onPress={onClickNewInquiry}
 					>
 						문의 접수
 					</Button>
 				}
 			/>
-			<Suspense
-				fallback={
-					<InquiriesContentFallback
-						queryStates={queryStates}
-						setQueryStates={setQueryStates}
+			<VStack gap={4}>
+				<Surface className="rounded-2xl border-divider/80 bg-content1/70">
+					<div className="mb-4 border-b border-divider/80 pb-4">
+						<PageTitleBar level={2} title="문의 현황" />
+					</div>
+					<InquiryStatsCards
+						stats={stats}
 						activeStatus={activeStatus}
-						onClickStatusFilter={handlers.onClickStatusFilter}
+						onStatusClick={onClickStatusFilter}
 					/>
-				}
-			>
-				<InquiriesPageContent
-					queryStates={queryStates}
-					setQueryStates={setQueryStates}
-					activeStatus={activeStatus}
-					onClickInquiryRow={handlers.onClickInquiryRow}
-					onClickStatusFilter={handlers.onClickStatusFilter}
-				/>
-			</Suspense>
+				</Surface>
+				<Surface className="rounded-2xl border-divider/80 bg-content1/70">
+					<div className="mb-4 border-b border-divider/80 pb-4">
+						<PageTitleBar level={2} title="문의 목록" />
+					</div>
+					<MetaDataGrid
+						config={{
+							entity: "Inquiry",
+							data: inquiries,
+							totalCount,
+							isLoading: false,
+							queryStates,
+							setQueryStates,
+							columns,
+							leftInputs,
+							onRowClick: (inquiry) => {
+								onClickInquiryRow(inquiry.id);
+							},
+							emptyMessage: "표시할 문의가 없습니다.",
+						}}
+					/>
+				</Surface>
+			</VStack>
 		</div>
-	);
-});
-
-export const AdminInquiriesPage = observer(function InquiriesPage() {
-	return (
-		<Suspense fallback={<InquiriesPageShellFallback />}>
-			<InquiriesPageInner />
-		</Suspense>
 	);
 });
 

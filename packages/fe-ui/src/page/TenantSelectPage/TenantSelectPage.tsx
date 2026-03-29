@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	Button,
 	Listbox,
@@ -8,6 +10,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 
 import { useState } from "react";
 
@@ -42,10 +45,10 @@ export interface TenantSelectPageProps {
  * />
  * ```
  */
-export const TenantSelectPage = ({
+export const TenantSelectPage = observer(function TenantSelectPage({
 	tenants,
 	onSelect,
-}: TenantSelectPageProps) => {
+}: TenantSelectPageProps) {
 	const [selectedTenant, setSelectedTenant] = useState("");
 
 	const handleSelect = () => {
@@ -90,4 +93,6 @@ export const TenantSelectPage = ({
 			</ModalContent>
 		</Modal>
 	);
-};
+});
+
+TenantSelectPage.displayName = "TenantSelectPage";

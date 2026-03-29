@@ -1,26 +1,16 @@
 "use client";
 
-import {
-	type TemplateDto,
-	getGetTemplatesQueryKey,
-	useGetTemplatesSuspense,
-	useToggleTemplateStatus,
-} from "@cocrepo/api/core/templates";
-import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
+import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
+import type { InputConfig } from "@cocrepo/type";
 import {
 	buildTemplateTableColumns,
 	MetaDataGrid,
 	PageTitleBar,
 	Surface,
-	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
-import { addToast, Button } from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Suspense } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -33,55 +23,34 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 
-type TemplatesQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[0];
-type SetTemplatesQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[1];
+export const adminTemplatesPageQueryInputs = [...leftInputs];
 
-function getTemplatesParams(queryStates: TemplatesQueryStates) {
-	return {
-		take: queryStates.take,
-		skip: queryStates.skip,
-		search: queryStates.search || undefined,
-		isActive:
-			queryStates.isActive === "true"
-				? true
-				: queryStates.isActive === "false"
-					? false
-					: undefined,
-	};
+export type AdminTemplatesPageQueryStates = ReturnType<
+	typeof useMetaDataGridQueryStates
+>[0];
+export type AdminTemplatesPageSetQueryStates = ReturnType<
+	typeof useMetaDataGridQueryStates
+>[1];
+
+export interface AdminTemplatesPageTemplate {
+	id: string;
+	code: string;
+	name: string;
+	isActive: boolean;
+	createdAt: string | Date | null;
 }
 
-const TemplatesGridContent = observer(function TemplatesGridContent({
-	queryStates,
-	setQueryStates,
-	columns,
-}: {
-	queryStates: TemplatesQueryStates;
-	setQueryStates: SetTemplatesQueryStates;
-	columns: MetaDataGridColumnConfig<TemplateDto>[];
-}) {
-	const { data: response } = useGetTemplatesSuspense(
-		getTemplatesParams(queryStates),
-	);
-
-	const templates = (response?.data ?? []) as TemplateDto[];
-	const totalCount = response?.meta?.total ?? 0;
-
-	return (
-		<MetaDataGrid
-			config={{
-				entity: "Template",
-				data: templates,
-				totalCount,
-				isLoading: false,
-				queryStates,
-				setQueryStates,
-				columns,
-				leftInputs,
-				emptyMessage: "등록된 템플릿이 없습니다.",
-			}}
-		/>
-	);
-});
+export interface AdminTemplatesPageProps {
+	templates: AdminTemplatesPageTemplate[];
+	totalCount: number;
+	isLoading: boolean;
+	isToggling: boolean;
+	queryStates: AdminTemplatesPageQueryStates;
+	setQueryStates: AdminTemplatesPageSetQueryStates;
+	onClickCreateButton: () => void;
+	onClickTemplateCode: (templateId: string) => void;
+	onToggleTemplateStatusSwitch: (templateId: string) => Promise<void>;
+}
 
 function TemplatesPageFallback() {
 	return (
@@ -97,94 +66,56 @@ function TemplatesPageFallback() {
 	);
 }
 
-const TemplatesPageInner = observer(function TemplatesPageInner() {
-	const router = useRouter();
-	const queryClient = useQueryClient();
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
-	const toggleMutation = useToggleTemplateStatus();
-
-	const onToggleTemplateStatusSwitch = async (templateId: string) => {
-		try {
-			await toggleMutation.mutateAsync({ templateId });
-			await queryClient.invalidateQueries({
-				queryKey: getGetTemplatesQueryKey(),
-			});
-			addToast({
-				title: "상태 변경 완료",
-				description: "템플릿 활성 상태가 변경되었습니다.",
-				color: "success",
-			});
-		} catch {
-			addToast({
-				title: "상태 변경 실패",
-				description: "템플릿 상태 변경 중 오류가 발생했습니다.",
-				color: "danger",
-			});
-			throw new Error("토글 실패");
-		}
-	};
-
-	const onClickTemplateCode = (template: TemplateDto) => {
-		router.push(`/templates/${template.id}`);
-	};
-
-	const columns = buildTemplateTableColumns({
+export const AdminTemplatesPage = observer(function AdminTemplatesPage({
+	templates,
+	totalCount,
+	isLoading,
+	queryStates,
+	setQueryStates,
+	onClickCreateButton,
+	onClickTemplateCode,
+	onToggleTemplateStatusSwitch,
+}: AdminTemplatesPageProps) {
+	const columns = buildTemplateTableColumns<AdminTemplatesPageTemplate>({
 		onClickTemplateCode,
 		onToggleTemplateStatusSwitch,
 	});
 
-	const createTemplateButton = (
-		<Button
-			as={Link}
-			href="/templates/new"
-			color="primary"
-			startContent={<Plus className="h-4 w-4" />}
-		>
-			템플릿 등록
-		</Button>
-	);
+	if (isLoading) {
+		return <TemplatesPageFallback />;
+	}
 
 	return (
 		<div className="space-y-5">
 			<PageTitleBar
 				title="메시지 템플릿"
 				description="시스템에 등록된 메시지 템플릿을 관리합니다."
-				actions={createTemplateButton}
+				actions={
+					<Button
+						color="primary"
+						startContent={<Plus className="h-4 w-4" />}
+						onPress={onClickCreateButton}
+					>
+						템플릿 등록
+					</Button>
+				}
 			/>
 			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
-				<Suspense
-					fallback={
-						<MetaDataGrid
-							config={{
-								entity: "Template",
-								data: [],
-								totalCount: 0,
-								isLoading: true,
-								queryStates,
-								setQueryStates,
-								columns,
-								leftInputs,
-								emptyMessage: "등록된 템플릿이 없습니다.",
-							}}
-						/>
-					}
-				>
-					<TemplatesGridContent
-						queryStates={queryStates}
-						setQueryStates={setQueryStates}
-						columns={columns}
-					/>
-				</Suspense>
+				<MetaDataGrid
+					config={{
+						entity: "Template",
+						data: templates,
+						totalCount,
+						isLoading: false,
+						queryStates,
+						setQueryStates,
+						columns,
+						leftInputs,
+						emptyMessage: "등록된 템플릿이 없습니다.",
+					}}
+				/>
 			</Surface>
 		</div>
-	);
-});
-
-export const AdminTemplatesPage = observer(function TemplatesPage() {
-	return (
-		<Suspense fallback={<TemplatesPageFallback />}>
-			<TemplatesPageInner />
-		</Suspense>
 	);
 });
 

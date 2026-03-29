@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	Button,
 	Listbox,
@@ -8,6 +10,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 
 import { useState } from "react";
 
@@ -42,10 +45,10 @@ export interface GroundsSelectPageProps {
  * />
  * ```
  */
-export const GroundsSelectPage = ({
+export const GroundsSelectPage = observer(function GroundsSelectPage({
 	grounds,
 	onSelect,
-}: GroundsSelectPageProps) => {
+}: GroundsSelectPageProps) {
 	const [selectedGround, setSelectedGround] = useState("");
 
 	const handleSelect = () => {
@@ -90,4 +93,6 @@ export const GroundsSelectPage = ({
 			</ModalContent>
 		</Modal>
 	);
-};
+});
+
+GroundsSelectPage.displayName = "GroundsSelectPage";

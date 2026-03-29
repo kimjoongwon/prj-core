@@ -1,17 +1,21 @@
-# IdpConsoleDashboardPage page 기획서
+# IdpConsoleDashboardPage ui 기획서
 
 > 생성일: 2026-03-26
-> 타입: page
+> 타입: ui
 > 위치: packages/fe-ui/src/page/IdpConsoleDashboardPage/IdpConsoleDashboardPage.tsx
 
 ## 역할
 
-이 파일은 route thin wrapper가 재사용하는 page 레이어 화면 컴포넌트를 담당합니다.
+IDP 대시보드 화면의 pure page 컴포넌트입니다.
+통계와 로그인 추이 조회는 route thin container가 소유하고 이 파일은 detail shell 안의 시각 조합만 담당합니다.
 
 ## 공개 계약
 
 | 항목 | 설명 |
 |------|------|
+| IdpConsoleDashboardPageStats | 대시보드 통계 계약 |
+| IdpConsoleDashboardPageTrendItem | 최근 로그인 추이 row 계약 |
+| IdpConsoleDashboardPageProps | pure page 입력 계약 |
 | IdpConsoleDashboardPage | 공개 계약 요소 |
 | default export | 공개 계약 요소 |
 
@@ -19,7 +23,6 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/api/idp/idp-dashboard | 기능 구현 의존성 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
@@ -29,4 +32,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | IDP 대시보드를 pure page로 재정의하고 통계/추이 조회를 route thin container로 이동 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |

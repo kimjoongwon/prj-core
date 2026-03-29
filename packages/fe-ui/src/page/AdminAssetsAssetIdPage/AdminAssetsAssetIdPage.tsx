@@ -1,21 +1,12 @@
 "use client";
-import {
-	type AssetDto,
-	type FolderDto,
-	getGetAssetsQueryKey,
-	useGetAssetById,
-	useGetFolders,
-	useMoveAsset,
-	useRemoveAsset,
-} from "@cocrepo/api/assets";
 
 import {
 	DateTimeCell,
 	DetailPage,
 	DetailPageSurface,
-	PageTitleBar,
 	DetailSection,
 	DetailSectionCard,
+	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
 import {
@@ -26,18 +17,40 @@ import {
 	SelectItem,
 	Spinner,
 } from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, FolderInput, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import type { Route } from "next";
-import { useRouter, useParams } from "next/navigation";
 import { useState } from "react";
 
-interface AssetDetailPageClientProps {
-	assetId: string;
+export interface AdminAssetsAssetIdPageFolder {
+	id: string;
+	name: string;
 }
 
-const getKindLabel = (kind: AssetDto["kind"]) => {
+export interface AdminAssetsAssetIdPageAsset {
+	id: string;
+	originalName: string;
+	kind: "IMAGE" | "VIDEO" | "DOCUMENT";
+	status: "UPLOADING" | "READY" | "FAILED";
+	mimeType: string;
+	sizeBytes: number;
+	folderId: string;
+	createdAt: string;
+	storageKey: string;
+	checksum?: string | null;
+}
+
+export interface AdminAssetsAssetIdPageProps {
+	asset?: AdminAssetsAssetIdPageAsset;
+	folders: AdminAssetsAssetIdPageFolder[];
+	isLoading: boolean;
+	isRemoving: boolean;
+	isMoving: boolean;
+	onClickBackButton: () => void;
+	onClickDeleteAssetButton: () => Promise<void>;
+	onClickMoveAssetButton: (targetFolderId: string) => Promise<void>;
+}
+
+const getKindLabel = (kind: AdminAssetsAssetIdPageAsset["kind"]) => {
 	switch (kind) {
 		case "IMAGE":
 			return "이미지";
@@ -50,7 +63,7 @@ const getKindLabel = (kind: AssetDto["kind"]) => {
 	}
 };
 
-const getStatusLabel = (status: AssetDto["status"]) => {
+const getStatusLabel = (status: AdminAssetsAssetIdPageAsset["status"]) => {
 	switch (status) {
 		case "READY":
 			return "완료";
@@ -74,78 +87,19 @@ const formatBytes = (bytes: number) => {
 	return `${value.toFixed(exponent === 0 ? 0 : 1)} ${units[exponent]}`;
 };
 
-/**
- * 에셋 상세 페이지 - 클라이언트 컴포넌트
- */
-function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
-	const router = useRouter();
-	const queryClient = useQueryClient();
-
-	const { data: response, isLoading } = useGetAssetById(assetId);
-	const { data: folderResponse } = useGetFolders();
-
-	const asset = response?.data as AssetDto | undefined;
-	const folders = (folderResponse?.data ?? []) as FolderDto[];
+export const AdminAssetsAssetIdPage = observer(function AdminAssetsAssetIdPage({
+	asset,
+	folders,
+	isLoading,
+	isRemoving,
+	isMoving,
+	onClickBackButton,
+	onClickDeleteAssetButton,
+	onClickMoveAssetButton,
+}: AdminAssetsAssetIdPageProps) {
 	const [targetFolderId, setTargetFolderId] = useState<string>("");
 
-	const { mutate: removeAsset, isPending: isRemoving } = useRemoveAsset({
-		mutation: {
-			onSuccess: () => {
-				queryClient.invalidateQueries({
-					queryKey: getGetAssetsQueryKey(),
-				});
-				addToast({
-					title: "삭제 완료",
-					description: "에셋이 삭제되었습니다.",
-					color: "success",
-				});
-				router.push("/assets" as Route);
-			},
-			onError: () => {
-				addToast({
-					title: "삭제 실패",
-					description: "에셋 삭제 중 오류가 발생했습니다.",
-					color: "danger",
-				});
-			},
-		},
-	});
-
-	const { mutate: moveAsset, isPending: isMoving } = useMoveAsset({
-		mutation: {
-			onSuccess: () => {
-				queryClient.invalidateQueries({
-					queryKey: getGetAssetsQueryKey(),
-				});
-				queryClient.invalidateQueries({
-					queryKey: ["/api/v1/assets", assetId],
-				});
-				setTargetFolderId("");
-				addToast({
-					title: "이동 완료",
-					description: "에셋 폴더가 변경되었습니다.",
-					color: "success",
-				});
-			},
-			onError: () => {
-				addToast({
-					title: "이동 실패",
-					description: "폴더 이동 중 오류가 발생했습니다.",
-					color: "danger",
-				});
-			},
-		},
-	});
-
-	const onClickBackButton = () => {
-		router.push("/assets" as Route);
-	};
-
-	const onClickDeleteAssetButton = () => {
-		removeAsset({ assetId });
-	};
-
-	const onClickMoveAssetButton = () => {
+	const onSubmitMove = async () => {
 		if (!targetFolderId) {
 			addToast({
 				title: "대상 폴더 선택 필요",
@@ -155,15 +109,19 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 			return;
 		}
 
-		moveAsset({
-			assetId,
-			data: { targetFolderId },
-		});
+		try {
+			await onClickMoveAssetButton(targetFolderId);
+			setTargetFolderId("");
+		} catch {
+			return;
+		}
 	};
 
 	if (isLoading) {
 		return (
-			<DetailPage top={<PageTitleBar title="에셋 상세" description="로딩 중..." />}>
+			<DetailPage
+				top={<PageTitleBar title="에셋 상세" description="로딩 중..." />}
+			>
 				<DetailPageSurface>
 					<DetailSectionCard>
 						<div className="flex items-center justify-center p-10">
@@ -199,34 +157,34 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 		);
 	}
 
-	const pageActions = (
-		<div className="flex gap-2">
-			<Button
-				variant="light"
-				startContent={<ArrowLeft className="h-4 w-4" />}
-				onPress={onClickBackButton}
-			>
-				목록으로
-			</Button>
-			<Button
-				variant="flat"
-				color="danger"
-				isLoading={isRemoving}
-				startContent={<Trash2 className="h-4 w-4" />}
-				onPress={onClickDeleteAssetButton}
-			>
-				삭제
-			</Button>
-		</div>
-	);
-
 	return (
 		<DetailPage
 			top={
 				<PageTitleBar
 					title={asset.originalName ?? "에셋 상세"}
 					description="에셋 상세 정보"
-					actions={pageActions}
+					actions={
+						<div className="flex gap-2">
+							<Button
+								variant="light"
+								startContent={<ArrowLeft className="h-4 w-4" />}
+								onPress={onClickBackButton}
+							>
+								목록으로
+							</Button>
+							<Button
+								variant="flat"
+								color="danger"
+								isLoading={isRemoving}
+								startContent={<Trash2 className="h-4 w-4" />}
+								onPress={() => {
+									void onClickDeleteAssetButton();
+								}}
+							>
+								삭제
+							</Button>
+						</div>
+					}
 				/>
 			}
 		>
@@ -294,7 +252,7 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 										variant="flat"
 										isLoading={isMoving}
 										startContent={<FolderInput className="h-4 w-4" />}
-										onPress={onClickMoveAssetButton}
+										onPress={onSubmitMove}
 									>
 										이동
 									</Button>
@@ -303,7 +261,9 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 						</DetailSection>
 					</DetailSectionCard>
 					<DetailSectionCard>
-						<DetailSection top={<PageTitleBar level={2} title="스토리지 정보" />}>
+						<DetailSection
+							top={<PageTitleBar level={2} title="스토리지 정보" />}
+						>
 							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 								<Input
 									label="Storage Key"
@@ -322,13 +282,6 @@ function AssetDetailPageClient({ assetId }: AssetDetailPageClientProps) {
 			</DetailPageSurface>
 		</DetailPage>
 	);
-}
-
-const AssetDetailPage = observer(function AssetDetailPage() {
-	const params = useParams<{ assetId: string }>();
-	return <AssetDetailPageClient assetId={params.assetId} />;
 });
-
-export const AdminAssetsAssetIdPage = AssetDetailPage;
 
 export default AdminAssetsAssetIdPage;

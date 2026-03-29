@@ -34,6 +34,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | admin 목록 pure page용 query input / row / props export를 배럴에 추가하고 thin route container 소비 경로를 정리 | codex |
 | 2026-03-26 | route page pure page 이관 현황 문서(`migration-audit.md`) 참조 규칙 추가 | codex |
 | 2026-03-26 | page 계층 sidecar 파일을 동일 이름 폴더에 묶는 규칙과 새 배럴 경로를 반영 | codex |
 | 2026-03-25 | auth/root route용 page 컴포넌트 export를 추가 | codex |

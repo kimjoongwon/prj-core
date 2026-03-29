@@ -10,6 +10,7 @@ import {
 	Textarea,
 } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	FormPage,
 	FormPageSurface,
@@ -82,7 +83,9 @@ export type AbilityEditorPageProps =
 	| AbilityEditorPageNotFoundProps
 	| AbilityEditorPageReadyProps;
 
-export function AbilityEditorPage(props: AbilityEditorPageProps) {
+export const AbilityEditorPage = observer(function AbilityEditorPage(
+	props: AbilityEditorPageProps,
+) {
 	if (props.status === "loading") {
 		return (
 			<FormPage
@@ -259,4 +262,6 @@ export function AbilityEditorPage(props: AbilityEditorPageProps) {
 			</FormPageSurface>
 		</FormPage>
 	);
-}
+});
+
+AbilityEditorPage.displayName = "AbilityEditorPage";

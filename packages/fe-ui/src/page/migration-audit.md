@@ -13,6 +13,7 @@
 - `thin_container`: 79개
 - `route_composes_page_ui`: 0개
 - `no_ui_import`: 0개
+- `pure_page_runtime_violation`: 37개
 
 ## Thin Container 완료
 
@@ -104,6 +105,48 @@
 
 - 없음
 
+## Pure Page Runtime 위반 잔여
+
+- `packages/fe-ui/src/page/AdminInquiriesInquiryIdEditPage/AdminInquiriesInquiryIdEditPage.tsx`
+- `packages/fe-ui/src/page/AdminInquiriesInquiryIdPage/AdminInquiriesInquiryIdPage.tsx`
+- `packages/fe-ui/src/page/AdminInquiriesNewPage/AdminInquiriesNewPage.tsx`
+- `packages/fe-ui/src/page/AdminRolesCategoriesCategoryIdEditPage/AdminRolesCategoriesCategoryIdEditPage.tsx`
+- `packages/fe-ui/src/page/AdminRolesCategoriesCategoryIdPage/AdminRolesCategoriesCategoryIdPage.tsx`
+- `packages/fe-ui/src/page/AdminRolesCategoriesNewPage/AdminRolesCategoriesNewPage.tsx`
+- `packages/fe-ui/src/page/AdminRolesCategoriesPage/AdminRolesCategoriesPage.tsx`
+- `packages/fe-ui/src/page/AdminRolesGroupsGroupIdEditPage/AdminRolesGroupsGroupIdEditPage.tsx`
+- `packages/fe-ui/src/page/AdminRolesGroupsGroupIdPage/AdminRolesGroupsGroupIdPage.tsx`
+- `packages/fe-ui/src/page/AdminRolesGroupsNewPage/AdminRolesGroupsNewPage.tsx`
+- `packages/fe-ui/src/page/AdminRolesGroupsPage/AdminRolesGroupsPage.tsx`
+- `packages/fe-ui/src/page/AdminRolesNewPage/AdminRolesNewPage.tsx`
+- `packages/fe-ui/src/page/AdminRolesRoleIdAbilitiesAbilityIdActionsPage/AdminRolesRoleIdAbilitiesAbilityIdActionsPage.tsx`
+- `packages/fe-ui/src/page/AdminRolesRoleIdAbilitiesAbilityIdSubjectsPage/AdminRolesRoleIdAbilitiesAbilityIdSubjectsPage.tsx`
+- `packages/fe-ui/src/page/AdminRolesRoleIdEditPage/AdminRolesRoleIdEditPage.tsx`
+- `packages/fe-ui/src/page/AdminRolesRoleIdPage/AdminRolesRoleIdPage.tsx`
+- `packages/fe-ui/src/page/AdminRoutinesNewPage/AdminRoutinesNewPage.tsx`
+- `packages/fe-ui/src/page/AdminRoutinesRoutineIdEditPage/AdminRoutinesRoutineIdEditPage.tsx`
+- `packages/fe-ui/src/page/AdminRoutinesRoutineIdPage/AdminRoutinesRoutineIdPage.tsx`
+- `packages/fe-ui/src/page/AdminSpacesNewPage/AdminSpacesNewPage.tsx`
+- `packages/fe-ui/src/page/AdminSpacesSpaceIdGroundEditPage/AdminSpacesSpaceIdGroundEditPage.tsx`
+- `packages/fe-ui/src/page/AdminSpacesSpaceIdGroundPage/AdminSpacesSpaceIdGroundPage.tsx`
+- `packages/fe-ui/src/page/AdminTasksNewPage/AdminTasksNewPage.tsx`
+- `packages/fe-ui/src/page/AdminTasksTaskIdExerciseEditPage/AdminTasksTaskIdExerciseEditPage.tsx`
+- `packages/fe-ui/src/page/AdminTasksTaskIdExercisePage/AdminTasksTaskIdExercisePage.tsx`
+- `packages/fe-ui/src/page/AdminTemplatesNewPage/AdminTemplatesNewPage.tsx`
+- `packages/fe-ui/src/page/AdminTemplatesTemplateIdEditPage/AdminTemplatesTemplateIdEditPage.tsx`
+- `packages/fe-ui/src/page/AdminTemplatesTemplateIdPage/AdminTemplatesTemplateIdPage.tsx`
+- `packages/fe-ui/src/page/AdminTimelinesNewPage/AdminTimelinesNewPage.tsx`
+- `packages/fe-ui/src/page/AdminTimelinesTimelineIdEditPage/AdminTimelinesTimelineIdEditPage.tsx`
+- `packages/fe-ui/src/page/AdminTimelinesTimelineIdPage/AdminTimelinesTimelineIdPage.tsx`
+- `packages/fe-ui/src/page/AdminTimelinesTimelineIdSessionsNewPage/AdminTimelinesTimelineIdSessionsNewPage.tsx`
+- `packages/fe-ui/src/page/AdminTimelinesTimelineIdSessionsSessionIdEditPage/AdminTimelinesTimelineIdSessionsSessionIdEditPage.tsx`
+- `packages/fe-ui/src/page/AdminTimelinesTimelineIdSessionsSessionIdPage/AdminTimelinesTimelineIdSessionsSessionIdPage.tsx`
+- `packages/fe-ui/src/page/AdminTimelinesTimelineIdSessionsSessionIdProgramsNewPage/AdminTimelinesTimelineIdSessionsSessionIdProgramsNewPage.tsx`
+- `packages/fe-ui/src/page/AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditPage/AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditPage.tsx`
+- `packages/fe-ui/src/page/AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPage/AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPage.tsx`
+
 ## 최근 반영
 
 - 2026-03-26: admin/idp web route `page.tsx` 전체를 `packages/fe-ui/src/page` 기반 thin container 구조로 정리
+- 2026-03-29: IDP console pure page에서 API/navigation/react-query import를 제거해 pure page runtime 위반을 46개(admin 영역만 남음)까지 축소
+- 2026-03-29: admin 목록 페이지(`assets`, `inquiries`, `roles`, `routines`, `spaces`, `tasks`, `templates`, `timelines`)를 pure page + thin route container 구조로 재정의해 pure page runtime 위반을 37개까지 축소

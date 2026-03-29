@@ -112,16 +112,70 @@ export const actionRemovedAtColumn = createRemovedAtStatusColumn<ActionDto>({
 	size: 100,
 });
 
-/** Action 목록 페이지에서 사용하는 전체 컬럼 조합입니다. */
-export const actionTableColumns = buildColumns<ActionDto>(
-	actionNameColumn,
-	actionDisplayNameColumn,
-	actionGroupColumn,
-	actionOrderColumn,
-	actionIsSystemColumn,
-	actionCreatedAtColumn,
-	actionRemovedAtColumn,
-);
+/** Action 목록 페이지용 컬럼 조합을 생성합니다. */
+export function buildActionTableColumns<
+	TRow extends {
+		name: string;
+		displayName?: string | null;
+		group?: string | null;
+		order: number;
+		isSystem: boolean;
+		createdAt: string | Date | null;
+		removedAt?: string | null;
+	},
+>() {
+	return buildColumns<TRow>(
+		createNameColumn<TRow>({
+			fieldKey: "actionKey",
+			accessorKey: COLUMN_FIELDS.name,
+			size: 200,
+			isRequired: true,
+			nameVariant: "identifier",
+		}),
+		createDisplayNameColumn<TRow>({
+			size: 150,
+		}),
+		createGroupColumn<TRow>({
+			size: 120,
+			align: "center",
+			cell: ({ getValue }) => {
+				const group = getValue() as string | undefined;
+				return (
+					<ChipCell
+						label={group}
+						color={group ? getActionGroupColor(group) : undefined}
+					/>
+				);
+			},
+		}),
+		createPresetColumn<TRow>("order", {
+			size: 80,
+			align: "center",
+		}),
+		createPresetColumn<TRow>("isSystem", {
+			size: 100,
+			align: "center",
+			cell: ({ getValue }) => (
+				<BooleanCell
+					value={getValue() as boolean}
+					trueLabel="시스템"
+					falseLabel="사용자"
+					trueColor="warning"
+					falseColor="default"
+				/>
+			),
+		}),
+		createCreatedAtColumn<TRow>({
+			size: 150,
+		}),
+		createRemovedAtStatusColumn<TRow>({
+			size: 100,
+		}),
+	);
+}
+
+/** Action 목록 페이지에서 사용하는 기본 컬럼 조합입니다. */
+export const actionTableColumns = buildActionTableColumns<ActionDto>();
 
 export function buildUserListTableColumns<
 	TRow extends {
@@ -183,14 +237,35 @@ export const subjectCreatedAtColumn = createCreatedAtColumn<SubjectDto>({
 
 export const subjectRemovedAtColumn = createRemovedAtStatusColumn<SubjectDto>();
 
+/** Subject 목록 페이지용 컬럼 조합을 생성합니다. */
+export function buildSubjectTableColumns<
+	TRow extends {
+		name: string;
+		displayName?: string | null;
+		group?: string | null;
+		createdAt: string | Date | null;
+		removedAt?: string | null;
+	},
+>() {
+	return buildColumns<TRow>(
+		createNameColumn<TRow>({
+			fieldKey: "subjectKey",
+			accessorKey: COLUMN_FIELDS.name,
+			size: 220,
+			isRequired: true,
+			nameVariant: "identifier",
+		}),
+		createDisplayNameColumn<TRow>(),
+		createGroupColumn<TRow>(),
+		createCreatedAtColumn<TRow>({
+			size: 160,
+		}),
+		createRemovedAtStatusColumn<TRow>(),
+	);
+}
+
 /** Subject 목록 페이지에서 사용하는 전체 컬럼 조합입니다. */
-export const subjectTableColumns = buildColumns<SubjectDto>(
-	subjectNameColumn,
-	subjectDisplayNameColumn,
-	subjectGroupColumn,
-	subjectCreatedAtColumn,
-	subjectRemovedAtColumn,
-);
+export const subjectTableColumns = buildSubjectTableColumns<SubjectDto>();
 
 export const adminRoleNameColumn = createNameColumn<RoleDto>({
 	fieldKey: "roleKey",
@@ -224,16 +299,58 @@ export const adminRoleActionsColumn = createActionsColumn<RoleDto>({
 	),
 });
 
+/** 역할 목록 페이지용 컬럼 조합을 생성합니다. */
+export function buildAdminRoleTableColumns<
+	TRow extends {
+		id: string;
+		name: string;
+		displayName?: string | null;
+		description?: string | null;
+		isSystem: boolean;
+		createdAt: string | Date | null;
+		removedAt?: string | null;
+	},
+>() {
+	return buildColumnsWithDefaultCreatedAt<TRow>(
+		[
+			createNameColumn<TRow>({
+				fieldKey: "roleKey",
+				accessorKey: COLUMN_FIELDS.name,
+				size: 180,
+				isRequired: true,
+				nameVariant: "identifier",
+				cell: ({ row }) => (
+					<RoleNameCell
+						value={row.original.name}
+						isSystem={row.original.isSystem}
+					/>
+				),
+			}),
+			createDisplayNameColumn<TRow>(),
+			createDescriptionColumn<TRow>(),
+			createRemovedAtStatusColumn<TRow>({
+				size: 100,
+			}),
+		],
+		[
+			createActionsColumn<TRow>({
+				size: 100,
+				cell: ({ row }) => (
+					<ActionButtonCell
+						as={Link}
+						href={`/roles/${row.original.id}`}
+						variant="flat"
+					>
+						상세
+					</ActionButtonCell>
+				),
+			}),
+		],
+	);
+}
+
 /** 역할 목록 페이지에서 사용하는 전체 컬럼 조합입니다. */
-export const adminRoleTableColumns = buildColumnsWithDefaultCreatedAt<RoleDto>(
-	[
-		adminRoleNameColumn,
-		adminRoleDisplayNameColumn,
-		adminRoleDescriptionColumn,
-		adminRoleStatusColumn,
-	],
-	[adminRoleActionsColumn],
-);
+export const adminRoleTableColumns = buildAdminRoleTableColumns<RoleDto>();
 
 /** 권한 목록 페이지용 컬럼 조합을 생성합니다. */
 export function buildAbilityListTableColumns<
@@ -310,14 +427,13 @@ export function buildTaskTableColumns<
 		count: number;
 		description?: string;
 		createdAt: string;
-		task: TaskDto;
 	},
 >({
 	onClickTaskName,
 	onClickDeleteButton,
 }: {
 	onClickTaskName: (taskId: string) => void;
-	onClickDeleteButton: (task: TaskDto) => void;
+	onClickDeleteButton: (taskId: string) => void;
 }) {
 	/** Task 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumnsWithDefaultCreatedAt<TRow>(
@@ -356,7 +472,7 @@ export function buildTaskTableColumns<
 					<ActionButtonCell
 						color="danger"
 						variant="light"
-						onPress={() => onClickDeleteButton(row.original.task)}
+						onPress={() => onClickDeleteButton(row.original.id)}
 					>
 						삭제
 					</ActionButtonCell>
@@ -366,21 +482,28 @@ export function buildTaskTableColumns<
 	);
 }
 
-export function buildTimelineTableColumns({
+export function buildTimelineTableColumns<
+	TRow extends {
+		id: string;
+		name: string;
+		description?: string | null;
+		createdAt: string | Date | null;
+	},
+>({
 	onClickTimelineName,
 	onClickDeleteButton,
 }: {
-	onClickTimelineName: (timeline: TimelineDto) => void;
-	onClickDeleteButton: (timeline: TimelineDto) => void;
+	onClickTimelineName: (timelineId: string) => void;
+	onClickDeleteButton: (timelineId: string) => void;
 }) {
 	/** Timeline 목록 페이지용 컬럼 조합을 생성합니다. */
-	return buildColumnsWithDefaultCreatedAt<TimelineDto>(
+	return buildColumnsWithDefaultCreatedAt<TRow>(
 		[
-			createNameColumn<TimelineDto>({
+			createNameColumn<TRow>({
 				nameVariant: "clickable",
-				onClickName: onClickTimelineName,
+				onClickName: (row) => onClickTimelineName(row.id),
 			}),
-			createDescriptionColumn<TimelineDto>({
+			createDescriptionColumn<TRow>({
 				size: 300,
 				cell: ({ getValue }) => (
 					<DefaultCell
@@ -392,12 +515,12 @@ export function buildTimelineTableColumns({
 			}),
 		],
 		[
-			createActionsColumn<TimelineDto>({
+			createActionsColumn<TRow>({
 				cell: ({ row }) => (
 					<ActionButtonCell
 						color="danger"
 						variant="light"
-						onPress={() => onClickDeleteButton(row.original)}
+						onPress={() => onClickDeleteButton(row.original.id)}
 					>
 						삭제
 					</ActionButtonCell>
@@ -407,16 +530,24 @@ export function buildTimelineTableColumns({
 	);
 }
 
-export function buildTemplateTableColumns({
+export function buildTemplateTableColumns<
+	TRow extends {
+		id: string;
+		code: string;
+		name: string;
+		isActive: boolean;
+		createdAt: string | Date | null;
+	},
+>({
 	onClickTemplateCode,
 	onToggleTemplateStatusSwitch,
 }: {
-	onClickTemplateCode: (template: TemplateDto) => void;
+	onClickTemplateCode: (templateId: string) => void;
 	onToggleTemplateStatusSwitch: (templateId: string) => Promise<void>;
 }) {
 	/** Template 목록 페이지용 컬럼 조합을 생성합니다. */
-	return buildColumns<TemplateDto>(
-		createPresetColumn<TemplateDto>("code", {
+	return buildColumns<TRow>(
+		createPresetColumn<TRow>("code", {
 			size: 220,
 			isRequired: true,
 			cell: ({ row }) => (
@@ -424,16 +555,16 @@ export function buildTemplateTableColumns({
 					align="start"
 					className="justify-start p-0 font-mono text-sm"
 					variant="light"
-					onPress={() => onClickTemplateCode(row.original)}
+					onPress={() => onClickTemplateCode(row.original.id)}
 				>
 					{row.original.code}
 				</ActionButtonCell>
 			),
 		}),
-		createNameColumn<TemplateDto>({
+		createNameColumn<TRow>({
 			size: 220,
 		}),
-		createIsActiveColumn<TemplateDto>({
+		createIsActiveColumn<TRow>({
 			cell: ({ row }) => (
 				<TemplateActiveToggleCell
 					isActive={row.original.isActive}
@@ -442,7 +573,7 @@ export function buildTemplateTableColumns({
 				/>
 			),
 		}),
-		createCreatedAtColumn<TemplateDto>({
+		createCreatedAtColumn<TRow>({
 			size: 160,
 		}),
 	);
@@ -488,33 +619,40 @@ export function buildSpaceTableColumns<
 	]);
 }
 
-export function buildRoutineTableColumns({
+export function buildRoutineTableColumns<
+	TRow extends {
+		id: string;
+		name: string;
+		label?: string | null;
+		createdAt: string | Date | null;
+	},
+>({
 	onClickRoutineName,
 	onClickDeleteButton,
 }: {
-	onClickRoutineName: (routine: RoutineDto) => void;
-	onClickDeleteButton: (routine: RoutineDto) => void;
+	onClickRoutineName: (routineId: string) => void;
+	onClickDeleteButton: (routineId: string) => void;
 }) {
 	/** Routine 목록 페이지용 컬럼 조합을 생성합니다. */
-	return buildColumnsWithDefaultCreatedAt<RoutineDto>(
+	return buildColumnsWithDefaultCreatedAt<TRow>(
 		[
-			createNameColumn<RoutineDto>({
+			createNameColumn<TRow>({
 				nameVariant: "clickable",
-				onClickName: onClickRoutineName,
+				onClickName: (row) => onClickRoutineName(row.id),
 			}),
-			createLabelColumn<RoutineDto>({
+			createLabelColumn<TRow>({
 				cell: ({ getValue }) => (
 					<DefaultCell value={getValue() as string} tone="muted" />
 				),
 			}),
 		],
 		[
-			createActionsColumn<RoutineDto>({
+			createActionsColumn<TRow>({
 				cell: ({ row }) => (
 					<ActionButtonCell
 						color="danger"
 						variant="light"
-						onPress={() => onClickDeleteButton(row.original)}
+						onPress={() => onClickDeleteButton(row.original.id)}
 					>
 						삭제
 					</ActionButtonCell>
@@ -524,7 +662,17 @@ export function buildRoutineTableColumns({
 	);
 }
 
-export function buildAssetTableColumns({
+export function buildAssetTableColumns<
+	TRow extends {
+		id: string;
+		originalName: string;
+		kind: AssetDto["kind"];
+		status: AssetDto["status"];
+		mimeType: string;
+		sizeBytes: number;
+		createdAt: string;
+	},
+>({
 	isRemoving,
 	onClickDeleteAssetButton,
 }: {
@@ -532,9 +680,9 @@ export function buildAssetTableColumns({
 	onClickDeleteAssetButton: (assetId: string) => void;
 }) {
 	/** Asset 목록 페이지용 컬럼 조합을 생성합니다. */
-	return buildColumnsWithDefaultCreatedAt<AssetDto>(
+	return buildColumnsWithDefaultCreatedAt<TRow>(
 		[
-			createPresetColumn<AssetDto>("originalName", {
+			createPresetColumn<TRow>("originalName", {
 				size: 280,
 				isRequired: true,
 				cell: ({ row }) => (
@@ -545,7 +693,7 @@ export function buildAssetTableColumns({
 					/>
 				),
 			}),
-			createPresetColumn<AssetDto>("kind", {
+			createPresetColumn<TRow>("kind", {
 				size: 100,
 				align: "center",
 				cell: ({ row }) => (
@@ -555,7 +703,7 @@ export function buildAssetTableColumns({
 					/>
 				),
 			}),
-			createStatusColumn<AssetDto>({
+			createStatusColumn<TRow>({
 				cell: ({ row }) => (
 					<ChipCell
 						label={getAssetStatusLabel(row.original.status)}
@@ -563,13 +711,13 @@ export function buildAssetTableColumns({
 					/>
 				),
 			}),
-			createPresetColumn<AssetDto>("mimeType", {
+			createPresetColumn<TRow>("mimeType", {
 				size: 180,
 				cell: ({ getValue }) => (
 					<DefaultCell value={getValue() as string} mono size="xs" />
 				),
 			}),
-			createPresetColumn<AssetDto>("sizeBytes", {
+			createPresetColumn<TRow>("sizeBytes", {
 				size: 120,
 				align: "right",
 				cell: ({ getValue }) => (
@@ -578,7 +726,7 @@ export function buildAssetTableColumns({
 			}),
 		],
 		[
-			createActionsColumn<AssetDto>({
+			createActionsColumn<TRow>({
 				size: 100,
 				align: "center",
 				cell: ({ row }) => (
@@ -595,6 +743,11 @@ export function buildAssetTableColumns({
 		],
 	);
 }
+
+export const assetTableColumns = buildAssetTableColumns<AssetDto>({
+	isRemoving: false,
+	onClickDeleteAssetButton: () => undefined,
+});
 
 export function buildInquiryTableColumns<
 	TRow extends {

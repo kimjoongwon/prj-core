@@ -1,25 +1,15 @@
 "use client";
 import {
-	type CreateActionDto,
-	useCreateAction,
-} from "@cocrepo/api/core/actions";
-
-import {
 	FormPage,
+	FormSectionCard,
 	FormPageSurface,
 	PageTitleBar,
-	FormSectionCard,
 	VStack,
 } from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import type { Route } from "next";
-import { useRouter } from "next/navigation";
 
-/**
- * Action 등록 폼 상태
- */
 interface ActionFormState {
 	name: string;
 	displayName: string;
@@ -29,6 +19,20 @@ interface ActionFormState {
 	errors: {
 		name: string;
 	};
+}
+
+export interface AdminActionsNewPageForm {
+	name: string;
+	displayName: string;
+	description: string;
+	group: string;
+	order: number;
+}
+
+export interface AdminActionsNewPageProps {
+	isSubmitting: boolean;
+	onClickBackButton: () => void;
+	onSubmit: (form: AdminActionsNewPageForm) => void;
 }
 
 /**
@@ -41,27 +45,11 @@ const groupOptions = [
 	{ value: "bulk", label: "Bulk" },
 ];
 
-/**
- * Action 등록 페이지 - 클라이언트 컴포넌트
- */
-function ActionNewPageClient() {
-	const router = useRouter();
-
-	// API Mutation
-	const { mutate: createAction, isPending } = useCreateAction({
-		mutation: {
-			onSuccess: (response) => {
-				const actionId = response.data?.id;
-				if (actionId) {
-					router.push(`/actions/${actionId}` as Route);
-				} else {
-					router.push("/actions" as Route);
-				}
-			},
-		},
-	});
-
-	// 폼 상태 (config는 CreateActionDto에 없으므로 제거)
+export const AdminActionsNewPage = observer(function AdminActionsNewPage({
+	isSubmitting,
+	onClickBackButton,
+	onSubmit,
+}: AdminActionsNewPageProps) {
 	const state = useLocalObservable<ActionFormState>(() => ({
 		name: "",
 		displayName: "",
@@ -94,31 +82,18 @@ function ActionNewPageClient() {
 		return isValid;
 	};
 
-	/**
-	 * 뒤로가기 핸들러
-	 */
-	const onClickBackButton = () => {
-		router.push("/actions" as Route);
-	};
-
-	/**
-	 * 폼 제출 핸들러
-	 */
 	const onClickSubmitButton = () => {
 		if (!validate()) {
 			return;
 		}
 
-		const data: CreateActionDto = {
+		onSubmit({
 			name: state.name,
-			displayName: state.displayName || undefined,
-			description: state.description || undefined,
-			group: state.group || undefined,
+			displayName: state.displayName,
+			description: state.description,
+			group: state.group,
 			order: state.order,
-			isSystem: false,
-		};
-
-		createAction({ data });
+		});
 	};
 
 	return (
@@ -209,7 +184,7 @@ function ActionNewPageClient() {
 									color="primary"
 									startContent={<Save className="h-4 w-4" />}
 									onPress={onClickSubmitButton}
-									isLoading={isPending}
+									isLoading={isSubmitting}
 								>
 									Action 등록
 								</Button>
@@ -220,12 +195,6 @@ function ActionNewPageClient() {
 			</FormPageSurface>
 		</FormPage>
 	);
-}
-
-const ActionNewPage = observer(function ActionNewPage() {
-	return <ActionNewPageClient />;
 });
-
-export const AdminActionsNewPage = ActionNewPage;
 
 export default AdminActionsNewPage;

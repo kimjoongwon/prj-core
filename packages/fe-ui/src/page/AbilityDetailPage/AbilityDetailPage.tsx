@@ -10,6 +10,7 @@ import {
 	Spinner,
 } from "@heroui/react";
 import { ArrowLeft, Edit, Key, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import { DetailPage, DetailPageSurface, DetailSectionCard } from "../../detail";
 import { Chip } from "../../display";
 import { VStack } from "../../rhythm";
@@ -55,7 +56,9 @@ export type AbilityDetailPageProps =
 	| AbilityDetailPageNotFoundProps
 	| AbilityDetailPageReadyProps;
 
-export function AbilityDetailPage(props: AbilityDetailPageProps) {
+export const AbilityDetailPage = observer(function AbilityDetailPage(
+	props: AbilityDetailPageProps,
+) {
 	if (props.mode === "loading") {
 		return (
 			<DetailPage
@@ -268,4 +271,6 @@ export function AbilityDetailPage(props: AbilityDetailPageProps) {
 			</Modal>
 		</DetailPage>
 	);
-}
+});
+
+AbilityDetailPage.displayName = "AbilityDetailPage";

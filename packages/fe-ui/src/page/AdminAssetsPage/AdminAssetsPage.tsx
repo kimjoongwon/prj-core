@@ -1,20 +1,6 @@
 "use client";
 
-import {
-	type AssetDto,
-	type AssetKind,
-	type AssetStatus,
-	type FolderDto,
-	getGetAssetsQueryKey,
-	getGetFoldersQueryKey,
-	useCreateFolder,
-	useGetAssetsSuspense,
-	useGetFoldersSuspense,
-	useRemoveAsset,
-	useRemoveFolder,
-	useUpdateFolder,
-	useUploadAsset,
-} from "@cocrepo/api/assets";
+import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
 import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
 import {
 	buildAssetTableColumns,
@@ -24,7 +10,6 @@ import {
 	MetaDataGrid,
 	PageTitleBar,
 	Surface,
-	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import {
 	addToast,
@@ -37,18 +22,9 @@ import {
 	ModalHeader,
 	useDisclosure,
 } from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
 import { Upload } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	type ChangeEvent,
-	type ReactNode,
-	Suspense,
-	useEffect,
-	useRef,
-	useState,
-} from "react";
-import { usePersistStore } from "@cocrepo/store";
+import { type ChangeEvent, useRef, useState } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -96,8 +72,60 @@ const queryStateInputs: InputConfig[] = [
 	},
 ];
 
+export const adminAssetsPageQueryInputs = [...queryStateInputs];
+
+export type AdminAssetsPageQueryStates = ReturnType<
+	typeof useMetaDataGridQueryStates
+>[0];
+export type AdminAssetsPageSetQueryStates = ReturnType<
+	typeof useMetaDataGridQueryStates
+>[1];
+
+export interface AdminAssetsPageAsset {
+	id: string;
+	originalName: string;
+	kind: "IMAGE" | "VIDEO" | "DOCUMENT";
+	status: "UPLOADING" | "READY" | "FAILED";
+	mimeType: string;
+	sizeBytes: number;
+	createdAt: string;
+}
+
+export interface AdminAssetsPageProps {
+	assets: AdminAssetsPageAsset[];
+	totalCount: number;
+	folders: FolderTreeItem[];
+	queryStates: AdminAssetsPageQueryStates;
+	setQueryStates: AdminAssetsPageSetQueryStates;
+	isLoading: boolean;
+	isStoreReady: boolean;
+	hasSelectedSpace: boolean;
+	isRemoving: boolean;
+	isUploadingAsset: boolean;
+	isCreatingFolder: boolean;
+	isUpdatingFolder: boolean;
+	isRemovingFolder: boolean;
+	onUploadAsset: (file: File, folderId: string) => Promise<void>;
+	onDeleteAsset: (assetId: string) => Promise<void>;
+	onCreateFolder: (input: {
+		name: string;
+		parentFolderId?: string;
+	}) => Promise<void>;
+	onRenameFolder: (input: { folderId: string; name: string }) => Promise<void>;
+	onDeleteFolder: (folderId: string) => Promise<void>;
+}
+
+const assetsLayoutClassName =
+	"grid min-h-[520px] grid-cols-1 gap-5 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-6";
+
+const assetsSidebarPanelClassName =
+	"overflow-hidden rounded-[1.25rem] border border-divider/70 bg-default-50/70 shadow-sm";
+
+const assetsGridPanelClassName =
+	"min-w-0 rounded-[1.25rem] border border-divider/70 bg-content1/85 px-4 py-4 shadow-sm sm:px-5 sm:py-5";
+
 const getAssetEmptyMessage = (
-	folders: FolderDto[],
+	folders: FolderTreeItem[],
 	selectedFolderId: string | null,
 ) => {
 	if (!selectedFolderId) {
@@ -114,123 +142,14 @@ const getAssetEmptyMessage = (
 	return `${selectedFolder.name} 폴더에 등록된 에셋이 없습니다.`;
 };
 
-const assetsLayoutClassName =
-	"grid min-h-[520px] grid-cols-1 gap-5 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-6";
-
-const assetsSidebarPanelClassName =
-	"overflow-hidden rounded-[1.25rem] border border-divider/70 bg-default-50/70 shadow-sm";
-
-const assetsGridPanelClassName =
-	"min-w-0 rounded-[1.25rem] border border-divider/70 bg-content1/85 px-4 py-4 shadow-sm sm:px-5 sm:py-5";
-
-const AssetsPageContent = observer(function AssetsPageContent({
-	queryStates,
-	setQueryStates,
-	isRemoving,
-	onClickDeleteAssetButton,
-	onClickCreateFolderButton,
-	onClickRenameFolderButton,
-	onClickDeleteFolderButton,
-}: {
-	queryStates: ReturnType<typeof useMetaDataGridQueryStates>[0];
-	setQueryStates: ReturnType<typeof useMetaDataGridQueryStates>[1];
-	isRemoving: boolean;
-	onClickDeleteAssetButton: (assetId: string) => void;
-	onClickCreateFolderButton: () => void;
-	onClickRenameFolderButton: (folder: FolderTreeItem) => void;
-	onClickDeleteFolderButton: (folder: FolderTreeItem) => void;
-}) {
-	const take = queryStates.take;
-	const skip = queryStates.skip;
-	const search = queryStates.search || undefined;
-	const kind = (queryStates.kind || undefined) as AssetKind | undefined;
-	const status = (queryStates.status || undefined) as AssetStatus | undefined;
-	const selectedFolderId = queryStates.folderId || null;
-	const folderId = selectedFolderId || undefined;
-
-	const { data: response } = useGetAssetsSuspense({
-		take,
-		skip,
-		search,
-		kind,
-		status,
-		folderId,
-	});
-	const { data: folderResponse } = useGetFoldersSuspense();
-
-	const assets = (response?.data ?? []) as AssetDto[];
-	const totalCount = response?.meta?.total ?? 0;
-	const folders = (folderResponse?.data ?? []) as FolderDto[];
-	const columns = buildAssetTableColumns({
-		isRemoving,
-		onClickDeleteAssetButton,
-	});
-	const emptyMessage = getAssetEmptyMessage(folders, selectedFolderId);
-
-	const onSelectFolder = (folder: FolderTreeItem | null) => {
-		void setQueryStates({
-			folderId: folder?.id ?? "",
-			skip: 0,
-		});
-	};
-
-	return (
-		<div className={assetsLayoutClassName}>
-			<div className={assetsSidebarPanelClassName}>
-				<FolderTree
-					folders={folders}
-					selectedFolderId={selectedFolderId}
-					showCreateButton
-					showRenameButton
-					showDeleteButton
-					onSelect={onSelectFolder}
-					onCreate={onClickCreateFolderButton}
-					onRename={onClickRenameFolderButton}
-					onDelete={onClickDeleteFolderButton}
-					className="bg-transparent"
-				/>
-			</div>
-			<div className={assetsGridPanelClassName}>
-				<MetaDataGrid
-					config={{
-						entity: "Asset",
-						data: assets,
-						totalCount,
-						isLoading: false,
-						queryStates,
-						setQueryStates,
-						columns,
-						leftInputs,
-						emptyMessage,
-					}}
-				/>
-			</div>
-		</div>
-	);
-});
-
-function AssetsPageShellFallback() {
-	return (
-		<div className="space-y-6 md:space-y-7">
-			<PageTitleBar
-				title="에셋 관리"
-				description="업로드된 에셋을 조회, 검색, 필터링하고 삭제할 수 있습니다."
-			/>
-			<Surface className="h-36 rounded-[1.75rem] border-divider/80 bg-content1/75">
-				{null}
-			</Surface>
-		</div>
-	);
-}
-
 function AssetsGridFallback({
 	queryStates,
 	setQueryStates,
 	columns,
 }: {
-	queryStates: ReturnType<typeof useMetaDataGridQueryStates>[0];
-	setQueryStates: ReturnType<typeof useMetaDataGridQueryStates>[1];
-	columns: MetaDataGridColumnConfig<AssetDto>[];
+	queryStates: AdminAssetsPageQueryStates;
+	setQueryStates: AdminAssetsPageSetQueryStates;
+	columns: MetaDataGridColumnConfig<AdminAssetsPageAsset>[];
 }) {
 	return (
 		<div className={assetsLayoutClassName}>
@@ -268,19 +187,34 @@ function AssetsSpaceEmptyState() {
 	);
 }
 
-const AssetsPageInner = observer(function AssetsPageInner() {
-	const queryClient = useQueryClient();
-	const [queryStates, setQueryStates] =
-		useMetaDataGridQueryStates(queryStateInputs);
-	const persistStore = usePersistStore();
+export const AdminAssetsPage = observer(function AdminAssetsPage({
+	assets,
+	totalCount,
+	folders,
+	queryStates,
+	setQueryStates,
+	isLoading,
+	isStoreReady,
+	hasSelectedSpace,
+	isRemoving,
+	isUploadingAsset,
+	isCreatingFolder,
+	isUpdatingFolder,
+	isRemovingFolder,
+	onUploadAsset,
+	onDeleteAsset,
+	onCreateFolder,
+	onRenameFolder,
+	onDeleteFolder,
+}: AdminAssetsPageProps) {
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const createFolderModal = useDisclosure();
 	const renameFolderModal = useDisclosure();
 	const deleteFolderModal = useDisclosure();
-	const [isClientMounted, setIsClientMounted] = useState(false);
-	const isPersistStoreHydrated = persistStore?.isHydrated ?? false;
-	const hasSelectedSpace = Boolean(persistStore?.spaceId);
-	const selectedFolderId = queryStates.folderId || null;
+	const selectedFolderId =
+		typeof queryStates.folderId === "string" && queryStates.folderId
+			? queryStates.folderId
+			: null;
 	const [activeFolder, setActiveFolder] = useState<FolderTreeItem | null>(null);
 	const [newFolderName, setNewFolderName] = useState("");
 	const [newFolderNameError, setNewFolderNameError] = useState<string | null>(
@@ -290,144 +224,6 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 	const [renameFolderNameError, setRenameFolderNameError] = useState<
 		string | null
 	>(null);
-
-	const { mutate: removeAsset, isPending: isRemoving } = useRemoveAsset({
-		mutation: {
-			onSuccess: () => {
-				queryClient.invalidateQueries({
-					queryKey: getGetAssetsQueryKey(),
-				});
-				addToast({
-					title: "삭제 완료",
-					description: "에셋이 삭제되었습니다.",
-					color: "success",
-				});
-			},
-			onError: () => {
-				addToast({
-					title: "삭제 실패",
-					description: "에셋 삭제 중 오류가 발생했습니다.",
-					color: "danger",
-				});
-			},
-		},
-	});
-
-	const { mutate: uploadAsset, isPending: isUploadingAsset } = useUploadAsset({
-		mutation: {
-			onSuccess: () => {
-				queryClient.invalidateQueries({
-					queryKey: getGetAssetsQueryKey(),
-				});
-				addToast({
-					title: "업로드 완료",
-					description: "에셋이 업로드되었습니다.",
-					color: "success",
-				});
-			},
-			onError: (error) => {
-				addToast({
-					title: "업로드 실패",
-					description: error.message || "에셋 업로드 중 오류가 발생했습니다.",
-					color: "danger",
-				});
-			},
-		},
-	});
-
-	const { mutate: createFolder, isPending: isCreatingFolder } = useCreateFolder(
-		{
-			mutation: {
-				onSuccess: (response) => {
-					queryClient.invalidateQueries({
-						queryKey: getGetFoldersQueryKey(),
-					});
-
-					const createdFolderId = response?.data?.id;
-
-					addToast({
-						title: "폴더 생성 완료",
-						description: "새 폴더가 생성되었습니다.",
-						color: "success",
-					});
-
-					createFolderModal.onClose();
-					onResetCreateFolderForm();
-
-					if (createdFolderId) {
-						void setQueryStates({
-							folderId: createdFolderId,
-							skip: 0,
-						});
-					}
-				},
-				onError: (error) => {
-					addToast({
-						title: "폴더 생성 실패",
-						description: error.message || "폴더 생성 중 오류가 발생했습니다.",
-						color: "danger",
-					});
-				},
-			},
-		},
-	);
-
-	const { mutate: updateFolder, isPending: isUpdatingFolder } = useUpdateFolder(
-		{
-			mutation: {
-				onSuccess: () => {
-					queryClient.invalidateQueries({
-						queryKey: getGetFoldersQueryKey(),
-					});
-					addToast({
-						title: "폴더 수정 완료",
-						description: "폴더가 수정되었습니다.",
-						color: "success",
-					});
-					renameFolderModal.onClose();
-					onResetRenameFolderForm();
-				},
-				onError: (error) => {
-					addToast({
-						title: "폴더 수정 실패",
-						description: error.message || "폴더 수정 중 오류가 발생했습니다.",
-						color: "danger",
-					});
-				},
-			},
-		},
-	);
-
-	const { mutate: removeFolder, isPending: isRemovingFolder } = useRemoveFolder(
-		{
-			mutation: {
-				onSuccess: () => {
-					const deletedFolderParentId = activeFolder?.parentFolderId ?? "";
-					queryClient.invalidateQueries({
-						queryKey: getGetFoldersQueryKey(),
-					});
-					addToast({
-						title: "폴더 삭제 완료",
-						description: "폴더가 삭제되었습니다.",
-						color: "success",
-					});
-					deleteFolderModal.onClose();
-					setActiveFolder(null);
-					void setQueryStates({
-						folderId: deletedFolderParentId,
-						skip: 0,
-					});
-				},
-				onError: (error) => {
-					addToast({
-						title: "폴더 삭제 실패",
-						description: error.message || "폴더 삭제 중 오류가 발생했습니다.",
-						color: "danger",
-					});
-				},
-			},
-		},
-	);
 
 	const onResetCreateFolderForm = () => {
 		setNewFolderName("");
@@ -449,6 +245,24 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 		onResetCreateFolderForm();
 	};
 
+	const onCloseRenameFolderModal = () => {
+		if (isUpdatingFolder) {
+			return;
+		}
+
+		renameFolderModal.onClose();
+		onResetRenameFolderForm();
+	};
+
+	const onCloseDeleteFolderModal = () => {
+		if (isRemovingFolder) {
+			return;
+		}
+
+		deleteFolderModal.onClose();
+		setActiveFolder(null);
+	};
+
 	const onClickCreateFolderButton = () => {
 		onResetCreateFolderForm();
 		createFolderModal.onOpen();
@@ -461,58 +275,32 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 		renameFolderModal.onOpen();
 	};
 
-	const onCloseRenameFolderModal = () => {
-		if (isUpdatingFolder) {
-			return;
-		}
-
-		renameFolderModal.onClose();
-		onResetRenameFolderForm();
-	};
-
 	const onClickDeleteFolderButton = (folder: FolderTreeItem) => {
 		setActiveFolder(folder);
 		deleteFolderModal.onOpen();
 	};
 
-	const onCloseDeleteFolderModal = () => {
-		if (isRemovingFolder) {
-			return;
-		}
-
-		deleteFolderModal.onClose();
-		setActiveFolder(null);
-	};
-
-	const onChangeFolderNameInput = (value: string) => {
-		setNewFolderName(value);
-		setNewFolderNameError(null);
-	};
-
-	const onChangeRenameFolderNameInput = (value: string) => {
-		setRenameFolderName(value);
-		setRenameFolderNameError(null);
-	};
-
-	const onClickCreateFolderSubmitButton = () => {
+	const onClickCreateFolderSubmitButton = async () => {
 		const trimmedFolderName = newFolderName.trim();
-
 		if (!trimmedFolderName) {
 			setNewFolderNameError("폴더명을 입력해주세요.");
 			return;
 		}
 
-		createFolder({
-			data: {
+		try {
+			await onCreateFolder({
 				name: trimmedFolderName,
 				...(selectedFolderId ? { parentFolderId: selectedFolderId } : {}),
-			},
-		});
+			});
+			createFolderModal.onClose();
+			onResetCreateFolderForm();
+		} catch {
+			return;
+		}
 	};
 
-	const onClickRenameFolderSubmitButton = () => {
+	const onClickRenameFolderSubmitButton = async () => {
 		const trimmedFolderName = renameFolderName.trim();
-
 		if (!trimmedFolderName) {
 			setRenameFolderNameError("폴더명을 입력해주세요.");
 			return;
@@ -522,22 +310,34 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 			return;
 		}
 
-		updateFolder({
-			folderId: activeFolder.id,
-			data: {
+		try {
+			await onRenameFolder({
+				folderId: activeFolder.id,
 				name: trimmedFolderName,
-			},
-		});
+			});
+			renameFolderModal.onClose();
+			onResetRenameFolderForm();
+		} catch {
+			return;
+		}
 	};
 
-	const onClickDeleteFolderConfirmButton = () => {
+	const onClickDeleteFolderConfirmButton = async () => {
 		if (!activeFolder) {
 			return;
 		}
 
-		removeFolder({
-			folderId: activeFolder.id,
-		});
+		try {
+			await onDeleteFolder(activeFolder.id);
+			deleteFolderModal.onClose();
+			setActiveFolder(null);
+			void setQueryStates({
+				folderId: activeFolder.parentFolderId ?? "",
+				skip: 0,
+			});
+		} catch {
+			return;
+		}
 	};
 
 	const onClickUploadButton = () => {
@@ -550,53 +350,35 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 			return;
 		}
 
-		if (fileInputRef.current) {
-			fileInputRef.current.value = "";
-			fileInputRef.current.click();
-		}
+		fileInputRef.current?.click();
 	};
 
 	const onChangeAssetFileInput = (event: ChangeEvent<HTMLInputElement>) => {
 		const selectedFile = event.target.files?.[0];
 		event.target.value = "";
-
 		if (!selectedFile || !selectedFolderId) {
 			return;
 		}
 
-		const formData = new FormData();
-		formData.append("file", selectedFile);
-		formData.append("folderId", selectedFolderId);
-		uploadAsset({
-			data: formData,
-		});
+		void onUploadAsset(selectedFile, selectedFolderId);
 	};
 
 	const onClickDeleteAssetButton = (assetId: string) => {
-		removeAsset({ assetId });
+		void onDeleteAsset(assetId);
 	};
 
-	const columns = buildAssetTableColumns({
+	const onSelectFolder = (folder: FolderTreeItem | null) => {
+		void setQueryStates({
+			folderId: folder?.id ?? "",
+			skip: 0,
+		});
+	};
+
+	const columns = buildAssetTableColumns<AdminAssetsPageAsset>({
 		isRemoving,
 		onClickDeleteAssetButton,
 	});
-
-	const pageActions: ReactNode = (
-		<Button
-			variant="flat"
-			color="primary"
-			startContent={<Upload className="h-4 w-4" />}
-			onPress={onClickUploadButton}
-			isLoading={isUploadingAsset}
-			isDisabled={!selectedFolderId || isUploadingAsset}
-		>
-			업로드
-		</Button>
-	);
-
-	useEffect(() => {
-		setIsClientMounted(true);
-	}, []);
+	const emptyMessage = getAssetEmptyMessage(folders, selectedFolderId);
 
 	return (
 		<>
@@ -604,11 +386,22 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 				<PageTitleBar
 					title="에셋 관리"
 					description="업로드된 에셋을 조회, 검색, 필터링하고 삭제할 수 있습니다."
-					actions={pageActions}
+					actions={
+						<Button
+							variant="flat"
+							color="primary"
+							startContent={<Upload className="h-4 w-4" />}
+							onPress={onClickUploadButton}
+							isLoading={isUploadingAsset}
+							isDisabled={!selectedFolderId || isUploadingAsset}
+						>
+							업로드
+						</Button>
+					}
 				/>
 
 				<Surface className="overflow-hidden rounded-[1.75rem] border-divider/80 bg-content1/75">
-					{!isClientMounted || !isPersistStoreHydrated ? (
+					{!isStoreReady ? (
 						<AssetsGridFallback
 							queryStates={queryStates}
 							setQueryStates={setQueryStates}
@@ -617,25 +410,38 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 					) : !hasSelectedSpace ? (
 						<AssetsSpaceEmptyState />
 					) : (
-						<Suspense
-							fallback={
-								<AssetsGridFallback
-									queryStates={queryStates}
-									setQueryStates={setQueryStates}
-									columns={columns}
+						<div className={assetsLayoutClassName}>
+							<div className={assetsSidebarPanelClassName}>
+								<FolderTree
+									folders={folders}
+									selectedFolderId={selectedFolderId}
+									showCreateButton
+									showRenameButton
+									showDeleteButton
+									onSelect={onSelectFolder}
+									onCreate={onClickCreateFolderButton}
+									onRename={onClickRenameFolderButton}
+									onDelete={onClickDeleteFolderButton}
+									isLoading={isLoading}
+									className="bg-transparent"
 								/>
-							}
-						>
-							<AssetsPageContent
-								queryStates={queryStates}
-								setQueryStates={setQueryStates}
-								isRemoving={isRemoving}
-								onClickDeleteAssetButton={onClickDeleteAssetButton}
-								onClickCreateFolderButton={onClickCreateFolderButton}
-								onClickRenameFolderButton={onClickRenameFolderButton}
-								onClickDeleteFolderButton={onClickDeleteFolderButton}
-							/>
-						</Suspense>
+							</div>
+							<div className={assetsGridPanelClassName}>
+								<MetaDataGrid
+									config={{
+										entity: "Asset",
+										data: assets,
+										totalCount,
+										isLoading,
+										queryStates,
+										setQueryStates,
+										columns,
+										leftInputs,
+										emptyMessage,
+									}}
+								/>
+							</div>
+						</div>
 					)}
 				</Surface>
 			</div>
@@ -665,7 +471,10 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 								label="폴더명"
 								placeholder="새 폴더명을 입력하세요"
 								value={newFolderName}
-								onValueChange={onChangeFolderNameInput}
+								onValueChange={(value) => {
+									setNewFolderName(value);
+									setNewFolderNameError(null);
+								}}
 								isRequired
 								autoFocus
 								isInvalid={Boolean(newFolderNameError)}
@@ -705,7 +514,10 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 							label="폴더명"
 							placeholder="변경할 폴더명을 입력하세요"
 							value={renameFolderName}
-							onValueChange={onChangeRenameFolderNameInput}
+							onValueChange={(value) => {
+								setRenameFolderName(value);
+								setRenameFolderNameError(null);
+							}}
 							isRequired
 							autoFocus
 							isInvalid={Boolean(renameFolderNameError)}
@@ -768,14 +580,6 @@ const AssetsPageInner = observer(function AssetsPageInner() {
 				</ModalContent>
 			</Modal>
 		</>
-	);
-});
-
-export const AdminAssetsPage = observer(function AssetsPage() {
-	return (
-		<Suspense fallback={<AssetsPageShellFallback />}>
-			<AssetsPageInner />
-		</Suspense>
 	);
 });
 

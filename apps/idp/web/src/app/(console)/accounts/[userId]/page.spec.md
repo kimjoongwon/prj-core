@@ -21,7 +21,9 @@
 |------|------|
 | `@cocrepo/api/idp/idp-accounts` | 계정 상세 조회, 활성 상태 전환, 실패 횟수 초기화 |
 | `@cocrepo/api/idp/auth` | 잠금 해제, 비밀번호 강제 변경, 세션 무효화 |
-| `@cocrepo/ui` | `DetailPage`, `DetailSection`, `ConfirmModal` 등 상세 본문 조합 |
+| `@cocrepo/ui` | `IdpConsoleAccountsUserIdPage` pure page 조합 |
+| `@tanstack/react-query` | 상세 캐시 무효화 |
+| `next/navigation` | 상세 라우팅과 목록 복귀 |
 
 ## 동작 흐름
 
@@ -59,13 +61,14 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/accounts/[userId]/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 `detail/view`의 detail shell 안에서 계정 읽기 전용 본문과 관리 액션만 담당합니다.
+- `page.tsx`는 계정 상세 조회, 보안 mutation, 라우팅만 담당하고 시각 조합은 `IdpConsoleAccountsUserIdPage`가 소유합니다.
 
 ## Rendering Decision
 
-- 기본 패턴: `page.tsx` 단일 CSR
+- 기본 패턴: `pure page + thin route container`
 - page role: `detail`
 - reusable target: `detail/view`
+- page component path: `packages/fe-ui/src/page/IdpConsoleAccountsUserIdPage/IdpConsoleAccountsUserIdPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -73,6 +76,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | `IdpConsoleAccountsUserIdPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-28 | 상세 진입 E2E가 `aria-label` 대신 실제 계정 상세 링크 계약(`/accounts/:userId`)을 사용하도록 기준을 정리 | codex |
 | 2026-03-22 | `(console)` layout contract 변경에 맞춰 primitive skeleton 범위를 보정 | codex |
 | 2026-03-22 | 계정 상세를 `DetailPage`/`DetailSectionCard` 기반 detail/view shell로 정리하고 spec 의존성을 동기화 | codex |

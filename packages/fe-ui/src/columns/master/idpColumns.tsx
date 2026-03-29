@@ -85,32 +85,87 @@ export const oidcClientActionsColumn = createActionsColumn<OidcClientDto>({
 	),
 });
 
-export const oidcClientTableColumns = buildColumns<OidcClientDto>(
-	oidcClientIdColumn,
-	oidcClientNameColumn,
-	oidcClientAuthMethodColumn,
-	oidcClientGrantTypesColumn,
-	oidcClientIsActiveColumn,
-	oidcClientCreatedAtColumn,
-	oidcClientActionsColumn,
-);
-
-export function buildIdpAccountTableColumns({
-	onClickOpenUnlockModal,
-}: {
-	onClickOpenUnlockModal: (account: IdpAccountDto) => void;
-}) {
-	/** IDP Account 목록 페이지용 컬럼 조합을 생성합니다. */
-	return buildColumns<IdpAccountDto>(
-		createNameColumn<IdpAccountDto>(),
-		createEmailColumn<IdpAccountDto>(),
-		createIsActiveColumn<IdpAccountDto>({
+/** OIDC Client 목록 페이지용 컬럼 조합을 생성합니다. */
+export function buildOidcClientTableColumns<
+	TRow extends {
+		id: string;
+		clientId: string;
+		name: string;
+		tokenEndpointAuthMethod: string;
+		grantTypes: string[];
+		isActive: boolean;
+		createdAt: string | Date | null;
+	},
+>() {
+	return buildColumns<TRow>(
+		createPresetColumn<TRow>("clientId", {
+			size: 200,
+			isRequired: true,
+			cell: ({ getValue }) => <DefaultCell value={getValue() as string} mono />,
+		}),
+		createPresetColumn<TRow>("name", {
+			size: 200,
+		}),
+		createPresetColumn<TRow>("tokenEndpointAuthMethod", {
+			size: 150,
+			cell: ({ getValue }) => <AuthMethodCell method={getValue() as string} />,
+		}),
+		createPresetColumn<TRow>("grantTypes", {
+			size: 200,
+			cell: ({ getValue }) => <GrantTypeCell types={getValue() as string[]} />,
+		}),
+		createIsActiveColumn<TRow>({
 			size: 80,
 			cell: ({ getValue }) => (
 				<ActiveStatusCell isActive={getValue() as boolean} />
 			),
 		}),
-		createPresetColumn<IdpAccountDto>("isPermanentlyLocked", {
+		createCreatedAtColumn<TRow>(),
+		createActionsColumn<TRow>({
+			size: 100,
+			cell: ({ row }) => (
+				<RowActionsCell
+					id={row.original.id}
+					basePath="/oidc-clients"
+					showView
+					showEdit={false}
+					showDelete={false}
+				/>
+			),
+		}),
+	);
+}
+
+export const oidcClientTableColumns =
+	buildOidcClientTableColumns<OidcClientDto>();
+
+export function buildIdpAccountTableColumns<
+	TRow extends {
+		id: string;
+		name: string;
+		email: string;
+		isActive: boolean;
+		isPermanentlyLocked: boolean;
+		lockedUntil?: string | null;
+		failedLoginAttempts: number;
+		lastLoginAt?: string | null;
+	},
+>({
+	onClickOpenUnlockModal,
+}: {
+	onClickOpenUnlockModal: (account: TRow) => void;
+}) {
+	/** IDP Account 목록 페이지용 컬럼 조합을 생성합니다. */
+	return buildColumns<TRow>(
+		createNameColumn<TRow>(),
+		createEmailColumn<TRow>(),
+		createIsActiveColumn<TRow>({
+			size: 80,
+			cell: ({ getValue }) => (
+				<ActiveStatusCell isActive={getValue() as boolean} />
+			),
+		}),
+		createPresetColumn<TRow>("isPermanentlyLocked", {
 			size: 100,
 			align: "center",
 			cell: ({ row }) => (
@@ -120,20 +175,20 @@ export function buildIdpAccountTableColumns({
 				/>
 			),
 		}),
-		createPresetColumn<IdpAccountDto>("failedLoginAttempts", {
+		createPresetColumn<TRow>("failedLoginAttempts", {
 			size: 80,
 			align: "center",
 			cell: ({ getValue }) => (
 				<FailedAttemptsCell count={getValue() as number} />
 			),
 		}),
-		createPresetColumn<IdpAccountDto>("lastLoginAt", {
+		createPresetColumn<TRow>("lastLoginAt", {
 			size: 170,
 			cell: ({ getValue }) => (
-				<DateTimeCell value={getValue() as string | null} />
+				<DateTimeCell value={getValue() as string | null | undefined} />
 			),
 		}),
-		createActionsColumn<IdpAccountDto>({
+		createActionsColumn<TRow>({
 			size: 180,
 			cell: ({ row }) => {
 				const account = row.original;
@@ -151,6 +206,11 @@ export function buildIdpAccountTableColumns({
 		}),
 	);
 }
+
+export const idpAccountTableColumns =
+	buildIdpAccountTableColumns<IdpAccountDto>({
+		onClickOpenUnlockModal: () => undefined,
+	});
 
 export const authAuditLogCreatedAtColumn =
 	createCreatedAtColumn<AuthAuditLogDto>({
@@ -202,7 +262,53 @@ export const authAuditLogTableColumns = buildColumns<AuthAuditLogDto>(
 	authAuditLogUserAgentColumn,
 );
 
-export function buildOidcSessionTableColumns({
+export function buildAuthAuditLogTableColumns<
+	TRow extends {
+		occurredAt?: string | null;
+		email: string;
+		result: string;
+		failureReason?: string | null;
+		ipAddress: string;
+		userAgent?: string | null;
+	},
+>() {
+	return buildColumns<TRow>(
+		createCreatedAtColumn<TRow>({
+			fieldKey: "occurredAt",
+			accessorKey: COLUMN_FIELDS.createdAt,
+			size: 170,
+			isRequired: true,
+		}),
+		createEmailColumn<TRow>(),
+		createPresetColumn<TRow>("result", {
+			size: 100,
+			align: "center",
+			cell: ({ getValue }) => (
+				<AuditResultBadge result={getValue() as AuthAuditResult} />
+			),
+		}),
+		createPresetColumn<TRow>("failureReason", {
+			size: 200,
+		}),
+		createPresetColumn<TRow>("ipAddress", {
+			size: 140,
+		}),
+		createPresetColumn<TRow>("userAgent", {
+			size: 250,
+		}),
+	);
+}
+
+export function buildOidcSessionTableColumns<
+	TRow extends {
+		key: string;
+		modelType: string;
+		accountId?: string;
+		grantId?: string;
+		expiresAt: string | null;
+		createdAt: string;
+	},
+>({
 	onClickGrantId,
 	onClickRevokeSession,
 }: {
@@ -210,9 +316,9 @@ export function buildOidcSessionTableColumns({
 	onClickRevokeSession: (key: string) => void;
 }) {
 	/** OIDC Session 목록 페이지용 컬럼 조합을 생성합니다. */
-	return buildColumnsWithDefaultCreatedAt<OidcSessionDto>(
+	return buildColumnsWithDefaultCreatedAt<TRow>(
 		[
-			createPresetColumn<OidcSessionDto>("key", {
+			createPresetColumn<TRow>("key", {
 				size: 140,
 				isRequired: true,
 				/** 긴 세션 키는 앞부분만 노출하고 전체 값은 title로 보존합니다. */
@@ -223,11 +329,11 @@ export function buildOidcSessionTableColumns({
 					);
 				},
 			}),
-			createPresetColumn<OidcSessionDto>("modelType", {
+			createPresetColumn<TRow>("modelType", {
 				size: 140,
 				cell: ({ getValue }) => <ModelTypeCell type={getValue() as string} />,
 			}),
-			createPresetColumn<OidcSessionDto>("accountId", {
+			createPresetColumn<TRow>("accountId", {
 				size: 140,
 				/** accountId도 동일한 방식으로 축약 표시합니다. */
 				cell: ({ getValue }) => {
@@ -242,7 +348,7 @@ export function buildOidcSessionTableColumns({
 					);
 				},
 			}),
-			createPresetColumn<OidcSessionDto>("grantId", {
+			createPresetColumn<TRow>("grantId", {
 				size: 140,
 				/** grantId는 클릭 액션이 있으므로 버튼 형태의 셀로 표시합니다. */
 				cell: ({ getValue }) => {
@@ -263,7 +369,7 @@ export function buildOidcSessionTableColumns({
 					);
 				},
 			}),
-			createPresetColumn<OidcSessionDto>("expiresAt", {
+			createPresetColumn<TRow>("expiresAt", {
 				size: 180,
 				cell: ({ getValue }) => (
 					<ExpiryCell expiresAt={getValue() as string | null} />
@@ -271,7 +377,7 @@ export function buildOidcSessionTableColumns({
 			}),
 		],
 		[
-			createActionsColumn<OidcSessionDto>({
+			createActionsColumn<TRow>({
 				size: 100,
 				cell: ({ row }) => (
 					<RevokeButtonCell
@@ -282,3 +388,9 @@ export function buildOidcSessionTableColumns({
 		],
 	);
 }
+
+export const oidcSessionTableColumns =
+	buildOidcSessionTableColumns<OidcSessionDto>({
+		onClickGrantId: () => undefined,
+		onClickRevokeSession: () => undefined,
+	});

@@ -1,15 +1,21 @@
 "use client";
 
-import { DetailPage, DetailPageSurface, DetailSectionCard, PageTitleBar } from "@cocrepo/ui";
+import {
+	DetailPage,
+	DetailPageSurface,
+	DetailSectionCard,
+	PageTitleBar,
+} from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
+import { observer } from "mobx-react-lite";
 
 export interface UserDetailPageProps {
 	userId: string;
 	onClickBackButton: () => void;
 }
 
-export function UserDetailPage({
+export const UserDetailPage = observer(function UserDetailPage({
 	userId,
 	onClickBackButton,
 }: UserDetailPageProps) {
@@ -47,4 +53,6 @@ export function UserDetailPage({
 			</DetailPageSurface>
 		</DetailPage>
 	);
-}
+});
+
+UserDetailPage.displayName = "UserDetailPage";

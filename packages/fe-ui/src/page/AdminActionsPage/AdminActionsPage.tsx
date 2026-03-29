@@ -1,22 +1,15 @@
 "use client";
 
-import {
-	type ActionDto,
-	useGetActionsSuspense,
-} from "@cocrepo/api/core/actions";
+import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
 import type { InputConfig } from "@cocrepo/type";
 import {
-	actionTableColumns,
+	buildActionTableColumns,
 	MetaDataGrid,
 	PageTitleBar,
 	Surface,
-	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import type { Route } from "next";
-import { useRouter } from "next/navigation";
-import { Suspense } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -39,10 +32,41 @@ const groupQueryInputs: InputConfig[] = [
 	},
 ];
 
-type ActionsQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[0];
-type SetActionsQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[1];
+export const adminActionsPageQueryInputs: InputConfig[] = [
+	...leftInputs,
+	...groupQueryInputs,
+];
 
-function filterActions(actions: ActionDto[], search?: string) {
+export type AdminActionsPageQueryStates = ReturnType<
+	typeof useMetaDataGridQueryStates
+>[0];
+export type AdminActionsPageSetQueryStates = ReturnType<
+	typeof useMetaDataGridQueryStates
+>[1];
+
+export interface AdminActionsPageAction {
+	id: string;
+	name: string;
+	displayName?: string | null;
+	group?: string | null;
+	order: number;
+	isSystem: boolean;
+	createdAt: string | Date | null;
+	removedAt?: string | null;
+}
+
+export interface AdminActionsPageProps {
+	actions: AdminActionsPageAction[];
+	totalCount: number;
+	isLoading: boolean;
+	queryStates: AdminActionsPageQueryStates;
+	setQueryStates: AdminActionsPageSetQueryStates;
+	onClickCreateButton: () => void;
+}
+
+const actionTableColumns = buildActionTableColumns<AdminActionsPageAction>();
+
+function filterActions(actions: AdminActionsPageAction[], search?: string) {
 	const searchKeyword = search?.trim().toLowerCase() ?? "";
 	if (!searchKeyword) {
 		return actions;
@@ -73,39 +97,47 @@ function buildRightInputs(onClickCreateButton: () => void): InputConfig[] {
 	];
 }
 
-const ActionsPageContent = observer(function ActionsPageContent({
+export const AdminActionsPage = observer(function AdminActionsPage({
+	actions,
+	totalCount: totalActionCount,
+	isLoading,
 	queryStates,
 	setQueryStates,
-	rightInputs,
-}: {
-	queryStates: ActionsQueryStates;
-	setQueryStates: SetActionsQueryStates;
-	rightInputs: InputConfig[];
-}) {
-	const { data: response } = useGetActionsSuspense({
-		group: queryStates.group || undefined,
-	});
-	const actions = response?.data ?? [];
+	onClickCreateButton,
+}: AdminActionsPageProps) {
 	const filteredActions = filterActions(actions, queryStates.search);
 	const totalCount = queryStates.search?.trim().length
 		? filteredActions.length
-		: (response?.meta?.total ?? actions.length);
+		: totalActionCount;
+	const rightInputs = buildRightInputs(onClickCreateButton);
+
+	if (isLoading) {
+		return <ActionsPageFallback />;
+	}
 
 	return (
-		<MetaDataGrid
-			config={{
-				entity: "Action",
-				data: filteredActions,
-				totalCount,
-				isLoading: false,
-				queryStates,
-				setQueryStates,
-				columns: actionTableColumns,
-				leftInputs,
-				rightInputs,
-				emptyMessage: "조회된 Action이 없습니다.",
-			}}
-		/>
+		<div className="space-y-5">
+			<PageTitleBar
+				title="Action 목록"
+				description="시스템에 등록된 Action을 조회합니다."
+			/>
+			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<MetaDataGrid
+					config={{
+						entity: "Action",
+						data: filteredActions,
+						totalCount,
+						isLoading: false,
+						queryStates,
+						setQueryStates,
+						columns: actionTableColumns,
+						leftInputs,
+						rightInputs,
+						emptyMessage: "조회된 Action이 없습니다.",
+					}}
+				/>
+			</Surface>
+		</div>
 	);
 });
 
@@ -122,62 +154,5 @@ function ActionsPageFallback() {
 		</div>
 	);
 }
-
-const ActionsPageInner = observer(function ActionsPageInner() {
-	const router = useRouter();
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates([
-		...leftInputs,
-		...groupQueryInputs,
-	]);
-
-	const onClickCreateButton = () => {
-		router.push("/actions/new" as Route);
-	};
-
-	const rightInputs = buildRightInputs(onClickCreateButton);
-
-	return (
-		<div className="space-y-5">
-			<PageTitleBar
-				title="Action 목록"
-				description="시스템에 등록된 Action을 조회합니다."
-			/>
-			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
-				<Suspense
-					fallback={
-						<MetaDataGrid
-							config={{
-								entity: "Action",
-								data: [],
-								totalCount: 0,
-								isLoading: true,
-								queryStates,
-								setQueryStates,
-								columns: actionTableColumns,
-								leftInputs,
-								rightInputs,
-								emptyMessage: "조회된 Action이 없습니다.",
-							}}
-						/>
-					}
-				>
-					<ActionsPageContent
-						queryStates={queryStates}
-						setQueryStates={setQueryStates}
-						rightInputs={rightInputs}
-					/>
-				</Suspense>
-			</Surface>
-		</div>
-	);
-});
-
-export const AdminActionsPage = observer(function ActionsPage() {
-	return (
-		<Suspense fallback={<ActionsPageFallback />}>
-			<ActionsPageInner />
-		</Suspense>
-	);
-});
 
 export default AdminActionsPage;

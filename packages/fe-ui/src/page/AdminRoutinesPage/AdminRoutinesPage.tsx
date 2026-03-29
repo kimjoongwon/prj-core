@@ -1,21 +1,14 @@
 "use client";
 
-import {
-	getGetRoutinesQueryKey,
-	type RoutineDto,
-	useDeleteRoutine,
-	useGetRoutinesSuspense,
-} from "@cocrepo/api/core/routines";
-import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
+import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
+import type { InputConfig } from "@cocrepo/type";
 import {
 	buildRoutineTableColumns,
 	MetaDataGrid,
 	PageTitleBar,
 	Surface,
-	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import {
-	addToast,
 	Button,
 	Modal,
 	ModalBody,
@@ -24,12 +17,9 @@ import {
 	ModalHeader,
 	useDisclosure,
 } from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Suspense } from "react";
+import { observer } from "mobx-react-lite";
+import { useState } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -53,50 +43,33 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 
-type RoutinesQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[0];
-type SetRoutinesQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[1];
+export const adminRoutinesPageQueryInputs = [...leftInputs];
 
-function getRoutineParams(queryStates: RoutinesQueryStates) {
-	return {
-		take: queryStates.take,
-		skip: queryStates.skip,
-		search: queryStates.search || undefined,
-		spaceScope:
-			(queryStates.spaceScope as "CURRENT" | "INCLUDE_ANCESTORS") || undefined,
-	};
+export type AdminRoutinesPageQueryStates = ReturnType<
+	typeof useMetaDataGridQueryStates
+>[0];
+export type AdminRoutinesPageSetQueryStates = ReturnType<
+	typeof useMetaDataGridQueryStates
+>[1];
+
+export interface AdminRoutinesPageRoutine {
+	id: string;
+	name: string;
+	label?: string | null;
+	createdAt: string | Date | null;
 }
 
-const RoutinesPageContent = observer(function RoutinesPageContent({
-	queryStates,
-	setQueryStates,
-	columns,
-}: {
-	queryStates: RoutinesQueryStates;
-	setQueryStates: SetRoutinesQueryStates;
-	columns: MetaDataGridColumnConfig<RoutineDto>[];
-}) {
-	const { data: response } = useGetRoutinesSuspense(
-		getRoutineParams(queryStates),
-	);
-	const routines = (response?.data ?? []) as RoutineDto[];
-	const totalCount = response?.meta?.total ?? 0;
-
-	return (
-		<MetaDataGrid
-			config={{
-				entity: "Routine",
-				data: routines,
-				totalCount,
-				isLoading: false,
-				queryStates,
-				setQueryStates,
-				columns,
-				leftInputs,
-				emptyMessage: "등록된 루틴이 없습니다.",
-			}}
-		/>
-	);
-});
+export interface AdminRoutinesPageProps {
+	routines: AdminRoutinesPageRoutine[];
+	totalCount: number;
+	isLoading: boolean;
+	isDeleting: boolean;
+	queryStates: AdminRoutinesPageQueryStates;
+	setQueryStates: AdminRoutinesPageSetQueryStates;
+	onClickCreateButton: () => void;
+	onClickRoutineName: (routineId: string) => void;
+	onDeleteRoutine: (routineId: string) => Promise<void>;
+}
 
 function RoutinesPageFallback() {
 	return (
@@ -112,61 +85,36 @@ function RoutinesPageFallback() {
 	);
 }
 
-const RoutinesPageInner = observer(function RoutinesPageInner() {
-	const router = useRouter();
-	const queryClient = useQueryClient();
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(leftInputs);
-	const state = useLocalObservable(() => ({
-		deleteTarget: null as RoutineDto | null,
-	}));
+export const AdminRoutinesPage = observer(function AdminRoutinesPage({
+	routines,
+	totalCount,
+	isLoading,
+	isDeleting,
+	queryStates,
+	setQueryStates,
+	onClickCreateButton,
+	onClickRoutineName,
+	onDeleteRoutine,
+}: AdminRoutinesPageProps) {
+	const [deleteTarget, setDeleteTarget] =
+		useState<AdminRoutinesPageRoutine | null>(null);
 	const deleteModal = useDisclosure();
-	const deleteMutation = useDeleteRoutine();
-
-	const onClickRoutineName = (routine: RoutineDto) => {
-		router.push(`/routines/${routine.id}`);
-	};
-
-	const onClickDeleteButton = (routine: RoutineDto) => {
-		state.deleteTarget = routine;
+	const onClickDeleteButton = (routineId: string) => {
+		const targetRoutine = routines.find((routine) => routine.id === routineId);
+		if (!targetRoutine) {
+			return;
+		}
+		setDeleteTarget(targetRoutine);
 		deleteModal.onOpen();
 	};
-
-	const onClickDeleteConfirm = () => {
-		const target = state.deleteTarget;
-		if (!target) return;
-
-		deleteMutation.mutate(
-			{ routineId: target.id },
-			{
-				onSuccess: () => {
-					addToast({
-						title: "삭제 성공",
-						description: "루틴이 삭제되었습니다.",
-						color: "success",
-					});
-					deleteModal.onClose();
-					state.deleteTarget = null;
-					queryClient.invalidateQueries({
-						queryKey: getGetRoutinesQueryKey(),
-					});
-				},
-				onError: (error) => {
-					addToast({
-						title: "삭제 실패",
-						description:
-							error.message ||
-							"삭제 중 오류가 발생했습니다. 프로그램에서 사용 중인 루틴은 삭제할 수 없습니다.",
-						color: "danger",
-					});
-				},
-			},
-		);
-	};
-
-	const columns = buildRoutineTableColumns({
+	const columns = buildRoutineTableColumns<AdminRoutinesPageRoutine>({
 		onClickRoutineName,
 		onClickDeleteButton,
 	});
+
+	if (isLoading) {
+		return <RoutinesPageFallback />;
+	}
 
 	return (
 		<div className="space-y-5">
@@ -175,47 +123,35 @@ const RoutinesPageInner = observer(function RoutinesPageInner() {
 				description="운동 루틴(커리큘럼)을 관리합니다."
 				actions={
 					<Button
-						as={Link}
-						href="/routines/new"
 						color="primary"
 						startContent={<Plus className="h-4 w-4" />}
+						onPress={onClickCreateButton}
 					>
 						루틴 등록
 					</Button>
 				}
 			/>
 			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
-				<Suspense
-					fallback={
-						<MetaDataGrid
-							config={{
-								entity: "Routine",
-								data: [],
-								totalCount: 0,
-								isLoading: true,
-								queryStates,
-								setQueryStates,
-								columns,
-								leftInputs,
-								emptyMessage: "등록된 루틴이 없습니다.",
-							}}
-						/>
-					}
-				>
-					<RoutinesPageContent
-						queryStates={queryStates}
-						setQueryStates={setQueryStates}
-						columns={columns}
-					/>
-				</Suspense>
+				<MetaDataGrid
+					config={{
+						entity: "Routine",
+						data: routines,
+						totalCount,
+						isLoading: false,
+						queryStates,
+						setQueryStates,
+						columns,
+						leftInputs,
+						emptyMessage: "등록된 루틴이 없습니다.",
+					}}
+				/>
 			</Surface>
 			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
 				<ModalContent>
 					<ModalHeader>루틴 삭제</ModalHeader>
 					<ModalBody>
 						<p>
-							<strong>{state.deleteTarget?.name}</strong> 루틴을
-							삭제하시겠습니까?
+							<strong>{deleteTarget?.name}</strong> 루틴을 삭제하시겠습니까?
 						</p>
 						<p className="mt-2 text-sm text-danger">
 							프로그램에서 사용 중인 루틴은 삭제할 수 없습니다.
@@ -225,14 +161,22 @@ const RoutinesPageInner = observer(function RoutinesPageInner() {
 						<Button
 							variant="flat"
 							onPress={deleteModal.onClose}
-							isDisabled={deleteMutation.isPending}
+							isDisabled={isDeleting}
 						>
 							취소
 						</Button>
 						<Button
 							color="danger"
-							onPress={onClickDeleteConfirm}
-							isLoading={deleteMutation.isPending}
+							onPress={() => {
+								if (!deleteTarget) {
+									return;
+								}
+								void onDeleteRoutine(deleteTarget.id).then(() => {
+									deleteModal.onClose();
+									setDeleteTarget(null);
+								});
+							}}
+							isLoading={isDeleting}
 						>
 							삭제
 						</Button>
@@ -240,14 +184,6 @@ const RoutinesPageInner = observer(function RoutinesPageInner() {
 				</ModalContent>
 			</Modal>
 		</div>
-	);
-});
-
-export const AdminRoutinesPage = observer(function RoutinesPage() {
-	return (
-		<Suspense fallback={<RoutinesPageFallback />}>
-			<RoutinesPageInner />
-		</Suspense>
 	);
 });
 

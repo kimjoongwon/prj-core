@@ -1,18 +1,19 @@
-# AdminRolesPage page 기획서
+# AdminRolesPage ui 기획서
 
 > 생성일: 2026-03-26
-> 타입: page
+> 타입: ui
 > 위치: packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.tsx
 
 ## 역할
 
-이 파일은 route thin wrapper가 재사용하는 page 레이어 화면 컴포넌트를 담당합니다.
-역할 목록 시각화는 직접 `<table>`를 그리지 않고 `MetaDataGrid`와 `columns` 레이어 조합만 사용합니다.
+역할 목록 화면의 pure page 컴포넌트입니다. 역할 조회, query state, 신규 등록 라우팅은 route thin container가 소유하고 이 파일은 안내 배너와 grid 조합만 담당합니다.
 
 ## 공개 계약
 
 | 항목 | 설명 |
 |------|------|
+| AdminRolesPageRole | 역할 목록 row 계약 |
+| AdminRolesPageProps | pure page 입력 계약 |
 | AdminRolesPage | 공개 계약 요소 |
 | default export | 공개 계약 요소 |
 
@@ -20,19 +21,16 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/api/core/roles | 기능 구현 의존성 |
+| @cocrepo/hook | query state type 참조 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | @heroui/react | 기능 구현 의존성 |
 | lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
-| next/link | 기능 구현 의존성 |
-| react | 기능 구현 의존성 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-28 | 역할 목록 렌더링을 custom table에서 `MetaDataGrid`로 전환하고 상세 액션도 `columns` 레이어로 이동 | codex |
-| 2026-03-27 | `columns` 레이어 이관 후 남은 미사용 `RoleDto` type import를 제거해 page 계약을 단순화 | codex |
-| 2026-03-27 | 역할 목록 raw table 컬럼을 page 내부 inline 선언 대신 `columns` 레이어의 공용 조합으로 이관 | codex |
+| 2026-03-29 | 역할 목록을 pure page로 재정의하고 조회·query state·등록 라우팅을 route thin container로 이동 | codex |
+| 2026-03-28 | 역할 목록을 `MetaDataGrid` 기반 pure page로 통합하고 `raw` 테이블 의존을 제거 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |

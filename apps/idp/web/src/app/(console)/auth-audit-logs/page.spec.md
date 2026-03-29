@@ -19,8 +19,8 @@
 
 | 모듈 | 용도 |
 |------|------|
-| @tanstack/react-query | 기능 구현 의존성 |
-| next/headers | 기능 구현 의존성 |
+| @cocrepo/api/idp/auth | 감사 로그와 요약 통계 조회 |
+| @cocrepo/ui | `IdpConsoleAuthAuditLogsPage`, query input, `useMetaDataGridQueryStates` |
 
 ## 동작 흐름
 
@@ -49,13 +49,14 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/auth-audit-logs/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 `PageTitleBar`, `StatsCard`, content-level `Surface` 안에서 감사 로그 탐색과 `MetaDataGrid` 콘텐츠만 담당합니다.
+- `page.tsx`는 감사 로그/통계 조회와 query state만 담당하고 시각 조합은 `IdpConsoleAuthAuditLogsPage`가 소유합니다.
 
 ## Rendering Decision
 
-- 기본 패턴: `page.tsx` 단일 CSR
+- 기본 패턴: `pure page + thin route container`
 - page role: `master`
 - reusable target: `master/table`
+- page component path: `packages/fe-ui/src/page/IdpConsoleAuthAuditLogsPage/IdpConsoleAuthAuditLogsPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -63,6 +64,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | `IdpConsoleAuthAuditLogsPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-22 | `StatsCard`와 content-level `Surface` 기준으로 감사 로그 목록 계약을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |

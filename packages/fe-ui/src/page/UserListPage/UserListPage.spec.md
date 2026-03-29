@@ -21,6 +21,7 @@
 
 | 일자       | 내용                                                                                                                         | 작성자       |
 | ---------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| 2026-03-29 | `UserListPage`와 loading fallback을 `observer`로 감싸 목록/로딩 상태의 MobX 변경 추적 계약을 고정                          | codex        |
 | 2026-03-27 | user page는 로컬 row contract를 유지하면서 cell 참조를 루트 `src/cell` 배럴로 고정해 columns refactor와 import 흐름을 단순화 | codex        |
 | 2026-03-27 | `UserRoleCell` import를 이동된 루트 `src/cell` 배럴 기준으로 정리                                                            | codex        |
 | 2026-03-27 | columns 레이어 exported row type import를 제거하고 page contract 기반 user columns builder를 사용하도록 조정                 | codex        |

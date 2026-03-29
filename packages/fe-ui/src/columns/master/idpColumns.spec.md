@@ -13,15 +13,21 @@ OIDC Client, IDP Account, Auth Audit Log, OIDC Session 컬럼 빌딩 흐름을 �
 
 | 항목                           | 설명                           |
 | ------------------------------ | ------------------------------ |
+| `buildAuthAuditLogTableColumns` | Auth audit log 목록 컬럼 builder |
+| `buildOidcClientTableColumns`  | OIDC Client 목록 컬럼 builder  |
 | `oidcClientTableColumns`       | OIDC Client 목록 컬럼 조합     |
 | `buildIdpAccountTableColumns`  | IDP Account 목록 컬럼 builder  |
+| `idpAccountTableColumns`       | IDP Account 목록 기본 컬럼 조합 |
 | `authAuditLogTableColumns`     | Auth audit log 컬럼 조합       |
 | `buildOidcSessionTableColumns` | OIDC Session 목록 컬럼 builder |
+| `oidcSessionTableColumns`      | OIDC Session 목록 기본 컬럼 조합 |
 
 ## 변경 이력
 
 | 일자       | 내용                                                                                                             | 작성자 |
 | ---------- | ---------------------------------------------------------------------------------------------------------------- | ------ |
+| 2026-03-29 | Auth audit log, IDP account, OIDC session 컬럼을 generic builder로 확장해 pure page가 API DTO 없이도 동일한 columns 조합을 재사용할 수 있게 정리 | codex  |
+| 2026-03-29 | `OIDC Client` 목록 컬럼을 generic builder로 추출해 pure page가 API DTO 없이도 동일한 columns 조합을 재사용할 수 있게 정리 | codex  |
 | 2026-03-28 | IDP column builder 주석을 영문에서 한글로 정리하고 세션 축약 표시 설명을 보강 | codex  |
 | 2026-03-28 | 주요 IDP column builder 함수에 설명 주석을 추가해 lock/action/session 컬럼 의도를 보강 | codex  |
 | 2026-03-28 | IDP master columns의 인라인 버튼/식별자/잠금 상태 렌더링을 `src/cell` 컴포넌트로 이동 | codex  |

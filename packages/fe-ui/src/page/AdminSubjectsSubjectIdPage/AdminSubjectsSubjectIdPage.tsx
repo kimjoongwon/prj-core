@@ -1,10 +1,4 @@
 "use client";
-import {
-	getSubjectFields,
-	type SubjectDto,
-	type SubjectFieldDto,
-	useGetSubjectById,
-} from "@cocrepo/api/core/subjects";
 
 import {
 	BooleanCell,
@@ -28,16 +22,35 @@ import {
 	TableHeader,
 	TableRow,
 } from "@heroui/react";
-import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Box } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import type { Route } from "next";
-import Link from "next/link";
 import type { ReactNode } from "react";
-import { useParams } from "next/navigation";
 
-interface SubjectDetailPageClientProps {
-	subjectId: string;
+export interface AdminSubjectsSubjectIdPageSubject {
+	name: string;
+	displayName?: string | null;
+	icon?: string | null;
+	group?: string | null;
+	order: number;
+	isSystem: boolean;
+	createdAt: string | Date | null;
+	updatedAt?: string | Date | null;
+}
+
+export interface AdminSubjectsSubjectIdPageField {
+	name: string;
+	displayName?: string | null;
+	type: string;
+	isRequired: boolean;
+	isRelation: boolean;
+}
+
+export interface AdminSubjectsSubjectIdPageProps {
+	subject?: AdminSubjectsSubjectIdPageSubject;
+	subjectFields: AdminSubjectsSubjectIdPageField[];
+	isLoading: boolean;
+	isFieldsLoading: boolean;
+	onClickBackButton: () => void;
 }
 
 /**
@@ -63,7 +76,11 @@ function getGroupColor(
 /**
  * Subject 상세 정보 표시 컴포넌트
  */
-function SubjectInfoSection({ subject }: { subject: SubjectDto }) {
+function SubjectInfoSection({
+	subject,
+}: {
+	subject: AdminSubjectsSubjectIdPageSubject;
+}) {
 	return (
 		<DetailSectionCard>
 			<DetailSection top={<PageTitleBar level={2} title="기본 정보" />}>
@@ -132,19 +149,14 @@ function SubjectInfoSection({ subject }: { subject: SubjectDto }) {
  * Subject 필드 목록 표시 컴포넌트
  */
 function SubjectFieldsSection({
-	subjectId,
 	group,
+	subjectFields,
+	isLoading,
 }: {
-	subjectId: string;
-	group?: string;
+	group?: string | null;
+	subjectFields: AdminSubjectsSubjectIdPageField[];
+	isLoading: boolean;
 }) {
-	// entity 그룹이 아니면 필드 조회 스킵
-	const { data: fields, isLoading } = useQuery({
-		queryKey: ["subject-fields", subjectId],
-		queryFn: () => getSubjectFields(subjectId),
-		enabled: group === "entity",
-	});
-
 	let content: ReactNode;
 
 	// entity 그룹이 아닌 경우
@@ -165,8 +177,6 @@ function SubjectFieldsSection({
 			</div>
 		);
 	} else {
-		// 필드 데이터 추출
-		const fieldList: SubjectFieldDto[] = fields?.data ?? [];
 		content = (
 			<Table aria-label="Subject 필드 목록">
 				<TableHeader>
@@ -176,7 +186,7 @@ function SubjectFieldsSection({
 					<TableColumn align="center">필수</TableColumn>
 					<TableColumn align="center">관계</TableColumn>
 				</TableHeader>
-				<TableBody items={fieldList} emptyContent="조회된 필드가 없습니다.">
+				<TableBody items={subjectFields} emptyContent="조회된 필드가 없습니다.">
 					{(field) => (
 						<TableRow key={field.name}>
 							<TableCell>{field.name}</TableCell>
@@ -212,98 +222,89 @@ function SubjectFieldsSection({
 	);
 }
 
-/**
- * Subject 상세 페이지 - 클라이언트 컴포넌트
- */
-function SubjectDetailPageClient({ subjectId }: SubjectDetailPageClientProps) {
-	// Subject 상세 조회 (useGetSubjectById는 string 파라미터 받음)
-	const { data: response, isLoading } = useGetSubjectById(subjectId);
-	const subject = response?.data;
+export const AdminSubjectsSubjectIdPage = observer(
+	function AdminSubjectsSubjectIdPage({
+		subject,
+		subjectFields,
+		isLoading,
+		isFieldsLoading,
+		onClickBackButton,
+	}: AdminSubjectsSubjectIdPageProps) {
+		if (isLoading) {
+			return (
+				<DetailPage
+					top={<PageTitleBar title="Subject 상세" description="로딩 중..." />}
+				>
+					<DetailPageSurface>
+						<DetailSectionCard>
+							<div className="flex items-center justify-center p-8">
+								<Spinner size="lg" />
+							</div>
+						</DetailSectionCard>
+					</DetailPageSurface>
+				</DetailPage>
+			);
+		}
 
-	if (isLoading) {
-		return (
-			<DetailPage
-				top={<PageTitleBar title="Subject 상세" description="로딩 중..." />}
-			>
-				<DetailPageSurface>
-					<DetailSectionCard>
-						<div className="flex items-center justify-center p-8">
-							<Spinner size="lg" />
-						</div>
-					</DetailSectionCard>
-				</DetailPageSurface>
-			</DetailPage>
-		);
-	}
+		if (!subject) {
+			const pageHeader = (
+				<PageTitleBar
+					title="Subject 상세"
+					description="Subject를 찾을 수 없습니다."
+				/>
+			);
 
-	if (!subject) {
+			return (
+				<DetailPage top={pageHeader}>
+					<DetailPageSurface>
+						<DetailSectionCard>
+							<div className="flex flex-col items-center justify-center gap-4 p-8">
+								<p className="text-default-500">Subject를 찾을 수 없습니다.</p>
+								<Button
+									variant="flat"
+									startContent={<ArrowLeft className="size-4" />}
+									onPress={onClickBackButton}
+								>
+									목록으로
+								</Button>
+							</div>
+						</DetailSectionCard>
+					</DetailPageSurface>
+				</DetailPage>
+			);
+		}
+
 		const pageHeader = (
 			<PageTitleBar
 				title="Subject 상세"
-				description="Subject를 찾을 수 없습니다."
+				description="Subject의 상세 정보를 조회합니다."
+				actions={
+					<Button
+						variant="flat"
+						startContent={<ArrowLeft className="size-4" />}
+						onPress={onClickBackButton}
+					>
+						목록으로
+					</Button>
+				}
 			/>
 		);
 
 		return (
 			<DetailPage top={pageHeader}>
 				<DetailPageSurface>
-					<DetailSectionCard>
-						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-default-500">Subject를 찾을 수 없습니다.</p>
-							<Button
-								as={Link}
-								href={"/subjects" as Route}
-								variant="flat"
-								startContent={<ArrowLeft className="size-4" />}
-							>
-								목록으로
-							</Button>
-						</div>
-					</DetailSectionCard>
+					<VStack gap={4}>
+						<SubjectInfoSection subject={subject} />
+						<SubjectFieldsSection
+							group={subject.group}
+							subjectFields={subjectFields}
+							isLoading={isFieldsLoading}
+						/>
+					</VStack>
 				</DetailPageSurface>
 			</DetailPage>
 		);
-	}
-
-	const pageHeader = (
-		<PageTitleBar
-			title="Subject 상세"
-			description="Subject의 상세 정보를 조회합니다."
-			actions={
-				<Button
-					as={Link}
-					href={"/subjects" as Route}
-					variant="flat"
-					startContent={<ArrowLeft className="size-4" />}
-				>
-					목록으로
-				</Button>
-			}
-		/>
-	);
-
-	return (
-		<DetailPage top={pageHeader}>
-			<DetailPageSurface>
-				<VStack gap={4}>
-					<SubjectInfoSection subject={subject} />
-					<SubjectFieldsSection subjectId={subjectId} group={subject.group} />
-				</VStack>
-			</DetailPageSurface>
-		</DetailPage>
-	);
-}
-
-type SubjectDetailPageParams = {
-	subjectId: string;
-};
-
-const SubjectDetailPage = observer(function SubjectDetailPage() {
-	const { subjectId } = useParams<SubjectDetailPageParams>();
-
-	return <SubjectDetailPageClient subjectId={subjectId} />;
-});
-
-export const AdminSubjectsSubjectIdPage = SubjectDetailPage;
+	},
+);
 
 export default AdminSubjectsSubjectIdPage;

@@ -22,4 +22,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | page 컴포넌트를 `observer`로 감싸 MobX 변경 추적 계약을 명시적으로 보강 | codex |
 | 2026-03-26 | abilities 등록/수정 route의 page-level UI를 page 레이어로 이동 | codex |
