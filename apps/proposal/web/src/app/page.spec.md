@@ -109,8 +109,8 @@
 ## Rendering Decision
 
 - 기본 패턴: `page.tsx` 단일 CSR
-- page role: `master`
-- reusable target: `master/list`
+- page role: `detail`
+- reusable target: `detail/view`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -118,6 +118,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | 미구현 리스트 재사용 축 제거에 맞춰 정적 읽기 중심 랜딩 분류를 `detail/view`로 보정 | codex |
 | 2026-03-28 | 상단 제안 메시지는 유지하고 하단에 실전 경력, 이력 상세, 포트폴리오 섹션을 추가하도록 랜딩 구조를 조정 | codex |
 | 2026-03-21 | `_client.tsx`와 `_prefetch.ts`를 제거하고 `page.tsx` + `proposal-page-data.ts` 구조로 단순화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |

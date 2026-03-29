@@ -16,7 +16,7 @@
 | 축 | 공개 경로 | 용도 |
 | --- | --- | --- |
 | `feature` | `packages/fe-ui/src/feature` | 비즈니스 로직, 상태, 라우터 이동이 포함된 기능 컴포넌트 |
-| `master` | `packages/fe-ui/src/master` | 목록/테이블/그리드 중심 재사용 계층 |
+| `master` | `packages/fe-ui/src/master` | 테이블/그리드 중심 재사용 계층 |
 | `detail` | `packages/fe-ui/src/detail` | 읽기 전용 상세 본문 재사용 계층 |
 | `form` | `packages/fe-ui/src/form` | 생성/수정/입력 중심 재사용 계층 |
 | `surface` | `packages/fe-ui/src/surface` | `master/detail/form`이 공통으로 쓰는 시각 wrapper |
@@ -27,7 +27,6 @@
 | page role | reusable target | 실제 경로 | 전담 agent |
 | --- | --- | --- | --- |
 | `master` | `master/table` | `packages/fe-ui/src/master/table` | `fe-master-builder` |
-| `master` | `master/list` | `packages/fe-ui/src/master/list` | `fe-master-builder` |
 | `master` | `master/grid` | `packages/fe-ui/src/master/grid` | `fe-master-builder` |
 | `detail` | `detail/view` | `packages/fe-ui/src/detail/view` | `fe-detail-builder` |
 | `form` | `form` | `packages/fe-ui/src/form` | `fe-form-builder` |
@@ -38,7 +37,6 @@
 | --- | --- |
 | `src/feature/form/**` | `src/form/**` |
 | `src/feature/table/**` | `src/master/table/**` |
-| `src/feature/list/**` | `src/master/list/**` |
 | `src/feature/grid/**` | `src/master/grid/**` |
 | `src/feature/view/**` | `src/detail/view/**` |
 | `src/widget/**` 또는 도메인 하위 form 계열 | `src/form/**` |

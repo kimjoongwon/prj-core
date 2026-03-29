@@ -25,7 +25,7 @@
 
 - 기본 패턴: `page.tsx` 단일 CSR
 - page role: `master`
-- reusable target: `master/list`
+- reusable target: `master/table`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -59,5 +59,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | 구현이 테이블 중심으로 유지되는 현재 구조에 맞춰 reusable target을 `master/table`로 보정 | codex |
 | 2026-03-22 | 목록 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | 역할 그룹 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

@@ -25,7 +25,7 @@
 
 - 기본 패턴: `pure page + thin route container`
 - page role: `master`
-- reusable target: `master/list`
+- reusable target: `master/table`
 - page component path: `packages/fe-ui/src/page/AbilityListPage/AbilityListPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
@@ -68,6 +68,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | `AbilityListPage`가 `MetaDataGrid` 기반 테이블 조합을 사용하도록 정착된 상태에 맞춰 reusable target을 `master/table`로 보정 | codex |
 | 2026-03-26 | `AbilityListPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-23 | 필터 Select 검증 기준을 접근성 role name이 아닌 HeroUI trigger placeholder 텍스트로 명시 | codex |
 | 2026-03-23 | 검색 input이 자동화/스크린리더에서 일관되게 식별되도록 `aria-label="권한 이름 검색"` 계약을 추가 | codex |

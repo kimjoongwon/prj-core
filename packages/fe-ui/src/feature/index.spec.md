@@ -8,7 +8,7 @@
 
 `feature` 계층 컴포넌트의 공용 export 진입점을 제공합니다.
 페이지에서는 반드시 `@cocrepo/ui`를 통해 feature를 import하도록 경로를 단일화합니다.
-재사용 분류가 필요한 화면은 `feature` 하위가 아니라 `master/table`, `master/list`, `master/grid`, `detail/view`, `form` 엔트리를 우선 사용합니다.
+재사용 분류가 필요한 화면은 `feature` 하위가 아니라 `master/table`, `master/grid`, `detail/view`, `form` 엔트리를 우선 사용합니다.
 
 ## 구조 규칙
 
@@ -21,6 +21,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | 미구현 리스트 재사용 축 제거에 맞춰 재사용 엔트리 안내를 `master/table`/`master/grid` 기준으로 정리 | codex |
 | 2026-03-25 | `feature` 아래 중간 묶음 폴더(`idp`, `user`, `message-template`, `ability`)를 금지하는 평탄화 규칙 추가 | codex |
 | 2026-03-25 | `master/detail/form` 재사용 계층을 `feature`와 같은 위계의 루트 배럴로 분리하고 `feature/index.ts`에서 제외 | codex |
 | 2026-03-21 | `master/detail` 재사용 계층 export를 추가하고 `MetaDataGrid` 공개 진입점을 `master/table`로 승격 | codex |
