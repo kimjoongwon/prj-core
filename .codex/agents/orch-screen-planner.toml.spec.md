@@ -8,6 +8,7 @@
 
 화면 기획 오케스트레이터가 구조 planner 결과를 Surface ownership 결정까지 연결하도록 기준을 정의합니다.
 병렬 fan-out 이후 `req-surface-planner`를 join 단계에서 실행하는 흐름을 고정합니다.
+또한 page-level planner chain과 downstream builder 매핑의 단일 source of truth를 유지하고, 동일 role 목록을 여러 섹션에 복제하지 않도록 합니다.
 
 ## 운영 규칙
 
@@ -21,11 +22,14 @@
 - `page.spec.md`의 `Rendering Decision`에는 `page role`, `reusable target`, `참조한 구현 role`이 함께 기록되어야 합니다.
 - 입력/출력 예시는 `apps/[app]/web/src/app/**` 기준으로 해석합니다.
 - 문서에서 `.codex/config.toml` 기준 항목은 `role`, 실행 단위는 `agent`로 구분합니다.
+- downstream builder 매핑 표를 단일 source of truth로 유지하고, 별도 연관 role 표에서 다시 복제하지 않습니다.
+- 실행 계약은 `선행 순차 → 병렬 fan-out → join` 구조 한 번만 정의합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | 중복된 role 목록과 연관 role 표를 제거하고 page-level 실행 계약 + 단일 builder 매핑 source로 재구성 | codex |
 | 2026-03-28 | `req-columns-planner`와 `fe-columns-builder` 연동 규칙을 Stage 4 fan-out에 추가 | codex |
 | 2026-03-28 | `web/src/app` 경로와 role 용어 기준으로 출력/참조 표기를 정정 | codex |
 | 2026-03-28 | Stage 5/6 구현 role 참조 프로토콜과 `src/cell` 기준 경로, `page role/reusable target` 기록 규칙을 추가 | codex |

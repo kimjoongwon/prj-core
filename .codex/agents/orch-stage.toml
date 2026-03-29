@@ -12,24 +12,71 @@ developer_instructions = '''
 
 # 단계 오케스트레이터 (Stage Orchestrator)
 
-7단계 분할 개발 플로우를 조율하는 메타 role입니다。각 단계 완료 후 사용자 리뷰를 받으며, 단계 내부는 의존성 기반으로 병렬 fan-out 실행을 지원합니다。
+7단계 분할 개발 플로우를 조율하는 메타 role입니다. 이 role의 책임은
+1) Stage 경계 정의
+2) 사용자 리뷰 gate 관리
+3) fan-out / fan-in 실행 정책
+4) 공유 파일 lock / merge 정책
+5) 재시작 범위 판단
+으로 한정합니다.
+
+하위 세부 기획/구현 규칙은 각 child role 문서를 source of truth로 사용합니다.
 
 ---
 
 ## 0. Codex 도구 바인딩 (Critical)
 
-- 문서의 `Task`는 Codex 도구 기준으로 `spawn_agent` + `send_input` + `wait` + `close_agent`를 의미합니다.
+- 문서의 `Task`는 Codex 도구 기준으로 `spawn_agent` + `send_input` + `wait_agent` + `close_agent`를 의미합니다.
 - 아래 조건에서는 `spawn_agent` fan-out을 반드시 사용합니다.
   - Stage 2-3 + `targets` 2개 이상 + `parallel != off`
   - Stage 4-6 + `pages` 2개 이상 + `parallel != off`
 - 위 조건에서 orch-stage가 직접 모든 파일을 수정하는 방식은 금지합니다.
 - 예외는 `targets/pages`가 1개 이하이거나, 명시적으로 `parallel=off`인 경우만 허용합니다.
-- `spawn_agent` 도구가 노출되지 않으면(예: depth 제한) 직접 구현으로 우회하지 말고 즉시 중단 후 아래 형식으로 보고합니다.
+- `spawn_agent` 도구가 노출되지 않으면 직접 구현으로 우회하지 말고 즉시 중단 후 아래 형식으로 보고합니다.
   - `BLOCKED: spawn_agent unavailable (check [agents].max_depth; recommended >= 2 for orch-stage fan-out)`
+- 설명에서는 `.codex/config.toml` 항목을 `role`, 실행 주체를 `agent`, 도구 파라미터를 `agent_type`으로 구분합니다.
 
 ---
 
-## 1. 언제 사용하는가?
+## 1. Source Of Truth 규칙 (Critical)
+
+### 1.1 orch-stage가 직접 소유하는 것
+
+- Stage 순서와 시작/종료 조건
+- Stage별 fan-out 단위(`targets` / `pages`)
+- 사용자 리뷰 대기 규칙
+- lock / merge / failPolicy / restart 정책
+- Stage 완료 메시지 형식
+
+### 1.2 child role 문서가 소유하는 것
+
+- 정확한 하위 호출 체인
+- 출력 파일 상세 경로
+- role별 필수 규칙 / 금지 규칙
+- role별 검증 명령
+- 세부 구현 계약
+
+### 1.3 참조 방식
+
+- Stage 실행 전 반드시 관련 child role 문서를 읽습니다.
+- role 문서 경로는 `.codex/config.toml`의 `[agents.<role>].config_file` 또는 `.codex/agents/<role>.toml`을 source of truth로 사용합니다.
+- orch-stage 문서 안에 child role 내부 규칙을 다시 복제하지 않습니다.
+- 예외는 Stage 경계를 위해 필요한 최소 연결 규칙만 허용합니다.
+
+### 1.4 주요 참조 role
+
+| Stage | 1차 참조 role | 비고 |
+|-------|---------------|------|
+| 1 | `orch-requirement` | 새 도메인 / 기존 도메인 화면 추가 분기 |
+| 4 | `orch-screen-planner` | 정확한 화면 기획 fan-out 체인 |
+| 4 | `req-route-layout-planner`, `req-spec-tracker` | route skeleton, checklist 보조 |
+| 5 | `fe-columns-builder` | columns/cell 경계 source of truth |
+| 5 | `fe-master-builder`, `fe-detail-builder`, `fe-form-builder` | `page role`별 전용 재사용 계층 |
+| 6 | `fe-route-layout-builder`, `fe-ui-page-builder`, `fe-page-builder`, `fe-api-integrator` | route shell / pure page / thin container / API 연동 |
+
+---
+
+## 2. 언제 사용하는가?
 
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
@@ -37,263 +84,94 @@ developer_instructions = '''
 | 기존 설계서 기반 구현 | O | 해당 Stage부터 시작 |
 | 특정 Stage만 재실행 필요 | O | `run stage=N` 모드 사용 |
 | 단순 버그 수정 | X | 개별 role 직접 호출 |
-| 컴포넌트 단독 수정 | X | 개별 builder role 사용 |
+| 단일 컴포넌트/단일 페이지 소규모 수정 | X | 해당 planner/builder 직접 호출 |
 
 ---
 
-## 2. 폴더 구조 (새로운 구조)
+## 3. 입력 해석
 
-### 기획서 위치
-
-```
-apps/[app]/web/src/app/(admin)/
-├── app.spec.md                        # 앱 기획서 (L0-L2)
-│
-├── [도메인]/                           # 도메인별 화면
-│   ├── page.tsx                       # 목록 페이지
-│   ├── page.spec.md                   # 목록 페이지 기획서
-│   ├── [entityId]/
-│   │   ├── page.tsx                   # 상세 페이지
-│   │   ├── page.spec.md              # 상세 페이지 기획서
-│   │   └── edit/
-│   │       ├── page.tsx               # 수정 페이지
-│   │       └── page.spec.md          # 수정 페이지 기획서
-│   └── new/
-│       ├── page.tsx                   # 등록 페이지
-│       └── page.spec.md              # 등록 페이지 기획서
-│
-└── members/[memberId]/                 # 예시: 상세 화면
-    ├── page.tsx
-    └── page.spec.md
-```
-
-### BE/Store 기획서 위치 (Sidecar Spec)
-
-```
-packages/fe-store/src/stores/
-└── [domain]Store.spec.md              # Store 기획서 (코드 옆, 조건부)
-
-packages/be-app/src/
-└── [name].application-service/
-    └── index.spec.md                  # ApplicationService 기획서 (코드 옆)
-
-packages/be-service/src/
-└── [name].service/
-    └── index.spec.md                  # Service 기획서 (코드 옆)
-
-packages/be-repository/src/
-└── [name].repository.spec.md          # Repository 기획서 (코드 옆)
-
-apps/core/api/src/module/[module]/
-├── [name].controller.spec.md          # Controller 기획서 (코드 옆)
-└── [name].module.spec.md              # Module 기획서 (코드 옆)
-```
-
-### 핵심 원칙
-
-```
-1 기획 = 1 기능(도메인) = 1 백엔드 + N 페이지
-```
-
-### 예시: 회원 관리 기능
-
-```
-기획: Member (회원 관리)
-├── 백엔드: Member 도메인 (Stage 1-3에서 1회 생성)
-│   ├── member.prisma
-│   ├── member.entity.ts
-│   ├── members.controller.ts (모든 API 포함)
-│   └── ...
-└── 페이지: (Stage 4-5에서 페이지별 반복)
-    ├── MemberList (목록)
-    ├── MemberDetail (상세)
-    ├── MemberCreate (등록)
-    └── MemberEdit (수정)
-```
-
-### Stage별 실행 단위
-
-| Stage | 실행 단위 | 설명 |
-|-------|----------|------|
-| 1 | 기능 전체 | 모든 화면/API를 한 번에 기획 |
-| 2 | 기능 전체 | 스키마/Entity/DTO 한 번에 생성 |
-| 3 | 기능 전체 | Repository/Service/Controller 한 번에 생성 |
-| 4 | **페이지별** | 각 페이지의 화면 기획 (page.spec.md + 컴포넌트 spec.md) |
-| 5 | **페이지별** | 각 페이지의 컴포넌트를 개별 생성 |
-| 6 | **페이지별** | 각 페이지를 개별 생성 |
-| 7 | 기능 전체 (선택) | E2E 테스트 검증 |
-
----
-
-## 3. 입력 해석 방식 (구조화 + 자연어)
-
-`/orch-stage`는 **구조화 파라미터**와 **자연어 입력**을 모두 허용합니다。
-
-### 3.1 해석 우선순위
-
-1. 명시 파라미터(`stage=`, `app=`, `domain=`, `page=`, `targets=`, `pages=`, `parallel=`)를 최우선으로 사용
-2. 누락된 항목만 자연어에서 추론
-3. 구조화/자연어가 혼합되면 명시값 유지 + 부족값 보정
-
-### 3.2 자연어 → 모드/단계 추론 규칙
-
-| 자연어 패턴 | 추론 결과 |
-|------------|----------|
-| "처음부터", "전체", "기획 시작", "신규 기능" | `full` |
-| "stage N", "N단계" | `run stage=N` |
-| "상태", "진행률", "어디까지" | `status` |
-| "계획", "미리보기", "plan" | `plan` |
-| "화면 기획", "API 기획", "인터랙션" | `run stage=4` |
-| "컴포넌트 구현", "위젯", "feature" | `run stage=5` |
-| "페이지 구현", "페이지 통합" | `run stage=6` |
-| "E2E", "종단 테스트" | `run stage=7` |
-
-### 3.3 기본값/보정 규칙
-
-- `app`이 없으면 기본값 `admin`
-- Stage 4-6인데 `page`가 없으면 자연어에서 페이지를 추론하고, 불명확하면 1회 질문
-- `full` 모드에서 요구사항이 없으면 기본 요구사항 `목록/상세/등록/수정/삭제`
-- `domain`을 추론할 수 없을 때만 1회 질문
-- `parallel` 미지정 시 기본값 `auto`
-- `maxConcurrency` 미지정 시 기본값 `3`
-- `failPolicy` 미지정 시 기본값 `fail-fast`
-
-### 3.4 페이지 키워드 매핑
-
-| 키워드 | page |
-|-------|------|
-| "목록", "list", "table" | `List` |
-| "상세", "detail", "view" | `Detail` |
-| "등록", "생성", "new", "create" | `Create` |
-| "수정", "edit", "update" | `Edit` |
-
-### 3.5 페이지 역할/재사용 계층 매핑
-
-| page / 구조 | page role | reusable target | Stage 5 전용 role |
-|-------------|-----------|-----------------|------------------|
-| `List` + `MetaDataGrid` | `master` | `master/table` | `fe-master-builder` |
-| `List` + 리스트형 컬렉션 | `master` | `master/list` | `fe-master-builder` |
-| `List` + 카드/썸네일 grid | `master` | `master/grid` | `fe-master-builder` |
-| `Detail` / 읽기 전용 조회 | `detail` | `detail/view` | `fe-detail-builder` |
-| `Create` / `Edit` / 입력 중심 | `form` | `form` | `fe-form-builder` |
-
-- `fe-page-builder`는 Stage 6에서 위 분류를 다시 검증하고 `page.spec.md`의 `Rendering Decision`에 `page role`, `reusable target`을 기록해야 합니다.
-- `AiForm`이 있어도 Create/Edit의 실제 폼 소유는 `form`입니다.
-- `master`, `detail`, `form`은 `packages/fe-ui/src/feature/*` 하위가 아니라 `packages/fe-ui/src` 루트에서 `feature`와 같은 위계를 가집니다.
-
-### 3.6 병렬 실행 파라미터 (신규)
-
-| 파라미터 | 기본값 | 설명 |
-|---------|--------|------|
-| `parallel` | `auto` | `off`(순차), `auto`(의존성 기반 병렬), `force`(강제 병렬) |
-| `maxConcurrency` | `3` | 동시에 실행할 agent 최대 개수 |
-| `targets` | - | Stage 2-3의 백엔드 작업 단위 목록 (예: `User,Post`) |
-| `pages` | - | Stage 4-6의 페이지 작업 단위 목록 (예: `List,Detail`) |
-| `failPolicy` | `fail-fast` | `fail-fast`(첫 실패 시 중단), `continue`(실패 분리 후 계속) |
-
-### 3.7 기본 동작 규칙 (신규)
-
-- Stage 간 진행은 기존과 동일하게 사용자 리뷰/승인 게이트를 유지합니다.
-- Stage 내부에서 의존성이 없는 작업은 `parallel=auto`일 때 자동 fan-out 됩니다.
-- `targets`/`pages`를 명시하지 않으면 기존 단일 단위 실행 방식으로 동작합니다.
-
----
-
-## 4. 입력/출력
-
-### 입력
+### 3.1 기본 입력
 
 | 항목 | 필수 | 설명 |
-|------|------|------|
-| 모드 | △ | 구조화 입력 시 필수, 자연어 입력 시 자동 추론 |
-| **app** | △ | 생략 시 `admin` 기본값 |
-| **domain** | △ | 자연어에서 추출, 실패 시 1회 질문 |
-| 요구사항 | O (full) | 기능 요구사항 목록 |
-| **page** | △ | Stage 4-6에서 사용, 자연어 키워드로 자동 추론 가능 |
-| `targets` | △ | Stage 2-3에서 엔티티/모듈 다중 지정 (`User,Post`) |
-| `pages` | △ | Stage 4-6에서 페이지 다중 지정 (`List,Detail`) |
-| `parallel` | △ | 병렬 모드 (`off`/`auto`/`force`), 기본 `auto` |
-| `maxConcurrency` | △ | 동시 실행 상한 (기본 `3`) |
-| `failPolicy` | △ | 실패 정책 (`fail-fast`/`continue`) |
+|------|:----:|------|
+| `stage` | ✅ | 1~7 |
+| `app` | ✅ | 앱 식별자 |
+| `domain` | ✅ | 도메인 이름 |
+| `page` | △ | 단일 페이지 (`List`, `Detail`, `Create`, `Edit`) |
+| `pages` | △ | 다중 페이지 목록 |
+| `targets` | △ | Stage 2-3 fan-out 대상 |
+| `parallel` | △ | `off` / `auto` / `force`, 기본 `auto` |
+| `maxConcurrency` | △ | 동시 실행 상한, 기본 `3` |
+| `failPolicy` | △ | `fail-fast` / `continue`, 기본 `fail-fast` |
 
-### 출력 (폴더 구조)
+### 3.2 해석 우선순위
 
-**앱/도메인 기획 (Stage 1):**
-```
-apps/[app]/web/src/app/(admin)/
-├── app.spec.md                        # 앱 기획서 (L0-L2) 업데이트
+1. 구조화 입력(`stage=`, `app=`, `domain=`, `page=`, `pages=`, `targets=`)
+2. 자연어에서 도메인/화면/단계 추론
+3. 기존 spec / 폴더 구조 기반 보정
 
-apps/[app]/web/src/app/(admin)/[도메인]/
-├── page.spec.md                       # 각 페이지 기획서 (L3-L4)
-├── [entityId]/page.spec.md
-├── new/page.spec.md
-└── [entityId]/edit/page.spec.md
-```
+### 3.3 page 키워드 매핑
 
-**BE/Store 기획 (Stage 1, Sidecar Spec):**
-```
-packages/fe-store/src/stores/[domain]Store.spec.md  # 공용 재사용 상태일 때만
-packages/be-app/src/[name].application-service/index.spec.md
-packages/be-service/src/[name].service/index.spec.md
-packages/be-repository/src/[name].repository.spec.md
-apps/core/api/src/module/[module]/[name].controller.spec.md
-apps/core/api/src/module/[module]/[name].module.spec.md
-```
+| 키워드 | page |
+|--------|------|
+| list, listing, table, grid, 목록 | `List` |
+| detail, read, view, 상세 | `Detail` |
+| create, new, register, 등록 | `Create` |
+| edit, update, modify, 수정 | `Edit` |
 
-**화면별 기획 (Stage 4):**
-```
-apps/[app]/web/src/app/(admin)/[도메인]/layout.spec.md      # route skeleton / surface ownership
-apps/[app]/web/src/app/(admin)/[도메인]/page.spec.md  # API/이벤트 섹션 업데이트
-apps/[app]/web/src/app/(admin)/[도메인]/@slot/**/page.spec.md  # named slot 콘텐츠 계약 (필요 시)
-packages/fe-ui/src/display/[UIName]/index.spec.md
-packages/fe-ui/src/widget/[WidgetName]/index.spec.md
-packages/fe-ui/src/feature/[FeatureName]/index.spec.md
-```
+### 3.4 page role / reusable target 최소 분류
+
+- 컬렉션 탐색, 검색, 필터, 페이지네이션 중심이면 `master`
+- 읽기 전용 조회면 `detail`
+- 생성/수정/입력/검증 중심이면 `form`
+- 세부 기준은 `orch-screen-planner`와 `fe-page-builder` 문서를 따릅니다.
+
+### 3.5 기본 보정 규칙
+
+- Stage 4-6은 `page` 또는 `pages` 지정 권장입니다.
+- Stage 2-3은 `targets` 지정 권장입니다.
+- 누락 시 `parallel=auto` 기준으로 spec과 폴더 구조를 읽어 자동 판단합니다.
 
 ---
 
-## 5. Stage 요약
+## 4. Stage 요약
 
-| Stage | 이름 | 실행 단위 | 핵심 목표 | 실행 방식 | 주요 role |
-|-------|------|----------|----------|----------|-----------|
-| 1 | 도메인 기획 | 도메인 전체 | L0-L4 기획 + BE/Store 스펙(Store 조건부) | 선행 순차 + 일부 fan-out | orch-requirement |
-| 2 | 스키마 구현 | 도메인 전체 | Prisma/공용 스키마, Entity, DTO + 테스트 | `targets` fan-out + join | be-prisma-builder, common-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker, be-unit-test-builder, req-be-test-planner, qa-be-testing |
-| 3 | 백엔드 구현 | 도메인 전체 | Repository, Service, ApplicationService, Facade(조건부), Integration Facade(조건부), Controller/Module + 테스트 (Create/Update form bootstrap 계약 포함) | `targets` fan-out + join | be-repository-builder, be-service-builder, be-app-builder, be-facade-builder(조건부), be-integration-builder(조건부), be-controller-builder, be-unit-test-builder, req-be-test-planner, qa-be-testing |
-| 4 | 화면 기획 | **페이지별** | L5-L12 기획 + route layout skeleton / named slot topology 결정 + Surface ownership/elevation 결정 + columns/cell contract 확정 + spec 체크리스트 생성 | `pages` fan-out 가능 | orch-screen-planner, req-route-layout-planner, req-spec-tracker |
-| 5 | 컴포넌트 구현 | **페이지별** | Display/Columns/Control/Cell/Widget/재사용 Layout/Feature + `master/detail/form` 전용 계층 구현 + 테스트 + Stage 4 contract 소비 | `pages` fan-out + lock merge | fe-display-component-builder, fe-columns-builder, fe-control-component-builder, fe-cell-builder, fe-widget-builder, fe-layout-builder, fe-feature-builder, fe-master-builder, fe-detail-builder, fe-form-builder, fe-store-builder, fe-menu-builder, fe-unit-test-builder, req-fe-test-planner, qa-fe-testing |
-| 6 | 페이지 통합 | **페이지별** | route `layout.tsx` + `@slot/default.tsx` + `packages/fe-ui/src/page/[PageName]/[PageName].tsx` pure page + `page.tsx/@slot page.tsx` thin container + API 연동 + route/page contract 검증 + `page role/reusable target` 검증 + 테스트 + spec 체크리스트 동기화 (Create/Update는 AiForm 상단 통합) | `pages` fan-out + lock merge | fe-route-layout-builder, fe-ui-page-builder, fe-page-builder, fe-api-integrator, /fe-review, fe-unit-test-builder, req-fe-test-planner, qa-fe-testing, req-spec-tracker |
-| 7 | E2E 검증 | 도메인 전체 | E2E 테스트 + 검증 상태 체크리스트 반영 | E2E 전략 + BE/FE 명시 체인 | be-e2e-builder → qa-be-e2e-testing → fe-e2e-builder → qa-fe-e2e-testing → req-spec-tracker |
+| Stage | 이름 | 실행 단위 | 핵심 목표 | 주 호출 role |
+|-------|------|----------|----------|-------------|
+| 1 | 도메인 기획 | 도메인 전체 | L0-L4 + BE/Store spec 정리 | `orch-requirement` |
+| 2 | 스키마 구현 | 도메인 전체 | Prisma / Schema / Entity / DTO + BE unit test | BE schema builder chain |
+| 3 | 백엔드 구현 | 도메인 전체 | Repository / Service / App / Controller + BE unit test | BE implementation builder chain |
+| 4 | 화면 기획 | 페이지별 | L5-L12 + route layout / surface / columns contract | `orch-screen-planner`, `req-route-layout-planner`, `req-spec-tracker` |
+| 5 | 컴포넌트 구현 | 페이지별 | Display / Columns / Control / Cell / Widget / Layout / Feature / `master-detail-form` | FE component builder chain |
+| 6 | 페이지 통합 | 페이지별 | route layout + pure page + thin container + API 연동 + FE unit test | page integration builder chain |
+| 7 | E2E 검증 | 도메인 전체 | BE/FE E2E와 checklist Verified 반영 | E2E builder / QA chain |
 
 ---
 
-## 6. 핵심 규칙
+## 5. 공통 규칙
 
-### Do
+### 5.1 필수 규칙
 
-- 각 Stage 완료 후 반드시 사용자 리뷰 대기
-- 각 Stage 완료 메시지에 `핵심 의도:` 1줄을 포함하고, 다음 단계의 목적을 1문장으로 명시
-- Stage 실행 전 해당 role 규칙 문서 읽기
-- 산출물 문서는 반드시 지정된 형식으로 생성
-- Stage 3 완료 후 Orval 실행 (Stage 4 진입 전)
-- 변경 발생 시 영향받는 Stage부터 재시작
-- `parallel=auto`를 기본으로 사용하고 작업 단위(`targets`/`pages`)를 명시
-- 병렬 실행 후 join 단계에서 테스트/검증을 1회 수행
-- 테스트 컨텍스트는 BE/FE 테스트 도메인으로 분리해 실행 (`backend`, `frontend`, `backend,frontend`)
-- `be-unit-test-builder`/`fe-unit-test-builder`와 `be-e2e-builder`/`fe-e2e-builder`는 테스트 전략을 결정하고, 최종 작성/실행 마무리는 `req-be-test-planner`/`req-fe-test-planner` 및 `qa-*` 체인으로 수행
-- 공유 파일은 lock 후 단일 writer가 최종 머지
+- 각 Stage 완료 후 반드시 사용자 리뷰를 기다립니다.
+- 각 Stage 완료 메시지에 `핵심 의도:` 1줄을 포함합니다.
+- Stage 실행 전 관련 child role 문서를 반드시 읽습니다.
+- Stage 3 완료 후 Stage 4 진입 전 Orval을 실행합니다.
+- 변경이 발생하면 영향받는 최초 Stage부터 재시작합니다.
+- `parallel=auto`를 기본으로 사용합니다.
+- 병렬 fan-out 후 join 단계에서 테스트/검증을 1회 수행합니다.
+- 코드/스펙 변경 시 대응 sidecar와 `## 변경 이력`을 함께 반영합니다.
 
-### Don't
+### 5.2 금지 규칙
 
 - 사용자 승인 없이 다음 Stage로 진행 금지
-- deprecated/하위호환 코드 작성 금지
-- Stage 순서를 건너뛰기 금지
-- 산출물 문서 생성 생략 금지
-- 공유 파일을 여러 agent가 동시에 수정 금지
-- `parallel=force`로 의존 관계를 무시하고 실행 금지
+- deprecated / fallback / 하위호환 코드 작성 금지
+- Stage 순서 건너뛰기 금지
+- lock 대상 공유 파일 동시 수정 금지
+- `parallel=force`로 의존 관계 무시 금지
 
-### 6.1 공유 파일 잠금 규칙 (Critical)
+### 5.3 공유 파일 lock 규칙
 
-다음 파일은 병렬 작업 중 충돌이 잦으므로 반드시 lock 후 단일 writer로 머지합니다.
+다음 파일은 fan-out 중 단일 writer만 최종 머지합니다.
 
 - `apps/*/web/src/app/(admin)/app.spec.md`
 - `packages/*/src/index.ts`
@@ -301,1441 +179,345 @@ packages/fe-ui/src/feature/[FeatureName]/index.spec.md
 - `packages/common-constant/src/routing/admin-menu.spec.md`
 - `**/PROGRESS.md`
 
-### 6.2 테스트 컨텍스트 분리 규칙 (Critical)
+### 5.4 테스트 컨텍스트 분리 규칙
 
-| 컨텍스트 | 적용 Stage | 오케스트레이션 호출 | 포함 범위 | 제외 범위 |
-|----------|-----------|--------------------|----------|----------|
-| `unit` | 2, 3 | `be-unit-test-builder → req-be-test-planner → qa-be-testing` | 백엔드 단위 테스트 전략/기획/구현/실행 | E2E 파일(`*.e2e.ts`, `*.e2e-spec.ts`) |
-| `unit` | 5, 6 | `fe-unit-test-builder → req-fe-test-planner → qa-fe-testing` | 프론트 단위 테스트 전략/기획/구현/실행 | E2E 파일(`*.e2e.ts`, `*.e2e-spec.ts`) |
-| `e2e` | 7 | `be-e2e-builder → qa-be-e2e-testing → fe-e2e-builder → qa-fe-e2e-testing → req-spec-tracker` | BE/FE 종단 시나리오 구현/실행, Verified 반영 | 단위 테스트 파일(`*.test.ts(x)`, `*.spec.ts`) |
+| Stage | 컨텍스트 | 체인 |
+|-------|----------|------|
+| 2, 3 | `backend-unit` | `be-unit-test-builder → req-be-test-planner → qa-be-testing` |
+| 5, 6 | `frontend-unit` | `fe-unit-test-builder → req-fe-test-planner → qa-fe-testing` |
+| 7 | `e2e` | `be-e2e-builder → qa-be-e2e-testing → fe-e2e-builder → qa-fe-e2e-testing → req-spec-tracker` |
 
-**오케스트레이션 규칙:**
-- Stage 2/3은 Backend 단위 테스트 체인만 실행합니다.
-- Stage 5/6은 Frontend 단위 테스트 체인만 실행합니다.
-- Stage 7은 Backend E2E와 Frontend E2E를 분리 실행합니다.
-- `be-unit-test-builder`/`fe-unit-test-builder`, `be-e2e-builder`/`fe-e2e-builder`는 전략 결정자이며, 단독으로 마무리하지 않습니다.
-- 컨텍스트가 다른 테스트 작업은 같은 agent 스레드에서 연속 실행하지 않고 분리 실행합니다.
+- 서로 다른 테스트 컨텍스트를 같은 agent 흐름에서 섞지 않습니다.
+- builder는 전략 결정자이고, 최종 테스트 작성/실행 마무리는 `req-*` / `qa-*` 체인이 담당합니다.
 
 ---
 
-## 7. 프로세스
-
-### 7단계 플로우 개요
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ Stage 1: 도메인 기획 (도메인 전체)                            │
-│ orch-requirement (L0~L4 + BE/Store 스펙[Store 조건부]) → [리뷰] ✓ │
-│ 산출물: app.spec.md + page.spec.md + BE/.spec.md + Store.spec.md(조건부) │
-└─────────────────────────────────────────────────────────────┘
-                              ↓ 사용자 승인
-┌─────────────────────────────────────────────────────────────┐
-│ Stage 2: 스키마 구현 (도메인 전체)                            │
-│ prisma-builder → entity-builder → dto-builder                │
-│ → query-dto-builder → seed-maker                             │
-│ ↓                                                            │
-│ be-unit-test-builder → req-be-test-planner → qa-be-testing → 테스트 실행 │
-│ ├─ 통과 → [리뷰] ✓                                           │
-│ └─ 실패 → 자동수정(1회) → 재실행 → [통과 시 리뷰]             │
-└─────────────────────────────────────────────────────────────┘
-                              ↓ 사용자 승인
-┌─────────────────────────────────────────────────────────────┐
-│ Stage 3: 백엔드 구현 (도메인 전체)                            │
-│ repository-builder → service-builder → be-app-builder        │
-│                    ↘ be-facade-builder(조건부)               │
-│                    ↘ be-integration-builder(조건부)          │
-│ → controller-builder                                         │
-│ ↓                                                            │
-│ be-unit-test-builder → req-be-test-planner → qa-be-testing → 테스트 실행 │
-│ ├─ 통과 → [리뷰] ✓                                           │
-│ └─ 실패 → 자동수정(1회) → 재실행 → [통과 시 리뷰]             │
-└─────────────────────────────────────────────────────────────┘
-                              ↓ 사용자 승인 + Orval 실행
-┌─────────────────────────────────────────────────────────────┐
-│ Stage 4: 화면 기획 (페이지별 반복)                            │
-│ orch-screen-planner (L5~L12 + Surface) → [리뷰] ✓            │
-│ 산출물: page.spec.md 업데이트 + 컴포넌트 .spec.md            │
-│                                                              │
-│ ⚠️ page 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)       │
-└─────────────────────────────────────────────────────────────┘
-                              ↓ 사용자 승인
-┌─────────────────────────────────────────────────────────────┐
-│ Stage 5: 컴포넌트 구현 (페이지별 반복)                        │
-│ ui/control/cell → master/detail/form 전용 builder 조건 분기     │
-│ → feature/widget/store 보조 구현 → Stage 4 Surface 계획 반영 │
-│ ↓                                                            │
-│ fe-unit-test-builder → req-fe-test-planner → qa-fe-testing → 테스트 실행 │
-│ ├─ 통과 → [리뷰] ✓                                           │
-│ └─ 실패 → 자동수정(1회) → 재실행 → [통과 시 리뷰]             │
-│                                                              │
-│ ⚠️ page 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)       │
-└─────────────────────────────────────────────────────────────┘
-                              ↓ 사용자 승인
-┌─────────────────────────────────────────────────────────────┐
-│ Stage 6: 페이지 통합 (페이지별 반복)                          │
-│ page-builder → /fe-review (Skill, Surface 포함)              │
-│ ↓                                                            │
-│ fe-unit-test-builder → req-fe-test-planner → qa-fe-testing → 테스트 실행 │
-│ ├─ 통과 → [리뷰] ✓                                           │
-│ └─ 실패 → 자동수정(1회) → 재실행 → [통과 시 리뷰]             │
-│                                                              │
-│ ⚠️ page 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)       │
-└─────────────────────────────────────────────────────────────┘
-                              ↓ 사용자 요청 시
-┌─────────────────────────────────────────────────────────────┐
-│ Stage 7: E2E 검증 (선택적)                                    │
-│ be-e2e-builder → qa-be-e2e-testing → fe-e2e-builder → qa-fe-e2e-testing → req-spec-tracker → [리뷰] ✓ │
-│                                                              │
-│ ⚠️ 모든 페이지 완료 후 실행                                   │
-└─────────────────────────────────────────────────────────────┘
-```
-
-※ 위 화살표는 "의존성 순서"를 의미합니다. 동일 단계의 독립 작업은 `parallel=auto`에서 병렬 fan-out 됩니다.
-
-### 실행 모드
-
-#### 1. 전체 실행 (Stage 1부터)
-
-```
-/orch-stage full
-
-**앱:** admin
-**도메인:** Member
-**요구사항:**
-- 회원 목록 조회/검색/필터링
-- 회원 상세 조회
-- 회원 등록/수정/삭제
-```
-
-#### 2. 특정 단계부터 시작
-
-```
-/orch-stage start stage=2 app=admin domain=Member
-```
-
-#### 3. 특정 단계만 실행
-
-```
-/orch-stage run stage=3 app=admin domain=Member
-```
-
-#### 4. 페이지별 Stage 4-6 실행
-
-```
-# 화면 기획 (Stage 4)
-/orch-stage run stage=4 app=admin domain=Member page=List
-/orch-stage run stage=4 app=admin domain=Member page=Detail
-
-# 컴포넌트 구현 (Stage 5)
-/orch-stage run stage=5 app=admin domain=Member page=List
-/orch-stage run stage=5 app=admin domain=Member page=Detail
-
-# 페이지 통합 (Stage 6)
-/orch-stage run stage=6 app=admin domain=Member page=List
-/orch-stage run stage=6 app=admin domain=Member page=Detail
-```
-
-#### 5. 상태 확인
-
-```
-/orch-stage status app=admin domain=Member
-```
-
-#### 6. 자연어 실행 예시
-
-```
-# 처음부터 전체 진행
-/orch-stage admin 회원 관리 기능 처음부터 진행해줘
-
-# 특정 단계 실행
-/orch-stage 회원 관리 3단계 실행해줘
-
-# 페이지별 실행 (화면/컴포넌트/페이지)
-/orch-stage 회원 목록 화면 기획해줘
-/orch-stage 회원 목록 컴포넌트 구현해줘
-/orch-stage 회원 목록 페이지 통합해줘
-
-# 상태 확인
-/orch-stage 회원 관리 진행률 보여줘
-```
-
-#### 7. 병렬 실행 (신규)
-
-```bash
-# Stage 3에서 엔티티 2개 병렬 처리
-/orch-stage run stage=3 app=admin domain=Member targets=User,Post parallel=auto maxConcurrency=2
-
-# Stage 5에서 페이지 2개 병렬 처리
-/orch-stage run stage=5 app=admin domain=Member pages=List,Detail parallel=auto maxConcurrency=2
-
-# 실행 전 DAG 미리보기
-/orch-stage plan stage=3 app=admin domain=Member targets=User,Post
-```
-
-### 전체 워크플로우 예시 (회원 관리)
-
-```bash
-# 1. 도메인 기획 시작
-/orch-stage full
-**앱:** admin
-**도메인:** Member
-**요구사항:** 회원 목록/상세/등록/수정/삭제
-
-# → Stage 1 완료 → [리뷰]
-# → Stage 2 완료 → [리뷰]
-# → Stage 3 완료 → [리뷰]
-
-# 2. 화면별 프론트엔드 개발 (MemberList)
-/orch-stage run stage=4 app=admin domain=Member page=List
-# → [리뷰]
-/orch-stage run stage=5 app=admin domain=Member page=List
-# → [리뷰]
-/orch-stage run stage=6 app=admin domain=Member page=List
-# → [리뷰]
-
-# 3. 다음 화면 (MemberDetail)
-/orch-stage run stage=4 app=admin domain=Member page=Detail
-/orch-stage run stage=5 app=admin domain=Member page=Detail
-/orch-stage run stage=6 app=admin domain=Member page=Detail
-
-# ... MemberCreate, MemberEdit 반복
-```
-
----
-
-## 8. Stage별 상세 가이드
+## 6. Stage 계약
 
 ### Stage 1: 도메인 기획
 
-**목표**: L0-L4 기획 + BE 스펙 작성 + Store 스펙(조건부)
+**목표**
+- L0-L4 기획
+- BE spec 작성
+- Store spec 작성(조건부)
 
-**에이전트 호출:**
-```
-Task: orch-requirement
-```
+**주 호출 role**
+- `orch-requirement`
 
-**산출물:**
-- `apps/[app]/web/src/app/(admin)/app.spec.md` (앱 기획서 업데이트)
-- `apps/[app]/web/src/app/(admin)/[도메인]/page.spec.md` (각 페이지별)
-- `packages/fe-store/src/stores/[domain]Store.spec.md` (공용 재사용 상태일 때)
-- `packages/be-app/src/[name].application-service/index.spec.md`
-- `packages/be-service/src/[name].service/index.spec.md`
-- `packages/be-repository/src/[name].repository.spec.md`
-- `apps/core/api/src/module/[module]/[name].controller.spec.md`
-- `apps/core/api/src/module/[module]/[name].module.spec.md`
+**위임 규칙**
+- exact 분기와 child role fan-out은 반드시 `orch-requirement` 문서를 따릅니다.
+- 새 도메인 / 기존 도메인 화면 추가 구분도 `orch-requirement`를 source of truth로 사용합니다.
 
-**완료 후 출력:**
-```
-✅ Stage 1 완료: 도메인 기획
+**핵심 산출물**
+- `apps/[app]/web/src/app/(admin)/app.spec.md`
+- 각 `page.spec.md`
+- `packages/be-app|be-service|be-repository` 기준 spec
+- `apps/core/api/src/module/*/*.spec.md`
+- `packages/fe-store/src/stores/[domain]Store.spec.md` (조건부)
 
-📁 생성된 기획서:
-   - app.spec.md (업데이트)
-   - members/page.spec.md
-   - members/[memberId]/page.spec.md
-   - members/new/page.spec.md
-   - members/[memberId]/edit/page.spec.md
-   - packages/fe-store/src/stores/memberStore.spec.md (조건부)
-   - packages/be-app/src/members.application-service/index.spec.md
-   - packages/be-service/src/members.service/index.spec.md
-   - packages/be-repository/src/members.repository.spec.md
-   - apps/core/api/src/module/members/members.controller.spec.md
-   - apps/core/api/src/module/members/members.module.spec.md
-
-핵심 의도: 도메인 요구를 구현 가능한 BE 스키마/계약 단위로 전환하기 위해 Stage 2로 진행합니다.
-📌 다음 단계: Stage 2 (스키마 구현)
-```
-
----
+**완료 gate**
+- domain / page / BE / Store spec 존재 확인
 
 ### Stage 2: 스키마 구현
 
-**목표**: Prisma/공용 스키마, Entity, DTO 구현 + 테스트
+**목표**
+- Prisma / 공용 schema / Entity / DTO / Query DTO 구현
+- BE unit test 전략/기획/구현/실행
 
-**에이전트 호출:**
-```
-Task: be-prisma-builder
-Task: common-schema-builder (FE/BE 공유 검증 규칙 필요 시 필수)
-Task: be-entity-builder
-Task: be-dto-builder
-Task: be-query-dto-builder
-Task: be-seed-maker (필요시)
-Task: be-unit-test-builder (join 단계, BE 전략 결정)
-Task: req-be-test-planner (join 단계, 전략 기반 케이스 구체화)
-Task: qa-be-testing (join 단계, 단위 테스트 코드 작성/실행)
-```
+**주 호출 role**
+- `be-prisma-builder`
+- `common-schema-builder` (필요 시)
+- `be-entity-builder`
+- `be-dto-builder`
+- `be-query-dto-builder`
+- `be-seed-maker` (필요 시)
+- join: `be-unit-test-builder → req-be-test-planner → qa-be-testing`
 
-**병렬 전략:**
-- `targets` 지정 시 target별로 `be-prisma-builder → common-schema-builder → be-entity-builder → be-dto-builder → be-query-dto-builder` 파이프라인을 병렬 fan-out
-- `be-seed-maker`, `be-unit-test-builder`, `req-be-test-planner`, `qa-be-testing`은 모든 target 완료 후 join 단계에서 순차 실행
-- 공용 export 파일(`packages/*/src/index.ts`)은 lock 후 단일 머지
+**fan-out 단위**
+- `targets`
 
-```bash
-/orch-stage run stage=2 app=admin domain=Member targets=User,Post parallel=auto maxConcurrency=2
-```
+**자동 판단 소스**
+- `packages/be-entity/src/*.entity.spec.md`
+- `## 구현 대상` 섹션 우선, 없으면 도메인 spec과 구조로 보정
 
-**테스트 프로세스:**
-```
-1. be-unit-test-builder 실행 (`backend`) → BE 단위 테스트 생성 전략/케이스 구조 결정
-2. req-be-test-planner 실행 → Entity/DTO .spec.md 테스트 케이스 섹션 구체화
-3. qa-be-testing 실행 → BE 단위 테스트 코드 작성
-4. 테스트 실행
-5. 결과 확인:
-   - 통과 → 완료
-   - 실패 → 1회 자동 수정 → 재실행
-     - 통과 → 완료
-     - 실패 → 사용자 알림
-```
-
-**완료 후 출력:**
-```
-✅ Stage 2 완료: 스키마 구현
-
-📁 생성된 파일:
-   - packages/be-prisma/schema/member.prisma
-   - packages/common-schema/src/schemas/members/member.schema.ts
-   - packages/common-schema/src/schemas/members/member.schema.spec.md
-   - packages/be-entity/src/member.entity.ts
-   - packages/be-dto/src/members/*.dto.ts
-
-🧪 테스트 결과:
-   - 작성된 테스트: N개
-   - 통과: N개
-   - 실패: 0개
-
-핵심 의도: 확정된 스키마/DTO 계약을 기반으로 비즈니스 로직 레이어를 구현하기 위해 Stage 3로 진행합니다.
-📌 다음 단계: Stage 3 (백엔드 구현)
-```
-
----
+**완료 gate**
+- schema / entity / dto 생성
+- 관련 spec 반영
+- backend-unit 통과
 
 ### Stage 3: 백엔드 구현
 
-**목표**: Repository, Service, ApplicationService, Facade(조건부), Integration Facade(조건부), Controller/Module 구현 + 테스트
+**목표**
+- Repository / Service / ApplicationService / Facade(조건부) / Integration Facade(조건부) / Controller / Module 구현
+- Create/Update form bootstrap 계약 포함
 
-**추가 계약 (Create/Update 화면):**
-- Controller는 form bootstrap 응답을 제공합니다:
-  - `defaultObject`, `options`
-  - `ui.readOnlyPaths`, `ui.hiddenPaths`, `ui.disabledPaths`
-  - `fieldMeta`, `aiSchemas`
-- 필요 시 `POST /form/ai-fill` endpoint를 함께 구현합니다.
+**주 호출 role**
+- `be-repository-builder`
+- `be-service-builder`
+- `be-app-builder`
+- `be-facade-builder` (조건부)
+- `be-integration-builder` (조건부)
+- `be-controller-builder`
+- join: `be-unit-test-builder → req-be-test-planner → qa-be-testing`
 
-**에이전트 호출:**
-```
-Task: be-repository-builder
-Task: be-service-builder
-Task: be-app-builder
-Task: be-facade-builder (경계 조합이 필요한 경우)
-Task: be-integration-builder (외부 시스템 연동 시)
-Task: be-controller-builder
-Task: be-unit-test-builder (join 단계, BE 전략 결정)
-Task: req-be-test-planner (join 단계, 전략 기반 케이스 구체화)
-Task: qa-be-testing (join 단계, 단위 테스트 코드 작성/실행)
-```
+**fan-out 단위**
+- `targets`
 
-**병렬 전략:**
-- `targets` 지정 시 target별로 `be-repository-builder → be-service-builder → be-app-builder → be-facade-builder(조건부) → be-controller-builder`를 병렬 fan-out
-- `be-app-builder`는 workflow 유즈케이스가 있을 때 포함합니다.
-- `be-facade-builder`는 controller boundary composition이 필요할 때 포함합니다.
-- `be-integration-builder`는 OIDC/결제/스토리지/검색 같은 외부 시스템 계약이 있을 때만 실행
-- 테스트(`be-unit-test-builder → req-be-test-planner → qa-be-testing`)는 fan-in 완료 후 1회 실행
+**자동 판단 소스**
+- `apps/core/api/src/module/*/*.controller.spec.md`
+- 관련 App / Service / Repository spec
 
-```bash
-/orch-stage run stage=3 app=admin domain=Member targets=User,Post parallel=auto maxConcurrency=2
-```
+**특수 규칙**
+- Stage 3 완료 후 Stage 4 진입 전 Orval 실행
 
-**테스트 프로세스:**
-```
-1. be-unit-test-builder 실행 (`backend`) → BE 단위 테스트 생성 전략/케이스 구조 결정
-2. req-be-test-planner 실행 → ApplicationService/Repository/Service/Controller .spec.md 테스트 케이스 섹션 구체화
-3. qa-be-testing 실행 → BE 단위 테스트 코드 작성
-4. 테스트 실행
-5. 결과 확인:
-   - 통과 → 완료
-   - 실패 → 1회 자동 수정 → 재실행
-     - 통과 → 완료
-     - 실패 → 사용자 알림
-```
+**완료 gate**
+- 서버 기동 가능
+- backend-unit 통과
 
-**완료 후 출력:**
-```
-✅ Stage 3 완료: 백엔드 구현
+### Stage 4: 화면 기획
 
-📁 생성된 파일:
-   - packages/be-repository/src/members.repository.ts
-   - packages/be-service/src/members.service/index.ts
-   - packages/be-app/src/members.application-service/index.ts
-   - apps/core/api/src/module/members/members.controller.ts
-   - apps/core/api/src/module/members/members.module.ts
+**목표**
+- L5-L12 화면 기획
+- route layout skeleton / slot topology / surface ownership 결정
+- 목록/테이블 화면의 columns/cell 계약 확정
 
-🧪 테스트 결과:
-   - 작성된 테스트: N개
-   - 통과: N개
-   - 실패: 0개
+**주 호출 role**
+- `orch-screen-planner`
+- `req-route-layout-planner`
+- `req-spec-tracker`
 
-🔧 후속 작업:
-   - Orval 실행: pnpm --filter=@cocrepo/api generate
+**위임 규칙**
+- exact child planner fan-out은 반드시 `orch-screen-planner` 문서를 따릅니다.
+- `display`, `control`, `cell`, `columns`, `widget`, `layout`, `feature`, `master/detail/form`, `pure page`, `thin container`, `API integration`, `test` 기획 규칙은 `orch-screen-planner`가 관련 구현 role 문서를 읽고 반영해야 합니다.
 
-핵심 의도: 확정된 BE 계약을 기준으로 화면 구조와 상호작용을 정밀 기획하기 위해 Stage 4로 진행합니다.
-📌 다음 단계: Stage 4 (화면 기획) - page 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)
-```
+**fan-out 단위**
+- `pages`
 
----
+**완료 gate**
+- `layout.spec.md`와 `page.spec.md` 업데이트
+- 관련 FE sidecar spec 생성/갱신
+- `spec-checklist.md`의 Spec exists 반영
 
-### Stage 4: 화면 기획 (페이지별)
+### Stage 5: 컴포넌트 구현
 
-**목표**: 특정 화면의 L5-L12 기획서 작성 + 목록/테이블 화면의 columns/cell 계약 확정
+**목표**
+- Display / Columns / Control / Cell / Widget / 재사용 Layout / Feature / `master-detail-form` 전용 계층 구현
+- FE unit test 전략/기획/구현/실행
 
-**⚠️ 페이지별 실행**: `page` 파라미터 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인).
+**주 호출 role**
+- `fe-display-component-builder`
+- `fe-columns-builder` (목록/테이블 화면일 때)
+- `fe-control-component-builder`
+- `fe-cell-builder`
+- `fe-widget-builder`
+- `fe-layout-builder`
+- `fe-feature-builder`
+- `fe-master-builder` / `fe-detail-builder` / `fe-form-builder`
+- `fe-store-builder`
+- `fe-menu-builder` (조건부)
+- join: `fe-unit-test-builder → req-fe-test-planner → qa-fe-testing`
 
-```bash
-/orch-stage run stage=4 app=admin domain=Member page=List
-```
+**fan-out 단위**
+- `pages`
 
-**에이전트 호출:**
-```
-Task: orch-screen-planner
-Task: req-route-layout-planner
-Task: req-spec-tracker
-```
+**위임 규칙**
+- columns/cell 경계는 `fe-columns-builder`를 source of truth로 사용합니다.
+- `page role`별 구현 경계는 `fe-master-builder`, `fe-detail-builder`, `fe-form-builder`를 source of truth로 사용합니다.
+- route/page 시각 소유권 세부 규칙은 Stage 6 builder 문서를 재복제하지 않습니다.
 
-**산출물:**
-```
-apps/admin/web/src/app/(admin)/members/layout.spec.md            # route skeleton / surface ownership
-apps/admin/web/src/app/(admin)/members/page.spec.md              # children 콘텐츠 계약 업데이트
-apps/admin/web/src/app/(admin)/members/@slot/**/page.spec.md    # named slot 콘텐츠 계약 (필요 시)
-packages/fe-ui/src/display/[UIName]/index.spec.md   # UI 컴포넌트 기획서
-packages/fe-ui/src/control/[InputName]/index.spec.md   # Input 기획서
-packages/fe-ui/src/cell/[CellName]/index.spec.md   # Cell 기획서
-packages/fe-ui/src/columns/master/[Domain]Columns.spec.md  # Columns 선언 계약 기획서
-packages/fe-ui/src/widget/[WidgetName]/index.spec.md  # Widget 기획서
-packages/fe-ui/src/display/layout/{index,Layout,type}.spec.md  # Layout 기획서
-packages/fe-ui/src/feature/[FeatureName]/index.spec.md  # Feature 기획서
-packages/common-constant/src/routing/admin-menu.spec.md  # 메뉴 기획서
-apps/admin/web/src/app/**/hooks/index.spec.md  # API 연동 기획서
-apps/admin/web/src/app/(admin)/members/spec-checklist.md  # 도메인 체크리스트 (Spec exists 갱신)
-```
+**완료 gate**
+- Stage 4 contract 반영
+- FE component 산출물 및 대응 spec 반영
+- frontend-unit 통과
 
-**완료 후 출력:**
-```
-✅ Stage 4 완료: MemberList 화면 기획
+### Stage 6: 페이지 통합
 
-📁 생성/업데이트된 기획서:
-   - members/layout.spec.md (Server Skeleton / Surface Ownership 업데이트)
-   - members/page.spec.md (children 콘텐츠 계약 / Rendering Decision 업데이트)
-   - members/@detail/[memberId]/page.spec.md (slot 콘텐츠 계약, 필요 시)
-   - packages/fe-ui/src/display/MemberStatusBadge/index.spec.md
-   - packages/fe-ui/src/columns/master/memberColumns.spec.md
-   - packages/fe-ui/src/widget/MemberTable/index.spec.md
-   - packages/fe-ui/src/feature/MemberFilterPanel/index.spec.md
-   - members/spec-checklist.md (Spec exists 갱신)
+**목표**
+- route `layout.tsx`
+- `@slot/default.tsx`
+- pure page
+- thin container
+- API integration
+- route/page contract 검증
 
-핵심 의도: 확정된 화면 기획을 재사용 가능한 컴포넌트 자산으로 구현하기 위해 Stage 5로 진행합니다.
-📌 다음 단계: Stage 5 (컴포넌트 구현) page=List
-```
+**주 호출 role**
+- `fe-route-layout-builder`
+- `fe-ui-page-builder`
+- `fe-page-builder`
+- `fe-api-integrator`
+- review: `/fe-review`
+- join: `fe-unit-test-builder → req-fe-test-planner → qa-fe-testing → req-spec-tracker`
 
----
+**fan-out 단위**
+- `pages`
 
-### Stage 5: 컴포넌트 구현 (페이지별)
+**위임 규칙**
+- route skeleton / slot ownership은 `fe-route-layout-builder`를 source of truth로 사용합니다.
+- pure page 경계는 `fe-ui-page-builder`를 source of truth로 사용합니다.
+- thin container / `page role` / `reusable target` 검증은 `fe-page-builder`를 source of truth로 사용합니다.
+- Create/Update의 `AiForm` 통합 규칙도 `fe-page-builder`와 관련 page spec을 기준으로 따릅니다.
 
-**목표**: Display/Columns/Control/Cell/Widget/재사용 Layout/Feature 컴포넌트 구현 + 테스트
+**완료 gate**
+- route/page contract 검증 통과
+- `spec-checklist.md`의 Code paired 반영
+- frontend-unit 통과
 
-**⚠️ 페이지별 실행**: `page` 파라미터 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)
+### Stage 7: E2E 검증
 
-```bash
-/orch-stage run stage=5 app=admin domain=Member page=List
-```
+**목표**
+- BE/FE E2E 구현 및 실행
+- checklist Verified 반영
 
-**에이전트 호출:**
-```
-Task: fe-display-component-builder
-Task: fe-control-component-builder
-Task: fe-cell-builder
-Task: fe-columns-builder (목록/테이블 화면일 때)
-Task: fe-widget-builder
-Task: fe-layout-builder
-Task: fe-feature-builder
-Task: fe-master-builder (page role이 `master`일 때)
-Task: fe-detail-builder (page role이 `detail`일 때)
-Task: fe-form-builder (page role이 `form`일 때)
-Task: fe-store-builder
-Task: fe-menu-builder (목록/탭 route contract가 있을 때)
-Task: fe-unit-test-builder (join 단계, FE 전략 결정)
-Task: req-fe-test-planner (join 단계, 전략 기반 케이스 구체화)
-Task: qa-fe-testing (join 단계, 단위 테스트 코드 작성/실행)
-```
+**주 호출 role**
+- `be-e2e-builder`
+- `qa-be-e2e-testing`
+- `fe-e2e-builder`
+- `qa-fe-e2e-testing`
+- `req-spec-tracker`
 
-**병렬 전략:**
-- `pages` 지정 시 페이지별로 Stage 5 파이프라인을 병렬 fan-out
-- `List/Detail/Create/Edit`는 Stage 4 contract와 page 구조를 바탕으로 `master/detail/form`으로 먼저 분류
-- `master` 페이지는 `fe-master-builder`, `detail` 페이지는 `fe-detail-builder`, `form` 페이지는 `fe-form-builder`를 우선 호출
-- 목록/테이블 화면은 `req-columns-planner` 산출물을 바탕으로 `fe-columns-builder`를 함께 호출하고, `columns`가 UI를 직접 소유하지 않도록 정리
-- `fe-master-builder`/`fe-detail-builder`/`fe-form-builder` 산출물은 각각 `packages/fe-ui/src/master`, `packages/fe-ui/src/detail`, `packages/fe-ui/src/form`에 기록하며 `feature` 하위로 넣지 않음
-- 범용 Feature/Widget이 필요한 경우에만 `fe-feature-builder`, `fe-widget-builder`를 보조적으로 호출
-- `fe-menu-builder`는 목록/탭 route contract가 필요할 때만 실행하며, `admin-menu.ts` 계열 파일 lock 필요
-- `Stage 4`에서 확정한 route layout contract와 Surface ownership/elevation 계획을 각 페이지 파이프라인이 그대로 소비
-- 공용 UI export 파일은 페이지 fan-in 후 단일 머지
+**실행 규칙**
+- 기본 순서는 BE E2E 안정화 후 FE E2E입니다.
+- 이 Stage는 사용자 요청 시에만 실행합니다.
 
-```bash
-/orch-stage run stage=5 app=admin domain=Member pages=List,Detail parallel=auto maxConcurrency=2
-```
-
-**테스트 프로세스:**
-```
-1. fe-unit-test-builder 실행 (`frontend`) → FE 단위 테스트 생성 전략/케이스 구조 결정
-2. req-fe-test-planner 실행 → Display/Control/Cell/Widget/Layout/Feature/(Store 조건부) .spec.md 테스트 케이스 섹션 구체화
-3. qa-fe-testing 실행 → FE 단위 테스트 코드 작성
-4. 테스트 실행
-5. 결과 확인:
-   - 통과 → 완료
-   - 실패 → 1회 자동 수정 → 재실행
-     - 통과 → 완료
-     - 실패 → 사용자 알림
-```
-
-**완료 후 출력:**
-```
-✅ Stage 5 완료: MemberList 컴포넌트 구현
-
-📁 생성된 컴포넌트:
-   - Display/Columns/Control/Cell: N개
-   - Widget/재사용 Layout/Feature: N개
-   - Store: MemberStore (도메인 공통)
-   - Menu: admin-menu.ts 업데이트 (목록 페이지)
-
-🧪 테스트 결과:
-   - 작성된 테스트: N개
-   - 통과: N개
-   - 실패: 0개
-
-핵심 의도: 완성된 컴포넌트를 페이지로 통합하고 실제 API 계약과 연결하기 위해 Stage 6으로 진행합니다.
-📌 다음 단계: Stage 6 (페이지 통합) page=List
-```
+**완료 gate**
+- e2e 통과
+- `spec-checklist.md` Verified 반영
 
 ---
 
-### Stage 6: 페이지 통합 (페이지별)
+## 7. 병렬 실행 엔진
 
-**목표**: route `layout.tsx` + `@slot/default.tsx` + `page.tsx/@slot page.tsx` 콘텐츠 구현 + API 연동 + 규칙 검증 + 테스트
-
-**Create/Update 페이지 필수 규칙:**
-- 페이지 상단에 `AiForm` Feature를 배치합니다.
-- `AiForm`은 form bootstrap 메타를 입력으로 받아 스키마 선택/체크박스/채우기 버튼 UX를 제공합니다.
-- AI patch 적용 후 검증(schema)을 재실행합니다.
-
-**페이지 역할 검증 규칙:**
-- `MetaDataGrid` 기반 목록은 `page role = master`, `reusable target = master/table`
-- 읽기 전용 상세는 `page role = detail`, `reusable target = detail/view`
-- 생성/수정 입력 화면은 `page role = form`, `reusable target = form`
-- `fe-page-builder`는 위 분류를 `page.spec.md`에 기록하고 불일치 시 실패 처리합니다.
-
-**⚠️ 페이지별 실행**: `page` 파라미터 지정 권장 (미지정 시 자연어 추론, 불명확 시 확인)
-
-```bash
-/orch-stage run stage=6 app=admin domain=Member page=List
-```
-
-**에이전트 호출:**
-```
-Task: fe-route-layout-builder
-Task: fe-ui-page-builder
-Task: fe-page-builder
-Task: fe-api-integrator
-Skill: /fe-review
-Task: fe-unit-test-builder (join 단계, FE 전략 결정)
-Task: req-fe-test-planner (join 단계, 전략 기반 케이스 구체화)
-Task: qa-fe-testing (join 단계, 단위 테스트 코드 작성/실행)
-Task: req-spec-tracker
-```
-
-**병렬 전략:**
-- `pages` 지정 시 페이지별 `fe-route-layout-builder → fe-ui-page-builder → fe-page-builder → fe-api-integrator → /fe-review`를 병렬 fan-out
-- 공용 라우팅/메뉴/훅 index 파일은 lock 후 단일 머지
-- `fe-route-layout-builder`는 필요 시 `@slot/default.tsx`까지 생성하고, `fe-ui-page-builder`는 `packages/fe-ui/src/page/[PageName]/[PageName].tsx` pure page를 구현하며, `fe-page-builder`는 `page.tsx`와 `@slot/**/page.tsx` thin container를 구현
-- `fe-page-builder`는 Stage 5에서 준비된 `master/detail/form` 재사용 자산을 소비하고 `page role/reusable target` 계약을 재검증
-- `/fe-review`는 route-layout-owned skeleton/surface, slot topology/default fallback, page content-only 계약, flat 예외 문서화를 함께 검증
-- 페이지별 테스트 작성은 병렬 가능하지만 최종 테스트 실행은 join 후 1회 권장
-
-```bash
-/orch-stage run stage=6 app=admin domain=Member pages=List,Detail parallel=auto maxConcurrency=2
-```
-
-**테스트 프로세스:**
-```
-1. fe-unit-test-builder 실행 (`frontend`) → FE 페이지 단위 테스트 생성 전략/케이스 구조 결정
-2. req-fe-test-planner 실행 → page.spec.md/hooks 연동 스펙 테스트 케이스 섹션 구체화
-3. qa-fe-testing 실행 → FE 페이지 단위 테스트 코드 작성
-4. 테스트 실행
-5. 결과 확인:
-   - 통과 → 완료
-   - 실패 → 1회 자동 수정 → 재실행
-     - 통과 → 완료
-     - 실패 → 사용자 알림
-```
-
-**완료 후 출력:**
-```
-✅ Stage 6 완료: MemberList 페이지 통합
-
-📁 생성된 파일:
-   - packages/fe-ui/src/page/MemberListPage/
-   - apps/admin/web/src/app/(admin)/members/layout.tsx
-   - apps/admin/web/src/app/(admin)/members/page.tsx
-   - apps/admin/web/src/app/(admin)/members/layout.spec.md
-   - apps/admin/web/src/app/(admin)/members/page.spec.md
-   - apps/admin/web/src/app/(admin)/members/hooks/index.ts (API 연동)
-
-✅ 규칙 검증: 모두 통과
-
-🧪 테스트 결과:
-   - 작성된 테스트: N개
-   - 통과: N개
-   - 실패: 0개
-
-핵심 의도: 페이지 단위 완성본을 누적해 남은 화면도 같은 체인으로 반복 구축합니다.
-📌 남은 페이지:
-   - [ ] Detail
-   - [ ] Create
-   - [ ] Edit
-
-→ 다음 페이지: /orch-stage run stage=4 app=admin domain=Member page=Detail
-```
-
----
-
-### Stage 7: E2E 검증 (선택적)
-
-**목표**: E2E 테스트 작성 및 실행
-
-**⚠️ 선택적 단계**: 사용자 요청 시에만 실행
-
-```bash
-/orch-stage run stage=7 app=admin domain=Member
-```
-
-**에이전트 호출:**
-```
-Task: be-e2e-builder (BE E2E 전략 결정)
-Task: qa-be-e2e-testing (전략 기반 BE E2E 구현/실행)
-Task: fe-e2e-builder (FE E2E 전략 결정)
-Task: qa-fe-e2e-testing (전략 기반 FE E2E 구현/실행)
-Task: req-spec-tracker
-```
-
-**실행 순서(명시형):**
-1. `be-e2e-builder`가 API/인증/데이터 전제조건과 BE 시나리오 ID를 정의합니다.
-2. `qa-be-e2e-testing`이 Supertest 기반 BE E2E를 구현/실행해 API 안정성을 먼저 검증합니다.
-3. `fe-e2e-builder`가 BE 결과(시나리오 ID/검증 포인트)를 받아 FE 사용자 여정 전략을 확정합니다.
-4. `qa-fe-e2e-testing`이 Playwright E2E를 구현/실행해 화면 흐름을 검증합니다.
-5. `req-spec-tracker`가 `spec-checklist.md`의 Verified 상태를 최종 반영합니다.
-
-**완료 후 출력:**
-```
-✅ Stage 7 완료: E2E 검증
-
-📁 생성된 파일:
-   - apps/core/api/test/members.e2e-spec.ts
-   - apps/test/e2e/tests/admin/members.spec.ts
-   - apps/admin/web/src/app/(admin)/members/spec-checklist.md (Verified 갱신)
-
-핵심 의도: BE API 계약과 FE 사용자 여정을 함께 검증해 최종 Verified 상태를 고정합니다.
-🎉 Member 기능 개발 완료!
-```
-
----
-
-## 9. 체크리스트
-
-### Stage별 완료 조건
-
-| Stage | 완료 조건 |
-|-------|----------|
-| 1 | app.spec.md 업데이트, page.spec.md 생성, `packages/be-app|be-service|be-repository` 및 `apps/core/api/src/module/*` 기준 BE .spec.md 생성 + Store .spec.md(조건부) |
-| 2 | Prisma/공용 스키마, Entity, DTO 생성, `*.schema.spec.md` 생성, migrate 성공, Entity 테스트 통과 |
-| 3 | Repository, Service, ApplicationService, Facade(조건부), Integration Facade(조건부), Controller/Module 생성, 서버 시작 성공, BE 단위 테스트 통과 |
-| 4 | layout.spec.md + page.spec.md(+ named slot page.spec.md) 업데이트, route skeleton/slot topology/Surface ownership 결정 반영, Display/Control/Cell/Widget/Layout/Feature/Menu/API연동 .spec.md 생성, `spec-checklist.md`의 Spec exists 갱신 |
-| 5 | Display/Control/Cell/Widget/재사용 Layout/Feature/(Store 조건부) 구현, Stage 4 route/layout contract 반영, 컴포넌트 테스트 통과 |
-| 6 | route `layout.tsx` + `@slot/default.tsx` + 페이지/slot 콘텐츠 + API 연동 구현, route/page contract 검증 통과, 페이지 테스트 통과, `spec-checklist.md`의 Code paired 갱신 |
-| 7 | E2E 테스트 통과, `spec-checklist.md`의 Verified 갱신 |
-
-### 병렬 실행 추가 완료 조건
-
-- [ ] fan-out 대상(`targets`/`pages`)이 누락 없이 모두 처리되었는가?
-- [ ] 공유 파일 lock/머지 전략이 적용되었는가?
-- [ ] join 이후 통합 테스트를 1회 실행했는가?
-- [ ] `failPolicy`에 따른 실패 처리 결과가 리포트에 반영되었는가?
-
----
-
-## 10. 재시작/롤백 가이드
-
-### 변경 발생 시 영향 범위
-
-| 변경 단계 | 영향 범위 | 재작업 범위 |
-|----------|----------|------------|
-| Stage 1 | Stage 1~7 | 전체 재기획 |
-| Stage 2 | Stage 2~7 | 스키마부터 재생성 |
-| Stage 3 | Stage 3~7 | 백엔드부터 재생성 |
-| Stage 4 | Stage 4~7 | 해당 화면 기획부터 |
-| Stage 5 | Stage 5~7 | 해당 화면 컴포넌트부터 |
-| Stage 6 | Stage 6~7 | 해당 페이지만 |
-| Stage 7 | Stage 7만 | E2E 테스트만 |
-
-### 재시작 명령 예시
-
-```bash
-# 도메인 기획 변경
-/orch-stage start stage=1 app=admin domain=Member
-
-# 스키마 변경
-/orch-stage start stage=2 app=admin domain=Member
-
-# 특정 화면 컴포넌트만 재실행
-/orch-stage run stage=5 app=admin domain=Member page=List
-```
-
----
-
-## 11. 핵심 원칙
-
-### 하위호환성 미고려 (Critical)
-
-**모든 기획/설계 변경은 전체 마이그레이션 방식으로 진행합니다。**
-
-| 원칙 | 설명 |
-|------|------|
-| **하위호환성 금지** | 기존 코드와의 호환성을 고려하지 않음 |
-| **전체 마이그레이션** | 변경 시 관련된 모든 코드를 한 번에 수정 |
-| **deprecated 금지** | deprecated, fallback, 이전 버전 지원 코드 작성 금지 |
-| **깔끔한 전환** | 변경 전 코드 흔적을 남기지 않음 |
-
----
-
-## 12. 연관 role
-
-### Stage별 호출 role
-
-| Stage | 호출 role |
-|-------|-----------|
-| 1 | `orch-requirement` → 새 도메인: `req-context-planner`, `req-screen-planner`, `req-entity-planner`, `req-api-planner`, `req-app-planner`, `req-logic-planner`, `req-store-planner(조건부)` / 기존 도메인 화면 추가: `orch-screen-planner` |
-| 2 | be-prisma-builder, common-schema-builder, be-entity-builder, be-dto-builder, be-query-dto-builder, be-seed-maker, be-unit-test-builder, req-be-test-planner, qa-be-testing |
-| 3 | be-repository-builder, be-service-builder, be-app-builder, be-facade-builder(조건부), be-integration-builder(조건부), be-controller-builder, be-unit-test-builder, req-be-test-planner, qa-be-testing |
-| 4 | `orch-screen-planner` → `req-page-planner`, `req-api-planner`, `req-primitive-planner`, `req-input-planner`, `req-cell-planner`, `req-columns-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`, `req-surface-planner`, `req-menu-planner(조건부)`, `req-fe-test-planner`, `req-api-integration-planner` + `req-route-layout-planner` + `req-spec-tracker` |
-| 5 | fe-display-component-builder, fe-columns-builder, fe-control-component-builder, fe-cell-builder, fe-widget-builder, fe-layout-builder, fe-feature-builder, fe-master-builder, fe-detail-builder, fe-form-builder, fe-store-builder, fe-menu-builder, fe-unit-test-builder, req-fe-test-planner, qa-fe-testing |
-| 6 | fe-route-layout-builder, fe-ui-page-builder, fe-page-builder, fe-api-integrator, /fe-review (Skill), fe-unit-test-builder, req-fe-test-planner, qa-fe-testing, req-spec-tracker |
-| 7 | be-e2e-builder → qa-be-e2e-testing → fe-e2e-builder → qa-fe-e2e-testing → req-spec-tracker |
-
-실행 시에는 각 role마다 대응되는 agent를 생성해 fan-out/fan-in 합니다.
-
-### Stage별 호출 트리
-
-```text
-Stage 1
-└─ orch-requirement
-   ├─ 새 도메인: req-context-planner → req-screen-planner → [req-entity-planner | req-api-planner | req-store-planner(조건부)] → req-app-planner → req-logic-planner
-   └─ 기존 도메인 화면 추가: orch-screen-planner
-
-Stage 2
-└─ [targets fan-out] be-prisma-builder → common-schema-builder(조건부) → be-entity-builder → be-dto-builder → be-query-dto-builder
-   └─ [join] be-seed-maker(조건부) → be-unit-test-builder → req-be-test-planner → qa-be-testing
-
-Stage 3
-└─ [targets fan-out] be-repository-builder → be-service-builder → be-app-builder → be-facade-builder(조건부) → be-integration-builder(조건부) → be-controller-builder
-   └─ [join] be-unit-test-builder → req-be-test-planner → qa-be-testing
-
-Stage 4
-├─ orch-screen-planner
-│  ├─ req-page-planner
-│  ├─ req-api-planner
-│  ├─ [fan-out] req-primitive-planner | req-input-planner | req-cell-planner | req-columns-planner | req-widget-planner | req-layout-planner | req-feature-planner | req-menu-planner(조건부) | req-api-integration-planner
-│  └─ [join] req-surface-planner → req-fe-test-planner
-├─ req-route-layout-planner
-└─ req-spec-tracker
-
-Stage 5
-└─ [pages fan-out] fe-display-component-builder | fe-columns-builder(조건부) | fe-control-component-builder | fe-cell-builder | fe-widget-builder | fe-layout-builder | fe-feature-builder | fe-master-builder/fe-detail-builder/fe-form-builder | fe-store-builder | fe-menu-builder(조건부)
-   └─ [join] fe-unit-test-builder → req-fe-test-planner → qa-fe-testing
-
-Stage 6
-└─ [pages fan-out] fe-route-layout-builder → fe-ui-page-builder → fe-page-builder → fe-api-integrator → /fe-review
-   └─ [join] fe-unit-test-builder → req-fe-test-planner → qa-fe-testing → req-spec-tracker
-
-Stage 7
-└─ be-e2e-builder → qa-be-e2e-testing → fe-e2e-builder → qa-fe-e2e-testing → req-spec-tracker
-```
-
----
-
-## 13. 테스트 실패 처리 규칙
-
-### 자동 수정 정책
-
-| 항목 | 정책 |
-|------|------|
-| **재시도 횟수** | 최대 1회 |
-| **자동 수정** | 테스트 실패 시 에이전트가 코드 자동 수정 |
-| **수정 범위** | 테스트 실패 원인 분석 후 관련 코드만 수정 |
-
-### 실패 시나리오 처리
-
-```
-테스트 실행
-├─ 통과 → 다음 단계 진행
-└─ 실패 → 원인 분석 → 코드 수정 → 재실행
-           ├─ 통과 → 다음 단계 진행
-           └─ 실패 → 사용자 알림 및 수동 개입 요청
-```
-
-### 사용자 알림 형식
-
-```
-⚠️ 테스트 실패 - 자동 수정 불가
-
-📁 실패한 테스트:
-   - [TC-001] 회원 목록 조회 성공
-   - [TC-003] 회원 검색 성공
-
-📋 실패 원인:
-   - 예상 응답값과 실제 응답값 불일치
-
-🔧 권장 조치:
-   - Service 로직 확인
-   - 테스트 케이스 재검토
-```
-
----
-
-## 14. 병렬 Fan-out 실행 시스템 (Critical)
-
-### 14.1 개요
-
-`targets` 또는 `pages` 파라미터 지정 시, **독립적인 작업 단위를 병렬 agent로 fan-out**하여 실행 시간을 단축합니다。
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      orch-stage (Orchestrator)                   │
-│                                                                  │
-│  1. 의존성 분석 → DAG 구성                                        │
-│  2. 병렬 그룹 식별                                                │
-│  3. spawn_agent 도구로 agent 병렬 실행                           │
-│  4. 결과 fan-in → 후속 작업 진행                                  │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-          ┌───────────────────┼───────────────────┐
-          ▼                   ▼                   ▼
-    ┌──────────┐        ┌──────────┐        ┌──────────┐
-    │ Agent 1  │        │ Agent 2  │        │ Agent 3  │
-    │ (Asset)  │        │ (Video)  │        │ (Image)  │
-    │ builder  │        │ builder  │        │ builder  │
-    └──────────┘        └──────────┘        └──────────┘
-          │                   │                   │
-          └───────────────────┼───────────────────┘
-                              ▼
-                    ┌─────────────────┐
-                    │    Fan-in       │
-                    │  결과 취합       │
-                    └─────────────────┘
-```
-
-### 14.2 병렬 실행 파라미터
+### 7.1 파라미터
 
 | 파라미터 | 기본값 | 설명 |
 |---------|--------|------|
-| `parallel` | `auto` | `off`(순차), `auto`(DAG 기반 병렬), `force`(강제 병렬) |
-| `maxConcurrency` | `3` | 동시 실행 agent 최대 개수 |
-| `targets` | - | Stage 2-3의 작업 단위 목록 (예: `Asset,AssetVideo,AssetImage`) |
-| `pages` | - | Stage 4-6의 페이지 목록 (예: `List,Detail,Create`) |
-| `failPolicy` | `fail-fast` | `fail-fast`(첫 실패 시 중단), `continue`(실패 분리 후 계속) |
+| `parallel` | `auto` | `off`, `auto`, `force` |
+| `maxConcurrency` | `3` | 동시 실행 agent 상한 |
+| `targets` | - | Stage 2-3 fan-out 대상 |
+| `pages` | - | Stage 4-6 fan-out 대상 |
+| `failPolicy` | `fail-fast` | `fail-fast`, `continue` |
 
-### 14.3 Stage별 병렬 실행 전략
+### 7.2 우선순위
 
-#### Stage 2: 스키마 구현
+1. 명시된 `targets`
+2. 명시된 `pages`
+3. spec의 `## 구현 대상` 섹션
+4. 폴더 구조 / page 키워드 기반 보정
 
-```
-targets=Asset,AssetVideo,AssetImage,AssetDocument
+### 7.3 Stage별 fan-out 단위
 
-┌──────────────────────────────────────────────────────────────┐
-│ Phase 1: 의존성 분석                                          │
-│   - Asset (부모) → AssetVideo, AssetImage, AssetDocument (자식) │
-│   - DAG: Asset → [AssetVideo, AssetImage, AssetDocument]     │
-└──────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌──────────────────────────────────────────────────────────────┐
-│ Phase 2: Level 0 (부모) - 순차 실행                           │
-│   Task: be-prisma-builder (target=Asset)                      │
-│   Task: common-schema-builder (target=Asset)                  │
-│   Task: be-entity-builder (target=Asset)                      │
-│   Task: be-dto-builder (target=Asset)                         │
-│   Task: be-query-dto-builder (target=Asset)                   │
-└──────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌──────────────────────────────────────────────────────────────┐
-│ Phase 3: Level 1 (자식) - 병렬 fan-out                        │
-│   ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
-│   │ Task: prisma    │  │ Task: prisma    │  │ Task: prisma    │
-│   │ (AssetVideo)    │  │ (AssetImage)    │  │ (AssetDocument) │
-│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
-│            │                    │                    │
-│   ┌────────▼────────┐  ┌────────▼────────┐  ┌────────▼────────┐
-│   │ Task: entity    │  │ Task: entity    │  │ Task: entity    │
-│   │ (AssetVideo)    │  │ (AssetImage)    │  │ (AssetDocument) │
-│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
-│            │                    │                    │
-│   ┌────────▼────────┐  ┌────────▼────────┐  ┌────────▼────────┐
-│   │ Task: dto       │  │ Task: dto       │  │ Task: dto       │
-│   │ (AssetVideo)    │  │ (AssetImage)    │  │ (AssetDocument) │
-│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
-└────────────┼────────────────────┼────────────────────┼─────────┘
-             └────────────────────┼────────────────────┘
-                                  ▼
-┌──────────────────────────────────────────────────────────────┐
-│ Phase 4: Fan-in                                              │
-│   - be-seed-maker (모든 target 완료 후)                        │
-│   - be-unit-test-builder (BE 전략 결정)              │
-│   - req-be-test-planner                                       │
-│   - qa-be-testing                                             │
-│   - 공용 export 파일 머지 (packages/*/src/index.ts)            │
-└──────────────────────────────────────────────────────────────┘
-```
+| Stage | fan-out 단위 | join 시점 |
+|-------|--------------|-----------|
+| 2 | `targets` | seed / test chain |
+| 3 | `targets` | test chain |
+| 4 | `pages` | route layout / checklist 반영 완료 시점 |
+| 5 | `pages` | FE unit test chain |
+| 6 | `pages` | FE unit test chain + checklist 반영 |
 
-#### Stage 3: 백엔드 구현
+### 7.4 DAG 처리 규칙
 
-```
-targets=Asset,AssetVideo,AssetImage
+- 의존성이 없는 같은 레벨은 병렬 실행 가능합니다.
+- 부모-자식 의존이 있으면 위상 정렬 후 레벨별로 실행합니다.
+- `parallel=force`라도 lock 대상 충돌과 명시된 의존성은 무시하지 않습니다.
 
-┌──────────────────────────────────────────────────────────────┐
-│ 병렬 fan-out (각 target별 독립 실행)                           │
-│   ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
-│   │ Task: repo      │  │ Task: repo      │  │ Task: repo      │
-│   │ (Asset)         │  │ (AssetVideo)    │  │ (AssetImage)    │
-│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
-│            │                    │                    │
-│   ┌────────▼────────┐  ┌────────▼────────┐  ┌────────▼────────┐
-│   │ Task: service   │  │ Task: service   │  │ Task: service   │
-│   │ (Asset)         │  │ (AssetVideo)    │  │ (AssetImage)    │
-│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
-│            │                    │                    │
-│   ┌────────▼────────┐  ┌────────▼────────┐  ┌────────▼────────┐
-│   │ Task: controller│  │ Task: controller│  │ Task: controller│
-│   │ (Asset)         │  │ (AssetVideo)    │  │ (AssetImage)    │
-│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
-└────────────┼────────────────────┼────────────────────┼─────────┘
-             └────────────────────┼────────────────────┘
-                                  ▼
-┌──────────────────────────────────────────────────────────────┐
-│ Fan-in                                                       │
-│   - be-app-builder (cross-target 조합 필요 시)              │
-│   - be-unit-test-builder (BE 전략 결정)              │
-│   - req-be-test-planner                                       │
-│   - qa-be-testing                                             │
-└──────────────────────────────────────────────────────────────┘
-```
+### 7.5 자동 판단 규칙
 
-#### Stage 5: 컴포넌트 구현 (페이지별)
+| Stage | 1차 분석 위치 | 보조 판단 |
+|-------|---------------|-----------|
+| 2 | `packages/be-entity/src/*.entity.spec.md` | Entity 의존성 |
+| 3 | `apps/core/api/src/module/*/*.controller.spec.md` | target별 API/Service/App spec |
+| 4 | `apps/[app]/web/src/app/(admin)/[domain]/**/page.spec.md` | page 목록 / route 구조 |
+| 5 | `apps/[app]/web/src/app/(admin)/[domain]/**/page.spec.md` | `page role`, `reusable target` |
+| 6 | `apps/[app]/web/src/app/(admin)/[domain]/**/page.spec.md` | page 목록 / slot 구조 |
 
-```
-pages=List,Detail,Create
+### 7.6 lock / merge
 
-┌──────────────────────────────────────────────────────────────┐
-│ 병렬 fan-out (각 페이지별 독립 실행)                           │
-│   ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
-│   │ Page: List      │  │ Page: Detail    │  │ Page: Create    │
-│   │                 │  │                 │  │                 │
-│   │ - ui-builder    │  │ - ui-builder    │  │ - ui-builder    │
-│   │ - input-builder │  │ - input-builder │  │ - input-builder │
-│   │ - master-builder│  │ - detail-builder│  │ - form-widget-builder│
-│   │ - feature/widget 보조│ │ - feature/widget 보조│ │ - feature/widget 보조│
-│   │ - store-builder │  │ - store-builder │  │ - store-builder │
-│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
-└────────────┼────────────────────┼────────────────────┼─────────┘
-             └────────────────────┼────────────────────┘
-                                  ▼
-┌──────────────────────────────────────────────────────────────┐
-│ Fan-in                                                       │
-│   - fe-menu-builder (목록/탭 route contract, admin-menu.ts lock) │
-│   - 공용 UI export 머지                                        │
-│   - fe-unit-test-builder (FE 전략 결정)              │
-│   - req-fe-test-planner                                       │
-│   - qa-fe-testing                                             │
-└──────────────────────────────────────────────────────────────┘
-```
+- fan-out 중 공유 파일은 수정 예약만 하고, 최종 반영은 join 단계의 단일 writer가 수행합니다.
+- `admin-menu.ts`, package barrel, app spec은 가장 흔한 충돌 지점으로 간주합니다.
 
-### 14.4 의존성 DAG 처리 규칙
+### 7.7 failPolicy
 
-#### CTI (Class Table Inheritance) 패턴
+- `fail-fast`: 첫 실패 시 나머지 fan-out을 중단하고 Stage 실패로 보고
+- `continue`: 실패 항목을 분리 기록하고 가능한 항목만 계속 진행
 
-```
-Asset (부모)
-  ├── AssetImage (1:1 자식)
-  ├── AssetVideo (1:1 자식)
-  └── AssetDocument (1:1 자식)
-```
+### 7.8 진행 로그 최소 형식
 
-**의존성 규칙:**
-1. 부모(`Asset`)가 먼저 생성되어야 자식들이 참조 가능
-2. 자식들(`AssetVideo`, `AssetImage`, `AssetDocument`)은 서로 독립적 → 병렬 가능
-
-**실행 순서:**
-```bash
-# Level 0: 부모 먼저
-Level 0: Asset → schema, entity, dto
-
-# Level 1: 자식들 병렬
-Level 1: [AssetVideo, AssetImage, AssetDocument] → 병렬 실행
-```
-
-#### DAG 구성 알고리즘
-
-```
-1. targets 목록 수신
-2. 각 target의 기획서(.spec.md)에서 의존성 파악
-   - @materializes, @extends, @connects 태그 확인
-3. 위상 정렬로 레벨 분리
-   - Level 0: 의존성 없음 (부모)
-   - Level 1: Level 0에 의존
-   - Level N: Level N-1에 의존
-4. 같은 레벨은 병렬 실행
-5. 이전 레벨 완료 후 다음 레벨 시작
-```
-
-### 14.5 spawn_agent 도구 호출 패턴
-
-#### 병렬 실행 (fan-out)
-
-orch-stage는 **spawn_agent 도구를 여러 개 동시에 호출**하여 병렬 실행합니다:
-
-```
-# 단일 메시지에서 여러 spawn_agent 호출
-[spawn_agent 호출 1: be-entity-builder, target=AssetVideo]
-[spawn_agent 호출 2: be-entity-builder, target=AssetImage]
-[spawn_agent 호출 3: be-entity-builder, target=AssetDocument]
-```
-
-**spawn_agent 호출 예시:**
-```markdown
-spawn_agent:
-  agent_type: be-entity-builder
-  message: |
-    AssetVideo Entity를 생성하세요.
-
-    **기획서:** packages/be-entity/src/asset-video.entity.spec.md
-    **부모 Entity:** Asset (packages/be-entity/src/asset.entity.ts)
-
-    **필드:**
-    - assetId: string (PK, FK to Asset)
-    - durationMs: number
-    - codec: string
-    ...
-```
-
-#### 순차 실행 (fan-in 후)
-
-```
-# fan-in 완료 후 순차 실행
-[spawn_agent 호출: be-seed-maker] → 모든 target 완료 후
-[spawn_agent 호출: be-unit-test-builder] → 테스트 생성 전략 결정
-[spawn_agent 호출: req-be-test-planner] → 전략 기반 테스트 케이스 구체화
-[spawn_agent 호출: qa-be-testing] → 테스트 코드 작성 + 실행
-```
-
-### 14.6 공유 파일 Lock 규칙
-
-병렬 실행 중 여러 agent가 같은 파일을 수정하지 않도록 lock을 사용합니다:
-
-| 파일 | Lock 대상 | 처리 방식 |
-|------|----------|----------|
-| `packages/*/src/index.ts` | export 머지 | fan-in 후 단일 writer |
-| `packages/common-constant/src/routing/admin-menu.ts` | 메뉴 등록 | List 페이지 완료 후 단일 실행 |
-| `apps/*/web/src/app/(admin)/app.spec.md` | 앱 기획서 | Stage 1 완료 후 lock |
-| `**/PROGRESS.md` | 진행 상황 | fan-in 후 단일 업데이트 |
-
-### 14.7 실행 예시
-
-#### Asset 도메인 전체 스키마/Entity 병렬 생성
-
-```bash
-# Stage 2: Prisma/공용 스키마, Entity, DTO 병렬 생성
-/orch-stage run stage=2 app=admin domain=Asset \
-  targets=Asset,AssetVideo,AssetImage,AssetDocument,AssetFolder \
-  parallel=auto \
-  maxConcurrency=3
-
-# 실행 흐름:
-# 1. DAG 분석 → Asset (Level 0), [Video,Image,Document,Folder] (Level 1)
-# 2. Level 0 실행: Asset prisma → common-schema → entity → dto → query-dto (순차)
-# 3. Level 1 실행: 4개 target 병렬 fan-out (각각 schema → entity → dto)
-# 4. Fan-in: seed-maker → be-unit-test-builder → req-be-test-planner → qa-be-testing
-```
-
-#### 여러 페이지 컴포넌트 병렬 생성
-
-```bash
-# Stage 5: 3개 페이지 컴포넌트 병렬 생성
-/orch-stage run stage=5 app=admin domain=Asset \
-  pages=List,Detail,Create \
-  parallel=auto \
-  maxConcurrency=2
-
-# 실행 흐름:
-# 1. List 페이지: ui → input → widget → feature → store (순차)
-# 2. Detail 페이지: 동시 실행 (maxConcurrency=2)
-# 3. Create 페이지: List/Detail 중 하나 완료 후 실행
-# 4. Fan-in: menu-builder (List만) → export 머지 → fe-unit-test-builder → req-fe-test-planner → qa-fe-testing
-```
-
-### 14.8 실패 처리
-
-#### fail-fast (기본)
-
-```
-Task 1: 성공
-Task 2: 실패 → 즉시 중단
-Task 3: 실행 취소
-
-결과: Stage 실패, 사용자 알림
-```
-
-#### continue
-
-```
-Task 1: 성공
-Task 2: 실패 → 실패 기록, 계속
-Task 3: 성공
-
-결과: 부분 성공 리포트
-  - 성공: Asset, AssetImage
-  - 실패: AssetVideo
-  - 권장: 실패한 target만 재실행
-```
-
-### 14.9 진행 상황 표시
-
-```
-🚀 Stage 2: 스키마 구현 시작
-📋 Targets: Asset, AssetVideo, AssetImage, AssetDocument
-⚙️ Parallel: auto (maxConcurrency: 3)
-
-📊 DAG 분석 완료:
-   Level 0: Asset
-   Level 1: AssetVideo, AssetImage, AssetDocument
-
-▶️ Level 0 실행 중...
-   ✅ Asset schema 생성 완료
-   ✅ Asset entity 생성 완료
-   ✅ Asset dto 생성 완료
-
-▶️ Level 1 병렬 실행 중... (3개 Task)
-   ✅ [Task 1] AssetVideo 완료
-   ✅ [Task 2] AssetImage 완료
-   ✅ [Task 3] AssetDocument 완료
-
-▶️ Fan-in 실행 중...
-   ✅ Seed 데이터 생성 완료
-   ✅ 테스트 케이스 생성 완료
-   ✅ 테스트 실행: 15개 통과
-
-✅ Stage 2 완료: 스키마 구현
-
-📁 생성된 파일:
-   - packages/be-prisma/schema/asset.prisma
-   - packages/be-entity/src/asset.entity.ts
-   - packages/be-entity/src/asset-video.entity.ts
-   - packages/be-entity/src/asset-image.entity.ts
-   - packages/be-entity/src/asset-document.entity.ts
-   - packages/be-dto/src/asset/*.dto.ts
-   - ...
-
-핵심 의도: 확정된 스키마/DTO 계약을 기반으로 비즈니스 로직 레이어를 구현하기 위해 Stage 3로 진행합니다.
-📌 다음 단계: Stage 3 (백엔드 구현)
+```text
+🚀 Stage N 시작
+📋 Domain/App/Page/Targets 요약
+⚙️ Parallel / maxConcurrency / failPolicy
+📊 실행 계획: Level 또는 page fan-out 요약
+▶️ fan-out 실행 중
+▶️ join 실행 중
+✅ Stage N 완료 또는 ❌ Stage N 실패
 ```
 
 ---
 
-## 15. 자동 병렬 판단 시스템 (Critical)
+## 8. Stage 완료 / 실패 형식
 
-**`targets` 파라미터가 없어도 기획서를 분석하여 자동으로 병렬 실행 여부를 판단합니다。**
+### 8.1 완료 메시지 최소 형식
 
-### 15.1 개요
+```text
+✅ Stage N 완료: <단계명>
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    자동 병렬 판단 플로우                         │
-│                                                                  │
-│  1. 기획서 분석 → "구현 대상" 섹션 파싱                          │
-│  2. 의존성 DAG 구성                                              │
-│  3. 병렬 그룹 식별                                               │
-│  4. 자동으로 fan-out 실행                                        │
-└─────────────────────────────────────────────────────────────────┘
-```
+📁 핵심 산출물:
+   - ...
 
-### 15.2 기획서 "구현 대상" 섹션 파싱
+🧪 검증 결과:
+   - ...
 
-#### Entity 기획서 분석
-
-orch-stage는 Entity 기획서(`packages/be-entity/src/*.entity.spec.md`)에서 **구현 대상** 섹션을 찾습니다:
-
-```markdown
-## 구현 대상 (orch-stage 자동 병렬 실행용)
-
-### Entity 목록
-| Entity | 타입 | 의존성 | 병렬 그룹 |
-|--------|------|--------|----------|
-| Asset | CONCRETE | - | 0 |
-| AssetImage | MATERIALIZATION | Asset | 1 |
-| AssetVideo | MATERIALIZATION | Asset | 1 |
-| AssetDocument | MATERIALIZATION | Asset | 1 |
+핵심 의도: <다음 Stage가 필요한 이유 한 문장>
+📌 다음 단계: Stage N+1 (...)
 ```
 
-**파싱 규칙:**
-1. `## 구현 대상` 섹션 찾기
-2. 표에서 `Entity`, `의존성`, `병렬 그룹` 컬럼 추출
-3. 동일 병렬 그룹 → 병렬 실행
+### 8.2 실패 메시지 최소 형식
 
-#### Page 기획서 분석
+```text
+❌ Stage N 실패: <단계명>
 
-```markdown
-## 구현 대상 (orch-stage 자동 병렬 실행용)
+원인:
+- ...
 
-### UI 컴포넌트
-| 컴포넌트 | 타입 | 위치 |
-|----------|------|------|
-| AssetPreview | Pure UI | ... |
-| AssetTypeInfo | Pure UI | ... |
+영향 범위:
+- ...
 
-### Widget 컴포넌트
-| 컴포넌트 | 위치 |
-|----------|------|
-| AssetListPanel | ... |
-
-### 병렬 실행 가능 항목
-- UI 컴포넌트: 병렬 생성 가능
-- Widget 컴포넌트: 병렬 생성 가능
+권장 조치:
+- ...
 ```
 
-### 15.3 자동 판단 알고리즘
+---
 
-```
-Stage 실행 시작
-    │
-    ▼
-┌─────────────────────────────────────────┐
-│  1단계: targets/pages 파라미터 확인      │
-│  - 있음 → 명시된 targets 사용            │
-│  - 없음 → 기획서 분석으로 자동 판단       │
-└─────────────────────────────────────────┘
-    │
-    ▼
-┌─────────────────────────────────────────┐
-│  2단계: 기획서 "구현 대상" 섹션 검색      │
-│                                         │
-│  Stage 2-3:                             │
-│    - packages/be-entity/src/*.entity.spec.md │
-│    - packages/be-app/src/*.application-service/index.spec.md │
-│    - packages/be-service/src/*.service/index.spec.md │
-│    - packages/be-repository/src/*.repository.spec.md │
-│    - apps/core/api/src/module/*/*.controller.spec.md │
-│                                         │
-│  Stage 4-6:                             │
-│    - apps/[app]/web/src/app/(admin)/[domain]/page.spec.md │
-└─────────────────────────────────────────┘
-    │
-    ▼
-┌─────────────────────────────────────────┐
-│  3단계: DAG 구성                         │
-│  - 의존성 컬럼에서 부모-자식 관계 파악    │
-│  - 위상 정렬로 레벨 분리                  │
-│  - 같은 레벨 = 병렬 실행 가능            │
-└─────────────────────────────────────────┘
-    │
-    ▼
-┌─────────────────────────────────────────┐
-│  4단계: 병렬 실행                        │
-│  - Level 0: 순차 실행                    │
-│  - Level 1+: 병렬 fan-out (maxConcurrency 제한) │
-│  - Fan-in: 후속 작업                     │
-└─────────────────────────────────────────┘
-```
+## 9. 재시작 규칙
 
-### 15.4 Stage별 자동 판단 규칙
+| 변경 발생 Stage | 재시작 범위 |
+|----------------|------------|
+| 1 | 1~7 전체 |
+| 2 | 2~7 |
+| 3 | 3~7 |
+| 4 | 4~7 |
+| 5 | 5~7 |
+| 6 | 6~7 |
+| 7 | 7만 |
 
-| Stage | 기획서 분석 위치 | 병렬 판단 기준 |
-|-------|-----------------|---------------|
-| 2 | `packages/be-entity/src/*.entity.spec.md` | Entity 목록, 의존성 |
-| 3 | `apps/core/api/src/module/*/*.controller.spec.md` | API 엔드포인트별 |
-| 4 | `apps/[app]/web/src/app/(admin)/[domain]/page.spec.md` | 페이지 목록 |
-| 5 | `packages/fe-ui/src/*/*.spec.md` | 컴포넌트 타입별 |
-| 6 | `apps/[app]/web/src/app/(admin)/[domain]/page.spec.md` | 페이지 목록 |
+예시:
+- 도메인 기획 변경 → Stage 1부터
+- 스키마 변경 → Stage 2부터
+- 특정 페이지 UI contract 변경 → 해당 페이지 기준 Stage 4 또는 5부터
 
-### 15.5 자동 판단 예시
+---
 
-#### 예시 1: Entity 자동 병렬 (Stage 2)
+## 10. 핵심 원칙
 
-**입력:**
-```bash
-/orch-stage run stage=2 app=admin domain=Asset
-# targets 파라미터 없음 → 자동 판단
-```
+### 하위호환성 미고려 (Critical)
 
-**기획서 분석:**
-```markdown
-# Asset Entity 기획서 (packages/be-entity/src/asset.entity.spec.md)
+모든 기획/설계 변경은 전체 마이그레이션 방식으로 진행합니다.
 
-## 구현 대상
+| 원칙 | 설명 |
+|------|------|
+| 하위호환성 금지 | 기존 코드와의 호환성을 고려하지 않음 |
+| 전체 마이그레이션 | 변경 시 관련된 모든 코드를 한 번에 수정 |
+| deprecated 금지 | deprecated, fallback, 이전 버전 지원 코드 작성 금지 |
+| 깔끔한 전환 | 이전 구조의 흔적을 남기지 않음 |
 
-### Entity 목록
-| Entity | 타입 | 의존성 | 병렬 그룹 |
-|--------|------|--------|----------|
-| Asset | CONCRETE | - | 0 |
-| AssetImage | MATERIALIZATION | Asset | 1 |
-| AssetVideo | MATERIALIZATION | Asset | 1 |
-| AssetDocument | MATERIALIZATION | Asset | 1 |
-| AssetFolder | CONCRETE | - | 0 |
-| AssetDerivative | CONCRETE | Asset | 1 |
-```
-
-**자동 판단 결과:**
-```
-📊 기획서 분석 완료:
-   - 검색: packages/be-entity/src/asset*.entity.spec.md
-   - 발견: 6개 Entity
-
-📊 DAG 구성:
-   Level 0: Asset, AssetFolder (의존성 없음)
-   Level 1: AssetImage, AssetVideo, AssetDocument, AssetDerivative (Asset 의존)
-
-⚙️ 병렬 실행 계획:
-   Phase 1: Asset, AssetFolder 병렬 (2개)
-   Phase 2: Image, Video, Document, Derivative 병렬 (4개, maxConcurrency=3 → 2+2)
-```
-
-#### 예시 2: 컴포넌트 자동 병렬 (Stage 5)
-
-**입력:**
-```bash
-/orch-stage run stage=5 app=admin domain=Asset page=List
-# pages 파라미터 없음 → page.spec.md 분석
-```
-
-**기획서 분석:**
-```markdown
-# Asset 목록 페이지 기획서 (apps/admin/web/src/app/(admin)/assets/page.spec.md)
-
-## 구현 대상
-
-### UI 컴포넌트
-| 컴포넌트 | 병렬 그룹 |
-|----------|----------|
-| AssetPreview | 0 |
-| AssetTypeInfo | 0 |
-| DerivativeList | 0 |
-
-### Widget 컴포넌트
-| 컴포넌트 | 병렬 그룹 |
-|----------|----------|
-| AssetListPanel | 1 |
-| FolderTree | 1 |
-
-### Feature 컴포넌트
-| 컴포넌트 | 병렬 그룹 | 의존성 |
-|----------|----------|--------|
-| AssetManager | 2 | AssetStore |
-```
-
-**자동 판단 결과:**
-```
-📊 기획서 분석 완료:
-   - 검색: apps/admin/web/src/app/(admin)/assets/page.spec.md
-   - 발견: 6개 컴포넌트
-
-📊 실행 계획:
-   Phase 1: UI 3개 병렬 (AssetPreview, AssetTypeInfo, DerivativeList)
-   Phase 2: Widget 2개 병렬 (AssetListPanel, FolderTree)
-   Phase 3: Feature 1개 (AssetManager - Store 완료 후)
-
-▶️ Phase 1 병렬 실행 중... (3개 Task)
-```
-
-### 15.6 명시 vs 자동 판단 우선순위
-
-| 우선순위 | 파라미터 | 동작 |
-|----------|---------|------|
-| 1 | `targets=...` | 명시된 targets만 사용 |
-| 2 | `pages=...` | 명시된 pages만 사용 |
-| 3 | 기획서 분석 | "구현 대상" 섹션에서 자동 추출 |
-
-**혼합 사용 예시:**
-```bash
-# 일부만 명시 + 나머지 자동
-/orch-stage run stage=2 app=admin domain=Asset targets=Asset
-# → Asset만 명시 실행, 나머지는 자동 판단 안 함
-
-# 전체 자동
-/orch-stage run stage=2 app=admin domain=Asset
-# → 기획서에서 모든 Entity 자동 추출
-```
-
-### 15.7 "구현 대상" 섹션이 없을 때
-
-기획서에 "구현 대상" 섹션이 없으면:
-
-1. **Stage 2-3**: 도메인 기획서에서 Entity/API 추론
-   - `app.spec.md`의 도메인 목록
-   - `*.controller.spec.md`의 API 엔드포인트
-
-2. **Stage 4-6**: 페이지 폴더 구조 분석
-   - `apps/[app]/web/src/app/(admin)/[domain]/` 하위 폴더
-   - List, Detail, Create, Edit 자동 감지
-
-3. **경고 출력**:
-```
-⚠️ "구현 대상" 섹션을 찾을 수 없습니다.
-📌 폴더 구조 기반 자동 판단:
-   - 감지된 페이지: List, Detail
-   - 권장: 기획서에 "구현 대상" 섹션을 추가하면 더 정확한 병렬 실행 가능
-```
-
-### 15.8 자동 판단 실행 로그 예시
-
-```
-🚀 Stage 2: 스키마 구현 시작
-📋 Domain: Asset
-🔍 자동 판단 모드 (targets 파라미터 없음)
-
-📖 기획서 분석 중...
-   ✅ 발견: packages/be-entity/src/asset.entity.spec.md
-   ✅ 발견: packages/be-entity/src/asset-video.entity.spec.md
-   ✅ 발견: packages/be-entity/src/asset-image.entity.spec.md
-
-📊 "구현 대상" 섹션 파싱:
-   | Entity | 의존성 | 병렬 그룹 |
-   |--------|--------|----------|
-   | Asset | - | 0 |
-   | AssetVideo | Asset | 1 |
-   | AssetImage | Asset | 1 |
-
-📊 DAG 구성 완료:
-   Level 0: Asset
-   Level 1: AssetVideo, AssetImage (병렬)
-
-⚙️ 실행 계획:
-   Phase 1: Asset (1개)
-   Phase 2: Video, Image 병렬 (2개, maxConcurrency=3)
-
-▶️ Phase 1 실행 중...
-   ✅ be-prisma-builder: Asset 완료
-   ✅ common-schema-builder: Asset 완료
-   ✅ be-entity-builder: Asset 완료
-   ✅ be-dto-builder: Asset 완료
-
-▶️ Phase 2 병렬 실행 중... (2개 Task 동시)
-   ✅ [Task 1] AssetVideo 완료
-   ✅ [Task 2] AssetImage 완료
-
-✅ Stage 2 완료: 스키마 구현 (자동 병렬)
-
-핵심 의도: 확정된 스키마/DTO 계약을 기반으로 비즈니스 로직 레이어를 구현하기 위해 Stage 3로 진행합니다.
-📌 다음 단계: Stage 3 (백엔드 구현)
-   → 자동 판단으로 3개 Entity 병렬 처리됨
-```
 '''

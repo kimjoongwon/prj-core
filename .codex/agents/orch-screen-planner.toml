@@ -12,41 +12,117 @@ developer_instructions = '''
 
 # 화면 기획 오케스트레이터 (Screen Planner Orchestrator)
 
-단일 화면의 **L5-L12 기획**을 의존성 기반으로 조율하는 오케스트레이터입니다. 선행 단계 이후 독립 작업은 병렬 fan-out 실행을 지원합니다.
+단일 화면의 **L5-L12 기획**을 조율하는 오케스트레이터입니다.
+이 role의 책임은
+1) page-level planner chain 고정
+2) Stage 5/6 builder 문서 참조
+3) `page role` / `reusable target` / downstream builder 매핑 확정
+으로 한정합니다.
+
+같은 role 목록이나 builder 매핑을 다른 섹션에 다시 복제하지 않습니다.
 
 ---
 
-## 1. 담당 범위
+## 1. Source Of Truth 규칙 (Critical)
 
-| 레벨 | 명칭 | 담당 role | 출력 위치 |
-|------|------|-----------|----------|
-| L4+ | 페이지 통합 | req-page-planner | `page.spec.md` 통합 섹션 업데이트 (`page component path = packages/fe-ui/src/page/[PageName]/[PageName].tsx`) |
-| L5-L6 | 인터랙션/API | req-api-planner | `page.spec.md` API/이벤트 + `apps/core/api/src/module/*/*.controller.spec.md`/`dto.spec.md` |
-| L8 | UI | req-primitive-planner | `packages/fe-ui/src/display/[UIName]/index.spec.md` |
-| L8 | Input | req-input-planner | `packages/fe-ui/src/control/[InputName]/index.spec.md` |
-| L8 | Cell | req-cell-planner | `packages/fe-ui/src/cell/[CellName]/index.spec.md` |
-| L8+ | Columns | req-columns-planner | `packages/fe-ui/src/columns/master/[Domain]Columns.spec.md` |
-| L9 | Widget | req-widget-planner | `packages/fe-ui/src/widget/[WidgetName]/index.spec.md` |
-| L10 | Layout | req-layout-planner | `packages/fe-ui/src/display/layout/{index,Layout,type}.spec.md` |
-| L10 | Feature | req-feature-planner | `packages/fe-ui/src/feature/[FeatureName]/index.spec.md` |
-| L10+ | Surface | req-surface-planner | `page.spec.md` Surface/Elevation 섹션 + 관련 layout/feature spec 보강 |
-| L10+ | Menu | req-menu-planner | `packages/common-constant/src/routing/admin-menu.spec.md` |
-| L12 | 테스트 | req-fe-test-planner | 각 기존 `.spec.md`에 "테스트 케이스" 섹션 추가 |
-| L12+ | API 연동 | req-api-integration-planner | `apps/[app]/web/src/app/**/hooks/index.spec.md` |
+### 1.1 orch-screen-planner가 직접 소유하는 것
 
-> **참고:** L7(Entity), L11(Store)은 도메인 단위로 기획되므로 별도 처리
+- page-level planner 실행 순서
+- `page role` / `reusable target` 분류
+- downstream builder 참조 프로토콜
+- page-level spec 완료 조건
 
-### 1.1 Stage 5/6 구현 참조 프로토콜 (Critical)
+### 1.2 child role 문서가 소유하는 것
 
-- 화면 기획을 시작하기 전에 관련 구현 role 문서를 먼저 읽습니다.
+- 각 req-* planner의 세부 규칙
+- 각 builder의 출력 파일 경로, 필수 규칙, 금지 규칙, 검증 명령
+- component/page/layout 자체의 구현 규칙
+
+### 1.3 참조 방식
+
+- 화면 기획 시작 전에 관련 Stage 5/6 builder 문서를 먼저 읽습니다.
 - role 문서 경로는 `.codex/config.toml`의 `[agents.<role>].config_file` 또는 `.codex/agents/<role>.toml`을 source of truth로 사용합니다.
-- 각 req-* planner는 downstream 구현 role 문서에서 최소 다음 4가지를 추출해 spec에 반영합니다.
-  - 출력 파일 경로
-  - 필수 규칙
-  - 금지 규칙
-  - 검증 명령
 - `page.spec.md`의 `## Rendering Decision`에는 반드시 `page role`, `reusable target`, `page component path`, `참조한 구현 role`을 기록합니다.
-- `page role`과 `reusable target`은 Stage 5/6에서 호출할 role과 정확히 일치해야 합니다.
+- page-level 구현 규칙은 이 문서 안에서 다시 풀어쓰지 않고 builder 문서를 참조합니다.
+
+---
+
+## 2. 언제 사용하는가?
+
+| 상황 | 사용 여부 | 설명 |
+|------|----------|------|
+| 특정 화면의 상세 기획이 필요할 때 | O | `List`, `Detail`, `Create`, `Edit` |
+| 기존 도메인에 새 화면을 추가할 때 | O | `orch-requirement`에서 위임 |
+| Stage 5/6 구현 전 contract 정리가 필요할 때 | O | builder 참조 기반 spec 보강 |
+| domain-wide Entity / API / Service 기획이 필요할 때 | X | `orch-requirement` 범위 |
+| 단일 UI/Cell/Feature spec만 부분 수정할 때 | X | 해당 req-* planner 직접 호출 가능 |
+
+---
+
+## 3. 입력과 전제조건
+
+### 3.1 입력
+
+| 항목 | 필수 | 설명 |
+|------|:----:|------|
+| `app` | ✅ | 앱 식별자 |
+| `domain` | ✅ | 도메인 이름 |
+| `screen` 또는 `page` | ✅ | `List`, `Detail`, `Create`, `Edit` |
+| `parallel` | △ | `off` / `auto` / `force`, 기본 `auto` |
+| `maxConcurrency` | △ | 동시 실행 상한, 기본 `4` |
+
+### 3.2 전제조건
+
+- `apps/[app]/web/src/app/(admin)/app.spec.md`
+- 대상 route의 `page.spec.md` 초안
+- 관련 Entity spec
+- 공용 Store가 필요한 화면이면 `[domain]Store.spec.md`
+
+---
+
+## 4. 실행 계약
+
+### 4.1 선행 순차 단계
+
+1. `req-page-planner`
+   - `page.spec.md`를 page integration 관점으로 정리
+2. `req-api-planner`
+   - `page.spec.md`의 API/이벤트와 관련 controller/dto spec 보강
+3. `page role`, `reusable target`, 참조할 Stage 5/6 구현 role 확정
+
+### 4.2 병렬 fan-out 단계
+
+파일 충돌이 없으면 아래 role을 병렬 실행합니다.
+
+- `req-primitive-planner`
+- `req-input-planner`
+- `req-cell-planner`
+- `req-columns-planner`
+- `req-widget-planner`
+- `req-layout-planner`
+- `req-feature-planner`
+- `req-menu-planner` (목록/탭 화면일 때)
+- `req-api-integration-planner`
+
+### 4.3 join 단계
+
+- `req-surface-planner`
+- `req-fe-test-planner`
+- 공유 파일 lock 머지
+  - `page.spec.md`
+  - `packages/common-constant/src/routing/admin-menu.spec.md`
+  - `**/PROGRESS.md`
+
+### 4.4 병렬 규칙
+
+- 기본 모드는 `parallel=auto`
+- `req-page-planner`, `req-api-planner`는 선행 순차 고정
+- `req-surface-planner`는 join 단계 단일 실행
+- 동일 파일을 수정하는 작업은 동시에 실행하지 않습니다
+
+---
+
+## 5. downstream builder 매핑 (Single Source Of Truth)
 
 | 기획 role | 구현 role | 구현 문서 | 화면 기획에 반영할 내용 |
 |----------|----------|----------|------------------------|
@@ -66,7 +142,9 @@ developer_instructions = '''
 | `req-api-integration-planner` | `fe-api-integrator` | `.codex/agents/fe-api-integrator.toml` | `apps/[app]/web/src/app/**/hooks/index.spec.md` 계약 |
 | `req-fe-test-planner` | `fe-unit-test-builder`, `qa-fe-testing` | `.codex/agents/fe-unit-test-builder.toml`, `.codex/agents/qa-fe-testing.toml` | 테스트 전략, 케이스, 검증 기준 |
 
-### 1.2 page role / reusable target 분류 규칙 (Critical)
+---
+
+## 6. page role / reusable target 규칙
 
 | page role | reusable target | Stage 5 구현 role | 반영 대상 |
 |----------|-----------------|-------------------|----------|
@@ -74,240 +152,79 @@ developer_instructions = '''
 | `detail` | `detail/view` | `fe-detail-builder` | `packages/fe-ui/src/detail/view/**` |
 | `form` | `form` | `fe-form-builder` | `packages/fe-ui/src/form/**` |
 
----
-
-## 2. 입력/출력
-
-### 입력
-
-| 항목 | 필수 | 설명 | 예시 |
-|------|:----:|------|------|
-| 앱 | ✅ | 앱 식별자 | "admin" |
-| 도메인명 | ✅ | 도메인 이름 | "Member" |
-| 화면명 | ✅ | 화면 이름 | "List", "Detail", "Create", "Edit" |
-| 화면 경로 | ✅ | 화면 파일 경로 | "apps/admin/web/src/app/(admin)/members/" |
-| `parallel` | △ | 병렬 모드 (`off`/`auto`/`force`), 기본 `auto` | `auto` |
-| `maxConcurrency` | △ | 동시 실행 상한 | `4` |
-
-### 출력
-
-```
-# page.spec.md 통합 + API/이벤트 섹션 업데이트
-apps/[app]/web/src/app/(admin)/[도메인]/**/page.spec.md
-
-# BE/공용 스펙
-apps/core/api/src/module/[module]/[domain].controller.spec.md
-packages/be-dto/src/[domain]/*.dto.spec.md
-
-# FE Sidecar
-packages/fe-ui/src/display/[UIName]/index.spec.md
-packages/fe-ui/src/control/[InputName]/index.spec.md
-packages/fe-ui/src/cell/[CellName]/index.spec.md
-packages/fe-ui/src/columns/master/[Domain]Columns.spec.md
-packages/fe-ui/src/widget/[WidgetName]/index.spec.md
-packages/fe-ui/src/display/layout/{index,Layout,type}.spec.md
-packages/fe-ui/src/feature/[FeatureName]/index.spec.md
-
-# Rendering Decision / 재사용 계층 target
-apps/[app]/web/src/app/(admin)/[도메인]/**/page.spec.md   # page role / reusable target / page component path / 참조한 구현 role
-packages/fe-ui/src/master/**                              # page role=master일 때 대상 경로 명시
-packages/fe-ui/src/detail/view/**                         # page role=detail일 때 대상 경로 명시
-packages/fe-ui/src/form/**                                # page role=form일 때 대상 경로 명시
-
-# 메뉴/API 연동
-packages/common-constant/src/routing/admin-menu.spec.md
-apps/[app]/web/src/app/**/hooks/index.spec.md
-
-# 테스트 케이스는 각 기존 .spec.md에 섹션 추가
-```
+규칙:
+- 목록/검색/필터/페이지네이션 중심이면 `master`
+- 읽기 전용 상세면 `detail`
+- 생성/수정/입력/검증 중심이면 `form`
 
 ---
 
-## 3. 전제조건
+## 7. 필수 산출물
 
-화면 기획을 시작하기 전에 다음이 완료되어 있어야 합니다:
+- `apps/[app]/web/src/app/(admin)/[domain]/**/page.spec.md`
+- `packages/fe-ui/src/display/[UIName]/index.spec.md`
+- `packages/fe-ui/src/control/[InputName]/index.spec.md`
+- `packages/fe-ui/src/cell/[CellName]/index.spec.md`
+- `packages/fe-ui/src/columns/master/[Domain]Columns.spec.md`
+- `packages/fe-ui/src/widget/[WidgetName]/index.spec.md`
+- `packages/fe-ui/src/display/layout/{index,Layout,type}.spec.md`
+- `packages/fe-ui/src/feature/[FeatureName]/index.spec.md`
+- `packages/common-constant/src/routing/admin-menu.spec.md` (조건부)
+- `apps/[app]/web/src/app/**/hooks/index.spec.md` (조건부)
 
-| 항목 | 위치 | 확인 방법 |
-|------|------|----------|
-| 앱 기획서 (L0-L2) | `apps/[app]/web/src/app/(admin)/app.spec.md` | 파일 존재 확인 |
-| 페이지 기획서 (L3-L4) | `apps/[app]/web/src/app/(admin)/[도메인]/page.spec.md` | 파일 존재 확인 |
-| Entity 기획서 (L7) | `packages/be-entity/src/[entity].entity.spec.md` | 파일 존재 확인 |
-| Store 기획서 (L11, 조건부) | `packages/fe-store/src/stores/[domain]Store.spec.md` | 공용 재사용 상태일 때만 확인 |
-
----
-
-## 4. 실행 플로우
-
-1. 전제조건 확인 (`app.spec.md`, `page.spec.md`, Entity spec, Store spec[조건부])
-2. 기반 단계(순차):
-   - `req-page-planner` 실행 (페이지 통합 관점으로 `page.spec.md` 정리)
-   - `req-api-planner` 실행 (`page.spec.md` API/이벤트 + `apps/core/api/src/module/*/*.controller.spec.md`/`dto.spec.md`)
-   - `page role`, `reusable target`, 참조할 Stage 5/6 구현 role 확정
-3. 설계 단계(병렬 fan-out, `parallel=auto`):
-   - `req-primitive-planner`, `req-input-planner`, `req-cell-planner`, `req-columns-planner`, `req-widget-planner`, `req-layout-planner`, `req-feature-planner`
-   - `req-menu-planner`(목록 화면), `req-api-integration-planner`
-4. join 단계:
-   - `req-surface-planner` 실행 (Surface ownership, elevation, flat 예외 확정)
-   - `req-fe-test-planner` 실행 (기존 `.spec.md`에 테스트 케이스 섹션 추가)
-   - 공용 파일 lock 머지 (`admin-menu.spec.md`, `page.spec.md`, `**/PROGRESS.md`)
-
-### 병렬 실행 규칙 (신규)
-
-- 기본 모드는 `parallel=auto`, 필요 시 `maxConcurrency`로 fan-out 개수를 제한합니다.
-- `req-page-planner`/`req-api-planner`는 선행 순차 고정입니다.
-- `req-surface-planner`는 구조 planner 결과를 모은 뒤 join 단계에서 단일 실행합니다.
-- 동일 파일을 수정하는 작업은 동시에 실행하지 않습니다.
-- 충돌 가능 파일은 lock 후 단일 writer가 최종 반영합니다.
+추가 필수 기록:
+- `Rendering Decision.page role`
+- `Rendering Decision.reusable target`
+- `Rendering Decision.page component path`
+- `Rendering Decision.참조한 구현 role`
 
 ---
 
-## 5. 실행 예시
+## 8. 완료 체크리스트
+
+- [ ] `page.spec.md`에 `Rendering Decision`이 기록되었는가?
+- [ ] `page role`과 `reusable target`이 확정되었는가?
+- [ ] 관련 builder 문서의 출력 경로 / 필수 규칙 / 금지 규칙 / 검증 명령을 spec에 반영했는가?
+- [ ] Cell 산출물이 `packages/fe-ui/src/cell/**` 기준인가?
+- [ ] Columns 산출물이 `packages/fe-ui/src/columns/master/**` 기준인가?
+- [ ] `req-surface-planner` 결과가 Surface/Elevation 섹션에 반영되었는가?
+- [ ] 테스트 케이스 섹션이 관련 spec에 추가되었는가?
+
+---
+
+## 9. 실행 예시
 
 ```bash
 /orch-screen-planner app=admin domain=Member screen=List
 
-# 병렬 fan-out 실행
 /orch-screen-planner app=admin domain=Member screen=List parallel=auto maxConcurrency=4
 ```
 
-```text
-Task: req-page-planner
-Task: req-api-planner
-Task: req-primitive-planner
-Task: req-input-planner
-Task: req-cell-planner
-Task: req-columns-planner
-Task: req-widget-planner
-Task: req-layout-planner
-Task: req-feature-planner
-Task: req-menu-planner
-Task: req-surface-planner
-Task: req-fe-test-planner
-Task: req-api-integration-planner
-```
-
-`req-primitive-planner`부터 `req-api-integration-planner`까지는 파일 충돌이 없으면 병렬 fan-out 가능합니다.
-`req-surface-planner`는 위 결과를 모은 뒤 단일 writer로 실행합니다.
-
 ---
 
-## 6. 화면명 규칙
-
-| 화면 타입 | 화면명 | 경로 예시 |
-|----------|--------|----------|
-| 목록 | List | `members/` → MemberList |
-| 상세 | Detail | `members/[memberId]/` → MemberDetail |
-| 등록 | Create | `members/new/` → MemberCreate |
-| 수정 | Edit | `members/[memberId]/edit/` → MemberEdit |
-
----
-
-## 7. 체크리스트
-
-### 실행 전 확인
-- [ ] 앱 기획서 (app.spec.md)가 존재하는가?
-- [ ] 페이지 기획서 (page.spec.md)가 존재하는가?
-- [ ] Entity 기획서가 존재하는가?
-- [ ] 공용 재사용 상태가 필요한 화면인가? (필요 시 Store 기획서 존재 확인)
-
-### 각 단계 완료 시
-- [ ] 기획서 파일이 생성/업데이트되었는가?
-- [ ] 기획서 내용이 화면에 맞는가?
-
-### 전체 완료 시
-- [ ] page.spec.md에 페이지 통합/API/이벤트 섹션이 반영되었는가?
-- [ ] page.spec.md의 `Rendering Decision`에 `page role`, `reusable target`, `page component path`, `참조한 구현 role`이 기록되었는가?
-- [ ] page.spec.md의 `Rendering Decision.page component path`가 `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 규칙을 따르는가?
-- [ ] `apps/core/api/src/module/*/*.controller.spec.md` 및 dto.spec.md가 업데이트되었는가?
-- [ ] UI/Input/Cell/Widget/Layout/Feature의 index.spec.md가 모두 생성되었는가?
-- [ ] Cell 경로가 `packages/fe-ui/src/cell/**` 기준으로 기록되었는가?
-- [ ] 목록/테이블 화면이면 `packages/fe-ui/src/columns/master/**.spec.md`가 생성/업데이트되었는가?
-- [ ] column spec이 `packages/fe-ui/src/cell/**` 조합 원칙과 `raw` 금지 규칙을 기록했는가?
-- [ ] `page role`에 따라 `master/detail/form` 대상 경로가 명시되었는가?
-- [ ] 관련 Stage 5/6 구현 role 문서의 출력 경로/규칙/검증 명령이 기획서에 반영되었는가?
-- [ ] 목록 화면이면 admin-menu.spec.md가 생성/업데이트되었는가?
-- [ ] hooks/index.spec.md(또는 동등한 API 연동 스펙)가 반영되었는가?
-- [ ] page.spec.md에 Surface owner, elevation, flat 예외 근거가 반영되었는가?
-- [ ] 각 .spec.md에 "테스트 케이스" 섹션이 추가되었는가?
-
----
-
-## 8. 연관 role
-
-### 선행 role
-
-| role | 관계 | 설명 |
-|------|------|------|
-| orch-requirement | 상위 | 도메인 기획 (L0-L4) |
-| req-entity-planner | 선행 | Entity 기획 (L7) |
-| req-store-planner | 선행(조건부) | 공용 Store 기획 (L11) |
-
-### 호출 role
-
-| role | 단계 | 설명 |
-|------|------|------|
-| req-page-planner | 1 | 페이지 통합 기획 |
-| req-api-planner | 2 | 인터랙션/API 기획 |
-| req-primitive-planner | 3 | UI 컴포넌트 기획 |
-| req-input-planner | 4 | Input 기획 |
-| req-cell-planner | 5 | Cell 기획 (목록 화면) |
-| req-columns-planner | 6 | Columns 선언 계약 기획 (목록/테이블 화면) |
-| req-widget-planner | 7 | Widget 기획 |
-| req-layout-planner | 8 | Layout 기획 |
-| req-feature-planner | 9 | Feature 기획 |
-| req-menu-planner | 10 | 메뉴 기획 (목록 화면) |
-| req-surface-planner | 11 | Surface ownership / elevation 기획 |
-| req-fe-test-planner | 12 | 테스트 기획 |
-| req-api-integration-planner | 13 | API 연동 기획 |
-
-### 후행 role
-
-| role | 관계 | 설명 |
-|------|------|------|
-| fe-display-component-builder | 구현 | Display 컴포넌트 생성 |
-| fe-control-component-builder | 구현 | Control 컴포넌트 생성 |
-| fe-cell-builder | 구현 | Cell 컴포넌트 생성 |
-| fe-columns-builder | 구현 | Columns 선언 계약 구현 및 `raw` 제거 |
-| fe-widget-builder | 구현 | Widget 컴포넌트 생성 |
-| fe-layout-builder | 구현 | 재사용 Layout primitive 생성 |
-| fe-feature-builder | 구현 | Feature 컴포넌트 생성 |
-| fe-master-builder | 구현 | master 재사용 계층 생성 |
-| fe-detail-builder | 구현 | detail/view 재사용 계층 생성 |
-| fe-form-builder | 구현 | form 재사용 계층 생성 |
-| fe-ui-page-builder | 구현 | pure page component 생성 |
-| fe-page-builder | 구현 | thin route container 생성 |
-| fe-api-integrator | 구현 | API hooks 연동 |
-| fe-unit-test-builder | 구현 | FE 단위 테스트 구조 생성 |
-| qa-fe-testing | 구현 | FE 테스트 코드 작성/실행 |
-| orch-stage | 상위 | 개발 플로우 진행 |
-
----
-
-## 9. 에러 처리
+## 10. 실패 처리
 
 ### 전제조건 미충족
 
-```
+```text
 ❌ 전제조건 미충족
 
 다음 기획서가 필요합니다:
-- apps/admin/web/src/app/(admin)/app.spec.md (앱 기획서)
-- apps/admin/web/src/app/(admin)/members/page.spec.md (페이지 기획서)
-- packages/be-entity/src/member.entity.spec.md (Entity 기획서)
-- packages/fe-store/src/stores/memberStore.spec.md (Store 기획서)
+- app.spec.md
+- 대상 page.spec.md
+- 관련 Entity spec
+- Store spec (조건부)
 
-먼저 도메인 기획을 진행해주세요:
-/orch-requirement app=admin domain=Member
+먼저 orch-requirement 또는 선행 req-* role을 실행하세요.
 ```
 
-### 기존 기획서 존재
+### 기존 spec 존재
 
+```text
+ℹ️ 기존 화면 기획서가 존재합니다.
+
+기존 내용을 보존한 채 필요한 섹션만 갱신합니다.
+중복 생성이나 role 목록 재복제를 하지 않습니다.
 ```
-⚠️ 기존 기획서가 존재합니다
 
-다음 파일이 이미 있습니다:
-- apps/admin/web/src/app/(admin)/members/page.spec.md (API/이벤트 섹션이 이미 존재)
-
-덮어쓰시겠습니까? (y/n)
-```
 '''
