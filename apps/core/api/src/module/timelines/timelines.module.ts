@@ -1,5 +1,5 @@
 import { TimelineFacade } from "@cocrepo/facade";
-import { TimelinesRepository } from "@cocrepo/repository";
+import { RoutinesRepository, TimelinesRepository } from "@cocrepo/repository";
 import { AuthContext, SpaceContext, TimelineService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { TimelinesController } from "./timelines.controller";
@@ -10,6 +10,7 @@ import { TimelinesController } from "./timelines.controller";
 		TimelineFacade,
 		TimelineService,
 		TimelinesRepository,
+		RoutinesRepository,
 		AuthContext,
 		SpaceContext,
 	],

@@ -9,4 +9,6 @@ export const TIMELINE_ERRORS = createDomainErrors("타임라인", {
 	SESSION_DATE_INVALID: "세션 날짜가 유효하지 않습니다. 종료일은 시작일 이후여야 합니다",
 	PROGRAM_NOT_FOUND: "프로그램을 찾을 수 없습니다",
 	PROGRAM_ROUTINE_DUPLICATED: "같은 세션 내에 동일한 루틴의 프로그램이 이미 존재합니다",
+	PROGRAM_ROUTINE_EXERCISE_INCOMPLETE:
+		"루틴에 스케줄할 수 없는 운동이 포함되어 있어 프로그램을 생성할 수 없습니다",
 });

@@ -23,6 +23,7 @@ import {
 import {
 	addToast,
 	Button,
+	Chip,
 	Input,
 	Select,
 	SelectItem,
@@ -46,6 +47,21 @@ const LEVEL_OPTIONS = [
 	{ value: "중급", label: "중급" },
 	{ value: "고급", label: "고급" },
 ];
+
+const buildRoutinePreview = (routine?: RoutineDto) => {
+	return [...(routine?.activities ?? [])]
+		.sort((left, right) => left.order - right.order)
+		.map((activity) => ({
+			id: activity.id,
+			order: activity.order,
+			exerciseName:
+				activity.task?.exercise?.name ?? `Task ${activity.taskId.slice(-6)}`,
+			repetitions: activity.repetitions,
+			restTime: activity.restTime,
+			notes: activity.notes,
+			isSchedulable: Boolean(activity.task?.exercise?.videoFileId),
+		}));
+};
 
 /**
  * 프로그램 수정 페이지 - 클라이언트 컴포넌트
@@ -194,6 +210,11 @@ function ProgramEditPageClient({
 			errors.capacity = "정원은 1 이상의 숫자를 입력해주세요.";
 		}
 
+		if (hasUnschedulableRoutine) {
+			errors.routineId =
+				"영상이 없는 운동이 포함된 루틴은 Program으로 저장할 수 없습니다.";
+		}
+
 		if (Object.keys(errors).length > 0) {
 			state.errors = errors;
 			return;
@@ -291,7 +312,11 @@ function ProgramEditPageClient({
 	const routinePickerOptions = routineOptions.map((routine) => ({
 		id: routine.id,
 		name: routine.name,
-		subtitle: `라벨: ${routine.label ?? "-"} · 활동 ${routine.activities?.length ?? 0}개`,
+		subtitle: `라벨: ${routine.label ?? "-"} · 활동 ${routine.activities?.length ?? 0}개 · ${
+			routine.activities?.some((activity) => !activity.task?.exercise?.videoFileId)
+				? "영상 누락"
+				: "스케줄 가능"
+		}`,
 	}));
 
 	const instructorPickerOptions = instructorOptions.map((instructor) => ({
@@ -304,6 +329,10 @@ function ProgramEditPageClient({
 		<Button variant="flat" onPress={onClickCancelButton}>
 			취소
 		</Button>
+	);
+	const routinePreview = buildRoutinePreview(selectedRoutine);
+	const hasUnschedulableRoutine = routinePreview.some(
+		(activity) => !activity.isSchedulable,
 	);
 
 	return (
@@ -370,6 +399,59 @@ function ProgramEditPageClient({
 									{selectedInstructor?.name ?? program?.instructorId ?? "-"}
 								</p>
 							</div>
+							<div className="rounded-lg border border-default-200 p-3">
+								<div className="flex items-center justify-between gap-3">
+									<p className="font-medium text-default-700">실행 운동 preview</p>
+									<Chip
+										color={hasUnschedulableRoutine ? "warning" : "success"}
+										size="sm"
+									>
+										{hasUnschedulableRoutine ? "저장 불가" : "저장 가능"}
+									</Chip>
+								</div>
+								{routinePreview.length === 0 ? (
+									<p className="mt-2 text-sm text-default-500">
+										선택한 루틴에 등록된 운동이 없습니다.
+									</p>
+								) : (
+									<div className="mt-3 flex flex-col gap-2">
+										{routinePreview.map((activity) => (
+											<div
+												key={activity.id}
+												className="rounded-md bg-content2 px-3 py-2"
+											>
+												<div className="flex items-center justify-between gap-3">
+													<p className="font-medium">
+														{activity.order}. {activity.exerciseName}
+													</p>
+													<Chip
+														color={
+															activity.isSchedulable ? "success" : "warning"
+														}
+														size="sm"
+														variant="flat"
+													>
+														{activity.isSchedulable ? "가능" : "불가"}
+													</Chip>
+												</div>
+												<p className="mt-1 text-default-500 text-sm">
+													반복 {activity.repetitions}회 · 휴식 {activity.restTime}초
+												</p>
+												{activity.notes ? (
+													<p className="mt-1 text-default-500 text-xs">
+														{activity.notes}
+													</p>
+												) : null}
+											</div>
+										))}
+									</div>
+								)}
+								{hasUnschedulableRoutine ? (
+									<p className="mt-3 text-sm text-warning">
+										영상이 없는 운동이 포함되어 있어 저장 버튼이 비활성화됩니다.
+									</p>
+								) : null}
+							</div>
 							<Input
 								label="정원"
 								labelPlacement="outside"
@@ -405,7 +487,8 @@ function ProgramEditPageClient({
 										!state.name.trim() ||
 										!state.routineId.trim() ||
 										!state.instructorId.trim() ||
-										!state.capacity
+										!state.capacity ||
+										hasUnschedulableRoutine
 									}
 								>
 									저장

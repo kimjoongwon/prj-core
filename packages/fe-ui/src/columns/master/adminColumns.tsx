@@ -423,6 +423,7 @@ export function buildTaskTableColumns<
 	TRow extends {
 		id: string;
 		name: string;
+		isSchedulable: boolean;
 		duration: number;
 		count: number;
 		description?: string;
@@ -441,6 +442,19 @@ export function buildTaskTableColumns<
 			createNameColumn<TRow>({
 				nameVariant: "clickable",
 				onClickName: (row) => onClickTaskName(row.id),
+			}),
+			createPresetColumn<TRow>("isSchedulable", {
+				size: 110,
+				align: "center",
+				cell: ({ getValue }) => (
+					<BooleanCell
+						value={getValue() as boolean}
+						trueLabel="가능"
+						falseLabel="불가"
+						trueColor="success"
+						falseColor="warning"
+					/>
+				),
 			}),
 			createPresetColumn<TRow>("duration", {
 				size: 100,

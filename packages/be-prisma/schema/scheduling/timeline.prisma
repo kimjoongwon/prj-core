@@ -92,22 +92,57 @@ model Session {
 // @connects: Session ─── Routine
 /// @displayName 프로그램
 model Program {
-  id           String    @id @default(uuid())
-  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt    DateTime? @map("removed_at") @db.Timestamptz(6)
-  routineId    String    @map("routine_id")
-  sessionId    String    @map("session_id")
-  instructorId String    @map("instructor_id")
-  capacity     Int
-  name         String
-  level        String?
-  routine      Routine   @relation(fields: [routineId], references: [id])
-  session      Session   @relation(fields: [sessionId], references: [id])
+  id                  String            @id @default(uuid())
+  createdAt           DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime?         @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt           DateTime?         @map("removed_at") @db.Timestamptz(6)
+  routineId           String            @map("routine_id")
+  sessionId           String            @map("session_id")
+  instructorId        String            @map("instructor_id")
+  capacity            Int
+  name                String
+  level               String?
+  routineNameSnapshot String?           @map("routine_name_snapshot")
+  routineLabelSnapshot String?          @map("routine_label_snapshot")
+  routine             Routine           @relation(fields: [routineId], references: [id])
+  session             Session           @relation(fields: [sessionId], references: [id])
+  programActivities   ProgramActivity[]
 
   @@unique([sessionId, routineId])
   @@index([sessionId])
   @@index([routineId])
   @@index([instructorId])
   @@map("programs")
+}
+
+// @schema-type: CHILD
+// @description: Program 생성 시점의 실행 운동 계획을 보관하는 운영 스냅샷
+// @relation-pattern: one-to-many
+// @ownership: dependent
+// @scope: space
+// @extends: Program
+/// @displayName 프로그램 활동
+model ProgramActivity {
+  id                  String    @id @default(uuid())
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt           DateTime? @map("removed_at") @db.Timestamptz(6)
+  programId           String    @map("program_id")
+  taskId              String    @map("task_id")
+  order               Int
+  repetitions         Int
+  restTime            Int       @map("rest_time")
+  notes               String?
+  exerciseName        String    @map("exercise_name")
+  exerciseDescription String?   @map("exercise_description")
+  exerciseDuration    Int       @map("exercise_duration")
+  exerciseCount       Int       @map("exercise_count")
+  imageFileId         String?   @map("image_file_id")
+  videoFileId         String?   @map("video_file_id")
+  program             Program   @relation(fields: [programId], references: [id])
+
+  @@index([programId, order])
+  @@unique([programId, taskId])
+  @@index([taskId])
+  @@map("program_activities")
 }

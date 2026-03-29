@@ -85,6 +85,7 @@ function mapTaskRow(task: TaskDto): AdminTasksPageTask {
 	return {
 		id: task.id,
 		name: task.exercise.name,
+		isSchedulable: Boolean(task.exercise.videoFileId),
 		duration: task.exercise.duration,
 		count: task.exercise.count,
 		description: task.exercise.description,

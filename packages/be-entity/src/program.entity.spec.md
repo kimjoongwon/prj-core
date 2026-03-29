@@ -1,13 +1,13 @@
 # Program Entity 기획서
 
 > 생성일: 2026-02-19
-> 수정일: 2026-02-19
+> 수정일: 2026-03-29
 > 타입: entity
 > 위치: packages/be-entity/src/program.entity.ts
 
 ## 역할
 
-세션(Session)과 루틴(Routine)을 연결하는 수업/프로그램 엔티티입니다. 특정 세션에서 진행되는 수업 프로그램을 나타내며, 담당 강사 ID, 수강 인원, 수업 이름, 난이도 수준 등의 정보를 포함합니다.
+세션(Session)과 루틴(Routine)을 연결하는 수업/프로그램 aggregate root입니다. 특정 세션에서 진행되는 수업 프로그램을 나타내며, 담당 강사 ID, 수강 인원, 수업 이름, 난이도 수준과 함께 생성 시점의 루틴 표시 snapshot을 포함합니다.
 
 ## 필드
 
@@ -23,6 +23,8 @@
 | capacity | number | required | - | 최대 수강 인원 |
 | name | string | required | - | 프로그램 이름 |
 | level | string \| null | nullable | null | 난이도 수준 |
+| routineNameSnapshot | string \| null | nullable | null | Program 생성 시점의 루틴 이름 snapshot |
+| routineLabelSnapshot | string \| null | nullable | null | Program 생성 시점의 루틴 라벨 snapshot |
 
 ## Enum
 
@@ -34,6 +36,7 @@
 |------|-------------|------|------|
 | routine | Routine | ManyToOne | 연결된 루틴 |
 | session | Session | ManyToOne | 소속 세션 |
+| programActivities | ProgramActivity | OneToMany | Program이 소유하는 실행 운동 snapshot 목록 |
 
 ## 도메인 메서드
 
@@ -44,6 +47,8 @@
 - `instructorId`는 User의 ID를 참조하며, 해당 강사가 이 프로그램을 진행합니다.
 - `capacity`는 프로그램의 최대 수강 인원 제한입니다.
 - `level`은 초급/중급/고급 등 임의 문자열로 설정 가능합니다.
+- `routineNameSnapshot`, `routineLabelSnapshot`은 Program 생성 시점의 표시값을 고정합니다.
+- 실행 운동 계획은 `ProgramActivity[]` child entity로 소유하며 Program 밖에서 직접 수정하지 않습니다.
 - 세션이 삭제되면 연관된 프로그램도 처리되어야 합니다.
 
 ## 구현 체크리스트
@@ -57,4 +62,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | Program을 실행 계획 snapshot owner로 재정의하고 routine 표시 snapshot 및 `ProgramActivity` 관계를 추가 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |

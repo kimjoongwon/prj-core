@@ -18,6 +18,7 @@ import {
 import {
 	addToast,
 	Button,
+	Chip,
 	Input,
 	Modal,
 	ModalBody,
@@ -36,6 +37,7 @@ import { useEffect } from "react";
 interface RoutineActivityFormItem {
 	taskId: string;
 	exerciseName: string;
+	isSchedulable: boolean;
 	repetitions: string;
 	restTime: string;
 	notes: string;
@@ -87,6 +89,9 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 		spaceScope: "INCLUDE_ANCESTORS",
 	});
 	const candidateTasks = (tasksResponse?.data ?? []) as TaskDto[];
+	const schedulableCandidateTasks = candidateTasks.filter((task) =>
+		Boolean(task.exercise?.videoFileId),
+	);
 
 	useEffect(() => {
 		if (routine && !state.isInitialized) {
@@ -96,6 +101,7 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 				taskId: activity.taskId,
 				exerciseName:
 					activity.task?.exercise?.name ?? activity.taskId.slice(-6),
+				isSchedulable: Boolean(activity.task?.exercise?.videoFileId),
 				repetitions: String(activity.repetitions ?? 1),
 				restTime: String(activity.restTime ?? 0),
 				notes: activity.notes ?? "",
@@ -174,6 +180,12 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 			return;
 		}
 
+		if (state.activities.some((activity) => !activity.isSchedulable)) {
+			state.errors.activities =
+				"영상이 없는 운동이 포함되어 있어 루틴을 저장할 수 없습니다.";
+			return;
+		}
+
 		if (state.activities.length === 0) {
 			emptyActivitiesWarningModal.onOpen();
 			return;
@@ -188,6 +200,15 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 
 	const onClickAddActivity = (task: TaskDto) => {
 		const exercise = task.exercise;
+		if (!exercise.videoFileId) {
+			addToast({
+				title: "편성 불가 운동",
+				description: "영상이 등록된 운동만 루틴에 추가할 수 있습니다.",
+				color: "warning",
+			});
+			return;
+		}
+
 		if (state.activities.some((activity) => activity.taskId === task.id)) {
 			addToast({
 				title: "중복 운동",
@@ -200,10 +221,12 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 		state.activities.push({
 			taskId: task.id,
 			exerciseName: exercise.name,
+			isSchedulable: true,
 			repetitions: String(exercise.count || 1),
 			restTime: "0",
 			notes: "",
 		});
+		delete state.errors.activities;
 	};
 
 	const onChangeActivityField = (
@@ -224,6 +247,7 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 		state.activities = state.activities.filter(
 			(activity) => activity.taskId !== taskId,
 		);
+		delete state.errors.activities;
 	};
 
 	if (isLoading) {
@@ -326,22 +350,24 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 								placeholder="운동 이름으로 검색하세요."
 								value={state.exerciseQuery}
 								onValueChange={onChangeExerciseQuery}
-								description="현재 Space + 상위 Space 운동이 조회됩니다."
+								description="현재 Space + 상위 Space 운동 중 영상이 등록된 운동만 후보로 표시합니다."
 							/>
 							<div className="rounded-lg border border-default-200 p-3">
-								<div className="mb-2 text-sm text-default-500">후보 운동</div>
+								<div className="mb-2 text-sm text-default-500">
+									후보 운동 (스케줄 가능만 표시)
+								</div>
 								{isTasksLoading ? (
 									<div className="flex items-center gap-2 text-sm text-default-500">
 										<Spinner size="sm" />
 										<span>운동 목록을 불러오는 중...</span>
 									</div>
-								) : candidateTasks.length === 0 ? (
+								) : schedulableCandidateTasks.length === 0 ? (
 									<p className="text-sm text-default-500">
-										검색 결과가 없습니다.
+										조건에 맞는 스케줄 가능 운동이 없습니다.
 									</p>
 								) : (
 									<div className="flex flex-col gap-2">
-										{candidateTasks.map((task) => (
+										{schedulableCandidateTasks.map((task) => (
 											<div
 												key={task.id}
 												className="flex items-center justify-between rounded-md bg-content2 px-3 py-2"
@@ -366,6 +392,11 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 							</div>
 							<div className="rounded-lg border border-default-200 p-3">
 								<div className="mb-2 text-sm text-default-500">추가된 활동</div>
+								{state.errors.activities ? (
+									<p className="mb-3 text-sm text-danger">
+										{state.errors.activities}
+									</p>
+								) : null}
 								{state.activities.length === 0 ? (
 									<p className="text-sm text-default-500">
 										아직 추가된 활동이 없습니다.
@@ -381,17 +412,32 @@ function RoutineEditPageClient({ routineId }: RoutineEditPageClientProps) {
 													<p className="font-medium">
 														{index + 1}. {activity.exerciseName}
 													</p>
-													<Button
-														size="sm"
-														variant="flat"
-														color="danger"
-														onPress={() =>
-															onClickRemoveActivity(activity.taskId)
-														}
-													>
-														제거
-													</Button>
+													<div className="flex items-center gap-2">
+														<Chip
+															color={
+																activity.isSchedulable ? "success" : "warning"
+															}
+															size="sm"
+														>
+															{activity.isSchedulable ? "가능" : "불가"}
+														</Chip>
+														<Button
+															size="sm"
+															variant="flat"
+															color="danger"
+															onPress={() =>
+																onClickRemoveActivity(activity.taskId)
+															}
+														>
+															제거
+														</Button>
+													</div>
 												</div>
+												{!activity.isSchedulable ? (
+													<p className="mb-3 text-sm text-warning">
+														영상이 없어 Program 생성에 사용할 수 없는 운동입니다.
+													</p>
+												) : null}
 												<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
 													<Input
 														type="number"

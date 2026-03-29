@@ -7,6 +7,7 @@
 ## 역할
 
 이 파일은 route thin wrapper가 재사용하는 page 레이어 화면 컴포넌트를 담당합니다.
+Program 수정 시 선택한 Routine의 execution preview를 보여주고, 스케줄 불가 Routine으로의 교체를 차단합니다.
 
 ## 공개 계약
 
@@ -30,8 +31,15 @@
 | next/navigation | 기능 구현 의존성 |
 | react | 기능 구현 의존성 |
 
+## UI 규칙
+
+- 현재 Program의 Routine 변경 후보마다 schedulable 상태를 표시합니다.
+- 선택된 Routine의 execution preview를 즉시 갱신합니다.
+- preview에 영상 누락 Exercise가 있으면 저장 버튼을 비활성화합니다.
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | Program 수정 화면에 Routine execution preview와 스케줄 불가 교체 차단 규칙을 추가 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |

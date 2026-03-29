@@ -23,6 +23,7 @@ export * from "./inquiries";
 export * from "./oidc";
 export * from "./password-history.dto";
 export * from "./profile.dto";
+export * from "./program-activity.dto";
 export * from "./program.dto";
 export * from "./query";
 export * from "./role-association.dto";

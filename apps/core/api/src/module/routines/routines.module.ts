@@ -1,5 +1,5 @@
 import { RoutineFacade } from "@cocrepo/facade";
-import { RoutinesRepository } from "@cocrepo/repository";
+import { RoutinesRepository, TasksRepository } from "@cocrepo/repository";
 import { AuthContext, RoutineService, SpaceContext } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { RoutinesController } from "./routines.controller";
@@ -10,6 +10,7 @@ import { RoutinesController } from "./routines.controller";
 		RoutineFacade,
 		RoutineService,
 		RoutinesRepository,
+		TasksRepository,
 		AuthContext,
 		SpaceContext,
 	],

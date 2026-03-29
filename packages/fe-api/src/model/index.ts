@@ -238,6 +238,7 @@ export * from "./pageMetaDto";
 export * from "./previewTemplateDto";
 export * from "./previewTemplateDtoVariables";
 export * from "./profileDto";
+export * from "./programActivityDto";
 export * from "./programDto";
 export * from "./recurringDayOfWeek";
 export * from "./refreshToken200AllOf";

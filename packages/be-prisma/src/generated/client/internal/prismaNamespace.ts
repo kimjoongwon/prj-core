@@ -436,6 +436,7 @@ export const ModelName = {
   Timeline: 'Timeline',
   Session: 'Session',
   Program: 'Program',
+  ProgramActivity: 'ProgramActivity',
   Category: 'Category',
   Group: 'Group',
   SafeWallet: 'SafeWallet',
@@ -456,7 +457,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "ability" | "action" | "grant" | "role" | "roleAssociation" | "roleClassification" | "subject" | "album" | "albumEntry" | "asset" | "image" | "video" | "document" | "derivative" | "folder" | "authAuditLog" | "passwordHistory" | "securityPolicy" | "whitelistEntry" | "post" | "content" | "template" | "templateVariable" | "translation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "tenant" | "assignment" | "user" | "userClassification" | "userAssociation" | "profile" | "aIAgentLog" | "inquiryThread" | "inquiryMessage" | "inquiryParticipant" | "inquiryAttachment" | "inquiry" | "inquiryTag" | "sentimentAnalysis" | "oidcClient" | "oidcModel" | "referenceDataMigrationHistory" | "routine" | "activity" | "task" | "exercise" | "timeline" | "session" | "program" | "category" | "group" | "safeWallet" | "safeTransaction" | "safeConfirmation"
+    modelProps: "ability" | "action" | "grant" | "role" | "roleAssociation" | "roleClassification" | "subject" | "album" | "albumEntry" | "asset" | "image" | "video" | "document" | "derivative" | "folder" | "authAuditLog" | "passwordHistory" | "securityPolicy" | "whitelistEntry" | "post" | "content" | "template" | "templateVariable" | "translation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "tenant" | "assignment" | "user" | "userClassification" | "userAssociation" | "profile" | "aIAgentLog" | "inquiryThread" | "inquiryMessage" | "inquiryParticipant" | "inquiryAttachment" | "inquiry" | "inquiryTag" | "sentimentAnalysis" | "oidcClient" | "oidcModel" | "referenceDataMigrationHistory" | "routine" | "activity" | "task" | "exercise" | "timeline" | "session" | "program" | "programActivity" | "category" | "group" | "safeWallet" | "safeTransaction" | "safeConfirmation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -4308,6 +4309,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ProgramActivity: {
+      payload: Prisma.$ProgramActivityPayload<ExtArgs>
+      fields: Prisma.ProgramActivityFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProgramActivityFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramActivityPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProgramActivityFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramActivityPayload>
+        }
+        findFirst: {
+          args: Prisma.ProgramActivityFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramActivityPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProgramActivityFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramActivityPayload>
+        }
+        findMany: {
+          args: Prisma.ProgramActivityFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramActivityPayload>[]
+        }
+        create: {
+          args: Prisma.ProgramActivityCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramActivityPayload>
+        }
+        createMany: {
+          args: Prisma.ProgramActivityCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProgramActivityCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramActivityPayload>[]
+        }
+        delete: {
+          args: Prisma.ProgramActivityDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramActivityPayload>
+        }
+        update: {
+          args: Prisma.ProgramActivityUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramActivityPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProgramActivityDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProgramActivityUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProgramActivityUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramActivityPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProgramActivityUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramActivityPayload>
+        }
+        aggregate: {
+          args: Prisma.ProgramActivityAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProgramActivity>
+        }
+        groupBy: {
+          args: Prisma.ProgramActivityGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProgramActivityGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProgramActivityCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProgramActivityCountAggregateOutputType> | number
+        }
+      }
+    }
     Category: {
       payload: Prisma.$CategoryPayload<ExtArgs>
       fields: Prisma.CategoryFieldRefs
@@ -5548,10 +5623,34 @@ export const ProgramScalarFieldEnum = {
   instructorId: 'instructorId',
   capacity: 'capacity',
   name: 'name',
-  level: 'level'
+  level: 'level',
+  routineNameSnapshot: 'routineNameSnapshot',
+  routineLabelSnapshot: 'routineLabelSnapshot'
 } as const
 
 export type ProgramScalarFieldEnum = (typeof ProgramScalarFieldEnum)[keyof typeof ProgramScalarFieldEnum]
+
+
+export const ProgramActivityScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  programId: 'programId',
+  taskId: 'taskId',
+  order: 'order',
+  repetitions: 'repetitions',
+  restTime: 'restTime',
+  notes: 'notes',
+  exerciseName: 'exerciseName',
+  exerciseDescription: 'exerciseDescription',
+  exerciseDuration: 'exerciseDuration',
+  exerciseCount: 'exerciseCount',
+  imageFileId: 'imageFileId',
+  videoFileId: 'videoFileId'
+} as const
+
+export type ProgramActivityScalarFieldEnum = (typeof ProgramActivityScalarFieldEnum)[keyof typeof ProgramActivityScalarFieldEnum]
 
 
 export const CategoryScalarFieldEnum = {
@@ -6277,6 +6376,7 @@ export type GlobalOmitConfig = {
   timeline?: Prisma.TimelineOmit
   session?: Prisma.SessionOmit
   program?: Prisma.ProgramOmit
+  programActivity?: Prisma.ProgramActivityOmit
   category?: Prisma.CategoryOmit
   group?: Prisma.GroupOmit
   safeWallet?: Prisma.SafeWalletOmit

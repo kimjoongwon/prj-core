@@ -45,6 +45,8 @@ export type ProgramMinAggregateOutputType = {
   capacity: number | null
   name: string | null
   level: string | null
+  routineNameSnapshot: string | null
+  routineLabelSnapshot: string | null
 }
 
 export type ProgramMaxAggregateOutputType = {
@@ -58,6 +60,8 @@ export type ProgramMaxAggregateOutputType = {
   capacity: number | null
   name: string | null
   level: string | null
+  routineNameSnapshot: string | null
+  routineLabelSnapshot: string | null
 }
 
 export type ProgramCountAggregateOutputType = {
@@ -71,6 +75,8 @@ export type ProgramCountAggregateOutputType = {
   capacity: number
   name: number
   level: number
+  routineNameSnapshot: number
+  routineLabelSnapshot: number
   _all: number
 }
 
@@ -94,6 +100,8 @@ export type ProgramMinAggregateInputType = {
   capacity?: true
   name?: true
   level?: true
+  routineNameSnapshot?: true
+  routineLabelSnapshot?: true
 }
 
 export type ProgramMaxAggregateInputType = {
@@ -107,6 +115,8 @@ export type ProgramMaxAggregateInputType = {
   capacity?: true
   name?: true
   level?: true
+  routineNameSnapshot?: true
+  routineLabelSnapshot?: true
 }
 
 export type ProgramCountAggregateInputType = {
@@ -120,6 +130,8 @@ export type ProgramCountAggregateInputType = {
   capacity?: true
   name?: true
   level?: true
+  routineNameSnapshot?: true
+  routineLabelSnapshot?: true
   _all?: true
 }
 
@@ -220,6 +232,8 @@ export type ProgramGroupByOutputType = {
   capacity: number
   name: string
   level: string | null
+  routineNameSnapshot: string | null
+  routineLabelSnapshot: string | null
   _count: ProgramCountAggregateOutputType | null
   _avg: ProgramAvgAggregateOutputType | null
   _sum: ProgramSumAggregateOutputType | null
@@ -256,8 +270,11 @@ export type ProgramWhereInput = {
   capacity?: Prisma.IntFilter<"Program"> | number
   name?: Prisma.StringFilter<"Program"> | string
   level?: Prisma.StringNullableFilter<"Program"> | string | null
+  routineNameSnapshot?: Prisma.StringNullableFilter<"Program"> | string | null
+  routineLabelSnapshot?: Prisma.StringNullableFilter<"Program"> | string | null
   routine?: Prisma.XOR<Prisma.RoutineScalarRelationFilter, Prisma.RoutineWhereInput>
   session?: Prisma.XOR<Prisma.SessionScalarRelationFilter, Prisma.SessionWhereInput>
+  programActivities?: Prisma.ProgramActivityListRelationFilter
 }
 
 export type ProgramOrderByWithRelationInput = {
@@ -271,8 +288,11 @@ export type ProgramOrderByWithRelationInput = {
   capacity?: Prisma.SortOrder
   name?: Prisma.SortOrder
   level?: Prisma.SortOrderInput | Prisma.SortOrder
+  routineNameSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
+  routineLabelSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   routine?: Prisma.RoutineOrderByWithRelationInput
   session?: Prisma.SessionOrderByWithRelationInput
+  programActivities?: Prisma.ProgramActivityOrderByRelationAggregateInput
 }
 
 export type ProgramWhereUniqueInput = Prisma.AtLeast<{
@@ -290,8 +310,11 @@ export type ProgramWhereUniqueInput = Prisma.AtLeast<{
   capacity?: Prisma.IntFilter<"Program"> | number
   name?: Prisma.StringFilter<"Program"> | string
   level?: Prisma.StringNullableFilter<"Program"> | string | null
+  routineNameSnapshot?: Prisma.StringNullableFilter<"Program"> | string | null
+  routineLabelSnapshot?: Prisma.StringNullableFilter<"Program"> | string | null
   routine?: Prisma.XOR<Prisma.RoutineScalarRelationFilter, Prisma.RoutineWhereInput>
   session?: Prisma.XOR<Prisma.SessionScalarRelationFilter, Prisma.SessionWhereInput>
+  programActivities?: Prisma.ProgramActivityListRelationFilter
 }, "id" | "sessionId_routineId">
 
 export type ProgramOrderByWithAggregationInput = {
@@ -305,6 +328,8 @@ export type ProgramOrderByWithAggregationInput = {
   capacity?: Prisma.SortOrder
   name?: Prisma.SortOrder
   level?: Prisma.SortOrderInput | Prisma.SortOrder
+  routineNameSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
+  routineLabelSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ProgramCountOrderByAggregateInput
   _avg?: Prisma.ProgramAvgOrderByAggregateInput
   _max?: Prisma.ProgramMaxOrderByAggregateInput
@@ -326,6 +351,8 @@ export type ProgramScalarWhereWithAggregatesInput = {
   capacity?: Prisma.IntWithAggregatesFilter<"Program"> | number
   name?: Prisma.StringWithAggregatesFilter<"Program"> | string
   level?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
+  routineNameSnapshot?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
+  routineLabelSnapshot?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
 }
 
 export type ProgramCreateInput = {
@@ -337,8 +364,11 @@ export type ProgramCreateInput = {
   capacity: number
   name: string
   level?: string | null
+  routineNameSnapshot?: string | null
+  routineLabelSnapshot?: string | null
   routine: Prisma.RoutineCreateNestedOneWithoutProgramsInput
   session: Prisma.SessionCreateNestedOneWithoutProgramsInput
+  programActivities?: Prisma.ProgramActivityCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateInput = {
@@ -352,6 +382,9 @@ export type ProgramUncheckedCreateInput = {
   capacity: number
   name: string
   level?: string | null
+  routineNameSnapshot?: string | null
+  routineLabelSnapshot?: string | null
+  programActivities?: Prisma.ProgramActivityUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUpdateInput = {
@@ -363,8 +396,11 @@ export type ProgramUpdateInput = {
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routine?: Prisma.RoutineUpdateOneRequiredWithoutProgramsNestedInput
   session?: Prisma.SessionUpdateOneRequiredWithoutProgramsNestedInput
+  programActivities?: Prisma.ProgramActivityUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateInput = {
@@ -378,6 +414,9 @@ export type ProgramUncheckedUpdateInput = {
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  programActivities?: Prisma.ProgramActivityUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramCreateManyInput = {
@@ -391,6 +430,8 @@ export type ProgramCreateManyInput = {
   capacity: number
   name: string
   level?: string | null
+  routineNameSnapshot?: string | null
+  routineLabelSnapshot?: string | null
 }
 
 export type ProgramUpdateManyMutationInput = {
@@ -402,6 +443,8 @@ export type ProgramUpdateManyMutationInput = {
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProgramUncheckedUpdateManyInput = {
@@ -415,6 +458,8 @@ export type ProgramUncheckedUpdateManyInput = {
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProgramListRelationFilter = {
@@ -443,6 +488,8 @@ export type ProgramCountOrderByAggregateInput = {
   capacity?: Prisma.SortOrder
   name?: Prisma.SortOrder
   level?: Prisma.SortOrder
+  routineNameSnapshot?: Prisma.SortOrder
+  routineLabelSnapshot?: Prisma.SortOrder
 }
 
 export type ProgramAvgOrderByAggregateInput = {
@@ -460,6 +507,8 @@ export type ProgramMaxOrderByAggregateInput = {
   capacity?: Prisma.SortOrder
   name?: Prisma.SortOrder
   level?: Prisma.SortOrder
+  routineNameSnapshot?: Prisma.SortOrder
+  routineLabelSnapshot?: Prisma.SortOrder
 }
 
 export type ProgramMinOrderByAggregateInput = {
@@ -473,10 +522,17 @@ export type ProgramMinOrderByAggregateInput = {
   capacity?: Prisma.SortOrder
   name?: Prisma.SortOrder
   level?: Prisma.SortOrder
+  routineNameSnapshot?: Prisma.SortOrder
+  routineLabelSnapshot?: Prisma.SortOrder
 }
 
 export type ProgramSumOrderByAggregateInput = {
   capacity?: Prisma.SortOrder
+}
+
+export type ProgramScalarRelationFilter = {
+  is?: Prisma.ProgramWhereInput
+  isNot?: Prisma.ProgramWhereInput
 }
 
 export type ProgramCreateNestedManyWithoutRoutineInput = {
@@ -563,6 +619,20 @@ export type ProgramUncheckedUpdateManyWithoutSessionNestedInput = {
   deleteMany?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
 }
 
+export type ProgramCreateNestedOneWithoutProgramActivitiesInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutProgramActivitiesInput, Prisma.ProgramUncheckedCreateWithoutProgramActivitiesInput>
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutProgramActivitiesInput
+  connect?: Prisma.ProgramWhereUniqueInput
+}
+
+export type ProgramUpdateOneRequiredWithoutProgramActivitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutProgramActivitiesInput, Prisma.ProgramUncheckedCreateWithoutProgramActivitiesInput>
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutProgramActivitiesInput
+  upsert?: Prisma.ProgramUpsertWithoutProgramActivitiesInput
+  connect?: Prisma.ProgramWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProgramUpdateToOneWithWhereWithoutProgramActivitiesInput, Prisma.ProgramUpdateWithoutProgramActivitiesInput>, Prisma.ProgramUncheckedUpdateWithoutProgramActivitiesInput>
+}
+
 export type ProgramCreateWithoutRoutineInput = {
   id?: string
   createdAt?: Date | string
@@ -572,7 +642,10 @@ export type ProgramCreateWithoutRoutineInput = {
   capacity: number
   name: string
   level?: string | null
+  routineNameSnapshot?: string | null
+  routineLabelSnapshot?: string | null
   session: Prisma.SessionCreateNestedOneWithoutProgramsInput
+  programActivities?: Prisma.ProgramActivityCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutRoutineInput = {
@@ -585,6 +658,9 @@ export type ProgramUncheckedCreateWithoutRoutineInput = {
   capacity: number
   name: string
   level?: string | null
+  routineNameSnapshot?: string | null
+  routineLabelSnapshot?: string | null
+  programActivities?: Prisma.ProgramActivityUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramCreateOrConnectWithoutRoutineInput = {
@@ -627,6 +703,8 @@ export type ProgramScalarWhereInput = {
   capacity?: Prisma.IntFilter<"Program"> | number
   name?: Prisma.StringFilter<"Program"> | string
   level?: Prisma.StringNullableFilter<"Program"> | string | null
+  routineNameSnapshot?: Prisma.StringNullableFilter<"Program"> | string | null
+  routineLabelSnapshot?: Prisma.StringNullableFilter<"Program"> | string | null
 }
 
 export type ProgramCreateWithoutSessionInput = {
@@ -638,7 +716,10 @@ export type ProgramCreateWithoutSessionInput = {
   capacity: number
   name: string
   level?: string | null
+  routineNameSnapshot?: string | null
+  routineLabelSnapshot?: string | null
   routine: Prisma.RoutineCreateNestedOneWithoutProgramsInput
+  programActivities?: Prisma.ProgramActivityCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutSessionInput = {
@@ -651,6 +732,9 @@ export type ProgramUncheckedCreateWithoutSessionInput = {
   capacity: number
   name: string
   level?: string | null
+  routineNameSnapshot?: string | null
+  routineLabelSnapshot?: string | null
+  programActivities?: Prisma.ProgramActivityUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramCreateOrConnectWithoutSessionInput = {
@@ -679,6 +763,82 @@ export type ProgramUpdateManyWithWhereWithoutSessionInput = {
   data: Prisma.XOR<Prisma.ProgramUpdateManyMutationInput, Prisma.ProgramUncheckedUpdateManyWithoutSessionInput>
 }
 
+export type ProgramCreateWithoutProgramActivitiesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  instructorId: string
+  capacity: number
+  name: string
+  level?: string | null
+  routineNameSnapshot?: string | null
+  routineLabelSnapshot?: string | null
+  routine: Prisma.RoutineCreateNestedOneWithoutProgramsInput
+  session: Prisma.SessionCreateNestedOneWithoutProgramsInput
+}
+
+export type ProgramUncheckedCreateWithoutProgramActivitiesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  routineId: string
+  sessionId: string
+  instructorId: string
+  capacity: number
+  name: string
+  level?: string | null
+  routineNameSnapshot?: string | null
+  routineLabelSnapshot?: string | null
+}
+
+export type ProgramCreateOrConnectWithoutProgramActivitiesInput = {
+  where: Prisma.ProgramWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProgramCreateWithoutProgramActivitiesInput, Prisma.ProgramUncheckedCreateWithoutProgramActivitiesInput>
+}
+
+export type ProgramUpsertWithoutProgramActivitiesInput = {
+  update: Prisma.XOR<Prisma.ProgramUpdateWithoutProgramActivitiesInput, Prisma.ProgramUncheckedUpdateWithoutProgramActivitiesInput>
+  create: Prisma.XOR<Prisma.ProgramCreateWithoutProgramActivitiesInput, Prisma.ProgramUncheckedCreateWithoutProgramActivitiesInput>
+  where?: Prisma.ProgramWhereInput
+}
+
+export type ProgramUpdateToOneWithWhereWithoutProgramActivitiesInput = {
+  where?: Prisma.ProgramWhereInput
+  data: Prisma.XOR<Prisma.ProgramUpdateWithoutProgramActivitiesInput, Prisma.ProgramUncheckedUpdateWithoutProgramActivitiesInput>
+}
+
+export type ProgramUpdateWithoutProgramActivitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routine?: Prisma.RoutineUpdateOneRequiredWithoutProgramsNestedInput
+  session?: Prisma.SessionUpdateOneRequiredWithoutProgramsNestedInput
+}
+
+export type ProgramUncheckedUpdateWithoutProgramActivitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  routineId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
 export type ProgramCreateManyRoutineInput = {
   id?: string
   createdAt?: Date | string
@@ -689,6 +849,8 @@ export type ProgramCreateManyRoutineInput = {
   capacity: number
   name: string
   level?: string | null
+  routineNameSnapshot?: string | null
+  routineLabelSnapshot?: string | null
 }
 
 export type ProgramUpdateWithoutRoutineInput = {
@@ -700,7 +862,10 @@ export type ProgramUpdateWithoutRoutineInput = {
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   session?: Prisma.SessionUpdateOneRequiredWithoutProgramsNestedInput
+  programActivities?: Prisma.ProgramActivityUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutRoutineInput = {
@@ -713,6 +878,9 @@ export type ProgramUncheckedUpdateWithoutRoutineInput = {
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  programActivities?: Prisma.ProgramActivityUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateManyWithoutRoutineInput = {
@@ -725,6 +893,8 @@ export type ProgramUncheckedUpdateManyWithoutRoutineInput = {
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProgramCreateManySessionInput = {
@@ -737,6 +907,8 @@ export type ProgramCreateManySessionInput = {
   capacity: number
   name: string
   level?: string | null
+  routineNameSnapshot?: string | null
+  routineLabelSnapshot?: string | null
 }
 
 export type ProgramUpdateWithoutSessionInput = {
@@ -748,7 +920,10 @@ export type ProgramUpdateWithoutSessionInput = {
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routine?: Prisma.RoutineUpdateOneRequiredWithoutProgramsNestedInput
+  programActivities?: Prisma.ProgramActivityUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutSessionInput = {
@@ -761,6 +936,9 @@ export type ProgramUncheckedUpdateWithoutSessionInput = {
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  programActivities?: Prisma.ProgramActivityUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateManyWithoutSessionInput = {
@@ -773,8 +951,39 @@ export type ProgramUncheckedUpdateManyWithoutSessionInput = {
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
+
+/**
+ * Count Type ProgramCountOutputType
+ */
+
+export type ProgramCountOutputType = {
+  programActivities: number
+}
+
+export type ProgramCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  programActivities?: boolean | ProgramCountOutputTypeCountProgramActivitiesArgs
+}
+
+/**
+ * ProgramCountOutputType without action
+ */
+export type ProgramCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProgramCountOutputType
+   */
+  select?: Prisma.ProgramCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ProgramCountOutputType without action
+ */
+export type ProgramCountOutputTypeCountProgramActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProgramActivityWhereInput
+}
 
 
 export type ProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -788,8 +997,12 @@ export type ProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   capacity?: boolean
   name?: boolean
   level?: boolean
+  routineNameSnapshot?: boolean
+  routineLabelSnapshot?: boolean
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  programActivities?: boolean | Prisma.Program$programActivitiesArgs<ExtArgs>
+  _count?: boolean | Prisma.ProgramCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["program"]>
 
 export type ProgramSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -803,6 +1016,8 @@ export type ProgramSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   capacity?: boolean
   name?: boolean
   level?: boolean
+  routineNameSnapshot?: boolean
+  routineLabelSnapshot?: boolean
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["program"]>
@@ -818,6 +1033,8 @@ export type ProgramSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   capacity?: boolean
   name?: boolean
   level?: boolean
+  routineNameSnapshot?: boolean
+  routineLabelSnapshot?: boolean
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["program"]>
@@ -833,12 +1050,16 @@ export type ProgramSelectScalar = {
   capacity?: boolean
   name?: boolean
   level?: boolean
+  routineNameSnapshot?: boolean
+  routineLabelSnapshot?: boolean
 }
 
-export type ProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "routineId" | "sessionId" | "instructorId" | "capacity" | "name" | "level", ExtArgs["result"]["program"]>
+export type ProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "routineId" | "sessionId" | "instructorId" | "capacity" | "name" | "level" | "routineNameSnapshot" | "routineLabelSnapshot", ExtArgs["result"]["program"]>
 export type ProgramInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  programActivities?: boolean | Prisma.Program$programActivitiesArgs<ExtArgs>
+  _count?: boolean | Prisma.ProgramCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProgramIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
@@ -854,6 +1075,7 @@ export type $ProgramPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     routine: Prisma.$RoutinePayload<ExtArgs>
     session: Prisma.$SessionPayload<ExtArgs>
+    programActivities: Prisma.$ProgramActivityPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -866,6 +1088,8 @@ export type $ProgramPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     capacity: number
     name: string
     level: string | null
+    routineNameSnapshot: string | null
+    routineLabelSnapshot: string | null
   }, ExtArgs["result"]["program"]>
   composites: {}
 }
@@ -1262,6 +1486,7 @@ export interface Prisma__ProgramClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   routine<T extends Prisma.RoutineDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoutineDefaultArgs<ExtArgs>>): Prisma.Prisma__RoutineClient<runtime.Types.Result.GetResult<Prisma.$RoutinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   session<T extends Prisma.SessionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SessionDefaultArgs<ExtArgs>>): Prisma.Prisma__SessionClient<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  programActivities<T extends Prisma.Program$programActivitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$programActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1301,6 +1526,8 @@ export interface ProgramFieldRefs {
   readonly capacity: Prisma.FieldRef<"Program", 'Int'>
   readonly name: Prisma.FieldRef<"Program", 'String'>
   readonly level: Prisma.FieldRef<"Program", 'String'>
+  readonly routineNameSnapshot: Prisma.FieldRef<"Program", 'String'>
+  readonly routineLabelSnapshot: Prisma.FieldRef<"Program", 'String'>
 }
     
 
@@ -1694,6 +1921,30 @@ export type ProgramDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Programs to delete.
    */
   limit?: number
+}
+
+/**
+ * Program.programActivities
+ */
+export type Program$programActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProgramActivity
+   */
+  select?: Prisma.ProgramActivitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProgramActivity
+   */
+  omit?: Prisma.ProgramActivityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramActivityInclude<ExtArgs> | null
+  where?: Prisma.ProgramActivityWhereInput
+  orderBy?: Prisma.ProgramActivityOrderByWithRelationInput | Prisma.ProgramActivityOrderByWithRelationInput[]
+  cursor?: Prisma.ProgramActivityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProgramActivityScalarFieldEnum | Prisma.ProgramActivityScalarFieldEnum[]
 }
 
 /**

@@ -33,6 +33,7 @@
 
 | 일자       | 내용                                                                                                                                | 작성자 |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| 2026-03-29 | Task master columns에 `스케줄 가능` Boolean cell을 추가해 Exercise 영상 준비 상태를 목록에서 바로 확인할 수 있게 확장 | codex  |
 | 2026-03-29 | `Role/Routine/Task/Template/Timeline` 목록 컬럼을 generic row + callback 계약으로 정리해 pure page가 API DTO 없이 columns를 재사용할 수 있게 정리 | codex  |
 | 2026-03-29 | `Subject` 목록 컬럼을 generic builder로 추출해 pure page가 API DTO 없이도 동일한 columns 조합을 재사용할 수 있게 정리 | codex  |
 | 2026-03-29 | `Action` 목록 컬럼을 generic builder로 추출해 pure page가 API DTO 없이도 동일한 columns 조합을 재사용할 수 있게 정리 | codex  |

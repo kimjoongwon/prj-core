@@ -11,6 +11,7 @@
  */
 import type { RoutineDto } from './routineDto';
 import type { SessionDto } from './sessionDto';
+import type { ProgramActivityDto } from './programActivityDto';
 
 export interface ProgramDto {
   id: string;
@@ -24,6 +25,11 @@ export interface ProgramDto {
   capacity: number;
   name: string;
   level?: string;
+  routineNameSnapshot?: string;
+  routineLabelSnapshot?: string;
+  activityCount?: number;
+  previewExerciseNames?: string[];
   routine: RoutineDto;
   session: SessionDto;
+  executionPlan?: ProgramActivityDto[];
 }

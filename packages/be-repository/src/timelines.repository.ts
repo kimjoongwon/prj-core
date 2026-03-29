@@ -246,7 +246,15 @@ export class TimelinesRepository {
 			this.txHost.tx.program.findMany({
 				where,
 				include: {
-					routine: { select: { id: true, name: true } },
+					programActivities: {
+						where: { removedAt: null },
+						select: {
+							exerciseName: true,
+							order: true,
+						},
+						orderBy: { order: "asc" },
+					},
+					routine: { select: { id: true, name: true, label: true } },
 					session: { select: { id: true, name: true } },
 				},
 				orderBy: { createdAt: "desc" },
@@ -256,7 +264,19 @@ export class TimelinesRepository {
 			this.txHost.tx.program.count({ where }),
 		]);
 
-		return [programs, total] as const;
+		return [
+			programs.map((program) => {
+				const { programActivities, ...rest } = program;
+				return {
+					...rest,
+					activityCount: programActivities.length,
+					previewExerciseNames: programActivities
+						.slice(0, 3)
+						.map((activity) => activity.exerciseName),
+				};
+			}),
+			total,
+		] as const;
 	}
 
 	/**
@@ -268,9 +288,33 @@ export class TimelinesRepository {
 		return this.txHost.tx.program.findFirst({
 			where: { id: programId, sessionId, removedAt: null },
 			include: {
-				routine: { select: { id: true, name: true } },
-				session: { select: { id: true, name: true } },
+				programActivities: {
+					where: { removedAt: null },
+					orderBy: { order: "asc" },
+				},
+				routine: { select: { id: true, name: true, label: true } },
+				session: {
+					select: {
+						id: true,
+						name: true,
+						timeline: { select: { id: true, name: true } },
+					},
+				},
 			},
+		}).then((program) => {
+			if (!program) {
+				return null;
+			}
+
+			const { programActivities, ...rest } = program;
+			return {
+				...rest,
+				activityCount: programActivities.length,
+				previewExerciseNames: programActivities
+					.slice(0, 3)
+					.map((activity) => activity.exerciseName),
+				executionPlan: programActivities,
+			};
 		});
 	}
 
@@ -284,6 +328,8 @@ export class TimelinesRepository {
 		instructorId: string;
 		capacity: number;
 		level?: string | null;
+		routineNameSnapshot?: string | null;
+		routineLabelSnapshot?: string | null;
 	}) {
 		this.logger.debug("프로그램 생성");
 
@@ -301,6 +347,8 @@ export class TimelinesRepository {
 			instructorId?: string;
 			capacity?: number;
 			level?: string | null;
+			routineNameSnapshot?: string | null;
+			routineLabelSnapshot?: string | null;
 		},
 	) {
 		this.logger.debug(`프로그램 수정: ${programId.slice(-8)}`);
@@ -317,10 +365,79 @@ export class TimelinesRepository {
 	async softDeleteProgram(programId: string): Promise<void> {
 		this.logger.debug(`프로그램 소프트 삭제: ${programId.slice(-8)}`);
 
+		const removedAt = new Date();
+
 		await this.txHost.tx.program.update({
 			where: { id: programId },
-			data: { removedAt: new Date() },
+			data: { removedAt },
 		});
+		await this.txHost.tx.programActivity.updateMany({
+			where: {
+				programId,
+				removedAt: null,
+			},
+			data: { removedAt },
+		});
+	}
+
+	async createProgramActivities(
+		programId: string,
+		activities: {
+			taskId: string;
+			order: number;
+			repetitions: number;
+			restTime: number;
+			notes?: string | null;
+			exerciseName: string;
+			exerciseDescription?: string | null;
+			exerciseDuration: number;
+			exerciseCount: number;
+			imageFileId?: string | null;
+			videoFileId?: string | null;
+		}[],
+	): Promise<void> {
+		if (activities.length === 0) {
+			return;
+		}
+
+		await this.txHost.tx.programActivity.createMany({
+			data: activities.map((activity) => ({
+				programId,
+				taskId: activity.taskId,
+				order: activity.order,
+				repetitions: activity.repetitions,
+				restTime: activity.restTime,
+				notes: activity.notes ?? null,
+				exerciseName: activity.exerciseName,
+				exerciseDescription: activity.exerciseDescription ?? null,
+				exerciseDuration: activity.exerciseDuration,
+				exerciseCount: activity.exerciseCount,
+				imageFileId: activity.imageFileId ?? null,
+				videoFileId: activity.videoFileId ?? null,
+			})),
+		});
+	}
+
+	async replaceProgramActivities(
+		programId: string,
+		activities: {
+			taskId: string;
+			order: number;
+			repetitions: number;
+			restTime: number;
+			notes?: string | null;
+			exerciseName: string;
+			exerciseDescription?: string | null;
+			exerciseDuration: number;
+			exerciseCount: number;
+			imageFileId?: string | null;
+			videoFileId?: string | null;
+		}[],
+	): Promise<void> {
+		await this.txHost.tx.programActivity.deleteMany({
+			where: { programId },
+		});
+		await this.createProgramActivities(programId, activities);
 	}
 
 	/**

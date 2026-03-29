@@ -39,6 +39,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | Program execution snapshot 응답을 위해 `program-activity.dto` 배럴 export 추가 | codex |
 | 2026-03-06 | 미사용 템플릿 DTO 배럴 export 제거 반영 | codex |
 | 2026-03-06 | File 관련 DTO export 제거에 맞춰 배럴 계약 정리 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

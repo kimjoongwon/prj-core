@@ -1,8 +1,9 @@
 import { ROUTINE_ERRORS } from "@cocrepo/constant";
 import { SpaceScope } from "@cocrepo/dto";
 import { Routine } from "@cocrepo/entity";
-import { RoutinesRepository } from "@cocrepo/repository";
+import { RoutinesRepository, TasksRepository } from "@cocrepo/repository";
 import {
+	BadRequestException,
 	ConflictException,
 	ForbiddenException,
 	Injectable,
@@ -20,6 +21,7 @@ export class RoutineService {
 
 	constructor(
 		private readonly routinesRepository: RoutinesRepository,
+		private readonly tasksRepository: TasksRepository,
 		private readonly spaceContext: SpaceContext,
 	) {}
 
@@ -116,7 +118,7 @@ export class RoutineService {
 			throw new Error("Space 컨텍스트가 설정되지 않았습니다");
 		}
 
-		this.validateRoutineActivityTasks(dto.activities);
+		await this.validateRoutineActivityTasks(dto.activities);
 
 		return this.routinesRepository.createRoutine({
 			name: dto.name,
@@ -153,7 +155,7 @@ export class RoutineService {
 			SpaceScope.INCLUDE_ANCESTORS,
 		);
 
-		this.validateRoutineActivityTasks(dto.activities);
+		await this.validateRoutineActivityTasks(dto.activities);
 
 		// 현재 Space 소유 여부 확인
 		if (routine.spaceId !== spaceId) {
@@ -167,11 +169,11 @@ export class RoutineService {
 		});
 	}
 
-	private validateRoutineActivityTasks(
+	private async validateRoutineActivityTasks(
 		activities?: {
 			taskId: string;
 		}[],
-	): void {
+	): Promise<void> {
 		if (!activities) {
 			return;
 		}
@@ -184,6 +186,24 @@ export class RoutineService {
 				);
 			}
 			taskIds.add(activity.taskId);
+		}
+
+		const accessibleSpaceIds =
+			this.spaceContext.spaceIds ??
+			(this.spaceContext.spaceId ? [this.spaceContext.spaceId] : []);
+		const tasks = await this.tasksRepository.findTasksByIds(
+			Array.from(taskIds),
+			accessibleSpaceIds,
+		);
+		const taskById = new Map(tasks.map((task) => [task.id, task]));
+
+		for (const taskId of taskIds) {
+			const task = taskById.get(taskId);
+			if (!task?.exercise?.videoFileId) {
+				throw new BadRequestException(
+					ROUTINE_ERRORS.TASK_EXERCISE_NOT_SCHEDULABLE,
+				);
+			}
 		}
 	}
 

@@ -55,6 +55,7 @@ export type AdminTasksPageSetQueryStates = ReturnType<
 export interface AdminTasksPageTask {
 	id: string;
 	name: string;
+	isSchedulable: boolean;
 	duration: number;
 	count: number;
 	description?: string;

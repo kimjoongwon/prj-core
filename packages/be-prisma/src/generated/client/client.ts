@@ -298,6 +298,11 @@ export type Session = Prisma.SessionModel
  */
 export type Program = Prisma.ProgramModel
 /**
+ * Model ProgramActivity
+ * @displayName 프로그램 활동
+ */
+export type ProgramActivity = Prisma.ProgramActivityModel
+/**
  * Model Category
  * @displayName 카테고리
  */

@@ -205,9 +205,19 @@ export class RoutinesRepository {
 	async softDeleteRoutine(routineId: string): Promise<void> {
 		this.logger.debug(`루틴 소프트 삭제: ${routineId.slice(-8)}`);
 
+		const removedAt = new Date();
+
 		await this.txHost.tx.routine.update({
 			where: { id: routineId },
-			data: { removedAt: new Date() },
+			data: { removedAt },
+		});
+
+		await this.txHost.tx.activity.updateMany({
+			where: {
+				routineId,
+				removedAt: null,
+			},
+			data: { removedAt },
 		});
 	}
 

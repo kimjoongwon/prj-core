@@ -18,6 +18,7 @@ import {
 import {
 	addToast,
 	Button,
+	Chip,
 	Modal,
 	ModalBody,
 	ModalContent,
@@ -29,6 +30,7 @@ import {
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
+import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 
 const formatDuration = (seconds: number) => {
@@ -55,6 +57,7 @@ function TaskExerciseDetailPageClient({
 	const { data: routinesResponse } = useGetTaskRoutines(taskId);
 	const routines = routinesResponse?.data ?? [];
 	const { mutate: deleteTask, isPending: isDeleting } = useDeleteTask();
+	const isSchedulable = Boolean(exercise?.videoFileId);
 
 	const onClickBackButton = () => {
 		router.push("/tasks" as Route);
@@ -181,8 +184,49 @@ function TaskExerciseDetailPageClient({
 									<p className="mt-1">{exercise.count}회</p>
 								</div>
 								<div>
+									<label className="text-sm text-default-500">스케줄 가능</label>
+									<div className="mt-1">
+										<Chip
+											color={isSchedulable ? "success" : "warning"}
+											size="sm"
+										>
+											{isSchedulable ? "가능" : "불가"}
+										</Chip>
+									</div>
+								</div>
+								<div>
 									<label className="text-sm text-default-500">설명</label>
 									<p className="mt-1">{exercise.description || "-"}</p>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">이미지 파일</label>
+									<div className="mt-1">
+										{exercise.imageFileId ? (
+											<Link
+												href={`/assets/${exercise.imageFileId}` as Route}
+												className="font-mono text-primary text-sm hover:underline"
+											>
+												{exercise.imageFileId}
+											</Link>
+										) : (
+											"-"
+										)}
+									</div>
+								</div>
+								<div>
+									<label className="text-sm text-default-500">영상 파일</label>
+									<div className="mt-1">
+										{exercise.videoFileId ? (
+											<Link
+												href={`/assets/${exercise.videoFileId}` as Route}
+												className="font-mono text-primary text-sm hover:underline"
+											>
+												{exercise.videoFileId}
+											</Link>
+										) : (
+											"-"
+										)}
+									</div>
 								</div>
 								<div>
 									<label className="text-sm text-default-500">등록일</label>

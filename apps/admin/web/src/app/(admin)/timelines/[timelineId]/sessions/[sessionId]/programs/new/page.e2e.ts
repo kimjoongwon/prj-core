@@ -4,6 +4,7 @@ const API_BASE_URL = "http://localhost:3000/api/v1";
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
 const SPACE_HEADERS = { "x-space-id": SYSTEM_SPACE_ID };
+const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
 
 interface IdOnlyDto {
 	id: string;
@@ -93,13 +94,11 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 						name: exerciseTaskName,
 						duration: 60,
 						count: 10,
+						videoFileId: TEST_VIDEO_FILE_ID,
 					},
 				},
 			);
-			test.skip(
-				createTaskResponse.status() !== 201,
-				`운동 생성 API 응답이 201이 아닙니다. status=${createTaskResponse.status()}`,
-			);
+			expect(createTaskResponse.status()).toBe(201);
 			const createdTask =
 				(await createTaskResponse.json()) as ApiItemResponse<IdOnlyDto>;
 			exerciseTaskId = createdTask.data?.id;
@@ -125,10 +124,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 					},
 				},
 			);
-			test.skip(
-				createRoutineOneResponse.status() !== 201,
-				`루틴 생성 API 응답이 201이 아닙니다. status=${createRoutineOneResponse.status()}`,
-			);
+			expect(createRoutineOneResponse.status()).toBe(201);
 			const createdRoutineOne =
 				(await createRoutineOneResponse.json()) as ApiItemResponse<IdOnlyDto>;
 			routineOneId = createdRoutineOne.data?.id;
@@ -152,10 +148,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 					},
 				},
 			);
-			test.skip(
-				createRoutineTwoResponse.status() !== 201,
-				`루틴 생성 API 응답이 201이 아닙니다. status=${createRoutineTwoResponse.status()}`,
-			);
+			expect(createRoutineTwoResponse.status()).toBe(201);
 			const createdRoutineTwo =
 				(await createRoutineTwoResponse.json()) as ApiItemResponse<IdOnlyDto>;
 			routineTwoId = createdRoutineTwo.data?.id;
@@ -178,9 +171,20 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			expect(instructor?.name).toBeTruthy();
 
 			// When: 프로그램 등록 페이지에 진입해 필수 필드와 연결 대상을 선택한다
+			const routinesListResponse = page.waitForResponse(
+				(response) =>
+					response.url().includes("/api/v1/routines") &&
+					response.request().method() === "GET",
+			);
+			const instructorsListResponse = page.waitForResponse(
+				(response) =>
+					response.url().includes("/api/v1/users") &&
+					response.request().method() === "GET",
+			);
 			await page.goto(
 				`./timelines/${timelineId}/sessions/${sessionId}/programs/new`,
 			);
+			await Promise.all([routinesListResponse, instructorsListResponse]);
 			await page.waitForLoadState("networkidle");
 
 			await expect(

@@ -245,6 +245,14 @@ function SessionDetailPageClient({
 		return instructorNameById.get(instructorId) ?? "확인 필요";
 	};
 
+	const getProgramPreviewText = (program: ProgramDto) => {
+		if (!program.previewExerciseNames || program.previewExerciseNames.length === 0) {
+			return "-";
+		}
+
+		return program.previewExerciseNames.join(", ");
+	};
+
 	const pageTitle = session?.name ?? "세션 상세";
 	const pageDescription = session?.timeline?.name;
 	const pageActions = (
@@ -415,6 +423,8 @@ function SessionDetailPageClient({
 								<TableHeader>
 									<TableColumn>프로그램명</TableColumn>
 									<TableColumn>루틴명</TableColumn>
+									<TableColumn align="center">운동 수</TableColumn>
+									<TableColumn>대표 운동</TableColumn>
 									<TableColumn>강사</TableColumn>
 									<TableColumn align="center">연결 상태</TableColumn>
 									<TableColumn align="center">정원</TableColumn>
@@ -436,7 +446,11 @@ function SessionDetailPageClient({
 													{program.name}
 												</button>
 											</TableCell>
-											<TableCell>{program.routine?.name ?? "-"}</TableCell>
+											<TableCell>
+												{program.routineNameSnapshot ?? program.routine?.name ?? "-"}
+											</TableCell>
+											<TableCell>{program.activityCount ?? 0}개</TableCell>
+											<TableCell>{getProgramPreviewText(program)}</TableCell>
 											<TableCell>
 												{getInstructorName(program.instructorId)}
 											</TableCell>

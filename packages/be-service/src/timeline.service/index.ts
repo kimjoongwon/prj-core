@@ -1,10 +1,15 @@
-import { TIMELINE_ERRORS } from "@cocrepo/constant";
+import { ROUTINE_ERRORS, TIMELINE_ERRORS } from "@cocrepo/constant";
+import { SpaceContext } from "@cocrepo/context";
 import {
 	type RecurringDayOfWeek,
 	type RepeatCycleTypes,
 	SessionTypes,
 } from "@cocrepo/prisma";
-import { TimelinesRepository } from "@cocrepo/repository";
+import {
+	RoutinesRepository,
+	TimelinesRepository,
+} from "@cocrepo/repository";
+import { Transactional } from "@nestjs-cls/transactional";
 import {
 	BadRequestException,
 	Injectable,
@@ -58,11 +63,29 @@ interface UpdateProgramInput {
 	level?: string | null;
 }
 
+interface ProgramActivitySnapshotInput {
+	taskId: string;
+	order: number;
+	repetitions: number;
+	restTime: number;
+	notes?: string | null;
+	exerciseName: string;
+	exerciseDescription?: string | null;
+	exerciseDuration: number;
+	exerciseCount: number;
+	imageFileId?: string | null;
+	videoFileId?: string | null;
+}
+
 @Injectable()
 export class TimelineService {
 	private readonly logger = new Logger(TimelineService.name);
 
-	constructor(private readonly repository: TimelinesRepository) {}
+	constructor(
+		private readonly repository: TimelinesRepository,
+		private readonly routinesRepository: RoutinesRepository,
+		private readonly spaceContext: SpaceContext,
+	) {}
 
 	// ============================================================================
 	// Timeline 메서드
@@ -362,6 +385,7 @@ export class TimelineService {
 	 * 세션에 프로그램 생성
 	 * - 같은 세션 내 루틴 중복 확인
 	 */
+	@Transactional()
 	async createProgramInSession(sessionId: string, input: CreateProgramInput) {
 		this.logger.debug(`프로그램 생성: sessionId=${sessionId.slice(-8)}`);
 
@@ -373,20 +397,33 @@ export class TimelineService {
 			throw new BadRequestException(TIMELINE_ERRORS.PROGRAM_ROUTINE_DUPLICATED);
 		}
 
-		return this.repository.createProgram({
+		const routineSnapshot = await this.getRoutineExecutionSnapshot(
+			input.routineId,
+		);
+
+		const createdProgram = await this.repository.createProgram({
 			name: input.name,
 			routineId: input.routineId,
 			sessionId,
 			instructorId: input.instructorId,
 			capacity: input.capacity,
 			level: input.level ?? null,
+			routineNameSnapshot: routineSnapshot.routine.name,
+			routineLabelSnapshot: routineSnapshot.routine.label,
 		});
+		await this.repository.createProgramActivities(
+			createdProgram.id,
+			routineSnapshot.activities,
+		);
+
+		return this.findProgramInSession(sessionId, createdProgram.id);
 	}
 
 	/**
 	 * 세션 내 프로그램 수정
 	 * - routineId 변경 시 세션 내 중복 확인
 	 */
+	@Transactional()
 	async updateProgramInSession(
 		sessionId: string,
 		programId: string,
@@ -394,9 +431,13 @@ export class TimelineService {
 	) {
 		this.logger.debug(`프로그램 수정: ${programId.slice(-8)}`);
 
-		await this.findProgramInSession(sessionId, programId);
+		const existingProgram = await this.findProgramInSession(sessionId, programId);
 
-		if (input.routineId) {
+		const hasRoutineChanged =
+			input.routineId !== undefined &&
+			input.routineId !== existingProgram.routineId;
+
+		if (hasRoutineChanged && input.routineId) {
 			const duplicateCount = await this.repository.countProgramsWithRoutine(
 				sessionId,
 				input.routineId,
@@ -407,20 +448,45 @@ export class TimelineService {
 			}
 		}
 
-		const updateData: UpdateProgramInput = {};
+		const routineSnapshot =
+			hasRoutineChanged && input.routineId
+				? await this.getRoutineExecutionSnapshot(input.routineId)
+				: null;
+
+		const updateData: UpdateProgramInput & {
+			routineNameSnapshot?: string | null;
+			routineLabelSnapshot?: string | null;
+		} = {};
 
 		if (input.name !== undefined) updateData.name = input.name;
-		if (input.routineId !== undefined) updateData.routineId = input.routineId;
 		if (input.instructorId !== undefined) updateData.instructorId = input.instructorId;
 		if (input.capacity !== undefined) updateData.capacity = input.capacity;
 		if (input.level !== undefined) updateData.level = input.level;
 
-		return this.repository.updateProgram(programId, updateData);
+		if (input.routineId !== undefined) {
+			updateData.routineId = input.routineId;
+		}
+		if (routineSnapshot) {
+			updateData.routineNameSnapshot = routineSnapshot.routine.name;
+			updateData.routineLabelSnapshot = routineSnapshot.routine.label;
+		}
+
+		await this.repository.updateProgram(programId, updateData);
+
+		if (routineSnapshot) {
+			await this.repository.replaceProgramActivities(
+				programId,
+				routineSnapshot.activities,
+			);
+		}
+
+		return this.findProgramInSession(sessionId, programId);
 	}
 
 	/**
 	 * 세션 내 프로그램 소프트 삭제
 	 */
+	@Transactional()
 	async deleteProgramFromSession(sessionId: string, programId: string): Promise<void> {
 		this.logger.debug(`프로그램 삭제: ${programId.slice(-8)}`);
 
@@ -487,5 +553,62 @@ export class TimelineService {
 				throw new BadRequestException(TIMELINE_ERRORS.SESSION_DATE_INVALID);
 			}
 		}
+	}
+
+	private getAccessibleSpaceIds(): string[] {
+		return (
+			this.spaceContext.spaceIds ??
+			(this.spaceContext.spaceId ? [this.spaceContext.spaceId] : [])
+		);
+	}
+
+	private async getRoutineExecutionSnapshot(routineId: string): Promise<{
+		routine: {
+			name: string;
+			label: string;
+		};
+		activities: ProgramActivitySnapshotInput[];
+	}> {
+		const routine = await this.routinesRepository.findRoutineById(
+			routineId,
+			this.getAccessibleSpaceIds(),
+		);
+
+		if (!routine) {
+			throw new NotFoundException(ROUTINE_ERRORS.ROUTINE_NOT_FOUND);
+		}
+
+		const routineActivities = [...(routine.activities ?? [])].sort(
+			(left, right) => left.order - right.order,
+		);
+
+		const hasUnschedulableExercise = routineActivities.some(
+			(activity) => !activity.task?.exercise?.videoFileId,
+		);
+		if (hasUnschedulableExercise) {
+			throw new BadRequestException(
+				TIMELINE_ERRORS.PROGRAM_ROUTINE_EXERCISE_INCOMPLETE,
+			);
+		}
+
+		return {
+			routine: {
+				name: routine.name,
+				label: routine.label,
+			},
+			activities: routineActivities.map((activity) => ({
+				taskId: activity.taskId,
+				order: activity.order,
+				repetitions: activity.repetitions,
+				restTime: activity.restTime,
+				notes: activity.notes ?? null,
+				exerciseName: activity.task?.exercise?.name ?? "",
+				exerciseDescription: activity.task?.exercise?.description ?? null,
+				exerciseDuration: activity.task?.exercise?.duration ?? 0,
+				exerciseCount: activity.task?.exercise?.count ?? 0,
+				imageFileId: activity.task?.exercise?.imageFileId ?? null,
+				videoFileId: activity.task?.exercise?.videoFileId ?? null,
+			})),
+		};
 	}
 }

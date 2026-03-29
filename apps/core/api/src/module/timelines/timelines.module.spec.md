@@ -15,6 +15,7 @@
 | TimelineFacade | Controller boundary 유즈케이스 및 응답 조립 |
 | TimelineService | Timeline/Session/Program 도메인 규칙 및 변경 처리 |
 | TimelinesRepository | Timeline 영속성 접근 |
+| RoutinesRepository | Program execution snapshot 생성을 위한 Routine/Activity 조회 |
 | AuthContext | 현재 인증 사용자 제공 |
 | SpaceContext | 현재 요청 Space 제공 |
 
@@ -28,6 +29,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | Program execution snapshot 생성을 위해 `RoutinesRepository` provider를 module wiring에 추가 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | TimelinesModule export를 TimelineService 기준으로 정렬 | codex |

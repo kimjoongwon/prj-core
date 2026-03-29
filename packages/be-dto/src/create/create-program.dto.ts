@@ -5,6 +5,11 @@ import { ProgramDto } from "../program.dto";
 export class CreateProgramDto extends OmitType(ProgramDto, [
 	...COMMON_ENTITY_FIELDS,
 	"sessionId",
+	"routineNameSnapshot",
+	"routineLabelSnapshot",
+	"activityCount",
+	"previewExerciseNames",
+	"executionPlan",
 	"routine",
 	"session",
 ]) {}

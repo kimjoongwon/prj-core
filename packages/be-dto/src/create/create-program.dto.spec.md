@@ -6,7 +6,8 @@
 
 ## 역할
 
-이 파일은 dto 계층의 보조 동작(연결/조회/조합)을 담당합니다.
+이 파일은 Program 생성 요청 DTO를 정의합니다.
+쓰기 요청에서는 `routineId` 중심의 운영 메타만 받고, session 연결값과 snapshot read model 필드는 제외합니다.
 
 ## 주요 계약
 
@@ -31,4 +32,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | Program 생성 DTO에서 routine snapshot 및 execution summary/detail 필드를 제외하는 쓰기 계약으로 갱신 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

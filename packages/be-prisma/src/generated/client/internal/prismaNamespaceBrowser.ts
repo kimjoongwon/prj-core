@@ -103,6 +103,7 @@ export const ModelName = {
   Timeline: 'Timeline',
   Session: 'Session',
   Program: 'Program',
+  ProgramActivity: 'ProgramActivity',
   Category: 'Category',
   Group: 'Group',
   SafeWallet: 'SafeWallet',
@@ -957,10 +958,34 @@ export const ProgramScalarFieldEnum = {
   instructorId: 'instructorId',
   capacity: 'capacity',
   name: 'name',
-  level: 'level'
+  level: 'level',
+  routineNameSnapshot: 'routineNameSnapshot',
+  routineLabelSnapshot: 'routineLabelSnapshot'
 } as const
 
 export type ProgramScalarFieldEnum = (typeof ProgramScalarFieldEnum)[keyof typeof ProgramScalarFieldEnum]
+
+
+export const ProgramActivityScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  programId: 'programId',
+  taskId: 'taskId',
+  order: 'order',
+  repetitions: 'repetitions',
+  restTime: 'restTime',
+  notes: 'notes',
+  exerciseName: 'exerciseName',
+  exerciseDescription: 'exerciseDescription',
+  exerciseDuration: 'exerciseDuration',
+  exerciseCount: 'exerciseCount',
+  imageFileId: 'imageFileId',
+  videoFileId: 'videoFileId'
+} as const
+
+export type ProgramActivityScalarFieldEnum = (typeof ProgramActivityScalarFieldEnum)[keyof typeof ProgramActivityScalarFieldEnum]
 
 
 export const CategoryScalarFieldEnum = {

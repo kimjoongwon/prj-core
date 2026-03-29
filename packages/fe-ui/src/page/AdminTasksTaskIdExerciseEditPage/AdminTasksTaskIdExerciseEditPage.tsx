@@ -12,7 +12,7 @@ import {
 	FormSection,
 	FormSectionCard,
 } from "@cocrepo/ui";
-import { addToast, Button, Input, Spinner, Textarea } from "@heroui/react";
+import { addToast, Button, Chip, Input, Spinner, Textarea } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter, useParams } from "next/navigation";
@@ -35,6 +35,8 @@ function TaskExerciseEditPageClient({
 		durationSec: 0,
 		count: 1,
 		description: "",
+		imageFileId: "",
+		videoFileId: "",
 		errors: {} as Record<string, string>,
 		isInitialized: false,
 	}));
@@ -49,6 +51,8 @@ function TaskExerciseEditPageClient({
 			state.durationSec = exercise.duration % 60;
 			state.count = exercise.count;
 			state.description = exercise.description || "";
+			state.imageFileId = exercise.imageFileId || "";
+			state.videoFileId = exercise.videoFileId || "";
 			state.isInitialized = true;
 		}
 	}, [exercise, state]);
@@ -102,6 +106,14 @@ function TaskExerciseEditPageClient({
 		state.description = value;
 	};
 
+	const onChangeImageFileId = (value: string) => {
+		state.imageFileId = value;
+	};
+
+	const onChangeVideoFileId = (value: string) => {
+		state.videoFileId = value;
+	};
+
 	const onClickSaveButton = () => {
 		const errors: Record<string, string> = {};
 
@@ -130,9 +142,13 @@ function TaskExerciseEditPageClient({
 				duration,
 				count: state.count,
 				description: state.description.trim() || undefined,
+				imageFileId: state.imageFileId.trim() || undefined,
+				videoFileId: state.videoFileId.trim() || undefined,
 			},
 		});
 	};
+
+	const isSchedulable = state.videoFileId.trim().length > 0;
 
 	if (isLoading) {
 		return (
@@ -274,6 +290,33 @@ function TaskExerciseEditPageClient({
 								maxLength={500}
 								minRows={3}
 							/>
+							<Input
+								label="이미지 파일 ID"
+								placeholder="업로드된 이미지 에셋 ID를 입력하세요"
+								value={state.imageFileId}
+								onValueChange={onChangeImageFileId}
+								description="선택 입력입니다. 비워두면 이미지 없이 저장됩니다."
+							/>
+							<Input
+								label="영상 파일 ID"
+								placeholder="업로드된 영상 에셋 ID를 입력하세요"
+								value={state.videoFileId}
+								onValueChange={onChangeVideoFileId}
+								description="비워두면 저장은 가능하지만 루틴 편성과 Program 생성에는 사용할 수 없습니다."
+							/>
+							<div className="rounded-lg bg-content2 p-3 text-sm text-default-600">
+								<div className="flex items-center gap-2">
+									<span className="font-medium text-default-700">
+										스케줄 가능 상태
+									</span>
+									<Chip color={isSchedulable ? "success" : "warning"} size="sm">
+										{isSchedulable ? "가능" : "불가"}
+									</Chip>
+								</div>
+								<p className="mt-1">
+									영상 파일 ID가 있어야 루틴 편성과 Program 생성에서 선택할 수 있습니다.
+								</p>
+							</div>
 						</div>
 					</FormSection>
 				</FormSectionCard>

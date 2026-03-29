@@ -32,6 +32,7 @@ export * from "./oidc-client.entity";
 export * from "./oidc-model.entity";
 export * from "./password-history.entity";
 export * from "./profile.entity";
+export * from "./program-activity.entity";
 export * from "./program.entity";
 // Response Entity
 export * from "./response.entity";

@@ -48,4 +48,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-29 | Routine 소프트 삭제 시 child Activity도 함께 removedAt 처리해 aggregate 정합성을 유지하도록 보강 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

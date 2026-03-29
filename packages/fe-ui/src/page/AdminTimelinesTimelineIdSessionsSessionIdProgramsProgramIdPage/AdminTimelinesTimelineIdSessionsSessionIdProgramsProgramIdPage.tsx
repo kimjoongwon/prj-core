@@ -37,6 +37,12 @@ interface ProgramDetailPageClientProps {
 	programId: string;
 }
 
+const formatExerciseDuration = (seconds: number) => {
+	const minutes = Math.floor(seconds / 60);
+	const remainSeconds = seconds % 60;
+	return minutes > 0 ? `${minutes}분 ${remainSeconds}초` : `${remainSeconds}초`;
+};
+
 /**
  * 프로그램 상세 페이지 - 클라이언트 컴포넌트
  */
@@ -56,6 +62,7 @@ function ProgramDetailPageClient({
 		programId,
 	);
 	const program = response?.data as ProgramDto | undefined;
+	const executionPlan = program?.executionPlan ?? [];
 
 	const { mutate: deleteProgram, isPending: isDeleting } = useDeleteProgram();
 
@@ -150,10 +157,10 @@ function ProgramDetailPageClient({
 											href={`/routines/${program.routine.id}` as Route}
 											className="text-primary hover:underline"
 										>
-											{program.routine.name}
+											{program.routineNameSnapshot ?? program.routine.name}
 										</Link>
 									) : (
-										"-"
+										(program?.routineNameSnapshot ?? "-")
 									)}
 								</div>
 							</div>
@@ -170,6 +177,10 @@ function ProgramDetailPageClient({
 							<div>
 								<label className="text-sm text-default-500">난이도</label>
 								<p className="mt-1">{program?.level ?? "-"}</p>
+							</div>
+							<div>
+								<label className="text-sm text-default-500">운동 수</label>
+								<p className="mt-1">{program?.activityCount ?? executionPlan.length}개</p>
 							</div>
 							<div>
 								<label className="text-sm text-default-500">세션</label>
@@ -195,6 +206,96 @@ function ProgramDetailPageClient({
 								</div>
 							</div>
 						</div>
+					</DetailSection>
+				</DetailSectionCard>
+				<DetailSectionCard>
+					<DetailSection top={<PageTitleBar level={2} title="실행 운동" />}>
+						{executionPlan.length === 0 ? (
+							<p className="text-default-500 text-sm">
+								저장된 실행 운동 계획이 없습니다.
+							</p>
+						) : (
+							<div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+								{executionPlan.map((activity) => (
+									<div
+										key={activity.id}
+										className="rounded-lg bg-content2 p-4"
+									>
+										<div className="flex items-start justify-between gap-3">
+											<div>
+												<p className="text-sm text-default-500">
+													{activity.order}번 운동
+												</p>
+												<p className="font-semibold">
+													{activity.exerciseName}
+												</p>
+											</div>
+											<p className="text-default-500 text-sm">
+												Task {activity.taskId.slice(-6)}
+											</p>
+										</div>
+										<div className="mt-3 grid grid-cols-2 gap-3 text-sm">
+											<div>
+												<label className="text-default-500">반복</label>
+												<p className="mt-1">{activity.repetitions}회</p>
+											</div>
+											<div>
+												<label className="text-default-500">휴식</label>
+												<p className="mt-1">{activity.restTime}초</p>
+											</div>
+											<div>
+												<label className="text-default-500">기본 시간</label>
+												<p className="mt-1">
+													{formatExerciseDuration(activity.exerciseDuration)}
+												</p>
+											</div>
+											<div>
+												<label className="text-default-500">기본 횟수</label>
+												<p className="mt-1">{activity.exerciseCount}회</p>
+											</div>
+										</div>
+										<div className="mt-3 text-sm">
+											<label className="text-default-500">설명</label>
+											<p className="mt-1">
+												{activity.exerciseDescription || activity.notes || "-"}
+											</p>
+										</div>
+										<div className="mt-3 grid grid-cols-1 gap-2 text-sm">
+											<div>
+												<label className="text-default-500">이미지 자산</label>
+												<div className="mt-1">
+													{activity.imageFileId ? (
+														<Link
+															href={`/assets/${activity.imageFileId}` as Route}
+															className="font-mono text-primary text-sm hover:underline"
+														>
+															{activity.imageFileId}
+														</Link>
+													) : (
+														"-"
+													)}
+												</div>
+											</div>
+											<div>
+												<label className="text-default-500">영상 자산</label>
+												<div className="mt-1">
+													{activity.videoFileId ? (
+														<Link
+															href={`/assets/${activity.videoFileId}` as Route}
+															className="font-mono text-primary text-sm hover:underline"
+														>
+															{activity.videoFileId}
+														</Link>
+													) : (
+														"-"
+													)}
+												</div>
+											</div>
+										</div>
+									</div>
+								))}
+							</div>
+						)}
 					</DetailSection>
 				</DetailSectionCard>
 			</DetailPageSurface>

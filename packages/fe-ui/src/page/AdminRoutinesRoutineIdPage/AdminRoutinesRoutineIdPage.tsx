@@ -1,4 +1,5 @@
 "use client";
+import type { AxiosError } from "axios";
 import {
 	type ActivityDto,
 	getGetRoutinesQueryKey,
@@ -46,7 +47,7 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 	const queryClient = useQueryClient();
 	const deleteModal = useDisclosure();
 
-	const { data: response } = useGetRoutine(routineId);
+	const { data: response, error, isLoading, refetch } = useGetRoutine(routineId);
 	const routine = response?.data as RoutineDto | undefined;
 
 	const { mutate: deleteRoutine, isPending: isDeleting } = useDeleteRoutine();
@@ -88,13 +89,52 @@ function RoutineDetailPageClient({ routineId }: RoutineDetailPageClientProps) {
 		);
 	};
 
-	if (!response) {
+	if (isLoading) {
 		return (
 			<DetailPage top={<PageTitleBar title="루틴 상세" description="로딩 중..." />}>
 				<DetailPageSurface>
 					<DetailSectionCard>
 						<div className="flex items-center justify-center p-8">
 							<Spinner size="lg" />
+						</div>
+					</DetailSectionCard>
+				</DetailPageSurface>
+			</DetailPage>
+		);
+	}
+
+	const responseStatus = (error as AxiosError | null)?.response?.status;
+	if (error) {
+		const isNotFound = responseStatus === 404;
+		const errorTitle = isNotFound
+			? "루틴을 찾을 수 없습니다."
+			: "루틴을 불러오지 못했습니다.";
+		const errorDescription = isNotFound
+			? "현재 Space에서 접근 가능한 루틴이 아니거나 삭제되었습니다."
+			: "잠시 후 다시 시도해주세요.";
+
+		return (
+			<DetailPage
+				top={<PageTitleBar title="루틴 상세" description={errorDescription} />}
+			>
+				<DetailPageSurface>
+					<DetailSectionCard>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-default-500">{errorTitle}</p>
+							<div className="flex gap-2">
+								{!isNotFound ? (
+									<Button variant="flat" onPress={() => void refetch()}>
+										다시 시도
+									</Button>
+								) : null}
+								<Button
+									variant="flat"
+									startContent={<ArrowLeft className="size-4" />}
+									onPress={onClickBackButton}
+								>
+									목록으로
+								</Button>
+							</div>
 						</div>
 					</DetailSectionCard>
 				</DetailPageSurface>

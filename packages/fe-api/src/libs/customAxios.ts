@@ -27,8 +27,10 @@ export const AXIOS_INSTANCE = Axios.create({
 // PersistStore 참조 (앱 초기화 시 설정)
 interface PersistStoreRef {
 	spaceId: string | null;
+	isHydrated?: boolean;
 	accessTokenExpiresAt?: number | null;
 	refreshTokenExpiresAt?: number | null;
+	hydrateFromStorage?: () => void;
 }
 let persistStoreRef: PersistStoreRef | null = null;
 
@@ -51,9 +53,25 @@ export function setApiPersistStore(store: PersistStoreRef) {
 	persistStoreRef = store;
 }
 
+function ensurePersistStoreHydrated() {
+	if (
+		typeof window === "undefined" ||
+		!persistStoreRef ||
+		persistStoreRef.isHydrated !== false
+	) {
+		return;
+	}
+
+	persistStoreRef.hydrateFromStorage?.();
+}
+
 // Request 인터셉터: x-space-id 헤더 추가
 AXIOS_INSTANCE.interceptors.request.use(
 	(config) => {
+		// 첫 요청이 PersistStore hydration보다 먼저 나가면 space 없는 응답이 캐시될 수 있으므로
+		// 브라우저 요청 직전에 로컬 저장소를 한 번 동기 hydrate합니다.
+		ensurePersistStoreHydrated();
+
 		// spaceId가 있으면 헤더에 추가
 		if (persistStoreRef?.spaceId) {
 			config.headers["x-space-id"] = persistStoreRef.spaceId;

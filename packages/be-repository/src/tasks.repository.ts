@@ -81,6 +81,34 @@ export class TasksRepository {
 		return result ? plainToInstance(Task, result) : null;
 	}
 
+	async findTasksByIds(taskIds: string[], spaceIds: string[]): Promise<Task[]> {
+		if (taskIds.length === 0) {
+			return [];
+		}
+
+		this.logger.debug(`Task 다건 조회: count=${taskIds.length}`);
+
+		const results = await this.txHost.tx.task.findMany({
+			where: {
+				id: { in: taskIds },
+				removedAt: null,
+				spaceId: { in: spaceIds },
+				exercise: {
+					is: {
+						removedAt: null,
+					},
+				},
+			},
+			include: {
+				exercise: true,
+				space: { select: { id: true } },
+				creator: { select: { id: true, name: true } },
+			},
+		});
+
+		return results.map((result) => plainToInstance(Task, result));
+	}
+
 	async findTaskRoutines(taskId: string): Promise<Routine[]> {
 		this.logger.debug(`Task 연관 루틴 조회: ${taskId.slice(-8)}`);
 
@@ -198,6 +226,9 @@ export class TasksRepository {
 			where: {
 				taskId,
 				removedAt: null,
+				routine: {
+					removedAt: null,
+				},
 			},
 		});
 	}
