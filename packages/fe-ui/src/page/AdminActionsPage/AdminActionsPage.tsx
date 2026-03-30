@@ -97,14 +97,14 @@ function buildRightInputs(onClickCreateButton: () => void): InputConfig[] {
 	];
 }
 
-export const AdminActionsPage = observer(function AdminActionsPage({
+export const AdminActionsPage = observer(({
 	actions,
 	totalCount: totalActionCount,
 	isLoading,
 	queryStates,
 	setQueryStates,
 	onClickCreateButton,
-}: AdminActionsPageProps) {
+}: AdminActionsPageProps) => {
 	const filteredActions = filterActions(actions, queryStates.search);
 	const totalCount = queryStates.search?.trim().length
 		? filteredActions.length
@@ -155,4 +155,3 @@ function ActionsPageFallback() {
 	);
 }
 
-export default AdminActionsPage;

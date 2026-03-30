@@ -8,9 +8,9 @@ export interface UserCreatePageProps {
 	onClickBackButton: () => void;
 }
 
-export const UserCreatePage = observer(function UserCreatePage({
+export const UserCreatePage = observer(({
 	onClickBackButton,
-}: UserCreatePageProps) {
+}: UserCreatePageProps) => {
 	return (
 		<div className="space-y-6">
 			<Button

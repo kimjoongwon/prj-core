@@ -44,11 +44,11 @@ export interface PasswordInputPageProps {
  * />
  * ```
  */
-export const PasswordInputPage = observer(function PasswordInputPage({
+export const PasswordInputPage = observer(({
 	state,
 	onSubmit,
 	isLoading = false,
-}: PasswordInputPageProps) {
+}: PasswordInputPageProps) => {
 	return (
 		<VStack fullWidth gap={8} className="p-4">
 			<VStack fullWidth gap={2}>

@@ -89,13 +89,13 @@ function filterSubjects(
 	});
 }
 
-export const AdminSubjectsPage = observer(function AdminSubjectsPage({
+export const AdminSubjectsPage = observer(({
 	subjects,
 	totalCount,
 	isLoading,
 	queryStates,
 	setQueryStates,
-}: AdminSubjectsPageProps) {
+}: AdminSubjectsPageProps) => {
 	const filteredSubjects = filterSubjects(subjects, queryStates);
 
 	if (isLoading) {
@@ -142,4 +142,3 @@ function SubjectsPageFallback() {
 	);
 }
 
-export default AdminSubjectsPage;

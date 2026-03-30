@@ -50,4 +50,3 @@ function DashboardPage() {
 
 export const AdminDashboardPage = observer(DashboardPage);
 
-export default AdminDashboardPage;

@@ -42,8 +42,18 @@ widget/feature/form/master/detail 등 하위 재사용 계층을 조합해 page-
 7. page component props의 이벤트 이름은 `on[Event][UI]` 패턴 강제
 8. page component가 route shell primitive를 직접 소유하지 않음
    - 금지 예: route `Page`, `PageSurface`, `Section`, `SectionSurface` 책임 침범
-9. 기존 코드 수정 시 대응 `.spec.md` 업데이트 + `## 변경 이력` 추가 필수
-10. `packages/fe-ui/src/page/index.ts` export 동기화 필수
+9. page component export는 named export만 허용
+   - 허용 예: `export const MembersListPage = observer(() => { ... })`
+   - 허용 예: `export const MembersListPage = observer((props: MembersListPageProps) => { ... })`
+   - 금지 예: `export default MembersListPage`
+   - 금지 예: `export const MembersListPage = MembersListPageClient;`
+10. `observer(function Name() { ... })` 패턴 금지
+   - page component는 반드시 `export const [PageName] = observer(() => { ... })` 또는 props를 받는 `observer((props) => { ... })` 형태로 선언
+11. `*Client`, `*Inner`, `*Base` 같은 trivial pass-through wrapper 금지
+   - 단순히 props/params를 받아 바로 하위 컴포넌트에 전달하는 중간 component를 같은 page 파일 안에 두지 않음
+   - page 파일 안에서 wrapper 없이 최종 exported component가 바로 렌더 책임을 가짐
+12. 기존 코드 수정 시 대응 `.spec.md` 업데이트 + `## 변경 이력` 추가 필수
+13. `packages/fe-ui/src/page/index.ts` export 동기화 필수
 
 ---
 
@@ -95,6 +105,25 @@ packages/fe-ui/src/page/[PageName]/
 
 - 새 page component를 만들면 `packages/fe-ui/src/page/index.ts`에 export를 추가합니다.
 - props type도 함께 export합니다.
+- page component 파일은 named export만 사용합니다.
+- page component 파일 안에서 `default export`를 금지합니다.
+- page component 선언은 아래 두 패턴만 허용합니다.
+
+```tsx
+export const MembersListPage = observer(() => {
+  return <div />;
+});
+```
+
+```tsx
+export const MembersListPage = observer((props: MembersListPageProps) => {
+  return <div />;
+});
+```
+
+- `observer(function MembersListPage() { ... })` 패턴은 금지합니다.
+- `const MembersListPage = ...; export { MembersListPage };` 같은 우회 export보다 직접 `export const`를 우선합니다.
+- `MembersListPageClient`, `MembersListPageInner`처럼 최종 export 직전 wrapper 이름을 만드는 패턴을 금지합니다.
 
 ### 2.3 sidecar 문서 규칙
 
@@ -124,6 +153,8 @@ packages/fe-ui/src/page/[PageName]/
 - MobX store import 및 직접 관찰
 - `window.location`, `document.cookie`, `localStorage`, `sessionStorage` 직접 사용
 - app route 파일 경로/URL을 page 내부 상수로 박아 넣는 행위
+- `useParams` 값을 읽어 단순 전달만 하는 wrapper component 추가
+- 같은 파일 안에서 `export const Page = observer(() => <PageClient ... />);` 형태로 한번 더 감싸는 구조
 
 ---
 

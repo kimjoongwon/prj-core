@@ -13,6 +13,8 @@
 | 항목 | 설명 |
 |------|------|
 | export | `src/page/*` pure page component 배럴 export |
+| export type | route container가 pure page props/state contract를 import하는 타입 배럴 |
+| hook alias export | inquiry detail route가 쓰는 page-local websocket hook을 이름 충돌 없이 재노출 |
 
 ## Page Sidecar 폴더 규칙
 
@@ -34,6 +36,10 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | inquiry/actions/idp pure page refactor에 맞춰 props contract export와 `useInquiryDetailWebSocket` alias export를 추가 | codex |
+| 2026-03-30 | ground/task/template/role edit page 4종의 pure page props contract 배럴 export를 추가 | codex |
+| 2026-03-30 | create page 5종의 pure page props contract 배럴 export를 추가 | codex |
+| 2026-03-30 | `AdminTimelinesTimelineIdEditPageProps` 배럴 export를 추가해 pure page props contract를 외부 route에서 사용할 수 있게 정리 | codex |
 | 2026-03-29 | admin 목록 pure page용 query input / row / props export를 배럴에 추가하고 thin route container 소비 경로를 정리 | codex |
 | 2026-03-26 | route page pure page 이관 현황 문서(`migration-audit.md`) 참조 규칙 추가 | codex |
 | 2026-03-26 | page 계층 sidecar 파일을 동일 이름 폴더에 묶는 규칙과 새 배럴 경로를 반영 | codex |

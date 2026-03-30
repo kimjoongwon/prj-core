@@ -80,7 +80,7 @@ function SpacesPageFallback() {
 	);
 }
 
-export const AdminSpacesPage = observer(function AdminSpacesPage({
+export const AdminSpacesPage = observer(({
 	spaces,
 	totalCount: totalSpaceCount,
 	isLoading,
@@ -88,7 +88,7 @@ export const AdminSpacesPage = observer(function AdminSpacesPage({
 	setQueryStates,
 	onClickCreateButton,
 	onClickSpaceGroundName,
-}: AdminSpacesPageProps) {
+}: AdminSpacesPageProps) => {
 	const filteredRows = filterRows(spaces, queryStates.search);
 	const totalCount = queryStates.search?.trim().length
 		? filteredRows.length
@@ -135,4 +135,3 @@ export const AdminSpacesPage = observer(function AdminSpacesPage({
 	);
 });
 
-export default AdminSpacesPage;

@@ -134,6 +134,11 @@
 | onSubmitForm | 유효성 검증 -> createTemplate API 호출 |
 | onClickCancelButton | `/templates` 목록 페이지로 이동 |
 
+## 런타임 책임
+
+- `page.tsx`가 `useCreateTemplate`, `useRouter`, `useLocalObservable`를 직접 소유합니다.
+- `@cocrepo/ui`의 `AdminTemplatesNewPage`는 props-only pure page로 사용합니다.
+
 ## 유효성 검증 규칙
 
 | 필드 | 규칙 | 에러 메시지 |
@@ -181,6 +186,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | 템플릿 등록의 mutation/router/local state를 route page로 이동하고 `@cocrepo/ui` page를 pure contract로 분리 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | 등록 페이지 본문을 `PageSurface > SectionSurface`로 감싸 폼 Surface ownership을 명시 | codex |

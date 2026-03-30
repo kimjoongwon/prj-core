@@ -88,7 +88,7 @@ function TasksPageFallback() {
 	);
 }
 
-export const AdminTasksPage = observer(function AdminTasksPage({
+export const AdminTasksPage = observer(({
 	tasks,
 	totalCount,
 	isLoading,
@@ -98,7 +98,7 @@ export const AdminTasksPage = observer(function AdminTasksPage({
 	onClickCreateButton,
 	onClickTaskName,
 	onDeleteTask,
-}: AdminTasksPageProps) {
+}: AdminTasksPageProps) => {
 	const [deleteTarget, setDeleteTarget] = useState<AdminTasksPageTask | null>(
 		null,
 	);
@@ -192,4 +192,3 @@ export const AdminTasksPage = observer(function AdminTasksPage({
 	);
 });
 
-export default AdminTasksPage;

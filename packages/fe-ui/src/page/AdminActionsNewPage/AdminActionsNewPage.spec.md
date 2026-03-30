@@ -16,7 +16,6 @@ Action 등록 화면의 pure page 컴포넌트입니다.
 | AdminActionsNewPageForm | route로 전달하는 폼 제출 계약 |
 | AdminActionsNewPageProps | pure page 입력 계약 |
 | AdminActionsNewPage | 공개 계약 요소 |
-| default export | 공개 계약 요소 |
 
 ## 의존성
 
@@ -31,5 +30,7 @@ Action 등록 화면의 pure page 컴포넌트입니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-29 | Action 등록을 pure page로 재정의하고 생성 mutation·라우팅을 route thin container로 이동 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |
+| 2026-03-30 | route runtime ownership에 맞춰 page를 props 기반 pure contract로 정리 | codex |

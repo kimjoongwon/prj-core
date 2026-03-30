@@ -3,27 +3,19 @@ import { DetailPage, DetailPageSurface, PageTitleBar, DetailSectionCard } from "
 import { Button } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import type { Route } from "next";
-import { useRouter, useParams } from "next/navigation";
 
-interface AbilitySubjectsPageClientProps {
-	roleId: string;
+export interface AdminRolesRoleIdAbilitiesAbilityIdSubjectsPageProps {
 	abilityId: string;
+	onClickBackButton: () => void;
 }
 
 /**
  * Ability Subject 관리 페이지 - 클라이언트 컴포넌트
  */
-function AbilitySubjectsPageClient({
-	roleId,
+export const AdminRolesRoleIdAbilitiesAbilityIdSubjectsPage = observer(({
 	abilityId,
-}: AbilitySubjectsPageClientProps) {
-	const router = useRouter();
-
-	const onClickBackButton = () => {
-		router.push(`/roles/${roleId}` as Route);
-	};
-
+	onClickBackButton,
+}: AdminRolesRoleIdAbilitiesAbilityIdSubjectsPageProps) => {
 	return (
 		<DetailPage
 			top={
@@ -54,19 +46,4 @@ function AbilitySubjectsPageClient({
 			</DetailPageSurface>
 		</DetailPage>
 	);
-}
-
-type AbilitySubjectsPageParams = {
-	roleId: string;
-	abilityId: string;
-};
-
-const AbilitySubjectsPage = observer(function AbilitySubjectsPage() {
-	const { roleId, abilityId } = useParams<AbilitySubjectsPageParams>();
-
-	return <AbilitySubjectsPageClient roleId={roleId} abilityId={abilityId} />;
 });
-
-export const AdminRolesRoleIdAbilitiesAbilityIdSubjectsPage = AbilitySubjectsPage;
-
-export default AdminRolesRoleIdAbilitiesAbilityIdSubjectsPage;

@@ -19,9 +19,13 @@ import {
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
+import { useState } from "react";
 
 export default observer(function OidcSessionsPageRoute() {
 	const queryClient = useQueryClient();
+	const [revokeGrantId, setRevokeGrantId] = useState<string | null>(null);
+	const [isGrantRevokeModalOpen, setIsGrantRevokeModalOpen] = useState(false);
+	const [isRevokeAllModalOpen, setIsRevokeAllModalOpen] = useState(false);
 	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(
 		idpConsoleOidcSessionsPageQueryInputs,
 	);
@@ -73,16 +77,36 @@ export default observer(function OidcSessionsPageRoute() {
 					? mapOidcSessionStats(statsResponse.data)
 					: undefined
 			}
+			revokeGrantId={revokeGrantId}
+			isGrantRevokeModalOpen={isGrantRevokeModalOpen}
+			isRevokeAllModalOpen={isRevokeAllModalOpen}
 			isRevokingByGrant={isRevokingByGrant}
 			isRevokingAll={isRevokingAll}
 			onRevokeSession={(key) => {
 				revokeSession({ key });
 			}}
+			onOpenGrantRevokeModal={(grantId) => {
+				setRevokeGrantId(grantId);
+				setIsGrantRevokeModalOpen(true);
+			}}
+			onCloseGrantRevokeModal={() => {
+				setIsGrantRevokeModalOpen(false);
+				setRevokeGrantId(null);
+			}}
 			onConfirmRevokeByGrant={(grantId) => {
 				revokeByGrant({ grantId });
+				setIsGrantRevokeModalOpen(false);
+				setRevokeGrantId(null);
+			}}
+			onOpenRevokeAllModal={() => {
+				setIsRevokeAllModalOpen(true);
+			}}
+			onCloseRevokeAllModal={() => {
+				setIsRevokeAllModalOpen(false);
 			}}
 			onConfirmRevokeAll={() => {
 				revokeAll();
+				setIsRevokeAllModalOpen(false);
 			}}
 		/>
 	);

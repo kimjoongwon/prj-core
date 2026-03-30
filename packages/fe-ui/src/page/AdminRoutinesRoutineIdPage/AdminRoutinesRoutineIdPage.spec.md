@@ -13,7 +13,6 @@
 | 항목 | 설명 |
 |------|------|
 | AdminRoutinesRoutineIdPage | 공개 계약 요소 |
-| default export | 공개 계약 요소 |
 
 ## 의존성
 
@@ -32,5 +31,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-29 | 루틴 상세 조회 실패 시 영구 로딩 대신 not found 또는 재시도 가능한 오류 상태를 표시하도록 보강 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |
+| 2026-03-30 | route runtime ownership에 맞춰 page를 props 기반 pure contract로 정리 | codex |

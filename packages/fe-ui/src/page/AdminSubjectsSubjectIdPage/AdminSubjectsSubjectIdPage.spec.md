@@ -17,7 +17,6 @@ Subject 상세 화면의 pure page 컴포넌트입니다.
 | AdminSubjectsSubjectIdPageField | Subject 필드 표시 계약 |
 | AdminSubjectsSubjectIdPageProps | pure page 입력 계약 |
 | AdminSubjectsSubjectIdPage | 공개 계약 요소 |
-| default export | 공개 계약 요소 |
 
 ## 의존성
 
@@ -33,5 +32,6 @@ Subject 상세 화면의 pure page 컴포넌트입니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-29 | Subject 상세를 pure page로 재정의하고 상세 조회·필드 조회·라우팅 책임을 route thin container로 이동 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |

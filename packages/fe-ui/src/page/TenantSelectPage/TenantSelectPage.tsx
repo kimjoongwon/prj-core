@@ -45,10 +45,10 @@ export interface TenantSelectPageProps {
  * />
  * ```
  */
-export const TenantSelectPage = observer(function TenantSelectPage({
+export const TenantSelectPage = observer(({
 	tenants,
 	onSelect,
-}: TenantSelectPageProps) {
+}: TenantSelectPageProps) => {
 	const [selectedTenant, setSelectedTenant] = useState("");
 
 	const handleSelect = () => {

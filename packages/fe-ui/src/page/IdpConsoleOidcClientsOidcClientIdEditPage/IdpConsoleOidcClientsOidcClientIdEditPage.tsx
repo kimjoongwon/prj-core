@@ -11,10 +11,9 @@ import {
 	VStack,
 } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
 
-interface OidcClientEditFormState {
+export interface IdpConsoleOidcClientsOidcClientIdEditPageFormState {
 	name: string;
 	clientSecret: string;
 	isPublic: boolean;
@@ -68,6 +67,7 @@ export interface IdpConsoleOidcClientsOidcClientIdEditPageSubmitInput {
 
 export interface IdpConsoleOidcClientsOidcClientIdEditPageProps {
 	client?: IdpConsoleOidcClientsOidcClientIdEditPageClient;
+	formState: IdpConsoleOidcClientsOidcClientIdEditPageFormState;
 	isLoading: boolean;
 	isSubmitting: boolean;
 	onClickBackButton: () => void;
@@ -77,88 +77,44 @@ export interface IdpConsoleOidcClientsOidcClientIdEditPageProps {
 	) => void;
 }
 
-export const IdpConsoleOidcClientsOidcClientIdEditPage = observer(
-	function IdpConsoleOidcClientsOidcClientIdEditPage({
+export const IdpConsoleOidcClientsOidcClientIdEditPage = observer(({
 		client,
+		formState,
 		isLoading,
 		isSubmitting,
 		onClickBackButton,
 		onClickListButton,
 		onSubmit,
-	}: IdpConsoleOidcClientsOidcClientIdEditPageProps) {
-		const state = useLocalObservable<OidcClientEditFormState>(() => ({
-			clientId: "",
-			name: "",
-			clientSecret: "",
-			isPublic: false,
-			tokenEndpointAuthMethod: "client_secret_basic",
-			grantTypes: [],
-			responseTypes: [],
-			scope: "",
-			redirectUris: [""],
-			loginUrl: "",
-			defaultReturnTo: "",
-			logoUri: "",
-			policyUri: "",
-			tosUri: "",
-			errors: {},
-			redirectUriErrors: {},
-			isInitialized: false,
-		}));
-
-		// 기존 데이터로 폼 초기화
-		useEffect(() => {
-			if (
-				client &&
-				(!state.isInitialized || state.clientId !== client.clientId)
-			) {
-				state.clientId = client.clientId;
-				state.name = client.name;
-				state.clientSecret = client.clientSecret || "";
-				state.tokenEndpointAuthMethod = client.tokenEndpointAuthMethod;
-				state.grantTypes = [...client.grantTypes];
-				state.responseTypes = [...client.responseTypes];
-				state.scope = client.scope;
-				state.redirectUris =
-					client.redirectUris.length > 0 ? [...client.redirectUris] : [""];
-				state.loginUrl = client.loginUrl || "";
-				state.defaultReturnTo = client.defaultReturnTo || "";
-				state.logoUri = client.logoUri || "";
-				state.policyUri = client.policyUri || "";
-				state.tosUri = client.tosUri || "";
-				state.isInitialized = true;
-			}
-		}, [client, state]);
-
-		const isPublic = state.tokenEndpointAuthMethod === "none";
+	}: IdpConsoleOidcClientsOidcClientIdEditPageProps) => {
+		const isPublic = formState.tokenEndpointAuthMethod === "none";
 
 		const validate = (): boolean => {
 			const errors: Record<string, string> = {};
 			const redirectUriErrors: Record<number, string> = {};
 			let isValid = true;
 
-			if (!state.name.trim()) {
+			if (!formState.name.trim()) {
 				errors.name = "이름을 입력해주세요.";
 				isValid = false;
 			}
 
-			if (state.grantTypes.length === 0) {
+			if (formState.grantTypes.length === 0) {
 				errors.grantTypes = "최소 1개의 Grant Type을 선택해주세요.";
 				isValid = false;
 			}
 
-			if (state.responseTypes.length === 0) {
+			if (formState.responseTypes.length === 0) {
 				errors.responseTypes = "최소 1개의 Response Type을 선택해주세요.";
 				isValid = false;
 			}
 
-			const validUris = state.redirectUris.filter((uri) => uri.trim());
+			const validUris = formState.redirectUris.filter((uri) => uri.trim());
 			if (validUris.length === 0) {
 				errors.redirectUris = "최소 1개의 Redirect URI를 입력해주세요.";
 				isValid = false;
 			}
 
-			state.redirectUris.forEach((uri, index) => {
+			formState.redirectUris.forEach((uri, index) => {
 				if (
 					uri.trim() &&
 					!uri.startsWith("http://") &&
@@ -169,29 +125,30 @@ export const IdpConsoleOidcClientsOidcClientIdEditPage = observer(
 				}
 			});
 
-			state.errors = errors;
-			state.redirectUriErrors = redirectUriErrors;
+			formState.errors = errors;
+			formState.redirectUriErrors = redirectUriErrors;
 			return isValid;
 		};
 
 		const onClickSubmitButton = () => {
 			if (!validate()) return;
 
-			const validUris = state.redirectUris.filter((uri) => uri.trim());
+			const validUris = formState.redirectUris.filter((uri) => uri.trim());
 
 			onSubmit({
-				name: state.name,
-				clientSecret: isPublic ? undefined : state.clientSecret || undefined,
-				tokenEndpointAuthMethod: state.tokenEndpointAuthMethod,
-				grantTypes: state.grantTypes,
-				responseTypes: state.responseTypes,
-				scope: state.scope,
+				name: formState.name,
+				clientSecret:
+					isPublic ? undefined : formState.clientSecret || undefined,
+				tokenEndpointAuthMethod: formState.tokenEndpointAuthMethod,
+				grantTypes: formState.grantTypes,
+				responseTypes: formState.responseTypes,
+				scope: formState.scope,
 				redirectUris: validUris,
-				loginUrl: state.loginUrl || undefined,
-				defaultReturnTo: state.defaultReturnTo || undefined,
-				logoUri: state.logoUri || undefined,
-				policyUri: state.policyUri || undefined,
-				tosUri: state.tosUri || undefined,
+				loginUrl: formState.loginUrl || undefined,
+				defaultReturnTo: formState.defaultReturnTo || undefined,
+				logoUri: formState.logoUri || undefined,
+				policyUri: formState.policyUri || undefined,
+				tosUri: formState.tosUri || undefined,
 			});
 		};
 
@@ -274,7 +231,7 @@ export const IdpConsoleOidcClientsOidcClientIdEditPage = observer(
 							>
 								<OidcClientForm
 									mode="edit"
-									state={state}
+									state={formState}
 									onSubmit={onClickSubmitButton}
 									onCancel={onClickBackButton}
 									isSubmitting={isSubmitting}
@@ -286,7 +243,4 @@ export const IdpConsoleOidcClientsOidcClientIdEditPage = observer(
 				</FormPageSurface>
 			</FormPage>
 		);
-	},
-);
-
-export default IdpConsoleOidcClientsOidcClientIdEditPage;
+	});

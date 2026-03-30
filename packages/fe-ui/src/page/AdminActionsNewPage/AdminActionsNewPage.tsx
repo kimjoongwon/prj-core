@@ -8,9 +8,9 @@ import {
 } from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 
-interface ActionFormState {
+export interface AdminActionsNewPageFormState {
 	name: string;
 	displayName: string;
 	description: string;
@@ -30,8 +30,14 @@ export interface AdminActionsNewPageForm {
 }
 
 export interface AdminActionsNewPageProps {
+	formState: AdminActionsNewPageFormState;
 	isSubmitting: boolean;
 	onClickBackButton: () => void;
+	onChangeNameInput: (value: string) => void;
+	onChangeDisplayNameInput: (value: string) => void;
+	onChangeDescriptionTextarea: (value: string) => void;
+	onChangeGroupSelection: (value: string) => void;
+	onChangeOrderInput: (value: string) => void;
 	onSubmit: (form: AdminActionsNewPageForm) => void;
 }
 
@@ -45,54 +51,24 @@ const groupOptions = [
 	{ value: "bulk", label: "Bulk" },
 ];
 
-export const AdminActionsNewPage = observer(function AdminActionsNewPage({
+export const AdminActionsNewPage = observer(({
+	formState,
 	isSubmitting,
 	onClickBackButton,
+	onChangeNameInput,
+	onChangeDisplayNameInput,
+	onChangeDescriptionTextarea,
+	onChangeGroupSelection,
+	onChangeOrderInput,
 	onSubmit,
-}: AdminActionsNewPageProps) {
-	const state = useLocalObservable<ActionFormState>(() => ({
-		name: "",
-		displayName: "",
-		description: "",
-		group: "",
-		order: 0,
-		errors: {
-			name: "",
-		},
-	}));
-
-	/**
-	 * 폼 유효성 검사
-	 */
-	const validate = (): boolean => {
-		let isValid = true;
-
-		// 이름 검사 (필수, 패턴: ^[a-z][a-z0-9:_]*$)
-		if (!state.name.trim()) {
-			state.errors.name = "행위 식별자를 입력해주세요.";
-			isValid = false;
-		} else if (!/^[a-z][a-z0-9:_]*$/.test(state.name)) {
-			state.errors.name =
-				"소문자로 시작하고, 소문자/숫자/콜론/밑줄만 사용 가능합니다. (예: read:masked:email)";
-			isValid = false;
-		} else {
-			state.errors.name = "";
-		}
-
-		return isValid;
-	};
-
+}: AdminActionsNewPageProps) => {
 	const onClickSubmitButton = () => {
-		if (!validate()) {
-			return;
-		}
-
 		onSubmit({
-			name: state.name,
-			displayName: state.displayName,
-			description: state.description,
-			group: state.group,
-			order: state.order,
+			name: formState.name,
+			displayName: formState.displayName,
+			description: formState.description,
+			group: formState.group,
+			order: formState.order,
 		});
 	};
 
@@ -128,42 +104,36 @@ export const AdminActionsNewPage = observer(function AdminActionsNewPage({
 							<Input
 								label="행위 식별자"
 								placeholder="read:masked:email"
-								value={state.name}
-								onValueChange={(value) => {
-									state.name = value.toLowerCase();
-								}}
-								isInvalid={!!state.errors.name}
-								errorMessage={state.errors.name}
+								value={formState.name}
+								onValueChange={onChangeNameInput}
+								isInvalid={!!formState.errors.name}
+								errorMessage={formState.errors.name}
 								isRequired
 								description="소문자로 시작하고, 소문자/숫자/콜론/밑줄만 사용 가능합니다."
 							/>
 							<Input
 								label="표시명"
 								placeholder="이메일 마스킹 읽기"
-								value={state.displayName}
-								onValueChange={(value) => {
-									state.displayName = value;
-								}}
+								value={formState.displayName}
+								onValueChange={onChangeDisplayNameInput}
 								maxLength={100}
 								description="사용자에게 보여질 Action 이름입니다."
 							/>
 							<Textarea
 								label="설명"
 								placeholder="Action에 대한 설명을 입력하세요."
-								value={state.description}
-								onValueChange={(value) => {
-									state.description = value;
-								}}
+								value={formState.description}
+								onValueChange={onChangeDescriptionTextarea}
 								maxLength={200}
 								minRows={3}
 							/>
 							<Select
 								label="분류"
 								placeholder="분류를 선택하세요"
-								selectedKeys={state.group ? [state.group] : []}
+								selectedKeys={formState.group ? [formState.group] : []}
 								onSelectionChange={(keys) => {
 									const selectedKey = Array.from(keys)[0];
-									state.group = selectedKey ? String(selectedKey) : "";
+									onChangeGroupSelection(selectedKey ? String(selectedKey) : "");
 								}}
 							>
 								{groupOptions.map((option) => (
@@ -173,10 +143,8 @@ export const AdminActionsNewPage = observer(function AdminActionsNewPage({
 							<Input
 								label="정렬 순서"
 								type="number"
-								value={String(state.order)}
-								onValueChange={(value) => {
-									state.order = Number(value) || 0;
-								}}
+								value={String(formState.order)}
+								onValueChange={onChangeOrderInput}
 								description="낮은 숫자일수록 먼저 표시됩니다."
 							/>
 							<div className="flex justify-end pt-4">
@@ -196,5 +164,3 @@ export const AdminActionsNewPage = observer(function AdminActionsNewPage({
 		</FormPage>
 	);
 });
-
-export default AdminActionsNewPage;

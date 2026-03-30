@@ -222,14 +222,13 @@ function SubjectFieldsSection({
 	);
 }
 
-export const AdminSubjectsSubjectIdPage = observer(
-	function AdminSubjectsSubjectIdPage({
+export const AdminSubjectsSubjectIdPage = observer(({
 		subject,
 		subjectFields,
 		isLoading,
 		isFieldsLoading,
 		onClickBackButton,
-	}: AdminSubjectsSubjectIdPageProps) {
+	}: AdminSubjectsSubjectIdPageProps) => {
 		if (isLoading) {
 			return (
 				<DetailPage
@@ -304,7 +303,4 @@ export const AdminSubjectsSubjectIdPage = observer(
 				</DetailPageSurface>
 			</DetailPage>
 		);
-	},
-);
-
-export default AdminSubjectsSubjectIdPage;
+	});

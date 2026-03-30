@@ -14,7 +14,6 @@ Program 수정 시 선택한 Routine의 execution preview를 보여주고, 스�
 | 항목 | 설명 |
 |------|------|
 | AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditPage | 공개 계약 요소 |
-| default export | 공개 계약 요소 |
 
 ## 의존성
 
@@ -41,5 +40,6 @@ Program 수정 시 선택한 Routine의 execution preview를 보여주고, 스�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-29 | Program 수정 화면에 Routine execution preview와 스케줄 불가 교체 차단 규칙을 추가 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |

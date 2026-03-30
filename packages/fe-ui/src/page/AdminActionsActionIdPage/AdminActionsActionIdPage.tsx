@@ -62,15 +62,14 @@ const getGroupColor = (
 	}
 };
 
-export const AdminActionsActionIdPage = observer(
-	function AdminActionsActionIdPage({
+export const AdminActionsActionIdPage = observer(({
 		action,
 		isLoading,
 		isDeleting,
 		onClickBackButton,
 		onClickEditButton,
 		onClickDeleteConfirmButton,
-	}: AdminActionsActionIdPageProps) {
+	}: AdminActionsActionIdPageProps) => {
 		const deleteModal = useDisclosure();
 
 		if (isLoading) {
@@ -268,7 +267,4 @@ export const AdminActionsActionIdPage = observer(
 				</Modal>
 			</DetailPage>
 		);
-	},
-);
-
-export default AdminActionsActionIdPage;
+	});

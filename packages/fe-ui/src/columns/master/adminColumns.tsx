@@ -3,11 +3,7 @@
 import type { AssetDto } from "@cocrepo/api/assets";
 import type { ActionDto } from "@cocrepo/api/core/actions";
 import type { RoleDto } from "@cocrepo/api/core/roles";
-import type { RoutineDto } from "@cocrepo/api/core/routines";
 import type { SubjectDto } from "@cocrepo/api/core/subjects";
-import type { TaskDto } from "@cocrepo/api/core/tasks";
-import type { TemplateDto } from "@cocrepo/api/core/templates";
-import type { TimelineDto } from "@cocrepo/api/core/timelines";
 import {
 	ActionButtonCell,
 	BooleanCell,

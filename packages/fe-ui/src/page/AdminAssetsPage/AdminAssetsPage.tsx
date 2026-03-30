@@ -12,7 +12,6 @@ import {
 	Surface,
 } from "@cocrepo/ui";
 import {
-	addToast,
 	Button,
 	Input,
 	Modal,
@@ -187,7 +186,7 @@ function AssetsSpaceEmptyState() {
 	);
 }
 
-export const AdminAssetsPage = observer(function AdminAssetsPage({
+export const AdminAssetsPage = observer(({
 	assets,
 	totalCount,
 	folders,
@@ -206,7 +205,7 @@ export const AdminAssetsPage = observer(function AdminAssetsPage({
 	onCreateFolder,
 	onRenameFolder,
 	onDeleteFolder,
-}: AdminAssetsPageProps) {
+}: AdminAssetsPageProps) => {
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const createFolderModal = useDisclosure();
 	const renameFolderModal = useDisclosure();
@@ -341,16 +340,9 @@ export const AdminAssetsPage = observer(function AdminAssetsPage({
 	};
 
 	const onClickUploadButton = () => {
-		if (!selectedFolderId) {
-			addToast({
-				title: "폴더 선택 필요",
-				description: "업로드할 폴더를 먼저 선택해주세요.",
-				color: "warning",
-			});
-			return;
+		if (selectedFolderId) {
+			fileInputRef.current?.click();
 		}
-
-		fileInputRef.current?.click();
 	};
 
 	const onChangeAssetFileInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -582,5 +574,3 @@ export const AdminAssetsPage = observer(function AdminAssetsPage({
 		</>
 	);
 });
-
-export default AdminAssetsPage;

@@ -8,9 +8,9 @@ export interface UserEditPageProps {
 	onClickBackButton: () => void;
 }
 
-export const UserEditPage = observer(function UserEditPage({
+export const UserEditPage = observer(({
 	onClickBackButton,
-}: UserEditPageProps) {
+}: UserEditPageProps) => {
 	return (
 		<div className="space-y-6">
 			<Button

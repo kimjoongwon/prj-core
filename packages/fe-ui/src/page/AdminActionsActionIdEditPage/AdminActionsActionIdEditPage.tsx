@@ -8,15 +8,13 @@ import {
 } from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
 
-interface ActionEditFormState {
+export interface AdminActionsActionIdEditPageFormState {
 	displayName: string;
 	description: string;
 	group: string;
 	order: number;
-	initializedFromActionId: string | null;
 }
 
 export interface AdminActionsActionIdEditPageAction {
@@ -38,10 +36,15 @@ export interface AdminActionsActionIdEditPageForm {
 
 export interface AdminActionsActionIdEditPageProps {
 	action?: AdminActionsActionIdEditPageAction;
+	formState: AdminActionsActionIdEditPageFormState;
 	isLoading: boolean;
 	isSubmitting: boolean;
 	onClickBackButton: () => void;
 	onClickListButton: () => void;
+	onChangeDisplayNameInput: (value: string) => void;
+	onChangeDescriptionTextarea: (value: string) => void;
+	onChangeGroupSelection: (value: string) => void;
+	onChangeOrderInput: (value: string) => void;
 	onSubmit: (form: AdminActionsActionIdEditPageForm) => void;
 }
 
@@ -55,33 +58,19 @@ const groupOptions = [
 	{ value: "bulk", label: "Bulk" },
 ];
 
-export const AdminActionsActionIdEditPage = observer(
-	function AdminActionsActionIdEditPage({
+export const AdminActionsActionIdEditPage = observer(({
 		action,
+		formState,
 		isLoading,
 		isSubmitting,
 		onClickBackButton,
 		onClickListButton,
+		onChangeDisplayNameInput,
+		onChangeDescriptionTextarea,
+		onChangeGroupSelection,
+		onChangeOrderInput,
 		onSubmit,
-	}: AdminActionsActionIdEditPageProps) {
-		const state = useLocalObservable<ActionEditFormState>(() => ({
-			displayName: "",
-			description: "",
-			group: "",
-			order: 0,
-			initializedFromActionId: null,
-		}));
-
-		useEffect(() => {
-			if (action && state.initializedFromActionId !== action.actionId) {
-				state.displayName = action.displayName || "";
-				state.description = action.description || "";
-				state.group = action.group || "";
-				state.order = action.order;
-				state.initializedFromActionId = action.actionId;
-			}
-		}, [action, state]);
-
+	}: AdminActionsActionIdEditPageProps) => {
 		if (isLoading) {
 			return (
 				<FormPage
@@ -150,10 +139,10 @@ export const AdminActionsActionIdEditPage = observer(
 
 		const onClickSubmitButton = () => {
 			onSubmit({
-				displayName: state.displayName,
-				description: state.description,
-				group: state.group,
-				order: state.order,
+				displayName: formState.displayName,
+				description: formState.description,
+				group: formState.group,
+				order: formState.order,
 			});
 		};
 
@@ -189,30 +178,26 @@ export const AdminActionsActionIdEditPage = observer(
 								<Input
 									label="표시명"
 									placeholder="이메일 마스킹 읽기"
-									value={state.displayName}
-									onValueChange={(value) => {
-										state.displayName = value;
-									}}
+									value={formState.displayName}
+									onValueChange={onChangeDisplayNameInput}
 									maxLength={100}
 									description="사용자에게 보여질 Action 이름입니다."
 								/>
 								<Textarea
 									label="설명"
 									placeholder="Action에 대한 설명을 입력하세요."
-									value={state.description}
-									onValueChange={(value) => {
-										state.description = value;
-									}}
+									value={formState.description}
+									onValueChange={onChangeDescriptionTextarea}
 									maxLength={200}
 									minRows={3}
 								/>
 								<Select
 									label="분류"
 									placeholder="분류를 선택하세요"
-									selectedKeys={state.group ? [state.group] : []}
+									selectedKeys={formState.group ? [formState.group] : []}
 									onSelectionChange={(keys) => {
 										const selectedKey = Array.from(keys)[0];
-										state.group = selectedKey ? String(selectedKey) : "";
+										onChangeGroupSelection(selectedKey ? String(selectedKey) : "");
 									}}
 								>
 									{groupOptions.map((option) => (
@@ -222,10 +207,8 @@ export const AdminActionsActionIdEditPage = observer(
 								<Input
 									label="정렬 순서"
 									type="number"
-									value={String(state.order)}
-									onValueChange={(value) => {
-										state.order = Number(value) || 0;
-									}}
+									value={String(formState.order)}
+									onValueChange={onChangeOrderInput}
 									description="낮은 숫자일수록 먼저 표시됩니다."
 								/>
 								<div className="flex justify-end gap-2 pt-4">
@@ -247,7 +230,4 @@ export const AdminActionsActionIdEditPage = observer(
 				</FormPageSurface>
 			</FormPage>
 		);
-	},
-);
-
-export default AdminActionsActionIdEditPage;
+	});

@@ -10,8 +10,7 @@ import {
 } from "@cocrepo/ui";
 import { Button, Input, Switch } from "@heroui/react";
 import { Save } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
 
 /** 숫자 필드 키 타입 */
 type NumberField =
@@ -44,86 +43,36 @@ export interface IdpConsoleSecurityPolicyPagePolicy {
 export interface IdpConsoleSecurityPolicyPageSubmitInput
 	extends IdpConsoleSecurityPolicyPagePolicy {}
 
+export interface IdpConsoleSecurityPolicyPageFormState
+	extends IdpConsoleSecurityPolicyPagePolicy {}
+
 export interface IdpConsoleSecurityPolicyPageProps {
-	policy?: IdpConsoleSecurityPolicyPagePolicy;
+	formState: IdpConsoleSecurityPolicyPageFormState;
 	isSaving: boolean;
 	isSaveSuccess: boolean;
-	onSubmit: (input: IdpConsoleSecurityPolicyPageSubmitInput) => void;
-}
-
-interface SecurityPolicyFormState extends IdpConsoleSecurityPolicyPagePolicy {
-	passwordMinLength: number;
+	onChangeNumberField: (field: NumberField, value: string) => void;
+	onChangeBooleanField: (
+		field:
+			| "passwordRequireUppercase"
+			| "passwordRequireLowercase"
+			| "passwordRequireNumber"
+			| "passwordRequireSpecial",
+		value: boolean,
+	) => void;
+	onSubmit: () => void;
 }
 
 /**
  * 보안 정책 설정 pure page입니다.
  */
-export const IdpConsoleSecurityPolicyPage = observer(
-	function IdpConsoleSecurityPolicyPage({
-		policy,
+export const IdpConsoleSecurityPolicyPage = observer(({
+		formState,
 		isSaving,
 		isSaveSuccess,
+		onChangeNumberField,
+		onChangeBooleanField,
 		onSubmit,
-	}: IdpConsoleSecurityPolicyPageProps) {
-		const state = useLocalObservable<SecurityPolicyFormState>(() => ({
-			passwordMinLength: 8,
-			passwordRequireUppercase: false,
-			passwordRequireLowercase: false,
-			passwordRequireNumber: false,
-			passwordRequireSpecial: false,
-			passwordExpirationDays: 0,
-			passwordReuseLimit: 0,
-			temporaryLockThreshold: 5,
-			temporaryLockDurationMin: 30,
-			permanentLockThreshold: 10,
-			accessTokenTtlSec: 3600,
-			refreshTokenTtlSec: 86400,
-			sessionTtlSec: 86400,
-		}));
-
-		useEffect(() => {
-			if (policy) {
-				state.passwordMinLength = policy.passwordMinLength;
-				state.passwordRequireUppercase = policy.passwordRequireUppercase;
-				state.passwordRequireLowercase = policy.passwordRequireLowercase;
-				state.passwordRequireNumber = policy.passwordRequireNumber;
-				state.passwordRequireSpecial = policy.passwordRequireSpecial;
-				state.passwordExpirationDays = policy.passwordExpirationDays;
-				state.passwordReuseLimit = policy.passwordReuseLimit;
-				state.temporaryLockThreshold = policy.temporaryLockThreshold;
-				state.temporaryLockDurationMin = policy.temporaryLockDurationMin;
-				state.permanentLockThreshold = policy.permanentLockThreshold;
-				state.accessTokenTtlSec = policy.accessTokenTtlSec;
-				state.refreshTokenTtlSec = policy.refreshTokenTtlSec;
-				state.sessionTtlSec = policy.sessionTtlSec;
-			}
-		}, [policy, state]);
-
-		const onClickSaveButton = () => {
-			onSubmit({
-				passwordMinLength: state.passwordMinLength,
-				passwordRequireUppercase: state.passwordRequireUppercase,
-				passwordRequireLowercase: state.passwordRequireLowercase,
-				passwordRequireNumber: state.passwordRequireNumber,
-				passwordRequireSpecial: state.passwordRequireSpecial,
-				passwordExpirationDays: state.passwordExpirationDays,
-				passwordReuseLimit: state.passwordReuseLimit,
-				temporaryLockThreshold: state.temporaryLockThreshold,
-				temporaryLockDurationMin: state.temporaryLockDurationMin,
-				permanentLockThreshold: state.permanentLockThreshold,
-				accessTokenTtlSec: state.accessTokenTtlSec,
-				refreshTokenTtlSec: state.refreshTokenTtlSec,
-				sessionTtlSec: state.sessionTtlSec,
-			});
-		};
-
-		const onChangeNumberField = (field: NumberField, value: string) => {
-			const num = Number(value);
-			if (!Number.isNaN(num)) {
-				state[field] = num;
-			}
-		};
-
+	}: IdpConsoleSecurityPolicyPageProps) => {
 		return (
 			<FormPage
 				top={
@@ -134,7 +83,7 @@ export const IdpConsoleSecurityPolicyPage = observer(
 							<Button
 								color={isSaveSuccess ? "success" : "primary"}
 								startContent={<Save className="h-4 w-4" />}
-								onPress={onClickSaveButton}
+								onPress={onSubmit}
 								isLoading={isSaving}
 							>
 								{isSaveSuccess ? "저장 완료" : "저장"}
@@ -162,7 +111,7 @@ export const IdpConsoleSecurityPolicyPage = observer(
 										description="비밀번호의 최소 문자 수 (4~32)"
 										min={4}
 										max={32}
-										value={String(state.passwordMinLength)}
+										value={String(formState.passwordMinLength)}
 										onValueChange={(value) =>
 											onChangeNumberField("passwordMinLength", value)
 										}
@@ -170,9 +119,9 @@ export const IdpConsoleSecurityPolicyPage = observer(
 									/>
 									<VStack gap={4}>
 										<Switch
-											isSelected={state.passwordRequireUppercase}
+											isSelected={formState.passwordRequireUppercase}
 											onValueChange={(value) => {
-												state.passwordRequireUppercase = value;
+												onChangeBooleanField("passwordRequireUppercase", value);
 											}}
 										>
 											<div>
@@ -183,9 +132,9 @@ export const IdpConsoleSecurityPolicyPage = observer(
 											</div>
 										</Switch>
 										<Switch
-											isSelected={state.passwordRequireLowercase}
+											isSelected={formState.passwordRequireLowercase}
 											onValueChange={(value) => {
-												state.passwordRequireLowercase = value;
+												onChangeBooleanField("passwordRequireLowercase", value);
 											}}
 										>
 											<div>
@@ -196,9 +145,9 @@ export const IdpConsoleSecurityPolicyPage = observer(
 											</div>
 										</Switch>
 										<Switch
-											isSelected={state.passwordRequireNumber}
+											isSelected={formState.passwordRequireNumber}
 											onValueChange={(value) => {
-												state.passwordRequireNumber = value;
+												onChangeBooleanField("passwordRequireNumber", value);
 											}}
 										>
 											<div>
@@ -209,9 +158,9 @@ export const IdpConsoleSecurityPolicyPage = observer(
 											</div>
 										</Switch>
 										<Switch
-											isSelected={state.passwordRequireSpecial}
+											isSelected={formState.passwordRequireSpecial}
 											onValueChange={(value) => {
-												state.passwordRequireSpecial = value;
+												onChangeBooleanField("passwordRequireSpecial", value);
 											}}
 										>
 											<div>
@@ -227,7 +176,7 @@ export const IdpConsoleSecurityPolicyPage = observer(
 										label="비밀번호 만료일 (일)"
 										description="0으로 설정하면 비밀번호가 만료되지 않습니다"
 										min={0}
-										value={String(state.passwordExpirationDays)}
+										value={String(formState.passwordExpirationDays)}
 										onValueChange={(value) =>
 											onChangeNumberField("passwordExpirationDays", value)
 										}
@@ -238,7 +187,7 @@ export const IdpConsoleSecurityPolicyPage = observer(
 										label="재사용 제한 횟수"
 										description="최근 N개의 비밀번호를 재사용할 수 없습니다 (0=제한 없음)"
 										min={0}
-										value={String(state.passwordReuseLimit)}
+										value={String(formState.passwordReuseLimit)}
 										onValueChange={(value) =>
 											onChangeNumberField("passwordReuseLimit", value)
 										}
@@ -263,7 +212,7 @@ export const IdpConsoleSecurityPolicyPage = observer(
 										label="일시 잠금 임계값 (회)"
 										description="연속 로그인 실패 시 일시 잠금되는 횟수"
 										min={1}
-										value={String(state.temporaryLockThreshold)}
+										value={String(formState.temporaryLockThreshold)}
 										onValueChange={(value) =>
 											onChangeNumberField("temporaryLockThreshold", value)
 										}
@@ -274,7 +223,7 @@ export const IdpConsoleSecurityPolicyPage = observer(
 										label="일시 잠금 지속시간 (분)"
 										description="일시 잠금 후 자동 해제까지의 시간"
 										min={1}
-										value={String(state.temporaryLockDurationMin)}
+										value={String(formState.temporaryLockDurationMin)}
 										onValueChange={(value) =>
 											onChangeNumberField("temporaryLockDurationMin", value)
 										}
@@ -285,7 +234,7 @@ export const IdpConsoleSecurityPolicyPage = observer(
 										label="영구 잠금 임계값 (회)"
 										description="연속 로그인 실패 시 영구 잠금되는 횟수 (관리자만 해제 가능)"
 										min={1}
-										value={String(state.permanentLockThreshold)}
+										value={String(formState.permanentLockThreshold)}
 										onValueChange={(value) =>
 											onChangeNumberField("permanentLockThreshold", value)
 										}
@@ -310,7 +259,7 @@ export const IdpConsoleSecurityPolicyPage = observer(
 										label="Access Token TTL (초)"
 										description="Access Token의 유효 시간 (초 단위)"
 										min={60}
-										value={String(state.accessTokenTtlSec)}
+										value={String(formState.accessTokenTtlSec)}
 										onValueChange={(value) =>
 											onChangeNumberField("accessTokenTtlSec", value)
 										}
@@ -321,7 +270,7 @@ export const IdpConsoleSecurityPolicyPage = observer(
 										label="Refresh Token TTL (초)"
 										description="Refresh Token의 유효 시간 (초 단위)"
 										min={60}
-										value={String(state.refreshTokenTtlSec)}
+										value={String(formState.refreshTokenTtlSec)}
 										onValueChange={(value) =>
 											onChangeNumberField("refreshTokenTtlSec", value)
 										}
@@ -332,7 +281,7 @@ export const IdpConsoleSecurityPolicyPage = observer(
 										label="세션 TTL (초)"
 										description="사용자 세션의 유효 시간 (초 단위)"
 										min={60}
-										value={String(state.sessionTtlSec)}
+										value={String(formState.sessionTtlSec)}
 										onValueChange={(value) =>
 											onChangeNumberField("sessionTtlSec", value)
 										}
@@ -345,7 +294,4 @@ export const IdpConsoleSecurityPolicyPage = observer(
 				</FormPageSurface>
 			</FormPage>
 		);
-	},
-);
-
-export default IdpConsoleSecurityPolicyPage;
+	});

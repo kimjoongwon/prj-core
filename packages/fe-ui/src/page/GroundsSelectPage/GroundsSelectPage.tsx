@@ -45,10 +45,10 @@ export interface GroundsSelectPageProps {
  * />
  * ```
  */
-export const GroundsSelectPage = observer(function GroundsSelectPage({
+export const GroundsSelectPage = observer(({
 	grounds,
 	onSelect,
-}: GroundsSelectPageProps) {
+}: GroundsSelectPageProps) => {
 	const [selectedGround, setSelectedGround] = useState("");
 
 	const handleSelect = () => {

@@ -19,4 +19,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-25 | forgot-password route 시각 owner를 page 레이어로 이동 | codex |

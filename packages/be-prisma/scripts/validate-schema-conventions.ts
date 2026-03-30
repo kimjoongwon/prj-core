@@ -137,6 +137,7 @@ const expectedOwner: Record<string, string> = {
 	Timeline: "scheduling/timeline.prisma",
 	Session: "scheduling/timeline.prisma",
 	Program: "scheduling/timeline.prisma",
+	ProgramActivity: "scheduling/timeline.prisma",
 	SessionTypes: "scheduling/timeline.prisma",
 	RepeatCycleTypes: "scheduling/timeline.prisma",
 	RecurringDayOfWeek: "scheduling/timeline.prisma",

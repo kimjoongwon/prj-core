@@ -56,7 +56,7 @@ export interface AbilityListPageProps {
 const abilityListTableColumns =
 	buildAbilityListTableColumns<AbilityListPageProps["abilities"][number]>();
 
-const AbilityListPageFallback = observer(function AbilityListPageFallback() {
+const AbilityListPageFallback = observer(() => {
 	return (
 		<div className="space-y-5">
 			<Surface
@@ -81,7 +81,7 @@ const AbilityListPageFallback = observer(function AbilityListPageFallback() {
 	);
 });
 
-export const AbilityListPage = observer(function AbilityListPage({
+export const AbilityListPage = observer(({
 	abilities,
 	totalCount,
 	subjects,
@@ -95,7 +95,7 @@ export const AbilityListPage = observer(function AbilityListPage({
 	onClickResetFiltersButton,
 	onClickAbilityRow,
 	onClickCreateButton,
-}: AbilityListPageProps) {
+}: AbilityListPageProps) => {
 	const [queryStates, setQueryStates] = useMetaDataGridQueryStates();
 	const handleAbilityRowClick = (ability: AbilityListPageAbility) => {
 		onClickAbilityRow(ability.id);

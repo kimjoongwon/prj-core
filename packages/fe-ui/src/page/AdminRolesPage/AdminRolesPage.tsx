@@ -38,7 +38,7 @@ export interface AdminRolesPageProps {
 	onClickCreateButton: () => void;
 }
 
-const RolesPageFallback = observer(function RolesPageFallback() {
+const RolesPageFallback = observer(() => {
 	return (
 		<div className="space-y-5">
 			<PageTitleBar
@@ -52,14 +52,14 @@ const RolesPageFallback = observer(function RolesPageFallback() {
 	);
 });
 
-export const AdminRolesPage = observer(function AdminRolesPage({
+export const AdminRolesPage = observer(({
 	roles,
 	totalCount,
 	isLoading,
 	queryStates,
 	setQueryStates,
 	onClickCreateButton,
-}: AdminRolesPageProps) {
+}: AdminRolesPageProps) => {
 	const columns = buildAdminRoleTableColumns<AdminRolesPageRole>();
 
 	if (isLoading) {
@@ -111,4 +111,3 @@ export const AdminRolesPage = observer(function AdminRolesPage({
 	);
 });
 
-export default AdminRolesPage;

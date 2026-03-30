@@ -20,11 +20,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default observer(function AssetDetailPageRoute() {
 	const assetId = useParams<{ assetId: string }>().assetId;
 	const router = useRouter();
 	const queryClient = useQueryClient();
+	const [targetFolderId, setTargetFolderId] = useState("");
+	const [targetFolderError, setTargetFolderError] = useState<string>();
 	const { data: response, isLoading } = useGetAssetById(assetId);
 	const { data: folderResponse } = useGetFolders();
 	const removeAssetMutation = useRemoveAsset();
@@ -34,6 +37,8 @@ export default observer(function AssetDetailPageRoute() {
 		<AdminAssetsAssetIdPage
 			asset={response?.data ? mapAssetDetail(response.data) : undefined}
 			folders={(folderResponse?.data ?? []).map(mapFolder)}
+			targetFolderId={targetFolderId}
+			targetFolderError={targetFolderError}
 			isLoading={isLoading}
 			isRemoving={removeAssetMutation.isPending}
 			isMoving={moveAssetMutation.isPending}
@@ -52,7 +57,16 @@ export default observer(function AssetDetailPageRoute() {
 				});
 				router.push("/assets" as Route);
 			}}
-			onClickMoveAssetButton={async (targetFolderId) => {
+			onChangeTargetFolderSelection={(nextTargetFolderId) => {
+				setTargetFolderId(nextTargetFolderId);
+				setTargetFolderError(undefined);
+			}}
+			onClickMoveAssetButton={async () => {
+				if (!targetFolderId) {
+					setTargetFolderError("이동할 폴더를 선택해주세요.");
+					return;
+				}
+
 				await moveAssetMutation.mutateAsync({
 					assetId,
 					data: { targetFolderId },
@@ -71,6 +85,7 @@ export default observer(function AssetDetailPageRoute() {
 					description: "에셋 폴더가 변경되었습니다.",
 					color: "success",
 				});
+				setTargetFolderError(undefined);
 			}}
 		/>
 	);

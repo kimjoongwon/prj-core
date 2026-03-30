@@ -23,6 +23,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-28 | 권한 목록 하단 테이블을 custom table에서 `MetaDataGrid`로 전환해 `columns/raw` 의존을 제거 | codex |
 | 2026-03-27 | ability raw table도 exported row type 없이 page props row shape를 받는 builder 함수로 연결 | codex |
 | 2026-03-27 | 권한 목록 raw table 컬럼을 page 내부 inline 선언 대신 `columns` 레이어의 공용 조합으로 이관 | codex |

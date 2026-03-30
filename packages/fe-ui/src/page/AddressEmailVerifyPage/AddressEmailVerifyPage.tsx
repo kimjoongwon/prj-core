@@ -52,13 +52,13 @@ export interface AddressEmailVerifyPageProps {
  * />
  * ```
  */
-export const AddressEmailVerifyPage = observer(function AddressEmailVerifyPage({
+export const AddressEmailVerifyPage = observer(({
 	state,
 	onSendEmailVerification,
 	onSubmit,
 	isEmailCodeSent = false,
 	isLoading = false,
-}: AddressEmailVerifyPageProps) {
+}: AddressEmailVerifyPageProps) => {
 	return (
 		<VStack fullWidth gap={8} className="p-4">
 			<VStack fullWidth gap={2}>

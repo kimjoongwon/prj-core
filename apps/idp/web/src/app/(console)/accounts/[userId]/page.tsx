@@ -13,6 +13,7 @@ import {
 	useToggleIdpAccountActive,
 } from "@cocrepo/api/idp/idp-accounts";
 import {
+	type IdpConsoleAccountsUserIdPageModalAction,
 	IdpConsoleAccountsUserIdPage,
 	type IdpConsoleAccountsUserIdPageAccount,
 } from "@cocrepo/ui";
@@ -20,11 +21,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default observer(function AccountDetailPageRoute() {
 	const userId = useParams<{ userId: string }>().userId;
 	const router = useRouter();
 	const queryClient = useQueryClient();
+	const [modalAction, setModalAction] =
+		useState<IdpConsoleAccountsUserIdPageModalAction>(null);
 	const { data: response, isLoading } = useGetIdpAccount(userId);
 	const account = response?.data;
 
@@ -73,6 +77,7 @@ export default observer(function AccountDetailPageRoute() {
 			isUnlocking={isUnlocking}
 			isForceResetting={isForceResetting}
 			isInvalidating={isInvalidating}
+			modalAction={modalAction}
 			onClickBackButton={() => {
 				router.push("/accounts" as Route);
 			}}
@@ -81,6 +86,32 @@ export default observer(function AccountDetailPageRoute() {
 			}}
 			onClickResetFailedAttemptsButton={() => {
 				resetFailedAttempts({ userId });
+			}}
+			onClickOpenUnlockModal={() => {
+				setModalAction("unlock");
+			}}
+			onClickOpenForceResetPasswordModal={() => {
+				setModalAction("forceResetPassword");
+			}}
+			onClickOpenInvalidateSessionsModal={() => {
+				setModalAction("invalidateSessions");
+			}}
+			onCloseModal={() => {
+				setModalAction(null);
+			}}
+			onClickConfirmModal={() => {
+				switch (modalAction) {
+					case "unlock":
+						unlockAccount({ userId });
+						break;
+					case "forceResetPassword":
+						forceResetPassword({ userId });
+						break;
+					case "invalidateSessions":
+						invalidateSessions({ userId });
+						break;
+				}
+				setModalAction(null);
 			}}
 			onClickUnlockButton={() => {
 				unlockAccount({ userId });

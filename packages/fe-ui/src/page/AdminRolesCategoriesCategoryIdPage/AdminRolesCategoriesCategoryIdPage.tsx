@@ -1,5 +1,4 @@
 "use client";
-import { customInstance } from "@cocrepo/api/core/client";
 
 import {
 	CategoryChildrenSection,
@@ -18,20 +17,11 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	useDisclosure,
 } from "@heroui/react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import type { Route } from "next";
-import { useRouter, useParams } from "next/navigation";
 
-interface RoleCategoryDetailPageClientProps {
-	categoryId: string;
-}
-
-/** 카테고리 상세 응답 타입 */
-interface CategoryDetail {
+export interface AdminRolesCategoriesCategoryIdPageCategory {
 	id: string;
 	name: string;
 	type: string;
@@ -56,218 +46,180 @@ interface CategoryDetail {
 	updatedAt: string;
 }
 
-/**
- * 역할 카테고리 상세 페이지 - 클라이언트 컴포넌트
- */
-function RoleCategoryDetailPageClient({
-	categoryId,
-}: RoleCategoryDetailPageClientProps) {
-	const router = useRouter();
-	const queryClient = useQueryClient();
-	const deleteModal = useDisclosure();
+export interface AdminRolesCategoriesCategoryIdPageProps {
+	category?: AdminRolesCategoriesCategoryIdPageCategory;
+	isLoading: boolean;
+	isDeleteModalOpen: boolean;
+	isDeleting: boolean;
+	onClickBackButton: () => void;
+	onClickEditButton: () => void;
+	onClickDeleteButton: () => void;
+	onCloseDeleteModal: () => void;
+	onClickDeleteConfirm: () => void;
+}
 
-	// TODO: Orval codegen 후 useGetCategoryById(categoryId) 로 교체
-	const { data: response, isLoading } = useQuery({
-		queryKey: ["/api/v1/categories", categoryId],
-		queryFn: () =>
-			customInstance<{ data: CategoryDetail }>({
-				url: `/api/v1/categories/${categoryId}`,
-				method: "GET",
-			}),
-	});
-	const category = response?.data;
+export const AdminRolesCategoriesCategoryIdPage = observer(
+	({
+		category,
+		isLoading,
+		isDeleteModalOpen,
+		isDeleting,
+		onClickBackButton,
+		onClickEditButton,
+		onClickDeleteButton,
+		onCloseDeleteModal,
+		onClickDeleteConfirm,
+	}: AdminRolesCategoriesCategoryIdPageProps) => {
+		if (isLoading) {
+			return (
+				<DetailPage
+					top={
+						<PageTitleBar title="역할 카테고리 상세" description="로딩 중..." />
+					}
+				>
+					<DetailPageSurface>
+						<DetailSectionCard>
+							<div className="flex items-center justify-center p-8">
+								<span className="text-default-500">로딩 중...</span>
+							</div>
+						</DetailSectionCard>
+					</DetailPageSurface>
+				</DetailPage>
+			);
+		}
 
-	// TODO: Orval codegen 후 useDeleteCategory 으로 교체
-	const { mutate: deleteCategory, isPending: isDeleting } = useMutation({
-		mutationFn: () =>
-			customInstance({
-				url: `/api/v1/categories/${categoryId}`,
-				method: "DELETE",
-			}),
-		onSuccess: () => {
-			deleteModal.onClose();
-			queryClient.invalidateQueries({
-				queryKey: ["/api/v1/categories"],
-			});
-			router.push("/roles/categories" as Route);
-		},
-	});
+		if (!category) {
+			return (
+				<DetailPage
+					top={
+						<PageTitleBar
+							title="역할 카테고리 상세"
+							description="카테고리를 찾을 수 없습니다."
+						/>
+					}
+				>
+					<DetailPageSurface>
+						<DetailSectionCard>
+							<div className="flex flex-col items-center justify-center gap-4 p-8">
+								<p className="text-default-500">카테고리를 찾을 수 없습니다.</p>
+								<Button variant="flat" onPress={onClickBackButton}>
+									목록으로
+								</Button>
+							</div>
+						</DetailSectionCard>
+					</DetailPageSurface>
+				</DetailPage>
+			);
+		}
 
-	const onClickBackButton = () => {
-		router.push("/roles/categories" as Route);
-	};
+		const hasChildren = (category.children?.length ?? 0) > 0;
 
-	const onClickEditButton = () => {
-		router.push(`/roles/categories/${categoryId}/edit` as Route);
-	};
-
-	const onClickDeleteConfirm = () => {
-		deleteCategory();
-	};
-
-	if (isLoading) {
-		return (
-			<DetailPage
-				top={
-					<PageTitleBar title="역할 카테고리 상세" description="로딩 중..." />
-				}
-			>
-				<DetailPageSurface>
-					<DetailSectionCard>
-						<div className="flex items-center justify-center p-8">
-							<span className="text-default-500">로딩 중...</span>
-						</div>
-					</DetailSectionCard>
-				</DetailPageSurface>
-			</DetailPage>
-		);
-	}
-
-	if (!category) {
 		return (
 			<DetailPage
 				top={
 					<PageTitleBar
 						title="역할 카테고리 상세"
-						description="카테고리를 찾을 수 없습니다."
+						description={`${category.name} 카테고리의 상세 정보입니다.`}
+						actions={
+							<div className="flex gap-2">
+								<Button
+									variant="light"
+									startContent={<ArrowLeft className="h-4 w-4" />}
+									onPress={onClickBackButton}
+								>
+									목록으로
+								</Button>
+								<Button
+									variant="flat"
+									color="primary"
+									startContent={<Edit className="h-4 w-4" />}
+									onPress={onClickEditButton}
+								>
+									수정
+								</Button>
+								<Button
+									variant="flat"
+									color="danger"
+									startContent={<Trash2 className="h-4 w-4" />}
+									onPress={onClickDeleteButton}
+									isDisabled={hasChildren}
+								>
+									삭제
+								</Button>
+							</div>
+						}
 					/>
 				}
 			>
 				<DetailPageSurface>
-					<DetailSectionCard>
-						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-default-500">카테고리를 찾을 수 없습니다.</p>
-							<Button variant="flat" onPress={onClickBackButton}>
-								목록으로
-							</Button>
-						</div>
-					</DetailSectionCard>
+					<VStack gap={4}>
+						{hasChildren ? (
+							<div className="rounded-xl bg-warning-50 p-4 dark:bg-warning-900/20">
+								<p className="text-sm text-warning-700 dark:text-warning-400">
+									<strong>참고:</strong> 하위 카테고리가 있어 삭제할 수 없습니다.
+									하위 카테고리를 먼저 삭제해주세요.
+								</p>
+							</div>
+						) : null}
+						<DetailSectionCard>
+							<h3 className="mb-4 text-lg font-semibold">기본 정보</h3>
+							<CategoryInfoSection
+								category={{
+									name: category.name,
+									type: category.type,
+									parent: category.parent,
+									parentId: category.parent?.id,
+									createdAt: category.createdAt,
+									updatedAt: category.updatedAt,
+								}}
+								categoriesBasePath="/roles/categories"
+							/>
+						</DetailSectionCard>
+						<DetailSectionCard>
+							<h3 className="mb-4 text-lg font-semibold">하위 카테고리</h3>
+							<CategoryChildrenSection
+								items={category.children ?? []}
+								categoriesBasePath="/roles/categories"
+							/>
+						</DetailSectionCard>
+						<DetailSectionCard>
+							<h3 className="mb-4 text-lg font-semibold">분류된 역할</h3>
+							<CategoryRoleListSection
+								roleClassifications={category.roleClassifications ?? []}
+							/>
+						</DetailSectionCard>
+					</VStack>
 				</DetailPageSurface>
-			</DetailPage>
-		);
-	}
-
-	const hasChildren = (category.children?.length ?? 0) > 0;
-
-	return (
-		<DetailPage
-			top={
-				<PageTitleBar
-					title="역할 카테고리 상세"
-					description={`${category.name} 카테고리의 상세 정보입니다.`}
-					actions={
-						<div className="flex gap-2">
-							<Button
-								variant="light"
-								startContent={<ArrowLeft className="h-4 w-4" />}
-								onPress={onClickBackButton}
-							>
-								목록으로
-							</Button>
+				<Modal isOpen={isDeleteModalOpen} onClose={onCloseDeleteModal}>
+					<ModalContent>
+						<ModalHeader>역할 카테고리 삭제</ModalHeader>
+						<ModalBody>
+							<p>
+								<strong>{category.name}</strong> 카테고리를 삭제하시겠습니까?
+							</p>
+							<p className="mt-2 text-sm text-danger">
+								이 작업은 되돌릴 수 없습니다. 연결된 역할 분류도 함께 삭제됩니다.
+							</p>
+						</ModalBody>
+						<ModalFooter>
 							<Button
 								variant="flat"
-								color="primary"
-								startContent={<Edit className="h-4 w-4" />}
-								onPress={onClickEditButton}
+								onPress={onCloseDeleteModal}
+								isDisabled={isDeleting}
 							>
-								수정
+								취소
 							</Button>
 							<Button
-								variant="flat"
 								color="danger"
-								startContent={<Trash2 className="h-4 w-4" />}
-								onPress={deleteModal.onOpen}
-								isDisabled={hasChildren}
+								onPress={onClickDeleteConfirm}
+								isLoading={isDeleting}
 							>
 								삭제
 							</Button>
-						</div>
-					}
-				/>
-			}
-		>
-			<DetailPageSurface>
-				<VStack gap={4}>
-					{hasChildren && (
-						<div className="rounded-xl bg-warning-50 p-4 dark:bg-warning-900/20">
-							<p className="text-sm text-warning-700 dark:text-warning-400">
-								<strong>참고:</strong>하위 카테고리가 있어 삭제할 수 없습니다.
-								하위 카테고리를 먼저 삭제해주세요.
-							</p>
-						</div>
-					)}
-					<DetailSectionCard>
-						<h3 className="text-lg font-semibold mb-4">기본 정보</h3>
-						<CategoryInfoSection
-							category={{
-								name: category.name,
-								type: category.type,
-								parent: category.parent,
-								parentId: category.parent?.id,
-								createdAt: category.createdAt,
-								updatedAt: category.updatedAt,
-							}}
-							categoriesBasePath="/roles/categories"
-						/>
-					</DetailSectionCard>
-					<DetailSectionCard>
-						<h3 className="text-lg font-semibold mb-4">하위 카테고리</h3>
-						<CategoryChildrenSection
-							items={category.children ?? []}
-							categoriesBasePath="/roles/categories"
-						/>
-					</DetailSectionCard>
-					<DetailSectionCard>
-						<h3 className="text-lg font-semibold mb-4">분류된 역할</h3>
-						<CategoryRoleListSection
-							roleClassifications={category.roleClassifications ?? []}
-						/>
-					</DetailSectionCard>
-				</VStack>
-			</DetailPageSurface>
-			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
-				<ModalContent>
-					<ModalHeader>역할 카테고리 삭제</ModalHeader>
-					<ModalBody>
-						<p>
-							<strong>{category.name}</strong>카테고리를 삭제하시겠습니까?
-						</p>
-						<p className="text-sm text-danger mt-2">
-							이 작업은 되돌릴 수 없습니다. 연결된 역할 분류도 함께 삭제됩니다.
-						</p>
-					</ModalBody>
-					<ModalFooter>
-						<Button
-							variant="flat"
-							onPress={deleteModal.onClose}
-							isDisabled={isDeleting}
-						>
-							취소
-						</Button>
-						<Button
-							color="danger"
-							onPress={onClickDeleteConfirm}
-							isLoading={isDeleting}
-						>
-							삭제
-						</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-		</DetailPage>
-	);
-}
-
-type RoleCategoryDetailPageParams = {
-	categoryId: string;
-};
-
-const RoleCategoryDetailPage = observer(function RoleCategoryDetailPage() {
-	const { categoryId } = useParams<RoleCategoryDetailPageParams>();
-
-	return <RoleCategoryDetailPageClient categoryId={categoryId} />;
-});
-
-export const AdminRolesCategoriesCategoryIdPage = RoleCategoryDetailPage;
-
-export default AdminRolesCategoriesCategoryIdPage;
+						</ModalFooter>
+					</ModalContent>
+				</Modal>
+			</DetailPage>
+		);
+	},
+);

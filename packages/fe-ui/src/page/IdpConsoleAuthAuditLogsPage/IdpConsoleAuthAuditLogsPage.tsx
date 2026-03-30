@@ -66,15 +66,14 @@ const authAuditLogTableColumns =
 /**
  * 감사 로그 목록 pure page입니다.
  */
-export const IdpConsoleAuthAuditLogsPage = observer(
-	function IdpConsoleAuthAuditLogsPage({
+export const IdpConsoleAuthAuditLogsPage = observer(({
 		logs,
 		totalCount,
 		isLoading,
 		queryStates,
 		setQueryStates,
 		stats,
-	}: IdpConsoleAuthAuditLogsPageProps) {
+	}: IdpConsoleAuthAuditLogsPageProps) => {
 		return (
 			<VStack gap={5}>
 				<PageTitleBar
@@ -126,7 +125,4 @@ export const IdpConsoleAuthAuditLogsPage = observer(
 				</Surface>
 			</VStack>
 		);
-	},
-);
-
-export default IdpConsoleAuthAuditLogsPage;
+	});

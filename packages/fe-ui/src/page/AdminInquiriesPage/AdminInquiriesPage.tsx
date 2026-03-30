@@ -100,7 +100,7 @@ function InquiriesPageShellFallback() {
 	);
 }
 
-export const AdminInquiriesPage = observer(function AdminInquiriesPage({
+export const AdminInquiriesPage = observer(({
 	inquiries,
 	totalCount,
 	stats,
@@ -111,7 +111,7 @@ export const AdminInquiriesPage = observer(function AdminInquiriesPage({
 	onClickNewInquiry,
 	onClickInquiryRow,
 	onClickStatusFilter,
-}: AdminInquiriesPageProps) {
+}: AdminInquiriesPageProps) => {
 	const columns = buildInquiryTableColumns<AdminInquiriesPageInquiry>();
 
 	if (isLoading) {
@@ -170,4 +170,3 @@ export const AdminInquiriesPage = observer(function AdminInquiriesPage({
 	);
 });
 
-export default AdminInquiriesPage;

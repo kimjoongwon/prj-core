@@ -1,20 +1,17 @@
 "use client";
-import {
-	type InquiryCategory,
-	type InquiryMessageDto,
-	type InquiryParticipantDto,
-	type InquiryPriority,
-	useDeleteInquiry,
-	useFillInquiryFormWithAi,
-	useGetInquiryById,
-	useGetInquiryMessages,
-	useGetInquiryParticipants,
-	useGetUpdateInquiryForm,
-	useUpdateInquiry,
-} from "@cocrepo/api/core/inquiries";
 
 import type {
+	InquiryCategory,
+	InquiryPriority,
+} from "@cocrepo/api/core/inquiries";
+import type {
+	AiFormFieldMeta,
+	AiFormFillRequest,
+	AiFormFillResponse,
 	AiFormOptionItem,
+	AiFormPatch,
+	AiFormSchema,
+	AiFormUiPaths,
 	InquiryMessage,
 	InquiryParticipant,
 } from "@cocrepo/type";
@@ -38,13 +35,8 @@ import {
 } from "@cocrepo/ui";
 import { Input, Select, SelectItem, type Selection } from "@heroui/react";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
-import { observable } from "mobx";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import type { Route } from "next";
-import { useRouter, useParams } from "next/navigation";
-import { useEffect } from "react";
-import { useHandlers } from "./hooks/useHandlers";
-import { useInquiryWebSocket } from "./hooks/useInquiryWebSocket";
+import { observer } from "mobx-react-lite";
+import type { WebSocketStatus } from "./hooks/useInquiryWebSocket";
 
 const statusOptions = [
 	{ value: "NEW", text: "신규" },
@@ -75,59 +67,6 @@ const categoryOptions = [
 	{ value: "OTHER", text: "기타" },
 ];
 
-interface Props {
-	inquiryId: string;
-}
-
-const mapMessageToStore = (message: InquiryMessageDto): InquiryMessage => {
-	return {
-		id: message.id,
-		threadId: message.threadId,
-		inquiryId: message.inquiryId,
-		senderType: message.senderType,
-		senderId: message.senderName || message.senderId || null,
-		content: message.content,
-		contentType: message.contentType,
-		isEdited: message.isEdited,
-		isDeleted: message.isDeleted,
-		deliveredAt: message.deliveredAt,
-		readAt: message.readAt,
-		editedAt: message.editedAt,
-		createdAt: message.createdAt,
-	};
-};
-
-const mapParticipantToStore = (
-	participant: InquiryParticipantDto | Record<string, unknown>,
-	inquiryId: string,
-): InquiryParticipant => {
-	const data = participant as Record<string, unknown>;
-	return {
-		id: (data.id as string) ?? crypto.randomUUID(),
-		inquiryId,
-		threadId: (data.threadId as string | null) ?? null,
-		userId: (data.userId as string) ?? "unknown-user",
-		role: ((data.role as string) ?? "AGENT") as
-			| "CUSTOMER"
-			| "AGENT"
-			| "SUPERVISOR",
-		isOnline: Boolean(data.isOnline),
-		isTyping: Boolean(data.isTyping),
-		unreadCount: Number(data.unreadCount ?? 0),
-		joinedAt: (data.joinedAt as string) ?? new Date().toISOString(),
-		lastSeenAt: (data.lastSeenAt as string | null) ?? null,
-		lastReadAt: (data.lastReadAt as string | null) ?? null,
-		leftAt: (data.leftAt as string | null) ?? null,
-	};
-};
-
-const toMinutes = (start: string, end: string) => {
-	return Math.max(
-		0,
-		Math.floor((new Date(end).getTime() - new Date(start).getTime()) / 60000),
-	);
-};
-
 const CHANNEL_LABELS: Record<string, string> = {
 	WEB: "웹",
 	EMAIL: "이메일",
@@ -141,296 +80,166 @@ const getSelectedValue = (keys: Selection): string => {
 	if (keys === "all") {
 		return "";
 	}
+
 	const selectedKey = keys.values().next().value;
 	return selectedKey ? String(selectedKey) : "";
 };
 
-const normalizeAiFormOptionValue = (
-	value: unknown,
-): AiFormOptionItem["value"] => {
-	if (
-		typeof value === "string" ||
-		typeof value === "number" ||
-		typeof value === "boolean"
-	) {
-		return value;
-	}
-
-	return null;
-};
-
-const normalizeAiFormOptions = (
-	options?: Record<string, Array<{ value: unknown; label: string }>>,
-): Record<string, AiFormOptionItem[]> => {
-	return Object.fromEntries(
-		Object.entries(options ?? {}).map(([path, items]) => [
-			path,
-			items.map((item) => ({
-				value: normalizeAiFormOptionValue(item.value),
-				label: item.label,
-			})),
-		]),
+const toMinutes = (start: string, end: string) => {
+	return Math.max(
+		0,
+		Math.floor((new Date(end).getTime() - new Date(start).getTime()) / 60000),
 	);
 };
 
-function InquiryDetailPageClient({ inquiryId }: Props) {
-	const router = useRouter();
-	const state = useLocalObservable(() => ({
-		deleteModalOpen: false,
-	}));
+export interface AdminInquiriesInquiryIdPageInquiry {
+	id: string;
+	inquiryNumber: string;
+	title: string;
+	channel: string;
+	status: string;
+	priority: string;
+	category: string;
+	assigneeId?: string | null;
+	customerId?: string | null;
+	createdAt: string;
+	firstResponseAt?: string | null;
+	resolvedAt?: string | null;
+	slaResponseDue?: string | null;
+	slaResolveDue?: string | null;
+	isSlaResponseBreached?: boolean | null;
+	isSlaResolveBreached?: boolean | null;
+	sentiment?: {
+		sentiment?: string | null;
+		confidence?: number | null;
+	} | null;
+}
 
-	const inquiryState = useLocalObservable(() => ({
-		currentInquiryId: null as string | null,
-		currentThreadId: null as string | null,
-		replyContent: "",
-		isGeneratingDraft: false,
-		isKnowledgeBaseModalOpen: false,
-		isMetaEditModalOpen: false,
-		messages: [] as InquiryMessage[],
-		participants: [] as InquiryParticipant[],
-		isWebSocketConnected: false,
-		isTyping: false,
-		typingUsers: observable.map<string, boolean>(),
-		get onlineParticipants() {
-			return this.participants.filter((participant) => participant.isOnline);
-		},
-		get typingUserNames() {
-			return Array.from(this.typingUsers.keys());
-		},
-		setCurrentInquiry(inquiryId: string | null) {
-			this.currentInquiryId = inquiryId;
-		},
-		setMessages(messages: InquiryMessage[]) {
-			this.messages = messages;
-		},
-		addMessage(message: InquiryMessage) {
-			this.messages.push(message);
-		},
-		updateMessage(messageId: string, updates: Partial<InquiryMessage>) {
-			const index = this.messages.findIndex(
-				(message) => message.id === messageId,
-			);
-			if (index < 0) {
-				return;
-			}
-			this.messages[index] = { ...this.messages[index], ...updates };
-		},
-		setParticipants(participants: InquiryParticipant[]) {
-			this.participants = participants;
-		},
-		addParticipant(participant: InquiryParticipant) {
-			const index = this.participants.findIndex(
-				(existing) => existing.userId === participant.userId,
-			);
-			if (index < 0) {
-				this.participants.push(participant);
-				return;
-			}
-			this.participants[index] = participant;
-		},
-		removeParticipant(userId: string) {
-			this.participants = this.participants.filter(
-				(participant) => participant.userId !== userId,
-			);
-			this.typingUsers.delete(userId);
-		},
-		updateParticipant(userId: string, updates: Partial<InquiryParticipant>) {
-			const index = this.participants.findIndex(
-				(participant) => participant.userId === userId,
-			);
-			if (index < 0) {
-				return;
-			}
-			this.participants[index] = { ...this.participants[index], ...updates };
-		},
-		setTyping(userId: string, isTyping: boolean) {
-			if (isTyping) {
-				this.typingUsers.set(userId, true);
-				return;
-			}
-			this.typingUsers.delete(userId);
-		},
-		startTyping() {
-			this.isTyping = true;
-		},
-		stopTyping() {
-			this.isTyping = false;
-		},
-		setWebSocketConnected(isConnected: boolean) {
-			this.isWebSocketConnected = isConnected;
-		},
-		setReplyContent(content: string) {
-			this.replyContent = content;
-		},
-		setGeneratingDraft(isGenerating: boolean) {
-			this.isGeneratingDraft = isGenerating;
-		},
-		openKnowledgeBaseModal() {
-			this.isKnowledgeBaseModalOpen = true;
-		},
-		closeKnowledgeBaseModal() {
-			this.isKnowledgeBaseModalOpen = false;
-		},
-		openMetaEditModal() {
-			this.isMetaEditModalOpen = true;
-		},
-		closeMetaEditModal() {
-			this.isMetaEditModalOpen = false;
-		},
-		clear() {
-			this.currentInquiryId = null;
-			this.currentThreadId = null;
-			this.replyContent = "";
-			this.isGeneratingDraft = false;
-			this.isKnowledgeBaseModalOpen = false;
-			this.isMetaEditModalOpen = false;
-			this.messages = [];
-			this.participants = [];
-			this.isWebSocketConnected = false;
-			this.isTyping = false;
-			this.typingUsers.clear();
-		},
-	}));
+export interface AdminInquiriesInquiryIdPageBootstrap {
+	fieldMeta: Record<string, AiFormFieldMeta>;
+	aiSchemas: AiFormSchema[];
+	ui: AiFormUiPaths;
+	options: Record<string, AiFormOptionItem[]>;
+}
 
-	const { data: inquiryResponse } = useGetInquiryById(inquiryId);
-	const { data: messagesResponse } = useGetInquiryMessages(inquiryId);
-	const { data: participantsResponse } = useGetInquiryParticipants(inquiryId);
-	const { data: updateFormBootstrapResponse } =
-		useGetUpdateInquiryForm(inquiryId);
-	const deleteInquiryMutation = useDeleteInquiry();
-	const fillMetaMutation = useFillInquiryFormWithAi();
-	const updateMetaMutation = useUpdateInquiry();
+export interface AdminInquiriesInquiryIdPageOption {
+	value: string;
+	label: string;
+}
 
-	const inquiry = inquiryResponse?.data;
-	const updateFormBootstrap = updateFormBootstrapResponse?.data;
-	const updateFormOptions = normalizeAiFormOptions(
-		updateFormBootstrap?.options,
-	);
-	const editCategoryOptions = (updateFormOptions.category ?? []).map(
-		(item) => ({
-			value: String(item.value ?? ""),
-			label: item.label,
-		}),
-	);
-	const editPriorityOptions = (updateFormOptions.priority ?? []).map(
-		(item) => ({
-			value: String(item.value ?? ""),
-			label: item.label,
-		}),
-	);
-	const messages = (messagesResponse?.data ?? []).map(mapMessageToStore);
-	const participantRows =
-		(participantsResponse?.data as
-			| Array<Record<string, unknown>>
-			| undefined) ??
-		(inquiry?.participants as Array<Record<string, unknown>> | undefined) ??
-		[];
-	const participants = participantRows.map((participant) =>
-		mapParticipantToStore(participant, inquiryId),
-	);
-	const metaState = useLocalObservable(() => ({
-		initialized: false,
-		title: "",
-		category: "GENERAL" as InquiryCategory,
-		priority: "NORMAL" as InquiryPriority,
-		error: "",
-		setFromBootstrap() {
-			if (!updateFormBootstrap || this.initialized) {
-				return;
-			}
-			this.title =
-				typeof updateFormBootstrap.defaultObject.title === "string"
-					? updateFormBootstrap.defaultObject.title
-					: (inquiry?.title ?? "");
-			this.category =
-				typeof updateFormBootstrap.defaultObject.category === "string"
-					? (updateFormBootstrap.defaultObject.category as InquiryCategory)
-					: ((inquiry?.category ?? "GENERAL") as InquiryCategory);
-			this.priority =
-				typeof updateFormBootstrap.defaultObject.priority === "string"
-					? (updateFormBootstrap.defaultObject.priority as InquiryPriority)
-					: ((inquiry?.priority ?? "NORMAL") as InquiryPriority);
-			this.initialized = true;
-		},
-		toFormObject() {
-			return {
-				title: this.title,
-				category: this.category,
-				priority: this.priority,
-			} satisfies Record<string, unknown>;
-		},
-		applyPatch(patches: Array<{ path: string; value: unknown }>) {
-			for (const patch of patches) {
-				switch (patch.path) {
-					case "title":
-						if (typeof patch.value === "string") this.title = patch.value;
-						break;
-					case "category":
-						if (typeof patch.value === "string")
-							this.category = patch.value as InquiryCategory;
-						break;
-					case "priority":
-						if (typeof patch.value === "string")
-							this.priority = patch.value as InquiryPriority;
-						break;
-					default:
-						break;
-				}
-			}
-		},
-	}));
+export interface AdminInquiriesInquiryIdPageMetaFormState {
+	title: string;
+	category: InquiryCategory;
+	priority: InquiryPriority;
+	error: string;
+}
 
-	const ws = useInquiryWebSocket({
-		inquiryId,
-		state: inquiryState,
-		autoConnect: true,
-		onConnect: () => {
-			console.log("WebSocket 연결됨");
-		},
-		onDisconnect: () => {
-			console.log("WebSocket 연결 해제됨");
-		},
-	});
+export interface AdminInquiriesInquiryIdPageParticipantListItem {
+	id: string;
+	name: string;
+	role: "customer" | "agent" | "supervisor";
+	isOnline: boolean;
+	isTyping: boolean;
+}
 
-	useEffect(() => {
-		inquiryState.setCurrentInquiry(inquiryId);
-		inquiryState.setMessages(messages);
-		inquiryState.setParticipants(participants);
+export interface AdminInquiriesInquiryIdPageAssigneeOption {
+	value: string;
+	text: string;
+}
 
-		return () => {
-			inquiryState.clear();
-		};
-	}, [inquiryId, messages, participants, inquiryState]);
+export interface AdminInquiriesInquiryIdPageRealtimeState {
+	messages: InquiryMessage[];
+	typingUserNames: string[];
+	isWebSocketConnected: boolean;
+	isTyping: boolean;
+	isGeneratingDraft: boolean;
+}
 
-	useEffect(() => {
-		metaState.setFromBootstrap();
-	}, [metaState, inquiry, updateFormBootstrap]);
+export interface AdminInquiriesInquiryIdPageProps {
+	inquiryId: string;
+	inquiry?: AdminInquiriesInquiryIdPageInquiry;
+	bootstrap?: AdminInquiriesInquiryIdPageBootstrap;
+	metaFormState: AdminInquiriesInquiryIdPageMetaFormState;
+	editCategoryOptions: AdminInquiriesInquiryIdPageOption[];
+	editPriorityOptions: AdminInquiriesInquiryIdPageOption[];
+	realtimeState: AdminInquiriesInquiryIdPageRealtimeState;
+	participantListItems: AdminInquiriesInquiryIdPageParticipantListItem[];
+	onlineParticipantNames: string[];
+	assigneeOptions: AdminInquiriesInquiryIdPageAssigneeOption[];
+	deleteModalOpen: boolean;
+	isDeleting: boolean;
+	isUpdatingMeta: boolean;
+	isFillingMeta: boolean;
+	webSocketStatus: WebSocketStatus;
+	onClickBackButton: () => void;
+	onClickEditButton: () => void;
+	onOpenDeleteModal: () => void;
+	onCloseDeleteModal: () => void;
+	onConfirmDelete: () => void;
+	onChangeStatus: (status: string) => void;
+	onChangePriority: (priority: string) => void;
+	onChangeCategory: (category: string) => void;
+	onChangeAssignee: (assigneeId: string) => void;
+	onTagAdd: (tag: string) => void;
+	onTagRemove: (tag: string) => void;
+	onFillMetaAiForm: (
+		input: AiFormFillRequest<Record<string, unknown>>,
+	) => Promise<AiFormFillResponse>;
+	onApplyMetaAiPatch: (patches: AiFormPatch[]) => void;
+	onChangeMetaTitleInput: (value: string) => void;
+	onChangeMetaCategorySelection: (value: InquiryCategory) => void;
+	onChangeMetaPrioritySelection: (value: InquiryPriority) => void;
+	onClickSaveMetaButton: () => void;
+	onClickReconnectButton: () => void;
+	onSendInquiryMessage: (content: string, attachments?: File[]) => void;
+	onSendTypingStatus: (isTyping: boolean) => void;
+	onTypingStart: () => void;
+	onTypingStop: () => void;
+	onClickGenerateDraftButton: () => void;
+	onClickSearchKnowledgeButton: () => void;
+}
 
-	const handlers = useHandlers({
-		inquiryId,
-		inquiryState,
-		ws,
-	});
-
-	const onClickReconnectButton = () => {
-		ws.reconnect();
-	};
-
-	const onSendInquiryMessage = (content: string, attachments?: File[]) => {
-		ws.sendMessage(content, attachments);
-	};
-
-	const onlineParticipantNames = inquiryState.onlineParticipants.map(
-		(participant) => participant.userId,
-	);
-
-	const assigneeOptions = participants
-		.filter((participant) => participant.role === "AGENT")
-		.map((participant) => ({
-			value: participant.userId,
-			text: participant.userId,
-		}));
-
+export const AdminInquiriesInquiryIdPage = observer(({
+	inquiryId,
+	inquiry,
+	bootstrap,
+	metaFormState,
+	editCategoryOptions,
+	editPriorityOptions,
+	realtimeState,
+	participantListItems,
+	onlineParticipantNames,
+	assigneeOptions,
+	deleteModalOpen,
+	isDeleting,
+	isUpdatingMeta,
+	isFillingMeta,
+	webSocketStatus,
+	onClickBackButton,
+	onClickEditButton,
+	onOpenDeleteModal,
+	onCloseDeleteModal,
+	onConfirmDelete,
+	onChangeStatus,
+	onChangePriority,
+	onChangeCategory,
+	onChangeAssignee,
+	onTagAdd,
+	onTagRemove,
+	onFillMetaAiForm,
+	onApplyMetaAiPatch,
+	onChangeMetaTitleInput,
+	onChangeMetaCategorySelection,
+	onChangeMetaPrioritySelection,
+	onClickSaveMetaButton,
+	onClickReconnectButton,
+	onSendInquiryMessage,
+	onSendTypingStatus,
+	onTypingStart,
+	onTypingStop,
+	onClickGenerateDraftButton,
+	onClickSearchKnowledgeButton,
+}: AdminInquiriesInquiryIdPageProps) => {
 	const createdAt = inquiry?.createdAt ?? new Date().toISOString();
 	const firstResponseEnd = inquiry?.firstResponseAt ?? new Date().toISOString();
 	const resolutionEnd = inquiry?.resolvedAt ?? new Date().toISOString();
@@ -448,47 +257,13 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 				? "negative"
 				: "neutral";
 
-	const participantListItems: Array<{
-		id: string;
-		name: string;
-		role: "customer" | "agent" | "supervisor";
-		isOnline: boolean;
-		isTyping: boolean;
-	}> = participants.map((participant) => ({
-		id: participant.id,
-		name: participant.userId,
-		role:
-			participant.role === "CUSTOMER"
-				? "customer"
-				: participant.role === "SUPERVISOR"
-					? "supervisor"
-					: "agent",
-		isOnline: participant.isOnline,
-		isTyping: participant.isTyping,
-	}));
-	const onSubmitMeta = async () => {
-		if (!metaState.title.trim()) {
-			metaState.error = "문의 제목을 입력해주세요.";
-			return;
-		}
-		metaState.error = "";
-		await updateMetaMutation.mutateAsync({
-			inquiryId,
-			data: {
-				title: metaState.title.trim(),
-				category: metaState.category,
-				priority: metaState.priority,
-			},
-		});
-	};
-
 	return (
 		<InquiryWebSocketProvider
 			inquiryId={inquiryId}
-			status={ws.status}
+			status={webSocketStatus}
 			onReconnect={onClickReconnectButton}
 			sendMessage={onSendInquiryMessage}
-			sendTypingStatus={ws.sendTypingStatus}
+			sendTypingStatus={onSendTypingStatus}
 		>
 			<DetailPage
 				top={
@@ -500,7 +275,7 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 								<Button
 									variant="light"
 									startContent={<ArrowLeft className="h-4 w-4" />}
-									onPress={handlers.onClickBack}
+									onPress={onClickBackButton}
 								>
 									목록으로
 								</Button>
@@ -508,7 +283,7 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 									variant="flat"
 									color="primary"
 									startContent={<Pencil className="h-4 w-4" />}
-									onPress={handlers.onClickEdit}
+									onPress={onClickEditButton}
 								>
 									수정
 								</Button>
@@ -516,9 +291,7 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 									variant="flat"
 									color="danger"
 									startContent={<Trash2 className="h-4 w-4" />}
-									onPress={() => {
-										state.deleteModalOpen = true;
-									}}
+									onPress={onOpenDeleteModal}
 								>
 									삭제
 								</Button>
@@ -555,20 +328,20 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 									<InquiryMetaPanel
 										status={inquiry?.status ?? "NEW"}
 										statusOptions={statusOptions}
-										onStatusChange={handlers.onChangeStatus}
+										onStatusChange={onChangeStatus}
 										priority={inquiry?.priority ?? "NORMAL"}
 										priorityOptions={priorityOptions}
-										onPriorityChange={handlers.onChangePriority}
+										onPriorityChange={onChangePriority}
 										category={inquiry?.category ?? "GENERAL"}
 										categoryOptions={categoryOptions}
-										onCategoryChange={handlers.onChangeCategory}
-										assigneeId={inquiry?.assigneeId}
-										assigneeName={inquiry?.assigneeId}
+										onCategoryChange={onChangeCategory}
+										assigneeId={inquiry?.assigneeId ?? undefined}
+										assigneeName={inquiry?.assigneeId ?? undefined}
 										assigneeOptions={assigneeOptions}
-										onAssigneeChange={handlers.onChangeAssignee}
+										onAssigneeChange={onChangeAssignee}
 										tags={[]}
-										onTagAdd={handlers.onTagAdd}
-										onTagRemove={handlers.onTagRemove}
+										onTagAdd={onTagAdd}
+										onTagRemove={onTagRemove}
 									/>
 								</div>
 							</HStack>
@@ -585,51 +358,28 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 									/>
 								</div>
 								<div className="w-full lg:w-1/2">
-									<ParticipantList
-										participants={participantListItems.map((participant) => ({
-											...participant,
-											isTyping:
-												inquiryState.typingUsers.has(participant.name) ||
-												participant.isTyping,
-										}))}
-									/>
+									<ParticipantList participants={participantListItems} />
 								</div>
 							</HStack>
 						</DetailSectionCard>
-						{updateFormBootstrap && (
+						{bootstrap && (
 							<>
 								<DetailSectionCard>
 									<VStack gap={4}>
 										<PageTitleBar level={2} title="AI 메타 추천" />
 										<AiForm
-											formState={metaState.toFormObject()}
-											fieldMeta={updateFormBootstrap.fieldMeta}
-											aiSchemas={updateFormBootstrap.aiSchemas}
-											ui={updateFormBootstrap.ui}
-											options={updateFormOptions}
-											onFill={async (input) => {
-												const result = await fillMetaMutation.mutateAsync({
-													data: {
-														mode: "UPDATE",
-														schemaKey: input.schemaKey,
-														selectedPaths: input.selectedPaths,
-														currentObject: input.currentObject,
-														userPrompt: input.userPrompt,
-													},
-												});
-												return (
-													result?.data ?? {
-														patches: [],
-													}
-												);
+											formState={{
+												title: metaFormState.title,
+												category: metaFormState.category,
+												priority: metaFormState.priority,
 											}}
-											applyPatch={(patches) => {
-												metaState.applyPatch(patches);
-											}}
-											disabled={
-												updateMetaMutation.isPending ||
-												fillMetaMutation.isPending
-											}
+											fieldMeta={bootstrap.fieldMeta}
+											aiSchemas={bootstrap.aiSchemas}
+											ui={bootstrap.ui}
+											options={bootstrap.options}
+											onFill={onFillMetaAiForm}
+											applyPatch={onApplyMetaAiPatch}
+											disabled={isUpdatingMeta || isFillingMeta}
 										/>
 									</VStack>
 								</DetailSectionCard>
@@ -639,25 +389,26 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 										<Input
 											label="문의 제목"
 											labelPlacement="outside"
-											value={metaState.title}
-											onValueChange={(value) => {
-												metaState.title = value;
-											}}
-											isInvalid={Boolean(metaState.error)}
-											errorMessage={metaState.error}
+											value={metaFormState.title}
+											onValueChange={onChangeMetaTitleInput}
+											isInvalid={Boolean(metaFormState.error)}
+											errorMessage={metaFormState.error}
 										/>
 										<HStack gap={4} className="flex-col md:flex-row">
 											<Select
 												label="카테고리"
 												placeholder="카테고리 선택"
 												selectedKeys={
-													metaState.category ? [metaState.category] : []
+													metaFormState.category
+														? [metaFormState.category]
+														: []
 												}
 												onSelectionChange={(keys) => {
 													const selectedValue = getSelectedValue(keys);
 													if (selectedValue) {
-														metaState.category =
-															selectedValue as InquiryCategory;
+														onChangeMetaCategorySelection(
+															selectedValue as InquiryCategory,
+														);
 													}
 												}}
 											>
@@ -671,13 +422,16 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 												label="우선순위"
 												placeholder="우선순위 선택"
 												selectedKeys={
-													metaState.priority ? [metaState.priority] : []
+													metaFormState.priority
+														? [metaFormState.priority]
+														: []
 												}
 												onSelectionChange={(keys) => {
 													const selectedValue = getSelectedValue(keys);
 													if (selectedValue) {
-														metaState.priority =
-															selectedValue as InquiryPriority;
+														onChangeMetaPrioritySelection(
+															selectedValue as InquiryPriority,
+														);
 													}
 												}}
 											>
@@ -691,8 +445,8 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 										<div className="flex justify-end">
 											<Button
 												color="primary"
-												onPress={onSubmitMeta}
-												isLoading={updateMetaMutation.isPending}
+												onPress={onClickSaveMetaButton}
+												isLoading={isUpdatingMeta}
 											>
 												메타 저장
 											</Button>
@@ -704,21 +458,17 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 						<DetailSectionCard>
 							<RealtimeChatPanel
 								inquiryId={inquiryId}
-								messages={
-									inquiryState.messages.length > 0
-										? inquiryState.messages
-										: messages
-								}
-								typingUserNames={inquiryState.typingUserNames}
-								isWebSocketConnected={inquiryState.isWebSocketConnected}
-								isTyping={inquiryState.isTyping}
+								messages={realtimeState.messages}
+								typingUserNames={realtimeState.typingUserNames}
+								isWebSocketConnected={realtimeState.isWebSocketConnected}
+								isTyping={realtimeState.isTyping}
 								onSendMessage={onSendInquiryMessage}
-								onTypingStart={handlers.onTypingStart}
-								onTypingStop={handlers.onTypingStop}
+								onTypingStart={onTypingStart}
+								onTypingStop={onTypingStop}
 								onReconnect={onClickReconnectButton}
-								onGenerateDraft={handlers.onClickGenerateDraft}
-								onSearchKnowledge={handlers.onClickSearchKnowledge}
-								isGeneratingDraft={inquiryState.isGeneratingDraft}
+								onGenerateDraft={onClickGenerateDraftButton}
+								onSearchKnowledge={onClickSearchKnowledgeButton}
+								isGeneratingDraft={realtimeState.isGeneratingDraft}
 							/>
 						</DetailSectionCard>
 						<DetailSectionCard>
@@ -742,17 +492,9 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 					</VStack>
 				</DetailPageSurface>
 				<ConfirmModal
-					isOpen={state.deleteModalOpen}
-					onClose={() => {
-						state.deleteModalOpen = false;
-					}}
-					onConfirm={async () => {
-						await deleteInquiryMutation.mutateAsync({
-							inquiryId,
-						});
-						state.deleteModalOpen = false;
-						router.push("/inquiries" as Route);
-					}}
+					isOpen={deleteModalOpen}
+					onClose={onCloseDeleteModal}
+					onConfirm={onConfirmDelete}
 					title="문의 삭제"
 					message={
 						<span>
@@ -765,22 +507,9 @@ function InquiryDetailPageClient({ inquiryId }: Props) {
 					confirmText="삭제"
 					confirmColor="danger"
 					iconType="delete"
+					loading={isDeleting}
 				/>
 			</DetailPage>
 		</InquiryWebSocketProvider>
 	);
-}
-
-type InquiryDetailPageParams = {
-	inquiryId: string;
-};
-
-const InquiryDetailPage = observer(function InquiryDetailPage() {
-	const { inquiryId } = useParams<InquiryDetailPageParams>();
-
-	return <InquiryDetailPageClient inquiryId={inquiryId} />;
 });
-
-export const AdminInquiriesInquiryIdPage = InquiryDetailPage;
-
-export default AdminInquiriesInquiryIdPage;

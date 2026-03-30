@@ -184,3 +184,4 @@ useEffect로 API 응답 데이터를 로컬 상태에 한 번만 채운다:
 | 2026-03-03 | PageTitleBar(level=1/2) 패턴 정리 반영 | codex |
 | 2026-03-03 | Page/Section `mode` 제거 반영 (단일 구조 기준으로 문서 표현 정리) | codex |
 | 2026-03-03 | `PageTitleBar` 단일 컴포넌트 통합 및 리네이밍 반영 | codex |
+| 2026-03-30 | route가 query/mutation/navigation/local state를 소유하고 pure page props를 주입하는 구조로 정리 | codex |

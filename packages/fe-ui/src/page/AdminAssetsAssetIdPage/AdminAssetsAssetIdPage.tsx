@@ -9,17 +9,9 @@ import {
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
-import {
-	addToast,
-	Button,
-	Input,
-	Select,
-	SelectItem,
-	Spinner,
-} from "@heroui/react";
+import { Button, Input, Select, SelectItem, Spinner } from "@heroui/react";
 import { ArrowLeft, FolderInput, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { useState } from "react";
 
 export interface AdminAssetsAssetIdPageFolder {
 	id: string;
@@ -42,12 +34,15 @@ export interface AdminAssetsAssetIdPageAsset {
 export interface AdminAssetsAssetIdPageProps {
 	asset?: AdminAssetsAssetIdPageAsset;
 	folders: AdminAssetsAssetIdPageFolder[];
+	targetFolderId: string;
+	targetFolderError?: string;
 	isLoading: boolean;
 	isRemoving: boolean;
 	isMoving: boolean;
 	onClickBackButton: () => void;
 	onClickDeleteAssetButton: () => Promise<void>;
-	onClickMoveAssetButton: (targetFolderId: string) => Promise<void>;
+	onChangeTargetFolderSelection: (targetFolderId: string) => void;
+	onClickMoveAssetButton: () => Promise<void>;
 }
 
 const getKindLabel = (kind: AdminAssetsAssetIdPageAsset["kind"]) => {
@@ -87,36 +82,19 @@ const formatBytes = (bytes: number) => {
 	return `${value.toFixed(exponent === 0 ? 0 : 1)} ${units[exponent]}`;
 };
 
-export const AdminAssetsAssetIdPage = observer(function AdminAssetsAssetIdPage({
+export const AdminAssetsAssetIdPage = observer(({
 	asset,
 	folders,
+	targetFolderId,
+	targetFolderError,
 	isLoading,
 	isRemoving,
 	isMoving,
 	onClickBackButton,
 	onClickDeleteAssetButton,
+	onChangeTargetFolderSelection,
 	onClickMoveAssetButton,
-}: AdminAssetsAssetIdPageProps) {
-	const [targetFolderId, setTargetFolderId] = useState<string>("");
-
-	const onSubmitMove = async () => {
-		if (!targetFolderId) {
-			addToast({
-				title: "대상 폴더 선택 필요",
-				description: "이동할 폴더를 먼저 선택해주세요.",
-				color: "warning",
-			});
-			return;
-		}
-
-		try {
-			await onClickMoveAssetButton(targetFolderId);
-			setTargetFolderId("");
-		} catch {
-			return;
-		}
-	};
-
+}: AdminAssetsAssetIdPageProps) => {
 	if (isLoading) {
 		return (
 			<DetailPage
@@ -237,9 +215,13 @@ export const AdminAssetsAssetIdPage = observer(function AdminAssetsAssetIdPage({
 									label="이동 대상 폴더"
 									placeholder="폴더를 선택하세요"
 									selectedKeys={targetFolderId ? [targetFolderId] : []}
+									isInvalid={Boolean(targetFolderError)}
+									errorMessage={targetFolderError}
 									onSelectionChange={(keys) => {
 										const firstKey = Array.from(keys)[0];
-										setTargetFolderId(firstKey ? String(firstKey) : "");
+										onChangeTargetFolderSelection(
+											firstKey ? String(firstKey) : "",
+										);
 									}}
 								>
 									{folders.map((folder) => (
@@ -252,7 +234,9 @@ export const AdminAssetsAssetIdPage = observer(function AdminAssetsAssetIdPage({
 										variant="flat"
 										isLoading={isMoving}
 										startContent={<FolderInput className="h-4 w-4" />}
-										onPress={onSubmitMove}
+										onPress={() => {
+											void onClickMoveAssetButton();
+										}}
 									>
 										이동
 									</Button>
@@ -283,5 +267,3 @@ export const AdminAssetsAssetIdPage = observer(function AdminAssetsAssetIdPage({
 		</DetailPage>
 	);
 });
-
-export default AdminAssetsAssetIdPage;

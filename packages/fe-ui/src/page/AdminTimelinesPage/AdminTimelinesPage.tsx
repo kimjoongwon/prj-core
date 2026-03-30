@@ -74,7 +74,7 @@ function TimelinesPageFallback() {
 	);
 }
 
-export const AdminTimelinesPage = observer(function AdminTimelinesPage({
+export const AdminTimelinesPage = observer(({
 	timelines,
 	totalCount,
 	isLoading,
@@ -84,7 +84,7 @@ export const AdminTimelinesPage = observer(function AdminTimelinesPage({
 	onClickCreateButton,
 	onClickTimelineName,
 	onDeleteTimeline,
-}: AdminTimelinesPageProps) {
+}: AdminTimelinesPageProps) => {
 	const [deleteTarget, setDeleteTarget] =
 		useState<AdminTimelinesPageTimeline | null>(null);
 	const deleteModal = useDisclosure();
@@ -178,4 +178,3 @@ export const AdminTimelinesPage = observer(function AdminTimelinesPage({
 	);
 });
 
-export default AdminTimelinesPage;

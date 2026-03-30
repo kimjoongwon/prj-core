@@ -65,7 +65,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| SSR 프리페칭 | `prefetchGetTimelineQuery({ timelineId })` | 기존 타임라인 정보 로드 (프리필용) |
+| CSR 초기 진입 | `useGetTimelineById(timelineId)` | 기존 타임라인 정보 로드 및 폼 프리필 |
 | 수정 버튼 클릭 | `useUpdateTimeline()` | 타임라인 정보 업데이트 |
 
 ## 이벤트 핸들러
@@ -75,6 +75,12 @@
 | 수정 버튼 클릭 | 폼 유효성 검사 → `updateTimeline` API 호출 → 성공 시 `/timelines/{timelineId}` 이동, 실패 시 에러 토스트 |
 | 취소 버튼 클릭 | `/timelines/{timelineId}` 상세로 이동 |
 
+## 런타임 책임
+
+- `page.tsx`가 `useParams`, `useRouter`, `useQueryClient`, `useLocalObservable`, timeline query/mutation을 직접 소유합니다.
+- `packages/fe-ui/src/page/AdminTimelinesTimelineIdEditPage/AdminTimelinesTimelineIdEditPage.tsx`는 props-only pure page로 사용합니다.
+- 검증 에러, 변경 감지, 토스트, invalidate, 상세 페이지 이동은 route가 책임집니다.
+
 ## 비즈니스 규칙
 
 - **변경 감지**: 수정 내용이 없으면 "수정" 버튼 비활성화
@@ -83,7 +89,8 @@
 ## 구현 체크리스트
 
 - [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
-- [ ] hooks/useHandlers.ts (수정 핸들러)
+- [x] route가 query/mutation/router/local state를 소유
+- [x] `@cocrepo/ui` pure page props 주입
 
 
 ## Surface / Elevation
@@ -119,6 +126,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | timeline edit의 실행 로직을 route page로 이동하고 `@cocrepo/ui` page를 pure props contract로 분리 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |

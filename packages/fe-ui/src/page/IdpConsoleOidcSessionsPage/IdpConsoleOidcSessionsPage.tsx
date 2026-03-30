@@ -12,9 +12,9 @@ import {
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, useDisclosure } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { Activity, Trash2 } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 
 /**
  * 좌측 입력 정의 (모델 타입 필터 + accountId 검색)
@@ -72,36 +72,43 @@ export interface IdpConsoleOidcSessionsPageProps {
 	queryStates: IdpConsoleOidcSessionsPageQueryStates;
 	setQueryStates: IdpConsoleOidcSessionsPageSetQueryStates;
 	stats?: IdpConsoleOidcSessionsPageStats;
+	revokeGrantId: string | null;
+	isGrantRevokeModalOpen: boolean;
+	isRevokeAllModalOpen: boolean;
 	isRevokingByGrant: boolean;
 	isRevokingAll: boolean;
 	onRevokeSession: (key: string) => void;
+	onOpenGrantRevokeModal: (grantId: string) => void;
+	onCloseGrantRevokeModal: () => void;
 	onConfirmRevokeByGrant: (grantId: string) => void;
+	onOpenRevokeAllModal: () => void;
+	onCloseRevokeAllModal: () => void;
 	onConfirmRevokeAll: () => void;
 }
 
 /**
  * OIDC 세션 목록 pure page입니다.
  */
-export const IdpConsoleOidcSessionsPage = observer(
-	function IdpConsoleOidcSessionsPage({
+export const IdpConsoleOidcSessionsPage = observer(({
 		sessions,
 		totalCount,
 		isLoading,
 		queryStates,
 		setQueryStates,
 		stats,
+		revokeGrantId,
+		isGrantRevokeModalOpen,
+		isRevokeAllModalOpen,
 		isRevokingByGrant,
 		isRevokingAll,
 		onRevokeSession,
+		onOpenGrantRevokeModal,
+		onCloseGrantRevokeModal,
 		onConfirmRevokeByGrant,
+		onOpenRevokeAllModal,
+		onCloseRevokeAllModal,
 		onConfirmRevokeAll,
-	}: IdpConsoleOidcSessionsPageProps) {
-		const revokeModal = useDisclosure();
-		const revokeAllModal = useDisclosure();
-
-		const state = useLocalObservable(() => ({
-			grantIdToRevoke: null as string | null,
-		}));
+	}: IdpConsoleOidcSessionsPageProps) => {
 		const byModelType = (stats?.byModelType ?? {}) as Record<string, number>;
 
 		const onClickRevokeSession = (key: string) => {
@@ -109,21 +116,7 @@ export const IdpConsoleOidcSessionsPage = observer(
 		};
 
 		const onClickGrantId = (grantId: string) => {
-			state.grantIdToRevoke = grantId;
-			revokeModal.onOpen();
-		};
-
-		const onClickConfirmRevokeByGrant = () => {
-			if (state.grantIdToRevoke) {
-				onConfirmRevokeByGrant(state.grantIdToRevoke);
-				state.grantIdToRevoke = null;
-				revokeModal.onClose();
-			}
-		};
-
-		const onClickConfirmRevokeAll = () => {
-			onConfirmRevokeAll();
-			revokeAllModal.onClose();
+			onOpenGrantRevokeModal(grantId);
 		};
 
 		const columns =
@@ -142,7 +135,7 @@ export const IdpConsoleOidcSessionsPage = observer(
 							color="danger"
 							variant="flat"
 							startContent={<Trash2 className="h-4 w-4" />}
-							onPress={revokeAllModal.onOpen}
+							onPress={onOpenRevokeAllModal}
 							isDisabled={totalCount === 0}
 						>
 							전체 폐기
@@ -186,18 +179,22 @@ export const IdpConsoleOidcSessionsPage = observer(
 					/>
 				</Surface>
 				<ConfirmModal
-					isOpen={revokeModal.isOpen}
-					onClose={revokeModal.onClose}
-					onConfirm={onClickConfirmRevokeByGrant}
+					isOpen={isGrantRevokeModalOpen}
+					onClose={onCloseGrantRevokeModal}
+					onConfirm={() => {
+						if (revokeGrantId) {
+							onConfirmRevokeByGrant(revokeGrantId);
+						}
+					}}
 					title="Grant 일괄 폐기"
 					message={
 						<>
 							<p>
 								이 Grant에 연결된 모든 세션 및 토큰을 일괄 폐기하시겠습니까?
 							</p>
-							{state.grantIdToRevoke && (
+							{revokeGrantId && (
 								<p className="mt-2 rounded-lg bg-default-100 p-2 font-mono text-sm">
-									Grant ID: {state.grantIdToRevoke}
+									Grant ID: {revokeGrantId}
 								</p>
 							)}
 						</>
@@ -208,9 +205,9 @@ export const IdpConsoleOidcSessionsPage = observer(
 					loading={isRevokingByGrant}
 				/>
 				<ConfirmModal
-					isOpen={revokeAllModal.isOpen}
-					onClose={revokeAllModal.onClose}
-					onConfirm={onClickConfirmRevokeAll}
+					isOpen={isRevokeAllModalOpen}
+					onClose={onCloseRevokeAllModal}
+					onConfirm={onConfirmRevokeAll}
 					title="전체 세션/토큰 폐기"
 					message={
 						<p>
@@ -225,7 +222,4 @@ export const IdpConsoleOidcSessionsPage = observer(
 				/>
 			</VStack>
 		);
-	},
-);
-
-export default IdpConsoleOidcSessionsPage;
+	});

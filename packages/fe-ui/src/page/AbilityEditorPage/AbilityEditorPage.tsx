@@ -83,9 +83,9 @@ export type AbilityEditorPageProps =
 	| AbilityEditorPageNotFoundProps
 	| AbilityEditorPageReadyProps;
 
-export const AbilityEditorPage = observer(function AbilityEditorPage(
+export const AbilityEditorPage = observer((
 	props: AbilityEditorPageProps,
-) {
+) => {
 	if (props.status === "loading") {
 		return (
 			<FormPage

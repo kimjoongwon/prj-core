@@ -46,8 +46,7 @@ export interface IdpConsoleOidcClientsOidcClientIdPageProps {
 	onClickDeleteConfirmButton: () => void;
 }
 
-export const IdpConsoleOidcClientsOidcClientIdPage = observer(
-	function IdpConsoleOidcClientsOidcClientIdPage({
+export const IdpConsoleOidcClientsOidcClientIdPage = observer(({
 		client,
 		isLoading,
 		isDeleting,
@@ -56,7 +55,7 @@ export const IdpConsoleOidcClientsOidcClientIdPage = observer(
 		onClickEditButton,
 		onClickToggleActiveButton,
 		onClickDeleteConfirmButton,
-	}: IdpConsoleOidcClientsOidcClientIdPageProps) {
+	}: IdpConsoleOidcClientsOidcClientIdPageProps) => {
 		const deleteModal = useDisclosure();
 
 		if (isLoading) {
@@ -319,7 +318,4 @@ export const IdpConsoleOidcClientsOidcClientIdPage = observer(
 				/>
 			</DetailPage>
 		);
-	},
-);
-
-export default IdpConsoleOidcClientsOidcClientIdPage;
+	});

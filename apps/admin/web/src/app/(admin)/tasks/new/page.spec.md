@@ -122,6 +122,11 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 | 이미지 업로드 | 파일 API 업로드 → `imageFileId` 설정 |
 | 영상 업로드 | 파일 API 업로드 → `videoFileId` 설정 |
 
+## 런타임 책임
+
+- `page.tsx`가 `useCreateTask`, `useRouter`, `useLocalObservable`를 직접 소유합니다.
+- `@cocrepo/ui`의 `AdminTasksNewPage`는 props-only pure page로 사용합니다.
+
 ## 비즈니스 규칙
 
 - Exercise 등록 시 현재 사용자의 Space를 자동으로 Task.spaceId에 설정 (서버 처리)
@@ -168,6 +173,7 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | 태스크 등록의 mutation/router/local state를 route page로 이동하고 `@cocrepo/ui` page를 pure contract로 분리 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |

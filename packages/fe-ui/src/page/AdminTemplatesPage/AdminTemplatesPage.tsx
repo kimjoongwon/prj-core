@@ -66,7 +66,7 @@ function TemplatesPageFallback() {
 	);
 }
 
-export const AdminTemplatesPage = observer(function AdminTemplatesPage({
+export const AdminTemplatesPage = observer(({
 	templates,
 	totalCount,
 	isLoading,
@@ -75,7 +75,7 @@ export const AdminTemplatesPage = observer(function AdminTemplatesPage({
 	onClickCreateButton,
 	onClickTemplateCode,
 	onToggleTemplateStatusSwitch,
-}: AdminTemplatesPageProps) {
+}: AdminTemplatesPageProps) => {
 	const columns = buildTemplateTableColumns<AdminTemplatesPageTemplate>({
 		onClickTemplateCode,
 		onToggleTemplateStatusSwitch,
@@ -119,4 +119,3 @@ export const AdminTemplatesPage = observer(function AdminTemplatesPage({
 	);
 });
 
-export default AdminTemplatesPage;

@@ -19,4 +19,5 @@ OIDC 오류 표시와 복귀 액션을 담당하는 재사용 page 컴포넌트�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-25 | error route 시각 owner를 page 레이어로 이동 | codex |

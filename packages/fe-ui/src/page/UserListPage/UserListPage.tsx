@@ -72,7 +72,7 @@ function UsersDirectoryHeader({ totalCount }: { totalCount: number }) {
 	);
 }
 
-const UsersPageFallback = observer(function UsersPageFallback() {
+const UsersPageFallback = observer(() => {
 	return (
 		<div className="flex min-h-80 items-center justify-center">
 			<Spinner size="lg" />
@@ -80,7 +80,7 @@ const UsersPageFallback = observer(function UsersPageFallback() {
 	);
 });
 
-export const UserListPage = observer(function UserListPage({
+export const UserListPage = observer(({
 	users,
 	totalCount,
 	stats,
@@ -90,7 +90,7 @@ export const UserListPage = observer(function UserListPage({
 	onClearSearch,
 	queryStates,
 	setQueryStates,
-}: UserListPageProps) {
+}: UserListPageProps) => {
 	if (isLoading && totalCount === 0 && users.length === 0) {
 		return <UsersPageFallback />;
 	}

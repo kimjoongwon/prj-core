@@ -58,15 +58,14 @@ export interface IdpConsoleOidcClientsPageProps {
 const oidcClientTableColumns =
 	buildOidcClientTableColumns<IdpConsoleOidcClientsPageClient>();
 
-export const IdpConsoleOidcClientsPage = observer(
-	function IdpConsoleOidcClientsPage({
+export const IdpConsoleOidcClientsPage = observer(({
 		oidcClients,
 		totalCount,
 		isLoading,
 		queryStates,
 		setQueryStates,
 		onClickCreateButton,
-	}: IdpConsoleOidcClientsPageProps) {
+	}: IdpConsoleOidcClientsPageProps) => {
 		return (
 			<VStack gap={5}>
 				<PageTitleBar
@@ -99,7 +98,4 @@ export const IdpConsoleOidcClientsPage = observer(
 				</Surface>
 			</VStack>
 		);
-	},
-);
-
-export default IdpConsoleOidcClientsPage;
+	});

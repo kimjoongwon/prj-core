@@ -7,17 +7,31 @@ import {
 	useUpdateSecurityPolicy,
 } from "@cocrepo/api/idp/security-policy";
 import {
+	type IdpConsoleSecurityPolicyPageFormState,
 	IdpConsoleSecurityPolicyPage,
-	type IdpConsoleSecurityPolicyPagePolicy,
-	type IdpConsoleSecurityPolicyPageSubmitInput,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
 export default observer(function SecurityPolicyPageRoute() {
 	const queryClient = useQueryClient();
 	const [isSaveSuccess, setIsSaveSuccess] = useState(false);
+	const state = useLocalObservable<IdpConsoleSecurityPolicyPageFormState>(() => ({
+		passwordMinLength: 8,
+		passwordRequireUppercase: false,
+		passwordRequireLowercase: false,
+		passwordRequireNumber: false,
+		passwordRequireSpecial: false,
+		passwordExpirationDays: 0,
+		passwordReuseLimit: 0,
+		temporaryLockThreshold: 5,
+		temporaryLockDurationMin: 30,
+		permanentLockThreshold: 10,
+		accessTokenTtlSec: 3600,
+		refreshTokenTtlSec: 86400,
+		sessionTtlSec: 86400,
+	}));
 	const { data: response } = useGetSecurityPolicy();
 	const { mutate: updatePolicy, isPending } = useUpdateSecurityPolicy({
 		mutation: {
@@ -29,6 +43,25 @@ export default observer(function SecurityPolicyPageRoute() {
 			},
 		},
 	});
+
+	useEffect(() => {
+		if (!response?.data) {
+			return;
+		}
+		state.passwordMinLength = response.data.passwordMinLength;
+		state.passwordRequireUppercase = response.data.passwordRequireUppercase;
+		state.passwordRequireLowercase = response.data.passwordRequireLowercase;
+		state.passwordRequireNumber = response.data.passwordRequireNumber;
+		state.passwordRequireSpecial = response.data.passwordRequireSpecial;
+		state.passwordExpirationDays = response.data.passwordExpirationDays;
+		state.passwordReuseLimit = response.data.passwordReuseLimit;
+		state.temporaryLockThreshold = response.data.temporaryLockThreshold;
+		state.temporaryLockDurationMin = response.data.temporaryLockDurationMin;
+		state.permanentLockThreshold = response.data.permanentLockThreshold;
+		state.accessTokenTtlSec = response.data.accessTokenTtlSec;
+		state.refreshTokenTtlSec = response.data.refreshTokenTtlSec;
+		state.sessionTtlSec = response.data.sessionTtlSec;
+	}, [response?.data, state]);
 
 	useEffect(() => {
 		if (!isSaveSuccess) {
@@ -46,52 +79,29 @@ export default observer(function SecurityPolicyPageRoute() {
 
 	return (
 		<IdpConsoleSecurityPolicyPage
-			policy={response?.data ? mapSecurityPolicy(response.data) : undefined}
+			formState={state}
 			isSaving={isPending}
 			isSaveSuccess={isSaveSuccess}
-			onSubmit={(input) => {
+			onChangeNumberField={(field, value) => {
+				const num = Number(value);
+				if (!Number.isNaN(num)) {
+					state[field] = num;
+				}
+			}}
+			onChangeBooleanField={(field, value) => {
+				state[field] = value;
+			}}
+			onSubmit={() => {
 				updatePolicy({
-					data: mapUpdateSecurityPolicyInput(input),
+					data: mapUpdateSecurityPolicyInput(state),
 				});
 			}}
 		/>
 	);
 });
 
-function mapSecurityPolicy(policy: {
-	passwordMinLength: number;
-	passwordRequireUppercase: boolean;
-	passwordRequireLowercase: boolean;
-	passwordRequireNumber: boolean;
-	passwordRequireSpecial: boolean;
-	passwordExpirationDays: number;
-	passwordReuseLimit: number;
-	temporaryLockThreshold: number;
-	temporaryLockDurationMin: number;
-	permanentLockThreshold: number;
-	accessTokenTtlSec: number;
-	refreshTokenTtlSec: number;
-	sessionTtlSec: number;
-}): IdpConsoleSecurityPolicyPagePolicy {
-	return {
-		passwordMinLength: policy.passwordMinLength,
-		passwordRequireUppercase: policy.passwordRequireUppercase,
-		passwordRequireLowercase: policy.passwordRequireLowercase,
-		passwordRequireNumber: policy.passwordRequireNumber,
-		passwordRequireSpecial: policy.passwordRequireSpecial,
-		passwordExpirationDays: policy.passwordExpirationDays,
-		passwordReuseLimit: policy.passwordReuseLimit,
-		temporaryLockThreshold: policy.temporaryLockThreshold,
-		temporaryLockDurationMin: policy.temporaryLockDurationMin,
-		permanentLockThreshold: policy.permanentLockThreshold,
-		accessTokenTtlSec: policy.accessTokenTtlSec,
-		refreshTokenTtlSec: policy.refreshTokenTtlSec,
-		sessionTtlSec: policy.sessionTtlSec,
-	};
-}
-
 function mapUpdateSecurityPolicyInput(
-	input: IdpConsoleSecurityPolicyPageSubmitInput,
+	input: IdpConsoleSecurityPolicyPageFormState,
 ): UpdateSecurityPolicyMutationBody {
 	return {
 		passwordMinLength: input.passwordMinLength,

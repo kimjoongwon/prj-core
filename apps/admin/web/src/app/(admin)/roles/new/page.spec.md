@@ -93,6 +93,11 @@
 | onClickSubmitButton | 유효성 검사 -> createRole 호출 |
 | name Input 변경 | 대문자 자동 변환 (value.toUpperCase()) |
 
+## 런타임 책임
+
+- `page.tsx`가 `useCreateRole`, `useRouter`, `useLocalObservable`를 직접 소유합니다.
+- `@cocrepo/ui`의 `AdminRolesNewPage`는 props-only pure page로 사용합니다.
+
 ## 폼 상태 관리
 
 `useLocalObservable`로 관리하는 `RoleFormState`:
@@ -140,6 +145,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | 역할 등록의 mutation/router/local state를 route page로 이동하고 `@cocrepo/ui` page를 pure contract로 분리 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |

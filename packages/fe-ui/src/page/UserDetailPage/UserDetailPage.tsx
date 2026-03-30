@@ -15,10 +15,10 @@ export interface UserDetailPageProps {
 	onClickBackButton: () => void;
 }
 
-export const UserDetailPage = observer(function UserDetailPage({
+export const UserDetailPage = observer(({
 	userId,
 	onClickBackButton,
-}: UserDetailPageProps) {
+}: UserDetailPageProps) => {
 	return (
 		<DetailPage
 			top={

@@ -50,13 +50,13 @@ export interface PhoneVerifyPageProps {
  * />
  * ```
  */
-export const PhoneVerifyPage = observer(function PhoneVerifyPage({
+export const PhoneVerifyPage = observer(({
 	state,
 	onSendVerificationCode,
 	onVerifyCode,
 	isCodeSent = false,
 	isLoading = false,
-}: PhoneVerifyPageProps) {
+}: PhoneVerifyPageProps) => {
 	return (
 		<VStack fullWidth gap={8} className="p-4">
 			<VStack fullWidth gap={2}>

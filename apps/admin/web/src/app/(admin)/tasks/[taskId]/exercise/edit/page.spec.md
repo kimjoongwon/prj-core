@@ -87,6 +87,12 @@
 }
 ```
 
+## 런타임 책임
+
+- route container가 `useParams`, `useRouter`, `useGetTaskExercise`, `useUpdateTaskExercise`, `useLocalObservable`을 소유합니다.
+- route container가 duration 분/초 변환, 스케줄 가능 상태 계산, 저장 성공/실패 toast와 상세 페이지 이동을 처리합니다.
+- `AdminTasksTaskIdExerciseEditPage`는 입력값/에러/CTA handler만 렌더링합니다.
+
 ## 이벤트 핸들러
 
 | 이벤트 | 동작 |
@@ -143,6 +149,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | 조회/저장/local state 책임을 route container로 명시하고 pure page props 위임 구조를 문서화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |

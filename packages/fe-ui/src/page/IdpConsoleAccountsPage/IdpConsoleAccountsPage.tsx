@@ -61,7 +61,7 @@ export interface IdpConsoleAccountsPageProps {
 /**
  * IDP 계정 관리 목록 pure page입니다.
  */
-export const IdpConsoleAccountsPage = observer(function IdpConsoleAccountsPage({
+export const IdpConsoleAccountsPage = observer(({
 	accounts,
 	totalCount,
 	isLoading,
@@ -69,7 +69,7 @@ export const IdpConsoleAccountsPage = observer(function IdpConsoleAccountsPage({
 	queryStates,
 	setQueryStates,
 	onConfirmUnlockAccount,
-}: IdpConsoleAccountsPageProps) {
+}: IdpConsoleAccountsPageProps) => {
 	const unlockModal = useDisclosure();
 	const [accountToUnlock, setAccountToUnlock] =
 		useState<IdpConsoleAccountsPageAccount | null>(null);
@@ -144,4 +144,3 @@ export const IdpConsoleAccountsPage = observer(function IdpConsoleAccountsPage({
 	);
 });
 
-export default IdpConsoleAccountsPage;

@@ -1,16 +1,19 @@
 "use client";
-import {
-	type InquiryCategory,
-	type InquiryChannel,
-	type InquiryPriority,
-	useCreateInquiry,
-	useFillInquiryFormWithAi,
-	useGetCreateInquiryForm,
-} from "@cocrepo/api/core/inquiries";
-import { getUsers } from "@cocrepo/api/core/users";
 
-import { ADMIN_PATHS } from "@cocrepo/constant";
-import type { AiFormOptionItem } from "@cocrepo/type";
+import type {
+	InquiryCategory,
+	InquiryChannel,
+	InquiryPriority,
+} from "@cocrepo/api/core/inquiries";
+import type {
+	AiFormFieldMeta,
+	AiFormFillRequest,
+	AiFormFillResponse,
+	AiFormOptionItem,
+	AiFormPatch,
+	AiFormSchema,
+	AiFormUiPaths,
+} from "@cocrepo/type";
 import {
 	AiForm,
 	Button,
@@ -29,14 +32,18 @@ import {
 	Textarea,
 } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import type { Route } from "next";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
 
-const REQUIRED_MESSAGE = "필수 항목입니다.";
+const getSelectedValue = (keys: Selection): string => {
+	if (keys === "all") {
+		return "";
+	}
 
-interface CustomerSearchResult {
+	const selectedKey = keys.values().next().value;
+	return selectedKey ? String(selectedKey) : "";
+};
+
+export interface AdminInquiriesNewPageCustomerSearchResult {
 	id: string;
 	name: string;
 	email: string | null;
@@ -45,209 +52,83 @@ interface CustomerSearchResult {
 	description: string;
 }
 
-const getSelectedValue = (keys: Selection): string => {
-	if (keys === "all") {
-		return "";
-	}
-	const selectedKey = keys.values().next().value;
-	return selectedKey ? String(selectedKey) : "";
-};
+export interface AdminInquiriesNewPageOption {
+	value: string;
+	text: string;
+}
 
-const normalizeAiFormOptionValue = (
-	value: unknown,
-): AiFormOptionItem["value"] => {
-	if (
-		typeof value === "string" ||
-		typeof value === "number" ||
-		typeof value === "boolean"
-	) {
-		return value;
-	}
+export interface AdminInquiriesNewPageBootstrap {
+	fieldMeta: Record<string, AiFormFieldMeta>;
+	aiSchemas: AiFormSchema[];
+	ui: AiFormUiPaths;
+	options: Record<string, AiFormOptionItem[]>;
+}
 
-	return null;
-};
+export interface AdminInquiriesNewPageFormState {
+	customerId: string;
+	customerKeyword: string;
+	title: string;
+	content: string;
+	category: InquiryCategory;
+	channel: InquiryChannel;
+	priority: InquiryPriority;
+	searchResults: AdminInquiriesNewPageCustomerSearchResult[];
+	errors: Record<string, string>;
+}
 
-const normalizeAiFormOptions = (
-	options?: Record<string, Array<{ value: unknown; label: string }>>,
-): Record<string, AiFormOptionItem[]> => {
-	return Object.fromEntries(
-		Object.entries(options ?? {}).map(([path, items]) => [
-			path,
-			items.map((item) => ({
-				value: normalizeAiFormOptionValue(item.value),
-				label: item.label,
-			})),
-		]),
-	);
-};
+export interface AdminInquiriesNewPageProps {
+	formState: AdminInquiriesNewPageFormState;
+	bootstrap?: AdminInquiriesNewPageBootstrap;
+	categoryOptions: AdminInquiriesNewPageOption[];
+	channelOptions: AdminInquiriesNewPageOption[];
+	priorityOptions: AdminInquiriesNewPageOption[];
+	isLoading: boolean;
+	isSubmitting: boolean;
+	onClickBackButton: () => void;
+	onChangeCustomerKeyword: (value: string) => void;
+	onSearchCustomer: (keyword: string) => void;
+	onSelectCustomer: (
+		customer: AdminInquiriesNewPageCustomerSearchResult,
+	) => void;
+	onChangeTitleInput: (value: string) => void;
+	onChangeContentTextarea: (value: string) => void;
+	onChangeCategorySelection: (value: InquiryCategory) => void;
+	onChangeChannelSelection: (value: InquiryChannel) => void;
+	onChangePrioritySelection: (value: InquiryPriority) => void;
+	onFillAiForm: (
+		input: AiFormFillRequest<Record<string, unknown>>,
+	) => Promise<AiFormFillResponse>;
+	onApplyAiPatch: (patches: AiFormPatch[]) => void;
+	onRevalidateAiForm: () => void;
+	onClickCancelButton: () => void;
+	onClickSubmitButton: () => void;
+}
 
-function InquiriesNewPageClient() {
-	const router = useRouter();
-	const { data: bootstrapResponse, isLoading } = useGetCreateInquiryForm();
-	const createInquiryMutation = useCreateInquiry();
-	const fillMutation = useFillInquiryFormWithAi();
-	const bootstrap = bootstrapResponse?.data;
-	const bootstrapOptions = normalizeAiFormOptions(bootstrap?.options);
-
-	const state = useLocalObservable(() => ({
-		initialized: false,
-		isSubmitting: false,
-		customerId: "",
-		customerKeyword: "",
-		title: "",
-		content: "",
-		category: "GENERAL" as InquiryCategory,
-		channel: "WEB" as InquiryChannel,
-		priority: "NORMAL" as InquiryPriority,
-		searchResults: [] as CustomerSearchResult[],
-		errors: {} as Record<string, string>,
-		initFromBootstrap() {
-			if (!bootstrap || this.initialized) {
-				return;
-			}
-			this.title =
-				typeof bootstrap.defaultObject.title === "string"
-					? bootstrap.defaultObject.title
-					: "";
-			this.content =
-				typeof bootstrap.defaultObject.content === "string"
-					? bootstrap.defaultObject.content
-					: "";
-			this.category =
-				typeof bootstrap.defaultObject.category === "string"
-					? (bootstrap.defaultObject.category as InquiryCategory)
-					: "GENERAL";
-			this.channel =
-				typeof bootstrap.defaultObject.channel === "string"
-					? (bootstrap.defaultObject.channel as InquiryChannel)
-					: "WEB";
-			this.priority =
-				typeof bootstrap.defaultObject.priority === "string"
-					? (bootstrap.defaultObject.priority as InquiryPriority)
-					: "NORMAL";
-			this.initialized = true;
-		},
-		toFormObject() {
-			return {
-				customerId: this.customerId,
-				title: this.title,
-				content: this.content,
-				category: this.category,
-				channel: this.channel,
-				priority: this.priority,
-			} satisfies Record<string, unknown>;
-		},
-		applyPatch(patches: Array<{ path: string; value: unknown }>) {
-			for (const patch of patches) {
-				switch (patch.path) {
-					case "title":
-						if (typeof patch.value === "string") this.title = patch.value;
-						break;
-					case "content":
-						if (typeof patch.value === "string") this.content = patch.value;
-						break;
-					case "category":
-						if (typeof patch.value === "string")
-							this.category = patch.value as InquiryCategory;
-						break;
-					case "priority":
-						if (typeof patch.value === "string")
-							this.priority = patch.value as InquiryPriority;
-						break;
-					default:
-						break;
-				}
-			}
-		},
-		validate() {
-			const nextErrors: Record<string, string> = {};
-			if (!this.customerId) nextErrors.customerId = REQUIRED_MESSAGE;
-			if (!this.title.trim()) nextErrors.title = REQUIRED_MESSAGE;
-			if (!this.content.trim()) nextErrors.content = REQUIRED_MESSAGE;
-			if (!this.category) nextErrors.category = REQUIRED_MESSAGE;
-			if (!this.channel) nextErrors.channel = REQUIRED_MESSAGE;
-			if (!this.priority) nextErrors.priority = REQUIRED_MESSAGE;
-			this.errors = nextErrors;
-			return Object.keys(nextErrors).length === 0;
-		},
-	}));
-
-	useEffect(() => {
-		state.initFromBootstrap();
-	}, [state, bootstrap]);
-
+export const AdminInquiriesNewPage = observer(({
+	formState,
+	bootstrap,
+	categoryOptions,
+	channelOptions,
+	priorityOptions,
+	isLoading,
+	isSubmitting,
+	onClickBackButton,
+	onChangeCustomerKeyword,
+	onSearchCustomer,
+	onSelectCustomer,
+	onChangeTitleInput,
+	onChangeContentTextarea,
+	onChangeCategorySelection,
+	onChangeChannelSelection,
+	onChangePrioritySelection,
+	onFillAiForm,
+	onApplyAiPatch,
+	onRevalidateAiForm,
+	onClickCancelButton,
+	onClickSubmitButton,
+}: AdminInquiriesNewPageProps) => {
 	const hiddenPaths = bootstrap?.ui.hiddenPaths ?? [];
 	const isHidden = (path: string) => hiddenPaths.includes(path);
-
-	const categoryOptions = (bootstrapOptions.category ?? []).map((item) => ({
-		value: String(item.value ?? ""),
-		text: item.label,
-	}));
-	const channelOptions = (bootstrapOptions.channel ?? []).map((item) => ({
-		value: String(item.value ?? ""),
-		text: item.label,
-	}));
-	const priorityOptions = (bootstrapOptions.priority ?? []).map((item) => ({
-		value: String(item.value ?? ""),
-		text: item.label,
-	}));
-
-	const onSearchCustomer = async (keyword: string) => {
-		if (keyword.length < 2) {
-			state.searchResults = [];
-			return;
-		}
-
-		const response = await getUsers({ name: keyword, take: 10 });
-		state.searchResults = (response?.data ?? []).map((user) => ({
-			id: user.id,
-			name: user.name,
-			email: user.email,
-			phone: user.phone,
-			label: user.name,
-			description: [user.email, user.phone].filter(Boolean).join(" | "),
-		}));
-	};
-
-	const onSelectCustomer = (customer: CustomerSearchResult) => {
-		state.customerId = customer.id;
-		state.customerKeyword = customer.label;
-		state.searchResults = [];
-	};
-
-	const onSubmit = async () => {
-		if (!state.validate()) {
-			return;
-		}
-
-		state.isSubmitting = true;
-		try {
-			const result = await createInquiryMutation.mutateAsync({
-				data: {
-					customerId: state.customerId || undefined,
-					title: state.title.trim(),
-					content: state.content.trim(),
-					category: state.category,
-					channel: state.channel,
-					priority: state.priority,
-				},
-			});
-
-			const inquiryId = result?.data?.id;
-			if (inquiryId) {
-				router.push(
-					ADMIN_PATHS.INQUIRIES_DETAIL.replace(
-						"[inquiryId]",
-						inquiryId,
-					) as Route,
-				);
-				return;
-			}
-			router.push(ADMIN_PATHS.INQUIRIES as Route);
-		} finally {
-			state.isSubmitting = false;
-		}
-	};
 
 	return (
 		<FormPage
@@ -259,8 +140,8 @@ function InquiriesNewPageClient() {
 						<Button
 							variant="flat"
 							startContent={<ArrowLeft className="size-4" />}
-							onPress={() => router.push(ADMIN_PATHS.INQUIRIES as Route)}
-							isDisabled={state.isSubmitting}
+							onPress={onClickBackButton}
+							isDisabled={isSubmitting}
 						>
 							목록으로
 						</Button>
@@ -274,34 +155,22 @@ function InquiriesNewPageClient() {
 						<FormSectionCard>
 							<FormSection top={<PageTitleBar level={2} title="AI 폼 추천" />}>
 								<AiForm
-									formState={state.toFormObject()}
+									formState={{
+										customerId: formState.customerId,
+										title: formState.title,
+										content: formState.content,
+										category: formState.category,
+										channel: formState.channel,
+										priority: formState.priority,
+									}}
 									fieldMeta={bootstrap.fieldMeta}
 									aiSchemas={bootstrap.aiSchemas}
 									ui={bootstrap.ui}
-									options={bootstrapOptions}
-									onFill={async (input) => {
-										const result = await fillMutation.mutateAsync({
-											data: {
-												mode: "CREATE",
-												schemaKey: input.schemaKey,
-												selectedPaths: input.selectedPaths,
-												currentObject: input.currentObject,
-												userPrompt: input.userPrompt,
-											},
-										});
-										return (
-											result?.data ?? {
-												patches: [],
-											}
-										);
-									}}
-									applyPatch={(patches) => {
-										state.applyPatch(patches);
-									}}
-									onRevalidate={() => {
-										state.validate();
-									}}
-									disabled={state.isSubmitting}
+									options={bootstrap.options}
+									onFill={onFillAiForm}
+									applyPatch={onApplyAiPatch}
+									onRevalidate={onRevalidateAiForm}
+									disabled={isSubmitting}
 								/>
 							</FormSection>
 						</FormSectionCard>
@@ -315,18 +184,18 @@ function InquiriesNewPageClient() {
 											label="고객"
 											labelPlacement="outside"
 											placeholder="고객명/이메일/전화번호 검색"
-											value={state.customerKeyword}
+											value={formState.customerKeyword}
 											onValueChange={(value) => {
-												state.customerKeyword = value;
-												void onSearchCustomer(value);
+												onChangeCustomerKeyword(value);
+												onSearchCustomer(value);
 											}}
 											isRequired
-											isInvalid={Boolean(state.errors.customerId)}
-											errorMessage={state.errors.customerId}
+											isInvalid={Boolean(formState.errors.customerId)}
+											errorMessage={formState.errors.customerId}
 										/>
-										{state.searchResults.length > 0 && (
+										{formState.searchResults.length > 0 && (
 											<div className="max-h-56 space-y-1 overflow-y-auto rounded-xl border border-divider p-2">
-												{state.searchResults.map((customer) => (
+												{formState.searchResults.map((customer) => (
 													<button
 														key={customer.id}
 														type="button"
@@ -345,9 +214,9 @@ function InquiriesNewPageClient() {
 												))}
 											</div>
 										)}
-										{state.customerId && (
+										{formState.customerId && (
 											<div className="text-xs text-default-500">
-												선택된 고객 ID: {state.customerId}
+												선택된 고객 ID: {formState.customerId}
 											</div>
 										)}
 									</div>
@@ -357,13 +226,11 @@ function InquiriesNewPageClient() {
 										label="문의 제목"
 										labelPlacement="outside"
 										placeholder="문의 제목을 입력하세요"
-										value={state.title}
-										onValueChange={(value) => {
-											state.title = value;
-										}}
+										value={formState.title}
+										onValueChange={onChangeTitleInput}
 										isRequired
-										isInvalid={Boolean(state.errors.title)}
-										errorMessage={state.errors.title}
+										isInvalid={Boolean(formState.errors.title)}
+										errorMessage={formState.errors.title}
 									/>
 								)}
 								{!isHidden("content") && (
@@ -371,14 +238,12 @@ function InquiriesNewPageClient() {
 										label="문의 내용"
 										labelPlacement="outside"
 										placeholder="문의 내용을 입력하세요"
-										value={state.content}
-										onValueChange={(value) => {
-											state.content = value;
-										}}
+										value={formState.content}
+										onValueChange={onChangeContentTextarea}
 										minRows={6}
 										isRequired
-										isInvalid={Boolean(state.errors.content)}
-										errorMessage={state.errors.content}
+										isInvalid={Boolean(formState.errors.content)}
+										errorMessage={formState.errors.content}
 									/>
 								)}
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -387,16 +252,20 @@ function InquiriesNewPageClient() {
 											<Select
 												label="카테고리"
 												placeholder="카테고리 선택"
-												selectedKeys={state.category ? [state.category] : []}
+												selectedKeys={
+													formState.category ? [formState.category] : []
+												}
 												onSelectionChange={(keys) => {
 													const selectedValue = getSelectedValue(keys);
 													if (selectedValue) {
-														state.category = selectedValue as InquiryCategory;
+														onChangeCategorySelection(
+															selectedValue as InquiryCategory,
+														);
 													}
 												}}
 												isRequired
-												isInvalid={Boolean(state.errors.category)}
-												errorMessage={state.errors.category}
+												isInvalid={Boolean(formState.errors.category)}
+												errorMessage={formState.errors.category}
 											>
 												{categoryOptions.map((option) => (
 													<SelectItem key={option.value}>
@@ -411,16 +280,20 @@ function InquiriesNewPageClient() {
 											<Select
 												label="채널"
 												placeholder="채널 선택"
-												selectedKeys={state.channel ? [state.channel] : []}
+												selectedKeys={
+													formState.channel ? [formState.channel] : []
+												}
 												onSelectionChange={(keys) => {
 													const selectedValue = getSelectedValue(keys);
 													if (selectedValue) {
-														state.channel = selectedValue as InquiryChannel;
+														onChangeChannelSelection(
+															selectedValue as InquiryChannel,
+														);
 													}
 												}}
 												isRequired
-												isInvalid={Boolean(state.errors.channel)}
-												errorMessage={state.errors.channel}
+												isInvalid={Boolean(formState.errors.channel)}
+												errorMessage={formState.errors.channel}
 											>
 												{channelOptions.map((option) => (
 													<SelectItem key={option.value}>
@@ -435,16 +308,20 @@ function InquiriesNewPageClient() {
 											<Select
 												label="우선순위"
 												placeholder="우선순위 선택"
-												selectedKeys={state.priority ? [state.priority] : []}
+												selectedKeys={
+													formState.priority ? [formState.priority] : []
+												}
 												onSelectionChange={(keys) => {
 													const selectedValue = getSelectedValue(keys);
 													if (selectedValue) {
-														state.priority = selectedValue as InquiryPriority;
+														onChangePrioritySelection(
+															selectedValue as InquiryPriority,
+														);
 													}
 												}}
 												isRequired
-												isInvalid={Boolean(state.errors.priority)}
-												errorMessage={state.errors.priority}
+												isInvalid={Boolean(formState.errors.priority)}
+												errorMessage={formState.errors.priority}
 											>
 												{priorityOptions.map((option) => (
 													<SelectItem key={option.value}>
@@ -458,17 +335,15 @@ function InquiriesNewPageClient() {
 								<div className="flex justify-end gap-2">
 									<Button
 										variant="light"
-										onPress={() => router.push(ADMIN_PATHS.INQUIRIES as Route)}
-										isDisabled={state.isSubmitting}
+										onPress={onClickCancelButton}
+										isDisabled={isSubmitting}
 									>
 										취소
 									</Button>
 									<Button
 										color="primary"
-										onPress={onSubmit}
-										isLoading={
-											state.isSubmitting || createInquiryMutation.isPending
-										}
+										onPress={onClickSubmitButton}
+										isLoading={isSubmitting}
 										isDisabled={isLoading}
 									>
 										등록
@@ -481,12 +356,4 @@ function InquiriesNewPageClient() {
 			</FormPageSurface>
 		</FormPage>
 	);
-}
-
-const InquiriesNewPage = observer(function InquiriesNewPage() {
-	return <InquiriesNewPageClient />;
 });
-
-export const AdminInquiriesNewPage = InquiriesNewPage;
-
-export default AdminInquiriesNewPage;

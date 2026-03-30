@@ -19,10 +19,10 @@ import {
 	LogOut,
 	RotateCcw,
 } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 
 /** 모달 액션 타입 */
-type ModalAction =
+export type IdpConsoleAccountsUserIdPageModalAction =
 	| "unlock"
 	| "forceResetPassword"
 	| "invalidateSessions"
@@ -50,9 +50,15 @@ export interface IdpConsoleAccountsUserIdPageProps {
 	isUnlocking: boolean;
 	isForceResetting: boolean;
 	isInvalidating: boolean;
+	modalAction: IdpConsoleAccountsUserIdPageModalAction;
 	onClickBackButton: () => void;
 	onClickToggleActiveButton: () => void;
 	onClickResetFailedAttemptsButton: () => void;
+	onClickOpenUnlockModal: () => void;
+	onClickOpenForceResetPasswordModal: () => void;
+	onClickOpenInvalidateSessionsModal: () => void;
+	onCloseModal: () => void;
+	onClickConfirmModal: () => void;
 	onClickUnlockButton: () => void;
 	onClickForceResetPasswordButton: () => void;
 	onClickInvalidateSessionsButton: () => void;
@@ -61,8 +67,7 @@ export interface IdpConsoleAccountsUserIdPageProps {
 /**
  * IDP 계정 상세 pure page입니다.
  */
-export const IdpConsoleAccountsUserIdPage = observer(
-	function IdpConsoleAccountsUserIdPage({
+export const IdpConsoleAccountsUserIdPage = observer(({
 		account,
 		isLoading,
 		isToggling,
@@ -70,52 +75,19 @@ export const IdpConsoleAccountsUserIdPage = observer(
 		isUnlocking,
 		isForceResetting,
 		isInvalidating,
+		modalAction,
 		onClickBackButton,
 		onClickToggleActiveButton,
 		onClickResetFailedAttemptsButton,
+		onClickOpenUnlockModal,
+		onClickOpenForceResetPasswordModal,
+		onClickOpenInvalidateSessionsModal,
+		onCloseModal,
+		onClickConfirmModal,
 		onClickUnlockButton,
 		onClickForceResetPasswordButton,
 		onClickInvalidateSessionsButton,
-	}: IdpConsoleAccountsUserIdPageProps) {
-		const state = useLocalObservable(() => ({
-			modalAction: null as ModalAction,
-			get isModalOpen() {
-				return this.modalAction !== null;
-			},
-		}));
-
-		const onClickOpenUnlockModal = () => {
-			state.modalAction = "unlock";
-		};
-
-		const onClickOpenForceResetPasswordModal = () => {
-			state.modalAction = "forceResetPassword";
-		};
-
-		const onClickOpenInvalidateSessionsModal = () => {
-			state.modalAction = "invalidateSessions";
-		};
-
-		const onCloseModal = () => {
-			state.modalAction = null;
-		};
-
-		const onClickConfirmModal = () => {
-			switch (state.modalAction) {
-				case "unlock":
-					onClickUnlockButton();
-					break;
-				case "forceResetPassword":
-					onClickForceResetPasswordButton();
-					break;
-				case "invalidateSessions":
-					onClickInvalidateSessionsButton();
-					break;
-			}
-
-			onCloseModal();
-		};
-
+	}: IdpConsoleAccountsUserIdPageProps) => {
 		// 잠금 상태 판단
 		const isLocked = account
 			? account.isPermanentlyLocked || !!account.lockedUntil
@@ -123,7 +95,7 @@ export const IdpConsoleAccountsUserIdPage = observer(
 
 		// 모달 설정
 		const modalConfig: Record<
-			Exclude<ModalAction, null>,
+			Exclude<IdpConsoleAccountsUserIdPageModalAction, null>,
 			{
 				title: string;
 				message: React.ReactNode;
@@ -188,8 +160,8 @@ export const IdpConsoleAccountsUserIdPage = observer(
 			},
 		};
 
-		const currentModalConfig = state.modalAction
-			? modalConfig[state.modalAction]
+		const currentModalConfig = modalAction
+			? modalConfig[modalAction]
 			: null;
 
 		// 로딩 상태
@@ -433,7 +405,7 @@ export const IdpConsoleAccountsUserIdPage = observer(
 				</DetailPageSurface>
 				{currentModalConfig && (
 					<ConfirmModal
-						isOpen={state.isModalOpen}
+						isOpen={modalAction !== null}
 						onClose={onCloseModal}
 						onConfirm={onClickConfirmModal}
 						title={currentModalConfig.title}
@@ -446,7 +418,4 @@ export const IdpConsoleAccountsUserIdPage = observer(
 				)}
 			</DetailPage>
 		);
-	},
-);
-
-export default IdpConsoleAccountsUserIdPage;
+	});

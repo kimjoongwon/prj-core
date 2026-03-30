@@ -21,6 +21,7 @@ Prisma schema 도메인 폴더 구조, 파일별 `@schema-owner: true` 단일성
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | `ProgramActivity` 추가 이후 `expectedOwner` 매트릭스에 scheduling/timeline.prisma 소유 선언을 반영 | codex |
 | 2026-03-10 | `Tenant` 대표 모델 파일명을 `identity/tenant.prisma`로 정리하고 검증 매트릭스 경로를 갱신 | codex |
 | 2026-03-10 | `@schema-owner: true`와 실제 `@aggregate-root: true`를 분리해 검증 규칙 설명 갱신 | codex |
 | 2026-03-10 | 도메인 폴더 구조와 `@aggregate-root: true` 단일성 검증 규칙으로 스크립트 설명 갱신 | codex |

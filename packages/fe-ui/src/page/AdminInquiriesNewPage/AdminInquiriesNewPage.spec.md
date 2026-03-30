@@ -6,33 +6,29 @@
 
 ## 역할
 
-이 파일은 route thin wrapper가 재사용하는 page 레이어 화면 컴포넌트를 담당합니다.
+이 파일은 문의 접수 화면의 pure page 레이어를 담당합니다. bootstrap 데이터, 고객 검색, AI 채움, 생성 mutation, 라우팅은 app route가 소유하고 이 파일은 입력 섹션과 CTA 렌더링만 담당합니다.
 
 ## 공개 계약
 
 | 항목 | 설명 |
 |------|------|
 | AdminInquiriesNewPage | 공개 계약 요소 |
-| default export | 공개 계약 요소 |
 
 ## 의존성
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/api/core/inquiries | 기능 구현 의존성 |
-| @cocrepo/api/core/users | 기능 구현 의존성 |
-| @cocrepo/constant | 기능 구현 의존성 |
+| @cocrepo/api/core/inquiries | 문의 enum type 참조 |
 | @cocrepo/type | 기능 구현 의존성 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | @heroui/react | 기능 구현 의존성 |
 | lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
-| next | 기능 구현 의존성 |
-| next/navigation | 기능 구현 의존성 |
-| react | 기능 구현 의존성 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | create bootstrap, 고객 검색, AI fill, 라우팅을 route로 이동하고 page를 props 기반 pure contract로 재정의 | codex |
+| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |

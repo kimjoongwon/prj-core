@@ -62,3 +62,4 @@
 | 2026-03-29 | 구현이 테이블 중심으로 유지되는 현재 구조에 맞춰 reusable target을 `master/table`로 보정 | codex |
 | 2026-03-22 | 목록 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | 역할 그룹 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |
+| 2026-03-30 | route가 query/mutation/navigation/local state를 소유하고 pure page props를 주입하는 구조로 정리 | codex |

@@ -6,26 +6,23 @@
 
 ## 역할
 
-이 파일은 route thin wrapper가 재사용하는 page 레이어 화면 컴포넌트를 담당합니다.
-Task root와 Exercise detail을 동시에 생성하며 이미지/영상 자산 ID 입력과 스케줄 가능 상태 preview를 제공합니다.
+이 파일은 Task root + Exercise detail 등록 화면의 pure page 레이어를 담당합니다.
+route의 mutation/router/local state는 app route가 소유하고, 이 파일은 이미지/영상 자산 ID 입력과 스케줄 가능 상태 preview를 props 기반으로 렌더링합니다.
 
 ## 공개 계약
 
 | 항목 | 설명 |
 |------|------|
 | AdminTasksNewPage | 공개 계약 요소 |
-| default export | 공개 계약 요소 |
+| AdminTasksNewPageProps | 태스크 등록 화면 렌더링 props 계약 |
 
 ## 의존성
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/api/core/tasks | 기능 구현 의존성 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | @heroui/react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
-| next | 기능 구현 의존성 |
-| next/navigation | 기능 구현 의존성 |
 
 ## UI 규칙
 
@@ -36,5 +33,7 @@ Task root와 Exercise detail을 동시에 생성하며 이미지/영상 자산 I
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | 태스크 등록 로직을 route page로 이동하고 page를 pure props contract로 정리 | codex |
+| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-29 | Exercise 이미지/영상 자산 입력과 스케줄 가능 상태 preview를 신규 Task 생성 화면에 반영 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |

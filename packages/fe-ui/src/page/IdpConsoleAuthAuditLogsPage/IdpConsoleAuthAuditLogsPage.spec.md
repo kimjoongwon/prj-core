@@ -18,7 +18,6 @@
 | IdpConsoleAuthAuditLogsPageProps | pure page 입력 계약 |
 | idpConsoleAuthAuditLogsPageQueryInputs | route와 page가 공유하는 query input 정의 |
 | IdpConsoleAuthAuditLogsPage | 공개 계약 요소 |
-| default export | 공개 계약 요소 |
 
 ## 의존성
 
@@ -33,6 +32,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-29 | 감사 로그 목록을 pure page로 재정의하고 조회·통계·query state를 route thin container로 이동 | codex |
 | 2026-03-27 | 감사 로그 `MetaDataGrid` 컬럼 정의를 `@cocrepo/ui` `columns` 레이어 조합으로 이관 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |

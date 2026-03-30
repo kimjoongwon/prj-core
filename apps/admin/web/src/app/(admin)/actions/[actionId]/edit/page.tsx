@@ -5,14 +5,24 @@ import {
 	useGetActionById,
 	useUpdateAction,
 } from "@cocrepo/api/core/actions";
-import { AdminActionsActionIdEditPage } from "@cocrepo/ui";
-import { observer } from "mobx-react-lite";
+import {
+	AdminActionsActionIdEditPage,
+	type AdminActionsActionIdEditPageFormState,
+} from "@cocrepo/ui";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default observer(function ActionEditPageRoute() {
 	const actionId = useParams<{ actionId: string }>().actionId;
 	const router = useRouter();
+	const state = useLocalObservable<AdminActionsActionIdEditPageFormState>(() => ({
+		displayName: "",
+		description: "",
+		group: "",
+		order: 0,
+	}));
 	const { data: response, isLoading } = useGetActionById(actionId);
 	const { mutate: updateAction, isPending } = useUpdateAction({
 		mutation: {
@@ -21,6 +31,16 @@ export default observer(function ActionEditPageRoute() {
 			},
 		},
 	});
+
+	useEffect(() => {
+		if (!response?.data) {
+			return;
+		}
+		state.displayName = response.data.displayName || "";
+		state.description = response.data.description || "";
+		state.group = response.data.group || "";
+		state.order = response.data.order;
+	}, [response?.data, state]);
 
 	return (
 		<AdminActionsActionIdEditPage
@@ -37,6 +57,7 @@ export default observer(function ActionEditPageRoute() {
 						}
 					: undefined
 			}
+			formState={state}
 			isLoading={isLoading}
 			isSubmitting={isPending}
 			onClickBackButton={() => {
@@ -45,12 +66,24 @@ export default observer(function ActionEditPageRoute() {
 			onClickListButton={() => {
 				router.push("/actions" as Route);
 			}}
-			onSubmit={(form) => {
+			onChangeDisplayNameInput={(value) => {
+				state.displayName = value;
+			}}
+			onChangeDescriptionTextarea={(value) => {
+				state.description = value;
+			}}
+			onChangeGroupSelection={(value) => {
+				state.group = value;
+			}}
+			onChangeOrderInput={(value) => {
+				state.order = Number(value) || 0;
+			}}
+			onSubmit={() => {
 				const data: UpdateActionDto = {
-					displayName: form.displayName || undefined,
-					description: form.description || undefined,
-					group: form.group || undefined,
-					order: form.order,
+					displayName: state.displayName || undefined,
+					description: state.description || undefined,
+					group: state.group || undefined,
+					order: state.order,
 				};
 				updateAction({ id: actionId, data });
 			}}

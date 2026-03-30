@@ -85,7 +85,7 @@ function RoutinesPageFallback() {
 	);
 }
 
-export const AdminRoutinesPage = observer(function AdminRoutinesPage({
+export const AdminRoutinesPage = observer(({
 	routines,
 	totalCount,
 	isLoading,
@@ -95,7 +95,7 @@ export const AdminRoutinesPage = observer(function AdminRoutinesPage({
 	onClickCreateButton,
 	onClickRoutineName,
 	onDeleteRoutine,
-}: AdminRoutinesPageProps) {
+}: AdminRoutinesPageProps) => {
 	const [deleteTarget, setDeleteTarget] =
 		useState<AdminRoutinesPageRoutine | null>(null);
 	const deleteModal = useDisclosure();
@@ -187,4 +187,3 @@ export const AdminRoutinesPage = observer(function AdminRoutinesPage({
 	);
 });
 
-export default AdminRoutinesPage;
