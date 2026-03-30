@@ -52,8 +52,13 @@
 - child 페이지는 `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface`를 다시 조립하지 않습니다.
 - child 페이지 계약은 각 `page.spec.md`의 `Consumed Layout Contract`와 `Rendering Decision`을 따릅니다.
 
+## Metadata Contract
+
+- `layout.tsx`는 proposal-web의 문서 제목과 설명을 온짓다 브랜드 기준으로 제공합니다.
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-30 | layout metadata의 브랜드 표기를 온짓다 기준으로 정리 | codex |
 | 2026-03-21 | fe-route-layout-builder 계약에 맞춰 layout skeleton/slot 계약을 재정의 | codex |

@@ -3,9 +3,9 @@ import { Providers } from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-	title: "자자 | AI 중심 외주 개발 스튜디오",
+	title: "온짓다 | AI 중심 외주 개발 스튜디오",
 	description:
-		"자자는 AI 주도로 기획, UI 시스템, 도메인 설계를 연결해 더 적은 handoff와 더 빠른 실행으로 제품을 만드는 개발 스튜디오입니다.",
+		"온짓다는 AI 주도로 기획, UI 시스템, 도메인 설계를 연결해 더 적은 handoff와 더 빠른 실행으로 제품을 만드는 개발 스튜디오입니다.",
 };
 
 const THEME_STORAGE_KEY = "heroui-theme";
