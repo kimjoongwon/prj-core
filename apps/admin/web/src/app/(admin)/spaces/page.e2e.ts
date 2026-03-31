@@ -6,6 +6,103 @@ test.describe("공간 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
 
 	test.describe("[E2E-001] 목록 렌더링", () => {
+		test("current-space 응답에 ground가 없어도 헤더에 현재 Space 이름이 표시되어야 한다", async ({
+			page,
+		}) => {
+			const systemSpaceId = "61ddca20-1752-466e-b4da-879ebdbe54e3";
+
+			await page.route("**/api/v1/auth/current-space", async (route) => {
+				if (route.request().method() !== "GET") {
+					await route.continue();
+					return;
+				}
+
+				await route.fulfill({
+					status: 200,
+					contentType: "application/json",
+					body: JSON.stringify({
+						data: {
+							id: systemSpaceId,
+						},
+					}),
+				});
+			});
+
+			await page.route("**/api/v1/auth/my-spaces", async (route) => {
+				await route.fulfill({
+					status: 200,
+					contentType: "application/json",
+					body: JSON.stringify({
+						data: [
+							{
+								id: systemSpaceId,
+								ground: {
+									name: "플랫폼 운영본부",
+								},
+							},
+						],
+					}),
+				});
+			});
+
+			await page.route("**/api/v1/abilities", async (route) => {
+				await route.fulfill({
+					status: 200,
+					contentType: "application/json",
+					body: JSON.stringify({
+						data: [],
+						meta: { total: 0 },
+					}),
+				});
+			});
+
+			await page.route("**/api/v1/spaces", async (route) => {
+				await route.fulfill({
+					status: 200,
+					contentType: "application/json",
+					body: JSON.stringify({
+						data: [
+							{
+								id: systemSpaceId,
+								createdAt: "2026-03-31T00:00:00.000Z",
+								ground: {
+									name: "플랫폼 운영본부",
+									label: null,
+									businessNo: "123-45-67890",
+									address: "서울특별시 강남구 테스트로 1",
+									phone: "02-0000-0001",
+									email: "space@example.com",
+								},
+							},
+						],
+						meta: { total: 1 },
+					}),
+				});
+			});
+
+			await page.route("**/api/v1/auth/token/refresh", async (route) => {
+				await route.fulfill({
+					status: 200,
+					contentType: "application/json",
+					body: JSON.stringify({
+						data: {
+							accessToken: "stub-access-token",
+							refreshToken: "stub-refresh-token",
+							accessTokenExpiresAt: Date.now() + 60_000,
+							refreshTokenExpiresAt: Date.now() + 120_000,
+						},
+					}),
+				});
+			});
+
+			await page.goto("./spaces");
+			await page.waitForLoadState("networkidle");
+
+			await expect(
+				page.getByRole("button", { name: /플랫폼 운영본부/ }).first(),
+			).toBeVisible();
+		});
+
 		test("공간 목록 페이지가 정상 렌더링되어야 한다", async ({ page }) => {
 			// Given: 공간 목록 페이지 진입
 			await page.goto("./spaces");

@@ -8,6 +8,28 @@ import { useEffect } from "react";
 import { useSpaceGuard } from "@/hooks";
 import { usePersistStore } from "@/stores/AppStoreProvider";
 
+type SpaceWithGroundLike = {
+	id?: string;
+	ground?: {
+		name?: string | null;
+	} | null;
+};
+
+export function resolveCurrentSpaceGroundName(
+	currentSpace: SpaceWithGroundLike | null | undefined,
+	spaces: SpaceWithGroundLike[],
+) {
+	if (!currentSpace?.id) {
+		return "";
+	}
+
+	return (
+		currentSpace.ground?.name ??
+		spaces.find((space) => space.id === currentSpace.id)?.ground?.name ??
+		""
+	);
+}
+
 export const AdminLayoutEffects = observer(function AdminLayoutEffects() {
 	const persistStore = usePersistStore();
 	const { data: mySpacesResponse } = useGetMySpaces();
@@ -16,10 +38,10 @@ export const AdminLayoutEffects = observer(function AdminLayoutEffects() {
 		isFetched: isCurrentSpaceFetched,
 	} = useGetCurrentSpace();
 	const { showAlert, handleConfirm, handleDismiss } = useSpaceGuard();
+	const spaces = mySpacesResponse?.data ?? [];
 
 	useEffect(() => {
-		const spaces = mySpacesResponse?.data;
-		if (!spaces || spaces.length === 0) {
+		if (spaces.length === 0) {
 			return;
 		}
 
@@ -31,20 +53,19 @@ export const AdminLayoutEffects = observer(function AdminLayoutEffects() {
 			}));
 
 		persistStore.setSpaces(spaceInfoList);
-	}, [mySpacesResponse, persistStore]);
+	}, [spaces, persistStore]);
 
 	useEffect(() => {
 		if (!isCurrentSpaceFetched) {
 			return;
 		}
 
-		const spaces = mySpacesResponse?.data ?? [];
 		const currentSpace = currentSpaceResponse?.data;
 		if (currentSpace?.id) {
-			const resolvedGroundName =
-				currentSpace.ground?.name ??
-				spaces.find((space) => space.id === currentSpace.id)?.ground?.name ??
-				"";
+			const resolvedGroundName = resolveCurrentSpaceGroundName(
+				currentSpace,
+				spaces,
+			);
 			persistStore.setSpace(currentSpace.id, resolvedGroundName);
 		} else {
 			persistStore.clearSpace();
@@ -53,7 +74,7 @@ export const AdminLayoutEffects = observer(function AdminLayoutEffects() {
 	}, [
 		currentSpaceResponse,
 		isCurrentSpaceFetched,
-		mySpacesResponse,
+		spaces,
 		persistStore,
 	]);
 
