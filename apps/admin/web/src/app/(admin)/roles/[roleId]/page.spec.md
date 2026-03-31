@@ -132,9 +132,9 @@
 | 클라이언트 초기 렌더 | `useGetRoleById(roleId)` | 역할 상세 첫 조회 |
 | 클라이언트 | `useGetRoleById(roleId)` | 역할 상세 조회 (GET /api/v1/roles/:id) |
 | 클라이언트 | `useGetAbilitiesByRoleId(roleId)` | 역할별 Ability 목록 조회 |
-| 편집 모드 진입 시 | `useQuery (getAllAbilities)` | 전체 Ability 목록 조회 (GET /api/v1/abilities), 임시 customInstance 사용 |
+| 편집 모드 진입 시 | `useGetAbilities({ query: { enabled: isEditingGrants } })` | 편집 모드에서만 전체 Ability 목록 조회 |
 | 삭제 | `useDeleteRole` | 역할 삭제 (DELETE /api/v1/roles/:id) |
-| Grant 저장 | `useMutation (batchAssignGrantsToRole)` | Grant 배치 할당 (PUT /api/v1/grants/roles/:roleId), 임시 customInstance 사용 |
+| Grant 저장 | `useBatchAssignGrantsToRole` | Grant 배치 할당 후 역할별 Ability 쿼리 무효화 |
 
 ## 이벤트 핸들러
 
@@ -158,7 +158,7 @@
 
 ## 비고
 
-- 전체 Ability 조회 및 Grant 배치 할당은 Orval 재생성 전 임시 customInstance를 사용 중
+- 전체 Ability 조회와 Grant 배치 저장은 `@cocrepo/api`의 Orval 생성 훅을 사용
 - Grant 편집 모드에서 변경 감지는 `hasChanges` 상태로 관리
 - 변경사항 요약(added, removed, kept)은 `getChangeSummary()` 함수로 계산
 
@@ -196,6 +196,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-31 | 전체 Ability 조회/Grant 저장 흐름을 `useGetAbilities`, `useBatchAssignGrantsToRole` 기준으로 갱신 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |

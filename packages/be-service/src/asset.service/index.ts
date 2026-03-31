@@ -175,6 +175,7 @@ export class AssetService {
     return {
       ...asset,
       sizeBytes: Number(asset.sizeBytes),
+      publicUrl: this.objectStorageService.getPublicUrl(asset.storageKey),
     };
   }
 

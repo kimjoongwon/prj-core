@@ -73,8 +73,8 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 클라이언트 | `useQuery (GET /api/v1/categories/${categoryId})` | 카테고리 상세 조회, 임시 customInstance 사용 |
-| 삭제 | `useMutation (DELETE /api/v1/categories/${categoryId})` | 카테고리 삭제, 임시 customInstance 사용 |
+| 클라이언트 | `useGetCategoryById(categoryId)` | 카테고리 상세 조회 |
+| 삭제 | `useDeleteCategory` | 카테고리 삭제 후 목록 쿼리 무효화 |
 
 ## 이벤트 핸들러
 
@@ -91,11 +91,12 @@
 - CategoryInfoSection에 `categoriesBasePath="/roles/categories"` 전달 (상위 카테고리 링크 경로)
 - CategoryChildrenSection에 `categoriesBasePath="/roles/categories"` 전달 (하위 카테고리 링크 경로)
 - CategoryInfoSection, CategoryChildrenSection, CategoryRoleListSection은 `@cocrepo/ui` 공용 컴포넌트 사용
+- 상세 조회/삭제는 `@cocrepo/api/core/categories`의 Orval 생성 훅을 사용
 
 ## 구현 체크리스트
 
 - [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
-- [ ] Orval codegen 후 useGetCategoryById, useDeleteCategory 훅 교체
+- [x] `useGetCategoryById`, `useDeleteCategory` 훅 사용
 
 
 ## Surface / Elevation
@@ -131,6 +132,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-31 | 상세 조회/삭제 흐름을 `useGetCategoryById`, `useDeleteCategory` 기준으로 갱신 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |

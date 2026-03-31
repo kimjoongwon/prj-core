@@ -1,8 +1,8 @@
 "use client";
 
-import { customInstance } from "@cocrepo/api/core/client";
+import { useCreateGroup } from "@cocrepo/api/core/groups";
 import { AdminRolesGroupsNewPage } from "@cocrepo/ui";
-import { useMutation } from "@tanstack/react-query";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -10,15 +10,17 @@ import { useState } from "react";
 
 const AdminRolesGroupsNewRoute = observer(() => {
 	const router = useRouter();
+	const persistStore = usePersistStore();
 	const [name, setName] = useState("");
 	const [label, setLabel] = useState("");
 	const [nameError, setNameError] = useState("");
+	const spaceId = persistStore.spaceId ?? "";
 
-	const { mutate: createGroup, isPending } = useMutation({
-		mutationFn: (data: { name: string; label?: string; type: string }) =>
-			customInstance({ url: "/api/v1/groups", method: "POST", data }),
-		onSuccess: () => {
-			router.push("/roles/groups" as Route);
+	const { mutate: createGroup, isPending } = useCreateGroup({
+		mutation: {
+			onSuccess: () => {
+				router.push("/roles/groups" as Route);
+			},
 		},
 	});
 
@@ -34,9 +36,13 @@ const AdminRolesGroupsNewRoute = observer(() => {
 
 		setNameError("");
 		createGroup({
-			name,
-			label: label || undefined,
-			type: "Role",
+			data: {
+				tenantId: spaceId,
+				name,
+				label: label || undefined,
+				type: "Role",
+				spaceId,
+			},
 		});
 	};
 

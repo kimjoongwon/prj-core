@@ -54,6 +54,12 @@ export class AssetDto extends AbstractDto {
 	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
 	creatorId!: string | null;
 
+	@StringFieldOptional({
+		nullable: true,
+		description: "공개 접근 가능한 에셋 URL",
+	})
+	publicUrl!: string | null;
+
 	// 관계 필드
 	@ClassField(() => FolderDto, { required: false, description: "소속 폴더" })
 	folder?: FolderDto;

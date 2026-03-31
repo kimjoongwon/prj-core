@@ -70,8 +70,8 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 페이지 진입 | `useQuery (GET /api/v1/categories?type=Role)` | 상위 카테고리 선택 목록, 임시 customInstance 사용 |
-| 폼 제출 | `useMutation (POST /api/v1/categories)` | 카테고리 생성, { name, parentId, type: "Role" }, 임시 customInstance 사용 |
+| 페이지 진입 | `useGetCategories({ type: "Role" })` | 상위 카테고리 선택 목록 조회 |
+| 폼 제출 | `useCreateCategory` | 카테고리 생성, `{ name, parentId, type: "Role" }` 전달 |
 
 ## 이벤트 핸들러
 
@@ -93,11 +93,12 @@
 
 - `type: "Role"` 고정값으로 카테고리 생성 시 전달
 - parentId가 빈 문자열이면 null로 변환하여 최상위 카테고리로 생성
+- 카테고리 목록 조회와 생성은 `@cocrepo/api/core/categories`의 Orval 생성 훅을 사용
 
 ## 구현 체크리스트
 
 - [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
-- [ ] Orval codegen 후 useCreateCategory, useGetCategories 훅 교체
+- [x] `useGetCategories`, `useCreateCategory` 훅 사용
 
 
 ## Surface / Elevation
@@ -133,6 +134,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-31 | 상위 카테고리 조회/생성 흐름을 `useGetCategories`, `useCreateCategory` 기준으로 갱신 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |

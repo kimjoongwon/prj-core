@@ -79,9 +79,9 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 클라이언트 | `useQuery (GET /api/v1/categories/${categoryId})` | 카테고리 상세 조회, 임시 customInstance 사용 |
-| 클라이언트 | `useQuery (GET /api/v1/categories?type=Role)` | 상위 카테고리 선택 목록, 임시 customInstance 사용 |
-| 폼 제출 | `useMutation (PATCH /api/v1/categories/${categoryId})` | 카테고리 수정, 임시 customInstance 사용 |
+| 클라이언트 | `useGetCategoryById(categoryId)` | 카테고리 상세 조회 |
+| 클라이언트 | `useGetCategories({ type: "Role" })` | 상위 카테고리 선택 목록 조회 |
+| 폼 제출 | `useUpdateCategory` | 카테고리 수정 후 상세 쿼리 무효화 |
 
 ## 이벤트 핸들러
 
@@ -106,11 +106,12 @@
 - 현재 route는 thin container + CSR fetch 패턴을 유지하며 별도 `_prefetch.ts`는 사용하지 않음
 - parentId가 빈 문자열이면 null로 변환하여 최상위 카테고리로 설정
 - 수정 성공 시 해당 카테고리 쿼리 캐시 무효화
+- 조회/수정은 `@cocrepo/api/core/categories`의 Orval 생성 훅을 사용
 
 ## 구현 체크리스트
 
 - [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
-- [ ] Orval codegen 후 useGetCategoryById, useUpdateCategory, useGetCategories 훅 교체
+- [x] `useGetCategoryById`, `useGetCategories`, `useUpdateCategory` 훅 사용
 
 
 ## Surface / Elevation
@@ -146,6 +147,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-31 | 상세 조회/상위 목록/수정 흐름을 Orval 생성 카테고리 훅 기준으로 갱신 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |

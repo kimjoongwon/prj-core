@@ -1,11 +1,16 @@
 "use client";
 
-import { customInstance } from "@cocrepo/api/core/client";
+import {
+	getGetCategoryByIdQueryKey,
+	useGetCategories,
+	useGetCategoryById,
+	useUpdateCategory,
+} from "@cocrepo/api/core/categories";
 import {
 	AdminRolesCategoriesCategoryIdEditPage,
 	type AdminRolesCategoriesCategoryIdEditPageOption,
 } from "@cocrepo/ui";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -33,25 +38,11 @@ const AdminRolesCategoriesEditRoute = observer(() => {
 	const [nameError, setNameError] = useState("");
 	const [isInitialized, setIsInitialized] = useState(false);
 
-	const { data: response, isLoading } = useQuery({
-		queryKey: ["/api/v1/categories", categoryId],
-		queryFn: () =>
-			customInstance<{ data: CategoryDetail }>({
-				url: `/api/v1/categories/${categoryId}`,
-				method: "GET",
-			}),
-	});
-	const category = response?.data;
+	const { data: response, isLoading } = useGetCategoryById(categoryId);
+	const category = (response?.data as unknown) as CategoryDetail | undefined;
 
-	const { data: categoriesResponse } = useQuery({
-		queryKey: ["/api/v1/categories", { type: "Role" }],
-		queryFn: () =>
-			customInstance<{ data: CategoryOption[] }>({
-				url: "/api/v1/categories",
-				method: "GET",
-				params: { type: "Role" },
-			}),
-	});
+	const { data: categoriesResponse } = useGetCategories({ type: "Role" });
+	const categories = ((categoriesResponse?.data ?? []) as unknown) as CategoryOption[];
 
 	useEffect(() => {
 		if (!category || isInitialized) {
@@ -66,22 +57,18 @@ const AdminRolesCategoriesEditRoute = observer(() => {
 	for (const child of category?.children ?? []) {
 		descendantIds.add(child.id);
 	}
-	const categoryOptions = (categoriesResponse?.data ?? [])
+	const categoryOptions = categories
 		.filter((candidate) => !descendantIds.has(candidate.id))
 		.map(mapEditOption);
 
-	const { mutate: updateCategory, isPending } = useMutation({
-		mutationFn: (data: { name?: string; parentId?: string | null }) =>
-			customInstance({
-				url: `/api/v1/categories/${categoryId}`,
-				method: "PATCH",
-				data,
-			}),
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ["/api/v1/categories", categoryId],
-			});
-			router.push(`/roles/categories/${categoryId}` as Route);
+	const { mutate: updateCategory, isPending } = useUpdateCategory({
+		mutation: {
+			onSuccess: () => {
+				queryClient.invalidateQueries({
+					queryKey: getGetCategoryByIdQueryKey(categoryId),
+				});
+				router.push(`/roles/categories/${categoryId}` as Route);
+			},
 		},
 	});
 
@@ -93,8 +80,11 @@ const AdminRolesCategoriesEditRoute = observer(() => {
 
 		setNameError("");
 		updateCategory({
-			name,
-			parentId: parentId || null,
+			id: categoryId,
+			data: {
+				name,
+				parentId: parentId || null,
+			},
 		});
 	};
 

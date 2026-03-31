@@ -1,6 +1,6 @@
 "use client";
 
-import { customInstance } from "@cocrepo/api/core/client";
+import { useGetCategories } from "@cocrepo/api/core/categories";
 import {
 	AdminRolesCategoriesPage,
 	type AdminRolesCategoriesPageCategory,
@@ -8,7 +8,6 @@ import {
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
 
 interface CategoryData {
 	id: string;
@@ -24,24 +23,14 @@ interface CategoryData {
 	}[];
 }
 
-function getCategories() {
-	return customInstance<{ data: CategoryData[] }>({
-		url: "/api/v1/categories",
-		method: "GET",
-		params: { type: "Role" },
-	});
-}
-
 const AdminRolesCategoriesRoute = observer(() => {
 	const router = useRouter();
-	const { data: response, isLoading } = useQuery({
-		queryKey: ["/api/v1/categories", { type: "Role" }],
-		queryFn: getCategories,
-	});
+	const { data: response, isLoading } = useGetCategories({ type: "Role" });
+	const categories = ((response?.data ?? []) as unknown) as CategoryData[];
 
 	return (
 		<AdminRolesCategoriesPage
-			categories={(response?.data ?? []).map(mapCategoryRow)}
+			categories={categories.map(mapCategoryRow)}
 			isLoading={isLoading}
 			onClickCreateButton={() => {
 				router.push("/roles/categories/new" as Route);

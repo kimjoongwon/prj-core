@@ -40,7 +40,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 클라이언트 렌더 | `fetch("/api/v1/categories?type=Role")` + `useQuery` | 역할 카테고리 목록 조회 |
+| 클라이언트 렌더 | `useGetCategories({ type: "Role" })` | 역할 카테고리 목록 조회 |
 
 ## 이벤트 핸들러
 
@@ -59,6 +59,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-31 | 목록 조회를 `useGetCategories({ type: "Role" })` 기반 Orval 훅 사용으로 갱신 | codex |
 | 2026-03-29 | 구현이 테이블 중심으로 유지되는 현재 구조에 맞춰 reusable target을 `master/table`로 보정 | codex |
 | 2026-03-22 | 목록 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | 역할 카테고리 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

@@ -4,6 +4,7 @@ import {
 	DateTimeCell,
 	DetailPage,
 	DetailPageSurface,
+	MediaThumbnail,
 	PageTitleBar,
 	DetailSection,
 	DetailSectionCard,
@@ -24,14 +25,13 @@ import { observer } from "mobx-react-lite";
 
 export interface AdminRoutinesRoutineIdPageActivity {
 	id: string;
+	order: number;
 	repetitions: number;
 	restTime: number;
 	notes?: string | null;
-	task?: {
-		exercise?: {
-			name?: string | null;
-		} | null;
-	} | null;
+	exerciseName?: string | null;
+	imageAssetUrl?: string;
+	videoAssetUrl?: string;
 }
 
 export interface AdminRoutinesRoutineIdPageProgram {
@@ -161,7 +161,7 @@ export const AdminRoutinesRoutineIdPage = observer(
 		const activities = routine.activities ?? [];
 		const programs = routine.programs ?? [];
 		const resolvedActivities = activities.filter((activity) =>
-			Boolean(activity.task?.exercise?.name),
+			Boolean(activity.exerciseName),
 		).length;
 		const unresolvedActivities = activities.length - resolvedActivities;
 
@@ -285,39 +285,65 @@ export const AdminRoutinesRoutineIdPage = observer(
 								) : (
 									<div className="flex flex-col gap-3">
 										{activities.map((activity, index) => {
-											const isResolved = Boolean(activity.task?.exercise?.name);
+											const isResolved = Boolean(activity.exerciseName);
 											return (
 												<div
 													key={activity.id}
-													className="flex flex-col gap-1 rounded-lg bg-content2 p-4"
+													className="rounded-2xl border border-default-200 bg-content1 p-4"
 												>
-													<div className="flex items-center justify-between">
-														<p className="font-medium">
-															{index + 1}.{" "}
-															{activity.task?.exercise?.name ?? "알 수 없는 운동"}
-														</p>
-														<Chip
-															size="sm"
-															variant="flat"
-															color={isResolved ? "success" : "warning"}
-														>
-															{isResolved ? "정상" : "확인필요"}
-														</Chip>
+													<div className="flex flex-col gap-4 md:flex-row">
+														<div className="flex items-start gap-3 md:w-48 md:flex-col md:items-center">
+															<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+																{index + 1}
+															</div>
+															<MediaThumbnail
+																imageUrl={activity.imageAssetUrl}
+																videoUrl={
+																	!activity.imageAssetUrl
+																		? activity.videoAssetUrl
+																		: undefined
+																}
+																title={
+																	activity.exerciseName ?? "알 수 없는 운동"
+																}
+																className="aspect-video w-full max-w-40"
+															/>
+														</div>
+														<div className="flex-1">
+															<div className="flex items-start justify-between gap-3">
+																<div>
+																	<p className="font-medium">
+																		{activity.exerciseName ??
+																			"알 수 없는 운동"}
+																	</p>
+																	<p className="mt-1 text-sm text-default-500">
+																		루틴 순서 {activity.order}
+																	</p>
+																</div>
+																<Chip
+																	size="sm"
+																	variant="flat"
+																	color={isResolved ? "success" : "warning"}
+																>
+																	{isResolved ? "정상" : "확인필요"}
+																</Chip>
+															</div>
+															<div className="mt-3 flex flex-wrap gap-4 text-sm text-default-500">
+																<span>반복 횟수: {activity.repetitions}회</span>
+																<span>
+																	휴식 시간:{" "}
+																	{activity.restTime > 0
+																		? `${activity.restTime}초`
+																		: "없음"}
+																</span>
+															</div>
+															{activity.notes ? (
+																<p className="mt-2 text-sm text-default-400">
+																	메모: {activity.notes}
+																</p>
+															) : null}
+														</div>
 													</div>
-													<div className="flex gap-4 text-sm text-default-500">
-														<span>반복 횟수: {activity.repetitions}회</span>
-														<span>
-															휴식 시간:{" "}
-															{activity.restTime > 0
-																? `${activity.restTime}초`
-																: "없음"}
-														</span>
-													</div>
-													{activity.notes ? (
-														<p className="mt-1 text-sm text-default-400">
-															메모: {activity.notes}
-														</p>
-													) : null}
 												</div>
 											);
 										})}

@@ -6,11 +6,17 @@ import {
 } from "@cocrepo/api/core/routines";
 import { type TaskDto, useGetTasks } from "@cocrepo/api/core/tasks";
 import {
+	getAssetById,
+	getGetAssetByIdQueryKey,
+	type AssetDto,
+} from "@cocrepo/api/assets";
+import {
 	AdminRoutinesNewPage,
 	type AdminRoutineActivityFormItem,
 	type AdminRoutineTaskCandidate,
 } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
+import { useQueries } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -50,9 +56,37 @@ const AdminRoutinesNewRoute = observer(() => {
 		search: state.exerciseQuery.trim() || undefined,
 		spaceScope: "INCLUDE_ANCESTORS",
 	});
-	const candidateTasks = ((tasksResponse?.data ?? []) as TaskDto[])
+	const tasks = (tasksResponse?.data ?? []) as TaskDto[];
+	const assetIds = Array.from(
+		new Set(
+			tasks.flatMap((task) =>
+				[task.exercise?.imageFileId, task.exercise?.videoFileId].filter(
+					(value): value is string => Boolean(value),
+				),
+			),
+		),
+	);
+	const assetQueries = useQueries({
+		queries: assetIds.map((assetId) => ({
+			queryKey: getGetAssetByIdQueryKey(assetId),
+			queryFn: ({ signal }: { signal: AbortSignal }) =>
+				getAssetById(assetId, undefined, signal),
+			enabled: Boolean(assetId),
+		})),
+	});
+	const assetMap = new Map<string, AssetDto>();
+	assetIds.forEach((assetId, index) => {
+		const asset = assetQueries[index]?.data?.data;
+		if (asset) {
+			assetMap.set(assetId, asset);
+		}
+	});
+	const candidateTasks = tasks
 		.filter((task) => Boolean(task.exercise?.videoFileId))
-		.map(mapRoutineTaskCandidate);
+		.map((task) => mapRoutineTaskCandidate(task, assetMap));
+	const activities = state.activities.map((activity) =>
+		mapRoutineActivityFormItem(activity, assetMap),
+	);
 
 	const { mutate: createRoutine, isPending } = useCreateRoutine({
 		mutation: {
@@ -122,7 +156,7 @@ const AdminRoutinesNewRoute = observer(() => {
 			name={state.name}
 			label={state.label}
 			exerciseQuery={state.exerciseQuery}
-			activities={state.activities.slice()}
+			activities={activities}
 			candidateTasks={candidateTasks}
 			nameError={state.errors.name}
 			labelError={state.errors.label}
@@ -142,7 +176,7 @@ const AdminRoutinesNewRoute = observer(() => {
 				state.exerciseQuery = value;
 			}}
 			onClickAddActivityButton={(taskId) => {
-				const task = (tasksResponse?.data ?? []).find((item) => item.id === taskId);
+				const task = tasks.find((item) => item.id === taskId);
 				if (!task?.exercise?.videoFileId) {
 					addToast({
 						title: "편성 불가 운동",
@@ -163,6 +197,8 @@ const AdminRoutinesNewRoute = observer(() => {
 					taskId: task.id,
 					exerciseName: task.exercise.name,
 					isSchedulable: true,
+					imageFileId: task.exercise.imageFileId,
+					videoFileId: task.exercise.videoFileId,
 					repetitions: String(task.exercise.count || 1),
 					restTime: "0",
 					notes: "",
@@ -182,6 +218,15 @@ const AdminRoutinesNewRoute = observer(() => {
 				);
 				delete state.errors.activities;
 			}}
+			onReorderActivities={(fromIndex, toIndex) => {
+				const nextActivities = state.activities.slice();
+				const [movedActivity] = nextActivities.splice(fromIndex, 1);
+				if (!movedActivity) {
+					return;
+				}
+				nextActivities.splice(toIndex, 0, movedActivity);
+				state.activities = nextActivities;
+			}}
 			onClickCancelButton={() => {
 				router.push("/routines" as Route);
 			}}
@@ -197,12 +242,44 @@ const AdminRoutinesNewRoute = observer(() => {
 	);
 });
 
-function mapRoutineTaskCandidate(task: TaskDto): AdminRoutineTaskCandidate {
+function mapRoutineTaskCandidate(
+	task: TaskDto,
+	assetMap: Map<string, AssetDto>,
+): AdminRoutineTaskCandidate {
+	const imageAssetUrl = task.exercise.imageFileId
+		? assetMap.get(task.exercise.imageFileId)?.publicUrl
+		: undefined;
+	const videoAssetUrl = task.exercise.videoFileId
+		? assetMap.get(task.exercise.videoFileId)?.publicUrl
+		: undefined;
+
 	return {
 		id: task.id,
 		exerciseName: task.exercise.name,
 		exerciseCount: task.exercise.count || 1,
+		imageFileId: task.exercise.imageFileId,
+		videoFileId: task.exercise.videoFileId,
+		imageAssetUrl: imageAssetUrl ?? undefined,
+		videoAssetUrl: videoAssetUrl ?? undefined,
 		isSchedulable: Boolean(task.exercise.videoFileId),
+	};
+}
+
+function mapRoutineActivityFormItem(
+	activity: AdminRoutineActivityFormItem,
+	assetMap: Map<string, AssetDto>,
+): AdminRoutineActivityFormItem {
+	const imageAssetUrl = activity.imageFileId
+		? assetMap.get(activity.imageFileId)?.publicUrl
+		: undefined;
+	const videoAssetUrl = activity.videoFileId
+		? assetMap.get(activity.videoFileId)?.publicUrl
+		: undefined;
+
+	return {
+		...activity,
+		imageAssetUrl: imageAssetUrl ?? undefined,
+		videoAssetUrl: videoAssetUrl ?? undefined,
 	};
 }
 

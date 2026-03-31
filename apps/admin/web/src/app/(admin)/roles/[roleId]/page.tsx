@@ -1,7 +1,12 @@
 "use client";
 
-import { useGetAbilitiesByRoleId } from "@cocrepo/api/core/abilities";
-import { customInstance } from "@cocrepo/api/core/client";
+import {
+	type AbilityResponseDto,
+	getGetAbilitiesByRoleIdQueryKey,
+	useGetAbilities,
+	useGetAbilitiesByRoleId,
+} from "@cocrepo/api/core/abilities";
+import { useBatchAssignGrantsToRole } from "@cocrepo/api/core/grants";
 import { useDeleteRole, useGetRoleById } from "@cocrepo/api/core/roles";
 import {
 	AdminRolesRoleIdPage,
@@ -9,31 +14,11 @@ import {
 	type AdminRolesRoleIdPageGrantItem,
 	type AdminRolesRoleIdPageRole,
 } from "@cocrepo/ui";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
-
-interface AbilityItem extends AdminRolesRoleIdPageAbility {}
-
-function getAllAbilities() {
-	return customInstance<{ data: AbilityItem[] }>({
-		url: "/api/v1/abilities",
-		method: "GET",
-	});
-}
-
-function batchAssignGrantsToRole(
-	roleId: string,
-	grants: AdminRolesRoleIdPageGrantItem[],
-) {
-	return customInstance<{ data: unknown[] }>({
-		url: `/api/v1/grants/roles/${roleId}`,
-		method: "PUT",
-		data: { grants },
-	});
-}
 
 const AdminRolesRoleDetailRoute = observer(() => {
 	const { roleId } = useParams<{ roleId: string }>();
@@ -52,15 +37,15 @@ const AdminRolesRoleDetailRoute = observer(() => {
 
 	const { data: abilitiesResponse, isLoading: isLoadingAbilities } =
 		useGetAbilitiesByRoleId(roleId);
-	const grantedAbilities =
-		(abilitiesResponse?.data ?? []) as AdminRolesRoleIdPageAbility[];
+	const grantedAbilities = (abilitiesResponse?.data ?? []).map(mapAbilityItem);
 
 	const { data: allAbilitiesResponse, isLoading: isLoadingAllAbilities } =
-		useQuery({
-			queryKey: ["abilities", "all"],
-			queryFn: getAllAbilities,
-			enabled: isEditingGrants,
+		useGetAbilities({
+			query: {
+				enabled: isEditingGrants,
+			},
 		});
+	const allAbilities = (allAbilitiesResponse?.data ?? []).map(mapAbilityItem);
 
 	const { mutate: deleteRole, isPending: isDeleting } = useDeleteRole({
 		mutation: {
@@ -71,18 +56,19 @@ const AdminRolesRoleDetailRoute = observer(() => {
 		},
 	});
 
-	const { mutate: saveBatchGrants, isPending: isSavingGrants } = useMutation({
-		mutationFn: (grants: AdminRolesRoleIdPageGrantItem[]) =>
-			batchAssignGrantsToRole(roleId, grants),
-		onSuccess: () => {
-			setIsSaveModalOpen(false);
-			setIsEditingGrants(false);
-			setHasChanges(false);
-			queryClient.invalidateQueries({
-				queryKey: [`/api/v1/abilities/roles/${roleId}`],
-			});
-		},
-	});
+	const { mutate: saveBatchGrants, isPending: isSavingGrants } =
+		useBatchAssignGrantsToRole({
+			mutation: {
+				onSuccess: () => {
+					setIsSaveModalOpen(false);
+					setIsEditingGrants(false);
+					setHasChanges(false);
+					queryClient.invalidateQueries({
+						queryKey: getGetAbilitiesByRoleIdQueryKey(roleId),
+					});
+				},
+			},
+		});
 
 	const currentIds = new Set(grantedAbilities.map((ability) => ability.id));
 	const nextIds = new Set(Object.keys(selectedGrantItems));
@@ -113,9 +99,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 		<AdminRolesRoleIdPage
 			role={role}
 			grantedAbilities={grantedAbilities}
-			allAbilities={
-				(allAbilitiesResponse?.data ?? []) as AdminRolesRoleIdPageAbility[]
-			}
+			allAbilities={allAbilities}
 			selectedGrantItems={selectedGrantItems}
 			changeSummary={changeSummary}
 			isLoading={isLoading}
@@ -198,10 +182,44 @@ const AdminRolesRoleDetailRoute = observer(() => {
 				setIsSaveModalOpen(false);
 			}}
 			onClickConfirmSaveGrantsButton={() => {
-				saveBatchGrants(Object.values(selectedGrantItems));
+				saveBatchGrants({
+					roleId,
+					data: {
+						grants: Object.values(selectedGrantItems),
+					},
+				});
 			}}
 		/>
 	);
 });
+
+function mapAbilityItem(
+	ability: AbilityResponseDto,
+): AdminRolesRoleIdPageAbility {
+	return {
+		id: ability.id,
+		name: ability.name,
+		description: ability.description ?? undefined,
+		subjectId: ability.subjectId,
+		actionId: ability.actionId,
+		fields: ability.fields,
+		inverted: ability.inverted,
+		reason: ability.reason ?? undefined,
+		subject: ability.subject
+			? {
+					id: ability.subjectId,
+					name: ability.subject.name,
+					displayName: ability.subject.displayName ?? undefined,
+				}
+			: undefined,
+		action: ability.action
+			? {
+					id: ability.actionId,
+					name: ability.action.name,
+					displayName: ability.action.displayName ?? undefined,
+				}
+			: undefined,
+	};
+}
 
 export default AdminRolesRoleDetailRoute;

@@ -1,11 +1,14 @@
 "use client";
 
-import { customInstance } from "@cocrepo/api/core/client";
+import {
+	useCreateCategory,
+	useGetCategories,
+} from "@cocrepo/api/core/categories";
 import {
 	AdminRolesCategoriesNewPage,
 	type AdminRolesCategoriesNewPageOption,
 } from "@cocrepo/ui";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -16,33 +19,22 @@ interface CategoryOption {
 	name: string;
 }
 
-function getCategories() {
-	return customInstance<{ data: CategoryOption[] }>({
-		url: "/api/v1/categories",
-		method: "GET",
-		params: { type: "Role" },
-	});
-}
-
 const AdminRolesCategoriesNewRoute = observer(() => {
 	const router = useRouter();
+	const persistStore = usePersistStore();
 	const [name, setName] = useState("");
 	const [parentId, setParentId] = useState("");
 	const [nameError, setNameError] = useState("");
 
-	const { data: categoriesResponse } = useQuery({
-		queryKey: ["/api/v1/categories", { type: "Role" }],
-		queryFn: getCategories,
-	});
+	const { data: categoriesResponse } = useGetCategories({ type: "Role" });
+	const categories = ((categoriesResponse?.data ?? []) as unknown) as CategoryOption[];
+	const spaceId = persistStore.spaceId ?? "";
 
-	const { mutate: createCategory, isPending } = useMutation({
-		mutationFn: (data: {
-			name: string;
-			parentId?: string | null;
-			type: string;
-		}) => customInstance({ url: "/api/v1/categories", method: "POST", data }),
-		onSuccess: () => {
-			router.push("/roles/categories" as Route);
+	const { mutate: createCategory, isPending } = useCreateCategory({
+		mutation: {
+			onSuccess: () => {
+				router.push("/roles/categories" as Route);
+			},
 		},
 	});
 
@@ -58,9 +50,13 @@ const AdminRolesCategoriesNewRoute = observer(() => {
 
 		setNameError("");
 		createCategory({
-			name,
-			parentId: parentId || null,
-			type: "Role",
+			data: {
+				tenantId: spaceId,
+				spaceId,
+				name,
+				parentId: parentId || null,
+				type: "Role",
+			},
 		});
 	};
 
@@ -69,7 +65,7 @@ const AdminRolesCategoriesNewRoute = observer(() => {
 			name={name}
 			parentId={parentId}
 			nameError={nameError}
-			options={(categoriesResponse?.data ?? []).map(mapCategoryOption)}
+			options={categories.map(mapCategoryOption)}
 			isSubmitting={isPending}
 			onChangeNameInput={(value) => {
 				setName(value.toUpperCase());

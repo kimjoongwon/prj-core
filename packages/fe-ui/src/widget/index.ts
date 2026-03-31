@@ -1,4 +1,5 @@
 export * from "./ActionFab";
+export * from "./AssetPickerModal";
 export * from "./BottomNav";
 export * from "./HeaderBar";
 export * from "./OverlayMenu";
@@ -26,6 +27,7 @@ export * from "./InquiryFilterPanel";
 export * from "./InquiryInfoCard";
 export * from "./InquiryMetaPanel";
 export * from "./InquiryStatsCards";
+export * from "./MediaThumbnail";
 export * from "./NavTreePanel";
 export * from "./PageTitleBar";
 export * from "./ParticipantList";

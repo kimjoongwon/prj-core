@@ -1,11 +1,15 @@
 "use client";
 
-import { customInstance } from "@cocrepo/api/core/client";
+import {
+	getGetGroupsQueryKey,
+	useDeleteGroup,
+	useGetGroupById,
+} from "@cocrepo/api/core/groups";
 import {
 	AdminRolesGroupsGroupIdPage,
 	type AdminRolesGroupsGroupIdPageGroup,
 } from "@cocrepo/ui";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -36,27 +40,17 @@ const AdminRolesGroupsDetailRoute = observer(() => {
 	const queryClient = useQueryClient();
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-	const { data: response, isLoading } = useQuery({
-		queryKey: ["/api/v1/groups", groupId],
-		queryFn: () =>
-			customInstance<{ data: GroupDetail }>({
-				url: `/api/v1/groups/${groupId}`,
-				method: "GET",
-			}),
-	});
+	const { data: response, isLoading } = useGetGroupById(groupId);
 
-	const { mutate: deleteGroup, isPending: isDeleting } = useMutation({
-		mutationFn: () =>
-			customInstance({
-				url: `/api/v1/groups/${groupId}`,
-				method: "DELETE",
-			}),
-		onSuccess: () => {
-			setIsDeleteModalOpen(false);
-			queryClient.invalidateQueries({
-				queryKey: ["/api/v1/groups"],
-			});
-			router.push("/roles/groups" as Route);
+	const { mutate: deleteGroup, isPending: isDeleting } = useDeleteGroup({
+		mutation: {
+			onSuccess: () => {
+				setIsDeleteModalOpen(false);
+				queryClient.invalidateQueries({
+					queryKey: getGetGroupsQueryKey(),
+				});
+				router.push("/roles/groups" as Route);
+			},
 		},
 	});
 
@@ -79,7 +73,7 @@ const AdminRolesGroupsDetailRoute = observer(() => {
 				setIsDeleteModalOpen(false);
 			}}
 			onClickDeleteConfirm={() => {
-				deleteGroup();
+				deleteGroup({ id: groupId });
 			}}
 		/>
 	);

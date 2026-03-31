@@ -1,14 +1,19 @@
 "use client";
 
 import {
+	AssetPickerModal,
+	type AssetPickerItem,
 	FormPage,
 	FormPageSurface,
+	MediaThumbnail,
 	PageTitleBar,
 	FormSection,
 	FormSectionCard,
 } from "@cocrepo/ui";
 import { Button, Chip, Input, Spinner, Textarea } from "@heroui/react";
 import { observer } from "mobx-react-lite";
+
+export interface ExerciseMediaAsset extends AssetPickerItem {}
 
 export interface AdminTasksTaskIdExerciseEditPageProps {
 	exerciseName?: string;
@@ -19,6 +24,15 @@ export interface AdminTasksTaskIdExerciseEditPageProps {
 	description: string;
 	imageFileId: string;
 	videoFileId: string;
+	selectedImageAsset?: ExerciseMediaAsset;
+	selectedVideoAsset?: ExerciseMediaAsset;
+	imageAssets: ExerciseMediaAsset[];
+	videoAssets: ExerciseMediaAsset[];
+	assetSearchQuery: string;
+	isImagePickerOpen: boolean;
+	isVideoPickerOpen: boolean;
+	isImageAssetsLoading: boolean;
+	isVideoAssetsLoading: boolean;
 	errors: Record<string, string>;
 	isSchedulable: boolean;
 	isLoading: boolean;
@@ -31,8 +45,80 @@ export interface AdminTasksTaskIdExerciseEditPageProps {
 	onChangeDescriptionTextarea: (value: string) => void;
 	onChangeImageFileIdInput: (value: string) => void;
 	onChangeVideoFileIdInput: (value: string) => void;
+	onChangeAssetSearchQuery: (value: string) => void;
+	onOpenImagePicker: () => void;
+	onCloseImagePicker: () => void;
+	onOpenVideoPicker: () => void;
+	onCloseVideoPicker: () => void;
+	onSelectImageAsset: (asset: ExerciseMediaAsset) => void;
+	onSelectVideoAsset: (asset: ExerciseMediaAsset) => void;
+	onClickClearImageAssetButton: () => void;
+	onClickClearVideoAssetButton: () => void;
 	onClickCancelButton: () => void;
 	onClickSaveButton: () => void;
+}
+
+function ExerciseMediaField({
+	label,
+	description,
+	selectedAsset,
+	placeholder,
+	onOpenPicker,
+	onClear,
+}: {
+	label: string;
+	description: string;
+	selectedAsset?: ExerciseMediaAsset;
+	placeholder: string;
+	onOpenPicker: () => void;
+	onClear: () => void;
+}) {
+	const isImage = selectedAsset?.mimeType?.startsWith("image/");
+	return (
+		<div className="rounded-2xl border border-default-200 bg-content1 p-4">
+			<div className="mb-3 flex items-start justify-between gap-3">
+				<div>
+					<p className="font-medium">{label}</p>
+					<p className="mt-1 text-sm text-default-500">{description}</p>
+				</div>
+				<div className="flex gap-2">
+					<Button size="sm" variant="flat" onPress={onOpenPicker}>
+						{selectedAsset ? "다시 선택" : "에셋에서 선택"}
+					</Button>
+					<Button
+						size="sm"
+						variant="flat"
+						color="danger"
+						onPress={onClear}
+						isDisabled={!selectedAsset}
+					>
+						해제
+					</Button>
+				</div>
+			</div>
+			{selectedAsset ? (
+				<div className="flex flex-col gap-3 md:flex-row">
+					<MediaThumbnail
+						imageUrl={isImage ? selectedAsset.publicUrl : undefined}
+						videoUrl={!isImage ? selectedAsset.publicUrl : undefined}
+						title={selectedAsset.originalName}
+						className="aspect-video w-full max-w-xs"
+					/>
+					<div className="space-y-1 text-sm">
+						<p className="font-medium">{selectedAsset.originalName}</p>
+						<p className="text-default-500">{selectedAsset.mimeType}</p>
+						<p className="break-all font-mono text-xs text-default-400">
+							{selectedAsset.id}
+						</p>
+					</div>
+				</div>
+			) : (
+				<div className="rounded-xl border border-dashed border-default-300 px-4 py-6 text-sm text-default-500">
+					{placeholder}
+				</div>
+			)}
+		</div>
+	);
 }
 
 export const AdminTasksTaskIdExerciseEditPage = observer(
@@ -45,6 +131,15 @@ export const AdminTasksTaskIdExerciseEditPage = observer(
 		description,
 		imageFileId,
 		videoFileId,
+		selectedImageAsset,
+		selectedVideoAsset,
+		imageAssets,
+		videoAssets,
+		assetSearchQuery,
+		isImagePickerOpen,
+		isVideoPickerOpen,
+		isImageAssetsLoading,
+		isVideoAssetsLoading,
 		errors,
 		isSchedulable,
 		isLoading,
@@ -57,6 +152,15 @@ export const AdminTasksTaskIdExerciseEditPage = observer(
 		onChangeDescriptionTextarea,
 		onChangeImageFileIdInput,
 		onChangeVideoFileIdInput,
+		onChangeAssetSearchQuery,
+		onOpenImagePicker,
+		onCloseImagePicker,
+		onOpenVideoPicker,
+		onCloseVideoPicker,
+		onSelectImageAsset,
+		onSelectVideoAsset,
+		onClickClearImageAssetButton,
+		onClickClearVideoAssetButton,
 		onClickCancelButton,
 		onClickSaveButton,
 	}: AdminTasksTaskIdExerciseEditPageProps) => {
@@ -202,19 +306,27 @@ export const AdminTasksTaskIdExerciseEditPage = observer(
 									maxLength={500}
 									minRows={3}
 								/>
-								<Input
-									label="이미지 파일 ID"
-									placeholder="업로드된 이미지 에셋 ID를 입력하세요"
-									value={imageFileId}
-									onValueChange={onChangeImageFileIdInput}
-									description="선택 입력입니다. 운동 상세 화면에서 자산 링크로 노출됩니다."
+								<ExerciseMediaField
+									label="대표 이미지"
+									description="운동 카드와 상세 화면에서 먼저 보일 이미지를 선택합니다."
+									selectedAsset={selectedImageAsset}
+									placeholder="이미지 에셋을 선택하면 여기서 바로 미리보기를 확인할 수 있습니다."
+									onOpenPicker={onOpenImagePicker}
+									onClear={() => {
+										onChangeImageFileIdInput("");
+										onClickClearImageAssetButton();
+									}}
 								/>
-								<Input
-									label="영상 파일 ID"
-									placeholder="업로드된 영상 에셋 ID를 입력하세요"
-									value={videoFileId}
-									onValueChange={onChangeVideoFileIdInput}
-									description="비어 있으면 저장은 가능하지만 루틴 편성과 프로그램 생성에는 사용할 수 없습니다."
+								<ExerciseMediaField
+									label="운동 영상"
+									description="루틴 편성과 프로그램 생성에는 영상이 연결된 운동이 필요합니다."
+									selectedAsset={selectedVideoAsset}
+									placeholder="영상 에셋을 선택하면 루틴 카드에서 영상 썸네일로 활용됩니다."
+									onOpenPicker={onOpenVideoPicker}
+									onClear={() => {
+										onChangeVideoFileIdInput("");
+										onClickClearVideoAssetButton();
+									}}
 								/>
 								<div className="rounded-lg bg-content2 p-3 text-sm text-default-600">
 									<div className="flex items-center gap-2">
@@ -234,6 +346,30 @@ export const AdminTasksTaskIdExerciseEditPage = observer(
 						</FormSection>
 					</FormSectionCard>
 				</FormPageSurface>
+				<AssetPickerModal
+					title="이미지 에셋 선택"
+					isOpen={isImagePickerOpen}
+					isLoading={isImageAssetsLoading}
+					searchValue={assetSearchQuery}
+					selectedAssetId={imageFileId || undefined}
+					assets={imageAssets}
+					emptyMessage="조건에 맞는 이미지 에셋이 없습니다."
+					onClose={onCloseImagePicker}
+					onChangeSearchValue={onChangeAssetSearchQuery}
+					onSelectAsset={onSelectImageAsset}
+				/>
+				<AssetPickerModal
+					title="영상 에셋 선택"
+					isOpen={isVideoPickerOpen}
+					isLoading={isVideoAssetsLoading}
+					searchValue={assetSearchQuery}
+					selectedAssetId={videoFileId || undefined}
+					assets={videoAssets}
+					emptyMessage="조건에 맞는 영상 에셋이 없습니다."
+					onClose={onCloseVideoPicker}
+					onChangeSearchValue={onChangeAssetSearchQuery}
+					onSelectAsset={onSelectVideoAsset}
+				/>
 			</FormPage>
 		);
 	},

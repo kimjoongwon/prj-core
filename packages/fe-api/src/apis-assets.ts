@@ -34,6 +34,7 @@ export interface AssetDto {
   checksum: string | null;
   metadata: unknown;
   creatorId: string | null;
+  publicUrl: string | null;
   createdAt: string;
   updatedAt: string;
 }

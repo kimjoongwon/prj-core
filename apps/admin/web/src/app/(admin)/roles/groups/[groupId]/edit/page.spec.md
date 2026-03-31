@@ -69,8 +69,8 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 클라이언트 | `useQuery (GET /api/v1/groups/${groupId})` | 그룹 상세 조회, 임시 customInstance 사용 |
-| 폼 제출 | `useMutation (PATCH /api/v1/groups/${groupId})` | 그룹 수정, 임시 customInstance 사용 |
+| 클라이언트 | `useGetGroupById(groupId)` | 그룹 상세 조회 |
+| 폼 제출 | `useUpdateGroup` | 그룹 수정 후 상세 쿼리 무효화 |
 
 ## 이벤트 핸들러
 
@@ -93,11 +93,12 @@
 
 - 현재 route는 thin container + CSR fetch 패턴을 유지하며 별도 `_prefetch.ts`는 사용하지 않음
 - 수정 성공 시 해당 그룹 쿼리 캐시 무효화
+- 조회/수정은 `@cocrepo/api/core/groups`의 Orval 생성 훅을 사용
 
 ## 구현 체크리스트
 
 - [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
-- [ ] Orval codegen 후 useGetGroupById, useUpdateGroup 훅 교체
+- [x] `useGetGroupById`, `useUpdateGroup` 훅 사용
 
 
 ## Surface / Elevation
@@ -133,6 +134,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-31 | 상세 조회/수정 흐름을 `useGetGroupById`, `useUpdateGroup` 기준으로 갱신 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |

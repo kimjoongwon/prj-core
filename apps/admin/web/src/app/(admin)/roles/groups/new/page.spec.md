@@ -67,7 +67,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 폼 제출 | `useMutation (POST /api/v1/groups)` | 그룹 생성, { name, label, type: "Role" }, 임시 customInstance 사용 |
+| 폼 제출 | `useCreateGroup` | 그룹 생성, `{ name, label, type: "Role" }` 전달 |
 
 ## 이벤트 핸들러
 
@@ -87,12 +87,12 @@
 ## 비고
 
 - `type: "Role"` 고정값으로 그룹 생성 시 전달
-- Orval codegen 후 useCreateGroup 훅으로 교체 예정
+- 그룹 생성은 `@cocrepo/api/core/groups`의 Orval 생성 훅을 사용
 
 ## 구현 체크리스트
 
 - [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
-- [ ] Orval codegen 후 useCreateGroup 훅 교체
+- [x] `useCreateGroup` 훅 사용
 
 
 ## Surface / Elevation
@@ -128,6 +128,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-31 | 그룹 생성 흐름을 `useCreateGroup` 기준으로 갱신 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |

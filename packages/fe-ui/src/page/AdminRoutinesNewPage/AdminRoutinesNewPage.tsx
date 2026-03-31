@@ -1,11 +1,14 @@
 "use client";
 
 import {
+	DragHandle,
+	DraggableSortableList,
 	FormPage,
 	FormPageSurface,
-	PageTitleBar,
 	FormSection,
 	FormSectionCard,
+	MediaThumbnail,
+	PageTitleBar,
 } from "@cocrepo/ui";
 import {
 	Button,
@@ -19,11 +22,16 @@ import {
 	Spinner,
 } from "@heroui/react";
 import { observer } from "mobx-react-lite";
+import type { ComponentProps } from "react";
 
 export interface AdminRoutineActivityFormItem {
 	taskId: string;
 	exerciseName: string;
 	isSchedulable: boolean;
+	imageFileId?: string;
+	videoFileId?: string;
+	imageAssetUrl?: string;
+	videoAssetUrl?: string;
 	repetitions: string;
 	restTime: string;
 	notes: string;
@@ -34,6 +42,10 @@ export interface AdminRoutineTaskCandidate {
 	exerciseName: string;
 	exerciseCount: number;
 	isSchedulable: boolean;
+	imageFileId?: string;
+	videoFileId?: string;
+	imageAssetUrl?: string;
+	videoAssetUrl?: string;
 }
 
 export interface AdminRoutinesNewPageProps {
@@ -58,13 +70,180 @@ export interface AdminRoutinesNewPageProps {
 		value: string,
 	) => void;
 	onClickRemoveActivityButton: (taskId: string) => void;
+	onReorderActivities: (fromIndex: number, toIndex: number) => void;
 	onClickCancelButton: () => void;
 	onClickSaveButton: () => void;
 	onCloseEmptyActivitiesWarningModal: () => void;
 	onClickConfirmEmptyActivitiesWarningButton: () => void;
 }
 
-function RoutineActivitySection({
+function RoutineMediaThumbnail({
+	title,
+	imageAssetUrl,
+	videoAssetUrl,
+	className,
+}: {
+	title: string;
+	imageAssetUrl?: string;
+	videoAssetUrl?: string;
+	className?: string;
+}) {
+	return (
+		<MediaThumbnail
+			imageUrl={imageAssetUrl}
+			videoUrl={!imageAssetUrl ? videoAssetUrl : undefined}
+			title={title}
+			className={className}
+		/>
+	);
+}
+
+function CandidateTaskCard({
+	task,
+	onClickAdd,
+}: {
+	task: AdminRoutineTaskCandidate;
+	onClickAdd: (taskId: string) => void;
+}) {
+	return (
+		<div className="rounded-2xl border border-default-200 bg-content1 p-3">
+			<div className="flex gap-3">
+				<RoutineMediaThumbnail
+					title={task.exerciseName}
+					imageAssetUrl={task.imageAssetUrl}
+					videoAssetUrl={task.videoAssetUrl}
+					className="aspect-video w-28 shrink-0"
+				/>
+				<div className="min-w-0 flex-1">
+					<div className="flex items-start justify-between gap-2">
+						<div className="min-w-0">
+							<p className="line-clamp-2 font-medium">{task.exerciseName}</p>
+							<p className="mt-1 text-xs text-default-500">
+								기본 반복 {task.exerciseCount}회
+							</p>
+						</div>
+						<Chip
+							size="sm"
+							variant="flat"
+							color={task.isSchedulable ? "success" : "warning"}
+						>
+							{task.isSchedulable ? "가능" : "불가"}
+						</Chip>
+					</div>
+					<div className="mt-3 flex justify-end">
+						<Button
+							size="sm"
+							variant="flat"
+							color="primary"
+							onPress={() => onClickAdd(task.id)}
+						>
+							추가
+						</Button>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+function ActivityCard({
+	activity,
+	index,
+	onChangeActivityInput,
+	onClickRemoveActivityButton,
+	dragHandle,
+}: {
+	activity: AdminRoutineActivityFormItem;
+	index: number;
+	onChangeActivityInput: (
+		taskId: string,
+		field: "repetitions" | "restTime" | "notes",
+		value: string,
+	) => void;
+	onClickRemoveActivityButton: (taskId: string) => void;
+	dragHandle: ComponentProps<typeof DragHandle>;
+}) {
+	return (
+		<div className="rounded-2xl border border-default-200 bg-content1 p-4">
+			<div className="flex flex-col gap-4 md:flex-row">
+				<div className="flex items-start gap-3 md:w-44 md:flex-col md:items-center">
+					<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+						{index + 1}
+					</div>
+					<DragHandle {...dragHandle} className="mt-1" />
+					<RoutineMediaThumbnail
+						title={activity.exerciseName}
+						imageAssetUrl={activity.imageAssetUrl}
+						videoAssetUrl={activity.videoAssetUrl}
+						className="aspect-video w-full max-w-40"
+					/>
+				</div>
+				<div className="flex-1">
+					<div className="mb-3 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+						<div>
+							<p className="font-medium">{activity.exerciseName}</p>
+							<p className="mt-1 text-sm text-default-500">
+								드래그해서 루틴 순서를 조정할 수 있습니다.
+							</p>
+						</div>
+						<div className="flex items-center gap-2">
+							<Chip
+								color={activity.isSchedulable ? "success" : "warning"}
+								size="sm"
+								variant="flat"
+							>
+								{activity.isSchedulable ? "비디오 연결" : "비디오 필요"}
+							</Chip>
+							<Button
+								size="sm"
+								variant="flat"
+								color="danger"
+								onPress={() => onClickRemoveActivityButton(activity.taskId)}
+							>
+								제거
+							</Button>
+						</div>
+					</div>
+					{!activity.isSchedulable ? (
+						<p className="mb-3 text-sm text-warning">
+							영상이 없어 Program 생성에 사용할 수 없는 운동입니다.
+						</p>
+					) : null}
+					<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+						<Input
+							type="number"
+							label="반복 횟수"
+							value={activity.repetitions}
+							onValueChange={(value) =>
+								onChangeActivityInput(activity.taskId, "repetitions", value)
+							}
+							min={1}
+						/>
+						<Input
+							type="number"
+							label="휴식 시간(초)"
+							value={activity.restTime}
+							onValueChange={(value) =>
+								onChangeActivityInput(activity.taskId, "restTime", value)
+							}
+							min={0}
+						/>
+						<Input
+							label="메모"
+							value={activity.notes}
+							onValueChange={(value) =>
+								onChangeActivityInput(activity.taskId, "notes", value)
+							}
+							placeholder="필요 시 메모를 입력하세요."
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+export function RoutineActivitySection({
 	exerciseQuery,
 	candidateTasks,
 	activities,
@@ -74,6 +253,7 @@ function RoutineActivitySection({
 	onClickAddActivityButton,
 	onChangeActivityInput,
 	onClickRemoveActivityButton,
+	onReorderActivities,
 }: Pick<
 	AdminRoutinesNewPageProps,
 	| "exerciseQuery"
@@ -85,6 +265,7 @@ function RoutineActivitySection({
 	| "onClickAddActivityButton"
 	| "onChangeActivityInput"
 	| "onClickRemoveActivityButton"
+	| "onReorderActivities"
 >) {
 	return (
 		<FormSectionCard>
@@ -95,11 +276,16 @@ function RoutineActivitySection({
 						placeholder="운동 이름으로 검색하세요."
 						value={exerciseQuery}
 						onValueChange={onChangeExerciseQueryInput}
-						description="현재 Space + 상위 Space 운동 중 영상이 등록된 운동만 후보로 표시합니다."
+						description="현재 Space + 상위 Space 운동 중 비디오가 연결된 운동만 후보로 표시합니다."
 					/>
-					<div className="rounded-lg border border-default-200 p-3">
-						<div className="mb-2 text-sm text-default-500">
-							후보 운동 (스케줄 가능만 표시)
+					<div className="rounded-2xl border border-default-200 p-4">
+						<div className="mb-3 flex items-center justify-between gap-3">
+							<div>
+								<p className="font-medium">후보 운동</p>
+								<p className="text-sm text-default-500">
+									이미지는 썸네일, 비디오는 편성 가능 여부 기준으로 사용합니다.
+								</p>
+							</div>
 						</div>
 						{isTasksLoading ? (
 							<div className="flex items-center gap-2 text-sm text-default-500">
@@ -111,32 +297,29 @@ function RoutineActivitySection({
 								조건에 맞는 스케줄 가능 운동이 없습니다.
 							</p>
 						) : (
-							<div className="flex flex-col gap-2">
+							<div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
 								{candidateTasks.map((task) => (
-									<div
+									<CandidateTaskCard
 										key={task.id}
-										className="flex items-center justify-between rounded-md bg-content2 px-3 py-2"
-									>
-										<div>
-											<p className="font-medium">{task.exerciseName}</p>
-											<p className="text-xs text-default-500">
-												기본 반복 {task.exerciseCount}회
-											</p>
-										</div>
-										<Button
-											size="sm"
-											variant="flat"
-											onPress={() => onClickAddActivityButton(task.id)}
-										>
-											추가
-										</Button>
-									</div>
+										task={task}
+										onClickAdd={onClickAddActivityButton}
+									/>
 								))}
 							</div>
 						)}
 					</div>
-					<div className="rounded-lg border border-default-200 p-3">
-						<div className="mb-2 text-sm text-default-500">추가된 활동</div>
+					<div className="rounded-2xl border border-default-200 p-4">
+						<div className="mb-3 flex items-center justify-between gap-3">
+							<div>
+								<p className="font-medium">추가된 활동</p>
+								<p className="text-sm text-default-500">
+									드래그로 순서를 바꾸면 저장 순서에도 그대로 반영됩니다.
+								</p>
+							</div>
+							<Chip size="sm" variant="flat" color="primary">
+								{activities.length}개
+							</Chip>
+						</div>
 						{activitiesError ? (
 							<p className="mb-3 text-sm text-danger">{activitiesError}</p>
 						) : null}
@@ -145,83 +328,23 @@ function RoutineActivitySection({
 								아직 추가된 활동이 없습니다.
 							</p>
 						) : (
-							<div className="flex flex-col gap-3">
-								{activities.map((activity, index) => (
-									<div
-										key={activity.taskId}
-										className="rounded-md bg-content2 p-3"
-									>
-										<div className="mb-3 flex items-center justify-between">
-											<p className="font-medium">
-												{index + 1}. {activity.exerciseName}
-											</p>
-											<div className="flex items-center gap-2">
-												<Chip
-													color={activity.isSchedulable ? "success" : "warning"}
-													size="sm"
-												>
-													{activity.isSchedulable ? "가능" : "불가"}
-												</Chip>
-												<Button
-													size="sm"
-													variant="flat"
-													color="danger"
-													onPress={() =>
-														onClickRemoveActivityButton(activity.taskId)
-													}
-												>
-													제거
-												</Button>
-											</div>
-										</div>
-										{!activity.isSchedulable ? (
-											<p className="mb-3 text-sm text-warning">
-												영상이 없어 Program 생성에 사용할 수 없는 운동입니다.
-											</p>
-										) : null}
-										<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-											<Input
-												type="number"
-												label="반복 횟수"
-												value={activity.repetitions}
-												onValueChange={(value) =>
-													onChangeActivityInput(
-														activity.taskId,
-														"repetitions",
-														value,
-													)
-												}
-												min={1}
-											/>
-											<Input
-												type="number"
-												label="휴식 시간(초)"
-												value={activity.restTime}
-												onValueChange={(value) =>
-													onChangeActivityInput(
-														activity.taskId,
-														"restTime",
-														value,
-													)
-												}
-												min={0}
-											/>
-											<Input
-												label="메모"
-												value={activity.notes}
-												onValueChange={(value) =>
-													onChangeActivityInput(
-														activity.taskId,
-														"notes",
-														value,
-													)
-												}
-												placeholder="필요 시 메모를 입력하세요."
-											/>
-										</div>
-									</div>
-								))}
-							</div>
+							<DraggableSortableList
+								items={activities.map((activity) => ({
+									...activity,
+									id: activity.taskId,
+								}))}
+								onReorder={onReorderActivities}
+								renderItem={(activity, index, dragHandleProps) => (
+									<ActivityCard
+										activity={activity}
+										index={index}
+										onChangeActivityInput={onChangeActivityInput}
+										onClickRemoveActivityButton={onClickRemoveActivityButton}
+										dragHandle={dragHandleProps}
+									/>
+								)}
+								className="gap-3"
+							/>
 						)}
 					</div>
 				</div>
@@ -249,6 +372,7 @@ export const AdminRoutinesNewPage = observer(
 		onClickAddActivityButton,
 		onChangeActivityInput,
 		onClickRemoveActivityButton,
+		onReorderActivities,
 		onClickCancelButton,
 		onClickSaveButton,
 		onCloseEmptyActivitiesWarningModal,
@@ -320,6 +444,7 @@ export const AdminRoutinesNewPage = observer(
 						onClickAddActivityButton={onClickAddActivityButton}
 						onChangeActivityInput={onChangeActivityInput}
 						onClickRemoveActivityButton={onClickRemoveActivityButton}
+						onReorderActivities={onReorderActivities}
 					/>
 				</FormPageSurface>
 				<Modal

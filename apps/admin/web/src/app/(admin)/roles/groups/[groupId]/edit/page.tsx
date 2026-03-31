@@ -1,8 +1,12 @@
 "use client";
 
-import { customInstance } from "@cocrepo/api/core/client";
+import {
+	getGetGroupByIdQueryKey,
+	useGetGroupById,
+	useUpdateGroup,
+} from "@cocrepo/api/core/groups";
 import { AdminRolesGroupsGroupIdEditPage } from "@cocrepo/ui";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -24,14 +28,7 @@ const AdminRolesGroupsEditRoute = observer(() => {
 	const [nameError, setNameError] = useState("");
 	const [isInitialized, setIsInitialized] = useState(false);
 
-	const { data: response, isLoading } = useQuery({
-		queryKey: ["/api/v1/groups", groupId],
-		queryFn: () =>
-			customInstance<{ data: GroupDetail }>({
-				url: `/api/v1/groups/${groupId}`,
-				method: "GET",
-			}),
-	});
+	const { data: response, isLoading } = useGetGroupById(groupId);
 	const group = response?.data;
 
 	useEffect(() => {
@@ -43,18 +40,14 @@ const AdminRolesGroupsEditRoute = observer(() => {
 		setIsInitialized(true);
 	}, [group, isInitialized]);
 
-	const { mutate: updateGroup, isPending } = useMutation({
-		mutationFn: (data: { name?: string; label?: string }) =>
-			customInstance({
-				url: `/api/v1/groups/${groupId}`,
-				method: "PATCH",
-				data,
-			}),
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ["/api/v1/groups", groupId],
-			});
-			router.push(`/roles/groups/${groupId}` as Route);
+	const { mutate: updateGroup, isPending } = useUpdateGroup({
+		mutation: {
+			onSuccess: () => {
+				queryClient.invalidateQueries({
+					queryKey: getGetGroupByIdQueryKey(groupId),
+				});
+				router.push(`/roles/groups/${groupId}` as Route);
+			},
 		},
 	});
 
@@ -66,8 +59,11 @@ const AdminRolesGroupsEditRoute = observer(() => {
 
 		setNameError("");
 		updateGroup({
-			name,
-			label: label || undefined,
+			id: groupId,
+			data: {
+				name,
+				label: label || undefined,
+			},
 		});
 	};
 
