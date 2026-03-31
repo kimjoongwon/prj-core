@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
 const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const spaceHeaders = { "x-space-id": SYSTEM_SPACE_ID };
+const spaceHeaders = { Cookie: `selectedSpaceId=${SYSTEM_SPACE_ID}` };
 
 test.describe("역할 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──

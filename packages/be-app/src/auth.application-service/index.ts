@@ -2,6 +2,7 @@ import { CONTEXT_KEYS, SYSTEM_ROLES, Token } from "@cocrepo/constant";
 import {
 	PageMetaDto,
 	QueryAuthAuditLogDto,
+	SetCurrentSpaceDto,
 	SpaceDto,
 	TokenRefreshResponseDto,
 	UserDto,
@@ -27,6 +28,7 @@ import {
 import { Cookie, HashedPassword, PlainPassword } from "@cocrepo/vo";
 import {
 	BadRequestException,
+	ForbiddenException,
 	Injectable,
 	Logger,
 	UnauthorizedException,
@@ -63,6 +65,17 @@ interface OidcCallbackResult {
 	defaultReturnTo: string;
 	loginUrl: string;
 }
+
+type SpaceTenantLike = {
+	spaceId: string;
+	role?: {
+		name?: string | null;
+	} | null;
+};
+
+type UserWithTenantsLike = {
+	tenants?: SpaceTenantLike[];
+};
 
 /**
  * 인증 Application Service
@@ -205,6 +218,7 @@ export class AuthApplicationService {
 			tokenResponse.refresh_token,
 		);
 		this.setSessionIdCookie(res, sessionId);
+		await this.reconcileSelectedSpaceCookie(user, undefined, res);
 
 		return {
 			returnTo,
@@ -216,6 +230,7 @@ export class AuthApplicationService {
 	async refreshTokenWithIdp(
 		refreshToken: string,
 		sessionId: string | undefined,
+		selectedSpaceId: string | undefined,
 		res: Response,
 	): Promise<TokenRefreshResponseDto> {
 		if (!refreshToken) {
@@ -256,6 +271,7 @@ export class AuthApplicationService {
 			tokenResponse.access_token,
 			tokenResponse.refresh_token,
 		);
+		await this.reconcileSelectedSpaceCookie(user, selectedSpaceId, res);
 
 		const now = Date.now();
 
@@ -316,6 +332,7 @@ export class AuthApplicationService {
 		// 4. 쿠키 삭제
 		this.clearTokenCookies(res);
 		res.clearCookie(Token.SESSION_ID);
+		this.tokenService.clearSelectedSpaceCookie(res);
 		res.clearCookie("tenantId");
 		res.clearCookie("workspaceId");
 
@@ -379,17 +396,41 @@ export class AuthApplicationService {
 	 */
 	async getMySpaces(): Promise<SpaceDto[]> {
 		const user = this.cls.get<UserDto>(CONTEXT_KEYS.AUTH_USER);
-		if (!user?.tenants) {
-			return [];
+		return this.getAccessibleSpacesForUser(user);
+	}
+
+	async getCurrentSpace(
+		selectedSpaceId: string | undefined,
+		res: Response,
+	): Promise<SpaceDto | null> {
+		const user = this.cls.get<UserDto>(CONTEXT_KEYS.AUTH_USER);
+		const { space } = await this.reconcileSelectedSpaceCookie(
+			user,
+			selectedSpaceId,
+			res,
+		);
+		return space;
+	}
+
+	async setCurrentSpace(
+		dto: SetCurrentSpaceDto,
+		res: Response,
+	): Promise<SpaceDto> {
+		const user = this.cls.get<UserDto>(CONTEXT_KEYS.AUTH_USER);
+		if (!user?.tenants?.some((tenant) => tenant.spaceId === dto.spaceId)) {
+			throw new ForbiddenException(
+				"해당 Space를 선택할 권한이 없습니다",
+			);
 		}
 
-		const tenantSpaceIds = Array.from(
-			new Set(user.tenants.map((t) => t.spaceId)),
-		);
+		const spaces = await this.getAccessibleSpacesForUser(user);
+		const selectedSpace = spaces.find((space) => space.id === dto.spaceId);
+		if (!selectedSpace) {
+			throw new BadRequestException("선택한 Space를 찾을 수 없습니다");
+		}
 
-		const spaces = await this.spacesService.findByIdsWithGround(tenantSpaceIds);
-
-		return spaces.map((space) => plainToInstance(SpaceDto, space));
+		this.tokenService.setSelectedSpaceCookie(res, dto.spaceId);
+		return selectedSpace;
 	}
 
 	/**
@@ -804,5 +845,88 @@ export class AuthApplicationService {
 	 */
 	clearTokenCookies(res: Response): void {
 		this.tokenService.clearTokenCookies(res);
+	}
+
+	private async getAccessibleSpacesForUser(
+		user?: UserWithTenantsLike,
+	): Promise<SpaceDto[]> {
+		if (!user?.tenants?.length) {
+			return [];
+		}
+
+		const tenantSpaceIds = this.getOrderedTenantSpaceIds(user);
+		const spaces = await this.spacesService.findByIdsWithGround(tenantSpaceIds);
+		const spaceById = new Map(
+			spaces.map((space) => [space.id, plainToInstance(SpaceDto, space)]),
+		);
+
+		return tenantSpaceIds
+			.map((spaceId) => spaceById.get(spaceId))
+			.filter((space): space is SpaceDto => Boolean(space));
+	}
+
+	private async reconcileSelectedSpaceCookie(
+		user: UserWithTenantsLike | undefined,
+		selectedSpaceId: string | undefined,
+		res: Response,
+	): Promise<{ space: SpaceDto | null }> {
+		const spaces = await this.getAccessibleSpacesForUser(user);
+		if (spaces.length === 0) {
+			this.tokenService.clearSelectedSpaceCookie(res);
+			return { space: null };
+		}
+
+		const allowedSpaceIds = new Set(spaces.map((space) => space.id));
+		const defaultSpaceId = this.getDefaultSelectedSpaceId(user, allowedSpaceIds);
+		const nextSpaceId =
+			selectedSpaceId && allowedSpaceIds.has(selectedSpaceId)
+				? selectedSpaceId
+				: defaultSpaceId;
+		const nextSpace =
+			spaces.find((space) => space.id === nextSpaceId) ?? null;
+
+		if (!nextSpace) {
+			this.tokenService.clearSelectedSpaceCookie(res);
+			return { space: null };
+		}
+
+		this.tokenService.setSelectedSpaceCookie(res, nextSpace.id);
+		return { space: nextSpace };
+	}
+
+	private getDefaultSelectedSpaceId(
+		user: UserWithTenantsLike | undefined,
+		allowedSpaceIds: Set<string>,
+	): string | undefined {
+		if (!user?.tenants?.length) {
+			return undefined;
+		}
+
+		const fullAccessTenant = user.tenants.find(
+			(tenant) => tenant.role?.name === SYSTEM_ROLES.FULL_ACCESS,
+		);
+		if (fullAccessTenant && allowedSpaceIds.has(fullAccessTenant.spaceId)) {
+			return fullAccessTenant.spaceId;
+		}
+
+		return this.getOrderedTenantSpaceIds(user).find((spaceId) =>
+			allowedSpaceIds.has(spaceId),
+		);
+	}
+
+	private getOrderedTenantSpaceIds(
+		user: UserWithTenantsLike,
+	): string[] {
+		const seen = new Set<string>();
+		const orderedSpaceIds: string[] = [];
+
+		for (const tenant of user.tenants ?? []) {
+			if (!seen.has(tenant.spaceId)) {
+				seen.add(tenant.spaceId);
+				orderedSpaceIds.push(tenant.spaceId);
+			}
+		}
+
+		return orderedSpaceIds;
 	}
 }

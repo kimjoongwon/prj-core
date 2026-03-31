@@ -39,7 +39,7 @@ describe("Templates API E2E 테스트", () => {
 					await request(app.getHttpServer())
 						.delete(`/api/v1/templates/${templateId}`)
 						.set("Authorization", `Bearer ${jwtToken}`)
-						.set("X-Space-ID", spaceId);
+						.set("Cookie", "selectedSpaceId=" + spaceId);
 				} catch {
 					// 이미 삭제된 데이터는 무시
 				}
@@ -52,7 +52,7 @@ describe("Templates API E2E 테스트", () => {
 	}, 30000);
 
 	describe("목록 조회", () => {
-		it("Given 인증과 X-Space-ID 헤더가 있을 때 When 템플릿 목록을 조회하면 Then 200과 ResponseEntity 목록을 반환해야 한다", async () => {
+		it("Given 인증과 selectedSpaceId 쿠키가 있을 때 When 템플릿 목록을 조회하면 Then 200과 ResponseEntity 목록을 반환해야 한다", async () => {
 			// Given
 			if (!jwtToken || !spaceId) return;
 
@@ -61,7 +61,7 @@ describe("Templates API E2E 테스트", () => {
 				.get("/api/v1/templates")
 				.query({ skip: 0, take: 10 })
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			// Then
 			expect(response.status).toBe(200);
@@ -90,7 +90,7 @@ describe("Templates API E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.post("/api/v1/templates")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId)
+				.set("Cookie", "selectedSpaceId=" + spaceId)
 				.send(createDto);
 
 			// Then
@@ -120,7 +120,7 @@ describe("Templates API E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.post("/api/v1/templates")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId)
+				.set("Cookie", "selectedSpaceId=" + spaceId)
 				.send(invalidDto);
 
 			// Then
@@ -139,7 +139,7 @@ describe("Templates API E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get(`/api/v1/templates/${nonExistentTemplateId}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			// Then
 			expect(response.status).toBe(404);
@@ -154,7 +154,7 @@ describe("Templates API E2E 테스트", () => {
 			// When
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/templates")
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			// Then
 			expect(response.status).toBe(401);

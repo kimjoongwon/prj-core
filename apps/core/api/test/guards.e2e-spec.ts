@@ -51,7 +51,7 @@ describe("Guards E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/role-category/shared")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			// 권한이 있으면 200, 없으면 403
 			expect([200, 403]).toContain(response.status);
@@ -63,7 +63,7 @@ describe("Guards E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/role-category/workspace")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			// 워크스페이스 카테고리 권한이 없으면 403
 			expect([200, 403]).toContain(response.status);
@@ -75,7 +75,7 @@ describe("Guards E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/role-category/public")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			expect([200, 403]).toContain(response.status);
 		});
@@ -96,7 +96,7 @@ describe("Guards E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/role-group/standard")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			expect([200, 403]).toContain(response.status);
 		});
@@ -107,7 +107,7 @@ describe("Guards E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/role-group/premium")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			expect([200, 403]).toContain(response.status);
 		});
@@ -118,7 +118,7 @@ describe("Guards E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/role-group/trusted")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			expect([200, 403]).toContain(response.status);
 		});
@@ -139,7 +139,7 @@ describe("Guards E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/roles/view")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			expect([200, 403]).toContain(response.status);
 		});
@@ -150,7 +150,7 @@ describe("Guards E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/roles/manage")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			expect([200, 403]).toContain(response.status);
 		});
@@ -161,7 +161,7 @@ describe("Guards E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/roles/full-access")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			expect([200, 403]).toContain(response.status);
 		});
@@ -182,7 +182,7 @@ describe("Guards E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/combined/workspace-category-and-role")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			// 두 조건 모두 충족해야 200, 하나라도 불충족하면 403
 			expect([200, 403]).toContain(response.status);
@@ -204,7 +204,7 @@ describe("Guards E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/roles/full-access")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			if (response.status === 403) {
 				expect(response.body).toHaveProperty("message");

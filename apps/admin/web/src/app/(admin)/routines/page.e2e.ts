@@ -62,7 +62,7 @@ test.describe("루틴 목록 페이지", () => {
 			const TEST_TASK_NAME = `E2E 루틴 운동 ${uniqueSuffix}`;
 			// 시드 데이터 기준 System Space ID (로그인 헬퍼와 동일)
 			const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
-			const spaceHeaders = { "x-space-id": SYSTEM_SPACE_ID };
+			const spaceHeaders = { Cookie: `selectedSpaceId=${SYSTEM_SPACE_ID}` };
 			let createdTaskId: string | undefined;
 
 			const clickSaveWithOptionalEmptyActivitiesConfirm = async () => {

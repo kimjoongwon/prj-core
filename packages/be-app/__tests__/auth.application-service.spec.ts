@@ -95,7 +95,9 @@ describe("AuthApplicationService", () => {
 		mockTokenService = {
 			setAccessTokenCookie: jest.fn(),
 			setRefreshTokenCookie: jest.fn(),
+			setSelectedSpaceCookie: jest.fn(),
 			clearTokenCookies: jest.fn(),
+			clearSelectedSpaceCookie: jest.fn(),
 			isTokenBlacklisted: jest.fn(),
 		} as unknown as jest.Mocked<TokenService>;
 
@@ -366,6 +368,7 @@ describe("AuthApplicationService", () => {
 			const result = await applicationService.refreshTokenWithIdp(
 				"refresh-token",
 				"idp-web.session-raw",
+				undefined,
 				{} as never,
 			);
 

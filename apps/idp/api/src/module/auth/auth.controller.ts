@@ -16,6 +16,7 @@ import {
 	ChangePasswordDto,
 	PageMetaDto,
 	QueryAuthAuditLogDto,
+	SetCurrentSpaceDto,
 	SignUpPayloadDto,
 	SpaceDto,
 	TokenRefreshResponseDto,
@@ -142,9 +143,11 @@ export class AuthController {
 	) {
 		const refreshToken = req.cookies.refreshToken;
 		const sessionId = req.cookies?.sessionId;
+		const selectedSpaceId = req.cookies?.[Token.SELECTED_SPACE_ID];
 		return this.authApplicationService.refreshTokenWithIdp(
 			refreshToken,
 			sessionId,
+			selectedSpaceId,
 			res,
 		);
 	}
@@ -194,7 +197,7 @@ export class AuthController {
 		operationId: "getMySpaces",
 		summary: "내 Space 목록 조회",
 		description:
-			"현재 인증된 사용자가 접근 가능한 Space 목록을 반환합니다. X-Space-ID 헤더가 필요하지 않습니다.",
+			"현재 인증된 사용자가 접근 가능한 Space 목록을 반환합니다. 선택 Space 쿠키가 없어도 호출할 수 있습니다.",
 	})
 	@ApiCookieAuth(Token.ACCESS)
 	@ApiSecurity("oauth2", ["openid", "profile", "email", "roles"])
@@ -203,6 +206,55 @@ export class AuthController {
 	@ResponseMessage("내 Space 목록 조회 성공")
 	async getMySpaces() {
 		return this.authApplicationService.getMySpaces();
+	}
+
+	@SkipSpaceCheck()
+	@HttpCode(HttpStatus.OK)
+	@Get("current-space")
+	@ApiOperation({
+		operationId: "getCurrentSpace",
+		summary: "현재 선택 Space 조회",
+		description:
+			"현재 선택된 selectedSpaceId 쿠키를 기준으로 Space를 반환합니다. 쿠키가 없거나 유효하지 않으면 기본 Space로 복구합니다.",
+	})
+	@ApiCookieAuth(Token.ACCESS)
+	@ApiSecurity("oauth2", ["openid", "profile", "email", "roles"])
+	@ApiErrors(401, 500)
+	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
+	@ResponseMessage("현재 Space 조회 성공")
+	async getCurrentSpace(
+		@Req() req: Request,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		return this.authApplicationService.getCurrentSpace(
+			req.cookies?.[Token.SELECTED_SPACE_ID],
+			res,
+		);
+	}
+
+	@SkipSpaceCheck()
+	@HttpCode(HttpStatus.OK)
+	@Post("current-space")
+	@ApiOperation({
+		operationId: "setCurrentSpace",
+		summary: "현재 선택 Space 변경",
+		description:
+			"사용자가 접근 가능한 Space 중 하나를 현재 선택 Space 쿠키로 설정합니다.",
+	})
+	@ApiCookieAuth(Token.ACCESS)
+	@ApiSecurity("oauth2", ["openid", "profile", "email", "roles"])
+	@ApiBody({
+		type: SetCurrentSpaceDto,
+		description: "현재 선택할 Space ID",
+	})
+	@ApiErrors(401, 403, 500)
+	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
+	@ResponseMessage("현재 Space 변경 성공")
+	async setCurrentSpace(
+		@Body() dto: SetCurrentSpaceDto,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		return this.authApplicationService.setCurrentSpace(dto, res);
 	}
 
 	@HttpCode(HttpStatus.OK)

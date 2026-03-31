@@ -122,8 +122,8 @@ describe("SpaceAccessGuard", () => {
 			});
 		});
 
-		describe("X-Space-ID 헤더 검증", () => {
-			it("인증된 사용자가 X-Space-ID 없이 요청하면 BadRequestException을 던져야 한다", () => {
+		describe("selectedSpaceId 쿠키 검증", () => {
+			it("인증된 사용자가 selectedSpaceId 없이 요청하면 BadRequestException을 던져야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser();
@@ -137,11 +137,11 @@ describe("SpaceAccessGuard", () => {
 				// When & Then
 				expect(() => guard.canActivate(context)).toThrow(BadRequestException);
 				expect(() => guard.canActivate(context)).toThrow(
-					"X-Space-ID 헤더가 필요합니다",
+					"selectedSpaceId 쿠키가 필요합니다",
 				);
 			});
 
-			it("인증 + X-Space-ID + 해당 tenant가 있으면 true를 반환해야 한다", () => {
+			it("인증 + selectedSpaceId + 해당 tenant가 있으면 true를 반환해야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser();
@@ -159,7 +159,7 @@ describe("SpaceAccessGuard", () => {
 				expect(result).toBe(true);
 			});
 
-			it("인증 + X-Space-ID + 해당 tenant가 없으면 ForbiddenException을 던져야 한다", () => {
+			it("인증 + selectedSpaceId + 해당 tenant가 없으면 ForbiddenException을 던져야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser();
@@ -179,7 +179,7 @@ describe("SpaceAccessGuard", () => {
 		});
 
 		describe("tenants가 비정상인 경우", () => {
-			it("인증 + X-Space-ID + tenants가 null이면 true를 반환해야 한다", () => {
+			it("인증 + selectedSpaceId + tenants가 null이면 true를 반환해야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser({ tenants: null });
@@ -197,7 +197,7 @@ describe("SpaceAccessGuard", () => {
 				expect(result).toBe(true);
 			});
 
-			it("인증 + X-Space-ID + tenants가 undefined이면 true를 반환해야 한다", () => {
+			it("인증 + selectedSpaceId + tenants가 undefined이면 true를 반환해야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser({ tenants: undefined });

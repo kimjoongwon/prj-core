@@ -38,7 +38,10 @@ export function createUseSpaceGuard(
 		const [showAlert, setShowAlert] = useState(false);
 
 		useEffect(() => {
-			if (!persistStore?.isHydrated) {
+			if (
+				!persistStore?.isHydrated ||
+				!persistStore?.isSpaceSelectionResolved
+			) {
 				setShowAlert(false);
 				return;
 			}
@@ -49,7 +52,11 @@ export function createUseSpaceGuard(
 			} else {
 				setShowAlert(false);
 			}
-		}, [persistStore?.isHydrated, persistStore?.spaceId]);
+		}, [
+			persistStore?.isHydrated,
+			persistStore?.isSpaceSelectionResolved,
+			persistStore?.spaceId,
+		]);
 
 		const handleConfirm = () => {
 			setShowAlert(false);

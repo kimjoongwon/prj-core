@@ -41,6 +41,9 @@ export class UsersRepository {
 			where: { id },
 			include: {
 				tenants: {
+					orderBy: {
+						createdAt: "asc",
+					},
 					include: {
 						role: {
 							include: {
@@ -133,6 +136,9 @@ export class UsersRepository {
 			where: { email },
 			include: {
 				tenants: {
+					orderBy: {
+						createdAt: "asc",
+					},
 					include: {
 						role: {
 							include: {

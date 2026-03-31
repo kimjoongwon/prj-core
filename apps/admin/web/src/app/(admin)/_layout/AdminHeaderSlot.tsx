@@ -1,6 +1,6 @@
 "use client";
 
-import { useLogout } from "@cocrepo/api/idp/auth";
+import { useLogout, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
 import type { SpaceInfo } from "@cocrepo/ui";
 import {
 	AppLogo,
@@ -25,6 +25,22 @@ const userInfo = {
 export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 	const persistStore = usePersistStore();
 	const navigationStore = useNavigationStore();
+	const { mutate: setCurrentSpaceMutate, isPending: isSettingCurrentSpace } =
+		useSetCurrentSpace({
+			mutation: {
+				onSuccess: (response, variables) => {
+					const currentSpace = response.data;
+					const nextGroundName =
+						currentSpace?.ground?.name ??
+						persistStore.spaces.find(
+							(space) => space.spaceId === variables.spaceId,
+						)?.groundName ??
+						"";
+					persistStore.setSpace(variables.spaceId, nextGroundName);
+					window.location.reload();
+				},
+			},
+		});
 	const { mutate: logoutMutate } = useLogout({
 		mutation: {
 			onSettled: () => {
@@ -39,8 +55,11 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 	};
 
 	const onSelectSpace = (space: SpaceInfo) => {
-		persistStore.setSpace(space.spaceId, space.groundName);
-		window.location.reload();
+		if (isSettingCurrentSpace) {
+			return;
+		}
+
+		setCurrentSpaceMutate({ spaceId: space.spaceId });
 	};
 
 	const onClickOpenIdpClientButton = () => {

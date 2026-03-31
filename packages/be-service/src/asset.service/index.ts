@@ -153,7 +153,7 @@ export class AssetService {
 
     if (!spaceId) {
       throw new BadRequestException(
-        "X-Space-ID 헤더가 필요합니다. Space를 선택해주세요.",
+        "selectedSpaceId 쿠키가 필요합니다. Space를 선택해주세요.",
       );
     }
 

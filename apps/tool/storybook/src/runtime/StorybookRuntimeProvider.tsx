@@ -43,7 +43,9 @@ import {
 	setLoginRedirectUrl,
 } from "../../../../../packages/fe-api/src/core/client";
 import {
+	useGetCurrentSpace,
 	useGetMySpaces,
+	useSetCurrentSpace,
 	useVerifyToken,
 } from "../../../../../packages/fe-api/src/idp/auth";
 import {
@@ -383,6 +385,19 @@ function useRootStore(): RootStore {
 
 const AdminSpaceBar = observer(function AdminSpaceBar() {
 	const persistStore = usePersistStore();
+	const { mutate: setCurrentSpaceMutate } = useSetCurrentSpace({
+		mutation: {
+			onSuccess: (response, variables) => {
+				const currentSpace = response.data;
+				const nextSpace = persistStore.spaces.find(
+					(space) => space.spaceId === (currentSpace?.id ?? variables.spaceId),
+				);
+				if (nextSpace) {
+					persistStore.setSpace(nextSpace.spaceId, nextSpace.groundName);
+				}
+			},
+		},
+	});
 
 	if (
 		!persistStore.isHydrated ||
@@ -428,7 +443,7 @@ const AdminSpaceBar = observer(function AdminSpaceBar() {
 						return;
 					}
 
-					persistStore.setSpace(nextSpace.spaceId, nextSpace.groundName);
+					setCurrentSpaceMutate({ spaceId: nextSpace.spaceId });
 				}}
 			>
 				{persistStore.spaces.map((space) => (
@@ -467,6 +482,17 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 		runtime.realm === "admin" ? (persistStore?.spaceId ?? null) : null;
 
 	const mySpacesQuery = useGetMySpaces({
+		query: {
+			enabled:
+				isLiveAuthRuntime &&
+				runtime.realm === "admin" &&
+				Boolean(verifyQuery.data?.data?.valid),
+			retry: false,
+			staleTime: DEFAULT_STALE_TIME_MS,
+		},
+	});
+
+	const currentSpaceQuery = useGetCurrentSpace({
 		query: {
 			enabled:
 				isLiveAuthRuntime &&
@@ -574,16 +600,18 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 			return;
 		}
 
+		const currentSpace = currentSpaceQuery.data?.data;
+		const currentSelectedSpace = currentSpace?.id
+			? spaces.find((space) => space.spaceId === currentSpace.id)
+			: undefined;
 		const requestedSpace = runtime.spaceId
 			? spaces.find((space) => space.spaceId === runtime.spaceId)
 			: undefined;
-		const persistedSpace = spaces.find(
-			(space) => space.spaceId === persistStore.spaceId,
-		);
-		const nextSpace = requestedSpace ?? persistedSpace ?? spaces[0];
+		const nextSpace = requestedSpace ?? currentSelectedSpace ?? spaces[0];
 
 		persistStore.setSpace(nextSpace.spaceId, nextSpace.groundName);
 	}, [
+		currentSpaceQuery.data,
 		isLiveAuthRuntime,
 		mySpacesQuery.data,
 		persistStore,
@@ -733,7 +761,7 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 		return (
 			<RuntimeScreen
 				title="No accessible spaces found"
-				description="Admin stories that require X-Space-ID need at least one accessible space from /api/v1/auth/my-spaces."
+				description="Admin stories that require a selected Space need at least one accessible space from /api/v1/auth/my-spaces."
 				tone="error"
 				actions={
 					<a

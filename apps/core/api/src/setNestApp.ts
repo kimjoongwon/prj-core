@@ -8,6 +8,7 @@ import {
 } from "@cocrepo/be-common";
 import { I18nTranslationService } from "@cocrepo/service";
 import { TokenStorageService } from "@cocrepo/service";
+import cookieParser from "cookie-parser";
 import { ClsService } from "nestjs-cls";
 import {
 	ClassSerializerInterceptor,
@@ -19,6 +20,9 @@ import { HttpAdapterHost, Reflector } from "@nestjs/core";
 export function setNestApp<T extends INestApplication>(app: T): void {
 	const { httpAdapter } = app.get(HttpAdapterHost);
 	const translationService = app.get(I18nTranslationService);
+
+	// Cookie 기반 인증/Space 선택을 위해 테스트/런타임 모두 cookie-parser를 등록합니다.
+	app.use(cookieParser());
 
 	// =================================================================
 	// Global Exception Filters (모든 예외를 일관되게 처리)

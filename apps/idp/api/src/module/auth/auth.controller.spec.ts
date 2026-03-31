@@ -1,4 +1,5 @@
 import { AuthApplicationService } from "@cocrepo/app";
+import { Token } from "@cocrepo/constant";
 import { SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
 import type { SignUpPayloadDto } from "@cocrepo/dto";
 import { UnauthorizedException } from "@nestjs/common";
@@ -38,6 +39,7 @@ describe("AuthController", () => {
 			accessToken: "test-access-token",
 			refreshToken: "test-refresh-token",
 			sessionId: "idp-web.test-session-id",
+			selectedSpaceId: "space-test-id",
 		},
 		user: mockUser,
 		headers: { "user-agent": "test-agent" },
@@ -73,6 +75,8 @@ describe("AuthController", () => {
 			verifyToken: jest.fn(),
 			logoutWithCookie: jest.fn(),
 			getMySpaces: jest.fn(),
+			getCurrentSpace: jest.fn(),
+			setCurrentSpace: jest.fn(),
 			getAuthAuditLogs: jest.fn(),
 			getAuthAuditLogStats: jest.fn(),
 			changePassword: jest.fn(),
@@ -255,6 +259,7 @@ describe("AuthController", () => {
 			).toHaveBeenCalledWith(
 				"test-refresh-token",
 				"idp-web.test-session-id",
+				"space-test-id",
 				mockResponse,
 			);
 			expect(result.accessToken).toBe("new-access-token");
@@ -343,6 +348,40 @@ describe("AuthController", () => {
 				mockResponse,
 			);
 			expect(result).toBe(true);
+		});
+	});
+
+	describe("current space", () => {
+		it("현재 선택 Space 조회 시 쿠키 값을 전달해야 한다", async () => {
+			mockAuthApplicationService.getCurrentSpace.mockResolvedValue({
+				id: "space-test-id",
+			} as never);
+
+			await controller.getCurrentSpace(
+				mockRequest as unknown as never,
+				mockResponse as unknown as never,
+			);
+
+			expect(mockAuthApplicationService.getCurrentSpace).toHaveBeenCalledWith(
+				mockRequest.cookies[Token.SELECTED_SPACE_ID],
+				mockResponse,
+			);
+		});
+
+		it("현재 선택 Space 변경 시 body와 response를 전달해야 한다", async () => {
+			mockAuthApplicationService.setCurrentSpace.mockResolvedValue({
+				id: "space-test-id",
+			} as never);
+
+			await controller.setCurrentSpace(
+				{ spaceId: "space-test-id" } as never,
+				mockResponse as unknown as never,
+			);
+
+			expect(mockAuthApplicationService.setCurrentSpace).toHaveBeenCalledWith(
+				{ spaceId: "space-test-id" },
+				mockResponse,
+			);
 		});
 	});
 });

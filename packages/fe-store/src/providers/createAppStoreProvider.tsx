@@ -93,7 +93,7 @@ export function createAppStoreProvider(
 
 		rootStore.fabStore = new FABStore({ actions: config.fabActions });
 
-		// API 인터셉터에 PersistStore 참조 주입 (x-space-id 헤더용)
+		// API 인터셉터에 PersistStore 참조 주입 (토큰 만료 정보 동기화용)
 		setApiPersistStore(rootStore.persistStore);
 
 		return rootStore;

@@ -25,7 +25,6 @@ export const IDP_AXIOS_INSTANCE = Axios.create({
 
 // PersistStore 참조 (앱 초기화 시 설정)
 interface PersistStoreRef {
-	spaceId: string | null;
 	accessTokenExpiresAt?: number | null;
 	refreshTokenExpiresAt?: number | null;
 }
@@ -41,7 +40,7 @@ export function setIdpBaseUrl(baseUrl: string) {
 
 /**
  * IDP Axios에 PersistStore 참조 설정
- * x-space-id 헤더 추가 및 토큰 갱신 시 만료 시간 업데이트에 사용
+ * 토큰 갱신 시 만료 시간 업데이트에 사용
  */
 export function setIdpPersistStore(store: PersistStoreRef) {
 	persistStoreRef = store;
@@ -53,19 +52,6 @@ export function setIdpPersistStore(store: PersistStoreRef) {
 export function setIdpLoginRedirectUrl(url: string) {
 	loginRedirectUrl = url;
 }
-
-// Request 인터셉터: x-space-id 헤더 추가
-IDP_AXIOS_INSTANCE.interceptors.request.use(
-	(config) => {
-		if (persistStoreRef?.spaceId) {
-			config.headers["x-space-id"] = persistStoreRef.spaceId;
-		}
-		return config;
-	},
-	(error) => {
-		return Promise.reject(error);
-	},
-);
 
 // 토큰 갱신 상태 관리
 let isRefreshing = false;

@@ -58,6 +58,15 @@ export class TokenService {
 		return this.setTokenToHTTPOnlyCookie(res, Token.REFRESH, refreshToken);
 	}
 
+	setSelectedSpaceCookie(res: Response, spaceId: string) {
+		const cookie = Cookie.forToken("30d");
+		return res.cookie(
+			Token.SELECTED_SPACE_ID,
+			spaceId,
+			cookie.toExpressOptions(),
+		);
+	}
+
 	/**
 	 * 쿠키 삭제
 	 */
@@ -72,6 +81,14 @@ export class TokenService {
 
 		res.clearCookie(Token.ACCESS, accessCookie.toExpressOptions());
 		res.clearCookie(Token.REFRESH, refreshCookie.toExpressOptions());
+	}
+
+	clearSelectedSpaceCookie(res: Response) {
+		const selectedSpaceCookie = Cookie.forToken("30d");
+		res.clearCookie(
+			Token.SELECTED_SPACE_ID,
+			selectedSpaceCookie.toExpressOptions(),
+		);
 	}
 
 	/**

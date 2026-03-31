@@ -83,7 +83,8 @@ describe("RequestContextMiddleware", () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: { "x-space-id": "space-001" },
+					headers: {},
+					cookies: { selectedSpaceId: "space-001" },
 					user,
 				} as any;
 
@@ -131,11 +132,12 @@ describe("RequestContextMiddleware", () => {
 		});
 
 		describe("Space/Tenant 설정", () => {
-			it("X-Space-ID와 매칭되는 tenant가 있으면 TENANT를 설정해야 한다", async () => {
+			it("selectedSpaceId와 매칭되는 tenant가 있으면 TENANT를 설정해야 한다", async () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: { "x-space-id": "space-001" },
+					headers: {},
+					cookies: { selectedSpaceId: "space-001" },
 					user,
 				} as any;
 
@@ -157,10 +159,10 @@ describe("RequestContextMiddleware", () => {
 				);
 			});
 
-			it("X-Space-ID가 없으면 SPACE_ID를 undefined로 설정해야 한다", async () => {
+			it("selectedSpaceId가 없으면 SPACE_ID를 undefined로 설정해야 한다", async () => {
 				// Given
 				const user = createMockUser();
-				mockReq = { headers: {}, user } as any;
+				mockReq = { headers: {}, cookies: {}, user } as any;
 
 				// When
 				await middleware.use(
@@ -176,11 +178,12 @@ describe("RequestContextMiddleware", () => {
 				);
 			});
 
-			it("X-Space-ID와 매칭되는 tenant가 없으면 TENANT를 undefined로 설정해야 한다", async () => {
+			it("selectedSpaceId와 매칭되는 tenant가 없으면 TENANT를 undefined로 설정해야 한다", async () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: { "x-space-id": "non-existent-space" },
+					headers: {},
+					cookies: { selectedSpaceId: "non-existent-space" },
 					user,
 				} as any;
 
@@ -206,7 +209,8 @@ describe("RequestContextMiddleware", () => {
 					throw new Error("CLS 에러");
 				});
 				mockReq = {
-					headers: { "x-space-id": "space-001" },
+					headers: {},
+					cookies: { selectedSpaceId: "space-001" },
 					user: createMockUser(),
 				} as any;
 

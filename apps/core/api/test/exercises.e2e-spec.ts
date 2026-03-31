@@ -165,7 +165,7 @@ describe("Tasks API (E2E)", () => {
 		expect(response.status).toBe(401);
 	});
 
-	it("인증은 있지만 X-Space-ID가 없으면 400을 반환해야 한다", async () => {
+	it("인증은 있지만 selectedSpaceId가 없으면 400을 반환해야 한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/tasks")
 			.set("Authorization", `Bearer ${jwtToken}`);
@@ -183,7 +183,7 @@ describe("Tasks API (E2E)", () => {
 				spaceScope: SpaceScope.INCLUDE_ANCESTORS,
 			})
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_MANAGE_ID);
+			.set("Cookie", "selectedSpaceId=" + SPACE_MANAGE_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
@@ -207,7 +207,7 @@ describe("Tasks API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get(`/api/v1/tasks/${TASK_ID}/exercise`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_MANAGE_ID);
+			.set("Cookie", "selectedSpaceId=" + SPACE_MANAGE_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
@@ -222,7 +222,7 @@ describe("Tasks API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get(`/api/v1/tasks/${TASK_ID}/routines`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_MANAGE_ID);
+			.set("Cookie", "selectedSpaceId=" + SPACE_MANAGE_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
@@ -244,7 +244,7 @@ describe("Tasks API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.post("/api/v1/tasks")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_MANAGE_ID)
+			.set("Cookie", "selectedSpaceId=" + SPACE_MANAGE_ID)
 			.send(createDto);
 
 		expect(response.status).toBe(201);
@@ -261,7 +261,7 @@ describe("Tasks API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.post("/api/v1/tasks")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_VIEW_ID)
+			.set("Cookie", "selectedSpaceId=" + SPACE_VIEW_ID)
 			.send({
 				name: "Blocked task",
 				duration: 20,
@@ -282,7 +282,7 @@ describe("Tasks API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.patch(`/api/v1/tasks/${TASK_ID}/exercise`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_MANAGE_ID)
+			.set("Cookie", "selectedSpaceId=" + SPACE_MANAGE_ID)
 			.send(updateDto);
 
 		expect(response.status).toBe(200);
@@ -299,7 +299,7 @@ describe("Tasks API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.delete(`/api/v1/tasks/${TASK_ID}`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_MANAGE_ID);
+			.set("Cookie", "selectedSpaceId=" + SPACE_MANAGE_ID);
 
 		expect(response.status).toBe(204);
 		expect(response.body).toEqual({});
@@ -313,7 +313,7 @@ describe("Tasks API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/tasks")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", UNKNOWN_SPACE_ID);
+			.set("Cookie", "selectedSpaceId=" + UNKNOWN_SPACE_ID);
 
 		expect(response.status).toBe(403);
 		expect(taskFacadeMock.findTasks).not.toHaveBeenCalled();
@@ -323,7 +323,7 @@ describe("Tasks API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/tasks/not-a-valid-uuid/exercise")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_MANAGE_ID);
+			.set("Cookie", "selectedSpaceId=" + SPACE_MANAGE_ID);
 
 		expect(response.status).toBe(400);
 		expect(taskFacadeMock.getExerciseByTaskId).not.toHaveBeenCalled();

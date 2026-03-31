@@ -1,0 +1,11 @@
+import { UUIDField } from "@cocrepo/decorator";
+import { Expose } from "class-transformer";
+
+export class SetCurrentSpaceDto {
+	@UUIDField({
+		description: "현재 선택할 Space ID",
+		example: "123e4567-e89b-12d3-a456-426614174000",
+	})
+	@Expose()
+	spaceId: string;
+}

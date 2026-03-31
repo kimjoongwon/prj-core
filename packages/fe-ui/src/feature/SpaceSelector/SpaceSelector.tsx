@@ -13,7 +13,7 @@ import { Building2, Check, ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
 
 export interface SpaceSelectorProps {
-	/** Space 변경 시 콜백 (API 호출 등) */
+	/** Space 변경 시 콜백 (서버에 현재 Space를 반영한 뒤 상태를 갱신) */
 	onChangeSpace?: (spaceId: string, groundName: string) => void;
 }
 
@@ -30,6 +30,7 @@ export interface SpaceSelectorProps {
 export const SpaceSelector = observer(
 	({ onChangeSpace }: SpaceSelectorProps) => {
 		const persistStore = usePersistStore();
+		const canChangeSpace = typeof onChangeSpace === "function";
 
 		// 현재 Space 정보
 		const currentSpace =
@@ -44,10 +45,7 @@ export const SpaceSelector = observer(
 			// 현재 선택된 Space와 동일하면 무시
 			if (spaceId === persistStore.spaceId) return;
 
-			// PersistStore 업데이트 (x-space-id 헤더용)
-			persistStore.setSpace(spaceId, groundName);
-
-			// 외부 콜백 호출 (API 호출 등)
+			// 현재 Space 반영은 상위에서 API 호출 및 store 동기화를 담당합니다.
 			onChangeSpace?.(spaceId, groundName);
 		};
 
@@ -77,6 +75,7 @@ export const SpaceSelector = observer(
 				<DropdownTrigger>
 					<Button
 						variant="flat"
+						isDisabled={!canChangeSpace}
 						className="h-auto min-h-0 gap-2 bg-default-100 px-3 py-2 hover:bg-default-200"
 					>
 						<Avatar
@@ -100,6 +99,7 @@ export const SpaceSelector = observer(
 					{spaces.map((space) => (
 						<DropdownItem
 							key={space.spaceId}
+							isDisabled={!canChangeSpace}
 							startContent={
 								<Avatar
 									icon={<Building2 className="h-4 w-4" size={16} />}

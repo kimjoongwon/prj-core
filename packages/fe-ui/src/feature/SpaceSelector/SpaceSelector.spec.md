@@ -32,7 +32,9 @@
 1. 입력(라우트/props/호출)을 수신합니다.
 2. PersistStore의 `isHydrated`, `spaceId`, `groundName`, `spaces`를 읽어 현재 Space 상태를 계산합니다.
 3. hydration 완료 전이나 현재 Space가 없으면 `null`을 반환합니다.
-4. hydration 완료 후 결과를 렌더링/반환/전파합니다.
+4. 사용자가 다른 Space를 선택하면 상위에서 전달한 `onChangeSpace`를 호출합니다.
+5. 실제 현재 Space 반영은 상위가 서버와 동기화한 뒤 store를 갱신하는 방식으로 처리합니다.
+6. hydration 완료 후 결과를 렌더링/반환/전파합니다.
 
 ## 실패 및 엣지 케이스
 
@@ -40,6 +42,7 @@
 - 비정상 입력은 조기 반환 또는 예외 처리합니다.
 - 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
 - 브라우저 저장소 hydrate 전에는 렌더링을 지연해 SSR/CSR 첫 렌더 불일치를 피합니다.
+- `onChangeSpace`가 없으면 표시 전용으로 동작하며 Space 변경 UI는 비활성화됩니다.
 
 ## 구현 체크리스트
 
@@ -51,6 +54,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-03-31 | 선택 시 내부 store를 직접 갱신하지 않고 상위의 서버 동기화 콜백만 호출하도록 조정 | codex |
 | 2026-03-14 | 로컬 `useState/useEffect` 대신 PersistStore `isHydrated`를 사용해 SSR/hydration 책임을 store/provider로 일원화 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | Building2, ChevronDown, Check 아이콘을 파일 내부에서 직접 사용하도록 정리 | codex |

@@ -53,7 +53,7 @@ test.describe("타임라인 목록 페이지", () => {
 			const UPDATED_NAME = `E2E 수정된 타임라인 ${uniqueSuffix}`;
 			// 시드 데이터 기준 System Space ID (로그인 헬퍼와 동일)
 			const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
-			const spaceHeaders = { "x-space-id": SYSTEM_SPACE_ID };
+			const spaceHeaders = { Cookie: `selectedSpaceId=${SYSTEM_SPACE_ID}` };
 
 			// Given: 타임라인 API로 테스트 데이터를 생성
 			const createResponse = await page.request.post(

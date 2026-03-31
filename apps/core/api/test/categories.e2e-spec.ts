@@ -74,7 +74,7 @@ describe("Categories API (E2E)", () => {
 					await request(app.getHttpServer())
 						.delete(`/api/v1/categories/${id}`)
 						.set("Authorization", `Bearer ${jwtToken}`)
-						.set("X-Space-ID", spaceId);
+						.set("Cookie", "selectedSpaceId=" + spaceId);
 				} catch {
 					// 이미 삭제된 경우 무시
 				}
@@ -96,7 +96,7 @@ describe("Categories API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.post("/api/v1/categories")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", spaceId)
+			.set("Cookie", "selectedSpaceId=" + spaceId)
 			.send({
 				name,
 				type: "Role",
@@ -127,7 +127,7 @@ describe("Categories API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/categories")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("X-Space-ID", spaceId);
+					.set("Cookie", "selectedSpaceId=" + spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -143,7 +143,7 @@ describe("Categories API (E2E)", () => {
 					.get("/api/v1/categories")
 					.query({ type: "Role" })
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("X-Space-ID", spaceId);
+					.set("Cookie", "selectedSpaceId=" + spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -169,7 +169,7 @@ describe("Categories API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/categories/${category.id}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("X-Space-ID", spaceId);
+					.set("Cookie", "selectedSpaceId=" + spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -194,7 +194,7 @@ describe("Categories API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.post("/api/v1/categories")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("X-Space-ID", spaceId)
+					.set("Cookie", "selectedSpaceId=" + spaceId)
 					.send({
 						name: categoryName,
 						type: "Role",
@@ -224,7 +224,7 @@ describe("Categories API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.post("/api/v1/categories")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("X-Space-ID", spaceId)
+					.set("Cookie", "selectedSpaceId=" + spaceId)
 					.send({
 						name: childName,
 						type: "Role",
@@ -255,7 +255,7 @@ describe("Categories API (E2E)", () => {
 				const deleteResponse = await request(app.getHttpServer())
 					.delete(`/api/v1/categories/${category.id}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("X-Space-ID", spaceId);
+					.set("Cookie", "selectedSpaceId=" + spaceId);
 
 				// Then: 삭제 성공
 				expect(deleteResponse.status).toBe(200);
@@ -264,7 +264,7 @@ describe("Categories API (E2E)", () => {
 				const getResponse = await request(app.getHttpServer())
 					.get(`/api/v1/categories/${category.id}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("X-Space-ID", spaceId);
+					.set("Cookie", "selectedSpaceId=" + spaceId);
 
 				expect(getResponse.status).toBe(404);
 
@@ -322,7 +322,7 @@ describe("Categories API (E2E)", () => {
 			const response = await request(app.getHttpServer())
 				.post("/api/v1/categories")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId)
+				.set("Cookie", "selectedSpaceId=" + spaceId)
 				.send({
 					name: duplicateName,
 					type: "Role",
@@ -350,7 +350,7 @@ describe("Categories API (E2E)", () => {
 			const response = await request(app.getHttpServer())
 				.delete(`/api/v1/categories/${parent.id}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			// Then
 			expect(response.status).toBe(400);
@@ -371,7 +371,7 @@ describe("Categories API (E2E)", () => {
 					"/api/v1/categories/00000000-0000-0000-0000-000000000099",
 				)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			// Then
 			expect(response.status).toBe(404);
@@ -389,7 +389,7 @@ describe("Categories API (E2E)", () => {
 					"/api/v1/categories/00000000-0000-0000-0000-000000000099",
 				)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			// Then
 			expect(response.status).toBe(404);
@@ -426,7 +426,7 @@ describe("Categories API (E2E)", () => {
 			const response = await request(app.getHttpServer())
 				.patch(`/api/v1/categories/${category.id}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId)
+				.set("Cookie", "selectedSpaceId=" + spaceId)
 				.send({ parentId: category.id });
 
 			// Then
@@ -452,7 +452,7 @@ describe("Categories API (E2E)", () => {
 			const response = await request(app.getHttpServer())
 				.patch(`/api/v1/categories/${parent.id}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId)
+				.set("Cookie", "selectedSpaceId=" + spaceId)
 				.send({ parentId: child.id });
 
 			// Then
@@ -476,7 +476,7 @@ describe("Categories API (E2E)", () => {
 			const deleteChildResponse = await request(app.getHttpServer())
 				.delete(`/api/v1/categories/${child.id}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			expect(deleteChildResponse.status).toBe(200);
 
@@ -488,7 +488,7 @@ describe("Categories API (E2E)", () => {
 			const deleteParentResponse = await request(app.getHttpServer())
 				.delete(`/api/v1/categories/${parent.id}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			// Then
 			expect(deleteParentResponse.status).toBe(200);
@@ -514,7 +514,7 @@ describe("Categories API (E2E)", () => {
 			const beforeResponse = await request(app.getHttpServer())
 				.get(`/api/v1/categories/${child.id}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			expect(beforeResponse.body.data.parentId).toBe(parent.id);
 
@@ -522,7 +522,7 @@ describe("Categories API (E2E)", () => {
 			const response = await request(app.getHttpServer())
 				.patch(`/api/v1/categories/${child.id}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId)
+				.set("Cookie", "selectedSpaceId=" + spaceId)
 				.send({ parentId: null });
 
 			// Then
@@ -537,7 +537,7 @@ describe("Categories API (E2E)", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/categories/invalid-uuid-format")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			// Then (ParseUUIDPipe에 의해 400)
 			expect(response.status).toBe(400);

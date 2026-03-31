@@ -6,7 +6,6 @@ import {
   type SwaggerDocumentOptions,
   SwaggerModule,
 } from "@nestjs/swagger";
-import cookieParser from "cookie-parser";
 import { Logger } from "nestjs-pino";
 import { AppModule } from "./module/app.module";
 import { setNestApp } from "./setNestApp";
@@ -15,29 +14,16 @@ import { setNestApp } from "./setNestApp";
  * Swagger UI Space 선택 플러그인
  * - topbar에 Space 드롭다운 추가
  * - 인증 후 Load 버튼으로 접근 가능한 Space 목록 로드
- * - 선택된 Space ID를 모든 API 요청의 X-Space-ID 헤더에 자동 주입
+ * - 선택된 Space는 auth/current-space API를 통해 HttpOnly 쿠키로 설정
  */
 const SWAGGER_SPACE_SELECTOR_JS = `
 (function() {
   'use strict';
-  var STORAGE_KEY = 'swagger-space-id';
-
-  // fetch를 패치하여 X-Space-ID 헤더 자동 주입 + 401 시 재인증 트리거
   var origFetch = window.fetch;
   var isReauthorizing = false;
+  var spacesCache = [];
 
   window.fetch = function(url, init) {
-    var spaceId = localStorage.getItem(STORAGE_KEY);
-    if (spaceId && typeof url === 'string' && url.indexOf('/api/v1/') !== -1) {
-      init = init || {};
-      if (init.headers instanceof Headers) {
-        init.headers.set('X-Space-ID', spaceId);
-      } else if (typeof init.headers === 'object') {
-        init.headers['X-Space-ID'] = spaceId;
-      } else {
-        init.headers = { 'X-Space-ID': spaceId };
-      }
-    }
     return origFetch.apply(this, arguments).then(function(response) {
       if (response.status === 401 && !isReauthorizing && typeof url === 'string' && url.indexOf('/api/v1/') !== -1) {
         isReauthorizing = true;
@@ -85,8 +71,6 @@ const SWAGGER_SPACE_SELECTOR_JS = `
     select.style.cssText = 'padding:5px 10px;border-radius:4px;background:#2b3137;color:#fff;border:1px solid #555;font-size:13px;min-width:220px;cursor:pointer;';
     select.innerHTML = '<option value="">-- Authorize 후 Load 클릭 --</option>';
 
-    var savedSpaceId = localStorage.getItem(STORAGE_KEY) || '';
-
     var loadBtn = document.createElement('button');
     loadBtn.textContent = 'Load';
     loadBtn.style.cssText = 'padding:5px 14px;border-radius:4px;background:#4990e2;color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap;';
@@ -101,20 +85,30 @@ const SWAGGER_SPACE_SELECTOR_JS = `
       loadBtn.textContent = '...';
       loadBtn.disabled = true;
 
-      origFetch((window.__IDP_SERVER_URL || 'http://localhost:3007') + '/api/v1/auth/my-spaces', {
-        headers: { 'Authorization': 'Bearer ' + token }
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(response) {
-        var raw = response && response.data;
+      Promise.all([
+        origFetch((window.__IDP_SERVER_URL || 'http://localhost:3007') + '/api/v1/auth/my-spaces', {
+          credentials: 'include',
+          headers: { 'Authorization': 'Bearer ' + token }
+        }).then(function(r) { return r.json(); }),
+        origFetch((window.__IDP_SERVER_URL || 'http://localhost:3007') + '/api/v1/auth/current-space', {
+          credentials: 'include',
+          headers: { 'Authorization': 'Bearer ' + token }
+        }).then(function(r) { return r.json(); })
+      ])
+      .then(function(results) {
+        var spacesResponse = results[0];
+        var currentSpaceResponse = results[1];
+        var raw = spacesResponse && spacesResponse.data;
+        var currentSpace = currentSpaceResponse && currentSpaceResponse.data;
         var spaces = Array.isArray(raw) ? raw : [];
+        spacesCache = spaces;
         select.innerHTML = '<option value="">-- Space 선택 --</option>';
         spaces.forEach(function(s) {
           var opt = document.createElement('option');
           opt.value = s.id;
           var text = (s.ground && s.ground.name) ? s.ground.name : s.id;
           opt.textContent = text;
-          if (s.id === savedSpaceId) opt.selected = true;
+          if (currentSpace && s.id === currentSpace.id) opt.selected = true;
           select.appendChild(opt);
         });
         if (spaces.length === 0) {
@@ -132,11 +126,42 @@ const SWAGGER_SPACE_SELECTOR_JS = `
 
     select.addEventListener('change', function() {
       var value = select.value;
-      if (value) {
-        localStorage.setItem(STORAGE_KEY, value);
-      } else {
-        localStorage.removeItem(STORAGE_KEY);
+      var token = getAuthToken();
+      if (!value || !token) {
+        return;
       }
+
+      select.disabled = true;
+      origFetch((window.__IDP_SERVER_URL || 'http://localhost:3007') + '/api/v1/auth/current-space', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ spaceId: value })
+      })
+      .then(function(response) {
+        if (!response.ok) {
+          throw new Error('Space 선택 변경에 실패했습니다.');
+        }
+        return response.json();
+      })
+      .then(function(response) {
+        var currentSpace = response && response.data;
+        if (!currentSpace) {
+          return;
+        }
+        for (var i = 0; i < select.options.length; i += 1) {
+          select.options[i].selected = select.options[i].value === currentSpace.id;
+        }
+      })
+      .catch(function(err) {
+        alert('Space 변경 실패: ' + err.message);
+      })
+      .finally(function() {
+        select.disabled = false;
+      });
     });
 
     container.appendChild(label);
@@ -182,9 +207,6 @@ async function bootstrap() {
   // =================================================================
   // 2. Express 미들웨어 설정 (HTTP 레벨 - 가장 먼저 실행)
   // =================================================================
-  // 쿠키 파싱 미들웨어 - 모든 요청에서 쿠키를 자동 파싱
-  app.use(cookieParser());
-
   // Express 쿼리 파서 설정 - 복잡한 쿼리 객체 파싱 지원
   app.set("query parser", "extended");
 

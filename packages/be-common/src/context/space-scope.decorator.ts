@@ -1,7 +1,7 @@
 import { SetMetadata } from "@nestjs/common";
 
 export enum SpaceScope {
-	/** @OnlyMySpace: X-Space-ID 1개만 */
+	/** @OnlyMySpace: selectedSpaceId 1개만 */
 	CURRENT = "current",
 	/** @AccessibleSpaces: 카테고리 계층 기반 하위 Space 포함 (기본값) */
 	DESCENDANTS = "descendants",
@@ -9,7 +9,7 @@ export enum SpaceScope {
 
 export const SPACE_SCOPE_KEY = "space_scope";
 
-/** 현재 Space만 사용 (X-Space-ID 1개) */
+/** 현재 Space만 사용 (selectedSpaceId 1개) */
 export const OnlyMySpace = () =>
 	SetMetadata(SPACE_SCOPE_KEY, SpaceScope.CURRENT);
 

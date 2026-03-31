@@ -11,7 +11,7 @@ export const CONTEXT_KEYS = {
 	/** 현재 세션 ID (sessionId 쿠키) */
 	SESSION_ID: "request.session_id",
 	SERVICE_NAME: "request.service_name_key",
-	/** 요청된 Space ID (X-Space-ID 헤더) - undefined이면 모든 데이터 조회 */
+	/** 요청된 Space ID (selectedSpaceId 쿠키) - undefined이면 선택되지 않은 상태 */
 	SPACE_ID: "request.space_id",
 	/** SpaceScopeInterceptor가 계산한 최종 Space IDs (데코레이터 기반)
 	 * - undefined: 슈퍼매니저 (전체 조회)

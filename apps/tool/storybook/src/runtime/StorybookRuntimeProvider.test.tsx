@@ -1,3 +1,5 @@
+// @vitest-environment jsdom
+
 import { render, screen, waitFor } from "@testing-library/react";
 import type { PropsWithChildren } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -8,6 +10,8 @@ const setApiPersistStoreMock = vi.fn();
 const setIdpPersistStoreMock = vi.fn();
 const useVerifyTokenMock = vi.fn();
 const useGetMySpacesMock = vi.fn();
+const useGetCurrentSpaceMock = vi.fn();
+const useSetCurrentSpaceMock = vi.fn();
 const customInstanceMock = vi.fn();
 
 vi.mock("@cocrepo/ui", () => ({
@@ -32,6 +36,8 @@ vi.mock("../../../../../packages/fe-api/src/idp/client", () => ({
 
 vi.mock("../../../../../packages/fe-api/src/idp/auth", () => ({
 	useGetMySpaces: (...args: unknown[]) => useGetMySpacesMock(...args),
+	useGetCurrentSpace: (...args: unknown[]) => useGetCurrentSpaceMock(...args),
+	useSetCurrentSpace: (...args: unknown[]) => useSetCurrentSpaceMock(...args),
 	useVerifyToken: (...args: unknown[]) => useVerifyTokenMock(...args),
 }));
 
@@ -41,7 +47,26 @@ async function loadProvider(requireAuth: boolean) {
 	return import("./StorybookRuntimeProvider");
 }
 
+function createStorageMock() {
+	const store = new Map<string, string>();
+
+	return {
+		getItem: vi.fn((key: string) => store.get(key) ?? null),
+		setItem: vi.fn((key: string, value: string) => {
+			store.set(key, value);
+		}),
+		removeItem: vi.fn((key: string) => {
+			store.delete(key);
+		}),
+		clear: vi.fn(() => {
+			store.clear();
+		}),
+	};
+}
+
 beforeEach(() => {
+	vi.stubGlobal("localStorage", createStorageMock());
+	vi.stubGlobal("sessionStorage", createStorageMock());
 	customInstanceMock.mockReset();
 	setApiPersistStoreMock.mockReset();
 	setIdpPersistStoreMock.mockReset();
@@ -49,6 +74,8 @@ beforeEach(() => {
 	setIdpLoginRedirectUrlMock.mockReset();
 	useVerifyTokenMock.mockReset();
 	useGetMySpacesMock.mockReset();
+	useGetCurrentSpaceMock.mockReset();
+	useSetCurrentSpaceMock.mockReset();
 
 	customInstanceMock.mockResolvedValue({ data: [] });
 	useVerifyTokenMock.mockReturnValue({
@@ -62,6 +89,15 @@ beforeEach(() => {
 		error: null,
 		isError: false,
 		isLoading: false,
+	});
+	useGetCurrentSpaceMock.mockReturnValue({
+		data: undefined,
+		error: null,
+		isError: false,
+		isLoading: false,
+	});
+	useSetCurrentSpaceMock.mockReturnValue({
+		mutate: vi.fn(),
 	});
 	localStorage.clear();
 	sessionStorage.clear();
@@ -104,7 +140,7 @@ describe("StorybookRuntimeProvider", () => {
 		expect(setIdpLoginRedirectUrlMock).toHaveBeenCalledWith(
 			"/__storybook_auth/login?returnTo=%2Fiframe.html%3Fid%3Dfeatures-button--primary%26viewMode%3Dstory",
 		);
-		expect(screen.getByText("Story content")).toBeInTheDocument();
+		expect(screen.getByText("Story content")).toBeTruthy();
 		},
 		15000,
 	);
@@ -130,10 +166,10 @@ describe("StorybookRuntimeProvider", () => {
 		);
 
 		await waitFor(() => {
-			expect(screen.getByText("Admin Realm")).toBeInTheDocument();
+			expect(screen.getByText("Admin Realm")).toBeTruthy();
 		});
-		expect(screen.getByText("Storybook Space")).toBeInTheDocument();
-		expect(screen.getByText("Admin story content")).toBeInTheDocument();
+		expect(screen.getByText("Storybook Space")).toBeTruthy();
+		expect(screen.getByText("Admin story content")).toBeTruthy();
 		},
 		15000,
 	);

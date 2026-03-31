@@ -1,4 +1,4 @@
-import { CONTEXT_KEYS } from "@cocrepo/constant";
+import { CONTEXT_KEYS, Token } from "@cocrepo/constant";
 import { TenantDto, UserDto } from "@cocrepo/dto";
 import { Injectable, type NestMiddleware } from "@nestjs/common";
 import type { NextFunction, Request, Response } from "express";
@@ -59,8 +59,10 @@ export class RequestContextMiddleware implements NestMiddleware {
 		const language = parseAcceptLanguage(languageFromHeader);
 		this.cls.set(CONTEXT_KEYS.LANGUAGE, language);
 
-		// Space ID 설정
-		const spaceId = request.headers["x-space-id"] as string | undefined;
+		// Space ID 설정 (HttpOnly selectedSpaceId 쿠키)
+		const spaceId = request.cookies?.[Token.SELECTED_SPACE_ID] as
+			| string
+			| undefined;
 		this.cls.set(CONTEXT_KEYS.SPACE_ID, spaceId || undefined);
 
 		// Tenant 설정 (spaceId가 있는 경우)

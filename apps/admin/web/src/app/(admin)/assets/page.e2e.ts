@@ -13,10 +13,12 @@ const SYSTEM_SPACE_ID = (
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3"
 ).toLowerCase();
 
-const expectSpaceHeader = (route: Route) => {
-	const header = route.request().headers()["x-space-id"];
-	expect(header, "X-Space-ID 헤더가 누락되었습니다").toBeTruthy();
-	expect(header?.toLowerCase()).toBe(SYSTEM_SPACE_ID);
+const expectSpaceCookie = (route: Route) => {
+	const cookieHeader = route.request().headers()["cookie"];
+	expect(cookieHeader, "selectedSpaceId 쿠키가 누락되었습니다").toBeTruthy();
+	expect(cookieHeader?.toLowerCase()).toContain(
+		`selectedspaceid=${SYSTEM_SPACE_ID}`,
+	);
 };
 
 test.describe("에셋 목록 페이지", () => {
@@ -26,7 +28,7 @@ test.describe("에셋 목록 페이지", () => {
 
 			// Given: 에셋 목록/폴더 API 모킹
 			await page.route("**/api/v1/assets**", async (route) => {
-				expectSpaceHeader(route);
+				expectSpaceCookie(route);
 				await route.fulfill({
 					status: 200,
 					contentType: "application/json",
@@ -34,7 +36,7 @@ test.describe("에셋 목록 페이지", () => {
 				});
 			});
 			await page.route("**/api/v1/folders**", async (route) => {
-				expectSpaceHeader(route);
+				expectSpaceCookie(route);
 				await route.fulfill({
 					status: 200,
 					contentType: "application/json",
@@ -69,7 +71,7 @@ test.describe("에셋 목록 페이지", () => {
 
 			// Given: 목록/상세/폴더 API 모킹
 			await page.route("**/api/v1/assets**", async (route) => {
-				expectSpaceHeader(route);
+				expectSpaceCookie(route);
 				const url = route.request().url();
 				if (url.endsWith(`/api/v1/assets/${MOCK_ASSET_ID}`)) {
 					await route.fulfill({
@@ -127,7 +129,7 @@ test.describe("에셋 목록 페이지", () => {
 			});
 
 			await page.route("**/api/v1/folders**", async (route) => {
-				expectSpaceHeader(route);
+				expectSpaceCookie(route);
 				await route.fulfill({
 					status: 200,
 					contentType: "application/json",

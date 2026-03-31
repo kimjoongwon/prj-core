@@ -160,7 +160,7 @@ describe("Spaces API (E2E)", () => {
 		expect(response.status).toBe(401);
 	});
 
-	it("인증은 있지만 X-Space-ID가 없으면 400을 반환해야 한다", async () => {
+	it("인증은 있지만 selectedSpaceId가 없으면 400을 반환해야 한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`);
@@ -172,7 +172,7 @@ describe("Spaces API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_VIEW_ID);
+			.set("Cookie", "selectedSpaceId=" + SPACE_VIEW_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
@@ -186,7 +186,7 @@ describe("Spaces API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_FULL_ACCESS_ID);
+			.set("Cookie", "selectedSpaceId=" + SPACE_FULL_ACCESS_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
@@ -199,7 +199,7 @@ describe("Spaces API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get(`/api/v1/spaces/${SPACE_VIEW_ID}/ground`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_VIEW_ID);
+			.set("Cookie", "selectedSpaceId=" + SPACE_VIEW_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
@@ -211,7 +211,7 @@ describe("Spaces API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get(`/api/v1/spaces/${SPACE_MANAGE_ID}/ground`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_VIEW_ID);
+			.set("Cookie", "selectedSpaceId=" + SPACE_VIEW_ID);
 
 		expect(response.status).toBe(403);
 		expect(spaceFacadeMock.getGroundBySpaceId).not.toHaveBeenCalled();
@@ -221,7 +221,7 @@ describe("Spaces API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get(`/api/v1/spaces/${UNKNOWN_SPACE_ID}/ground`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_FULL_ACCESS_ID);
+			.set("Cookie", "selectedSpaceId=" + SPACE_FULL_ACCESS_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
@@ -247,7 +247,7 @@ describe("Spaces API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.post("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_MANAGE_ID)
+			.set("Cookie", "selectedSpaceId=" + SPACE_MANAGE_ID)
 			.send(createDto);
 
 		expect(response.status).toBe(201);
@@ -265,7 +265,7 @@ describe("Spaces API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.patch(`/api/v1/spaces/${SPACE_VIEW_ID}/ground`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_VIEW_ID)
+			.set("Cookie", "selectedSpaceId=" + SPACE_VIEW_ID)
 			.send(updateDto);
 
 		expect(response.status).toBe(200);
@@ -280,7 +280,7 @@ describe("Spaces API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.patch(`/api/v1/spaces/${SPACE_MANAGE_ID}/ground`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_VIEW_ID)
+			.set("Cookie", "selectedSpaceId=" + SPACE_VIEW_ID)
 			.send({ name: "Blocked update" });
 
 		expect(response.status).toBe(403);
@@ -291,7 +291,7 @@ describe("Spaces API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.delete(`/api/v1/spaces/${SPACE_VIEW_ID}`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_VIEW_ID);
+			.set("Cookie", "selectedSpaceId=" + SPACE_VIEW_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
@@ -303,7 +303,7 @@ describe("Spaces API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/spaces/not-a-valid-uuid/ground")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("X-Space-ID", SPACE_VIEW_ID);
+			.set("Cookie", "selectedSpaceId=" + SPACE_VIEW_ID);
 
 		expect(response.status).toBe(400);
 		expect(spaceFacadeMock.getGroundBySpaceId).not.toHaveBeenCalled();

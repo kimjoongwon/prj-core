@@ -8,7 +8,7 @@ import { GuardTestController } from "./mock-controllers/tenant-injection-test.co
 /**
  * Role 시스템 전용 E2E 테스트
  * - 시드 데이터 검증 (새 역할 이름 존재, 이전 이름 미존재)
- * - X-Space-ID 헤더 검증
+ * - selectedSpaceId 쿠키 검증
  * - Guard 에러 메시지 검증
  * - 복합 시나리오
  */
@@ -60,7 +60,7 @@ describe("Role 시스템 E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/roles")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			if (response.status !== 200) {
 				console.warn(`역할 목록 조회 실패 (${response.status}), 테스트 건너뜀`);
@@ -82,7 +82,7 @@ describe("Role 시스템 E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/roles")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			if (response.status !== 200) return;
 
@@ -99,7 +99,7 @@ describe("Role 시스템 E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/roles")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			if (response.status !== 200) return;
 
@@ -120,32 +120,32 @@ describe("Role 시스템 E2E 테스트", () => {
 		});
 	});
 
-	// ==================== B. X-Space-ID 헤더 검증 ====================
+	// ==================== B. selectedSpaceId 쿠키 검증 ====================
 
-	describe("X-Space-ID 헤더 검증", () => {
-		it("인증 + X-Space-ID 없이 Guard 보호 엔드포인트 접근 시 400을 반환해야 한다", async () => {
+	describe("selectedSpaceId 쿠키 검증", () => {
+		it("인증 + selectedSpaceId 없이 Guard 보호 엔드포인트 접근 시 400을 반환해야 한다", async () => {
 			if (!jwtToken) return;
 
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/roles/view")
 				.set("Authorization", `Bearer ${jwtToken}`);
-			// X-Space-ID 헤더 없음
+			// selectedSpaceId 쿠키 없음
 
 			// SpaceAccessGuard가 전역으로 등록되어 있으면 400, 아니면 RolesGuard가 첫 번째 tenant 사용
 			expect([200, 400]).toContain(response.status);
 
 			if (response.status === 400) {
-				expect(response.body?.message).toContain("X-Space-ID");
+				expect(response.body?.message).toContain("selectedSpaceId");
 			}
 		});
 
-		it("인증 + 잘못된 X-Space-ID로 접근 시 403을 반환해야 한다", async () => {
+		it("인증 + 잘못된 selectedSpaceId로 접근 시 403을 반환해야 한다", async () => {
 			if (!jwtToken) return;
 
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/roles/view")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", "00000000-0000-0000-0000-000000000000");
+				.set("Cookie", "selectedSpaceId=" + "00000000-0000-0000-0000-000000000000");
 
 			// SpaceAccessGuard가 전역이면 403, 아니면 RolesGuard에서 403
 			expect([403]).toContain(response.status);
@@ -161,7 +161,7 @@ describe("Role 시스템 E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/roles/full-access")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			if (response.status === 403) {
 				expect(response.body).toHaveProperty("message");
@@ -183,7 +183,7 @@ describe("Role 시스템 E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/role-category/workspace")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			if (response.status === 403) {
 				expect(response.body).toHaveProperty("message");
@@ -199,7 +199,7 @@ describe("Role 시스템 E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/role-group/premium")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			if (response.status === 403) {
 				expect(response.body).toHaveProperty("message");
@@ -219,7 +219,7 @@ describe("Role 시스템 E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/combined/workspace-category-and-role")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("X-Space-ID", spaceId);
+				.set("Cookie", "selectedSpaceId=" + spaceId);
 
 			// 두 조건 모두 충족해야 200, 하나라도 불충족하면 403
 			expect([200, 403]).toContain(response.status);
