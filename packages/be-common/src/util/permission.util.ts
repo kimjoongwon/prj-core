@@ -1,19 +1,18 @@
+import { SYSTEM_ROLES } from "@cocrepo/constant";
 import type { TenantDto } from "@cocrepo/dto";
-import { SpaceCategoryName } from "@cocrepo/enum";
 
 /**
- * Space가 ROOT 카테고리인지 확인
- * ROOT 카테고리 Space는 모든 하위 카테고리 Space 데이터에 접근 가능
+ * 이전 ROOT category 기반 전체 접근 체크와의 호환용 별칭입니다.
+ * 현재 전체 접근 여부는 선택된 Tenant의 FULL_ACCESS 역할로 판단합니다.
  */
 export function isRootSpaceCategory(tenant: TenantDto): boolean {
-	const categoryName = tenant.space?.spaceClassification?.category?.name;
-	return categoryName === SpaceCategoryName.ROOT.name;
+	return tenant.role?.name === SYSTEM_ROLES.FULL_ACCESS;
 }
 
 /**
  * 모든 Space 데이터에 접근 가능한지 확인
- * SpaceCategory가 ROOT이면 하위 모든 Space 접근 가능
+ * 현재 선택된 Tenant의 role이 FULL_ACCESS인 경우 전체 조회를 허용합니다.
  */
 export function canAccessAllSpaces(tenant: TenantDto): boolean {
-	return isRootSpaceCategory(tenant);
+	return tenant.role?.name === SYSTEM_ROLES.FULL_ACCESS;
 }

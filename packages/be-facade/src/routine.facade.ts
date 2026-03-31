@@ -38,7 +38,7 @@ export class RoutineFacade {
 	}> {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 10;
-		const spaceScope = query.spaceScope ?? SpaceScope.INCLUDE_ANCESTORS;
+		const spaceScope = query.spaceScope ?? SpaceScope.CURRENT;
 		const { routines, total } = await this.routinesService.findRoutines({
 			spaceScope,
 			skip,
@@ -67,7 +67,7 @@ export class RoutineFacade {
 	getRoutine(routineId: string): Promise<Routine> {
 		return this.routinesService.findRoutineById(
 			routineId,
-			SpaceScope.INCLUDE_ANCESTORS,
+			SpaceScope.CURRENT,
 		);
 	}
 

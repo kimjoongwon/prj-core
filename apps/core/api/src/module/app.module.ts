@@ -50,19 +50,26 @@ import { UsersModule } from "./users";
 
 const enableNestDevtools =
 	process.env.ENABLE_NEST_DEVTOOLS === "true" &&
-	process.env.NODE_ENV !== "production";
+	process.env.NODE_ENV !== "production" &&
+	process.env.NODE_ENV !== "test";
+
+const devtoolsImports = enableNestDevtools
+	? [
+			DevtoolsModule.register({
+				http: true,
+				port:
+					Number.parseInt(
+						process.env.CORE_API_NEST_DEVTOOLS_PORT ?? "8000",
+						10,
+					) || 8000,
+			}),
+		]
+	: [];
 
 @Module({
 	imports: [
 		...globalModules,
-		DevtoolsModule.register({
-			http: enableNestDevtools,
-			port:
-				Number.parseInt(
-					process.env.CORE_API_NEST_DEVTOOLS_PORT ?? "8000",
-					10,
-				) || 8000,
-		}),
+		...devtoolsImports,
 		PrismaModule,
 		RedisModule,
 		I18nModule,

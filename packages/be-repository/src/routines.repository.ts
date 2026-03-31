@@ -20,19 +20,19 @@ export class RoutinesRepository {
 	 * spaceIds 배열로 여러 Space의 Routine을 한 번에 조회합니다.
 	 */
 	async findManyRoutines(params: {
-		spaceIds: string[];
+		spaceIds?: string[];
 		skip: number;
 		take: number;
 		search?: string;
 	}): Promise<[Routine[], number]> {
 		const { spaceIds, skip, take, search } = params;
 		this.logger.debug(
-			`루틴 목록 조회: spaceIds=${spaceIds.length}개, search=${search ?? "없음"}`,
+			`루틴 목록 조회: spaceIds=${spaceIds?.length ?? "all"}개, search=${search ?? "없음"}`,
 		);
 
 		const whereCondition = {
 			removedAt: null,
-			spaceId: { in: spaceIds },
+			...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 			...(search
 				? { name: { contains: search, mode: "insensitive" as const } }
 				: {}),
@@ -79,7 +79,7 @@ export class RoutinesRepository {
 	 */
 	async findRoutineById(
 		routineId: string,
-		spaceIds: string[],
+		spaceIds?: string[],
 	): Promise<Routine | null> {
 		this.logger.debug(`루틴 단건 조회: ${routineId.slice(-8)}`);
 
@@ -87,7 +87,7 @@ export class RoutinesRepository {
 			where: {
 				id: routineId,
 				removedAt: null,
-				spaceId: { in: spaceIds },
+				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 			},
 			include: {
 				_count: {

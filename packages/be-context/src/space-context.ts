@@ -1,6 +1,5 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { TenantDto, UserDto } from "@cocrepo/dto";
-import { User } from "@cocrepo/entity";
+import type { TenantDto } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 
@@ -39,16 +38,11 @@ export class SpaceContext {
 
 	/**
 	 * 쿼리 필터용 Space IDs
-	 * - 슈퍼매니저: undefined → 전체 조회
-	 * - 일반: tenants의 spaceIds
+	 * - undefined: 전체 조회 (FULL_ACCESS)
+	 * - [id]: 현재 선택 Space만 조회
 	 */
 	get spaceIds(): string[] | undefined {
-		const userDto = this.cls.get<UserDto>(CONTEXT_KEYS.AUTH_USER);
-		if (!userDto) {
-			return [];
-		}
-
-		return User.fromDto(userDto).accessibleSpaceIds;
+		return this.cls.get<string[] | undefined>(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS);
 	}
 
 	/**

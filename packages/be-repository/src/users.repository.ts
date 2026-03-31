@@ -197,10 +197,12 @@ export class UsersRepository {
 		orderBy: Record<string, "asc" | "desc">[];
 		skip: number;
 		take: number;
-		spaceIds: string[];
+		spaceIds?: string[];
 	}): Promise<{ users: User[]; totalCount: number }> {
 		const { where, orderBy, skip, take, spaceIds } = params;
-		this.logger.debug(`접근 가능 Space 내 회원 목록 조회: spaceIds=${spaceIds.length}개`);
+		this.logger.debug(
+			`접근 가능 Space 내 회원 목록 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
+		);
 
 		const [users, totalCount] = await Promise.all([
 			this.txHost.tx.user.findMany({
@@ -209,8 +211,8 @@ export class UsersRepository {
 					profiles: true,
 					tenants: {
 						where: {
-							spaceId: { in: spaceIds },
 							removedAt: null,
+							...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 						},
 						include: {
 							role: true,
@@ -245,21 +247,27 @@ export class UsersRepository {
 	/**
 	 * 접근 가능한 Space ID 목록으로 회원 통계 조회
 	 */
-	async countStatsBySpaceIds(spaceIds: string[]): Promise<UserStats> {
-		this.logger.debug(`접근 가능 Space 내 회원 통계 조회: spaceIds=${spaceIds.length}개`);
+	async countStatsBySpaceIds(spaceIds?: string[]): Promise<UserStats> {
+		this.logger.debug(
+			`접근 가능 Space 내 회원 통계 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
+		);
 
 		const startOfMonth = new Date();
 		startOfMonth.setDate(1);
 		startOfMonth.setHours(0, 0, 0, 0);
 
 		const baseWhere = {
-			tenants: {
-				some: {
-					spaceId: { in: spaceIds },
-					removedAt: null,
-				},
-			},
 			removedAt: null,
+			...(spaceIds
+				? {
+						tenants: {
+							some: {
+								spaceId: { in: spaceIds },
+								removedAt: null,
+							},
+						},
+					}
+				: {}),
 		};
 
 		const [total, newThisMonth] = await Promise.all([

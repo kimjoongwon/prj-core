@@ -16,19 +16,19 @@ export class TasksRepository {
 	) {}
 
 	async findManyTasks(params: {
-		spaceIds: string[];
+		spaceIds?: string[];
 		skip: number;
 		take: number;
 		search?: string;
 	}): Promise<[Task[], number]> {
 		const { spaceIds, skip, take, search } = params;
 		this.logger.debug(
-			`Task 목록 조회: spaceIds=${spaceIds.length}, search=${search ?? "없음"}`,
+			`Task 목록 조회: spaceIds=${spaceIds?.length ?? "all"}, search=${search ?? "없음"}`,
 		);
 
 		const where: Prisma.TaskWhereInput = {
 			removedAt: null,
-			spaceId: { in: spaceIds },
+			...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 			exercise: {
 				is: {
 					removedAt: null,
@@ -57,14 +57,14 @@ export class TasksRepository {
 		return [items.map((item) => plainToInstance(Task, item)), total];
 	}
 
-	async findTaskById(taskId: string, spaceIds: string[]): Promise<Task | null> {
+	async findTaskById(taskId: string, spaceIds?: string[]): Promise<Task | null> {
 		this.logger.debug(`Task 단건 조회: ${taskId.slice(-8)}`);
 
 		const result = await this.txHost.tx.task.findFirst({
 			where: {
 				id: taskId,
 				removedAt: null,
-				spaceId: { in: spaceIds },
+				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 				exercise: {
 					is: {
 						removedAt: null,
@@ -81,7 +81,7 @@ export class TasksRepository {
 		return result ? plainToInstance(Task, result) : null;
 	}
 
-	async findTasksByIds(taskIds: string[], spaceIds: string[]): Promise<Task[]> {
+	async findTasksByIds(taskIds: string[], spaceIds?: string[]): Promise<Task[]> {
 		if (taskIds.length === 0) {
 			return [];
 		}
@@ -92,7 +92,7 @@ export class TasksRepository {
 			where: {
 				id: { in: taskIds },
 				removedAt: null,
-				spaceId: { in: spaceIds },
+				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 				exercise: {
 					is: {
 						removedAt: null,

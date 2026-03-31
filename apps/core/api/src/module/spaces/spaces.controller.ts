@@ -2,7 +2,6 @@ import {
 	ApiAuth,
 	ApiErrors,
 	ApiResponseEntity,
-	Public,
 	ResponseMessage,
 } from "@cocrepo/decorator";
 import {
@@ -13,10 +12,12 @@ import {
 } from "@cocrepo/dto";
 import { Ground, Space } from "@cocrepo/entity";
 import { SpaceFacade } from "@cocrepo/facade";
+import { SpaceContext } from "@cocrepo/context";
 import {
 	Body,
 	Controller,
 	Delete,
+	ForbiddenException,
 	Get,
 	HttpCode,
 	HttpStatus,
@@ -30,20 +31,25 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @ApiTags("SPACES")
 @Controller()
 export class SpacesController {
-	constructor(private readonly spacesService: SpaceFacade) {}
+	constructor(
+		private readonly spacesService: SpaceFacade,
+		private readonly spaceContext: SpaceContext,
+	) {}
 
-	@Public()
 	@Get()
 	@ApiOperation({
 		operationId: "getSpaces",
 		summary: "공간 목록 조회",
 		description: "Ground detail이 있는 Space 목록을 조회합니다.",
 	})
-	@ApiErrors(500)
+	@ApiAuth()
+	@ApiErrors(401, 500)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("공간 목록 조회 성공")
 	async getSpaces() {
-		return this.spacesService.listSpaces();
+		return this.spacesService.listSpaces({
+			spaceIds: this.spaceContext.spaceIds,
+		});
 	}
 
 	@Get(":spaceId/ground")
@@ -64,6 +70,7 @@ export class SpacesController {
 	async getSpaceGround(
 		@Param("spaceId", ParseUUIDPipe) spaceId: string,
 	): Promise<Ground> {
+		this.assertSpaceAccess(spaceId);
 		return this.spacesService.getGroundBySpaceId(spaceId);
 	}
 
@@ -109,6 +116,7 @@ export class SpacesController {
 		@Param("spaceId", ParseUUIDPipe) spaceId: string,
 		@Body() dto: UpdateGroundDto,
 	): Promise<Space> {
+		this.assertSpaceAccess(spaceId);
 		return this.spacesService.updateGroundBySpaceId(spaceId, dto);
 	}
 
@@ -131,6 +139,13 @@ export class SpacesController {
 	async deleteSpace(
 		@Param("spaceId", ParseUUIDPipe) spaceId: string,
 	): Promise<Space> {
+		this.assertSpaceAccess(spaceId);
 		return this.spacesService.deleteSpace(spaceId);
+	}
+
+	private assertSpaceAccess(spaceId: string): void {
+		if (!this.spaceContext.canAccessSpace(spaceId)) {
+			throw new ForbiddenException("해당 Space 리소스에 접근할 수 없습니다.");
+		}
 	}
 }

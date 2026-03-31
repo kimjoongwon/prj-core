@@ -6,7 +6,7 @@
   "transformIgnorePatterns": ["node_modules/(?!(lodash-es)/)"],
   "transform": {
     "generated/client/client\\.js$": "<rootDir>/test/transforms/prisma-esm-transform.js",
-    "^.+\\.(t|j)s$": [
+    "^.+\\.ts$": [
       "ts-jest",
       {
         "tsconfig": {
@@ -16,7 +16,7 @@
           "allowSyntheticDefaultImports": true,
           "experimentalDecorators": true,
           "emitDecoratorMetadata": true,
-          "types": ["jest", "node"],
+          "types": ["jest", "node", "multer"],
           "skipLibCheck": true,
           "strict": false
         }
@@ -24,20 +24,20 @@
     ]
   },
   "moduleNameMapper": {
-    "^@cocrepo/prisma$": "<rootDir>/../../packages/be-prisma/dist/src",
-    "^@cocrepo/be-common$": "<rootDir>/../../packages/be-common/dist",
-    "^@cocrepo/repository$": "<rootDir>/../../packages/be-repository/dist",
-    "^@cocrepo/service$": "<rootDir>/../../packages/be-service/dist",
-    "^@cocrepo/app$": "<rootDir>/../../packages/be-app/dist",
-    "^@cocrepo/integration$": "<rootDir>/../../packages/be-integration/dist",
-    "^@cocrepo/entity$": "<rootDir>/../../packages/be-entity/dist",
-    "^@cocrepo/vo$": "<rootDir>/../../packages/be-vo/dist",
-    "^@cocrepo/dto$": "<rootDir>/../../packages/be-dto/dist",
-    "^@cocrepo/enum$": "<rootDir>/../../packages/common-enum/dist",
-    "^@cocrepo/toolkit$": "<rootDir>/../../packages/common-toolkit/dist",
-    "^@cocrepo/constant$": "<rootDir>/../../packages/common-constant/dist",
-    "^@cocrepo/type$": "<rootDir>/../../packages/common-type/dist",
-    "^@cocrepo/decorator$": "<rootDir>/../../packages/be-decorator/dist",
+    "^@cocrepo/prisma$": "<rootDir>/../../../packages/be-prisma/dist/src",
+    "^@cocrepo/be-common$": "<rootDir>/../../../packages/be-common/dist",
+    "^@cocrepo/repository$": "<rootDir>/../../../packages/be-repository/dist",
+    "^@cocrepo/service$": "<rootDir>/../../../packages/be-service/dist",
+    "^@cocrepo/app$": "<rootDir>/../../../packages/be-app/dist",
+    "^@cocrepo/integration$": "<rootDir>/../../../packages/be-integration/dist",
+    "^@cocrepo/entity$": "<rootDir>/../../../packages/be-entity/dist",
+    "^@cocrepo/vo$": "<rootDir>/../../../packages/be-vo/dist",
+    "^@cocrepo/dto$": "<rootDir>/../../../packages/be-dto/dist",
+    "^@cocrepo/enum$": "<rootDir>/../../../packages/common-enum/dist",
+    "^@cocrepo/toolkit$": "<rootDir>/../../../packages/common-toolkit/dist",
+    "^@cocrepo/constant$": "<rootDir>/../../../packages/common-constant/dist",
+    "^@cocrepo/type$": "<rootDir>/../../../packages/common-type/dist",
+    "^@cocrepo/decorator$": "<rootDir>/../../../packages/be-decorator/dist",
     "^@shared$": "<rootDir>/src/shared/index",
     "^@shared/(.*)$": "<rootDir>/src/shared/$1"
   },

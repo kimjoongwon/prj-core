@@ -10,5 +10,5 @@ export class GetRoutinesQueryDto extends PrismaQueryDto<Prisma.RoutineWhereInput
 	search?: string;
 
 	@EnumFieldOptional(() => SpaceScope)
-	spaceScope?: SpaceScope = SpaceScope.INCLUDE_ANCESTORS;
+	spaceScope?: SpaceScope = SpaceScope.CURRENT;
 }

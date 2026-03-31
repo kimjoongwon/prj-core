@@ -36,7 +36,7 @@ export class TaskService {
 		const { spaceId, spaceScope, skip, take, search } = params;
 		const spaceIds =
 			spaceScope === SpaceScopeEnum.INCLUDE_ANCESTORS
-				? this.spaceContext.spaceIds ?? [spaceId]
+				? this.spaceContext.spaceIds
 				: [spaceId];
 
 		const [tasks, total] = await this.tasksRepository.findManyTasks({
@@ -56,7 +56,7 @@ export class TaskService {
 	): Promise<Task> {
 		const spaceIds =
 			spaceScope === SpaceScopeEnum.INCLUDE_ANCESTORS
-				? this.spaceContext.spaceIds ?? [spaceId]
+				? this.spaceContext.spaceIds
 				: [spaceId];
 
 		const task = await this.tasksRepository.findTaskById(taskId, spaceIds);

@@ -555,7 +555,7 @@ export class TimelineService {
 		}
 	}
 
-	private getAccessibleSpaceIds(): string[] {
+	private getAccessibleSpaceIds(): string[] | undefined {
 		return (
 			this.spaceContext.spaceIds ??
 			(this.spaceContext.spaceId ? [this.spaceContext.spaceId] : [])

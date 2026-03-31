@@ -57,11 +57,15 @@ export class UserService {
 	 */
 	async getUsersBySpace(query: QueryUsersDto): Promise<GetUsersResult> {
 		const spaceIds = this.spaceCtx.spaceIds;
-		this.logger.debug(`접근 가능 Space 내 사용자 목록 조회: spaceIds=${spaceIds.length}개`);
+		this.logger.debug(
+			`접근 가능 Space 내 사용자 목록 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
+		);
 
-		const baseWhere: Partial<Prisma.UserWhereInput> = {
-			tenants: { some: { spaceId: { in: spaceIds }, removedAt: null } },
-		};
+		const baseWhere: Partial<Prisma.UserWhereInput> = spaceIds
+			? {
+					tenants: { some: { spaceId: { in: spaceIds }, removedAt: null } },
+				}
+			: {};
 
 		const where = query.toPrismaWhere(baseWhere);
 		const orderBy = query.toPrismaOrderBy();

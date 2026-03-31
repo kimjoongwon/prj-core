@@ -75,7 +75,7 @@ export class TaskFacade {
 	getTaskExercise(
 		taskId: string,
 		spaceId: string,
-		spaceScope: SpaceScope = SpaceScopeEnum.INCLUDE_ANCESTORS,
+		spaceScope: SpaceScope = SpaceScopeEnum.CURRENT,
 	): Promise<Exercise> {
 		return this.taskService.getExerciseByTaskId(taskId, spaceId, spaceScope);
 	}

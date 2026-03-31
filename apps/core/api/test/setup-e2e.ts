@@ -9,6 +9,7 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 beforeAll(() => {
 	// 테스트 환경 설정 (기존 환경 변수 유지, 필요한 것만 오버라이드)
 	process.env.NODE_ENV = "test";
+	process.env.ENABLE_NEST_DEVTOOLS = "false";
 	// JWT 테스트용 시크릿 (실제 시크릿 사용 가능하면 그대로 유지)
 	if (!process.env.AUTH_JWT_SECRET) {
 		process.env.AUTH_JWT_SECRET = "test-jwt-secret-e2e";
