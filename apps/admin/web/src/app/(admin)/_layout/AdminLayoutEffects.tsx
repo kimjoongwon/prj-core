@@ -38,14 +38,24 @@ export const AdminLayoutEffects = observer(function AdminLayoutEffects() {
 			return;
 		}
 
+		const spaces = mySpacesResponse?.data ?? [];
 		const currentSpace = currentSpaceResponse?.data;
 		if (currentSpace?.id) {
-			persistStore.setSpace(currentSpace.id, currentSpace.ground?.name ?? "");
+			const resolvedGroundName =
+				currentSpace.ground?.name ??
+				spaces.find((space) => space.id === currentSpace.id)?.ground?.name ??
+				"";
+			persistStore.setSpace(currentSpace.id, resolvedGroundName);
 		} else {
 			persistStore.clearSpace();
 		}
 		persistStore.setSpaceSelectionResolved(true);
-	}, [currentSpaceResponse, isCurrentSpaceFetched, persistStore]);
+	}, [
+		currentSpaceResponse,
+		isCurrentSpaceFetched,
+		mySpacesResponse,
+		persistStore,
+	]);
 
 	if (!showAlert) {
 		return null;
