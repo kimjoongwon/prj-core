@@ -95,8 +95,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute = observer
 									program.activityCount ?? program.executionPlan?.length ?? 0
 								}개`,
 								sessionName: program.session?.name ?? null,
-								sessionHref: (`/timelines/${timelineId}/sessions/${sessionId}` ??
-									"") as Route,
+								sessionHref: `/timelines/${timelineId}/sessions/${sessionId}` as Route,
 								createdAt: program.createdAt,
 								executionPlan: (program.executionPlan ?? []).map((activity) => ({
 									id: activity.id,

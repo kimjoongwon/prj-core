@@ -9,7 +9,10 @@ import {
 	useSendTestTemplate,
 	useToggleTemplateStatus,
 } from "@cocrepo/api/core/templates";
-import { AdminTemplatesTemplateIdPage } from "@cocrepo/ui";
+import {
+	AdminTemplatesTemplateIdPage,
+	type PreviewResult,
+} from "@cocrepo/ui";
 import { addToast, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -109,12 +112,12 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 	const onSubmitPreviewTemplate = async (
 		tplId: string,
 		variables: Record<string, string>,
-	) => {
+	): Promise<PreviewResult> => {
 		const result = await previewTemplate({
 			templateId: tplId,
 			data: { variables },
 		});
-		return (result as Record<string, unknown>).data as Record<string, unknown>;
+		return (result as { data: PreviewResult }).data;
 	};
 
 	const onSubmitSendTestTemplate = async (

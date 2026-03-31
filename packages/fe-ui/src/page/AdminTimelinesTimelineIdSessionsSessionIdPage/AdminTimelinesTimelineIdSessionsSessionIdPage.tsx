@@ -27,6 +27,7 @@ import {
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
+import type { Route } from "next";
 
 export interface AdminTimelinesTimelineIdSessionsSessionIdPageSession {
 	name?: string | null;
@@ -39,7 +40,7 @@ export interface AdminTimelinesTimelineIdSessionsSessionIdPageSession {
 	endDateTime?: string | null;
 	description?: string | null;
 	timelineName?: string | null;
-	timelineHref?: string;
+	timelineHref?: Route;
 	createdAt?: string | null;
 }
 

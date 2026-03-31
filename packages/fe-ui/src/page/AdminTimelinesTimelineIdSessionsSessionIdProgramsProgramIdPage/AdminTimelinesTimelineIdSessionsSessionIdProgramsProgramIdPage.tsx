@@ -20,6 +20,7 @@ import {
 import { Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
+import type { Route } from "next";
 
 const formatExerciseDuration = (seconds: number) => {
 	const minutes = Math.floor(seconds / 60);
@@ -39,22 +40,22 @@ export interface AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPageE
 	exerciseCount: number;
 	notes?: string | null;
 	imageFileId?: string | null;
-	imageAssetHref?: string;
+	imageAssetHref?: Route;
 	videoFileId?: string | null;
-	videoAssetHref?: string;
+	videoAssetHref?: Route;
 }
 
 export interface AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPageData {
 	name?: string | null;
 	descriptionText?: string;
 	routineName?: string | null;
-	routineHref?: string;
+	routineHref?: Route;
 	instructorLabel?: string | null;
 	capacityLabel?: string;
 	levelLabel?: string | null;
 	activityCountLabel?: string;
 	sessionName?: string | null;
-	sessionHref?: string;
+	sessionHref?: Route;
 	createdAt?: string | null;
 	executionPlan: AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPageExecutionItem[];
 }

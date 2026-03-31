@@ -22,6 +22,7 @@ import {
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
+import type { Route } from "next";
 
 const formatDuration = (seconds: number) => {
 	const minutes = Math.floor(seconds / 60);
@@ -35,9 +36,9 @@ export interface AdminTasksTaskIdExercisePageExercise {
 	count: number;
 	description?: string | null;
 	imageFileId?: string | null;
-	imageAssetHref?: string;
+	imageAssetHref?: Route;
 	videoFileId?: string | null;
-	videoAssetHref?: string;
+	videoAssetHref?: Route;
 	createdAt: string;
 	updatedAt?: string | null;
 	spaceId?: string | null;
