@@ -1,6 +1,5 @@
 "use client";
 
-import { useGetAssetById, useGetAssets } from "@cocrepo/api/assets";
 import {
 	type ExerciseDto,
 	useGetTaskExercise,
@@ -11,7 +10,8 @@ import { addToast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useTaskExerciseAssetBrowser } from "../../../hooks/useTaskExerciseAssetBrowser";
 
 type TaskExerciseEditPageParams = {
 	taskId: string;
@@ -20,10 +20,6 @@ type TaskExerciseEditPageParams = {
 const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 	const { taskId } = useParams<TaskExerciseEditPageParams>();
 	const router = useRouter();
-	const [assetPickerKind, setAssetPickerKind] = useState<"image" | "video" | null>(
-		null,
-	);
-	const [assetSearchQuery, setAssetSearchQuery] = useState("");
 	const state = useLocalObservable(() => ({
 		name: "",
 		durationMin: 0,
@@ -38,44 +34,27 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 
 	const { data: response, isLoading } = useGetTaskExercise(taskId);
 	const exercise = response?.data as ExerciseDto | undefined;
-	const { data: selectedImageAssetResponse } = useGetAssetById(state.imageFileId, {
-		query: {
-			enabled: state.imageFileId.trim().length > 0,
+	const {
+		activeAssetSlot,
+		assetBrowser,
+		assetBrowserTitle,
+		assetBrowserDescription,
+		selectedAssetId,
+		selectedImageAsset,
+		selectedVideoAsset,
+		onOpenAssetBrowser,
+		onCloseAssetBrowser,
+		onSelectAsset,
+	} = useTaskExerciseAssetBrowser({
+		imageFileId: state.imageFileId,
+		videoFileId: state.videoFileId,
+		onChangeImageFileId: (value) => {
+			state.imageFileId = value;
+		},
+		onChangeVideoFileId: (value) => {
+			state.videoFileId = value;
 		},
 	});
-	const { data: selectedVideoAssetResponse } = useGetAssetById(state.videoFileId, {
-		query: {
-			enabled: state.videoFileId.trim().length > 0,
-		},
-	});
-	const { data: imageAssetsResponse, isLoading: isImageAssetsLoading } = useGetAssets(
-		{
-			take: 18,
-			skip: 0,
-			search: assetSearchQuery.trim() || undefined,
-			kind: "IMAGE",
-			status: "READY",
-		},
-		{
-			query: {
-				enabled: assetPickerKind === "image",
-			},
-		},
-	);
-	const { data: videoAssetsResponse, isLoading: isVideoAssetsLoading } = useGetAssets(
-		{
-			take: 18,
-			skip: 0,
-			search: assetSearchQuery.trim() || undefined,
-			kind: "VIDEO",
-			status: "READY",
-		},
-		{
-			query: {
-				enabled: assetPickerKind === "video",
-			},
-		},
-	);
 
 	useEffect(() => {
 		if (exercise && !state.isInitialized) {
@@ -189,17 +168,13 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 			durationSec={state.durationSec}
 			count={state.count}
 			description={state.description}
-			imageFileId={state.imageFileId}
-			videoFileId={state.videoFileId}
-			selectedImageAsset={selectedImageAssetResponse?.data}
-			selectedVideoAsset={selectedVideoAssetResponse?.data}
-			imageAssets={imageAssetsResponse?.data ?? []}
-			videoAssets={videoAssetsResponse?.data ?? []}
-			assetSearchQuery={assetSearchQuery}
-			isImagePickerOpen={assetPickerKind === "image"}
-			isVideoPickerOpen={assetPickerKind === "video"}
-			isImageAssetsLoading={isImageAssetsLoading}
-			isVideoAssetsLoading={isVideoAssetsLoading}
+			selectedImageAsset={selectedImageAsset}
+			selectedVideoAsset={selectedVideoAsset}
+			assetBrowserProps={assetBrowser}
+			assetBrowserTitle={assetBrowserTitle}
+			assetBrowserDescription={assetBrowserDescription}
+			assetBrowserSelectedAssetId={selectedAssetId}
+			isAssetBrowserOpen={activeAssetSlot !== null}
 			errors={state.errors}
 			isSchedulable={state.videoFileId.trim().length > 0}
 			isLoading={isLoading}
@@ -212,29 +187,14 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 			onChangeDescriptionTextarea={onChangeDescriptionTextarea}
 			onChangeImageFileIdInput={onChangeImageFileIdInput}
 			onChangeVideoFileIdInput={onChangeVideoFileIdInput}
-			onChangeAssetSearchQuery={setAssetSearchQuery}
 			onOpenImagePicker={() => {
-				setAssetSearchQuery("");
-				setAssetPickerKind("image");
-			}}
-			onCloseImagePicker={() => {
-				setAssetPickerKind((current) => (current === "image" ? null : current));
+				onOpenAssetBrowser("image");
 			}}
 			onOpenVideoPicker={() => {
-				setAssetSearchQuery("");
-				setAssetPickerKind("video");
+				onOpenAssetBrowser("video");
 			}}
-			onCloseVideoPicker={() => {
-				setAssetPickerKind((current) => (current === "video" ? null : current));
-			}}
-			onSelectImageAsset={(asset) => {
-				state.imageFileId = asset.id;
-				setAssetPickerKind(null);
-			}}
-			onSelectVideoAsset={(asset) => {
-				state.videoFileId = asset.id;
-				setAssetPickerKind(null);
-			}}
+			onCloseAssetBrowser={onCloseAssetBrowser}
+			onSelectAssetFromBrowser={onSelectAsset}
 			onClickClearImageAssetButton={() => {
 				state.imageFileId = "";
 			}}

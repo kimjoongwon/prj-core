@@ -39,6 +39,7 @@ describe("UserService", () => {
 	beforeEach(async () => {
 		mockRepository = mockDeep<UsersRepository>();
 		mockSpaceContext = {
+			spaceId: "space-test-id",
 			spaceIds: ["space-test-id"],
 			requireSpaceId: jest.fn(),
 			hasSpace: jest.fn(),
@@ -144,6 +145,64 @@ describe("UserService", () => {
 			// Then
 			expect(mockRepository.findByEmailSelectCredentials).toHaveBeenCalledWith(email);
 			expect(result).toBeNull();
+		});
+	});
+
+	describe("getUsersBySpace", () => {
+		it("현재 선택 Space 기준으로만 사용자 목록과 통계를 조회해야 한다", async () => {
+			const query = {
+				skip: 10,
+				take: 20,
+				toPrismaWhere: jest.fn().mockReturnValue({ removedAt: null }),
+				toPrismaOrderBy: jest.fn().mockReturnValue([{ createdAt: "desc" }]),
+			} as any;
+			const repositoryResult = {
+				users: [mockUser],
+				totalCount: 1,
+			};
+			const statsResult = {
+				total: 1,
+				active: 1,
+				inactive: 0,
+				newThisMonth: 0,
+			};
+
+			mockSpaceContext = {
+				spaceId: "space-current-id",
+				spaceIds: undefined,
+				requireSpaceId: jest.fn(),
+				hasSpace: jest.fn(),
+				isSystemSpace: jest.fn(),
+			} as unknown as SpaceContext;
+			mockRepository.findManyBySpaceIds.mockResolvedValue(repositoryResult as any);
+			mockRepository.countStatsBySpaceIds.mockResolvedValue(statsResult as any);
+			(service as any).spaceCtx = mockSpaceContext;
+
+			const result = await service.getUsersBySpace(query);
+
+			expect(query.toPrismaWhere).toHaveBeenCalledWith({
+				tenants: {
+					some: {
+						spaceId: "space-current-id",
+						removedAt: null,
+					},
+				},
+			});
+			expect(mockRepository.findManyBySpaceIds).toHaveBeenCalledWith({
+				where: { removedAt: null },
+				orderBy: [{ createdAt: "desc" }],
+				skip: 10,
+				take: 20,
+				spaceIds: ["space-current-id"],
+			});
+			expect(mockRepository.countStatsBySpaceIds).toHaveBeenCalledWith([
+				"space-current-id",
+			]);
+			expect(result).toEqual({
+				users: [mockUser],
+				totalCount: 1,
+				stats: statsResult,
+			});
 		});
 	});
 });

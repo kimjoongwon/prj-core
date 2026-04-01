@@ -1,7 +1,7 @@
 # Users Service 기획서
 
 > 생성일: 2026-02-19
-> 수정일: 2026-03-13
+> 수정일: 2026-04-01
 > 타입: service
 > 위치: packages/be-service/src/user.service/index.ts
 
@@ -9,14 +9,14 @@
 
 사용자 계정 관리의 핵심 비즈니스 로직을 담당합니다.
 Space 기반 사용자 목록/상세 조회와 삭제, 비밀번호 변경, 계정 잠금 해제, 임시 비밀번호 발급, 회원가입용 생성 등을 처리합니다.
-CLS SpaceContext를 통해 접근 가능한 Space 범위 내에서 사용자를 관리합니다.
+CLS SpaceContext를 통해 현재 선택 Space를 기준으로 사용자를 관리합니다.
 
 ## 의존성
 
 | 의존 서비스/리포지토리 | 역할 |
 |-----------------------|------|
 | `UsersRepository` | 사용자 CRUD |
-| `SpaceContext` | 접근 가능한 Space ID 목록 제공 |
+| `SpaceContext` | 현재 선택 Space ID 및 접근 범위 제공 |
 | `AuthCacheService` | 사용자 캐시 무효화 |
 
 ## 메서드
@@ -25,7 +25,7 @@ CLS SpaceContext를 통해 접근 가능한 Space 범위 내에서 사용자를 
 |--------|----------|------|------|
 | `getByIdWithTenants` | `id: string` | Tenant+Profile 포함 사용자 조회 |
 | `findUserForAuth` | `email: string` | 인증용 경량 사용자 조회 (이메일, 비밀번호만) |
-| `getUsersBySpace` | `query: QueryUsersDto` | `Promise<GetUsersResult>` | 접근 가능한 Space 내 사용자 목록 조회 |
+| `getUsersBySpace` | `query: QueryUsersDto` | `Promise<GetUsersResult>` | 현재 선택 Space 내 사용자 목록/통계 조회 |
 | `getUserDetailForSpace` | `userId, spaceId` | Space 내 사용자 상세 조회 |
 | `deleteUserForSpace` | `userId, spaceId, currentUserId` | 사용자 소프트 삭제 + 캐시 무효화 |
 | `changePassword` | `userId, currentPassword, newPassword` | `Promise<void>` | 비밀번호 변경 |
@@ -89,6 +89,7 @@ CLS SpaceContext를 통해 접근 가능한 Space 범위 내에서 사용자를 
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-01 | 사용자 목록/통계 조회 스코프를 접근 가능 전체 Space에서 현재 선택 Space 기준으로 정정 | codex |
 | 2026-03-11 | 회원가입 생성 메서드 설명을 ApplicationService 기준으로 갱신 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-13 | `user.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |

@@ -6,7 +6,8 @@
 
 ## 역할
 
-에셋 목록 화면의 pure page 컴포넌트입니다. persist store hydrate, Space 선택, API 조회/변경, query state는 route thin container가 소유하고 이 파일은 폴더 트리, grid, folder modal 조합만 담당합니다.
+에셋 목록 화면의 pure page 컴포넌트입니다.
+route thin container가 데이터/변경 훅을 소유하고, 이 파일은 공통 `AssetBrowser` feature를 inline 관리 화면으로 마운트하는 thin page wrapper만 담당합니다.
 
 ## 공개 계약
 
@@ -33,6 +34,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-01 | 페이지 내부 조합 책임을 `AssetBrowser` feature로 위임하고 thin wrapper로 축소 | codex |
 | 2026-03-30 | 업로드 CTA를 선택된 폴더 기준으로만 동작시키고 page 내부 warning toast 의존을 제거 | codex |
 | 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-29 | 에셋 목록을 pure page로 재정의하고 persist store/API/query state를 route thin container로 이동 | codex |

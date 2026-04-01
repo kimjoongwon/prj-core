@@ -4,6 +4,8 @@ import type { AssetDto } from "@cocrepo/api/assets";
 import type { ActionDto } from "@cocrepo/api/core/actions";
 import type { RoleDto } from "@cocrepo/api/core/roles";
 import type { SubjectDto } from "@cocrepo/api/core/subjects";
+import { Button } from "@heroui/react";
+import Link from "next/link";
 import {
 	ActionButtonCell,
 	BooleanCell,
@@ -25,6 +27,7 @@ import {
 	TemplateActiveToggleCell,
 	UserRoleCell,
 } from "../../cell";
+import { COLUMN_FIELDS } from "../internal/fieldPresets";
 import {
 	buildColumns,
 	buildColumnsWithDefaultCreatedAt,
@@ -48,8 +51,6 @@ import {
 	getAssetStatusColor,
 	getAssetStatusLabel,
 } from "../internal/masterFactory";
-import { COLUMN_FIELDS } from "../internal/fieldPresets";
-import Link from "next/link";
 
 /** 관리자 Action 목록에서 사용하는 기본 이름 컬럼입니다. */
 export const actionNameColumn = createNameColumn<ActionDto>({
@@ -685,9 +686,15 @@ export function buildAssetTableColumns<
 >({
 	isRemoving,
 	onClickDeleteAssetButton,
+	mode = "manage",
+	onClickSelectAssetButton,
+	selectedAssetId,
 }: {
 	isRemoving: boolean;
 	onClickDeleteAssetButton: (assetId: string) => void;
+	mode?: "manage" | "picker";
+	onClickSelectAssetButton?: (asset: TRow) => void;
+	selectedAssetId?: string;
 }) {
 	/** Asset 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumnsWithDefaultCreatedAt<TRow>(
@@ -695,13 +702,16 @@ export function buildAssetTableColumns<
 			createPresetColumn<TRow>("originalName", {
 				size: 280,
 				isRequired: true,
-				cell: ({ row }) => (
-					<LinkCell
-						href={`/assets/${row.original.id}`}
-						className="text-primary hover:underline"
-						value={row.original.originalName}
-					/>
-				),
+				cell: ({ row }) =>
+					mode === "picker" ? (
+						<DefaultCell value={row.original.originalName} />
+					) : (
+						<LinkCell
+							href={`/assets/${row.original.id}`}
+							className="text-primary hover:underline"
+							value={row.original.originalName}
+						/>
+					),
 			}),
 			createPresetColumn<TRow>("kind", {
 				size: 100,
@@ -737,18 +747,48 @@ export function buildAssetTableColumns<
 		],
 		[
 			createActionsColumn<TRow>({
-				size: 100,
+				size: mode === "picker" ? 220 : 100,
 				align: "center",
-				cell: ({ row }) => (
-					<ActionButtonCell
-						variant="flat"
-						color="danger"
-						isLoading={isRemoving}
-						onPress={() => onClickDeleteAssetButton(row.original.id)}
-					>
-						삭제
-					</ActionButtonCell>
-				),
+				cell: ({ row }) => {
+					if (mode === "picker") {
+						const isSelected = row.original.id === selectedAssetId;
+
+						return (
+							<div className="flex items-center justify-center gap-2">
+								{onClickSelectAssetButton ? (
+									<Button
+										size="sm"
+										color={isSelected ? "primary" : "default"}
+										variant={isSelected ? "solid" : "flat"}
+										onPress={() => onClickSelectAssetButton(row.original)}
+									>
+										{isSelected ? "선택됨" : "선택"}
+									</Button>
+								) : null}
+								<Button
+									size="sm"
+									color="danger"
+									variant="flat"
+									isLoading={isRemoving}
+									onPress={() => onClickDeleteAssetButton(row.original.id)}
+								>
+									삭제
+								</Button>
+							</div>
+						);
+					}
+
+					return (
+						<ActionButtonCell
+							variant="flat"
+							color="danger"
+							isLoading={isRemoving}
+							onPress={() => onClickDeleteAssetButton(row.original.id)}
+						>
+							삭제
+						</ActionButtonCell>
+					);
+				},
 			}),
 		],
 	);

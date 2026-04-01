@@ -8,8 +8,8 @@
 
 1. 관리자가 운동 목록에서 "운동 등록" 버튼을 클릭하여 이 페이지에 진입한다
 2. 운동 기본 정보(이름, 지속시간, 반복횟수, 설명)를 입력한다
-3. 필요 시 운동 동작 이미지를 업로드한다
-4. 필요 시 운동 시연 영상을 업로드하거나 링크를 입력한다
+3. 필요 시 공통 `AssetBrowser` modal에서 운동 동작 이미지를 선택하거나 업로드한다
+4. 필요 시 공통 `AssetBrowser` modal에서 운동 시연 영상을 선택하거나 업로드한다
 5. "저장" 버튼을 클릭하여 운동을 등록한다
 6. 등록 성공 시 생성된 운동의 상세 페이지로 이동한다
 
@@ -27,8 +27,8 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 |----|------|----------|------|
 | F-001 | 기본 정보 입력 | 높음 | 이름, 지속시간, 반복횟수, 설명 입력 |
 | F-002 | 지속시간 UI | 높음 | 분/초 분리 입력 → 초 단위 변환 저장 |
-| F-003 | 이미지 업로드 | 중간 | 운동 동작 이미지 (선택) |
-| F-004 | 영상 업로드/링크 | 중간 | 운동 시연 영상 (선택) |
+| F-003 | 이미지 에셋 선택/업로드 | 중간 | 공통 AssetBrowser modal로 운동 동작 이미지를 연결 |
+| F-004 | 영상 에셋 선택/업로드 | 중간 | 공통 AssetBrowser modal로 운동 시연 영상을 연결 |
 | F-005 | 폼 유효성 검사 | 높음 | 필수 필드 미입력 시 에러 표시 |
 | F-006 | 저장/취소 | 높음 | 저장 성공 시 상세 페이지 이동, 취소 시 목록 복귀 |
 
@@ -60,13 +60,13 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 
 | 필드 | 컴포넌트 | 유효성 | 설명 |
 |------|----------|--------|------|
-| imageFileId | FileUpload | 선택, 이미지 파일 | 운동 동작 이미지 (jpg, png, gif 등) |
-| videoFileId | FileUpload | 선택, 동영상 파일 | 운동 시연 영상 (mp4, mov 등) |
+| imageFileId | AssetBrowser picker | 선택, 이미지 파일 | 운동 동작 이미지 (jpg, png, gif 등) |
+| videoFileId | AssetBrowser picker | 선택, 동영상 파일 | 운동 시연 영상 (mp4, mov 등) |
 
-**파일 업로드 UI:**
-- 드래그 앤 드롭 또는 파일 선택 버튼
-- 업로드 후 미리보기 표시 (이미지: 썸네일, 영상: 재생 가능한 플레이어)
-- 파일 삭제 버튼 포함
+**에셋 선택 UI:**
+- `/assets`와 동일한 `AssetBrowser` feature를 modal picker로 재사용
+- 폴더 탐색, 업로드, 폴더 CRUD, 에셋 삭제를 modal 안에서 그대로 수행 가능
+- 선택 후 폼에는 preview 카드와 clear action을 표시
 
 ### 페이지 상태
 
@@ -119,12 +119,14 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 |--------|------|
 | "취소" 버튼 클릭 | `/tasks` 목록으로 이동 (폼 데이터 버림) |
 | "저장" 버튼 클릭 | 폼 유효성 검사 → `createExercise` 호출 → 성공 시 상세 이동 |
-| 이미지 업로드 | 파일 API 업로드 → `imageFileId` 설정 |
-| 영상 업로드 | 파일 API 업로드 → `videoFileId` 설정 |
+| 이미지 picker 열기 | `useTaskExerciseAssetBrowser()`가 image slot + 공통 `AssetBrowser` bindings를 준비 |
+| 영상 picker 열기 | `useTaskExerciseAssetBrowser()`가 video slot + 공통 `AssetBrowser` bindings를 준비 |
+| 에셋 선택/업로드/삭제 | 공통 `useAdminAssetBrowser()`가 mutation/query state/caching을 처리하고 선택 결과를 `imageFileId`/`videoFileId`에 반영 |
 
 ## 런타임 책임
 
 - `page.tsx`가 `useCreateTask`, `useRouter`, `useLocalObservable`를 직접 소유합니다.
+- `page.tsx`가 `useTaskExerciseAssetBrowser()`를 통해 image/video picker 상태와 공통 `AssetBrowser` bindings를 소유합니다.
 - `@cocrepo/ui`의 `AdminTasksNewPage`는 props-only pure page로 사용합니다.
 
 ## 비즈니스 규칙
@@ -173,6 +175,7 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-01 | task 신규 화면의 asset 선택/업로드를 공통 `AssetBrowser` modal과 shared hook 조합으로 전환 | codex |
 | 2026-03-30 | 태스크 등록의 mutation/router/local state를 route page로 이동하고 `@cocrepo/ui` page를 pure contract로 분리 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |

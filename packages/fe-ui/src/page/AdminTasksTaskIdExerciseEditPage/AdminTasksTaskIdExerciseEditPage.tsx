@@ -1,19 +1,20 @@
 "use client";
 
 import {
-	AssetPickerModal,
-	type AssetPickerItem,
+	AssetBrowser,
+	type AssetBrowserAsset,
+	type AssetBrowserProps,
 	FormPage,
 	FormPageSurface,
-	MediaThumbnail,
-	PageTitleBar,
 	FormSection,
 	FormSectionCard,
+	MediaThumbnail,
+	PageTitleBar,
 } from "@cocrepo/ui";
 import { Button, Chip, Input, Spinner, Textarea } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 
-export interface ExerciseMediaAsset extends AssetPickerItem {}
+export interface ExerciseMediaAsset extends AssetBrowserAsset {}
 
 export interface AdminTasksTaskIdExerciseEditPageProps {
 	exerciseName?: string;
@@ -22,17 +23,23 @@ export interface AdminTasksTaskIdExerciseEditPageProps {
 	durationSec: number;
 	count: number;
 	description: string;
-	imageFileId: string;
-	videoFileId: string;
 	selectedImageAsset?: ExerciseMediaAsset;
 	selectedVideoAsset?: ExerciseMediaAsset;
-	imageAssets: ExerciseMediaAsset[];
-	videoAssets: ExerciseMediaAsset[];
-	assetSearchQuery: string;
-	isImagePickerOpen: boolean;
-	isVideoPickerOpen: boolean;
-	isImageAssetsLoading: boolean;
-	isVideoAssetsLoading: boolean;
+	assetBrowserProps: Omit<
+		AssetBrowserProps,
+		| "mode"
+		| "presentation"
+		| "title"
+		| "description"
+		| "isOpen"
+		| "onClose"
+		| "selectedAssetId"
+		| "onSelectAsset"
+	>;
+	assetBrowserTitle: string;
+	assetBrowserDescription: string;
+	assetBrowserSelectedAssetId?: string;
+	isAssetBrowserOpen: boolean;
 	errors: Record<string, string>;
 	isSchedulable: boolean;
 	isLoading: boolean;
@@ -45,13 +52,10 @@ export interface AdminTasksTaskIdExerciseEditPageProps {
 	onChangeDescriptionTextarea: (value: string) => void;
 	onChangeImageFileIdInput: (value: string) => void;
 	onChangeVideoFileIdInput: (value: string) => void;
-	onChangeAssetSearchQuery: (value: string) => void;
 	onOpenImagePicker: () => void;
-	onCloseImagePicker: () => void;
 	onOpenVideoPicker: () => void;
-	onCloseVideoPicker: () => void;
-	onSelectImageAsset: (asset: ExerciseMediaAsset) => void;
-	onSelectVideoAsset: (asset: ExerciseMediaAsset) => void;
+	onCloseAssetBrowser: () => void;
+	onSelectAssetFromBrowser: (asset: ExerciseMediaAsset) => void;
 	onClickClearImageAssetButton: () => void;
 	onClickClearVideoAssetButton: () => void;
 	onClickCancelButton: () => void;
@@ -129,17 +133,13 @@ export const AdminTasksTaskIdExerciseEditPage = observer(
 		durationSec,
 		count,
 		description,
-		imageFileId,
-		videoFileId,
 		selectedImageAsset,
 		selectedVideoAsset,
-		imageAssets,
-		videoAssets,
-		assetSearchQuery,
-		isImagePickerOpen,
-		isVideoPickerOpen,
-		isImageAssetsLoading,
-		isVideoAssetsLoading,
+		assetBrowserProps,
+		assetBrowserTitle,
+		assetBrowserDescription,
+		assetBrowserSelectedAssetId,
+		isAssetBrowserOpen,
 		errors,
 		isSchedulable,
 		isLoading,
@@ -152,13 +152,10 @@ export const AdminTasksTaskIdExerciseEditPage = observer(
 		onChangeDescriptionTextarea,
 		onChangeImageFileIdInput,
 		onChangeVideoFileIdInput,
-		onChangeAssetSearchQuery,
 		onOpenImagePicker,
-		onCloseImagePicker,
 		onOpenVideoPicker,
-		onCloseVideoPicker,
-		onSelectImageAsset,
-		onSelectVideoAsset,
+		onCloseAssetBrowser,
+		onSelectAssetFromBrowser,
 		onClickClearImageAssetButton,
 		onClickClearVideoAssetButton,
 		onClickCancelButton,
@@ -281,7 +278,9 @@ export const AdminTasksTaskIdExerciseEditPage = observer(
 										/>
 									</div>
 									{errors.duration ? (
-										<p className="mt-1 text-sm text-danger">{errors.duration}</p>
+										<p className="mt-1 text-sm text-danger">
+											{errors.duration}
+										</p>
 									) : null}
 								</div>
 								<Input
@@ -333,7 +332,10 @@ export const AdminTasksTaskIdExerciseEditPage = observer(
 										<span className="font-medium text-default-700">
 											스케줄 가능 상태
 										</span>
-										<Chip color={isSchedulable ? "success" : "warning"} size="sm">
+										<Chip
+											color={isSchedulable ? "success" : "warning"}
+											size="sm"
+										>
 											{isSchedulable ? "가능" : "불가"}
 										</Chip>
 									</div>
@@ -346,29 +348,16 @@ export const AdminTasksTaskIdExerciseEditPage = observer(
 						</FormSection>
 					</FormSectionCard>
 				</FormPageSurface>
-				<AssetPickerModal
-					title="이미지 에셋 선택"
-					isOpen={isImagePickerOpen}
-					isLoading={isImageAssetsLoading}
-					searchValue={assetSearchQuery}
-					selectedAssetId={imageFileId || undefined}
-					assets={imageAssets}
-					emptyMessage="조건에 맞는 이미지 에셋이 없습니다."
-					onClose={onCloseImagePicker}
-					onChangeSearchValue={onChangeAssetSearchQuery}
-					onSelectAsset={onSelectImageAsset}
-				/>
-				<AssetPickerModal
-					title="영상 에셋 선택"
-					isOpen={isVideoPickerOpen}
-					isLoading={isVideoAssetsLoading}
-					searchValue={assetSearchQuery}
-					selectedAssetId={videoFileId || undefined}
-					assets={videoAssets}
-					emptyMessage="조건에 맞는 영상 에셋이 없습니다."
-					onClose={onCloseVideoPicker}
-					onChangeSearchValue={onChangeAssetSearchQuery}
-					onSelectAsset={onSelectVideoAsset}
+				<AssetBrowser
+					{...assetBrowserProps}
+					mode="picker"
+					presentation="modal"
+					title={assetBrowserTitle}
+					description={assetBrowserDescription}
+					isOpen={isAssetBrowserOpen}
+					onClose={onCloseAssetBrowser}
+					selectedAssetId={assetBrowserSelectedAssetId}
+					onSelectAsset={onSelectAssetFromBrowser}
 				/>
 			</FormPage>
 		);

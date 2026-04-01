@@ -51,19 +51,21 @@ export class UserService {
 	}
 
 	/**
-	 * 접근 가능한 Space 내 사용자 목록 조회
-	 * CLS 컨텍스트에서 ACCESSIBLE_SPACE_IDS를 가져와 필터링합니다.
+	 * 현재 선택 Space 내 사용자 목록 조회
+	 * selectedSpaceId 기준으로 현재 Space 사용자만 필터링합니다.
 	 * DTO → Prisma 변환을 Service에서 수행하고 Repository에는 원시값만 전달합니다.
 	 */
 	async getUsersBySpace(query: QueryUsersDto): Promise<GetUsersResult> {
-		const spaceIds = this.spaceCtx.spaceIds;
+		const currentSpaceId = this.spaceCtx.spaceId;
 		this.logger.debug(
-			`접근 가능 Space 내 사용자 목록 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
+			`현재 Space 내 사용자 목록 조회: spaceId=${currentSpaceId ?? "없음"}`,
 		);
 
-		const baseWhere: Partial<Prisma.UserWhereInput> = spaceIds
+		const baseWhere: Partial<Prisma.UserWhereInput> = currentSpaceId
 			? {
-					tenants: { some: { spaceId: { in: spaceIds }, removedAt: null } },
+					tenants: {
+						some: { spaceId: currentSpaceId, removedAt: null },
+					},
 				}
 			: {};
 
@@ -76,9 +78,11 @@ export class UserService {
 				orderBy,
 				skip: query.skip ?? 0,
 				take: query.take ?? 10,
-				spaceIds,
+				spaceIds: currentSpaceId ? [currentSpaceId] : undefined,
 			}),
-			this.repository.countStatsBySpaceIds(spaceIds),
+			this.repository.countStatsBySpaceIds(
+				currentSpaceId ? [currentSpaceId] : undefined,
+			),
 		]);
 
 		return {

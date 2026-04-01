@@ -18,8 +18,8 @@
 |----|------|----------|------|
 | F-001 | 기존 데이터 프리페칭 | 높음 | SSR에서 기존 운동 데이터를 미리 로드하여 폼에 채움 |
 | F-002 | 기본 정보 수정 | 높음 | 이름, 지속시간, 반복횟수, 설명 수정 |
-| F-003 | 이미지 변경 | 중간 | 기존 이미지 삭제 또는 새 이미지 업로드 |
-| F-004 | 영상 변경 | 중간 | 기존 영상 삭제 또는 새 영상 업로드 |
+| F-003 | 이미지 변경 | 중간 | 공통 AssetBrowser modal에서 기존 이미지 해제/새 이미지 선택/업로드 |
+| F-004 | 영상 변경 | 중간 | 공통 AssetBrowser modal에서 기존 영상 해제/새 영상 선택/업로드 |
 | F-005 | 폼 유효성 검사 | 높음 | 필수 필드 미입력 시 에러 표시 |
 | F-006 | 저장/취소 | 높음 | 저장 성공 시 상세 페이지 이동, 취소 시 상세 복귀 |
 | F-007 | 접근 권한 검사 | 높음 | 현재 Space 소유 운동만 수정 가능. 타 Space 운동 접근 시 리다이렉트 |
@@ -51,8 +51,8 @@
 
 | 필드 | 컴포넌트 | 설명 |
 |------|----------|------|
-| imageFileId | FileUpload | 기존 이미지 미리보기 표시. 삭제 버튼으로 기존 이미지 제거. 새 파일 업로드 가능 |
-| videoFileId | FileUpload | 기존 영상 플레이어 표시. 삭제 버튼으로 기존 영상 제거. 새 파일 업로드 가능 |
+| imageFileId | AssetBrowser picker | 기존 이미지 미리보기 표시. 삭제 버튼으로 기존 이미지 제거. 새 에셋 선택/업로드 가능 |
+| videoFileId | AssetBrowser picker | 기존 영상 미리보기 표시. 삭제 버튼으로 기존 영상 제거. 새 에셋 선택/업로드 가능 |
 
 ### 페이지 상태
 
@@ -90,6 +90,7 @@
 ## 런타임 책임
 
 - route container가 `useParams`, `useRouter`, `useGetTaskExercise`, `useUpdateTaskExercise`, `useLocalObservable`을 소유합니다.
+- route container가 `useTaskExerciseAssetBrowser()`를 통해 image/video picker slot과 공통 `AssetBrowser` bindings를 소유합니다.
 - route container가 duration 분/초 변환, 스케줄 가능 상태 계산, 저장 성공/실패 toast와 상세 페이지 이동을 처리합니다.
 - `AdminTasksTaskIdExerciseEditPage`는 입력값/에러/CTA handler만 렌더링합니다.
 
@@ -100,9 +101,9 @@
 | "취소" 버튼 클릭 | `/tasks/{taskId}/exercise` 상세 페이지로 이동 (변경 사항 버림) |
 | "저장" 버튼 클릭 | 폼 유효성 검사 → `updateExercise` 호출 → 성공 시 상세 이동 |
 | 이미지 삭제 버튼 클릭 | `imageFileId = null` 설정 (저장 시 서버에 null 전송) |
-| 이미지 업로드 | 파일 API 업로드 → `imageFileId` 업데이트 |
+| 이미지 picker 열기/업로드 | 공통 `AssetBrowser` modal과 `useAdminAssetBrowser()`가 선택/업로드/폴더 CRUD를 처리 |
 | 영상 삭제 버튼 클릭 | `videoFileId = null` 설정 |
-| 영상 업로드 | 파일 API 업로드 → `videoFileId` 업데이트 |
+| 영상 picker 열기/업로드 | 공통 `AssetBrowser` modal과 `useAdminAssetBrowser()`가 선택/업로드/폴더 CRUD를 처리 |
 
 ## 비즈니스 규칙
 
@@ -149,6 +150,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-01 | 수정 화면의 자산 변경 흐름을 공통 `AssetBrowser` modal과 shared hook 조합으로 전환 | codex |
 | 2026-03-30 | 조회/저장/local state 책임을 route container로 명시하고 pure page props 위임 구조를 문서화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |

@@ -16,7 +16,7 @@
 - page role: `master`
 - reusable target: `master/table`
 - page component path: `packages/fe-ui/src/page/AdminAssetsPage/AdminAssetsPage.tsx`
-- route는 `persistStore` hydrate/Space 선택 gate, `useGetAssets`, `useGetFolders`, folder/asset mutation, `useMetaDataGridQueryStates`를 소유합니다.
+- route는 공통 `useAdminAssetBrowser()` hook을 통해 persist store hydrate/Space 선택 gate, query state, assets/folders 조회, folder/asset mutation을 소유합니다.
 
 ## API 호출
 
@@ -44,6 +44,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-01 | `/assets` route의 조회/변경 책임을 `useAdminAssetBrowser` 공통 hook으로 통합하고 UI는 `AssetBrowser` feature 재사용으로 전환 | codex |
 | 2026-03-29 | `AdminAssetsPage` pure page와 thin route container 구조로 전환하고 persist store/API/query state 책임을 route로 이동 | codex |
 | 2026-03-26 | 브라우저 wrapper의 zero-padding 예시를 제거하고 기본 `Surface` 여백 기준으로 정정 | codex |
 | 2026-03-21 | 에셋 관리 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |
