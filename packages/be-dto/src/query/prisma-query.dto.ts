@@ -1,3 +1,4 @@
+import { EnumFieldKey } from "@cocrepo/decorator";
 import { QueryDto } from "./query.dto";
 
 /**
@@ -75,6 +76,7 @@ export class PrismaQueryDto<
 	toPrismaWhere(baseWhere?: Partial<TWhere>): TWhere {
 		const where: Record<string, unknown> = { ...(baseWhere ?? {}) };
 		const self = this as Record<string, unknown>;
+		const prototype = Object.getPrototypeOf(this) as object;
 		const customExcludes = new Set(this.excludeFromAutoMap());
 
 		// *From 필드에서 처리한 *To 필드를 추적
@@ -147,7 +149,11 @@ export class PrismaQueryDto<
 
 			// 4. 일반 문자열: 부분 일치 검색
 			if (typeof value === "string") {
-				where[key] = this.containsFilter(value);
+				if (Reflect.hasMetadata(EnumFieldKey, prototype, key)) {
+					where[key] = value;
+				} else {
+					where[key] = this.containsFilter(value);
+				}
 				continue;
 			}
 

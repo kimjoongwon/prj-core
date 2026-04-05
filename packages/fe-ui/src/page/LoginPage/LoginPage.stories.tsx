@@ -1,24 +1,63 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { useLocalObservable } from "mobx-react-lite";
+import type { KeyboardEvent } from "react";
+import { PageStoryCard } from "../storybookFrame";
+import { LoginPage, type State as LoginPageState } from "./LoginPage";
 
-const Placeholder = () => (
-	<div style={{ padding: 16, fontFamily: "sans-serif" }}>
-		<h3 style={{ margin: 0 }}>Story Placeholder</h3>
-		<p style={{ marginTop: 8 }}>Component target: page/LoginPage/LoginPage.tsx</p>
-		<p style={{ marginTop: 8 }}>Baseline story generated for coverage.</p>
-	</div>
-);
-
-const meta: Meta<typeof Placeholder> = {
-	title: "Page/Login/LoginPage",
-	component: Placeholder,
+const meta = {
+	component: LoginPage,
 	parameters: {
-		layout: "padded",
+		layout: "fullscreen",
 	},
 	tags: ["autodocs"],
-};
+	args: {
+		title: "관리자 로그인",
+		caption: "운영 계정으로 로그인해 그라운드와 이용자 상태를 관리하세요.",
+		isLoading: false,
+		onClickLoginButton: () => undefined,
+		onKeyDownInput: (_event: KeyboardEvent) => undefined,
+	},
+} satisfies Meta<typeof LoginPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+const renderLoginPage =
+	(initialState: LoginPageState): Story["render"] =>
+	(args) => {
+		const state = useLocalObservable(() => ({ ...initialState }));
+
+		return (
+			<PageStoryCard>
+				<LoginPage {...args} state={state} />
+			</PageStoryCard>
+		);
+	};
+
+export const Default: Story = {
+	render: renderLoginPage({
+		email: "",
+		password: "",
+		errorMessage: "",
+	}),
+};
+
+export const WithEmailError: Story = {
+	render: renderLoginPage({
+		email: "ops@example.com",
+		password: "",
+		errorMessage: "이메일 또는 비밀번호를 다시 확인해주세요.",
+	}),
+};
+
+export const Loading: Story = {
+	args: {
+		isLoading: true,
+	},
+	render: renderLoginPage({
+		email: "ops@example.com",
+		password: "password123!",
+		errorMessage: "",
+	}),
+};

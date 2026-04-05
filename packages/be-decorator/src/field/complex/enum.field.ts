@@ -6,6 +6,8 @@ import { ToArray } from "../../transform.decorators";
 import { IsNullable, IsUndefinable } from "../../validator.decorators";
 import type { BaseFieldOptions } from "../base/field-options.types";
 
+export const EnumFieldKey = "field:enum";
+
 /**
  * Enum 필드 데코레이터
  *
@@ -32,6 +34,9 @@ export function EnumField<TEnum extends object>(
 ): PropertyDecorator {
 	const enumValue = getEnum();
 	const decorators: PropertyDecorator[] = [
+		(target: object, propertyKey: string | symbol) => {
+			Reflect.defineMetadata(EnumFieldKey, enumValue, target, propertyKey);
+		},
 		IsEnum(enumValue, { each: options.each }),
 	];
 

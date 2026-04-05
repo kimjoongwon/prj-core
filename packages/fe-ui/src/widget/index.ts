@@ -1,5 +1,6 @@
 export * from "./ActionFab";
 export * from "./AIClassificationSuggestion";
+export * from "./AssetPreview";
 export * from "./AuthCard";
 export * from "./ability";
 export * from "./BackButton";

@@ -100,6 +100,7 @@ function mapAssetDetail(asset: AssetDto): AdminAssetsAssetIdPageAsset {
 		mimeType: asset.mimeType,
 		sizeBytes: asset.sizeBytes,
 		folderId: asset.folderId,
+		publicUrl: asset.publicUrl,
 		createdAt: asset.createdAt,
 		storageKey: asset.storageKey,
 		checksum: asset.checksum,

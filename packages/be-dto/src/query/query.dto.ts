@@ -9,7 +9,7 @@ import { PageMetaDto } from "./page-meta.dto";
  */
 export class QueryDto {
 	@NumberFieldOptional({
-		minimum: 1,
+		minimum: 0,
 		default: undefined,
 		int: true,
 	})

@@ -19,7 +19,12 @@ import { buildAssetTableColumns } from "../../columns";
 import { EmptyState } from "../../display";
 import { MetaDataGrid } from "../../master/table";
 import { Surface } from "../../surface";
-import { FolderTree, type FolderTreeItem, PageTitleBar } from "../../widget";
+import {
+	AssetPreviewDialog,
+	FolderTree,
+	type FolderTreeItem,
+	PageTitleBar,
+} from "../../widget";
 
 const searchInputConfig: InputConfig = {
 	type: "search",
@@ -156,6 +161,30 @@ const getAssetEmptyMessage = (
 	return `${selectedFolder.name} 폴더에 등록된 에셋이 없습니다.`;
 };
 
+export function isUploadActionDisabled({
+	isStoreReady,
+	hasSelectedSpace,
+	isUploadingAsset,
+}: Pick<
+	AssetBrowserProps,
+	"isStoreReady" | "hasSelectedSpace" | "isUploadingAsset"
+>) {
+	return !isStoreReady || !hasSelectedSpace || isUploadingAsset;
+}
+
+export function getUploadRequirementMessage(
+	selectedFolderId: string | null,
+	folderCount: number,
+) {
+	if (selectedFolderId) {
+		return null;
+	}
+
+	return folderCount > 0
+		? "업로드할 폴더를 먼저 선택해주세요."
+		: "업로드하려면 먼저 폴더를 생성해주세요.";
+}
+
 function AssetsGridFallback({
 	queryStates,
 	setQueryStates,
@@ -251,6 +280,11 @@ export const AssetBrowser = observer(
 		const [renameFolderNameError, setRenameFolderNameError] = useState<
 			string | null
 		>(null);
+		const [uploadRequirementMessage, setUploadRequirementMessage] = useState<
+			string | null
+		>(null);
+		const [previewingAsset, setPreviewingAsset] =
+			useState<AssetBrowserAsset | null>(null);
 
 		const visibleLeftInputs =
 			mode === "picker" ? pickerLeftInputs : manageLeftInputs;
@@ -294,6 +328,7 @@ export const AssetBrowser = observer(
 		};
 
 		const onClickCreateFolderButton = () => {
+			setUploadRequirementMessage(null);
 			onResetCreateFolderForm();
 			createFolderModal.onOpen();
 		};
@@ -371,9 +406,15 @@ export const AssetBrowser = observer(
 		};
 
 		const onClickUploadButton = () => {
-			if (selectedFolderId) {
-				fileInputRef.current?.click();
+			if (!selectedFolderId) {
+				setUploadRequirementMessage(
+					getUploadRequirementMessage(selectedFolderId, folders.length),
+				);
+				return;
 			}
+
+			setUploadRequirementMessage(null);
+			fileInputRef.current?.click();
 		};
 
 		const onChangeAssetFileInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -383,11 +424,20 @@ export const AssetBrowser = observer(
 				return;
 			}
 
+			setUploadRequirementMessage(null);
 			void onUploadAsset(selectedFile, selectedFolderId);
 		};
 
 		const onClickDeleteAssetButton = (assetId: string) => {
+			if (previewingAsset?.id === assetId) {
+				setPreviewingAsset(null);
+			}
+
 			void onDeleteAsset(assetId);
+		};
+
+		const onClickPreviewAssetButton = (asset: AssetBrowserAsset) => {
+			setPreviewingAsset(asset);
 		};
 
 		const onClickSelectAssetButton = (asset: AssetBrowserAsset) => {
@@ -395,6 +445,7 @@ export const AssetBrowser = observer(
 		};
 
 		const onSelectFolder = (folder: FolderTreeItem | null) => {
+			setUploadRequirementMessage(null);
 			void setQueryStates({
 				folderId: folder?.id ?? "",
 				skip: 0,
@@ -404,6 +455,8 @@ export const AssetBrowser = observer(
 		const columns = buildAssetTableColumns<AssetBrowserAsset>({
 			isRemoving,
 			onClickDeleteAssetButton,
+			onClickPreviewAssetButton:
+				mode === "manage" ? onClickPreviewAssetButton : undefined,
 			mode,
 			selectedAssetId,
 			onClickSelectAssetButton,
@@ -463,6 +516,13 @@ export const AssetBrowser = observer(
 					type="file"
 					className="hidden"
 					onChange={onChangeAssetFileInput}
+				/>
+				<AssetPreviewDialog
+					asset={previewingAsset}
+					isOpen={Boolean(previewingAsset)}
+					onClose={() => {
+						setPreviewingAsset(null);
+					}}
 				/>
 			</>
 		);
@@ -605,16 +665,30 @@ export const AssetBrowser = observer(
 		);
 
 		const uploadAction = (
-			<Button
-				variant="flat"
-				color="primary"
-				startContent={<Upload className="h-4 w-4" />}
-				onPress={onClickUploadButton}
-				isLoading={isUploadingAsset}
-				isDisabled={!selectedFolderId || isUploadingAsset}
-			>
-				업로드
-			</Button>
+			<div className="flex flex-col items-end gap-1">
+				<Button
+					variant="flat"
+					color="primary"
+					startContent={<Upload className="h-4 w-4" />}
+					onPress={onClickUploadButton}
+					isLoading={isUploadingAsset}
+					isDisabled={isUploadActionDisabled({
+						isStoreReady,
+						hasSelectedSpace,
+						isUploadingAsset,
+					})}
+				>
+					업로드
+				</Button>
+				{uploadRequirementMessage ? (
+					<p
+						role="status"
+						className="max-w-56 text-right text-xs text-default-500"
+					>
+						{uploadRequirementMessage}
+					</p>
+				) : null}
+			</div>
 		);
 
 		if (presentation === "modal") {

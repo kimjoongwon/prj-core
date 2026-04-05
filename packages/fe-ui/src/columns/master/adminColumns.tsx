@@ -5,6 +5,7 @@ import type { ActionDto } from "@cocrepo/api/core/actions";
 import type { RoleDto } from "@cocrepo/api/core/roles";
 import type { SubjectDto } from "@cocrepo/api/core/subjects";
 import { Button } from "@heroui/react";
+import { Eye } from "lucide-react";
 import Link from "next/link";
 import {
 	ActionButtonCell,
@@ -686,12 +687,14 @@ export function buildAssetTableColumns<
 >({
 	isRemoving,
 	onClickDeleteAssetButton,
+	onClickPreviewAssetButton,
 	mode = "manage",
 	onClickSelectAssetButton,
 	selectedAssetId,
 }: {
 	isRemoving: boolean;
 	onClickDeleteAssetButton: (assetId: string) => void;
+	onClickPreviewAssetButton?: (asset: TRow) => void;
 	mode?: "manage" | "picker";
 	onClickSelectAssetButton?: (asset: TRow) => void;
 	selectedAssetId?: string;
@@ -747,7 +750,7 @@ export function buildAssetTableColumns<
 		],
 		[
 			createActionsColumn<TRow>({
-				size: mode === "picker" ? 220 : 100,
+				size: mode === "picker" ? 220 : 220,
 				align: "center",
 				cell: ({ row }) => {
 					if (mode === "picker") {
@@ -779,14 +782,27 @@ export function buildAssetTableColumns<
 					}
 
 					return (
-						<ActionButtonCell
-							variant="flat"
-							color="danger"
-							isLoading={isRemoving}
-							onPress={() => onClickDeleteAssetButton(row.original.id)}
-						>
-							삭제
-						</ActionButtonCell>
+						<div className="flex items-center justify-center gap-2">
+							{onClickPreviewAssetButton ? (
+								<Button
+									size="sm"
+									variant="flat"
+									startContent={<Eye className="h-4 w-4" />}
+									onPress={() => onClickPreviewAssetButton(row.original)}
+								>
+									보기
+								</Button>
+							) : null}
+							<Button
+								size="sm"
+								variant="flat"
+								color="danger"
+								isLoading={isRemoving}
+								onPress={() => onClickDeleteAssetButton(row.original.id)}
+							>
+								삭제
+							</Button>
+						</div>
 					);
 				},
 			}),

@@ -35,6 +35,18 @@ export function NumberField(
 	options: FieldDecoratorOptions<NumberFieldOptions> = {},
 ): PropertyDecorator {
 	const decorators: PropertyDecorator[] = [Type(() => Number)];
+	const validationMin =
+		typeof options.min === "number"
+			? options.min
+			: typeof options.minimum === "number"
+				? options.minimum
+				: undefined;
+	const validationMax =
+		typeof options.max === "number"
+			? options.max
+			: typeof options.maximum === "number"
+				? options.maximum
+				: undefined;
 
 	// Nullable 처리
 	if (options.nullable) {
@@ -45,7 +57,20 @@ export function NumberField(
 
 	// Swagger 문서화
 	if (options.swagger !== false) {
-		decorators.push(ApiProperty({ type: "number", ...options }));
+		decorators.push(
+			ApiProperty({
+				type: "number",
+				...options,
+				minimum:
+					typeof options.minimum === "number"
+						? options.minimum
+						: validationMin,
+				maximum:
+					typeof options.maximum === "number"
+						? options.maximum
+						: validationMax,
+			}),
+		);
 	}
 
 	// 배열 변환
@@ -61,12 +86,12 @@ export function NumberField(
 	}
 
 	// 범위 검증
-	if (typeof options.min === "number") {
-		decorators.push(Min(options.min, { each: options.each }));
+	if (typeof validationMin === "number") {
+		decorators.push(Min(validationMin, { each: options.each }));
 	}
 
-	if (typeof options.max === "number") {
-		decorators.push(Max(options.max, { each: options.each }));
+	if (typeof validationMax === "number") {
+		decorators.push(Max(validationMax, { each: options.each }));
 	}
 
 	// 양수 검증
