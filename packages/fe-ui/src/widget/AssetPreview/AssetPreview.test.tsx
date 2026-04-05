@@ -3,6 +3,7 @@ import {
 	AssetPreview,
 	getAssetPreviewMode,
 	getAssetPreviewStatusMessage,
+	getAssetPreviewUrl,
 } from "./AssetPreview";
 
 const baseAsset = {
@@ -38,7 +39,7 @@ describe("AssetPreview", () => {
 		expect(screen.getByTitle("guide.pdf PDF preview")).toBeInTheDocument();
 	});
 
-	it("공개 URL이 없으면 프리뷰 제한 메시지를 보여줘야 한다", () => {
+	it("공개 URL이 없어도 인증 프록시 URL로 이미지를 렌더링해야 한다", () => {
 		render(
 			<AssetPreview
 				asset={{
@@ -48,9 +49,10 @@ describe("AssetPreview", () => {
 			/>,
 		);
 
-		expect(
-			screen.getByText("지금은 인라인 미리보기를 열 수 없습니다."),
-		).toBeInTheDocument();
+		expect(screen.getByRole("img", { name: "banner.png" })).toHaveAttribute(
+			"src",
+			"/api/v1/assets/asset-1/content",
+		);
 	});
 });
 
@@ -67,12 +69,29 @@ describe("AssetPreview helpers", () => {
 		).toBe("unsupported");
 	});
 
-	it("공개 URL이 없으면 안내 메시지에 공개 URL 필요성을 포함해야 한다", () => {
+	it("공개 URL이 없어도 READY 상태면 프록시 URL을 반환해야 한다", () => {
 		expect(
-			getAssetPreviewStatusMessage({
+			getAssetPreviewUrl({
 				...baseAsset,
 				publicUrl: null,
 			}),
-		).toContain("공개 URL");
+		).toBe("/api/v1/assets/asset-1/content");
+	});
+
+	it("업로드 중이면 안내 메시지와 함께 프리뷰 URL이 없어야 한다", () => {
+		expect(
+			getAssetPreviewStatusMessage({
+				...baseAsset,
+				status: "UPLOADING",
+				publicUrl: null,
+			}),
+		).toContain("업로드");
+		expect(
+			getAssetPreviewUrl({
+				...baseAsset,
+				status: "UPLOADING",
+				publicUrl: null,
+			}),
+		).toBeNull();
 	});
 });

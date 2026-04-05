@@ -8,6 +8,7 @@ import {
 	DetailPageSurface,
 	DetailSection,
 	DetailSectionCard,
+	getAssetPreviewUrl,
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
@@ -179,6 +180,8 @@ export const AdminAssetsAssetIdPage = observer(
 			);
 		}
 
+		const previewUrl = getAssetPreviewUrl(asset);
+
 		return (
 			<DetailPage
 				top={
@@ -194,16 +197,12 @@ export const AdminAssetsAssetIdPage = observer(
 								>
 									목록으로
 								</Button>
-								{asset.publicUrl ? (
+								{previewUrl ? (
 									<Button
 										variant="flat"
 										color="primary"
 										onPress={() => {
-											window.open(
-												asset.publicUrl ?? "",
-												"_blank",
-												"noopener,noreferrer",
-											);
+											window.open(previewUrl, "_blank", "noopener,noreferrer");
 										}}
 									>
 										원본 열기
@@ -234,9 +233,9 @@ export const AdminAssetsAssetIdPage = observer(
 										level={2}
 										title="미리보기"
 										description={
-											asset.publicUrl
+											previewUrl
 												? "목록과 상세에서 바로 확인할 수 있는 뷰어입니다."
-												: "현재는 공개 URL이 없어 인라인 미리보기가 제한됩니다."
+												: "업로드 상태나 파일 형식에 따라 인라인 미리보기가 제한될 수 있습니다."
 										}
 										actions={
 											<Button
@@ -275,9 +274,9 @@ export const AdminAssetsAssetIdPage = observer(
 										<Chip
 											size="sm"
 											variant="bordered"
-											color={asset.publicUrl ? "success" : "warning"}
+											color={previewUrl ? "success" : "warning"}
 										>
-											{asset.publicUrl ? "즉시 보기 가능" : "공개 URL 필요"}
+											{previewUrl ? "즉시 보기 가능" : "프리뷰 제한"}
 										</Chip>
 									</div>
 									<div className="mt-4 space-y-2">
@@ -285,9 +284,9 @@ export const AdminAssetsAssetIdPage = observer(
 											{asset.originalName}
 										</p>
 										<p className="text-sm leading-6 text-default-500">
-											{asset.publicUrl
+											{previewUrl
 												? "브라우저 안에서 바로 검토하고, 필요하면 원본 파일을 새 탭으로 열 수 있습니다."
-												: "현재 환경에서는 `OBJECT_STORAGE_PUBLIC_BASE_URL`이 없어 상세와 목록에서 인라인 프리뷰만 폴백으로 표시됩니다."}
+												: "업로드가 완료되지 않았거나 브라우저가 인라인 렌더링을 지원하지 않는 형식이면 안내 카드로 폴백됩니다."}
 										</p>
 									</div>
 									<div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-1">

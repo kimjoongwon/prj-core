@@ -1,5 +1,6 @@
 import {
 	DeleteObjectCommand,
+	GetObjectCommand,
 	PutObjectCommand,
 	S3Client,
 } from "@aws-sdk/client-s3";
@@ -32,8 +33,17 @@ export interface PutObjectResult {
 	etag?: string;
 }
 
+export interface GetObjectResult {
+	body: Buffer;
+	contentType?: string;
+	contentLength?: number;
+	etag?: string;
+	lastModified?: Date;
+}
+
 export abstract class ObjectStorageService {
 	abstract putObject(input: PutObjectInput): Promise<PutObjectResult>;
+	abstract getObject(key: string): Promise<GetObjectResult>;
 	abstract deleteObject(key: string): Promise<void>;
 	abstract getPublicUrl(key: string): string | null;
 }
@@ -117,6 +127,33 @@ export class S3CompatibleStorageService implements ObjectStorageService {
 		);
 	}
 
+	async getObject(key: string): Promise<GetObjectResult> {
+		this.logger.debug(
+			`object 조회: provider=${this.objectStorage.provider}, key=${key}`,
+		);
+
+		const result = await this.client.send(
+			new GetObjectCommand({
+				Bucket: this.objectStorage.bucket,
+				Key: key,
+			}),
+		);
+
+		if (!result.Body) {
+			throw new Error(`Object body is missing for key: ${key}`);
+		}
+
+		const byteArray = await result.Body.transformToByteArray();
+
+		return {
+			body: Buffer.from(byteArray),
+			contentType: result.ContentType,
+			contentLength: result.ContentLength,
+			etag: result.ETag,
+			lastModified: result.LastModified,
+		};
+	}
+
 	getPublicUrl(key: string): string | null {
 		if (!this.objectStorage.publicBaseUrl) {
 			return null;
@@ -125,7 +162,9 @@ export class S3CompatibleStorageService implements ObjectStorageService {
 		return `${this.objectStorage.publicBaseUrl}/${key}`;
 	}
 
-	private buildMetadata(input: PutObjectInput): Record<string, string> | undefined {
+	private buildMetadata(
+		input: PutObjectInput,
+	): Record<string, string> | undefined {
 		if (!input.metadata && !input.checksum) {
 			return undefined;
 		}

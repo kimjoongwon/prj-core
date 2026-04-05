@@ -28,6 +28,7 @@ describe("AssetService", () => {
 
 		mockObjectStorageService = {
 			putObject: jest.fn(),
+			getObject: jest.fn(),
 			deleteObject: jest.fn(),
 			getPublicUrl: jest.fn(),
 		} as jest.Mocked<ObjectStorageService>;
@@ -72,24 +73,27 @@ describe("AssetService", () => {
 			key: "unused",
 			publicUrl: null,
 		});
-		mockAssetsRepository.create.mockImplementation(async (data) => ({
-			id: "asset-123",
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			removedAt: null,
-			spaceId: data.spaceId,
-			folderId: data.folderId,
-			kind: data.kind,
-			status: data.status,
-			originalName: data.originalName,
-			storageKey: data.storageKey,
-			mimeType: data.mimeType,
-			sizeBytes: data.sizeBytes as bigint,
-			extension: data.extension as string | null,
-			checksum: data.checksum as string | null,
-			metadata: data.metadata ?? null,
-			creatorId: data.creatorId as string | null,
-		}) as never);
+		mockAssetsRepository.create.mockImplementation(
+			async (data) =>
+				({
+					id: "asset-123",
+					createdAt: new Date(),
+					updatedAt: new Date(),
+					removedAt: null,
+					spaceId: data.spaceId,
+					folderId: data.folderId,
+					kind: data.kind,
+					status: data.status,
+					originalName: data.originalName,
+					storageKey: data.storageKey,
+					mimeType: data.mimeType,
+					sizeBytes: data.sizeBytes as bigint,
+					extension: data.extension as string | null,
+					checksum: data.checksum as string | null,
+					metadata: data.metadata ?? null,
+					creatorId: data.creatorId as string | null,
+				}) as never,
+		);
 
 		const result = await service.uploadAsset(
 			{ folderId: "folder-123" },
@@ -167,6 +171,48 @@ describe("AssetService", () => {
 		expect(
 			mockObjectStorageService.deleteObject.mock.invocationCallOrder[0],
 		).toBeLessThan(mockAssetsRepository.deleteById.mock.invocationCallOrder[0]);
+	});
+
+	it("상세 원본 조회 시 현재 space의 object content를 반환해야 한다", async () => {
+		mockAssetsRepository.findByIdWithRelations.mockResolvedValue({
+			id: "asset-123",
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			removedAt: null,
+			spaceId: "space-123",
+			folderId: "folder-123",
+			kind: AssetKind.DOCUMENT,
+			status: AssetStatus.READY,
+			originalName: "guide.pdf",
+			storageKey: "spaces/space-123/assets/document/file.pdf",
+			mimeType: "application/pdf",
+			sizeBytes: BigInt(11),
+			extension: "pdf",
+			checksum: "checksum",
+			metadata: null,
+			creatorId: "user-123",
+		} as never);
+		mockObjectStorageService.getObject.mockResolvedValue({
+			body: Buffer.from("pdf-body"),
+			contentType: "application/pdf",
+			contentLength: 8,
+			etag: '"etag-123"',
+			lastModified: new Date("2026-04-05T06:00:00.000Z"),
+		});
+
+		const result = await service.getAssetContent("asset-123");
+
+		expect(mockObjectStorageService.getObject).toHaveBeenCalledWith(
+			"spaces/space-123/assets/document/file.pdf",
+		);
+		expect(result).toEqual({
+			body: Buffer.from("pdf-body"),
+			contentType: "application/pdf",
+			contentLength: 8,
+			etag: '"etag-123"',
+			fileName: "guide.pdf",
+			lastModified: new Date("2026-04-05T06:00:00.000Z"),
+		});
 	});
 
 	it("object storage 삭제가 실패하면 DB 삭제를 중단해야 한다", async () => {

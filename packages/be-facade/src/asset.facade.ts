@@ -34,6 +34,10 @@ export class AssetFacade {
     return this.assetService.getAssetById(assetId);
   }
 
+  getAssetContent(assetId: string) {
+    return this.assetService.getAssetContent(assetId);
+  }
+
   moveAsset(assetId: string, dto: MoveAssetDto) {
     return this.assetService.moveAsset(assetId, dto);
   }

@@ -1,5 +1,5 @@
 import { AbilityApplicationService } from "@cocrepo/app";
-import { ABILITY_ERRORS } from "@cocrepo/constant";
+import { ABILITY_ERRORS, USER_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -24,6 +24,7 @@ import {
 	Post,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
+
 @ApiTags("ABILITIES")
 @Controller()
 export class AbilitiesController {
@@ -46,6 +47,29 @@ export class AbilitiesController {
 	@ResponseMessage("common.ability.list.success")
 	async getAbilities(): Promise<Ability[]> {
 		return this.abilitiesService.getAllAbilities();
+	}
+
+	/**
+	 * 현재 로그인 사용자의 권한 조회
+	 * GET /api/v1/abilities/my
+	 */
+	@Get("my")
+	@ApiOperation({
+		operationId: "getMyAbilities",
+		summary: "현재 로그인 사용자의 권한 조회",
+		description:
+			"현재 선택한 Space 기준으로 로그인 사용자에게 적용되는 Role/User Grant를 병합해 조회합니다.",
+	})
+	@ApiAuth()
+	@ApiErrors(
+		{ status: 401, message: USER_ERRORS.USER_NOT_FOUND },
+		{ status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
+		500,
+	)
+	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
+	@ResponseMessage("common.ability.my.success")
+	async getMyAbilities(): Promise<Ability[]> {
+		return this.abilitiesService.getMyAbilities();
 	}
 
 	/**

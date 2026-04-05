@@ -41,6 +41,14 @@ export type AssetPreviewMode =
 	| "unsupported"
 	| "unavailable";
 
+export function getAssetPreviewUrl(asset: AssetPreviewAsset): string | null {
+	if (asset.status && asset.status !== "READY") {
+		return null;
+	}
+
+	return asset.publicUrl ?? `/api/v1/assets/${asset.id}/content`;
+}
+
 export function formatAssetPreviewBytes(bytes: number) {
 	if (bytes === 0) {
 		return "0 B";
@@ -59,11 +67,7 @@ export function formatAssetPreviewBytes(bytes: number) {
 export function getAssetPreviewMode(
 	asset: AssetPreviewAsset,
 ): AssetPreviewMode {
-	if (asset.status && asset.status !== "READY") {
-		return "unavailable";
-	}
-
-	if (!asset.publicUrl) {
+	if (!getAssetPreviewUrl(asset)) {
 		return "unavailable";
 	}
 
@@ -98,8 +102,8 @@ export function getAssetPreviewStatusMessage(
 		return "업로드에 실패한 에셋이라 미리보기를 제공할 수 없습니다.";
 	}
 
-	if (!asset.publicUrl) {
-		return "현재 스토리지 공개 URL이 설정되지 않아 인라인 미리보기를 제공할 수 없습니다.";
+	if (!getAssetPreviewUrl(asset)) {
+		return "현재 이 에셋을 미리보기용으로 열 수 없습니다.";
 	}
 
 	if (mode === "unsupported") {
@@ -219,10 +223,12 @@ function AssetPreviewMedia({
 	asset,
 	mode,
 }: AssetPreviewProps & { mode: AssetPreviewMode }) {
-	if (mode === "image" && asset.publicUrl) {
+	const previewUrl = getAssetPreviewUrl(asset);
+
+	if (mode === "image" && previewUrl) {
 		return (
 			<img
-				src={asset.publicUrl}
+				src={previewUrl}
 				alt={asset.originalName}
 				className="max-h-[560px] w-full rounded-[1.25rem] object-contain shadow-2xl shadow-slate-900/10"
 				loading="lazy"
@@ -230,10 +236,10 @@ function AssetPreviewMedia({
 		);
 	}
 
-	if (mode === "video" && asset.publicUrl) {
+	if (mode === "video" && previewUrl) {
 		return (
 			<video
-				src={asset.publicUrl}
+				src={previewUrl}
 				controls
 				playsInline
 				preload="metadata"
@@ -242,11 +248,11 @@ function AssetPreviewMedia({
 		);
 	}
 
-	if (mode === "pdf" && asset.publicUrl) {
+	if (mode === "pdf" && previewUrl) {
 		return (
 			<iframe
 				title={`${asset.originalName} PDF preview`}
-				src={`${asset.publicUrl}#view=FitH`}
+				src={`${previewUrl}#view=FitH`}
 				className="h-[560px] w-full rounded-[1.25rem] bg-white shadow-2xl shadow-slate-900/10"
 			/>
 		);
@@ -312,22 +318,20 @@ export function AssetPreviewDialog({
 	isOpen,
 	onClose,
 }: AssetPreviewDialogProps) {
+	const previewUrl = asset ? getAssetPreviewUrl(asset) : null;
+
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} size="5xl" scrollBehavior="inside">
 			<ModalContent>
 				<ModalHeader>{asset?.originalName ?? "에셋 보기"}</ModalHeader>
 				<ModalBody>{asset ? <AssetPreview asset={asset} /> : null}</ModalBody>
 				<ModalFooter>
-					{asset?.publicUrl ? (
+					{previewUrl ? (
 						<Button
 							color="primary"
 							variant="flat"
 							onPress={() => {
-								window.open(
-									asset.publicUrl ?? "",
-									"_blank",
-									"noopener,noreferrer",
-								);
+								window.open(previewUrl, "_blank", "noopener,noreferrer");
 							}}
 						>
 							원본 열기

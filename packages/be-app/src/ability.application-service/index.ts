@@ -1,15 +1,15 @@
-import { ABILITY_ERRORS } from "@cocrepo/constant";
-import { CreateAbilityInput } from "@cocrepo/dto";
+import { ABILITY_ERRORS, CONTEXT_KEYS, USER_ERRORS } from "@cocrepo/constant";
+import { UserDto } from "@cocrepo/dto";
 import { Ability } from "@cocrepo/entity";
 import { Prisma } from "@cocrepo/prisma";
 import { AbilityService } from "@cocrepo/service";
 import {
-	BadRequestException,
 	Injectable,
 	Logger,
 	NotFoundException,
+	UnauthorizedException,
 } from "@nestjs/common";
-
+import { ClsService } from "nestjs-cls";
 
 /**
  * Abilities Application Service (CASL ABAC 기반)
@@ -22,7 +22,42 @@ import {
 export class AbilityApplicationService {
 	private readonly logger = new Logger(AbilityApplicationService.name);
 
-	constructor(private readonly abilitiesService: AbilityService) {}
+	constructor(
+		private readonly abilitiesService: AbilityService,
+		private readonly cls: ClsService,
+	) {}
+
+	/**
+	 * 현재 로그인 사용자의 권한 조회
+	 *
+	 * @returns 현재 선택 Space 기준으로 병합된 Ability 배열
+	 */
+	async getMyAbilities(): Promise<Ability[]> {
+		const user = this.cls.get<UserDto | undefined>(CONTEXT_KEYS.AUTH_USER);
+		if (!user?.id) {
+			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
+		}
+
+		const spaceId = this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
+		if (!spaceId) {
+			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
+		}
+
+		const roleIds = Array.from(
+			new Set(
+				(user.tenants ?? [])
+					.filter((tenant) => tenant.spaceId === spaceId)
+					.map((tenant) => tenant.roleId)
+					.filter((roleId): roleId is string => Boolean(roleId)),
+			),
+		);
+
+		this.logger.debug(
+			`현재 사용자 권한 조회: userId=${user.id.slice(-8)}, spaceId=${spaceId.slice(-8)}, roleIds=${roleIds.length}`,
+		);
+
+		return this.abilitiesService.getMergedAbilities(roleIds, user.id);
+	}
 
 	/**
 	 * ID로 Ability 조회

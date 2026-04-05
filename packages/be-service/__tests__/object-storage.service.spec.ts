@@ -11,10 +11,13 @@ jest.mock("@aws-sdk/client-s3", () => {
 
 	return {
 		__mockSend: mockSend,
-		S3Client: jest.fn().mockImplementation(function (this: {
-			config?: unknown;
-			send?: typeof mockSend;
-		}, config) {
+		S3Client: jest.fn().mockImplementation(function (
+			this: {
+				config?: unknown;
+				send?: typeof mockSend;
+			},
+			config,
+		) {
 			this.config = config;
 			this.send = mockSend;
 		}),
@@ -26,6 +29,10 @@ jest.mock("@aws-sdk/client-s3", () => {
 			type: "DeleteObjectCommand",
 			input,
 		})),
+		GetObjectCommand: jest.fn().mockImplementation((input) => ({
+			type: "GetObjectCommand",
+			input,
+		})),
 	};
 });
 
@@ -33,7 +40,9 @@ const mockSend = (S3Module as typeof S3Module & { __mockSend: jest.Mock })
 	.__mockSend;
 const S3ClientMock = S3Module.S3Client as unknown as jest.Mock;
 const PutObjectCommandMock = S3Module.PutObjectCommand as unknown as jest.Mock;
-const DeleteObjectCommandMock = S3Module.DeleteObjectCommand as unknown as jest.Mock;
+const DeleteObjectCommandMock =
+	S3Module.DeleteObjectCommand as unknown as jest.Mock;
+const GetObjectCommandMock = S3Module.GetObjectCommand as unknown as jest.Mock;
 
 describe("S3CompatibleStorageService", () => {
 	let service: ObjectStorageService;
@@ -145,7 +154,8 @@ describe("S3CompatibleStorageService", () => {
 		expect(mockSend).toHaveBeenCalledTimes(1);
 		expect(result).toEqual({
 			key: "spaces/space-1/assets/image/file.png",
-			publicUrl: "https://cdn.example.com/assets/spaces/space-1/assets/image/file.png",
+			publicUrl:
+				"https://cdn.example.com/assets/spaces/space-1/assets/image/file.png",
 			etag: '"etag-123"',
 		});
 	});
@@ -160,6 +170,36 @@ describe("S3CompatibleStorageService", () => {
 			Key: "spaces/space-1/assets/image/file.png",
 		});
 		expect(mockSend).toHaveBeenCalledTimes(1);
+	});
+
+	it("object를 조회해야 한다", async () => {
+		mockSend.mockResolvedValue({
+			Body: {
+				transformToByteArray: jest
+					.fn()
+					.mockResolvedValue(Uint8Array.from([104, 105])),
+			},
+			ContentType: "image/png",
+			ContentLength: 2,
+			ETag: '"etag-789"',
+			LastModified: new Date("2026-04-05T06:00:00.000Z"),
+		});
+
+		const result = await service.getObject(
+			"spaces/space-1/assets/image/file.png",
+		);
+
+		expect(GetObjectCommandMock).toHaveBeenCalledWith({
+			Bucket: "asset-bucket",
+			Key: "spaces/space-1/assets/image/file.png",
+		});
+		expect(result).toEqual({
+			body: Buffer.from("hi"),
+			contentType: "image/png",
+			contentLength: 2,
+			etag: '"etag-789"',
+			lastModified: new Date("2026-04-05T06:00:00.000Z"),
+		});
 	});
 
 	it("publicBaseUrl이 없으면 public url은 null이어야 한다", () => {
