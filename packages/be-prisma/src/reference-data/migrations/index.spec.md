@@ -14,8 +14,14 @@
 |------|------|
 | referenceDataMigrations | 공개 계약 요소 |
 
+## 규칙
+
+- 배열 순서가 실제 reference-data migration 적용 순서입니다.
+- `initial-reference-data` 뒤에 catalog 보정/prune 성격의 후속 migration을 이어 붙여 운영 DB drift를 수정합니다.
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | admin menu/page current catalog sync 및 legacy prune migration을 실행 순서 끝에 추가 | codex |
 | 2026-03-26 | 누락된 sidecar spec 신규 생성 | codex |
