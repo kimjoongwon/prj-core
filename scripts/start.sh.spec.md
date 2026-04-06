@@ -30,6 +30,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | `tool-storybook` 사전 정리 패턴을 Storybook 전용 실행 명령으로 좁혀 현재 `pnpm start` 프로세스 오탐을 방지 | codex |
 | 2026-03-20 | `proposal-web`을 대화형/비대화형 시작 대상에 추가하고 포트/프로세스 정리 규칙을 확장 | codex |
 | 2026-03-08 | 숫자 선택 외에 canonical workspace 이름과 `start:*` 별칭 인자를 받아 root 스크립트 체계와 정렬 | codex |
 | 2026-03-08 | `server`, `admin`, `storybook` 같은 구식 짧은 별칭 인자를 제거 | codex |

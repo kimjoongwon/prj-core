@@ -211,7 +211,7 @@ pre_cleanup_service_processes() {
       proposal-web) pattern="turbo start:dev --filter=proposal-web|apps/proposal/web" ;;
       idp-api) pattern="turbo start:dev --filter=idp-api|idp-api@0.0.1 start:dev|/apps/idp/api/dist/main.js" ;;
       idp-web) pattern="turbo start:dev --filter=idp-web|apps/idp/web" ;;
-      tool-storybook) pattern="turbo start:dev --filter=tool-storybook|storybook" ;;
+      tool-storybook) pattern="turbo start:dev --filter=tool-storybook|apps/tool/storybook|STORYBOOK_REQUIRE_AUTH=true storybook dev|storybook dev -p" ;;
     esac
 
     if [[ -n "$pattern" ]]; then
