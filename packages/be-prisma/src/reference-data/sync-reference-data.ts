@@ -423,7 +423,7 @@ async function syncAbilitiesAndGrants(
 		}
 	}
 
-	// Phase 2: connect roles to those shared abilities through grant rows.
+	// Phase 2: connect roles to those shared abilities through role-grant rows.
 	for (const abilityData of abilitySeedData) {
 		const role = roles[abilityData.roleName];
 		const subject = subjects[abilityData.subject];
@@ -431,7 +431,7 @@ async function syncAbilitiesAndGrants(
 
 		if (!role || !subject || !action) {
 			throw new Error(
-				`Missing role/subject/action for grant: ${abilityData.roleName} / ${abilityData.subject} / ${abilityData.actionName}`,
+				`Missing role/subject/action for role grant: ${abilityData.roleName} / ${abilityData.subject} / ${abilityData.actionName}`,
 			);
 		}
 
@@ -442,11 +442,10 @@ async function syncAbilitiesAndGrants(
 			throw new Error(`Missing ability mapping for key: ${abilityKey}`);
 		}
 
-		await db.grant.upsert({
+		await db.roleGrant.upsert({
 			where: {
-				granteeType_granteeId_abilityId: {
-					granteeType: "Role",
-					granteeId: role.id,
+				roleId_abilityId: {
+					roleId: role.id,
 					abilityId: ability.id,
 				},
 			},
@@ -456,8 +455,7 @@ async function syncAbilitiesAndGrants(
 				removedAt: null,
 			},
 			create: {
-				granteeType: "Role",
-				granteeId: role.id,
+				roleId: role.id,
 				abilityId: ability.id,
 				isActive: abilityData.isActive ?? true,
 				priority: abilityData.priority ?? 0,

@@ -152,6 +152,24 @@ Admin
 | inquiries | 문의 관리 | MessageCircleQuestionMark | /inquiries | menu:inquiries | 1 |
 | roles | 권한 관리 | Shield | - | menu:roles | 6 |
 
+## 메뉴 권한 편집 카탈로그
+
+### `ADMIN_MENU_PERMISSION_LEAFS`
+
+| 필드 | 설명 |
+|------|------|
+| groupId / groupLabel | 메뉴 권한 편집기에서 묶는 1depth 그룹 |
+| groupSubject | 부모 메뉴 노출에 필요한 `menu:*` subject |
+| leafId / leafLabel | 실제 편집 단위인 leaf menu |
+| leafSubject | leaf menu 자체의 canonical subject |
+| requiredSubjects | 실제 메뉴 표시 판정에 필요한 subject 집합. child가 있는 경우 parent + child를 모두 포함 |
+| path | leaf가 연결되는 admin 화면 경로 |
+
+### `ADMIN_MENU_PERMISSION_SUBJECTS`
+
+- `ADMIN_MENU_PERMISSION_LEAFS` 의 `requiredSubjects` 를 평탄화한 유니크 subject 목록입니다.
+- 역할 상세 페이지의 drift 진단에서 "catalog에 존재해야 하는 menu subject 집합" 기준으로 사용합니다.
+
 ## BottomTab 구성 (BOTTOM_TAB_IDS)
 
 | 순서 | ID | 라벨 |
@@ -181,6 +199,8 @@ Admin
 - Subject는 `menu:` 접두어로 시작
 - 1depth 메뉴는 하위 메뉴가 있을 경우 path 없이 children만 정의
 - 1depth 메뉴가 단일 페이지면 path 포함 (예: 문의 관리)
+- 메뉴 권한 편집은 `ADMIN_NAV_ITEMS` 를 직접 수정하지 않고 `ADMIN_MENU_PERMISSION_LEAFS` 파생 결과를 사용
+- child leaf가 있는 메뉴는 parent subject와 child subject가 모두 있어야 실제 sidebar/mobile 메뉴가 노출됩니다
 
 ## 구현 체크리스트
 
@@ -200,6 +220,7 @@ Admin
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | 역할 상세 메뉴 권한 편집기용 `ADMIN_MENU_PERMISSION_LEAFS`, `ADMIN_MENU_PERMISSION_SUBJECTS` 계약과 parent+child required subject 규칙을 문서화 | codex |
 | 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-02-26 | 초기 생성 (기존 admin-menu.ts 역기획) | orch-screen-planner |
 | 2026-02-26 | 문의(Inquiry) 메뉴 추가 (INQUIRIES, INQUIRIES_NEW, INQUIRIES_DETAIL) | orch-screen-planner |

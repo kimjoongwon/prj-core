@@ -34,6 +34,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | AbilityService가 RoleGrantsRepository/UserGrantsRepository를 주입받도록 provider 구성을 분리 | codex |
 | 2026-04-05 | `getMyAbilities` 복구를 위해 AbilityApplicationService가 CLS 기반 사용자/Space 컨텍스트를 다시 사용하도록 정리 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

@@ -16,6 +16,11 @@
 | export type | route container가 pure page props/state contract를 import하는 타입 배럴 |
 | hook alias export | inquiry detail route가 쓰는 page-local websocket hook을 이름 충돌 없이 재노출 |
 
+## 배럴 추가 규칙
+
+- route container가 직접 소비하는 pure page 세부 계약도 이 배럴에서 함께 노출합니다.
+- 역할 상세처럼 페이지가 여러 하위 계약(`MenuPermission`, `MenuDiagnostic` 등)을 외부 route와 공유하면 같은 turn에 배럴 export를 추가합니다.
+
 ## Page Sidecar 폴더 규칙
 
 - `packages/fe-ui/src/page` 계층은 sidecar 방식을 쓸 때 반드시 동일 이름 폴더를 사용합니다.
@@ -36,6 +41,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | `AdminRolesRoleIdPage`의 page permission / CRUD bundle / generic permission issue 타입 배럴 export를 추가 | codex |
+| 2026-04-06 | `AdminRolesRoleIdPage`의 menu permission / diagnostic 타입 배럴 export를 추가 | codex |
 | 2026-03-30 | inquiry/actions/idp pure page refactor에 맞춰 props contract export와 `useInquiryDetailWebSocket` alias export를 추가 | codex |
 | 2026-03-30 | ground/task/template/role edit page 4종의 pure page props contract 배럴 export를 추가 | codex |
 | 2026-03-30 | create page 5종의 pure page props contract 배럴 export를 추가 | codex |

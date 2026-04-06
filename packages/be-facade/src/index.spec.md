@@ -18,6 +18,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | GrantFacade export를 RoleGrantFacade export로 교체 | codex |
 | 2026-03-13 | be-facade 패키지 초기 생성 | codex |
 | 2026-03-13 | IDP 계정/OIDC Client/OIDC Session facade export 추가 | codex |
 | 2026-03-13 | Space/Task/Template/Inquiry facade export 추가 | codex |

@@ -18,6 +18,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | polymorphic GrantsRepository export를 제거하고 RoleGrantsRepository/UserGrantsRepository export를 추가 | codex |
 | 2026-03-06 | 미사용 AI Form Template Repository export 제거 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | schema-owner 기준으로 누락된 10개 repository export 및 누락 레포 파일 생성 반영 | codex |

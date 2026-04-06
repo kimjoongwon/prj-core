@@ -1,0 +1,102 @@
+"use client";
+
+import { ADMIN_PATHS, matchAdminPageAccessItem } from "@cocrepo/constant";
+import {
+	DetailPage,
+	DetailPageSurface,
+	DetailSectionCard,
+	PageTitleBar,
+} from "@cocrepo/ui";
+import { useAbility } from "@cocrepo/store";
+import { Button } from "@heroui/react";
+import { LockKeyhole } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { usePathname, useRouter } from "next/navigation";
+import type { ReactNode } from "react";
+
+export const AdminPageAccessGate = observer(function AdminPageAccessGate({
+	children,
+}: {
+	children: ReactNode;
+}) {
+	const pathname = usePathname();
+	const router = useRouter();
+	const { can, isLoaded, hasGlobalAccess } = useAbility();
+
+	if (!pathname) {
+		return children;
+	}
+
+	const pageAccessItem = matchAdminPageAccessItem(pathname);
+	if (!pageAccessItem) {
+		return children;
+	}
+
+	if (!isLoaded) {
+		return (
+			<DetailPage
+				top={
+					<PageTitleBar
+						title="권한 확인 중"
+						description="현재 화면 접근 권한을 확인하고 있습니다."
+					/>
+				}
+			>
+				<DetailPageSurface>
+					<DetailSectionCard>
+						<div className="flex min-h-[260px] items-center justify-center text-sm text-default-500">
+							화면 접근 권한을 확인하는 중입니다.
+						</div>
+					</DetailSectionCard>
+				</DetailPageSurface>
+			</DetailPage>
+		);
+	}
+
+	if (hasGlobalAccess || can("view", pageAccessItem.subject)) {
+		return children;
+	}
+
+	return (
+		<DetailPage
+			top={
+				<PageTitleBar
+					title="접근 권한이 없습니다"
+					description={`${pageAccessItem.pageLabel} 화면을 열 수 있는 권한이 현재 역할에 없습니다.`}
+				/>
+			}
+		>
+			<DetailPageSurface>
+				<DetailSectionCard>
+					<div className="flex min-h-[280px] flex-col items-center justify-center gap-4 px-6 py-10 text-center">
+						<div className="flex h-14 w-14 items-center justify-center rounded-full bg-danger-50 text-danger dark:bg-danger-900/20">
+							<LockKeyhole className="h-6 w-6" />
+						</div>
+						<div className="space-y-2">
+							<p className="text-base font-semibold">
+								이 화면은 현재 역할에서 열 수 없습니다.
+							</p>
+							<p className="max-w-xl text-sm text-default-500">
+								메뉴가 보여도 화면 접근 권한이 따로 꺼져 있으면 URL 직접 접근은
+								막힙니다. 역할 상세의 화면 접근 섹션에서 해당 페이지를 켜면 다시
+								열 수 있습니다.
+							</p>
+						</div>
+						<div className="flex gap-2">
+							<Button variant="flat" onPress={() => router.back()}>
+								이전 화면
+							</Button>
+							<Button
+								color="primary"
+								variant="flat"
+								onPress={() => router.push(ADMIN_PATHS.DASHBOARD)}
+							>
+								대시보드로 이동
+							</Button>
+						</div>
+					</div>
+				</DetailSectionCard>
+			</DetailPageSurface>
+		</DetailPage>
+	);
+});

@@ -209,6 +209,7 @@ export type RoleWhereInput = {
   assignments?: Prisma.AssignmentListRelationFilter
   associations?: Prisma.RoleAssociationListRelationFilter
   classification?: Prisma.XOR<Prisma.RoleClassificationNullableScalarRelationFilter, Prisma.RoleClassificationWhereInput> | null
+  roleGrants?: Prisma.RoleGrantListRelationFilter
   tenants?: Prisma.TenantListRelationFilter
 }
 
@@ -224,6 +225,7 @@ export type RoleOrderByWithRelationInput = {
   assignments?: Prisma.AssignmentOrderByRelationAggregateInput
   associations?: Prisma.RoleAssociationOrderByRelationAggregateInput
   classification?: Prisma.RoleClassificationOrderByWithRelationInput
+  roleGrants?: Prisma.RoleGrantOrderByRelationAggregateInput
   tenants?: Prisma.TenantOrderByRelationAggregateInput
 }
 
@@ -242,6 +244,7 @@ export type RoleWhereUniqueInput = Prisma.AtLeast<{
   assignments?: Prisma.AssignmentListRelationFilter
   associations?: Prisma.RoleAssociationListRelationFilter
   classification?: Prisma.XOR<Prisma.RoleClassificationNullableScalarRelationFilter, Prisma.RoleClassificationWhereInput> | null
+  roleGrants?: Prisma.RoleGrantListRelationFilter
   tenants?: Prisma.TenantListRelationFilter
 }, "id" | "name">
 
@@ -285,6 +288,7 @@ export type RoleCreateInput = {
   assignments?: Prisma.AssignmentCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationCreateNestedManyWithoutRoleInput
   classification?: Prisma.RoleClassificationCreateNestedOneWithoutRoleInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutRoleInput
   tenants?: Prisma.TenantCreateNestedManyWithoutRoleInput
 }
 
@@ -300,6 +304,7 @@ export type RoleUncheckedCreateInput = {
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutRoleInput
   classification?: Prisma.RoleClassificationUncheckedCreateNestedOneWithoutRoleInput
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutRoleInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutRoleInput
 }
 
@@ -315,6 +320,7 @@ export type RoleUpdateInput = {
   assignments?: Prisma.AssignmentUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUpdateManyWithoutRoleNestedInput
   classification?: Prisma.RoleClassificationUpdateOneWithoutRoleNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutRoleNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutRoleNestedInput
 }
 
@@ -330,6 +336,7 @@ export type RoleUncheckedUpdateInput = {
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput
   classification?: Prisma.RoleClassificationUncheckedUpdateOneWithoutRoleNestedInput
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutRoleNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutRoleNestedInput
 }
 
@@ -366,6 +373,11 @@ export type RoleUncheckedUpdateManyInput = {
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
+export type RoleScalarRelationFilter = {
+  is?: Prisma.RoleWhereInput
+  isNot?: Prisma.RoleWhereInput
+}
+
 export type RoleCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -399,9 +411,18 @@ export type RoleMinOrderByAggregateInput = {
   isSystem?: Prisma.SortOrder
 }
 
-export type RoleScalarRelationFilter = {
-  is?: Prisma.RoleWhereInput
-  isNot?: Prisma.RoleWhereInput
+export type RoleCreateNestedOneWithoutRoleGrantsInput = {
+  create?: Prisma.XOR<Prisma.RoleCreateWithoutRoleGrantsInput, Prisma.RoleUncheckedCreateWithoutRoleGrantsInput>
+  connectOrCreate?: Prisma.RoleCreateOrConnectWithoutRoleGrantsInput
+  connect?: Prisma.RoleWhereUniqueInput
+}
+
+export type RoleUpdateOneRequiredWithoutRoleGrantsNestedInput = {
+  create?: Prisma.XOR<Prisma.RoleCreateWithoutRoleGrantsInput, Prisma.RoleUncheckedCreateWithoutRoleGrantsInput>
+  connectOrCreate?: Prisma.RoleCreateOrConnectWithoutRoleGrantsInput
+  upsert?: Prisma.RoleUpsertWithoutRoleGrantsInput
+  connect?: Prisma.RoleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RoleUpdateToOneWithWhereWithoutRoleGrantsInput, Prisma.RoleUpdateWithoutRoleGrantsInput>, Prisma.RoleUncheckedUpdateWithoutRoleGrantsInput>
 }
 
 export type RoleCreateNestedOneWithoutAssociationsInput = {
@@ -460,6 +481,82 @@ export type RoleUpdateOneRequiredWithoutAssignmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RoleUpdateToOneWithWhereWithoutAssignmentsInput, Prisma.RoleUpdateWithoutAssignmentsInput>, Prisma.RoleUncheckedUpdateWithoutAssignmentsInput>
 }
 
+export type RoleCreateWithoutRoleGrantsInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
+  assignments?: Prisma.AssignmentCreateNestedManyWithoutRoleInput
+  associations?: Prisma.RoleAssociationCreateNestedManyWithoutRoleInput
+  classification?: Prisma.RoleClassificationCreateNestedOneWithoutRoleInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutRoleInput
+}
+
+export type RoleUncheckedCreateWithoutRoleGrantsInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
+  assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutRoleInput
+  associations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutRoleInput
+  classification?: Prisma.RoleClassificationUncheckedCreateNestedOneWithoutRoleInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutRoleInput
+}
+
+export type RoleCreateOrConnectWithoutRoleGrantsInput = {
+  where: Prisma.RoleWhereUniqueInput
+  create: Prisma.XOR<Prisma.RoleCreateWithoutRoleGrantsInput, Prisma.RoleUncheckedCreateWithoutRoleGrantsInput>
+}
+
+export type RoleUpsertWithoutRoleGrantsInput = {
+  update: Prisma.XOR<Prisma.RoleUpdateWithoutRoleGrantsInput, Prisma.RoleUncheckedUpdateWithoutRoleGrantsInput>
+  create: Prisma.XOR<Prisma.RoleCreateWithoutRoleGrantsInput, Prisma.RoleUncheckedCreateWithoutRoleGrantsInput>
+  where?: Prisma.RoleWhereInput
+}
+
+export type RoleUpdateToOneWithWhereWithoutRoleGrantsInput = {
+  where?: Prisma.RoleWhereInput
+  data: Prisma.XOR<Prisma.RoleUpdateWithoutRoleGrantsInput, Prisma.RoleUncheckedUpdateWithoutRoleGrantsInput>
+}
+
+export type RoleUpdateWithoutRoleGrantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  assignments?: Prisma.AssignmentUpdateManyWithoutRoleNestedInput
+  associations?: Prisma.RoleAssociationUpdateManyWithoutRoleNestedInput
+  classification?: Prisma.RoleClassificationUpdateOneWithoutRoleNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutRoleNestedInput
+}
+
+export type RoleUncheckedUpdateWithoutRoleGrantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutRoleNestedInput
+  associations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput
+  classification?: Prisma.RoleClassificationUncheckedUpdateOneWithoutRoleNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutRoleNestedInput
+}
+
 export type RoleCreateWithoutAssociationsInput = {
   id?: string
   createdAt?: Date | string
@@ -471,6 +568,7 @@ export type RoleCreateWithoutAssociationsInput = {
   isSystem?: boolean
   assignments?: Prisma.AssignmentCreateNestedManyWithoutRoleInput
   classification?: Prisma.RoleClassificationCreateNestedOneWithoutRoleInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutRoleInput
   tenants?: Prisma.TenantCreateNestedManyWithoutRoleInput
 }
 
@@ -485,6 +583,7 @@ export type RoleUncheckedCreateWithoutAssociationsInput = {
   isSystem?: boolean
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutRoleInput
   classification?: Prisma.RoleClassificationUncheckedCreateNestedOneWithoutRoleInput
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutRoleInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutRoleInput
 }
 
@@ -515,6 +614,7 @@ export type RoleUpdateWithoutAssociationsInput = {
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignments?: Prisma.AssignmentUpdateManyWithoutRoleNestedInput
   classification?: Prisma.RoleClassificationUpdateOneWithoutRoleNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutRoleNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutRoleNestedInput
 }
 
@@ -529,6 +629,7 @@ export type RoleUncheckedUpdateWithoutAssociationsInput = {
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutRoleNestedInput
   classification?: Prisma.RoleClassificationUncheckedUpdateOneWithoutRoleNestedInput
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutRoleNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutRoleNestedInput
 }
 
@@ -543,6 +644,7 @@ export type RoleCreateWithoutClassificationInput = {
   isSystem?: boolean
   assignments?: Prisma.AssignmentCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationCreateNestedManyWithoutRoleInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutRoleInput
   tenants?: Prisma.TenantCreateNestedManyWithoutRoleInput
 }
 
@@ -557,6 +659,7 @@ export type RoleUncheckedCreateWithoutClassificationInput = {
   isSystem?: boolean
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutRoleInput
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutRoleInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutRoleInput
 }
 
@@ -587,6 +690,7 @@ export type RoleUpdateWithoutClassificationInput = {
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignments?: Prisma.AssignmentUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUpdateManyWithoutRoleNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutRoleNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutRoleNestedInput
 }
 
@@ -601,6 +705,7 @@ export type RoleUncheckedUpdateWithoutClassificationInput = {
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutRoleNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutRoleNestedInput
 }
 
@@ -616,6 +721,7 @@ export type RoleCreateWithoutTenantsInput = {
   assignments?: Prisma.AssignmentCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationCreateNestedManyWithoutRoleInput
   classification?: Prisma.RoleClassificationCreateNestedOneWithoutRoleInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutRoleInput
 }
 
 export type RoleUncheckedCreateWithoutTenantsInput = {
@@ -630,6 +736,7 @@ export type RoleUncheckedCreateWithoutTenantsInput = {
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutRoleInput
   associations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutRoleInput
   classification?: Prisma.RoleClassificationUncheckedCreateNestedOneWithoutRoleInput
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutRoleInput
 }
 
 export type RoleCreateOrConnectWithoutTenantsInput = {
@@ -660,6 +767,7 @@ export type RoleUpdateWithoutTenantsInput = {
   assignments?: Prisma.AssignmentUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUpdateManyWithoutRoleNestedInput
   classification?: Prisma.RoleClassificationUpdateOneWithoutRoleNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutRoleNestedInput
 }
 
 export type RoleUncheckedUpdateWithoutTenantsInput = {
@@ -674,6 +782,7 @@ export type RoleUncheckedUpdateWithoutTenantsInput = {
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutRoleNestedInput
   associations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput
   classification?: Prisma.RoleClassificationUncheckedUpdateOneWithoutRoleNestedInput
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutRoleNestedInput
 }
 
 export type RoleCreateWithoutAssignmentsInput = {
@@ -687,6 +796,7 @@ export type RoleCreateWithoutAssignmentsInput = {
   isSystem?: boolean
   associations?: Prisma.RoleAssociationCreateNestedManyWithoutRoleInput
   classification?: Prisma.RoleClassificationCreateNestedOneWithoutRoleInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutRoleInput
   tenants?: Prisma.TenantCreateNestedManyWithoutRoleInput
 }
 
@@ -701,6 +811,7 @@ export type RoleUncheckedCreateWithoutAssignmentsInput = {
   isSystem?: boolean
   associations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutRoleInput
   classification?: Prisma.RoleClassificationUncheckedCreateNestedOneWithoutRoleInput
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutRoleInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutRoleInput
 }
 
@@ -731,6 +842,7 @@ export type RoleUpdateWithoutAssignmentsInput = {
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   associations?: Prisma.RoleAssociationUpdateManyWithoutRoleNestedInput
   classification?: Prisma.RoleClassificationUpdateOneWithoutRoleNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutRoleNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutRoleNestedInput
 }
 
@@ -745,6 +857,7 @@ export type RoleUncheckedUpdateWithoutAssignmentsInput = {
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   associations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput
   classification?: Prisma.RoleClassificationUncheckedUpdateOneWithoutRoleNestedInput
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutRoleNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutRoleNestedInput
 }
 
@@ -756,12 +869,14 @@ export type RoleUncheckedUpdateWithoutAssignmentsInput = {
 export type RoleCountOutputType = {
   assignments: number
   associations: number
+  roleGrants: number
   tenants: number
 }
 
 export type RoleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assignments?: boolean | RoleCountOutputTypeCountAssignmentsArgs
   associations?: boolean | RoleCountOutputTypeCountAssociationsArgs
+  roleGrants?: boolean | RoleCountOutputTypeCountRoleGrantsArgs
   tenants?: boolean | RoleCountOutputTypeCountTenantsArgs
 }
 
@@ -792,6 +907,13 @@ export type RoleCountOutputTypeCountAssociationsArgs<ExtArgs extends runtime.Typ
 /**
  * RoleCountOutputType without action
  */
+export type RoleCountOutputTypeCountRoleGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoleGrantWhereInput
+}
+
+/**
+ * RoleCountOutputType without action
+ */
 export type RoleCountOutputTypeCountTenantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TenantWhereInput
 }
@@ -809,6 +931,7 @@ export type RoleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   assignments?: boolean | Prisma.Role$assignmentsArgs<ExtArgs>
   associations?: boolean | Prisma.Role$associationsArgs<ExtArgs>
   classification?: boolean | Prisma.Role$classificationArgs<ExtArgs>
+  roleGrants?: boolean | Prisma.Role$roleGrantsArgs<ExtArgs>
   tenants?: boolean | Prisma.Role$tenantsArgs<ExtArgs>
   _count?: boolean | Prisma.RoleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["role"]>
@@ -851,6 +974,7 @@ export type RoleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   assignments?: boolean | Prisma.Role$assignmentsArgs<ExtArgs>
   associations?: boolean | Prisma.Role$associationsArgs<ExtArgs>
   classification?: boolean | Prisma.Role$classificationArgs<ExtArgs>
+  roleGrants?: boolean | Prisma.Role$roleGrantsArgs<ExtArgs>
   tenants?: boolean | Prisma.Role$tenantsArgs<ExtArgs>
   _count?: boolean | Prisma.RoleCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -863,6 +987,7 @@ export type $RolePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     assignments: Prisma.$AssignmentPayload<ExtArgs>[]
     associations: Prisma.$RoleAssociationPayload<ExtArgs>[]
     classification: Prisma.$RoleClassificationPayload<ExtArgs> | null
+    roleGrants: Prisma.$RoleGrantPayload<ExtArgs>[]
     tenants: Prisma.$TenantPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1283,6 +1408,7 @@ export interface Prisma__RoleClient<T, Null = never, ExtArgs extends runtime.Typ
   assignments<T extends Prisma.Role$assignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Role$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   associations<T extends Prisma.Role$associationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Role$associationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoleAssociationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   classification<T extends Prisma.Role$classificationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Role$classificationArgs<ExtArgs>>): Prisma.Prisma__RoleClassificationClient<runtime.Types.Result.GetResult<Prisma.$RoleClassificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  roleGrants<T extends Prisma.Role$roleGrantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Role$roleGrantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoleGrantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tenants<T extends Prisma.Role$tenantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Role$tenantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1773,6 +1899,30 @@ export type Role$classificationArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   include?: Prisma.RoleClassificationInclude<ExtArgs> | null
   where?: Prisma.RoleClassificationWhereInput
+}
+
+/**
+ * Role.roleGrants
+ */
+export type Role$roleGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoleGrant
+   */
+  select?: Prisma.RoleGrantSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RoleGrant
+   */
+  omit?: Prisma.RoleGrantOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoleGrantInclude<ExtArgs> | null
+  where?: Prisma.RoleGrantWhereInput
+  orderBy?: Prisma.RoleGrantOrderByWithRelationInput | Prisma.RoleGrantOrderByWithRelationInput[]
+  cursor?: Prisma.RoleGrantWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoleGrantScalarFieldEnum | Prisma.RoleGrantScalarFieldEnum[]
 }
 
 /**

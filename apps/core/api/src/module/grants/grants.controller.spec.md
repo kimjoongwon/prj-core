@@ -6,13 +6,13 @@
 
 ## 역할
 
-Grant 배치 할당 API를 노출하며, 요청 해석과 응답 조립은 `GrantFacade`에 위임합니다.
+RoleGrant 배치 할당 API를 노출하며, 요청 해석과 응답 조립은 `RoleGrantFacade`에 위임합니다.
 
 ## 의존성
 
 | 주입 대상 | 타입 | 설명 |
 |-----------|------|------|
-| grantFacade | GrantFacade | Grant 배치 할당 boundary 유즈케이스 |
+| roleGrantFacade | RoleGrantFacade | RoleGrant 배치 할당 boundary 유즈케이스 |
 
 ## 엔드포인트
 
@@ -23,12 +23,14 @@ Grant 배치 할당 API를 노출하며, 요청 해석과 응답 조립은 `Gran
 ## 비즈니스 메모
 
 - `BatchGrantRequestDto.grants` 해석과 Role별 전체 동기화 진입점은 Facade가 담당합니다.
-- Grant 정합성 검증과 저장 로직은 Facade 내부 `GrantService`가 담당합니다.
+- `BatchAssignRoleGrantRequestDto.roleGrants` 해석과 Role별 전체 동기화 진입점은 Facade가 담당합니다.
+- RoleGrant 정합성 검증과 저장 로직은 Facade 내부 `RoleGrantService`가 담당합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | 요청/응답 계약과 boundary 의존성을 RoleGrant 전용 구조로 갱신 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-11 | Controller 의존성을 GrantService로 전환 | codex |

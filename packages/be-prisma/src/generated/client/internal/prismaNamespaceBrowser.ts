@@ -53,11 +53,12 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Ability: 'Ability',
   Action: 'Action',
-  Grant: 'Grant',
+  RoleGrant: 'RoleGrant',
   Role: 'Role',
   RoleAssociation: 'RoleAssociation',
   RoleClassification: 'RoleClassification',
   Subject: 'Subject',
+  UserGrant: 'UserGrant',
   Album: 'Album',
   AlbumEntry: 'AlbumEntry',
   Asset: 'Asset',
@@ -162,19 +163,18 @@ export const ActionScalarFieldEnum = {
 export type ActionScalarFieldEnum = (typeof ActionScalarFieldEnum)[keyof typeof ActionScalarFieldEnum]
 
 
-export const GrantScalarFieldEnum = {
+export const RoleGrantScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  granteeType: 'granteeType',
-  granteeId: 'granteeId',
+  roleId: 'roleId',
   abilityId: 'abilityId',
   isActive: 'isActive',
   priority: 'priority'
 } as const
 
-export type GrantScalarFieldEnum = (typeof GrantScalarFieldEnum)[keyof typeof GrantScalarFieldEnum]
+export type RoleGrantScalarFieldEnum = (typeof RoleGrantScalarFieldEnum)[keyof typeof RoleGrantScalarFieldEnum]
 
 
 export const RoleScalarFieldEnum = {
@@ -229,6 +229,20 @@ export const SubjectScalarFieldEnum = {
 } as const
 
 export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
+
+
+export const UserGrantScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  userId: 'userId',
+  abilityId: 'abilityId',
+  isActive: 'isActive',
+  priority: 'priority'
+} as const
+
+export type UserGrantScalarFieldEnum = (typeof UserGrantScalarFieldEnum)[keyof typeof UserGrantScalarFieldEnum]
 
 
 export const AlbumScalarFieldEnum = {

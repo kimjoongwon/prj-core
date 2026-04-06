@@ -19,6 +19,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | GrantService export를 제거하고 RoleGrantService export를 추가 | codex |
 | 2026-03-23 | `EmailService`와 `TemplateService` export를 폴더형 `index` 경로로 명시해 stale dist 평면 경로를 다시 참조하지 않도록 정리 | codex |
 | 2026-03-23 | `EmailProvider`/`SmtpEmailProvider`/`EmailModule` export를 추가해 메일 전송 구현 교체 지점을 배럴에서 직접 노출 | codex |
 | 2026-03-16 | `TokenService`도 폴더형 `token.service/index.ts`로 명시 export해 stale dist 경로로 인한 Nest DI 토큰 분리를 방지 | codex |

@@ -13,6 +13,7 @@ import {
 	OidcFacade,
 } from "@cocrepo/integration";
 import {
+	AbilityService,
 	AuthAuditLogService,
 	AuthCacheService,
 	EmailService,
@@ -40,6 +41,8 @@ import { ClsService } from "nestjs-cls";
 const DEFAULT_OIDC_CLIENT_ID = "admin-web";
 const OIDC_STATE_CONTEXT_PREFIX = "__oidc_ctx__:";
 const SESSION_ID_SEPARATOR = ".";
+const GLOBAL_ACCESS_ACTION_NAME = "manage";
+const GLOBAL_ACCESS_SUBJECT_NAME = "all";
 
 const LEGACY_OIDC_CLIENT_ID_MAP = {
 	admin: "admin-web",
@@ -92,6 +95,7 @@ export class AuthApplicationService {
 	constructor(
 		private readonly usersService: UserService,
 		private readonly rolesService: RoleService,
+		private readonly abilitiesService: AbilityService,
 		private readonly spacesService: SpaceService,
 		private readonly tokenService: TokenService,
 		private readonly tokenStorageService: TokenStorageService,
@@ -363,7 +367,7 @@ export class AuthApplicationService {
 	 * 토큰 유효성 검증 (JWKS 기반 - 쿠키에 있는 토큰이 유효한지)
 	 * 만료 시간 정보를 함께 반환하여 PersistStore에서 관리할 수 있도록 함
 	 */
-	verifyToken(): VerifyTokenResponseDto {
+	async verifyToken(): Promise<VerifyTokenResponseDto> {
 		const token = this.cls.get<string>(CONTEXT_KEYS.TOKEN);
 		const user = this.cls.get<UserDto | undefined>(CONTEXT_KEYS.AUTH_USER);
 		if (!token) {
@@ -376,10 +380,7 @@ export class AuthApplicationService {
 		const accessTokenExpiresAt =
 			((payload as { exp?: number }).exp || 0) * 1000; // sec → ms
 		const refreshTokenExpiresAt = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30일 (추정)
-		const hasFullAccess =
-			user?.tenants?.some(
-				(tenant) => tenant.role?.name === SYSTEM_ROLES.FULL_ACCESS,
-			) ?? false;
+		const hasFullAccess = await this.hasGlobalAccess(user);
 
 		return {
 			valid: true,
@@ -911,6 +912,43 @@ export class AuthApplicationService {
 
 		return this.getOrderedTenantSpaceIds(user).find((spaceId) =>
 			allowedSpaceIds.has(spaceId),
+		);
+	}
+
+	private async hasGlobalAccess(
+		user: UserDto | undefined,
+	): Promise<boolean> {
+		if (!user?.id) {
+			return false;
+		}
+
+		const roleIds = Array.from(
+			new Set(
+				(user.tenants ?? [])
+					.map((tenant) => tenant.roleId)
+					.filter((roleId): roleId is string => Boolean(roleId)),
+			),
+		);
+
+		const mergedAbilities = await this.abilitiesService.getMergedAbilities(
+			roleIds,
+			user.id,
+		);
+
+		return mergedAbilities.some((ability) =>
+			this.isGlobalAccessAbility(ability),
+		);
+	}
+
+	private isGlobalAccessAbility(ability: {
+		inverted?: boolean;
+		action?: { name?: string | null } | null;
+		subject?: { name?: string | null } | null;
+	}): boolean {
+		return (
+			!ability.inverted &&
+			ability.action?.name === GLOBAL_ACCESS_ACTION_NAME &&
+			ability.subject?.name === GLOBAL_ACCESS_SUBJECT_NAME
 		);
 	}
 

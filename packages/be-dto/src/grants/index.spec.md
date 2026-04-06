@@ -18,10 +18,8 @@
 
 | 모듈 | 용도 |
 |------|------|
-| ./batch-grant.dto | 기능 구현 의존성 |
-| ./create-grant.dto | 기능 구현 의존성 |
-| ./grant-response.dto | 기능 구현 의존성 |
-| ./update-grant.dto | 기능 구현 의존성 |
+| ./batch-assign-role-grant.dto | 기능 구현 의존성 |
+| ./role-grant-response.dto | 기능 구현 의존성 |
 
 ## 구현 체크리스트
 
@@ -32,4 +30,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | generic Grant DTO export를 제거하고 RoleGrant 전용 계약만 노출하도록 정리 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

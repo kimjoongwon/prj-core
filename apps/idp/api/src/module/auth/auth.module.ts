@@ -1,13 +1,17 @@
 import { AuthApplicationService } from "@cocrepo/app";
 import { OidcFacade } from "@cocrepo/integration";
 import {
+	AbilitiesRepository,
 	AuthAuditLogsRepository,
+	RoleGrantsRepository,
 	RolesRepository,
 	SpacesRepository,
 	TemplatesRepository,
+	UserGrantsRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
 import {
+	AbilityService,
 	AuthAuditLogService,
 	AuthCacheService,
 	EmailProvider,
@@ -32,6 +36,10 @@ import { AuthController } from "./auth.controller";
 	providers: [
 		AuthApplicationService,
 		OidcFacade,
+		AbilityService,
+		AbilitiesRepository,
+		RoleGrantsRepository,
+		UserGrantsRepository,
 		TokenService,
 		TokenStorageService,
 		RedisService,

@@ -7,15 +7,16 @@
 
 ## 역할
 
-CASL ABAC(Attribute-Based Access Control) 기반의 권한 정의(Ability)와 할당(Grant)을 관리합니다.
-Ability는 재사용 가능한 권한 정의이며, Grant를 통해 Role 또는 User에게 할당됩니다.
+CASL ABAC(Attribute-Based Access Control) 기반의 권한 정의(Ability)와 할당(RoleGrant/UserGrant)을 관리합니다.
+Ability는 재사용 가능한 권한 정의이며, RoleGrant/UserGrant를 통해 Role 또는 User에게 할당됩니다.
 
 ## 의존성
 
 | 의존 서비스/리포지토리 | 역할 |
 |-----------------------|------|
 | `AbilitiesRepository` | Ability CRUD |
-| `GrantsRepository` | Grant 조회 (Role/User 권한 조회) |
+| `RoleGrantsRepository` | Role 기본 권한 조회/정리 |
+| `UserGrantsRepository` | User 예외 권한 조회/정리 |
 
 ## 메서드
 
@@ -23,18 +24,18 @@ Ability는 재사용 가능한 권한 정의이며, Grant를 통해 Role 또는 
 |--------|----------|------|------|
 | `getAbilityById` | `id: string` | `Promise<Ability \| null>` | ID로 Ability 조회 |
 | `getAllAbilities` | - | `Promise<Ability[]>` | 전체 Ability 목록 조회 |
-| `getRoleAbilities` | `roleId: string` | `Promise<Ability[]>` | Role별 권한 조회 (Grant → Ability) |
+| `getRoleAbilities` | `roleId: string` | `Promise<Ability[]>` | Role별 권한 조회 (RoleGrant → Ability) |
 | `getUserAbilities` | `userId: string` | `Promise<Ability[]>` | User별 예외 권한 조회 |
 | `getMergedAbilities` | `roleIds: string[], userId?: string` | `Promise<Ability[]>` | Role + User 권한 병합 조회 |
 | `createAbility` | `data: Prisma.AbilityUncheckedCreateInput` | `Promise<Ability>` | 권한 정의 생성 |
 | `updateAbility` | `id: string, data: Prisma.AbilityUncheckedUpdateInput` | `Promise<Ability>` | 권한 정의 수정 |
-| `deleteAbility` | `id: string` | `Promise<Ability>` | 권한 삭제 (소프트 삭제 + 연결된 Grant 삭제) |
+| `deleteAbility` | `id: string` | `Promise<Ability>` | 권한 삭제 (소프트 삭제 + 연결된 RoleGrant/UserGrant 삭제) |
 
 ## 비즈니스 규칙
 
-- Ability는 권한 정의만 담당하며, Role/User에 할당하려면 별도로 Grant를 생성해야 함
+- Ability는 권한 정의만 담당하며, Role/User에 할당하려면 별도로 RoleGrant 또는 UserGrant를 생성해야 함
 - `getMergedAbilities`: User 권한이 Role 권한보다 우선순위가 높으며, priority → createdAt 기준으로 내림차순 정렬
-- `deleteAbility`: 트랜잭션(`@Transactional`) 처리 - Ability 소프트 삭제 시 연결된 모든 Grant도 소프트 삭제
+- `deleteAbility`: 트랜잭션(`@Transactional`) 처리 - Ability 소프트 삭제 시 연결된 모든 RoleGrant/UserGrant도 소프트 삭제
 - Ability 생성 시 `actionId`, `subjectId`, `name`은 필수 필드
 
 ## 에러 처리
@@ -61,3 +62,4 @@ Ability는 재사용 가능한 권한 정의이며, Grant를 통해 Role 또는 
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-13 | `ability.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |
+| 2026-04-06 | polymorphic GrantsRepository 의존을 RoleGrantsRepository/UserGrantsRepository 조합으로 분리 | codex |

@@ -7,7 +7,7 @@
 
 ## 역할
 
-CASL ABAC(Attribute-Based Access Control) 기반의 재사용 가능한 권한 정의 엔티티입니다. Subject(대상) + Action(행위) + fields(필드) + conditions(조건) 조합으로 세밀한 권한을 정의하며, 실제 부여는 Grant 테이블을 통해 Role 또는 User와 연결됩니다.
+CASL ABAC(Attribute-Based Access Control) 기반의 재사용 가능한 권한 정의 엔티티입니다. Subject(대상) + Action(행위) + fields(필드) + conditions(조건) 조합으로 세밀한 권한을 정의하며, 실제 부여는 RoleGrant/UserGrant 테이블을 통해 Role 또는 User와 연결됩니다.
 
 ## 필드
 
@@ -25,7 +25,7 @@ CASL ABAC(Attribute-Based Access Control) 기반의 재사용 가능한 권한 �
 | reason | string \| null | nullable | null | 거부 사유 (inverted=true일 때 사용) |
 | subjectId | string | FK, required | - | Subject ID (권한 대상) |
 | actionId | string | FK, required | - | Action ID (행위 정의) |
-| priority | number | optional | - | 우선순위 (Grant.priority 값, Grant에서 조회 시 설정) |
+| priority | number | optional | - | 우선순위 (RoleGrant/UserGrant.priority 값, 할당 조회 시 설정) |
 
 ## Enum
 
@@ -37,7 +37,8 @@ CASL ABAC(Attribute-Based Access Control) 기반의 재사용 가능한 권한 �
 |------|-------------|------|------|
 | subject | Subject | ManyToOne | 권한 대상 (CASL Subject) |
 | action | Action | ManyToOne | 행위 정의 |
-| grants | Grant[] | OneToMany | BRIDGE 테이블을 통해 Role/User에 연결 |
+| roleGrants | RoleGrant[] | OneToMany | Role 기본 권한 할당 목록 |
+| userGrants | UserGrant[] | OneToMany | User 예외 권한 할당 목록 |
 
 ## 도메인 메서드
 
@@ -51,11 +52,11 @@ CASL ABAC(Attribute-Based Access Control) 기반의 재사용 가능한 권한 �
 
 ## 비즈니스 규칙
 
-- Ability는 권한 정의만 담당하며, 실제 부여는 Grant 테이블에서 관리합니다.
+- Ability는 권한 정의만 담당하며, 실제 부여는 RoleGrant/UserGrant 테이블에서 관리합니다.
 - `inverted=true`이면 거부(cannot) 권한이며, 이 경우 `reason` 필드에 거부 사유를 기록합니다.
 - `fields` 배열이 비어 있으면 해당 Subject의 모든 필드에 대한 권한을 의미합니다.
 - `conditions`는 CASL의 조건부 권한 검사에 사용되며 JSON 형식으로 저장됩니다.
-- `priority` 필드는 DB에 저장되지 않고, Grant에서 조회 시 설정됩니다.
+- `priority` 필드는 DB에 저장되지 않고, RoleGrant/UserGrant에서 조회 시 설정됩니다.
 - 마스킹 관련 메서드는 `action` 관계가 로드된 경우에만 사용 가능합니다.
 
 ## 구현 체크리스트
@@ -70,3 +71,4 @@ CASL ABAC(Attribute-Based Access Control) 기반의 재사용 가능한 권한 �
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
+| 2026-04-06 | polymorphic Grant 제거에 맞춰 RoleGrant/UserGrant 관계로 명세를 분리 | codex |

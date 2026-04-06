@@ -1,0 +1,36 @@
+// ============================================================================
+// RoleGrant Domain - 역할 권한 부여 도메인
+// ============================================================================
+
+// @schema-type: JOIN
+// @schema-owner: true
+// @aggregate-root: true
+// @description: Role과 Ability를 연결하는 역할 권한 정책 조인 모델
+// @relation-pattern: one-to-many
+// @ownership: independent
+// @scope: tenant
+// @join-role: policy-link
+// @connects: Role ─── Ability
+/// @displayName 역할 권한 부여
+model RoleGrant {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 역할 ID
+  roleId    String    @map("role_id")
+  /// @displayName 권한 ID
+  abilityId String    @map("ability_id")
+  /// @displayName 활성화 여부
+  isActive  Boolean   @default(true) @map("is_active")
+  /// @displayName 우선순위
+  priority  Int       @default(0)
+  role      Role      @relation(fields: [roleId], references: [id])
+  ability   Ability   @relation(fields: [abilityId], references: [id])
+
+  @@unique([roleId, abilityId])
+  @@index([roleId])
+  @@index([abilityId])
+  @@index([isActive])
+  @@map("role_grants")
+}

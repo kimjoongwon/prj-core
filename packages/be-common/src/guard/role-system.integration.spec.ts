@@ -410,8 +410,8 @@ describe("Role 시스템 통합 테스트", () => {
 					expect(error).toBeInstanceOf(ForbiddenException);
 					const message = (error as ForbiddenException).message;
 					expect(message).toContain("[RoleGroupGuard] 접근 거부");
-					expect(message).toContain("프리미엄");
 					expect(message).toContain("일반");
+					expect(message).toContain("프리미엄");
 				}
 			});
 		});

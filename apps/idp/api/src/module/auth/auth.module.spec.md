@@ -7,7 +7,7 @@
 ## 역할
 
 이 파일은 인증 관련 provider 조합과 controller/application service 연결을 담당합니다.
-메일 발송은 `EmailModule`을 import해 `EmailService`를 외부 전송 구현과 분리된 상태로 주입받습니다.
+특히 `AuthApplicationService`가 `verifyToken()`에서 merged ability를 조회할 수 있도록 `AbilityService`와 관련 repository provider를 함께 구성합니다.
 
 ## 주요 계약
 
@@ -35,6 +35,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | AbilityService merged ability 조회를 위해 RoleGrantsRepository/UserGrantsRepository provider를 함께 구성하도록 갱신 | codex |
+| 2026-04-06 | `AuthApplicationService.verifyToken()`의 merged ability 조회를 위해 `AbilityService`와 권한 repository provider 구성을 반영 | codex |
 | 2026-03-23 | `EmailService` 직접 provider 등록을 제거하고 `EmailModule` import 방식으로 교체해 전송 구현 결합을 모듈 외부로 분리 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | AuthModule provider/export를 ApplicationService + OidcFacade 구조로 전환 | codex |

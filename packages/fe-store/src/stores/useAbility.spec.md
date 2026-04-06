@@ -26,13 +26,14 @@ CASL 권한 확인을 위한 React Hook 모음. `AbilityStore`를 래핑하여 �
 | ability | `AppAbility` | CASL Ability 인스턴스 |
 | rules | `AbilityRule[]` | 현재 적용된 권한 규칙 |
 | isLoaded | `boolean` | 권한 로드 완료 여부 |
+| hasGlobalAccess | `boolean` | `manage all` 전역 권한 보유 여부 |
 | can | `(action, subject, field?) => boolean` | 권한 허용 확인 |
 | cannot | `(action, subject, field?) => boolean` | 권한 거부 확인 |
 | updateRules | `(rules) => void` | 권한 규칙 업데이트 |
 | clearRules | `() => void` | 권한 초기화 |
 | getAllowedActions | `(subject) => AppAction[]` | Subject에 대한 허용 액션 목록 |
 | getAllowedSubjects | `(action) => AppSubject[]` | Action에 대한 허용 Subject 목록 |
-| getAllowedMenus | `() => string[]` | 허용된 메뉴 Subject 목록 |
+| getAllowedMenus | `() => string[]` | 허용된 메뉴 Subject 목록 (`manage all` 이 있으면 `['all']` sentinel 포함 가능) |
 
 ### useCan
 
@@ -42,6 +43,14 @@ CASL 권한 확인을 위한 React Hook 모음. `AbilityStore`를 래핑하여 �
 | 파라미터 | `action: AppAction, subject: AppSubject, field?: string` |
 | 반환 | `boolean` |
 | 사용 예시 | `const canReadUser = useCan('read', 'entity:user');` |
+
+### useHasGlobalAccess
+
+| 항목 | 설명 |
+|------|------|
+| 역할 | `manage all` 전역 권한 여부를 간단히 확인 |
+| 반환 | `boolean` |
+| 사용 예시 | `const hasGlobalAccess = useHasGlobalAccess();` |
 
 ### useCannot
 
@@ -105,6 +114,7 @@ CASL 권한 확인을 위한 React Hook 모음. `AbilityStore`를 래핑하여 �
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | `hasGlobalAccess` 반환값과 `useHasGlobalAccess` helper를 추가해 전역 권한 판정을 공용화 | codex |
 | 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
 | 2026-03-06 | CASL 타입 import 기준을 abilityStore 내부 선언에서 @cocrepo/type 공통 타입으로 전환 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

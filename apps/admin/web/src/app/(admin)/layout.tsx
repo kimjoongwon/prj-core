@@ -5,6 +5,7 @@ import { AdminFabSlot } from "./_layout/AdminFabSlot";
 import { AdminHeaderSlot } from "./_layout/AdminHeaderSlot";
 import { AdminLayoutEffects } from "./_layout/AdminLayoutEffects";
 import { AdminOverlayMenuSlot } from "./_layout/AdminOverlayMenuSlot";
+import { AdminPageAccessGate } from "./_layout/AdminPageAccessGate";
 import { AdminSidebarSlot } from "./_layout/AdminSidebarSlot";
 
 export const dynamic = "force-dynamic";
@@ -24,7 +25,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 				mobileFab={<AdminFabSlot />}
 				mobileBottomNav={<AdminBottomNavSlot />}
 			>
-				{children}
+				<AdminPageAccessGate>{children}</AdminPageAccessGate>
 			</Layout>
 		</>
 	);

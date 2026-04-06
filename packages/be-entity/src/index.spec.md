@@ -18,6 +18,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | polymorphic Grant export를 제거하고 RoleGrant/UserGrant export를 추가 | codex |
 | 2026-03-29 | Program 실행 계획 snapshot entity 노출을 위해 `program-activity.entity` 배럴 export 추가 | codex |
 | 2026-03-06 | 미사용 AI Form Template 엔티티 export 제거 | codex |
 | 2026-03-06 | File* 엔티티 제거에 맞춰 배럴 export 정리 | codex |

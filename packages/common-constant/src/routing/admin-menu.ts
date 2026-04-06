@@ -1,4 +1,4 @@
-import type { FABAction, NavItemConfig } from "@cocrepo/type";
+import type { AppIconName, FABAction, NavItemConfig } from "@cocrepo/type";
 
 /**
  * 어드민 메뉴 경로 상수
@@ -337,6 +337,65 @@ export const ADMIN_NAV_ITEMS: NavItemConfig[] = [
 		],
 	},
 ];
+
+export interface AdminMenuPermissionLeaf {
+	groupId: string;
+	groupLabel: string;
+	groupSubject: string;
+	leafId: string;
+	leafLabel: string;
+	leafSubject: string;
+	path?: string;
+	icon?: AppIconName;
+	depth: 1 | 2;
+	requiredSubjects: string[];
+}
+
+/**
+ * 메뉴 권한 편집기에서 사용하는 leaf-first 카탈로그
+ *
+ * - children이 있는 메뉴는 child를 편집 단위로 사용합니다.
+ * - children이 없는 메뉴는 자기 자신을 leaf로 사용합니다.
+ * - 실제 노출에는 parent subject도 필요하므로 requiredSubjects에 포함합니다.
+ */
+export const ADMIN_MENU_PERMISSION_LEAFS: AdminMenuPermissionLeaf[] =
+	ADMIN_NAV_ITEMS.flatMap<AdminMenuPermissionLeaf>((navItem) => {
+		if (navItem.children && navItem.children.length > 0) {
+			return navItem.children.map<AdminMenuPermissionLeaf>((child) => ({
+				groupId: navItem.id,
+				groupLabel: navItem.label,
+				groupSubject: navItem.subject,
+				leafId: child.id,
+				leafLabel: child.label,
+				leafSubject: child.subject,
+				path: child.path,
+				icon: navItem.icon,
+				depth: 2 as const,
+				requiredSubjects: [navItem.subject, child.subject],
+			}));
+		}
+
+		return [
+			{
+				groupId: navItem.id,
+				groupLabel: navItem.label,
+				groupSubject: navItem.subject,
+				leafId: navItem.id,
+				leafLabel: navItem.label,
+				leafSubject: navItem.subject,
+				path: navItem.path,
+				icon: navItem.icon,
+				depth: 1 as const,
+				requiredSubjects: [navItem.subject],
+			},
+		];
+	});
+
+export const ADMIN_MENU_PERMISSION_SUBJECTS = Array.from(
+	new Set(
+		ADMIN_MENU_PERMISSION_LEAFS.flatMap((leaf) => leaf.requiredSubjects),
+	),
+);
 
 /**
  * 어드민 FAB 액션 설정

@@ -59,6 +59,7 @@ export function useAbility() {
 		ability: abilityStore.ability,
 		rules: abilityStore.rules,
 		isLoaded: abilityStore.isLoaded,
+		hasGlobalAccess: abilityStore.hasGlobalAccess,
 		can,
 		cannot,
 		updateRules,
@@ -102,6 +103,14 @@ export function useCannot(
 ): boolean {
 	const { cannot } = useAbility();
 	return cannot(action, subject, field);
+}
+
+/**
+ * useHasGlobalAccess - manage all 전역 권한 확인용 훅
+ */
+export function useHasGlobalAccess(): boolean {
+	const { hasGlobalAccess } = useAbility();
+	return hasGlobalAccess;
 }
 
 /**

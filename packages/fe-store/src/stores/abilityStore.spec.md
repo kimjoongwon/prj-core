@@ -34,6 +34,7 @@ CASL 기반 권한(Ability) 상태를 관리하는 MobX Store. 서버에서 받�
 | ability | `AppAbility` | `_ability` 반환 |
 | rules | `AbilityRule[]` | `_rules` 반환 |
 | isLoaded | `boolean` | `_isLoaded` 반환 |
+| hasGlobalAccess | `boolean` | `can('manage', 'all')` 결과를 반환 |
 
 ## 액션 (Action)
 
@@ -45,7 +46,7 @@ CASL 기반 권한(Ability) 상태를 관리하는 MobX Store. 서버에서 받�
 | `clearRules` | 없음 | 모든 권한 초기화 (로그아웃 시), `_isLoaded`를 false로 설정 |
 | `getAllowedActions` | `subject: AppSubject` | 특정 Subject에 대해 허용된 모든 Action 목록 반환 |
 | `getAllowedSubjects` | `action: AppAction` | 특정 Action에 대해 허용된 모든 Subject 목록 반환 (규칙 기반 직접 필터링) |
-| `getAllowedMenus` | 없음 | `view` 액션에 대해 `menu:` 접두사를 가진 허용 Subject 목록 반환 |
+| `getAllowedMenus` | 없음 | `view` 액션에 대해 `menu:` 접두사를 가진 허용 Subject 목록 반환. `manage all` 이 있으면 `['all']` sentinel 반환 |
 
 ## 공개 유틸 함수
 
@@ -96,5 +97,6 @@ abilityStore.clearRules();
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | `manage all` 전역 권한을 `hasGlobalAccess` computed와 `getAllowedMenus()` sentinel 처리로 공용화 | codex |
 | 2026-03-06 | CASL 공용 타입을 @cocrepo/type으로 이관하고 API->Rule 변환 유틸(convertApiToAbilityRules) 추가 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

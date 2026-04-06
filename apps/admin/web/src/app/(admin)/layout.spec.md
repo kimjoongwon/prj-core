@@ -12,13 +12,14 @@
 - `Layout`은 `desktopVariant="stacked-header"`를 사용해 전폭 header + 하단 sidebar/main 구조를 shared shell로 조립합니다.
 - 헤더, 사이드바, 모바일 오버레이/FAB/하단 내비게이션 바인딩은 route-local client slot 컴포넌트가 담당합니다.
 - 데스크톱 사이드바는 shared `SidePanel`을 사용하며 2depth 메뉴가 현재 선택 상태를 기준으로 노출되어야 합니다.
+- `children` 는 `AdminPageAccessGate` 로 감싸 current pathname에 대응하는 `page:*` 권한을 runtime에서 확인합니다.
 - route-level 데이터 fetch나 페이지 이벤트 바인딩은 `layout.tsx`가 직접 수행하지 않습니다.
 
 ## Page Composition
 
 | 레벨 | 소유 파일 | 구성 요소 | 책임 |
 |------|-----------|-----------|------|
-| route layout | `apps/admin/web/src/app/(admin)/layout.tsx` | `Layout` + client slot props | 서버 skeleton 조립과 child mount |
+| route layout | `apps/admin/web/src/app/(admin)/layout.tsx` | `Layout` + `AdminPageAccessGate` + client slot props | 서버 skeleton 조립과 child mount |
 | child content | child `page.tsx` / slot page | 콘텐츠 전용 컴포넌트 | layout이 제공한 slot 안에서 실제 화면 콘텐츠 구현 |
 
 - `apps/admin/web/src/app/(admin)/abilities/page.spec.md`
@@ -73,6 +74,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | `children` 를 `AdminPageAccessGate` 로 감싸 page:* direct access 권한을 runtime에서 확인하는 계약을 추가 | codex |
 | 2026-03-23 | `(admin)` 콘솔을 `force-dynamic`으로 지정해 build 시 prerender API 호출을 차단 | codex |
 | 2026-03-23 | `fe-ui` shared console shell을 사용하도록 전환하고 stacked-header + 2depth sidebar 계약을 명시 | codex |
 | 2026-03-21 | direct client layout을 서버 `Layout` skeleton + client slot 컴포넌트 구조로 전환 | codex |

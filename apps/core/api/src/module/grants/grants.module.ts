@@ -1,25 +1,23 @@
-import { GrantFacade } from "@cocrepo/facade";
+import { RoleGrantFacade } from "@cocrepo/facade";
 import {
 	AbilitiesRepository,
-	GrantsRepository,
 	RolesRepository,
-	UsersRepository,
+	RoleGrantsRepository,
 } from "@cocrepo/repository";
-import { GrantService, SpaceContext } from "@cocrepo/service";
+import { RoleGrantService, SpaceContext } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { GrantsController } from "./grants.controller";
 
 @Module({
 	controllers: [GrantsController],
 	providers: [
-		GrantFacade,
-		GrantService,
-		GrantsRepository,
+		RoleGrantFacade,
+		RoleGrantService,
+		RoleGrantsRepository,
 		RolesRepository,
-		UsersRepository,
 		AbilitiesRepository,
 		SpaceContext,
 	],
-	exports: [GrantFacade],
+	exports: [RoleGrantFacade],
 })
 export class GrantsModule {}

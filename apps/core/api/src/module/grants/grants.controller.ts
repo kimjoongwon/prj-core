@@ -7,8 +7,11 @@ import {
 	ResponseMessage,
 	Roles,
 } from "@cocrepo/decorator";
-import { BatchGrantRequestDto, GrantResponseDto } from "@cocrepo/dto";
-import { GrantFacade } from "@cocrepo/facade";
+import {
+	BatchAssignRoleGrantRequestDto,
+	RoleGrantResponseDto,
+} from "@cocrepo/dto";
+import { RoleGrantFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -23,7 +26,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @ApiTags("GRANTS")
 @Controller()
 export class GrantsController {
-	constructor(private readonly grantsService: GrantFacade) {}
+	constructor(private readonly roleGrantFacade: RoleGrantFacade) {}
 
 	@Put("roles/:roleId")
 	@UseGuards(RolesGuard)
@@ -36,14 +39,14 @@ export class GrantsController {
 	})
 	@ApiAuth()
 	@ApiParam({ name: "roleId", description: "역할 ID (UUID)", type: String })
-	@ApiBody({ type: BatchGrantRequestDto })
+	@ApiBody({ type: BatchAssignRoleGrantRequestDto })
 	@ApiErrors(400, 401, 403, 404, 500)
-	@ApiResponseEntity(GrantResponseDto, HttpStatus.OK, { isArray: true })
+	@ApiResponseEntity(RoleGrantResponseDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("common.grant.batchAssign.success")
 	async batchAssignGrantsToRole(
 		@Param("roleId", ParseUUIDPipe) roleId: string,
-		@Body() dto: BatchGrantRequestDto,
+		@Body() dto: BatchAssignRoleGrantRequestDto,
 	) {
-		return this.grantsService.batchAssignToRole(roleId, dto.grants);
+		return this.roleGrantFacade.batchAssignToRole(roleId, dto.roleGrants);
 	}
 }

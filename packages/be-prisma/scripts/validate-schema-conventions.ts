@@ -7,9 +7,10 @@ const baseFile = "_base.prisma";
 const schemaOwnerByFile: Record<string, string> = {
 	"access-control/ability.prisma": "Ability",
 	"access-control/action.prisma": "Action",
-	"access-control/grant.prisma": "Grant",
+	"access-control/role-grant.prisma": "RoleGrant",
 	"access-control/role.prisma": "Role",
 	"access-control/subject.prisma": "Subject",
+	"access-control/user-grant.prisma": "UserGrant",
 	"asset/album.prisma": "Album",
 	"asset/asset.prisma": "Asset",
 	"asset/folder.prisma": "Folder",
@@ -40,9 +41,10 @@ const schemaOwnerByFile: Record<string, string> = {
 const aggregateRootByFile: Record<string, string> = {
 	"access-control/ability.prisma": "Ability",
 	"access-control/action.prisma": "Action",
-	"access-control/grant.prisma": "Grant",
+	"access-control/role-grant.prisma": "RoleGrant",
 	"access-control/role.prisma": "Role",
 	"access-control/subject.prisma": "Subject",
+	"access-control/user-grant.prisma": "UserGrant",
 	"asset/album.prisma": "Album",
 	"asset/asset.prisma": "Asset",
 	"asset/folder.prisma": "Folder",
@@ -92,7 +94,8 @@ const expectedOwner: Record<string, string> = {
 	Subject: "access-control/subject.prisma",
 	Action: "access-control/action.prisma",
 	Ability: "access-control/ability.prisma",
-	Grant: "access-control/grant.prisma",
+	RoleGrant: "access-control/role-grant.prisma",
+	UserGrant: "access-control/user-grant.prisma",
 
 	Inquiry: "inquiry/inquiry.prisma",
 	InquiryTag: "inquiry/inquiry.prisma",

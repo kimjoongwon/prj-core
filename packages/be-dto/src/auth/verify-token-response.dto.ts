@@ -12,7 +12,7 @@ export class VerifyTokenResponseDto {
 
 	@ApiProperty({
 		description:
-			"현재 사용자가 tenant 역할 기준으로 FULL_ACCESS 권한을 하나라도 보유하는지 여부",
+			"현재 사용자가 `manage all` 전역 권한을 보유하는지 여부",
 	})
 	hasFullAccess!: boolean;
 }

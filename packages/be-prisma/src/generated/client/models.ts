@@ -10,11 +10,12 @@
  */
 export type * from './models/Ability.js'
 export type * from './models/Action.js'
-export type * from './models/Grant.js'
+export type * from './models/RoleGrant.js'
 export type * from './models/Role.js'
 export type * from './models/RoleAssociation.js'
 export type * from './models/RoleClassification.js'
 export type * from './models/Subject.js'
+export type * from './models/UserGrant.js'
 export type * from './models/Album.js'
 export type * from './models/AlbumEntry.js'
 export type * from './models/Asset.js'

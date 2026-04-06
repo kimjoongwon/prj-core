@@ -386,11 +386,12 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Ability: 'Ability',
   Action: 'Action',
-  Grant: 'Grant',
+  RoleGrant: 'RoleGrant',
   Role: 'Role',
   RoleAssociation: 'RoleAssociation',
   RoleClassification: 'RoleClassification',
   Subject: 'Subject',
+  UserGrant: 'UserGrant',
   Album: 'Album',
   AlbumEntry: 'AlbumEntry',
   Asset: 'Asset',
@@ -457,7 +458,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "ability" | "action" | "grant" | "role" | "roleAssociation" | "roleClassification" | "subject" | "album" | "albumEntry" | "asset" | "image" | "video" | "document" | "derivative" | "folder" | "authAuditLog" | "passwordHistory" | "securityPolicy" | "whitelistEntry" | "post" | "content" | "template" | "templateVariable" | "translation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "tenant" | "assignment" | "user" | "userClassification" | "userAssociation" | "profile" | "aIAgentLog" | "inquiryThread" | "inquiryMessage" | "inquiryParticipant" | "inquiryAttachment" | "inquiry" | "inquiryTag" | "sentimentAnalysis" | "oidcClient" | "oidcModel" | "referenceDataMigrationHistory" | "routine" | "activity" | "task" | "exercise" | "timeline" | "session" | "program" | "programActivity" | "category" | "group" | "safeWallet" | "safeTransaction" | "safeConfirmation"
+    modelProps: "ability" | "action" | "roleGrant" | "role" | "roleAssociation" | "roleClassification" | "subject" | "userGrant" | "album" | "albumEntry" | "asset" | "image" | "video" | "document" | "derivative" | "folder" | "authAuditLog" | "passwordHistory" | "securityPolicy" | "whitelistEntry" | "post" | "content" | "template" | "templateVariable" | "translation" | "space" | "spaceClassification" | "spaceAssociation" | "ground" | "tenant" | "assignment" | "user" | "userClassification" | "userAssociation" | "profile" | "aIAgentLog" | "inquiryThread" | "inquiryMessage" | "inquiryParticipant" | "inquiryAttachment" | "inquiry" | "inquiryTag" | "sentimentAnalysis" | "oidcClient" | "oidcModel" | "referenceDataMigrationHistory" | "routine" | "activity" | "task" | "exercise" | "timeline" | "session" | "program" | "programActivity" | "category" | "group" | "safeWallet" | "safeTransaction" | "safeConfirmation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -609,77 +610,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Grant: {
-      payload: Prisma.$GrantPayload<ExtArgs>
-      fields: Prisma.GrantFieldRefs
+    RoleGrant: {
+      payload: Prisma.$RoleGrantPayload<ExtArgs>
+      fields: Prisma.RoleGrantFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.GrantFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrantPayload> | null
+          args: Prisma.RoleGrantFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleGrantPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.GrantFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrantPayload>
+          args: Prisma.RoleGrantFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleGrantPayload>
         }
         findFirst: {
-          args: Prisma.GrantFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrantPayload> | null
+          args: Prisma.RoleGrantFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleGrantPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.GrantFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrantPayload>
+          args: Prisma.RoleGrantFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleGrantPayload>
         }
         findMany: {
-          args: Prisma.GrantFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrantPayload>[]
+          args: Prisma.RoleGrantFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleGrantPayload>[]
         }
         create: {
-          args: Prisma.GrantCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrantPayload>
+          args: Prisma.RoleGrantCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleGrantPayload>
         }
         createMany: {
-          args: Prisma.GrantCreateManyArgs<ExtArgs>
+          args: Prisma.RoleGrantCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.GrantCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrantPayload>[]
+          args: Prisma.RoleGrantCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleGrantPayload>[]
         }
         delete: {
-          args: Prisma.GrantDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrantPayload>
+          args: Prisma.RoleGrantDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleGrantPayload>
         }
         update: {
-          args: Prisma.GrantUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrantPayload>
+          args: Prisma.RoleGrantUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleGrantPayload>
         }
         deleteMany: {
-          args: Prisma.GrantDeleteManyArgs<ExtArgs>
+          args: Prisma.RoleGrantDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.GrantUpdateManyArgs<ExtArgs>
+          args: Prisma.RoleGrantUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.GrantUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrantPayload>[]
+          args: Prisma.RoleGrantUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleGrantPayload>[]
         }
         upsert: {
-          args: Prisma.GrantUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrantPayload>
+          args: Prisma.RoleGrantUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleGrantPayload>
         }
         aggregate: {
-          args: Prisma.GrantAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateGrant>
+          args: Prisma.RoleGrantAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRoleGrant>
         }
         groupBy: {
-          args: Prisma.GrantGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.GrantGroupByOutputType>[]
+          args: Prisma.RoleGrantGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoleGrantGroupByOutputType>[]
         }
         count: {
-          args: Prisma.GrantCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.GrantCountAggregateOutputType> | number
+          args: Prisma.RoleGrantCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoleGrantCountAggregateOutputType> | number
         }
       }
     }
@@ -976,6 +977,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.SubjectCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.SubjectCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserGrant: {
+      payload: Prisma.$UserGrantPayload<ExtArgs>
+      fields: Prisma.UserGrantFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserGrantFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGrantPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserGrantFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGrantPayload>
+        }
+        findFirst: {
+          args: Prisma.UserGrantFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGrantPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserGrantFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGrantPayload>
+        }
+        findMany: {
+          args: Prisma.UserGrantFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGrantPayload>[]
+        }
+        create: {
+          args: Prisma.UserGrantCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGrantPayload>
+        }
+        createMany: {
+          args: Prisma.UserGrantCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserGrantCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGrantPayload>[]
+        }
+        delete: {
+          args: Prisma.UserGrantDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGrantPayload>
+        }
+        update: {
+          args: Prisma.UserGrantUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGrantPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserGrantDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserGrantUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserGrantUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGrantPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserGrantUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGrantPayload>
+        }
+        aggregate: {
+          args: Prisma.UserGrantAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserGrant>
+        }
+        groupBy: {
+          args: Prisma.UserGrantGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserGrantGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserGrantCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserGrantCountAggregateOutputType> | number
         }
       }
     }
@@ -4827,19 +4902,18 @@ export const ActionScalarFieldEnum = {
 export type ActionScalarFieldEnum = (typeof ActionScalarFieldEnum)[keyof typeof ActionScalarFieldEnum]
 
 
-export const GrantScalarFieldEnum = {
+export const RoleGrantScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  granteeType: 'granteeType',
-  granteeId: 'granteeId',
+  roleId: 'roleId',
   abilityId: 'abilityId',
   isActive: 'isActive',
   priority: 'priority'
 } as const
 
-export type GrantScalarFieldEnum = (typeof GrantScalarFieldEnum)[keyof typeof GrantScalarFieldEnum]
+export type RoleGrantScalarFieldEnum = (typeof RoleGrantScalarFieldEnum)[keyof typeof RoleGrantScalarFieldEnum]
 
 
 export const RoleScalarFieldEnum = {
@@ -4894,6 +4968,20 @@ export const SubjectScalarFieldEnum = {
 } as const
 
 export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
+
+
+export const UserGrantScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  userId: 'userId',
+  abilityId: 'abilityId',
+  isActive: 'isActive',
+  priority: 'priority'
+} as const
+
+export type UserGrantScalarFieldEnum = (typeof UserGrantScalarFieldEnum)[keyof typeof UserGrantScalarFieldEnum]
 
 
 export const AlbumScalarFieldEnum = {
@@ -6326,11 +6414,12 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   ability?: Prisma.AbilityOmit
   action?: Prisma.ActionOmit
-  grant?: Prisma.GrantOmit
+  roleGrant?: Prisma.RoleGrantOmit
   role?: Prisma.RoleOmit
   roleAssociation?: Prisma.RoleAssociationOmit
   roleClassification?: Prisma.RoleClassificationOmit
   subject?: Prisma.SubjectOmit
+  userGrant?: Prisma.UserGrantOmit
   album?: Prisma.AlbumOmit
   albumEntry?: Prisma.AlbumEntryOmit
   asset?: Prisma.AssetOmit

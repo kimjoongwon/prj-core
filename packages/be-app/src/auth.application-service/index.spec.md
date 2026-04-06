@@ -14,6 +14,7 @@
 |------|------|
 | AuthApplicationService | 인증 유즈케이스 공개 계약 |
 | OidcClientService | DB 기반 OIDC client 조회 dependency |
+| AbilityService | `verifyToken()` 전역 권한 판별용 merged ability 조회 dependency |
 | OidcFacade | 외부 OIDC 연동 dependency |
 
 ## 구현 메모
@@ -23,12 +24,16 @@
 - 세션 ID는 `{clientId}.{random}` 형태로 저장하여 refresh/logout/revoke 시 client를 복원합니다.
 - `handleOidcCallback()`은 `returnTo`, `defaultReturnTo`, `loginUrl`을 반환해 controller가 리다이렉트 결정을 하도록 합니다.
 - `getAuthorizationUrl()`은 요청마다 DB에서 auth shell client를 조회한 뒤 explicit client protocol config로 authorization URL을 생성합니다.
+- `verifyToken()`은 CLS의 `AUTH_USER` tenant role 이름을 직접 검사하지 않고, `AbilityService.getMergedAbilities()` 결과에 `manage all`이 있는지 확인해 `hasFullAccess`를 계산합니다.
+- selectedSpace 기본값은 기존처럼 `FULL_ACCESS` tenant를 우선하고, 없으면 tenant 순서를 따릅니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-- 2026-03-25 | DB 조회 기반 clientId 계약과 explicit protocol client config 흐름으로 정리 | codex |
+| 2026-04-06 | selectedSpace 기본 선택 우선순위를 `manage all` 해석에서 되돌리고 기존 `FULL_ACCESS` tenant 우선 규칙으로 복원 | codex |
+| 2026-04-06 | `verifyToken()`의 `hasFullAccess` 계산을 tenant role 이름이 아닌 `manage all` merged ability 기준으로 정리 | codex |
+| 2026-03-25 | DB 조회 기반 clientId 계약과 explicit protocol client config 흐름으로 정리 | codex |
 | 2026-03-16 | Storybook RP 식별자를 `storybook`으로 단순화하고 세션 prefix/clientId 복원 설명도 동일하게 정리 | codex |
 | 2026-03-16 | storybook 전용 OIDC RP와 state payload + sessionId prefix 기반 clientId 복원 규칙을 추가 | codex |
 | 2026-03-14 | 인증 감사 로그 목록 반환 키를 `logs`에서 표준 `data`로 정렬해 Orval/React Query 소비 shape를 수정 | codex |

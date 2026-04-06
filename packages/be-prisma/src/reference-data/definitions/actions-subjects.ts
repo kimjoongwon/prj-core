@@ -1,3 +1,8 @@
+import {
+	adminMenuSubjectSeedData,
+	adminPageSubjectSeedData,
+} from "./admin-permissions";
+
 /**
  * Action 설정 타입 (config JSON 필드)
  *
@@ -211,7 +216,7 @@ export const actionSeedData: ActionSeedData[] = [
 export interface SubjectSeedData {
 	name: string; // Subject 이름 (Prisma 모델명, 'all', 'menu:xxx', 'entity:xxx', 'feature:xxx', 'ui:xxx' 등)
 	displayName: string; // 한글 표시명
-	group: "all" | "entity" | "menu" | "feature" | "ui"; // 그룹핑
+	group: "all" | "entity" | "menu" | "page" | "feature" | "ui"; // 그룹핑
 	order?: number; // UI 정렬 순서
 	isSystem?: boolean; // 시스템 생성 여부 (DMMF 기반 = true)
 }
@@ -228,7 +233,7 @@ export interface SubjectSeedData {
  * - menu:settings → menu:spaces, menu:admins, menu:roles로 분리
  * - 예약, 알림, 문의, 템플릿 메뉴 추가
  */
-export const subjectSeedData: SubjectSeedData[] = [
+const staticSubjectSeedData: SubjectSeedData[] = [
 	// ---- 전체 ----
 	{ name: "all", displayName: "전체", group: "all", order: 0 },
 
@@ -848,4 +853,18 @@ export const subjectSeedData: SubjectSeedData[] = [
 		group: "ui",
 		order: 1231,
 	},
+];
+
+const derivedAdminSubjectNames = new Set(
+	[...adminMenuSubjectSeedData, ...adminPageSubjectSeedData].map(
+		(subject) => subject.name,
+	),
+);
+
+export const subjectSeedData: SubjectSeedData[] = [
+	...staticSubjectSeedData.filter(
+		(subject) => !derivedAdminSubjectNames.has(subject.name),
+	),
+	...adminMenuSubjectSeedData,
+	...adminPageSubjectSeedData,
 ];

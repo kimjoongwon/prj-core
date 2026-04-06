@@ -13,6 +13,7 @@
     "README.md"
   ],
   "scripts": {
+    "reference:prepare": "pnpm --filter @cocrepo/constant build",
     "type-check": "tsc --noEmit",
     "generate": "prisma generate && node ./scripts/fix-generated-client-module-format.mjs",
     "schema:check": "tsx ./scripts/validate-schema-conventions.ts",
@@ -34,11 +35,11 @@
     "db:migrate:deploy:prod": "cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD prisma migrate deploy",
     "db:reset": "prisma migrate reset",
     "db:reset:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG prisma migrate reset",
-    "db:bootstrap": "tsx seed.ts",
-    "db:bootstrap:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG tsx seed.ts",
-    "db:data:migrate": "tsx data-migrate.ts",
-    "db:data:migrate:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG tsx data-migrate.ts",
-    "db:data:migrate:prod": "cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD tsx data-migrate.ts",
+    "db:bootstrap": "pnpm reference:prepare && tsx seed.ts",
+    "db:bootstrap:stg": "pnpm reference:prepare && cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG tsx seed.ts",
+    "db:data:migrate": "pnpm reference:prepare && tsx data-migrate.ts",
+    "db:data:migrate:stg": "pnpm reference:prepare && cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG tsx data-migrate.ts",
+    "db:data:migrate:prod": "pnpm reference:prepare && cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD tsx data-migrate.ts",
     "db:seed": "pnpm db:bootstrap",
     "db:seed:stg": "pnpm db:bootstrap:stg",
     "clean": "rm -rf dist && rm -rf node_modules",
@@ -49,6 +50,7 @@
     "seed": "tsx seed.ts"
   },
   "dependencies": {
+    "@cocrepo/constant": "workspace:*",
     "@prisma/adapter-pg": "^7.0.0",
     "bcrypt": "^6.0.0",
     "pg": "^8.13.1"

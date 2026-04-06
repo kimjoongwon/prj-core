@@ -1,20 +1,27 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import { GrantsRepository } from "@cocrepo/repository";
 import type { UserDto } from "@cocrepo/dto";
+import {
+	RoleGrantsRepository,
+	UserGrantsRepository,
+} from "@cocrepo/repository";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { ClsService } from "nestjs-cls";
 import { CaslAbilityFactory } from "../casl-ability.factory";
 
 describe("CaslAbilityFactory", () => {
 	let factory: CaslAbilityFactory;
-	let mockGrantsRepository: jest.Mocked<GrantsRepository>;
+	let mockRoleGrantsRepository: jest.Mocked<RoleGrantsRepository>;
+	let mockUserGrantsRepository: jest.Mocked<UserGrantsRepository>;
 	let mockClsService: jest.Mocked<ClsService>;
 
 	beforeEach(async () => {
-		mockGrantsRepository = {
+		mockRoleGrantsRepository = {
 			findActiveByRoleIds: jest.fn(),
+		} as unknown as jest.Mocked<RoleGrantsRepository>;
+
+		mockUserGrantsRepository = {
 			findActiveByUserId: jest.fn(),
-		} as unknown as jest.Mocked<GrantsRepository>;
+		} as unknown as jest.Mocked<UserGrantsRepository>;
 
 		mockClsService = {
 			get: jest.fn(),
@@ -23,7 +30,14 @@ describe("CaslAbilityFactory", () => {
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
 				CaslAbilityFactory,
-				{ provide: GrantsRepository, useValue: mockGrantsRepository },
+				{
+					provide: RoleGrantsRepository,
+					useValue: mockRoleGrantsRepository,
+				},
+				{
+					provide: UserGrantsRepository,
+					useValue: mockUserGrantsRepository,
+				},
 				{ provide: ClsService, useValue: mockClsService },
 			],
 		}).compile();
@@ -45,7 +59,7 @@ describe("CaslAbilityFactory", () => {
 		} as unknown as UserDto;
 
 		mockClsService.get.mockReturnValueOnce("space-1");
-		mockGrantsRepository.findActiveByRoleIds.mockResolvedValue([
+		mockRoleGrantsRepository.findActiveByRoleIds.mockResolvedValue([
 			{
 				priority: 1,
 				ability: {
@@ -57,7 +71,7 @@ describe("CaslAbilityFactory", () => {
 				},
 			},
 		] as never);
-		mockGrantsRepository.findActiveByUserId.mockResolvedValue([] as never);
+		mockUserGrantsRepository.findActiveByUserId.mockResolvedValue([] as never);
 
 		const ability = await factory.createForUser(user);
 		expect(ability.can("READ", "entity:User")).toBe(true);
@@ -73,7 +87,7 @@ describe("CaslAbilityFactory", () => {
 		} as unknown as UserDto;
 
 		mockClsService.get.mockReturnValueOnce("space-1");
-		mockGrantsRepository.findActiveByRoleIds.mockResolvedValue([
+		mockRoleGrantsRepository.findActiveByRoleIds.mockResolvedValue([
 			{
 				priority: 1,
 				ability: {
@@ -85,7 +99,7 @@ describe("CaslAbilityFactory", () => {
 				},
 			},
 		] as never);
-		mockGrantsRepository.findActiveByUserId.mockResolvedValue([
+		mockUserGrantsRepository.findActiveByUserId.mockResolvedValue([
 			{
 				priority: 10,
 				ability: {
@@ -114,11 +128,11 @@ describe("CaslAbilityFactory", () => {
 		mockClsService.get.mockImplementation((key) =>
 			key === CONTEXT_KEYS.SPACE_ID ? undefined : undefined,
 		);
-		mockGrantsRepository.findActiveByRoleIds.mockResolvedValue([] as never);
-		mockGrantsRepository.findActiveByUserId.mockResolvedValue([] as never);
+		mockRoleGrantsRepository.findActiveByRoleIds.mockResolvedValue([] as never);
+		mockUserGrantsRepository.findActiveByUserId.mockResolvedValue([] as never);
 
 		await factory.createForUser(user);
-		expect(mockGrantsRepository.findActiveByRoleIds).toHaveBeenCalledWith([
+		expect(mockRoleGrantsRepository.findActiveByRoleIds).toHaveBeenCalledWith([
 			"role-1",
 		]);
 	});

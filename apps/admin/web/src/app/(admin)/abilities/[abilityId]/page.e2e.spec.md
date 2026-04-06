@@ -18,4 +18,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | 상세 이동 테스트가 DataGrid ARIA row 구조를 사용하도록 selector와 URL 대기 timeout을 갱신 | codex |
 | 2026-03-26 | 누락된 sidecar spec 신규 생성 | codex |

@@ -1,5 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 
+const ROUTE_READY_TIMEOUT = 20_000;
+
 function getAbilitiesHeading(page: Page) {
 	return page.getByRole("heading", {
 		name: "권한 목록",
@@ -10,7 +12,9 @@ function getAbilitiesHeading(page: Page) {
 
 async function gotoAbilitiesPage(page: Page) {
 	await page.goto("./abilities", { waitUntil: "domcontentloaded" });
-	await expect(getAbilitiesHeading(page)).toBeVisible();
+	await expect(getAbilitiesHeading(page)).toBeVisible({
+		timeout: ROUTE_READY_TIMEOUT,
+	});
 }
 
 test.describe("권한 상세 페이지", () => {
@@ -19,10 +23,14 @@ test.describe("권한 상세 페이지", () => {
 		await gotoAbilitiesPage(page);
 
 		// When: 첫 번째 목록 행을 클릭
-		const firstRow = page.locator("table tbody tr").first();
-		await expect(firstRow).toBeVisible();
+		const firstRow = page.locator('[role="rowgroup"]').nth(1).getByRole("row").first();
+		await expect(firstRow).toBeVisible({
+			timeout: ROUTE_READY_TIMEOUT,
+		});
 		await Promise.all([
-			page.waitForURL(/\/abilities\/[^/]+$/),
+			page.waitForURL(/\/abilities\/[^/]+$/, {
+				timeout: ROUTE_READY_TIMEOUT,
+			}),
 			firstRow.click(),
 		]);
 

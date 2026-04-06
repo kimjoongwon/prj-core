@@ -5,14 +5,15 @@ import type {
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Action } from "./action.entity";
-import type { Grant } from "./grant.entity";
+import type { RoleGrant } from "./role-grant.entity";
+import type { UserGrant } from "./user-grant.entity";
 
 /**
  * Ability 엔티티 (CASL ABAC 기반)
  *
  * 재사용 가능한 권한 정의를 담당합니다.
- * - 권한 정의만 담당, 실제 부여는 Grant 테이블에서 관리
- * - Grant를 통해 Role 또는 User에 연결됩니다
+ * - 권한 정의만 담당, 실제 부여는 RoleGrant/UserGrant 테이블에서 관리
+ * - RoleGrant, UserGrant를 통해 Role 또는 User에 연결됩니다
  *
  * DDD 원칙에 따라 Ability는 Subject + Action + fields + conditions 조합으로 권한을 정의합니다.
  * 마스킹 등의 설정은 Action.config에서 가져옵니다.
@@ -40,14 +41,15 @@ export class Ability extends AbstractEntity implements AbilityEntity {
 	/** Action ID (행위 정의) */
 	actionId!: string;
 
-	// Grant에서 조회할 때 설정되는 필드 (optional)
-	/** 우선순위 (Grant.priority 값) */
+	// RoleGrant/UserGrant에서 조회할 때 설정되는 필드 (optional)
+	/** 우선순위 (RoleGrant/UserGrant.priority 값) */
 	priority?: number;
 
 	// 관계
 	subject?: Subject;
 	action?: Action;
-	grants?: Grant[]; // BRIDGE를 통해 Role/User에 연결
+	roleGrants?: RoleGrant[];
+	userGrants?: UserGrant[];
 
 	/**
 	 * 허용 권한인지 확인

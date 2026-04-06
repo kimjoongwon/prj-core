@@ -11,14 +11,11 @@ import {
 } from "class-validator";
 
 /**
- * Grant 배치 할당 개별 항목 DTO
- *
- * @description
- * 배치 할당 시 각 Ability에 대한 Grant 정보를 담습니다.
+ * RoleGrant 배치 할당 개별 항목 DTO
  */
-export class BatchGrantItemDto {
+export class BatchAssignRoleGrantItemDto {
 	@ApiProperty({
-		description: "Ability ID (부여할 권한)",
+		description: "Ability ID (Role에 부여할 권한)",
 		example: "550e8400-e29b-41d4-a716-446655440001",
 	})
 	@IsNotEmpty({ message: "Ability ID를 입력해주세요" })
@@ -47,16 +44,12 @@ export class BatchGrantItemDto {
 }
 
 /**
- * Grant 배치 할당 요청 DTO
- *
- * @description
- * PUT /api/v1/grants/roles/:roleId 또는 /users/:userId
- * 특정 Role 또는 User에게 여러 Ability를 한 번에 할당합니다.
+ * RoleGrant 배치 할당 요청 DTO
  */
-export class BatchGrantRequestDto {
+export class BatchAssignRoleGrantRequestDto {
 	@ApiProperty({
-		description: "Grant 목록 (할당할 Ability 목록)",
-		type: [BatchGrantItemDto],
+		description: "RoleGrant 목록 (역할에 할당할 Ability 목록)",
+		type: [BatchAssignRoleGrantItemDto],
 		example: [
 			{
 				abilityId: "550e8400-e29b-41d4-a716-446655440001",
@@ -70,9 +63,9 @@ export class BatchGrantRequestDto {
 			},
 		],
 	})
-	@IsArray({ message: "grants는 배열이어야 합니다" })
+	@IsArray({ message: "roleGrants는 배열이어야 합니다" })
 	@ValidateNested({ each: true })
-	@Type(() => BatchGrantItemDto)
-	@IsNotEmpty({ message: "최소 1개 이상의 Grant를 입력해주세요" })
-	grants!: BatchGrantItemDto[];
+	@Type(() => BatchAssignRoleGrantItemDto)
+	@IsNotEmpty({ message: "최소 1개 이상의 RoleGrant를 입력해주세요" })
+	roleGrants!: BatchAssignRoleGrantItemDto[];
 }

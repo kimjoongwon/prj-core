@@ -12,6 +12,6 @@
 import type { BatchGrantItemDto } from './batchGrantItemDto';
 
 export interface BatchGrantRequestDto {
-  /** Grant 목록 (할당할 Ability 목록) */
-  grants: BatchGrantItemDto[];
+  /** RoleGrant 목록 (역할에 할당할 Ability 목록) */
+  roleGrants: BatchGrantItemDto[];
 }

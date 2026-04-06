@@ -1,3 +1,5 @@
+import { adminFullAccessAbilitySeedData } from "./admin-permissions";
+
 /**
  * CASL 기반 ability 기준 데이터입니다.
  *
@@ -73,7 +75,14 @@ export interface AbilitySeedData {
  * FULL_ACCESS 권한 시드 데이터 (v7.0)
  * - manage all: 모든 권한
  */
-export const fullAccessAbilitySeedData: AbilitySeedData[] = [
+const staticFullAccessAbilitySeedData: AbilitySeedData[] = [
+	{
+		roleName: "FULL_ACCESS",
+		subject: "all",
+		actionName: "manage",
+		inverted: false,
+		description: "전체 시스템 관리 권한",
+	},
 	// ============================================================================
 	// v7.0 메뉴 manage (1depth)
 	// ============================================================================
@@ -845,6 +854,22 @@ export const fullAccessAbilitySeedData: AbilitySeedData[] = [
 		inverted: false,
 		description: "권한 엔티티 전체 권한",
 	},
+];
+
+const derivedAdminAbilityKeys = new Set(
+	adminFullAccessAbilitySeedData.map(
+		(ability) => `${ability.roleName}:${ability.subject}:${ability.actionName}`,
+	),
+);
+
+export const fullAccessAbilitySeedData: AbilitySeedData[] = [
+	...staticFullAccessAbilitySeedData.filter(
+		(ability) =>
+			!derivedAdminAbilityKeys.has(
+				`${ability.roleName}:${ability.subject}:${ability.actionName}`,
+			),
+	),
+	...adminFullAccessAbilitySeedData,
 ];
 
 /**

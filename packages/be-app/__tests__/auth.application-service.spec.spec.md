@@ -1,0 +1,23 @@
+# auth.application-service.spec 테스트 기획서
+
+> 생성일: 2026-04-06
+> 타입: test
+> 위치: packages/be-app/__tests__/auth.application-service.spec.ts
+
+## 역할
+
+`AuthApplicationService`의 인증 플로우와 보조 규칙을 단위 테스트로 검증합니다.
+
+## 주요 시나리오
+
+| 시나리오 | 설명 |
+|------|------|
+| OIDC redirect | clientId별 authorization URL 생성 규칙 검증 |
+| callback/login/logout | OIDC callback, refresh, logout의 세션 처리 검증 |
+| verifyToken | 토큰 만료 시각과 `manage all` 전역 권한 기반 `hasFullAccess` 계산 검증 |
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-04-06 | `verifyToken`이 tenant 역할명이 아닌 `manage all` merged ability로 `hasFullAccess`를 계산하는 회귀 테스트를 추가 | codex |

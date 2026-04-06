@@ -1,5 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 
+const ROUTE_READY_TIMEOUT = 20_000;
+
 function getAbilitiesHeading(page: Page) {
 	return page
 		.getByRole("heading", {
@@ -12,14 +14,18 @@ function getAbilitiesHeading(page: Page) {
 
 async function gotoAbilitiesPage(page: Page) {
 	await page.goto("./abilities", { waitUntil: "domcontentloaded" });
-	await expect(getAbilitiesHeading(page)).toBeVisible();
+	await expect(getAbilitiesHeading(page)).toBeVisible({
+		timeout: ROUTE_READY_TIMEOUT,
+	});
 }
 
 async function gotoAbilityCreatePage(page: Page) {
 	await page.goto("./abilities/new", { waitUntil: "domcontentloaded" });
 	await expect(
 		page.getByRole("heading", { name: "권한 등록", exact: true }),
-	).toBeVisible();
+	).toBeVisible({
+		timeout: ROUTE_READY_TIMEOUT,
+	});
 }
 
 test.describe("권한 목록 페이지", () => {

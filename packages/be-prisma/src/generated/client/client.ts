@@ -48,10 +48,10 @@ export type Ability = Prisma.AbilityModel
  */
 export type Action = Prisma.ActionModel
 /**
- * Model Grant
- * @displayName 권한 부여
+ * Model RoleGrant
+ * @displayName 역할 권한 부여
  */
-export type Grant = Prisma.GrantModel
+export type RoleGrant = Prisma.RoleGrantModel
 /**
  * Model Role
  * @displayName 역할
@@ -72,6 +72,11 @@ export type RoleClassification = Prisma.RoleClassificationModel
  * @displayName Subject
  */
 export type Subject = Prisma.SubjectModel
+/**
+ * Model UserGrant
+ * @displayName 사용자 권한 부여
+ */
+export type UserGrant = Prisma.UserGrantModel
 /**
  * Model Album
  * @displayName 앨범

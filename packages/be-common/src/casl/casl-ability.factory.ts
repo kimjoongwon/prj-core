@@ -14,16 +14,19 @@ import type {
 	Action as PrismaAction,
 	Subject as PrismaSubject,
 } from "@cocrepo/prisma";
-import { GrantsRepository } from "@cocrepo/repository";
+import {
+	RoleGrantsRepository,
+	UserGrantsRepository,
+} from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 import type { Actions, AppAbility, AppAbilityClass, Subjects } from "./types";
 
 /**
- * Grant에서 추출한 Ability 데이터와 priority를 결합한 타입
+ * RoleGrant/UserGrant에서 추출한 Ability 데이터와 priority를 결합한 타입
  *
  * @description
- * Prisma에서 조회한 Ability 데이터를 spread하고 Grant.priority를 추가하면
+ * Prisma에서 조회한 Ability 데이터를 spread하고 RoleGrant/UserGrant.priority를 추가하면
  * AbilityEntity 클래스의 메서드(isAllowed, isDenied 등)를 잃게 됩니다.
  * mergeAbilities/applyAbilityRule에서는 메서드가 필요 없으므로
  * Prisma의 데이터 타입에 관계 필드와 required priority를 추가한
@@ -68,7 +71,8 @@ export class CaslAbilityFactory {
 	private readonly logger = new Logger(CaslAbilityFactory.name);
 
 	constructor(
-		private readonly grantsRepository: GrantsRepository,
+		private readonly roleGrantsRepository: RoleGrantsRepository,
+		private readonly userGrantsRepository: UserGrantsRepository,
 		private readonly cls: ClsService,
 	) {}
 
@@ -80,9 +84,9 @@ export class CaslAbilityFactory {
 	 *
 	 * @description
 	 * 1. selectedSpaceId 쿠키에서 현재 spaceId를 가져와 해당 tenant 찾기
-	 * 2. GrantsRepository로 Role 기반 권한 조회 (Grant → Ability)
-	 * 3. GrantsRepository로 User 예외 권한 조회 (Grant → Ability)
-	 * 4. 권한 병합 (User 권한이 Role 권한보다 우선 - Grant.priority 기반)
+	 * 2. RoleGrantsRepository로 Role 기반 권한 조회 (RoleGrant → Ability)
+	 * 3. UserGrantsRepository로 User 예외 권한 조회 (UserGrant → Ability)
+	 * 4. 권한 병합 (User 권한이 Role 권한보다 우선 - priority 기반)
 	 * 5. AbilityBuilder로 권한 생성
 	 * 6. conditions 파싱 (템플릿 변수 치환)
 	 * 7. CAN/CAN_NOT에 따라 can/cannot 호출
@@ -94,9 +98,10 @@ export class CaslAbilityFactory {
 
 		// selectedSpaceId 쿠키에서 현재 spaceId를 가져와서 해당 tenant 찾기
 		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
-		const currentTenant = spaceId
-			? user.tenants?.find((tenant) => tenant.spaceId === spaceId)
-			: undefined;
+		const currentTenant =
+			user.tenants?.find((tenant) =>
+				spaceId ? tenant.spaceId === spaceId : true,
+			) ?? user.tenants?.[0];
 
 		if (!currentTenant?.role) {
 			this.logger.warn(
@@ -110,29 +115,26 @@ export class CaslAbilityFactory {
 			`사용자 권한 생성 시작: userId=${user.id}, roleId=${roleId}, spaceId=${spaceId}`,
 		);
 
-		// 1. DB에서 Role에 해당하는 활성화된 Grants 조회 (Ability 포함)
-		const roleGrants = await this.grantsRepository.findActiveByRoleIds([
+		const roleGrants = await this.roleGrantsRepository.findActiveByRoleIds([
 			roleId,
 		]);
-		// Grant에서 Ability 추출 (Grant.priority를 Ability.priority로 복사)
 		const roleAbilities: AbilityWithPriority[] = roleGrants
 			.filter((grant) => grant.ability)
 			.map((grant) => ({
 				...grant.ability!,
-				priority: grant.priority, // Grant의 priority 사용
+				priority: grant.priority,
 			}));
 		this.logger.debug(
 			`Role 기반 Ability 조회: ${roleAbilities.length}개, roleId=${roleId}`,
 		);
 
-		// 2. DB에서 User에 해당하는 활성화된 예외 Grants 조회 (Ability 포함)
-		const userGrants = await this.grantsRepository.findActiveByUserId(user.id);
-		// Grant에서 Ability 추출 (Grant.priority를 Ability.priority로 복사)
+		const userGrants =
+			await this.userGrantsRepository.findActiveByUserId(user.id);
 		const userAbilities: AbilityWithPriority[] = userGrants
 			.filter((grant) => grant.ability)
 			.map((grant) => ({
 				...grant.ability!,
-				priority: grant.priority, // Grant의 priority 사용
+				priority: grant.priority,
 			}));
 		this.logger.debug(
 			`User 예외 Ability 조회: ${userAbilities.length}개, userId=${user.id}`,

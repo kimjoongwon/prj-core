@@ -3,32 +3,22 @@ import { Expose, Type } from "class-transformer";
 import { AbilityResponseDto } from "../abilities/ability-response.dto";
 
 /**
- * Grant 응답 DTO
- *
- * @description
- * Role 또는 User에게 할당된 권한 정보를 반환합니다.
+ * RoleGrant 응답 DTO
  */
-export class GrantResponseDto {
+export class RoleGrantResponseDto {
 	@ApiProperty({
-		description: "Grant ID (UUID)",
+		description: "RoleGrant ID (UUID)",
 		example: "550e8400-e29b-41d4-a716-446655440000",
 	})
 	@Expose()
 	id!: string;
 
 	@ApiProperty({
-		description: "권한 대상 유형 (Role 또는 User)",
-		example: "Role",
-	})
-	@Expose()
-	granteeType!: string;
-
-	@ApiProperty({
-		description: "권한 대상 ID (Role ID 또는 User ID)",
+		description: "Role ID",
 		example: "550e8400-e29b-41d4-a716-446655440001",
 	})
 	@Expose()
-	granteeId!: string;
+	roleId!: string;
 
 	@ApiProperty({
 		description: "Ability ID (부여된 권한)",

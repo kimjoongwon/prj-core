@@ -12,12 +12,10 @@
 import type { AbilityResponseDto } from './abilityResponseDto';
 
 export interface GrantResponseDto {
-  /** Grant ID (UUID) */
+  /** RoleGrant ID (UUID) */
   id: string;
-  /** 권한 대상 유형 (Role 또는 User) */
-  granteeType: string;
-  /** 권한 대상 ID (Role ID 또는 User ID) */
-  granteeId: string;
+  /** Role ID */
+  roleId: string;
   /** Ability ID (부여된 권한) */
   abilityId: string;
   /** 활성화 여부 */

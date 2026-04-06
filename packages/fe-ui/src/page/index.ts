@@ -199,7 +199,18 @@ export { AdminRolesRoleIdEditPage } from "./AdminRolesRoleIdEditPage/AdminRolesR
 export type {
 	AdminRolesRoleIdPageAbility,
 	AdminRolesRoleIdPageChangeSummary,
+	AdminRolesRoleIdPageCrudActionKey,
+	AdminRolesRoleIdPageCrudActionState,
+	AdminRolesRoleIdPageCrudBundle,
 	AdminRolesRoleIdPageGrantItem,
+	AdminRolesRoleIdPageMenuDiagnostic,
+	AdminRolesRoleIdPageMenuIssue,
+	AdminRolesRoleIdPageMenuIssueCode,
+	AdminRolesRoleIdPageMenuPermission,
+	AdminRolesRoleIdPagePageDiagnostic,
+	AdminRolesRoleIdPagePagePermission,
+	AdminRolesRoleIdPagePermissionIssue,
+	AdminRolesRoleIdPagePermissionIssueCode,
 	AdminRolesRoleIdPageProps,
 	AdminRolesRoleIdPageRole,
 } from "./AdminRolesRoleIdPage/AdminRolesRoleIdPage";

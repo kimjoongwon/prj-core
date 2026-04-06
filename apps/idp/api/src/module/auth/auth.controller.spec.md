@@ -17,7 +17,7 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 | GET | /callback | `clientId` 기준 OIDC 인증 완료 후 Authorization Code 수신 및 토큰 교환 | Public |
 | POST | /token/refresh | 리프레시 토큰으로 새 토큰 재발급 | Public (쿠키 기반) |
 | POST | /sign-up | 신규 사용자 계정 생성 | Public |
-| GET | /verify-token | 액세스 토큰 유효성 검증 + FULL_ACCESS 보유 여부 반환 | JWT 인증 필요, SkipSpaceCheck |
+| GET | /verify-token | 액세스 토큰 유효성 검증 + `manage all` 전역 권한 보유 여부 반환 | JWT 인증 필요, SkipSpaceCheck |
 | GET | /my-spaces | 현재 사용자가 접근 가능한 Space 목록 조회 | JWT 인증 필요, SkipSpaceCheck |
 | POST | /logout | 로그아웃 및 토큰 무효화 | JWT 인증 필요 |
 | GET | /audit-logs | 인증 감사 로그 목록 조회 | FULL_ACCESS, SkipSpaceCheck |
@@ -64,6 +64,7 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 - 로그인 시작은 `clientId` 쿼리로 구분하며, 앱별 login shell URL은 `AuthApplicationService.getClientRedirects()`로 조회합니다.
 - 콜백 에러 발생 시에도 `clientId`에 맞는 login shell URL로 `?error=...`를 붙여 리다이렉트합니다.
 - 성공 시에는 `AuthApplicationService.handleOidcCallback()`이 돌려준 `returnTo`를 우선 사용하고, 없으면 `defaultReturnTo`를 사용합니다.
+- `GET /verify-token`의 `hasFullAccess`는 tenant role 이름이 아니라 merged ability의 `manage all` 전역 권한 여부를 의미합니다.
 - 비밀번호 변경 시 `newPassword !== confirmPassword` 이면 `PASSWORD_MISMATCH` 예외 발생
 - 감사 로그 조회는 페이지네이션 지원 (기본 skip=0, take=20)
 - 세션은 쿠키 기반으로 관리되며, 로그아웃 시 IDP 측 토큰도 무효화
@@ -86,6 +87,7 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-06 | `GET /verify-token`의 `hasFullAccess` 의미를 tenant 역할명이 아닌 `manage all` 전역 권한으로 갱신 | codex |
 | 2026-03-25 | login/callback을 clientId 기반 generic route로 정리 | codex |
 | 2026-03-23 | `GET /verify-token` 응답 계약에 `hasFullAccess`를 추가하고 IDP 웹 메뉴 bootstrap 근거를 명시 | codex |
 | 2026-03-16 | Storybook RP 식별 기준을 `clientId` 계약으로 단순화해 login/callback redirect 표현을 정리 | codex |

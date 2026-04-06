@@ -28,7 +28,6 @@ export {
 	SmtpEmailProvider,
 } from "./email.service/index";
 export { FolderService } from "./folder.service";
-export { GrantService } from "./grant.service";
 export { GroupService } from "./group.service";
 export {
 	type IdpAccountInfo,
@@ -64,6 +63,7 @@ export { createPrismaClient } from "./prisma.factory";
 export { PrismaService } from "./prisma.service";
 export { RedisService } from "./redis.service";
 export { RoleService } from "./role.service";
+export { RoleGrantService } from "./role-grant.service";
 export { RoutineService } from "./routine.service";
 export { SecurityPolicyService } from "./security-policy.service";
 export { SpaceService } from "./space.service";

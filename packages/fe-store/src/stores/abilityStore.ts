@@ -33,6 +33,8 @@ const ACTION_ALIAS_MAP: Readonly<Record<string, AppAction>> = {
 };
 
 const APP_ACTION_SET = new Set<string>(APP_ACTIONS);
+const GLOBAL_ACCESS_ACTION: AppAction = "manage";
+const GLOBAL_ACCESS_SUBJECT: AppSubject = "all";
 
 function normalizeActionName(rawActionName: string): AppAction | null {
 	const normalized = rawActionName.trim().toLowerCase().replace(/:/g, "_");
@@ -143,6 +145,13 @@ export class AbilityStore {
 	}
 
 	/**
+	 * manage all 전역 권한 보유 여부
+	 */
+	get hasGlobalAccess(): boolean {
+		return this.can(GLOBAL_ACCESS_ACTION, GLOBAL_ACCESS_SUBJECT);
+	}
+
+	/**
 	 * 권한 확인 - can
 	 */
 	can(action: AppAction, subject: AppSubject, field?: string): boolean {
@@ -218,6 +227,10 @@ export class AbilityStore {
 	 * 메뉴 Subject만 필터링하여 허용된 목록 반환
 	 */
 	getAllowedMenus(): string[] {
+		if (this.hasGlobalAccess) {
+			return [GLOBAL_ACCESS_SUBJECT];
+		}
+
 		return this.getAllowedSubjects("view").filter((subject) =>
 			subject.startsWith("menu:"),
 		);
