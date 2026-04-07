@@ -8,9 +8,9 @@ test.describe("로그인 페이지 테스트", () => {
 		await page.goto("auth/login");
 
 		// Then: IDP 로그인 페이지가 표시됨
-		await expect(page.getByRole("heading", { name: "로그인" })).toBeVisible({
-			timeout: 30000,
-		});
+		await expect(
+			page.getByRole("heading", { name: "로그인", exact: true }),
+		).toBeVisible({ timeout: 30000 });
 
 		// Then: IDP 로그인 폼이 표시됨
 		await expect(page.getByLabel("이메일")).toBeVisible();

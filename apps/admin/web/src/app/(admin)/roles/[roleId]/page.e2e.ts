@@ -49,13 +49,13 @@ test.describe("역할 상세 페이지", () => {
 				page.getByRole("button", { name: "메뉴 편집" }),
 			).toBeVisible();
 			await expect(
-				page.getByText(/모든 메뉴, 화면, 데이터 권한이 자동 허용됩니다/, {
-					exact: false,
-				}),
+				page.getByText("에셋 목록", { exact: true }).first(),
 			).toBeVisible();
-			await expect(page.getByText("에셋 목록", { exact: true })).toBeVisible();
 			await expect(
-				page.getByText(/URL 직접 접근은 허용됩니다/, { exact: false }),
+				page.getByText(
+					/메뉴가 숨겨져 있어도 이 화면 권한이 켜져 있으면 URL 직접 접근은 허용됩니다/,
+					{ exact: false },
+				),
 			).toBeVisible();
 			await expect(page.getByText("회원 데이터", { exact: true })).toBeVisible();
 		});

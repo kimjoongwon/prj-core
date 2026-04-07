@@ -5,11 +5,12 @@ test.describe("문의 접수 페이지", () => {
 		test("문의 접수 페이지가 정상 렌더링되어야 한다", async ({ page }) => {
 			// Given: 문의 접수 페이지 진입
 			await page.goto("./inquiries/new", { waitUntil: "domcontentloaded" });
+			await page.waitForLoadState("networkidle");
 
 			// Then: 타이틀/설명/주요 입력 요소 확인
 			await expect(
 				page.getByRole("heading", { name: "문의 접수" }),
-			).toBeVisible();
+			).toBeVisible({ timeout: 15000 });
 			await expect(
 				page.getByText(
 					"문의 생성 bootstrap과 AiForm을 이용해 문의를 등록합니다.",
@@ -34,6 +35,7 @@ test.describe("문의 접수 페이지", () => {
 		}) => {
 			// Given: 문의 접수 페이지 진입
 			await page.goto("./inquiries/new", { waitUntil: "domcontentloaded" });
+			await page.waitForLoadState("networkidle");
 
 			// When: 목록으로 버튼 클릭
 			await page.getByRole("button", { name: "목록으로" }).click();

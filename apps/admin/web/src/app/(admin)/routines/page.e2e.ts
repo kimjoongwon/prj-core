@@ -60,9 +60,6 @@ test.describe("루틴 목록 페이지", () => {
 			const UPDATED_NAME = `E2E 수정된 루틴 ${uniqueSuffix}`;
 			const UPDATED_LABEL = `E2E-UPDATED-${uniqueSuffix}`;
 			const TEST_TASK_NAME = `E2E 루틴 운동 ${uniqueSuffix}`;
-			// 시드 데이터 기준 System Space ID (로그인 헬퍼와 동일)
-			const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
-			const spaceHeaders = { Cookie: `selectedSpaceId=${SYSTEM_SPACE_ID}` };
 			let createdTaskId: string | undefined;
 
 			const clickSaveWithOptionalEmptyActivitiesConfirm = async () => {
@@ -78,17 +75,13 @@ test.describe("루틴 목록 페이지", () => {
 
 			// Cleanup: 기존 E2E 테스트 루틴 삭제
 			try {
-				const resp = await page.request.get(
-					"http://localhost:3000/api/v1/routines",
-					{ headers: spaceHeaders },
-				);
+				const resp = await page.request.get("http://localhost:3000/api/v1/routines");
 				const body = await resp.json();
 				const routines = body.data ?? [];
 				for (const routine of routines as { id: string; name: string }[]) {
 					if (routine.name === TEST_NAME || routine.name === UPDATED_NAME) {
 						await page.request.delete(
 							`http://localhost:3000/api/v1/routines/${routine.id}`,
-							{ headers: spaceHeaders },
 						);
 					}
 				}
@@ -99,7 +92,6 @@ test.describe("루틴 목록 페이지", () => {
 			const createTaskResponse = await page.request.post(
 				`${ADMIN_API_BASE_URL}/tasks`,
 				{
-					headers: spaceHeaders,
 					data: {
 						name: TEST_TASK_NAME,
 						duration: 30,
@@ -261,7 +253,6 @@ test.describe("루틴 목록 페이지", () => {
 				for (let attempt = 0; attempt < 3; attempt += 1) {
 					const deleteTaskResponse = await page.request.delete(
 						`${ADMIN_API_BASE_URL}/tasks/${createdTaskId}`,
-						{ headers: spaceHeaders },
 					);
 					deleteTaskStatus = deleteTaskResponse.status();
 

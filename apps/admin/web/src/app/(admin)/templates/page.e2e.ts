@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
 
+function buildUniqueTemplateCode() {
+	return `E2E_TEMPLATE_${Date.now()}`;
+}
+
 test.describe("메시지 템플릿 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
 
@@ -43,33 +47,10 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 
 	test.describe("[E2E-002] 템플릿 CRUD 플로우", () => {
 		test("템플릿 등록 → 상세 → 수정 → 삭제 전체 플로우", async ({ page }) => {
-			const TEST_CODE = "E2E_TEST_TEMPLATE";
-			const TEST_NAME = "E2E SMS 테스트 템플릿";
+			const uniqueSuffix = `${Date.now()}`;
+			const TEST_CODE = buildUniqueTemplateCode();
+			const TEST_NAME = `E2E SMS 테스트 템플릿 ${uniqueSuffix}`;
 			const TEST_CONTENT = "E2E 테스트 발송 메시지입니다.";
-			// 시드 데이터 기준 System Space ID (로그인 헬퍼와 동일)
-			const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
-			const spaceHeaders = { Cookie: `selectedSpaceId=${SYSTEM_SPACE_ID}` };
-
-			// Cleanup: 기존 E2E 테스트 템플릿 삭제
-			try {
-				const resp = await page.request.get(
-					"http://localhost:3000/api/v1/templates",
-					{ headers: spaceHeaders },
-				);
-				const body = await resp.json();
-				const templates = body.data ?? [];
-				const existing = (templates as { id: string; code: string }[]).find(
-					(t) => t.code === TEST_CODE,
-				);
-				if (existing) {
-					await page.request.delete(
-						`http://localhost:3000/api/v1/templates/${existing.id}`,
-						{ headers: spaceHeaders },
-					);
-				}
-			} catch {
-				// cleanup 실패해도 계속 진행
-			}
 
 			// Given: 템플릿 등록 페이지로 이동
 			await page.goto("./templates/new");

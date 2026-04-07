@@ -52,15 +52,11 @@ test.describe("태스크 목록 페이지", () => {
 			const UPDATED_NAME = `E2E Task Beta ${uniqueSuffix}`;
 			const TEST_DURATION = 30;
 			const TEST_COUNT = 5;
-			// 시드 데이터 기준 System Space ID (로그인 헬퍼와 동일)
-			const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
-			const spaceHeaders = { Cookie: `selectedSpaceId=${SYSTEM_SPACE_ID}` };
 
 			// Given: 태스크 API로 테스트 데이터를 생성
 			const createResponse = await page.request.post(
 				`${ADMIN_API_BASE_URL}/tasks`,
 				{
-					headers: spaceHeaders,
 					data: {
 						name: TEST_NAME,
 						duration: TEST_DURATION,
@@ -109,7 +105,6 @@ test.describe("태스크 목록 페이지", () => {
 			const updateResponse = await page.request.patch(
 				`${ADMIN_API_BASE_URL}/tasks/${taskId}/exercise`,
 				{
-					headers: spaceHeaders,
 					data: {
 						name: UPDATED_NAME,
 						duration: TEST_DURATION,
@@ -130,7 +125,6 @@ test.describe("태스크 목록 페이지", () => {
 			// ── 삭제 플로우 ──
 			const deleteResponse = await page.request.delete(
 				`${ADMIN_API_BASE_URL}/tasks/${taskId}`,
-				{ headers: spaceHeaders },
 			);
 			expect(deleteResponse.status()).toBe(204);
 

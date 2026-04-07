@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@cocrepo/api": "workspace:^",
+    "@cocrepo/constant": "workspace:^",
     "@cocrepo/hook": "workspace:^",
     "@cocrepo/schema": "workspace:^",
     "@cocrepo/store": "workspace:^",

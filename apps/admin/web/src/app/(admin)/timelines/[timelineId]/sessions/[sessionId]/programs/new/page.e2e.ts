@@ -1,9 +1,6 @@
 import { expect, test } from "@playwright/test";
 
 const API_BASE_URL = "http://localhost:3000/api/v1";
-const SYSTEM_SPACE_ID =
-	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const SPACE_HEADERS = { Cookie: `selectedSpaceId=${SYSTEM_SPACE_ID}` };
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
 
 interface IdOnlyDto {
@@ -53,7 +50,6 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createTimelineResponse = await page.request.post(
 				`${API_BASE_URL}/timelines`,
 				{
-					headers: SPACE_HEADERS,
 					data: {
 						name: timelineName,
 						description: "프로그램 E2E 테스트용 타임라인",
@@ -70,7 +66,6 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createSessionResponse = await page.request.post(
 				`${API_BASE_URL}/timelines/${timelineId}/sessions`,
 				{
-					headers: SPACE_HEADERS,
 					data: {
 						name: sessionName,
 						type: "ONE_TIME",
@@ -89,7 +84,6 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createTaskResponse = await page.request.post(
 				`${API_BASE_URL}/tasks`,
 				{
-					headers: SPACE_HEADERS,
 					data: {
 						name: exerciseTaskName,
 						duration: 60,
@@ -109,7 +103,6 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createRoutineOneResponse = await page.request.post(
 				`${API_BASE_URL}/routines`,
 				{
-					headers: SPACE_HEADERS,
 					data: {
 						name: routineOneName,
 						label: `E2E-A-${uniqueSuffix}`,
@@ -133,7 +126,6 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createRoutineTwoResponse = await page.request.post(
 				`${API_BASE_URL}/routines`,
 				{
-					headers: SPACE_HEADERS,
 					data: {
 						name: routineTwoName,
 						label: `E2E-B-${uniqueSuffix}`,
@@ -156,9 +148,6 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 
 			const usersResponse = await page.request.get(
 				`${API_BASE_URL}/users?take=20&skip=0&status=active&roles=MANAGE&roles=FULL_ACCESS`,
-				{
-					headers: SPACE_HEADERS,
-				},
 			);
 			test.skip(
 				usersResponse.status() !== 200,
@@ -238,6 +227,8 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createdProgram =
 				(await postProgramResponse.json()) as ApiItemResponse<IdOnlyDto>;
 			programId = createdProgram.data?.id;
+			expect(programId).toBeTruthy();
+			const createdProgramId = programId as string;
 
 			await page.waitForURL(
 				new RegExp(`/timelines/${timelineId}/sessions/${sessionId}$`),
@@ -247,20 +238,21 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 				page.getByRole("heading", { name: sessionName }),
 			).toBeVisible({ timeout: 10_000 });
 
-			await page
-				.getByRole("button", { name: programName, exact: true })
-				.click();
-			await page.waitForURL(
-				new RegExp(
-					`/timelines/${timelineId}/sessions/${sessionId}/programs/[^/]+$`,
+			await expect(
+				page.getByRole("button", { name: programName, exact: true }),
+			).toBeVisible({ timeout: 10_000 });
+			await Promise.all([
+				page.waitForURL(
+					new RegExp(
+						`/timelines/${timelineId}/sessions/${sessionId}/programs/${createdProgramId}$`,
+					),
+					{ timeout: 30_000 },
 				),
-				{ timeout: 15_000 },
-			);
-
-			if (!programId) {
-				const urlMatch = page.url().match(/\/programs\/([^/]+)$/);
-				programId = urlMatch?.[1];
-			}
+				page.getByRole("button", { name: programName, exact: true }).click(),
+			]);
+			await expect(page.getByRole("button", { name: "수정" })).toBeVisible({
+				timeout: 30_000,
+			});
 
 			// When: 수정 페이지에서 루틴을 두 번째 루틴으로 변경하고 저장한다
 			await page.getByRole("button", { name: "수정" }).click();
@@ -325,40 +317,29 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			if (programId && sessionId && timelineId) {
 				await page.request.delete(
 					`${API_BASE_URL}/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`,
-					{ headers: SPACE_HEADERS },
 				);
 			}
 
 			if (sessionId && timelineId) {
 				await page.request.delete(
 					`${API_BASE_URL}/timelines/${timelineId}/sessions/${sessionId}`,
-					{ headers: SPACE_HEADERS },
 				);
 			}
 
 			if (timelineId) {
-				await page.request.delete(`${API_BASE_URL}/timelines/${timelineId}`, {
-					headers: SPACE_HEADERS,
-				});
+				await page.request.delete(`${API_BASE_URL}/timelines/${timelineId}`);
 			}
 
 			if (routineOneId) {
-				await page.request.delete(`${API_BASE_URL}/routines/${routineOneId}`, {
-					headers: SPACE_HEADERS,
-				});
+				await page.request.delete(`${API_BASE_URL}/routines/${routineOneId}`);
 			}
 
 			if (routineTwoId) {
-				await page.request.delete(`${API_BASE_URL}/routines/${routineTwoId}`, {
-					headers: SPACE_HEADERS,
-				});
+				await page.request.delete(`${API_BASE_URL}/routines/${routineTwoId}`);
 			}
 
 			if (createdExerciseTaskId) {
-				await page.request.delete(
-					`${API_BASE_URL}/tasks/${createdExerciseTaskId}`,
-					{ headers: SPACE_HEADERS },
-				);
+				await page.request.delete(`${API_BASE_URL}/tasks/${createdExerciseTaskId}`);
 			}
 		}
 	});

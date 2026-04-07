@@ -144,9 +144,9 @@ Admin
 |----|------|--------|------|---------|---------|
 | dashboard | 대시보드 | LayoutDashboard | /dashboard | menu:dashboard | 0 |
 | users | 회원 | Users | /users | menu:users | 1 |
-| spaces | 시설 관리 | Building2 | - | menu:spaces | 1 |
+| spaces | 공간 관리 | Building2 | - | menu:spaces | 1 |
 | timelines | 일정 관리 | CalendarDays | - | menu:timelines | 1 |
-| tasks | 운동 관리 | Dumbbell | - | menu:tasks | 2 |
+| tasks | 태스크 관리 | Dumbbell | - | menu:tasks | 2 |
 | templates | 템플릿 | Mail | - | menu:templates | 1 |
 | assets | 에셋 | Images | /assets | menu:assets | 1 |
 | inquiries | 문의 관리 | MessageCircleQuestionMark | /inquiries | menu:inquiries | 1 |
@@ -185,9 +185,9 @@ Admin
 |------|---------------|------|
 | 대시보드 | LayoutDashboard | 대시보드 레이아웃 |
 | 회원 | Users | 사용자 그룹 |
-| 시설 관리 | Building2 | 건물 |
+| 공간 관리 | Building2 | 건물 |
 | 일정 관리 | CalendarDays | 달력 |
-| 운동 관리 | Dumbbell | 덤벨 |
+| 태스크 관리 | Dumbbell | 덤벨 |
 | 템플릿 | Mail | 메일 |
 | 에셋 | Images | 겹쳐진 이미지 |
 | 문의 관리 | MessageCircleQuestionMark | 말풍선 + 물음표 |
@@ -197,6 +197,7 @@ Admin
 
 - 모든 경로는 동적 파라미터에 전체 엔티티명 사용 (예: `[userId]`, `[inquiryId]`)
 - Subject는 `menu:` 접두어로 시작
+- `ADMIN_NAV_ITEMS` 는 각 admin route 폴더의 `route.meta.ts` generated catalog를 직접 사용합니다.
 - 1depth 메뉴는 하위 메뉴가 있을 경우 path 없이 children만 정의
 - 1depth 메뉴가 단일 페이지면 path 포함 (예: 문의 관리)
 - 메뉴 권한 편집은 `ADMIN_NAV_ITEMS` 를 직접 수정하지 않고 `ADMIN_MENU_PERMISSION_LEAFS` 파생 결과를 사용
@@ -220,6 +221,8 @@ Admin
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-07 | 전체 admin route meta rollout 이후 `ADMIN_NAV_ITEMS` 를 generated-only SOT로 전환 | codex |
+| 2026-04-07 | `route.meta.ts` generated nav catalog를 수동 `ADMIN_NAV_ITEMS` 에 merge하는 점진 이행 규칙 추가 | codex |
 | 2026-04-06 | 역할 상세 메뉴 권한 편집기용 `ADMIN_MENU_PERMISSION_LEAFS`, `ADMIN_MENU_PERMISSION_SUBJECTS` 계약과 parent+child required subject 규칙을 문서화 | codex |
 | 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-02-26 | 초기 생성 (기존 admin-menu.ts 역기획) | orch-screen-planner |

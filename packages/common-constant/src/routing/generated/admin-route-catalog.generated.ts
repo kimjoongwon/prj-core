@@ -1,0 +1,793 @@
+import type { NavItemConfig } from "@cocrepo/type";
+import type { GeneratedAdminPageAccessItem } from "../admin-route-meta";
+
+export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
+	"apps/admin/web/src/app/(admin)/abilities/[abilityId]/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/abilities/[abilityId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/abilities/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/abilities/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/actions/[actionId]/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/actions/[actionId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/actions/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/actions/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/assets/[assetId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/assets/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/dashboard/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/inquiries/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/inquiries/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/roles/[roleId]/abilities/[abilityId]/actions/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/roles/[roleId]/abilities/[abilityId]/subjects/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/roles/[roleId]/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/roles/[roleId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/roles/categories/[categoryId]/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/roles/categories/[categoryId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/roles/categories/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/roles/categories/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/roles/groups/[groupId]/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/roles/groups/[groupId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/roles/groups/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/roles/groups/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/roles/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/roles/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/routines/[routineId]/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/routines/[routineId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/routines/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/routines/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/spaces/[spaceId]/ground/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/spaces/[spaceId]/ground/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/spaces/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/spaces/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/subjects/[subjectId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/subjects/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/tasks/[taskId]/exercise/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/tasks/[taskId]/exercise/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/tasks/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/tasks/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/templates/[templateId]/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/templates/[templateId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/templates/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/templates/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/sessions/[sessionId]/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/sessions/[sessionId]/programs/[programId]/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/sessions/[sessionId]/programs/[programId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/sessions/[sessionId]/programs/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/sessions/[sessionId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/sessions/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/timelines/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/timelines/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/users/[userId]/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/users/[userId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/users/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/users/route.meta.ts"
+];
+
+export const GENERATED_ADMIN_NAV_ITEMS: NavItemConfig[] = [
+	{
+		"id": "dashboard",
+		"label": "대시보드",
+		"path": "/dashboard",
+		"icon": "LayoutDashboard",
+		"subject": "menu:dashboard"
+	},
+	{
+		"id": "users",
+		"label": "회원",
+		"icon": "Users",
+		"path": "/users",
+		"subject": "menu:users",
+		"children": [
+			{
+				"id": "users-list",
+				"label": "회원 목록",
+				"path": "/users",
+				"subject": "menu:users:list"
+			}
+		]
+	},
+	{
+		"id": "spaces",
+		"label": "공간 관리",
+		"icon": "Building2",
+		"subject": "menu:spaces",
+		"children": [
+			{
+				"id": "spaces-list",
+				"label": "공간 목록",
+				"path": "/spaces",
+				"subject": "menu:spaces:list"
+			}
+		]
+	},
+	{
+		"id": "timelines",
+		"label": "일정 관리",
+		"icon": "CalendarDays",
+		"subject": "menu:timelines",
+		"children": [
+			{
+				"id": "timelines-list",
+				"label": "타임라인",
+				"path": "/timelines",
+				"subject": "menu:timelines:list"
+			}
+		]
+	},
+	{
+		"id": "tasks",
+		"label": "태스크 관리",
+		"icon": "Dumbbell",
+		"subject": "menu:tasks",
+		"children": [
+			{
+				"id": "tasks-list",
+				"label": "태스크 목록",
+				"path": "/tasks",
+				"subject": "menu:tasks:list"
+			},
+			{
+				"id": "routines-list",
+				"label": "루틴",
+				"path": "/routines",
+				"subject": "menu:routines:list"
+			}
+		]
+	},
+	{
+		"id": "templates",
+		"label": "템플릿",
+		"icon": "Mail",
+		"subject": "menu:templates",
+		"children": [
+			{
+				"id": "templates-list",
+				"label": "템플릿 목록",
+				"path": "/templates",
+				"subject": "menu:templates:list"
+			}
+		]
+	},
+	{
+		"id": "assets",
+		"label": "에셋",
+		"icon": "Images",
+		"path": "/assets",
+		"subject": "menu:assets",
+		"children": [
+			{
+				"id": "assets-list",
+				"label": "에셋 목록",
+				"path": "/assets",
+				"subject": "menu:assets:list"
+			}
+		]
+	},
+	{
+		"id": "inquiries",
+		"label": "문의 관리",
+		"icon": "MessageCircleQuestionMark",
+		"path": "/inquiries",
+		"subject": "menu:inquiries",
+		"children": [
+			{
+				"id": "inquiries-list",
+				"label": "문의 목록",
+				"path": "/inquiries",
+				"subject": "menu:inquiries:list"
+			}
+		]
+	},
+	{
+		"id": "roles",
+		"label": "권한 관리",
+		"icon": "Shield",
+		"subject": "menu:roles",
+		"children": [
+			{
+				"id": "roles-list",
+				"label": "역할",
+				"path": "/roles",
+				"subject": "menu:roles:list"
+			},
+			{
+				"id": "role-groups-list",
+				"label": "역할 그룹",
+				"path": "/roles/groups",
+				"subject": "menu:role-groups:list"
+			},
+			{
+				"id": "role-categories-list",
+				"label": "역할 카테고리",
+				"path": "/roles/categories",
+				"subject": "menu:role-categories:list"
+			},
+			{
+				"id": "abilities-list",
+				"label": "권한 정의",
+				"path": "/abilities",
+				"subject": "menu:abilities:list"
+			},
+			{
+				"id": "actions-list",
+				"label": "액션",
+				"path": "/actions",
+				"subject": "menu:actions:list"
+			},
+			{
+				"id": "subjects-list",
+				"label": "대상",
+				"path": "/subjects",
+				"subject": "menu:subjects:list"
+			}
+		]
+	}
+];
+
+export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] = [
+	{
+		"groupId": "dashboard",
+		"groupLabel": "대시보드",
+		"pageId": "dashboard",
+		"pageLabel": "대시보드",
+		"pathPattern": "/dashboard",
+		"subject": "page:dashboard",
+		"description": "운영 지표와 최근 상태를 확인하는 첫 화면입니다."
+	},
+	{
+		"groupId": "users",
+		"groupLabel": "회원",
+		"pageId": "users:list",
+		"pageLabel": "회원 목록",
+		"pathPattern": "/users",
+		"subject": "page:users:list",
+		"description": "회원 목록과 검색 결과를 확인합니다.",
+		"menuLeafId": "users-list"
+	},
+	{
+		"groupId": "users",
+		"groupLabel": "회원",
+		"pageId": "users:new",
+		"pageLabel": "회원 등록",
+		"pathPattern": "/users/new",
+		"subject": "page:users:new",
+		"description": "새 회원 정보를 등록합니다."
+	},
+	{
+		"groupId": "users",
+		"groupLabel": "회원",
+		"pageId": "users:detail",
+		"pageLabel": "회원 상세",
+		"pathPattern": "/users/[userId]",
+		"subject": "page:users:detail",
+		"description": "회원 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "users",
+		"groupLabel": "회원",
+		"pageId": "users:edit",
+		"pageLabel": "회원 수정",
+		"pathPattern": "/users/[userId]/edit",
+		"subject": "page:users:edit",
+		"description": "회원 정보를 수정합니다."
+	},
+	{
+		"groupId": "spaces",
+		"groupLabel": "공간 관리",
+		"pageId": "spaces:list",
+		"pageLabel": "공간 목록",
+		"pathPattern": "/spaces",
+		"subject": "page:spaces:list",
+		"description": "공간과 연결된 ground 목록을 관리합니다.",
+		"menuLeafId": "spaces-list"
+	},
+	{
+		"groupId": "spaces",
+		"groupLabel": "공간 관리",
+		"pageId": "spaces:new",
+		"pageLabel": "공간 등록",
+		"pathPattern": "/spaces/new",
+		"subject": "page:spaces:new",
+		"description": "새 공간을 등록합니다."
+	},
+	{
+		"groupId": "spaces",
+		"groupLabel": "공간 관리",
+		"pageId": "spaces:detail",
+		"pageLabel": "공간 상세",
+		"pathPattern": "/spaces/[spaceId]/ground",
+		"subject": "page:spaces:detail",
+		"description": "선택한 공간의 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "spaces",
+		"groupLabel": "공간 관리",
+		"pageId": "spaces:edit",
+		"pageLabel": "공간 수정",
+		"pathPattern": "/spaces/[spaceId]/ground/edit",
+		"subject": "page:spaces:edit",
+		"description": "선택한 공간의 정보를 수정합니다."
+	},
+	{
+		"groupId": "timelines",
+		"groupLabel": "일정 관리",
+		"pageId": "timelines:list",
+		"pageLabel": "타임라인 목록",
+		"pathPattern": "/timelines",
+		"subject": "page:timelines:list",
+		"description": "타임라인 목록을 조회합니다.",
+		"menuLeafId": "timelines-list"
+	},
+	{
+		"groupId": "timelines",
+		"groupLabel": "일정 관리",
+		"pageId": "timelines:new",
+		"pageLabel": "타임라인 등록",
+		"pathPattern": "/timelines/new",
+		"subject": "page:timelines:new",
+		"description": "새 타임라인을 등록합니다."
+	},
+	{
+		"groupId": "timelines",
+		"groupLabel": "일정 관리",
+		"pageId": "timelines:detail",
+		"pageLabel": "타임라인 상세",
+		"pathPattern": "/timelines/[timelineId]",
+		"subject": "page:timelines:detail",
+		"description": "타임라인 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "timelines",
+		"groupLabel": "일정 관리",
+		"pageId": "timelines:edit",
+		"pageLabel": "타임라인 수정",
+		"pathPattern": "/timelines/[timelineId]/edit",
+		"subject": "page:timelines:edit",
+		"description": "타임라인 정보를 수정합니다."
+	},
+	{
+		"groupId": "timelines",
+		"groupLabel": "일정 관리",
+		"pageId": "sessions:new",
+		"pageLabel": "세션 등록",
+		"pathPattern": "/timelines/[timelineId]/sessions/new",
+		"subject": "page:sessions:new",
+		"description": "타임라인에 새 세션을 추가합니다."
+	},
+	{
+		"groupId": "timelines",
+		"groupLabel": "일정 관리",
+		"pageId": "sessions:detail",
+		"pageLabel": "세션 상세",
+		"pathPattern": "/timelines/[timelineId]/sessions/[sessionId]",
+		"subject": "page:sessions:detail",
+		"description": "세션 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "timelines",
+		"groupLabel": "일정 관리",
+		"pageId": "sessions:edit",
+		"pageLabel": "세션 수정",
+		"pathPattern": "/timelines/[timelineId]/sessions/[sessionId]/edit",
+		"subject": "page:sessions:edit",
+		"description": "세션 정보를 수정합니다."
+	},
+	{
+		"groupId": "timelines",
+		"groupLabel": "일정 관리",
+		"pageId": "programs:new",
+		"pageLabel": "프로그램 등록",
+		"pathPattern": "/timelines/[timelineId]/sessions/[sessionId]/programs/new",
+		"subject": "page:programs:new",
+		"description": "세션에 새 프로그램을 추가합니다."
+	},
+	{
+		"groupId": "timelines",
+		"groupLabel": "일정 관리",
+		"pageId": "programs:detail",
+		"pageLabel": "프로그램 상세",
+		"pathPattern": "/timelines/[timelineId]/sessions/[sessionId]/programs/[programId]",
+		"subject": "page:programs:detail",
+		"description": "프로그램 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "timelines",
+		"groupLabel": "일정 관리",
+		"pageId": "programs:edit",
+		"pageLabel": "프로그램 수정",
+		"pathPattern": "/timelines/[timelineId]/sessions/[sessionId]/programs/[programId]/edit",
+		"subject": "page:programs:edit",
+		"description": "프로그램 정보를 수정합니다."
+	},
+	{
+		"groupId": "tasks",
+		"groupLabel": "태스크 관리",
+		"pageId": "tasks:list",
+		"pageLabel": "태스크 목록",
+		"pathPattern": "/tasks",
+		"subject": "page:tasks:list",
+		"description": "태스크 목록을 조회합니다.",
+		"menuLeafId": "tasks-list"
+	},
+	{
+		"groupId": "tasks",
+		"groupLabel": "태스크 관리",
+		"pageId": "tasks:new",
+		"pageLabel": "태스크 등록",
+		"pathPattern": "/tasks/new",
+		"subject": "page:tasks:new",
+		"description": "새 태스크를 등록합니다."
+	},
+	{
+		"groupId": "tasks",
+		"groupLabel": "태스크 관리",
+		"pageId": "tasks:detail",
+		"pageLabel": "태스크 상세",
+		"pathPattern": "/tasks/[taskId]/exercise",
+		"subject": "page:tasks:detail",
+		"description": "태스크 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "tasks",
+		"groupLabel": "태스크 관리",
+		"pageId": "tasks:edit",
+		"pageLabel": "태스크 수정",
+		"pathPattern": "/tasks/[taskId]/exercise/edit",
+		"subject": "page:tasks:edit",
+		"description": "태스크 정보를 수정합니다."
+	},
+	{
+		"groupId": "routines",
+		"groupLabel": "루틴",
+		"pageId": "routines:list",
+		"pageLabel": "루틴 목록",
+		"pathPattern": "/routines",
+		"subject": "page:routines:list",
+		"description": "루틴 목록을 조회합니다.",
+		"menuLeafId": "routines-list"
+	},
+	{
+		"groupId": "routines",
+		"groupLabel": "루틴",
+		"pageId": "routines:new",
+		"pageLabel": "루틴 등록",
+		"pathPattern": "/routines/new",
+		"subject": "page:routines:new",
+		"description": "새 루틴을 등록합니다."
+	},
+	{
+		"groupId": "routines",
+		"groupLabel": "루틴",
+		"pageId": "routines:detail",
+		"pageLabel": "루틴 상세",
+		"pathPattern": "/routines/[routineId]",
+		"subject": "page:routines:detail",
+		"description": "루틴 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "routines",
+		"groupLabel": "루틴",
+		"pageId": "routines:edit",
+		"pageLabel": "루틴 수정",
+		"pathPattern": "/routines/[routineId]/edit",
+		"subject": "page:routines:edit",
+		"description": "루틴 정보를 수정합니다."
+	},
+	{
+		"groupId": "templates",
+		"groupLabel": "템플릿",
+		"pageId": "templates:list",
+		"pageLabel": "템플릿 목록",
+		"pathPattern": "/templates",
+		"subject": "page:templates:list",
+		"description": "템플릿 목록을 조회합니다.",
+		"menuLeafId": "templates-list"
+	},
+	{
+		"groupId": "templates",
+		"groupLabel": "템플릿",
+		"pageId": "templates:new",
+		"pageLabel": "템플릿 등록",
+		"pathPattern": "/templates/new",
+		"subject": "page:templates:new",
+		"description": "새 템플릿을 등록합니다."
+	},
+	{
+		"groupId": "templates",
+		"groupLabel": "템플릿",
+		"pageId": "templates:detail",
+		"pageLabel": "템플릿 상세",
+		"pathPattern": "/templates/[templateId]",
+		"subject": "page:templates:detail",
+		"description": "템플릿 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "templates",
+		"groupLabel": "템플릿",
+		"pageId": "templates:edit",
+		"pageLabel": "템플릿 수정",
+		"pathPattern": "/templates/[templateId]/edit",
+		"subject": "page:templates:edit",
+		"description": "템플릿 정보를 수정합니다."
+	},
+	{
+		"groupId": "assets",
+		"groupLabel": "에셋",
+		"pageId": "assets:list",
+		"pageLabel": "에셋 목록",
+		"pathPattern": "/assets",
+		"subject": "page:assets:list",
+		"description": "에셋 목록을 조회합니다.",
+		"menuLeafId": "assets-list"
+	},
+	{
+		"groupId": "assets",
+		"groupLabel": "에셋",
+		"pageId": "assets:detail",
+		"pageLabel": "에셋 상세",
+		"pathPattern": "/assets/[assetId]",
+		"subject": "page:assets:detail",
+		"description": "에셋 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "inquiries",
+		"groupLabel": "문의 관리",
+		"pageId": "inquiries:list",
+		"pageLabel": "문의 목록",
+		"pathPattern": "/inquiries",
+		"subject": "page:inquiries:list",
+		"description": "문의 목록을 조회합니다.",
+		"menuLeafId": "inquiries-list"
+	},
+	{
+		"groupId": "inquiries",
+		"groupLabel": "문의 관리",
+		"pageId": "inquiries:new",
+		"pageLabel": "문의 등록",
+		"pathPattern": "/inquiries/new",
+		"subject": "page:inquiries:new",
+		"description": "새 문의를 등록합니다."
+	},
+	{
+		"groupId": "inquiries",
+		"groupLabel": "문의 관리",
+		"pageId": "inquiries:detail",
+		"pageLabel": "문의 상세",
+		"pathPattern": "/inquiries/[inquiryId]",
+		"subject": "page:inquiries:detail",
+		"description": "문의 상세 내용을 확인합니다."
+	},
+	{
+		"groupId": "inquiries",
+		"groupLabel": "문의 관리",
+		"pageId": "inquiries:edit",
+		"pageLabel": "문의 수정",
+		"pathPattern": "/inquiries/[inquiryId]/edit",
+		"subject": "page:inquiries:edit",
+		"description": "문의 정보를 수정합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "roles:list",
+		"pageLabel": "역할 목록",
+		"pathPattern": "/roles",
+		"subject": "page:roles:list",
+		"description": "역할 목록을 조회합니다.",
+		"menuLeafId": "roles-list"
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "roles:new",
+		"pageLabel": "역할 등록",
+		"pathPattern": "/roles/new",
+		"subject": "page:roles:new",
+		"description": "새 역할을 등록합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "roles:detail",
+		"pageLabel": "역할 상세",
+		"pathPattern": "/roles/[roleId]",
+		"subject": "page:roles:detail",
+		"description": "역할 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "roles:edit",
+		"pageLabel": "역할 수정",
+		"pathPattern": "/roles/[roleId]/edit",
+		"subject": "page:roles:edit",
+		"description": "역할 정보를 수정합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "role-groups:list",
+		"pageLabel": "역할 그룹 목록",
+		"pathPattern": "/roles/groups",
+		"subject": "page:role-groups:list",
+		"description": "역할 그룹 목록을 조회합니다.",
+		"menuLeafId": "role-groups-list"
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "role-groups:new",
+		"pageLabel": "역할 그룹 등록",
+		"pathPattern": "/roles/groups/new",
+		"subject": "page:role-groups:new",
+		"description": "새 역할 그룹을 등록합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "role-groups:detail",
+		"pageLabel": "역할 그룹 상세",
+		"pathPattern": "/roles/groups/[groupId]",
+		"subject": "page:role-groups:detail",
+		"description": "역할 그룹 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "role-groups:edit",
+		"pageLabel": "역할 그룹 수정",
+		"pathPattern": "/roles/groups/[groupId]/edit",
+		"subject": "page:role-groups:edit",
+		"description": "역할 그룹 정보를 수정합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "role-categories:list",
+		"pageLabel": "역할 카테고리 목록",
+		"pathPattern": "/roles/categories",
+		"subject": "page:role-categories:list",
+		"description": "역할 카테고리 목록을 조회합니다.",
+		"menuLeafId": "role-categories-list"
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "role-categories:new",
+		"pageLabel": "역할 카테고리 등록",
+		"pathPattern": "/roles/categories/new",
+		"subject": "page:role-categories:new",
+		"description": "새 역할 카테고리를 등록합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "role-categories:detail",
+		"pageLabel": "역할 카테고리 상세",
+		"pathPattern": "/roles/categories/[categoryId]",
+		"subject": "page:role-categories:detail",
+		"description": "역할 카테고리 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "role-categories:edit",
+		"pageLabel": "역할 카테고리 수정",
+		"pathPattern": "/roles/categories/[categoryId]/edit",
+		"subject": "page:role-categories:edit",
+		"description": "역할 카테고리 정보를 수정합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "abilities:list",
+		"pageLabel": "권한 정의 목록",
+		"pathPattern": "/abilities",
+		"subject": "page:abilities:list",
+		"description": "권한 정의 목록을 조회합니다.",
+		"menuLeafId": "abilities-list"
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "abilities:new",
+		"pageLabel": "권한 정의 등록",
+		"pathPattern": "/abilities/new",
+		"subject": "page:abilities:new",
+		"description": "새 권한 정의를 등록합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "abilities:detail",
+		"pageLabel": "권한 정의 상세",
+		"pathPattern": "/abilities/[abilityId]",
+		"subject": "page:abilities:detail",
+		"description": "권한 정의 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "abilities:edit",
+		"pageLabel": "권한 정의 수정",
+		"pathPattern": "/abilities/[abilityId]/edit",
+		"subject": "page:abilities:edit",
+		"description": "권한 정의를 수정합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "actions:list",
+		"pageLabel": "액션 목록",
+		"pathPattern": "/actions",
+		"subject": "page:actions:list",
+		"description": "액션 목록을 조회합니다.",
+		"menuLeafId": "actions-list"
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "actions:new",
+		"pageLabel": "액션 등록",
+		"pathPattern": "/actions/new",
+		"subject": "page:actions:new",
+		"description": "새 액션을 등록합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "actions:detail",
+		"pageLabel": "액션 상세",
+		"pathPattern": "/actions/[actionId]",
+		"subject": "page:actions:detail",
+		"description": "액션 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "actions:edit",
+		"pageLabel": "액션 수정",
+		"pathPattern": "/actions/[actionId]/edit",
+		"subject": "page:actions:edit",
+		"description": "액션 정보를 수정합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "subjects:list",
+		"pageLabel": "대상 목록",
+		"pathPattern": "/subjects",
+		"subject": "page:subjects:list",
+		"description": "대상 목록을 조회합니다.",
+		"menuLeafId": "subjects-list"
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "subjects:detail",
+		"pageLabel": "대상 상세",
+		"pathPattern": "/subjects/[subjectId]",
+		"subject": "page:subjects:detail",
+		"description": "대상 상세 정보를 확인합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "roles:ability-actions",
+		"pageLabel": "역할별 권한 액션 연결",
+		"pathPattern": "/roles/[roleId]/abilities/[abilityId]/actions",
+		"subject": "page:roles:ability-actions",
+		"description": "역할에 연결된 액션 구성을 확인합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "roles:ability-subjects",
+		"pageLabel": "역할별 권한 대상 연결",
+		"pathPattern": "/roles/[roleId]/abilities/[abilityId]/subjects",
+		"subject": "page:roles:ability-subjects",
+		"description": "역할에 연결된 대상 구성을 확인합니다."
+	}
+];

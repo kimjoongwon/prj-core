@@ -84,6 +84,12 @@
       "outputs": [".next/**", "!.next/cache/**"],
       "cache": true
     },
+    "admin-web#start:dev": {
+      "dependsOn": ["^build"],
+      "with": ["@cocrepo/constant#start:dev"],
+      "cache": false,
+      "persistent": true
+    },
     "proposal-web#build": {
       "dependsOn": ["^build"],
       "inputs": ["src/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],

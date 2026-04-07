@@ -25,11 +25,13 @@
 - [x] source-only 패키지는 빈 출력으로 캐시 일관성만 유지
 - [x] `tool-storybook#build`는 Storybook 전용 입력과 `storybook-static/**` 출력을 사용
 - [x] Storybook 관련 환경 변수는 Turbo strict env 모드에서도 태스크로 전달된다
+- [x] `admin-web#start:dev`는 `@cocrepo/constant#start:dev`를 함께 실행해 route meta generated catalog watch를 유지한다
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-07 | `admin-web#start:dev`에 `@cocrepo/constant#start:dev` 동시 실행 규칙을 추가해 route meta generated catalog가 개발 서버 중에도 자동 반영되도록 수정 | codex |
 | 2026-03-20 | `proposal-web#build`에 Next.js 앱 표준 입력/출력(`.next/**`) 규칙을 추가해 Docker/Turbo 빌드 경고 없이 캐시되도록 정리 | codex |
 | 2026-03-18 | Storybook 정적/개발 빌드에 필요한 `STORYBOOK_*` 환경 변수를 `globalEnv`에 추가해 Turbo 실행에서도 전달되도록 수정 | codex |
 | 2026-03-09 | `@cocrepo/prisma#build` 입력을 `schema/**`, `scripts/**`, `prisma.config.ts`, seed 파일 기준으로 정정해 스키마 리팩토링 변경이 캐시에 반영되도록 수정 | codex |

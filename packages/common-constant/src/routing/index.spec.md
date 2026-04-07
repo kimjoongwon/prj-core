@@ -18,5 +18,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-07 | admin route meta 공용 타입 export를 추가 | codex |
 | 2026-04-06 | admin permission catalog 배럴 export를 추가 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

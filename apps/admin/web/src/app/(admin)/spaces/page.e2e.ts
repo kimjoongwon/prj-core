@@ -153,15 +153,11 @@ test.describe("공간 목록 페이지", () => {
 			const TEST_ADDRESS = "서울특별시 강남구 테스트로 1";
 			const TEST_PHONE = "02-0000-0001";
 			const TEST_EMAIL = `e2e-test-space-${uniqueSuffix}@example.com`;
-			// 시드 데이터 기준 System Space ID (로그인 헬퍼와 동일)
-			const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
-			const spaceHeaders = { Cookie: `selectedSpaceId=${SYSTEM_SPACE_ID}` };
 
 			// Given: 공간 API로 테스트 데이터를 생성
 			const createResponse = await page.request.post(
 				`${ADMIN_API_BASE_URL}/spaces`,
 				{
-					headers: spaceHeaders,
 					data: {
 						name: TEST_NAME,
 						label: null,
@@ -212,7 +208,6 @@ test.describe("공간 목록 페이지", () => {
 			const updateResponse = await page.request.patch(
 				`${ADMIN_API_BASE_URL}/spaces/${spaceId}/ground`,
 				{
-					headers: spaceHeaders,
 					data: {
 						name: UPDATED_NAME,
 						label: null,
@@ -239,7 +234,6 @@ test.describe("공간 목록 페이지", () => {
 
 			const deleteResp = await page.request.delete(
 				`${ADMIN_API_BASE_URL}/spaces/${spaceId}`,
-				{ headers: spaceHeaders },
 			);
 			expect(deleteResp.status()).toBe(200);
 

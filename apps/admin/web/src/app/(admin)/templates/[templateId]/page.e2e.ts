@@ -1,41 +1,20 @@
 import { expect, test } from "@playwright/test";
 
+function buildUniqueTemplateCode() {
+	return `E2E_TOGGLE_TEMPLATE_${Date.now()}`;
+}
+
 test.describe("메시지 템플릿 상세 페이지", () => {
 	// ── E2E-001: 활성 상태 토글 ──
 
 	test.describe("[E2E-001] 활성 상태 토글", () => {
 		test("템플릿 상세에서 활성 상태 토글이 동작해야 한다", async ({ page }) => {
-			const TEST_CODE = "E2E_TOGGLE_TEMPLATE";
-			// 시드 데이터 기준 System Space ID (로그인 헬퍼와 동일)
-			const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
-			const spaceHeaders = { Cookie: `selectedSpaceId=${SYSTEM_SPACE_ID}` };
-
-			// Cleanup
-			try {
-				const resp = await page.request.get(
-					"http://localhost:3000/api/v1/templates",
-					{ headers: spaceHeaders },
-				);
-				const body = await resp.json();
-				const templates = body.data ?? [];
-				const existing = (templates as { id: string; code: string }[]).find(
-					(t) => t.code === TEST_CODE,
-				);
-				if (existing) {
-					await page.request.delete(
-						`http://localhost:3000/api/v1/templates/${existing.id}`,
-						{ headers: spaceHeaders },
-					);
-				}
-			} catch {
-				// cleanup 무시
-			}
+			const TEST_CODE = buildUniqueTemplateCode();
 
 			// Given: SMS 템플릿 API로 직접 생성
 			const createResp = await page.request.post(
 				"http://localhost:3000/api/v1/templates",
 				{
-					headers: spaceHeaders,
 					data: {
 						type: "SMS",
 						code: TEST_CODE,
@@ -44,6 +23,7 @@ test.describe("메시지 템플릿 상세 페이지", () => {
 					},
 				},
 			);
+			expect(createResp.status()).toBe(201);
 			const created = await createResp.json();
 			const templateId = created.data?.id;
 			expect(templateId).toBeTruthy();
@@ -69,10 +49,7 @@ test.describe("메시지 템플릿 상세 페이지", () => {
 			expect(toggleResp.status()).toBe(200);
 
 			// Cleanup: 템플릿 삭제
-			await page.request.delete(
-				`http://localhost:3000/api/v1/templates/${templateId}`,
-				{ headers: spaceHeaders },
-			);
+			await page.request.delete(`http://localhost:3000/api/v1/templates/${templateId}`);
 		});
 	});
 });
