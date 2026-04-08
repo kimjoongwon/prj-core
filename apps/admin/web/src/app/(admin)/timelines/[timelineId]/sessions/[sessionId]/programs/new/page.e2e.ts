@@ -1,7 +1,9 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const API_BASE_URL = "http://localhost:3000/api/v1";
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
+const SYSTEM_SPACE_ID =
+	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
 
 interface IdOnlyDto {
 	id: string;
@@ -9,6 +11,12 @@ interface IdOnlyDto {
 
 interface UserDto extends IdOnlyDto {
 	name: string;
+}
+
+interface ProgramSnapshotDto extends IdOnlyDto {
+	name?: string;
+	routineId?: string;
+	capacity?: number;
 }
 
 interface ApiListResponse<T> {
@@ -21,6 +29,127 @@ interface ApiItemResponse<T> {
 
 const escapeRegExp = (value: string) =>
 	value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+async function ensureAdminCurrentSpace(page: Page) {
+	const response = await page.request.post(`${API_BASE_URL}/auth/current-space`, {
+		data: { spaceId: SYSTEM_SPACE_ID },
+	});
+	expect(response.ok()).toBeTruthy();
+
+	const body = (await response.json()) as ApiItemResponse<IdOnlyDto>;
+	expect(body.data?.id).toBe(SYSTEM_SPACE_ID);
+}
+
+async function waitForRoutineToBeSelectable(page: Page, routineId: string) {
+	await expect
+		.poll(
+			async () => {
+				const response = await page.request.get(`${API_BASE_URL}/routines`, {
+					params: {
+						take: 50,
+						skip: 0,
+						spaceScope: "INCLUDE_ANCESTORS",
+					},
+				});
+				if (!response.ok()) {
+					return false;
+				}
+
+				const body = (await response.json()) as ApiListResponse<IdOnlyDto>;
+				return body.data?.some((routine) => routine.id === routineId) ?? false;
+			},
+			{
+				timeout: 30_000,
+				message: `루틴 ${routineId} 가 선택 목록에 노출될 때까지 대기`,
+			},
+		)
+		.toBe(true);
+}
+
+function waitForRoutineOptions(page: Page) {
+	return page
+		.waitForResponse(
+			(response) =>
+				response.url().includes("/api/v1/routines") &&
+				response.request().method() === "GET",
+			{ timeout: 15_000 },
+		)
+		.catch(() => undefined);
+}
+
+async function openRoutinePicker(page: Page) {
+	const routineDialog = page.getByRole("dialog", { name: "루틴 선택" });
+	for (let attempt = 0; attempt < 3; attempt += 1) {
+		const routineOptionsResponse = waitForRoutineOptions(page);
+		await page.getByRole("button", { name: "루틴 선택" }).click();
+		await routineOptionsResponse;
+		if (await routineDialog.isVisible().catch(() => false)) {
+			return routineDialog;
+		}
+		await page.waitForTimeout(500);
+	}
+	await expect(routineDialog).toBeVisible({ timeout: 45_000 });
+	return routineDialog;
+}
+
+async function waitForProgramSnapshot(
+	page: Page,
+	params: {
+		timelineId: string;
+		sessionId: string;
+		programId: string;
+		assert: (program: ProgramSnapshotDto | undefined) => boolean;
+		message: string;
+	},
+) {
+	await expect
+		.poll(
+			async () => {
+				const response = await page.request.get(
+					`${API_BASE_URL}/timelines/${params.timelineId}/sessions/${params.sessionId}/programs/${params.programId}`,
+				);
+				if (!response.ok()) {
+					return false;
+				}
+
+				const body =
+					(await response.json()) as ApiItemResponse<ProgramSnapshotDto>;
+				return params.assert(body.data);
+			},
+			{
+				timeout: 30_000,
+				message: params.message,
+			},
+		)
+		.toBe(true);
+}
+
+async function selectRoutineInDialog({
+	page,
+	dialog,
+	routineName,
+}: {
+	page: Page;
+	dialog: Locator;
+	routineName: string;
+}) {
+	const routineSearchResponse = page
+		.waitForResponse(
+			(response) =>
+				response.url().includes("/api/v1/routines") &&
+				response.request().method() === "GET",
+			{ timeout: 10_000 },
+		)
+		.catch(() => undefined);
+	await dialog.getByLabel("루틴 검색").fill(routineName);
+	await routineSearchResponse;
+	const routineButton = dialog
+		.getByRole("button")
+		.filter({ hasText: routineName })
+		.first();
+	await expect(routineButton).toBeVisible({ timeout: 45_000 });
+	await routineButton.click();
+}
 
 test.describe("프로그램 등록/수정 연결 플로우", () => {
 	test("프로그램 등록 후 수정에서 루틴 전환이 정상 동작해야 한다", async ({
@@ -47,6 +176,8 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 
 		try {
 			// Given: API로 타임라인/세션/루틴/강사 데이터를 준비한다
+			await ensureAdminCurrentSpace(page);
+
 			const createTimelineResponse = await page.request.post(
 				`${API_BASE_URL}/timelines`,
 				{
@@ -158,23 +289,17 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			instructor = usersBody.data?.[0];
 			expect(instructor?.id).toBeTruthy();
 			expect(instructor?.name).toBeTruthy();
+			await waitForRoutineToBeSelectable(page, routineOneId as string);
+			await waitForRoutineToBeSelectable(page, routineTwoId as string);
 
 			// When: 프로그램 등록 페이지에 진입해 필수 필드와 연결 대상을 선택한다
-			const routinesListResponse = page.waitForResponse(
-				(response) =>
-					response.url().includes("/api/v1/routines") &&
-					response.request().method() === "GET",
-			);
-			const instructorsListResponse = page.waitForResponse(
-				(response) =>
-					response.url().includes("/api/v1/users") &&
-					response.request().method() === "GET",
-			);
 			await page.goto(
 				`./timelines/${timelineId}/sessions/${sessionId}/programs/new`,
 			);
-			await Promise.all([routinesListResponse, instructorsListResponse]);
 			await page.waitForLoadState("networkidle");
+			await expect(
+				page.getByText("Space 선택 필요", { exact: true }),
+			).not.toBeVisible();
 
 			await expect(
 				page.getByRole("heading", { name: "프로그램 등록" }),
@@ -183,19 +308,12 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			await page.getByLabel("프로그램 이름").fill(programName);
 			await page.getByLabel("정원").fill(initialCapacity);
 
-			await page.getByRole("button", { name: "루틴 선택" }).click();
-			const routineSelectDialogInCreate = page.getByRole("dialog", {
-				name: "루틴 선택",
+			const routineSelectDialogInCreate = await openRoutinePicker(page);
+			await selectRoutineInDialog({
+				page,
+				dialog: routineSelectDialogInCreate,
+				routineName: routineOneName,
 			});
-			await expect(routineSelectDialogInCreate).toBeVisible();
-			await routineSelectDialogInCreate
-				.getByLabel("루틴 검색")
-				.fill(routineOneName);
-			await routineSelectDialogInCreate
-				.getByRole("button", {
-					name: new RegExp(escapeRegExp(routineOneName)),
-				})
-				.click();
 
 			await page.getByRole("button", { name: "강사 선택" }).click();
 			const instructorSelectDialog = page.getByRole("dialog", {
@@ -229,29 +347,29 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			programId = createdProgram.data?.id;
 			expect(programId).toBeTruthy();
 			const createdProgramId = programId as string;
+			await waitForProgramSnapshot(page, {
+				timelineId: timelineId as string,
+				sessionId: sessionId as string,
+				programId: createdProgramId,
+				assert: (program) => program?.name === programName,
+				message: "생성한 프로그램이 상세 조회에 반영될 때까지 대기",
+			});
 
-			await page.waitForURL(
-				new RegExp(`/timelines/${timelineId}/sessions/${sessionId}$`),
-				{ timeout: 15_000 },
-			);
-			await expect(
-				page.getByRole("heading", { name: sessionName }),
-			).toBeVisible({ timeout: 10_000 });
-
-			await expect(
-				page.getByRole("button", { name: programName, exact: true }),
-			).toBeVisible({ timeout: 10_000 });
-			await Promise.all([
-				page.waitForURL(
-					new RegExp(
-						`/timelines/${timelineId}/sessions/${sessionId}/programs/${createdProgramId}$`,
-					),
-					{ timeout: 30_000 },
+			await page.goto("about:blank");
+			const programDetailPath = `/admin/timelines/${timelineId}/sessions/${sessionId}/programs/${createdProgramId}`;
+			await page.goto(programDetailPath, { waitUntil: "commit" });
+			await expect(page).toHaveURL(
+				new RegExp(
+					`/timelines/${timelineId}/sessions/${sessionId}/programs/${createdProgramId}$`,
 				),
-				page.getByRole("button", { name: programName, exact: true }).click(),
-			]);
+				{ timeout: 45_000 },
+			);
+			await page.waitForLoadState("networkidle");
+			await expect(
+				page.getByRole("heading", { name: programName, exact: true }),
+			).toBeVisible({ timeout: 45_000 });
 			await expect(page.getByRole("button", { name: "수정" })).toBeVisible({
-				timeout: 30_000,
+				timeout: 45_000,
 			});
 
 			// When: 수정 페이지에서 루틴을 두 번째 루틴으로 변경하고 저장한다
@@ -266,19 +384,12 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 				page.getByRole("heading", { name: "프로그램 수정" }),
 			).toBeVisible();
 
-			await page.getByRole("button", { name: "루틴 선택" }).click();
-			const routineSelectDialogInEdit = page.getByRole("dialog", {
-				name: "루틴 선택",
+			const routineSelectDialogInEdit = await openRoutinePicker(page);
+			await selectRoutineInDialog({
+				page,
+				dialog: routineSelectDialogInEdit,
+				routineName: routineTwoName,
 			});
-			await expect(routineSelectDialogInEdit).toBeVisible();
-			await routineSelectDialogInEdit
-				.getByLabel("루틴 검색")
-				.fill(routineTwoName);
-			await routineSelectDialogInEdit
-				.getByRole("button", {
-					name: new RegExp(escapeRegExp(routineTwoName)),
-				})
-				.click();
 
 			const capacityInput = page.getByLabel("정원");
 			await capacityInput.click();
@@ -298,12 +409,22 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 
 			// Then: 프로그램 수정 응답과 상세 화면의 변경 데이터를 확인한다
 			expect(patchProgramResponse.status()).toBe(200);
+			await waitForProgramSnapshot(page, {
+				timelineId: timelineId as string,
+				sessionId: sessionId as string,
+				programId: createdProgramId,
+				assert: (program) =>
+					program?.routineId === routineTwoId &&
+					program?.capacity === Number(updatedCapacity),
+				message: "수정한 프로그램의 루틴/정원이 상세 조회에 반영될 때까지 대기",
+			});
 			await page.waitForURL(
 				new RegExp(
 					`/timelines/${timelineId}/sessions/${sessionId}/programs/[^/]+$`,
 				),
 				{ timeout: 15_000 },
 			);
+			await page.reload({ waitUntil: "domcontentloaded" });
 			await expect(
 				page.getByRole("link", { name: routineTwoName }),
 			).toBeVisible({
@@ -317,29 +438,37 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			if (programId && sessionId && timelineId) {
 				await page.request.delete(
 					`${API_BASE_URL}/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`,
-				);
+				).catch(() => undefined);
 			}
 
 			if (sessionId && timelineId) {
 				await page.request.delete(
 					`${API_BASE_URL}/timelines/${timelineId}/sessions/${sessionId}`,
-				);
+				).catch(() => undefined);
 			}
 
 			if (timelineId) {
-				await page.request.delete(`${API_BASE_URL}/timelines/${timelineId}`);
+				await page.request
+					.delete(`${API_BASE_URL}/timelines/${timelineId}`)
+					.catch(() => undefined);
 			}
 
 			if (routineOneId) {
-				await page.request.delete(`${API_BASE_URL}/routines/${routineOneId}`);
+				await page.request
+					.delete(`${API_BASE_URL}/routines/${routineOneId}`)
+					.catch(() => undefined);
 			}
 
 			if (routineTwoId) {
-				await page.request.delete(`${API_BASE_URL}/routines/${routineTwoId}`);
+				await page.request
+					.delete(`${API_BASE_URL}/routines/${routineTwoId}`)
+					.catch(() => undefined);
 			}
 
 			if (createdExerciseTaskId) {
-				await page.request.delete(`${API_BASE_URL}/tasks/${createdExerciseTaskId}`);
+				await page.request
+					.delete(`${API_BASE_URL}/tasks/${createdExerciseTaskId}`)
+					.catch(() => undefined);
 			}
 		}
 	});

@@ -11,6 +11,7 @@ import { addToast, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
+import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 
 type ProgramDetailPageParams = {
@@ -133,4 +134,9 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute = observer
 	},
 );
 
-export default AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute;
+export default dynamic(
+	() => Promise.resolve(AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute),
+	{
+		ssr: false,
+	},
+);

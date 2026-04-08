@@ -10,6 +10,7 @@ import { addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
+import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -128,4 +129,6 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 	);
 });
 
-export default AdminTimelinesTimelineIdEditRoute;
+export default dynamic(() => Promise.resolve(AdminTimelinesTimelineIdEditRoute), {
+	ssr: false,
+});

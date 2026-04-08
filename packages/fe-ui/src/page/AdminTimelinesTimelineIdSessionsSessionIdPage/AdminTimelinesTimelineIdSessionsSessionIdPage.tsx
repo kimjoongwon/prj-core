@@ -46,6 +46,7 @@ export interface AdminTimelinesTimelineIdSessionsSessionIdPageSession {
 
 export interface AdminTimelinesTimelineIdSessionsSessionIdPageProgramRow {
 	id: string;
+	href: Route;
 	name: string;
 	routineName: string;
 	activityCountLabel: string;
@@ -74,7 +75,6 @@ export interface AdminTimelinesTimelineIdSessionsSessionIdPageProps {
 	onClickDeleteSessionConfirmButton: () => void;
 	onClickDeleteSessionCancelButton: () => void;
 	onClickCreateProgramButton: () => void;
-	onClickProgramNameButton: (programId: string) => void;
 	onClickEditProgramButton: (programId: string) => void;
 	onClickDeleteProgramButton: (programId: string) => void;
 	onClickDeleteProgramConfirmButton: () => void;
@@ -100,7 +100,6 @@ export const AdminTimelinesTimelineIdSessionsSessionIdPage = observer(
 		onClickDeleteSessionConfirmButton,
 		onClickDeleteSessionCancelButton,
 		onClickCreateProgramButton,
-		onClickProgramNameButton,
 		onClickEditProgramButton,
 		onClickDeleteProgramButton,
 		onClickDeleteProgramConfirmButton,
@@ -285,13 +284,15 @@ export const AdminTimelinesTimelineIdSessionsSessionIdPage = observer(
 										{(program) => (
 											<TableRow key={program.id}>
 												<TableCell>
-													<button
-														type="button"
+													<Link
+														href={program.href}
 														className="text-left text-primary hover:underline"
-														onClick={() => onClickProgramNameButton(program.id)}
+														onClick={(event) => {
+															event.stopPropagation();
+														}}
 													>
 														{program.name}
-													</button>
+													</Link>
 												</TableCell>
 												<TableCell>{program.routineName}</TableCell>
 												<TableCell>{program.activityCountLabel}</TableCell>

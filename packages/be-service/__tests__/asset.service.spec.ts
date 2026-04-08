@@ -140,6 +140,74 @@ describe("AssetService", () => {
 		);
 	});
 
+	it("업로드 파일명이 latin1 모지바케면 UTF-8 파일명으로 복원해야 한다", async () => {
+		const mojibakeName = "íê¸-ìë¡ë.png";
+		const normalizedName = "한글-업로드.png";
+		const file = {
+			originalname: mojibakeName,
+			mimetype: "image/png",
+			size: 11,
+			buffer: Buffer.from("hello-world"),
+		} as any;
+
+		mockFoldersRepository.findById.mockResolvedValue({
+			id: "folder-123",
+			spaceId: "space-123",
+			removedAt: null,
+		} as never);
+		mockObjectStorageService.putObject.mockResolvedValue({
+			key: "unused",
+			publicUrl: null,
+		});
+		mockAssetsRepository.create.mockImplementation(
+			async (data) =>
+				({
+					id: "asset-123",
+					createdAt: new Date(),
+					updatedAt: new Date(),
+					removedAt: null,
+					spaceId: data.spaceId,
+					folderId: data.folderId,
+					kind: data.kind,
+					status: data.status,
+					originalName: data.originalName,
+					storageKey: data.storageKey,
+					mimeType: data.mimeType,
+					sizeBytes: data.sizeBytes as bigint,
+					extension: data.extension as string | null,
+					checksum: data.checksum as string | null,
+					metadata: data.metadata ?? null,
+					creatorId: data.creatorId as string | null,
+				}) as never,
+		);
+
+		const result = await service.uploadAsset(
+			{ folderId: "folder-123" },
+			file,
+			"user-123",
+		);
+
+		expect(mockObjectStorageService.putObject).toHaveBeenCalledWith(
+			expect.objectContaining({
+				metadata: expect.objectContaining({
+					originalName: normalizedName,
+				}),
+			}),
+		);
+		expect(mockAssetsRepository.create).toHaveBeenCalledWith(
+			expect.objectContaining({
+				originalName: normalizedName,
+				extension: "png",
+			}),
+		);
+		expect(result).toEqual(
+			expect.objectContaining({
+				originalName: normalizedName,
+				extension: "png",
+			}),
+		);
+	});
+
 	it("삭제 시 object storage 삭제 후 DB 삭제를 수행해야 한다", async () => {
 		mockAssetsRepository.findByIdWithRelations.mockResolvedValue({
 			id: "asset-123",

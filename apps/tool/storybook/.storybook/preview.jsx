@@ -14,7 +14,7 @@ const preview = {
       storySort: {
         method: "alphabetical",
         includeNames: true,
-        order: ["cell", "control", "detail", "display", "feature", "form", "layout", "master", "page", "rhythm", "surface", "widget", "widget-heavy", "Auto"],
+        order: ["overview", "cell", "control", "detail", "display", "feature", "form", "layout", "master", "page", "rhythm", "surface", "widget", "widget-heavy", "Auto"],
       },
     },
     backgrounds: {

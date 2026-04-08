@@ -119,13 +119,14 @@
 - 기본 패턴: `page.tsx` 단일 CSR
 - page role: `form`
 - reusable target: `form`
-- SSR/prefetch 예외 승인 여부: 없음
+- SSR/prefetch 예외 승인 여부: 있음 (`ssr: false` client-only export)
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-08 | dev 서버에서 route 응답이 멈추는 문제를 피하기 위해 client-only(`ssr: false`) export 예외를 추가 | codex |
 | 2026-03-30 | timeline edit의 실행 로직을 route page로 이동하고 `@cocrepo/ui` page를 pure props contract로 분리 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |

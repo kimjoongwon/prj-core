@@ -44,6 +44,7 @@ import type {
   GetAuthAuditLogStats200AllOf,
   GetAuthAuditLogs200AllOf,
   GetAuthAuditLogsParams,
+  GetCurrentSpace200AllOf,
   GetMySessions200AllOf,
   GetMySpaces200AllOf,
   InvalidateUserSessions200AllOf,
@@ -52,6 +53,8 @@ import type {
   RefreshToken200AllOf,
   RevokeOtherSessions200AllOf,
   RevokeSession200AllOf,
+  SetCurrentSpace200AllOf,
+  SetCurrentSpaceDto,
   SignUpPayloadDto,
   UnlockAccount200AllOf,
   VerifyToken200AllOf
@@ -907,7 +910,7 @@ export const prefetchVerifyTokenInfiniteQuery = async <TData = Awaited<ReturnTyp
 
 
 /**
- * 현재 인증된 사용자가 접근 가능한 Space 목록을 반환합니다. X-Space-ID 헤더가 필요하지 않습니다.
+ * 현재 인증된 사용자가 접근 가능한 Space 목록을 반환합니다. 선택 Space 쿠키가 없어도 호출할 수 있습니다.
  * @summary 내 Space 목록 조회
  */
 export const getMySpaces = (
@@ -1144,6 +1147,308 @@ export const prefetchGetMySpacesInfiniteQuery = async <TData = Awaited<ReturnTyp
 
 
 /**
+ * 현재 선택된 selectedSpaceId 쿠키를 기준으로 Space를 반환합니다. 쿠키가 없거나 유효하지 않으면 기본 Space로 복구합니다.
+ * @summary 현재 선택 Space 조회
+ */
+export const getCurrentSpace = (
+    
+ options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customIdpInstance<GetCurrentSpace200AllOf>(
+      {url: `/api/v1/auth/current-space`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetCurrentSpaceQueryKey = () => {
+    return [
+    `/api/v1/auth/current-space`
+    ] as const;
+    }
+
+export const getGetCurrentSpaceInfiniteQueryKey = () => {
+    return [
+    'infinite', `/api/v1/auth/current-space`
+    ] as const;
+    }
+
+    
+export const getGetCurrentSpaceQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCurrentSpaceQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentSpace>>> = ({ signal }) => getCurrentSpace(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCurrentSpaceQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentSpace>>>
+export type GetCurrentSpaceQueryError = ErrorType<void>
+
+
+export function useGetCurrentSpace<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCurrentSpace>>,
+          TError,
+          Awaited<ReturnType<typeof getCurrentSpace>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurrentSpace<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCurrentSpace>>,
+          TError,
+          Awaited<ReturnType<typeof getCurrentSpace>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurrentSpace<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 현재 선택 Space 조회
+ */
+
+export function useGetCurrentSpace<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCurrentSpaceQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 현재 선택 Space 조회
+ */
+export const prefetchGetCurrentSpaceQuery = async <TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
+ queryClient: QueryClient,  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetCurrentSpaceQueryOptions(options)
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getGetCurrentSpaceSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCurrentSpaceQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentSpace>>> = ({ signal }) => getCurrentSpace(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCurrentSpaceSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentSpace>>>
+export type GetCurrentSpaceSuspenseQueryError = ErrorType<void>
+
+
+export function useGetCurrentSpaceSuspense<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurrentSpaceSuspense<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurrentSpaceSuspense<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 현재 선택 Space 조회
+ */
+
+export function useGetCurrentSpaceSuspense<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCurrentSpaceSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetCurrentSpaceSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCurrentSpaceInfiniteQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentSpace>>> = ({ signal }) => getCurrentSpace(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCurrentSpaceSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentSpace>>>
+export type GetCurrentSpaceSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetCurrentSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurrentSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurrentSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 현재 선택 Space 조회
+ */
+
+export function useGetCurrentSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCurrentSpaceSuspenseInfiniteQueryOptions(options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 현재 선택 Space 조회
+ */
+export const prefetchGetCurrentSpaceInfiniteQuery = async <TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
+ queryClient: QueryClient,  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetCurrentSpaceSuspenseInfiniteQueryOptions(options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+/**
+ * 사용자가 접근 가능한 Space 중 하나를 현재 선택 Space 쿠키로 설정합니다.
+ * @summary 현재 선택 Space 변경
+ */
+export const setCurrentSpace = (
+    setCurrentSpaceDto: BodyType<SetCurrentSpaceDto>,
+ options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customIdpInstance<SetCurrentSpace200AllOf>(
+      {url: `/api/v1/auth/current-space`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: setCurrentSpaceDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getSetCurrentSpaceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setCurrentSpace>>, TError,{data: BodyType<SetCurrentSpaceDto>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof setCurrentSpace>>, TError,{data: BodyType<SetCurrentSpaceDto>}, TContext> => {
+
+const mutationKey = ['setCurrentSpace'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof setCurrentSpace>>, {data: BodyType<SetCurrentSpaceDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  setCurrentSpace(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SetCurrentSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof setCurrentSpace>>>
+    export type SetCurrentSpaceMutationBody = BodyType<SetCurrentSpaceDto>
+    export type SetCurrentSpaceMutationError = ErrorType<void>
+
+    /**
+ * @summary 현재 선택 Space 변경
+ */
+export const useSetCurrentSpace = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setCurrentSpace>>, TError,{data: BodyType<SetCurrentSpaceDto>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof setCurrentSpace>>,
+        TError,
+        {data: BodyType<SetCurrentSpaceDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getSetCurrentSpaceMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * 현재 사용자를 로그아웃하고 IDP 토큰을 무효화하며 쿠키를 삭제합니다.
  * @summary 로그아웃
  */

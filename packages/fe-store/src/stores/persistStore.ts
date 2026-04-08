@@ -24,6 +24,8 @@ export interface SpaceInfo {
  * 영속 저장 데이터 인터페이스
  */
 interface PersistedData {
+	spaceId: string | null;
+	groundName: string | null;
 	spaces: SpaceInfo[];
 	accessTokenExpiresAt: number | null;
 	refreshTokenExpiresAt: number | null;
@@ -89,6 +91,8 @@ export class PersistStore {
 		if (stored) {
 			try {
 				const data: PersistedData = JSON.parse(stored);
+				this.spaceId = data.spaceId;
+				this.groundName = data.groundName;
 				this.spaces = data.spaces || [];
 				this.accessTokenExpiresAt = data.accessTokenExpiresAt;
 				this.refreshTokenExpiresAt = data.refreshTokenExpiresAt;
@@ -108,6 +112,8 @@ export class PersistStore {
 
 		reaction(
 			() => ({
+				spaceId: this.spaceId,
+				groundName: this.groundName,
 				spaces: this.spaces,
 				accessTokenExpiresAt: this.accessTokenExpiresAt,
 				refreshTokenExpiresAt: this.refreshTokenExpiresAt,

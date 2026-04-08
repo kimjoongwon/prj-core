@@ -15,7 +15,7 @@ import type { AuthAuditResult } from './authAuditResult';
 
 export type GetAuthAuditLogsParams = {
 /**
- * @minimum 1
+ * @minimum 0
  */
 skip?: number;
 /**

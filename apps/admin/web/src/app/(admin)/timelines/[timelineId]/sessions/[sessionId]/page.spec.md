@@ -109,7 +109,7 @@
 | "삭제" 버튼 클릭 | 확인 모달 → `deleteSession` 호출 → 성공 시 `/timelines/{timelineId}` 이동 |
 | 타임라인명 링크 클릭 | `/timelines/{timelineId}` 상위 타임라인 상세로 이동 |
 | "프로그램 등록" 버튼 클릭 | `/timelines/{timelineId}/sessions/{sessionId}/programs/new` 이동 |
-| 프로그램명 클릭 | `/timelines/{timelineId}/sessions/{sessionId}/programs/{programId}` 이동 |
+| 프로그램명 링크 클릭 | `/timelines/{timelineId}/sessions/{sessionId}/programs/{programId}` 이동 |
 | 프로그램 수정 버튼 클릭 | `/timelines/{timelineId}/sessions/{sessionId}/programs/{programId}/edit` 이동 |
 | 프로그램 삭제 버튼 클릭 | 확인 모달 → `deleteProgram` 호출 → 성공 시 프로그램 목록 갱신 |
 
@@ -158,6 +158,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-08 | Program 상세 진입을 callback 버튼이 아닌 href 링크 렌더링 기준으로 정리 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |

@@ -60,6 +60,10 @@ function resolveRegion(objectStorage: ObjectStorageConfig): string {
 	return "auto";
 }
 
+function normalizeMetadataValue(value: string): string {
+	return /[^\x20-\x7E]/.test(value) ? encodeURIComponent(value) : value;
+}
+
 @Injectable()
 export class S3CompatibleStorageService implements ObjectStorageService {
 	private readonly logger = new Logger(S3CompatibleStorageService.name);
@@ -169,8 +173,17 @@ export class S3CompatibleStorageService implements ObjectStorageService {
 			return undefined;
 		}
 
+		const normalizedMetadata = input.metadata
+			? Object.fromEntries(
+					Object.entries(input.metadata).map(([key, value]) => [
+						key,
+						normalizeMetadataValue(value),
+					]),
+				)
+			: undefined;
+
 		return {
-			...(input.metadata ?? {}),
+			...(normalizedMetadata ?? {}),
 			...(input.checksum ? { checksumSha256: input.checksum } : {}),
 		};
 	}

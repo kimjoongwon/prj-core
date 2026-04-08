@@ -30,6 +30,20 @@ type UploadedAssetFile = {
 	buffer: Buffer;
 };
 
+function normalizeUploadedFileName(fileName: string): string {
+	if (/^[\x00-\x7F]*$/.test(fileName)) {
+		return fileName;
+	}
+
+	const decodedName = Buffer.from(fileName, "latin1").toString("utf8");
+	const hasReplacementCharacter = decodedName.includes("\uFFFD");
+	const roundTrippedName = Buffer.from(decodedName, "utf8").toString("latin1");
+
+	return !hasReplacementCharacter && roundTrippedName === fileName
+		? decodedName
+		: fileName;
+}
+
 @Injectable()
 export class AssetService {
 	private readonly logger = new Logger(AssetService.name);
@@ -125,6 +139,7 @@ export class AssetService {
 			throw new BadRequestException("업로드할 파일이 필요합니다");
 		}
 
+		const normalizedOriginalName = normalizeUploadedFileName(file.originalname);
 		const spaceId = this.getCurrentSpaceId();
 		const targetFolder = await this.foldersRepository.findById(dto.folderId);
 
@@ -136,7 +151,7 @@ export class AssetService {
 			throw new NotFoundException("업로드할 폴더를 찾을 수 없습니다");
 		}
 
-		const extension = this.extractExtension(file.originalname);
+		const extension = this.extractExtension(normalizedOriginalName);
 		const kind = this.resolveAssetKind(file.mimetype);
 		const storageKey = this.buildStorageKey(spaceId, kind, extension);
 		const checksum = createHash("sha256").update(file.buffer).digest("hex");
@@ -148,7 +163,7 @@ export class AssetService {
 			contentLength: file.size,
 			checksum,
 			metadata: {
-				originalName: file.originalname,
+				originalName: normalizedOriginalName,
 			},
 		});
 
@@ -157,7 +172,7 @@ export class AssetService {
 			folderId: dto.folderId,
 			kind,
 			status: AssetStatus.READY,
-			originalName: file.originalname,
+			originalName: normalizedOriginalName,
 			storageKey,
 			mimeType: file.mimetype,
 			sizeBytes: BigInt(file.size),

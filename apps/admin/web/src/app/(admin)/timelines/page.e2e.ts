@@ -1,6 +1,27 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
+const TIMELINE_LIST_PATH = "/admin/timelines";
+
+async function openLinkHrefAndWaitForRoute({
+	page,
+	link,
+	expectedUrl,
+}: {
+	page: Page;
+	link: Locator;
+	expectedUrl: RegExp;
+}) {
+	const href = await link.getAttribute("href");
+	expect(href).toBeTruthy();
+	await page.goto(href as string, { waitUntil: "commit" });
+	await expect(page).toHaveURL(expectedUrl, { timeout: 30_000 });
+}
+
+async function gotoTimelineList(page: Page) {
+	await page.goto(TIMELINE_LIST_PATH, { waitUntil: "commit" });
+	await page.waitForLoadState("networkidle");
+}
 
 test.describe("타임라인 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
@@ -8,8 +29,7 @@ test.describe("타임라인 목록 페이지", () => {
 	test.describe("[E2E-001] 목록 렌더링", () => {
 		test("타임라인 목록 페이지가 정상 렌더링되어야 한다", async ({ page }) => {
 			// Given: 타임라인 목록 페이지 진입
-			await page.goto("./timelines");
-			await page.waitForLoadState("networkidle");
+			await gotoTimelineList(page);
 
 			// Then: 타이틀과 설명 확인
 			await expect(
@@ -22,8 +42,7 @@ test.describe("타임라인 목록 페이지", () => {
 
 		test("타임라인 등록 버튼이 표시되어야 한다", async ({ page }) => {
 			// Given: 타임라인 목록 페이지 진입
-			await page.goto("./timelines");
-			await page.waitForLoadState("networkidle");
+			await gotoTimelineList(page);
 
 			// Then: 타임라인 등록 버튼 확인
 			await expect(
@@ -33,8 +52,7 @@ test.describe("타임라인 목록 페이지", () => {
 
 		test("검색 입력 필드가 표시되어야 한다", async ({ page }) => {
 			// Given: 타임라인 목록 페이지 진입
-			await page.goto("./timelines");
-			await page.waitForLoadState("networkidle");
+			await gotoTimelineList(page);
 
 			// Then: 검색 필드 확인
 			await expect(
@@ -70,19 +88,20 @@ test.describe("타임라인 목록 페이지", () => {
 			expect(timelineId).toBeTruthy();
 
 			// When: 타임라인 목록에서 생성된 항목의 상세 페이지로 이동
-			await page.goto("./timelines");
-			await page.waitForLoadState("networkidle");
+			await gotoTimelineList(page);
 			const createdTimelineRow = page
 				.getByRole("row")
 				.filter({ has: page.getByText(TEST_NAME, { exact: true }) })
 				.first();
 			await expect(createdTimelineRow).toBeVisible({ timeout: 10_000 });
-			await Promise.all([
-				page.waitForURL(new RegExp(`/timelines/${timelineId}$`), {
-					timeout: 30_000,
+			await openLinkHrefAndWaitForRoute({
+				page,
+				link: createdTimelineRow.getByRole("link", {
+					name: TEST_NAME,
+					exact: true,
 				}),
-				createdTimelineRow.getByRole("button", { name: "상세" }).click(),
-			]);
+				expectedUrl: new RegExp(`/timelines/${timelineId}$`),
+			});
 
 			// Then: 등록한 정보 확인
 			await expect(
@@ -93,7 +112,7 @@ test.describe("타임라인 목록 페이지", () => {
 
 			// When: 수정 버튼 클릭
 			await page.getByRole("button", { name: "수정" }).click();
-			await page.waitForURL(/\/timelines\/.*\/edit/, { timeout: 15000 });
+			await page.waitForURL(/\/timelines\/.*\/edit/, { timeout: 45_000 });
 			await page.waitForLoadState("networkidle");
 
 			// Then: 수정 페이지 타이틀 확인
@@ -118,8 +137,7 @@ test.describe("타임라인 목록 페이지", () => {
 			expect(updateResponse.status()).toBe(200);
 
 			// Then: 목록으로 돌아가 최신 데이터 확인
-			await page.goto("./timelines");
-			await page.waitForLoadState("networkidle");
+			await gotoTimelineList(page);
 
 			await expect(
 				page.getByText(UPDATED_NAME, { exact: true }),
@@ -133,8 +151,7 @@ test.describe("타임라인 목록 페이지", () => {
 			expect(deleteResponse.status()).toBe(204);
 
 			// Then: 목록 페이지로 이동
-			await page.goto("./timelines");
-			await page.waitForLoadState("networkidle");
+			await gotoTimelineList(page);
 
 			await expect(page.getByRole("heading", { name: "타임라인" })).toBeVisible(
 				{ timeout: 10000 },

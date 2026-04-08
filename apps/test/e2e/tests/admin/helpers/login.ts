@@ -5,9 +5,13 @@ import { runOidcLoginFlow } from "@cocrepo/e2e";
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
 const SYSTEM_GROUND_NAME = "플랫폼 운영본부";
+const ADMIN_DASHBOARD_PATH = "/admin/dashboard";
+const ADMIN_PERSIST_KEY = "admin-persist";
+const ADMIN_PERSIST_READY_TIMEOUT = 15_000;
+const ROUTE_PREWARM_TIMEOUT = 10_000;
 
 const ADMIN_PREWARM_PATHS = [
-	"/admin/dashboard",
+	ADMIN_DASHBOARD_PATH,
 	"/admin/actions",
 	"/admin/abilities",
 	"/admin/assets",
@@ -21,6 +25,170 @@ const ADMIN_PREWARM_PATHS = [
 	"/admin/timelines",
 	"/admin/users",
 ];
+
+type AdminPersistSnapshot = {
+	spaceId: string | null;
+	groundName: string | null;
+	spaces: Array<{
+		spaceId: string;
+		groundName: string;
+	}>;
+	accessTokenExpiresAt: number | null;
+	refreshTokenExpiresAt: number | null;
+};
+
+function buildAdminPersistSnapshot(
+	raw: string | null,
+	nextSpace: { spaceId: string; groundName: string },
+): AdminPersistSnapshot {
+	const fallbackSnapshot: AdminPersistSnapshot = {
+		spaceId: nextSpace.spaceId,
+		groundName: nextSpace.groundName,
+		spaces: [nextSpace],
+		accessTokenExpiresAt: null,
+		refreshTokenExpiresAt: null,
+	};
+
+	if (!raw) {
+		return fallbackSnapshot;
+	}
+
+	try {
+		const parsed = JSON.parse(raw) as Partial<AdminPersistSnapshot>;
+		const spaces = Array.isArray(parsed.spaces)
+			? parsed.spaces.filter(
+					(space): space is { spaceId: string; groundName: string } =>
+						typeof space?.spaceId === "string" &&
+						space.spaceId.length > 0 &&
+						typeof space.groundName === "string",
+				)
+			: [];
+		const hasSystemSpace = spaces.some(
+			(space) => space.spaceId === nextSpace.spaceId,
+		);
+
+		return {
+			spaceId: nextSpace.spaceId,
+			groundName: nextSpace.groundName,
+			spaces: hasSystemSpace ? spaces : [nextSpace, ...spaces],
+			accessTokenExpiresAt:
+				typeof parsed.accessTokenExpiresAt === "number"
+					? parsed.accessTokenExpiresAt
+					: null,
+			refreshTokenExpiresAt:
+				typeof parsed.refreshTokenExpiresAt === "number"
+					? parsed.refreshTokenExpiresAt
+					: null,
+		};
+	} catch {
+		return fallbackSnapshot;
+	}
+}
+
+async function ensureAdminDashboard(page: Page) {
+	if (page.url().includes("/admin/")) {
+		return;
+	}
+
+	await page.goto(ADMIN_DASHBOARD_PATH, {
+		waitUntil: "domcontentloaded",
+		timeout: ROUTE_PREWARM_TIMEOUT,
+	});
+}
+
+export async function seedAdminPersist(
+	page: Page,
+	nextSpace: { spaceId: string; groundName: string },
+) {
+	await ensureAdminDashboard(page);
+	await page.evaluate(
+		({ storageKey, nextSpaceValue }) => {
+			const raw = window.localStorage.getItem(storageKey);
+			const fallbackSnapshot = {
+				spaceId: nextSpaceValue.spaceId,
+				groundName: nextSpaceValue.groundName,
+				spaces: [nextSpaceValue],
+				accessTokenExpiresAt: null,
+				refreshTokenExpiresAt: null,
+			};
+
+			try {
+				const parsed = raw ? JSON.parse(raw) : fallbackSnapshot;
+				const spaces: Array<{ spaceId: string; groundName: string }> =
+					Array.isArray(parsed?.spaces)
+						? parsed.spaces.filter(
+								(space: unknown): space is { spaceId: string; groundName: string } =>
+									typeof space === "object" &&
+									space !== null &&
+									typeof (space as { spaceId?: unknown }).spaceId === "string" &&
+									typeof (space as { groundName?: unknown }).groundName === "string",
+							)
+						: [];
+				const hasSystemSpace = spaces.some(
+					(space) => space.spaceId === nextSpaceValue.spaceId,
+				);
+
+				window.localStorage.setItem(
+					storageKey,
+					JSON.stringify({
+						spaceId: nextSpaceValue.spaceId,
+						groundName: nextSpaceValue.groundName,
+						spaces: hasSystemSpace ? spaces : [nextSpaceValue, ...spaces],
+						accessTokenExpiresAt:
+							typeof parsed?.accessTokenExpiresAt === "number"
+								? parsed.accessTokenExpiresAt
+								: null,
+						refreshTokenExpiresAt:
+							typeof parsed?.refreshTokenExpiresAt === "number"
+								? parsed.refreshTokenExpiresAt
+								: null,
+					}),
+				);
+			} catch {
+				window.localStorage.setItem(
+					storageKey,
+					JSON.stringify(fallbackSnapshot),
+				);
+			}
+		},
+		{ storageKey: ADMIN_PERSIST_KEY, nextSpaceValue: nextSpace },
+	);
+}
+
+export async function readAdminPersist(page: Page) {
+	await ensureAdminDashboard(page);
+	await page.waitForFunction(
+		(storageKey) => {
+			const raw = window.localStorage.getItem(storageKey);
+			if (!raw) {
+				return false;
+			}
+
+			try {
+				const parsed = JSON.parse(raw) as { spaceId?: string | null };
+				return typeof parsed.spaceId === "string" && parsed.spaceId.length > 0;
+			} catch {
+				return false;
+			}
+		},
+		ADMIN_PERSIST_KEY,
+		{ timeout: ADMIN_PERSIST_READY_TIMEOUT },
+	);
+
+	const raw = await page.evaluate(
+		(storageKey) => window.localStorage.getItem(storageKey),
+		ADMIN_PERSIST_KEY,
+	);
+
+	if (!raw) {
+		return null;
+	}
+
+	return buildAdminPersistSnapshot(raw, {
+		spaceId: SYSTEM_SPACE_ID,
+		groundName: SYSTEM_GROUND_NAME,
+	});
+}
 
 /**
  * Admin 앱에 OIDC 로그인 플로우를 수행합니다.
@@ -69,6 +237,11 @@ export async function loginToAdmin(page: Page) {
 	if (currentSpaceName !== SYSTEM_GROUND_NAME) {
 		throw new Error("selectedSpaceId 쿠키 설정 후 Space 이름이 일치하지 않습니다.");
 	}
+
+	await seedAdminPersist(page, {
+		spaceId: SYSTEM_SPACE_ID,
+		groundName: currentSpaceName,
+	});
 }
 
 /**
@@ -78,7 +251,10 @@ export async function loginToAdmin(page: Page) {
 export async function prewarmAdminRoutes(page: Page) {
 	for (const targetPath of ADMIN_PREWARM_PATHS) {
 		try {
-			await page.goto(targetPath, { waitUntil: "domcontentloaded" });
+			await page.goto(targetPath, {
+				waitUntil: "domcontentloaded",
+				timeout: ROUTE_PREWARM_TIMEOUT,
+			});
 			await page.waitForLoadState("networkidle", { timeout: 2000 });
 		} catch {
 			// 누락된 페이지나 일시 오류는 전체 테스트를 막지 않도록 무시
@@ -87,7 +263,10 @@ export async function prewarmAdminRoutes(page: Page) {
 
 	// 사전 컴파일 후 기본 대시보드로 복귀
 	try {
-		await page.goto("/admin/dashboard", { waitUntil: "domcontentloaded" });
+		await page.goto(ADMIN_DASHBOARD_PATH, {
+			waitUntil: "domcontentloaded",
+			timeout: ROUTE_PREWARM_TIMEOUT,
+		});
 	} catch {
 		// noop
 	}

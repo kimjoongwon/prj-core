@@ -16,7 +16,7 @@
 - page role: `master`
 - reusable target: `master/table`
 - page component path: `packages/fe-ui/src/page/AdminTimelinesPage/AdminTimelinesPage.tsx`
-- route는 `useGetTimelines`, `useDeleteTimeline`, `useMetaDataGridQueryStates`, `router`를 소유합니다.
+- route는 `useGetTimelines`, `useDeleteTimeline`, `useMetaDataGridQueryStates`, `router`, row href 생성을 소유합니다.
 
 ## API 호출
 
@@ -30,13 +30,14 @@
 | 이벤트 | 동작 |
 |--------|------|
 | `onClickCreateButton` | route가 `/timelines/new`로 이동 |
-| `onClickTimelineName` | route가 `/timelines/[timelineId]`로 이동 |
+| `timelineRow.href` | route가 `/timelines/[timelineId]` href를 주입하고 page는 이름 링크로 렌더 |
 | `onDeleteTimeline` | route가 삭제 mutation과 캐시 무효화를 처리 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-08 | 타임라인 상세 진입을 callback 버튼이 아니라 route가 주입한 이름 링크 href 기준으로 정리 | codex |
 | 2026-03-29 | `AdminTimelinesPage` pure page와 thin route container 구조로 전환하고 조회/삭제/라우팅을 route로 이동 | codex |
 | 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | 타임라인 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

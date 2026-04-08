@@ -21,6 +21,24 @@ const expectSpaceCookie = (route: Route) => {
 	);
 };
 
+type FolderListResponse = {
+	data?: Array<{
+		id: string;
+		name: string;
+		parentFolderId?: string | null;
+	}>;
+};
+
+type AssetMutationResponse = {
+	httpStatus?: number;
+	message?: string;
+	data?: {
+		id: string;
+		originalName: string;
+		folderId: string;
+	};
+};
+
 test.describe("에셋 목록 페이지", () => {
 	test.describe("[E2E-001] 목록 렌더링", () => {
 		test("에셋 목록 페이지가 정상 렌더링되어야 한다", async ({ page }) => {
@@ -159,6 +177,66 @@ test.describe("에셋 목록 페이지", () => {
 				page.getByRole("heading", { name: TEST_NAME, exact: true }),
 			).toBeVisible();
 			expect(pageErrors).toEqual([]);
+		});
+	});
+
+	test.describe("[E2E-003] 실업로드 회귀", () => {
+		test("한글 파일명의 실제 multipart 업로드가 201로 완료되고 목록에서 바로 조회되어야 한다", async ({
+			page,
+		}) => {
+			const pageErrors = capturePageErrors(page);
+			const uploadFileName = `한글-업로드-${Date.now()}.png`;
+			let uploadedAssetId: string | null = null;
+
+			try {
+				const foldersResponse = await page.request.get(
+					"http://localhost:3000/api/v1/folders",
+				);
+				expect(foldersResponse.ok()).toBeTruthy();
+				const foldersBody =
+					((await foldersResponse.json()) as FolderListResponse) ?? {};
+				const targetFolder = foldersBody.data?.find((folder) => Boolean(folder.id));
+
+				expect(targetFolder, "실업로드에 사용할 폴더가 필요합니다.").toBeTruthy();
+
+				const uploadResponse = await page.request.post(
+					"http://localhost:3000/api/v1/assets",
+					{
+						multipart: {
+							folderId: targetFolder!.id,
+							file: {
+								name: uploadFileName,
+								mimeType: "image/png",
+								buffer: Buffer.from("e2e-real-upload-png"),
+							},
+						},
+					},
+				);
+				const uploadBody =
+					((await uploadResponse.json()) as AssetMutationResponse) ?? {};
+
+				expect(uploadResponse.ok()).toBeTruthy();
+				expect(uploadBody.httpStatus).toBe(201);
+				expect(uploadBody.message).toBe("에셋 업로드 성공");
+				expect(uploadBody.data?.originalName).toBe(uploadFileName);
+				expect(uploadBody.data?.folderId).toBe(targetFolder!.id);
+
+				uploadedAssetId = uploadBody.data?.id ?? null;
+				expect(uploadedAssetId).toBeTruthy();
+
+				await page.goto("./assets", { waitUntil: "domcontentloaded" });
+				await page.getByPlaceholder("파일명 검색...").fill(uploadFileName);
+				await expect(
+					page.getByRole("link", { name: uploadFileName }).first(),
+				).toBeVisible();
+				expect(pageErrors).toEqual([]);
+			} finally {
+				if (uploadedAssetId) {
+					await page.request.delete(
+						`http://localhost:3000/api/v1/assets/${uploadedAssetId}`,
+					);
+				}
+			}
 		});
 	});
 });

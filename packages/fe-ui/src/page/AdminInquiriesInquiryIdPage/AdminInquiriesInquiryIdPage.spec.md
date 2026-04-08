@@ -30,6 +30,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-08 | 미사용 `InquiryParticipant` 타입 import를 제거해 storybook type-check 오류를 정리 | codex |
 | 2026-03-30 | 문의 조회/실시간/WebSocket/mutation/삭제 modal state를 route로 이동하고 page를 pure props contract로 재정의 | codex |
 | 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |

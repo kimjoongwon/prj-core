@@ -59,15 +59,13 @@ export interface IdpConsoleAccountsUserIdPageProps {
 	onClickOpenInvalidateSessionsModal: () => void;
 	onCloseModal: () => void;
 	onClickConfirmModal: () => void;
-	onClickUnlockButton: () => void;
-	onClickForceResetPasswordButton: () => void;
-	onClickInvalidateSessionsButton: () => void;
 }
 
 /**
  * IDP 계정 상세 pure page입니다.
  */
-export const IdpConsoleAccountsUserIdPage = observer(({
+export const IdpConsoleAccountsUserIdPage = observer(
+	({
 		account,
 		isLoading,
 		isToggling,
@@ -84,9 +82,6 @@ export const IdpConsoleAccountsUserIdPage = observer(({
 		onClickOpenInvalidateSessionsModal,
 		onCloseModal,
 		onClickConfirmModal,
-		onClickUnlockButton,
-		onClickForceResetPasswordButton,
-		onClickInvalidateSessionsButton,
 	}: IdpConsoleAccountsUserIdPageProps) => {
 		// 잠금 상태 판단
 		const isLocked = account
@@ -160,9 +155,7 @@ export const IdpConsoleAccountsUserIdPage = observer(({
 			},
 		};
 
-		const currentModalConfig = modalAction
-			? modalConfig[modalAction]
-			: null;
+		const currentModalConfig = modalAction ? modalConfig[modalAction] : null;
 
 		// 로딩 상태
 		if (isLoading) {
@@ -418,4 +411,5 @@ export const IdpConsoleAccountsUserIdPage = observer(({
 				)}
 			</DetailPage>
 		);
-	});
+	},
+);

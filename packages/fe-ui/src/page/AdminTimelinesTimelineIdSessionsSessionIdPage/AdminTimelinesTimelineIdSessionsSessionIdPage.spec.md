@@ -34,11 +34,14 @@
 
 - Program table은 `activityCount`, `previewExerciseNames`를 사용해 실행 운동 요약을 표시합니다.
 - Routine 컬럼은 live routine name보다 `routineNameSnapshot`을 우선 사용합니다.
+- Program 이름은 hydration 전에도 이동 가능한 상세 링크로 렌더링합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-08 | Program 이름 링크 클릭이 테이블 상위 row 이벤트에 막히지 않도록 propagation 차단 규칙을 추가 | codex |
+| 2026-04-08 | Program 이름을 버튼 callback 대신 상세 href 링크로 렌더링하도록 정리 | codex |
 | 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-29 | 세션 상세 Program 목록에 운동 수/대표 운동 summary와 routine snapshot 우선 표시 규칙을 추가 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |

@@ -1,13 +1,13 @@
 "use client";
 
 import {
-	DateTimeCell,
 	DetailPage,
 	DetailPageSurface,
-	PageTitleBar,
 	DetailSection,
 	DetailSectionCard,
-} from "@cocrepo/ui";
+} from "../../detail";
+import { DateTimeCell } from "../../cell";
+import { PageTitleBar } from "../../widget";
 import {
 	Button,
 	Modal,

@@ -31,6 +31,7 @@ ConfigService에서 `objectStorage` 설정(provider, endpoint, bucket, credentia
 - endpoint/provider 차이는 설정으로만 흡수하고 구현체는 AWS SDK v3 하나만 사용합니다.
 - `publicBaseUrl`이 없으면 `getPublicUrl()`은 `null`을 반환합니다.
 - checksum이 있으면 object metadata에 `checksumSha256`로 기록합니다.
+- object metadata 값에 비ASCII 문자가 포함되면 S3-compatible provider 서명 불일치를 피하기 위해 ASCII-safe percent-encoding으로 정규화합니다.
 - object storage 설정이 없으면 초기화 시 에러를 발생시킵니다.
 - `cloudflare-r2` provider는 region 값이 `auto`, `wnam`, `enam`, `weur`, `eeur`, `apac`, `oc` 중 하나가 아니면 `auto`로 보정합니다.
 
@@ -54,6 +55,7 @@ ConfigService에서 `objectStorage` 설정(provider, endpoint, bucket, credentia
 
 | 일자       | 내용                                                                                    | 작성자               |
 | ---------- | --------------------------------------------------------------------------------------- | -------------------- |
+| 2026-04-08 | 한글 파일명 metadata가 Cloudflare R2 서명을 깨뜨리던 이슈를 막기 위해 비ASCII metadata 값을 ASCII-safe percent-encoding으로 정규화 | codex |
 | 2026-03-15 | Cloudflare R2가 AWS region 문자열을 거부하는 런타임 이슈를 흡수하기 위해 provider 전용 region normalization(`auto`) 규칙 추가 | codex |
 | 2026-03-15 | AWS 전용 업로드 서비스를 S3-compatible object storage 추상 레이어로 교체 | codex |
 | 2026-02-19 | 초기 생성 (역기획)                                                                      | req-reverse-engineer |

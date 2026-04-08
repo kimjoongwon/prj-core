@@ -1,14 +1,14 @@
 "use client";
 
 import {
-	DateTimeCell,
 	DetailPage,
 	DetailPageSurface,
-	PageTitleBar,
 	DetailSection,
 	DetailSectionCard,
-	VStack,
-} from "@cocrepo/ui";
+} from "../../detail";
+import { DateTimeCell } from "../../cell";
+import { VStack } from "../../rhythm";
+import { PageTitleBar } from "../../widget";
 import {
 	Button,
 	Chip,

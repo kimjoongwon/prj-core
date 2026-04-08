@@ -38,6 +38,7 @@ Program 상세에서 routine snapshot 메타와 `executionPlan` 기반 실행 �
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-08 | dev compile 정체를 줄이기 위해 `@cocrepo/ui` self barrel 대신 상대 import를 사용하도록 정리 | codex |
 | 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-29 | Program 상세 화면에 executionPlan 기반 실행 운동 섹션과 routine snapshot 표시 규칙을 추가 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |

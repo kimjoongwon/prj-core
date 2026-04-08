@@ -160,6 +160,31 @@ describe("S3CompatibleStorageService", () => {
 		});
 	});
 
+	it("metadata에 비ASCII 파일명이 오면 서명 안정성을 위해 ASCII-safe 값으로 인코딩해야 한다", async () => {
+		mockSend.mockResolvedValue({ ETag: '"etag-utf8"' });
+
+		await service.putObject({
+			key: "spaces/space-1/assets/image/hangul-file.png",
+			body: Buffer.from("file-body"),
+			contentType: "image/png",
+			metadata: {
+				originalName: "한글-테스트.png",
+			},
+		});
+
+		expect(PutObjectCommandMock).toHaveBeenCalledWith({
+			Bucket: "asset-bucket",
+			Key: "spaces/space-1/assets/image/hangul-file.png",
+			Body: Buffer.from("file-body"),
+			ContentType: "image/png",
+			ContentLength: undefined,
+			Metadata: {
+				originalName:
+					"%ED%95%9C%EA%B8%80-%ED%85%8C%EC%8A%A4%ED%8A%B8.png",
+			},
+		});
+	});
+
 	it("object를 삭제해야 한다", async () => {
 		mockSend.mockResolvedValue({});
 

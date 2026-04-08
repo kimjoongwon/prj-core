@@ -122,9 +122,10 @@
 
 | 항목 | 설명 |
 |------|------|
-| 조회 범위 | `subject.name` 이 `menu:` 또는 `page:` 로 시작하지 않는 Ability |
+| 조회 범위 | `menu:` / `page:` subject와 data section에서 다루는 canonical CRUD ability를 제외한 raw Ability |
 | 편집 단위 | raw Ability + Grant metadata(`isActive`, `priority`) |
 | 저장 방식 | 메뉴/화면/CRUD와 같은 `selectedGrantItems` 세션 공유 |
+| 표시 규칙 | `ability.name`, `description`, `conditions`, `reason` 으로 서로 다른 raw Ability를 구분 가능하게 표시 |
 | 목적 | surface bundle로 다루지 않는 예외 권한의 세밀한 배치 편집 |
 
 ## 페이지 상태
@@ -177,6 +178,8 @@
 - 따라서 route는 메뉴/화면/CRUD/고급 편집이 같은 `selectedGrantItems` 를 공유해야 합니다.
 - FULL_ACCESS는 `manage all` 단일 grant만으로도 모든 권한을 가져야 하므로, route는 전역 권한을 감지해 세부 섹션을 override해야 합니다.
 - duplicate canonical ability가 있으면 최신 `createdAt` 항목을 우선 선택하되, 해제 시에는 해당 subject의 duplicate ability를 모두 정리합니다.
+- 동일 leaf/page에서 같은 문구의 duplicate warning이 여러 subject에서 생기면 route에서 하나로 합치고, technical details와 관련 ability 목록은 병합합니다.
+- duplicate 또는 catalog mismatch 진단에는 관련 ability 상세 이동 경로를 함께 제공해 운영자가 곧바로 삭제 화면으로 이동할 수 있게 합니다.
 - 운영자 기본 문구에서는 subject/ability 내부 키를 숨기고, 필요할 때만 technical details로 펼쳐 보여줍니다.
 
 ## Surface / Elevation
@@ -215,6 +218,8 @@
 | 2026-04-06 | FULL_ACCESS의 `manage all` 전역 권한을 반영해 메뉴/화면/CRUD 섹션을 전역 허용 상태로 해석하는 규칙을 추가 | codex |
 | 2026-04-06 | 역할 상세를 메뉴/화면/CRUD/고급 4섹션 권한 편집기로 확장하고 운영자용 진단 문구를 반영 | codex |
 | 2026-04-06 | 역할 상세를 메뉴 leaf 중심 권한 편집기 + non-menu 고급 편집 구조로 재정의하고 full-sync save 제약을 문서화 | codex |
+| 2026-04-08 | 고급 권한 목록에서 canonical CRUD를 제외하고 raw ability 식별자/조건 표시 규칙을 추가 | codex |
+| 2026-04-08 | duplicate ability 경고를 leaf/page 단위로 병합하고 관련 ability 상세 이동 경로를 추가 | codex |
 | 2026-03-31 | 전체 Ability 조회/Grant 저장 흐름을 `useGetAbilities`, `useBatchAssignGrantsToRole` 기준으로 갱신 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |

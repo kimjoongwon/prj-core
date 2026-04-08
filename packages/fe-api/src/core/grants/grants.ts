@@ -21,7 +21,7 @@ import type {
 
 import type {
   BatchAssignGrantsToRole200AllOf,
-  BatchGrantRequestDto
+  BatchAssignRoleGrantRequestDto
 } from '.././model';
 
 import { customInstance } from '../../libs/customAxios';
@@ -38,14 +38,14 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  */
 export const batchAssignGrantsToRole = (
     roleId: string,
-    batchGrantRequestDto: BodyType<BatchGrantRequestDto>,
+    batchAssignRoleGrantRequestDto: BodyType<BatchAssignRoleGrantRequestDto>,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
       return customInstance<BatchAssignGrantsToRole200AllOf>(
       {url: `/api/v1/grants/roles/${roleId}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
-      data: batchGrantRequestDto
+      data: batchAssignRoleGrantRequestDto
     },
       options);
     }
@@ -53,8 +53,8 @@ export const batchAssignGrantsToRole = (
 
 
 export const getBatchAssignGrantsToRoleMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof batchAssignGrantsToRole>>, TError,{roleId: string;data: BodyType<BatchGrantRequestDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof batchAssignGrantsToRole>>, TError,{roleId: string;data: BodyType<BatchGrantRequestDto>}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof batchAssignGrantsToRole>>, TError,{roleId: string;data: BodyType<BatchAssignRoleGrantRequestDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof batchAssignGrantsToRole>>, TError,{roleId: string;data: BodyType<BatchAssignRoleGrantRequestDto>}, TContext> => {
 
 const mutationKey = ['batchAssignGrantsToRole'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -66,7 +66,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof batchAssignGrantsToRole>>, {roleId: string;data: BodyType<BatchGrantRequestDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof batchAssignGrantsToRole>>, {roleId: string;data: BodyType<BatchAssignRoleGrantRequestDto>}> = (props) => {
           const {roleId,data} = props ?? {};
 
           return  batchAssignGrantsToRole(roleId,data,requestOptions)
@@ -78,18 +78,18 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type BatchAssignGrantsToRoleMutationResult = NonNullable<Awaited<ReturnType<typeof batchAssignGrantsToRole>>>
-    export type BatchAssignGrantsToRoleMutationBody = BodyType<BatchGrantRequestDto>
+    export type BatchAssignGrantsToRoleMutationBody = BodyType<BatchAssignRoleGrantRequestDto>
     export type BatchAssignGrantsToRoleMutationError = ErrorType<void>
 
     /**
  * @summary 역할별 권한 배치 할당
  */
 export const useBatchAssignGrantsToRole = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof batchAssignGrantsToRole>>, TError,{roleId: string;data: BodyType<BatchGrantRequestDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof batchAssignGrantsToRole>>, TError,{roleId: string;data: BodyType<BatchAssignRoleGrantRequestDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof batchAssignGrantsToRole>>,
         TError,
-        {roleId: string;data: BodyType<BatchGrantRequestDto>},
+        {roleId: string;data: BodyType<BatchAssignRoleGrantRequestDto>},
         TContext
       > => {
 

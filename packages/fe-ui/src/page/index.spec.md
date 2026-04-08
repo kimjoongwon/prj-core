@@ -41,6 +41,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-08 | `AdminRolesRoleIdPageRelatedAbility` 타입 배럴 export를 추가해 역할 상세 route가 중복 권한 이동 계약을 소비할 수 있게 정리 | codex |
 | 2026-04-06 | `AdminRolesRoleIdPage`의 page permission / CRUD bundle / generic permission issue 타입 배럴 export를 추가 | codex |
 | 2026-04-06 | `AdminRolesRoleIdPage`의 menu permission / diagnostic 타입 배럴 export를 추가 | codex |
 | 2026-03-30 | inquiry/actions/idp pure page refactor에 맞춰 props contract export와 `useInquiryDetailWebSocket` alias export를 추가 | codex |

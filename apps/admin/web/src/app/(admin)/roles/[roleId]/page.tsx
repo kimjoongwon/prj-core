@@ -26,6 +26,8 @@ import {
 	type AdminRolesRoleIdPageMenuPermission,
 	type AdminRolesRoleIdPagePageDiagnostic,
 	type AdminRolesRoleIdPagePagePermission,
+	type AdminRolesRoleIdPagePermissionIssue,
+	type AdminRolesRoleIdPageRelatedAbility,
 	type AdminRolesRoleIdPageRole,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
@@ -120,7 +122,6 @@ const AdminRolesRoleDetailRoute = observer(() => {
 	const { data: abilitiesResponse, isLoading: isLoadingAbilities } =
 		useGetAbilitiesByRoleId(roleId);
 	const grantedAbilityDtos = abilitiesResponse?.data ?? [];
-	const grantedAbilities = (abilitiesResponse?.data ?? []).map(mapAbilityItem);
 
 	const {
 		data: allAbilitiesResponse,
@@ -196,17 +197,11 @@ const AdminRolesRoleDetailRoute = observer(() => {
 		selectedAbilityIds: activeSelectedAbilityIds,
 		hasGlobalAccess,
 	});
-	const grantedAdvancedAbilities = grantedAbilities.filter(
-		(ability) =>
-			!isMenuSubjectName(ability.subject?.name) &&
-			!isPageSubjectName(ability.subject?.name),
-	);
+	const grantedAdvancedAbilities = grantedAbilityDtos
+		.filter((ability) => isAdvancedRoleDetailAbility(ability))
+		.map(mapAbilityItem);
 	const allAdvancedAbilities = allAbilityDtos
-		.filter(
-			(ability) =>
-				!isMenuSubjectName(ability.subject?.name) &&
-				!isPageSubjectName(ability.subject?.name),
-		)
+		.filter((ability) => isAdvancedRoleDetailAbility(ability))
 		.map(mapAbilityItem);
 	const hasBlockingPermissionDiagnostics =
 		hasBlockingMenuDiagnostics || hasBlockingPageDiagnostics;
@@ -302,7 +297,8 @@ const AdminRolesRoleDetailRoute = observer(() => {
 					}
 
 					if (isSelected) {
-						for (const abilityId of resolution.leafRequirement.matchedAbilityIds) {
+						for (const abilityId of resolution.leafRequirement
+							.matchedAbilityIds) {
 							delete next[abilityId];
 						}
 
@@ -315,7 +311,9 @@ const AdminRolesRoleDetailRoute = observer(() => {
 									leaf.groupId === resolution.groupId && leaf.leafId !== leafId,
 							);
 							const hasSelectedSibling = siblingLeaves.some((leaf) => {
-								const siblingResolution = permissionStateByLeaf.get(leaf.leafId);
+								const siblingResolution = permissionStateByLeaf.get(
+									leaf.leafId,
+								);
 								if (!siblingResolution) {
 									return false;
 								}
@@ -472,6 +470,9 @@ const AdminRolesRoleDetailRoute = observer(() => {
 					},
 				});
 			}}
+			onClickOpenAbilityDetail={(abilityId) => {
+				router.push(`/abilities/${abilityId}` as Route);
+			}}
 		/>
 	);
 });
@@ -519,7 +520,10 @@ function buildMenuPermissionState({
 
 	const menuPermissions: AdminRolesRoleIdPageMenuPermission[] = [];
 	const menuDiagnostics: AdminRolesRoleIdPageMenuDiagnostic[] = [];
-	const permissionStateByLeaf = new Map<string, MenuPermissionToggleResolution>();
+	const permissionStateByLeaf = new Map<
+		string,
+		MenuPermissionToggleResolution
+	>();
 
 	for (const leaf of ADMIN_MENU_PERMISSION_LEAFS) {
 		const issues: AdminRolesRoleIdPageMenuIssue[] = [];
@@ -540,19 +544,23 @@ function buildMenuPermissionState({
 				issues.push({
 					code: "missingAbility",
 					severity: "blocking",
-					message:
-						`${leaf.leafLabel} 메뉴를 역할에 연결할 기본 권한이 아직 준비되지 않았습니다.`,
-					technicalDetails: [`누락 ability: ${MENU_ACTION_NAME} ${subjectName}`],
+					message: `${leaf.leafLabel} 메뉴를 역할에 연결할 기본 권한이 아직 준비되지 않았습니다.`,
+					technicalDetails: [
+						`누락 ability: ${MENU_ACTION_NAME} ${subjectName}`,
+					],
 				});
 			} else if (!hasGlobalAccess && matchedAbilities.length > 1) {
 				issues.push({
 					code: "duplicateAbility",
 					severity: "warning",
-					message:
-						`${leaf.leafLabel} 메뉴 권한이 여러 개라 최신 구성을 기준으로 연결합니다.`,
+					message: `${leaf.leafLabel} 메뉴 권한이 여러 개라 최신 구성을 기준으로 연결합니다.`,
 					technicalDetails: [
 						`중복 ability: ${MENU_ACTION_NAME} ${subjectName} (${matchedAbilities.length}개)`,
 					],
+					relatedAbilities: mapRelatedAbilities(
+						matchedAbilities,
+						preferredAbility?.id,
+					),
 				});
 			}
 
@@ -563,13 +571,16 @@ function buildMenuPermissionState({
 			} satisfies MenuRequirementResolution;
 		});
 
-		const issuesWithDiagnostics = issues.map((issue, index) => ({
+		const mergedIssues = mergePermissionIssues(issues);
+		const issuesWithDiagnostics = mergedIssues.map((issue, index) => ({
 			issue,
 			diagnostic: {
 				id: `${leaf.leafId}-${issue.code}-${index}`,
 				severity: issue.severity,
 				title: `${leaf.groupLabel} / ${leaf.leafLabel}`,
 				description: issue.message,
+				technicalDetails: issue.technicalDetails,
+				relatedAbilities: issue.relatedAbilities,
 			} satisfies AdminRolesRoleIdPageMenuDiagnostic,
 		}));
 
@@ -588,7 +599,8 @@ function buildMenuPermissionState({
 				(requirement) => requirement.subjectName === leaf.leafSubject,
 			) ?? requirements[requirements.length - 1];
 		const isSelected =
-			hasGlobalAccess || isRequirementSelected(requirements, selectedAbilityIds);
+			hasGlobalAccess ||
+			isRequirementSelected(requirements, selectedAbilityIds);
 
 		menuPermissions.push({
 			groupId: leaf.groupId,
@@ -598,7 +610,7 @@ function buildMenuPermissionState({
 			path: leaf.path,
 			requiredSubjects: leaf.requiredSubjects,
 			isSelected,
-			issues,
+			issues: mergedIssues,
 		});
 
 		permissionStateByLeaf.set(leaf.leafId, {
@@ -609,7 +621,7 @@ function buildMenuPermissionState({
 			requirements,
 			groupRequirement,
 			leafRequirement,
-			hasBlockingIssues: issues.some(
+			hasBlockingIssues: mergedIssues.some(
 				(issue) => issue.severity === "blocking",
 			),
 		});
@@ -632,6 +644,7 @@ function buildMenuPermissionState({
 					`연결되지 않은 menu subject: ${subjectName}`,
 					`중복 count: ${matches.length}`,
 				],
+				relatedAbilities: mapRelatedAbilities(matches),
 			});
 		}
 	}
@@ -689,7 +702,10 @@ function buildPagePermissionState({
 
 	const pagePermissions: AdminRolesRoleIdPagePagePermission[] = [];
 	const pageDiagnostics: AdminRolesRoleIdPagePageDiagnostic[] = [];
-	const permissionStateByPage = new Map<string, PagePermissionToggleResolution>();
+	const permissionStateByPage = new Map<
+		string,
+		PagePermissionToggleResolution
+	>();
 
 	for (const item of ADMIN_PAGE_ACCESS_ITEMS) {
 		const issues: AdminRolesRoleIdPageMenuIssue[] = [];
@@ -709,30 +725,34 @@ function buildPagePermissionState({
 			issues.push({
 				code: "missingAbility",
 				severity: "blocking",
-				message:
-					`${item.pageLabel} 화면을 역할에 연결할 기본 권한이 아직 준비되지 않았습니다.`,
+				message: `${item.pageLabel} 화면을 역할에 연결할 기본 권한이 아직 준비되지 않았습니다.`,
 				technicalDetails: [`누락 ability: ${PAGE_ACTION_NAME} ${item.subject}`],
 			});
 		} else if (!hasGlobalAccess && matchedAbilities.length > 1) {
 			issues.push({
 				code: "duplicateAbility",
 				severity: "warning",
-				message:
-					`${item.pageLabel} 화면 권한이 여러 개라 최신 구성을 기준으로 연결합니다.`,
+				message: `${item.pageLabel} 화면 권한이 여러 개라 최신 구성을 기준으로 연결합니다.`,
 				technicalDetails: [
 					`중복 ability: ${PAGE_ACTION_NAME} ${item.subject} (${matchedAbilities.length}개)`,
 				],
+				relatedAbilities: mapRelatedAbilities(
+					matchedAbilities,
+					preferredAbility?.id,
+				),
 			});
 		}
 
+		const mergedIssues = mergePermissionIssues(issues);
 		if (!hasGlobalAccess) {
-			for (const issue of issues) {
+			for (const issue of mergedIssues) {
 				pageDiagnostics.push({
 					id: `${item.pageId}-${issue.code}-${issue.message}`,
 					severity: issue.severity,
 					title: `${item.groupLabel} / ${item.pageLabel}`,
 					description: issue.message,
 					technicalDetails: issue.technicalDetails,
+					relatedAbilities: issue.relatedAbilities,
 				});
 			}
 		}
@@ -746,7 +766,7 @@ function buildPagePermissionState({
 			isSelected:
 				hasGlobalAccess ||
 				matchedAbilities.some((ability) => selectedAbilityIds.has(ability.id)),
-			issues,
+			issues: mergedIssues,
 		});
 
 		permissionStateByPage.set(item.pageId, {
@@ -755,7 +775,9 @@ function buildPagePermissionState({
 			subjectName: item.subject,
 			matchedAbilityIds: matchedAbilities.map((ability) => ability.id),
 			preferredAbilityId: preferredAbility?.id,
-			hasBlockingIssues: issues.some((issue) => issue.severity === "blocking"),
+			hasBlockingIssues: mergedIssues.some(
+				(issue) => issue.severity === "blocking",
+			),
 		});
 	}
 
@@ -778,6 +800,7 @@ function buildPagePermissionState({
 					`연결되지 않은 page subject: ${subjectName}`,
 					`중복 count: ${matches.length}`,
 				],
+				relatedAbilities: mapRelatedAbilities(matches),
 			});
 		}
 	}
@@ -808,7 +831,11 @@ function buildCrudBundleState({
 	>();
 
 	for (const ability of allAbilities) {
-		if (!isCrudAbility(ability) || !ability.subject?.name || !ability.action?.name) {
+		if (
+			!isCrudAbility(ability) ||
+			!ability.subject?.name ||
+			!ability.action?.name
+		) {
 			continue;
 		}
 
@@ -825,7 +852,9 @@ function buildCrudBundleState({
 		});
 	}
 
-	const knownBundleSubjects = new Set(ADMIN_CRUD_BUNDLES.map((bundle) => bundle.subject));
+	const knownBundleSubjects = new Set(
+		ADMIN_CRUD_BUNDLES.map((bundle) => bundle.subject),
+	);
 	const extraBundleSubjects = Array.from(entitySubjectMeta.keys())
 		.filter((subject) => !knownBundleSubjects.has(subject))
 		.sort();
@@ -843,50 +872,54 @@ function buildCrudBundleState({
 
 	const bundles = [...ADMIN_CRUD_BUNDLES, ...extraBundles];
 	const actionStateByKey = new Map<string, CrudActionResolution>();
-	const crudBundles: AdminRolesRoleIdPageCrudBundle[] = bundles.map((bundle) => {
-		const subjectMeta = entitySubjectMeta.get(bundle.subject);
-		const actions = CRUD_ACTIONS.map((action) => {
-			const matchedAbilities =
-				canonicalCrudAbilityMap.get(`${bundle.subject}:${action}`) ?? [];
-			const preferredAbility = pickPreferredCrudAbility(matchedAbilities);
-			const issueMessage =
-				matchedAbilities.length === 0
-					? "기본 권한이 아직 등록되지 않았습니다."
-					: matchedAbilities.length > 1
-						? "조건이 다른 권한이 함께 있어 기본 권한을 우선 사용합니다."
-						: undefined;
+	const crudBundles: AdminRolesRoleIdPageCrudBundle[] = bundles.map(
+		(bundle) => {
+			const subjectMeta = entitySubjectMeta.get(bundle.subject);
+			const actions = CRUD_ACTIONS.map((action) => {
+				const matchedAbilities =
+					canonicalCrudAbilityMap.get(`${bundle.subject}:${action}`) ?? [];
+				const preferredAbility = pickPreferredCrudAbility(matchedAbilities);
+				const issueMessage =
+					matchedAbilities.length === 0
+						? "기본 권한이 아직 등록되지 않았습니다."
+						: matchedAbilities.length > 1
+							? "조건이 다른 권한이 함께 있어 기본 권한을 우선 사용합니다."
+							: undefined;
 
-			actionStateByKey.set(`${bundle.bundleId}:${action}`, {
-				bundleId: bundle.bundleId,
-				action,
-				matchedAbilityIds: matchedAbilities.map((ability) => ability.id),
-				preferredAbilityId: preferredAbility?.id,
-				isAvailable: hasGlobalAccess || matchedAbilities.length > 0,
+				actionStateByKey.set(`${bundle.bundleId}:${action}`, {
+					bundleId: bundle.bundleId,
+					action,
+					matchedAbilityIds: matchedAbilities.map((ability) => ability.id),
+					preferredAbilityId: preferredAbility?.id,
+					isAvailable: hasGlobalAccess || matchedAbilities.length > 0,
+				});
+
+				return {
+					action,
+					label: getCrudActionLabel(action),
+					isSelected:
+						hasGlobalAccess ||
+						matchedAbilities.some((ability) =>
+							selectedAbilityIds.has(ability.id),
+						),
+					isAvailable: hasGlobalAccess || matchedAbilities.length > 0,
+					issueMessage: hasGlobalAccess ? undefined : issueMessage,
+				};
 			});
 
 			return {
-				action,
-				label: getCrudActionLabel(action),
-				isSelected:
-					hasGlobalAccess ||
-					matchedAbilities.some((ability) => selectedAbilityIds.has(ability.id)),
-				isAvailable: hasGlobalAccess || matchedAbilities.length > 0,
-				issueMessage: hasGlobalAccess ? undefined : issueMessage,
+				bundleId: bundle.bundleId,
+				groupLabel: bundle.groupLabel,
+				bundleLabel: bundle.bundleLabel,
+				subject: bundle.subject,
+				subjectLabel: subjectMeta?.displayName ?? bundle.subject,
+				description: bundle.description,
+				selectedCount: actions.filter((action) => action.isSelected).length,
+				availableCount: actions.filter((action) => action.isAvailable).length,
+				actions,
 			};
-		});
-
-		return {
-			bundleId: bundle.bundleId,
-			groupLabel: bundle.groupLabel,
-			bundleLabel: bundle.bundleLabel,
-			subject: bundle.subject,
-			subjectLabel: subjectMeta?.displayName ?? bundle.subject,
-			description: bundle.description,
-			selectedCount: actions.filter((action) => action.isSelected).length,
-			availableCount: actions.filter((action) => action.isAvailable).length,
-			actions,
-		};
-	});
+		},
+	);
 
 	return {
 		crudBundles,
@@ -916,6 +949,87 @@ function buildGrantItem(
 			priority: 0,
 		}
 	);
+}
+
+function mapRelatedAbilities(
+	matches: AbilityResponseDto[],
+	preferredAbilityId?: string,
+): AdminRolesRoleIdPageRelatedAbility[] | undefined {
+	if (matches.length === 0) {
+		return undefined;
+	}
+
+	return matches.map((ability) => ({
+		id: ability.id,
+		label: ability.name,
+		href: `/abilities/${ability.id}`,
+		isPreferred: ability.id === preferredAbilityId,
+	}));
+}
+
+function mergePermissionIssues(
+	issues: AdminRolesRoleIdPagePermissionIssue[],
+): AdminRolesRoleIdPagePermissionIssue[] {
+	const merged = new Map<string, AdminRolesRoleIdPagePermissionIssue>();
+
+	for (const issue of issues) {
+		const key = `${issue.code}:${issue.severity}:${issue.message}`;
+		const existing = merged.get(key);
+		if (!existing) {
+			merged.set(key, {
+				...issue,
+				technicalDetails: issue.technicalDetails
+					? [...new Set(issue.technicalDetails)]
+					: undefined,
+				relatedAbilities: issue.relatedAbilities
+					? dedupeRelatedAbilities(issue.relatedAbilities)
+					: undefined,
+			});
+			continue;
+		}
+
+		existing.technicalDetails = [
+			...new Set([
+				...(existing.technicalDetails ?? []),
+				...(issue.technicalDetails ?? []),
+			]),
+		];
+		existing.relatedAbilities = dedupeRelatedAbilities([
+			...(existing.relatedAbilities ?? []),
+			...(issue.relatedAbilities ?? []),
+		]);
+	}
+
+	return Array.from(merged.values()).map((issue) => ({
+		...issue,
+		technicalDetails:
+			issue.technicalDetails && issue.technicalDetails.length > 0
+				? issue.technicalDetails
+				: undefined,
+		relatedAbilities:
+			issue.relatedAbilities && issue.relatedAbilities.length > 0
+				? issue.relatedAbilities
+				: undefined,
+	}));
+}
+
+function dedupeRelatedAbilities(
+	items: AdminRolesRoleIdPageRelatedAbility[],
+): AdminRolesRoleIdPageRelatedAbility[] {
+	const merged = new Map<string, AdminRolesRoleIdPageRelatedAbility>();
+
+	for (const item of items) {
+		const existing = merged.get(item.id);
+		if (!existing) {
+			merged.set(item.id, item);
+			continue;
+		}
+		if (item.isPreferred) {
+			merged.set(item.id, item);
+		}
+	}
+
+	return Array.from(merged.values());
 }
 
 function pickPreferredCanonicalAbility(
@@ -981,6 +1095,14 @@ function isCrudAbility(ability: AbilityResponseDto): boolean {
 	);
 }
 
+function isAdvancedRoleDetailAbility(ability: AbilityResponseDto): boolean {
+	return (
+		!isMenuSubjectName(ability.subject?.name) &&
+		!isPageSubjectName(ability.subject?.name) &&
+		!isCrudAbility(ability)
+	);
+}
+
 function hasAbilityConditions(ability: AbilityResponseDto): boolean {
 	if (!ability.conditions || typeof ability.conditions !== "object") {
 		return false;
@@ -1029,6 +1151,10 @@ function mapAbilityItem(
 		subjectId: ability.subjectId,
 		actionId: ability.actionId,
 		fields: ability.fields,
+		conditions:
+			ability.conditions && typeof ability.conditions === "object"
+				? (ability.conditions as Record<string, unknown>)
+				: undefined,
 		inverted: ability.inverted,
 		reason: ability.reason ?? undefined,
 		subject: ability.subject

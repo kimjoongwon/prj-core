@@ -6,6 +6,7 @@ import type { RoleDto } from "@cocrepo/api/core/roles";
 import type { SubjectDto } from "@cocrepo/api/core/subjects";
 import { Button } from "@heroui/react";
 import { Eye } from "lucide-react";
+import type { Route } from "next";
 import Link from "next/link";
 import {
 	ActionButtonCell,
@@ -498,22 +499,31 @@ export function buildTimelineTableColumns<
 	TRow extends {
 		id: string;
 		name: string;
+		href: Route;
 		description?: string | null;
 		createdAt: string | Date | null;
 	},
 >({
-	onClickTimelineName,
 	onClickDeleteButton,
 }: {
-	onClickTimelineName: (timelineId: string) => void;
 	onClickDeleteButton: (timelineId: string) => void;
 }) {
 	/** Timeline 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumnsWithDefaultCreatedAt<TRow>(
 		[
 			createNameColumn<TRow>({
-				nameVariant: "clickable",
-				onClickName: (row) => onClickTimelineName(row.id),
+				nameVariant: "plain",
+				cell: ({ getValue, row }) => (
+					<Link
+						href={row.original.href}
+						className="text-primary hover:underline"
+						onClick={(event) => {
+							event.stopPropagation();
+						}}
+					>
+						{getValue() as string}
+					</Link>
+				),
 			}),
 			createDescriptionColumn<TRow>({
 				size: 300,

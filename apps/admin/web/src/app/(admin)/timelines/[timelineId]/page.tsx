@@ -15,6 +15,7 @@ import { addToast, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
+import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 
 const getSessionTypeLabel = (type: string) => {
@@ -232,4 +233,6 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 	);
 });
 
-export default AdminTimelinesTimelineIdRoute;
+export default dynamic(() => Promise.resolve(AdminTimelinesTimelineIdRoute), {
+	ssr: false,
+});

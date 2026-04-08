@@ -17,6 +17,7 @@
 | `AdminRolesRoleIdPageAbility` | raw Ability 표시 계약 |
 | `AdminRolesRoleIdPageGrantItem` | 편집 세션의 Grant payload 계약 |
 | `AdminRolesRoleIdPagePermissionIssue` | 운영자용 진단/경고 공통 계약 |
+| `AdminRolesRoleIdPageRelatedAbility` | 중복/정리 대상 raw ability 이동 계약 |
 | `AdminRolesRoleIdPageMenuPermission` | leaf-first menu editor row 계약 |
 | `AdminRolesRoleIdPageMenuDiagnostic` | 우측 진단 카드 계약 |
 | `AdminRolesRoleIdPagePagePermission` | page access editor row 계약 |
@@ -45,6 +46,7 @@
 | 경고 이슈 | `severity=warning` 이면 `주의` Chip 표시 |
 | 전역 권한 | `hasGlobalAccess=true` 이면 전체 권한 안내를 표시하고 Checkbox를 잠금 |
 | 기술 정보 | 기본 문구는 운영자용으로 유지하고 내부 key는 `TechnicalDetails`에서만 펼쳐 표시 |
+| 중복 정리 경로 | `duplicateAbility` 이슈가 있으면 관련 ability 상세로 이동하는 버튼을 함께 노출 |
 | 요약 카드 | 선택 leaf 수, 전체 leaf 수, 진단 수 표시 |
 | 저장 버튼 | `!hasChanges || hasBlockingPermissionDiagnostics` 면 비활성화 |
 
@@ -57,6 +59,7 @@
 | 편집 규칙 | blocking issue가 있으면 신규 허용 토글을 막음 |
 | 전역 권한 | `hasGlobalAccess=true` 이면 모든 row를 허용 상태로 표시하고 토글을 잠금 |
 | 진단 | 메뉴 진단 패널과 동일한 운영자용 카드 UI를 재사용 |
+| 중복 정리 경로 | 관련 duplicate ability가 있으면 상세 화면으로 이동하는 버튼을 함께 노출 |
 
 ## 데이터 권한 렌더링 규칙
 
@@ -74,7 +77,8 @@
 |------|------|
 | 조회 모드 | `grantedAdvancedAbilities` 만 표시 |
 | 편집 모드 | `allAdvancedAbilities` + Checkbox + active Switch + priority Input 표시 |
-| 범위 | `menu:` 와 `page:` subject를 제외한 raw ability만 표시 |
+| 범위 | `menu:` / `page:` subject와 canonical CRUD ability를 제외한 raw ability만 표시 |
+| 구분 정보 | 각 row는 `ability.name`, `description`, `conditions`, `reason` 정보를 함께 표시해 예외 권한 차이를 드러냄 |
 
 ## 상태 계약
 
@@ -106,6 +110,7 @@
 | `onChangeGrantPriorityInput` | 선택된 raw grant priority 변경 |
 | `onClickOpenSaveGrantsModal` | 공통 저장 확인 모달 열기 |
 | `onClickConfirmSaveGrantsButton` | 공통 저장 실행 |
+| `onClickOpenAbilityDetail` | duplicate/catalog mismatch에 연결된 ability 상세 화면으로 이동 |
 
 ## 의존성
 
@@ -125,6 +130,8 @@
 | 2026-04-06 | `hasGlobalAccess` prop과 전체 권한 안내/세부 토글 잠금 규칙을 문서화 | codex |
 | 2026-04-06 | pure page를 메뉴/화면/CRUD/고급 4섹션 구조로 확장하고 운영자용 진단/technical details 계약을 반영 | codex |
 | 2026-04-06 | 역할 상세 pure page를 메뉴 leaf 편집기 + non-menu 고급 권한 목록 2섹션 구조로 재정의하고 menu diagnostic 계약을 추가 | codex |
+| 2026-04-08 | 고급 권한 목록에서 canonical CRUD를 제외하고 raw ability 식별/조건 정보를 노출하도록 갱신 | codex |
+| 2026-04-08 | duplicate ability 이슈를 화면에서 안전하게 합치고 관련 ability 상세 이동 버튼 계약을 추가 | codex |
 | 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |
 | 2026-03-30 | route runtime ownership에 맞춰 page를 props 기반 pure contract로 정리 | codex |

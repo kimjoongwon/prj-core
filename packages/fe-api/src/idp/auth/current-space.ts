@@ -21,6 +21,44 @@ type SetCurrentSpacePayload = {
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
+function resolveDirectIdpApiBaseUrl() {
+	const envUrl =
+		typeof process !== "undefined"
+			? process.env.NEXT_PUBLIC_IDP_API_URL
+			: undefined;
+	if (envUrl) {
+		return envUrl;
+	}
+
+	if (typeof window === "undefined") {
+		return undefined;
+	}
+
+	if (window.location.hostname === "localhost") {
+		return `${window.location.protocol}//localhost:3007`;
+	}
+
+	return undefined;
+}
+
+function resolveCurrentSpaceRequestOptions(
+	options?: SecondParameter<typeof customIdpInstance>,
+) {
+	const nextOptions = options ? { ...options } : {};
+	if (!nextOptions.baseURL) {
+		const directBaseUrl = resolveDirectIdpApiBaseUrl();
+		if (directBaseUrl) {
+			nextOptions.baseURL = directBaseUrl;
+		}
+	}
+
+	if (nextOptions.baseURL && nextOptions.withCredentials === undefined) {
+		nextOptions.withCredentials = true;
+	}
+
+	return nextOptions;
+}
+
 export const getCurrentSpace = (
 	options?: SecondParameter<typeof customIdpInstance>,
 	signal?: AbortSignal,
@@ -31,7 +69,7 @@ export const getCurrentSpace = (
 			method: "GET",
 			signal,
 		},
-		options,
+		resolveCurrentSpaceRequestOptions(options),
 	);
 
 export const getCurrentSpaceQueryKey = () =>
@@ -73,7 +111,7 @@ export const setCurrentSpace = (
 			headers: { "Content-Type": "application/json" },
 			data: payload,
 		},
-		options,
+		resolveCurrentSpaceRequestOptions(options),
 	);
 
 export function useSetCurrentSpace<TError = ErrorType<unknown>, TContext = unknown>(

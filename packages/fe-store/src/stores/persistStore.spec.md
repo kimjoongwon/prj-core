@@ -15,7 +15,7 @@
 |--------|------|------|
 | `PersistStoreConfig` | interface | `storageKey: string` - localStorage 키 |
 | `SpaceInfo` | interface | `spaceId: string`, `groundName: string` - 선택 가능한 Space 정보 |
-| `PersistedData` | interface (private) | localStorage에 저장되는 전체 데이터 구조 |
+| `PersistedData` | interface (private) | `spaceId`, `groundName`, `spaces`, 토큰 만료 시간을 포함한 localStorage 저장 구조 |
 
 ## 상수
 
@@ -77,7 +77,7 @@
 - 이미 hydrate 완료면 재실행하지 않음
 - `typeof window === "undefined"` 체크 (SSR 안전)
 - localStorage에서 `config.storageKey`로 데이터 읽기
-- JSON 파싱하여 각 속성에 복원
+- JSON 파싱하여 `spaceId`, `groundName`, `spaces`, 토큰 만료 시간을 모두 복원
 - 완료 후 `isHydrated=true`
 
 ### setupAutoSave (private)
@@ -112,5 +112,6 @@ persistStore.clear();
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-08 | 현재 선택 Space가 새 브라우저 컨텍스트에서도 유지되도록 `spaceId`/`groundName`을 localStorage 저장·복원 범위에 포함 | codex |
 | 2026-03-14 | constructor hydrate를 제거하고 `hydrateFromStorage` + `isHydrated` 기반 SSR 안전 계약으로 전환 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

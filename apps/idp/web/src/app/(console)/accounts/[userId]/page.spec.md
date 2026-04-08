@@ -76,6 +76,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-08 | pure page에서 사용하지 않는 개별 보안 action callback 전달을 제거하고 confirm modal 단일 진입점만 유지 | codex |
 | 2026-03-29 | `IdpConsoleAccountsUserIdPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-28 | 상세 진입 E2E가 `aria-label` 대신 실제 계정 상세 링크 계약(`/accounts/:userId`)을 사용하도록 기준을 정리 | codex |
 | 2026-03-22 | `(console)` layout contract 변경에 맞춰 primitive skeleton 범위를 보정 | codex |

@@ -3,9 +3,9 @@
 import {
 	DetailPage,
 	DetailPageSurface,
-	PageTitleBar,
 	DetailSection,
 	DetailSectionCard,
+	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
 import {
@@ -33,8 +33,8 @@ import {
 	Save,
 	ShieldCheck,
 	ShieldX,
-	TriangleAlert,
 	Trash2,
+	TriangleAlert,
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
@@ -52,6 +52,7 @@ export interface AdminRolesRoleIdPageAbility {
 	subjectId: string;
 	actionId: string;
 	fields: string[];
+	conditions?: Record<string, unknown>;
 	inverted: boolean;
 	reason?: string;
 	subject?: { id: string; name: string; displayName?: string };
@@ -81,11 +82,19 @@ export type AdminRolesRoleIdPagePermissionIssueCode =
 	| "duplicateAbility"
 	| "catalogMismatch";
 
+export interface AdminRolesRoleIdPageRelatedAbility {
+	id: string;
+	label: string;
+	href: string;
+	isPreferred?: boolean;
+}
+
 export interface AdminRolesRoleIdPagePermissionIssue {
 	code: AdminRolesRoleIdPagePermissionIssueCode;
 	severity: "blocking" | "warning";
 	message: string;
 	technicalDetails?: string[];
+	relatedAbilities?: AdminRolesRoleIdPageRelatedAbility[];
 }
 
 export type AdminRolesRoleIdPageMenuIssueCode =
@@ -109,6 +118,7 @@ export interface AdminRolesRoleIdPageMenuDiagnostic {
 	title: string;
 	description: string;
 	technicalDetails?: string[];
+	relatedAbilities?: AdminRolesRoleIdPageRelatedAbility[];
 }
 
 export interface AdminRolesRoleIdPagePagePermission {
@@ -127,6 +137,7 @@ export interface AdminRolesRoleIdPagePageDiagnostic {
 	title: string;
 	description: string;
 	technicalDetails?: string[];
+	relatedAbilities?: AdminRolesRoleIdPageRelatedAbility[];
 }
 
 export type AdminRolesRoleIdPageCrudActionKey =
@@ -201,6 +212,7 @@ export interface AdminRolesRoleIdPageProps {
 	onClickOpenSaveGrantsModal: () => void;
 	onCloseSaveGrantsModal: () => void;
 	onClickConfirmSaveGrantsButton: () => void;
+	onClickOpenAbilityDetail: (abilityId: string) => void;
 }
 
 const getAbilityLabel = (
@@ -208,15 +220,19 @@ const getAbilityLabel = (
 	fallback?: string,
 ) => String(value?.displayName || value?.name || fallback || "-");
 
+function formatAbilityConditions(conditions?: Record<string, unknown>): string {
+	if (!conditions || Object.keys(conditions).length === 0) {
+		return "조건 없음";
+	}
+
+	return JSON.stringify(conditions);
+}
+
 function getIssueChipColor(severity: "blocking" | "warning") {
 	return severity === "blocking" ? "danger" : "warning";
 }
 
-function TechnicalDetails({
-	items,
-}: {
-	items?: string[];
-}) {
+function TechnicalDetails({ items }: { items?: string[] }) {
 	if (!items || items.length === 0) {
 		return null;
 	}
@@ -227,11 +243,45 @@ function TechnicalDetails({
 				기술 정보 보기
 			</summary>
 			<ul className="mt-2 space-y-1">
-				{items.map((item) => (
-					<li key={item}>{item}</li>
+				{items.map((item, index) => (
+					<li key={`${index}-${item}`}>{item}</li>
 				))}
 			</ul>
 		</details>
+	);
+}
+
+function RelatedAbilityLinks({
+	items,
+	onClickOpenAbilityDetail,
+}: {
+	items?: AdminRolesRoleIdPageRelatedAbility[];
+	onClickOpenAbilityDetail: (abilityId: string) => void;
+}) {
+	if (!items || items.length === 0) {
+		return null;
+	}
+
+	const dedupedItems = Array.from(
+		new Map(items.map((item) => [item.id, item])).values(),
+	);
+
+	return (
+		<div className="mt-2 flex flex-wrap gap-2">
+			{dedupedItems.map((item) => (
+				<Button
+					key={item.id}
+					size="sm"
+					variant={item.isPreferred ? "solid" : "flat"}
+					color={item.isPreferred ? "primary" : "default"}
+					onPress={() => {
+						onClickOpenAbilityDetail(item.id);
+					}}
+				>
+					{item.isPreferred ? "현재 사용" : "중복 후보"} {item.label}
+				</Button>
+			))}
+		</div>
 	);
 }
 
@@ -240,6 +290,7 @@ function PermissionDiagnosticsPanel({
 	diagnostics,
 	hasBlockingDiagnostics,
 	emptyDescription,
+	onClickOpenAbilityDetail,
 }: {
 	title: string;
 	diagnostics: Array<
@@ -247,6 +298,7 @@ function PermissionDiagnosticsPanel({
 	>;
 	hasBlockingDiagnostics: boolean;
 	emptyDescription: string;
+	onClickOpenAbilityDetail: (abilityId: string) => void;
 }) {
 	return (
 		<div className="rounded-2xl border border-divider/80 bg-content1/60 p-4">
@@ -286,6 +338,10 @@ function PermissionDiagnosticsPanel({
 							<p className="mt-2 text-xs text-default-500">
 								{diagnostic.description}
 							</p>
+							<RelatedAbilityLinks
+								items={diagnostic.relatedAbilities}
+								onClickOpenAbilityDetail={onClickOpenAbilityDetail}
+							/>
 							<TechnicalDetails items={diagnostic.technicalDetails} />
 						</div>
 					))}
@@ -297,15 +353,11 @@ function PermissionDiagnosticsPanel({
 	);
 }
 
-function GlobalAccessNotice({
-	scopeLabel,
-}: {
-	scopeLabel: string;
-}) {
+function GlobalAccessNotice({ scopeLabel }: { scopeLabel: string }) {
 	return (
 		<div className="rounded-xl border border-primary/30 bg-primary-50/80 p-3 text-sm text-primary-700 dark:bg-primary-900/20 dark:text-primary-300">
-			현재 이 역할은 전체 권한(`manage all`)이 연결되어 있어 {scopeLabel}이
-			자동 허용됩니다. 세부 조정이 필요하면 고급 권한 목록에서 전체 권한을 먼저
+			현재 이 역할은 전체 권한(`manage all`)이 연결되어 있어 {scopeLabel}이 자동
+			허용됩니다. 세부 조정이 필요하면 고급 권한 목록에서 전체 권한을 먼저
 			해제하세요.
 		</div>
 	);
@@ -323,6 +375,7 @@ function MenuPermissionSection({
 	onClickCancelEditGrantsButton,
 	onClickOpenSaveGrantsModal,
 	onToggleMenuPermission,
+	onClickOpenAbilityDetail,
 }: {
 	menuPermissions: AdminRolesRoleIdPageMenuPermission[];
 	menuDiagnostics: AdminRolesRoleIdPageMenuDiagnostic[];
@@ -335,8 +388,11 @@ function MenuPermissionSection({
 	onClickCancelEditGrantsButton: () => void;
 	onClickOpenSaveGrantsModal: () => void;
 	onToggleMenuPermission: (leafId: string) => void;
+	onClickOpenAbilityDetail: (abilityId: string) => void;
 }) {
-	const selectedCount = menuPermissions.filter((item) => item.isSelected).length;
+	const selectedCount = menuPermissions.filter(
+		(item) => item.isSelected,
+	).length;
 	const groups = new Map<
 		string,
 		{ label: string; items: AdminRolesRoleIdPageMenuPermission[] }
@@ -452,7 +508,9 @@ function MenuPermissionSection({
 															<div className="flex items-start justify-between gap-3">
 																<div className="min-w-0">
 																	<div className="flex flex-wrap items-center gap-2">
-																		<p className="font-medium">{item.leafLabel}</p>
+																		<p className="font-medium">
+																			{item.leafLabel}
+																		</p>
 																		<Chip
 																			size="sm"
 																			color={
@@ -497,9 +555,9 @@ function MenuPermissionSection({
 															</div>
 															{item.issues.length > 0 ? (
 																<div className="mt-3 space-y-1">
-																	{item.issues.map((issue) => (
+																	{item.issues.map((issue, index) => (
 																		<div
-																			key={`${item.leafId}-${issue.code}-${issue.message}`}
+																			key={`${item.leafId}-${issue.code}-${index}`}
 																			className="flex items-start gap-2 text-xs"
 																		>
 																			<TriangleAlert
@@ -515,10 +573,17 @@ function MenuPermissionSection({
 																			</span>
 																		</div>
 																	))}
+																	<RelatedAbilityLinks
+																		items={item.issues.flatMap(
+																			(issue) => issue.relatedAbilities ?? [],
+																		)}
+																		onClickOpenAbilityDetail={
+																			onClickOpenAbilityDetail
+																		}
+																	/>
 																	<TechnicalDetails
 																		items={item.issues.flatMap(
-																			(issue) =>
-																				issue.technicalDetails ?? [],
+																			(issue) => issue.technicalDetails ?? [],
 																		)}
 																	/>
 																</div>
@@ -562,8 +627,8 @@ function MenuPermissionSection({
 									</Chip>
 								</div>
 								<p className="mt-3 text-xs text-default-500">
-									부모 메뉴는 자식 leaf 결과로 자동 계산되며, 저장 시 메뉴/화면/CRUD
-									선택과 기존 고급 grant를 함께 동기화합니다.
+									부모 메뉴는 자식 leaf 결과로 자동 계산되며, 저장 시
+									메뉴/화면/CRUD 선택과 기존 고급 grant를 함께 동기화합니다.
 								</p>
 							</div>
 
@@ -572,6 +637,7 @@ function MenuPermissionSection({
 								diagnostics={menuDiagnostics}
 								hasBlockingDiagnostics={hasBlockingDiagnostics}
 								emptyDescription="현재 메뉴 설정과 권한 구성이 일치합니다."
+								onClickOpenAbilityDetail={onClickOpenAbilityDetail}
 							/>
 						</div>
 					</div>
@@ -590,6 +656,7 @@ function PagePermissionSection({
 	isLoadingPagePermissions,
 	onClickEditGrantsButton,
 	onTogglePagePermission,
+	onClickOpenAbilityDetail,
 }: {
 	pagePermissions: AdminRolesRoleIdPagePagePermission[];
 	pageDiagnostics: AdminRolesRoleIdPagePageDiagnostic[];
@@ -599,8 +666,11 @@ function PagePermissionSection({
 	isLoadingPagePermissions: boolean;
 	onClickEditGrantsButton: () => void;
 	onTogglePagePermission: (pageId: string) => void;
+	onClickOpenAbilityDetail: (abilityId: string) => void;
 }) {
-	const selectedCount = pagePermissions.filter((item) => item.isSelected).length;
+	const selectedCount = pagePermissions.filter(
+		(item) => item.isSelected,
+	).length;
 	const groups = new Map<
 		string,
 		{ label: string; items: AdminRolesRoleIdPagePagePermission[] }
@@ -671,10 +741,8 @@ function PagePermissionSection({
 											</p>
 										</div>
 										<Chip size="sm" color="secondary" variant="flat">
-											{
-												group.items.filter((item) => item.isSelected).length
-											}
-											/{group.items.length} 허용
+											{group.items.filter((item) => item.isSelected).length}/
+											{group.items.length} 허용
 										</Chip>
 									</div>
 									<div className="space-y-2">
@@ -697,7 +765,9 @@ function PagePermissionSection({
 																<p className="font-medium">{item.pageLabel}</p>
 																<Chip
 																	size="sm"
-																	color={item.isSelected ? "success" : "default"}
+																	color={
+																		item.isSelected ? "success" : "default"
+																	}
 																	variant="flat"
 																>
 																	{item.isSelected ? "접근 허용" : "접근 차단"}
@@ -719,9 +789,9 @@ function PagePermissionSection({
 													</div>
 													{item.issues.length > 0 ? (
 														<div className="mt-3 space-y-1">
-															{item.issues.map((issue) => (
+															{item.issues.map((issue, index) => (
 																<div
-																	key={`${item.pageId}-${issue.code}-${issue.message}`}
+																	key={`${item.pageId}-${issue.code}-${index}`}
 																	className="flex items-start gap-2 text-xs"
 																>
 																	<TriangleAlert
@@ -737,6 +807,14 @@ function PagePermissionSection({
 																	</span>
 																</div>
 															))}
+															<RelatedAbilityLinks
+																items={item.issues.flatMap(
+																	(issue) => issue.relatedAbilities ?? [],
+																)}
+																onClickOpenAbilityDetail={
+																	onClickOpenAbilityDetail
+																}
+															/>
 															<TechnicalDetails
 																items={item.issues.flatMap(
 																	(issue) => issue.technicalDetails ?? [],
@@ -764,8 +842,8 @@ function PagePermissionSection({
 									</Chip>
 								</div>
 								<p className="mt-3 text-xs text-default-500">
-									메뉴가 숨겨져 있어도 이 화면 권한이 켜져 있으면 URL 직접 접근은
-									허용됩니다.
+									메뉴가 숨겨져 있어도 이 화면 권한이 켜져 있으면 URL 직접
+									접근은 허용됩니다.
 								</p>
 							</div>
 							<PermissionDiagnosticsPanel
@@ -773,6 +851,7 @@ function PagePermissionSection({
 								diagnostics={pageDiagnostics}
 								hasBlockingDiagnostics={hasBlockingDiagnostics}
 								emptyDescription="현재 화면 접근 설정과 권한 구성이 일치합니다."
+								onClickOpenAbilityDetail={onClickOpenAbilityDetail}
 							/>
 						</div>
 					</div>
@@ -852,97 +931,99 @@ function CrudBundlesSection({
 					</div>
 				) : (
 					<div className="space-y-4">
-					{hasGlobalAccess ? (
-						<GlobalAccessNotice scopeLabel="모든 데이터 권한" />
-					) : null}
-					{Array.from(groups.entries()).map(([groupLabel, group]) => (
-						<div
-							key={groupLabel}
-							className="rounded-2xl border border-divider/80 bg-content1/60 p-4"
-						>
-							<div className="mb-3">
-								<p className="font-semibold">{group.label}</p>
-								<p className="text-xs text-default-500">
-									엔티티별 CRUD 묶음을 제공합니다.
-								</p>
-							</div>
-							<div className="space-y-3">
-								{group.items.map((bundle) => (
-									<div
-										key={bundle.bundleId}
-										className="rounded-xl border border-divider/70 bg-background/70 p-3"
-									>
-										<div className="mb-3 flex flex-wrap items-start justify-between gap-3">
-											<div>
-												<p className="font-medium">{bundle.bundleLabel}</p>
-												<p className="mt-1 text-xs text-default-500">
-													{bundle.description ?? bundle.subjectLabel}
-												</p>
+						{hasGlobalAccess ? (
+							<GlobalAccessNotice scopeLabel="모든 데이터 권한" />
+						) : null}
+						{Array.from(groups.entries()).map(([groupLabel, group]) => (
+							<div
+								key={groupLabel}
+								className="rounded-2xl border border-divider/80 bg-content1/60 p-4"
+							>
+								<div className="mb-3">
+									<p className="font-semibold">{group.label}</p>
+									<p className="text-xs text-default-500">
+										엔티티별 CRUD 묶음을 제공합니다.
+									</p>
+								</div>
+								<div className="space-y-3">
+									{group.items.map((bundle) => (
+										<div
+											key={bundle.bundleId}
+											className="rounded-xl border border-divider/70 bg-background/70 p-3"
+										>
+											<div className="mb-3 flex flex-wrap items-start justify-between gap-3">
+												<div>
+													<p className="font-medium">{bundle.bundleLabel}</p>
+													<p className="mt-1 text-xs text-default-500">
+														{bundle.description ?? bundle.subjectLabel}
+													</p>
+												</div>
+												<div className="flex flex-wrap gap-2">
+													<Chip size="sm" color="primary" variant="flat">
+														선택 {bundle.selectedCount}
+													</Chip>
+													<Chip size="sm" variant="flat">
+														사용 가능 {bundle.availableCount}
+													</Chip>
+												</div>
 											</div>
-											<div className="flex flex-wrap gap-2">
-												<Chip size="sm" color="primary" variant="flat">
-													선택 {bundle.selectedCount}
-												</Chip>
-												<Chip size="sm" variant="flat">
-													사용 가능 {bundle.availableCount}
-												</Chip>
-											</div>
-										</div>
-										<div className="grid gap-2 md:grid-cols-5">
-											{bundle.actions.map((action) => (
-												<div
-													key={`${bundle.bundleId}-${action.action}`}
-													className="rounded-lg border border-divider/70 bg-content1/40 p-3"
-												>
-													<div className="flex items-center justify-between gap-2">
-														<p className="text-sm font-medium">{action.label}</p>
-														{isEditingGrants ? (
-															<Checkbox
-																isSelected={action.isSelected}
-																isDisabled={
-																	hasGlobalAccess || !action.isAvailable
+											<div className="grid gap-2 md:grid-cols-5">
+												{bundle.actions.map((action) => (
+													<div
+														key={`${bundle.bundleId}-${action.action}`}
+														className="rounded-lg border border-divider/70 bg-content1/40 p-3"
+													>
+														<div className="flex items-center justify-between gap-2">
+															<p className="text-sm font-medium">
+																{action.label}
+															</p>
+															{isEditingGrants ? (
+																<Checkbox
+																	isSelected={action.isSelected}
+																	isDisabled={
+																		hasGlobalAccess || !action.isAvailable
+																	}
+																	onValueChange={() =>
+																		onToggleCrudAction(
+																			bundle.bundleId,
+																			action.action,
+																		)
+																	}
+																/>
+															) : null}
+														</div>
+														<div className="mt-2 flex flex-wrap gap-2">
+															<Chip
+																size="sm"
+																color={
+																	action.isAvailable
+																		? action.isSelected
+																			? "success"
+																			: "default"
+																		: "warning"
 																}
-																onValueChange={() =>
-																	onToggleCrudAction(
-																		bundle.bundleId,
-																		action.action,
-																	)
-																}
-															/>
+																variant="flat"
+															>
+																{!action.isAvailable
+																	? "미등록"
+																	: action.isSelected
+																		? "허용"
+																		: "미허용"}
+															</Chip>
+														</div>
+														{action.issueMessage ? (
+															<p className="mt-2 text-xs text-default-500">
+																{action.issueMessage}
+															</p>
 														) : null}
 													</div>
-													<div className="mt-2 flex flex-wrap gap-2">
-														<Chip
-															size="sm"
-															color={
-																action.isAvailable
-																	? action.isSelected
-																		? "success"
-																		: "default"
-																	: "warning"
-															}
-															variant="flat"
-														>
-															{!action.isAvailable
-																? "미등록"
-																: action.isSelected
-																	? "허용"
-																	: "미허용"}
-														</Chip>
-													</div>
-													{action.issueMessage ? (
-														<p className="mt-2 text-xs text-default-500">
-															{action.issueMessage}
-														</p>
-													) : null}
-												</div>
-											))}
+												))}
+											</div>
 										</div>
-									</div>
-								))}
+									))}
+								</div>
 							</div>
-						</div>
-					))}
+						))}
 					</div>
 				)}
 			</DetailSection>
@@ -982,8 +1063,8 @@ function AdvancedAbilitiesSection({
 					<div>
 						<h3 className="text-lg font-semibold">고급 권한 목록</h3>
 						<p className="mt-1 text-sm text-default-500">
-							메뉴/화면/CRUD 묶음으로 다루지 않는 예외 권한은 raw ability 단위로
-							확인하고 조정합니다.
+							메뉴/화면/데이터 권한에서 다루지 않는 예외 권한만 raw ability
+							단위로 확인하고 조정합니다.
 						</p>
 					</div>
 					{!isEditingGrants ? (
@@ -1017,7 +1098,7 @@ function AdvancedAbilitiesSection({
 						</div>
 					) : allAdvancedAbilities.length === 0 ? (
 						<div className="py-8 text-center text-default-500">
-							등록된 non-menu 권한 정의가 없습니다.
+							등록된 고급 예외 권한 정의가 없습니다.
 						</div>
 					) : (
 						<Table aria-label="고급 권한 배치 할당" removeWrapper>
@@ -1025,6 +1106,7 @@ function AdvancedAbilitiesSection({
 								<TableColumn width={50}>선택</TableColumn>
 								<TableColumn>대상 (Subject)</TableColumn>
 								<TableColumn>액션 (Action)</TableColumn>
+								<TableColumn>조건</TableColumn>
 								<TableColumn>유형</TableColumn>
 								<TableColumn width={80}>활성</TableColumn>
 								<TableColumn width={100}>우선순위</TableColumn>
@@ -1047,10 +1129,23 @@ function AdvancedAbilitiesSection({
 												<span className="font-medium">
 													{getAbilityLabel(ability.subject, ability.subjectId)}
 												</span>
+												<p className="mt-1 text-xs text-default-500">
+													{ability.name}
+												</p>
 											</TableCell>
 											<TableCell>
 												<span className="font-mono text-sm">
 													{getAbilityLabel(ability.action, ability.actionId)}
+												</span>
+												{ability.description ? (
+													<p className="mt-1 text-xs text-default-500">
+														{ability.description}
+													</p>
+												) : null}
+											</TableCell>
+											<TableCell>
+												<span className="font-mono text-xs text-default-500">
+													{formatAbilityConditions(ability.conditions)}
 												</span>
 											</TableCell>
 											<TableCell>
@@ -1116,13 +1211,14 @@ function AdvancedAbilitiesSection({
 					</div>
 				) : grantedAdvancedAbilities.length === 0 ? (
 					<div className="py-8 text-center text-default-500">
-						등록된 non-menu 권한이 없습니다.
+						등록된 고급 예외 권한이 없습니다.
 					</div>
 				) : (
 					<Table aria-label="역할 고급 권한 목록" removeWrapper>
 						<TableHeader>
 							<TableColumn>대상 (Subject)</TableColumn>
 							<TableColumn>액션 (Action)</TableColumn>
+							<TableColumn>조건</TableColumn>
 							<TableColumn>필드</TableColumn>
 							<TableColumn>유형</TableColumn>
 						</TableHeader>
@@ -1133,11 +1229,31 @@ function AdvancedAbilitiesSection({
 										<span className="font-medium">
 											{getAbilityLabel(ability.subject, ability.subjectId)}
 										</span>
+										<p className="mt-1 text-xs text-default-500">
+											{ability.name}
+										</p>
 									</TableCell>
 									<TableCell>
 										<span className="font-mono text-sm">
 											{getAbilityLabel(ability.action, ability.actionId)}
 										</span>
+										{ability.description ? (
+											<p className="mt-1 text-xs text-default-500">
+												{ability.description}
+											</p>
+										) : null}
+									</TableCell>
+									<TableCell>
+										<div className="flex flex-wrap gap-1">
+											<Chip size="sm" variant="flat">
+												{formatAbilityConditions(ability.conditions)}
+											</Chip>
+											{ability.reason ? (
+												<Chip size="sm" variant="flat" color="warning">
+													사유: {ability.reason}
+												</Chip>
+											) : null}
+										</div>
 									</TableCell>
 									<TableCell>
 										{ability.fields.length > 0 ? (
@@ -1231,10 +1347,13 @@ export const AdminRolesRoleIdPage = observer(
 		onClickOpenSaveGrantsModal,
 		onCloseSaveGrantsModal,
 		onClickConfirmSaveGrantsButton,
+		onClickOpenAbilityDetail,
 	}: AdminRolesRoleIdPageProps) => {
 		if (isLoading) {
 			return (
-				<DetailPage top={<PageTitleBar title="역할 상세" description="로딩 중..." />}>
+				<DetailPage
+					top={<PageTitleBar title="역할 상세" description="로딩 중..." />}
+				>
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex items-center justify-center p-8">
@@ -1325,9 +1444,8 @@ export const AdminRolesRoleIdPage = observer(
 						{hasGlobalAccess ? (
 							<div className="rounded-xl bg-primary-50 p-4 dark:bg-primary-900/20">
 								<p className="text-sm text-primary-700 dark:text-primary-300">
-									<strong>전체 권한:</strong> 이 역할은 `manage all`이
-									연결되어 있어 모든 메뉴, 화면, 데이터 권한이 자동
-									허용됩니다.
+									<strong>전체 권한:</strong> 이 역할은 `manage all`이 연결되어
+									있어 모든 메뉴, 화면, 데이터 권한이 자동 허용됩니다.
 								</p>
 							</div>
 						) : null}
@@ -1336,7 +1454,9 @@ export const AdminRolesRoleIdPage = observer(
 								<h3 className="mb-4 text-lg font-semibold">기본 정보</h3>
 								<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<dt className="mb-1 text-sm text-default-500">역할 식별자</dt>
+										<dt className="mb-1 text-sm text-default-500">
+											역할 식별자
+										</dt>
 										<dd className="flex items-center gap-2">
 											<span className="font-mono">{role.name}</span>
 											{role.isSystem ? (
@@ -1352,7 +1472,9 @@ export const AdminRolesRoleIdPage = observer(
 									</div>
 									<div className="md:col-span-2">
 										<dt className="mb-1 text-sm text-default-500">설명</dt>
-										<dd className="text-default-600">{role.description || "-"}</dd>
+										<dd className="text-default-600">
+											{role.description || "-"}
+										</dd>
 									</div>
 								</dl>
 							</DetailSection>
@@ -1370,6 +1492,7 @@ export const AdminRolesRoleIdPage = observer(
 							onClickCancelEditGrantsButton={onClickCancelEditGrantsButton}
 							onClickOpenSaveGrantsModal={onClickOpenSaveGrantsModal}
 							onToggleMenuPermission={onToggleMenuPermission}
+							onClickOpenAbilityDetail={onClickOpenAbilityDetail}
 						/>
 
 						<PagePermissionSection
@@ -1381,6 +1504,7 @@ export const AdminRolesRoleIdPage = observer(
 							isLoadingPagePermissions={isLoadingPagePermissions}
 							onClickEditGrantsButton={onClickEditGrantsButton}
 							onTogglePagePermission={onTogglePagePermission}
+							onClickOpenAbilityDetail={onClickOpenAbilityDetail}
 						/>
 
 						<CrudBundlesSection

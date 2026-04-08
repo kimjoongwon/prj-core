@@ -3,11 +3,11 @@
 import {
 	FormPage,
 	FormPageSurface,
-	PageTitleBar,
 	FormSection,
 	FormSectionCard,
-	VStack,
-} from "@cocrepo/ui";
+} from "../../form";
+import { VStack } from "../../rhythm";
+import { PageTitleBar } from "../../widget";
 import { Button, Input, Textarea } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 

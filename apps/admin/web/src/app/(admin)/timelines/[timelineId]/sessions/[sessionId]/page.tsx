@@ -140,9 +140,6 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 	const onClickCreateProgramButton = () => {
 		router.push(`/timelines/${timelineId}/sessions/${sessionId}/programs/new` as Route);
 	};
-	const onClickProgramNameButton = (programId: string) => {
-		router.push(`/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}` as Route);
-	};
 	const onClickEditProgramButton = (programId: string) => {
 		router.push(
 			`/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}/edit` as Route,
@@ -215,6 +212,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 			}
 			programs={programs.map((program) => ({
 				id: program.id,
+				href: `/timelines/${timelineId}/sessions/${sessionId}/programs/${program.id}` as Route,
 				name: program.name,
 				routineName: program.routineNameSnapshot ?? program.routine?.name ?? "-",
 				activityCountLabel: `${program.activityCount ?? 0}개`,
@@ -237,7 +235,6 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 			onClickDeleteSessionConfirmButton={onClickDeleteSessionConfirmButton}
 			onClickDeleteSessionCancelButton={deleteSessionModal.onClose}
 			onClickCreateProgramButton={onClickCreateProgramButton}
-			onClickProgramNameButton={onClickProgramNameButton}
 			onClickEditProgramButton={onClickEditProgramButton}
 			onClickDeleteProgramButton={onClickDeleteProgramButton}
 			onClickDeleteProgramConfirmButton={onClickDeleteProgramConfirmButton}

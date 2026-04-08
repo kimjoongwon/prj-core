@@ -106,6 +106,21 @@ describe("PersistStore", () => {
 			expect(persistStore.spaceId).toBe("space-456");
 			expect(persistStore.groundName).toBe("New Ground");
 		});
+
+		it("Space 정보를 localStorage 자동 저장 대상에 포함해야 한다", async () => {
+			// When
+			persistStore.setSpace("space-456", "New Ground");
+			await Promise.resolve();
+
+			// Then
+			expect(mockLocalStorage.setItem).toHaveBeenCalled();
+			const latestCall = mockLocalStorage.setItem.mock.calls.at(-1);
+			expect(latestCall?.[0]).toBe(STORAGE_KEY);
+			expect(JSON.parse(latestCall?.[1] as string)).toMatchObject({
+				spaceId: "space-456",
+				groundName: "New Ground",
+			});
+		});
 	});
 
 	describe("clearSpace", () => {

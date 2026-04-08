@@ -41,9 +41,6 @@ export default observer(function TimelinesPageRoute() {
 			onClickCreateButton={() => {
 				router.push("/timelines/new" as Route);
 			}}
-			onClickTimelineName={(timelineId) => {
-				router.push(`/timelines/${timelineId}` as Route);
-			}}
 			onDeleteTimeline={async (timelineId) => {
 				try {
 					await deleteMutation.mutateAsync({ timelineId });
@@ -83,6 +80,7 @@ function mapTimelineRow(timeline: TimelineDto): AdminTimelinesPageTimeline {
 	return {
 		id: timeline.id,
 		name: timeline.name,
+		href: `/timelines/${timeline.id}` as Route,
 		description: timeline.description,
 		createdAt: timeline.createdAt,
 	};

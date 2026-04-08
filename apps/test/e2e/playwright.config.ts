@@ -123,7 +123,7 @@ const coreApiServer = {
 };
 
 const adminWebServer = {
-	command: "pnpm --filter=admin-web start:dev",
+	command: "pnpm start:admin-web",
 	url: new URL("/admin/auth/login", adminBaseUrl).toString(),
 	reuseExistingServer,
 	timeout: 120000,

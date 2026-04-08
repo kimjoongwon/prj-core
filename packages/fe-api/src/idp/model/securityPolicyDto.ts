@@ -24,7 +24,11 @@ export interface SecurityPolicyDto {
   updatedAt?: string | null;
   /** 정책 키 */
   key: string;
-  /** 최소 비밀번호 길이 */
+  /**
+   * 최소 비밀번호 길이
+   * @minimum 4
+   * @maximum 128
+   */
   passwordMinLength: number;
   /** 대문자 필수 */
   passwordRequireUppercase: boolean;
@@ -34,21 +38,45 @@ export interface SecurityPolicyDto {
   passwordRequireNumber: boolean;
   /** 특수문자 필수 */
   passwordRequireSpecial: boolean;
-  /** 비밀번호 만료 일수 (0=무제한) */
+  /**
+   * 비밀번호 만료 일수 (0=무제한)
+   * @minimum 0
+   */
   passwordExpirationDays: number;
-  /** 비밀번호 재사용 제한 횟수 */
+  /**
+   * 비밀번호 재사용 제한 횟수
+   * @minimum 0
+   */
   passwordReuseLimit: number;
-  /** 일시 잠금 임계값 */
+  /**
+   * 일시 잠금 임계값
+   * @minimum 1
+   */
   temporaryLockThreshold: number;
-  /** 일시 잠금 시간 (분) */
+  /**
+   * 일시 잠금 시간 (분)
+   * @minimum 1
+   */
   temporaryLockDurationMin: number;
-  /** 영구 잠금 임계값 */
+  /**
+   * 영구 잠금 임계값
+   * @minimum 1
+   */
   permanentLockThreshold: number;
-  /** Access Token TTL (초) */
+  /**
+   * Access Token TTL (초)
+   * @minimum 60
+   */
   accessTokenTtlSec: number;
-  /** Refresh Token TTL (초) */
+  /**
+   * Refresh Token TTL (초)
+   * @minimum 60
+   */
   refreshTokenTtlSec: number;
-  /** 세션 TTL (초) */
+  /**
+   * 세션 TTL (초)
+   * @minimum 60
+   */
   sessionTtlSec: number;
   /** IP 화이트리스트 활성화 */
   ipWhitelistEnabled: boolean;

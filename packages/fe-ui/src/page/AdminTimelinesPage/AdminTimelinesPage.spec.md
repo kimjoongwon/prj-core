@@ -6,7 +6,7 @@
 
 ## 역할
 
-타임라인 목록 화면의 pure page 컴포넌트입니다. 타임라인 조회, query state, 삭제 mutation, 라우팅은 route thin container가 소유하고 이 파일은 grid 렌더링과 삭제 modal만 담당합니다.
+타임라인 목록 화면의 pure page 컴포넌트입니다. 타임라인 조회, query state, 삭제 mutation, 라우팅 href 주입은 route thin container가 소유하고 이 파일은 grid 렌더링과 삭제 modal만 담당합니다.
 
 ## 공개 계약
 
@@ -33,6 +33,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-08 | 타임라인 이름 상세 진입을 버튼 callback 대신 row href 기반 링크 렌더링으로 전환 | codex |
 | 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-29 | 타임라인 목록을 pure page로 재정의하고 조회·삭제·라우팅을 route thin container로 이동 | codex |
 | 2026-03-27 | 타임라인 목록 `MetaDataGrid` 컬럼 정의를 `@cocrepo/ui` `columns` 레이어 조합으로 이관 | codex |

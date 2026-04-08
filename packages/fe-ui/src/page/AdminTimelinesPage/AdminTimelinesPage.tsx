@@ -19,6 +19,7 @@ import {
 } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import type { Route } from "next";
 import { useState } from "react";
 
 const leftInputs: InputConfig[] = [
@@ -44,6 +45,7 @@ export type AdminTimelinesPageSetQueryStates = ReturnType<
 export interface AdminTimelinesPageTimeline {
 	id: string;
 	name: string;
+	href: Route;
 	description?: string | null;
 	createdAt: string | Date | null;
 }
@@ -56,7 +58,6 @@ export interface AdminTimelinesPageProps {
 	queryStates: AdminTimelinesPageQueryStates;
 	setQueryStates: AdminTimelinesPageSetQueryStates;
 	onClickCreateButton: () => void;
-	onClickTimelineName: (timelineId: string) => void;
 	onDeleteTimeline: (timelineId: string) => Promise<void>;
 }
 
@@ -82,7 +83,6 @@ export const AdminTimelinesPage = observer(({
 	queryStates,
 	setQueryStates,
 	onClickCreateButton,
-	onClickTimelineName,
 	onDeleteTimeline,
 }: AdminTimelinesPageProps) => {
 	const [deleteTarget, setDeleteTarget] =
@@ -99,7 +99,6 @@ export const AdminTimelinesPage = observer(({
 		deleteModal.onOpen();
 	};
 	const columns = buildTimelineTableColumns<AdminTimelinesPageTimeline>({
-		onClickTimelineName,
 		onClickDeleteButton: onClickDeleteIcon,
 	});
 
@@ -177,4 +176,3 @@ export const AdminTimelinesPage = observer(({
 		</div>
 	);
 });
-

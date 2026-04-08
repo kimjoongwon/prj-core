@@ -13,9 +13,9 @@ import {
 	useToggleIdpAccountActive,
 } from "@cocrepo/api/idp/idp-accounts";
 import {
-	type IdpConsoleAccountsUserIdPageModalAction,
 	IdpConsoleAccountsUserIdPage,
 	type IdpConsoleAccountsUserIdPageAccount,
+	type IdpConsoleAccountsUserIdPageModalAction,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -112,15 +112,6 @@ export default observer(function AccountDetailPageRoute() {
 						break;
 				}
 				setModalAction(null);
-			}}
-			onClickUnlockButton={() => {
-				unlockAccount({ userId });
-			}}
-			onClickForceResetPasswordButton={() => {
-				forceResetPassword({ userId });
-			}}
-			onClickInvalidateSessionsButton={() => {
-				invalidateSessions({ userId });
 			}}
 		/>
 	);
