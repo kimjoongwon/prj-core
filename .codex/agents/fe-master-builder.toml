@@ -1,7 +1,7 @@
 name = "fe-master-builder"
 description = "목록/테이블/그리드 계열 재사용 master 계층을 생성하고 정리하는 전문가"
-model = "gpt-5-codex"
-model_reasoning_effort = "high"
+model = "gpt-5.4"
+model_reasoning_effort = "xhigh"
 developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)

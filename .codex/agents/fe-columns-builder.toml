@@ -1,7 +1,7 @@
 name = "fe-columns-builder"
 description = "packages/fe-ui/src/columns 레이어와 MetaDataGrid/cell 경계를 정리하는 전문가"
-model = "gpt-5-codex"
-model_reasoning_effort = "high"
+model = "gpt-5.4"
+model_reasoning_effort = "xhigh"
 developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)

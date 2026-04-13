@@ -1,5 +1,5 @@
-model = "gpt-5-codex"
-model_reasoning_effort = "high"
+model = "gpt-5.4"
+model_reasoning_effort = "xhigh"
 developer_instructions = '''
 
 # 서비스 시작 에이전트 (Service Starter)
