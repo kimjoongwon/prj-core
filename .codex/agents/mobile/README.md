@@ -1,6 +1,6 @@
 # Mobile Agent Index
 
-이 문서는 `.codex/agents/mobile/*.toml`의 모바일 frontend role 인덱스입니다.
+이 문서는 `.codex/agents/mobile/*.toml`의 모바일 role 인덱스입니다.
 
 원문 우선순위:
 
@@ -12,12 +12,12 @@
 
 - 모바일 role은 RN/Expo 전용 contract입니다.
 - 웹용 `fe-*`, `orch-*`, `req-*` role과 분리됩니다.
-- 모바일 orchestration 은 frontend-only 의 compact 4-stage flow 기준입니다.
+- 모바일 orchestration 은 mobile route flow 에 공통 backend spec planning 을 포함한 compact 4-stage flow 기준입니다.
 - v1 검증은 command-based verification 이며 전용 `qa-mo-*` role 은 아직 없습니다.
 
 ## Orchestration
 
-- [orch-mobile-stage.toml](./orch-mobile-stage.toml): 모바일 frontend 전용 compact stage flow 를 조율하는 메타 role
+- [orch-mobile-stage.toml](./orch-mobile-stage.toml): 모바일 route flow 와 common backend spec planning 을 함께 조율하는 메타 role
 - [orch-mobile-screen-planner.toml](./orch-mobile-screen-planner.toml): 단일 Expo route 의 모바일 화면 기획을 조율하는 오케스트레이터
 
 ## Planner

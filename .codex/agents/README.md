@@ -86,10 +86,10 @@
 - [fe-e2e-builder.toml](./fe-e2e-builder.toml): 프론트엔드 E2E 테스트 전략을 설계하는 전문가
 - [fe-unit-test-builder.toml](./fe-unit-test-builder.toml): 프론트엔드 단위 테스트 전략을 설계하는 전문가
 
-## 모바일 프론트엔드
+## 모바일
 
-- [mobile/README.md](./mobile/README.md): RN/Expo 전용 frontend role 인덱스
-- [mobile/orch-mobile-stage.toml](./mobile/orch-mobile-stage.toml): 모바일 frontend 전용 compact stage flow 를 조율하는 메타 role
+- [mobile/README.md](./mobile/README.md): RN/Expo 전용 mobile role 인덱스
+- [mobile/orch-mobile-stage.toml](./mobile/orch-mobile-stage.toml): 모바일 route flow 와 common backend spec planning 을 함께 조율하는 메타 role
 - [mobile/orch-mobile-screen-planner.toml](./mobile/orch-mobile-screen-planner.toml): 단일 Expo route 의 모바일 화면 기획을 조율하는 오케스트레이터
 - [mobile/req-mo-route-layout-planner.toml](./mobile/req-mo-route-layout-planner.toml): Expo Router 의 `_layout.spec.md` shell 계약을 기획하는 전문가
 - [mobile/req-mo-page-planner.toml](./mobile/req-mo-page-planner.toml): Expo route screen 의 `index.spec.md`를 상세 기획하는 전문가
