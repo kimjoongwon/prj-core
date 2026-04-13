@@ -73,6 +73,31 @@ port_in_use() {
   lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1
 }
 
+get_listener_pid() {
+  local port="$1"
+  lsof -t -nP -iTCP:"$port" -sTCP:LISTEN 2>/dev/null | head -n 1
+}
+
+ensure_not_kubectl_port_forward() {
+  local port="$1"
+  local label="$2"
+  local pid=""
+  local command_line=""
+
+  pid="$(get_listener_pid "$port")"
+  if [[ -z "$pid" ]]; then
+    return
+  fi
+
+  command_line="$(ps -p "$pid" -o command= 2>/dev/null || true)"
+  if [[ "$command_line" == *"kubectl port-forward"* ]]; then
+    error "$label 포트 $port 를 kubectl port-forward 가 점유하고 있습니다."
+    error "로컬 E2E는 원격 포워딩이 아니라 로컬 개발용 ${label}을 사용해야 합니다."
+    error "port-forward 를 종료하거나 다른 포트로 바꾼 뒤 다시 실행하세요."
+    exit 1
+  fi
+}
+
 wait_for_tcp() {
   local host="$1"
   local port="$2"
@@ -171,6 +196,7 @@ validate_local_targets() {
 
 ensure_postgres() {
   if port_in_use "$DB_PORT"; then
+    ensure_not_kubectl_port_forward "$DB_PORT" "Postgres"
     log "Postgres 포트 $DB_PORT 가 이미 열려 있습니다. 기존 서비스를 사용합니다."
     return
   fi
@@ -197,6 +223,7 @@ ensure_postgres() {
 
 ensure_redis() {
   if port_in_use "$REDIS_PORT"; then
+    ensure_not_kubectl_port_forward "$REDIS_PORT" "Redis"
     log "Redis 포트 $REDIS_PORT 가 이미 열려 있습니다. 기존 서비스를 사용합니다."
     return
   fi
