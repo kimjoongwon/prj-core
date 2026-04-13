@@ -20,6 +20,8 @@
     "expo-router": "~55.0.10",
     "expo-splash-screen": "~55.0.15",
     "heroui-native": "^1.0.1",
+    "mobx": "catalog:",
+    "mobx-react-lite": "catalog:",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-native": "0.83.4",
