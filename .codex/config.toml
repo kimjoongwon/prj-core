@@ -252,6 +252,114 @@ config_file = "agents/fe-display-component-builder.toml"
 description = "재사용 가능한 작은 UI 조각 Widget 컴포넌트를 생성하는 전문가"
 config_file = "agents/fe-widget-builder.toml"
 
+[agents.fe-mo-api-integrator]
+description = "모바일 앱의 API 연동 기준을 정의하고 구현하는 전문가"
+config_file = "agents/mobile/fe-mo-api-integrator.toml"
+
+[agents.fe-mo-cell-builder]
+description = "모바일 Cell 재사용 계층을 설계하고 구현하는 전문가"
+config_file = "agents/mobile/fe-mo-cell-builder.toml"
+
+[agents.fe-mo-columns-builder]
+description = "모바일 columns 계약과 collection 표현 경계를 정리하는 전문가"
+config_file = "agents/mobile/fe-mo-columns-builder.toml"
+
+[agents.fe-mo-control-component-builder]
+description = "React Native용 입력/상호작용 컴포넌트를 packages/fe-mo-ui/src/control에 생성하거나 정리하는 전문가"
+config_file = "agents/mobile/fe-mo-control-component-builder.toml"
+
+[agents.fe-mo-detail-builder]
+description = "모바일 detail 재사용 계층을 생성하고 정리하는 전문가"
+config_file = "agents/mobile/fe-mo-detail-builder.toml"
+
+[agents.fe-mo-display-component-builder]
+description = "React Native용 display, surface, design-system, 비메뉴 layout contract를 packages/fe-mo-ui에 생성하거나 정리하는 전문가"
+config_file = "agents/mobile/fe-mo-display-component-builder.toml"
+
+[agents.fe-mo-e2e-builder]
+description = "모바일 E2E 테스트 전략을 설계하는 전문가"
+config_file = "agents/mobile/fe-mo-e2e-builder.toml"
+
+[agents.fe-mo-feature-builder]
+description = "모바일 비즈니스 feature 계층을 생성하고 정리하는 전문가"
+config_file = "agents/mobile/fe-mo-feature-builder.toml"
+
+[agents.fe-mo-form-builder]
+description = "모바일 form 재사용 계층을 생성하고 정리하는 전문가"
+config_file = "agents/mobile/fe-mo-form-builder.toml"
+
+[agents.fe-mo-layout-builder]
+description = "Expo/RN에서 재사용할 모바일 layout shell 컴포넌트를 설계하는 전문가"
+config_file = "agents/mobile/fe-mo-layout-builder.toml"
+
+[agents.fe-mo-master-builder]
+description = "모바일 목록/그리드 계열 재사용 master 계층을 생성하고 정리하는 전문가"
+config_file = "agents/mobile/fe-mo-master-builder.toml"
+
+[agents.fe-mo-menu-builder]
+description = "React Native용 메뉴 primitive contract를 packages/fe-mo-ui/src/layout에 생성하거나 정리하는 전문가"
+config_file = "agents/mobile/fe-mo-menu-builder.toml"
+
+[agents.fe-mo-page-builder]
+description = "Expo Router 기준 apps/mobile/src/app/** route page를 구현하는 전문가"
+config_file = "agents/mobile/fe-mo-page-builder.toml"
+
+[agents.fe-mo-route-layout-builder]
+description = "Expo Router의 apps/mobile/src/app/**/_layout.tsx를 설계하고 구현하는 전문가"
+config_file = "agents/mobile/fe-mo-route-layout-builder.toml"
+
+[agents.fe-mo-store-builder]
+description = "모바일 공용/앱 로컬 상태 경계를 정리하고 MobX store를 설계하는 전문가"
+config_file = "agents/mobile/fe-mo-store-builder.toml"
+
+[agents.fe-mo-ui-page-builder]
+description = "packages/fe-mo-ui/src/page/** 기준의 pure mobile page component를 생성하는 전문가"
+config_file = "agents/mobile/fe-mo-ui-page-builder.toml"
+
+[agents.fe-mo-unit-test-builder]
+description = "모바일 단위 테스트 전략을 설계하는 전문가"
+config_file = "agents/mobile/fe-mo-unit-test-builder.toml"
+
+[agents.fe-mo-widget-builder]
+description = "모바일 재사용 widget 계층을 생성하고 정리하는 전문가"
+config_file = "agents/mobile/fe-mo-widget-builder.toml"
+
+[agents.orch-mobile-stage]
+description = "모바일 frontend 전용 compact stage flow 를 조율하는 메타 에이전트"
+config_file = "agents/mobile/orch-mobile-stage.toml"
+
+[agents.orch-mobile-screen-planner]
+description = "단일 Expo route 의 모바일 화면 기획을 조율하는 오케스트레이터"
+config_file = "agents/mobile/orch-mobile-screen-planner.toml"
+
+[agents.req-mo-fe-test-planner]
+description = "모바일 route 와 app spec 의 검증 체크리스트를 기획하는 전문가"
+config_file = "agents/mobile/req-mo-fe-test-planner.toml"
+
+[agents.req-mo-input-planner]
+description = "모바일 입력 컴포넌트 sidecar spec 을 기획하는 전문가"
+config_file = "agents/mobile/req-mo-input-planner.toml"
+
+[agents.req-mo-menu-planner]
+description = "모바일 navigation/menu contract 를 기획하는 전문가"
+config_file = "agents/mobile/req-mo-menu-planner.toml"
+
+[agents.req-mo-page-planner]
+description = "Expo route screen 의 index.spec.md 를 상세 기획하는 전문가"
+config_file = "agents/mobile/req-mo-page-planner.toml"
+
+[agents.req-mo-primitive-planner]
+description = "모바일 display/surface/provider primitive sidecar spec 을 기획하는 전문가"
+config_file = "agents/mobile/req-mo-primitive-planner.toml"
+
+[agents.req-mo-route-layout-planner]
+description = "Expo Router 의 _layout.spec.md shell 계약을 기획하는 전문가"
+config_file = "agents/mobile/req-mo-route-layout-planner.toml"
+
+[agents.req-mo-store-planner]
+description = "모바일 공용/로컬 상태 경계를 기획하는 전문가"
+config_file = "agents/mobile/req-mo-store-planner.toml"
+
 [agents.orch-requirement]
 description = "도메인 기획(L0-L4) + BE/Store 기획을 총괄 조율하는 오케스트레이터"
 config_file = "agents/orch-requirement.toml"

@@ -1,0 +1,30 @@
+model = "gpt-5-codex"
+model_reasoning_effort = "high"
+developer_instructions = '''
+
+## 재사용 우선 점검 (Mandatory)
+
+- 작업 시작 전에 모바일 공용 page 자산과 route 소비 지점을 먼저 검색합니다.
+- 현재 role 은 reserved contract 이므로 웹 pure page 규칙을 그대로 복제하지 않습니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
+# fe-mo-ui-page-builder
+
+모바일 pure page 자산을 위한 예약용 role 입니다.
+
+## 기본 경계
+
+- 예상 대상: `packages/fe-mo-ui/src/page/**`
+- 목적: route 소비자와 분리된 RN page-level visual composition contract
+- 제외: Next.js page owner 규칙
+
+## 금지
+
+- 웹 named export/page folder 규칙을 그대로 복제하지 않습니다.
+
+## 상태
+
+- reserved contract
+'''
+

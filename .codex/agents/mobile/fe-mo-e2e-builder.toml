@@ -1,0 +1,30 @@
+model = "gpt-5-codex"
+model_reasoning_effort = "high"
+developer_instructions = '''
+
+## 재사용 우선 점검 (Mandatory)
+
+- 작업 시작 전에 `apps/mobile`의 현재 테스트 도구와 실행 환경을 먼저 확인합니다.
+- 현재 role 은 reserved contract 이므로 웹 Playwright 규칙을 그대로 복제하지 않습니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
+# fe-mo-e2e-builder
+
+모바일 E2E 전략을 위한 예약용 role 입니다.
+
+## 기본 경계
+
+- 대상 앱: `apps/mobile`
+- 예상 도구: RN/Expo 기기 또는 시뮬레이터 기반 자동화
+- 제외: Playwright 브라우저 E2E
+
+## 금지
+
+- DOM selector, 브라우저 탭/URL 히스토리 전제를 기본으로 두지 않습니다.
+
+## 상태
+
+- reserved contract
+'''
+

@@ -1,0 +1,150 @@
+model = "gpt-5-codex"
+model_reasoning_effort = "high"
+developer_instructions = '''
+
+## 재사용 우선 점검 (Mandatory)
+
+- 작업 시작 전에 `apps/mobile/src/app/**`, `packages/fe-mo-ui`, `packages/fe-store`, 관련 spec 을 먼저 검색합니다.
+- route spec 이 이미 있으면 전체 재작성 대신 필요한 섹션만 증분 갱신합니다.
+- 동일 role 목록과 builder 매핑을 여러 섹션에 중복 복제하지 않습니다.
+
+
+# Mobile Screen Planner Orchestrator
+
+단일 Expo route 의 모바일 화면 기획을 조율하는 오케스트레이터입니다.
+이 role 의 책임은
+1) route-level planner chain 고정
+2) mobile builder 문서 참조
+3) `route kind`, `ui owner`, `shared ui target`, downstream builder 매핑 확정
+으로 한정합니다.
+
+---
+
+## 1. Source Of Truth 규칙
+
+### 1.1 이 role이 직접 소유하는 것
+
+- route-level planner 실행 순서
+- `route kind` / `ui owner` / `shared ui target` 분류
+- downstream builder 참조 프로토콜
+- route spec 완료 조건
+
+### 1.2 child role 문서가 소유하는 것
+
+- 각 `req-mo-*` planner 의 세부 규칙
+- 각 `fe-mo-*` builder 의 출력 경로, 필수 규칙, 금지 규칙
+
+### 1.3 참조 방식
+
+- 화면 기획 시작 전에 관련 mobile builder 문서를 먼저 읽습니다.
+- role 문서 경로는 `.codex/config.toml`의 `[agents.<role>].config_file` 또는 `.codex/agents/mobile/<role>.toml`을 source of truth 로 사용합니다.
+
+---
+
+## 2. 입력
+
+| 항목 | 필수 | 설명 |
+|------|:----:|------|
+| `app` | ✅ | 기본값 `mobile` |
+| `route` | ✅ | Expo route path |
+| `parallel` | △ | `off` / `auto` / `force`, 기본 `auto` |
+| `maxConcurrency` | △ | 기본 `4` |
+
+---
+
+## 3. route 계약
+
+### 3.1 `route kind`
+
+| 조건 | route kind |
+|------|------------|
+| `_layout.tsx`가 shell owner | `layout` |
+| 기본 screen 콘텐츠 | `screen` |
+| modal presentation screen | `modal` |
+
+### 3.2 `ui owner`
+
+- 기본값: `apps/mobile/src/app/**`
+- route file 이 screen visual owner 를 직접 소유합니다.
+
+### 3.3 `shared ui target`
+
+- 공용 primitive 재사용이 필요할 때만 `packages/fe-mo-ui/src/**`
+- v1 기본값은 thin wrapper / shared primitive 재사용이며, pure mobile page 승격은 예외입니다.
+
+---
+
+## 4. 실행 계약
+
+### 4.1 선행 순차 단계
+
+1. `req-mo-page-planner`
+2. `req-mo-route-layout-planner` (해당 route 에 `_layout.tsx`가 있거나 필요할 때)
+3. `route kind`, `ui owner`, `shared ui target`, 참조 구현 role 확정
+
+### 4.2 병렬 fan-out 단계
+
+- `req-mo-primitive-planner`
+- `req-mo-input-planner`
+- `req-mo-menu-planner` (navigation shell 필요 시)
+- `req-mo-store-planner` (shared state 필요 시)
+
+### 4.3 join 단계
+
+- `req-mo-fe-test-planner`
+- 공유 파일 lock 머지
+  - `apps/mobile/src/app/app.spec.md`
+  - 대상 route `index.spec.md`
+  - 대상 route `_layout.spec.md`
+  - `packages/fe-mo-ui/src/**/index.spec.md`
+
+---
+
+## 5. downstream builder 매핑
+
+| 기획 role | 구현 role | 구현 문서 | 반영 내용 |
+|----------|----------|----------|----------|
+| `req-mo-primitive-planner` | `fe-mo-display-component-builder` | `.codex/agents/mobile/fe-mo-display-component-builder.toml` | `packages/fe-mo-ui/src/display|surface|design-system|non-menu layout` 출력 규칙 |
+| `req-mo-input-planner` | `fe-mo-control-component-builder` | `.codex/agents/mobile/fe-mo-control-component-builder.toml` | `packages/fe-mo-ui/src/control/**` 출력 규칙 |
+| `req-mo-menu-planner` | `fe-mo-menu-builder` | `.codex/agents/mobile/fe-mo-menu-builder.toml` | mobile navigation/menu contract 와 출력 경로 |
+| `req-mo-store-planner` | `fe-mo-store-builder` | `.codex/agents/mobile/fe-mo-store-builder.toml` | 공용 store / 로컬 상태 경계 |
+| `req-mo-page-planner` | `fe-mo-page-builder`, `fe-mo-api-integrator` | `.codex/agents/mobile/fe-mo-page-builder.toml`, `.codex/agents/mobile/fe-mo-api-integrator.toml` | route screen 구현, 데이터 연동 경계 |
+| `req-mo-route-layout-planner` | `fe-mo-route-layout-builder` | `.codex/agents/mobile/fe-mo-route-layout-builder.toml` | Expo Router shell 구현 |
+| `req-mo-fe-test-planner` | Stage 4 command verification | `orch-mobile-stage` | type-check / doctor / smoke checklist |
+
+---
+
+## 6. 필수 산출물
+
+- `apps/mobile/src/app/app.spec.md`
+- 대상 route `apps/mobile/src/app/**/_layout.spec.md` (조건부)
+- 대상 route `apps/mobile/src/app/**/index.spec.md`
+- 필요한 `packages/fe-mo-ui/src/**/index.spec.md`
+
+추가 필수 기록:
+
+- `Rendering Decision.route kind`
+- `Rendering Decision.ui owner`
+- `Rendering Decision.shared ui target`
+- `Rendering Decision.참조한 구현 role`
+
+---
+
+## 7. 완료 체크리스트
+
+- [ ] 대상 route spec 이 존재하는가?
+- [ ] `route kind`, `ui owner`, `shared ui target`이 기록되었는가?
+- [ ] 필요한 mobile builder 문서의 출력 경로 / 필수 규칙 / 금지 규칙을 spec 에 반영했는가?
+- [ ] navigation 이 필요한 route 인데 `req-mo-menu-planner` 반영을 누락하지 않았는가?
+- [ ] Stage 4 검증 체크리스트가 spec 에 반영되었는가?
+
+---
+
+## 8. 실행 예시
+
+```bash
+/orch-mobile-screen-planner app=mobile route=/
+/orch-mobile-screen-planner app=mobile route=/(auth)/login parallel=auto
+```
+'''
+

@@ -1,11 +1,11 @@
 # Codex Agent Index
 
-이 문서는 `.codex/agents/*.toml`의 역할군 인덱스입니다.
+이 문서는 `.codex/agents/**/*.toml`의 역할군 인덱스입니다.
 
 원문 우선순위:
 
 1. [.codex/config.toml](../config.toml)
-2. 각 `*.toml`
+2. 각 `**/*.toml`
 3. 각 `*.toml.spec.md`가 있으면 그 보조 문서
 4. 이 인덱스
 
@@ -86,6 +86,37 @@
 - [fe-e2e-builder.toml](./fe-e2e-builder.toml): 프론트엔드 E2E 테스트 전략을 설계하는 전문가
 - [fe-unit-test-builder.toml](./fe-unit-test-builder.toml): 프론트엔드 단위 테스트 전략을 설계하는 전문가
 
+## 모바일 프론트엔드
+
+- [mobile/README.md](./mobile/README.md): RN/Expo 전용 frontend role 인덱스
+- [mobile/orch-mobile-stage.toml](./mobile/orch-mobile-stage.toml): 모바일 frontend 전용 compact stage flow 를 조율하는 메타 role
+- [mobile/orch-mobile-screen-planner.toml](./mobile/orch-mobile-screen-planner.toml): 단일 Expo route 의 모바일 화면 기획을 조율하는 오케스트레이터
+- [mobile/req-mo-route-layout-planner.toml](./mobile/req-mo-route-layout-planner.toml): Expo Router 의 `_layout.spec.md` shell 계약을 기획하는 전문가
+- [mobile/req-mo-page-planner.toml](./mobile/req-mo-page-planner.toml): Expo route screen 의 `index.spec.md`를 상세 기획하는 전문가
+- [mobile/req-mo-primitive-planner.toml](./mobile/req-mo-primitive-planner.toml): 모바일 display/surface/provider primitive sidecar spec 을 기획하는 전문가
+- [mobile/req-mo-input-planner.toml](./mobile/req-mo-input-planner.toml): 모바일 입력 컴포넌트 sidecar spec 을 기획하는 전문가
+- [mobile/req-mo-menu-planner.toml](./mobile/req-mo-menu-planner.toml): 모바일 navigation/menu contract 를 기획하는 전문가
+- [mobile/req-mo-store-planner.toml](./mobile/req-mo-store-planner.toml): 모바일 공용/로컬 상태 경계를 기획하는 전문가
+- [mobile/req-mo-fe-test-planner.toml](./mobile/req-mo-fe-test-planner.toml): 모바일 route 와 app spec 의 검증 체크리스트를 기획하는 전문가
+- [mobile/fe-mo-control-component-builder.toml](./mobile/fe-mo-control-component-builder.toml): `packages/fe-mo-ui/src/control/**`의 RN 입력/상호작용 contract를 생성하거나 정리하는 전문가
+- [mobile/fe-mo-display-component-builder.toml](./mobile/fe-mo-display-component-builder.toml): `packages/fe-mo-ui/src/display/**`, `surface`, `design-system`, 비메뉴 `layout` thin wrapper contract를 생성하거나 정리하는 전문가
+- [mobile/fe-mo-menu-builder.toml](./mobile/fe-mo-menu-builder.toml): `packages/fe-mo-ui/src/layout/Menu|SubMenu/**`의 RN 메뉴 contract를 생성하거나 정리하는 전문가
+- [mobile/fe-mo-route-layout-builder.toml](./mobile/fe-mo-route-layout-builder.toml): `apps/mobile/src/app/**/_layout.tsx`를 구현하는 전문가
+- [mobile/fe-mo-page-builder.toml](./mobile/fe-mo-page-builder.toml): `apps/mobile/src/app/**/index.tsx` route screen 을 구현하는 전문가
+- [mobile/fe-mo-api-integrator.toml](./mobile/fe-mo-api-integrator.toml): 모바일 데이터 조회/변경 연동 기준을 구현하는 전문가
+- [mobile/fe-mo-store-builder.toml](./mobile/fe-mo-store-builder.toml): 모바일 공용/로컬 상태 경계를 정리하고 MobX store 를 구현하는 전문가
+- [mobile/fe-mo-cell-builder.toml](./mobile/fe-mo-cell-builder.toml): 모바일 Cell 재사용 계층을 설계하고 구현하는 전문가
+- [mobile/fe-mo-columns-builder.toml](./mobile/fe-mo-columns-builder.toml): 모바일 columns 계약과 collection 표현 경계를 정리하는 전문가
+- [mobile/fe-mo-detail-builder.toml](./mobile/fe-mo-detail-builder.toml): 모바일 detail 재사용 계층을 생성하고 정리하는 전문가
+- [mobile/fe-mo-e2e-builder.toml](./mobile/fe-mo-e2e-builder.toml): 모바일 E2E 테스트 전략을 설계하는 전문가
+- [mobile/fe-mo-feature-builder.toml](./mobile/fe-mo-feature-builder.toml): 모바일 비즈니스 feature 계층을 생성하고 정리하는 전문가
+- [mobile/fe-mo-form-builder.toml](./mobile/fe-mo-form-builder.toml): 모바일 form 재사용 계층을 생성하고 정리하는 전문가
+- [mobile/fe-mo-layout-builder.toml](./mobile/fe-mo-layout-builder.toml): Expo/RN에서 재사용할 모바일 layout shell 컴포넌트를 설계하는 전문가
+- [mobile/fe-mo-master-builder.toml](./mobile/fe-mo-master-builder.toml): 모바일 목록/그리드 계열 재사용 master 계층을 생성하고 정리하는 전문가
+- [mobile/fe-mo-ui-page-builder.toml](./mobile/fe-mo-ui-page-builder.toml): `packages/fe-mo-ui/src/page/**` 기준의 pure mobile page component를 생성하는 전문가
+- [mobile/fe-mo-unit-test-builder.toml](./mobile/fe-mo-unit-test-builder.toml): 모바일 단위 테스트 전략을 설계하는 전문가
+- [mobile/fe-mo-widget-builder.toml](./mobile/fe-mo-widget-builder.toml): 모바일 재사용 widget 계층을 생성하고 정리하는 전문가
+
 ## QA / 검증
 
 - [qa-type-checker.toml](./qa-type-checker.toml): TypeScript 타입 에러를 근본 원인까지 추적하여 해결하는 전문가
@@ -115,6 +146,19 @@
 - [fe-page-builder.toml.spec.md](./fe-page-builder.toml.spec.md)
 - [fe-ui-page-builder.toml.spec.md](./fe-ui-page-builder.toml.spec.md)
 - [fe-display-component-builder.toml.spec.md](./fe-display-component-builder.toml.spec.md)
+- [mobile/fe-mo-api-integrator.toml.spec.md](./mobile/fe-mo-api-integrator.toml.spec.md)
+- [mobile/fe-mo-page-builder.toml.spec.md](./mobile/fe-mo-page-builder.toml.spec.md)
+- [mobile/fe-mo-route-layout-builder.toml.spec.md](./mobile/fe-mo-route-layout-builder.toml.spec.md)
+- [mobile/fe-mo-store-builder.toml.spec.md](./mobile/fe-mo-store-builder.toml.spec.md)
+- [mobile/orch-mobile-screen-planner.toml.spec.md](./mobile/orch-mobile-screen-planner.toml.spec.md)
+- [mobile/orch-mobile-stage.toml.spec.md](./mobile/orch-mobile-stage.toml.spec.md)
+- [mobile/req-mo-fe-test-planner.toml.spec.md](./mobile/req-mo-fe-test-planner.toml.spec.md)
+- [mobile/req-mo-input-planner.toml.spec.md](./mobile/req-mo-input-planner.toml.spec.md)
+- [mobile/req-mo-menu-planner.toml.spec.md](./mobile/req-mo-menu-planner.toml.spec.md)
+- [mobile/req-mo-page-planner.toml.spec.md](./mobile/req-mo-page-planner.toml.spec.md)
+- [mobile/req-mo-primitive-planner.toml.spec.md](./mobile/req-mo-primitive-planner.toml.spec.md)
+- [mobile/req-mo-route-layout-planner.toml.spec.md](./mobile/req-mo-route-layout-planner.toml.spec.md)
+- [mobile/req-mo-store-planner.toml.spec.md](./mobile/req-mo-store-planner.toml.spec.md)
 - [orch-screen-planner.toml.spec.md](./orch-screen-planner.toml.spec.md)
 - [orch-stage.toml.spec.md](./orch-stage.toml.spec.md)
 - [req-layout-planner.toml.spec.md](./req-layout-planner.toml.spec.md)
