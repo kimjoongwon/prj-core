@@ -3,7 +3,7 @@ multi_agent = true
 
 [agents]
 max_threads = 8
-max_depth = 3
+max_depth = 99
 
 [project]
 multilingual = true

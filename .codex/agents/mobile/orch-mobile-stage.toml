@@ -96,19 +96,25 @@ developer_instructions = '''
 
 ## 4. 공통 규칙
 
+### 4.1 필수 규칙
+
 - 각 Stage 완료 후 반드시 사용자 리뷰를 기다립니다.
+- 현재 호출에서는 요청된 `stage` 하나만 수행합니다.
+- Stage 완료 또는 실패 메시지를 출력한 뒤 추가 Task/agent 호출을 시작하지 않고 종료합니다.
+- 다음 Stage는 사용자가 명시적으로 `continue`, `next`, `stage=N` 등으로 승인한 경우에만 실행합니다.
 - 각 Stage 완료 메시지에 `핵심 의도:` 1줄을 포함합니다.
 - 변경이 발생하면 영향받는 최초 Stage부터 재시작합니다.
 - `parallel=auto`를 기본으로 사용합니다.
 - 코드/스펙 변경 시 대응 sidecar 와 `## 변경 이력`을 함께 반영합니다.
 
-### 금지
+### 4.2 금지
 
 - 사용자 승인 없이 다음 Stage 로 진행 금지
+- 단일 호출에서 여러 Stage 를 연속 실행하는 행위 금지
 - web `orch-stage` 규칙을 그대로 복제하여 `apps/*/web` 경로를 다루는 행위
 - deprecated / fallback / 하위호환 코드 작성
 
-### 공유 파일 lock
+### 4.3 공유 파일 lock
 
 - `apps/mobile/src/app/app.spec.md`
 - `packages/fe-mo-ui/src/index.ts`
@@ -118,6 +124,12 @@ developer_instructions = '''
 - `packages/fe-mo-ui/src/surface/index.ts`
 - `packages/fe-mo-ui/src/design-system/index.ts`
 - `**/PROGRESS.md`
+
+### 4.4 리뷰 체크포인트
+
+- Stage 완료 보고의 마지막 줄에는 반드시 `📌 리뷰 요청: Stage N 결과 검토 후 다음 단계 진행 여부를 지정해 주세요.`를 포함합니다.
+- Stage N+1 제안은 가능하지만 자동 실행하지 않습니다.
+- 사용자가 수정 의견을 주면 영향받는 최초 Stage부터 재시작 범위를 다시 판단합니다.
 
 ---
 
@@ -132,6 +144,11 @@ developer_instructions = '''
   - `apps/mobile/src/app/**/index.spec.md`
   - 필요한 `packages/fe-mo-ui/src/**/index.spec.md`
 
+**완료 gate**
+- 요청된 route 범위의 app/route spec 이 생성 또는 갱신되어야 합니다.
+- 모바일 UI/state/test contract 가 spec 에 반영되어야 합니다.
+- 완료 메시지를 출력한 뒤 Stage 2 를 자동 시작하지 않고 사용자 리뷰를 기다립니다.
+
 ### Stage 2: 모바일 UI 패키지 구현
 
 - 대상 role:
@@ -145,6 +162,11 @@ developer_instructions = '''
   - `packages/fe-mo-ui/src/surface/**`
   - `packages/fe-mo-ui/src/design-system/**`
 
+**완료 gate**
+- 요청된 UI target 구현과 대응 sidecar/spec 변경 이력이 반영되어야 합니다.
+- 공유 barrel/index 파일은 join 단계의 단일 writer 로만 정리되어야 합니다.
+- 완료 메시지를 출력한 뒤 Stage 3 을 자동 시작하지 않고 사용자 리뷰를 기다립니다.
+
 ### Stage 3: 모바일 route 통합
 
 - 대상 role:
@@ -157,6 +179,11 @@ developer_instructions = '''
   - `apps/mobile/src/app/**/index.tsx`
   - route-local hooks / shared store
 
+**완료 gate**
+- 요청된 route 의 layout/screen wiring 이 구현되어야 합니다.
+- 조건부 store/API 연동과 대응 sidecar/spec 변경 이력이 반영되어야 합니다.
+- 완료 메시지를 출력한 뒤 Stage 4 를 자동 시작하지 않고 사용자 리뷰를 기다립니다.
+
 ### Stage 4: 모바일 검증
 
 - 기본 검증 명령:
@@ -164,6 +191,11 @@ developer_instructions = '''
   - `pnpm --filter mobile-app type-check`
   - `pnpm --filter mobile-app doctor`
 - 검증 결과는 해당 spec 테스트 섹션과 stage 완료 보고에 반영합니다.
+
+**완료 gate**
+- 검증 명령 결과가 수집되어 stage 완료 보고에 반영되어야 합니다.
+- 필요한 spec 테스트 섹션과 변경 이력이 최신이어야 합니다.
+- Stage 4 완료 후에도 후속 Stage 를 가정하지 않고 사용자 리뷰를 기다립니다.
 
 ---
 
@@ -175,11 +207,51 @@ developer_instructions = '''
 
 ---
 
-## 7. 실행 예시
+## 7. Stage 완료 / 실패 형식
+
+### 7.1 완료 메시지 최소 형식
+
+```text
+✅ Stage N 완료: <단계명>
+
+📁 핵심 산출물:
+   - ...
+
+🧪 검증 결과:
+   - ...
+
+핵심 의도: <다음 Stage가 필요한 이유 한 문장>
+📌 다음 단계: Stage N+1 (...)
+📌 리뷰 요청: Stage N 결과 검토 후 다음 단계 진행 여부를 지정해 주세요.
+```
+
+### 7.2 실패 메시지 최소 형식
+
+```text
+❌ Stage N 실패: <단계명>
+
+원인:
+- ...
+
+영향 범위:
+- ...
+
+권장 조치:
+- ...
+```
+
+### 7.3 종료 규칙
+
+- 위 완료/실패 메시지를 출력한 시점에 현재 호출을 종료합니다.
+- 완료 메시지 뒤에 다음 Stage 를 위한 추가 agent 실행, 명령 실행, 파일 수정 계획을 이어서 수행하지 않습니다.
+- 사용자 응답이 오기 전까지 현재 Stage 를 review pending 상태로 간주합니다.
+
+---
+
+## 8. 실행 예시
 
 ```bash
 /orch-mobile-stage stage=1 app=mobile route=/
 /orch-mobile-stage stage=3 app=mobile routes=\"/,/(auth)/login\" parallel=auto
 ```
 '''
-
