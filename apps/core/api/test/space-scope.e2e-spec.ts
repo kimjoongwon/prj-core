@@ -235,11 +235,11 @@ describe("Space Scope API (E2E)", () => {
 		}
 	}, 30000);
 
-	it("비 FULL_ACCESS tenant면 현재 selectedSpaceId 한 개만 EFFECTIVE_SPACE_IDS로 사용한다", async () => {
+	it("비 FULL_ACCESS tenant면 현재 x-space-id 한 개만 EFFECTIVE_SPACE_IDS로 사용한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("Cookie", "selectedSpaceId=" + SPACE_A_ID);
+			.set("x-space-id", SPACE_A_ID);
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
@@ -253,7 +253,7 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("Cookie", "selectedSpaceId=" + SPACE_B_ID);
+			.set("x-space-id", SPACE_B_ID);
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
@@ -267,7 +267,7 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/users")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("Cookie", "selectedSpaceId=" + SPACE_A_ID);
+			.set("x-space-id", SPACE_A_ID);
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(usersRepoCalls[0]).toMatchObject({
@@ -280,20 +280,20 @@ describe("Space Scope API (E2E)", () => {
 		});
 	});
 
-	it("FULL_ACCESS 사용자의 users 조회는 전체 조회로 repository를 호출한다", async () => {
+	it("FULL_ACCESS 사용자의 users 조회도 현재 x-space-id만 repository로 전달한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/users")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("Cookie", "selectedSpaceId=" + SPACE_B_ID);
+			.set("x-space-id", SPACE_B_ID);
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(usersRepoCalls[0]).toMatchObject({
 			type: "findManyBySpaceIds",
+			spaceIds: [SPACE_B_ID],
 		});
-		expect(usersRepoCalls[0].spaceIds).toBeUndefined();
 		expect(usersRepoCalls[1]).toEqual({
 			type: "countStatsBySpaceIds",
-			spaceIds: undefined,
+			spaceIds: [SPACE_B_ID],
 		});
 	});
 
@@ -302,7 +302,7 @@ describe("Space Scope API (E2E)", () => {
 			.get("/api/v1/test-space-scope/tasks")
 			.query({ spaceScope: SpaceScope.INCLUDE_ANCESTORS })
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("Cookie", "selectedSpaceId=" + SPACE_A_ID);
+			.set("x-space-id", SPACE_A_ID);
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(tasksRepoCalls[0]).toMatchObject({
@@ -316,7 +316,7 @@ describe("Space Scope API (E2E)", () => {
 			.get("/api/v1/test-space-scope/tasks")
 			.query({ spaceScope: SpaceScope.INCLUDE_ANCESTORS })
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("Cookie", "selectedSpaceId=" + SPACE_B_ID);
+			.set("x-space-id", SPACE_B_ID);
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(tasksRepoCalls[0]).toMatchObject({
@@ -329,7 +329,7 @@ describe("Space Scope API (E2E)", () => {
 		const limitedResponse = await request(app.getHttpServer())
 			.get("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("Cookie", "selectedSpaceId=" + SPACE_A_ID);
+			.set("x-space-id", SPACE_A_ID);
 
 		expect(limitedResponse.status).toBe(HttpStatus.OK);
 		expect(spacesRepoCalls[0]).toEqual({
@@ -342,7 +342,7 @@ describe("Space Scope API (E2E)", () => {
 		const fullResponse = await request(app.getHttpServer())
 			.get("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("Cookie", "selectedSpaceId=" + SPACE_B_ID);
+			.set("x-space-id", SPACE_B_ID);
 
 		expect(fullResponse.status).toBe(HttpStatus.OK);
 		expect(spacesRepoCalls[0]).toEqual({
@@ -354,7 +354,7 @@ describe("Space Scope API (E2E)", () => {
 		const forbiddenResponse = await request(app.getHttpServer())
 			.get(`/api/v1/spaces/${SPACE_B_ID}/ground`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("Cookie", "selectedSpaceId=" + SPACE_A_ID);
+			.set("x-space-id", SPACE_A_ID);
 
 		expect(forbiddenResponse.status).toBe(HttpStatus.FORBIDDEN);
 		expect(
@@ -366,7 +366,7 @@ describe("Space Scope API (E2E)", () => {
 		const allowedResponse = await request(app.getHttpServer())
 			.get(`/api/v1/spaces/${SPACE_A_ID}/ground`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("Cookie", "selectedSpaceId=" + SPACE_B_ID);
+			.set("x-space-id", SPACE_B_ID);
 
 		expect(allowedResponse.status).toBe(HttpStatus.OK);
 		expect(spacesRepoCalls[0]).toEqual({
@@ -375,11 +375,11 @@ describe("Space Scope API (E2E)", () => {
 		});
 	});
 
-	it("tenant가 없는 selectedSpaceId는 403으로 차단한다", async () => {
+	it("tenant가 없는 x-space-id는 403으로 차단한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("Cookie", "selectedSpaceId=" + SPACE_C_ID);
+			.set("x-space-id", SPACE_C_ID);
 
 		expect(response.status).toBe(HttpStatus.FORBIDDEN);
 	});

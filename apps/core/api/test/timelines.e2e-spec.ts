@@ -66,7 +66,7 @@ describe("Timelines API (E2E)", () => {
 					const sessionsRes = await request(app.getHttpServer())
 						.get(`/api/v1/timelines/${timelineId}/sessions`)
 						.set("Authorization", `Bearer ${jwtToken}`)
-						.set("Cookie", "selectedSpaceId=" + spaceId);
+						.set("x-space-id", spaceId);
 
 					if (sessionsRes.status === 200 && sessionsRes.body.data?.length > 0) {
 						for (const session of sessionsRes.body.data) {
@@ -76,7 +76,7 @@ describe("Timelines API (E2E)", () => {
 									`/api/v1/timelines/${timelineId}/sessions/${session.id}/programs`,
 								)
 								.set("Authorization", `Bearer ${jwtToken}`)
-								.set("Cookie", "selectedSpaceId=" + spaceId);
+								.set("x-space-id", spaceId);
 
 							if (
 								programsRes.status === 200 &&
@@ -88,7 +88,7 @@ describe("Timelines API (E2E)", () => {
 											`/api/v1/timelines/${timelineId}/sessions/${session.id}/programs/${program.id}`,
 										)
 										.set("Authorization", `Bearer ${jwtToken}`)
-										.set("Cookie", "selectedSpaceId=" + spaceId);
+										.set("x-space-id", spaceId);
 								}
 							}
 
@@ -98,7 +98,7 @@ describe("Timelines API (E2E)", () => {
 									`/api/v1/timelines/${timelineId}/sessions/${session.id}`,
 								)
 								.set("Authorization", `Bearer ${jwtToken}`)
-								.set("Cookie", "selectedSpaceId=" + spaceId);
+								.set("x-space-id", spaceId);
 						}
 					}
 
@@ -106,7 +106,7 @@ describe("Timelines API (E2E)", () => {
 					await request(app.getHttpServer())
 						.delete(`/api/v1/timelines/${timelineId}`)
 						.set("Authorization", `Bearer ${jwtToken}`)
-						.set("Cookie", "selectedSpaceId=" + spaceId);
+						.set("x-space-id", spaceId);
 				} catch {
 					// 이미 삭제되었거나 존재하지 않으면 무시
 				}
@@ -137,7 +137,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/timelines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -155,7 +155,7 @@ describe("Timelines API (E2E)", () => {
 					.get("/api/v1/timelines")
 					.query({ skip: 0, take: 5 })
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -179,7 +179,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.post("/api/v1/timelines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(createDto);
 
 				// Then
@@ -206,7 +206,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/timelines/${testTimelineId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -231,7 +231,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.patch(`/api/v1/timelines/${testTimelineId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(updateDto);
 
 				// Then
@@ -267,7 +267,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.post(`/api/v1/timelines/${testTimelineId}/sessions`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(createDto);
 
 				// Then
@@ -291,7 +291,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/timelines/${testTimelineId}/sessions`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -319,7 +319,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -346,7 +346,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(updateDto);
 
 				// Then
@@ -368,7 +368,7 @@ describe("Timelines API (E2E)", () => {
 					.get("/api/v1/routines")
 					.query({ skip: 0, take: 1 })
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				if (routinesRes.body.data?.length === 0) {
 					console.warn("루틴 데이터가 없어 프로그램 등록 테스트를 건너뜁니다.");
@@ -392,7 +392,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}/programs`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(createDto);
 
 				// Then
@@ -420,7 +420,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}/programs`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -453,7 +453,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}/programs/${testProgramId}`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(updateDto);
 
 				// Then
@@ -481,7 +481,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}/programs/${testProgramId}`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then: 204 No Content
 				expect(deleteResponse.status).toBe(204);
@@ -493,7 +493,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}/programs`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				expect(listResponse.status).toBe(200);
 				const ids = listResponse.body.data.map((p: { id: string }) => p.id);
@@ -516,7 +516,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then: 204 No Content
 				expect(deleteResponse.status).toBe(204);
@@ -528,7 +528,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				expect(getResponse.status).toBe(404);
 
@@ -550,7 +550,7 @@ describe("Timelines API (E2E)", () => {
 				const createResponse = await request(app.getHttpServer())
 					.post("/api/v1/timelines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(createDto);
 
 				expect(createResponse.status).toBe(201);
@@ -560,7 +560,7 @@ describe("Timelines API (E2E)", () => {
 				const deleteResponse = await request(app.getHttpServer())
 					.delete(`/api/v1/timelines/${deleteTargetId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then: 204 No Content
 				expect(deleteResponse.status).toBe(204);
@@ -570,7 +570,7 @@ describe("Timelines API (E2E)", () => {
 				const getResponse = await request(app.getHttpServer())
 					.get(`/api/v1/timelines/${deleteTargetId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				expect(getResponse.status).toBe(404);
 			});
@@ -680,8 +680,8 @@ describe("Timelines API (E2E)", () => {
 			});
 		});
 
-		describe("selectedSpaceId 쿠키 누락", () => {
-			it("selectedSpaceId 없이 타임라인 목록 조회 시 400 또는 403을 반환해야 한다", async () => {
+		describe("x-space-id 헤더 누락", () => {
+			it("x-space-id 없이 타임라인 목록 조회 시 400 또는 403을 반환해야 한다", async () => {
 				// Given
 				if (!jwtToken) return;
 
@@ -709,7 +709,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.post("/api/v1/timelines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(invalidDto);
 
 				// Then
@@ -724,7 +724,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/timelines/not-a-valid-uuid")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(400);
@@ -738,7 +738,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/timelines/not-a-uuid/sessions")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(400);
@@ -756,7 +756,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/timelines/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(404);
@@ -772,7 +772,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.patch(`/api/v1/timelines/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send({ name: "수정 시도" });
 
 				// Then
@@ -789,7 +789,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.delete(`/api/v1/timelines/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(404);
@@ -805,7 +805,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/timelines/${nonExistentId}/sessions`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(404);
@@ -819,7 +819,7 @@ describe("Timelines API (E2E)", () => {
 				const timelineRes = await request(app.getHttpServer())
 					.post("/api/v1/timelines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send({ name: `404 세션 테스트 타임라인 ${Date.now()}` });
 
 				if (timelineRes.status !== 201) return;
@@ -834,7 +834,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${tempTimelineId}/sessions/${nonExistentSessionId}`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(404);
@@ -853,7 +853,7 @@ describe("Timelines API (E2E)", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/timelines")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId);
+				.set("x-space-id", spaceId);
 
 			// Then
 			expect(response.status).toBe(200);
@@ -873,7 +873,7 @@ describe("Timelines API (E2E)", () => {
 			const createResponse = await request(app.getHttpServer())
 				.post("/api/v1/timelines")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId)
+				.set("x-space-id", spaceId)
 				.send(createDto);
 
 			expect(createResponse.status).toBe(201);
@@ -884,7 +884,7 @@ describe("Timelines API (E2E)", () => {
 			const updateResponse = await request(app.getHttpServer())
 				.patch(`/api/v1/timelines/${timelineId}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId)
+				.set("x-space-id", spaceId)
 				.send({});
 
 			// Then: 변경사항 없이 200 반환
@@ -901,7 +901,7 @@ describe("Timelines API (E2E)", () => {
 				.get("/api/v1/timelines")
 				.query({ search: "테스트" })
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId);
+				.set("x-space-id", spaceId);
 
 			// Then
 			expect(response.status).toBe(200);
@@ -915,7 +915,7 @@ describe("Timelines API (E2E)", () => {
 			const createTimelineRes = await request(app.getHttpServer())
 				.post("/api/v1/timelines")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId)
+				.set("x-space-id", spaceId)
 				.send({
 					name: `세션 페이지네이션 테스트 타임라인 ${Date.now()}`,
 				});
@@ -929,7 +929,7 @@ describe("Timelines API (E2E)", () => {
 				.get(`/api/v1/timelines/${tempTimelineId}/sessions`)
 				.query({ skip: 0, take: 10 })
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId);
+				.set("x-space-id", spaceId);
 
 			// Then
 			expect(response.status).toBe(200);

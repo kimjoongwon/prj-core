@@ -140,7 +140,7 @@ developer_instructions = '''
 | `req-page-planner` | `fe-page-builder` | `.codex/agents/fe-page-builder.toml` | `apps/*/web/src/app/**/page.tsx` thin container 기준 |
 | `req-menu-planner` | `fe-menu-builder` | `.codex/agents/fe-menu-builder.toml` | route/menu contract와 출력 경로 |
 | `req-api-integration-planner` | `fe-api-integrator` | `.codex/agents/fe-api-integrator.toml` | `apps/[app]/web/src/app/**/hooks/index.spec.md` 계약 |
-| `req-fe-test-planner` | `fe-unit-test-builder`, `qa-fe-testing` | `.codex/agents/fe-unit-test-builder.toml`, `.codex/agents/qa-fe-testing.toml` | 테스트 전략, 케이스, 검증 기준 |
+| `req-fe-test-planner` | `fe-unit-test-builder`, `qa-fe-testing`, `fe-e2e-builder`, `qa-fe-e2e-testing` | `.codex/agents/fe-unit-test-builder.toml`, `.codex/agents/qa-fe-testing.toml`, `.codex/agents/fe-e2e-builder.toml`, `.codex/agents/qa-fe-e2e-testing.toml` | 테스트 전략, unit/E2E 케이스, 검증 기준 |
 
 ---
 
@@ -188,7 +188,8 @@ developer_instructions = '''
 - [ ] Cell 산출물이 `packages/fe-ui/src/cell/**` 기준인가?
 - [ ] Columns 산출물이 `packages/fe-ui/src/columns/master/**` 기준인가?
 - [ ] `req-surface-planner` 결과가 Surface/Elevation 섹션에 반영되었는가?
-- [ ] 테스트 케이스 섹션이 관련 spec에 추가되었는가?
+- [ ] `page.spec.md`와 관련 FE sidecar spec에 unit/E2E 테스트 케이스가 추가되었는가?
+- [ ] `page.e2e.spec.md` owner/파일 경로가 필요한 화면에서 누락되지 않았는가?
 
 ---
 

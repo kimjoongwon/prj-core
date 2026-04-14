@@ -27,7 +27,8 @@ OIDC provider와의 외부 프로토콜 연동을 단순화합니다. Authorizat
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-- 2026-03-25 | OIDC facade가 static RP key 대신 explicit protocol client config를 받도록 정리 | codex |
+| 2026-04-14 | Storybook RP canonical clientId를 `storybook-web` 기준으로 정리 | codex |
+| 2026-03-25 | OIDC facade가 static RP key 대신 explicit protocol client config를 받도록 정리 | codex |
 | 2026-03-18 | legacy single-client OIDC 설정 정규화를 제거하고 다중 RP 구조만 허용하도록 정리 | codex |
 | 2026-03-11 | be-integration OIDC facade 신규 생성 | codex |
 | 2026-03-16 | Storybook RP 식별자를 `storybook`으로 단순화하고 fallback clientId 명명도 함께 정리 | codex |

@@ -1,26 +1,42 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageStoryScaffold } from "../storybookFrame";
+import { PageStoryStage } from "../storybookFrame";
+import { IdpForgotPasswordPage } from "./IdpForgotPasswordPage";
+
+const centeredCardStyle = {
+	width: "100%",
+	maxWidth: 460,
+};
 
 const meta = {
-	component: PageStoryScaffold,
+	component: IdpForgotPasswordPage,
 	parameters: {
 		layout: "fullscreen",
-		docs: {
-			description: {
-				component:
-					"Generated baseline page story for IdpForgotPasswordPage. Replace this scaffold with scenario-focused stories when page fixtures are available.",
-			},
-		},
 	},
 	tags: ["autodocs"],
-	args: {
-		componentName: "IdpForgotPasswordPage",
-		componentPath: "page/IdpForgotPasswordPage/IdpForgotPasswordPage.tsx",
-	},
-} satisfies Meta<typeof PageStoryScaffold>;
+} satisfies Meta<typeof IdpForgotPasswordPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+const renderIdpForgotPasswordPage: Story["render"] = (args) => (
+	<PageStoryStage>
+		<div style={centeredCardStyle}>
+			<IdpForgotPasswordPage {...args} />
+		</div>
+	</PageStoryStage>
+);
+
+export const Default: Story = {
+	args: {
+		onSubmit: async () => null,
+	},
+	render: renderIdpForgotPasswordPage,
+};
+
+export const UnknownAccount: Story = {
+	args: {
+		onSubmit: async () => "등록된 이메일을 찾을 수 없습니다.",
+	},
+	render: renderIdpForgotPasswordPage,
+};

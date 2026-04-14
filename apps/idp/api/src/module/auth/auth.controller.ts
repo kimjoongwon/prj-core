@@ -1,5 +1,10 @@
 import { AuthApplicationService } from "@cocrepo/app";
-import { AUTH_ERRORS, SYSTEM_ROLES, Token } from "@cocrepo/constant";
+import {
+	AUTH_ERRORS,
+	REQUEST_HEADER_KEYS,
+	SYSTEM_ROLES,
+	Token,
+} from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -143,11 +148,9 @@ export class AuthController {
 	) {
 		const refreshToken = req.cookies.refreshToken;
 		const sessionId = req.cookies?.sessionId;
-		const selectedSpaceId = req.cookies?.[Token.SELECTED_SPACE_ID];
 		return this.authApplicationService.refreshTokenWithIdp(
 			refreshToken,
 			sessionId,
-			selectedSpaceId,
 			res,
 		);
 	}
@@ -197,7 +200,7 @@ export class AuthController {
 		operationId: "getMySpaces",
 		summary: "내 Space 목록 조회",
 		description:
-			"현재 인증된 사용자가 접근 가능한 Space 목록을 반환합니다. 선택 Space 쿠키가 없어도 호출할 수 있습니다.",
+			"현재 인증된 사용자가 접근 가능한 Space 목록을 반환합니다. x-space-id 헤더 없이도 호출할 수 있습니다.",
 	})
 	@ApiCookieAuth(Token.ACCESS)
 	@ApiSecurity("oauth2", ["openid", "profile", "email", "roles"])
@@ -215,7 +218,7 @@ export class AuthController {
 		operationId: "getCurrentSpace",
 		summary: "현재 선택 Space 조회",
 		description:
-			"현재 선택된 selectedSpaceId 쿠키를 기준으로 Space를 반환합니다. 쿠키가 없거나 유효하지 않으면 기본 Space로 복구합니다.",
+			"요청의 x-space-id 헤더를 기준으로 Space를 반환합니다. 헤더가 없거나 유효하지 않으면 접근 가능한 기본 Space를 반환합니다.",
 	})
 	@ApiCookieAuth(Token.ACCESS)
 	@ApiSecurity("oauth2", ["openid", "profile", "email", "roles"])
@@ -224,11 +227,9 @@ export class AuthController {
 	@ResponseMessage("현재 Space 조회 성공")
 	async getCurrentSpace(
 		@Req() req: Request,
-		@Res({ passthrough: true }) res: Response,
 	) {
 		return this.authApplicationService.getCurrentSpace(
-			req.cookies?.[Token.SELECTED_SPACE_ID],
-			res,
+			this.readSpaceIdHeader(req),
 		);
 	}
 
@@ -239,7 +240,7 @@ export class AuthController {
 		operationId: "setCurrentSpace",
 		summary: "현재 선택 Space 변경",
 		description:
-			"사용자가 접근 가능한 Space 중 하나를 현재 선택 Space 쿠키로 설정합니다.",
+			"사용자가 접근 가능한 Space 중 하나를 선택 가능 대상으로 검증하고 반환합니다.",
 	})
 	@ApiCookieAuth(Token.ACCESS)
 	@ApiSecurity("oauth2", ["openid", "profile", "email", "roles"])
@@ -250,11 +251,8 @@ export class AuthController {
 	@ApiErrors(401, 403, 500)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	@ResponseMessage("현재 Space 변경 성공")
-	async setCurrentSpace(
-		@Body() dto: SetCurrentSpaceDto,
-		@Res({ passthrough: true }) res: Response,
-	) {
-		return this.authApplicationService.setCurrentSpace(dto, res);
+	async setCurrentSpace(@Body() dto: SetCurrentSpaceDto) {
+		return this.authApplicationService.setCurrentSpace(dto);
 	}
 
 	@HttpCode(HttpStatus.OK)
@@ -481,5 +479,14 @@ export class AuthController {
 			const joiner = loginUrl.includes("?") ? "&" : "?";
 			return `${loginUrl}${joiner}error=${encodeURIComponent(errorMessage)}`;
 		}
+	}
+
+	private readSpaceIdHeader(req: Request): string | undefined {
+		const headerValue = req.headers[REQUEST_HEADER_KEYS.SPACE_ID];
+		if (typeof headerValue === "string") {
+			return headerValue;
+		}
+
+		return Array.isArray(headerValue) ? headerValue[0] : undefined;
 	}
 }

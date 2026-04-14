@@ -42,3 +42,4 @@
 | 2026-03-15 | assets 남은 폴더 관리 범위를 위해 `updateFolder`와 `deleteFolder`를 추가하고 path 재작성/삭제 가드를 정의    | codex  |
 | 2026-03-15 | assets 폴더 생성 최소 흐름을 위해 parent 검증, path 중복 검사, sortOrder 계산을 포함한 `createFolder`를 추가 | codex  |
 | 2026-03-15 | admin assets 폴더 선택 목록 복구를 위한 FolderService 신규 추가                                              | codex  |
+| 2026-04-14 | FolderService의 필수 Space 입력 안내를 x-space-id header 기준으로 갱신 | codex |

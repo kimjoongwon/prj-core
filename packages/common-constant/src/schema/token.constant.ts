@@ -6,7 +6,6 @@ export const Token = {
 	ACCESS: "accessToken",
 	REFRESH: "refreshToken",
 	SESSION_ID: "sessionId",
-	SELECTED_SPACE_ID: "selectedSpaceId",
 } as const;
 
 export type TokenValues = (typeof Token)[keyof typeof Token];

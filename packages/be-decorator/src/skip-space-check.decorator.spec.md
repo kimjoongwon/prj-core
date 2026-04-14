@@ -20,3 +20,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-04-14 | SkipSpaceCheck 설명을 selectedSpace cookie 검증 대신 x-space-id header 검증 skip 의미로 갱신 | codex |

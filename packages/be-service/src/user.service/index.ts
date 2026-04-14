@@ -52,7 +52,7 @@ export class UserService {
 
 	/**
 	 * 현재 선택 Space 내 사용자 목록 조회
-	 * selectedSpaceId 기준으로 현재 Space 사용자만 필터링합니다.
+	 * x-space-id 기준으로 현재 Space 사용자만 필터링합니다.
 	 * DTO → Prisma 변환을 Service에서 수행하고 Repository에는 원시값만 전달합니다.
 	 */
 	async getUsersBySpace(query: QueryUsersDto): Promise<GetUsersResult> {

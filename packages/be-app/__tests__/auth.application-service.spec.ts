@@ -12,6 +12,7 @@ import {
 	TokenStorageService,
 	UserService,
 } from "@cocrepo/service";
+import { NotFoundException } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 import { AuthApplicationService } from "../src/auth.application-service";
 
@@ -32,7 +33,7 @@ function buildOidcClient(
 		defaultReturnTo: string;
 		isActive: boolean;
 	}> = {},
-) {
+): any {
 	return {
 		id: `${clientId}-db-id`,
 		clientId,
@@ -50,6 +51,8 @@ function buildOidcClient(
 		tokenEndpointAuthMethod: "client_secret_post",
 		scope: "openid profile email roles",
 		isActive: overrides.isActive ?? true,
+		isPublicClient: false,
+		isConfidentialClient: true,
 		logoUri: null,
 		policyUri: null,
 		tosUri: null,
@@ -102,9 +105,7 @@ describe("AuthApplicationService", () => {
 		mockTokenService = {
 			setAccessTokenCookie: jest.fn(),
 			setRefreshTokenCookie: jest.fn(),
-			setSelectedSpaceCookie: jest.fn(),
 			clearTokenCookies: jest.fn(),
-			clearSelectedSpaceCookie: jest.fn(),
 			isTokenBlacklisted: jest.fn(),
 		} as unknown as jest.Mocked<TokenService>;
 
@@ -158,10 +159,10 @@ describe("AuthApplicationService", () => {
 			getAuthShellClientByClientId: jest
 				.fn()
 				.mockImplementation(async ({ clientId }) => {
-					if (clientId === "storybook") {
-						return buildOidcClient("storybook", {
+					if (clientId === "storybook-web") {
+						return buildOidcClient("storybook-web", {
 							redirectUri:
-								"http://localhost:6006/api/v1/auth/callback?clientId=storybook",
+								"http://localhost:6006/api/v1/auth/callback?clientId=storybook-web",
 							loginUrl: "http://localhost:6006/__storybook_auth/login",
 							defaultReturnTo: "http://localhost:6006/",
 						});
@@ -174,18 +175,28 @@ describe("AuthApplicationService", () => {
 							defaultReturnTo: "http://localhost:3008/dashboard",
 						});
 					}
-					return buildOidcClient("admin-web", {
-						redirectUri:
-							"http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
-						loginUrl: "http://localhost:3000/admin/auth/login",
-						defaultReturnTo: "http://localhost:3000/admin/dashboard",
-					});
+					if (clientId === "admin-web") {
+						return buildOidcClient("admin-web", {
+							redirectUri:
+								"http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
+							loginUrl: "http://localhost:3000/admin/auth/login",
+							defaultReturnTo: "http://localhost:3000/admin/dashboard",
+						});
+					}
+					if (clientId === "swagger-web") {
+						return buildOidcClient("swagger-web", {
+							redirectUri: "http://localhost:3007/api/oauth2-redirect.html",
+							loginUrl: "http://localhost:3007/api",
+							defaultReturnTo: "http://localhost:3007/api",
+						});
+					}
+					throw new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다");
 				}),
 			getByClientId: jest.fn().mockImplementation(async (clientId: string) => {
-				if (clientId === "storybook") {
-					return buildOidcClient("storybook", {
+				if (clientId === "storybook-web") {
+					return buildOidcClient("storybook-web", {
 						redirectUri:
-							"http://localhost:6006/api/v1/auth/callback?clientId=storybook",
+							"http://localhost:6006/api/v1/auth/callback?clientId=storybook-web",
 						loginUrl: "http://localhost:6006/__storybook_auth/login",
 						defaultReturnTo: "http://localhost:6006/",
 					});
@@ -198,12 +209,22 @@ describe("AuthApplicationService", () => {
 						defaultReturnTo: "http://localhost:3008/dashboard",
 					});
 				}
-				return buildOidcClient("admin-web", {
-					redirectUri:
-						"http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
-					loginUrl: "http://localhost:3000/admin/auth/login",
-					defaultReturnTo: "http://localhost:3000/admin/dashboard",
-				});
+				if (clientId === "admin-web") {
+					return buildOidcClient("admin-web", {
+						redirectUri:
+							"http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
+						loginUrl: "http://localhost:3000/admin/auth/login",
+						defaultReturnTo: "http://localhost:3000/admin/dashboard",
+					});
+				}
+				if (clientId === "swagger-web") {
+					return buildOidcClient("swagger-web", {
+						redirectUri: "http://localhost:3007/api/oauth2-redirect.html",
+						loginUrl: "http://localhost:3007/api",
+						defaultReturnTo: "http://localhost:3007/api",
+					});
+				}
+				throw new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다");
 			}),
 		} as unknown as jest.Mocked<OidcClientService>;
 
@@ -278,6 +299,69 @@ describe("AuthApplicationService", () => {
 				600,
 				"http://localhost:3008/dashboard",
 				"idp-web",
+			);
+		});
+
+		it("legacy storybook clientId를 canonical storybook-web으로 정규화해야 한다", async () => {
+			await applicationService.getAuthorizationUrl(
+				"http://localhost:6006/",
+				"storybook",
+			);
+
+			expect(mockOidcFacade.createAuthorizationRequest).toHaveBeenCalledWith(
+				expect.objectContaining({
+					clientId: "storybook-web",
+					redirectUri:
+						"http://localhost:6006/api/v1/auth/callback?clientId=storybook-web",
+				}),
+				"http://localhost:6006/",
+			);
+			expect(mockTokenStorageService.saveOidcState).toHaveBeenCalledWith(
+				"state-token",
+				"verifier-token",
+				600,
+				"http://localhost:6006/",
+				"storybook-web",
+			);
+		});
+
+		it("canonical swagger-web 요청도 migration 전 legacy DB client로 fallback 해야 한다", async () => {
+			mockOidcClientService.getAuthShellClientByClientId.mockImplementation(
+				async ({ clientId }) => {
+					if (clientId === "swagger-web") {
+						throw new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다");
+					}
+
+					if (clientId === "prj-core-swagger") {
+						return buildOidcClient("prj-core-swagger", {
+							redirectUri: "http://localhost:3007/api/oauth2-redirect.html",
+							loginUrl: "http://localhost:3007/api",
+							defaultReturnTo: "http://localhost:3007/api",
+						});
+					}
+
+					throw new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다");
+				},
+			);
+
+			await applicationService.getAuthorizationUrl(
+				"http://localhost:3007/api",
+				"swagger-web",
+			);
+
+			expect(mockOidcFacade.createAuthorizationRequest).toHaveBeenCalledWith(
+				expect.objectContaining({
+					clientId: "prj-core-swagger",
+					redirectUri: "http://localhost:3007/api/oauth2-redirect.html",
+				}),
+				"http://localhost:3007/api",
+			);
+			expect(mockTokenStorageService.saveOidcState).toHaveBeenCalledWith(
+				"state-token",
+				"verifier-token",
+				600,
+				"http://localhost:3007/api",
+				"prj-core-swagger",
 			);
 		});
 	});
@@ -376,7 +460,6 @@ describe("AuthApplicationService", () => {
 			const result = await applicationService.refreshTokenWithIdp(
 				"refresh-token",
 				"idp-web.session-raw",
-				undefined,
 				{} as never,
 			);
 
@@ -482,6 +565,85 @@ describe("AuthApplicationService", () => {
 				["role-1"],
 				"user-1",
 			);
+		});
+	});
+
+	describe("current space helpers", () => {
+		const fullAccessUser = {
+			id: "user-1",
+			email: "test@example.com",
+			name: "Test User",
+			tenants: [
+				{
+					id: "tenant-space-1",
+					spaceId: "space-1",
+					role: { name: "VIEW" },
+				},
+				{
+					id: "tenant-space-2",
+					spaceId: "space-2",
+					role: { name: "FULL_ACCESS" },
+				},
+			],
+		};
+
+		beforeEach(() => {
+			mockClsService.get.mockReset();
+			mockSpacesService.findByIdsWithGround.mockReset();
+			mockSpacesService.findByIdsWithGround.mockResolvedValue([
+				{
+					id: "space-1",
+					ground: { name: "Space One" },
+				},
+				{
+					id: "space-2",
+					ground: { name: "Space Two" },
+				},
+			] as never);
+		});
+
+		it("x-space-id가 접근 가능한 Space면 그대로 반환해야 한다", async () => {
+			mockClsService.get.mockImplementation((key) => {
+				if (key === CONTEXT_KEYS.AUTH_USER) {
+					return fullAccessUser as never;
+				}
+
+				return undefined;
+			});
+
+			const result = await applicationService.getCurrentSpace("space-1");
+
+			expect(result?.id).toBe("space-1");
+		});
+
+		it("x-space-id가 없거나 접근 불가하면 FULL_ACCESS tenant를 기본 Space로 반환해야 한다", async () => {
+			mockClsService.get.mockImplementation((key) => {
+				if (key === CONTEXT_KEYS.AUTH_USER) {
+					return fullAccessUser as never;
+				}
+
+				return undefined;
+			});
+
+			const result = await applicationService.getCurrentSpace("unknown-space");
+
+			expect(result?.id).toBe("space-2");
+		});
+
+		it("setCurrentSpace는 쿠키 없이 접근 가능한 Space DTO만 반환해야 한다", async () => {
+			mockClsService.get.mockImplementation((key) => {
+				if (key === CONTEXT_KEYS.AUTH_USER) {
+					return fullAccessUser as never;
+				}
+
+				return undefined;
+			});
+
+			const result = await applicationService.setCurrentSpace({
+				spaceId: "space-1",
+			} as never);
+
+			expect(result.id).toBe("space-1");
 		});
 	});
 

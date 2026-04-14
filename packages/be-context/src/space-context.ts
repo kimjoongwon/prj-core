@@ -21,7 +21,7 @@ import { ClsService } from "nestjs-cls";
 export class SpaceContext {
 	constructor(private readonly cls: ClsService) {}
 
-	/** 현재 요청의 Space ID (selectedSpaceId 쿠키) */
+	/** 현재 요청의 Space ID (x-space-id 헤더) */
 	get spaceId(): string | undefined {
 		return this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
 	}

@@ -197,7 +197,7 @@ export async function readAdminPersist(page: Page) {
  * 2. 시드 데이터의 FULL_ACCESS 계정으로 로그인
  * 3. OIDC 동의 화면에서 "허용" 클릭
  * 4. Admin 대시보드로 리다이렉트
- * 5. current-space API로 System Space 쿠키 확정
+ * 5. current-space API로 System Space 선택 가능 여부를 확인하고 PersistStore를 맞춤
  */
 export async function loginToAdmin(page: Page) {
 	const isAdminUrl = (url: URL) =>
@@ -222,20 +222,20 @@ export async function loginToAdmin(page: Page) {
 		},
 	);
 	if (!currentSpaceResponse.ok()) {
-		throw new Error("selectedSpaceId 쿠키 설정에 실패했습니다.");
+		throw new Error("현재 Space 검증 API 호출에 실패했습니다.");
 	}
 
 	const currentSpaceBody = (await currentSpaceResponse.json()) as {
 		data?: { id?: string; ground?: { name?: string } };
 	};
 	if (currentSpaceBody.data?.id !== SYSTEM_SPACE_ID) {
-		throw new Error("selectedSpaceId 쿠키가 기대한 Space로 설정되지 않았습니다.");
+		throw new Error("현재 Space 검증 결과가 기대한 Space와 일치하지 않습니다.");
 	}
 
 	const currentSpaceName =
 		currentSpaceBody.data?.ground?.name ?? SYSTEM_GROUND_NAME;
 	if (currentSpaceName !== SYSTEM_GROUND_NAME) {
-		throw new Error("selectedSpaceId 쿠키 설정 후 Space 이름이 일치하지 않습니다.");
+		throw new Error("현재 Space 검증 후 Space 이름이 일치하지 않습니다.");
 	}
 
 	await seedAdminPersist(page, {

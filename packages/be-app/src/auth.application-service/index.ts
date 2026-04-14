@@ -32,6 +32,7 @@ import {
 	ForbiddenException,
 	Injectable,
 	Logger,
+	NotFoundException,
 	UnauthorizedException,
 } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
@@ -46,8 +47,18 @@ const GLOBAL_ACCESS_SUBJECT_NAME = "all";
 
 const LEGACY_OIDC_CLIENT_ID_MAP = {
 	admin: "admin-web",
-	storybook: "storybook",
+	storybook: "storybook-web",
 	idpWeb: "idp-web",
+	mobile: "user-mobile",
+	swagger: "swagger-web",
+	"prj-core-mobile": "user-mobile",
+	"prj-core-swagger": "swagger-web",
+} as const;
+
+const LEGACY_OIDC_CLIENT_IDS_BY_CANONICAL_ID = {
+	"storybook-web": ["storybook"],
+	"user-mobile": ["prj-core-mobile"],
+	"swagger-web": ["prj-core-swagger"],
 } as const;
 
 interface OidcStateContext {
@@ -222,7 +233,6 @@ export class AuthApplicationService {
 			tokenResponse.refresh_token,
 		);
 		this.setSessionIdCookie(res, sessionId);
-		await this.reconcileSelectedSpaceCookie(user, undefined, res);
 
 		return {
 			returnTo,
@@ -234,7 +244,6 @@ export class AuthApplicationService {
 	async refreshTokenWithIdp(
 		refreshToken: string,
 		sessionId: string | undefined,
-		selectedSpaceId: string | undefined,
 		res: Response,
 	): Promise<TokenRefreshResponseDto> {
 		if (!refreshToken) {
@@ -275,7 +284,6 @@ export class AuthApplicationService {
 			tokenResponse.access_token,
 			tokenResponse.refresh_token,
 		);
-		await this.reconcileSelectedSpaceCookie(user, selectedSpaceId, res);
 
 		const now = Date.now();
 
@@ -336,7 +344,6 @@ export class AuthApplicationService {
 		// 4. 쿠키 삭제
 		this.clearTokenCookies(res);
 		res.clearCookie(Token.SESSION_ID);
-		this.tokenService.clearSelectedSpaceCookie(res);
 		res.clearCookie("tenantId");
 		res.clearCookie("workspaceId");
 
@@ -401,22 +408,13 @@ export class AuthApplicationService {
 	}
 
 	async getCurrentSpace(
-		selectedSpaceId: string | undefined,
-		res: Response,
+		requestedSpaceId: string | undefined,
 	): Promise<SpaceDto | null> {
 		const user = this.cls.get<UserDto>(CONTEXT_KEYS.AUTH_USER);
-		const { space } = await this.reconcileSelectedSpaceCookie(
-			user,
-			selectedSpaceId,
-			res,
-		);
-		return space;
+		return this.resolveCurrentSpace(user, requestedSpaceId);
 	}
 
-	async setCurrentSpace(
-		dto: SetCurrentSpaceDto,
-		res: Response,
-	): Promise<SpaceDto> {
+	async setCurrentSpace(dto: SetCurrentSpaceDto): Promise<SpaceDto> {
 		const user = this.cls.get<UserDto>(CONTEXT_KEYS.AUTH_USER);
 		if (!user?.tenants?.some((tenant) => tenant.spaceId === dto.spaceId)) {
 			throw new ForbiddenException(
@@ -430,7 +428,6 @@ export class AuthApplicationService {
 			throw new BadRequestException("선택한 Space를 찾을 수 없습니다");
 		}
 
-		this.tokenService.setSelectedSpaceCookie(res, dto.spaceId);
 		return selectedSpace;
 	}
 
@@ -745,22 +742,54 @@ export class AuthApplicationService {
 		legacyClientKey?: string,
 		fallbackClientId = DEFAULT_OIDC_CLIENT_ID,
 	): string {
-		if (typeof clientId === "string" && clientId.length > 0) {
-			return clientId;
+		const normalizedClientId = this.normalizeOidcClientId(clientId);
+		if (normalizedClientId) {
+			return normalizedClientId;
 		}
 
-		const legacyClientId = this.resolveLegacyClientId(legacyClientKey);
-		return legacyClientId ?? fallbackClientId;
+		const legacyClientId = this.normalizeOidcClientId(legacyClientKey);
+		return (
+			legacyClientId ??
+			this.normalizeOidcClientId(fallbackClientId) ??
+			DEFAULT_OIDC_CLIENT_ID
+		);
 	}
 
-	private resolveLegacyClientId(clientKey?: string): string | undefined {
-		if (!clientKey) {
+	private normalizeOidcClientId(clientId?: string): string | undefined {
+		if (typeof clientId !== "string") {
+			return undefined;
+		}
+
+		const trimmedClientId = clientId.trim();
+		if (!trimmedClientId) {
 			return undefined;
 		}
 
 		return LEGACY_OIDC_CLIENT_ID_MAP[
-			clientKey as keyof typeof LEGACY_OIDC_CLIENT_ID_MAP
-		];
+			trimmedClientId as keyof typeof LEGACY_OIDC_CLIENT_ID_MAP
+		] ?? trimmedClientId;
+	}
+
+	private getOidcClientIdCandidates(
+		clientId?: string,
+		fallbackClientId = DEFAULT_OIDC_CLIENT_ID,
+	): string[] {
+		const rawClientId =
+			typeof clientId === "string" && clientId.trim().length > 0
+				? clientId.trim()
+				: undefined;
+		const normalizedClientId =
+			this.normalizeOidcClientId(rawClientId) ??
+			this.normalizeOidcClientId(fallbackClientId) ??
+			DEFAULT_OIDC_CLIENT_ID;
+		const legacyClientIds =
+			LEGACY_OIDC_CLIENT_IDS_BY_CANONICAL_ID[
+				normalizedClientId as keyof typeof LEGACY_OIDC_CLIENT_IDS_BY_CANONICAL_ID
+			] ?? [];
+
+		return [...new Set([rawClientId, normalizedClientId, ...legacyClientIds])].filter(
+			(candidate): candidate is string => Boolean(candidate),
+		);
 	}
 
 	private async resolveAuthShellClient(
@@ -780,12 +809,35 @@ export class AuthApplicationService {
 			requireAuthShell?: boolean;
 		},
 	): Promise<ResolvedOidcClient> {
-		const client = options?.requireAuthShell
-			? await this.oidcClientService.getAuthShellClientByClientId({
-					clientId,
-					requireActive: options.requireActive,
-				})
-			: await this.oidcClientService.getByClientId(clientId);
+		const lookupCandidates = this.getOidcClientIdCandidates(clientId);
+		let lastNotFoundError: NotFoundException | undefined;
+		let client:
+			| Awaited<ReturnType<OidcClientService["getAuthShellClientByClientId"]>>
+			| Awaited<ReturnType<OidcClientService["getByClientId"]>>
+			| undefined;
+
+		for (const lookupClientId of lookupCandidates) {
+			try {
+				client = options?.requireAuthShell
+					? await this.oidcClientService.getAuthShellClientByClientId({
+							clientId: lookupClientId,
+							requireActive: options.requireActive,
+						})
+					: await this.oidcClientService.getByClientId(lookupClientId);
+				break;
+			} catch (error) {
+				if (error instanceof NotFoundException) {
+					lastNotFoundError = error;
+					continue;
+				}
+
+				throw error;
+			}
+		}
+
+		if (!client) {
+			throw lastNotFoundError ?? new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다");
+		}
 		const redirectUri = client.redirectUris[0];
 		if (!redirectUri) {
 			throw new BadRequestException("Redirect URI가 설정되지 않았습니다");
@@ -866,36 +918,25 @@ export class AuthApplicationService {
 			.filter((space): space is SpaceDto => Boolean(space));
 	}
 
-	private async reconcileSelectedSpaceCookie(
+	private async resolveCurrentSpace(
 		user: UserWithTenantsLike | undefined,
-		selectedSpaceId: string | undefined,
-		res: Response,
-	): Promise<{ space: SpaceDto | null }> {
+		requestedSpaceId: string | undefined,
+	): Promise<SpaceDto | null> {
 		const spaces = await this.getAccessibleSpacesForUser(user);
 		if (spaces.length === 0) {
-			this.tokenService.clearSelectedSpaceCookie(res);
-			return { space: null };
+			return null;
 		}
 
 		const allowedSpaceIds = new Set(spaces.map((space) => space.id));
-		const defaultSpaceId = this.getDefaultSelectedSpaceId(user, allowedSpaceIds);
+		const defaultSpaceId = this.getDefaultSpaceId(user, allowedSpaceIds);
 		const nextSpaceId =
-			selectedSpaceId && allowedSpaceIds.has(selectedSpaceId)
-				? selectedSpaceId
+			requestedSpaceId && allowedSpaceIds.has(requestedSpaceId)
+				? requestedSpaceId
 				: defaultSpaceId;
-		const nextSpace =
-			spaces.find((space) => space.id === nextSpaceId) ?? null;
-
-		if (!nextSpace) {
-			this.tokenService.clearSelectedSpaceCookie(res);
-			return { space: null };
-		}
-
-		this.tokenService.setSelectedSpaceCookie(res, nextSpace.id);
-		return { space: nextSpace };
+		return spaces.find((space) => space.id === nextSpaceId) ?? null;
 	}
 
-	private getDefaultSelectedSpaceId(
+	private getDefaultSpaceId(
 		user: UserWithTenantsLike | undefined,
 		allowedSpaceIds: Set<string>,
 	): string | undefined {

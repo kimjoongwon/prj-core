@@ -13,10 +13,10 @@ describe("OidcFacade", () => {
 	};
 
 	const storybookClient = {
-		clientId: "storybook",
+		clientId: "storybook-web",
 		clientSecret: "storybook-secret",
 		redirectUri:
-			"http://localhost:6006/api/v1/auth/callback?clientId=storybook",
+			"http://localhost:6006/api/v1/auth/callback?clientId=storybook-web",
 	};
 
 	beforeEach(async () => {

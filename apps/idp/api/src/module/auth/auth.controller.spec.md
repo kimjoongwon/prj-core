@@ -19,6 +19,8 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 | POST | /sign-up | 신규 사용자 계정 생성 | Public |
 | GET | /verify-token | 액세스 토큰 유효성 검증 + `manage all` 전역 권한 보유 여부 반환 | JWT 인증 필요, SkipSpaceCheck |
 | GET | /my-spaces | 현재 사용자가 접근 가능한 Space 목록 조회 | JWT 인증 필요, SkipSpaceCheck |
+| GET | /current-space | 요청의 `x-space-id` 또는 기본 접근 가능 Space 조회 | JWT 인증 필요, SkipSpaceCheck |
+| POST | /current-space | 현재 선택할 Space 검증 | JWT 인증 필요, SkipSpaceCheck |
 | POST | /logout | 로그아웃 및 토큰 무효화 | JWT 인증 필요 |
 | GET | /audit-logs | 인증 감사 로그 목록 조회 | FULL_ACCESS, SkipSpaceCheck |
 | GET | /audit-logs/stats | 감사 로그 통계 조회 (오늘/전체) | FULL_ACCESS, SkipSpaceCheck |
@@ -48,6 +50,8 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 | POST /sign-up | `SignUpPayloadDto` | - |
 | GET /verify-token | - | `VerifyTokenResponseDto` (`valid`, `accessTokenExpiresAt`, `refreshTokenExpiresAt`, `hasFullAccess`) |
 | GET /my-spaces | - | `SpaceDto[]` |
+| GET /current-space | Header: `x-space-id`(optional) | `SpaceDto \| null` |
+| POST /current-space | `SetCurrentSpaceDto` | `SpaceDto` |
 | POST /logout | 쿠키: `accessToken`, `sessionId` | `Boolean` |
 | GET /audit-logs | `QueryAuthAuditLogDto` | `AuthAuditLogDto[]` + `PageMetaDto` |
 | GET /audit-logs/stats | - | `AuditLogStatsDto` |
@@ -64,7 +68,10 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 - 로그인 시작은 `clientId` 쿼리로 구분하며, 앱별 login shell URL은 `AuthApplicationService.getClientRedirects()`로 조회합니다.
 - 콜백 에러 발생 시에도 `clientId`에 맞는 login shell URL로 `?error=...`를 붙여 리다이렉트합니다.
 - 성공 시에는 `AuthApplicationService.handleOidcCallback()`이 돌려준 `returnTo`를 우선 사용하고, 없으면 `defaultReturnTo`를 사용합니다.
+- Storybook login shell도 canonical `clientId=storybook-web`을 사용합니다.
 - `GET /verify-token`의 `hasFullAccess`는 tenant role 이름이 아니라 merged ability의 `manage all` 전역 권한 여부를 의미합니다.
+- `GET /current-space`는 `x-space-id` 헤더가 유효하면 해당 Space를 반환하고, 없거나 접근 불가하면 기본 접근 가능 Space를 반환합니다.
+- `POST /current-space`는 더 이상 Space 쿠키를 설정하지 않고, body의 `spaceId`를 검증한 결과만 반환합니다.
 - 비밀번호 변경 시 `newPassword !== confirmPassword` 이면 `PASSWORD_MISMATCH` 예외 발생
 - 감사 로그 조회는 페이지네이션 지원 (기본 skip=0, take=20)
 - 세션은 쿠키 기반으로 관리되며, 로그아웃 시 IDP 측 토큰도 무효화
@@ -87,6 +94,8 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | `current-space`를 `x-space-id` 검증 API로 재정의하고 selectedSpace 쿠키 설명을 제거 | codex |
+| 2026-04-14 | Storybook login/callback canonical clientId를 `storybook-web`으로 정리 | codex |
 | 2026-04-06 | `GET /verify-token`의 `hasFullAccess` 의미를 tenant 역할명이 아닌 `manage all` 전역 권한으로 갱신 | codex |
 | 2026-03-25 | login/callback을 clientId 기반 generic route로 정리 | codex |
 | 2026-03-23 | `GET /verify-token` 응답 계약에 `hasFullAccess`를 추가하고 IDP 웹 메뉴 bootstrap 근거를 명시 | codex |

@@ -1,4 +1,6 @@
+import { REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import Axios, {
+	AxiosHeaders,
 	type AxiosError,
 	type AxiosRequestConfig,
 	type InternalAxiosRequestConfig,
@@ -27,6 +29,7 @@ export const IDP_AXIOS_INSTANCE = Axios.create({
 interface PersistStoreRef {
 	accessTokenExpiresAt?: number | null;
 	refreshTokenExpiresAt?: number | null;
+	spaceId?: string | null;
 }
 let persistStoreRef: PersistStoreRef | null = null;
 
@@ -70,6 +73,18 @@ const processQueue = (error: unknown) => {
 	}
 	failedQueue = [];
 };
+
+IDP_AXIOS_INSTANCE.interceptors.request.use((config) => {
+	const headers = AxiosHeaders.from(config.headers);
+	const spaceId = persistStoreRef?.spaceId;
+
+	if (spaceId) {
+		headers.set(REQUEST_HEADER_KEYS.SPACE_ID, spaceId);
+	}
+
+	config.headers = headers;
+	return config;
+});
 
 // Response 인터셉터: 401 토큰 갱신
 IDP_AXIOS_INSTANCE.interceptors.response.use(

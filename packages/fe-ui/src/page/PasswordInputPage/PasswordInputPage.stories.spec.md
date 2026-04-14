@@ -13,5 +13,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | Storybook 9 args 계약에 맞춰 `state` 기본값과 검증/로딩 override 구성을 정리 | Codex |
 | 2026-04-05 | placeholder를 실제 페이지 스토리로 교체하고 비밀번호 입력 시나리오를 추가 | Codex |
 | 2026-03-15 | `Auto/*` title을 실제 스토리 경로 기준으로 정규화하고 sidecar spec을 추가 | codex |

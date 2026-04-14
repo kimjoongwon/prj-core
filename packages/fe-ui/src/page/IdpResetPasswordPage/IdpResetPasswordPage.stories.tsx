@@ -1,26 +1,58 @@
+import { PASSWORD_RULES } from "@cocrepo/constant";
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageStoryScaffold } from "../storybookFrame";
+import { PageStoryStage } from "../storybookFrame";
+import { IdpResetPasswordPage } from "./IdpResetPasswordPage";
+
+const centeredCardStyle = {
+	width: "100%",
+	maxWidth: 460,
+};
 
 const meta = {
-	component: PageStoryScaffold,
+	component: IdpResetPasswordPage,
 	parameters: {
 		layout: "fullscreen",
-		docs: {
-			description: {
-				component:
-					"Generated baseline page story for IdpResetPasswordPage. Replace this scaffold with scenario-focused stories when page fixtures are available.",
-			},
-		},
 	},
 	tags: ["autodocs"],
-	args: {
-		componentName: "IdpResetPasswordPage",
-		componentPath: "page/IdpResetPasswordPage/IdpResetPasswordPage.tsx",
-	},
-} satisfies Meta<typeof PageStoryScaffold>;
+} satisfies Meta<typeof IdpResetPasswordPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+const renderIdpResetPasswordPage: Story["render"] = (args) => (
+	<PageStoryStage>
+		<div style={centeredCardStyle}>
+			<IdpResetPasswordPage {...args} />
+		</div>
+	</PageStoryStage>
+);
+
+export const ValidatingLink: Story = {
+	args: {
+		step: "validating",
+		passwordRules: PASSWORD_RULES,
+		onSubmit: async () => null,
+	},
+	render: renderIdpResetPasswordPage,
+};
+
+export const ReadyToReset: Story = {
+	args: {
+		step: "form",
+		tokenEmail: "member@example.com",
+		passwordRules: PASSWORD_RULES,
+		onSubmit: async () => null,
+	},
+	render: renderIdpResetPasswordPage,
+};
+
+export const ExpiredLink: Story = {
+	args: {
+		step: "invalid",
+		tokenError: "재설정 링크가 만료되었습니다.",
+		passwordRules: PASSWORD_RULES,
+		onSubmit: async () => null,
+	},
+	render: renderIdpResetPasswordPage,
+};

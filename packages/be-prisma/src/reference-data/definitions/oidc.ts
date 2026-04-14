@@ -3,6 +3,10 @@
  *
  * 운영 환경마다 redirect URI가 달라질 수 있으므로, business key는 `clientId`로 유지하고
  * URL 계열 값만 env override로 풀어내는 구조입니다.
+ *
+ * clientId 표준 명명 규칙:
+ * - 신규/정비 대상 first-party 클라이언트는 `{realm}-{surface}` 패턴을 사용합니다.
+ * - 예: `admin-web`, `storybook-web`, `idp-web`, `user-mobile`, `swagger-web`
  */
 
 /**
@@ -57,7 +61,7 @@ const oidcStorybookRedirectUri =
 	process.env.OIDC_STORYBOOK_REDIRECT_URI ||
 	resolveOidcSeedUrl(
 		oidcStorybookBaseUrl,
-		"/api/v1/auth/callback?clientId=storybook",
+		"/api/v1/auth/callback?clientId=storybook-web",
 	);
 const oidcStorybookLoginUrl =
 	process.env.OIDC_STORYBOOK_LOGIN_URL ||
@@ -109,7 +113,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tosUri: null,
 	},
 	{
-		clientId: "storybook",
+		clientId: "storybook-web",
 		clientSecret: oidcStorybookClientSecret,
 		name: "PRJ Core Storybook",
 		redirectUris: [oidcStorybookRedirectUri],
@@ -125,7 +129,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tosUri: null,
 	},
 	{
-		clientId: "prj-core-mobile",
+		clientId: "user-mobile",
 		clientSecret: null, // Public client (PKCE required)
 		name: "PRJ Core Mobile App",
 		redirectUris: [
@@ -160,7 +164,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tosUri: null,
 	},
 	{
-		clientId: "prj-core-swagger",
+		clientId: "swagger-web",
 		clientSecret: null,
 		name: "PRJ Core Swagger UI",
 		redirectUris: [oidcSwaggerRedirectUri],
@@ -176,3 +180,15 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tosUri: null,
 	},
 ];
+
+/**
+ * reference-data가 ownership을 가지는 OIDC client의 legacy 식별자 목록입니다.
+ *
+ * seed business key가 바뀐 후에도 이전 레코드가 DB에 남아 provider에 다시 노출되지 않도록
+ * sync 단계에서 비활성화/removed 처리합니다.
+ */
+export const legacyOidcClientIds = [
+	"storybook",
+	"prj-core-mobile",
+	"prj-core-swagger",
+] as const;

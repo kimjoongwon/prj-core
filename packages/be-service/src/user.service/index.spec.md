@@ -95,3 +95,4 @@ CLS SpaceContext를 통해 현재 선택 Space를 기준으로 사용자를 관�
 | 2026-03-13 | `user.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |
 | 2026-03-13 | 폴더형 `index.ts` 구조에 맞게 `AuthCacheService` 상대 import 경로를 `../auth-cache.service`로 보정 | codex |
 | 2026-03-13 | frontend 런타임 미사용 Space 기준 생성/수정 메서드를 제거 | codex |
+| 2026-04-14 | UserService의 현재 Space 조회 기준을 x-space-id header로 명시하도록 갱신 | codex |

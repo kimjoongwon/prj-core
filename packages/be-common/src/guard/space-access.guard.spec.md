@@ -19,3 +19,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-04-14 | SpaceAccessGuard의 필수 입력 계약을 selectedSpace cookie에서 x-space-id header로 전환 | codex |

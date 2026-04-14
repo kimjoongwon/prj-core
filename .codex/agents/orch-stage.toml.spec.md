@@ -20,6 +20,8 @@ Stage 4의 route layout / slot / Surface 결정이 Stage 6의 `layout.tsx` + `@s
 - Stage 5는 Stage 4에서 확정한 재사용 Layout primitive contract와 메뉴 contract를 그대로 소비해야 하며, `fe-master-builder`/`fe-detail-builder`/`fe-form-builder`와 `fe-columns-builder(조건부)`를 호출합니다.
 - Stage 6에서 pure page는 `packages/fe-ui/src/page/[PageName]/[PageName].tsx`와 동일 폴더 sidecar 구조로 관리합니다.
 - Stage 6의 `/fe-review`는 route-layout-owned skeleton/surface, slot fallback, page content-only 계약과 `page role/reusable target` 일치 여부를 함께 검증해야 합니다.
+- Stage 4는 frontend unit/E2E 테스트 케이스를 spec에 최초 기록하는 owner stage입니다.
+- Stage 7은 Stage 4/2/3에서 기록된 E2E 케이스를 구현/실행하고 `Verified`를 반영하는 stage입니다.
 - 문서에서는 `.codex/config.toml` 항목을 `role`, 실행 주체를 `agent`로 구분합니다.
 - Stage 1과 Stage 4의 exact child 호출 체인은 `orch-requirement`, `orch-screen-planner` 문서를 source of truth로 참조합니다.
 - `orch-stage.toml`에는 child role 내부 규칙을 다시 복제하지 않고, Stage 계약과 위임 경계만 남깁니다.
@@ -29,6 +31,7 @@ Stage 4의 route layout / slot / Surface 결정이 Stage 6의 `layout.tsx` + `@s
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | Stage 4를 FE test spec authoring owner로, Stage 7을 E2E 구현/sync stage로 재정의 | codex |
 | 2026-03-29 | Stage 설명/호출 체인 중복을 제거하고 child role 참조 중심 구조로 `orch-stage.toml`을 전면 정리 | codex |
 | 2026-03-28 | `req-columns-planner`/`fe-columns-builder`를 Stage 4-5 흐름과 호출 트리에 반영 | codex |
 | 2026-03-28 | Stage별 호출 role 트리와 `web/src/app` 경로, role/agent 용어를 정정 | codex |

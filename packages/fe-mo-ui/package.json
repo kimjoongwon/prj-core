@@ -26,6 +26,7 @@
     "start:dev": "echo 'Development mode - no build needed'",
     "lint": "echo 'Linting skipped for now'",
     "lint:fix": "echo 'Linting skipped for now'",
+    "test": "node ./node_modules/jest-expo/bin/jest.js --config ./jest.config.js --runInBand",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules"
   },
@@ -39,10 +40,15 @@
     "heroui-native": "^1.0.1"
   },
   "devDependencies": {
+    "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^29.5.14",
     "heroui-native": "^1.0.1",
+    "jest": "^29.7.0",
+    "jest-expo": "~55.0.16",
     "@types/react": "catalog:",
     "react": "catalog:",
     "react-native": "0.83.4",
+    "react-test-renderer": "19.2.0",
     "typescript": "catalog:"
   }
 }

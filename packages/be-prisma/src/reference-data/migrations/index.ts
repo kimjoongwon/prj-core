@@ -3,6 +3,7 @@ import { authEmailTemplatesMigration } from "./20260323143000_auth-email-templat
 import { secondarySuperManagerMigration } from "./20260323160000_secondary-super-manager";
 import { oidcClientAuthShellFieldsMigration } from "./20260325110000_oidc-client-auth-shell-fields";
 import { adminMenuPageReferenceCatalogMigration } from "./20260406120000_admin-menu-page-reference-catalog";
+import { oidcClientIdRenameMigration } from "./20260414110000_oidc-client-id-rename";
 import type { ReferenceDataMigration } from "./types";
 
 export const referenceDataMigrations: ReferenceDataMigration[] = [
@@ -11,4 +12,5 @@ export const referenceDataMigrations: ReferenceDataMigration[] = [
 	secondarySuperManagerMigration,
 	oidcClientAuthShellFieldsMigration,
 	adminMenuPageReferenceCatalogMigration,
+	oidcClientIdRenameMigration,
 ];

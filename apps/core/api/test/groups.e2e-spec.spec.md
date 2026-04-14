@@ -19,3 +19,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-26 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-04-14 | Groups E2E의 Space 스코프 전달 방식을 selectedSpace cookie에서 x-space-id header로 전환 | codex |

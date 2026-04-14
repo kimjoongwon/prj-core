@@ -39,7 +39,7 @@ describe("Actions API E2E 테스트", () => {
 					await request(app.getHttpServer())
 						.delete(`/api/v1/actions/${actionId}`)
 						.set("Authorization", `Bearer ${jwtToken}`)
-						.set("Cookie", "selectedSpaceId=" + spaceId);
+						.set("x-space-id", spaceId);
 				} catch {
 					// 이미 삭제된 데이터는 무시
 				}
@@ -82,7 +82,7 @@ describe("Actions API E2E 테스트", () => {
 	});
 
 	describe("POST /api/v1/actions", () => {
-		it("Given 인증 토큰과 selectedSpaceId 쿠키 및 유효한 데이터가 있을 때 When 액션을 생성하면 Then 201과 생성된 액션을 반환해야 한다", async () => {
+		it("Given 인증 토큰과 x-space-id 헤더 및 유효한 데이터가 있을 때 When 액션을 생성하면 Then 201과 생성된 액션을 반환해야 한다", async () => {
 			// Given
 			if (!jwtToken || !spaceId) return;
 
@@ -102,7 +102,7 @@ describe("Actions API E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.post("/api/v1/actions")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId)
+				.set("x-space-id", spaceId)
 				.send(createDto);
 
 			// Then
@@ -130,7 +130,7 @@ describe("Actions API E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.post("/api/v1/actions")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId)
+				.set("x-space-id", spaceId)
 				.send(invalidDto);
 
 			// Then
@@ -150,7 +150,7 @@ describe("Actions API E2E 테스트", () => {
 			// When
 			const response = await request(app.getHttpServer())
 				.post("/api/v1/actions")
-				.set("Cookie", "selectedSpaceId=" + spaceId)
+				.set("x-space-id", spaceId)
 				.send(createDto);
 
 			// Then

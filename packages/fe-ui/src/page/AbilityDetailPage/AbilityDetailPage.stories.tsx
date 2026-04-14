@@ -1,26 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageStoryScaffold } from "../storybookFrame";
+import { AbilityDetailPage } from "./AbilityDetailPage";
+
+const defaultArgs = {
+  "mode": "loading",
+};
 
 const meta = {
-	component: PageStoryScaffold,
-	parameters: {
-		layout: "fullscreen",
-		docs: {
-			description: {
-				component:
-					"Generated baseline page story for AbilityDetailPage. Replace this scaffold with scenario-focused stories when page fixtures are available.",
-			},
-		},
-	},
-	tags: ["autodocs"],
-	args: {
-		componentName: "AbilityDetailPage",
-		componentPath: "page/AbilityDetailPage/AbilityDetailPage.tsx",
-	},
-} satisfies Meta<typeof PageStoryScaffold>;
+  component: AbilityDetailPage,
+  parameters: {
+    layout: "fullscreen",
+  },
+  tags: ["autodocs"],
+  args: defaultArgs as never,
+} satisfies Meta<typeof AbilityDetailPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+

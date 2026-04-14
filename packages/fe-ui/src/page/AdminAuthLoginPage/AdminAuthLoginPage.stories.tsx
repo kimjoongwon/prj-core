@@ -1,26 +1,53 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageStoryScaffold } from "../storybookFrame";
+import { PageStoryStage } from "../storybookFrame";
+import { AdminAuthLoginPage } from "./AdminAuthLoginPage";
+
+const centeredCardStyle = {
+	width: "100%",
+	maxWidth: 420,
+};
 
 const meta = {
-	component: PageStoryScaffold,
+	component: AdminAuthLoginPage,
 	parameters: {
 		layout: "fullscreen",
-		docs: {
-			description: {
-				component:
-					"Generated baseline page story for AdminAuthLoginPage. Replace this scaffold with scenario-focused stories when page fixtures are available.",
-			},
-		},
 	},
 	tags: ["autodocs"],
-	args: {
-		componentName: "AdminAuthLoginPage",
-		componentPath: "page/AdminAuthLoginPage/AdminAuthLoginPage.tsx",
-	},
-} satisfies Meta<typeof PageStoryScaffold>;
+} satisfies Meta<typeof AdminAuthLoginPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+const renderAdminAuthLoginPage: Story["render"] = (args) => (
+	<PageStoryStage>
+		<div style={centeredCardStyle}>
+			<AdminAuthLoginPage {...args} />
+		</div>
+	</PageStoryStage>
+);
+
+export const RetryRequired: Story = {
+	args: {
+		errorMessage: "관리자 인증 세션이 만료되었습니다. 다시 로그인해 주세요.",
+		isRedirecting: false,
+		onClickRetry: () => undefined,
+	},
+	render: renderAdminAuthLoginPage,
+};
+
+export const Redirecting: Story = {
+	args: {
+		errorMessage: "",
+		isRedirecting: true,
+	},
+	render: renderAdminAuthLoginPage,
+};
+
+export const RetryUnavailable: Story = {
+	args: {
+		errorMessage: "관리자 인증 구성을 확인할 수 없습니다. 잠시 후 다시 시도해 주세요.",
+		isRedirecting: false,
+	},
+	render: renderAdminAuthLoginPage,
+};

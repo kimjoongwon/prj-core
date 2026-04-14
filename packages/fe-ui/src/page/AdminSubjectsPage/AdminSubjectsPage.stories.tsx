@@ -1,26 +1,56 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageStoryScaffold } from "../storybookFrame";
+import { AdminSubjectsPage } from "./AdminSubjectsPage";
+
+const defaultArgs = {
+  "isLoading": false,
+  "queryStates": {"page": 1, "take": 10, "skip": 0, "search": ""},
+  "setQueryStates": (..._args: never[]) => undefined,
+  "subjects": [{
+  "createdAt": "2026-04-14T09:00:00.000Z",
+  "displayName": "샘플 display name 1",
+  "group": "샘플 group 1",
+  "id": "item-1",
+  "removedAt": "2026-04-14T09:00:00.000Z",
+}, {
+  "createdAt": "2026-04-14T09:00:00.000Z",
+  "displayName": "샘플 display name 1",
+  "group": "샘플 group 1",
+  "id": "item-1",
+  "removedAt": "2026-04-14T09:00:00.000Z",
+}],
+  "totalCount": 12,
+};
+
+const loadingArgs = {
+  ...defaultArgs,
+  "isLoading": true,
+};
+
+const emptyStateArgs = {
+  ...defaultArgs,
+  "subjects": [],
+  "totalCount": 0,
+};
 
 const meta = {
-	component: PageStoryScaffold,
-	parameters: {
-		layout: "fullscreen",
-		docs: {
-			description: {
-				component:
-					"Generated baseline page story for AdminSubjectsPage. Replace this scaffold with scenario-focused stories when page fixtures are available.",
-			},
-		},
-	},
-	tags: ["autodocs"],
-	args: {
-		componentName: "AdminSubjectsPage",
-		componentPath: "page/AdminSubjectsPage/AdminSubjectsPage.tsx",
-	},
-} satisfies Meta<typeof PageStoryScaffold>;
+  component: AdminSubjectsPage,
+  parameters: {
+    layout: "fullscreen",
+  },
+  tags: ["autodocs"],
+  args: defaultArgs as never,
+} satisfies Meta<typeof AdminSubjectsPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Loading: Story = {
+  args: loadingArgs as never,
+};
+
+export const EmptyState: Story = {
+  args: emptyStateArgs as never,
+};

@@ -1,26 +1,36 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageStoryScaffold } from "../storybookFrame";
+import { AdminRolesGroupsNewPage } from "./AdminRolesGroupsNewPage";
+
+const defaultArgs = {
+  "isSubmitting": false,
+  "label": "샘플 label 1",
+  "nameError": "샘플 name error 1",
+  "onChangeLabelInput": (..._args: never[]) => undefined,
+  "onChangeNameInput": (..._args: never[]) => undefined,
+  "onClickBackButton": (..._args: never[]) => undefined,
+  "onClickSubmitButton": (..._args: never[]) => undefined,
+};
+
+const busyArgs = {
+  ...defaultArgs,
+  "isSubmitting": true,
+};
 
 const meta = {
-	component: PageStoryScaffold,
-	parameters: {
-		layout: "fullscreen",
-		docs: {
-			description: {
-				component:
-					"Generated baseline page story for AdminRolesGroupsNewPage. Replace this scaffold with scenario-focused stories when page fixtures are available.",
-			},
-		},
-	},
-	tags: ["autodocs"],
-	args: {
-		componentName: "AdminRolesGroupsNewPage",
-		componentPath: "page/AdminRolesGroupsNewPage/AdminRolesGroupsNewPage.tsx",
-	},
-} satisfies Meta<typeof PageStoryScaffold>;
+  component: AdminRolesGroupsNewPage,
+  parameters: {
+    layout: "fullscreen",
+  },
+  tags: ["autodocs"],
+  args: defaultArgs as never,
+} satisfies Meta<typeof AdminRolesGroupsNewPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Busy: Story = {
+  args: busyArgs as never,
+};

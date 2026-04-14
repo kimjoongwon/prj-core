@@ -20,4 +20,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | legacy direct clientId(`storybook`) 정규화와 canonical `swagger-web`의 legacy DB fallback 회귀 시나리오를 추가 | codex |
+| 2026-04-14 | Storybook RP canonical clientId를 `storybook-web`으로 바꾸고 legacy 복원 회귀 시나리오를 반영 | codex |
 | 2026-04-06 | `verifyToken`이 tenant 역할명이 아닌 `manage all` merged ability로 `hasFullAccess`를 계산하는 회귀 테스트를 추가 | codex |
+| 2026-04-14 | AuthApplicationService 단위 테스트가 selectedSpace cookie write 없이 current-space helper semantics를 따르도록 갱신 | codex |

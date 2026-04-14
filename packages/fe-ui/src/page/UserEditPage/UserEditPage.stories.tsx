@@ -1,26 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageStoryScaffold } from "../storybookFrame";
+import { UserEditPage } from "./UserEditPage";
+
+const defaultArgs = {
+  "onClickBackButton": (..._args: never[]) => undefined,
+};
 
 const meta = {
-	component: PageStoryScaffold,
-	parameters: {
-		layout: "fullscreen",
-		docs: {
-			description: {
-				component:
-					"Generated baseline page story for UserEditPage. Replace this scaffold with scenario-focused stories when page fixtures are available.",
-			},
-		},
-	},
-	tags: ["autodocs"],
-	args: {
-		componentName: "UserEditPage",
-		componentPath: "page/UserEditPage/UserEditPage.tsx",
-	},
-} satisfies Meta<typeof PageStoryScaffold>;
+  component: UserEditPage,
+  parameters: {
+    layout: "fullscreen",
+  },
+  tags: ["autodocs"],
+  args: defaultArgs as never,
+} satisfies Meta<typeof UserEditPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+

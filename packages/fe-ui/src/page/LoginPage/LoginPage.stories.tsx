@@ -11,6 +11,11 @@ const meta = {
 	},
 	tags: ["autodocs"],
 	args: {
+		state: {
+			email: "",
+			password: "",
+			errorMessage: "",
+		},
 		title: "관리자 로그인",
 		caption: "운영 계정으로 로그인해 그라운드와 이용자 상태를 관리하세요.",
 		isLoading: false,
@@ -23,41 +28,39 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const renderLoginPage =
-	(initialState: LoginPageState): Story["render"] =>
-	(args) => {
-		const state = useLocalObservable(() => ({ ...initialState }));
+const renderLoginPage: Story["render"] = (args) => {
+	const state = useLocalObservable<LoginPageState>(() => ({ ...args.state }));
 
-		return (
-			<PageStoryCard>
-				<LoginPage {...args} state={state} />
-			</PageStoryCard>
-		);
-	};
+	return (
+		<PageStoryCard>
+			<LoginPage {...args} state={state} />
+		</PageStoryCard>
+	);
+};
 
 export const Default: Story = {
-	render: renderLoginPage({
-		email: "",
-		password: "",
-		errorMessage: "",
-	}),
+	render: renderLoginPage,
 };
 
 export const WithEmailError: Story = {
-	render: renderLoginPage({
-		email: "ops@example.com",
-		password: "",
-		errorMessage: "이메일 또는 비밀번호를 다시 확인해주세요.",
-	}),
+	args: {
+		state: {
+			email: "ops@example.com",
+			password: "",
+			errorMessage: "이메일 또는 비밀번호를 다시 확인해주세요.",
+		},
+	},
+	render: renderLoginPage,
 };
 
 export const Loading: Story = {
 	args: {
+		state: {
+			email: "ops@example.com",
+			password: "password123!",
+			errorMessage: "",
+		},
 		isLoading: true,
 	},
-	render: renderLoginPage({
-		email: "ops@example.com",
-		password: "password123!",
-		errorMessage: "",
-	}),
+	render: renderLoginPage,
 };

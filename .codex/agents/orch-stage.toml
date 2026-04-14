@@ -141,10 +141,10 @@ developer_instructions = '''
 | 1 | 도메인 기획 | 도메인 전체 | L0-L4 + BE/Store spec 정리 | `orch-requirement` |
 | 2 | 스키마 구현 | 도메인 전체 | Prisma / Schema / Entity / DTO + BE unit test | BE schema builder chain |
 | 3 | 백엔드 구현 | 도메인 전체 | Repository / Service / App / Controller + BE unit test | BE implementation builder chain |
-| 4 | 화면 기획 | 페이지별 | L5-L12 + route layout / surface / columns contract | `orch-screen-planner`, `req-route-layout-planner`, `req-spec-tracker` |
+| 4 | 화면 기획 | 페이지별 | L5-L12 + route layout / surface / columns contract + FE unit/E2E test spec authoring | `orch-screen-planner`, `req-route-layout-planner`, `req-spec-tracker` |
 | 5 | 컴포넌트 구현 | 페이지별 | Display / Columns / Control / Cell / Widget / Layout / Feature / `master-detail-form` | FE component builder chain |
 | 6 | 페이지 통합 | 페이지별 | route layout + pure page + thin container + API 연동 + FE unit test | page integration builder chain |
-| 7 | E2E 검증 | 도메인 전체 | BE/FE E2E와 checklist Verified 반영 | E2E builder / QA chain |
+| 7 | E2E 검증 | 도메인 전체 | 기록된 BE/FE E2E 케이스 구현/실행과 checklist Verified 반영 | E2E builder / QA chain |
 
 ---
 
@@ -189,10 +189,10 @@ developer_instructions = '''
 |-------|----------|------|
 | 2, 3 | `backend-unit` | `be-unit-test-builder → req-be-test-planner → qa-be-testing` |
 | 5, 6 | `frontend-unit` | `fe-unit-test-builder → req-fe-test-planner → qa-fe-testing` |
-| 7 | `e2e` | `be-e2e-builder → qa-be-e2e-testing → fe-e2e-builder → qa-fe-e2e-testing → req-spec-tracker` |
+| 7 | `e2e` | `be-e2e-builder → req-be-test-planner → qa-be-e2e-testing → fe-e2e-builder → req-fe-test-planner → qa-fe-e2e-testing → req-spec-tracker` |
 
 - 서로 다른 테스트 컨텍스트를 같은 agent 흐름에서 섞지 않습니다.
-- builder는 전략 결정자이고, 최종 테스트 작성/실행 마무리는 `req-*` / `qa-*` 체인이 담당합니다.
+- builder는 전략 결정자이고, `req-*`는 spec authoring/sync, `qa-*`는 최종 테스트 작성/실행 마무리를 담당합니다.
 
 ### 5.5 리뷰 체크포인트
 
@@ -290,6 +290,7 @@ developer_instructions = '''
 - L5-L12 화면 기획
 - route layout skeleton / slot topology / surface ownership 결정
 - 목록/테이블 화면의 columns/cell 계약 확정
+- page/feature/widget/display/control/store/frontend E2E sidecar의 테스트 케이스 authoring
 
 **주 호출 role**
 - `orch-screen-planner`
@@ -306,6 +307,7 @@ developer_instructions = '''
 **완료 gate**
 - `layout.spec.md`와 `page.spec.md` 업데이트
 - 관련 FE sidecar spec 생성/갱신
+- 관련 FE unit/E2E 테스트 케이스 spec 반영
 - `spec-checklist.md`의 Spec exists 반영
 
 ### Stage 5: 컴포넌트 구현
@@ -376,12 +378,15 @@ developer_instructions = '''
 
 **목표**
 - BE/FE E2E 구현 및 실행
+- Stage 4/2/3에서 기록된 E2E 케이스와 테스트 파일 sync
 - checklist Verified 반영
 
 **주 호출 role**
 - `be-e2e-builder`
+- `req-be-test-planner`
 - `qa-be-e2e-testing`
 - `fe-e2e-builder`
+- `req-fe-test-planner`
 - `qa-fe-e2e-testing`
 - `req-spec-tracker`
 

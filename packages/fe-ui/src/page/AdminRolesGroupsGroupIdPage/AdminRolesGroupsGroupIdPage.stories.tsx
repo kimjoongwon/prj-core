@@ -1,27 +1,63 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageStoryScaffold } from "../storybookFrame";
+import { createStorybookMock } from "../storybookMock";
+import { AdminRolesGroupsGroupIdPage } from "./AdminRolesGroupsGroupIdPage";
+
+const defaultArgs = {
+  "group": {
+  "createdAt": "2026-04-14T09:00:00.000Z",
+  "id": "item-1",
+  "label": "샘플 label 1",
+  "roleAssociations": [{
+  "id": createStorybookMock("id") as never,
+  "role": createStorybookMock("role") as never,
+  "roleId": createStorybookMock("roleId") as never,
+}, {
+  "id": createStorybookMock("id") as never,
+  "role": createStorybookMock("role") as never,
+  "roleId": createStorybookMock("roleId") as never,
+}],
+  "type": "샘플 type 1",
+  "updatedAt": "2026-04-14T09:00:00.000Z",
+},
+  "isDeleteModalOpen": false,
+  "isDeleting": false,
+  "isLoading": false,
+  "onClickBackButton": (..._args: never[]) => undefined,
+  "onClickDeleteButton": (..._args: never[]) => undefined,
+  "onClickDeleteConfirm": (..._args: never[]) => undefined,
+  "onClickEditButton": (..._args: never[]) => undefined,
+  "onCloseDeleteModal": (..._args: never[]) => undefined,
+};
+
+const loadingArgs = {
+  ...defaultArgs,
+  "isLoading": true,
+};
+
+const busyArgs = {
+  ...defaultArgs,
+  "isDeleting": true,
+};
 
 const meta = {
-	component: PageStoryScaffold,
-	parameters: {
-		layout: "fullscreen",
-		docs: {
-			description: {
-				component:
-					"Generated baseline page story for AdminRolesGroupsGroupIdPage. Replace this scaffold with scenario-focused stories when page fixtures are available.",
-			},
-		},
-	},
-	tags: ["autodocs"],
-	args: {
-		componentName: "AdminRolesGroupsGroupIdPage",
-		componentPath:
-			"page/AdminRolesGroupsGroupIdPage/AdminRolesGroupsGroupIdPage.tsx",
-	},
-} satisfies Meta<typeof PageStoryScaffold>;
+  component: AdminRolesGroupsGroupIdPage,
+  parameters: {
+    layout: "fullscreen",
+  },
+  tags: ["autodocs"],
+  args: defaultArgs as never,
+} satisfies Meta<typeof AdminRolesGroupsGroupIdPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Loading: Story = {
+  args: loadingArgs as never,
+};
+
+export const Busy: Story = {
+  args: busyArgs as never,
+};

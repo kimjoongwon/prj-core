@@ -1,27 +1,24 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageStoryScaffold } from "../storybookFrame";
+import { AdminRolesRoleIdAbilitiesAbilityIdActionsPage } from "./AdminRolesRoleIdAbilitiesAbilityIdActionsPage";
+
+const defaultArgs = {
+  "abilityId": "ability-1",
+  "onClickBackButton": (..._args: never[]) => undefined,
+};
 
 const meta = {
-	component: PageStoryScaffold,
-	parameters: {
-		layout: "fullscreen",
-		docs: {
-			description: {
-				component:
-					"Generated baseline page story for AdminRolesRoleIdAbilitiesAbilityIdActionsPage. Replace this scaffold with scenario-focused stories when page fixtures are available.",
-			},
-		},
-	},
-	tags: ["autodocs"],
-	args: {
-		componentName: "AdminRolesRoleIdAbilitiesAbilityIdActionsPage",
-		componentPath:
-			"page/AdminRolesRoleIdAbilitiesAbilityIdActionsPage/AdminRolesRoleIdAbilitiesAbilityIdActionsPage.tsx",
-	},
-} satisfies Meta<typeof PageStoryScaffold>;
+  component: AdminRolesRoleIdAbilitiesAbilityIdActionsPage,
+  parameters: {
+    layout: "fullscreen",
+  },
+  tags: ["autodocs"],
+  args: defaultArgs as never,
+} satisfies Meta<typeof AdminRolesRoleIdAbilitiesAbilityIdActionsPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+

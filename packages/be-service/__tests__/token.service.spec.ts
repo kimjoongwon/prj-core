@@ -70,25 +70,6 @@ describe("TokenService", () => {
 		expect((res as unknown as { clearCookie: jest.Mock }).clearCookie).toHaveBeenCalledTimes(2);
 	});
 
-	it("선택된 Space 쿠키를 설정해야 한다", () => {
-		const res = { cookie: jest.fn() } as unknown as Response;
-		service.setSelectedSpaceCookie(res, "space-123");
-		expect((res as unknown as { cookie: jest.Mock }).cookie).toHaveBeenCalledWith(
-			Token.SELECTED_SPACE_ID,
-			"space-123",
-			expect.objectContaining({ httpOnly: true }),
-		);
-	});
-
-	it("선택된 Space 쿠키를 삭제해야 한다", () => {
-		const res = { clearCookie: jest.fn() } as unknown as Response;
-		service.clearSelectedSpaceCookie(res);
-		expect((res as unknown as { clearCookie: jest.Mock }).clearCookie).toHaveBeenCalledWith(
-			Token.SELECTED_SPACE_ID,
-			expect.objectContaining({ httpOnly: true }),
-		);
-	});
-
 	it("블랙리스트 여부를 위임 조회해야 한다", async () => {
 		mockTokenStorageService.isBlacklisted.mockResolvedValue(true);
 		const result = await service.isTokenBlacklisted("access-token");

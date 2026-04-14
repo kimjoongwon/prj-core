@@ -23,7 +23,7 @@ OIDC provider/client 설정 계약을 정의하며, `OidcFacade`와 `AuthControl
 - `oidc.clients.admin`, `oidc.clients.storybook`, `oidc.clients.idpWeb`은 provider fallback auth-shell registry로 동시에 제공됩니다.
 - auth shell route는 모두 `/api/v1/auth/login?clientId=...`와 `/api/v1/auth/callback?clientId=...` 계약을 따릅니다.
 - admin RP의 기본 redirect URI는 `http://localhost:3000/api/v1/auth/callback?clientId=admin-web`, 기본 login URL은 `http://localhost:3000/admin/auth/login`, 기본 return URL은 `http://localhost:3000/admin/dashboard`입니다.
-- storybook RP의 기본 redirect URI는 `http://localhost:6006/api/v1/auth/callback?clientId=storybook`, 기본 login URL은 `http://localhost:6006/__storybook_auth/login`, 기본 return URL은 `http://localhost:6006/`입니다.
+- storybook RP의 기본 redirect URI는 `http://localhost:6006/api/v1/auth/callback?clientId=storybook-web`, 기본 login URL은 `http://localhost:6006/__storybook_auth/login`, 기본 return URL은 `http://localhost:6006/`입니다.
 - idpWeb RP의 기본 redirect URI는 `http://localhost:3008/api/v1/auth/callback?clientId=idp-web`, 기본 login URL은 `http://localhost:3008/auth/login`, 기본 return URL은 `http://localhost:3008/dashboard`입니다.
 - 개별 override(`OIDC_ADMIN_REDIRECT_URI`, `OIDC_ADMIN_LOGIN_URL`, `OIDC_ADMIN_DEFAULT_RETURN_TO`, `OIDC_STORYBOOK_REDIRECT_URI`, `OIDC_STORYBOOK_LOGIN_URL`, `OIDC_STORYBOOK_DEFAULT_RETURN_TO`, `OIDC_IDP_WEB_REDIRECT_URI`, `OIDC_IDP_WEB_LOGIN_URL`, `OIDC_IDP_WEB_DEFAULT_RETURN_TO`)는 base URL 조합보다 우선합니다.
 - OIDC 환경변수는 `OIDC_ADMIN_*`, `OIDC_STORYBOOK_*`, `OIDC_IDP_WEB_*` 정식 키만 사용합니다.
@@ -32,6 +32,7 @@ OIDC provider/client 설정 계약을 정의하며, `OidcFacade`와 `AuthControl
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | Storybook RP canonical clientId를 `storybook-web` 기준으로 정리 | codex |
 | 2026-03-25 | callback/login contract를 clientId 기반 generic route 기준으로 정리 | codex |
 | 2026-03-16 | OIDC 설정 sidecar의 Storybook 명명 기록을 최종 식별자 기준으로 정리 | codex |
 | 2026-03-16 | Storybook RP 식별자와 기본 clientId/clientSecret 명명을 최종 형태로 정리 | codex |

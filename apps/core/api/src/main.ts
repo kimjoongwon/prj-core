@@ -277,7 +277,7 @@ async function bootstrap() {
       persistAuthorization: true,
       oauth2RedirectUrl: `http://localhost:${port}/api/oauth2-redirect.html`,
       initOAuth: {
-        clientId: "prj-core-swagger",
+        clientId: "swagger-web",
         scopes: ["openid", "profile", "email", "roles"],
         usePkceWithAuthorizationCodeGrant: true,
       },

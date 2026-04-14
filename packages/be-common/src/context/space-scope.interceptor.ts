@@ -14,11 +14,11 @@ import { canAccessAllSpaces } from "../util/permission.util";
  * Space 스코프 인터셉터
  *
  * RequestContextMiddleware 이후에 실행되며,
- * 현재 선택된 Tenant 역할과 selectedSpaceId 쿠키를 기반으로
+ * 현재 선택된 Tenant 역할과 x-space-id 헤더를 기반으로
  * EFFECTIVE_SPACE_IDS를 CLS에 저장합니다.
  *
  * - FULL_ACCESS → undefined (전체 조회)
- * - 그 외 → 현재 selectedSpaceId 1개만
+ * - 그 외 → 현재 x-space-id 1개만
  */
 @Injectable()
 export class SpaceScopeInterceptor implements NestInterceptor {

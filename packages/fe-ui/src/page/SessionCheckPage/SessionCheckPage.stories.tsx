@@ -1,26 +1,30 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageStoryScaffold } from "../storybookFrame";
+import { SessionCheckPage } from "./SessionCheckPage";
 
 const meta = {
-	component: PageStoryScaffold,
+	component: SessionCheckPage,
 	parameters: {
 		layout: "fullscreen",
-		docs: {
-			description: {
-				component:
-					"Generated baseline page story for SessionCheckPage. Replace this scaffold with scenario-focused stories when page fixtures are available.",
-			},
-		},
 	},
 	tags: ["autodocs"],
-	args: {
-		componentName: "SessionCheckPage",
-		componentPath: "page/SessionCheckPage/SessionCheckPage.tsx",
-	},
-} satisfies Meta<typeof PageStoryScaffold>;
+} satisfies Meta<typeof SessionCheckPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const AdminBootstrap: Story = {
+	args: {
+		title: "관리자 세션 확인",
+		description: "공간 권한과 운영 콘솔 접근 권한을 확인한 뒤 적절한 페이지로 이동합니다.",
+		message: "관리자 권한과 최근 접속 공간을 확인하고 있습니다.",
+	},
+};
+
+export const IdpBootstrap: Story = {
+	args: {
+		title: "계정 상태 확인",
+		description: "OIDC 세션과 비밀번호 재설정 상태를 점검합니다.",
+		message: "인증 상태를 확인한 뒤 필요한 화면으로 이동합니다.",
+	},
+};

@@ -14,21 +14,22 @@ import { createHash, randomBytes } from "node:crypto";
 
 const BASE_URL = "http://localhost:3007";
 
-type FirstPartyClient = "admin-web" | "idp-web" | "storybook";
+type FirstPartyClient = "admin-web" | "idp-web" | "storybook-web";
 
 const FIRST_PARTY_CALLBACK_URIS: Record<FirstPartyClient, string> = {
 	"admin-web": "http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
 	"idp-web": "http://localhost:3008/api/v1/auth/callback?clientId=idp-web",
-	storybook: "http://localhost:6006/api/v1/auth/callback?clientId=storybook",
+	"storybook-web":
+		"http://localhost:6006/api/v1/auth/callback?clientId=storybook-web",
 };
 
 const FIRST_PARTY_LOGIN_URLS: Record<FirstPartyClient, string> = {
 	"admin-web": "http://localhost:3000/admin/auth/login",
 	"idp-web": "http://localhost:3008/auth/login",
-	storybook: "http://localhost:6006/__storybook_auth/login",
+	"storybook-web": "http://localhost:6006/__storybook_auth/login",
 };
 
-const SWAGGER_CLIENT_ID = "prj-core-swagger";
+const SWAGGER_CLIENT_ID = "swagger-web";
 const SWAGGER_REDIRECT_URI = `${BASE_URL}/api/oauth2-redirect.html`;
 const DEFAULT_ADMIN_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
 const DEFAULT_ADMIN_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
@@ -387,8 +388,8 @@ describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 			await expectOidcLoginRedirect("idp-web");
 		});
 
-		it("GET /api/v1/auth/login?clientId=storybook - storybook 로그인 리다이렉트", async () => {
-			await expectOidcLoginRedirect("storybook");
+		it("GET /api/v1/auth/login?clientId=storybook-web - storybook 로그인 리다이렉트", async () => {
+			await expectOidcLoginRedirect("storybook-web");
 		});
 
 		it("GET /api/v1/auth/login?clientId=idp-web&returnTo=/admin/settings - returnTo 파라미터 전달", async () => {
@@ -412,14 +413,14 @@ describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 			expect(body.message).toBe("OIDC 클라이언트를 찾을 수 없습니다");
 		});
 
-		it("GET /api/v1/auth/callback?clientId=storybook&error=access_denied - storybook loginUrl로 복귀", async () => {
+		it("GET /api/v1/auth/callback?clientId=storybook-web&error=access_denied - storybook loginUrl로 복귀", async () => {
 			const res = await requestManualRedirect(
-				`${BASE_URL}/api/v1/auth/callback?clientId=storybook&error=access_denied&error_description=%EC%9D%B8%EC%A6%9D%20%EA%B1%B0%EB%B6%80`,
+				`${BASE_URL}/api/v1/auth/callback?clientId=storybook-web&error=access_denied&error_description=%EC%9D%B8%EC%A6%9D%20%EA%B1%B0%EB%B6%80`,
 			);
 
 			expect(res.status).toBe(302);
 			expect(res.headers.get("location")).toBe(
-				`${FIRST_PARTY_LOGIN_URLS.storybook}?error=%EC%9D%B8%EC%A6%9D+%EA%B1%B0%EB%B6%80`,
+				`${FIRST_PARTY_LOGIN_URLS["storybook-web"]}?error=%EC%9D%B8%EC%A6%9D+%EA%B1%B0%EB%B6%80`,
 			);
 		});
 

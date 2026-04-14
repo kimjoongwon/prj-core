@@ -87,7 +87,7 @@ test.describe("Storybook 로그인 셸", () => {
 		const entryUrl = new URL(entryPath, getStorybookBaseUrl());
 
 		expect(entryUrl.pathname).toBe("/api/v1/auth/login");
-		expect(entryUrl.searchParams.get("clientId")).toBe("storybook");
+		expect(entryUrl.searchParams.get("clientId")).toBe("storybook-web");
 		expect(entryUrl.searchParams.get("returnTo")).toBe(
 			buildStorybookUrl(STORY_PATH),
 		);

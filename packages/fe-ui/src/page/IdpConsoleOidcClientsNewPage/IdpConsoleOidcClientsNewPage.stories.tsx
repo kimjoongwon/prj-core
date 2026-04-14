@@ -1,27 +1,50 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageStoryScaffold } from "../storybookFrame";
+import { createStorybookMock } from "../storybookMock";
+import { IdpConsoleOidcClientsNewPage } from "./IdpConsoleOidcClientsNewPage";
+
+const defaultArgs = {
+  "formState": {
+  "clientId": "client-1",
+  "clientSecret": "client-secret-1",
+  "defaultReturnTo": "default-return-to-1",
+  "errors": {},
+  "grantTypes": ["authorization_code", "refresh_token"],
+  "isPublic": false,
+  "loginUrl": "https://example.com/login-url-1",
+  "logoUri": "https://placehold.co/96x96/png?text=Logo+1",
+  "policyUri": "https://example.com/policy-1",
+  "redirectUriErrors": createStorybookMock("redirectUriErrors") as never,
+  "redirectUris": ["https://example.com/auth/callback", "https://example.com/auth/secondary"],
+  "responseTypes": ["code"],
+  "scope": "scope-1",
+  "tokenEndpointAuthMethod": "token-endpoint-auth-method-1",
+  "tosUri": "https://example.com/tos-uri-1",
+},
+  "isSubmitting": false,
+  "onClickBackButton": (..._args: never[]) => undefined,
+  "onSubmit": (..._args: never[]) => undefined,
+};
+
+const busyArgs = {
+  ...defaultArgs,
+  "isSubmitting": true,
+};
 
 const meta = {
-	component: PageStoryScaffold,
-	parameters: {
-		layout: "fullscreen",
-		docs: {
-			description: {
-				component:
-					"Generated baseline page story for IdpConsoleOidcClientsNewPage. Replace this scaffold with scenario-focused stories when page fixtures are available.",
-			},
-		},
-	},
-	tags: ["autodocs"],
-	args: {
-		componentName: "IdpConsoleOidcClientsNewPage",
-		componentPath:
-			"page/IdpConsoleOidcClientsNewPage/IdpConsoleOidcClientsNewPage.tsx",
-	},
-} satisfies Meta<typeof PageStoryScaffold>;
+  component: IdpConsoleOidcClientsNewPage,
+  parameters: {
+    layout: "fullscreen",
+  },
+  tags: ["autodocs"],
+  args: defaultArgs as never,
+} satisfies Meta<typeof IdpConsoleOidcClientsNewPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Busy: Story = {
+  args: busyArgs as never,
+};

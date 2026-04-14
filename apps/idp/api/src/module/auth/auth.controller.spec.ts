@@ -1,5 +1,5 @@
 import { AuthApplicationService } from "@cocrepo/app";
-import { Token } from "@cocrepo/constant";
+import { REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import { SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
 import type { SignUpPayloadDto } from "@cocrepo/dto";
 import { UnauthorizedException } from "@nestjs/common";
@@ -19,7 +19,6 @@ describe("AuthController", () => {
 		id: "user-test-id",
 		email: "test@example.com",
 		name: "Test User",
-		selectedSpaceId: null,
 		tenants: [
 			{
 				id: "tenant-test-id",
@@ -39,10 +38,12 @@ describe("AuthController", () => {
 			accessToken: "test-access-token",
 			refreshToken: "test-refresh-token",
 			sessionId: "idp-web.test-session-id",
-			selectedSpaceId: "space-test-id",
+		},
+		headers: {
+			"user-agent": "test-agent",
+			[REQUEST_HEADER_KEYS.SPACE_ID]: "space-test-id",
 		},
 		user: mockUser,
-		headers: { "user-agent": "test-agent" },
 		ip: "127.0.0.1",
 		socket: { remoteAddress: "127.0.0.1" },
 	};
@@ -52,7 +53,7 @@ describe("AuthController", () => {
 			getAuthorizationUrl: jest.fn(),
 			getClientRedirects: jest.fn().mockImplementation(async (clientId) => {
 				switch (clientId) {
-					case "storybook":
+					case "storybook-web":
 						return {
 							loginUrl: "http://localhost:6006/__storybook_auth/login",
 							defaultReturnTo: "http://localhost:6006/",
@@ -201,7 +202,7 @@ describe("AuthController", () => {
 
 		it("OIDC 에러는 clientId에 맞는 loginUrl로 리다이렉트해야 한다", async () => {
 			await controller.handleCallback(
-				"storybook",
+				"storybook-web",
 				undefined as unknown as string,
 				undefined as unknown as string,
 				"access_denied",
@@ -259,7 +260,6 @@ describe("AuthController", () => {
 			).toHaveBeenCalledWith(
 				"test-refresh-token",
 				"idp-web.test-session-id",
-				"space-test-id",
 				mockResponse,
 			);
 			expect(result.accessToken).toBe("new-access-token");
@@ -352,35 +352,29 @@ describe("AuthController", () => {
 	});
 
 	describe("current space", () => {
-		it("현재 선택 Space 조회 시 쿠키 값을 전달해야 한다", async () => {
+		it("현재 선택 Space 조회 시 x-space-id 헤더 값을 전달해야 한다", async () => {
 			mockAuthApplicationService.getCurrentSpace.mockResolvedValue({
 				id: "space-test-id",
 			} as never);
 
 			await controller.getCurrentSpace(
 				mockRequest as unknown as never,
-				mockResponse as unknown as never,
 			);
 
 			expect(mockAuthApplicationService.getCurrentSpace).toHaveBeenCalledWith(
-				mockRequest.cookies[Token.SELECTED_SPACE_ID],
-				mockResponse,
+				mockRequest.headers[REQUEST_HEADER_KEYS.SPACE_ID],
 			);
 		});
 
-		it("현재 선택 Space 변경 시 body와 response를 전달해야 한다", async () => {
+		it("현재 선택 Space 변경 시 body만 전달해야 한다", async () => {
 			mockAuthApplicationService.setCurrentSpace.mockResolvedValue({
 				id: "space-test-id",
 			} as never);
 
-			await controller.setCurrentSpace(
-				{ spaceId: "space-test-id" } as never,
-				mockResponse as unknown as never,
-			);
+			await controller.setCurrentSpace({ spaceId: "space-test-id" } as never);
 
 			expect(mockAuthApplicationService.setCurrentSpace).toHaveBeenCalledWith(
 				{ spaceId: "space-test-id" },
-				mockResponse,
 			);
 		});
 	});

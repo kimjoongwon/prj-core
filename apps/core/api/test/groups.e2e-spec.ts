@@ -53,7 +53,7 @@ describe("Groups API (E2E)", () => {
 					await request(app.getHttpServer())
 						.delete(`/api/v1/groups/${groupId}`)
 						.set("Authorization", `Bearer ${jwtToken}`)
-						.set("Cookie", "selectedSpaceId=" + spaceId);
+						.set("x-space-id", spaceId);
 				} catch {
 					// 이미 삭제되었거나 존재하지 않으면 무시
 				}
@@ -78,7 +78,7 @@ describe("Groups API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/groups")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -95,7 +95,7 @@ describe("Groups API (E2E)", () => {
 					.get("/api/v1/groups")
 					.query({ type: "Role" })
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -124,7 +124,7 @@ describe("Groups API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.post("/api/v1/groups")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(createDto);
 
 				// Then
@@ -151,7 +151,7 @@ describe("Groups API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/groups/${testGroupId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -175,7 +175,7 @@ describe("Groups API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.patch(`/api/v1/groups/${testGroupId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(updateDto);
 
 				// Then
@@ -198,7 +198,7 @@ describe("Groups API (E2E)", () => {
 				const createResponse = await request(app.getHttpServer())
 					.post("/api/v1/groups")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(createDto);
 
 				expect(createResponse.status).toBe(201);
@@ -208,7 +208,7 @@ describe("Groups API (E2E)", () => {
 				const deleteResponse = await request(app.getHttpServer())
 					.delete(`/api/v1/groups/${deleteTargetId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(deleteResponse.status).toBe(200);
@@ -217,7 +217,7 @@ describe("Groups API (E2E)", () => {
 				const getResponse = await request(app.getHttpServer())
 					.get(`/api/v1/groups/${deleteTargetId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				expect(getResponse.status).toBe(404);
 			});
@@ -279,8 +279,8 @@ describe("Groups API (E2E)", () => {
 			});
 		});
 
-		describe("selectedSpaceId 쿠키 누락", () => {
-			it("selectedSpaceId 없이 조회 시 400 또는 403을 반환해야 한다", async () => {
+		describe("x-space-id 헤더 누락", () => {
+			it("x-space-id 없이 조회 시 400 또는 403을 반환해야 한다", async () => {
 				// Given
 				if (!jwtToken) return;
 
@@ -309,7 +309,7 @@ describe("Groups API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.post("/api/v1/groups")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(invalidDto);
 
 				// Then
@@ -324,7 +324,7 @@ describe("Groups API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/groups/not-a-uuid")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(400);
@@ -347,7 +347,7 @@ describe("Groups API (E2E)", () => {
 				const firstResponse = await request(app.getHttpServer())
 					.post("/api/v1/groups")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(createDto);
 
 				expect(firstResponse.status).toBe(201);
@@ -357,7 +357,7 @@ describe("Groups API (E2E)", () => {
 				const secondResponse = await request(app.getHttpServer())
 					.post("/api/v1/groups")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(createDto);
 
 				// Then
@@ -376,7 +376,7 @@ describe("Groups API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/groups/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(404);
@@ -392,7 +392,7 @@ describe("Groups API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.patch(`/api/v1/groups/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send({ label: "수정 시도" });
 
 				// Then
@@ -409,7 +409,7 @@ describe("Groups API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.delete(`/api/v1/groups/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(404);
@@ -427,7 +427,7 @@ describe("Groups API (E2E)", () => {
 				// const response = await request(app.getHttpServer())
 				//   .post("/api/v1/groups")
 				//   .set("Authorization", `Bearer ${manageToken}`)
-				//   .set("Cookie", "selectedSpaceId=" + spaceId)
+				//   .set("x-space-id", spaceId)
 				//   .send({ name: "test", type: "Role", tenantId: spaceId });
 				// expect(response.status).toBe(403);
 			});
@@ -460,7 +460,7 @@ describe("Groups API (E2E)", () => {
 			const createResponse = await request(app.getHttpServer())
 				.post("/api/v1/groups")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId)
+				.set("x-space-id", spaceId)
 				.send(createDto);
 
 			expect(createResponse.status).toBe(201);
@@ -470,7 +470,7 @@ describe("Groups API (E2E)", () => {
 			const deleteResponse = await request(app.getHttpServer())
 				.delete(`/api/v1/groups/${firstGroupId}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId);
+				.set("x-space-id", spaceId);
 
 			expect(deleteResponse.status).toBe(200);
 
@@ -478,7 +478,7 @@ describe("Groups API (E2E)", () => {
 			const recreateResponse = await request(app.getHttpServer())
 				.post("/api/v1/groups")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId)
+				.set("x-space-id", spaceId)
 				.send(createDto);
 
 			// Then
@@ -504,7 +504,7 @@ describe("Groups API (E2E)", () => {
 			const createResponse = await request(app.getHttpServer())
 				.post("/api/v1/groups")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId)
+				.set("x-space-id", spaceId)
 				.send(createDto);
 
 			expect(createResponse.status).toBe(201);
@@ -515,7 +515,7 @@ describe("Groups API (E2E)", () => {
 			const updateResponse = await request(app.getHttpServer())
 				.patch(`/api/v1/groups/${groupId}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId)
+				.set("x-space-id", spaceId)
 				.send({});
 
 			// Then: 변경사항 없이 200 반환
@@ -531,7 +531,7 @@ describe("Groups API (E2E)", () => {
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/groups")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId);
+				.set("x-space-id", spaceId);
 
 			// Then
 			expect(response.status).toBe(200);

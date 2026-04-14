@@ -333,7 +333,7 @@ description = "단일 Expo route 의 모바일 화면 기획을 조율하는 오
 config_file = "agents/mobile/orch-mobile-screen-planner.toml"
 
 [agents.req-mo-fe-test-planner]
-description = "모바일 route 와 app spec 의 검증 체크리스트를 기획하는 전문가"
+description = "모바일 route 와 app spec 의 unit/E2E 테스트 케이스를 기획하는 전문가"
 config_file = "agents/mobile/req-mo-fe-test-planner.toml"
 
 [agents.req-mo-input-planner]
@@ -387,6 +387,14 @@ config_file = "agents/qa-fe-e2e-testing.toml"
 [agents.qa-fe-testing]
 description = "Vitest 기반 프론트엔드 패키지 테스트 코드를 작성하는 전문가 (다국어 UI 회귀 포함)"
 config_file = "agents/qa-fe-testing.toml"
+
+[agents.qa-mo-e2e-testing]
+description = "Detox 기반 모바일 E2E 테스트 코드를 작성하는 전문가"
+config_file = "agents/mobile/qa-mo-e2e-testing.toml"
+
+[agents.qa-mo-testing]
+description = "Jest + React Native Testing Library 기반 모바일 단위 테스트 코드를 작성하는 전문가"
+config_file = "agents/mobile/qa-mo-testing.toml"
 
 [agents.qa-type-checker]
 description = "TypeScript 타입 에러를 근본 원인까지 추적하여 해결하는 전문가"

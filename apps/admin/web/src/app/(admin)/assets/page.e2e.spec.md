@@ -20,5 +20,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | mock/live asset API 확인을 selectedSpace 쿠키 대신 `x-space-id` 헤더 기준으로 전환 | codex |
 | 2026-04-08 | 한글 파일명 업로드에서 object storage 서명 오류가 재발하지 않도록 실제 multipart 회귀 E2E를 추가 | codex |
 | 2026-03-15 | SSR/client rendering 오류 재발 방지를 위한 assets E2E sidecar 신규 추가 | codex |

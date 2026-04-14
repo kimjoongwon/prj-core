@@ -97,7 +97,7 @@
 - [mobile/req-mo-input-planner.toml](./mobile/req-mo-input-planner.toml): 모바일 입력 컴포넌트 sidecar spec 을 기획하는 전문가
 - [mobile/req-mo-menu-planner.toml](./mobile/req-mo-menu-planner.toml): 모바일 navigation/menu contract 를 기획하는 전문가
 - [mobile/req-mo-store-planner.toml](./mobile/req-mo-store-planner.toml): 모바일 공용/로컬 상태 경계를 기획하는 전문가
-- [mobile/req-mo-fe-test-planner.toml](./mobile/req-mo-fe-test-planner.toml): 모바일 route 와 app spec 의 검증 체크리스트를 기획하는 전문가
+- [mobile/req-mo-fe-test-planner.toml](./mobile/req-mo-fe-test-planner.toml): 모바일 route 와 app spec 의 unit/E2E 테스트 케이스를 기획하는 전문가
 - [mobile/fe-mo-control-component-builder.toml](./mobile/fe-mo-control-component-builder.toml): `packages/fe-mo-ui/src/control/**`의 RN 입력/상호작용 contract를 생성하거나 정리하는 전문가
 - [mobile/fe-mo-display-component-builder.toml](./mobile/fe-mo-display-component-builder.toml): `packages/fe-mo-ui/src/display/**`, `surface`, `design-system`, 비메뉴 `layout` thin wrapper contract를 생성하거나 정리하는 전문가
 - [mobile/fe-mo-menu-builder.toml](./mobile/fe-mo-menu-builder.toml): `packages/fe-mo-ui/src/layout/Menu|SubMenu/**`의 RN 메뉴 contract를 생성하거나 정리하는 전문가
@@ -108,13 +108,13 @@
 - [mobile/fe-mo-cell-builder.toml](./mobile/fe-mo-cell-builder.toml): 모바일 Cell 재사용 계층을 설계하고 구현하는 전문가
 - [mobile/fe-mo-columns-builder.toml](./mobile/fe-mo-columns-builder.toml): 모바일 columns 계약과 collection 표현 경계를 정리하는 전문가
 - [mobile/fe-mo-detail-builder.toml](./mobile/fe-mo-detail-builder.toml): 모바일 detail 재사용 계층을 생성하고 정리하는 전문가
-- [mobile/fe-mo-e2e-builder.toml](./mobile/fe-mo-e2e-builder.toml): 모바일 E2E 테스트 전략을 설계하는 전문가
+- [mobile/fe-mo-e2e-builder.toml](./mobile/fe-mo-e2e-builder.toml): 모바일 Detox E2E 테스트 전략을 설계하는 전문가
 - [mobile/fe-mo-feature-builder.toml](./mobile/fe-mo-feature-builder.toml): 모바일 비즈니스 feature 계층을 생성하고 정리하는 전문가
 - [mobile/fe-mo-form-builder.toml](./mobile/fe-mo-form-builder.toml): 모바일 form 재사용 계층을 생성하고 정리하는 전문가
 - [mobile/fe-mo-layout-builder.toml](./mobile/fe-mo-layout-builder.toml): Expo/RN에서 재사용할 모바일 layout shell 컴포넌트를 설계하는 전문가
 - [mobile/fe-mo-master-builder.toml](./mobile/fe-mo-master-builder.toml): 모바일 목록/그리드 계열 재사용 master 계층을 생성하고 정리하는 전문가
 - [mobile/fe-mo-ui-page-builder.toml](./mobile/fe-mo-ui-page-builder.toml): `packages/fe-mo-ui/src/page/**` 기준의 pure mobile page component를 생성하는 전문가
-- [mobile/fe-mo-unit-test-builder.toml](./mobile/fe-mo-unit-test-builder.toml): 모바일 단위 테스트 전략을 설계하는 전문가
+- [mobile/fe-mo-unit-test-builder.toml](./mobile/fe-mo-unit-test-builder.toml): 모바일 Jest unit test 전략을 설계하는 전문가
 - [mobile/fe-mo-widget-builder.toml](./mobile/fe-mo-widget-builder.toml): 모바일 재사용 widget 계층을 생성하고 정리하는 전문가
 
 ## QA / 검증
@@ -124,6 +124,8 @@
 - [qa-fe-e2e-testing.toml](./qa-fe-e2e-testing.toml): Playwright 기반 프론트엔드 E2E 테스트 코드를 작성하는 전문가
 - [qa-be-testing.toml](./qa-be-testing.toml): Jest 기반 백엔드 및 공용 패키지 테스트 코드를 작성하는 전문가
 - [qa-be-e2e-testing.toml](./qa-be-e2e-testing.toml): Jest + Supertest 기반 백엔드 E2E 테스트 코드를 작성하는 전문가
+- [mobile/qa-mo-testing.toml](./mobile/qa-mo-testing.toml): Jest + React Native Testing Library 기반 모바일 단위 테스트 코드를 작성하는 전문가
+- [mobile/qa-mo-e2e-testing.toml](./mobile/qa-mo-e2e-testing.toml): Detox 기반 모바일 E2E 테스트 코드를 작성하는 전문가
 
 ## 공용 / 운영 보조
 

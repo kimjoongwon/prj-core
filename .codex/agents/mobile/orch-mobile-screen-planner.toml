@@ -110,7 +110,7 @@ developer_instructions = '''
 | `req-mo-store-planner` | `fe-mo-store-builder` | `.codex/agents/mobile/fe-mo-store-builder.toml` | 공용 store / 로컬 상태 경계 |
 | `req-mo-page-planner` | `fe-mo-page-builder`, `fe-mo-api-integrator` | `.codex/agents/mobile/fe-mo-page-builder.toml`, `.codex/agents/mobile/fe-mo-api-integrator.toml` | route screen 구현, 데이터 연동 경계 |
 | `req-mo-route-layout-planner` | `fe-mo-route-layout-builder` | `.codex/agents/mobile/fe-mo-route-layout-builder.toml` | Expo Router shell 구현 |
-| `req-mo-fe-test-planner` | Stage 4 command verification | `orch-mobile-stage` | type-check / doctor / smoke checklist |
+| `req-mo-fe-test-planner` | `fe-mo-unit-test-builder`, `qa-mo-testing`, `fe-mo-e2e-builder`, `qa-mo-e2e-testing` | `.codex/agents/mobile/fe-mo-unit-test-builder.toml`, `.codex/agents/mobile/fe-mo-e2e-builder.toml`, `.codex/agents/mobile/qa-mo-testing.toml`, `.codex/agents/mobile/qa-mo-e2e-testing.toml` | mobile unit/E2E 테스트 전략, 케이스, 검증 기준 |
 
 ---
 
@@ -136,7 +136,7 @@ developer_instructions = '''
 - [ ] `route kind`, `ui owner`, `shared ui target`이 기록되었는가?
 - [ ] 필요한 mobile builder 문서의 출력 경로 / 필수 규칙 / 금지 규칙을 spec 에 반영했는가?
 - [ ] navigation 이 필요한 route 인데 `req-mo-menu-planner` 반영을 누락하지 않았는가?
-- [ ] Stage 4 검증 체크리스트가 spec 에 반영되었는가?
+- [ ] route/app spec 에 unit/E2E 테스트 케이스와 테스트 파일 경로가 반영되었는가?
 
 ---
 
@@ -147,4 +147,3 @@ developer_instructions = '''
 /orch-mobile-screen-planner app=mobile route=/(auth)/login parallel=auto
 ```
 '''
-

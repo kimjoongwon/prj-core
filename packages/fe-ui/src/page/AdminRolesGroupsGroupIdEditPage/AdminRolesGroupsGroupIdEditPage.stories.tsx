@@ -1,27 +1,58 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageStoryScaffold } from "../storybookFrame";
+import { AdminRolesGroupsGroupIdEditPage } from "./AdminRolesGroupsGroupIdEditPage";
+
+const defaultArgs = {
+  "groupName": "샘플 group name 1",
+  "isLoading": false,
+  "isNotFound": false,
+  "isSubmitting": false,
+  "label": "샘플 label 1",
+  "nameError": "샘플 name error 1",
+  "onChangeLabelInput": (..._args: never[]) => undefined,
+  "onChangeNameInput": (..._args: never[]) => undefined,
+  "onClickBackButton": (..._args: never[]) => undefined,
+  "onClickListButton": (..._args: never[]) => undefined,
+  "onClickSubmitButton": (..._args: never[]) => undefined,
+};
+
+const loadingArgs = {
+  ...defaultArgs,
+  "isLoading": true,
+};
+
+const notFoundArgs = {
+  ...defaultArgs,
+  "isNotFound": true,
+};
+
+const busyArgs = {
+  ...defaultArgs,
+  "isSubmitting": true,
+};
 
 const meta = {
-	component: PageStoryScaffold,
-	parameters: {
-		layout: "fullscreen",
-		docs: {
-			description: {
-				component:
-					"Generated baseline page story for AdminRolesGroupsGroupIdEditPage. Replace this scaffold with scenario-focused stories when page fixtures are available.",
-			},
-		},
-	},
-	tags: ["autodocs"],
-	args: {
-		componentName: "AdminRolesGroupsGroupIdEditPage",
-		componentPath:
-			"page/AdminRolesGroupsGroupIdEditPage/AdminRolesGroupsGroupIdEditPage.tsx",
-	},
-} satisfies Meta<typeof PageStoryScaffold>;
+  component: AdminRolesGroupsGroupIdEditPage,
+  parameters: {
+    layout: "fullscreen",
+  },
+  tags: ["autodocs"],
+  args: defaultArgs as never,
+} satisfies Meta<typeof AdminRolesGroupsGroupIdEditPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Loading: Story = {
+  args: loadingArgs as never,
+};
+
+export const NotFound: Story = {
+  args: notFoundArgs as never,
+};
+
+export const Busy: Story = {
+  args: busyArgs as never,
+};

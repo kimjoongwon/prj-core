@@ -83,7 +83,7 @@ export class CaslAbilityFactory {
 	 * @returns 사용자의 권한이 적용된 AppAbility 객체
 	 *
 	 * @description
-	 * 1. selectedSpaceId 쿠키에서 현재 spaceId를 가져와 해당 tenant 찾기
+	 * 1. x-space-id 헤더에서 현재 spaceId를 가져와 해당 tenant 찾기
 	 * 2. RoleGrantsRepository로 Role 기반 권한 조회 (RoleGrant → Ability)
 	 * 3. UserGrantsRepository로 User 예외 권한 조회 (UserGrant → Ability)
 	 * 4. 권한 병합 (User 권한이 Role 권한보다 우선 - priority 기반)
@@ -96,7 +96,7 @@ export class CaslAbilityFactory {
 			Ability as AppAbilityClass,
 		);
 
-		// selectedSpaceId 쿠키에서 현재 spaceId를 가져와서 해당 tenant 찾기
+		// x-space-id 헤더에서 현재 spaceId를 가져와서 해당 tenant 찾기
 		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
 		const currentTenant =
 			user.tenants?.find((tenant) =>

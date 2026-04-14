@@ -1,27 +1,59 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageStoryScaffold } from "../storybookFrame";
+import { IdpConsoleOidcClientsPage } from "./IdpConsoleOidcClientsPage";
+
+const defaultArgs = {
+  "isLoading": false,
+  "oidcClients": [{
+  "clientId": "client-1",
+  "createdAt": "2026-04-14T09:00:00.000Z",
+  "grantTypes": ["authorization_code", "refresh_token"],
+  "id": "item-1",
+  "isActive": false,
+  "tokenEndpointAuthMethod": "token-endpoint-auth-method-1",
+}, {
+  "clientId": "client-1",
+  "createdAt": "2026-04-14T09:00:00.000Z",
+  "grantTypes": ["authorization_code", "refresh_token"],
+  "id": "item-1",
+  "isActive": false,
+  "tokenEndpointAuthMethod": "token-endpoint-auth-method-1",
+}],
+  "onClickCreateButton": (..._args: never[]) => undefined,
+  "queryStates": {"page": 1, "take": 10, "skip": 0, "search": ""},
+  "setQueryStates": (..._args: never[]) => undefined,
+  "totalCount": 12,
+};
+
+const loadingArgs = {
+  ...defaultArgs,
+  "isLoading": true,
+};
+
+const emptyStateArgs = {
+  ...defaultArgs,
+  "oidcClients": [],
+  "totalCount": 0,
+};
 
 const meta = {
-	component: PageStoryScaffold,
-	parameters: {
-		layout: "fullscreen",
-		docs: {
-			description: {
-				component:
-					"Generated baseline page story for IdpConsoleOidcClientsPage. Replace this scaffold with scenario-focused stories when page fixtures are available.",
-			},
-		},
-	},
-	tags: ["autodocs"],
-	args: {
-		componentName: "IdpConsoleOidcClientsPage",
-		componentPath:
-			"page/IdpConsoleOidcClientsPage/IdpConsoleOidcClientsPage.tsx",
-	},
-} satisfies Meta<typeof PageStoryScaffold>;
+  component: IdpConsoleOidcClientsPage,
+  parameters: {
+    layout: "fullscreen",
+  },
+  tags: ["autodocs"],
+  args: defaultArgs as never,
+} satisfies Meta<typeof IdpConsoleOidcClientsPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Loading: Story = {
+  args: loadingArgs as never,
+};
+
+export const EmptyState: Story = {
+  args: emptyStateArgs as never,
+};

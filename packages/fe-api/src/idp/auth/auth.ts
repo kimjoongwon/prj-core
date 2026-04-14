@@ -910,7 +910,7 @@ export const prefetchVerifyTokenInfiniteQuery = async <TData = Awaited<ReturnTyp
 
 
 /**
- * 현재 인증된 사용자가 접근 가능한 Space 목록을 반환합니다. 선택 Space 쿠키가 없어도 호출할 수 있습니다.
+ * 현재 인증된 사용자가 접근 가능한 Space 목록을 반환합니다. x-space-id 헤더 없이도 호출할 수 있습니다.
  * @summary 내 Space 목록 조회
  */
 export const getMySpaces = (
@@ -1147,7 +1147,7 @@ export const prefetchGetMySpacesInfiniteQuery = async <TData = Awaited<ReturnTyp
 
 
 /**
- * 현재 선택된 selectedSpaceId 쿠키를 기준으로 Space를 반환합니다. 쿠키가 없거나 유효하지 않으면 기본 Space로 복구합니다.
+ * 요청의 x-space-id 헤더를 기준으로 Space를 반환합니다. 헤더가 없거나 유효하지 않으면 접근 가능한 기본 Space를 반환합니다.
  * @summary 현재 선택 Space 조회
  */
 export const getCurrentSpace = (
@@ -1384,7 +1384,7 @@ export const prefetchGetCurrentSpaceInfiniteQuery = async <TData = Awaited<Retur
 
 
 /**
- * 사용자가 접근 가능한 Space 중 하나를 현재 선택 Space 쿠키로 설정합니다.
+ * 사용자가 접근 가능한 Space 중 하나를 선택 가능 대상으로 검증하고 반환합니다.
  * @summary 현재 선택 Space 변경
  */
 export const setCurrentSpace = (

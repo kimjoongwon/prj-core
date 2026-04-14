@@ -478,7 +478,7 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 		},
 	});
 
-	const selectedSpaceId =
+	const currentSpaceId =
 		runtime.realm === "admin" ? (persistStore?.spaceId ?? null) : null;
 
 	const mySpacesQuery = useGetMySpaces({
@@ -504,7 +504,7 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 	});
 
 	const abilitiesQuery = useQuery({
-		queryKey: ["storybook", "abilities", "my", selectedSpaceId ?? "none"],
+		queryKey: ["storybook", "abilities", "my", currentSpaceId ?? "none"],
 		queryFn: async () => {
 			const response = await customInstance<{ data?: AbilityResponseDto[] }>({
 				url: "/api/v1/abilities/my",
@@ -517,7 +517,7 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 			isLiveAuthRuntime &&
 			runtime.realm === "admin" &&
 			Boolean(verifyQuery.data?.data?.valid) &&
-			Boolean(selectedSpaceId),
+			Boolean(currentSpaceId),
 		staleTime: DEFAULT_STALE_TIME_MS,
 		retry: false,
 	});
@@ -740,7 +740,7 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 	if (
 		runtime.realm === "admin" &&
 		isLiveAuthRuntime &&
-		selectedSpaceId &&
+		currentSpaceId &&
 		abilitiesQuery.isLoading
 	) {
 		return (
@@ -756,7 +756,7 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 		runtime.realm === "admin" &&
 		runtime.requiresSpace &&
 		persistStore?.isHydrated &&
-		!selectedSpaceId
+		!currentSpaceId
 	) {
 		return (
 			<RuntimeScreen

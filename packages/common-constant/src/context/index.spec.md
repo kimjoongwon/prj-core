@@ -12,10 +12,12 @@
 
 | 항목 | 설명 |
 |------|------|
-| export | 없음 |
+| `CONTEXT_KEYS` | CLS 컨텍스트 키 재수출 |
+| `REQUEST_HEADER_KEYS` | 요청 헤더 키 재수출 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | Space 선택 공용 계약으로 `REQUEST_HEADER_KEYS` 재수출을 추가 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

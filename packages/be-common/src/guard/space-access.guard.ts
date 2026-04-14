@@ -42,7 +42,7 @@ export class SpaceAccessGuard implements CanActivate {
 		const spaceId = this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
 		if (!spaceId) {
 			throw new BadRequestException(
-				"selectedSpaceId 쿠키가 필요합니다. Space를 선택해주세요.",
+				"x-space-id 헤더가 필요합니다. Space를 선택해주세요.",
 			);
 		}
 

@@ -14,11 +14,12 @@
 - 입력 예시는 `apps/mobile/src/app/**` 기준으로 해석합니다.
 - route kind는 `layout`, `screen`, `modal` 중 하나로 결정합니다.
 - UI owner는 기본적으로 `apps/mobile/src/app/**`이며, 공유 primitive가 필요할 때만 `packages/fe-mo-ui/**`로 승격합니다.
-- 선행 순차 단계 뒤에 planner fan-out을 실행하고, 검증 체크리스트는 `req-mo-fe-test-planner`가 join 단계에서 정리합니다.
+- 선행 순차 단계 뒤에 planner fan-out을 실행하고, `req-mo-fe-test-planner`가 join 단계에서 route/app spec의 unit/E2E 케이스를 정리합니다.
 - `page role/master-detail-form` 같은 웹 분류 대신 Expo Router route 구조와 navigation 흐름을 우선 기록합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | join 단계의 mobile test planner를 checklist-only에서 unit/E2E 케이스 authoring 기준으로 갱신 | codex |
 | 2026-04-13 | 단일 Expo route 기획 orchestration 과 downstream builder 매핑 규칙을 신규 정의 | codex |

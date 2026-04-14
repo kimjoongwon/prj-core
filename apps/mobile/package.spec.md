@@ -6,14 +6,15 @@
 
 ## 역할
 
-Expo 기반 모바일 앱의 실행 스크립트와 HeroUI Native/Uniwind, dev client 의존성 계약을 정의합니다.
+Expo 기반 모바일 앱의 실행 스크립트와 HeroUI Native/Uniwind, dev client, Jest/Detox 테스트 의존성 계약을 정의합니다.
 
 ## 구성 요소
 
 | 항목 | 설명 |
 |------|------|
-| scripts | Expo 실행, lint, doctor, type-check 진입점 |
+| scripts | Expo 실행, lint, doctor, type-check, Jest unit test, Detox E2E 진입점 |
 | dependencies | Expo Router, Expo Dev Client, HeroUI Native, Uniwind, React Native, MobX 런타임, @cocrepo/mo-ui 런타임 의존성 |
+| devDependencies | 모바일 테스트 도구(Jest Expo, React Native Testing Library, Detox) |
 
 ## 규칙
 
@@ -26,11 +27,14 @@ Expo 기반 모바일 앱의 실행 스크립트와 HeroUI Native/Uniwind, dev c
 - Expo Autolinking은 모바일 앱의 직접 의존성을 우선 링크하도록 `legacy_shallowReactNativeLinking`을 활성화해 nested peer installation 중복 경고를 줄입니다.
 - 모바일 앱은 Expo Router 단일 엔트리를 사용하고, 샘플 탭 화면을 추가하지 않습니다.
 - Expo 템플릿의 `reset-project` 같은 일회성 초기화 스크립트는 유지하지 않습니다.
+- 모바일 unit test는 `jest-expo`와 React Native Testing Library 기준으로 유지합니다.
+- 모바일 E2E는 Detox 기준으로 유지하고, 기본 `test:e2e`는 iOS simulator smoke 경로를 사용합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | Jest unit test / Detox E2E 스크립트와 모바일 테스트 도구 의존성 계약을 추가 | codex |
 | 2026-04-14 | `expo-constants` 직접 의존성과 shallow RN autolinking 규칙을 추가하고 `react-native-worklets`를 SDK 55 권장 patch로 정렬 | codex |
 | 2026-04-14 | Expo SDK 55 dependency validation 경고를 막기 위해 핵심 Expo 패키지 patch version 정합성 규칙을 추가 | codex |
 | 2026-04-14 | `pnpm start` local build 경로를 위해 `expo-dev-client` 의존성 계약을 추가 | codex |

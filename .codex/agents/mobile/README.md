@@ -13,7 +13,7 @@
 - 모바일 role은 RN/Expo 전용 contract입니다.
 - 웹용 `fe-*`, `orch-*`, `req-*` role과 분리됩니다.
 - 모바일 orchestration 은 mobile route flow 에 공통 backend spec planning 을 포함한 compact 4-stage flow 기준입니다.
-- v1 검증은 command-based verification 이며 전용 `qa-mo-*` role 은 아직 없습니다.
+- 모바일 검증은 Jest unit test 와 Detox E2E, `qa-mo-*` role 기준으로 정리합니다.
 
 ## Orchestration
 
@@ -28,7 +28,7 @@
 - [req-mo-input-planner.toml](./req-mo-input-planner.toml): 모바일 입력 컴포넌트 sidecar spec 을 기획하는 전문가
 - [req-mo-menu-planner.toml](./req-mo-menu-planner.toml): 모바일 navigation/menu contract 를 기획하는 전문가
 - [req-mo-store-planner.toml](./req-mo-store-planner.toml): 모바일 공용/로컬 상태 경계를 기획하는 전문가
-- [req-mo-fe-test-planner.toml](./req-mo-fe-test-planner.toml): 모바일 route 와 app spec 의 검증 체크리스트를 기획하는 전문가
+- [req-mo-fe-test-planner.toml](./req-mo-fe-test-planner.toml): 모바일 route 와 app spec 의 unit/E2E 테스트 케이스를 기획하는 전문가
 
 ## Active Builder
 
@@ -39,17 +39,22 @@
 - [fe-mo-page-builder.toml](./fe-mo-page-builder.toml): `apps/mobile/src/app/**/index.tsx` route screen 을 구현하는 전문가
 - [fe-mo-api-integrator.toml](./fe-mo-api-integrator.toml): 모바일 데이터 조회/변경 연동 기준을 구현하는 전문가
 - [fe-mo-store-builder.toml](./fe-mo-store-builder.toml): 모바일 공용/로컬 상태 경계를 정리하고 MobX store 를 구현하는 전문가
+- [fe-mo-unit-test-builder.toml](./fe-mo-unit-test-builder.toml): 모바일 Jest unit test 전략을 설계하는 전문가
+- [fe-mo-e2e-builder.toml](./fe-mo-e2e-builder.toml): 모바일 Detox E2E 테스트 전략을 설계하는 전문가
 
 ## Reserved Builder
 
 - [fe-mo-cell-builder.toml](./fe-mo-cell-builder.toml): 모바일 Cell 재사용 계층 예약 role
 - [fe-mo-columns-builder.toml](./fe-mo-columns-builder.toml): 모바일 columns 계약 예약 role
 - [fe-mo-detail-builder.toml](./fe-mo-detail-builder.toml): 모바일 detail 계층 예약 role
-- [fe-mo-e2e-builder.toml](./fe-mo-e2e-builder.toml): 모바일 E2E 전략 예약 role
 - [fe-mo-feature-builder.toml](./fe-mo-feature-builder.toml): 모바일 feature 계층 예약 role
 - [fe-mo-form-builder.toml](./fe-mo-form-builder.toml): 모바일 form 계층 예약 role
 - [fe-mo-layout-builder.toml](./fe-mo-layout-builder.toml): 모바일 재사용 layout shell 예약 role
 - [fe-mo-master-builder.toml](./fe-mo-master-builder.toml): 모바일 master 계층 예약 role
 - [fe-mo-ui-page-builder.toml](./fe-mo-ui-page-builder.toml): `packages/fe-mo-ui/src/page/**` pure page 예약 role
-- [fe-mo-unit-test-builder.toml](./fe-mo-unit-test-builder.toml): 모바일 unit test 전략 예약 role
 - [fe-mo-widget-builder.toml](./fe-mo-widget-builder.toml): 모바일 widget 계층 예약 role
+
+## QA
+
+- [qa-mo-testing.toml](./qa-mo-testing.toml): Jest + React Native Testing Library 기반 모바일 단위 테스트 코드를 작성하는 전문가
+- [qa-mo-e2e-testing.toml](./qa-mo-e2e-testing.toml): Detox 기반 모바일 E2E 테스트 코드를 작성하는 전문가

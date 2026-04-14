@@ -19,3 +19,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-04-14 | RequestContext가 selectedSpace cookie 대신 x-space-id header를 CLS SPACE_ID/TENANT source로 사용하도록 반영 | codex |

@@ -20,8 +20,23 @@
 - `packages/fe-ui`의 MobX form-field 패턴을 RN wrapper에 맞게 옮기기 위한 내부 유틸입니다.
 - 배열 인덱스 표기(`items[0].name`)를 dot path로 정규화해서 처리합니다.
 
+## 구현 체크리스트
+
+- [x] `objectPath.ts`
+- [x] `objectPath.test.ts`
+
+## 테스트 케이스
+
+> 구현 도구: Jest
+
+| ID | 분류 | Given | When | Then |
+|----|------|-------|------|------|
+| `MO-UNIT-OBJECTPATH-001` | Happy Path | 중첩 객체와 dot path | `getPathValue` 호출 | 경로의 값을 읽고 fallback 을 사용하지 않습니다. |
+| `MO-UNIT-OBJECTPATH-002` | Edge Case | 배열 인덱스 표기 경로 | `setPathValue` 호출 | 중간 배열/객체를 생성하고 값을 씁니다. |
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | objectPath unit test 케이스와 구현 체크리스트를 추가 | codex |
 | 2026-04-13 | 모바일 control MobX wrapper 지원을 위한 path 유틸 신규 추가 | codex |

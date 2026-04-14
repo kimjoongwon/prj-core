@@ -1,4 +1,4 @@
-import { CONTEXT_KEYS } from "@cocrepo/constant";
+import { CONTEXT_KEYS, REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import type { NextFunction, Request, Response } from "express";
 
 // parseAcceptLanguage 함수 mock
@@ -83,8 +83,7 @@ describe("RequestContextMiddleware", () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: {},
-					cookies: { selectedSpaceId: "space-001" },
+					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "space-001" },
 					user,
 				} as any;
 
@@ -132,12 +131,11 @@ describe("RequestContextMiddleware", () => {
 		});
 
 		describe("Space/Tenant 설정", () => {
-			it("selectedSpaceId와 매칭되는 tenant가 있으면 TENANT를 설정해야 한다", async () => {
+			it("x-space-id와 매칭되는 tenant가 있으면 TENANT를 설정해야 한다", async () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: {},
-					cookies: { selectedSpaceId: "space-001" },
+					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "space-001" },
 					user,
 				} as any;
 
@@ -159,10 +157,10 @@ describe("RequestContextMiddleware", () => {
 				);
 			});
 
-			it("selectedSpaceId가 없으면 SPACE_ID를 undefined로 설정해야 한다", async () => {
+			it("x-space-id가 없으면 SPACE_ID를 undefined로 설정해야 한다", async () => {
 				// Given
 				const user = createMockUser();
-				mockReq = { headers: {}, cookies: {}, user } as any;
+				mockReq = { headers: {}, user } as any;
 
 				// When
 				await middleware.use(
@@ -178,12 +176,11 @@ describe("RequestContextMiddleware", () => {
 				);
 			});
 
-			it("selectedSpaceId와 매칭되는 tenant가 없으면 TENANT를 undefined로 설정해야 한다", async () => {
+			it("x-space-id와 매칭되는 tenant가 없으면 TENANT를 undefined로 설정해야 한다", async () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: {},
-					cookies: { selectedSpaceId: "non-existent-space" },
+					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "non-existent-space" },
 					user,
 				} as any;
 
@@ -209,8 +206,7 @@ describe("RequestContextMiddleware", () => {
 					throw new Error("CLS 에러");
 				});
 				mockReq = {
-					headers: {},
-					cookies: { selectedSpaceId: "space-001" },
+					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "space-001" },
 					user: createMockUser(),
 				} as any;
 

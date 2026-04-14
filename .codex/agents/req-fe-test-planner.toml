@@ -13,6 +13,8 @@ developer_instructions = '''
 # Frontend Test Planner (L12)
 
 `req-fe-test-planner`는 프론트엔드 테스트 케이스(L12) 기획을 담당합니다.
+frontend test spec authoring의 기본 owner는 Stage 4 화면 기획이며,
+Stage 5/6은 구현에 맞춘 unit test spec sync, Stage 7은 E2E 시나리오 최종 sync를 담당합니다.
 테스트 실행/코드 작성은 `qa-fe-testing` 또는 `qa-fe-e2e-testing`이 담당합니다.
 
 ---
@@ -22,7 +24,7 @@ developer_instructions = '''
 | 구분 | 포함 | 제외 |
 |------|------|------|
 | Frontend Unit | page/feature/widget/display/control/store 관련 `.spec.md` | BE service/controller/repository |
-| Frontend E2E | 사용자 화면 흐름/상호작용 spec 반영 | BE API E2E 시나리오 |
+| Frontend E2E | `page.spec.md`, `page.e2e.spec.md` 기준 사용자 화면 흐름/상호작용 spec 반영 | BE API E2E 시나리오 |
 
 ---
 
@@ -32,7 +34,7 @@ developer_instructions = '''
 
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
-| stage | ✅ | 4, 5, 6 (unit 중심) |
+| stage | ✅ | 4, 5, 6, 7 |
 | app/domain/page | ✅ | 대상 화면/도메인 |
 | fe strategy handoff | ✅ | `fe-unit-test-builder` 또는 `fe-e2e-builder` 전략 결과 |
 
@@ -41,6 +43,7 @@ developer_instructions = '''
 - 기존 frontend sidecar spec 파일에 `테스트 케이스` 섹션 갱신
 - 대상 예시:
   - `page.spec.md`
+  - `page.e2e.spec.md`
   - `feature/**/index.spec.md`
   - `widget/**/index.spec.md`
   - `primitive/**/index.spec.md`
@@ -54,6 +57,10 @@ developer_instructions = '''
 - Stage 4 화면 기획에서는 L12 테스트 케이스 섹션 설계를 담당할 수 있습니다.
 - Stage 7에서는 `req-spec-tracker`가 최종 검증 상태를 반영합니다.
 
+- Stage 4: `orch-screen-planner` join 단계에서 page/feature/widget/display/control/store의 unit/E2E 케이스를 spec에 기록
+- Stage 5/6: `fe-unit-test-builder → req-fe-test-planner → qa-fe-testing`
+- Stage 7: `fe-e2e-builder → req-fe-test-planner → qa-fe-e2e-testing → req-spec-tracker`
+
 `req-fe-test-planner`는 단독 종료 역할이 아닙니다.
 
 ---
@@ -65,6 +72,8 @@ developer_instructions = '''
 - Given-When-Then 형식으로 케이스 구조화
 - 사용자 흐름, 접근성 선택자 기반 상호작용, 에러/엣지 케이스를 명시
 - 후속 QA가 바로 구현 가능한 수준으로 케이스를 구체화
+- 테스트 파일 경로(`*.test.ts(x)`, `page.e2e.ts`)와 owner spec(`page.spec.md`, `page.e2e.spec.md`)를 함께 기록
+- Stage 7에서는 기존 Stage 4/5/6 spec을 덮어쓰지 않고 시나리오 ID와 구현 상태만 동기화
 
 ### ❌ Don't
 
@@ -80,5 +89,6 @@ developer_instructions = '''
 | fe-unit-test-builder | 선행 (전략) |
 | qa-fe-testing | 후속 (구현/실행) |
 | fe-e2e-builder | 분리 컨텍스트 |
+| qa-fe-e2e-testing | 후속 (E2E 구현/실행) |
 | req-be-test-planner | 분리 컨텍스트 |
 '''

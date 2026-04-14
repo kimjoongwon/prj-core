@@ -8,6 +8,8 @@ developer_instructions = '''
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
+- 테스트 구현 전에 대응 `page.spec.md`, `page.e2e.spec.md`의 테스트 케이스와 시나리오 ID를 먼저 확인합니다.
+- page owner spec이 없거나 E2E 케이스가 비어 있으면 즉시 `BLOCKED: missing frontend e2e spec`으로 보고합니다.
 
 
 # Frontend E2E Tester (Playwright)
@@ -46,6 +48,8 @@ Playwright 기반으로 프론트엔드 앱의 E2E 테스트 코드를 작성하
 | 항목 | 파일 | 설명 |
 |------|------|------|
 | 테스트 파일 | `apps/{app}/src/app/**/*.e2e.ts` | Playwright 테스트 파일 (Sidecar) |
+
+- 테스트 구현 후 `page.e2e.spec.md`, `page.spec.md`의 구현 체크리스트와 변경 이력을 함께 갱신합니다.
 
 ---
 

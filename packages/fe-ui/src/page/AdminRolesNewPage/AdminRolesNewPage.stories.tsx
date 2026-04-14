@@ -1,26 +1,39 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { PageStoryScaffold } from "../storybookFrame";
+import { AdminRolesNewPage } from "./AdminRolesNewPage";
+
+const defaultArgs = {
+  "description": "스토리북에서 확인할 description 예시입니다.",
+  "displayName": "샘플 display name 1",
+  "displayNameError": "샘플 display name error 1",
+  "isSubmitPending": false,
+  "nameError": "샘플 name error 1",
+  "onChangeDescriptionTextarea": (..._args: never[]) => undefined,
+  "onChangeDisplayNameInput": (..._args: never[]) => undefined,
+  "onChangeNameInput": (..._args: never[]) => undefined,
+  "onClickBackButton": (..._args: never[]) => undefined,
+  "onClickSubmitButton": (..._args: never[]) => undefined,
+};
+
+const busyArgs = {
+  ...defaultArgs,
+  "isSubmitPending": true,
+};
 
 const meta = {
-	component: PageStoryScaffold,
-	parameters: {
-		layout: "fullscreen",
-		docs: {
-			description: {
-				component:
-					"Generated baseline page story for AdminRolesNewPage. Replace this scaffold with scenario-focused stories when page fixtures are available.",
-			},
-		},
-	},
-	tags: ["autodocs"],
-	args: {
-		componentName: "AdminRolesNewPage",
-		componentPath: "page/AdminRolesNewPage/AdminRolesNewPage.tsx",
-	},
-} satisfies Meta<typeof PageStoryScaffold>;
+  component: AdminRolesNewPage,
+  parameters: {
+    layout: "fullscreen",
+  },
+  tags: ["autodocs"],
+  args: defaultArgs as never,
+} satisfies Meta<typeof AdminRolesNewPage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Busy: Story = {
+  args: busyArgs as never,
+};

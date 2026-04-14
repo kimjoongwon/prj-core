@@ -11,6 +11,7 @@ import { SYSTEM_SPACE_ID } from "./constants";
 import {
 	abilitySeedData,
 	actionSeedData,
+	legacyOidcClientIds,
 	oidcClientSeedData,
 	roleAssociationSeedData,
 	roleCategorySeedData,
@@ -484,6 +485,21 @@ async function syncTranslations(db: DbClient): Promise<void> {
 }
 
 async function syncOidcClients(db: DbClient): Promise<void> {
+	if (legacyOidcClientIds.length > 0) {
+		await db.oidcClient.updateMany({
+			where: {
+				clientId: {
+					in: [...legacyOidcClientIds],
+				},
+				removedAt: null,
+			},
+			data: {
+				isActive: false,
+				removedAt: new Date(),
+			},
+		});
+	}
+
 	for (const clientData of oidcClientSeedData) {
 		await db.oidcClient.upsert({
 			where: { clientId: clientData.clientId },

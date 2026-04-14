@@ -76,7 +76,7 @@ pnpm --filter=test-e2e test:idp:mobile
 - 앱별 차이(리다이렉트 URL, storageState, localStorage 보정)는 테스트 래퍼에서만 처리합니다.
 - Admin 인증 상태 준비는 `admin-setup` 프로젝트에서 `storageState`를 생성해 재사용합니다.
 - IDP는 테스트 내에서 `loginToConsole`을 호출해 로그인 후 검증을 수행합니다.
-- Storybook은 로그인 셸에서 generic auth endpoint(`clientId=storybook`)와 스토리 복귀를 직접 검증합니다.
+- Storybook은 로그인 셸에서 generic auth endpoint(`clientId=storybook-web`)와 스토리 복귀를 직접 검증합니다.
 
 ## 공통 헬퍼
 

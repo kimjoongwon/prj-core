@@ -1,6 +1,7 @@
 "use client";
 
 import { setApiPersistStore } from "@cocrepo/api/core/client";
+import { setIdpPersistStore } from "@cocrepo/api/idp/client";
 import type { AppStoreConfig, AppStoreProviderResult } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
@@ -93,8 +94,9 @@ export function createAppStoreProvider(
 
 		rootStore.fabStore = new FABStore({ actions: config.fabActions });
 
-		// API 인터셉터에 PersistStore 참조 주입 (토큰 만료 정보 동기화용)
+		// Core/IDP API 인터셉터가 모두 동일한 현재 Space를 읽도록 연결합니다.
 		setApiPersistStore(rootStore.persistStore);
+		setIdpPersistStore(rootStore.persistStore);
 
 		return rootStore;
 	}

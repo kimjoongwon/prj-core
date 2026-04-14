@@ -16,6 +16,7 @@
 - `req-surface-planner`는 구조/UI/feature/layout 결과를 모은 뒤 단일 writer로 실행합니다.
 - 화면 기획 완료 조건에는 `page.spec.md`의 Surface/Elevation 기록 여부가 포함됩니다.
 - 화면 기획 완료 조건에는 `Rendering Decision.page component path = packages/fe-ui/src/page/[PageName]/[PageName].tsx` 준수 여부도 포함됩니다.
+- 화면 기획 완료 조건에는 `page.spec.md`, 필요한 `page.e2e.spec.md`, 관련 FE sidecar spec의 unit/E2E 테스트 케이스 기록 여부가 포함됩니다.
 - 화면 기획은 관련 Stage 5/6 구현 role 문서를 먼저 읽고 출력 경로, 필수 규칙, 금지 규칙, 검증 명령을 spec에 반영해야 합니다.
 - Cell 관련 기획 산출물은 `packages/fe-ui/src/cell/**` 경로를 기준으로 기록합니다.
 - 목록/테이블 화면의 column 기획 산출물은 `packages/fe-ui/src/columns/master/**.spec.md` 경로를 기준으로 기록합니다.
@@ -29,6 +30,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | Stage 4 join 단계에서 FE unit/E2E 테스트 케이스 authoring을 완료 조건으로 명시 | codex |
 | 2026-03-29 | 중복된 role 목록과 연관 role 표를 제거하고 page-level 실행 계약 + 단일 builder 매핑 source로 재구성 | codex |
 | 2026-03-28 | `req-columns-planner`와 `fe-columns-builder` 연동 규칙을 Stage 4 fan-out에 추가 | codex |
 | 2026-03-28 | `web/src/app` 경로와 role 용어 기준으로 출력/참조 표기를 정정 | codex |

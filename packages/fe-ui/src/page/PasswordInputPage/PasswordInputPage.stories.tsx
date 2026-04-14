@@ -13,6 +13,11 @@ const meta = {
 	},
 	tags: ["autodocs"],
 	args: {
+		state: {
+			password: "",
+			passwordConfirm: "",
+			errorMessage: "",
+		},
 		onSubmit: () => undefined,
 		isLoading: false,
 	},
@@ -22,41 +27,41 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const renderPasswordInputPage =
-	(initialState: PasswordInputPageState): Story["render"] =>
-	(args) => {
-		const state = useLocalObservable(() => ({ ...initialState }));
+const renderPasswordInputPage: Story["render"] = (args) => {
+	const state = useLocalObservable<PasswordInputPageState>(() => ({
+		...args.state,
+	}));
 
-		return (
-			<PageStoryCard>
-				<PasswordInputPage {...args} state={state} />
-			</PageStoryCard>
-		);
-	};
+	return (
+		<PageStoryCard>
+			<PasswordInputPage {...args} state={state} />
+		</PageStoryCard>
+	);
+};
 
 export const Default: Story = {
-	render: renderPasswordInputPage({
-		password: "",
-		passwordConfirm: "",
-		errorMessage: "",
-	}),
+	render: renderPasswordInputPage,
 };
 
 export const ValidationError: Story = {
-	render: renderPasswordInputPage({
-		password: "password123!",
-		passwordConfirm: "password12",
-		errorMessage: "비밀번호와 비밀번호 확인이 일치하지 않습니다.",
-	}),
+	args: {
+		state: {
+			password: "password123!",
+			passwordConfirm: "password12",
+			errorMessage: "비밀번호와 비밀번호 확인이 일치하지 않습니다.",
+		},
+	},
+	render: renderPasswordInputPage,
 };
 
 export const Loading: Story = {
 	args: {
+		state: {
+			password: "securePass123!",
+			passwordConfirm: "securePass123!",
+			errorMessage: "",
+		},
 		isLoading: true,
 	},
-	render: renderPasswordInputPage({
-		password: "securePass123!",
-		passwordConfirm: "securePass123!",
-		errorMessage: "",
-	}),
+	render: renderPasswordInputPage,
 };

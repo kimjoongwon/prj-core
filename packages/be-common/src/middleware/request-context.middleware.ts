@@ -1,4 +1,4 @@
-import { CONTEXT_KEYS, Token } from "@cocrepo/constant";
+import { CONTEXT_KEYS, REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import { TenantDto, UserDto } from "@cocrepo/dto";
 import { Injectable, type NestMiddleware } from "@nestjs/common";
 import type { NextFunction, Request, Response } from "express";
@@ -53,16 +53,14 @@ export class RequestContextMiddleware implements NestMiddleware {
 
 		// 언어 설정 (Accept-Language 또는 x-language 헤더)
 		const languageFromHeader =
-			(request.headers["x-language"] as string | undefined) ||
+			this.readRequestHeader(request, REQUEST_HEADER_KEYS.LANGUAGE) ||
 			(request.headers["accept-language"] as string | undefined);
 
 		const language = parseAcceptLanguage(languageFromHeader);
 		this.cls.set(CONTEXT_KEYS.LANGUAGE, language);
 
-		// Space ID 설정 (HttpOnly selectedSpaceId 쿠키)
-		const spaceId = request.cookies?.[Token.SELECTED_SPACE_ID] as
-			| string
-			| undefined;
+		// Space ID 설정 (x-space-id 헤더)
+		const spaceId = this.readRequestHeader(request, REQUEST_HEADER_KEYS.SPACE_ID);
 		this.cls.set(CONTEXT_KEYS.SPACE_ID, spaceId || undefined);
 
 		// Tenant 설정 (spaceId가 있는 경우)
@@ -80,5 +78,17 @@ export class RequestContextMiddleware implements NestMiddleware {
 				language,
 			});
 		}
+	}
+
+	private readRequestHeader(
+		request: Request,
+		headerName: string,
+	): string | undefined {
+		const headerValue = request.headers[headerName];
+		if (typeof headerValue === "string") {
+			return headerValue;
+		}
+
+		return Array.isArray(headerValue) ? headerValue[0] : undefined;
 	}
 }

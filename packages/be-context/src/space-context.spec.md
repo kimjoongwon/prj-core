@@ -27,3 +27,4 @@
 | 2026-03-14 | Nest DI가 `ClsService`를 주입할 수 있도록 패키지 빌드가 decorator metadata를 유지해야 한다는 런타임 전제를 명시 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-04 | AuthContext 직접 의존을 제거하고 CLS 기반으로 Space 접근 계산 로직을 정리 | codex |
+| 2026-04-14 | SpaceContext의 현재 Space source를 x-space-id header로 명시하도록 갱신 | codex |

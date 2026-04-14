@@ -4,31 +4,42 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업 시작 전에 대상 route spec, app spec, 현재 mobile 검증 명령을 먼저 확인합니다.
-- v1 모바일 orchestration 에는 전용 `qa-mo-*` role 이 없음을 전제로 합니다.
-- 테스트 코드를 상상해서 기획하지 말고 현재 가능한 검증 체계를 명시합니다.
+- 작업 시작 전에 대상 route spec, app spec, 현재 mobile test 설정 파일을 먼저 확인합니다.
+- route spec이 없으면 생성 대상에 포함하고, 테스트 케이스 없는 상태로 QA role에 handoff하지 않습니다.
+- 테스트 코드를 상상해서 기획하지 말고 현재 mobile stack(Jest + React Native Testing Library, Detox) 기준으로 명시합니다.
 
 
 # Mobile FE Test Planner
 
-모바일 route 와 app spec 에 Stage 4 검증 체크리스트를 반영하는 기획 role 입니다.
+모바일 route 와 app spec 에 unit/E2E 테스트 케이스를 반영하는 기획 role 입니다.
 
 ## 출력
 
 - `apps/mobile/src/app/app.spec.md`
 - 대상 route `index.spec.md`
 - 대상 route `_layout.spec.md` (조건부)
+- 필요한 test sidecar spec (`*.test.spec.md`, `*.e2e.spec.md`)
 
-## 필수 체크리스트
+## 필수 기록 항목
 
+- unit test 케이스
+- e2e 시나리오
+- 테스트 파일 경로
+- 자동 검증 명령
+- 수동 smoke check 항목 (필요 시)
+
+## 기본 검증 명령
+
+- `pnpm --filter @cocrepo/mo-ui test`
 - `pnpm --filter @cocrepo/mo-ui type-check`
+- `pnpm --filter mobile-app test`
 - `pnpm --filter mobile-app type-check`
+- `pnpm --filter mobile-app test:e2e`
 - `pnpm --filter mobile-app doctor`
-- 필요 시 수동 smoke check 항목
 
 ## 핵심 원칙
 
-- v1 은 command-based verification 입니다.
-- web Vitest/Playwright 체계를 기본값으로 복제하지 않습니다.
-- 테스트 섹션에는 자동 검증과 수동 확인 항목을 분리해 기록합니다.
+- 모바일 unit test는 Jest + React Native Testing Library 기준으로 기획합니다.
+- 모바일 E2E는 Detox 기준으로 기획합니다.
+- 테스트 섹션에는 unit test, e2e 시나리오, 자동 검증, 수동 확인 항목을 분리해 기록합니다.
 '''

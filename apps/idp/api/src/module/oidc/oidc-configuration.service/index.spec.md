@@ -33,12 +33,14 @@ oidc-provider 인스턴스 초기화에 필요한 전체 설정 객체(`OidcConf
 - DB 조회 결과가 있더라도 기본 로컬 RP(admin/storybook/mobile/swagger)는 누락 시 폴백 목록으로 병합합니다.
 - DB에 같은 `client_id`가 있으면 폴백과 DB 설정을 병합하며, 기본 redirect/grant/response 계약은 유지한 채 DB 확장 값을 추가합니다.
 - DB 조회 실패/빈 결과 시에도 동일한 병합 함수를 거친 고유 `client_id` 목록만 반환하여 정적 폴백 중복으로 인한 oidc-provider 초기화 실패를 방지합니다.
+- reference-data sync는 개편 전 legacy clientId(`storybook`, `prj-core-mobile`, `prj-core-swagger`)를 비활성화해 provider가 더 이상 로드하지 않도록 정리합니다.
 - DB 접근 실패(RLS 등) 시 정적 폴백 클라이언트 5개 사용:
   - `admin-web`: 어드민 웹 (client_secret_post, authorization_code + refresh_token, localhost:3000 `/api/v1/auth/callback?clientId=admin-web`)
-  - `storybook`: Storybook RP (client_secret_post, authorization_code + refresh_token, localhost:6006 `/api/v1/auth/callback?clientId=storybook`)
+  - `storybook-web`: Storybook RP (client_secret_post, authorization_code + refresh_token, localhost:6006 `/api/v1/auth/callback?clientId=storybook-web`)
   - `idp-web`: IDP 웹 (client_secret_post, authorization_code + refresh_token, localhost:3008 `/api/v1/auth/callback?clientId=idp-web`)
-  - `prj-core-mobile`: 모바일 앱 (PKCE 필수, none auth method)
-  - `prj-core-swagger`: Swagger UI (authorization_code만)
+  - `user-mobile`: 모바일 앱 (PKCE 필수, none auth method)
+  - `swagger-web`: Swagger UI (authorization_code만)
+- 신규/정비 대상 first-party OIDC `clientId`는 `{realm}-{surface}` 패턴을 사용하며, repo/product 접두사(`prj-core-*`)는 사용하지 않습니다.
 
 ### TTL 설정
 
@@ -88,6 +90,8 @@ oidc-provider 인스턴스 초기화에 필요한 전체 설정 객체(`OidcConf
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | Storybook fallback clientId를 `storybook-web`으로 승격하고 legacy clientId 정리 규칙을 문서화 | codex |
+| 2026-04-14 | first-party fallback clientId를 `{realm}-{surface}` 규칙에 맞춰 `user-mobile`, `swagger-web`으로 문서화 | codex |
 | 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-03-25 | first-party callback path를 clientId 기반 generic route로 정리 | codex |
 | 2026-03-16 | Storybook fallback client 표시명을 clientId 기준으로 정리 | codex |

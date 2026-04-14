@@ -46,3 +46,4 @@
 | 2026-03-15 | `AwsService` 의존을 제거하고 공용 `ObjectStorageService` 기반 업로드/삭제 흐름으로 전환 | codex  |
 | 2026-03-15 | assets 남은 범위를 위해 multipart upload 처리와 S3 업로드/메타데이터 생성 흐름을 추가 | codex  |
 | 2026-03-15 | admin assets 목록/상세 복구를 위한 AssetService 신규 추가                             | codex  |
+| 2026-04-14 | AssetService의 필수 Space 입력 안내를 x-space-id header 기준으로 갱신 | codex |

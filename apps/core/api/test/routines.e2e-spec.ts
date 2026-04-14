@@ -51,7 +51,7 @@ describe("Routines API (E2E)", () => {
 					await request(app.getHttpServer())
 						.delete(`/api/v1/routines/${routineId}`)
 						.set("Authorization", `Bearer ${jwtToken}`)
-						.set("Cookie", "selectedSpaceId=" + spaceId);
+						.set("x-space-id", spaceId);
 				} catch {
 					// 이미 삭제되었거나 존재하지 않으면 무시
 				}
@@ -76,7 +76,7 @@ describe("Routines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/routines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -93,7 +93,7 @@ describe("Routines API (E2E)", () => {
 					.get("/api/v1/routines")
 					.query({ skip: 0, take: 5 })
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -112,7 +112,7 @@ describe("Routines API (E2E)", () => {
 					.get("/api/v1/routines")
 					.query({ search: "테스트" })
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -136,7 +136,7 @@ describe("Routines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.post("/api/v1/routines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(createDto);
 
 				// Then
@@ -163,7 +163,7 @@ describe("Routines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/routines/${testRoutineId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -188,7 +188,7 @@ describe("Routines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.patch(`/api/v1/routines/${testRoutineId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(updateDto);
 
 				// Then
@@ -213,7 +213,7 @@ describe("Routines API (E2E)", () => {
 				const createResponse = await request(app.getHttpServer())
 					.post("/api/v1/routines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(createDto);
 
 				expect(createResponse.status).toBe(201);
@@ -223,7 +223,7 @@ describe("Routines API (E2E)", () => {
 				const deleteResponse = await request(app.getHttpServer())
 					.delete(`/api/v1/routines/${deleteTargetId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then: 204 No Content
 				expect(deleteResponse.status).toBe(204);
@@ -233,7 +233,7 @@ describe("Routines API (E2E)", () => {
 				const getResponse = await request(app.getHttpServer())
 					.get(`/api/v1/routines/${deleteTargetId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				expect(getResponse.status).toBe(404);
 			});
@@ -295,8 +295,8 @@ describe("Routines API (E2E)", () => {
 			});
 		});
 
-		describe("selectedSpaceId 쿠키 누락", () => {
-			it("selectedSpaceId 없이 목록 조회 시 400 또는 403을 반환해야 한다", async () => {
+		describe("x-space-id 헤더 누락", () => {
+			it("x-space-id 없이 목록 조회 시 400 또는 403을 반환해야 한다", async () => {
 				// Given
 				if (!jwtToken) return;
 
@@ -325,7 +325,7 @@ describe("Routines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.post("/api/v1/routines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send(invalidDto);
 
 				// Then
@@ -340,7 +340,7 @@ describe("Routines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/routines/not-a-valid-uuid")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(400);
@@ -358,7 +358,7 @@ describe("Routines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/routines/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(404);
@@ -374,7 +374,7 @@ describe("Routines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.patch(`/api/v1/routines/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId)
+					.set("x-space-id", spaceId)
 					.send({ name: "수정 시도" });
 
 				// Then
@@ -391,7 +391,7 @@ describe("Routines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.delete(`/api/v1/routines/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("Cookie", "selectedSpaceId=" + spaceId);
+					.set("x-space-id", spaceId);
 
 				// Then
 				expect(response.status).toBe(404);
@@ -411,7 +411,7 @@ describe("Routines API (E2E)", () => {
 				.get("/api/v1/routines")
 				.query({ skip: 0, take: 10 })
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId);
+				.set("x-space-id", spaceId);
 
 			// Then
 			expect(response.status).toBe(200);
@@ -436,7 +436,7 @@ describe("Routines API (E2E)", () => {
 			const createResponse = await request(app.getHttpServer())
 				.post("/api/v1/routines")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId)
+				.set("x-space-id", spaceId)
 				.send(createDto);
 
 			expect(createResponse.status).toBe(201);
@@ -447,7 +447,7 @@ describe("Routines API (E2E)", () => {
 			const updateResponse = await request(app.getHttpServer())
 				.patch(`/api/v1/routines/${routineId}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId)
+				.set("x-space-id", spaceId)
 				.send({});
 
 			// Then: 변경사항 없이 200 반환
@@ -469,7 +469,7 @@ describe("Routines API (E2E)", () => {
 			const createResponse = await request(app.getHttpServer())
 				.post("/api/v1/routines")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId)
+				.set("x-space-id", spaceId)
 				.send(createDto);
 
 			expect(createResponse.status).toBe(201);
@@ -480,7 +480,7 @@ describe("Routines API (E2E)", () => {
 			const response = await request(app.getHttpServer())
 				.get(`/api/v1/routines/${routineId}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("Cookie", "selectedSpaceId=" + spaceId);
+				.set("x-space-id", spaceId);
 
 			// Then
 			expect(response.status).toBe(200);

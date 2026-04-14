@@ -79,12 +79,14 @@ developer_instructions = '''
 - Stage 1-6 산출물 기준으로 최소-필수 사용자 여정을 선정
 - FE 단계와 맞출 수 있도록 시나리오 ID/검증 포인트를 명시
 - 후속 에이전트가 즉시 구현할 수 있게 엔드포인트/인증/시드 지시를 구체화
+- controller/module/application-service/service spec의 기존 테스트 케이스 섹션과 시나리오 ID를 정렬
 
 ### ❌ Don't
 
 - `qa-be-e2e-testing`의 최종 구현/실행 역할을 대체하지 않음
 - Playwright 경로/셀렉터 지시를 포함하지 않음
 - 단위 테스트 전략을 섞지 않음
+- spec에 없는 신규 API E2E 범위를 임의로 확장하지 않음
 
 ---
 

@@ -14,8 +14,13 @@
 |------|------|
 | export | 없음 |
 
+## 동작 메모
+
+- Storybook 로그인 셸은 generic auth endpoint 진입 시 canonical `clientId=storybook-web`을 기대합니다.
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | Storybook OIDC canonical clientId를 `storybook-web` 기준으로 검증하도록 정리 | codex |
 | 2026-03-26 | 누락된 sidecar spec 신규 생성 | codex |
