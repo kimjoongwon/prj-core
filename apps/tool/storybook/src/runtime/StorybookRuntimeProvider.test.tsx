@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import type { PropsWithChildren } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -168,8 +168,54 @@ describe("StorybookRuntimeProvider", () => {
 		await waitFor(() => {
 			expect(screen.getByText("Admin Realm")).toBeTruthy();
 		});
-		expect(screen.getByText("Storybook Space")).toBeTruthy();
+		const spaceSelect = screen.getByLabelText("Space") as HTMLSelectElement;
+		expect(spaceSelect.value).toBe("storybook-space");
+		expect(screen.getByRole("option", { name: "Storybook Space" })).toBeTruthy();
+		expect(screen.getByRole("option", { name: "Storybook Ops" })).toBeTruthy();
+		expect(
+			screen.getByRole("option", { name: "Storybook Growth" }),
+		).toBeTruthy();
+
+		fireEvent.change(spaceSelect, {
+			target: { value: "storybook-growth-space" },
+		});
+
+		expect(spaceSelect.value).toBe("storybook-growth-space");
 		expect(screen.getByText("Admin story content")).toBeTruthy();
+		},
+		15000,
+	);
+
+	it(
+		"uses the Storybook toolbar realm override when the story does not provide a runtime realm",
+		async () => {
+		window.history.replaceState(
+			{},
+			"",
+			"/iframe.html?id=page-adminspacespage--default&viewMode=story",
+		);
+
+		const { withStorybookRuntime } = await loadProvider(false);
+
+		render(
+			withStorybookRuntime(
+				() => <div>Toolbar realm story</div>,
+				{
+					id: "page-adminspacespage--default",
+					title: "page/AdminSpacesPage",
+					globals: {
+						storybookRealm: "admin",
+					},
+					parameters: {},
+				},
+			),
+		);
+
+		await waitFor(() => {
+			expect(screen.getByText("Admin Realm")).toBeTruthy();
+		});
+		expect(screen.getByLabelText("Space")).toBeTruthy();
+		expect(screen.getByText("Toolbar realm story")).toBeTruthy();
 		},
 		15000,
 	);

@@ -3,6 +3,25 @@ import { withStorybookRuntime } from "../src/runtime/StorybookRuntimeProvider";
 
 /** @type { import('@storybook/nextjs-vite').Preview } */
 const preview = {
+  globalTypes: {
+    storybookRealm: {
+      name: "Runtime",
+      description: "Override the Storybook runtime realm for stories without a storybookRuntime realm.",
+      toolbar: {
+        icon: "globe",
+        dynamicTitle: true,
+        items: [
+          { value: "auto", title: "Runtime: Auto" },
+          { value: "admin", title: "Runtime: Admin" },
+          { value: "idp", title: "Runtime: IDP" },
+          { value: "none", title: "Runtime: None" },
+        ],
+      },
+    },
+  },
+  initialGlobals: {
+    storybookRealm: "auto",
+  },
   decorators: [
     withStorybookRuntime,
   ],
@@ -39,7 +58,6 @@ const preview = {
       test: "todo",
     },
     storybookRuntime: {
-      realm: "none",
       requiresSpace: false,
     },
   },

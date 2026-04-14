@@ -56,6 +56,7 @@ import {
 declare const __STORYBOOK_REQUIRE_AUTH__: boolean;
 
 type StorybookRealm = "none" | "admin" | "idp";
+type StorybookRealmGlobal = StorybookRealm | "auto";
 type StoryRender = () => ReactNode;
 
 interface StorybookRuntimeParameter {
@@ -67,6 +68,10 @@ interface StorybookRuntimeParameter {
 
 interface StorybookContextLike {
 	id: string;
+	title?: string;
+	globals?: {
+		storybookRealm?: StorybookRealmGlobal;
+	};
 	parameters?: {
 		storybookRuntime?: StorybookRuntimeParameter;
 	};
@@ -90,10 +95,20 @@ const DEFAULT_STALE_TIME_MS = 60 * 1000;
 const FALLBACK_ABILITY_RULES: AbilityRule[] = [
 	{ action: "manage", subject: "all" },
 ];
-const STATIC_ADMIN_SPACE: SpaceOption = {
-	spaceId: "storybook-space",
-	groundName: "Storybook Space",
-};
+const STATIC_ADMIN_SPACES: SpaceOption[] = [
+	{
+		spaceId: "storybook-space",
+		groundName: "Storybook Space",
+	},
+	{
+		spaceId: "storybook-ops-space",
+		groundName: "Storybook Ops",
+	},
+	{
+		spaceId: "storybook-growth-space",
+		groundName: "Storybook Growth",
+	},
+];
 
 function createStorybookAuthStore(rootStore: RootStore): AuthStore {
 	const authStore = new AuthStore(rootStore);
@@ -144,7 +159,10 @@ function resolveRuntimeConfig(
 	context: StorybookContextLike,
 ): StorybookRuntimeConfig {
 	const runtime = context.parameters?.storybookRuntime;
-	const realm = runtime?.realm ?? "none";
+	const globalRealm = context.globals?.storybookRealm;
+	const realm =
+		runtime?.realm ??
+		(globalRealm && globalRealm !== "auto" ? globalRealm : "none");
 
 	return {
 		realm,
@@ -383,7 +401,11 @@ function useRootStore(): RootStore {
 	return store;
 }
 
-const AdminSpaceBar = observer(function AdminSpaceBar() {
+const AdminSpaceBar = observer(function AdminSpaceBar({
+	isLiveAuthRuntime,
+}: {
+	isLiveAuthRuntime: boolean;
+}) {
 	const persistStore = usePersistStore();
 	const { mutate: setCurrentSpaceMutate } = useSetCurrentSpace({
 		mutation: {
@@ -440,6 +462,11 @@ const AdminSpaceBar = observer(function AdminSpaceBar() {
 						(space) => space.spaceId === event.target.value,
 					);
 					if (!nextSpace) {
+						return;
+					}
+
+					if (!isLiveAuthRuntime) {
+						persistStore.setSpace(nextSpace.spaceId, nextSpace.groundName);
 						return;
 					}
 
@@ -572,11 +599,21 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 
 		if (!isLiveAuthRuntime) {
 			if (runtime.realm === "admin") {
-				persistStore.setSpaces([STATIC_ADMIN_SPACE]);
-				persistStore.setSpace(
-					STATIC_ADMIN_SPACE.spaceId,
-					STATIC_ADMIN_SPACE.groundName,
-				);
+				const persistedSpace = persistStore.spaceId
+					? STATIC_ADMIN_SPACES.find(
+							(space) => space.spaceId === persistStore.spaceId,
+						)
+					: undefined;
+				const requestedSpace = runtime.spaceId
+					? STATIC_ADMIN_SPACES.find(
+							(space) => space.spaceId === runtime.spaceId,
+						)
+					: undefined;
+				const nextSpace =
+					requestedSpace ?? persistedSpace ?? STATIC_ADMIN_SPACES[0];
+
+				persistStore.setSpaces(STATIC_ADMIN_SPACES);
+				persistStore.setSpace(nextSpace.spaceId, nextSpace.groundName);
 			}
 			abilityStore.updateRules([...FALLBACK_ABILITY_RULES]);
 			return;
@@ -778,7 +815,7 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 	if (runtime.realm === "admin") {
 		return (
 			<div className="p-4">
-				<AdminSpaceBar />
+				<AdminSpaceBar isLiveAuthRuntime={isLiveAuthRuntime} />
 				{children}
 			</div>
 		);

@@ -13,13 +13,16 @@
 - `overview` 루트는 Page Catalog/Flow Map 같은 Storybook 전용 탐색 진입면을 최상단에 배치합니다.
 - 전역 `parameters.nextjs.appDirectory = true`를 적용해 `next/navigation` 기반 App Router 훅(`useParams`, `useRouter`, `useSearchParams`)을 모든 스토리에서 사용할 수 있게 합니다.
 - 스토리 정렬 루트는 `packages/fe-ui/src` 실제 디렉토리 축(`cell`, `control`, `display`, `feature`, `form`, `layout`, `master`, `page`, `rhythm`, `surface`, `widget`)과 맞춥니다.
-- `parameters.storybookRuntime` 기본값은 `{ realm: "none", requiresSpace: false }`이며, 인증형 스토리는 개별 story parameter로 `admin` 또는 `idp` realm을 켭니다.
+- runtime resolver의 기본 realm은 `none`이며, preview 기본 `parameters.storybookRuntime`는 `requiresSpace: false`만 시드합니다.
+- 인증형 스토리는 개별 story parameter로 `admin` 또는 `idp` realm을 켭니다.
+- preview toolbar의 `storybookRealm` global은 story parameter에 `realm`이 없는 스토리에서만 `auto | admin | idp | none` 런타임을 임시 오버라이드합니다.
 - 로컬 dev auth 모드에서는 preview bootstrap이 세션 만료를 감지하면 top-level Storybook 전체를 `/__storybook_auth/login`으로 돌려보냅니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | preview toolbar에 `storybookRealm` global을 복원해 parameter-less story에서도 admin/idp runtime을 전환할 수 있도록 갱신 | codex |
 | 2026-04-08 | `overview` 루트를 최상단에 배치해 page catalog/flow overview story를 우선 노출하도록 정렬 규칙 갱신 | codex |
 | 2026-03-27 | `cell`이 `src` 루트 축으로 올라간 구조에 맞춰 Storybook 루트 정렬 우선순위 갱신 | codex |
 | 2026-03-27 | sidebar root 정렬 기준을 fe-ui 실제 디렉토리 축으로 동기화 | codex |
