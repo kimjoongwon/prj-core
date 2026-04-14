@@ -8,9 +8,11 @@
     "scheme": "plate-mobile",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "kr.co.cocdev.platemobile"
     },
     "android": {
+      "package": "kr.co.cocdev.platemobile",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

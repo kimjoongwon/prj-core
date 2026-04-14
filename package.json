@@ -98,6 +98,11 @@
     "vitest": "catalog:"
   },
   "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "expo-modules-core>react-native-worklets": "0.7.2"
+      }
+    },
     "overrides": {
       "thread-stream": "^4.0.0",
       "pino": "^9.11.0",

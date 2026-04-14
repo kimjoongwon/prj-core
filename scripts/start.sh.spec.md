@@ -8,16 +8,19 @@
 
 로컬 개발용 대화형 서비스 런처입니다.
 선택한 앱 목록을 Turbo `start:dev` 필터로 변환하고, 필요 시 API codegen 흐름까지 조율합니다.
+모바일 앱이 포함되면 Expo를 foreground로 실행하고, 선택된 플랫폼과 런타임(local build / Expo Go)에 맞춰 시뮬레이터/에뮬레이터 실행 및 React Native DevTools 오픈을 보조합니다.
 
 ## 공개 계약
 
 | 항목 | 설명 |
 |------|------|
 | 기본 실행 | `pnpm start`로 대화형 선택 UI 표시 |
-| 숫자 선택 | `1`~`6` 번호로 서비스 선택 |
-| 이름 선택 | `core-api`, `admin-web`, `proposal-web`, `idp-api`, `idp-web`, `tool-storybook` 문자열 인자 허용 |
-| 허용 별칭 | canonical workspace 이름과 대응하는 `start:*` 형태 인자 허용 |
-| 실행 엔진 | 최종 실행은 `turbo start:dev <filters> --concurrency=20` |
+| 숫자 선택 | `1`~`7` 번호로 서비스 선택 |
+| 이름 선택 | `core-api`, `admin-web`, `proposal-web`, `idp-api`, `idp-web`, `tool-storybook`, `mobile` 문자열 인자 허용 |
+| 허용 별칭 | canonical workspace 이름, `start:*`, `mobile:ios`, `mobile:android`, `mobile:all`, `ios:mobile`, `android:mobile`, `all:mobile`, `mobile:local`, `mobile:go`, `local:mobile`, `go:mobile` 형태 인자 허용 |
+| 모바일 실행 | `mobile` 선택 시 `iOS` / `AOS` / `전체`와 `local build` / `Expo Go`를 고르고 Expo `start`를 foreground로 실행 |
+| DevTools | Metro가 올라오고 inspectable app이 연결되면 React Native DevTools 오픈을 자동 시도 |
+| 실행 엔진 | 웹/백엔드는 `turbo start:dev <filters> --concurrency=20`, 모바일은 `pnpm --filter=mobile-app exec expo start --dev-client|--go ...` |
 
 ## 구현 체크리스트
 
@@ -25,11 +28,16 @@
 - [x] canonical workspace 이름을 기준으로 Turbo filter 생성
 - [x] 구식 짧은 별칭 없이 canonical 이름과 `start:*` 인자만 수용
 - [x] codegen 및 포트 정리 기존 흐름 유지
+- [x] 모바일 선택 시 플랫폼(iOS/AOS/전체) 분기 지원
+- [x] 모바일 선택 시 런타임(local build/Expo Go) 분기 지원
+- [x] 모바일 포함 시 Expo foreground 실행과 React Native DevTools 자동 오픈 시도 지원
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | 모바일 실행 시 `local build`와 `Expo Go`를 선택하고 비대화형 `mobile:local` / `mobile:go` 인자를 지원하도록 계약을 확장 | codex |
+| 2026-04-14 | `mobile` 서비스를 대화형/비대화형 시작 대상에 추가하고 iOS/AOS/전체 선택 및 React Native DevTools 자동 오픈 흐름을 반영 | codex |
 | 2026-04-06 | `tool-storybook` 사전 정리 패턴을 Storybook 전용 실행 명령으로 좁혀 현재 `pnpm start` 프로세스 오탐을 방지 | codex |
 | 2026-03-20 | `proposal-web`을 대화형/비대화형 시작 대상에 추가하고 포트/프로세스 정리 규칙을 확장 | codex |
 | 2026-03-08 | 숫자 선택 외에 canonical workspace 이름과 `start:*` 별칭 인자를 받아 root 스크립트 체계와 정렬 | codex |

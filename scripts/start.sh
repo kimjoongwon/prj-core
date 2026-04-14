@@ -50,8 +50,9 @@ else
   echo -e "  ${CYAN}4${RESET})  idp-api         ${DIM}인증 서버 (백엔드)${RESET}"
   echo -e "  ${CYAN}5${RESET})  idp-web         ${DIM}인증 서버 (프론트엔드)${RESET}"
   echo -e "  ${CYAN}6${RESET})  tool-storybook  ${DIM}스토리북${RESET}"
+  echo -e "  ${CYAN}7${RESET})  mobile          ${DIM}Expo 모바일 앱${RESET}"
   echo ""
-  echo -e "  ${DIM}복수 선택 가능 (예: 1 2)${RESET}"
+  echo -e "  ${DIM}복수 선택 가능 (예: 1 2 7)${RESET}"
   echo ""
   echo -ne "${BOLD}번호 선택: ${RESET}"
   read -r choices
@@ -67,6 +68,11 @@ SERVICES=""
 HAS_FRONTEND="false"
 HAS_BACKEND="false"
 HAS_IDP="false"
+HAS_MOBILE="false"
+MOBILE_TARGET=""
+MOBILE_RUNTIME=""
+TURBO_PID=""
+MOBILE_DEVTOOLS_PID=""
 
 # 서비스별 포트 조회
 get_port() {
@@ -77,11 +83,133 @@ get_port() {
     idp-api)         echo "${IDP_API_PORT:-3007}" ;;
     idp-web)         echo "${IDP_WEB_PORT:-3008}" ;;
     tool-storybook)  echo "${STORYBOOK_PORT:-6006}" ;;
+    mobile)          echo "${MOBILE_PORT:-8081}" ;;
   esac
 }
 
 CORE_API_PORT_VALUE=$(get_port core-api)
 IDP_API_PORT_VALUE=$(get_port idp-api)
+MOBILE_PORT_VALUE=$(get_port mobile)
+
+# 커맨드라인 인자 모드 여부
+INTERACTIVE="true"
+if [[ ${#ARGS[@]} -gt 0 ]]; then
+  INTERACTIVE="false"
+fi
+
+ensure_mobile_service() {
+  HAS_MOBILE="true"
+  if [[ " $SERVICES " != *" mobile "* ]]; then
+    SERVICES="$SERVICES mobile"
+  fi
+}
+
+set_mobile_target() {
+  local next_target=$1
+
+  ensure_mobile_service
+
+  if [[ -n "$MOBILE_TARGET" && "$MOBILE_TARGET" != "$next_target" && "$MOBILE_TARGET" != "prompt" && "$next_target" != "prompt" ]]; then
+    echo -e "${YELLOW}모바일 실행 대상이 중복 지정되었습니다: ${MOBILE_TARGET}, ${next_target}${RESET}"
+    exit 1
+  fi
+
+  if [[ "$next_target" != "prompt" ]]; then
+    MOBILE_TARGET="$next_target"
+  elif [[ -z "$MOBILE_TARGET" ]]; then
+    MOBILE_TARGET="prompt"
+  fi
+}
+
+resolve_mobile_target_label() {
+  case $1 in
+    ios) echo "iOS" ;;
+    android) echo "AOS" ;;
+    all) echo "iOS + AOS" ;;
+  esac
+}
+
+set_mobile_runtime() {
+  local next_runtime=$1
+
+  ensure_mobile_service
+
+  if [[ -n "$MOBILE_RUNTIME" && "$MOBILE_RUNTIME" != "$next_runtime" && "$MOBILE_RUNTIME" != "prompt" && "$next_runtime" != "prompt" ]]; then
+    echo -e "${YELLOW}모바일 실행 모드가 중복 지정되었습니다: ${MOBILE_RUNTIME}, ${next_runtime}${RESET}"
+    exit 1
+  fi
+
+  if [[ "$next_runtime" != "prompt" ]]; then
+    MOBILE_RUNTIME="$next_runtime"
+  elif [[ -z "$MOBILE_RUNTIME" ]]; then
+    MOBILE_RUNTIME="prompt"
+  fi
+}
+
+resolve_mobile_runtime_label() {
+  case $1 in
+    local) echo "local build" ;;
+    go) echo "Expo Go" ;;
+  esac
+}
+
+ensure_mobile_target() {
+  if [[ "$HAS_MOBILE" != "true" ]]; then
+    return
+  fi
+
+  if [[ -n "$MOBILE_TARGET" && "$MOBILE_TARGET" != "prompt" ]]; then
+    return
+  fi
+
+  if [[ "$INTERACTIVE" == "true" ]]; then
+    echo ""
+    echo -e "${BOLD}📱 모바일 실행 대상${RESET}"
+    echo -e "  ${CYAN}1${RESET})  iOS          ${DIM}iOS 시뮬레이터 실행${RESET}"
+    echo -e "  ${CYAN}2${RESET})  AOS          ${DIM}Android 에뮬레이터 실행${RESET}"
+    echo -e "  ${CYAN}3${RESET})  전체         ${DIM}iOS + AOS 모두 실행${RESET}"
+    echo ""
+    echo -ne "${BOLD}번호 선택: ${RESET}"
+    read -r mobile_target_choice
+
+    case $mobile_target_choice in
+      1) MOBILE_TARGET="ios" ;;
+      2) MOBILE_TARGET="android" ;;
+      3|"") MOBILE_TARGET="all" ;;
+      *) echo -e "${YELLOW}잘못된 번호: ${mobile_target_choice}${RESET}"; exit 1 ;;
+    esac
+  else
+    MOBILE_TARGET="all"
+  fi
+}
+
+ensure_mobile_runtime() {
+  if [[ "$HAS_MOBILE" != "true" ]]; then
+    return
+  fi
+
+  if [[ -n "$MOBILE_RUNTIME" && "$MOBILE_RUNTIME" != "prompt" ]]; then
+    return
+  fi
+
+  if [[ "$INTERACTIVE" == "true" ]]; then
+    echo ""
+    echo -e "${BOLD}📦 모바일 실행 모드${RESET}"
+    echo -e "  ${CYAN}1${RESET})  local build  ${DIM}development build / custom native app${RESET}"
+    echo -e "  ${CYAN}2${RESET})  Expo Go      ${DIM}Expo Go로 실행${RESET}"
+    echo ""
+    echo -ne "${BOLD}번호 선택: ${RESET}"
+    read -r mobile_runtime_choice
+
+    case $mobile_runtime_choice in
+      1) MOBILE_RUNTIME="local" ;;
+      2|"") MOBILE_RUNTIME="go" ;;
+      *) echo -e "${YELLOW}잘못된 번호: ${mobile_runtime_choice}${RESET}"; exit 1 ;;
+    esac
+  else
+    MOBILE_RUNTIME="go"
+  fi
+}
 
 for choice in $choices; do
   case $choice in
@@ -103,15 +231,31 @@ for choice in $choices; do
     6|tool-storybook|start:tool-storybook)
       FILTERS="$FILTERS --filter=tool-storybook"; SERVICES="$SERVICES tool-storybook"
       ;;
+    7|mobile|start:mobile)
+      set_mobile_target prompt
+      set_mobile_runtime prompt
+      ;;
+    ios:mobile|mobile:ios|start:mobile:ios)
+      set_mobile_target ios
+      ;;
+    android:mobile|aos:mobile|mobile:android|mobile:aos|start:mobile:android)
+      set_mobile_target android
+      ;;
+    all:mobile|mobile:all|start:mobile:all)
+      set_mobile_target all
+      ;;
+    local:mobile|mobile:local|start:mobile:local)
+      set_mobile_runtime local
+      ;;
+    go:mobile|mobile:go|expo-go:mobile|mobile:expo-go|start:mobile:go)
+      set_mobile_runtime go
+      ;;
     *) echo -e "${YELLOW}잘못된 번호: ${choice}${RESET}"; exit 1 ;;
   esac
 done
 
-# 커맨드라인 인자 모드 여부
-INTERACTIVE="true"
-if [[ ${#ARGS[@]} -gt 0 ]]; then
-  INTERACTIVE="false"
-fi
+ensure_mobile_target
+ensure_mobile_runtime
 
 # 프론트엔드(admin/idp-web) 선택 시 codegen 질문
 CODEGEN_ENV=""
@@ -185,6 +329,15 @@ resolve_codegen_cmd() {
 cleanup() {
   echo ""
   echo -e "${YELLOW}🛑 서비스 종료 중...${RESET}"
+
+  if [[ -n "$MOBILE_DEVTOOLS_PID" ]]; then
+    kill "$MOBILE_DEVTOOLS_PID" 2>/dev/null || true
+  fi
+
+  if [[ -n "$TURBO_PID" ]]; then
+    kill "$TURBO_PID" 2>/dev/null || true
+  fi
+
   for svc in $SERVICES; do
     port=$(get_port "$svc")
     if [ -n "$port" ]; then
@@ -212,6 +365,7 @@ pre_cleanup_service_processes() {
       idp-api) pattern="turbo start:dev --filter=idp-api|idp-api@0.0.1 start:dev|/apps/idp/api/dist/main.js" ;;
       idp-web) pattern="turbo start:dev --filter=idp-web|apps/idp/web" ;;
       tool-storybook) pattern="turbo start:dev --filter=tool-storybook|apps/tool/storybook|STORYBOOK_REQUIRE_AUTH=true storybook dev|storybook dev -p" ;;
+      mobile) pattern="mobile-app@1.0.0 start|pnpm --filter=mobile-app exec expo start|expo start .*--port ${MOBILE_PORT_VALUE}" ;;
     esac
 
     if [[ -n "$pattern" ]]; then
@@ -261,10 +415,112 @@ pre_cleanup_ports
 
 echo -e "\n${GREEN}▶${SERVICES} 시작${RESET}\n"
 
+if [[ "$HAS_MOBILE" == "true" ]]; then
+  echo -e "${DIM}모바일 실행 대상: $(resolve_mobile_target_label "$MOBILE_TARGET") / 실행 모드: $(resolve_mobile_runtime_label "$MOBILE_RUNTIME") / Metro port ${MOBILE_PORT_VALUE}${RESET}"
+  if [[ "$MOBILE_RUNTIME" == "local" ]]; then
+    echo -e "${DIM}local build는 development build(custom native app)가 기기에 설치되어 있어야 합니다.${RESET}"
+  fi
+  echo -e "${DIM}모바일 앱 연결 후 React Native DevTools를 자동으로 엽니다.${RESET}\n"
+fi
+
+has_turbo_services() {
+  [[ -n "${FILTERS// /}" ]]
+}
+
+run_turbo_background() {
+  if has_turbo_services; then
+    turbo start:dev $FILTERS --concurrency=20 &
+    TURBO_PID=$!
+  fi
+}
+
+run_turbo_foreground() {
+  if has_turbo_services; then
+    turbo start:dev $FILTERS --concurrency=20
+  fi
+}
+
+wait_for_turbo() {
+  if [[ -n "$TURBO_PID" ]]; then
+    wait "$TURBO_PID"
+  fi
+}
+
+start_mobile_devtools_watcher() {
+  if [[ "$HAS_MOBILE" != "true" ]]; then
+    return
+  fi
+
+  node - "$MOBILE_PORT_VALUE" <<'NODE' >/dev/null 2>&1 &
+const [rawPort] = process.argv.slice(2);
+const port = Number(rawPort);
+const origin = `http://127.0.0.1:${port}`;
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const findInspectableApp = (apps) =>
+  [...apps]
+    .reverse()
+    .find(
+      (app) =>
+        app?.id &&
+        app?.webSocketDebuggerUrl &&
+        app?.reactNative?.logicalDeviceId
+    );
+
+(async () => {
+  const deadline = Date.now() + 120000;
+
+  while (Date.now() < deadline) {
+    try {
+      const response = await fetch(`${origin}/json/list`);
+      if (response.ok) {
+        const apps = await response.json();
+        const app = findInspectableApp(apps);
+
+        if (app?.id) {
+          const url = new URL('/open-debugger', origin);
+          url.searchParams.set('target', app.id);
+          await fetch(url, {
+            method: 'POST',
+            signal: AbortSignal.timeout(1000),
+          }).catch(() => null);
+          return;
+        }
+      }
+    } catch {}
+
+    await wait(2000);
+  }
+})().catch(() => process.exit(0));
+NODE
+  MOBILE_DEVTOOLS_PID=$!
+}
+
+run_mobile() {
+  if [[ "$HAS_MOBILE" != "true" ]]; then
+    return
+  fi
+
+  local mobile_args=(pnpm --filter=mobile-app exec expo start --port "$MOBILE_PORT_VALUE")
+
+  case $MOBILE_RUNTIME in
+    local) mobile_args+=(--dev-client) ;;
+    go) mobile_args+=(--go) ;;
+  esac
+
+  case $MOBILE_TARGET in
+    ios) mobile_args+=(--ios) ;;
+    android) mobile_args+=(--android) ;;
+    all) mobile_args+=(--ios --android) ;;
+  esac
+
+  start_mobile_devtools_watcher
+  "${mobile_args[@]}"
+}
+
 if [[ "$CODEGEN_ENV" == "local" ]]; then
   # local: 서버 먼저 띄우고 → health check → codegen → turbo에 join
-  turbo start:dev $FILTERS --concurrency=20 &
-  TURBO_PID=$!
+  run_turbo_background
 
   # Server health check
   if [[ "$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "server" ]]; then
@@ -289,7 +545,11 @@ if [[ "$CODEGEN_ENV" == "local" ]]; then
   eval $CODEGEN_CMD
   echo -e "${GREEN}✅ API 코드젠 완료${RESET}"
 
-  wait $TURBO_PID
+  if [[ "$HAS_MOBILE" == "true" ]]; then
+    run_mobile
+  fi
+
+  wait_for_turbo
 
 elif [[ -n "$CODEGEN_ENV" ]]; then
   # stg/prod: 코드젠 먼저 실행 (서버 불필요)
@@ -298,9 +558,25 @@ elif [[ -n "$CODEGEN_ENV" ]]; then
   eval $CODEGEN_CMD
   echo -e "${GREEN}✅ API 코드젠 완료${RESET}\n"
 
-  turbo start:dev $FILTERS --concurrency=20
+  if [[ "$HAS_MOBILE" == "true" && has_turbo_services ]]; then
+    run_turbo_background
+    run_mobile
+    wait_for_turbo
+  elif [[ "$HAS_MOBILE" == "true" ]]; then
+    run_mobile
+  else
+    run_turbo_foreground
+  fi
 
 else
   # 건너뛰기 또는 프론트엔드 미선택
-  turbo start:dev $FILTERS --concurrency=20
+  if [[ "$HAS_MOBILE" == "true" && has_turbo_services ]]; then
+    run_turbo_background
+    run_mobile
+    wait_for_turbo
+  elif [[ "$HAS_MOBILE" == "true" ]]; then
+    run_mobile
+  else
+    run_turbo_foreground
+  fi
 fi

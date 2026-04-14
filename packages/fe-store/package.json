@@ -45,7 +45,6 @@
   },
   "devDependencies": {
     "@casl/ability": "^6.7.1",
-    "@casl/react": "^4.0.0",
     "@heroui/react": "catalog:",
     "@tanstack/react-query": "catalog:",
     "@testing-library/jest-dom": "catalog:",

@@ -72,7 +72,6 @@
     "@tailwindcss/postcss": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "@tanstack/react-query": "catalog:",
-    "@tanstack/react-query-devtools": "^5.83.0",
     "@tanstack/react-router": "^1.130.2",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/router-cli": "^1.130.2",

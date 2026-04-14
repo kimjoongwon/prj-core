@@ -28,11 +28,13 @@ Turbo 기반 공통 빌드/검사 태스크와 앱별 명시적 별칭을 한곳
 - [x] Rancher 컨테이너 파이프라인도 앱별 root alias(`rancher:{workspace}`)로 직접 호출 가능
 - [x] 구식 짧은 alias 없이 canonical workspace 이름만 노출
 - [x] 루트 `devDependencies`에 `turbo`를 고정해 글로벌 설치본에 의존하지 않음
+- [x] 루트 `pnpm.peerDependencyRules.allowedVersions`로 SDK 권장 버전과 upstream peer metadata 충돌을 최소 범위 예외로 허용
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-14 | Expo SDK 55의 `react-native-worklets@0.7.2` 권장값과 `expo-modules-core` peer metadata 충돌을 루트 pnpm `allowedVersions` 예외로 허용 | codex |
 | 2026-04-13 | Android Expo 번들링 대응을 루트 우회 의존성 대신 `apps/mobile` 직접 의존성 선언으로 재정리하며 루트 `use-sync-external-store` 추가를 제거 | codex |
 | 2026-03-20 | `proposal-web`용 root build/start/rancher alias를 추가해 배포 대상 앱 목록과 루트 진입 스크립트를 동기화 | codex |
 | 2026-03-09 | 루트 `turbo` 버전을 `2.8.14` exact로 고정해 Docker 전역 설치 버전과 동일한 기준으로 재현성을 맞춤 | codex |

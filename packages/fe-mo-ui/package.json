@@ -32,11 +32,14 @@
   "author": "kimjoongwon",
   "license": "ISC",
   "dependencies": {
-    "heroui-native": "^1.0.1",
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:"
   },
+  "peerDependencies": {
+    "heroui-native": "^1.0.1"
+  },
   "devDependencies": {
+    "heroui-native": "^1.0.1",
     "@types/react": "catalog:",
     "react": "catalog:",
     "react-native": "0.83.4",
