@@ -1,7 +1,6 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { OidcFacade } from "@cocrepo/integration";
 import {
-	AbilityService,
 	AuthAuditLogService,
 	AuthCacheService,
 	EmailService,
@@ -66,7 +65,6 @@ describe("AuthApplicationService", () => {
 	let applicationService: AuthApplicationService;
 	let mockUsersService: jest.Mocked<UserService>;
 	let mockRolesService: jest.Mocked<RoleService>;
-	let mockAbilitiesService: jest.Mocked<AbilityService>;
 	let mockSpacesService: jest.Mocked<SpaceService>;
 	let mockTokenService: jest.Mocked<TokenService>;
 	let mockTokenStorageService: jest.Mocked<TokenStorageService>;
@@ -91,11 +89,6 @@ describe("AuthApplicationService", () => {
 		mockRolesService = {
 			getDefaultUserRole: jest.fn(),
 		} as unknown as jest.Mocked<RoleService>;
-
-		mockAbilitiesService = {
-			getMergedAbilities: jest.fn(),
-			getRoleAbilities: jest.fn().mockResolvedValue([]),
-		} as unknown as jest.Mocked<AbilityService>;
 
 		mockSpacesService = {
 			createPersonalSpace: jest.fn(),
@@ -231,7 +224,6 @@ describe("AuthApplicationService", () => {
 		applicationService = new AuthApplicationService(
 			mockUsersService,
 			mockRolesService,
-			mockAbilitiesService,
 			mockSpacesService,
 			mockTokenService,
 			mockTokenStorageService,
@@ -523,7 +515,7 @@ describe("AuthApplicationService", () => {
 	});
 
 	describe("verifyToken", () => {
-		it("유효한 토큰의 만료 시간과 manage all 전역 권한 여부를 반환해야 한다", async () => {
+		it("유효한 토큰의 만료 시간과 FULL_ACCESS tenant role 여부를 반환해야 한다", async () => {
 			const exp = Math.floor(Date.now() / 1000) + 3600;
 			const fakeToken = `header.${Buffer.from(
 				JSON.stringify({ sub: "user-1", exp }),
@@ -539,8 +531,8 @@ describe("AuthApplicationService", () => {
 						tenants: [
 							{
 								id: "tenant-1",
-								roleId: "role-1",
 								spaceId: "space-1",
+								role: { name: "FULL_ACCESS" },
 							},
 						],
 					};
@@ -548,23 +540,12 @@ describe("AuthApplicationService", () => {
 
 				return undefined;
 			});
-			mockAbilitiesService.getMergedAbilities.mockResolvedValue([
-				{
-					inverted: false,
-					action: { name: "manage" },
-					subject: { name: "all" },
-				},
-			] as never);
 
 			const result = await applicationService.verifyToken();
 
 			expect(result.valid).toBe(true);
 			expect(result.accessTokenExpiresAt).toBe(exp * 1000);
 			expect(result.hasFullAccess).toBe(true);
-			expect(mockAbilitiesService.getMergedAbilities).toHaveBeenCalledWith(
-				["role-1"],
-				"user-1",
-			);
 		});
 	});
 

@@ -13,7 +13,6 @@ import {
 	OidcFacade,
 } from "@cocrepo/integration";
 import {
-	AbilityService,
 	AuthAuditLogService,
 	AuthCacheService,
 	EmailService,
@@ -42,8 +41,6 @@ import { ClsService } from "nestjs-cls";
 const DEFAULT_OIDC_CLIENT_ID = "admin-web";
 const OIDC_STATE_CONTEXT_PREFIX = "__oidc_ctx__:";
 const SESSION_ID_SEPARATOR = ".";
-const GLOBAL_ACCESS_ACTION_NAME = "manage";
-const GLOBAL_ACCESS_SUBJECT_NAME = "all";
 
 const LEGACY_OIDC_CLIENT_ID_MAP = {
 	admin: "admin-web",
@@ -106,7 +103,6 @@ export class AuthApplicationService {
 	constructor(
 		private readonly usersService: UserService,
 		private readonly rolesService: RoleService,
-		private readonly abilitiesService: AbilityService,
 		private readonly spacesService: SpaceService,
 		private readonly tokenService: TokenService,
 		private readonly tokenStorageService: TokenStorageService,
@@ -387,7 +383,7 @@ export class AuthApplicationService {
 		const accessTokenExpiresAt =
 			((payload as { exp?: number }).exp || 0) * 1000; // sec → ms
 		const refreshTokenExpiresAt = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30일 (추정)
-		const hasFullAccess = await this.hasGlobalAccess(user);
+		const hasFullAccess = this.hasFullAccessTenantRole(user);
 
 		return {
 			valid: true,
@@ -417,9 +413,7 @@ export class AuthApplicationService {
 	async setCurrentSpace(dto: SetCurrentSpaceDto): Promise<SpaceDto> {
 		const user = this.cls.get<UserDto>(CONTEXT_KEYS.AUTH_USER);
 		if (!user?.tenants?.some((tenant) => tenant.spaceId === dto.spaceId)) {
-			throw new ForbiddenException(
-				"해당 Space를 선택할 권한이 없습니다",
-			);
+			throw new ForbiddenException("해당 Space를 선택할 권한이 없습니다");
 		}
 
 		const spaces = await this.getAccessibleSpacesForUser(user);
@@ -765,9 +759,11 @@ export class AuthApplicationService {
 			return undefined;
 		}
 
-		return LEGACY_OIDC_CLIENT_ID_MAP[
-			trimmedClientId as keyof typeof LEGACY_OIDC_CLIENT_ID_MAP
-		] ?? trimmedClientId;
+		return (
+			LEGACY_OIDC_CLIENT_ID_MAP[
+				trimmedClientId as keyof typeof LEGACY_OIDC_CLIENT_ID_MAP
+			] ?? trimmedClientId
+		);
 	}
 
 	private getOidcClientIdCandidates(
@@ -787,9 +783,9 @@ export class AuthApplicationService {
 				normalizedClientId as keyof typeof LEGACY_OIDC_CLIENT_IDS_BY_CANONICAL_ID
 			] ?? [];
 
-		return [...new Set([rawClientId, normalizedClientId, ...legacyClientIds])].filter(
-			(candidate): candidate is string => Boolean(candidate),
-		);
+		return [
+			...new Set([rawClientId, normalizedClientId, ...legacyClientIds]),
+		].filter((candidate): candidate is string => Boolean(candidate));
 	}
 
 	private async resolveAuthShellClient(
@@ -836,7 +832,10 @@ export class AuthApplicationService {
 		}
 
 		if (!client) {
-			throw lastNotFoundError ?? new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다");
+			throw (
+				lastNotFoundError ??
+				new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다")
+			);
 		}
 		const redirectUri = client.redirectUris[0];
 		if (!redirectUri) {
@@ -956,46 +955,15 @@ export class AuthApplicationService {
 		);
 	}
 
-	private async hasGlobalAccess(
-		user: UserDto | undefined,
-	): Promise<boolean> {
-		if (!user?.id) {
-			return false;
-		}
-
-		const roleIds = Array.from(
-			new Set(
-				(user.tenants ?? [])
-					.map((tenant) => tenant.roleId)
-					.filter((roleId): roleId is string => Boolean(roleId)),
-			),
-		);
-
-		const mergedAbilities = await this.abilitiesService.getMergedAbilities(
-			roleIds,
-			user.id,
-		);
-
-		return mergedAbilities.some((ability) =>
-			this.isGlobalAccessAbility(ability),
-		);
-	}
-
-	private isGlobalAccessAbility(ability: {
-		inverted?: boolean;
-		action?: { name?: string | null } | null;
-		subject?: { name?: string | null } | null;
-	}): boolean {
+	private hasFullAccessTenantRole(user: UserDto | undefined): boolean {
 		return (
-			!ability.inverted &&
-			ability.action?.name === GLOBAL_ACCESS_ACTION_NAME &&
-			ability.subject?.name === GLOBAL_ACCESS_SUBJECT_NAME
+			user?.tenants?.some(
+				(tenant) => tenant.role?.name === SYSTEM_ROLES.FULL_ACCESS,
+			) ?? false
 		);
 	}
 
-	private getOrderedTenantSpaceIds(
-		user: UserWithTenantsLike,
-	): string[] {
+	private getOrderedTenantSpaceIds(user: UserWithTenantsLike): string[] {
 		const seen = new Set<string>();
 		const orderedSpaceIds: string[] = [];
 

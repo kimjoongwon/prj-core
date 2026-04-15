@@ -13,8 +13,8 @@
 ├────────────────────────────────────────────────────────────────────┤
 │ ⚠ 시스템 역할: 이름 변경과 삭제는 제한되지만, 메뉴 및 권한 배치는 │
 │   조정할 수 있습니다.                                              │
-│ ℹ 전체 권한: `manage all`이 있으면 모든 메뉴/화면/데이터 권한이     │
-│   자동 허용되며 세부 토글은 고급 권한에서 전체 권한을 해제해야 함  │
+│ ℹ 전체 권한: `FULL_ACCESS` 역할은 모든 메뉴/화면/데이터 권한을      │
+│   자동 허용으로 읽고 세부 토글을 잠근다.                             │
 │                                                                    │
 │ ┌── 기본 정보 ───────────────────────────────────────────────────┐ │
 │ │ 역할 식별자 / 표시명 / 설명 / 상태 / 생성일 / 수정일          │ │
@@ -62,7 +62,7 @@
 8. 저장 시 menu/page grant와 기존 CRUD/non-menu grant를 합쳐 전체 동기화 API에 전달한다.
 9. 필요하면 고급 권한 목록에서 bundle로 다루지 않는 Ability를 raw 단위로 추가/제거한다.
 10. 시스템 역할은 수정/삭제 버튼은 숨기되 메뉴/권한 편집은 허용한다.
-11. `manage all` 이 연결된 역할은 메뉴/화면/CRUD 섹션을 전역 허용 상태로 읽고 세부 토글을 잠근다.
+11. `FULL_ACCESS` 시스템 역할은 메뉴/화면/CRUD 섹션을 전역 허용 상태로 읽고 세부 토글을 잠근다.
 
 ## 레이아웃 구성
 
@@ -89,7 +89,7 @@
 | 선택 판단 | leaf가 요구하는 `requiredSubjects` 의 canonical ability가 모두 선택되어야 함 |
 | canonical 규칙 | `subject startsWith("menu:")` + `action.name === "manage"` |
 | 부모 처리 | child leaf가 하나라도 선택되면 parent `menu:*` grant 유지 |
-| 전역 예외 | `manage all` 이 선택돼 있으면 모든 leaf를 `노출`로 간주하고 개별 토글은 잠금 |
+| 전역 예외 | 현재 role.name 이 `FULL_ACCESS`면 모든 leaf를 `노출`로 간주하고 개별 토글은 잠금 |
 | 저장 차단 | `missingSubject`, `missingAbility` |
 | 경고 | `duplicateAbility`, `catalogMismatch` |
 
@@ -103,7 +103,7 @@
 | 편집 단위 | route/page 단위 (`roles:detail`, `assets:list` 등) |
 | canonical 규칙 | `subject startsWith("page:")` + `action.name === "access"` |
 | 역할 | 메뉴 노출과 분리된 URL 직접 접근 제어 |
-| 전역 예외 | `manage all` 이 선택돼 있으면 모든 page를 `접근 허용`으로 간주하고 개별 토글은 잠금 |
+| 전역 예외 | 현재 role.name 이 `FULL_ACCESS`면 모든 page를 `접근 허용`으로 간주하고 개별 토글은 잠금 |
 | 저장 차단 | `missingSubject`, `missingAbility` |
 | 경고 | `duplicateAbility`, `catalogMismatch` |
 
@@ -115,7 +115,7 @@
 | 편집 단위 | entity CRUD action (`create`, `read`, `update`, `delete`, `manage`) |
 | canonical 규칙 | `subject startsWith("entity:")` + CRUD action |
 | 표시 목적 | 운영자가 raw ability 대신 업무 단위로 CRUD를 조정할 수 있게 함 |
-| 전역 예외 | `manage all` 이 선택돼 있으면 모든 CRUD action을 허용/사용 가능으로 간주하고 개별 토글은 잠금 |
+| 전역 예외 | 현재 role.name 이 `FULL_ACCESS`면 모든 CRUD action을 허용/사용 가능으로 간주하고 개별 토글은 잠금 |
 | 비등록 처리 | ability가 없으면 `미등록` 상태와 안내 문구를 표시 |
 
 ## 고급 권한 계약
@@ -176,7 +176,7 @@
 
 - `/grants/roles/:roleId` 는 전체 동기화 API이므로 메뉴 편집만 저장하면 non-menu grant가 삭제됩니다.
 - 따라서 route는 메뉴/화면/CRUD/고급 편집이 같은 `selectedGrantItems` 를 공유해야 합니다.
-- FULL_ACCESS는 `manage all` 단일 grant만으로도 모든 권한을 가져야 하므로, route는 전역 권한을 감지해 세부 섹션을 override해야 합니다.
+- 역할 상세 route의 전역 권한 해석은 selected grant가 아니라 `role.name === FULL_ACCESS`를 단일 기준으로 사용합니다.
 - duplicate canonical ability가 있으면 최신 `createdAt` 항목을 우선 선택하되, 해제 시에는 해당 subject의 duplicate ability를 모두 정리합니다.
 - 동일 leaf/page에서 같은 문구의 duplicate warning이 여러 subject에서 생기면 route에서 하나로 합치고, technical details와 관련 ability 목록은 병합합니다.
 - duplicate 또는 catalog mismatch 진단에는 관련 ability 상세 이동 경로를 함께 제공해 운영자가 곧바로 삭제 화면으로 이동할 수 있게 합니다.
@@ -213,6 +213,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-15 | 역할 상세의 전역 허용/잠금 기준을 selected `manage all` grant가 아니라 `role.name === FULL_ACCESS`로 단순화 | codex |
 | 2026-04-06 | 역할 권한 저장 요청 본문을 generic `grants` 대신 `roleGrants` 계약으로 명시 | codex |
 | 2026-04-06 | FULL_ACCESS의 `manage all` 전역 권한 안내와 세부 섹션 잠금 규칙을 추가 | codex |
 | 2026-04-06 | FULL_ACCESS의 `manage all` 전역 권한을 반영해 메뉴/화면/CRUD 섹션을 전역 허용 상태로 해석하는 규칙을 추가 | codex |

@@ -149,7 +149,7 @@ describe("UserService", () => {
 	});
 
 	describe("getUsersBySpace", () => {
-		it("현재 선택 Space 기준으로만 사용자 목록과 통계를 조회해야 한다", async () => {
+		it("비 FULL_ACCESS면 현재 tenant의 spaceId 1개만 기준으로 사용자 목록과 통계를 조회해야 한다", async () => {
 			const query = {
 				skip: 10,
 				take: 20,
@@ -168,8 +168,16 @@ describe("UserService", () => {
 			};
 
 			mockSpaceContext = {
-				spaceId: "space-current-id",
-				spaceIds: undefined,
+				spaceId: "space-header-id",
+				spaceIds: ["space-header-id"],
+				tenant: {
+					id: "tenant-current-id",
+					spaceId: "space-header-id",
+					role: {
+						id: "role-manage-id",
+						name: "MANAGE",
+					},
+				},
 				requireSpaceId: jest.fn(),
 				hasSpace: jest.fn(),
 				isSystemSpace: jest.fn(),
@@ -183,8 +191,11 @@ describe("UserService", () => {
 			expect(query.toPrismaWhere).toHaveBeenCalledWith({
 				tenants: {
 					some: {
-						spaceId: "space-current-id",
+						spaceId: { in: ["space-header-id"] },
 						removedAt: null,
+						role: {
+							name: { notIn: ["FULL_ACCESS"] },
+						},
 					},
 				},
 			});
@@ -193,11 +204,140 @@ describe("UserService", () => {
 				orderBy: [{ createdAt: "desc" }],
 				skip: 10,
 				take: 20,
-				spaceIds: ["space-current-id"],
+				spaceIds: ["space-header-id"],
 			});
-			expect(mockRepository.countStatsBySpaceIds).toHaveBeenCalledWith([
-				"space-current-id",
-			]);
+			expect(mockRepository.countStatsBySpaceIds).toHaveBeenCalledWith({
+				spaceIds: ["space-header-id"],
+				excludedRoleNames: ["FULL_ACCESS"],
+			});
+			expect(result).toEqual({
+				users: [mockUser],
+				totalCount: 1,
+				stats: statsResult,
+			});
+		});
+
+		it("FULL_ACCESS면 전체 사용자 목록과 통계를 조회해야 한다", async () => {
+			const query = {
+				skip: 0,
+				take: 10,
+				toPrismaWhere: jest.fn().mockReturnValue({ removedAt: null }),
+				toPrismaOrderBy: jest.fn().mockReturnValue([{ createdAt: "desc" }]),
+			} as any;
+			const repositoryResult = {
+				users: [mockUser],
+				totalCount: 1,
+			};
+			const statsResult = {
+				total: 1,
+				active: 1,
+				inactive: 0,
+				newThisMonth: 0,
+			};
+
+			mockSpaceContext = {
+				spaceId: "space-root-id",
+				spaceIds: undefined,
+				tenant: {
+					id: "tenant-full-access-id",
+					spaceId: "space-root-id",
+					role: {
+						id: "role-full-access-id",
+						name: "FULL_ACCESS",
+					},
+				},
+				requireSpaceId: jest.fn(),
+				hasSpace: jest.fn(),
+				isSystemSpace: jest.fn(),
+			} as unknown as SpaceContext;
+			mockRepository.findManyBySpaceIds.mockResolvedValue(repositoryResult as any);
+			mockRepository.countStatsBySpaceIds.mockResolvedValue(statsResult as any);
+			(service as any).spaceCtx = mockSpaceContext;
+
+			const result = await service.getUsersBySpace(query);
+
+			expect(query.toPrismaWhere).toHaveBeenCalledWith({});
+			expect(mockRepository.findManyBySpaceIds).toHaveBeenCalledWith({
+				where: { removedAt: null },
+				orderBy: [{ createdAt: "desc" }],
+				skip: 0,
+				take: 10,
+				spaceIds: undefined,
+			});
+			expect(mockRepository.countStatsBySpaceIds).toHaveBeenCalledWith(
+				{
+					spaceIds: undefined,
+					excludedRoleNames: undefined,
+				},
+			);
+			expect(result).toEqual({
+				users: [mockUser],
+				totalCount: 1,
+				stats: statsResult,
+			});
+		});
+
+		it("branch에 미러된 FULL_ACCESS tenant를 선택한 경우 전체 조회를 열지 않고 현재 space의 일반 회원만 조회해야 한다", async () => {
+			const query = {
+				skip: 0,
+				take: 20,
+				toPrismaWhere: jest.fn().mockReturnValue({ removedAt: null }),
+				toPrismaOrderBy: jest.fn().mockReturnValue([{ createdAt: "desc" }]),
+			} as any;
+			const repositoryResult = {
+				users: [mockUser],
+				totalCount: 1,
+			};
+			const statsResult = {
+				total: 1,
+				active: 1,
+				inactive: 0,
+				newThisMonth: 0,
+			};
+
+			mockSpaceContext = {
+				spaceId: "space-branch-id",
+				spaceIds: ["space-branch-id"],
+				tenant: {
+					id: "tenant-branch-full-access-id",
+					spaceId: "space-branch-id",
+					role: {
+						id: "role-full-access-id",
+						name: "FULL_ACCESS",
+					},
+				},
+				requireSpaceId: jest.fn(),
+				hasSpace: jest.fn(),
+				isSystemSpace: jest.fn(),
+			} as unknown as SpaceContext;
+			mockRepository.findManyBySpaceIds.mockResolvedValue(repositoryResult as any);
+			mockRepository.countStatsBySpaceIds.mockResolvedValue(statsResult as any);
+			(service as any).spaceCtx = mockSpaceContext;
+
+			const result = await service.getUsersBySpace(query);
+
+			expect(query.toPrismaWhere).toHaveBeenCalledWith({
+				tenants: {
+					some: {
+						spaceId: { in: ["space-branch-id"] },
+						removedAt: null,
+						role: {
+							name: { notIn: ["FULL_ACCESS"] },
+						},
+					},
+				},
+			});
+			expect(mockRepository.findManyBySpaceIds).toHaveBeenCalledWith({
+				where: { removedAt: null },
+				orderBy: [{ createdAt: "desc" }],
+				skip: 0,
+				take: 20,
+				spaceIds: ["space-branch-id"],
+			});
+			expect(mockRepository.countStatsBySpaceIds).toHaveBeenCalledWith({
+				spaceIds: ["space-branch-id"],
+				excludedRoleNames: ["FULL_ACCESS"],
+			});
 			expect(result).toEqual({
 				users: [mockUser],
 				totalCount: 1,

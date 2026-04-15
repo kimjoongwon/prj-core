@@ -2,7 +2,7 @@
 import { type AbilityResponseDto } from "@cocrepo/api/core/abilities";
 
 import { convertApiToAbilityRules, useStore } from "@cocrepo/store";
-import type { AbilityApiResponse, AbilityRule } from "@cocrepo/type";
+import type { AbilityApiResponse } from "@cocrepo/type";
 import { NuqsNextAdapter } from "@cocrepo/hook/nuqs";
 import { DesignSystemProvider } from "@cocrepo/ui";
 import {
@@ -93,14 +93,16 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 	const abilityStore = store.abilityStore;
 
 	useEffect(() => {
-		const fallbackRules: AbilityRule[] = [{ action: "manage", subject: "all" }];
-
 		if (!abilityStore) {
 			return;
 		}
 
-		if (isLoading || isError || !abilities || abilities.length === 0) {
-			abilityStore.updateRules(fallbackRules);
+		if (isLoading) {
+			return;
+		}
+
+		if (isError || !abilities || abilities.length === 0) {
+			abilityStore.updateRules([]);
 			return;
 		}
 

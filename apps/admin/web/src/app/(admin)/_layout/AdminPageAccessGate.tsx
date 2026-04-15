@@ -1,5 +1,6 @@
 "use client";
 
+import { useVerifyToken } from "@cocrepo/api/idp/auth";
 import { ADMIN_PATHS, matchAdminPageAccessItem } from "@cocrepo/constant";
 import {
 	DetailPage,
@@ -21,7 +22,15 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 }) {
 	const pathname = usePathname();
 	const router = useRouter();
-	const { can, isLoaded, hasGlobalAccess } = useAbility();
+	const { can, isLoaded } = useAbility();
+	const { data: verifyTokenResponse, isPending: isVerifyingToken } =
+		useVerifyToken({
+			query: {
+				retry: false,
+				refetchOnWindowFocus: false,
+			},
+		});
+	const hasFullAccessRole = verifyTokenResponse?.data?.hasFullAccess === true;
 
 	if (!pathname) {
 		return children;
@@ -32,7 +41,7 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 		return children;
 	}
 
-	if (!isLoaded) {
+	if (!isLoaded || isVerifyingToken) {
 		return (
 			<DetailPage
 				top={
@@ -53,7 +62,7 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 		);
 	}
 
-	if (hasGlobalAccess || can("view", pageAccessItem.subject)) {
+	if (hasFullAccessRole || can("view", pageAccessItem.subject)) {
 		return children;
 	}
 

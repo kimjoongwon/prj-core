@@ -1,5 +1,5 @@
 import { SpaceContext } from "@cocrepo/context";
-import { USER_ERRORS } from "@cocrepo/constant";
+import { SYSTEM_ROLES, USER_ERRORS } from "@cocrepo/constant";
 import { validatePasswordPolicy } from "@cocrepo/toolkit";
 import type { QueryUsersDto } from "@cocrepo/dto";
 import type { Prisma } from "@cocrepo/prisma";
@@ -52,22 +52,49 @@ export class UserService {
 
 	/**
 	 * 현재 선택 Space 내 사용자 목록 조회
-	 * x-space-id 기준으로 현재 Space 사용자만 필터링합니다.
+	 * x-space-id 기준으로 현재 Tenant를 해석하고,
+	 * ROOT(System) Space의 FULL_ACCESS면 전체 사용자,
+	 * 그 외에는 현재 Tenant의 Space 사용자만 필터링합니다.
+	 * branch 범위 기본 목록에서는 미러된 FULL_ACCESS tenant를 제외해 실제 회원 목록만 보여줍니다.
 	 * DTO → Prisma 변환을 Service에서 수행하고 Repository에는 원시값만 전달합니다.
 	 */
 	async getUsersBySpace(query: QueryUsersDto): Promise<GetUsersResult> {
 		const currentSpaceId = this.spaceCtx.spaceId;
+		const currentTenantSpaceId = this.spaceCtx.tenant?.spaceId;
+		const effectiveSpaceIds = this.spaceCtx.spaceIds;
+		const scopedSpaceIds =
+			effectiveSpaceIds === undefined
+				? undefined
+				: currentTenantSpaceId
+					? [currentTenantSpaceId]
+					: effectiveSpaceIds;
+		const excludedRoleNames =
+			scopedSpaceIds !== undefined && !query.roles?.length
+				? [SYSTEM_ROLES.FULL_ACCESS]
+				: undefined;
+
 		this.logger.debug(
-			`현재 Space 내 사용자 목록 조회: spaceId=${currentSpaceId ?? "없음"}`,
+			`회원 목록 조회: requestedSpaceId=${currentSpaceId ?? "없음"}, scope=${scopedSpaceIds?.join(",") ?? "all"}, excludedRoles=${excludedRoleNames?.join(",") ?? "없음"}`,
 		);
 
-		const baseWhere: Partial<Prisma.UserWhereInput> = currentSpaceId
-			? {
-					tenants: {
-						some: { spaceId: currentSpaceId, removedAt: null },
-					},
-				}
-			: {};
+		const baseWhere: Partial<Prisma.UserWhereInput> =
+			scopedSpaceIds === undefined
+				? {}
+				: {
+						tenants: {
+							some: {
+								spaceId: { in: scopedSpaceIds },
+								removedAt: null,
+								...(excludedRoleNames?.length
+									? {
+											role: {
+												name: { notIn: excludedRoleNames },
+											},
+										}
+									: {}),
+							},
+						},
+					};
 
 		const where = query.toPrismaWhere(baseWhere);
 		const orderBy = query.toPrismaOrderBy();
@@ -78,11 +105,12 @@ export class UserService {
 				orderBy,
 				skip: query.skip ?? 0,
 				take: query.take ?? 10,
-				spaceIds: currentSpaceId ? [currentSpaceId] : undefined,
+				spaceIds: scopedSpaceIds,
 			}),
-			this.repository.countStatsBySpaceIds(
-				currentSpaceId ? [currentSpaceId] : undefined,
-			),
+			this.repository.countStatsBySpaceIds({
+				spaceIds: scopedSpaceIds,
+				excludedRoleNames,
+			}),
 		]);
 
 		return {

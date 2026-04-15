@@ -17,7 +17,7 @@ import { canAccessAllSpaces } from "../util/permission.util";
  * 현재 선택된 Tenant 역할과 x-space-id 헤더를 기반으로
  * EFFECTIVE_SPACE_IDS를 CLS에 저장합니다.
  *
- * - FULL_ACCESS → undefined (전체 조회)
+ * - ROOT(System) Space의 FULL_ACCESS → undefined (전체 조회)
  * - 그 외 → 현재 x-space-id 1개만
  */
 @Injectable()
@@ -36,7 +36,7 @@ export class SpaceScopeInterceptor implements NestInterceptor {
 			return next.handle();
 		}
 
-		// 비 FULL_ACCESS 사용자는 scope 데코레이터와 무관하게 현재 선택한 Space만 사용합니다.
+		// ROOT FULL_ACCESS가 아닌 사용자는 현재 선택한 Space만 사용합니다.
 		this.cls.set(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS, spaceId ? [spaceId] : []);
 
 		return next.handle();

@@ -253,9 +253,13 @@ export class UsersRepository {
 	/**
 	 * 접근 가능한 Space ID 목록으로 회원 통계 조회
 	 */
-	async countStatsBySpaceIds(spaceIds?: string[]): Promise<UserStats> {
+	async countStatsBySpaceIds(params?: {
+		spaceIds?: string[];
+		excludedRoleNames?: string[];
+	}): Promise<UserStats> {
+		const { spaceIds, excludedRoleNames } = params ?? {};
 		this.logger.debug(
-			`접근 가능 Space 내 회원 통계 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
+			`접근 가능 Space 내 회원 통계 조회: spaceIds=${spaceIds?.length ?? "all"}개, excludedRoles=${excludedRoleNames?.join(",") ?? "없음"}`,
 		);
 
 		const startOfMonth = new Date();
@@ -270,6 +274,13 @@ export class UsersRepository {
 							some: {
 								spaceId: { in: spaceIds },
 								removedAt: null,
+								...(excludedRoleNames?.length
+									? {
+											role: {
+												name: { notIn: excludedRoleNames },
+											},
+										}
+									: {}),
 							},
 						},
 					}

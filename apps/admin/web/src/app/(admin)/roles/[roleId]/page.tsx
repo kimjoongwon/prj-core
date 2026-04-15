@@ -14,6 +14,7 @@ import {
 	ADMIN_MENU_PERMISSION_LEAFS,
 	ADMIN_MENU_PERMISSION_SUBJECTS,
 	ADMIN_PAGE_ACCESS_ITEMS,
+	SYSTEM_ROLES,
 } from "@cocrepo/constant";
 import {
 	AdminRolesRoleIdPage,
@@ -38,8 +39,6 @@ import { useState } from "react";
 
 const MENU_ACTION_NAME = "manage";
 const PAGE_ACTION_NAME = "access";
-const GLOBAL_ACTION_NAME = "manage";
-const GLOBAL_SUBJECT_NAME = "all";
 const MENU_SUBJECT_PREFIX = "menu:";
 const PAGE_SUBJECT_PREFIX = "page:";
 const ENTITY_SUBJECT_PREFIX = "entity:";
@@ -164,10 +163,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 	const activeSelectedAbilityIds = isEditingGrants
 		? new Set(Object.keys(selectedGrantItems))
 		: currentIds;
-	const hasGlobalAccess = hasGlobalAccessAbilitySelected(
-		activeSelectedAbilityIds,
-		allAbilityDtos,
-	);
+	const hasGlobalAccess = role?.name === SYSTEM_ROLES.FULL_ACCESS;
 	const {
 		menuPermissions,
 		menuDiagnostics,
@@ -1063,24 +1059,6 @@ function isCanonicalPageAbility(ability: AbilityResponseDto): boolean {
 	return (
 		isPageSubjectName(ability.subject?.name) &&
 		ability.action?.name === PAGE_ACTION_NAME
-	);
-}
-
-function isGlobalAccessAbility(ability: AbilityResponseDto): boolean {
-	return (
-		!ability.inverted &&
-		ability.subject?.name === GLOBAL_SUBJECT_NAME &&
-		ability.action?.name === GLOBAL_ACTION_NAME
-	);
-}
-
-function hasGlobalAccessAbilitySelected(
-	selectedAbilityIds: Set<string>,
-	allAbilities: AbilityResponseDto[],
-): boolean {
-	return allAbilities.some(
-		(ability) =>
-			isGlobalAccessAbility(ability) && selectedAbilityIds.has(ability.id),
 	);
 }
 

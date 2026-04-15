@@ -9,6 +9,7 @@ import {
 	UserService,
 } from "@cocrepo/service";
 import { SpaceScope } from "@cocrepo/dto";
+import { SpaceCategoryName } from "@cocrepo/enum";
 import {
 	Controller,
 	Get,
@@ -29,9 +30,11 @@ const TEST_JWT_SECRET = "test-jwt-secret-e2e";
 const USER_ID = "00000000-0000-4000-8000-000000000001";
 const TENANT_A_ID = "10000000-0000-4000-8000-000000000001";
 const TENANT_B_ID = "20000000-0000-4000-8000-000000000001";
+const TENANT_C_ID = "30000000-0000-4000-8000-000000000001";
 const SPACE_A_ID = "11111111-1111-4111-8111-111111111111";
 const SPACE_B_ID = "22222222-2222-4222-8222-222222222222";
 const SPACE_C_ID = "33333333-3333-4333-8333-333333333333";
+const SPACE_D_ID = "44444444-4444-4444-8444-444444444444";
 
 function createTestUser() {
 	return {
@@ -42,11 +45,37 @@ function createTestUser() {
 				id: TENANT_A_ID,
 				spaceId: SPACE_A_ID,
 				role: { name: SYSTEM_ROLES.MANAGE },
+				space: {
+					classification: {
+						category: {
+							name: SpaceCategoryName.BRANCH.name,
+						},
+					},
+				},
 			},
 			{
 				id: TENANT_B_ID,
 				spaceId: SPACE_B_ID,
 				role: { name: SYSTEM_ROLES.FULL_ACCESS },
+				space: {
+					classification: {
+						category: {
+							name: SpaceCategoryName.ROOT.name,
+						},
+					},
+				},
+			},
+			{
+				id: TENANT_C_ID,
+				spaceId: SPACE_C_ID,
+				role: { name: SYSTEM_ROLES.FULL_ACCESS },
+				space: {
+					classification: {
+						category: {
+							name: SpaceCategoryName.BRANCH.name,
+						},
+					},
+				},
 			},
 		],
 	};
@@ -123,8 +152,10 @@ describe("Space Scope API (E2E)", () => {
 			usersRepoCalls.push({ type: "findManyBySpaceIds", ...params });
 			return { users: [], totalCount: 0 };
 		},
-		countStatsBySpaceIds: async (spaceIds?: string[]) => {
-			usersRepoCalls.push({ type: "countStatsBySpaceIds", spaceIds });
+		countStatsBySpaceIds: async (
+			params?: Record<string, unknown>,
+		) => {
+			usersRepoCalls.push({ type: "countStatsBySpaceIds", ...(params ?? {}) });
 			return {
 				total: 0,
 				active: 0,
@@ -249,7 +280,7 @@ describe("Space Scope API (E2E)", () => {
 		});
 	});
 
-	it("FULL_ACCESS tenant면 EFFECTIVE_SPACE_IDS를 전체 조회로 연다", async () => {
+	it("ROOT Space의 FULL_ACCESS tenant면 EFFECTIVE_SPACE_IDS를 전체 조회로 연다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
@@ -259,6 +290,20 @@ describe("Space Scope API (E2E)", () => {
 		expect(response.body.data).toEqual({
 			spaceId: SPACE_B_ID,
 			spaceIds: null,
+			tenantRole: SYSTEM_ROLES.FULL_ACCESS,
+		});
+	});
+
+	it("BRANCH에 미러된 FULL_ACCESS tenant면 EFFECTIVE_SPACE_IDS를 현재 space 1개로 유지한다", async () => {
+		const response = await request(app.getHttpServer())
+			.get("/api/v1/test-space-scope/context")
+			.set("Authorization", `Bearer ${jwtToken}`)
+			.set("x-space-id", SPACE_C_ID);
+
+		expect(response.status).toBe(HttpStatus.OK);
+		expect(response.body.data).toEqual({
+			spaceId: SPACE_C_ID,
+			spaceIds: [SPACE_C_ID],
 			tenantRole: SYSTEM_ROLES.FULL_ACCESS,
 		});
 	});
@@ -273,14 +318,26 @@ describe("Space Scope API (E2E)", () => {
 		expect(usersRepoCalls[0]).toMatchObject({
 			type: "findManyBySpaceIds",
 			spaceIds: [SPACE_A_ID],
+			where: {
+				tenants: {
+					some: {
+						spaceId: { in: [SPACE_A_ID] },
+						removedAt: null,
+						role: {
+							name: { notIn: [SYSTEM_ROLES.FULL_ACCESS] },
+						},
+					},
+				},
+			},
 		});
 		expect(usersRepoCalls[1]).toEqual({
 			type: "countStatsBySpaceIds",
 			spaceIds: [SPACE_A_ID],
+			excludedRoleNames: [SYSTEM_ROLES.FULL_ACCESS],
 		});
 	});
 
-	it("FULL_ACCESS 사용자의 users 조회도 현재 x-space-id만 repository로 전달한다", async () => {
+	it("ROOT Space FULL_ACCESS 사용자의 users 조회는 전체 scope로 repository를 호출한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/users")
 			.set("Authorization", `Bearer ${jwtToken}`)
@@ -289,11 +346,42 @@ describe("Space Scope API (E2E)", () => {
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(usersRepoCalls[0]).toMatchObject({
 			type: "findManyBySpaceIds",
-			spaceIds: [SPACE_B_ID],
+			spaceIds: undefined,
+			where: {},
 		});
 		expect(usersRepoCalls[1]).toEqual({
 			type: "countStatsBySpaceIds",
-			spaceIds: [SPACE_B_ID],
+			spaceIds: undefined,
+			excludedRoleNames: undefined,
+		});
+	});
+
+	it("BRANCH에 미러된 FULL_ACCESS 사용자의 users 조회는 현재 space 일반 회원만 조회한다", async () => {
+		const response = await request(app.getHttpServer())
+			.get("/api/v1/test-space-scope/users")
+			.set("Authorization", `Bearer ${jwtToken}`)
+			.set("x-space-id", SPACE_C_ID);
+
+		expect(response.status).toBe(HttpStatus.OK);
+		expect(usersRepoCalls[0]).toMatchObject({
+			type: "findManyBySpaceIds",
+			spaceIds: [SPACE_C_ID],
+			where: {
+				tenants: {
+					some: {
+						spaceId: { in: [SPACE_C_ID] },
+						removedAt: null,
+						role: {
+							name: { notIn: [SYSTEM_ROLES.FULL_ACCESS] },
+						},
+					},
+				},
+			},
+		});
+		expect(usersRepoCalls[1]).toEqual({
+			type: "countStatsBySpaceIds",
+			spaceIds: [SPACE_C_ID],
+			excludedRoleNames: [SYSTEM_ROLES.FULL_ACCESS],
 		});
 	});
 
@@ -379,7 +467,7 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-space-id", SPACE_C_ID);
+			.set("x-space-id", SPACE_D_ID);
 
 		expect(response.status).toBe(HttpStatus.FORBIDDEN);
 	});

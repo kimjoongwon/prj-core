@@ -32,6 +32,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-15 | Ability bootstrap이 로딩 중 `manage all` fallback을 주입하지 않고, 오류/빈 응답 시 빈 규칙으로 수렴하도록 정리 | codex |
 | 2026-03-23 | nuqs Adapter 의존을 @cocrepo/hook/nuqs 브리지로 전환 | codex |
 | 2026-03-14 | AbilityStore bootstrap effect가 매 렌더 새 함수에 반응하지 않도록 `useStore` 기반의 안정적 store 참조로 변경 | codex |
 | 2026-03-13 | `@cocrepo/api` root import를 split subpath import로 전환 | codex |

@@ -21,7 +21,7 @@
   "scripts": {
     "generate:admin-route-catalog": "node ./scripts/generate-admin-route-catalog.mjs",
     "start:dev": "node ./scripts/start-dev.mjs",
-    "build": "pnpm run generate:admin-route-catalog && tsc --build",
+    "build": "pnpm run generate:admin-route-catalog && tsc --build --force",
     "format": "biome format --write ."
   },
   "keywords": [],

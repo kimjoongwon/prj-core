@@ -42,7 +42,7 @@ User(사용자) 엔티티의 데이터 접근을 담당합니다. 인증(이메�
 
 | 메서드 | 파라미터 | 반환 | 설명 |
 |--------|----------|------|------|
-| `countStatsBySpaceIds(spaceIds)` | string[] | `Promise<UserStats>` | Space 내 회원 통계 (전체, 활성, 비활성, 이번달 신규) |
+| `countStatsBySpaceIds(params)` | `{ spaceIds?: string[], excludedRoleNames?: string[] }` | `Promise<UserStats>` | Space 내 회원 통계 (전체, 활성, 비활성, 이번달 신규) |
 
 ### 생성/수정/삭제 메서드
 
@@ -97,6 +97,7 @@ User {
 - `findManyBySpaceIds()`: `Promise.all()`로 데이터와 totalCount 동시 조회
 - `existsBy*()`: `select: { id: true }`만 조회하여 성능 최적화
 - `countStatsBySpaceIds()`: `Promise.all()`로 통계 동시 계산
+- scoped 회원 통계는 `excludedRoleNames`를 받아 branch 기본 목록에서 미러된 `FULL_ACCESS` tenant를 제외할 수 있습니다.
 
 ## 비밀번호 업데이트 정책 (updatePassword)
 
@@ -134,4 +135,5 @@ User {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-15 | 회원 통계 메서드가 `excludedRoleNames`로 branch 기본 목록의 FULL_ACCESS 제외를 지원하도록 갱신 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |

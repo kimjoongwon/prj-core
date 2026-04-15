@@ -17,7 +17,7 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 | GET | /callback | `clientId` 기준 OIDC 인증 완료 후 Authorization Code 수신 및 토큰 교환 | Public |
 | POST | /token/refresh | 리프레시 토큰으로 새 토큰 재발급 | Public (쿠키 기반) |
 | POST | /sign-up | 신규 사용자 계정 생성 | Public |
-| GET | /verify-token | 액세스 토큰 유효성 검증 + `manage all` 전역 권한 보유 여부 반환 | JWT 인증 필요, SkipSpaceCheck |
+| GET | /verify-token | 액세스 토큰 유효성 검증 + `FULL_ACCESS` tenant role 보유 여부 반환 | JWT 인증 필요, SkipSpaceCheck |
 | GET | /my-spaces | 현재 사용자가 접근 가능한 Space 목록 조회 | JWT 인증 필요, SkipSpaceCheck |
 | GET | /current-space | 요청의 `x-space-id` 또는 기본 접근 가능 Space 조회 | JWT 인증 필요, SkipSpaceCheck |
 | POST | /current-space | 현재 선택할 Space 검증 | JWT 인증 필요, SkipSpaceCheck |
@@ -69,7 +69,7 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 - 콜백 에러 발생 시에도 `clientId`에 맞는 login shell URL로 `?error=...`를 붙여 리다이렉트합니다.
 - 성공 시에는 `AuthApplicationService.handleOidcCallback()`이 돌려준 `returnTo`를 우선 사용하고, 없으면 `defaultReturnTo`를 사용합니다.
 - Storybook login shell도 canonical `clientId=storybook-web`을 사용합니다.
-- `GET /verify-token`의 `hasFullAccess`는 tenant role 이름이 아니라 merged ability의 `manage all` 전역 권한 여부를 의미합니다.
+- `GET /verify-token`의 `hasFullAccess`는 현재 사용자의 tenant 중 `FULL_ACCESS` role이 하나라도 있는지 여부를 의미합니다.
 - `GET /current-space`는 `x-space-id` 헤더가 유효하면 해당 Space를 반환하고, 없거나 접근 불가하면 기본 접근 가능 Space를 반환합니다.
 - `POST /current-space`는 더 이상 Space 쿠키를 설정하지 않고, body의 `spaceId`를 검증한 결과만 반환합니다.
 - 비밀번호 변경 시 `newPassword !== confirmPassword` 이면 `PASSWORD_MISMATCH` 예외 발생
@@ -94,6 +94,7 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-15 | `GET /verify-token`의 `hasFullAccess` 의미를 `manage all`이 아니라 tenant role `FULL_ACCESS` 기준으로 단순화 | codex |
 | 2026-04-14 | `current-space`를 `x-space-id` 검증 API로 재정의하고 selectedSpace 쿠키 설명을 제거 | codex |
 | 2026-04-14 | Storybook login/callback canonical clientId를 `storybook-web`으로 정리 | codex |
 | 2026-04-06 | `GET /verify-token`의 `hasFullAccess` 의미를 tenant 역할명이 아닌 `manage all` 전역 권한으로 갱신 | codex |
