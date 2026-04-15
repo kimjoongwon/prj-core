@@ -3,9 +3,23 @@ import {
 	ADMIN_PAGE_ACCESS_ITEMS,
 	IDP_NAV_ITEMS,
 } from "../../../../../packages/common-constant/src";
+import {
+	FLOW_OVERRIDES,
+	type FlowOverride,
+	type FlowOverrideEdge,
+} from "./flow-overrides";
 
 const PAGE_STORY_SOURCES = import.meta.glob(
 	"../../../../../packages/fe-ui/src/page/*/*.stories.tsx",
+	{
+		eager: true,
+		import: "default",
+		query: "?raw",
+	},
+) as Record<string, string>;
+
+const PURE_PAGE_SPEC_SOURCES = import.meta.glob(
+	"../../../../../packages/fe-ui/src/page/*/*.spec.md",
 	{
 		eager: true,
 		import: "default",
@@ -22,8 +36,26 @@ const ADMIN_ROUTE_PAGE_SOURCES = import.meta.glob(
 	},
 ) as Record<string, string>;
 
+const ADMIN_ROUTE_SPEC_SOURCES = import.meta.glob(
+	"../../../../../apps/admin/web/src/app/**/page.spec.md",
+	{
+		eager: true,
+		import: "default",
+		query: "?raw",
+	},
+) as Record<string, string>;
+
 const IDP_ROUTE_PAGE_SOURCES = import.meta.glob(
 	"../../../../../apps/idp/web/src/app/**/page.tsx",
+	{
+		eager: true,
+		import: "default",
+		query: "?raw",
+	},
+) as Record<string, string>;
+
+const IDP_ROUTE_SPEC_SOURCES = import.meta.glob(
+	"../../../../../apps/idp/web/src/app/**/page.spec.md",
 	{
 		eager: true,
 		import: "default",
@@ -35,6 +67,31 @@ type AppId = "admin" | "idp";
 
 export type StoryMaturity = "scenario" | "scaffold";
 export type PageKind = "list" | "new" | "detail" | "edit" | "custom";
+export type PlanningDocumentKind = "pure-page" | "route-page";
+
+export interface MarkdownSection {
+	heading: string;
+	content: string;
+}
+
+export interface PlanningDocument {
+	id: string;
+	appId?: AppId;
+	componentName?: string;
+	kind: PlanningDocumentKind;
+	metadata: string[];
+	rawMarkdown: string;
+	routePath?: string;
+	sections: MarkdownSection[];
+	sourcePath: string;
+	summary: string | null;
+	title: string;
+}
+
+export interface PlanningRefs {
+	purePageId: string | null;
+	routePageIds: string[];
+}
 
 export interface RouteBinding {
 	id: string;
@@ -56,9 +113,11 @@ export interface PageCatalogEntry {
 	storyTitle: string;
 	storyId: string | null;
 	storyHref: string | null;
+	storyIds: string[];
 	maturity: StoryMaturity;
 	bindings: RouteBinding[];
 	appIds: Array<AppId | "standalone">;
+	planning: PlanningRefs;
 }
 
 export interface FlowNode {
@@ -75,6 +134,10 @@ export interface FlowNode {
 	laneId: string;
 	laneLabel: string;
 	order: number;
+	planning: {
+		purePageId: string | null;
+		routePageId: string | null;
+	};
 }
 
 export interface FlowEdge {
@@ -82,6 +145,7 @@ export interface FlowEdge {
 	from: string;
 	to: string;
 	label: string;
+	source: "auto" | "manual";
 }
 
 export interface FlowLane {
@@ -105,6 +169,7 @@ export interface OverviewManifest {
 	summary: OverviewSummary;
 	entries: PageCatalogEntry[];
 	lanes: FlowLane[];
+	planningDocuments: Record<string, PlanningDocument>;
 }
 
 interface StoryRecord {
@@ -113,6 +178,7 @@ interface StoryRecord {
 	storyTitle: string;
 	storyId: string | null;
 	storyHref: string | null;
+	storyIds: string[];
 	maturity: StoryMaturity;
 }
 
@@ -134,6 +200,12 @@ interface LaneInfo {
 
 interface AdminLeafInfo extends LaneInfo {
 	groupLabel: string;
+}
+
+interface PlanningBuildResult {
+	documents: Record<string, PlanningDocument>;
+	purePageIdByComponent: Map<string, string>;
+	routePageIdByKey: Map<string, string>;
 }
 
 function normalizeSlashes(value: string) {
@@ -164,7 +236,7 @@ export function normalizeAppRoutePath(filePath: string) {
 
 	const relativePath = normalized
 		.slice(markerIndex + marker.length)
-		.replace(/(?:^|\/)page\.tsx$/, "");
+		.replace(/(?:^|\/)page(?:\.spec\.md|\.tsx)$/, "");
 	const segments = relativePath
 		.split("/")
 		.filter(Boolean)
@@ -219,31 +291,45 @@ function getComponentNameFromStoryPath(filePath: string) {
 	return match?.[1] ?? null;
 }
 
+function getComponentNameFromPureSpecPath(filePath: string) {
+	const normalized = normalizeSlashes(filePath);
+	const match = normalized.match(/\/page\/([^/]+)\/[^/]+\.spec\.md$/);
+
+	return match?.[1] ?? null;
+}
+
 function createStoryRecords(storySources: Record<string, string>) {
-	return Object.entries(storySources)
-		.map(([filePath, source]) => {
-			const componentName = getComponentNameFromStoryPath(filePath);
+	const storyRecords: StoryRecord[] = [];
 
-			if (!componentName) {
-				return null;
-			}
+	for (const [filePath, source] of Object.entries(storySources)) {
+		const componentName = getComponentNameFromStoryPath(filePath);
 
-			const storyTitle = `page/${componentName}`;
-			const storyExports = extractStoryExportNames(source);
-			const storyId = storyExports.includes("Default")
-				? createStoryId(storyTitle, "Default")
-				: null;
+		if (!componentName) {
+			continue;
+		}
 
-			return {
-				componentName,
-				componentPath: `page/${componentName}/${componentName}.tsx`,
-				storyTitle,
-				storyId,
-				storyHref: storyId ? `./?path=/story/${storyId}` : null,
-				maturity: getStoryMaturity(source),
-			} satisfies StoryRecord;
-		})
-		.filter((value): value is StoryRecord => value !== null);
+		const storyTitle = `page/${componentName}`;
+		const storyExports = extractStoryExportNames(source);
+		const storyIds = storyExports.map((exportName) =>
+			createStoryId(storyTitle, exportName),
+		);
+		const docsStoryId = createStoryId(storyTitle, "Docs");
+		const storyId = storyExports.includes("Default")
+			? createStoryId(storyTitle, "Default")
+			: (storyIds[0] ?? null);
+
+		storyRecords.push({
+			componentName,
+			componentPath: `page/${componentName}/${componentName}.tsx`,
+			storyTitle,
+			storyId,
+			storyHref: storyId ? `./?path=/story/${storyId}` : null,
+			storyIds: [...storyIds, docsStoryId],
+			maturity: getStoryMaturity(source),
+		});
+	}
+
+	return storyRecords;
 }
 
 function flattenAdminNavLanes(navItems: typeof ADMIN_NAV_ITEMS) {
@@ -523,14 +609,12 @@ function createIdpRouteBinding({
 		} satisfies RouteBinding;
 	}
 
-	const authBinding = createIdpSpecialBinding({
+	return createIdpSpecialBinding({
 		componentName,
 		filePath,
 		path,
 		laneMap,
 	});
-
-	return authBinding;
 }
 
 function createIdpSpecialBinding({
@@ -601,9 +685,149 @@ function getPageDepth(path: string) {
 	return path.split("/").filter(Boolean).length;
 }
 
+function parsePlanningDocument(sourcePath: string, rawMarkdown: string) {
+	const lines = rawMarkdown.replace(/\r\n?/g, "\n").split("\n");
+	const titleIndex = lines.findIndex((line) => /^#\s+/.test(line));
+	const title =
+		titleIndex === -1
+			? (sourcePath.split("/").pop()?.replace(/\.md$/, "") ?? sourcePath)
+			: lines[titleIndex].replace(/^#\s+/, "").trim();
+	const preamble: string[] = [];
+	const sections: MarkdownSection[] = [];
+	let currentHeading: string | null = null;
+	let currentLines: string[] = [];
+
+	const flushSection = () => {
+		if (!currentHeading) {
+			return;
+		}
+
+		sections.push({
+			heading: currentHeading,
+			content: currentLines.join("\n").trim(),
+		});
+		currentHeading = null;
+		currentLines = [];
+	};
+
+	for (const line of lines.slice(titleIndex + 1)) {
+		const sectionMatch = line.match(/^##\s+(.+)$/);
+
+		if (sectionMatch) {
+			flushSection();
+			currentHeading = sectionMatch[1].trim();
+			continue;
+		}
+
+		if (currentHeading) {
+			currentLines.push(line);
+			continue;
+		}
+
+		preamble.push(line);
+	}
+
+	flushSection();
+
+	const normalizedPreamble = preamble
+		.join("\n")
+		.split("\n")
+		.map((line) => line.trim())
+		.filter(Boolean);
+	const metadata = normalizedPreamble
+		.filter((line) => line.startsWith(">"))
+		.map((line) => line.replace(/^>\s*/, "").trim());
+	const summaryLines = normalizedPreamble.filter(
+		(line) => !line.startsWith(">"),
+	);
+
+	return {
+		title,
+		metadata,
+		summary: summaryLines.length > 0 ? summaryLines.join("\n") : null,
+		sections: sections.filter((section) => section.content.length > 0),
+	};
+}
+
+function createPlanningDocuments({
+	purePageSpecSources,
+	adminRouteSpecSources,
+	idpRouteSpecSources,
+}: {
+	purePageSpecSources: Record<string, string>;
+	adminRouteSpecSources: Record<string, string>;
+	idpRouteSpecSources: Record<string, string>;
+}) {
+	const documents: Record<string, PlanningDocument> = {};
+	const purePageIdByComponent = new Map<string, string>();
+	const routePageIdByKey = new Map<string, string>();
+
+	for (const [filePath, source] of Object.entries(purePageSpecSources)) {
+		if (filePath.endsWith(".stories.spec.md")) {
+			continue;
+		}
+
+		const componentName = getComponentNameFromPureSpecPath(filePath);
+
+		if (!componentName) {
+			continue;
+		}
+
+		const documentId = `pure:${componentName}`;
+		const parsed = parsePlanningDocument(normalizeSlashes(filePath), source);
+		documents[documentId] = {
+			id: documentId,
+			componentName,
+			kind: "pure-page",
+			metadata: parsed.metadata,
+			rawMarkdown: source,
+			sections: parsed.sections,
+			sourcePath: normalizeSlashes(filePath),
+			summary: parsed.summary,
+			title: parsed.title,
+		};
+		purePageIdByComponent.set(componentName, documentId);
+	}
+
+	const appendRouteDocuments = (
+		appId: AppId,
+		specSources: Record<string, string>,
+	) => {
+		for (const [filePath, source] of Object.entries(specSources)) {
+			const routePath = normalizeAppRoutePath(filePath);
+			const documentId = `${appId}:${routePath}:spec`;
+			const parsed = parsePlanningDocument(normalizeSlashes(filePath), source);
+
+			documents[documentId] = {
+				id: documentId,
+				appId,
+				kind: "route-page",
+				metadata: parsed.metadata,
+				rawMarkdown: source,
+				routePath,
+				sections: parsed.sections,
+				sourcePath: normalizeSlashes(filePath),
+				summary: parsed.summary,
+				title: parsed.title,
+			};
+			routePageIdByKey.set(`${appId}:${routePath}`, documentId);
+		}
+	};
+
+	appendRouteDocuments("admin", adminRouteSpecSources);
+	appendRouteDocuments("idp", idpRouteSpecSources);
+
+	return {
+		documents,
+		purePageIdByComponent,
+		routePageIdByKey,
+	} satisfies PlanningBuildResult;
+}
+
 function buildCatalogEntries(
 	storyRecords: StoryRecord[],
 	bindings: RouteBinding[],
+	planning: PlanningBuildResult,
 ) {
 	const bindingsByComponent = new Map<string, RouteBinding[]>();
 
@@ -627,11 +851,26 @@ function buildCatalogEntries(
 				componentBindings.length === 0
 					? (["standalone"] as Array<AppId | "standalone">)
 					: [...new Set(componentBindings.map((binding) => binding.appId))];
+			const routePageIds = [
+				...new Set(
+					componentBindings
+						.map((binding) =>
+							planning.routePageIdByKey.get(`${binding.appId}:${binding.path}`),
+						)
+						.filter((value): value is string => Boolean(value)),
+				),
+			];
 
 			return {
 				...storyRecord,
 				bindings: componentBindings,
 				appIds,
+				planning: {
+					purePageId:
+						planning.purePageIdByComponent.get(storyRecord.componentName) ??
+						null,
+					routePageIds,
+				},
 			} satisfies PageCatalogEntry;
 		})
 		.sort((left, right) => {
@@ -649,8 +888,12 @@ function buildCatalogEntries(
 		});
 }
 
-function buildFlowLanes(entries: PageCatalogEntry[]) {
+function buildFlowLanes(
+	entries: PageCatalogEntry[],
+	flowOverrides: FlowOverride[],
+) {
 	const laneMap = new Map<string, FlowLane>();
+	const overrideEdgesByLane = createOverrideEdgesByLane(flowOverrides);
 
 	for (const entry of entries) {
 		for (const binding of entry.bindings) {
@@ -678,6 +921,14 @@ function buildFlowLanes(entries: PageCatalogEntry[]) {
 				laneLabel: binding.laneLabel,
 				order:
 					getPageDepth(binding.path) * 10 + getPageKindRank(binding.pageKind),
+				planning: {
+					purePageId: entry.planning.purePageId,
+					routePageId:
+						entry.planning.routePageIds.find(
+							(documentId) =>
+								documentId === `${binding.appId}:${binding.path}:spec`,
+						) ?? null,
+				},
 			});
 
 			laneMap.set(binding.laneId, lane);
@@ -689,13 +940,30 @@ function buildFlowLanes(entries: PageCatalogEntry[]) {
 			(left, right) =>
 				left.order - right.order || left.path.localeCompare(right.path),
 		);
-		lane.edges = buildLaneEdges(lane.nodes);
+		lane.edges = buildLaneEdges(
+			lane.nodes,
+			overrideEdgesByLane.get(lane.id) ?? [],
+		);
 	}
 
 	return [...laneMap.values()].sort(
 		(left, right) =>
 			left.order - right.order || left.label.localeCompare(right.label),
 	);
+}
+
+function createOverrideEdgesByLane(flowOverrides: FlowOverride[]) {
+	const overrideEdgesByLane = new Map<string, FlowOverrideEdge[]>();
+
+	for (const flowOverride of flowOverrides) {
+		for (const edge of flowOverride.edges ?? []) {
+			const existingEdges = overrideEdgesByLane.get(edge.laneId) ?? [];
+			existingEdges.push(edge);
+			overrideEdgesByLane.set(edge.laneId, existingEdges);
+		}
+	}
+
+	return overrideEdgesByLane;
 }
 
 function getPageKindRank(pageKind: PageKind) {
@@ -710,7 +978,7 @@ function getPageKindRank(pageKind: PageKind) {
 	return rank[pageKind];
 }
 
-function buildLaneEdges(nodes: FlowNode[]) {
+function buildLaneEdges(nodes: FlowNode[], overrideEdges: FlowOverrideEdge[]) {
 	const nodeByPath = new Map(nodes.map((node) => [node.path, node]));
 	const edgeMap = new Map<string, FlowEdge>();
 
@@ -732,11 +1000,30 @@ function buildLaneEdges(nodes: FlowNode[]) {
 					from: parentNode.id,
 					to: node.id,
 					label: candidate.label,
+					source: "auto",
 				});
 			}
 
 			break;
 		}
+	}
+
+	for (const overrideEdge of overrideEdges) {
+		const fromNode = nodeByPath.get(overrideEdge.fromPath);
+		const toNode = nodeByPath.get(overrideEdge.toPath);
+
+		if (!fromNode || !toNode) {
+			continue;
+		}
+
+		const edgeId = `${fromNode.id}->${toNode.id}`;
+		edgeMap.set(edgeId, {
+			id: edgeId,
+			from: fromNode.id,
+			to: toNode.id,
+			label: overrideEdge.label,
+			source: "manual",
+		});
 	}
 
 	return [...edgeMap.values()];
@@ -795,14 +1082,42 @@ function createSummary(entries: PageCatalogEntry[]): OverviewSummary {
 	};
 }
 
+export function findCatalogEntryForStory(
+	manifest: OverviewManifest,
+	storyId: string,
+) {
+	return (
+		manifest.entries.find((entry) => entry.storyIds.includes(storyId)) ?? null
+	);
+}
+
+export function getPlanningDocument(
+	manifest: OverviewManifest,
+	documentId: string | null,
+) {
+	if (!documentId) {
+		return null;
+	}
+
+	return manifest.planningDocuments[documentId] ?? null;
+}
+
 export function createOverviewManifest({
 	storySources,
+	purePageSpecSources,
 	adminRouteSources,
+	adminRouteSpecSources,
 	idpRouteSources,
+	idpRouteSpecSources,
+	flowOverrides = FLOW_OVERRIDES,
 }: {
 	storySources: Record<string, string>;
+	purePageSpecSources: Record<string, string>;
 	adminRouteSources: Record<string, string>;
+	adminRouteSpecSources: Record<string, string>;
 	idpRouteSources: Record<string, string>;
+	idpRouteSpecSources: Record<string, string>;
+	flowOverrides?: FlowOverride[];
 }) {
 	const storyRecords = createStoryRecords(storySources);
 	const storyRecordMap = new Map(
@@ -812,20 +1127,29 @@ export function createOverviewManifest({
 		...createAdminRouteBindings(adminRouteSources, storyRecordMap),
 		...createIdpRouteBindings(idpRouteSources, storyRecordMap),
 	];
-	const entries = buildCatalogEntries(storyRecords, bindings);
-	const lanes = buildFlowLanes(entries);
+	const planning = createPlanningDocuments({
+		purePageSpecSources,
+		adminRouteSpecSources,
+		idpRouteSpecSources,
+	});
+	const entries = buildCatalogEntries(storyRecords, bindings, planning);
+	const lanes = buildFlowLanes(entries, flowOverrides);
 
 	return {
 		summary: createSummary(entries),
 		entries,
 		lanes,
+		planningDocuments: planning.documents,
 	} satisfies OverviewManifest;
 }
 
 export function buildOverviewManifest() {
 	return createOverviewManifest({
 		storySources: PAGE_STORY_SOURCES,
+		purePageSpecSources: PURE_PAGE_SPEC_SOURCES,
 		adminRouteSources: ADMIN_ROUTE_PAGE_SOURCES,
+		adminRouteSpecSources: ADMIN_ROUTE_SPEC_SOURCES,
 		idpRouteSources: IDP_ROUTE_PAGE_SOURCES,
+		idpRouteSpecSources: IDP_ROUTE_SPEC_SOURCES,
 	});
 }

@@ -15,7 +15,7 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					"Storybook-local overview for page catalog coverage, routed bindings, and flow relationships across admin and idp apps.",
+					"Storybook-local workspace for page catalog coverage, React Flow screen relationships, and page-planning deep links across admin and idp apps.",
 			},
 		},
 	},

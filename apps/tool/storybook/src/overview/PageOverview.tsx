@@ -1,5 +1,17 @@
+import dagre from "@dagrejs/dagre";
+import {
+	Background,
+	Handle,
+	MarkerType,
+	Position,
+	ReactFlow,
+	type Edge,
+	type Node,
+	type NodeProps,
+} from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
 import type { ChangeEvent, CSSProperties, ReactNode } from "react";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import type {
 	FlowLane,
 	FlowNode,
@@ -12,6 +24,12 @@ import type {
 type AppFilter = "all" | "admin" | "idp" | "standalone";
 type KindFilter = "all" | PageKind;
 type MaturityFilter = "all" | StoryMaturity;
+
+type FlowCanvasNodeData = {
+	isSelected: boolean;
+	node: FlowNode;
+	onSelect: (nodeId: string) => void;
+};
 
 const pageKindLabels: Record<PageKind, string> = {
 	list: "List",
@@ -33,6 +51,16 @@ const appLabels: Record<AppFilter, string> = {
 	standalone: "Standalone",
 };
 
+const nodeTypes = {
+	overviewNode: FlowOverviewNode,
+};
+
+const FLOW_NODE_WIDTH = 280;
+const FLOW_NODE_HEIGHT = 190;
+const FLOW_LANE_HEIGHT = 260;
+const FLOW_X_OFFSET = 32;
+const FLOW_Y_OFFSET = 48;
+
 export function PageOverview({ manifest }: { manifest: OverviewManifest }) {
 	const appFilterId = useId();
 	const laneFilterId = useId();
@@ -44,6 +72,7 @@ export function PageOverview({ manifest }: { manifest: OverviewManifest }) {
 	const [kindFilter, setKindFilter] = useState<KindFilter>("all");
 	const [maturityFilter, setMaturityFilter] = useState<MaturityFilter>("all");
 	const [searchValue, setSearchValue] = useState("");
+	const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 	const handleAppFilterChange = (event: ChangeEvent<HTMLSelectElement>) => {
 		setAppFilter(event.target.value as AppFilter);
 		setLaneFilter("all");
@@ -94,16 +123,46 @@ export function PageOverview({ manifest }: { manifest: OverviewManifest }) {
 					.filter(
 						(lane): lane is FlowLane => lane !== null && lane.nodes.length > 0,
 					);
+	const visibleFlowNodes = visibleLanes.flatMap((lane) => lane.nodes);
+	const visibleNodeIds = new Set(visibleFlowNodes.map((node) => node.id));
+	const selectedFlowNode =
+		selectedNodeId && visibleNodeIds.has(selectedNodeId)
+			? (visibleFlowNodes.find((node) => node.id === selectedNodeId) ?? null)
+			: null;
+	const handleNodeSelect = (nodeId: string) => {
+		setSelectedNodeId(nodeId);
+	};
+	const flowCanvas = buildFlowCanvasData(
+		visibleLanes,
+		selectedNodeId,
+		handleNodeSelect,
+	);
+	const flowKey = visibleLanes
+		.map((lane) => `${lane.id}:${lane.nodes.length}:${lane.edges.length}`)
+		.join("|");
+
+	useEffect(() => {
+		if (visibleFlowNodes.length === 0) {
+			if (selectedNodeId !== null) {
+				setSelectedNodeId(null);
+			}
+			return;
+		}
+
+		if (!selectedNodeId || !visibleNodeIds.has(selectedNodeId)) {
+			setSelectedNodeId(visibleFlowNodes[0]?.id ?? null);
+		}
+	}, [selectedNodeId, visibleFlowNodes, visibleNodeIds]);
 
 	return (
 		<div style={pageStyle}>
 			<header style={heroStyle}>
 				<div style={heroCopyStyle}>
 					<p style={eyebrowStyle}>Storybook Overview</p>
-					<h1 style={titleStyle}>Page Catalog + Flow Map</h1>
+					<h1 style={titleStyle}>Page Flow Workspace</h1>
 					<p style={descriptionStyle}>
-						`packages/fe-ui/src/page` 기준 화면 자산과 앱 라우트 연결 관계를 한
-						화면에서 점검합니다.
+						`packages/fe-ui/src/page` 기준 화면 자산, 앱 route binding,
+						Storybook 딥링크를 React Flow 캔버스에서 함께 점검합니다.
 					</p>
 				</div>
 				<div style={summaryGridStyle}>
@@ -142,8 +201,8 @@ export function PageOverview({ manifest }: { manifest: OverviewManifest }) {
 						<h2 style={sectionTitleStyle}>Review Scope</h2>
 					</div>
 					<p style={sectionDescriptionStyle}>
-						앱, lane, page kind, story 성숙도를 기준으로 화면과 흐름을 좁혀볼 수
-						있습니다.
+						앱, lane, page kind, story 성숙도를 기준으로 graph와 catalog를 함께
+						좁혀볼 수 있습니다.
 					</p>
 				</div>
 				<div style={filterGridStyle}>
@@ -217,6 +276,57 @@ export function PageOverview({ manifest }: { manifest: OverviewManifest }) {
 						/>
 					</FilterField>
 				</div>
+			</section>
+
+			<section style={sectionStyle}>
+				<div style={sectionHeaderStyle}>
+					<div>
+						<p style={sectionEyebrowStyle}>Flows</p>
+						<h2 style={sectionTitleStyle}>React Flow Map</h2>
+					</div>
+					<p style={sectionDescriptionStyle}>
+						route 기반 연결은 자동 계산되고, manual override edge는 다른 색으로
+						강조됩니다. 노드를 선택하면 우측에서 현재 화면 요약을 바로 확인할 수
+						있습니다.
+					</p>
+				</div>
+				{visibleLanes.length === 0 ? (
+					<p style={emptyPanelStyle}>
+						현재 필터에는 표시할 routed flow가 없습니다.
+					</p>
+				) : (
+					<div style={flowWorkspaceStyle}>
+						<div style={flowCanvasShellStyle}>
+							<div style={laneLegendStyle}>
+								{visibleLanes.map((lane) => (
+									<div key={lane.id} style={laneLegendCardStyle}>
+										<p style={laneLegendLabelStyle}>{lane.label}</p>
+										<span style={laneLegendMetaStyle}>
+											{lane.appId.toUpperCase()} · {lane.nodes.length} nodes
+										</span>
+									</div>
+								))}
+							</div>
+							<div style={flowCanvasFrameStyle}>
+								<ReactFlow
+									edges={flowCanvas.edges}
+									fitView
+									key={flowKey}
+									minZoom={0.45}
+									maxZoom={1.2}
+									nodes={flowCanvas.nodes}
+									nodeTypes={nodeTypes}
+									nodesConnectable={false}
+									nodesDraggable={false}
+									proOptions={{ hideAttribution: true }}
+								>
+									<Background color="rgba(148, 163, 184, 0.18)" gap={18} />
+								</ReactFlow>
+							</div>
+						</div>
+						<FlowDetailPanel node={selectedFlowNode} />
+					</div>
+				)}
 			</section>
 
 			<section style={sectionStyle}>
@@ -310,30 +420,6 @@ export function PageOverview({ manifest }: { manifest: OverviewManifest }) {
 				{visibleEntries.length === 0 ? (
 					<p style={emptyPanelStyle}>현재 필터에 맞는 page entry가 없습니다.</p>
 				) : null}
-			</section>
-
-			<section style={sectionStyle}>
-				<div style={sectionHeaderStyle}>
-					<div>
-						<p style={sectionEyebrowStyle}>Flows</p>
-						<h2 style={sectionTitleStyle}>Lane Map</h2>
-					</div>
-					<p style={sectionDescriptionStyle}>
-						라우트 기반 연결은 lane별로 정리되고, edge는 상위 경로 또는 CRUD
-						패턴을 기준으로 자동 계산됩니다.
-					</p>
-				</div>
-				{visibleLanes.length === 0 ? (
-					<p style={emptyPanelStyle}>
-						현재 필터에는 표시할 routed flow가 없습니다.
-					</p>
-				) : (
-					<div style={laneStackStyle}>
-						{visibleLanes.map((lane) => (
-							<LaneCard key={lane.id} lane={lane} />
-						))}
-					</div>
-				)}
 			</section>
 		</div>
 	);
@@ -478,73 +564,233 @@ function filterLane(
 	};
 }
 
-function LaneCard({ lane }: { lane: FlowLane }) {
-	const nodeMap = new Map(lane.nodes.map((node) => [node.id, node]));
+function buildFlowCanvasData(
+	lanes: FlowLane[],
+	selectedNodeId: string | null,
+	onSelect: (nodeId: string) => void,
+) {
+	const nodes: Array<Node<FlowCanvasNodeData>> = [];
+	const edges: Edge[] = [];
 
-	return (
-		<article style={laneCardStyle}>
-			<div style={laneHeaderStyle}>
-				<div>
-					<p style={laneAppStyle}>{lane.appId.toUpperCase()}</p>
-					<h3 style={laneTitleStyle}>{lane.label}</h3>
-				</div>
-				<StatusChip
-					label={`${lane.nodes.length} node${lane.nodes.length === 1 ? "" : "s"}`}
-					tone="neutral"
-				/>
-			</div>
-			<div style={laneNodeGridStyle}>
-				{lane.nodes.map((node) => (
-					<NodeCard key={node.id} node={node} />
-				))}
-			</div>
-			<div style={edgeWrapStyle}>
-				{lane.edges.length === 0 ? (
-					<span style={emptyStateStyle}>연결 edge가 없는 단일 화면입니다.</span>
-				) : (
-					lane.edges.map((edge) => {
-						const fromNode = nodeMap.get(edge.from);
-						const toNode = nodeMap.get(edge.to);
+	lanes.forEach((lane, laneIndex) => {
+		const lanePositions = layoutLaneNodes(lane);
+		const yOffset = laneIndex * FLOW_LANE_HEIGHT + FLOW_Y_OFFSET;
 
-						if (!fromNode || !toNode) {
-							return null;
+		lane.nodes.forEach((laneNode) => {
+			const position = lanePositions.get(laneNode.id) ?? { x: 0, y: 0 };
+
+			nodes.push({
+				id: laneNode.id,
+				type: "overviewNode",
+				position: {
+					x: position.x + FLOW_X_OFFSET,
+					y: position.y + yOffset,
+				},
+				data: {
+					isSelected: laneNode.id === selectedNodeId,
+					node: laneNode,
+					onSelect,
+				},
+				draggable: false,
+				selectable: false,
+			});
+		});
+
+		lane.edges.forEach((laneEdge) => {
+			edges.push({
+				id: laneEdge.id,
+				source: laneEdge.from,
+				target: laneEdge.to,
+				label: laneEdge.label,
+				markerEnd: {
+					type: MarkerType.ArrowClosed,
+					color:
+						laneEdge.source === "manual"
+							? "#F59E0B"
+							: "rgba(148, 163, 184, 0.9)",
+				},
+				labelStyle: {
+					fill: laneEdge.source === "manual" ? "#FCD34D" : "#CBD5E1",
+					fontSize: 12,
+					fontWeight: 700,
+				},
+				style:
+					laneEdge.source === "manual"
+						? {
+								stroke: "#F59E0B",
+								strokeDasharray: "8 6",
+								strokeWidth: 2,
+							}
+						: {
+								stroke: "rgba(148, 163, 184, 0.64)",
+								strokeWidth: 1.5,
+							},
+				type: "smoothstep",
+			});
+		});
+	});
+
+	return {
+		nodes,
+		edges,
+	};
+}
+
+function layoutLaneNodes(lane: FlowLane) {
+	const graph = new dagre.graphlib.Graph();
+
+	graph.setDefaultEdgeLabel(() => ({}));
+	graph.setGraph({
+		rankdir: "LR",
+		nodesep: 28,
+		ranksep: 72,
+	});
+
+	lane.nodes.forEach((laneNode) => {
+		graph.setNode(laneNode.id, {
+			width: FLOW_NODE_WIDTH,
+			height: FLOW_NODE_HEIGHT,
+		});
+	});
+	lane.edges.forEach((laneEdge) => {
+		graph.setEdge(laneEdge.from, laneEdge.to);
+	});
+	dagre.layout(graph);
+
+	return new Map(
+		lane.nodes.map((laneNode) => {
+			const layoutNode = graph.node(laneNode.id);
+
+			return [
+				laneNode.id,
+				layoutNode
+					? {
+							x: layoutNode.x - FLOW_NODE_WIDTH / 2,
+							y: layoutNode.y - FLOW_NODE_HEIGHT / 2,
 						}
-
-						return (
-							<div key={edge.id} style={edgeChipStyle}>
-								<span>{fromNode.label}</span>
-								<span style={edgeArrowStyle}>→</span>
-								<span>{toNode.label}</span>
-							</div>
-						);
-					})
-				)}
-			</div>
-		</article>
+					: { x: 0, y: 0 },
+			];
+		}),
 	);
 }
 
-function NodeCard({ node }: { node: FlowNode }) {
+function FlowOverviewNode({ data }: NodeProps<Node<FlowCanvasNodeData>>) {
+	const handleSelectClick = () => {
+		data.onSelect(data.node.id);
+	};
+
 	return (
-		<div style={nodeCardStyle}>
-			<div style={chipRowStyle}>
+		<div
+			style={{
+				...flowNodeShellStyle,
+				...(data.isSelected ? flowNodeShellSelectedStyle : null),
+			}}
+		>
+			<Handle
+				isConnectable={false}
+				position={Position.Left}
+				style={handleStyle}
+				type="target"
+			/>
+			<button
+				aria-label={`Select flow node ${data.node.label}`}
+				onClick={handleSelectClick}
+				style={flowNodeButtonStyle}
+				type="button"
+			>
+				<div style={flowNodeChipRowStyle}>
+					<StatusChip label={data.node.appId.toUpperCase()} tone="neutral" />
+					<StatusChip
+						label={pageKindLabels[data.node.pageKind]}
+						tone="accent"
+					/>
+					<StatusChip
+						label={maturityLabels[data.node.maturity]}
+						tone={data.node.maturity === "scenario" ? "success" : "warning"}
+					/>
+				</div>
+				<strong style={flowNodeTitleStyle}>{data.node.label}</strong>
+				<code style={routePathStyle}>{data.node.path}</code>
+				<p style={flowNodeMetaStyle}>{data.node.componentName}</p>
+				<p style={flowNodeDescriptionStyle}>
+					{data.node.description ??
+						"story와 route binding이 연결된 화면입니다."}
+				</p>
+			</button>
+			{data.node.storyHref ? (
+				<a
+					href={data.node.storyHref}
+					style={flowNodeStoryLinkStyle}
+					target="_top"
+				>
+					Open Story
+				</a>
+			) : null}
+			<Handle
+				isConnectable={false}
+				position={Position.Right}
+				style={handleStyle}
+				type="source"
+			/>
+		</div>
+	);
+}
+
+function FlowDetailPanel({ node }: { node: FlowNode | null }) {
+	if (!node) {
+		return (
+			<aside style={detailPanelStyle}>
+				<h3 style={detailTitleStyle}>Flow Detail</h3>
+				<p style={detailDescriptionStyle}>
+					좌측 graph에서 화면 노드를 선택하면 route path, story, planning 연결
+					상태를 요약해 보여줍니다.
+				</p>
+			</aside>
+		);
+	}
+
+	return (
+		<aside style={detailPanelStyle}>
+			<p style={detailEyebrowStyle}>Flow Detail</p>
+			<h3 style={detailTitleStyle}>{node.label}</h3>
+			<div style={chipWrapStyle}>
+				<StatusChip label={node.laneLabel} tone="neutral" />
 				<StatusChip label={pageKindLabels[node.pageKind]} tone="accent" />
 				<StatusChip
 					label={maturityLabels[node.maturity]}
 					tone={node.maturity === "scenario" ? "success" : "warning"}
 				/>
 			</div>
-			<strong style={nodeTitleStyle}>{node.label}</strong>
-			<code style={routePathStyle}>{node.path}</code>
-			<p style={nodeComponentStyle}>{node.componentName}</p>
-			<p style={nodeDescriptionStyle}>
-				{node.description ?? "story와 route binding이 연결된 화면입니다."}
+			<div style={detailMetaGridStyle}>
+				<DetailPair label="App" value={node.appId.toUpperCase()} />
+				<DetailPair label="Route" value={node.path} />
+				<DetailPair label="Component" value={node.componentName} />
+				<DetailPair
+					label="Planning"
+					value={
+						node.planning.routePageId || node.planning.purePageId
+							? "Linked"
+							: "Missing"
+					}
+				/>
+			</div>
+			<p style={detailDescriptionStyle}>
+				{node.description ?? "현재 lane 안에서 선택된 화면입니다."}
 			</p>
 			{node.storyHref ? (
-				<a href={node.storyHref} style={storyLinkStyle} target="_top">
+				<a href={node.storyHref} style={detailStoryLinkStyle} target="_top">
 					Open Story
 				</a>
 			) : null}
+		</aside>
+	);
+}
+
+function DetailPair({ label, value }: { label: string; value: string }) {
+	return (
+		<div style={detailPairStyle}>
+			<span style={detailPairLabelStyle}>{label}</span>
+			<code style={detailPairValueStyle}>{value}</code>
 		</div>
 	);
 }
@@ -762,6 +1008,180 @@ const controlStyle: CSSProperties = {
 	fontSize: 14,
 };
 
+const flowWorkspaceStyle: CSSProperties = {
+	display: "grid",
+	gridTemplateColumns: "minmax(0, 1fr) minmax(280px, 320px)",
+	gap: 16,
+	alignItems: "start",
+};
+
+const flowCanvasShellStyle: CSSProperties = {
+	display: "grid",
+	gap: 12,
+};
+
+const laneLegendStyle: CSSProperties = {
+	display: "grid",
+	gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+	gap: 12,
+};
+
+const laneLegendCardStyle: CSSProperties = {
+	display: "grid",
+	gap: 4,
+	padding: 12,
+	borderRadius: 14,
+	background: "rgba(2, 6, 23, 0.38)",
+	border: "1px solid rgba(148, 163, 184, 0.14)",
+};
+
+const laneLegendLabelStyle: CSSProperties = {
+	margin: 0,
+	fontSize: 13,
+	fontWeight: 700,
+	color: "#E2E8F0",
+};
+
+const laneLegendMetaStyle: CSSProperties = {
+	fontSize: 12,
+	color: "#94A3B8",
+};
+
+const flowCanvasFrameStyle: CSSProperties = {
+	height: 700,
+	borderRadius: 20,
+	border: "1px solid rgba(148, 163, 184, 0.14)",
+	overflow: "hidden",
+	background:
+		"radial-gradient(circle at top left, rgba(59, 130, 246, 0.08), transparent 32%), rgba(2, 6, 23, 0.54)",
+};
+
+const flowNodeShellStyle: CSSProperties = {
+	width: FLOW_NODE_WIDTH,
+	display: "grid",
+	gap: 10,
+	padding: 14,
+	borderRadius: 18,
+	background: "rgba(15, 23, 42, 0.94)",
+	border: "1px solid rgba(148, 163, 184, 0.16)",
+	boxShadow: "0 18px 48px rgba(2, 6, 23, 0.35)",
+};
+
+const flowNodeShellSelectedStyle: CSSProperties = {
+	borderColor: "rgba(94, 234, 212, 0.72)",
+	boxShadow: "0 22px 56px rgba(20, 184, 166, 0.2)",
+};
+
+const flowNodeButtonStyle: CSSProperties = {
+	display: "grid",
+	gap: 10,
+	padding: 0,
+	border: "none",
+	background: "transparent",
+	textAlign: "left",
+	cursor: "pointer",
+	color: "#E5E7EB",
+};
+
+const flowNodeChipRowStyle: CSSProperties = {
+	display: "flex",
+	flexWrap: "wrap",
+	gap: 8,
+};
+
+const flowNodeTitleStyle: CSSProperties = {
+	fontSize: 15,
+	color: "#F8FAFC",
+};
+
+const flowNodeMetaStyle: CSSProperties = {
+	margin: 0,
+	fontSize: 13,
+	color: "#93C5FD",
+};
+
+const flowNodeDescriptionStyle: CSSProperties = {
+	margin: 0,
+	fontSize: 13,
+	lineHeight: 1.6,
+	color: "#CBD5E1",
+};
+
+const flowNodeStoryLinkStyle: CSSProperties = {
+	color: "#5EEAD4",
+	fontSize: 13,
+	fontWeight: 700,
+	textDecoration: "none",
+};
+
+const detailPanelStyle: CSSProperties = {
+	display: "grid",
+	gap: 14,
+	padding: 18,
+	borderRadius: 20,
+	background: "rgba(2, 6, 23, 0.42)",
+	border: "1px solid rgba(148, 163, 184, 0.14)",
+};
+
+const detailEyebrowStyle: CSSProperties = {
+	margin: 0,
+	fontSize: 12,
+	fontWeight: 700,
+	letterSpacing: "0.08em",
+	textTransform: "uppercase",
+	color: "#FCD34D",
+};
+
+const detailTitleStyle: CSSProperties = {
+	margin: 0,
+	fontSize: 22,
+	color: "#F8FAFC",
+};
+
+const detailDescriptionStyle: CSSProperties = {
+	margin: 0,
+	fontSize: 13,
+	lineHeight: 1.7,
+	color: "#CBD5E1",
+};
+
+const detailMetaGridStyle: CSSProperties = {
+	display: "grid",
+	gap: 10,
+};
+
+const detailPairStyle: CSSProperties = {
+	display: "grid",
+	gap: 4,
+};
+
+const detailPairLabelStyle: CSSProperties = {
+	fontSize: 12,
+	fontWeight: 700,
+	color: "#94A3B8",
+	textTransform: "uppercase",
+};
+
+const detailPairValueStyle: CSSProperties = {
+	fontSize: 12,
+	color: "#E2E8F0",
+	wordBreak: "break-word",
+};
+
+const detailStoryLinkStyle: CSSProperties = {
+	color: "#5EEAD4",
+	fontSize: 13,
+	fontWeight: 700,
+	textDecoration: "none",
+};
+
+const handleStyle: CSSProperties = {
+	width: 10,
+	height: 10,
+	border: "1px solid rgba(148, 163, 184, 0.32)",
+	background: "#0F172A",
+};
+
 const tableFrameStyle: CSSProperties = {
 	overflowX: "auto",
 	borderRadius: 20,
@@ -859,112 +1279,13 @@ const emptyPanelStyle: CSSProperties = {
 	color: "#94A3B8",
 };
 
-const laneStackStyle: CSSProperties = {
-	display: "grid",
-	gap: 16,
-};
-
-const laneCardStyle: CSSProperties = {
-	display: "grid",
-	gap: 16,
-	padding: 18,
-	borderRadius: 20,
-	background: "rgba(2, 6, 23, 0.42)",
-	border: "1px solid rgba(148, 163, 184, 0.14)",
-};
-
-const laneHeaderStyle: CSSProperties = {
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "space-between",
-	gap: 16,
-};
-
-const laneAppStyle: CSSProperties = {
-	margin: 0,
-	fontSize: 11,
-	fontWeight: 700,
-	letterSpacing: "0.08em",
-	textTransform: "uppercase",
-	color: "#94A3B8",
-};
-
-const laneTitleStyle: CSSProperties = {
-	margin: "4px 0 0",
-	fontSize: 18,
-	color: "#F8FAFC",
-};
-
-const laneNodeGridStyle: CSSProperties = {
-	display: "grid",
-	gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-	gap: 12,
-};
-
-const nodeCardStyle: CSSProperties = {
-	display: "grid",
-	gap: 10,
-	padding: 16,
-	borderRadius: 18,
-	background: "rgba(15, 23, 42, 0.78)",
-	border: "1px solid rgba(148, 163, 184, 0.12)",
-};
-
-const chipRowStyle: CSSProperties = {
-	display: "flex",
-	flexWrap: "wrap",
-	gap: 8,
-};
-
-const nodeTitleStyle: CSSProperties = {
-	fontSize: 15,
-	color: "#F8FAFC",
-};
-
-const nodeComponentStyle: CSSProperties = {
-	margin: 0,
-	fontSize: 13,
-	color: "#CBD5E1",
-};
-
-const nodeDescriptionStyle: CSSProperties = {
-	margin: 0,
-	fontSize: 13,
-	lineHeight: 1.5,
-	color: "#94A3B8",
-};
-
-const edgeWrapStyle: CSSProperties = {
-	display: "flex",
-	flexWrap: "wrap",
-	gap: 10,
-};
-
-const edgeChipStyle: CSSProperties = {
-	display: "inline-flex",
-	alignItems: "center",
-	gap: 8,
-	padding: "8px 12px",
-	borderRadius: 999,
-	background: "rgba(37, 99, 235, 0.14)",
-	border: "1px solid rgba(96, 165, 250, 0.18)",
-	fontSize: 13,
-	color: "#DBEAFE",
-};
-
-const edgeArrowStyle: CSSProperties = {
-	color: "#5EEAD4",
-};
-
 const chipStyle: CSSProperties = {
 	display: "inline-flex",
 	alignItems: "center",
-	borderRadius: 999,
 	padding: "4px 10px",
-	fontSize: 11,
+	borderRadius: 999,
+	fontSize: 12,
 	fontWeight: 700,
-	letterSpacing: "0.05em",
-	textTransform: "uppercase",
 };
 
 const toneStyles: Record<
@@ -972,19 +1293,23 @@ const toneStyles: Record<
 	CSSProperties
 > = {
 	accent: {
-		background: "rgba(37, 99, 235, 0.18)",
+		background: "rgba(59, 130, 246, 0.18)",
 		color: "#BFDBFE",
+		border: "1px solid rgba(96, 165, 250, 0.28)",
 	},
 	neutral: {
-		background: "rgba(148, 163, 184, 0.14)",
+		background: "rgba(30, 41, 59, 0.92)",
 		color: "#CBD5E1",
+		border: "1px solid rgba(148, 163, 184, 0.2)",
 	},
 	success: {
-		background: "rgba(16, 185, 129, 0.16)",
-		color: "#A7F3D0",
+		background: "rgba(16, 185, 129, 0.18)",
+		color: "#BBF7D0",
+		border: "1px solid rgba(52, 211, 153, 0.28)",
 	},
 	warning: {
-		background: "rgba(245, 158, 11, 0.16)",
+		background: "rgba(245, 158, 11, 0.18)",
 		color: "#FDE68A",
+		border: "1px solid rgba(251, 191, 36, 0.28)",
 	},
 };

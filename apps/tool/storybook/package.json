@@ -16,10 +16,12 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@dagrejs/dagre": "catalog:",
     "@cocrepo/store": "workspace:^",
     "@cocrepo/ui": "workspace:^",
     "@heroui/react": "catalog:",
     "@tanstack/react-query": "catalog:",
+    "@xyflow/react": "catalog:",
     "mobx": "catalog:",
     "next": "^16.1.0",
     "mobx-react-lite": "catalog:",

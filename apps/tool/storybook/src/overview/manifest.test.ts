@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
 	buildOverviewManifest,
+	createOverviewManifest,
 	createStoryId,
 	extractPageComponentNames,
+	findCatalogEntryForStory,
+	getPlanningDocument,
 	getStoryMaturity,
 	normalizeAppRoutePath,
 } from "./manifest";
@@ -22,6 +25,11 @@ describe("overview manifest helpers", () => {
 		expect(
 			normalizeAppRoutePath("../../../../apps/idp/web/src/app/page.tsx"),
 		).toBe("/");
+		expect(
+			normalizeAppRoutePath(
+				"../../../../apps/admin/web/src/app/(admin)/roles/page.spec.md",
+			),
+		).toBe("/roles");
 	});
 
 	it("extracts page components from @cocrepo/ui route files", () => {
@@ -115,12 +123,15 @@ describe("buildOverviewManifest", () => {
 			expect.arrayContaining([
 				expect.objectContaining({
 					label: "등록",
+					source: "auto",
 				}),
 				expect.objectContaining({
 					label: "상세",
+					source: "auto",
 				}),
 				expect.objectContaining({
 					label: "수정",
+					source: "auto",
 				}),
 			]),
 		);
@@ -128,6 +139,111 @@ describe("buildOverviewManifest", () => {
 			expect.arrayContaining([
 				expect.objectContaining({ path: "/accounts" }),
 				expect.objectContaining({ path: "/accounts/[userId]" }),
+			]),
+		);
+	});
+
+	it("indexes every story export back to the owning page entry", () => {
+		const manifest = buildOverviewManifest();
+		const entry = findCatalogEntryForStory(
+			manifest,
+			"page-adminrolespage--loading",
+		);
+
+		expect(entry?.componentName).toBe("AdminRolesPage");
+	});
+
+	it("maps autodocs entries back to the owning page entry", () => {
+		const manifest = buildOverviewManifest();
+		const entry = findCatalogEntryForStory(
+			manifest,
+			"page-adminrolespage--docs",
+		);
+
+		expect(entry?.componentName).toBe("AdminRolesPage");
+	});
+
+	it("loads pure page and route planning documents for page stories", () => {
+		const manifest = buildOverviewManifest();
+		const entry = manifest.entries.find(
+			(item) => item.componentName === "AdminRolesPage",
+		);
+		const purePageDocument = getPlanningDocument(
+			manifest,
+			entry?.planning.purePageId ?? null,
+		);
+		const routeDocument = getPlanningDocument(
+			manifest,
+			entry?.planning.routePageIds[0] ?? null,
+		);
+
+		expect(purePageDocument?.title).toBe("AdminRolesPage ui 기획서");
+		expect(routeDocument?.title).toBe("역할 목록 페이지 기획서");
+		expect(routeDocument?.sections).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ heading: "사용자 시나리오" }),
+				expect.objectContaining({ heading: "Rendering Decision" }),
+			]),
+		);
+	});
+});
+
+describe("createOverviewManifest", () => {
+	it("merges manual flow overrides into the lane graph", () => {
+		const manifest = createOverviewManifest({
+			storySources: {
+				"/repo/packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.stories.tsx": `
+						export default {};
+						export const Default = {};
+					`,
+				"/repo/packages/fe-ui/src/page/AdminRolesRoleIdEditPage/AdminRolesRoleIdEditPage.stories.tsx": `
+						export default {};
+						export const Default = {};
+					`,
+			},
+			purePageSpecSources: {
+				"/repo/packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.spec.md":
+					"# AdminRolesPage ui 기획서\n\n## 역할\n\n역할 목록",
+				"/repo/packages/fe-ui/src/page/AdminRolesRoleIdEditPage/AdminRolesRoleIdEditPage.spec.md":
+					"# AdminRolesRoleIdEditPage ui 기획서\n\n## 역할\n\n역할 수정",
+			},
+			adminRouteSources: {
+				"/repo/apps/admin/web/src/app/(admin)/roles/page.tsx":
+					'import { AdminRolesPage } from "@cocrepo/ui";',
+				"/repo/apps/admin/web/src/app/(admin)/roles/[roleId]/edit/page.tsx":
+					'import { AdminRolesRoleIdEditPage } from "@cocrepo/ui";',
+			},
+			adminRouteSpecSources: {
+				"/repo/apps/admin/web/src/app/(admin)/roles/page.spec.md":
+					"# 역할 목록 페이지 기획서\n\n## 사용자 시나리오\n\n1. 역할 목록을 확인합니다.",
+				"/repo/apps/admin/web/src/app/(admin)/roles/[roleId]/edit/page.spec.md":
+					"# 역할 수정 페이지 기획서\n\n## 사용자 시나리오\n\n1. 역할을 수정합니다.",
+			},
+			idpRouteSources: {},
+			idpRouteSpecSources: {},
+			flowOverrides: [
+				{
+					edges: [
+						{
+							laneId: "admin:roles-list",
+							fromPath: "/roles",
+							toPath: "/roles/[roleId]/edit",
+							label: "바로 수정",
+						},
+					],
+				},
+			],
+		});
+		const adminRolesLane = manifest.lanes.find(
+			(lane) => lane.id === "admin:roles-list",
+		);
+
+		expect(adminRolesLane?.edges).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					label: "바로 수정",
+					source: "manual",
+				}),
 			]),
 		);
 	});

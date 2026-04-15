@@ -1,9 +1,52 @@
 // @vitest-environment jsdom
 
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import type { OverviewManifest } from "./manifest";
 import { PageOverview } from "./PageOverview";
+
+beforeAll(() => {
+	class ResizeObserverMock {
+		observe() {}
+		unobserve() {}
+		disconnect() {}
+	}
+
+	Object.defineProperty(window, "ResizeObserver", {
+		value: ResizeObserverMock,
+		writable: true,
+	});
+	Object.defineProperty(HTMLElement.prototype, "clientWidth", {
+		configurable: true,
+		get() {
+			return 1200;
+		},
+	});
+	Object.defineProperty(HTMLElement.prototype, "clientHeight", {
+		configurable: true,
+		get() {
+			return 800;
+		},
+	});
+	Object.defineProperty(HTMLElement.prototype, "getBoundingClientRect", {
+		configurable: true,
+		value() {
+			return {
+				x: 0,
+				y: 0,
+				top: 0,
+				left: 0,
+				right: 1200,
+				bottom: 800,
+				width: 1200,
+				height: 800,
+				toJSON() {
+					return {};
+				},
+			};
+		},
+	});
+});
 
 const manifest: OverviewManifest = {
 	summary: {
@@ -20,8 +63,16 @@ const manifest: OverviewManifest = {
 			storyTitle: "page/AdminRolesPage",
 			storyId: "page-adminrolespage--default",
 			storyHref: "./?path=/story/page-adminrolespage--default",
+			storyIds: [
+				"page-adminrolespage--default",
+				"page-adminrolespage--loading",
+			],
 			maturity: "scaffold",
 			appIds: ["admin"],
+			planning: {
+				purePageId: "pure:AdminRolesPage",
+				routePageIds: ["admin:/roles:spec"],
+			},
 			bindings: [
 				{
 					id: "admin:/roles",
@@ -43,8 +94,13 @@ const manifest: OverviewManifest = {
 			storyTitle: "page/IdpConsoleAccountsPage",
 			storyId: "page-idpconsoleaccountspage--default",
 			storyHref: "./?path=/story/page-idpconsoleaccountspage--default",
+			storyIds: ["page-idpconsoleaccountspage--default"],
 			maturity: "scaffold",
 			appIds: ["idp"],
+			planning: {
+				purePageId: "pure:IdpConsoleAccountsPage",
+				routePageIds: ["idp:/accounts:spec"],
+			},
 			bindings: [
 				{
 					id: "idp:/accounts",
@@ -66,8 +122,13 @@ const manifest: OverviewManifest = {
 			storyTitle: "page/TenantSelectPage",
 			storyId: "page-tenantselectpage--default",
 			storyHref: "./?path=/story/page-tenantselectpage--default",
+			storyIds: ["page-tenantselectpage--default"],
 			maturity: "scenario",
 			appIds: ["standalone"],
+			planning: {
+				purePageId: "pure:TenantSelectPage",
+				routePageIds: [],
+			},
 			bindings: [],
 		},
 	],
@@ -91,6 +152,10 @@ const manifest: OverviewManifest = {
 					laneId: "admin:roles-list",
 					laneLabel: "권한 관리 / 역할",
 					order: 10,
+					planning: {
+						purePageId: "pure:AdminRolesPage",
+						routePageId: "admin:/roles:spec",
+					},
 				},
 			],
 			edges: [],
@@ -114,18 +179,84 @@ const manifest: OverviewManifest = {
 					laneId: "idp:accounts",
 					laneLabel: "계정 관리",
 					order: 10,
+					planning: {
+						purePageId: "pure:IdpConsoleAccountsPage",
+						routePageId: "idp:/accounts:spec",
+					},
 				},
 			],
 			edges: [],
 		},
 	],
+	planningDocuments: {
+		"pure:AdminRolesPage": {
+			id: "pure:AdminRolesPage",
+			componentName: "AdminRolesPage",
+			kind: "pure-page",
+			metadata: [],
+			rawMarkdown: "# AdminRolesPage ui 기획서",
+			sections: [],
+			sourcePath:
+				"packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.spec.md",
+			summary: null,
+			title: "AdminRolesPage ui 기획서",
+		},
+		"admin:/roles:spec": {
+			id: "admin:/roles:spec",
+			appId: "admin",
+			kind: "route-page",
+			metadata: [],
+			rawMarkdown: "# 역할 목록 페이지 기획서",
+			routePath: "/roles",
+			sections: [],
+			sourcePath: "apps/admin/web/src/app/(admin)/roles/page.spec.md",
+			summary: null,
+			title: "역할 목록 페이지 기획서",
+		},
+		"pure:IdpConsoleAccountsPage": {
+			id: "pure:IdpConsoleAccountsPage",
+			componentName: "IdpConsoleAccountsPage",
+			kind: "pure-page",
+			metadata: [],
+			rawMarkdown: "# IdpConsoleAccountsPage ui 기획서",
+			sections: [],
+			sourcePath:
+				"packages/fe-ui/src/page/IdpConsoleAccountsPage/IdpConsoleAccountsPage.spec.md",
+			summary: null,
+			title: "IdpConsoleAccountsPage ui 기획서",
+		},
+		"idp:/accounts:spec": {
+			id: "idp:/accounts:spec",
+			appId: "idp",
+			kind: "route-page",
+			metadata: [],
+			rawMarkdown: "# 계정 관리 페이지 기획서",
+			routePath: "/accounts",
+			sections: [],
+			sourcePath: "apps/idp/web/src/app/(console)/accounts/page.spec.md",
+			summary: null,
+			title: "계정 관리 페이지 기획서",
+		},
+		"pure:TenantSelectPage": {
+			id: "pure:TenantSelectPage",
+			componentName: "TenantSelectPage",
+			kind: "pure-page",
+			metadata: [],
+			rawMarkdown: "# TenantSelectPage ui 기획서",
+			sections: [],
+			sourcePath:
+				"packages/fe-ui/src/page/TenantSelectPage/TenantSelectPage.spec.md",
+			summary: null,
+			title: "TenantSelectPage ui 기획서",
+		},
+	},
 };
 
 describe("PageOverview", () => {
 	it("renders summary cards and catalog entries", () => {
 		render(<PageOverview manifest={manifest} />);
 
-		expect(screen.getByText("Page Catalog + Flow Map")).toBeInTheDocument();
+		expect(screen.getByText("Page Flow Workspace")).toBeInTheDocument();
 		expect(screen.getAllByText("AdminRolesPage").length).toBeGreaterThan(0);
 		expect(screen.getByText("TenantSelectPage")).toBeInTheDocument();
 		expect(screen.getByText("3")).toBeInTheDocument();
@@ -165,5 +296,17 @@ describe("PageOverview", () => {
 						"./?path=/story/page-idpconsoleaccountspage--default",
 				),
 		).toBe(true);
+	});
+
+	it("updates the flow detail panel when the visible graph scope changes", () => {
+		render(<PageOverview manifest={manifest} />);
+
+		fireEvent.change(screen.getByLabelText("Search"), {
+			target: { value: "accounts" },
+		});
+
+		expect(screen.getByText("Flow Detail")).toBeInTheDocument();
+		expect(screen.getAllByText("계정 관리").length).toBeGreaterThan(1);
+		expect(screen.getAllByText("/accounts").length).toBeGreaterThan(0);
 	});
 });

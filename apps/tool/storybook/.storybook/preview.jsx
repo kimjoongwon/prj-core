@@ -1,5 +1,24 @@
 import "../tailwind.css";
+import { buildOverviewManifest } from "../src/overview/manifest";
+import { PagePlanningDock } from "../src/planning/PagePlanningDock";
 import { withStorybookRuntime } from "../src/runtime/StorybookRuntimeProvider";
+
+const overviewManifest = buildOverviewManifest();
+
+const withPagePlanningDock = (Story, context) => {
+  const isPageStory = typeof context.title === "string" && context.title.startsWith("page/");
+  const inlinePlanning = context.parameters?.pagePlanning?.inline ?? true;
+
+  if (context.viewMode !== "story" || !isPageStory || !inlinePlanning) {
+    return <Story />;
+  }
+
+  return (
+    <PagePlanningDock manifest={overviewManifest} storyId={context.id ?? null}>
+      <Story />
+    </PagePlanningDock>
+  );
+};
 
 /** @type { import('@storybook/nextjs-vite').Preview } */
 const preview = {
@@ -24,6 +43,7 @@ const preview = {
   },
   decorators: [
     withStorybookRuntime,
+    withPagePlanningDock,
   ],
   parameters: {
     nextjs: {
@@ -60,6 +80,7 @@ const preview = {
     storybookRuntime: {
       requiresSpace: false,
     },
+    pagePlanningManifest: overviewManifest,
   },
 };
 

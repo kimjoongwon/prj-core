@@ -1,3 +1,4 @@
+import "./pagePlanningAddon.jsx";
 import { addons } from "storybook/manager-api";
 import { create } from "storybook/theming";
 
@@ -29,8 +30,11 @@ const plateTheme = create({
 
 addons.setConfig({
   theme: plateTheme,
+  showAddonPanel: true,
   sidebar: {
     showRoots: true
   },
-  panelPosition: "right"
+  panelPosition: "right",
+  selectedPanel: "plate/page-planning/panel",
+  addonPanelInRight: true
 });
