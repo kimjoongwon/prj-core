@@ -5,6 +5,7 @@ import {
   createStorybookAuthPlugin,
   createStorybookProxyConfig,
 } from "./storybookAuthDevServer.js";
+import { createStorybookCodexBridgePlugin } from "./storybookCodexBridge.js";
 import {
   applyFeUiStoryTitleTransform,
   createFeUiStoryIndexer,
@@ -21,10 +22,12 @@ function getAbsolutePath(value) {
 /** @type { import('@storybook/nextjs-vite').StorybookConfig } */
 const chromaticAddonDisabled = process.env.STORYBOOK_DISABLE_CHROMATIC === "true";
 const vitestAddonDisabled = process.env.STORYBOOK_DISABLE_VITEST_ADDON === "true";
+const codexBridgeDisabled = process.env.STORYBOOK_DISABLE_CODEX_BRIDGE === "true";
 const includePlaceholderStories = process.env.STORYBOOK_INCLUDE_PLACEHOLDER === "true";
 const configDir = fileURLToPath(new URL(".", import.meta.url));
 const localStoryRoot = join(configDir, "../stories");
 const feUiStoryRoot = join(configDir, "../../../../packages/fe-ui/src");
+const repositoryRoot = join(configDir, "../../../..");
 
 function isStoryFile(name) {
   return /\.stories\.(js|jsx|mjs|ts|tsx)$/.test(name);
@@ -169,6 +172,13 @@ const config = {
     );
 
     config.plugins.push(createStorybookAuthPlugin(authConfig));
+    if (!codexBridgeDisabled) {
+      config.plugins.push(
+        createStorybookCodexBridgePlugin({
+          repositoryRoot,
+        }),
+      );
+    }
 
     return config;
   },

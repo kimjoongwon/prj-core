@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { OverviewManifest } from "../overview/manifest";
 import { PagePlanningPanelView } from "./PagePlanningPanel";
 
@@ -190,5 +190,118 @@ describe("PagePlanningPanelView", () => {
 			screen.getAllByRole("button", { name: "더 보기" }).length,
 		).toBeGreaterThan(0);
 		expect(screen.getByText("Route Planning")).toBeInTheDocument();
+	});
+
+	it("opens a Codex composer with the connected spec files", async () => {
+		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response(
+				JSON.stringify({
+					available: true,
+					codexVersion: "1.0.0",
+					editableTargets: ["spec"],
+					ghAuthenticated: true,
+					ghVersion: "2.73.0",
+					mode: "local-only",
+					originUrl: "https://github.com/kimjoongwon/prj-core.git",
+					publishBase: "main",
+					reason: null,
+				}),
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+					status: 200,
+				},
+			),
+		);
+
+		render(
+			<PagePlanningPanelView
+				manifest={manifest}
+				storyId="page-adminrolespage--default"
+			/>,
+		);
+
+		fireEvent.click(screen.getByRole("button", { name: "Codex로 수정" }));
+
+		expect(
+			await screen.findByRole("button", { name: "Codex 실행" }),
+		).toBeInTheDocument();
+		expect(screen.getByText("page/AdminRolesPage")).toBeInTheDocument();
+		expect(
+			screen.getByText("apps/admin/web/src/app/(admin)/roles/page.spec.md"),
+		).toBeInTheDocument();
+
+		fetchMock.mockRestore();
+	});
+
+	it("shows a restart hint when the Codex bridge endpoint is missing", async () => {
+		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response("Not Found", {
+				headers: {
+					"Content-Type": "text/plain",
+				},
+				status: 404,
+			}),
+		);
+
+		render(
+			<PagePlanningPanelView
+				manifest={manifest}
+				storyId="page-adminrolespage--default"
+			/>,
+		);
+
+		fireEvent.click(screen.getByRole("button", { name: "Codex로 수정" }));
+
+		expect(
+			await screen.findByText(
+				"Codex bridge endpoint를 찾지 못했습니다. Storybook dev 서버를 재시작하거나 정적 build가 아닌지 확인하세요.",
+			),
+		).toBeInTheDocument();
+
+		fetchMock.mockRestore();
+	});
+
+	it("shows an HTML response hint when login or redirect HTML is returned", async () => {
+		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response("<!DOCTYPE html><html><body>Login</body></html>", {
+				headers: {
+					"Content-Type": "text/html",
+				},
+				status: 200,
+			}),
+		);
+
+		render(
+			<PagePlanningPanelView
+				manifest={manifest}
+				storyId="page-adminrolespage--default"
+			/>,
+		);
+
+		fireEvent.click(screen.getByRole("button", { name: "Codex로 수정" }));
+
+		expect(
+			await screen.findByText(
+				"Codex bridge가 JSON 대신 HTML 응답을 반환했습니다. 로그인 리다이렉트 또는 dev 서버 상태를 확인하세요.",
+			),
+		).toBeInTheDocument();
+
+		fetchMock.mockRestore();
+	});
+
+	it("hides the Codex launcher when the story disables it", () => {
+		render(
+			<PagePlanningPanelView
+				codexEnabled={false}
+				manifest={manifest}
+				storyId="page-adminrolespage--default"
+			/>,
+		);
+
+		expect(
+			screen.queryByRole("button", { name: "Codex로 수정" }),
+		).not.toBeInTheDocument();
 	});
 });

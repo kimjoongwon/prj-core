@@ -18,12 +18,15 @@
 - preview toolbar의 `storybookRealm` global은 story parameter에 `realm`이 없는 스토리에서만 `auto | admin | idp | none` 런타임을 임시 오버라이드합니다.
 - 로컬 dev auth 모드에서는 preview bootstrap이 세션 만료를 감지하면 top-level Storybook 전체를 `/__storybook_auth/login`으로 돌려보냅니다.
 - `buildOverviewManifest()` 결과를 전역 `parameters.pagePlanningManifest`로 주입해 manager addon이 `import.meta.glob` 없이 현재 story planning 문서를 읽을 수 있게 합니다.
-- `page/*` Canvas story는 preview decorator가 하단 `PagePlanningDock` shelf를 붙여 canvas 폭을 유지한 채 planning card를 펼치고 접을 수 있게 합니다.
+- `page/*` Canvas story는 preview decorator가 우하단 floating `PagePlanningDock` launcher를 붙이고, 필요할 때 planning을 전체 화면 overlay로 펼칠 수 있게 합니다.
+- `pagePlanning.codex.enabled = false`를 지정한 story는 canvas dock에서 Codex 수정 액션을 숨깁니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-15 | page canvas planning을 하단 shelf 대신 우하단 floating launcher와 전체 화면 overlay로 전환 | codex |
+| 2026-04-15 | story parameter로 page canvas planning dock의 Codex bridge 액션을 opt-out할 수 있도록 조정 | codex |
 | 2026-04-15 | inline planning을 하단 shelf 방식으로 바꿔 좌우 이동 없이 카드 단위 문서 탐색이 가능하도록 조정 | codex |
 | 2026-04-15 | page canvas planning dock를 floating compact summary 방식으로 바꿔 fullscreen 페이지 폭을 보존하도록 조정 | codex |
 | 2026-04-15 | `page/*` Canvas story에 inline planning dock decorator를 추가해 기본 story에서 기획을 바로 노출하도록 확장 | codex |

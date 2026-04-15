@@ -9,6 +9,7 @@ const PANEL_ID = `${ADDON_ID}/panel`;
 function StoryPlanningPanel() {
 	const { storyId } = useStorybookState();
 	const overviewManifest = useParameter("pagePlanningManifest", null);
+	const planningParameters = useParameter("pagePlanning", null);
 
 	if (!overviewManifest) {
 		return null;
@@ -16,6 +17,7 @@ function StoryPlanningPanel() {
 
 	return (
 		<PagePlanningPanelView
+			codexEnabled={planningParameters?.codex?.enabled !== false}
 			manifest={overviewManifest}
 			storyId={storyId ?? null}
 		/>

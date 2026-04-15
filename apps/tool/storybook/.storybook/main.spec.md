@@ -20,11 +20,14 @@
 - `start:dev`에서만 `STORYBOOK_REQUIRE_AUTH=true`가 주입되면 로컬 auth shell plugin과 API proxy를 활성화합니다.
 - 로컬 dev auth 모드에서는 Storybook HTML/JSON 진입점을 로그인 셸 뒤로 숨기고, `/api/v1/*` 요청을 core/idp API로 프록시합니다.
 - preview 번들에는 `__STORYBOOK_REQUIRE_AUTH__` define 값을 주입해 런타임 provider가 dev 인증 모드 여부를 감지할 수 있게 합니다.
+- dev 서버에서는 Storybook Vite middleware로 local-only Codex bridge를 함께 올려 `/__codex/*` 요청을 처리합니다.
+- `STORYBOOK_DISABLE_CODEX_BRIDGE=true`가 주입되면 Codex bridge middleware를 비활성화할 수 있습니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-15 | dev 전용 local Codex bridge middleware를 추가해 Storybook에서 spec 수정 제안과 draft PR 발행을 same-origin으로 처리하도록 확장 | codex |
 | 2026-03-27 | fe-ui 스토리의 sidebar title을 실제 `packages/fe-ui/src` 폴더 구조로 정규화하는 indexer/transform 계약 추가 | codex |
 | 2026-03-27 | framework를 `@storybook/nextjs-vite`로 전환하고 `next/navigation` 수동 mock alias 계약을 제거 | codex |
 | 2026-03-20 | 자동 생성 placeholder 스토리를 기본 수집 대상에서 제외하고, 정적 빌드에서는 `@storybook/addon-vitest`를 끄는 계약 추가 | codex |

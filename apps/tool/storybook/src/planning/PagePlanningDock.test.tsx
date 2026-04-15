@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import type { OverviewManifest } from "../overview/manifest";
 import { PagePlanningDock } from "./PagePlanningDock";
@@ -88,11 +88,7 @@ const manifest: OverviewManifest = {
 };
 
 describe("PagePlanningDock", () => {
-	it("renders the story content with an expandable planning shelf", () => {
-		Object.defineProperty(window, "innerWidth", {
-			configurable: true,
-			value: 1680,
-		});
+	it("renders a floating launcher and expands planning into a full-screen overlay", () => {
 		render(
 			<PagePlanningDock
 				manifest={manifest}
@@ -104,12 +100,21 @@ describe("PagePlanningDock", () => {
 
 		expect(screen.getByText("Story Canvas")).toBeInTheDocument();
 		expect(
+			screen.getByRole("button", { name: "Open planning overlay" }),
+		).toBeInTheDocument();
+		expect(
+			screen.queryByRole("heading", { name: "AdminRolesPage" }),
+		).not.toBeInTheDocument();
+
+		fireEvent.click(screen.getByRole("button", { name: "Open planning overlay" }));
+
+		expect(
 			screen.getByRole("heading", { name: "AdminRolesPage" }),
 		).toBeInTheDocument();
 		expect(screen.getByText("Route Planning")).toBeInTheDocument();
 		expect(
-			screen.getByRole("button", { name: "Collapse planning shelf" }),
+			screen.getByRole("button", { name: "Close planning overlay" }),
 		).toBeInTheDocument();
-		expect(screen.getByText("Planning Shelf")).toBeInTheDocument();
+		expect(screen.getByText("Planning Overlay")).toBeInTheDocument();
 	});
 });

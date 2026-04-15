@@ -1,99 +1,71 @@
 import type { CSSProperties, ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { OverviewManifest } from "../overview/manifest";
 import { PagePlanningPanelView } from "./PagePlanningPanel";
 
-const COLLAPSED_VIEWPORT_WIDTH = 1180;
-const EXPANDED_SHELF_HEIGHT = "min(46vh, 420px)";
-
 export function PagePlanningDock({
 	children,
+	codexEnabled = true,
 	manifest,
 	storyId,
 }: {
 	children: ReactNode;
+	codexEnabled?: boolean;
 	manifest: OverviewManifest;
 	storyId: string | null;
 }) {
-	const [isExpanded, setIsExpanded] = useState(() => {
-		if (typeof window === "undefined") {
-			return true;
-		}
+	const [isExpanded, setIsExpanded] = useState(false);
 
-		return window.innerWidth >= COLLAPSED_VIEWPORT_WIDTH;
-	});
-
-	useEffect(() => {
-		if (typeof window === "undefined") {
-			return;
-		}
-
-		const syncExpandedState = () => {
-			if (window.innerWidth < COLLAPSED_VIEWPORT_WIDTH) {
-				setIsExpanded(false);
-			}
-		};
-
-		syncExpandedState();
-		window.addEventListener("resize", syncExpandedState);
-
-		return () => {
-			window.removeEventListener("resize", syncExpandedState);
-		};
-	}, []);
-
-	const handleToggleClick = () => {
-		setIsExpanded((current) => !current);
+	const handleExpandClick = () => {
+		setIsExpanded(true);
+	};
+	const handleCloseClick = () => {
+		setIsExpanded(false);
 	};
 
 	return (
 		<div style={shellStyle}>
-			<div
-				style={{
-					...canvasPaneStyle,
-					paddingBottom: isExpanded ? "calc(24px + 46vh)" : 96,
-				}}
-			>
-				{children}
+			<div style={canvasPaneStyle}>{children}</div>
+			<div style={launcherLayerStyle}>
+				<button
+					aria-label="Open planning overlay"
+					onClick={handleExpandClick}
+					style={launcherButtonStyle}
+					type="button"
+				>
+					기획서 열기
+				</button>
 			</div>
-			<div style={shelfLayerStyle}>
-				{isExpanded ? (
-					<section aria-label="Planning shelf" style={shelfStyle}>
-						<header style={shelfHeaderStyle}>
-							<div style={shelfHeaderTextStyle}>
-								<p style={shelfEyebrowStyle}>Planning Shelf</p>
-								<strong style={shelfTitleStyle}>
-									문서를 카드처럼 펼쳐 두고 필요한 것만 접고 펼칩니다.
+			{isExpanded ? (
+				<div style={overlayStyle}>
+					<section aria-label="Planning overlay" style={dialogStyle}>
+						<header style={dialogHeaderStyle}>
+							<div style={dialogHeaderTextStyle}>
+								<p style={dialogEyebrowStyle}>Planning Overlay</p>
+								<strong style={dialogTitleStyle}>
+									기획서를 전체 화면으로 펼쳐 route/pure page spec를 한 번에 확인합니다.
 								</strong>
 							</div>
 							<button
-								aria-label="Collapse planning shelf"
-								onClick={handleToggleClick}
+								aria-label="Close planning overlay"
+								onClick={handleCloseClick}
 								style={actionButtonStyle}
 								type="button"
 							>
-								Shelf 접기
+								닫기
 							</button>
 						</header>
-						<div style={shelfBodyStyle}>
+						<div style={dialogBodyStyle}>
 							<PagePlanningPanelView
+								codexEnabled={codexEnabled}
 								manifest={manifest}
 								storyId={storyId}
-								variant="board"
+								variant="full"
 							/>
 						</div>
 					</section>
-				) : (
-					<button
-						aria-label="Expand planning shelf"
-						onClick={handleToggleClick}
-						style={launcherButtonStyle}
-						type="button"
-					>
-						Planning Shelf 열기
-					</button>
-				)}
-			</div>
+				</div>
+			) : null}
 		</div>
 	);
 }
@@ -110,59 +82,11 @@ const canvasPaneStyle: CSSProperties = {
 	padding: 24,
 };
 
-const shelfLayerStyle: CSSProperties = {
+const launcherLayerStyle: CSSProperties = {
 	position: "fixed",
-	left: 16,
-	right: 16,
-	bottom: 16,
+	right: 24,
+	bottom: 24,
 	zIndex: 30,
-	pointerEvents: "none",
-};
-
-const shelfStyle: CSSProperties = {
-	display: "grid",
-	gridTemplateRows: "auto minmax(0, 1fr)",
-	height: EXPANDED_SHELF_HEIGHT,
-	borderRadius: 24,
-	border: "1px solid rgba(148, 163, 184, 0.18)",
-	background:
-		"linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9))",
-	boxShadow: "0 24px 64px rgba(2, 6, 23, 0.42)",
-	backdropFilter: "blur(20px)",
-	overflow: "hidden",
-	pointerEvents: "auto",
-};
-
-const shelfHeaderStyle: CSSProperties = {
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "space-between",
-	gap: 16,
-	padding: "14px 18px",
-	borderBottom: "1px solid rgba(148, 163, 184, 0.12)",
-};
-
-const shelfHeaderTextStyle: CSSProperties = {
-	display: "grid",
-	gap: 4,
-};
-
-const shelfEyebrowStyle: CSSProperties = {
-	margin: 0,
-	fontSize: 11,
-	fontWeight: 700,
-	letterSpacing: "0.08em",
-	textTransform: "uppercase",
-	color: "#5EEAD4",
-};
-
-const shelfTitleStyle: CSSProperties = {
-	fontSize: 14,
-	color: "#F8FAFC",
-};
-
-const shelfBodyStyle: CSSProperties = {
-	overflow: "auto",
 };
 
 const actionButtonStyle: CSSProperties = {
@@ -178,6 +102,65 @@ const actionButtonStyle: CSSProperties = {
 
 const launcherButtonStyle: CSSProperties = {
 	...actionButtonStyle,
-	pointerEvents: "auto",
+	border: "1px solid rgba(94, 234, 212, 0.24)",
+	padding: "12px 16px",
+	background:
+		"linear-gradient(135deg, rgba(15, 118, 110, 0.94), rgba(8, 47, 73, 0.94))",
 	boxShadow: "0 16px 40px rgba(2, 6, 23, 0.35)",
+};
+
+const overlayStyle: CSSProperties = {
+	position: "fixed",
+	inset: 0,
+	zIndex: 40,
+	display: "grid",
+	padding: 20,
+	background: "rgba(2, 6, 23, 0.68)",
+	backdropFilter: "blur(18px)",
+};
+
+const dialogStyle: CSSProperties = {
+	display: "grid",
+	gridTemplateRows: "auto minmax(0, 1fr)",
+	minHeight: 0,
+	borderRadius: 28,
+	border: "1px solid rgba(148, 163, 184, 0.18)",
+	background:
+		"radial-gradient(circle at top right, rgba(94, 234, 212, 0.14), transparent 28%), rgba(15, 23, 42, 0.98)",
+	boxShadow: "0 32px 80px rgba(2, 6, 23, 0.48)",
+	overflow: "hidden",
+};
+
+const dialogHeaderStyle: CSSProperties = {
+	display: "flex",
+	alignItems: "flex-start",
+	justifyContent: "space-between",
+	gap: 16,
+	padding: "18px 22px",
+	borderBottom: "1px solid rgba(148, 163, 184, 0.12)",
+};
+
+const dialogHeaderTextStyle: CSSProperties = {
+	display: "grid",
+	gap: 4,
+};
+
+const dialogEyebrowStyle: CSSProperties = {
+	margin: 0,
+	fontSize: 11,
+	fontWeight: 700,
+	letterSpacing: "0.08em",
+	textTransform: "uppercase",
+	color: "#5EEAD4",
+};
+
+const dialogTitleStyle: CSSProperties = {
+	fontSize: 15,
+	lineHeight: 1.5,
+	color: "#F8FAFC",
+};
+
+const dialogBodyStyle: CSSProperties = {
+	minHeight: 0,
+	overflow: "auto",
 };

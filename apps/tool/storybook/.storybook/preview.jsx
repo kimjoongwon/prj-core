@@ -8,13 +8,18 @@ const overviewManifest = buildOverviewManifest();
 const withPagePlanningDock = (Story, context) => {
   const isPageStory = typeof context.title === "string" && context.title.startsWith("page/");
   const inlinePlanning = context.parameters?.pagePlanning?.inline ?? true;
+  const codexEnabled = context.parameters?.pagePlanning?.codex?.enabled !== false;
 
   if (context.viewMode !== "story" || !isPageStory || !inlinePlanning) {
     return <Story />;
   }
 
   return (
-    <PagePlanningDock manifest={overviewManifest} storyId={context.id ?? null}>
+    <PagePlanningDock
+      codexEnabled={codexEnabled}
+      manifest={overviewManifest}
+      storyId={context.id ?? null}
+    >
       <Story />
     </PagePlanningDock>
   );
