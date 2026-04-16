@@ -4,6 +4,7 @@ import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
 import { useDebouncedCallback } from "@cocrepo/hook";
 import { parseAsString, useQueryState } from "@cocrepo/hook/nuqs";
 import { UserListPage, useMetaDataGridQueryStates } from "@cocrepo/ui";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 import { observer } from "mobx-react-lite";
 import { Suspense, useEffect, useState } from "react";
 
@@ -26,6 +27,9 @@ function UsersPageContent() {
 		parseAsString.withDefault(""),
 	);
 	const [searchValue, setSearchValue] = useState(searchQuery);
+	const persistStore = usePersistStore();
+	const currentSpaceId = persistStore.spaceId ?? "all";
+	const usersParams = getUsersParams(queryStates, searchQuery);
 
 	useEffect(() => {
 		setSearchValue(searchQuery);
@@ -36,10 +40,11 @@ function UsersPageContent() {
 	}, 300);
 
 	const { data: response, isLoading } = useGetUsers(
-		getUsersParams(queryStates, searchQuery),
+		usersParams,
 		{
 			query: {
 				placeholderData: (previousData) => previousData,
+				queryKey: ["/api/v1/users", usersParams, currentSpaceId],
 			},
 		},
 	);
