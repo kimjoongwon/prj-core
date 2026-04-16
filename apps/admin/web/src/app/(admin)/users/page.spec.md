@@ -49,7 +49,7 @@
 
 | 이벤트 | 동작 |
 |--------|------|
-| Space 변경 | `persistStore.spaceId` 변경 시 `queryKey`가 바뀌어 목록 조회가 space별로 재요청됨 | 
+| Space 변경 | `persistStore.spaceId` 변경 시 `queryKey`가 바뀌어 목록 조회가 space별로 재요청됨. 이전 space 데이터는 전환 시 placeholder로 노출되지 않음 | 
 | 검색어 입력 | `search` URL 파라미터 갱신 후 재조회 |
 | 페이지 변경 | `skip` 상태 갱신 후 재조회 |
 | 페이지 크기 변경 | `take` 상태 갱신 후 재조회 |
@@ -65,6 +65,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | admin 사용자 목록 Space 전환 시 이전 space의 임시 데이터 표시를 막기 위해 placeholderData 제거 | codex |
 | 2026-04-16 | admin 사용자 목록 `useGetUsers` 쿼리 키에 spaceId를 포함해 space 변경 시 재조회되도록 캐시 분리 적용 | codex |
 | 2026-03-23 | nuqs 직접 의존을 제거하고 공용 bridge(@cocrepo/hook/nuqs)를 통해 URL state를 공유 | codex |
 | 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |

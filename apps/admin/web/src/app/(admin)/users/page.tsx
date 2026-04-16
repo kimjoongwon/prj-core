@@ -43,7 +43,6 @@ function UsersPageContent() {
 		usersParams,
 		{
 			query: {
-				placeholderData: (previousData) => previousData,
 				queryKey: ["/api/v1/users", usersParams, currentSpaceId],
 			},
 		},
