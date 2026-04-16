@@ -16,6 +16,7 @@ Stage 1에서는 모바일 route spec 뿐 아니라 backend spec 생성도 함�
 - Stage 1에서는 `domain`/`domains`와 `route/routes`를 함께 받아 mobile route spec 과 backend spec 을 조율할 수 있습니다.
 - backend spec planning 은 mobile 전용 backend clone role 을 만들지 않고 공통 backend `req-*` role 을 사용합니다.
 - Stage 1은 `orch-mobile-screen-planner`를 통해 `_layout.spec.md`, `index.spec.md`, `app.spec.md`와 unit/E2E 테스트 계약을 정리하고, 공통 backend role chain 으로 backend spec 을 정리합니다.
+- `FULL_ACCESS` / `x-space-id`처럼 API 생성의 근간이 되는 공통 backend scope/authorization 규칙은 mobile Stage 2-4가 아니라 Stage 1의 공통 backend `req-api-planner` / `req-app-planner` / `req-logic-planner` chain 이 owner 입니다.
 - Stage 2는 `fe-mo-display-component-builder`, `fe-mo-control-component-builder`, `fe-mo-menu-builder` 중심으로 `packages/fe-mo-ui`를 구현합니다.
 - Stage 3은 `fe-mo-route-layout-builder`, `fe-mo-page-builder`, 조건부 `fe-mo-api-integrator`, `fe-mo-store-builder`로 `apps/mobile/src/app/**`를 통합합니다.
 - Stage 4는 `fe-mo-e2e-builder`, `req-mo-fe-test-planner`, `qa-mo-e2e-testing`과 검증 명령으로 모바일 테스트를 마감합니다.
@@ -25,6 +26,7 @@ Stage 1에서는 모바일 route spec 뿐 아니라 backend spec 생성도 함�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | 공통 backend scope/authorization invariant owner를 Stage 1의 공통 backend req chain으로 명시 | codex |
 | 2026-04-14 | 모바일 Stage 1 test spec owner / Stage 4 E2E verification + `qa-mo-*` role 기준으로 운영 규칙을 갱신 | codex |
 | 2026-04-13 | 모바일 frontend 전용 compact 4-stage orchestrator 신규 추가 | codex |
 | 2026-04-13 | Stage 1에 common backend spec planning 책임 추가 | codex |

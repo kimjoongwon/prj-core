@@ -26,11 +26,14 @@ Stage 4의 route layout / slot / Surface 결정이 Stage 6의 `layout.tsx` + `@s
 - Stage 1과 Stage 4의 exact child 호출 체인은 `orch-requirement`, `orch-screen-planner` 문서를 source of truth로 참조합니다.
 - `orch-stage.toml`에는 child role 내부 규칙을 다시 복제하지 않고, Stage 계약과 위임 경계만 남깁니다.
 - 병렬 실행 설명은 fan-out/fan-in 엔진 하나로 통합하고, 수동 지정과 자동 판단은 같은 실행 규칙 안에서 다룹니다.
+- API 생성의 근간이 되는 공통 backend scope/authorization invariant는 Stage 1에서 `orch-requirement -> req-api-planner/req-logic-planner` 체인으로 정의하고, Stage 3에서 `be-repository-builder -> be-service-builder -> be-app-builder(조건부) -> be-controller-builder(조건부)` 체인으로 강제합니다.
+- 예시 규칙인 `FULL_ACCESS`면 전체 조회, 아니면 현재 `x-space-id` 기준 tenant/space scope만 허용하는 정책은 Stage 4-6 화면 기획/구현이 아니라 Stage 1/3 백엔드 체인의 owner 범위로 간주합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | 공통 backend scope/authorization invariant를 Stage 1 정의, Stage 3 강제 책임으로 명시 | codex |
 | 2026-04-14 | Stage 4를 FE test spec authoring owner로, Stage 7을 E2E 구현/sync stage로 재정의 | codex |
 | 2026-03-29 | Stage 설명/호출 체인 중복을 제거하고 child role 참조 중심 구조로 `orch-stage.toml`을 전면 정리 | codex |
 | 2026-03-28 | `req-columns-planner`/`fe-columns-builder`를 Stage 4-5 흐름과 호출 트리에 반영 | codex |

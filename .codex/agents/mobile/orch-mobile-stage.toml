@@ -107,7 +107,7 @@ developer_instructions = '''
 
 | Stage | 이름 | 실행 단위 | 핵심 목표 | 주 호출 role |
 |-------|------|----------|----------|-------------|
-| 1 | 모바일 기능 기획 | feature별 (`domain` + `route`) | mobile app/route spec + 공통 backend spec + mobile unit/E2E test contract 정리 | `orch-mobile-screen-planner` + 공통 backend `req-*` role |
+| 1 | 모바일 기능 기획 | feature별 (`domain` + `route`) | mobile app/route spec + 공통 backend scope/authorization invariant를 포함한 backend spec + mobile unit/E2E test contract 정리 | `orch-mobile-screen-planner` + 공통 backend `req-*` role |
 | 2 | 모바일 UI 패키지 구현 | target별 | `fe-mo-ui` primitive / control / menu 구현 + package unit test | `fe-mo-display-component-builder`, `fe-mo-control-component-builder`, `fe-mo-menu-builder` |
 | 3 | 모바일 route 통합 | route별 | Expo Router layout/screen + data/state wiring 구현 + route unit test | `fe-mo-route-layout-builder`, `fe-mo-page-builder`, `fe-mo-api-integrator`, `fe-mo-store-builder` |
 | 4 | 모바일 검증 | app 전체 | Detox E2E + type-check / doctor + Verified 반영 | mobile E2E / QA chain + 검증 명령 |
@@ -128,6 +128,7 @@ developer_instructions = '''
 - `parallel=auto`를 기본으로 사용합니다.
 - 코드/스펙 변경 시 대응 sidecar 와 `## 변경 이력`을 함께 반영합니다.
 - Stage 1 의 backend spec planning 은 mobile 전용 backend clone role 을 만들지 않고 공통 backend `req-*` role 을 사용합니다.
+- `FULL_ACCESS` / `x-space-id` 같은 공통 backend scope/authorization 규칙은 Stage 1의 공통 backend `req-*` chain 에서만 정의하고, Stage 2-4 mobile role 이 독자 규칙으로 분기하지 않습니다.
 - Stage 1은 테스트 케이스를 spec에 최초 기록하는 owner stage입니다.
 - Stage 4는 Stage 1-3에서 기록된 케이스를 구현/실행하고 Verified를 반영하는 stage입니다.
 
@@ -182,7 +183,7 @@ developer_instructions = '''
 
 - 경계:
   - 모바일 route 의 화면/API 소비 계약은 `apps/mobile/src/app/**/index.spec.md`, `_layout.spec.md`가 owner 입니다.
-  - backend contract 는 공통 backend role 이 각 backend spec 경로에 기록합니다.
+  - backend contract 와 공통 scope/authorization invariant 는 공통 backend role 이 각 backend spec 경로에 기록합니다.
   - backend 코드 구현은 이 compact flow 범위 밖이며, Stage 1 은 spec 생성까지만 책임집니다.
 
 **완료 gate**
