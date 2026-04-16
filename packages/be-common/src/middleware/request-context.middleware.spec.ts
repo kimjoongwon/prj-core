@@ -157,18 +157,18 @@ describe("RequestContextMiddleware", () => {
 				);
 			});
 
-			it("같은 spaceId에 중복 tenant가 있어도 매칭되는 tenant를 그대로 저장해야 한다", async () => {
+			it("같은 spaceId에서 FULL_ACCESS tenant가 있으면 해당 tenant를 우선 저장해야 한다", async () => {
 				const user = createMockUser({
 					tenants: [
 						{
-							id: "tenant-mirrored-full-access",
-							spaceId: "space-001",
-							role: { name: "FULL_ACCESS" },
-						},
-						{
-							id: "tenant-space-scoped",
+							id: "tenant-view",
 							spaceId: "space-001",
 							role: { name: "VIEW" },
+						},
+						{
+							id: "tenant-full-access",
+							spaceId: "space-001",
+							role: { name: "FULL_ACCESS" },
 						},
 					],
 				});
@@ -185,7 +185,35 @@ describe("RequestContextMiddleware", () => {
 
 				expect(mockCls.set).toHaveBeenCalledWith(
 					CONTEXT_KEYS.TENANT,
-					user.tenants[0],
+					user.tenants[1],
+				);
+			});
+
+			it("해당 spaceId의 tenant가 removed되었으면 TENANT를 undefined로 설정해야 한다", async () => {
+				const user = createMockUser({
+					tenants: [
+						{
+							id: "tenant-deleted",
+							spaceId: "space-001",
+							role: { name: "FULL_ACCESS" },
+							removedAt: new Date(),
+						},
+					],
+				});
+				mockReq = {
+					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "space-001" },
+					user,
+				} as any;
+
+				await middleware.use(
+					mockReq as Request,
+					mockRes as Response,
+					mockNext,
+				);
+
+				expect(mockCls.set).toHaveBeenCalledWith(
+					CONTEXT_KEYS.TENANT,
+					undefined,
 				);
 			});
 

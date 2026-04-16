@@ -41,6 +41,10 @@ export function isRootSpaceCategory(tenant: TenantDto): boolean {
 
 /**
  * 현재 x-space-id에 대응하는 Tenant를 고릅니다.
+ * 우선순위:
+ * 1. 같은 spaceId + 제거되지 않은 레코드
+ * 2. FULL_ACCESS 역할이 있으면 해당 tenant
+ * 3. 그 외 첫 번째 tenant
  */
 export function resolveCurrentTenantForSpace(
 	tenants: TenantDto[] | null | undefined,
@@ -49,17 +53,25 @@ export function resolveCurrentTenantForSpace(
 	if (!tenants?.length) {
 		return undefined;
 	}
-
 	if (!spaceId) {
-		return tenants[0];
-	}
-
-	const matchedTenant = tenants.find((tenant) => tenant.spaceId === spaceId);
-	if (!matchedTenant) {
 		return undefined;
 	}
 
-	return matchedTenant;
+	const candidates = tenants.filter(
+		(tenant) => tenant.spaceId === spaceId && tenant.removedAt == null,
+	);
+	if (!candidates.length) {
+		return undefined;
+	}
+
+	const fullAccessTenant = candidates.find(
+		(tenant) => tenant.role?.name === SYSTEM_ROLES.FULL_ACCESS,
+	);
+	if (fullAccessTenant) {
+		return fullAccessTenant;
+	}
+
+	return candidates[0];
 }
 
 /**

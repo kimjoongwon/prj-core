@@ -50,7 +50,8 @@ export class SpaceAccessGuard implements CanActivate {
 		if (!user.tenants || !Array.isArray(user.tenants)) return true;
 
 		const tenant = user.tenants.find(
-			(t: TenantDto) => t.spaceId === spaceId,
+			(t: TenantDto) =>
+				t.spaceId === spaceId && t.removedAt == null,
 		);
 		if (!tenant) {
 			throw new ForbiddenException(
