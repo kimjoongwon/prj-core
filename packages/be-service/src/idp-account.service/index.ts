@@ -1,7 +1,8 @@
+import { SpaceContext } from "@cocrepo/context";
 import type { QueryIdpAccountDto } from "@cocrepo/dto";
 import { AuthAuditLogsRepository } from "@cocrepo/repository";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
-import type { PrismaClient } from "@cocrepo/prisma";
+import type { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import type { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 
@@ -42,6 +43,7 @@ export class IdpAccountService {
 		private readonly txHost: TransactionHost<
 			TransactionalAdapterPrisma<PrismaClient>
 		>,
+		private readonly spaceContext: SpaceContext,
 		private readonly auditLogsRepository: AuthAuditLogsRepository,
 	) {}
 
@@ -51,7 +53,9 @@ export class IdpAccountService {
 	}> {
 		this.logger.debug("IDP 계정 목록 조회");
 
-		const where = query.toPrismaWhere({ removedAt: null });
+		const where = this.applySpaceScope(
+			query.toPrismaWhere({ removedAt: null }),
+		);
 		const orderBy = query.toPrismaOrderBy();
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 20;
@@ -73,8 +77,8 @@ export class IdpAccountService {
 	async getById(userId: string): Promise<IdpAccountInfo> {
 		this.logger.debug(`IDP 계정 상세 조회: ${userId.slice(-8)}`);
 
-		const user = await this.txHost.tx.user.findUnique({
-			where: { id: userId, removedAt: null },
+		const user = await this.txHost.tx.user.findFirst({
+			where: this.applySpaceScope({ id: userId, removedAt: null }),
 			select: ACCOUNT_SELECT,
 		});
 
@@ -92,8 +96,8 @@ export class IdpAccountService {
 	async toggleActive(userId: string): Promise<IdpAccountInfo> {
 		this.logger.debug(`계정 활성/비활성 토글: ${userId.slice(-8)}`);
 
-		const user = await this.txHost.tx.user.findUnique({
-			where: { id: userId, removedAt: null },
+		const user = await this.txHost.tx.user.findFirst({
+			where: this.applySpaceScope({ id: userId, removedAt: null }),
 		});
 
 		if (!user) {
@@ -112,8 +116,8 @@ export class IdpAccountService {
 	async resetFailedAttempts(userId: string): Promise<void> {
 		this.logger.debug(`실패 횟수 초기화: ${userId.slice(-8)}`);
 
-		const user = await this.txHost.tx.user.findUnique({
-			where: { id: userId, removedAt: null },
+		const user = await this.txHost.tx.user.findFirst({
+			where: this.applySpaceScope({ id: userId, removedAt: null }),
 		});
 
 		if (!user) {
@@ -128,5 +132,28 @@ export class IdpAccountService {
 				isPermanentlyLocked: false,
 			},
 		});
+	}
+
+	private applySpaceScope(
+		where: Prisma.UserWhereInput,
+	): Prisma.UserWhereInput {
+		const spaceIds = this.spaceContext.spaceIds;
+		if (spaceIds === undefined) {
+			return where;
+		}
+
+		return {
+			AND: [
+				where,
+				{
+					tenants: {
+						some: {
+							spaceId: { in: spaceIds },
+							removedAt: null,
+						},
+					},
+				},
+			],
+		};
 	}
 }

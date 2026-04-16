@@ -1,10 +1,11 @@
 import { CONTEXT_KEYS, REQUEST_HEADER_KEYS } from "@cocrepo/constant";
-import { TenantDto, UserDto } from "@cocrepo/dto";
+import { UserDto } from "@cocrepo/dto";
 import { Injectable, type NestMiddleware } from "@nestjs/common";
 import type { NextFunction, Request, Response } from "express";
 import { parseAcceptLanguage } from "@cocrepo/toolkit";
 import { ClsService } from "nestjs-cls";
 import { AppLogger } from "../util/app-logger.util";
+import { resolveCurrentTenantForSpace } from "../util/permission.util";
 
 /**
  * CLS 컨텍스트를 설정하는 Middleware
@@ -64,10 +65,7 @@ export class RequestContextMiddleware implements NestMiddleware {
 		this.cls.set(CONTEXT_KEYS.SPACE_ID, spaceId || undefined);
 
 		// Tenant 설정 (spaceId가 있는 경우)
-		const tenant =
-			spaceId && user?.tenants
-				? user.tenants.find((t: TenantDto) => t.spaceId === spaceId)
-				: undefined;
+		const tenant = resolveCurrentTenantForSpace(user?.tenants, spaceId);
 		this.cls.set(CONTEXT_KEYS.TENANT, tenant);
 
 		if (user && tenant) {

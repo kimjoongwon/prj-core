@@ -25,7 +25,9 @@
 | ValueSplitter | 공개 계약 요소 |
 | ValueAggregator | 공개 계약 요소 |
 | AppIconName | 공개 계약 요소 |
+| ScreenScopeKind | 공개 계약 요소 |
 | AbilityChecker | 공개 계약 요소 |
+| NavItemScopeChecker | 공개 계약 요소 |
 | NavigationStoreOptions | 공개 계약 요소 |
 | FABStoreOptions | 공개 계약 요소 |
 | AppStoreConfig | 공개 계약 요소 |
@@ -37,6 +39,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | 화면 scope 계약(`ScreenScopeKind`, `NavItemScopeChecker`) export를 루트 배럴에 추가 | codex |
 | 2026-03-15 | 루트 타입 배럴에서 `ObjectStorageConfig`/`ObjectStorageProvider` export를 추가 | codex |
 | 2026-03-11 | `AppIconName` 공개 export를 추가해 UI 아이콘 계약을 루트 타입 배럴에서 직접 import 가능하게 정리 | codex |
 | 2026-03-06 | 미사용 템플릿 타입 export 블록 제거 | codex |

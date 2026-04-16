@@ -1,8 +1,11 @@
+import type { ScreenScopeKind } from "@cocrepo/type";
 import type { GeneratedAdminPageAccessItem } from "./admin-route-meta";
 import { GENERATED_ADMIN_PAGE_ACCESS_ITEMS } from "./generated/admin-route-catalog.generated";
 import { ADMIN_MENU_PERMISSION_LEAFS } from "./admin-menu";
 
-export interface AdminPageAccessItem extends GeneratedAdminPageAccessItem {}
+export interface AdminPageAccessItem extends GeneratedAdminPageAccessItem {
+	scopeKind: ScreenScopeKind;
+}
 
 export interface AdminCrudBundle {
 	bundleId: string;
@@ -15,8 +18,30 @@ export interface AdminCrudBundle {
 
 const CRUD_ACTIONS = ["create", "read", "update", "delete", "manage"] as const;
 
+const ADMIN_GLOBAL_FULL_ACCESS_PAGE_PREFIXES = [
+	"abilities:",
+	"actions:",
+	"subjects:",
+	"templates:",
+] as const;
+
+export function resolveAdminPageScopeKind(pageId: string): ScreenScopeKind {
+	if (
+		ADMIN_GLOBAL_FULL_ACCESS_PAGE_PREFIXES.some((prefix) =>
+			pageId.startsWith(prefix),
+		)
+	) {
+		return "global-full-access-only";
+	}
+
+	return "space";
+}
+
 export const ADMIN_PAGE_ACCESS_ITEMS: AdminPageAccessItem[] =
-	GENERATED_ADMIN_PAGE_ACCESS_ITEMS;
+	GENERATED_ADMIN_PAGE_ACCESS_ITEMS.map((item) => ({
+		...item,
+		scopeKind: resolveAdminPageScopeKind(item.pageId),
+	}));
 
 export const ADMIN_PAGE_ACCESS_SUBJECTS = ADMIN_PAGE_ACCESS_ITEMS.map(
 	(item) => item.subject,

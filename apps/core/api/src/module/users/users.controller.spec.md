@@ -18,7 +18,7 @@ User CRUD API를 노출하며, Space/Auth 컨텍스트 해석과 응답 조립�
 
 | Method | 경로 | Operation ID | 설명 |
 |--------|------|-------------|------|
-| GET | `/` | `getUsers` | 사용자 목록 조회 (`ROOT FULL_ACCESS => 전체`, 그 외 현재 Space / `data + meta + stats`) |
+| GET | `/` | `getUsers` | 사용자 목록 조회 (`현재 tenant FULL_ACCESS => 전체`, 그 외 현재 Space / `data + meta + stats`) |
 | GET | `/:id` | `getUserById` | 현재 Space 기준 사용자 상세 조회 |
 | DELETE | `/:id` | `deleteUser` | 현재 Space 기준 사용자 삭제 |
 
@@ -26,13 +26,15 @@ User CRUD API를 노출하며, Space/Auth 컨텍스트 해석과 응답 조립�
 
 - controller는 `ClsService`와 `getSpaceId`/`getCurrentUser` helper 없이 Facade만 호출합니다.
 - Space/Auth 컨텍스트 해석과 목록 `meta`/`stats` 조립은 Facade가 담당하고, 자기 자신 삭제 방지와 Space 검증은 내부 `UserService`가 담당합니다.
-- 사용자 목록은 현재 `x-space-id`로 해석된 Tenant가 `ROOT(System)` Space의 `FULL_ACCESS`면 전체 조회합니다.
-- 그 외에는 현재 Tenant의 `spaceId` 1개만 조회하며, 기본 목록에서는 현재 Space에 미러된 `FULL_ACCESS` tenant를 제외합니다.
+- 사용자 목록은 현재 `x-space-id`로 해석된 Tenant role이 `FULL_ACCESS`면 전체 조회합니다.
+- 그 외에는 현재 Tenant의 `spaceId` 1개만 조회합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | 사용자 목록의 전역 조회 기준을 ROOT와 무관한 현재 tenant `FULL_ACCESS`로 정정 | codex |
+| 2026-04-16 | 사용자 목록 설명에서 `mirrored FULL_ACCESS` 제외 규칙 문구 제거 | codex |
 | 2026-04-15 | 회원 목록 설명을 `ROOT FULL_ACCESS => 전체`, 그 외 현재 Space + branch 기본 목록의 FULL_ACCESS 제외 규칙으로 갱신 | codex |
 | 2026-04-15 | 사용자 목록 엔드포인트 설명을 `FULL_ACCESS => 전체`, 그 외 현재 header tenant space 기준으로 갱신 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |

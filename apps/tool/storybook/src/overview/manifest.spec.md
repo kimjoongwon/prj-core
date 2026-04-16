@@ -6,7 +6,7 @@
 - page story별 planning sidecar spec를 찾아 우측 패널과 overview detail이 재사용할 수 있는 index를 제공합니다.
 
 ## 핵심 동작
-- `import.meta.glob`로 `packages/fe-ui/src/page/*/*.stories.tsx`, pure page `*.spec.md`, admin/idp route `page.tsx`, admin/idp route `page.spec.md` 소스를 raw text로 수집합니다.
+- Storybook/Vitest가 주입하는 `__STORYBOOK_OVERVIEW_MANIFEST_SOURCES__` define에서 `packages/fe-ui/src/page/*/*.stories.tsx`, pure page `*.spec.md`, admin/idp route `page.tsx`, admin/idp route `page.spec.md` raw source map을 읽습니다.
 - page story는 folder 이름을 기준으로 component name, `page/[ComponentName]` title, canonical `Default` story id와 모든 export story id, autodocs `Docs` story id 목록을 계산합니다.
 - story source에 `PageStoryScaffold`가 포함되면 `scaffold`, 아니면 `scenario`로 판정합니다.
 - route page source는 `@cocrepo/ui` import/export 패턴만 파싱해 연결된 pure page component를 찾습니다.
@@ -21,6 +21,7 @@
 | 항목 | 설명 |
 |------|------|
 | `buildOverviewManifest()` | 실제 repo 소스에서 overview manifest를 조립합니다. |
+| `OverviewManifestSourceMaps` | overview manifest에 필요한 raw source map six-pack 타입입니다. |
 | `createOverviewManifest()` | 테스트/확장용 순수 조합 함수입니다. |
 | `normalizeAppRoutePath()` | route group을 제거한 앱 경로를 계산합니다. |
 | `extractPageComponentNames()` | `@cocrepo/ui` import/export에서 page component 이름을 추출합니다. |
@@ -33,6 +34,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | browser 번들에서 `import.meta.glob`를 제거하고 Storybook/Vitest define source map을 소비하도록 변경 | codex |
 | 2026-04-15 | autodocs 진입에서도 planning panel이 보이도록 page `Docs` story id 매핑 규칙 추가 | codex |
 | 2026-04-15 | page story planning panel을 위해 pure/route spec index와 manual flow override 병합 계약 추가 | codex |
 | 2026-04-08 | Storybook page overview를 위한 page catalog/flow manifest 생성기 신규 추가 | codex |

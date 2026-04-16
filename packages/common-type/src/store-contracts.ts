@@ -1,6 +1,6 @@
 import type { Context, FC, ReactNode } from "react";
 import type { AppAction, AppSubject } from "./ability";
-import type { FABAction, NavItemConfig } from "./navigation";
+import type { FABAction, NavItemConfig, ScreenScopeKind } from "./navigation";
 
 /**
  * 권한 체크 함수 타입
@@ -9,6 +9,8 @@ export type AbilityChecker = (
 	action: AppAction,
 	subject: AppSubject,
 ) => boolean;
+
+export type NavItemScopeChecker = (scopeKind?: ScreenScopeKind) => boolean;
 
 /**
  * FAB 권한 체크 함수 타입
@@ -35,6 +37,8 @@ export interface NavigationStoreOptions {
 	navigator?: NavigatorLike;
 	/** 권한 체크 함수 */
 	abilityChecker?: AbilityChecker;
+	/** 화면 스코프 기반 노출 체크 함수 */
+	scopeChecker?: NavItemScopeChecker;
 	/**
 	 * @deprecated navigator 사용을 권장합니다
 	 */

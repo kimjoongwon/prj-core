@@ -515,7 +515,35 @@ describe("AuthApplicationService", () => {
 	});
 
 	describe("verifyToken", () => {
-		it("유효한 토큰의 만료 시간과 FULL_ACCESS tenant role 여부를 반환해야 한다", async () => {
+		it("유효한 토큰의 만료 시간과 현재 tenant의 FULL_ACCESS 여부를 반환해야 한다", async () => {
+			const exp = Math.floor(Date.now() / 1000) + 3600;
+			const fakeToken = `header.${Buffer.from(
+				JSON.stringify({ sub: "user-1", exp }),
+			).toString("base64url")}.signature`;
+			mockClsService.get.mockImplementation((key) => {
+				if (key === CONTEXT_KEYS.TOKEN) {
+					return fakeToken;
+				}
+
+				if (key === CONTEXT_KEYS.TENANT) {
+					return {
+						id: "tenant-1",
+						spaceId: "space-1",
+						role: { name: "FULL_ACCESS" },
+					};
+				}
+
+				return undefined;
+			});
+
+			const result = await applicationService.verifyToken();
+
+			expect(result.valid).toBe(true);
+			expect(result.accessTokenExpiresAt).toBe(exp * 1000);
+			expect(result.hasFullAccess).toBe(true);
+		});
+
+		it("다른 tenant에 FULL_ACCESS가 있어도 현재 tenant가 아니면 hasFullAccess를 false로 반환해야 한다", async () => {
 			const exp = Math.floor(Date.now() / 1000) + 3600;
 			const fakeToken = `header.${Buffer.from(
 				JSON.stringify({ sub: "user-1", exp }),
@@ -538,14 +566,20 @@ describe("AuthApplicationService", () => {
 					};
 				}
 
+				if (key === CONTEXT_KEYS.TENANT) {
+					return {
+						id: "tenant-2",
+						spaceId: "space-2",
+						role: { name: "VIEW" },
+					};
+				}
+
 				return undefined;
 			});
 
 			const result = await applicationService.verifyToken();
 
-			expect(result.valid).toBe(true);
-			expect(result.accessTokenExpiresAt).toBe(exp * 1000);
-			expect(result.hasFullAccess).toBe(true);
+			expect(result.hasFullAccess).toBe(false);
 		});
 	});
 
@@ -597,7 +631,7 @@ describe("AuthApplicationService", () => {
 			expect(result?.id).toBe("space-1");
 		});
 
-		it("x-space-id가 없거나 접근 불가하면 FULL_ACCESS tenant를 기본 Space로 반환해야 한다", async () => {
+		it("x-space-id가 없거나 접근 불가하면 접근 가능한 기본 순서의 Space를 반환해야 한다", async () => {
 			mockClsService.get.mockImplementation((key) => {
 				if (key === CONTEXT_KEYS.AUTH_USER) {
 					return fullAccessUser as never;
@@ -608,7 +642,7 @@ describe("AuthApplicationService", () => {
 
 			const result = await applicationService.getCurrentSpace("unknown-space");
 
-			expect(result?.id).toBe("space-2");
+			expect(result?.id).toBe("space-1");
 		});
 
 		it("setCurrentSpace는 쿠키 없이 접근 가능한 Space DTO만 반환해야 한다", async () => {

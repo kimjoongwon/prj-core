@@ -9,6 +9,8 @@ describe("UsersRepository", () => {
 		tx: {
 			user: {
 				findUnique: jest.Mock;
+				findMany: jest.Mock;
+				count: jest.Mock;
 			};
 		};
 	};
@@ -50,11 +52,13 @@ describe("UsersRepository", () => {
 	beforeEach(async () => {
 		mockTxHost = {
 			tx: {
-				user: {
-					findUnique: jest.fn(),
+					user: {
+						findUnique: jest.fn(),
+						findMany: jest.fn(),
+						count: jest.fn(),
+					},
 				},
-			},
-		};
+			};
 
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
@@ -183,6 +187,40 @@ describe("UsersRepository", () => {
 					}),
 				}),
 			);
+		});
+	});
+
+	describe("findManyBySpaceIds", () => {
+		it("scoped 목록 조회에서 spaceIds가 있으면 tenants include가 그 space만 조회한다", async () => {
+			mockTxHost.tx.user.findMany.mockResolvedValue([]);
+			mockTxHost.tx.user.count.mockResolvedValue(0);
+
+			await repository.findManyBySpaceIds({
+				where: { removedAt: null },
+				orderBy: [{ createdAt: "desc" }],
+				skip: 0,
+				take: 20,
+				spaceIds: ["space-001"],
+			});
+
+			expect(mockTxHost.tx.user.findMany).toHaveBeenCalledWith({
+				where: { removedAt: null },
+				include: expect.objectContaining({
+					tenants: expect.objectContaining({
+						where: {
+							removedAt: null,
+							spaceId: { in: ["space-001"] },
+						},
+						include: {
+							role: true,
+							space: true,
+						},
+					}),
+				}),
+				orderBy: [{ createdAt: "desc" }],
+				skip: 0,
+				take: 20,
+			});
 		});
 	});
 });

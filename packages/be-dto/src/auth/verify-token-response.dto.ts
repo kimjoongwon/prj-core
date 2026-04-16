@@ -11,7 +11,8 @@ export class VerifyTokenResponseDto {
 	refreshTokenExpiresAt!: number;
 
 	@ApiProperty({
-		description: "현재 사용자가 `FULL_ACCESS` tenant role을 보유하는지 여부",
+		description:
+			"현재 `x-space-id`로 해석된 tenant role이 `FULL_ACCESS`인지 여부",
 	})
 	hasFullAccess!: boolean;
 }

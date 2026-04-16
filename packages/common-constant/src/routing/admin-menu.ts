@@ -1,4 +1,9 @@
-import type { AppIconName, FABAction, NavItemConfig } from "@cocrepo/type";
+import type {
+	AppIconName,
+	FABAction,
+	NavItemConfig,
+	ScreenScopeKind,
+} from "@cocrepo/type";
 import { GENERATED_ADMIN_NAV_ITEMS } from "./generated/admin-route-catalog.generated";
 
 /**
@@ -158,7 +163,43 @@ export const ADMIN_SUBJECTS = {
 	MENU_INQUIRIES_LIST: "menu:inquiries:list",
 } as const;
 
-export const ADMIN_NAV_ITEMS: NavItemConfig[] = GENERATED_ADMIN_NAV_ITEMS;
+const ADMIN_NAV_SCOPE_KIND_BY_ID: Partial<Record<string, ScreenScopeKind>> = {
+	dashboard: "space",
+	users: "space",
+	"users-list": "space",
+	spaces: "space",
+	"spaces-list": "space",
+	timelines: "space",
+	"timelines-list": "space",
+	tasks: "space",
+	"tasks-list": "space",
+	"routines-list": "space",
+	templates: "global-full-access-only",
+	"templates-list": "global-full-access-only",
+	assets: "space",
+	"assets-list": "space",
+	inquiries: "space",
+	"inquiries-list": "space",
+	"roles-list": "space",
+	"role-groups-list": "space",
+	"role-categories-list": "space",
+	"abilities-list": "global-full-access-only",
+	"actions-list": "global-full-access-only",
+	"subjects-list": "global-full-access-only",
+};
+
+function applyAdminNavScopeKinds(navItems: NavItemConfig[]): NavItemConfig[] {
+	return navItems.map((navItem) => ({
+		...navItem,
+		scopeKind: ADMIN_NAV_SCOPE_KIND_BY_ID[navItem.id] ?? navItem.scopeKind,
+		children: navItem.children
+			? applyAdminNavScopeKinds(navItem.children)
+			: undefined,
+	}));
+}
+
+export const ADMIN_NAV_ITEMS: NavItemConfig[] =
+	applyAdminNavScopeKinds(GENERATED_ADMIN_NAV_ITEMS);
 
 export interface AdminMenuPermissionLeaf {
 	groupId: string;

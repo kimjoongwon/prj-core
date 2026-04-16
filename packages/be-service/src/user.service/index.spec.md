@@ -25,7 +25,7 @@ CLS SpaceContext를 통해 현재 선택 Space를 기준으로 사용자를 관�
 |--------|----------|------|------|
 | `getByIdWithTenants` | `id: string` | Tenant+Profile 포함 사용자 조회 |
 | `findUserForAuth` | `email: string` | 인증용 경량 사용자 조회 (이메일, 비밀번호만) |
-| `getUsersBySpace` | `query: QueryUsersDto` | `Promise<GetUsersResult>` | 현재 Tenant가 ROOT FULL_ACCESS인지에 따라 전체 또는 현재 Space 사용자 목록/통계 조회 |
+| `getUsersBySpace` | `query: QueryUsersDto` | `Promise<GetUsersResult>` | 현재 Tenant role이 FULL_ACCESS인지에 따라 전체 또는 현재 Space 사용자 목록/통계 조회 |
 | `getUserDetailForSpace` | `userId, spaceId` | Space 내 사용자 상세 조회 |
 | `deleteUserForSpace` | `userId, spaceId, currentUserId` | 사용자 소프트 삭제 + 캐시 무효화 |
 | `changePassword` | `userId, currentPassword, newPassword` | `Promise<void>` | 비밀번호 변경 |
@@ -81,9 +81,10 @@ CLS SpaceContext를 통해 현재 선택 Space를 기준으로 사용자를 관�
 
 ## 사용자 목록 스코프 규칙
 
-- `x-space-id` 헤더로 해석된 현재 Tenant가 `ROOT(System) Space + FULL_ACCESS`면 사용자 목록/통계는 전체 Space를 대상으로 조회합니다.
+- `x-space-id` 헤더로 해석된 현재 Tenant role이 `FULL_ACCESS`면 사용자 목록/통계는 전체 Space를 대상으로 조회합니다.
 - 그 외에는 현재 header로 찾은 Tenant의 `spaceId` 1개만 사용해 사용자 목록/통계를 조회합니다.
-- branch 범위의 기본 목록(`roles` 미지정)에서는 미러된 `FULL_ACCESS` tenant를 제외해 실제 회원만 보여줍니다.
+- branch/공간 범위 기본 목록(`roles` 미지정)에서는 `SpaceContext.spaceIds` 기준 단일 스코프만 사용해 실제 화면에 필요한 tenant만 노출합니다.
+- branch 범위 목록 응답의 `user.tenants` 관계도 동일한 `spaceIds` 기반 단일 스코프 규칙을 따릅니다.
 - 사용자 목록 Service는 `SpaceContext.spaceIds`가 `undefined`인지로 전체 조회 여부를 판별하고, 비전체 조회에서는 `SpaceContext.tenant.spaceId`를 우선 사용합니다.
 
 ## 구현 체크리스트
@@ -96,6 +97,8 @@ CLS SpaceContext를 통해 현재 선택 Space를 기준으로 사용자를 관�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | scoped 사용자 목록 응답에서 FULL_ACCESS 제외 규칙을 제거하고 `spaceIds` 기반 단일 스코프 규칙으로 정렬 | codex |
+| 2026-04-16 | 사용자 목록의 전역 조회 기준을 ROOT와 무관한 현재 tenant `FULL_ACCESS`로 정정 | codex |
 | 2026-04-15 | 회원 목록 스코프를 `ROOT FULL_ACCESS => 전체`, 그 외 현재 Space + branch 기본 목록의 FULL_ACCESS 제외 규칙으로 정정 | codex |
 | 2026-04-15 | 회원 목록 스코프를 `FULL_ACCESS => 전체`, 그 외 `현재 header tenant.spaceId 1개` 규칙으로 정리 | codex |
 | 2026-04-01 | 사용자 목록/통계 조회 스코프를 접근 가능 전체 Space에서 현재 선택 Space 기준으로 정정 | codex |

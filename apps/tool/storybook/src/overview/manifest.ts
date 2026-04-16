@@ -9,65 +9,33 @@ import {
 	type FlowOverrideEdge,
 } from "./flow-overrides";
 
-const PAGE_STORY_SOURCES = import.meta.glob(
-	"../../../../../packages/fe-ui/src/page/*/*.stories.tsx",
-	{
-		eager: true,
-		import: "default",
-		query: "?raw",
-	},
-) as Record<string, string>;
-
-const PURE_PAGE_SPEC_SOURCES = import.meta.glob(
-	"../../../../../packages/fe-ui/src/page/*/*.spec.md",
-	{
-		eager: true,
-		import: "default",
-		query: "?raw",
-	},
-) as Record<string, string>;
-
-const ADMIN_ROUTE_PAGE_SOURCES = import.meta.glob(
-	"../../../../../apps/admin/web/src/app/**/page.tsx",
-	{
-		eager: true,
-		import: "default",
-		query: "?raw",
-	},
-) as Record<string, string>;
-
-const ADMIN_ROUTE_SPEC_SOURCES = import.meta.glob(
-	"../../../../../apps/admin/web/src/app/**/page.spec.md",
-	{
-		eager: true,
-		import: "default",
-		query: "?raw",
-	},
-) as Record<string, string>;
-
-const IDP_ROUTE_PAGE_SOURCES = import.meta.glob(
-	"../../../../../apps/idp/web/src/app/**/page.tsx",
-	{
-		eager: true,
-		import: "default",
-		query: "?raw",
-	},
-) as Record<string, string>;
-
-const IDP_ROUTE_SPEC_SOURCES = import.meta.glob(
-	"../../../../../apps/idp/web/src/app/**/page.spec.md",
-	{
-		eager: true,
-		import: "default",
-		query: "?raw",
-	},
-) as Record<string, string>;
-
 type AppId = "admin" | "idp";
 
 export type StoryMaturity = "scenario" | "scaffold";
 export type PageKind = "list" | "new" | "detail" | "edit" | "custom";
 export type PlanningDocumentKind = "pure-page" | "route-page";
+
+export interface OverviewManifestSourceMaps {
+	storySources: Record<string, string>;
+	purePageSpecSources: Record<string, string>;
+	adminRouteSources: Record<string, string>;
+	adminRouteSpecSources: Record<string, string>;
+	idpRouteSources: Record<string, string>;
+	idpRouteSpecSources: Record<string, string>;
+}
+
+declare const __STORYBOOK_OVERVIEW_MANIFEST_SOURCES__:
+	| OverviewManifestSourceMaps
+	| undefined;
+
+const EMPTY_OVERVIEW_MANIFEST_SOURCE_MAPS: OverviewManifestSourceMaps = {
+	storySources: {},
+	purePageSpecSources: {},
+	adminRouteSources: {},
+	adminRouteSpecSources: {},
+	idpRouteSources: {},
+	idpRouteSpecSources: {},
+};
 
 export interface MarkdownSection {
 	heading: string;
@@ -1144,12 +1112,12 @@ export function createOverviewManifest({
 }
 
 export function buildOverviewManifest() {
+	const sourceMaps =
+		typeof __STORYBOOK_OVERVIEW_MANIFEST_SOURCES__ === "undefined"
+			? EMPTY_OVERVIEW_MANIFEST_SOURCE_MAPS
+			: __STORYBOOK_OVERVIEW_MANIFEST_SOURCES__;
+
 	return createOverviewManifest({
-		storySources: PAGE_STORY_SOURCES,
-		purePageSpecSources: PURE_PAGE_SPEC_SOURCES,
-		adminRouteSources: ADMIN_ROUTE_PAGE_SOURCES,
-		adminRouteSpecSources: ADMIN_ROUTE_SPEC_SOURCES,
-		idpRouteSources: IDP_ROUTE_PAGE_SOURCES,
-		idpRouteSpecSources: IDP_ROUTE_SPEC_SOURCES,
+		...sourceMaps,
 	});
 }

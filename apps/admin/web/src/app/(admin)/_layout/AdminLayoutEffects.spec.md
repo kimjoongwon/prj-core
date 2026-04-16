@@ -6,7 +6,7 @@
 
 ## 역할
 
-이 파일은 ui 성격의 경량 구성/배럴 책임을 가집니다.
+admin 공통 layout에서 space bootstrap, space alert, 현재 tenant 기반 navigation scope checker를 연결합니다.
 
 ## 구성 요소
 
@@ -14,8 +14,15 @@
 |------|------|
 | AdminLayoutEffects | 공개 계약 요소 |
 
+## 규칙
+
+- `useSpaceBootstrap()`으로 `my-spaces` / `current-space` / `PersistStore`를 공통 bootstrap합니다.
+- `verify-token.hasFullAccess`와 `isScopeKindAccessible()`를 조합해 `navigationStore.setScopeChecker()`를 등록합니다.
+- 현재 Space가 선택되지 않았으면 `SpaceAlert`를 렌더링합니다.
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | admin layout effect가 공용 space bootstrap과 current tenant scope checker를 연결하도록 갱신 | codex |
 | 2026-03-26 | 누락된 sidecar spec 신규 생성 | codex |

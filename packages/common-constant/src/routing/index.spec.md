@@ -12,12 +12,13 @@
 
 | 항목 | 설명 |
 |------|------|
-| export | admin menu, admin permission catalog, route constant 관련 public barrel |
+| export | admin/idp menu, permission catalog, scope-kind, route constant 관련 public barrel |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | 현재 tenant FULL_ACCESS 화면 정책 유틸(`scope-kind`) export를 추가 | codex |
 | 2026-04-07 | admin route meta 공용 타입 export를 추가 | codex |
 | 2026-04-06 | admin permission catalog 배럴 export를 추가 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

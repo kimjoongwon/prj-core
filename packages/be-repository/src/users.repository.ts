@@ -204,10 +204,18 @@ export class UsersRepository {
 		skip: number;
 		take: number;
 		spaceIds?: string[];
+		includedRoleNames?: string[];
 	}): Promise<{ users: User[]; totalCount: number }> {
-		const { where, orderBy, skip, take, spaceIds } = params;
+		const {
+			where,
+			orderBy,
+			skip,
+			take,
+			spaceIds,
+			includedRoleNames,
+		} = params;
 		this.logger.debug(
-			`접근 가능 Space 내 회원 목록 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
+			`접근 가능 Space 내 회원 목록 조회: spaceIds=${spaceIds?.length ?? "all"}개, includedRoles=${includedRoleNames?.join(",") ?? "없음"}`,
 		);
 
 		const [users, totalCount] = await Promise.all([
@@ -219,6 +227,13 @@ export class UsersRepository {
 						where: {
 							removedAt: null,
 							...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+							...(includedRoleNames?.length
+								? {
+									role: {
+										name: { in: includedRoleNames },
+									},
+								}
+								: {}),
 						},
 						include: {
 							role: true,
@@ -255,11 +270,10 @@ export class UsersRepository {
 	 */
 	async countStatsBySpaceIds(params?: {
 		spaceIds?: string[];
-		excludedRoleNames?: string[];
 	}): Promise<UserStats> {
-		const { spaceIds, excludedRoleNames } = params ?? {};
+		const { spaceIds } = params ?? {};
 		this.logger.debug(
-			`접근 가능 Space 내 회원 통계 조회: spaceIds=${spaceIds?.length ?? "all"}개, excludedRoles=${excludedRoleNames?.join(",") ?? "없음"}`,
+			`접근 가능 Space 내 회원 통계 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
 		);
 
 		const startOfMonth = new Date();
@@ -274,16 +288,9 @@ export class UsersRepository {
 							some: {
 								spaceId: { in: spaceIds },
 								removedAt: null,
-								...(excludedRoleNames?.length
-									? {
-											role: {
-												name: { notIn: excludedRoleNames },
-											},
-										}
-									: {}),
-							},
 						},
-					}
+					},
+				}
 				: {}),
 		};
 

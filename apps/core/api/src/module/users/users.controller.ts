@@ -41,7 +41,7 @@ export class UsersController {
 		operationId: "getUsers",
 		summary: "사용자 목록 조회",
 		description:
-			"현재 x-space-id로 선택된 Tenant가 ROOT(System) Space의 FULL_ACCESS면 전체 사용자 목록을, 그 외에는 현재 Space 기준 사용자 목록을 조회합니다. 기본 목록 조회에서는 현재 Space에 미러된 FULL_ACCESS tenant를 제외하며, 검색/필터링/페이지네이션과 통계 정보를 함께 반환합니다.",
+			"현재 x-space-id로 선택된 Tenant의 role이 FULL_ACCESS면 전체 사용자 목록을, 그 외에는 현재 Space 기준 사용자 목록을 조회합니다. 검색/필터링/페이지네이션과 통계 정보를 함께 반환합니다.",
 	})
 	@ApiAuth()
 	@ApiErrors(

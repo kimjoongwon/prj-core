@@ -36,10 +36,60 @@ for arg in "$@"; do
   [[ "$arg" != "--" ]] && ARGS+=("$arg")
 done
 
-if [[ ${#ARGS[@]} -gt 0 ]]; then
-  # 커맨드라인 인자로 전달된 경우
+START_CHOICES_VALUE="${START_CHOICES:-}"
+PROMPT_MODE="none"
+PROMPT_TTY_FD=""
+
+if [[ -t 0 ]]; then
+  PROMPT_MODE="stdin"
+elif { exec {PROMPT_TTY_FD}<> /dev/tty; } 2>/dev/null; then
+  PROMPT_MODE="tty"
+fi
+
+can_prompt() {
+  [[ "$PROMPT_MODE" != "none" ]]
+}
+
+prompt_read() {
+  local __resultvar=$1
+  local prompt=$2
+  local value=""
+
+  case "$PROMPT_MODE" in
+    stdin)
+      echo -ne "$prompt"
+      IFS= read -r value || return 1
+      ;;
+    tty)
+      echo -ne "$prompt" >&"$PROMPT_TTY_FD"
+      IFS= read -r -u "$PROMPT_TTY_FD" value || return 1
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+
+  printf -v "$__resultvar" '%s' "$value"
+}
+
+INTERACTIVE="false"
+
+if [[ -n "$START_CHOICES_VALUE" ]]; then
+  choices="$START_CHOICES_VALUE"
+elif [[ ${#ARGS[@]} -gt 0 ]]; then
   choices="${ARGS[*]}"
 else
+  INTERACTIVE="true"
+
+  if ! can_prompt; then
+    echo ""
+    echo -e "${YELLOW}비대화형 환경에서는 선택 UI를 표시할 수 없습니다.${RESET}"
+    echo -e "  ${DIM}예: pnpm start -- core-api admin-web${RESET}"
+    echo -e "  ${DIM}예: START_CHOICES=\"1 6\" pnpm start${RESET}"
+    echo -e "  ${DIM}예: START_CHOICES=\"mobile mobile:ios mobile:go\" pnpm start${RESET}"
+    exit 1
+  fi
+
   # 대화형 모드
   echo ""
   echo -e "${BOLD}🚀 서비스 시작${RESET}"
@@ -54,8 +104,10 @@ else
   echo ""
   echo -e "  ${DIM}복수 선택 가능 (예: 1 2 7)${RESET}"
   echo ""
-  echo -ne "${BOLD}번호 선택: ${RESET}"
-  read -r choices
+  if ! prompt_read choices "${BOLD}번호 선택: ${RESET}"; then
+    echo -e "\n${YELLOW}입력이 취소되었습니다.${RESET}"
+    exit 1
+  fi
 fi
 
 if [[ -z "$choices" ]]; then
@@ -90,12 +142,6 @@ get_port() {
 CORE_API_PORT_VALUE=$(get_port core-api)
 IDP_API_PORT_VALUE=$(get_port idp-api)
 MOBILE_PORT_VALUE=$(get_port mobile)
-
-# 커맨드라인 인자 모드 여부
-INTERACTIVE="true"
-if [[ ${#ARGS[@]} -gt 0 ]]; then
-  INTERACTIVE="false"
-fi
 
 ensure_mobile_service() {
   HAS_MOBILE="true"
@@ -169,8 +215,10 @@ ensure_mobile_target() {
     echo -e "  ${CYAN}2${RESET})  AOS          ${DIM}Android 에뮬레이터 실행${RESET}"
     echo -e "  ${CYAN}3${RESET})  전체         ${DIM}iOS + AOS 모두 실행${RESET}"
     echo ""
-    echo -ne "${BOLD}번호 선택: ${RESET}"
-    read -r mobile_target_choice
+    if ! prompt_read mobile_target_choice "${BOLD}번호 선택: ${RESET}"; then
+      echo -e "\n${YELLOW}입력이 취소되었습니다.${RESET}"
+      exit 1
+    fi
 
     case $mobile_target_choice in
       1) MOBILE_TARGET="ios" ;;
@@ -198,8 +246,10 @@ ensure_mobile_runtime() {
     echo -e "  ${CYAN}1${RESET})  local build  ${DIM}development build / custom native app${RESET}"
     echo -e "  ${CYAN}2${RESET})  Expo Go      ${DIM}Expo Go로 실행${RESET}"
     echo ""
-    echo -ne "${BOLD}번호 선택: ${RESET}"
-    read -r mobile_runtime_choice
+    if ! prompt_read mobile_runtime_choice "${BOLD}번호 선택: ${RESET}"; then
+      echo -e "\n${YELLOW}입력이 취소되었습니다.${RESET}"
+      exit 1
+    fi
 
     case $mobile_runtime_choice in
       1) MOBILE_RUNTIME="local" ;;
@@ -268,8 +318,10 @@ if [[ "$HAS_FRONTEND" == "true" && "$INTERACTIVE" == "true" ]]; then
   echo -e "  ${CYAN}3${RESET})  IDP만        ${DIM}인증 서버 (port ${IDP_API_PORT_VALUE})${RESET}"
   echo -e "  ${CYAN}4${RESET})  건너뛰기     ${DIM}코드젠 실행 안 함${RESET}"
   echo ""
-  echo -ne "${BOLD}번호 선택: ${RESET}"
-  read -r codegen_target_choice
+  if ! prompt_read codegen_target_choice "${BOLD}번호 선택: ${RESET}"; then
+    echo -e "\n${YELLOW}입력이 취소되었습니다.${RESET}"
+    exit 1
+  fi
 
   case $codegen_target_choice in
     1) CODEGEN_TARGET="all" ;;
@@ -286,8 +338,10 @@ if [[ "$HAS_FRONTEND" == "true" && "$INTERACTIVE" == "true" ]]; then
     echo -e "  ${CYAN}2${RESET})  stg        ${DIM}스테이징 서버${RESET}"
     echo -e "  ${CYAN}3${RESET})  prod       ${DIM}운영 서버${RESET}"
     echo ""
-    echo -ne "${BOLD}번호 선택: ${RESET}"
-    read -r codegen_choice
+    if ! prompt_read codegen_choice "${BOLD}번호 선택: ${RESET}"; then
+      echo -e "\n${YELLOW}입력이 취소되었습니다.${RESET}"
+      exit 1
+    fi
 
     case $codegen_choice in
       1) CODEGEN_ENV="local" ;;
@@ -359,12 +413,12 @@ pre_cleanup_service_processes() {
   for svc in $SERVICES; do
     local pattern=""
     case $svc in
-      core-api) pattern="turbo start:dev --filter=core-api|core-api@0.0.1 start:dev|/apps/core/api/dist/main.js" ;;
-      admin-web) pattern="turbo start:dev --filter=admin-web|apps/admin/web" ;;
-      proposal-web) pattern="turbo start:dev --filter=proposal-web|apps/proposal/web" ;;
-      idp-api) pattern="turbo start:dev --filter=idp-api|idp-api@0.0.1 start:dev|/apps/idp/api/dist/main.js" ;;
-      idp-web) pattern="turbo start:dev --filter=idp-web|apps/idp/web" ;;
-      tool-storybook) pattern="turbo start:dev --filter=tool-storybook|apps/tool/storybook|STORYBOOK_REQUIRE_AUTH=true storybook dev|storybook dev -p" ;;
+      core-api) pattern="turbo start:dev .*--filter=core-api|pnpm(\\.cjs)? --filter=core-api start:dev|apps/core/api/.+nest\\.js build --webpack --webpackPath webpack\\.config\\.js --watch|/apps/core/api/dist/main.js" ;;
+      admin-web) pattern="turbo start:dev .*--filter=admin-web|pnpm(\\.cjs)? --filter=admin-web start:dev|apps/admin/web" ;;
+      proposal-web) pattern="turbo start:dev .*--filter=proposal-web|pnpm(\\.cjs)? --filter=proposal-web start:dev|apps/proposal/web" ;;
+      idp-api) pattern="turbo start:dev .*--filter=idp-api|pnpm(\\.cjs)? --filter=idp-api start:dev|apps/idp/api/.+nest\\.js build --webpack --webpackPath webpack\\.config\\.js --watch|/apps/idp/api/dist/main.js" ;;
+      idp-web) pattern="turbo start:dev .*--filter=idp-web|pnpm(\\.cjs)? --filter=idp-web start:dev|apps/idp/web" ;;
+      tool-storybook) pattern="turbo start:dev .*--filter=tool-storybook|pnpm(\\.cjs)? --filter=tool-storybook start:dev|apps/tool/storybook|STORYBOOK_REQUIRE_AUTH=true storybook dev|storybook dev -p" ;;
       mobile) pattern="mobile-app@1.0.0 start|pnpm --filter=mobile-app exec expo start|expo start .*--port ${MOBILE_PORT_VALUE}" ;;
     esac
 

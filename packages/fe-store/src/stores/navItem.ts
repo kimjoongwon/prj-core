@@ -1,4 +1,9 @@
-import type { AppIconName, NavItemConfig, TabConfig } from "@cocrepo/type";
+import type {
+	AppIconName,
+	NavItemConfig,
+	ScreenScopeKind,
+	TabConfig,
+} from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
 
 /**
@@ -40,6 +45,7 @@ export class NavItem {
 	readonly path: string | undefined;
 	readonly icon: AppIconName | undefined;
 	readonly subject: string;
+	readonly scopeKind: ScreenScopeKind | undefined;
 	readonly children: NavItem[];
 	/** v7.0 신규: 3depth 탭 목록 */
 	readonly tabs: TabConfig[];
@@ -55,6 +61,7 @@ export class NavItem {
 		this.path = config.path;
 		this.icon = config.icon;
 		this.subject = config.subject;
+		this.scopeKind = config.scopeKind;
 		this.children = config.children
 			? config.children.map((child) => new NavItem(child))
 			: [];

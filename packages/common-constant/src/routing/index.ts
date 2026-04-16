@@ -5,3 +5,4 @@ export * from "./endpoints";
 export * from "./feature-items";
 export * from "./idp-menu";
 export * from "./route-names";
+export * from "./scope-kind";

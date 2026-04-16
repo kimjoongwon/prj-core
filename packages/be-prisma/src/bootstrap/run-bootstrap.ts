@@ -5,7 +5,6 @@ import { ensureSecurityPolicyDefaults } from "./defaults";
 import { createInquiryDomainData } from "./inquiry";
 import {
 	classifyGroundSpacesAsBranch,
-	createHierarchicalTenants,
 	createRegularUsersAndGrounds,
 	ensureSystemBootstrap,
 } from "./system-space";
@@ -21,13 +20,12 @@ import { createTimelineSessionExerciseDomainData } from "./timeline";
 export async function runBootstrap(prisma: PrismaClient): Promise<void> {
 	// The order here is intentional:
 	// 1) reference/system primitives
-	// 2) branch/user hierarchy
-	// 3) domain demo data that depends on those primitives
+	// 2) user/ground seeds
+	// 3) branch classification + domain demo data that depends on those primitives
 	const { manageRole, superAdminUser } = await ensureSystemBootstrap(prisma);
 
 	await createRegularUsersAndGrounds(prisma, manageRole);
 	await classifyGroundSpacesAsBranch(prisma, SYSTEM_SPACE_ID);
-	await createHierarchicalTenants(prisma, SYSTEM_SPACE_ID);
 	await createTimelineSessionExerciseDomainData(prisma);
 	await ensureSecurityPolicyDefaults(prisma);
 	await createAssetDomainData(prisma);

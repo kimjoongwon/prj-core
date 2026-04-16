@@ -1,4 +1,6 @@
+import { SpaceContext } from "@cocrepo/context";
 import type { QueryAuthAuditLogDto } from "@cocrepo/dto";
+import type { Prisma } from "@cocrepo/prisma";
 import { AuthAuditLogsRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 
@@ -35,7 +37,10 @@ export interface AuditLogStats {
 export class AuthAuditLogService {
 	private readonly logger = new Logger(AuthAuditLogService.name);
 
-	constructor(private readonly repository: AuthAuditLogsRepository) {}
+	constructor(
+		private readonly repository: AuthAuditLogsRepository,
+		private readonly spaceContext: SpaceContext,
+	) {}
 
 	/**
 	 * 감사 로그 목록 조회
@@ -46,7 +51,7 @@ export class AuthAuditLogService {
 	async getAuditLogs(query: QueryAuthAuditLogDto): Promise<GetAuditLogsResult> {
 		this.logger.debug("감사 로그 목록 조회");
 
-		const where = query.toPrismaWhere();
+		const where = query.toPrismaWhere(this.createScopedWhere());
 		const orderBy = query.toPrismaOrderBy();
 
 		return this.repository.findMany({
@@ -75,16 +80,29 @@ export class AuthAuditLogService {
 	 */
 	async getStats(): Promise<AuditLogStats> {
 		this.logger.debug("감사 로그 통계 조회");
+		const scopedWhere = this.createScopedWhere();
 
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
 
 		const [todaySuccessCount, todayFailureCount, todayLockedCount, totalCount] =
 			await Promise.all([
-				this.repository.count({ result: "SUCCESS", createdAt: { gte: today } }),
-				this.repository.count({ result: "FAILURE", createdAt: { gte: today } }),
-				this.repository.count({ result: "LOCKED", createdAt: { gte: today } }),
-				this.repository.count({}),
+				this.repository.count({
+					...scopedWhere,
+					result: "SUCCESS",
+					createdAt: { gte: today },
+				}),
+				this.repository.count({
+					...scopedWhere,
+					result: "FAILURE",
+					createdAt: { gte: today },
+				}),
+				this.repository.count({
+					...scopedWhere,
+					result: "LOCKED",
+					createdAt: { gte: today },
+				}),
+				this.repository.count(scopedWhere),
 			]);
 
 		return {
@@ -92,6 +110,24 @@ export class AuthAuditLogService {
 			todayFailureCount,
 			todayLockedCount,
 			totalCount,
+		};
+	}
+
+	private createScopedWhere(): Prisma.AuthAuditLogWhereInput {
+		const spaceIds = this.spaceContext.spaceIds;
+		if (spaceIds === undefined) {
+			return {};
+		}
+
+		return {
+			user: {
+				tenants: {
+					some: {
+						spaceId: { in: spaceIds },
+						removedAt: null,
+					},
+				},
+			},
 		};
 	}
 }

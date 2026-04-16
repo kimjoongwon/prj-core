@@ -128,6 +128,7 @@ export type {
 	FABConfig,
 	FABStoreOptions,
 	ModalOpenHandler,
+	NavItemScopeChecker,
 	NavigationStoreOptions,
 	NavigatorLike,
 } from "./store-contracts";
@@ -172,7 +173,12 @@ export type { AppIconName } from "./icon";
 // ============================================
 // 네비게이션 관련 타입
 // ============================================
-export type { FABAction, NavItemConfig, TabConfig } from "./navigation";
+export type {
+	FABAction,
+	NavItemConfig,
+	ScreenScopeKind,
+	TabConfig,
+} from "./navigation";
 // ============================================
 // 페이지 메타 관련 타입
 // ============================================

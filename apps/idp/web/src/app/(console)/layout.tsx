@@ -3,7 +3,9 @@ import { Layout } from "@cocrepo/ui";
 import { ConsoleBottomNavSlot } from "./_layout/ConsoleBottomNavSlot";
 import { ConsoleFabSlot } from "./_layout/ConsoleFabSlot";
 import { ConsoleHeaderSlot } from "./_layout/ConsoleHeaderSlot";
+import { ConsoleLayoutEffects } from "./_layout/ConsoleLayoutEffects";
 import { ConsoleOverlayMenuSlot } from "./_layout/ConsoleOverlayMenuSlot";
+import { ConsolePageAccessGate } from "./_layout/ConsolePageAccessGate";
 import { ConsoleSidebarSlot } from "./_layout/ConsoleSidebarSlot";
 import ConsoleSessionGate from "./_session-gate";
 
@@ -14,6 +16,7 @@ interface ConsoleLayoutProps {
 export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
 	return (
 		<ConsoleSessionGate>
+			<ConsoleLayoutEffects />
 			<Layout
 				desktopVariant="stacked-header"
 				header={<ConsoleHeaderSlot />}
@@ -22,7 +25,7 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
 				mobileFab={<ConsoleFabSlot />}
 				mobileBottomNav={<ConsoleBottomNavSlot />}
 			>
-				{children}
+				<ConsolePageAccessGate>{children}</ConsolePageAccessGate>
 			</Layout>
 		</ConsoleSessionGate>
 	);

@@ -1,10 +1,12 @@
 "use client";
 
+import { useVerifyToken } from "@cocrepo/api/idp/auth";
 import { useLayout } from "@cocrepo/hook";
 import {
 	useConsoleBottomTabStore,
 	useConsoleFABStore,
 	useConsoleNavigationStore,
+	useConsolePersistStore,
 } from "@cocrepo/store";
 import { SidePanel } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
@@ -24,6 +26,18 @@ const NAV_ITEM_COPY: Record<string, string> = {
 };
 
 export const ConsoleSidebarSlot = observer(function ConsoleSidebarSlot() {
+	const persistStore = useConsolePersistStore();
+	const shouldVerifyCurrentTenant =
+		persistStore.isHydrated && persistStore.isSpaceSelectionResolved;
+	const { data: verifyTokenResponse } = useVerifyToken({
+		query: {
+			enabled: shouldVerifyCurrentTenant,
+			retry: false,
+			refetchOnWindowFocus: false,
+		},
+	});
+	const hasFullAccessInCurrentTenant =
+		verifyTokenResponse?.data?.hasFullAccess === true;
 	const layoutProps = useLayout({
 		useNavigationStore: useConsoleNavigationStore,
 		useBottomTabStore: useConsoleBottomTabStore,
@@ -53,7 +67,9 @@ export const ConsoleSidebarSlot = observer(function ConsoleSidebarSlot() {
 						Identity Console
 					</p>
 					<p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-						FULL_ACCESS 기준 전체 관리 메뉴
+						{hasFullAccessInCurrentTenant
+							? "현재 tenant FULL_ACCESS로 전체 리소스를 확인합니다."
+							: `${persistStore.groundName || "현재 Space"} 기준으로 리소스 범위를 제한합니다.`}
 					</p>
 				</>
 			}

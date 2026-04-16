@@ -372,7 +372,7 @@ export class AuthApplicationService {
 	 */
 	async verifyToken(): Promise<VerifyTokenResponseDto> {
 		const token = this.cls.get<string>(CONTEXT_KEYS.TOKEN);
-		const user = this.cls.get<UserDto | undefined>(CONTEXT_KEYS.AUTH_USER);
+		const tenant = this.cls.get<SpaceTenantLike | undefined>(CONTEXT_KEYS.TENANT);
 		if (!token) {
 			throw new UnauthorizedException("토큰이 존재하지 않습니다");
 		}
@@ -383,7 +383,7 @@ export class AuthApplicationService {
 		const accessTokenExpiresAt =
 			((payload as { exp?: number }).exp || 0) * 1000; // sec → ms
 		const refreshTokenExpiresAt = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30일 (추정)
-		const hasFullAccess = this.hasFullAccessTenantRole(user);
+		const hasFullAccess = tenant?.role?.name === SYSTEM_ROLES.FULL_ACCESS;
 
 		return {
 			valid: true,
@@ -943,23 +943,8 @@ export class AuthApplicationService {
 			return undefined;
 		}
 
-		const fullAccessTenant = user.tenants.find(
-			(tenant) => tenant.role?.name === SYSTEM_ROLES.FULL_ACCESS,
-		);
-		if (fullAccessTenant && allowedSpaceIds.has(fullAccessTenant.spaceId)) {
-			return fullAccessTenant.spaceId;
-		}
-
 		return this.getOrderedTenantSpaceIds(user).find((spaceId) =>
 			allowedSpaceIds.has(spaceId),
-		);
-	}
-
-	private hasFullAccessTenantRole(user: UserDto | undefined): boolean {
-		return (
-			user?.tenants?.some(
-				(tenant) => tenant.role?.name === SYSTEM_ROLES.FULL_ACCESS,
-			) ?? false
 		);
 	}
 

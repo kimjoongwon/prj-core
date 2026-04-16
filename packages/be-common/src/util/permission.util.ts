@@ -40,12 +40,32 @@ export function isRootSpaceCategory(tenant: TenantDto): boolean {
 }
 
 /**
+ * 현재 x-space-id에 대응하는 Tenant를 고릅니다.
+ */
+export function resolveCurrentTenantForSpace(
+	tenants: TenantDto[] | null | undefined,
+	spaceId?: string,
+): TenantDto | undefined {
+	if (!tenants?.length) {
+		return undefined;
+	}
+
+	if (!spaceId) {
+		return tenants[0];
+	}
+
+	const matchedTenant = tenants.find((tenant) => tenant.spaceId === spaceId);
+	if (!matchedTenant) {
+		return undefined;
+	}
+
+	return matchedTenant;
+}
+
+/**
  * 모든 Space 데이터에 접근 가능한지 확인
- * 현재 선택된 Tenant가 FULL_ACCESS 이면서 System(ROOT) Space인 경우에만 전체 조회를 허용합니다.
+ * 현재 선택된 Tenant role이 FULL_ACCESS인 경우 전체 조회를 허용합니다.
  */
 export function canAccessAllSpaces(tenant: TenantDto): boolean {
-	return (
-		tenant.role?.name === SYSTEM_ROLES.FULL_ACCESS &&
-		isRootSpaceCategory(tenant)
-	);
+	return tenant.role?.name === SYSTEM_ROLES.FULL_ACCESS;
 }

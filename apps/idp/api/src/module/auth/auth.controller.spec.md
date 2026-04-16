@@ -22,8 +22,8 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 | GET | /current-space | 요청의 `x-space-id` 또는 기본 접근 가능 Space 조회 | JWT 인증 필요, SkipSpaceCheck |
 | POST | /current-space | 현재 선택할 Space 검증 | JWT 인증 필요, SkipSpaceCheck |
 | POST | /logout | 로그아웃 및 토큰 무효화 | JWT 인증 필요 |
-| GET | /audit-logs | 인증 감사 로그 목록 조회 | FULL_ACCESS, SkipSpaceCheck |
-| GET | /audit-logs/stats | 감사 로그 통계 조회 (오늘/전체) | FULL_ACCESS, SkipSpaceCheck |
+| GET | /audit-logs | 인증 감사 로그 목록 조회 | JWT + 현재 tenant scope |
+| GET | /audit-logs/stats | 감사 로그 통계 조회 (오늘/전체) | JWT + 현재 tenant scope |
 | POST | /change-password | 현재 비밀번호 확인 후 비밀번호 변경 | JWT 인증 필요, SkipSpaceCheck |
 | POST | /users/:userId/unlock | 잠긴 계정 해제 | FULL_ACCESS, SkipSpaceCheck |
 | POST | /users/:userId/force-reset-password | 임시 비밀번호 생성 및 이메일 발송 | FULL_ACCESS, SkipSpaceCheck |
@@ -36,7 +36,7 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 
 - `@Public()`: 인증 없이 접근 가능한 엔드포인트에 적용 (login, callback, token/refresh, sign-up)
 - `@SkipSpaceCheck()`: X-Space-ID 헤더 없이 접근 가능 (verify-token, my-spaces, change-password, 세션 관리, 관리자 기능)
-- `@Roles([SYSTEM_ROLES.FULL_ACCESS])`: 최고 관리자만 접근 가능 (audit-logs, unlock, force-reset, invalidate-sessions)
+- `@Roles([SYSTEM_ROLES.FULL_ACCESS])`: 최고 관리자만 접근 가능 (unlock, force-reset, invalidate-sessions)
 - `@ApiAuth()`: Bearer Token 또는 Cookie 기반 인증 필요
 - 쿠키: `accessToken`, `refreshToken`, `sessionId` 쿠키를 사용하여 세션 관리
 
@@ -53,8 +53,8 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 | GET /current-space | Header: `x-space-id`(optional) | `SpaceDto \| null` |
 | POST /current-space | `SetCurrentSpaceDto` | `SpaceDto` |
 | POST /logout | 쿠키: `accessToken`, `sessionId` | `Boolean` |
-| GET /audit-logs | `QueryAuthAuditLogDto` | `AuthAuditLogDto[]` + `PageMetaDto` |
-| GET /audit-logs/stats | - | `AuditLogStatsDto` |
+| GET /audit-logs | `QueryAuthAuditLogDto` + Header `x-space-id` | `AuthAuditLogDto[]` + `PageMetaDto` |
+| GET /audit-logs/stats | Header `x-space-id` | `AuditLogStatsDto` |
 | POST /change-password | `ChangePasswordDto` | `Boolean` |
 | POST /users/:userId/unlock | Path: `userId` (UUID) | `Boolean` |
 | POST /users/:userId/force-reset-password | Path: `userId` (UUID) | `Boolean` |
@@ -69,11 +69,11 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 - 콜백 에러 발생 시에도 `clientId`에 맞는 login shell URL로 `?error=...`를 붙여 리다이렉트합니다.
 - 성공 시에는 `AuthApplicationService.handleOidcCallback()`이 돌려준 `returnTo`를 우선 사용하고, 없으면 `defaultReturnTo`를 사용합니다.
 - Storybook login shell도 canonical `clientId=storybook-web`을 사용합니다.
-- `GET /verify-token`의 `hasFullAccess`는 현재 사용자의 tenant 중 `FULL_ACCESS` role이 하나라도 있는지 여부를 의미합니다.
-- `GET /current-space`는 `x-space-id` 헤더가 유효하면 해당 Space를 반환하고, 없거나 접근 불가하면 기본 접근 가능 Space를 반환합니다.
+- `GET /verify-token`의 `hasFullAccess`는 현재 `x-space-id`로 해석된 tenant role이 `FULL_ACCESS`인지 여부를 의미합니다.
+- `GET /current-space`는 `x-space-id` 헤더가 유효하면 해당 Space를 반환하고, 없거나 접근 불가하면 접근 가능한 tenant 순서 기준 기본 Space를 반환합니다.
 - `POST /current-space`는 더 이상 Space 쿠키를 설정하지 않고, body의 `spaceId`를 검증한 결과만 반환합니다.
 - 비밀번호 변경 시 `newPassword !== confirmPassword` 이면 `PASSWORD_MISMATCH` 예외 발생
-- 감사 로그 조회는 페이지네이션 지원 (기본 skip=0, take=20)
+- 감사 로그 조회는 페이지네이션을 지원하며, 비 FULL_ACCESS tenant에서는 현재 `x-space-id` 범위의 사용자 로그만 조회합니다.
 - 세션은 쿠키 기반으로 관리되며, 로그아웃 시 IDP 측 토큰도 무효화
 
 ## 의존성
@@ -94,6 +94,8 @@ OIDC/OAuth2 기반 인증 흐름의 진입점을 담당합니다. 로그인 리�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | `current-space` 기본 선택이 FULL_ACCESS tenant 우선이 아니라 접근 가능 tenant 순서를 따른다는 점을 명시 | codex |
+| 2026-04-16 | 감사 로그 API를 FULL_ACCESS 전용 전역 조회에서 현재 tenant scope API로 정정 | codex |
 | 2026-04-15 | `GET /verify-token`의 `hasFullAccess` 의미를 `manage all`이 아니라 tenant role `FULL_ACCESS` 기준으로 단순화 | codex |
 | 2026-04-14 | `current-space`를 `x-space-id` 검증 API로 재정의하고 selectedSpace 쿠키 설명을 제거 | codex |
 | 2026-04-14 | Storybook login/callback canonical clientId를 `storybook-web`으로 정리 | codex |

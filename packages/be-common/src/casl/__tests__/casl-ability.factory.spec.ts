@@ -136,4 +136,37 @@ describe("CaslAbilityFactory", () => {
 			"role-1",
 		]);
 	});
+
+it("같은 spaceId에 중복 tenant가 있어도 첫 tenant의 roleId로 조회해야 한다", async () => {
+		const user = {
+			id: "user-1",
+			spaceId: "space-1",
+			email: "u1@test.com",
+			name: "u1",
+			tenants: [
+				{
+					id: "tenant-full-access",
+					spaceId: "space-1",
+					roleId: "role-full-access",
+					role: { id: "role-full-access", name: "FULL_ACCESS" },
+				},
+				{
+					id: "tenant-manage",
+					spaceId: "space-1",
+					roleId: "role-manage",
+					role: { id: "role-manage", name: "MANAGE" },
+				},
+			],
+		} as unknown as UserDto;
+
+		mockClsService.get.mockReturnValueOnce("space-1");
+		mockRoleGrantsRepository.findActiveByRoleIds.mockResolvedValue([] as never);
+		mockUserGrantsRepository.findActiveByUserId.mockResolvedValue([] as never);
+
+		await factory.createForUser(user);
+
+		expect(mockRoleGrantsRepository.findActiveByRoleIds).toHaveBeenCalledWith([
+			"role-full-access",
+		]);
+	});
 });

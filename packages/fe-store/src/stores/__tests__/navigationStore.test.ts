@@ -230,6 +230,7 @@ describe("NavigationStore", () => {
 					label: "보안",
 					path: "/settings/security",
 					subject: "Security",
+					scopeKind: "global-full-access-only",
 				},
 			],
 		},
@@ -275,6 +276,19 @@ describe("NavigationStore", () => {
 
 			// Then
 			const settingsItem = items.find((m) => m.id === "settings");
+			expect(settingsItem?.children).toHaveLength(1);
+			expect(settingsItem?.children[0].id).toBe("general");
+		});
+
+		it("scopeChecker로 global-full-access-only 아이템을 필터링해야 한다", () => {
+			navigationStore.setAbilityChecker(() => true);
+			navigationStore.setScopeChecker(
+				(scopeKind) => scopeKind !== "global-full-access-only",
+			);
+
+			const items = navigationStore.items;
+			const settingsItem = items.find((item) => item.id === "settings");
+
 			expect(settingsItem?.children).toHaveLength(1);
 			expect(settingsItem?.children[0].id).toBe("general");
 		});

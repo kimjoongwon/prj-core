@@ -1,11 +1,8 @@
-import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
 	ApiResponseEntity,
 	ResponseMessage,
-	Roles,
-	SkipSpaceCheck,
 } from "@cocrepo/decorator";
 import { IdpAccountDto, PageMetaDto, QueryIdpAccountDto } from "@cocrepo/dto";
 import { IdpAccountFacade } from "@cocrepo/facade";
@@ -24,8 +21,6 @@ import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("IDP_ACCOUNTS")
 @Controller()
-@Roles([SYSTEM_ROLES.FULL_ACCESS])
-@SkipSpaceCheck()
 export class IdpAccountsController {
 	constructor(private readonly idpAccountFacade: IdpAccountFacade) {}
 

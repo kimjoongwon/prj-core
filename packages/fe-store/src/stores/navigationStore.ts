@@ -1,5 +1,6 @@
 import type {
 	AbilityChecker,
+	NavItemScopeChecker,
 	NavItemConfig,
 	NavigationStoreOptions,
 	NavigatorLike,
@@ -38,6 +39,7 @@ export class NavigationStore {
 	private _selectedNavItem: NavItem | null = null;
 	private _selectedSubNavItem: NavItem | null = null;
 	private _abilityChecker: AbilityChecker | null = null;
+	private _scopeChecker: NavItemScopeChecker | null = null;
 	private _navigator: NavigatorLike | null = null;
 	private _onNavigate: ((path: string) => void) | null = null;
 	private _expandedNavItemIds: Set<string> = new Set();
@@ -52,6 +54,7 @@ export class NavigationStore {
 		this._items = navItems.map((config) => new NavItem(config));
 		this._navigator = options?.navigator ?? null;
 		this._abilityChecker = options?.abilityChecker ?? null;
+		this._scopeChecker = options?.scopeChecker ?? null;
 		this._onNavigate = options?.onNavigate ?? null;
 
 		makeAutoObservable(this);
@@ -72,6 +75,13 @@ export class NavigationStore {
 	}
 
 	/**
+	 * 화면 스코프 체크 함수 설정
+	 */
+	setScopeChecker(checker: NavItemScopeChecker | null): void {
+		this._scopeChecker = checker;
+	}
+
+	/**
 	 * @deprecated navigator 사용을 권장합니다
 	 */
 	setNavigateHandler(handler: (path: string) => void): void {
@@ -89,28 +99,9 @@ export class NavigationStore {
 	 * 권한 필터링된 네비게이션 아이템
 	 */
 	get items(): NavItem[] {
-		if (!this._abilityChecker) {
-			return this._items;
-		}
-
 		return this._items
-			.filter((navItem) => this._abilityChecker!("view", navItem.subject))
-			.map((navItem) => {
-				const filteredChildren = navItem.children.filter((child) =>
-					this._abilityChecker!("view", child.subject),
-				);
-
-				return {
-					...navItem,
-					children: filteredChildren,
-					hasChildren: filteredChildren.length > 0,
-				} as NavItem;
-			})
-			.filter(
-				(navItem) =>
-					!navItem.hasChildren ||
-					(navItem.children && navItem.children.length > 0),
-			);
+			.map((navItem) => this.createVisibleNavItem(navItem))
+			.filter((navItem): navItem is NavItem => navItem !== null);
 	}
 
 	/**
@@ -133,13 +124,9 @@ export class NavigationStore {
 	get subNavItems(): NavItem[] {
 		if (!this._selectedNavItem) return [];
 
-		if (this._abilityChecker) {
-			return this._selectedNavItem.children.filter((child) =>
-				this._abilityChecker!("view", child.subject),
-			);
-		}
-
-		return this._selectedNavItem.children;
+		return this._selectedNavItem.children.filter((child) =>
+			this.isNavItemVisible(child),
+		);
 	}
 
 	/**
@@ -351,5 +338,37 @@ export class NavigationStore {
 			navItem.setActive(false);
 			navItem.resetChildrenActive();
 		}
+	}
+
+	private isNavItemVisible(navItem: NavItem): boolean {
+		const hasAbility =
+			!this._abilityChecker || this._abilityChecker("view", navItem.subject);
+		const hasScope =
+			!this._scopeChecker || this._scopeChecker(navItem.scopeKind);
+		return hasAbility && hasScope;
+	}
+
+	private createVisibleNavItem(navItem: NavItem): NavItem | null {
+		if (!this.isNavItemVisible(navItem)) {
+			return null;
+		}
+
+		if (!navItem.children.length) {
+			return navItem;
+		}
+
+		const filteredChildren = navItem.children
+			.map((child) => this.createVisibleNavItem(child))
+			.filter((child): child is NavItem => child !== null);
+
+		if (filteredChildren.length === 0 && !navItem.path) {
+			return null;
+		}
+
+		return {
+			...navItem,
+			children: filteredChildren,
+			hasChildren: filteredChildren.length > 0,
+		} as NavItem;
 	}
 }

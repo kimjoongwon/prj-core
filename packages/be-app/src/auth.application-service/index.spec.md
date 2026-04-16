@@ -26,14 +26,16 @@
 - 세션 ID는 `{clientId}.{random}` 형태로 저장하여 refresh/logout/revoke 시 client를 복원합니다.
 - `handleOidcCallback()`은 `returnTo`, `defaultReturnTo`, `loginUrl`을 반환해 controller가 리다이렉트 결정을 하도록 합니다.
 - `getAuthorizationUrl()`은 요청마다 DB에서 auth shell client를 조회한 뒤 explicit client protocol config로 authorization URL을 생성합니다.
-- `verifyToken()`은 CLS의 `AUTH_USER`에 연결된 tenant 중 `FULL_ACCESS` role이 하나라도 있으면 `hasFullAccess`를 true로 반환합니다.
-- `getCurrentSpace()`는 요청의 `x-space-id` 헤더가 유효하면 해당 Space를, 아니면 `FULL_ACCESS` tenant 우선 규칙 기반 기본 Space를 반환합니다.
+- `verifyToken()`은 현재 `x-space-id`로 해석된 CLS `TENANT`의 role이 `FULL_ACCESS`일 때만 `hasFullAccess`를 true로 반환합니다.
+- `getCurrentSpace()`는 요청의 `x-space-id` 헤더가 유효하면 해당 Space를, 아니면 접근 가능한 tenant 순서 기준 기본 Space를 반환합니다.
 - `setCurrentSpace()`는 쿠키를 쓰지 않고, body의 `spaceId`가 접근 가능한 대상인지 검증한 뒤 해당 Space DTO를 반환합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | `getCurrentSpace()` 기본 선택에서 FULL_ACCESS tenant 우선 규칙을 제거하고 접근 가능 순서로 고정 | codex |
+| 2026-04-16 | `verifyToken()`이 현재 선택 tenant만 기준으로 `hasFullAccess`를 계산한다는 점을 명시 | codex |
 | 2026-04-15 | `verifyToken()`의 `hasFullAccess` 기준을 merged ability의 `manage all`이 아니라 tenant role `FULL_ACCESS`로 단순화 | codex |
 | 2026-04-14 | Space 선택 canonical source를 `x-space-id` 헤더로 전환하고 login/refresh에서 selectedSpace 쿠키 write를 제거 | codex |
 | 2026-04-14 | direct query/session/state의 legacy clientId를 canonical로 정규화하고 migration 전 legacy DB row까지 fallback 하는 auth lookup 규칙을 추가 | codex |

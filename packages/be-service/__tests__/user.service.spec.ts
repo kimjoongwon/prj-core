@@ -193,9 +193,6 @@ describe("UserService", () => {
 					some: {
 						spaceId: { in: ["space-header-id"] },
 						removedAt: null,
-						role: {
-							name: { notIn: ["FULL_ACCESS"] },
-						},
 					},
 				},
 			});
@@ -205,10 +202,10 @@ describe("UserService", () => {
 				skip: 10,
 				take: 20,
 				spaceIds: ["space-header-id"],
+				includedRoleNames: undefined,
 			});
 			expect(mockRepository.countStatsBySpaceIds).toHaveBeenCalledWith({
 				spaceIds: ["space-header-id"],
-				excludedRoleNames: ["FULL_ACCESS"],
 			});
 			expect(result).toEqual({
 				users: [mockUser],
@@ -263,11 +260,11 @@ describe("UserService", () => {
 				skip: 0,
 				take: 10,
 				spaceIds: undefined,
+				includedRoleNames: undefined,
 			});
 			expect(mockRepository.countStatsBySpaceIds).toHaveBeenCalledWith(
 				{
 					spaceIds: undefined,
-					excludedRoleNames: undefined,
 				},
 			);
 			expect(result).toEqual({
@@ -277,7 +274,7 @@ describe("UserService", () => {
 			});
 		});
 
-		it("branch에 미러된 FULL_ACCESS tenant를 선택한 경우 전체 조회를 열지 않고 현재 space의 일반 회원만 조회해야 한다", async () => {
+		it("현재 tenant role이 FULL_ACCESS인 branch space도 전체 사용자 목록과 통계를 조회해야 한다", async () => {
 			const query = {
 				skip: 0,
 				take: 20,
@@ -297,7 +294,7 @@ describe("UserService", () => {
 
 			mockSpaceContext = {
 				spaceId: "space-branch-id",
-				spaceIds: ["space-branch-id"],
+				spaceIds: undefined,
 				tenant: {
 					id: "tenant-branch-full-access-id",
 					spaceId: "space-branch-id",
@@ -316,27 +313,17 @@ describe("UserService", () => {
 
 			const result = await service.getUsersBySpace(query);
 
-			expect(query.toPrismaWhere).toHaveBeenCalledWith({
-				tenants: {
-					some: {
-						spaceId: { in: ["space-branch-id"] },
-						removedAt: null,
-						role: {
-							name: { notIn: ["FULL_ACCESS"] },
-						},
-					},
-				},
-			});
+			expect(query.toPrismaWhere).toHaveBeenCalledWith({});
 			expect(mockRepository.findManyBySpaceIds).toHaveBeenCalledWith({
 				where: { removedAt: null },
 				orderBy: [{ createdAt: "desc" }],
 				skip: 0,
 				take: 20,
-				spaceIds: ["space-branch-id"],
+				spaceIds: undefined,
+				includedRoleNames: undefined,
 			});
 			expect(mockRepository.countStatsBySpaceIds).toHaveBeenCalledWith({
-				spaceIds: ["space-branch-id"],
-				excludedRoleNames: ["FULL_ACCESS"],
+				spaceIds: undefined,
 			});
 			expect(result).toEqual({
 				users: [mockUser],

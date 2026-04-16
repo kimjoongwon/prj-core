@@ -1,8 +1,15 @@
 "use client";
 
-import { useLogout } from "@cocrepo/api/idp/auth";
-import { useConsoleNavigationStore } from "@cocrepo/store";
-import { HeaderBar, ThemeToggleButton } from "@cocrepo/ui";
+import {
+	useLogout,
+	useSetCurrentSpace,
+	useVerifyToken,
+} from "@cocrepo/api/idp/auth";
+import {
+	useConsoleNavigationStore,
+	useConsolePersistStore,
+} from "@cocrepo/store";
+import { HeaderBar, HeaderSpaceSelector, ThemeToggleButton } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import {
 	getIdpConsoleIconName,
@@ -12,14 +19,43 @@ import { IdpConsoleBrand } from "@/components/console/IdpConsoleBrand";
 
 const userInfo = {
 	name: "IDP 관리자",
-	role: "FULL_ACCESS",
+	role: "SPACE_SCOPED",
 };
 
 export const ConsoleHeaderSlot = observer(function ConsoleHeaderSlot() {
 	const navigationStore = useConsoleNavigationStore();
+	const persistStore = useConsolePersistStore();
+	const shouldVerifyCurrentTenant =
+		persistStore.isHydrated && persistStore.isSpaceSelectionResolved;
+	const { data: verifyTokenResponse } = useVerifyToken({
+		query: {
+			enabled: shouldVerifyCurrentTenant,
+			retry: false,
+			refetchOnWindowFocus: false,
+		},
+	});
+	const hasFullAccessInCurrentTenant =
+		verifyTokenResponse?.data?.hasFullAccess === true;
+	const { mutate: setCurrentSpaceMutate, isPending: isSettingCurrentSpace } =
+		useSetCurrentSpace({
+			mutation: {
+				onSuccess: (response, variables) => {
+					const currentSpace = response.data;
+					const nextGroundName =
+						currentSpace?.ground?.name ??
+						persistStore.spaces.find(
+							(space) => space.spaceId === variables.spaceId,
+						)?.groundName ??
+						"";
+					persistStore.setSpace(variables.spaceId, nextGroundName);
+					window.location.reload();
+				},
+			},
+		});
 	const { mutate: logoutMutate } = useLogout({
 		mutation: {
 			onSettled: () => {
+				persistStore.clearSpace();
 				window.location.href = "/auth/login";
 			},
 		},
@@ -27,6 +63,14 @@ export const ConsoleHeaderSlot = observer(function ConsoleHeaderSlot() {
 
 	const onClickLogoutButton = () => {
 		logoutMutate();
+	};
+
+	const onSelectSpace = (space: { spaceId: string }) => {
+		if (isSettingCurrentSpace) {
+			return;
+		}
+
+		setCurrentSpaceMutate({ spaceId: space.spaceId });
 	};
 
 	const selectedNavItem = navigationStore.selectedNavItem;
@@ -40,7 +84,10 @@ export const ConsoleHeaderSlot = observer(function ConsoleHeaderSlot() {
 
 	return (
 		<HeaderBar
-			userInfo={userInfo}
+			userInfo={{
+				...userInfo,
+				role: hasFullAccessInCurrentTenant ? "FULL_ACCESS" : "SPACE_SCOPED",
+			}}
 			onLogout={onClickLogoutButton}
 			leading={<IdpConsoleBrand />}
 			context={
@@ -62,10 +109,18 @@ export const ConsoleHeaderSlot = observer(function ConsoleHeaderSlot() {
 				</>
 			}
 			actions={
-				<ThemeToggleButton
-					compact
-					className="h-10 w-10 rounded-2xl border border-slate-200/70 bg-white/72 text-slate-700 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10"
-				/>
+				<>
+					<ThemeToggleButton
+						compact
+						className="h-10 w-10 rounded-2xl border border-slate-200/70 bg-white/72 text-slate-700 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10"
+					/>
+					<HeaderSpaceSelector
+						spaces={persistStore.spaces}
+						currentSpaceId={persistStore.spaceId}
+						currentSpaceName={persistStore.groundName}
+						onSpaceSelect={onSelectSpace}
+					/>
+				</>
 			}
 		/>
 	);

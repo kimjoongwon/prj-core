@@ -8,7 +8,7 @@
 ## 역할
 
 IDP(Identity Provider) 관리자 화면에서 사용자 계정 보안 정보를 관리합니다.
-Prisma 직접 접근(TransactionHost)을 사용하며, Space 개념 없이 전체 사용자를 대상으로 합니다.
+Prisma 직접 접근(TransactionHost)을 사용하며, 현재 `x-space-id`로 해석된 tenant 범위에서 접근 가능한 사용자만 대상으로 합니다.
 계정 활성/비활성 토글, 로그인 실패 횟수 초기화 등 보안 관련 작업을 담당합니다.
 
 ## 의존성
@@ -31,6 +31,7 @@ Prisma 직접 접근(TransactionHost)을 사용하며, Space 개념 없이 전�
 ## 비즈니스 규칙
 
 - `removedAt: null` 필터로 소프트 삭제된 계정 제외
+- 현재 tenant role이 `FULL_ACCESS`면 전체 사용자 범위, 그 외에는 `user.tenants.spaceId in [현재 spaceId]` 범위만 허용
 - 조회 필드 제한: id, name, email, isActive, failedLoginAttempts, isPermanentlyLocked, lockedUntil, mustChangePassword, lastLoginAt, lastLoginIp, createdAt
 - `resetFailedAttempts`: `failedLoginAttempts = 0`, `lockedUntil = null`, `isPermanentlyLocked = false` 리셋
 
@@ -60,7 +61,7 @@ interface IdpAccountInfo {
 
 ## 권한 요구사항
 
-- IDP 관리자 전용 (FULL_ACCESS 역할 필요)
+- IDP 콘솔 진입 사용자가 현재 tenant 범위에서 계정 관리 subject를 통과해야 하며, 데이터 범위는 SpaceContext가 결정합니다.
 
 ## 구현 체크리스트
 
@@ -72,5 +73,6 @@ interface IdpAccountInfo {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | IDP 계정 관리가 `SkipSpaceCheck` 전역 조회가 아니라 현재 tenant scope를 따르도록 정정 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-13 | `idp-account.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |

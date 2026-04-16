@@ -18,6 +18,7 @@
 | path | `string \| undefined` (readonly) | config.path | 연결 경로 |
 | icon | `AppIconName \| undefined` (readonly) | config.icon | 허용된 앱 아이콘 이름 |
 | subject | `string` (readonly) | config.subject | CASL Subject (권한 체크용) |
+| scopeKind | `ScreenScopeKind \| undefined` (readonly) | config.scopeKind | 현재 tenant 기준 노출 정책 |
 | children | `NavItem[]` (readonly) | config.children를 NavItem으로 재귀 변환 | 하위 아이템 목록 |
 | tabs | `TabConfig[]` (readonly) | config.tabs ?? `[]` | 3depth 탭 목록 (v7.0) |
 | _active | `boolean` (private) | `false` | 활성화 상태 |
@@ -54,7 +55,7 @@
 
 | 패키지 | 사용 |
 |--------|------|
-| `@cocrepo/type` | `AppIconName`, `NavItemConfig`, `TabConfig` 타입 |
+| `@cocrepo/type` | `AppIconName`, `NavItemConfig`, `ScreenScopeKind`, `TabConfig` 타입 |
 
 ## 경로 매칭 규칙 (findChildByPath)
 
@@ -88,5 +89,6 @@ const navItem = new NavItem({
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | 메뉴 노출 정책을 재사용할 수 있도록 `scopeKind` 필드를 보존하도록 확장 | codex |
 | 2026-03-11 | NavItem의 `icon`을 자유 문자열 대신 `AppIconName` 계약으로 고정 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

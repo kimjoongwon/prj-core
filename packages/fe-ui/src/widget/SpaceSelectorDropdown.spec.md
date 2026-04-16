@@ -36,6 +36,7 @@
 - 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
 - 비정상 입력은 조기 반환 또는 예외 처리합니다.
 - 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
+- `spaces`가 비어도 헤더 자리 유지를 위해 disabled 버튼을 렌더링하고, 가능한 목록이 생기면 dropdown으로 전환합니다.
 
 ## 구현 체크리스트
 
@@ -47,6 +48,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | 선택 가능한 Space가 아직 없을 때도 헤더에서 selector 자리를 유지하도록 disabled 버튼 fallback을 추가 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | Building2, ChevronDown, Check 아이콘을 파일 내부에서 직접 사용하도록 정리 | codex |
 | 2026-03-06 | src 레이어 상향에 맞춰 util/hook 상대 import 깊이를 보정 | codex |

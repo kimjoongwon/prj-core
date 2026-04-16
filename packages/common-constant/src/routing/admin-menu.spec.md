@@ -198,10 +198,12 @@ Admin
 - 모든 경로는 동적 파라미터에 전체 엔티티명 사용 (예: `[userId]`, `[inquiryId]`)
 - Subject는 `menu:` 접두어로 시작
 - `ADMIN_NAV_ITEMS` 는 각 admin route 폴더의 `route.meta.ts` generated catalog를 직접 사용합니다.
+- `ADMIN_NAV_ITEMS` 는 generated catalog에 `scopeKind`를 병합해 현재 tenant `FULL_ACCESS` 여부에 따라 재사용 가능한 노출 정책을 제공합니다.
 - 1depth 메뉴는 하위 메뉴가 있을 경우 path 없이 children만 정의
 - 1depth 메뉴가 단일 페이지면 path 포함 (예: 문의 관리)
 - 메뉴 권한 편집은 `ADMIN_NAV_ITEMS` 를 직접 수정하지 않고 `ADMIN_MENU_PERMISSION_LEAFS` 파생 결과를 사용
 - child leaf가 있는 메뉴는 parent subject와 child subject가 모두 있어야 실제 sidebar/mobile 메뉴가 노출됩니다
+- `templates`, `abilities`, `actions`, `subjects` 계열은 `global-full-access-only`로 분류하고, 나머지 운영 화면은 기본적으로 `space` scope를 사용합니다.
 
 ## 구현 체크리스트
 
@@ -221,6 +223,7 @@ Admin
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | generated admin nav에 `scopeKind`를 병합해 현재 tenant FULL_ACCESS 기준 메뉴 노출 정책을 추가 | codex |
 | 2026-04-07 | 전체 admin route meta rollout 이후 `ADMIN_NAV_ITEMS` 를 generated-only SOT로 전환 | codex |
 | 2026-04-07 | `route.meta.ts` generated nav catalog를 수동 `ADMIN_NAV_ITEMS` 에 merge하는 점진 이행 규칙 추가 | codex |
 | 2026-04-06 | 역할 상세 메뉴 권한 편집기용 `ADMIN_MENU_PERMISSION_LEAFS`, `ADMIN_MENU_PERMISSION_SUBJECTS` 계약과 parent+child required subject 규칙을 문서화 | codex |

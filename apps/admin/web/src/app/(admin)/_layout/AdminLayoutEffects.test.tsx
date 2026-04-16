@@ -5,20 +5,29 @@ import {
 	resolveCurrentSpaceGroundName,
 } from "./AdminLayoutEffects";
 
-const mockUseGetMySpaces = vi.fn();
-const mockUseGetCurrentSpace = vi.fn();
+const mockUseSpaceBootstrap = vi.fn();
+const mockUseVerifyToken = vi.fn();
 const mockUseSpaceGuard = vi.fn();
 const mockUsePersistStore = vi.fn();
-let mySpacesResult: unknown;
-let currentSpaceResult: unknown;
+const mockUseNavigationStore = vi.fn();
 
 vi.mock("@cocrepo/api/idp/auth", () => ({
-	useGetMySpaces: () => mockUseGetMySpaces(),
-	useGetCurrentSpace: () => mockUseGetCurrentSpace(),
+	useVerifyToken: () => mockUseVerifyToken(),
 }));
 
 vi.mock("@cocrepo/ui", () => ({
 	SpaceAlert: () => null,
+}));
+
+vi.mock("@cocrepo/hook", () => ({
+	useSpaceBootstrap: () => mockUseSpaceBootstrap(),
+	resolveCurrentSpaceGroundName: (
+		currentSpace: { id?: string; ground?: { name?: string | null } | null },
+		spaces: Array<{ id?: string; ground?: { name?: string | null } | null }>,
+	) =>
+		currentSpace?.ground?.name ??
+		spaces.find((space) => space.id === currentSpace?.id)?.ground?.name ??
+		"",
 }));
 
 vi.mock("@/hooks", () => ({
@@ -27,15 +36,16 @@ vi.mock("@/hooks", () => ({
 
 vi.mock("@/stores/AppStoreProvider", () => ({
 	usePersistStore: () => mockUsePersistStore(),
+	useNavigationStore: () => mockUseNavigationStore(),
 }));
 
 describe("AdminLayoutEffects", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mySpacesResult = undefined;
-		currentSpaceResult = undefined;
-		mockUseGetMySpaces.mockImplementation(() => mySpacesResult);
-		mockUseGetCurrentSpace.mockImplementation(() => currentSpaceResult);
+		mockUseSpaceBootstrap.mockReturnValue(undefined);
+		mockUseVerifyToken.mockReturnValue({
+			data: { data: { hasFullAccess: false } },
+		});
 		mockUseSpaceGuard.mockReturnValue({
 			showAlert: false,
 			handleConfirm: vi.fn(),
@@ -43,45 +53,31 @@ describe("AdminLayoutEffects", () => {
 		});
 	});
 
-	it("current-space 응답에 ground가 없어도 my-spaces의 ground 이름으로 현재 Space를 설정해야 한다", async () => {
+	it("current tenant FULL_ACCESS 여부를 navigation scope checker에 연결해야 한다", async () => {
 		const persistStore = {
-			setSpaces: vi.fn(),
-			setSpace: vi.fn(),
-			clearSpace: vi.fn(),
-			setSpaceSelectionResolved: vi.fn(),
+			isHydrated: true,
+			isSpaceSelectionResolved: true,
+		};
+		const navigationStore = {
+			setScopeChecker: vi.fn(),
 		};
 
 		mockUsePersistStore.mockReturnValue(persistStore);
-		currentSpaceResult = {
-			data: { data: { id: "space-a" } },
-			isFetched: true,
-		};
-		mySpacesResult = {
-			data: {
-				data: [
-					{
-						id: "space-a",
-						ground: { name: "플랫폼 운영본부" },
-					},
-				],
-			},
-		};
+		mockUseNavigationStore.mockReturnValue(navigationStore);
+		mockUseVerifyToken.mockReturnValue({
+			data: { data: { hasFullAccess: true } },
+		});
 
 		render(<AdminLayoutEffects />);
 
 		await waitFor(() => {
-			expect(persistStore.setSpaces).toHaveBeenCalledWith([
-				{
-					spaceId: "space-a",
-					groundName: "플랫폼 운영본부",
-				},
-			]);
-			expect(persistStore.setSpace).toHaveBeenCalledWith(
-				"space-a",
-				"플랫폼 운영본부",
-			);
-			expect(persistStore.setSpaceSelectionResolved).toHaveBeenCalledWith(true);
+			expect(mockUseSpaceBootstrap).toHaveBeenCalled();
+			expect(navigationStore.setScopeChecker).toHaveBeenCalled();
 		});
+
+		const scopeChecker = navigationStore.setScopeChecker.mock.calls[0]?.[0];
+		expect(scopeChecker("global-full-access-only")).toBe(true);
+		expect(scopeChecker("space")).toBe(true);
 	});
 
 	it("current-space에 ground가 비어 있으면 my-spaces의 같은 id ground 이름으로 보강해야 한다", () => {

@@ -33,6 +33,7 @@
 - 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
 - 비정상 입력은 조기 반환 또는 예외 처리합니다.
 - 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
+- 내부 widget이 선택 가능한 Space가 아직 없을 때도 disabled placeholder를 렌더링하므로 헤더 레이아웃이 갑자기 비지 않습니다.
 
 ## 구현 체크리스트
 
@@ -44,6 +45,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | Space 목록이 비어도 헤더 selector 자리 유지를 보장하는 widget fallback 동작을 반영 | codex |
 | 2026-03-14 | hydration 제어 책임을 PersistStore/provider로 이동하고 HeaderSpaceSelector는 순수 props passthrough로 복귀 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |

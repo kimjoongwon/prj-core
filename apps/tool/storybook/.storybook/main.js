@@ -10,6 +10,7 @@ import {
   applyFeUiStoryTitleTransform,
   createFeUiStoryIndexer,
 } from "./feUiStoryTitles.js";
+import { serializeOverviewManifestSourceMaps } from "./overviewManifestSources.js";
 
 /**
  * This function is used to resolve the absolute path of a package.
@@ -28,6 +29,7 @@ const configDir = fileURLToPath(new URL(".", import.meta.url));
 const localStoryRoot = join(configDir, "../stories");
 const feUiStoryRoot = join(configDir, "../../../../packages/fe-ui/src");
 const repositoryRoot = join(configDir, "../../../..");
+const overviewManifestSources = serializeOverviewManifestSourceMaps(repositoryRoot);
 
 function isStoryFile(name) {
   return /\.stories\.(js|jsx|mjs|ts|tsx)$/.test(name);
@@ -137,6 +139,7 @@ const config = {
     config.define = {
       ...(config.define || {}),
       __STORYBOOK_REQUIRE_AUTH__: JSON.stringify(authConfig.requireAuth),
+      __STORYBOOK_OVERVIEW_MANIFEST_SOURCES__: overviewManifestSources,
     };
 
     try {

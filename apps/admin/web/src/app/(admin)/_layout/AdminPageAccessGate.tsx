@@ -1,19 +1,24 @@
 "use client";
 
 import { useVerifyToken } from "@cocrepo/api/idp/auth";
-import { ADMIN_PATHS, matchAdminPageAccessItem } from "@cocrepo/constant";
+import {
+	ADMIN_PATHS,
+	isScopeKindAccessible,
+	matchAdminPageAccessItem,
+} from "@cocrepo/constant";
+import { useAbility } from "@cocrepo/store";
 import {
 	DetailPage,
 	DetailPageSurface,
 	DetailSectionCard,
 	PageTitleBar,
 } from "@cocrepo/ui";
-import { useAbility } from "@cocrepo/store";
 import { Button } from "@heroui/react";
 import { LockKeyhole } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 
 export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 	children,
@@ -22,10 +27,14 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 }) {
 	const pathname = usePathname();
 	const router = useRouter();
+	const persistStore = usePersistStore();
 	const { can, isLoaded } = useAbility();
+	const shouldVerifyCurrentTenant =
+		persistStore.isHydrated && persistStore.isSpaceSelectionResolved;
 	const { data: verifyTokenResponse, isPending: isVerifyingToken } =
 		useVerifyToken({
 			query: {
+				enabled: shouldVerifyCurrentTenant,
 				retry: false,
 				refetchOnWindowFocus: false,
 			},
@@ -41,7 +50,7 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 		return children;
 	}
 
-	if (!isLoaded || isVerifyingToken) {
+	if (!isLoaded || !shouldVerifyCurrentTenant || isVerifyingToken) {
 		return (
 			<DetailPage
 				top={
@@ -62,16 +71,25 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 		);
 	}
 
-	if (hasFullAccessRole || can("view", pageAccessItem.subject)) {
+	const isScopeAccessible = isScopeKindAccessible(
+		pageAccessItem.scopeKind,
+		hasFullAccessRole,
+	);
+
+	if (isScopeAccessible && (hasFullAccessRole || can("view", pageAccessItem.subject))) {
 		return children;
 	}
+
+	const forbiddenDescription = isScopeAccessible
+		? `${pageAccessItem.pageLabel} 화면을 열 수 있는 권한이 현재 역할에 없습니다.`
+		: `${pageAccessItem.pageLabel} 화면은 현재 선택한 tenant role이 FULL_ACCESS일 때만 열 수 있습니다.`;
 
 	return (
 		<DetailPage
 			top={
 				<PageTitleBar
 					title="접근 권한이 없습니다"
-					description={`${pageAccessItem.pageLabel} 화면을 열 수 있는 권한이 현재 역할에 없습니다.`}
+					description={forbiddenDescription}
 				/>
 			}
 		>
@@ -86,9 +104,9 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 								이 화면은 현재 역할에서 열 수 없습니다.
 							</p>
 							<p className="max-w-xl text-sm text-default-500">
-								메뉴가 보여도 화면 접근 권한이 따로 꺼져 있으면 URL 직접 접근은
-								막힙니다. 역할 상세의 화면 접근 섹션에서 해당 페이지를 켜면 다시
-								열 수 있습니다.
+								{isScopeAccessible
+									? "메뉴가 보여도 화면 접근 권한이 따로 꺼져 있으면 URL 직접 접근은 막힙니다. 역할 상세의 화면 접근 섹션에서 해당 페이지를 켜면 다시 열 수 있습니다."
+									: "현재 선택한 tenant role이 FULL_ACCESS가 아니면 global 관리 화면은 열 수 없습니다. 헤더에서 FULL_ACCESS tenant로 전환한 뒤 다시 시도해 주세요."}
 							</p>
 						</div>
 						<div className="flex gap-2">

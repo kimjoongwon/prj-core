@@ -3,7 +3,7 @@ import { setLoginRedirectUrl } from "@cocrepo/api/core/client";
 import { useVerifyToken } from "@cocrepo/api/idp/auth";
 import { setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
 
-import { IDP_SUBJECTS } from "@cocrepo/constant";
+import { IDP_NAV_ITEMS, isScopeKindAccessible } from "@cocrepo/constant";
 import { NuqsNextAdapter } from "@cocrepo/hook/nuqs";
 import {
 	ConsoleAppStoreProvider,
@@ -33,20 +33,6 @@ const AUTH_FLOW_PATH_PREFIXES = [
 	"/reset-password",
 	"/error",
 ];
-
-const IDP_MENU_RULES = convertApiToAbilityRules(
-	Object.values(IDP_SUBJECTS).map(
-		(subject): AbilityApiResponse => ({
-			action: "access",
-			subject,
-			isActive: true,
-			fields: undefined,
-			conditions: undefined,
-			inverted: false,
-			reason: undefined,
-		}),
-	),
-);
 
 // IDP 콘솔의 로그인 리다이렉트 URL 설정 (admin용 + IDP용)
 setLoginRedirectUrl("/auth/login");
@@ -121,13 +107,39 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 	const shouldSkip = isAuthFlowPath(pathname);
 	const store = useStore();
 	const abilityStore = store.abilityStore;
+	const navigationStore = store.navigationStore;
+	const persistStore = store.persistStore;
+	const shouldVerifyCurrentTenant =
+		!shouldSkip &&
+		persistStore?.isHydrated === true &&
+		persistStore?.isSpaceSelectionResolved === true;
 	const { data, isLoading, isError } = useVerifyToken({
 		query: {
-			enabled: !shouldSkip,
+			enabled: shouldVerifyCurrentTenant,
 			retry: false,
 			refetchOnWindowFocus: false,
 		},
 	});
+	const hasFullAccessInCurrentTenant = data?.data?.hasFullAccess === true;
+
+	useEffect(() => {
+		if (!navigationStore) {
+			return;
+		}
+
+		if (shouldSkip) {
+			navigationStore.setScopeChecker(null);
+			return;
+		}
+
+		navigationStore.setScopeChecker((scopeKind) =>
+			isScopeKindAccessible(scopeKind, hasFullAccessInCurrentTenant),
+		);
+
+		return () => {
+			navigationStore.setScopeChecker(null);
+		};
+	}, [hasFullAccessInCurrentTenant, navigationStore, shouldSkip]);
 
 	useEffect(() => {
 		if (!abilityStore) {
@@ -139,7 +151,8 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 			return;
 		}
 
-		if (isLoading) {
+		if (!shouldVerifyCurrentTenant || isLoading) {
+			abilityStore.clearRules();
 			return;
 		}
 
@@ -150,8 +163,32 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 			return;
 		}
 
-		abilityStore.updateRules(IDP_MENU_RULES);
-	}, [abilityStore, data, isError, isLoading, shouldSkip]);
+		const rules = convertApiToAbilityRules(
+			IDP_NAV_ITEMS.filter((navItem) =>
+				isScopeKindAccessible(navItem.scopeKind, hasFullAccessInCurrentTenant),
+			).map(
+				(navItem): AbilityApiResponse => ({
+					action: "access",
+					subject: navItem.subject,
+					isActive: true,
+					fields: undefined,
+					conditions: undefined,
+					inverted: false,
+					reason: undefined,
+				}),
+			),
+		);
+
+		abilityStore.updateRules(rules);
+	}, [
+		abilityStore,
+		data,
+		hasFullAccessInCurrentTenant,
+		isError,
+		isLoading,
+		shouldSkip,
+		shouldVerifyCurrentTenant,
+	]);
 
 	return children;
 });

@@ -18,6 +18,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | `mirrored` 우선순위 규칙을 제거하고 `resolveCurrentTenantForSpace` 기본 매칭 규칙을 그대로 반영하도록 정리 | codex |
 | 2026-04-06 | space context가 없을 때 첫 tenant를 fallback으로 사용하도록 규칙을 명시 | codex |
 | 2026-04-06 | polymorphic GrantsRepository 대신 RoleGrantsRepository/UserGrantsRepository를 주입받도록 갱신 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

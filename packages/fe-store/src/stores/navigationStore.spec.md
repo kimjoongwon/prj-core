@@ -24,6 +24,7 @@
 | _selectedNavItem | `NavItem \| null` | `null` | 현재 선택된 주요 아이템 (1depth) |
 | _selectedSubNavItem | `NavItem \| null` | `null` | 현재 선택된 하위 아이템 (2depth) |
 | _abilityChecker | `AbilityChecker \| null` | options?.abilityChecker ?? `null` | 권한 체크 함수 |
+| _scopeChecker | `NavItemScopeChecker \| null` | options?.scopeChecker ?? `null` | 현재 tenant scope 기반 노출 체크 함수 |
 | _navigator | `Navigator \| null` | options?.navigator ?? `null` | 페이지 이동 담당 |
 | _onNavigate | `((path: string) => void) \| null` | options?.onNavigate ?? `null` | (deprecated) 이동 콜백 |
 | _expandedNavItemIds | `Set<string>` | `new Set()` | 펼쳐진 아이템 ID 집합 |
@@ -34,10 +35,10 @@
 | 속성 | 타입 | 계산 로직 |
 |------|------|----------|
 | allItems | `NavItem[]` | `_items` 전체 반환 (필터링 없음) |
-| items | `NavItem[]` | `_abilityChecker`가 있으면 `"view"` 액션으로 1depth/2depth 모두 필터링, 없으면 전체 반환 |
+| items | `NavItem[]` | `_abilityChecker`와 `_scopeChecker`를 함께 적용해 1depth/2depth 모두 필터링한 visible tree 반환 |
 | selectedNavItem | `NavItem \| null` | `_selectedNavItem` 반환 |
 | selectedSubNavItem | `NavItem \| null` | `_selectedSubNavItem` 반환 |
-| subNavItems | `NavItem[]` | 선택된 주요 아이템의 children (권한 필터링 적용) |
+| subNavItems | `NavItem[]` | 선택된 주요 아이템의 children (권한 + scope 필터링 적용) |
 | expandedNavItemIds | `Set<string>` | `_expandedNavItemIds` 반환 |
 | currentPath | `string` | `_currentPath` 반환 |
 
@@ -47,6 +48,7 @@
 |--------|----------|------|
 | `setNavigator` | `navigator: Navigator` | Navigator 설정 |
 | `setAbilityChecker` | `checker: AbilityChecker` | 권한 체크 함수 설정 |
+| `setScopeChecker` | `checker: NavItemScopeChecker \| null` | 현재 tenant scope 체크 함수 설정 |
 | `setNavigateHandler` | `handler: (path: string) => void` | (deprecated) 이동 핸들러 설정 |
 | `toggleNavItem` | `navItemId: string` | 아이템 펼침/접힘 토글 |
 | `isNavItemExpanded` | `navItemId: string` | 아이템 펼침 상태 확인 |
@@ -81,7 +83,7 @@
 
 | 패키지 | 사용 |
 |--------|------|
-| `@cocrepo/type` | `NavItemConfig`, `AbilityChecker`, `NavigationStoreOptions`, `NavigatorLike` 타입 |
+| `@cocrepo/type` | `NavItemConfig`, `AbilityChecker`, `NavItemScopeChecker`, `NavigationStoreOptions`, `NavigatorLike` 타입 |
 
 ## 주요 동작 흐름
 
@@ -126,6 +128,7 @@ navigationStore.selectNavItem('members');
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | ability와 별도로 `scopeChecker`를 도입해 현재 tenant 기준 메뉴/화면 노출을 재사용 가능하게 정리 | codex |
 | 2026-03-06 | AbilityChecker/NavigationStoreOptions를 로컬 선언에서 @cocrepo/type 공용 계약 import로 전환 | codex |
 | 2026-03-06 | AbilityChecker를 AppAction/AppSubject 기반으로 타입 강화하고 메뉴 필터 액션을 view(소문자)로 통일 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

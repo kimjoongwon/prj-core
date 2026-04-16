@@ -12,11 +12,12 @@
 
 | 항목 | 설명 |
 |------|------|
-| export | 없음 |
+| export | 공용 hook과 hook helper(useSpaceBootstrap 포함) 배럴 export |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | admin/idp 공용 space bootstrap 훅 export를 루트 배럴에 추가 | codex |
 | 2026-03-06 | CASL 관련 배럴 export를 제거하고 fe-hook을 순수 훅 집합으로 정리 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

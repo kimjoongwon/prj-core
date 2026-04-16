@@ -9,6 +9,7 @@
 - 상위 shell은 `apps/idp/web/src/app/layout.spec.md`가 소유합니다.
 - 이 route의 `layout.tsx`는 서버 컴포넌트로 동작하며 shared `Layout` skeleton을 소유합니다.
 - route shell은 `Layout`의 `desktopVariant="stacked-header"`를 사용하고, 인터랙티브 slot은 `_layout/Console*Slot.tsx`가 담당합니다.
+- route shell은 `ConsoleLayoutEffects`로 공용 space bootstrap/alert를, `ConsolePageAccessGate`로 pathname 기반 screen scope 차단을 연결합니다.
 - 데스크톱에서는 header가 전폭 상단을 차지하고 sidebar는 header 아래에서 시작해야 하며, 두 영역이 같은 첫 행을 공유하지 않습니다.
 - route-level 데이터 fetch나 페이지 이벤트 바인딩은 `layout.tsx`가 직접 수행하지 않습니다.
 
@@ -64,6 +65,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | IDP console layout에 space bootstrap effect와 screen scope gate 조합을 추가 | codex |
 | 2026-03-23 | IDP 콘솔 shell을 `fe-ui` shared `Layout/HeaderBar/SidePanel` 기반으로 재구성 | codex |
 | 2026-03-23 | 데스크톱 콘솔 shell을 `전폭 header + 하단 sidebar/main` 구조로 재배치하고 IDP 전용 브랜드/아이콘 비주얼을 적용 | codex |
 | 2026-03-22 | `Layout` primitive를 제거하고 `(console)` shell을 route markup + `_layout/Console*Slot` 조합으로 재구성 | codex |

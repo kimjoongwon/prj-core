@@ -20,6 +20,7 @@ import {
 } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
+import { resolveCurrentTenantForSpace } from "../util/permission.util";
 import type { Actions, AppAbility, AppAbilityClass, Subjects } from "./types";
 
 /**
@@ -98,10 +99,7 @@ export class CaslAbilityFactory {
 
 		// x-space-id 헤더에서 현재 spaceId를 가져와서 해당 tenant 찾기
 		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
-		const currentTenant =
-			user.tenants?.find((tenant) =>
-				spaceId ? tenant.spaceId === spaceId : true,
-			) ?? user.tenants?.[0];
+		const currentTenant = resolveCurrentTenantForSpace(user.tenants, spaceId);
 
 		if (!currentTenant?.role) {
 			this.logger.warn(

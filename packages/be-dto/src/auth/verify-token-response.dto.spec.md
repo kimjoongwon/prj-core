@@ -21,7 +21,7 @@
 | `valid` | boolean | 현재 액세스 토큰 유효 여부 |
 | `accessTokenExpiresAt` | number | 액세스 토큰 만료 시각(ms) |
 | `refreshTokenExpiresAt` | number | 리프레시 토큰 만료 시각(ms) |
-| `hasFullAccess` | boolean | 현재 사용자가 `FULL_ACCESS` tenant role을 보유하는지 여부 |
+| `hasFullAccess` | boolean | 현재 `x-space-id`로 해석된 tenant role이 `FULL_ACCESS`인지 여부 |
 
 ## 의존성
 
@@ -38,6 +38,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | `hasFullAccess`를 현재 선택 tenant 기준 필드로 명확히 정리 | codex |
 | 2026-04-15 | `hasFullAccess`를 `manage all`이 아니라 tenant role `FULL_ACCESS` 의미로 단순화 | codex |
 | 2026-04-06 | `hasFullAccess`를 tenant 역할명이 아닌 `manage all` 전역 권한 의미로 재정의 | codex |
 | 2026-03-23 | IDP 웹 권한 bootstrap을 위해 `hasFullAccess` 필드를 추가 | codex |

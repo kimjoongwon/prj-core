@@ -25,7 +25,7 @@ User(사용자) 엔티티의 데이터 접근을 담당합니다. 인증(이메�
 | `findByEmail(email)` | string | `Promise<User \| null>` | 이메일로 기본 정보 조회 |
 | `findByEmailWithTenantsAndProfiles(email)` | string | `Promise<User \| null>` | 이메일로 전체 관계 포함 조회 |
 | `findByEmailSelectCredentials(email)` | string | `Promise<{ id, email, password } \| null>` | 인증용 이메일 조회 (최소 필드만) |
-| `findManyBySpaceIds(params)` | where, orderBy, skip, take, spaceIds | `Promise<{ users: User[], totalCount: number }>` | Space ID 목록 내 사용자 목록 + 페이지네이션 |
+| `findManyBySpaceIds(params)` | where, orderBy, skip, take, spaceIds, includedRoleNames? | `Promise<{ users: User[], totalCount: number }>` | Space ID 목록 내 사용자 목록 + 페이지네이션 |
 | `findByIdAndSpaceIdWithRelations(userId, spaceId)` | string, string | `Promise<User \| null>` | ID + Space ID로 관계 포함 조회 |
 | `findSecurityInfoById(id)` | string | `Promise<보안정보 \| null>` | 보안 정보만 select 조회 |
 | `findPasswordById(id)` | string | `Promise<{ password } \| null>` | 비밀번호 해시만 조회 |
@@ -42,7 +42,7 @@ User(사용자) 엔티티의 데이터 접근을 담당합니다. 인증(이메�
 
 | 메서드 | 파라미터 | 반환 | 설명 |
 |--------|----------|------|------|
-| `countStatsBySpaceIds(params)` | `{ spaceIds?: string[], excludedRoleNames?: string[] }` | `Promise<UserStats>` | Space 내 회원 통계 (전체, 활성, 비활성, 이번달 신규) |
+| `countStatsBySpaceIds(params)` | `{ spaceIds?: string[] }` | `Promise<UserStats>` | Space 내 회원 통계 (전체, 활성, 비활성, 이번달 신규) |
 
 ### 생성/수정/삭제 메서드
 
@@ -95,9 +95,10 @@ User {
 
 - `findByEmailSelectCredentials()`: 인증 시 최소 필드(id, email, password)만 조회하여 보안 강화
 - `findManyBySpaceIds()`: `Promise.all()`로 데이터와 totalCount 동시 조회
+- scoped 회원 목록은 `includedRoleNames`를 받아 응답에 포함되는 `tenants` 관계도 현재 화면 필터와 동일한 역할 범위로 정렬합니다.
 - `existsBy*()`: `select: { id: true }`만 조회하여 성능 최적화
 - `countStatsBySpaceIds()`: `Promise.all()`로 통계 동시 계산
-- scoped 회원 통계는 `excludedRoleNames`를 받아 branch 기본 목록에서 미러된 `FULL_ACCESS` tenant를 제외할 수 있습니다.
+- scoped 회원 통계는 `spaceIds` 기준으로만 범위를 제한합니다.
 
 ## 비밀번호 업데이트 정책 (updatePassword)
 
@@ -135,5 +136,7 @@ User {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | scoped 회원 목록 응답의 `tenants` include도 역할 포함/제외 규칙을 따르도록 문서화 | codex |
+| 2026-04-16 | 회원 목록/통계에서 `FULL_ACCESS` 제외 규칙을 제거하고 `spaceIds` 기반 단일 스코프 규칙으로 정리 | codex |
 | 2026-04-15 | 회원 통계 메서드가 `excludedRoleNames`로 branch 기본 목록의 FULL_ACCESS 제외를 지원하도록 갱신 | codex |
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |

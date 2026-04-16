@@ -30,11 +30,13 @@
 - [ ] 호출 경로 변경 시 spec을 함께 갱신함
 - [x] controller에서 `@cocrepo/facade` 주입 사용
 - [x] controller의 `@cocrepo/app` 직접 주입 제거
+- [x] `IdpAccountService`의 tenant scope 의존성인 `SpaceContext`를 module provider로 등록함
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-16 | `IdpAccountService`가 현재 tenant scope를 해석할 수 있도록 `SpaceContext` provider wiring을 추가 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-03-14 | `IdpAccountFacade`가 주입하는 `IdpAccountService` provider를 module wiring에 복구 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
