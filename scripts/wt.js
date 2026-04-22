@@ -76,11 +76,11 @@ function main() {
         runFinish(args, configOverride, { json });
         break;
       default:
-        throw new Error(`Unknown command: ${command}`);
+        throw new Error(`알 수 없는 명령입니다: ${command}`);
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    console.error(`error: ${message}`);
+    console.error(`오류: ${message}`);
     process.exit(1);
   }
 }
@@ -98,7 +98,7 @@ function parseArgs(argv) {
     if (arg === "--config") {
       const value = argv[index + 1];
       if (!value) {
-        throw new Error("--config requires a path value.");
+        throw new Error("--config에는 경로 값이 필요합니다.");
       }
       configPath = value;
       index += 1;
@@ -120,41 +120,42 @@ function parseArgs(argv) {
 }
 
 function printHelp() {
-  console.log(`wt - reusable git worktree + tmux helper
+  console.log(`wt - git worktree + tmux 작업 도우미
 
-Usage:
-  node scripts/wt.js <command> [args] [--config <path>]
+사용법:
+  pnpm wt
+  pnpm wt:<command> [args]
+  pnpm exec tsx scripts/wt.ts <command> [args] [--config <path>]
 
-Commands:
-  init                       Create default config when missing.
-  new <ticket>               Create branch/worktree + env + tmux session.
-  new-run <ticket>           Create worktree, run Codex task, and queue PR creation.
-  go <ticket-or-branch>      Attach tmux session or print cd path.
-  list                       Show worktree entries with status.
-  rm <ticket-or-branch>      Remove worktree and delete local branch by default.
-  plan-merge <ticket|branch> Recommend merge strategy from branch work outputs.
-  pr <ticket|branch>         Push branch and create/open PR.
-  merge <ticket|branch>      Merge PR with selected or recommended strategy.
-  finish <ticket|branch>     Rebase/push/create PR/merge/cleanup in one flow.
-  help                       Show this help.
+명령:
+  init                       설정이 없으면 기본 config를 만듭니다.
+  new <ticket>               브랜치/worktree/env/tmux 세션을 생성합니다.
+  new-run <ticket>           worktree를 만들고 Codex 작업과 PR 흐름을 이어서 준비합니다.
+  go <ticket-or-branch>      tmux 세션에 붙거나 cd 경로를 출력합니다.
+  list                       등록된 worktree와 상태를 출력합니다.
+  rm <ticket-or-branch>      worktree를 정리하고 기본적으로 로컬 브랜치도 삭제합니다.
+  plan-merge <ticket|branch> 브랜치 작업 결과를 보고 병합 전략을 추천합니다.
+  pr <ticket|branch>         브랜치를 push하고 PR을 만들거나 엽니다.
+  merge <ticket|branch>      선택한 전략 또는 추천 전략으로 PR을 병합합니다.
+  finish <ticket|branch>     rebase/push/PR/merge/cleanup을 한 번에 실행합니다.
+  help                       이 도움말을 출력합니다.
 
-Options:
-  --config <path>            Override config path (default: .wt/config.json).
-  --json                     Print machine-readable JSON for supported commands.
+옵션:
+  --config <path>            설정 경로를 덮어씁니다. 기본값은 .wt/config.json 입니다.
+  --json                     지원하는 명령에서 기계 판독용 JSON을 출력합니다.
 
-Examples:
-  node scripts/wt.js init
-  node scripts/wt.js new CORE-123
-  node scripts/wt.js new-run CORE-123
-  node scripts/wt.js new-run CORE-123 --prompt "Implement user listing page"
-  node scripts/wt.js new-run CORE-123 --prompt "Implement user listing page" --no-pr
-  node scripts/wt.js go CORE-123
-  node scripts/wt.js plan-merge CORE-123 --json
-  node scripts/wt.js pr CORE-123
-  node scripts/wt.js merge CORE-123 --strategy auto --auto
-  node scripts/wt.js finish CORE-123 --strategy auto
-  node scripts/wt.js rm CORE-123 --keep-branch
-  node scripts/wt.js rm CORE-123 --force
+예시:
+  pnpm wt
+  pnpm wt:init
+  pnpm wt:new CORE-123
+  pnpm wt:new-run CORE-123 --prompt "회원 목록 화면 구현"
+  pnpm wt:go CORE-123
+  pnpm wt:plan-merge CORE-123 --json
+  pnpm wt:pr CORE-123
+  pnpm wt:merge CORE-123 --strategy auto --auto
+  pnpm wt:finish CORE-123 --strategy auto
+  pnpm wt:rm CORE-123 --keep-branch
+  pnpm wt:rm CORE-123 --force
 `);
 }
 

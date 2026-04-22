@@ -1,57 +1,61 @@
 # wt.js Sidecar Spec
 
-## Purpose
+## 목적
 
-- Provide a reusable CLI for git worktree lifecycle management.
-- Standardize parallel development setup with optional tmux automation.
-- Keep runtime state outside the repo working tree in git common dir.
+- git worktree 생명주기를 관리하는 재사용 가능한 core CLI를 제공합니다.
+- 선택형 `scripts/wt.ts` 진입점 뒤에서 실제 실행 엔진 역할을 맡습니다.
+- 선택형 메뉴를 거치지 않는 직접 호출(`pnpm wt:new`, `pnpm wt:finish`)도 안정적으로 처리합니다.
+- 런타임 상태는 repo 작업 디렉터리 바깥 git common dir에 유지합니다.
 
-## Commands
+## 명령 계약
 
-- `init`: create config file if missing.
-- `new <ticket>`: allocate slot, create branch/worktree, write env file, create tmux session/windows.
-- `new-run <ticket> [--prompt <text>]`: run `new`, enqueue Codex task in tmux, optionally auto-attach.
-  - If prompt is omitted, ask interactively in TTY mode.
-  - By default, queue `wt:pr <ticket>` after Codex succeeds (`--no-pr` disables this).
-- `go <ticket-or-branch>`: attach tmux session when available; otherwise print `cd` path.
-- `list`: print registry entries with worktree/tmux status (`--json` supported).
-- `plan-merge <ticket|branch>`: analyze branch outputs and recommend `merge|squash|rebase`.
-- `pr <ticket|branch>`: push branch and create/reuse PR.
-- `merge <ticket|branch>`: merge PR with explicit or recommended strategy.
-- `finish <ticket|branch>`: end-to-end flow (rebase, push, PR, merge, cleanup).
-- `rm <ticket-or-branch>`: stop tmux, remove worktree, delete local branch by default.
-  - Safe default: `git worktree remove` and `git branch -d`
-  - Force option: `--force` uses `git worktree remove --force` and `git branch -D`
-  - If `-d` fails (unmerged), branch is kept and cleanup continues.
-- `help`: show command usage.
+- `init`: 설정 파일이 없으면 생성합니다.
+- `new <ticket>`: slot 할당, 브랜치/worktree 생성, env 파일 작성, tmux 세션/윈도우 생성을 수행합니다.
+- `new-run <ticket> [--prompt <text>]`: `new`를 실행한 뒤 tmux에 Codex 작업을 큐잉하고 필요하면 자동 attach 합니다.
+  - `--prompt`가 없고 TTY이면 사용자에게 입력을 받습니다.
+  - 기본값으로 Codex 성공 후 `wt:pr <ticket>`를 이어서 실행합니다. (`--no-pr`로 비활성화)
+- `go <ticket-or-branch>`: tmux 사용 가능 시 attach하고, 아니면 `cd` 경로를 출력합니다.
+- `list`: registry 항목과 worktree/tmux 상태를 출력합니다. (`--json` 지원)
+- `plan-merge <ticket|branch>`: 브랜치 작업 결과를 분석해 `merge|squash|rebase`를 추천합니다.
+- `pr <ticket|branch>`: 브랜치를 push하고 PR을 생성하거나 재사용합니다.
+- `merge <ticket|branch>`: 명시한 전략 또는 추천 전략으로 PR을 병합합니다.
+- `finish <ticket|branch>`: rebase, push, PR, merge, cleanup을 한 흐름으로 실행합니다.
+- `rm <ticket-or-branch>`: tmux를 멈추고 worktree를 제거하며 기본적으로 로컬 브랜치도 삭제합니다.
+  - 안전 기본값: `git worktree remove`와 `git branch -d`
+  - 강제 옵션: `--force`는 `git worktree remove --force`와 `git branch -D`
+  - `-d`가 실패해도 브랜치는 유지하고 cleanup은 계속합니다.
+- `help`: 명령 사용법을 출력합니다.
 
-## Config Contract
+## 설정 계약
 
-- External JSON config (default: `.wt/config.json`, override: `--config`).
-- Required behavior keys:
+- 외부 JSON 설정 파일을 사용합니다. 기본 경로는 `.wt/config.json`이고 `--config`로 덮어쓸 수 있습니다.
+- 필수 동작 키:
   - `worktreeRoot`, `directoryNameTemplate`, `branchPrefix`, `baseRef`, `envFileName`
   - `port.offsetStep`, `port.map`
   - `tmux.enabled`, `tmux.sessionPrefix`, `tmux.windows`
 
-## Runtime Data
+## 런타임 데이터
 
-- Registry path: `<git-common-dir>/wt-tool/registry.json`
-- Registry stores:
+- registry 경로: `<git-common-dir>/wt-tool/registry.json`
+- registry 저장 항목:
   - `ticket`, `branch`, `slot`
   - `worktreePath`, `envFilePath`, `sessionName`
   - `createdAt`
 
-## Error Handling
+## 오류 및 출력
 
-- Validate config shape and values before command execution.
-- Fail with concise `error: ...` output and non-zero exit code.
-- Keep console output short for normal flows.
-- For AI orchestration flows, provide machine-readable payloads with `--json`.
+- 명령 실행 전에 config 형식과 값을 검증합니다.
+- 정상 흐름의 콘솔 출력은 짧게 유지합니다.
+- top-level 도움말과 오류 접두어는 한국어 중심으로 출력합니다.
+- AI orchestration 흐름에서는 `--json`으로 기계 판독용 payload를 제공합니다.
 
-## Change History
+## 변경 이력
 
 | Date       | Change                                                                                                             | Author |
 | ---------- | ------------------------------------------------------------------------------------------------------------------ | ------ |
+| 2026-04-22 | core help와 top-level 오류 문구를 한국어 중심 UX로 정리함                                                         | codex  |
+| 2026-04-22 | Update core help text to present `pnpm wt` and `wt:*` as the primary invocation style                             | codex  |
+| 2026-04-22 | Clarify `wt.js` as the core executor behind the interactive `wt.ts` entrypoint                                     | codex  |
 | 2026-02-28 | Initial spec for reusable git worktree + tmux automation                                                           | codex  |
 | 2026-02-28 | Align defaults to project workflow (`../wt`, `feat/*`, `origin/main`) and add safe `rm` behavior                   | codex  |
 | 2026-02-28 | Add AI-controlled PR/merge lifecycle commands (`plan-merge`, `pr`, `merge`, `finish`) and JSON output mode         | codex  |

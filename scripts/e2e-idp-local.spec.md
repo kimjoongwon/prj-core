@@ -20,6 +20,7 @@ Postgres/Redis 준비, Prisma schema push/seed, `idp-api` 기동, Playwright 실
 | 포트 충돌 방지 | `kubectl port-forward`가 DB/Redis 포트를 점유 중이면 로컬 서비스로 오인하지 않고 즉시 실패 |
 | Postgres 준비 | 로컬 DB일 때만 `prj-core-e2e-postgres` 컨테이너를 자동 생성/재사용 |
 | Redis 준비 | 로컬 Redis일 때만 `prj-core-e2e-redis` 컨테이너를 자동 생성/재사용 |
+| Browser 준비 | `pnpm --filter=test-e2e ensure:browsers`로 user-level Playwright browser cache를 보장 |
 | DB bootstrap | 기본적으로 `pnpm --filter=@cocrepo/prisma db:push` + `db:seed` 실행 |
 | API 준비 | 기본적으로 `@cocrepo/service`와 `idp-api`를 빌드한 뒤 `idp-api start:dev`를 백그라운드로 기동 |
 | 실패 로그 | `IDP_API_LOG_FILE` 기본값 `/tmp/idp-api-e2e.log` |
@@ -38,5 +39,6 @@ Postgres/Redis 준비, Prisma schema push/seed, `idp-api` 기동, Playwright 실
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | repo-local browsers 디렉터리 대신 `test-e2e ensure:browsers`를 호출해 user-level browser cache를 보장하도록 변경 | codex |
 | 2026-04-13 | `kubectl port-forward`가 DB/Redis 포트를 점유한 경우 로컬 개발 서비스로 오인하지 않도록 안전 장치를 추가 | codex |
 | 2026-03-20 | IDP 로컬 E2E one-shot 실행 스크립트 신규 추가 | codex |

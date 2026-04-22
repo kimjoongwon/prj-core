@@ -11,10 +11,14 @@
 ## 2. 빠른 시작
 
 ```bash
+pnpm wt
 pnpm wt:init
 pnpm wt:new AUTH-21
 pnpm wt:go AUTH-21
 ```
+
+`pnpm wt`를 실행하면 현재 상황(config 유무, tracked worktree 수)에 맞는 한글 작업 메뉴가 먼저 표시됩니다.
+명령 이름을 외우기 싫다면 이 진입점을 기본으로 사용하면 됩니다.
 
 위 3개 명령으로 아래가 자동 처리됩니다.
 

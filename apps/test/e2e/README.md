@@ -2,6 +2,9 @@
 
 Admin/IDP/Storybook E2E 테스트는 Playwright 워크스페이스(`apps/test/e2e`)에서 공통으로 관리합니다.
 
+첫 실행 시 필요한 Playwright 브라우저는 사용자 로컬 cache에 자동 설치됩니다.
+기본 경로는 Playwright 기본 cache 정책을 따르며, 필요하면 `PLAYWRIGHT_BROWSERS_PATH`로 override할 수 있습니다.
+
 ## 실행
 
 ```bash

@@ -282,9 +282,19 @@ pnpm bundle:sizes
 - 패키지 권한 확인
 - 네트워크 연결 확인
 
-## Git worktree + tmux automation (`wt.js`)
+## Git worktree + tmux automation (`wt.ts` + `wt.js`)
 
-`wt.js`는 `git worktree + tmux` 병렬 작업을 표준화하는 스크립트입니다.
+`pnpm wt`는 상황형 메뉴를 띄우는 TypeScript entrypoint이고, 실제 git worktree 작업은 `wt.js` core가 수행합니다.
+
+### Guided entrypoint
+
+```bash
+pnpm wt
+```
+
+- TTY 환경에서는 현재 상태에 맞는 action menu를 보여줍니다.
+- 예: config 초기화, 신규 worktree 생성, 기존 worktree 이동, PR 생성, finish, remove
+- TTY가 아니면 raw help로 fallback 합니다.
 
 ### Commands
 

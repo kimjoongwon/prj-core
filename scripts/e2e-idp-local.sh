@@ -5,7 +5,6 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ENV_FILE="$ROOT_DIR/apps/idp/api/.env"
 PLAYWRIGHT_PROJECT="${E2E_PLAYWRIGHT_PROJECT:-idp-chromium}"
-PLAYWRIGHT_BROWSERS_DIR="$ROOT_DIR/apps/test/e2e/browsers"
 IDP_API_LOG_FILE="${IDP_API_LOG_FILE:-/tmp/idp-api-e2e.log}"
 POSTGRES_CONTAINER_NAME="${E2E_POSTGRES_CONTAINER_NAME:-prj-core-e2e-postgres}"
 REDIS_CONTAINER_NAME="${E2E_REDIS_CONTAINER_NAME:-prj-core-e2e-redis}"
@@ -246,15 +245,10 @@ ensure_redis() {
 }
 
 ensure_playwright_browsers() {
-  if [[ -d "$PLAYWRIGHT_BROWSERS_DIR" ]] && [[ -n "$(ls -A "$PLAYWRIGHT_BROWSERS_DIR" 2>/dev/null)" ]]; then
-    log "Playwright 브라우저를 재사용합니다."
-    return
-  fi
-
-  log "Playwright 브라우저를 설치합니다."
+  log "Playwright 브라우저를 보장합니다."
   (
     cd "$ROOT_DIR"
-    pnpm --filter=test-e2e install:browsers
+    pnpm --filter=test-e2e ensure:browsers
   )
 }
 
@@ -364,8 +358,7 @@ main() {
   log "IDP E2E 테스트를 실행합니다."
   (
     cd "$ROOT_DIR"
-    PLAYWRIGHT_BROWSERS_PATH="$PLAYWRIGHT_BROWSERS_DIR" \
-      pnpm --filter=test-e2e exec playwright test --project="$PLAYWRIGHT_PROJECT" "$@"
+    pnpm --filter=test-e2e exec playwright test --project="$PLAYWRIGHT_PROJECT" "$@"
   )
 }
 

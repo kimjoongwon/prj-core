@@ -2,9 +2,17 @@ import Module from "node:module";
 import path from "node:path";
 import { defineConfig, devices } from "@playwright/test";
 
-// 항상 절대 경로로 browsers 경로 설정 (상대 경로는 CWD에 따라 달라질 수 있음)
-process.env.PLAYWRIGHT_BROWSERS_PATH =
-	process.env.PLAYWRIGHT_BROWSERS_PATH ?? path.join(__dirname, "browsers");
+if (
+	process.env.PLAYWRIGHT_BROWSERS_PATH &&
+	process.env.PLAYWRIGHT_BROWSERS_PATH !== "0" &&
+	!path.isAbsolute(process.env.PLAYWRIGHT_BROWSERS_PATH)
+) {
+	process.env.PLAYWRIGHT_BROWSERS_PATH = path.resolve(
+		process.cwd(),
+		process.env.PLAYWRIGHT_BROWSERS_PATH,
+	);
+}
+
 process.env.E2E_ENV = process.env.E2E_ENV ?? "local";
 
 const workspaceNodeModulesPath = path.join(__dirname, "node_modules");
