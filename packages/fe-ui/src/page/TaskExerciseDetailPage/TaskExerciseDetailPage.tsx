@@ -257,7 +257,7 @@ export const TaskExerciseDetailPage = observer(
 									<div className="flex flex-col gap-2">
 										{routines.map((routine) => (
 											<div
-												key={routine.id}
+												key={`${routine.id}:${routine.createdAt}`}
 												className="flex items-center justify-between rounded-lg bg-content2 p-3"
 											>
 												<div>

@@ -379,6 +379,30 @@ resolve_codegen_cmd() {
   esac
 }
 
+run_local_infra_preflight() {
+  if [[ "${START_SKIP_INFRA_CHECK:-}" =~ ^(y|yes|true|1|on)$ ]]; then
+    echo -e "${DIM}START_SKIP_INFRA_CHECK enabled - skipping PostgreSQL/Redis preflight${RESET}"
+    return
+  fi
+
+  local services=()
+
+  if [[ "$HAS_BACKEND" == "true" ]]; then
+    services+=("core-api")
+  fi
+
+  if [[ "$HAS_IDP" == "true" ]]; then
+    services+=("idp-api")
+  fi
+
+  if [[ ${#services[@]} -eq 0 ]]; then
+    return
+  fi
+
+  echo -e "${YELLOW}🔎 로컬 인프라 사전 점검 중...${RESET}"
+  node ./scripts/check-local-infra.mjs "${services[@]}"
+}
+
 # 종료 시 선택된 서비스의 포트 프로세스 정리
 cleanup() {
   echo ""
@@ -464,6 +488,7 @@ pre_cleanup_ports() {
   fi
 }
 
+run_local_infra_preflight
 pre_cleanup_service_processes
 pre_cleanup_ports
 

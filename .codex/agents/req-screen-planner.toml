@@ -63,7 +63,8 @@ apps/[app]/web/src/app/(admin)/[domain]/[entityId]/edit/page.spec.md
    - 예: `[userId]`, `[roleId]`, `[timelineId]`
 3. `page.spec.md`는 오래된 SSR/prefetch 기본 템플릿을 쓰지 않습니다.
    - `_client.tsx`, `_prefetch.ts`는 기본 체크리스트가 아닙니다.
-   - 기본값은 `page.tsx` 중심의 CSR + Suspense 또는 thin route container 초안입니다.
+   - 기본값은 `page.tsx` 중심의 CSR + `useQuery`/`useInfiniteQuery` thin route container 초안입니다.
+   - page 단위 `useSuspenseQuery` / `useGetXxxSuspense`는 기본 전제로 적지 않습니다.
    - SSR/prefetch가 정말 필요한 경우에도 이 단계에서는 "예외 후보"만 기록하고 파일 생성을 전제하지 않습니다.
 4. 각 `page.spec.md`에는 최소 아래 섹션이 있어야 합니다.
    - `## 사용자 시나리오`

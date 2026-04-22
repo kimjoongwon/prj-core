@@ -240,6 +240,12 @@ export const InquiryDetailPage = observer(
 		onClickGenerateDraftButton,
 		onClickSearchKnowledgeButton,
 	}: InquiryDetailPageProps) => {
+		const editCategoryOptionValues = new Set(
+			editCategoryOptions.map((option) => option.value),
+		);
+		const editPriorityOptionValues = new Set(
+			editPriorityOptions.map((option) => option.value),
+		);
 		const createdAt = inquiry?.createdAt ?? new Date().toISOString();
 		const firstResponseEnd =
 			inquiry?.firstResponseAt ?? new Date().toISOString();
@@ -400,7 +406,10 @@ export const InquiryDetailPage = observer(
 													label="카테고리"
 													placeholder="카테고리 선택"
 													selectedKeys={
-														metaFormState.category
+														metaFormState.category &&
+														editCategoryOptionValues.has(
+															metaFormState.category,
+														)
 															? [metaFormState.category]
 															: []
 													}
@@ -423,7 +432,10 @@ export const InquiryDetailPage = observer(
 													label="우선순위"
 													placeholder="우선순위 선택"
 													selectedKeys={
-														metaFormState.priority
+														metaFormState.priority &&
+														editPriorityOptionValues.has(
+															metaFormState.priority,
+														)
 															? [metaFormState.priority]
 															: []
 													}

@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "STORYBOOK_DISABLE_CHROMATIC=${STORYBOOK_DISABLE_CHROMATIC:-true} STORYBOOK_DISABLE_VITEST_ADDON=${STORYBOOK_DISABLE_VITEST_ADDON:-true} storybook build && node ./scripts/fix-static-subpath.mjs",
-    "test": "vitest --config vitest.config.js --passWithNoTests",
-    "test:ui": "vitest --ui",
-    "test:run": "vitest run",
-    "test:watch": "vitest watch",
+    "test": "PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-./.playwright} vitest --config vitest.config.js --passWithNoTests",
+    "test:ui": "PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-./.playwright} vitest --ui",
+    "test:run": "PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-./.playwright} vitest run",
+    "test:watch": "PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-./.playwright} vitest watch",
     "format": "biome format --write .",
     "type-check": "tsc --noEmit",
     "start:dev": "STORYBOOK_REQUIRE_AUTH=true storybook dev -p ${STORYBOOK_PORT:-6006}",
@@ -31,6 +31,10 @@
     "react-router-dom": "^7.7.1"
   },
   "devDependencies": {
+    "@babel/generator": "^7.29.1",
+    "@babel/parser": "^7.29.2",
+    "@babel/traverse": "^7.29.0",
+    "@babel/types": "^7.29.0",
     "@chromatic-com/storybook": "^4.0.1",
     "@storybook/addon-a11y": "^9.0.18",
     "@storybook/addon-docs": "catalog:",

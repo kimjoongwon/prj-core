@@ -97,6 +97,8 @@ export const AbilityListPage = observer(({
 	onClickCreateButton,
 }: AbilityListPageProps) => {
 	const [queryStates, setQueryStates] = useMetaDataGridQueryStates();
+	const subjectOptionIds = new Set(subjects.map((subject) => subject.id));
+	const actionOptionIds = new Set(actions.map((action) => action.id));
 	const handleAbilityRowClick = (ability: AbilityListPageAbility) => {
 		onClickAbilityRow(ability.id);
 	};
@@ -136,9 +138,13 @@ export const AbilityListPage = observer(({
 							onClear={() => onChangeSearchTerm("")}
 						/>
 						<Select
+							aria-label="Subject 선택"
 							placeholder="Subject 선택"
 							selectedKeys={
-								filters.selectedSubjectId ? [filters.selectedSubjectId] : []
+								filters.selectedSubjectId &&
+								subjectOptionIds.has(filters.selectedSubjectId)
+									? [filters.selectedSubjectId]
+									: []
 							}
 							onSelectionChange={(keys) => {
 								const selected = Array.from(keys)[0] as string;
@@ -150,9 +156,13 @@ export const AbilityListPage = observer(({
 							))}
 						</Select>
 						<Select
+							aria-label="Action 선택"
 							placeholder="Action 선택"
 							selectedKeys={
-								filters.selectedActionId ? [filters.selectedActionId] : []
+								filters.selectedActionId &&
+								actionOptionIds.has(filters.selectedActionId)
+									? [filters.selectedActionId]
+									: []
 							}
 							onSelectionChange={(keys) => {
 								const selected = Array.from(keys)[0] as string;
@@ -164,9 +174,13 @@ export const AbilityListPage = observer(({
 							))}
 						</Select>
 						<Select
+							aria-label="유형 선택"
 							placeholder="유형 선택"
 							selectedKeys={
-								filters.selectedInverted ? [filters.selectedInverted] : []
+								filters.selectedInverted === "true" ||
+								filters.selectedInverted === "false"
+									? [filters.selectedInverted]
+									: []
 							}
 							onSelectionChange={(keys) => {
 								const selected = Array.from(keys)[0] as string;

@@ -300,7 +300,7 @@ export function RoutineActivitySection({
 							<div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
 								{candidateTasks.map((task) => (
 									<CandidateTaskCard
-										key={task.id}
+										key={`${task.id}:${task.exerciseName}`}
 										task={task}
 										onClickAdd={onClickAddActivityButton}
 									/>
@@ -329,9 +329,9 @@ export function RoutineActivitySection({
 							</p>
 						) : (
 							<DraggableSortableList
-								items={activities.map((activity) => ({
+								items={activities.map((activity, index) => ({
 									...activity,
-									id: activity.taskId,
+									id: `${activity.taskId}:${index}`,
 								}))}
 								onReorder={onReorderActivities}
 								renderItem={(activity, index, dragHandleProps) => (

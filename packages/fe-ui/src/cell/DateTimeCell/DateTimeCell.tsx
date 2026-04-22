@@ -19,8 +19,8 @@ interface DateTimeCellProps {
  */
 export const DateTimeCell = ({ value }: DateTimeCellProps) => {
 	if (!value) {
-		return <p>-</p>;
+		return <span>-</span>;
 	}
 
-	return <p>{formatDateTime(value as string)}</p>;
+	return <span>{formatDateTime(value as string)}</span>;
 };

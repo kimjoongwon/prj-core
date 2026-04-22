@@ -1512,7 +1512,7 @@ export const useLogout = <TError = ErrorType<unknown>,
       return useMutation(mutationOptions, queryClient);
     }
     /**
- * 로그인 시도에 대한 감사 로그를 조회합니다. FULL_ACCESS 권한이 필요합니다.
+ * 로그인 시도에 대한 감사 로그를 현재 선택 tenant scope 기준으로 조회합니다.
  * @summary 인증 감사 로그 조회
  */
 export const getAuthAuditLogs = (

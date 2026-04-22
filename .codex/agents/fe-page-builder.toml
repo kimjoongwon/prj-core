@@ -111,13 +111,16 @@ apps/<app>/src/app/<route>/
 
 - app route page는 가능하면 얇게 유지합니다.
 - 화면 시각 구성은 `@cocrepo/ui` page component 한 단계에 위임합니다.
+- page 단위에서는 `useSuspenseQuery` / `useGetXxxSuspense`를 기본 선택지로 사용하지 않습니다.
+- 목록/검색/필터/페이지네이션/탭 전환 화면은 `useQuery`/`useInfiniteQuery`와 `isLoading`/`isFetching`으로 상태를 제어합니다.
+- `loading.tsx` 또는 국소 `<Suspense>` boundary가 있고 전체 fallback이 UX상 허용되는 경우에만 suspense query를 예외적으로 허용합니다.
 - app route page는 아래만 담당합니다.
   - `@cocrepo/ui` page component import 및 props 전달
-  - `useGetXxx`, `useGetXxxSuspense`, `useMutation` 등 API 훅 호출
+  - `useGetXxx`, `useInfiniteQuery` 계열 훅, `useMutation` 등 API 훅 호출
   - `useRouter`, `useSearchParams`, `redirect`, route param 해석
   - page props용 파생 값 계산
   - `on[Event][UI]` 핸들러 선언
-  - suspense fallback 연결
+  - loading/fetching/error props 연결
 - app route page는 feature/widget/page-level 시각 wrapper를 직접 쌓지 않습니다.
 
 ### 2.3 named slot 콘텐츠 규칙
@@ -282,7 +285,7 @@ import { MembersListPage } from "@cocrepo/ui";
 
 const MembersListPageContainer = observer(() => {
   const router = useRouter();
-  const { data } = useGetMembersSuspense();
+  const { data, isLoading } = useGetMembers();
 
   const onClickCreateButton = () => {
     router.push("/members/create");
@@ -290,19 +293,14 @@ const MembersListPageContainer = observer(() => {
 
   return (
     <MembersListPage
-      members={data.items}
+      members={data?.items ?? []}
+      isLoading={isLoading}
       onClickCreateButton={onClickCreateButton}
     />
   );
 });
 
-export default function MembersPage() {
-  return (
-    <Suspense fallback={null}>
-      <MembersListPageContainer />
-    </Suspense>
-  );
-}
+export default MembersListPageContainer;
 ```
 
 layout contract가 없거나 slot owner가 불명확하거나, pure page component 없이 route page가 시각 구성을 직접 소유하고 있으면 아래 형식으로 질문 후 진행합니다.

@@ -46,6 +46,20 @@ export type DataGridProps<T> = Omit<
 	loadingContent?: React.ReactNode;
 };
 
+export function getDataGridRowKey<T extends { id: Key }>(
+	row: T,
+	index: number,
+	idCounts?: Map<string, number>,
+	parentId?: string,
+) {
+	const baseId = String(row.id ?? "row");
+	if (idCounts?.get(baseId) === 1) {
+		return parentId ? `${parentId}/${baseId}` : baseId;
+	}
+
+	return `${parentId ?? "row"}:${baseId}:${index}`;
+}
+
 /**
  * DataGrid 컴포넌트
  *
@@ -96,6 +110,11 @@ const DataGridComponent = <T extends object>(props: DataGridProps<T>) => {
 	} = props;
 
 	const [expanded, setExpanded] = useState<ExpandedState>({});
+	const idCounts = data.reduce((counts, row) => {
+		const id = String((row as T & { id: Key }).id ?? "row");
+		counts.set(id, (counts.get(id) ?? 0) + 1);
+		return counts;
+	}, new Map<string, number>());
 	const defaultSelection = state.selectedKeys
 		? new Set(state.selectedKeys)
 		: new Set<Key>();
@@ -104,7 +123,13 @@ const DataGridComponent = <T extends object>(props: DataGridProps<T>) => {
 		data,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
-		getRowId: (row) => String((row as T & { id: Key }).id),
+		getRowId: (row, index, parent) =>
+			getDataGridRowKey(
+				row as T & { id: Key },
+				index,
+				idCounts,
+				parent?.id,
+			),
 		getSubRows: (row: T & { children?: T[] }) => row?.children || [],
 		getExpandedRowModel: getExpandedRowModel(),
 		onExpandedChange: setExpanded,

@@ -129,6 +129,15 @@ export const InquiryCreatePage = observer(({
 }: InquiryCreatePageProps) => {
 	const hiddenPaths = bootstrap?.ui.hiddenPaths ?? [];
 	const isHidden = (path: string) => hiddenPaths.includes(path);
+	const categoryOptionValues = new Set(
+		categoryOptions.map((option) => option.value),
+	);
+	const channelOptionValues = new Set(
+		channelOptions.map((option) => option.value),
+	);
+	const priorityOptionValues = new Set(
+		priorityOptions.map((option) => option.value),
+	);
 
 	return (
 		<FormPage
@@ -253,7 +262,10 @@ export const InquiryCreatePage = observer(({
 												label="카테고리"
 												placeholder="카테고리 선택"
 												selectedKeys={
-													formState.category ? [formState.category] : []
+													formState.category &&
+													categoryOptionValues.has(formState.category)
+														? [formState.category]
+														: []
 												}
 												onSelectionChange={(keys) => {
 													const selectedValue = getSelectedValue(keys);
@@ -281,7 +293,10 @@ export const InquiryCreatePage = observer(({
 												label="채널"
 												placeholder="채널 선택"
 												selectedKeys={
-													formState.channel ? [formState.channel] : []
+													formState.channel &&
+													channelOptionValues.has(formState.channel)
+														? [formState.channel]
+														: []
 												}
 												onSelectionChange={(keys) => {
 													const selectedValue = getSelectedValue(keys);
@@ -309,7 +324,10 @@ export const InquiryCreatePage = observer(({
 												label="우선순위"
 												placeholder="우선순위 선택"
 												selectedKeys={
-													formState.priority ? [formState.priority] : []
+													formState.priority &&
+													priorityOptionValues.has(formState.priority)
+														? [formState.priority]
+														: []
 												}
 												onSelectionChange={(keys) => {
 													const selectedValue = getSelectedValue(keys);

@@ -139,6 +139,7 @@ export const AssetDetailPage = observer(
 		onClickMoveAssetButton,
 	}: AssetDetailPageProps) => {
 		const [isPreviewExpanded, setIsPreviewExpanded] = useState(false);
+		const folderIds = new Set(folders.map((folder) => folder.id));
 
 		if (isLoading) {
 			return (
@@ -372,7 +373,11 @@ export const AssetDetailPage = observer(
 									<Select
 										label="이동 대상 폴더"
 										placeholder="폴더를 선택하세요"
-										selectedKeys={targetFolderId ? [targetFolderId] : []}
+										selectedKeys={
+											targetFolderId && folderIds.has(targetFolderId)
+												? [targetFolderId]
+												: []
+										}
 										isInvalid={Boolean(targetFolderError)}
 										errorMessage={targetFolderError}
 										onSelectionChange={(keys) => {
@@ -383,7 +388,12 @@ export const AssetDetailPage = observer(
 										}}
 									>
 										{folders.map((folder) => (
-											<SelectItem key={folder.id}>{folder.name}</SelectItem>
+											<SelectItem
+												key={folder.id}
+												textValue={folder.name}
+											>
+												{folder.name}
+											</SelectItem>
 										))}
 									</Select>
 									<div className="flex items-end">

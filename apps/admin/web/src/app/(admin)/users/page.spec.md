@@ -28,7 +28,8 @@
 - reusable target: `master/table`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
-- `Suspense` fallback은 콘텐츠 로딩 상태만 처리합니다.
+- page-level `SuspenseQuery`는 지양하며, 목록 로딩 상태는 `useGetUsers`의 `isLoading`/`isFetching`으로 제어합니다.
+- 현재 `Suspense` boundary는 query loading이 아니라 URL 상태 해석 경계를 위한 얇은 wrapper로만 사용합니다.
 
 ## 콘텐츠 구성
 
@@ -65,6 +66,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | page-level `SuspenseQuery` 지양 정책에 맞춰 목록 로딩 책임을 `useGetUsers`의 loading/fetching 상태로 재정의 | codex |
 | 2026-04-16 | admin 사용자 목록 Space 전환 시 이전 space의 임시 데이터 표시를 막기 위해 placeholderData 제거 | codex |
 | 2026-04-16 | admin 사용자 목록 `useGetUsers` 쿼리 키에 spaceId를 포함해 space 변경 시 재조회되도록 캐시 분리 적용 | codex |
 | 2026-03-23 | nuqs 직접 의존을 제거하고 공용 bridge(@cocrepo/hook/nuqs)를 통해 URL state를 공유 | codex |

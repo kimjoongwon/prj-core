@@ -75,6 +75,20 @@ export const Select = (props: SelectProps) => {
 	} = props;
 
 	const _options = cloneDeep(options);
+	const optionKeys = new Set(_options.map((option) => String(option.value)));
+	const normalizedSelectedKeys = props.selectedKeys
+		?.map((selectedKey) => String(selectedKey))
+		.filter((selectedKey) => optionKeys.has(selectedKey));
+	const selectedKeys =
+		normalizedSelectedKeys && normalizedSelectedKeys.length > 0
+			? normalizedSelectedKeys
+			: value && optionKeys.has(String(value))
+				? [String(value)]
+				: undefined;
+	const ariaLabel =
+		typeof rest["aria-label"] === "string"
+			? rest["aria-label"]
+			: label ?? placeholder ?? "선택";
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		onChange?.(e.target.value);
@@ -93,12 +107,16 @@ export const Select = (props: SelectProps) => {
 			isRequired={isRequired}
 			disallowEmptySelection={isReadOnly}
 			onChange={handleChange}
-			selectedKeys={value ? [value] : undefined}
+			selectedKeys={selectedKeys}
+			aria-label={ariaLabel}
 			{...rest}
 		>
 			{_options.map((option) => {
 				return (
-					<SelectItem key={option.value} textValue={option.value}>
+					<SelectItem
+						key={option.value}
+						textValue={String(option.text ?? option.value)}
+					>
 						{option.text}
 					</SelectItem>
 				);

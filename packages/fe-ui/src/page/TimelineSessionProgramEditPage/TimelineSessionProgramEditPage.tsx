@@ -64,6 +64,12 @@ export const TimelineSessionProgramEditPage =
 			onClickCancelButton,
 			onClickSubmitButton,
 		}: TimelineSessionProgramEditPageProps) => {
+			const selectedLevelKeys = LEVEL_OPTIONS.some(
+				(option) => option.value === level,
+			)
+				? [level]
+				: [];
+
 			return (
 				<FormPage
 					top={
@@ -155,7 +161,7 @@ export const TimelineSessionProgramEditPage =
 											<div className="mt-3 flex flex-col gap-2">
 												{routinePreview.map((activity) => (
 													<div
-														key={activity.id}
+														key={`${activity.id}:${activity.order}`}
 														className="rounded-md bg-content2 px-3 py-2"
 													>
 														<div className="flex items-center justify-between gap-3">
@@ -208,7 +214,7 @@ export const TimelineSessionProgramEditPage =
 									<Select
 										label="난이도"
 										labelPlacement="outside"
-										selectedKeys={[level]}
+										selectedKeys={selectedLevelKeys}
 										onSelectionChange={(keys) => {
 											onChangeLevelSelect(
 												(Array.from(keys)[0] as string) ?? "",

@@ -275,12 +275,28 @@ function validateTargetFiles(targetFiles, repositoryRoot) {
 }
 
 function formatBranchDate(value) {
+	const formatter = new Intl.DateTimeFormat("en-CA", {
+		timeZone: "Asia/Seoul",
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+		hour: "2-digit",
+		minute: "2-digit",
+		hour12: false,
+	});
+	const formattedParts = Object.fromEntries(
+		formatter
+			.formatToParts(value)
+			.filter((part) => part.type !== "literal")
+			.map((part) => [part.type, part.value]),
+	);
+
 	return [
-		value.getFullYear(),
-		String(value.getMonth() + 1).padStart(2, "0"),
-		String(value.getDate()).padStart(2, "0"),
-		String(value.getHours()).padStart(2, "0"),
-		String(value.getMinutes()).padStart(2, "0"),
+		formattedParts.year,
+		formattedParts.month,
+		formattedParts.day,
+		formattedParts.hour,
+		formattedParts.minute,
 	].join("");
 }
 

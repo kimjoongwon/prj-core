@@ -192,7 +192,7 @@ export const IdentityDashboardPage = observer(({
 										>
 											{trendItems.map((item) => (
 												<div
-													key={item.date}
+													key={`${item.date}:${item.successCount}:${item.failureCount}`}
 													className="flex flex-1 flex-col items-center gap-1"
 													style={{
 														height: "100%",

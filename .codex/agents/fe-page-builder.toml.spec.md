@@ -24,12 +24,14 @@
 - `Rendering Decision.page component path`는 반드시 `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 형식을 사용합니다.
 - 작업 시작 전에 반드시 sibling `layout.spec.md`와 `page.spec.md`를 읽고 `Consumed Layout Contract`를 확인해야 합니다.
 - `_client.tsx`, `_prefetch.ts`, `HydrationBoundary` 기반 SSR/prefetch 패턴은 개발자 승인된 예외에서만 허용합니다.
+- page 단위 `useSuspenseQuery`는 기본 패턴이 아니며, 기본 조회는 `useQuery`/`useInfiniteQuery`로 연결합니다.
 - `page.spec.md`의 `Rendering Decision`에는 `page role`, `reusable target`, `page component path`가 포함되어야 합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | page-level `SuspenseQuery` 지양 정책에 맞춰 thin container 기본 조회를 `useQuery` 중심으로 정리 | codex |
 | 2026-04-21 | `fe-page-builder`를 pure page 생성자가 아닌 pure page import/use thin container로 명시 | codex |
 | 2026-03-26 | page owner 경로를 folder-based sidecar 기준으로 구체화 | codex |
 | 2026-03-26 | thin container가 참조하는 page component 경로를 folder-based sidecar 패턴으로 명시 | codex |

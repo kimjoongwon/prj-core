@@ -6,7 +6,11 @@ import type {
 } from "@cocrepo/type";
 import type { ColumnDef } from "@tanstack/react-table";
 import { observer } from "mobx-react-lite";
-import { DataGrid, type Key } from "../../../display/data-display/DataGrid";
+import {
+	DataGrid,
+	getDataGridRowKey,
+	type Key,
+} from "../../../display/data-display/DataGrid";
 
 interface MetaDataGridBodyProps<T extends object> {
 	config: MetaDataGridConfig<T>;
@@ -51,10 +55,21 @@ export const MetaDataGridBody = observer(
 	<T extends object>({ config }: MetaDataGridBodyProps<T>) => {
 		// MetaDataGridColumnConfig를 ColumnDef로 변환
 		const columns = toColumnDefs(config.columns) as ColumnDef<T, unknown>[];
+		const idCounts = (config.data as (T & { id: Key })[]).reduce(
+			(counts, row) => {
+				const id = String(row.id ?? "row");
+				counts.set(id, (counts.get(id) ?? 0) + 1);
+				return counts;
+			},
+			new Map<string, number>(),
+		);
 
 		// 키 기반 행 맵 (onRowClick 매핑용)
 		const rowMap = new Map(
-			(config.data as (T & { id: Key })[]).map((row) => [String(row.id), row]),
+			(config.data as (T & { id: Key })[]).map((row, index) => [
+				getDataGridRowKey(row, index, idCounts),
+				row,
+			]),
 		);
 
 		// 선택된 키 목록

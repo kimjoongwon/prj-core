@@ -7,7 +7,27 @@ interface Role {
 
 interface RoleChipCellProps {
 	/** 역할 객체 */
-	role?: Role | null;
+	role?: Role | string | null;
+}
+
+function getRoleLabel(role?: Role | string | null) {
+	if (typeof role === "string") {
+		return role;
+	}
+
+	if (!role) {
+		return null;
+	}
+
+	if (typeof role.displayName === "string" && role.displayName.trim().length > 0) {
+		return role.displayName;
+	}
+
+	if (typeof role.name === "string" && role.name.trim().length > 0) {
+		return role.name;
+	}
+
+	return null;
 }
 
 /**
@@ -31,13 +51,18 @@ const getRoleColor = (
  * 역할을 Chip으로 표시하는 Cell 컴포넌트
  */
 export const RoleChipCell = ({ role }: RoleChipCellProps) => {
-	if (!role) {
+	const roleLabel = getRoleLabel(role);
+	if (!roleLabel) {
 		return <span className="text-default-400">-</span>;
 	}
 
 	return (
-		<Chip size="sm" color={getRoleColor(role.name)} variant="flat">
-			{role.displayName || role.name}
+		<Chip
+			size="sm"
+			color={getRoleColor(typeof role === "object" ? role?.name : undefined)}
+			variant="flat"
+		>
+			{roleLabel}
 		</Chip>
 	);
 };

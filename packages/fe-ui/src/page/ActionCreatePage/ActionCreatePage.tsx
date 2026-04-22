@@ -50,6 +50,7 @@ const groupOptions = [
 	{ value: "workflow", label: "Workflow" },
 	{ value: "bulk", label: "Bulk" },
 ];
+const GROUP_OPTION_VALUES = new Set(groupOptions.map((option) => option.value));
 
 export const ActionCreatePage = observer(({
 	formState,
@@ -130,7 +131,11 @@ export const ActionCreatePage = observer(({
 							<Select
 								label="분류"
 								placeholder="분류를 선택하세요"
-								selectedKeys={formState.group ? [formState.group] : []}
+								selectedKeys={
+									formState.group && GROUP_OPTION_VALUES.has(formState.group)
+										? [formState.group]
+										: []
+								}
 								onSelectionChange={(keys) => {
 									const selectedKey = Array.from(keys)[0];
 									onChangeGroupSelection(selectedKey ? String(selectedKey) : "");

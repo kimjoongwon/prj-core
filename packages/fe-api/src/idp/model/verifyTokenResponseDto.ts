@@ -19,6 +19,6 @@ export interface VerifyTokenResponseDto {
   accessTokenExpiresAt: number;
   /** Refresh Token 만료 시간 (Unix timestamp, ms) */
   refreshTokenExpiresAt: number;
-  /** 현재 사용자가 `manage all` 전역 권한을 보유하는지 여부 */
+  /** 현재 `x-space-id`로 해석된 tenant role이 `FULL_ACCESS`인지 여부 */
   hasFullAccess: boolean;
 }

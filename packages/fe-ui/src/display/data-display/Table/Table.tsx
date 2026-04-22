@@ -70,6 +70,10 @@ const TableComponent = <T extends object>({
 	...rest
 }: TableProps<T>) => {
 	const headers = tableInstance?.getHeaderGroups?.()?.[0]?.headers || [];
+	const ariaLabel =
+		typeof rest["aria-label"] === "string"
+			? rest["aria-label"]
+			: "데이터 테이블";
 
 	const isSortable = (columnId: string) => {
 		return sortableColumns.includes(columnId);
@@ -78,6 +82,7 @@ const TableComponent = <T extends object>({
 	return (
 		<HeroTable
 			{...rest}
+			aria-label={ariaLabel}
 			onSelectionChange={onSelectionChange}
 			selectedKeys={selectedKeys}
 		>

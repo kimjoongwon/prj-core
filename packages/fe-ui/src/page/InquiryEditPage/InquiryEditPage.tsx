@@ -88,6 +88,13 @@ export const InquiryEditPage = observer(({
 	onClickCancelButton,
 	onClickSubmitButton,
 }: InquiryEditPageProps) => {
+	const categoryOptionValues = new Set(
+		categoryOptions.map((option) => option.value),
+	);
+	const priorityOptionValues = new Set(
+		priorityOptions.map((option) => option.value),
+	);
+
 	return (
 		<FormPage
 			top={
@@ -145,7 +152,10 @@ export const InquiryEditPage = observer(({
 										label="카테고리"
 										placeholder="카테고리 선택"
 										selectedKeys={
-											formState.category ? [formState.category] : []
+											formState.category &&
+											categoryOptionValues.has(formState.category)
+												? [formState.category]
+												: []
 										}
 										onSelectionChange={(keys) => {
 											const selectedValue = getSelectedValue(keys);
@@ -164,7 +174,10 @@ export const InquiryEditPage = observer(({
 										label="우선순위"
 										placeholder="우선순위 선택"
 										selectedKeys={
-											formState.priority ? [formState.priority] : []
+											formState.priority &&
+											priorityOptionValues.has(formState.priority)
+												? [formState.priority]
+												: []
 										}
 										onSelectionChange={(keys) => {
 											const selectedValue = getSelectedValue(keys);

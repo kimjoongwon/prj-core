@@ -54,11 +54,10 @@ pnpm codegen:prod       # 프로덕션 환경
 ### 생성된 API 사용 예시
 
 ```typescript
-import { Suspense } from "react";
-import { useCreateUser, useGetUsersSuspense } from "@cocrepo/api/core/users";
+import { useCreateUser, useGetUsers } from "@cocrepo/api/core/users";
 
-function UserListContent() {
-  const { data: response } = useGetUsersSuspense();
+function UserList() {
+  const { data: response, isLoading } = useGetUsers();
   const users = response?.data ?? [];
   const createUser = useCreateUser();
 
@@ -72,18 +71,11 @@ function UserListContent() {
 
   return (
     <div>
-      {users?.map(user => (
+      {isLoading ? <div>로딩 중...</div> : null}
+      {users.map(user => (
         <div key={user.id}>{user.name}</div>
       ))}
     </div>
-  );
-}
-
-function UserList() {
-  return (
-    <Suspense fallback={<div>로딩 중...</div>}>
-      <UserListContent />
-    </Suspense>
   );
 }
 ```
@@ -105,7 +97,7 @@ function UserList() {
 
 - ✅ `useQuery` - 조건부 `enabled`, 점진 로딩, 기존 페이지 호환용
 - ❌ `useInfiniteQuery` - 무한 스크롤 (비활성화)
-- ✅ `useSuspenseQuery` - 신규 admin/idp 페이지의 기본 표준
+- ✅ `useSuspenseQuery` - 예외 route 또는 국소 `Suspense` boundary용
 - ✅ `useSuspenseInfiniteQuery` - 필요 시 사용할 수 있는 suspense 기반 무한 쿼리
 - ✅ `prefetchQuery`용 helper - SSR 예외 페이지 지원
 
@@ -140,9 +132,9 @@ pnpm clean
 - 커스텀 Axios 설정이 필요한 경우 `src/libs/customAxios.ts`를 수정하세요
 - DTO/enum이 태그 배럴에 없으면 `@cocrepo/api/model/*`, `@cocrepo/api/idp-model/*`에서 직접 import 하세요
 - 환경 변수 `ORVAL_ENV`가 설정되지 않으면 localhost를 먼저 확인하고, 없으면 staging으로 fallback 합니다
-- 신규 admin/idp 페이지는 `useGetXxxSuspense`를 우선 사용하세요
-- 일반 `useGetXxx`는 `enabled`, 조건부 호출, 점진 로딩이 필요한 경우에만 사용하세요
-- SSR prefetch helper는 예외 페이지에서만 사용하고, admin 기본 패턴은 CSR + Suspense입니다
+- 신규 admin/idp 페이지의 기본 조회는 `useGetXxx`/`useInfiniteQuery`입니다
+- `useGetXxxSuspense`는 route-level `loading.tsx` 또는 수동 `Suspense` boundary가 있는 예외 패턴에서만 사용하세요
+- SSR prefetch helper는 예외 페이지에서만 사용하고, admin 기본 패턴은 CSR + `useQuery`입니다
 - 지원되지 않는 환경을 설정하면 콘솔에 에러 메시지와 함께 지원 가능한 환경 목록이 표시됩니다
 
 ## 🚨 트러블슈팅

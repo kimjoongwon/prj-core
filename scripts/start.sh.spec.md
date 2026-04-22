@@ -23,6 +23,7 @@
 | DevTools | Metro가 올라오고 inspectable app이 연결되면 React Native DevTools 오픈을 자동 시도 |
 | 실행 엔진 | 웹/백엔드는 `turbo start:dev <filters> --concurrency=20`, 모바일은 `pnpm --filter=mobile-app exec expo start --dev-client|--go ...` |
 | 프롬프트 입력 | stdin이 TTY가 아니어도 `/dev/tty`가 있으면 같은 선택 UI를 계속 사용하고, 완전 비대화형이면 사용 예시를 출력하고 종료 |
+| 로컬 인프라 preflight | `core-api`/`idp-api`가 선택되면 `scripts/check-local-infra.mjs`를 먼저 실행해 local PostgreSQL/Redis 포트 접근 가능 여부를 확인하고, remote host면 skip |
 | 시작 전 정리 | 다중 `--filter`를 포함한 기존 `turbo start:dev`, `pnpm --filter=<service> start:dev`, Nest watch/실행 자식 프로세스, LISTEN 포트를 함께 정리해 재기동 충돌을 줄임 |
 
 ## 구현 체크리스트
@@ -34,11 +35,13 @@
 - [x] 모바일 선택 시 플랫폼(iOS/AOS/전체) 분기 지원
 - [x] 모바일 선택 시 런타임(local build/Expo Go) 분기 지원
 - [x] 모바일 포함 시 Expo foreground 실행과 React Native DevTools 자동 오픈 시도 지원
+- [x] 백엔드 선택 시 local PostgreSQL/Redis preflight 지원
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | `core-api`/`idp-api` 시작 전 `scripts/check-local-infra.mjs`를 호출해 local PostgreSQL/Redis 접근 가능 여부를 선검증하고 `START_SKIP_INFRA_CHECK` 우회 경로를 추가 | codex |
 | 2026-04-16 | 다중 `--filter` root turbo와 `pnpm --filter=<service> start:dev`/Nest watch 자식 프로세스를 함께 정리하도록 패턴을 보강해 `3007` 같은 재기동 포트 충돌을 줄임 | codex |
 | 2026-04-16 | `START_CHOICES` 비대화형 입력 경로와 `/dev/tty` 프롬프트 fallback을 추가해 stdin 없는 실행 환경에서도 원인과 우회 경로가 명확하도록 조정 | codex |
 | 2026-04-14 | 모바일 실행 시 `local build`와 `Expo Go`를 선택하고 비대화형 `mobile:local` / `mobile:go` 인자를 지원하도록 계약을 확장 | codex |
