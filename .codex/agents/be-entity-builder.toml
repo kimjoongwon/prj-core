@@ -128,7 +128,7 @@ async fetchRelated(): Promise<Related[]> {
 
 ### 0단계: 템플릿 파일 확인
 
-Read `.codex/templates/spec/entity.spec.md`
+Read `.codex/templates/spec/entity.template.md`
 → 해당 파일의 형식을 기준으로 entity.spec.md를 생성한다
 
 ### 1단계: Prisma 타입 확인

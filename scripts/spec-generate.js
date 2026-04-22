@@ -4,11 +4,21 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = process.cwd();
-const CODE_EXT = new Set(['.ts', '.tsx', '.js', '.jsx', '.prisma']);
+const CODE_EXT = new Set([
+  '.ts',
+  '.tsx',
+  '.js',
+  '.jsx',
+  '.mjs',
+  '.cjs',
+  '.mts',
+  '.cts',
+  '.sh',
+]);
 const DATE = new Date().toISOString().slice(0, 10);
 const VALID_SCOPES = new Set(['all', 'src']);
 const SKIP_DIR_SEGMENT_RE =
-  /(^|\/)(node_modules|dist|coverage|\.next|\.turbo|build|out|\.vercel|\.idea|storybook-static)(\/|$)/;
+  /(^|\/)(node_modules|dist|dist-web|coverage|\.next|\.turbo|build|out|\.vercel|\.idea|storybook-static|browsers)(\/|$)/;
 
 function shouldSkipDirectory(relPath) {
   return (
@@ -72,19 +82,26 @@ function isCodeTarget(relPath, options) {
   if (!isTargetRoot(relPath, options.scope)) return false;
   if (!options.includeGeneratedFeApi && relPath.startsWith('packages/fe-api/src/'))
     return false;
+  if (relPath.startsWith('packages/be-prisma/')) return false;
 
   const ext = path.extname(relPath);
   if (!CODE_EXT.has(ext)) return false;
 
   if (relPath.endsWith('.d.ts')) return false;
+  if (isExcludedConfigSource(relPath)) return false;
   if (/\.spec\.[tj]sx?$/.test(relPath)) return false;
   if (/\.test\.[tj]sx?$/.test(relPath)) return false;
 
   return true;
 }
 
+function isExcludedConfigSource(relPath) {
+  return (
+    /(^|\/)[^/]+\.config\.[cm]?[jt]sx?$/.test(relPath)
+  );
+}
+
 function sidecarPath(codePath) {
-  if (codePath.endsWith('.prisma')) return `${codePath}.spec.md`;
   return codePath.replace(/\.[^.]+$/, '.spec.md');
 }
 

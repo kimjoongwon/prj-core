@@ -60,7 +60,7 @@ packages/be-dto/src/[domain]/*.dto.spec.md
 |------|:----:|------|
 | 화면 경로 | ✅ | 기획서를 생성할 화면 경로 (예: apps/admin/web/src/app/(admin)/members/) |
 | L3-L4 기획 결과 | ✅ | 각 페이지의 `page.spec.md` (기능과 화면 정의) |
-| app.spec.md | ❌ | 앱 전체 컨텍스트 (apps/[app]/web/src/app/(admin)/app.spec.md) |
+| app.context.md | ❌ | 앱 전체 컨텍스트 (apps/[app]/web/src/app/(admin)/app.context.md) |
 | API 규칙 | ❌ | 프로젝트의 API 네이밍 규칙 |
 
 ### 출력

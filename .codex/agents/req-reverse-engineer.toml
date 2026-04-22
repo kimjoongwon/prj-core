@@ -53,7 +53,7 @@ L1 사용자 집합     →  L0 컨텍스트
 
 ```
 apps/[app]/web/src/app/(admin)/
-├── app.spec.md                              # 앱 기획서 (L0-L2)
+├── app.context.md                              # 앱 기획서 (L0-L2)
 
 apps/[app]/web/src/app/(admin)/[domain]/
 ├── page.spec.md                             # 목록 페이지 기획서 (L3-L6)
@@ -101,7 +101,7 @@ packages/fe-ui/src/
 | Page 파일 | 화면 구조, 데이터 흐름 | `page.spec.md`, `page/[PageName]/[PageName].spec.md` |
 | 컴포넌트 | Props, 이벤트, 상태 | `feature/widget/display/control/page.spec.md` |
 | Store | 상태, 액션 | `store.spec.md` |
-| 앱 전체 구조 | 컨텍스트, Actor, Goal | `app.spec.md` |
+| 앱 전체 구조 | 컨텍스트, Actor, Goal | `app.context.md` |
 
 ---
 
@@ -358,17 +358,17 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 | 생성 파일 | 위치 | 참조 템플릿 |
 |----------|------|------------|
-| `app.spec.md` | `apps/[app]/web/src/app/(admin)/` | 없음 (L0-L2 직접 작성) |
-| `page.spec.md` | 각 페이지 폴더 옆 | `.codex/templates/spec/page.spec.md` |
-| `controller.spec.md` | `apps/core/api/src/module/.../` | `.codex/templates/spec/controller.spec.md` |
-| `module.spec.md` | `apps/core/api/src/module/.../` | `.codex/templates/spec/module.spec.md` |
-| `application-service.spec.md` | `packages/be-app/src/` | `.codex/templates/spec/application-service.spec.md` |
-| `service.spec.md` | `packages/be-service/src/` | `.codex/templates/spec/service.spec.md` |
-| `repository.spec.md` | `packages/be-repository/src/` | `.codex/templates/spec/repository.spec.md` |
-| `store.spec.md` | `packages/fe-store/src/stores/` | `.codex/templates/spec/store.spec.md` |
-| `index.spec.md` (feature) | `packages/fe-ui/src/feature/[Name]/` | `.codex/templates/spec/feature.spec.md` |
-| `index.spec.md` (widget) | `packages/fe-ui/src/widget/[Name]/` | `.codex/templates/spec/widget.spec.md` |
-| `index.spec.md` (primitive) | `packages/fe-ui/src/display/[Name]/` | `.codex/templates/spec/primitive.spec.md` |
+| `app.context.md` | `apps/[app]/web/src/app/(admin)/` | 없음 (L0-L2 직접 작성) |
+| `page.spec.md` | 각 페이지 폴더 옆 | `.codex/templates/spec/page.template.md` |
+| `controller.spec.md` | `apps/core/api/src/module/.../` | `.codex/templates/spec/controller.template.md` |
+| `module.spec.md` | `apps/core/api/src/module/.../` | `.codex/templates/spec/module.template.md` |
+| `application-service.spec.md` | `packages/be-app/src/` | `.codex/templates/spec/application-service.template.md` |
+| `service.spec.md` | `packages/be-service/src/` | `.codex/templates/spec/service.template.md` |
+| `repository.spec.md` | `packages/be-repository/src/` | `.codex/templates/spec/repository.template.md` |
+| `store.spec.md` | `packages/fe-store/src/stores/` | `.codex/templates/spec/store.template.md` |
+| `index.spec.md` (feature) | `packages/fe-ui/src/feature/[Name]/` | `.codex/templates/spec/feature.template.md` |
+| `index.spec.md` (widget) | `packages/fe-ui/src/widget/[Name]/` | `.codex/templates/spec/widget.template.md` |
+| `index.spec.md` (primitive) | `packages/fe-ui/src/display/[Name]/` | `.codex/templates/spec/primitive.template.md` |
 
 **이미 존재하는 .spec.md 처리:**
 - 이미 있으면 스킵 (새로 덮어쓰지 않음)
@@ -378,7 +378,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ## 5. .spec.md 생성 가이드
 
-### app.spec.md (앱 기획서)
+### app.context.md (앱 기획서)
 
 앱 전체 구조를 분석하여 L0-L2 수준의 컨텍스트, Actor, Goal을 기록합니다.
 
@@ -424,7 +424,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### page.spec.md (페이지 기획서)
 
-`.codex/templates/spec/page.spec.md` 템플릿을 기반으로 아래 섹션을 코드에서 채웁니다:
+`.codex/templates/spec/page.template.md` 템플릿을 기반으로 아래 섹션을 코드에서 채웁니다:
 
 - **시나리오**: 페이지에서 가능한 흐름 (코드의 이벤트 핸들러에서 도출)
 - **레이아웃**: 렌더링되는 컴포넌트 구조 (JSX 분석)
@@ -433,7 +433,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### controller.spec.md (Controller 기획서)
 
-`.codex/templates/spec/controller.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
+`.codex/templates/spec/controller.template.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
 
 - **엔드포인트 목록**: 메서드/경로/설명/권한
 - **인증/인가**: `@Roles`, `@RoleCategories`, `@RoleGroups` 데코레이터
@@ -441,7 +441,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### service.spec.md (Service 기획서)
 
-`.codex/templates/spec/service.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
+`.codex/templates/spec/service.template.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
 
 - **메서드 목록**: 공개 메서드와 역할
 - **비즈니스 규칙**: 조건 분기, 검증 로직
@@ -450,7 +450,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### repository.spec.md (Repository 기획서)
 
-`.codex/templates/spec/repository.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
+`.codex/templates/spec/repository.template.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
 
 - **메서드 목록**: findMany, findById, create, update, delete 등
 - **Prisma 매핑**: `prisma.[model].[method]()` 호출 분석
@@ -458,7 +458,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 
 ### store.spec.md (Store 기획서)
 
-`.codex/templates/spec/store.spec.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
+`.codex/templates/spec/store.template.md` 템플릿을 기반으로 아래 섹션을 채웁니다:
 
 - **상태 (Observable)**: `@observable` 필드 목록
 - **계산값 (Computed)**: `@computed` 게터 목록
@@ -497,7 +497,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 - [ ] L0 컨텍스트가 정의되었는가?
 
 ### .spec.md 생성 체크리스트
-- [ ] `app.spec.md`가 생성 또는 업데이트되었는가? (앱 첫 역기획 시)
+- [ ] `app.context.md`가 생성 또는 업데이트되었는가? (앱 첫 역기획 시)
 - [ ] 각 페이지의 `page.spec.md`가 생성되었는가?
 - [ ] `controller.spec.md`가 생성되었는가?
 - [ ] `service.spec.md`가 생성되었는가?
@@ -517,7 +517,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
 | orch-requirement | 검증 | 역추론된 기획서 검증 및 보완 |
-| req-context-planner | 보완 | L0-L2 레이어 상세화 → `app.spec.md` 업데이트 |
+| req-context-planner | 보완 | L0-L2 레이어 상세화 → `app.context.md` 업데이트 |
 | req-screen-planner | 보완 | L3-L4 레이어 상세화 → `page.spec.md` 업데이트 |
 | req-api-planner | 보완 | L5-L6 레이어 상세화 → `controller.spec.md` 업데이트 |
 | req-entity-planner | 보완 | L7 레이어 상세화 → `entity.spec.md` 업데이트 |
@@ -590,7 +590,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
   - Error: 7 cases
 
 [8단계] .spec.md 기획서 생성
-  - app.spec.md (이미 존재 → 스킵) ⏭
+  - app.context.md (이미 존재 → 스킵) ⏭
   - apps/admin/web/src/app/(admin)/roles/page.spec.md ✅
   - apps/admin/web/src/app/(admin)/roles/[roleId]/page.spec.md ✅
   - apps/admin/web/src/app/(admin)/roles/new/page.spec.md ✅
@@ -619,7 +619,7 @@ CRUD 작업별 Happy Path와 Error Path를 도출합니다.
    - packages/fe-ui/src/feature/RoleList/index.spec.md
    - packages/fe-ui/src/widget/RoleTable/index.spec.md
 📁 스킵된 파일 (이미 존재):
-   - apps/admin/web/src/app/(admin)/app.spec.md
+   - apps/admin/web/src/app/(admin)//app.context.md
 ```
 
 ---

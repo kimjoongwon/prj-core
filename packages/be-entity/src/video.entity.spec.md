@@ -110,7 +110,7 @@ Asset의 CTI(Class Table Inheritance) 서브타입으로, 비디오 타입 에�
 
 ## 상위 기획서
 
-- `apps/admin/src/app/(admin)/app.spec.md`
+- `apps/admin/src/app/(admin)/app.context.md`
 - `packages/be-entity/src/asset.entity.spec.md`
 
 ## 변경 이력

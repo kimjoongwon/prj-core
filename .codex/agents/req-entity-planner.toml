@@ -31,7 +31,7 @@ developer_instructions = '''
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
 | 도메인명 | ✅ | Entity를 생성할 도메인 |
-| L0-L4 기획 결과 | ✅ | 도메인 기획서 (`app.spec.md`, `page.spec.md`) |
+| L0-L4 기획 결과 | ✅ | 도메인 기획서 (`app.context.md`, `page.spec.md`) |
 | L6 API 기획 결과 | ✅ | API 정의 |
 
 ### 출력
@@ -43,7 +43,7 @@ developer_instructions = '''
 
 ### 출력 형식 (entity.spec.md)
 
-> 형식은 `.codex/templates/spec/entity.spec.md` 참조
+> 형식은 `.codex/templates/spec/entity.template.md` 참조
 
 ---
 
@@ -86,11 +86,11 @@ developer_instructions = '''
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.codex/templates/spec/entity.spec.md`
+   Read `.codex/templates/spec/entity.template.md`
    → 해당 파일의 형식을 기준으로 entity.spec.md를 생성한다
    ↓
 1단계: 도메인 분석
-   - app.spec.md, page.spec.md 기획서 확인
+   - app.context.md, page.spec.md 기획서 확인
    - L6 API에서 필요한 데이터 도출
    ↓
 2단계: Entity 도출

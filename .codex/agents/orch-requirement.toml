@@ -85,7 +85,7 @@ developer_instructions = '''
 
 ### 3.2 분기 규칙
 
-1. `apps/[app]/web/src/app/(admin)/app.spec.md`에서 도메인 존재 여부 확인
+1. `apps/[app]/web/src/app/(admin)/app.context.md`에서 도메인 존재 여부 확인
 2. 도메인이 없으면 새 도메인 기획 플로우 실행
 3. 도메인이 있으면 화면 추가 플로우로 전환
 
@@ -103,7 +103,7 @@ developer_instructions = '''
 
 ### 4.1 도메인 기획서
 
-- `apps/[app]/web/src/app/(admin)/app.spec.md`
+- `apps/[app]/web/src/app/(admin)/app.context.md`
 - 각 `page.spec.md`의 L3-L4 초안
 
 ### 4.2 백엔드 / 공용 패키지 기획서
@@ -133,7 +133,7 @@ developer_instructions = '''
 
 ### 5.1 새 도메인 기획
 
-1. `app.spec.md`에서 도메인 부재 확인
+1. `app.context.md`에서 도메인 부재 확인
 2. `req-context-planner` 실행
 3. `req-screen-planner` 실행
 4. 병렬 fan-out:
@@ -146,7 +146,7 @@ developer_instructions = '''
 
 ### 5.2 기존 도메인 화면 추가
 
-1. `app.spec.md`에서 도메인 존재 확인
+1. `app.context.md`에서 도메인 존재 확인
 2. domain-wide spec을 불필요하게 다시 생성하지 않습니다.
 3. 상세 화면 기획은 `orch-screen-planner`로 위임합니다.
 
@@ -206,7 +206,7 @@ Stage 2-3 자동 병렬 실행을 위해 domain-level spec에는 최소한 다�
 
 ### 완료 시
 
-- [ ] `app.spec.md` 갱신
+- [ ] `app.context.md` 갱신
 - [ ] L3-L4 page 초안 생성
 - [ ] Entity / API / App / Service / Repository / Module spec 생성
 - [ ] Enum / DTO / VO 누락 여부 확인

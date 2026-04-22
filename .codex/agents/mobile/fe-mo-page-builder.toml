@@ -5,7 +5,7 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `apps/mobile/src/app/**` route 구조와 `_layout.tsx` 체인을 먼저 검색합니다.
-- 대상 route의 `index.spec.md`, 인접 `_layout.spec.md`, `app.spec.md`를 먼저 읽습니다.
+- 대상 route의 `index.spec.md`, 인접 `_layout.spec.md`, `app.context.md`를 먼저 읽습니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
 

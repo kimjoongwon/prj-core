@@ -177,7 +177,7 @@ developer_instructions = '''
 
 다음 파일은 fan-out 중 단일 writer만 최종 머지합니다.
 
-- `apps/*/web/src/app/(admin)/app.spec.md`
+- `apps/*/web/src/app/(admin)/app.context.md`
 - `packages/*/src/index.ts`
 - `packages/common-constant/src/routing/admin-menu.ts`
 - `packages/common-constant/src/routing/admin-menu.spec.md`
@@ -222,7 +222,7 @@ developer_instructions = '''
 - 예: `FULL_ACCESS`면 전체 조회, 아니면 현재 `x-space-id`가 해석한 tenant/space 범위만 허용하는 규칙
 
 **핵심 산출물**
-- `apps/[app]/web/src/app/(admin)/app.spec.md`
+- `apps/[app]/web/src/app/(admin)/app.context.md`
 - 각 `page.spec.md`
 - `packages/be-app|be-service|be-repository` 기준 spec
 - `apps/core/api/src/module/*/*.spec.md`

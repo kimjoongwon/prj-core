@@ -88,7 +88,7 @@
 
 ## 상위 기획서
 
-- `apps/admin/src/app/(admin)/app.spec.md`
+- `apps/admin/src/app/(admin)/app.context.md`
 
 ## 변경 이력
 

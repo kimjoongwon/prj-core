@@ -15,7 +15,7 @@ developer_instructions = '''
 
 ## 출력
 
-- `apps/mobile/src/app/app.spec.md`
+- `apps/mobile/src/app//app.context.md`
 - 대상 route `index.spec.md`
 - 대상 route `_layout.spec.md` (조건부)
 - 필요한 test sidecar spec (`*.test.spec.md`, `*.e2e.spec.md`)

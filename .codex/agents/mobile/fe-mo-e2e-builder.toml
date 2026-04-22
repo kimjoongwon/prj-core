@@ -23,7 +23,7 @@ developer_instructions = '''
 
 - E2E 전략 요약
 - `qa-mo-e2e-testing`에 전달할 route/smoke 시나리오 handoff
-- owner spec(`app.spec.md`, `index.spec.md`, `_layout.spec.md`) sync 지시
+- owner spec(`app.context.md`, `index.spec.md`, `_layout.spec.md`) sync 지시
 
 ## 체인
 

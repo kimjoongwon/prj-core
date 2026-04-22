@@ -86,7 +86,7 @@
 
 ## 상위 기획서
 
-- `apps/admin/src/app/(admin)/app.spec.md`
+- `apps/admin/src/app/(admin)/app.context.md`
 - `packages/be-entity/src/album.entity.spec.md`
 
 ## 변경 이력

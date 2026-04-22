@@ -5,7 +5,7 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 반드시 기존 mobile spec/test/config 를 먼저 검색합니다.
-- 대응 `app.spec.md`, `index.spec.md`, `_layout.spec.md`, `*.e2e.spec.md`의 E2E 시나리오를 먼저 읽습니다.
+- 대응 `app.context.md`, `index.spec.md`, `_layout.spec.md`, `*.e2e.spec.md`의 E2E 시나리오를 먼저 읽습니다.
 - owner spec 이 없거나 E2E 케이스가 비어 있으면 즉시 `BLOCKED: missing mobile e2e spec`으로 보고합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 

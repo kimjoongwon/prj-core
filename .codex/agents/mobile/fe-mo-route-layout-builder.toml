@@ -5,7 +5,7 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `apps/mobile/src/app/**/_layout.tsx`와 Expo Router 구조를 먼저 검색합니다.
-- 대상 route의 `_layout.spec.md`, 상위 `_layout.tsx`, `app.spec.md`, child `index.spec.md`를 먼저 읽습니다.
+- 대상 route의 `_layout.spec.md`, 상위 `_layout.tsx`, `app.context.md`, child `index.spec.md`를 먼저 읽습니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
 

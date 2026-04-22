@@ -712,24 +712,33 @@ packages/common-type/src/
 
 ### 코드 옆 기획서 (Sidecar Spec) (Critical)
 
-**모든 코드 파일 옆에 .spec.md 기획서가 존재합니다.**
+**`*.spec.md`는 source code 파일의 sidecar 문서에만 사용합니다.**
 
 ```
-모든 코드 파일 옆에 .spec.md가 존재
-기획서와 코드가 같은 폴더에 있어 발견성/동기화 용이
-기존 코드를 수정하면 대응되는 .spec.md를 반드시 함께 업데이트
+source code 파일과 sidecar spec은 같은 폴더에서 1:1로 관리
+기존 source code를 수정하면 대응되는 .spec.md를 반드시 함께 업데이트
 spec.md를 수정했다면 하단 "변경 이력"에 변경 내용을 반드시 추가
+non-source 문서는 .spec.md를 쓰지 않고 context/guide/ops/notes/template suffix를 사용
 ```
 
 **운영 규칙 (Mandatory):**
-- 기존 코드 파일(`*.ts`, `*.tsx`, `*.js` 등)을 수정하면 같은 위치의 `*.spec.md`를 반드시 함께 수정합니다.
+- 허용되는 sidecar source 확장자: `*.ts`, `*.tsx`, `*.js`, `*.jsx`, `*.mjs`, `*.cjs`, `*.mts`, `*.cts`, `*.sh`
+- 기존 source code 파일을 수정하면 같은 위치의 `*.spec.md`를 반드시 함께 수정합니다.
 - `*.spec.md`를 수정한 경우 하단 `## 변경 이력` 표에 당일 변경 내용을 1줄 이상 추가합니다.
 - 코드만 변경하고 spec/변경 이력을 누락한 PR/커밋은 완료로 간주하지 않습니다.
+- `app.spec.md`, `package.spec.md`, `tsconfig.spec.md`, `*.toml.spec.md`, `*.json.spec.md`, `*.css.spec.md`, `*.html.spec.md`, `Dockerfile.*.spec.md`, `Jenkinsfile.*.spec.md`는 신규 생성하지 않습니다.
+- `packages/be-prisma/**`와 Prisma schema / generated client에는 `*.spec.md`를 붙이지 않습니다.
+- source file이 없는 디렉터리 설명용 `index.spec.md`는 금지합니다.
+- non-source 문서는 아래 suffix를 사용합니다.
+  - 앱/도메인 컨텍스트: `*.context.md`
+  - 설정/운영 설명: `*.guide.md`, `*.ops.md`, `*.notes.md`
+  - 템플릿 자산 설명: `*.template.md`
 - `packages/fe-ui/src/page`는 page component와 sidecar를 반드시 동일 이름 폴더에 함께 둡니다.
 - 예: `packages/fe-ui/src/page/AddressEmailVerifyPage/AddressEmailVerifyPage.tsx`, `.spec.md`, `.stories.tsx`, `.stories.spec.md`
 - 금지 예: `packages/fe-ui/src/page/AddressEmailVerifyPage.tsx`, `packages/fe-ui/src/page/AddressEmailVerifyPage.spec.md`
 - admin/idp route의 pure page 이관 현황은 `packages/fe-ui/src/page/migration-audit.md`를 기준으로 확인합니다.
 - 전체 page 이관 완료 여부를 말하기 전에는 반드시 `packages/fe-ui/src/page/migration-audit.md`를 먼저 확인합니다.
+- 상세 정책은 `docs/sidecar-spec-policy.md`를 기준으로 합니다.
 
 **기존 코드 수정 완료 조건 (Critical):**
 - 코드 변경이 1개라도 있으면 대응되는 `*.spec.md` 업데이트와 `## 변경 이력` 추가가 모두 완료되어야 합니다.
@@ -739,7 +748,7 @@ spec.md를 수정했다면 하단 "변경 이력"에 변경 내용을 반드시 
 
 ```
 apps/[app]/web/src/app/(admin)/
-├── app.spec.md                 # 앱 기획서 (L0-L2: 컨텍스트, Actor, Goal)
+├── app.context.md              # 앱 컨텍스트 문서 (L0-L2, non-sidecar)
 
 apps/[app]/web/src/app/(admin)/[도메인]/
 ├── page.tsx                    # 목록 페이지
@@ -767,15 +776,15 @@ packages/fe-ui/src/page/
 
 packages/fe-ui/src/feature/[FeatureName]/
 ├── index.tsx
-└── index.spec.md               # Feature 기획서
+└── index.spec.md               # Feature 기획서 (index.tsx sidecar)
 
 packages/fe-ui/src/widget/[WidgetName]/
 ├── index.tsx
-└── index.spec.md               # Widget 기획서
+└── index.spec.md               # Widget 기획서 (index.tsx sidecar)
 
 packages/fe-ui/src/display/[DisplayName]/
 ├── index.tsx
-└── index.spec.md               # Display 기획서
+└── index.spec.md               # Display 기획서 (index.tsx sidecar)
 
 packages/fe-store/src/stores/
 ├── [StoreName].ts
@@ -804,11 +813,11 @@ apps/core/api/src/[module]/
 
 | 타입 | 파일 | 핵심 내용 |
 |------|------|----------|
-| **app** | `app.spec.md` | 앱 컨텍스트, 사용자, 목표, 도메인 목록 (L0-L2) |
+| **app-context** | `app.context.md` | 앱 컨텍스트, 사용자, 목표, 도메인 목록 (L0-L2, non-sidecar) |
 | **page** | `page.spec.md` | 시나리오, 레이아웃, API, 이벤트 |
-| **feature** | `index.spec.md` | Store 연결, Props, 이벤트 |
-| **widget** | `index.spec.md` | Props, 하위 UI, 슬롯, 디자인 토큰 |
-| **ui** | `index.spec.md` | Props, 상태, 변형, 접근성 |
+| **feature** | `index.spec.md` | `index.tsx` 대응. Store 연결, Props, 이벤트 |
+| **widget** | `index.spec.md` | `index.tsx` 대응. Props, 하위 UI, 슬롯, 디자인 토큰 |
+| **ui** | `index.spec.md` | `index.tsx` 대응. Props, 상태, 변형, 접근성 |
 | **store** | `.spec.md` | 상태, 액션, 비동기 흐름 |
 | **entity** | `.entity.spec.md` | 필드, 관계, Enum, 도메인 메서드, 비즈니스 규칙 |
 | **vo** | `.vo.spec.md` | 역할, Props, validate 규칙, 팩토리 메서드, 도메인 메서드 |
@@ -819,18 +828,26 @@ apps/core/api/src/[module]/
 #### 기획서 템플릿 위치
 
 ```
-.claude/templates/spec/
-├── page.spec.md        # 페이지 기획서 템플릿
-├── feature.spec.md     # Feature 기획서 템플릿
-├── widget.spec.md      # Widget 기획서 템플릿
-├── ui.spec.md          # UI 기획서 템플릿
-├── store.spec.md       # Store 기획서 템플릿
-├── entity.spec.md      # Entity 기획서 템플릿
-├── vo.spec.md          # VO 기획서 템플릿
-├── service.spec.md     # Service 기획서 템플릿
-├── repository.spec.md  # Repository 기획서 템플릿
-└── controller.spec.md  # Controller 기획서 템플릿
+.codex/templates/spec/
+├── page.template.md
+├── feature.template.md
+├── widget.template.md
+├── primitive.template.md
+├── store.template.md
+├── entity.template.md
+├── vo.template.md
+├── service.template.md
+├── repository.template.md
+├── controller.template.md
+├── application-service.template.md
+├── integration-facade.template.md
+├── dto.template.md
+├── enum.template.md
+└── module.template.md
 ```
+
+- 위 경로의 `*.template.md`는 generator template asset이며 source sidecar가 아닙니다.
+- 신규 일반 문서도 성격에 맞게 `*.template.md` suffix를 사용합니다.
 
 #### 기획서 변경 이력 관리
 
@@ -852,7 +869,7 @@ apps/core/api/src/[module]/
 | **발견성** | 코드 파일만 보면 기획서도 바로 옆에 있음 |
 | **동기화** | 기획서와 코드가 같은 폴더에 있어 버전 관리 용이 |
 | **점진적** | 한 번에 다 만들지 않고, 필요한 것부터 |
-| **역설계 호환** | 기존 코드 분석 → .spec.md만 생성하면 됨 |
+| **역설계 호환** | 기존 source code 분석 → 대응 sidecar만 생성하면 됨 |
 
 ## 백엔드 개발 규칙
 
@@ -1101,7 +1118,7 @@ Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → 
 
 ```
 apps/[app]/web/src/app/(admin)/
-├── app.spec.md                 # 앱 기획서 (L0-L2: 컨텍스트, Actor, Goal)
+├── app.context.md              # 앱 컨텍스트 문서 (L0-L2, non-sidecar)
 
 apps/[app]/web/src/app/(admin)/[도메인]/
 ├── page.tsx                    # 목록 페이지
@@ -1129,15 +1146,15 @@ packages/fe-ui/src/page/
 
 packages/fe-ui/src/feature/[FeatureName]/
 ├── index.tsx
-└── index.spec.md               # Feature 기획서
+└── index.spec.md               # Feature 기획서 (index.tsx sidecar)
 
 packages/fe-ui/src/widget/[WidgetName]/
 ├── index.tsx
-└── index.spec.md               # Widget 기획서
+└── index.spec.md               # Widget 기획서 (index.tsx sidecar)
 
 packages/fe-ui/src/display/[DisplayName]/
 ├── index.tsx
-└── index.spec.md               # Display 기획서
+└── index.spec.md               # Display 기획서 (index.tsx sidecar)
 
 packages/fe-store/src/stores/
 ├── [StoreName].ts
@@ -1234,7 +1251,7 @@ Stage 5: 컴포넌트 (페이지별)
 
 | Agent | 역할 |
 |-------|------|
-| req-context-planner | 시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 기획 → `app.spec.md` 업데이트 |
+| req-context-planner | 시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 기획 → `app.context.md` 업데이트 |
 | req-screen-planner | 도메인 기능/화면 구조 기획 → 각 `page.spec.md` 초안 생성 |
 | req-page-planner | 페이지 통합 기획(SSR/Prefetch/핸들러) → `page.spec.md` 통합 섹션 업데이트 |
 | req-api-planner | 인터랙션(Action)과 API 기획 → `controller.spec.md` + 페이지 API 섹션 |
@@ -1324,7 +1341,7 @@ Stage 5: 컴포넌트 (페이지별)
 |-------|------|
 | dev-service-starter | 개발 서비스 시작 (admin, server, storybook 등) |
 
-각 Agent의 상세 역할은 `.claude/agents/` 디렉토리를 참고하세요.
+각 Agent의 상세 역할은 `.codex/agents/` 디렉토리를 참고하세요.
 
 ### 에이전트 실행 규칙 (Critical)
 

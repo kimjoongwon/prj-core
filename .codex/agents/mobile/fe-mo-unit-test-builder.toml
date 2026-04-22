@@ -23,7 +23,7 @@ developer_instructions = '''
 
 - unit test 전략 요약
 - `qa-mo-testing`에 전달할 테스트 파일/시나리오 handoff
-- owner spec(`app.spec.md`, `index.spec.md`, `_layout.spec.md`, `index.spec.md`) sync 지시
+- owner spec(`app.context.md`, `index.spec.md`, `_layout.spec.md`, `index.spec.md`) sync 지시
 
 ## 체인
 

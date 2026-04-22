@@ -405,5 +405,5 @@ pnpm db:data:migrate:prod # prod reference-data migration
 
 ## 비고
 
-현재 `seed-data.spec.md`는 seed 정의 구조의 역할과 일부 계약을 설명합니다.
+현재 seed 정의 구조의 역할과 일부 계약은 `seed-data.ts`와 관련 구현 코드에서 관리합니다.
 이 문서는 그보다 상위 개념인 "운영 관점의 seed governance"를 정의합니다.

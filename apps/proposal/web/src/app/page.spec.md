@@ -93,7 +93,7 @@
 
 ## 상위 기획서
 
-- `app.spec.md`
+- `app.context.md`
 
 ## Consumed Layout Contract
 

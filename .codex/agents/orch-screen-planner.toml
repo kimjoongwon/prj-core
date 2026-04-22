@@ -73,7 +73,7 @@ developer_instructions = '''
 
 ### 3.2 전제조건
 
-- `apps/[app]/web/src/app/(admin)/app.spec.md`
+- `apps/[app]/web/src/app/(admin)/app.context.md`
 - 대상 route의 `page.spec.md` 초안
 - 관련 Entity spec
 - 공용 Store가 필요한 화면이면 `[domain]Store.spec.md`
@@ -211,7 +211,7 @@ developer_instructions = '''
 ❌ 전제조건 미충족
 
 다음 기획서가 필요합니다:
-- app.spec.md
+- app.context.md
 - 대상 page.spec.md
 - 관련 Entity spec
 - Store spec (조건부)

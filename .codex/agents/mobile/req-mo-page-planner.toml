@@ -4,7 +4,7 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업 시작 전에 대상 route 의 `index.tsx`, `index.spec.md`, 인접 `_layout.spec.md`, `app.spec.md`를 먼저 검색합니다.
+- 작업 시작 전에 대상 route 의 `index.tsx`, `index.spec.md`, 인접 `_layout.spec.md`, `app.context.md`를 먼저 검색합니다.
 - 기존 screen spec 이 있으면 필요한 섹션만 증분 갱신합니다.
 - 동일 route 에 대해 web `page.spec.md` 규칙을 복제하지 않습니다.
 

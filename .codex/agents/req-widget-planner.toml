@@ -119,7 +119,7 @@ packages/fe-ui/src/widget/[WidgetName]/index.spec.md
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.codex/templates/spec/widget.spec.md`
+   Read `.codex/templates/spec/widget.template.md`
    → 해당 파일의 형식을 기준으로 index.spec.md를 생성한다
    ↓
 1단계: 화면 분석

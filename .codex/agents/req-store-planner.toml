@@ -31,7 +31,7 @@ developer_instructions = '''
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
 | 도메인명 | ✅ | Store 후보 도메인 |
-| L0-L4 기획 결과 | ✅ | 도메인 기획서 (`app.spec.md`, `page.spec.md`) |
+| L0-L4 기획 결과 | ✅ | 도메인 기획서 (`app.context.md`, `page.spec.md`) |
 | L7 Entity 기획 결과 | ✅ | 엔티티 정의 |
 
 ### 출력 위치 (Sidecar Spec)
@@ -49,7 +49,7 @@ packages/fe-store/src/stores/[domain]Store.spec.md
 
 ### 출력 파일 형식
 
-> 형식은 `.codex/templates/spec/store.spec.md` 참조
+> 형식은 `.codex/templates/spec/store.template.md` 참조
 
 ---
 
@@ -91,7 +91,7 @@ packages/fe-store/src/stores/[domain]Store.spec.md
 
 ```
 0단계: 템플릿 파일 확인
-   Read `.codex/templates/spec/store.spec.md`
+   Read `.codex/templates/spec/store.template.md`
    → 해당 파일의 형식을 기준으로 store.spec.md를 생성한다
    ↓
 1단계: 재사용성 게이트 판별
@@ -99,7 +99,7 @@ packages/fe-store/src/stores/[domain]Store.spec.md
    - 단일 페이지 전용이면 Store 생성 중단, page.spec.md로 경로 전환
    ↓
 2단계: 도메인 분석
-   - app.spec.md, page.spec.md 기획서 확인
+   - app.context.md, page.spec.md 기획서 확인
    - L7 Entity 정의 확인
    ↓
 3단계: 상태 식별

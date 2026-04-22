@@ -93,7 +93,7 @@ developer_instructions = '''
 
 - `req-mo-fe-test-planner`
 - 공유 파일 lock 머지
-  - `apps/mobile/src/app/app.spec.md`
+  - `apps/mobile/src/app//app.context.md`
   - 대상 route `index.spec.md`
   - 대상 route `_layout.spec.md`
   - `packages/fe-mo-ui/src/**/index.spec.md`
@@ -116,7 +116,7 @@ developer_instructions = '''
 
 ## 6. 필수 산출물
 
-- `apps/mobile/src/app/app.spec.md`
+- `apps/mobile/src/app//app.context.md`
 - 대상 route `apps/mobile/src/app/**/_layout.spec.md` (조건부)
 - 대상 route `apps/mobile/src/app/**/index.spec.md`
 - 필요한 `packages/fe-mo-ui/src/**/index.spec.md`
