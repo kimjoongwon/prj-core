@@ -18,6 +18,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | barrel이 `LoginPageState` 이름으로 page state type을 다시 export하도록 갱신 | codex |
 | 2026-03-26 | `LoginPage` 폴더명 변경에 맞춰 배럴 경로를 갱신 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |

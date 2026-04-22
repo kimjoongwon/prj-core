@@ -91,6 +91,19 @@ widget/feature/form/master/detail 등 하위 재사용 계층을 조합해 page-
 - 서버 cookie/header 접근
 - app-specific environment 분기
 
+### 1.4 state contract 경계
+
+- pure page는 page state를 생성, 소유, 초기화, 변경 전략까지 설계하지 않습니다.
+- page state 설계 owner는 `fe-page-builder`이며, pure page는 전달받은 `state` slice를 소비만 합니다.
+- pure page가 받는 `state` slice는 route page의 page MobX class 인스턴스에서 나온 observable field를 기본 계약으로 가정합니다.
+- pure page는 route가 설계한 중첩 state를 flatten하지 않습니다.
+  - 예: `state.loginForm`, `state.resetPasswordForm`, `state.oidcLoginForm`
+- pure page가 child form/widget에 state를 전달할 때도 route가 정한 component-name slice를 그대로 사용합니다.
+- mutable page state는 `state` prop 아래에 모으고, handler와 정적 카피/링크 같은 값만 별도 props로 둡니다.
+- pure page는 page-level 이벤트 props를 받아 wrapper에서 native event를 연결할 수 있습니다.
+  - child form에는 submit/cancel/click handler props를 직접 전달하지 않습니다.
+  - form은 state와 정적 props만 받고, page가 `onSubmit`/`onClickCapture` 등으로 상호작용을 위임합니다.
+
 ---
 
 ## 2. 파일 구조 규칙

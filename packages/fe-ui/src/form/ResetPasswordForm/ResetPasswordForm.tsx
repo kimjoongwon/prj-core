@@ -1,15 +1,22 @@
 "use client";
 
 import type { PasswordRule } from "@cocrepo/constant";
-import { Button, Input, Link } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { useState } from "react";
+import { Button, Input, Link } from "../../control";
 import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
 import { PasswordStrengthIndicator } from "../../display/feedback/PasswordStrengthIndicator/PasswordStrengthIndicator";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 
 export type ResetPasswordStep = "validating" | "invalid" | "form" | "complete";
+
+export interface ResetPasswordFormState {
+	password: string;
+	confirmPassword: string;
+	submitError: string | null;
+	isSubmitting: boolean;
+	isComplete: boolean;
+}
 
 export interface ResetPasswordFormProps {
 	/** 현재 단계 */
@@ -18,15 +25,12 @@ export interface ResetPasswordFormProps {
 	tokenError?: string | null;
 	/** 토큰에 연결된 이메일 */
 	tokenEmail?: string;
+	/** page/feature/route가 소유하는 form state */
+	state: ResetPasswordFormState;
 	/** 비밀번호 정책 규칙 (API에서 동적으로 제공) */
 	passwordRules: PasswordRule[];
-	/** 비밀번호 변경 제출 핸들러. 에러 메시지 반환 시 에러 표시 */
-	onSubmit: (data: {
-		password: string;
-		confirmPassword: string;
-	}) => Promise<string | null>;
-	/** 토큰 만료 시 에러 콜백 */
-	onTokenExpired?: () => void;
+	forgotPasswordHref?: string;
+	loginHref?: string;
 }
 
 /**
@@ -39,34 +43,15 @@ export const ResetPasswordForm = observer(
 		step,
 		tokenError,
 		tokenEmail,
+		state,
 		passwordRules,
-		onSubmit,
+		forgotPasswordHref = "/forgot-password",
+		loginHref = "/auth/login",
 	}: ResetPasswordFormProps) => {
-		const [password, setPassword] = useState("");
-		const [confirmPassword, setConfirmPassword] = useState("");
-		const [isSubmitting, setIsSubmitting] = useState(false);
-		const [submitError, setSubmitError] = useState<string | null>(null);
-		const [isComplete, setIsComplete] = useState(false);
-
-		const isPasswordValid = passwordRules.every((r) => r.test(password));
+		const isPasswordValid = passwordRules.every((r) => r.test(state.password));
 		const isPasswordMatch =
-			password === confirmPassword && confirmPassword.length > 0;
-
-		const handleSubmit = async () => {
-			setSubmitError(null);
-			setIsSubmitting(true);
-
-			try {
-				const err = await onSubmit({ password, confirmPassword });
-				if (err) {
-					setSubmitError(err);
-				} else {
-					setIsComplete(true);
-				}
-			} finally {
-				setIsSubmitting(false);
-			}
-		};
+			state.password === state.confirmPassword &&
+			state.confirmPassword.length > 0;
 
 		return (
 			<AuthCard>
@@ -102,7 +87,7 @@ export const ResetPasswordForm = observer(
 						<p className="text-default-500 text-sm mb-6">
 							비밀번호 재설정 링크는 30분간 유효하며, 1회만 사용할 수 있습니다.
 						</p>
-						<Link href="/forgot-password">
+						<Link href={forgotPasswordHref}>
 							<Button
 								color="primary"
 								className="w-full font-semibold"
@@ -115,7 +100,7 @@ export const ResetPasswordForm = observer(
 				)}
 
 				{/* 재설정 완료 */}
-				{step === "form" && isComplete && (
+				{step === "form" && state.isComplete && (
 					<div className="text-center">
 						<div className="w-16 h-16 bg-success/20 rounded-full mx-auto mb-4 flex items-center justify-center">
 							<svg
@@ -139,7 +124,7 @@ export const ResetPasswordForm = observer(
 							보안을 위해 모든 기기에서 로그아웃되었습니다.
 							<br />새 비밀번호로 다시 로그인해주세요.
 						</p>
-						<Link href="/auth/login">
+						<Link href={loginHref}>
 							<Button
 								color="primary"
 								className="w-full font-semibold"
@@ -152,7 +137,7 @@ export const ResetPasswordForm = observer(
 				)}
 
 				{/* 비밀번호 입력 폼 */}
-				{step === "form" && !isComplete && (
+				{step === "form" && !state.isComplete && (
 					<>
 						<AuthCardHeader
 							iconPath="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
@@ -160,45 +145,39 @@ export const ResetPasswordForm = observer(
 							subtitle={tokenEmail || undefined}
 						/>
 
-						{submitError && <AlertBanner type="danger" message={submitError} />}
+						{state.submitError && (
+							<AlertBanner type="danger" message={state.submitError} />
+						)}
 
-						<form
-							className="space-y-5"
-							onSubmit={(e) => {
-								e.preventDefault();
-								handleSubmit();
-							}}
-						>
+						<form className="space-y-5">
 							<div>
 								<Input
-									type="password"
+									path="password"
+									state={state}
 									label="새 비밀번호"
 									placeholder="********"
-									value={password}
-									onValueChange={setPassword}
 									isRequired
 									autoComplete="new-password"
 									variant="bordered"
 									autoFocus
 								/>
 								<PasswordStrengthIndicator
-									password={password}
+									password={state.password}
 									rules={passwordRules}
 								/>
 							</div>
 
 							<Input
-								type="password"
+								path="confirmPassword"
+								state={state}
 								label="비밀번호 확인"
 								placeholder="********"
-								value={confirmPassword}
-								onValueChange={setConfirmPassword}
 								isRequired
 								autoComplete="new-password"
 								variant="bordered"
-								isInvalid={confirmPassword.length > 0 && !isPasswordMatch}
+								isInvalid={state.confirmPassword.length > 0 && !isPasswordMatch}
 								errorMessage={
-									confirmPassword.length > 0 && !isPasswordMatch
+									state.confirmPassword.length > 0 && !isPasswordMatch
 										? "비밀번호가 일치하지 않습니다"
 										: undefined
 								}
@@ -209,7 +188,7 @@ export const ResetPasswordForm = observer(
 								color="primary"
 								className="w-full font-semibold"
 								size="lg"
-								isLoading={isSubmitting}
+								isLoading={state.isSubmitting}
 								isDisabled={!isPasswordValid || !isPasswordMatch}
 							>
 								비밀번호 변경
@@ -219,10 +198,10 @@ export const ResetPasswordForm = observer(
 				)}
 
 				{/* 로그인으로 돌아가기 */}
-				{!isComplete && (
+				{!state.isComplete && (
 					<div className="mt-6 text-center">
 						<Link
-							href="/auth/login"
+							href={loginHref}
 							className="text-default-400 hover:text-default-500 text-sm"
 						>
 							로그인으로 돌아가기

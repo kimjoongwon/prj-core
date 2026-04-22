@@ -5,18 +5,19 @@ import {
 	SCOPE_ICONS,
 	SCOPE_LABELS,
 } from "@cocrepo/constant";
-import { Button } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { useState } from "react";
+import { Button } from "../../control";
 import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 
+export interface OidcConsentPanelState {
+	errorMessage: string | null;
+	isSubmitting: boolean;
+}
+
 export interface OidcConsentPanelProps {
-	/** 동의 확인 핸들러 */
-	onConfirm: () => Promise<string | null>;
-	/** 거부(Abort) 핸들러 */
-	onAbort: () => void;
+	state: OidcConsentPanelState;
 	/** 클라이언트 정보 */
 	client?: {
 		clientId: string;
@@ -33,24 +34,7 @@ export interface OidcConsentPanelProps {
  * 클라이언트가 요청하는 권한 목록을 표시하고, 허용/거부를 선택할 수 있습니다.
  */
 export const OidcConsentPanel = observer(
-	({ onConfirm, onAbort, client, missingScopes }: OidcConsentPanelProps) => {
-		const [error, setError] = useState<string | null>(null);
-		const [isSubmitting, setIsSubmitting] = useState(false);
-
-		const handleConfirm = async () => {
-			setError(null);
-			setIsSubmitting(true);
-
-			try {
-				const err = await onConfirm();
-				if (err) {
-					setError(err);
-				}
-			} finally {
-				setIsSubmitting(false);
-			}
-		};
-
+	({ state, client, missingScopes }: OidcConsentPanelProps) => {
 		return (
 			<AuthCard>
 				<AuthCardHeader
@@ -63,7 +47,9 @@ export const OidcConsentPanel = observer(
 				/>
 
 				{/* 에러 메시지 */}
-				{error && <AlertBanner type="danger" message={error} />}
+				{state.errorMessage && (
+					<AlertBanner type="danger" message={state.errorMessage} />
+				)}
 
 				{/* 요청된 권한 목록 */}
 				<div className="mb-6 rounded-xl border border-slate-200/70 bg-slate-100/80 p-4 dark:border-white/10 dark:bg-white/[0.04]">
@@ -99,19 +85,21 @@ export const OidcConsentPanel = observer(
 				{/* 액션 버튼 */}
 				<div className="flex gap-4">
 					<Button
+						type="button"
+						data-action="confirm-consent"
 						color="success"
 						className="flex-1 font-semibold"
 						size="lg"
-						isLoading={isSubmitting}
-						onPress={handleConfirm}
+						isLoading={state.isSubmitting}
 					>
 						허용
 					</Button>
 					<Button
+						type="button"
+						data-action="abort-interaction"
 						variant="flat"
 						className="flex-1 font-semibold"
 						size="lg"
-						onPress={onAbort}
 					>
 						거부
 					</Button>

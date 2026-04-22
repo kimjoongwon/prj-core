@@ -6,13 +6,15 @@
 
 ## 역할
 
-이 파일은 widget 계층의 핵심 동작을 담당합니다.
-상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+OIDC consent 상태를 시각화하는 form/widget 컴포넌트입니다.
+상위 page/feature가 소유한 `OidcConsentPanelState`를 받아 scope 목록, 에러, 로딩 상태를 렌더링합니다.
+confirm/abort 이벤트 연결은 상위 wrapper가 소유하고 이 컴포넌트는 `data-action` 기반 action element만 제공합니다.
 
 ## 공개 계약
 
 | 항목 | 설명 |
 |------|------|
+| OidcConsentPanelState | 공개 계약 요소 |
 | OidcConsentPanelProps | 공개 계약 요소 |
 | OidcConsentPanel | 공개 계약 요소 |
 
@@ -21,9 +23,8 @@
 | 모듈 | 용도 |
 |------|------|
 | @cocrepo/constant | 기능 구현 의존성 |
-| @heroui/react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
-| react | 기능 구현 의존성 |
+| ../../control | 기능 구현 의존성 |
 | ../../../display/feedback/AlertBanner/AlertBanner | 기능 구현 의존성 |
 | ../../../widget/AuthCard/AuthCard | 기능 구현 의존성 |
 | ../../../widget/AuthCard/AuthCardHeader | 기능 구현 의존성 |
@@ -50,6 +51,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | local state와 handler props를 제거하고 external `OidcConsentPanelState` + `data-action` contract로 정리 | codex |
 | 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-03-06 | AlertBanner 의존 경로를 `../../../display/*`로 변경 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |

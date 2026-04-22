@@ -6,28 +6,190 @@ import {
 	useGetInteraction,
 	useSubmitLogin,
 } from "@cocrepo/api/idp/interaction";
-import { OidcInteractionPage, type LoginErrorResponse } from "@cocrepo/ui";
+import { type LoginErrorResponse, OidcInteractionPage } from "@cocrepo/ui";
 import type { AxiosError } from "axios";
-import { observer } from "mobx-react-lite";
+import {
+	type IReactionDisposer,
+	makeAutoObservable,
+	reaction,
+	runInAction,
+} from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { useParams } from "next/navigation";
+import { useEffect } from "react";
 
 type InteractionPageParams = {
 	uid: string;
 };
 
-function InteractionPage() {
+class InteractionRoutePageState {
+	mode: "loading" | "error" | "login" | "consent" = "loading";
+	client: {
+		clientId: string;
+		name: string;
+		logoUri?: string;
+	} | null = null;
+	isDev = false;
+	errorMessage = "";
+	isExpiredInteraction = false;
+	missingScopes: string[] = [];
+	oidcConsentPanel = {
+		errorMessage: null as string | null,
+		isSubmitting: false,
+	};
+	oidcLoginForm = {
+		email: "",
+		password: "",
+		remember: false,
+		error: null as LoginErrorResponse | null,
+		isSubmitting: false,
+	};
+
+	private hasAppliedDevDefaults = false;
+	private readonly disposeLoginErrorReaction: IReactionDisposer;
+
+	constructor() {
+		makeAutoObservable<
+			this,
+			"hasAppliedDevDefaults" | "disposeLoginErrorReaction"
+		>(this, {
+			hasAppliedDevDefaults: false,
+			disposeLoginErrorReaction: false,
+		});
+
+		this.disposeLoginErrorReaction = reaction(
+			() => [this.oidcLoginForm.email, this.oidcLoginForm.password],
+			() => {
+				if (this.oidcLoginForm.error) {
+					this.oidcLoginForm.error = null;
+				}
+			},
+		);
+	}
+
+	syncInteraction(params: {
+		data:
+			| {
+					type: string;
+					client?: {
+						clientId: string;
+						name: string;
+						logoUri?: string;
+					} | null;
+					isDev?: boolean;
+			  }
+			| undefined;
+		error: unknown;
+		isLoading: boolean;
+		errorMessage: string;
+		isExpiredInteraction: boolean;
+		missingScopes: string[];
+	}) {
+		const {
+			data,
+			error,
+			errorMessage,
+			isExpiredInteraction,
+			isLoading,
+			missingScopes,
+		} = params;
+
+		this.mode = isLoading
+			? "loading"
+			: error || !data
+				? "error"
+				: data.type === "consent"
+					? "consent"
+					: "login";
+		this.client = data?.client ?? null;
+		this.isDev = Boolean(data?.isDev);
+		this.errorMessage = errorMessage;
+		this.isExpiredInteraction = isExpiredInteraction;
+		this.missingScopes = [...missingScopes];
+
+		if (this.isDev && !this.hasAppliedDevDefaults) {
+			this.oidcLoginForm.email = "admin@plate.com";
+			this.oidcLoginForm.password = "rkdmf12!@";
+			this.hasAppliedDevDefaults = true;
+		}
+	}
+
+	async submitLogin(
+		request: (payload: {
+			email: string;
+			password: string;
+			remember: boolean;
+		}) => Promise<string>,
+	) {
+		this.oidcLoginForm.error = null;
+		this.oidcLoginForm.isSubmitting = true;
+
+		try {
+			return await request({
+				email: this.oidcLoginForm.email,
+				password: this.oidcLoginForm.password,
+				remember: this.oidcLoginForm.remember,
+			});
+		} catch (err) {
+			const axiosError = err as AxiosError<LoginErrorResponse>;
+
+			runInAction(() => {
+				if (axiosError.response?.data) {
+					this.oidcLoginForm.error = axiosError.response.data;
+					return;
+				}
+
+				this.oidcLoginForm.error = {
+					error: "NETWORK_ERROR",
+					displayMessage: "서버와 통신할 수 없습니다.",
+					hint: "잠시 후 다시 시도하거나 문제가 반복되면 관리자에게 문의하세요.",
+				};
+			});
+
+			return null;
+		} finally {
+			runInAction(() => {
+				this.oidcLoginForm.isSubmitting = false;
+			});
+		}
+	}
+
+	async confirmConsent(request: () => Promise<string>) {
+		this.oidcConsentPanel.errorMessage = null;
+		this.oidcConsentPanel.isSubmitting = true;
+
+		try {
+			return await request();
+		} catch {
+			runInAction(() => {
+				this.oidcConsentPanel.errorMessage = "서버와 통신할 수 없습니다.";
+			});
+			return null;
+		} finally {
+			runInAction(() => {
+				this.oidcConsentPanel.isSubmitting = false;
+			});
+		}
+	}
+
+	async abortInteraction(request: () => Promise<string | null>) {
+		try {
+			return await request();
+		} catch {
+			return null;
+		}
+	}
+
+	destroy() {
+		this.disposeLoginErrorReaction();
+	}
+}
+
+const InteractionPage = observer(() => {
 	const { uid } = useParams<InteractionPageParams>();
-
-	return <InteractionClient uid={uid} />;
-}
-
-interface InteractionClientProps {
-	uid: string;
-}
-
-const InteractionClient = observer(function InteractionClient({
-	uid,
-}: InteractionClientProps) {
+	const oidcInteractionPage = useLocalObservable(
+		() => new InteractionRoutePageState(),
+	);
 	const { data, isLoading, error } = useGetInteraction(uid);
 	const loginMutation = useSubmitLogin();
 	const abortMutation = useAbortInteraction();
@@ -44,50 +206,78 @@ const InteractionClient = observer(function InteractionClient({
 			interactionError?.response?.data?.message ||
 			error?.message ||
 			"알 수 없는 오류가 발생했습니다.";
+	const missingScopes =
+		data?.type === "consent"
+			? ((
+					data.prompt as {
+						name: string;
+						details?: {
+							missingOIDCScope?: string[];
+						};
+					}
+				).details?.missingOIDCScope ?? [])
+			: [];
+
+	useEffect(() => {
+		oidcInteractionPage.syncInteraction({
+			data,
+			error,
+			isLoading,
+			errorMessage,
+			isExpiredInteraction,
+			missingScopes,
+		});
+	}, [
+		data,
+		error,
+		errorMessage,
+		isExpiredInteraction,
+		isLoading,
+		missingScopes,
+		oidcInteractionPage,
+	]);
+
+	useEffect(() => {
+		return () => {
+			oidcInteractionPage.destroy();
+		};
+	}, [oidcInteractionPage]);
 
 	const onAbortInteraction = async () => {
-		try {
+		const redirectTo = await oidcInteractionPage.abortInteraction(async () => {
 			const result = await abortMutation.mutateAsync({ uid });
-			if (result.redirectTo) {
-				window.location.href = result.redirectTo;
-			}
-		} catch {
-			// 에러 무시
+			return result.redirectTo ?? null;
+		});
+
+		if (redirectTo) {
+			window.location.href = redirectTo;
 		}
 	};
 
-	const onSubmitLogin = async (data: {
-		email: string;
-		password: string;
-		remember: boolean;
-	}): Promise<LoginErrorResponse | null> => {
-		try {
-			const result = await loginMutation.mutateAsync({
-				uid,
-				data,
-			});
-			window.location.href = result.redirectTo;
-			return null;
-		} catch (err) {
-			const axiosError = err as AxiosError<LoginErrorResponse>;
-			if (axiosError.response?.data) {
-				return axiosError.response.data;
-			}
-			return {
-				error: "NETWORK_ERROR",
-				displayMessage: "서버와 통신할 수 없습니다.",
-				hint: "잠시 후 다시 시도하거나 문제가 반복되면 관리자에게 문의하세요.",
-			};
+	const onSubmitLoginForm = async () => {
+		const redirectTo = await oidcInteractionPage.submitLogin(
+			async (payload) => {
+				const result = await loginMutation.mutateAsync({
+					uid,
+					data: payload,
+				});
+				return result.redirectTo;
+			},
+		);
+
+		if (redirectTo) {
+			window.location.href = redirectTo;
 		}
 	};
 
-	const onConfirmConsent = async (): Promise<string | null> => {
-		try {
+	const onConfirmConsent = async () => {
+		const redirectTo = await oidcInteractionPage.confirmConsent(async () => {
 			const result = await consentMutation.mutateAsync({ uid });
-			window.location.href = result.redirectTo;
-			return null;
-		} catch {
-			return "서버와 통신할 수 없습니다.";
+			return result.redirectTo;
+		});
+
+		if (redirectTo) {
+			window.location.href = redirectTo;
 		}
 	};
 
@@ -106,48 +296,47 @@ const InteractionClient = observer(function InteractionClient({
 	};
 
 	if (isLoading) {
-		return <OidcInteractionPage mode="loading" />;
+		return (
+			<OidcInteractionPage
+				state={oidcInteractionPage}
+				onAbortInteraction={onAbortInteraction}
+				onSubmitLoginForm={onSubmitLoginForm}
+				onConfirmConsent={onConfirmConsent}
+			/>
+		);
 	}
 
 	if (error || !data) {
 		return (
 			<OidcInteractionPage
-				mode="error"
-				errorMessage={errorMessage}
-				isExpiredInteraction={isExpiredInteraction}
+				state={oidcInteractionPage}
 				onClickRecoveryButton={onClickRecoveryButton}
+				onAbortInteraction={onAbortInteraction}
+				onSubmitLoginForm={onSubmitLoginForm}
+				onConfirmConsent={onConfirmConsent}
 			/>
 		);
 	}
 
 	if (data.type === "consent") {
-		const prompt = data.prompt as {
-			name: string;
-			details?: {
-				missingOIDCScope?: string[];
-			};
-		};
-		const missingScopes = prompt.details?.missingOIDCScope || [];
 		return (
 			<OidcInteractionPage
-				mode="consent"
-				client={data.client ?? null}
-				missingScopes={missingScopes}
+				state={oidcInteractionPage}
 				onConfirmConsent={onConfirmConsent}
 				onAbortInteraction={onAbortInteraction}
+				onSubmitLoginForm={onSubmitLoginForm}
 			/>
 		);
 	}
 
 	return (
 		<OidcInteractionPage
-			mode="login"
-			client={data.client ?? null}
-			isDev={data.isDev}
-			onSubmitLogin={onSubmitLogin}
+			state={oidcInteractionPage}
+			onSubmitLoginForm={onSubmitLoginForm}
 			onAbortInteraction={onAbortInteraction}
+			onConfirmConsent={onConfirmConsent}
 		/>
 	);
 });
 
-export default observer(InteractionPage);
+export default InteractionPage;

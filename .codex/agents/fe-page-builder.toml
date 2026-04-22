@@ -89,6 +89,33 @@ developer_instructions = '''
   - 읽기 전용 조회, inspector, 상세 본문 중심이면 `detail` + `detail/view`
   - 생성/수정/입력/검증 중심이면 `form` + `form`
 
+### 1.5 page state 설계 원칙
+
+- route page가 page state의 유일한 owner입니다.
+- `state`는 page가 렌더링과 상호작용에 사용하는 모든 mutable state를 의미합니다.
+  - 예: 입력값, 단계(step), 로딩/제출 상태, 에러/성공 상태, 사용자 선택 상태
+- route page는 page slice를 plain object로 만들지 않습니다.
+  - 페이지당 하나의 page MobX class를 선언합니다.
+  - class constructor에서 `makeAutoObservable(this)`를 호출합니다.
+  - route page에서는 `useLocalObservable(() => new PageStateClass())` 형태로 인스턴스화합니다.
+  - action / computed / reaction / 상태 변경은 해당 class 내부에서 처리합니다.
+- state root key는 반드시 pure page component 이름의 lower camel case를 사용합니다.
+  - 예: `state.loginPage`, `state.forgotPasswordPage`, `state.oidcInteractionPage`
+- UI 하위 slice key는 반드시 lower camel case component 이름을 사용합니다.
+  - 예: `state.loginPage.loginForm`, `state.resetPasswordPage.resetPasswordForm`
+  - 예시: `class LoginRoutePageState { loginPage = { loginForm: { username: string, password: string } } }`
+- UI가 아닌 logic state는 generic 이름을 금지하고 목적이 드러나는 명칭을 사용합니다.
+  - 허용 예: `resetPasswordStep`, `interactionErrorMessage`, `passwordPolicy`
+  - 금지 예: `data`, `value`, `temp`, `formState2`
+- route page는 pure page에 반드시 page slice만 전달합니다.
+  - 예: `<LoginPage state={state.loginPage} />`
+- pure page 내부에서 하위 form/widget으로 필요한 UI slice를 다시 전달합니다.
+  - 예: `<LoginForm state={state.loginForm} />`
+- 정적 title/caption/route href처럼 lifecycle 동안 변하지 않는 값은 일반 props로 둘 수 있지만,
+  page lifecycle 중 변하는 값이면 반드시 `state` 안에 포함합니다.
+- route/page가 form을 사용하는 경우 submit/click 이벤트 소유권도 함께 설계합니다.
+  - child form에는 이벤트 handler props를 직접 내리지 않고, route page 또는 pure page wrapper에서 native event를 연결합니다.
+
 ---
 
 ## 2. 페이지 파일 규칙

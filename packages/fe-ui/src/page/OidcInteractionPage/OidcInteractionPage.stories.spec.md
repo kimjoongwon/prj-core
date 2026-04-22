@@ -13,6 +13,9 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | story render에서도 object literal observable 대신 `OidcInteractionPageStoryState` MobX class를 사용하도록 정리 | codex |
+| 2026-04-22 | consent branch용 `oidcConsentPanel` state slice와 page-level action handler 계약을 story args에 반영 | codex |
+| 2026-04-22 | story args를 `oidcInteractionPage` state slice 구조로 바꾸고 모든 모드가 동일한 state prop 계약을 사용하도록 정리 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 story page id와 component 이름을 semantic 기준으로 갱신 | codex |
 | 2026-04-14 | scaffold를 실제 OIDC interaction 상태별 스토리로 교체 | Codex |
 | 2026-04-05 | 누락된 page Storybook scaffold 신규 생성 | Codex |

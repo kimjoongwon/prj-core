@@ -17,6 +17,7 @@ export { InquiryChannelSelect } from "./InquiryChannelSelect";
 export { InquiryPrioritySelect } from "./InquiryPrioritySelect";
 export { InquirySourceSelect } from "./InquirySourceSelect";
 export { InquiryStatusSelect } from "./InquiryStatusSelect";
+export * from "./Link/Link";
 export { ListboxSelect } from "./ListboxSelect";
 export { MultiSelect } from "./MultiSelect";
 export { Pagination } from "./Pagination";

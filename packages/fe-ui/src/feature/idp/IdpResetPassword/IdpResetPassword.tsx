@@ -9,10 +9,13 @@ import {
 
 import { PASSWORD_RULES, type PasswordRule } from "@cocrepo/constant";
 import type { AxiosError } from "axios";
-import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { type IReactionDisposer, makeAutoObservable, reaction } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import type { FormEvent } from "react";
+import { useEffect } from "react";
 import {
 	ResetPasswordForm,
+	type ResetPasswordFormState,
 	type ResetPasswordStep,
 } from "../../../form/ResetPasswordForm/ResetPasswordForm";
 
@@ -56,7 +59,7 @@ function buildPasswordRules(policy: PasswordPolicyDto): PasswordRule[] {
 		rules.push({
 			rule: "special",
 			label: "특수문자 포함",
-			test: (pw: string) => /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?/~`"']/.test(pw),
+			test: (pw: string) => /[!@#$%^&*()_+\-=[\]{}|;:,.<>?/~`"']/.test(pw),
 		});
 	}
 
@@ -68,6 +71,140 @@ export interface IdpResetPasswordProps {
 	token: string;
 }
 
+type ExecutePasswordResetFn = (payload: {
+	token: string;
+	data: {
+		password: string;
+		confirmPassword: string;
+	};
+}) => Promise<unknown>;
+
+type ResetTokenValidationResult = {
+	valid: boolean;
+	email?: string | null;
+	reason?: string | null;
+};
+
+class IdpResetPasswordFeatureState {
+	resetPasswordForm: ResetPasswordFormState = {
+		password: "",
+		confirmPassword: "",
+		submitError: null,
+		isSubmitting: false,
+		isComplete: false,
+	};
+
+	resetPasswordStep: ResetPasswordStep = "validating";
+	tokenError: string | null = null;
+	tokenEmail = "";
+	passwordRules: PasswordRule[] = PASSWORD_RULES;
+
+	private readonly clearSubmitErrorDisposer: IReactionDisposer;
+
+	constructor() {
+		makeAutoObservable<
+			IdpResetPasswordFeatureState,
+			"clearSubmitErrorDisposer"
+		>(this, { clearSubmitErrorDisposer: false }, { autoBind: true });
+		this.clearSubmitErrorDisposer = reaction(
+			() =>
+				`${this.resetPasswordForm.password}|${this.resetPasswordForm.confirmPassword}`,
+			() => {
+				if (this.resetPasswordForm.submitError) {
+					this.resetPasswordForm.submitError = null;
+				}
+			},
+		);
+	}
+
+	syncTokenValidation(
+		tokenData: ResetTokenValidationResult | null | undefined,
+		isTokenError: boolean,
+	) {
+		if (isTokenError) {
+			this.tokenError = "서버와 통신할 수 없습니다.";
+			this.resetPasswordStep = "invalid";
+			return;
+		}
+
+		if (!tokenData) {
+			return;
+		}
+
+		if (tokenData.valid) {
+			this.resetPasswordStep = "form";
+			this.tokenEmail = tokenData.email || "";
+			this.tokenError = null;
+			this.resetPasswordForm.isComplete = false;
+			return;
+		}
+
+		this.tokenEmail = "";
+		this.resetPasswordForm.isComplete = false;
+		this.tokenError =
+			tokenData.reason === "TOKEN_EXPIRED"
+				? "링크가 만료되었습니다."
+				: "유효하지 않은 링크입니다.";
+		this.resetPasswordStep = "invalid";
+	}
+
+	syncPasswordPolicy(policyData: PasswordPolicyDto | undefined) {
+		if (policyData) {
+			this.passwordRules = buildPasswordRules(policyData);
+		}
+	}
+
+	async submitResetPassword(
+		token: string,
+		executePasswordReset: ExecutePasswordResetFn,
+	) {
+		this.resetPasswordForm.submitError = null;
+		this.resetPasswordForm.isSubmitting = true;
+
+		try {
+			await executePasswordReset({
+				token,
+				data: {
+					password: this.resetPasswordForm.password,
+					confirmPassword: this.resetPasswordForm.confirmPassword,
+				},
+			});
+			this.resetPasswordForm.isComplete = true;
+		} catch (err) {
+			const axiosError = err as AxiosError<ResetPasswordErrorDto>;
+			const errorCode = axiosError.response?.data?.error || "";
+
+			if (errorCode === "PASSWORD_REUSE") {
+				this.resetPasswordForm.submitError =
+					"최근 사용한 비밀번호는 다시 사용할 수 없습니다.";
+				return;
+			}
+			if (errorCode.startsWith("PASSWORD_POLICY_VIOLATION")) {
+				this.resetPasswordForm.submitError =
+					"비밀번호가 정책 조건을 충족하지 않습니다.";
+				return;
+			}
+			if (errorCode === "TOKEN_EXPIRED") {
+				this.tokenError = "링크가 만료되었습니다.";
+				this.resetPasswordStep = "invalid";
+				return;
+			}
+			if (errorCode === "PASSWORD_MISMATCH") {
+				this.resetPasswordForm.submitError = "비밀번호가 일치하지 않습니다.";
+				return;
+			}
+			this.resetPasswordForm.submitError =
+				errorCode || "비밀번호 재설정에 실패했습니다.";
+		} finally {
+			this.resetPasswordForm.isSubmitting = false;
+		}
+	}
+
+	destroy() {
+		this.clearSubmitErrorDisposer();
+	}
+}
+
 /**
  * IDP 비밀번호 재설정 Feature
  *
@@ -75,11 +212,7 @@ export interface IdpResetPasswordProps {
  * 비밀번호 정책을 DB에서 조회하여 동적으로 규칙을 생성합니다.
  */
 export const IdpResetPassword = observer(({ token }: IdpResetPasswordProps) => {
-	const [step, setStep] = useState<ResetPasswordStep>("validating");
-	const [tokenError, setTokenError] = useState<string | null>(null);
-	const [tokenEmail, setTokenEmail] = useState("");
-	const [passwordRules, setPasswordRules] =
-		useState<PasswordRule[]>(PASSWORD_RULES);
+	const state = useLocalObservable(() => new IdpResetPasswordFeatureState());
 
 	// 토큰 검증
 	const { data: tokenData, isError: isTokenError } =
@@ -92,76 +225,39 @@ export const IdpResetPassword = observer(({ token }: IdpResetPasswordProps) => {
 
 	// 토큰 검증 결과 처리
 	useEffect(() => {
-		if (isTokenError) {
-			setTokenError("서버와 통신할 수 없습니다.");
-			setStep("invalid");
-			return;
-		}
-
-		if (!tokenData) return;
-
-		if (tokenData.valid) {
-			setStep("form");
-			setTokenEmail(tokenData.email || "");
-		} else {
-			setTokenError(
-				tokenData.reason === "TOKEN_EXPIRED"
-					? "링크가 만료되었습니다."
-					: "유효하지 않은 링크입니다.",
-			);
-			setStep("invalid");
-		}
-	}, [tokenData, isTokenError]);
+		state.syncTokenValidation(tokenData, isTokenError);
+	}, [isTokenError, state, tokenData]);
 
 	// 비밀번호 정책 결과 처리
 	useEffect(() => {
-		if (policyData) {
-			setPasswordRules(buildPasswordRules(policyData));
-		}
-	}, [policyData]);
+		state.syncPasswordPolicy(policyData);
+	}, [policyData, state]);
 
-	const handleSubmit = async (data: {
-		password: string;
-		confirmPassword: string;
-	}): Promise<string | null> => {
-		try {
-			await resetMutation.mutateAsync({ token, data });
-			return null;
-		} catch (err) {
-			const axiosError = err as AxiosError<ResetPasswordErrorDto>;
-			const errorCode = axiosError.response?.data?.error || "";
+	useEffect(() => {
+		return () => {
+			state.destroy();
+		};
+	}, [state]);
 
-			if (errorCode === "PASSWORD_REUSE") {
-				return "최근 사용한 비밀번호는 다시 사용할 수 없습니다.";
-			}
-			if (errorCode.startsWith("PASSWORD_POLICY_VIOLATION")) {
-				return "비밀번호가 정책 조건을 충족하지 않습니다.";
-			}
-			if (errorCode === "TOKEN_EXPIRED") {
-				setTokenError("링크가 만료되었습니다.");
-				setStep("invalid");
-				return null;
-			}
-			if (errorCode === "PASSWORD_MISMATCH") {
-				return "비밀번호가 일치하지 않습니다.";
-			}
-			return errorCode || "비밀번호 재설정에 실패했습니다.";
-		}
+	const onSubmitResetPasswordForm = async () => {
+		await state.submitResetPassword(token, resetMutation.mutateAsync);
 	};
 
-	const handleTokenExpired = () => {
-		setStep("invalid");
+	const onSubmitIdpResetPassword = (event: FormEvent<HTMLDivElement>) => {
+		event.preventDefault();
+		void onSubmitResetPasswordForm();
 	};
 
 	return (
-		<ResetPasswordForm
-			step={step}
-			tokenError={tokenError}
-			tokenEmail={tokenEmail}
-			passwordRules={passwordRules}
-			onSubmit={handleSubmit}
-			onTokenExpired={handleTokenExpired}
-		/>
+		<div onSubmit={onSubmitIdpResetPassword}>
+			<ResetPasswordForm
+				step={state.resetPasswordStep}
+				tokenError={state.tokenError}
+				tokenEmail={state.tokenEmail}
+				state={state.resetPasswordForm}
+				passwordRules={state.passwordRules}
+			/>
+		</div>
 	);
 });
 

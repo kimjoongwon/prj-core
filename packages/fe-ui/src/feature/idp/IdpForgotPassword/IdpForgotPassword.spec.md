@@ -8,6 +8,8 @@
 
 이 파일은 feature 계층의 핵심 동작을 담당합니다.
 상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+submit 이벤트는 feature wrapper가 소유하고 `ForgotPasswordForm`에는 state만 전달합니다.
+feature 로컬 state는 `IdpForgotPasswordFeatureState` MobX class 하나가 소유합니다.
 
 ## 공개 계약
 
@@ -45,6 +47,9 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | feature 로컬 form state를 `IdpForgotPasswordFeatureState` MobX class로 승격하고 error reset reaction을 class 내부로 이동 | codex |
+| 2026-04-22 | submit 이벤트를 feature wrapper에서 연결하고 `ForgotPasswordForm`에는 state만 주입하도록 정리 | codex |
+| 2026-04-22 | 직접 form 소비 경로도 route/page와 동일한 form state 주입 패턴으로 동기화 | codex |
 | 2026-03-13 | API 의존을 root barrel에서 `@cocrepo/api/idp/password-reset` subpath로 전환 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |

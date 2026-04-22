@@ -1,130 +1,26 @@
-# ResetPasswordForm Widget 기획서
+# ResetPasswordForm index 배럴 기획서
 
 > 생성일: 2026-02-18
-> 타입: widget
-> 위치: packages/fe-ui/src/form/ResetPasswordForm/
+> 타입: index
+> 위치: packages/fe-ui/src/form/ResetPasswordForm/index.ts
 
 ## 역할
 
-비밀번호 재설정 폼입니다. 4단계 UI를 포함합니다: validating(토큰 검증 중), invalid(토큰 만료/무효), form(비밀번호 입력), complete(변경 완료). PasswordStrengthIndicator로 비밀번호 강도를 실시간 표시합니다.
+`ResetPasswordForm` 관련 공개 계약을 재노출하는 배럴 파일입니다.
+page/feature가 동일한 `ResetPasswordFormState`, `ResetPasswordStep` 타입을 공통으로 사용하도록 연결합니다.
 
-## 디자인 목업
+## 공개 export
 
-> 컴포넌트의 시각적 구조와 변형(variant)별 모습을 ASCII로 표현합니다.
-
-```
-  --- validating 단계 ---
-
-  ┌─────────────────────────────────────────────┐
-  │                                             │
-  │            [⏳ 아이콘]                      │
-  │          토큰을 검증하는 중...               │
-  │                                             │
-  │              [스피너]                        │
-  └─────────────────────────────────────────────┘
-
-  --- invalid 단계 (토큰 만료/무효) ---
-
-  ┌─────────────────────────────────────────────┐
-  │                                             │
-  │            [⚠ 아이콘]                      │
-  │        링크가 만료되었습니다                 │
-  │   재설정 링크가 유효하지 않거나 만료됐습니다  │
-  │                                             │
-  │  ┌───────────────────────────────────────┐  │
-  │  │         다시 요청하기                  │  │
-  │  └───────────────────────────────────────┘  │
-  └─────────────────────────────────────────────┘
-
-  --- form 단계 (비밀번호 입력) ---
-
-  ┌─────────────────────────────────────────────┐
-  │                                             │
-  │            [🔑 아이콘]                      │
-  │         새 비밀번호 설정                     │
-  │      user@example.com 계정의 비밀번호        │
-  │                                             │
-  │  새 비밀번호                                 │
-  │  ┌───────────────────────────────────────┐  │
-  │  │ ••••••••••                            │  │
-  │  └───────────────────────────────────────┘  │
-  │  [강도 표시] ████░░  보통                   │
-  │  ✓ 8자 이상  ✓ 대문자  ✗ 특수문자           │
-  │                                             │
-  │  비밀번호 확인                               │
-  │  ┌───────────────────────────────────────┐  │
-  │  │ ••••••••••                            │  │
-  │  └───────────────────────────────────────┘  │
-  │                                             │
-  │  [에러 배너 - 제출 실패 시]                  │
-  │                                             │
-  │  ┌───────────────────────────────────────┐  │
-  │  │           비밀번호 변경                │  │
-  │  └───────────────────────────────────────┘  │
-  └─────────────────────────────────────────────┘
-
-  --- complete 단계 (변경 완료) ---
-
-  ┌─────────────────────────────────────────────┐
-  │                                             │
-  │            [✅ 아이콘]                      │
-  │         비밀번호가 변경되었습니다             │
-  │   새 비밀번호로 로그인할 수 있습니다          │
-  │                                             │
-  │  ┌───────────────────────────────────────┐  │
-  │  │            로그인하기                  │  │
-  │  └───────────────────────────────────────┘  │
-  └─────────────────────────────────────────────┘
-```
-
-### 변형별 외형
-
-| 변형 | 미리보기 |
-|------|---------|
-| validating | 스피너 로딩 화면 |
-| invalid | 링크 만료 안내 + 다시 요청하기 버튼 |
-| form | 비밀번호 입력 폼 + PasswordStrengthIndicator |
-| complete | 변경 완료 메시지 + 로그인하기 버튼 |
-
-## Props
-
-```typescript
-interface ResetPasswordFormProps {
-  step: ResetPasswordStep;  // "validating" | "invalid" | "form" | "complete"
-  tokenError?: string | null;
-  tokenEmail?: string;
-  passwordRules: PasswordRule[];
-  onSubmit: (data: { password: string; confirmPassword: string }) => Promise<string | null>;
-  onTokenExpired?: () => void;
-}
-```
-
-## 하위 UI 컴포넌트
-
-| 컴포넌트 | 역할 |
-|----------|------|
-| AuthCard | 인증 카드 컨테이너 |
-| AuthCardHeader | 새 비밀번호 설정 헤더 |
-| AlertBanner | 제출 에러 메시지 |
-| PasswordStrengthIndicator | 비밀번호 강도 표시 |
-| HeroUI Input | 새 비밀번호, 비밀번호 확인 입력 |
-| HeroUI Button | 비밀번호 변경, 다시 요청하기, 로그인하기 |
-| HeroUI Link | 로그인으로 돌아가기, 비밀번호 재요청 |
-
-## 상태 관리
-
-로컬: password, confirmPassword, isSubmitting, submitError, isComplete (모두 useState)
-
-## 슬롯
-
-없음
+| 항목 | 설명 |
+|------|------|
+| ResetPasswordForm | form 컴포넌트 export |
+| ResetPasswordFormProps | form props type export |
+| ResetPasswordFormState | form state slice type export |
+| ResetPasswordStep | reset 단계 type export |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
-| 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
+| 2026-04-22 | 배럴이 `ResetPasswordFormState`, `ResetPasswordStep`을 함께 export하고 page/feature가 동일한 계약을 재사용하도록 정리 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
-| 2026-03-06 | widget 디렉토리를 widgets로 통합하며 위치 경로를 정리 | codex |

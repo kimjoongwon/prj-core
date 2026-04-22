@@ -2,21 +2,91 @@
 
 import { useRequestPasswordReset } from "@cocrepo/api/idp/password-reset";
 import { ForgotPasswordPage } from "@cocrepo/ui";
-import { observer } from "mobx-react-lite";
+import {
+	type IReactionDisposer,
+	makeAutoObservable,
+	reaction,
+	runInAction,
+} from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect } from "react";
 
-const ForgotPasswordRoutePage = observer(function ForgotPasswordRoutePage() {
-	const resetMutation = useRequestPasswordReset();
-
-	const onSubmitForgotPasswordForm = async (email: string) => {
-		try {
-			await resetMutation.mutateAsync({ data: { email } });
-			return null;
-		} catch {
-			return "서버와 통신할 수 없습니다.";
-		}
+class ForgotPasswordRoutePageState {
+	forgotPasswordForm = {
+		email: "",
+		errorMessage: null as string | null,
+		isSubmitted: false,
+		isSubmitting: false,
 	};
 
-	return <ForgotPasswordPage onSubmit={onSubmitForgotPasswordForm} />;
+	private readonly disposeEmailReaction: IReactionDisposer;
+
+	constructor() {
+		makeAutoObservable<this, "disposeEmailReaction">(this, {
+			disposeEmailReaction: false,
+		});
+
+		this.disposeEmailReaction = reaction(
+			() => this.forgotPasswordForm.email,
+			() => {
+				if (this.forgotPasswordForm.errorMessage) {
+					this.forgotPasswordForm.errorMessage = null;
+				}
+			},
+		);
+	}
+
+	async submit(request: (email: string) => Promise<void>) {
+		this.forgotPasswordForm.errorMessage = null;
+		this.forgotPasswordForm.isSubmitting = true;
+
+		try {
+			await request(this.forgotPasswordForm.email);
+			runInAction(() => {
+				this.forgotPasswordForm.isSubmitted = true;
+			});
+		} catch {
+			runInAction(() => {
+				this.forgotPasswordForm.errorMessage = "서버와 통신할 수 없습니다.";
+			});
+		} finally {
+			runInAction(() => {
+				this.forgotPasswordForm.isSubmitting = false;
+			});
+		}
+	}
+
+	destroy() {
+		this.disposeEmailReaction();
+	}
+}
+
+const ForgotPasswordRoutePage = observer(() => {
+	const resetMutation = useRequestPasswordReset();
+	const forgotPasswordPage = useLocalObservable(
+		() => new ForgotPasswordRoutePageState(),
+	);
+
+	useEffect(() => {
+		return () => {
+			forgotPasswordPage.destroy();
+		};
+	}, [forgotPasswordPage]);
+
+	const onSubmitForgotPasswordForm = async () => {
+		await forgotPasswordPage.submit(async (email) => {
+			await resetMutation.mutateAsync({
+				data: { email },
+			});
+		});
+	};
+
+	return (
+		<ForgotPasswordPage
+			state={forgotPasswordPage}
+			onSubmitForgotPasswordForm={onSubmitForgotPasswordForm}
+		/>
+	);
 });
 
 export default ForgotPasswordRoutePage;

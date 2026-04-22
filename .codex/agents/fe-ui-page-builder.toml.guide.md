@@ -33,11 +33,22 @@ page-level visual composition과 props contract만 소유합니다.
 - `observer(function PageName() { ... })` 패턴은 금지합니다.
 - `PageClient`, `PageInner` 같은 trivial pass-through wrapper를 page 파일 안에 두지 않습니다.
 - `useParams`를 읽어 하위 component에 그대로 전달만 하는 중간 wrapper는 허용하지 않습니다.
+- page state 설계는 이 agent의 책임이 아닙니다.
+  - state owner는 `fe-page-builder`
+  - 전달받는 `state` slice는 route page의 page MobX class 인스턴스에서 나온 observable field를 기본 계약으로 가정합니다.
+  - pure page는 전달받은 `state` slice를 소비만 하고, child form/widget에는 named slice(`state.loginForm`)만 전달합니다.
+- pure page는 page-level 이벤트 props를 wrapper에서 연결할 수 있습니다.
+  - child form에는 submit/cancel/click handler props를 직접 넘기지 않습니다.
+  - form은 state와 정적 props만 소비합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | pure page가 받는 `state` slice source를 page MobX class 인스턴스 기준으로 명시 | codex |
+| 2026-04-22 | pure page가 받는 `state` slice는 MobX observable object를 기본 계약으로 가정한다는 규칙을 추가 | codex |
+| 2026-04-22 | pure page가 form child 대신 wrapper에서 native event를 연결한다는 경계를 추가 | codex |
+| 2026-04-22 | pure page는 state를 설계하지 않고 `fe-page-builder`가 넘긴 state slice만 소비한다는 경계를 명시 | codex |
 | 2026-04-22 | `src/page` naming을 route 직렬화형이 아닌 semantic app-facing screen 기준으로 재정의 | codex |
 | 2026-03-26 | `rhythm` 레이어와 semantic spacing preset 사용 규칙을 반영 | codex |
 | 2026-03-26 | pure page owner 경로를 folder-based sidecar 패턴으로 구체화 | codex |

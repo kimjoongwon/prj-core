@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
 import { useLocalObservable } from "mobx-react-lite";
-import type { KeyboardEvent } from "react";
 import { PageStoryCard } from "../storybookFrame";
-import { LoginPage, type State as LoginPageState } from "./LoginPage";
+import { LoginPage, type LoginPageState } from "./LoginPage";
 
 const meta = {
 	component: LoginPage,
@@ -12,15 +12,16 @@ const meta = {
 	tags: ["autodocs"],
 	args: {
 		state: {
-			email: "",
-			password: "",
+			loginForm: {
+				email: "",
+				password: "",
+			},
 			errorMessage: "",
 		},
 		title: "관리자 로그인",
 		caption: "운영 계정으로 로그인해 그라운드와 이용자 상태를 관리하세요.",
 		isLoading: false,
-		onClickLoginButton: () => undefined,
-		onKeyDownInput: (_event: KeyboardEvent) => undefined,
+		onSubmitLoginForm: async () => undefined,
 	},
 } satisfies Meta<typeof LoginPage>;
 
@@ -28,8 +29,19 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+class LoginPageStoryState implements LoginPageState {
+	loginForm: LoginPageState["loginForm"];
+	errorMessage: string;
+
+	constructor(state: LoginPageState) {
+		this.loginForm = { ...state.loginForm };
+		this.errorMessage = state.errorMessage;
+		makeAutoObservable(this, {}, { autoBind: true });
+	}
+}
+
 const renderLoginPage: Story["render"] = (args) => {
-	const state = useLocalObservable<LoginPageState>(() => ({ ...args.state }));
+	const state = useLocalObservable(() => new LoginPageStoryState(args.state));
 
 	return (
 		<PageStoryCard>
@@ -45,8 +57,10 @@ export const Default: Story = {
 export const WithEmailError: Story = {
 	args: {
 		state: {
-			email: "ops@example.com",
-			password: "",
+			loginForm: {
+				email: "ops@example.com",
+				password: "",
+			},
 			errorMessage: "이메일 또는 비밀번호를 다시 확인해주세요.",
 		},
 	},
@@ -56,8 +70,10 @@ export const WithEmailError: Story = {
 export const Loading: Story = {
 	args: {
 		state: {
-			email: "ops@example.com",
-			password: "password123!",
+			loginForm: {
+				email: "ops@example.com",
+				password: "password123!",
+			},
 			errorMessage: "",
 		},
 		isLoading: true,

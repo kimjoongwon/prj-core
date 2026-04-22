@@ -1,98 +1,25 @@
-# ForgotPasswordForm Widget 기획서
+# ForgotPasswordForm index 배럴 기획서
 
 > 생성일: 2026-02-18
-> 타입: widget
-> 위치: packages/fe-ui/src/form/ForgotPasswordForm/
+> 타입: index
+> 위치: packages/fe-ui/src/form/ForgotPasswordForm/index.ts
 
 ## 역할
 
-비밀번호 찾기 폼입니다. 이메일 입력 단계와 발송 완료 단계의 2단계 UI를 포함합니다. 발송 완료 시 "다시 보내기" 기능을 제공합니다.
+`ForgotPasswordForm` 관련 공개 계약을 재노출하는 배럴 파일입니다.
+page/feature가 동일한 `ForgotPasswordFormState`와 props 타입을 공통으로 사용하도록 연결합니다.
 
-## 디자인 목업
+## 공개 export
 
-> 컴포넌트의 시각적 구조와 변형(variant)별 모습을 ASCII로 표현합니다.
-
-```
-  --- 1단계: 이메일 입력 ---
-
-  ┌─────────────────────────────────────────────┐
-  │                                             │
-  │              [🔑 아이콘]                    │
-  │         비밀번호 재설정                      │
-  │   가입한 이메일로 재설정 링크을 보내드립니다  │
-  │                                             │
-  │  ┌───────────────────────────────────────┐  │
-  │  │ 이메일을 입력하세요                    │  │
-  │  └───────────────────────────────────────┘  │
-  │                                             │
-  │  [에러 배너 - 이메일이 없는 경우 표시]       │
-  │                                             │
-  │  ┌───────────────────────────────────────┐  │
-  │  │        재설정 링크 보내기              │  │
-  │  └───────────────────────────────────────┘  │
-  │                                             │
-  │          ← 로그인으로 돌아가기              │
-  └─────────────────────────────────────────────┘
-
-  --- 2단계: 발송 완료 ---
-
-  ┌─────────────────────────────────────────────┐
-  │                                             │
-  │              [✉ 아이콘]                    │
-  │           이메일을 확인하세요                │
-  │  user@example.com 으로 재설정 링크를        │
-  │  발송했습니다                               │
-  │                                             │
-  │  ┌───────────────────────────────────────┐  │
-  │  │           다시 보내기                  │  │
-  │  └───────────────────────────────────────┘  │
-  │                                             │
-  │          ← 로그인으로 돌아가기              │
-  └─────────────────────────────────────────────┘
-```
-
-### 변형별 외형
-
-| 변형 | 미리보기 |
-|------|---------|
-| 이메일 입력 단계 | 이메일 Input + 재설정 링크 보내기 버튼 |
-| 발송 완료 단계 (isSubmitted=true) | 완료 안내 메시지 + 다시 보내기 버튼 |
-| 에러 발생 | AuthCard 상단에 에러 AlertBanner 표시 |
-| 제출 중 | 버튼 비활성화 + 로딩 인디케이터 |
-
-## Props
-
-```typescript
-interface ForgotPasswordFormProps {
-  onSubmit: (email: string) => Promise<string | null>;
-}
-```
-
-## 하위 UI 컴포넌트
-
-| 컴포넌트 | 역할 |
-|----------|------|
-| AuthCard | 인증 카드 컨테이너 |
-| AuthCardHeader | 아이콘 + 제목 + 부제목 헤더 |
-| AlertBanner | 에러 메시지 표시 |
-| HeroUI Input | 이메일 입력 (type="email") |
-| HeroUI Button | 재설정 링크 보내기, 다시 보내기 |
-| HeroUI Link | 로그인으로 돌아가기 |
-
-## 상태 관리
-
-로컬: email (useState), isSubmitting (useState), isSubmitted (useState), error (useState)
-
-## 슬롯
-
-없음
+| 항목 | 설명 |
+|------|------|
+| ForgotPasswordForm | form 컴포넌트 export |
+| ForgotPasswordFormProps | form props type export |
+| ForgotPasswordFormState | form state slice type export |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
-| 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
+| 2026-04-22 | 배럴이 `ForgotPasswordFormState`를 함께 export하고 page/feature가 동일한 state slice 계약을 재사용하도록 정리 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
-| 2026-03-06 | widget 디렉토리를 widgets로 통합하며 위치 경로를 정리 | codex |

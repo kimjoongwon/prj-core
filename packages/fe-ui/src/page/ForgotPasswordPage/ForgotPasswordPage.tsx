@@ -1,15 +1,41 @@
 "use client";
 
+import type { FormEvent } from "react";
 import { observer } from "mobx-react-lite";
-import { ForgotPasswordForm } from "../../form";
+import {
+	ForgotPasswordForm,
+	type ForgotPasswordFormState,
+} from "../../form/ForgotPasswordForm/ForgotPasswordForm";
+
+export interface ForgotPasswordPageState {
+	forgotPasswordForm: ForgotPasswordFormState;
+}
 
 export interface ForgotPasswordPageProps {
-	onSubmit: (email: string) => Promise<string | null>;
+	state: ForgotPasswordPageState;
+	onSubmitForgotPasswordForm: () => void | Promise<void>;
+	loginHref?: string;
 }
 
 export const ForgotPasswordPage = observer(
-	({ onSubmit }: ForgotPasswordPageProps) => {
-		return <ForgotPasswordForm onSubmit={onSubmit} />;
+	({
+		state,
+		onSubmitForgotPasswordForm,
+		loginHref,
+	}: ForgotPasswordPageProps) => {
+		const onSubmitForgotPasswordPage = (event: FormEvent<HTMLDivElement>) => {
+			event.preventDefault();
+			void onSubmitForgotPasswordForm();
+		};
+
+		return (
+			<div onSubmit={onSubmitForgotPasswordPage}>
+				<ForgotPasswordForm
+					state={state.forgotPasswordForm}
+					loginHref={loginHref}
+				/>
+			</div>
+		);
 	},
 );
 

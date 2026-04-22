@@ -1,27 +1,22 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import type React from "react";
+import type { FormEvent } from "react";
 import { Button } from "../../control/Button/Button";
-import { Input } from "../../control/Input";
+import { LoginForm, type LoginFormState } from "../../form/LoginForm/LoginForm";
 import { VStack } from "../../rhythm/VStack/VStack";
 
-export interface State {
-	/** 이메일 */
-	email: string;
-	/** 비밀번호 */
-	password: string;
-	/** 에러 메시지 */
+export interface LoginPageState {
+	loginForm: LoginFormState;
+	/** 페이지 레벨 에러 메시지 */
 	errorMessage: string;
 }
 
 export interface LoginPageProps {
-	/** 로그인 상태 객체 */
-	state: State;
-	/** 로그인 버튼 클릭 핸들러 */
-	onClickLoginButton: () => void;
-	/** 입력 필드 키다운 핸들러 (Enter 키 처리) */
-	onKeyDownInput: (e: React.KeyboardEvent) => void;
+	/** 페이지가 소비하는 state slice */
+	state: LoginPageState;
+	/** 로그인 폼 제출 핸들러 */
+	onSubmitLoginForm: () => void | Promise<void>;
 	/** 로딩 상태 */
 	isLoading?: boolean;
 	/** 로그인 페이지 제목 (예: "관리자 로그인", "파트너 로그인") */
@@ -37,14 +32,27 @@ export interface LoginPageProps {
  *
  * @example
  * ```tsx
- * const [state] = useState({ email: "", password: "", errorMessage: "" });
+ * class LoginRoutePageState {
+ *   loginPage = {
+ *     loginForm: {
+ *       email: "",
+ *       password: "",
+ *     },
+ *     errorMessage: "",
+ *   };
+ *
+ *   constructor() {
+ *     makeAutoObservable(this);
+ *   }
+ * }
+ *
+ * const state = useLocalObservable(() => new LoginRoutePageState());
  *
  * <LoginPage
- *   state={state}
+ *   state={state.loginPage}
  *   title="관리자 로그인"
  *   caption="관리자 계정으로 로그인해주세요."
- *   onClickLoginButton={handleLogin}
- *   onKeyDownInput={(e) => e.key === "Enter" && handleLogin()}
+ *   onSubmitLoginForm={handleLogin}
  *   isLoading={isLoading}
  * />
  * ```
@@ -52,56 +60,45 @@ export interface LoginPageProps {
 export const LoginPage = observer(
 	({
 		state,
-		onClickLoginButton,
-		onKeyDownInput,
+		onSubmitLoginForm,
 		isLoading = false,
 		title,
 		caption,
 	}: LoginPageProps) => {
+		const onSubmitLoginPage = (event: FormEvent<HTMLFormElement>) => {
+			event.preventDefault();
+			void onSubmitLoginForm();
+		};
+
 		return (
-			<VStack fullWidth gap={8} className="p-4">
-				<VStack fullWidth gap={2}>
-					<h3 className="text-2xl font-bold">{title}</h3>
-					<span className="text-sm text-default-500">{caption}</span>
+			<form onSubmit={onSubmitLoginPage}>
+				<VStack fullWidth gap={8} className="p-4">
+					<VStack fullWidth gap={2}>
+						<h3 className="text-2xl font-bold">{title}</h3>
+						<span className="text-sm text-default-500">{caption}</span>
+					</VStack>
+
+					<VStack fullWidth gap={4}>
+						<LoginForm state={state.loginForm} />
+					</VStack>
+
+					{state.errorMessage && (
+						<span className="text-sm font-medium text-danger">
+							{state.errorMessage}
+						</span>
+					)}
+
+					<Button
+						type="submit"
+						color="primary"
+						size="lg"
+						fullWidth
+						isLoading={isLoading}
+					>
+						<span className="text-white">로그인</span>
+					</Button>
 				</VStack>
-
-				<VStack fullWidth gap={4}>
-					<Input
-						path="email"
-						state={state}
-						variant="flat"
-						type="email"
-						placeholder="이메일을 입력하세요"
-						label="이메일"
-						onKeyDown={onKeyDownInput}
-					/>
-					<Input
-						path="password"
-						state={state}
-						variant="flat"
-						type="password"
-						placeholder="비밀번호를 입력하세요"
-						label="비밀번호"
-						onKeyDown={onKeyDownInput}
-					/>
-				</VStack>
-
-				{state.errorMessage && (
-					<span className="text-sm font-medium text-danger">
-						{state.errorMessage}
-					</span>
-				)}
-
-				<Button
-					color="primary"
-					size="lg"
-					fullWidth
-					onPress={onClickLoginButton}
-					isLoading={isLoading}
-				>
-					<span className="text-white">로그인</span>
-				</Button>
-			</VStack>
+			</form>
 		);
 	},
 );

@@ -8,6 +8,8 @@
 
 이 파일은 feature 계층의 핵심 동작을 담당합니다.
 상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+confirm/abort 이벤트는 feature wrapper가 소유하고 `OidcConsentPanel`에는 state만 전달합니다.
+feature 로컬 state는 `IdpConsentFeatureState` MobX class 하나가 소유합니다.
 
 ## 공개 계약
 
@@ -46,6 +48,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | feature 로컬 consent state를 `IdpConsentFeatureState` MobX class로 승격하고 action을 class 메서드로 이동 | codex |
+| 2026-04-22 | confirm/abort 이벤트를 feature wrapper에서 연결하고 `OidcConsentPanel`에는 state만 주입하도록 정리 | codex |
 | 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-03-13 | API 의존을 root barrel에서 `@cocrepo/api/idp/interaction` subpath로 전환 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |

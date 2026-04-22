@@ -1,12 +1,14 @@
 import { Input } from "../../control/Input";
 import { VStack } from "../../rhythm/VStack/VStack";
 
+export interface LoginFormState {
+	email: string;
+	password: string;
+}
+
 export interface LoginFormProps {
-	/** 로그인 상태 객체 (email, password 필드 포함) */
-	state: {
-		email: string;
-		password: string;
-	};
+	/** 로그인 상태 객체 (필드명은 화면 계약에 따라 달라질 수 있으며, 이 구현은 email/password 예시를 사용) */
+	state: LoginFormState;
 }
 
 /**

@@ -12,12 +12,14 @@
 
 | 항목 | 설명 |
 |------|------|
+| `Link` | control 레이어 공통 링크 export |
 | `RedirectUriListInput` | OIDC redirect URI 목록 입력 export |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | form 계층의 control-only 조합 규칙에 맞춰 `Link` control export를 추가 | codex |
 | 2026-03-22 | `RedirectUriListInput` 소유를 `widget`에서 `control`로 이동 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |

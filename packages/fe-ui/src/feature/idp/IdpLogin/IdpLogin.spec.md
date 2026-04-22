@@ -6,8 +6,10 @@
 
 ## 역할
 
-이 파일은 feature 계층의 핵심 동작을 담당합니다.
-상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+이 파일은 feature 계층에서 `OidcLoginForm`에 API 로직을 연결합니다.
+폼 입력 state는 feature가 소유하고, form에는 외부 state만 주입합니다.
+submit/abort 이벤트는 feature wrapper가 native event로 연결합니다.
+feature 로컬 state는 `IdpLoginFeatureState` MobX class 하나가 소유합니다.
 
 ## 공개 계약
 
@@ -47,6 +49,9 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | feature 로컬 login state를 `IdpLoginFeatureState` MobX class로 승격하고 error reset reaction을 class 내부로 이동 | codex |
+| 2026-04-22 | submit/abort 이벤트를 feature wrapper에서 연결하고 `OidcLoginForm`에는 state만 주입하도록 정리 | codex |
+| 2026-04-22 | form 내부 상태를 제거한 계약에 맞춰 feature가 `OidcLoginFormState`를 소유하고 submit/abort handler를 연결하도록 정리 | codex |
 | 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-03-13 | API 의존을 root barrel에서 `@cocrepo/api/idp/interaction`, `@cocrepo/api/idp-model/loginErrorDto` subpath로 전환 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |

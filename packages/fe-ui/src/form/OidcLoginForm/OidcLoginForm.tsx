@@ -1,8 +1,7 @@
 "use client";
 
-import { Button, Checkbox, Input, Link } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { useState } from "react";
+import { Button, Checkbox, Input, Link } from "../../control";
 import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
@@ -25,25 +24,6 @@ export interface LoginErrorResponse {
 	temporaryLockThreshold?: number;
 	/** 일시 잠금 지속시간 (분, DB 정책 값) */
 	temporaryLockDurationMin?: number;
-}
-
-export interface OidcLoginFormProps {
-	/** 로그인 제출 핸들러 */
-	onSubmit: (data: {
-		email: string;
-		password: string;
-		remember: boolean;
-	}) => Promise<LoginErrorResponse | null>;
-	/** 취소(Abort) 핸들러 */
-	onAbort: () => void;
-	/** 클라이언트 정보 */
-	client?: {
-		clientId: string;
-		name: string;
-		logoUri?: string;
-	} | null;
-	/** DEV 모드 여부 */
-	isDev?: boolean;
 }
 
 /** 에러 응답이 표시 문구를 제공하지 않는 경우를 대비한 기본 메시지 */
@@ -81,45 +61,52 @@ function getErrorTone(error: LoginErrorResponse): "danger" | "warning" {
 	return error.error === "ACCOUNT_LOCKED_TEMPORARY" ? "warning" : "danger";
 }
 
+export interface OidcLoginFormState {
+	email: string;
+	password: string;
+	remember: boolean;
+	error: LoginErrorResponse | null;
+	isSubmitting: boolean;
+}
+
 /**
  * OIDC 로그인 폼 Widget
  *
  * 이메일/비밀번호 입력, 실패 상태, 복구 액션을 포함하는 로그인 폼입니다.
- * API 호출은 콜백(onSubmit, onAbort)으로 위임합니다.
+ * field state와 제출/에러 상태는 상위 page/feature/route가 소유합니다.
  */
+export interface OidcLoginFormProps {
+	state: OidcLoginFormState;
+	/** 클라이언트 정보 */
+	client?: {
+		clientId: string;
+		name: string;
+		logoUri?: string;
+	} | null;
+	/** DEV 모드 여부 */
+	isDev?: boolean;
+	forgotPasswordHref?: string;
+}
+
 export const OidcLoginForm = observer(
-	({ onSubmit, onAbort, client, isDev = false }: OidcLoginFormProps) => {
-		const [email, setEmail] = useState(isDev ? "admin@plate.com" : "");
-		const [password, setPassword] = useState(isDev ? "rkdmf12!@" : "");
-		const [remember, setRemember] = useState(false);
-		const [error, setError] = useState<LoginErrorResponse | null>(null);
-		const [isSubmitting, setIsSubmitting] = useState(false);
-
-		const handleSubmitLogin = async () => {
-			setError(null);
-			setIsSubmitting(true);
-
-			try {
-				const result = await onSubmit({ email, password, remember });
-				if (result) {
-					setError(result);
-				}
-			} finally {
-				setIsSubmitting(false);
-			}
-		};
-
+	({
+		state,
+		client,
+		isDev = false,
+		forgotPasswordHref = "/forgot-password",
+	}: OidcLoginFormProps) => {
 		const recoveryActions =
-			error?.recoveryActions?.filter((action) => action.href || action.label) ??
-			[];
+			state.error?.recoveryActions?.filter(
+				(action) => action.href || action.label,
+			) ?? [];
 		const fallbackRecoveryActions =
-			error?.error === "ACCOUNT_LOCKED_TEMPORARY" ||
-			error?.error === "ACCOUNT_LOCKED_PERMANENT"
+			state.error?.error === "ACCOUNT_LOCKED_TEMPORARY" ||
+			state.error?.error === "ACCOUNT_LOCKED_PERMANENT"
 				? [
 						{
 							type: "forgot-password",
 							label: "비밀번호 재설정",
-							href: "/forgot-password",
+							href: forgotPasswordHref,
 						},
 					]
 				: [];
@@ -148,16 +135,17 @@ export const OidcLoginForm = observer(
 					/>
 				)}
 
-				{error && (
+				{state.error && (
 					<AlertBanner
-						type={getErrorTone(error)}
-						title={getErrorTitle(error)}
+						type={getErrorTone(state.error)}
+						title={getErrorTitle(state.error)}
 						message={
 							<>
-								{error.displayMessage || getFallbackErrorMessage(error)}
-								{error.hint && (
+								{state.error.displayMessage ||
+									getFallbackErrorMessage(state.error)}
+								{state.error.hint && (
 									<span className="mt-2 block text-xs leading-5 opacity-80">
-										{error.hint}
+										{state.error.hint}
 									</span>
 								)}
 							</>
@@ -189,24 +177,12 @@ export const OidcLoginForm = observer(
 					/>
 				)}
 
-				<form
-					className="space-y-5"
-					onSubmit={(e) => {
-						e.preventDefault();
-						handleSubmitLogin();
-					}}
-				>
+				<form className="space-y-5">
 					<Input
-						type="email"
+						path="email"
+						state={state}
 						label="이메일"
 						placeholder="your@email.com"
-						value={email}
-						onValueChange={(value) => {
-							setEmail(value);
-							if (error) {
-								setError(null);
-							}
-						}}
 						isRequired
 						autoComplete="email"
 						variant="bordered"
@@ -214,32 +190,22 @@ export const OidcLoginForm = observer(
 					/>
 
 					<Input
-						type="password"
+						path="password"
+						state={state}
 						label="비밀번호"
 						placeholder="********"
-						value={password}
-						onValueChange={(value) => {
-							setPassword(value);
-							if (error) {
-								setError(null);
-							}
-						}}
 						isRequired
 						autoComplete="current-password"
 						variant="bordered"
 					/>
 
 					<div className="flex items-center justify-between gap-4">
-						<Checkbox
-							isSelected={remember}
-							onValueChange={setRemember}
-							size="sm"
-						>
+						<Checkbox path="remember" state={state} size="sm">
 							로그인 상태 유지
 						</Checkbox>
 
 						<Link
-							href="/forgot-password"
+							href={forgotPasswordHref}
 							className="text-sm text-default-500 hover:text-primary"
 						>
 							비밀번호를 잊으셨나요?
@@ -251,7 +217,7 @@ export const OidcLoginForm = observer(
 						color="primary"
 						className="w-full font-semibold"
 						size="lg"
-						isLoading={isSubmitting}
+						isLoading={state.isSubmitting}
 					>
 						로그인
 					</Button>
@@ -260,8 +226,8 @@ export const OidcLoginForm = observer(
 				<div className="mt-6 text-center">
 					<button
 						type="button"
+						data-action="abort-interaction"
 						className="text-sm text-default-400 transition-colors hover:text-default-500"
-						onClick={onAbort}
 					>
 						취소하고 돌아가기
 					</button>

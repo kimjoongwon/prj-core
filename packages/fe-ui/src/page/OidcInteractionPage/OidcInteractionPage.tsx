@@ -2,12 +2,14 @@
 
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
+import type { FormEvent, MouseEvent } from "react";
 import { Button } from "../../control";
 import { AlertBanner } from "../../display";
 import {
-	type LoginErrorResponse,
 	OidcConsentPanel,
+	type OidcConsentPanelState,
 	OidcLoginForm,
+	type OidcLoginFormState,
 } from "../../form";
 import { AuthCard, AuthCardHeader } from "../../widget";
 
@@ -17,105 +19,124 @@ export interface IdpInteractionClientInfo {
 	logoUri?: string;
 }
 
-type IdpInteractionLoadingProps = {
-	mode: "loading";
-};
-
-type IdpInteractionErrorProps = {
-	mode: "error";
-	errorMessage: string;
-	isExpiredInteraction: boolean;
-	onClickRecoveryButton: () => void;
-};
-
-type IdpInteractionLoginProps = {
-	mode: "login";
+export interface OidcInteractionPageState {
+	mode: "loading" | "error" | "login" | "consent";
 	client?: IdpInteractionClientInfo | null;
 	isDev?: boolean;
-	onSubmitLogin: (data: {
-		email: string;
-		password: string;
-		remember: boolean;
-	}) => Promise<LoginErrorResponse | null>;
-	onAbortInteraction: () => void;
-};
-
-type IdpInteractionConsentProps = {
-	mode: "consent";
-	client?: IdpInteractionClientInfo | null;
+	errorMessage?: string;
+	isExpiredInteraction?: boolean;
 	missingScopes: string[];
-	onConfirmConsent: () => Promise<string | null>;
-	onAbortInteraction: () => void;
-};
+	oidcConsentPanel: OidcConsentPanelState;
+	oidcLoginForm: OidcLoginFormState;
+}
 
-export type OidcInteractionPageProps =
-	| IdpInteractionLoadingProps
-	| IdpInteractionErrorProps
-	| IdpInteractionLoginProps
-	| IdpInteractionConsentProps;
+export interface OidcInteractionPageProps {
+	state: OidcInteractionPageState;
+	onSubmitLoginForm: () => void | Promise<void>;
+	onAbortInteraction: () => void | Promise<void>;
+	forgotPasswordHref?: string;
+	onConfirmConsent: () => void | Promise<void>;
+	onClickRecoveryButton?: () => void;
+}
 
-export const OidcInteractionPage = observer((props: OidcInteractionPageProps) => {
-	if (props.mode === "loading") {
-		return (
-			<AuthCard>
-				<div className="flex flex-col items-center gap-4 py-10 text-center">
-					<Spinner size="lg" />
-					<div className="space-y-1">
-						<p className="font-medium text-foreground">
-							인증 정보를 확인하고 있습니다
-						</p>
-						<p className="text-sm text-default-500">잠시만 기다려 주세요.</p>
+export const OidcInteractionPage = observer(
+	(props: OidcInteractionPageProps) => {
+		const onSubmitOidcInteractionPage = (event: FormEvent<HTMLDivElement>) => {
+			event.preventDefault();
+			void props.onSubmitLoginForm();
+		};
+
+		const onClickOidcInteractionAction = (
+			event: MouseEvent<HTMLDivElement>,
+		) => {
+			if (!(event.target instanceof Element)) {
+				return;
+			}
+
+			const actionElement = event.target.closest<HTMLElement>("[data-action]");
+			const action = actionElement?.dataset.action;
+
+			if (!action) {
+				return;
+			}
+
+			if (action === "abort-interaction") {
+				void props.onAbortInteraction();
+			}
+
+			if (action === "confirm-consent") {
+				void props.onConfirmConsent();
+			}
+		};
+
+		if (props.state.mode === "loading") {
+			return (
+				<AuthCard>
+					<div className="flex flex-col items-center gap-4 py-10 text-center">
+						<Spinner size="lg" />
+						<div className="space-y-1">
+							<p className="font-medium text-foreground">
+								인증 정보를 확인하고 있습니다
+							</p>
+							<p className="text-sm text-default-500">잠시만 기다려 주세요.</p>
+						</div>
 					</div>
-				</div>
-			</AuthCard>
-		);
-	}
+				</AuthCard>
+			);
+		}
 
-	if (props.mode === "error") {
+		if (props.state.mode === "error") {
+			return (
+				<AuthCard variant="danger">
+					<AuthCardHeader
+						iconPath="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+						iconGradient="from-danger to-danger-400"
+						title="인증을 이어갈 수 없습니다"
+						titleClassName="text-danger"
+						subtitle="세션이 만료되었거나 요청이 올바르지 않습니다."
+					/>
+
+					<AlertBanner type="danger" message={props.state.errorMessage || ""} />
+
+					<div className="flex gap-3">
+						<Button
+							className="flex-1 font-semibold"
+							color="primary"
+							onPress={props.onClickRecoveryButton}
+						>
+							{props.state.isExpiredInteraction ? "다시 로그인" : "돌아가기"}
+						</Button>
+					</div>
+				</AuthCard>
+			);
+		}
+
+		if (props.state.mode === "consent") {
+			return (
+				<div onClickCapture={onClickOidcInteractionAction}>
+					<OidcConsentPanel
+						state={props.state.oidcConsentPanel}
+						client={props.state.client ?? null}
+						missingScopes={props.state.missingScopes}
+					/>
+				</div>
+			);
+		}
+
 		return (
-			<AuthCard variant="danger">
-				<AuthCardHeader
-					iconPath="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
-					iconGradient="from-danger to-danger-400"
-					title="인증을 이어갈 수 없습니다"
-					titleClassName="text-danger"
-					subtitle="세션이 만료되었거나 요청이 올바르지 않습니다."
+			<div
+				onSubmit={onSubmitOidcInteractionPage}
+				onClickCapture={onClickOidcInteractionAction}
+			>
+				<OidcLoginForm
+					state={props.state.oidcLoginForm}
+					client={props.state.client ?? null}
+					isDev={props.state.isDev}
+					forgotPasswordHref={props.forgotPasswordHref}
 				/>
-
-				<AlertBanner type="danger" message={props.errorMessage} />
-
-				<div className="flex gap-3">
-					<Button
-						className="flex-1 font-semibold"
-						color="primary"
-						onPress={props.onClickRecoveryButton}
-					>
-						{props.isExpiredInteraction ? "다시 로그인" : "돌아가기"}
-					</Button>
-				</div>
-			</AuthCard>
+			</div>
 		);
-	}
-
-	if (props.mode === "consent") {
-		return (
-			<OidcConsentPanel
-				onConfirm={props.onConfirmConsent}
-				onAbort={props.onAbortInteraction}
-				client={props.client ?? null}
-				missingScopes={props.missingScopes}
-			/>
-		);
-	}
-
-	return (
-		<OidcLoginForm
-			onSubmit={props.onSubmitLogin}
-			onAbort={props.onAbortInteraction}
-			client={props.client ?? null}
-			isDev={props.isDev}
-		/>
-	);
-});
+	},
+);
 
 OidcInteractionPage.displayName = "OidcInteractionPage";

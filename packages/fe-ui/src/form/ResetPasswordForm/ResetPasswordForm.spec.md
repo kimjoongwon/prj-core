@@ -6,14 +6,15 @@
 
 ## 역할
 
-이 파일은 widget 계층의 핵심 동작을 담당합니다.
-상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+비밀번호 재설정 field state와 제출 상태를 상위 page/feature/route가 소유하고, form은 control 조합과 단계별 상태 표현만 담당합니다.
+submit 이벤트 연결은 상위 wrapper가 소유하고, form은 handler props를 직접 받지 않습니다.
 
 ## 공개 계약
 
 | 항목 | 설명 |
 |------|------|
 | ResetPasswordStep | 공개 계약 요소 |
+| ResetPasswordFormState | 공개 계약 요소 |
 | ResetPasswordFormProps | 공개 계약 요소 |
 | ResetPasswordForm | 공개 계약 요소 |
 
@@ -22,9 +23,8 @@
 | 모듈 | 용도 |
 |------|------|
 | @cocrepo/constant | 기능 구현 의존성 |
-| @heroui/react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
-| react | 기능 구현 의존성 |
+| ../../control | 기능 구현 의존성 |
 | ../../../display/feedback/AlertBanner/AlertBanner | 기능 구현 의존성 |
 | ../../../display/feedback/PasswordStrengthIndicator/PasswordStrengthIndicator | 기능 구현 의존성 |
 | ../../../widget/AuthCard/AuthCard | 기능 구현 의존성 |
@@ -52,6 +52,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | submit handler prop 없이 state와 단계 정보만 받도록 contract를 정리 | codex |
+| 2026-04-22 | field state와 완료/에러 상태를 상위에서 주입받고 form 내부는 control-only 조합으로 재정의 | codex |
 | 2026-03-06 | UI 의존 경로를 `../../../display/*`로 변경 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |

@@ -13,6 +13,10 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | story render에서도 object literal observable 대신 `ResetPasswordPageStoryState` MobX class를 사용하도록 정리 | codex |
+| 2026-04-22 | page가 submit wrapper를 소유하고 form은 state-only contract를 쓰는 흐름으로 story 설명을 보강 | codex |
+| 2026-04-22 | story args를 `resetPasswordPage` state slice 구조로 바꾸고 form slice와 page logic state를 함께 전달하도록 수정 | codex |
+| 2026-04-22 | page가 route-local state를 form에 전달하는 계약에 맞춰 story args를 `state` 기반으로 갱신 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 story page id와 component 이름을 semantic 기준으로 갱신 | codex |
 | 2026-04-14 | scaffold를 실제 비밀번호 재설정 단계 스토리로 교체 | Codex |
 | 2026-04-05 | 누락된 page Storybook scaffold 신규 생성 | Codex |

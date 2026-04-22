@@ -4,8 +4,13 @@ import {
 	useConfirmConsent,
 } from "@cocrepo/api/idp/interaction";
 
-import { observer } from "mobx-react-lite";
-import { OidcConsentPanel } from "../../../form/OidcConsentPanel/OidcConsentPanel";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import type { MouseEvent } from "react";
+import {
+	OidcConsentPanel,
+	type OidcConsentPanelState,
+} from "../../../form/OidcConsentPanel/OidcConsentPanel";
 
 export interface IdpConsentProps {
 	/** OIDC 인터랙션 UID */
@@ -20,6 +25,49 @@ export interface IdpConsentProps {
 	missingScopes: string[];
 }
 
+type ConfirmConsentFn = (payload: {
+	uid: string;
+}) => Promise<{ redirectTo: string }>;
+
+type AbortInteractionFn = (payload: {
+	uid: string;
+}) => Promise<{ redirectTo?: string | null }>;
+
+class IdpConsentFeatureState {
+	oidcConsentPanel: OidcConsentPanelState = {
+		errorMessage: null,
+		isSubmitting: false,
+	};
+
+	constructor() {
+		makeAutoObservable(this, {}, { autoBind: true });
+	}
+
+	async confirmConsent(uid: string, confirmConsent: ConfirmConsentFn) {
+		this.oidcConsentPanel.errorMessage = null;
+		this.oidcConsentPanel.isSubmitting = true;
+
+		try {
+			const result = await confirmConsent({ uid });
+			return result.redirectTo;
+		} catch {
+			this.oidcConsentPanel.errorMessage = "서버와 통신할 수 없습니다.";
+			return null;
+		} finally {
+			this.oidcConsentPanel.isSubmitting = false;
+		}
+	}
+
+	async abortInteraction(uid: string, abortInteraction: AbortInteractionFn) {
+		try {
+			const result = await abortInteraction({ uid });
+			return result.redirectTo ?? null;
+		} catch {
+			return null;
+		}
+	}
+}
+
 /**
  * IDP 동의 Feature
  *
@@ -29,35 +77,53 @@ export const IdpConsent = observer(
 	({ uid, client, missingScopes }: IdpConsentProps) => {
 		const consentMutation = useConfirmConsent();
 		const abortMutation = useAbortInteraction();
+		const state = useLocalObservable(() => new IdpConsentFeatureState());
 
-		const handleConfirm = async (): Promise<string | null> => {
-			try {
-				const result = await consentMutation.mutateAsync({ uid });
-				window.location.href = result.redirectTo;
-				return null;
-			} catch {
-				return "서버와 통신할 수 없습니다.";
+		const onConfirmConsent = async () => {
+			const redirectTo = await state.confirmConsent(
+				uid,
+				consentMutation.mutateAsync,
+			);
+			if (redirectTo) {
+				window.location.href = redirectTo;
 			}
 		};
 
-		const handleAbort = async () => {
-			try {
-				const result = await abortMutation.mutateAsync({ uid });
-				if (result.redirectTo) {
-					window.location.href = result.redirectTo;
-				}
-			} catch {
-				// 에러 무시
+		const onAbortInteraction = async () => {
+			const redirectTo = await state.abortInteraction(
+				uid,
+				abortMutation.mutateAsync,
+			);
+			if (redirectTo) {
+				window.location.href = redirectTo;
+			}
+		};
+
+		const onClickIdpConsentAction = (event: MouseEvent<HTMLDivElement>) => {
+			if (!(event.target instanceof Element)) {
+				return;
+			}
+
+			const actionElement = event.target.closest<HTMLElement>("[data-action]");
+			const action = actionElement?.dataset.action;
+
+			if (action === "confirm-consent") {
+				void onConfirmConsent();
+			}
+
+			if (action === "abort-interaction") {
+				void onAbortInteraction();
 			}
 		};
 
 		return (
-			<OidcConsentPanel
-				onConfirm={handleConfirm}
-				onAbort={handleAbort}
-				client={client}
-				missingScopes={missingScopes}
-			/>
+			<div onClickCapture={onClickIdpConsentAction}>
+				<OidcConsentPanel
+					state={state.oidcConsentPanel}
+					client={client}
+					missingScopes={missingScopes}
+				/>
+			</div>
 		);
 	},
 );

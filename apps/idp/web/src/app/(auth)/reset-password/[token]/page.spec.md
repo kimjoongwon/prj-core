@@ -48,6 +48,8 @@
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
 - `page.tsx`는 입력, 검증, 생성/수정 폼 흐름만 담당합니다.
+- route page가 `ResetPasswordRoutePageState` class를 선언하고 `makeAutoObservable`로 `state.resetPasswordPage` 구조를 소유합니다.
+- route page에서는 `useLocalObservable(() => new ResetPasswordRoutePageState())`로 인스턴스화하고 step/token/passwordRules와 `resetPasswordForm` slice를 함께 pure page로 주입합니다.
 
 ## Rendering Decision
 
@@ -62,6 +64,10 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | route page state를 `ResetPasswordRoutePageState` class + `makeAutoObservable` + `useLocalObservable(() => new ...)` 패턴으로 정리 | codex |
+| 2026-04-22 | route page가 `resetPasswordPage` 자체를 `useLocalObservable` 기반 observable slice로 소유하도록 기준을 보강 | codex |
+| 2026-04-22 | `fe-page-builder` 기준에 맞춰 route state root를 `resetPasswordPage`로 두고 form slice를 `resetPasswordForm`으로 정리 | codex |
+| 2026-04-22 | 비밀번호 재설정 field state와 제출/완료 상태를 route page가 소유하고 pure page에 주입하도록 정리 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-26 | `ResetPasswordPage` 경로를 page 폴더 기반 sidecar 구조에 맞게 갱신 | codex |
 | 2026-03-25 | `ResetPasswordPage`로 시각 구성을 page 레이어로 이동하고 토큰 검증/제출 핸들러를 route page가 소유하도록 정리 | codex |
