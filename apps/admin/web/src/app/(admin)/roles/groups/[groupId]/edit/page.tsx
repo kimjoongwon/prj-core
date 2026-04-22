@@ -5,7 +5,7 @@ import {
 	useGetGroupById,
 	useUpdateGroup,
 } from "@cocrepo/api/core/groups";
-import { AdminRolesGroupsGroupIdEditPage } from "@cocrepo/ui";
+import { RoleGroupEditPage } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -68,7 +68,7 @@ const AdminRolesGroupsEditRoute = observer(() => {
 	};
 
 	return (
-		<AdminRolesGroupsGroupIdEditPage
+		<RoleGroupEditPage
 			groupName={group?.label || group?.name}
 			name={name}
 			label={label}

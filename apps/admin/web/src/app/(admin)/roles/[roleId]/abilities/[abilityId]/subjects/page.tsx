@@ -1,6 +1,6 @@
 "use client";
 
-import { AdminRolesRoleIdAbilitiesAbilityIdSubjectsPage } from "@cocrepo/ui";
+import { RoleAbilitySubjectListPage } from "@cocrepo/ui";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 
@@ -18,7 +18,7 @@ export default function AdminRolesRoleIdAbilitiesAbilityIdSubjectsRoute() {
 	};
 
 	return (
-		<AdminRolesRoleIdAbilitiesAbilityIdSubjectsPage
+		<RoleAbilitySubjectListPage
 			abilityId={abilityId}
 			onClickBackButton={onClickBackButton}
 		/>

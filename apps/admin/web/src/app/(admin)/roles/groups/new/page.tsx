@@ -1,7 +1,7 @@
 "use client";
 
 import { useCreateGroup } from "@cocrepo/api/core/groups";
-import { AdminRolesGroupsNewPage } from "@cocrepo/ui";
+import { RoleGroupCreatePage } from "@cocrepo/ui";
 import { usePersistStore } from "@/stores/AppStoreProvider";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -47,7 +47,7 @@ const AdminRolesGroupsNewRoute = observer(() => {
 	};
 
 	return (
-		<AdminRolesGroupsNewPage
+		<RoleGroupCreatePage
 			name={name}
 			label={label}
 			nameError={nameError}

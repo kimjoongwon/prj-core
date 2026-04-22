@@ -11,9 +11,9 @@ import {
 	useRemoveAsset,
 } from "@cocrepo/api/assets";
 import {
-	AdminAssetsAssetIdPage,
-	type AdminAssetsAssetIdPageAsset,
-	type AdminAssetsAssetIdPageFolder,
+	AssetDetailPage,
+	type AssetDetailPageAsset,
+	type AssetDetailPageFolder,
 } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -34,7 +34,7 @@ export default observer(function AssetDetailPageRoute() {
 	const moveAssetMutation = useMoveAsset();
 
 	return (
-		<AdminAssetsAssetIdPage
+		<AssetDetailPage
 			asset={response?.data ? mapAssetDetail(response.data) : undefined}
 			folders={(folderResponse?.data ?? []).map(mapFolder)}
 			targetFolderId={targetFolderId}
@@ -91,7 +91,7 @@ export default observer(function AssetDetailPageRoute() {
 	);
 });
 
-function mapAssetDetail(asset: AssetDto): AdminAssetsAssetIdPageAsset {
+function mapAssetDetail(asset: AssetDto): AssetDetailPageAsset {
 	return {
 		id: asset.id,
 		originalName: asset.originalName,
@@ -107,7 +107,7 @@ function mapAssetDetail(asset: AssetDto): AdminAssetsAssetIdPageAsset {
 	};
 }
 
-function mapFolder(folder: FolderDto): AdminAssetsAssetIdPageFolder {
+function mapFolder(folder: FolderDto): AssetDetailPageFolder {
 	return {
 		id: folder.id,
 		name: folder.name,

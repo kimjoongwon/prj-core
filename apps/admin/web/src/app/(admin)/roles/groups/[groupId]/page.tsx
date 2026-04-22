@@ -6,8 +6,8 @@ import {
 	useGetGroupById,
 } from "@cocrepo/api/core/groups";
 import {
-	AdminRolesGroupsGroupIdPage,
-	type AdminRolesGroupsGroupIdPageGroup,
+	RoleGroupDetailPage,
+	type RoleGroupDetailPageGroup,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -55,7 +55,7 @@ const AdminRolesGroupsDetailRoute = observer(() => {
 	});
 
 	return (
-		<AdminRolesGroupsGroupIdPage
+		<RoleGroupDetailPage
 			group={response?.data ? mapGroupDetail(response.data) : undefined}
 			isLoading={isLoading}
 			isDeleteModalOpen={isDeleteModalOpen}
@@ -79,7 +79,7 @@ const AdminRolesGroupsDetailRoute = observer(() => {
 	);
 });
 
-function mapGroupDetail(group: GroupDetail): AdminRolesGroupsGroupIdPageGroup {
+function mapGroupDetail(group: GroupDetail): RoleGroupDetailPageGroup {
 	return group;
 }
 

@@ -138,7 +138,7 @@ pnpm exec tsc -p packages/fe-ui/tsconfig.json --noEmit --pretty false
 
 - `packages/fe-ui/src/cell/RoleNameCell/RoleNameCell.tsx`
 - `packages/fe-ui/src/columns/master/adminColumns.tsx`
-- `packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.tsx`
+- `packages/fe-ui/src/page/RoleListPage/RoleListPage.tsx`
 - `packages/fe-ui/src/columns/index.ts`
 
 핵심은 **column 파일이 UI를 소유하지 않게 만드는 것**입니다.

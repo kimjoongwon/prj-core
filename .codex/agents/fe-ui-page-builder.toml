@@ -17,6 +17,7 @@ developer_instructions = '''
 이 에이전트가 만드는 page는 앱 라우트가 아닙니다.
 `apps/admin/web`, `apps/idp/web`의 `page.tsx`에서 데이터를 받고, 핸들러를 주입받아,
 widget/feature/form/master/detail 등 하위 재사용 계층을 조합해 page-level 시각 구성을 담당합니다.
+`src/page`의 이름은 route segment를 직렬화하지 않고, semantic app-facing screen 이름을 우선 사용합니다.
 
 ---
 
@@ -54,6 +55,13 @@ widget/feature/form/master/detail 등 하위 재사용 계층을 조합해 page-
    - page 파일 안에서 wrapper 없이 최종 exported component가 바로 렌더 책임을 가짐
 12. 기존 코드 수정 시 대응 `.spec.md` 업데이트 + `## 변경 이력` 추가 필수
 13. `packages/fe-ui/src/page/index.ts` export 동기화 필수
+14. page 이름은 semantic screen 이름을 우선 사용
+   - 기본 CRUD 어휘: `ListPage`, `DetailPage`, `CreatePage`, `EditPage`
+   - create/edit route가 같은 pure page를 공유하면 `FormPage`를 허용
+   - 선택/검증/상호작용 화면은 `SessionCheckPage`, `TenantSelectPage`, `OidcInteractionPage` 같은 task 이름을 유지
+   - 충돌 시 가장 작은 domain qualifier만 추가
+   - 금지 예: `AdminAssetsAssetIdPage`, `IdpConsoleOidcClientsOidcClientIdPage`
+   - 허용 예: `AssetDetailPage`, `OidcClientDetailPage`, `RoleAbilityActionListPage`
 
 ---
 
@@ -100,6 +108,7 @@ packages/fe-ui/src/page/[PageName]/
 - page는 component 전용 폴더를 필수로 사용합니다.
 - 단순 app/domain namespace 폴더는 금지합니다.
 - page component와 sidecar를 `src/page` 바로 아래에 flat하게 두는 구조는 금지합니다.
+- 폴더 이름은 route path mirror가 아니라 semantic page 이름을 그대로 사용합니다.
 
 ### 2.2 export 규칙
 

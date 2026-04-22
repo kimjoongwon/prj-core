@@ -49,14 +49,14 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/oidc-clients/[oidcClientId]/edit/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 상세 조회, 저장 mutation, 라우팅만 담당하고 시각 조합과 로컬 폼 상태는 `IdpConsoleOidcClientsOidcClientIdEditPage`가 소유합니다.
+- `page.tsx`는 상세 조회, 저장 mutation, 라우팅만 담당하고 시각 조합과 로컬 폼 상태는 `OidcClientEditPage`가 소유합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `pure page + thin route container`
 - page role: `form`
 - reusable target: `form`
-- page component path: `packages/fe-ui/src/page/IdpConsoleOidcClientsOidcClientIdEditPage/IdpConsoleOidcClientsOidcClientIdEditPage.tsx`
+- page component path: `packages/fe-ui/src/page/OidcClientEditPage/OidcClientEditPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -64,7 +64,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-29 | `IdpConsoleOidcClientsOidcClientIdEditPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-03-29 | `OidcClientEditPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-22 | parent `(console)` layout 참조와 `form` 재사용 셸 기준으로 수정 페이지 계약을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |

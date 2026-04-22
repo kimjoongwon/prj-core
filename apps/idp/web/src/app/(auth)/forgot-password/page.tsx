@@ -1,10 +1,10 @@
 "use client";
 
 import { useRequestPasswordReset } from "@cocrepo/api/idp/password-reset";
-import { IdpForgotPasswordPage } from "@cocrepo/ui";
+import { ForgotPasswordPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 
-const ForgotPasswordPage = observer(function ForgotPasswordPage() {
+const ForgotPasswordRoutePage = observer(function ForgotPasswordRoutePage() {
 	const resetMutation = useRequestPasswordReset();
 
 	const onSubmitForgotPasswordForm = async (email: string) => {
@@ -16,7 +16,7 @@ const ForgotPasswordPage = observer(function ForgotPasswordPage() {
 		}
 	};
 
-	return <IdpForgotPasswordPage onSubmit={onSubmitForgotPasswordForm} />;
+	return <ForgotPasswordPage onSubmit={onSubmitForgotPasswordForm} />;
 });
 
-export default ForgotPasswordPage;
+export default ForgotPasswordRoutePage;

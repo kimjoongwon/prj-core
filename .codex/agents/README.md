@@ -67,7 +67,7 @@
 
 ## 프론트엔드
 
-- [fe-ui-page-builder.toml](./fe-ui-page-builder.toml): `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 기준의 pure page component와 sidecar를 생성하는 전문가
+- [fe-ui-page-builder.toml](./fe-ui-page-builder.toml): `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 기준의 semantic pure page component와 sidecar를 생성하는 전문가
 - [fe-page-builder.toml](./fe-page-builder.toml): `apps/*/src/app/**/page.tsx`와 `@slot/**/page.tsx` thin container를 구현하고 folder-based pure page를 연결하는 전문가
 - [fe-layout-builder.toml](./fe-layout-builder.toml): `packages/fe-ui/src/display/layout`의 flat Layout primitive를 설계하고 생성하는 전문가
 - [fe-route-layout-builder.toml](./fe-route-layout-builder.toml): Next.js App Router의 `app/**/layout.tsx`와 named slot topology를 설계하고 생성하는 전문가

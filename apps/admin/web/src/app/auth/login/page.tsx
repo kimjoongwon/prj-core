@@ -1,6 +1,6 @@
 "use client";
 
-import { AdminAuthLoginPage } from "@cocrepo/ui";
+import { LoginRedirectPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { Suspense } from "react";
 
@@ -10,7 +10,7 @@ const LoginContent = observer(() => {
 	const { errorMessage, isRedirecting, onClickRetry } = useAuthLoginPage();
 
 	return (
-		<AdminAuthLoginPage
+		<LoginRedirectPage
 			errorMessage={errorMessage}
 			isRedirecting={isRedirecting}
 			onClickRetry={onClickRetry}
@@ -22,7 +22,7 @@ function AuthLoginPage() {
 	return (
 		<Suspense
 			fallback={
-				<AdminAuthLoginPage
+				<LoginRedirectPage
 					errorMessage=""
 					isRedirecting
 					onClickRetry={undefined}

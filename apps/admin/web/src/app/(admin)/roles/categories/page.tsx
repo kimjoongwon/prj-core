@@ -2,8 +2,8 @@
 
 import { useGetCategories } from "@cocrepo/api/core/categories";
 import {
-	AdminRolesCategoriesPage,
-	type AdminRolesCategoriesPageCategory,
+	RoleCategoryListPage,
+	type RoleCategoryListPageCategory,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -29,7 +29,7 @@ const AdminRolesCategoriesRoute = observer(() => {
 	const categories = ((response?.data ?? []) as unknown) as CategoryData[];
 
 	return (
-		<AdminRolesCategoriesPage
+		<RoleCategoryListPage
 			categories={categories.map(mapCategoryRow)}
 			isLoading={isLoading}
 			onClickCreateButton={() => {
@@ -44,7 +44,7 @@ const AdminRolesCategoriesRoute = observer(() => {
 
 function mapCategoryRow(
 	category: CategoryData,
-): AdminRolesCategoriesPageCategory {
+): RoleCategoryListPageCategory {
 	return {
 		id: category.id,
 		name: category.name,

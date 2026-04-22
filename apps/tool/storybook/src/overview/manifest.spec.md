@@ -34,6 +34,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 page story id를 route-mirror slug 대신 semantic page title slug 기준으로 정리 | codex |
 | 2026-04-16 | browser 번들에서 `import.meta.glob`를 제거하고 Storybook/Vitest define source map을 소비하도록 변경 | codex |
 | 2026-04-15 | autodocs 진입에서도 planning panel이 보이도록 page `Docs` story id 매핑 규칙 추가 | codex |
 | 2026-04-15 | page story planning panel을 위해 pure/route spec index와 manual flow override 병합 계약 추가 | codex |

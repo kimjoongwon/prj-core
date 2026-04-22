@@ -7,7 +7,7 @@ import {
 	useUpdateTemplate,
 } from "@cocrepo/api/core/templates";
 import {
-	AdminTemplatesTemplateIdEditPage,
+	TemplateEditPage,
 	type TemplateFormData,
 	type VariableEditItem,
 } from "@cocrepo/ui";
@@ -157,7 +157,7 @@ const AdminTemplatesTemplateIdEditRoute = observer(() => {
 	};
 
 	return (
-		<AdminTemplatesTemplateIdEditPage
+		<TemplateEditPage
 			templateName={template?.name}
 			formData={state.formData}
 			variables={state.variables}

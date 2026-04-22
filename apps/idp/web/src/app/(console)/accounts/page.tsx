@@ -9,8 +9,8 @@ import {
 } from "@cocrepo/api/idp/idp-accounts";
 import {
 	idpConsoleAccountsPageQueryInputs,
-	IdpConsoleAccountsPage,
-	type IdpConsoleAccountsPageAccount,
+	AccountListPage,
+	type AccountListPageAccount,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
@@ -41,7 +41,7 @@ export default observer(function AccountsPageRoute() {
 	});
 
 	return (
-		<IdpConsoleAccountsPage
+		<AccountListPage
 			accounts={(response?.data ?? []).map(mapAccountListItem)}
 			totalCount={response?.meta?.totalCount ?? 0}
 			isLoading={isLoading}
@@ -57,7 +57,7 @@ export default observer(function AccountsPageRoute() {
 
 function mapAccountListItem(
 	account: IdpAccountDto,
-): IdpConsoleAccountsPageAccount {
+): AccountListPageAccount {
 	return {
 		id: account.id,
 		name: account.name,

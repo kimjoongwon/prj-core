@@ -20,7 +20,7 @@
 | 모듈 | 용도 |
 |------|------|
 | `@cocrepo/api/idp/idp-dashboard` | 대시보드 통계/로그인 추이 조회 |
-| `@cocrepo/ui` | `IdpConsoleDashboardPage` pure page 조합 |
+| `@cocrepo/ui` | `IdentityDashboardPage` pure page 조합 |
 
 ## 동작 흐름
 
@@ -57,14 +57,14 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/dashboard/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 대시보드 통계/로그인 추이 조회만 담당하고 시각 조합은 `IdpConsoleDashboardPage`가 소유합니다.
+- `page.tsx`는 대시보드 통계/로그인 추이 조회만 담당하고 시각 조합은 `IdentityDashboardPage`가 소유합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `pure page + thin route container`
 - page role: `detail`
 - reusable target: `detail/view`
-- page component path: `packages/fe-ui/src/page/IdpConsoleDashboardPage/IdpConsoleDashboardPage.tsx`
+- page component path: `packages/fe-ui/src/page/IdentityDashboardPage/IdentityDashboardPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -72,7 +72,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-29 | `IdpConsoleDashboardPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-03-29 | `IdentityDashboardPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-22 | `(console)` layout contract 변경에 맞춰 primitive skeleton 범위를 보정 | codex |
 | 2026-03-22 | IDP 대시보드를 `DetailPage`/`DetailSectionCard` 기반 detail/view 본문으로 정리하고 spec 의존성을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |

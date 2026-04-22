@@ -12,4 +12,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 planning dock fixture story id를 semantic page 기준으로 갱신 | codex |
 | 2026-04-15 | floating launcher와 전체 화면 overlay 전환 흐름 검증용 sidecar spec 신규 추가 | codex |

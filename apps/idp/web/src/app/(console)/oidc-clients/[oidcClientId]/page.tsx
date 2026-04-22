@@ -5,7 +5,7 @@ import {
 	useGetOidcClient,
 	useToggleActiveOidcClient,
 } from "@cocrepo/api/idp/oidc-clients";
-import { IdpConsoleOidcClientsOidcClientIdPage } from "@cocrepo/ui";
+import { OidcClientDetailPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -26,7 +26,7 @@ export default observer(function OidcClientDetailPageRoute() {
 		useToggleActiveOidcClient();
 
 	return (
-		<IdpConsoleOidcClientsOidcClientIdPage
+		<OidcClientDetailPage
 			client={
 				client
 					? {

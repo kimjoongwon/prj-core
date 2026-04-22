@@ -8,8 +8,8 @@ import {
 } from "@cocrepo/api/core/templates";
 import {
 	adminTemplatesPageQueryInputs,
-	AdminTemplatesPage,
-	type AdminTemplatesPageTemplate,
+	TemplateListPage,
+	type TemplateListPageTemplate,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
@@ -31,7 +31,7 @@ export default observer(function TemplatesPageRoute() {
 	const templates = (response?.data ?? []).map(mapTemplateRow);
 
 	return (
-		<AdminTemplatesPage
+		<TemplateListPage
 			templates={templates}
 			totalCount={response?.meta?.total ?? 0}
 			isLoading={isLoading}
@@ -84,7 +84,7 @@ function getTemplatesParams(
 	};
 }
 
-function mapTemplateRow(template: TemplateDto): AdminTemplatesPageTemplate {
+function mapTemplateRow(template: TemplateDto): TemplateListPageTemplate {
 	return {
 		id: template.id,
 		code: template.code,

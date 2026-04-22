@@ -8,7 +8,7 @@ import {
 	useValidateResetToken,
 } from "@cocrepo/api/idp/password-reset";
 import { PASSWORD_RULES, type PasswordRule } from "@cocrepo/constant";
-import { IdpResetPasswordPage } from "@cocrepo/ui";
+import { ResetPasswordPage } from "@cocrepo/ui";
 import type { AxiosError } from "axios";
 import { observer } from "mobx-react-lite";
 import { useParams } from "next/navigation";
@@ -64,7 +64,7 @@ function buildPasswordRules(policy: PasswordPolicyDto): PasswordRule[] {
 	return rules;
 }
 
-const ResetPasswordPage = observer(function ResetPasswordPage() {
+const ResetPasswordRoutePage = observer(function ResetPasswordRoutePage() {
 	const { token } = useParams<ResetPasswordPageParams>();
 	const [step, setStep] = useState<"validating" | "invalid" | "form">(
 		"validating",
@@ -144,7 +144,7 @@ const ResetPasswordPage = observer(function ResetPasswordPage() {
 	};
 
 	return (
-		<IdpResetPasswordPage
+		<ResetPasswordPage
 			step={step}
 			tokenError={tokenError}
 			tokenEmail={tokenEmail}
@@ -155,4 +155,4 @@ const ResetPasswordPage = observer(function ResetPasswordPage() {
 	);
 });
 
-export default ResetPasswordPage;
+export default ResetPasswordRoutePage;

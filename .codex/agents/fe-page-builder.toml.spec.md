@@ -11,13 +11,15 @@
 `@slot/**/page.tsx`의 thin route container를 구현하는 것입니다.
 
 순수 page visual composition은 `fe-ui-page-builder`가 `packages/fe-ui/src/page/[PageName]/[PageName].tsx`에 구현하고,
-`fe-page-builder`는 그 page component에 데이터와 핸들러를 연결합니다.
+`fe-page-builder`는 그 page component를 import해 데이터와 핸들러를 연결합니다.
+즉, pure page component 생성/수정 owner는 아니고 pure page 소비/연결 owner입니다.
 
 ## 운영 규칙
 
 - app route `page.tsx`와 `@slot/**/page.tsx`는 thin container만 허용합니다.
 - 시각 page owner는 반드시 `packages/fe-ui/src/page/[PageName]/[PageName].tsx`입니다.
 - route page는 API 조회, router/search params 해석, redirect, handler wiring만 담당합니다.
+- route page는 pure page component를 import해 props를 주입하며, pure page owner를 직접 생성/수정하지 않습니다.
 - route page가 feature/widget/page-level 시각 트리를 직접 소유하면 안 됩니다.
 - `Rendering Decision.page component path`는 반드시 `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 형식을 사용합니다.
 - 작업 시작 전에 반드시 sibling `layout.spec.md`와 `page.spec.md`를 읽고 `Consumed Layout Contract`를 확인해야 합니다.
@@ -28,6 +30,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-21 | `fe-page-builder`를 pure page 생성자가 아닌 pure page import/use thin container로 명시 | codex |
 | 2026-03-26 | page owner 경로를 folder-based sidecar 기준으로 구체화 | codex |
 | 2026-03-26 | thin container가 참조하는 page component 경로를 folder-based sidecar 패턴으로 명시 | codex |
 | 2026-03-25 | pure page와 thin route container를 분리하고, fe-page-builder를 app route 전용으로 재정의 | codex |

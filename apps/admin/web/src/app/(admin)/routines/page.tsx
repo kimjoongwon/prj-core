@@ -8,8 +8,8 @@ import {
 } from "@cocrepo/api/core/routines";
 import {
 	adminRoutinesPageQueryInputs,
-	AdminRoutinesPage,
-	type AdminRoutinesPageRoutine,
+	RoutineListPage,
+	type RoutineListPageRoutine,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
@@ -31,7 +31,7 @@ export default observer(function RoutinesPageRoute() {
 	const routines = (response?.data ?? []).map(mapRoutineRow);
 
 	return (
-		<AdminRoutinesPage
+		<RoutineListPage
 			routines={routines}
 			totalCount={response?.meta?.total ?? 0}
 			isLoading={isLoading}
@@ -83,7 +83,7 @@ function getRoutineParams(
 	};
 }
 
-function mapRoutineRow(routine: RoutineDto): AdminRoutinesPageRoutine {
+function mapRoutineRow(routine: RoutineDto): RoutineListPageRoutine {
 	return {
 		id: routine.id,
 		name: routine.name,

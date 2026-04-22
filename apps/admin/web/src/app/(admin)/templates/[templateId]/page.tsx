@@ -10,7 +10,7 @@ import {
 	useToggleTemplateStatus,
 } from "@cocrepo/api/core/templates";
 import {
-	AdminTemplatesTemplateIdPage,
+	TemplateDetailPage,
 	type PreviewResult,
 } from "@cocrepo/ui";
 import { addToast, useDisclosure } from "@heroui/react";
@@ -137,7 +137,7 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 	};
 
 	return (
-		<AdminTemplatesTemplateIdPage
+		<TemplateDetailPage
 			templateId={templateId}
 			template={
 				template

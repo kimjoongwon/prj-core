@@ -7,9 +7,9 @@ import {
 	useGetIdpLoginTrend,
 } from "@cocrepo/api/idp/idp-dashboard";
 import {
-	IdpConsoleDashboardPage,
-	type IdpConsoleDashboardPageStats,
-	type IdpConsoleDashboardPageTrendItem,
+	IdentityDashboardPage,
+	type IdentityDashboardPageStats,
+	type IdentityDashboardPageTrendItem,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 
@@ -18,7 +18,7 @@ export default observer(function DashboardPageRoute() {
 	const { data: trendResponse } = useGetIdpLoginTrend();
 
 	return (
-		<IdpConsoleDashboardPage
+		<IdentityDashboardPage
 			stats={
 				statsResponse?.data ? mapDashboardStats(statsResponse.data) : undefined
 			}
@@ -29,7 +29,7 @@ export default observer(function DashboardPageRoute() {
 
 function mapDashboardStats(
 	stats: DashboardStatsDto,
-): IdpConsoleDashboardPageStats {
+): IdentityDashboardPageStats {
 	return {
 		activeSessionCount: stats.activeSessionCount,
 		todaySuccessCount: stats.todaySuccessCount,
@@ -42,7 +42,7 @@ function mapDashboardStats(
 
 function mapDashboardTrend(
 	item: LoginTrendItemDto,
-): IdpConsoleDashboardPageTrendItem {
+): IdentityDashboardPageTrendItem {
 	return {
 		date: item.date,
 		successCount: item.successCount,

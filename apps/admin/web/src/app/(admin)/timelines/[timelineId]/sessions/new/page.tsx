@@ -6,10 +6,10 @@ import {
 	useGetTimelineById,
 } from "@cocrepo/api/core/timelines";
 import {
-	AdminTimelinesTimelineIdSessionsNewPage,
-	type AdminTimelineSessionPageCycleType,
-	type AdminTimelineSessionPageDayOfWeek,
-	type AdminTimelineSessionPageSessionType,
+	TimelineSessionCreatePage,
+	type TimelineSessionPageCycleType,
+	type TimelineSessionPageDayOfWeek,
+	type TimelineSessionPageSessionType,
 } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -25,12 +25,12 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 	const router = useRouter();
 	const state = useLocalObservable(() => ({
 		name: "",
-		type: "ONE_TIME" as AdminTimelineSessionPageSessionType,
+		type: "ONE_TIME" as TimelineSessionPageSessionType,
 		description: "",
 		startDateTime: "",
 		endDateTime: "",
-		recurringDayOfWeek: null as AdminTimelineSessionPageDayOfWeek | null,
-		repeatCycleType: "" as AdminTimelineSessionPageCycleType | "",
+		recurringDayOfWeek: null as TimelineSessionPageDayOfWeek | null,
+		repeatCycleType: "" as TimelineSessionPageCycleType | "",
 		errors: {} as Record<string, string>,
 	}));
 
@@ -48,7 +48,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 	};
 
 	const onChangeTypeSelect = (value: string) => {
-		state.type = value as AdminTimelineSessionPageSessionType;
+		state.type = value as TimelineSessionPageSessionType;
 		state.startDateTime = "";
 		state.endDateTime = "";
 		state.recurringDayOfWeek = null;
@@ -76,7 +76,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 	};
 
 	const onChangeCycleTypeSelect = (value: string) => {
-		state.repeatCycleType = value as AdminTimelineSessionPageCycleType;
+		state.repeatCycleType = value as TimelineSessionPageCycleType;
 		delete state.errors.repeatCycleType;
 	};
 
@@ -159,7 +159,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 	};
 
 	return (
-		<AdminTimelinesTimelineIdSessionsNewPage
+		<TimelineSessionCreatePage
 			descriptionText={
 				timeline?.name ? `${timeline.name}에 세션을 등록합니다.` : undefined
 			}

@@ -8,8 +8,8 @@ import {
 } from "@cocrepo/api/core/tasks";
 import {
 	adminTasksPageQueryInputs,
-	AdminTasksPage,
-	type AdminTasksPageTask,
+	TaskListPage,
+	type TaskListPageTask,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
@@ -29,7 +29,7 @@ export default observer(function TasksPageRoute() {
 	const tasks = (response?.data ?? []).map(mapTaskRow);
 
 	return (
-		<AdminTasksPage
+		<TaskListPage
 			tasks={tasks}
 			totalCount={response?.meta?.total ?? tasks.length}
 			isLoading={isLoading}
@@ -81,7 +81,7 @@ function getTaskParams(
 	};
 }
 
-function mapTaskRow(task: TaskDto): AdminTasksPageTask {
+function mapTaskRow(task: TaskDto): TaskListPageTask {
 	return {
 		id: task.id,
 		name: task.exercise.name,

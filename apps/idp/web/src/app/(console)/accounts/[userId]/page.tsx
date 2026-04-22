@@ -13,9 +13,9 @@ import {
 	useToggleIdpAccountActive,
 } from "@cocrepo/api/idp/idp-accounts";
 import {
-	IdpConsoleAccountsUserIdPage,
-	type IdpConsoleAccountsUserIdPageAccount,
-	type IdpConsoleAccountsUserIdPageModalAction,
+	AccountDetailPage,
+	type AccountDetailPageAccount,
+	type AccountDetailPageModalAction,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -28,7 +28,7 @@ export default observer(function AccountDetailPageRoute() {
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const [modalAction, setModalAction] =
-		useState<IdpConsoleAccountsUserIdPageModalAction>(null);
+		useState<AccountDetailPageModalAction>(null);
 	const { data: response, isLoading } = useGetIdpAccount(userId);
 	const account = response?.data;
 
@@ -69,7 +69,7 @@ export default observer(function AccountDetailPageRoute() {
 		});
 
 	return (
-		<IdpConsoleAccountsUserIdPage
+		<AccountDetailPage
 			account={account ? mapAccountDetail(account) : undefined}
 			isLoading={isLoading}
 			isToggling={isToggling}
@@ -119,7 +119,7 @@ export default observer(function AccountDetailPageRoute() {
 
 function mapAccountDetail(
 	account: IdpAccountDto,
-): IdpConsoleAccountsUserIdPageAccount {
+): AccountDetailPageAccount {
 	return {
 		id: account.id,
 		name: account.name,

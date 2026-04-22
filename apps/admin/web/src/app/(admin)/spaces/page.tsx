@@ -3,8 +3,8 @@
 import { type SpaceDto, useGetSpaces } from "@cocrepo/api/core/spaces";
 import {
 	adminSpacesPageQueryInputs,
-	AdminSpacesPage,
-	type AdminSpacesPageSpace,
+	SpaceListPage,
+	type SpaceListPageSpace,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
@@ -20,7 +20,7 @@ export default observer(function SpacesPageRoute() {
 	const spaces = (response?.data ?? []).flatMap(mapSpaceRow);
 
 	return (
-		<AdminSpacesPage
+		<SpaceListPage
 			spaces={spaces}
 			totalCount={response?.meta?.total ?? spaces.length}
 			isLoading={isLoading}
@@ -36,7 +36,7 @@ export default observer(function SpacesPageRoute() {
 	);
 });
 
-function mapSpaceRow(space: SpaceDto): AdminSpacesPageSpace[] {
+function mapSpaceRow(space: SpaceDto): SpaceListPageSpace[] {
 	const ground = space.ground;
 	if (!ground) {
 		return [];

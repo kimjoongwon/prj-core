@@ -13,4 +13,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 planning panel fixture story id를 semantic page 기준으로 갱신 | codex |
 | 2026-04-15 | Codex bridge 404/HTML 응답 안내 회귀와 panel variant 동작을 문서화하는 test sidecar 신규 추가 | codex |

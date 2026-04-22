@@ -127,7 +127,7 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 
 - `page.tsx`가 `useCreateTask`, `useRouter`, `useLocalObservable`를 직접 소유합니다.
 - `page.tsx`가 `useTaskExerciseAssetBrowser()`를 통해 image/video picker 상태와 공통 `AssetBrowser` bindings를 소유합니다.
-- `@cocrepo/ui`의 `AdminTasksNewPage`는 props-only pure page로 사용합니다.
+- `@cocrepo/ui`의 `TaskCreatePage`는 props-only pure page로 사용합니다.
 
 ## 비즈니스 규칙
 
@@ -175,6 +175,7 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-04-01 | task 신규 화면의 asset 선택/업로드를 공통 `AssetBrowser` modal과 shared hook 조합으로 전환 | codex |
 | 2026-03-30 | 태스크 등록의 mutation/router/local state를 route page로 이동하고 `@cocrepo/ui` page를 pure contract로 분리 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |

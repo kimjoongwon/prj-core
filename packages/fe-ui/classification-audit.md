@@ -10,6 +10,7 @@
 - 루트 공개 배럴 `packages/fe-ui/src/index.ts`는 `control`, `detail`, `display`, `feature`, `form`, `layout`, `master`, `page`, `surface`, `widget`을 직접 공개합니다.
 - `src` 바로 아래 공개 축만 그룹 폴더로 허용하고, 그 아래의 단순 묶음용 중간 depth는 신규 추가를 금지합니다.
 - Stage 5 전용 builder 소유는 `fe-master-builder`, `fe-detail-builder`, `fe-form-builder`로 분리합니다.
+- `src/page`는 route mirror 레이어가 아니라 semantic app-facing screen asset 레이어로 운영합니다.
 
 ## 현재 공개 축
 
@@ -48,6 +49,11 @@
 - 생성/등록/수정/입력 중심 화면은 `form`을 사용합니다.
 - `AiForm`은 보조 `feature`로 유지할 수 있지만 실제 폼 본문 소유는 `form`입니다.
 - `master/detail/form`이 복수의 시각 블록을 묶을 때는 별도 thin wrapper보다 `packages/fe-ui/src/surface/Surface`를 우선 검토합니다.
+- `src/page` 이름은 route segment 직렬화 대신 semantic 이름을 우선합니다.
+  - 기본 CRUD 어휘: `ListPage`, `DetailPage`, `CreatePage`, `EditPage`
+  - shared create/edit pure page는 `FormPage`
+  - task flow는 `SelectPage`, `VerifyPage`, `InteractionPage` 같은 task 이름 유지
+  - 충돌 시 가장 작은 domain qualifier만 추가
 
 ## 폴더 평탄화 규칙
 

@@ -11,7 +11,7 @@ import {
 	getGetAssetByIdQueryKey,
 	type AssetDto,
 } from "@cocrepo/api/assets";
-import { AdminRoutinesRoutineIdPage } from "@cocrepo/ui";
+import { RoutineDetailPage } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -91,7 +91,7 @@ const AdminRoutinesDetailRoute = observer(() => {
 	const { mutate: deleteRoutine, isPending: isDeleting } = useDeleteRoutine();
 
 	return (
-		<AdminRoutinesRoutineIdPage
+		<RoutineDetailPage
 			routine={mappedRoutine}
 			isLoading={isLoading}
 			errorTitle={errorTitle}

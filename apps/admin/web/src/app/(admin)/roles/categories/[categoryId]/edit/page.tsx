@@ -7,8 +7,8 @@ import {
 	useUpdateCategory,
 } from "@cocrepo/api/core/categories";
 import {
-	AdminRolesCategoriesCategoryIdEditPage,
-	type AdminRolesCategoriesCategoryIdEditPageOption,
+	RoleCategoryEditPage,
+	type RoleCategoryEditPageOption,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -89,7 +89,7 @@ const AdminRolesCategoriesEditRoute = observer(() => {
 	};
 
 	return (
-		<AdminRolesCategoriesCategoryIdEditPage
+		<RoleCategoryEditPage
 			categoryName={category?.name}
 			name={name}
 			parentId={parentId}
@@ -118,7 +118,7 @@ const AdminRolesCategoriesEditRoute = observer(() => {
 
 function mapEditOption(
 	category: CategoryOption,
-): AdminRolesCategoriesCategoryIdEditPageOption {
+): RoleCategoryEditPageOption {
 	return {
 		id: category.id,
 		name: category.name,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCreateSpace } from "@cocrepo/api/core/spaces";
-import { AdminSpacesNewPage } from "@cocrepo/ui";
+import { SpaceCreatePage } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -119,7 +119,7 @@ const AdminSpacesNewRoute = observer(() => {
 	};
 
 	return (
-		<AdminSpacesNewPage
+		<SpaceCreatePage
 			name={state.name}
 			label={state.label}
 			address={state.address}

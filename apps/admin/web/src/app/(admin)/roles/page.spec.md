@@ -15,7 +15,7 @@
 - 기본 패턴: `pure page + thin route container`
 - page role: `master`
 - reusable target: `master/table`
-- page component path: `packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.tsx`
+- page component path: `packages/fe-ui/src/page/RoleListPage/RoleListPage.tsx`
 - route는 `useGetRoles()`와 `useMetaDataGridQueryStates()`를 소유합니다.
 
 ## API 호출
@@ -34,6 +34,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-29 | `AdminRolesPage` pure page와 thin route container 구조로 전환하고 조회/등록 라우팅을 route로 이동 | codex |
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-03-29 | `RoleListPage` pure page와 thin route container 구조로 전환하고 조회/등록 라우팅을 route로 이동 | codex |
 | 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | 역할 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

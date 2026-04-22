@@ -10,7 +10,7 @@ import {
 	useGetSessions,
 	useGetTimelineById,
 } from "@cocrepo/api/core/timelines";
-import { AdminTimelinesTimelineIdPage } from "@cocrepo/ui";
+import { TimelineDetailPage } from "@cocrepo/ui";
 import { addToast, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -188,7 +188,7 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 	};
 
 	return (
-		<AdminTimelinesTimelineIdPage
+		<TimelineDetailPage
 			title={timeline?.name ?? "타임라인 상세"}
 			timeline={
 				timeline

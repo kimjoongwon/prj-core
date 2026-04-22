@@ -23,5 +23,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 overview의 canonical story deep-link fixture를 semantic page slug 기준으로 정리 | codex |
 | 2026-04-15 | React Flow 캔버스, lane legend, selected node detail panel을 포함한 page flow workspace로 확장 | codex |
 | 2026-04-08 | page catalog, filter, lane map을 렌더링하는 Storybook overview UI 신규 추가 | codex |

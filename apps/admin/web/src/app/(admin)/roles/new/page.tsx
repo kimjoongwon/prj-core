@@ -1,7 +1,7 @@
 "use client";
 
 import { type CreateRoleDto, useCreateRole } from "@cocrepo/api/core/roles";
-import { AdminRolesNewPage } from "@cocrepo/ui";
+import { RoleCreatePage } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -96,7 +96,7 @@ const AdminRolesNewRoute = observer(() => {
 	};
 
 	return (
-		<AdminRolesNewPage
+		<RoleCreatePage
 			name={state.name}
 			displayName={state.displayName}
 			description={state.description}

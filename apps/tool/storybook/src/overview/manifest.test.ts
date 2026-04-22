@@ -35,8 +35,8 @@ describe("overview manifest helpers", () => {
 	it("extracts page components from @cocrepo/ui route files", () => {
 		const source = `
 			import {
-				AdminRolesPage,
-				type AdminRolesPageRole,
+				RoleListPage,
+				type RoleListPageRole,
 				useMetaDataGridQueryStates,
 			} from "@cocrepo/ui";
 
@@ -44,7 +44,7 @@ describe("overview manifest helpers", () => {
 		`;
 
 		expect(extractPageComponentNames(source)).toEqual([
-			"AdminRolesPage",
+			"RoleListPage",
 			"SessionCheckPage",
 		]);
 	});
@@ -55,8 +55,8 @@ describe("overview manifest helpers", () => {
 				'import { PageStoryScaffold } from "../storybookFrame"; export const Default = {};',
 			),
 		).toBe("scaffold");
-		expect(createStoryId("page/AdminRolesPage", "Default")).toBe(
-			"page-adminrolespage--default",
+		expect(createStoryId("page/RoleListPage", "Default")).toBe(
+			"page-rolelistpage--default",
 		);
 	});
 });
@@ -65,10 +65,10 @@ describe("buildOverviewManifest", () => {
 	it("includes known admin and idp routed pages", () => {
 		const manifest = buildOverviewManifest();
 		const adminRolesPage = manifest.entries.find(
-			(entry) => entry.componentName === "AdminRolesPage",
+			(entry) => entry.componentName === "RoleListPage",
 		);
 		const idpAccountsPage = manifest.entries.find(
-			(entry) => entry.componentName === "IdpConsoleAccountsPage",
+			(entry) => entry.componentName === "AccountListPage",
 		);
 
 		expect(adminRolesPage?.bindings).toEqual(
@@ -147,26 +147,26 @@ describe("buildOverviewManifest", () => {
 		const manifest = buildOverviewManifest();
 		const entry = findCatalogEntryForStory(
 			manifest,
-			"page-adminrolespage--loading",
+			"page-rolelistpage--loading",
 		);
 
-		expect(entry?.componentName).toBe("AdminRolesPage");
+		expect(entry?.componentName).toBe("RoleListPage");
 	});
 
 	it("maps autodocs entries back to the owning page entry", () => {
 		const manifest = buildOverviewManifest();
 		const entry = findCatalogEntryForStory(
 			manifest,
-			"page-adminrolespage--docs",
+			"page-rolelistpage--docs",
 		);
 
-		expect(entry?.componentName).toBe("AdminRolesPage");
+		expect(entry?.componentName).toBe("RoleListPage");
 	});
 
 	it("loads pure page and route planning documents for page stories", () => {
 		const manifest = buildOverviewManifest();
 		const entry = manifest.entries.find(
-			(item) => item.componentName === "AdminRolesPage",
+			(item) => item.componentName === "RoleListPage",
 		);
 		const purePageDocument = getPlanningDocument(
 			manifest,
@@ -177,7 +177,7 @@ describe("buildOverviewManifest", () => {
 			entry?.planning.routePageIds[0] ?? null,
 		);
 
-		expect(purePageDocument?.title).toBe("AdminRolesPage ui 기획서");
+		expect(purePageDocument?.title).toBe("RoleListPage ui 기획서");
 		expect(routeDocument?.title).toBe("역할 목록 페이지 기획서");
 		expect(routeDocument?.sections).toEqual(
 			expect.arrayContaining([
@@ -192,26 +192,26 @@ describe("createOverviewManifest", () => {
 	it("merges manual flow overrides into the lane graph", () => {
 		const manifest = createOverviewManifest({
 			storySources: {
-				"/repo/packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.stories.tsx": `
+				"/repo/packages/fe-ui/src/page/RoleListPage/RoleListPage.stories.tsx": `
 						export default {};
 						export const Default = {};
 					`,
-				"/repo/packages/fe-ui/src/page/AdminRolesRoleIdEditPage/AdminRolesRoleIdEditPage.stories.tsx": `
+				"/repo/packages/fe-ui/src/page/RoleEditPage/RoleEditPage.stories.tsx": `
 						export default {};
 						export const Default = {};
 					`,
 			},
 			purePageSpecSources: {
-				"/repo/packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.spec.md":
-					"# AdminRolesPage ui 기획서\n\n## 역할\n\n역할 목록",
-				"/repo/packages/fe-ui/src/page/AdminRolesRoleIdEditPage/AdminRolesRoleIdEditPage.spec.md":
-					"# AdminRolesRoleIdEditPage ui 기획서\n\n## 역할\n\n역할 수정",
+				"/repo/packages/fe-ui/src/page/RoleListPage/RoleListPage.spec.md":
+					"# RoleListPage ui 기획서\n\n## 역할\n\n역할 목록",
+				"/repo/packages/fe-ui/src/page/RoleEditPage/RoleEditPage.spec.md":
+					"# RoleEditPage ui 기획서\n\n## 역할\n\n역할 수정",
 			},
 			adminRouteSources: {
 				"/repo/apps/admin/web/src/app/(admin)/roles/page.tsx":
-					'import { AdminRolesPage } from "@cocrepo/ui";',
+					'import { RoleListPage } from "@cocrepo/ui";',
 				"/repo/apps/admin/web/src/app/(admin)/roles/[roleId]/edit/page.tsx":
-					'import { AdminRolesRoleIdEditPage } from "@cocrepo/ui";',
+					'import { RoleEditPage } from "@cocrepo/ui";',
 			},
 			adminRouteSpecSources: {
 				"/repo/apps/admin/web/src/app/(admin)/roles/page.spec.md":

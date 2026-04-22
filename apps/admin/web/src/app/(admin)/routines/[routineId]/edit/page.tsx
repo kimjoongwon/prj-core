@@ -14,9 +14,9 @@ import {
 	type AssetDto,
 } from "@cocrepo/api/assets";
 import {
-	AdminRoutinesRoutineIdEditPage,
-	type AdminRoutineActivityFormItem,
-	type AdminRoutineTaskCandidate,
+	RoutineEditPage,
+	type RoutineActivityFormItem,
+	type RoutineTaskCandidate,
 } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
@@ -51,7 +51,7 @@ const AdminRoutinesEditRoute = observer(() => {
 		name: "",
 		label: "",
 		exerciseQuery: "",
-		activities: [] as AdminRoutineActivityFormItem[],
+		activities: [] as RoutineActivityFormItem[],
 		errors: {} as Record<string, string>,
 		isInitialized: false,
 	}));
@@ -189,7 +189,7 @@ const AdminRoutinesEditRoute = observer(() => {
 	};
 
 	return (
-		<AdminRoutinesRoutineIdEditPage
+		<RoutineEditPage
 			routineName={routine?.name}
 			name={state.name}
 			label={state.label}
@@ -285,7 +285,7 @@ const AdminRoutinesEditRoute = observer(() => {
 function mapRoutineTaskCandidate(
 	task: TaskDto,
 	assetMap: Map<string, AssetDto>,
-): AdminRoutineTaskCandidate {
+): RoutineTaskCandidate {
 	const imageAssetUrl = task.exercise.imageFileId
 		? assetMap.get(task.exercise.imageFileId)?.publicUrl
 		: undefined;
@@ -306,9 +306,9 @@ function mapRoutineTaskCandidate(
 }
 
 function mapRoutineActivityFormItem(
-	activity: AdminRoutineActivityFormItem,
+	activity: RoutineActivityFormItem,
 	assetMap: Map<string, AssetDto>,
-): AdminRoutineActivityFormItem {
+): RoutineActivityFormItem {
 	const imageAssetUrl = activity.imageFileId
 		? assetMap.get(activity.imageFileId)?.publicUrl
 		: undefined;

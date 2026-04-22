@@ -1,7 +1,7 @@
 "use client";
 
 import { useCreateTimeline } from "@cocrepo/api/core/timelines";
-import { AdminTimelinesNewPage } from "@cocrepo/ui";
+import { TimelineCreatePage } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -83,7 +83,7 @@ const AdminTimelinesNewRoute = observer(() => {
 	};
 
 	return (
-		<AdminTimelinesNewPage
+		<TimelineCreatePage
 			name={state.name}
 			description={state.description}
 			nameError={state.errors.name}

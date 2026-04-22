@@ -11,7 +11,7 @@ import {
 	useGetSessionById,
 } from "@cocrepo/api/core/timelines";
 import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
-import { AdminTimelinesTimelineIdSessionsSessionIdPage } from "@cocrepo/ui";
+import { TimelineSessionDetailPage } from "@cocrepo/ui";
 import { addToast, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -189,7 +189,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 			: "-";
 
 	return (
-		<AdminTimelinesTimelineIdSessionsSessionIdPage
+		<TimelineSessionDetailPage
 			title={session?.name ?? "세션 상세"}
 			descriptionText={session?.timeline?.name}
 			session={

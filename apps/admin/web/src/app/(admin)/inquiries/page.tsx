@@ -9,8 +9,8 @@ import {
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import {
 	adminInquiriesPageQueryInputs,
-	AdminInquiriesPage,
-	type AdminInquiriesPageInquiry,
+	InquiryListPage,
+	type InquiryListPageInquiry,
 	useMetaDataGridQueryStates,
 	type SLAStatus,
 } from "@cocrepo/ui";
@@ -46,7 +46,7 @@ export default observer(function InquiriesPageRoute() {
 			: undefined;
 
 	return (
-		<AdminInquiriesPage
+		<InquiryListPage
 			inquiries={(inquiriesResponse?.data ?? []).map(mapInquiryRow)}
 			totalCount={inquiriesResponse?.meta?.total ?? 0}
 			stats={{
@@ -139,7 +139,7 @@ function getSlaRemainingMinutes(inquiry: InquiryDto): number | undefined {
 	);
 }
 
-function mapInquiryRow(inquiry: InquiryDto): AdminInquiriesPageInquiry {
+function mapInquiryRow(inquiry: InquiryDto): InquiryListPageInquiry {
 	return {
 		id: inquiry.id,
 		title: inquiry.title,

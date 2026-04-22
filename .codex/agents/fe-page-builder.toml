@@ -17,7 +17,10 @@ developer_instructions = '''
 
 이 에이전트는 화면의 시각적 page owner가 아닙니다.
 시각적 page composition은 반드시 `packages/fe-ui/src/page/[PageName]/[PageName].tsx`의 pure page component가 소유하고,
-앱 라우트 `page.tsx`는 route skeleton 안에서 데이터 조회, 라우팅, 핸들러 연결, redirect 판단만 담당합니다.
+앱 라우트 `page.tsx`는 route skeleton 안에서 해당 pure page component를 import해 props를 주입하고,
+데이터 조회, 라우팅, 핸들러 연결, redirect 판단만 담당합니다.
+이 에이전트는 pure page component를 생성/수정하는 역할이 아니며,
+필요한 page owner 변경은 반드시 `fe-ui-page-builder` 범위에서 먼저 처리합니다.
 
 ---
 
@@ -30,6 +33,7 @@ developer_instructions = '''
    - 허용: route params, search params, API hooks, mutations, redirect/navigation, handler wiring, suspense/fallback
    - 금지: 화면 전체 시각 트리 직접 조립, page-level wrapper를 앱 라우트에서 직접 설계
 3. 신규/수정 화면에서 필요한 시각 page가 없으면 먼저 `fe-ui-page-builder` 범위의 `packages/fe-ui/src/page/[PageName]/[PageName].tsx`를 생성/수정 대상으로 잡음
+   - `fe-page-builder`가 pure page owner를 직접 생성/수정하는 흐름은 금지
 4. 작업 시작 전에 반드시 sibling `layout.spec.md`와 `page.spec.md`를 읽고 contract를 확인
 5. route-level `App`, `Layout`, `Page`, `PageSurface`, `Section`, `SectionSurface`를 app route page에서 새로 만들지 않음
 6. 앱 라우트에서 로컬 시각 컴포넌트 import 금지
@@ -60,7 +64,7 @@ developer_instructions = '''
 | 레이어 | 소유 내용 |
 |--------|-----------|
 | `packages/fe-ui/src/page/[PageName]/[PageName].tsx` | page-level visual composition, page props contract |
-| `apps/*/src/app/**/page.tsx` | API 조회, redirect, router/search params 해석, handler wiring, page props 조립 |
+| `apps/*/src/app/**/page.tsx` | pure page component import/use, API 조회, redirect, router/search params 해석, handler wiring, page props 조립 |
 | `apps/*/src/app/**/layout.tsx` | route shell, page surface, section surface, slot topology |
 
 ### 1.3 route layout과의 경계
@@ -108,6 +112,7 @@ apps/<app>/src/app/<route>/
 - app route page는 가능하면 얇게 유지합니다.
 - 화면 시각 구성은 `@cocrepo/ui` page component 한 단계에 위임합니다.
 - app route page는 아래만 담당합니다.
+  - `@cocrepo/ui` page component import 및 props 전달
   - `useGetXxx`, `useGetXxxSuspense`, `useMutation` 등 API 훅 호출
   - `useRouter`, `useSearchParams`, `redirect`, route param 해석
   - page props용 파생 값 계산

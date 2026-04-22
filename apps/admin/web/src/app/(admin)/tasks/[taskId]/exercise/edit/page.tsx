@@ -5,7 +5,7 @@ import {
 	useGetTaskExercise,
 	useUpdateTaskExercise,
 } from "@cocrepo/api/core/tasks";
-import { AdminTasksTaskIdExerciseEditPage } from "@cocrepo/ui";
+import { TaskExerciseEditPage } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -161,7 +161,7 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 	};
 
 	return (
-		<AdminTasksTaskIdExerciseEditPage
+		<TaskExerciseEditPage
 			exerciseName={exercise?.name}
 			name={state.name}
 			durationMin={state.durationMin}

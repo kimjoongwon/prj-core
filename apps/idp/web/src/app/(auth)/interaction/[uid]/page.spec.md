@@ -10,7 +10,7 @@
 | 후보 | 판단 | 이유 |
 |------|------|------|
 | `useGetInteraction(uid)` | 재사용 | interaction 타입 분기와 만료 판별의 기준 데이터로 충분하다. |
-| `IdpInteractionPage` | 재사용 | loading/error/login/consent의 page-level 시각 구성을 page 레이어로 위임할 수 있다. |
+| `OidcInteractionPage` | 재사용 | loading/error/login/consent의 page-level 시각 구성을 page 레이어로 위임할 수 있다. |
 | 기존 `AuthCard` 기반 full-screen 콘텐츠 구조 | 재사용 불가 | route layout이 shell을 소유해야 하므로 page 내부에서 full-screen 카드 레이아웃을 계속 중첩하면 책임이 충돌한다. |
 
 ## 사용자 시나리오
@@ -27,10 +27,10 @@
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
 | route shell | `(auth)/layout.tsx` | 전체 배경, 중앙 배치, support copy, primary panel frame |
-| loading | `IdpInteractionPage` loading mode | interaction 데이터 조회 중 |
-| login | `IdpInteractionPage` + `OidcLoginForm` | 로그인 폼, 에러, recovery action |
-| consent | `IdpInteractionPage` + `OidcConsentPanel` | scope 승인/거절 |
-| error | `IdpInteractionPage` error mode | 만료/오류 상태 설명과 복구 액션 |
+| loading | `OidcInteractionPage` loading mode | interaction 데이터 조회 중 |
+| login | `OidcInteractionPage` + `OidcLoginForm` | 로그인 폼, 에러, recovery action |
+| consent | `OidcInteractionPage` + `OidcConsentPanel` | scope 승인/거절 |
+| error | `OidcInteractionPage` error mode | 만료/오류 상태 설명과 복구 액션 |
 
 ## 페이지 상태
 
@@ -63,7 +63,7 @@
 | 항목 | 위치 | 역할 |
 |------|------|------|
 | `useGetInteraction` | `@cocrepo/api/idp/interaction` | interaction 데이터 조회 |
-| `IdpInteractionPage` | `packages/fe-ui/src/page/IdpInteractionPage/IdpInteractionPage.tsx` | 상태별 page-level 시각 구성 |
+| `OidcInteractionPage` | `packages/fe-ui/src/page/OidcInteractionPage/OidcInteractionPage.tsx` | 상태별 page-level 시각 구성 |
 | `OidcLoginForm` | `packages/fe-ui/src/form/OidcLoginForm/` | 로그인 폼 widget |
 | `OidcConsentPanel` | `packages/fe-ui/src/form/OidcConsentPanel/` | 권한 동의 widget |
 
@@ -95,7 +95,7 @@
 - 기본 패턴: `pure page + thin route container`
 - page role: `form`
 - reusable target: `form`
-- page component path: `packages/fe-ui/src/page/IdpInteractionPage/IdpInteractionPage.tsx`
+- page component path: `packages/fe-ui/src/page/OidcInteractionPage/OidcInteractionPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -103,8 +103,9 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-26 | `IdpInteractionPage` 경로를 page 폴더 기반 sidecar 구조에 맞게 갱신 | codex |
-| 2026-03-25 | `IdpInteractionPage`를 도입해 loading/error/login/consent 시각 구성을 page 레이어로 이동하고 route page는 API/handler wiring만 담당하도록 정리 | codex |
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-03-26 | `OidcInteractionPage` 경로를 page 폴더 기반 sidecar 구조에 맞게 갱신 | codex |
+| 2026-03-25 | `OidcInteractionPage`를 도입해 loading/error/login/consent 시각 구성을 page 레이어로 이동하고 route page는 API/handler wiring만 담당하도록 정리 | codex |
 | 2026-03-23 | 로그인 UX 재기획에 맞춰 interaction page의 상태 분기, route shell 소비 계약, 복구 UX 기준을 구체화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |

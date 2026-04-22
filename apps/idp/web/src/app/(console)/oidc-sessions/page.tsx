@@ -12,9 +12,9 @@ import {
 } from "@cocrepo/api/idp/oidc-sessions";
 import {
 	idpConsoleOidcSessionsPageQueryInputs,
-	IdpConsoleOidcSessionsPage,
-	type IdpConsoleOidcSessionsPageSession,
-	type IdpConsoleOidcSessionsPageStats,
+	OidcSessionListPage,
+	type OidcSessionListPageSession,
+	type OidcSessionListPageStats,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
@@ -66,7 +66,7 @@ export default observer(function OidcSessionsPageRoute() {
 		});
 
 	return (
-		<IdpConsoleOidcSessionsPage
+		<OidcSessionListPage
 			sessions={(response?.data ?? []).map(mapOidcSession)}
 			totalCount={response?.meta?.totalCount ?? 0}
 			isLoading={isLoading}
@@ -114,7 +114,7 @@ export default observer(function OidcSessionsPageRoute() {
 
 function mapOidcSession(
 	session: OidcSessionDto,
-): IdpConsoleOidcSessionsPageSession {
+): OidcSessionListPageSession {
 	return {
 		id: session.id,
 		key: session.key,
@@ -129,7 +129,7 @@ function mapOidcSession(
 function mapOidcSessionStats(stats: {
 	totalCount: number;
 	byModelType: Record<string, number>;
-}): IdpConsoleOidcSessionsPageStats {
+}): OidcSessionListPageStats {
 	return {
 		totalCount: stats.totalCount,
 		byModelType: stats.byModelType ?? {},

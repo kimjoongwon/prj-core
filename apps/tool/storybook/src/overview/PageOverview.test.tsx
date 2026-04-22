@@ -58,26 +58,26 @@ const manifest: OverviewManifest = {
 	},
 	entries: [
 		{
-			componentName: "AdminRolesPage",
-			componentPath: "page/AdminRolesPage/AdminRolesPage.tsx",
-			storyTitle: "page/AdminRolesPage",
-			storyId: "page-adminrolespage--default",
-			storyHref: "./?path=/story/page-adminrolespage--default",
+			componentName: "RoleListPage",
+			componentPath: "page/RoleListPage/RoleListPage.tsx",
+			storyTitle: "page/RoleListPage",
+			storyId: "page-rolelistpage--default",
+			storyHref: "./?path=/story/page-rolelistpage--default",
 			storyIds: [
-				"page-adminrolespage--default",
-				"page-adminrolespage--loading",
+				"page-rolelistpage--default",
+				"page-rolelistpage--loading",
 			],
 			maturity: "scaffold",
 			appIds: ["admin"],
 			planning: {
-				purePageId: "pure:AdminRolesPage",
+				purePageId: "pure:RoleListPage",
 				routePageIds: ["admin:/roles:spec"],
 			},
 			bindings: [
 				{
 					id: "admin:/roles",
 					appId: "admin",
-					componentName: "AdminRolesPage",
+					componentName: "RoleListPage",
 					path: "/roles",
 					pageKind: "list",
 					pageLabel: "역할 목록",
@@ -89,23 +89,23 @@ const manifest: OverviewManifest = {
 			],
 		},
 		{
-			componentName: "IdpConsoleAccountsPage",
-			componentPath: "page/IdpConsoleAccountsPage/IdpConsoleAccountsPage.tsx",
-			storyTitle: "page/IdpConsoleAccountsPage",
-			storyId: "page-idpconsoleaccountspage--default",
-			storyHref: "./?path=/story/page-idpconsoleaccountspage--default",
-			storyIds: ["page-idpconsoleaccountspage--default"],
+			componentName: "AccountListPage",
+			componentPath: "page/AccountListPage/AccountListPage.tsx",
+			storyTitle: "page/AccountListPage",
+			storyId: "page-accountlistpage--default",
+			storyHref: "./?path=/story/page-accountlistpage--default",
+			storyIds: ["page-accountlistpage--default"],
 			maturity: "scaffold",
 			appIds: ["idp"],
 			planning: {
-				purePageId: "pure:IdpConsoleAccountsPage",
+				purePageId: "pure:AccountListPage",
 				routePageIds: ["idp:/accounts:spec"],
 			},
 			bindings: [
 				{
 					id: "idp:/accounts",
 					appId: "idp",
-					componentName: "IdpConsoleAccountsPage",
+					componentName: "AccountListPage",
 					path: "/accounts",
 					pageKind: "list",
 					pageLabel: "계정 관리",
@@ -142,9 +142,9 @@ const manifest: OverviewManifest = {
 				{
 					id: "admin:/roles",
 					appId: "admin",
-					componentName: "AdminRolesPage",
-					storyId: "page-adminrolespage--default",
-					storyHref: "./?path=/story/page-adminrolespage--default",
+					componentName: "RoleListPage",
+					storyId: "page-rolelistpage--default",
+					storyHref: "./?path=/story/page-rolelistpage--default",
 					maturity: "scaffold",
 					path: "/roles",
 					pageKind: "list",
@@ -153,7 +153,7 @@ const manifest: OverviewManifest = {
 					laneLabel: "권한 관리 / 역할",
 					order: 10,
 					planning: {
-						purePageId: "pure:AdminRolesPage",
+						purePageId: "pure:RoleListPage",
 						routePageId: "admin:/roles:spec",
 					},
 				},
@@ -169,9 +169,9 @@ const manifest: OverviewManifest = {
 				{
 					id: "idp:/accounts",
 					appId: "idp",
-					componentName: "IdpConsoleAccountsPage",
-					storyId: "page-idpconsoleaccountspage--default",
-					storyHref: "./?path=/story/page-idpconsoleaccountspage--default",
+					componentName: "AccountListPage",
+					storyId: "page-accountlistpage--default",
+					storyHref: "./?path=/story/page-accountlistpage--default",
 					maturity: "scaffold",
 					path: "/accounts",
 					pageKind: "list",
@@ -180,7 +180,7 @@ const manifest: OverviewManifest = {
 					laneLabel: "계정 관리",
 					order: 10,
 					planning: {
-						purePageId: "pure:IdpConsoleAccountsPage",
+						purePageId: "pure:AccountListPage",
 						routePageId: "idp:/accounts:spec",
 					},
 				},
@@ -189,17 +189,17 @@ const manifest: OverviewManifest = {
 		},
 	],
 	planningDocuments: {
-		"pure:AdminRolesPage": {
-			id: "pure:AdminRolesPage",
-			componentName: "AdminRolesPage",
+		"pure:RoleListPage": {
+			id: "pure:RoleListPage",
+			componentName: "RoleListPage",
 			kind: "pure-page",
 			metadata: [],
-			rawMarkdown: "# AdminRolesPage ui 기획서",
+			rawMarkdown: "# RoleListPage ui 기획서",
 			sections: [],
 			sourcePath:
-				"packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.spec.md",
+				"packages/fe-ui/src/page/RoleListPage/RoleListPage.spec.md",
 			summary: null,
-			title: "AdminRolesPage ui 기획서",
+			title: "RoleListPage ui 기획서",
 		},
 		"admin:/roles:spec": {
 			id: "admin:/roles:spec",
@@ -213,17 +213,17 @@ const manifest: OverviewManifest = {
 			summary: null,
 			title: "역할 목록 페이지 기획서",
 		},
-		"pure:IdpConsoleAccountsPage": {
-			id: "pure:IdpConsoleAccountsPage",
-			componentName: "IdpConsoleAccountsPage",
+		"pure:AccountListPage": {
+			id: "pure:AccountListPage",
+			componentName: "AccountListPage",
 			kind: "pure-page",
 			metadata: [],
-			rawMarkdown: "# IdpConsoleAccountsPage ui 기획서",
+			rawMarkdown: "# AccountListPage ui 기획서",
 			sections: [],
 			sourcePath:
-				"packages/fe-ui/src/page/IdpConsoleAccountsPage/IdpConsoleAccountsPage.spec.md",
+				"packages/fe-ui/src/page/AccountListPage/AccountListPage.spec.md",
 			summary: null,
-			title: "IdpConsoleAccountsPage ui 기획서",
+			title: "AccountListPage ui 기획서",
 		},
 		"idp:/accounts:spec": {
 			id: "idp:/accounts:spec",
@@ -257,7 +257,7 @@ describe("PageOverview", () => {
 		render(<PageOverview manifest={manifest} />);
 
 		expect(screen.getByText("Page Flow Workspace")).toBeInTheDocument();
-		expect(screen.getAllByText("AdminRolesPage").length).toBeGreaterThan(0);
+		expect(screen.getAllByText("RoleListPage").length).toBeGreaterThan(0);
 		expect(screen.getByText("TenantSelectPage")).toBeInTheDocument();
 		expect(screen.getByText("3")).toBeInTheDocument();
 	});
@@ -270,7 +270,7 @@ describe("PageOverview", () => {
 		});
 
 		expect(screen.getByText("TenantSelectPage")).toBeInTheDocument();
-		expect(screen.queryByText("AdminRolesPage")).not.toBeInTheDocument();
+		expect(screen.queryByText("RoleListPage")).not.toBeInTheDocument();
 		expect(
 			screen.getByText("현재 필터에는 표시할 routed flow가 없습니다."),
 		).toBeInTheDocument();
@@ -284,16 +284,16 @@ describe("PageOverview", () => {
 		});
 
 		expect(
-			screen.getAllByText("IdpConsoleAccountsPage").length,
+			screen.getAllByText("AccountListPage").length,
 		).toBeGreaterThan(0);
-		expect(screen.queryByText("AdminRolesPage")).not.toBeInTheDocument();
+		expect(screen.queryByText("RoleListPage")).not.toBeInTheDocument();
 		expect(
 			screen
 				.getAllByRole("link", { name: "Open Story" })
 				.some(
 					(link) =>
 						link.getAttribute("href") ===
-						"./?path=/story/page-idpconsoleaccountspage--default",
+						"./?path=/story/page-accountlistpage--default",
 				),
 		).toBe(true);
 	});

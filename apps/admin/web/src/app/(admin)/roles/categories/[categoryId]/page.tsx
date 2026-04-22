@@ -6,8 +6,8 @@ import {
 	useGetCategoryById,
 } from "@cocrepo/api/core/categories";
 import {
-	AdminRolesCategoriesCategoryIdPage,
-	type AdminRolesCategoriesCategoryIdPageCategory,
+	RoleCategoryDetailPage,
+	type RoleCategoryDetailPageCategory,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -62,7 +62,7 @@ const AdminRolesCategoriesDetailRoute = observer(() => {
 	});
 
 	return (
-		<AdminRolesCategoriesCategoryIdPage
+		<RoleCategoryDetailPage
 			category={category ? mapCategoryDetail(category) : undefined}
 			isLoading={isLoading}
 			isDeleteModalOpen={isDeleteModalOpen}
@@ -88,7 +88,7 @@ const AdminRolesCategoriesDetailRoute = observer(() => {
 
 function mapCategoryDetail(
 	category: CategoryDetail,
-): AdminRolesCategoriesCategoryIdPageCategory {
+): RoleCategoryDetailPageCategory {
 	return category;
 }
 

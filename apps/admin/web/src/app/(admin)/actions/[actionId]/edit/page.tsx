@@ -6,8 +6,8 @@ import {
 	useUpdateAction,
 } from "@cocrepo/api/core/actions";
 import {
-	AdminActionsActionIdEditPage,
-	type AdminActionsActionIdEditPageFormState,
+	ActionEditPage,
+	type ActionEditPageFormState,
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -17,7 +17,7 @@ import { useEffect } from "react";
 export default observer(function ActionEditPageRoute() {
 	const actionId = useParams<{ actionId: string }>().actionId;
 	const router = useRouter();
-	const state = useLocalObservable<AdminActionsActionIdEditPageFormState>(() => ({
+	const state = useLocalObservable<ActionEditPageFormState>(() => ({
 		displayName: "",
 		description: "",
 		group: "",
@@ -43,7 +43,7 @@ export default observer(function ActionEditPageRoute() {
 	}, [response?.data, state]);
 
 	return (
-		<AdminActionsActionIdEditPage
+		<ActionEditPage
 			action={
 				response?.data
 					? {

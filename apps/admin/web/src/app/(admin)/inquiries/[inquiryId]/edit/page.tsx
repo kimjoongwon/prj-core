@@ -10,8 +10,8 @@ import {
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import type { AiFormOptionItem, AiFormPatch } from "@cocrepo/type";
 import {
-	type AdminInquiriesInquiryIdEditPageFormState,
-	AdminInquiriesInquiryIdEditPage,
+	type InquiryEditPageFormState,
+	InquiryEditPage,
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -64,7 +64,7 @@ export default observer(function InquiryEditPageRoute() {
 	}));
 
 	const state = useLocalObservable<
-		AdminInquiriesInquiryIdEditPageFormState & {
+		InquiryEditPageFormState & {
 			initialized: boolean;
 			initFromBootstrap: () => void;
 		}
@@ -142,7 +142,7 @@ export default observer(function InquiryEditPageRoute() {
 	};
 
 	return (
-		<AdminInquiriesInquiryIdEditPage
+		<InquiryEditPage
 			formState={state}
 			bootstrap={
 				bootstrap

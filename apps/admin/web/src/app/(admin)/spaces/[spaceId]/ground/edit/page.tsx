@@ -5,7 +5,7 @@ import {
 	useGetSpaceGround,
 	useUpdateSpaceGround,
 } from "@cocrepo/api/core/spaces";
-import { AdminSpacesSpaceIdGroundEditPage } from "@cocrepo/ui";
+import { GroundEditPage } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -130,7 +130,7 @@ const AdminSpacesSpaceIdGroundEditRoute = observer(() => {
 	};
 
 	return (
-		<AdminSpacesSpaceIdGroundEditPage
+		<GroundEditPage
 			groundName={ground?.name}
 			name={state.name}
 			label={state.label}

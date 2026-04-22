@@ -1,7 +1,7 @@
 "use client";
 
 import { type GroundDto, useGetSpaceGround } from "@cocrepo/api/core/spaces";
-import { AdminSpacesSpaceIdGroundPage } from "@cocrepo/ui";
+import { GroundDetailPage } from "@cocrepo/ui";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 
@@ -24,7 +24,7 @@ export default function AdminSpacesSpaceIdGroundRoute() {
 	};
 
 	return (
-		<AdminSpacesSpaceIdGroundPage
+		<GroundDetailPage
 			spaceId={spaceId}
 			ground={
 				ground

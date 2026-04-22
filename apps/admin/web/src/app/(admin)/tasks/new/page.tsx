@@ -1,7 +1,7 @@
 "use client";
 
 import { useCreateTask } from "@cocrepo/api/core/tasks";
-import { AdminTasksNewPage } from "@cocrepo/ui";
+import { TaskCreatePage } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -135,7 +135,7 @@ const AdminTasksNewRoute = observer(() => {
 	};
 
 	return (
-		<AdminTasksNewPage
+		<TaskCreatePage
 			name={state.name}
 			durationMin={state.durationMin}
 			durationSec={state.durationSec}

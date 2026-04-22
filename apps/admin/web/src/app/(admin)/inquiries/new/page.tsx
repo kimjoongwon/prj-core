@@ -12,10 +12,10 @@ import { getUsers } from "@cocrepo/api/core/users";
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import type { AiFormOptionItem, AiFormPatch } from "@cocrepo/type";
 import {
-	type AdminInquiriesNewPageCustomerSearchResult,
-	type AdminInquiriesNewPageFormState,
-	type AdminInquiriesNewPageOption,
-	AdminInquiriesNewPage,
+	type InquiryCreatePageCustomerSearchResult,
+	type InquiryCreatePageFormState,
+	type InquiryCreatePageOption,
+	InquiryCreatePage,
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -54,7 +54,7 @@ const normalizeAiFormOptions = (
 
 const mapSelectOptions = (
 	items?: AiFormOptionItem[],
-): AdminInquiriesNewPageOption[] =>
+): InquiryCreatePageOption[] =>
 	(items ?? []).map((item) => ({
 		value: String(item.value ?? ""),
 		text: item.label,
@@ -68,7 +68,7 @@ export default observer(function InquiriesNewPageRoute() {
 	const bootstrap = bootstrapResponse?.data;
 	const bootstrapOptions = normalizeAiFormOptions(bootstrap?.options);
 
-	const state = useLocalObservable<AdminInquiriesNewPageFormState & {
+	const state = useLocalObservable<InquiryCreatePageFormState & {
 		initialized: boolean;
 		isSubmitting: boolean;
 		initFromBootstrap: () => void;
@@ -84,7 +84,7 @@ export default observer(function InquiriesNewPageRoute() {
 			category: "GENERAL" as InquiryCategory,
 			channel: "WEB" as InquiryChannel,
 			priority: "NORMAL" as InquiryPriority,
-			searchResults: [] as AdminInquiriesNewPageCustomerSearchResult[],
+			searchResults: [] as InquiryCreatePageCustomerSearchResult[],
 			errors: {} as Record<string, string>,
 			initFromBootstrap() {
 				if (!bootstrap || this.initialized) {
@@ -211,7 +211,7 @@ export default observer(function InquiriesNewPageRoute() {
 	};
 
 	return (
-		<AdminInquiriesNewPage
+		<InquiryCreatePage
 			formState={state}
 			bootstrap={
 				bootstrap

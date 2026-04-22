@@ -5,8 +5,8 @@ import {
 	useGetCategories,
 } from "@cocrepo/api/core/categories";
 import {
-	AdminRolesCategoriesNewPage,
-	type AdminRolesCategoriesNewPageOption,
+	RoleCategoryCreatePage,
+	type RoleCategoryCreatePageOption,
 } from "@cocrepo/ui";
 import { usePersistStore } from "@/stores/AppStoreProvider";
 import { observer } from "mobx-react-lite";
@@ -61,7 +61,7 @@ const AdminRolesCategoriesNewRoute = observer(() => {
 	};
 
 	return (
-		<AdminRolesCategoriesNewPage
+		<RoleCategoryCreatePage
 			name={name}
 			parentId={parentId}
 			nameError={nameError}
@@ -84,7 +84,7 @@ const AdminRolesCategoriesNewRoute = observer(() => {
 
 function mapCategoryOption(
 	category: CategoryOption,
-): AdminRolesCategoriesNewPageOption {
+): RoleCategoryCreatePageOption {
 	return {
 		id: category.id,
 		name: category.name,

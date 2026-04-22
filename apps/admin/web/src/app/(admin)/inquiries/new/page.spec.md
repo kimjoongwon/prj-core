@@ -388,13 +388,14 @@
 - reusable target: `form`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
-- route는 create bootstrap, 고객 검색, AI fill, create mutation, 라우팅을 소유하고 `AdminInquiriesNewPage`에는 props로 주입합니다.
+- route는 create bootstrap, 고객 검색, AI fill, create mutation, 라우팅을 소유하고 `InquiryCreatePage`에는 props로 주입합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-30 | create bootstrap/고객 검색/AI fill/mutation/라우팅을 route container가 소유하고 `AdminInquiriesNewPage`는 pure page로 소비하도록 반영 | codex |
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-03-30 | create bootstrap/고객 검색/AI fill/mutation/라우팅을 route container가 소유하고 `InquiryCreatePage`는 pure page로 소비하도록 반영 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |

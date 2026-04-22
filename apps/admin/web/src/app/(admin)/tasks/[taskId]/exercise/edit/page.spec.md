@@ -92,7 +92,7 @@
 - route container가 `useParams`, `useRouter`, `useGetTaskExercise`, `useUpdateTaskExercise`, `useLocalObservable`을 소유합니다.
 - route container가 `useTaskExerciseAssetBrowser()`를 통해 image/video picker slot과 공통 `AssetBrowser` bindings를 소유합니다.
 - route container가 duration 분/초 변환, 스케줄 가능 상태 계산, 저장 성공/실패 toast와 상세 페이지 이동을 처리합니다.
-- `AdminTasksTaskIdExerciseEditPage`는 입력값/에러/CTA handler만 렌더링합니다.
+- `TaskExerciseEditPage`는 입력값/에러/CTA handler만 렌더링합니다.
 
 ## 이벤트 핸들러
 
@@ -150,6 +150,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-04-01 | 수정 화면의 자산 변경 흐름을 공통 `AssetBrowser` modal과 shared hook 조합으로 전환 | codex |
 | 2026-03-30 | 조회/저장/local state 책임을 route container로 명시하고 pure page props 위임 구조를 문서화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |

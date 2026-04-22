@@ -4,12 +4,12 @@ export type {
 } from "./AbilityDetailPage/AbilityDetailPage";
 export { AbilityDetailPage } from "./AbilityDetailPage/AbilityDetailPage";
 export type {
-	AbilityEditorPageChangeHandlers,
-	AbilityEditorPageForm,
-	AbilityEditorPageOption,
-	AbilityEditorPageProps,
-} from "./AbilityEditorPage/AbilityEditorPage";
-export { AbilityEditorPage } from "./AbilityEditorPage/AbilityEditorPage";
+	AbilityFormPageChangeHandlers,
+	AbilityFormPageForm,
+	AbilityFormPageOption,
+	AbilityFormPageProps,
+} from "./AbilityFormPage/AbilityFormPage";
+export { AbilityFormPage } from "./AbilityFormPage/AbilityFormPage";
 export type {
 	AbilityListPageAbility,
 	AbilityListPageFilters,
@@ -23,405 +23,405 @@ export type {
 } from "./AddressEmailVerifyPage/AddressEmailVerifyPage";
 export { AddressEmailVerifyPage } from "./AddressEmailVerifyPage/AddressEmailVerifyPage";
 export type {
-	AdminActionsActionIdEditPageAction,
-	AdminActionsActionIdEditPageForm,
-	AdminActionsActionIdEditPageFormState,
-	AdminActionsActionIdEditPageProps,
-} from "./AdminActionsActionIdEditPage/AdminActionsActionIdEditPage";
-export { AdminActionsActionIdEditPage } from "./AdminActionsActionIdEditPage/AdminActionsActionIdEditPage";
+	ActionEditPageAction,
+	ActionEditPageForm,
+	ActionEditPageFormState,
+	ActionEditPageProps,
+} from "./ActionEditPage/ActionEditPage";
+export { ActionEditPage } from "./ActionEditPage/ActionEditPage";
 export type {
-	AdminActionsActionIdPageAction,
-	AdminActionsActionIdPageProps,
-} from "./AdminActionsActionIdPage/AdminActionsActionIdPage";
-export { AdminActionsActionIdPage } from "./AdminActionsActionIdPage/AdminActionsActionIdPage";
+	ActionDetailPageAction,
+	ActionDetailPageProps,
+} from "./ActionDetailPage/ActionDetailPage";
+export { ActionDetailPage } from "./ActionDetailPage/ActionDetailPage";
 export type {
-	AdminActionsNewPageForm,
-	AdminActionsNewPageFormState,
-	AdminActionsNewPageProps,
-} from "./AdminActionsNewPage/AdminActionsNewPage";
-export { AdminActionsNewPage } from "./AdminActionsNewPage/AdminActionsNewPage";
+	ActionCreatePageForm,
+	ActionCreatePageFormState,
+	ActionCreatePageProps,
+} from "./ActionCreatePage/ActionCreatePage";
+export { ActionCreatePage } from "./ActionCreatePage/ActionCreatePage";
 export type {
-	AdminActionsPageAction,
-	AdminActionsPageProps,
-	AdminActionsPageQueryStates,
-	AdminActionsPageSetQueryStates,
-} from "./AdminActionsPage/AdminActionsPage";
+	ActionListPageAction,
+	ActionListPageProps,
+	ActionListPageQueryStates,
+	ActionListPageSetQueryStates,
+} from "./ActionListPage/ActionListPage";
 export {
-	AdminActionsPage,
+	ActionListPage,
 	adminActionsPageQueryInputs,
-} from "./AdminActionsPage/AdminActionsPage";
+} from "./ActionListPage/ActionListPage";
 export type {
-	AdminAssetsAssetIdPageAsset,
-	AdminAssetsAssetIdPageFolder,
-	AdminAssetsAssetIdPageProps,
-} from "./AdminAssetsAssetIdPage/AdminAssetsAssetIdPage";
-export { AdminAssetsAssetIdPage } from "./AdminAssetsAssetIdPage/AdminAssetsAssetIdPage";
+	AssetDetailPageAsset,
+	AssetDetailPageFolder,
+	AssetDetailPageProps,
+} from "./AssetDetailPage/AssetDetailPage";
+export { AssetDetailPage } from "./AssetDetailPage/AssetDetailPage";
 export type {
-	AdminAssetsPageAsset,
-	AdminAssetsPageProps,
-	AdminAssetsPageQueryStates,
-	AdminAssetsPageSetQueryStates,
-} from "./AdminAssetsPage/AdminAssetsPage";
+	AssetListPageAsset,
+	AssetListPageProps,
+	AssetListPageQueryStates,
+	AssetListPageSetQueryStates,
+} from "./AssetListPage/AssetListPage";
 export {
-	AdminAssetsPage,
+	AssetListPage,
 	adminAssetsPageQueryInputs,
-} from "./AdminAssetsPage/AdminAssetsPage";
-export type { AdminAuthLoginPageProps } from "./AdminAuthLoginPage/AdminAuthLoginPage";
-export { AdminAuthLoginPage } from "./AdminAuthLoginPage/AdminAuthLoginPage";
-export { AdminDashboardPage } from "./AdminDashboardPage/AdminDashboardPage";
+} from "./AssetListPage/AssetListPage";
+export type { LoginRedirectPageProps } from "./LoginRedirectPage/LoginRedirectPage";
+export { LoginRedirectPage } from "./LoginRedirectPage/LoginRedirectPage";
+export { DashboardPage } from "./DashboardPage/DashboardPage";
 export type {
-	AdminInquiriesInquiryIdEditPageBootstrap,
-	AdminInquiriesInquiryIdEditPageFormState,
-	AdminInquiriesInquiryIdEditPageOption,
-	AdminInquiriesInquiryIdEditPageProps,
-} from "./AdminInquiriesInquiryIdEditPage/AdminInquiriesInquiryIdEditPage";
-export { AdminInquiriesInquiryIdEditPage } from "./AdminInquiriesInquiryIdEditPage/AdminInquiriesInquiryIdEditPage";
+	InquiryEditPageBootstrap,
+	InquiryEditPageFormState,
+	InquiryEditPageOption,
+	InquiryEditPageProps,
+} from "./InquiryEditPage/InquiryEditPage";
+export { InquiryEditPage } from "./InquiryEditPage/InquiryEditPage";
 export type {
-	AdminInquiriesInquiryIdPageAssigneeOption,
-	AdminInquiriesInquiryIdPageBootstrap,
-	AdminInquiriesInquiryIdPageInquiry,
-	AdminInquiriesInquiryIdPageMetaFormState,
-	AdminInquiriesInquiryIdPageOption,
-	AdminInquiriesInquiryIdPageParticipantListItem,
-	AdminInquiriesInquiryIdPageProps,
-	AdminInquiriesInquiryIdPageRealtimeState,
-} from "./AdminInquiriesInquiryIdPage/AdminInquiriesInquiryIdPage";
-export { AdminInquiriesInquiryIdPage } from "./AdminInquiriesInquiryIdPage/AdminInquiriesInquiryIdPage";
+	InquiryDetailPageAssigneeOption,
+	InquiryDetailPageBootstrap,
+	InquiryDetailPageInquiry,
+	InquiryDetailPageMetaFormState,
+	InquiryDetailPageOption,
+	InquiryDetailPageParticipantListItem,
+	InquiryDetailPageProps,
+	InquiryDetailPageRealtimeState,
+} from "./InquiryDetailPage/InquiryDetailPage";
+export { InquiryDetailPage } from "./InquiryDetailPage/InquiryDetailPage";
 export type {
 	UseInquiryWebSocketOptions as UseInquiryDetailWebSocketOptions,
 	UseInquiryWebSocketReturn as UseInquiryDetailWebSocketReturn,
 	WebSocketStatus as InquiryDetailWebSocketStatus,
-} from "./AdminInquiriesInquiryIdPage/hooks/useInquiryWebSocket";
-export { useInquiryWebSocket as useInquiryDetailWebSocket } from "./AdminInquiriesInquiryIdPage/hooks/useInquiryWebSocket";
+} from "./InquiryDetailPage/hooks/useInquiryWebSocket";
+export { useInquiryWebSocket as useInquiryDetailWebSocket } from "./InquiryDetailPage/hooks/useInquiryWebSocket";
 export type {
-	AdminInquiriesNewPageBootstrap,
-	AdminInquiriesNewPageCustomerSearchResult,
-	AdminInquiriesNewPageFormState,
-	AdminInquiriesNewPageOption,
-	AdminInquiriesNewPageProps,
-} from "./AdminInquiriesNewPage/AdminInquiriesNewPage";
-export { AdminInquiriesNewPage } from "./AdminInquiriesNewPage/AdminInquiriesNewPage";
+	InquiryCreatePageBootstrap,
+	InquiryCreatePageCustomerSearchResult,
+	InquiryCreatePageFormState,
+	InquiryCreatePageOption,
+	InquiryCreatePageProps,
+} from "./InquiryCreatePage/InquiryCreatePage";
+export { InquiryCreatePage } from "./InquiryCreatePage/InquiryCreatePage";
 export type {
-	AdminInquiriesPageInquiry,
-	AdminInquiriesPageProps,
-	AdminInquiriesPageQueryStates,
-	AdminInquiriesPageSetQueryStates,
-} from "./AdminInquiriesPage/AdminInquiriesPage";
+	InquiryListPageInquiry,
+	InquiryListPageProps,
+	InquiryListPageQueryStates,
+	InquiryListPageSetQueryStates,
+} from "./InquiryListPage/InquiryListPage";
 export {
-	AdminInquiriesPage,
+	InquiryListPage,
 	adminInquiriesPageQueryInputs,
-} from "./AdminInquiriesPage/AdminInquiriesPage";
+} from "./InquiryListPage/InquiryListPage";
 export type {
-	AdminRolesCategoriesCategoryIdEditPageOption,
-	AdminRolesCategoriesCategoryIdEditPageProps,
-} from "./AdminRolesCategoriesCategoryIdEditPage/AdminRolesCategoriesCategoryIdEditPage";
-export { AdminRolesCategoriesCategoryIdEditPage } from "./AdminRolesCategoriesCategoryIdEditPage/AdminRolesCategoriesCategoryIdEditPage";
+	RoleCategoryEditPageOption,
+	RoleCategoryEditPageProps,
+} from "./RoleCategoryEditPage/RoleCategoryEditPage";
+export { RoleCategoryEditPage } from "./RoleCategoryEditPage/RoleCategoryEditPage";
 export type {
-	AdminRolesCategoriesCategoryIdPageCategory,
-	AdminRolesCategoriesCategoryIdPageProps,
-} from "./AdminRolesCategoriesCategoryIdPage/AdminRolesCategoriesCategoryIdPage";
-export { AdminRolesCategoriesCategoryIdPage } from "./AdminRolesCategoriesCategoryIdPage/AdminRolesCategoriesCategoryIdPage";
+	RoleCategoryDetailPageCategory,
+	RoleCategoryDetailPageProps,
+} from "./RoleCategoryDetailPage/RoleCategoryDetailPage";
+export { RoleCategoryDetailPage } from "./RoleCategoryDetailPage/RoleCategoryDetailPage";
 export type {
-	AdminRolesCategoriesNewPageOption,
-	AdminRolesCategoriesNewPageProps,
-} from "./AdminRolesCategoriesNewPage/AdminRolesCategoriesNewPage";
-export { AdminRolesCategoriesNewPage } from "./AdminRolesCategoriesNewPage/AdminRolesCategoriesNewPage";
+	RoleCategoryCreatePageOption,
+	RoleCategoryCreatePageProps,
+} from "./RoleCategoryCreatePage/RoleCategoryCreatePage";
+export { RoleCategoryCreatePage } from "./RoleCategoryCreatePage/RoleCategoryCreatePage";
 export type {
-	AdminRolesCategoriesPageCategory,
-	AdminRolesCategoriesPageProps,
-} from "./AdminRolesCategoriesPage/AdminRolesCategoriesPage";
-export { AdminRolesCategoriesPage } from "./AdminRolesCategoriesPage/AdminRolesCategoriesPage";
-export type { AdminRolesGroupsGroupIdEditPageProps } from "./AdminRolesGroupsGroupIdEditPage/AdminRolesGroupsGroupIdEditPage";
-export { AdminRolesGroupsGroupIdEditPage } from "./AdminRolesGroupsGroupIdEditPage/AdminRolesGroupsGroupIdEditPage";
+	RoleCategoryListPageCategory,
+	RoleCategoryListPageProps,
+} from "./RoleCategoryListPage/RoleCategoryListPage";
+export { RoleCategoryListPage } from "./RoleCategoryListPage/RoleCategoryListPage";
+export type { RoleGroupEditPageProps } from "./RoleGroupEditPage/RoleGroupEditPage";
+export { RoleGroupEditPage } from "./RoleGroupEditPage/RoleGroupEditPage";
 export type {
-	AdminRolesGroupsGroupIdPageGroup,
-	AdminRolesGroupsGroupIdPageProps,
-} from "./AdminRolesGroupsGroupIdPage/AdminRolesGroupsGroupIdPage";
-export { AdminRolesGroupsGroupIdPage } from "./AdminRolesGroupsGroupIdPage/AdminRolesGroupsGroupIdPage";
-export type { AdminRolesGroupsNewPageProps } from "./AdminRolesGroupsNewPage/AdminRolesGroupsNewPage";
-export { AdminRolesGroupsNewPage } from "./AdminRolesGroupsNewPage/AdminRolesGroupsNewPage";
+	RoleGroupDetailPageGroup,
+	RoleGroupDetailPageProps,
+} from "./RoleGroupDetailPage/RoleGroupDetailPage";
+export { RoleGroupDetailPage } from "./RoleGroupDetailPage/RoleGroupDetailPage";
+export type { RoleGroupCreatePageProps } from "./RoleGroupCreatePage/RoleGroupCreatePage";
+export { RoleGroupCreatePage } from "./RoleGroupCreatePage/RoleGroupCreatePage";
 export type {
-	AdminRolesGroupsPageGroup,
-	AdminRolesGroupsPageProps,
-} from "./AdminRolesGroupsPage/AdminRolesGroupsPage";
-export { AdminRolesGroupsPage } from "./AdminRolesGroupsPage/AdminRolesGroupsPage";
-export type { AdminRolesNewPageProps } from "./AdminRolesNewPage/AdminRolesNewPage";
-export { AdminRolesNewPage } from "./AdminRolesNewPage/AdminRolesNewPage";
+	RoleGroupListPageGroup,
+	RoleGroupListPageProps,
+} from "./RoleGroupListPage/RoleGroupListPage";
+export { RoleGroupListPage } from "./RoleGroupListPage/RoleGroupListPage";
+export type { RoleCreatePageProps } from "./RoleCreatePage/RoleCreatePage";
+export { RoleCreatePage } from "./RoleCreatePage/RoleCreatePage";
 export type {
-	AdminRolesPageProps,
-	AdminRolesPageQueryStates,
-	AdminRolesPageRole,
-	AdminRolesPageSetQueryStates,
-} from "./AdminRolesPage/AdminRolesPage";
-export { AdminRolesPage } from "./AdminRolesPage/AdminRolesPage";
-export type { AdminRolesRoleIdAbilitiesAbilityIdActionsPageProps } from "./AdminRolesRoleIdAbilitiesAbilityIdActionsPage/AdminRolesRoleIdAbilitiesAbilityIdActionsPage";
-export { AdminRolesRoleIdAbilitiesAbilityIdActionsPage } from "./AdminRolesRoleIdAbilitiesAbilityIdActionsPage/AdminRolesRoleIdAbilitiesAbilityIdActionsPage";
-export type { AdminRolesRoleIdAbilitiesAbilityIdSubjectsPageProps } from "./AdminRolesRoleIdAbilitiesAbilityIdSubjectsPage/AdminRolesRoleIdAbilitiesAbilityIdSubjectsPage";
-export { AdminRolesRoleIdAbilitiesAbilityIdSubjectsPage } from "./AdminRolesRoleIdAbilitiesAbilityIdSubjectsPage/AdminRolesRoleIdAbilitiesAbilityIdSubjectsPage";
-export type { AdminRolesRoleIdEditPageProps } from "./AdminRolesRoleIdEditPage/AdminRolesRoleIdEditPage";
-export { AdminRolesRoleIdEditPage } from "./AdminRolesRoleIdEditPage/AdminRolesRoleIdEditPage";
+	RoleListPageProps,
+	RoleListPageQueryStates,
+	RoleListPageRole,
+	RoleListPageSetQueryStates,
+} from "./RoleListPage/RoleListPage";
+export { RoleListPage } from "./RoleListPage/RoleListPage";
+export type { RoleAbilityActionListPageProps } from "./RoleAbilityActionListPage/RoleAbilityActionListPage";
+export { RoleAbilityActionListPage } from "./RoleAbilityActionListPage/RoleAbilityActionListPage";
+export type { RoleAbilitySubjectListPageProps } from "./RoleAbilitySubjectListPage/RoleAbilitySubjectListPage";
+export { RoleAbilitySubjectListPage } from "./RoleAbilitySubjectListPage/RoleAbilitySubjectListPage";
+export type { RoleEditPageProps } from "./RoleEditPage/RoleEditPage";
+export { RoleEditPage } from "./RoleEditPage/RoleEditPage";
 export type {
-	AdminRolesRoleIdPageAbility,
-	AdminRolesRoleIdPageChangeSummary,
-	AdminRolesRoleIdPageCrudActionKey,
-	AdminRolesRoleIdPageCrudActionState,
-	AdminRolesRoleIdPageCrudBundle,
-	AdminRolesRoleIdPageGrantItem,
-	AdminRolesRoleIdPageMenuDiagnostic,
-	AdminRolesRoleIdPageMenuIssue,
-	AdminRolesRoleIdPageMenuIssueCode,
-	AdminRolesRoleIdPageMenuPermission,
-	AdminRolesRoleIdPagePageDiagnostic,
-	AdminRolesRoleIdPagePagePermission,
-	AdminRolesRoleIdPagePermissionIssue,
-	AdminRolesRoleIdPagePermissionIssueCode,
-	AdminRolesRoleIdPageProps,
-	AdminRolesRoleIdPageRelatedAbility,
-	AdminRolesRoleIdPageRole,
-} from "./AdminRolesRoleIdPage/AdminRolesRoleIdPage";
-export { AdminRolesRoleIdPage } from "./AdminRolesRoleIdPage/AdminRolesRoleIdPage";
+	RoleDetailPageAbility,
+	RoleDetailPageChangeSummary,
+	RoleDetailPageCrudActionKey,
+	RoleDetailPageCrudActionState,
+	RoleDetailPageCrudBundle,
+	RoleDetailPageGrantItem,
+	RoleDetailPageMenuDiagnostic,
+	RoleDetailPageMenuIssue,
+	RoleDetailPageMenuIssueCode,
+	RoleDetailPageMenuPermission,
+	RoleDetailPagePageDiagnostic,
+	RoleDetailPagePagePermission,
+	RoleDetailPagePermissionIssue,
+	RoleDetailPagePermissionIssueCode,
+	RoleDetailPageProps,
+	RoleDetailPageRelatedAbility,
+	RoleDetailPageRole,
+} from "./RoleDetailPage/RoleDetailPage";
+export { RoleDetailPage } from "./RoleDetailPage/RoleDetailPage";
 export type {
-	AdminRoutineActivityFormItem,
-	AdminRoutinesNewPageProps,
-	AdminRoutineTaskCandidate,
-} from "./AdminRoutinesNewPage/AdminRoutinesNewPage";
-export { AdminRoutinesNewPage } from "./AdminRoutinesNewPage/AdminRoutinesNewPage";
+	RoutineActivityFormItem,
+	RoutineCreatePageProps,
+	RoutineTaskCandidate,
+} from "./RoutineCreatePage/RoutineCreatePage";
+export { RoutineCreatePage } from "./RoutineCreatePage/RoutineCreatePage";
 export type {
-	AdminRoutinesPageProps,
-	AdminRoutinesPageQueryStates,
-	AdminRoutinesPageRoutine,
-	AdminRoutinesPageSetQueryStates,
-} from "./AdminRoutinesPage/AdminRoutinesPage";
+	RoutineListPageProps,
+	RoutineListPageQueryStates,
+	RoutineListPageRoutine,
+	RoutineListPageSetQueryStates,
+} from "./RoutineListPage/RoutineListPage";
 export {
-	AdminRoutinesPage,
+	RoutineListPage,
 	adminRoutinesPageQueryInputs,
-} from "./AdminRoutinesPage/AdminRoutinesPage";
-export type { AdminRoutinesRoutineIdEditPageProps } from "./AdminRoutinesRoutineIdEditPage/AdminRoutinesRoutineIdEditPage";
-export { AdminRoutinesRoutineIdEditPage } from "./AdminRoutinesRoutineIdEditPage/AdminRoutinesRoutineIdEditPage";
+} from "./RoutineListPage/RoutineListPage";
+export type { RoutineEditPageProps } from "./RoutineEditPage/RoutineEditPage";
+export { RoutineEditPage } from "./RoutineEditPage/RoutineEditPage";
 export type {
-	AdminRoutinesRoutineIdPageActivity,
-	AdminRoutinesRoutineIdPageProgram,
-	AdminRoutinesRoutineIdPageProps,
-	AdminRoutinesRoutineIdPageRoutine,
-} from "./AdminRoutinesRoutineIdPage/AdminRoutinesRoutineIdPage";
-export { AdminRoutinesRoutineIdPage } from "./AdminRoutinesRoutineIdPage/AdminRoutinesRoutineIdPage";
-export type { AdminSpacesNewPageProps } from "./AdminSpacesNewPage/AdminSpacesNewPage";
-export { AdminSpacesNewPage } from "./AdminSpacesNewPage/AdminSpacesNewPage";
+	RoutineDetailPageActivity,
+	RoutineDetailPageProgram,
+	RoutineDetailPageProps,
+	RoutineDetailPageRoutine,
+} from "./RoutineDetailPage/RoutineDetailPage";
+export { RoutineDetailPage } from "./RoutineDetailPage/RoutineDetailPage";
+export type { SpaceCreatePageProps } from "./SpaceCreatePage/SpaceCreatePage";
+export { SpaceCreatePage } from "./SpaceCreatePage/SpaceCreatePage";
 export type {
-	AdminSpacesPageProps,
-	AdminSpacesPageQueryStates,
-	AdminSpacesPageSetQueryStates,
-	AdminSpacesPageSpace,
-} from "./AdminSpacesPage/AdminSpacesPage";
+	SpaceListPageProps,
+	SpaceListPageQueryStates,
+	SpaceListPageSetQueryStates,
+	SpaceListPageSpace,
+} from "./SpaceListPage/SpaceListPage";
 export {
-	AdminSpacesPage,
+	SpaceListPage,
 	adminSpacesPageQueryInputs,
-} from "./AdminSpacesPage/AdminSpacesPage";
-export type { AdminSpacesSpaceIdGroundEditPageProps } from "./AdminSpacesSpaceIdGroundEditPage/AdminSpacesSpaceIdGroundEditPage";
-export { AdminSpacesSpaceIdGroundEditPage } from "./AdminSpacesSpaceIdGroundEditPage/AdminSpacesSpaceIdGroundEditPage";
+} from "./SpaceListPage/SpaceListPage";
+export type { GroundEditPageProps } from "./GroundEditPage/GroundEditPage";
+export { GroundEditPage } from "./GroundEditPage/GroundEditPage";
 export type {
-	AdminSpacesSpaceIdGroundPageGround,
-	AdminSpacesSpaceIdGroundPageProps,
-} from "./AdminSpacesSpaceIdGroundPage/AdminSpacesSpaceIdGroundPage";
-export { AdminSpacesSpaceIdGroundPage } from "./AdminSpacesSpaceIdGroundPage/AdminSpacesSpaceIdGroundPage";
+	GroundDetailPageGround,
+	GroundDetailPageProps,
+} from "./GroundDetailPage/GroundDetailPage";
+export { GroundDetailPage } from "./GroundDetailPage/GroundDetailPage";
 export type {
-	AdminSubjectsPageProps,
-	AdminSubjectsPageQueryStates,
-	AdminSubjectsPageSetQueryStates,
-	AdminSubjectsPageSubject,
-} from "./AdminSubjectsPage/AdminSubjectsPage";
+	SubjectListPageProps,
+	SubjectListPageQueryStates,
+	SubjectListPageSetQueryStates,
+	SubjectListPageSubject,
+} from "./SubjectListPage/SubjectListPage";
 export {
-	AdminSubjectsPage,
+	SubjectListPage,
 	adminSubjectsPageQueryInputs,
-} from "./AdminSubjectsPage/AdminSubjectsPage";
+} from "./SubjectListPage/SubjectListPage";
 export type {
-	AdminSubjectsSubjectIdPageField,
-	AdminSubjectsSubjectIdPageProps,
-	AdminSubjectsSubjectIdPageSubject,
-} from "./AdminSubjectsSubjectIdPage/AdminSubjectsSubjectIdPage";
-export { AdminSubjectsSubjectIdPage } from "./AdminSubjectsSubjectIdPage/AdminSubjectsSubjectIdPage";
-export type { AdminTasksNewPageProps } from "./AdminTasksNewPage/AdminTasksNewPage";
-export { AdminTasksNewPage } from "./AdminTasksNewPage/AdminTasksNewPage";
+	SubjectDetailPageField,
+	SubjectDetailPageProps,
+	SubjectDetailPageSubject,
+} from "./SubjectDetailPage/SubjectDetailPage";
+export { SubjectDetailPage } from "./SubjectDetailPage/SubjectDetailPage";
+export type { TaskCreatePageProps } from "./TaskCreatePage/TaskCreatePage";
+export { TaskCreatePage } from "./TaskCreatePage/TaskCreatePage";
 export type {
-	AdminTasksPageProps,
-	AdminTasksPageQueryStates,
-	AdminTasksPageSetQueryStates,
-	AdminTasksPageTask,
-} from "./AdminTasksPage/AdminTasksPage";
+	TaskListPageProps,
+	TaskListPageQueryStates,
+	TaskListPageSetQueryStates,
+	TaskListPageTask,
+} from "./TaskListPage/TaskListPage";
 export {
-	AdminTasksPage,
+	TaskListPage,
 	adminTasksPageQueryInputs,
-} from "./AdminTasksPage/AdminTasksPage";
-export type { AdminTasksTaskIdExerciseEditPageProps } from "./AdminTasksTaskIdExerciseEditPage/AdminTasksTaskIdExerciseEditPage";
-export { AdminTasksTaskIdExerciseEditPage } from "./AdminTasksTaskIdExerciseEditPage/AdminTasksTaskIdExerciseEditPage";
+} from "./TaskListPage/TaskListPage";
+export type { TaskExerciseEditPageProps } from "./TaskExerciseEditPage/TaskExerciseEditPage";
+export { TaskExerciseEditPage } from "./TaskExerciseEditPage/TaskExerciseEditPage";
 export type {
-	AdminTasksTaskIdExercisePageExercise,
-	AdminTasksTaskIdExercisePageProps,
-	AdminTasksTaskIdExercisePageRoutine,
-} from "./AdminTasksTaskIdExercisePage/AdminTasksTaskIdExercisePage";
-export { AdminTasksTaskIdExercisePage } from "./AdminTasksTaskIdExercisePage/AdminTasksTaskIdExercisePage";
-export type { AdminTemplatesNewPageProps } from "./AdminTemplatesNewPage/AdminTemplatesNewPage";
-export { AdminTemplatesNewPage } from "./AdminTemplatesNewPage/AdminTemplatesNewPage";
+	TaskExerciseDetailPageExercise,
+	TaskExerciseDetailPageProps,
+	TaskExerciseDetailPageRoutine,
+} from "./TaskExerciseDetailPage/TaskExerciseDetailPage";
+export { TaskExerciseDetailPage } from "./TaskExerciseDetailPage/TaskExerciseDetailPage";
+export type { TemplateCreatePageProps } from "./TemplateCreatePage/TemplateCreatePage";
+export { TemplateCreatePage } from "./TemplateCreatePage/TemplateCreatePage";
 export type {
-	AdminTemplatesPageProps,
-	AdminTemplatesPageQueryStates,
-	AdminTemplatesPageSetQueryStates,
-	AdminTemplatesPageTemplate,
-} from "./AdminTemplatesPage/AdminTemplatesPage";
+	TemplateListPageProps,
+	TemplateListPageQueryStates,
+	TemplateListPageSetQueryStates,
+	TemplateListPageTemplate,
+} from "./TemplateListPage/TemplateListPage";
 export {
-	AdminTemplatesPage,
+	TemplateListPage,
 	adminTemplatesPageQueryInputs,
-} from "./AdminTemplatesPage/AdminTemplatesPage";
-export type { AdminTemplatesTemplateIdEditPageProps } from "./AdminTemplatesTemplateIdEditPage/AdminTemplatesTemplateIdEditPage";
-export { AdminTemplatesTemplateIdEditPage } from "./AdminTemplatesTemplateIdEditPage/AdminTemplatesTemplateIdEditPage";
+} from "./TemplateListPage/TemplateListPage";
+export type { TemplateEditPageProps } from "./TemplateEditPage/TemplateEditPage";
+export { TemplateEditPage } from "./TemplateEditPage/TemplateEditPage";
 export type {
-	AdminTemplatesTemplateIdPageProps,
-	AdminTemplatesTemplateIdPageSendTestResult,
-	AdminTemplatesTemplateIdPageTemplate,
-} from "./AdminTemplatesTemplateIdPage/AdminTemplatesTemplateIdPage";
-export { AdminTemplatesTemplateIdPage } from "./AdminTemplatesTemplateIdPage/AdminTemplatesTemplateIdPage";
-export type { AdminTimelinesNewPageProps } from "./AdminTimelinesNewPage/AdminTimelinesNewPage";
-export { AdminTimelinesNewPage } from "./AdminTimelinesNewPage/AdminTimelinesNewPage";
+	TemplateDetailPageProps,
+	TemplateDetailPageSendTestResult,
+	TemplateDetailPageTemplate,
+} from "./TemplateDetailPage/TemplateDetailPage";
+export { TemplateDetailPage } from "./TemplateDetailPage/TemplateDetailPage";
+export type { TimelineCreatePageProps } from "./TimelineCreatePage/TimelineCreatePage";
+export { TimelineCreatePage } from "./TimelineCreatePage/TimelineCreatePage";
 export type {
-	AdminTimelinesPageProps,
-	AdminTimelinesPageQueryStates,
-	AdminTimelinesPageSetQueryStates,
-	AdminTimelinesPageTimeline,
-} from "./AdminTimelinesPage/AdminTimelinesPage";
+	TimelineListPageProps,
+	TimelineListPageQueryStates,
+	TimelineListPageSetQueryStates,
+	TimelineListPageTimeline,
+} from "./TimelineListPage/TimelineListPage";
 export {
-	AdminTimelinesPage,
+	TimelineListPage,
 	adminTimelinesPageQueryInputs,
-} from "./AdminTimelinesPage/AdminTimelinesPage";
-export type { AdminTimelinesTimelineIdEditPageProps } from "./AdminTimelinesTimelineIdEditPage/AdminTimelinesTimelineIdEditPage";
-export { AdminTimelinesTimelineIdEditPage } from "./AdminTimelinesTimelineIdEditPage/AdminTimelinesTimelineIdEditPage";
+} from "./TimelineListPage/TimelineListPage";
+export type { TimelineEditPageProps } from "./TimelineEditPage/TimelineEditPage";
+export { TimelineEditPage } from "./TimelineEditPage/TimelineEditPage";
 export type {
-	AdminTimelinesTimelineIdPageProps,
-	AdminTimelinesTimelineIdPageSessionRow,
-	AdminTimelinesTimelineIdPageTimeline,
-} from "./AdminTimelinesTimelineIdPage/AdminTimelinesTimelineIdPage";
-export { AdminTimelinesTimelineIdPage } from "./AdminTimelinesTimelineIdPage/AdminTimelinesTimelineIdPage";
+	TimelineDetailPageProps,
+	TimelineDetailPageSessionRow,
+	TimelineDetailPageTimeline,
+} from "./TimelineDetailPage/TimelineDetailPage";
+export { TimelineDetailPage } from "./TimelineDetailPage/TimelineDetailPage";
 export type {
-	AdminTimelineSessionPageCycleType,
-	AdminTimelineSessionPageDayOfWeek,
-	AdminTimelineSessionPageSessionType,
-	AdminTimelinesTimelineIdSessionsNewPageProps,
-} from "./AdminTimelinesTimelineIdSessionsNewPage/AdminTimelinesTimelineIdSessionsNewPage";
-export { AdminTimelinesTimelineIdSessionsNewPage } from "./AdminTimelinesTimelineIdSessionsNewPage/AdminTimelinesTimelineIdSessionsNewPage";
-export type { AdminTimelinesTimelineIdSessionsSessionIdEditPageProps } from "./AdminTimelinesTimelineIdSessionsSessionIdEditPage/AdminTimelinesTimelineIdSessionsSessionIdEditPage";
-export { AdminTimelinesTimelineIdSessionsSessionIdEditPage } from "./AdminTimelinesTimelineIdSessionsSessionIdEditPage/AdminTimelinesTimelineIdSessionsSessionIdEditPage";
+	TimelineSessionPageCycleType,
+	TimelineSessionPageDayOfWeek,
+	TimelineSessionPageSessionType,
+	TimelineSessionCreatePageProps,
+} from "./TimelineSessionCreatePage/TimelineSessionCreatePage";
+export { TimelineSessionCreatePage } from "./TimelineSessionCreatePage/TimelineSessionCreatePage";
+export type { TimelineSessionEditPageProps } from "./TimelineSessionEditPage/TimelineSessionEditPage";
+export { TimelineSessionEditPage } from "./TimelineSessionEditPage/TimelineSessionEditPage";
 export type {
-	AdminTimelinesTimelineIdSessionsSessionIdPageProgramRow,
-	AdminTimelinesTimelineIdSessionsSessionIdPageProps,
-	AdminTimelinesTimelineIdSessionsSessionIdPageSession,
-} from "./AdminTimelinesTimelineIdSessionsSessionIdPage/AdminTimelinesTimelineIdSessionsSessionIdPage";
-export { AdminTimelinesTimelineIdSessionsSessionIdPage } from "./AdminTimelinesTimelineIdSessionsSessionIdPage/AdminTimelinesTimelineIdSessionsSessionIdPage";
+	TimelineSessionDetailPageProgramRow,
+	TimelineSessionDetailPageProps,
+	TimelineSessionDetailPageSession,
+} from "./TimelineSessionDetailPage/TimelineSessionDetailPage";
+export { TimelineSessionDetailPage } from "./TimelineSessionDetailPage/TimelineSessionDetailPage";
 export type {
-	AdminTimelinesTimelineIdSessionsSessionIdProgramsNewPageProps,
-	AdminTimelinesTimelineIdSessionsSessionIdProgramsPickerOption,
-	AdminTimelinesTimelineIdSessionsSessionIdProgramsRoutinePreviewItem,
-} from "./AdminTimelinesTimelineIdSessionsSessionIdProgramsNewPage/AdminTimelinesTimelineIdSessionsSessionIdProgramsNewPage";
-export { AdminTimelinesTimelineIdSessionsSessionIdProgramsNewPage } from "./AdminTimelinesTimelineIdSessionsSessionIdProgramsNewPage/AdminTimelinesTimelineIdSessionsSessionIdProgramsNewPage";
-export type { AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditPageProps } from "./AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditPage/AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditPage";
-export { AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditPage } from "./AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditPage/AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditPage";
+	TimelineSessionProgramCreatePageProps,
+	TimelineSessionProgramPickerOption,
+	TimelineSessionProgramRoutinePreviewItem,
+} from "./TimelineSessionProgramCreatePage/TimelineSessionProgramCreatePage";
+export { TimelineSessionProgramCreatePage } from "./TimelineSessionProgramCreatePage/TimelineSessionProgramCreatePage";
+export type { TimelineSessionProgramEditPageProps } from "./TimelineSessionProgramEditPage/TimelineSessionProgramEditPage";
+export { TimelineSessionProgramEditPage } from "./TimelineSessionProgramEditPage/TimelineSessionProgramEditPage";
 export type {
-	AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPageData,
-	AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPageExecutionItem,
-	AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPageProps,
-} from "./AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPage/AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPage";
-export { AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPage } from "./AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPage/AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPage";
+	TimelineSessionProgramDetailPageData,
+	TimelineSessionProgramDetailPageExecutionItem,
+	TimelineSessionProgramDetailPageProps,
+} from "./TimelineSessionProgramDetailPage/TimelineSessionProgramDetailPage";
+export { TimelineSessionProgramDetailPage } from "./TimelineSessionProgramDetailPage/TimelineSessionProgramDetailPage";
 export type { GroundsSelectPageProps } from "./GroundsSelectPage/GroundsSelectPage";
 export { GroundsSelectPage } from "./GroundsSelectPage/GroundsSelectPage";
-export type { IdpAuthLoginPageProps } from "./IdpAuthLoginPage/IdpAuthLoginPage";
-export { IdpAuthLoginPage } from "./IdpAuthLoginPage/IdpAuthLoginPage";
+export type { IdentityLoginRedirectPageProps } from "./IdentityLoginRedirectPage/IdentityLoginRedirectPage";
+export { IdentityLoginRedirectPage } from "./IdentityLoginRedirectPage/IdentityLoginRedirectPage";
 export type {
-	IdpConsoleAccountsPageAccount,
-	IdpConsoleAccountsPageProps,
-	IdpConsoleAccountsPageQueryStates,
-	IdpConsoleAccountsPageSetQueryStates,
-} from "./IdpConsoleAccountsPage/IdpConsoleAccountsPage";
+	AccountListPageAccount,
+	AccountListPageProps,
+	AccountListPageQueryStates,
+	AccountListPageSetQueryStates,
+} from "./AccountListPage/AccountListPage";
 export {
-	IdpConsoleAccountsPage,
+	AccountListPage,
 	idpConsoleAccountsPageQueryInputs,
-} from "./IdpConsoleAccountsPage/IdpConsoleAccountsPage";
+} from "./AccountListPage/AccountListPage";
 export type {
-	IdpConsoleAccountsUserIdPageAccount,
-	IdpConsoleAccountsUserIdPageModalAction,
-	IdpConsoleAccountsUserIdPageProps,
-} from "./IdpConsoleAccountsUserIdPage/IdpConsoleAccountsUserIdPage";
-export { IdpConsoleAccountsUserIdPage } from "./IdpConsoleAccountsUserIdPage/IdpConsoleAccountsUserIdPage";
+	AccountDetailPageAccount,
+	AccountDetailPageModalAction,
+	AccountDetailPageProps,
+} from "./AccountDetailPage/AccountDetailPage";
+export { AccountDetailPage } from "./AccountDetailPage/AccountDetailPage";
 export type {
-	IdpConsoleAuthAuditLogsPageLog,
-	IdpConsoleAuthAuditLogsPageProps,
-	IdpConsoleAuthAuditLogsPageQueryStates,
-	IdpConsoleAuthAuditLogsPageSetQueryStates,
-	IdpConsoleAuthAuditLogsPageStats,
-} from "./IdpConsoleAuthAuditLogsPage/IdpConsoleAuthAuditLogsPage";
+	AuthAuditLogListPageLog,
+	AuthAuditLogListPageProps,
+	AuthAuditLogListPageQueryStates,
+	AuthAuditLogListPageSetQueryStates,
+	AuthAuditLogListPageStats,
+} from "./AuthAuditLogListPage/AuthAuditLogListPage";
 export {
-	IdpConsoleAuthAuditLogsPage,
+	AuthAuditLogListPage,
 	idpConsoleAuthAuditLogsPageQueryInputs,
-} from "./IdpConsoleAuthAuditLogsPage/IdpConsoleAuthAuditLogsPage";
+} from "./AuthAuditLogListPage/AuthAuditLogListPage";
 export type {
-	IdpConsoleDashboardPageProps,
-	IdpConsoleDashboardPageStats,
-	IdpConsoleDashboardPageTrendItem,
-} from "./IdpConsoleDashboardPage/IdpConsoleDashboardPage";
-export { IdpConsoleDashboardPage } from "./IdpConsoleDashboardPage/IdpConsoleDashboardPage";
+	IdentityDashboardPageProps,
+	IdentityDashboardPageStats,
+	IdentityDashboardPageTrendItem,
+} from "./IdentityDashboardPage/IdentityDashboardPage";
+export { IdentityDashboardPage } from "./IdentityDashboardPage/IdentityDashboardPage";
 export type {
-	IdpConsoleOidcClientsNewPageProps,
-	IdpConsoleOidcClientsNewPageSubmitInput,
-} from "./IdpConsoleOidcClientsNewPage/IdpConsoleOidcClientsNewPage";
-export { IdpConsoleOidcClientsNewPage } from "./IdpConsoleOidcClientsNewPage/IdpConsoleOidcClientsNewPage";
+	OidcClientCreatePageProps,
+	OidcClientCreatePageSubmitInput,
+} from "./OidcClientCreatePage/OidcClientCreatePage";
+export { OidcClientCreatePage } from "./OidcClientCreatePage/OidcClientCreatePage";
 export type {
-	IdpConsoleOidcClientsOidcClientIdEditPageClient,
-	IdpConsoleOidcClientsOidcClientIdEditPageFormState,
-	IdpConsoleOidcClientsOidcClientIdEditPageProps,
-	IdpConsoleOidcClientsOidcClientIdEditPageSubmitInput,
-} from "./IdpConsoleOidcClientsOidcClientIdEditPage/IdpConsoleOidcClientsOidcClientIdEditPage";
-export { IdpConsoleOidcClientsOidcClientIdEditPage } from "./IdpConsoleOidcClientsOidcClientIdEditPage/IdpConsoleOidcClientsOidcClientIdEditPage";
+	OidcClientEditPageClient,
+	OidcClientEditPageFormState,
+	OidcClientEditPageProps,
+	OidcClientEditPageSubmitInput,
+} from "./OidcClientEditPage/OidcClientEditPage";
+export { OidcClientEditPage } from "./OidcClientEditPage/OidcClientEditPage";
 export type {
-	IdpConsoleOidcClientsOidcClientIdPageClient,
-	IdpConsoleOidcClientsOidcClientIdPageProps,
-} from "./IdpConsoleOidcClientsOidcClientIdPage/IdpConsoleOidcClientsOidcClientIdPage";
-export { IdpConsoleOidcClientsOidcClientIdPage } from "./IdpConsoleOidcClientsOidcClientIdPage/IdpConsoleOidcClientsOidcClientIdPage";
+	OidcClientDetailPageClient,
+	OidcClientDetailPageProps,
+} from "./OidcClientDetailPage/OidcClientDetailPage";
+export { OidcClientDetailPage } from "./OidcClientDetailPage/OidcClientDetailPage";
 export type {
-	IdpConsoleOidcClientsPageClient,
-	IdpConsoleOidcClientsPageProps,
-	IdpConsoleOidcClientsPageQueryStates,
-	IdpConsoleOidcClientsPageSetQueryStates,
-} from "./IdpConsoleOidcClientsPage/IdpConsoleOidcClientsPage";
+	OidcClientListPageClient,
+	OidcClientListPageProps,
+	OidcClientListPageQueryStates,
+	OidcClientListPageSetQueryStates,
+} from "./OidcClientListPage/OidcClientListPage";
 export {
-	IdpConsoleOidcClientsPage,
+	OidcClientListPage,
 	idpConsoleOidcClientsPageQueryInputs,
-} from "./IdpConsoleOidcClientsPage/IdpConsoleOidcClientsPage";
+} from "./OidcClientListPage/OidcClientListPage";
 export type {
-	IdpConsoleOidcSessionsPageProps,
-	IdpConsoleOidcSessionsPageQueryStates,
-	IdpConsoleOidcSessionsPageSession,
-	IdpConsoleOidcSessionsPageSetQueryStates,
-	IdpConsoleOidcSessionsPageStats,
-} from "./IdpConsoleOidcSessionsPage/IdpConsoleOidcSessionsPage";
+	OidcSessionListPageProps,
+	OidcSessionListPageQueryStates,
+	OidcSessionListPageSession,
+	OidcSessionListPageSetQueryStates,
+	OidcSessionListPageStats,
+} from "./OidcSessionListPage/OidcSessionListPage";
 export {
-	IdpConsoleOidcSessionsPage,
+	OidcSessionListPage,
 	idpConsoleOidcSessionsPageQueryInputs,
-} from "./IdpConsoleOidcSessionsPage/IdpConsoleOidcSessionsPage";
+} from "./OidcSessionListPage/OidcSessionListPage";
 export type {
-	IdpConsoleSecurityPolicyPageFormState,
-	IdpConsoleSecurityPolicyPagePolicy,
-	IdpConsoleSecurityPolicyPageProps,
-	IdpConsoleSecurityPolicyPageSubmitInput,
-} from "./IdpConsoleSecurityPolicyPage/IdpConsoleSecurityPolicyPage";
-export { IdpConsoleSecurityPolicyPage } from "./IdpConsoleSecurityPolicyPage/IdpConsoleSecurityPolicyPage";
-export type { IdpErrorPageProps } from "./IdpErrorPage/IdpErrorPage";
-export { IdpErrorPage } from "./IdpErrorPage/IdpErrorPage";
-export type { IdpForgotPasswordPageProps } from "./IdpForgotPasswordPage/IdpForgotPasswordPage";
-export { IdpForgotPasswordPage } from "./IdpForgotPasswordPage/IdpForgotPasswordPage";
+	SecurityPolicyFormPageFormState,
+	SecurityPolicyFormPagePolicy,
+	SecurityPolicyFormPageProps,
+	SecurityPolicyFormPageSubmitInput,
+} from "./SecurityPolicyFormPage/SecurityPolicyFormPage";
+export { SecurityPolicyFormPage } from "./SecurityPolicyFormPage/SecurityPolicyFormPage";
+export type { AuthErrorPageProps } from "./AuthErrorPage/AuthErrorPage";
+export { AuthErrorPage } from "./AuthErrorPage/AuthErrorPage";
+export type { ForgotPasswordPageProps } from "./ForgotPasswordPage/ForgotPasswordPage";
+export { ForgotPasswordPage } from "./ForgotPasswordPage/ForgotPasswordPage";
 export type {
 	IdpInteractionClientInfo,
-	IdpInteractionPageProps,
-} from "./IdpInteractionPage/IdpInteractionPage";
-export { IdpInteractionPage } from "./IdpInteractionPage/IdpInteractionPage";
-export type { IdpResetPasswordPageProps } from "./IdpResetPasswordPage/IdpResetPasswordPage";
-export { IdpResetPasswordPage } from "./IdpResetPasswordPage/IdpResetPasswordPage";
+	OidcInteractionPageProps,
+} from "./OidcInteractionPage/OidcInteractionPage";
+export { OidcInteractionPage } from "./OidcInteractionPage/OidcInteractionPage";
+export type { ResetPasswordPageProps } from "./ResetPasswordPage/ResetPasswordPage";
+export { ResetPasswordPage } from "./ResetPasswordPage/ResetPasswordPage";
 export type { LoginPageProps, LoginPageState } from "./LoginPage";
 export { LoginPage } from "./LoginPage";
 export type {

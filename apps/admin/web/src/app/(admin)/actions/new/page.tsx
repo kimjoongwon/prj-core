@@ -2,8 +2,8 @@
 
 import { useCreateAction } from "@cocrepo/api/core/actions";
 import {
-	AdminActionsNewPage,
-	type AdminActionsNewPageFormState,
+	ActionCreatePage,
+	type ActionCreatePageFormState,
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 
 export default observer(function ActionNewPageRoute() {
 	const router = useRouter();
-	const state = useLocalObservable<AdminActionsNewPageFormState>(() => ({
+	const state = useLocalObservable<ActionCreatePageFormState>(() => ({
 		name: "",
 		displayName: "",
 		description: "",
@@ -64,7 +64,7 @@ export default observer(function ActionNewPageRoute() {
 	};
 
 	return (
-		<AdminActionsNewPage
+		<ActionCreatePage
 			formState={state}
 			isSubmitting={isPending}
 			onClickBackButton={() => {

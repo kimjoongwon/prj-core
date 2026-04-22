@@ -7,7 +7,7 @@ import {
 } from "@cocrepo/api/core/abilities";
 import { useGetActions } from "@cocrepo/api/core/actions";
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
-import { AbilityEditorPage } from "@cocrepo/ui";
+import { AbilityFormPage } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -116,7 +116,7 @@ export default observer(function AbilityEditPage() {
 
 	if (isLoading || isSubjectsLoading || isActionsLoading) {
 		return (
-			<AbilityEditorPage
+			<AbilityFormPage
 				status="loading"
 				mode="edit"
 				title="권한 수정"
@@ -127,7 +127,7 @@ export default observer(function AbilityEditPage() {
 
 	if (!ability) {
 		return (
-			<AbilityEditorPage
+			<AbilityFormPage
 				status="not_found"
 				mode="edit"
 				title="권한 수정"
@@ -140,7 +140,7 @@ export default observer(function AbilityEditPage() {
 	}
 
 	return (
-		<AbilityEditorPage
+		<AbilityFormPage
 			status="ready"
 			mode="edit"
 			title="권한 수정"

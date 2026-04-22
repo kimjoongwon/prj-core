@@ -17,19 +17,19 @@ import {
 	SYSTEM_ROLES,
 } from "@cocrepo/constant";
 import {
-	AdminRolesRoleIdPage,
-	type AdminRolesRoleIdPageAbility,
-	type AdminRolesRoleIdPageCrudActionKey,
-	type AdminRolesRoleIdPageCrudBundle,
-	type AdminRolesRoleIdPageGrantItem,
-	type AdminRolesRoleIdPageMenuDiagnostic,
-	type AdminRolesRoleIdPageMenuIssue,
-	type AdminRolesRoleIdPageMenuPermission,
-	type AdminRolesRoleIdPagePageDiagnostic,
-	type AdminRolesRoleIdPagePagePermission,
-	type AdminRolesRoleIdPagePermissionIssue,
-	type AdminRolesRoleIdPageRelatedAbility,
-	type AdminRolesRoleIdPageRole,
+	RoleDetailPage,
+	type RoleDetailPageAbility,
+	type RoleDetailPageCrudActionKey,
+	type RoleDetailPageCrudBundle,
+	type RoleDetailPageGrantItem,
+	type RoleDetailPageMenuDiagnostic,
+	type RoleDetailPageMenuIssue,
+	type RoleDetailPageMenuPermission,
+	type RoleDetailPagePageDiagnostic,
+	type RoleDetailPagePagePermission,
+	type RoleDetailPagePermissionIssue,
+	type RoleDetailPageRelatedAbility,
+	type RoleDetailPageRole,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -42,7 +42,7 @@ const PAGE_ACTION_NAME = "access";
 const MENU_SUBJECT_PREFIX = "menu:";
 const PAGE_SUBJECT_PREFIX = "page:";
 const ENTITY_SUBJECT_PREFIX = "entity:";
-const CRUD_ACTIONS: AdminRolesRoleIdPageCrudActionKey[] = [
+const CRUD_ACTIONS: RoleDetailPageCrudActionKey[] = [
 	"create",
 	"read",
 	"update",
@@ -68,8 +68,8 @@ interface MenuPermissionToggleResolution {
 }
 
 interface BuildMenuPermissionStateResult {
-	menuPermissions: AdminRolesRoleIdPageMenuPermission[];
-	menuDiagnostics: AdminRolesRoleIdPageMenuDiagnostic[];
+	menuPermissions: RoleDetailPageMenuPermission[];
+	menuDiagnostics: RoleDetailPageMenuDiagnostic[];
 	permissionStateByLeaf: Map<string, MenuPermissionToggleResolution>;
 	hasBlockingMenuDiagnostics: boolean;
 }
@@ -84,22 +84,22 @@ interface PagePermissionToggleResolution {
 }
 
 interface BuildPagePermissionStateResult {
-	pagePermissions: AdminRolesRoleIdPagePagePermission[];
-	pageDiagnostics: AdminRolesRoleIdPagePageDiagnostic[];
+	pagePermissions: RoleDetailPagePagePermission[];
+	pageDiagnostics: RoleDetailPagePageDiagnostic[];
 	permissionStateByPage: Map<string, PagePermissionToggleResolution>;
 	hasBlockingPageDiagnostics: boolean;
 }
 
 interface CrudActionResolution {
 	bundleId: string;
-	action: AdminRolesRoleIdPageCrudActionKey;
+	action: RoleDetailPageCrudActionKey;
 	matchedAbilityIds: string[];
 	preferredAbilityId?: string;
 	isAvailable: boolean;
 }
 
 interface BuildCrudBundleStateResult {
-	crudBundles: AdminRolesRoleIdPageCrudBundle[];
+	crudBundles: RoleDetailPageCrudBundle[];
 	actionStateByKey: Map<string, CrudActionResolution>;
 }
 
@@ -111,12 +111,12 @@ const AdminRolesRoleDetailRoute = observer(() => {
 	const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 	const [isEditingGrants, setIsEditingGrants] = useState(false);
 	const [selectedGrantItems, setSelectedGrantItems] = useState<
-		Record<string, AdminRolesRoleIdPageGrantItem>
+		Record<string, RoleDetailPageGrantItem>
 	>({});
 	const [hasChanges, setHasChanges] = useState(false);
 
 	const { data: response, isLoading } = useGetRoleById(roleId);
-	const role = response?.data as AdminRolesRoleIdPageRole | undefined;
+	const role = response?.data as RoleDetailPageRole | undefined;
 
 	const { data: abilitiesResponse, isLoading: isLoadingAbilities } =
 		useGetAbilitiesByRoleId(roleId);
@@ -217,7 +217,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 					abilityId: ability.id,
 					isActive: true,
 					priority: 0,
-				} satisfies AdminRolesRoleIdPageGrantItem,
+				} satisfies RoleDetailPageGrantItem,
 			]),
 		);
 		setSelectedGrantItems(nextItems);
@@ -226,7 +226,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 	};
 
 	return (
-		<AdminRolesRoleIdPage
+		<RoleDetailPage
 			role={role}
 			menuPermissions={menuPermissions}
 			menuDiagnostics={menuDiagnostics}
@@ -514,15 +514,15 @@ function buildMenuPermissionState({
 		canonicalAbilityMap.set(ability.subject.name, current);
 	}
 
-	const menuPermissions: AdminRolesRoleIdPageMenuPermission[] = [];
-	const menuDiagnostics: AdminRolesRoleIdPageMenuDiagnostic[] = [];
+	const menuPermissions: RoleDetailPageMenuPermission[] = [];
+	const menuDiagnostics: RoleDetailPageMenuDiagnostic[] = [];
 	const permissionStateByLeaf = new Map<
 		string,
 		MenuPermissionToggleResolution
 	>();
 
 	for (const leaf of ADMIN_MENU_PERMISSION_LEAFS) {
-		const issues: AdminRolesRoleIdPageMenuIssue[] = [];
+		const issues: RoleDetailPageMenuIssue[] = [];
 		const requirements = leaf.requiredSubjects.map((subjectName) => {
 			const matchedAbilities = canonicalAbilityMap.get(subjectName) ?? [];
 			const preferredAbility = pickPreferredCanonicalAbility(matchedAbilities);
@@ -577,7 +577,7 @@ function buildMenuPermissionState({
 				description: issue.message,
 				technicalDetails: issue.technicalDetails,
 				relatedAbilities: issue.relatedAbilities,
-			} satisfies AdminRolesRoleIdPageMenuDiagnostic,
+			} satisfies RoleDetailPageMenuDiagnostic,
 		}));
 
 		if (!hasGlobalAccess) {
@@ -696,15 +696,15 @@ function buildPagePermissionState({
 		canonicalAbilityMap.set(ability.subject.name, current);
 	}
 
-	const pagePermissions: AdminRolesRoleIdPagePagePermission[] = [];
-	const pageDiagnostics: AdminRolesRoleIdPagePageDiagnostic[] = [];
+	const pagePermissions: RoleDetailPagePagePermission[] = [];
+	const pageDiagnostics: RoleDetailPagePageDiagnostic[] = [];
 	const permissionStateByPage = new Map<
 		string,
 		PagePermissionToggleResolution
 	>();
 
 	for (const item of ADMIN_PAGE_ACCESS_ITEMS) {
-		const issues: AdminRolesRoleIdPageMenuIssue[] = [];
+		const issues: RoleDetailPageMenuIssue[] = [];
 		const matchedAbilities = canonicalAbilityMap.get(item.subject) ?? [];
 		const preferredAbility = pickPreferredCanonicalAbility(matchedAbilities);
 
@@ -868,7 +868,7 @@ function buildCrudBundleState({
 
 	const bundles = [...ADMIN_CRUD_BUNDLES, ...extraBundles];
 	const actionStateByKey = new Map<string, CrudActionResolution>();
-	const crudBundles: AdminRolesRoleIdPageCrudBundle[] = bundles.map(
+	const crudBundles: RoleDetailPageCrudBundle[] = bundles.map(
 		(bundle) => {
 			const subjectMeta = entitySubjectMeta.get(bundle.subject);
 			const actions = CRUD_ACTIONS.map((action) => {
@@ -936,8 +936,8 @@ function isRequirementSelected(
 
 function buildGrantItem(
 	abilityId: string,
-	current?: AdminRolesRoleIdPageGrantItem,
-): AdminRolesRoleIdPageGrantItem {
+	current?: RoleDetailPageGrantItem,
+): RoleDetailPageGrantItem {
 	return (
 		current ?? {
 			abilityId,
@@ -950,7 +950,7 @@ function buildGrantItem(
 function mapRelatedAbilities(
 	matches: AbilityResponseDto[],
 	preferredAbilityId?: string,
-): AdminRolesRoleIdPageRelatedAbility[] | undefined {
+): RoleDetailPageRelatedAbility[] | undefined {
 	if (matches.length === 0) {
 		return undefined;
 	}
@@ -964,9 +964,9 @@ function mapRelatedAbilities(
 }
 
 function mergePermissionIssues(
-	issues: AdminRolesRoleIdPagePermissionIssue[],
-): AdminRolesRoleIdPagePermissionIssue[] {
-	const merged = new Map<string, AdminRolesRoleIdPagePermissionIssue>();
+	issues: RoleDetailPagePermissionIssue[],
+): RoleDetailPagePermissionIssue[] {
+	const merged = new Map<string, RoleDetailPagePermissionIssue>();
 
 	for (const issue of issues) {
 		const key = `${issue.code}:${issue.severity}:${issue.message}`;
@@ -1010,9 +1010,9 @@ function mergePermissionIssues(
 }
 
 function dedupeRelatedAbilities(
-	items: AdminRolesRoleIdPageRelatedAbility[],
-): AdminRolesRoleIdPageRelatedAbility[] {
-	const merged = new Map<string, AdminRolesRoleIdPageRelatedAbility>();
+	items: RoleDetailPageRelatedAbility[],
+): RoleDetailPageRelatedAbility[] {
+	const merged = new Map<string, RoleDetailPageRelatedAbility>();
 
 	for (const item of items) {
 		const existing = merged.get(item.id);
@@ -1068,7 +1068,7 @@ function isCrudAbility(ability: AbilityResponseDto): boolean {
 		isEntitySubjectName(ability.subject?.name) &&
 		Boolean(ability.action?.name) &&
 		CRUD_ACTIONS.includes(
-			ability.action!.name as AdminRolesRoleIdPageCrudActionKey,
+			ability.action!.name as RoleDetailPageCrudActionKey,
 		)
 	);
 }
@@ -1102,7 +1102,7 @@ function pickPreferredCrudAbility(
 	})[0];
 }
 
-function getCrudActionLabel(action: AdminRolesRoleIdPageCrudActionKey): string {
+function getCrudActionLabel(action: RoleDetailPageCrudActionKey): string {
 	switch (action) {
 		case "create":
 			return "생성";
@@ -1121,7 +1121,7 @@ function getCrudActionLabel(action: AdminRolesRoleIdPageCrudActionKey): string {
 
 function mapAbilityItem(
 	ability: AbilityResponseDto,
-): AdminRolesRoleIdPageAbility {
+): RoleDetailPageAbility {
 	return {
 		id: ability.id,
 		name: ability.name,

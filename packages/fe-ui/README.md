@@ -14,7 +14,7 @@ Entry points are organized under `src/`:
 - `form`: form flows and form sections
 - `layout`: structural primitives such as `App`, `Page`, `Section`, `Container`
 - `master`: list/table oriented page building blocks
-- `page`: route-level page UI components
+- `page`: semantic app-facing pure page UI components
 - `rhythm`: spacing and flow primitives such as `VStack`, `HStack`, `Spacer`
 - `surface`: surface and elevation primitives
 - `widget`: reusable domain widgets
@@ -22,6 +22,8 @@ Entry points are organized under `src/`:
 Domain sub-groups under `feature` and `widget` are allowed when they improve discoverability, for example `src/feature/idp/*` or `src/widget/ability/*`.
 
 `src/page` uses folder-based sidecars. Keep each page in `src/page/[PageName]/`.
+Prefer semantic screen names such as `AssetListPage`, `RoleDetailPage`, `SecurityPolicyFormPage`.
+Avoid route-mirror names such as `AdminAssetsAssetIdPage` or `IdpConsoleOidcClientsOidcClientIdPage`.
 
 ## Installation
 
@@ -53,7 +55,7 @@ export function Example() {
 - Control: `Button`, `Input`, `Select`, `Tabs`, `Textarea`, `Pagination`
 - Display: `DataGrid`, `NotFound`, `EmptyState`, `Message`, `Skeleton`
 - Form: `LoginForm`, `ForgotPasswordForm`, `ResetPasswordForm`, `OidcClientForm`
-- Page: app-facing page UI such as `AdminAssetsPage`, `AdminAssetsAssetIdPage`, `IdpConsoleAccountsPage`
+- Page: app-facing page UI such as `AssetListPage`, `AssetDetailPage`, `AccountListPage`
 
 ## Storybook
 

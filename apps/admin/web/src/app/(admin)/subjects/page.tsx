@@ -3,7 +3,7 @@
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
 import {
 	adminSubjectsPageQueryInputs,
-	AdminSubjectsPage,
+	SubjectListPage,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
@@ -15,7 +15,7 @@ export default observer(function SubjectsPageRoute() {
 	const { data: response, isLoading } = useGetSubjects();
 
 	return (
-		<AdminSubjectsPage
+		<SubjectListPage
 			subjects={(response?.data ?? []).map((subject) => ({
 				id: subject.id,
 				name: subject.name,

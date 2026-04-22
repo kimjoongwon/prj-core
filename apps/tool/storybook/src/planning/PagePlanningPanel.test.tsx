@@ -15,27 +15,27 @@ const manifest: OverviewManifest = {
 	},
 	entries: [
 		{
-			componentName: "AdminRolesPage",
-			componentPath: "page/AdminRolesPage/AdminRolesPage.tsx",
-			storyTitle: "page/AdminRolesPage",
-			storyId: "page-adminrolespage--default",
-			storyHref: "./?path=/story/page-adminrolespage--default",
+			componentName: "RoleListPage",
+			componentPath: "page/RoleListPage/RoleListPage.tsx",
+			storyTitle: "page/RoleListPage",
+			storyId: "page-rolelistpage--default",
+			storyHref: "./?path=/story/page-rolelistpage--default",
 			storyIds: [
-				"page-adminrolespage--default",
-				"page-adminrolespage--loading",
-				"page-adminrolespage--docs",
+				"page-rolelistpage--default",
+				"page-rolelistpage--loading",
+				"page-rolelistpage--docs",
 			],
 			maturity: "scenario",
 			appIds: ["admin"],
 			planning: {
-				purePageId: "pure:AdminRolesPage",
+				purePageId: "pure:RoleListPage",
 				routePageIds: ["admin:/roles:spec"],
 			},
 			bindings: [
 				{
 					id: "admin:/roles",
 					appId: "admin",
-					componentName: "AdminRolesPage",
+					componentName: "RoleListPage",
 					path: "/roles",
 					pageKind: "list",
 					pageLabel: "역할 목록",
@@ -72,13 +72,13 @@ const manifest: OverviewManifest = {
 			summary: null,
 			title: "역할 목록 페이지 기획서",
 		},
-		"pure:AdminRolesPage": {
-			id: "pure:AdminRolesPage",
-			componentName: "AdminRolesPage",
+		"pure:RoleListPage": {
+			id: "pure:RoleListPage",
+			componentName: "RoleListPage",
 			kind: "pure-page",
 			metadata: ["타입: ui"],
 			rawMarkdown:
-				"# AdminRolesPage ui 기획서\n\n## 역할\n\n역할 목록 화면의 pure page 컴포넌트입니다.\n\n## 공개 계약\n\n| 항목 | 설명 |\n|------|------|\n| AdminRolesPage | 공개 계약 요소 |\n",
+				"# RoleListPage ui 기획서\n\n## 역할\n\n역할 목록 화면의 pure page 컴포넌트입니다.\n\n## 공개 계약\n\n| 항목 | 설명 |\n|------|------|\n| RoleListPage | 공개 계약 요소 |\n",
 			sections: [
 				{
 					heading: "역할",
@@ -87,13 +87,13 @@ const manifest: OverviewManifest = {
 				{
 					heading: "공개 계약",
 					content:
-						"| 항목 | 설명 |\n|------|------|\n| AdminRolesPage | 공개 계약 요소 |",
+						"| 항목 | 설명 |\n|------|------|\n| RoleListPage | 공개 계약 요소 |",
 				},
 			],
 			sourcePath:
-				"packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.spec.md",
+				"packages/fe-ui/src/page/RoleListPage/RoleListPage.spec.md",
 			summary: null,
-			title: "AdminRolesPage ui 기획서",
+			title: "RoleListPage ui 기획서",
 		},
 	},
 };
@@ -103,12 +103,12 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-adminrolespage--loading"
+				storyId="page-rolelistpage--loading"
 			/>,
 		);
 
 		expect(
-			screen.getByRole("heading", { name: "AdminRolesPage" }),
+			screen.getByRole("heading", { name: "RoleListPage" }),
 		).toBeInTheDocument();
 		expect(screen.getByText("Route Planning")).toBeInTheDocument();
 		expect(screen.getByText("역할 목록 페이지 기획서")).toBeInTheDocument();
@@ -120,7 +120,7 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-adminrolespage--default"
+				storyId="page-rolelistpage--default"
 			/>,
 		);
 
@@ -130,7 +130,7 @@ describe("PagePlanningPanelView", () => {
 			screen.getAllByText("역할 목록 페이지 기획서").length,
 		).toBeGreaterThan(0);
 		expect(
-			screen.getAllByText("AdminRolesPage ui 기획서").length,
+			screen.getAllByText("RoleListPage ui 기획서").length,
 		).toBeGreaterThan(0);
 	});
 
@@ -149,12 +149,12 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-adminrolespage--docs"
+				storyId="page-rolelistpage--docs"
 			/>,
 		);
 
 		expect(
-			screen.getByRole("heading", { name: "AdminRolesPage" }),
+			screen.getByRole("heading", { name: "RoleListPage" }),
 		).toBeInTheDocument();
 		expect(screen.getByText("Route Planning")).toBeInTheDocument();
 	});
@@ -163,7 +163,7 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-adminrolespage--default"
+				storyId="page-rolelistpage--default"
 				variant="compact"
 			/>,
 		);
@@ -178,7 +178,7 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-adminrolespage--default"
+				storyId="page-rolelistpage--default"
 				variant="board"
 			/>,
 		);
@@ -218,7 +218,7 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-adminrolespage--default"
+				storyId="page-rolelistpage--default"
 			/>,
 		);
 
@@ -227,7 +227,7 @@ describe("PagePlanningPanelView", () => {
 		expect(
 			await screen.findByRole("button", { name: "Codex 실행" }),
 		).toBeInTheDocument();
-		expect(screen.getByText("page/AdminRolesPage")).toBeInTheDocument();
+		expect(screen.getByText("page/RoleListPage")).toBeInTheDocument();
 		expect(
 			screen.getByText("apps/admin/web/src/app/(admin)/roles/page.spec.md"),
 		).toBeInTheDocument();
@@ -248,7 +248,7 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-adminrolespage--default"
+				storyId="page-rolelistpage--default"
 			/>,
 		);
 
@@ -276,7 +276,7 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-adminrolespage--default"
+				storyId="page-rolelistpage--default"
 			/>,
 		);
 
@@ -296,7 +296,7 @@ describe("PagePlanningPanelView", () => {
 			<PagePlanningPanelView
 				codexEnabled={false}
 				manifest={manifest}
-				storyId="page-adminrolespage--default"
+				storyId="page-rolelistpage--default"
 			/>,
 		);
 

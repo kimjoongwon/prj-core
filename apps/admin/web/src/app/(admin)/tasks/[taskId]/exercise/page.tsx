@@ -6,7 +6,7 @@ import {
 	useGetTaskExercise,
 	useGetTaskRoutines,
 } from "@cocrepo/api/core/tasks";
-import { AdminTasksTaskIdExercisePage } from "@cocrepo/ui";
+import { TaskExerciseDetailPage } from "@cocrepo/ui";
 import { addToast, useDisclosure } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -62,7 +62,7 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 	};
 
 	return (
-		<AdminTasksTaskIdExercisePage
+		<TaskExerciseDetailPage
 			taskId={taskId}
 			exercise={
 				exercise

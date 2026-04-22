@@ -2,8 +2,8 @@
 
 import { useGetActions } from "@cocrepo/api/core/actions";
 import {
-	AdminActionsPage,
-	type AdminActionsPageAction,
+	ActionListPage,
+	type ActionListPageAction,
 	adminActionsPageQueryInputs,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
@@ -24,7 +24,7 @@ export default observer(function ActionsPageRoute() {
 	const totalCount = response?.meta?.total ?? actions.length;
 
 	return (
-		<AdminActionsPage
+		<ActionListPage
 			actions={actions}
 			totalCount={totalCount}
 			isLoading={isLoading}
@@ -46,7 +46,7 @@ function mapActionListItem(action: {
 	isSystem: boolean;
 	createdAt: string;
 	removedAt?: string | null;
-}): AdminActionsPageAction {
+}): ActionListPageAction {
 	return {
 		id: action.id,
 		name: action.name,

@@ -1,3 +1,3 @@
 "use client";
 
-export { AdminDashboardPage as default } from "@cocrepo/ui";
+export { DashboardPage as default } from "@cocrepo/ui";

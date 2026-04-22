@@ -18,14 +18,14 @@
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/subjects/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 Subject 조회와 query state만 담당하고 시각 조합은 `AdminSubjectsPage`가 소유합니다.
+- `page.tsx`는 Subject 조회와 query state만 담당하고 시각 조합은 `SubjectListPage`가 소유합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `pure page + thin route container`
 - page role: `master`
 - reusable target: `master/table`
-- page component path: `packages/fe-ui/src/page/AdminSubjectsPage/AdminSubjectsPage.tsx`
+- page component path: `packages/fe-ui/src/page/SubjectListPage/SubjectListPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -60,7 +60,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-29 | `AdminSubjectsPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-03-29 | `SubjectListPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | Subject 목록을 `master/table` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
 | 2026-03-21 | Subject 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

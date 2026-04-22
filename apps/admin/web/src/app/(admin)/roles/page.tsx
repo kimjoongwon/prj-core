@@ -2,8 +2,8 @@
 
 import { type RoleDto, useGetRoles } from "@cocrepo/api/core/roles";
 import {
-	AdminRolesPage,
-	type AdminRolesPageRole,
+	RoleListPage,
+	type RoleListPageRole,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
@@ -17,7 +17,7 @@ export default observer(function RolesPageRoute() {
 	const roles = (response?.data ?? []).map(mapRoleRow);
 
 	return (
-		<AdminRolesPage
+		<RoleListPage
 			roles={roles}
 			totalCount={response?.meta?.total ?? roles.length}
 			isLoading={isLoading}
@@ -30,7 +30,7 @@ export default observer(function RolesPageRoute() {
 	);
 });
 
-function mapRoleRow(role: RoleDto): AdminRolesPageRole {
+function mapRoleRow(role: RoleDto): RoleListPageRole {
 	return {
 		id: role.id,
 		name: role.name,

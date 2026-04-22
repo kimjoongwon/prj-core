@@ -2,8 +2,8 @@
 
 import { useGetGroups } from "@cocrepo/api/core/groups";
 import {
-	AdminRolesGroupsPage,
-	type AdminRolesGroupsPageGroup,
+	RoleGroupListPage,
+	type RoleGroupListPageGroup,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -21,7 +21,7 @@ const AdminRolesGroupsRoute = observer(() => {
 	const { data: response, isLoading } = useGetGroups({ type: "Role" });
 
 	return (
-		<AdminRolesGroupsPage
+		<RoleGroupListPage
 			groups={(response?.data ?? []).map(mapGroupRow)}
 			isLoading={isLoading}
 			onClickCreateButton={() => {
@@ -34,7 +34,7 @@ const AdminRolesGroupsRoute = observer(() => {
 	);
 });
 
-function mapGroupRow(group: GroupData): AdminRolesGroupsPageGroup {
+function mapGroupRow(group: GroupData): RoleGroupListPageGroup {
 	return group;
 }
 

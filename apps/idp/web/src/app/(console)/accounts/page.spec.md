@@ -21,7 +21,7 @@
 |------|------|
 | @cocrepo/api/idp/auth | 잠긴 계정 잠금 해제 mutation |
 | @cocrepo/api/idp/idp-accounts | 계정 목록 조회 및 상세 캐시 무효화 |
-| @cocrepo/ui | `IdpConsoleAccountsPage`, query input, `useMetaDataGridQueryStates` |
+| @cocrepo/ui | `AccountListPage`, query input, `useMetaDataGridQueryStates` |
 | @tanstack/react-query | 목록/상세 캐시 무효화 |
 
 ## 동작 흐름
@@ -55,14 +55,14 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/accounts/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 계정 목록 조회, query state, 잠금 해제 mutation만 담당하고 시각 조합은 `IdpConsoleAccountsPage`가 소유합니다.
+- `page.tsx`는 계정 목록 조회, query state, 잠금 해제 mutation만 담당하고 시각 조합은 `AccountListPage`가 소유합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `pure page + thin route container`
 - page role: `master`
 - reusable target: `master/table`
-- page component path: `packages/fe-ui/src/page/IdpConsoleAccountsPage/IdpConsoleAccountsPage.tsx`
+- page component path: `packages/fe-ui/src/page/AccountListPage/AccountListPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -70,7 +70,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-29 | `IdpConsoleAccountsPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-03-29 | `AccountListPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-28 | 목록 E2E가 실제 컬럼 라벨(`활성`)과 상세 링크 계약(`/accounts/:userId`)을 따르도록 검증 기준을 보강 | codex |
 | 2026-03-23 | 목록 그리드에서 잠긴 계정을 직접 잠금 해제할 수 있는 row action + 확인 모달 계약 추가 | codex |
 | 2026-03-22 | `PageTitleBar` + content-level `Surface` 기준으로 목록 페이지 계약을 동기화 | codex |

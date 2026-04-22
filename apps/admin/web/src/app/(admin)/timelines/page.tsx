@@ -8,8 +8,8 @@ import {
 } from "@cocrepo/api/core/timelines";
 import {
 	adminTimelinesPageQueryInputs,
-	AdminTimelinesPage,
-	type AdminTimelinesPageTimeline,
+	TimelineListPage,
+	type TimelineListPageTimeline,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
@@ -31,7 +31,7 @@ export default observer(function TimelinesPageRoute() {
 	const timelines = (response?.data ?? []).map(mapTimelineRow);
 
 	return (
-		<AdminTimelinesPage
+		<TimelineListPage
 			timelines={timelines}
 			totalCount={response?.meta?.total ?? 0}
 			isLoading={isLoading}
@@ -76,7 +76,7 @@ function getTimelineParams(
 	};
 }
 
-function mapTimelineRow(timeline: TimelineDto): AdminTimelinesPageTimeline {
+function mapTimelineRow(timeline: TimelineDto): TimelineListPageTimeline {
 	return {
 		id: timeline.id,
 		name: timeline.name,

@@ -6,7 +6,7 @@ import {
 	type SubjectFieldDto,
 	useGetSubjectById,
 } from "@cocrepo/api/core/subjects";
-import { AdminSubjectsSubjectIdPage } from "@cocrepo/ui";
+import { SubjectDetailPage } from "@cocrepo/ui";
 import { useQuery } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -25,7 +25,7 @@ export default observer(function SubjectDetailPageRoute() {
 	});
 
 	return (
-		<AdminSubjectsSubjectIdPage
+		<SubjectDetailPage
 			subject={
 				subject
 					? {

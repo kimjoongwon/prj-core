@@ -6,7 +6,7 @@ import {
 	useGetSessionById,
 } from "@cocrepo/api/core/timelines";
 import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
-import { AdminTimelinesTimelineIdSessionsSessionIdProgramsNewPage } from "@cocrepo/ui";
+import { TimelineSessionProgramCreatePage } from "@cocrepo/ui";
 import { addToast, useDisclosure } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -190,7 +190,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 		};
 
 		return (
-			<AdminTimelinesTimelineIdSessionsSessionIdProgramsNewPage
+			<TimelineSessionProgramCreatePage
 				descriptionText={[session?.name, session?.timeline?.name]
 					.filter(Boolean)
 					.join(" · ")}

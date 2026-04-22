@@ -5,7 +5,7 @@ import {
 	useGetTimelineById,
 	useUpdateTimeline,
 } from "@cocrepo/api/core/timelines";
-import { AdminTimelinesTimelineIdEditPage } from "@cocrepo/ui";
+import { TimelineEditPage } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -113,7 +113,7 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 			state.description === (timeline?.description ?? ""));
 
 	return (
-		<AdminTimelinesTimelineIdEditPage
+		<TimelineEditPage
 			timelineName={timeline?.name}
 			name={state.name}
 			description={state.description}

@@ -7,7 +7,7 @@ import {
 	useUpdateProgram,
 } from "@cocrepo/api/core/timelines";
 import { type UserDto, useGetUserById, useGetUsers } from "@cocrepo/api/core/users";
-import { AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditPage } from "@cocrepo/ui";
+import { TimelineSessionProgramEditPage } from "@cocrepo/ui";
 import { addToast, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -241,7 +241,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 		};
 
 		return (
-			<AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditPage
+			<TimelineSessionProgramEditPage
 				descriptionText={[program?.name, program?.session?.name]
 					.filter(Boolean)
 					.join(" · ")}

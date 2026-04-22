@@ -24,8 +24,8 @@ import type {
 	InquiryParticipant,
 } from "@cocrepo/type";
 import {
-	type AdminInquiriesInquiryIdPageMetaFormState,
-	AdminInquiriesInquiryIdPage,
+	type InquiryDetailPageMetaFormState,
+	InquiryDetailPage,
 	useInquiryDetailWebSocket,
 } from "@cocrepo/ui";
 import { observable } from "mobx";
@@ -205,7 +205,7 @@ export default observer(function InquiryDetailPageRoute() {
 		},
 	}));
 	const metaState = useLocalObservable<
-		AdminInquiriesInquiryIdPageMetaFormState & {
+		InquiryDetailPageMetaFormState & {
 			initialized: boolean;
 			setFromBootstrap: () => void;
 		}
@@ -329,7 +329,7 @@ export default observer(function InquiryDetailPageRoute() {
 	};
 
 	return (
-		<AdminInquiriesInquiryIdPage
+		<InquiryDetailPage
 			inquiryId={inquiryId}
 			inquiry={
 				inquiry

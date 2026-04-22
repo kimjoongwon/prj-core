@@ -6,7 +6,7 @@ import {
 	useDeleteProgram,
 	useGetProgramById,
 } from "@cocrepo/api/core/timelines";
-import { AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPage } from "@cocrepo/ui";
+import { TimelineSessionProgramDetailPage } from "@cocrepo/ui";
 import { addToast, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -77,7 +77,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute = observer
 			.join(" · ");
 
 		return (
-			<AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdPage
+			<TimelineSessionProgramDetailPage
 				program={
 					program
 						? {

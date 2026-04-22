@@ -5,8 +5,8 @@ import {
 	useUpdateOidcClient,
 } from "@cocrepo/api/idp/oidc-clients";
 import {
-	IdpConsoleOidcClientsOidcClientIdEditPage,
-	type IdpConsoleOidcClientsOidcClientIdEditPageFormState,
+	OidcClientEditPage,
+	type OidcClientEditPageFormState,
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -17,7 +17,7 @@ export default observer(function OidcClientEditPageRoute() {
 	const oidcClientId = useParams<{ oidcClientId: string }>().oidcClientId;
 	const router = useRouter();
 	const state =
-		useLocalObservable<IdpConsoleOidcClientsOidcClientIdEditPageFormState>(
+		useLocalObservable<OidcClientEditPageFormState>(
 			() => ({
 				clientId: "",
 				name: "",
@@ -69,7 +69,7 @@ export default observer(function OidcClientEditPageRoute() {
 	});
 
 	return (
-		<IdpConsoleOidcClientsOidcClientIdEditPage
+		<OidcClientEditPage
 			client={
 				client
 					? {

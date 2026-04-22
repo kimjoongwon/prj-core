@@ -83,13 +83,13 @@
 ### Fetch 전략
 
 - 별도 `_prefetch.ts`는 없습니다.
-- `AdminSpacesSpaceIdGroundPage` 내부에서 `useGetSpaceGround(spaceId)`를 직접 호출합니다.
+- `GroundDetailPage` 내부에서 `useGetSpaceGround(spaceId)`를 직접 호출합니다.
 
 ## 컴포넌트 구성
 
 ```
 apps/admin/web/.../spaces/[spaceId]/ground/page.tsx
-└── AdminSpacesSpaceIdGroundPage (@cocrepo/ui export)
+└── GroundDetailPage (@cocrepo/ui export)
     └── GroundDetailPageClient
         ├── PageTitleBar (title=ground.name, action="수정")
         ├── DetailSectionCard
@@ -132,6 +132,7 @@ apps/admin/web/.../spaces/[spaceId]/ground/page.tsx
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |

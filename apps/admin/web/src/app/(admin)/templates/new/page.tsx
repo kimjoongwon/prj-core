@@ -5,7 +5,7 @@ import {
 	useCreateTemplate,
 } from "@cocrepo/api/core/templates";
 import {
-	AdminTemplatesNewPage,
+	TemplateCreatePage,
 	type TemplateFormData,
 	type VariableEditItem,
 } from "@cocrepo/ui";
@@ -125,7 +125,7 @@ const AdminTemplatesNewRoute = observer(() => {
 	};
 
 	return (
-		<AdminTemplatesNewPage
+		<TemplateCreatePage
 			formData={state.formData}
 			variables={state.variables}
 			errors={state.errors}

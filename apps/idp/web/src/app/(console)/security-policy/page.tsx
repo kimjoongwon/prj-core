@@ -7,8 +7,8 @@ import {
 	useUpdateSecurityPolicy,
 } from "@cocrepo/api/idp/security-policy";
 import {
-	type IdpConsoleSecurityPolicyPageFormState,
-	IdpConsoleSecurityPolicyPage,
+	type SecurityPolicyFormPageFormState,
+	SecurityPolicyFormPage,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 export default observer(function SecurityPolicyPageRoute() {
 	const queryClient = useQueryClient();
 	const [isSaveSuccess, setIsSaveSuccess] = useState(false);
-	const state = useLocalObservable<IdpConsoleSecurityPolicyPageFormState>(() => ({
+	const state = useLocalObservable<SecurityPolicyFormPageFormState>(() => ({
 		passwordMinLength: 8,
 		passwordRequireUppercase: false,
 		passwordRequireLowercase: false,
@@ -78,7 +78,7 @@ export default observer(function SecurityPolicyPageRoute() {
 	}, [isSaveSuccess]);
 
 	return (
-		<IdpConsoleSecurityPolicyPage
+		<SecurityPolicyFormPage
 			formState={state}
 			isSaving={isPending}
 			isSaveSuccess={isSaveSuccess}
@@ -101,7 +101,7 @@ export default observer(function SecurityPolicyPageRoute() {
 });
 
 function mapUpdateSecurityPolicyInput(
-	input: IdpConsoleSecurityPolicyPageFormState,
+	input: SecurityPolicyFormPageFormState,
 ): UpdateSecurityPolicyMutationBody {
 	return {
 		passwordMinLength: input.passwordMinLength,

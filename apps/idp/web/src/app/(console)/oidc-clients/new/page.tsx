@@ -2,7 +2,7 @@
 
 import { useCreateOidcClient } from "@cocrepo/api/idp/oidc-clients";
 import {
-	IdpConsoleOidcClientsNewPage,
+	OidcClientCreatePage,
 	type OidcClientFormState,
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -38,7 +38,7 @@ export default observer(function OidcClientNewPageRoute() {
 	});
 
 	return (
-		<IdpConsoleOidcClientsNewPage
+		<OidcClientCreatePage
 			formState={state}
 			isSubmitting={isPending}
 			onClickBackButton={() => {

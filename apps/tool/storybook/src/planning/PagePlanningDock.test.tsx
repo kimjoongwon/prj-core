@@ -15,26 +15,26 @@ const manifest: OverviewManifest = {
 	},
 	entries: [
 		{
-			componentName: "AdminRolesPage",
-			componentPath: "page/AdminRolesPage/AdminRolesPage.tsx",
-			storyTitle: "page/AdminRolesPage",
-			storyId: "page-adminrolespage--default",
-			storyHref: "./?path=/story/page-adminrolespage--default",
+			componentName: "RoleListPage",
+			componentPath: "page/RoleListPage/RoleListPage.tsx",
+			storyTitle: "page/RoleListPage",
+			storyId: "page-rolelistpage--default",
+			storyHref: "./?path=/story/page-rolelistpage--default",
 			storyIds: [
-				"page-adminrolespage--default",
-				"page-adminrolespage--docs",
+				"page-rolelistpage--default",
+				"page-rolelistpage--docs",
 			],
 			maturity: "scenario",
 			appIds: ["admin"],
 			planning: {
-				purePageId: "pure:AdminRolesPage",
+				purePageId: "pure:RoleListPage",
 				routePageIds: ["admin:/roles:spec"],
 			},
 			bindings: [
 				{
 					id: "admin:/roles",
 					appId: "admin",
-					componentName: "AdminRolesPage",
+					componentName: "RoleListPage",
 					path: "/roles",
 					pageKind: "list",
 					pageLabel: "역할 목록",
@@ -66,13 +66,13 @@ const manifest: OverviewManifest = {
 			summary: null,
 			title: "역할 목록 페이지 기획서",
 		},
-		"pure:AdminRolesPage": {
-			id: "pure:AdminRolesPage",
-			componentName: "AdminRolesPage",
+		"pure:RoleListPage": {
+			id: "pure:RoleListPage",
+			componentName: "RoleListPage",
 			kind: "pure-page",
 			metadata: [],
 			rawMarkdown:
-				"# AdminRolesPage ui 기획서\n\n## 역할\n\n역할 목록 화면의 pure page 컴포넌트입니다.",
+				"# RoleListPage ui 기획서\n\n## 역할\n\n역할 목록 화면의 pure page 컴포넌트입니다.",
 			sections: [
 				{
 					heading: "역할",
@@ -80,9 +80,9 @@ const manifest: OverviewManifest = {
 				},
 			],
 			sourcePath:
-				"packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.spec.md",
+				"packages/fe-ui/src/page/RoleListPage/RoleListPage.spec.md",
 			summary: null,
-			title: "AdminRolesPage ui 기획서",
+			title: "RoleListPage ui 기획서",
 		},
 	},
 };
@@ -92,7 +92,7 @@ describe("PagePlanningDock", () => {
 		render(
 			<PagePlanningDock
 				manifest={manifest}
-				storyId="page-adminrolespage--default"
+				storyId="page-rolelistpage--default"
 			>
 				<div>Story Canvas</div>
 			</PagePlanningDock>,
@@ -103,13 +103,13 @@ describe("PagePlanningDock", () => {
 			screen.getByRole("button", { name: "Open planning overlay" }),
 		).toBeInTheDocument();
 		expect(
-			screen.queryByRole("heading", { name: "AdminRolesPage" }),
+			screen.queryByRole("heading", { name: "RoleListPage" }),
 		).not.toBeInTheDocument();
 
 		fireEvent.click(screen.getByRole("button", { name: "Open planning overlay" }));
 
 		expect(
-			screen.getByRole("heading", { name: "AdminRolesPage" }),
+			screen.getByRole("heading", { name: "RoleListPage" }),
 		).toBeInTheDocument();
 		expect(screen.getByText("Route Planning")).toBeInTheDocument();
 		expect(

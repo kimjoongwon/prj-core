@@ -7,10 +7,10 @@ import {
 	useUpdateSession,
 } from "@cocrepo/api/core/timelines";
 import {
-	AdminTimelinesTimelineIdSessionsSessionIdEditPage,
-	type AdminTimelineSessionPageCycleType,
-	type AdminTimelineSessionPageDayOfWeek,
-	type AdminTimelineSessionPageSessionType,
+	TimelineSessionEditPage,
+	type TimelineSessionPageCycleType,
+	type TimelineSessionPageDayOfWeek,
+	type TimelineSessionPageSessionType,
 } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -30,13 +30,13 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 	const queryClient = useQueryClient();
 	const state = useLocalObservable(() => ({
 		name: "",
-		type: "ONE_TIME" as AdminTimelineSessionPageSessionType,
-		originalType: "ONE_TIME" as AdminTimelineSessionPageSessionType,
+		type: "ONE_TIME" as TimelineSessionPageSessionType,
+		originalType: "ONE_TIME" as TimelineSessionPageSessionType,
 		description: "",
 		startDateTime: "",
 		endDateTime: "",
-		recurringDayOfWeek: null as AdminTimelineSessionPageDayOfWeek | null,
-		repeatCycleType: "" as AdminTimelineSessionPageCycleType | "",
+		recurringDayOfWeek: null as TimelineSessionPageDayOfWeek | null,
+		repeatCycleType: "" as TimelineSessionPageCycleType | "",
 		errors: {} as Record<string, string>,
 		isInitialized: false,
 	}));
@@ -47,15 +47,15 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 	useEffect(() => {
 		if (session && !state.isInitialized) {
 			state.name = session.name;
-			state.type = session.type as AdminTimelineSessionPageSessionType;
-			state.originalType = session.type as AdminTimelineSessionPageSessionType;
+			state.type = session.type as TimelineSessionPageSessionType;
+			state.originalType = session.type as TimelineSessionPageSessionType;
 			state.description = session.description ?? "";
 			state.startDateTime = session.startDateTime ?? "";
 			state.endDateTime = session.endDateTime ?? "";
 			state.recurringDayOfWeek =
-				(session.recurringDayOfWeek as AdminTimelineSessionPageDayOfWeek) ?? null;
+				(session.recurringDayOfWeek as TimelineSessionPageDayOfWeek) ?? null;
 			state.repeatCycleType =
-				(session.repeatCycleType as AdminTimelineSessionPageCycleType) ?? "";
+				(session.repeatCycleType as TimelineSessionPageCycleType) ?? "";
 			state.isInitialized = true;
 		}
 	}, [session, state]);
@@ -72,7 +72,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 	};
 
 	const onChangeTypeSelect = (value: string) => {
-		const newType = value as AdminTimelineSessionPageSessionType;
+		const newType = value as TimelineSessionPageSessionType;
 		const previousType = state.type;
 		state.type = newType;
 		if (newType !== previousType) {
@@ -87,7 +87,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 				(session?.recurringDayOfWeek as UpdateSessionDtoRecurringDayOfWeek) ??
 				null;
 			state.repeatCycleType =
-				(session?.repeatCycleType as AdminTimelineSessionPageCycleType) ?? "";
+				(session?.repeatCycleType as TimelineSessionPageCycleType) ?? "";
 		}
 		state.errors = {};
 	};
@@ -112,7 +112,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 	};
 
 	const onChangeCycleTypeSelect = (value: string) => {
-		state.repeatCycleType = value as AdminTimelineSessionPageCycleType;
+		state.repeatCycleType = value as TimelineSessionPageCycleType;
 		delete state.errors.repeatCycleType;
 	};
 
@@ -200,7 +200,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 			state.repeatCycleType !== (session?.repeatCycleType ?? ""));
 
 	return (
-		<AdminTimelinesTimelineIdSessionsSessionIdEditPage
+		<TimelineSessionEditPage
 			descriptionText={session?.name}
 			name={state.name}
 			type={state.type}

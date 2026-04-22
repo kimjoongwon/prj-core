@@ -7,9 +7,9 @@ import {
 } from "@cocrepo/api/idp/auth";
 import {
 	idpConsoleAuthAuditLogsPageQueryInputs,
-	IdpConsoleAuthAuditLogsPage,
-	type IdpConsoleAuthAuditLogsPageLog,
-	type IdpConsoleAuthAuditLogsPageStats,
+	AuthAuditLogListPage,
+	type AuthAuditLogListPageLog,
+	type AuthAuditLogListPageStats,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
@@ -26,7 +26,7 @@ export default observer(function AuthAuditLogsPageRoute() {
 	const { data: statsResponse } = useGetAuthAuditLogStats();
 
 	return (
-		<IdpConsoleAuthAuditLogsPage
+		<AuthAuditLogListPage
 			logs={(response?.data ?? []).map(mapAuditLog)}
 			totalCount={response?.meta?.totalCount ?? 0}
 			isLoading={isLoading}
@@ -39,7 +39,7 @@ export default observer(function AuthAuditLogsPageRoute() {
 	);
 });
 
-function mapAuditLog(log: AuthAuditLogDto): IdpConsoleAuthAuditLogsPageLog {
+function mapAuditLog(log: AuthAuditLogDto): AuthAuditLogListPageLog {
 	return {
 		id: log.id,
 		occurredAt: log.createdAt,
@@ -56,7 +56,7 @@ function mapAuditLogStats(stats: {
 	todayFailureCount: number;
 	todayLockedCount: number;
 	totalCount: number;
-}): IdpConsoleAuthAuditLogsPageStats {
+}): AuthAuditLogListPageStats {
 	return {
 		todaySuccessCount: stats.todaySuccessCount,
 		todayFailureCount: stats.todayFailureCount,

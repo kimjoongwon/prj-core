@@ -131,7 +131,7 @@
 
 - route container가 `useParams`, `useRouter`, `useGetTemplate`, `useUpdateTemplate`, `useLocalObservable`을 소유합니다.
 - route container가 template 응답을 `TemplateFormData`/`VariableEditItem[]` props로 정규화하고 저장 성공/실패 toast와 상세 페이지 이동을 처리합니다.
-- `AdminTemplatesTemplateIdEditPage`는 `TemplateForm` 조합과 CTA rendering만 담당합니다.
+- `TemplateEditPage`는 `TemplateForm` 조합과 CTA rendering만 담당합니다.
 
 ## 이벤트 핸들러
 
@@ -188,6 +188,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-30 | 조회/저장/local state 책임을 route container로 명시하고 pure page props 위임 구조를 문서화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |

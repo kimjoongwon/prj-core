@@ -20,7 +20,7 @@
 | 모듈 | 용도 |
 |------|------|
 | @cocrepo/api/idp/oidc-sessions | 세션 목록/통계 조회와 revoke mutation |
-| @cocrepo/ui | `IdpConsoleOidcSessionsPage`, query input, `useMetaDataGridQueryStates` |
+| @cocrepo/ui | `OidcSessionListPage`, query input, `useMetaDataGridQueryStates` |
 | @tanstack/react-query | 세션/통계 캐시 무효화 |
 
 ## 동작 흐름
@@ -50,14 +50,14 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/oidc-sessions/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 세션 목록/통계 조회, revoke mutation, query state만 담당하고 시각 조합은 `IdpConsoleOidcSessionsPage`가 소유합니다.
+- `page.tsx`는 세션 목록/통계 조회, revoke mutation, query state만 담당하고 시각 조합은 `OidcSessionListPage`가 소유합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `pure page + thin route container`
 - page role: `master`
 - reusable target: `master/table`
-- page component path: `packages/fe-ui/src/page/IdpConsoleOidcSessionsPage/IdpConsoleOidcSessionsPage.tsx`
+- page component path: `packages/fe-ui/src/page/OidcSessionListPage/OidcSessionListPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -65,7 +65,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-29 | `IdpConsoleOidcSessionsPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-03-29 | `OidcSessionListPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-22 | parent `(console)` layout 참조와 `StatsCard`/`Surface` 기준으로 세션 목록 계약을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |

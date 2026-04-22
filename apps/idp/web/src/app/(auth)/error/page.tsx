@@ -1,6 +1,6 @@
 "use client";
 
-import { IdpErrorPage } from "@cocrepo/ui";
+import { AuthErrorPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
@@ -20,7 +20,7 @@ const ErrorPage = observer(function ErrorPage() {
 	}, []);
 
 	return (
-		<IdpErrorPage
+		<AuthErrorPage
 			error={errorState.error}
 			errorDescription={errorState.errorDescription}
 			onClickBack={() => window.history.back()}

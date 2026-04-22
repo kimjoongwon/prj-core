@@ -5,7 +5,7 @@ import {
 	useDeleteAction,
 	useGetActionById,
 } from "@cocrepo/api/core/actions";
-import { AdminActionsActionIdPage } from "@cocrepo/ui";
+import { ActionDetailPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -24,7 +24,7 @@ export default observer(function ActionDetailPageRoute() {
 	});
 
 	return (
-		<AdminActionsActionIdPage
+		<ActionDetailPage
 			action={
 				action
 					? {

@@ -5,7 +5,7 @@ import {
 	useGetRoleById,
 	useUpdateRole,
 } from "@cocrepo/api/core/roles";
-import { AdminRolesRoleIdEditPage } from "@cocrepo/ui";
+import { RoleEditPage } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -97,7 +97,7 @@ const AdminRolesRoleIdEditRoute = observer(() => {
 	};
 
 	return (
-		<AdminRolesRoleIdEditPage
+		<RoleEditPage
 			roleName={role?.name}
 			roleDisplayName={role?.displayName}
 			isSystemRole={Boolean(role?.isSystem)}

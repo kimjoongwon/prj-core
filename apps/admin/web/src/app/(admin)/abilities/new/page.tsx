@@ -6,7 +6,7 @@ import {
 } from "@cocrepo/api/core/abilities";
 import { useGetActions } from "@cocrepo/api/core/actions";
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
-import { AbilityEditorPage } from "@cocrepo/ui";
+import { AbilityFormPage } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -117,7 +117,7 @@ export default observer(function AbilityNewPage() {
 	};
 
 	return (
-		<AbilityEditorPage
+		<AbilityFormPage
 			status={isSubjectsLoading || isActionsLoading ? "loading" : "ready"}
 			mode="create"
 			title="권한 등록"

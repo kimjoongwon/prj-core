@@ -6,7 +6,7 @@ import {
 	useGetInteraction,
 	useSubmitLogin,
 } from "@cocrepo/api/idp/interaction";
-import { IdpInteractionPage, type LoginErrorResponse } from "@cocrepo/ui";
+import { OidcInteractionPage, type LoginErrorResponse } from "@cocrepo/ui";
 import type { AxiosError } from "axios";
 import { observer } from "mobx-react-lite";
 import { useParams } from "next/navigation";
@@ -106,12 +106,12 @@ const InteractionClient = observer(function InteractionClient({
 	};
 
 	if (isLoading) {
-		return <IdpInteractionPage mode="loading" />;
+		return <OidcInteractionPage mode="loading" />;
 	}
 
 	if (error || !data) {
 		return (
-			<IdpInteractionPage
+			<OidcInteractionPage
 				mode="error"
 				errorMessage={errorMessage}
 				isExpiredInteraction={isExpiredInteraction}
@@ -129,7 +129,7 @@ const InteractionClient = observer(function InteractionClient({
 		};
 		const missingScopes = prompt.details?.missingOIDCScope || [];
 		return (
-			<IdpInteractionPage
+			<OidcInteractionPage
 				mode="consent"
 				client={data.client ?? null}
 				missingScopes={missingScopes}
@@ -140,7 +140,7 @@ const InteractionClient = observer(function InteractionClient({
 	}
 
 	return (
-		<IdpInteractionPage
+		<OidcInteractionPage
 			mode="login"
 			client={data.client ?? null}
 			isDev={data.isDev}

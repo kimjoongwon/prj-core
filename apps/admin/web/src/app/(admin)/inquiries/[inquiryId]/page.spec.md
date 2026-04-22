@@ -463,13 +463,14 @@
 - reusable target: `detail/view`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
-- route는 조회/실시간 메시지/참여자 동기화, WebSocket 연결 관리, 메타 mutation, 삭제 modal state, 라우팅을 소유하고 `AdminInquiriesInquiryIdPage`에는 정규화된 props를 주입합니다.
+- route는 조회/실시간 메시지/참여자 동기화, WebSocket 연결 관리, 메타 mutation, 삭제 modal state, 라우팅을 소유하고 `InquiryDetailPage`에는 정규화된 props를 주입합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-30 | 실시간/WebSocket/mutation/delete modal state를 route container로 이동하고 `AdminInquiriesInquiryIdPage`를 pure page props contract로 재정의 | codex |
+| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-03-30 | 실시간/WebSocket/mutation/delete modal state를 route container로 이동하고 `InquiryDetailPage`를 pure page props contract로 재정의 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |

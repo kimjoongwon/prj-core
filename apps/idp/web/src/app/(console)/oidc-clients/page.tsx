@@ -3,7 +3,7 @@
 import { useGetOidcClients } from "@cocrepo/api/idp/oidc-clients";
 import {
 	idpConsoleOidcClientsPageQueryInputs,
-	IdpConsoleOidcClientsPage,
+	OidcClientListPage,
 	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
@@ -22,7 +22,7 @@ export default observer(function OidcClientsPageRoute() {
 	});
 
 	return (
-		<IdpConsoleOidcClientsPage
+		<OidcClientListPage
 			oidcClients={response?.data ?? []}
 			totalCount={response?.meta?.totalCount ?? 0}
 			isLoading={isLoading}
