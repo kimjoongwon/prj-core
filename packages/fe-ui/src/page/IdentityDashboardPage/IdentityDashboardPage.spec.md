@@ -27,10 +27,15 @@ IDP 대시보드 화면의 pure page 컴포넌트입니다.
 | mobx-react-lite | 기능 구현 의존성 |
 | react | 기능 구현 의존성 |
 
+## UI 규칙
+
+- 최근 로그인 추이 막대는 동일한 날짜 row가 들어와도 index 기반 stable key로 렌더링해 duplicate key warning을 방지합니다.
+
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | 로그인 추이 막대 리스트가 중복 날짜 데이터에서도 stable key를 사용하도록 UI 규칙을 보강 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 route-mirror page 이름을 semantic screen 이름으로 정리 | codex |
 | 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-29 | IDP 대시보드를 pure page로 재정의하고 통계/추이 조회를 route thin container로 이동 | codex |

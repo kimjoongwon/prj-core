@@ -18,13 +18,15 @@ const defaultArgs = {
   "variables": [{
   "defaultValue": "default-value-1",
   "description": "스토리북에서 확인할 description 예시입니다.",
-  "id": "item-1",
+  "id": "template-variable-1",
   "isRequired": false,
+  "name": "userName",
 }, {
   "defaultValue": "default-value-1",
   "description": "스토리북에서 확인할 description 예시입니다.",
-  "id": "item-1",
+  "id": "template-variable-2",
   "isRequired": false,
+  "name": "orderNumber",
 }],
 };
 

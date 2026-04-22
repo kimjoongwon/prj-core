@@ -255,9 +255,9 @@ export const TaskExerciseDetailPage = observer(
 							<DetailSectionCard>
 								<DetailSection top={<PageTitleBar level={2} title="연관 루틴" />}>
 									<div className="flex flex-col gap-2">
-										{routines.map((routine) => (
+										{routines.map((routine, index) => (
 											<div
-												key={`${routine.id}:${routine.createdAt}`}
+												key={`${routine.id}:${index}`}
 												className="flex items-center justify-between rounded-lg bg-content2 p-3"
 											>
 												<div>

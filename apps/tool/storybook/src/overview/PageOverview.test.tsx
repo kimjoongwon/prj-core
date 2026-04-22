@@ -1,11 +1,32 @@
 // @vitest-environment jsdom
 
 import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import type { OverviewManifest } from "./manifest";
 import { PageOverview } from "./PageOverview";
 
+const isReactFlowWarning = (value: unknown) =>
+	typeof value === "string" && value.includes("[React Flow]:");
+
 beforeAll(() => {
+	const originalConsoleError = console.error;
+	const originalConsoleWarn = console.warn;
+
+	vi.spyOn(console, "error").mockImplementation((...args) => {
+		if (args.some(isReactFlowWarning)) {
+			return;
+		}
+
+		originalConsoleError(...args);
+	});
+	vi.spyOn(console, "warn").mockImplementation((...args) => {
+		if (args.some(isReactFlowWarning)) {
+			return;
+		}
+
+		originalConsoleWarn(...args);
+	});
+
 	class ResizeObserverMock {
 		observe() {}
 		unobserve() {}
@@ -46,6 +67,10 @@ beforeAll(() => {
 			};
 		},
 	});
+});
+
+afterAll(() => {
+	vi.restoreAllMocks();
 });
 
 const manifest: OverviewManifest = {

@@ -63,10 +63,6 @@ const generateSecret = (): string => {
 	return result;
 };
 
-const AUTH_METHOD_KEYS = new Set(
-	AUTH_METHOD_OPTIONS.map((option) => option.value),
-);
-
 /**
  * OIDC 클라이언트 등록/수정 폼 Widget
  *
@@ -195,7 +191,9 @@ export const OidcClientForm = observer(
 						<Select
 							label="인증 방식"
 							selectedKeys={
-								AUTH_METHOD_KEYS.has(state.tokenEndpointAuthMethod)
+								AUTH_METHOD_OPTIONS.some(
+									(option) => option.value === state.tokenEndpointAuthMethod,
+								)
 									? [state.tokenEndpointAuthMethod]
 									: []
 							}

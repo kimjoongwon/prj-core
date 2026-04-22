@@ -18,7 +18,7 @@ Turbo 표준 `build`/`start:dev` 계약에 맞춰 Storybook 개발 서버와 정
 | `build-storybook` | Storybook CLI 직접 호출용 별칭 (`STORYBOOK_DISABLE_CHROMATIC=true`, `STORYBOOK_DISABLE_VITEST_ADDON=true` 기본 주입) |
 | `start:dev` | 로컬 Storybook 개발 서버 실행 (`STORYBOOK_REQUIRE_AUTH=true` 기본 주입) |
 | `type-check` | Storybook 앱 TypeScript 무출력 검사 |
-| `test*` | Storybook 앱 Vitest 계열 실행 |
+| `test*` | Storybook 앱 Vitest 계열 실행. 별도 환경 변수가 없으면 사용자 홈 cache(`$HOME/.cache/ms-playwright`)에 Playwright browser를 설치/사용합니다. |
 
 ## 구현 체크리스트
 
@@ -34,6 +34,7 @@ Turbo 표준 `build`/`start:dev` 계약에 맞춰 Storybook 개발 서버와 정
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | Storybook test 스크립트가 repo 내부가 아닌 사용자 홈 cache(`$HOME/.cache/ms-playwright`)를 기본 Playwright browser 경로로 사용하도록 정리 | codex |
 | 2026-03-27 | `@storybook/nextjs-vite`와 `next` 의존성을 사용해 Next.js App Router 기반 Storybook 실행 계약을 명시 | codex |
 | 2026-03-20 | 정적 빌드 후 `iframe.html`의 `/vite-inject-mocker-entry.js`를 상대 경로로 후처리하도록 계약 보강 | codex |
 | 2026-03-20 | 정적 빌드에서 `STORYBOOK_DISABLE_VITEST_ADDON=true`를 기본 주입하도록 계약 보강 | codex |

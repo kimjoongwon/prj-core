@@ -4,12 +4,14 @@ import { RoleGroupListPage } from "./RoleGroupListPage";
 const defaultArgs = {
   "groups": [{
   "createdAt": "2026-04-14T09:00:00.000Z",
-  "id": "item-1",
-  "label": "샘플 label 1",
+  "id": "group-1",
+  "label": "운영 관리자",
+  "name": "operations-admin",
 }, {
-  "createdAt": "2026-04-14T09:00:00.000Z",
-  "id": "item-1",
-  "label": "샘플 label 1",
+  "createdAt": "2026-04-15T09:00:00.000Z",
+  "id": "group-2",
+  "label": "감사 전용",
+  "name": "audit-viewer",
 }],
   "isLoading": false,
   "onClickCreateButton": (..._args: never[]) => undefined,

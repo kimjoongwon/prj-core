@@ -36,6 +36,7 @@
 - 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
 - 비정상 입력은 조기 반환 또는 예외 처리합니다.
 - 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
+- row `id`가 중복되는 데이터셋은 DataGrid의 duplicate-safe row key helper를 재사용해 React key warning 없이 렌더링합니다.
 
 ## 구현 체크리스트
 
@@ -47,6 +48,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | 중복 row id를 DataGrid row key helper로 보정해 Storybook/런타임 key warning을 막는 계약을 추가 | codex |
 | 2026-03-06 | DataGrid 의존 경로를 `../../display/*`로 변경 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | 컬럼 변환 로직을 파일 내부 helper로 이동하고 utils 의존을 제거 | codex |

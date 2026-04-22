@@ -35,11 +35,13 @@ Program 수정 시 선택한 Routine의 execution preview를 보여주고, 스�
 - 현재 Program의 Routine 변경 후보마다 schedulable 상태를 표시합니다.
 - 선택된 Routine의 execution preview를 즉시 갱신합니다.
 - preview에 영상 누락 Exercise가 있으면 저장 버튼을 비활성화합니다.
+- execution preview row key는 activity id/order가 중복돼도 충돌하지 않도록 index를 함께 사용합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | 수정 화면 execution preview가 중복 activity fixture에서도 stable key를 사용하도록 UI 규칙을 보강 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 route-mirror page 이름을 semantic screen 이름으로 정리 | codex |
 | 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-29 | Program 수정 화면에 Routine execution preview와 스케줄 불가 교체 차단 규칙을 추가 | codex |

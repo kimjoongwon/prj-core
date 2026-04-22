@@ -8,11 +8,13 @@
 - Storybook 사이드바 제목은 `page/TimelineSessionDetailPage`입니다.
 - 스토리 파일 기준 경로는 `page/TimelineSessionDetailPage/TimelineSessionDetailPage.stories.tsx`입니다.
 - `Default`, `EmptyState` 시나리오를 제공합니다.
+- fixture는 session/program/activity 관계를 plain object로 명시해 detail panel이 warning 없이 렌더링됩니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | timeline session detail fixture를 실제 detail 계약에 맞는 plain object 관계 데이터로 재작성 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 story page id와 component 이름을 semantic 기준으로 갱신 | codex |
 | 2026-04-14 | scaffold를 실제 페이지 시나리오 스토리로 교체하고 Default, EmptyState 상태를 추가 | Codex |
 | 2026-04-05 | 누락된 page Storybook scaffold 신규 생성 | Codex |

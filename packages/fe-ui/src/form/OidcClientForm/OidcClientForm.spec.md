@@ -39,6 +39,7 @@
 - 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
 - 비정상 입력은 조기 반환 또는 예외 처리합니다.
 - 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
+- `tokenEndpointAuthMethod`가 현재 옵션 목록에 없으면 Select 선택 상태를 비워 HeroUI selection warning을 방지합니다.
 
 ## 구현 체크리스트
 
@@ -50,6 +51,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | 유효하지 않은 `tokenEndpointAuthMethod` 값이 들어와도 Select가 빈 선택으로 degrade 되도록 엣지 케이스를 문서화 | codex |
 | 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |

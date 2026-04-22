@@ -159,9 +159,9 @@ export const TimelineSessionProgramEditPage =
 											</p>
 										) : (
 											<div className="mt-3 flex flex-col gap-2">
-												{routinePreview.map((activity) => (
+												{routinePreview.map((activity, index) => (
 													<div
-														key={`${activity.id}:${activity.order}`}
+														key={`${activity.id}:${index}`}
 														className="rounded-md bg-content2 px-3 py-2"
 													>
 														<div className="flex items-center justify-between gap-3">

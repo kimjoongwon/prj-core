@@ -16,9 +16,11 @@ const defaultArgs = {
   "storageKey": "storage-key-1",
 },
   "folders": [{
-  "id": "item-1",
+  "id": "folder-1",
+  "name": "기본 폴더",
 }, {
-  "id": "item-1",
+  "id": "folder-2",
+  "name": "보관함",
 }],
   "isLoading": false,
   "isMoving": false,
@@ -28,7 +30,7 @@ const defaultArgs = {
   "onClickDeleteAssetButton": async (..._args: never[]) => undefined,
   "onClickMoveAssetButton": async (..._args: never[]) => undefined,
   "targetFolderError": "target-folder-error-1",
-  "targetFolderId": "target-folder-1",
+  "targetFolderId": "folder-2",
 };
 
 const loadingArgs = {

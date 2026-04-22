@@ -190,9 +190,9 @@ export const IdentityDashboardPage = observer(({
 												height: 200,
 											}}
 										>
-											{trendItems.map((item) => (
+											{trendItems.map((item, index) => (
 												<div
-													key={`${item.date}:${item.successCount}:${item.failureCount}`}
+													key={`${item.date}:${index}`}
 													className="flex flex-1 flex-col items-center gap-1"
 													style={{
 														height: "100%",

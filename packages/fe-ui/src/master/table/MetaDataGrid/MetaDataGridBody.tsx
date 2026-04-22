@@ -6,11 +6,9 @@ import type {
 } from "@cocrepo/type";
 import type { ColumnDef } from "@tanstack/react-table";
 import { observer } from "mobx-react-lite";
-import {
-	DataGrid,
-	getDataGridRowKey,
-	type Key,
-} from "../../../display/data-display/DataGrid";
+import type { Key } from "../../../display/data-display/DataGrid";
+import { DataGrid } from "../../../display/data-display/DataGrid";
+import { getDataGridRowKey } from "../../../display/data-display/DataGrid/DataGrid";
 
 interface MetaDataGridBodyProps<T extends object> {
 	config: MetaDataGridConfig<T>;

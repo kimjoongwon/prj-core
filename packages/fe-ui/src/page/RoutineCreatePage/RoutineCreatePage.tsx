@@ -298,9 +298,9 @@ export function RoutineActivitySection({
 							</p>
 						) : (
 							<div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
-								{candidateTasks.map((task) => (
+								{candidateTasks.map((task, index) => (
 									<CandidateTaskCard
-										key={`${task.id}:${task.exerciseName}`}
+										key={`${task.id}:${index}`}
 										task={task}
 										onClickAdd={onClickAddActivityButton}
 									/>

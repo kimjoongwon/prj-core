@@ -8,11 +8,13 @@
 - Storybook 사이드바 제목은 `page/RoleDetailPage`입니다.
 - 스토리 파일 기준 경로는 `page/RoleDetailPage/RoleDetailPage.stories.tsx`입니다.
 - `Default`, `Loading`, `Busy`, `EmptyState` 시나리오를 제공합니다.
+- fixture는 role, category, action 관계를 plain object로 명시해 detail widget이 invalid child warning 없이 렌더링됩니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-22 | role detail fixture를 plain object 기반 관계 데이터로 재작성해 Storybook runtime warning을 제거 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 story page id와 component 이름을 semantic 기준으로 갱신 | codex |
 | 2026-04-14 | scaffold를 실제 페이지 시나리오 스토리로 교체하고 Default, Loading, Busy, EmptyState 상태를 추가 | Codex |
 | 2026-04-05 | 누락된 page Storybook scaffold 신규 생성 | Codex |

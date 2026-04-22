@@ -55,7 +55,7 @@ const manifest: OverviewManifest = {
 			kind: "route-page",
 			metadata: ["생성일: 2026-03-21", "경로: /roles"],
 			rawMarkdown:
-				"# 역할 목록 페이지 기획서\n\n## 사용자 시나리오\n\n1. 관리자가 역할 목록을 확인합니다.\n\n## API 호출\n\n| 시점 | API |\n|------|-----|\n| 클라이언트 렌더 | useGetRoles |\n",
+				"# 역할 목록 페이지 기획서\n\n## 사용자 시나리오\n\n1. 관리자가 역할 목록을 확인합니다.\n\n## API 호출\n\n- 클라이언트 렌더: useGetRoles\n",
 			routePath: "/roles",
 			sections: [
 				{
@@ -65,7 +65,7 @@ const manifest: OverviewManifest = {
 				{
 					heading: "API 호출",
 					content:
-						"| 시점 | API |\n|------|-----|\n| 클라이언트 렌더 | useGetRoles |",
+						"- 클라이언트 렌더: useGetRoles",
 				},
 			],
 			sourcePath: "apps/admin/web/src/app/(admin)/roles/page.spec.md",
@@ -78,7 +78,7 @@ const manifest: OverviewManifest = {
 			kind: "pure-page",
 			metadata: ["타입: ui"],
 			rawMarkdown:
-				"# RoleListPage ui 기획서\n\n## 역할\n\n역할 목록 화면의 pure page 컴포넌트입니다.\n\n## 공개 계약\n\n| 항목 | 설명 |\n|------|------|\n| RoleListPage | 공개 계약 요소 |\n",
+				"# RoleListPage ui 기획서\n\n## 역할\n\n역할 목록 화면의 pure page 컴포넌트입니다.\n\n## 공개 계약\n\n- RoleListPage: 공개 계약 요소\n",
 			sections: [
 				{
 					heading: "역할",
@@ -87,7 +87,7 @@ const manifest: OverviewManifest = {
 				{
 					heading: "공개 계약",
 					content:
-						"| 항목 | 설명 |\n|------|------|\n| RoleListPage | 공개 계약 요소 |",
+						"- RoleListPage: 공개 계약 요소",
 				},
 			],
 			sourcePath:
