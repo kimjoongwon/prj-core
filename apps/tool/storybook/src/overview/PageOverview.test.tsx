@@ -3,7 +3,11 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import type { OverviewManifest } from "./manifest";
-import { PageOverview } from "./PageOverview";
+import {
+	buildFlowCanvasData,
+	mergeFlowNodePositionChanges,
+	PageOverview,
+} from "./PageOverview";
 
 const isReactFlowWarning = (value: unknown) =>
 	typeof value === "string" && value.includes("[React Flow]:");
@@ -88,10 +92,7 @@ const manifest: OverviewManifest = {
 			storyTitle: "page/RoleListPage",
 			storyId: "page-rolelistpage--default",
 			storyHref: "./?path=/story/page-rolelistpage--default",
-			storyIds: [
-				"page-rolelistpage--default",
-				"page-rolelistpage--loading",
-			],
+			storyIds: ["page-rolelistpage--default", "page-rolelistpage--loading"],
 			maturity: "scaffold",
 			appIds: ["admin"],
 			planning: {
@@ -221,8 +222,7 @@ const manifest: OverviewManifest = {
 			metadata: [],
 			rawMarkdown: "# RoleListPage ui 기획서",
 			sections: [],
-			sourcePath:
-				"packages/fe-ui/src/page/RoleListPage/RoleListPage.spec.md",
+			sourcePath: "packages/fe-ui/src/page/RoleListPage/RoleListPage.spec.md",
 			summary: null,
 			title: "RoleListPage ui 기획서",
 		},
@@ -308,9 +308,7 @@ describe("PageOverview", () => {
 			target: { value: "accounts" },
 		});
 
-		expect(
-			screen.getAllByText("AccountListPage").length,
-		).toBeGreaterThan(0);
+		expect(screen.getAllByText("AccountListPage").length).toBeGreaterThan(0);
 		expect(screen.queryByText("RoleListPage")).not.toBeInTheDocument();
 		expect(
 			screen
@@ -333,5 +331,40 @@ describe("PageOverview", () => {
 		expect(screen.getByText("Flow Detail")).toBeInTheDocument();
 		expect(screen.getAllByText("계정 관리").length).toBeGreaterThan(1);
 		expect(screen.getAllByText("/accounts").length).toBeGreaterThan(0);
+	});
+
+	it("applies saved drag positions over the dagre layout", () => {
+		const flowCanvas = buildFlowCanvasData(
+			manifest.lanes,
+			"admin:/roles",
+			vi.fn(),
+			{
+				"admin:/roles": { x: 640, y: 320 },
+			},
+		);
+
+		expect(
+			flowCanvas.nodes.find((node) => node.id === "admin:/roles")?.position,
+		).toEqual({
+			x: 640,
+			y: 320,
+		});
+	});
+
+	it("tracks dragged node position changes", () => {
+		const nextPositions = mergeFlowNodePositionChanges({}, [
+			{
+				id: "admin:/roles",
+				type: "position",
+				position: { x: 420, y: 240 },
+			},
+		]);
+
+		expect(nextPositions).toEqual({
+			"admin:/roles": {
+				x: 420,
+				y: 240,
+			},
+		});
 	});
 });

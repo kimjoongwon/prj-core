@@ -1,13 +1,15 @@
 import dagre from "@dagrejs/dagre";
 import {
+	applyNodeChanges,
 	Background,
+	type Edge,
 	Handle,
 	MarkerType,
+	type Node,
+	type NodeChange,
+	type NodeProps,
 	Position,
 	ReactFlow,
-	type Edge,
-	type Node,
-	type NodeProps,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import type { ChangeEvent, CSSProperties, ReactNode } from "react";
@@ -30,6 +32,13 @@ type FlowCanvasNodeData = {
 	node: FlowNode;
 	onSelect: (nodeId: string) => void;
 };
+
+type FlowNodePosition = {
+	x: number;
+	y: number;
+};
+
+type FlowNodePositionMap = Record<string, FlowNodePosition>;
 
 const pageKindLabels: Record<PageKind, string> = {
 	list: "List",
@@ -73,6 +82,7 @@ export function PageOverview({ manifest }: { manifest: OverviewManifest }) {
 	const [maturityFilter, setMaturityFilter] = useState<MaturityFilter>("all");
 	const [searchValue, setSearchValue] = useState("");
 	const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+	const [nodePositions, setNodePositions] = useState<FlowNodePositionMap>({});
 	const handleAppFilterChange = (event: ChangeEvent<HTMLSelectElement>) => {
 		setAppFilter(event.target.value as AppFilter);
 		setLaneFilter("all");
@@ -129,17 +139,24 @@ export function PageOverview({ manifest }: { manifest: OverviewManifest }) {
 		selectedNodeId && visibleNodeIds.has(selectedNodeId)
 			? (visibleFlowNodes.find((node) => node.id === selectedNodeId) ?? null)
 			: null;
-	const handleNodeSelect = (nodeId: string) => {
-		setSelectedNodeId(nodeId);
-	};
 	const flowCanvas = buildFlowCanvasData(
 		visibleLanes,
 		selectedNodeId,
-		handleNodeSelect,
+		setSelectedNodeId,
+		nodePositions,
 	);
 	const flowKey = visibleLanes
-		.map((lane) => `${lane.id}:${lane.nodes.length}:${lane.edges.length}`)
+		.map(
+			(lane) =>
+				`${lane.id}:${lane.nodes.map((node) => node.id).join(",")}:${lane.edges
+					.map((edge) => edge.id)
+					.join(",")}`,
+		)
 		.join("|");
+	const [flowNodes, setFlowNodes] = useState<Array<Node<FlowCanvasNodeData>>>(
+		flowCanvas.nodes,
+	);
+	const [flowEdges, setFlowEdges] = useState<Edge[]>(flowCanvas.edges);
 
 	useEffect(() => {
 		if (visibleFlowNodes.length === 0) {
@@ -153,6 +170,26 @@ export function PageOverview({ manifest }: { manifest: OverviewManifest }) {
 			setSelectedNodeId(visibleFlowNodes[0]?.id ?? null);
 		}
 	}, [selectedNodeId, visibleFlowNodes, visibleNodeIds]);
+
+	useEffect(() => {
+		const nextFlowCanvas = buildFlowCanvasData(
+			visibleLanes,
+			selectedNodeId,
+			setSelectedNodeId,
+			nodePositions,
+		);
+		setFlowNodes(nextFlowCanvas.nodes);
+		setFlowEdges(nextFlowCanvas.edges);
+	}, [flowKey, nodePositions, selectedNodeId]);
+
+	const handleFlowNodesChange = (
+		changes: Array<NodeChange<Node<FlowCanvasNodeData>>>,
+	) => {
+		setFlowNodes((currentNodes) => applyNodeChanges(changes, currentNodes));
+		setNodePositions((currentPositions) =>
+			mergeFlowNodePositionChanges(currentPositions, changes),
+		);
+	};
 
 	return (
 		<div style={pageStyle}>
@@ -286,8 +323,8 @@ export function PageOverview({ manifest }: { manifest: OverviewManifest }) {
 					</div>
 					<p style={sectionDescriptionStyle}>
 						route 기반 연결은 자동 계산되고, manual override edge는 다른 색으로
-						강조됩니다. 노드를 선택하면 우측에서 현재 화면 요약을 바로 확인할 수
-						있습니다.
+						강조됩니다. 노드를 드래그해서 겹침을 풀 수 있고, 선택한 화면 요약은
+						우측 detail panel에서 바로 확인할 수 있습니다.
 					</p>
 				</div>
 				{visibleLanes.length === 0 ? (
@@ -309,15 +346,16 @@ export function PageOverview({ manifest }: { manifest: OverviewManifest }) {
 							</div>
 							<div style={flowCanvasFrameStyle}>
 								<ReactFlow
-									edges={flowCanvas.edges}
+									edges={flowEdges}
 									fitView
 									key={flowKey}
 									minZoom={0.45}
 									maxZoom={1.2}
-									nodes={flowCanvas.nodes}
+									nodes={flowNodes}
 									nodeTypes={nodeTypes}
+									onNodesChange={handleFlowNodesChange}
 									nodesConnectable={false}
-									nodesDraggable={false}
+									nodesDraggable
 									proOptions={{ hideAttribution: true }}
 								>
 									<Background color="rgba(148, 163, 184, 0.18)" gap={18} />
@@ -564,10 +602,11 @@ function filterLane(
 	};
 }
 
-function buildFlowCanvasData(
+export function buildFlowCanvasData(
 	lanes: FlowLane[],
 	selectedNodeId: string | null,
 	onSelect: (nodeId: string) => void,
+	nodePositions: FlowNodePositionMap = {},
 ) {
 	const nodes: Array<Node<FlowCanvasNodeData>> = [];
 	const edges: Edge[] = [];
@@ -577,21 +616,23 @@ function buildFlowCanvasData(
 		const yOffset = laneIndex * FLOW_LANE_HEIGHT + FLOW_Y_OFFSET;
 
 		lane.nodes.forEach((laneNode) => {
-			const position = lanePositions.get(laneNode.id) ?? { x: 0, y: 0 };
+			const savedPosition = nodePositions[laneNode.id];
+			const basePosition = lanePositions.get(laneNode.id) ?? { x: 0, y: 0 };
 
 			nodes.push({
 				id: laneNode.id,
 				type: "overviewNode",
-				position: {
-					x: position.x + FLOW_X_OFFSET,
-					y: position.y + yOffset,
+				position: savedPosition ?? {
+					x: basePosition.x + FLOW_X_OFFSET,
+					y: basePosition.y + yOffset,
 				},
 				data: {
 					isSelected: laneNode.id === selectedNodeId,
 					node: laneNode,
 					onSelect,
 				},
-				draggable: false,
+				draggable: true,
+				dragHandle: ".flow-node-drag-handle",
 				selectable: false,
 			});
 		});
@@ -634,6 +675,31 @@ function buildFlowCanvasData(
 		nodes,
 		edges,
 	};
+}
+
+export function mergeFlowNodePositionChanges(
+	currentPositions: FlowNodePositionMap,
+	changes: Array<NodeChange<Node<FlowCanvasNodeData>>>,
+) {
+	let nextPositions = currentPositions;
+
+	changes.forEach((change) => {
+		if (
+			change.type !== "position" ||
+			!change.position ||
+			change.dragging === true
+		) {
+			return;
+		}
+
+		if (nextPositions === currentPositions) {
+			nextPositions = { ...currentPositions };
+		}
+
+		nextPositions[change.id] = change.position;
+	});
+
+	return nextPositions;
 }
 
 function layoutLaneNodes(lane: FlowLane) {
@@ -694,6 +760,7 @@ function FlowOverviewNode({ data }: NodeProps<Node<FlowCanvasNodeData>>) {
 			/>
 			<button
 				aria-label={`Select flow node ${data.node.label}`}
+				className="flow-node-drag-handle"
 				onClick={handleSelectClick}
 				style={flowNodeButtonStyle}
 				type="button"
@@ -719,6 +786,7 @@ function FlowOverviewNode({ data }: NodeProps<Node<FlowCanvasNodeData>>) {
 			</button>
 			{data.node.storyHref ? (
 				<a
+					className="nodrag nopan"
 					href={data.node.storyHref}
 					style={flowNodeStoryLinkStyle}
 					target="_top"
