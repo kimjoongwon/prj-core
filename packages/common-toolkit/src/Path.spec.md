@@ -19,4 +19,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-23 | `convertFromPathParamsToQueryParams`의 `pathParams` 계약을 `Record<string, unknown>`로 명시해 strict index access를 보장하도록 수정 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

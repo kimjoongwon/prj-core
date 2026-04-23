@@ -29,6 +29,14 @@ export function createRange(
 	end?: number,
 	step?: number,
 ): number[] {
+	if (end === undefined) {
+		return range(start);
+	}
+
+	if (step === undefined) {
+		return range(start, end);
+	}
+
 	return range(start, end, step);
 }
 

@@ -20,4 +20,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-23 | `validateFields`의 path reduce를 `Record<string, unknown>` 기반 안전 인덱싱으로 정리해 strict type-check를 통과하도록 수정 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

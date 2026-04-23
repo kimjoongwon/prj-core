@@ -22,4 +22,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-23 | `createRange`가 optional `end`/`step`을 분기해 `es-toolkit` overload와 strict type-check를 만족하도록 수정 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
