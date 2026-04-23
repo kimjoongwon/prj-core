@@ -1,0 +1,298 @@
+version = 1
+
+[[rules]]
+id = "docs-exempt"
+match = ["*.md", "**/*.md", "docs/**"]
+primary_role = "qa-pr-reviewer"
+supporting_roles = []
+rule_docs = [".codex/agents/qa-pr-reviewer.toml"]
+check_keys = ["documentation-only"]
+exempt = true
+
+[[rules]]
+id = "meta-exempt"
+match = ["pnpm-lock.yaml", ".gitignore", ".editorconfig", ".npmrc", ".env*", "**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.svg"]
+primary_role = "qa-pr-reviewer"
+supporting_roles = []
+rule_docs = [".codex/agents/qa-pr-reviewer.toml"]
+check_keys = ["documentation-only"]
+exempt = true
+
+[[rules]]
+id = "codex-role-files"
+match = [".codex/agents/**/*.toml", ".codex/config.toml", ".codex/review-map.toml"]
+primary_role = "qa-pr-reviewer"
+supporting_roles = []
+rule_docs = [".codex/config.toml", ".codex/agents/README.md", ".codex/config.toml.guide.md"]
+check_keys = ["role-registry-sync", "review-map-coverage", "config-contract"]
+exempt = false
+
+[[rules]]
+id = "workspace-config"
+match = [".wt/config.json", "package.json", "apps/*/package.json", "packages/*/package.json", "pnpm-workspace.yaml", "turbo.json", "tsconfig*.json", "**/tsconfig*.json"]
+primary_role = "qa-pr-reviewer"
+supporting_roles = []
+rule_docs = [".codex/agents/qa-pr-reviewer.toml", ".wt/config.json"]
+check_keys = ["config-contract", "role-registry-sync", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "wt-and-ops-scripts"
+match = ["scripts/**/*.js", "scripts/**/*.ts", "scripts/**/*.mjs", "scripts/**/*.sh"]
+primary_role = "qa-pr-reviewer"
+supporting_roles = []
+rule_docs = [".codex/agents/qa-pr-reviewer.toml"]
+check_keys = ["config-contract", "sidecar-sync", "review-map-coverage"]
+exempt = false
+
+[[rules]]
+id = "route-layout-files"
+match = ["apps/*/web/src/app/**/layout.tsx"]
+primary_role = "fe-route-layout-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["route-layout-ownership", "owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "route-page-files"
+match = ["apps/*/web/src/app/**/page.tsx", "apps/*/web/src/app/**/_client.tsx", "apps/*/web/src/app/**/_prefetch.ts"]
+primary_role = "fe-page-builder"
+supporting_roles = ["fe-ui-page-builder"]
+rule_docs = []
+check_keys = ["thin-container", "state-owner", "owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-ui-page-files"
+match = ["packages/fe-ui/src/page/**/*.ts", "packages/fe-ui/src/page/**/*.tsx"]
+primary_role = "fe-ui-page-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["pure-page", "required-export", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-form-files"
+match = ["packages/fe-ui/src/form/**/*.ts", "packages/fe-ui/src/form/**/*.tsx"]
+primary_role = "fe-form-builder"
+supporting_roles = ["fe-control-component-builder"]
+rule_docs = []
+check_keys = ["control-only", "owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-control-files"
+match = ["packages/fe-ui/src/control/**/*.ts", "packages/fe-ui/src/control/**/*.tsx"]
+primary_role = "fe-control-component-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-feature-files"
+match = ["packages/fe-ui/src/feature/**/*.ts", "packages/fe-ui/src/feature/**/*.tsx"]
+primary_role = "fe-feature-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["layer-boundary", "owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-widget-files"
+match = ["packages/fe-ui/src/widget/**/*.ts", "packages/fe-ui/src/widget/**/*.tsx"]
+primary_role = "fe-widget-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["layer-boundary", "owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-display-files"
+match = ["packages/fe-ui/src/display/**/*.ts", "packages/fe-ui/src/display/**/*.tsx"]
+primary_role = "fe-display-component-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-layout-files"
+match = ["packages/fe-ui/src/layout/**/*.ts", "packages/fe-ui/src/layout/**/*.tsx"]
+primary_role = "fe-layout-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["owner-boundary", "layer-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-master-files"
+match = ["packages/fe-ui/src/master/**/*.ts", "packages/fe-ui/src/master/**/*.tsx"]
+primary_role = "fe-master-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["owner-boundary", "layer-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-detail-files"
+match = ["packages/fe-ui/src/detail/**/*.ts", "packages/fe-ui/src/detail/**/*.tsx"]
+primary_role = "fe-detail-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["owner-boundary", "layer-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-columns-files"
+match = ["packages/fe-ui/src/columns/**/*.ts", "packages/fe-ui/src/columns/**/*.tsx"]
+primary_role = "fe-columns-builder"
+supporting_roles = ["fe-cell-builder"]
+rule_docs = []
+check_keys = ["layer-boundary", "owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-testing-files"
+match = ["packages/fe-ui/**/*.test.ts", "packages/fe-ui/**/*.test.tsx", "packages/fe-store/**/*.test.ts", "packages/fe-store/**/*.test.tsx"]
+primary_role = "qa-fe-testing"
+supporting_roles = []
+rule_docs = []
+check_keys = ["test-contract", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-store-files"
+match = ["packages/fe-store/**/*.ts", "packages/fe-store/**/*.tsx"]
+primary_role = "fe-store-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-e2e-files"
+match = ["apps/*/web/src/app/**/*.e2e.ts"]
+primary_role = "qa-fe-e2e-testing"
+supporting_roles = []
+rule_docs = []
+check_keys = ["test-contract", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "controller-files"
+match = ["apps/*/api/src/module/**/*.controller.ts"]
+primary_role = "be-controller-builder"
+supporting_roles = ["be-app-builder", "be-facade-builder"]
+rule_docs = []
+check_keys = ["controller-entrypoint", "owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "module-files"
+match = ["apps/*/api/src/module/**/*.module.ts", "apps/*/api/src/module/app.module.ts"]
+primary_role = "be-module-builder"
+supporting_roles = ["be-bootstrap-integrator"]
+rule_docs = []
+check_keys = ["owner-boundary", "required-export", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "prisma-schema-files"
+match = ["packages/be-prisma/schema/**/*.prisma"]
+primary_role = "be-prisma-builder"
+supporting_roles = ["be-prisma-annotator"]
+rule_docs = []
+check_keys = ["owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "application-service-files"
+match = ["packages/be-app/src/**/*.ts"]
+primary_role = "be-app-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["owner-boundary", "service-repository-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "facade-files"
+match = ["packages/be-facade/src/**/*.ts"]
+primary_role = "be-facade-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["owner-boundary", "service-repository-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "service-files"
+match = ["packages/be-service/src/**/*.ts"]
+primary_role = "be-service-builder"
+supporting_roles = ["be-repository-builder"]
+rule_docs = []
+check_keys = ["service-repository-boundary", "owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "repository-files"
+match = ["packages/be-repository/src/**/*.ts"]
+primary_role = "be-repository-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "dto-files"
+match = ["packages/be-dto/src/**/*.ts"]
+primary_role = "be-dto-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "entity-files"
+match = ["packages/be-entity/src/**/*.ts"]
+primary_role = "be-entity-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "vo-files"
+match = ["packages/be-vo/src/**/*.ts"]
+primary_role = "be-vo-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "schema-files"
+match = ["packages/common-schema/src/**/*.ts", "packages/common-schema/**/*.ts"]
+primary_role = "common-schema-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "common-package-files"
+match = ["packages/common-constant/**/*.ts", "packages/common-enum/**/*.ts", "packages/common-schema/**/*.ts", "packages/common-toolkit/**/*.ts", "packages/common-type/**/*.ts"]
+primary_role = "qa-pr-reviewer"
+supporting_roles = []
+rule_docs = [".codex/agents/qa-pr-reviewer.toml"]
+check_keys = ["owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "backend-testing-files"
+match = ["apps/*/api/src/module/**/*.spec.ts", "packages/be-common/**/*.spec.ts", "packages/be-app/**/*.spec.ts", "packages/be-integration/**/*.spec.ts", "packages/be-service/**/*.spec.ts", "packages/be-repository/**/*.spec.ts", "packages/be-entity/**/*.spec.ts", "packages/be-dto/**/*.spec.ts", "packages/be-vo/**/*.spec.ts"]
+primary_role = "qa-be-testing"
+supporting_roles = []
+rule_docs = []
+check_keys = ["test-contract", "sidecar-sync"]
+exempt = false

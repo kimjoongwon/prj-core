@@ -99,6 +99,7 @@ data = [
   "be-prisma-annotator",
 ]
 qa = [
+  "qa-pr-reviewer",
   "qa-fe-testing",
   "qa-fe-e2e-testing",
   "qa-be-testing",
@@ -395,6 +396,10 @@ config_file = "agents/mobile/qa-mo-e2e-testing.toml"
 [agents.qa-mo-testing]
 description = "Jest + React Native Testing Library 기반 모바일 단위 테스트 코드를 작성하는 전문가"
 config_file = "agents/mobile/qa-mo-testing.toml"
+
+[agents.qa-pr-reviewer]
+description = "변경된 PR diff를 role 규칙 기준으로 검증하고 code/rule 위치를 함께 보고하는 리뷰 전문가"
+config_file = "agents/qa-pr-reviewer.toml"
 
 [agents.qa-type-checker]
 description = "TypeScript 타입 에러를 근본 원인까지 추적하여 해결하는 전문가"

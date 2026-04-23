@@ -11,6 +11,11 @@ const DEFAULT_CONFIG = {
   branchPrefix: "feat",
   baseRef: "origin/main",
   envFileName: ".env.worktree",
+  reviewGate: {
+    enabled: true,
+    role: "qa-pr-reviewer",
+    reviewMapFile: ".codex/review-map.toml"
+  },
   port: {
     offsetStep: 20,
     map: {
@@ -136,8 +141,8 @@ function printHelp() {
   rm <ticket-or-branch>      worktree를 정리하고 기본적으로 로컬 브랜치도 삭제합니다.
   plan-merge <ticket|branch> 브랜치 작업 결과를 보고 병합 전략을 추천합니다.
   pr <ticket|branch>         브랜치를 push하고 PR을 만들거나 엽니다.
-  merge <ticket|branch>      선택한 전략 또는 추천 전략으로 PR을 병합합니다.
-  finish <ticket|branch>     rebase/push/PR/merge/cleanup을 한 번에 실행합니다.
+  merge <ticket|branch>      Codex review gate 통과 후 선택한 전략 또는 추천 전략으로 PR을 병합합니다.
+  finish <ticket|branch>     rebase/push/PR/review/merge/cleanup을 한 번에 실행합니다.
   help                       이 도움말을 출력합니다.
 
 옵션:
@@ -768,6 +773,12 @@ function runMerge(args, configOverride, options = {}) {
     baseBranch: baseInfo.baseBranch
   });
   const strategy = parsed.strategy === "auto" ? plan.recommended.strategy : parsed.strategy;
+  const reviewGate = executeReviewGate({
+    context,
+    target,
+    baseInfo,
+    dryRun: parsed.dryRun
+  });
 
   const mergeExecution = executePullRequestMerge({
     repoRoot: context.repoRoot,
@@ -790,6 +801,7 @@ function runMerge(args, configOverride, options = {}) {
       requestedStrategy: parsed.strategy,
       selectedStrategy: strategy,
       plan,
+      reviewGate,
       mergeExecution,
       prBefore: pr,
       prAfter
@@ -799,7 +811,14 @@ function runMerge(args, configOverride, options = {}) {
 
   console.log(`PR     : #${pr.number} ${pr.url}`);
   console.log(`Method : ${strategy}${parsed.strategy === "auto" ? " (recommended)" : ""}`);
+  printReviewGateSummary(reviewGate, {
+    baseRef: baseInfo.baseRef,
+    branch: target.branch
+  });
   if (parsed.dryRun) {
+    if (reviewGate.command) {
+      console.log(`DryRun : ${reviewGate.command}`);
+    }
     console.log(`DryRun : ${mergeExecution.command}`);
     return;
   }
@@ -867,6 +886,12 @@ function runFinish(args, configOverride, options = {}) {
     baseBranch: baseInfo.baseBranch
   });
   const selectedStrategy = parsed.strategy === "auto" ? plan.recommended.strategy : parsed.strategy;
+  const reviewGate = executeReviewGate({
+    context,
+    target,
+    baseInfo,
+    dryRun: parsed.dryRun
+  });
 
   const mergeExecution = prResult.pr
     ? executePullRequestMerge({
@@ -927,6 +952,7 @@ function runFinish(args, configOverride, options = {}) {
       plan,
       requestedStrategy: parsed.strategy,
       selectedStrategy,
+      reviewGate,
       mergeExecution,
       merged,
       remoteBranchDeleted,
@@ -943,9 +969,16 @@ function runFinish(args, configOverride, options = {}) {
     console.log("PR     : missing (will be created on non-dry-run finish)");
   }
   console.log(`Method : ${selectedStrategy}${parsed.strategy === "auto" ? " (recommended)" : ""}`);
+  printReviewGateSummary(reviewGate, {
+    baseRef: baseInfo.baseRef,
+    branch: target.branch
+  });
   if (parsed.dryRun) {
     if (prResult.wouldCreate) {
       console.log(`DryRun : gh pr create --base ${baseInfo.baseBranch} --head ${target.branch} --fill`);
+    }
+    if (reviewGate.command) {
+      console.log(`DryRun : ${reviewGate.command}`);
     }
     console.log(`DryRun : ${mergeExecution.command}`);
     return;
@@ -1564,6 +1597,599 @@ function executePullRequestMerge({ repoRoot, prNumber, strategy, auto, admin, de
   return { command, output };
 }
 
+function executeReviewGate({ context, target, baseInfo, dryRun }) {
+  const config = context.config.reviewGate;
+  if (!config.enabled) {
+    return {
+      enabled: false,
+      role: config.role,
+      command: "",
+      skippedReason: "disabled",
+      result: null,
+      reviewContext: null
+    };
+  }
+
+  if (!target.entry) {
+    throw new Error(
+      `Review gate requires a tracked worktree entry for ${target.branch}. Use "wt:finish" or recreate the worktree with "wt:new".`
+    );
+  }
+  if (!fs.existsSync(target.entry.worktreePath)) {
+    throw new Error(`Review gate worktree path missing: ${target.entry.worktreePath}`);
+  }
+  if (!dryRun && !isCommandAvailable("codex")) {
+    throw new Error("codex command not found. Install Codex CLI or disable reviewGate in .wt/config.json.");
+  }
+
+  const reviewRoot = target.entry.worktreePath;
+  const reviewMapPath = resolvePath(config.reviewMapFile, reviewRoot);
+  const reviewMap = loadReviewMap(reviewMapPath);
+  const reviewContext = buildReviewContext({
+    gitRoot: context.repoRoot,
+    reviewRoot,
+    branch: target.branch,
+    baseRef: baseInfo.baseRef,
+    reviewMap
+  });
+
+  const tempRoot = path.join(context.commonDir, "wt-tool", "review-gate-");
+  ensureDir(path.dirname(tempRoot));
+  const tempDir = fs.mkdtempSync(tempRoot);
+  const schemaPath = path.join(tempDir, "qa-pr-reviewer.schema.json");
+  const reviewContextPath = path.join(tempDir, "review-context.json");
+  const outputPath = path.join(tempDir, "qa-pr-reviewer.output.json");
+
+  fs.writeFileSync(schemaPath, JSON.stringify(buildReviewOutputSchema(), null, 2) + "\n", "utf8");
+  fs.writeFileSync(reviewContextPath, JSON.stringify(reviewContext, null, 2) + "\n", "utf8");
+
+  const args = buildReviewGateCommandArgs({
+    worktreePath: target.entry.worktreePath,
+    tempDir,
+    schemaPath,
+    outputPath,
+    prompt: buildReviewGatePrompt({
+      role: config.role,
+      reviewMapFile: normalizeRepoPath(config.reviewMapFile),
+      reviewContextPath,
+      baseRef: baseInfo.baseRef
+    })
+  });
+  const command = `codex ${args.map(shellQuote).join(" ")}`;
+
+  if (dryRun) {
+    safeRemoveDir(tempDir);
+    return {
+      enabled: true,
+      role: config.role,
+      command,
+      skippedReason: "dry-run",
+      result: null,
+      reviewContext
+    };
+  }
+
+  const execution = runAllowFailure("codex", args, { cwd: context.repoRoot });
+  try {
+    if (execution.error) {
+      throw new Error(execution.error.message);
+    }
+    if (execution.status !== 0) {
+      const detail = (execution.stderr || execution.stdout || "").trim();
+      throw new Error(detail || "codex review gate execution failed.");
+    }
+    if (!fs.existsSync(outputPath)) {
+      throw new Error(`codex review gate did not write output: ${outputPath}`);
+    }
+
+    const parsed = validateReviewGateResult(JSON.parse(fs.readFileSync(outputPath, "utf8")));
+    if (parsed.verdict !== "pass" || parsed.findings.length > 0) {
+      throw new Error(formatReviewGateFailure(config.role, parsed));
+    }
+
+    return {
+      enabled: true,
+      role: config.role,
+      command,
+      skippedReason: "",
+      result: parsed,
+      reviewContext
+    };
+  } finally {
+    safeRemoveDir(tempDir);
+  }
+}
+
+function buildReviewContext({ gitRoot, reviewRoot, branch, baseRef, reviewMap }) {
+  const changedFiles = splitLines(run("git", ["diff", "--name-only", `${baseRef}...${branch}`], { cwd: gitRoot }));
+  const mappedFiles = [];
+  const unresolvedFiles = [];
+  const exemptFiles = [];
+
+  for (const filePath of changedFiles) {
+    const normalizedFilePath = normalizeRepoPath(filePath);
+    const companionDocs = findCompanionDocs(reviewRoot, normalizedFilePath);
+    const matchedRule = findMatchingReviewRule(reviewMap.rules, normalizedFilePath);
+
+    if (!matchedRule) {
+      unresolvedFiles.push({
+        filePath: normalizedFilePath,
+        companionDocs
+      });
+      continue;
+    }
+
+    if (matchedRule.exempt) {
+      exemptFiles.push({
+        filePath: normalizedFilePath,
+        ruleId: matchedRule.id,
+        companionDocs
+      });
+      continue;
+    }
+
+    mappedFiles.push({
+      filePath: normalizedFilePath,
+      mappingSource: "review-map",
+      primaryRole: matchedRule.primaryRole,
+      supportingRoles: matchedRule.supportingRoles,
+      ruleDocs: resolveRuleDocs(reviewRoot, matchedRule),
+      checkKeys: matchedRule.checkKeys,
+      companionDocs
+    });
+  }
+
+  return {
+    diffRange: `${baseRef}...${branch}`,
+    changedFiles,
+    mappedFiles,
+    unresolvedFiles,
+    exemptFiles
+  };
+}
+
+function buildReviewGateCommandArgs({ worktreePath, tempDir, schemaPath, outputPath, prompt }) {
+  return [
+    "exec",
+    "-C",
+    worktreePath,
+    "--add-dir",
+    tempDir,
+    "-s",
+    "read-only",
+    "--output-schema",
+    schemaPath,
+    "-o",
+    outputPath,
+    prompt
+  ];
+}
+
+function buildReviewGatePrompt({ role, reviewMapFile, reviewContextPath, baseRef }) {
+  return [
+    `Run the ${role} role for this repository.`,
+    "Read and follow these files first:",
+    `- ${reviewMapFile}`,
+    `- .codex/agents/${role}.toml`,
+    `- ${normalizeRepoPath(reviewContextPath)}`,
+    "",
+    "Review scope:",
+    `- Only inspect the PR diff for git diff ${baseRef}...HEAD.`,
+    "- Do not modify files.",
+    "- Use the mapped rules in review-context.json as the first source of truth.",
+    "- For unresolved non-exempt files, infer the governing role from .codex/agents/*.toml and emit a finding if governance is still unclear.",
+    "- For each changed source file, also inspect any listed companion docs or sidecar specs.",
+    "",
+    "Return only JSON that matches the provided schema."
+  ].join("\n");
+}
+
+function buildReviewOutputSchema() {
+  return {
+    type: "object",
+    additionalProperties: false,
+    required: ["verdict", "summary", "appliedRules", "findings"],
+    properties: {
+      verdict: {
+        type: "string",
+        enum: ["pass", "fail"]
+      },
+      summary: {
+        type: "string"
+      },
+      appliedRules: {
+        type: "array",
+        items: {
+          type: "object",
+          additionalProperties: false,
+          required: ["filePath", "mappingSource", "primaryRole", "supportingRoles", "ruleDocs", "checkKeys"],
+          properties: {
+            filePath: { type: "string" },
+            mappingSource: { type: "string" },
+            primaryRole: { type: "string" },
+            supportingRoles: {
+              type: "array",
+              items: { type: "string" }
+            },
+            ruleDocs: {
+              type: "array",
+              items: { type: "string" }
+            },
+            checkKeys: {
+              type: "array",
+              items: { type: "string" }
+            }
+          }
+        }
+      },
+      findings: {
+        type: "array",
+        items: {
+          type: "object",
+          additionalProperties: false,
+          required: ["title", "codeLocation", "ruleLocation", "why", "fixExpectation"],
+          properties: {
+            title: { type: "string" },
+            codeLocation: { type: "string" },
+            ruleLocation: { type: "string" },
+            why: { type: "string" },
+            fixExpectation: { type: "string" }
+          }
+        }
+      }
+    }
+  };
+}
+
+function validateReviewGateResult(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("codex review gate returned a non-object result.");
+  }
+
+  const verdict = String(value.verdict || "").trim().toLowerCase();
+  if (verdict !== "pass" && verdict !== "fail") {
+    throw new Error(`codex review gate returned an invalid verdict: ${value.verdict}`);
+  }
+
+  const summary = String(value.summary || "").trim();
+  if (!summary) {
+    throw new Error("codex review gate returned an empty summary.");
+  }
+
+  const appliedRules = Array.isArray(value.appliedRules)
+    ? value.appliedRules.map((item) => ({
+        filePath: String(item.filePath || "").trim(),
+        mappingSource: String(item.mappingSource || "").trim(),
+        primaryRole: String(item.primaryRole || "").trim(),
+        supportingRoles: Array.isArray(item.supportingRoles)
+          ? item.supportingRoles.map((entry) => String(entry || "").trim()).filter(Boolean)
+          : [],
+        ruleDocs: Array.isArray(item.ruleDocs)
+          ? item.ruleDocs.map((entry) => String(entry || "").trim()).filter(Boolean)
+          : [],
+        checkKeys: Array.isArray(item.checkKeys)
+          ? item.checkKeys.map((entry) => String(entry || "").trim()).filter(Boolean)
+          : []
+      }))
+    : [];
+
+  const findings = Array.isArray(value.findings)
+    ? value.findings.map((item) => ({
+        title: String(item.title || "").trim(),
+        codeLocation: String(item.codeLocation || "").trim(),
+        ruleLocation: String(item.ruleLocation || "").trim(),
+        why: String(item.why || "").trim(),
+        fixExpectation: String(item.fixExpectation || "").trim()
+      }))
+    : [];
+
+  for (const finding of findings) {
+    if (!finding.title || !finding.codeLocation || !finding.ruleLocation || !finding.why || !finding.fixExpectation) {
+      throw new Error("codex review gate returned an incomplete finding.");
+    }
+  }
+
+  return {
+    verdict,
+    summary,
+    appliedRules,
+    findings
+  };
+}
+
+function formatReviewGateFailure(role, result) {
+  const lines = [`Merge blocked by review gate (${role}).`, `Summary: ${result.summary}`];
+  for (const finding of result.findings) {
+    lines.push(`- ${finding.title}`);
+    lines.push(`  Code: ${finding.codeLocation}`);
+    lines.push(`  Rule: ${finding.ruleLocation}`);
+    lines.push(`  Why : ${finding.why}`);
+    lines.push(`  Fix : ${finding.fixExpectation}`);
+  }
+  return lines.join("\n");
+}
+
+function printReviewGateSummary(reviewGate, info) {
+  if (!reviewGate.enabled) {
+    return;
+  }
+
+  const mappedCount = reviewGate.reviewContext ? reviewGate.reviewContext.mappedFiles.length : 0;
+  const unresolvedCount = reviewGate.reviewContext ? reviewGate.reviewContext.unresolvedFiles.length : 0;
+  const exemptCount = reviewGate.reviewContext ? reviewGate.reviewContext.exemptFiles.length : 0;
+  const scope = `${info.baseRef}...${info.branch}`;
+
+  if (reviewGate.skippedReason === "dry-run") {
+    console.log(`Review : planned (${reviewGate.role})`);
+    console.log(`Scope  : ${scope}`);
+    console.log(`Mapped : ${mappedCount} / Unresolved: ${unresolvedCount} / Exempt: ${exemptCount}`);
+    return;
+  }
+
+  if (reviewGate.result) {
+    console.log(`Review : ${reviewGate.role} (${reviewGate.result.verdict})`);
+    console.log(`Scope  : ${scope}`);
+    console.log(`Mapped : ${mappedCount} / Unresolved: ${unresolvedCount} / Exempt: ${exemptCount}`);
+    console.log(`Summary: ${reviewGate.result.summary}`);
+  }
+}
+
+function loadReviewMap(reviewMapPath) {
+  if (!fs.existsSync(reviewMapPath)) {
+    throw new Error(`Review map not found: ${reviewMapPath}`);
+  }
+
+  const lines = fs.readFileSync(reviewMapPath, "utf8").split(/\r?\n/);
+  const parsed = { version: 1, rules: [] };
+  let currentRule = null;
+
+  for (const rawLine of lines) {
+    const line = stripTomlComment(rawLine).trim();
+    if (!line) {
+      continue;
+    }
+    if (line === "[[rules]]") {
+      currentRule = {};
+      parsed.rules.push(currentRule);
+      continue;
+    }
+
+    const match = line.match(/^([A-Za-z0-9_.-]+)\s*=\s*(.+)$/);
+    if (!match) {
+      throw new Error(`Unsupported review map syntax: ${rawLine}`);
+    }
+    const key = match[1];
+    const value = parseSimpleTomlValue(match[2]);
+    if (currentRule) {
+      currentRule[key] = value;
+    } else {
+      parsed[key] = value;
+    }
+  }
+
+  return normalizeReviewMap(parsed, reviewMapPath);
+}
+
+function normalizeReviewMap(parsed, reviewMapPath) {
+  const version = toPositiveInt(parsed.version || 1) || 1;
+  if (!Array.isArray(parsed.rules) || parsed.rules.length === 0) {
+    throw new Error(`Review map must contain at least one [[rules]] entry: ${reviewMapPath}`);
+  }
+
+  return {
+    version,
+    rules: parsed.rules.map((rule, index) => {
+      const id = stringOrDefault(rule.id, `rule-${index + 1}`).trim();
+      const match = Array.isArray(rule.match) ? rule.match.map((entry) => String(entry || "").trim()).filter(Boolean) : [];
+      const primaryRole = stringOrDefault(rule.primary_role, "").trim();
+      const supportingRoles = Array.isArray(rule.supporting_roles)
+        ? rule.supporting_roles.map((entry) => String(entry || "").trim()).filter(Boolean)
+        : [];
+      const ruleDocs = Array.isArray(rule.rule_docs)
+        ? rule.rule_docs.map((entry) => String(entry || "").trim()).filter(Boolean)
+        : [];
+      const checkKeys = Array.isArray(rule.check_keys)
+        ? rule.check_keys.map((entry) => String(entry || "").trim()).filter(Boolean)
+        : [];
+      const exempt = Boolean(rule.exempt);
+
+      if (match.length === 0) {
+        throw new Error(`Review map rule ${id} is missing match patterns.`);
+      }
+      if (!primaryRole) {
+        throw new Error(`Review map rule ${id} is missing primary_role.`);
+      }
+
+      return {
+        id,
+        match,
+        primaryRole,
+        supportingRoles,
+        ruleDocs,
+        checkKeys,
+        exempt
+      };
+    })
+  };
+}
+
+function stripTomlComment(line) {
+  let inString = false;
+  let escaped = false;
+  let result = "";
+
+  for (const char of String(line || "")) {
+    if (char === '"' && !escaped) {
+      inString = !inString;
+      result += char;
+      continue;
+    }
+    if (char === "#" && !inString) {
+      break;
+    }
+    result += char;
+    escaped = char === "\\" && !escaped;
+    if (char !== "\\") {
+      escaped = false;
+    }
+  }
+
+  return result;
+}
+
+function parseSimpleTomlValue(rawValue) {
+  const value = String(rawValue || "").trim();
+  if (value.startsWith('"') && value.endsWith('"')) {
+    return value.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, "\\");
+  }
+  if (value === "true" || value === "false") {
+    return value === "true";
+  }
+  if (/^-?\d+$/.test(value)) {
+    return Number(value);
+  }
+  if (value.startsWith("[") && value.endsWith("]")) {
+    const inner = value.slice(1, -1).trim();
+    if (!inner) {
+      return [];
+    }
+    return splitTomlArray(inner).map((entry) => parseSimpleTomlValue(entry));
+  }
+
+  throw new Error(`Unsupported review map value: ${rawValue}`);
+}
+
+function splitTomlArray(value) {
+  const items = [];
+  let buffer = "";
+  let inString = false;
+  let escaped = false;
+
+  for (const char of value) {
+    if (char === '"' && !escaped) {
+      inString = !inString;
+      buffer += char;
+      continue;
+    }
+    if (char === "," && !inString) {
+      items.push(buffer.trim());
+      buffer = "";
+      continue;
+    }
+    buffer += char;
+    escaped = char === "\\" && !escaped;
+    if (char !== "\\") {
+      escaped = false;
+    }
+  }
+
+  if (buffer.trim()) {
+    items.push(buffer.trim());
+  }
+
+  return items;
+}
+
+function findMatchingReviewRule(rules, filePath) {
+  return rules.find((rule) => rule.match.some((pattern) => pathMatchesPattern(filePath, pattern))) || null;
+}
+
+function pathMatchesPattern(filePath, pattern) {
+  const normalizedPath = normalizeRepoPath(filePath);
+  const normalizedPattern = normalizeRepoPath(pattern);
+  const doubleStarToken = "__DOUBLE_STAR__";
+  const regexSource = normalizedPattern
+    .replace(/[.+^${}()|[\]\\]/g, "\\$&")
+    .replace(/\*\*/g, doubleStarToken)
+    .replace(/\*/g, "[^/]*")
+    .replace(new RegExp(doubleStarToken, "g"), ".*");
+
+  return new RegExp(`^${regexSource}$`).test(normalizedPath);
+}
+
+function resolveRuleDocs(reviewRoot, rule) {
+  const docs = [];
+  docs.push(...resolveRoleDocsFromRegistry(reviewRoot, rule.primaryRole));
+  for (const supportingRole of rule.supportingRoles) {
+    docs.push(...resolveRoleDocsFromRegistry(reviewRoot, supportingRole));
+  }
+  for (const docPath of rule.ruleDocs) {
+    const absoluteDocPath = resolvePath(docPath, reviewRoot);
+    if (fs.existsSync(absoluteDocPath)) {
+      docs.push(normalizeRepoPath(path.relative(reviewRoot, absoluteDocPath)));
+    }
+  }
+  return [...new Set(docs)];
+}
+
+function resolveRoleDocsFromRegistry(reviewRoot, role) {
+  const configPath = path.join(reviewRoot, ".codex", "config.toml");
+  if (!fs.existsSync(configPath)) {
+    return [];
+  }
+
+  const lines = fs.readFileSync(configPath, "utf8").split(/\r?\n/);
+  let inSection = false;
+  let configFile = "";
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    const sectionMatch = line.match(/^\[agents\.([A-Za-z0-9_-]+)\]$/);
+    if (sectionMatch) {
+      inSection = sectionMatch[1] === role;
+      continue;
+    }
+    if (!inSection) {
+      continue;
+    }
+    const configMatch = line.match(/^config_file\s*=\s*"([^"]+)"$/);
+    if (configMatch) {
+      configFile = configMatch[1];
+      break;
+    }
+  }
+
+  if (!configFile) {
+    return [];
+  }
+
+  const docs = [];
+  const rolePath = path.resolve(reviewRoot, ".codex", configFile);
+  if (fs.existsSync(rolePath)) {
+    docs.push(normalizeRepoPath(path.relative(reviewRoot, rolePath)));
+  }
+  const guidePath = `${rolePath}.guide.md`;
+  if (fs.existsSync(guidePath)) {
+    docs.push(normalizeRepoPath(path.relative(reviewRoot, guidePath)));
+  }
+  return docs;
+}
+
+function findCompanionDocs(repoRoot, filePath) {
+  const normalizedPath = normalizeRepoPath(filePath);
+  const extension = path.extname(normalizedPath);
+  if (!extension) {
+    return [];
+  }
+
+  const sourceExtensions = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".mts", ".cts", ".sh"]);
+  if (!sourceExtensions.has(extension)) {
+    return [];
+  }
+
+  const basePath = normalizedPath.slice(0, -extension.length);
+  const candidate = `${basePath}.spec.md`;
+  return fs.existsSync(path.resolve(repoRoot, candidate)) ? [candidate] : [];
+}
+
+function safeRemoveDir(targetDir) {
+  fs.rmSync(targetDir, { recursive: true, force: true });
+}
+
+function normalizeRepoPath(value) {
+  return String(value || "").replace(/\\/g, "/");
+}
+
 function shellQuote(value) {
   const text = String(value);
   if (/^[A-Za-z0-9_./:-]+$/.test(text)) {
@@ -1612,6 +2238,7 @@ function loadContext(configOverride) {
 
   return {
     repoRoot,
+    commonDir,
     configPath,
     config,
     registryPath,
@@ -1673,6 +2300,7 @@ function normalizeConfig(rawConfig) {
     branchPrefix: stringOrDefault(rawConfig.branchPrefix, DEFAULT_CONFIG.branchPrefix),
     baseRef: stringOrDefault(rawConfig.baseRef, DEFAULT_CONFIG.baseRef),
     envFileName: stringOrDefault(rawConfig.envFileName, DEFAULT_CONFIG.envFileName),
+    reviewGate: normalizeReviewGateConfig(rawConfig.reviewGate),
     port: normalizePortConfig(rawConfig.port),
     tmux: normalizeTmuxConfig(rawConfig.tmux)
   };
@@ -1690,6 +2318,31 @@ function normalizeConfig(rawConfig) {
   }
 
   return config;
+}
+
+function normalizeReviewGateConfig(rawReviewGate) {
+  const safeRawReviewGate =
+    rawReviewGate && typeof rawReviewGate === "object" && !Array.isArray(rawReviewGate)
+      ? rawReviewGate
+      : {};
+
+  const reviewGate = {
+    enabled: Boolean(safeRawReviewGate.enabled ?? DEFAULT_CONFIG.reviewGate.enabled),
+    role: stringOrDefault(safeRawReviewGate.role, DEFAULT_CONFIG.reviewGate.role).trim(),
+    reviewMapFile: stringOrDefault(
+      safeRawReviewGate.reviewMapFile,
+      DEFAULT_CONFIG.reviewGate.reviewMapFile
+    ).trim()
+  };
+
+  if (!reviewGate.role) {
+    throw new Error("reviewGate.role must not be empty.");
+  }
+  if (!reviewGate.reviewMapFile) {
+    throw new Error("reviewGate.reviewMapFile must not be empty.");
+  }
+
+  return reviewGate;
 }
 
 function normalizePortConfig(rawPort) {

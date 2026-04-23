@@ -22,6 +22,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-23 | `qa-pr-reviewer` role registry를 추가하고 PR diff rule review gate 용도를 문서화 | codex |
 | 2026-04-14 | `qa-mo-*` role registry와 모바일 unit/E2E 테스트 planner 설명을 추가 | codex |
 | 2026-04-13 | 모바일 `fe-mo-*`, `orch-mobile-*`, `req-mo-*` role registry와 연결 규칙을 문서화 | codex |
 | 2026-04-13 | `orch-mobile-stage` 설명을 mobile route + common backend spec planning 기준으로 갱신 | codex |

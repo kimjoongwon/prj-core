@@ -25,6 +25,7 @@
 - 기존 worktree 대상 명령은 registry 항목 선택을 우선하고, 필요하면 수동 입력으로 fallback 합니다.
 - 인터랙티브 프롬프트는 실행에 필요한 최소 인자만 수집한 뒤 core CLI로 넘깁니다.
 - 예/아니오 질문은 빈 입력 시 기본값을 사용하고, `예/아니오`, `네/아니요`, `y/n`, `ㅇ/ㄴ` 입력을 모두 허용합니다.
+- `merge`와 `finish`는 core CLI가 수행하는 `qa-pr-reviewer` review gate를 그대로 노출합니다.
 
 ## 위임 규칙
 
@@ -42,5 +43,6 @@
 
 | Date       | Change                                                                                     | Author |
 | ---------- | ------------------------------------------------------------------------------------------ | ------ |
+| 2026-04-23 | `merge`/`finish`가 core의 `qa-pr-reviewer` review gate를 그대로 통과시킨다는 계약을 문서화 | codex  |
 | 2026-04-22 | `pnpm wt` 메뉴와 프롬프트를 한국어 중심 UX로 바꾸고 예/아니오 입력을 확장함              | codex  |
 | 2026-04-22 | Add TypeScript wrapper entrypoint with contextual `pnpm wt` menu and shared config lookup | codex  |

@@ -18,8 +18,8 @@
 - `list`: registry 항목과 worktree/tmux 상태를 출력합니다. (`--json` 지원)
 - `plan-merge <ticket|branch>`: 브랜치 작업 결과를 분석해 `merge|squash|rebase`를 추천합니다.
 - `pr <ticket|branch>`: 브랜치를 push하고 PR을 생성하거나 재사용합니다.
-- `merge <ticket|branch>`: 명시한 전략 또는 추천 전략으로 PR을 병합합니다.
-- `finish <ticket|branch>`: rebase, push, PR, merge, cleanup을 한 흐름으로 실행합니다.
+- `merge <ticket|branch>`: review gate를 먼저 실행하고, 통과 시 명시한 전략 또는 추천 전략으로 PR을 병합합니다.
+- `finish <ticket|branch>`: rebase, push, PR, review, merge, cleanup을 한 흐름으로 실행합니다.
 - `rm <ticket-or-branch>`: tmux를 멈추고 worktree를 제거하며 기본적으로 로컬 브랜치도 삭제합니다.
   - 안전 기본값: `git worktree remove`와 `git branch -d`
   - 강제 옵션: `--force`는 `git worktree remove --force`와 `git branch -D`
@@ -31,8 +31,17 @@
 - 외부 JSON 설정 파일을 사용합니다. 기본 경로는 `.wt/config.json`이고 `--config`로 덮어쓸 수 있습니다.
 - 필수 동작 키:
   - `worktreeRoot`, `directoryNameTemplate`, `branchPrefix`, `baseRef`, `envFileName`
+  - `reviewGate.enabled`, `reviewGate.role`, `reviewGate.reviewMapFile`
   - `port.offsetStep`, `port.map`
   - `tmux.enabled`, `tmux.sessionPrefix`, `tmux.windows`
+
+## Review Gate
+
+- `merge`와 `finish`는 기본적으로 `reviewGate`를 실행합니다.
+- review gate는 tracked worktree를 기준으로 `git diff <baseRef>...HEAD`를 검토합니다.
+- reviewer는 `.codex/review-map.toml`로 changed file을 role 규칙에 매핑하고, 각 role 문서를 근거로 findings를 보고합니다.
+- finding이 하나라도 있으면 merge를 중단합니다.
+- `--dry-run`에서는 reviewer 실행 대신 planned command만 출력합니다.
 
 ## 런타임 데이터
 
@@ -53,6 +62,7 @@
 
 | Date       | Change                                                                                                             | Author |
 | ---------- | ------------------------------------------------------------------------------------------------------------------ | ------ |
+| 2026-04-23 | `merge`/`finish`에 `qa-pr-reviewer` 기반 review gate와 `reviewGate` 설정 계약을 추가                             | codex  |
 | 2026-04-22 | core help와 top-level 오류 문구를 한국어 중심 UX로 정리함                                                         | codex  |
 | 2026-04-22 | Update core help text to present `pnpm wt` and `wt:*` as the primary invocation style                             | codex  |
 | 2026-04-22 | Clarify `wt.js` as the core executor behind the interactive `wt.ts` entrypoint                                     | codex  |

@@ -119,6 +119,7 @@
 
 ## QA / 검증
 
+- [qa-pr-reviewer.toml](./qa-pr-reviewer.toml): 변경된 PR diff를 role 규칙 기준으로 검증하고 code/rule 위치를 함께 보고하는 리뷰 전문가
 - [qa-type-checker.toml](./qa-type-checker.toml): TypeScript 타입 에러를 근본 원인까지 추적하여 해결하는 전문가
 - [qa-fe-testing.toml](./qa-fe-testing.toml): Vitest 기반 프론트엔드 패키지 테스트 코드를 작성하는 전문가
 - [qa-fe-e2e-testing.toml](./qa-fe-e2e-testing.toml): Playwright 기반 프론트엔드 E2E 테스트 코드를 작성하는 전문가

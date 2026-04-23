@@ -169,6 +169,12 @@ pnpm wt:finish AUTH-21 --strategy auto
 - `--dry-run`: 실행 커맨드만 출력
 - `--json`: JSON 출력
 
+기본 동작:
+
+- merge 전에 `qa-pr-reviewer` review gate를 실행합니다.
+- reviewer는 `.codex/review-map.toml`로 changed file을 role 규칙에 매핑하고, finding이 하나라도 있으면 merge를 중단합니다.
+- `--dry-run`에서는 reviewer 실행 대신 planned review command를 함께 보여줍니다.
+
 ### `pnpm wt:finish <ticket-or-branch> [옵션]`
 
 옵션:
@@ -186,6 +192,11 @@ pnpm wt:finish AUTH-21 --strategy auto
 - `--force`: dirty worktree 보호 해제
 - `--dry-run`
 - `--json`
+
+기본 동작:
+
+- `finish`는 rebase/push/PR 생성 뒤 merge 직전에 동일한 review gate를 실행합니다.
+- review gate가 fail이면 merge/cleanup은 진행하지 않습니다.
 
 ### `pnpm wt:rm <ticket-or-branch>`
 
@@ -241,6 +252,11 @@ pnpm wt:finish AUTH-21 --strategy auto
   "branchPrefix": "feat",
   "baseRef": "origin/main",
   "envFileName": ".env.worktree",
+  "reviewGate": {
+    "enabled": true,
+    "role": "qa-pr-reviewer",
+    "reviewMapFile": ".codex/review-map.toml"
+  },
   "port": {
     "offsetStep": 20,
     "map": {
@@ -266,6 +282,9 @@ pnpm wt:finish AUTH-21 --strategy auto
 - `branchPrefix`: 브랜치 prefix (`feat`, `fix` 등)
 - `baseRef`: 분기 기준 ref (`origin/main` 권장)
 - `envFileName`: 생성 env 파일명
+- `reviewGate.enabled`: merge/finish 전에 reviewer를 강제할지 여부
+- `reviewGate.role`: review에 사용할 Codex role 이름
+- `reviewGate.reviewMapFile`: changed file을 role에 매핑하는 registry 파일
 - `port.offsetStep`: slot 증가 시 포트 오프셋
 - `port.map`: env 변수명과 base port 매핑
 - `tmux.enabled`: tmux 사용 여부

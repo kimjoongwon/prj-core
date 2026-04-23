@@ -1320,6 +1320,7 @@ Stage 5: 컴포넌트 (페이지별)
 | qa-fe-testing | Vitest 기반 프론트엔드 패키지 테스트 코드 작성 |
 | qa-be-e2e-testing | Jest+Supertest 기반 백엔드 E2E 테스트 작성 |
 | qa-fe-e2e-testing | Playwright 기반 프론트엔드 E2E 테스트 작성 |
+| qa-pr-reviewer | 변경된 PR diff를 role 규칙 기준으로 검증하고 code/rule 위치를 함께 보고 |
 | qa-type-checker | TypeScript 타입 에러를 근본 원인까지 추적하여 해결 |
 | /fe-review (Skill) | 프론트엔드 코드 규칙 검증 (리포트만) |
 | /be-review (Skill) | 백엔드 코드 규칙 검증 (리포트만) |
