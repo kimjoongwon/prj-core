@@ -11,11 +11,6 @@
       "import": "./index.ts",
       "default": "./index.ts"
     },
-    "./nuqs": {
-      "types": "./src/nuqs.ts",
-      "import": "./src/nuqs.ts",
-      "default": "./src/nuqs.ts"
-    },
     "./package.json": "./package.json"
   },
   "main": "./index.ts",
@@ -41,12 +36,8 @@
   "author": "kimjoongwon",
   "license": "ISC",
   "dependencies": {
-    "@cocrepo/api": "workspace:*",
-    "@cocrepo/store": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
-    "@cocrepo/type": "workspace:*",
-    "@tanstack/react-query": "catalog:",
-    "nuqs": "catalog:"
+    "@cocrepo/type": "workspace:*"
   },
   "devDependencies": {
     "react": "catalog:",
@@ -57,7 +48,6 @@
     "vitest": "catalog:"
   },
   "peerDependencies": {
-    "next": ">=14.0.0",
     "react": ">=18.0.0"
   }
 }

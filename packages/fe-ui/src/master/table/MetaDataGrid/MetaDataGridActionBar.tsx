@@ -38,7 +38,12 @@ export const MetaDataGridActionBar = observer(
 					{/* 액션 버튼들 */}
 					<div className="flex items-center gap-2">
 						{actionBarConfig?.actions?.map((action) => (
-							<InputRenderer key={action.id} config={action} />
+							<InputRenderer
+								key={action.id}
+								config={action}
+								queryStates={config.queryStates}
+								setQueryStates={config.setQueryStates}
+							/>
 						))}
 					</div>
 				</div>

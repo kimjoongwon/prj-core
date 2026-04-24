@@ -1,7 +1,10 @@
 "use client";
 
-import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildSubjectTableColumns,
 	MetaDataGrid,
@@ -37,12 +40,13 @@ export const adminSubjectsPageQueryInputs: InputConfig[] = [
 	...rightInputs,
 ];
 
-export type SubjectListPageQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[0];
-export type SubjectListPageSetQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[1];
+export interface SubjectListPageQueryStates extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+	search: string;
+	group: string;
+}
+export type SubjectListPageSetQueryStates = MetaDataGridSetQueryStates;
 
 export interface SubjectListPageSubject {
 	id: string;
@@ -141,4 +145,3 @@ function SubjectsPageFallback() {
 		</div>
 	);
 }
-

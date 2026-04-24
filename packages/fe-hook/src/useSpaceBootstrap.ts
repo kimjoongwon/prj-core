@@ -1,19 +1,23 @@
 "use client";
 
-import { useGetCurrentSpace, useGetMySpaces } from "@cocrepo/api/idp/auth";
-import { usePersistStore } from "@cocrepo/store";
+import type {
+	SpaceBootstrapSpaceLike,
+	UseSpaceBootstrapOptions,
+	UseSpaceBootstrapReturn,
+} from "@cocrepo/type";
 import { useEffect } from "react";
 
-type SpaceWithGroundLike = {
-	id?: string;
-	ground?: {
-		name?: string | null;
-	} | null;
-};
+export type {
+	SpaceBootstrapSelection,
+	SpaceBootstrapSpaceLike,
+	SpaceBootstrapStoreLike,
+	UseSpaceBootstrapOptions,
+	UseSpaceBootstrapReturn,
+} from "@cocrepo/type";
 
 export function resolveCurrentSpaceGroundName(
-	currentSpace: SpaceWithGroundLike | null | undefined,
-	spaces: SpaceWithGroundLike[],
+	currentSpace: SpaceBootstrapSpaceLike | null | undefined,
+	spaces: SpaceBootstrapSpaceLike[],
 ) {
 	if (!currentSpace?.id) {
 		return "";
@@ -26,68 +30,63 @@ export function resolveCurrentSpaceGroundName(
 	);
 }
 
-export function useSpaceBootstrap() {
-	const persistStore = usePersistStore();
-	const isHydrated = persistStore.isHydrated === true;
-	const { data: mySpacesResponse } = useGetMySpaces({
-		query: {
-			enabled: isHydrated,
-		},
-	});
+export function useSpaceBootstrap<
+	TSpace extends SpaceBootstrapSpaceLike = SpaceBootstrapSpaceLike,
+>(
+	options: UseSpaceBootstrapOptions<TSpace>,
+): UseSpaceBootstrapReturn<TSpace> {
 	const {
-		data: currentSpaceResponse,
-		isFetched: isCurrentSpaceFetched,
-	} = useGetCurrentSpace({
-		query: {
-			enabled: isHydrated,
-		},
-	});
-	const spaces = mySpacesResponse?.data ?? [];
+		spaceStore,
+		isHydrated,
+		spaces: injectedSpaces,
+		currentSpace = null,
+		isCurrentSpaceFetched,
+	} = options;
+	const spaces = injectedSpaces ?? [];
 
 	useEffect(() => {
 		if (spaces.length === 0) {
 			return;
 		}
 
-		persistStore.setSpaces(
+		spaceStore.setSpaces(
 			spaces
-				.filter((space) => space.ground)
+				.filter((space) => space.id && space.ground)
 				.map((space) => ({
-					spaceId: space.id,
-					groundName: space.ground!.name,
+					spaceId: space.id!,
+					groundName: space.ground?.name ?? "",
 				})),
 		);
-	}, [persistStore, spaces]);
+	}, [spaceStore, spaces]);
 
 	useEffect(() => {
 		if (!isHydrated || !isCurrentSpaceFetched) {
 			return;
 		}
 
-		const currentSpace = currentSpaceResponse?.data;
-
 		if (currentSpace?.id) {
-			persistStore.setSpace(
+			spaceStore.setSpace(
 				currentSpace.id,
 				resolveCurrentSpaceGroundName(currentSpace, spaces),
 			);
 		} else {
-			persistStore.clearSpace();
+			spaceStore.clearSpace();
 		}
 
-		persistStore.setSpaceSelectionResolved(true);
+		spaceStore.setSpaceSelectionResolved(true);
 	}, [
-		currentSpaceResponse,
+		currentSpace,
 		isCurrentSpaceFetched,
 		isHydrated,
-		persistStore,
+		spaceStore,
 		spaces,
 	]);
 
 	return {
 		spaces,
-		currentSpace: currentSpaceResponse?.data ?? null,
+		currentSpace,
 		isCurrentSpaceFetched,
-		isSpaceBootstrapReady: isHydrated && persistStore.isSpaceSelectionResolved,
+		isSpaceBootstrapReady:
+			isHydrated && spaceStore.isSpaceSelectionResolved === true,
 	};
 }

@@ -20,4 +20,5 @@ persist store hydrate/Space gate, query state, assets/folders 조회, asset/fold
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
 | 2026-04-01 | 신규 생성 | codex |

@@ -8,19 +8,20 @@ import {
 	useGetIdpAccounts,
 } from "@cocrepo/api/idp/idp-accounts";
 import {
-	idpConsoleAccountsPageQueryInputs,
 	AccountListPage,
 	type AccountListPageAccount,
-	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
+import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 
 export default observer(function AccountsPageRoute() {
 	const queryClient = useQueryClient();
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(
-		idpConsoleAccountsPageQueryInputs,
-	);
+	const [queryStates, setQueryStates] = useQueryStates({
+		take: parseAsInteger.withDefault(20),
+		skip: parseAsInteger.withDefault(0),
+		search: parseAsString.withDefault(""),
+	});
 	const queryParams = {
 		take: queryStates.take,
 		skip: queryStates.skip,

@@ -18,12 +18,11 @@ import { usePersistStore } from "@cocrepo/store";
 import {
 	type AssetBrowserAsset,
 	type AssetBrowserProps,
-	assetBrowserQueryInputs,
-	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 
 export type AdminAssetBrowserBindings = Omit<
 	AssetBrowserProps,
@@ -53,9 +52,14 @@ export function useAdminAssetBrowser({
 	const queryClient = useQueryClient();
 	const persistStore = usePersistStore();
 	const [isClientMounted, setIsClientMounted] = useState(false);
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(
-		assetBrowserQueryInputs,
-	);
+	const [queryStates, setQueryStates] = useQueryStates({
+		take: parseAsInteger.withDefault(20),
+		skip: parseAsInteger.withDefault(0),
+		search: parseAsString.withDefault(""),
+		kind: parseAsString.withDefault(""),
+		status: parseAsString.withDefault(""),
+		folderId: parseAsString.withDefault(""),
+	});
 	const isStoreReady = isClientMounted && (persistStore?.isHydrated ?? false);
 	const hasSelectedSpace = Boolean(persistStore?.spaceId);
 	const selectedFolderId =

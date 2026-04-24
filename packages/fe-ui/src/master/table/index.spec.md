@@ -14,7 +14,6 @@
 | 항목 | 설명 |
 |------|------|
 | `MetaDataGrid` | 마스터 테이블 기본 컴포넌트 |
-| `useMetaDataGridQueryStates` | URL query state 동기화 훅 |
 | `MetaDataGrid*` | 헤더/본문/푸터/스켈레톤 등 보조 구성요소 |
 
 ## 구현 메모
@@ -27,6 +26,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | nuqs bridge 의존 제거에 맞춰 계약을 정리 | codex |
 | 2026-03-25 | `master/table`을 `feature`와 같은 위계의 재사용 계층으로 승격 | codex |
 | 2026-03-22 | `MetaDataGrid` 실제 구현 디렉터리를 `master/table/MetaDataGrid`로 재배치 | codex |
 | 2026-03-22 | `MetaDataGrid` 콘텐츠 wrapper 기본값을 thin wrapper가 아닌 범용 `Surface`로 정리 | codex |

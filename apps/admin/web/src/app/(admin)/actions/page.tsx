@@ -4,18 +4,20 @@ import { useGetActions } from "@cocrepo/api/core/actions";
 import {
 	ActionListPage,
 	type ActionListPageAction,
-	adminActionsPageQueryInputs,
-	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
+import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 
 export default observer(function ActionsPageRoute() {
 	const router = useRouter();
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(
-		adminActionsPageQueryInputs,
-	);
+	const [queryStates, setQueryStates] = useQueryStates({
+		take: parseAsInteger.withDefault(20),
+		skip: parseAsInteger.withDefault(0),
+		search: parseAsString.withDefault(""),
+		group: parseAsString.withDefault(""),
+	});
 	const { data: response, isLoading } = useGetActions({
 		group: queryStates.group || undefined,
 	});

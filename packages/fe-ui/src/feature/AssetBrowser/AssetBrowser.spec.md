@@ -29,4 +29,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | AssetBrowser query state 타입을 hook ReturnType 의존에서 명시 계약으로 정리 | codex |
 | 2026-04-01 | 신규 생성 | codex |

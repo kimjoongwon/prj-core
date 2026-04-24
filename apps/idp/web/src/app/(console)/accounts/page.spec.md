@@ -21,7 +21,7 @@
 |------|------|
 | @cocrepo/api/idp/auth | 잠긴 계정 잠금 해제 mutation |
 | @cocrepo/api/idp/idp-accounts | 계정 목록 조회 및 상세 캐시 무효화 |
-| @cocrepo/ui | `AccountListPage`, query input, `useMetaDataGridQueryStates` |
+| @cocrepo/ui | `AccountListPage`, query input |
 | @tanstack/react-query | 목록/상세 캐시 무효화 |
 
 ## 동작 흐름
@@ -70,6 +70,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-29 | `AccountListPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-28 | 목록 E2E가 실제 컬럼 라벨(`활성`)과 상세 링크 계약(`/accounts/:userId`)을 따르도록 검증 기준을 보강 | codex |

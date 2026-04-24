@@ -26,6 +26,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | PersistStore concrete 타입 의존을 제거하고 @cocrepo/type의 structural PersistStore-like 계약으로 전환 | codex |
 | 2026-03-14 | PersistStore hydration 완료 전에는 Space 미선택 Alert를 띄우지 않도록 계약 보강 | codex |
 | 2026-03-06 | UseSpaceGuardOptions/UseSpaceGuardReturn 로컬 선언을 제거하고 @cocrepo/type 계약 import/re-export로 전환 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

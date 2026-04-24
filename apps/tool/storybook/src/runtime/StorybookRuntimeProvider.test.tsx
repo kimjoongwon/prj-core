@@ -18,8 +18,8 @@ vi.mock("@cocrepo/ui", () => ({
 	DesignSystemProvider: ({ children }: PropsWithChildren) => children,
 }));
 
-vi.mock("@cocrepo/hook/nuqs", () => ({
-	NuqsReactAdapter: ({ children }: PropsWithChildren) => children,
+vi.mock("nuqs/adapters/react", () => ({
+	NuqsAdapter: ({ children }: PropsWithChildren) => children,
 }));
 
 vi.mock("../../../../../packages/fe-api/src/core/client", () => ({

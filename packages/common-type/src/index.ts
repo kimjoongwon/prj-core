@@ -216,7 +216,12 @@ export type {
 // Hook 계약 타입
 // ============================================
 export type {
+	SpaceBootstrapSelection,
+	SpaceBootstrapSpaceLike,
+	SpaceBootstrapStoreLike,
 	SpaceGuardPersistStoreLike,
+	UseAbilitiesOptions,
+	UseAbilitiesReturn,
 	UseFormFieldMultiOptions,
 	UseFormFieldReturn,
 	UseFormFieldSingleOptions,
@@ -225,6 +230,8 @@ export type {
 	UseLayoutNavigationStoreLike,
 	UseLayoutOptions,
 	UseLayoutReturn,
+	UseSpaceBootstrapOptions,
+	UseSpaceBootstrapReturn,
 	UseSpaceGuardOptions,
 	UseSpaceGuardReturn,
 } from "./hook-contracts";
@@ -239,6 +246,8 @@ export type {
 	InputTypeProps,
 	MetaDataGridColumnConfig,
 	MetaDataGridConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
 	ResponsiveConfig,
 	SelectionConfig,
 	SelectOption,

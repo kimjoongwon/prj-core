@@ -20,7 +20,6 @@ vi.mock("@cocrepo/ui", () => ({
 }));
 
 vi.mock("@cocrepo/hook", () => ({
-	useSpaceBootstrap: () => mockUseSpaceBootstrap(),
 	resolveCurrentSpaceGroundName: (
 		currentSpace: { id?: string; ground?: { name?: string | null } | null },
 		spaces: Array<{ id?: string; ground?: { name?: string | null } | null }>,
@@ -31,6 +30,7 @@ vi.mock("@cocrepo/hook", () => ({
 }));
 
 vi.mock("@/hooks", () => ({
+	useSpaceBootstrap: () => mockUseSpaceBootstrap(),
 	useSpaceGuard: () => mockUseSpaceGuard(),
 }));
 

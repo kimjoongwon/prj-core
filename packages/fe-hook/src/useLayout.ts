@@ -1,7 +1,12 @@
 "use client";
 
-import type { BottomTabStore, FABStore, NavigationStore } from "@cocrepo/store";
-import type { UseLayoutOptions, UseLayoutReturn } from "@cocrepo/type";
+import type {
+	UseLayoutBottomTabStoreLike,
+	UseLayoutFABStoreLike,
+	UseLayoutNavigationStoreLike,
+	UseLayoutOptions,
+	UseLayoutReturn,
+} from "@cocrepo/type";
 
 export type { UseLayoutOptions, UseLayoutReturn } from "@cocrepo/type";
 
@@ -23,9 +28,13 @@ export type { UseLayoutOptions, UseLayoutReturn } from "@cocrepo/type";
  * });
  * ```
  */
-export function useLayout(
-	options: UseLayoutOptions<NavigationStore, BottomTabStore, FABStore>,
-): UseLayoutReturn<NavigationStore, BottomTabStore, FABStore> {
+export function useLayout<
+	TNavigationStore extends UseLayoutNavigationStoreLike,
+	TBottomTabStore extends UseLayoutBottomTabStoreLike,
+	TFABStore extends UseLayoutFABStoreLike,
+>(
+	options: UseLayoutOptions<TNavigationStore, TBottomTabStore, TFABStore>,
+): UseLayoutReturn<TNavigationStore, TBottomTabStore, TFABStore> {
 	const { useNavigationStore, useBottomTabStore, useFABStore } = options;
 
 	const navigationStore = useNavigationStore();

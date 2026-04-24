@@ -1,17 +1,29 @@
 "use client";
 
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import { Select, SelectItem } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { parseAsString, useQueryState } from "@cocrepo/hook/nuqs";
 
 interface SelectInputProps {
 	config: InputConfig;
+	queryStates: MetaDataGridQueryStates;
+	setQueryStates: MetaDataGridSetQueryStates;
 }
 
-export const SelectInput = observer(({ config }: SelectInputProps) => {
+export const SelectInput = observer(({
+	config,
+	queryStates,
+	setQueryStates,
+}: SelectInputProps) => {
 	const queryKey = config.props?.queryKey ?? config.id;
-	const [value, setValue] = useQueryState(queryKey, parseAsString);
+	const value =
+		typeof queryStates[queryKey] === "string"
+			? (queryStates[queryKey] as string)
+			: "";
 
 	const options = config.props?.options ?? [];
 
@@ -21,7 +33,7 @@ export const SelectInput = observer(({ config }: SelectInputProps) => {
 			selectedKeys={value ? [value] : []}
 			onSelectionChange={(keys) => {
 				const selected = Array.from(keys)[0] as string;
-				setValue(selected || null);
+				void setQueryStates({ [queryKey]: selected || null });
 			}}
 			classNames={{
 				base: "min-w-[160px] max-w-xs",

@@ -13,8 +13,7 @@
 | 항목 | 설명 |
 |------|------|
 | useDebouncedCallback | 공개 계약 요소 |
-| useMetaDataGridQueryStates | 공개 계약 요소 |
-| nuqs bridge | 공개 계약 요소 |
+| `nuqs` `useQueryStates` | 공개 계약 요소 |
 
 ## 의존성
 
@@ -22,7 +21,7 @@
 |------|------|
 | ./src/index | 기능 구현 의존성 |
 | ./src/useDebouncedCallback | 기능 구현 의존성 |
-| ./src/useMetaDataGridQueryStates | 기능 구현 의존성 |
+| ./src/`nuqs` `useQueryStates` | 기능 구현 의존성 |
 
 ## 구현 체크리스트
 
@@ -33,7 +32,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-23 | nuqs 단일 진입점을 export 하여 공용 어댑터 사용을 강제 | codex |
+| 2026-04-24 | MetaDataGrid query hook과 nuqs bridge export를 제거 | codex |
+| 2026-03-23 | nuqs bridge export 제거 | codex |
 | 2026-03-06 | fe-ui hook 배럴을 fe-hook 루트 엔트리로 이관하고 공통 훅 export를 통합 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/input/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

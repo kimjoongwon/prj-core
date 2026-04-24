@@ -29,7 +29,6 @@ IDP 앱의 Query/AppStore/DesignSystem provider를 조립하고, 현재 tenant �
 | @cocrepo/api/idp/auth | `verify-token` 기반 인증 세션 확인 및 메뉴 bootstrap |
 | @cocrepo/store | ConsoleAppStoreProvider 사용 |
 | @cocrepo/ui | 기능 구현 의존성 |
-| @cocrepo/hook/nuqs | 기능 구현 의존성 |
 | @tanstack/react-query | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
 | next/navigation | 기능 구현 의존성 |
@@ -39,9 +38,10 @@ IDP 앱의 Query/AppStore/DesignSystem provider를 조립하고, 현재 tenant �
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | nuqs Adapter를 app provider에서 직접 import하도록 정리 | codex |
 | 2026-04-16 | 현재 tenant FULL_ACCESS 기준 menu ability/bootstrap과 navigation scope checker를 공용 provider에 추가 | codex |
 | 2026-03-23 | IDP 콘솔 메뉴 bootstrap 기준을 `my-spaces` 추론에서 `verify-token` 인증 세션 확인으로 정리 | codex |
-| 2026-03-23 | nuqs bridge 모듈(@cocrepo/hook/nuqs)로 Adapter 의존성을 일원화 | codex |
+| 2026-03-23 | nuqs Adapter 의존성을 direct import 기준으로 정리 | codex |
 | 2026-03-23 | `/interaction`, `/forgot-password`, `/reset-password`, `/error`를 인증 플로우 경로로 간주해 전역 권한 bootstrap의 401 리다이렉트 루프를 차단 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-04 | 앱 로컬 stores 대신 @cocrepo/store의 ConsoleAppStoreProvider 직접 사용으로 전환 | codex |

@@ -28,7 +28,7 @@
 - page component path: `packages/fe-ui/src/page/ActionListPage/ActionListPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
-- route는 `useGetActions()`와 `useMetaDataGridQueryStates()`를 소유하고 pure page에 props를 주입합니다.
+- route는 `useGetActions()`와 ``nuqs` `useQueryStates()``를 소유하고 pure page에 props를 주입합니다.
 
 ## 콘텐츠 구성
 
@@ -66,6 +66,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-29 | `ActionListPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-28 | 목록 E2E가 현재 시드 데이터 기준으로 시스템 컬럼의 `시스템` 표시를 검증하도록 기준을 보강 | codex |

@@ -1,6 +1,10 @@
 "use client";
 
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { ButtonInput } from "./ButtonInput";
 import { DropdownInput } from "./DropdownInput";
@@ -9,17 +13,35 @@ import { SelectInput } from "./SelectInput";
 
 interface InputRendererProps {
 	config: InputConfig;
+	queryStates: MetaDataGridQueryStates;
+	setQueryStates: MetaDataGridSetQueryStates;
 }
 
 /**
  * InputConfig에 따라 적절한 입력 컴포넌트를 렌더링
  */
-export const InputRenderer = observer(({ config }: InputRendererProps) => {
+export const InputRenderer = observer(({
+	config,
+	queryStates,
+	setQueryStates,
+}: InputRendererProps) => {
 	switch (config.type) {
 		case "search":
-			return <SearchInput config={config} />;
+			return (
+				<SearchInput
+					config={config}
+					queryStates={queryStates}
+					setQueryStates={setQueryStates}
+				/>
+			);
 		case "select":
-			return <SelectInput config={config} />;
+			return (
+				<SelectInput
+					config={config}
+					queryStates={queryStates}
+					setQueryStates={setQueryStates}
+				/>
+			);
 		case "button":
 			return <ButtonInput config={config} />;
 		case "dropdown":

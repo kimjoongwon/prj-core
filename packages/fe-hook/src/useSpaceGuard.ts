@@ -1,7 +1,10 @@
 "use client";
 
-import type { PersistStore } from "@cocrepo/store";
-import type { UseSpaceGuardOptions, UseSpaceGuardReturn } from "@cocrepo/type";
+import type {
+	SpaceGuardPersistStoreLike,
+	UseSpaceGuardOptions,
+	UseSpaceGuardReturn,
+} from "@cocrepo/type";
 import { useEffect, useState } from "react";
 
 export type { UseSpaceGuardOptions, UseSpaceGuardReturn } from "@cocrepo/type";
@@ -23,9 +26,9 @@ export type { UseSpaceGuardOptions, UseSpaceGuardReturn } from "@cocrepo/type";
  * });
  * ```
  */
-export function createUseSpaceGuard(
-	options: UseSpaceGuardOptions<PersistStore>,
-) {
+export function createUseSpaceGuard<
+	TPersistStore extends SpaceGuardPersistStoreLike,
+>(options: UseSpaceGuardOptions<TPersistStore>) {
 	const {
 		usePersistStore,
 		selectSpacePath: _selectSpacePath = "/select-space",

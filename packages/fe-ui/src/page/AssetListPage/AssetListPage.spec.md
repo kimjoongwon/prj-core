@@ -22,7 +22,6 @@ route thin container가 데이터/변경 훅을 소유하고, 이 파일은 공�
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/hook | query state type 참조 |
 | @cocrepo/type | 기능 구현 의존성 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | @heroui/react | 기능 구현 의존성 |
@@ -34,6 +33,7 @@ route thin container가 데이터/변경 훅을 소유하고, 이 파일은 공�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | query state 타입을 AssetBrowser의 명시 계약으로 정리 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 route-mirror page 이름을 semantic screen 이름으로 정리 | codex |
 | 2026-04-01 | 페이지 내부 조합 책임을 `AssetBrowser` feature로 위임하고 thin wrapper로 축소 | codex |
 | 2026-03-30 | 업로드 CTA를 선택된 폴더 기준으로만 동작시키고 page 내부 warning toast 의존을 제거 | codex |

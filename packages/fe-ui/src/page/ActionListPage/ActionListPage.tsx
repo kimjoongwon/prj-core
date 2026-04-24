@@ -1,7 +1,10 @@
 "use client";
 
-import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildActionTableColumns,
 	MetaDataGrid,
@@ -37,12 +40,13 @@ export const adminActionsPageQueryInputs: InputConfig[] = [
 	...groupQueryInputs,
 ];
 
-export type ActionListPageQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[0];
-export type ActionListPageSetQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[1];
+export interface ActionListPageQueryStates extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+	search: string;
+	group: string;
+}
+export type ActionListPageSetQueryStates = MetaDataGridSetQueryStates;
 
 export interface ActionListPageAction {
 	id: string;
@@ -154,4 +158,3 @@ function ActionsPageFallback() {
 		</div>
 	);
 }
-

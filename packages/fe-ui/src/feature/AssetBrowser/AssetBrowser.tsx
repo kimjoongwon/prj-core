@@ -1,7 +1,11 @@
 "use client";
 
-import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
-import type { InputConfig, MetaDataGridColumnConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridColumnConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	Button,
 	Input,
@@ -80,13 +84,16 @@ export const assetBrowserQueryInputs: InputConfig[] = [
 	},
 ];
 
-export type AssetBrowserQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[0];
+export interface AssetBrowserQueryStates extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+	search: string;
+	kind: string;
+	status: string;
+	folderId: string;
+}
 
-export type AssetBrowserSetQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[1];
+export type AssetBrowserSetQueryStates = MetaDataGridSetQueryStates;
 
 export type AssetBrowserMode = "manage" | "picker";
 export type AssetBrowserPresentation = "inline" | "modal";

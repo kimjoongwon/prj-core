@@ -2,11 +2,11 @@
 
 import { useVerifyToken } from "@cocrepo/api/idp/auth";
 import { isScopeKindAccessible } from "@cocrepo/constant";
-import { useSpaceBootstrap } from "@cocrepo/hook";
+import { resolveCurrentSpaceGroundName } from "@cocrepo/hook";
 import { SpaceAlert } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { useSpaceGuard } from "@/hooks";
+import { useSpaceBootstrap, useSpaceGuard } from "@/hooks";
 import {
 	useNavigationStore,
 	usePersistStore,

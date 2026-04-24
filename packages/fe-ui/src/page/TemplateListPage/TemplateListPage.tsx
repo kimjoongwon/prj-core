@@ -1,7 +1,10 @@
 "use client";
 
-import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildTemplateTableColumns,
 	MetaDataGrid,
@@ -25,12 +28,13 @@ const leftInputs: InputConfig[] = [
 
 export const adminTemplatesPageQueryInputs = [...leftInputs];
 
-export type TemplateListPageQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[0];
-export type TemplateListPageSetQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[1];
+export interface TemplateListPageQueryStates extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+	search: string;
+	isActive: string;
+}
+export type TemplateListPageSetQueryStates = MetaDataGridSetQueryStates;
 
 export interface TemplateListPageTemplate {
 	id: string;
@@ -118,4 +122,3 @@ export const TemplateListPage = observer(({
 		</div>
 	);
 });
-

@@ -1,9 +1,12 @@
 "use client";
 
+import type {
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildAbilityListTableColumns,
 	MetaDataGrid,
-	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem, Spinner } from "@heroui/react";
 import { Plus, Search } from "lucide-react";
@@ -37,6 +40,12 @@ export interface AbilityListPageFilters {
 	selectedInverted: string;
 }
 
+export interface AbilityListPageQueryStates extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+}
+export type AbilityListPageSetQueryStates = MetaDataGridSetQueryStates;
+
 export interface AbilityListPageProps {
 	abilities: AbilityListPageAbility[];
 	totalCount: number;
@@ -44,6 +53,8 @@ export interface AbilityListPageProps {
 	actions: AbilityListPageOption[];
 	filters: AbilityListPageFilters;
 	isLoading: boolean;
+	queryStates: AbilityListPageQueryStates;
+	setQueryStates: AbilityListPageSetQueryStates;
 	onChangeSearchTerm: (value: string) => void;
 	onChangeSubjectId: (value: string) => void;
 	onChangeActionId: (value: string) => void;
@@ -88,6 +99,8 @@ export const AbilityListPage = observer(({
 	actions,
 	filters,
 	isLoading,
+	queryStates,
+	setQueryStates,
 	onChangeSearchTerm,
 	onChangeSubjectId,
 	onChangeActionId,
@@ -96,7 +109,6 @@ export const AbilityListPage = observer(({
 	onClickAbilityRow,
 	onClickCreateButton,
 }: AbilityListPageProps) => {
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates();
 	const subjectOptionIds = new Set(subjects.map((subject) => subject.id));
 	const actionOptionIds = new Set(actions.map((action) => action.id));
 	const handleAbilityRowClick = (ability: AbilityListPageAbility) => {

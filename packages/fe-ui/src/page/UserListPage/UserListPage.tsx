@@ -1,13 +1,16 @@
 "use client";
 
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildUserListTableColumns,
 	MetaDataGrid,
 	PageTitleBar,
 	StatsCard,
 	Surface,
-	useMetaDataGridQueryStates,
 	VStack,
 } from "@cocrepo/ui";
 import { Chip, Input, Spinner } from "@heroui/react";
@@ -32,8 +35,11 @@ export interface UserListPageStats {
 	inactive: number;
 }
 
-type GridQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[0];
-type SetGridQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[1];
+export interface UserListPageQueryStates extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+}
+export type UserListPageSetQueryStates = MetaDataGridSetQueryStates;
 
 export interface UserListPageProps {
 	users: UserListPageUser[];
@@ -43,8 +49,8 @@ export interface UserListPageProps {
 	searchValue: string;
 	onChangeSearchValue: (value: string) => void;
 	onClearSearch: () => void;
-	queryStates: GridQueryStates;
-	setQueryStates: SetGridQueryStates;
+	queryStates: UserListPageQueryStates;
+	setQueryStates: UserListPageSetQueryStates;
 }
 
 const SEARCH_PLACEHOLDER = "이름, 이메일, 전화번호로 검색...";

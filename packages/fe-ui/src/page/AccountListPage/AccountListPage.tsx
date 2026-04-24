@@ -1,7 +1,10 @@
 "use client";
 
-import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildIdpAccountTableColumns,
 	ConfirmModal,
@@ -30,12 +33,12 @@ const leftInputs: InputConfig[] = [
 
 export const idpConsoleAccountsPageQueryInputs = [...leftInputs];
 
-export type AccountListPageQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[0];
-export type AccountListPageSetQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[1];
+export interface AccountListPageQueryStates extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+	search: string;
+}
+export type AccountListPageSetQueryStates = MetaDataGridSetQueryStates;
 
 export interface AccountListPageAccount {
 	id: string;
@@ -143,4 +146,3 @@ export const AccountListPage = observer(({
 		</VStack>
 	);
 });
-

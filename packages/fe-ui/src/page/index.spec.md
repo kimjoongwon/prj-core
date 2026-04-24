@@ -41,6 +41,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | Ability/User 목록 query state 타입 배럴 export를 추가 | codex |
 | 2026-04-22 | semantic pure page naming 규칙에 맞춰 export catalog 예시와 문서를 semantic screen 이름 기준으로 정리 | codex |
 | 2026-04-08 | `RoleDetailPageRelatedAbility` 타입 배럴 export를 추가해 역할 상세 route가 중복 권한 이동 계약을 소비할 수 있게 정리 | codex |
 | 2026-04-06 | `RoleDetailPage`의 page permission / CRUD bundle / generic permission issue 타입 배럴 export를 추가 | codex |

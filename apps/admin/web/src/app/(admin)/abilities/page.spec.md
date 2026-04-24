@@ -68,6 +68,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
 | 2026-03-29 | `AbilityListPage`가 `MetaDataGrid` 기반 테이블 조합을 사용하도록 정착된 상태에 맞춰 reusable target을 `master/table`로 보정 | codex |
 | 2026-03-26 | `AbilityListPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-23 | 필터 Select 검증 기준을 접근성 role name이 아닌 HeroUI trigger placeholder 텍스트로 명시 | codex |

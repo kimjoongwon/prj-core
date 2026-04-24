@@ -1,7 +1,10 @@
 "use client";
 
-import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildInquiryTableColumns,
 	type InquiryStats,
@@ -51,12 +54,13 @@ const leftInputs: InputConfig[] = [
 
 export const adminInquiriesPageQueryInputs = [...leftInputs];
 
-export type InquiryListPageQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[0];
-export type InquiryListPageSetQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[1];
+export interface InquiryListPageQueryStates extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+	search: string;
+	inquiryStatus: string;
+}
+export type InquiryListPageSetQueryStates = MetaDataGridSetQueryStates;
 
 export interface InquiryListPageInquiry {
 	id: string;
@@ -169,4 +173,3 @@ export const InquiryListPage = observer(({
 		</div>
 	);
 });
-

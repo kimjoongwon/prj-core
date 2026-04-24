@@ -13,5 +13,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | nuqs React Adapter mock을 direct adapter export 이름 기준으로 정리 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 toolbar realm override fixture story id를 semantic page 기준으로 갱신 | codex |
 | 2026-04-14 | Storybook runtime bootstrap 회귀용 단위 테스트 sidecar 신규 추가 | codex |

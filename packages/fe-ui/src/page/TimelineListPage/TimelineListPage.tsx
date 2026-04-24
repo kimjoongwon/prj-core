@@ -1,7 +1,10 @@
 "use client";
 
-import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildTimelineTableColumns,
 	MetaDataGrid,
@@ -35,12 +38,12 @@ const leftInputs: InputConfig[] = [
 
 export const adminTimelinesPageQueryInputs = [...leftInputs];
 
-export type TimelineListPageQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[0];
-export type TimelineListPageSetQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[1];
+export interface TimelineListPageQueryStates extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+	search: string;
+}
+export type TimelineListPageSetQueryStates = MetaDataGridSetQueryStates;
 
 export interface TimelineListPageTimeline {
 	id: string;

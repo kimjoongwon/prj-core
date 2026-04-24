@@ -1,8 +1,11 @@
 "use client";
 
 import { MODEL_TYPE_OPTIONS } from "@cocrepo/constant";
-import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildOidcSessionTableColumns,
 	ConfirmModal,
@@ -43,12 +46,14 @@ const leftInputs: InputConfig[] = [
 
 export const idpConsoleOidcSessionsPageQueryInputs = [...leftInputs];
 
-export type OidcSessionListPageQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[0];
-export type OidcSessionListPageSetQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[1];
+export interface OidcSessionListPageQueryStates
+	extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+	modelType: string;
+	accountId: string;
+}
+export type OidcSessionListPageSetQueryStates = MetaDataGridSetQueryStates;
 
 export interface OidcSessionListPageSession {
 	id: string;

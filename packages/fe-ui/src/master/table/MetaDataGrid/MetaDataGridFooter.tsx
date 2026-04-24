@@ -2,7 +2,6 @@
 
 import type { MetaDataGridConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import { parseAsInteger, useQueryStates } from "@cocrepo/hook/nuqs";
 import { Pagination } from "../../../control/Pagination/Pagination";
 
 interface MetaDataGridFooterProps<T> {
@@ -14,18 +13,17 @@ interface MetaDataGridFooterProps<T> {
  */
 export const MetaDataGridFooter = observer(
 	<T,>({ config }: MetaDataGridFooterProps<T>) => {
-		// nuqs로 페이지네이션 상태 관리
-		const [{ take, skip }, setQueryStates] = useQueryStates({
-			take: parseAsInteger.withDefault(20),
-			skip: parseAsInteger.withDefault(0),
-		});
+		const take =
+			typeof config.queryStates.take === "number" ? config.queryStates.take : 20;
+		const skip =
+			typeof config.queryStates.skip === "number" ? config.queryStates.skip : 0;
 
 		// 현재 페이지 계산 (1부터 시작)
-		const currentPage = Math.floor(skip / take) + 1;
+		const currentPage = Math.floor(skip / Math.max(take, 1)) + 1;
 
 		const handlePageChange = (page: number) => {
 			const newSkip = (page - 1) * take;
-			setQueryStates({ skip: newSkip });
+			void config.setQueryStates({ skip: newSkip });
 		};
 
 		return (

@@ -5,6 +5,13 @@ import type { ReactNode } from "react";
 // MetaDataGrid 메인 인터페이스
 // ============================================
 
+export type MetaDataGridQueryStates = Record<string, unknown>;
+
+export type MetaDataGridSetQueryStates = (
+	values: Record<string, unknown | null>,
+	options?: { history?: "push" | "replace" },
+) => Promise<URLSearchParams>;
+
 /**
  * MetaDataGrid 설정 인터페이스
  * 메타데이터 기반 선언적 DataGrid 구성
@@ -22,14 +29,11 @@ export interface MetaDataGridConfig<T> {
 	/** 로딩 상태 */
 	isLoading?: boolean;
 
-	/** nuqs queryStates (페이지에서 주입) */
-	queryStates: Record<string, unknown>;
+	/** 페이지가 소유한 query state */
+	queryStates: MetaDataGridQueryStates;
 
-	/** nuqs setQueryStates (페이지에서 주입) */
-	setQueryStates: (
-		values: Record<string, unknown | null>,
-		options?: { history?: "push" | "replace" },
-	) => Promise<URLSearchParams>;
+	/** 페이지가 소유한 query state setter */
+	setQueryStates: MetaDataGridSetQueryStates;
 
 	/** 컬럼 정의 (TanStack Table ColumnDef 확장) */
 	columns: MetaDataGridColumnConfig<T>[];
@@ -84,10 +88,10 @@ export interface MetaDataGridColumnConfig<TData, TValue = unknown>
  * 입력 컴포넌트 타입
  */
 export type InputType =
-	| "search" // 검색 입력 (nuqs 연동)
-	| "select" // 셀렉트 박스 (nuqs 연동)
+	| "search" // 검색 입력
+	| "select" // 셀렉트 박스
 	| "multi-select" // 다중 선택
-	| "date-range" // 날짜 범위 (nuqs 연동)
+	| "date-range" // 날짜 범위
 	| "button" // 버튼
 	| "dropdown" // 드롭다운 메뉴
 	| "chip-group" // 필터 칩 그룹
@@ -100,7 +104,7 @@ export interface InputConfig {
 	/** 입력 타입 */
 	type: InputType;
 
-	/** 고유 식별자 (nuqs querystring key로 사용) */
+	/** 고유 식별자 (query state key로 사용) */
 	id: string;
 
 	/** 표시 라벨 */
@@ -129,15 +133,15 @@ export interface InputConfig {
  * 입력 타입별 설정
  */
 export interface InputTypeProps {
-	// Search - nuqs 자동 연동
+	// Search
 	debounceMs?: number;
 	queryKey?: string; // 기본값: id
 
-	// Select / MultiSelect - nuqs 자동 연동
+	// Select / MultiSelect
 	options?: SelectOption[];
 	defaultValue?: string | string[];
 
-	// DateRange - nuqs 자동 연동
+	// DateRange
 	queryKeys?: { start: string; end: string };
 
 	// Button

@@ -2,20 +2,21 @@
 
 import { type SpaceDto, useGetSpaces } from "@cocrepo/api/core/spaces";
 import {
-	adminSpacesPageQueryInputs,
 	SpaceListPage,
 	type SpaceListPageSpace,
-	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
+import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 
 export default observer(function SpacesPageRoute() {
 	const router = useRouter();
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(
-		adminSpacesPageQueryInputs,
-	);
+	const [queryStates, setQueryStates] = useQueryStates({
+		take: parseAsInteger.withDefault(20),
+		skip: parseAsInteger.withDefault(0),
+		search: parseAsString.withDefault(""),
+	});
 	const { data: response, isLoading } = useGetSpaces();
 	const spaces = (response?.data ?? []).flatMap(mapSpaceRow);
 

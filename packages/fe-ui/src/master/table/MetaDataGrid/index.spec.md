@@ -8,7 +8,7 @@
 
 메타데이터 기반 선언적 DataGrid 시스템입니다.
 MetaDataGridConfig 설정 객체 하나로 DataGrid의 컬럼, 검색, 필터, 페이지네이션, 선택 모드를 구성합니다.
-nuqs를 통해 페이지네이션과 필터가 URL querystring과 자동 동기화됩니다.
+페이지가 소유한 query state를 주입받아 검색, 필터, 페이지네이션 UI를 갱신합니다.
 공개 재사용 진입점은 `packages/fe-ui/src/master/table/index.ts`가 소유하고, 이 폴더는 그 구현을 제공합니다.
 
 ## 디자인 목업
@@ -69,8 +69,8 @@ nuqs를 통해 페이지네이션과 필터가 URL querystring과 자동 동기�
 | 로딩 | 데이터 로드 중 | MetaDataGridSkeleton으로 Body 대체 |
 | 빈 상태 | 조회 결과 없음 | MetaDataGridEmpty 표시 |
 | 행 선택 | 체크박스 선택 시 | MetaDataGridActionBar 하단 고정 표시 |
-| 검색/필터 | 입력값 변경 시 | URL querystring 자동 동기화 후 목록 갱신 |
-| 페이지 변경 | 페이지네이션 클릭 시 | URL querystring 동기화, 해당 페이지 로드 |
+| 검색/필터 | 입력값 변경 시 | 주입된 setQueryStates로 page-owned query state 갱신 |
+| 페이지 변경 | 페이지네이션 클릭 시 | 주입된 setQueryStates로 skip 상태 갱신 |
 
 ## 의존성
 
@@ -79,7 +79,6 @@ nuqs를 통해 페이지네이션과 필터가 URL querystring과 자동 동기�
 | Type | `@cocrepo/type` > `MetaDataGridConfig` | DataGrid 설정 타입 |
 | UI | `DataGrid` (Pure UI) | 테이블 본문 렌더링 |
 | Input | `Pagination` | 페이지네이션 UI |
-| Library | `nuqs` | URL querystring 상태 동기화 |
 | Library | `@tanstack/react-table` | 컬럼 정의 (ColumnDef) |
 
 ## Props
@@ -101,7 +100,7 @@ interface MetaDataGridProps<T> {
 | 이벤트 | 발생 조건 | 부모 전달 |
 |--------|----------|----------|
 | (config 내부) | 검색/필터/버튼 입력 시 | config.leftInputs/rightInputs의 개별 핸들러 |
-| (config 내부) | 페이지 변경 시 | nuqs를 통한 URL querystring 자동 동기화 |
+| (config 내부) | 페이지 변경 시 | config.setQueryStates 호출 |
 | (config 내부) | 행 선택 시 | config.selection.onSelectionChange |
 
 ## 하위 컴포넌트
@@ -130,13 +129,14 @@ interface MetaDataGridProps<T> {
 - [x] ButtonInput.tsx
 - [x] DropdownInput.tsx
 - [x] SelectInput.tsx
-- [x] index.ts (re-export + hooks re-export)
+- [x] index.ts (component re-export)
 - [x] observer 적용 (모든 하위 컴포넌트)
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | MetaDataGrid가 page-owned query state props를 소비하도록 정리 | codex |
 | 2026-03-21 | `master/table` 공식 재사용 엔트리의 구현 백엔드 역할을 명시 | codex |
 | 2026-03-06 | MetaDataGrid 훅 re-export 경로를 fe-ui 내부 hook에서 @cocrepo/hook으로 이관 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |

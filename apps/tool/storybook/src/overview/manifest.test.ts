@@ -37,7 +37,6 @@ describe("overview manifest helpers", () => {
 			import {
 				RoleListPage,
 				type RoleListPageRole,
-				useMetaDataGridQueryStates,
 			} from "@cocrepo/ui";
 
 			export { SessionCheckPage as default } from "@cocrepo/ui";

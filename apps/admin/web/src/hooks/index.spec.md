@@ -12,13 +12,15 @@
 
 | 항목 | 설명 |
 |------|------|
-| export | 없음 |
+| export | admin 앱 전용 hook과 공용 hook re-export |
 
 ## 의존성
 
 | 모듈 | 용도 |
 |------|------|
-| @cocrepo/hook | 기능 구현 의존성 |
+| @cocrepo/hook | useDeviceType 등 concrete 앱 의존성이 없는 공용 hook re-export |
+| ./useAbilities | admin 권한 API query와 공용 ability 상태 정규화 hook 조립 |
+| ./useSpaceBootstrap | admin Space API query와 공용 Space bootstrap hook 조립 |
 | ./useSpaceGuard | 기능 구현 의존성 |
 
 ## 구현 체크리스트
@@ -30,5 +32,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | useAbilities/useSpaceBootstrap을 admin 앱 소유 hook으로 이관하고 index export를 갱신 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-04 | useAdminLayout export 제거 후 공용 useLayout 직접 사용 구조로 변경 | codex |

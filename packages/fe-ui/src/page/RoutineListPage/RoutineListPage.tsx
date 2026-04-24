@@ -1,7 +1,10 @@
 "use client";
 
-import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildRoutineTableColumns,
 	MetaDataGrid,
@@ -45,12 +48,13 @@ const leftInputs: InputConfig[] = [
 
 export const adminRoutinesPageQueryInputs = [...leftInputs];
 
-export type RoutineListPageQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[0];
-export type RoutineListPageSetQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[1];
+export interface RoutineListPageQueryStates extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+	search: string;
+	spaceScope: string;
+}
+export type RoutineListPageSetQueryStates = MetaDataGridSetQueryStates;
 
 export interface RoutineListPageRoutine {
 	id: string;
@@ -186,4 +190,3 @@ export const RoutineListPage = observer(({
 		</div>
 	);
 });
-

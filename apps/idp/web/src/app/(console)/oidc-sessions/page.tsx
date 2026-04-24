@@ -11,14 +11,13 @@ import {
 	useRevokeOidcSessionsByGrant,
 } from "@cocrepo/api/idp/oidc-sessions";
 import {
-	idpConsoleOidcSessionsPageQueryInputs,
 	OidcSessionListPage,
 	type OidcSessionListPageSession,
 	type OidcSessionListPageStats,
-	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
+import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 import { useState } from "react";
 
 export default observer(function OidcSessionsPageRoute() {
@@ -26,9 +25,12 @@ export default observer(function OidcSessionsPageRoute() {
 	const [revokeGrantId, setRevokeGrantId] = useState<string | null>(null);
 	const [isGrantRevokeModalOpen, setIsGrantRevokeModalOpen] = useState(false);
 	const [isRevokeAllModalOpen, setIsRevokeAllModalOpen] = useState(false);
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(
-		idpConsoleOidcSessionsPageQueryInputs,
-	);
+	const [queryStates, setQueryStates] = useQueryStates({
+		take: parseAsInteger.withDefault(20),
+		skip: parseAsInteger.withDefault(0),
+		modelType: parseAsString.withDefault(""),
+		accountId: parseAsString.withDefault(""),
+	});
 	const queryParams = {
 		take: queryStates.take,
 		skip: queryStates.skip,

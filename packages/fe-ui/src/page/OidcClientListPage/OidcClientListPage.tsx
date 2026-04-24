@@ -1,7 +1,10 @@
 "use client";
 
-import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildOidcClientTableColumns,
 	MetaDataGrid,
@@ -29,12 +32,13 @@ const leftInputs: InputConfig[] = [
 
 export const idpConsoleOidcClientsPageQueryInputs = [...leftInputs];
 
-export type OidcClientListPageQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[0];
-export type OidcClientListPageSetQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[1];
+export interface OidcClientListPageQueryStates
+	extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+	search: string;
+}
+export type OidcClientListPageSetQueryStates = MetaDataGridSetQueryStates;
 
 export interface OidcClientListPageClient {
 	id: string;

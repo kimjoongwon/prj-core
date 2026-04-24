@@ -19,9 +19,10 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | nuqs React Adapter를 Storybook runtime에서 직접 import하도록 정리 | codex |
 | 2026-04-14 | preview toolbar realm override와 정적 mock multi-space fallback을 반영해 Storybook 내부 Space 전환 동작을 보강 | codex |
 | 2026-04-14 | Storybook admin runtime의 current space terminology를 `PersistStore.spaceId`/`x-space-id` 기준으로 정리 | codex |
-| 2026-03-23 | nuqs Adapter를 @cocrepo/hook/nuqs 브리지로 교체해 workspace 전역 인스턴스를 공유 | codex |
+| 2026-03-23 | nuqs Adapter를 Storybook runtime에서 직접 import하도록 정리 | codex |
 | 2026-03-16 | workspace export import와 auth-flag 기반 runtime gating으로 Storybook 타입 안정성을 보강 | codex |
 | 2026-03-16 | story parameter 기반 realm/space bootstrap과 정적 빌드 fallback runtime 동작을 반영 | codex |
 | 2026-03-16 | Storybook 전용 QueryClient/RootStore/provider/bootstrap 계층 및 auth-aware runtime resolver 신규 추가 | codex |

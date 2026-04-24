@@ -46,6 +46,26 @@ export interface UseFormFieldReturn<TValue> {
 }
 
 /**
+ * useAbilities 입력 옵션 계약
+ */
+export interface UseAbilitiesOptions<TAbility = unknown> {
+	abilities?: TAbility[] | null;
+	isLoading?: boolean;
+	isError?: boolean;
+	isDisabled?: boolean;
+}
+
+/**
+ * useAbilities 반환 계약
+ */
+export interface UseAbilitiesReturn<TAbility = unknown> {
+	abilities: TAbility[];
+	isLoading: boolean;
+	isError: boolean;
+	isDisabled: boolean;
+}
+
+/**
  * useLayout가 의존하는 NavigationStore 최소 계약
  */
 export interface UseLayoutNavigationStoreLike {
@@ -142,6 +162,7 @@ export interface SpaceGuardPersistStoreLike {
 	spaceId?: string | null;
 	groundName?: string | null;
 	isHydrated?: boolean;
+	isSpaceSelectionResolved?: boolean;
 }
 
 /**
@@ -169,4 +190,58 @@ export interface UseSpaceGuardReturn {
 	hasSpace: boolean;
 	/** 현재 선택된 Ground 이름 */
 	groundName: string | null;
+}
+
+/**
+ * Space bootstrap이 참조하는 Space 최소 계약
+ */
+export interface SpaceBootstrapSpaceLike {
+	id?: string | null;
+	ground?: {
+		name?: string | null;
+	} | null;
+}
+
+/**
+ * Persist 계층에 저장할 Space 선택 항목 계약
+ */
+export interface SpaceBootstrapSelection {
+	spaceId: string;
+	groundName: string;
+}
+
+/**
+ * useSpaceBootstrap이 값을 반영할 Store 최소 계약
+ */
+export interface SpaceBootstrapStoreLike {
+	isSpaceSelectionResolved?: boolean;
+	setSpaces: (spaces: SpaceBootstrapSelection[]) => void;
+	setSpace: (spaceId: string, groundName: string) => void;
+	clearSpace: () => void;
+	setSpaceSelectionResolved: (resolved: boolean) => void;
+}
+
+/**
+ * useSpaceBootstrap 입력 옵션 계약
+ */
+export interface UseSpaceBootstrapOptions<
+	TSpace extends SpaceBootstrapSpaceLike = SpaceBootstrapSpaceLike,
+> {
+	spaceStore: SpaceBootstrapStoreLike;
+	isHydrated: boolean;
+	spaces?: TSpace[] | null;
+	currentSpace?: TSpace | null;
+	isCurrentSpaceFetched: boolean;
+}
+
+/**
+ * useSpaceBootstrap 반환 계약
+ */
+export interface UseSpaceBootstrapReturn<
+	TSpace extends SpaceBootstrapSpaceLike = SpaceBootstrapSpaceLike,
+> {
+	spaces: TSpace[];
+	currentSpace: TSpace | null;
+	isCurrentSpaceFetched: boolean;
+	isSpaceBootstrapReady: boolean;
 }

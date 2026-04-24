@@ -26,14 +26,24 @@ export const MetaDataGridHeader = observer(
 				{/* 좌측 영역: 검색, 필터 */}
 				<div className="flex flex-wrap items-center gap-2">
 					{leftInputs.map((input) => (
-						<InputRenderer key={input.id} config={input} />
+						<InputRenderer
+							key={input.id}
+							config={input}
+							queryStates={config.queryStates}
+							setQueryStates={config.setQueryStates}
+						/>
 					))}
 				</div>
 
 				{/* 우측 영역: 버튼, 액션 */}
 				<div className="flex items-center gap-2">
 					{rightInputs.map((input) => (
-						<InputRenderer key={input.id} config={input} />
+						<InputRenderer
+							key={input.id}
+							config={input}
+							queryStates={config.queryStates}
+							setQueryStates={config.setQueryStates}
+						/>
 					))}
 				</div>
 			</div>

@@ -4,7 +4,6 @@ import { useVerifyToken } from "@cocrepo/api/idp/auth";
 import { setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
 
 import { IDP_NAV_ITEMS, isScopeKindAccessible } from "@cocrepo/constant";
-import { NuqsNextAdapter } from "@cocrepo/hook/nuqs";
 import {
 	ConsoleAppStoreProvider,
 	convertApiToAbilityRules,
@@ -19,6 +18,7 @@ import {
 } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
+import { NuqsAdapter as NuqsNextAdapter } from "nuqs/adapters/next/app";
 import type { ReactNode } from "react";
 import { useEffect } from "react";
 

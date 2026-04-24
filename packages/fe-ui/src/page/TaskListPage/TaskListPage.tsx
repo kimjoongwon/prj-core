@@ -1,7 +1,10 @@
 "use client";
 
-import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildTaskTableColumns,
 	MetaDataGrid,
@@ -45,12 +48,13 @@ const leftInputs: InputConfig[] = [
 
 export const adminTasksPageQueryInputs = [...leftInputs];
 
-export type TaskListPageQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[0];
-export type TaskListPageSetQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[1];
+export interface TaskListPageQueryStates extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+	search: string;
+	spaceScope: string;
+}
+export type TaskListPageSetQueryStates = MetaDataGridSetQueryStates;
 
 export interface TaskListPageTask {
 	id: string;
@@ -191,4 +195,3 @@ export const TaskListPage = observer(({
 		</div>
 	);
 });
-

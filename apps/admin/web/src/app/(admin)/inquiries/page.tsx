@@ -8,15 +8,14 @@ import {
 } from "@cocrepo/api/core/inquiries";
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import {
-	adminInquiriesPageQueryInputs,
 	InquiryListPage,
 	type InquiryListPageInquiry,
-	useMetaDataGridQueryStates,
 	type SLAStatus,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
+import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 
 const FILTERABLE_INQUIRY_STATUSES: InquiryStatus[] = [
 	"NEW",
@@ -28,9 +27,12 @@ const FILTERABLE_INQUIRY_STATUSES: InquiryStatus[] = [
 
 export default observer(function InquiriesPageRoute() {
 	const router = useRouter();
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(
-		adminInquiriesPageQueryInputs,
-	);
+	const [queryStates, setQueryStates] = useQueryStates({
+		take: parseAsInteger.withDefault(20),
+		skip: parseAsInteger.withDefault(0),
+		search: parseAsString.withDefault(""),
+		inquiryStatus: parseAsString.withDefault(""),
+	});
 	const { data: inquiriesResponse, isLoading: isLoadingInquiries } =
 		useGetInquiries({
 			take: getNumberQueryValue(queryStates.take, 20),

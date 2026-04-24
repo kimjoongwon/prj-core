@@ -1,8 +1,3 @@
-// Hooks (re-export from package-level hooks)
-export {
-	useDebouncedCallback,
-	useMetaDataGridQueryStates,
-} from "@cocrepo/hook";
 // Components
 export { MetaDataGrid } from "./MetaDataGrid";
 export { MetaDataGridActionBar } from "./MetaDataGridActionBar";

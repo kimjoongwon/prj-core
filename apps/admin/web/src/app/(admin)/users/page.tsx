@@ -2,17 +2,20 @@
 
 import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
 import { useDebouncedCallback } from "@cocrepo/hook";
-import { parseAsString, useQueryState } from "@cocrepo/hook/nuqs";
-import { UserListPage, useMetaDataGridQueryStates } from "@cocrepo/ui";
+import { UserListPage } from "@cocrepo/ui";
 import { usePersistStore } from "@/stores/AppStoreProvider";
 import { observer } from "mobx-react-lite";
+import { parseAsInteger, parseAsString, useQueryState, useQueryStates } from "nuqs";
 import { Suspense, useEffect, useState } from "react";
 
 const SEARCH_PLACEHOLDER = "이름, 이메일, 전화번호로 검색...";
 
-type GridQueryStates = ReturnType<typeof useMetaDataGridQueryStates>[0];
+interface UsersQueryStates {
+	take: number;
+	skip: number;
+}
 
-function getUsersParams(queryStates: GridQueryStates, search: string) {
+function getUsersParams(queryStates: UsersQueryStates, search: string) {
 	return {
 		take: queryStates.take,
 		skip: queryStates.skip,
@@ -21,7 +24,10 @@ function getUsersParams(queryStates: GridQueryStates, search: string) {
 }
 
 function UsersPageContent() {
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates();
+	const [queryStates, setQueryStates] = useQueryStates({
+		take: parseAsInteger.withDefault(20),
+		skip: parseAsInteger.withDefault(0),
+	});
 	const [searchQuery, setSearchQuery] = useQueryState(
 		"search",
 		parseAsString.withDefault(""),

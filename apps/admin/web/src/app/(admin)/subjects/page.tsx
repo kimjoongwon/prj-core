@@ -1,17 +1,17 @@
 "use client";
 
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
-import {
-	adminSubjectsPageQueryInputs,
-	SubjectListPage,
-	useMetaDataGridQueryStates,
-} from "@cocrepo/ui";
+import { SubjectListPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
+import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 
 export default observer(function SubjectsPageRoute() {
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(
-		adminSubjectsPageQueryInputs,
-	);
+	const [queryStates, setQueryStates] = useQueryStates({
+		take: parseAsInteger.withDefault(20),
+		skip: parseAsInteger.withDefault(0),
+		search: parseAsString.withDefault(""),
+		group: parseAsString.withDefault(""),
+	});
 	const { data: response, isLoading } = useGetSubjects();
 
 	return (

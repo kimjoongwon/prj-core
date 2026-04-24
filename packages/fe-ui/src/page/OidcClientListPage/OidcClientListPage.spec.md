@@ -32,6 +32,7 @@ OIDC 클라이언트 목록 화면의 pure page 컴포넌트입니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | pure page query state 타입을 shared hook ReturnType 의존에서 명시 계약으로 정리 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 route-mirror page 이름을 semantic screen 이름으로 정리 | codex |
 | 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
 | 2026-03-29 | OIDC 클라이언트 목록을 pure page로 재정의하고 조회·query state·라우팅을 route thin container로 이동 | codex |

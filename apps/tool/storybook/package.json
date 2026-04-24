@@ -25,6 +25,7 @@
     "@xyflow/react": "catalog:",
     "mobx": "catalog:",
     "next": "^16.1.0",
+    "nuqs": "catalog:",
     "mobx-react-lite": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",

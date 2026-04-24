@@ -6,18 +6,19 @@ import {
 	useGetAuthAuditLogs,
 } from "@cocrepo/api/idp/auth";
 import {
-	idpConsoleAuthAuditLogsPageQueryInputs,
 	AuthAuditLogListPage,
 	type AuthAuditLogListPageLog,
 	type AuthAuditLogListPageStats,
-	useMetaDataGridQueryStates,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
+import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 
 export default observer(function AuthAuditLogsPageRoute() {
-	const [queryStates, setQueryStates] = useMetaDataGridQueryStates(
-		idpConsoleAuthAuditLogsPageQueryInputs,
-	);
+	const [queryStates, setQueryStates] = useQueryStates({
+		take: parseAsInteger.withDefault(20),
+		skip: parseAsInteger.withDefault(0),
+		email: parseAsString.withDefault(""),
+	});
 	const { data: response, isLoading } = useGetAuthAuditLogs({
 		take: queryStates.take,
 		skip: queryStates.skip,

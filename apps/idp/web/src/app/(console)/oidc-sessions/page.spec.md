@@ -20,7 +20,7 @@
 | 모듈 | 용도 |
 |------|------|
 | @cocrepo/api/idp/oidc-sessions | 세션 목록/통계 조회와 revoke mutation |
-| @cocrepo/ui | `OidcSessionListPage`, query input, `useMetaDataGridQueryStates` |
+| @cocrepo/ui | `OidcSessionListPage`, query input |
 | @tanstack/react-query | 세션/통계 캐시 무효화 |
 
 ## 동작 흐름
@@ -65,6 +65,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-29 | `OidcSessionListPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-22 | parent `(console)` layout 참조와 `StatsCard`/`Surface` 기준으로 세션 목록 계약을 동기화 | codex |

@@ -1,7 +1,10 @@
 "use client";
 
-import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildSpaceTableColumns,
 	MetaDataGrid,
@@ -25,12 +28,12 @@ const leftInputs: InputConfig[] = [
 
 export const adminSpacesPageQueryInputs = [...leftInputs];
 
-export type SpaceListPageQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[0];
-export type SpaceListPageSetQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[1];
+export interface SpaceListPageQueryStates extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+	search: string;
+}
+export type SpaceListPageSetQueryStates = MetaDataGridSetQueryStates;
 
 export interface SpaceListPageSpace {
 	id: string;
@@ -134,4 +137,3 @@ export const SpaceListPage = observer(({
 		</div>
 	);
 });
-

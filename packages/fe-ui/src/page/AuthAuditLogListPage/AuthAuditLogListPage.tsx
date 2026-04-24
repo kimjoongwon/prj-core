@@ -1,7 +1,10 @@
 "use client";
 
-import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
-import type { InputConfig } from "@cocrepo/type";
+import type {
+	InputConfig,
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildAuthAuditLogTableColumns,
 	MetaDataGrid,
@@ -27,12 +30,13 @@ const leftInputs: InputConfig[] = [
 
 export const idpConsoleAuthAuditLogsPageQueryInputs = [...leftInputs];
 
-export type AuthAuditLogListPageQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[0];
-export type AuthAuditLogListPageSetQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[1];
+export interface AuthAuditLogListPageQueryStates
+	extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+	email: string;
+}
+export type AuthAuditLogListPageSetQueryStates = MetaDataGridSetQueryStates;
 
 export interface AuthAuditLogListPageLog {
 	id: string;

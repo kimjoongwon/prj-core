@@ -22,7 +22,7 @@ import {
 	useQuery,
 } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
-import { NuqsReactAdapter } from "@cocrepo/hook/nuqs";
+import { NuqsAdapter as NuqsReactAdapter } from "nuqs/adapters/react";
 import type { PropsWithChildren, ReactNode } from "react";
 import { useContext, useEffect, useRef, useState } from "react";
 import {

@@ -1,6 +1,9 @@
 "use client";
 
-import type { useMetaDataGridQueryStates } from "@cocrepo/hook";
+import type {
+	MetaDataGridQueryStates,
+	MetaDataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	buildAdminRoleTableColumns,
 	MetaDataGrid,
@@ -12,12 +15,11 @@ import { Button } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
 
-export type RoleListPageQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[0];
-export type RoleListPageSetQueryStates = ReturnType<
-	typeof useMetaDataGridQueryStates
->[1];
+export interface RoleListPageQueryStates extends MetaDataGridQueryStates {
+	take: number;
+	skip: number;
+}
+export type RoleListPageSetQueryStates = MetaDataGridSetQueryStates;
 
 export interface RoleListPageRole {
 	id: string;
@@ -110,4 +112,3 @@ export const RoleListPage = observer(({
 		</div>
 	);
 });
-
