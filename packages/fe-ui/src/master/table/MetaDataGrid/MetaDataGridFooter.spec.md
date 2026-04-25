@@ -45,6 +45,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-25 | MetaDataGridFooter가 totalCount render prop을 기준으로 pagination을 표시하도록 변경 | codex |
+| 2026-04-25 | MetaDataGridFooter가 MetaDataGridState query를 기준으로 pagination을 제어하도록 변경 | codex |
 | 2026-04-24 | MetaDataGrid가 page-owned query state props를 소비하도록 정리 | codex |
 | 2026-03-23 | nuqs bridge 의존을 제거하고 page-owned query state props를 소비하도록 정리 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |

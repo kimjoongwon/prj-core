@@ -2,30 +2,27 @@
 
 import type {
 	InputConfig,
-	MetaDataGridQueryStates,
-	MetaDataGridSetQueryStates,
+	MetaDataGridState,
 } from "@cocrepo/type";
 import { Input } from "@heroui/react";
-import { useDebouncedCallback } from "@cocrepo/hook";
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 
 interface SearchInputProps {
 	config: InputConfig;
-	queryStates: MetaDataGridQueryStates;
-	setQueryStates: MetaDataGridSetQueryStates;
+	state: MetaDataGridState;
 }
 
 export const SearchInput = observer(({
 	config,
-	queryStates,
-	setQueryStates,
+	state,
 }: SearchInputProps) => {
 	const queryKey = config.props?.queryKey ?? config.id;
+	const isColumnHeader = config.props?.placement === "column-header";
 	const query =
-		typeof queryStates[queryKey] === "string"
-			? (queryStates[queryKey] as string)
+		typeof state.query.values[queryKey] === "string"
+			? (state.query.values[queryKey] as string)
 			: "";
 	const [inputValue, setInputValue] = useState(query);
 
@@ -33,29 +30,48 @@ export const SearchInput = observer(({
 		setInputValue(query);
 	}, [query]);
 
-	const debouncedSetQuery = useDebouncedCallback(
-		(value: string) => setQueryStates({ [queryKey]: value || null }),
-		config.props?.debounceMs ?? 300,
-	);
+	const commitQuery = () => {
+		void state.query.setValues({
+			[queryKey]: inputValue.trim() || null,
+			skip: 0,
+		});
+	};
+
+	const handleValueChange = (value: string) => {
+		setInputValue(value);
+	};
+
+	const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+		if (event.key !== "Enter") {
+			return;
+		}
+
+		event.preventDefault();
+		commitQuery();
+	};
+
+	const handleClear = () => {
+		setInputValue("");
+		void state.query.setValues({
+			[queryKey]: null,
+			skip: 0,
+		});
+	};
 
 	return (
 		<Input
 			placeholder={config.placeholder}
 			value={inputValue}
-			onValueChange={(value) => {
-				setInputValue(value);
-				debouncedSetQuery(value);
-			}}
+			onValueChange={handleValueChange}
+			onKeyDown={handleKeyDown}
 			startContent={<Search size={16} className="text-default-400" />}
 			classNames={{
-				base: "max-w-xs",
-				inputWrapper: "h-10",
+				base: isColumnHeader ? "w-full min-w-[120px]" : "max-w-xs",
+				inputWrapper: isColumnHeader ? "h-8 min-h-8" : "h-10",
+				input: isColumnHeader ? "text-xs" : undefined,
 			}}
 			isClearable
-			onClear={() => {
-				setInputValue("");
-				void setQueryStates({ [queryKey]: null });
-			}}
+			onClear={handleClear}
 		/>
 	);
 });

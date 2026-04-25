@@ -32,6 +32,10 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-25 | MetaDataGrid state를 useLocalObservable 기반 MetaDataGridStateModel class instance로 생성하도록 변경 | codex |
+| 2026-04-25 | 검색 input을 column-header placement로 전환해 컬럼 헤더 아래에서 Enter commit되도록 변경 | codex |
+| 2026-04-25 | MetaDataGrid server result를 rows/totalCount/isLoading props로 분리 | codex |
+| 2026-04-25 | MetaDataGrid 호출을 state prop 기반 query 계약으로 변경 | codex |
 | 2026-04-24 | pure page query state 타입을 shared hook ReturnType 의존에서 명시 계약으로 정리 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 route-mirror page 이름을 semantic screen 이름으로 정리 | codex |
 | 2026-04-08 | 타임라인 이름 상세 진입을 버튼 callback 대신 row href 기반 링크 렌더링으로 전환 | codex |

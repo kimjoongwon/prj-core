@@ -8,13 +8,15 @@ import type {
 import {
 	buildOidcClientTableColumns,
 	MetaDataGrid,
+	MetaDataGridStateModel,
 	PageTitleBar,
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { Plus } from "lucide-react";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect } from "react";
 
 /**
  * 좌측 입력 정의 (검색)
@@ -25,7 +27,7 @@ const leftInputs: InputConfig[] = [
 		id: "search",
 		placeholder: "Client ID 또는 이름으로 검색...",
 		props: {
-			debounceMs: 300,
+			placement: "column-header",
 		},
 	},
 ];
@@ -70,6 +72,13 @@ export const OidcClientListPage = observer(({
 		setQueryStates,
 		onClickCreateButton,
 	}: OidcClientListPageProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 		return (
 			<VStack gap={5}>
 				<PageTitleBar
@@ -89,16 +98,15 @@ export const OidcClientListPage = observer(({
 					<MetaDataGrid
 						config={{
 							entity: "OidcClient",
-							data: oidcClients,
-							totalCount,
-							isLoading,
-							queryStates,
-							setQueryStates,
 							columns: oidcClientTableColumns,
 							leftInputs,
 							emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
 						}}
-					/>
+	rows={oidcClients}
+	totalCount={totalCount}
+	isLoading={isLoading}
+	state={gridState}
+/>
 				</Surface>
 			</VStack>
 		);

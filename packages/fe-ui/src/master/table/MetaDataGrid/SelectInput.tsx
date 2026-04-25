@@ -2,27 +2,25 @@
 
 import type {
 	InputConfig,
-	MetaDataGridQueryStates,
-	MetaDataGridSetQueryStates,
+	MetaDataGridState,
 } from "@cocrepo/type";
 import { Select, SelectItem } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 
 interface SelectInputProps {
 	config: InputConfig;
-	queryStates: MetaDataGridQueryStates;
-	setQueryStates: MetaDataGridSetQueryStates;
+	state: MetaDataGridState;
 }
 
 export const SelectInput = observer(({
 	config,
-	queryStates,
-	setQueryStates,
+	state,
 }: SelectInputProps) => {
 	const queryKey = config.props?.queryKey ?? config.id;
+	const isColumnHeader = config.props?.placement === "column-header";
 	const value =
-		typeof queryStates[queryKey] === "string"
-			? (queryStates[queryKey] as string)
+		typeof state.query.values[queryKey] === "string"
+			? (state.query.values[queryKey] as string)
 			: "";
 
 	const options = config.props?.options ?? [];
@@ -33,11 +31,14 @@ export const SelectInput = observer(({
 			selectedKeys={value ? [value] : []}
 			onSelectionChange={(keys) => {
 				const selected = Array.from(keys)[0] as string;
-				void setQueryStates({ [queryKey]: selected || null });
+				void state.query.setValues({
+					[queryKey]: selected || null,
+					skip: 0,
+				});
 			}}
 			classNames={{
-				base: "min-w-[160px] max-w-xs",
-				trigger: "h-10",
+				base: isColumnHeader ? "w-full min-w-[120px]" : "min-w-[160px] max-w-xs",
+				trigger: isColumnHeader ? "h-8 min-h-8" : "h-10",
 			}}
 			aria-label={config.label ?? config.id}
 		>

@@ -10,6 +10,7 @@ import {
 	buildOidcSessionTableColumns,
 	ConfirmModal,
 	MetaDataGrid,
+	MetaDataGridStateModel,
 	PageTitleBar,
 	StatsCard,
 	Surface,
@@ -17,7 +18,8 @@ import {
 } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { Activity, Trash2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect } from "react";
 
 /**
  * 좌측 입력 정의 (모델 타입 필터 + accountId 검색)
@@ -39,7 +41,7 @@ const leftInputs: InputConfig[] = [
 		id: "accountId",
 		placeholder: "Account ID 검색...",
 		props: {
-			debounceMs: 300,
+			placement: "column-header",
 		},
 	},
 ];
@@ -114,6 +116,13 @@ export const OidcSessionListPage = observer(({
 		onCloseRevokeAllModal,
 		onConfirmRevokeAll,
 	}: OidcSessionListPageProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 		const byModelType = (stats?.byModelType ?? {}) as Record<string, number>;
 
 		const onClickRevokeSession = (key: string) => {
@@ -172,16 +181,15 @@ export const OidcSessionListPage = observer(({
 					<MetaDataGrid
 						config={{
 							entity: "OidcSession",
-							data: sessions,
-							totalCount,
-							isLoading,
-							queryStates,
-							setQueryStates,
 							columns,
 							leftInputs,
 							emptyMessage: "등록된 OIDC 세션/토큰이 없습니다.",
 						}}
-					/>
+	rows={sessions}
+	totalCount={totalCount}
+	isLoading={isLoading}
+	state={gridState}
+/>
 				</Surface>
 				<ConfirmModal
 					isOpen={isGrantRevokeModalOpen}

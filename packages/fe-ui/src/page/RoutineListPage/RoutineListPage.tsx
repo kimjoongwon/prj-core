@@ -8,6 +8,7 @@ import type {
 import {
 	buildRoutineTableColumns,
 	MetaDataGrid,
+	MetaDataGridStateModel,
 	PageTitleBar,
 	Surface,
 } from "@cocrepo/ui";
@@ -21,8 +22,8 @@ import {
 	useDisclosure,
 } from "@heroui/react";
 import { Plus } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import { useState } from "react";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect, useState } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -30,7 +31,7 @@ const leftInputs: InputConfig[] = [
 		id: "search",
 		placeholder: "루틴명으로 검색...",
 		props: {
-			debounceMs: 300,
+			placement: "column-header",
 		},
 	},
 	{
@@ -100,6 +101,13 @@ export const RoutineListPage = observer(({
 	onClickRoutineName,
 	onDeleteRoutine,
 }: RoutineListPageProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 	const [deleteTarget, setDeleteTarget] =
 		useState<RoutineListPageRoutine | null>(null);
 	const deleteModal = useDisclosure();
@@ -139,16 +147,15 @@ export const RoutineListPage = observer(({
 				<MetaDataGrid
 					config={{
 						entity: "Routine",
-						data: routines,
-						totalCount,
-						isLoading: false,
-						queryStates,
-						setQueryStates,
 						columns,
 						leftInputs,
 						emptyMessage: "등록된 루틴이 없습니다.",
 					}}
-				/>
+	rows={routines}
+	totalCount={totalCount}
+	isLoading={false}
+	state={gridState}
+/>
 			</Surface>
 			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
 				<ModalContent>

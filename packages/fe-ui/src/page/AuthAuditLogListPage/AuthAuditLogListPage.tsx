@@ -8,13 +8,15 @@ import type {
 import {
 	buildAuthAuditLogTableColumns,
 	MetaDataGrid,
+	MetaDataGridStateModel,
 	PageTitleBar,
 	StatsCard,
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
 import { CheckCircle, Lock, XCircle } from "lucide-react";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect } from "react";
 
 /** 좌측 입력 정의 */
 const leftInputs: InputConfig[] = [
@@ -23,7 +25,7 @@ const leftInputs: InputConfig[] = [
 		id: "email",
 		placeholder: "이메일로 검색...",
 		props: {
-			debounceMs: 300,
+			placement: "column-header",
 		},
 	},
 ];
@@ -78,6 +80,13 @@ export const AuthAuditLogListPage = observer(({
 		setQueryStates,
 		stats,
 	}: AuthAuditLogListPageProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 		return (
 			<VStack gap={5}>
 				<PageTitleBar
@@ -116,16 +125,15 @@ export const AuthAuditLogListPage = observer(({
 					<MetaDataGrid
 						config={{
 							entity: "AuthAuditLog",
-							data: logs,
-							totalCount,
-							isLoading,
-							queryStates,
-							setQueryStates,
 							columns: authAuditLogTableColumns,
 							leftInputs,
 							emptyMessage: "조회된 감사 로그가 없습니다.",
 						}}
-					/>
+	rows={logs}
+	totalCount={totalCount}
+	isLoading={isLoading}
+	state={gridState}
+/>
 				</Surface>
 			</VStack>
 		);

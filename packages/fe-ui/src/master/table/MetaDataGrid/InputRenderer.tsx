@@ -2,8 +2,7 @@
 
 import type {
 	InputConfig,
-	MetaDataGridQueryStates,
-	MetaDataGridSetQueryStates,
+	MetaDataGridState,
 } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { ButtonInput } from "./ButtonInput";
@@ -13,8 +12,7 @@ import { SelectInput } from "./SelectInput";
 
 interface InputRendererProps {
 	config: InputConfig;
-	queryStates: MetaDataGridQueryStates;
-	setQueryStates: MetaDataGridSetQueryStates;
+	state: MetaDataGridState;
 }
 
 /**
@@ -22,24 +20,21 @@ interface InputRendererProps {
  */
 export const InputRenderer = observer(({
 	config,
-	queryStates,
-	setQueryStates,
+	state,
 }: InputRendererProps) => {
 	switch (config.type) {
 		case "search":
 			return (
 				<SearchInput
 					config={config}
-					queryStates={queryStates}
-					setQueryStates={setQueryStates}
+					state={state}
 				/>
 			);
 		case "select":
 			return (
 				<SelectInput
 					config={config}
-					queryStates={queryStates}
-					setQueryStates={setQueryStates}
+					state={state}
 				/>
 			);
 		case "button":

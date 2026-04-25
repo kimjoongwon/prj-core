@@ -7,7 +7,7 @@
 ## 역할
 
 이 파일은 feature 계층의 핵심 동작을 담당합니다.
-상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+검색 입력의 draft 값을 로컬로 보관하고, Enter 또는 clear 시점에만 page-owned query state로 반영합니다.
 
 ## 공개 계약
 
@@ -23,13 +23,14 @@
 | @heroui/react | 기능 구현 의존성 |
 | lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
-| @cocrepo/hook | 기능 구현 의존성 |
 
 ## 동작 흐름
 
-1. 입력(라우트/props/호출)을 수신합니다.
-2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
-3. 결과를 렌더링/반환/전파합니다.
+1. `state.query.values[queryKey]`를 읽어 입력 draft 초기값을 맞춥니다.
+2. 사용자가 타이핑하면 draft 값만 갱신하고 query state는 변경하지 않습니다.
+3. Enter 입력 시 `state.query.setValues`로 검색어와 `skip: 0`을 commit합니다.
+4. clear 시 draft와 query 값을 함께 초기화하고 `skip: 0`을 commit합니다.
+5. `placement: "column-header"`이면 컬럼 헤더 안에 맞는 compact height로 렌더링합니다.
 
 ## 실패 및 엣지 케이스
 
@@ -47,6 +48,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-25 | column-header placement compact 렌더링을 추가 | codex |
+| 2026-04-25 | debounce 검색을 제거하고 Enter/clear 시점에만 MetaDataGridState query로 commit하도록 변경 | codex |
 | 2026-04-24 | MetaDataGrid가 page-owned query state props를 소비하도록 정리 | codex |
 | 2026-03-23 | nuqs bridge 의존을 제거하고 page-owned query state props를 소비하도록 정리 | codex |
 | 2026-03-06 | useDebouncedCallback 의존 경로를 fe-ui 내부 hook에서 @cocrepo/hook으로 이관 | codex |

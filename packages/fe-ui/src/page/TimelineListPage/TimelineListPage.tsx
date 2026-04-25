@@ -8,6 +8,7 @@ import type {
 import {
 	buildTimelineTableColumns,
 	MetaDataGrid,
+	MetaDataGridStateModel,
 	PageTitleBar,
 	Surface,
 } from "@cocrepo/ui";
@@ -21,9 +22,9 @@ import {
 	useDisclosure,
 } from "@heroui/react";
 import { Plus } from "lucide-react";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -31,7 +32,7 @@ const leftInputs: InputConfig[] = [
 		id: "search",
 		placeholder: "타임라인 이름으로 검색...",
 		props: {
-			debounceMs: 300,
+			placement: "column-header",
 		},
 	},
 ];
@@ -88,6 +89,13 @@ export const TimelineListPage = observer(({
 	onClickCreateButton,
 	onDeleteTimeline,
 }: TimelineListPageProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 	const [deleteTarget, setDeleteTarget] =
 		useState<TimelineListPageTimeline | null>(null);
 	const deleteModal = useDisclosure();
@@ -128,16 +136,15 @@ export const TimelineListPage = observer(({
 				<MetaDataGrid
 					config={{
 						entity: "Timeline",
-						data: timelines,
-						totalCount,
-						isLoading: false,
-						queryStates,
-						setQueryStates,
 						columns,
 						leftInputs,
 						emptyMessage: "등록된 타임라인이 없습니다.",
 					}}
-				/>
+	rows={timelines}
+	totalCount={totalCount}
+	isLoading={false}
+	state={gridState}
+/>
 			</Surface>
 			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
 				<ModalContent>

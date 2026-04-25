@@ -19,6 +19,12 @@
 
 ## 변경 이력
 
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-04-25 | MetaDataGrid state를 useLocalObservable 기반 MetaDataGridStateModel class instance로 생성하도록 변경 | codex |
+| 2026-04-25 | MetaDataGrid server result를 rows/totalCount/isLoading props로 분리 | codex |
+| 2026-04-25 | MetaDataGrid 호출을 state prop 기반 query 계약으로 변경 | codex |
+
 | 일자       | 내용                                                                                                                         | 작성자       |
 | ---------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | 2026-03-29 | `UserListPage`와 loading fallback을 `observer`로 감싸 목록/로딩 상태의 MobX 변경 추적 계약을 고정                          | codex        |

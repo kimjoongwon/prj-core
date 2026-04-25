@@ -7,13 +7,15 @@ import type {
 import {
 	buildAdminRoleTableColumns,
 	MetaDataGrid,
+	MetaDataGridStateModel,
 	PageTitleBar,
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { Plus } from "lucide-react";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect } from "react";
 
 export interface RoleListPageQueryStates extends MetaDataGridQueryStates {
 	take: number;
@@ -62,6 +64,13 @@ export const RoleListPage = observer(({
 	setQueryStates,
 	onClickCreateButton,
 }: RoleListPageProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 	const columns = buildAdminRoleTableColumns<RoleListPageRole>();
 
 	if (isLoading) {
@@ -97,15 +106,14 @@ export const RoleListPage = observer(({
 						<MetaDataGrid
 							config={{
 								entity: "Role",
-								data: roles,
-								totalCount,
-								isLoading: false,
-								queryStates,
-								setQueryStates,
 								columns,
 								emptyMessage: "등록된 역할이 없습니다.",
 							}}
-						/>
+	rows={roles}
+	totalCount={totalCount}
+	isLoading={false}
+	state={gridState}
+/>
 					</Surface>
 				</div>
 			</VStack>

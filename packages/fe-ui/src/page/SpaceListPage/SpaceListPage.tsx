@@ -8,12 +8,14 @@ import type {
 import {
 	buildSpaceTableColumns,
 	MetaDataGrid,
+	MetaDataGridStateModel,
 	PageTitleBar,
 	Surface,
 } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { Building2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -21,7 +23,7 @@ const leftInputs: InputConfig[] = [
 		id: "search",
 		placeholder: "시설명, 사업자등록번호로 검색...",
 		props: {
-			debounceMs: 300,
+			placement: "column-header",
 		},
 	},
 ];
@@ -92,6 +94,13 @@ export const SpaceListPage = observer(({
 	onClickCreateButton,
 	onClickSpaceGroundName,
 }: SpaceListPageProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 	const filteredRows = filterRows(spaces, queryStates.search);
 	const totalCount = queryStates.search?.trim().length
 		? filteredRows.length
@@ -123,16 +132,15 @@ export const SpaceListPage = observer(({
 				<MetaDataGrid
 					config={{
 						entity: "Space",
-						data: filteredRows,
-						totalCount,
-						isLoading: false,
-						queryStates,
-						setQueryStates,
 						columns,
 						leftInputs,
 						emptyMessage: "등록된 공간이 없습니다.",
 					}}
-				/>
+	rows={filteredRows}
+	totalCount={totalCount}
+	isLoading={false}
+	state={gridState}
+/>
 			</Surface>
 		</div>
 	);

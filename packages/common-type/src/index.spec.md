@@ -43,6 +43,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-25 | MetaDataGridState 계열 타입 export를 추가 | codex |
 | 2026-04-24 | ability/space bootstrap 주입형 hook 계약 export를 추가 | codex |
 | 2026-04-24 | MetaDataGrid query state 공통 계약 export를 추가 | codex |
 | 2026-04-16 | 화면 scope 계약(`ScreenScopeKind`, `NavItemScopeChecker`) export를 루트 배럴에 추가 | codex |

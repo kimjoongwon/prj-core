@@ -1,4 +1,4 @@
-# MetaDataGrid feature 기획서
+# MetaDataGrid master 기획서
 
 > 생성일: 2026-03-03
 > 타입: feature
@@ -6,14 +6,16 @@
 
 ## 역할
 
-이 파일은 feature 계층의 핵심 동작을 담당합니다.
-상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+이 파일은 `master/table` 계층의 범용 DataGrid 조합을 담당합니다.
+도메인 비즈니스 상태를 직접 소유하지 않고, page-owned `MetaDataGridState`를 받아 검색/필터/페이지네이션 UI를 연결합니다.
+호출부는 plain object를 넘기지 않고 `useLocalObservable`로 생성한 `MetaDataGridStateModel` class instance를 전달합니다.
+서버 조회 결과는 `rows`, `totalCount`, `isLoading` render props로 받고, `config`는 컬럼/입력/액션 같은 선언적 설정만 담당합니다.
 
 ## 공개 계약
 
 | 항목 | 설명 |
 |------|------|
-| MetaDataGrid | 공개 계약 요소 |
+| MetaDataGrid | `config`와 `state`를 받아 Header, Body, Footer, ActionBar를 조합하는 공개 계약 요소 |
 
 ## 의존성
 
@@ -50,6 +52,10 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-25 | JSDoc 예시를 MetaDataGridStateModel class instance 사용 방식으로 갱신 | codex |
+| 2026-04-25 | state prop을 plain object가 아닌 useLocalObservable 기반 MetaDataGridStateModel class instance로 받도록 계약 보강 | codex |
+| 2026-04-25 | server render data를 rows/totalCount/isLoading props로 분리 | codex |
+| 2026-04-25 | MetaDataGrid가 `state` prop을 받아 query/selection interaction state를 소비하도록 변경 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |

@@ -17,11 +17,11 @@ import {
 	useDisclosure,
 } from "@heroui/react";
 import { Upload } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import { type ChangeEvent, useRef, useState } from "react";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect, type ChangeEvent, useRef, useState } from "react";
 import { buildAssetTableColumns } from "../../columns";
 import { EmptyState } from "../../display";
-import { MetaDataGrid } from "../../master/table";
+import { MetaDataGrid, MetaDataGridStateModel } from "../../master/table";
 import { Surface } from "../../surface";
 import {
 	AssetPreviewDialog,
@@ -35,7 +35,7 @@ const searchInputConfig: InputConfig = {
 	id: "search",
 	placeholder: "파일명 검색...",
 	props: {
-		debounceMs: 300,
+		placement: "column-header",
 	},
 };
 
@@ -203,6 +203,13 @@ function AssetsGridFallback({
 	columns: MetaDataGridColumnConfig<AssetBrowserAsset>[];
 	leftInputs: InputConfig[];
 }) {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 	return (
 		<div className={assetsLayoutClassName}>
 			<div className={assetsSidebarPanelClassName}>
@@ -212,16 +219,15 @@ function AssetsGridFallback({
 				<MetaDataGrid
 					config={{
 						entity: "Asset",
-						data: [],
-						totalCount: 0,
-						isLoading: true,
-						queryStates,
-						setQueryStates,
 						columns,
 						leftInputs,
 						emptyMessage: "등록된 에셋이 없습니다.",
 					}}
-				/>
+	rows={[]}
+	totalCount={0}
+	isLoading={true}
+	state={gridState}
+/>
 			</div>
 		</div>
 	);
@@ -268,6 +274,13 @@ export const AssetBrowser = observer(
 		onRenameFolder,
 		onDeleteFolder,
 	}: AssetBrowserProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 		const fileInputRef = useRef<HTMLInputElement | null>(null);
 		const createFolderModal = useDisclosure();
 		const renameFolderModal = useDisclosure();
@@ -503,16 +516,15 @@ export const AssetBrowser = observer(
 								<MetaDataGrid
 									config={{
 										entity: "Asset",
-										data: assets,
-										totalCount,
-										isLoading,
-										queryStates,
-										setQueryStates,
 										columns,
 										leftInputs: visibleLeftInputs,
 										emptyMessage,
 									}}
-								/>
+	rows={assets}
+	totalCount={totalCount}
+	isLoading={isLoading}
+	state={gridState}
+/>
 							</div>
 						</div>
 					)}

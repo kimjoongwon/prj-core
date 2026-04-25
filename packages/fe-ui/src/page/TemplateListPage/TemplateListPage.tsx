@@ -8,12 +8,14 @@ import type {
 import {
 	buildTemplateTableColumns,
 	MetaDataGrid,
+	MetaDataGridStateModel,
 	PageTitleBar,
 	Surface,
 } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { Plus } from "lucide-react";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -21,7 +23,7 @@ const leftInputs: InputConfig[] = [
 		id: "search",
 		placeholder: "이름, 코드로 검색...",
 		props: {
-			debounceMs: 300,
+			placement: "column-header",
 		},
 	},
 ];
@@ -80,6 +82,13 @@ export const TemplateListPage = observer(({
 	onClickTemplateCode,
 	onToggleTemplateStatusSwitch,
 }: TemplateListPageProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 	const columns = buildTemplateTableColumns<TemplateListPageTemplate>({
 		onClickTemplateCode,
 		onToggleTemplateStatusSwitch,
@@ -108,16 +117,15 @@ export const TemplateListPage = observer(({
 				<MetaDataGrid
 					config={{
 						entity: "Template",
-						data: templates,
-						totalCount,
-						isLoading: false,
-						queryStates,
-						setQueryStates,
 						columns,
 						leftInputs,
 						emptyMessage: "등록된 템플릿이 없습니다.",
 					}}
-				/>
+	rows={templates}
+	totalCount={totalCount}
+	isLoading={false}
+	state={gridState}
+/>
 			</Surface>
 		</div>
 	);

@@ -10,6 +10,7 @@ import {
 	type InquiryStats,
 	InquiryStatsCards,
 	MetaDataGrid,
+	MetaDataGridStateModel,
 	PageTitleBar,
 	type SLAStatus,
 	Surface,
@@ -24,7 +25,8 @@ import type {
 } from "../../cell";
 import { Button } from "@heroui/react";
 import { Plus } from "lucide-react";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -32,7 +34,7 @@ const leftInputs: InputConfig[] = [
 		id: "search",
 		placeholder: "제목 또는 고객 ID로 검색",
 		props: {
-			debounceMs: 300,
+			placement: "column-header",
 		},
 	},
 	{
@@ -116,6 +118,13 @@ export const InquiryListPage = observer(({
 	onClickInquiryRow,
 	onClickStatusFilter,
 }: InquiryListPageProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 	const columns = buildInquiryTableColumns<InquiryListPageInquiry>();
 
 	if (isLoading) {
@@ -155,11 +164,6 @@ export const InquiryListPage = observer(({
 					<MetaDataGrid
 						config={{
 							entity: "Inquiry",
-							data: inquiries,
-							totalCount,
-							isLoading: false,
-							queryStates,
-							setQueryStates,
 							columns,
 							leftInputs,
 							onRowClick: (inquiry) => {
@@ -167,7 +171,11 @@ export const InquiryListPage = observer(({
 							},
 							emptyMessage: "표시할 문의가 없습니다.",
 						}}
-					/>
+	rows={inquiries}
+	totalCount={totalCount}
+	isLoading={false}
+	state={gridState}
+/>
 				</Surface>
 			</VStack>
 		</div>

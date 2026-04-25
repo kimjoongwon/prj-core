@@ -1,11 +1,12 @@
 "use client";
 
-import type { MetaDataGridConfig } from "@cocrepo/type";
+import type { MetaDataGridConfig, MetaDataGridState } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { InputRenderer } from "./InputRenderer";
 
 interface MetaDataGridHeaderProps<T> {
 	config: MetaDataGridConfig<T>;
+	state: MetaDataGridState;
 }
 
 /**
@@ -14,8 +15,13 @@ interface MetaDataGridHeaderProps<T> {
  * rightInputs: 버튼, 액션 등
  */
 export const MetaDataGridHeader = observer(
-	<T,>({ config }: MetaDataGridHeaderProps<T>) => {
-		const { leftInputs = [], rightInputs = [] } = config;
+	<T,>({ config, state }: MetaDataGridHeaderProps<T>) => {
+		const leftInputs = (config.leftInputs ?? []).filter(
+			(input) => input.props?.placement !== "column-header",
+		);
+		const rightInputs = (config.rightInputs ?? []).filter(
+			(input) => input.props?.placement !== "column-header",
+		);
 
 		if (leftInputs.length === 0 && rightInputs.length === 0) {
 			return null;
@@ -29,8 +35,7 @@ export const MetaDataGridHeader = observer(
 						<InputRenderer
 							key={input.id}
 							config={input}
-							queryStates={config.queryStates}
-							setQueryStates={config.setQueryStates}
+							state={state}
 						/>
 					))}
 				</div>
@@ -41,8 +46,7 @@ export const MetaDataGridHeader = observer(
 						<InputRenderer
 							key={input.id}
 							config={input}
-							queryStates={config.queryStates}
-							setQueryStates={config.setQueryStates}
+							state={state}
 						/>
 					))}
 				</div>

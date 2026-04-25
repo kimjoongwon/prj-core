@@ -8,6 +8,7 @@ import type {
 import {
 	buildUserListTableColumns,
 	MetaDataGrid,
+	MetaDataGridStateModel,
 	PageTitleBar,
 	StatsCard,
 	Surface,
@@ -15,8 +16,8 @@ import {
 } from "@cocrepo/ui";
 import { Chip, Input, Spinner } from "@heroui/react";
 import { Search, UserCheck, UserMinus, Users } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import type { ComponentType } from "react";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect, type ComponentType } from "react";
 import { UserRoleCell } from "../../cell";
 
 export interface UserListPageUser {
@@ -97,6 +98,13 @@ export const UserListPage = observer(({
 	queryStates,
 	setQueryStates,
 }: UserListPageProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 	if (isLoading && totalCount === 0 && users.length === 0) {
 		return <UsersPageFallback />;
 	}
@@ -168,16 +176,15 @@ export const UserListPage = observer(({
 					<MetaDataGrid
 						config={{
 							entity: "User",
-							data: users,
-							totalCount,
-							isLoading,
-							queryStates,
-							setQueryStates,
 							columns: userListTableColumns,
 							leftInputs,
 							emptyMessage: "조회된 이용자가 없습니다.",
 						}}
-					/>
+	rows={users}
+	totalCount={totalCount}
+	isLoading={isLoading}
+	state={gridState}
+/>
 				</Surface>
 			</VStack>
 		</div>

@@ -1,6 +1,6 @@
 "use client";
 
-import type { MetaDataGridConfig } from "@cocrepo/type";
+import type { MetaDataGridConfig, MetaDataGridState } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { MetaDataGridActionBar } from "./MetaDataGridActionBar";
 import { MetaDataGridBody } from "./MetaDataGridBody";
@@ -11,6 +11,10 @@ import { MetaDataGridSkeleton } from "./MetaDataGridSkeleton";
 
 interface MetaDataGridProps<T> {
 	config: MetaDataGridConfig<T>;
+	state: MetaDataGridState;
+	rows: T[];
+	totalCount: number;
+	isLoading?: boolean;
 }
 
 /**
@@ -25,10 +29,6 @@ interface MetaDataGridProps<T> {
  * ```tsx
  * const gridConfig: MetaDataGridConfig<User> = {
  *   entity: "User",
- *   data: users,
- *   totalCount: 100,
- *   queryStates,
- *   setQueryStates,
  *   columns: [
  *     { field: "name", label: "이름", isRequired: true },
  *     { field: "email", label: "이메일" },
@@ -40,33 +40,56 @@ interface MetaDataGridProps<T> {
  *     { type: "button", id: "create", label: "등록", props: { color: "primary" } },
  *   ],
  * };
+ * const gridState = useLocalObservable(
+ *   () => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+ * );
  *
- * <MetaDataGrid config={gridConfig} />
+ * <MetaDataGrid
+ *   config={gridConfig}
+ *   state={gridState}
+ *   rows={users}
+ *   totalCount={100}
+ * />
  * ```
  */
 export const MetaDataGrid = observer(
-	<T extends { id: string | number }>({ config }: MetaDataGridProps<T>) => {
-		const { data, isLoading, emptyMessage } = config;
+	<T extends { id: string | number }>({
+		config,
+		state,
+		rows,
+		totalCount,
+		isLoading,
+	}: MetaDataGridProps<T>) => {
+		const { emptyMessage } = config;
 
 		return (
 			<>
 				{/* 상단 영역: 검색, 필터, 버튼 */}
-				<MetaDataGridHeader config={config} />
+				<MetaDataGridHeader config={config} state={state} />
 
 				{/* 본문 영역 */}
 				{isLoading ? (
 					<MetaDataGridSkeleton />
-				) : data.length === 0 ? (
+				) : rows.length === 0 ? (
 					<MetaDataGridEmpty message={emptyMessage} />
 				) : (
-					<MetaDataGridBody config={config} />
+					<MetaDataGridBody
+						config={config}
+						state={state}
+						rows={rows}
+						isLoading={isLoading}
+					/>
 				)}
 
 				{/* 하단 영역: 페이지네이션 */}
-				<MetaDataGridFooter config={config} />
+				<MetaDataGridFooter
+					config={config}
+					state={state}
+					totalCount={totalCount}
+				/>
 
 				{/* 선택 시 액션바 */}
-				<MetaDataGridActionBar config={config} />
+				<MetaDataGridActionBar config={config} state={state} />
 			</>
 		);
 	},

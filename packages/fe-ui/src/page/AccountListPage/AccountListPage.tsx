@@ -9,13 +9,14 @@ import {
 	buildIdpAccountTableColumns,
 	ConfirmModal,
 	MetaDataGrid,
+	MetaDataGridStateModel,
 	PageTitleBar,
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
 import { useDisclosure } from "@heroui/react";
-import { observer } from "mobx-react-lite";
-import { useState } from "react";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect, useState } from "react";
 
 /**
  * 좌측 입력 정의 (검색)
@@ -26,7 +27,7 @@ const leftInputs: InputConfig[] = [
 		id: "search",
 		placeholder: "이메일 또는 이름으로 검색...",
 		props: {
-			debounceMs: 300,
+			placement: "column-header",
 		},
 	},
 ];
@@ -73,6 +74,13 @@ export const AccountListPage = observer(({
 	setQueryStates,
 	onConfirmUnlockAccount,
 }: AccountListPageProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 	const unlockModal = useDisclosure();
 	const [accountToUnlock, setAccountToUnlock] =
 		useState<AccountListPageAccount | null>(null);
@@ -110,16 +118,15 @@ export const AccountListPage = observer(({
 				<MetaDataGrid
 					config={{
 						entity: "IdpAccount",
-						data: accounts,
-						totalCount,
-						isLoading,
-						queryStates,
-						setQueryStates,
 						columns,
 						leftInputs,
 						emptyMessage: "등록된 계정이 없습니다.",
 					}}
-				/>
+	rows={accounts}
+	totalCount={totalCount}
+	isLoading={isLoading}
+	state={gridState}
+/>
 			</Surface>
 			<ConfirmModal
 				isOpen={unlockModal.isOpen}

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import type { RoleDetailPageProps } from "./RoleDetailPage";
 import { RoleDetailPage } from "./RoleDetailPage";
 
-const noop = (..._args: never[]) => undefined;
+const noop = (..._args: unknown[]) => undefined;
 
 const baseAbilities = [
 	{

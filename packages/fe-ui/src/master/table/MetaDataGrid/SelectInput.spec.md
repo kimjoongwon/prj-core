@@ -7,7 +7,7 @@
 ## 역할
 
 이 파일은 feature 계층의 핵심 동작을 담당합니다.
-상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+select filter 값을 `MetaDataGridState`의 query slice에서 읽고, 선택 변경 시 page-owned query state에 즉시 반영합니다.
 
 ## 공개 계약
 
@@ -25,9 +25,10 @@
 
 ## 동작 흐름
 
-1. 입력(라우트/props/호출)을 수신합니다.
-2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
-3. 결과를 렌더링/반환/전파합니다.
+1. `state.query.values[queryKey]`를 읽어 selectedKeys를 계산합니다.
+2. 사용자가 option을 선택하면 `state.query.setValues`로 필터 값과 `skip: 0`을 commit합니다.
+3. 필터 option은 InputConfig props의 options를 사용합니다.
+4. `placement: "column-header"`이면 컬럼 헤더 안에 맞는 compact height로 렌더링합니다.
 
 ## 실패 및 엣지 케이스
 
@@ -45,6 +46,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-25 | column-header placement compact 렌더링을 추가 | codex |
+| 2026-04-25 | SelectInput이 MetaDataGridState query를 소비하고 선택 변경 시 첫 페이지로 reset하도록 변경 | codex |
 | 2026-04-24 | MetaDataGrid가 page-owned query state props를 소비하도록 정리 | codex |
 | 2026-03-23 | nuqs bridge 의존을 제거하고 page-owned query state props를 소비하도록 정리 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |

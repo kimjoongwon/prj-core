@@ -14,6 +14,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-25 | story noop handler 타입을 props callback과 호환되도록 완화 | codex |
 | 2026-04-22 | role detail fixture를 plain object 기반 관계 데이터로 재작성해 Storybook runtime warning을 제거 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 story page id와 component 이름을 semantic 기준으로 갱신 | codex |
 | 2026-04-14 | scaffold를 실제 페이지 시나리오 스토리로 교체하고 Default, Loading, Busy, EmptyState 상태를 추가 | Codex |

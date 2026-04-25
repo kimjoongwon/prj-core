@@ -48,6 +48,9 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-25 | column.filter와 column-header placement input을 컬럼 헤더 아래 렌더링하도록 변경 | codex |
+| 2026-04-25 | MetaDataGridBody가 rows/isLoading render props를 기준으로 DataGrid를 렌더링하도록 변경 | codex |
+| 2026-04-25 | MetaDataGridBody가 MetaDataGridState selection을 우선 소비하도록 변경 | codex |
 | 2026-04-22 | 중복 row id를 DataGrid row key helper로 보정해 Storybook/런타임 key warning을 막는 계약을 추가 | codex |
 | 2026-03-06 | DataGrid 의존 경로를 `../../display/*`로 변경 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |

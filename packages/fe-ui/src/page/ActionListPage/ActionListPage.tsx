@@ -8,11 +8,13 @@ import type {
 import {
 	buildActionTableColumns,
 	MetaDataGrid,
+	MetaDataGridStateModel,
 	PageTitleBar,
 	Surface,
 } from "@cocrepo/ui";
 import { Plus } from "lucide-react";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -20,7 +22,7 @@ const leftInputs: InputConfig[] = [
 		id: "search",
 		placeholder: "이름으로 검색...",
 		props: {
-			debounceMs: 300,
+			placement: "column-header",
 		},
 	},
 ];
@@ -109,6 +111,13 @@ export const ActionListPage = observer(({
 	setQueryStates,
 	onClickCreateButton,
 }: ActionListPageProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 	const filteredActions = filterActions(actions, queryStates.search);
 	const totalCount = queryStates.search?.trim().length
 		? filteredActions.length
@@ -129,17 +138,16 @@ export const ActionListPage = observer(({
 				<MetaDataGrid
 					config={{
 						entity: "Action",
-						data: filteredActions,
-						totalCount,
-						isLoading: false,
-						queryStates,
-						setQueryStates,
 						columns: actionTableColumns,
 						leftInputs,
 						rightInputs,
 						emptyMessage: "조회된 Action이 없습니다.",
 					}}
-				/>
+	rows={filteredActions}
+	totalCount={totalCount}
+	isLoading={false}
+	state={gridState}
+/>
 			</Surface>
 		</div>
 	);

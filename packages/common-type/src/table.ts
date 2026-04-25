@@ -12,6 +12,33 @@ export type MetaDataGridSetQueryStates = (
 	options?: { history?: "push" | "replace" },
 ) => Promise<URLSearchParams>;
 
+export interface MetaDataGridQueryState {
+	/** 페이지 또는 route 가 소유한 query state 값 */
+	values: MetaDataGridQueryStates;
+
+	/** 페이지 또는 route 가 소유한 query state setter */
+	setValues: MetaDataGridSetQueryStates;
+}
+
+export interface MetaDataGridSelectionState {
+	/** 선택된 키 목록 */
+	selectedKeys?: Set<string>;
+
+	/** 선택 변경 핸들러 */
+	setSelectedKeys?: (keys: Set<string>) => void;
+
+	/** 선택 초기화 핸들러 */
+	clear?: () => void;
+}
+
+export interface MetaDataGridState {
+	/** 검색/필터/페이지네이션 query 상태 */
+	query: MetaDataGridQueryState;
+
+	/** row selection 같은 grid interaction 상태 */
+	selection?: MetaDataGridSelectionState;
+}
+
 /**
  * MetaDataGrid 설정 인터페이스
  * 메타데이터 기반 선언적 DataGrid 구성
@@ -19,21 +46,6 @@ export type MetaDataGridSetQueryStates = (
 export interface MetaDataGridConfig<T> {
 	/** 엔티티명 (컬럼 가시성 시스템 연동) */
 	entity: string;
-
-	/** 데이터 배열 */
-	data: T[];
-
-	/** 전체 데이터 수 (페이지네이션용) */
-	totalCount: number;
-
-	/** 로딩 상태 */
-	isLoading?: boolean;
-
-	/** 페이지가 소유한 query state */
-	queryStates: MetaDataGridQueryStates;
-
-	/** 페이지가 소유한 query state setter */
-	setQueryStates: MetaDataGridSetQueryStates;
 
 	/** 컬럼 정의 (TanStack Table ColumnDef 확장) */
 	columns: MetaDataGridColumnConfig<T>[];
@@ -78,6 +90,9 @@ export interface MetaDataGridColumnConfig<TData, TValue = unknown>
 
 	/** 정렬 방향 */
 	align?: "left" | "center" | "right";
+
+	/** 컬럼 헤더 아래에 표시할 필터 입력 */
+	filter?: InputConfig;
 }
 
 // ============================================
@@ -134,8 +149,8 @@ export interface InputConfig {
  */
 export interface InputTypeProps {
 	// Search
-	debounceMs?: number;
 	queryKey?: string; // 기본값: id
+	placement?: "toolbar" | "column-header";
 
 	// Select / MultiSelect
 	options?: SelectOption[];
@@ -201,10 +216,10 @@ export interface SelectionConfig {
 	/** 선택 모드 */
 	mode: "none" | "single" | "multiple";
 
-	/** 선택된 키 목록 (외부 상태) */
+	/** 선택된 키 목록 (MetaDataGridState.selection 우선) */
 	selectedKeys?: Set<string>;
 
-	/** 선택 변경 핸들러 */
+	/** 선택 변경 핸들러 (MetaDataGridState.selection 우선) */
 	onSelectionChange?: (keys: Set<string>) => void;
 
 	/** 선택 시 하단 액션바 */

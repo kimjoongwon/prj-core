@@ -7,10 +7,12 @@ import type {
 import {
 	buildAbilityListTableColumns,
 	MetaDataGrid,
+	MetaDataGridStateModel,
 } from "@cocrepo/ui";
 import { Button, Input, Select, SelectItem, Spinner } from "@heroui/react";
 import { Plus, Search } from "lucide-react";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect } from "react";
 import { VStack } from "../../rhythm";
 import { Surface } from "../../surface";
 import { PageTitleBar } from "../../widget";
@@ -109,6 +111,13 @@ export const AbilityListPage = observer(({
 	onClickAbilityRow,
 	onClickCreateButton,
 }: AbilityListPageProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 	const subjectOptionIds = new Set(subjects.map((subject) => subject.id));
 	const actionOptionIds = new Set(actions.map((action) => action.id));
 	const handleAbilityRowClick = (ability: AbilityListPageAbility) => {
@@ -221,11 +230,6 @@ export const AbilityListPage = observer(({
 					<MetaDataGrid
 						config={{
 							entity: "Ability",
-							data: abilities,
-							totalCount: abilities.length,
-							isLoading: false,
-							queryStates,
-							setQueryStates,
 							columns: abilityListTableColumns,
 							onRowClick: handleAbilityRowClick,
 							emptyMessage:
@@ -233,7 +237,11 @@ export const AbilityListPage = observer(({
 									? "등록된 권한이 없습니다."
 									: "검색 조건에 맞는 권한이 없습니다.",
 						}}
-					/>
+	rows={abilities}
+	totalCount={abilities.length}
+	isLoading={false}
+	state={gridState}
+/>
 				</Surface>
 			</VStack>
 		</div>

@@ -8,10 +8,12 @@ import type {
 import {
 	buildSubjectTableColumns,
 	MetaDataGrid,
+	MetaDataGridStateModel,
 	PageTitleBar,
 	Surface,
 } from "@cocrepo/ui";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -19,7 +21,7 @@ const leftInputs: InputConfig[] = [
 		id: "search",
 		placeholder: "이름으로 검색...",
 		props: {
-			debounceMs: 300,
+			placement: "column-header",
 		},
 	},
 ];
@@ -100,6 +102,13 @@ export const SubjectListPage = observer(({
 	queryStates,
 	setQueryStates,
 }: SubjectListPageProps) => {
+	const gridState = useLocalObservable(
+		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+	);
+
+	useEffect(() => {
+		gridState.syncQuery(queryStates, setQueryStates);
+	}, [gridState, queryStates, setQueryStates]);
 	const filteredSubjects = filterSubjects(subjects, queryStates);
 
 	if (isLoading) {
@@ -116,17 +125,16 @@ export const SubjectListPage = observer(({
 				<MetaDataGrid
 					config={{
 						entity: "Subject",
-						data: filteredSubjects,
-						totalCount,
-						isLoading: false,
-						queryStates,
-						setQueryStates,
 						columns: subjectTableColumns,
 						leftInputs,
 						rightInputs,
 						emptyMessage: "조회된 Subject가 없습니다.",
 					}}
-				/>
+	rows={filteredSubjects}
+	totalCount={totalCount}
+	isLoading={false}
+	state={gridState}
+/>
 			</Surface>
 		</div>
 	);

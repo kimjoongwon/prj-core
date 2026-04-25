@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ComponentType } from "react";
 import { Pagination } from "../../../control/Pagination/Pagination";
 import type {
 	MultiSortDescriptor,
@@ -79,9 +79,11 @@ const columns = [
 	}),
 ];
 
+type StoryDataGridProps = Partial<DataGridProps<SampleData>>;
+
 const meta = {
 	title: "Ui/data-display/DataGrid",
-	component: DataGrid,
+	component: DataGrid as ComponentType<StoryDataGridProps>,
 	args: {
 		"aria-label": "샘플 데이터 그리드",
 	},
@@ -121,12 +123,10 @@ const meta = {
 			description: "로딩 상태",
 		},
 	},
-} satisfies Meta<typeof DataGrid>;
+} satisfies Meta<StoryDataGridProps>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
-
-type StoryDataGridProps = Partial<DataGridProps<SampleData>>;
+type Story = StoryObj<StoryDataGridProps>;
 
 const DataGridWrapper = observer<StoryDataGridProps>(
 	({ data = sampleData, columns: storyColumns = columns, ...rest }) => {
@@ -475,9 +475,8 @@ const PaginatedDataGridWrapper = observer<StoryDataGridProps>(
 export const 기본: Story = {
 	args: {
 		data: sampleData,
-		// @ts-expect-error
 		columns: columns,
-		emptyContent: "데이터가 없습니다.",
+		tableBody: { emptyContent: "데이터가 없습니다." },
 		selectionMode: "none",
 	},
 	render: (args) => <DataGridWrapper {...args} />,
@@ -493,7 +492,6 @@ export const 기본: Story = {
 export const 단일선택: Story = {
 	args: {
 		data: sampleData,
-		// @ts-expect-error
 		columns: columns,
 		selectionMode: "single",
 	},
@@ -510,7 +508,6 @@ export const 단일선택: Story = {
 export const 다중선택: Story = {
 	args: {
 		data: sampleData,
-		// @ts-expect-error
 		columns: columns,
 		selectionMode: "multiple",
 	},
@@ -527,7 +524,6 @@ export const 다중선택: Story = {
 export const 단일정렬: Story = {
 	args: {
 		data: sampleData,
-		// @ts-expect-error
 		columns: columns,
 		sortableColumns: ["id", "name", "age", "email"],
 	},
@@ -545,7 +541,6 @@ export const 단일정렬: Story = {
 export const 복합정렬: Story = {
 	args: {
 		data: sampleData,
-		// @ts-expect-error
 		columns: columns,
 		sortableColumns: ["id", "name", "age", "city", "email"],
 	},
@@ -563,7 +558,6 @@ export const 복합정렬: Story = {
 export const 로딩상태: Story = {
 	args: {
 		data: sampleData,
-		// @ts-expect-error
 		columns: columns,
 		isLoading: true,
 	},
@@ -581,7 +575,6 @@ export const 로딩상태: Story = {
 export const 서버페이지네이션: Story = {
 	args: {
 		data: sampleData,
-		// @ts-expect-error
 		columns: columns,
 		sortableColumns: ["id", "name", "age", "city", "email"],
 	},
@@ -599,9 +592,8 @@ export const 서버페이지네이션: Story = {
 export const 빈데이터: Story = {
 	args: {
 		data: [],
-		// @ts-expect-error
 		columns: columns,
-		emptyContent: "표시할 데이터가 없습니다.",
+		tableBody: { emptyContent: "표시할 데이터가 없습니다." },
 	},
 	render: (args) => <DataGridWrapper {...args} />,
 	parameters: {
@@ -616,9 +608,8 @@ export const 빈데이터: Story = {
 export const 커스텀빈내용: Story = {
 	args: {
 		data: [],
-		// @ts-expect-error
 		columns: columns,
-		emptyContent: "검색 결과가 없습니다.",
+		tableBody: { emptyContent: "검색 결과가 없습니다." },
 	},
 	render: (args) => <DataGridWrapper {...args} />,
 	parameters: {
@@ -633,10 +624,9 @@ export const 커스텀빈내용: Story = {
 export const 플레이그라운드: Story = {
 	args: {
 		data: sampleData,
-		// @ts-expect-error
 		columns: columns,
 		selectionMode: "multiple",
-		emptyContent: "데이터가 없습니다.",
+		tableBody: { emptyContent: "데이터가 없습니다." },
 	},
 	render: (args) => <DataGridWrapper {...args} />,
 	parameters: {
