@@ -109,7 +109,7 @@ developer_instructions = '''
 |-------|------|----------|----------|-------------|
 | 1 | 모바일 기능 기획 | feature별 (`domain` + `route`) | mobile app/route spec + 공통 backend scope/authorization invariant를 포함한 backend spec + mobile unit/E2E test contract 정리 | `orch-mobile-screen-planner` + 공통 backend `req-*` role |
 | 2 | 모바일 UI 패키지 구현 | target별 | `fe-mo-ui` primitive / control / menu 구현 + package unit test | `fe-mo-display-component-builder`, `fe-mo-control-component-builder`, `fe-mo-menu-builder` |
-| 3 | 모바일 route 통합 | route별 | Expo Router layout/screen + data/state wiring 구현 + route unit test | `fe-mo-route-layout-builder`, `fe-mo-page-builder`, `fe-mo-api-integrator`, `fe-mo-store-builder` |
+| 3 | 모바일 route 통합 | route별 | Expo Router layout/screen + data/state wiring 구현 + route unit test | `fe-mo-route-layout-builder`, `fe-mo-page-builder`, `fe-mo-api-integrator`, `fe-mo-state-builder`, `fe-mo-store-builder` |
 | 4 | 모바일 검증 | app 전체 | Detox E2E + type-check / doctor + Verified 반영 | mobile E2E / QA chain + 검증 명령 |
 
 ---
@@ -166,6 +166,7 @@ developer_instructions = '''
 - child roles:
   - `orch-mobile-screen-planner`
   - 공통 backend spec role chain (`req-entity-planner`, `req-api-planner`, `req-app-planner`, `req-logic-planner`)
+  - `req-mo-state-planner`는 route-local state 계약이 필요할 때 `orch-mobile-screen-planner` chain 에서 조건부로 사용
   - `req-mo-store-planner`는 mobile shared state 가 필요할 때 `orch-mobile-screen-planner` chain 에서 조건부로 사용
 - 산출물:
   - `apps/mobile/src/app//app.context.md`
@@ -179,6 +180,7 @@ developer_instructions = '''
   - `packages/be-repository/src/*.repository.spec.md`
   - `apps/core/api/src/module/*/*.controller.spec.md`
   - `apps/core/api/src/module/*/*.module.spec.md`
+  - route `index.spec.md`의 State Ownership / State Shape 섹션 (route-local state 가 있을 때)
   - `packages/fe-store/src/stores/**.spec.md` (shared state 가 route-local 을 넘을 때만)
 
 - 경계:
@@ -217,6 +219,7 @@ developer_instructions = '''
   - `fe-mo-route-layout-builder`
   - `fe-mo-page-builder`
   - `fe-mo-api-integrator` (조건부)
+  - `fe-mo-state-builder` (route-local state class/hook 이 필요할 때)
   - `fe-mo-store-builder` (조건부)
   - join: `fe-mo-unit-test-builder → req-mo-fe-test-planner → qa-mo-testing`
 - 대상 경로:
@@ -226,7 +229,8 @@ developer_instructions = '''
 
 **완료 gate**
 - 요청된 route 의 layout/screen wiring 이 구현되어야 합니다.
-- 조건부 store/API 연동, route unit test, 대응 sidecar/spec 변경 이력이 반영되어야 합니다.
+- 조건부 API/state/store 연동, route unit test, 대응 sidecar/spec 변경 이력이 반영되어야 합니다.
+- 단일 route 전용 상태는 `fe-mo-state-builder`, 여러 route 재사용 상태는 `fe-mo-store-builder`를 source of truth 로 사용해야 합니다.
 - 완료 메시지를 출력한 뒤 Stage 4 를 자동 시작하지 않고 사용자 리뷰를 기다립니다.
 
 ### Stage 4: 모바일 검증

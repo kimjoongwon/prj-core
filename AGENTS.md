@@ -733,6 +733,8 @@ non-source 문서는 .spec.md를 쓰지 않고 context/guide/ops/notes/template 
   - 앱/도메인 컨텍스트: `*.context.md`
   - 설정/운영 설명: `*.guide.md`, `*.ops.md`, `*.notes.md`
   - 템플릿 자산 설명: `*.template.md`
+- TOML 설정/role 파일의 보조 문서인 `*.toml.guide.md`는 생성하지 않습니다.
+- agent/role 설명은 해당 `.toml`의 `developer_instructions` 또는 인덱스 `README.md`에 직접 반영합니다.
 - `packages/fe-ui/src/page`는 page component와 sidecar를 반드시 동일 이름 폴더에 함께 둡니다.
 - 예: `packages/fe-ui/src/page/AddressEmailVerifyPage/AddressEmailVerifyPage.tsx`, `.spec.md`, `.stories.tsx`, `.stories.spec.md`
 - 금지 예: `packages/fe-ui/src/page/AddressEmailVerifyPage.tsx`, `packages/fe-ui/src/page/AddressEmailVerifyPage.spec.md`
@@ -1265,6 +1267,7 @@ Stage 5: 컴포넌트 (페이지별)
 | req-feature-planner | 화면 Feature 기획(L10) → `feature/index.spec.md` |
 | req-menu-planner | 메뉴/경로/권한 기획 → `admin-menu.spec.md` |
 | req-store-planner | 도메인 Store 기획(L11) → `[domain]Store.spec.md` |
+| req-state-planner | 화면 로컬 상태와 shared Store 승격 경계 기획 |
 | req-logic-planner | 비즈니스 로직/테스트 기획 → `service/repository.spec.md` + 테스트 케이스 |
 | req-be-test-planner | 백엔드 테스트 케이스 기획(L12) → Service/Controller/E2E 테스트 섹션 업데이트 |
 | req-fe-test-planner | 프론트엔드 테스트 케이스 기획(L12) → Page/Feature/UI 테스트 섹션 업데이트 |
@@ -1287,6 +1290,7 @@ Stage 5: 컴포넌트 (페이지별)
 | fe-page-builder | `apps/*/src/app/**/page.tsx` thin container 생성 |
 | fe-menu-builder | 메뉴 시스템 컴포넌트 생성 |
 | fe-store-builder | MobX 기반 Store 생성 |
+| fe-state-builder | 화면 로컬 MobX state class/hook과 state slice 전달 구조 생성 |
 | fe-api-integrator | Orval 생성 React Query 훅을 사용하여 더미 데이터를 실제 API 호출로 교체 |
 
 #### 백엔드 (be-*)

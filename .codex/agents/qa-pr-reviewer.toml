@@ -40,7 +40,7 @@ review launcher는 아래 입력을 제공합니다.
 
 1. `review-context.json`의 mapped file / rule docs
 2. `.codex/review-map.toml`
-3. 각 role 문서 (`.codex/agents/*.toml`, 필요 시 `*.guide.md`)
+3. 각 role 문서 (`.codex/agents/*.toml`)
 4. changed source와 companion sidecar/spec
 
 `review-context.json`의 `mappingSource = "review-map"`은 1차 source of truth로 취급합니다.

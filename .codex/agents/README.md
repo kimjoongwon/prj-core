@@ -6,8 +6,10 @@
 
 1. [.codex/config.toml](../config.toml)
 2. 각 `**/*.toml`
-3. 각 `*.toml.guide.md`가 있으면 그 보조 문서
-4. 이 인덱스
+3. 이 인덱스
+
+`*.toml.guide.md` 보조 문서는 생성하지 않습니다.
+role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 둡니다.
 
 설명 문구는 기본적으로 `.codex/config.toml`의 agent description을 기준으로 정리합니다.
 
@@ -33,6 +35,7 @@
 - [req-input-planner.toml](./req-input-planner.toml): 입력 컴포넌트(Inputs) sidecar spec을 기획하는 전문가
 - [req-menu-planner.toml](./req-menu-planner.toml): 메뉴 경로/권한 sidecar spec을 기획하는 전문가
 - [req-store-planner.toml](./req-store-planner.toml): 도메인별 MobX Store를 기획하는 전문가
+- [req-state-planner.toml](./req-state-planner.toml): 웹 화면 로컬 상태와 shared Store 승격 경계를 기획하는 전문가
 - [req-entity-planner.toml](./req-entity-planner.toml): 도메인별 Entity를 기획하는 전문가
 - [req-api-planner.toml](./req-api-planner.toml): aggregate root 기준 API와 Action 계약을 기획하는 전문가
 - [req-api-integration-planner.toml](./req-api-integration-planner.toml): Orval 기반 API 연동 sidecar spec을 기획하는 전문가
@@ -82,6 +85,7 @@
 - [fe-columns-builder.toml](./fe-columns-builder.toml): `packages/fe-ui/src/columns` 레이어와 `MetaDataGrid`/`cell` 경계를 정리하는 전문가
 - [fe-menu-builder.toml](./fe-menu-builder.toml): 메뉴 시스템 컴포넌트를 생성하는 전문가
 - [fe-store-builder.toml](./fe-store-builder.toml): MobX 기반 Store를 생성하는 전문가
+- [fe-state-builder.toml](./fe-state-builder.toml): 웹 화면 로컬 MobX state class/hook과 state slice 전달 구조를 구현하는 전문가
 - [fe-api-integrator.toml](./fe-api-integrator.toml): Orval 생성 React Query 훅을 사용하여 더미 데이터를 실제 API 호출로 교체하는 전문가
 - [fe-e2e-builder.toml](./fe-e2e-builder.toml): 프론트엔드 E2E 테스트 전략을 설계하는 전문가
 - [fe-unit-test-builder.toml](./fe-unit-test-builder.toml): 프론트엔드 단위 테스트 전략을 설계하는 전문가
@@ -97,6 +101,7 @@
 - [mobile/req-mo-input-planner.toml](./mobile/req-mo-input-planner.toml): 모바일 입력 컴포넌트 sidecar spec 을 기획하는 전문가
 - [mobile/req-mo-menu-planner.toml](./mobile/req-mo-menu-planner.toml): 모바일 navigation/menu contract 를 기획하는 전문가
 - [mobile/req-mo-store-planner.toml](./mobile/req-mo-store-planner.toml): 모바일 공용/로컬 상태 경계를 기획하는 전문가
+- [mobile/req-mo-state-planner.toml](./mobile/req-mo-state-planner.toml): 모바일 route-local 상태와 shared Store 승격 경계를 기획하는 전문가
 - [mobile/req-mo-fe-test-planner.toml](./mobile/req-mo-fe-test-planner.toml): 모바일 route 와 app spec 의 unit/E2E 테스트 케이스를 기획하는 전문가
 - [mobile/fe-mo-control-component-builder.toml](./mobile/fe-mo-control-component-builder.toml): `packages/fe-mo-ui/src/control/**`의 RN 입력/상호작용 contract를 생성하거나 정리하는 전문가
 - [mobile/fe-mo-display-component-builder.toml](./mobile/fe-mo-display-component-builder.toml): `packages/fe-mo-ui/src/display/**`, `surface`, `design-system`, 비메뉴 `layout` thin wrapper contract를 생성하거나 정리하는 전문가
@@ -105,6 +110,7 @@
 - [mobile/fe-mo-page-builder.toml](./mobile/fe-mo-page-builder.toml): `apps/mobile/src/app/**/index.tsx` route screen 을 구현하는 전문가
 - [mobile/fe-mo-api-integrator.toml](./mobile/fe-mo-api-integrator.toml): 모바일 데이터 조회/변경 연동 기준을 구현하는 전문가
 - [mobile/fe-mo-store-builder.toml](./mobile/fe-mo-store-builder.toml): 모바일 공용/로컬 상태 경계를 정리하고 MobX store 를 구현하는 전문가
+- [mobile/fe-mo-state-builder.toml](./mobile/fe-mo-state-builder.toml): 모바일 route-local MobX state class/hook과 state slice 전달 구조를 구현하는 전문가
 - [mobile/fe-mo-cell-builder.toml](./mobile/fe-mo-cell-builder.toml): 모바일 Cell 재사용 계층을 설계하고 구현하는 전문가
 - [mobile/fe-mo-columns-builder.toml](./mobile/fe-mo-columns-builder.toml): 모바일 columns 계약과 collection 표현 경계를 정리하는 전문가
 - [mobile/fe-mo-detail-builder.toml](./mobile/fe-mo-detail-builder.toml): 모바일 detail 재사용 계층을 생성하고 정리하는 전문가
@@ -133,40 +139,3 @@
 - [common-schema-builder.toml](./common-schema-builder.toml): 프론트엔드와 백엔드에서 공유하는 검증 스키마를 생성하는 전문가
 - [dev-service-starter.toml](./dev-service-starter.toml): 개발 서비스를 시작하는 에이전트
 - [etc-jenkinsfile-builder.toml](./etc-jenkinsfile-builder.toml): Jenkins CI/CD 파이프라인 파일을 생성하는 전문가
-
-## 보조 문서가 있는 agent
-
-아래 agent는 별도 `*.guide.md`가 있습니다.
-
-- [be-prisma-builder.toml.guide.md](./be-prisma-builder.toml.guide.md)
-- [be-repository-builder.toml.guide.md](./be-repository-builder.toml.guide.md)
-- [fe-detail-builder.toml.guide.md](./fe-detail-builder.toml.guide.md)
-- [fe-form-builder.toml.guide.md](./fe-form-builder.toml.guide.md)
-- [fe-layout-builder.toml.guide.md](./fe-layout-builder.toml.guide.md)
-- [fe-master-builder.toml.guide.md](./fe-master-builder.toml.guide.md)
-- [fe-route-layout-builder.toml.guide.md](./fe-route-layout-builder.toml.guide.md)
-- [fe-menu-builder.toml.guide.md](./fe-menu-builder.toml.guide.md)
-- [fe-page-builder.toml.guide.md](./fe-page-builder.toml.guide.md)
-- [fe-ui-page-builder.toml.guide.md](./fe-ui-page-builder.toml.guide.md)
-- [fe-display-component-builder.toml.guide.md](./fe-display-component-builder.toml.guide.md)
-- [mobile/fe-mo-api-integrator.toml.guide.md](./mobile/fe-mo-api-integrator.toml.guide.md)
-- [mobile/fe-mo-page-builder.toml.guide.md](./mobile/fe-mo-page-builder.toml.guide.md)
-- [mobile/fe-mo-route-layout-builder.toml.guide.md](./mobile/fe-mo-route-layout-builder.toml.guide.md)
-- [mobile/fe-mo-store-builder.toml.guide.md](./mobile/fe-mo-store-builder.toml.guide.md)
-- [mobile/orch-mobile-screen-planner.toml.guide.md](./mobile/orch-mobile-screen-planner.toml.guide.md)
-- [mobile/orch-mobile-stage.toml.guide.md](./mobile/orch-mobile-stage.toml.guide.md)
-- [mobile/req-mo-fe-test-planner.toml.guide.md](./mobile/req-mo-fe-test-planner.toml.guide.md)
-- [mobile/req-mo-input-planner.toml.guide.md](./mobile/req-mo-input-planner.toml.guide.md)
-- [mobile/req-mo-menu-planner.toml.guide.md](./mobile/req-mo-menu-planner.toml.guide.md)
-- [mobile/req-mo-page-planner.toml.guide.md](./mobile/req-mo-page-planner.toml.guide.md)
-- [mobile/req-mo-primitive-planner.toml.guide.md](./mobile/req-mo-primitive-planner.toml.guide.md)
-- [mobile/req-mo-route-layout-planner.toml.guide.md](./mobile/req-mo-route-layout-planner.toml.guide.md)
-- [mobile/req-mo-store-planner.toml.guide.md](./mobile/req-mo-store-planner.toml.guide.md)
-- [orch-screen-planner.toml.guide.md](./orch-screen-planner.toml.guide.md)
-- [orch-stage.toml.guide.md](./orch-stage.toml.guide.md)
-- [req-layout-planner.toml.guide.md](./req-layout-planner.toml.guide.md)
-- [req-route-layout-planner.toml.guide.md](./req-route-layout-planner.toml.guide.md)
-- [req-page-planner.toml.guide.md](./req-page-planner.toml.guide.md)
-- [req-columns-planner.toml.guide.md](./req-columns-planner.toml.guide.md)
-- [req-primitive-planner.toml.guide.md](./req-primitive-planner.toml.guide.md)
-- [req-surface-planner.toml.guide.md](./req-surface-planner.toml.guide.md)

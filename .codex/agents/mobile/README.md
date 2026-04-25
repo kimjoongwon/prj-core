@@ -28,6 +28,7 @@
 - [req-mo-input-planner.toml](./req-mo-input-planner.toml): 모바일 입력 컴포넌트 sidecar spec 을 기획하는 전문가
 - [req-mo-menu-planner.toml](./req-mo-menu-planner.toml): 모바일 navigation/menu contract 를 기획하는 전문가
 - [req-mo-store-planner.toml](./req-mo-store-planner.toml): 모바일 공용/로컬 상태 경계를 기획하는 전문가
+- [req-mo-state-planner.toml](./req-mo-state-planner.toml): 모바일 route-local 상태와 shared Store 승격 경계를 기획하는 전문가
 - [req-mo-fe-test-planner.toml](./req-mo-fe-test-planner.toml): 모바일 route 와 app spec 의 unit/E2E 테스트 케이스를 기획하는 전문가
 
 ## Active Builder
@@ -38,6 +39,7 @@
 - [fe-mo-route-layout-builder.toml](./fe-mo-route-layout-builder.toml): `apps/mobile/src/app/**/_layout.tsx`를 구현하는 전문가
 - [fe-mo-page-builder.toml](./fe-mo-page-builder.toml): `apps/mobile/src/app/**/index.tsx` route screen 을 구현하는 전문가
 - [fe-mo-api-integrator.toml](./fe-mo-api-integrator.toml): 모바일 데이터 조회/변경 연동 기준을 구현하는 전문가
+- [fe-mo-state-builder.toml](./fe-mo-state-builder.toml): 모바일 route-local MobX state class/hook과 state slice 전달 구조를 구현하는 전문가
 - [fe-mo-store-builder.toml](./fe-mo-store-builder.toml): 모바일 공용/로컬 상태 경계를 정리하고 MobX store 를 구현하는 전문가
 - [fe-mo-unit-test-builder.toml](./fe-mo-unit-test-builder.toml): 모바일 Jest unit test 전략을 설계하는 전문가
 - [fe-mo-e2e-builder.toml](./fe-mo-e2e-builder.toml): 모바일 Detox E2E 테스트 전략을 설계하는 전문가

@@ -245,6 +245,10 @@ config_file = "agents/fe-ui-page-builder.toml"
 description = "MobX 기반 Store를 생성하는 전문가"
 config_file = "agents/fe-store-builder.toml"
 
+[agents.fe-state-builder]
+description = "웹 화면 로컬 MobX state class/hook과 state slice 전달 구조를 구현하는 전문가"
+config_file = "agents/fe-state-builder.toml"
+
 [agents.fe-display-component-builder]
 description = "Display UI 컴포넌트를 packages/fe-ui/src/display에 생성하는 전문가"
 config_file = "agents/fe-display-component-builder.toml"
@@ -313,6 +317,10 @@ config_file = "agents/mobile/fe-mo-route-layout-builder.toml"
 description = "모바일 공용/앱 로컬 상태 경계를 정리하고 MobX store를 설계하는 전문가"
 config_file = "agents/mobile/fe-mo-store-builder.toml"
 
+[agents.fe-mo-state-builder]
+description = "모바일 route-local MobX state class/hook과 state slice 전달 구조를 구현하는 전문가"
+config_file = "agents/mobile/fe-mo-state-builder.toml"
+
 [agents.fe-mo-ui-page-builder]
 description = "packages/fe-mo-ui/src/page/** 기준의 pure mobile page component를 생성하는 전문가"
 config_file = "agents/mobile/fe-mo-ui-page-builder.toml"
@@ -360,6 +368,10 @@ config_file = "agents/mobile/req-mo-route-layout-planner.toml"
 [agents.req-mo-store-planner]
 description = "모바일 공용/로컬 상태 경계를 기획하는 전문가"
 config_file = "agents/mobile/req-mo-store-planner.toml"
+
+[agents.req-mo-state-planner]
+description = "모바일 route-local 상태와 shared Store 승격 경계를 기획하는 전문가"
+config_file = "agents/mobile/req-mo-state-planner.toml"
 
 [agents.orch-requirement]
 description = "도메인 기획(L0-L4) + BE/Store 기획을 총괄 조율하는 오케스트레이터"
@@ -480,6 +492,10 @@ config_file = "agents/req-spec-tracker.toml"
 [agents.req-store-planner]
 description = "도메인별 MobX Store를 기획하는 전문가"
 config_file = "agents/req-store-planner.toml"
+
+[agents.req-state-planner]
+description = "웹 화면 로컬 상태와 shared Store 승격 경계를 기획하는 전문가"
+config_file = "agents/req-state-planner.toml"
 
 [agents.req-be-test-planner]
 description = "백엔드 테스트 케이스를 기획하는 전문가"

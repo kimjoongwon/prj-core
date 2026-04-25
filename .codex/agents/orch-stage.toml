@@ -72,6 +72,7 @@ developer_instructions = '''
 | 4 | `req-route-layout-planner`, `req-spec-tracker` | route skeleton, checklist 보조 |
 | 5 | `fe-columns-builder` | columns/cell 경계 source of truth |
 | 5 | `fe-master-builder`, `fe-detail-builder`, `fe-form-builder` | `page role`별 전용 재사용 계층 |
+| 5 | `fe-state-builder`, `fe-store-builder` | page-local state 와 shared Store 승격 경계 |
 | 6 | `fe-route-layout-builder`, `fe-ui-page-builder`, `fe-page-builder`, `fe-api-integrator` | route shell / pure page / thin container / API 연동 |
 
 ---
@@ -143,7 +144,7 @@ developer_instructions = '''
 | 3 | 백엔드 구현 | 도메인 전체 | Repository / Service / App / Controller + 공통 scope rule enforcement + BE unit test | BE implementation builder chain |
 | 4 | 화면 기획 | 페이지별 | L5-L12 + route layout / surface / columns contract + FE unit/E2E test spec authoring | `orch-screen-planner`, `req-route-layout-planner`, `req-spec-tracker` |
 | 5 | 컴포넌트 구현 | 페이지별 | Display / Columns / Control / Cell / Widget / Layout / Feature / `master-detail-form` | FE component builder chain |
-| 6 | 페이지 통합 | 페이지별 | route layout + pure page + thin container + API 연동 + FE unit test | page integration builder chain |
+| 6 | 페이지 통합 | 페이지별 | route layout + pure page + thin container + API/state 연동 + FE unit test | page integration builder chain |
 | 7 | E2E 검증 | 도메인 전체 | 기록된 BE/FE E2E 케이스 구현/실행과 checklist Verified 반영 | E2E builder / QA chain |
 
 ---
@@ -304,7 +305,7 @@ developer_instructions = '''
 
 **위임 규칙**
 - exact child planner fan-out은 반드시 `orch-screen-planner` 문서를 따릅니다.
-- `display`, `control`, `cell`, `columns`, `widget`, `layout`, `feature`, `master/detail/form`, `pure page`, `thin container`, `API integration`, `test` 기획 규칙은 `orch-screen-planner`가 관련 구현 role 문서를 읽고 반영해야 합니다.
+- `display`, `control`, `cell`, `columns`, `widget`, `layout`, `feature`, `state`, `master/detail/form`, `pure page`, `thin container`, `API integration`, `test` 기획 규칙은 `orch-screen-planner`가 관련 구현 role 문서를 읽고 반영해야 합니다.
 
 **fan-out 단위**
 - `pages`
@@ -330,6 +331,7 @@ developer_instructions = '''
 - `fe-layout-builder`
 - `fe-feature-builder`
 - `fe-master-builder` / `fe-detail-builder` / `fe-form-builder`
+- `fe-state-builder` (page-local state class/hook 이 필요할 때)
 - `fe-store-builder`
 - `fe-menu-builder` (조건부)
 - join: `fe-unit-test-builder → req-fe-test-planner → qa-fe-testing`
@@ -340,6 +342,7 @@ developer_instructions = '''
 **위임 규칙**
 - columns/cell 경계는 `fe-columns-builder`를 source of truth로 사용합니다.
 - `page role`별 구현 경계는 `fe-master-builder`, `fe-detail-builder`, `fe-form-builder`를 source of truth로 사용합니다.
+- 단일 page / route 전용 상태는 `fe-state-builder`, 여러 page / domain 에서 재사용되는 상태는 `fe-store-builder`를 source of truth로 사용합니다.
 - route/page 시각 소유권 세부 규칙은 Stage 6 builder 문서를 재복제하지 않습니다.
 
 **완료 gate**
@@ -362,6 +365,7 @@ developer_instructions = '''
 - `fe-ui-page-builder`
 - `fe-page-builder`
 - `fe-api-integrator`
+- `fe-state-builder` (thin container 에서 page-local state wiring 이 필요할 때)
 - review: `/fe-review`
 - join: `fe-unit-test-builder → req-fe-test-planner → qa-fe-testing → req-spec-tracker`
 
@@ -372,6 +376,7 @@ developer_instructions = '''
 - route skeleton / slot ownership은 `fe-route-layout-builder`를 source of truth로 사용합니다.
 - pure page 경계는 `fe-ui-page-builder`를 source of truth로 사용합니다.
 - thin container / `page role` / `reusable target` 검증은 `fe-page-builder`를 source of truth로 사용합니다.
+- URL query state / React Query server state / MobX page-local state 경계는 `fe-state-builder`와 `fe-page-builder` 문서를 함께 기준으로 따릅니다.
 - Create/Update의 `AiForm` 통합 규칙도 `fe-page-builder`와 관련 page spec을 기준으로 따릅니다.
 
 **완료 gate**

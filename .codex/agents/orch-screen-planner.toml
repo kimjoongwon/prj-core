@@ -101,6 +101,7 @@ developer_instructions = '''
 - `req-widget-planner`
 - `req-layout-planner`
 - `req-feature-planner`
+- `req-state-planner` (page-local state 또는 state slice 계약이 필요할 때)
 - `req-menu-planner` (목록/탭 화면일 때)
 - `req-api-integration-planner`
 
@@ -133,6 +134,7 @@ developer_instructions = '''
 | `req-widget-planner` | `fe-widget-builder` | `.codex/agents/fe-widget-builder.toml` | `packages/fe-ui/src/widget/**` 출력 경로와 Widget 규칙 |
 | `req-layout-planner` | `fe-layout-builder` | `.codex/agents/fe-layout-builder.toml` | `packages/fe-ui/src/display/layout/**` 출력 경로와 Layout 규칙 |
 | `req-feature-planner` | `fe-feature-builder` | `.codex/agents/fe-feature-builder.toml` | `packages/fe-ui/src/feature/**` 출력 경로와 Feature 규칙 |
+| `req-state-planner` | `fe-state-builder`, `fe-store-builder` | `.codex/agents/fe-state-builder.toml`, `.codex/agents/fe-store-builder.toml` | URL query / React Query / page-local MobX / shared Store 경계 |
 | `req-page-planner` | `fe-master-builder` | `.codex/agents/fe-master-builder.toml` | `master/table|list|grid` 재사용 계층 기준 |
 | `req-page-planner` | `fe-detail-builder` | `.codex/agents/fe-detail-builder.toml` | `detail/view` 재사용 계층 기준 |
 | `req-page-planner` | `fe-form-builder` | `.codex/agents/fe-form-builder.toml` | `form` 재사용 계층 기준 |

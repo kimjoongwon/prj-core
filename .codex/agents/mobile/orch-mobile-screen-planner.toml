@@ -87,6 +87,7 @@ developer_instructions = '''
 - `req-mo-primitive-planner`
 - `req-mo-input-planner`
 - `req-mo-menu-planner` (navigation shell 필요 시)
+- `req-mo-state-planner` (route-local state 또는 state slice 계약이 필요할 때)
 - `req-mo-store-planner` (shared state 필요 시)
 
 ### 4.3 join 단계
@@ -107,6 +108,7 @@ developer_instructions = '''
 | `req-mo-primitive-planner` | `fe-mo-display-component-builder` | `.codex/agents/mobile/fe-mo-display-component-builder.toml` | `packages/fe-mo-ui/src/display|surface|design-system|non-menu layout` 출력 규칙 |
 | `req-mo-input-planner` | `fe-mo-control-component-builder` | `.codex/agents/mobile/fe-mo-control-component-builder.toml` | `packages/fe-mo-ui/src/control/**` 출력 규칙 |
 | `req-mo-menu-planner` | `fe-mo-menu-builder` | `.codex/agents/mobile/fe-mo-menu-builder.toml` | mobile navigation/menu contract 와 출력 경로 |
+| `req-mo-state-planner` | `fe-mo-state-builder`, `fe-mo-store-builder` | `.codex/agents/mobile/fe-mo-state-builder.toml`, `.codex/agents/mobile/fe-mo-store-builder.toml` | API server state / route-local MobX / shared Store 경계 |
 | `req-mo-store-planner` | `fe-mo-store-builder` | `.codex/agents/mobile/fe-mo-store-builder.toml` | 공용 store / 로컬 상태 경계 |
 | `req-mo-page-planner` | `fe-mo-page-builder`, `fe-mo-api-integrator` | `.codex/agents/mobile/fe-mo-page-builder.toml`, `.codex/agents/mobile/fe-mo-api-integrator.toml` | route screen 구현, 데이터 연동 경계 |
 | `req-mo-route-layout-planner` | `fe-mo-route-layout-builder` | `.codex/agents/mobile/fe-mo-route-layout-builder.toml` | Expo Router shell 구현 |
