@@ -48,7 +48,7 @@
 | 기술 정보 | 기본 문구는 운영자용으로 유지하고 내부 key는 `TechnicalDetails`에서만 펼쳐 표시 |
 | 중복 정리 경로 | `duplicateAbility` 이슈가 있으면 관련 ability 상세로 이동하는 버튼을 함께 노출 |
 | 요약 카드 | 선택 leaf 수, 전체 leaf 수, 진단 수 표시 |
-| 저장 버튼 | `!hasChanges || hasBlockingPermissionDiagnostics` 면 비활성화 |
+| 저장 버튼 | `!hasChanges` 면 비활성화. 차단 진단은 신규 선택 토글만 막고 이미 가능한 변경 저장은 허용 |
 
 ## 화면 접근 렌더링 규칙
 
@@ -93,7 +93,7 @@
 | `isEditingGrants` | 메뉴 권한/고급 권한 동시 편집 모드 |
 | `hasChanges` | 저장 필요 여부 |
 | `hasGlobalAccess` | `manage all` 이 선택돼 메뉴/화면/CRUD를 전역 허용으로 보여줘야 하는지 여부 |
-| `hasBlockingPermissionDiagnostics` | menu/page drift로 저장을 막아야 하는지 여부 |
+| `hasBlockingPermissionDiagnostics` | menu/page drift를 진단 패널과 요약 Chip에 강조해야 하는지 여부 |
 | `role?.isSystem` | 수정/삭제 버튼 숨김, 시스템 안내 표시 |
 
 ## 인터랙션 계약
@@ -126,6 +126,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-27 | blocking 진단이 있어도 개별 토글 가능한 권한 변경은 저장할 수 있도록 저장 버튼 비활성 조건을 `hasChanges` 기준으로 정리 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 route-mirror page 이름을 semantic screen 이름으로 정리 | codex |
 | 2026-04-06 | FULL_ACCESS의 `manage all` 상태에서 전체 권한 안내와 세부 토글 잠금 UI를 문서화 | codex |
 | 2026-04-06 | `hasGlobalAccess` prop과 전체 권한 안내/세부 토글 잠금 규칙을 문서화 | codex |

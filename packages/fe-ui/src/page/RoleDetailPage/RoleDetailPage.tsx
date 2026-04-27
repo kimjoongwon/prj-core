@@ -97,8 +97,7 @@ export interface RoleDetailPagePermissionIssue {
 	relatedAbilities?: RoleDetailPageRelatedAbility[];
 }
 
-export type RoleDetailPageMenuIssueCode =
-	RoleDetailPagePermissionIssueCode;
+export type RoleDetailPageMenuIssueCode = RoleDetailPagePermissionIssueCode;
 export type RoleDetailPageMenuIssue = RoleDetailPagePermissionIssue;
 
 export interface RoleDetailPageMenuPermission {
@@ -444,7 +443,7 @@ function MenuPermissionSection({
 								size="sm"
 								color="primary"
 								startContent={<Save className="h-3.5 w-3.5" />}
-								isDisabled={!hasChanges || hasBlockingDiagnostics}
+								isDisabled={!hasChanges}
 								onPress={onClickOpenSaveGrantsModal}
 							>
 								저장

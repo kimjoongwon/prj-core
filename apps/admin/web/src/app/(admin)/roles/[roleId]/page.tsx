@@ -3,6 +3,7 @@
 import {
 	type AbilityResponseDto,
 	getGetAbilitiesByRoleIdQueryKey,
+	getGetMyAbilitiesQueryKey,
 	useGetAbilities,
 	useGetAbilitiesByRoleId,
 } from "@cocrepo/api/core/abilities";
@@ -154,6 +155,9 @@ const AdminRolesRoleDetailRoute = observer(() => {
 					setHasChanges(false);
 					queryClient.invalidateQueries({
 						queryKey: getGetAbilitiesByRoleIdQueryKey(roleId),
+					});
+					queryClient.invalidateQueries({
+						queryKey: getGetMyAbilitiesQueryKey(),
 					});
 				},
 			},
@@ -868,54 +872,52 @@ function buildCrudBundleState({
 
 	const bundles = [...ADMIN_CRUD_BUNDLES, ...extraBundles];
 	const actionStateByKey = new Map<string, CrudActionResolution>();
-	const crudBundles: RoleDetailPageCrudBundle[] = bundles.map(
-		(bundle) => {
-			const subjectMeta = entitySubjectMeta.get(bundle.subject);
-			const actions = CRUD_ACTIONS.map((action) => {
-				const matchedAbilities =
-					canonicalCrudAbilityMap.get(`${bundle.subject}:${action}`) ?? [];
-				const preferredAbility = pickPreferredCrudAbility(matchedAbilities);
-				const issueMessage =
-					matchedAbilities.length === 0
-						? "기본 권한이 아직 등록되지 않았습니다."
-						: matchedAbilities.length > 1
-							? "조건이 다른 권한이 함께 있어 기본 권한을 우선 사용합니다."
-							: undefined;
+	const crudBundles: RoleDetailPageCrudBundle[] = bundles.map((bundle) => {
+		const subjectMeta = entitySubjectMeta.get(bundle.subject);
+		const actions = CRUD_ACTIONS.map((action) => {
+			const matchedAbilities =
+				canonicalCrudAbilityMap.get(`${bundle.subject}:${action}`) ?? [];
+			const preferredAbility = pickPreferredCrudAbility(matchedAbilities);
+			const issueMessage =
+				matchedAbilities.length === 0
+					? "기본 권한이 아직 등록되지 않았습니다."
+					: matchedAbilities.length > 1
+						? "조건이 다른 권한이 함께 있어 기본 권한을 우선 사용합니다."
+						: undefined;
 
-				actionStateByKey.set(`${bundle.bundleId}:${action}`, {
-					bundleId: bundle.bundleId,
-					action,
-					matchedAbilityIds: matchedAbilities.map((ability) => ability.id),
-					preferredAbilityId: preferredAbility?.id,
-					isAvailable: hasGlobalAccess || matchedAbilities.length > 0,
-				});
-
-				return {
-					action,
-					label: getCrudActionLabel(action),
-					isSelected:
-						hasGlobalAccess ||
-						matchedAbilities.some((ability) =>
-							selectedAbilityIds.has(ability.id),
-						),
-					isAvailable: hasGlobalAccess || matchedAbilities.length > 0,
-					issueMessage: hasGlobalAccess ? undefined : issueMessage,
-				};
+			actionStateByKey.set(`${bundle.bundleId}:${action}`, {
+				bundleId: bundle.bundleId,
+				action,
+				matchedAbilityIds: matchedAbilities.map((ability) => ability.id),
+				preferredAbilityId: preferredAbility?.id,
+				isAvailable: hasGlobalAccess || matchedAbilities.length > 0,
 			});
 
 			return {
-				bundleId: bundle.bundleId,
-				groupLabel: bundle.groupLabel,
-				bundleLabel: bundle.bundleLabel,
-				subject: bundle.subject,
-				subjectLabel: subjectMeta?.displayName ?? bundle.subject,
-				description: bundle.description,
-				selectedCount: actions.filter((action) => action.isSelected).length,
-				availableCount: actions.filter((action) => action.isAvailable).length,
-				actions,
+				action,
+				label: getCrudActionLabel(action),
+				isSelected:
+					hasGlobalAccess ||
+					matchedAbilities.some((ability) =>
+						selectedAbilityIds.has(ability.id),
+					),
+				isAvailable: hasGlobalAccess || matchedAbilities.length > 0,
+				issueMessage: hasGlobalAccess ? undefined : issueMessage,
 			};
-		},
-	);
+		});
+
+		return {
+			bundleId: bundle.bundleId,
+			groupLabel: bundle.groupLabel,
+			bundleLabel: bundle.bundleLabel,
+			subject: bundle.subject,
+			subjectLabel: subjectMeta?.displayName ?? bundle.subject,
+			description: bundle.description,
+			selectedCount: actions.filter((action) => action.isSelected).length,
+			availableCount: actions.filter((action) => action.isAvailable).length,
+			actions,
+		};
+	});
 
 	return {
 		crudBundles,
@@ -1067,9 +1069,7 @@ function isCrudAbility(ability: AbilityResponseDto): boolean {
 		!ability.inverted &&
 		isEntitySubjectName(ability.subject?.name) &&
 		Boolean(ability.action?.name) &&
-		CRUD_ACTIONS.includes(
-			ability.action!.name as RoleDetailPageCrudActionKey,
-		)
+		CRUD_ACTIONS.includes(ability.action!.name as RoleDetailPageCrudActionKey)
 	);
 }
 
@@ -1119,9 +1119,7 @@ function getCrudActionLabel(action: RoleDetailPageCrudActionKey): string {
 	}
 }
 
-function mapAbilityItem(
-	ability: AbilityResponseDto,
-): RoleDetailPageAbility {
+function mapAbilityItem(ability: AbilityResponseDto): RoleDetailPageAbility {
 	return {
 		id: ability.id,
 		name: ability.name,

@@ -20,12 +20,14 @@ Admin 공통 layout 안에서 현재 pathname에 대응하는 `page:*` 권한을
 - 권한이 아직 로드되지 않았으면 "권한 확인 중" placeholder를 렌더링합니다.
 - `pageAccessItem.scopeKind`가 `global-full-access-only`이고 현재 tenant가 FULL_ACCESS가 아니면 subject 여부와 무관하게 차단합니다.
 - `verify-token` 기준 현재 tenant가 `FULL_ACCESS`면 page subject와 무관하게 즉시 통과시킵니다.
-- 전역 권한이 없고 `view page:*` 권한도 없으면 안내 화면을 보여주고, dashboard 이동/이전 화면 액션을 제공합니다.
+- 전역 권한이 없고 `view page:*` 권한도 없으면 현재 선택한 Space 권한으로 열 수 없다는 안내 화면을 보여주고, dashboard 이동/이전 화면 액션을 제공합니다.
+- 안내 문구는 편집 중인 역할이 아니라 현재 로그인 사용자와 선택 Space tenant에 적용된 권한 기준임을 드러냅니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-27 | 접근 거부 문구를 편집 중인 역할이 아니라 현재 선택 Space 권한 기준으로 보이도록 정리 | codex |
 | 2026-04-16 | page access gate에 `scopeKind` 기반 전역 화면 차단 규칙을 추가 | codex |
 | 2026-04-15 | admin page gate의 전역 통과 기준을 `manage all`이 아니라 `verify-token.hasFullAccess`(`FULL_ACCESS` role)로 전환 | codex |
 | 2026-04-06 | `manage all` 전역 권한이 있으면 page gate를 즉시 통과시키는 규칙을 반영 | codex |

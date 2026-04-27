@@ -76,12 +76,15 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 		hasFullAccessRole,
 	);
 
-	if (isScopeAccessible && (hasFullAccessRole || can("view", pageAccessItem.subject))) {
+	if (
+		isScopeAccessible &&
+		(hasFullAccessRole || can("view", pageAccessItem.subject))
+	) {
 		return children;
 	}
 
 	const forbiddenDescription = isScopeAccessible
-		? `${pageAccessItem.pageLabel} 화면을 열 수 있는 권한이 현재 역할에 없습니다.`
+		? `${pageAccessItem.pageLabel} 화면을 열 수 있는 화면 접근 권한이 현재 선택한 Space 권한에 없습니다.`
 		: `${pageAccessItem.pageLabel} 화면은 현재 선택한 tenant role이 FULL_ACCESS일 때만 열 수 있습니다.`;
 
 	return (
@@ -101,11 +104,11 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 						</div>
 						<div className="space-y-2">
 							<p className="text-base font-semibold">
-								이 화면은 현재 역할에서 열 수 없습니다.
+								이 화면은 현재 선택한 Space 권한으로 열 수 없습니다.
 							</p>
 							<p className="max-w-xl text-sm text-default-500">
 								{isScopeAccessible
-									? "메뉴가 보여도 화면 접근 권한이 따로 꺼져 있으면 URL 직접 접근은 막힙니다. 역할 상세의 화면 접근 섹션에서 해당 페이지를 켜면 다시 열 수 있습니다."
+									? "메뉴 노출 권한이 있어도 화면 접근 권한이 따로 꺼져 있으면 URL 직접 접근은 막힙니다. 역할 상세의 화면 접근 섹션에서 해당 페이지를 켜면 다시 열 수 있습니다."
 									: "현재 선택한 tenant role이 FULL_ACCESS가 아니면 global 관리 화면은 열 수 없습니다. 헤더에서 FULL_ACCESS tenant로 전환한 뒤 다시 시도해 주세요."}
 							</p>
 						</div>

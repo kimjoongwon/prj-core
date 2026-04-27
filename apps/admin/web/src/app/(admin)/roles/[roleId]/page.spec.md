@@ -90,7 +90,7 @@
 | canonical 규칙 | `subject startsWith("menu:")` + `action.name === "manage"` |
 | 부모 처리 | child leaf가 하나라도 선택되면 parent `menu:*` grant 유지 |
 | 전역 예외 | 현재 role.name 이 `FULL_ACCESS`면 모든 leaf를 `노출`로 간주하고 개별 토글은 잠금 |
-| 저장 차단 | `missingSubject`, `missingAbility` |
+| 신규 선택 차단 | `missingSubject`, `missingAbility` 가 있는 leaf는 신규 선택을 막고, 다른 변경 저장은 허용 |
 | 경고 | `duplicateAbility`, `catalogMismatch` |
 
 ## 고급 권한 계약
@@ -104,7 +104,7 @@
 | canonical 규칙 | `subject startsWith("page:")` + `action.name === "access"` |
 | 역할 | 메뉴 노출과 분리된 URL 직접 접근 제어 |
 | 전역 예외 | 현재 role.name 이 `FULL_ACCESS`면 모든 page를 `접근 허용`으로 간주하고 개별 토글은 잠금 |
-| 저장 차단 | `missingSubject`, `missingAbility` |
+| 신규 선택 차단 | `missingSubject`, `missingAbility` 가 있는 page는 신규 허용을 막고, 다른 변경 저장은 허용 |
 | 경고 | `duplicateAbility`, `catalogMismatch` |
 
 ## 데이터 권한 계약
@@ -176,11 +176,14 @@
 
 - `/grants/roles/:roleId` 는 전체 동기화 API이므로 메뉴 편집만 저장하면 non-menu grant가 삭제됩니다.
 - 따라서 route는 메뉴/화면/CRUD/고급 편집이 같은 `selectedGrantItems` 를 공유해야 합니다.
+- 권한 저장 성공 후 현재 역할 권한과 현재 로그인 사용자의 권한 query를 함께 무효화해 page access gate가 방금 저장한 변경을 즉시 반영합니다.
+- 메뉴 권한의 `노출`은 `menu:*` grant만 의미하며, 실제 URL 진입은 화면 접근 섹션의 `page:*` grant를 별도로 수동 부여해야 합니다.
 - 역할 상세 route의 전역 권한 해석은 selected grant가 아니라 `role.name === FULL_ACCESS`를 단일 기준으로 사용합니다.
 - duplicate canonical ability가 있으면 최신 `createdAt` 항목을 우선 선택하되, 해제 시에는 해당 subject의 duplicate ability를 모두 정리합니다.
 - 동일 leaf/page에서 같은 문구의 duplicate warning이 여러 subject에서 생기면 route에서 하나로 합치고, technical details와 관련 ability 목록은 병합합니다.
 - duplicate 또는 catalog mismatch 진단에는 관련 ability 상세 이동 경로를 함께 제공해 운영자가 곧바로 삭제 화면으로 이동할 수 있게 합니다.
 - 운영자 기본 문구에서는 subject/ability 내부 키를 숨기고, 필요할 때만 technical details로 펼쳐 보여줍니다.
+- blocking 진단은 해당 row의 신규 선택을 막는 용도이며, 다른 row에서 발생한 정상 변경이나 기존 권한 정리 저장을 전역 차단하지 않습니다.
 
 ## Surface / Elevation
 
@@ -213,6 +216,9 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-27 | 메뉴 노출과 화면 접근이 별도 grant이며 page 접근은 역할 상세에서 수동 부여하는 정책을 명시 | codex |
+| 2026-04-27 | 권한 저장 성공 시 현재 로그인 사용자 권한 캐시도 무효화해 화면 접근 변경을 즉시 반영하도록 문서화 | codex |
+| 2026-04-27 | 역할 권한 편집에서 blocking 진단을 저장 버튼 전역 차단이 아니라 row-level 신규 선택 차단으로 문서화 | codex |
 | 2026-04-15 | 역할 상세의 전역 허용/잠금 기준을 selected `manage all` grant가 아니라 `role.name === FULL_ACCESS`로 단순화 | codex |
 | 2026-04-06 | 역할 권한 저장 요청 본문을 generic `grants` 대신 `roleGrants` 계약으로 명시 | codex |
 | 2026-04-06 | FULL_ACCESS의 `manage all` 전역 권한 안내와 세부 섹션 잠금 규칙을 추가 | codex |
