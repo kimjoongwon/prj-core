@@ -372,9 +372,15 @@ export class AuthApplicationService {
 	 */
 	async verifyToken(): Promise<VerifyTokenResponseDto> {
 		const token = this.cls.get<string>(CONTEXT_KEYS.TOKEN);
-		const tenant = this.cls.get<SpaceTenantLike | undefined>(CONTEXT_KEYS.TENANT);
+		const tenant = this.cls.get<SpaceTenantLike | undefined>(
+			CONTEXT_KEYS.TENANT,
+		);
+		const spaceId = this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
 		if (!token) {
 			throw new UnauthorizedException("토큰이 존재하지 않습니다");
+		}
+		if (spaceId && !tenant) {
+			throw new ForbiddenException("해당 Space에 대한 테넌트가 없습니다.");
 		}
 		// JwtAuthGuard에서 이미 JWKS로 검증됨 → 여기까지 왔으면 유효
 

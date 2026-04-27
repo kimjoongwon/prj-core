@@ -206,21 +206,16 @@ export class UsersRepository {
 		spaceIds?: string[];
 		includedRoleNames?: string[];
 	}): Promise<{ users: User[]; totalCount: number }> {
-		const {
-			where,
-			orderBy,
-			skip,
-			take,
-			spaceIds,
-			includedRoleNames,
-		} = params;
+		const { where, orderBy, skip, take, spaceIds, includedRoleNames } = params;
 		this.logger.debug(
 			`접근 가능 Space 내 회원 목록 조회: spaceIds=${spaceIds?.length ?? "all"}개, includedRoles=${includedRoleNames?.join(",") ?? "없음"}`,
 		);
 
+		const scopedWhere = this.applySpaceScopeToUserWhere(where, spaceIds);
+
 		const [users, totalCount] = await Promise.all([
 			this.txHost.tx.user.findMany({
-				where,
+				where: scopedWhere,
 				include: {
 					profiles: true,
 					tenants: {
@@ -229,10 +224,10 @@ export class UsersRepository {
 							...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 							...(includedRoleNames?.length
 								? {
-									role: {
-										name: { in: includedRoleNames },
-									},
-								}
+										role: {
+											name: { in: includedRoleNames },
+										},
+									}
 								: {}),
 						},
 						include: {
@@ -256,12 +251,41 @@ export class UsersRepository {
 				skip,
 				take,
 			}),
-			this.txHost.tx.user.count({ where }),
+			this.txHost.tx.user.count({ where: scopedWhere }),
 		]);
 
 		return {
 			users: users.map((user) => plainToInstance(User, user)),
 			totalCount,
+		};
+	}
+
+	private applySpaceScopeToUserWhere(
+		where: Prisma.UserWhereInput,
+		spaceIds?: string[],
+	): Prisma.UserWhereInput {
+		if (spaceIds === undefined) {
+			return where;
+		}
+
+		const tenantsFilter = where.tenants as
+			| Prisma.TenantListRelationFilter
+			| undefined;
+		const existingSome =
+			tenantsFilter?.some && typeof tenantsFilter.some === "object"
+				? tenantsFilter.some
+				: {};
+
+		return {
+			...where,
+			tenants: {
+				...(tenantsFilter ?? {}),
+				some: {
+					...existingSome,
+					spaceId: { in: spaceIds },
+					removedAt: null,
+				},
+			},
 		};
 	}
 
@@ -288,9 +312,9 @@ export class UsersRepository {
 							some: {
 								spaceId: { in: spaceIds },
 								removedAt: null,
+							},
 						},
-					},
-				}
+					}
 				: {}),
 		};
 
@@ -559,9 +583,7 @@ export class UsersRepository {
 	/**
 	 * ID로 비밀번호 해시만 조회
 	 */
-	async findPasswordById(
-		id: string,
-	): Promise<{ password: string } | null> {
+	async findPasswordById(id: string): Promise<{ password: string } | null> {
 		this.logger.debug(`비밀번호 해시 조회: ${id.slice(-8)}`);
 
 		return this.txHost.tx.user.findUnique({
@@ -573,10 +595,7 @@ export class UsersRepository {
 	/**
 	 * 비밀번호 업데이트 (관련 필드 함께)
 	 */
-	async updatePassword(
-		id: string,
-		hashedPassword: string,
-	): Promise<void> {
+	async updatePassword(id: string, hashedPassword: string): Promise<void> {
 		this.logger.debug(`비밀번호 업데이트: ${id.slice(-8)}`);
 
 		await this.txHost.tx.user.update({
@@ -599,7 +618,9 @@ export class UsersRepository {
 		userId: string,
 		limit: number,
 	): Promise<{ id: string; passwordHash: string }[]> {
-		this.logger.debug(`비밀번호 히스토리 조회: ${userId.slice(-8)}, limit=${limit}`);
+		this.logger.debug(
+			`비밀번호 히스토리 조회: ${userId.slice(-8)}, limit=${limit}`,
+		);
 
 		return this.txHost.tx.passwordHistory.findMany({
 			where: { userId },
@@ -626,11 +647,10 @@ export class UsersRepository {
 	/**
 	 * 오래된 비밀번호 히스토리 삭제 (최대 N개 유지)
 	 */
-	async prunePasswordHistory(
-		userId: string,
-		maxCount: number,
-	): Promise<void> {
-		this.logger.debug(`비밀번호 히스토리 정리: ${userId.slice(-8)}, max=${maxCount}`);
+	async prunePasswordHistory(userId: string, maxCount: number): Promise<void> {
+		this.logger.debug(
+			`비밀번호 히스토리 정리: ${userId.slice(-8)}, max=${maxCount}`,
+		);
 
 		const histories = await this.txHost.tx.passwordHistory.findMany({
 			where: { userId },

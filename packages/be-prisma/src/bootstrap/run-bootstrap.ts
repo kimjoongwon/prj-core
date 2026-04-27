@@ -5,6 +5,7 @@ import { ensureSecurityPolicyDefaults } from "./defaults";
 import { createInquiryDomainData } from "./inquiry";
 import {
 	classifyGroundSpacesAsBranch,
+	createHierarchicalTenants,
 	createRegularUsersAndGrounds,
 	ensureSystemBootstrap,
 } from "./system-space";
@@ -26,6 +27,7 @@ export async function runBootstrap(prisma: PrismaClient): Promise<void> {
 
 	await createRegularUsersAndGrounds(prisma, manageRole);
 	await classifyGroundSpacesAsBranch(prisma, SYSTEM_SPACE_ID);
+	await createHierarchicalTenants(prisma, SYSTEM_SPACE_ID);
 	await createTimelineSessionExerciseDomainData(prisma);
 	await ensureSecurityPolicyDefaults(prisma);
 	await createAssetDomainData(prisma);

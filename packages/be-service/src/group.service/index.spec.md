@@ -21,8 +21,8 @@
 
 | 메서드 | 파라미터 | 반환 | 설명 |
 |--------|----------|------|------|
-| `getAll` | `query: QueryGroupDto` | `Promise<Group[]>` | 그룹 목록 조회 |
-| `getById` | `id: string` | `Promise<Group>` | ID로 그룹 조회 (연결된 역할 포함) |
+| `getAll` | `query: QueryGroupDto, spaceIds?: string[]` | `Promise<Group[]>` | effective space scope 기반 그룹 목록 조회 |
+| `getById` | `id: string, spaceIds?: string[]` | `Promise<Group>` | effective space scope 기반 ID 그룹 조회 (연결된 역할 포함) |
 | `create` | `dto: CreateGroupDto, spaceId: string` | `Promise<Group>` | 그룹 생성 |
 | `update` | `id: string, dto: UpdateGroupDto` | `Promise<Group>` | 그룹 수정 |
 | `delete` | `id: string` | `Promise<Group>` | 그룹 삭제 |
@@ -31,6 +31,7 @@
 
 - **이름 unique**: 같은 Space + type 내에서 name 중복 불가 (전역 unique 아님)
 - **삭제 허용**: 연결된 역할이 있어도 삭제 가능 (RoleAssociation cascade 삭제)
+- **조회 Space scope**: `spaceIds`가 `undefined`면 `FULL_ACCESS`로 간주해 전체 그룹을 허용하고, 배열이면 DTO의 `spaceId` 필터보다 서버가 계산한 `spaceIds`를 우선 적용합니다.
 - 기본 타입: `GroupTypes.Role`
 
 ## 에러 처리
@@ -42,7 +43,8 @@
 
 ## 권한 요구사항
 
-- Controller 레이어에서 Guard를 통해 권한 처리
+- Controller/Facade 레이어에서 Guard와 SpaceContext를 통해 현재 요청의 effective space scope를 전달합니다.
+- Service는 전달받은 `spaceIds`로 목록/상세 조회의 Space 경계를 최종 보정합니다.
 
 ## 구현 체크리스트
 
@@ -56,3 +58,4 @@
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-13 | `group.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |
+| 2026-04-25 | Group 목록/상세 조회에 effective space scope 필터 적용 규칙 추가 | codex |

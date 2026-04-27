@@ -1,4 +1,9 @@
-import { Inquiry, InquiryMessage, InquiryParticipant, InquiryThread } from "@cocrepo/entity";
+import {
+	Inquiry,
+	InquiryMessage,
+	InquiryParticipant,
+	InquiryThread,
+} from "@cocrepo/entity";
 import {
 	InquiryCategory,
 	InquiryPriority,
@@ -46,11 +51,15 @@ export class InquiriesRepository {
 	 */
 	async findByIdWithThreadsAndMessagesAndParticipants(
 		id: string,
+		spaceIds?: string[],
 	): Promise<Inquiry | null> {
 		this.logger.debug(`ID로 상세 조회: ${id.slice(-8)}`);
 
-		const result = await this.txHost.tx.inquiry.findUnique({
-			where: { id },
+		const result = await this.txHost.tx.inquiry.findFirst({
+			where: {
+				id,
+				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+			},
 			include: {
 				threads: {
 					orderBy: { createdAt: "desc" },
@@ -572,18 +581,20 @@ export class InquiriesRepository {
 	/**
 	 * 상태별 문의 수 조회
 	 */
-	async countByStatus(spaceId: string): Promise<
+	async countByStatus(spaceIds?: string[]): Promise<
 		{
 			status: InquiryStatus;
 			count: number;
 		}[]
 	> {
-		this.logger.debug(`상태별 문의 수 조회: ${spaceId.slice(-8)}`);
+		this.logger.debug(
+			`상태별 문의 수 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
+		);
 
 		const results = await this.txHost.tx.inquiry.groupBy({
 			by: ["status"],
 			where: {
-				spaceId,
+				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 				removedAt: null,
 			},
 			_count: {
@@ -600,18 +611,20 @@ export class InquiriesRepository {
 	/**
 	 * 카테고리별 문의 수 조회
 	 */
-	async countByCategory(spaceId: string): Promise<
+	async countByCategory(spaceIds?: string[]): Promise<
 		{
 			category: InquiryCategory;
 			count: number;
 		}[]
 	> {
-		this.logger.debug(`카테고리별 문의 수 조회: ${spaceId.slice(-8)}`);
+		this.logger.debug(
+			`카테고리별 문의 수 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
+		);
 
 		const results = await this.txHost.tx.inquiry.groupBy({
 			by: ["category"],
 			where: {
-				spaceId,
+				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 				removedAt: null,
 			},
 			_count: {
@@ -628,16 +641,18 @@ export class InquiriesRepository {
 	/**
 	 * SLA 위반 문의 수 조회
 	 */
-	async countOverdue(spaceId: string): Promise<{
+	async countOverdue(spaceIds?: string[]): Promise<{
 		responseOverdue: number;
 		resolveOverdue: number;
 		total: number;
 	}> {
-		this.logger.debug(`SLA 위반 문의 수 조회: ${spaceId.slice(-8)}`);
+		this.logger.debug(
+			`SLA 위반 문의 수 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
+		);
 
 		const now = new Date();
 		const baseWhere: Prisma.InquiryWhereInput = {
-			spaceId,
+			...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 			removedAt: null,
 			resolvedAt: null,
 		};

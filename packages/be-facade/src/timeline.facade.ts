@@ -41,7 +41,6 @@ export class TimelineFacade {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 10;
 		const { timelines, total } = await this.timelinesService.findTimelines({
-			spaceId,
 			skip,
 			take,
 			search: query.search ?? null,
@@ -67,7 +66,10 @@ export class TimelineFacade {
 			throw new UnauthorizedException(TIMELINE_ERRORS.INVALID_DATA);
 		}
 
-		return this.timelinesService.findTimelineForSpace(timelineId, spaceId);
+		return this.timelinesService.findTimelineForSpace(
+			timelineId,
+			this.spaceContext.spaceIds,
+		);
 	}
 
 	createTimeline(dto: CreateTimelineDto) {

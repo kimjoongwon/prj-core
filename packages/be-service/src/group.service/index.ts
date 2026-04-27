@@ -1,5 +1,6 @@
 import { CreateGroupDto, QueryGroupDto, UpdateGroupDto } from "@cocrepo/dto";
 import { Group } from "@cocrepo/entity";
+import type { Prisma } from "@cocrepo/prisma";
 import { GroupTypes } from "@cocrepo/prisma";
 import { GroupsRepository } from "@cocrepo/repository";
 import {
@@ -18,8 +19,8 @@ export class GroupService {
 	/**
 	 * 그룹 목록 조회
 	 */
-	async getAll(query: QueryGroupDto): Promise<Group[]> {
-		const where = query.toPrismaWhere();
+	async getAll(query: QueryGroupDto, spaceIds?: string[]): Promise<Group[]> {
+		const where = this.applySpaceScope(query.toPrismaWhere(), spaceIds);
 		const orderBy = query.toPrismaOrderBy();
 
 		return this.repository.findMany({ where, orderBy });
@@ -28,7 +29,7 @@ export class GroupService {
 	/**
 	 * ID로 그룹 조회 (연결된 역할 포함)
 	 */
-	async getById(id: string): Promise<Group> {
+	async getById(id: string, spaceIds?: string[]): Promise<Group> {
 		const group = await this.repository.findById(id, {
 			roleAssociations: {
 				include: { role: true },
@@ -39,7 +40,25 @@ export class GroupService {
 			throw new NotFoundException("그룹을 찾을 수 없습니다");
 		}
 
+		if (spaceIds !== undefined && !spaceIds.includes(group.spaceId)) {
+			throw new NotFoundException("그룹을 찾을 수 없습니다");
+		}
+
 		return group;
+	}
+
+	private applySpaceScope(
+		where: Prisma.GroupWhereInput,
+		spaceIds?: string[],
+	): Prisma.GroupWhereInput {
+		if (spaceIds === undefined) {
+			return where;
+		}
+
+		return {
+			...where,
+			spaceId: { in: spaceIds },
+		};
 	}
 
 	/**
@@ -59,9 +78,7 @@ export class GroupService {
 		});
 
 		if (existing.length > 0) {
-			throw new ConflictException(
-				`이미 존재하는 그룹 이름입니다: ${dto.name}`,
-			);
+			throw new ConflictException(`이미 존재하는 그룹 이름입니다: ${dto.name}`);
 		}
 
 		return this.repository.create({

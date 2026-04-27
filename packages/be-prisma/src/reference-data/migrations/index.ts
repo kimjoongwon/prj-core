@@ -4,6 +4,8 @@ import { secondarySuperManagerMigration } from "./20260323160000_secondary-super
 import { oidcClientAuthShellFieldsMigration } from "./20260325110000_oidc-client-auth-shell-fields";
 import { adminMenuPageReferenceCatalogMigration } from "./20260406120000_admin-menu-page-reference-catalog";
 import { oidcClientIdRenameMigration } from "./20260414110000_oidc-client-id-rename";
+import { systemAdminBranchManageTenantsMigration } from "./20260427030000_system-admin-branch-manage-tenants";
+import { systemAdminNonPlatformManageTenantsMigration } from "./20260427031000_system-admin-non-platform-manage-tenants";
 import type { ReferenceDataMigration } from "./types";
 
 export const referenceDataMigrations: ReferenceDataMigration[] = [
@@ -13,4 +15,6 @@ export const referenceDataMigrations: ReferenceDataMigration[] = [
 	oidcClientAuthShellFieldsMigration,
 	adminMenuPageReferenceCatalogMigration,
 	oidcClientIdRenameMigration,
+	systemAdminBranchManageTenantsMigration,
+	systemAdminNonPlatformManageTenantsMigration,
 ];

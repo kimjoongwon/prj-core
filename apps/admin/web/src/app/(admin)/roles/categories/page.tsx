@@ -25,8 +25,9 @@ interface CategoryData {
 
 const AdminRolesCategoriesRoute = observer(() => {
 	const router = useRouter();
-	const { data: response, isLoading } = useGetCategories({ type: "Role" });
-	const categories = ((response?.data ?? []) as unknown) as CategoryData[];
+	const categoryParams = { type: "Role" as const };
+	const { data: response, isLoading } = useGetCategories(categoryParams);
+	const categories = (response?.data ?? []) as unknown as CategoryData[];
 
 	return (
 		<RoleCategoryListPage
@@ -42,9 +43,7 @@ const AdminRolesCategoriesRoute = observer(() => {
 	);
 });
 
-function mapCategoryRow(
-	category: CategoryData,
-): RoleCategoryListPageCategory {
+function mapCategoryRow(category: CategoryData): RoleCategoryListPageCategory {
 	return {
 		id: category.id,
 		name: category.name,

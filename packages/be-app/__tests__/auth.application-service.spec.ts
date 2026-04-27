@@ -11,7 +11,7 @@ import {
 	TokenStorageService,
 	UserService,
 } from "@cocrepo/service";
-import { NotFoundException } from "@nestjs/common";
+import { ForbiddenException, NotFoundException } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 import { AuthApplicationService } from "../src/auth.application-service";
 
@@ -32,7 +32,7 @@ function buildOidcClient(
 		defaultReturnTo: string;
 		isActive: boolean;
 	}> = {},
-): any {
+): Awaited<ReturnType<OidcClientService["getByClientId"]>> {
 	return {
 		id: `${clientId}-db-id`,
 		clientId,
@@ -58,7 +58,7 @@ function buildOidcClient(
 		removedAt: null,
 		createdAt: new Date(),
 		updatedAt: new Date(),
-	};
+	} as unknown as Awaited<ReturnType<OidcClientService["getByClientId"]>>;
 }
 
 describe("AuthApplicationService", () => {
@@ -580,6 +580,28 @@ describe("AuthApplicationService", () => {
 			const result = await applicationService.verifyToken();
 
 			expect(result.hasFullAccess).toBe(false);
+		});
+
+		it("x-space-id가 있는데 현재 tenant를 찾지 못하면 ForbiddenException을 던져야 한다", async () => {
+			const exp = Math.floor(Date.now() / 1000) + 3600;
+			const fakeToken = `header.${Buffer.from(
+				JSON.stringify({ sub: "user-1", exp }),
+			).toString("base64url")}.signature`;
+			mockClsService.get.mockImplementation((key) => {
+				if (key === CONTEXT_KEYS.TOKEN) {
+					return fakeToken;
+				}
+
+				if (key === CONTEXT_KEYS.SPACE_ID) {
+					return "missing-space";
+				}
+
+				return undefined;
+			});
+
+			await expect(applicationService.verifyToken()).rejects.toThrow(
+				ForbiddenException,
+			);
 		});
 	});
 

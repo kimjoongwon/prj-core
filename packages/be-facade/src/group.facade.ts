@@ -15,7 +15,7 @@ export class GroupFacade {
 	}
 
 	getGroups(query: QueryGroupDto): Promise<Group[]> {
-		return this.groupsService.getAll(query);
+		return this.groupsService.getAll(query, this.spaceContext.spaceIds);
 	}
 
 	getById(id: string): Promise<Group> {
@@ -23,7 +23,7 @@ export class GroupFacade {
 	}
 
 	getGroupById(id: string): Promise<Group> {
-		return this.groupsService.getById(id);
+		return this.groupsService.getById(id, this.spaceContext.spaceIds);
 	}
 
 	create(dto: CreateGroupDto): Promise<Group> {

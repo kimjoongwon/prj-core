@@ -14,15 +14,11 @@ import {
 	useUpdateFolder,
 	useUploadAsset,
 } from "@cocrepo/api/assets";
-import { usePersistStore } from "@cocrepo/store";
-import {
-	type AssetBrowserAsset,
-	type AssetBrowserProps,
-} from "@cocrepo/ui";
+import { type AssetBrowserAsset, type AssetBrowserProps } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 
 export type AdminAssetBrowserBindings = Omit<
 	AssetBrowserProps,
@@ -51,7 +47,6 @@ export function useAdminAssetBrowser({
 }: UseAdminAssetBrowserOptions = {}): AdminAssetBrowserBindings {
 	const queryClient = useQueryClient();
 	const persistStore = usePersistStore();
-	const [isClientMounted, setIsClientMounted] = useState(false);
 	const [queryStates, setQueryStates] = useQueryStates({
 		take: parseAsInteger.withDefault(20),
 		skip: parseAsInteger.withDefault(0),
@@ -60,8 +55,6 @@ export function useAdminAssetBrowser({
 		status: parseAsString.withDefault(""),
 		folderId: parseAsString.withDefault(""),
 	});
-	const isStoreReady = isClientMounted && (persistStore?.isHydrated ?? false);
-	const hasSelectedSpace = Boolean(persistStore?.spaceId);
 	const selectedFolderId =
 		typeof queryStates.folderId === "string" && queryStates.folderId
 			? queryStates.folderId
@@ -80,21 +73,21 @@ export function useAdminAssetBrowser({
 		(typeof queryStates.status === "string" && queryStates.status
 			? (queryStates.status as AssetStatus)
 			: undefined);
+	const assetParams = {
+		take: typeof queryStates.take === "number" ? queryStates.take : 20,
+		skip: typeof queryStates.skip === "number" ? queryStates.skip : 0,
+		search: searchValue,
+		kind: resolvedKind,
+		status: resolvedStatus,
+		folderId: selectedFolderId,
+	};
+	const isStoreReady =
+		persistStore.isHydrated && persistStore.isSpaceSelectionResolved;
+	const hasSelectedSpace = Boolean(persistStore.spaceId);
 	const isQueryEnabled = isStoreReady && hasSelectedSpace && enabled;
 
-	useEffect(() => {
-		setIsClientMounted(true);
-	}, []);
-
 	const { data: assetsResponse, isLoading: isLoadingAssets } = useGetAssets(
-		{
-			take: typeof queryStates.take === "number" ? queryStates.take : 20,
-			skip: typeof queryStates.skip === "number" ? queryStates.skip : 0,
-			search: searchValue,
-			kind: resolvedKind,
-			status: resolvedStatus,
-			folderId: selectedFolderId,
-		},
+		assetParams,
 		{
 			query: {
 				enabled: isQueryEnabled,

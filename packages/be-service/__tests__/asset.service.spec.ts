@@ -1,8 +1,8 @@
+import { createHash } from "node:crypto";
 import { SpaceContext } from "@cocrepo/context";
 import { AssetKind, AssetStatus } from "@cocrepo/prisma";
 import { AssetsRepository, FoldersRepository } from "@cocrepo/repository";
 import { Test, type TestingModule } from "@nestjs/testing";
-import { createHash } from "crypto";
 import { AssetService } from "../src/asset.service";
 import { ObjectStorageService } from "../src/object-storage.service";
 
@@ -53,13 +53,45 @@ describe("AssetService", () => {
 		service = module.get<AssetService>(AssetService);
 	});
 
+	it("FULL_ACCESS 목록 조회는 spaceId 필터 없이 전체 에셋을 요청해야 한다", async () => {
+		mockAssetsRepository.findMany.mockResolvedValue({
+			assets: [],
+			totalCount: 0,
+		} as never);
+
+		await service.getAssets(createAssetQuery());
+
+		const findManyInput = mockAssetsRepository.findMany.mock.calls[0][0];
+		expect(findManyInput.where).not.toHaveProperty("spaceId");
+	});
+
+	it("일반 권한 목록 조회는 접근 가능한 spaceIds로 에셋을 제한해야 한다", async () => {
+		(mockSpaceContext as SpaceContext & { spaceIds: string[] }).spaceIds = [
+			"space-123",
+			"space-parent",
+		];
+		mockAssetsRepository.findMany.mockResolvedValue({
+			assets: [],
+			totalCount: 0,
+		} as never);
+
+		await service.getAssets(createAssetQuery());
+
+		const findManyInput = mockAssetsRepository.findMany.mock.calls[0][0];
+		expect(findManyInput.where).toEqual(
+			expect.objectContaining({
+				spaceId: { in: ["space-123", "space-parent"] },
+			}),
+		);
+	});
+
 	it("업로드 시 object storage 업로드 후 asset metadata를 생성해야 한다", async () => {
 		const file = {
 			originalname: "photo.png",
 			mimetype: "image/png",
 			size: 11,
 			buffer: Buffer.from("hello-world"),
-		} as any;
+		};
 		const expectedChecksum = createHash("sha256")
 			.update(file.buffer)
 			.digest("hex");
@@ -148,7 +180,7 @@ describe("AssetService", () => {
 			mimetype: "image/png",
 			size: 11,
 			buffer: Buffer.from("hello-world"),
-		} as any;
+		};
 
 		mockFoldersRepository.findById.mockResolvedValue({
 			id: "folder-123",
@@ -312,3 +344,16 @@ describe("AssetService", () => {
 		expect(mockAssetsRepository.deleteById).not.toHaveBeenCalled();
 	});
 });
+
+function createAssetQuery(): Parameters<AssetService["getAssets"]>[0] {
+	return {
+		toPrismaWhere: (baseWhere = {}) => ({
+			...baseWhere,
+			removedAt: null,
+		}),
+		toPrismaOrderBy: () => [],
+		sort: [],
+		skip: 0,
+		take: 20,
+	} as Parameters<AssetService["getAssets"]>[0];
+}

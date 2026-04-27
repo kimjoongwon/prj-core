@@ -1,6 +1,6 @@
 import { SYSTEM_ROLES } from "@cocrepo/constant";
-import { SpaceCategoryName } from "@cocrepo/enum";
 import type { TenantDto } from "@cocrepo/dto";
+import { SpaceCategoryName } from "@cocrepo/enum";
 
 type TenantWithSpaceCategory = TenantDto & {
 	space?: {
@@ -32,6 +32,10 @@ function resolveTenantSpaceCategoryName(tenant: TenantDto): string | undefined {
 	);
 }
 
+export function resolveTenantSpaceId(tenant: TenantDto): string | undefined {
+	return tenant.space?.id ?? tenant.spaceId ?? undefined;
+}
+
 /**
  * 현재 선택된 Tenant가 System(ROOT) Space인지 확인합니다.
  */
@@ -58,7 +62,8 @@ export function resolveCurrentTenantForSpace(
 	}
 
 	const candidates = tenants.filter(
-		(tenant) => tenant.spaceId === spaceId && tenant.removedAt == null,
+		(tenant) =>
+			resolveTenantSpaceId(tenant) === spaceId && tenant.removedAt == null,
 	);
 	if (!candidates.length) {
 		return undefined;

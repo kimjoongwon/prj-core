@@ -22,7 +22,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 클라이언트 렌더 | `useGetTimelines({ take, skip, search })` | 타임라인 목록 조회 |
+| 클라이언트 렌더 | `useGetTimelines({ take, skip, search })` | admin layout의 Space bootstrap/access gate 아래에서 타임라인 목록 조회. Space 전환은 hard reload로 query cache를 초기화 |
 | 삭제 확인 | `useDeleteTimeline()` | 타임라인 삭제 |
 
 ## 이벤트 핸들러
@@ -37,6 +37,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-27 | 타임라인 목록의 수동 Space queryKey 분리를 제거하고 admin layout bootstrap/access gate와 hard reload 기반 cache 초기화 정책으로 갱신 | codex |
+| 2026-04-26 | 목록 query가 Space bootstrap 완료 후 실행되고 현재 spaceId별로 캐시를 분리하도록 반영 | codex |
 | 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-04-08 | 타임라인 상세 진입을 callback 버튼이 아니라 route가 주입한 이름 링크 href 기준으로 정리 | codex |

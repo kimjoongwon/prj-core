@@ -6,10 +6,7 @@ import {
 	useDeleteTask,
 	useGetTasks,
 } from "@cocrepo/api/core/tasks";
-import {
-	TaskListPage,
-	type TaskListPageTask,
-} from "@cocrepo/ui";
+import { TaskListPage, type TaskListPageTask } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -33,7 +30,8 @@ export default observer(function TasksPageRoute() {
 		search: parseAsString.withDefault(""),
 		spaceScope: parseAsString.withDefault(""),
 	});
-	const { data: response, isLoading } = useGetTasks(getTaskParams(queryStates));
+	const taskParams = getTaskParams(queryStates);
+	const { data: response, isLoading } = useGetTasks(taskParams);
 	const deleteMutation = useDeleteTask();
 	const tasks = (response?.data ?? []).map(mapTaskRow);
 

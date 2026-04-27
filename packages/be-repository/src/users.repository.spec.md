@@ -1,7 +1,7 @@
 # Users Repository 기획서
 
 > 생성일: 2026-02-19
-> 수정일: 2026-02-19
+> 수정일: 2026-04-26
 > 타입: repository
 > 위치: packages/be-repository/src/users.repository.ts
 
@@ -95,6 +95,7 @@ User {
 
 - `findByEmailSelectCredentials()`: 인증 시 최소 필드(id, email, password)만 조회하여 보안 강화
 - `findManyBySpaceIds()`: `Promise.all()`로 데이터와 totalCount 동시 조회
+- `findManyBySpaceIds()`: `spaceIds`가 전달되면 루트 사용자 목록/count의 `tenants.some` 조건에도 Space 스코프를 강제합니다.
 - scoped 회원 목록은 `includedRoleNames`를 받아 응답에 포함되는 `tenants` 관계도 현재 화면 필터와 동일한 역할 범위로 정렬합니다.
 - `existsBy*()`: `select: { id: true }`만 조회하여 성능 최적화
 - `countStatsBySpaceIds()`: `Promise.all()`로 통계 동시 계산
@@ -136,6 +137,7 @@ User {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-26 | scoped 회원 목록에서 `spaceIds`가 루트 사용자 목록/count 조건에도 강제되도록 문서화 | codex |
 | 2026-04-16 | scoped 회원 목록 응답의 `tenants` include도 역할 포함/제외 규칙을 따르도록 문서화 | codex |
 | 2026-04-16 | 회원 목록/통계에서 `FULL_ACCESS` 제외 규칙을 제거하고 `spaceIds` 기반 단일 스코프 규칙으로 정리 | codex |
 | 2026-04-15 | 회원 통계 메서드가 `excludedRoleNames`로 branch 기본 목록의 FULL_ACCESS 제외를 지원하도록 갱신 | codex |

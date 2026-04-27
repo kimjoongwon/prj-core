@@ -4,6 +4,7 @@ import {
 	UpdateCategoryDto,
 } from "@cocrepo/dto";
 import { Category } from "@cocrepo/entity";
+import type { Prisma } from "@cocrepo/prisma";
 import { CategoryTypes } from "@cocrepo/prisma";
 import { CategoriesRepository } from "@cocrepo/repository";
 import {
@@ -23,8 +24,11 @@ export class CategoryService {
 	/**
 	 * 카테고리 목록 조회
 	 */
-	async getAll(query: QueryCategoryDto): Promise<Category[]> {
-		const where = query.toPrismaWhere();
+	async getAll(
+		query: QueryCategoryDto,
+		spaceIds?: string[],
+	): Promise<Category[]> {
+		const where = this.applySpaceScope(query.toPrismaWhere(), spaceIds);
 		const orderBy = query.toPrismaOrderBy();
 
 		return this.repository.findMany({
@@ -37,7 +41,7 @@ export class CategoryService {
 	/**
 	 * ID로 카테고리 조회 (상위, 하위, 연결된 역할 포함)
 	 */
-	async getById(id: string): Promise<Category> {
+	async getById(id: string, spaceIds?: string[]): Promise<Category> {
 		const category = await this.repository.findById(id, {
 			parent: true,
 			children: true,
@@ -50,7 +54,25 @@ export class CategoryService {
 			throw new NotFoundException("카테고리를 찾을 수 없습니다");
 		}
 
+		if (spaceIds !== undefined && !spaceIds.includes(category.spaceId)) {
+			throw new NotFoundException("카테고리를 찾을 수 없습니다");
+		}
+
 		return category;
+	}
+
+	private applySpaceScope(
+		where: Prisma.CategoryWhereInput,
+		spaceIds?: string[],
+	): Prisma.CategoryWhereInput {
+		if (spaceIds === undefined) {
+			return where;
+		}
+
+		return {
+			...where,
+			spaceId: { in: spaceIds },
+		};
 	}
 
 	/**

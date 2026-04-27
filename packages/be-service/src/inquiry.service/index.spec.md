@@ -50,6 +50,8 @@
 - `hidden > readOnly > disabled` 경로는 AI patch 대상에서 제외
 - UPDATE 모드에서는 `content`를 AI 채움 대상에서 제외
 - 허용되지 않은 path 요청은 `BadRequestException`
+- 목록/상세/form bootstrap/stat 조회는 전달받은 `spaceIds`로 Inquiry root row를 제한합니다.
+- `tenant.role`이 `FULL_ACCESS`이면 `spaceIds`가 `undefined`이므로 Space 필터 없이 전체 Inquiry를 조회/집계합니다.
 - 메시지 전송은 `InquiryThread`, `InquiryMessage`, `InquiryParticipant`를 개별 service로 우회하지 않고 root service 내부에서 처리한다.
 - CLOSED 문의에는 메시지를 보낼 수 없다.
 - `clientMessageId`가 중복되면 메시지 생성이 거부된다.
@@ -60,6 +62,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-26 | Inquiry 목록/상세/form bootstrap/stat 조회의 Space scope 적용 규칙을 추가 | codex |
 | 2026-03-01 | 초기 생성 (Form Bootstrap/AiForm patch 로직 문서화) | codex |
 | 2026-03-11 | AI 처리 책임 설명을 ApplicationService 기준으로 갱신 | codex |
 | 2026-03-11 | root 기준 메시지/참여자 처리 규칙을 추가 | codex |

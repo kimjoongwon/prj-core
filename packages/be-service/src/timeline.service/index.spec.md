@@ -33,6 +33,13 @@ Timeline/Session/Program 운영 aggregate에서 Program execution snapshot 생�
 - `getRoutineExecutionSnapshot`은 현재 요청자의 접근 가능한 Space 범위 안에서 Routine 실행 계획을 계산합니다.
 - Exercise에 `videoFileId`가 없으면 `PROGRAM_ROUTINE_EXERCISE_INCOMPLETE`로 Program 생성을 거부합니다.
 
+## Space Scope 규칙
+
+- `findTimelines`와 상세 조회는 `SpaceContext.spaceIds`를 repository에 전달합니다.
+- `tenant.role`이 `FULL_ACCESS`이면 `spaceIds`가 `undefined`이므로 Timeline 목록/상세를 전체 Space 대상으로 조회합니다.
+- 일반 권한에서는 현재 사용자가 접근 가능한 Space ID 목록으로 목록/상세를 제한합니다.
+- 수정/삭제는 기존 write contract를 유지해 현재 선택된 `x-space-id`의 Timeline만 대상으로 검증합니다.
+
 ## 동작 흐름
 
 1. 입력(라우트/props/호출)을 수신합니다.
@@ -55,6 +62,7 @@ Timeline/Session/Program 운영 aggregate에서 Program execution snapshot 생�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-26 | Timeline 목록/상세 조회의 FULL_ACCESS 전체 조회와 일반 권한 Space scope 제한 규칙을 추가 | codex |
 | 2026-03-29 | Program execution snapshot 생성·교체 트랜잭션과 schedulable validation 규칙을 서비스 책임으로 추가 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-13 | `timeline.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |

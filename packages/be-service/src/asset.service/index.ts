@@ -1,8 +1,10 @@
+import { createHash, randomUUID } from "node:crypto";
+import { extname } from "node:path";
+import { SpaceContext } from "@cocrepo/context";
 import { AssetQueryDto, MoveAssetDto, UploadAssetDto } from "@cocrepo/dto";
 import { Asset } from "@cocrepo/entity";
-import { AssetKind, AssetStatus } from "@cocrepo/prisma";
+import { AssetKind, AssetStatus, type Prisma } from "@cocrepo/prisma";
 import { AssetsRepository, FoldersRepository } from "@cocrepo/repository";
-import { SpaceContext } from "@cocrepo/context";
 import {
 	BadRequestException,
 	ForbiddenException,
@@ -10,8 +12,6 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
-import { createHash, randomUUID } from "crypto";
-import { extname } from "path";
 import { ObjectStorageService } from "../object-storage.service";
 
 type AssetPayload = Record<string, unknown>;
@@ -31,7 +31,7 @@ type UploadedAssetFile = {
 };
 
 function normalizeUploadedFileName(fileName: string): string {
-	if (/^[\x00-\x7F]*$/.test(fileName)) {
+	if (isAscii(fileName)) {
 		return fileName;
 	}
 
@@ -42,6 +42,16 @@ function normalizeUploadedFileName(fileName: string): string {
 	return !hasReplacementCharacter && roundTrippedName === fileName
 		? decodedName
 		: fileName;
+}
+
+function isAscii(value: string): boolean {
+	for (let index = 0; index < value.length; index += 1) {
+		if (value.charCodeAt(index) > 0x7f) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 @Injectable()
@@ -60,9 +70,16 @@ export class AssetService {
 	): Promise<{ data: AssetPayload[]; totalCount: number }> {
 		const spaceId = this.getCurrentSpaceId();
 		this.logger.debug(`에셋 목록 조회: space=${spaceId.slice(-8)}`);
+		const spaceIds = this.spaceContext.spaceIds;
+		const where = this.applySpaceScope(
+			query.toPrismaWhere(
+				spaceIds === undefined ? undefined : { spaceId: { in: spaceIds } },
+			),
+			spaceIds,
+		);
 
 		const { assets, totalCount } = await this.assetsRepository.findMany({
-			where: query.toPrismaWhere({ spaceId }),
+			where,
 			orderBy: query.sort?.length ? query.toPrismaOrderBy() : undefined,
 			skip: query.skip,
 			take: query.take,
@@ -122,7 +139,10 @@ export class AssetService {
 	async deleteAsset(assetId: string): Promise<void> {
 		const asset = await this.getCurrentSpaceAsset(assetId);
 
-		if (asset.spaceId !== this.getCurrentSpaceId()) {
+		if (
+			this.spaceContext.spaceIds !== undefined &&
+			asset.spaceId !== this.getCurrentSpaceId()
+		) {
 			throw new ForbiddenException("현재 Space의 에셋만 삭제할 수 있습니다");
 		}
 
@@ -199,13 +219,32 @@ export class AssetService {
 
 	private async getCurrentSpaceAsset(assetId: string): Promise<Asset> {
 		const asset = await this.assetsRepository.findByIdWithRelations(assetId);
-		const currentSpaceId = this.getCurrentSpaceId();
+		this.getCurrentSpaceId();
 
-		if (!asset || asset.removedAt || asset.spaceId !== currentSpaceId) {
+		if (!asset || asset.removedAt || !this.canReadSpace(asset.spaceId)) {
 			throw new NotFoundException("에셋을 찾을 수 없습니다");
 		}
 
 		return asset;
+	}
+
+	private applySpaceScope(
+		where: Prisma.AssetWhereInput,
+		spaceIds?: string[],
+	): Prisma.AssetWhereInput {
+		if (spaceIds === undefined) {
+			return where;
+		}
+
+		return {
+			...where,
+			spaceId: { in: spaceIds },
+		};
+	}
+
+	private canReadSpace(spaceId: string): boolean {
+		const spaceIds = this.spaceContext.spaceIds;
+		return spaceIds === undefined || spaceIds.includes(spaceId);
 	}
 
 	private serializeAsset(asset: Asset): AssetPayload {

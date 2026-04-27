@@ -10,6 +10,7 @@ import {
 	type InquiryCreateUpdateFormBootstrap,
 	type InquiryStats,
 	InquiryService,
+	SpaceContext,
 } from "@cocrepo/service";
 import { Injectable, Logger } from "@nestjs/common";
 
@@ -17,7 +18,10 @@ import { Injectable, Logger } from "@nestjs/common";
 export class InquiryFacade {
 	private readonly logger = new Logger(InquiryFacade.name);
 
-	constructor(private readonly inquiryService: InquiryService) {}
+	constructor(
+		private readonly inquiryService: InquiryService,
+		private readonly spaceContext: SpaceContext,
+	) {}
 
 	async listInquiries(params: {
 		where: Parameters<InquiryService["list"]>[0]["where"];
@@ -36,7 +40,10 @@ export class InquiryFacade {
 		this.logger.debug("문의 목록 조회");
 		const skip = params.skip ?? 0;
 		const take = params.take ?? 10;
-		const { items, totalCount } = await this.inquiryService.list(params);
+		const { items, totalCount } = await this.inquiryService.list({
+			...params,
+			spaceIds: this.spaceContext.spaceIds,
+		});
 
 		return {
 			data: items,
@@ -49,8 +56,8 @@ export class InquiryFacade {
 		};
 	}
 
-	getInquiryStats(spaceId: string): Promise<InquiryStats> {
-		return this.inquiryService.getStats(spaceId);
+	getInquiryStats(): Promise<InquiryStats> {
+		return this.inquiryService.getStats(this.spaceContext.spaceIds);
 	}
 
 	getCreateFormBootstrap(): Promise<InquiryCreateUpdateFormBootstrap> {
@@ -60,7 +67,10 @@ export class InquiryFacade {
 	getUpdateFormBootstrap(
 		inquiryId: string,
 	): Promise<InquiryCreateUpdateFormBootstrap> {
-		return this.inquiryService.getUpdateFormBootstrap(inquiryId);
+		return this.inquiryService.getUpdateFormBootstrap(
+			inquiryId,
+			this.spaceContext.spaceIds,
+		);
 	}
 
 	fillFormWithAi(input: FillInquiryFormInput): FillInquiryFormResult {
@@ -68,7 +78,10 @@ export class InquiryFacade {
 	}
 
 	getInquiryById(inquiryId: string): Promise<Inquiry> {
-		return this.inquiryService.findByIdWithDetails(inquiryId);
+		return this.inquiryService.findByIdWithDetails(
+			inquiryId,
+			this.spaceContext.spaceIds,
+		);
 	}
 
 	createInquiry(params: {

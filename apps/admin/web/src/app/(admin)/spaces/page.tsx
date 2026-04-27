@@ -1,10 +1,7 @@
 "use client";
 
 import { type SpaceDto, useGetSpaces } from "@cocrepo/api/core/spaces";
-import {
-	SpaceListPage,
-	type SpaceListPageSpace,
-} from "@cocrepo/ui";
+import { SpaceListPage, type SpaceListPageSpace } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";

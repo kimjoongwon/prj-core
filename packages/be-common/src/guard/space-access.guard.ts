@@ -10,6 +10,7 @@ import {
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { ClsService } from "nestjs-cls";
+import { resolveTenantSpaceId } from "../util/permission.util";
 
 @Injectable()
 export class SpaceAccessGuard implements CanActivate {
@@ -47,16 +48,16 @@ export class SpaceAccessGuard implements CanActivate {
 		}
 
 		// Tenant 접근 권한 확인
-		if (!user.tenants || !Array.isArray(user.tenants)) return true;
+		if (!Array.isArray(user.tenants) || user.tenants.length === 0) {
+			throw new ForbiddenException("사용자에게 할당된 테넌트가 없습니다.");
+		}
 
 		const tenant = user.tenants.find(
 			(t: TenantDto) =>
-				t.spaceId === spaceId && t.removedAt == null,
+				resolveTenantSpaceId(t) === spaceId && t.removedAt == null,
 		);
 		if (!tenant) {
-			throw new ForbiddenException(
-				"해당 Space에 대한 접근 권한이 없습니다.",
-			);
+			throw new ForbiddenException("해당 Space에 대한 접근 권한이 없습니다.");
 		}
 
 		return true;

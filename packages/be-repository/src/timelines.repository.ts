@@ -21,15 +21,17 @@ export class TimelinesRepository {
 	 * Space 기반 타임라인 목록 조회 (세션 수 포함)
 	 */
 	async findManyTimelines(params: {
-		spaceId: string;
+		spaceIds?: string[];
 		skip: number;
 		take: number;
 		search?: string | null;
 	}) {
-		this.logger.debug(`타임라인 목록 조회: spaceId=${params.spaceId.slice(-8)}`);
+		this.logger.debug(
+			`타임라인 목록 조회: spaceIds=${params.spaceIds?.length ?? "all"}개`,
+		);
 
 		const where: Prisma.TimelineWhereInput = {
-			spaceId: params.spaceId,
+			...(params.spaceIds ? { spaceId: { in: params.spaceIds } } : {}),
 			removedAt: null,
 			...(params.search
 				? { name: { contains: params.search, mode: "insensitive" } }
@@ -58,11 +60,15 @@ export class TimelinesRepository {
 	/**
 	 * ID와 spaceId로 타임라인 단건 조회 (creator, space, 세션 수 포함)
 	 */
-	async findTimelineById(timelineId: string, spaceId: string) {
+	async findTimelineById(timelineId: string, spaceIds?: string[]) {
 		this.logger.debug(`타임라인 상세 조회: ${timelineId.slice(-8)}`);
 
 		return this.txHost.tx.timeline.findFirst({
-			where: { id: timelineId, spaceId, removedAt: null },
+			where: {
+				id: timelineId,
+				removedAt: null,
+				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+			},
 			include: {
 				creator: { select: { id: true, name: true } },
 				space: { select: { id: true } },
@@ -285,37 +291,39 @@ export class TimelinesRepository {
 	async findProgramById(sessionId: string, programId: string) {
 		this.logger.debug(`프로그램 상세 조회: ${programId.slice(-8)}`);
 
-		return this.txHost.tx.program.findFirst({
-			where: { id: programId, sessionId, removedAt: null },
-			include: {
-				programActivities: {
-					where: { removedAt: null },
-					orderBy: { order: "asc" },
-				},
-				routine: { select: { id: true, name: true, label: true } },
-				session: {
-					select: {
-						id: true,
-						name: true,
-						timeline: { select: { id: true, name: true } },
+		return this.txHost.tx.program
+			.findFirst({
+				where: { id: programId, sessionId, removedAt: null },
+				include: {
+					programActivities: {
+						where: { removedAt: null },
+						orderBy: { order: "asc" },
+					},
+					routine: { select: { id: true, name: true, label: true } },
+					session: {
+						select: {
+							id: true,
+							name: true,
+							timeline: { select: { id: true, name: true } },
+						},
 					},
 				},
-			},
-		}).then((program) => {
-			if (!program) {
-				return null;
-			}
+			})
+			.then((program) => {
+				if (!program) {
+					return null;
+				}
 
-			const { programActivities, ...rest } = program;
-			return {
-				...rest,
-				activityCount: programActivities.length,
-				previewExerciseNames: programActivities
-					.slice(0, 3)
-					.map((activity) => activity.exerciseName),
-				executionPlan: programActivities,
-			};
-		});
+				const { programActivities, ...rest } = program;
+				return {
+					...rest,
+					activityCount: programActivities.length,
+					previewExerciseNames: programActivities
+						.slice(0, 3)
+						.map((activity) => activity.exerciseName),
+					executionPlan: programActivities,
+				};
+			});
 	}
 
 	/**

@@ -1,6 +1,10 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { PUBLIC_ROUTE_KEY, SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
-import { BadRequestException, ExecutionContext, ForbiddenException } from "@nestjs/common";
+import {
+	BadRequestException,
+	ExecutionContext,
+	ForbiddenException,
+} from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { Test, TestingModule } from "@nestjs/testing";
 import { ClsService } from "nestjs-cls";
@@ -10,6 +14,24 @@ describe("SpaceAccessGuard", () => {
 	let guard: SpaceAccessGuard;
 	let mockReflector: jest.Mocked<Reflector>;
 	let mockClsService: { get: jest.Mock };
+	type MockTenant = {
+		id: string;
+		spaceId: string;
+		role: { name: string };
+		space?: {
+			id?: string;
+			classification?: {
+				category?: {
+					name?: string;
+				};
+			};
+		};
+	};
+	type MockUser = {
+		id: string;
+		email: string;
+		tenants: MockTenant[];
+	};
 
 	const createMockExecutionContext = (): ExecutionContext => {
 		const handler = jest.fn();
@@ -26,7 +48,7 @@ describe("SpaceAccessGuard", () => {
 		} as unknown as ExecutionContext;
 	};
 
-	const createMockUser = (overrides: any = {}) => ({
+	const createMockUser = (overrides: Partial<MockUser> = {}): MockUser => ({
 		id: "user-test-id",
 		email: "test@example.com",
 		tenants: [
@@ -44,7 +66,7 @@ describe("SpaceAccessGuard", () => {
 			get: jest.fn(),
 			getAllAndOverride: jest.fn(),
 			getAllAndMerge: jest.fn(),
-		} as any;
+		} as unknown as jest.Mocked<Reflector>;
 
 		mockClsService = {
 			get: jest.fn(),
@@ -159,6 +181,33 @@ describe("SpaceAccessGuard", () => {
 				expect(result).toBe(true);
 			});
 
+			it("tenant.space.id가 x-space-id와 일치하면 true를 반환해야 한다", () => {
+				// Given
+				mockReflector.getAllAndOverride.mockReturnValue(undefined);
+				const user = createMockUser({
+					tenants: [
+						{
+							id: "tenant-1",
+							spaceId: undefined,
+							space: { id: "space-001" },
+							role: { name: "VIEW" },
+						},
+					],
+				});
+				mockClsService.get.mockImplementation((key: string) => {
+					if (key === CONTEXT_KEYS.AUTH_USER) return user;
+					if (key === CONTEXT_KEYS.SPACE_ID) return "space-001";
+					return undefined;
+				});
+				const context = createMockExecutionContext();
+
+				// When
+				const result = guard.canActivate(context);
+
+				// Then
+				expect(result).toBe(true);
+			});
+
 			it("인증 + x-space-id + 해당 tenant가 없으면 ForbiddenException을 던져야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
@@ -179,7 +228,7 @@ describe("SpaceAccessGuard", () => {
 		});
 
 		describe("tenants가 비정상인 경우", () => {
-			it("인증 + x-space-id + tenants가 null이면 true를 반환해야 한다", () => {
+			it("인증 + x-space-id + tenants가 null이면 ForbiddenException을 던져야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser({ tenants: null });
@@ -190,14 +239,14 @@ describe("SpaceAccessGuard", () => {
 				});
 				const context = createMockExecutionContext();
 
-				// When
-				const result = guard.canActivate(context);
-
-				// Then
-				expect(result).toBe(true);
+				// When & Then
+				expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
+				expect(() => guard.canActivate(context)).toThrow(
+					"사용자에게 할당된 테넌트가 없습니다",
+				);
 			});
 
-			it("인증 + x-space-id + tenants가 undefined이면 true를 반환해야 한다", () => {
+			it("인증 + x-space-id + tenants가 undefined이면 ForbiddenException을 던져야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser({ tenants: undefined });
@@ -208,11 +257,11 @@ describe("SpaceAccessGuard", () => {
 				});
 				const context = createMockExecutionContext();
 
-				// When
-				const result = guard.canActivate(context);
-
-				// Then
-				expect(result).toBe(true);
+				// When & Then
+				expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
+				expect(() => guard.canActivate(context)).toThrow(
+					"사용자에게 할당된 테넌트가 없습니다",
+				);
 			});
 		});
 	});

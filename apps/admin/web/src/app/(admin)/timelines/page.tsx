@@ -6,10 +6,7 @@ import {
 	useDeleteTimeline,
 	useGetTimelines,
 } from "@cocrepo/api/core/timelines";
-import {
-	TimelineListPage,
-	type TimelineListPageTimeline,
-} from "@cocrepo/ui";
+import { TimelineListPage, type TimelineListPageTimeline } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -31,9 +28,8 @@ export default observer(function TimelinesPageRoute() {
 		skip: parseAsInteger.withDefault(0),
 		search: parseAsString.withDefault(""),
 	});
-	const { data: response, isLoading } = useGetTimelines(
-		getTimelineParams(queryStates),
-	);
+	const timelineParams = getTimelineParams(queryStates);
+	const { data: response, isLoading } = useGetTimelines(timelineParams);
 	const deleteMutation = useDeleteTimeline();
 	const timelines = (response?.data ?? []).map(mapTimelineRow);
 

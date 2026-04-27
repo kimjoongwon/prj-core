@@ -52,13 +52,13 @@ describe("UsersRepository", () => {
 	beforeEach(async () => {
 		mockTxHost = {
 			tx: {
-					user: {
-						findUnique: jest.fn(),
-						findMany: jest.fn(),
-						count: jest.fn(),
-					},
+				user: {
+					findUnique: jest.fn(),
+					findMany: jest.fn(),
+					count: jest.fn(),
 				},
-			};
+			},
+		};
 
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
@@ -191,7 +191,7 @@ describe("UsersRepository", () => {
 	});
 
 	describe("findManyBySpaceIds", () => {
-		it("scoped 목록 조회에서 spaceIds가 있으면 tenants include가 그 space만 조회한다", async () => {
+		it("scoped 목록 조회에서 spaceIds가 있으면 user 목록과 tenants include를 그 space로 제한한다", async () => {
 			mockTxHost.tx.user.findMany.mockResolvedValue([]);
 			mockTxHost.tx.user.count.mockResolvedValue(0);
 
@@ -203,8 +203,18 @@ describe("UsersRepository", () => {
 				spaceIds: ["space-001"],
 			});
 
+			const expectedWhere = {
+				removedAt: null,
+				tenants: {
+					some: {
+						spaceId: { in: ["space-001"] },
+						removedAt: null,
+					},
+				},
+			};
+
 			expect(mockTxHost.tx.user.findMany).toHaveBeenCalledWith({
-				where: { removedAt: null },
+				where: expectedWhere,
 				include: expect.objectContaining({
 					tenants: expect.objectContaining({
 						where: {
@@ -220,6 +230,54 @@ describe("UsersRepository", () => {
 				orderBy: [{ createdAt: "desc" }],
 				skip: 0,
 				take: 20,
+			});
+			expect(mockTxHost.tx.user.count).toHaveBeenCalledWith({
+				where: expectedWhere,
+			});
+		});
+
+		it("scoped 목록 조회에서 기존 tenants.some 조건과 spaceIds를 병합한다", async () => {
+			mockTxHost.tx.user.findMany.mockResolvedValue([]);
+			mockTxHost.tx.user.count.mockResolvedValue(0);
+
+			await repository.findManyBySpaceIds({
+				where: {
+					removedAt: null,
+					tenants: {
+						some: {
+							role: {
+								name: { in: ["MANAGER"] },
+							},
+						},
+					},
+				},
+				orderBy: [{ createdAt: "desc" }],
+				skip: 0,
+				take: 20,
+				spaceIds: ["space-001"],
+				includedRoleNames: ["MANAGER"],
+			});
+
+			const expectedWhere = {
+				removedAt: null,
+				tenants: {
+					some: {
+						role: {
+							name: { in: ["MANAGER"] },
+						},
+						spaceId: { in: ["space-001"] },
+						removedAt: null,
+					},
+				},
+			};
+
+			expect(mockTxHost.tx.user.findMany).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: expectedWhere,
+				}),
+			);
+			expect(mockTxHost.tx.user.count).toHaveBeenCalledWith({
+				where: expectedWhere,
 			});
 		});
 	});

@@ -31,6 +31,12 @@ Inquiry aggregate root의 Prisma 접근을 담당합니다. Inquiry 조회/저�
 2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
 3. 결과를 렌더링/반환/전파합니다.
 
+## Space Scope 계약
+
+- 상세 조회와 통계 집계 보조 메서드는 optional `spaceIds`를 받습니다.
+- `spaceIds`가 배열이면 `spaceId in spaceIds` 조건을 적용합니다.
+- `spaceIds`가 `undefined`이면 `FULL_ACCESS` 조회로 간주하고 Space 필터를 적용하지 않습니다.
+
 ## 실패 및 엣지 케이스
 
 - 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
@@ -47,6 +53,7 @@ Inquiry aggregate root의 Prisma 접근을 담당합니다. Inquiry 조회/저�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-26 | Inquiry 상세/통계 repository 조회가 optional `spaceIds` scope를 지원하도록 계약을 추가 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-11 | root-only inquiry repository로 이동하고 위치/역할 설명을 갱신 | codex |
 | 2026-03-13 | frontend 런타임 미사용 참여자 join write 보조 메서드를 제거 | codex |

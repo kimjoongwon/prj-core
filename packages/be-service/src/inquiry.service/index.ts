@@ -11,13 +11,13 @@ import {
 	type SentimentType,
 } from "@cocrepo/prisma";
 import { InquiriesRepository } from "@cocrepo/repository";
-import { Transactional } from "@nestjs-cls/transactional";
 import {
 	BadRequestException,
 	Injectable,
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
+import { Transactional } from "@nestjs-cls/transactional";
 
 /**
  * 상태 전이 규칙 (상태 머신)
@@ -202,9 +202,12 @@ export class InquiryService {
 	/**
 	 * ID로 상세 조회 (스레드, 메시지, 참여자 포함)
 	 */
-	async findByIdWithDetails(id: string): Promise<Inquiry> {
+	async findByIdWithDetails(id: string, spaceIds?: string[]): Promise<Inquiry> {
 		const inquiry =
-			await this.repository.findByIdWithThreadsAndMessagesAndParticipants(id);
+			await this.repository.findByIdWithThreadsAndMessagesAndParticipants(
+				id,
+				spaceIds,
+			);
 		if (!inquiry) {
 			throw new NotFoundException("문의를 찾을 수 없습니다");
 		}
@@ -230,8 +233,12 @@ export class InquiryService {
 		orderBy: Prisma.InquiryOrderByWithRelationInput[];
 		skip?: number;
 		take?: number;
+		spaceIds?: string[];
 	}): Promise<{ items: Inquiry[]; totalCount: number }> {
-		return this.repository.findMany(params);
+		return this.repository.findMany({
+			...params,
+			where: this.applySpaceScope(params.where, params.spaceIds),
+		});
 	}
 
 	// ============================================================================
@@ -258,8 +265,9 @@ export class InquiryService {
 
 	async getUpdateFormBootstrap(
 		inquiryId: string,
+		spaceIds?: string[],
 	): Promise<InquiryCreateUpdateFormBootstrap> {
-		const inquiry = await this.findById(inquiryId);
+		const inquiry = await this.findByIdWithDetails(inquiryId, spaceIds);
 
 		return {
 			mode: "UPDATE",
@@ -280,7 +288,9 @@ export class InquiryService {
 
 	fillFormWithAi(input: FillInquiryFormInput): FillInquiryFormResult {
 		const schemas = this.buildAiSchemas(input.mode);
-		const selectedSchema = schemas.find((schema) => schema.key === input.schemaKey);
+		const selectedSchema = schemas.find(
+			(schema) => schema.key === input.schemaKey,
+		);
 		if (!selectedSchema) {
 			throw new BadRequestException("유효하지 않은 AI 스키마 키입니다");
 		}
@@ -295,7 +305,9 @@ export class InquiryService {
 		const requestedPaths = Array.from(new Set(input.selectedPaths));
 
 		if (requestedPaths.length === 0) {
-			throw new BadRequestException("selectedPaths는 최소 1개 이상이어야 합니다");
+			throw new BadRequestException(
+				"selectedPaths는 최소 1개 이상이어야 합니다",
+			);
 		}
 
 		const fillablePaths = selectedSchema.paths.filter((path) => {
@@ -456,7 +468,9 @@ export class InquiryService {
 	}): Promise<InquiryMessage> {
 		const inquiry = await this.findById(params.inquiryId);
 		if (inquiry.status === "CLOSED") {
-			throw new BadRequestException("종료된 문의에는 메시지를 전송할 수 없습니다");
+			throw new BadRequestException(
+				"종료된 문의에는 메시지를 전송할 수 없습니다",
+			);
 		}
 
 		const thread = params.threadId
@@ -581,19 +595,35 @@ export class InquiryService {
 	/**
 	 * 상태별/카테고리별 통계
 	 */
-	async getStats(spaceId: string): Promise<InquiryStats> {
-		this.logger.debug(`문의 통계 조회: ${spaceId.slice(-8)}`);
+	async getStats(spaceIds?: string[]): Promise<InquiryStats> {
+		this.logger.debug(
+			`문의 통계 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
+		);
 
 		const [byStatus, byCategory, overdue] = await Promise.all([
-			this.repository.countByStatus(spaceId),
-			this.repository.countByCategory(spaceId),
-			this.repository.countOverdue(spaceId),
+			this.repository.countByStatus(spaceIds),
+			this.repository.countByCategory(spaceIds),
+			this.repository.countOverdue(spaceIds),
 		]);
 
 		return {
 			byStatus,
 			byCategory,
 			overdue,
+		};
+	}
+
+	private applySpaceScope(
+		where: Prisma.InquiryWhereInput,
+		spaceIds?: string[],
+	): Prisma.InquiryWhereInput {
+		if (spaceIds === undefined) {
+			return where;
+		}
+
+		return {
+			...where,
+			spaceId: { in: spaceIds },
 		};
 	}
 
@@ -835,10 +865,18 @@ export class InquiryService {
 		if (text.includes("상품") || text.includes("product")) {
 			return InquiryCategory.PRODUCT;
 		}
-		if (text.includes("계정") || text.includes("로그인") || text.includes("account")) {
+		if (
+			text.includes("계정") ||
+			text.includes("로그인") ||
+			text.includes("account")
+		) {
 			return InquiryCategory.ACCOUNT;
 		}
-		if (text.includes("오류") || text.includes("버그") || text.includes("technical")) {
+		if (
+			text.includes("오류") ||
+			text.includes("버그") ||
+			text.includes("technical")
+		) {
 			return InquiryCategory.TECHNICAL;
 		}
 		if (text.includes("불만") || text.includes("complaint")) {

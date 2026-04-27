@@ -3,12 +3,14 @@
 import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
 import { useDebouncedCallback } from "@cocrepo/hook";
 import { UserListPage } from "@cocrepo/ui";
-import { usePersistStore } from "@/stores/AppStoreProvider";
 import { observer } from "mobx-react-lite";
-import { parseAsInteger, parseAsString, useQueryState, useQueryStates } from "nuqs";
+import {
+	parseAsInteger,
+	parseAsString,
+	useQueryState,
+	useQueryStates,
+} from "nuqs";
 import { Suspense, useEffect, useState } from "react";
-
-const SEARCH_PLACEHOLDER = "이름, 이메일, 전화번호로 검색...";
 
 interface UsersQueryStates {
 	take: number;
@@ -33,8 +35,6 @@ function UsersPageContent() {
 		parseAsString.withDefault(""),
 	);
 	const [searchValue, setSearchValue] = useState(searchQuery);
-	const persistStore = usePersistStore();
-	const currentSpaceId = persistStore.spaceId ?? "all";
 	const usersParams = getUsersParams(queryStates, searchQuery);
 
 	useEffect(() => {
@@ -45,14 +45,7 @@ function UsersPageContent() {
 		void setSearchQuery(nextValue || null);
 	}, 300);
 
-	const { data: response, isLoading } = useGetUsers(
-		usersParams,
-		{
-			query: {
-				queryKey: ["/api/v1/users", usersParams, currentSpaceId],
-			},
-		},
-	);
+	const { data: response, isLoading } = useGetUsers(usersParams);
 
 	return (
 		<UserListPage

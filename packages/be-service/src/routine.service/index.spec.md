@@ -33,6 +33,12 @@ Routine aggregate 저장 전에 참조 Task/Exercise가 스케줄 가능한지 �
 - `task.exercise.videoFileId`가 없으면 `TASK_EXERCISE_NOT_SCHEDULABLE` 예외를 반환합니다.
 - 동일한 Task를 한 Routine 안에 중복 배치하지 않도록 현재 admin write contract에서 차단합니다.
 
+## Space Scope 규칙
+
+- 목록/상세 조회는 `SpaceContext.spaceIds`를 기준으로 repository에 조회 범위를 전달합니다.
+- `tenant.role`이 `FULL_ACCESS`이면 `spaceIds`가 `undefined`이므로 Space 필터 없이 전체 Routine을 조회합니다.
+- 일반 권한에서는 `INCLUDE_ANCESTORS`가 접근 가능 Space 목록을, `CURRENT`가 현재 선택 Space만 조회 범위로 사용합니다.
+
 ## 동작 흐름
 
 1. 입력(라우트/props/호출)을 수신합니다.
@@ -55,6 +61,7 @@ Routine aggregate 저장 전에 참조 Task/Exercise가 스케줄 가능한지 �
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-26 | Routine 조회가 FULL_ACCESS와 일반 권한의 Space scope를 구분하도록 규칙을 추가 | codex |
 | 2026-03-29 | Routine 저장 시 Task/Exercise schedulable 검증과 중복 Task 차단 규칙을 추가 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-13 | `routine.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |

@@ -33,13 +33,14 @@ export default observer(function InquiriesPageRoute() {
 		search: parseAsString.withDefault(""),
 		inquiryStatus: parseAsString.withDefault(""),
 	});
+	const inquiryParams = {
+		take: getNumberQueryValue(queryStates.take, 20),
+		skip: getNumberQueryValue(queryStates.skip, 0),
+		search: getSearchQueryValue(queryStates.search),
+		inquiryStatus: getInquiryStatusFilter(queryStates.inquiryStatus),
+	};
 	const { data: inquiriesResponse, isLoading: isLoadingInquiries } =
-		useGetInquiries({
-			take: getNumberQueryValue(queryStates.take, 20),
-			skip: getNumberQueryValue(queryStates.skip, 0),
-			search: getSearchQueryValue(queryStates.search),
-			inquiryStatus: getInquiryStatusFilter(queryStates.inquiryStatus),
-		});
+		useGetInquiries(inquiryParams);
 	const { data: statsResponse, isLoading: isLoadingStats } =
 		useGetInquiryStats();
 	const activeStatus =

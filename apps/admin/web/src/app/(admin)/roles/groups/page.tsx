@@ -1,10 +1,7 @@
 "use client";
 
 import { useGetGroups } from "@cocrepo/api/core/groups";
-import {
-	RoleGroupListPage,
-	type RoleGroupListPageGroup,
-} from "@cocrepo/ui";
+import { RoleGroupListPage, type RoleGroupListPageGroup } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -18,7 +15,8 @@ interface GroupData {
 
 const AdminRolesGroupsRoute = observer(() => {
 	const router = useRouter();
-	const { data: response, isLoading } = useGetGroups({ type: "Role" });
+	const groupParams = { type: "Role" as const };
+	const { data: response, isLoading } = useGetGroups(groupParams);
 
 	return (
 		<RoleGroupListPage

@@ -40,6 +40,12 @@ Program 목록/상세 조회의 read model 조합과 Program execution snapshot 
 - `replaceProgramActivities`는 Program의 `routineId` 변경 시 기존 snapshot을 전부 교체합니다.
 - `softDeleteProgram`은 Program과 하위 `ProgramActivity`를 함께 soft delete 합니다.
 
+## Timeline Space Scope 계약
+
+- `findManyTimelines`와 `findTimelineById`는 optional `spaceIds`를 받습니다.
+- `spaceIds`가 배열이면 `spaceId in spaceIds` 조건으로 root Timeline row를 제한합니다.
+- `spaceIds`가 `undefined`이면 `FULL_ACCESS` 조회로 간주하고 Space 필터를 적용하지 않습니다.
+
 ## 실패 및 엣지 케이스
 
 - 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
@@ -56,5 +62,6 @@ Program 목록/상세 조회의 read model 조합과 Program execution snapshot 
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-26 | Timeline 목록/상세 repository 조회가 optional `spaceIds` scope를 지원하도록 계약을 추가 | codex |
 | 2026-03-29 | Program summary/detail read model과 `ProgramActivity` 생성·교체·삭제 영속화 계약을 추가 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

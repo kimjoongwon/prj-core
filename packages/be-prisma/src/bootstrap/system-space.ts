@@ -9,6 +9,7 @@ import type {
 } from "../generated/client/client";
 import { SYSTEM_SPACE_ID } from "../reference-data/constants";
 import { syncReferenceData } from "../reference-data/sync-reference-data";
+import { systemAdminSeedData } from "./data/system-users";
 import { ensureSystemAdminUsers } from "./system-admins";
 
 const systemSpaceGroupNames = [
@@ -410,14 +411,33 @@ export async function createHierarchicalTenants(
 	prisma: PrismaClient,
 	systemSpaceId = SYSTEM_SPACE_ID,
 ): Promise<void> {
-	console.log("계층적 Tenant 생성 시작 (ROOT → BRANCH)...");
+	console.log("계층적 Tenant 생성 시작 (ROOT FULL_ACCESS → BRANCH MANAGE)...");
+
+	const manageRole = await prisma.role.findFirst({
+		where: {
+			name: "MANAGE",
+			removedAt: null,
+		},
+	});
+
+	if (!manageRole) {
+		throw new Error("MANAGE role is required before creating branch tenants.");
+	}
 
 	const rootTenants = await prisma.tenant.findMany({
-		where: { spaceId: systemSpaceId },
+		where: {
+			spaceId: systemSpaceId,
+			removedAt: null,
+			user: {
+				email: {
+					in: systemAdminSeedData.map((user) => user.email),
+				},
+			},
+		},
 	});
 
 	if (rootTenants.length === 0) {
-		console.log("ROOT Space에 tenant가 없어 스킵합니다.");
+		console.log("ROOT Space에 system admin tenant가 없어 스킵합니다.");
 		return;
 	}
 
@@ -437,24 +457,46 @@ export async function createHierarchicalTenants(
 	let createdCount = 0;
 	let skippedCount = 0;
 
-	// Mirror ROOT memberships into every BRANCH space so bootstrap environments
-	// start with an immediately navigable tenant hierarchy.
+	// System admins keep FULL_ACCESS only on ROOT. Branch memberships are MANAGE
+	// so selecting a branch x-space-id does not open global resource scope.
 	for (const rootTenant of rootTenants) {
 		for (const branchSpace of branchSpaces) {
-			const existing = await prisma.tenant.findFirst({
+			const existingTenants = await prisma.tenant.findMany({
 				where: {
 					userId: rootTenant.userId,
 					spaceId: branchSpace.id,
-					roleId: rootTenant.roleId,
+					removedAt: null,
+				},
+				select: {
+					id: true,
+					roleId: true,
 				},
 			});
 
-			if (!existing) {
+			if (existingTenants.length === 0) {
 				await prisma.tenant.create({
 					data: {
 						userId: rootTenant.userId,
 						spaceId: branchSpace.id,
-						roleId: rootTenant.roleId,
+						roleId: manageRole.id,
+					},
+				});
+				createdCount++;
+				continue;
+			}
+
+			const needsRoleUpdate = existingTenants.some(
+				(tenant) => tenant.roleId !== manageRole.id,
+			);
+			if (needsRoleUpdate) {
+				await prisma.tenant.updateMany({
+					where: {
+						id: {
+							in: existingTenants.map((tenant) => tenant.id),
+						},
+					},
+					data: {
+						roleId: manageRole.id,
 					},
 				});
 				createdCount++;
@@ -465,6 +507,6 @@ export async function createHierarchicalTenants(
 	}
 
 	console.log(
-		`계층적 Tenant 생성 완료! (생성: ${createdCount}개, 스킵: ${skippedCount}개)`,
+		`계층적 Tenant 생성 완료! (생성/정규화: ${createdCount}개, 스킵: ${skippedCount}개)`,
 	);
 }

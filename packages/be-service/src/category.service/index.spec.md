@@ -21,8 +21,8 @@
 
 | 메서드 | 파라미터 | 반환 | 설명 |
 |--------|----------|------|------|
-| `getAll` | `query: QueryCategoryDto` | `Promise<Category[]>` | 카테고리 목록 조회 (parent, children 포함) |
-| `getById` | `id: string` | `Promise<Category>` | ID로 카테고리 조회 (parent, children, roleClassifications 포함) |
+| `getAll` | `query: QueryCategoryDto, spaceIds?: string[]` | `Promise<Category[]>` | effective space scope 기반 카테고리 목록 조회 (parent, children 포함) |
+| `getById` | `id: string, spaceIds?: string[]` | `Promise<Category>` | effective space scope 기반 ID 카테고리 조회 (parent, children, roleClassifications 포함) |
 | `create` | `dto: CreateCategoryDto, spaceId: string` | `Promise<Category>` | 카테고리 생성 |
 | `update` | `id: string, dto: UpdateCategoryDto` | `Promise<Category>` | 카테고리 수정 |
 | `delete` | `id: string` | `Promise<Category>` | 카테고리 삭제 |
@@ -33,6 +33,7 @@
 - **parentId 검증**: 생성/수정 시 parentId가 있으면 존재 여부 확인
 - **순환 참조 방지**: parentId 변경 시 자기 자신 또는 하위 카테고리를 부모로 설정 불가
 - **삭제 제한**: 하위 카테고리가 있으면 삭제 거부
+- **조회 Space scope**: `spaceIds`가 `undefined`면 `FULL_ACCESS`로 간주해 전체 카테고리를 허용하고, 배열이면 DTO의 `spaceId` 필터보다 서버가 계산한 `spaceIds`를 우선 적용합니다.
 - 기본 타입: `CategoryTypes.Role`
 
 ## 에러 처리
@@ -48,7 +49,8 @@
 
 ## 권한 요구사항
 
-- Controller 레이어에서 Guard를 통해 권한 처리
+- Controller/Facade 레이어에서 Guard와 SpaceContext를 통해 현재 요청의 effective space scope를 전달합니다.
+- Service는 전달받은 `spaceIds`로 목록/상세 조회의 Space 경계를 최종 보정합니다.
 
 ## 구현 체크리스트
 
@@ -62,3 +64,4 @@
 |------|------|--------|
 | 2026-02-19 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-03-13 | `category.service.ts`와 sidecar spec을 폴더형 `index.ts`/`index.spec.md` 구조로 재배치 | codex |
+| 2026-04-25 | Category 목록/상세 조회에 effective space scope 필터 적용 규칙 추가 | codex |

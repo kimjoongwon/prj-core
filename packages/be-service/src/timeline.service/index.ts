@@ -5,17 +5,14 @@ import {
 	type RepeatCycleTypes,
 	SessionTypes,
 } from "@cocrepo/prisma";
-import {
-	RoutinesRepository,
-	TimelinesRepository,
-} from "@cocrepo/repository";
-import { Transactional } from "@nestjs-cls/transactional";
+import { RoutinesRepository, TimelinesRepository } from "@cocrepo/repository";
 import {
 	BadRequestException,
 	Injectable,
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
+import { Transactional } from "@nestjs-cls/transactional";
 
 interface CreateTimelineInput {
 	name: string;
@@ -95,14 +92,19 @@ export class TimelineService {
 	 * Space 기반 타임라인 목록 조회
 	 */
 	async findTimelines(params: {
-		spaceId: string;
 		skip: number;
 		take: number;
 		search?: string | null;
 	}) {
-		this.logger.debug(`타임라인 목록 조회: spaceId=${params.spaceId.slice(-8)}`);
+		const spaceIds = this.getAccessibleSpaceIds();
+		this.logger.debug(
+			`타임라인 목록 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
+		);
 
-		const [timelines, total] = await this.repository.findManyTimelines(params);
+		const [timelines, total] = await this.repository.findManyTimelines({
+			...params,
+			spaceIds,
+		});
 		return { timelines, total };
 	}
 
@@ -111,10 +113,13 @@ export class TimelineService {
 	 * - spaceId 기준으로 Space 격리 적용
 	 * - 없으면 NotFoundException 발생
 	 */
-	async findTimelineForSpace(timelineId: string, spaceId: string) {
+	async findTimelineForSpace(timelineId: string, spaceIds?: string[]) {
 		this.logger.debug(`타임라인 상세 조회: ${timelineId.slice(-8)}`);
 
-		const timeline = await this.repository.findTimelineById(timelineId, spaceId);
+		const timeline = await this.repository.findTimelineById(
+			timelineId,
+			spaceIds ?? this.getAccessibleSpaceIds(),
+		);
 		if (!timeline) {
 			throw new NotFoundException(TIMELINE_ERRORS.TIMELINE_NOT_FOUND);
 		}
@@ -159,12 +164,12 @@ export class TimelineService {
 	) {
 		this.logger.debug(`타임라인 수정: ${timelineId.slice(-8)}`);
 
-		const timeline = await this.findTimelineForSpace(timelineId, spaceId);
+		const timeline = await this.findTimelineForSpace(timelineId, [spaceId]);
 
 		if (input.name && input.name !== timeline.name) {
 			const duplicateCount = await this.repository.countTimelinesWithName(
 				input.name,
-				spaceId,
+				timeline.spaceId,
 				timelineId,
 			);
 			if (duplicateCount > 0) {
@@ -174,7 +179,8 @@ export class TimelineService {
 
 		const updateData: { name?: string; description?: string | null } = {};
 		if (input.name !== undefined) updateData.name = input.name;
-		if (input.description !== undefined) updateData.description = input.description;
+		if (input.description !== undefined)
+			updateData.description = input.description;
 
 		return this.repository.updateTimeline(timelineId, updateData);
 	}
@@ -183,10 +189,13 @@ export class TimelineService {
 	 * Space 소유권 확인 후 타임라인 소프트 삭제
 	 * - 세션이 있으면 삭제 불가
 	 */
-	async deleteTimelineFromSpace(timelineId: string, spaceId: string): Promise<void> {
+	async deleteTimelineFromSpace(
+		timelineId: string,
+		spaceId: string,
+	): Promise<void> {
 		this.logger.debug(`타임라인 삭제: ${timelineId.slice(-8)}`);
 
-		const timeline = await this.findTimelineForSpace(timelineId, spaceId);
+		const timeline = await this.findTimelineForSpace(timelineId, [spaceId]);
 
 		if (timeline._count.sessions > 0) {
 			throw new BadRequestException(TIMELINE_ERRORS.TIMELINE_HAS_SESSIONS);
@@ -222,7 +231,10 @@ export class TimelineService {
 	async findSessionInTimeline(timelineId: string, sessionId: string) {
 		this.logger.debug(`세션 상세 조회: ${sessionId.slice(-8)}`);
 
-		const session = await this.repository.findSessionById(timelineId, sessionId);
+		const session = await this.repository.findSessionById(
+			timelineId,
+			sessionId,
+		);
 		if (!session) {
 			throw new NotFoundException(TIMELINE_ERRORS.SESSION_NOT_FOUND);
 		}
@@ -234,7 +246,9 @@ export class TimelineService {
 	 * - 세션 유형별 필드 유효성 검증
 	 */
 	async createSessionInTimeline(timelineId: string, input: CreateSessionInput) {
-		this.logger.debug(`세션 생성: timelineId=${timelineId.slice(-8)}, type=${input.type}`);
+		this.logger.debug(
+			`세션 생성: timelineId=${timelineId.slice(-8)}, type=${input.type}`,
+		);
 
 		this.validateSessionTypeConstraints(input);
 
@@ -245,7 +259,8 @@ export class TimelineService {
 			description: input.description ?? null,
 			startDateTime: input.startDateTime ?? null,
 			endDateTime: input.endDateTime ?? null,
-			recurringDayOfWeek: (input.recurringDayOfWeek as RecurringDayOfWeek) ?? null,
+			recurringDayOfWeek:
+				(input.recurringDayOfWeek as RecurringDayOfWeek) ?? null,
 			repeatCycleType: (input.repeatCycleType as RepeatCycleTypes) ?? null,
 		});
 	}
@@ -276,7 +291,8 @@ export class TimelineService {
 		} = {};
 
 		if (input.name !== undefined) updateData.name = input.name;
-		if (input.description !== undefined) updateData.description = input.description;
+		if (input.description !== undefined)
+			updateData.description = input.description;
 
 		// 유형 변경 시 이전 유형 관련 필드 초기화
 		if (input.type !== undefined && input.type !== existing.type) {
@@ -291,7 +307,8 @@ export class TimelineService {
 		if (input.startDateTime !== undefined) {
 			updateData.startDateTime = input.startDateTime;
 		}
-		if (input.endDateTime !== undefined) updateData.endDateTime = input.endDateTime;
+		if (input.endDateTime !== undefined)
+			updateData.endDateTime = input.endDateTime;
 		if (input.recurringDayOfWeek !== undefined) {
 			updateData.recurringDayOfWeek =
 				(input.recurringDayOfWeek as RecurringDayOfWeek) ?? null;
@@ -335,7 +352,10 @@ export class TimelineService {
 	 * 타임라인 내 세션 소프트 삭제
 	 * - 프로그램이 있으면 삭제 불가
 	 */
-	async deleteSessionFromTimeline(timelineId: string, sessionId: string): Promise<void> {
+	async deleteSessionFromTimeline(
+		timelineId: string,
+		sessionId: string,
+	): Promise<void> {
 		this.logger.debug(`세션 삭제: ${sessionId.slice(-8)}`);
 
 		const session = await this.findSessionInTimeline(timelineId, sessionId);
@@ -431,7 +451,10 @@ export class TimelineService {
 	) {
 		this.logger.debug(`프로그램 수정: ${programId.slice(-8)}`);
 
-		const existingProgram = await this.findProgramInSession(sessionId, programId);
+		const existingProgram = await this.findProgramInSession(
+			sessionId,
+			programId,
+		);
 
 		const hasRoutineChanged =
 			input.routineId !== undefined &&
@@ -444,7 +467,9 @@ export class TimelineService {
 				programId,
 			);
 			if (duplicateCount > 0) {
-				throw new BadRequestException(TIMELINE_ERRORS.PROGRAM_ROUTINE_DUPLICATED);
+				throw new BadRequestException(
+					TIMELINE_ERRORS.PROGRAM_ROUTINE_DUPLICATED,
+				);
 			}
 		}
 
@@ -459,7 +484,8 @@ export class TimelineService {
 		} = {};
 
 		if (input.name !== undefined) updateData.name = input.name;
-		if (input.instructorId !== undefined) updateData.instructorId = input.instructorId;
+		if (input.instructorId !== undefined)
+			updateData.instructorId = input.instructorId;
 		if (input.capacity !== undefined) updateData.capacity = input.capacity;
 		if (input.level !== undefined) updateData.level = input.level;
 
@@ -487,7 +513,10 @@ export class TimelineService {
 	 * 세션 내 프로그램 소프트 삭제
 	 */
 	@Transactional()
-	async deleteProgramFromSession(sessionId: string, programId: string): Promise<void> {
+	async deleteProgramFromSession(
+		sessionId: string,
+		programId: string,
+	): Promise<void> {
 		this.logger.debug(`프로그램 삭제: ${programId.slice(-8)}`);
 
 		await this.findProgramInSession(sessionId, programId);
@@ -512,8 +541,13 @@ export class TimelineService {
 		recurringDayOfWeek?: string | null;
 		repeatCycleType?: string | null;
 	}): void {
-		const { type, startDateTime, endDateTime, recurringDayOfWeek, repeatCycleType } =
-			input;
+		const {
+			type,
+			startDateTime,
+			endDateTime,
+			recurringDayOfWeek,
+			repeatCycleType,
+		} = input;
 
 		if (!type) return;
 

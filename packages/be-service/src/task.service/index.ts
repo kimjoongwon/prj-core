@@ -1,4 +1,5 @@
 import { EXERCISE_ERRORS } from "@cocrepo/constant";
+import { SpaceContext } from "@cocrepo/context";
 import type {
 	CreateExerciseDto,
 	SpaceScope,
@@ -7,7 +8,6 @@ import type {
 import { SpaceScope as SpaceScopeEnum } from "@cocrepo/dto";
 import { Exercise, Routine, Task } from "@cocrepo/entity";
 import { TasksRepository } from "@cocrepo/repository";
-import { Transactional } from "@nestjs-cls/transactional";
 import {
 	ConflictException,
 	ForbiddenException,
@@ -15,7 +15,7 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
-import { SpaceContext } from "@cocrepo/context";
+import { Transactional } from "@nestjs-cls/transactional";
 
 @Injectable()
 export class TaskService {
@@ -34,10 +34,7 @@ export class TaskService {
 		search?: string;
 	}): Promise<{ tasks: Task[]; total: number }> {
 		const { spaceId, spaceScope, skip, take, search } = params;
-		const spaceIds =
-			spaceScope === SpaceScopeEnum.INCLUDE_ANCESTORS
-				? this.spaceContext.spaceIds
-				: [spaceId];
+		const spaceIds = this.resolveReadableSpaceIds(spaceScope, spaceId);
 
 		const [tasks, total] = await this.tasksRepository.findManyTasks({
 			spaceIds,
@@ -54,10 +51,7 @@ export class TaskService {
 		spaceId: string,
 		spaceScope: SpaceScope = SpaceScopeEnum.INCLUDE_ANCESTORS,
 	): Promise<Task> {
-		const spaceIds =
-			spaceScope === SpaceScopeEnum.INCLUDE_ANCESTORS
-				? this.spaceContext.spaceIds
-				: [spaceId];
+		const spaceIds = this.resolveReadableSpaceIds(spaceScope, spaceId);
 
 		const task = await this.tasksRepository.findTaskById(taskId, spaceIds);
 		if (!task) {
@@ -153,5 +147,18 @@ export class TaskService {
 
 		await this.tasksRepository.softDeleteExerciseByTaskId(taskId);
 		await this.tasksRepository.softDeleteTaskById(taskId);
+	}
+
+	private resolveReadableSpaceIds(
+		spaceScope: SpaceScope,
+		spaceId: string,
+	): string[] | undefined {
+		if (this.spaceContext.spaceIds === undefined) {
+			return undefined;
+		}
+
+		return spaceScope === SpaceScopeEnum.INCLUDE_ANCESTORS
+			? this.spaceContext.spaceIds
+			: [spaceId];
 	}
 }

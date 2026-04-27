@@ -40,7 +40,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 클라이언트 렌더 | `useGetCategories({ type: "Role" })` | 역할 카테고리 목록 조회 |
+| 클라이언트 렌더 | `useGetCategories({ type: "Role" })` | admin layout의 Space bootstrap/access gate 아래에서 역할 카테고리 목록 조회. Space 전환은 hard reload로 query cache를 초기화 |
 
 ## 이벤트 핸들러
 
@@ -59,6 +59,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-27 | 역할 카테고리 목록의 수동 Space queryKey 분리를 제거하고 admin layout bootstrap/access gate와 hard reload 기반 cache 초기화 정책으로 갱신 | codex |
+| 2026-04-26 | 목록 query가 Space bootstrap 완료 후 실행되고 현재 spaceId별로 캐시를 분리하도록 반영 | codex |
 | 2026-03-31 | 목록 조회를 `useGetCategories({ type: "Role" })` 기반 Orval 훅 사용으로 갱신 | codex |
 | 2026-03-29 | 구현이 테이블 중심으로 유지되는 현재 구조에 맞춰 reusable target을 `master/table`로 보정 | codex |
 | 2026-03-22 | 목록 wrapper를 범용 `Surface` 기준으로 문서화 | codex |

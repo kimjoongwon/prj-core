@@ -6,10 +6,7 @@ import {
 	useDeleteRoutine,
 	useGetRoutines,
 } from "@cocrepo/api/core/routines";
-import {
-	RoutineListPage,
-	type RoutineListPageRoutine,
-} from "@cocrepo/ui";
+import { RoutineListPage, type RoutineListPageRoutine } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -33,9 +30,8 @@ export default observer(function RoutinesPageRoute() {
 		search: parseAsString.withDefault(""),
 		spaceScope: parseAsString.withDefault(""),
 	});
-	const { data: response, isLoading } = useGetRoutines(
-		getRoutineParams(queryStates),
-	);
+	const routineParams = getRoutineParams(queryStates);
+	const { data: response, isLoading } = useGetRoutines(routineParams);
 	const deleteMutation = useDeleteRoutine();
 	const routines = (response?.data ?? []).map(mapRoutineRow);
 

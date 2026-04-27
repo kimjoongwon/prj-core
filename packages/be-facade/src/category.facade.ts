@@ -19,7 +19,10 @@ export class CategoryFacade {
 	}
 
 	getCategories(query: QueryCategoryDto): Promise<Category[]> {
-		return this.categoriesService.getAll(query);
+		return this.categoriesService.getAll(
+			query,
+			this.spaceContext.spaceIds,
+		);
 	}
 
 	getById(id: string): Promise<Category> {
@@ -27,7 +30,10 @@ export class CategoryFacade {
 	}
 
 	getCategoryById(id: string): Promise<Category> {
-		return this.categoriesService.getById(id);
+		return this.categoriesService.getById(
+			id,
+			this.spaceContext.spaceIds,
+		);
 	}
 
 	create(dto: CreateCategoryDto): Promise<Category> {

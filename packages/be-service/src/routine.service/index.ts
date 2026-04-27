@@ -1,4 +1,5 @@
 import { ROUTINE_ERRORS } from "@cocrepo/constant";
+import { SpaceContext } from "@cocrepo/context";
 import { SpaceScope } from "@cocrepo/dto";
 import { Routine } from "@cocrepo/entity";
 import { RoutinesRepository, TasksRepository } from "@cocrepo/repository";
@@ -10,7 +11,6 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
-import { SpaceContext } from "@cocrepo/context";
 
 @Injectable()
 export class RoutineService {
@@ -44,13 +44,7 @@ export class RoutineService {
 		} = params;
 		this.logger.debug(`루틴 목록 조회: spaceScope=${spaceScope}`);
 
-		const spaceId = this.spaceContext.spaceId;
-		const spaceIds =
-			spaceScope === SpaceScope.INCLUDE_ANCESTORS
-				? this.spaceContext.spaceIds
-				: spaceId
-					? [spaceId]
-					: [];
+		const spaceIds = this.resolveReadableSpaceIds(spaceScope);
 
 		const [routines, total] = await this.routinesRepository.findManyRoutines({
 			spaceIds,
@@ -72,13 +66,7 @@ export class RoutineService {
 	): Promise<Routine> {
 		this.logger.debug(`루틴 단건 조회: ${routineId.slice(-8)}`);
 
-		const spaceId = this.spaceContext.spaceId;
-		const spaceIds =
-			spaceScope === SpaceScope.INCLUDE_ANCESTORS
-				? this.spaceContext.spaceIds
-				: spaceId
-					? [spaceId]
-					: [];
+		const spaceIds = this.resolveReadableSpaceIds(spaceScope);
 
 		const routine = await this.routinesRepository.findRoutineById(
 			routineId,
@@ -205,6 +193,20 @@ export class RoutineService {
 				);
 			}
 		}
+	}
+
+	private resolveReadableSpaceIds(
+		spaceScope: SpaceScope,
+	): string[] | undefined {
+		if (this.spaceContext.spaceIds === undefined) {
+			return undefined;
+		}
+
+		if (spaceScope === SpaceScope.INCLUDE_ANCESTORS) {
+			return this.spaceContext.spaceIds;
+		}
+
+		return this.spaceContext.spaceId ? [this.spaceContext.spaceId] : [];
 	}
 
 	private normalizeRoutineActivities(

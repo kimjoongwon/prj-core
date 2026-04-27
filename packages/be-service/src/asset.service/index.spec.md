@@ -30,7 +30,8 @@
 ## 비즈니스 규칙
 
 - `X-Space-ID`가 없으면 요청을 거부합니다.
-- 목록/상세는 현재 선택된 Space의 활성 에셋만 노출합니다.
+- 목록/상세는 `SpaceContext.spaceIds`를 기준으로 노출 범위를 결정합니다.
+- `tenant.role`이 `FULL_ACCESS`이면 Space 필터 없이 전체 활성 에셋을 조회하고, 일반 권한에서는 접근 가능 Space ID 목록으로 제한합니다.
 - 업로드는 현재 Space 안의 활성 폴더에만 허용하고, MIME 타입으로 에셋 kind를 결정합니다.
 - multipart 업로드에서 비 ASCII 파일명이 latin1 모지바케로 들어오면 UTF-8 파일명으로 복원한 뒤 저장/응답합니다.
 - 업로드 성공 시 object storage에 파일을 저장하고 storageKey/checksum을 계산해 상태를 `READY`로 저장합니다.
@@ -42,6 +43,7 @@
 
 | 일자       | 내용                                                                                  | 작성자 |
 | ---------- | ------------------------------------------------------------------------------------- | ------ |
+| 2026-04-26 | Asset 목록/상세 조회가 FULL_ACCESS 전체 조회와 일반 권한 Space scope 제한을 구분하도록 갱신 | codex |
 | 2026-04-08 | multipart `originalname` 모지바케를 UTF-8 파일명으로 복원하는 정규화 규칙을 추가      | codex  |
 | 2026-03-15 | `AwsService` 의존을 제거하고 공용 `ObjectStorageService` 기반 업로드/삭제 흐름으로 전환 | codex  |
 | 2026-03-15 | assets 남은 범위를 위해 multipart upload 처리와 S3 업로드/메타데이터 생성 흐름을 추가 | codex  |

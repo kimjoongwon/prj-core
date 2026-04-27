@@ -92,7 +92,7 @@ export class InquiriesController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		const where = query.toPrismaWhere({ spaceId });
+		const where = query.toPrismaWhere();
 		const orderBy = query.toPrismaOrderBy();
 		return this.inquiriesService.listInquiries({
 			where,
@@ -123,7 +123,7 @@ export class InquiriesController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		const stats = await this.inquiriesService.getInquiryStats(spaceId);
+		const stats = await this.inquiriesService.getInquiryStats();
 		return stats;
 	}
 

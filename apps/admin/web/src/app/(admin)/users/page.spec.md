@@ -44,13 +44,13 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 클라이언트 렌더 | `useGetUsers({ take, skip, name })` + `queryKey: ["/api/v1/users", params, currentSpaceId]` | 이용자 목록과 stats 조회, 현재 space 선택 기준으로 캐시 분리 |
+| 클라이언트 렌더 | `useGetUsers({ take, skip, name })` | admin layout의 Space bootstrap/access gate 아래에서 이용자 목록과 stats 조회. Space 전환은 hard reload로 query cache를 초기화 |
 
 ## 이벤트 핸들러
 
 | 이벤트 | 동작 |
 |--------|------|
-| Space 변경 | `persistStore.spaceId` 변경 시 `queryKey`가 바뀌어 목록 조회가 space별로 재요청됨. 이전 space 데이터는 전환 시 placeholder로 노출되지 않음 | 
+| Space 변경 | Header Space selector가 `setCurrentSpace` 성공 후 `persistStore.setSpace(...)`를 반영하고 `window.location.reload()`로 in-memory query cache를 초기화 |
 | 검색어 입력 | `search` URL 파라미터 갱신 후 재조회 |
 | 페이지 변경 | `skip` 상태 갱신 후 재조회 |
 | 페이지 크기 변경 | `take` 상태 갱신 후 재조회 |
@@ -66,6 +66,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-27 | 이용자 목록의 수동 Space queryKey 분리를 제거하고 admin layout bootstrap/access gate와 hard reload 기반 cache 초기화 정책으로 갱신 | codex |
+| 2026-04-25 | Space bootstrap/selection 완료 전에는 users query를 열지 않도록 `enabled` gate를 추가 | codex |
 | 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
 | 2026-04-22 | page-level `SuspenseQuery` 지양 정책에 맞춰 목록 로딩 책임을 `useGetUsers`의 loading/fetching 상태로 재정의 | codex |
 | 2026-04-16 | admin 사용자 목록 Space 전환 시 이전 space의 임시 데이터 표시를 막기 위해 placeholderData 제거 | codex |

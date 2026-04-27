@@ -100,7 +100,8 @@
 
 ## 비즈니스 규칙
 
-- 모든 문의는 Space 격리 (X-Space-ID 헤더 필수)
+- 모든 문의 read API는 X-Space-ID 헤더가 필수이며, 실제 Space scope 적용은 `InquiryFacade`와 `InquiryService`가 `SpaceContext.spaceIds` 기준으로 수행한다.
+- `FULL_ACCESS` tenant는 전체 Inquiry를 조회/집계하고, 일반 tenant는 접근 가능 Space 목록으로 제한한다.
 - 메시지/참여자 변경은 child service 직접 호출이 아니라 Inquiry root application service를 통해서만 처리한다.
 - CLOSED 상태 문의는 메시지 전송 및 상태 변경 제약을 따른다.
 - Create/Update 화면은 bootstrap 계약(defaultObject/options/ui/fieldMeta/aiSchemas)을 따른다.
@@ -110,6 +111,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-26 | 문의 목록/통계 controller가 Space scope 필터를 Facade/Service로 위임하는 계약을 반영 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-02-25 | 초기 생성 | orch-requirement |
 | 2026-03-01 | 문의 Form Bootstrap(`/form/create`, `/:inquiryId/form/update`) 및 AI Fill(`/form/ai-fill`) 반영, draft endpoint 제거 | codex |

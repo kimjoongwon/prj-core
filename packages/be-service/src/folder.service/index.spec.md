@@ -27,7 +27,8 @@
 ## 비즈니스 규칙
 
 - `X-Space-ID`가 없으면 요청을 거부합니다.
-- 목록은 현재 선택된 Space의 활성 폴더만 조회합니다.
+- 목록은 `SpaceContext.spaceIds`를 기준으로 조회 범위를 결정합니다.
+- `tenant.role`이 `FULL_ACCESS`이면 Space 필터 없이 전체 활성 폴더를 조회하고, 일반 권한에서는 접근 가능 Space ID 목록으로 제한합니다.
 - 폴더 생성 시 `parentFolderId`가 있으면 같은 Space의 활성 폴더인지 검증합니다.
 - 폴더 경로(`path`)는 `부모 path + name` 규칙으로 계산하고 중복되면 거부합니다.
 - 루트 폴더는 같은 Space의 루트 형제 기준으로, 하위 폴더는 같은 부모 기준으로 다음 `sortOrder`를 부여합니다.
@@ -39,6 +40,7 @@
 
 | 일자       | 내용                                                                                                         | 작성자 |
 | ---------- | ------------------------------------------------------------------------------------------------------------ | ------ |
+| 2026-04-26 | Folder 목록 조회가 FULL_ACCESS 전체 조회와 일반 권한 Space scope 제한을 구분하도록 갱신                       | codex  |
 | 2026-03-15 | assets 남은 폴더 관리 범위를 위해 `updateFolder`와 `deleteFolder`를 추가하고 path 재작성/삭제 가드를 정의    | codex  |
 | 2026-03-15 | assets 폴더 생성 최소 흐름을 위해 parent 검증, path 중복 검사, sortOrder 계산을 포함한 `createFolder`를 추가 | codex  |
 | 2026-03-15 | admin assets 폴더 선택 목록 복구를 위한 FolderService 신규 추가                                              | codex  |
