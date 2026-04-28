@@ -21,9 +21,6 @@ const leftInputs: InputConfig[] = [
 		type: "search",
 		id: "search",
 		placeholder: "이름으로 검색...",
-		props: {
-			placement: "column-header",
-		},
 	},
 ];
 

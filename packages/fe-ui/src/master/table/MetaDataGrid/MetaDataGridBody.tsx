@@ -1,18 +1,15 @@
 "use client";
 
 import type {
-	InputConfig,
 	MetaDataGridColumnConfig,
 	MetaDataGridConfig,
 	MetaDataGridState,
 } from "@cocrepo/type";
 import type { ColumnDef } from "@tanstack/react-table";
 import { observer } from "mobx-react-lite";
-import type { ReactNode } from "react";
 import type { Key } from "../../../display/data-display/DataGrid";
 import { DataGrid } from "../../../display/data-display/DataGrid";
 import { getDataGridRowKey } from "../../../display/data-display/DataGrid/DataGrid";
-import { InputRenderer } from "./InputRenderer";
 
 interface MetaDataGridBodyProps<T extends object> {
 	config: MetaDataGridConfig<T>;
@@ -21,106 +18,16 @@ interface MetaDataGridBodyProps<T extends object> {
 	isLoading?: boolean;
 }
 
-interface MetaDataGridColumnHeaderProps {
-	field: string;
-	label: ReactNode;
-	filter?: InputConfig;
-	state: MetaDataGridState;
-}
-
-const MetaDataGridColumnHeader = observer(function MetaDataGridColumnHeader({
-	field,
-	label,
-	filter,
-	state,
-}: MetaDataGridColumnHeaderProps) {
-	if (!filter) {
-		return <>{label}</>;
-	}
-
-	const queryKey = filter.props?.queryKey ?? field;
-	const filterConfig: InputConfig = {
-		...filter,
-		props: {
-			...filter.props,
-			queryKey,
-			placement: "column-header",
-		},
-	};
-
-	return (
-		<div className="flex min-w-0 flex-col gap-2 py-1">
-			<div className="min-w-0 truncate text-xs font-semibold uppercase tracking-wide text-default-500">
-				{label}
-			</div>
-			<InputRenderer config={filterConfig} state={state} />
-		</div>
-	);
-});
-
-function isColumnHeaderInput(input: InputConfig) {
-	return (
-		input.props?.placement === "column-header" &&
-		(input.type === "search" || input.type === "select")
-	);
-}
-
-function resolveColumnFilter(
-	field: string,
-	index: number,
-	filter: InputConfig | undefined,
-	headerInputs: InputConfig[],
-) {
-	if (filter) {
-		return filter;
-	}
-
-	const exactInput = headerInputs.find(
-		(input) => (input.props?.queryKey ?? input.id) === field,
-	);
-	if (exactInput) {
-		return exactInput;
-	}
-
-	return index === 0 ? headerInputs[0] : undefined;
-}
-
 function toColumnDef<TData, TValue = unknown>(
 	config: MetaDataGridColumnConfig<TData, TValue>,
-	state: MetaDataGridState,
-	headerInputs: InputConfig[],
-	index: number,
 ): ColumnDef<TData, TValue> {
-	const { field, label, isRequired, align, filter, ...columnDefProps } = config;
+	const { field, label, isRequired, align, ...columnDefProps } = config;
 
 	const accessorKey =
 		"accessorKey" in columnDefProps
 			? (columnDefProps.accessorKey as string)
 			: (field as string);
-
-	const headerLabel = (
-		"header" in columnDefProps && typeof columnDefProps.header !== "function"
-			? columnDefProps.header
-			: label
-	) as ReactNode;
-	const fallbackHeader =
-		"header" in columnDefProps ? columnDefProps.header : label;
-	const resolvedFilter = resolveColumnFilter(
-		String(field),
-		index,
-		filter,
-		headerInputs,
-	);
-	const header = resolvedFilter ? (
-		<MetaDataGridColumnHeader
-			field={String(field)}
-			label={headerLabel}
-			filter={resolvedFilter}
-			state={state}
-		/>
-	) : (
-		fallbackHeader
-	);
+	const header = "header" in columnDefProps ? columnDefProps.header : label;
 
 	return {
 		id: String(field),
@@ -138,12 +45,8 @@ function toColumnDef<TData, TValue = unknown>(
 
 function toColumnDefs<TData>(
 	configs: MetaDataGridColumnConfig<TData, unknown>[],
-	state: MetaDataGridState,
-	headerInputs: InputConfig[],
 ): ColumnDef<TData, unknown>[] {
-	return configs.map((config, index) =>
-		toColumnDef(config, state, headerInputs, index),
-	);
+	return configs.map((config) => toColumnDef(config));
 }
 
 /**
@@ -157,15 +60,7 @@ export const MetaDataGridBody = observer(
 		isLoading,
 	}: MetaDataGridBodyProps<T>) => {
 		// MetaDataGridColumnConfig를 ColumnDef로 변환
-		const headerInputs = [
-			...(config.leftInputs ?? []),
-			...(config.rightInputs ?? []),
-		].filter(isColumnHeaderInput);
-		const columns = toColumnDefs(
-			config.columns,
-			state,
-			headerInputs,
-		) as ColumnDef<T, unknown>[];
+		const columns = toColumnDefs(config.columns) as ColumnDef<T, unknown>[];
 		const idCounts = (rows as (T & { id: Key })[]).reduce(
 			(counts, row) => {
 				const id = String(row.id ?? "row");

@@ -73,7 +73,6 @@ MetaDataGridConfig 설정 객체, MetaDataGridState 상태 객체, 서버 render
 | 행 선택 | 체크박스 선택 시 | MetaDataGridActionBar 하단 고정 표시 |
 | 검색/필터 | text filter Enter 또는 discrete filter 선택 시 | 주입된 state.query.setValues로 page-owned query state 갱신 |
 | 페이지 변경 | 페이지네이션 클릭 시 | 주입된 state.query.setValues로 skip 상태 갱신 |
-| 컬럼 헤더 필터 | `column.filter` 또는 `placement: "column-header"` input 제공 시 | 컬럼 헤더 라벨 아래 input/select 렌더링 |
 
 ## 의존성
 
@@ -145,8 +144,8 @@ interface MetaDataGridProps<T> {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-28 | 컬럼 헤더 필터 계약을 제거하고 검색/필터 입력을 toolbar 렌더링으로 정리 | codex |
 | 2026-04-25 | MetaDataGrid 사용처가 useLocalObservable 기반 MetaDataGridStateModel을 넘기도록 계약 보강 | codex |
-| 2026-04-25 | 컬럼 헤더 아래 filter input/select 렌더링 계약을 추가 | codex |
 | 2026-04-25 | rows/totalCount/isLoading을 config에서 분리해 server render props로 전달하도록 변경 | codex |
 | 2026-04-25 | query/selection interaction state를 `MetaDataGridState` prop으로 분리하고 text 검색 Enter commit 정책을 반영 | codex |
 | 2026-04-24 | MetaDataGrid가 page-owned query state props를 소비하도록 정리 | codex |

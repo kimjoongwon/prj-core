@@ -24,9 +24,6 @@ const leftInputs: InputConfig[] = [
 		type: "search",
 		id: "email",
 		placeholder: "이메일로 검색...",
-		props: {
-			placement: "column-header",
-		},
 	},
 ];
 

@@ -28,7 +28,7 @@ select filter 값을 `MetaDataGridState`의 query slice에서 읽고, 선택 변
 1. `state.query.values[queryKey]`를 읽어 selectedKeys를 계산합니다.
 2. 사용자가 option을 선택하면 `state.query.setValues`로 필터 값과 `skip: 0`을 commit합니다.
 3. 필터 option은 InputConfig props의 options를 사용합니다.
-4. `placement: "column-header"`이면 컬럼 헤더 안에 맞는 compact height로 렌더링합니다.
+4. MetaDataGrid toolbar에 맞는 기본 높이로 렌더링합니다.
 
 ## 실패 및 엣지 케이스
 
@@ -46,7 +46,7 @@ select filter 값을 `MetaDataGridState`의 query slice에서 읽고, 선택 변
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-25 | column-header placement compact 렌더링을 추가 | codex |
+| 2026-04-28 | 컬럼 헤더 compact 렌더링 분기를 제거하고 toolbar 렌더링으로 정리 | codex |
 | 2026-04-25 | SelectInput이 MetaDataGridState query를 소비하고 선택 변경 시 첫 페이지로 reset하도록 변경 | codex |
 | 2026-04-24 | MetaDataGrid가 page-owned query state props를 소비하도록 정리 | codex |
 | 2026-03-23 | nuqs bridge 의존을 제거하고 page-owned query state props를 소비하도록 정리 | codex |

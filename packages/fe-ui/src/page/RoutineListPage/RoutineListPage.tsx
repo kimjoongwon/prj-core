@@ -30,9 +30,6 @@ const leftInputs: InputConfig[] = [
 		type: "search",
 		id: "search",
 		placeholder: "루틴명으로 검색...",
-		props: {
-			placement: "column-header",
-		},
 	},
 	{
 		type: "select",

@@ -33,9 +33,6 @@ const leftInputs: InputConfig[] = [
 		type: "search",
 		id: "search",
 		placeholder: "제목 또는 고객 ID로 검색",
-		props: {
-			placement: "column-header",
-		},
 	},
 	{
 		type: "select",

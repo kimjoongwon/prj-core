@@ -45,7 +45,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-25 | column-header placement input은 상단 toolbar에서 제외하도록 변경 | codex |
+| 2026-04-28 | 모든 leftInputs/rightInputs를 상단 toolbar에서 렌더링하도록 정리 | codex |
 | 2026-04-25 | MetaDataGridHeader가 MetaDataGridState를 받아 input renderer로 전달하도록 변경 | codex |
 | 2026-04-24 | MetaDataGrid가 page-owned query state props를 소비하도록 정리 | codex |
 | 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |

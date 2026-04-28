@@ -32,7 +32,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-25 | MetaDataGridColumnConfig.filter와 InputConfig placement 계약을 추가 | codex |
+| 2026-04-28 | MetaDataGridColumnConfig filter와 InputConfig 배치 계약을 제거해 grid 입력을 toolbar 렌더링으로 정리 | codex |
 | 2026-04-25 | MetaDataGridConfig에서 server render data를 분리하고 rows/totalCount/isLoading props 경계를 반영 | codex |
 | 2026-04-25 | MetaDataGrid interaction state 계약을 추가하고 query state를 config에서 분리 | codex |
 | 2026-04-24 | MetaDataGrid query state 공통 타입 계약을 추가 | codex |

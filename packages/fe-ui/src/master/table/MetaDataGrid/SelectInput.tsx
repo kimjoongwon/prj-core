@@ -17,7 +17,6 @@ export const SelectInput = observer(({
 	state,
 }: SelectInputProps) => {
 	const queryKey = config.props?.queryKey ?? config.id;
-	const isColumnHeader = config.props?.placement === "column-header";
 	const value =
 		typeof state.query.values[queryKey] === "string"
 			? (state.query.values[queryKey] as string)
@@ -37,8 +36,8 @@ export const SelectInput = observer(({
 				});
 			}}
 			classNames={{
-				base: isColumnHeader ? "w-full min-w-[120px]" : "min-w-[160px] max-w-xs",
-				trigger: isColumnHeader ? "h-8 min-h-8" : "h-10",
+				base: "min-w-[160px] max-w-xs",
+				trigger: "h-10",
 			}}
 			aria-label={config.label ?? config.id}
 		>

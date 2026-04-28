@@ -22,9 +22,6 @@ const leftInputs: InputConfig[] = [
 		type: "search",
 		id: "search",
 		placeholder: "시설명, 사업자등록번호로 검색...",
-		props: {
-			placement: "column-header",
-		},
 	},
 ];
 
@@ -136,11 +133,11 @@ export const SpaceListPage = observer(({
 						leftInputs,
 						emptyMessage: "등록된 공간이 없습니다.",
 					}}
-	rows={filteredRows}
-	totalCount={totalCount}
-	isLoading={false}
-	state={gridState}
-/>
+					rows={filteredRows}
+					totalCount={totalCount}
+					isLoading={false}
+					state={gridState}
+				/>
 			</Surface>
 		</div>
 	);

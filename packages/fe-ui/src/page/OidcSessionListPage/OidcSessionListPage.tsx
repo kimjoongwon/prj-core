@@ -40,9 +40,6 @@ const leftInputs: InputConfig[] = [
 		type: "search",
 		id: "accountId",
 		placeholder: "Account ID 검색...",
-		props: {
-			placement: "column-header",
-		},
 	},
 ];
 

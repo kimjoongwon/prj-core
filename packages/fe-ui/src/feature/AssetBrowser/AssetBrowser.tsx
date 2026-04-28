@@ -34,9 +34,6 @@ const searchInputConfig: InputConfig = {
 	type: "search",
 	id: "search",
 	placeholder: "파일명 검색...",
-	props: {
-		placement: "column-header",
-	},
 };
 
 const kindInputConfig: InputConfig = {

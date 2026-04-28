@@ -91,8 +91,6 @@ export interface MetaDataGridColumnConfig<TData, TValue = unknown>
 	/** 정렬 방향 */
 	align?: "left" | "center" | "right";
 
-	/** 컬럼 헤더 아래에 표시할 필터 입력 */
-	filter?: InputConfig;
 }
 
 // ============================================
@@ -150,7 +148,6 @@ export interface InputConfig {
 export interface InputTypeProps {
 	// Search
 	queryKey?: string; // 기본값: id
-	placement?: "toolbar" | "column-header";
 
 	// Select / MultiSelect
 	options?: SelectOption[];

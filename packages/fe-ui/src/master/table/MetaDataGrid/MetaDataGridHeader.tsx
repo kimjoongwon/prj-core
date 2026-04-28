@@ -16,12 +16,8 @@ interface MetaDataGridHeaderProps<T> {
  */
 export const MetaDataGridHeader = observer(
 	<T,>({ config, state }: MetaDataGridHeaderProps<T>) => {
-		const leftInputs = (config.leftInputs ?? []).filter(
-			(input) => input.props?.placement !== "column-header",
-		);
-		const rightInputs = (config.rightInputs ?? []).filter(
-			(input) => input.props?.placement !== "column-header",
-		);
+		const leftInputs = config.leftInputs ?? [];
+		const rightInputs = config.rightInputs ?? [];
 
 		if (leftInputs.length === 0 && rightInputs.length === 0) {
 			return null;

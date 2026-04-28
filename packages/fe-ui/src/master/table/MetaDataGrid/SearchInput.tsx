@@ -19,7 +19,6 @@ export const SearchInput = observer(({
 	state,
 }: SearchInputProps) => {
 	const queryKey = config.props?.queryKey ?? config.id;
-	const isColumnHeader = config.props?.placement === "column-header";
 	const query =
 		typeof state.query.values[queryKey] === "string"
 			? (state.query.values[queryKey] as string)
@@ -66,9 +65,8 @@ export const SearchInput = observer(({
 			onKeyDown={handleKeyDown}
 			startContent={<Search size={16} className="text-default-400" />}
 			classNames={{
-				base: isColumnHeader ? "w-full min-w-[120px]" : "max-w-xs",
-				inputWrapper: isColumnHeader ? "h-8 min-h-8" : "h-10",
-				input: isColumnHeader ? "text-xs" : undefined,
+				base: "max-w-xs",
+				inputWrapper: "h-10",
 			}}
 			isClearable
 			onClear={handleClear}
