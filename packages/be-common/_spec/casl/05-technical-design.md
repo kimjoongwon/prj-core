@@ -233,7 +233,8 @@ export class RolesGuard implements CanActivate {
 @Injectable()
 export class CaslAbilityFactory {
   constructor(
-    private readonly grantsRepository: GrantsRepository,
+    private readonly rolePoliciesRepository: RolePoliciesRepository,
+    private readonly userPoliciesRepository: UserPoliciesRepository,
     private readonly cls: ClsService,
   ) {}
 
@@ -250,23 +251,27 @@ export class CaslAbilityFactory {
 
     const roleId = currentTenant.roleId;
 
-    // 2. GrantsRepository로 Role 기반 Grant 조회 (Grant → Ability 추출)
-    const roleGrants = await this.grantsRepository.findActiveByRoleIds([roleId]);
-    const roleAbilities = roleGrants
-      .filter(grant => grant.ability)
-      .map(grant => ({
-        ...grant.ability!,           // Ability 데이터 spread
-        priority: grant.priority,    // Grant의 priority를 Ability에 복사
-      }));
+    // 2. RolePolicy로 PolicyAbility 조회 (Policy → Ability 추출)
+    const rolePolicies = await this.rolePoliciesRepository.findActiveByRoleIdsInSpace([roleId], spaceId);
+    const roleAbilities = rolePolicies.flatMap(rolePolicy =>
+      (rolePolicy.policy?.policyAbilities ?? [])
+        .filter(policyAbility => policyAbility.ability)
+        .map(policyAbility => ({
+          ...policyAbility.ability!,   // Ability 데이터 spread
+          priority: rolePolicy.priority,
+        })),
+    );
 
-    // 3. GrantsRepository로 User 예외 Grant 조회 (Grant → Ability 추출)
-    const userGrants = await this.grantsRepository.findActiveByUserId(user.id);
-    const userAbilities = userGrants
-      .filter(grant => grant.ability)
-      .map(grant => ({
-        ...grant.ability!,           // Ability 데이터 spread
-        priority: grant.priority,    // Grant의 priority를 Ability에 복사
-      }));
+    // 3. UserPolicy로 User 예외 PolicyAbility 조회 (Policy → Ability 추출)
+    const userPolicies = await this.userPoliciesRepository.findActiveByUserIdInSpace(user.id, spaceId);
+    const userAbilities = userPolicies.flatMap(userPolicy =>
+      (userPolicy.policy?.policyAbilities ?? [])
+        .filter(policyAbility => policyAbility.ability)
+        .map(policyAbility => ({
+          ...policyAbility.ability!,   // Ability 데이터 spread
+          priority: userPolicy.priority,
+        })),
+    );
 
     // 4. Ability 병합 (subject+action 키 기준, priority 높은 것 우선)
     const mergedAbilities = this.mergeAbilities(roleAbilities, userAbilities);
@@ -340,9 +345,9 @@ private mergeAbilities(roleAbilities, userAbilities): AbilityWithPriority[] {
 | L9-LOG-016 | 연결된 테넌트 확인 | 테넌트가 연결된 역할은 삭제 불가 | roles.service.ts |
 | L9-LOG-017 | 역할 이름 중복 체크 | 역할 이름(name)은 고유해야 함 | roles.service.ts |
 | L9-LOG-018 | Ability 이름 고유 | Ability name은 고유해야 함 | abilities.service.ts |
-| L9-LOG-019 | Grant 중복 방지 | 동일 (granteeType, granteeId, abilityId) 조합 불가 | grants.service.ts |
-| L9-LOG-020 | Grant 우선순위 | priority가 높을수록 우선 적용 (User > Role) | casl-ability.factory.ts |
-| L9-LOG-021 | Grant에서 Ability 추출 | GrantsRepository가 Grant + Ability join 반환 | casl-ability.factory.ts |
+| L9-LOG-019 | PolicyAbility 중복 방지 | 동일 (policyId, abilityId) 조합 불가 | policy.service.ts |
+| L9-LOG-020 | Policy assignment 우선순위 | priority가 높을수록 우선 적용, 동률이면 UserPolicy 우선 | casl-ability.factory.ts |
+| L9-LOG-021 | Policy에서 Ability 추출 | RolePolicy/UserPolicy가 PolicyAbility + Ability join 반환 | casl-ability.factory.ts |
 
 ---
 

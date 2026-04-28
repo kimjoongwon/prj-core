@@ -178,6 +178,7 @@ export type SpaceWhereInput = {
   associations?: Prisma.SpaceAssociationListRelationFilter
   classification?: Prisma.XOR<Prisma.SpaceClassificationNullableScalarRelationFilter, Prisma.SpaceClassificationWhereInput> | null
   tenants?: Prisma.TenantListRelationFilter
+  tenantAccessRequests?: Prisma.TenantAccessRequestListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
   groups?: Prisma.GroupListRelationFilter
   contents?: Prisma.ContentListRelationFilter
@@ -185,6 +186,7 @@ export type SpaceWhereInput = {
   tasks?: Prisma.TaskListRelationFilter
   safeWallets?: Prisma.SafeWalletListRelationFilter
   routines?: Prisma.RoutineListRelationFilter
+  policies?: Prisma.PolicyListRelationFilter
   folders?: Prisma.FolderListRelationFilter
   assets?: Prisma.AssetListRelationFilter
   albums?: Prisma.AlbumListRelationFilter
@@ -202,6 +204,7 @@ export type SpaceOrderByWithRelationInput = {
   associations?: Prisma.SpaceAssociationOrderByRelationAggregateInput
   classification?: Prisma.SpaceClassificationOrderByWithRelationInput
   tenants?: Prisma.TenantOrderByRelationAggregateInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestOrderByRelationAggregateInput
   categories?: Prisma.CategoryOrderByRelationAggregateInput
   groups?: Prisma.GroupOrderByRelationAggregateInput
   contents?: Prisma.ContentOrderByRelationAggregateInput
@@ -209,6 +212,7 @@ export type SpaceOrderByWithRelationInput = {
   tasks?: Prisma.TaskOrderByRelationAggregateInput
   safeWallets?: Prisma.SafeWalletOrderByRelationAggregateInput
   routines?: Prisma.RoutineOrderByRelationAggregateInput
+  policies?: Prisma.PolicyOrderByRelationAggregateInput
   folders?: Prisma.FolderOrderByRelationAggregateInput
   assets?: Prisma.AssetOrderByRelationAggregateInput
   albums?: Prisma.AlbumOrderByRelationAggregateInput
@@ -229,6 +233,7 @@ export type SpaceWhereUniqueInput = Prisma.AtLeast<{
   associations?: Prisma.SpaceAssociationListRelationFilter
   classification?: Prisma.XOR<Prisma.SpaceClassificationNullableScalarRelationFilter, Prisma.SpaceClassificationWhereInput> | null
   tenants?: Prisma.TenantListRelationFilter
+  tenantAccessRequests?: Prisma.TenantAccessRequestListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
   groups?: Prisma.GroupListRelationFilter
   contents?: Prisma.ContentListRelationFilter
@@ -236,6 +241,7 @@ export type SpaceWhereUniqueInput = Prisma.AtLeast<{
   tasks?: Prisma.TaskListRelationFilter
   safeWallets?: Prisma.SafeWalletListRelationFilter
   routines?: Prisma.RoutineListRelationFilter
+  policies?: Prisma.PolicyListRelationFilter
   folders?: Prisma.FolderListRelationFilter
   assets?: Prisma.AssetListRelationFilter
   albums?: Prisma.AlbumListRelationFilter
@@ -273,6 +279,7 @@ export type SpaceCreateInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
@@ -280,6 +287,7 @@ export type SpaceCreateInput = {
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -297,6 +305,7 @@ export type SpaceUncheckedCreateInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
@@ -304,6 +313,7 @@ export type SpaceUncheckedCreateInput = {
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -321,6 +331,7 @@ export type SpaceUpdateInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
@@ -328,6 +339,7 @@ export type SpaceUpdateInput = {
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -345,6 +357,7 @@ export type SpaceUncheckedUpdateInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
@@ -352,6 +365,7 @@ export type SpaceUncheckedUpdateInput = {
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -405,6 +419,20 @@ export type SpaceMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
+}
+
+export type SpaceCreateNestedOneWithoutPoliciesInput = {
+  create?: Prisma.XOR<Prisma.SpaceCreateWithoutPoliciesInput, Prisma.SpaceUncheckedCreateWithoutPoliciesInput>
+  connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutPoliciesInput
+  connect?: Prisma.SpaceWhereUniqueInput
+}
+
+export type SpaceUpdateOneRequiredWithoutPoliciesNestedInput = {
+  create?: Prisma.XOR<Prisma.SpaceCreateWithoutPoliciesInput, Prisma.SpaceUncheckedCreateWithoutPoliciesInput>
+  connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutPoliciesInput
+  upsert?: Prisma.SpaceUpsertWithoutPoliciesInput
+  connect?: Prisma.SpaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceUpdateToOneWithWhereWithoutPoliciesInput, Prisma.SpaceUpdateWithoutPoliciesInput>, Prisma.SpaceUncheckedUpdateWithoutPoliciesInput>
 }
 
 export type SpaceCreateNestedOneWithoutAlbumsInput = {
@@ -533,6 +561,20 @@ export type SpaceUpdateOneRequiredWithoutGroundNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceUpdateToOneWithWhereWithoutGroundInput, Prisma.SpaceUpdateWithoutGroundInput>, Prisma.SpaceUncheckedUpdateWithoutGroundInput>
 }
 
+export type SpaceCreateNestedOneWithoutTenantAccessRequestsInput = {
+  create?: Prisma.XOR<Prisma.SpaceCreateWithoutTenantAccessRequestsInput, Prisma.SpaceUncheckedCreateWithoutTenantAccessRequestsInput>
+  connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutTenantAccessRequestsInput
+  connect?: Prisma.SpaceWhereUniqueInput
+}
+
+export type SpaceUpdateOneRequiredWithoutTenantAccessRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.SpaceCreateWithoutTenantAccessRequestsInput, Prisma.SpaceUncheckedCreateWithoutTenantAccessRequestsInput>
+  connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutTenantAccessRequestsInput
+  upsert?: Prisma.SpaceUpsertWithoutTenantAccessRequestsInput
+  connect?: Prisma.SpaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceUpdateToOneWithWhereWithoutTenantAccessRequestsInput, Prisma.SpaceUpdateWithoutTenantAccessRequestsInput>, Prisma.SpaceUncheckedUpdateWithoutTenantAccessRequestsInput>
+}
+
 export type SpaceCreateNestedOneWithoutTenantsInput = {
   create?: Prisma.XOR<Prisma.SpaceCreateWithoutTenantsInput, Prisma.SpaceUncheckedCreateWithoutTenantsInput>
   connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutTenantsInput
@@ -645,6 +687,122 @@ export type SpaceUpdateOneRequiredWithoutSafeWalletsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceUpdateToOneWithWhereWithoutSafeWalletsInput, Prisma.SpaceUpdateWithoutSafeWalletsInput>, Prisma.SpaceUncheckedUpdateWithoutSafeWalletsInput>
 }
 
+export type SpaceCreateWithoutPoliciesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
+  associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
+  classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
+  groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
+  contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
+  timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
+  routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
+  assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
+  albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
+  albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
+  derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+}
+
+export type SpaceUncheckedCreateWithoutPoliciesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
+  associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
+  classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
+  timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
+  routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
+  albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
+  albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
+  derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+}
+
+export type SpaceCreateOrConnectWithoutPoliciesInput = {
+  where: Prisma.SpaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.SpaceCreateWithoutPoliciesInput, Prisma.SpaceUncheckedCreateWithoutPoliciesInput>
+}
+
+export type SpaceUpsertWithoutPoliciesInput = {
+  update: Prisma.XOR<Prisma.SpaceUpdateWithoutPoliciesInput, Prisma.SpaceUncheckedUpdateWithoutPoliciesInput>
+  create: Prisma.XOR<Prisma.SpaceCreateWithoutPoliciesInput, Prisma.SpaceUncheckedCreateWithoutPoliciesInput>
+  where?: Prisma.SpaceWhereInput
+}
+
+export type SpaceUpdateToOneWithWhereWithoutPoliciesInput = {
+  where?: Prisma.SpaceWhereInput
+  data: Prisma.XOR<Prisma.SpaceUpdateWithoutPoliciesInput, Prisma.SpaceUncheckedUpdateWithoutPoliciesInput>
+}
+
+export type SpaceUpdateWithoutPoliciesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
+  associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
+  classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
+  timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
+  routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
+  albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
+  albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
+  derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+}
+
+export type SpaceUncheckedUpdateWithoutPoliciesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
+  associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
+  classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
+  timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
+  routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
+  albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
+  albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
+  derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+}
+
 export type SpaceCreateWithoutAlbumsInput = {
   id?: string
   createdAt?: Date | string
@@ -654,6 +812,7 @@ export type SpaceCreateWithoutAlbumsInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
@@ -661,6 +820,7 @@ export type SpaceCreateWithoutAlbumsInput = {
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
@@ -677,6 +837,7 @@ export type SpaceUncheckedCreateWithoutAlbumsInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
@@ -684,6 +845,7 @@ export type SpaceUncheckedCreateWithoutAlbumsInput = {
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
@@ -716,6 +878,7 @@ export type SpaceUpdateWithoutAlbumsInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
@@ -723,6 +886,7 @@ export type SpaceUpdateWithoutAlbumsInput = {
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
@@ -739,6 +903,7 @@ export type SpaceUncheckedUpdateWithoutAlbumsInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
@@ -746,6 +911,7 @@ export type SpaceUncheckedUpdateWithoutAlbumsInput = {
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
@@ -762,6 +928,7 @@ export type SpaceCreateWithoutAlbumEntriesInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
@@ -769,6 +936,7 @@ export type SpaceCreateWithoutAlbumEntriesInput = {
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -785,6 +953,7 @@ export type SpaceUncheckedCreateWithoutAlbumEntriesInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
@@ -792,6 +961,7 @@ export type SpaceUncheckedCreateWithoutAlbumEntriesInput = {
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -824,6 +994,7 @@ export type SpaceUpdateWithoutAlbumEntriesInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
@@ -831,6 +1002,7 @@ export type SpaceUpdateWithoutAlbumEntriesInput = {
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -847,6 +1019,7 @@ export type SpaceUncheckedUpdateWithoutAlbumEntriesInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
@@ -854,6 +1027,7 @@ export type SpaceUncheckedUpdateWithoutAlbumEntriesInput = {
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -870,6 +1044,7 @@ export type SpaceCreateWithoutAssetsInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
@@ -877,6 +1052,7 @@ export type SpaceCreateWithoutAssetsInput = {
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
@@ -893,6 +1069,7 @@ export type SpaceUncheckedCreateWithoutAssetsInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
@@ -900,6 +1077,7 @@ export type SpaceUncheckedCreateWithoutAssetsInput = {
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
@@ -932,6 +1110,7 @@ export type SpaceUpdateWithoutAssetsInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
@@ -939,6 +1118,7 @@ export type SpaceUpdateWithoutAssetsInput = {
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
@@ -955,6 +1135,7 @@ export type SpaceUncheckedUpdateWithoutAssetsInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
@@ -962,6 +1143,7 @@ export type SpaceUncheckedUpdateWithoutAssetsInput = {
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
@@ -978,6 +1160,7 @@ export type SpaceCreateWithoutDerivativesInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
@@ -985,6 +1168,7 @@ export type SpaceCreateWithoutDerivativesInput = {
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -1001,6 +1185,7 @@ export type SpaceUncheckedCreateWithoutDerivativesInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
@@ -1008,6 +1193,7 @@ export type SpaceUncheckedCreateWithoutDerivativesInput = {
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -1040,6 +1226,7 @@ export type SpaceUpdateWithoutDerivativesInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
@@ -1047,6 +1234,7 @@ export type SpaceUpdateWithoutDerivativesInput = {
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -1063,6 +1251,7 @@ export type SpaceUncheckedUpdateWithoutDerivativesInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1070,6 +1259,7 @@ export type SpaceUncheckedUpdateWithoutDerivativesInput = {
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1086,6 +1276,7 @@ export type SpaceCreateWithoutFoldersInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
@@ -1093,6 +1284,7 @@ export type SpaceCreateWithoutFoldersInput = {
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
@@ -1109,6 +1301,7 @@ export type SpaceUncheckedCreateWithoutFoldersInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
@@ -1116,6 +1309,7 @@ export type SpaceUncheckedCreateWithoutFoldersInput = {
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
@@ -1148,6 +1342,7 @@ export type SpaceUpdateWithoutFoldersInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
@@ -1155,6 +1350,7 @@ export type SpaceUpdateWithoutFoldersInput = {
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
@@ -1171,6 +1367,7 @@ export type SpaceUncheckedUpdateWithoutFoldersInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1178,6 +1375,7 @@ export type SpaceUncheckedUpdateWithoutFoldersInput = {
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1194,12 +1392,14 @@ export type SpaceCreateWithoutContentsInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -1217,12 +1417,14 @@ export type SpaceUncheckedCreateWithoutContentsInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -1256,12 +1458,14 @@ export type SpaceUpdateWithoutContentsInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -1279,12 +1483,14 @@ export type SpaceUncheckedUpdateWithoutContentsInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1301,6 +1507,7 @@ export type SpaceCreateWithoutClassificationInput = {
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
@@ -1308,6 +1515,7 @@ export type SpaceCreateWithoutClassificationInput = {
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -1324,6 +1532,7 @@ export type SpaceUncheckedCreateWithoutClassificationInput = {
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
@@ -1331,6 +1540,7 @@ export type SpaceUncheckedCreateWithoutClassificationInput = {
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -1363,6 +1573,7 @@ export type SpaceUpdateWithoutClassificationInput = {
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
@@ -1370,6 +1581,7 @@ export type SpaceUpdateWithoutClassificationInput = {
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -1386,6 +1598,7 @@ export type SpaceUncheckedUpdateWithoutClassificationInput = {
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1393,6 +1606,7 @@ export type SpaceUncheckedUpdateWithoutClassificationInput = {
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1409,6 +1623,7 @@ export type SpaceCreateWithoutAssociationsInput = {
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
@@ -1416,6 +1631,7 @@ export type SpaceCreateWithoutAssociationsInput = {
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -1432,6 +1648,7 @@ export type SpaceUncheckedCreateWithoutAssociationsInput = {
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
@@ -1439,6 +1656,7 @@ export type SpaceUncheckedCreateWithoutAssociationsInput = {
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -1471,6 +1689,7 @@ export type SpaceUpdateWithoutAssociationsInput = {
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
@@ -1478,6 +1697,7 @@ export type SpaceUpdateWithoutAssociationsInput = {
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -1494,6 +1714,7 @@ export type SpaceUncheckedUpdateWithoutAssociationsInput = {
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1501,6 +1722,7 @@ export type SpaceUncheckedUpdateWithoutAssociationsInput = {
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1517,6 +1739,7 @@ export type SpaceCreateWithoutGroundInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
@@ -1524,6 +1747,7 @@ export type SpaceCreateWithoutGroundInput = {
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -1540,6 +1764,7 @@ export type SpaceUncheckedCreateWithoutGroundInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
@@ -1547,6 +1772,7 @@ export type SpaceUncheckedCreateWithoutGroundInput = {
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -1579,6 +1805,7 @@ export type SpaceUpdateWithoutGroundInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
@@ -1586,6 +1813,7 @@ export type SpaceUpdateWithoutGroundInput = {
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -1602,6 +1830,7 @@ export type SpaceUncheckedUpdateWithoutGroundInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1609,6 +1838,123 @@ export type SpaceUncheckedUpdateWithoutGroundInput = {
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
+  folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
+  albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
+  albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
+  derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+}
+
+export type SpaceCreateWithoutTenantAccessRequestsInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
+  associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
+  classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
+  groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
+  contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
+  timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
+  routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
+  folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
+  assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
+  albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
+  albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
+  derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+}
+
+export type SpaceUncheckedCreateWithoutTenantAccessRequestsInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
+  associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
+  classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
+  timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
+  routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
+  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
+  albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
+  albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
+  derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+}
+
+export type SpaceCreateOrConnectWithoutTenantAccessRequestsInput = {
+  where: Prisma.SpaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.SpaceCreateWithoutTenantAccessRequestsInput, Prisma.SpaceUncheckedCreateWithoutTenantAccessRequestsInput>
+}
+
+export type SpaceUpsertWithoutTenantAccessRequestsInput = {
+  update: Prisma.XOR<Prisma.SpaceUpdateWithoutTenantAccessRequestsInput, Prisma.SpaceUncheckedUpdateWithoutTenantAccessRequestsInput>
+  create: Prisma.XOR<Prisma.SpaceCreateWithoutTenantAccessRequestsInput, Prisma.SpaceUncheckedCreateWithoutTenantAccessRequestsInput>
+  where?: Prisma.SpaceWhereInput
+}
+
+export type SpaceUpdateToOneWithWhereWithoutTenantAccessRequestsInput = {
+  where?: Prisma.SpaceWhereInput
+  data: Prisma.XOR<Prisma.SpaceUpdateWithoutTenantAccessRequestsInput, Prisma.SpaceUncheckedUpdateWithoutTenantAccessRequestsInput>
+}
+
+export type SpaceUpdateWithoutTenantAccessRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
+  associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
+  classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
+  timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
+  routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
+  folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
+  albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
+  albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
+  derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+}
+
+export type SpaceUncheckedUpdateWithoutTenantAccessRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
+  associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
+  classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
+  timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
+  routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1625,6 +1971,7 @@ export type SpaceCreateWithoutTenantsInput = {
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
@@ -1632,6 +1979,7 @@ export type SpaceCreateWithoutTenantsInput = {
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -1648,6 +1996,7 @@ export type SpaceUncheckedCreateWithoutTenantsInput = {
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
@@ -1655,6 +2004,7 @@ export type SpaceUncheckedCreateWithoutTenantsInput = {
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -1687,6 +2037,7 @@ export type SpaceUpdateWithoutTenantsInput = {
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
@@ -1694,6 +2045,7 @@ export type SpaceUpdateWithoutTenantsInput = {
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -1710,6 +2062,7 @@ export type SpaceUncheckedUpdateWithoutTenantsInput = {
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1717,6 +2070,7 @@ export type SpaceUncheckedUpdateWithoutTenantsInput = {
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1734,6 +2088,7 @@ export type SpaceCreateWithoutInquiriesInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
@@ -1741,6 +2096,7 @@ export type SpaceCreateWithoutInquiriesInput = {
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -1757,6 +2113,7 @@ export type SpaceUncheckedCreateWithoutInquiriesInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
@@ -1764,6 +2121,7 @@ export type SpaceUncheckedCreateWithoutInquiriesInput = {
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -1796,6 +2154,7 @@ export type SpaceUpdateWithoutInquiriesInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
@@ -1803,6 +2162,7 @@ export type SpaceUpdateWithoutInquiriesInput = {
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -1819,6 +2179,7 @@ export type SpaceUncheckedUpdateWithoutInquiriesInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1826,6 +2187,7 @@ export type SpaceUncheckedUpdateWithoutInquiriesInput = {
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1842,12 +2204,14 @@ export type SpaceCreateWithoutRoutinesInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -1865,12 +2229,14 @@ export type SpaceUncheckedCreateWithoutRoutinesInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -1904,12 +2270,14 @@ export type SpaceUpdateWithoutRoutinesInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -1927,12 +2295,14 @@ export type SpaceUncheckedUpdateWithoutRoutinesInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1950,12 +2320,14 @@ export type SpaceCreateWithoutTasksInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -1973,12 +2345,14 @@ export type SpaceUncheckedCreateWithoutTasksInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -2012,12 +2386,14 @@ export type SpaceUpdateWithoutTasksInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -2035,12 +2411,14 @@ export type SpaceUncheckedUpdateWithoutTasksInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2058,12 +2436,14 @@ export type SpaceCreateWithoutTimelinesInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -2081,12 +2461,14 @@ export type SpaceUncheckedCreateWithoutTimelinesInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -2120,12 +2502,14 @@ export type SpaceUpdateWithoutTimelinesInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -2143,12 +2527,14 @@ export type SpaceUncheckedUpdateWithoutTimelinesInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2166,12 +2552,14 @@ export type SpaceCreateWithoutCategoriesInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -2189,12 +2577,14 @@ export type SpaceUncheckedCreateWithoutCategoriesInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -2228,12 +2618,14 @@ export type SpaceUpdateWithoutCategoriesInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -2251,12 +2643,14 @@ export type SpaceUncheckedUpdateWithoutCategoriesInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2274,12 +2668,14 @@ export type SpaceCreateWithoutGroupsInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -2297,12 +2693,14 @@ export type SpaceUncheckedCreateWithoutGroupsInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -2336,12 +2734,14 @@ export type SpaceUpdateWithoutGroupsInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -2359,12 +2759,14 @@ export type SpaceUncheckedUpdateWithoutGroupsInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2382,12 +2784,14 @@ export type SpaceCreateWithoutSafeWalletsInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
@@ -2405,12 +2809,14 @@ export type SpaceUncheckedCreateWithoutSafeWalletsInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
@@ -2444,12 +2850,14 @@ export type SpaceUpdateWithoutSafeWalletsInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
@@ -2467,12 +2875,14 @@ export type SpaceUncheckedUpdateWithoutSafeWalletsInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2489,6 +2899,7 @@ export type SpaceUncheckedUpdateWithoutSafeWalletsInput = {
 export type SpaceCountOutputType = {
   associations: number
   tenants: number
+  tenantAccessRequests: number
   categories: number
   groups: number
   contents: number
@@ -2496,6 +2907,7 @@ export type SpaceCountOutputType = {
   tasks: number
   safeWallets: number
   routines: number
+  policies: number
   folders: number
   assets: number
   albums: number
@@ -2507,6 +2919,7 @@ export type SpaceCountOutputType = {
 export type SpaceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   associations?: boolean | SpaceCountOutputTypeCountAssociationsArgs
   tenants?: boolean | SpaceCountOutputTypeCountTenantsArgs
+  tenantAccessRequests?: boolean | SpaceCountOutputTypeCountTenantAccessRequestsArgs
   categories?: boolean | SpaceCountOutputTypeCountCategoriesArgs
   groups?: boolean | SpaceCountOutputTypeCountGroupsArgs
   contents?: boolean | SpaceCountOutputTypeCountContentsArgs
@@ -2514,6 +2927,7 @@ export type SpaceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   tasks?: boolean | SpaceCountOutputTypeCountTasksArgs
   safeWallets?: boolean | SpaceCountOutputTypeCountSafeWalletsArgs
   routines?: boolean | SpaceCountOutputTypeCountRoutinesArgs
+  policies?: boolean | SpaceCountOutputTypeCountPoliciesArgs
   folders?: boolean | SpaceCountOutputTypeCountFoldersArgs
   assets?: boolean | SpaceCountOutputTypeCountAssetsArgs
   albums?: boolean | SpaceCountOutputTypeCountAlbumsArgs
@@ -2544,6 +2958,13 @@ export type SpaceCountOutputTypeCountAssociationsArgs<ExtArgs extends runtime.Ty
  */
 export type SpaceCountOutputTypeCountTenantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TenantWhereInput
+}
+
+/**
+ * SpaceCountOutputType without action
+ */
+export type SpaceCountOutputTypeCountTenantAccessRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TenantAccessRequestWhereInput
 }
 
 /**
@@ -2598,6 +3019,13 @@ export type SpaceCountOutputTypeCountRoutinesArgs<ExtArgs extends runtime.Types.
 /**
  * SpaceCountOutputType without action
  */
+export type SpaceCountOutputTypeCountPoliciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PolicyWhereInput
+}
+
+/**
+ * SpaceCountOutputType without action
+ */
 export type SpaceCountOutputTypeCountFoldersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.FolderWhereInput
 }
@@ -2647,6 +3075,7 @@ export type SpaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   associations?: boolean | Prisma.Space$associationsArgs<ExtArgs>
   classification?: boolean | Prisma.Space$classificationArgs<ExtArgs>
   tenants?: boolean | Prisma.Space$tenantsArgs<ExtArgs>
+  tenantAccessRequests?: boolean | Prisma.Space$tenantAccessRequestsArgs<ExtArgs>
   categories?: boolean | Prisma.Space$categoriesArgs<ExtArgs>
   groups?: boolean | Prisma.Space$groupsArgs<ExtArgs>
   contents?: boolean | Prisma.Space$contentsArgs<ExtArgs>
@@ -2654,6 +3083,7 @@ export type SpaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   tasks?: boolean | Prisma.Space$tasksArgs<ExtArgs>
   safeWallets?: boolean | Prisma.Space$safeWalletsArgs<ExtArgs>
   routines?: boolean | Prisma.Space$routinesArgs<ExtArgs>
+  policies?: boolean | Prisma.Space$policiesArgs<ExtArgs>
   folders?: boolean | Prisma.Space$foldersArgs<ExtArgs>
   assets?: boolean | Prisma.Space$assetsArgs<ExtArgs>
   albums?: boolean | Prisma.Space$albumsArgs<ExtArgs>
@@ -2690,6 +3120,7 @@ export type SpaceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   associations?: boolean | Prisma.Space$associationsArgs<ExtArgs>
   classification?: boolean | Prisma.Space$classificationArgs<ExtArgs>
   tenants?: boolean | Prisma.Space$tenantsArgs<ExtArgs>
+  tenantAccessRequests?: boolean | Prisma.Space$tenantAccessRequestsArgs<ExtArgs>
   categories?: boolean | Prisma.Space$categoriesArgs<ExtArgs>
   groups?: boolean | Prisma.Space$groupsArgs<ExtArgs>
   contents?: boolean | Prisma.Space$contentsArgs<ExtArgs>
@@ -2697,6 +3128,7 @@ export type SpaceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   tasks?: boolean | Prisma.Space$tasksArgs<ExtArgs>
   safeWallets?: boolean | Prisma.Space$safeWalletsArgs<ExtArgs>
   routines?: boolean | Prisma.Space$routinesArgs<ExtArgs>
+  policies?: boolean | Prisma.Space$policiesArgs<ExtArgs>
   folders?: boolean | Prisma.Space$foldersArgs<ExtArgs>
   assets?: boolean | Prisma.Space$assetsArgs<ExtArgs>
   albums?: boolean | Prisma.Space$albumsArgs<ExtArgs>
@@ -2715,6 +3147,7 @@ export type $SpacePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     associations: Prisma.$SpaceAssociationPayload<ExtArgs>[]
     classification: Prisma.$SpaceClassificationPayload<ExtArgs> | null
     tenants: Prisma.$TenantPayload<ExtArgs>[]
+    tenantAccessRequests: Prisma.$TenantAccessRequestPayload<ExtArgs>[]
     categories: Prisma.$CategoryPayload<ExtArgs>[]
     groups: Prisma.$GroupPayload<ExtArgs>[]
     contents: Prisma.$ContentPayload<ExtArgs>[]
@@ -2722,6 +3155,7 @@ export type $SpacePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     tasks: Prisma.$TaskPayload<ExtArgs>[]
     safeWallets: Prisma.$SafeWalletPayload<ExtArgs>[]
     routines: Prisma.$RoutinePayload<ExtArgs>[]
+    policies: Prisma.$PolicyPayload<ExtArgs>[]
     folders: Prisma.$FolderPayload<ExtArgs>[]
     assets: Prisma.$AssetPayload<ExtArgs>[]
     albums: Prisma.$AlbumPayload<ExtArgs>[]
@@ -3132,6 +3566,7 @@ export interface Prisma__SpaceClient<T, Null = never, ExtArgs extends runtime.Ty
   associations<T extends Prisma.Space$associationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$associationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SpaceAssociationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   classification<T extends Prisma.Space$classificationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$classificationArgs<ExtArgs>>): Prisma.Prisma__SpaceClassificationClient<runtime.Types.Result.GetResult<Prisma.$SpaceClassificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   tenants<T extends Prisma.Space$tenantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$tenantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tenantAccessRequests<T extends Prisma.Space$tenantAccessRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$tenantAccessRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantAccessRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   categories<T extends Prisma.Space$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   groups<T extends Prisma.Space$groupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   contents<T extends Prisma.Space$contentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$contentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3139,6 +3574,7 @@ export interface Prisma__SpaceClient<T, Null = never, ExtArgs extends runtime.Ty
   tasks<T extends Prisma.Space$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   safeWallets<T extends Prisma.Space$safeWalletsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$safeWalletsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SafeWalletPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   routines<T extends Prisma.Space$routinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$routinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoutinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  policies<T extends Prisma.Space$policiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$policiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   folders<T extends Prisma.Space$foldersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$foldersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assets<T extends Prisma.Space$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   albums<T extends Prisma.Space$albumsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$albumsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3652,6 +4088,30 @@ export type Space$tenantsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 /**
+ * Space.tenantAccessRequests
+ */
+export type Space$tenantAccessRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TenantAccessRequest
+   */
+  select?: Prisma.TenantAccessRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TenantAccessRequest
+   */
+  omit?: Prisma.TenantAccessRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TenantAccessRequestInclude<ExtArgs> | null
+  where?: Prisma.TenantAccessRequestWhereInput
+  orderBy?: Prisma.TenantAccessRequestOrderByWithRelationInput | Prisma.TenantAccessRequestOrderByWithRelationInput[]
+  cursor?: Prisma.TenantAccessRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TenantAccessRequestScalarFieldEnum | Prisma.TenantAccessRequestScalarFieldEnum[]
+}
+
+/**
  * Space.categories
  */
 export type Space$categoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3817,6 +4277,30 @@ export type Space$routinesArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.RoutineScalarFieldEnum | Prisma.RoutineScalarFieldEnum[]
+}
+
+/**
+ * Space.policies
+ */
+export type Space$policiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Policy
+   */
+  select?: Prisma.PolicySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Policy
+   */
+  omit?: Prisma.PolicyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PolicyInclude<ExtArgs> | null
+  where?: Prisma.PolicyWhereInput
+  orderBy?: Prisma.PolicyOrderByWithRelationInput | Prisma.PolicyOrderByWithRelationInput[]
+  cursor?: Prisma.PolicyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PolicyScalarFieldEnum | Prisma.PolicyScalarFieldEnum[]
 }
 
 /**

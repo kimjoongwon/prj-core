@@ -1,10 +1,11 @@
 "use client";
 
+import type { AssetDto } from "@cocrepo/api/assets";
 import type {
+	DataGridColumnConfig,
+	DataGridQueryStates,
+	DataGridSetQueryStates,
 	InputConfig,
-	MetaDataGridColumnConfig,
-	MetaDataGridQueryStates,
-	MetaDataGridSetQueryStates,
 } from "@cocrepo/type";
 import {
 	Button,
@@ -18,10 +19,10 @@ import {
 } from "@heroui/react";
 import { Upload } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect, type ChangeEvent, useRef, useState } from "react";
+import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { buildAssetTableColumns } from "../../columns";
+import { DataGrid, DataGridStateModel } from "../../data-grid";
 import { EmptyState } from "../../display";
-import { MetaDataGrid, MetaDataGridStateModel } from "../../data-grid";
 import { Surface } from "../../surface";
 import {
 	AssetPreviewDialog,
@@ -81,7 +82,7 @@ export const assetBrowserQueryInputs: InputConfig[] = [
 	},
 ];
 
-export interface AssetBrowserQueryStates extends MetaDataGridQueryStates {
+export interface AssetBrowserQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	search: string;
@@ -90,28 +91,19 @@ export interface AssetBrowserQueryStates extends MetaDataGridQueryStates {
 	folderId: string;
 }
 
-export type AssetBrowserSetQueryStates = MetaDataGridSetQueryStates;
+export type AssetBrowserSetQueryStates = DataGridSetQueryStates;
 
 export type AssetBrowserMode = "manage" | "picker";
 export type AssetBrowserPresentation = "inline" | "modal";
 
-export interface AssetBrowserAsset {
-	id: string;
-	originalName: string;
-	kind: "IMAGE" | "VIDEO" | "DOCUMENT";
-	status: "UPLOADING" | "READY" | "FAILED";
-	mimeType: string;
-	sizeBytes: number;
-	createdAt: string;
-	publicUrl?: string | null;
-}
+export type AssetBrowserAsset = AssetDto;
 
 export interface AssetBrowserProps {
 	mode: AssetBrowserMode;
 	presentation?: AssetBrowserPresentation;
 	title: string;
 	description: string;
-	assets: AssetBrowserAsset[];
+	assets?: AssetBrowserAsset[];
 	totalCount: number;
 	folders: FolderTreeItem[];
 	queryStates: AssetBrowserQueryStates;
@@ -197,11 +189,11 @@ function AssetsGridFallback({
 }: {
 	queryStates: AssetBrowserQueryStates;
 	setQueryStates: AssetBrowserSetQueryStates;
-	columns: MetaDataGridColumnConfig<AssetBrowserAsset>[];
+	columns: DataGridColumnConfig<AssetBrowserAsset>[];
 	leftInputs: InputConfig[];
 }) {
 	const gridState = useLocalObservable(
-		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
+		() => new DataGridStateModel({ queryStates, setQueryStates }),
 	);
 
 	useEffect(() => {
@@ -213,18 +205,18 @@ function AssetsGridFallback({
 				<FolderTree folders={[]} isLoading className="bg-transparent" />
 			</div>
 			<div className={assetsGridPanelClassName}>
-				<MetaDataGrid
+				<DataGrid
 					config={{
 						entity: "Asset",
 						columns,
 						leftInputs,
 						emptyMessage: "등록된 에셋이 없습니다.",
 					}}
-	rows={[]}
-	totalCount={0}
-	isLoading={true}
-	state={gridState}
-/>
+					rows={[]}
+					totalCount={0}
+					isLoading={true}
+					state={gridState}
+				/>
 			</div>
 		</div>
 	);
@@ -248,7 +240,7 @@ export const AssetBrowser = observer(
 		presentation = "inline",
 		title,
 		description,
-		assets,
+		assets = [],
 		totalCount,
 		folders,
 		queryStates,
@@ -271,13 +263,13 @@ export const AssetBrowser = observer(
 		onRenameFolder,
 		onDeleteFolder,
 	}: AssetBrowserProps) => {
-	const gridState = useLocalObservable(
-		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
-	);
+		const gridState = useLocalObservable(
+			() => new DataGridStateModel({ queryStates, setQueryStates }),
+		);
 
-	useEffect(() => {
-		gridState.syncQuery(queryStates, setQueryStates);
-	}, [gridState, queryStates, setQueryStates]);
+		useEffect(() => {
+			gridState.syncQuery(queryStates, setQueryStates);
+		}, [gridState, queryStates, setQueryStates]);
 		const fileInputRef = useRef<HTMLInputElement | null>(null);
 		const createFolderModal = useDisclosure();
 		const renameFolderModal = useDisclosure();
@@ -510,18 +502,18 @@ export const AssetBrowser = observer(
 								/>
 							</div>
 							<div className={assetsGridPanelClassName}>
-								<MetaDataGrid
+								<DataGrid
 									config={{
 										entity: "Asset",
 										columns,
 										leftInputs: visibleLeftInputs,
 										emptyMessage,
 									}}
-	rows={assets}
-	totalCount={totalCount}
-	isLoading={isLoading}
-	state={gridState}
-/>
+									rows={assets}
+									totalCount={totalCount}
+									isLoading={isLoading}
+									state={gridState}
+								/>
 							</div>
 						</div>
 					)}
@@ -697,12 +689,9 @@ export const AssetBrowser = observer(
 					업로드
 				</Button>
 				{uploadRequirementMessage ? (
-					<p
-						role="status"
-						className="max-w-56 text-right text-xs text-default-500"
-					>
+					<output className="max-w-56 text-right text-xs text-default-500">
 						{uploadRequirementMessage}
-					</p>
+					</output>
 				) : null}
 			</div>
 		);

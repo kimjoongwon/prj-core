@@ -11,6 +11,25 @@ state shape은 pure page가 정의하지 않고 상위 route가 설계한 `login
 page 내부에서는 `state.loginForm`만 form에 전달합니다.
 submit 이벤트는 page가 소유하고 child form에는 handler props를 직접 전달하지 않습니다.
 
+## 디자인 스케치
+
+```text
+LoginPage
+- VStack
+  - VStack
+  - VStack
+    - LoginForm
+  - Button
+```
+
+## 사용 컴포넌트
+
+| 컴포넌트 | 출처 | 사용 위치 |
+| --- | --- | --- |
+| `VStack` | `../../rhythm/VStack/VStack` | 화면 조합 요소 |
+| `LoginForm` | `../../form/LoginForm/LoginForm` | 입력 폼 또는 AI 입력 흐름 구성 |
+| `Button` | `../../control/Button/Button` | 사용자 액션 실행 |
+
 ## 구성 요소
 
 | 항목 | 설명 |
@@ -23,12 +42,7 @@ submit 이벤트는 page가 소유하고 child form에는 handler props를 직�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-22 | 문서 예시를 plain object 대신 route page MobX class + `state.loginPage` 전달 패턴으로 갱신 | codex |
-| 2026-04-22 | page가 submit wrapper를 소유하고 `LoginForm`은 state-only contract만 쓰도록 정리 | codex |
-| 2026-04-22 | pure page가 route가 설계한 `loginPage.loginForm` state slice를 소비하도록 계약명을 `LoginPageState`로 정리 | codex |
-| 2026-04-22 | page가 control을 직접 소유하지 않고 `LoginForm`을 조합하도록 책임을 정리 | codex |
-| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
-| 2026-03-26 | `LoginPage` 폴더명을 컴포넌트명 기준으로 정렬하고 경로 표기를 갱신 | codex |
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
-| 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
-| 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-04-22 | 로그인 제출 흐름과 폼 상태 계약 정리 | codex |
+| 2026-04-22 | 로그인 화면 상태 묶음 계약 정리 | codex |
+| 2026-04-22 | 로그인 page와 form의 책임 경계 정리 | codex |
+| 2026-03-03 | 초기 화면 기획 수립 | codex |

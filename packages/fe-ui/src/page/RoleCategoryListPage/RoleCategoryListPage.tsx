@@ -1,20 +1,13 @@
 "use client";
 
+import type { CategoryDto } from "@cocrepo/api/core/model";
 import { DateTimeCell, PageTitleBar, Surface } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { FolderTree, Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
 
-export interface RoleCategoryListPageCategory {
-	id: string;
-	name: string;
-	parentName?: string | null;
-	childrenCount: number;
-	createdAt: string;
-}
-
 export interface RoleCategoryListPageProps {
-	categories: RoleCategoryListPageCategory[];
+	categories?: CategoryDto[];
 	isLoading: boolean;
 	onClickCreateButton: () => void;
 	onClickDetailButton: (categoryId: string) => void;
@@ -27,6 +20,10 @@ function ParentCategoryCell({ parentName }: { parentName?: string | null }) {
 	return <span className="text-default-600">{parentName}</span>;
 }
 
+function getChildrenCount(category: CategoryDto) {
+	return Array.isArray(category.children) ? category.children.length : 0;
+}
+
 export const RoleCategoryListPage = observer(
 	({
 		categories,
@@ -34,7 +31,8 @@ export const RoleCategoryListPage = observer(
 		onClickCreateButton,
 		onClickDetailButton,
 	}: RoleCategoryListPageProps) => {
-		const totalCount = categories.length;
+		const categoryRows = categories ?? [];
+		const totalCount = categoryRows.length;
 
 		return (
 			<div className="space-y-5">
@@ -56,12 +54,14 @@ export const RoleCategoryListPage = observer(
 						<div className="flex items-center justify-center p-8">
 							<span className="text-default-500">로딩 중...</span>
 						</div>
-					) : categories.length === 0 ? (
+					) : categoryRows.length === 0 ? (
 						<div className="flex flex-col items-center justify-center gap-4 p-16">
 							<div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
 								<FolderTree className="h-8 w-8 text-primary" />
 							</div>
-							<p className="text-default-500">등록된 역할 카테고리가 없습니다.</p>
+							<p className="text-default-500">
+								등록된 역할 카테고리가 없습니다.
+							</p>
 						</div>
 					) : (
 						<div className="overflow-x-auto">
@@ -86,20 +86,24 @@ export const RoleCategoryListPage = observer(
 									</tr>
 								</thead>
 								<tbody>
-									{categories.map((category) => (
+									{categoryRows.map((category) => (
 										<tr
 											key={category.id}
 											className="border-b border-divider transition-colors hover:bg-content2/50"
 										>
 											<td className="px-4 py-3">
-												<span className="font-mono text-sm">{category.name}</span>
+												<span className="font-mono text-sm">
+													{category.name}
+												</span>
 											</td>
 											<td className="px-4 py-3">
-												<ParentCategoryCell parentName={category.parentName} />
+												<ParentCategoryCell
+													parentName={category.parent?.name}
+												/>
 											</td>
 											<td className="px-4 py-3 text-center">
 												<span className="text-default-600">
-													{category.childrenCount}
+													{getChildrenCount(category)}
 												</span>
 											</td>
 											<td className="px-4 py-3">

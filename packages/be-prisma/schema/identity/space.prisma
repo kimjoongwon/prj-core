@@ -31,6 +31,7 @@ model Space {
   associations   SpaceAssociation[]
   classification SpaceClassification?
   tenants        Tenant[]
+  tenantAccessRequests TenantAccessRequest[]
   // Space소속 리소스
   categories     Category[]
   groups         Group[]
@@ -39,6 +40,7 @@ model Space {
   tasks          Task[]
   safeWallets    SafeWallet[]
   routines       Routine[]
+  policies       Policy[]
   // Asset 도메인
   folders        Folder[]
   assets         Asset[]

@@ -2,11 +2,10 @@
 
 import {
 	getGetTasksQueryKey,
-	type TaskDto,
 	useDeleteTask,
 	useGetTasks,
 } from "@cocrepo/api/core/tasks";
-import { TaskListPage, type TaskListPageTask } from "@cocrepo/ui";
+import { TaskListPage } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -33,12 +32,11 @@ export default observer(function TasksPageRoute() {
 	const taskParams = getTaskParams(queryStates);
 	const { data: response, isLoading } = useGetTasks(taskParams);
 	const deleteMutation = useDeleteTask();
-	const tasks = (response?.data ?? []).map(mapTaskRow);
 
 	return (
 		<TaskListPage
-			tasks={tasks}
-			totalCount={response?.meta?.total ?? tasks.length}
+			tasks={response?.data}
+			totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
 			isLoading={isLoading}
 			isDeleting={deleteMutation.isPending}
 			queryStates={queryStates}
@@ -83,17 +81,5 @@ function getTaskParams(queryStates: TasksQueryStates) {
 		search: queryStates.search || undefined,
 		spaceScope:
 			(queryStates.spaceScope as "CURRENT" | "INCLUDE_ANCESTORS") || undefined,
-	};
-}
-
-function mapTaskRow(task: TaskDto): TaskListPageTask {
-	return {
-		id: task.id,
-		name: task.exercise.name,
-		isSchedulable: Boolean(task.exercise.videoFileId),
-		duration: task.exercise.duration,
-		count: task.exercise.count,
-		description: task.exercise.description,
-		createdAt: task.createdAt,
 	};
 }

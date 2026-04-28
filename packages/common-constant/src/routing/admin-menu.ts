@@ -40,6 +40,12 @@ export const ADMIN_PATHS = {
 	ROLE_CATEGORIES_DETAIL: "/roles/categories/[categoryId]",
 	ROLE_CATEGORIES_EDIT: "/roles/categories/[categoryId]/edit",
 
+	// 정책 (Policy)
+	POLICIES: "/policies",
+	POLICIES_NEW: "/policies/new",
+	POLICIES_DETAIL: "/policies/[policyId]",
+	POLICIES_EDIT: "/policies/[policyId]/edit",
+
 	// 권한 정의 (Ability)
 	ABILITIES: "/abilities",
 	ABILITIES_NEW: "/abilities/new",
@@ -101,6 +107,11 @@ export const ADMIN_PATHS = {
 	INQUIRIES_DETAIL: "/inquiries/[inquiryId]",
 	INQUIRIES_EDIT: "/inquiries/[inquiryId]/edit",
 
+	// 테넌트 접근 신청
+	TENANT_ACCESS_REQUESTS: "/tenant-access-requests",
+	TENANT_ACCESS_REQUESTS_DETAIL:
+		"/tenant-access-requests/[tenantAccessRequestId]",
+
 	// 인증
 	AUTH_LOGIN: "/auth/login",
 } as const;
@@ -126,6 +137,7 @@ export const ADMIN_SUBJECTS = {
 	MENU_ASSETS: "menu:assets",
 	MENU_ROLES: "menu:roles",
 	MENU_INQUIRIES: "menu:inquiries",
+	MENU_TENANT_ACCESS_REQUESTS: "menu:tenant-access-requests",
 
 	// 2depth - 회원
 	MENU_USERS_LIST: "menu:users:list",
@@ -152,6 +164,8 @@ export const ADMIN_SUBJECTS = {
 	MENU_ROLE_GROUPS_LIST: "menu:role-groups:list",
 	MENU_ROLE_CATEGORIES: "menu:role-categories",
 	MENU_ROLE_CATEGORIES_LIST: "menu:role-categories:list",
+	MENU_POLICIES: "menu:policies",
+	MENU_POLICIES_LIST: "menu:policies:list",
 	MENU_ABILITIES: "menu:abilities",
 	MENU_ABILITIES_LIST: "menu:abilities:list",
 	MENU_ACTIONS: "menu:actions",
@@ -183,6 +197,7 @@ const ADMIN_NAV_SCOPE_KIND_BY_ID: Partial<Record<string, ScreenScopeKind>> = {
 	"roles-list": "space",
 	"role-groups-list": "space",
 	"role-categories-list": "space",
+	"policies-list": "space",
 	"abilities-list": "global-full-access-only",
 	"actions-list": "global-full-access-only",
 	"subjects-list": "global-full-access-only",

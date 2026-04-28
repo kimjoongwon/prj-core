@@ -1,14 +1,15 @@
 "use client";
 
+import type { SpaceDto } from "@cocrepo/api/core/spaces";
 import type {
+	DataGridQueryStates,
+	DataGridSetQueryStates,
 	InputConfig,
-	MetaDataGridQueryStates,
-	MetaDataGridSetQueryStates,
 } from "@cocrepo/type";
 import {
 	buildSpaceTableColumns,
-	MetaDataGrid,
-	MetaDataGridStateModel,
+	DataGrid,
+	DataGridStateModel,
 	PageTitleBar,
 	Surface,
 } from "@cocrepo/ui";
@@ -27,26 +28,15 @@ const leftInputs: InputConfig[] = [
 
 export const adminSpacesPageQueryInputs = [...leftInputs];
 
-export interface SpaceListPageQueryStates extends MetaDataGridQueryStates {
+export interface SpaceListPageQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	search: string;
 }
-export type SpaceListPageSetQueryStates = MetaDataGridSetQueryStates;
-
-export interface SpaceListPageSpace {
-	id: string;
-	createdAt: string;
-	name: string;
-	label: string | null;
-	businessNo: string;
-	address: string;
-	phone: string;
-	email: string;
-}
+export type SpaceListPageSetQueryStates = DataGridSetQueryStates;
 
 export interface SpaceListPageProps {
-	spaces: SpaceListPageSpace[];
+	spaces?: SpaceDto[];
 	totalCount: number;
 	isLoading: boolean;
 	queryStates: SpaceListPageQueryStates;
@@ -55,16 +45,16 @@ export interface SpaceListPageProps {
 	onClickSpaceGroundName: (spaceId: string) => void;
 }
 
-function filterRows(rows: SpaceListPageSpace[], search?: string) {
+function filterRows(rows: SpaceDto[], search?: string) {
 	const searchKeyword = search?.trim().toLowerCase() ?? "";
 	if (searchKeyword.length === 0) {
 		return rows;
 	}
 
 	return rows.filter((row) =>
-		[row.name, row.businessNo, row.address]
+		[row.ground?.name, row.ground?.businessNo, row.ground?.address]
 			.filter(Boolean)
-			.some((value) => value.toLowerCase().includes(searchKeyword)),
+			.some((value) => value!.toLowerCase().includes(searchKeyword)),
 	);
 }
 
@@ -82,63 +72,66 @@ function SpacesPageFallback() {
 	);
 }
 
-export const SpaceListPage = observer(({
-	spaces,
-	totalCount: totalSpaceCount,
-	isLoading,
-	queryStates,
-	setQueryStates,
-	onClickCreateButton,
-	onClickSpaceGroundName,
-}: SpaceListPageProps) => {
-	const gridState = useLocalObservable(
-		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
-	);
-
-	useEffect(() => {
-		gridState.syncQuery(queryStates, setQueryStates);
-	}, [gridState, queryStates, setQueryStates]);
-	const filteredRows = filterRows(spaces, queryStates.search);
-	const totalCount = queryStates.search?.trim().length
-		? filteredRows.length
-		: totalSpaceCount;
-	const columns = buildSpaceTableColumns<SpaceListPageSpace>({
+export const SpaceListPage = observer(
+	({
+		spaces,
+		totalCount: totalSpaceCount,
+		isLoading,
+		queryStates,
+		setQueryStates,
+		onClickCreateButton,
 		onClickSpaceGroundName,
-	});
+	}: SpaceListPageProps) => {
+		const gridState = useLocalObservable(
+			() => new DataGridStateModel({ queryStates, setQueryStates }),
+		);
 
-	if (isLoading) {
-		return <SpacesPageFallback />;
-	}
+		useEffect(() => {
+			gridState.syncQuery(queryStates, setQueryStates);
+		}, [gridState, queryStates, setQueryStates]);
+		const spaceRows = spaces ?? [];
+		const filteredRows = filterRows(spaceRows, queryStates.search);
+		const totalCount = queryStates.search?.trim().length
+			? filteredRows.length
+			: totalSpaceCount;
+		const columns = buildSpaceTableColumns<SpaceDto>({
+			onClickSpaceGroundName,
+		});
 
-	return (
-		<div className="space-y-5">
-			<PageTitleBar
-				title="공간 목록"
-				description="시스템에 등록된 공간과 시설 detail을 관리합니다."
-				actions={
-					<Button
-						color="primary"
-						startContent={<Building2 className="h-4 w-4" />}
-						onPress={onClickCreateButton}
-					>
-						공간 등록
-					</Button>
-				}
-			/>
-			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
-				<MetaDataGrid
-					config={{
-						entity: "Space",
-						columns,
-						leftInputs,
-						emptyMessage: "등록된 공간이 없습니다.",
-					}}
-					rows={filteredRows}
-					totalCount={totalCount}
-					isLoading={false}
-					state={gridState}
+		if (isLoading) {
+			return <SpacesPageFallback />;
+		}
+
+		return (
+			<div className="space-y-5">
+				<PageTitleBar
+					title="공간 목록"
+					description="시스템에 등록된 공간과 시설 detail을 관리합니다."
+					actions={
+						<Button
+							color="primary"
+							startContent={<Building2 className="h-4 w-4" />}
+							onPress={onClickCreateButton}
+						>
+							공간 등록
+						</Button>
+					}
 				/>
-			</Surface>
-		</div>
-	);
-});
+				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+					<DataGrid
+						config={{
+							entity: "Space",
+							columns,
+							leftInputs,
+							emptyMessage: "등록된 공간이 없습니다.",
+						}}
+						rows={filteredRows}
+						totalCount={totalCount}
+						isLoading={false}
+						state={gridState}
+					/>
+				</Surface>
+			</div>
+		);
+	},
+);

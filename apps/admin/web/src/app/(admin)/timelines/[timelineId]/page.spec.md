@@ -56,7 +56,7 @@
 |------|----------|------|
 | 페이지 헤더 | `페이지 헤더 영역` | title="{타임라인명}", actions에 "수정", "삭제" 버튼 |
 | 타임라인 정보 | `섹션 영역` | title="기본 정보" - 이름, 설명, Space, 등록자, 등록일 표시 |
-| 세션 목록 | `섹션 영역` | title="세션 목록", actions에 "세션 등록" 버튼 - MetaDataGrid로 세션 표시 |
+| 세션 목록 | `섹션 영역` | title="세션 목록", actions에 "세션 등록" 버튼 - DataGrid로 세션 표시 |
 
 ## 타임라인 정보 필드
 
@@ -146,6 +146,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-28 | grid 컴포넌트 명칭을 DataGrid로 통일한 구조 변경을 반영 | codex |
 | 2026-04-08 | dev 서버에서 route 응답이 멈추는 문제를 피하기 위해 client-only(`ssr: false`) export 예외를 추가 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |

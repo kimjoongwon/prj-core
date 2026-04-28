@@ -17,6 +17,10 @@ export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
 	"apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/inquiries/new/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/inquiries/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/policies/[policyId]/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/policies/[policyId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/policies/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/policies/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/roles/[roleId]/abilities/[abilityId]/actions/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/roles/[roleId]/abilities/[abilityId]/subjects/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/roles/[roleId]/edit/route.meta.ts",
@@ -49,6 +53,8 @@ export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
 	"apps/admin/web/src/app/(admin)/templates/[templateId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/templates/new/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/templates/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/tenant-access-requests/[tenantAccessRequestId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/tenant-access-requests/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/edit/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/sessions/[sessionId]/edit/route.meta.ts",
@@ -221,6 +227,27 @@ export const GENERATED_ADMIN_NAV_ITEMS: NavItemConfig[] = [
 				"label": "대상",
 				"path": "/subjects",
 				"subject": "menu:subjects:list"
+			},
+			{
+				"id": "policies-list",
+				"label": "정책",
+				"path": "/policies",
+				"subject": "menu:policies:list"
+			}
+		]
+	},
+	{
+		"id": "tenant-access-requests",
+		"label": "접근 승인",
+		"icon": "ShieldCheck",
+		"path": "/tenant-access-requests",
+		"subject": "menu:tenant-access-requests",
+		"children": [
+			{
+				"id": "tenant-access-requests-list",
+				"label": "접근 승인",
+				"path": "/tenant-access-requests",
+				"subject": "menu:tenant-access-requests:list"
 			}
 		]
 	}
@@ -789,5 +816,61 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 		"pathPattern": "/roles/[roleId]/abilities/[abilityId]/subjects",
 		"subject": "page:roles:ability-subjects",
 		"description": "역할에 연결된 대상 구성을 확인합니다."
+	},
+	{
+		"groupId": "tenant-access-requests",
+		"groupLabel": "접근 승인",
+		"pageId": "tenant-access-requests:list",
+		"pageLabel": "접근 신청 목록",
+		"pathPattern": "/tenant-access-requests",
+		"subject": "page:tenant-access-requests:list",
+		"description": "테넌트 접근 신청을 조회하고 검토합니다.",
+		"menuLeafId": "tenant-access-requests-list"
+	},
+	{
+		"groupId": "tenant-access-requests",
+		"groupLabel": "접근 승인",
+		"pageId": "tenant-access-requests:detail",
+		"pageLabel": "접근 신청 상세",
+		"pathPattern": "/tenant-access-requests/[tenantAccessRequestId]",
+		"subject": "page:tenant-access-requests:detail",
+		"description": "테넌트 접근 신청 상세를 확인하고 승인 또는 반려합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "policies:list",
+		"pageLabel": "정책 목록",
+		"pathPattern": "/policies",
+		"subject": "page:policies:list",
+		"description": "현재 Space의 권한 정책 목록을 조회합니다.",
+		"menuLeafId": "policies-list"
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "policies:new",
+		"pageLabel": "정책 등록",
+		"pathPattern": "/policies/new",
+		"subject": "page:policies:new",
+		"description": "현재 Space에 새 권한 정책을 등록합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "policies:detail",
+		"pageLabel": "정책 상세",
+		"pathPattern": "/policies/[policyId]",
+		"subject": "page:policies:detail",
+		"description": "권한 정책 상세와 포함 Ability를 확인합니다."
+	},
+	{
+		"groupId": "roles",
+		"groupLabel": "권한 관리",
+		"pageId": "policies:edit",
+		"pageLabel": "정책 수정",
+		"pathPattern": "/policies/[policyId]/edit",
+		"subject": "page:policies:edit",
+		"description": "권한 정책 기본 정보와 포함 Ability를 수정합니다."
 	}
 ];

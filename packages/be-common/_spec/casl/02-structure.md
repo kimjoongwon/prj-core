@@ -93,13 +93,13 @@
      │ ]}                                 │                            │
      │───────────────────────────────────>│                            │
      │                                    │                            │
-     │                                    │  기존 Role Grant 삭제      │
-     │                                    │  새 Grant 일괄 생성        │
-     │                                    │  (granteeType="Role")      │
+     │                                    │  기존 RolePolicy 삭제      │
+     │                                    │  새 RolePolicy 동기화      │
+     │                                    │  (policyId + roleId)       │
      │                                    │───────────────────────────>│
      │                                    │<───────────────────────────│
      │                                    │                            │
-     │  GrantResponseDto[]                │                            │
+     │  PolicyAssignmentResponseDto[]     │                            │
      │<───────────────────────────────────│                            │
 ```
 
@@ -115,26 +115,26 @@ apps/server/src/module/
 │
 └── ability/
     ├── abilities.module.ts
-    └── abilities.controller.ts       # Ability CRUD + Grant 일괄 설정
+    └── abilities.controller.ts       # Ability CRUD
 
 packages/
 ├── service/
 │   ├── src/roles.service.ts
 │   ├── src/abilities.service.ts      # Ability 비즈니스 로직
-│   └── src/grants.service.ts         # Grant 비즈니스 로직
+│   └── src/policy.service.ts         # Policy 비즈니스 로직
 │
 ├── app/
-│   └── src/abilities.application-service.ts  # Ability + Grant 유즈케이스 조합
+│   └── src/abilities.application-service.ts  # Ability + Policy 유즈케이스 조합
 │
 ├── repository/
 │   ├── src/roles.repository.ts
 │   ├── src/abilities.repository.ts   # Ability CRUD
-│   └── src/grants.repository.ts      # Grant 조회 (Role/User 기반)
+│   └── src/policies.repository.ts    # Policy 조회 (Space 기반)
 │
 ├── entity/
 │   ├── src/role.entity.ts
 │   ├── src/ability.entity.ts         # 권한 정의 엔티티
-│   └── src/grant.entity.ts           # 권한 부여 엔티티
+│   └── src/policy.entity.ts          # 정책 엔티티
 │
 ├── dto/
 │   ├── src/role.dto.ts
@@ -142,15 +142,15 @@ packages/
 │   ├── src/abilities/
 │   │   ├── create-ability.dto.ts
 │   │   └── ability-response.dto.ts
-│   ├── src/grants/
-│   │   ├── create-grant.dto.ts
-│   │   ├── update-grant.dto.ts
-│   │   └── grant-response.dto.ts
+│   ├── src/policies/
+│   │   ├── create-policy.dto.ts
+│   │   ├── update-policy.dto.ts
+│   │   └── policy-response.dto.ts
 │   ├── src/create/create-role.dto.ts
 │   └── src/update/update-role.dto.ts
 │
 ├── be-common/
-│   ├── src/casl/casl-ability.factory.ts  # GrantsRepository로 Grant → Ability 추출
+│   ├── src/casl/casl-ability.factory.ts  # Policy assignment → Ability 추출
 │   └── src/guard/
 │       ├── roles.guard.ts
 │       ├── role-category.guard.ts

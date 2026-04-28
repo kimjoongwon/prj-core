@@ -25,7 +25,9 @@ model Tenant {
   role        Role         @relation(fields: [roleId], references: [id])
   space       Space        @relation(fields: [spaceId], references: [id])
   user        User         @relation(fields: [userId], references: [id])
+  accessRequests TenantAccessRequest[]
 
+  @@unique([userId, spaceId])
   @@map("tenants")
 }
 

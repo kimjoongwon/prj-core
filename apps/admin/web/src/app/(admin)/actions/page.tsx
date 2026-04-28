@@ -1,10 +1,7 @@
 "use client";
 
 import { useGetActions } from "@cocrepo/api/core/actions";
-import {
-	ActionListPage,
-	type ActionListPageAction,
-} from "@cocrepo/ui";
+import { ActionListPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -22,12 +19,11 @@ export default observer(function ActionsPageRoute() {
 		group: queryStates.group || undefined,
 	});
 
-	const actions = (response?.data ?? []).map(mapActionListItem);
-	const totalCount = response?.meta?.total ?? actions.length;
+	const totalCount = response?.meta?.total ?? response?.data?.length ?? 0;
 
 	return (
 		<ActionListPage
-			actions={actions}
+			actions={response?.data}
 			totalCount={totalCount}
 			isLoading={isLoading}
 			queryStates={queryStates}
@@ -38,25 +34,3 @@ export default observer(function ActionsPageRoute() {
 		/>
 	);
 });
-
-function mapActionListItem(action: {
-	id: string;
-	name: string;
-	displayName?: string | null;
-	group?: string | null;
-	order: number;
-	isSystem: boolean;
-	createdAt: string;
-	removedAt?: string | null;
-}): ActionListPageAction {
-	return {
-		id: action.id,
-		name: action.name,
-		displayName: action.displayName,
-		group: action.group,
-		order: action.order,
-		isSystem: action.isSystem,
-		createdAt: action.createdAt,
-		removedAt: action.removedAt,
-	};
-}

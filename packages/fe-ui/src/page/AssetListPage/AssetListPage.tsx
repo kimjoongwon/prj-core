@@ -3,7 +3,6 @@
 import { observer } from "mobx-react-lite";
 import {
 	AssetBrowser,
-	type AssetBrowserAsset,
 	type AssetBrowserProps,
 	type AssetBrowserQueryStates,
 	type AssetBrowserSetQueryStates,
@@ -14,7 +13,6 @@ export const adminAssetsPageQueryInputs = assetBrowserQueryInputs;
 
 export type AssetListPageQueryStates = AssetBrowserQueryStates;
 export type AssetListPageSetQueryStates = AssetBrowserSetQueryStates;
-export type AssetListPageAsset = AssetBrowserAsset;
 
 export interface AssetListPageProps
 	extends Omit<

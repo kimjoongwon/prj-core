@@ -22,7 +22,7 @@ export default observer(function OidcClientsPageRoute() {
 
 	return (
 		<OidcClientListPage
-			oidcClients={response?.data ?? []}
+			oidcClients={response?.data}
 			totalCount={response?.meta?.totalCount ?? 0}
 			isLoading={isLoading}
 			queryStates={queryStates}

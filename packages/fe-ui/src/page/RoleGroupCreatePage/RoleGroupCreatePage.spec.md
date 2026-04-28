@@ -8,6 +8,34 @@
 
 이 파일은 route thin wrapper가 재사용하는 page 레이어 화면 컴포넌트를 담당합니다.
 
+## 디자인 스케치
+
+```text
+RoleGroupCreatePage
+- FormPage
+  - PageTitleBar
+    - Button
+  - FormPageSurface
+    - VStack
+      - FormSectionCard
+        - Input x2
+        - Button
+```
+
+## 사용 컴포넌트
+
+| 컴포넌트 | 출처 | 사용 위치 |
+| --- | --- | --- |
+| `FormPage` | `@cocrepo/ui` | 페이지 외곽 레이아웃 구성 |
+| `PageTitleBar` | `@cocrepo/ui` | 상단 제목, 설명, 주요 액션 표시 |
+| `Button` | `@heroui/react` | 사용자 액션 실행 |
+| `ArrowLeft` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `FormPageSurface` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `VStack` | `@cocrepo/ui` | 화면 조합 요소 |
+| `FormSectionCard` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `Input` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `Save` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+
 ## 공개 계약
 
 | 항목 | 설명 |
@@ -31,7 +59,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 route-mirror page 이름을 semantic screen 이름으로 정리 | codex |
-| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
-| 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |
-| 2026-03-30 | route runtime ownership에 맞춰 page를 props 기반 pure contract로 정리 | codex |
+| 2026-03-30 | 화면 데이터/이벤트 소유 경계를 상위 컨테이너 기준으로 정리 | codex |
+| 2026-03-26 | 초기 화면 기획 수립 | codex |

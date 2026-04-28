@@ -71,7 +71,7 @@ developer_instructions = '''
 | 4 | `orch-screen-planner` | 정확한 화면 기획 fan-out 체인 |
 | 4 | `req-route-layout-planner`, `req-spec-tracker` | route skeleton, checklist 보조 |
 | 5 | `fe-columns-builder` | columns/cell 경계 source of truth |
-| 5 | `fe-collection-builder`, `fe-detail-builder`, `fe-form-builder` | `page role`별 전용 재사용 계층 |
+| 5 | `fe-data-grid-builder`, `fe-detail-builder`, `fe-form-builder` | `page role`별 전용 재사용 계층 |
 | 5 | `fe-state-builder`, `fe-store-builder` | page-local state 와 shared Store 승격 경계 |
 | 6 | `fe-route-layout-builder`, `fe-ui-page-builder`, `fe-page-builder`, `fe-api-integrator` | route shell / pure page / thin container / API 연동 |
 
@@ -330,7 +330,7 @@ developer_instructions = '''
 - `fe-widget-builder`
 - `fe-layout-builder`
 - `fe-feature-builder`
-- `fe-collection-builder` / `fe-detail-builder` / `fe-form-builder`
+- `fe-data-grid-builder` / `fe-detail-builder` / `fe-form-builder`
 - `fe-state-builder` (page-local state class/hook 이 필요할 때)
 - `fe-store-builder`
 - `fe-menu-builder` (조건부)
@@ -341,7 +341,7 @@ developer_instructions = '''
 
 **위임 규칙**
 - columns/cell 경계는 `fe-columns-builder`를 source of truth로 사용합니다.
-- `page role`별 구현 경계는 `fe-collection-builder`, `fe-detail-builder`, `fe-form-builder`를 source of truth로 사용합니다.
+- `page role`별 구현 경계는 `fe-data-grid-builder`, `fe-detail-builder`, `fe-form-builder`를 source of truth로 사용하고, collection/list 또는 collection/grid 성격의 순수 UI 조합은 `fe-widget-builder` 기준을 따릅니다.
 - 단일 page / route 전용 상태는 `fe-state-builder`, 여러 page / domain 에서 재사용되는 상태는 `fe-store-builder`를 source of truth로 사용합니다.
 - route/page 시각 소유권 세부 규칙은 Stage 6 builder 문서를 재복제하지 않습니다.
 

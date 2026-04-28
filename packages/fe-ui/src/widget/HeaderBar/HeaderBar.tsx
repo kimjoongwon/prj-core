@@ -116,7 +116,9 @@ export const HeaderBar = observer(function HeaderBar({
 					{leadingContent}
 					{context && (
 						<>
-							<div className="hidden h-8 w-px bg-slate-200/80 dark:bg-white/10 md:block" />
+							{leadingContent && (
+								<div className="hidden h-8 w-px bg-slate-200/80 dark:bg-white/10 md:block" />
+							)}
 							<div className="hidden min-w-0 items-center gap-3 md:flex">
 								{context}
 							</div>

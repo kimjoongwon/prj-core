@@ -4,7 +4,7 @@
 
 - **L3 Features**: 21개 기능 (Role 7, Ability 6, Action 6, Subject 2)
 - **L4 Screens**: 14개 화면
-  - Role: 목록/상세(+Grant 배치 할당)/등록/수정
+  - Role: 목록/상세(+Policy 할당)/등록/수정
   - Ability: 목록/상세/등록/수정
   - Action: 목록/상세/등록/수정
   - Subject: 목록/상세 (조회 전용)
@@ -23,25 +23,25 @@
 | ROL-L5-ACT-009 | 삭제 버튼 클릭 | 페이지 헤더 영역 actions 영역 버튼 클릭 | 삭제 확인 모달 표시 | `can('delete', 'role')`, isSystem=false |
 | ROL-L5-ACT-010 | 삭제 확인 | 모달에서 삭제 버튼 클릭 | DELETE /api/v1/roles/:id 호출 | - |
 | ROL-L5-ACT-011 | 삭제 취소 | 모달에서 취소 버튼 클릭 | 모달 닫기 | - |
-| ROL-L5-ACT-012 | Grant 체크박스 토글 | Ability 할당 테이블에서 체크박스 클릭 | 해당 Ability의 할당/해제 상태 변경 (로컬) | `can('update', 'role')` |
-| ROL-L5-ACT-013 | Grant isActive 토글 | 할당된 Ability의 활성화 Switch 클릭 | isActive 상태 변경 (로컬) | `can('update', 'role')` |
-| ROL-L5-ACT-014 | Grant priority 변경 | priority NumberInput 값 변경 | priority 값 변경 (로컬) | `can('update', 'role')` |
-| ROL-L5-ACT-015 | Subject 필터 선택 | Grant 영역 Subject 필터 Select 변경 | Subject별 Ability 목록 필터링 | - |
-| ROL-L5-ACT-016 | Action 필터 선택 | Grant 영역 Action 필터 Select 변경 | Action별 Ability 목록 필터링 | - |
-| ROL-L5-ACT-017 | 일괄 저장 버튼 클릭 | Grant 영역 "일괄 저장" 버튼 클릭 | 저장 확인 모달 표시 | 변경사항이 1건 이상 |
-| ROL-L5-ACT-018 | 일괄 저장 확인 | 모달에서 저장 버튼 클릭 | PUT /api/v1/grants/roles/:roleId 호출 | - |
+| ROL-L5-ACT-012 | Policy 체크박스 토글 | Policy 할당 목록에서 체크박스 클릭 | 해당 Policy의 할당/해제 상태 변경 (로컬) | `can('update', 'role')` |
+| ROL-L5-ACT-013 | RolePolicy isActive 토글 | 할당된 Policy의 활성화 Switch 클릭 | isActive 상태 변경 (로컬) | `can('update', 'role')` |
+| ROL-L5-ACT-014 | RolePolicy priority 변경 | priority NumberInput 값 변경 | priority 값 변경 (로컬) | `can('update', 'role')` |
+| ROL-L5-ACT-015 | Policy 목록 확인 | Policy 할당 영역 표시 | 현재 Space의 Policy 목록 확인 | - |
+| ROL-L5-ACT-016 | Policy 선택 변경 | Policy 할당 영역 선택 변경 | 로컬 assignment 변경 | - |
+| ROL-L5-ACT-017 | 일괄 저장 버튼 클릭 | Policy 할당 영역 "저장" 버튼 클릭 | 저장 확인 모달 표시 | 변경사항이 1건 이상 |
+| ROL-L5-ACT-018 | 일괄 저장 확인 | 모달에서 저장 버튼 클릭 | PUT /api/v1/policy-assignments/roles/:roleId 호출 | - |
 | ROL-L5-ACT-019 | 일괄 저장 취소 | 모달에서 취소 버튼 클릭 | 모달 닫기 | - |
-| ROL-L5-ACT-020 | Ability 이름 클릭 | Grant 테이블에서 Ability명 클릭 | Ability 상세 화면으로 이동 (`/abilities/[abilityId]`) | - |
+| ROL-L5-ACT-020 | Policy 이름 클릭 | Policy row에서 이름 클릭 | Policy 상세 화면으로 이동 (`/policies/[policyId]`) | - |
 | ROL-L5-ACT-021 | 뒤로가기 | 브라우저 뒤로가기 또는 목록 링크 | 역할 목록 화면으로 이동 | - |
 
 #### 시스템 반응
 
 | 액션 | 성공 시 | 실패 시 |
 |------|---------|---------|
-| 페이지 진입 | GET /api/v1/roles/:id + GET /api/v1/abilities (전체) + GET /api/v1/abilities/roles/:roleId 병렬 호출 → 상세 + Grant 매트릭스 표시 | 에러 메시지 (404: "역할을 찾을 수 없습니다") |
+| 페이지 진입 | GET /api/v1/roles/:id + GET /api/v1/policies + GET /api/v1/policy-assignments/roles/:roleId 병렬 호출 → 상세 + RolePolicy 할당 표시 | 에러 메시지 (404: "역할을 찾을 수 없습니다") |
 | 삭제 확인 | DELETE 호출 → 성공 토스트 → 역할 목록으로 이동 | 에러 토스트 (400: "시스템 역할은 삭제할 수 없습니다" / "연결된 사용자가 있어 삭제할 수 없습니다") |
-| Grant 변경 (체크/활성화/우선순위) | 로컬 상태 업데이트 → 변경사항 카운트 표시 | - |
-| 일괄 저장 확인 | PUT 호출 → 성공 토스트 → Grant 목록 재조회 | 에러 토스트 |
+| RolePolicy 변경 (체크/활성화/우선순위) | 로컬 상태 업데이트 → 변경사항 카운트 표시 | - |
+| 일괄 저장 확인 | PUT 호출 → 성공 토스트 → RolePolicy 목록 재조회 | 에러 토스트 |
 
 #### 상태 전이
 
@@ -49,7 +49,7 @@
 [페이지 진입]
     |
     v
-[로딩 상태] -- GET roles/:id + abilities (전체) + abilities/roles/:roleId (병렬)
+[로딩 상태] -- GET roles/:id + policies + policy-assignments/roles/:roleId (병렬)
     |
     +-- 성공 --> [데이터 표시]
     |                |
@@ -59,11 +59,11 @@
     |                |                    +-- 확인 --> [삭제 처리] --> 성공 --> [목록 이동]
     |                |                    +-- 취소 --> [데이터 표시]
     |                |
-    |                +-- Grant 변경 --> [변경사항 추적]
+    |                +-- RolePolicy 변경 --> [변경사항 추적]
     |                |                    |
     |                |                    +-- 일괄 저장 --> [저장 확인 모달]
     |                |                    |                    |
-    |                |                    |                    +-- 확인 --> [저장 처리] --> 성공 --> [Grant 재조회]
+    |                |                    |                    +-- 확인 --> [저장 처리] --> 성공 --> [RolePolicy 재조회]
     |                |                    |                    +-- 취소 --> [변경사항 추적]
     |                |                    |
     |                |                    +-- 필터 변경 --> [필터링된 목록 표시]
@@ -98,7 +98,7 @@
 | 취소 버튼 | 모달 닫기 (variant="flat") |
 | 삭제 버튼 | DELETE API 호출 (color="danger") |
 
-### Grant 일괄 저장 확인 모달
+### RolePolicy 일괄 저장 확인 모달
 
 ```
 +------------------------------------+
@@ -171,7 +171,7 @@
 | **Method** | GET |
 | **Endpoint** | `/api/v1/abilities/my` |
 | **Operation ID** | `getMyAbilities` |
-| **설명** | 현재 로그인한 사용자의 Role 기본 권한 + User 예외 권한을 병합하여 조회합니다. |
+| **설명** | 현재 Space의 RolePolicy + UserPolicy를 PolicyAbility로 펼친 뒤 병합하여 조회합니다. |
 | **인증** | Bearer Token |
 | **권한** | 인증된 모든 사용자 |
 | **Response** | `AbilityResponseDto[]` |
@@ -179,22 +179,22 @@
 
 ---
 
-### ROL-L6-API-007: Role별 권한 조회
+### ROL-L6-API-007: RolePolicy 조회
 
 | 항목 | 내용 |
 |------|------|
 | **ID** | ROL-L6-API-007 |
 | **Method** | GET |
-| **Endpoint** | `/api/v1/abilities/roles/:roleId` |
-| **Operation ID** | `getAbilitiesByRoleId` |
-| **설명** | 특정 Role에 할당된 기본 권한(Ability) 목록을 조회합니다. Grant를 통해 연결된 Ability를 반환합니다. |
+| **Endpoint** | `/api/v1/policy-assignments/roles/:roleId` |
+| **Operation ID** | `getRolePolicies` |
+| **설명** | 특정 Role에 할당된 현재 Space의 Policy assignment 목록을 조회합니다. |
 | **인증** | Bearer Token |
 | **권한** | 인증된 모든 사용자 |
 | **Path Params** | `roleId` (UUID) - Role ID |
-| **Response** | `AbilityResponseDto[]` |
+| **Response** | `PolicyAssignmentResponseDto[]` |
 | **에러** | 401, 500 |
 
-**Response Body 구조** (`AbilityResponseDto`):
+**Response Body 구조** (`PolicyAssignmentResponseDto`):
 
 ```json
 {
@@ -284,15 +284,15 @@
 
 ---
 
-### ROL-L6-API-021: Grant 배치 할당 (신규)
+### ROL-L6-API-021: RolePolicy 전체 동기화
 
 | 항목 | 내용 |
 |------|------|
 | **ID** | ROL-L6-API-021 |
 | **Method** | PUT |
-| **Endpoint** | `/api/v1/grants/roles/:roleId` |
-| **Operation ID** | `updateRoleGrants` |
-| **설명** | 특정 Role에 대한 Ability Grant를 배치 할당/해제합니다. PUT 방식으로 전체 목록을 동기화합니다. |
+| **Endpoint** | `/api/v1/policy-assignments/roles/:roleId` |
+| **Operation ID** | `syncRolePolicies` |
+| **설명** | 특정 Role에 대한 Policy assignment를 전체 동기화합니다. |
 | **인증** | Bearer Token |
 | **권한** | `@Roles([FULL_ACCESS])` |
 | **Path Params** | `roleId` (UUID) - Role ID |
@@ -302,19 +302,19 @@
 
 ```json
 {
-  "grants": [
+  "rolePolicies": [
     {
-      "abilityId": "uuid-1",
+      "policyId": "uuid-1",
       "isActive": true,
       "priority": 0
     },
     {
-      "abilityId": "uuid-2",
+      "policyId": "uuid-2",
       "isActive": true,
       "priority": 5
     },
     {
-      "abilityId": "uuid-3",
+      "policyId": "uuid-3",
       "isActive": false,
       "priority": 0
     }
@@ -323,23 +323,18 @@
 ```
 
 **동작 설명**:
-- 요청에 포함된 abilityId 목록과 현재 Grant 목록을 비교
-- **추가**: 요청에 있고 현재 Grant에 없는 항목 → 새 Grant 생성
-- **유지/수정**: 요청에 있고 현재 Grant에도 있는 항목 → isActive, priority 업데이트
-- **해제**: 현재 Grant에 있지만 요청에 없는 항목 → Grant 삭제 (소프트 삭제)
+- 요청에 포함된 policyId 목록과 현재 RolePolicy 목록을 비교
+- **추가**: 요청에 있고 현재 RolePolicy에 없는 항목 → 새 RolePolicy 생성
+- **유지/수정**: 요청에 있고 현재 RolePolicy에도 있는 항목 → isActive, priority 업데이트
+- **해제**: 현재 RolePolicy에 있지만 요청에 없는 항목 → RolePolicy 삭제 (소프트 삭제)
 
 **Response**:
 
 ```json
 {
   "httpStatus": 200,
-  "message": "권한 할당이 저장되었습니다",
-  "data": {
-    "added": 2,
-    "updated": 1,
-    "removed": 3,
-    "total": 5
-  }
+  "message": "정책 할당이 저장되었습니다",
+  "data": []
 }
 ```
 

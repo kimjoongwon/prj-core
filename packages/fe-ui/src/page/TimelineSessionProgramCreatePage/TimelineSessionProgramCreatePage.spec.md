@@ -9,6 +9,46 @@
 이 파일은 route thin wrapper가 재사용하는 page 레이어 화면 컴포넌트를 담당합니다.
 Program 생성 시 선택한 Routine의 execution preview를 보여주고, 영상 누락 Exercise가 포함된 Routine은 저장을 차단합니다.
 
+## 디자인 스케치
+
+```text
+TimelineSessionProgramCreatePage
+- FormPage
+  - PageTitleBar
+    - Button
+  - FormPageSurface
+    - FormSectionCard
+      - FormSection
+        - PageTitleBar
+        - VStack
+          - Input x2
+          - Button
+          - Input
+          - Button
+          - Chip
+          - Input
+          - Select
+          - Button
+  - ProgramPickerModal x2
+```
+
+## 사용 컴포넌트
+
+| 컴포넌트 | 출처 | 사용 위치 |
+| --- | --- | --- |
+| `FormPage` | `@cocrepo/ui` | 페이지 외곽 레이아웃 구성 |
+| `PageTitleBar` | `@cocrepo/ui` | 상단 제목, 설명, 주요 액션 표시 |
+| `Button` | `@heroui/react` | 사용자 액션 실행 |
+| `FormPageSurface` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `FormSectionCard` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `FormSection` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `VStack` | `@cocrepo/ui` | 화면 조합 요소 |
+| `Input` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `Chip` | `@heroui/react` | 상태/정보를 카드 또는 표시 단위로 표현 |
+| `Select` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `SelectItem` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `ProgramPickerModal` | `@cocrepo/ui` | 확인 또는 보조 작업 오버레이 |
+
 ## 공개 계약
 
 | 항목 | 설명 |
@@ -39,8 +79,5 @@ Program 생성 시 선택한 Routine의 execution preview를 보여주고, 영�
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-22 | execution preview가 중복 activity fixture에서도 stable key를 사용하도록 UI 규칙을 보강 | codex |
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 route-mirror page 이름을 semantic screen 이름으로 정리 | codex |
-| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
-| 2026-03-29 | Program 신규 생성 화면에 Routine execution preview와 schedulable 차단 규칙을 추가 | codex |
-| 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |
+| 2026-03-29 | Program 신규 생성 화면의 Routine 실행 미리보기와 스케줄 가능 차단 규칙 추가 | codex |
+| 2026-03-26 | 초기 화면 기획 수립 | codex |

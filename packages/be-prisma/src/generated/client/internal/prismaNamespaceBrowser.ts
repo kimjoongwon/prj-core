@@ -53,12 +53,14 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Ability: 'Ability',
   Action: 'Action',
-  RoleGrant: 'RoleGrant',
+  Policy: 'Policy',
+  PolicyAbility: 'PolicyAbility',
+  RolePolicy: 'RolePolicy',
+  UserPolicy: 'UserPolicy',
   Role: 'Role',
   RoleAssociation: 'RoleAssociation',
   RoleClassification: 'RoleClassification',
   Subject: 'Subject',
-  UserGrant: 'UserGrant',
   Album: 'Album',
   AlbumEntry: 'AlbumEntry',
   Asset: 'Asset',
@@ -80,6 +82,7 @@ export const ModelName = {
   SpaceClassification: 'SpaceClassification',
   SpaceAssociation: 'SpaceAssociation',
   Ground: 'Ground',
+  TenantAccessRequest: 'TenantAccessRequest',
   Tenant: 'Tenant',
   Assignment: 'Assignment',
   User: 'User',
@@ -163,18 +166,59 @@ export const ActionScalarFieldEnum = {
 export type ActionScalarFieldEnum = (typeof ActionScalarFieldEnum)[keyof typeof ActionScalarFieldEnum]
 
 
-export const RoleGrantScalarFieldEnum = {
+export const PolicyScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  spaceId: 'spaceId',
+  name: 'name',
+  displayName: 'displayName',
+  description: 'description',
+  isSystem: 'isSystem'
+} as const
+
+export type PolicyScalarFieldEnum = (typeof PolicyScalarFieldEnum)[keyof typeof PolicyScalarFieldEnum]
+
+
+export const PolicyAbilityScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  policyId: 'policyId',
+  abilityId: 'abilityId'
+} as const
+
+export type PolicyAbilityScalarFieldEnum = (typeof PolicyAbilityScalarFieldEnum)[keyof typeof PolicyAbilityScalarFieldEnum]
+
+
+export const RolePolicyScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
   roleId: 'roleId',
-  abilityId: 'abilityId',
+  policyId: 'policyId',
   isActive: 'isActive',
   priority: 'priority'
 } as const
 
-export type RoleGrantScalarFieldEnum = (typeof RoleGrantScalarFieldEnum)[keyof typeof RoleGrantScalarFieldEnum]
+export type RolePolicyScalarFieldEnum = (typeof RolePolicyScalarFieldEnum)[keyof typeof RolePolicyScalarFieldEnum]
+
+
+export const UserPolicyScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  userId: 'userId',
+  policyId: 'policyId',
+  isActive: 'isActive',
+  priority: 'priority'
+} as const
+
+export type UserPolicyScalarFieldEnum = (typeof UserPolicyScalarFieldEnum)[keyof typeof UserPolicyScalarFieldEnum]
 
 
 export const RoleScalarFieldEnum = {
@@ -229,20 +273,6 @@ export const SubjectScalarFieldEnum = {
 } as const
 
 export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
-
-
-export const UserGrantScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  userId: 'userId',
-  abilityId: 'abilityId',
-  isActive: 'isActive',
-  priority: 'priority'
-} as const
-
-export type UserGrantScalarFieldEnum = (typeof UserGrantScalarFieldEnum)[keyof typeof UserGrantScalarFieldEnum]
 
 
 export const AlbumScalarFieldEnum = {
@@ -573,6 +603,26 @@ export const GroundScalarFieldEnum = {
 } as const
 
 export type GroundScalarFieldEnum = (typeof GroundScalarFieldEnum)[keyof typeof GroundScalarFieldEnum]
+
+
+export const TenantAccessRequestScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  requesterId: 'requesterId',
+  spaceId: 'spaceId',
+  requestedRoleId: 'requestedRoleId',
+  previousRoleId: 'previousRoleId',
+  reason: 'reason',
+  status: 'status',
+  reviewerId: 'reviewerId',
+  reviewComment: 'reviewComment',
+  reviewedAt: 'reviewedAt',
+  appliedTenantId: 'appliedTenantId'
+} as const
+
+export type TenantAccessRequestScalarFieldEnum = (typeof TenantAccessRequestScalarFieldEnum)[keyof typeof TenantAccessRequestScalarFieldEnum]
 
 
 export const TenantScalarFieldEnum = {

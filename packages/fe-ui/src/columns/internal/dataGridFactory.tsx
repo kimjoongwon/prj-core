@@ -1,7 +1,7 @@
 "use client";
 
 import type { AssetKind, AssetStatus } from "@cocrepo/api/assets";
-import type { MetaDataGridColumnConfig } from "@cocrepo/type";
+import type { DataGridColumnConfig } from "@cocrepo/type";
 import {
 	DateTimeCell,
 	DefaultCell,
@@ -14,8 +14,10 @@ import { COLUMN_FIELDS, COLUMN_LABELS } from "./fieldPresets";
 type PresetColumnKey = keyof typeof COLUMN_FIELDS & keyof typeof COLUMN_LABELS;
 
 export type ColumnOverrides<TData, TValue = unknown> = Partial<
-	Omit<MetaDataGridColumnConfig<TData, TValue>, "field">
->;
+	Omit<DataGridColumnConfig<TData, TValue>, "field">
+> & {
+	accessorKey?: keyof TData | string;
+};
 
 type NameColumnOverrides<TData> = ColumnOverrides<TData> & {
 	fieldKey?: "name" | "actionKey" | "subjectKey" | "roleKey";
@@ -29,24 +31,24 @@ type CreatedAtColumnOverrides<TData> = ColumnOverrides<TData> & {
 	accessorKey?: keyof TData | string;
 };
 
-/** MetaDataGrid 컬럼 객체를 그대로 반환해 제네릭 정보를 보존합니다. */
+/** DataGrid 컬럼 객체를 그대로 반환해 제네릭 정보를 보존합니다. */
 export function defineColumn<TData, TValue = unknown>(
-	column: MetaDataGridColumnConfig<TData, TValue>,
+	column: DataGridColumnConfig<TData, TValue>,
 ) {
 	return column;
 }
 
 /** 호출부에서 컬럼 순서를 명시적으로 유지하도록 tuple 형태로 묶습니다. */
 export function buildColumns<TData>(
-	...columns: MetaDataGridColumnConfig<TData, unknown>[]
+	...columns: DataGridColumnConfig<TData, unknown>[]
 ) {
 	return columns;
 }
 
 /** 목록 화면에서 자주 쓰는 createdAt 후행 컬럼을 공통 규칙으로 붙입니다. */
 export function buildColumnsWithDefaultCreatedAt<TData>(
-	leading: MetaDataGridColumnConfig<TData, unknown>[],
-	trailing: MetaDataGridColumnConfig<TData, unknown>[] = [],
+	leading: DataGridColumnConfig<TData, unknown>[],
+	trailing: DataGridColumnConfig<TData, unknown>[] = [],
 ) {
 	return buildColumns<TData>(
 		...leading,
@@ -55,7 +57,7 @@ export function buildColumnsWithDefaultCreatedAt<TData>(
 	);
 }
 
-/** preset fieldKey를 실제 MetaDataGrid 컬럼 정의로 해석합니다. */
+/** preset fieldKey를 실제 DataGrid 컬럼 정의로 해석합니다. */
 export function createPresetColumn<TData, TValue = unknown>(
 	fieldKey: PresetColumnKey,
 	overrides: ColumnOverrides<TData, TValue> & {

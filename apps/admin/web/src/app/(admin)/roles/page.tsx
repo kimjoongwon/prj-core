@@ -1,7 +1,7 @@
 "use client";
 
-import { type RoleDto, useGetRoles } from "@cocrepo/api/core/roles";
-import { RoleListPage, type RoleListPageRole } from "@cocrepo/ui";
+import { useGetRoles } from "@cocrepo/api/core/roles";
+import { RoleListPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -14,12 +14,11 @@ export default observer(function RolesPageRoute() {
 		skip: parseAsInteger.withDefault(0),
 	});
 	const { data: response, isLoading } = useGetRoles();
-	const roles = (response?.data ?? []).map(mapRoleRow);
 
 	return (
 		<RoleListPage
-			roles={roles}
-			totalCount={response?.meta?.total ?? roles.length}
+			roles={response?.data}
+			totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
 			isLoading={isLoading}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
@@ -29,15 +28,3 @@ export default observer(function RolesPageRoute() {
 		/>
 	);
 });
-
-function mapRoleRow(role: RoleDto): RoleListPageRole {
-	return {
-		id: role.id,
-		name: role.name,
-		displayName: role.displayName,
-		description: role.description,
-		isSystem: role.isSystem,
-		createdAt: role.createdAt,
-		removedAt: role.removedAt,
-	};
-}

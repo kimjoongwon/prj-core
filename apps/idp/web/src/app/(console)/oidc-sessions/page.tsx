@@ -3,7 +3,6 @@
 import {
 	getGetOidcSessionStatsQueryKey,
 	getGetOidcSessionsQueryKey,
-	type OidcSessionDto,
 	useGetOidcSessionStats,
 	useGetOidcSessions,
 	useRevokeAllOidcSessions,
@@ -12,7 +11,6 @@ import {
 } from "@cocrepo/api/idp/oidc-sessions";
 import {
 	OidcSessionListPage,
-	type OidcSessionListPageSession,
 	type OidcSessionListPageStats,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
@@ -69,7 +67,7 @@ export default observer(function OidcSessionsPageRoute() {
 
 	return (
 		<OidcSessionListPage
-			sessions={(response?.data ?? []).map(mapOidcSession)}
+			sessions={response?.data}
 			totalCount={response?.meta?.totalCount ?? 0}
 			isLoading={isLoading}
 			queryStates={queryStates}
@@ -113,20 +111,6 @@ export default observer(function OidcSessionsPageRoute() {
 		/>
 	);
 });
-
-function mapOidcSession(
-	session: OidcSessionDto,
-): OidcSessionListPageSession {
-	return {
-		id: session.id,
-		key: session.key,
-		modelType: session.modelType,
-		accountId: session.accountId,
-		grantId: session.grantId,
-		expiresAt: session.expiresAt,
-		createdAt: session.createdAt,
-	};
-}
 
 function mapOidcSessionStats(stats: {
 	totalCount: number;

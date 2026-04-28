@@ -1,8 +1,9 @@
 import { AbilityApplicationService } from "@cocrepo/app";
 import {
 	AbilitiesRepository,
-	RoleGrantsRepository,
-	UserGrantsRepository,
+	PolicyAbilitiesRepository,
+	RolePoliciesRepository,
+	UserPoliciesRepository,
 } from "@cocrepo/repository";
 import { AbilityService } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
@@ -14,8 +15,9 @@ import { AbilitiesController } from "./abilities.controller";
 		AbilityApplicationService,
 		AbilityService,
 		AbilitiesRepository,
-		RoleGrantsRepository,
-		UserGrantsRepository,
+		PolicyAbilitiesRepository,
+		RolePoliciesRepository,
+		UserPoliciesRepository,
 	],
 	exports: [AbilityApplicationService],
 })

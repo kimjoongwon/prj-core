@@ -3,6 +3,7 @@
 import { useGetMyAbilities } from "@cocrepo/api/core/abilities";
 import { useAbilities as useInjectedAbilities } from "@cocrepo/hook";
 import { usePathname } from "next/navigation";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 
 interface UseAbilitiesOptions {
 	/**
@@ -21,10 +22,17 @@ interface UseAbilitiesOptions {
 export function useAbilities(options: UseAbilitiesOptions = {}) {
 	const { skipPathPrefix = "/auth" } = options;
 	const pathname = usePathname();
+	const persistStore = usePersistStore();
 	const isDisabled = pathname?.startsWith(skipPathPrefix) === true;
+	const canLoadAbilities =
+		!isDisabled &&
+		persistStore.isHydrated &&
+		persistStore.isSpaceSelectionResolved &&
+		Boolean(persistStore.spaceId);
 	const query = useGetMyAbilities({
 		query: {
-			enabled: !isDisabled,
+			enabled: canLoadAbilities,
+			queryKey: ["/api/v1/abilities/my", persistStore.spaceId],
 			staleTime: 1000 * 60 * 5,
 			gcTime: 1000 * 60 * 10,
 		},
@@ -32,7 +40,7 @@ export function useAbilities(options: UseAbilitiesOptions = {}) {
 
 	return useInjectedAbilities({
 		abilities: query.data?.data,
-		isLoading: query.isLoading,
+		isLoading: !isDisabled && !canLoadAbilities ? true : query.isLoading,
 		isError: query.isError,
 		isDisabled,
 	});

@@ -1,0 +1,132 @@
+// ============================================================================
+// Policy Domain - 공간별 권한 정책 도메인
+// ============================================================================
+
+// @schema-type: ROOT
+// @schema-owner: true
+// @aggregate-root: true
+// @description: 여러 Ability를 묶어 Role/User에 할당하는 공간별 권한 정책
+// @ownership: independent
+// @scope: space
+/// @displayName 정책
+model Policy {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 공간 ID
+  spaceId String @map("space_id")
+  /// @displayName 정책 식별자
+  name String
+  /// @displayName 표시명
+  displayName String? @map("display_name")
+  /// @displayName 설명
+  description String?
+  /// @displayName 시스템 정책 여부
+  isSystem Boolean @default(false) @map("is_system")
+
+  space           Space           @relation(fields: [spaceId], references: [id])
+  policyAbilities PolicyAbility[]
+  rolePolicies    RolePolicy[]
+  userPolicies    UserPolicy[]
+
+  @@unique([spaceId, name])
+  @@index([spaceId])
+  @@index([isSystem])
+  @@map("policies")
+}
+
+// @schema-type: JOIN
+// @description: Policy와 Ability를 연결하는 정책 구성 링크
+// @relation-pattern: one-to-many
+// @ownership: dependent
+// @scope: space
+// @join-role: policy-link
+// @connects: Policy ─── Ability
+/// @displayName 정책 권한
+model PolicyAbility {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 정책 ID
+  policyId String @map("policy_id")
+  /// @displayName 권한 ID
+  abilityId String @map("ability_id")
+
+  policy  Policy  @relation(fields: [policyId], references: [id])
+  ability Ability @relation(fields: [abilityId], references: [id])
+
+  @@unique([policyId, abilityId])
+  @@index([policyId])
+  @@index([abilityId])
+  @@map("policy_abilities")
+}
+
+// @schema-type: JOIN
+// @description: Role과 Policy를 연결하는 역할 정책 할당
+// @relation-pattern: one-to-many
+// @ownership: independent
+// @scope: space
+// @join-role: policy-link
+// @connects: Role ─── Policy
+/// @displayName 역할 정책
+model RolePolicy {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 역할 ID
+  roleId String @map("role_id")
+  /// @displayName 정책 ID
+  policyId String @map("policy_id")
+  /// @displayName 활성화 여부
+  isActive Boolean @default(true) @map("is_active")
+  /// @displayName 우선순위
+  priority Int @default(0)
+
+  role   Role   @relation(fields: [roleId], references: [id])
+  policy Policy @relation(fields: [policyId], references: [id])
+
+  @@unique([roleId, policyId])
+  @@index([roleId])
+  @@index([policyId])
+  @@index([isActive])
+  @@map("role_policies")
+}
+
+// @schema-type: JOIN
+// @description: User와 Policy를 연결하는 사용자 예외 정책 할당
+// @relation-pattern: one-to-many
+// @ownership: independent
+// @scope: space
+// @join-role: policy-link
+// @connects: User ─── Policy
+/// @displayName 사용자 정책
+model UserPolicy {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 사용자 ID
+  userId String @map("user_id")
+  /// @displayName 정책 ID
+  policyId String @map("policy_id")
+  /// @displayName 활성화 여부
+  isActive Boolean @default(true) @map("is_active")
+  /// @displayName 우선순위
+  priority Int @default(10)
+
+  user   User   @relation(fields: [userId], references: [id])
+  policy Policy @relation(fields: [policyId], references: [id])
+
+  @@unique([userId, policyId])
+  @@index([userId])
+  @@index([policyId])
+  @@index([isActive])
+  @@map("user_policies")
+}

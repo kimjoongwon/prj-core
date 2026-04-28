@@ -3,7 +3,6 @@
 import { useLogout, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
 import type { SpaceInfo } from "@cocrepo/ui";
 import {
-	AppLogo,
 	HeaderBar,
 	HeaderSpaceSelector,
 	ThemeToggleButton,
@@ -82,14 +81,6 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 		<HeaderBar
 			userInfo={userInfo}
 			onLogout={onClickLogoutButton}
-			leading={
-				<AppLogo
-					icon="LayoutGrid"
-					text="플레이트"
-					subtitle="Operations Console"
-					variant="console"
-				/>
-			}
 			context={
 				<div className="min-w-0">
 					<p className="text-[11px] font-medium uppercase tracking-[0.22em] text-slate-400 dark:text-slate-500">

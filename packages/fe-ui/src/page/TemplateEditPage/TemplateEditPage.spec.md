@@ -9,6 +9,29 @@
 이 파일은 템플릿 수정 화면의 pure presentational page 컴포넌트를 담당합니다.
 조회/저장 mutation, route 이동, 로컬 폼 상태와 변수 배열 제어는 app route container가 소유하고 이 page는 props contract만 렌더링합니다.
 
+## 디자인 스케치
+
+```text
+TemplateEditPage
+- FormPage
+  - PageTitleBar
+  - FormPageSurface
+    - FormSectionCard
+      - TemplateForm
+```
+
+## 사용 컴포넌트
+
+| 컴포넌트 | 출처 | 사용 위치 |
+| --- | --- | --- |
+| `FormPage` | `@cocrepo/ui` | 페이지 외곽 레이아웃 구성 |
+| `PageTitleBar` | `@cocrepo/ui` | 상단 제목, 설명, 주요 액션 표시 |
+| `FormPageSurface` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `FormSectionCard` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `Spinner` | `@heroui/react` | 로딩/대기 상태 표시 |
+| `Button` | `@heroui/react` | 사용자 액션 실행 |
+| `TemplateForm` | `@cocrepo/ui` | 입력 폼 또는 AI 입력 흐름 구성 |
+
 ## 공개 계약
 
 | 항목 | 설명 |
@@ -29,7 +52,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 route-mirror page 이름을 semantic screen 이름으로 정리 | codex |
-| 2026-03-30 | API/router/local state를 route로 이동하고 pure page props contract로 재정의 | codex |
-| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
-| 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |
+| 2026-03-30 | 수정 화면의 조회/저장/이동 책임 경계를 상위 컨테이너 기준으로 정리 | codex |
+| 2026-03-26 | 초기 화면 기획 수립 | codex |

@@ -129,7 +129,7 @@ exempt = false
 [[rules]]
 id = "fe-collection-files"
 match = ["packages/fe-ui/src/collection/**/*.ts", "packages/fe-ui/src/collection/**/*.tsx"]
-primary_role = "fe-collection-builder"
+primary_role = "fe-widget-builder"
 supporting_roles = []
 rule_docs = []
 check_keys = ["owner-boundary", "layer-boundary"]

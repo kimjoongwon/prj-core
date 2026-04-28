@@ -8,6 +8,32 @@
 
 이 파일은 ui 성격의 경량 구성/배럴 책임을 가집니다.
 
+## 디자인 스케치
+
+```text
+TenantSelectPage
+- Modal
+  - ModalContent
+    - ModalHeader
+    - ModalBody
+      - Listbox
+      - ModalFooter
+        - Button
+```
+
+## 사용 컴포넌트
+
+| 컴포넌트 | 출처 | 사용 위치 |
+| --- | --- | --- |
+| `Modal` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `ModalContent` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `ModalHeader` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `ModalBody` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Listbox` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `ListboxItem` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `ModalFooter` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Button` | `@heroui/react` | 사용자 액션 실행 |
+
 ## 구성 요소
 
 | 항목 | 설명 |
@@ -19,8 +45,4 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
-| 2026-03-29 | modal page를 client component + `observer` 기준으로 명시해 선택 상태 변경 추적 규칙을 보강 | codex |
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
-| 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
-| 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
+| 2026-03-03 | 초기 화면 기획 수립 | codex |

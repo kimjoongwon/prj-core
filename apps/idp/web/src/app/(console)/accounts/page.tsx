@@ -4,13 +4,9 @@ import { useUnlockAccount } from "@cocrepo/api/idp/auth";
 import {
 	getGetIdpAccountQueryKey,
 	getGetIdpAccountsQueryKey,
-	type IdpAccountDto,
 	useGetIdpAccounts,
 } from "@cocrepo/api/idp/idp-accounts";
-import {
-	AccountListPage,
-	type AccountListPageAccount,
-} from "@cocrepo/ui";
+import { AccountListPage } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
@@ -43,7 +39,7 @@ export default observer(function AccountsPageRoute() {
 
 	return (
 		<AccountListPage
-			accounts={(response?.data ?? []).map(mapAccountListItem)}
+			accounts={response?.data}
 			totalCount={response?.meta?.totalCount ?? 0}
 			isLoading={isLoading}
 			isUnlocking={isUnlocking}
@@ -55,18 +51,3 @@ export default observer(function AccountsPageRoute() {
 		/>
 	);
 });
-
-function mapAccountListItem(
-	account: IdpAccountDto,
-): AccountListPageAccount {
-	return {
-		id: account.id,
-		name: account.name,
-		email: account.email,
-		isActive: account.isActive,
-		isPermanentlyLocked: account.isPermanentlyLocked,
-		lockedUntil: account.lockedUntil,
-		failedLoginAttempts: account.failedLoginAttempts,
-		lastLoginAt: account.lastLoginAt,
-	};
-}

@@ -28,10 +28,25 @@ export type Ability = Prisma.AbilityModel
  */
 export type Action = Prisma.ActionModel
 /**
- * Model RoleGrant
- * @displayName 역할 권한 부여
+ * Model Policy
+ * @displayName 정책
  */
-export type RoleGrant = Prisma.RoleGrantModel
+export type Policy = Prisma.PolicyModel
+/**
+ * Model PolicyAbility
+ * @displayName 정책 권한
+ */
+export type PolicyAbility = Prisma.PolicyAbilityModel
+/**
+ * Model RolePolicy
+ * @displayName 역할 정책
+ */
+export type RolePolicy = Prisma.RolePolicyModel
+/**
+ * Model UserPolicy
+ * @displayName 사용자 정책
+ */
+export type UserPolicy = Prisma.UserPolicyModel
 /**
  * Model Role
  * @displayName 역할
@@ -52,11 +67,6 @@ export type RoleClassification = Prisma.RoleClassificationModel
  * @displayName Subject
  */
 export type Subject = Prisma.SubjectModel
-/**
- * Model UserGrant
- * @displayName 사용자 권한 부여
- */
-export type UserGrant = Prisma.UserGrantModel
 /**
  * Model Album
  * @displayName 앨범
@@ -162,6 +172,11 @@ export type SpaceAssociation = Prisma.SpaceAssociationModel
  * @displayName 시설
  */
 export type Ground = Prisma.GroundModel
+/**
+ * Model TenantAccessRequest
+ * @displayName 테넌트 접근 신청
+ */
+export type TenantAccessRequest = Prisma.TenantAccessRequestModel
 /**
  * Model Tenant
  * @displayName 테넌트

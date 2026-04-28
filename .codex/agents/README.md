@@ -42,7 +42,7 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - [req-widget-planner.toml](./req-widget-planner.toml): 화면별 Widget 컴포넌트를 기획하는 전문가
 - [req-primitive-planner.toml](./req-primitive-planner.toml): 화면별 Pure UI 컴포넌트를 기획하는 전문가
 - [req-cell-planner.toml](./req-cell-planner.toml): DataGrid/Table Cell 계약을 기획하는 전문가
-- [req-columns-planner.toml](./req-columns-planner.toml): `packages/fe-ui/src/columns` 레이어 계약과 `MetaDataGrid`/`cell` 경계를 기획하는 전문가
+- [req-columns-planner.toml](./req-columns-planner.toml): `packages/fe-ui/src/columns` 레이어 계약과 `DataGrid`/`cell` 경계를 기획하는 전문가
 - [req-input-planner.toml](./req-input-planner.toml): 입력 컴포넌트(Inputs) 계약을 기획하는 전문가
 - [req-menu-planner.toml](./req-menu-planner.toml): 메뉴 경로/권한 계약을 기획하는 전문가
 - [req-store-planner.toml](./req-store-planner.toml): 도메인별 MobX Store를 기획하는 전문가
@@ -86,15 +86,14 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - [fe-layout-builder.toml](./fe-layout-builder.toml): `packages/fe-ui/src/display/layout`의 flat Layout primitive를 설계하고 생성하는 전문가
 - [fe-route-layout-builder.toml](./fe-route-layout-builder.toml): Next.js App Router의 `app/**/layout.tsx`와 named slot topology를 설계하고 생성하는 전문가
 - [fe-feature-builder.toml](./fe-feature-builder.toml): 비즈니스 기능을 담당하는 Feature 컴포넌트를 생성하는 전문가
-- [fe-data-grid-builder.md](./fe-data-grid-builder.md): `packages/fe-ui/src/data-grid`의 DataGrid/MetaDataGrid 단일 렌더러 구조를 정리하는 전문가
-- [fe-collection-builder.toml](./fe-collection-builder.toml): 목록/테이블/그리드 계열 재사용 collection 계층을 생성하고 정리하는 전문가
+- [fe-data-grid-builder.toml](./fe-data-grid-builder.toml): `packages/fe-ui/src/data-grid`의 DataGrid 단일 렌더러와 input/state 계약을 정리하는 전문가
 - [fe-detail-builder.toml](./fe-detail-builder.toml): 상세 조회/읽기 전용 재사용 detail 계층을 생성하고 정리하는 전문가
 - [fe-form-builder.toml](./fe-form-builder.toml): 생성/수정 입력 화면용 재사용 form 계층을 생성하고 정리하는 전문가
 - [fe-widget-builder.toml](./fe-widget-builder.toml): 재사용 가능한 작은 UI 조각 Widget 컴포넌트를 생성하는 전문가
 - [fe-display-component-builder.toml](./fe-display-component-builder.toml): Display UI 컴포넌트를 `packages/fe-ui/src/display`에 생성하는 전문가
 - [fe-control-component-builder.toml](./fe-control-component-builder.toml): 사용자 조작/입력 컴포넌트를 `packages/fe-ui/src/control`에 생성하는 전문가
 - [fe-cell-builder.toml](./fe-cell-builder.toml): DataGrid/Table용 Cell 컴포넌트를 계층별로 생성하는 전문가
-- [fe-columns-builder.toml](./fe-columns-builder.toml): `packages/fe-ui/src/columns` 레이어와 `MetaDataGrid`/`cell` 경계를 정리하는 전문가
+- [fe-columns-builder.toml](./fe-columns-builder.toml): `packages/fe-ui/src/columns` 레이어와 `DataGrid`/`cell` 경계를 정리하는 전문가
 - [fe-menu-builder.toml](./fe-menu-builder.toml): 메뉴 시스템 컴포넌트를 생성하는 전문가
 - [fe-store-builder.toml](./fe-store-builder.toml): MobX 기반 Store를 생성하는 전문가
 - [fe-state-builder.toml](./fe-state-builder.toml): 웹 화면 로컬 MobX state class/hook과 state slice 전달 구조를 구현하는 전문가
@@ -130,7 +129,6 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - [mobile/fe-mo-feature-builder.toml](./mobile/fe-mo-feature-builder.toml): 모바일 비즈니스 feature 계층을 생성하고 정리하는 전문가
 - [mobile/fe-mo-form-builder.toml](./mobile/fe-mo-form-builder.toml): 모바일 form 재사용 계층을 생성하고 정리하는 전문가
 - [mobile/fe-mo-layout-builder.toml](./mobile/fe-mo-layout-builder.toml): Expo/RN에서 재사용할 모바일 layout shell 컴포넌트를 설계하는 전문가
-- [mobile/fe-mo-collection-builder.toml](./mobile/fe-mo-collection-builder.toml): 모바일 목록/그리드 계열 재사용 collection 계층을 생성하고 정리하는 전문가
 - [mobile/fe-mo-ui-page-builder.toml](./mobile/fe-mo-ui-page-builder.toml): `packages/fe-mo-ui/src/page/**` 기준의 pure mobile page component를 생성하는 전문가
 - [mobile/fe-mo-unit-test-builder.toml](./mobile/fe-mo-unit-test-builder.toml): 모바일 Jest unit test 전략을 설계하는 전문가
 - [mobile/fe-mo-widget-builder.toml](./mobile/fe-mo-widget-builder.toml): 모바일 재사용 widget 계층을 생성하고 정리하는 전문가

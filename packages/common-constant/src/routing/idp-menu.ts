@@ -26,6 +26,10 @@ export const IDP_PATHS = {
 	// 보안 정책
 	SECURITY_POLICY: "/security-policy",
 
+	// 테넌트 접근 신청
+	TENANT_ACCESS_REQUESTS: "/tenant-access-requests",
+	TENANT_ACCESS_REQUESTS_NEW: "/tenant-access-requests/new",
+
 	// 인증
 	AUTH_LOGIN: "/auth/login",
 } as const;

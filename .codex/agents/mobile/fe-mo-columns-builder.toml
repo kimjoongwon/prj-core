@@ -17,7 +17,7 @@ developer_instructions = '''
 
 - 예상 대상: `packages/fe-mo-ui/src/columns/**`
 - 목적: RN 목록/카드형 collection 에서 재사용할 컬럼 정의 contract
-- 제외: 웹 `MetaDataGrid`, `packages/fe-ui/src/columns/**`
+- 제외: 웹 `DataGrid`, `packages/fe-ui/src/columns/**`
 
 ## 금지
 

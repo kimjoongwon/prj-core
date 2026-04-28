@@ -1,13 +1,12 @@
 "use client";
 
 import { useLayout } from "@cocrepo/hook";
-import { AppLogo, SidePanel } from "@cocrepo/ui";
+import { SidePanel } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import {
 	useBottomTabStore,
 	useFABStore,
 	useNavigationStore,
-	usePersistStore,
 } from "@/stores/AppStoreProvider";
 
 const NAV_ITEM_COPY: Record<string, string> = {
@@ -28,7 +27,6 @@ export const AdminSidebarSlot = observer(function AdminSidebarSlot() {
 		useBottomTabStore,
 		useFABStore,
 	});
-	const persistStore = usePersistStore();
 
 	return (
 		<SidePanel
@@ -39,27 +37,8 @@ export const AdminSidebarSlot = observer(function AdminSidebarSlot() {
 			onNavItemClick={layoutProps.onNavItemClick}
 			onSubNavItemClick={layoutProps.onSubNavItemClick}
 			onNavItemToggle={layoutProps.onNavItemToggle}
-			logo={
-				<AppLogo
-					icon="LayoutGrid"
-					text="플레이트"
-					subtitle="Operations Console"
-					variant="console"
-				/>
-			}
-			logoDescription="회원, 일정, 권한, 고객 운영 흐름을 하나의 콘솔 구조에서 정리합니다."
 			getItemDescription={(item) =>
 				NAV_ITEM_COPY[item.id] ?? "운영 콘솔 메뉴로 이동합니다."
-			}
-			footer={
-				<>
-					<p className="text-[11px] font-medium uppercase tracking-[0.22em] text-slate-400 dark:text-slate-500">
-						Current Space
-					</p>
-					<p className="mt-1 truncate text-xs text-slate-500 dark:text-slate-400">
-						{persistStore.groundName ?? "Space를 선택해 운영 범위를 전환합니다."}
-					</p>
-				</>
 			}
 		/>
 	);

@@ -3,11 +3,12 @@ import { OidcFacade } from "@cocrepo/integration";
 import {
 	AbilitiesRepository,
 	AuthAuditLogsRepository,
-	RoleGrantsRepository,
+	PolicyAbilitiesRepository,
+	RolePoliciesRepository,
 	RolesRepository,
 	SpacesRepository,
 	TemplatesRepository,
-	UserGrantsRepository,
+	UserPoliciesRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
 import {
@@ -38,8 +39,9 @@ import { AuthController } from "./auth.controller";
 		OidcFacade,
 		AbilityService,
 		AbilitiesRepository,
-		RoleGrantsRepository,
-		UserGrantsRepository,
+		PolicyAbilitiesRepository,
+		RolePoliciesRepository,
+		UserPoliciesRepository,
 		TokenService,
 		TokenStorageService,
 		RedisService,

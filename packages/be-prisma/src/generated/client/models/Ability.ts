@@ -232,8 +232,7 @@ export type AbilityWhereInput = {
   actionId?: Prisma.StringFilter<"Ability"> | string
   subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>
   action?: Prisma.XOR<Prisma.ActionScalarRelationFilter, Prisma.ActionWhereInput>
-  roleGrants?: Prisma.RoleGrantListRelationFilter
-  userGrants?: Prisma.UserGrantListRelationFilter
+  policyAbilities?: Prisma.PolicyAbilityListRelationFilter
 }
 
 export type AbilityOrderByWithRelationInput = {
@@ -251,8 +250,7 @@ export type AbilityOrderByWithRelationInput = {
   actionId?: Prisma.SortOrder
   subject?: Prisma.SubjectOrderByWithRelationInput
   action?: Prisma.ActionOrderByWithRelationInput
-  roleGrants?: Prisma.RoleGrantOrderByRelationAggregateInput
-  userGrants?: Prisma.UserGrantOrderByRelationAggregateInput
+  policyAbilities?: Prisma.PolicyAbilityOrderByRelationAggregateInput
 }
 
 export type AbilityWhereUniqueInput = Prisma.AtLeast<{
@@ -273,8 +271,7 @@ export type AbilityWhereUniqueInput = Prisma.AtLeast<{
   actionId?: Prisma.StringFilter<"Ability"> | string
   subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>
   action?: Prisma.XOR<Prisma.ActionScalarRelationFilter, Prisma.ActionWhereInput>
-  roleGrants?: Prisma.RoleGrantListRelationFilter
-  userGrants?: Prisma.UserGrantListRelationFilter
+  policyAbilities?: Prisma.PolicyAbilityListRelationFilter
 }, "id" | "name">
 
 export type AbilityOrderByWithAggregationInput = {
@@ -326,8 +323,7 @@ export type AbilityCreateInput = {
   reason?: string | null
   subject: Prisma.SubjectCreateNestedOneWithoutAbilitiesInput
   action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
-  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutAbilityInput
-  userGrants?: Prisma.UserGrantCreateNestedManyWithoutAbilityInput
+  policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutAbilityInput
 }
 
 export type AbilityUncheckedCreateInput = {
@@ -343,8 +339,7 @@ export type AbilityUncheckedCreateInput = {
   reason?: string | null
   subjectId: string
   actionId: string
-  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutAbilityInput
-  userGrants?: Prisma.UserGrantUncheckedCreateNestedManyWithoutAbilityInput
+  policyAbilities?: Prisma.PolicyAbilityUncheckedCreateNestedManyWithoutAbilityInput
 }
 
 export type AbilityUpdateInput = {
@@ -360,8 +355,7 @@ export type AbilityUpdateInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subject?: Prisma.SubjectUpdateOneRequiredWithoutAbilitiesNestedInput
   action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
-  roleGrants?: Prisma.RoleGrantUpdateManyWithoutAbilityNestedInput
-  userGrants?: Prisma.UserGrantUpdateManyWithoutAbilityNestedInput
+  policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityUncheckedUpdateInput = {
@@ -377,8 +371,7 @@ export type AbilityUncheckedUpdateInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   actionId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutAbilityNestedInput
-  userGrants?: Prisma.UserGrantUncheckedUpdateManyWithoutAbilityNestedInput
+  policyAbilities?: Prisma.PolicyAbilityUncheckedUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityCreateManyInput = {
@@ -559,18 +552,18 @@ export type AbilityUncheckedUpdateManyWithoutActionNestedInput = {
   deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
 }
 
-export type AbilityCreateNestedOneWithoutRoleGrantsInput = {
-  create?: Prisma.XOR<Prisma.AbilityCreateWithoutRoleGrantsInput, Prisma.AbilityUncheckedCreateWithoutRoleGrantsInput>
-  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutRoleGrantsInput
+export type AbilityCreateNestedOneWithoutPolicyAbilitiesInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutPolicyAbilitiesInput, Prisma.AbilityUncheckedCreateWithoutPolicyAbilitiesInput>
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutPolicyAbilitiesInput
   connect?: Prisma.AbilityWhereUniqueInput
 }
 
-export type AbilityUpdateOneRequiredWithoutRoleGrantsNestedInput = {
-  create?: Prisma.XOR<Prisma.AbilityCreateWithoutRoleGrantsInput, Prisma.AbilityUncheckedCreateWithoutRoleGrantsInput>
-  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutRoleGrantsInput
-  upsert?: Prisma.AbilityUpsertWithoutRoleGrantsInput
+export type AbilityUpdateOneRequiredWithoutPolicyAbilitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutPolicyAbilitiesInput, Prisma.AbilityUncheckedCreateWithoutPolicyAbilitiesInput>
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutPolicyAbilitiesInput
+  upsert?: Prisma.AbilityUpsertWithoutPolicyAbilitiesInput
   connect?: Prisma.AbilityWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AbilityUpdateToOneWithWhereWithoutRoleGrantsInput, Prisma.AbilityUpdateWithoutRoleGrantsInput>, Prisma.AbilityUncheckedUpdateWithoutRoleGrantsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AbilityUpdateToOneWithWhereWithoutPolicyAbilitiesInput, Prisma.AbilityUpdateWithoutPolicyAbilitiesInput>, Prisma.AbilityUncheckedUpdateWithoutPolicyAbilitiesInput>
 }
 
 export type AbilityCreateNestedManyWithoutSubjectInput = {
@@ -615,20 +608,6 @@ export type AbilityUncheckedUpdateManyWithoutSubjectNestedInput = {
   deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
 }
 
-export type AbilityCreateNestedOneWithoutUserGrantsInput = {
-  create?: Prisma.XOR<Prisma.AbilityCreateWithoutUserGrantsInput, Prisma.AbilityUncheckedCreateWithoutUserGrantsInput>
-  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutUserGrantsInput
-  connect?: Prisma.AbilityWhereUniqueInput
-}
-
-export type AbilityUpdateOneRequiredWithoutUserGrantsNestedInput = {
-  create?: Prisma.XOR<Prisma.AbilityCreateWithoutUserGrantsInput, Prisma.AbilityUncheckedCreateWithoutUserGrantsInput>
-  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutUserGrantsInput
-  upsert?: Prisma.AbilityUpsertWithoutUserGrantsInput
-  connect?: Prisma.AbilityWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AbilityUpdateToOneWithWhereWithoutUserGrantsInput, Prisma.AbilityUpdateWithoutUserGrantsInput>, Prisma.AbilityUncheckedUpdateWithoutUserGrantsInput>
-}
-
 export type AbilityCreateWithoutActionInput = {
   id?: string
   createdAt?: Date | string
@@ -641,8 +620,7 @@ export type AbilityCreateWithoutActionInput = {
   inverted?: boolean
   reason?: string | null
   subject: Prisma.SubjectCreateNestedOneWithoutAbilitiesInput
-  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutAbilityInput
-  userGrants?: Prisma.UserGrantCreateNestedManyWithoutAbilityInput
+  policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutAbilityInput
 }
 
 export type AbilityUncheckedCreateWithoutActionInput = {
@@ -657,8 +635,7 @@ export type AbilityUncheckedCreateWithoutActionInput = {
   inverted?: boolean
   reason?: string | null
   subjectId: string
-  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutAbilityInput
-  userGrants?: Prisma.UserGrantUncheckedCreateNestedManyWithoutAbilityInput
+  policyAbilities?: Prisma.PolicyAbilityUncheckedCreateNestedManyWithoutAbilityInput
 }
 
 export type AbilityCreateOrConnectWithoutActionInput = {
@@ -705,7 +682,7 @@ export type AbilityScalarWhereInput = {
   actionId?: Prisma.StringFilter<"Ability"> | string
 }
 
-export type AbilityCreateWithoutRoleGrantsInput = {
+export type AbilityCreateWithoutPolicyAbilitiesInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -718,10 +695,9 @@ export type AbilityCreateWithoutRoleGrantsInput = {
   reason?: string | null
   subject: Prisma.SubjectCreateNestedOneWithoutAbilitiesInput
   action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
-  userGrants?: Prisma.UserGrantCreateNestedManyWithoutAbilityInput
 }
 
-export type AbilityUncheckedCreateWithoutRoleGrantsInput = {
+export type AbilityUncheckedCreateWithoutPolicyAbilitiesInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -734,26 +710,25 @@ export type AbilityUncheckedCreateWithoutRoleGrantsInput = {
   reason?: string | null
   subjectId: string
   actionId: string
-  userGrants?: Prisma.UserGrantUncheckedCreateNestedManyWithoutAbilityInput
 }
 
-export type AbilityCreateOrConnectWithoutRoleGrantsInput = {
+export type AbilityCreateOrConnectWithoutPolicyAbilitiesInput = {
   where: Prisma.AbilityWhereUniqueInput
-  create: Prisma.XOR<Prisma.AbilityCreateWithoutRoleGrantsInput, Prisma.AbilityUncheckedCreateWithoutRoleGrantsInput>
+  create: Prisma.XOR<Prisma.AbilityCreateWithoutPolicyAbilitiesInput, Prisma.AbilityUncheckedCreateWithoutPolicyAbilitiesInput>
 }
 
-export type AbilityUpsertWithoutRoleGrantsInput = {
-  update: Prisma.XOR<Prisma.AbilityUpdateWithoutRoleGrantsInput, Prisma.AbilityUncheckedUpdateWithoutRoleGrantsInput>
-  create: Prisma.XOR<Prisma.AbilityCreateWithoutRoleGrantsInput, Prisma.AbilityUncheckedCreateWithoutRoleGrantsInput>
+export type AbilityUpsertWithoutPolicyAbilitiesInput = {
+  update: Prisma.XOR<Prisma.AbilityUpdateWithoutPolicyAbilitiesInput, Prisma.AbilityUncheckedUpdateWithoutPolicyAbilitiesInput>
+  create: Prisma.XOR<Prisma.AbilityCreateWithoutPolicyAbilitiesInput, Prisma.AbilityUncheckedCreateWithoutPolicyAbilitiesInput>
   where?: Prisma.AbilityWhereInput
 }
 
-export type AbilityUpdateToOneWithWhereWithoutRoleGrantsInput = {
+export type AbilityUpdateToOneWithWhereWithoutPolicyAbilitiesInput = {
   where?: Prisma.AbilityWhereInput
-  data: Prisma.XOR<Prisma.AbilityUpdateWithoutRoleGrantsInput, Prisma.AbilityUncheckedUpdateWithoutRoleGrantsInput>
+  data: Prisma.XOR<Prisma.AbilityUpdateWithoutPolicyAbilitiesInput, Prisma.AbilityUncheckedUpdateWithoutPolicyAbilitiesInput>
 }
 
-export type AbilityUpdateWithoutRoleGrantsInput = {
+export type AbilityUpdateWithoutPolicyAbilitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -766,10 +741,9 @@ export type AbilityUpdateWithoutRoleGrantsInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subject?: Prisma.SubjectUpdateOneRequiredWithoutAbilitiesNestedInput
   action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
-  userGrants?: Prisma.UserGrantUpdateManyWithoutAbilityNestedInput
 }
 
-export type AbilityUncheckedUpdateWithoutRoleGrantsInput = {
+export type AbilityUncheckedUpdateWithoutPolicyAbilitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -782,7 +756,6 @@ export type AbilityUncheckedUpdateWithoutRoleGrantsInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   actionId?: Prisma.StringFieldUpdateOperationsInput | string
-  userGrants?: Prisma.UserGrantUncheckedUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityCreateWithoutSubjectInput = {
@@ -797,8 +770,7 @@ export type AbilityCreateWithoutSubjectInput = {
   inverted?: boolean
   reason?: string | null
   action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
-  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutAbilityInput
-  userGrants?: Prisma.UserGrantCreateNestedManyWithoutAbilityInput
+  policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutAbilityInput
 }
 
 export type AbilityUncheckedCreateWithoutSubjectInput = {
@@ -813,8 +785,7 @@ export type AbilityUncheckedCreateWithoutSubjectInput = {
   inverted?: boolean
   reason?: string | null
   actionId: string
-  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutAbilityInput
-  userGrants?: Prisma.UserGrantUncheckedCreateNestedManyWithoutAbilityInput
+  policyAbilities?: Prisma.PolicyAbilityUncheckedCreateNestedManyWithoutAbilityInput
 }
 
 export type AbilityCreateOrConnectWithoutSubjectInput = {
@@ -843,86 +814,6 @@ export type AbilityUpdateManyWithWhereWithoutSubjectInput = {
   data: Prisma.XOR<Prisma.AbilityUpdateManyMutationInput, Prisma.AbilityUncheckedUpdateManyWithoutSubjectInput>
 }
 
-export type AbilityCreateWithoutUserGrantsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  description?: string | null
-  fields?: Prisma.AbilityCreatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: boolean
-  reason?: string | null
-  subject: Prisma.SubjectCreateNestedOneWithoutAbilitiesInput
-  action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
-  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutAbilityInput
-}
-
-export type AbilityUncheckedCreateWithoutUserGrantsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  description?: string | null
-  fields?: Prisma.AbilityCreatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: boolean
-  reason?: string | null
-  subjectId: string
-  actionId: string
-  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutAbilityInput
-}
-
-export type AbilityCreateOrConnectWithoutUserGrantsInput = {
-  where: Prisma.AbilityWhereUniqueInput
-  create: Prisma.XOR<Prisma.AbilityCreateWithoutUserGrantsInput, Prisma.AbilityUncheckedCreateWithoutUserGrantsInput>
-}
-
-export type AbilityUpsertWithoutUserGrantsInput = {
-  update: Prisma.XOR<Prisma.AbilityUpdateWithoutUserGrantsInput, Prisma.AbilityUncheckedUpdateWithoutUserGrantsInput>
-  create: Prisma.XOR<Prisma.AbilityCreateWithoutUserGrantsInput, Prisma.AbilityUncheckedCreateWithoutUserGrantsInput>
-  where?: Prisma.AbilityWhereInput
-}
-
-export type AbilityUpdateToOneWithWhereWithoutUserGrantsInput = {
-  where?: Prisma.AbilityWhereInput
-  data: Prisma.XOR<Prisma.AbilityUpdateWithoutUserGrantsInput, Prisma.AbilityUncheckedUpdateWithoutUserGrantsInput>
-}
-
-export type AbilityUpdateWithoutUserGrantsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fields?: Prisma.AbilityUpdatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  subject?: Prisma.SubjectUpdateOneRequiredWithoutAbilitiesNestedInput
-  action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
-  roleGrants?: Prisma.RoleGrantUpdateManyWithoutAbilityNestedInput
-}
-
-export type AbilityUncheckedUpdateWithoutUserGrantsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fields?: Prisma.AbilityUpdatefieldsInput | string[]
-  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
-  actionId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutAbilityNestedInput
-}
-
 export type AbilityCreateManyActionInput = {
   id?: string
   createdAt?: Date | string
@@ -949,8 +840,7 @@ export type AbilityUpdateWithoutActionInput = {
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subject?: Prisma.SubjectUpdateOneRequiredWithoutAbilitiesNestedInput
-  roleGrants?: Prisma.RoleGrantUpdateManyWithoutAbilityNestedInput
-  userGrants?: Prisma.UserGrantUpdateManyWithoutAbilityNestedInput
+  policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityUncheckedUpdateWithoutActionInput = {
@@ -965,8 +855,7 @@ export type AbilityUncheckedUpdateWithoutActionInput = {
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutAbilityNestedInput
-  userGrants?: Prisma.UserGrantUncheckedUpdateManyWithoutAbilityNestedInput
+  policyAbilities?: Prisma.PolicyAbilityUncheckedUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityUncheckedUpdateManyWithoutActionInput = {
@@ -1009,8 +898,7 @@ export type AbilityUpdateWithoutSubjectInput = {
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
-  roleGrants?: Prisma.RoleGrantUpdateManyWithoutAbilityNestedInput
-  userGrants?: Prisma.UserGrantUpdateManyWithoutAbilityNestedInput
+  policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityUncheckedUpdateWithoutSubjectInput = {
@@ -1025,8 +913,7 @@ export type AbilityUncheckedUpdateWithoutSubjectInput = {
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   actionId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutAbilityNestedInput
-  userGrants?: Prisma.UserGrantUncheckedUpdateManyWithoutAbilityNestedInput
+  policyAbilities?: Prisma.PolicyAbilityUncheckedUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityUncheckedUpdateManyWithoutSubjectInput = {
@@ -1049,13 +936,11 @@ export type AbilityUncheckedUpdateManyWithoutSubjectInput = {
  */
 
 export type AbilityCountOutputType = {
-  roleGrants: number
-  userGrants: number
+  policyAbilities: number
 }
 
 export type AbilityCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  roleGrants?: boolean | AbilityCountOutputTypeCountRoleGrantsArgs
-  userGrants?: boolean | AbilityCountOutputTypeCountUserGrantsArgs
+  policyAbilities?: boolean | AbilityCountOutputTypeCountPolicyAbilitiesArgs
 }
 
 /**
@@ -1071,15 +956,8 @@ export type AbilityCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * AbilityCountOutputType without action
  */
-export type AbilityCountOutputTypeCountRoleGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.RoleGrantWhereInput
-}
-
-/**
- * AbilityCountOutputType without action
- */
-export type AbilityCountOutputTypeCountUserGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.UserGrantWhereInput
+export type AbilityCountOutputTypeCountPolicyAbilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PolicyAbilityWhereInput
 }
 
 
@@ -1098,8 +976,7 @@ export type AbilitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   actionId?: boolean
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
   action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
-  roleGrants?: boolean | Prisma.Ability$roleGrantsArgs<ExtArgs>
-  userGrants?: boolean | Prisma.Ability$userGrantsArgs<ExtArgs>
+  policyAbilities?: boolean | Prisma.Ability$policyAbilitiesArgs<ExtArgs>
   _count?: boolean | Prisma.AbilityCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ability"]>
 
@@ -1156,8 +1033,7 @@ export type AbilityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type AbilityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
   action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
-  roleGrants?: boolean | Prisma.Ability$roleGrantsArgs<ExtArgs>
-  userGrants?: boolean | Prisma.Ability$userGrantsArgs<ExtArgs>
+  policyAbilities?: boolean | Prisma.Ability$policyAbilitiesArgs<ExtArgs>
   _count?: boolean | Prisma.AbilityCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AbilityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1174,8 +1050,7 @@ export type $AbilityPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     subject: Prisma.$SubjectPayload<ExtArgs>
     action: Prisma.$ActionPayload<ExtArgs>
-    roleGrants: Prisma.$RoleGrantPayload<ExtArgs>[]
-    userGrants: Prisma.$UserGrantPayload<ExtArgs>[]
+    policyAbilities: Prisma.$PolicyAbilityPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1604,8 +1479,7 @@ export interface Prisma__AbilityClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   subject<T extends Prisma.SubjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubjectDefaultArgs<ExtArgs>>): Prisma.Prisma__SubjectClient<runtime.Types.Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   action<T extends Prisma.ActionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ActionDefaultArgs<ExtArgs>>): Prisma.Prisma__ActionClient<runtime.Types.Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  roleGrants<T extends Prisma.Ability$roleGrantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ability$roleGrantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoleGrantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  userGrants<T extends Prisma.Ability$userGrantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ability$userGrantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserGrantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  policyAbilities<T extends Prisma.Ability$policyAbilitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ability$policyAbilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PolicyAbilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2043,51 +1917,27 @@ export type AbilityDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Ability.roleGrants
+ * Ability.policyAbilities
  */
-export type Ability$roleGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Ability$policyAbilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the RoleGrant
+   * Select specific fields to fetch from the PolicyAbility
    */
-  select?: Prisma.RoleGrantSelect<ExtArgs> | null
+  select?: Prisma.PolicyAbilitySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the RoleGrant
+   * Omit specific fields from the PolicyAbility
    */
-  omit?: Prisma.RoleGrantOmit<ExtArgs> | null
+  omit?: Prisma.PolicyAbilityOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.RoleGrantInclude<ExtArgs> | null
-  where?: Prisma.RoleGrantWhereInput
-  orderBy?: Prisma.RoleGrantOrderByWithRelationInput | Prisma.RoleGrantOrderByWithRelationInput[]
-  cursor?: Prisma.RoleGrantWhereUniqueInput
+  include?: Prisma.PolicyAbilityInclude<ExtArgs> | null
+  where?: Prisma.PolicyAbilityWhereInput
+  orderBy?: Prisma.PolicyAbilityOrderByWithRelationInput | Prisma.PolicyAbilityOrderByWithRelationInput[]
+  cursor?: Prisma.PolicyAbilityWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.RoleGrantScalarFieldEnum | Prisma.RoleGrantScalarFieldEnum[]
-}
-
-/**
- * Ability.userGrants
- */
-export type Ability$userGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the UserGrant
-   */
-  select?: Prisma.UserGrantSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the UserGrant
-   */
-  omit?: Prisma.UserGrantOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserGrantInclude<ExtArgs> | null
-  where?: Prisma.UserGrantWhereInput
-  orderBy?: Prisma.UserGrantOrderByWithRelationInput | Prisma.UserGrantOrderByWithRelationInput[]
-  cursor?: Prisma.UserGrantWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.UserGrantScalarFieldEnum | Prisma.UserGrantScalarFieldEnum[]
+  distinct?: Prisma.PolicyAbilityScalarFieldEnum | Prisma.PolicyAbilityScalarFieldEnum[]
 }
 
 /**

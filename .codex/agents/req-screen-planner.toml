@@ -90,7 +90,7 @@ apps/[app]/web/src/app/(admin)/[domain]/[entityId]/edit/page.spec.md
 
 | 화면 유형 | 기본 path 패턴 | 초기 `page role` | 초기 `reusable target` |
 |----------|----------------|------------------|------------------------|
-| 목록 + `MetaDataGrid` 중심 | `/[resources]` | `collection` | `data-grid` |
+| 목록 + `DataGrid` 중심 | `/[resources]` | `collection` | `data-grid` |
 | 목록 + 리스트형 컬렉션 | `/[resources]` | `collection` | `collection/list` |
 | 목록 + 카드/썸네일 그리드 | `/[resources]` | `collection` | `collection/grid` |
 | 상세 조회 | `/[resources]/[entityId]` | `detail` | `detail/view` |

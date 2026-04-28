@@ -83,6 +83,16 @@ export const LanguageCode = {
 export type LanguageCode = (typeof LanguageCode)[keyof typeof LanguageCode]
 
 
+export const TenantAccessRequestStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELED: 'CANCELED'
+} as const
+
+export type TenantAccessRequestStatus = (typeof TenantAccessRequestStatus)[keyof typeof TenantAccessRequestStatus]
+
+
 export const AIAgentAction = {
   DRAFT_GENERATION: 'DRAFT_GENERATION',
   AUTO_CLASSIFICATION: 'AUTO_CLASSIFICATION',

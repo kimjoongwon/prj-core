@@ -38,7 +38,7 @@
 |------|----------------------------|
 | `access-control/ability.prisma` | `Ability` |
 | `access-control/action.prisma` | `Action` |
-| `access-control/grant.prisma` | `Grant` |
+| `access-control/policy.prisma` | `Policy` |
 | `access-control/role.prisma` | `Role` |
 | `access-control/subject.prisma` | `Subject` |
 | `asset/album.prisma` | `Album` |
@@ -73,7 +73,7 @@
 |------|------------------------------|
 | `access-control/ability.prisma` | `Ability` |
 | `access-control/action.prisma` | `Action` |
-| `access-control/grant.prisma` | `Grant` |
+| `access-control/policy.prisma` | `Policy` |
 | `access-control/role.prisma` | `Role` |
 | `access-control/subject.prisma` | `Subject` |
 | `asset/album.prisma` | `Album` |
@@ -111,7 +111,7 @@
 |------|----------------|
 | `access-control/ability.prisma` | `Ability` |
 | `access-control/action.prisma` | `Action` |
-| `access-control/grant.prisma` | `Grant` |
+| `access-control/policy.prisma` | `Policy`, `PolicyAbility`, `RolePolicy`, `UserPolicy` |
 | `access-control/role.prisma` | `Role`, `RoleAssociation`, `RoleClassification` |
 | `access-control/subject.prisma` | `Subject` |
 | `asset/album.prisma` | `Album`, `AlbumEntry` |

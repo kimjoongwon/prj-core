@@ -18,7 +18,7 @@ Stage 5/6 구현 role이 사용할 `page role`, `reusable target`, `page compone
 
 즉, `req-page-planner`는 다음 축을 함께 연결합니다.
 
-- `fe-collection-builder`, `fe-detail-builder`, `fe-form-builder`
+- `fe-data-grid-builder`, `fe-widget-builder`, `fe-detail-builder`, `fe-form-builder`
 - `fe-ui-page-builder`
 - `fe-page-builder`
 - `fe-api-integrator`
@@ -84,9 +84,9 @@ Stage 5/6 구현 role이 사용할 `page role`, `reusable target`, `page compone
 
 | 조건 | `page role` | `reusable target` | 참조 구현 role |
 |------|-------------|-------------------|----------------|
-| `MetaDataGrid` 기반 목록 | `collection` | `data-grid` | `fe-collection-builder` |
-| 리스트형 컬렉션 목록 | `collection` | `collection/list` | `fe-collection-builder` |
-| 카드/썸네일 그리드 목록 | `collection` | `collection/grid` | `fe-collection-builder` |
+| `DataGrid` 기반 목록 | `collection` | `data-grid` | `fe-data-grid-builder` |
+| 리스트형 컬렉션 목록 | `collection` | `collection/list` | `fe-widget-builder` |
+| 카드/썸네일 그리드 목록 | `collection` | `collection/grid` | `fe-widget-builder` |
 | 읽기 전용 상세 조회 | `detail` | `detail/view` | `fe-detail-builder` |
 | 생성/수정/입력 중심 | `form` | `form` | `fe-form-builder` |
 
@@ -115,7 +115,7 @@ Stage 5/6 구현 role이 사용할 `page role`, `reusable target`, `page compone
 
 - `page.spec.md`가 route-level `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` 배치를 과도하게 재설계하면 안 됩니다.
 - `page role`, `reusable target` 없이 pure page 경로만 적으면 안 됩니다.
-- `fe-collection-builder`, `fe-detail-builder`, `fe-form-builder` 중 필요한 구현 role을 누락하면 안 됩니다.
+- 목록 구현 role(`fe-data-grid-builder` 또는 `fe-widget-builder`), `fe-detail-builder`, `fe-form-builder` 중 필요한 구현 role을 누락하면 안 됩니다.
 - 단순 코드 분리를 이유로 `_client.tsx`, `_prefetch.ts`를 기본값처럼 계획하면 안 됩니다.
 - named slot인데 consumed slot key와 `default.tsx` fallback 정책을 모른 채 기획하면 안 됩니다.
 
@@ -130,7 +130,8 @@ Stage 5/6 구현 role이 사용할 `page role`, `reusable target`, `page compone
 | `req-feature-planner` | 이전 단계 | Feature 조합 정의 |
 | `req-surface-planner` | 협업 | surface ownership 경계 검토 |
 | `req-fe-test-planner` | 협업 | 테스트 관점 보강 |
-| `fe-collection-builder` | 다음 단계 | collection 재사용 계층 구현 |
+| `fe-data-grid-builder` | 다음 단계 | data-grid 재사용 계층 구현 |
+| `fe-widget-builder` | 다음 단계 | collection/list, collection/grid 성격의 순수 UI 조합 구현 |
 | `fe-detail-builder` | 다음 단계 | detail/view 재사용 계층 구현 |
 | `fe-form-builder` | 다음 단계 | form 재사용 계층 구현 |
 | `fe-ui-page-builder` | 다음 단계 | pure page 구현 |

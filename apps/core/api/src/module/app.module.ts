@@ -34,9 +34,10 @@ import { CategoriesModule } from "./categories";
 // Global modules
 import { FoldersModule } from "./folders";
 import { globalModules } from "./global.module";
-import { GrantsModule } from "./grants";
 import { GroupsModule } from "./groups";
 import { InquiriesModule } from "./inquiries";
+import { PoliciesModule } from "./policies";
+import { PolicyAssignmentsModule } from "./policy-assignments";
 import { PrismaModule } from "./prisma.module";
 import { RedisModule } from "./redis.module";
 import { RolesModule } from "./roles";
@@ -44,6 +45,7 @@ import { RoutinesModule } from "./routines";
 import { SpacesModule } from "./spaces";
 import { SubjectsModule } from "./subjects";
 import { TasksModule } from "./tasks";
+import { TenantAccessRequestsModule } from "./tenant-access-requests";
 import { TemplatesModule } from "./templates";
 import { TimelinesModule } from "./timelines";
 import { UsersModule } from "./users";
@@ -82,13 +84,15 @@ const devtoolsImports = enableNestDevtools
 		RolesModule,
 		GroupsModule,
 		CategoriesModule,
-		GrantsModule,
+		PoliciesModule,
+		PolicyAssignmentsModule,
 		FoldersModule,
 		TemplatesModule,
 		TimelinesModule,
 		TasksModule,
 		RoutinesModule,
 		InquiriesModule,
+		TenantAccessRequestsModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/be-controller-builder.md
 		RouterModule.register([
@@ -135,8 +139,12 @@ const devtoolsImports = enableNestDevtools
 								module: CategoriesModule,
 							},
 							{
-								path: "grants",
-								module: GrantsModule,
+								path: "policies",
+								module: PoliciesModule,
+							},
+							{
+								path: "policy-assignments",
+								module: PolicyAssignmentsModule,
 							},
 							{
 								path: "folders",
@@ -161,6 +169,10 @@ const devtoolsImports = enableNestDevtools
 							{
 								path: "inquiries",
 								module: InquiriesModule,
+							},
+							{
+								path: "tenant-access-requests",
+								module: TenantAccessRequestsModule,
 							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],

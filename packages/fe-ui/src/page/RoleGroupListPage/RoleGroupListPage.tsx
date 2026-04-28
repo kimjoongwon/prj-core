@@ -1,19 +1,13 @@
 "use client";
 
+import type { GroupDto } from "@cocrepo/api/core/model";
 import { DateTimeCell, PageTitleBar, Surface } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { Layers, Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
 
-export interface RoleGroupListPageGroup {
-	id: string;
-	name: string;
-	label?: string | null;
-	createdAt: string;
-}
-
 export interface RoleGroupListPageProps {
-	groups: RoleGroupListPageGroup[];
+	groups?: GroupDto[];
 	isLoading: boolean;
 	onClickCreateButton: () => void;
 	onClickDetailButton: (groupId: string) => void;
@@ -26,7 +20,8 @@ export const RoleGroupListPage = observer(
 		onClickCreateButton,
 		onClickDetailButton,
 	}: RoleGroupListPageProps) => {
-		const totalCount = groups.length;
+		const groupRows = groups ?? [];
+		const totalCount = groupRows.length;
 
 		return (
 			<div className="space-y-5">
@@ -48,7 +43,7 @@ export const RoleGroupListPage = observer(
 						<div className="flex items-center justify-center p-8">
 							<span className="text-default-500">로딩 중...</span>
 						</div>
-					) : groups.length === 0 ? (
+					) : groupRows.length === 0 ? (
 						<div className="flex flex-col items-center justify-center gap-4 p-16">
 							<div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
 								<Layers className="h-8 w-8 text-primary" />
@@ -75,7 +70,7 @@ export const RoleGroupListPage = observer(
 									</tr>
 								</thead>
 								<tbody>
-									{groups.map((group) => (
+									{groupRows.map((group) => (
 										<tr
 											key={group.id}
 											className="border-b border-divider transition-colors hover:bg-content2/50"

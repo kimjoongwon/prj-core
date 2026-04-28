@@ -2,25 +2,25 @@ import type { ColumnDef, RowData } from "@tanstack/react-table";
 import type { ReactNode } from "react";
 
 // ============================================
-// MetaDataGrid 메인 인터페이스
+// DataGrid 메인 인터페이스
 // ============================================
 
-export type MetaDataGridQueryStates = Record<string, unknown>;
+export type DataGridQueryStates = Record<string, unknown>;
 
-export type MetaDataGridSetQueryStates = (
+export type DataGridSetQueryStates = (
 	values: Record<string, unknown | null>,
 	options?: { history?: "push" | "replace" },
 ) => Promise<URLSearchParams>;
 
-export interface MetaDataGridQueryState {
+export interface DataGridQueryState {
 	/** 페이지 또는 route 가 소유한 query state 값 */
-	values: MetaDataGridQueryStates;
+	values: DataGridQueryStates;
 
 	/** 페이지 또는 route 가 소유한 query state setter */
-	setValues: MetaDataGridSetQueryStates;
+	setValues: DataGridSetQueryStates;
 }
 
-export interface MetaDataGridSelectionState {
+export interface DataGridSelectionState {
 	/** 선택된 키 목록 */
 	selectedKeys?: Set<string>;
 
@@ -31,24 +31,24 @@ export interface MetaDataGridSelectionState {
 	clear?: () => void;
 }
 
-export interface MetaDataGridState {
+export interface DataGridState {
 	/** 검색/필터/페이지네이션 query 상태 */
-	query: MetaDataGridQueryState;
+	query: DataGridQueryState;
 
 	/** row selection 같은 grid interaction 상태 */
-	selection?: MetaDataGridSelectionState;
+	selection?: DataGridSelectionState;
 }
 
 /**
- * MetaDataGrid 설정 인터페이스
+ * DataGrid 설정 인터페이스
  * 메타데이터 기반 선언적 DataGrid 구성
  */
-export interface MetaDataGridConfig<T> {
+export interface DataGridConfig<T> {
 	/** 엔티티명 (컬럼 가시성 시스템 연동) */
 	entity: string;
 
 	/** 컬럼 정의 (TanStack Table ColumnDef 확장) */
-	columns: MetaDataGridColumnConfig<T>[];
+	columns: DataGridColumnConfig<T>[];
 
 	/** 상단 좌측 영역 (검색, 필터 등) */
 	leftInputs?: InputConfig[];
@@ -70,14 +70,14 @@ export interface MetaDataGridConfig<T> {
 }
 
 // ============================================
-// MetaDataGridColumnConfig (TanStack Table ColumnDef 확장)
+// DataGridColumnConfig (TanStack Table ColumnDef 확장)
 // ============================================
 
 /**
  * TanStack Table의 ColumnDef를 확장한 컬럼 설정
  * 기본 ColumnDef의 모든 기능을 사용하면서 추가 메타데이터 제공
  */
-export interface MetaDataGridColumnConfig<TData, TValue = unknown>
+export interface DataGridColumnConfig<TData, TValue = unknown>
 	extends Omit<ColumnDef<TData, TValue>, "id"> {
 	/** 필드명 (ColumnDef의 id로도 사용됨) */
 	field: keyof TData | string;
@@ -90,7 +90,6 @@ export interface MetaDataGridColumnConfig<TData, TValue = unknown>
 
 	/** 정렬 방향 */
 	align?: "left" | "center" | "right";
-
 }
 
 // ============================================
@@ -213,10 +212,10 @@ export interface SelectionConfig {
 	/** 선택 모드 */
 	mode: "none" | "single" | "multiple";
 
-	/** 선택된 키 목록 (MetaDataGridState.selection 우선) */
+	/** 선택된 키 목록 (DataGridState.selection 우선) */
 	selectedKeys?: Set<string>;
 
-	/** 선택 변경 핸들러 (MetaDataGridState.selection 우선) */
+	/** 선택 변경 핸들러 (DataGridState.selection 우선) */
 	onSelectionChange?: (keys: Set<string>) => void;
 
 	/** 선택 시 하단 액션바 */

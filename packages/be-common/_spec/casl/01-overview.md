@@ -107,17 +107,17 @@ VIEW (조회)
 | Prisma | `packages/be-prisma/schema/access-control/subject.prisma` | Subject 모델 |
 | Prisma | `packages/be-prisma/schema/access-control/action.prisma` | Action 모델 |
 | Prisma | `packages/be-prisma/schema/access-control/ability.prisma` | Ability 모델 |
-| Prisma | `packages/be-prisma/schema/access-control/grant.prisma` | Grant 모델 |
+| Prisma | `packages/be-prisma/schema/access-control/policy.prisma` | Policy, PolicyAbility, RolePolicy, UserPolicy 모델 |
 | Prisma | `packages/be-prisma/schema/access-control/role.prisma` | Role, RoleAssociation, RoleClassification |
 | Entity | `packages/be-entity/src/ability.entity.ts` | Ability 도메인 엔티티 |
-| Entity | `packages/be-entity/src/grant.entity.ts` | Grant 도메인 엔티티 |
+| Entity | `packages/be-entity/src/policy.entity.ts` | Policy 도메인 엔티티 |
 | Entity | `packages/be-entity/src/role.entity.ts` | Role 도메인 엔티티 |
 | Repository | `packages/be-repository/src/abilities.repository.ts` | Ability CRUD |
-| Repository | `packages/be-repository/src/grants.repository.ts` | Grant 조회 (Role/User 기반) |
+| Repository | `packages/be-repository/src/policies.repository.ts` | Policy 조회 (Space 기반) |
 | Service | `packages/be-service/src/ability.service/index.ts` | Ability 비즈니스 로직 |
-| Service | `packages/be-service/src/grant.service/index.ts` | Grant 비즈니스 로직 |
-| ApplicationService | `packages/be-app/src/ability.application-service/index.ts` | Ability + Grant 조합 로직 |
-| CASL | `packages/be-common/src/casl/casl-ability.factory.ts` | CASL Ability 생성 팩토리 (GrantsRepository 사용) |
+| Service | `packages/be-service/src/policy.service/index.ts` | Policy 비즈니스 로직 |
+| ApplicationService | `packages/be-app/src/ability.application-service/index.ts` | Ability + Policy 조합 로직 |
+| CASL | `packages/be-common/src/casl/casl-ability.factory.ts` | CASL Ability 생성 팩토리 (Policy repository 사용) |
 | Guard | `packages/be-common/src/guard/roles.guard.ts` | @Roles 데코레이터 Guard |
 | Guard | `packages/be-common/src/guard/role-category.guard.ts` | @RoleCategories 데코레이터 Guard |
 | Guard | `packages/be-common/src/guard/role-group.guard.ts` | @RoleGroups 데코레이터 Guard |
@@ -127,10 +127,10 @@ VIEW (조회)
 | Decorator | `packages/be-decorator/src/role-groups.decorator.ts` | @RoleGroups 데코레이터 |
 | Decorator | `packages/be-decorator/src/skip-space-check.decorator.ts` | @SkipSpaceCheck 데코레이터 |
 | Controller | `apps/server/src/module/role/roles.controller.ts` | 역할 CRUD API |
-| Controller | `apps/server/src/module/ability/abilities.controller.ts` | Ability/Grant API |
+| Controller | `apps/server/src/module/ability/abilities.controller.ts` | Ability API |
 | DTO | `packages/be-dto/src/ability.dto.ts` | AbilityDto, AbilitySummaryDto |
 | DTO | `packages/be-dto/src/abilities/` | CreateAbilityDto, AbilityResponseDto |
-| DTO | `packages/be-dto/src/grants/` | CreateGrantDto, UpdateGrantDto, GrantResponseDto |
+| DTO | `packages/be-dto/src/policies/` | CreatePolicyDto, UpdatePolicyDto, PolicyResponseDto |
 | Enum | `packages/common-enum/src/role-category-names.enum.ts` | RoleCategoryNames (ts-jenum) |
 | Enum | `packages/common-enum/src/role-group-names.enum.ts` | RoleGroupNames (ts-jenum) |
 | Constant | `packages/common-constant/src/schema/role-type.constant.ts` | SYSTEM_ROLES 상수 |

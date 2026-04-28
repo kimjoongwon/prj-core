@@ -17,7 +17,7 @@ developer_instructions = '''
 
 - 예상 대상: `packages/fe-mo-ui/src/cell/**`
 - 목적: RN 목록/카드/행 단위 값 표현 contract
-- 제외: 웹 `MetaDataGrid`, `packages/fe-ui/src/cell/**`
+- 제외: 웹 `DataGrid`, `packages/fe-ui/src/cell/**`
 
 ## 금지
 

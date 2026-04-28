@@ -8,11 +8,35 @@
 
 역할 목록 화면의 pure page 컴포넌트입니다. 역할 조회, query state, 신규 등록 라우팅은 route thin container가 소유하고 이 파일은 안내 배너와 grid 조합만 담당합니다.
 
+## 디자인 스케치
+
+```text
+RoleListPage
+- PageTitleBar
+  - Button
+- VStack
+  - PageTitleBar
+  - Surface
+    - DataGrid
+```
+
+## 사용 컴포넌트
+
+| 컴포넌트 | 출처 | 사용 위치 |
+| --- | --- | --- |
+| `PageTitleBar` | `@cocrepo/ui` | 상단 제목, 설명, 주요 액션 표시 |
+| `Surface` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `RolesPageFallback` | `현재 파일` | 로딩/대기 상태 표시 |
+| `Button` | `@heroui/react` | 사용자 액션 실행 |
+| `Plus` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `VStack` | `@cocrepo/ui` | 화면 조합 요소 |
+| `DataGrid` | `@cocrepo/ui` | 목록/표 데이터 표시 |
+
 ## 공개 계약
 
 | 항목 | 설명 |
 |------|------|
-| RoleListPageRole | 역할 목록 row 계약 |
+| RoleListPageProps.roles | RoleDto[] optional row 계약 |
 | RoleListPageProps | pure page 입력 계약 |
 | RoleListPage | 공개 계약 요소 |
 
@@ -20,6 +44,7 @@
 
 | 모듈 | 용도 |
 |------|------|
+| @cocrepo/api | DTO row contract type source |
 | @cocrepo/ui | 기능 구현 의존성 |
 | @heroui/react | 기능 구현 의존성 |
 | lucide-react | 기능 구현 의존성 |
@@ -29,12 +54,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-25 | MetaDataGrid state를 useLocalObservable 기반 MetaDataGridStateModel class instance로 생성하도록 변경 | codex |
-| 2026-04-25 | MetaDataGrid server result를 rows/totalCount/isLoading props로 분리 | codex |
-| 2026-04-25 | MetaDataGrid 호출을 state prop 기반 query 계약으로 변경 | codex |
-| 2026-04-24 | pure page query state 타입을 shared hook ReturnType 의존에서 명시 계약으로 정리 | codex |
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 route-mirror page 이름을 semantic screen 이름으로 정리 | codex |
-| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
-| 2026-03-29 | 역할 목록을 pure page로 재정의하고 조회·query state·등록 라우팅을 route thin container로 이동 | codex |
-| 2026-03-28 | 역할 목록을 `MetaDataGrid` 기반 pure page로 통합하고 `raw` 테이블 의존을 제거 | codex |
-| 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |
+| 2026-04-28 | 목록 row 계약을 Page 전용 view model 대신 Orval DTO optional props로 정리 | codex |
+| 2026-04-24 | 목록 검색과 페이지네이션 검색 조건 계약을 명시적으로 정리 | codex |
+| 2026-03-29 | 역할 목록 화면의 조회/검색 조건/등록 라우팅 책임 경계 정리 | codex |
+| 2026-03-26 | 초기 화면 기획 수립 | codex |

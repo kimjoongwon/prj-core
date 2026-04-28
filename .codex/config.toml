@@ -208,7 +208,7 @@ description = "DataGrid/Table용 Cell 컴포넌트를 계층별로 생성하는 
 config_file = "agents/fe-cell-builder.toml"
 
 [agents.fe-columns-builder]
-description = "packages/fe-ui/src/columns 레이어와 MetaDataGrid/cell 경계를 정리하는 전문가"
+description = "packages/fe-ui/src/columns 레이어와 DataGrid/cell 경계를 정리하는 전문가"
 config_file = "agents/fe-columns-builder.toml"
 
 [agents.fe-feature-builder]
@@ -232,12 +232,8 @@ description = "메뉴 시스템 컴포넌트를 생성하는 전문가"
 config_file = "agents/fe-menu-builder.toml"
 
 [agents.fe-data-grid-builder]
-description = "packages/fe-ui/src/data-grid의 DataGrid/MetaDataGrid 단일 렌더러 구조를 생성하고 정리하는 전문가"
+description = "packages/fe-ui/src/data-grid의 DataGrid 단일 렌더러와 input/state 계약을 생성하고 정리하는 전문가"
 config_file = "agents/fe-data-grid-builder.toml"
-
-[agents.fe-collection-builder]
-description = "목록/테이블/그리드 계열 재사용 collection 계층을 생성하고 정리하는 전문가"
-config_file = "agents/fe-collection-builder.toml"
 
 [agents.fe-detail-builder]
 description = "상세 조회/읽기 전용 재사용 detail 계층을 생성하고 정리하는 전문가"
@@ -310,10 +306,6 @@ config_file = "agents/mobile/fe-mo-form-builder.toml"
 [agents.fe-mo-layout-builder]
 description = "Expo/RN에서 재사용할 모바일 layout shell 컴포넌트를 설계하는 전문가"
 config_file = "agents/mobile/fe-mo-layout-builder.toml"
-
-[agents.fe-mo-collection-builder]
-description = "모바일 목록/그리드 계열 재사용 collection 계층을 생성하고 정리하는 전문가"
-config_file = "agents/mobile/fe-mo-collection-builder.toml"
 
 [agents.fe-mo-menu-builder]
 description = "React Native용 메뉴 primitive contract를 packages/fe-mo-ui/src/layout에 생성하거나 정리하는 전문가"
@@ -448,7 +440,7 @@ description = "DataGrid/Table Cell 계약을 기획하는 전문가"
 config_file = "agents/req-cell-planner.toml"
 
 [agents.req-columns-planner]
-description = "packages/fe-ui/src/columns 레이어 계약과 MetaDataGrid/cell 경계를 기획하는 전문가"
+description = "packages/fe-ui/src/columns 레이어 계약과 DataGrid/cell 경계를 기획하는 전문가"
 config_file = "agents/req-columns-planner.toml"
 
 [agents.req-context-planner]

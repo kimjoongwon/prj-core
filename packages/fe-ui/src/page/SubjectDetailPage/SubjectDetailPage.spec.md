@@ -9,6 +9,44 @@
 Subject 상세 화면의 pure page 컴포넌트입니다.
 상세 조회, 필드 조회, 라우팅은 route thin container가 소유하고 이 파일은 상세 시각 조합만 담당합니다.
 
+## 디자인 스케치
+
+```text
+SubjectDetailPage
+- DetailPage
+  - DetailPageSurface
+    - VStack
+      - SubjectInfoSection
+      - SubjectFieldsSection
+```
+
+## 사용 컴포넌트
+
+| 컴포넌트 | 출처 | 사용 위치 |
+| --- | --- | --- |
+| `DetailSectionCard` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `DetailSection` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `PageTitleBar` | `@cocrepo/ui` | 상단 제목, 설명, 주요 액션 표시 |
+| `DefaultCell` | `@cocrepo/ui` | 상태/정보를 카드 또는 표시 단위로 표현 |
+| `Chip` | `@heroui/react` | 상태/정보를 카드 또는 표시 단위로 표현 |
+| `BooleanCell` | `@cocrepo/ui` | 상태/정보를 카드 또는 표시 단위로 표현 |
+| `DateTimeCell` | `@cocrepo/ui` | 상태/정보를 카드 또는 표시 단위로 표현 |
+| `Box` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `Spinner` | `@heroui/react` | 로딩/대기 상태 표시 |
+| `Table` | `@heroui/react` | 목록/표 데이터 표시 |
+| `TableHeader` | `@heroui/react` | 목록/표 데이터 표시 |
+| `TableColumn` | `@heroui/react` | 목록/표 데이터 표시 |
+| `TableBody` | `@heroui/react` | 목록/표 데이터 표시 |
+| `TableRow` | `@heroui/react` | 목록/표 데이터 표시 |
+| `TableCell` | `@heroui/react` | 목록/표 데이터 표시 |
+| `DetailPage` | `@cocrepo/ui` | 페이지 외곽 레이아웃 구성 |
+| `DetailPageSurface` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `Button` | `@heroui/react` | 사용자 액션 실행 |
+| `ArrowLeft` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `VStack` | `@cocrepo/ui` | 화면 조합 요소 |
+| `SubjectInfoSection` | `현재 파일` | 콘텐츠 그룹과 elevation 구성 |
+| `SubjectFieldsSection` | `현재 파일` | 콘텐츠 그룹과 elevation 구성 |
+
 ## 공개 계약
 
 | 항목 | 설명 |
@@ -32,7 +70,5 @@ Subject 상세 화면의 pure page 컴포넌트입니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 route-mirror page 이름을 semantic screen 이름으로 정리 | codex |
-| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
-| 2026-03-29 | Subject 상세를 pure page로 재정의하고 상세 조회·필드 조회·라우팅 책임을 route thin container로 이동 | codex |
-| 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |
+| 2026-03-29 | Subject 상세 화면의 상세/필드 조회와 라우팅 책임 경계 정리 | codex |
+| 2026-03-26 | 초기 화면 기획 수립 | codex |

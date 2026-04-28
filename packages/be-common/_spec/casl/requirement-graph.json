@@ -5,7 +5,7 @@
     "generator": "req-reverse-engineer",
     "sourceFiles": [
       "packages/be-prisma/schema/access-control/role.prisma",
-      "packages/be-prisma/schema/access-control/grant.prisma",
+      "packages/be-prisma/schema/access-control/policy.prisma",
       "packages/be-prisma/schema/access-control/subject.prisma",
       "packages/be-prisma/schema/access-control/action.prisma",
       "packages/be-prisma/schema/access-control/ability.prisma",

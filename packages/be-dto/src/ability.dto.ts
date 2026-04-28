@@ -13,9 +13,9 @@ import { ActionDto } from "./action.dto";
 import { SubjectSummaryDto } from "./subject.dto";
 
 /**
- * Ability 응답 DTO (Grant 기반)
+ * Ability 응답 DTO (Policy 기반)
  * 재사용 가능한 권한 정의
- * - Role/User 연결은 Grant 테이블에서 관리
+ * - Role/User 연결은 Policy/RolePolicy/UserPolicy 테이블에서 관리
  */
 export class AbilityDto extends AbstractDto implements Ability {
 	// CASL 필수 필드
@@ -50,7 +50,7 @@ export class AbilityDto extends AbstractDto implements Ability {
 	@ClassField(() => SubjectSummaryDto, { required: false })
 	subject?: SubjectSummaryDto;
 
-	// Grant에서 조회할 때 설정되는 필드 (optional)
+	// Policy assignment에서 조회할 때 설정되는 필드 (optional)
 	@NumberField({ required: false })
 	priority?: number;
 }
@@ -75,7 +75,7 @@ export class AbilitySummaryDto {
 	inverted!: boolean;
 
 	@NumberField({ required: false })
-	priority?: number; // From Grant (optional)
+	priority?: number; // From Policy assignment (optional)
 
 	@ClassField(() => ActionDto, { required: false })
 	action?: ActionDto;

@@ -58,7 +58,7 @@ export class AbilitiesController {
 		operationId: "getMyAbilities",
 		summary: "현재 로그인 사용자의 권한 조회",
 		description:
-			"현재 선택한 Space 기준으로 로그인 사용자에게 적용되는 Role/User Grant를 병합해 조회합니다.",
+			"현재 선택한 Space 기준으로 로그인 사용자에게 적용되는 Role/User Policy를 병합해 조회합니다.",
 	})
 	@ApiAuth()
 	@ApiErrors(
@@ -70,31 +70,6 @@ export class AbilitiesController {
 	@ResponseMessage("common.ability.my.success")
 	async getMyAbilities(): Promise<Ability[]> {
 		return this.abilitiesService.getMyAbilities();
-	}
-
-	/**
-	 * Role별 기본 권한 조회
-	 * GET /api/v1/abilities/roles/:roleId
-	 */
-	@Get("roles/:roleId")
-	@ApiOperation({
-		operationId: "getAbilitiesByRoleId",
-		summary: "Role별 기본 권한 조회",
-		description: "특정 Role에 할당된 기본 권한 목록을 조회합니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "roleId",
-		description: "Role ID (UUID)",
-		type: String,
-	})
-	@ApiErrors({ status: 401, message: ABILITY_ERRORS.USER_NOT_FOUND }, 500)
-	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("common.ability.byRole.success")
-	async getAbilitiesByRoleId(
-		@Param("roleId", ParseUUIDPipe) roleId: string,
-	): Promise<Ability[]> {
-		return this.abilitiesService.getRoleAbilities(roleId);
 	}
 
 	/**
@@ -135,7 +110,7 @@ export class AbilitiesController {
 		operationId: "createAbility",
 		summary: "권한 정의 생성",
 		description:
-			"재사용 가능한 권한 정의를 생성합니다. Role/User에 할당하려면 Grant를 생성하세요.",
+			"재사용 가능한 권한 정의를 생성합니다. Role/User에 할당하려면 Policy에 포함하세요.",
 	})
 	@ApiAuth()
 	@ApiBody({
@@ -173,7 +148,7 @@ export class AbilitiesController {
 		operationId: "updateAbility",
 		summary: "권한 정의 수정",
 		description:
-			"기존 권한 정의를 수정합니다. Grant 메타데이터(isActive, priority)는 변경되지 않습니다.",
+			"기존 권한 정의를 수정합니다. Policy assignment 메타데이터(isActive, priority)는 변경되지 않습니다.",
 	})
 	@ApiAuth()
 	@ApiParam({

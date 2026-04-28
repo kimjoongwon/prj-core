@@ -1,16 +1,17 @@
 "use client";
 
+import type { OidcSessionDto } from "@cocrepo/api/idp/oidc-sessions";
 import { MODEL_TYPE_OPTIONS } from "@cocrepo/constant";
 import type {
+	DataGridQueryStates,
+	DataGridSetQueryStates,
 	InputConfig,
-	MetaDataGridQueryStates,
-	MetaDataGridSetQueryStates,
 } from "@cocrepo/type";
 import {
 	buildOidcSessionTableColumns,
 	ConfirmModal,
-	MetaDataGrid,
-	MetaDataGridStateModel,
+	DataGrid,
+	DataGridStateModel,
 	PageTitleBar,
 	StatsCard,
 	Surface,
@@ -45,24 +46,13 @@ const leftInputs: InputConfig[] = [
 
 export const idpConsoleOidcSessionsPageQueryInputs = [...leftInputs];
 
-export interface OidcSessionListPageQueryStates
-	extends MetaDataGridQueryStates {
+export interface OidcSessionListPageQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	modelType: string;
 	accountId: string;
 }
-export type OidcSessionListPageSetQueryStates = MetaDataGridSetQueryStates;
-
-export interface OidcSessionListPageSession {
-	id: string;
-	key: string;
-	modelType: string;
-	accountId?: string;
-	grantId?: string;
-	expiresAt: string | null;
-	createdAt: string;
-}
+export type OidcSessionListPageSetQueryStates = DataGridSetQueryStates;
 
 export interface OidcSessionListPageStats {
 	totalCount: number;
@@ -70,7 +60,7 @@ export interface OidcSessionListPageStats {
 }
 
 export interface OidcSessionListPageProps {
-	sessions: OidcSessionListPageSession[];
+	sessions?: OidcSessionDto[];
 	totalCount: number;
 	isLoading: boolean;
 	queryStates: OidcSessionListPageQueryStates;
@@ -93,7 +83,8 @@ export interface OidcSessionListPageProps {
 /**
  * OIDC 세션 목록 pure page입니다.
  */
-export const OidcSessionListPage = observer(({
+export const OidcSessionListPage = observer(
+	({
 		sessions,
 		totalCount,
 		isLoading,
@@ -113,13 +104,14 @@ export const OidcSessionListPage = observer(({
 		onCloseRevokeAllModal,
 		onConfirmRevokeAll,
 	}: OidcSessionListPageProps) => {
-	const gridState = useLocalObservable(
-		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
-	);
+		const gridState = useLocalObservable(
+			() => new DataGridStateModel({ queryStates, setQueryStates }),
+		);
 
-	useEffect(() => {
-		gridState.syncQuery(queryStates, setQueryStates);
-	}, [gridState, queryStates, setQueryStates]);
+		useEffect(() => {
+			gridState.syncQuery(queryStates, setQueryStates);
+		}, [gridState, queryStates, setQueryStates]);
+		const sessionRows = sessions ?? [];
 		const byModelType = (stats?.byModelType ?? {}) as Record<string, number>;
 
 		const onClickRevokeSession = (key: string) => {
@@ -130,11 +122,10 @@ export const OidcSessionListPage = observer(({
 			onOpenGrantRevokeModal(grantId);
 		};
 
-		const columns =
-			buildOidcSessionTableColumns<OidcSessionListPageSession>({
-				onClickGrantId,
-				onClickRevokeSession,
-			});
+		const columns = buildOidcSessionTableColumns<OidcSessionDto>({
+			onClickGrantId,
+			onClickRevokeSession,
+		});
 
 		return (
 			<VStack gap={5}>
@@ -175,18 +166,18 @@ export const OidcSessionListPage = observer(({
 					</div>
 				)}
 				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
-					<MetaDataGrid
+					<DataGrid
 						config={{
 							entity: "OidcSession",
 							columns,
 							leftInputs,
 							emptyMessage: "등록된 OIDC 세션/토큰이 없습니다.",
 						}}
-	rows={sessions}
-	totalCount={totalCount}
-	isLoading={isLoading}
-	state={gridState}
-/>
+						rows={sessionRows}
+						totalCount={totalCount}
+						isLoading={isLoading}
+						state={gridState}
+					/>
 				</Surface>
 				<ConfirmModal
 					isOpen={isGrantRevokeModalOpen}
@@ -232,4 +223,5 @@ export const OidcSessionListPage = observer(({
 				/>
 			</VStack>
 		);
-	});
+	},
+);

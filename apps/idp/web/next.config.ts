@@ -9,6 +9,8 @@ const withBundleAnalyzer = bundleAnalyzer({
 const isDevelopment = process.env.NODE_ENV === "development";
 const idpApiInternalUrl =
 	process.env.IDP_API_INTERNAL_URL ?? "http://localhost:3007";
+const coreApiInternalUrl =
+	process.env.CORE_API_INTERNAL_URL ?? "http://localhost:3006";
 
 const nextConfig: NextConfig = {
 	// Docker 배포를 위한 standalone 출력 모드
@@ -54,6 +56,10 @@ const nextConfig: NextConfig = {
 					destination: `${idpApiInternalUrl}/api/reset-password/:path*`,
 				},
 				// Main 서버 API 프록시 (관리 콘솔)
+				{
+					source: "/api/v1/tenant-access-requests/:path*",
+					destination: `${coreApiInternalUrl}/api/v1/tenant-access-requests/:path*`,
+				},
 				{
 					source: "/api/v1/:path*",
 					destination: `${idpApiInternalUrl}/api/v1/:path*`,

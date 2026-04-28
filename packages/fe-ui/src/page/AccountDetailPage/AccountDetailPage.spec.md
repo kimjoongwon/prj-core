@@ -9,6 +9,56 @@
 IDP 계정 상세 화면의 pure page 컴포넌트입니다.
 상세 조회, 계정 잠금/세션/비밀번호 mutation, 라우팅은 route thin container가 소유하고 이 파일은 상세 시각 조합과 액션 confirm modal만 담당합니다.
 
+## 디자인 스케치
+
+```text
+AccountDetailPage
+- DetailPage
+  - PageTitleBar
+    - Button
+  - DetailPageSurface
+    - VStack
+      - DetailSectionCard
+        - DetailSection
+          - PageTitleBar
+          - Switch
+          - Chip x2
+          - Button (조건부)
+          - DateTimeCell
+          - Button (조건부)
+          - Chip
+          - DateTimeCell x2
+      - DetailSectionCard
+        - DetailSection
+          - PageTitleBar
+          - Divider
+          - Button x3
+  - ConfirmModal (조건부)
+```
+
+## 사용 컴포넌트
+
+| 컴포넌트 | 출처 | 사용 위치 |
+| --- | --- | --- |
+| `DetailPage` | `@cocrepo/ui` | 페이지 외곽 레이아웃 구성 |
+| `PageTitleBar` | `@cocrepo/ui` | 상단 제목, 설명, 주요 액션 표시 |
+| `DetailPageSurface` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `DetailSectionCard` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `Button` | `@heroui/react` | 사용자 액션 실행 |
+| `ArrowLeft` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `VStack` | `@cocrepo/ui` | 화면 조합 요소 |
+| `DetailSection` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `Switch` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `Chip` | `@heroui/react` | 상태/정보를 카드 또는 표시 단위로 표현 |
+| `Lock` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `LockOpen` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `DateTimeCell` | `@cocrepo/ui` | 상태/정보를 카드 또는 표시 단위로 표현 |
+| `RotateCcw` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `Divider` | `@heroui/react` | 화면 조합 요소 |
+| `KeyRound` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `LogOut` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `ConfirmModal` | `@cocrepo/ui` | 확인 또는 보조 작업 오버레이 |
+
 ## 공개 계약
 
 | 항목 | 설명 |
@@ -30,9 +80,7 @@ IDP 계정 상세 화면의 pure page 컴포넌트입니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 route-mirror page 이름을 semantic screen 이름으로 정리 | codex |
-| 2026-04-08 | 미사용 보안 action callback prop 3개를 제거하고 confirm modal 단일 진입점 계약으로 정리 | codex |
-| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
-| 2026-03-29 | IDP 계정 상세를 pure page로 재정의하고 조회·보안 mutation·라우팅을 route thin container로 이동 | codex |
-| 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |
-| 2026-03-30 | route runtime ownership에 맞춰 page를 props 기반 pure contract로 정리 | codex |
+| 2026-04-08 | 계정 보안 액션의 확인 절차 진입 계약 정리 | codex |
+| 2026-03-30 | 화면 데이터/이벤트 소유 경계를 상위 컨테이너 기준으로 정리 | codex |
+| 2026-03-29 | IDP 계정 상세 화면의 조회/보안 액션/라우팅 책임 경계 정리 | codex |
+| 2026-03-26 | 초기 화면 기획 수립 | codex |

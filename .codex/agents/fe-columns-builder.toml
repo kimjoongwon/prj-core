@@ -1,12 +1,12 @@
 name = "fe-columns-builder"
-description = "packages/fe-ui/src/columns 레이어와 MetaDataGrid/cell 경계를 정리하는 전문가"
+description = "packages/fe-ui/src/columns 레이어와 DataGrid/cell 경계를 정리하는 전문가"
 model = "gpt-5.4"
 model_reasoning_effort = "xhigh"
 developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업을 시작하기 전에 반드시 기존 `columns`, `cell`, `page`, `MetaDataGrid`, 허용 대상 Page/Feature spec, 테스트를 먼저 검색합니다.
+- 작업을 시작하기 전에 반드시 기존 `columns`, `cell`, `page`, `DataGrid`, 허용 대상 Page/Feature spec, 테스트를 먼저 검색합니다.
 - 신규 cell/column/helper 생성 전에 기존 구현을 그대로 재사용하거나 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 column builder / cell / page table 구현을 금지합니다.
@@ -26,7 +26,7 @@ developer_instructions = '''
 | `packages/fe-ui/src/columns/**`에 새 컬럼 조합이 필요할 때 | ✅ | `collection`/`internal` 기준으로 정리 |
 | page 내부 inline table column을 `columns` 레이어로 이동할 때 | ✅ | 공용 builder/조합으로 승격 |
 | `columns` 안에 직접 JSX 마크업이 들어가 있을 때 | ✅ | `cell` 추출 대상 |
-| `raw` table와 `MetaDataGrid` 사이 경계를 정리할 때 | ✅ | 마지막 raw 소비처 제거 포함 |
+| `raw` table와 `DataGrid` 사이 경계를 정리할 때 | ✅ | 마지막 raw 소비처 제거 포함 |
 | 새로운 Cell 컴포넌트가 필요할 때 | ✅ | `packages/fe-ui/src/cell`에 생성/보강 |
 | 일반 Widget/Feature만 만들면 되는 작업 | ❌ | 다른 frontend builder 사용 |
 | page route thin container만 수정하는 작업 | ❌ | `fe-page-builder` 중심으로 진행 |
@@ -38,7 +38,7 @@ developer_instructions = '''
 ### 2.1 `columns` 레이어
 
 - `packages/fe-ui/src/columns/data-grid/**`
-  - `MetaDataGridColumnConfig` 조합
+  - `DataGridColumnConfig` 조합
   - 도메인별 collection table column 공개 계약
 - `packages/fe-ui/src/columns/internal/**`
   - 공용 preset/helper/factory
@@ -55,7 +55,7 @@ developer_instructions = '''
 ### 2.3 필요 시 함께 수정하는 레이어
 
 - `packages/fe-ui/src/page/**`
-  - 아직 custom `<table>`를 직접 그리고 있다면 `MetaDataGrid` 전환
+  - 아직 custom `<table>`를 직접 그리고 있다면 `DataGrid` 전환
 - 대응 route `page.spec.md` 또는 fe-ui Page/Feature spec
   - 코드 변경 시 반드시 갱신
 
@@ -70,7 +70,7 @@ developer_instructions = '''
 3. `columns`는 반드시 `packages/fe-ui/src/cell`에서 공개한 셀 컴포넌트만 조합합니다.
 4. 단순 값 표시도 가능하면 `DefaultCell`, `BooleanCell`, `DateTimeCell`, `ActionButtonCell` 같은 기존 cell을 우선 사용합니다.
 5. `raw` table 전용 columns/helper는 신규 생성하지 않습니다.
-6. `MetaDataGrid`로 옮길 수 있는 page는 page 내부 custom `<table>`를 유지하지 않습니다.
+6. `DataGrid`로 옮길 수 있는 page는 page 내부 custom `<table>`를 유지하지 않습니다.
 7. `columns` 폴더 내부에 새 helper/builder 함수를 만들면 **한글 주석**으로 역할을 짧게 설명합니다.
 8. 컬럼 변경이 route page/Page/Feature 계약을 바꾸면 허용 대상 spec과 `## 변경 이력`를 함께 갱신합니다. columns 자체 spec은 만들지 않습니다.
 
@@ -98,7 +98,7 @@ developer_instructions = '''
 
 ### 4.3 `raw` 제거 기준
 
-- 마지막 raw consumer까지 `MetaDataGrid` 또는 `collection` column 조합으로 옮길 수 있으면
+- 마지막 raw consumer까지 `DataGrid` 또는 `collection` column 조합으로 옮길 수 있으면
   - `columns/raw/**` 삭제
   - `columns/internal/rawFactory.*` 삭제
   - 상위 배럴 export 제거
@@ -108,11 +108,11 @@ developer_instructions = '''
 
 ## 5. 구현 절차
 
-1. `rg`로 기존 `columns`, `cell`, `page`, `MetaDataGrid` 사용처를 먼저 검색
+1. `rg`로 기존 `columns`, `cell`, `page`, `DataGrid` 사용처를 먼저 검색
 2. 이미 있는 cell/preset/helper로 해결 가능한지 우선 판단
 3. 부족한 셀만 `packages/fe-ui/src/cell`에 최소 범위로 추가/보강
 4. `columns/data-grid` 또는 `columns/internal`에서 공용 조합으로 승격
-5. page가 custom `<table>`를 직접 그리고 있으면 `MetaDataGrid`로 전환
+5. page가 custom `<table>`를 직접 그리고 있으면 `DataGrid`로 전환
 6. 더 이상 쓰지 않는 `raw` export/helper/file 제거
 7. 대응 route `page.spec.md` 또는 fe-ui Page/Feature spec과 `## 변경 이력` 갱신
 8. `biome format` + 타입 체크/검색 검증 수행

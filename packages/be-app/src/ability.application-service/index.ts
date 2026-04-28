@@ -56,7 +56,7 @@ export class AbilityApplicationService {
 			`현재 사용자 권한 조회: userId=${user.id.slice(-8)}, spaceId=${spaceId.slice(-8)}, roleIds=${roleIds.length}`,
 		);
 
-		return this.abilitiesService.getMergedAbilities(roleIds, user.id);
+		return this.abilitiesService.getMergedAbilities(roleIds, user.id, spaceId);
 	}
 
 	/**
@@ -86,30 +86,6 @@ export class AbilityApplicationService {
 	async getAllAbilities(): Promise<Ability[]> {
 		this.logger.debug('전체 Ability 목록 조회');
 		return this.abilitiesService.getAllAbilities();
-	}
-
-	/**
-	 * Role별 기본 권한 조회
-	 *
-	 * @param roleId - Role ID
-	 * @returns 활성화된 Ability 배열
-	 */
-	async getRoleAbilities(roleId: string): Promise<Ability[]> {
-		this.logger.debug(`Role별 권한 조회: roleId=${roleId.slice(-8)}`);
-
-		return this.abilitiesService.getRoleAbilities(roleId);
-	}
-
-	/**
-	 * User별 예외 권한 조회
-	 *
-	 * @param userId - User ID
-	 * @returns 활성화된 Ability 배열
-	 */
-	async getUserAbilities(userId: string): Promise<Ability[]> {
-		this.logger.debug(`User별 예외 권한 조회: userId=${userId.slice(-8)}`);
-
-		return this.abilitiesService.getUserAbilities(userId);
 	}
 
 	/**

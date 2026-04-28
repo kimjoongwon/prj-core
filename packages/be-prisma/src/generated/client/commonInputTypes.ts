@@ -443,6 +443,23 @@ export type EnumLanguageCodeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumLanguageCodeFilter<$PrismaModel>
 }
 
+export type EnumTenantAccessRequestStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.TenantAccessRequestStatus | Prisma.EnumTenantAccessRequestStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TenantAccessRequestStatus[] | Prisma.ListEnumTenantAccessRequestStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TenantAccessRequestStatus[] | Prisma.ListEnumTenantAccessRequestStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTenantAccessRequestStatusFilter<$PrismaModel> | $Enums.TenantAccessRequestStatus
+}
+
+export type EnumTenantAccessRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TenantAccessRequestStatus | Prisma.EnumTenantAccessRequestStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TenantAccessRequestStatus[] | Prisma.ListEnumTenantAccessRequestStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TenantAccessRequestStatus[] | Prisma.ListEnumTenantAccessRequestStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTenantAccessRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.TenantAccessRequestStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTenantAccessRequestStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTenantAccessRequestStatusFilter<$PrismaModel>
+}
+
 export type EnumAIAgentActionFilter<$PrismaModel = never> = {
   equals?: $Enums.AIAgentAction | Prisma.EnumAIAgentActionFieldRefInput<$PrismaModel>
   in?: $Enums.AIAgentAction[] | Prisma.ListEnumAIAgentActionFieldRefInput<$PrismaModel>
@@ -1242,6 +1259,23 @@ export type NestedEnumLanguageCodeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumLanguageCodeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumLanguageCodeFilter<$PrismaModel>
+}
+
+export type NestedEnumTenantAccessRequestStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.TenantAccessRequestStatus | Prisma.EnumTenantAccessRequestStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TenantAccessRequestStatus[] | Prisma.ListEnumTenantAccessRequestStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TenantAccessRequestStatus[] | Prisma.ListEnumTenantAccessRequestStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTenantAccessRequestStatusFilter<$PrismaModel> | $Enums.TenantAccessRequestStatus
+}
+
+export type NestedEnumTenantAccessRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TenantAccessRequestStatus | Prisma.EnumTenantAccessRequestStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TenantAccessRequestStatus[] | Prisma.ListEnumTenantAccessRequestStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TenantAccessRequestStatus[] | Prisma.ListEnumTenantAccessRequestStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTenantAccessRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.TenantAccessRequestStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTenantAccessRequestStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTenantAccessRequestStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumAIAgentActionFilter<$PrismaModel = never> = {

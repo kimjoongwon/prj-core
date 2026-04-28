@@ -5,10 +5,10 @@ import type {
 	User as UserEntityType,
 } from "@cocrepo/prisma";
 import { SpaceCategoryName } from "@cocrepo/enum";
-import type { Ability } from "./ability.entity";
 import { AbstractEntity } from "./abstract.entity";
 import type { AuthAuditLog } from "./auth-audit-log.entity";
 import type { PasswordHistory } from "./password-history.entity";
+import type { UserPolicy } from "./user-policy.entity";
 
 /**
  * Tenant with Space relations for User entity
@@ -53,11 +53,7 @@ export class User extends AbstractEntity implements UserEntityType {
 	associations?: UserAssociation[];
 	passwordHistory?: PasswordHistory[];
 	authAuditLogs?: AuthAuditLog[];
-
-	/**
-	 * 사용자별 예외 권한 (CASL)
-	 */
-	abilities?: Ability[];
+	userPolicies?: UserPolicy[];
 
 	// ============================================================================
 	// 도메인 메서드

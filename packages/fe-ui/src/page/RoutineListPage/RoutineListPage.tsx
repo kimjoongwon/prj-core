@@ -1,14 +1,15 @@
 "use client";
 
+import type { RoutineDto } from "@cocrepo/api/core/routines";
 import type {
+	DataGridQueryStates,
+	DataGridSetQueryStates,
 	InputConfig,
-	MetaDataGridQueryStates,
-	MetaDataGridSetQueryStates,
 } from "@cocrepo/type";
 import {
 	buildRoutineTableColumns,
-	MetaDataGrid,
-	MetaDataGridStateModel,
+	DataGrid,
+	DataGridStateModel,
 	PageTitleBar,
 	Surface,
 } from "@cocrepo/ui";
@@ -46,23 +47,16 @@ const leftInputs: InputConfig[] = [
 
 export const adminRoutinesPageQueryInputs = [...leftInputs];
 
-export interface RoutineListPageQueryStates extends MetaDataGridQueryStates {
+export interface RoutineListPageQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	search: string;
 	spaceScope: string;
 }
-export type RoutineListPageSetQueryStates = MetaDataGridSetQueryStates;
-
-export interface RoutineListPageRoutine {
-	id: string;
-	name: string;
-	label?: string | null;
-	createdAt: string | Date | null;
-}
+export type RoutineListPageSetQueryStates = DataGridSetQueryStates;
 
 export interface RoutineListPageProps {
-	routines: RoutineListPageRoutine[];
+	routines?: RoutineDto[];
 	totalCount: number;
 	isLoading: boolean;
 	isDeleting: boolean;
@@ -87,110 +81,114 @@ function RoutinesPageFallback() {
 	);
 }
 
-export const RoutineListPage = observer(({
-	routines,
-	totalCount,
-	isLoading,
-	isDeleting,
-	queryStates,
-	setQueryStates,
-	onClickCreateButton,
-	onClickRoutineName,
-	onDeleteRoutine,
-}: RoutineListPageProps) => {
-	const gridState = useLocalObservable(
-		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
-	);
-
-	useEffect(() => {
-		gridState.syncQuery(queryStates, setQueryStates);
-	}, [gridState, queryStates, setQueryStates]);
-	const [deleteTarget, setDeleteTarget] =
-		useState<RoutineListPageRoutine | null>(null);
-	const deleteModal = useDisclosure();
-	const onClickDeleteButton = (routineId: string) => {
-		const targetRoutine = routines.find((routine) => routine.id === routineId);
-		if (!targetRoutine) {
-			return;
-		}
-		setDeleteTarget(targetRoutine);
-		deleteModal.onOpen();
-	};
-	const columns = buildRoutineTableColumns<RoutineListPageRoutine>({
+export const RoutineListPage = observer(
+	({
+		routines,
+		totalCount,
+		isLoading,
+		isDeleting,
+		queryStates,
+		setQueryStates,
+		onClickCreateButton,
 		onClickRoutineName,
-		onClickDeleteButton,
-	});
+		onDeleteRoutine,
+	}: RoutineListPageProps) => {
+		const gridState = useLocalObservable(
+			() => new DataGridStateModel({ queryStates, setQueryStates }),
+		);
 
-	if (isLoading) {
-		return <RoutinesPageFallback />;
-	}
+		useEffect(() => {
+			gridState.syncQuery(queryStates, setQueryStates);
+		}, [gridState, queryStates, setQueryStates]);
+		const routineRows = routines ?? [];
+		const [deleteTarget, setDeleteTarget] = useState<RoutineDto | null>(null);
+		const deleteModal = useDisclosure();
+		const onClickDeleteButton = (routineId: string) => {
+			const targetRoutine = routineRows.find(
+				(routine) => routine.id === routineId,
+			);
+			if (!targetRoutine) {
+				return;
+			}
+			setDeleteTarget(targetRoutine);
+			deleteModal.onOpen();
+		};
+		const columns = buildRoutineTableColumns<RoutineDto>({
+			onClickRoutineName,
+			onClickDeleteButton,
+		});
 
-	return (
-		<div className="space-y-5">
-			<PageTitleBar
-				title="루틴"
-				description="운동 루틴(커리큘럼)을 관리합니다."
-				actions={
-					<Button
-						color="primary"
-						startContent={<Plus className="h-4 w-4" />}
-						onPress={onClickCreateButton}
-					>
-						루틴 등록
-					</Button>
-				}
-			/>
-			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
-				<MetaDataGrid
-					config={{
-						entity: "Routine",
-						columns,
-						leftInputs,
-						emptyMessage: "등록된 루틴이 없습니다.",
-					}}
-	rows={routines}
-	totalCount={totalCount}
-	isLoading={false}
-	state={gridState}
-/>
-			</Surface>
-			<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
-				<ModalContent>
-					<ModalHeader>루틴 삭제</ModalHeader>
-					<ModalBody>
-						<p>
-							<strong>{deleteTarget?.name}</strong> 루틴을 삭제하시겠습니까?
-						</p>
-						<p className="mt-2 text-sm text-danger">
-							프로그램에서 사용 중인 루틴은 삭제할 수 없습니다.
-						</p>
-					</ModalBody>
-					<ModalFooter>
+		if (isLoading) {
+			return <RoutinesPageFallback />;
+		}
+
+		return (
+			<div className="space-y-5">
+				<PageTitleBar
+					title="루틴"
+					description="운동 루틴(커리큘럼)을 관리합니다."
+					actions={
 						<Button
-							variant="flat"
-							onPress={deleteModal.onClose}
-							isDisabled={isDeleting}
+							color="primary"
+							startContent={<Plus className="h-4 w-4" />}
+							onPress={onClickCreateButton}
 						>
-							취소
+							루틴 등록
 						</Button>
-						<Button
-							color="danger"
-							onPress={() => {
-								if (!deleteTarget) {
-									return;
-								}
-								void onDeleteRoutine(deleteTarget.id).then(() => {
-									deleteModal.onClose();
-									setDeleteTarget(null);
-								});
-							}}
-							isLoading={isDeleting}
-						>
-							삭제
-						</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-		</div>
-	);
-});
+					}
+				/>
+				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+					<DataGrid
+						config={{
+							entity: "Routine",
+							columns,
+							leftInputs,
+							emptyMessage: "등록된 루틴이 없습니다.",
+						}}
+						rows={routineRows}
+						totalCount={totalCount}
+						isLoading={false}
+						state={gridState}
+					/>
+				</Surface>
+				<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
+					<ModalContent>
+						<ModalHeader>루틴 삭제</ModalHeader>
+						<ModalBody>
+							<p>
+								<strong>{deleteTarget?.name}</strong> 루틴을 삭제하시겠습니까?
+							</p>
+							<p className="mt-2 text-sm text-danger">
+								프로그램에서 사용 중인 루틴은 삭제할 수 없습니다.
+							</p>
+						</ModalBody>
+						<ModalFooter>
+							<Button
+								variant="flat"
+								onPress={deleteModal.onClose}
+								isDisabled={isDeleting}
+							>
+								취소
+							</Button>
+							<Button
+								color="danger"
+								onPress={() => {
+									if (!deleteTarget) {
+										return;
+									}
+									void onDeleteRoutine(deleteTarget.id).then(() => {
+										deleteModal.onClose();
+										setDeleteTarget(null);
+									});
+								}}
+								isLoading={isDeleting}
+							>
+								삭제
+							</Button>
+						</ModalFooter>
+					</ModalContent>
+				</Modal>
+			</div>
+		);
+	},
+);

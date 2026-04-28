@@ -16,15 +16,8 @@ export default observer(function SubjectsPageRoute() {
 
 	return (
 		<SubjectListPage
-			subjects={(response?.data ?? []).map((subject) => ({
-				id: subject.id,
-				name: subject.name,
-				displayName: subject.displayName,
-				group: subject.group,
-				createdAt: subject.createdAt,
-				removedAt: subject.removedAt,
-			}))}
-			totalCount={(response?.data ?? []).length}
+			subjects={response?.data}
+			totalCount={response?.data?.length ?? 0}
 			isLoading={isLoading}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}

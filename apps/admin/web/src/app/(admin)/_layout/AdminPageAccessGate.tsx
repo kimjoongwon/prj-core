@@ -50,7 +50,11 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 		return children;
 	}
 
-	if (!isLoaded || !shouldVerifyCurrentTenant || isVerifyingToken) {
+	if (
+		!shouldVerifyCurrentTenant ||
+		isVerifyingToken ||
+		(!isLoaded && !hasFullAccessRole)
+	) {
 		return (
 			<DetailPage
 				top={

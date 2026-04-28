@@ -1,7 +1,6 @@
 "use client";
 
 import {
-	type AssetDto,
 	type AssetKind,
 	type AssetStatus,
 	type FolderDto,
@@ -14,7 +13,7 @@ import {
 	useUpdateFolder,
 	useUploadAsset,
 } from "@cocrepo/api/assets";
-import { type AssetBrowserAsset, type AssetBrowserProps } from "@cocrepo/ui";
+import type { AssetBrowserProps } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
@@ -106,7 +105,7 @@ export function useAdminAssetBrowser({
 	const removeFolderMutation = useRemoveFolder();
 
 	return {
-		assets: (assetsResponse?.data ?? []).map(mapAssetRow),
+		assets: assetsResponse?.data,
 		totalCount: assetsResponse?.meta?.total ?? 0,
 		folders: (foldersResponse?.data ?? []).map(mapFolder),
 		queryStates,
@@ -193,19 +192,6 @@ export function useAdminAssetBrowser({
 				color: "success",
 			});
 		},
-	};
-}
-
-function mapAssetRow(asset: AssetDto): AssetBrowserAsset {
-	return {
-		id: asset.id,
-		originalName: asset.originalName,
-		kind: asset.kind,
-		status: asset.status,
-		mimeType: asset.mimeType,
-		sizeBytes: asset.sizeBytes,
-		createdAt: asset.createdAt,
-		publicUrl: asset.publicUrl,
 	};
 }
 

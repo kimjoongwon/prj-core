@@ -80,6 +80,22 @@ export class TenantsRepository {
 		return result ? plainToInstance(Tenant, result) : null;
 	}
 
+	async findActiveByUserIdAndSpaceId(
+		userId: string,
+		spaceId: string,
+	): Promise<Tenant | null> {
+		this.logger.debug(
+			`활성 사용자+Space 테넌트 조회: ${userId.slice(-8)}/${spaceId.slice(-8)}`,
+		);
+
+		const result = await this.txHost.tx.tenant.findFirst({
+			where: { userId, spaceId, removedAt: null },
+			include: { role: true, space: true, user: true },
+		});
+
+		return result ? plainToInstance(Tenant, result) : null;
+	}
+
 	async findMany(params: {
 		where?: Prisma.TenantWhereInput;
 		orderBy?: Prisma.TenantOrderByWithRelationInput[];
@@ -129,6 +145,41 @@ export class TenantsRepository {
 		return plainToInstance(Tenant, result);
 	}
 
+	async upsertByUserIdAndSpaceId(data: {
+		userId: string;
+		spaceId: string;
+		roleId: string;
+	}): Promise<Tenant> {
+		this.logger.debug(
+			`테넌트 upsert: user=${data.userId.slice(-8)}, space=${data.spaceId.slice(-8)}`,
+		);
+
+		const result = await this.txHost.tx.tenant.upsert({
+			where: {
+				userId_spaceId: {
+					userId: data.userId,
+					spaceId: data.spaceId,
+				},
+			},
+			create: {
+				userId: data.userId,
+				spaceId: data.spaceId,
+				roleId: data.roleId,
+			},
+			update: {
+				roleId: data.roleId,
+				removedAt: null,
+			},
+			include: {
+				user: true,
+				space: true,
+				role: true,
+			},
+		});
+
+		return plainToInstance(Tenant, result);
+	}
+
 	async deleteById(id: string): Promise<Tenant> {
 		this.logger.debug(`테넌트 삭제: ${id.slice(-8)}`);
 
@@ -137,4 +188,3 @@ export class TenantsRepository {
 		return plainToInstance(Tenant, result);
 	}
 }
-

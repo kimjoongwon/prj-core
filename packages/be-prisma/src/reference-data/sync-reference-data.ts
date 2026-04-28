@@ -370,7 +370,11 @@ function getAbilityName(
 	);
 }
 
-async function syncAbilitiesAndGrants(
+function getSystemPolicyName(roleName: string): string {
+	return `${roleName.toLowerCase().replaceAll("_", "-")}-system-policy`;
+}
+
+async function syncAbilitiesAndPolicies(
 	db: DbClient,
 	roles: Record<string, Role>,
 	subjects: Record<string, Subject>,
@@ -424,15 +428,26 @@ async function syncAbilitiesAndGrants(
 		}
 	}
 
-	// Phase 2: connect roles to those shared abilities through role-grant rows.
+	const activeSpaces = await db.space.findMany({
+		where: { removedAt: null },
+		select: { id: true },
+	});
+
+	const abilityIdsByRoleName = new Map<string, Set<string>>();
+	const priorityByRoleName = new Map<string, number>();
+
 	for (const abilityData of abilitySeedData) {
+		if (abilityData.isActive === false) {
+			continue;
+		}
+
 		const role = roles[abilityData.roleName];
 		const subject = subjects[abilityData.subject];
 		const action = actions[abilityData.actionName];
 
 		if (!role || !subject || !action) {
 			throw new Error(
-				`Missing role/subject/action for role grant: ${abilityData.roleName} / ${abilityData.subject} / ${abilityData.actionName}`,
+				`Missing role/subject/action for role policy: ${abilityData.roleName} / ${abilityData.subject} / ${abilityData.actionName}`,
 			);
 		}
 
@@ -443,25 +458,96 @@ async function syncAbilitiesAndGrants(
 			throw new Error(`Missing ability mapping for key: ${abilityKey}`);
 		}
 
-		await db.roleGrant.upsert({
-			where: {
-				roleId_abilityId: {
-					roleId: role.id,
-					abilityId: ability.id,
+		const abilityIds =
+			abilityIdsByRoleName.get(abilityData.roleName) ?? new Set<string>();
+		abilityIds.add(ability.id);
+		abilityIdsByRoleName.set(abilityData.roleName, abilityIds);
+
+		const currentPriority = priorityByRoleName.get(abilityData.roleName) ?? 0;
+		priorityByRoleName.set(
+			abilityData.roleName,
+			Math.max(currentPriority, abilityData.priority ?? 0),
+		);
+	}
+
+	// Phase 2: create system policies per active space and assign them to roles.
+	for (const [roleName, abilityIds] of abilityIdsByRoleName.entries()) {
+		const role = roles[roleName];
+		if (!role) {
+			throw new Error(`Missing role for policy seed: ${roleName}`);
+		}
+
+		const policyName = getSystemPolicyName(roleName);
+
+		for (const space of activeSpaces) {
+			const policy = await db.policy.upsert({
+				where: {
+					spaceId_name: {
+						spaceId: space.id,
+						name: policyName,
+					},
 				},
-			},
-			update: {
-				isActive: abilityData.isActive ?? true,
-				priority: abilityData.priority ?? 0,
-				removedAt: null,
-			},
-			create: {
-				roleId: role.id,
-				abilityId: ability.id,
-				isActive: abilityData.isActive ?? true,
-				priority: abilityData.priority ?? 0,
-			},
-		});
+				update: {
+					displayName: `${role.displayName ?? role.name} 기본 정책`,
+					description: `${role.displayName ?? role.name} 역할에 자동 할당되는 시스템 권한 정책입니다.`,
+					isSystem: true,
+					removedAt: null,
+				},
+				create: {
+					spaceId: space.id,
+					name: policyName,
+					displayName: `${role.displayName ?? role.name} 기본 정책`,
+					description: `${role.displayName ?? role.name} 역할에 자동 할당되는 시스템 권한 정책입니다.`,
+					isSystem: true,
+				},
+			});
+
+			const abilityIdList = Array.from(abilityIds);
+			await db.policyAbility.updateMany({
+				where: {
+					policyId: policy.id,
+					removedAt: null,
+					abilityId: { notIn: abilityIdList },
+				},
+				data: { removedAt: new Date() },
+			});
+
+			for (const abilityId of abilityIdList) {
+				await db.policyAbility.upsert({
+					where: {
+						policyId_abilityId: {
+							policyId: policy.id,
+							abilityId,
+						},
+					},
+					update: { removedAt: null },
+					create: {
+						policyId: policy.id,
+						abilityId,
+					},
+				});
+			}
+
+			await db.rolePolicy.upsert({
+				where: {
+					roleId_policyId: {
+						roleId: role.id,
+						policyId: policy.id,
+					},
+				},
+				update: {
+					isActive: true,
+					priority: priorityByRoleName.get(roleName) ?? 0,
+					removedAt: null,
+				},
+				create: {
+					roleId: role.id,
+					policyId: policy.id,
+					isActive: true,
+					priority: priorityByRoleName.get(roleName) ?? 0,
+				},
+			});
+		}
 	}
 }
 
@@ -551,7 +637,7 @@ export async function syncReferenceData(
 	console.log("Reference data sync 시작...");
 
 	// Execution order matters because later catalogs depend on ids created by
-	// earlier ones, especially system space -> taxonomy -> roles -> grants.
+	// earlier ones, especially system space -> taxonomy -> roles -> policies.
 	await ensureSystemSpace(db);
 	await syncSpaceCategories(db);
 	await syncSpaceGroups(db);
@@ -564,7 +650,7 @@ export async function syncReferenceData(
 
 	const subjects = await syncSubjects(db);
 	const actions = await syncActions(db);
-	await syncAbilitiesAndGrants(db, roles, subjects, actions);
+	await syncAbilitiesAndPolicies(db, roles, subjects, actions);
 	await syncTranslations(db);
 	await syncOidcClients(db);
 

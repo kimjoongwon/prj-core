@@ -4,7 +4,7 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업을 시작하기 전에 반드시 기존 `columns`, `cell`, `page`, `MetaDataGrid`, 허용 대상 Page/Feature spec, 테스트를 먼저 검색합니다.
+- 작업을 시작하기 전에 반드시 기존 `columns`, `cell`, `page`, `DataGrid`, 허용 대상 Page/Feature spec, 테스트를 먼저 검색합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
@@ -23,7 +23,7 @@ developer_instructions = '''
 
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
-| 목록/테이블 페이지 경로 | ✅ | `MetaDataGrid` 또는 공용 컬럼 조합이 필요한 화면 |
+| 목록/테이블 페이지 경로 | ✅ | `DataGrid` 또는 공용 컬럼 조합이 필요한 화면 |
 | `page.spec.md` | ✅ | `page role`, `reusable target`, 테이블/리스트 블록 요구 확인 |
 | API 응답 스키마 | ✅ | 컬럼 필드와 정렬/필터/액션 후보 확인 |
 | Cell 기획 결과 | ✅ | 어떤 `src/cell` 자산을 조합할지 확인 |
@@ -43,7 +43,7 @@ developer_instructions = '''
 2. `packages/fe-ui/src/columns/**`는 UI를 소유하지 않습니다.
 3. `columns`는 반드시 `packages/fe-ui/src/cell`에서 공개한 Cell만 조합합니다.
 4. `columns/raw/**`, `rawFactory.*` 같은 raw table 전용 구조는 신규 계획하지 않습니다.
-5. custom `<table>`가 남아 있는 페이지는 `MetaDataGrid` 또는 `collection` column 조합 전환 계획을 함께 남깁니다.
+5. custom `<table>`가 남아 있는 페이지는 `DataGrid` 또는 `collection` column 조합 전환 계획을 함께 남깁니다.
 6. `columns` 내부 helper/builder 함수가 필요하면 역할을 설명하는 **한글 주석**이 필요하다는 점을 spec에 기록합니다.
 
 ---
@@ -52,7 +52,7 @@ developer_instructions = '''
 
 ### 3.1 `columns`에 남기는 것
 
-- `MetaDataGridColumnConfig` 선언 메타데이터
+- `DataGridColumnConfig` 선언 메타데이터
 - accessor / field / label / align / size
 - 기존 Cell 조합
 - 공용 preset/helper/factory
@@ -70,8 +70,8 @@ developer_instructions = '''
 
 ### 3.3 page role 연동 규칙
 
-- `page role = collection`이면서 `MetaDataGrid` 또는 column 조합이 필요한 화면이면 `req-columns-planner`를 실행합니다.
-- `page role = detail/form`이어도 내부 목록 블록이 독립 `MetaDataGrid`를 가지면 조건부로 실행할 수 있습니다.
+- `page role = collection`이면서 `DataGrid` 또는 column 조합이 필요한 화면이면 `req-columns-planner`를 실행합니다.
+- `page role = detail/form`이어도 내부 목록 블록이 독립 `DataGrid`를 가지면 조건부로 실행할 수 있습니다.
 - `page.spec.md`의 `Route / Page Mapping`과 컬럼 요구는 같은 데이터 블록을 가리켜야 합니다.
 
 ---

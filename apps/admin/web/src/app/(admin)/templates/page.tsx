@@ -2,14 +2,10 @@
 
 import {
 	getGetTemplatesQueryKey,
-	type TemplateDto,
 	useGetTemplates,
 	useToggleTemplateStatus,
 } from "@cocrepo/api/core/templates";
-import {
-	TemplateListPage,
-	type TemplateListPageTemplate,
-} from "@cocrepo/ui";
+import { TemplateListPage } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -37,11 +33,10 @@ export default observer(function TemplatesPageRoute() {
 		getTemplatesParams(queryStates),
 	);
 	const toggleMutation = useToggleTemplateStatus();
-	const templates = (response?.data ?? []).map(mapTemplateRow);
 
 	return (
 		<TemplateListPage
-			templates={templates}
+			templates={response?.data}
 			totalCount={response?.meta?.total ?? 0}
 			isLoading={isLoading}
 			isToggling={toggleMutation.isPending}
@@ -88,15 +83,5 @@ function getTemplatesParams(queryStates: TemplatesQueryStates) {
 				: queryStates.isActive === "false"
 					? false
 					: undefined,
-	};
-}
-
-function mapTemplateRow(template: TemplateDto): TemplateListPageTemplate {
-	return {
-		id: template.id,
-		code: template.code,
-		name: template.name,
-		isActive: template.isActive,
-		createdAt: template.createdAt,
 	};
 }

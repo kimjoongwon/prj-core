@@ -85,7 +85,7 @@ developer_instructions = '''
   - `form`
 - 분류 규칙:
   - 컬렉션 탐색, 검색, 필터, 페이지네이션 중심이면 `collection`
-  - `MetaDataGrid`를 사용하면 기본값은 `collection` + `data-grid`
+  - `DataGrid`를 사용하면 기본값은 `collection` + `data-grid`
   - 읽기 전용 조회, inspector, 상세 본문 중심이면 `detail` + `detail/view`
   - 생성/수정/입력/검증 중심이면 `form` + `form`
 

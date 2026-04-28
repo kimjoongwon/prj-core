@@ -45,6 +45,7 @@ export * from "./StatusBanner";
 export * from "./TemplateContentEditor";
 export * from "./TemplateContentViewer";
 export * from "./TemplateTypeBadge";
+export * from "./tenant-access-request";
 export * from "./UnsavedChangesIndicator";
 export * from "./user";
 export * from "./VariableReadTable";

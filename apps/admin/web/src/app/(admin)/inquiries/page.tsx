@@ -1,17 +1,12 @@
 "use client";
 
 import {
-	type InquiryDto,
 	type InquiryStatus,
 	useGetInquiries,
 	useGetInquiryStats,
 } from "@cocrepo/api/core/inquiries";
 import { ADMIN_PATHS } from "@cocrepo/constant";
-import {
-	InquiryListPage,
-	type InquiryListPageInquiry,
-	type SLAStatus,
-} from "@cocrepo/ui";
+import { InquiryListPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -50,7 +45,7 @@ export default observer(function InquiriesPageRoute() {
 
 	return (
 		<InquiryListPage
-			inquiries={(inquiriesResponse?.data ?? []).map(mapInquiryRow)}
+			inquiries={inquiriesResponse?.data}
 			totalCount={inquiriesResponse?.meta?.total ?? 0}
 			stats={{
 				total: statsResponse?.data?.total ?? 0,
@@ -110,55 +105,4 @@ function getInquiryStatusFilter(value: unknown): InquiryStatus | undefined {
 	return FILTERABLE_INQUIRY_STATUSES.includes(value as InquiryStatus)
 		? (value as InquiryStatus)
 		: undefined;
-}
-
-function getSlaStatus(inquiry: InquiryDto): SLAStatus | undefined {
-	if (inquiry.isSlaResponseBreached || inquiry.isSlaResolveBreached) {
-		return "breach";
-	}
-
-	if (!inquiry.slaResponseDue) {
-		return undefined;
-	}
-
-	const remainingMinutes = Math.floor(
-		(new Date(inquiry.slaResponseDue).getTime() - Date.now()) / 60000,
-	);
-
-	if (remainingMinutes <= 60) {
-		return "warning";
-	}
-
-	return "ok";
-}
-
-function getSlaRemainingMinutes(inquiry: InquiryDto): number | undefined {
-	if (!inquiry.slaResponseDue) {
-		return undefined;
-	}
-
-	return Math.floor(
-		(new Date(inquiry.slaResponseDue).getTime() - Date.now()) / 60000,
-	);
-}
-
-function mapInquiryRow(inquiry: InquiryDto): InquiryListPageInquiry {
-	return {
-		id: inquiry.id,
-		title: inquiry.title,
-		customerId: inquiry.customerId ?? "-",
-		customerName: inquiry.customerId ?? "고객",
-		status: inquiry.status,
-		category: inquiry.category,
-		channel: inquiry.channel,
-		priority: inquiry.priority,
-		assigneeId: inquiry.assigneeId,
-		assigneeName: inquiry.assigneeId,
-		sentiment: inquiry.sentiment ?? undefined,
-		slaStatus: getSlaStatus(inquiry),
-		slaRemainingMinutes: getSlaRemainingMinutes(inquiry),
-		unreadCount: inquiry.unreadCount ?? 0,
-		createdAt: inquiry.createdAt,
-		updatedAt: inquiry.updatedAt,
-	};
 }

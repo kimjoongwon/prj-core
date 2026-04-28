@@ -1,28 +1,21 @@
 "use client";
 
+import type { InquiryDto } from "@cocrepo/api/core/inquiries";
 import type {
+	DataGridQueryStates,
+	DataGridSetQueryStates,
 	InputConfig,
-	MetaDataGridQueryStates,
-	MetaDataGridSetQueryStates,
 } from "@cocrepo/type";
 import {
 	buildInquiryTableColumns,
+	DataGrid,
+	DataGridStateModel,
 	type InquiryStats,
 	InquiryStatsCards,
-	MetaDataGrid,
-	MetaDataGridStateModel,
 	PageTitleBar,
-	type SLAStatus,
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
-import type {
-	InquiryCategoryCell,
-	InquiryChannelCell,
-	InquiryPriorityCell,
-	InquirySentimentCell,
-	InquiryStatusCell,
-} from "../../cell";
 import { Button } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -53,35 +46,16 @@ const leftInputs: InputConfig[] = [
 
 export const adminInquiriesPageQueryInputs = [...leftInputs];
 
-export interface InquiryListPageQueryStates extends MetaDataGridQueryStates {
+export interface InquiryListPageQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	search: string;
 	inquiryStatus: string;
 }
-export type InquiryListPageSetQueryStates = MetaDataGridSetQueryStates;
-
-export interface InquiryListPageInquiry {
-	id: string;
-	title: string;
-	customerId: string;
-	customerName: string;
-	status: Parameters<typeof InquiryStatusCell>[0]["value"];
-	category: Parameters<typeof InquiryCategoryCell>[0]["value"];
-	channel: Parameters<typeof InquiryChannelCell>[0]["value"];
-	priority: Parameters<typeof InquiryPriorityCell>[0]["value"];
-	assigneeId?: string;
-	assigneeName?: string;
-	sentiment?: Parameters<typeof InquirySentimentCell>[0]["value"];
-	slaStatus?: SLAStatus;
-	slaRemainingMinutes?: number;
-	unreadCount: number;
-	createdAt: string;
-	updatedAt: string;
-}
+export type InquiryListPageSetQueryStates = DataGridSetQueryStates;
 
 export interface InquiryListPageProps {
-	inquiries: InquiryListPageInquiry[];
+	inquiries?: InquiryDto[];
 	totalCount: number;
 	stats: InquiryStats;
 	activeStatus?: string;
@@ -103,78 +77,81 @@ function InquiriesPageShellFallback() {
 	);
 }
 
-export const InquiryListPage = observer(({
-	inquiries,
-	totalCount,
-	stats,
-	activeStatus,
-	isLoading,
-	queryStates,
-	setQueryStates,
-	onClickNewInquiry,
-	onClickInquiryRow,
-	onClickStatusFilter,
-}: InquiryListPageProps) => {
-	const gridState = useLocalObservable(
-		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
-	);
+export const InquiryListPage = observer(
+	({
+		inquiries,
+		totalCount,
+		stats,
+		activeStatus,
+		isLoading,
+		queryStates,
+		setQueryStates,
+		onClickNewInquiry,
+		onClickInquiryRow,
+		onClickStatusFilter,
+	}: InquiryListPageProps) => {
+		const gridState = useLocalObservable(
+			() => new DataGridStateModel({ queryStates, setQueryStates }),
+		);
 
-	useEffect(() => {
-		gridState.syncQuery(queryStates, setQueryStates);
-	}, [gridState, queryStates, setQueryStates]);
-	const columns = buildInquiryTableColumns<InquiryListPageInquiry>();
+		useEffect(() => {
+			gridState.syncQuery(queryStates, setQueryStates);
+		}, [gridState, queryStates, setQueryStates]);
+		const inquiryRows = inquiries ?? [];
+		const columns = buildInquiryTableColumns<InquiryDto>();
 
-	if (isLoading) {
-		return <InquiriesPageShellFallback />;
-	}
+		if (isLoading) {
+			return <InquiriesPageShellFallback />;
+		}
 
-	return (
-		<div className="space-y-5">
-			<PageTitleBar
-				title="문의 관리"
-				description="고객 문의를 접수/처리/해결합니다."
-				actions={
-					<Button
-						color="primary"
-						startContent={<Plus className="size-4" />}
-						onPress={onClickNewInquiry}
-					>
-						문의 접수
-					</Button>
-				}
-			/>
-			<VStack gap={4}>
-				<Surface className="rounded-2xl border-divider/80 bg-content1/70">
-					<div className="mb-4 border-b border-divider/80 pb-4">
-						<PageTitleBar level={2} title="문의 현황" />
-					</div>
-					<InquiryStatsCards
-						stats={stats}
-						activeStatus={activeStatus}
-						onStatusClick={onClickStatusFilter}
-					/>
-				</Surface>
-				<Surface className="rounded-2xl border-divider/80 bg-content1/70">
-					<div className="mb-4 border-b border-divider/80 pb-4">
-						<PageTitleBar level={2} title="문의 목록" />
-					</div>
-					<MetaDataGrid
-						config={{
-							entity: "Inquiry",
-							columns,
-							leftInputs,
-							onRowClick: (inquiry) => {
-								onClickInquiryRow(inquiry.id);
-							},
-							emptyMessage: "표시할 문의가 없습니다.",
-						}}
-	rows={inquiries}
-	totalCount={totalCount}
-	isLoading={false}
-	state={gridState}
-/>
-				</Surface>
-			</VStack>
-		</div>
-	);
-});
+		return (
+			<div className="space-y-5">
+				<PageTitleBar
+					title="문의 관리"
+					description="고객 문의를 접수/처리/해결합니다."
+					actions={
+						<Button
+							color="primary"
+							startContent={<Plus className="size-4" />}
+							onPress={onClickNewInquiry}
+						>
+							문의 접수
+						</Button>
+					}
+				/>
+				<VStack gap={4}>
+					<Surface className="rounded-2xl border-divider/80 bg-content1/70">
+						<div className="mb-4 border-b border-divider/80 pb-4">
+							<PageTitleBar level={2} title="문의 현황" />
+						</div>
+						<InquiryStatsCards
+							stats={stats}
+							activeStatus={activeStatus}
+							onStatusClick={onClickStatusFilter}
+						/>
+					</Surface>
+					<Surface className="rounded-2xl border-divider/80 bg-content1/70">
+						<div className="mb-4 border-b border-divider/80 pb-4">
+							<PageTitleBar level={2} title="문의 목록" />
+						</div>
+						<DataGrid
+							config={{
+								entity: "Inquiry",
+								columns,
+								leftInputs,
+								onRowClick: (inquiry) => {
+									onClickInquiryRow(inquiry.id);
+								},
+								emptyMessage: "표시할 문의가 없습니다.",
+							}}
+							rows={inquiryRows}
+							totalCount={totalCount}
+							isLoading={false}
+							state={gridState}
+						/>
+					</Surface>
+				</VStack>
+			</div>
+		);
+	},
+);

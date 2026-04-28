@@ -1,9 +1,14 @@
 "use client";
 
 import type { AssetDto } from "@cocrepo/api/assets";
+import type { AbilityResponseDto } from "@cocrepo/api/core/abilities";
 import type { ActionDto } from "@cocrepo/api/core/actions";
+import type { InquiryDto } from "@cocrepo/api/core/inquiries";
 import type { RoleDto } from "@cocrepo/api/core/roles";
+import type { SpaceDto } from "@cocrepo/api/core/spaces";
 import type { SubjectDto } from "@cocrepo/api/core/subjects";
+import type { TaskDto } from "@cocrepo/api/core/tasks";
+import type { TimelineDto } from "@cocrepo/api/core/timelines";
 import { Button } from "@heroui/react";
 import { Eye } from "lucide-react";
 import type { Route } from "next";
@@ -29,7 +34,6 @@ import {
 	TemplateActiveToggleCell,
 	UserRoleCell,
 } from "../../cell";
-import { COLUMN_FIELDS } from "../internal/fieldPresets";
 import {
 	buildColumns,
 	buildColumnsWithDefaultCreatedAt,
@@ -53,6 +57,7 @@ import {
 	getAssetStatusColor,
 	getAssetStatusLabel,
 } from "../internal/dataGridFactory";
+import { COLUMN_FIELDS } from "../internal/fieldPresets";
 
 /** 관리자 Action 목록에서 사용하는 기본 이름 컬럼입니다. */
 export const actionNameColumn = createNameColumn<ActionDto>({
@@ -353,16 +358,7 @@ export const adminRoleTableColumns = buildAdminRoleTableColumns<RoleDto>();
 
 /** 권한 목록 페이지용 컬럼 조합을 생성합니다. */
 export function buildAbilityListTableColumns<
-	TRow extends {
-		id: string;
-		name: string;
-		subjectLabel: string;
-		actionLabel: string;
-		inverted: boolean;
-		fieldCount: number;
-		hasConditions: boolean;
-		createdAt: string | Date | null;
-	},
+	TRow extends AbilityResponseDto = AbilityResponseDto,
 >() {
 	return buildColumnsWithDefaultCreatedAt<TRow>([
 		createNameColumn<TRow>({
@@ -371,14 +367,24 @@ export function buildAbilityListTableColumns<
 		}),
 		createPresetColumn<TRow>("subjectLabel", {
 			size: 150,
-			cell: ({ getValue }) => (
-				<DefaultCell value={getValue() as string | null} placeholder="-" />
+			cell: ({ row }) => (
+				<DefaultCell
+					value={
+						row.original.subject?.displayName ??
+						row.original.subject?.name ??
+						"-"
+					}
+				/>
 			),
 		}),
 		createPresetColumn<TRow>("actionLabel", {
 			size: 120,
-			cell: ({ getValue }) => (
-				<DefaultCell value={getValue() as string | null} placeholder="-" />
+			cell: ({ row }) => (
+				<DefaultCell
+					value={
+						row.original.action?.displayName ?? row.original.action?.name ?? "-"
+					}
+				/>
 			),
 		}),
 		createPresetColumn<TRow>("inverted", {
@@ -397,17 +403,17 @@ export function buildAbilityListTableColumns<
 		createPresetColumn<TRow>("fieldCount", {
 			size: 80,
 			align: "center",
-			cell: ({ getValue }) => {
-				const fieldCount = getValue() as number;
+			cell: ({ row }) => {
+				const fieldCount = row.original.fields.length;
 				return <DefaultCell value={fieldCount === 0 ? "전체" : fieldCount} />;
 			},
 		}),
 		createPresetColumn<TRow>("hasConditions", {
 			size: 80,
 			align: "center",
-			cell: ({ getValue }) => (
+			cell: ({ row }) => (
 				<BooleanCell
-					value={getValue() as boolean}
+					value={Boolean(row.original.conditions)}
 					trueLabel="있음"
 					falseLabel="없음"
 					trueColor="primary"
@@ -418,17 +424,7 @@ export function buildAbilityListTableColumns<
 	]);
 }
 
-export function buildTaskTableColumns<
-	TRow extends {
-		id: string;
-		name: string;
-		isSchedulable: boolean;
-		duration: number;
-		count: number;
-		description?: string;
-		createdAt: string;
-	},
->({
+export function buildTaskTableColumns<TRow extends TaskDto = TaskDto>({
 	onClickTaskName,
 	onClickDeleteButton,
 }: {
@@ -440,14 +436,15 @@ export function buildTaskTableColumns<
 		[
 			createNameColumn<TRow>({
 				nameVariant: "clickable",
+				accessorKey: "exercise.name",
 				onClickName: (row) => onClickTaskName(row.id),
 			}),
 			createPresetColumn<TRow>("isSchedulable", {
 				size: 110,
 				align: "center",
-				cell: ({ getValue }) => (
+				cell: ({ row }) => (
 					<BooleanCell
-						value={getValue() as boolean}
+						value={Boolean(row.original.exercise.videoFileId)}
 						trueLabel="가능"
 						falseLabel="불가"
 						trueColor="success"
@@ -456,6 +453,7 @@ export function buildTaskTableColumns<
 				),
 			}),
 			createPresetColumn<TRow>("duration", {
+				accessorKey: "exercise.duration",
 				size: 100,
 				align: "center",
 				cell: ({ getValue }) => (
@@ -463,6 +461,7 @@ export function buildTaskTableColumns<
 				),
 			}),
 			createPresetColumn<TRow>("count", {
+				accessorKey: "exercise.count",
 				size: 80,
 				align: "center",
 				cell: ({ getValue }) => (
@@ -470,6 +469,7 @@ export function buildTaskTableColumns<
 				),
 			}),
 			createDescriptionColumn<TRow>({
+				accessorKey: "exercise.description",
 				cell: ({ getValue }) => (
 					<DefaultCell
 						value={getValue() as string | undefined}
@@ -496,13 +496,7 @@ export function buildTaskTableColumns<
 }
 
 export function buildTimelineTableColumns<
-	TRow extends {
-		id: string;
-		name: string;
-		href: Route;
-		description?: string | null;
-		createdAt: string | Date | null;
-	},
+	TRow extends TimelineDto = TimelineDto,
 >({
 	onClickDeleteButton,
 }: {
@@ -515,7 +509,7 @@ export function buildTimelineTableColumns<
 				nameVariant: "plain",
 				cell: ({ getValue, row }) => (
 					<Link
-						href={row.original.href}
+						href={`/timelines/${row.original.id}` as Route}
 						className="text-primary hover:underline"
 						onClick={(event) => {
 							event.stopPropagation();
@@ -601,18 +595,7 @@ export function buildTemplateTableColumns<
 	);
 }
 
-export function buildSpaceTableColumns<
-	TRow extends {
-		id: string;
-		createdAt: string;
-		name: string;
-		label: string | null;
-		businessNo: string;
-		address: string;
-		phone: string;
-		email: string;
-	},
->({
+export function buildSpaceTableColumns<TRow extends SpaceDto = SpaceDto>({
 	onClickSpaceGroundName,
 }: {
 	onClickSpaceGroundName: (spaceId: string) => void;
@@ -621,9 +604,11 @@ export function buildSpaceTableColumns<
 	return buildColumnsWithDefaultCreatedAt<TRow>([
 		createNameColumn<TRow>({
 			nameVariant: "clickable",
+			accessorKey: "ground.name",
 			onClickName: (row) => onClickSpaceGroundName(row.id),
 		}),
 		createLabelColumn<TRow>({
+			accessorKey: "ground.label",
 			size: 120,
 			align: "center",
 			cell: ({ getValue }) => (
@@ -631,13 +616,19 @@ export function buildSpaceTableColumns<
 			),
 		}),
 		createPresetColumn<TRow>("businessNo", {
+			accessorKey: "ground.businessNo",
 			size: 160,
 		}),
 		createPresetColumn<TRow>("address", {
+			accessorKey: "ground.address",
 			size: 250,
 		}),
-		createPhoneColumn<TRow>(),
-		createEmailColumn<TRow>(),
+		createPhoneColumn<TRow>({
+			accessorKey: "ground.phone",
+		}),
+		createEmailColumn<TRow>({
+			accessorKey: "ground.email",
+		}),
 	]);
 }
 
@@ -826,24 +817,7 @@ export const assetTableColumns = buildAssetTableColumns<AssetDto>({
 });
 
 export function buildInquiryTableColumns<
-	TRow extends {
-		id: string;
-		title: string;
-		customerId: string;
-		customerName: string;
-		status: Parameters<typeof InquiryStatusCell>[0]["value"];
-		category: Parameters<typeof InquiryCategoryCell>[0]["value"];
-		channel: Parameters<typeof InquiryChannelCell>[0]["value"];
-		priority: Parameters<typeof InquiryPriorityCell>[0]["value"];
-		assigneeId?: string;
-		assigneeName?: string;
-		sentiment?: Parameters<typeof InquirySentimentCell>[0]["value"];
-		slaStatus?: Parameters<typeof InquirySLACell>[0]["status"];
-		slaRemainingMinutes?: number;
-		unreadCount: number;
-		createdAt: string;
-		updatedAt: string;
-	},
+	TRow extends InquiryDto = InquiryDto,
 >() {
 	/** Inquiry 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumns<TRow>(
@@ -852,8 +826,8 @@ export function buildInquiryTableColumns<
 			isRequired: true,
 			cell: ({ row }) => (
 				<ProfileAvatarCell
-					name={row.original.customerName}
-					subtitle={row.original.customerId}
+					name={row.original.customerId ?? "고객"}
+					subtitle={row.original.customerId ?? "-"}
 				/>
 			),
 		}),
@@ -908,9 +882,7 @@ export function buildInquiryTableColumns<
 		createPresetColumn<TRow>("assigneeName", {
 			size: 150,
 			align: "center",
-			cell: ({ row }) => (
-				<InquiryAssigneeCell name={row.original.assigneeName} />
-			),
+			cell: ({ row }) => <InquiryAssigneeCell name={row.original.assigneeId} />,
 		}),
 		createPresetColumn<TRow>("sentiment", {
 			size: 100,
@@ -928,8 +900,8 @@ export function buildInquiryTableColumns<
 			align: "center",
 			cell: ({ row }) => (
 				<InquirySLACell
-					status={row.original.slaStatus}
-					remainingMinutes={row.original.slaRemainingMinutes}
+					status={getInquirySlaStatus(row.original)}
+					remainingMinutes={getInquirySlaRemainingMinutes(row.original)}
 				/>
 			),
 		}),
@@ -946,4 +918,35 @@ export function buildInquiryTableColumns<
 			size: 160,
 		}),
 	);
+}
+
+function getInquirySlaRemainingMinutes(
+	inquiry: InquiryDto,
+): number | undefined {
+	if (!inquiry.slaResponseDue) {
+		return undefined;
+	}
+
+	return Math.floor(
+		(new Date(inquiry.slaResponseDue).getTime() - Date.now()) / 60000,
+	);
+}
+
+function getInquirySlaStatus(
+	inquiry: InquiryDto,
+): Parameters<typeof InquirySLACell>[0]["status"] | undefined {
+	if (inquiry.isSlaResponseBreached || inquiry.isSlaResolveBreached) {
+		return "breach";
+	}
+
+	const remainingMinutes = getInquirySlaRemainingMinutes(inquiry);
+	if (typeof remainingMinutes !== "number") {
+		return undefined;
+	}
+
+	if (remainingMinutes <= 60) {
+		return "warning";
+	}
+
+	return "ok";
 }

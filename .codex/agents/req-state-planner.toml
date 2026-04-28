@@ -30,7 +30,7 @@ developer_instructions = '''
 
 | 분류 | owner | 예시 |
 |------|-------|------|
-| URL query state | route thin container / `useMetaDataGridQueryStates` | 검색어, 필터, 페이지네이션 |
+| URL query state | route thin container / `DataGridQueryStates` | 검색어, 필터, 페이지네이션 |
 | React Query server state | Orval hook | 목록 데이터, 상세 데이터, mutation 결과 |
 | MobX page-local state | `fe-state-builder` | 선택 row, modal open, draft, expanded, tab |
 | shared Store | `fe-store-builder` | 여러 page/domain 이 공유하는 세션성 상태 |

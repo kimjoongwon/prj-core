@@ -36,7 +36,7 @@ describe("overview manifest helpers", () => {
 		const source = `
 			import {
 				RoleListPage,
-				type RoleListPageRole,
+				type RoleListPageProps,
 			} from "@cocrepo/ui";
 
 			export { SessionCheckPage as default } from "@cocrepo/ui";
@@ -154,10 +154,7 @@ describe("buildOverviewManifest", () => {
 
 	it("maps autodocs entries back to the owning page entry", () => {
 		const manifest = buildOverviewManifest();
-		const entry = findCatalogEntryForStory(
-			manifest,
-			"page-rolelistpage--docs",
-		);
+		const entry = findCatalogEntryForStory(manifest, "page-rolelistpage--docs");
 
 		expect(entry?.componentName).toBe("RoleListPage");
 	});

@@ -9,14 +9,15 @@
 import { Ability, AbilityBuilder } from "@casl/ability";
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import type { UserDto } from "@cocrepo/dto";
+import type { RolePolicy, UserPolicy } from "@cocrepo/entity";
 import type {
 	Ability as PrismaAbility,
 	Action as PrismaAction,
 	Subject as PrismaSubject,
 } from "@cocrepo/prisma";
 import {
-	RoleGrantsRepository,
-	UserGrantsRepository,
+	RolePoliciesRepository,
+	UserPoliciesRepository,
 } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
@@ -24,17 +25,19 @@ import { resolveCurrentTenantForSpace } from "../util/permission.util";
 import type { Actions, AppAbility, AppAbilityClass, Subjects } from "./types";
 
 /**
- * RoleGrant/UserGrant에서 추출한 Ability 데이터와 priority를 결합한 타입
+ * RolePolicy/UserPolicy에서 추출한 Ability 데이터와 priority를 결합한 타입
  *
  * @description
- * Prisma에서 조회한 Ability 데이터를 spread하고 RoleGrant/UserGrant.priority를 추가하면
+ * Prisma에서 조회한 Ability 데이터를 spread하고 RolePolicy/UserPolicy.priority를 추가하면
  * AbilityEntity 클래스의 메서드(isAllowed, isDenied 등)를 잃게 됩니다.
  * mergeAbilities/applyAbilityRule에서는 메서드가 필요 없으므로
- * Prisma의 데이터 타입에 관계 필드와 required priority를 추가한
+ * Prisma의 데이터 타입에 관계 필드와 required priority/sourceRank를 추가한
  * 구조적 타입을 사용합니다.
  */
 type AbilityWithPriority = PrismaAbility & {
 	priority: number;
+	sourceRank: number;
+	assignmentCreatedAt?: Date;
 	subject?: PrismaSubject;
 	action?: PrismaAction;
 };
@@ -72,8 +75,8 @@ export class CaslAbilityFactory {
 	private readonly logger = new Logger(CaslAbilityFactory.name);
 
 	constructor(
-		private readonly roleGrantsRepository: RoleGrantsRepository,
-		private readonly userGrantsRepository: UserGrantsRepository,
+		private readonly rolePoliciesRepository: RolePoliciesRepository,
+		private readonly userPoliciesRepository: UserPoliciesRepository,
 		private readonly cls: ClsService,
 	) {}
 
@@ -85,8 +88,8 @@ export class CaslAbilityFactory {
 	 *
 	 * @description
 	 * 1. x-space-id 헤더에서 현재 spaceId를 가져와 해당 tenant 찾기
-	 * 2. RoleGrantsRepository로 Role 기반 권한 조회 (RoleGrant → Ability)
-	 * 3. UserGrantsRepository로 User 예외 권한 조회 (UserGrant → Ability)
+	 * 2. RolePolicy로 Role 기반 정책 조회 (RolePolicy → Policy → Ability)
+	 * 3. UserPolicy로 User 예외 정책 조회 (UserPolicy → Policy → Ability)
 	 * 4. 권한 병합 (User 권한이 Role 권한보다 우선 - priority 기반)
 	 * 5. AbilityBuilder로 권한 생성
 	 * 6. conditions 파싱 (템플릿 변수 치환)
@@ -101,7 +104,7 @@ export class CaslAbilityFactory {
 		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
 		const currentTenant = resolveCurrentTenantForSpace(user.tenants, spaceId);
 
-		if (!currentTenant?.role) {
+		if (!spaceId || !currentTenant?.role) {
 			this.logger.warn(
 				`사용자에게 현재 Space의 Tenant 또는 Role이 없습니다: userId=${user.id}, spaceId=${spaceId}`,
 			);
@@ -113,27 +116,22 @@ export class CaslAbilityFactory {
 			`사용자 권한 생성 시작: userId=${user.id}, roleId=${roleId}, spaceId=${spaceId}`,
 		);
 
-		const roleGrants = await this.roleGrantsRepository.findActiveByRoleIds([
-			roleId,
-		]);
-		const roleAbilities: AbilityWithPriority[] = roleGrants
-			.filter((grant) => grant.ability)
-			.map((grant) => ({
-				...grant.ability!,
-				priority: grant.priority,
-			}));
+		const rolePolicies =
+			await this.rolePoliciesRepository.findActiveByRoleIdsInSpace(
+				[roleId],
+				spaceId,
+			);
+		const roleAbilities = this.expandRolePolicyAbilities(rolePolicies);
 		this.logger.debug(
 			`Role 기반 Ability 조회: ${roleAbilities.length}개, roleId=${roleId}`,
 		);
 
-		const userGrants =
-			await this.userGrantsRepository.findActiveByUserId(user.id);
-		const userAbilities: AbilityWithPriority[] = userGrants
-			.filter((grant) => grant.ability)
-			.map((grant) => ({
-				...grant.ability!,
-				priority: grant.priority,
-			}));
+		const userPolicies =
+			await this.userPoliciesRepository.findActiveByUserIdInSpace(
+				user.id,
+				spaceId,
+			);
+		const userAbilities = this.expandUserPolicyAbilities(userPolicies);
 		this.logger.debug(
 			`User 예외 Ability 조회: ${userAbilities.length}개, userId=${user.id}`,
 		);
@@ -162,7 +160,7 @@ export class CaslAbilityFactory {
 	 *
 	 * @description
 	 * 동일한 subject + action 조합이 있을 경우 priority가 높은 것이 우선합니다.
-	 * User 예외 권한은 일반적으로 priority가 높게 설정됩니다 (10 이상).
+	 * 동률이면 UserPolicy가 RolePolicy보다 우선합니다.
 	 * 병합 후 priority 내림차순으로 정렬하여 반환합니다.
 	 */
 	private mergeAbilities(
@@ -172,36 +170,76 @@ export class CaslAbilityFactory {
 		// subject + action 조합을 키로 사용하여 Map 구성
 		const abilityMap = new Map<string, AbilityWithPriority>();
 
-		// 1. Role 권한을 먼저 추가
-		for (const ability of roleAbilities) {
-			const key = this.getAbilityKey(ability);
-			if (key) {
-				abilityMap.set(key, ability);
-			}
-		}
-
-		// 2. User 예외 권한으로 덮어쓰기 (priority가 높은 것이 우선)
-		for (const ability of userAbilities) {
+		for (const ability of [...roleAbilities, ...userAbilities]) {
 			const key = this.getAbilityKey(ability);
 			if (!key) continue;
 
 			const existingAbility = abilityMap.get(key);
 
-			// 기존 권한이 없거나, User 권한의 priority가 더 높으면 덮어쓰기
-			if (!existingAbility || ability.priority > existingAbility.priority) {
+			if (
+				!existingAbility ||
+				this.compareAbilityPriority(ability, existingAbility) > 0
+			) {
 				abilityMap.set(key, ability);
-				this.logger.debug(
-					`User 예외 권한 적용: subject=${ability.subject?.name}, action=${ability.action?.name}, priority=${ability.priority}`,
-				);
 			}
 		}
 
-		// 3. priority 내림차순으로 정렬
 		const mergedAbilities = Array.from(abilityMap.values()).sort(
-			(a, b) => b.priority - a.priority,
+			(a, b) => this.compareAbilityPriority(b, a),
 		);
 
 		return mergedAbilities;
+	}
+
+	private expandRolePolicyAbilities(
+		rolePolicies: RolePolicy[],
+	): AbilityWithPriority[] {
+		return rolePolicies.flatMap((rolePolicy) =>
+			this.expandPolicyAbilities(rolePolicy, 0),
+		);
+	}
+
+	private expandUserPolicyAbilities(
+		userPolicies: UserPolicy[],
+	): AbilityWithPriority[] {
+		return userPolicies.flatMap((userPolicy) =>
+			this.expandPolicyAbilities(userPolicy, 1),
+		);
+	}
+
+	private expandPolicyAbilities(
+		assignment: RolePolicy | UserPolicy,
+		sourceRank: number,
+	): AbilityWithPriority[] {
+		const policyAbilities = assignment.policy?.policyAbilities ?? [];
+
+		return policyAbilities
+			.filter((policyAbility) => policyAbility.ability)
+			.map((policyAbility) => ({
+				...(policyAbility.ability! as unknown as PrismaAbility),
+				subject: policyAbility.ability!.subject as PrismaSubject | undefined,
+				action: policyAbility.ability!.action as PrismaAction | undefined,
+				priority: assignment.priority,
+				sourceRank,
+				assignmentCreatedAt: assignment.createdAt,
+			}));
+	}
+
+	private compareAbilityPriority(
+		a: AbilityWithPriority,
+		b: AbilityWithPriority,
+	): number {
+		if (a.priority !== b.priority) {
+			return a.priority - b.priority;
+		}
+
+		if (a.sourceRank !== b.sourceRank) {
+			return a.sourceRank - b.sourceRank;
+		}
+
+		const aCreatedAt = a.assignmentCreatedAt?.getTime() ?? 0;
+		const bCreatedAt = b.assignmentCreatedAt?.getTime() ?? 0;
+		return aCreatedAt - bCreatedAt;
 	}
 
 	/**
@@ -267,7 +305,7 @@ export class CaslAbilityFactory {
 	/**
 	 * 단일 Ability 규칙을 적용합니다.
 	 *
-	 * @param ability - Grant에서 추출한 Ability 데이터 (priority 포함)
+	 * @param ability - Policy에서 추출한 Ability 데이터 (priority 포함)
 	 * @param userContext - 사용자 컨텍스트
 	 * @param can - CASL can 함수
 	 * @param cannot - CASL cannot 함수

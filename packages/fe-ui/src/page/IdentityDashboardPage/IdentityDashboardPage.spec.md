@@ -9,6 +9,36 @@
 IDP 대시보드 화면의 pure page 컴포넌트입니다.
 통계와 로그인 추이 조회는 route thin container가 소유하고 이 파일은 detail shell 안의 시각 조합만 담당합니다.
 
+## 디자인 스케치
+
+```text
+IdentityDashboardPage
+- DetailPage
+  - PageTitleBar
+  - DetailPageSurface
+    - VStack
+      - DetailSectionCard x2
+        - DetailSection
+          - PageTitleBar
+```
+
+## 사용 컴포넌트
+
+| 컴포넌트 | 출처 | 사용 위치 |
+| --- | --- | --- |
+| `Activity` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `CheckCircle` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `XCircle` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `Lock` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `UserX` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `KeyRound` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `DetailPage` | `@cocrepo/ui` | 페이지 외곽 레이아웃 구성 |
+| `PageTitleBar` | `@cocrepo/ui` | 상단 제목, 설명, 주요 액션 표시 |
+| `DetailPageSurface` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `VStack` | `@cocrepo/ui` | 화면 조합 요소 |
+| `DetailSectionCard` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `DetailSection` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+
 ## 공개 계약
 
 | 항목 | 설명 |
@@ -35,8 +65,5 @@ IDP 대시보드 화면의 pure page 컴포넌트입니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-22 | 로그인 추이 막대 리스트가 중복 날짜 데이터에서도 stable key를 사용하도록 UI 규칙을 보강 | codex |
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 route-mirror page 이름을 semantic screen 이름으로 정리 | codex |
-| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
-| 2026-03-29 | IDP 대시보드를 pure page로 재정의하고 통계/추이 조회를 route thin container로 이동 | codex |
-| 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |
+| 2026-03-29 | IDP 대시보드의 통계/추이 조회 책임 경계 정리 | codex |
+| 2026-03-26 | 초기 화면 기획 수립 | codex |

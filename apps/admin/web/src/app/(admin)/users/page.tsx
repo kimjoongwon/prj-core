@@ -1,6 +1,6 @@
 "use client";
 
-import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
+import { useGetUsers } from "@cocrepo/api/core/users";
 import { useDebouncedCallback } from "@cocrepo/hook";
 import { UserListPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
@@ -49,7 +49,7 @@ function UsersPageContent() {
 
 	return (
 		<UserListPage
-			users={(response?.data ?? []).map(mapUserListItem)}
+			users={response?.data}
 			totalCount={response?.meta?.total ?? 0}
 			stats={
 				response?.stats
@@ -87,15 +87,3 @@ export default observer(function UsersPageRoute() {
 		</Suspense>
 	);
 });
-
-function mapUserListItem(user: UserDto) {
-	return {
-		id: user.id,
-		name: user.name,
-		email: user.email,
-		phone: user.phone,
-		removedAt: user.removedAt,
-		createdAt: user.createdAt,
-		tenants: user.tenants,
-	};
-}

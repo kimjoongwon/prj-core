@@ -1,14 +1,15 @@
 "use client";
 
+import type { ActionDto } from "@cocrepo/api/core/actions";
 import type {
+	DataGridQueryStates,
+	DataGridSetQueryStates,
 	InputConfig,
-	MetaDataGridQueryStates,
-	MetaDataGridSetQueryStates,
 } from "@cocrepo/type";
 import {
 	buildActionTableColumns,
-	MetaDataGrid,
-	MetaDataGridStateModel,
+	DataGrid,
+	DataGridStateModel,
 	PageTitleBar,
 	Surface,
 } from "@cocrepo/ui";
@@ -39,27 +40,16 @@ export const adminActionsPageQueryInputs: InputConfig[] = [
 	...groupQueryInputs,
 ];
 
-export interface ActionListPageQueryStates extends MetaDataGridQueryStates {
+export interface ActionListPageQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	search: string;
 	group: string;
 }
-export type ActionListPageSetQueryStates = MetaDataGridSetQueryStates;
-
-export interface ActionListPageAction {
-	id: string;
-	name: string;
-	displayName?: string | null;
-	group?: string | null;
-	order: number;
-	isSystem: boolean;
-	createdAt: string | Date | null;
-	removedAt?: string | null;
-}
+export type ActionListPageSetQueryStates = DataGridSetQueryStates;
 
 export interface ActionListPageProps {
-	actions: ActionListPageAction[];
+	actions?: ActionDto[];
 	totalCount: number;
 	isLoading: boolean;
 	queryStates: ActionListPageQueryStates;
@@ -67,9 +57,9 @@ export interface ActionListPageProps {
 	onClickCreateButton: () => void;
 }
 
-const actionTableColumns = buildActionTableColumns<ActionListPageAction>();
+const actionTableColumns = buildActionTableColumns<ActionDto>();
 
-function filterActions(actions: ActionListPageAction[], search?: string) {
+function filterActions(actions: ActionDto[], search?: string) {
 	const searchKeyword = search?.trim().toLowerCase() ?? "";
 	if (!searchKeyword) {
 		return actions;
@@ -100,55 +90,58 @@ function buildRightInputs(onClickCreateButton: () => void): InputConfig[] {
 	];
 }
 
-export const ActionListPage = observer(({
-	actions,
-	totalCount: totalActionCount,
-	isLoading,
-	queryStates,
-	setQueryStates,
-	onClickCreateButton,
-}: ActionListPageProps) => {
-	const gridState = useLocalObservable(
-		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
-	);
+export const ActionListPage = observer(
+	({
+		actions,
+		totalCount: totalActionCount,
+		isLoading,
+		queryStates,
+		setQueryStates,
+		onClickCreateButton,
+	}: ActionListPageProps) => {
+		const gridState = useLocalObservable(
+			() => new DataGridStateModel({ queryStates, setQueryStates }),
+		);
 
-	useEffect(() => {
-		gridState.syncQuery(queryStates, setQueryStates);
-	}, [gridState, queryStates, setQueryStates]);
-	const filteredActions = filterActions(actions, queryStates.search);
-	const totalCount = queryStates.search?.trim().length
-		? filteredActions.length
-		: totalActionCount;
-	const rightInputs = buildRightInputs(onClickCreateButton);
+		useEffect(() => {
+			gridState.syncQuery(queryStates, setQueryStates);
+		}, [gridState, queryStates, setQueryStates]);
+		const actionRows = actions ?? [];
+		const filteredActions = filterActions(actionRows, queryStates.search);
+		const totalCount = queryStates.search?.trim().length
+			? filteredActions.length
+			: totalActionCount;
+		const rightInputs = buildRightInputs(onClickCreateButton);
 
-	if (isLoading) {
-		return <ActionsPageFallback />;
-	}
+		if (isLoading) {
+			return <ActionsPageFallback />;
+		}
 
-	return (
-		<div className="space-y-5">
-			<PageTitleBar
-				title="Action 목록"
-				description="시스템에 등록된 Action을 조회합니다."
-			/>
-			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
-				<MetaDataGrid
-					config={{
-						entity: "Action",
-						columns: actionTableColumns,
-						leftInputs,
-						rightInputs,
-						emptyMessage: "조회된 Action이 없습니다.",
-					}}
-	rows={filteredActions}
-	totalCount={totalCount}
-	isLoading={false}
-	state={gridState}
-/>
-			</Surface>
-		</div>
-	);
-});
+		return (
+			<div className="space-y-5">
+				<PageTitleBar
+					title="Action 목록"
+					description="시스템에 등록된 Action을 조회합니다."
+				/>
+				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+					<DataGrid
+						config={{
+							entity: "Action",
+							columns: actionTableColumns,
+							leftInputs,
+							rightInputs,
+							emptyMessage: "조회된 Action이 없습니다.",
+						}}
+						rows={filteredActions}
+						totalCount={totalCount}
+						isLoading={false}
+						state={gridState}
+					/>
+				</Surface>
+			</div>
+		);
+	},
+);
 
 function ActionsPageFallback() {
 	return (

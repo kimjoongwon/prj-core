@@ -135,7 +135,8 @@ developer_instructions = '''
 | `req-layout-planner` | `fe-layout-builder` | `.codex/agents/fe-layout-builder.toml` | `packages/fe-ui/src/display/layout/**` 출력 경로와 Layout 규칙 |
 | `req-feature-planner` | `fe-feature-builder` | `.codex/agents/fe-feature-builder.toml` | `packages/fe-ui/src/feature/**` 출력 경로와 Feature 규칙 |
 | `req-state-planner` | `fe-state-builder`, `fe-store-builder` | `.codex/agents/fe-state-builder.toml`, `.codex/agents/fe-store-builder.toml` | URL query / React Query / page-local MobX / shared Store 경계 |
-| `req-page-planner` | `fe-collection-builder` | `.codex/agents/fe-collection-builder.toml` | `data-grid|list|grid` 재사용 계층 기준 |
+| `req-page-planner` | `fe-data-grid-builder` | `.codex/agents/fe-data-grid-builder.toml` | `data-grid` 재사용 계층 기준 |
+| `req-page-planner` | `fe-widget-builder` | `.codex/agents/fe-widget-builder.toml` | `collection/list|grid` 성격의 순수 UI 조합 기준 |
 | `req-page-planner` | `fe-detail-builder` | `.codex/agents/fe-detail-builder.toml` | `detail/view` 재사용 계층 기준 |
 | `req-page-planner` | `fe-form-builder` | `.codex/agents/fe-form-builder.toml` | `form` 재사용 계층 기준 |
 | `req-page-planner` | `fe-ui-page-builder` | `.codex/agents/fe-ui-page-builder.toml` | `packages/fe-ui/src/page/[PageName]/[PageName].tsx` pure page 기준 |
@@ -150,7 +151,8 @@ developer_instructions = '''
 
 | page role | reusable target | Stage 5 구현 role | 반영 대상 |
 |----------|-----------------|-------------------|----------|
-| `collection` | `data-grid` / `collection/list` / `collection/grid` | `fe-collection-builder` | `packages/fe-ui/src/collection/**` |
+| `collection` | `data-grid` | `fe-data-grid-builder` | `packages/fe-ui/src/data-grid/**` |
+| `collection` | `collection/list` / `collection/grid` | `fe-widget-builder` | `packages/fe-ui/src/collection/**` |
 | `detail` | `detail/view` | `fe-detail-builder` | `packages/fe-ui/src/detail/view/**` |
 | `form` | `form` | `fe-form-builder` | `packages/fe-ui/src/form/**` |
 

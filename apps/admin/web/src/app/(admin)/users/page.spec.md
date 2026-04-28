@@ -19,7 +19,7 @@
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/users/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 page-local `PageTitleBar`, 통계 카드, 디렉터리 헤더, `Surface` 안의 `MetaDataGrid`만 렌더링합니다.
+- `page.tsx`는 page-local `PageTitleBar`, 통계 카드, 디렉터리 헤더, `Surface` 안의 `DataGrid`만 렌더링합니다.
 
 ## Rendering Decision
 
@@ -38,7 +38,7 @@
 | 페이지 헤더 | `PageTitleBar` | 이용자 목록 안내 |
 | 통계 블록 | `StatsCard` x3 | 전체/활성/비활성 이용자 요약 |
 | 디렉터리 헤더 | page-local header + `Chip` | 총 인원과 설명 텍스트 |
-| 목록 영역 | `Surface` + `MetaDataGrid` | 검색 입력과 이용자 목록 |
+| 목록 영역 | `Surface` + `DataGrid` | 검색 입력과 이용자 목록 |
 
 ## API 호출
 
@@ -66,8 +66,10 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-28 | route의 Page 전용 row 매핑을 제거하고 Orval DTO를 pure page에 직접 주입하도록 정리 | codex |
+| 2026-04-28 | grid 컴포넌트 명칭을 DataGrid로 통일한 구조 변경을 반영 | codex |
 | 2026-04-28 | page role을 `collection`으로 갱신 | codex |
-| 2026-04-28 | MetaDataGrid 공식 재사용 타깃을 `data-grid`로 갱신 | codex |
+| 2026-04-28 | DataGrid 공식 재사용 타깃을 `data-grid`로 갱신 | codex |
 | 2026-04-27 | 이용자 목록의 수동 Space queryKey 분리를 제거하고 admin layout bootstrap/access gate와 hard reload 기반 cache 초기화 정책으로 갱신 | codex |
 | 2026-04-25 | Space bootstrap/selection 완료 전에는 users query를 열지 않도록 `enabled` gate를 추가 | codex |
 | 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |

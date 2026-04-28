@@ -1,13 +1,11 @@
 "use client";
 
 import {
-	type AuthAuditLogDto,
 	useGetAuthAuditLogStats,
 	useGetAuthAuditLogs,
 } from "@cocrepo/api/idp/auth";
 import {
 	AuthAuditLogListPage,
-	type AuthAuditLogListPageLog,
 	type AuthAuditLogListPageStats,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
@@ -28,7 +26,7 @@ export default observer(function AuthAuditLogsPageRoute() {
 
 	return (
 		<AuthAuditLogListPage
-			logs={(response?.data ?? []).map(mapAuditLog)}
+			logs={response?.data}
 			totalCount={response?.meta?.totalCount ?? 0}
 			isLoading={isLoading}
 			queryStates={queryStates}
@@ -39,18 +37,6 @@ export default observer(function AuthAuditLogsPageRoute() {
 		/>
 	);
 });
-
-function mapAuditLog(log: AuthAuditLogDto): AuthAuditLogListPageLog {
-	return {
-		id: log.id,
-		occurredAt: log.createdAt,
-		email: log.email,
-		result: log.result,
-		failureReason: log.failureReason,
-		ipAddress: log.ipAddress,
-		userAgent: log.userAgent,
-	};
-}
 
 function mapAuditLogStats(stats: {
 	todaySuccessCount: number;

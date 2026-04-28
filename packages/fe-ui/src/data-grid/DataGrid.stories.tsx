@@ -1,14 +1,13 @@
+import type { DataGridConfig, DataGridQueryStates } from "@cocrepo/type";
 import type { Meta, StoryObj } from "@storybook/react";
-import { createColumnHelper } from "@tanstack/react-table";
+import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useState, type ComponentType } from "react";
+import type { ComponentType } from "react";
+import { DataGrid, type DataGridProps, type Key } from "./DataGrid";
 import {
-	DataGrid,
-	type DataGridProps,
-	type Key,
-	type MultiSortDescriptor,
-	type SortEvent,
-} from "./DataGrid";
+	DataGridSelectionStateModel,
+	DataGridStateModel,
+} from "./DataGridState";
 
 interface SampleRow {
 	id: Key;
@@ -42,48 +41,98 @@ const rows: SampleRow[] = [
 	},
 ];
 
-const columnHelper = createColumnHelper<SampleRow>();
-const columns = [
-	columnHelper.accessor("name", {
-		header: "이름",
-		meta: {
-			align: "left",
+const config: DataGridConfig<SampleRow> = {
+	entity: "Sample",
+	columns: [
+		{
+			field: "name",
+			label: "이름",
+			isRequired: true,
 		},
-	}),
-	columnHelper.accessor("email", {
-		header: "이메일",
-	}),
-	columnHelper.accessor("status", {
-		header: "상태",
-		meta: {
+		{
+			field: "email",
+			label: "이메일",
+		},
+		{
+			field: "status",
+			label: "상태",
 			align: "center",
+			cell: ({ getValue }) => {
+				const status = getValue();
+				return (
+					<span
+						className={
+							status === "활성" ? "text-success-500" : "text-danger-500"
+						}
+					>
+						{status as string}
+					</span>
+				);
+			},
 		},
-		cell: ({ getValue }) => {
-			const status = getValue();
-			return (
-				<span
-					className={status === "활성" ? "text-success-500" : "text-danger-500"}
-				>
-					{status}
-				</span>
-			);
-		},
-	}),
-	columnHelper.accessor("createdAt", {
-		header: "등록일",
-		meta: {
+		{
+			field: "createdAt",
+			label: "등록일",
 			align: "right",
 		},
-	}),
-];
+	],
+	leftInputs: [
+		{
+			type: "search",
+			id: "search",
+			placeholder: "검색",
+		},
+	],
+	rightInputs: [
+		{
+			type: "button",
+			id: "create",
+			label: "등록",
+			props: {
+				variant: "flat",
+				color: "primary",
+				startContent: <Plus className="h-4 w-4" />,
+			},
+			handlers: {
+				onClick: () => undefined,
+			},
+		},
+	],
+	selection: {
+		mode: "multiple",
+		actionBar: {
+			showCount: true,
+			actions: [
+				{
+					type: "button",
+					id: "delete",
+					label: "삭제",
+					props: {
+						variant: "flat",
+						color: "danger",
+						size: "sm",
+					},
+					handlers: {
+						onClick: () => undefined,
+					},
+				},
+			],
+		},
+	},
+};
 
-type StoryDataGridProps = Partial<DataGridProps<SampleRow>>;
+type StoryDataGridProps = Pick<
+	DataGridProps<SampleRow>,
+	"rows" | "totalCount" | "isLoading"
+>;
 
 const meta = {
 	title: "DataGrid/DataGrid",
 	component: DataGrid as ComponentType<StoryDataGridProps>,
 	args: {
-		"aria-label": "샘플 데이터 그리드",
+		rows,
+		totalCount: rows.length,
+		isLoading: false,
 	},
 	parameters: {
 		layout: "padded",
@@ -96,47 +145,43 @@ export default meta;
 type Story = StoryObj<StoryDataGridProps>;
 
 const DataGridWrapper = observer<StoryDataGridProps>(
-	({ data = rows, columns: storyColumns = columns, ...rest }) => {
-		const state = useLocalObservable(() => ({
-			selectedKeys: [] as Key[],
-		}));
-
-		return (
-			<DataGrid data={data} columns={storyColumns} state={state} {...rest} />
+	({ rows: storyRows = rows, totalCount = rows.length, isLoading = false }) => {
+		const queryStates = useLocalObservable(
+			() =>
+				({
+					skip: 0,
+					take: 10,
+					search: "",
+				}) as DataGridQueryStates,
 		);
-	},
-);
-
-const SortableDataGridWrapper = observer<StoryDataGridProps>(
-	({ data = rows, columns: storyColumns = columns, ...rest }) => {
-		const [sorting, setSorting] = useState<MultiSortDescriptor>([]);
-		const state = useLocalObservable(() => ({
-			selectedKeys: [] as Key[],
-			get sorting() {
-				return sorting;
-			},
-		}));
-		const onSortChange = (event: SortEvent) => {
-			setSorting((previous) => {
-				const existing = previous.find((item) => item.column === event.column);
-				if (!existing) {
-					return [{ column: event.column, direction: "asc" }];
-				}
-				if (existing.direction === "asc") {
-					return [{ column: event.column, direction: "desc" }];
-				}
-				return [];
-			});
-		};
+		const selection = useLocalObservable(
+			() => new DataGridSelectionStateModel(),
+		);
+		const state = useLocalObservable(
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates: async (values) => {
+						for (const [key, value] of Object.entries(values)) {
+							if (value === null) {
+								delete queryStates[key];
+							} else {
+								queryStates[key] = value;
+							}
+						}
+						return new URLSearchParams();
+					},
+					selection,
+				}),
+		);
 
 		return (
 			<DataGrid
-				data={data}
-				columns={storyColumns}
+				config={config}
 				state={state}
-				sortableColumns={["name", "email", "status", "createdAt"]}
-				onSortChange={onSortChange}
-				{...rest}
+				rows={storyRows}
+				totalCount={totalCount}
+				isLoading={isLoading}
 			/>
 		);
 	},
@@ -146,15 +191,12 @@ export const Default: Story = {
 	render: (args) => <DataGridWrapper {...args} />,
 };
 
-export const Selectable: Story = {
+export const Empty: Story = {
 	args: {
-		selectionMode: "multiple",
+		rows: [],
+		totalCount: 0,
 	},
 	render: (args) => <DataGridWrapper {...args} />,
-};
-
-export const Sortable: Story = {
-	render: (args) => <SortableDataGridWrapper {...args} />,
 };
 
 export const Loading: Story = {

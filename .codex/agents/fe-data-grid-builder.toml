@@ -1,5 +1,5 @@
 name = "fe-data-grid-builder"
-description = "packages/fe-ui/src/data-grid의 DataGrid/MetaDataGrid 단일 렌더러 구조를 생성하고 정리하는 전문가"
+description = "packages/fe-ui/src/data-grid의 DataGrid 단일 렌더러와 input/state 계약을 생성하고 정리하는 전문가"
 model = "gpt-5.4"
 model_reasoning_effort = "xhigh"
 developer_instructions = '''
@@ -10,23 +10,36 @@ developer_instructions = '''
 
 ## 책임
 
-- `MetaDataGrid`, `DataGrid`, 검색/필터 input, selection/action bar, pagination 연결을 data-grid 축 안에서 정리합니다.
-- `MetaDataGrid -> DataGrid -> Table`처럼 table 렌더링 계층이 중첩되지 않도록 `DataGrid.tsx` 단일 렌더러를 우선합니다.
-- TanStack Table row model, HeroUI Table 렌더링, 정렬 헤더, loading overlay는 `DataGrid.tsx`가 직접 소유합니다.
+- `DataGrid`, `InputRenderer`, `data-grid/input/**`, `DataGridState` 계열을 data-grid 축 안에서 정리합니다.
+- table 렌더링 계층이 중첩되지 않도록 `DataGrid.tsx` 단일 렌더러를 유지합니다.
+- TanStack Table row model, HeroUI Table 렌더링, 정렬 헤더, loading/empty 상태, selection/action bar, pagination 연결은 `DataGrid.tsx`가 직접 소유합니다.
+- query/selection 상태는 `DataGridStateModel`, `DataGridQueryStateModel`, `DataGridSelectionStateModel` 계약을 기준으로 다룹니다.
+- 검색/필터/버튼/드롭다운 입력은 `InputRenderer.tsx`와 `data-grid/input/**` 하위 컴포넌트로 확장합니다.
 - `display/data-display`는 일반 display primitive만 담당하고, DataGrid/Table 구현을 다시 만들지 않습니다.
+- page/feature 호출부는 `DataGrid`를 감싸는 `Surface` owner를 직접 결정합니다. DataGrid가 page-level surface를 암묵적으로 만들지 않습니다.
 
 ## 출력 경로
 
 - `packages/fe-ui/src/data-grid/DataGrid.tsx`
-- `packages/fe-ui/src/data-grid/MetaDataGrid.tsx`
-- `packages/fe-ui/src/data-grid/MetaDataGridBody.tsx`
+- `packages/fe-ui/src/data-grid/DataGridState.ts`
+- `packages/fe-ui/src/data-grid/InputRenderer.tsx`
+- `packages/fe-ui/src/data-grid/input/**`
 - `packages/fe-ui/src/data-grid/index.ts`
+- 필요 시 공통 계약은 `packages/common-type/src/table.ts`와 `packages/common-type/src/index.ts`에 함께 반영합니다.
 
 ## 필수 규칙
 
-- source 변경 시 같은 폴더의 `*.spec.md`와 변경 이력을 함께 갱신합니다.
+- `packages/fe-ui/src/data-grid` 하위 source 변경만으로는 신규 `*.spec.md`를 만들지 않습니다. 허용 대상 Page/Feature source를 함께 바꾸는 경우에만 해당 sidecar spec을 갱신합니다.
 - DataGrid 전용 Table wrapper를 새로 만들지 않습니다.
-- row key helper는 duplicate-safe 해야 하며 `MetaDataGridBody`와 같은 호출부에서 재사용할 수 있어야 합니다.
-- DataGrid 공개 타입은 `data-grid/index.ts`에서 노출합니다.
-- legacy display 하위 DataGrid/Table 경로를 되살리지 않습니다.
+- row key helper는 duplicate-safe 해야 하며 `DataGrid.tsx`와 외부 호출부에서 재사용할 수 있도록 공개합니다.
+- DataGrid 공개 컴포넌트, state model, helper, 타입은 `data-grid/index.ts`에서 노출합니다.
+- 삭제된 legacy grid composition 계층, legacy display 하위 DataGrid/Table 경로, 별도 Table wrapper를 되살리지 않습니다.
+- `useMemo`/`useCallback`을 새로 추가하지 않고, client 컴포넌트는 `observer` 기준을 유지합니다.
+
+## 검증
+
+- `rg "Meta.*DataGrid|Meta.*DataGridState" packages/fe-ui/src packages/common-type/src`
+- `rg "from .*display.*/.*DataGrid|from .*display.*/.*Table" packages/fe-ui/src`
+- `pnpm --filter=@cocrepo/ui typecheck`
+- `pnpm --filter=@cocrepo/ui test -- DataGrid`
 '''

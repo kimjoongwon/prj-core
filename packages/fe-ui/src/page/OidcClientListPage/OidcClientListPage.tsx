@@ -1,14 +1,15 @@
 "use client";
 
+import type { OidcClientDto } from "@cocrepo/api/idp/oidc-clients";
 import type {
+	DataGridQueryStates,
+	DataGridSetQueryStates,
 	InputConfig,
-	MetaDataGridQueryStates,
-	MetaDataGridSetQueryStates,
 } from "@cocrepo/type";
 import {
 	buildOidcClientTableColumns,
-	MetaDataGrid,
-	MetaDataGridStateModel,
+	DataGrid,
+	DataGridStateModel,
 	PageTitleBar,
 	Surface,
 	VStack,
@@ -31,26 +32,15 @@ const leftInputs: InputConfig[] = [
 
 export const idpConsoleOidcClientsPageQueryInputs = [...leftInputs];
 
-export interface OidcClientListPageQueryStates
-	extends MetaDataGridQueryStates {
+export interface OidcClientListPageQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	search: string;
 }
-export type OidcClientListPageSetQueryStates = MetaDataGridSetQueryStates;
-
-export interface OidcClientListPageClient {
-	id: string;
-	clientId: string;
-	name: string;
-	tokenEndpointAuthMethod: string;
-	grantTypes: string[];
-	isActive: boolean;
-	createdAt: string | Date | null;
-}
+export type OidcClientListPageSetQueryStates = DataGridSetQueryStates;
 
 export interface OidcClientListPageProps {
-	oidcClients: OidcClientListPageClient[];
+	oidcClients?: OidcClientDto[];
 	totalCount: number;
 	isLoading: boolean;
 	queryStates: OidcClientListPageQueryStates;
@@ -58,10 +48,10 @@ export interface OidcClientListPageProps {
 	onClickCreateButton: () => void;
 }
 
-const oidcClientTableColumns =
-	buildOidcClientTableColumns<OidcClientListPageClient>();
+const oidcClientTableColumns = buildOidcClientTableColumns<OidcClientDto>();
 
-export const OidcClientListPage = observer(({
+export const OidcClientListPage = observer(
+	({
 		oidcClients,
 		totalCount,
 		isLoading,
@@ -69,13 +59,14 @@ export const OidcClientListPage = observer(({
 		setQueryStates,
 		onClickCreateButton,
 	}: OidcClientListPageProps) => {
-	const gridState = useLocalObservable(
-		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
-	);
+		const gridState = useLocalObservable(
+			() => new DataGridStateModel({ queryStates, setQueryStates }),
+		);
 
-	useEffect(() => {
-		gridState.syncQuery(queryStates, setQueryStates);
-	}, [gridState, queryStates, setQueryStates]);
+		useEffect(() => {
+			gridState.syncQuery(queryStates, setQueryStates);
+		}, [gridState, queryStates, setQueryStates]);
+		const oidcClientRows = oidcClients ?? [];
 		return (
 			<VStack gap={5}>
 				<PageTitleBar
@@ -92,19 +83,20 @@ export const OidcClientListPage = observer(({
 					}
 				/>
 				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
-					<MetaDataGrid
+					<DataGrid
 						config={{
 							entity: "OidcClient",
 							columns: oidcClientTableColumns,
 							leftInputs,
 							emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
 						}}
-	rows={oidcClients}
-	totalCount={totalCount}
-	isLoading={isLoading}
-	state={gridState}
-/>
+						rows={oidcClientRows}
+						totalCount={totalCount}
+						isLoading={isLoading}
+						state={gridState}
+					/>
 				</Surface>
 			</VStack>
 		);
-	});
+	},
+);

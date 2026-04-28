@@ -53,7 +53,6 @@
 - [fe-mo-feature-builder.toml](./fe-mo-feature-builder.toml): 모바일 feature 계층 예약 role
 - [fe-mo-form-builder.toml](./fe-mo-form-builder.toml): 모바일 form 계층 예약 role
 - [fe-mo-layout-builder.toml](./fe-mo-layout-builder.toml): 모바일 재사용 layout shell 예약 role
-- [fe-mo-collection-builder.toml](./fe-mo-collection-builder.toml): 모바일 collection 계층 예약 role
 - [fe-mo-ui-page-builder.toml](./fe-mo-ui-page-builder.toml): `packages/fe-mo-ui/src/page/**` pure page 예약 role
 - [fe-mo-widget-builder.toml](./fe-mo-widget-builder.toml): 모바일 widget 계층 예약 role
 

@@ -1,12 +1,9 @@
 "use client";
 
-import {
-	type AbilityResponseDto,
-	useGetAbilities,
-} from "@cocrepo/api/core/abilities";
+import { useGetAbilities } from "@cocrepo/api/core/abilities";
 import { useGetActions } from "@cocrepo/api/core/actions";
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
-import { AbilityListPage, type AbilityListPageAbility } from "@cocrepo/ui";
+import { AbilityListPage } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -33,39 +30,34 @@ export default observer(function AbilitiesPage() {
 		useGetActions();
 
 	const abilities = abilitiesResponse?.data ?? [];
-	const filteredAbilities = abilities
-		.filter((ability) => {
-			if (
-				state.searchTerm &&
-				!ability.name.toLowerCase().includes(state.searchTerm.toLowerCase())
-			) {
+	const filteredAbilities = abilities.filter((ability) => {
+		if (
+			state.searchTerm &&
+			!ability.name.toLowerCase().includes(state.searchTerm.toLowerCase())
+		) {
+			return false;
+		}
+
+		if (
+			state.selectedSubjectId &&
+			ability.subjectId !== state.selectedSubjectId
+		) {
+			return false;
+		}
+
+		if (state.selectedActionId && ability.actionId !== state.selectedActionId) {
+			return false;
+		}
+
+		if (state.selectedInverted !== "") {
+			const invertedBool = state.selectedInverted === "true";
+			if (ability.inverted !== invertedBool) {
 				return false;
 			}
+		}
 
-			if (
-				state.selectedSubjectId &&
-				ability.subjectId !== state.selectedSubjectId
-			) {
-				return false;
-			}
-
-			if (
-				state.selectedActionId &&
-				ability.actionId !== state.selectedActionId
-			) {
-				return false;
-			}
-
-			if (state.selectedInverted !== "") {
-				const invertedBool = state.selectedInverted === "true";
-				if (ability.inverted !== invertedBool) {
-					return false;
-				}
-			}
-
-			return true;
-		})
-		.map(mapAbilityListItem);
+		return true;
+	});
 
 	const subjects = (subjectsResponse?.data ?? []).map((subject) => ({
 		id: subject.id,
@@ -118,20 +110,3 @@ export default observer(function AbilitiesPage() {
 		/>
 	);
 });
-
-function mapAbilityListItem(
-	ability: AbilityResponseDto,
-): AbilityListPageAbility {
-	return {
-		id: ability.id,
-		name: ability.name,
-		subjectId: ability.subjectId,
-		actionId: ability.actionId,
-		subjectLabel: ability.subject?.displayName || ability.subject?.name || "-",
-		actionLabel: ability.action?.displayName || ability.action?.name || "-",
-		inverted: ability.inverted,
-		fieldCount: ability.fields.length,
-		hasConditions: Boolean(ability.conditions),
-		createdAt: ability.createdAt,
-	};
-}

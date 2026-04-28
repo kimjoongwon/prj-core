@@ -1,14 +1,15 @@
 "use client";
 
+import type { AuthAuditLogDto } from "@cocrepo/api/idp/auth";
 import type {
+	DataGridQueryStates,
+	DataGridSetQueryStates,
 	InputConfig,
-	MetaDataGridQueryStates,
-	MetaDataGridSetQueryStates,
 } from "@cocrepo/type";
 import {
 	buildAuthAuditLogTableColumns,
-	MetaDataGrid,
-	MetaDataGridStateModel,
+	DataGrid,
+	DataGridStateModel,
 	PageTitleBar,
 	StatsCard,
 	Surface,
@@ -29,23 +30,12 @@ const leftInputs: InputConfig[] = [
 
 export const idpConsoleAuthAuditLogsPageQueryInputs = [...leftInputs];
 
-export interface AuthAuditLogListPageQueryStates
-	extends MetaDataGridQueryStates {
+export interface AuthAuditLogListPageQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	email: string;
 }
-export type AuthAuditLogListPageSetQueryStates = MetaDataGridSetQueryStates;
-
-export interface AuthAuditLogListPageLog {
-	id: string;
-	occurredAt?: string | null;
-	email: string;
-	result: string;
-	failureReason?: string | null;
-	ipAddress: string;
-	userAgent?: string | null;
-}
+export type AuthAuditLogListPageSetQueryStates = DataGridSetQueryStates;
 
 export interface AuthAuditLogListPageStats {
 	todaySuccessCount: number;
@@ -55,7 +45,7 @@ export interface AuthAuditLogListPageStats {
 }
 
 export interface AuthAuditLogListPageProps {
-	logs: AuthAuditLogListPageLog[];
+	logs?: AuthAuditLogDto[];
 	totalCount: number;
 	isLoading: boolean;
 	queryStates: AuthAuditLogListPageQueryStates;
@@ -64,12 +54,13 @@ export interface AuthAuditLogListPageProps {
 }
 
 const authAuditLogTableColumns =
-	buildAuthAuditLogTableColumns<AuthAuditLogListPageLog>();
+	buildAuthAuditLogTableColumns<AuthAuditLogDto>();
 
 /**
  * 감사 로그 목록 pure page입니다.
  */
-export const AuthAuditLogListPage = observer(({
+export const AuthAuditLogListPage = observer(
+	({
 		logs,
 		totalCount,
 		isLoading,
@@ -77,13 +68,14 @@ export const AuthAuditLogListPage = observer(({
 		setQueryStates,
 		stats,
 	}: AuthAuditLogListPageProps) => {
-	const gridState = useLocalObservable(
-		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
-	);
+		const gridState = useLocalObservable(
+			() => new DataGridStateModel({ queryStates, setQueryStates }),
+		);
 
-	useEffect(() => {
-		gridState.syncQuery(queryStates, setQueryStates);
-	}, [gridState, queryStates, setQueryStates]);
+		useEffect(() => {
+			gridState.syncQuery(queryStates, setQueryStates);
+		}, [gridState, queryStates, setQueryStates]);
+		const logRows = logs ?? [];
 		return (
 			<VStack gap={5}>
 				<PageTitleBar
@@ -119,19 +111,20 @@ export const AuthAuditLogListPage = observer(({
 					</div>
 				)}
 				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
-					<MetaDataGrid
+					<DataGrid
 						config={{
 							entity: "AuthAuditLog",
 							columns: authAuditLogTableColumns,
 							leftInputs,
 							emptyMessage: "조회된 감사 로그가 없습니다.",
 						}}
-	rows={logs}
-	totalCount={totalCount}
-	isLoading={isLoading}
-	state={gridState}
-/>
+						rows={logRows}
+						totalCount={totalCount}
+						isLoading={isLoading}
+						state={gridState}
+					/>
 				</Surface>
 			</VStack>
 		);
-	});
+	},
+);

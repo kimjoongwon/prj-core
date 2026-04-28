@@ -29,6 +29,10 @@ function buildAbilityName(action: Action, subject: Subject, inverted: boolean) {
 	return `${inverted ? "Cannot" : "Can"} ${actionDisplayName} ${subjectDisplayName}`;
 }
 
+function buildSystemPolicyName(roleName: string) {
+	return `${roleName.toLowerCase().replaceAll("_", "-")}-system-policy`;
+}
+
 async function ensureCurrentAdminSubjects(
 	db: ReferenceDataDbClient,
 ): Promise<Map<string, Subject>> {
@@ -95,12 +99,14 @@ async function readFullAccessRole(db: ReferenceDataDbClient): Promise<Role> {
 	return role;
 }
 
-async function ensureCurrentAdminFullAccessGrants(
+async function ensureCurrentAdminFullAccessPolicies(
 	db: ReferenceDataDbClient,
 	role: Role,
 	subjectMap: Map<string, Subject>,
 	actionMap: Map<string, Action>,
 ): Promise<void> {
+	const abilityIds = new Set<string>();
+
 	for (const seed of adminFullAccessAbilitySeedData) {
 		const subject = subjectMap.get(seed.subject);
 		const action = actionMap.get(seed.actionName);
@@ -135,11 +141,62 @@ async function ensureCurrentAdminFullAccessGrants(
 			},
 		});
 
-		await db.roleGrant.upsert({
+		abilityIds.add(ability.id);
+	}
+
+	const activeSpaces = await db.space.findMany({
+		where: { removedAt: null },
+		select: { id: true },
+	});
+
+	for (const space of activeSpaces) {
+		const policy = await db.policy.upsert({
 			where: {
-				roleId_abilityId: {
+				spaceId_name: {
+					spaceId: space.id,
+					name: buildSystemPolicyName(role.name),
+				},
+			},
+			update: {
+				displayName: `${role.displayName ?? role.name} 기본 정책`,
+				description:
+					"관리자 메뉴/화면 기준 데이터가 포함된 시스템 권한 정책입니다.",
+				isSystem: true,
+				removedAt: null,
+			},
+			create: {
+				spaceId: space.id,
+				name: buildSystemPolicyName(role.name),
+				displayName: `${role.displayName ?? role.name} 기본 정책`,
+				description:
+					"관리자 메뉴/화면 기준 데이터가 포함된 시스템 권한 정책입니다.",
+				isSystem: true,
+			},
+		});
+
+		for (const abilityId of abilityIds) {
+			await db.policyAbility.upsert({
+				where: {
+					policyId_abilityId: {
+						policyId: policy.id,
+						abilityId,
+					},
+				},
+				update: {
+					removedAt: null,
+				},
+				create: {
+					policyId: policy.id,
+					abilityId,
+				},
+			});
+		}
+
+		await db.rolePolicy.upsert({
+			where: {
+				roleId_policyId: {
 					roleId: role.id,
-					abilityId: ability.id,
+					policyId: policy.id,
 				},
 			},
 			update: {
@@ -149,7 +206,7 @@ async function ensureCurrentAdminFullAccessGrants(
 			},
 			create: {
 				roleId: role.id,
-				abilityId: ability.id,
+				policyId: policy.id,
 				isActive: true,
 				priority: 0,
 			},
@@ -186,18 +243,7 @@ async function pruneLegacyAdminSubjects(
 	const legacyAbilityIds = legacyAbilities.map((ability) => ability.id);
 
 	if (legacyAbilityIds.length > 0) {
-		await db.roleGrant.updateMany({
-			where: {
-				abilityId: { in: legacyAbilityIds },
-				removedAt: null,
-			},
-			data: {
-				isActive: false,
-				removedAt,
-			},
-		});
-
-		await db.userGrant.updateMany({
+		await db.policyAbility.updateMany({
 			where: {
 				abilityId: { in: legacyAbilityIds },
 				removedAt: null,
@@ -240,7 +286,7 @@ export const adminMenuPageReferenceCatalogMigration: ReferenceDataMigration = {
 		const actionMap = await readRequiredActions(db);
 		const fullAccessRole = await readFullAccessRole(db);
 
-		await ensureCurrentAdminFullAccessGrants(
+		await ensureCurrentAdminFullAccessPolicies(
 			db,
 			fullAccessRole,
 			subjectMap,

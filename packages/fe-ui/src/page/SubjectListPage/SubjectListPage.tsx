@@ -1,14 +1,15 @@
 "use client";
 
+import type { SubjectDto } from "@cocrepo/api/core/subjects";
 import type {
+	DataGridQueryStates,
+	DataGridSetQueryStates,
 	InputConfig,
-	MetaDataGridQueryStates,
-	MetaDataGridSetQueryStates,
 } from "@cocrepo/type";
 import {
 	buildSubjectTableColumns,
-	MetaDataGrid,
-	MetaDataGridStateModel,
+	DataGrid,
+	DataGridStateModel,
 	PageTitleBar,
 	Surface,
 } from "@cocrepo/ui";
@@ -39,36 +40,26 @@ export const adminSubjectsPageQueryInputs: InputConfig[] = [
 	...rightInputs,
 ];
 
-export interface SubjectListPageQueryStates extends MetaDataGridQueryStates {
+export interface SubjectListPageQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	search: string;
 	group: string;
 }
-export type SubjectListPageSetQueryStates = MetaDataGridSetQueryStates;
-
-export interface SubjectListPageSubject {
-	id: string;
-	name: string;
-	displayName?: string | null;
-	group?: string | null;
-	createdAt: string | Date | null;
-	removedAt?: string | null;
-}
+export type SubjectListPageSetQueryStates = DataGridSetQueryStates;
 
 export interface SubjectListPageProps {
-	subjects: SubjectListPageSubject[];
+	subjects?: SubjectDto[];
 	totalCount: number;
 	isLoading: boolean;
 	queryStates: SubjectListPageQueryStates;
 	setQueryStates: SubjectListPageSetQueryStates;
 }
 
-const subjectTableColumns =
-	buildSubjectTableColumns<SubjectListPageSubject>();
+const subjectTableColumns = buildSubjectTableColumns<SubjectDto>();
 
 function filterSubjects(
-	subjects: SubjectListPageSubject[],
+	subjects: SubjectDto[],
 	queryStates: SubjectListPageQueryStates,
 ) {
 	const searchKeyword = queryStates.search?.trim().toLowerCase() ?? "";
@@ -92,50 +83,53 @@ function filterSubjects(
 	});
 }
 
-export const SubjectListPage = observer(({
-	subjects,
-	totalCount,
-	isLoading,
-	queryStates,
-	setQueryStates,
-}: SubjectListPageProps) => {
-	const gridState = useLocalObservable(
-		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
-	);
+export const SubjectListPage = observer(
+	({
+		subjects,
+		totalCount,
+		isLoading,
+		queryStates,
+		setQueryStates,
+	}: SubjectListPageProps) => {
+		const gridState = useLocalObservable(
+			() => new DataGridStateModel({ queryStates, setQueryStates }),
+		);
 
-	useEffect(() => {
-		gridState.syncQuery(queryStates, setQueryStates);
-	}, [gridState, queryStates, setQueryStates]);
-	const filteredSubjects = filterSubjects(subjects, queryStates);
+		useEffect(() => {
+			gridState.syncQuery(queryStates, setQueryStates);
+		}, [gridState, queryStates, setQueryStates]);
+		const subjectRows = subjects ?? [];
+		const filteredSubjects = filterSubjects(subjectRows, queryStates);
 
-	if (isLoading) {
-		return <SubjectsPageFallback />;
-	}
+		if (isLoading) {
+			return <SubjectsPageFallback />;
+		}
 
-	return (
-		<div className="space-y-5">
-			<PageTitleBar
-				title="Subject 목록"
-				description="시스템에 등록된 Subject를 조회합니다."
-			/>
-			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
-				<MetaDataGrid
-					config={{
-						entity: "Subject",
-						columns: subjectTableColumns,
-						leftInputs,
-						rightInputs,
-						emptyMessage: "조회된 Subject가 없습니다.",
-					}}
-	rows={filteredSubjects}
-	totalCount={totalCount}
-	isLoading={false}
-	state={gridState}
-/>
-			</Surface>
-		</div>
-	);
-});
+		return (
+			<div className="space-y-5">
+				<PageTitleBar
+					title="Subject 목록"
+					description="시스템에 등록된 Subject를 조회합니다."
+				/>
+				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+					<DataGrid
+						config={{
+							entity: "Subject",
+							columns: subjectTableColumns,
+							leftInputs,
+							rightInputs,
+							emptyMessage: "조회된 Subject가 없습니다.",
+						}}
+						rows={filteredSubjects}
+						totalCount={totalCount}
+						isLoading={false}
+						state={gridState}
+					/>
+				</Surface>
+			</div>
+		);
+	},
+);
 
 function SubjectsPageFallback() {
 	return (

@@ -9,6 +9,41 @@
 이 파일은 Task root + Exercise detail 등록 화면의 pure page 레이어를 담당합니다.
 route의 mutation/router/local state는 app route가 소유하고, 이 파일은 선택된 이미지/영상 preview와 공통 `AssetBrowser` picker modal을 props 기반으로 렌더링합니다.
 
+## 디자인 스케치
+
+```text
+TaskCreatePage
+- FormPage
+  - PageTitleBar
+    - Button x2
+  - FormPageSurface
+    - FormSectionCard
+      - FormSection
+        - PageTitleBar
+        - Input x4
+        - Textarea
+        - ExerciseMediaField x2
+        - Chip
+  - AssetBrowser
+```
+
+## 사용 컴포넌트
+
+| 컴포넌트 | 출처 | 사용 위치 |
+| --- | --- | --- |
+| `Button` | `@heroui/react` | 사용자 액션 실행 |
+| `MediaThumbnail` | `@cocrepo/ui` | 화면 조합 요소 |
+| `FormPage` | `@cocrepo/ui` | 페이지 외곽 레이아웃 구성 |
+| `PageTitleBar` | `@cocrepo/ui` | 상단 제목, 설명, 주요 액션 표시 |
+| `FormPageSurface` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `FormSectionCard` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `FormSection` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `Input` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `Textarea` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `ExerciseMediaField` | `현재 파일` | 페이지 내부 보조 컴포넌트 |
+| `Chip` | `@heroui/react` | 상태/정보를 카드 또는 표시 단위로 표현 |
+| `AssetBrowser` | `@cocrepo/ui` | 화면 조합 요소 |
+
 ## 공개 계약
 
 | 항목 | 설명 |
@@ -34,9 +69,7 @@ route의 mutation/router/local state는 app route가 소유하고, 이 파일은
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 route-mirror page 이름을 semantic screen 이름으로 정리 | codex |
-| 2026-04-01 | asset 선택 UI를 전용 picker modal 대신 공통 `AssetBrowser` feature modal로 교체 | codex |
-| 2026-03-30 | 태스크 등록 로직을 route page로 이동하고 page를 pure props contract로 정리 | codex |
-| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
-| 2026-03-29 | Exercise 이미지/영상 자산 입력과 스케줄 가능 상태 preview를 신규 Task 생성 화면에 반영 | codex |
-| 2026-03-26 | route page 이관용 sidecar spec 신규 생성 | codex |
+| 2026-04-01 | Task 생성 화면의 공통 자산 선택 흐름 정리 | codex |
+| 2026-03-30 | Task 등록 화면의 제출/라우팅 책임 경계 정리 | codex |
+| 2026-03-29 | Task 생성 화면의 Exercise 자산 입력과 스케줄 가능 상태 기준 추가 | codex |
+| 2026-03-26 | 초기 화면 기획 수립 | codex |

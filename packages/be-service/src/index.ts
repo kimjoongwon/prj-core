@@ -59,11 +59,12 @@ export {
 	type OidcRedisSession,
 	OidcSessionService,
 } from "./oidc-session.service";
+export { PolicyAssignmentService } from "./policy-assignment.service";
+export { PolicyService } from "./policy.service";
 export { createPrismaClient } from "./prisma.factory";
 export { PrismaService } from "./prisma.service";
 export { RedisService } from "./redis.service";
 export { RoleService } from "./role.service";
-export { RoleGrantService } from "./role-grant.service";
 export { RoutineService } from "./routine.service";
 export { SecurityPolicyService } from "./security-policy.service";
 export { SpaceService } from "./space.service";
@@ -73,6 +74,11 @@ export {
 	SubjectService,
 } from "./subject.service";
 export { TaskService } from "./task.service";
+export {
+	TenantAccessRequestService,
+	type TenantAccessRequestCreateFormBootstrap,
+	type TenantAccessRequestFormOptionItem,
+} from "./tenant-access-request.service";
 export { TemplateService } from "./template.service/index";
 export { TimelineService } from "./timeline.service";
 export { TokenService } from "./token.service/index";

@@ -158,7 +158,100 @@ export class SpacesRepository {
 			data: data ?? {},
 		});
 
+		await this.cloneSystemPoliciesToSpace(result.id);
+
 		return plainToInstance(Space, result);
+	}
+
+	private async cloneSystemPoliciesToSpace(spaceId: string): Promise<void> {
+		const sourcePolicies = await this.txHost.tx.policy.findMany({
+			where: {
+				spaceId: { not: spaceId },
+				isSystem: true,
+				removedAt: null,
+			},
+			include: {
+				policyAbilities: {
+					where: { removedAt: null },
+					select: { abilityId: true },
+				},
+				rolePolicies: {
+					where: { removedAt: null },
+					select: {
+						roleId: true,
+						isActive: true,
+						priority: true,
+					},
+				},
+			},
+			orderBy: { createdAt: "asc" },
+		});
+
+		const sourcePolicyByName = new Map(
+			sourcePolicies.map((policy) => [policy.name, policy]),
+		);
+
+		for (const sourcePolicy of sourcePolicyByName.values()) {
+			const policy = await this.txHost.tx.policy.upsert({
+				where: {
+					spaceId_name: {
+						spaceId,
+						name: sourcePolicy.name,
+					},
+				},
+				update: {
+					displayName: sourcePolicy.displayName,
+					description: sourcePolicy.description,
+					isSystem: true,
+					removedAt: null,
+				},
+				create: {
+					spaceId,
+					name: sourcePolicy.name,
+					displayName: sourcePolicy.displayName,
+					description: sourcePolicy.description,
+					isSystem: true,
+				},
+			});
+
+			for (const policyAbility of sourcePolicy.policyAbilities) {
+				await this.txHost.tx.policyAbility.upsert({
+					where: {
+						policyId_abilityId: {
+							policyId: policy.id,
+							abilityId: policyAbility.abilityId,
+						},
+					},
+					update: { removedAt: null },
+					create: {
+						policyId: policy.id,
+						abilityId: policyAbility.abilityId,
+					},
+				});
+			}
+
+			for (const rolePolicy of sourcePolicy.rolePolicies) {
+				await this.txHost.tx.rolePolicy.upsert({
+					where: {
+						roleId_policyId: {
+							roleId: rolePolicy.roleId,
+							policyId: policy.id,
+						},
+					},
+					update: {
+						isActive: rolePolicy.isActive,
+						priority: rolePolicy.priority,
+						removedAt: null,
+					},
+					create: {
+						roleId: rolePolicy.roleId,
+						policyId: policy.id,
+						isActive: rolePolicy.isActive,
+						priority: rolePolicy.priority,
+					},
+				});
+			}
+		}
 	}
 
 	/**

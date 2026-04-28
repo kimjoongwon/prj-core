@@ -34,8 +34,7 @@ model Ability {
 
   subject    Subject     @relation(fields: [subjectId], references: [id])
   action     Action      @relation(fields: [actionId], references: [id])
-  roleGrants RoleGrant[]
-  userGrants UserGrant[]
+  policyAbilities PolicyAbility[]
 
   @@index([subjectId])
   @@index([actionId])

@@ -1,17 +1,10 @@
 "use client";
 
 import { useGetGroups } from "@cocrepo/api/core/groups";
-import { RoleGroupListPage, type RoleGroupListPageGroup } from "@cocrepo/ui";
+import { RoleGroupListPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-
-interface GroupData {
-	id: string;
-	name: string;
-	label?: string | null;
-	createdAt: string;
-}
 
 const AdminRolesGroupsRoute = observer(() => {
 	const router = useRouter();
@@ -20,7 +13,7 @@ const AdminRolesGroupsRoute = observer(() => {
 
 	return (
 		<RoleGroupListPage
-			groups={(response?.data ?? []).map(mapGroupRow)}
+			groups={response?.data}
 			isLoading={isLoading}
 			onClickCreateButton={() => {
 				router.push("/roles/groups/new" as Route);
@@ -31,9 +24,5 @@ const AdminRolesGroupsRoute = observer(() => {
 		/>
 	);
 });
-
-function mapGroupRow(group: GroupData): RoleGroupListPageGroup {
-	return group;
-}
 
 export default AdminRolesGroupsRoute;

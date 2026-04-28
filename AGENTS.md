@@ -195,7 +195,7 @@ import { Page, PageSurface, PageTitleBar, SectionSurface } from "@cocrepo/ui";
 
 **PageSurface는 Page 컴포넌트에서만 사용합니다. Layout에서 사용 금지!**
 
-**중요:** `Layout`, `Page`, `Section`, `MetaDataGrid`의 슬롯에 검색/필터/액션 컴포넌트를 배치해도 배경이나 elevation은 자동 생성되지 않습니다. 화면에서 시각적 묶음이 필요하면 호출부에서 `PageSurface`, `SectionSurface` owner를 명시해야 합니다.
+**중요:** `Layout`, `Page`, `Section`, `DataGrid`의 슬롯에 검색/필터/액션 컴포넌트를 배치해도 배경이나 elevation은 자동 생성되지 않습니다. 화면에서 시각적 묶음이 필요하면 호출부에서 `PageSurface`, `SectionSurface` owner를 명시해야 합니다.
 
 ```typescript
 // ❌ 금지 - Layout에서 PageSurface 사용

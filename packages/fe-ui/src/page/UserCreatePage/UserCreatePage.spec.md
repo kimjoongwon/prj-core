@@ -8,6 +8,20 @@
 
 회원 등록 준비중 화면의 pure page 컴포넌트입니다.
 
+## 디자인 스케치
+
+```text
+UserCreatePage
+- Button
+```
+
+## 사용 컴포넌트
+
+| 컴포넌트 | 출처 | 사용 위치 |
+| --- | --- | --- |
+| `Button` | `@heroui/react` | 사용자 액션 실행 |
+| `ArrowLeft` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+
 ## 구성 요소
 
 | 항목 | 설명 |
@@ -19,6 +33,4 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-30 | page export 규칙을 `observer(() => ...)` + named export only 형태로 정리 | codex |
-| 2026-03-29 | placeholder page를 `observer`로 감싸 MobX 변경 추적 기본 규칙을 맞춤 | codex |
-| 2026-03-26 | users 등록 route placeholder UI를 page 레이어로 이동 | codex-worker |
+| 2026-03-26 | 초기 화면 기획 수립 | codex-worker |

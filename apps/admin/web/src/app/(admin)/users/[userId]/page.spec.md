@@ -6,61 +6,49 @@
 
 ## 사용자 시나리오
 
-1. 관리자가 이용자 목록에서 특정 이용자를 선택해 상세 정보를 확인합니다.
-2. 현재 구현은 TODO 상태이며, `DetailPage` 헤더와 목록 복귀 액션, placeholder 본문을 렌더링합니다.
-3. 추후 상세 본문은 `detail/view` 재사용 계층을 소비하는 구조로 확장됩니다.
-
-## Consumed Layout Contract
-
-| 항목 | 값 |
-|------|----|
-| 참조 layout spec | `apps/admin/web/src/app/(admin)/users/layout.spec.md` |
-| consumed slot key | `children` |
-| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/users/[userId]/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
-
-- `page.tsx`는 `detail/view`의 detail shell 안에서 목록 복귀 액션과 placeholder 상세 콘텐츠만 렌더링합니다.
+1. 관리자가 이용자 기본 정보를 확인합니다.
+2. 역할을 통한 정책과 별개로 사용자에게 직접 할당할 정책을 확인합니다.
+3. 정책 편집 모드에서 직접 할당 정책, 활성 여부, 우선순위를 조정하고 저장합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `page.tsx` 단일 CSR
 - page role: `detail`
-- reusable target: `detail/view`
-- SSR/prefetch 예외 승인 여부: 없음
-- 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
-- 현재 구현은 placeholder이지만 최종 상세 본문 재사용 타깃은 `detail/view`로 고정합니다.
-
-## 콘텐츠 구성
-
-| 영역 | 구성 요소 | 설명 |
-|------|-----------|------|
-| 페이지 헤더 | `PageTitleBar` + `Button` | 이용자 ID 설명과 `/users` 목록 복귀 |
-| 상세 본문 | `DetailSectionCard` placeholder | TODO 상태 안내와 이용자 ID 표시 |
+- API: `useGetUserById`, `useGetPolicies`, `useGetUserPolicies`, `useSyncUserPolicies`
+- reusable target: `packages/fe-ui/src/page/UserDetailPage/UserDetailPage.tsx`
 
 ## API 호출
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 추후 구현 | `useGetUserById()` | 이용자 상세 조회 예정 |
+| 초기 렌더 | `useGetUserById(userId)` | 이용자 기본 정보 조회 |
+| 초기 렌더 | `useGetPolicies()` | 선택 가능한 정책 목록 조회 |
+| 초기 렌더 | `useGetUserPolicies(userId)` | 현재 사용자 직접 정책 할당 조회 |
+| 저장 | `useSyncUserPolicies` | `{ userPolicies: [{ policyId, isActive, priority }] }` 전체 동기화 |
 
 ## 이벤트 핸들러
 
 | 이벤트 | 동작 |
 |--------|------|
 | `onClickBackButton` | `/users` 이동 |
+| `onClickEditPoliciesButton` | 현재 할당 정책을 로컬 선택 상태로 복제하고 편집 시작 |
+| `onTogglePolicy` | 로컬 정책 assignment 추가/제거 |
+| `onChangePolicyAssignmentActive` | 로컬 UserPolicy 활성 여부 변경 |
+| `onChangePolicyAssignmentPriority` | 로컬 UserPolicy 우선순위 변경 |
+| `onClickSavePoliciesButton` | `useSyncUserPolicies` 호출 |
 
-## 구현 체크리스트
+## Surface / Elevation
 
-- [x] `page.tsx` 단일 CSR 콘텐츠 파일
-- [x] route skeleton은 상위 `users/layout.tsx`가 소유
-- [x] `Rendering Decision`에 `detail/view` 재사용 타깃 명시
-- [x] `DetailPage`/`DetailPageSurface`/`DetailSectionCard`로 placeholder 본문을 렌더링
-- [x] `_client.tsx` 없음
-- [x] `_prefetch.ts` 없음
+| 항목 | 결정 |
+|------|------|
+| PageSurface owner | 상위 users layout skeleton |
+| 본문 | `UserDetailPage`가 `DetailPageSurface > DetailSectionCard`로 기본 정보와 정책 할당 영역 구성 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-28 | placeholder 상세를 정책 직접 할당 화면으로 확장 | codex |
+| 2026-04-28 | UserPolicy assignment payload와 active/priority 편집 계약 반영 | codex |
 | 2026-03-22 | TODO 상태의 이용자 상세도 `detail/view` shell을 직접 소비하도록 본문/스펙을 정리 | codex |
 | 2026-03-21 | 이용자 상세를 `detail/view` 재사용 타깃으로 재정의하고 route-layout 계약 형식으로 재작성 | codex |

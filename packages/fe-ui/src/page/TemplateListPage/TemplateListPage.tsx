@@ -1,14 +1,15 @@
 "use client";
 
+import type { TemplateDto } from "@cocrepo/api/core/templates";
 import type {
+	DataGridQueryStates,
+	DataGridSetQueryStates,
 	InputConfig,
-	MetaDataGridQueryStates,
-	MetaDataGridSetQueryStates,
 } from "@cocrepo/type";
 import {
 	buildTemplateTableColumns,
-	MetaDataGrid,
-	MetaDataGridStateModel,
+	DataGrid,
+	DataGridStateModel,
 	PageTitleBar,
 	Surface,
 } from "@cocrepo/ui";
@@ -27,24 +28,16 @@ const leftInputs: InputConfig[] = [
 
 export const adminTemplatesPageQueryInputs = [...leftInputs];
 
-export interface TemplateListPageQueryStates extends MetaDataGridQueryStates {
+export interface TemplateListPageQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	search: string;
 	isActive: string;
 }
-export type TemplateListPageSetQueryStates = MetaDataGridSetQueryStates;
-
-export interface TemplateListPageTemplate {
-	id: string;
-	code: string;
-	name: string;
-	isActive: boolean;
-	createdAt: string | Date | null;
-}
+export type TemplateListPageSetQueryStates = DataGridSetQueryStates;
 
 export interface TemplateListPageProps {
-	templates: TemplateListPageTemplate[];
+	templates?: TemplateDto[];
 	totalCount: number;
 	isLoading: boolean;
 	isToggling: boolean;
@@ -69,61 +62,64 @@ function TemplatesPageFallback() {
 	);
 }
 
-export const TemplateListPage = observer(({
-	templates,
-	totalCount,
-	isLoading,
-	queryStates,
-	setQueryStates,
-	onClickCreateButton,
-	onClickTemplateCode,
-	onToggleTemplateStatusSwitch,
-}: TemplateListPageProps) => {
-	const gridState = useLocalObservable(
-		() => new MetaDataGridStateModel({ queryStates, setQueryStates }),
-	);
-
-	useEffect(() => {
-		gridState.syncQuery(queryStates, setQueryStates);
-	}, [gridState, queryStates, setQueryStates]);
-	const columns = buildTemplateTableColumns<TemplateListPageTemplate>({
+export const TemplateListPage = observer(
+	({
+		templates,
+		totalCount,
+		isLoading,
+		queryStates,
+		setQueryStates,
+		onClickCreateButton,
 		onClickTemplateCode,
 		onToggleTemplateStatusSwitch,
-	});
+	}: TemplateListPageProps) => {
+		const gridState = useLocalObservable(
+			() => new DataGridStateModel({ queryStates, setQueryStates }),
+		);
 
-	if (isLoading) {
-		return <TemplatesPageFallback />;
-	}
+		useEffect(() => {
+			gridState.syncQuery(queryStates, setQueryStates);
+		}, [gridState, queryStates, setQueryStates]);
+		const templateRows = templates ?? [];
+		const columns = buildTemplateTableColumns<TemplateDto>({
+			onClickTemplateCode,
+			onToggleTemplateStatusSwitch,
+		});
 
-	return (
-		<div className="space-y-5">
-			<PageTitleBar
-				title="메시지 템플릿"
-				description="시스템에 등록된 메시지 템플릿을 관리합니다."
-				actions={
-					<Button
-						color="primary"
-						startContent={<Plus className="h-4 w-4" />}
-						onPress={onClickCreateButton}
-					>
-						템플릿 등록
-					</Button>
-				}
-			/>
-			<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
-				<MetaDataGrid
-					config={{
-						entity: "Template",
-						columns,
-						leftInputs,
-						emptyMessage: "등록된 템플릿이 없습니다.",
-					}}
-	rows={templates}
-	totalCount={totalCount}
-	isLoading={false}
-	state={gridState}
-/>
-			</Surface>
-		</div>
-	);
-});
+		if (isLoading) {
+			return <TemplatesPageFallback />;
+		}
+
+		return (
+			<div className="space-y-5">
+				<PageTitleBar
+					title="메시지 템플릿"
+					description="시스템에 등록된 메시지 템플릿을 관리합니다."
+					actions={
+						<Button
+							color="primary"
+							startContent={<Plus className="h-4 w-4" />}
+							onPress={onClickCreateButton}
+						>
+							템플릿 등록
+						</Button>
+					}
+				/>
+				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+					<DataGrid
+						config={{
+							entity: "Template",
+							columns,
+							leftInputs,
+							emptyMessage: "등록된 템플릿이 없습니다.",
+						}}
+						rows={templateRows}
+						totalCount={totalCount}
+						isLoading={false}
+						state={gridState}
+					/>
+				</Surface>
+			</div>
+		);
+	},
+);
