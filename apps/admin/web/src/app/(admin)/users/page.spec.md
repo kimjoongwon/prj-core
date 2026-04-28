@@ -24,8 +24,8 @@
 ## Rendering Decision
 
 - 기본 패턴: `page.tsx` 단일 CSR
-- page role: `master`
-- reusable target: `master/table`
+- page role: `collection`
+- reusable target: `data-grid`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 - page-level `SuspenseQuery`는 지양하며, 목록 로딩 상태는 `useGetUsers`의 `isLoading`/`isFetching`으로 제어합니다.
@@ -66,6 +66,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-28 | page role을 `collection`으로 갱신 | codex |
+| 2026-04-28 | MetaDataGrid 공식 재사용 타깃을 `data-grid`로 갱신 | codex |
 | 2026-04-27 | 이용자 목록의 수동 Space queryKey 분리를 제거하고 admin layout bootstrap/access gate와 hard reload 기반 cache 초기화 정책으로 갱신 | codex |
 | 2026-04-25 | Space bootstrap/selection 완료 전에는 users query를 열지 않도록 `enabled` gate를 추가 | codex |
 | 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
@@ -74,5 +76,5 @@
 | 2026-04-16 | admin 사용자 목록 `useGetUsers` 쿼리 키에 spaceId를 포함해 space 변경 시 재조회되도록 캐시 분리 적용 | codex |
 | 2026-03-23 | route가 nuqs를 직접 import해 URL state를 소유하도록 정리 | codex |
 | 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
-| 2026-03-21 | 이용자 목록을 `master/table` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
+| 2026-03-21 | 이용자 목록을 `data-grid` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
 | 2026-03-21 | 이용자 목록 spec을 generic route layout + content-only page 구조로 재작성 | codex |

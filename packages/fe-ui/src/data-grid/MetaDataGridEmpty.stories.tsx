@@ -4,14 +4,14 @@ const Placeholder = () => (
 	<div style={{ padding: 16, fontFamily: "sans-serif" }}>
 		<h3 style={{ margin: 0 }}>Story Placeholder</h3>
 		<p style={{ marginTop: 8 }}>
-			Component target: master/table/MetaDataGrid/MetaDataGridActionBar.tsx
+			Component target: data-grid/MetaDataGridEmpty.tsx
 		</p>
 		<p style={{ marginTop: 8 }}>Baseline story generated for coverage.</p>
 	</div>
 );
 
 const meta: Meta<typeof Placeholder> = {
-	title: "Features/table/MetaDataGrid/MetaDataGridActionBar",
+	title: "DataGrid/MetaDataGrid/MetaDataGridEmpty",
 	component: Placeholder,
 	parameters: {
 		layout: "padded",

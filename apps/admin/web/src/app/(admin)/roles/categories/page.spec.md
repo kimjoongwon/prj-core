@@ -24,8 +24,8 @@
 ## Rendering Decision
 
 - 기본 패턴: `page.tsx` 단일 CSR
-- page role: `master`
-- reusable target: `master/table`
+- page role: `collection`
+- reusable target: `data-grid`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -59,10 +59,12 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-28 | page role을 `collection`으로 갱신 | codex |
+| 2026-04-28 | MetaDataGrid 공식 재사용 타깃을 `data-grid`로 갱신 | codex |
 | 2026-04-27 | 역할 카테고리 목록의 수동 Space queryKey 분리를 제거하고 admin layout bootstrap/access gate와 hard reload 기반 cache 초기화 정책으로 갱신 | codex |
 | 2026-04-26 | 목록 query가 Space bootstrap 완료 후 실행되고 현재 spaceId별로 캐시를 분리하도록 반영 | codex |
 | 2026-03-31 | 목록 조회를 `useGetCategories({ type: "Role" })` 기반 Orval 훅 사용으로 갱신 | codex |
-| 2026-03-29 | 구현이 테이블 중심으로 유지되는 현재 구조에 맞춰 reusable target을 `master/table`로 보정 | codex |
+| 2026-03-29 | 구현이 테이블 중심으로 유지되는 현재 구조에 맞춰 reusable target을 `data-grid`로 보정 | codex |
 | 2026-03-22 | 목록 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | 역할 카테고리 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |
 | 2026-03-30 | route가 query/mutation/navigation/local state를 소유하고 pure page props를 주입하는 구조로 정리 | codex |

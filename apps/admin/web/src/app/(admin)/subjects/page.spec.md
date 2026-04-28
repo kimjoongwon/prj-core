@@ -23,8 +23,8 @@
 ## Rendering Decision
 
 - 기본 패턴: `pure page + thin route container`
-- page role: `master`
-- reusable target: `master/table`
+- page role: `collection`
+- reusable target: `data-grid`
 - page component path: `packages/fe-ui/src/page/SubjectListPage/SubjectListPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
@@ -60,9 +60,11 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-28 | page role을 `collection`으로 갱신 | codex |
+| 2026-04-28 | MetaDataGrid 공식 재사용 타깃을 `data-grid`로 갱신 | codex |
 | 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-29 | `SubjectListPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
-| 2026-03-21 | Subject 목록을 `master/table` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
+| 2026-03-21 | Subject 목록을 `data-grid` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
 | 2026-03-21 | Subject 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

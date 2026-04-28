@@ -47,7 +47,7 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(auth)/error/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
 
-- `page.tsx`는 목록 탐색, 검색, 필터 같은 마스터 콘텐츠만 담당합니다.
+- `page.tsx`는 목록 탐색, 검색, 필터 같은 collection 콘텐츠만 담당합니다.
 
 ## Rendering Decision
 
@@ -62,6 +62,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-28 | legacy 목록 용어를 collection 기준으로 정리 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-26 | `AuthErrorPage` 경로를 page 폴더 기반 sidecar 구조에 맞게 갱신 | codex |
 | 2026-03-25 | `AuthErrorPage`로 시각 구성을 page 레이어로 이동하고 route page는 search param 해석/복귀 핸들러만 담당하도록 정리 | codex |

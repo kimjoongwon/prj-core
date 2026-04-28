@@ -29,7 +29,7 @@ import {
 	createIsActiveColumn,
 	createNameColumn,
 	createPresetColumn,
-} from "../internal/masterFactory";
+} from "../internal/dataGridFactory";
 import { COLUMN_FIELDS } from "../internal/fieldPresets";
 
 /** OIDC Client 목록에서 사용하는 clientId 컬럼입니다. */

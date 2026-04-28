@@ -21,7 +21,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, type ChangeEvent, useRef, useState } from "react";
 import { buildAssetTableColumns } from "../../columns";
 import { EmptyState } from "../../display";
-import { MetaDataGrid, MetaDataGridStateModel } from "../../master/table";
+import { MetaDataGrid, MetaDataGridStateModel } from "../../data-grid";
 import { Surface } from "../../surface";
 import {
 	AssetPreviewDialog,

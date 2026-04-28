@@ -13,7 +13,7 @@ Entry points are organized under `src/`:
 - `feature`: feature-level composites
 - `form`: form flows and form sections
 - `layout`: structural primitives such as `App`, `Page`, `Section`, `Container`
-- `master`: list/table oriented page building blocks
+- `collection`: list/table oriented page building blocks
 - `page`: semantic app-facing pure page UI components
 - `rhythm`: spacing and flow primitives such as `VStack`, `HStack`, `Spacer`
 - `surface`: surface and elevation primitives

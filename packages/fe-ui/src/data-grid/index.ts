@@ -1,4 +1,15 @@
 // Components
+export {
+	DataGrid,
+	getDataGridRowKey,
+	type DataGridProps,
+	type DataGridState,
+	type Key,
+	type MultiSortDescriptor,
+	type SortDescriptor,
+	type SortDirection,
+	type SortEvent,
+} from "./DataGrid";
 export { MetaDataGrid } from "./MetaDataGrid";
 export { MetaDataGridActionBar } from "./MetaDataGridActionBar";
 export { MetaDataGridBody } from "./MetaDataGridBody";

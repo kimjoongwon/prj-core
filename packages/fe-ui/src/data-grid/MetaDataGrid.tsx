@@ -22,7 +22,7 @@ interface MetaDataGridProps<T> {
  *
  * 메타데이터 기반 선언적 DataGrid 시스템
  * - 페이지 주입 query state 기반 페이지네이션/필터 제어
- * - 기존 DataGrid, Pagination 활용
+ * - data-grid 내부 DataGrid, Pagination 활용
  * - 선택 모드 지원 (none, single, multiple)
  *
  * @example

@@ -2,7 +2,7 @@
 
 import type { MetaDataGridConfig, MetaDataGridState } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import { Pagination } from "../../../control/Pagination/Pagination";
+import { Pagination } from "../control/Pagination/Pagination";
 
 interface MetaDataGridFooterProps<T> {
 	config: MetaDataGridConfig<T>;

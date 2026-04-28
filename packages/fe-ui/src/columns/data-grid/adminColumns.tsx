@@ -52,7 +52,7 @@ import {
 	getAssetKindLabel,
 	getAssetStatusColor,
 	getAssetStatusLabel,
-} from "../internal/masterFactory";
+} from "../internal/dataGridFactory";
 
 /** 관리자 Action 목록에서 사용하는 기본 이름 컬럼입니다. */
 export const actionNameColumn = createNameColumn<ActionDto>({

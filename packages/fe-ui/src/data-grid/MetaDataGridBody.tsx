@@ -5,11 +5,10 @@ import type {
 	MetaDataGridConfig,
 	MetaDataGridState,
 } from "@cocrepo/type";
+import type { Selection } from "@heroui/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { observer } from "mobx-react-lite";
-import type { Key } from "../../../display/data-display/DataGrid";
-import { DataGrid } from "../../../display/data-display/DataGrid";
-import { getDataGridRowKey } from "../../../display/data-display/DataGrid/DataGrid";
+import { DataGrid, getDataGridRowKey, type Key } from "./DataGrid";
 
 interface MetaDataGridBodyProps<T extends object> {
 	config: MetaDataGridConfig<T>;
@@ -50,7 +49,7 @@ function toColumnDefs<TData>(
 }
 
 /**
- * MetaDataGrid 본문 영역 (DataGrid 래퍼)
+ * MetaDataGrid 본문 영역
  */
 export const MetaDataGridBody = observer(
 	<T extends object>({
@@ -95,11 +94,20 @@ export const MetaDataGridBody = observer(
 				config.onRowClick(selectedRow);
 			}
 		};
+		const handleSelectionChange = (selection: Selection) => {
+			const nextKeys =
+				selection === "all"
+					? new Set((rows as (T & { id: Key })[]).map((row) => String(row.id)))
+					: new Set(Array.from(selection as Set<Key>).map(String));
+
+			state.selection?.setSelectedKeys?.(nextKeys);
+			config.selection?.onSelectionChange?.(nextKeys);
+		};
 
 		return (
 			<DataGrid
 				data={rows as (T & { id: Key })[]}
-				columns={columns as ColumnDef<object, unknown>[]}
+				columns={columns}
 				state={{ selectedKeys }}
 				selectionMode={
 					config.selection?.mode === "multiple"
@@ -116,6 +124,7 @@ export const MetaDataGridBody = observer(
 						: undefined
 				}
 				onRowAction={config.onRowClick ? handleRowAction : undefined}
+				onSelectionChange={handleSelectionChange}
 				isLoading={isLoading}
 			/>
 		);
