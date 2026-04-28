@@ -12,7 +12,11 @@ export interface IdentityLoginRedirectPageProps {
 }
 
 export const IdentityLoginRedirectPage = observer(
-	({ errorMessage, isRedirecting, onClickRetry }: IdentityLoginRedirectPageProps) => {
+	({
+		errorMessage,
+		isRedirecting,
+		onClickRetry,
+	}: IdentityLoginRedirectPageProps) => {
 		return (
 			<div className="relative flex min-h-screen items-center justify-center bg-slate-50 px-4 dark:bg-[#090c12]">
 				<ThemeToggleButton className="absolute right-4 top-4 z-20 sm:right-6 sm:top-6" />

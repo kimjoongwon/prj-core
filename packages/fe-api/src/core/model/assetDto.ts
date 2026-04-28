@@ -9,58 +9,58 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { AssetKind } from './assetKind';
-import type { AssetStatus } from './assetStatus';
-import type { AssetDtoMetadata } from './assetDtoMetadata';
-import type { FolderDto } from './folderDto';
-import type { DerivativeDto } from './derivativeDto';
+import type { AssetKind } from "./assetKind";
+import type { AssetStatus } from "./assetStatus";
+import type { AssetDtoMetadata } from "./assetDtoMetadata";
+import type { FolderDto } from "./folderDto";
+import type { DerivativeDto } from "./derivativeDto";
 
 export interface AssetDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** 소속 Space ID */
-  spaceId: string;
-  /** 소속 폴더 ID */
-  folderId: string;
-  /** 에셋 종류 (IMAGE, VIDEO, DOCUMENT) */
-  kind: AssetKind;
-  /** 에셋 상태 (UPLOADING, READY, FAILED) */
-  status: AssetStatus;
-  /** 원본 파일명 */
-  originalName: string;
-  /** 스토리지 저장 키 */
-  storageKey: string;
-  /** MIME 타입 */
-  mimeType: string;
-  /** 파일 크기 (바이트) */
-  sizeBytes: number;
-  /**
-   * 파일 확장자
-   * @nullable
-   */
-  extension?: string | null;
-  /**
-   * 체크섬 (무결성 검증용)
-   * @nullable
-   */
-  checksum?: string | null;
-  /** 메타데이터 (Exif, 동영상 길이 등) */
-  metadata?: AssetDtoMetadata;
-  /**
-   * 생성자 ID
-   * @nullable
-   */
-  creatorId?: string | null;
-  /**
-   * 공개 접근 가능한 에셋 URL
-   * @nullable
-   */
-  publicUrl?: string | null;
-  /** 소속 폴더 */
-  folder?: FolderDto;
-  /** 파생 리소스 목록 */
-  derivatives?: DerivativeDto[];
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** 소속 Space ID */
+	spaceId: string;
+	/** 소속 폴더 ID */
+	folderId: string;
+	/** 에셋 종류 (IMAGE, VIDEO, DOCUMENT) */
+	kind: AssetKind;
+	/** 에셋 상태 (UPLOADING, READY, FAILED) */
+	status: AssetStatus;
+	/** 원본 파일명 */
+	originalName: string;
+	/** 스토리지 저장 키 */
+	storageKey: string;
+	/** MIME 타입 */
+	mimeType: string;
+	/** 파일 크기 (바이트) */
+	sizeBytes: number;
+	/**
+	 * 파일 확장자
+	 * @nullable
+	 */
+	extension?: string | null;
+	/**
+	 * 체크섬 (무결성 검증용)
+	 * @nullable
+	 */
+	checksum?: string | null;
+	/** 메타데이터 (Exif, 동영상 길이 등) */
+	metadata?: AssetDtoMetadata;
+	/**
+	 * 생성자 ID
+	 * @nullable
+	 */
+	creatorId?: string | null;
+	/**
+	 * 공개 접근 가능한 에셋 URL
+	 * @nullable
+	 */
+	publicUrl?: string | null;
+	/** 소속 폴더 */
+	folder?: FolderDto;
+	/** 파생 리소스 목록 */
+	derivatives?: DerivativeDto[];
 }

@@ -11,10 +11,10 @@
  */
 
 export interface CreateActionDto {
-  name: string;
-  displayName?: string;
-  description?: string;
-  group?: string;
-  order: number;
-  isSystem: boolean;
+	name: string;
+	displayName?: string;
+	description?: string;
+	group?: string;
+	order: number;
+	isSystem: boolean;
 }

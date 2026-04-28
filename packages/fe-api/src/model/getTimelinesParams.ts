@@ -11,21 +11,21 @@
  */
 
 export type GetTimelinesParams = {
-/**
- * @minimum 1
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 50
- */
-take?: number;
-/**
- * @nullable
- */
-timelineId?: string | null;
-/**
- * @nullable
- */
-search?: string | null;
+	/**
+	 * @minimum 1
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 50
+	 */
+	take?: number;
+	/**
+	 * @nullable
+	 */
+	timelineId?: string | null;
+	/**
+	 * @nullable
+	 */
+	search?: string | null;
 };

@@ -12,10 +12,10 @@ import { getUsers } from "@cocrepo/api/core/users";
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import type { AiFormOptionItem, AiFormPatch } from "@cocrepo/type";
 import {
+	InquiryCreatePage,
 	type InquiryCreatePageCustomerSearchResult,
 	type InquiryCreatePageFormState,
 	type InquiryCreatePageOption,
-	InquiryCreatePage,
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -68,66 +68,66 @@ export default observer(function InquiriesNewPageRoute() {
 	const bootstrap = bootstrapResponse?.data;
 	const bootstrapOptions = normalizeAiFormOptions(bootstrap?.options);
 
-	const state = useLocalObservable<InquiryCreatePageFormState & {
-		initialized: boolean;
-		isSubmitting: boolean;
-		initFromBootstrap: () => void;
-		validate: () => boolean;
-	}>(
-		() => ({
-			initialized: false,
-			isSubmitting: false,
-			customerId: "",
-			customerKeyword: "",
-			title: "",
-			content: "",
-			category: "GENERAL" as InquiryCategory,
-			channel: "WEB" as InquiryChannel,
-			priority: "NORMAL" as InquiryPriority,
-			searchResults: [] as InquiryCreatePageCustomerSearchResult[],
-			errors: {} as Record<string, string>,
-			initFromBootstrap() {
-				if (!bootstrap || this.initialized) {
-					return;
-				}
+	const state = useLocalObservable<
+		InquiryCreatePageFormState & {
+			initialized: boolean;
+			isSubmitting: boolean;
+			initFromBootstrap: () => void;
+			validate: () => boolean;
+		}
+	>(() => ({
+		initialized: false,
+		isSubmitting: false,
+		customerId: "",
+		customerKeyword: "",
+		title: "",
+		content: "",
+		category: "GENERAL" as InquiryCategory,
+		channel: "WEB" as InquiryChannel,
+		priority: "NORMAL" as InquiryPriority,
+		searchResults: [] as InquiryCreatePageCustomerSearchResult[],
+		errors: {} as Record<string, string>,
+		initFromBootstrap() {
+			if (!bootstrap || this.initialized) {
+				return;
+			}
 
-				this.title =
-					typeof bootstrap.defaultObject.title === "string"
-						? bootstrap.defaultObject.title
-						: "";
-				this.content =
-					typeof bootstrap.defaultObject.content === "string"
-						? bootstrap.defaultObject.content
-						: "";
-					this.category =
-						typeof bootstrap.defaultObject.category === "string"
-							? (bootstrap.defaultObject.category as InquiryCategory)
-							: ("GENERAL" as InquiryCategory);
-					this.channel =
-						typeof bootstrap.defaultObject.channel === "string"
-							? (bootstrap.defaultObject.channel as InquiryChannel)
-							: ("WEB" as InquiryChannel);
-					this.priority =
-						typeof bootstrap.defaultObject.priority === "string"
-							? (bootstrap.defaultObject.priority as InquiryPriority)
-							: ("NORMAL" as InquiryPriority);
-				this.initialized = true;
-			},
-			validate() {
-				const nextErrors: Record<string, string> = {};
+			this.title =
+				typeof bootstrap.defaultObject.title === "string"
+					? bootstrap.defaultObject.title
+					: "";
+			this.content =
+				typeof bootstrap.defaultObject.content === "string"
+					? bootstrap.defaultObject.content
+					: "";
+			this.category =
+				typeof bootstrap.defaultObject.category === "string"
+					? (bootstrap.defaultObject.category as InquiryCategory)
+					: ("GENERAL" as InquiryCategory);
+			this.channel =
+				typeof bootstrap.defaultObject.channel === "string"
+					? (bootstrap.defaultObject.channel as InquiryChannel)
+					: ("WEB" as InquiryChannel);
+			this.priority =
+				typeof bootstrap.defaultObject.priority === "string"
+					? (bootstrap.defaultObject.priority as InquiryPriority)
+					: ("NORMAL" as InquiryPriority);
+			this.initialized = true;
+		},
+		validate() {
+			const nextErrors: Record<string, string> = {};
 
-				if (!this.customerId) nextErrors.customerId = REQUIRED_MESSAGE;
-				if (!this.title.trim()) nextErrors.title = REQUIRED_MESSAGE;
-				if (!this.content.trim()) nextErrors.content = REQUIRED_MESSAGE;
-				if (!this.category) nextErrors.category = REQUIRED_MESSAGE;
-				if (!this.channel) nextErrors.channel = REQUIRED_MESSAGE;
-				if (!this.priority) nextErrors.priority = REQUIRED_MESSAGE;
+			if (!this.customerId) nextErrors.customerId = REQUIRED_MESSAGE;
+			if (!this.title.trim()) nextErrors.title = REQUIRED_MESSAGE;
+			if (!this.content.trim()) nextErrors.content = REQUIRED_MESSAGE;
+			if (!this.category) nextErrors.category = REQUIRED_MESSAGE;
+			if (!this.channel) nextErrors.channel = REQUIRED_MESSAGE;
+			if (!this.priority) nextErrors.priority = REQUIRED_MESSAGE;
 
-				this.errors = nextErrors;
-				return Object.keys(nextErrors).length === 0;
-			},
-		}),
-	);
+			this.errors = nextErrors;
+			return Object.keys(nextErrors).length === 0;
+		},
+	}));
 
 	useEffect(() => {
 		state.initFromBootstrap();

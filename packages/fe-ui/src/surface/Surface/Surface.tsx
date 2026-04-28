@@ -27,7 +27,8 @@ const surfaceVariants = cva("w-full rounded-xl", {
 			flat: `${elevationTokens.flat.background} ${elevationTokens.flat.shadow}`.trim(),
 			raised:
 				`${elevationTokens.raised.background} ${elevationTokens.raised.shadow}`.trim(),
-			elevated: `${elevationTokens.elevated.background} ${elevationTokens.elevated.shadow} ${elevationTokens.elevated.border}`.trim(),
+			elevated:
+				`${elevationTokens.elevated.background} ${elevationTokens.elevated.shadow} ${elevationTokens.elevated.border}`.trim(),
 			floating:
 				`${elevationTokens.floating.background} ${elevationTokens.floating.shadow}`.trim(),
 			overlay:

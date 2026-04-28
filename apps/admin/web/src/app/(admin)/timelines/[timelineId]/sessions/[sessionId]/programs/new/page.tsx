@@ -95,7 +95,9 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 			state.level = value;
 		};
 
-		const selectedRoutine = routines.find((routine) => routine.id === state.routineId);
+		const selectedRoutine = routines.find(
+			(routine) => routine.id === state.routineId,
+		);
 		const selectedInstructor = instructors.find(
 			(instructor) => instructor.id === state.instructorId,
 		);
@@ -143,7 +145,11 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 				errors.instructorId = "강사를 선택해주세요.";
 			}
 			const capacityNumber = Number(state.capacity);
-			if (!state.capacity || Number.isNaN(capacityNumber) || capacityNumber < 1) {
+			if (
+				!state.capacity ||
+				Number.isNaN(capacityNumber) ||
+				capacityNumber < 1
+			) {
 				errors.capacity = "정원은 1 이상의 숫자를 입력해주세요.";
 			}
 			if (hasUnschedulableRoutine) {
@@ -175,7 +181,9 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 							description: "프로그램이 등록되었습니다.",
 							color: "success",
 						});
-						router.push(`/timelines/${timelineId}/sessions/${sessionId}` as Route);
+						router.push(
+							`/timelines/${timelineId}/sessions/${sessionId}` as Route,
+						);
 					},
 					onError: () => {
 						addToast({

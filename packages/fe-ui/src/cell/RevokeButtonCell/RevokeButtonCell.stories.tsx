@@ -4,8 +4,7 @@ const Placeholder = () => (
 	<div style={{ padding: 16, fontFamily: "sans-serif" }}>
 		<h3 style={{ margin: 0 }}>Story Placeholder</h3>
 		<p style={{ marginTop: 8 }}>
-			Component target:
-			cell/RevokeButtonCell/RevokeButtonCell.tsx
+			Component target: cell/RevokeButtonCell/RevokeButtonCell.tsx
 		</p>
 		<p style={{ marginTop: 8 }}>Baseline story generated for coverage.</p>
 	</div>

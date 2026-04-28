@@ -47,7 +47,9 @@ export const RoleEditPage = observer(
 	}: RoleEditPageProps) => {
 		if (isLoading) {
 			return (
-				<FormPage top={<PageTitleBar title="역할 수정" description="로딩 중..." />}>
+				<FormPage
+					top={<PageTitleBar title="역할 수정" description="로딩 중..." />}
+				>
 					<FormPageSurface>
 						<FormSectionCard>
 							<div className="flex items-center justify-center p-8">
@@ -62,7 +64,12 @@ export const RoleEditPage = observer(
 		if (isNotFound) {
 			return (
 				<FormPage
-					top={<PageTitleBar title="역할 수정" description="역할을 찾을 수 없습니다." />}
+					top={
+						<PageTitleBar
+							title="역할 수정"
+							description="역할을 찾을 수 없습니다."
+						/>
+					}
 				>
 					<FormPageSurface>
 						<FormSectionCard>

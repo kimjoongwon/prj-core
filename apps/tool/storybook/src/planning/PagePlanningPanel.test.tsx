@@ -64,8 +64,7 @@ const manifest: OverviewManifest = {
 				},
 				{
 					heading: "API 호출",
-					content:
-						"- 클라이언트 렌더: useGetRoles",
+					content: "- 클라이언트 렌더: useGetRoles",
 				},
 			],
 			sourcePath: "apps/admin/web/src/app/(admin)/roles/page.spec.md",
@@ -86,12 +85,10 @@ const manifest: OverviewManifest = {
 				},
 				{
 					heading: "공개 계약",
-					content:
-						"- RoleListPage: 공개 계약 요소",
+					content: "- RoleListPage: 공개 계약 요소",
 				},
 			],
-			sourcePath:
-				"packages/fe-ui/src/page/RoleListPage/RoleListPage.spec.md",
+			sourcePath: "packages/fe-ui/src/page/RoleListPage/RoleListPage.spec.md",
 			summary: null,
 			title: "RoleListPage ui 기획서",
 		},

@@ -158,9 +158,7 @@ export class AbilityService {
 	private validateAbilityData(data: Prisma.AbilityUncheckedCreateInput): void {
 		// actionId, subjectId, name 필수
 		if (!data.actionId || !data.subjectId || !data.name) {
-			throw new BadRequestException(
-				ABILITY_ERRORS.INVALID_DATA,
-			);
+			throw new BadRequestException(ABILITY_ERRORS.INVALID_DATA);
 		}
 	}
 
@@ -213,8 +211,8 @@ export class AbilityService {
 			}
 		}
 
-		return Array.from(abilityMap.values()).sort(
-			(a, b) => this.compareAbilityPriority(b, a),
+		return Array.from(abilityMap.values()).sort((a, b) =>
+			this.compareAbilityPriority(b, a),
 		);
 	}
 

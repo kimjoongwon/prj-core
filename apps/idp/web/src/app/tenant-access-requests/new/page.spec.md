@@ -1,7 +1,7 @@
 # IDP 테넌트 접근 신청 생성 페이지 기획서
 
 > 생성일: 2026-04-28
-> 수정일: 2026-04-28
+> 수정일: 2026-04-29
 > 타입: next-route-page
 > 경로: `/tenant-access-requests/new`
 > 위치: `apps/idp/web/src/app/tenant-access-requests/new/page.tsx`
@@ -48,4 +48,5 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-29 | 생성 폼 E2E의 Space/희망 역할 라벨 검증을 exact text 기준으로 안정화하고 verify-token/form bootstrap mock 경로를 쿼리스트링까지 허용 | Codex |
 | 2026-04-28 | 초기 생성 | Codex |

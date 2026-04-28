@@ -11,11 +11,11 @@ import {
 } from "@cocrepo/store";
 import { HeaderBar, HeaderSpaceSelector, ThemeToggleButton } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
+import { IdpConsoleBrand } from "@/components/console/IdpConsoleBrand";
 import {
 	getIdpConsoleIconName,
 	IdpConsoleIcon,
 } from "@/components/console/IdpConsoleIcon";
-import { IdpConsoleBrand } from "@/components/console/IdpConsoleBrand";
 
 const userInfo = {
 	name: "IDP 관리자",
@@ -78,9 +78,7 @@ export const ConsoleHeaderSlot = observer(function ConsoleHeaderSlot() {
 	const currentSectionLabel =
 		selectedSubNavItem?.label ?? selectedNavItem?.label ?? "대시보드";
 	const currentSectionCaption =
-		selectedSubNavItem && selectedNavItem
-			? selectedNavItem.label
-			: "현재 섹션";
+		selectedSubNavItem && selectedNavItem ? selectedNavItem.label : "현재 섹션";
 
 	return (
 		<HeaderBar

@@ -225,9 +225,7 @@ export class AuthController {
 	@ApiErrors(401, 500)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	@ResponseMessage("현재 Space 조회 성공")
-	async getCurrentSpace(
-		@Req() req: Request,
-	) {
+	async getCurrentSpace(@Req() req: Request) {
 		return this.authApplicationService.getCurrentSpace(
 			this.readSpaceIdHeader(req),
 		);

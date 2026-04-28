@@ -1,10 +1,7 @@
 "use client";
 
 import { useCreateAction } from "@cocrepo/api/core/actions";
-import {
-	ActionCreatePage,
-	type ActionCreatePageFormState,
-} from "@cocrepo/ui";
+import { ActionCreatePage, type ActionCreatePageFormState } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";

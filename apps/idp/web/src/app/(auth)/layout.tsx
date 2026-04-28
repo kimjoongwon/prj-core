@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import { ThemeToggleButton } from "@cocrepo/ui";
+import type { ReactNode } from "react";
 
 /**
  * 인증 플로우 레이아웃
@@ -25,8 +25,8 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 							서비스 이용에 필요한 계정 확인을 진행해 주세요.
 						</h1>
 						<p className="mt-3 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300">
-							로그인, 계정 복구, 서비스 연동 승인을 한 흐름으로 정리해
-							예약 서비스 이용을 바로 이어갈 수 있게 구성했습니다.
+							로그인, 계정 복구, 서비스 연동 승인을 한 흐름으로 정리해 예약
+							서비스 이용을 바로 이어갈 수 있게 구성했습니다.
 						</p>
 					</div>
 
@@ -38,9 +38,9 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 							로그인과 계정 복구, 서비스 연동 승인을 한 곳에서 처리합니다.
 						</h1>
 						<p className="mt-4 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-300">
-							예약 서비스 이용에 필요한 인증 단계를 같은 흐름으로 묶어
-							고객과 운영자가 계정 문제를 빠르게 해결하고 필요한 화면으로
-							돌아갈 수 있도록 구성했습니다.
+							예약 서비스 이용에 필요한 인증 단계를 같은 흐름으로 묶어 고객과
+							운영자가 계정 문제를 빠르게 해결하고 필요한 화면으로 돌아갈 수
+							있도록 구성했습니다.
 						</p>
 
 						<div className="mt-8 grid max-w-3xl gap-4 sm:grid-cols-3">
@@ -58,8 +58,8 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 									빠른 접근 복구
 								</p>
 								<p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-									재로그인과 비밀번호 재설정 이후에도 필요한 화면으로
-									자연스럽게 돌아갈 수 있습니다.
+									재로그인과 비밀번호 재설정 이후에도 필요한 화면으로 자연스럽게
+									돌아갈 수 있습니다.
 								</p>
 							</div>
 							<div className="rounded-2xl border border-slate-200/70 bg-white/75 p-5 shadow-[0_20px_50px_-36px_rgba(15,23,42,0.18)] backdrop-blur-sm dark:border-white/10 dark:bg-slate-950/70 dark:shadow-[0_24px_60px_-42px_rgba(0,0,0,0.65)]">
@@ -67,8 +67,8 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 									안전한 연동 승인
 								</p>
 								<p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-									서비스 연동 권한 승인과 계정 보호 흐름을 단순하게 유지해
-									실수 가능성을 낮춥니다.
+									서비스 연동 권한 승인과 계정 보호 흐름을 단순하게 유지해 실수
+									가능성을 낮춥니다.
 								</p>
 							</div>
 						</div>

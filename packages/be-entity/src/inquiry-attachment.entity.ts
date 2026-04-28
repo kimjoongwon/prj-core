@@ -11,7 +11,10 @@ import type { InquiryMessage } from "./inquiry-message.entity";
  * 이미지, 문서, 동영상 등 다양한 파일 형식을 지원하며,
  * 실시간 채팅에서 파일 업로드/다운로드를 처리합니다.
  */
-export class InquiryAttachment extends AbstractEntity implements InquiryAttachmentEntity {
+export class InquiryAttachment
+	extends AbstractEntity
+	implements InquiryAttachmentEntity
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

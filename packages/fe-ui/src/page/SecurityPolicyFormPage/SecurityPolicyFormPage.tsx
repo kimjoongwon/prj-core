@@ -65,7 +65,8 @@ export interface SecurityPolicyFormPageProps {
 /**
  * 보안 정책 설정 pure page입니다.
  */
-export const SecurityPolicyFormPage = observer(({
+export const SecurityPolicyFormPage = observer(
+	({
 		formState,
 		isSaving,
 		isSaveSuccess,
@@ -294,4 +295,5 @@ export const SecurityPolicyFormPage = observer(({
 				</FormPageSurface>
 			</FormPage>
 		);
-	});
+	},
+);

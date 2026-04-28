@@ -13,11 +13,11 @@
 /**
  * 폼 모드
  */
-export type FillInquiryFormRequestDtoMode = typeof FillInquiryFormRequestDtoMode[keyof typeof FillInquiryFormRequestDtoMode];
-
+export type FillInquiryFormRequestDtoMode =
+	(typeof FillInquiryFormRequestDtoMode)[keyof typeof FillInquiryFormRequestDtoMode];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const FillInquiryFormRequestDtoMode = {
-  CREATE: 'CREATE',
-  UPDATE: 'UPDATE',
+	CREATE: "CREATE",
+	UPDATE: "UPDATE",
 } as const;

@@ -6,7 +6,11 @@ import {
 	useGetProgramById,
 	useUpdateProgram,
 } from "@cocrepo/api/core/timelines";
-import { type UserDto, useGetUserById, useGetUsers } from "@cocrepo/api/core/users";
+import {
+	type UserDto,
+	useGetUserById,
+	useGetUsers,
+} from "@cocrepo/api/core/users";
 import { TimelineSessionProgramEditPage } from "@cocrepo/ui";
 import { addToast, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -37,7 +41,8 @@ const buildRoutinePreview = (routine?: RoutineDto) =>
 
 const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 	observer(() => {
-		const { timelineId, sessionId, programId } = useParams<ProgramEditPageParams>();
+		const { timelineId, sessionId, programId } =
+			useParams<ProgramEditPageParams>();
 		const router = useRouter();
 		const queryClient = useQueryClient();
 		const routinePickerModal = useDisclosure();
@@ -54,7 +59,11 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 			isInitialized: false,
 		}));
 
-		const { data: response } = useGetProgramById(timelineId, sessionId, programId);
+		const { data: response } = useGetProgramById(
+			timelineId,
+			sessionId,
+			programId,
+		);
 		const program = response?.data;
 		const { data: routinesResponse } = useGetRoutines({
 			take: 50,
@@ -73,12 +82,17 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 		);
 
 		let routines = (routinesResponse?.data ?? []) as RoutineDto[];
-		if (program?.routine && !routines.some((item) => item.id === program.routine.id)) {
+		if (
+			program?.routine &&
+			!routines.some((item) => item.id === program.routine.id)
+		) {
 			routines = [program.routine as RoutineDto, ...routines];
 		}
 
 		let instructors = (instructorsResponse?.data ?? []) as UserDto[];
-		const currentInstructor = currentInstructorResponse?.data as UserDto | undefined;
+		const currentInstructor = currentInstructorResponse?.data as
+			| UserDto
+			| undefined;
 		if (
 			currentInstructor &&
 			!instructors.some((item) => item.id === currentInstructor.id)
@@ -131,7 +145,9 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 			state.level = value;
 		};
 
-		const selectedRoutine = routines.find((routine) => routine.id === state.routineId);
+		const selectedRoutine = routines.find(
+			(routine) => routine.id === state.routineId,
+		);
 		const selectedInstructor = instructors.find(
 			(instructor) => instructor.id === state.instructorId,
 		);
@@ -186,7 +202,11 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 				errors.instructorId = "강사를 선택해주세요.";
 			}
 			const capacityNumber = Number(state.capacity);
-			if (!state.capacity || Number.isNaN(capacityNumber) || capacityNumber < 1) {
+			if (
+				!state.capacity ||
+				Number.isNaN(capacityNumber) ||
+				capacityNumber < 1
+			) {
 				errors.capacity = "정원은 1 이상의 숫자를 입력해주세요.";
 			}
 			if (hasUnschedulableRoutine) {
@@ -247,9 +267,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 					.join(" · ")}
 				name={state.name}
 				routineName={selectedRoutine?.name ?? ""}
-				instructorName={
-					selectedInstructor?.name ?? program?.instructorId ?? ""
-				}
+				instructorName={selectedInstructor?.name ?? program?.instructorId ?? ""}
 				capacity={state.capacity}
 				level={state.level}
 				errors={state.errors}

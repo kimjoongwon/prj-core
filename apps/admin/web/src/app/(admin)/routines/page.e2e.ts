@@ -1,7 +1,10 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
+const SYSTEM_SPACE_ID =
+	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
+const SPACE_HEADERS = { "x-space-id": SYSTEM_SPACE_ID };
 
 async function gotoRoutineList(page: Page) {
 	const routineListResponse = page.waitForResponse(
@@ -34,9 +37,9 @@ test.describe("루틴 목록 페이지", () => {
 			await gotoRoutineList(page);
 
 			// Then: 루틴 등록 버튼 확인
-			await expect(
-				page.getByRole("button", { name: "루틴 등록" }),
-			).toBeVisible({ timeout: 15000 });
+			await expect(page.getByRole("button", { name: "루틴 등록" })).toBeVisible(
+				{ timeout: 15000 },
+			);
 		});
 
 		test("검색 입력 필드가 표시되어야 한다", async ({ page }) => {
@@ -75,13 +78,17 @@ test.describe("루틴 목록 페이지", () => {
 
 			// Cleanup: 기존 E2E 테스트 루틴 삭제
 			try {
-				const resp = await page.request.get("http://localhost:3000/api/v1/routines");
+				const resp = await page.request.get(
+					"http://localhost:3000/api/v1/routines",
+					{ headers: SPACE_HEADERS },
+				);
 				const body = await resp.json();
 				const routines = body.data ?? [];
 				for (const routine of routines as { id: string; name: string }[]) {
 					if (routine.name === TEST_NAME || routine.name === UPDATED_NAME) {
 						await page.request.delete(
 							`http://localhost:3000/api/v1/routines/${routine.id}`,
+							{ headers: SPACE_HEADERS },
 						);
 					}
 				}
@@ -92,6 +99,7 @@ test.describe("루틴 목록 페이지", () => {
 			const createTaskResponse = await page.request.post(
 				`${ADMIN_API_BASE_URL}/tasks`,
 				{
+					headers: SPACE_HEADERS,
 					data: {
 						name: TEST_TASK_NAME,
 						duration: 30,
@@ -124,9 +132,11 @@ test.describe("루틴 목록 페이지", () => {
 
 			// When: 전용 schedulable 운동을 후보에서 찾아 활동으로 추가한다
 			await page.getByLabel("운동 검색").fill(TEST_TASK_NAME);
-			await expect(page.getByText(TEST_TASK_NAME, { exact: true })).toBeVisible({
-				timeout: 10000,
-			});
+			await expect(page.getByText(TEST_TASK_NAME, { exact: true })).toBeVisible(
+				{
+					timeout: 10000,
+				},
+			);
 			const addExerciseButton = page
 				.getByRole("button", { name: "추가" })
 				.first();
@@ -253,13 +263,11 @@ test.describe("루틴 목록 페이지", () => {
 				for (let attempt = 0; attempt < 3; attempt += 1) {
 					const deleteTaskResponse = await page.request.delete(
 						`${ADMIN_API_BASE_URL}/tasks/${createdTaskId}`,
+						{ headers: SPACE_HEADERS },
 					);
 					deleteTaskStatus = deleteTaskResponse.status();
 
-					if (
-						deleteTaskStatus === 204 ||
-						deleteTaskStatus === 404
-					) {
+					if (deleteTaskStatus === 204 || deleteTaskStatus === 404) {
 						break;
 					}
 

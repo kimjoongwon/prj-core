@@ -129,6 +129,9 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 	);
 });
 
-export default dynamic(() => Promise.resolve(AdminTimelinesTimelineIdEditRoute), {
-	ssr: false,
-});
+export default dynamic(
+	() => Promise.resolve(AdminTimelinesTimelineIdEditRoute),
+	{
+		ssr: false,
+	},
+);

@@ -83,13 +83,16 @@ export const AuthCardHeader = observer(
 		};
 
 		const visual = renderVisual();
-		const titleToneClass = titleClassName ?? "text-slate-950 dark:text-slate-50";
+		const titleToneClass =
+			titleClassName ?? "text-slate-950 dark:text-slate-50";
 
 		return (
 			<div className="mb-8 flex items-start gap-4">
 				{visual && <div className="shrink-0">{visual}</div>}
 				<div className="min-w-0">
-					<h1 className={`text-2xl font-semibold tracking-tight ${titleToneClass}`}>
+					<h1
+						className={`text-2xl font-semibold tracking-tight ${titleToneClass}`}
+					>
 						{title}
 					</h1>
 					{subtitle && (

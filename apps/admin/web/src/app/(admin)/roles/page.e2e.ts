@@ -1,6 +1,9 @@
 import { expect, test } from "@playwright/test";
 
 const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
+const SYSTEM_SPACE_ID =
+	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
+const SPACE_HEADERS = { "x-space-id": SYSTEM_SPACE_ID };
 
 test.describe("역할 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
@@ -59,14 +62,17 @@ test.describe("역할 목록 페이지", () => {
 			const createResponse = await page.request.post(
 				`${ADMIN_API_BASE_URL}/roles`,
 				{
+					headers: SPACE_HEADERS,
 					data: {
 						name: TEST_ROLE_NAME,
 						displayName: INITIAL_DISPLAY_NAME,
+						description: "E2E 테스트 역할입니다.",
 					},
 				},
 			);
-			expect(createResponse.status()).toBe(201);
-			const createResponseBody = (await createResponse.json()) as {
+			const createResponseText = await createResponse.text();
+			expect(createResponse.status(), createResponseText).toBe(201);
+			const createResponseBody = JSON.parse(createResponseText) as {
 				data?: { id?: string };
 			};
 			const roleId = createResponseBody.data?.id;
@@ -119,6 +125,7 @@ test.describe("역할 목록 페이지", () => {
 			const updateResponse = await page.request.patch(
 				`${ADMIN_API_BASE_URL}/roles/${roleId}`,
 				{
+					headers: SPACE_HEADERS,
 					data: {
 						displayName: UPDATED_DISPLAY_NAME,
 					},

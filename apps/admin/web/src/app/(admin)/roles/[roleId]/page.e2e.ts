@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 async function openFullAccessRoleDetail(page: Page) {
 	await page.goto("./roles");
@@ -17,47 +17,36 @@ test.describe("역할 상세 페이지", () => {
 	// ── E2E-002: Grant 배치 할당 플로우 ──
 
 	test.describe("[E2E-002] Grant 배치 할당 플로우", () => {
-		test("역할 상세에 메뉴/화면/데이터/고급 권한 섹션이 표시되어야 한다", async ({
+		test("역할 상세에 기본 정보와 정책 할당 섹션이 표시되어야 한다", async ({
 			page,
 		}) => {
 			// Given: 역할 목록에서 FULL_ACCESS 상세 버튼 클릭
 			await openFullAccessRoleDetail(page);
 
-			// Then: 새 권한 섹션 확인
 			await expect(
-				page.getByRole("heading", { name: "메뉴 권한" }),
+				page.getByRole("heading", { name: /역할 상세: 전체 접근/ }),
 			).toBeVisible();
 			await expect(
-				page.getByRole("heading", { name: "화면 접근" }),
+				page.getByRole("heading", { name: "기본 정보" }),
 			).toBeVisible();
 			await expect(
-				page.getByRole("heading", { name: "데이터 권한" }),
+				page.getByText("FULL_ACCESS", { exact: true }),
 			).toBeVisible();
 			await expect(
-				page.getByRole("heading", { name: "고급 권한 목록" }),
+				page.getByRole("heading", { name: "정책 할당" }),
+			).toBeVisible();
+			await expect(
+				page.getByText("현재 Space의 RolePolicy를 관리합니다."),
 			).toBeVisible();
 		});
 
-		test("메뉴 편집 버튼이 표시되고 운영자용 권한 묶음이 보여야 한다", async ({
-			page,
-		}) => {
+		test("정책 편집 버튼이 표시되어야 한다", async ({ page }) => {
 			// Given: 역할 상세 페이지
 			await openFullAccessRoleDetail(page);
 
-			// Then: 메뉴 편집 버튼과 권한 묶음 확인
 			await expect(
-				page.getByRole("button", { name: "메뉴 편집" }),
+				page.getByRole("button", { name: "정책 편집" }),
 			).toBeVisible();
-			await expect(
-				page.getByText("에셋 목록", { exact: true }).first(),
-			).toBeVisible();
-			await expect(
-				page.getByText(
-					/메뉴가 숨겨져 있어도 이 화면 권한이 켜져 있으면 URL 직접 접근은 허용됩니다/,
-					{ exact: false },
-				),
-			).toBeVisible();
-			await expect(page.getByText("회원 데이터", { exact: true })).toBeVisible();
 		});
 	});
 
@@ -70,10 +59,8 @@ test.describe("역할 상세 페이지", () => {
 			// Given: 역할 목록에서 FULL_ACCESS 상세 클릭
 			await openFullAccessRoleDetail(page);
 
-			// Then: 시스템 역할 안내 문구 확인
-			await expect(
-				page.getByText(/이름 변경과 삭제는 제한되지만, 메뉴 및 권한 배치는 조정할 수 있습니다/),
-			).toBeVisible();
+			await expect(page.getByText("시스템 역할")).toBeVisible();
+			await expect(page.getByText("예", { exact: true })).toBeVisible();
 
 			// Then: 수정 버튼이 없음 (시스템 역할은 렌더링하지 않음)
 			await expect(page.getByRole("button", { name: "수정" })).toHaveCount(0);

@@ -77,15 +77,13 @@ export function validateFields(
 ): { isValid: boolean; errorMessage?: string } {
 	// 간단한 path 접근 구현
 	const getValue = (obj: unknown, path: string): unknown => {
-		return path
-			.split(".")
-			.reduce<unknown>((current, key) => {
-				if (typeof current !== "object" || current === null) {
-					return undefined;
-				}
+		return path.split(".").reduce<unknown>((current, key) => {
+			if (typeof current !== "object" || current === null) {
+				return undefined;
+			}
 
-				return (current as Record<string, unknown>)[key];
-			}, obj);
+			return (current as Record<string, unknown>)[key];
+		}, obj);
 	};
 
 	for (const [fieldPath, fieldValidation] of Object.entries(validationFields)) {

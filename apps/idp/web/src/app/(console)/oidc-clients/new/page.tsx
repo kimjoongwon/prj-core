@@ -1,10 +1,7 @@
 "use client";
 
 import { useCreateOidcClient } from "@cocrepo/api/idp/oidc-clients";
-import {
-	OidcClientCreatePage,
-	type OidcClientFormState,
-} from "@cocrepo/ui";
+import { OidcClientCreatePage, type OidcClientFormState } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";

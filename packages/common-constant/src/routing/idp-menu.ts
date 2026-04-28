@@ -197,9 +197,10 @@ function pathPatternToRegExp(pathPattern: string): RegExp {
 
 const IDP_SCREEN_SCOPE_MATCHERS = [...IDP_SCREEN_SCOPE_ITEMS]
 	.sort((left, right) => {
-		const leftDynamicCount = (left.pathPattern.match(/\[[^/]+\]/g) ?? []).length;
-		const rightDynamicCount =
-			(right.pathPattern.match(/\[[^/]+\]/g) ?? []).length;
+		const leftDynamicCount = (left.pathPattern.match(/\[[^/]+\]/g) ?? [])
+			.length;
+		const rightDynamicCount = (right.pathPattern.match(/\[[^/]+\]/g) ?? [])
+			.length;
 
 		if (leftDynamicCount !== rightDynamicCount) {
 			return leftDynamicCount - rightDynamicCount;
@@ -213,9 +214,8 @@ const IDP_SCREEN_SCOPE_MATCHERS = [...IDP_SCREEN_SCOPE_ITEMS]
 	}));
 
 export function matchIdpScreenScopeItem(pathname: string) {
-	return IDP_SCREEN_SCOPE_MATCHERS.find((entry) =>
-		entry.regExp.test(pathname),
-	)?.item;
+	return IDP_SCREEN_SCOPE_MATCHERS.find((entry) => entry.regExp.test(pathname))
+		?.item;
 }
 
 /**

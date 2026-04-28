@@ -11,12 +11,12 @@
  */
 
 export interface VerifyTokenResponseDto {
-  /** 토큰 유효 여부 */
-  valid: boolean;
-  /** Access Token 만료 시간 (Unix timestamp, ms) */
-  accessTokenExpiresAt: number;
-  /** Refresh Token 만료 시간 (Unix timestamp, ms) */
-  refreshTokenExpiresAt: number;
-  /** 현재 사용자가 tenant 역할 기준으로 FULL_ACCESS 권한을 하나라도 보유하는지 여부 */
-  hasFullAccess: boolean;
+	/** 토큰 유효 여부 */
+	valid: boolean;
+	/** Access Token 만료 시간 (Unix timestamp, ms) */
+	accessTokenExpiresAt: number;
+	/** Refresh Token 만료 시간 (Unix timestamp, ms) */
+	refreshTokenExpiresAt: number;
+	/** 현재 사용자가 tenant 역할 기준으로 FULL_ACCESS 권한을 하나라도 보유하는지 여부 */
+	hasFullAccess: boolean;
 }

@@ -1,4 +1,11 @@
-import { expect, test, type Page } from "@playwright/test";
+import type { Page } from "../../../../test/e2e/node_modules/@playwright/test";
+import playwrightTest from "../../../../test/e2e/node_modules/@playwright/test/index.js";
+
+type PlaywrightTestModule =
+	typeof import("../../../../test/e2e/node_modules/@playwright/test");
+
+const test = playwrightTest;
+const expect = (playwrightTest as unknown as PlaywrightTestModule).expect;
 
 const DEFAULT_STORYBOOK_BASE_URL =
 	process.env.E2E_STORYBOOK_BASE_URL ?? "http://localhost:6006/";
@@ -87,7 +94,7 @@ test.describe("Storybook 로그인 셸", () => {
 		const entryUrl = new URL(entryPath, getStorybookBaseUrl());
 
 		expect(entryUrl.pathname).toBe("/api/v1/auth/login");
-		expect(entryUrl.searchParams.get("clientId")).toBe("storybook-web");
+		expect(entryUrl.searchParams.get("clientId")).toBe("storybook");
 		expect(entryUrl.searchParams.get("returnTo")).toBe(
 			buildStorybookUrl(STORY_PATH),
 		);
@@ -105,7 +112,9 @@ test.describe("Storybook 로그인 셸", () => {
 		await completeStorybookOidcLogin(page);
 
 		await expect(page).toHaveURL(buildStorybookUrl(STORY_PATH));
-		await expect(page.getByRole("link", { name: "Skip to canvas" })).toBeVisible();
+		await expect(
+			page.getByRole("link", { name: "Skip to canvas" }),
+		).toBeVisible();
 		await expect(page.locator("#storybook-preview-iframe")).toHaveAttribute(
 			"src",
 			/iframe\.html\?viewMode=story&id=widget-authcard--default/,

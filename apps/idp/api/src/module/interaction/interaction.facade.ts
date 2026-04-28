@@ -6,8 +6,8 @@ import type {
 	OidcClientInfo,
 } from "../oidc/types";
 import {
-	InteractionService,
 	type InteractionResult,
+	InteractionService,
 } from "./interaction.service";
 import {
 	InteractionLoginService,

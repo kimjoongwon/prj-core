@@ -222,7 +222,8 @@ function SubjectFieldsSection({
 	);
 }
 
-export const SubjectDetailPage = observer(({
+export const SubjectDetailPage = observer(
+	({
 		subject,
 		subjectFields,
 		isLoading,
@@ -303,4 +304,5 @@ export const SubjectDetailPage = observer(({
 				</DetailPageSurface>
 			</DetailPage>
 		);
-	});
+	},
+);

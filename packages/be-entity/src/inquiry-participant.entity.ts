@@ -13,7 +13,10 @@ import type { User } from "./user.entity";
  * 온라인/오프라인 상태, 타이핑 여부, 마지막 접속 시간 등을 추적하여
  * 실시간 채팅 경험을 제공합니다.
  */
-export class InquiryParticipant extends AbstractEntity implements InquiryParticipantEntity {
+export class InquiryParticipant
+	extends AbstractEntity
+	implements InquiryParticipantEntity
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

@@ -46,7 +46,8 @@ export interface OidcClientDetailPageProps {
 	onClickDeleteConfirmButton: () => void;
 }
 
-export const OidcClientDetailPage = observer(({
+export const OidcClientDetailPage = observer(
+	({
 		client,
 		isLoading,
 		isDeleting,
@@ -318,4 +319,5 @@ export const OidcClientDetailPage = observer(({
 				/>
 			</DetailPage>
 		);
-	});
+	},
+);

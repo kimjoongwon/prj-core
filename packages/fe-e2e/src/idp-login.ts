@@ -22,6 +22,10 @@ interface ApiRequestLike {
 }
 
 interface ConsoleLoginPageLike extends E2EPageLike {
+	evaluate<Arg>(
+		pageFunction: (arg: Arg) => void,
+		arg: Arg,
+	): Promise<void>;
 	request: ApiRequestLike;
 	url(): string;
 }
@@ -83,6 +87,10 @@ function buildApiUrl(path: string) {
 }
 const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
 const DEFAULT_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
+const CONSOLE_PERSIST_KEY = "idp-persist";
+const SYSTEM_SPACE_ID =
+	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
+const SYSTEM_GROUND_NAME = "플랫폼 운영본부";
 
 function extractInteractionUid(url: string): string | null {
 	try {
@@ -148,6 +156,54 @@ async function postInteractionRedirect(
 	return payload.redirectTo;
 }
 
+async function seedConsolePersist(page: ConsoleLoginPageLike) {
+	const response = await page.request.post(buildApiUrl("/api/v1/auth/current-space"), {
+		data: { spaceId: SYSTEM_SPACE_ID },
+	});
+
+	if (response.status() !== 200) {
+		throw new Error(`Failed to select console space: ${response.status()}`);
+	}
+
+	const payload = (await response.json()) as {
+		data?: {
+			id?: string;
+			ground?: {
+				name?: string;
+			};
+		};
+	};
+
+	if (payload.data?.id !== SYSTEM_SPACE_ID) {
+		throw new Error("Selected console space did not match the system space.");
+	}
+
+	const groundName = payload.data.ground?.name ?? SYSTEM_GROUND_NAME;
+	const now = Date.now();
+
+	await page.evaluate(
+		({ storageKey, spaceId, selectedGroundName, accessTokenExpiresAt, refreshTokenExpiresAt }) => {
+			window.localStorage.setItem(
+				storageKey,
+				JSON.stringify({
+					spaceId,
+					groundName: selectedGroundName,
+					spaces: [{ spaceId, groundName: selectedGroundName }],
+					accessTokenExpiresAt,
+					refreshTokenExpiresAt,
+				}),
+			);
+		},
+		{
+			storageKey: CONSOLE_PERSIST_KEY,
+			spaceId: SYSTEM_SPACE_ID,
+			selectedGroundName: groundName,
+			accessTokenExpiresAt: now + 60 * 60 * 1000,
+			refreshTokenExpiresAt: now + 30 * 24 * 60 * 60 * 1000,
+		},
+	);
+}
+
 export async function loginToConsole(page: ConsoleLoginPageLike) {
 	for (let attempt = 1; attempt <= 3; attempt++) {
 		try {
@@ -156,6 +212,10 @@ export async function loginToConsole(page: ConsoleLoginPageLike) {
 			for (let step = 0; step < 5; step++) {
 				const currentUrl = page.url();
 				if (isDashboardUrl(currentUrl)) {
+					await seedConsolePersist(page);
+					await page.goto(normalizedDashboardPath, {
+						waitUntil: "domcontentloaded",
+					});
 					return;
 				}
 

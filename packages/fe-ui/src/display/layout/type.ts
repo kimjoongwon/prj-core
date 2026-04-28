@@ -56,10 +56,7 @@ export interface SidePanelProps {
 	logoDescription?: ReactNode;
 	footer?: ReactNode;
 	className?: string;
-	renderItemIcon?: (
-		item: NavItem,
-		state: { isSelected: boolean },
-	) => ReactNode;
+	renderItemIcon?: (item: NavItem, state: { isSelected: boolean }) => ReactNode;
 	getItemDescription?: (item: NavItem) => ReactNode;
 }
 

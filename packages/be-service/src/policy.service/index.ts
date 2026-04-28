@@ -77,10 +77,7 @@ export class PolicyService {
 		});
 	}
 
-	async updatePolicy(
-		policyId: string,
-		dto: UpdatePolicyDto,
-	): Promise<Policy> {
+	async updatePolicy(policyId: string, dto: UpdatePolicyDto): Promise<Policy> {
 		const policy = await this.getPolicyById(policyId);
 
 		if (dto.name && dto.name !== policy.name) {
@@ -89,7 +86,9 @@ export class PolicyService {
 				dto.name,
 			);
 			if (existing) {
-				throw new ConflictException(`이미 존재하는 정책 이름입니다: ${dto.name}`);
+				throw new ConflictException(
+					`이미 존재하는 정책 이름입니다: ${dto.name}`,
+				);
 			}
 		}
 
@@ -132,7 +131,8 @@ export class PolicyService {
 		const uniqueAbilityIds = Array.from(new Set(abilityIds));
 		if (uniqueAbilityIds.length === 0) return;
 
-		const abilities = await this.abilitiesRepository.findByIds(uniqueAbilityIds);
+		const abilities =
+			await this.abilitiesRepository.findByIds(uniqueAbilityIds);
 		const existingIds = new Set(abilities.map((ability) => ability.id));
 		const missingIds = uniqueAbilityIds.filter((id) => !existingIds.has(id));
 

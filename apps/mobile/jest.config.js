@@ -6,6 +6,7 @@ module.exports = {
 		"^@/(.*)$": "<rootDir>/src/$1",
 		"\\.css$": "<rootDir>/test/styleMock.js",
 	},
+	setupFilesAfterEnv: ["<rootDir>/test/jestExpoRuntimeSetup.js"],
 	collectCoverageFrom: [
 		"src/**/*.ts",
 		"src/**/*.tsx",

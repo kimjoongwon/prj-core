@@ -9,64 +9,64 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ProfileDto } from './profileDto';
-import type { TenantDto } from './tenantDto';
-import type { UserAssociationDto } from './userAssociationDto';
-import type { UserClassificationDto } from './userClassificationDto';
+import type { ProfileDto } from "./profileDto";
+import type { TenantDto } from "./tenantDto";
+import type { UserAssociationDto } from "./userAssociationDto";
+import type { UserClassificationDto } from "./userClassificationDto";
 
 export interface UserDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** 소속 공간 ID */
-  spaceId: string;
-  /** 이메일 주소 */
-  email: string;
-  /** 사용자 이름 */
-  name: string;
-  /** 연락처 */
-  phone: string;
-  /**
-   * 응답 제외 필드
-   * @minLength 6
-   */
-  password: string;
-  /** 로그인 실패 횟수 */
-  failedLoginAttempts: number;
-  /**
-   * 잠금 해제 시각
-   * @nullable
-   */
-  lockedUntil: string | null;
-  /** 영구 잠금 여부 */
-  isPermanentlyLocked: boolean;
-  /** 비밀번호 변경 필요 */
-  mustChangePassword: boolean;
-  /**
-   * 비밀번호 변경일
-   * @nullable
-   */
-  passwordChangedAt: string | null;
-  /**
-   * 마지막 로그인 시각
-   * @nullable
-   */
-  lastLoginAt: string | null;
-  /**
-   * 마지막 로그인 IP
-   * @nullable
-   */
-  lastLoginIp?: string | null;
-  /** 활성 상태 */
-  isActive: boolean;
-  /** 프로필 목록 */
-  profiles?: ProfileDto[];
-  /** 테넌트 목록 */
-  tenants?: TenantDto[];
-  /** 사용자 연결 정보 */
-  associations?: UserAssociationDto[];
-  /** 사용자 분류 정보 */
-  classification?: UserClassificationDto;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** 소속 공간 ID */
+	spaceId: string;
+	/** 이메일 주소 */
+	email: string;
+	/** 사용자 이름 */
+	name: string;
+	/** 연락처 */
+	phone: string;
+	/**
+	 * 응답 제외 필드
+	 * @minLength 6
+	 */
+	password: string;
+	/** 로그인 실패 횟수 */
+	failedLoginAttempts: number;
+	/**
+	 * 잠금 해제 시각
+	 * @nullable
+	 */
+	lockedUntil: string | null;
+	/** 영구 잠금 여부 */
+	isPermanentlyLocked: boolean;
+	/** 비밀번호 변경 필요 */
+	mustChangePassword: boolean;
+	/**
+	 * 비밀번호 변경일
+	 * @nullable
+	 */
+	passwordChangedAt: string | null;
+	/**
+	 * 마지막 로그인 시각
+	 * @nullable
+	 */
+	lastLoginAt: string | null;
+	/**
+	 * 마지막 로그인 IP
+	 * @nullable
+	 */
+	lastLoginIp?: string | null;
+	/** 활성 상태 */
+	isActive: boolean;
+	/** 프로필 목록 */
+	profiles?: ProfileDto[];
+	/** 테넌트 목록 */
+	tenants?: TenantDto[];
+	/** 사용자 연결 정보 */
+	associations?: UserAssociationDto[];
+	/** 사용자 분류 정보 */
+	classification?: UserClassificationDto;
 }

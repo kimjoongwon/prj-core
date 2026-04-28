@@ -180,7 +180,9 @@ export const TimelineSessionDetailPage = observer(
 									) : null}
 									{session?.startDateTime ? (
 										<div>
-											<label className="text-sm text-default-500">시작 일시</label>
+											<label className="text-sm text-default-500">
+												시작 일시
+											</label>
 											<div className="mt-1">
 												<DateTimeCell value={session.startDateTime} />
 											</div>
@@ -188,7 +190,9 @@ export const TimelineSessionDetailPage = observer(
 									) : null}
 									{session?.endDateTime ? (
 										<div>
-											<label className="text-sm text-default-500">종료 일시</label>
+											<label className="text-sm text-default-500">
+												종료 일시
+											</label>
 											<div className="mt-1">
 												<DateTimeCell value={session.endDateTime} />
 											</div>
@@ -248,7 +252,9 @@ export const TimelineSessionDetailPage = observer(
 								<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
 									<div className="rounded-lg bg-content2 p-3">
 										<p className="text-xs text-default-500">전체 프로그램</p>
-										<p className="mt-1 text-lg font-semibold">{totalPrograms}개</p>
+										<p className="mt-1 text-lg font-semibold">
+											{totalPrograms}개
+										</p>
 									</div>
 									<div className="rounded-lg bg-content2 p-3">
 										<p className="text-xs text-default-500">강사 연결 정상</p>
@@ -263,9 +269,7 @@ export const TimelineSessionDetailPage = observer(
 										</p>
 									</div>
 								</div>
-								<Table
-									aria-label="프로그램 목록"
-								>
+								<Table aria-label="프로그램 목록">
 									<TableHeader>
 										<TableColumn>프로그램명</TableColumn>
 										<TableColumn>루틴명</TableColumn>
@@ -317,7 +321,9 @@ export const TimelineSessionDetailPage = observer(
 															size="sm"
 															variant="light"
 															isIconOnly
-															onPress={() => onClickEditProgramButton(program.id)}
+															onPress={() =>
+																onClickEditProgramButton(program.id)
+															}
 														>
 															<Pencil className="h-4 w-4" />
 														</Button>
@@ -326,7 +332,9 @@ export const TimelineSessionDetailPage = observer(
 															color="danger"
 															variant="light"
 															isIconOnly
-															onPress={() => onClickDeleteProgramButton(program.id)}
+															onPress={() =>
+																onClickDeleteProgramButton(program.id)
+															}
 														>
 															<Trash2 className="h-4 w-4" />
 														</Button>
@@ -380,7 +388,8 @@ export const TimelineSessionDetailPage = observer(
 						<ModalHeader>프로그램 삭제</ModalHeader>
 						<ModalBody>
 							<p>
-								<strong>{deleteProgramTargetName}</strong>프로그램을 삭제하시겠습니까?
+								<strong>{deleteProgramTargetName}</strong>프로그램을
+								삭제하시겠습니까?
 							</p>
 						</ModalBody>
 						<ModalFooter>

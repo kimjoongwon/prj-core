@@ -1,8 +1,10 @@
 import { render, screen } from "@testing-library/react-native";
+import RootLayout from "./_layout";
 
 jest.mock("@cocrepo/mo-ui", () => {
-	const React = require("react");
-	const { View } = require("react-native");
+	const React = jest.requireActual<typeof import("react")>("react");
+	const { View } =
+		jest.requireActual<typeof import("react-native")>("react-native");
 
 	return {
 		DesignSystemProvider: ({ children }) =>
@@ -15,8 +17,9 @@ jest.mock("@cocrepo/mo-ui", () => {
 });
 
 jest.mock("expo-router", () => {
-	const React = require("react");
-	const { Text } = require("react-native");
+	const React = jest.requireActual<typeof import("react")>("react");
+	const { Text } =
+		jest.requireActual<typeof import("react-native")>("react-native");
 
 	return {
 		Stack: ({ screenOptions }) =>
@@ -29,16 +32,15 @@ jest.mock("expo-router", () => {
 });
 
 jest.mock("react-native-gesture-handler", () => {
-	const React = require("react");
-	const { View } = require("react-native");
+	const React = jest.requireActual<typeof import("react")>("react");
+	const { View } =
+		jest.requireActual<typeof import("react-native")>("react-native");
 
 	return {
 		GestureHandlerRootView: ({ children }) =>
 			React.createElement(View, { accessibilityLabel: "gesture-root" }, children),
 	};
 });
-
-import RootLayout from "./_layout";
 
 describe("mobile root layout", () => {
 	it("gesture root 안에서 design system provider 와 header hidden stack 을 렌더링해야 한다", () => {

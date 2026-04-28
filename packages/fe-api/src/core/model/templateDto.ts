@@ -9,32 +9,32 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { TemplateType } from './templateType';
+import type { TemplateType } from "./templateType";
 
 export interface TemplateDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** 고유 코드 */
-  code: string;
-  /** 템플릿 이름 */
-  name: string;
-  /** 템플릿 유형 */
-  type: TemplateType;
-  /**
-   * 제목
-   * @nullable
-   */
-  subject?: string | null;
-  /** 본문 */
-  content: string;
-  /**
-   * 설명
-   * @nullable
-   */
-  description?: string | null;
-  /** 활성 상태 */
-  isActive: boolean;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** 고유 코드 */
+	code: string;
+	/** 템플릿 이름 */
+	name: string;
+	/** 템플릿 유형 */
+	type: TemplateType;
+	/**
+	 * 제목
+	 * @nullable
+	 */
+	subject?: string | null;
+	/** 본문 */
+	content: string;
+	/**
+	 * 설명
+	 * @nullable
+	 */
+	description?: string | null;
+	/** 활성 상태 */
+	isActive: boolean;
 }

@@ -24,9 +24,7 @@ export class AuthCacheService {
 	 */
 	async get(userId: string): Promise<string | null> {
 		try {
-			return await this.redisService.get(
-				`${AUTH_USER_CACHE_PREFIX}${userId}`,
-			);
+			return await this.redisService.get(`${AUTH_USER_CACHE_PREFIX}${userId}`);
 		} catch (error) {
 			this.logger.warn(
 				`인증 캐시 조회 실패: ${error instanceof Error ? error.message : String(error)}`,

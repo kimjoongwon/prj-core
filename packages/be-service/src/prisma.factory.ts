@@ -21,43 +21,43 @@ export function createPrismaClient(
 
 	return (async () => {
 		try {
-		logger.log("PrismaClient 생성 시작...");
+			logger.log("PrismaClient 생성 시작...");
 
-		const databaseUrl = configService.get<string>("DATABASE_URL");
-		logger.debug(`DATABASE_URL: ${databaseUrl ? "설정됨" : "설정 안됨"}`);
+			const databaseUrl = configService.get<string>("DATABASE_URL");
+			logger.debug(`DATABASE_URL: ${databaseUrl ? "설정됨" : "설정 안됨"}`);
 
-		if (!databaseUrl) {
-			const error = new Error(
-				"DATABASE_URL is not defined in environment variables",
-			);
-			logger.error(error.message);
-			throw error;
-		}
+			if (!databaseUrl) {
+				const error = new Error(
+					"DATABASE_URL is not defined in environment variables",
+				);
+				logger.error(error.message);
+				throw error;
+			}
 
 			const connectionTarget = getConnectionTarget(databaseUrl);
 
 			logger.log(`PostgreSQL connection pool 생성 중... (${connectionTarget})`);
-		// PostgreSQL connection pool 생성
-		const pool = new pg.Pool({
-			connectionString: databaseUrl,
-			max: 20, // 최대 연결 수
-			idleTimeoutMillis: 30000,
-			connectionTimeoutMillis: 2000,
-		});
+			// PostgreSQL connection pool 생성
+			const pool = new pg.Pool({
+				connectionString: databaseUrl,
+				max: 20, // 최대 연결 수
+				idleTimeoutMillis: 30000,
+				connectionTimeoutMillis: 2000,
+			});
 
-		logger.log("Prisma PostgreSQL Adapter 생성 중...");
-		// Prisma PostgreSQL Adapter 생성
-		const adapter = new PrismaPg(pool);
+			logger.log("Prisma PostgreSQL Adapter 생성 중...");
+			// Prisma PostgreSQL Adapter 생성
+			const adapter = new PrismaPg(pool);
 
-		logger.log("PrismaClient 인스턴스 생성 중...");
-		// PrismaService (extends PrismaClient) 생성 및 반환
-		const prismaClient = new PrismaClient({
-			adapter,
-			log:
-				configService.get<string>("NODE_ENV") === "development"
-					? ["query", "error", "warn"]
-					: ["error"],
-		}) as PrismaService;
+			logger.log("PrismaClient 인스턴스 생성 중...");
+			// PrismaService (extends PrismaClient) 생성 및 반환
+			const prismaClient = new PrismaClient({
+				adapter,
+				log:
+					configService.get<string>("NODE_ENV") === "development"
+						? ["query", "error", "warn"]
+						: ["error"],
+			}) as PrismaService;
 
 			logger.log("PrismaClient 연결 확인 중...");
 			await prismaClient.$connect();

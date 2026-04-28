@@ -9,14 +9,14 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { PolicyAssignmentResponseDto } from './policyAssignmentResponseDto';
-import type { SyncRolePolicies200AllOfMeta } from './syncRolePolicies200AllOfMeta';
+import type { PolicyAssignmentResponseDto } from "./policyAssignmentResponseDto";
+import type { SyncRolePolicies200AllOfMeta } from "./syncRolePolicies200AllOfMeta";
 
 export type SyncRolePolicies200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: PolicyAssignmentResponseDto[];
-  meta?: SyncRolePolicies200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: PolicyAssignmentResponseDto[];
+	meta?: SyncRolePolicies200AllOfMeta;
 };

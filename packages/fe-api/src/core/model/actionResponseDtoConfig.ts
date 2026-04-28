@@ -9,7 +9,7 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ActionConfigDto } from './actionConfigDto';
+import type { ActionConfigDto } from "./actionConfigDto";
 
 /**
  * Action 설정 (마스킹, 포맷팅 등)

@@ -1,6 +1,11 @@
 "use client";
 
 import {
+	type AssetDto,
+	getAssetById,
+	getGetAssetByIdQueryKey,
+} from "@cocrepo/api/assets";
+import {
 	type CreateRoutineActivityItemDto,
 	getGetRoutineQueryKey,
 	type RoutineDto,
@@ -9,13 +14,8 @@ import {
 } from "@cocrepo/api/core/routines";
 import { type TaskDto, useGetTasks } from "@cocrepo/api/core/tasks";
 import {
-	getAssetById,
-	getGetAssetByIdQueryKey,
-	type AssetDto,
-} from "@cocrepo/api/assets";
-import {
-	RoutineEditPage,
 	type RoutineActivityFormItem,
+	RoutineEditPage,
 	type RoutineTaskCandidate,
 } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
@@ -66,21 +66,19 @@ const AdminRoutinesEditRoute = observer(() => {
 	});
 	const tasks = (tasksResponse?.data ?? []) as TaskDto[];
 	const assetIds = Array.from(
-		new Set(
-			[
-				...tasks.flatMap((task) =>
-					[task.exercise?.imageFileId, task.exercise?.videoFileId].filter(
-						(value): value is string => Boolean(value),
-					),
+		new Set([
+			...tasks.flatMap((task) =>
+				[task.exercise?.imageFileId, task.exercise?.videoFileId].filter(
+					(value): value is string => Boolean(value),
 				),
-				...((routine?.activities ?? []).flatMap((activity) =>
-					[
-						activity.task?.exercise?.imageFileId,
-						activity.task?.exercise?.videoFileId,
-					].filter((value): value is string => Boolean(value)),
-				) ?? []),
-			],
-		),
+			),
+			...((routine?.activities ?? []).flatMap((activity) =>
+				[
+					activity.task?.exercise?.imageFileId,
+					activity.task?.exercise?.videoFileId,
+				].filter((value): value is string => Boolean(value)),
+			) ?? []),
+		]),
 	);
 	const assetQueries = useQueries({
 		queries: assetIds.map((assetId) => ({
@@ -246,7 +244,9 @@ const AdminRoutinesEditRoute = observer(() => {
 				delete state.errors.activities;
 			}}
 			onChangeActivityInput={(taskId, field, value) => {
-				const activity = state.activities.find((item) => item.taskId === taskId);
+				const activity = state.activities.find(
+					(item) => item.taskId === taskId,
+				);
 				if (!activity) {
 					return;
 				}

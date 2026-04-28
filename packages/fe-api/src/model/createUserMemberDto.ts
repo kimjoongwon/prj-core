@@ -11,25 +11,25 @@
  */
 
 export interface CreateUserMemberDto {
-  /**
-   * 사용자 이름
-   * @minLength 2
-   * @maxLength 50
-   */
-  name: string;
-  /** 이메일 주소 */
-  email: string;
-  /** 전화번호 (한국 휴대폰 형식) */
-  phone: string;
-  /**
-   * 비밀번호 (8자 이상, 영문+숫자+특수문자)
-   * @minLength 6
-   */
-  password: string;
-  /** 역할 ID */
-  roleId: string;
-  /** 분류 카테고리 ID */
-  categoryId?: string;
-  /** 그룹 ID 목록 */
-  groupIds?: string[];
+	/**
+	 * 사용자 이름
+	 * @minLength 2
+	 * @maxLength 50
+	 */
+	name: string;
+	/** 이메일 주소 */
+	email: string;
+	/** 전화번호 (한국 휴대폰 형식) */
+	phone: string;
+	/**
+	 * 비밀번호 (8자 이상, 영문+숫자+특수문자)
+	 * @minLength 6
+	 */
+	password: string;
+	/** 역할 ID */
+	roleId: string;
+	/** 분류 카테고리 ID */
+	categoryId?: string;
+	/** 그룹 ID 목록 */
+	groupIds?: string[];
 }

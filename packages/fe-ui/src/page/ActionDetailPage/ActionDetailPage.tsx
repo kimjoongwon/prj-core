@@ -62,7 +62,8 @@ const getGroupColor = (
 	}
 };
 
-export const ActionDetailPage = observer(({
+export const ActionDetailPage = observer(
+	({
 		action,
 		isLoading,
 		isDeleting,
@@ -267,4 +268,5 @@ export const ActionDetailPage = observer(({
 				</Modal>
 			</DetailPage>
 		);
-	});
+	},
+);

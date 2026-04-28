@@ -9,21 +9,21 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { CategoryTypes } from './categoryTypes';
+import type { CategoryTypes } from "./categoryTypes";
 
 export type GetCategoriesParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 50
- */
-take?: number;
-name?: string;
-type?: CategoryTypes;
-parentId?: string;
-spaceId?: string;
-serviceId?: string;
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 50
+	 */
+	take?: number;
+	name?: string;
+	type?: CategoryTypes;
+	parentId?: string;
+	spaceId?: string;
+	serviceId?: string;
 };

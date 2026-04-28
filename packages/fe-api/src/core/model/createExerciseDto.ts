@@ -11,10 +11,10 @@
  */
 
 export interface CreateExerciseDto {
-  duration: number;
-  count: number;
-  description?: string;
-  imageFileId?: string;
-  videoFileId?: string;
-  name: string;
+	duration: number;
+	count: number;
+	description?: string;
+	imageFileId?: string;
+	videoFileId?: string;
+	name: string;
 }

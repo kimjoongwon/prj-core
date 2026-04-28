@@ -1,6 +1,10 @@
 import { expect, test } from "@playwright/test";
 
 const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
+const SYSTEM_SPACE_ID =
+	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
+const SPACE_HEADERS = { "x-space-id": SYSTEM_SPACE_ID };
+const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
 
 test.describe("태스크 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
@@ -57,10 +61,12 @@ test.describe("태스크 목록 페이지", () => {
 			const createResponse = await page.request.post(
 				`${ADMIN_API_BASE_URL}/tasks`,
 				{
+					headers: SPACE_HEADERS,
 					data: {
 						name: TEST_NAME,
 						duration: TEST_DURATION,
 						count: TEST_COUNT,
+						videoFileId: TEST_VIDEO_FILE_ID,
 					},
 				},
 			);
@@ -105,10 +111,12 @@ test.describe("태스크 목록 페이지", () => {
 			const updateResponse = await page.request.patch(
 				`${ADMIN_API_BASE_URL}/tasks/${taskId}/exercise`,
 				{
+					headers: SPACE_HEADERS,
 					data: {
 						name: UPDATED_NAME,
 						duration: TEST_DURATION,
 						count: TEST_COUNT,
+						videoFileId: TEST_VIDEO_FILE_ID,
 					},
 				},
 			);
@@ -125,6 +133,7 @@ test.describe("태스크 목록 페이지", () => {
 			// ── 삭제 플로우 ──
 			const deleteResponse = await page.request.delete(
 				`${ADMIN_API_BASE_URL}/tasks/${taskId}`,
+				{ headers: SPACE_HEADERS },
 			);
 			expect(deleteResponse.status()).toBe(204);
 

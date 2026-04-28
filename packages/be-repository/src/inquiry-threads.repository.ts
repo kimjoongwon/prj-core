@@ -1,4 +1,8 @@
-import { InquiryThread, InquiryMessage, InquiryParticipant } from "@cocrepo/entity";
+import {
+	InquiryThread,
+	InquiryMessage,
+	InquiryParticipant,
+} from "@cocrepo/entity";
 import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
@@ -104,7 +108,9 @@ export class InquiryThreadsRepository {
 		};
 	}
 
-	async create(data: Prisma.InquiryThreadUncheckedCreateInput): Promise<InquiryThread> {
+	async create(
+		data: Prisma.InquiryThreadUncheckedCreateInput,
+	): Promise<InquiryThread> {
 		this.logger.debug(`생성: 문의 ${data.inquiryId.slice(-8)}`);
 
 		const result = await this.txHost.tx.inquiryThread.create({
@@ -136,4 +142,3 @@ export class InquiryThreadsRepository {
 		return plainToInstance(InquiryThread, result);
 	}
 }
-

@@ -94,24 +94,20 @@ export class OidcSessionService {
 	}> {
 		this.logger.debug("OIDC 세션/토큰 목록 조회 (Redis)");
 
-		const targetTypes = query.modelType
-			? [query.modelType]
-			: MODEL_TYPES;
+		const targetTypes = query.modelType ? [query.modelType] : MODEL_TYPES;
 
 		let allSessions = await this.collectAllSessions(targetTypes);
 
 		// accountId 필터 적용
 		if (query.accountId) {
 			const search = query.accountId.toLowerCase();
-			allSessions = allSessions.filter(
-				(s) => s.accountId?.toLowerCase().includes(search),
+			allSessions = allSessions.filter((s) =>
+				s.accountId?.toLowerCase().includes(search),
 			);
 		}
 
 		// 생성일 역순 정렬
-		allSessions.sort(
-			(a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-		);
+		allSessions.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 20;
@@ -184,10 +180,15 @@ export class OidcSessionService {
 					pipeline.del(`${KEY_PREFIX}:${modelType}:uid:${payload.uid}`);
 				}
 				if (payload.userCode) {
-					pipeline.del(`${KEY_PREFIX}:${modelType}:userCode:${payload.userCode}`);
+					pipeline.del(
+						`${KEY_PREFIX}:${modelType}:userCode:${payload.userCode}`,
+					);
 				}
 				if (payload.grantId) {
-					pipeline.srem(`${KEY_PREFIX}:${modelType}:grant:${payload.grantId}`, keyId);
+					pipeline.srem(
+						`${KEY_PREFIX}:${modelType}:grant:${payload.grantId}`,
+						keyId,
+					);
 				}
 
 				await pipeline.exec();
@@ -225,7 +226,9 @@ export class OidcSessionService {
 						pipeline.del(`${KEY_PREFIX}:${modelType}:uid:${payload.uid}`);
 					}
 					if (payload.userCode) {
-						pipeline.del(`${KEY_PREFIX}:${modelType}:userCode:${payload.userCode}`);
+						pipeline.del(
+							`${KEY_PREFIX}:${modelType}:userCode:${payload.userCode}`,
+						);
 					}
 				}
 			}
@@ -236,9 +239,7 @@ export class OidcSessionService {
 		}
 
 		if (totalDeleted === 0) {
-			throw new NotFoundException(
-				"해당 Grant에 연결된 세션/토큰이 없습니다",
-			);
+			throw new NotFoundException("해당 Grant에 연결된 세션/토큰이 없습니다");
 		}
 
 		return totalDeleted;

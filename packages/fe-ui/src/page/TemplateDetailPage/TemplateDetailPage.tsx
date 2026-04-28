@@ -106,7 +106,9 @@ export const TemplateDetailPage = observer(
 	}: TemplateDetailPageProps) => {
 		if (isLoading) {
 			return (
-				<DetailPage top={<PageTitleBar title="템플릿 상세" description="로딩 중..." />}>
+				<DetailPage
+					top={<PageTitleBar title="템플릿 상세" description="로딩 중..." />}
+				>
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex items-center justify-center p-8">
@@ -190,7 +192,9 @@ export const TemplateDetailPage = observer(
 										<p className="mt-1">{template.description || "-"}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">활성 상태</label>
+										<label className="text-sm text-default-500">
+											활성 상태
+										</label>
 										<div className="mt-1">
 											<Switch
 												isSelected={template.isActive}

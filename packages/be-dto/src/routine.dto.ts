@@ -1,4 +1,8 @@
-import { ClassField, StringField, StringFieldOptional } from "@cocrepo/decorator";
+import {
+	ClassField,
+	StringField,
+	StringFieldOptional,
+} from "@cocrepo/decorator";
 import type { Routine } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { ActivityDto } from "./activity.dto";

@@ -96,10 +96,7 @@ export class SpacesRepository {
 			this.txHost.tx.space.count({ where }),
 		]);
 
-		return [
-			results.map((result) => plainToInstance(Space, result)),
-			total,
-		];
+		return [results.map((result) => plainToInstance(Space, result)), total];
 	}
 
 	/**
@@ -327,7 +324,9 @@ export class SpacesRepository {
 	 * BRANCH Category → 자신만
 	 */
 	async findSpaceIdsByCategoryHierarchy(spaceId: string): Promise<string[]> {
-		this.logger.debug(`카테고리 위계 기반 Space ID 조회: spaceId=${spaceId.slice(-8)}`);
+		this.logger.debug(
+			`카테고리 위계 기반 Space ID 조회: spaceId=${spaceId.slice(-8)}`,
+		);
 
 		const spaceClassification =
 			await this.txHost.tx.spaceClassification.findUnique({
@@ -350,13 +349,12 @@ export class SpacesRepository {
 			categoryIds.push(child.id);
 		}
 
-		const classifications =
-			await this.txHost.tx.spaceClassification.findMany({
-				where: {
-					categoryId: { in: categoryIds },
-				},
-				select: { spaceId: true },
-			});
+		const classifications = await this.txHost.tx.spaceClassification.findMany({
+			where: {
+				categoryId: { in: categoryIds },
+			},
+			select: { spaceId: true },
+		});
 
 		return classifications.map((c) => c.spaceId);
 	}
@@ -365,7 +363,9 @@ export class SpacesRepository {
 	 * 여러 ID로 Space 조회 (Ground 포함)
 	 */
 	async findByIdsWithGround(ids: string[]): Promise<Space[]> {
-		this.logger.debug(`여러 ID로 Space 조회 (Ground 포함): count=${ids.length}`);
+		this.logger.debug(
+			`여러 ID로 Space 조회 (Ground 포함): count=${ids.length}`,
+		);
 
 		const results = await this.txHost.tx.space.findMany({
 			where: { id: { in: ids }, removedAt: null },

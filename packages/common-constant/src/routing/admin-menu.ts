@@ -213,8 +213,9 @@ function applyAdminNavScopeKinds(navItems: NavItemConfig[]): NavItemConfig[] {
 	}));
 }
 
-export const ADMIN_NAV_ITEMS: NavItemConfig[] =
-	applyAdminNavScopeKinds(GENERATED_ADMIN_NAV_ITEMS);
+export const ADMIN_NAV_ITEMS: NavItemConfig[] = applyAdminNavScopeKinds(
+	GENERATED_ADMIN_NAV_ITEMS,
+);
 
 export interface AdminMenuPermissionLeaf {
 	groupId: string;
@@ -270,9 +271,7 @@ export const ADMIN_MENU_PERMISSION_LEAFS: AdminMenuPermissionLeaf[] =
 	});
 
 export const ADMIN_MENU_PERMISSION_SUBJECTS = Array.from(
-	new Set(
-		ADMIN_MENU_PERMISSION_LEAFS.flatMap((leaf) => leaf.requiredSubjects),
-	),
+	new Set(ADMIN_MENU_PERMISSION_LEAFS.flatMap((leaf) => leaf.requiredSubjects)),
 );
 
 /**
@@ -286,6 +285,11 @@ export const ADMIN_FAB_ACTIONS: FABAction[] = [];
  * 순서대로 하단 탭에 표시됩니다.
  * 마지막 "more"는 특수 처리되어 나머지 메뉴를 표시합니다.
  */
-export const BOTTOM_TAB_IDS = ["dashboard", "users", "inquiries", "more"] as const;
+export const BOTTOM_TAB_IDS = [
+	"dashboard",
+	"users",
+	"inquiries",
+	"more",
+] as const;
 
 export type BottomTabId = (typeof BOTTOM_TAB_IDS)[number];

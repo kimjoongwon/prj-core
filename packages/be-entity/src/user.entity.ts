@@ -105,11 +105,12 @@ export class User extends AbstractEntity implements UserEntityType {
 	 * 슈퍼매니저(ROOT Space 소속) 여부
 	 */
 	isSuperManager(): boolean {
-		return this.tenants?.some((tenant) => {
-			const categoryName =
-				tenant.space?.spaceClassification?.category?.name;
-			return categoryName === SpaceCategoryName.ROOT.name;
-		}) ?? false;
+		return (
+			this.tenants?.some((tenant) => {
+				const categoryName = tenant.space?.spaceClassification?.category?.name;
+				return categoryName === SpaceCategoryName.ROOT.name;
+			}) ?? false
+		);
 	}
 
 	/**

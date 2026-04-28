@@ -88,7 +88,7 @@ export const Select = (props: SelectProps) => {
 	const ariaLabel =
 		typeof rest["aria-label"] === "string"
 			? rest["aria-label"]
-			: label ?? placeholder ?? "선택";
+			: (label ?? placeholder ?? "선택");
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		onChange?.(e.target.value);

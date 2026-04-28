@@ -80,7 +80,8 @@ export const Default: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "Default vertical stack using the recommended semantic section rhythm.",
+				story:
+					"Default vertical stack using the recommended semantic section rhythm.",
 			},
 		},
 	},

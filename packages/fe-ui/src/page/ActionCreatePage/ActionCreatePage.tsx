@@ -52,120 +52,124 @@ const groupOptions = [
 ];
 const GROUP_OPTION_VALUES = new Set(groupOptions.map((option) => option.value));
 
-export const ActionCreatePage = observer(({
-	formState,
-	isSubmitting,
-	onClickBackButton,
-	onChangeNameInput,
-	onChangeDisplayNameInput,
-	onChangeDescriptionTextarea,
-	onChangeGroupSelection,
-	onChangeOrderInput,
-	onSubmit,
-}: ActionCreatePageProps) => {
-	const onClickSubmitButton = () => {
-		onSubmit({
-			name: formState.name,
-			displayName: formState.displayName,
-			description: formState.description,
-			group: formState.group,
-			order: formState.order,
-		});
-	};
+export const ActionCreatePage = observer(
+	({
+		formState,
+		isSubmitting,
+		onClickBackButton,
+		onChangeNameInput,
+		onChangeDisplayNameInput,
+		onChangeDescriptionTextarea,
+		onChangeGroupSelection,
+		onChangeOrderInput,
+		onSubmit,
+	}: ActionCreatePageProps) => {
+		const onClickSubmitButton = () => {
+			onSubmit({
+				name: formState.name,
+				displayName: formState.displayName,
+				description: formState.description,
+				group: formState.group,
+				order: formState.order,
+			});
+		};
 
-	return (
-		<FormPage
-			top={
-				<PageTitleBar
-					title="Action 등록"
-					description="새로운 Action을 등록합니다."
-					actions={
-						<Button
-							variant="light"
-							startContent={<ArrowLeft className="h-4 w-4" />}
-							onPress={onClickBackButton}
-						>
-							목록으로
-						</Button>
-					}
-				/>
-			}
-		>
-			<FormPageSurface>
-				<VStack gap={4}>
-					<div className="rounded-xl bg-primary-50 p-4 dark:bg-primary-900/20">
-						<p className="text-sm text-primary-700 dark:text-primary-400">
-							<strong>참고:</strong> 행위 식별자는 소문자로 시작하고,
-							소문자/숫자/콜론/밑줄만 사용할 수 있습니다. (예:
-							read:masked:email)
-						</p>
-					</div>
-					<FormSectionCard>
-						<div className="space-y-6">
-							<Input
-								label="행위 식별자"
-								placeholder="read:masked:email"
-								value={formState.name}
-								onValueChange={onChangeNameInput}
-								isInvalid={!!formState.errors.name}
-								errorMessage={formState.errors.name}
-								isRequired
-								description="소문자로 시작하고, 소문자/숫자/콜론/밑줄만 사용 가능합니다."
-							/>
-							<Input
-								label="표시명"
-								placeholder="이메일 마스킹 읽기"
-								value={formState.displayName}
-								onValueChange={onChangeDisplayNameInput}
-								maxLength={100}
-								description="사용자에게 보여질 Action 이름입니다."
-							/>
-							<Textarea
-								label="설명"
-								placeholder="Action에 대한 설명을 입력하세요."
-								value={formState.description}
-								onValueChange={onChangeDescriptionTextarea}
-								maxLength={200}
-								minRows={3}
-							/>
-							<Select
-								label="분류"
-								placeholder="분류를 선택하세요"
-								selectedKeys={
-									formState.group && GROUP_OPTION_VALUES.has(formState.group)
-										? [formState.group]
-										: []
-								}
-								onSelectionChange={(keys) => {
-									const selectedKey = Array.from(keys)[0];
-									onChangeGroupSelection(selectedKey ? String(selectedKey) : "");
-								}}
+		return (
+			<FormPage
+				top={
+					<PageTitleBar
+						title="Action 등록"
+						description="새로운 Action을 등록합니다."
+						actions={
+							<Button
+								variant="light"
+								startContent={<ArrowLeft className="h-4 w-4" />}
+								onPress={onClickBackButton}
 							>
-								{groupOptions.map((option) => (
-									<SelectItem key={option.value}>{option.label}</SelectItem>
-								))}
-							</Select>
-							<Input
-								label="정렬 순서"
-								type="number"
-								value={String(formState.order)}
-								onValueChange={onChangeOrderInput}
-								description="낮은 숫자일수록 먼저 표시됩니다."
-							/>
-							<div className="flex justify-end pt-4">
-								<Button
-									color="primary"
-									startContent={<Save className="h-4 w-4" />}
-									onPress={onClickSubmitButton}
-									isLoading={isSubmitting}
-								>
-									Action 등록
-								</Button>
-							</div>
+								목록으로
+							</Button>
+						}
+					/>
+				}
+			>
+				<FormPageSurface>
+					<VStack gap={4}>
+						<div className="rounded-xl bg-primary-50 p-4 dark:bg-primary-900/20">
+							<p className="text-sm text-primary-700 dark:text-primary-400">
+								<strong>참고:</strong> 행위 식별자는 소문자로 시작하고,
+								소문자/숫자/콜론/밑줄만 사용할 수 있습니다. (예:
+								read:masked:email)
+							</p>
 						</div>
-					</FormSectionCard>
-				</VStack>
-			</FormPageSurface>
-		</FormPage>
-	);
-});
+						<FormSectionCard>
+							<div className="space-y-6">
+								<Input
+									label="행위 식별자"
+									placeholder="read:masked:email"
+									value={formState.name}
+									onValueChange={onChangeNameInput}
+									isInvalid={!!formState.errors.name}
+									errorMessage={formState.errors.name}
+									isRequired
+									description="소문자로 시작하고, 소문자/숫자/콜론/밑줄만 사용 가능합니다."
+								/>
+								<Input
+									label="표시명"
+									placeholder="이메일 마스킹 읽기"
+									value={formState.displayName}
+									onValueChange={onChangeDisplayNameInput}
+									maxLength={100}
+									description="사용자에게 보여질 Action 이름입니다."
+								/>
+								<Textarea
+									label="설명"
+									placeholder="Action에 대한 설명을 입력하세요."
+									value={formState.description}
+									onValueChange={onChangeDescriptionTextarea}
+									maxLength={200}
+									minRows={3}
+								/>
+								<Select
+									label="분류"
+									placeholder="분류를 선택하세요"
+									selectedKeys={
+										formState.group && GROUP_OPTION_VALUES.has(formState.group)
+											? [formState.group]
+											: []
+									}
+									onSelectionChange={(keys) => {
+										const selectedKey = Array.from(keys)[0];
+										onChangeGroupSelection(
+											selectedKey ? String(selectedKey) : "",
+										);
+									}}
+								>
+									{groupOptions.map((option) => (
+										<SelectItem key={option.value}>{option.label}</SelectItem>
+									))}
+								</Select>
+								<Input
+									label="정렬 순서"
+									type="number"
+									value={String(formState.order)}
+									onValueChange={onChangeOrderInput}
+									description="낮은 숫자일수록 먼저 표시됩니다."
+								/>
+								<div className="flex justify-end pt-4">
+									<Button
+										color="primary"
+										startContent={<Save className="h-4 w-4" />}
+										onPress={onClickSubmitButton}
+										isLoading={isSubmitting}
+									>
+										Action 등록
+									</Button>
+								</div>
+							</div>
+						</FormSectionCard>
+					</VStack>
+				</FormPageSurface>
+			</FormPage>
+		);
+	},
+);

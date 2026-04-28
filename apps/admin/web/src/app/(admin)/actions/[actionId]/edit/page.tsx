@@ -5,10 +5,7 @@ import {
 	useGetActionById,
 	useUpdateAction,
 } from "@cocrepo/api/core/actions";
-import {
-	ActionEditPage,
-	type ActionEditPageFormState,
-} from "@cocrepo/ui";
+import { ActionEditPage, type ActionEditPageFormState } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";

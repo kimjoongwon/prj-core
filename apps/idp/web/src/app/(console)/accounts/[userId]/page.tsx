@@ -117,9 +117,7 @@ export default observer(function AccountDetailPageRoute() {
 	);
 });
 
-function mapAccountDetail(
-	account: IdpAccountDto,
-): AccountDetailPageAccount {
+function mapAccountDetail(account: IdpAccountDto): AccountDetailPageAccount {
 	return {
 		id: account.id,
 		name: account.name,

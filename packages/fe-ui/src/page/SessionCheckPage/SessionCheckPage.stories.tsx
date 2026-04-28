@@ -16,7 +16,8 @@ type Story = StoryObj<typeof meta>;
 export const AdminBootstrap: Story = {
 	args: {
 		title: "관리자 세션 확인",
-		description: "공간 권한과 운영 콘솔 접근 권한을 확인한 뒤 적절한 페이지로 이동합니다.",
+		description:
+			"공간 권한과 운영 콘솔 접근 권한을 확인한 뒤 적절한 페이지로 이동합니다.",
 		message: "관리자 권한과 최근 접속 공간을 확인하고 있습니다.",
 	},
 };

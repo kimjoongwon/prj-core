@@ -1,3 +1,4 @@
+import { SpaceContext } from "@cocrepo/context";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -12,7 +13,6 @@ import {
 } from "@cocrepo/dto";
 import { Ground, Space } from "@cocrepo/entity";
 import { SpaceFacade } from "@cocrepo/facade";
-import { SpaceContext } from "@cocrepo/context";
 import {
 	Body,
 	Controller,

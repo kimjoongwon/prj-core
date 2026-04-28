@@ -11,14 +11,14 @@
  */
 
 export interface CreateTenantAccessRequestDto {
-  /** 신청 대상 Space ID */
-  spaceId: string;
-  /** 희망 Role ID */
-  requestedRoleId: string;
-  /**
-   * 신청 사유
-   * @maxLength 1000
-   * @nullable
-   */
-  reason?: string | null;
+	/** 신청 대상 Space ID */
+	spaceId: string;
+	/** 희망 Role ID */
+	requestedRoleId: string;
+	/**
+	 * 신청 사유
+	 * @maxLength 1000
+	 * @nullable
+	 */
+	reason?: string | null;
 }

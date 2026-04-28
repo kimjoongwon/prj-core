@@ -36,7 +36,8 @@ export interface OidcClientCreatePageProps {
 	onSubmit: (input: OidcClientCreatePageSubmitInput) => void;
 }
 
-export const OidcClientCreatePage = observer(({
+export const OidcClientCreatePage = observer(
+	({
 		formState,
 		isSubmitting,
 		onClickBackButton,
@@ -157,4 +158,5 @@ export const OidcClientCreatePage = observer(({
 				</FormPageSurface>
 			</FormPage>
 		);
-	});
+	},
+);

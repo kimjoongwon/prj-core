@@ -1,6 +1,5 @@
 import Module from "node:module";
 import path from "node:path";
-import { defineConfig, devices } from "@playwright/test";
 
 if (
 	process.env.PLAYWRIGHT_BROWSERS_PATH &&
@@ -27,6 +26,49 @@ process.env.NODE_PATH = [workspaceNodeModulesPath, existingNodePath]
 		_initPaths?: () => void;
 	}
 )._initPaths?.();
+
+const configRequire = Module.createRequire(__filename);
+const playwrightTestEntry = configRequire.resolve("@playwright/test");
+const playwrightTestRequire = Module.createRequire(playwrightTestEntry);
+const playwrightTestShimEntry = playwrightTestRequire.resolve("playwright/test");
+const playwrightEntry = playwrightTestRequire.resolve("playwright");
+const moduleWithResolver = Module as typeof Module & {
+	_resolveFilename: (
+		this: unknown,
+		request: string,
+		...args: unknown[]
+	) => string;
+};
+const originalResolveFilename = moduleWithResolver._resolveFilename;
+const globalWithPlaywrightResolver = globalThis as typeof globalThis & {
+	__cocrepoPlaywrightResolvePatched?: boolean;
+};
+
+if (!globalWithPlaywrightResolver.__cocrepoPlaywrightResolvePatched) {
+	moduleWithResolver._resolveFilename = function resolvePlaywrightPackage(
+		this: unknown,
+		request: string,
+		...args: unknown[]
+	) {
+		if (request === "@playwright/test") {
+			return playwrightTestEntry;
+		}
+
+		if (request === "playwright/test") {
+			return playwrightTestShimEntry;
+		}
+
+		if (request === "playwright") {
+			return playwrightEntry;
+		}
+
+		return originalResolveFilename.call(this, request, ...args);
+	};
+
+	globalWithPlaywrightResolver.__cocrepoPlaywrightResolvePatched = true;
+}
+
+const { defineConfig, devices } = configRequire("@playwright/test") as typeof import("@playwright/test");
 
 const e2eEnvironment = process.env.E2E_ENV;
 const skipAdminSetup = process.env.SKIP_ADMIN_SETUP === "1";
@@ -105,17 +147,16 @@ const adminAuthStorageStatePath = path.join(
 );
 
 function buildApiStartCommand(
-	envDir: string,
 	filter: "core-api" | "idp-api",
 ) {
 	return [
 		"bash -lc",
-		`'set -a; if [ -f ${envDir}/.env ]; then source ${envDir}/.env; fi; set +a; export SMTP_SECURE=\${SMTP_SECURE:-false}; pnpm --filter=${filter} start:dev'`,
+		`'export SMTP_SECURE=\${SMTP_SECURE:-false}; pnpm --filter=${filter} start:dev'`,
 	].join(" ");
 }
 
 const idpApiServer = {
-	command: buildApiStartCommand("apps/idp/api", "idp-api"),
+	command: buildApiStartCommand("idp-api"),
 	url: new URL("/api/password-policy", idpApiBaseUrl).toString(),
 	reuseExistingServer,
 	timeout: 120000,
@@ -123,7 +164,7 @@ const idpApiServer = {
 };
 
 const coreApiServer = {
-	command: buildApiStartCommand("apps/core/api", "core-api"),
+	command: buildApiStartCommand("core-api"),
 	url: new URL("/api-json", coreApiBaseUrl).toString(),
 	reuseExistingServer,
 	timeout: 120000,
@@ -160,7 +201,7 @@ function getWebServers() {
 	}
 
 	if (e2eTarget === "idp") {
-		return [idpApiServer, idpWebServer];
+		return [coreApiServer, idpApiServer, idpWebServer];
 	}
 
 	if (e2eTarget === "storybook") {

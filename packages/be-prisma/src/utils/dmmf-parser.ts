@@ -96,7 +96,10 @@ export class DmmfParser {
 		return contents.join("\n\n");
 	}
 
-	private listSchemaFiles(schemaDir: string, rootDir: string = schemaDir): string[] {
+	private listSchemaFiles(
+		schemaDir: string,
+		rootDir: string = schemaDir,
+	): string[] {
 		const files: string[] = [];
 		const entries = fs.readdirSync(schemaDir, { withFileTypes: true });
 

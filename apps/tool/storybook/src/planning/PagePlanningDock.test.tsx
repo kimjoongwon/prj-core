@@ -20,10 +20,7 @@ const manifest: OverviewManifest = {
 			storyTitle: "page/RoleListPage",
 			storyId: "page-rolelistpage--default",
 			storyHref: "./?path=/story/page-rolelistpage--default",
-			storyIds: [
-				"page-rolelistpage--default",
-				"page-rolelistpage--docs",
-			],
+			storyIds: ["page-rolelistpage--default", "page-rolelistpage--docs"],
 			maturity: "scenario",
 			appIds: ["admin"],
 			planning: {
@@ -79,8 +76,7 @@ const manifest: OverviewManifest = {
 					content: "역할 목록 화면의 pure page 컴포넌트입니다.",
 				},
 			],
-			sourcePath:
-				"packages/fe-ui/src/page/RoleListPage/RoleListPage.spec.md",
+			sourcePath: "packages/fe-ui/src/page/RoleListPage/RoleListPage.spec.md",
 			summary: null,
 			title: "RoleListPage ui 기획서",
 		},
@@ -106,7 +102,9 @@ describe("PagePlanningDock", () => {
 			screen.queryByRole("heading", { name: "RoleListPage" }),
 		).not.toBeInTheDocument();
 
-		fireEvent.click(screen.getByRole("button", { name: "Open planning overlay" }));
+		fireEvent.click(
+			screen.getByRole("button", { name: "Open planning overlay" }),
+		);
 
 		expect(
 			screen.getByRole("heading", { name: "RoleListPage" }),

@@ -47,7 +47,7 @@ const AdminRolesCategoriesDetailRoute = observer(() => {
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
 	const { data: response, isLoading } = useGetCategoryById(categoryId);
-	const category = (response?.data as unknown) as CategoryDetail | undefined;
+	const category = response?.data as unknown as CategoryDetail | undefined;
 
 	const { mutate: deleteCategory, isPending: isDeleting } = useDeleteCategory({
 		mutation: {

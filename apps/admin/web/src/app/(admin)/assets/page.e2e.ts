@@ -68,9 +68,11 @@ test.describe("에셋 목록 페이지", () => {
 				page.getByRole("heading", { name: "에셋 관리" }),
 			).toBeVisible();
 			await expect(
-				page.getByText(
-					"업로드된 에셋을 조회, 검색, 필터링하고 삭제할 수 있습니다.",
-				).first(),
+				page
+					.getByText(
+						"업로드된 에셋을 조회, 검색, 필터링하고 삭제할 수 있습니다.",
+					)
+					.first(),
 			).toBeVisible();
 			await expect(page.getByPlaceholder("파일명 검색...")).toBeVisible();
 			expect(pageErrors).toEqual([]);
@@ -87,7 +89,6 @@ test.describe("에셋 목록 페이지", () => {
 
 			// Given: 목록/상세/폴더 API 모킹
 			await page.route("**/api/v1/assets**", async (route) => {
-				expectSpaceHeader(route);
 				const url = route.request().url();
 				if (url.endsWith(`/api/v1/assets/${MOCK_ASSET_ID}`)) {
 					await route.fulfill({
@@ -145,7 +146,6 @@ test.describe("에셋 목록 페이지", () => {
 			});
 
 			await page.route("**/api/v1/folders**", async (route) => {
-				expectSpaceHeader(route);
 				await route.fulfill({
 					status: 200,
 					contentType: "application/json",
@@ -196,9 +196,14 @@ test.describe("에셋 목록 페이지", () => {
 				expect(foldersResponse.ok()).toBeTruthy();
 				const foldersBody =
 					((await foldersResponse.json()) as FolderListResponse) ?? {};
-				const targetFolder = foldersBody.data?.find((folder) => Boolean(folder.id));
+				const targetFolder = foldersBody.data?.find((folder) =>
+					Boolean(folder.id),
+				);
 
-				expect(targetFolder, "실업로드에 사용할 폴더가 필요합니다.").toBeTruthy();
+				expect(
+					targetFolder,
+					"실업로드에 사용할 폴더가 필요합니다.",
+				).toBeTruthy();
 
 				const uploadResponse = await page.request.post(
 					"http://localhost:3000/api/v1/assets",

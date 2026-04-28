@@ -43,7 +43,11 @@ export class CreateInquiryMessageDto {
 	/**
 	 * DTO → Entity 변환
 	 */
-	toEntity(inquiryId: string, threadId: string, senderId?: string): Partial<InquiryMessage> {
+	toEntity(
+		inquiryId: string,
+		threadId: string,
+		senderId?: string,
+	): Partial<InquiryMessage> {
 		return {
 			inquiryId,
 			threadId,

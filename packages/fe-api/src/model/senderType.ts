@@ -13,12 +13,11 @@
 /**
  * 발신자 유형
  */
-export type SenderType = typeof SenderType[keyof typeof SenderType];
-
+export type SenderType = (typeof SenderType)[keyof typeof SenderType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SenderType = {
-  USER: 'USER',
-  AI: 'AI',
-  SYSTEM: 'SYSTEM',
+	USER: "USER",
+	AI: "AI",
+	SYSTEM: "SYSTEM",
 } as const;

@@ -72,12 +72,11 @@ export interface OidcClientEditPageProps {
 	isSubmitting: boolean;
 	onClickBackButton: () => void;
 	onClickListButton: () => void;
-	onSubmit: (
-		input: OidcClientEditPageSubmitInput,
-	) => void;
+	onSubmit: (input: OidcClientEditPageSubmitInput) => void;
 }
 
-export const OidcClientEditPage = observer(({
+export const OidcClientEditPage = observer(
+	({
 		client,
 		formState,
 		isLoading,
@@ -137,8 +136,9 @@ export const OidcClientEditPage = observer(({
 
 			onSubmit({
 				name: formState.name,
-				clientSecret:
-					isPublic ? undefined : formState.clientSecret || undefined,
+				clientSecret: isPublic
+					? undefined
+					: formState.clientSecret || undefined,
 				tokenEndpointAuthMethod: formState.tokenEndpointAuthMethod,
 				grantTypes: formState.grantTypes,
 				responseTypes: formState.responseTypes,
@@ -243,4 +243,5 @@ export const OidcClientEditPage = observer(({
 				</FormPageSurface>
 			</FormPage>
 		);
-	});
+	},
+);

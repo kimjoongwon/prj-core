@@ -20,7 +20,9 @@ export class AIAgentLogsRepository {
 	async findById(id: string): Promise<AIAgentLog | null> {
 		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
 
-		const result = await this.txHost.tx.aIAgentLog.findUnique({ where: { id } });
+		const result = await this.txHost.tx.aIAgentLog.findUnique({
+			where: { id },
+		});
 
 		return result ? plainToInstance(AIAgentLog, result) : null;
 	}
@@ -70,7 +72,9 @@ export class AIAgentLogsRepository {
 		};
 	}
 
-	async create(data: Prisma.AIAgentLogUncheckedCreateInput): Promise<AIAgentLog> {
+	async create(
+		data: Prisma.AIAgentLogUncheckedCreateInput,
+	): Promise<AIAgentLog> {
 		this.logger.debug(`로그 생성: ${data.inquiryId.slice(-8)}`);
 
 		const result = await this.txHost.tx.aIAgentLog.create({ data });
@@ -92,4 +96,3 @@ export class AIAgentLogsRepository {
 		});
 	}
 }
-

@@ -134,9 +134,7 @@ export class IdpAccountService {
 		});
 	}
 
-	private applySpaceScope(
-		where: Prisma.UserWhereInput,
-	): Prisma.UserWhereInput {
+	private applySpaceScope(where: Prisma.UserWhereInput): Prisma.UserWhereInput {
 		const spaceIds = this.spaceContext.spaceIds;
 		if (spaceIds === undefined) {
 			return where;

@@ -44,7 +44,9 @@ export const GroundDetailPage = observer(
 	}: GroundDetailPageProps) => {
 		if (isLoading) {
 			return (
-				<DetailPage top={<PageTitleBar title="시설 정보" description="로딩 중..." />}>
+				<DetailPage
+					top={<PageTitleBar title="시설 정보" description="로딩 중..." />}
+				>
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex items-center justify-center p-8">
@@ -167,7 +169,9 @@ export const GroundDetailPage = observer(
 							</DetailSection>
 						</DetailSectionCard>
 						<DetailSectionCard>
-							<DetailSection top={<PageTitleBar level={2} title="연결된 Space" />}>
+							<DetailSection
+								top={<PageTitleBar level={2} title="연결된 Space" />}
+							>
 								<div>
 									<label className="text-sm text-default-500">Space ID</label>
 									<p className="mt-1 font-mono text-sm">{spaceId}</p>

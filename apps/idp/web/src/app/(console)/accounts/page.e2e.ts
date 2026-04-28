@@ -56,7 +56,9 @@ test.describe("IDP 계정 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			// When: 이메일 검색
-			await page.getByPlaceholder("이메일 또는 이름으로 검색...").fill("admin");
+			const searchInput = page.getByPlaceholder("이메일 또는 이름으로 검색...");
+			await searchInput.fill("admin");
+			await searchInput.press("Enter");
 
 			// debounce 대기
 			await page.waitForTimeout(500);

@@ -11,12 +11,12 @@
  */
 
 export interface InquiryFormSchemaDto {
-  /** 스키마 키 */
-  key: string;
-  /** 스키마 라벨 */
-  label: string;
-  /** 스키마 대상 경로 */
-  paths: string[];
-  /** 스키마 설명 */
-  description?: string;
+	/** 스키마 키 */
+	key: string;
+	/** 스키마 라벨 */
+	label: string;
+	/** 스키마 대상 경로 */
+	paths: string[];
+	/** 스키마 설명 */
+	description?: string;
 }

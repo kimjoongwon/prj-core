@@ -11,8 +11,8 @@
  */
 
 export interface CreatePolicyDto {
-  name: string;
-  displayName?: string;
-  description?: string;
-  isSystem?: boolean;
+	name: string;
+	displayName?: string;
+	description?: string;
+	isSystem?: boolean;
 }

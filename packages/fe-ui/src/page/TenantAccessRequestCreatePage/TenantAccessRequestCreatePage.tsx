@@ -1,12 +1,6 @@
 "use client";
 
-import {
-	Button,
-	Select,
-	SelectItem,
-	Skeleton,
-	Textarea,
-} from "@heroui/react";
+import { Button, Select, SelectItem, Skeleton, Textarea } from "@heroui/react";
 import { ArrowLeft, Send } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { PageSurface } from "../../surface/PageSurface";

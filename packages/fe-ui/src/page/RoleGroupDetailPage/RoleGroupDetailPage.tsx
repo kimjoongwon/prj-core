@@ -166,10 +166,12 @@ export const RoleGroupDetailPage = observer(
 						<ModalHeader>역할 그룹 삭제</ModalHeader>
 						<ModalBody>
 							<p>
-								<strong>{group.label || group.name}</strong> 그룹을 삭제하시겠습니까?
+								<strong>{group.label || group.name}</strong> 그룹을
+								삭제하시겠습니까?
 							</p>
 							<p className="mt-2 text-sm text-danger">
-								이 작업은 되돌릴 수 없습니다. 연결된 역할 연관도 함께 삭제됩니다.
+								이 작업은 되돌릴 수 없습니다. 연결된 역할 연관도 함께
+								삭제됩니다.
 							</p>
 						</ModalBody>
 						<ModalFooter>

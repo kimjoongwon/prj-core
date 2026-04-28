@@ -72,9 +72,7 @@ export class AbilityApplicationService {
 		const ability = await this.abilitiesService.getAbilityById(id);
 
 		if (!ability) {
-			throw new NotFoundException(
-				ABILITY_ERRORS.NOT_FOUND,
-			);
+			throw new NotFoundException(ABILITY_ERRORS.NOT_FOUND);
 		}
 
 		return ability;
@@ -84,7 +82,7 @@ export class AbilityApplicationService {
 	 * 전체 Ability 목록 조회
 	 */
 	async getAllAbilities(): Promise<Ability[]> {
-		this.logger.debug('전체 Ability 목록 조회');
+		this.logger.debug("전체 Ability 목록 조회");
 		return this.abilitiesService.getAllAbilities();
 	}
 
@@ -121,9 +119,7 @@ export class AbilityApplicationService {
 		// 존재 확인
 		const existing = await this.abilitiesService.getAbilityById(id);
 		if (!existing) {
-			throw new NotFoundException(
-				ABILITY_ERRORS.NOT_FOUND,
-			);
+			throw new NotFoundException(ABILITY_ERRORS.NOT_FOUND);
 		}
 
 		return this.abilitiesService.updateAbility(id, data);
@@ -142,9 +138,7 @@ export class AbilityApplicationService {
 		// 존재 확인
 		const existing = await this.abilitiesService.getAbilityById(id);
 		if (!existing) {
-			throw new NotFoundException(
-				ABILITY_ERRORS.NOT_FOUND,
-			);
+			throw new NotFoundException(ABILITY_ERRORS.NOT_FOUND);
 		}
 
 		return this.abilitiesService.deleteAbility(id);

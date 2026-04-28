@@ -179,8 +179,7 @@ describe("S3CompatibleStorageService", () => {
 			ContentType: "image/png",
 			ContentLength: undefined,
 			Metadata: {
-				originalName:
-					"%ED%95%9C%EA%B8%80-%ED%85%8C%EC%8A%A4%ED%8A%B8.png",
+				originalName: "%ED%95%9C%EA%B8%80-%ED%85%8C%EC%8A%A4%ED%8A%B8.png",
 			},
 		});
 	});

@@ -9,13 +9,13 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { InquiryMessageDto } from './inquiryMessageDto';
+import type { InquiryMessageDto } from "./inquiryMessageDto";
 
 export type SendInquiryMessage201AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: InquiryMessageDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: InquiryMessageDto;
 };

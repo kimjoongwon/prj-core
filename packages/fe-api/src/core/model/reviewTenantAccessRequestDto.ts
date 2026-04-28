@@ -11,10 +11,10 @@
  */
 
 export interface ReviewTenantAccessRequestDto {
-  /**
-   * 승인/반려 코멘트
-   * @maxLength 1000
-   * @nullable
-   */
-  reviewComment?: string | null;
+	/**
+	 * 승인/반려 코멘트
+	 * @maxLength 1000
+	 * @nullable
+	 */
+	reviewComment?: string | null;
 }

@@ -156,8 +156,8 @@ export const RoleCategoryDetailPage = observer(
 						{hasChildren ? (
 							<div className="rounded-xl bg-warning-50 p-4 dark:bg-warning-900/20">
 								<p className="text-sm text-warning-700 dark:text-warning-400">
-									<strong>참고:</strong> 하위 카테고리가 있어 삭제할 수 없습니다.
-									하위 카테고리를 먼저 삭제해주세요.
+									<strong>참고:</strong> 하위 카테고리가 있어 삭제할 수
+									없습니다. 하위 카테고리를 먼저 삭제해주세요.
 								</p>
 							</div>
 						) : null}
@@ -198,7 +198,8 @@ export const RoleCategoryDetailPage = observer(
 								<strong>{category.name}</strong> 카테고리를 삭제하시겠습니까?
 							</p>
 							<p className="mt-2 text-sm text-danger">
-								이 작업은 되돌릴 수 없습니다. 연결된 역할 분류도 함께 삭제됩니다.
+								이 작업은 되돌릴 수 없습니다. 연결된 역할 분류도 함께
+								삭제됩니다.
 							</p>
 						</ModalBody>
 						<ModalFooter>

@@ -32,9 +32,7 @@ export function resolveCurrentSpaceGroundName(
 
 export function useSpaceBootstrap<
 	TSpace extends SpaceBootstrapSpaceLike = SpaceBootstrapSpaceLike,
->(
-	options: UseSpaceBootstrapOptions<TSpace>,
-): UseSpaceBootstrapReturn<TSpace> {
+>(options: UseSpaceBootstrapOptions<TSpace>): UseSpaceBootstrapReturn<TSpace> {
 	const {
 		spaceStore,
 		isHydrated,
@@ -74,13 +72,7 @@ export function useSpaceBootstrap<
 		}
 
 		spaceStore.setSpaceSelectionResolved(true);
-	}, [
-		currentSpace,
-		isCurrentSpaceFetched,
-		isHydrated,
-		spaceStore,
-		spaces,
-	]);
+	}, [currentSpace, isCurrentSpaceFetched, isHydrated, spaceStore, spaces]);
 
 	return {
 		spaces,

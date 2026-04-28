@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { OidcProviderService } from "../../oidc/oidc-provider.service";
 import type {
 	Interaction,
@@ -32,8 +32,6 @@ export interface InteractionResult {
  */
 @Injectable()
 export class InteractionService {
-	private readonly logger = new Logger(InteractionService.name);
-
 	constructor(private readonly oidcProviderService: OidcProviderService) {}
 
 	/**

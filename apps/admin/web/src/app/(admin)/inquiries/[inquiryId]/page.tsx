@@ -24,8 +24,8 @@ import type {
 	InquiryParticipant,
 } from "@cocrepo/type";
 import {
-	type InquiryDetailPageMetaFormState,
 	InquiryDetailPage,
+	type InquiryDetailPageMetaFormState,
 	useInquiryDetailWebSocket,
 } from "@cocrepo/ui";
 import { observable } from "mobx";
@@ -130,7 +130,9 @@ export default observer(function InquiryDetailPageRoute() {
 			this.messages.push(message);
 		},
 		updateMessage(messageId: string, updates: Partial<InquiryMessage>) {
-			const index = this.messages.findIndex((message) => message.id === messageId);
+			const index = this.messages.findIndex(
+				(message) => message.id === messageId,
+			);
 			if (index >= 0) {
 				this.messages[index] = { ...this.messages[index], ...updates };
 			}
@@ -251,10 +253,14 @@ export default observer(function InquiryDetailPageRoute() {
 
 	const inquiry = inquiryResponse?.data;
 	const updateFormBootstrap = updateFormBootstrapResponse?.data;
-	const updateFormOptions = normalizeAiFormOptions(updateFormBootstrap?.options);
+	const updateFormOptions = normalizeAiFormOptions(
+		updateFormBootstrap?.options,
+	);
 	const messages = (messagesResponse?.data ?? []).map(mapMessageToStore);
 	const participantRows =
-		(participantsResponse?.data as Array<Record<string, unknown>> | undefined) ??
+		(participantsResponse?.data as
+			| Array<Record<string, unknown>>
+			| undefined) ??
 		(inquiry?.participants as Array<Record<string, unknown>> | undefined) ??
 		[];
 	const participants = participantRows.map((participant) =>
@@ -295,7 +301,8 @@ export default observer(function InquiryDetailPageRoute() {
 			role,
 			isOnline: participant.isOnline,
 			isTyping:
-				inquiryState.typingUsers.has(participant.userId) || participant.isTyping,
+				inquiryState.typingUsers.has(participant.userId) ||
+				participant.isTyping,
 		};
 	});
 
@@ -401,10 +408,7 @@ export default observer(function InquiryDetailPageRoute() {
 			}}
 			onClickEditButton={() => {
 				router.push(
-					ADMIN_PATHS.INQUIRIES_EDIT.replace(
-						"[inquiryId]",
-						inquiryId,
-					) as Route,
+					ADMIN_PATHS.INQUIRIES_EDIT.replace("[inquiryId]", inquiryId) as Route,
 				);
 			}}
 			onOpenDeleteModal={() => {
@@ -543,7 +547,9 @@ export default observer(function InquiryDetailPageRoute() {
 							},
 						});
 						const patches = result?.data?.patches ?? [];
-						const contentPatch = patches.find((patch) => patch.path === "content");
+						const contentPatch = patches.find(
+							(patch) => patch.path === "content",
+						);
 						if (typeof contentPatch?.value === "string") {
 							inquiryState.setReplyContent(contentPatch.value);
 						}

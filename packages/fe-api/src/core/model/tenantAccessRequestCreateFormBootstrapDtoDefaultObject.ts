@@ -13,4 +13,6 @@
 /**
  * 초기 폼 객체
  */
-export type TenantAccessRequestCreateFormBootstrapDtoDefaultObject = { [key: string]: unknown };
+export type TenantAccessRequestCreateFormBootstrapDtoDefaultObject = {
+	[key: string]: unknown;
+};

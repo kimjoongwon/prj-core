@@ -53,7 +53,8 @@ export const ADMIN_CRUD_BUNDLES: AdminCrudBundle[] = [
 		groupLabel: "회원",
 		bundleLabel: "회원 데이터",
 		subject: "entity:User",
-		description: "회원 생성, 조회, 수정, 삭제, 전체 관리 권한을 묶어 편집합니다.",
+		description:
+			"회원 생성, 조회, 수정, 삭제, 전체 관리 권한을 묶어 편집합니다.",
 		actions: CRUD_ACTIONS,
 	},
 	{
@@ -122,9 +123,10 @@ function pathPatternToRegExp(pathPattern: string): RegExp {
 
 const PAGE_ACCESS_MATCHERS = [...ADMIN_PAGE_ACCESS_ITEMS]
 	.sort((left, right) => {
-		const leftDynamicCount = (left.pathPattern.match(/\[[^/]+\]/g) ?? []).length;
-		const rightDynamicCount =
-			(right.pathPattern.match(/\[[^/]+\]/g) ?? []).length;
+		const leftDynamicCount = (left.pathPattern.match(/\[[^/]+\]/g) ?? [])
+			.length;
+		const rightDynamicCount = (right.pathPattern.match(/\[[^/]+\]/g) ?? [])
+			.length;
 
 		if (leftDynamicCount !== rightDynamicCount) {
 			return leftDynamicCount - rightDynamicCount;
@@ -138,7 +140,8 @@ const PAGE_ACCESS_MATCHERS = [...ADMIN_PAGE_ACCESS_ITEMS]
 	}));
 
 export function matchAdminPageAccessItem(pathname: string) {
-	return PAGE_ACCESS_MATCHERS.find((entry) => entry.regExp.test(pathname))?.item;
+	return PAGE_ACCESS_MATCHERS.find((entry) => entry.regExp.test(pathname))
+		?.item;
 }
 
 export const ADMIN_MENU_PERMISSION_GROUPS = Array.from(

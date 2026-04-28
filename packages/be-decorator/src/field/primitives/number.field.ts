@@ -62,13 +62,9 @@ export function NumberField(
 				type: "number",
 				...options,
 				minimum:
-					typeof options.minimum === "number"
-						? options.minimum
-						: validationMin,
+					typeof options.minimum === "number" ? options.minimum : validationMin,
 				maximum:
-					typeof options.maximum === "number"
-						? options.maximum
-						: validationMax,
+					typeof options.maximum === "number" ? options.maximum : validationMax,
 			}),
 		);
 	}

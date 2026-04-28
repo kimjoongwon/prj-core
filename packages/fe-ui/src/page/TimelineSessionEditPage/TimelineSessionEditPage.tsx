@@ -198,7 +198,9 @@ export const TimelineSessionEditPage = observer(
 												<Select
 													label="반복 요일"
 													labelPlacement="outside"
-													selectedKeys={recurringDayOfWeek ? [recurringDayOfWeek] : []}
+													selectedKeys={
+														recurringDayOfWeek ? [recurringDayOfWeek] : []
+													}
 													onSelectionChange={(keys) => {
 														const value = Array.from(keys)[0] as string;
 														if (value) onChangeDayOfWeekSelect(value);
@@ -209,13 +211,17 @@ export const TimelineSessionEditPage = observer(
 													className="flex-1"
 												>
 													{DAY_OF_WEEK_OPTIONS.map((option) => (
-														<SelectItem key={option.value}>{option.label}</SelectItem>
+														<SelectItem key={option.value}>
+															{option.label}
+														</SelectItem>
 													))}
 												</Select>
 												<Select
 													label="반복 주기"
 													labelPlacement="outside"
-													selectedKeys={repeatCycleType ? [repeatCycleType] : []}
+													selectedKeys={
+														repeatCycleType ? [repeatCycleType] : []
+													}
 													onSelectionChange={(keys) => {
 														const value = Array.from(keys)[0] as string;
 														if (value) onChangeCycleTypeSelect(value);
@@ -226,7 +232,9 @@ export const TimelineSessionEditPage = observer(
 													className="flex-1"
 												>
 													{CYCLE_TYPE_OPTIONS.map((option) => (
-														<SelectItem key={option.value}>{option.label}</SelectItem>
+														<SelectItem key={option.value}>
+															{option.label}
+														</SelectItem>
 													))}
 												</Select>
 											</div>

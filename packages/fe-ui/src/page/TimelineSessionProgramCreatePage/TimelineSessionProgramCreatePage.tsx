@@ -147,7 +147,10 @@ export const TimelineSessionProgramCreatePage = observer(
 										errorMessage={errors.routineId}
 										description="모달에서 루틴을 선택하세요."
 									/>
-									<Button variant="flat" onPress={onClickOpenRoutinePickerButton}>
+									<Button
+										variant="flat"
+										onPress={onClickOpenRoutinePickerButton}
+									>
 										루틴 선택
 									</Button>
 								</div>
@@ -227,7 +230,8 @@ export const TimelineSessionProgramCreatePage = observer(
 									)}
 									{hasUnschedulableRoutine ? (
 										<p className="mt-3 text-sm text-warning">
-											영상이 없는 운동이 포함되어 있어 저장 버튼이 비활성화됩니다.
+											영상이 없는 운동이 포함되어 있어 저장 버튼이
+											비활성화됩니다.
 										</p>
 									) : null}
 								</div>

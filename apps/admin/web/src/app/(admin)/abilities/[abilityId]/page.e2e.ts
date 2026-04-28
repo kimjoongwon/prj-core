@@ -23,7 +23,11 @@ test.describe("권한 상세 페이지", () => {
 		await gotoAbilitiesPage(page);
 
 		// When: 첫 번째 목록 행을 클릭
-		const firstRow = page.locator('[role="rowgroup"]').nth(1).getByRole("row").first();
+		const firstRow = page
+			.locator('[role="rowgroup"]')
+			.nth(1)
+			.getByRole("row")
+			.first();
 		await expect(firstRow).toBeVisible({
 			timeout: ROUTE_READY_TIMEOUT,
 		});

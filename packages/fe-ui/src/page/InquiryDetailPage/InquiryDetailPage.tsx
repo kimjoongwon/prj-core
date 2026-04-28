@@ -407,9 +407,7 @@ export const InquiryDetailPage = observer(
 													placeholder="카테고리 선택"
 													selectedKeys={
 														metaFormState.category &&
-														editCategoryOptionValues.has(
-															metaFormState.category,
-														)
+														editCategoryOptionValues.has(metaFormState.category)
 															? [metaFormState.category]
 															: []
 													}
@@ -433,9 +431,7 @@ export const InquiryDetailPage = observer(
 													placeholder="우선순위 선택"
 													selectedKeys={
 														metaFormState.priority &&
-														editPriorityOptionValues.has(
-															metaFormState.priority,
-														)
+														editPriorityOptionValues.has(metaFormState.priority)
 															? [metaFormState.priority]
 															: []
 													}

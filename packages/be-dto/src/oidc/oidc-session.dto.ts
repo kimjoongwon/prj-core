@@ -1,4 +1,9 @@
-import { DateField, StringField, StringFieldOptional, UUIDField } from "@cocrepo/decorator";
+import {
+	DateField,
+	StringField,
+	StringFieldOptional,
+	UUIDField,
+} from "@cocrepo/decorator";
 
 export class OidcSessionDto {
 	@UUIDField()
@@ -7,7 +12,9 @@ export class OidcSessionDto {
 	@StringField({ description: "모델 키 (jti 또는 uid)" })
 	key: string;
 
-	@StringField({ description: "모델 타입 (AccessToken, RefreshToken, Session 등)" })
+	@StringField({
+		description: "모델 타입 (AccessToken, RefreshToken, Session 등)",
+	})
 	modelType: string;
 
 	@StringFieldOptional({ description: "Grant ID (토큰 폐기용)" })

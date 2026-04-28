@@ -73,147 +73,155 @@ export interface InquiryEditPageProps {
 	onClickSubmitButton: () => void;
 }
 
-export const InquiryEditPage = observer(({
-	formState,
-	bootstrap,
-	categoryOptions,
-	priorityOptions,
-	isSubmitting,
-	onClickBackButton,
-	onFillAiForm,
-	onApplyAiPatch,
-	onChangeTitleInput,
-	onChangeCategorySelection,
-	onChangePrioritySelection,
-	onClickCancelButton,
-	onClickSubmitButton,
-}: InquiryEditPageProps) => {
-	const categoryOptionValues = new Set(
-		categoryOptions.map((option) => option.value),
-	);
-	const priorityOptionValues = new Set(
-		priorityOptions.map((option) => option.value),
-	);
+export const InquiryEditPage = observer(
+	({
+		formState,
+		bootstrap,
+		categoryOptions,
+		priorityOptions,
+		isSubmitting,
+		onClickBackButton,
+		onFillAiForm,
+		onApplyAiPatch,
+		onChangeTitleInput,
+		onChangeCategorySelection,
+		onChangePrioritySelection,
+		onClickCancelButton,
+		onClickSubmitButton,
+	}: InquiryEditPageProps) => {
+		const categoryOptionValues = new Set(
+			categoryOptions.map((option) => option.value),
+		);
+		const priorityOptionValues = new Set(
+			priorityOptions.map((option) => option.value),
+		);
 
-	return (
-		<FormPage
-			top={
-				<PageTitleBar
-					title="문의 수정"
-					description="문의 메타 정보를 수정하고 AiForm으로 추천 값을 반영합니다."
-					actions={
-						<Button
-							variant="flat"
-							startContent={<ArrowLeft className="size-4" />}
-							onPress={onClickBackButton}
-							isDisabled={isSubmitting}
-						>
-							상세로
-						</Button>
-					}
-				/>
-			}
-		>
-			<FormPageSurface>
-				<VStack gap={4}>
-					{bootstrap && (
+		return (
+			<FormPage
+				top={
+					<PageTitleBar
+						title="문의 수정"
+						description="문의 메타 정보를 수정하고 AiForm으로 추천 값을 반영합니다."
+						actions={
+							<Button
+								variant="flat"
+								startContent={<ArrowLeft className="size-4" />}
+								onPress={onClickBackButton}
+								isDisabled={isSubmitting}
+							>
+								상세로
+							</Button>
+						}
+					/>
+				}
+			>
+				<FormPageSurface>
+					<VStack gap={4}>
+						{bootstrap && (
+							<FormSectionCard>
+								<FormSection
+									top={<PageTitleBar level={2} title="AI 폼 추천" />}
+								>
+									<AiForm
+										formState={{
+											title: formState.title,
+											category: formState.category,
+											priority: formState.priority,
+										}}
+										fieldMeta={bootstrap.fieldMeta}
+										aiSchemas={bootstrap.aiSchemas}
+										ui={bootstrap.ui}
+										options={bootstrap.options}
+										onFill={onFillAiForm}
+										applyPatch={onApplyAiPatch}
+										disabled={isSubmitting}
+									/>
+								</FormSection>
+							</FormSectionCard>
+						)}
 						<FormSectionCard>
-							<FormSection top={<PageTitleBar level={2} title="AI 폼 추천" />}>
-								<AiForm
-									formState={{
-										title: formState.title,
-										category: formState.category,
-										priority: formState.priority,
-									}}
-									fieldMeta={bootstrap.fieldMeta}
-									aiSchemas={bootstrap.aiSchemas}
-									ui={bootstrap.ui}
-									options={bootstrap.options}
-									onFill={onFillAiForm}
-									applyPatch={onApplyAiPatch}
-									disabled={isSubmitting}
-								/>
+							<FormSection top={<PageTitleBar level={2} title="문의 입력" />}>
+								<VStack gap={4}>
+									<Input
+										label="문의 제목"
+										labelPlacement="outside"
+										value={formState.title}
+										onValueChange={onChangeTitleInput}
+										isInvalid={Boolean(formState.error)}
+										errorMessage={formState.error}
+									/>
+									<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+										<Select
+											label="카테고리"
+											placeholder="카테고리 선택"
+											selectedKeys={
+												formState.category &&
+												categoryOptionValues.has(formState.category)
+													? [formState.category]
+													: []
+											}
+											onSelectionChange={(keys) => {
+												const selectedValue = getSelectedValue(keys);
+												if (selectedValue) {
+													onChangeCategorySelection(
+														selectedValue as InquiryCategory,
+													);
+												}
+											}}
+										>
+											{categoryOptions.map((option) => (
+												<SelectItem key={option.value}>
+													{option.label}
+												</SelectItem>
+											))}
+										</Select>
+										<Select
+											label="우선순위"
+											placeholder="우선순위 선택"
+											selectedKeys={
+												formState.priority &&
+												priorityOptionValues.has(formState.priority)
+													? [formState.priority]
+													: []
+											}
+											onSelectionChange={(keys) => {
+												const selectedValue = getSelectedValue(keys);
+												if (selectedValue) {
+													onChangePrioritySelection(
+														selectedValue as InquiryPriority,
+													);
+												}
+											}}
+										>
+											{priorityOptions.map((option) => (
+												<SelectItem key={option.value}>
+													{option.label}
+												</SelectItem>
+											))}
+										</Select>
+									</div>
+									<div className="flex justify-end gap-2">
+										<Button
+											variant="light"
+											onPress={onClickCancelButton}
+											isDisabled={isSubmitting}
+										>
+											취소
+										</Button>
+										<Button
+											color="primary"
+											onPress={onClickSubmitButton}
+											isLoading={isSubmitting}
+										>
+											저장
+										</Button>
+									</div>
+								</VStack>
 							</FormSection>
 						</FormSectionCard>
-					)}
-					<FormSectionCard>
-						<FormSection top={<PageTitleBar level={2} title="문의 입력" />}>
-							<VStack gap={4}>
-								<Input
-									label="문의 제목"
-									labelPlacement="outside"
-									value={formState.title}
-									onValueChange={onChangeTitleInput}
-									isInvalid={Boolean(formState.error)}
-									errorMessage={formState.error}
-								/>
-								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-									<Select
-										label="카테고리"
-										placeholder="카테고리 선택"
-										selectedKeys={
-											formState.category &&
-											categoryOptionValues.has(formState.category)
-												? [formState.category]
-												: []
-										}
-										onSelectionChange={(keys) => {
-											const selectedValue = getSelectedValue(keys);
-											if (selectedValue) {
-												onChangeCategorySelection(
-													selectedValue as InquiryCategory,
-												);
-											}
-										}}
-									>
-										{categoryOptions.map((option) => (
-											<SelectItem key={option.value}>{option.label}</SelectItem>
-										))}
-									</Select>
-									<Select
-										label="우선순위"
-										placeholder="우선순위 선택"
-										selectedKeys={
-											formState.priority &&
-											priorityOptionValues.has(formState.priority)
-												? [formState.priority]
-												: []
-										}
-										onSelectionChange={(keys) => {
-											const selectedValue = getSelectedValue(keys);
-											if (selectedValue) {
-												onChangePrioritySelection(
-													selectedValue as InquiryPriority,
-												);
-											}
-										}}
-									>
-										{priorityOptions.map((option) => (
-											<SelectItem key={option.value}>{option.label}</SelectItem>
-										))}
-									</Select>
-								</div>
-								<div className="flex justify-end gap-2">
-									<Button
-										variant="light"
-										onPress={onClickCancelButton}
-										isDisabled={isSubmitting}
-									>
-										취소
-									</Button>
-									<Button
-										color="primary"
-										onPress={onClickSubmitButton}
-										isLoading={isSubmitting}
-									>
-										저장
-									</Button>
-								</div>
-							</VStack>
-						</FormSection>
-					</FormSectionCard>
-				</VStack>
-			</FormPageSurface>
-		</FormPage>
-	);
-});
+					</VStack>
+				</FormPageSurface>
+			</FormPage>
+		);
+	},
+);

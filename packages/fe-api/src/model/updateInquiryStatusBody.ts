@@ -9,9 +9,9 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { UpdateInquiryStatusBodyStatus } from './updateInquiryStatusBodyStatus';
+import type { UpdateInquiryStatusBodyStatus } from "./updateInquiryStatusBodyStatus";
 
 export type UpdateInquiryStatusBody = {
-  /** 변경할 상태 */
-  status: UpdateInquiryStatusBodyStatus;
+	/** 변경할 상태 */
+	status: UpdateInquiryStatusBodyStatus;
 };

@@ -1,6 +1,12 @@
-import { expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
+
+const SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
 
 test.describe("문의 접수 페이지", () => {
+	test.beforeEach(async ({ page }) => {
+		await mockInquiryCreateShell(page);
+	});
+
 	test.describe("[E2E-001] 접수 폼 렌더링", () => {
 		test("문의 접수 페이지가 정상 렌더링되어야 한다", async ({ page }) => {
 			// Given: 문의 접수 페이지 진입
@@ -58,3 +64,105 @@ test.describe("문의 접수 페이지", () => {
 		});
 	});
 });
+
+async function mockInquiryCreateShell(page: Page) {
+	await page.addInitScript(
+		({ spaceId }) => {
+			window.localStorage.setItem(
+				"admin-persist",
+				JSON.stringify({
+					spaceId,
+					groundName: "플랫폼 운영본부",
+					spaces: [{ spaceId, groundName: "플랫폼 운영본부" }],
+					accessTokenExpiresAt: Date.now() + 60 * 60 * 1000,
+					refreshTokenExpiresAt: Date.now() + 2 * 60 * 60 * 1000,
+				}),
+			);
+		},
+		{ spaceId: SPACE_ID },
+	);
+	await page.route("**/api/v1/auth/verify-token**", async (route) => {
+		await route.fulfill({
+			status: 200,
+			contentType: "application/json",
+			body: JSON.stringify({
+				data: {
+					valid: true,
+					hasFullAccess: true,
+				},
+			}),
+		});
+	});
+	await page.route("**/api/v1/auth/current-space**", async (route) => {
+		await route.fulfill({
+			status: 200,
+			contentType: "application/json",
+			body: JSON.stringify({
+				data: {
+					id: SPACE_ID,
+					ground: { name: "플랫폼 운영본부" },
+				},
+			}),
+		});
+	});
+	await page.route("**/api/v1/auth/my-spaces**", async (route) => {
+		await route.fulfill({
+			status: 200,
+			contentType: "application/json",
+			body: JSON.stringify({
+				data: [
+					{
+						id: SPACE_ID,
+						ground: { name: "플랫폼 운영본부" },
+					},
+				],
+			}),
+		});
+	});
+	await page.route("**/api/v1/abilities**", async (route) => {
+		await route.fulfill({
+			status: 200,
+			contentType: "application/json",
+			body: JSON.stringify({
+				data: [],
+				meta: { total: 0 },
+			}),
+		});
+	});
+	await page.route("**/api/v1/inquiries/form/create**", async (route) => {
+		await route.fulfill({
+			status: 200,
+			contentType: "application/json",
+			body: JSON.stringify({
+				data: {
+					mode: "CREATE",
+					defaultObject: {
+						title: "",
+						content: "",
+						category: "GENERAL",
+						channel: "WEB",
+						priority: "NORMAL",
+					},
+					options: {
+						category: [{ value: "GENERAL", label: "일반" }],
+						channel: [{ value: "WEB", label: "웹" }],
+						priority: [{ value: "NORMAL", label: "보통" }],
+					},
+					ui: {
+						readOnlyPaths: [],
+						hiddenPaths: [],
+						disabledPaths: [],
+					},
+					fieldMeta: {},
+					aiSchemas: [
+						{
+							key: "inquiry-basic",
+							label: "문의 기본 정보",
+							paths: ["title", "content", "category", "priority"],
+						},
+					],
+				},
+			}),
+		});
+	});
+}

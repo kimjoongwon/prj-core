@@ -98,9 +98,7 @@ export class GroupsRepository {
 	 * 그룹에 연결된 RoleAssociation 수 조회
 	 */
 	async countRoleAssociationsByGroupId(groupId: string): Promise<number> {
-		this.logger.debug(
-			`그룹에 연결된 역할 수 조회: ${groupId.slice(-8)}`,
-		);
+		this.logger.debug(`그룹에 연결된 역할 수 조회: ${groupId.slice(-8)}`);
 
 		return this.txHost.tx.roleAssociation.count({
 			where: { groupId },

@@ -1,5 +1,5 @@
-import { ValidationPipe, type ArgumentMetadata } from "@nestjs/common";
 import { AssetQueryDto } from "@cocrepo/dto";
+import { type ArgumentMetadata, ValidationPipe } from "@nestjs/common";
 
 describe("AssetQueryDto", () => {
 	const pipe = new ValidationPipe({
@@ -28,13 +28,14 @@ describe("AssetQueryDto", () => {
 		expect(query).toBeInstanceOf(AssetQueryDto);
 		expect(query.skip).toBe(0);
 		expect(query.take).toBe(20);
-		expect(query.toPrismaWhere({ spaceId: "61ddca20-1752-466e-b4da-879ebdbe54e3" }))
-			.toEqual({
-				spaceId: "61ddca20-1752-466e-b4da-879ebdbe54e3",
-				folderId: "da004091-8d08-4878-bf35-251a04608868",
-				kind: "IMAGE",
-				status: "READY",
-				removedAt: null,
-			});
+		expect(
+			query.toPrismaWhere({ spaceId: "61ddca20-1752-466e-b4da-879ebdbe54e3" }),
+		).toEqual({
+			spaceId: "61ddca20-1752-466e-b4da-879ebdbe54e3",
+			folderId: "da004091-8d08-4878-bf35-251a04608868",
+			kind: "IMAGE",
+			status: "READY",
+			removedAt: null,
+		});
 	});
 });

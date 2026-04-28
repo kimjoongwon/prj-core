@@ -2,24 +2,21 @@
  * Generated API client module for translations.
  * Do not edit manually.
  */
-import {
-  useMutation,
-  useQuery,
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-} from '@tanstack/react-query';
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	MutationFunction,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseMutationOptions,
+	UseMutationResult,
+	UseQueryOptions,
+	UseQueryResult,
+} from "@tanstack/react-query";
 
 import type { CreateTranslation201AllOf } from "../../model/createTranslation201AllOf";
 import type { CreateTranslationDto } from "../../model/createTranslationDto";
@@ -45,521 +42,835 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  * @summary 번역 목록 조회
  */
 export const getTranslations = (
-    params?: GetTranslationsParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	params?: GetTranslationsParams,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetTranslations200AllOf>(
-      {url: `/api/v1/translations`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
+	return customInstance<GetTranslations200AllOf>(
+		{ url: `/api/v1/translations`, method: "GET", params, signal },
+		options,
+	);
+};
 
-export const getGetTranslationsQueryKey = (params?: GetTranslationsParams,) => {
-    return [
-    `/api/v1/translations`, ...(params ? [params]: [])
-    ] as const;
-    }
+export const getGetTranslationsQueryKey = (params?: GetTranslationsParams) => {
+	return [`/api/v1/translations`, ...(params ? [params] : [])] as const;
+};
 
-export const getGetTranslationsQueryOptions = <TData = Awaited<ReturnType<typeof getTranslations>>, TError = ErrorType<void>>(params?: GetTranslationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTranslations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTranslationsQueryOptions = <
+	TData = Awaited<ReturnType<typeof getTranslations>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTranslationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTranslations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetTranslationsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTranslationsQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getTranslations>>> = ({
+		signal,
+	}) => getTranslations(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getTranslations>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTranslations>>> = ({ signal }) => getTranslations(params, requestOptions, signal);
+export type GetTranslationsQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getTranslations>>
+>;
 
-      
+export type GetTranslationsQueryError = ErrorType<void>;
 
-      
+export function useGetTranslations<
+	TData = Awaited<ReturnType<typeof getTranslations>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetTranslationsParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTranslations>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getTranslations>>,
+					TError,
+					Awaited<ReturnType<typeof getTranslations>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTranslations>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
+export function useGetTranslations<
+	TData = Awaited<ReturnType<typeof getTranslations>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTranslationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTranslations>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getTranslations>>,
+					TError,
+					Awaited<ReturnType<typeof getTranslations>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 
-export type GetTranslationsQueryResult = NonNullable<Awaited<ReturnType<typeof getTranslations>>>
-
-export type GetTranslationsQueryError = ErrorType<void>
-
-export function useGetTranslations<TData = Awaited<ReturnType<typeof getTranslations>>, TError = ErrorType<void>>(
- params: undefined |  GetTranslationsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTranslations>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getTranslations>>,
-          TError,
-          Awaited<ReturnType<typeof getTranslations>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetTranslations<TData = Awaited<ReturnType<typeof getTranslations>>, TError = ErrorType<void>>(
- params?: GetTranslationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTranslations>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getTranslations>>,
-          TError,
-          Awaited<ReturnType<typeof getTranslations>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetTranslations<TData = Awaited<ReturnType<typeof getTranslations>>, TError = ErrorType<void>>(
- params?: GetTranslationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTranslations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTranslations<
+	TData = Awaited<ReturnType<typeof getTranslations>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTranslationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTranslations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 
 /**
  * @summary 번역 목록 조회
  */
 
-export function useGetTranslations<TData = Awaited<ReturnType<typeof getTranslations>>, TError = ErrorType<void>>(
- params?: GetTranslationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTranslations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetTranslations<
+	TData = Awaited<ReturnType<typeof getTranslations>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTranslationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTranslations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetTranslationsQueryOptions(params, options);
 
-  const queryOptions = getGetTranslationsQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 번역 목록 조회
  */
-export const prefetchGetTranslationsQuery = async <TData = Awaited<ReturnType<typeof getTranslations>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetTranslationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTranslations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetTranslationsQuery = async <
+	TData = Awaited<ReturnType<typeof getTranslations>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetTranslationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTranslations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetTranslationsQueryOptions(params, options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetTranslationsQueryOptions(params,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
+	return queryClient;
+};
 
 /**
  * 새로운 번역을 생성합니다. FULL_ACCESS 전용.
  * @summary 번역 생성
  */
 export const createTranslation = (
-    createTranslationDto: BodyType<CreateTranslationDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	createTranslationDto: BodyType<CreateTranslationDto>,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<CreateTranslation201AllOf>(
-      {url: `/api/v1/translations`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createTranslationDto, signal
-    },
-      options);
-    }
+	return customInstance<CreateTranslation201AllOf>(
+		{
+			url: `/api/v1/translations`,
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			data: createTranslationDto,
+			signal,
+		},
+		options,
+	);
+};
 
-export const getCreateTranslationMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTranslation>>, TError,{data: BodyType<CreateTranslationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createTranslation>>, TError,{data: BodyType<CreateTranslationDto>}, TContext> => {
+export const getCreateTranslationMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof createTranslation>>,
+		TError,
+		{ data: BodyType<CreateTranslationDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof createTranslation>>,
+	TError,
+	{ data: BodyType<CreateTranslationDto> },
+	TContext
+> => {
+	const mutationKey = ["createTranslation"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-const mutationKey = ['createTranslation'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof createTranslation>>,
+		{ data: BodyType<CreateTranslationDto> }
+	> = (props) => {
+		const { data } = props ?? {};
 
-      
+		return createTranslation(data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createTranslation>>, {data: BodyType<CreateTranslationDto>}> = (props) => {
-          const {data} = props ?? {};
+export type CreateTranslationMutationResult = NonNullable<
+	Awaited<ReturnType<typeof createTranslation>>
+>;
 
-          return  createTranslation(data,requestOptions)
-        }
+export type CreateTranslationMutationBody = BodyType<CreateTranslationDto>;
 
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-export type CreateTranslationMutationResult = NonNullable<Awaited<ReturnType<typeof createTranslation>>>
-
-export type CreateTranslationMutationBody = BodyType<CreateTranslationDto>
-
-export type CreateTranslationMutationError = ErrorType<void>
+export type CreateTranslationMutationError = ErrorType<void>;
 
 /**
  * @summary 번역 생성
  */
-export const useCreateTranslation = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTranslation>>, TError,{data: BodyType<CreateTranslationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createTranslation>>,
-        TError,
-        {data: BodyType<CreateTranslationDto>},
-        TContext
-      > => {
+export const useCreateTranslation = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof createTranslation>>,
+			TError,
+			{ data: BodyType<CreateTranslationDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof createTranslation>>,
+	TError,
+	{ data: BodyType<CreateTranslationDto> },
+	TContext
+> => {
+	const mutationOptions = getCreateTranslationMutationOptions(options);
 
-      const mutationOptions = getCreateTranslationMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
+	return useMutation(mutationOptions, queryClient);
+};
 
 /**
  * ID로 특정 번역을 조회합니다. FULL_ACCESS 전용.
  * @summary 번역 조회
  */
 export const getTranslationById = (
-    id: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	id: string,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetTranslationById200AllOf>(
-      {url: `/api/v1/translations/${id}`, method: 'GET', signal
-    },
-      options);
-    }
+	return customInstance<GetTranslationById200AllOf>(
+		{ url: `/api/v1/translations/${id}`, method: "GET", signal },
+		options,
+	);
+};
 
-export const getGetTranslationByIdQueryKey = (id?: string,) => {
-    return [
-    `/api/v1/translations/${id}`
-    ] as const;
-    }
+export const getGetTranslationByIdQueryKey = (id?: string) => {
+	return [`/api/v1/translations/${id}`] as const;
+};
 
-export const getGetTranslationByIdQueryOptions = <TData = Awaited<ReturnType<typeof getTranslationById>>, TError = ErrorType<void>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTranslationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTranslationByIdQueryOptions = <
+	TData = Awaited<ReturnType<typeof getTranslationById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTranslationById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetTranslationByIdQueryKey(id);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTranslationByIdQueryKey(id);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getTranslationById>>
+	> = ({ signal }) => getTranslationById(id, requestOptions, signal);
 
-  
+	return {
+		queryKey,
+		queryFn,
+		enabled: !!id,
+		...queryOptions,
+	} as UseQueryOptions<
+		Awaited<ReturnType<typeof getTranslationById>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTranslationById>>> = ({ signal }) => getTranslationById(id, requestOptions, signal);
+export type GetTranslationByIdQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getTranslationById>>
+>;
 
-      
+export type GetTranslationByIdQueryError = ErrorType<void>;
 
-      
+export function useGetTranslationById<
+	TData = Awaited<ReturnType<typeof getTranslationById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTranslationById>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getTranslationById>>,
+					TError,
+					Awaited<ReturnType<typeof getTranslationById>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTranslationById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
+export function useGetTranslationById<
+	TData = Awaited<ReturnType<typeof getTranslationById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTranslationById>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getTranslationById>>,
+					TError,
+					Awaited<ReturnType<typeof getTranslationById>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 
-export type GetTranslationByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getTranslationById>>>
-
-export type GetTranslationByIdQueryError = ErrorType<void>
-
-export function useGetTranslationById<TData = Awaited<ReturnType<typeof getTranslationById>>, TError = ErrorType<void>>(
- id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTranslationById>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getTranslationById>>,
-          TError,
-          Awaited<ReturnType<typeof getTranslationById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetTranslationById<TData = Awaited<ReturnType<typeof getTranslationById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTranslationById>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getTranslationById>>,
-          TError,
-          Awaited<ReturnType<typeof getTranslationById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetTranslationById<TData = Awaited<ReturnType<typeof getTranslationById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTranslationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTranslationById<
+	TData = Awaited<ReturnType<typeof getTranslationById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTranslationById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 
 /**
  * @summary 번역 조회
  */
 
-export function useGetTranslationById<TData = Awaited<ReturnType<typeof getTranslationById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTranslationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetTranslationById<
+	TData = Awaited<ReturnType<typeof getTranslationById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTranslationById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetTranslationByIdQueryOptions(id, options);
 
-  const queryOptions = getGetTranslationByIdQueryOptions(id,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 번역 조회
  */
-export const prefetchGetTranslationByIdQuery = async <TData = Awaited<ReturnType<typeof getTranslationById>>, TError = ErrorType<void>>(
- queryClient: QueryClient, id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTranslationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetTranslationByIdQuery = async <
+	TData = Awaited<ReturnType<typeof getTranslationById>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	id: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTranslationById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetTranslationByIdQueryOptions(id, options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetTranslationByIdQueryOptions(id,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
+	return queryClient;
+};
 
 /**
  * 기존 번역을 수정합니다. FULL_ACCESS 전용.
  * @summary 번역 수정
  */
 export const updateTranslation = (
-    id: string,
-    updateTranslationDto: BodyType<UpdateTranslationDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdateTranslation200AllOf>(
-      {url: `/api/v1/translations/${id}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateTranslationDto
-    },
-      options);
-    }
+	id: string,
+	updateTranslationDto: BodyType<UpdateTranslationDto>,
+	options?: SecondParameter<typeof customInstance>,
+) => {
+	return customInstance<UpdateTranslation200AllOf>(
+		{
+			url: `/api/v1/translations/${id}`,
+			method: "PATCH",
+			headers: { "Content-Type": "application/json" },
+			data: updateTranslationDto,
+		},
+		options,
+	);
+};
 
-export const getUpdateTranslationMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTranslation>>, TError,{id: string;data: BodyType<UpdateTranslationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateTranslation>>, TError,{id: string;data: BodyType<UpdateTranslationDto>}, TContext> => {
+export const getUpdateTranslationMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof updateTranslation>>,
+		TError,
+		{ id: string; data: BodyType<UpdateTranslationDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof updateTranslation>>,
+	TError,
+	{ id: string; data: BodyType<UpdateTranslationDto> },
+	TContext
+> => {
+	const mutationKey = ["updateTranslation"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-const mutationKey = ['updateTranslation'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof updateTranslation>>,
+		{ id: string; data: BodyType<UpdateTranslationDto> }
+	> = (props) => {
+		const { id, data } = props ?? {};
 
-      
+		return updateTranslation(id, data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateTranslation>>, {id: string;data: BodyType<UpdateTranslationDto>}> = (props) => {
-          const {id,data} = props ?? {};
+export type UpdateTranslationMutationResult = NonNullable<
+	Awaited<ReturnType<typeof updateTranslation>>
+>;
 
-          return  updateTranslation(id,data,requestOptions)
-        }
+export type UpdateTranslationMutationBody = BodyType<UpdateTranslationDto>;
 
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-export type UpdateTranslationMutationResult = NonNullable<Awaited<ReturnType<typeof updateTranslation>>>
-
-export type UpdateTranslationMutationBody = BodyType<UpdateTranslationDto>
-
-export type UpdateTranslationMutationError = ErrorType<void>
+export type UpdateTranslationMutationError = ErrorType<void>;
 
 /**
  * @summary 번역 수정
  */
-export const useUpdateTranslation = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTranslation>>, TError,{id: string;data: BodyType<UpdateTranslationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateTranslation>>,
-        TError,
-        {id: string;data: BodyType<UpdateTranslationDto>},
-        TContext
-      > => {
+export const useUpdateTranslation = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof updateTranslation>>,
+			TError,
+			{ id: string; data: BodyType<UpdateTranslationDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof updateTranslation>>,
+	TError,
+	{ id: string; data: BodyType<UpdateTranslationDto> },
+	TContext
+> => {
+	const mutationOptions = getUpdateTranslationMutationOptions(options);
 
-      const mutationOptions = getUpdateTranslationMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
+	return useMutation(mutationOptions, queryClient);
+};
 
 /**
  * 번역을 삭제합니다. FULL_ACCESS 전용.
  * @summary 번역 삭제
  */
 export const deleteTranslation = (
-    id: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<unknown>(
-      {url: `/api/v1/translations/${id}`, method: 'DELETE'
-    },
-      options);
-    }
+	id: string,
+	options?: SecondParameter<typeof customInstance>,
+) => {
+	return customInstance<unknown>(
+		{ url: `/api/v1/translations/${id}`, method: "DELETE" },
+		options,
+	);
+};
 
-export const getDeleteTranslationMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTranslation>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteTranslation>>, TError,{id: string}, TContext> => {
+export const getDeleteTranslationMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof deleteTranslation>>,
+		TError,
+		{ id: string },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof deleteTranslation>>,
+	TError,
+	{ id: string },
+	TContext
+> => {
+	const mutationKey = ["deleteTranslation"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-const mutationKey = ['deleteTranslation'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof deleteTranslation>>,
+		{ id: string }
+	> = (props) => {
+		const { id } = props ?? {};
 
-      
+		return deleteTranslation(id, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteTranslation>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
+export type DeleteTranslationMutationResult = NonNullable<
+	Awaited<ReturnType<typeof deleteTranslation>>
+>;
 
-          return  deleteTranslation(id,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-export type DeleteTranslationMutationResult = NonNullable<Awaited<ReturnType<typeof deleteTranslation>>>
-
-export type DeleteTranslationMutationError = ErrorType<void>
+export type DeleteTranslationMutationError = ErrorType<void>;
 
 /**
  * @summary 번역 삭제
  */
-export const useDeleteTranslation = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTranslation>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deleteTranslation>>,
-        TError,
-        {id: string},
-        TContext
-      > => {
+export const useDeleteTranslation = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof deleteTranslation>>,
+			TError,
+			{ id: string },
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof deleteTranslation>>,
+	TError,
+	{ id: string },
+	TContext
+> => {
+	const mutationOptions = getDeleteTranslationMutationOptions(options);
 
-      const mutationOptions = getDeleteTranslationMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
+	return useMutation(mutationOptions, queryClient);
+};
 
 /**
  * Redis에 캐시된 모든 번역 데이터를 무효화합니다. FULL_ACCESS 전용.
  * @summary 전체 번역 캐시 무효화
  */
 export const invalidateAllTranslationCache = (
-    
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<unknown>(
-      {url: `/api/v1/translations/cache`, method: 'DELETE'
-    },
-      options);
-    }
+	options?: SecondParameter<typeof customInstance>,
+) => {
+	return customInstance<unknown>(
+		{ url: `/api/v1/translations/cache`, method: "DELETE" },
+		options,
+	);
+};
 
-export const getInvalidateAllTranslationCacheMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof invalidateAllTranslationCache>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof invalidateAllTranslationCache>>, TError,void, TContext> => {
+export const getInvalidateAllTranslationCacheMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof invalidateAllTranslationCache>>,
+		TError,
+		void,
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof invalidateAllTranslationCache>>,
+	TError,
+	void,
+	TContext
+> => {
+	const mutationKey = ["invalidateAllTranslationCache"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-const mutationKey = ['invalidateAllTranslationCache'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof invalidateAllTranslationCache>>,
+		void
+	> = () => {
+		return invalidateAllTranslationCache(requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type InvalidateAllTranslationCacheMutationResult = NonNullable<
+	Awaited<ReturnType<typeof invalidateAllTranslationCache>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof invalidateAllTranslationCache>>, void> = () => {
-          
-
-          return  invalidateAllTranslationCache(requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-export type InvalidateAllTranslationCacheMutationResult = NonNullable<Awaited<ReturnType<typeof invalidateAllTranslationCache>>>
-
-export type InvalidateAllTranslationCacheMutationError = ErrorType<void>
+export type InvalidateAllTranslationCacheMutationError = ErrorType<void>;
 
 /**
  * @summary 전체 번역 캐시 무효화
  */
-export const useInvalidateAllTranslationCache = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof invalidateAllTranslationCache>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof invalidateAllTranslationCache>>,
-        TError,
-        void,
-        TContext
-      > => {
+export const useInvalidateAllTranslationCache = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof invalidateAllTranslationCache>>,
+			TError,
+			void,
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof invalidateAllTranslationCache>>,
+	TError,
+	void,
+	TContext
+> => {
+	const mutationOptions =
+		getInvalidateAllTranslationCacheMutationOptions(options);
 
-      const mutationOptions = getInvalidateAllTranslationCacheMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
+	return useMutation(mutationOptions, queryClient);
+};
 
 /**
  * Redis에 캐시된 특정 언어의 번역 데이터를 무효화합니다. FULL_ACCESS 전용.
  * @summary 언어별 번역 캐시 무효화
  */
 export const invalidateTranslationCache = (
-    languageCode: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<unknown>(
-      {url: `/api/v1/translations/cache/${languageCode}`, method: 'DELETE'
-    },
-      options);
-    }
+	languageCode: string,
+	options?: SecondParameter<typeof customInstance>,
+) => {
+	return customInstance<unknown>(
+		{ url: `/api/v1/translations/cache/${languageCode}`, method: "DELETE" },
+		options,
+	);
+};
 
-export const getInvalidateTranslationCacheMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof invalidateTranslationCache>>, TError,{languageCode: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof invalidateTranslationCache>>, TError,{languageCode: string}, TContext> => {
+export const getInvalidateTranslationCacheMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof invalidateTranslationCache>>,
+		TError,
+		{ languageCode: string },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof invalidateTranslationCache>>,
+	TError,
+	{ languageCode: string },
+	TContext
+> => {
+	const mutationKey = ["invalidateTranslationCache"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-const mutationKey = ['invalidateTranslationCache'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof invalidateTranslationCache>>,
+		{ languageCode: string }
+	> = (props) => {
+		const { languageCode } = props ?? {};
 
-      
+		return invalidateTranslationCache(languageCode, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof invalidateTranslationCache>>, {languageCode: string}> = (props) => {
-          const {languageCode} = props ?? {};
+export type InvalidateTranslationCacheMutationResult = NonNullable<
+	Awaited<ReturnType<typeof invalidateTranslationCache>>
+>;
 
-          return  invalidateTranslationCache(languageCode,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-export type InvalidateTranslationCacheMutationResult = NonNullable<Awaited<ReturnType<typeof invalidateTranslationCache>>>
-
-export type InvalidateTranslationCacheMutationError = ErrorType<void>
+export type InvalidateTranslationCacheMutationError = ErrorType<void>;
 
 /**
  * @summary 언어별 번역 캐시 무효화
  */
-export const useInvalidateTranslationCache = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof invalidateTranslationCache>>, TError,{languageCode: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof invalidateTranslationCache>>,
-        TError,
-        {languageCode: string},
-        TContext
-      > => {
+export const useInvalidateTranslationCache = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof invalidateTranslationCache>>,
+			TError,
+			{ languageCode: string },
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof invalidateTranslationCache>>,
+	TError,
+	{ languageCode: string },
+	TContext
+> => {
+	const mutationOptions = getInvalidateTranslationCacheMutationOptions(options);
 
-      const mutationOptions = getInvalidateTranslationCacheMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
+	return useMutation(mutationOptions, queryClient);
+};

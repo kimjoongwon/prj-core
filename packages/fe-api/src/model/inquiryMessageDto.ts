@@ -9,56 +9,56 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { SenderType } from './senderType';
-import type { MessageContentType } from './messageContentType';
-import type { InquiryAttachmentDto } from './inquiryAttachmentDto';
+import type { SenderType } from "./senderType";
+import type { MessageContentType } from "./messageContentType";
+import type { InquiryAttachmentDto } from "./inquiryAttachmentDto";
 
 export interface InquiryMessageDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** 소속 스레드 ID */
-  threadId: string;
-  /** 소속 문의 ID */
-  inquiryId: string;
-  /** 발신자 ID */
-  senderId?: string;
-  /** 발신자 이름 */
-  senderName: string;
-  /**
-   * 발신자 아바타
-   * @nullable
-   */
-  senderAvatar: string | null;
-  /** 발신자 유형 */
-  senderType: SenderType;
-  /** 메시지 내용 */
-  content: string;
-  /** 콘텐츠 유형 */
-  contentType: MessageContentType;
-  /** 클라이언트 메시지 ID */
-  clientMessageId?: string;
-  /** 수정 여부 */
-  isEdited: boolean;
-  /** 삭제 여부 */
-  isDeleted: boolean;
-  /**
-   * 수정 일시
-   * @nullable
-   */
-  editedAt: string | null;
-  /**
-   * 전달 완료 시간
-   * @nullable
-   */
-  deliveredAt: string | null;
-  /**
-   * 읽음 확인 시간
-   * @nullable
-   */
-  readAt: string | null;
-  /** 첨부파일 목록 */
-  attachments?: InquiryAttachmentDto[];
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** 소속 스레드 ID */
+	threadId: string;
+	/** 소속 문의 ID */
+	inquiryId: string;
+	/** 발신자 ID */
+	senderId?: string;
+	/** 발신자 이름 */
+	senderName: string;
+	/**
+	 * 발신자 아바타
+	 * @nullable
+	 */
+	senderAvatar: string | null;
+	/** 발신자 유형 */
+	senderType: SenderType;
+	/** 메시지 내용 */
+	content: string;
+	/** 콘텐츠 유형 */
+	contentType: MessageContentType;
+	/** 클라이언트 메시지 ID */
+	clientMessageId?: string;
+	/** 수정 여부 */
+	isEdited: boolean;
+	/** 삭제 여부 */
+	isDeleted: boolean;
+	/**
+	 * 수정 일시
+	 * @nullable
+	 */
+	editedAt: string | null;
+	/**
+	 * 전달 완료 시간
+	 * @nullable
+	 */
+	deliveredAt: string | null;
+	/**
+	 * 읽음 확인 시간
+	 * @nullable
+	 */
+	readAt: string | null;
+	/** 첨부파일 목록 */
+	attachments?: InquiryAttachmentDto[];
 }

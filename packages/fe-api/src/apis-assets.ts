@@ -1,16 +1,16 @@
 import {
-  type MutationFunction,
-  type QueryClient,
-  type QueryFunction,
-  type UseMutationOptions,
-  type UseMutationResult,
-  type UseQueryOptions,
-  type UseQueryResult,
-  type UseSuspenseQueryOptions,
-  type UseSuspenseQueryResult,
-  useMutation,
-  useQuery,
-  useSuspenseQuery,
+	type MutationFunction,
+	type QueryClient,
+	type QueryFunction,
+	type UseMutationOptions,
+	type UseMutationResult,
+	type UseQueryOptions,
+	type UseQueryResult,
+	type UseSuspenseQueryOptions,
+	type UseSuspenseQueryResult,
+	useMutation,
+	useQuery,
+	useSuspenseQuery,
 } from "@tanstack/react-query";
 import type { BodyType, ErrorType } from "./libs/customAxios";
 import { customInstance } from "./libs/customAxios";
@@ -21,904 +21,904 @@ export type AssetKind = "IMAGE" | "VIDEO" | "DOCUMENT";
 export type AssetStatus = "UPLOADING" | "READY" | "FAILED";
 
 export interface AssetDto {
-  id: string;
-  spaceId: string;
-  folderId: string;
-  kind: AssetKind;
-  status: AssetStatus;
-  originalName: string;
-  storageKey: string;
-  mimeType: string;
-  sizeBytes: number;
-  extension: string | null;
-  checksum: string | null;
-  metadata: unknown;
-  creatorId: string | null;
-  publicUrl: string | null;
-  createdAt: string;
-  updatedAt: string;
+	id: string;
+	spaceId: string;
+	folderId: string;
+	kind: AssetKind;
+	status: AssetStatus;
+	originalName: string;
+	storageKey: string;
+	mimeType: string;
+	sizeBytes: number;
+	extension: string | null;
+	checksum: string | null;
+	metadata: unknown;
+	creatorId: string | null;
+	publicUrl: string | null;
+	createdAt: string;
+	updatedAt: string;
 }
 
 export interface FolderDto {
-  id: string;
-  name: string;
-  parentFolderId?: string | null;
+	id: string;
+	name: string;
+	parentFolderId?: string | null;
 }
 
 export interface PageMeta {
-  total?: number;
-  take?: number;
-  skip?: number;
+	total?: number;
+	take?: number;
+	skip?: number;
 }
 
 export interface GetAssetsParams {
-  take?: number;
-  skip?: number;
-  search?: string;
-  kind?: AssetKind;
-  status?: AssetStatus;
-  folderId?: string;
-  sort?: string[];
+	take?: number;
+	skip?: number;
+	search?: string;
+	kind?: AssetKind;
+	status?: AssetStatus;
+	folderId?: string;
+	sort?: string[];
 }
 
 export interface GetAssets200AllOf {
-  data: AssetDto[];
-  meta?: PageMeta;
+	data: AssetDto[];
+	meta?: PageMeta;
 }
 
 export interface GetAssetById200AllOf {
-  data: AssetDto;
+	data: AssetDto;
 }
 
 export interface GetFolders200AllOf {
-  data: FolderDto[];
-  meta?: PageMeta;
+	data: FolderDto[];
+	meta?: PageMeta;
 }
 
 export interface MoveAssetDto {
-  targetFolderId: string;
+	targetFolderId: string;
 }
 
 export interface CreateFolderDto {
-  name: string;
-  parentFolderId?: string | null;
+	name: string;
+	parentFolderId?: string | null;
 }
 
 export interface CreateFolder201AllOf {
-  data: FolderDto;
+	data: FolderDto;
 }
 
 export interface UpdateFolderDto {
-  name?: string;
-  parentFolderId?: string | null;
+	name?: string;
+	parentFolderId?: string | null;
 }
 
 export interface UpdateFolder200AllOf {
-  data: FolderDto;
+	data: FolderDto;
 }
 
 export interface UploadAsset201AllOf {
-  data: AssetDto;
+	data: AssetDto;
 }
 
 export const getAssets = (
-  params?: GetAssetsParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+	params?: GetAssetsParams,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-  return customInstance<GetAssets200AllOf>(
-    {
-      url: "/api/v1/assets",
-      method: "GET",
-      params,
-      signal,
-    },
-    options,
-  );
+	return customInstance<GetAssets200AllOf>(
+		{
+			url: "/api/v1/assets",
+			method: "GET",
+			params,
+			signal,
+		},
+		options,
+	);
 };
 
 export const getGetAssetsQueryKey = (params?: GetAssetsParams) =>
-  ["/api/v1/assets", params] as const;
+	["/api/v1/assets", params] as const;
 
 export const useGetAssets = <
-  TData = Awaited<ReturnType<typeof getAssets>>,
-  TError = ErrorType<void>,
+	TData = Awaited<ReturnType<typeof getAssets>>,
+	TError = ErrorType<void>,
 >(
-  params?: GetAssetsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient,
+	params?: GetAssetsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> => {
-  const queryOptions = options?.query;
-  const requestOptions = options?.request;
-  const queryKey = queryOptions?.queryKey ?? getGetAssetsQueryKey(params);
+	const queryOptions = options?.query;
+	const requestOptions = options?.request;
+	const queryKey = queryOptions?.queryKey ?? getGetAssetsQueryKey(params);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssets>>> = ({
-    signal,
-  }) => getAssets(params, requestOptions, signal);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssets>>> = ({
+		signal,
+	}) => getAssets(params, requestOptions, signal);
 
-  return useQuery(
-    {
-      queryKey,
-      queryFn,
-      ...queryOptions,
-    },
-    queryClient,
-  );
+	return useQuery(
+		{
+			queryKey,
+			queryFn,
+			...queryOptions,
+		},
+		queryClient,
+	);
 };
 
 export const prefetchGetAssetsQuery = async <
-  TData = Awaited<ReturnType<typeof getAssets>>,
-  TError = ErrorType<void>,
+	TData = Awaited<ReturnType<typeof getAssets>>,
+	TError = ErrorType<void>,
 >(
-  queryClient: QueryClient,
-  params?: GetAssetsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
+	queryClient: QueryClient,
+	params?: GetAssetsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ): Promise<QueryClient> => {
-  const queryOptions = options?.query;
-  const requestOptions = options?.request;
+	const queryOptions = options?.query;
+	const requestOptions = options?.request;
 
-  await queryClient.prefetchQuery({
-    queryKey: queryOptions?.queryKey ?? getGetAssetsQueryKey(params),
-    queryFn: ({ signal }) => getAssets(params, requestOptions, signal),
-    ...queryOptions,
-  });
+	await queryClient.prefetchQuery({
+		queryKey: queryOptions?.queryKey ?? getGetAssetsQueryKey(params),
+		queryFn: ({ signal }) => getAssets(params, requestOptions, signal),
+		...queryOptions,
+	});
 
-  return queryClient;
+	return queryClient;
 };
 
 export const getGetAssetsSuspenseQueryOptions = <
-  TData = Awaited<ReturnType<typeof getAssets>>,
-  TError = ErrorType<void>,
+	TData = Awaited<ReturnType<typeof getAssets>>,
+	TError = ErrorType<void>,
 >(
-  params?: GetAssetsParams,
-  options?: {
-    query?: Partial<
-      UseSuspenseQueryOptions<
-        Awaited<ReturnType<typeof getAssets>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
+	params?: GetAssetsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAssets>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ): UseSuspenseQueryOptions<
-  Awaited<ReturnType<typeof getAssets>>,
-  TError,
-  TData
+	Awaited<ReturnType<typeof getAssets>>,
+	TError,
+	TData
 > => {
-  const queryOptions = options?.query;
-  const requestOptions = options?.request;
-  const queryKey = queryOptions?.queryKey ?? getGetAssetsQueryKey(params);
+	const queryOptions = options?.query;
+	const requestOptions = options?.request;
+	const queryKey = queryOptions?.queryKey ?? getGetAssetsQueryKey(params);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssets>>> = ({
-    signal,
-  }) => getAssets(params, requestOptions, signal);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssets>>> = ({
+		signal,
+	}) => getAssets(params, requestOptions, signal);
 
-  return {
-    queryKey,
-    queryFn,
-    ...queryOptions,
-  };
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	};
 };
 
 export const useGetAssetsSuspense = <
-  TData = Awaited<ReturnType<typeof getAssets>>,
-  TError = ErrorType<void>,
+	TData = Awaited<ReturnType<typeof getAssets>>,
+	TError = ErrorType<void>,
 >(
-  params?: GetAssetsParams,
-  options?: {
-    query?: Partial<
-      UseSuspenseQueryOptions<
-        Awaited<ReturnType<typeof getAssets>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient,
+	params?: GetAssetsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAssets>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> => {
-  const queryOptions = getGetAssetsSuspenseQueryOptions(params, options);
-  return useSuspenseQuery(queryOptions, queryClient);
+	const queryOptions = getGetAssetsSuspenseQueryOptions(params, options);
+	return useSuspenseQuery(queryOptions, queryClient);
 };
 
 export const getAssetById = (
-  assetId: string,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+	assetId: string,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-  return customInstance<GetAssetById200AllOf>(
-    {
-      url: `/api/v1/assets/${assetId}`,
-      method: "GET",
-      signal,
-    },
-    options,
-  );
+	return customInstance<GetAssetById200AllOf>(
+		{
+			url: `/api/v1/assets/${assetId}`,
+			method: "GET",
+			signal,
+		},
+		options,
+	);
 };
 
 export const getGetAssetByIdQueryKey = (assetId: string) =>
-  ["/api/v1/assets", assetId] as const;
+	["/api/v1/assets", assetId] as const;
 
 export const useGetAssetById = <
-  TData = Awaited<ReturnType<typeof getAssetById>>,
-  TError = ErrorType<void>,
+	TData = Awaited<ReturnType<typeof getAssetById>>,
+	TError = ErrorType<void>,
 >(
-  assetId: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient,
+	assetId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> => {
-  const queryOptions = options?.query;
-  const requestOptions = options?.request;
-  const queryKey = queryOptions?.queryKey ?? getGetAssetByIdQueryKey(assetId);
+	const queryOptions = options?.query;
+	const requestOptions = options?.request;
+	const queryKey = queryOptions?.queryKey ?? getGetAssetByIdQueryKey(assetId);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetById>>> = ({
-    signal,
-  }) => getAssetById(assetId, requestOptions, signal);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetById>>> = ({
+		signal,
+	}) => getAssetById(assetId, requestOptions, signal);
 
-  return useQuery(
-    {
-      queryKey,
-      queryFn,
-      ...queryOptions,
-    },
-    queryClient,
-  );
+	return useQuery(
+		{
+			queryKey,
+			queryFn,
+			...queryOptions,
+		},
+		queryClient,
+	);
 };
 
 export const prefetchGetAssetByIdQuery = async <
-  TData = Awaited<ReturnType<typeof getAssetById>>,
-  TError = ErrorType<void>,
+	TData = Awaited<ReturnType<typeof getAssetById>>,
+	TError = ErrorType<void>,
 >(
-  queryClient: QueryClient,
-  assetId: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
+	queryClient: QueryClient,
+	assetId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ): Promise<QueryClient> => {
-  const queryOptions = options?.query;
-  const requestOptions = options?.request;
+	const queryOptions = options?.query;
+	const requestOptions = options?.request;
 
-  await queryClient.prefetchQuery({
-    queryKey: queryOptions?.queryKey ?? getGetAssetByIdQueryKey(assetId),
-    queryFn: ({ signal }) => getAssetById(assetId, requestOptions, signal),
-    ...queryOptions,
-  });
+	await queryClient.prefetchQuery({
+		queryKey: queryOptions?.queryKey ?? getGetAssetByIdQueryKey(assetId),
+		queryFn: ({ signal }) => getAssetById(assetId, requestOptions, signal),
+		...queryOptions,
+	});
 
-  return queryClient;
+	return queryClient;
 };
 
 export const getGetAssetByIdSuspenseQueryOptions = <
-  TData = Awaited<ReturnType<typeof getAssetById>>,
-  TError = ErrorType<void>,
+	TData = Awaited<ReturnType<typeof getAssetById>>,
+	TError = ErrorType<void>,
 >(
-  assetId: string,
-  options?: {
-    query?: Partial<
-      UseSuspenseQueryOptions<
-        Awaited<ReturnType<typeof getAssetById>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
+	assetId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAssetById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ): UseSuspenseQueryOptions<
-  Awaited<ReturnType<typeof getAssetById>>,
-  TError,
-  TData
+	Awaited<ReturnType<typeof getAssetById>>,
+	TError,
+	TData
 > => {
-  const queryOptions = options?.query;
-  const requestOptions = options?.request;
-  const queryKey = queryOptions?.queryKey ?? getGetAssetByIdQueryKey(assetId);
+	const queryOptions = options?.query;
+	const requestOptions = options?.request;
+	const queryKey = queryOptions?.queryKey ?? getGetAssetByIdQueryKey(assetId);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetById>>> = ({
-    signal,
-  }) => getAssetById(assetId, requestOptions, signal);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetById>>> = ({
+		signal,
+	}) => getAssetById(assetId, requestOptions, signal);
 
-  return {
-    queryKey,
-    queryFn,
-    ...queryOptions,
-  };
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	};
 };
 
 export const useGetAssetByIdSuspense = <
-  TData = Awaited<ReturnType<typeof getAssetById>>,
-  TError = ErrorType<void>,
+	TData = Awaited<ReturnType<typeof getAssetById>>,
+	TError = ErrorType<void>,
 >(
-  assetId: string,
-  options?: {
-    query?: Partial<
-      UseSuspenseQueryOptions<
-        Awaited<ReturnType<typeof getAssetById>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient,
+	assetId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAssetById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> => {
-  const queryOptions = getGetAssetByIdSuspenseQueryOptions(assetId, options);
-  return useSuspenseQuery(queryOptions, queryClient);
+	const queryOptions = getGetAssetByIdSuspenseQueryOptions(assetId, options);
+	return useSuspenseQuery(queryOptions, queryClient);
 };
 
 export const uploadAsset = (
-  data: FormData,
-  options?: SecondParameter<typeof customInstance>,
+	data: FormData,
+	options?: SecondParameter<typeof customInstance>,
 ) => {
-  return customInstance<UploadAsset201AllOf>(
-    {
-      url: "/api/v1/assets",
-      method: "POST",
-      headers: { "Content-Type": "multipart/form-data" },
-      data,
-    },
-    options,
-  );
+	return customInstance<UploadAsset201AllOf>(
+		{
+			url: "/api/v1/assets",
+			method: "POST",
+			headers: { "Content-Type": "multipart/form-data" },
+			data,
+		},
+		options,
+	);
 };
 
 export const getUploadAssetMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
+	TError = ErrorType<void>,
+	TContext = unknown,
 >(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof uploadAsset>>,
-    TError,
-    { data: FormData },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof uploadAsset>>,
+		TError,
+		{ data: FormData },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof uploadAsset>>,
-  TError,
-  { data: FormData },
-  TContext
+	Awaited<ReturnType<typeof uploadAsset>>,
+	TError,
+	{ data: FormData },
+	TContext
 > => {
-  const mutationKey = ["uploadAsset"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : {
-          ...options,
-          mutation: {
-            ...options.mutation,
-            mutationKey,
-          },
-        }
-    : { mutation: { mutationKey }, request: undefined };
+	const mutationKey = ["uploadAsset"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: {
+					...options,
+					mutation: {
+						...options.mutation,
+						mutationKey,
+					},
+				}
+		: { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof uploadAsset>>,
-    { data: FormData }
-  > = (props) => {
-    const { data } = props ?? {};
-    return uploadAsset(data, requestOptions);
-  };
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof uploadAsset>>,
+		{ data: FormData }
+	> = (props) => {
+		const { data } = props ?? {};
+		return uploadAsset(data, requestOptions);
+	};
 
-  return { mutationFn, ...mutationOptions };
+	return { mutationFn, ...mutationOptions };
 };
 
 export const useUploadAsset = <TError = ErrorType<void>, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof uploadAsset>>,
-      TError,
-      { data: FormData },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof uploadAsset>>,
+			TError,
+			{ data: FormData },
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof uploadAsset>>,
-  TError,
-  { data: FormData },
-  TContext
+	Awaited<ReturnType<typeof uploadAsset>>,
+	TError,
+	{ data: FormData },
+	TContext
 > => {
-  const mutationOptions = getUploadAssetMutationOptions(options);
-  return useMutation(mutationOptions, queryClient);
+	const mutationOptions = getUploadAssetMutationOptions(options);
+	return useMutation(mutationOptions, queryClient);
 };
 
 export const removeAsset = (
-  assetId: string,
-  options?: SecondParameter<typeof customInstance>,
+	assetId: string,
+	options?: SecondParameter<typeof customInstance>,
 ) => {
-  return customInstance<void>(
-    {
-      url: `/api/v1/assets/${assetId}`,
-      method: "DELETE",
-    },
-    options,
-  );
+	return customInstance<void>(
+		{
+			url: `/api/v1/assets/${assetId}`,
+			method: "DELETE",
+		},
+		options,
+	);
 };
 
 export const getRemoveAssetMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
+	TError = ErrorType<void>,
+	TContext = unknown,
 >(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof removeAsset>>,
-    TError,
-    { assetId: string },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof removeAsset>>,
+		TError,
+		{ assetId: string },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof removeAsset>>,
-  TError,
-  { assetId: string },
-  TContext
+	Awaited<ReturnType<typeof removeAsset>>,
+	TError,
+	{ assetId: string },
+	TContext
 > => {
-  const requestOptions = options?.request;
+	const requestOptions = options?.request;
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof removeAsset>>,
-    { assetId: string }
-  > = (props) => removeAsset(props.assetId, requestOptions);
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof removeAsset>>,
+		{ assetId: string }
+	> = (props) => removeAsset(props.assetId, requestOptions);
 
-  return { mutationFn, ...options?.mutation };
+	return { mutationFn, ...options?.mutation };
 };
 
 export const useRemoveAsset = <TError = ErrorType<void>, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof removeAsset>>,
-      TError,
-      { assetId: string },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof removeAsset>>,
+			TError,
+			{ assetId: string },
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof removeAsset>>,
-  TError,
-  { assetId: string },
-  TContext
+	Awaited<ReturnType<typeof removeAsset>>,
+	TError,
+	{ assetId: string },
+	TContext
 > => {
-  const mutationOptions = getRemoveAssetMutationOptions(options);
-  return useMutation(mutationOptions, queryClient);
+	const mutationOptions = getRemoveAssetMutationOptions(options);
+	return useMutation(mutationOptions, queryClient);
 };
 
 export const moveAsset = (
-  assetId: string,
-  data: BodyType<MoveAssetDto>,
-  options?: SecondParameter<typeof customInstance>,
+	assetId: string,
+	data: BodyType<MoveAssetDto>,
+	options?: SecondParameter<typeof customInstance>,
 ) => {
-  return customInstance<AssetDto>(
-    {
-      url: `/api/v1/assets/${assetId}/move`,
-      method: "PATCH",
-      data,
-    },
-    options,
-  );
+	return customInstance<AssetDto>(
+		{
+			url: `/api/v1/assets/${assetId}/move`,
+			method: "PATCH",
+			data,
+		},
+		options,
+	);
 };
 
 export const getMoveAssetMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
+	TError = ErrorType<void>,
+	TContext = unknown,
 >(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof moveAsset>>,
-    TError,
-    { assetId: string; data: BodyType<MoveAssetDto> },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof moveAsset>>,
+		TError,
+		{ assetId: string; data: BodyType<MoveAssetDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof moveAsset>>,
-  TError,
-  { assetId: string; data: BodyType<MoveAssetDto> },
-  TContext
+	Awaited<ReturnType<typeof moveAsset>>,
+	TError,
+	{ assetId: string; data: BodyType<MoveAssetDto> },
+	TContext
 > => {
-  const requestOptions = options?.request;
+	const requestOptions = options?.request;
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof moveAsset>>,
-    { assetId: string; data: BodyType<MoveAssetDto> }
-  > = (props) => moveAsset(props.assetId, props.data, requestOptions);
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof moveAsset>>,
+		{ assetId: string; data: BodyType<MoveAssetDto> }
+	> = (props) => moveAsset(props.assetId, props.data, requestOptions);
 
-  return { mutationFn, ...options?.mutation };
+	return { mutationFn, ...options?.mutation };
 };
 
 export const useMoveAsset = <TError = ErrorType<void>, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof moveAsset>>,
-      TError,
-      { assetId: string; data: BodyType<MoveAssetDto> },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof moveAsset>>,
+			TError,
+			{ assetId: string; data: BodyType<MoveAssetDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof moveAsset>>,
-  TError,
-  { assetId: string; data: BodyType<MoveAssetDto> },
-  TContext
+	Awaited<ReturnType<typeof moveAsset>>,
+	TError,
+	{ assetId: string; data: BodyType<MoveAssetDto> },
+	TContext
 > => {
-  const mutationOptions = getMoveAssetMutationOptions(options);
-  return useMutation(mutationOptions, queryClient);
+	const mutationOptions = getMoveAssetMutationOptions(options);
+	return useMutation(mutationOptions, queryClient);
 };
 
 export const getFolders = (
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-  return customInstance<GetFolders200AllOf>(
-    {
-      url: "/api/v1/folders",
-      method: "GET",
-      signal,
-    },
-    options,
-  );
+	return customInstance<GetFolders200AllOf>(
+		{
+			url: "/api/v1/folders",
+			method: "GET",
+			signal,
+		},
+		options,
+	);
 };
 
 export const getGetFoldersQueryKey = () => ["/api/v1/folders"] as const;
 
 export const useGetFolders = <
-  TData = Awaited<ReturnType<typeof getFolders>>,
-  TError = ErrorType<void>,
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
 >(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> => {
-  const queryOptions = options?.query;
-  const requestOptions = options?.request;
-  const queryKey = queryOptions?.queryKey ?? getGetFoldersQueryKey();
+	const queryOptions = options?.query;
+	const requestOptions = options?.request;
+	const queryKey = queryOptions?.queryKey ?? getGetFoldersQueryKey();
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolders>>> = ({
-    signal,
-  }) => getFolders(requestOptions, signal);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolders>>> = ({
+		signal,
+	}) => getFolders(requestOptions, signal);
 
-  return useQuery(
-    {
-      queryKey,
-      queryFn,
-      ...queryOptions,
-    },
-    queryClient,
-  );
+	return useQuery(
+		{
+			queryKey,
+			queryFn,
+			...queryOptions,
+		},
+		queryClient,
+	);
 };
 
 export const prefetchGetFoldersQuery = async <
-  TData = Awaited<ReturnType<typeof getFolders>>,
-  TError = ErrorType<void>,
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
 >(
-  queryClient: QueryClient,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ): Promise<QueryClient> => {
-  const queryOptions = options?.query;
-  const requestOptions = options?.request;
+	const queryOptions = options?.query;
+	const requestOptions = options?.request;
 
-  await queryClient.prefetchQuery({
-    queryKey: queryOptions?.queryKey ?? getGetFoldersQueryKey(),
-    queryFn: ({ signal }) => getFolders(requestOptions, signal),
-    ...queryOptions,
-  });
+	await queryClient.prefetchQuery({
+		queryKey: queryOptions?.queryKey ?? getGetFoldersQueryKey(),
+		queryFn: ({ signal }) => getFolders(requestOptions, signal),
+		...queryOptions,
+	});
 
-  return queryClient;
+	return queryClient;
 };
 
 export const getGetFoldersSuspenseQueryOptions = <
-  TData = Awaited<ReturnType<typeof getFolders>>,
-  TError = ErrorType<void>,
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
 >(options?: {
-  query?: Partial<
-    UseSuspenseQueryOptions<
-      Awaited<ReturnType<typeof getFolders>>,
-      TError,
-      TData
-    >
-  >;
-  request?: SecondParameter<typeof customInstance>;
+	query?: Partial<
+		UseSuspenseQueryOptions<
+			Awaited<ReturnType<typeof getFolders>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseSuspenseQueryOptions<
-  Awaited<ReturnType<typeof getFolders>>,
-  TError,
-  TData
+	Awaited<ReturnType<typeof getFolders>>,
+	TError,
+	TData
 > => {
-  const queryOptions = options?.query;
-  const requestOptions = options?.request;
-  const queryKey = queryOptions?.queryKey ?? getGetFoldersQueryKey();
+	const queryOptions = options?.query;
+	const requestOptions = options?.request;
+	const queryKey = queryOptions?.queryKey ?? getGetFoldersQueryKey();
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolders>>> = ({
-    signal,
-  }) => getFolders(requestOptions, signal);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolders>>> = ({
+		signal,
+	}) => getFolders(requestOptions, signal);
 
-  return {
-    queryKey,
-    queryFn,
-    ...queryOptions,
-  };
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	};
 };
 
 export const useGetFoldersSuspense = <
-  TData = Awaited<ReturnType<typeof getFolders>>,
-  TError = ErrorType<void>,
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
 >(
-  options?: {
-    query?: Partial<
-      UseSuspenseQueryOptions<
-        Awaited<ReturnType<typeof getFolders>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getFolders>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> => {
-  const queryOptions = getGetFoldersSuspenseQueryOptions(options);
-  return useSuspenseQuery(queryOptions, queryClient);
+	const queryOptions = getGetFoldersSuspenseQueryOptions(options);
+	return useSuspenseQuery(queryOptions, queryClient);
 };
 
 export const createFolder = (
-  data: BodyType<CreateFolderDto>,
-  options?: SecondParameter<typeof customInstance>,
+	data: BodyType<CreateFolderDto>,
+	options?: SecondParameter<typeof customInstance>,
 ) => {
-  return customInstance<CreateFolder201AllOf>(
-    {
-      url: "/api/v1/folders",
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      data,
-    },
-    options,
-  );
+	return customInstance<CreateFolder201AllOf>(
+		{
+			url: "/api/v1/folders",
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			data,
+		},
+		options,
+	);
 };
 
 export const getCreateFolderMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
+	TError = ErrorType<void>,
+	TContext = unknown,
 >(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createFolder>>,
-    TError,
-    { data: BodyType<CreateFolderDto> },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof createFolder>>,
+		TError,
+		{ data: BodyType<CreateFolderDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof createFolder>>,
-  TError,
-  { data: BodyType<CreateFolderDto> },
-  TContext
+	Awaited<ReturnType<typeof createFolder>>,
+	TError,
+	{ data: BodyType<CreateFolderDto> },
+	TContext
 > => {
-  const mutationKey = ["createFolder"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : {
-          ...options,
-          mutation: {
-            ...options.mutation,
-            mutationKey,
-          },
-        }
-    : { mutation: { mutationKey }, request: undefined };
+	const mutationKey = ["createFolder"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: {
+					...options,
+					mutation: {
+						...options.mutation,
+						mutationKey,
+					},
+				}
+		: { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof createFolder>>,
-    { data: BodyType<CreateFolderDto> }
-  > = (props) => {
-    const { data } = props ?? {};
-    return createFolder(data, requestOptions);
-  };
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof createFolder>>,
+		{ data: BodyType<CreateFolderDto> }
+	> = (props) => {
+		const { data } = props ?? {};
+		return createFolder(data, requestOptions);
+	};
 
-  return { mutationFn, ...mutationOptions };
+	return { mutationFn, ...mutationOptions };
 };
 
 export const useCreateFolder = <TError = ErrorType<void>, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof createFolder>>,
-      TError,
-      { data: BodyType<CreateFolderDto> },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof createFolder>>,
+			TError,
+			{ data: BodyType<CreateFolderDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof createFolder>>,
-  TError,
-  { data: BodyType<CreateFolderDto> },
-  TContext
+	Awaited<ReturnType<typeof createFolder>>,
+	TError,
+	{ data: BodyType<CreateFolderDto> },
+	TContext
 > => {
-  const mutationOptions = getCreateFolderMutationOptions(options);
-  return useMutation(mutationOptions, queryClient);
+	const mutationOptions = getCreateFolderMutationOptions(options);
+	return useMutation(mutationOptions, queryClient);
 };
 
 export const updateFolder = (
-  folderId: string,
-  data: BodyType<UpdateFolderDto>,
-  options?: SecondParameter<typeof customInstance>,
+	folderId: string,
+	data: BodyType<UpdateFolderDto>,
+	options?: SecondParameter<typeof customInstance>,
 ) => {
-  return customInstance<UpdateFolder200AllOf>(
-    {
-      url: `/api/v1/folders/${folderId}`,
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      data,
-    },
-    options,
-  );
+	return customInstance<UpdateFolder200AllOf>(
+		{
+			url: `/api/v1/folders/${folderId}`,
+			method: "PATCH",
+			headers: { "Content-Type": "application/json" },
+			data,
+		},
+		options,
+	);
 };
 
 export const getUpdateFolderMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
+	TError = ErrorType<void>,
+	TContext = unknown,
 >(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof updateFolder>>,
-    TError,
-    { folderId: string; data: BodyType<UpdateFolderDto> },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof updateFolder>>,
+		TError,
+		{ folderId: string; data: BodyType<UpdateFolderDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof updateFolder>>,
-  TError,
-  { folderId: string; data: BodyType<UpdateFolderDto> },
-  TContext
+	Awaited<ReturnType<typeof updateFolder>>,
+	TError,
+	{ folderId: string; data: BodyType<UpdateFolderDto> },
+	TContext
 > => {
-  const mutationKey = ["updateFolder"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : {
-          ...options,
-          mutation: {
-            ...options.mutation,
-            mutationKey,
-          },
-        }
-    : { mutation: { mutationKey }, request: undefined };
+	const mutationKey = ["updateFolder"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: {
+					...options,
+					mutation: {
+						...options.mutation,
+						mutationKey,
+					},
+				}
+		: { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof updateFolder>>,
-    { folderId: string; data: BodyType<UpdateFolderDto> }
-  > = (props) => {
-    const { folderId, data } = props ?? {};
-    return updateFolder(folderId, data, requestOptions);
-  };
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof updateFolder>>,
+		{ folderId: string; data: BodyType<UpdateFolderDto> }
+	> = (props) => {
+		const { folderId, data } = props ?? {};
+		return updateFolder(folderId, data, requestOptions);
+	};
 
-  return { mutationFn, ...mutationOptions };
+	return { mutationFn, ...mutationOptions };
 };
 
 export const useUpdateFolder = <TError = ErrorType<void>, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof updateFolder>>,
-      TError,
-      { folderId: string; data: BodyType<UpdateFolderDto> },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof updateFolder>>,
+			TError,
+			{ folderId: string; data: BodyType<UpdateFolderDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof updateFolder>>,
-  TError,
-  { folderId: string; data: BodyType<UpdateFolderDto> },
-  TContext
+	Awaited<ReturnType<typeof updateFolder>>,
+	TError,
+	{ folderId: string; data: BodyType<UpdateFolderDto> },
+	TContext
 > => {
-  const mutationOptions = getUpdateFolderMutationOptions(options);
-  return useMutation(mutationOptions, queryClient);
+	const mutationOptions = getUpdateFolderMutationOptions(options);
+	return useMutation(mutationOptions, queryClient);
 };
 
 export const removeFolder = (
-  folderId: string,
-  options?: SecondParameter<typeof customInstance>,
+	folderId: string,
+	options?: SecondParameter<typeof customInstance>,
 ) => {
-  return customInstance<void>(
-    {
-      url: `/api/v1/folders/${folderId}`,
-      method: "DELETE",
-    },
-    options,
-  );
+	return customInstance<void>(
+		{
+			url: `/api/v1/folders/${folderId}`,
+			method: "DELETE",
+		},
+		options,
+	);
 };
 
 export const getRemoveFolderMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
+	TError = ErrorType<void>,
+	TContext = unknown,
 >(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof removeFolder>>,
-    TError,
-    { folderId: string },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof removeFolder>>,
+		TError,
+		{ folderId: string },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof removeFolder>>,
-  TError,
-  { folderId: string },
-  TContext
+	Awaited<ReturnType<typeof removeFolder>>,
+	TError,
+	{ folderId: string },
+	TContext
 > => {
-  const mutationKey = ["removeFolder"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : {
-          ...options,
-          mutation: {
-            ...options.mutation,
-            mutationKey,
-          },
-        }
-    : { mutation: { mutationKey }, request: undefined };
+	const mutationKey = ["removeFolder"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: {
+					...options,
+					mutation: {
+						...options.mutation,
+						mutationKey,
+					},
+				}
+		: { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof removeFolder>>,
-    { folderId: string }
-  > = (props) => {
-    const { folderId } = props ?? {};
-    return removeFolder(folderId, requestOptions);
-  };
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof removeFolder>>,
+		{ folderId: string }
+	> = (props) => {
+		const { folderId } = props ?? {};
+		return removeFolder(folderId, requestOptions);
+	};
 
-  return { mutationFn, ...mutationOptions };
+	return { mutationFn, ...mutationOptions };
 };
 
 export const useRemoveFolder = <TError = ErrorType<void>, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof removeFolder>>,
-      TError,
-      { folderId: string },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof removeFolder>>,
+			TError,
+			{ folderId: string },
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof removeFolder>>,
-  TError,
-  { folderId: string },
-  TContext
+	Awaited<ReturnType<typeof removeFolder>>,
+	TError,
+	{ folderId: string },
+	TContext
 > => {
-  const mutationOptions = getRemoveFolderMutationOptions(options);
-  return useMutation(mutationOptions, queryClient);
+	const mutationOptions = getRemoveFolderMutationOptions(options);
+	return useMutation(mutationOptions, queryClient);
 };

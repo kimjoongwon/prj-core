@@ -9,9 +9,9 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { SyncUserPolicyItemDto } from './syncUserPolicyItemDto';
+import type { SyncUserPolicyItemDto } from "./syncUserPolicyItemDto";
 
 export interface SyncUserPoliciesDto {
-  /** User에 연결할 Policy 목록입니다. 전체 동기화 방식으로 반영됩니다. */
-  userPolicies: SyncUserPolicyItemDto[];
+	/** User에 연결할 Policy 목록입니다. 전체 동기화 방식으로 반영됩니다. */
+	userPolicies: SyncUserPolicyItemDto[];
 }

@@ -150,16 +150,16 @@ export async function runReferenceDataMigrations(): Promise<void> {
 						checksum,
 						migration.description,
 					);
-					},
-					{
-						// 대기 시간과 총 실행 시간을 분리해서 둔다.
-						// maxWait: transaction slot을 얻기까지 기다리는 최대 시간
-						// timeout: transaction 시작 후 전체 작업이 완료돼야 하는 시간
-						maxWait: 10_000,
-						timeout: 120_000,
-					},
-				);
-			}
+				},
+				{
+					// 대기 시간과 총 실행 시간을 분리해서 둔다.
+					// maxWait: transaction slot을 얻기까지 기다리는 최대 시간
+					// timeout: transaction 시작 후 전체 작업이 완료돼야 하는 시간
+					maxWait: 10_000,
+					timeout: 120_000,
+				},
+			);
+		}
 	} finally {
 		// 6) 성공/실패와 무관하게 연결 자원을 반드시 정리한다.
 		await disconnectPrismaClient(prismaHandle);

@@ -7,8 +7,8 @@ import {
 	useUpdateSecurityPolicy,
 } from "@cocrepo/api/idp/security-policy";
 import {
-	type SecurityPolicyFormPageFormState,
 	SecurityPolicyFormPage,
+	type SecurityPolicyFormPageFormState,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";

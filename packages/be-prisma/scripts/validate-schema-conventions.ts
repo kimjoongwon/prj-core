@@ -233,8 +233,12 @@ function getNames(text: string, kind: "model" | "enum"): string[] {
 	return result;
 }
 
-function getMarkedModels(text: string, marker: "schema-owner" | "aggregate-root"): string[] {
-	const pattern = /((?:^\s*\/\/[^\n]*\n)+)\s*model\s+([A-Za-z_][A-Za-z0-9_]*)\s*\{/gm;
+function getMarkedModels(
+	text: string,
+	marker: "schema-owner" | "aggregate-root",
+): string[] {
+	const pattern =
+		/((?:^\s*\/\/[^\n]*\n)+)\s*model\s+([A-Za-z_][A-Za-z0-9_]*)\s*\{/gm;
 	const result: string[] = [];
 
 	let match = pattern.exec(text);
@@ -265,7 +269,10 @@ function main(): void {
 
 	const files = listPrismaFiles(schemaDir);
 	const textsByFile = new Map<string, string>();
-	const declarations = new Map<string, { kind: "model" | "enum"; file: string }[]>();
+	const declarations = new Map<
+		string,
+		{ kind: "model" | "enum"; file: string }[]
+	>();
 	const errors: string[] = [];
 
 	for (const file of files) {
@@ -273,28 +280,45 @@ function main(): void {
 		const text = readFileSync(fullPath, "utf-8");
 		textsByFile.set(file, text);
 
-		const generatorCount = countMatches(text, /^\s*generator\s+[A-Za-z_][A-Za-z0-9_]*\s*\{/gm);
-		const datasourceCount = countMatches(text, /^\s*datasource\s+[A-Za-z_][A-Za-z0-9_]*\s*\{/gm);
-		const invalidDisplayNameCount = countMatches(text, /@DisplayName|@displayname/g);
+		const generatorCount = countMatches(
+			text,
+			/^\s*generator\s+[A-Za-z_][A-Za-z0-9_]*\s*\{/gm,
+		);
+		const datasourceCount = countMatches(
+			text,
+			/^\s*datasource\s+[A-Za-z_][A-Za-z0-9_]*\s*\{/gm,
+		);
+		const invalidDisplayNameCount = countMatches(
+			text,
+			/@DisplayName|@displayname/g,
+		);
 		const schemaOwnerModels = getMarkedModels(text, "schema-owner");
 		const aggregateRootModels = getMarkedModels(text, "aggregate-root");
 		const expectedSchemaOwner = schemaOwnerByFile[file];
 		const expectedAggregateRoot = aggregateRootByFile[file];
 
 		if (file !== baseFile && (generatorCount > 0 || datasourceCount > 0)) {
-			errors.push(`[${file}] generator/datasource is only allowed in ${baseFile}`);
+			errors.push(
+				`[${file}] generator/datasource is only allowed in ${baseFile}`,
+			);
 		}
 		if (invalidDisplayNameCount > 0) {
-			errors.push(`[${file}] contains invalid displayName tag casing (@DisplayName or @displayname)`);
+			errors.push(
+				`[${file}] contains invalid displayName tag casing (@DisplayName or @displayname)`,
+			);
 		}
 		if (file !== baseFile && !expectedSchemaOwner) {
-			errors.push(`[${file}] missing schema-owner assignment in schemaOwnerByFile`);
+			errors.push(
+				`[${file}] missing schema-owner assignment in schemaOwnerByFile`,
+			);
 		}
 		if (
 			file === baseFile &&
 			(schemaOwnerModels.length > 0 || aggregateRootModels.length > 0)
 		) {
-			errors.push(`[${file}] must not declare @schema-owner: true or @aggregate-root: true`);
+			errors.push(
+				`[${file}] must not declare @schema-owner: true or @aggregate-root: true`,
+			);
 		}
 		if (file !== baseFile && schemaOwnerModels.length !== 1) {
 			errors.push(
@@ -316,7 +340,11 @@ function main(): void {
 				`[${file}] must contain at most 1 @aggregate-root: true model, found ${aggregateRootModels.length}`,
 			);
 		}
-		if (file !== baseFile && !expectedAggregateRoot && aggregateRootModels.length > 0) {
+		if (
+			file !== baseFile &&
+			!expectedAggregateRoot &&
+			aggregateRootModels.length > 0
+		) {
 			errors.push(`[${file}] must not declare @aggregate-root: true`);
 		}
 		if (
@@ -363,14 +391,22 @@ function main(): void {
 	}
 
 	const mergedText = Array.from(textsByFile.values()).join("\n");
-	const totalGenerators = countMatches(mergedText, /^\s*generator\s+[A-Za-z_][A-Za-z0-9_]*\s*\{/gm);
-	const totalDatasources = countMatches(mergedText, /^\s*datasource\s+[A-Za-z_][A-Za-z0-9_]*\s*\{/gm);
+	const totalGenerators = countMatches(
+		mergedText,
+		/^\s*generator\s+[A-Za-z_][A-Za-z0-9_]*\s*\{/gm,
+	);
+	const totalDatasources = countMatches(
+		mergedText,
+		/^\s*datasource\s+[A-Za-z_][A-Za-z0-9_]*\s*\{/gm,
+	);
 
 	if (totalGenerators !== 1) {
 		errors.push(`expected exactly 1 generator block, found ${totalGenerators}`);
 	}
 	if (totalDatasources !== 1) {
-		errors.push(`expected exactly 1 datasource block, found ${totalDatasources}`);
+		errors.push(
+			`expected exactly 1 datasource block, found ${totalDatasources}`,
+		);
 	}
 	if (!textsByFile.has(baseFile)) {
 		errors.push(`missing required base schema file: ${baseFile}`);
@@ -385,7 +421,9 @@ function main(): void {
 		const file = entries[0].file;
 		const expected = expectedOwner[name];
 		if (!expected) {
-			errors.push(`${name} is declared in ${file} but missing from ownership map`);
+			errors.push(
+				`${name} is declared in ${file} but missing from ownership map`,
+			);
 			continue;
 		}
 		if (expected !== file) {
@@ -403,7 +441,10 @@ function main(): void {
 		if (entries[0].kind !== "enum") {
 			continue;
 		}
-		const usageCount = countMatches(mergedText, new RegExp(`\\b${name}\\b`, "g"));
+		const usageCount = countMatches(
+			mergedText,
+			new RegExp(`\\b${name}\\b`, "g"),
+		);
 		if (usageCount <= 1) {
 			errors.push(`enum ${name} is unused`);
 		}

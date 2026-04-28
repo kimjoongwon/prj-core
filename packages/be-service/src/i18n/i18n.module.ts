@@ -32,7 +32,10 @@ const SERVICE_PKG_ROOT =
 				new QueryResolver(["lang", "language"]), // ?lang=en_US
 				new AcceptLanguageResolver(), // Accept-Language 헤더
 			],
-			typesOutputPath: join(SERVICE_PKG_ROOT, "src/i18n/generated/i18n.generated.ts"),
+			typesOutputPath: join(
+				SERVICE_PKG_ROOT,
+				"src/i18n/generated/i18n.generated.ts",
+			),
 		}),
 	],
 	providers: [I18nTranslationService],

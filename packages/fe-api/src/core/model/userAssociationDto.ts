@@ -11,11 +11,11 @@
  */
 
 export interface UserAssociationDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  userId: string;
-  groupId: string;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	userId: string;
+	groupId: string;
 }

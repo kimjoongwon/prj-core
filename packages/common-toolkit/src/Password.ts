@@ -57,9 +57,7 @@ const PASSWORD_RULES = [
  * @param password - 검증할 비밀번호
  * @returns 전체 유효 여부 + 각 규칙별 통과/미달 상태
  */
-export function validatePasswordPolicy(
-	password: string,
-): PasswordPolicyResult {
+export function validatePasswordPolicy(password: string): PasswordPolicyResult {
 	const rules: PasswordPolicyRule[] = PASSWORD_RULES.map((r) => ({
 		rule: r.rule,
 		label: r.label,

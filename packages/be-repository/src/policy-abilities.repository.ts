@@ -90,9 +90,7 @@ export class PolicyAbilitiesRepository {
 			where: {
 				policyId,
 				removedAt: null,
-				...(abilityIds.length > 0
-					? { abilityId: { notIn: abilityIds } }
-					: {}),
+				...(abilityIds.length > 0 ? { abilityId: { notIn: abilityIds } } : {}),
 			},
 			data: {
 				removedAt: new Date(),

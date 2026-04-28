@@ -1,9 +1,10 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { expect, type Locator, type Page, test } from "@playwright/test";
 
 const API_BASE_URL = "http://localhost:3000/api/v1";
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
+const SPACE_HEADERS = { "x-space-id": SYSTEM_SPACE_ID };
 
 interface IdOnlyDto {
 	id: string;
@@ -31,9 +32,13 @@ const escapeRegExp = (value: string) =>
 	value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 async function ensureAdminCurrentSpace(page: Page) {
-	const response = await page.request.post(`${API_BASE_URL}/auth/current-space`, {
-		data: { spaceId: SYSTEM_SPACE_ID },
-	});
+	const response = await page.request.post(
+		`${API_BASE_URL}/auth/current-space`,
+		{
+			headers: SPACE_HEADERS,
+			data: { spaceId: SYSTEM_SPACE_ID },
+		},
+	);
 	expect(response.ok()).toBeTruthy();
 
 	const body = (await response.json()) as ApiItemResponse<IdOnlyDto>;
@@ -45,6 +50,7 @@ async function waitForRoutineToBeSelectable(page: Page, routineId: string) {
 		.poll(
 			async () => {
 				const response = await page.request.get(`${API_BASE_URL}/routines`, {
+					headers: SPACE_HEADERS,
 					params: {
 						take: 50,
 						skip: 0,
@@ -107,6 +113,7 @@ async function waitForProgramSnapshot(
 			async () => {
 				const response = await page.request.get(
 					`${API_BASE_URL}/timelines/${params.timelineId}/sessions/${params.sessionId}/programs/${params.programId}`,
+					{ headers: SPACE_HEADERS },
 				);
 				if (!response.ok()) {
 					return false;
@@ -181,6 +188,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createTimelineResponse = await page.request.post(
 				`${API_BASE_URL}/timelines`,
 				{
+					headers: SPACE_HEADERS,
 					data: {
 						name: timelineName,
 						description: "프로그램 E2E 테스트용 타임라인",
@@ -197,6 +205,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createSessionResponse = await page.request.post(
 				`${API_BASE_URL}/timelines/${timelineId}/sessions`,
 				{
+					headers: SPACE_HEADERS,
 					data: {
 						name: sessionName,
 						type: "ONE_TIME",
@@ -215,6 +224,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createTaskResponse = await page.request.post(
 				`${API_BASE_URL}/tasks`,
 				{
+					headers: SPACE_HEADERS,
 					data: {
 						name: exerciseTaskName,
 						duration: 60,
@@ -234,6 +244,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createRoutineOneResponse = await page.request.post(
 				`${API_BASE_URL}/routines`,
 				{
+					headers: SPACE_HEADERS,
 					data: {
 						name: routineOneName,
 						label: `E2E-A-${uniqueSuffix}`,
@@ -257,6 +268,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createRoutineTwoResponse = await page.request.post(
 				`${API_BASE_URL}/routines`,
 				{
+					headers: SPACE_HEADERS,
 					data: {
 						name: routineTwoName,
 						label: `E2E-B-${uniqueSuffix}`,
@@ -279,6 +291,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 
 			const usersResponse = await page.request.get(
 				`${API_BASE_URL}/users?take=20&skip=0&status=active&roles=MANAGE&roles=FULL_ACCESS`,
+				{ headers: SPACE_HEADERS },
 			);
 			test.skip(
 				usersResponse.status() !== 200,
@@ -436,38 +449,52 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 		} finally {
 			// Cleanup: 생성한 프로그램/세션/타임라인/루틴을 삭제한다
 			if (programId && sessionId && timelineId) {
-				await page.request.delete(
-					`${API_BASE_URL}/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`,
-				).catch(() => undefined);
+				await page.request
+					.delete(
+						`${API_BASE_URL}/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`,
+						{ headers: SPACE_HEADERS },
+					)
+					.catch(() => undefined);
 			}
 
 			if (sessionId && timelineId) {
-				await page.request.delete(
-					`${API_BASE_URL}/timelines/${timelineId}/sessions/${sessionId}`,
-				).catch(() => undefined);
+				await page.request
+					.delete(
+						`${API_BASE_URL}/timelines/${timelineId}/sessions/${sessionId}`,
+						{ headers: SPACE_HEADERS },
+					)
+					.catch(() => undefined);
 			}
 
 			if (timelineId) {
 				await page.request
-					.delete(`${API_BASE_URL}/timelines/${timelineId}`)
+					.delete(`${API_BASE_URL}/timelines/${timelineId}`, {
+						headers: SPACE_HEADERS,
+					})
 					.catch(() => undefined);
 			}
 
 			if (routineOneId) {
 				await page.request
-					.delete(`${API_BASE_URL}/routines/${routineOneId}`)
+					.delete(`${API_BASE_URL}/routines/${routineOneId}`, {
+						headers: SPACE_HEADERS,
+					})
 					.catch(() => undefined);
 			}
 
 			if (routineTwoId) {
 				await page.request
-					.delete(`${API_BASE_URL}/routines/${routineTwoId}`)
+					.delete(`${API_BASE_URL}/routines/${routineTwoId}`, {
+						headers: SPACE_HEADERS,
+					})
 					.catch(() => undefined);
 			}
 
 			if (createdExerciseTaskId) {
 				await page.request
-					.delete(`${API_BASE_URL}/tasks/${createdExerciseTaskId}`)
+					.delete(`${API_BASE_URL}/tasks/${createdExerciseTaskId}`, {
+						headers: SPACE_HEADERS,
+					})
 					.catch(() => undefined);
 			}
 		}

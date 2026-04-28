@@ -50,11 +50,11 @@ describe("BrowserUtil", () => {
 		mockWindow.location.href = "https://example.com/path";
 
 		// Setup global mocks
-			defineGlobal("document", mockDocument);
-			defineGlobal("window", mockWindow);
-			defineGlobal("navigator", mockNavigator);
-			defineGlobal("localStorage", mockLocalStorage);
-			defineGlobal("sessionStorage", mockSessionStorage);
+		defineGlobal("document", mockDocument);
+		defineGlobal("window", mockWindow);
+		defineGlobal("navigator", mockNavigator);
+		defineGlobal("localStorage", mockLocalStorage);
+		defineGlobal("sessionStorage", mockSessionStorage);
 	});
 
 	afterEach(() => {
@@ -169,10 +169,10 @@ describe("BrowserUtil", () => {
 		});
 
 		it("모바일 사용자 에이전트를 인식해야 한다", () => {
-				defineGlobal("navigator", {
-					userAgent:
-						"Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15",
-				});
+			defineGlobal("navigator", {
+				userAgent:
+					"Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15",
+			});
 
 			const result = getUserAgent();
 

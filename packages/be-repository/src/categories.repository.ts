@@ -137,9 +137,7 @@ export class CategoriesRepository {
 	 * 모든 하위 카테고리 ID를 재귀적으로 조회 (순환 참조 검증용)
 	 */
 	async findAllDescendantIds(categoryId: string): Promise<string[]> {
-		this.logger.debug(
-			`하위 카테고리 ID 재귀 조회: ${categoryId.slice(-8)}`,
-		);
+		this.logger.debug(`하위 카테고리 ID 재귀 조회: ${categoryId.slice(-8)}`);
 
 		const descendantIds: string[] = [];
 		const queue = [categoryId];

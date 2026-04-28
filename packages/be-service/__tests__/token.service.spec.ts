@@ -67,7 +67,9 @@ describe("TokenService", () => {
 	it("토큰 쿠키를 삭제해야 한다", () => {
 		const res = { clearCookie: jest.fn() } as unknown as Response;
 		service.clearTokenCookies(res);
-		expect((res as unknown as { clearCookie: jest.Mock }).clearCookie).toHaveBeenCalledTimes(2);
+		expect(
+			(res as unknown as { clearCookie: jest.Mock }).clearCookie,
+		).toHaveBeenCalledTimes(2);
 	});
 
 	it("블랙리스트 여부를 위임 조회해야 한다", async () => {

@@ -16,7 +16,6 @@ function hasBrowserCookieValue(cookieName: string): boolean {
 
 export function hasIdpBrowserSessionCookie(): boolean {
 	return (
-		hasBrowserCookieValue(Token.ACCESS) ||
-		hasBrowserCookieValue(Token.REFRESH)
+		hasBrowserCookieValue(Token.ACCESS) || hasBrowserCookieValue(Token.REFRESH)
 	);
 }

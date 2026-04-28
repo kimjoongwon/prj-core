@@ -15,7 +15,10 @@ test.describe("문의 상세 페이지", () => {
 				data?: Array<{ id?: string }>;
 			};
 			const inquiryId = inquiriesBody.data?.[0]?.id;
-			test.skip(!inquiryId, "조회 가능한 문의 데이터가 없어 상세 페이지를 검증할 수 없습니다.");
+			test.skip(
+				!inquiryId,
+				"조회 가능한 문의 데이터가 없어 상세 페이지를 검증할 수 없습니다.",
+			);
 
 			// Given: 문의 상세 페이지 직접 진입
 			await page.goto(`./inquiries/${inquiryId}`, {

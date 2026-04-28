@@ -80,8 +80,6 @@ export function getRhythmTailwindAxisClass(
 	return rhythmTailwindAxisClasses[axis][value];
 }
 
-export function getRhythmLegacyPixelGapClass(
-	value: RhythmScaleValue,
-): string {
+export function getRhythmLegacyPixelGapClass(value: RhythmScaleValue): string {
 	return rhythmLegacyPixelGapClasses[value];
 }

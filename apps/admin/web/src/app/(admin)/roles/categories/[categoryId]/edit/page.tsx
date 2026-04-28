@@ -39,10 +39,11 @@ const AdminRolesCategoriesEditRoute = observer(() => {
 	const [isInitialized, setIsInitialized] = useState(false);
 
 	const { data: response, isLoading } = useGetCategoryById(categoryId);
-	const category = (response?.data as unknown) as CategoryDetail | undefined;
+	const category = response?.data as unknown as CategoryDetail | undefined;
 
 	const { data: categoriesResponse } = useGetCategories({ type: "Role" });
-	const categories = ((categoriesResponse?.data ?? []) as unknown) as CategoryOption[];
+	const categories = (categoriesResponse?.data ??
+		[]) as unknown as CategoryOption[];
 
 	useEffect(() => {
 		if (!category || isInitialized) {
@@ -116,9 +117,7 @@ const AdminRolesCategoriesEditRoute = observer(() => {
 	);
 });
 
-function mapEditOption(
-	category: CategoryOption,
-): RoleCategoryEditPageOption {
+function mapEditOption(category: CategoryOption): RoleCategoryEditPageOption {
 	return {
 		id: category.id,
 		name: category.name,

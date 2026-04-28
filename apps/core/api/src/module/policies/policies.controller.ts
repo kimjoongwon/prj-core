@@ -148,7 +148,7 @@ export class PoliciesController {
 		operationId: "syncPolicyAbilities",
 		summary: "Policy Ability 동기화",
 		description:
-		"특정 Policy에 포함되는 Ability 목록을 전체 동기화 방식으로 반영합니다.",
+			"특정 Policy에 포함되는 Ability 목록을 전체 동기화 방식으로 반영합니다.",
 	})
 	@ApiAuth()
 	@ApiParam({

@@ -94,7 +94,8 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 		}
 
 		if (state.type === "ONE_TIME_RANGE") {
-			if (!state.startDateTime) errors.startDateTime = "시작 일시를 입력해주세요.";
+			if (!state.startDateTime)
+				errors.startDateTime = "시작 일시를 입력해주세요.";
 			if (!state.endDateTime) errors.endDateTime = "종료 일시를 입력해주세요.";
 			if (
 				state.startDateTime &&

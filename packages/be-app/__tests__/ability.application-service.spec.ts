@@ -64,7 +64,10 @@ describe("AbilityApplicationService", () => {
 			providers: [
 				AbilityApplicationService,
 				{ provide: AbilityService, useValue: mockAbilitiesService },
-				{ provide: ClsService, useValue: mockClsService as unknown as ClsService },
+				{
+					provide: ClsService,
+					useValue: mockClsService as unknown as ClsService,
+				},
 			],
 		}).compile();
 
@@ -91,6 +94,7 @@ describe("AbilityApplicationService", () => {
 			expect(mockAbilitiesService.getMergedAbilities).toHaveBeenCalledWith(
 				["role-1", "role-2"],
 				"user-test-id",
+				"space-1",
 			);
 			expect(result).toEqual(mockAbilities);
 		});
@@ -119,6 +123,7 @@ describe("AbilityApplicationService", () => {
 			expect(mockAbilitiesService.getMergedAbilities).toHaveBeenCalledWith(
 				["role-1"],
 				"user-test-id",
+				"space-1",
 			);
 		});
 
@@ -137,7 +142,9 @@ describe("AbilityApplicationService", () => {
 				key === CONTEXT_KEYS.AUTH_USER
 					? {
 							id: "user-test-id",
-							tenants: [{ id: "tenant-1", spaceId: "space-1", roleId: "role-1" }],
+							tenants: [
+								{ id: "tenant-1", spaceId: "space-1", roleId: "role-1" },
+							],
 						}
 					: undefined,
 			);
@@ -148,34 +155,22 @@ describe("AbilityApplicationService", () => {
 		});
 	});
 
-	describe("getRoleAbilities", () => {
-		it("Role ID로 권한 목록을 조회해야 한다", async () => {
-			// Given
-			const roleId = "role-test-id";
+	describe("getAllAbilities", () => {
+		it("전체 권한 목록을 조회해야 한다", async () => {
 			const mockAbilities = [mockAbility];
-			mockAbilitiesService.getRoleAbilities.mockResolvedValue(
-				mockAbilities,
-			);
+			mockAbilitiesService.getAllAbilities.mockResolvedValue(mockAbilities);
 
-			// When
-			const result = await applicationService.getRoleAbilities(roleId);
+			const result = await applicationService.getAllAbilities();
 
-			// Then
-			expect(mockAbilitiesService.getRoleAbilities).toHaveBeenCalledWith(
-				roleId,
-			);
+			expect(mockAbilitiesService.getAllAbilities).toHaveBeenCalledWith();
 			expect(result).toEqual(mockAbilities);
 		});
 
 		it("권한이 없으면 빈 배열을 반환해야 한다", async () => {
-			// Given
-			const roleId = "role-without-abilities";
-			mockAbilitiesService.getRoleAbilities.mockResolvedValue([]);
+			mockAbilitiesService.getAllAbilities.mockResolvedValue([]);
 
-			// When
-			const result = await applicationService.getRoleAbilities(roleId);
+			const result = await applicationService.getAllAbilities();
 
-			// Then
 			expect(result).toEqual([]);
 		});
 	});

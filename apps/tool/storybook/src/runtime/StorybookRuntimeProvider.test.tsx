@@ -108,9 +108,7 @@ afterEach(() => {
 });
 
 describe("StorybookRuntimeProvider", () => {
-	it(
-		"sets Storybook login redirect URLs using the top-level story location",
-		async () => {
+	it("sets Storybook login redirect URLs using the top-level story location", async () => {
 		window.history.replaceState(
 			{},
 			"",
@@ -141,13 +139,9 @@ describe("StorybookRuntimeProvider", () => {
 			"/__storybook_auth/login?returnTo=%2Fiframe.html%3Fid%3Dfeatures-button--primary%26viewMode%3Dstory",
 		);
 		expect(screen.getByText("Story content")).toBeTruthy();
-		},
-		15000,
-	);
+	}, 15000);
 
-	it(
-		"renders the static admin space fallback when live auth is disabled",
-		async () => {
+	it("renders the static admin space fallback when live auth is disabled", async () => {
 		window.history.replaceState({}, "", "/iframe.html?id=admin-card--default");
 
 		const { StorybookRuntimeProvider } = await loadProvider(false);
@@ -170,7 +164,9 @@ describe("StorybookRuntimeProvider", () => {
 		});
 		const spaceSelect = screen.getByLabelText("Space") as HTMLSelectElement;
 		expect(spaceSelect.value).toBe("storybook-space");
-		expect(screen.getByRole("option", { name: "Storybook Space" })).toBeTruthy();
+		expect(
+			screen.getByRole("option", { name: "Storybook Space" }),
+		).toBeTruthy();
 		expect(screen.getByRole("option", { name: "Storybook Ops" })).toBeTruthy();
 		expect(
 			screen.getByRole("option", { name: "Storybook Growth" }),
@@ -182,13 +178,9 @@ describe("StorybookRuntimeProvider", () => {
 
 		expect(spaceSelect.value).toBe("storybook-growth-space");
 		expect(screen.getByText("Admin story content")).toBeTruthy();
-		},
-		15000,
-	);
+	}, 15000);
 
-	it(
-		"uses the Storybook toolbar realm override when the story does not provide a runtime realm",
-		async () => {
+	it("uses the Storybook toolbar realm override when the story does not provide a runtime realm", async () => {
 		window.history.replaceState(
 			{},
 			"",
@@ -198,17 +190,14 @@ describe("StorybookRuntimeProvider", () => {
 		const { withStorybookRuntime } = await loadProvider(false);
 
 		render(
-			withStorybookRuntime(
-				() => <div>Toolbar realm story</div>,
-				{
-					id: "page-spacelistpage--default",
-					title: "page/SpaceListPage",
-					globals: {
-						storybookRealm: "admin",
-					},
-					parameters: {},
+			withStorybookRuntime(() => <div>Toolbar realm story</div>, {
+				id: "page-spacelistpage--default",
+				title: "page/SpaceListPage",
+				globals: {
+					storybookRealm: "admin",
 				},
-			),
+				parameters: {},
+			}),
 		);
 
 		await waitFor(() => {
@@ -216,7 +205,5 @@ describe("StorybookRuntimeProvider", () => {
 		});
 		expect(screen.getByLabelText("Space")).toBeTruthy();
 		expect(screen.getByText("Toolbar realm story")).toBeTruthy();
-		},
-		15000,
-	);
+	}, 15000);
 });

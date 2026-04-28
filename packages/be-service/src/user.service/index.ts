@@ -18,13 +18,10 @@ import { AuthCacheService } from "../auth-cache.service";
  * 사용자 목록 조회 결과
  */
 export interface GetUsersResult {
-	users: Awaited<
-		ReturnType<UsersRepository["findManyBySpaceIds"]>
-	>["users"];
+	users: Awaited<ReturnType<UsersRepository["findManyBySpaceIds"]>>["users"];
 	totalCount: number;
 	stats: UserStats;
 }
-
 
 @Injectable()
 export class UserService {
@@ -135,9 +132,7 @@ export class UserService {
 
 		// 자기 자신 삭제 방지
 		if (userId === currentUserId) {
-			throw new BadRequestException(
-				USER_ERRORS.CANNOT_DELETE_SELF,
-			);
+			throw new BadRequestException(USER_ERRORS.CANNOT_DELETE_SELF);
 		}
 
 		// 사용자 존재 및 Space 접근 권한 확인
@@ -245,7 +240,9 @@ export class UserService {
 	 *
 	 * @returns 생성된 임시 비밀번호 (관리자 확인용)
 	 */
-	async forceResetPassword(userId: string): Promise<{ temporaryPassword: string; email: string }> {
+	async forceResetPassword(
+		userId: string,
+	): Promise<{ temporaryPassword: string; email: string }> {
 		this.logger.debug(`비밀번호 강제 재설정: userId=${userId.slice(-8)}`);
 
 		const securityInfo = await this.repository.findSecurityInfoById(userId);
@@ -299,21 +296,15 @@ export class UserService {
 		]);
 
 		if (emailExists) {
-			throw new BadRequestException(
-				USER_ERRORS.EMAIL_ALREADY_EXISTS,
-			);
+			throw new BadRequestException(USER_ERRORS.EMAIL_ALREADY_EXISTS);
 		}
 
 		if (phoneExists) {
-			throw new BadRequestException(
-				USER_ERRORS.PHONE_ALREADY_EXISTS,
-			);
+			throw new BadRequestException(USER_ERRORS.PHONE_ALREADY_EXISTS);
 		}
 
 		if (nameExists) {
-			throw new BadRequestException(
-				USER_ERRORS.NAME_ALREADY_EXISTS,
-			);
+			throw new BadRequestException(USER_ERRORS.NAME_ALREADY_EXISTS);
 		}
 	}
 
@@ -340,7 +331,10 @@ export class UserService {
 		}
 
 		// 셔플
-		return password.split("").sort(() => Math.random() - 0.5).join("");
+		return password
+			.split("")
+			.sort(() => Math.random() - 0.5)
+			.join("");
 	}
 
 	/**

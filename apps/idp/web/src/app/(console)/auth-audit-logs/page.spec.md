@@ -65,6 +65,7 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-04-28 | route의 Page 전용 row 매핑을 제거하고 Orval DTO를 pure page에 직접 주입하도록 정리 | codex |
+| 2026-04-29 | 이메일 검색 E2E가 DataGrid 검색 입력의 Enter 커밋 계약을 검증하도록 갱신 | codex |
 | 2026-04-28 | grid 컴포넌트 명칭을 DataGrid로 통일한 구조 변경을 반영 | codex |
 | 2026-04-28 | page role을 `collection`으로 갱신 | codex |
 | 2026-04-28 | DataGrid 공식 재사용 타깃을 `data-grid`로 갱신 | codex |

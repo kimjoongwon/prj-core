@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import {
+	IsBoolean,
+	IsNotEmpty,
+	IsOptional,
+	IsString,
+	MinLength,
+} from "class-validator";
 
 /**
  * 비밀번호 변경 요청 DTO

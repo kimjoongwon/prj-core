@@ -9,42 +9,42 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ActionResponseDtoConfig } from './actionResponseDtoConfig';
+import type { ActionResponseDtoConfig } from "./actionResponseDtoConfig";
 
 export interface ActionResponseDto {
-  /** Action ID (UUID) */
-  id: string;
-  /** Action 이름 (create, read, read:masked:email 등) */
-  name: string;
-  /**
-   * 표시명
-   * @nullable
-   */
-  displayName?: string | null;
-  /**
-   * 설명
-   * @nullable
-   */
-  description?: string | null;
-  /**
-   * 그룹 (crud, visibility, bulk, workflow)
-   * @nullable
-   */
-  group?: string | null;
-  /** 정렬 순서 */
-  order: number;
-  /** 시스템 여부 (시스템 기본 Action인지) */
-  isSystem: boolean;
-  /**
-   * Action 설정 (마스킹, 포맷팅 등)
-   * @nullable
-   */
-  config?: ActionResponseDtoConfig;
-  /** 생성 일시 */
-  createdAt: string;
-  /**
-   * 수정 일시
-   * @nullable
-   */
-  updatedAt?: string | null;
+	/** Action ID (UUID) */
+	id: string;
+	/** Action 이름 (create, read, read:masked:email 등) */
+	name: string;
+	/**
+	 * 표시명
+	 * @nullable
+	 */
+	displayName?: string | null;
+	/**
+	 * 설명
+	 * @nullable
+	 */
+	description?: string | null;
+	/**
+	 * 그룹 (crud, visibility, bulk, workflow)
+	 * @nullable
+	 */
+	group?: string | null;
+	/** 정렬 순서 */
+	order: number;
+	/** 시스템 여부 (시스템 기본 Action인지) */
+	isSystem: boolean;
+	/**
+	 * Action 설정 (마스킹, 포맷팅 등)
+	 * @nullable
+	 */
+	config?: ActionResponseDtoConfig;
+	/** 생성 일시 */
+	createdAt: string;
+	/**
+	 * 수정 일시
+	 * @nullable
+	 */
+	updatedAt?: string | null;
 }

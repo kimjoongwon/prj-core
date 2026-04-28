@@ -46,7 +46,8 @@ export const Redirecting: Story = {
 
 export const RetryUnavailable: Story = {
 	args: {
-		errorMessage: "관리자 인증 구성을 확인할 수 없습니다. 잠시 후 다시 시도해 주세요.",
+		errorMessage:
+			"관리자 인증 구성을 확인할 수 없습니다. 잠시 후 다시 시도해 주세요.",
 		isRedirecting: false,
 	},
 	render: renderLoginRedirectPage,

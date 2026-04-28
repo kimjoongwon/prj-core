@@ -6,10 +6,7 @@ import { SpaceAlert } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { useSpaceBootstrap, useSpaceGuard } from "@/hooks";
-import {
-	useNavigationStore,
-	usePersistStore,
-} from "@/stores/AppStoreProvider";
+import { useNavigationStore, usePersistStore } from "@/stores/AppStoreProvider";
 
 export { resolveCurrentSpaceGroundName } from "@cocrepo/hook";
 

@@ -71,7 +71,9 @@ export class SpaceService {
 	async createSpaceWithGround(dto: CreateGroundDto): Promise<Space> {
 		this.logger.debug(`공간 생성: businessNo=${dto.businessNo}`);
 
-		const existing = await this.repository.findGroundByBusinessNo(dto.businessNo);
+		const existing = await this.repository.findGroundByBusinessNo(
+			dto.businessNo,
+		);
 		if (existing) {
 			throw new ConflictException(
 				`이미 등록된 사업자등록번호입니다: ${dto.businessNo}`,

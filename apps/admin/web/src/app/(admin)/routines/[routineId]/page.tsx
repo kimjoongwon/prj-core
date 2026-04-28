@@ -1,19 +1,19 @@
 "use client";
 
-import type { AxiosError } from "axios";
+import {
+	type AssetDto,
+	getAssetById,
+	getGetAssetByIdQueryKey,
+} from "@cocrepo/api/assets";
 import {
 	getGetRoutinesQueryKey,
 	useDeleteRoutine,
 	useGetRoutine,
 } from "@cocrepo/api/core/routines";
-import {
-	getAssetById,
-	getGetAssetByIdQueryKey,
-	type AssetDto,
-} from "@cocrepo/api/assets";
 import { RoutineDetailPage } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
+import type { AxiosError } from "axios";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -25,7 +25,12 @@ const AdminRoutinesDetailRoute = observer(() => {
 	const queryClient = useQueryClient();
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-	const { data: response, error, isLoading, refetch } = useGetRoutine(routineId);
+	const {
+		data: response,
+		error,
+		isLoading,
+		refetch,
+	} = useGetRoutine(routineId);
 	const routine = response?.data;
 	const assetIds = Array.from(
 		new Set(

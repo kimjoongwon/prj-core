@@ -7,7 +7,15 @@ import path from "node:path";
 
 function buildInstallEnv() {
   const installEnv = { ...process.env };
-  const browsersPath = installEnv.PLAYWRIGHT_BROWSERS_PATH;
+  let browsersPath = installEnv.PLAYWRIGHT_BROWSERS_PATH;
+
+  if (!browsersPath) {
+    const workspaceBrowsersPath = resolveWorkspaceBrowsersPath();
+    if (workspaceBrowsersPath) {
+      browsersPath = workspaceBrowsersPath;
+      installEnv.PLAYWRIGHT_BROWSERS_PATH = workspaceBrowsersPath;
+    }
+  }
 
   if (
     browsersPath &&
@@ -18,6 +26,29 @@ function buildInstallEnv() {
   }
 
   return installEnv;
+}
+
+function resolveWorkspaceBrowsersPath() {
+  let currentDir = process.cwd();
+
+  while (path.dirname(currentDir) !== currentDir) {
+    const workspaceFile = path.join(currentDir, "pnpm-workspace.yaml");
+    const browsersPath = path.join(
+      currentDir,
+      "apps",
+      "test",
+      "e2e",
+      "browsers",
+    );
+
+    if (fs.existsSync(workspaceFile) && fs.existsSync(browsersPath)) {
+      return browsersPath;
+    }
+
+    currentDir = path.dirname(currentDir);
+  }
+
+  return undefined;
 }
 
 function resolveBrowsersLocation(env) {

@@ -9,20 +9,20 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { TaskDto } from './taskDto';
+import type { TaskDto } from "./taskDto";
 
 export interface ExerciseDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  duration: number;
-  count: number;
-  taskId: string;
-  description?: string;
-  imageFileId?: string;
-  videoFileId?: string;
-  name: string;
-  task: TaskDto;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	duration: number;
+	count: number;
+	taskId: string;
+	description?: string;
+	imageFileId?: string;
+	videoFileId?: string;
+	name: string;
+	task: TaskDto;
 }

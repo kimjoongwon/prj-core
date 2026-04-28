@@ -30,7 +30,10 @@ const FIRST_PARTY_LOGIN_URLS: Record<FirstPartyClient, string> = {
 };
 
 const SWAGGER_CLIENT_ID = "swagger-web";
-const SWAGGER_REDIRECT_URI = `${BASE_URL}/api/oauth2-redirect.html`;
+const SWAGGER_BASE_URL = process.env.IDP_CLIENT_URL ?? "http://localhost:3008";
+const SWAGGER_REDIRECT_URI =
+	process.env.OIDC_SWAGGER_REDIRECT_URI ??
+	`${SWAGGER_BASE_URL}/api/oauth2-redirect.html`;
 const DEFAULT_ADMIN_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
 const DEFAULT_ADMIN_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
 
@@ -173,9 +176,10 @@ async function loginAsFullAccessWithSwaggerClient(): Promise<string> {
 		expect(location).toBeDefined();
 
 		const redirectUrl = new URL(location as string, BASE_URL);
+		const expectedRedirectUrl = new URL(SWAGGER_REDIRECT_URI);
 		if (
-			redirectUrl.origin === BASE_URL &&
-			redirectUrl.pathname === "/api/oauth2-redirect.html"
+			redirectUrl.origin === expectedRedirectUrl.origin &&
+			redirectUrl.pathname === expectedRedirectUrl.pathname
 		) {
 			const code = redirectUrl.searchParams.get("code");
 			const returnedState = redirectUrl.searchParams.get("state");

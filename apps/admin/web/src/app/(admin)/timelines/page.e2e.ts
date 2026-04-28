@@ -1,7 +1,10 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { expect, type Locator, type Page, test } from "@playwright/test";
 
 const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
 const TIMELINE_LIST_PATH = "/admin/timelines";
+const SYSTEM_SPACE_ID =
+	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
+const SPACE_HEADERS = { "x-space-id": SYSTEM_SPACE_ID };
 
 async function openLinkHrefAndWaitForRoute({
 	page,
@@ -74,6 +77,7 @@ test.describe("타임라인 목록 페이지", () => {
 			const createResponse = await page.request.post(
 				`${ADMIN_API_BASE_URL}/timelines`,
 				{
+					headers: SPACE_HEADERS,
 					data: {
 						name: TEST_NAME,
 						description: TEST_DESCRIPTION,
@@ -128,6 +132,7 @@ test.describe("타임라인 목록 페이지", () => {
 			const updateResponse = await page.request.patch(
 				`${ADMIN_API_BASE_URL}/timelines/${timelineId}`,
 				{
+					headers: SPACE_HEADERS,
 					data: {
 						name: UPDATED_NAME,
 						description: TEST_DESCRIPTION,
@@ -139,14 +144,15 @@ test.describe("타임라인 목록 페이지", () => {
 			// Then: 목록으로 돌아가 최신 데이터 확인
 			await gotoTimelineList(page);
 
-			await expect(
-				page.getByText(UPDATED_NAME, { exact: true }),
-			).toBeVisible({ timeout: 30000 });
+			await expect(page.getByText(UPDATED_NAME, { exact: true })).toBeVisible({
+				timeout: 30000,
+			});
 
 			// ── 삭제 플로우 ──
 
 			const deleteResponse = await page.request.delete(
 				`${ADMIN_API_BASE_URL}/timelines/${timelineId}`,
+				{ headers: SPACE_HEADERS },
 			);
 			expect(deleteResponse.status()).toBe(204);
 

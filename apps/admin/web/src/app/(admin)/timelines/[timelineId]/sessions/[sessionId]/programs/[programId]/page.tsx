@@ -20,8 +20,8 @@ type ProgramDetailPageParams = {
 	programId: string;
 };
 
-const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute = observer(
-	() => {
+const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
+	observer(() => {
 		const { timelineId, sessionId, programId } =
 			useParams<ProgramDetailPageParams>();
 		const router = useRouter();
@@ -72,7 +72,10 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute = observer
 			);
 		};
 
-		const descriptionText = [program?.session?.name, program?.session?.timeline?.name]
+		const descriptionText = [
+			program?.session?.name,
+			program?.session?.timeline?.name,
+		]
 			.filter(Boolean)
 			.join(" · ");
 
@@ -96,28 +99,31 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute = observer
 									program.activityCount ?? program.executionPlan?.length ?? 0
 								}개`,
 								sessionName: program.session?.name ?? null,
-								sessionHref: `/timelines/${timelineId}/sessions/${sessionId}` as Route,
+								sessionHref:
+									`/timelines/${timelineId}/sessions/${sessionId}` as Route,
 								createdAt: program.createdAt,
-								executionPlan: (program.executionPlan ?? []).map((activity) => ({
-									id: activity.id,
-									taskId: activity.taskId,
-									order: activity.order,
-									repetitions: activity.repetitions,
-									restTime: activity.restTime,
-									exerciseName: activity.exerciseName,
-									exerciseDescription: activity.exerciseDescription,
-									exerciseDuration: activity.exerciseDuration,
-									exerciseCount: activity.exerciseCount,
-									notes: activity.notes,
-									imageFileId: activity.imageFileId,
-									imageAssetHref: activity.imageFileId
-										? (`/assets/${activity.imageFileId}` as Route)
-										: undefined,
-									videoFileId: activity.videoFileId,
-									videoAssetHref: activity.videoFileId
-										? (`/assets/${activity.videoFileId}` as Route)
-										: undefined,
-								})),
+								executionPlan: (program.executionPlan ?? []).map(
+									(activity) => ({
+										id: activity.id,
+										taskId: activity.taskId,
+										order: activity.order,
+										repetitions: activity.repetitions,
+										restTime: activity.restTime,
+										exerciseName: activity.exerciseName,
+										exerciseDescription: activity.exerciseDescription,
+										exerciseDuration: activity.exerciseDuration,
+										exerciseCount: activity.exerciseCount,
+										notes: activity.notes,
+										imageFileId: activity.imageFileId,
+										imageAssetHref: activity.imageFileId
+											? (`/assets/${activity.imageFileId}` as Route)
+											: undefined,
+										videoFileId: activity.videoFileId,
+										videoAssetHref: activity.videoFileId
+											? (`/assets/${activity.videoFileId}` as Route)
+											: undefined,
+									}),
+								),
 							}
 						: undefined
 				}
@@ -131,11 +137,13 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute = observer
 				onClickDeleteCancelButton={deleteModal.onClose}
 			/>
 		);
-	},
-);
+	});
 
 export default dynamic(
-	() => Promise.resolve(AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute),
+	() =>
+		Promise.resolve(
+			AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute,
+		),
 	{
 		ssr: false,
 	},

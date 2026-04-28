@@ -61,7 +61,9 @@ function getQueryClient() {
 }
 
 function isAuthFlowPath(pathname?: string | null) {
-	return AUTH_FLOW_PATH_PREFIXES.some((prefix) => pathname?.startsWith(prefix));
+	return AUTH_FLOW_PATH_PREFIXES.some(
+		(prefix) => pathname === prefix || pathname?.startsWith(`${prefix}/`),
+	);
 }
 
 /**

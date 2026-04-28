@@ -13,7 +13,9 @@ import {
  * 500 대신 503 (Service Unavailable)을 사용하여 일시적인 문제임을 표시
  */
 export class DatabaseConnectionException extends HttpException {
-	constructor(message = "데이터베이스에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.") {
+	constructor(
+		message = "데이터베이스에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.",
+	) {
 		super(
 			{
 				httpStatus: HttpStatus.SERVICE_UNAVAILABLE,

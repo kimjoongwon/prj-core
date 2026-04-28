@@ -388,10 +388,7 @@ export const AssetDetailPage = observer(
 										}}
 									>
 										{folders.map((folder) => (
-											<SelectItem
-												key={folder.id}
-												textValue={folder.name}
-											>
+											<SelectItem key={folder.id} textValue={folder.name}>
 												{folder.name}
 											</SelectItem>
 										))}

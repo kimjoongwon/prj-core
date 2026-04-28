@@ -9,19 +9,19 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { SessionTypes } from './sessionTypes';
-import type { CreateSessionDtoRepeatCycleType } from './createSessionDtoRepeatCycleType';
-import type { CreateSessionDtoRecurringDayOfWeek } from './createSessionDtoRecurringDayOfWeek';
+import type { SessionTypes } from "./sessionTypes";
+import type { CreateSessionDtoRepeatCycleType } from "./createSessionDtoRepeatCycleType";
+import type { CreateSessionDtoRecurringDayOfWeek } from "./createSessionDtoRecurringDayOfWeek";
 
 export interface CreateSessionDto {
-  type: SessionTypes;
-  /** @nullable */
-  repeatCycleType?: CreateSessionDtoRepeatCycleType;
-  startDateTime?: string;
-  endDateTime?: string;
-  /** @nullable */
-  recurringDayOfWeek?: CreateSessionDtoRecurringDayOfWeek;
-  timelineId: string;
-  name: string;
-  description?: string;
+	type: SessionTypes;
+	/** @nullable */
+	repeatCycleType?: CreateSessionDtoRepeatCycleType;
+	startDateTime?: string;
+	endDateTime?: string;
+	/** @nullable */
+	recurringDayOfWeek?: CreateSessionDtoRecurringDayOfWeek;
+	timelineId: string;
+	name: string;
+	description?: string;
 }

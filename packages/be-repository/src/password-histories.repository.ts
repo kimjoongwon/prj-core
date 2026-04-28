@@ -20,7 +20,9 @@ export class PasswordHistoriesRepository {
 	async findById(id: string): Promise<PasswordHistory | null> {
 		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
 
-		const result = await this.txHost.tx.passwordHistory.findUnique({ where: { id } });
+		const result = await this.txHost.tx.passwordHistory.findUnique({
+			where: { id },
+		});
 
 		return result ? plainToInstance(PasswordHistory, result) : null;
 	}
@@ -71,7 +73,9 @@ export class PasswordHistoriesRepository {
 		};
 	}
 
-	async create(data: Prisma.PasswordHistoryUncheckedCreateInput): Promise<PasswordHistory> {
+	async create(
+		data: Prisma.PasswordHistoryUncheckedCreateInput,
+	): Promise<PasswordHistory> {
 		this.logger.debug(`생성: ${data.userId.slice(-8)}`);
 
 		const result = await this.txHost.tx.passwordHistory.create({
@@ -101,4 +105,3 @@ export class PasswordHistoriesRepository {
 		return result;
 	}
 }
-

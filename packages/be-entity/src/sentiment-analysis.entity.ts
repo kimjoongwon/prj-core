@@ -13,7 +13,10 @@ import type { InquiryMessage } from "./inquiry-message.entity";
  * AI 기반 감정 분석을 통해 고객의 감정 상태(긍정, 중립, 부정)와
  * 신뢰도를 추적합니다. 실시간 채팅에서 메시지별 감정 변화를 모니터링합니다.
  */
-export class SentimentAnalysis extends AbstractEntity implements SentimentAnalysisEntity {
+export class SentimentAnalysis
+	extends AbstractEntity
+	implements SentimentAnalysisEntity
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

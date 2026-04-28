@@ -91,9 +91,7 @@ export class SubjectsRepository {
 	/**
 	 * Subject 생성
 	 */
-	async create(
-		data: Prisma.SubjectUncheckedCreateInput,
-	): Promise<Subject> {
+	async create(data: Prisma.SubjectUncheckedCreateInput): Promise<Subject> {
 		this.logger.debug(`Subject 생성: ${data.name}`);
 
 		const result = await this.txHost.tx.subject.create({
@@ -150,5 +148,4 @@ export class SubjectsRepository {
 
 		return plainToInstance(Subject, results);
 	}
-
 }

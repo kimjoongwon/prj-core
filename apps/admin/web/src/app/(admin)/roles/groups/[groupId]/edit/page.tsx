@@ -12,13 +12,6 @@ import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface GroupDetail {
-	id: string;
-	name: string;
-	label?: string | null;
-	type: string;
-}
-
 const AdminRolesGroupsEditRoute = observer(() => {
 	const { groupId } = useParams<{ groupId: string }>();
 	const router = useRouter();

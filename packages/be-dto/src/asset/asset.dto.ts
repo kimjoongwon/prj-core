@@ -21,10 +21,14 @@ export class AssetDto extends AbstractDto {
 	@UUIDField({ description: "소속 폴더 ID" })
 	folderId!: string;
 
-	@EnumField(() => AssetKind, { description: "에셋 종류 (IMAGE, VIDEO, DOCUMENT)" })
+	@EnumField(() => AssetKind, {
+		description: "에셋 종류 (IMAGE, VIDEO, DOCUMENT)",
+	})
 	kind!: AssetKind;
 
-	@EnumField(() => AssetStatus, { description: "에셋 상태 (UPLOADING, READY, FAILED)" })
+	@EnumField(() => AssetStatus, {
+		description: "에셋 상태 (UPLOADING, READY, FAILED)",
+	})
 	status!: AssetStatus;
 
 	@StringField({ description: "원본 파일명" })
@@ -42,7 +46,10 @@ export class AssetDto extends AbstractDto {
 	@StringFieldOptional({ nullable: true, description: "파일 확장자" })
 	extension!: string | null;
 
-	@StringFieldOptional({ nullable: true, description: "체크섬 (무결성 검증용)" })
+	@StringFieldOptional({
+		nullable: true,
+		description: "체크섬 (무결성 검증용)",
+	})
 	checksum!: string | null;
 
 	@ClassField(() => Object, {

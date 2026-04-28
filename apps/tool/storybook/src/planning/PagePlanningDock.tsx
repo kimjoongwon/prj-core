@@ -43,7 +43,8 @@ export function PagePlanningDock({
 							<div style={dialogHeaderTextStyle}>
 								<p style={dialogEyebrowStyle}>Planning Overlay</p>
 								<strong style={dialogTitleStyle}>
-									기획서를 전체 화면으로 펼쳐 route/pure page spec를 한 번에 확인합니다.
+									기획서를 전체 화면으로 펼쳐 route/pure page spec를 한 번에
+									확인합니다.
 								</strong>
 							</div>
 							<button

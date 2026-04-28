@@ -83,7 +83,9 @@ export const RoutineDetailPage = observer(
 	}: RoutineDetailPageProps) => {
 		if (isLoading) {
 			return (
-				<DetailPage top={<PageTitleBar title="루틴 상세" description="로딩 중..." />}>
+				<DetailPage
+					top={<PageTitleBar title="루틴 상세" description="로딩 중..." />}
+				>
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex items-center justify-center p-8">
@@ -220,7 +222,9 @@ export const RoutineDetailPage = observer(
 										<p className="mt-1">{activities.length}개</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">연결 상태</label>
+										<label className="text-sm text-default-500">
+											연결 상태
+										</label>
 										<div className="mt-1">
 											{activities.length === 0 ? (
 												<Chip size="sm" variant="flat" color="warning">
@@ -313,8 +317,7 @@ export const RoutineDetailPage = observer(
 															<div className="flex items-start justify-between gap-3">
 																<div>
 																	<p className="font-medium">
-																		{activity.exerciseName ??
-																			"알 수 없는 운동"}
+																		{activity.exerciseName ?? "알 수 없는 운동"}
 																	</p>
 																	<p className="mt-1 text-sm text-default-500">
 																		루틴 순서 {activity.order}

@@ -87,11 +87,15 @@
     "spec:generate:dry": "node scripts/spec-generate.js --dry-run"
   },
   "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/helper-plugin-utils": "^7.28.6",
+    "@babel/traverse": "^7.29.0",
     "@biomejs/biome": "catalog:",
     "@types/node": "catalog:",
     "@vitejs/plugin-react-swc": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",
+    "semver": "^7.7.3",
     "tsx": "catalog:",
     "turbo": "2.8.14",
     "typescript": "catalog:",

@@ -60,9 +60,7 @@ export class FoldersRepository {
 		return result.map((item) => plainToInstance(Folder, item));
 	}
 
-	async findByParentFolderId(
-		parentFolderId: string | null,
-	): Promise<Folder[]> {
+	async findByParentFolderId(parentFolderId: string | null): Promise<Folder[]> {
 		this.logger.debug(
 			`상위 폴더 기준 조회: ${parentFolderId ? parentFolderId.slice(-8) : "root"}`,
 		);
@@ -129,4 +127,3 @@ export class FoldersRepository {
 		return plainToInstance(Folder, result);
 	}
 }
-

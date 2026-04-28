@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import { Layout } from "@cocrepo/ui";
+import type { ReactNode } from "react";
 import { ConsoleBottomNavSlot } from "./_layout/ConsoleBottomNavSlot";
 import { ConsoleFabSlot } from "./_layout/ConsoleFabSlot";
 import { ConsoleHeaderSlot } from "./_layout/ConsoleHeaderSlot";

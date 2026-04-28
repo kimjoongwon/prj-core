@@ -82,7 +82,8 @@ type SessionCountable = SessionDto & {
 
 const getProgramCount = (session: SessionDto) => {
 	const countableSession = session as SessionCountable;
-	if (Array.isArray(countableSession.programs)) return countableSession.programs.length;
+	if (Array.isArray(countableSession.programs))
+		return countableSession.programs.length;
 	if (typeof countableSession._count?.programs === "number") {
 		return countableSession._count.programs;
 	}
@@ -107,7 +108,9 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 	);
 	const sessions = (sessionsResponse?.data ?? []) as SessionDto[];
 	const totalSessions = sessions.length;
-	const connectedSessions = sessions.filter((session) => getProgramCount(session) > 0).length;
+	const connectedSessions = sessions.filter(
+		(session) => getProgramCount(session) > 0,
+	).length;
 	const unconnectedSessions = totalSessions - connectedSessions;
 	const { mutate: deleteTimeline, isPending: isDeletingTimeline } =
 		useDeleteTimeline();
@@ -129,7 +132,9 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 						color: "success",
 					});
 					deleteTimelineModal.onClose();
-					queryClient.invalidateQueries({ queryKey: getGetTimelinesQueryKey() });
+					queryClient.invalidateQueries({
+						queryKey: getGetTimelinesQueryKey(),
+					});
 					router.push("/timelines" as Route);
 				},
 				onError: () => {
@@ -150,7 +155,9 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 		router.push(`/timelines/${timelineId}/sessions/${sessionId}` as Route);
 	};
 	const onClickCreateProgramButton = (sessionId: string) => {
-		router.push(`/timelines/${timelineId}/sessions/${sessionId}/programs/new` as Route);
+		router.push(
+			`/timelines/${timelineId}/sessions/${sessionId}/programs/new` as Route,
+		);
 	};
 	const onClickDeleteSessionButton = (sessionId: string) => {
 		const session = sessions.find((item) => item.id === sessionId);
@@ -172,7 +179,9 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 					deleteSessionModal.onClose();
 					state.deleteSessionTargetId = "";
 					state.deleteSessionTargetName = "";
-					queryClient.invalidateQueries({ queryKey: getGetSessionsQueryKey(timelineId) });
+					queryClient.invalidateQueries({
+						queryKey: getGetSessionsQueryKey(timelineId),
+					});
 					refetchSessions();
 				},
 				onError: () => {

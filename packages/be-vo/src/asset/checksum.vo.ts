@@ -11,12 +11,14 @@ interface ChecksumProps {
 export class Checksum extends ValueObject<ChecksumProps> {
 	private static readonly HEX_REGEX = /^[a-f0-9]+$/;
 
-	private static readonly LENGTH_BY_ALGORITHM: Record<ChecksumAlgorithm, number> =
-		{
-			md5: 32,
-			sha256: 64,
-			sha512: 128,
-		};
+	private static readonly LENGTH_BY_ALGORITHM: Record<
+		ChecksumAlgorithm,
+		number
+	> = {
+		md5: 32,
+		sha256: 64,
+		sha512: 128,
+	};
 
 	protected validate(props: ChecksumProps): void {
 		const { algorithm, value } = props;

@@ -1,9 +1,5 @@
 import { Prisma } from "../../generated/client/client";
-import type {
-	Action,
-	Role,
-	Subject,
-} from "../../generated/client/client";
+import type { Action, Role, Subject } from "../../generated/client/client";
 import {
 	adminFullAccessAbilitySeedData,
 	adminMenuSubjectSeedData,
@@ -67,7 +63,9 @@ async function readRequiredActions(
 	db: ReferenceDataDbClient,
 ): Promise<Map<string, Action>> {
 	const requiredActionNames = Array.from(
-		new Set(adminFullAccessAbilitySeedData.map((ability) => ability.actionName)),
+		new Set(
+			adminFullAccessAbilitySeedData.map((ability) => ability.actionName),
+		),
 	);
 	const actions = await db.action.findMany({
 		where: { name: { in: requiredActionNames } },
@@ -249,7 +247,6 @@ async function pruneLegacyAdminSubjects(
 				removedAt: null,
 			},
 			data: {
-				isActive: false,
 				removedAt,
 			},
 		});

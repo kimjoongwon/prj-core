@@ -93,7 +93,9 @@ export const HeaderBar = observer(function HeaderBar({
 						<DropdownItem
 							key="logout"
 							color="danger"
-							startContent={<LogOut className="h-4 w-4 text-danger" size={16} />}
+							startContent={
+								<LogOut className="h-4 w-4 text-danger" size={16} />
+							}
 							onPress={handleLogout}
 						>
 							로그아웃

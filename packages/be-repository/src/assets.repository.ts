@@ -45,7 +45,9 @@ export class AssetsRepository {
 	async findByStorageKey(storageKey: string): Promise<Asset | null> {
 		this.logger.debug(`스토리지 키 조회: ${storageKey}`);
 
-		const result = await this.txHost.tx.asset.findUnique({ where: { storageKey } });
+		const result = await this.txHost.tx.asset.findUnique({
+			where: { storageKey },
+		});
 
 		return result ? plainToInstance(Asset, result) : null;
 	}
@@ -117,4 +119,3 @@ export class AssetsRepository {
 		return plainToInstance(Asset, result);
 	}
 }
-

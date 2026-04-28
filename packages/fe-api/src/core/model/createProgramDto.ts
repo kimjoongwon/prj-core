@@ -11,9 +11,9 @@
  */
 
 export interface CreateProgramDto {
-  routineId: string;
-  instructorId: string;
-  capacity: number;
-  name: string;
-  level?: string;
+	routineId: string;
+	instructorId: string;
+	capacity: number;
+	name: string;
+	level?: string;
 }

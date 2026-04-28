@@ -10,9 +10,7 @@ export default function RoleCategoriesLayout({
 		<Page>
 			<PageSurface>
 				<Section>
-					<SectionSurface elevation="flat">
-						{children}
-					</SectionSurface>
+					<SectionSurface elevation="flat">{children}</SectionSurface>
 				</Section>
 			</PageSurface>
 		</Page>

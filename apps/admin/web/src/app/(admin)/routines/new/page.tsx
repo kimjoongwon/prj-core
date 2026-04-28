@@ -1,18 +1,18 @@
 "use client";
 
 import {
+	type AssetDto,
+	getAssetById,
+	getGetAssetByIdQueryKey,
+} from "@cocrepo/api/assets";
+import {
 	type CreateRoutineActivityItemDto,
 	useCreateRoutine,
 } from "@cocrepo/api/core/routines";
 import { type TaskDto, useGetTasks } from "@cocrepo/api/core/tasks";
 import {
-	getAssetById,
-	getGetAssetByIdQueryKey,
-	type AssetDto,
-} from "@cocrepo/api/assets";
-import {
-	RoutineCreatePage,
 	type RoutineActivityFormItem,
+	RoutineCreatePage,
 	type RoutineTaskCandidate,
 } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
@@ -206,7 +206,9 @@ const AdminRoutinesNewRoute = observer(() => {
 				delete state.errors.activities;
 			}}
 			onChangeActivityInput={(taskId, field, value) => {
-				const activity = state.activities.find((item) => item.taskId === taskId);
+				const activity = state.activities.find(
+					(item) => item.taskId === taskId,
+				);
 				if (!activity) {
 					return;
 				}

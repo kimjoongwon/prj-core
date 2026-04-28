@@ -13,18 +13,18 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface OidcSessionDto {
-  id: string;
-  /** 모델 키 (jti 또는 uid) */
-  key: string;
-  /** 모델 타입 (AccessToken, RefreshToken, Session 등) */
-  modelType: string;
-  /** Grant ID (토큰 폐기용) */
-  grantId?: string;
-  /** 세션 UID */
-  uid?: string;
-  /** 계정 ID */
-  accountId?: string;
-  /** @nullable */
-  expiresAt: string | null;
-  createdAt: string;
+	id: string;
+	/** 모델 키 (jti 또는 uid) */
+	key: string;
+	/** 모델 타입 (AccessToken, RefreshToken, Session 등) */
+	modelType: string;
+	/** Grant ID (토큰 폐기용) */
+	grantId?: string;
+	/** 세션 UID */
+	uid?: string;
+	/** 계정 ID */
+	accountId?: string;
+	/** @nullable */
+	expiresAt: string | null;
+	createdAt: string;
 }

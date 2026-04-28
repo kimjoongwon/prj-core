@@ -9,28 +9,28 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { SessionTypes } from './sessionTypes';
-import type { SessionDtoRepeatCycleType } from './sessionDtoRepeatCycleType';
-import type { SessionDtoRecurringDayOfWeek } from './sessionDtoRecurringDayOfWeek';
-import type { ProgramDto } from './programDto';
-import type { TimelineDto } from './timelineDto';
+import type { SessionTypes } from "./sessionTypes";
+import type { SessionDtoRepeatCycleType } from "./sessionDtoRepeatCycleType";
+import type { SessionDtoRecurringDayOfWeek } from "./sessionDtoRecurringDayOfWeek";
+import type { ProgramDto } from "./programDto";
+import type { TimelineDto } from "./timelineDto";
 
 export interface SessionDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  type: SessionTypes;
-  /** @nullable */
-  repeatCycleType?: SessionDtoRepeatCycleType;
-  startDateTime?: string;
-  endDateTime?: string;
-  /** @nullable */
-  recurringDayOfWeek?: SessionDtoRecurringDayOfWeek;
-  timelineId: string;
-  name: string;
-  description?: string;
-  programs: ProgramDto[];
-  timeline: TimelineDto;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	type: SessionTypes;
+	/** @nullable */
+	repeatCycleType?: SessionDtoRepeatCycleType;
+	startDateTime?: string;
+	endDateTime?: string;
+	/** @nullable */
+	recurringDayOfWeek?: SessionDtoRecurringDayOfWeek;
+	timelineId: string;
+	name: string;
+	description?: string;
+	programs: ProgramDto[];
+	timeline: TimelineDto;
 }

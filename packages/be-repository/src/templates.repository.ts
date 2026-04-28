@@ -90,9 +90,7 @@ export class TemplatesRepository {
 	/**
 	 * 생성
 	 */
-	async create(
-		data: Prisma.TemplateUncheckedCreateInput,
-	): Promise<Template> {
+	async create(data: Prisma.TemplateUncheckedCreateInput): Promise<Template> {
 		this.logger.debug(`생성 중: ${data.code}`);
 
 		const result = await this.txHost.tx.template.create({ data });

@@ -30,8 +30,8 @@ import {
 import type { Request, Response } from "express";
 import type { OidcConfig } from "../../config/oidc.config";
 import type { KoaLikeRequest, KoaLikeResponse } from "../oidc/types";
-import type { LoginValidationResult } from "./interaction-login.service";
 import { InteractionFacade } from "./interaction.facade";
+import type { LoginValidationResult } from "./interaction-login.service";
 
 /**
  * OIDC Interaction Controller

@@ -3,8 +3,8 @@ import {
 	appConfig,
 	authConfig,
 	corsConfig,
-	oidcConfig,
 	objectStorageConfig,
+	oidcConfig,
 	redisConfig,
 	smtpConfig,
 } from "../config";

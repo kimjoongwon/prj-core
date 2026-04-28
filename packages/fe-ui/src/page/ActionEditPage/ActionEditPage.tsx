@@ -59,7 +59,8 @@ const groupOptions = [
 ];
 const GROUP_OPTION_VALUES = new Set(groupOptions.map((option) => option.value));
 
-export const ActionEditPage = observer(({
+export const ActionEditPage = observer(
+	({
 		action,
 		formState,
 		isLoading,
@@ -202,7 +203,9 @@ export const ActionEditPage = observer(({
 									}
 									onSelectionChange={(keys) => {
 										const selectedKey = Array.from(keys)[0];
-										onChangeGroupSelection(selectedKey ? String(selectedKey) : "");
+										onChangeGroupSelection(
+											selectedKey ? String(selectedKey) : "",
+										);
 									}}
 								>
 									{groupOptions.map((option) => (
@@ -235,4 +238,5 @@ export const ActionEditPage = observer(({
 				</FormPageSurface>
 			</FormPage>
 		);
-	});
+	},
+);

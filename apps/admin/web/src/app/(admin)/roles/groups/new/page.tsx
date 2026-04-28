@@ -2,11 +2,11 @@
 
 import { useCreateGroup } from "@cocrepo/api/core/groups";
 import { RoleGroupCreatePage } from "@cocrepo/ui";
-import { usePersistStore } from "@/stores/AppStoreProvider";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 
 const AdminRolesGroupsNewRoute = observer(() => {
 	const router = useRouter();

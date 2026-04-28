@@ -1,11 +1,12 @@
-import { expect, test, type Page } from "@playwright/test";
+import { loginToConsole } from "@cocrepo/e2e";
+import { expect, type Page, test } from "@playwright/test";
 
 const REQUEST_ID = "11111111-1111-4111-8111-111111111111";
 
 test.describe("IDP 접근 신청 목록 페이지", () => {
 	test.beforeEach(async ({ page }) => {
-		await mockConsoleSession(page);
 		await mockMyTenantAccessRequests(page);
+		await loginToConsole(page);
 	});
 
 	test("내 신청 목록과 신청하기 버튼이 표시되어야 한다", async ({ page }) => {
@@ -56,21 +57,6 @@ test.describe("IDP 접근 신청 목록 페이지", () => {
 		await expect.poll(() => cancelCalls).toBe(1);
 	});
 });
-
-async function mockConsoleSession(page: Page) {
-	await page.route("**/api/v1/auth/verify-token", async (route) => {
-		await route.fulfill({
-			status: 200,
-			contentType: "application/json",
-			body: JSON.stringify({
-				data: {
-					valid: true,
-					hasFullAccess: false,
-				},
-			}),
-		});
-	});
-}
 
 async function mockMyTenantAccessRequests(page: Page) {
 	await page.route("**/api/v1/tenant-access-requests/my**", async (route) => {

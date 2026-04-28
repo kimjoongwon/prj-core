@@ -19,7 +19,10 @@ function getRoleLabel(role?: Role | string | null) {
 		return null;
 	}
 
-	if (typeof role.displayName === "string" && role.displayName.trim().length > 0) {
+	if (
+		typeof role.displayName === "string" &&
+		role.displayName.trim().length > 0
+	) {
 		return role.displayName;
 	}
 

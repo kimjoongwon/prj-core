@@ -12,6 +12,27 @@ describe("SpacesRepository", () => {
 				findMany: jest.Mock;
 				create: jest.Mock;
 				update: jest.Mock;
+				count: jest.Mock;
+			};
+			ground: {
+				findFirst: jest.Mock;
+				create: jest.Mock;
+				update: jest.Mock;
+				updateMany: jest.Mock;
+			};
+			policy: {
+				findMany: jest.Mock;
+				upsert: jest.Mock;
+			};
+			policyAbility: {
+				upsert: jest.Mock;
+			};
+			rolePolicy: {
+				upsert: jest.Mock;
+			};
+			spaceClassification: {
+				findUnique: jest.Mock;
+				findMany: jest.Mock;
 			};
 		};
 	};
@@ -39,6 +60,27 @@ describe("SpacesRepository", () => {
 					findMany: jest.fn(),
 					create: jest.fn(),
 					update: jest.fn(),
+					count: jest.fn(),
+				},
+				ground: {
+					findFirst: jest.fn(),
+					create: jest.fn(),
+					update: jest.fn(),
+					updateMany: jest.fn(),
+				},
+				policy: {
+					findMany: jest.fn().mockResolvedValue([]),
+					upsert: jest.fn(),
+				},
+				policyAbility: {
+					upsert: jest.fn(),
+				},
+				rolePolicy: {
+					upsert: jest.fn(),
+				},
+				spaceClassification: {
+					findUnique: jest.fn(),
+					findMany: jest.fn(),
 				},
 			},
 		};

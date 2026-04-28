@@ -83,9 +83,7 @@ export type AbilityFormPageProps =
 	| AbilityFormPageNotFoundProps
 	| AbilityFormPageReadyProps;
 
-export const AbilityFormPage = observer((
-	props: AbilityFormPageProps,
-) => {
+export const AbilityFormPage = observer((props: AbilityFormPageProps) => {
 	if (props.status === "loading") {
 		return (
 			<FormPage

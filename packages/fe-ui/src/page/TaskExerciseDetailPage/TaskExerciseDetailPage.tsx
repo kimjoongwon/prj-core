@@ -85,7 +85,9 @@ export const TaskExerciseDetailPage = observer(
 	}: TaskExerciseDetailPageProps) => {
 		if (isLoading) {
 			return (
-				<DetailPage top={<PageTitleBar title="운동 정보" description="로딩 중..." />}>
+				<DetailPage
+					top={<PageTitleBar title="운동 정보" description="로딩 중..." />}
+				>
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex items-center justify-center p-8">
@@ -191,7 +193,9 @@ export const TaskExerciseDetailPage = observer(
 										<p className="mt-1">{exercise.description || "-"}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">이미지 파일</label>
+										<label className="text-sm text-default-500">
+											이미지 파일
+										</label>
 										<div className="mt-1">
 											{exercise.imageFileId && exercise.imageAssetHref ? (
 												<Link
@@ -206,7 +210,9 @@ export const TaskExerciseDetailPage = observer(
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">영상 파일</label>
+										<label className="text-sm text-default-500">
+											영상 파일
+										</label>
 										<div className="mt-1">
 											{exercise.videoFileId && exercise.videoAssetHref ? (
 												<Link
@@ -236,7 +242,9 @@ export const TaskExerciseDetailPage = observer(
 							</DetailSection>
 						</DetailSectionCard>
 						<DetailSectionCard>
-							<DetailSection top={<PageTitleBar level={2} title="태스크 정보" />}>
+							<DetailSection
+								top={<PageTitleBar level={2} title="태스크 정보" />}
+							>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
 										<label className="text-sm text-default-500">Task ID</label>
@@ -253,7 +261,9 @@ export const TaskExerciseDetailPage = observer(
 						</DetailSectionCard>
 						{routines.length > 0 ? (
 							<DetailSectionCard>
-								<DetailSection top={<PageTitleBar level={2} title="연관 루틴" />}>
+								<DetailSection
+									top={<PageTitleBar level={2} title="연관 루틴" />}
+								>
 									<div className="flex flex-col gap-2">
 										{routines.map((routine, index) => (
 											<div

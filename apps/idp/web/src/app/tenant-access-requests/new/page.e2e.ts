@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 test.describe("IDP 접근 신청 생성 페이지", () => {
 	test.beforeEach(async ({ page }) => {
@@ -15,8 +15,8 @@ test.describe("IDP 접근 신청 생성 페이지", () => {
 			page.getByRole("heading", { name: "접근 신청", exact: true }),
 		).toBeVisible();
 		await expect(page.getByText("신청 정보")).toBeVisible();
-		await expect(page.getByText("Space")).toBeVisible();
-		await expect(page.getByText("희망 역할")).toBeVisible();
+		await expect(page.getByText("Space", { exact: true })).toBeVisible();
+		await expect(page.getByText("희망 역할", { exact: true })).toBeVisible();
 		await expect(page.getByLabel("신청 사유")).toBeVisible();
 		await expect(page.getByRole("button", { name: "신청 제출" })).toBeEnabled();
 	});
@@ -60,7 +60,7 @@ test.describe("IDP 접근 신청 생성 페이지", () => {
 });
 
 async function mockConsoleSession(page: Page) {
-	await page.route("**/api/v1/auth/verify-token", async (route) => {
+	await page.route("**/api/v1/auth/verify-token**", async (route) => {
 		await route.fulfill({
 			status: 200,
 			contentType: "application/json",
@@ -76,7 +76,7 @@ async function mockConsoleSession(page: Page) {
 
 async function mockCreateForm(page: Page) {
 	await page.route(
-		"**/api/v1/tenant-access-requests/form/create",
+		"**/api/v1/tenant-access-requests/form/create**",
 		async (route) => {
 			await route.fulfill({
 				status: 200,

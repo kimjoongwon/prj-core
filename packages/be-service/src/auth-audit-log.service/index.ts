@@ -8,9 +8,7 @@ import { Injectable, Logger } from "@nestjs/common";
  * 인증 감사 로그 조회 결과
  */
 export interface GetAuditLogsResult {
-	logs: Awaited<
-		ReturnType<AuthAuditLogsRepository["findMany"]>
-	>["logs"];
+	logs: Awaited<ReturnType<AuthAuditLogsRepository["findMany"]>>["logs"];
 	totalCount: number;
 }
 
@@ -70,7 +68,9 @@ export class AuthAuditLogService {
 	 * @returns 최근 감사 로그 배열
 	 */
 	async getRecentLogsByUserId(userId: string, limit = 10) {
-		this.logger.debug(`사용자별 최근 감사 로그 조회: userId=${userId.slice(-8)}, limit=${limit}`);
+		this.logger.debug(
+			`사용자별 최근 감사 로그 조회: userId=${userId.slice(-8)}, limit=${limit}`,
+		);
 
 		return this.repository.findByUserId(userId, limit);
 	}

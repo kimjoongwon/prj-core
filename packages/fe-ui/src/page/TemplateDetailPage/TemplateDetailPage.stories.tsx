@@ -33,7 +33,8 @@ const defaultArgs = {
 		id: "template-order-status",
 		code: "ORDER_STATUS",
 		name: "주문 상태 안내",
-		content: "안녕하세요 {{userName}}님, 주문 {{orderNumber}}의 상태를 안내드립니다.",
+		content:
+			"안녕하세요 {{userName}}님, 주문 {{orderNumber}}의 상태를 안내드립니다.",
 		createdAt: "2026-04-14T09:00:00.000Z",
 		description: "주문 상태 변경 시 고객에게 발송하는 기본 템플릿입니다.",
 		isActive: true,

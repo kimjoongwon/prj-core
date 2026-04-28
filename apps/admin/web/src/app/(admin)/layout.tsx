@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import { Layout } from "@cocrepo/ui";
+import type { ReactNode } from "react";
 import { AdminBottomNavSlot } from "./_layout/AdminBottomNavSlot";
 import { AdminFabSlot } from "./_layout/AdminFabSlot";
 import { AdminHeaderSlot } from "./_layout/AdminHeaderSlot";

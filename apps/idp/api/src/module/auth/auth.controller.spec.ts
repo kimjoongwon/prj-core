@@ -357,9 +357,7 @@ describe("AuthController", () => {
 				id: "space-test-id",
 			} as never);
 
-			await controller.getCurrentSpace(
-				mockRequest as unknown as never,
-			);
+			await controller.getCurrentSpace(mockRequest as unknown as never);
 
 			expect(mockAuthApplicationService.getCurrentSpace).toHaveBeenCalledWith(
 				mockRequest.headers[REQUEST_HEADER_KEYS.SPACE_ID],
@@ -373,9 +371,9 @@ describe("AuthController", () => {
 
 			await controller.setCurrentSpace({ spaceId: "space-test-id" } as never);
 
-			expect(mockAuthApplicationService.setCurrentSpace).toHaveBeenCalledWith(
-				{ spaceId: "space-test-id" },
-			);
+			expect(mockAuthApplicationService.setCurrentSpace).toHaveBeenCalledWith({
+				spaceId: "space-test-id",
+			});
 		});
 	});
 });

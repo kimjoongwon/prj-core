@@ -63,7 +63,9 @@ export const Layout = observer(function Layout({
 
 	return (
 		<div className={cn("flex h-screen bg-background", className)}>
-			{sidebar && <div className={cn("hidden md:block", sidebarClassName)}>{sidebar}</div>}
+			{sidebar && (
+				<div className={cn("hidden md:block", sidebarClassName)}>{sidebar}</div>
+			)}
 			<div className="flex flex-1 flex-col overflow-hidden">
 				{header}
 				<main

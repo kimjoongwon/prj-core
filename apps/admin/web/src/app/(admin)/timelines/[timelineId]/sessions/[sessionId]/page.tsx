@@ -95,13 +95,20 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 		{ take: 20, skip: 0 },
 	);
 	const programs = (programsResponse?.data ?? []) as ProgramDto[];
-	const { data: usersResponse } = useGetUsers({ take: 100, skip: 0, status: "active" });
+	const { data: usersResponse } = useGetUsers({
+		take: 100,
+		skip: 0,
+		status: "active",
+	});
 	const users = (usersResponse?.data ?? []) as UserDto[];
 	const instructorNameById = new Map(users.map((user) => [user.id, user.name]));
 	const isConnectionResolved = (program: ProgramDto) =>
-		Boolean(program.routine?.id) && instructorNameById.has(program.instructorId);
+		Boolean(program.routine?.id) &&
+		instructorNameById.has(program.instructorId);
 	const totalPrograms = programs.length;
-	const resolvedPrograms = programs.filter((program) => isConnectionResolved(program)).length;
+	const resolvedPrograms = programs.filter((program) =>
+		isConnectionResolved(program),
+	).length;
 	const unresolvedPrograms = totalPrograms - resolvedPrograms;
 	const { mutate: deleteSession, isPending: isDeletingSession } =
 		useDeleteSession();
@@ -123,7 +130,9 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 						color: "success",
 					});
 					deleteSessionModal.onClose();
-					queryClient.invalidateQueries({ queryKey: getGetSessionsQueryKey(timelineId) });
+					queryClient.invalidateQueries({
+						queryKey: getGetSessionsQueryKey(timelineId),
+					});
 					router.push(`/timelines/${timelineId}` as Route);
 				},
 				onError: () => {
@@ -138,7 +147,9 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 		);
 	};
 	const onClickCreateProgramButton = () => {
-		router.push(`/timelines/${timelineId}/sessions/${sessionId}/programs/new` as Route);
+		router.push(
+			`/timelines/${timelineId}/sessions/${sessionId}/programs/new` as Route,
+		);
 	};
 	const onClickEditProgramButton = (programId: string) => {
 		router.push(
@@ -199,7 +210,9 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 							type: session.type,
 							typeLabel: getSessionTypeLabel(session.type),
 							typeColor: getSessionTypeColor(session.type),
-							recurringDayLabel: getDayLabel(session.recurringDayOfWeek ?? null),
+							recurringDayLabel: getDayLabel(
+								session.recurringDayOfWeek ?? null,
+							),
 							repeatCycleLabel: getCycleLabel(session.repeatCycleType ?? null),
 							startDateTime: session.startDateTime,
 							endDateTime: session.endDateTime,
@@ -214,7 +227,8 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 				id: program.id,
 				href: `/timelines/${timelineId}/sessions/${sessionId}/programs/${program.id}` as Route,
 				name: program.name,
-				routineName: program.routineNameSnapshot ?? program.routine?.name ?? "-",
+				routineName:
+					program.routineNameSnapshot ?? program.routine?.name ?? "-",
 				activityCountLabel: `${program.activityCount ?? 0}개`,
 				previewText: getProgramPreviewText(program),
 				instructorName: getInstructorName(program.instructorId),

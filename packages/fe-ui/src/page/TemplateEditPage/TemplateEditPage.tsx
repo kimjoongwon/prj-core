@@ -42,7 +42,9 @@ export const TemplateEditPage = observer(
 	}: TemplateEditPageProps) => {
 		if (isLoading) {
 			return (
-				<FormPage top={<PageTitleBar title="템플릿 수정" description="로딩 중..." />}>
+				<FormPage
+					top={<PageTitleBar title="템플릿 수정" description="로딩 중..." />}
+				>
 					<FormPageSurface>
 						<FormSectionCard>
 							<div className="flex items-center justify-center gap-2 p-8">

@@ -13,6 +13,6 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface SetCurrentSpaceDto {
-  /** 현재 선택할 Space ID */
-  spaceId: string;
+	/** 현재 선택할 Space ID */
+	spaceId: string;
 }

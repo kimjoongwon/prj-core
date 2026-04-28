@@ -44,9 +44,7 @@ export class TenantAccessRequestsRepository {
 		return result ? plainToInstance(TenantAccessRequest, result) : null;
 	}
 
-	async findByIdWithRelations(
-		id: string,
-	): Promise<TenantAccessRequest | null> {
+	async findByIdWithRelations(id: string): Promise<TenantAccessRequest | null> {
 		this.logger.debug(`테넌트 접근 신청 상세 조회: ${id.slice(-8)}`);
 
 		const result = await this.txHost.tx.tenantAccessRequest.findUnique({

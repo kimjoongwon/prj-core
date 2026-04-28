@@ -36,7 +36,9 @@ test.describe("감사 로그", () => {
 			await page.waitForLoadState("networkidle");
 
 			// When: 이메일 검색
-			await page.getByPlaceholder("이메일로 검색...").fill("admin@example.com");
+			const searchInput = page.getByPlaceholder("이메일로 검색...");
+			await searchInput.fill("admin@example.com");
+			await searchInput.press("Enter");
 
 			// debounce 대기
 			await page.waitForTimeout(500);

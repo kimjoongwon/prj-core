@@ -86,7 +86,9 @@ export const RoutineEditPage = observer(
 	}: RoutineEditPageProps) => {
 		if (isLoading) {
 			return (
-				<FormPage top={<PageTitleBar title="루틴 수정" description="로딩 중..." />}>
+				<FormPage
+					top={<PageTitleBar title="루틴 수정" description="로딩 중..." />}
+				>
 					<FormPageSurface>
 						<FormSectionCard>
 							<div className="flex items-center justify-center gap-2 p-8">
@@ -148,7 +150,9 @@ export const RoutineEditPage = observer(
 					<PageTitleBar
 						title="루틴 수정"
 						description={
-							routineName ? `${routineName} 루틴을 수정합니다.` : "루틴을 수정합니다."
+							routineName
+								? `${routineName} 루틴을 수정합니다.`
+								: "루틴을 수정합니다."
 						}
 						actions={pageActions}
 					/>

@@ -9,10 +9,7 @@ import {
 	useSendTestTemplate,
 	useToggleTemplateStatus,
 } from "@cocrepo/api/core/templates";
-import {
-	TemplateDetailPage,
-	type PreviewResult,
-} from "@cocrepo/ui";
+import { type PreviewResult, TemplateDetailPage } from "@cocrepo/ui";
 import { addToast, useDisclosure } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";

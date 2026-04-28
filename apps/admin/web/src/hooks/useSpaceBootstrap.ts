@@ -18,14 +18,12 @@ export function useSpaceBootstrap() {
 			enabled: isHydrated,
 		},
 	});
-	const {
-		data: currentSpaceResponse,
-		isFetched: isCurrentSpaceFetched,
-	} = useGetCurrentSpace({
-		query: {
-			enabled: isHydrated,
-		},
-	});
+	const { data: currentSpaceResponse, isFetched: isCurrentSpaceFetched } =
+		useGetCurrentSpace({
+			query: {
+				enabled: isHydrated,
+			},
+		});
 
 	return useInjectedSpaceBootstrap({
 		spaceStore: persistStore,

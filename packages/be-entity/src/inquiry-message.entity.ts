@@ -18,7 +18,10 @@ import type { User } from "./user.entity";
  * 실시간 채팅 지원을 위해 메시지 상태(전달, 읽음) 추적,
  * 타이핑 표시, AI/시스템 메시지 구분 등의 기능을 제공합니다.
  */
-export class InquiryMessage extends AbstractEntity implements InquiryMessageEntity {
+export class InquiryMessage
+	extends AbstractEntity
+	implements InquiryMessageEntity
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

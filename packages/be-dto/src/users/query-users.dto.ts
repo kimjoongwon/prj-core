@@ -102,7 +102,9 @@ export class QueryUsersDto extends PrismaQueryDto<Prisma.UserWhereInput> {
 		const where = super.toPrismaWhere(baseWhere);
 
 		// 상태 필터 (DeleteFilter -> removedAt)
-		where.removedAt = this.removedAtFilter(this.status === DeleteFilter.DELETED);
+		where.removedAt = this.removedAtFilter(
+			this.status === DeleteFilter.DELETED,
+		);
 
 		// 닉네임 (릴레이션: profiles.some)
 		if (this.nickname) {
@@ -114,8 +116,7 @@ export class QueryUsersDto extends PrismaQueryDto<Prisma.UserWhereInput> {
 		// 역할 필터 (릴레이션: tenants.some.role.name, baseWhere 병합)
 		if (this.roles?.length) {
 			const existing =
-				(baseWhere?.tenants as Record<string, unknown> | undefined)?.some ??
-				{};
+				(baseWhere?.tenants as Record<string, unknown> | undefined)?.some ?? {};
 			where.tenants = {
 				some: {
 					...(existing as Record<string, unknown>),

@@ -25,10 +25,7 @@ export interface ForgotPasswordFormProps {
  * 이메일 입력 → 발송 완료 2단계 UI를 포함합니다.
  */
 export const ForgotPasswordForm = observer(
-	({
-		state,
-		loginHref = "/auth/login",
-	}: ForgotPasswordFormProps) => {
+	({ state, loginHref = "/auth/login" }: ForgotPasswordFormProps) => {
 		return (
 			<AuthCard>
 				<AuthCardHeader
@@ -56,9 +53,13 @@ export const ForgotPasswordForm = observer(
 									/>
 								</svg>
 							</div>
-							<h2 className="text-lg font-semibold mb-2">이메일을 확인하세요</h2>
+							<h2 className="text-lg font-semibold mb-2">
+								이메일을 확인하세요
+							</h2>
 							<p className="text-default-500 text-sm mb-6">
-								<span className="font-medium text-foreground">{state.email}</span>
+								<span className="font-medium text-foreground">
+									{state.email}
+								</span>
 								으로 예약 계정 비밀번호 재설정 링크를 발송했습니다.
 								<br />
 								이메일이 도착하지 않았다면 스팸 폴더를 확인해주세요.

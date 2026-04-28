@@ -42,7 +42,11 @@ export class SecurityPolicyService {
 		}
 
 		// 캐시 저장
-		await this.redisService.set(CACHE_KEY, JSON.stringify(policy), CACHE_TTL_SEC);
+		await this.redisService.set(
+			CACHE_KEY,
+			JSON.stringify(policy),
+			CACHE_TTL_SEC,
+		);
 
 		return policy;
 	}

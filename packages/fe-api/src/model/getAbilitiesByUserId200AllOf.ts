@@ -9,14 +9,14 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { AbilityResponseDto } from './abilityResponseDto';
-import type { GetAbilitiesByUserId200AllOfMeta } from './getAbilitiesByUserId200AllOfMeta';
+import type { AbilityResponseDto } from "./abilityResponseDto";
+import type { GetAbilitiesByUserId200AllOfMeta } from "./getAbilitiesByUserId200AllOfMeta";
 
 export type GetAbilitiesByUserId200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: AbilityResponseDto[];
-  meta?: GetAbilitiesByUserId200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: AbilityResponseDto[];
+	meta?: GetAbilitiesByUserId200AllOfMeta;
 };

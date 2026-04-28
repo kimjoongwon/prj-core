@@ -132,15 +132,16 @@ function buildAdminMenuSubjectDisplayMap() {
 
 const adminMenuSubjectDisplayMap = buildAdminMenuSubjectDisplayMap();
 
-export const adminMenuSubjectSeedData: AdminDerivedSubjectSeedData[] = Array.from(
-	adminMenuSubjectDisplayMap.entries(),
-).map(([name, displayName], index) => ({
-	name,
-	displayName,
-	group: "menu",
-	order: 100 + index,
-	isSystem: true,
-}));
+export const adminMenuSubjectSeedData: AdminDerivedSubjectSeedData[] =
+	Array.from(adminMenuSubjectDisplayMap.entries()).map(
+		([name, displayName], index) => ({
+			name,
+			displayName,
+			group: "menu",
+			order: 100 + index,
+			isSystem: true,
+		}),
+	);
 
 export const adminPageSubjectSeedData: AdminDerivedSubjectSeedData[] =
 	ADMIN_PAGE_ACCESS_ITEMS.map((item, index) => ({
@@ -155,9 +156,10 @@ const currentAdminMenuSubjectNameSet = new Set(
 	adminMenuSubjectSeedData.map((subject) => subject.name),
 );
 
-export const legacyAdminMenuSubjectNames = PREVIOUS_ADMIN_MENU_SUBJECT_NAMES.filter(
-	(subjectName) => !currentAdminMenuSubjectNameSet.has(subjectName),
-);
+export const legacyAdminMenuSubjectNames =
+	PREVIOUS_ADMIN_MENU_SUBJECT_NAMES.filter(
+		(subjectName) => !currentAdminMenuSubjectNameSet.has(subjectName),
+	);
 
 export const legacyAdminPageSubjectNames: string[] = [];
 
@@ -180,9 +182,7 @@ export const adminFullAccessAbilitySeedData: AdminDerivedAbilitySeedData[] = [
 
 export const adminManageMenuAccessAbilitySeedData: AdminDerivedAbilitySeedData[] =
 	adminMenuSubjectSeedData
-		.filter(
-			(subject) => !MANAGE_EXCLUDED_ADMIN_MENU_SUBJECTS.has(subject.name),
-		)
+		.filter((subject) => !MANAGE_EXCLUDED_ADMIN_MENU_SUBJECTS.has(subject.name))
 		.map((subject) => ({
 			roleName: "MANAGE" as const,
 			subject: subject.name,

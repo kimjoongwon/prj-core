@@ -83,10 +83,10 @@
 
 ## 폼 상태 관리
 
-`useLocalObservable`로 관리하는 `GroupEditFormState`:
+`useState`와 `useEffect`로 관리하는 route-local 상태:
 - `name`: string
 - `label`: string
-- `errors.name`: string
+- `nameError`: string
 - `isInitialized`: boolean (useEffect로 초기값 설정, 한 번만)
 
 ## 비고
@@ -134,6 +134,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-28 | 현재 구현 기준으로 route-local 상태 설명을 `useState` 기반으로 정리하고 미사용 타입 제거를 반영 | codex |
 | 2026-03-31 | 상세 조회/수정 흐름을 `useGetGroupById`, `useUpdateGroup` 기준으로 갱신 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |

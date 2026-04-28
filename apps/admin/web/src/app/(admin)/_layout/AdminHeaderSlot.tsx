@@ -2,19 +2,12 @@
 
 import { useLogout, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
 import type { SpaceInfo } from "@cocrepo/ui";
-import {
-	HeaderBar,
-	HeaderSpaceSelector,
-	ThemeToggleButton,
-} from "@cocrepo/ui";
+import { HeaderBar, HeaderSpaceSelector, ThemeToggleButton } from "@cocrepo/ui";
 import { Button, Tooltip } from "@heroui/react";
 import { KeyRound } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { resolveIdpClientUrl } from "@/runtime-urls";
-import {
-	useNavigationStore,
-	usePersistStore,
-} from "@/stores/AppStoreProvider";
+import { useNavigationStore, usePersistStore } from "@/stores/AppStoreProvider";
 
 const userInfo = {
 	name: "관리자",
@@ -73,9 +66,7 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 	const currentSectionLabel =
 		selectedSubNavItem?.label ?? selectedNavItem?.label ?? "대시보드";
 	const currentSectionCaption =
-		selectedSubNavItem && selectedNavItem
-			? selectedNavItem.label
-			: "현재 섹션";
+		selectedSubNavItem && selectedNavItem ? selectedNavItem.label : "현재 섹션";
 
 	return (
 		<HeaderBar

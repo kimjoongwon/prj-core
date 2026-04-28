@@ -43,7 +43,6 @@ export const PASSWORD_RULES: PasswordRule[] = [
 	{
 		rule: "special",
 		label: "특수문자 포함",
-		test: (pw: string) =>
-			/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?/~`"']/.test(pw),
+		test: (pw: string) => /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?/~`"']/.test(pw),
 	},
 ];

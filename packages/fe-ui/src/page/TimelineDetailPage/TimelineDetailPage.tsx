@@ -127,7 +127,9 @@ export const TimelineDetailPage = observer(
 							<DetailSection top={<PageTitleBar level={2} title="기본 정보" />}>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<label className="text-sm text-default-500">타임라인명</label>
+										<label className="text-sm text-default-500">
+											타임라인명
+										</label>
 										<p className="mt-1">{timeline?.name ?? "-"}</p>
 									</div>
 									<div>
@@ -169,7 +171,9 @@ export const TimelineDetailPage = observer(
 								<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
 									<div className="rounded-lg bg-content2 p-3">
 										<p className="text-xs text-default-500">전체 세션</p>
-										<p className="mt-1 text-lg font-semibold">{totalSessions}개</p>
+										<p className="mt-1 text-lg font-semibold">
+											{totalSessions}개
+										</p>
 									</div>
 									<div className="rounded-lg bg-content2 p-3">
 										<p className="text-xs text-default-500">연결된 세션</p>
@@ -196,7 +200,10 @@ export const TimelineDetailPage = observer(
 										<TableColumn>등록일</TableColumn>
 										<TableColumn align="center">액션</TableColumn>
 									</TableHeader>
-									<TableBody items={sessions} emptyContent="등록된 세션이 없습니다.">
+									<TableBody
+										items={sessions}
+										emptyContent="등록된 세션이 없습니다."
+									>
 										{(session) => (
 											<TableRow key={session.id}>
 												<TableCell>
@@ -246,7 +253,9 @@ export const TimelineDetailPage = observer(
 														<Button
 															size="sm"
 															variant="light"
-															onPress={() => onClickCreateProgramButton(session.id)}
+															onPress={() =>
+																onClickCreateProgramButton(session.id)
+															}
 														>
 															프로그램 등록
 														</Button>
@@ -255,7 +264,9 @@ export const TimelineDetailPage = observer(
 															color="danger"
 															variant="light"
 															isIconOnly
-															onPress={() => onClickDeleteSessionButton(session.id)}
+															onPress={() =>
+																onClickDeleteSessionButton(session.id)
+															}
 														>
 															<Trash2 className="h-4 w-4" />
 														</Button>
@@ -309,7 +320,8 @@ export const TimelineDetailPage = observer(
 						<ModalHeader>세션 삭제</ModalHeader>
 						<ModalBody>
 							<p>
-								<strong>{deleteSessionTargetName}</strong>세션을 삭제하시겠습니까?
+								<strong>{deleteSessionTargetName}</strong>세션을
+								삭제하시겠습니까?
 							</p>
 							<p className="mt-2 text-sm text-danger">
 								프로그램이 연결된 세션은 삭제할 수 없습니다.

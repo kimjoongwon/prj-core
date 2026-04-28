@@ -1,8 +1,4 @@
-import {
-	BooleanField,
-	DateField,
-	StringField,
-} from "@cocrepo/decorator";
+import { BooleanField, DateField, StringField } from "@cocrepo/decorator";
 
 /**
  * 인증 세션 정보 DTO

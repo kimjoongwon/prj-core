@@ -9,11 +9,11 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { JoinInquiryBodyRole } from './joinInquiryBodyRole';
+import type { JoinInquiryBodyRole } from "./joinInquiryBodyRole";
 
 export type JoinInquiryBody = {
-  /** 스레드 ID (선택) */
-  threadId?: string;
-  /** 참여자 역할 (기본값: VIEWER) */
-  role?: JoinInquiryBodyRole;
+	/** 스레드 ID (선택) */
+	threadId?: string;
+	/** 참여자 역할 (기본값: VIEWER) */
+	role?: JoinInquiryBodyRole;
 };

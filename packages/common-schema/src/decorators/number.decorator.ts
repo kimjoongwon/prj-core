@@ -61,15 +61,11 @@ export function Number(
 	}
 
 	if (min !== undefined) {
-		decorators.push(
-			Min(min, { each, message: VALIDATION_MESSAGES.MIN_VALUE }),
-		);
+		decorators.push(Min(min, { each, message: VALIDATION_MESSAGES.MIN_VALUE }));
 	}
 
 	if (max !== undefined) {
-		decorators.push(
-			Max(max, { each, message: VALIDATION_MESSAGES.MAX_VALUE }),
-		);
+		decorators.push(Max(max, { each, message: VALIDATION_MESSAGES.MAX_VALUE }));
 	}
 
 	return applyDecorators(...decorators);

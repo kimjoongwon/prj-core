@@ -87,7 +87,9 @@ export const RoleGroupEditPage = observer(
 					<PageTitleBar
 						title="역할 그룹 수정"
 						description={
-							groupName ? `${groupName} 그룹을 수정합니다.` : "그룹을 수정합니다."
+							groupName
+								? `${groupName} 그룹을 수정합니다.`
+								: "그룹을 수정합니다."
 						}
 						actions={
 							<Button

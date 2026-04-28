@@ -15,7 +15,10 @@ export class FolderDto extends AbstractDto implements Folder {
 	@UUIDField({ description: "소속 Space ID" })
 	spaceId!: string;
 
-	@UUIDFieldOptional({ nullable: true, description: "부모 폴더 ID (루트면 null)" })
+	@UUIDFieldOptional({
+		nullable: true,
+		description: "부모 폴더 ID (루트면 null)",
+	})
 	parentFolderId!: string | null;
 
 	@StringField({ description: "폴더명" })

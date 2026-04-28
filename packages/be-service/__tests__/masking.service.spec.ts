@@ -604,7 +604,10 @@ describe("MaskingService", () => {
 
 			// When
 			const nullResult = service.maskFields(null as any, fieldsToMask);
-			const undefinedResult = service.maskFields(undefined as any, fieldsToMask);
+			const undefinedResult = service.maskFields(
+				undefined as any,
+				fieldsToMask,
+			);
 
 			// Then
 			expect(nullResult).toBeNull();

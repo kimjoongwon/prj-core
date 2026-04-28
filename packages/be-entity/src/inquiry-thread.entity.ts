@@ -14,7 +14,10 @@ import type { User } from "./user.entity";
  * 하나의 문의에 여러 스레드가 존재할 수 있으며,
  * 각 스레드는 독립적인 대화 흐름을 가집니다.
  */
-export class InquiryThread extends AbstractEntity implements InquiryThreadEntity {
+export class InquiryThread
+	extends AbstractEntity
+	implements InquiryThreadEntity
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

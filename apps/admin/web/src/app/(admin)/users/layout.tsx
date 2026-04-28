@@ -6,9 +6,7 @@ export default function UsersLayout({ children }: { children: ReactNode }) {
 		<Page>
 			<PageSurface>
 				<Section>
-					<SectionSurface elevation="flat">
-						{children}
-					</SectionSurface>
+					<SectionSurface elevation="flat">{children}</SectionSurface>
 				</Section>
 			</PageSurface>
 		</Page>

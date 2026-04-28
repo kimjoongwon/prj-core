@@ -18,7 +18,9 @@ export class SafeWalletsRepository {
 	async findById(id: string): Promise<SafeWallet | null> {
 		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
 
-		const result = await this.txHost.tx.safeWallet.findUnique({ where: { id } });
+		const result = await this.txHost.tx.safeWallet.findUnique({
+			where: { id },
+		});
 
 		return result;
 	}
@@ -80,7 +82,9 @@ export class SafeWalletsRepository {
 		return { wallets, totalCount };
 	}
 
-	async create(data: Prisma.SafeWalletUncheckedCreateInput): Promise<SafeWallet> {
+	async create(
+		data: Prisma.SafeWalletUncheckedCreateInput,
+	): Promise<SafeWallet> {
 		this.logger.debug(`지갑 생성: ${data.address}`);
 
 		const result = await this.txHost.tx.safeWallet.create({ data });
@@ -110,4 +114,3 @@ export class SafeWalletsRepository {
 		return result;
 	}
 }
-

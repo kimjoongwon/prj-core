@@ -9,10 +9,7 @@ import {
 } from "@cocrepo/api/core/inquiries";
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import type { AiFormOptionItem, AiFormPatch } from "@cocrepo/type";
-import {
-	type InquiryEditPageFormState,
-	InquiryEditPage,
-} from "@cocrepo/ui";
+import { InquiryEditPage, type InquiryEditPageFormState } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -68,12 +65,12 @@ export default observer(function InquiryEditPageRoute() {
 			initialized: boolean;
 			initFromBootstrap: () => void;
 		}
-		>(() => ({
-			initialized: false,
-			title: "",
-			category: "GENERAL" as InquiryCategory,
-			priority: "NORMAL" as InquiryPriority,
-			error: "",
+	>(() => ({
+		initialized: false,
+		title: "",
+		category: "GENERAL" as InquiryCategory,
+		priority: "NORMAL" as InquiryPriority,
+		error: "",
 		initFromBootstrap() {
 			if (!bootstrap || this.initialized) {
 				return;

@@ -18,7 +18,9 @@ export class DerivativeDto extends AbstractDto {
 	@UUIDField({ description: "원본 에셋 ID" })
 	assetId!: string;
 
-	@EnumField(() => DerivativeKind, { description: "파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT)" })
+	@EnumField(() => DerivativeKind, {
+		description: "파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT)",
+	})
 	kind!: DerivativeKind;
 
 	@StringField({ description: "프로필명 (예: thumbnail-256, preview-1080p)" })
@@ -33,12 +35,24 @@ export class DerivativeDto extends AbstractDto {
 	@NumberField({ description: "파일 크기 (바이트)", int: true })
 	sizeBytes!: number;
 
-	@NumberFieldOptional({ nullable: true, description: "너비 (이미지/비디오)", int: true })
+	@NumberFieldOptional({
+		nullable: true,
+		description: "너비 (이미지/비디오)",
+		int: true,
+	})
 	width!: number | null;
 
-	@NumberFieldOptional({ nullable: true, description: "높이 (이미지/비디오)", int: true })
+	@NumberFieldOptional({
+		nullable: true,
+		description: "높이 (이미지/비디오)",
+		int: true,
+	})
 	height!: number | null;
 
-	@NumberFieldOptional({ nullable: true, description: "재생 시간 (밀리초, 비디오)", int: true })
+	@NumberFieldOptional({
+		nullable: true,
+		description: "재생 시간 (밀리초, 비디오)",
+		int: true,
+	})
 	durationMs!: number | null;
 }

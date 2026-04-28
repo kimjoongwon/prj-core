@@ -128,7 +128,8 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 			errors.startDateTime = "일시를 입력해주세요.";
 		}
 		if (state.type === "ONE_TIME_RANGE") {
-			if (!state.startDateTime) errors.startDateTime = "시작 일시를 입력해주세요.";
+			if (!state.startDateTime)
+				errors.startDateTime = "시작 일시를 입력해주세요.";
 			if (!state.endDateTime) errors.endDateTime = "종료 일시를 입력해주세요.";
 			if (
 				state.startDateTime &&
@@ -176,7 +177,9 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 					queryClient.invalidateQueries({
 						queryKey: getGetSessionByIdQueryKey(timelineId, sessionId),
 					});
-					router.push(`/timelines/${timelineId}/sessions/${sessionId}` as Route);
+					router.push(
+						`/timelines/${timelineId}/sessions/${sessionId}` as Route,
+					);
 				},
 				onError: () => {
 					addToast({

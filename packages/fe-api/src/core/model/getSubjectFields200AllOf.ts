@@ -9,14 +9,14 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { SubjectFieldDto } from './subjectFieldDto';
-import type { GetSubjectFields200AllOfMeta } from './getSubjectFields200AllOfMeta';
+import type { SubjectFieldDto } from "./subjectFieldDto";
+import type { GetSubjectFields200AllOfMeta } from "./getSubjectFields200AllOfMeta";
 
 export type GetSubjectFields200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: SubjectFieldDto[];
-  meta?: GetSubjectFields200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: SubjectFieldDto[];
+	meta?: GetSubjectFields200AllOfMeta;
 };

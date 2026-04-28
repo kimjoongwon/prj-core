@@ -1,5 +1,5 @@
 import { navigateToConsentForm, navigateToLoginForm } from "@cocrepo/e2e";
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 /** 시드 데이터 기준 FULL_ACCESS 계정 */
 const ADMIN_EMAIL = "admin@plate.com";
@@ -8,9 +8,7 @@ const ADMIN_PASSWORD = "rkdmf12!@";
 const getLoginHeading = (page: Page) =>
 	page.getByRole("heading", { name: "로그인", exact: true });
 
-const assertLoginFailureHandled = async (
-	page: Page,
-) => {
+const assertLoginFailureHandled = async (page: Page) => {
 	const invalidCredentials = page.getByText(
 		"이메일 또는 비밀번호가 올바르지 않습니다.",
 	);

@@ -11,15 +11,15 @@
  */
 
 export interface ActionDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  name: string;
-  displayName?: string;
-  description?: string;
-  group?: string;
-  order: number;
-  isSystem: boolean;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	name: string;
+	displayName?: string;
+	description?: string;
+	group?: string;
+	order: number;
+	isSystem: boolean;
 }

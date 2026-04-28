@@ -145,9 +145,7 @@ export class RolePoliciesRepository {
 					spaceId,
 					removedAt: null,
 				},
-				...(policyIds.length > 0
-					? { policyId: { notIn: policyIds } }
-					: {}),
+				...(policyIds.length > 0 ? { policyId: { notIn: policyIds } } : {}),
 			},
 			data: {
 				removedAt: new Date(),

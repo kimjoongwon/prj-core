@@ -82,15 +82,12 @@ describe("AdminLayoutEffects", () => {
 
 	it("current-space에 ground가 비어 있으면 my-spaces의 같은 id ground 이름으로 보강해야 한다", () => {
 		expect(
-			resolveCurrentSpaceGroundName(
-				{ id: "space-a" },
-				[
-					{
-						id: "space-a",
-						ground: { name: "플랫폼 운영본부" },
-					},
-				],
-			),
+			resolveCurrentSpaceGroundName({ id: "space-a" }, [
+				{
+					id: "space-a",
+					ground: { name: "플랫폼 운영본부" },
+				},
+			]),
 		).toBe("플랫폼 운영본부");
 	});
 });

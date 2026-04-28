@@ -30,9 +30,11 @@ test.describe("OIDC 클라이언트 목록 페이지", () => {
 
 	test("검색어 입력 시 필터링되어야 한다", async ({ page }) => {
 		// When: 검색어 입력
-		await page
-			.getByPlaceholder("Client ID 또는 이름으로 검색...")
-			.fill("admin");
+		const searchInput = page.getByPlaceholder(
+			"Client ID 또는 이름으로 검색...",
+		);
+		await searchInput.fill("admin");
+		await searchInput.press("Enter");
 
 		// debounce 대기
 		await page.waitForTimeout(500);

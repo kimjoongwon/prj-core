@@ -9,9 +9,9 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { UpdateInquiryPriorityBodyPriority } from './updateInquiryPriorityBodyPriority';
+import type { UpdateInquiryPriorityBodyPriority } from "./updateInquiryPriorityBodyPriority";
 
 export type UpdateInquiryPriorityBody = {
-  /** 변경할 우선순위 */
-  priority: UpdateInquiryPriorityBodyPriority;
+	/** 변경할 우선순위 */
+	priority: UpdateInquiryPriorityBodyPriority;
 };

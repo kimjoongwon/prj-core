@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 const REQUEST_ID = "11111111-1111-4111-8111-111111111111";
 const SPACE_ID = "33333333-3333-4333-8333-333333333333";
@@ -18,7 +18,9 @@ test.describe("Admin 접근 승인 목록 페이지", () => {
 		).toBeVisible();
 		await expect(page.getByText("전체 신청")).toBeVisible();
 		await expect(page.getByText("승인 대기")).toBeVisible();
-		await expect(page.getByText("플랫폼 운영본부")).toBeVisible();
+		await expect(
+			page.getByRole("main").getByText("플랫폼 운영본부"),
+		).toBeVisible();
 		await expect(page.getByText("조회", { exact: true })).toBeVisible();
 		await expect(page.getByText("requester@example.com")).toBeVisible();
 	});

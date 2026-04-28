@@ -30,10 +30,7 @@ export class PoliciesRepository {
 		return results.map((result) => plainToInstance(Policy, result));
 	}
 
-	async findByIdInSpace(
-		id: string,
-		spaceId: string,
-	): Promise<Policy | null> {
+	async findByIdInSpace(id: string, spaceId: string): Promise<Policy | null> {
 		this.logger.debug(
 			`Policy 조회: id=${id.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
 		);

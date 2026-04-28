@@ -1,10 +1,7 @@
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import type { CreateTenantAccessRequestDto } from "@cocrepo/dto";
 import type { TenantAccessRequest } from "@cocrepo/entity";
-import type {
-	Prisma,
-	TenantAccessRequestStatus,
-} from "@cocrepo/prisma";
+import type { Prisma, TenantAccessRequestStatus } from "@cocrepo/prisma";
 import {
 	RolesRepository,
 	SpacesRepository,
@@ -185,10 +182,14 @@ export class TenantAccessRequestService {
 			throw new NotFoundException("신청 대상 Role을 찾을 수 없습니다");
 		}
 		if (activeTenant?.roleId === dto.requestedRoleId) {
-			throw new ConflictException("이미 동일한 Space와 Role 권한을 보유 중입니다");
+			throw new ConflictException(
+				"이미 동일한 Space와 Role 권한을 보유 중입니다",
+			);
 		}
 		if (pendingRequest) {
-			throw new ConflictException("해당 Space에 처리 대기 중인 신청이 있습니다");
+			throw new ConflictException(
+				"해당 Space에 처리 대기 중인 신청이 있습니다",
+			);
 		}
 
 		return this.repository.create({

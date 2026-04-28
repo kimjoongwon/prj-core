@@ -9,14 +9,14 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { FolderDto } from './folderDto';
-import type { GetFolders200AllOfMeta } from './getFolders200AllOfMeta';
+import type { FolderDto } from "./folderDto";
+import type { GetFolders200AllOfMeta } from "./getFolders200AllOfMeta";
 
 export type GetFolders200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: FolderDto[];
-  meta?: GetFolders200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: FolderDto[];
+	meta?: GetFolders200AllOfMeta;
 };

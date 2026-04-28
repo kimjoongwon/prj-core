@@ -138,7 +138,8 @@ export const proposalPageData = {
 	],
 	hero: {
 		eyebrow: "AI-FIRST PRODUCT DELIVERY",
-		title: "온짓다는 1명의 고급 개발자와 AI로 외주 구조 자체를 다시 설계합니다.",
+		title:
+			"온짓다는 1명의 고급 개발자와 AI로 외주 구조 자체를 다시 설계합니다.",
 		description:
 			"기획, 디자인, 개발을 senior 한 명이 일관되게 책임지고 AI는 초안 생성, 반복 구현, 문서 정리를 보조합니다. 그래서 고급 인력으로 수주한 뒤 실제 제작은 신입 체인으로 내려가는 구조, 빠르게만 만든 바이브 코드가 유지보수 비용으로 돌아오는 구조를 피합니다. 결과물은 정적인 시안이 아니라 Storybook, 테스트, 도메인 설계, GitOps 배포 흐름까지 연결된 지속 가능한 제품입니다.",
 		primaryAction: {

@@ -4,6 +4,10 @@ function buildUniqueTemplateCode() {
 	return `E2E_TOGGLE_TEMPLATE_${Date.now()}`;
 }
 
+const SYSTEM_SPACE_ID =
+	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
+const SPACE_HEADERS = { "x-space-id": SYSTEM_SPACE_ID };
+
 test.describe("메시지 템플릿 상세 페이지", () => {
 	// ── E2E-001: 활성 상태 토글 ──
 
@@ -15,11 +19,14 @@ test.describe("메시지 템플릿 상세 페이지", () => {
 			const createResp = await page.request.post(
 				"http://localhost:3000/api/v1/templates",
 				{
+					headers: SPACE_HEADERS,
 					data: {
 						type: "SMS",
 						code: TEST_CODE,
 						name: "E2E 토글 테스트 템플릿",
+						subject: null,
 						content: "토글 테스트 본문입니다.",
+						description: null,
 					},
 				},
 			);
@@ -49,7 +56,10 @@ test.describe("메시지 템플릿 상세 페이지", () => {
 			expect(toggleResp.status()).toBe(200);
 
 			// Cleanup: 템플릿 삭제
-			await page.request.delete(`http://localhost:3000/api/v1/templates/${templateId}`);
+			await page.request.delete(
+				`http://localhost:3000/api/v1/templates/${templateId}`,
+				{ headers: SPACE_HEADERS },
+			);
 		});
 	});
 });

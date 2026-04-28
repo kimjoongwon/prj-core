@@ -53,7 +53,13 @@ function formatDateTime(value?: string | null) {
 	});
 }
 
-function DetailItem({ label, value }: { label: string; value?: string | null }) {
+function DetailItem({
+	label,
+	value,
+}: {
+	label: string;
+	value?: string | null;
+}) {
 	return (
 		<VStack gap={1}>
 			<span className="text-xs font-medium uppercase text-default-400">
@@ -144,10 +150,7 @@ export const TenantAccessRequestReviewDetailPage = observer(
 								/>
 								{request.status !== "PENDING" ? (
 									<div className="rounded-lg border border-divider bg-content2/40 p-4">
-										<DetailItem
-											label="처리자"
-											value={request.reviewerName}
-										/>
+										<DetailItem label="처리자" value={request.reviewerName} />
 										<div className="mt-3">
 											<DetailItem
 												label="처리 코멘트"
@@ -175,9 +178,7 @@ export const TenantAccessRequestReviewDetailPage = observer(
 										startContent={<Check className="size-4" />}
 										isLoading={isApproving}
 										isDisabled={
-											request.status !== "PENDING" ||
-											!canApprove ||
-											isRejecting
+											request.status !== "PENDING" || !canApprove || isRejecting
 										}
 										onPress={onClickApproveButton}
 									>

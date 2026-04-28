@@ -97,7 +97,11 @@ export function useGetInquiryCreateForm<
 >(
 	options?: {
 		query?: Omit<
-			UseQueryOptions<Awaited<ReturnType<typeof getInquiryCreateForm>>, TError, TData>,
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getInquiryCreateForm>>,
+				TError,
+				TData
+			>,
 			"queryKey" | "queryFn"
 		>;
 		request?: RequestOptions;
@@ -153,7 +157,11 @@ export function useGetInquiryUpdateForm<
 	inquiryId: string,
 	options?: {
 		query?: Omit<
-			UseQueryOptions<Awaited<ReturnType<typeof getInquiryUpdateForm>>, TError, TData>,
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getInquiryUpdateForm>>,
+				TError,
+				TData
+			>,
 			"queryKey" | "queryFn"
 		>;
 		request?: RequestOptions;
@@ -166,7 +174,8 @@ export function useGetInquiryUpdateForm<
 	return useQuery(
 		{
 			queryKey: getGetInquiryUpdateFormQueryKey(inquiryId),
-			queryFn: ({ signal }) => getInquiryUpdateForm(inquiryId, options?.request, signal),
+			queryFn: ({ signal }) =>
+				getInquiryUpdateForm(inquiryId, options?.request, signal),
 			enabled,
 			...(queryOptions ?? {}),
 		},
@@ -181,7 +190,8 @@ export const prefetchGetInquiryUpdateFormQuery = async (
 ): Promise<QueryClient> => {
 	await queryClient.prefetchQuery({
 		queryKey: getGetInquiryUpdateFormQueryKey(inquiryId),
-		queryFn: ({ signal }) => getInquiryUpdateForm(inquiryId, options?.request, signal),
+		queryFn: ({ signal }) =>
+			getInquiryUpdateForm(inquiryId, options?.request, signal),
 	});
 
 	return queryClient;
@@ -204,10 +214,7 @@ export const fillInquiryFormWithAi = (
 	);
 };
 
-export const useFillInquiryFormWithAi = <
-	TError = Error,
-	TContext = unknown,
->(
+export const useFillInquiryFormWithAi = <TError = Error, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<
 			Awaited<ReturnType<typeof fillInquiryFormWithAi>>,

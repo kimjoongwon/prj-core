@@ -43,7 +43,11 @@ export function useGetCurrentSpace<
 >(
 	options?: {
 		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
 		>;
 		request?: SecondParameter<typeof customIdpInstance>;
 	},
@@ -76,7 +80,10 @@ export const setCurrentSpace = (
 		options,
 	);
 
-export function useSetCurrentSpace<TError = ErrorType<unknown>, TContext = unknown>(
+export function useSetCurrentSpace<
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(
 	options?: {
 		mutation?: UseMutationOptions<
 			Awaited<ReturnType<typeof setCurrentSpace>>,

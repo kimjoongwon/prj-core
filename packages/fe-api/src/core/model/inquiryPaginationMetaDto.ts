@@ -11,12 +11,12 @@
  */
 
 export interface InquiryPaginationMetaDto {
-  /** 전체 개수 */
-  total: number;
-  /** 건너뛴 항목 수 (offset) */
-  skip: number;
-  /** 조회 항목 수 */
-  take: number;
-  /** 전체 페이지 수 */
-  totalPages: number;
+	/** 전체 개수 */
+	total: number;
+	/** 건너뛴 항목 수 (offset) */
+	skip: number;
+	/** 조회 항목 수 */
+	take: number;
+	/** 전체 페이지 수 */
+	totalPages: number;
 }

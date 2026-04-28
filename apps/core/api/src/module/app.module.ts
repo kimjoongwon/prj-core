@@ -45,8 +45,8 @@ import { RoutinesModule } from "./routines";
 import { SpacesModule } from "./spaces";
 import { SubjectsModule } from "./subjects";
 import { TasksModule } from "./tasks";
-import { TenantAccessRequestsModule } from "./tenant-access-requests";
 import { TemplatesModule } from "./templates";
+import { TenantAccessRequestsModule } from "./tenant-access-requests";
 import { TimelinesModule } from "./timelines";
 import { UsersModule } from "./users";
 

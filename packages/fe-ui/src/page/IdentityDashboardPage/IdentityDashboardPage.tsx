@@ -115,10 +115,8 @@ function formatShortDate(dateStr: string): string {
 /**
  * IDP 대시보드 pure page입니다.
  */
-export const IdentityDashboardPage = observer(({
-		stats,
-		trendItems,
-	}: IdentityDashboardPageProps) => {
+export const IdentityDashboardPage = observer(
+	({ stats, trendItems }: IdentityDashboardPageProps) => {
 		// 바 차트 최대값 계산
 		const maxTrendValue = trendItems.reduce((max, item) => {
 			return Math.max(max, item.successCount, item.failureCount);
@@ -257,4 +255,5 @@ export const IdentityDashboardPage = observer(({
 				</DetailPageSurface>
 			</DetailPage>
 		);
-	});
+	},
+);

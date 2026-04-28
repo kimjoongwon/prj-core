@@ -110,7 +110,9 @@ describe("admin permission derived seeds", () => {
 			),
 		).toBe(false);
 		expect(
-			fullAccessAbilitySeedData.some((ability) => ability.subject === "menu:files"),
+			fullAccessAbilitySeedData.some(
+				(ability) => ability.subject === "menu:files",
+			),
 		).toBe(false);
 	});
 });

@@ -130,7 +130,9 @@ describe("UserService", () => {
 			const result = await service.findUserForAuth(email);
 
 			// Then
-			expect(mockRepository.findByEmailSelectCredentials).toHaveBeenCalledWith(email);
+			expect(mockRepository.findByEmailSelectCredentials).toHaveBeenCalledWith(
+				email,
+			);
 			expect(result).toEqual(authUser);
 		});
 
@@ -143,7 +145,9 @@ describe("UserService", () => {
 			const result = await service.findUserForAuth(email);
 
 			// Then
-			expect(mockRepository.findByEmailSelectCredentials).toHaveBeenCalledWith(email);
+			expect(mockRepository.findByEmailSelectCredentials).toHaveBeenCalledWith(
+				email,
+			);
 			expect(result).toBeNull();
 		});
 	});
@@ -182,7 +186,9 @@ describe("UserService", () => {
 				hasSpace: jest.fn(),
 				isSystemSpace: jest.fn(),
 			} as unknown as SpaceContext;
-			mockRepository.findManyBySpaceIds.mockResolvedValue(repositoryResult as any);
+			mockRepository.findManyBySpaceIds.mockResolvedValue(
+				repositoryResult as any,
+			);
 			mockRepository.countStatsBySpaceIds.mockResolvedValue(statsResult as any);
 			(service as any).spaceCtx = mockSpaceContext;
 
@@ -247,7 +253,9 @@ describe("UserService", () => {
 				hasSpace: jest.fn(),
 				isSystemSpace: jest.fn(),
 			} as unknown as SpaceContext;
-			mockRepository.findManyBySpaceIds.mockResolvedValue(repositoryResult as any);
+			mockRepository.findManyBySpaceIds.mockResolvedValue(
+				repositoryResult as any,
+			);
 			mockRepository.countStatsBySpaceIds.mockResolvedValue(statsResult as any);
 			(service as any).spaceCtx = mockSpaceContext;
 
@@ -262,11 +270,9 @@ describe("UserService", () => {
 				spaceIds: undefined,
 				includedRoleNames: undefined,
 			});
-			expect(mockRepository.countStatsBySpaceIds).toHaveBeenCalledWith(
-				{
-					spaceIds: undefined,
-				},
-			);
+			expect(mockRepository.countStatsBySpaceIds).toHaveBeenCalledWith({
+				spaceIds: undefined,
+			});
 			expect(result).toEqual({
 				users: [mockUser],
 				totalCount: 1,
@@ -307,7 +313,9 @@ describe("UserService", () => {
 				hasSpace: jest.fn(),
 				isSystemSpace: jest.fn(),
 			} as unknown as SpaceContext;
-			mockRepository.findManyBySpaceIds.mockResolvedValue(repositoryResult as any);
+			mockRepository.findManyBySpaceIds.mockResolvedValue(
+				repositoryResult as any,
+			);
 			mockRepository.countStatsBySpaceIds.mockResolvedValue(statsResult as any);
 			(service as any).spaceCtx = mockSpaceContext;
 

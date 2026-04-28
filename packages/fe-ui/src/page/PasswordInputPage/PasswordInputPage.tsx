@@ -44,54 +44,52 @@ export interface PasswordInputPageProps {
  * />
  * ```
  */
-export const PasswordInputPage = observer(({
-	state,
-	onSubmit,
-	isLoading = false,
-}: PasswordInputPageProps) => {
-	return (
-		<VStack fullWidth gap={8} className="p-4">
-			<VStack fullWidth gap={2}>
-				<h3 className="text-2xl font-bold">비밀번호 설정</h3>
-				<span className="text-sm text-default-500">
-					사용하실 비밀번호를 입력해주세요.
-				</span>
+export const PasswordInputPage = observer(
+	({ state, onSubmit, isLoading = false }: PasswordInputPageProps) => {
+		return (
+			<VStack fullWidth gap={8} className="p-4">
+				<VStack fullWidth gap={2}>
+					<h3 className="text-2xl font-bold">비밀번호 설정</h3>
+					<span className="text-sm text-default-500">
+						사용하실 비밀번호를 입력해주세요.
+					</span>
+				</VStack>
+
+				<VStack fullWidth gap={4}>
+					<Input
+						path="password"
+						state={state}
+						variant="flat"
+						type="password"
+						placeholder="비밀번호를 입력하세요"
+						label="비밀번호"
+					/>
+					<Input
+						path="passwordConfirm"
+						state={state}
+						variant="flat"
+						type="password"
+						placeholder="비밀번호를 다시 입력하세요"
+						label="비밀번호 확인"
+					/>
+				</VStack>
+
+				{state.errorMessage && (
+					<span className="text-sm font-medium text-danger">
+						{state.errorMessage}
+					</span>
+				)}
+
+				<Button
+					color="primary"
+					size="lg"
+					fullWidth
+					onPress={onSubmit}
+					isLoading={isLoading}
+				>
+					<span className="text-white">다음</span>
+				</Button>
 			</VStack>
-
-			<VStack fullWidth gap={4}>
-				<Input
-					path="password"
-					state={state}
-					variant="flat"
-					type="password"
-					placeholder="비밀번호를 입력하세요"
-					label="비밀번호"
-				/>
-				<Input
-					path="passwordConfirm"
-					state={state}
-					variant="flat"
-					type="password"
-					placeholder="비밀번호를 다시 입력하세요"
-					label="비밀번호 확인"
-				/>
-			</VStack>
-
-			{state.errorMessage && (
-				<span className="text-sm font-medium text-danger">
-					{state.errorMessage}
-				</span>
-			)}
-
-			<Button
-				color="primary"
-				size="lg"
-				fullWidth
-				onPress={onSubmit}
-				isLoading={isLoading}
-			>
-				<span className="text-white">다음</span>
-			</Button>
-		</VStack>
-	);
-});
+		);
+	},
+);

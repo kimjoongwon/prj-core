@@ -8,11 +8,11 @@ import {
 	RoleCategoryCreatePage,
 	type RoleCategoryCreatePageOption,
 } from "@cocrepo/ui";
-import { usePersistStore } from "@/stores/AppStoreProvider";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 
 interface CategoryOption {
 	id: string;
@@ -27,7 +27,8 @@ const AdminRolesCategoriesNewRoute = observer(() => {
 	const [nameError, setNameError] = useState("");
 
 	const { data: categoriesResponse } = useGetCategories({ type: "Role" });
-	const categories = ((categoriesResponse?.data ?? []) as unknown) as CategoryOption[];
+	const categories = (categoriesResponse?.data ??
+		[]) as unknown as CategoryOption[];
 	const spaceId = persistStore.spaceId ?? "";
 
 	const { mutate: createCategory, isPending } = useCreateCategory({

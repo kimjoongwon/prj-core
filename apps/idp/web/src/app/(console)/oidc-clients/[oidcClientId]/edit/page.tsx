@@ -16,32 +16,32 @@ import { useEffect } from "react";
 export default observer(function OidcClientEditPageRoute() {
 	const oidcClientId = useParams<{ oidcClientId: string }>().oidcClientId;
 	const router = useRouter();
-	const state =
-		useLocalObservable<OidcClientEditPageFormState>(
-			() => ({
-				clientId: "",
-				name: "",
-				clientSecret: "",
-				isPublic: false,
-				tokenEndpointAuthMethod: "client_secret_basic",
-				grantTypes: [],
-				responseTypes: [],
-				scope: "",
-				redirectUris: [""],
-				loginUrl: "",
-				defaultReturnTo: "",
-				logoUri: "",
-				policyUri: "",
-				tosUri: "",
-				errors: {},
-				redirectUriErrors: {},
-				isInitialized: false,
-			}),
-		);
+	const state = useLocalObservable<OidcClientEditPageFormState>(() => ({
+		clientId: "",
+		name: "",
+		clientSecret: "",
+		isPublic: false,
+		tokenEndpointAuthMethod: "client_secret_basic",
+		grantTypes: [],
+		responseTypes: [],
+		scope: "",
+		redirectUris: [""],
+		loginUrl: "",
+		defaultReturnTo: "",
+		logoUri: "",
+		policyUri: "",
+		tosUri: "",
+		errors: {},
+		redirectUriErrors: {},
+		isInitialized: false,
+	}));
 	const { data: response, isLoading } = useGetOidcClient(oidcClientId);
 	const client = response?.data;
 	useEffect(() => {
-		if (!client || (state.isInitialized && state.clientId === client.clientId)) {
+		if (
+			!client ||
+			(state.isInitialized && state.clientId === client.clientId)
+		) {
 			return;
 		}
 		state.clientId = client.clientId;

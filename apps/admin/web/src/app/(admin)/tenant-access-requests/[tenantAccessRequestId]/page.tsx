@@ -23,8 +23,8 @@ import { useEffect } from "react";
 export default observer(function TenantAccessRequestReviewDetailPageRoute() {
 	const router = useRouter();
 	const queryClient = useQueryClient();
-	const tenantAccessRequestId =
-		useParams<{ tenantAccessRequestId: string }>().tenantAccessRequestId;
+	const tenantAccessRequestId = useParams<{ tenantAccessRequestId: string }>()
+		.tenantAccessRequestId;
 	const reviewState = useLocalObservable(() => ({
 		initializedRequestId: "",
 		reviewComment: "",

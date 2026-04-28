@@ -40,9 +40,9 @@ export function convertFromPathParamsToQueryParams({
 	pathParams,
 }: {
 	pathParamKeys: string[];
-	pathParams: Record<string, unknown>;
+	pathParams?: Record<string, unknown> | null;
 }) {
 	return Object.fromEntries(
-		pathParamKeys.map((key) => [key, pathParams[key]]),
+		pathParamKeys.map((key) => [key, pathParams?.[key]]),
 	);
 }

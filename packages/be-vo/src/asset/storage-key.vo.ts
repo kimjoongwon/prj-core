@@ -35,7 +35,9 @@ export class StorageKey extends ValueObject<StorageKeyProps> {
 		}
 
 		if (value.endsWith("/")) {
-			throw new VoValidationError("스토리지 키는 슬래시(/)로 끝날 수 없습니다.");
+			throw new VoValidationError(
+				"스토리지 키는 슬래시(/)로 끝날 수 없습니다.",
+			);
 		}
 
 		if (!StorageKey.ALLOWED_REGEX.test(value)) {

@@ -56,9 +56,7 @@ export type AbilityDetailPageProps =
 	| AbilityDetailPageNotFoundProps
 	| AbilityDetailPageReadyProps;
 
-export const AbilityDetailPage = observer((
-	props: AbilityDetailPageProps,
-) => {
+export const AbilityDetailPage = observer((props: AbilityDetailPageProps) => {
 	if (props.mode === "loading") {
 		return (
 			<DetailPage

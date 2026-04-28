@@ -57,7 +57,10 @@ export class TasksRepository {
 		return [items.map((item) => plainToInstance(Task, item)), total];
 	}
 
-	async findTaskById(taskId: string, spaceIds?: string[]): Promise<Task | null> {
+	async findTaskById(
+		taskId: string,
+		spaceIds?: string[],
+	): Promise<Task | null> {
 		this.logger.debug(`Task 단건 조회: ${taskId.slice(-8)}`);
 
 		const result = await this.txHost.tx.task.findFirst({
@@ -81,7 +84,10 @@ export class TasksRepository {
 		return result ? plainToInstance(Task, result) : null;
 	}
 
-	async findTasksByIds(taskIds: string[], spaceIds?: string[]): Promise<Task[]> {
+	async findTasksByIds(
+		taskIds: string[],
+		spaceIds?: string[],
+	): Promise<Task[]> {
 		if (taskIds.length === 0) {
 			return [];
 		}
@@ -128,9 +134,7 @@ export class TasksRepository {
 		return results.map((result) => plainToInstance(Routine, result));
 	}
 
-	async create(
-		data: Prisma.TaskUncheckedCreateInput,
-	): Promise<Task> {
+	async create(data: Prisma.TaskUncheckedCreateInput): Promise<Task> {
 		this.logger.debug("Task 생성");
 
 		const result = await this.txHost.tx.task.create({

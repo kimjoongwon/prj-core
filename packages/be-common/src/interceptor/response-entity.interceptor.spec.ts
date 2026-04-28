@@ -1,5 +1,6 @@
 import { RESPONSE_MESSAGE_METADATA } from "@cocrepo/decorator";
 import { ResponseEntity } from "@cocrepo/entity";
+import type { I18nTranslationService } from "@cocrepo/service";
 import {
 	type CallHandler,
 	type ExecutionContext,
@@ -9,15 +10,14 @@ import { Reflector } from "@nestjs/core";
 import { lastValueFrom, of } from "rxjs";
 import { wrapResponse } from "../util/response.util";
 import { ResponseEntityInterceptor } from "./response-entity.interceptor";
-import type { TranslationService } from "@cocrepo/service";
 
 jest.mock("@cocrepo/service", () => {
-	class TranslationService {
+	class I18nTranslationService {
 		translate = jest.fn(async (value: string) => value);
 	}
 	return {
 		__esModule: true,
-		TranslationService,
+		I18nTranslationService,
 	};
 });
 
@@ -26,13 +26,13 @@ jest.mock("@cocrepo/service", () => {
 describe("ResponseEntityInterceptor", () => {
 	let reflector: Reflector;
 	let interceptor: ResponseEntityInterceptor;
-	let mockTranslationService: jest.Mocked<TranslationService>;
+	let mockTranslationService: jest.Mocked<I18nTranslationService>;
 
 	beforeEach(() => {
 		reflector = new Reflector();
 		mockTranslationService = {
 			translate: jest.fn(async (value: string) => value),
-		} as unknown as jest.Mocked<TranslationService>;
+		} as unknown as jest.Mocked<I18nTranslationService>;
 		interceptor = new ResponseEntityInterceptor(reflector, mockTranslationService);
 	});
 
