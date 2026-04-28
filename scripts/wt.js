@@ -1778,7 +1778,7 @@ function buildReviewGatePrompt({ role, reviewMapFile, reviewContextPath, baseRef
     "- Do not modify files.",
     "- Use the mapped rules in review-context.json as the first source of truth.",
     "- For unresolved non-exempt files, infer the governing role from .codex/agents/*.toml and emit a finding if governance is still unclear.",
-    "- For each changed source file, also inspect any listed companion docs or sidecar specs.",
+    "- For changed route page, fe-ui Page, and fe-ui Feature files, also inspect the listed companion spec.",
     "",
     "Return only JSON that matches the provided schema."
   ].join("\n");
@@ -2167,19 +2167,30 @@ function resolveRoleDocsFromRegistry(reviewRoot, role) {
 
 function findCompanionDocs(repoRoot, filePath) {
   const normalizedPath = normalizeRepoPath(filePath);
+  if (!isAllowedSidecarSource(normalizedPath)) return [];
+
   const extension = path.extname(normalizedPath);
-  if (!extension) {
-    return [];
-  }
-
-  const sourceExtensions = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".mts", ".cts", ".sh"]);
-  if (!sourceExtensions.has(extension)) {
-    return [];
-  }
-
   const basePath = normalizedPath.slice(0, -extension.length);
   const candidate = `${basePath}.spec.md`;
   return fs.existsSync(path.resolve(repoRoot, candidate)) ? [candidate] : [];
+}
+
+function isAllowedSidecarSource(filePath) {
+  if (/^apps\/[^/]+\/web\/src\/app\/(?:.*\/)?page\.tsx$/.test(filePath)) {
+    return true;
+  }
+  if (/^packages\/fe-ui\/src\/page\/[^/]+\/[^/]+Page\.tsx$/.test(filePath)) {
+    return true;
+  }
+  if (
+    filePath.startsWith("packages/fe-ui/src/feature/") &&
+    filePath.endsWith(".tsx") &&
+    !filePath.endsWith(".stories.tsx") &&
+    !filePath.endsWith(".test.tsx")
+  ) {
+    return true;
+  }
+  return false;
 }
 
 function safeRemoveDir(targetDir) {

@@ -4,7 +4,7 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업을 시작하기 전에 반드시 기존 `columns`, `cell`, `page`, `MetaDataGrid`, sidecar spec, 테스트를 먼저 검색합니다.
+- 작업을 시작하기 전에 반드시 기존 `columns`, `cell`, `page`, `MetaDataGrid`, 허용 대상 Page/Feature spec, 테스트를 먼저 검색합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
@@ -27,15 +27,13 @@ developer_instructions = '''
 | `page.spec.md` | ✅ | `page role`, `reusable target`, 테이블/리스트 블록 요구 확인 |
 | API 응답 스키마 | ✅ | 컬럼 필드와 정렬/필터/액션 후보 확인 |
 | Cell 기획 결과 | ✅ | 어떤 `src/cell` 자산을 조합할지 확인 |
-| 기존 `columns` 구현 | △ | `master`, `internal`, `index` 재사용 후보 |
+| 기존 `columns` 구현 | △ | `collection`, `internal`, `index` 재사용 후보 |
 
 ### 출력
 
 | 파일 | 동작 |
 |------|------|
-| `packages/fe-ui/src/columns/master/[Domain]Columns.spec.md` | 생성/업데이트 |
-| `packages/fe-ui/src/columns/internal/masterFactory.spec.md` | helper/factory 계약 변경 시 업데이트 |
-| `packages/fe-ui/src/columns/index.spec.md` | 공개 배럴 변경 시 업데이트 |
+| route `page.spec.md` | 컬럼 요구와 테스트 관점 반영 |
 
 ---
 
@@ -45,7 +43,7 @@ developer_instructions = '''
 2. `packages/fe-ui/src/columns/**`는 UI를 소유하지 않습니다.
 3. `columns`는 반드시 `packages/fe-ui/src/cell`에서 공개한 Cell만 조합합니다.
 4. `columns/raw/**`, `rawFactory.*` 같은 raw table 전용 구조는 신규 계획하지 않습니다.
-5. custom `<table>`가 남아 있는 페이지는 `MetaDataGrid` 또는 `master` column 조합 전환 계획을 함께 남깁니다.
+5. custom `<table>`가 남아 있는 페이지는 `MetaDataGrid` 또는 `collection` column 조합 전환 계획을 함께 남깁니다.
 6. `columns` 내부 helper/builder 함수가 필요하면 역할을 설명하는 **한글 주석**이 필요하다는 점을 spec에 기록합니다.
 
 ---
@@ -58,7 +56,7 @@ developer_instructions = '''
 - accessor / field / label / align / size
 - 기존 Cell 조합
 - 공용 preset/helper/factory
-- page가 직접 import하지 않는 내부 `masterFactory` 조합 규칙
+- page가 직접 import하지 않는 내부 `dataGridFactory` 조합 규칙
 
 ### 3.2 `cell`로 보내는 것
 
@@ -72,9 +70,9 @@ developer_instructions = '''
 
 ### 3.3 page role 연동 규칙
 
-- `page role = master`이면서 `MetaDataGrid` 또는 column 조합이 필요한 화면이면 `req-columns-planner`를 실행합니다.
+- `page role = collection`이면서 `MetaDataGrid` 또는 column 조합이 필요한 화면이면 `req-columns-planner`를 실행합니다.
 - `page role = detail/form`이어도 내부 목록 블록이 독립 `MetaDataGrid`를 가지면 조건부로 실행할 수 있습니다.
-- `page.spec.md`의 `Rendering Decision`과 컬럼 spec은 같은 데이터 블록을 가리켜야 합니다.
+- `page.spec.md`의 `Route / Page Mapping`과 컬럼 요구는 같은 데이터 블록을 가리켜야 합니다.
 
 ---
 

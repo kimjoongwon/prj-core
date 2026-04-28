@@ -4,19 +4,9 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = process.cwd();
-const CODE_EXT = new Set([
-  '.ts',
-  '.tsx',
-  '.js',
-  '.jsx',
-  '.mjs',
-  '.cjs',
-  '.mts',
-  '.cts',
-  '.sh',
-]);
 const DATE = new Date().toISOString().slice(0, 10);
 const VALID_SCOPES = new Set(['all', 'src']);
+const TARGET_EXT = '.tsx';
 const SKIP_DIR_SEGMENT_RE =
   /(^|\/)(node_modules|dist|dist-web|coverage|\.next|\.turbo|build|out|\.vercel|\.idea|storybook-static|browsers)(\/|$)/;
 
@@ -37,9 +27,7 @@ function walk(dir, out = []) {
     const rel = path.relative(ROOT, abs).replace(/\\/g, '/');
 
     if (entry.isDirectory()) {
-      if (shouldSkipDirectory(rel)) {
-        continue;
-      }
+      if (shouldSkipDirectory(rel)) continue;
       walk(abs, out);
       continue;
     }
@@ -60,45 +48,44 @@ function parseArgs(argv) {
   return {
     dryRun: argv.includes('--dry-run'),
     scope,
-    includeGeneratedFeApi: argv.includes('--include-generated-fe-api'),
   };
 }
 
-function isTargetRoot(relPath, scope) {
+function isInScope(relPath, scope) {
   if (scope === 'src') {
     return (
       (relPath.startsWith('apps/') || relPath.startsWith('packages/')) &&
       relPath.includes('/src/')
     );
   }
-  return (
-    relPath.startsWith('apps/') ||
-    relPath.startsWith('packages/') ||
-    relPath.startsWith('scripts/')
-  );
+  return relPath.startsWith('apps/') || relPath.startsWith('packages/');
 }
 
-function isCodeTarget(relPath, options) {
-  if (!isTargetRoot(relPath, options.scope)) return false;
-  if (!options.includeGeneratedFeApi && relPath.startsWith('packages/fe-api/src/'))
-    return false;
-  if (relPath.startsWith('packages/be-prisma/')) return false;
+function isNextRoutePage(relPath) {
+  return /^apps\/[^/]+\/web\/src\/app\/(?:.*\/)?page\.tsx$/.test(relPath);
+}
 
-  const ext = path.extname(relPath);
-  if (!CODE_EXT.has(ext)) return false;
+function isFeUiPageComponent(relPath) {
+  if (!relPath.startsWith('packages/fe-ui/src/page/')) return false;
+  if (!relPath.endsWith(TARGET_EXT)) return false;
+  if (relPath.endsWith('.stories.tsx') || relPath.endsWith('.test.tsx')) return false;
 
-  if (relPath.endsWith('.d.ts')) return false;
-  if (isExcludedConfigSource(relPath)) return false;
-  if (/\.spec\.[tj]sx?$/.test(relPath)) return false;
-  if (/\.test\.[tj]sx?$/.test(relPath)) return false;
+  const parts = relPath.split('/');
+  const fileName = parts.at(-1);
+  const folderName = parts.at(-2);
+  return fileName === `${folderName}.tsx`;
+}
 
+function isFeUiFeatureComponent(relPath) {
+  if (!relPath.startsWith('packages/fe-ui/src/feature/')) return false;
+  if (!relPath.endsWith(TARGET_EXT)) return false;
+  if (relPath.endsWith('.stories.tsx') || relPath.endsWith('.test.tsx')) return false;
   return true;
 }
 
-function isExcludedConfigSource(relPath) {
-  return (
-    /(^|\/)[^/]+\.config\.[cm]?[jt]sx?$/.test(relPath)
-  );
+function isSpecTarget(relPath, options) {
+  if (!isInScope(relPath, options.scope)) return false;
+  return isNextRoutePage(relPath) || isFeUiPageComponent(relPath) || isFeUiFeatureComponent(relPath);
 }
 
 function sidecarPath(codePath) {
@@ -115,46 +102,6 @@ function readCode(relPath) {
 
 function unique(arr) {
   return [...new Set(arr)];
-}
-
-function detectKind(relPath) {
-  const p = relPath;
-  const base = path.basename(p);
-
-  if (/\.stories\.[tj]sx?$/.test(p)) return 'story';
-  if (/\.e2e\.[tj]s$/.test(p)) return 'e2e';
-  if (/\.config\.[cm]?[tj]s$/.test(p) || /^next\.config\.[tj]s$/.test(base))
-    return 'config';
-  if (/\/(page)\.[tj]sx?$/.test(p)) return 'page';
-  if (/\/_client\.[tj]sx?$/.test(p)) return 'client';
-  if (/\/_prefetch\.[tj]sx?$/.test(p)) return 'prefetch';
-  if (/\/(layout)\.[tj]sx?$/.test(p)) return 'layout';
-  if (/\/hooks\//.test(p)) return 'hook';
-
-  if (/\.controller\.[tj]s$/.test(p) || /\/controllers\//.test(p)) return 'controller';
-  if (/\.service\.[tj]s$/.test(p) || /\/services\//.test(p)) return 'service';
-  if (/\.repository\.[tj]s$/.test(p) || /\/repositories\//.test(p)) return 'repository';
-  if (/\.entity\.[tj]s$/.test(p)) return 'entity';
-  if (/\.vo\.[tj]s$/.test(p)) return 'vo';
-  if (/\.dto\.[tj]s$/.test(p) || p.startsWith('packages/be-dto/src/')) return 'dto';
-
-  if (/\/stores\//.test(p)) return 'store';
-  if (/\/components\/features\//.test(p)) return 'feature';
-  if (/\/components\/widget\//.test(p) || /\/components\/widgets\//.test(p)) return 'widget';
-  if (/\/components\/ui\//.test(p) || /\/components\/inputs\//.test(p)) return 'ui';
-  if (/\/index\.[tj]sx?$/.test(p)) return 'index';
-
-  if (/\.module\.[tj]s$/.test(p)) return 'module';
-  if (/config\//.test(p) || /\/utils?\//.test(p) || /\/lib\//.test(p)) return 'util';
-
-  if (base.endsWith('.tsx')) return 'ui';
-  return 'util';
-}
-
-function detectTier(kind) {
-  if (['page', 'client', 'layout', 'controller', 'service', 'repository', 'entity', 'vo', 'feature', 'widget'].includes(kind)) return 'A';
-  if (['hook', 'prefetch', 'store', 'dto', 'module'].includes(kind)) return 'B';
-  return 'C';
 }
 
 function extractMeta(code) {
@@ -176,150 +123,199 @@ function extractMeta(code) {
   };
 }
 
-function titleFromPath(relPath, kind) {
-  const base = path.basename(relPath, path.extname(relPath));
-  if (kind === 'index') return 'index 배럴 기획서';
-  return `${base} ${kind} 기획서`;
+function titleFromFile(relPath) {
+  return path.basename(relPath, path.extname(relPath));
 }
 
-function typeLabel(kind) {
-  if (kind === 'client') return 'page-client';
-  if (kind === 'prefetch') return 'page-prefetch';
-  return kind;
+function routeFromPath(relPath) {
+  const marker = '/src/app';
+  const [, rest = ''] = relPath.split(marker);
+  const route = rest
+    .replace(/\/page\.tsx$/, '')
+    .replace(/\/\([^)]*\)/g, '')
+    .replace(/\/@[^/]+/g, '');
+  return route.length > 0 ? route : '/';
 }
 
-function renderSectionRows(meta) {
-  if (meta.exports.length === 0) return '| export | 없음 |';
-  return meta.exports.map((name) => `| ${name} | 공개 계약 요소 |`).join('\n');
+function renderRows(items, emptyLabel, purpose) {
+  if (items.length === 0) return `| ${emptyLabel} | 추후 구현 시 확정 |`;
+  return items.map((item) => `| ${item} | ${purpose} |`).join('\n');
 }
 
-function renderImportRows(meta) {
-  if (meta.imports.length === 0) return '| 내부 모듈 | 의존성 없음 |';
-  return meta.imports.map((source) => `| ${source} | 기능 구현 의존성 |`).join('\n');
-}
-
-function renderTierA(relPath, kind, meta) {
-  const t = titleFromPath(relPath, kind);
-  return `# ${t}
+function renderRoutePageSpec(relPath, meta) {
+  const route = routeFromPath(relPath);
+  return `# ${route} route page 기획서
 
 > 생성일: ${DATE}
-> 타입: ${typeLabel(kind)}
+> 타입: next-route-page
+> 경로: ${route}
 > 위치: ${relPath}
 
-## 역할
+## 화면 목적
 
-이 파일은 ${kind} 계층의 핵심 동작을 담당합니다.
-상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
+이 route page는 Next.js App Router의 thin container입니다.
+데이터 조회, route/search params 해석, 라우팅 이벤트를 소유하고 시각 구성은 fe-ui Page component에 위임합니다.
 
-## 공개 계약
+## Route / Page Mapping
+
+| 항목 | 값 |
+|------|----|
+| route path | \`${route}\` |
+| route page | \`${relPath}\` |
+| pure page component | TODO: \`packages/fe-ui/src/page/[PageName]/[PageName].tsx\` |
+| page role | TODO: \`collection | detail | form\` |
+| reusable target | TODO: \`data-grid | collection/list | collection/grid | detail/view | form\` |
+| SSR/prefetch 예외 | 없음 |
+
+## 데이터 / API
 
 | 항목 | 설명 |
 |------|------|
-${renderSectionRows(meta)}
+${renderRows(meta.imports.filter((item) => item.startsWith('@cocrepo/api')), 'Orval hook', 'route page에서 호출 후 pure page props로 전달')}
 
-## 의존성
+## 상태와 이벤트
 
-| 모듈 | 용도 |
+| 항목 | 설명 |
 |------|------|
-${renderImportRows(meta)}
+| route/search params | route page가 해석하고 pure page에는 필요한 값만 전달 |
+| loading/error/empty | API 결과를 pure page props로 전달 |
+| 이벤트 핸들러 | \`on[Event][UI]\` 이름으로 선언 |
 
-## 동작 흐름
+## 테스트 관점
 
-1. 입력(라우트/props/호출)을 수신합니다.
-2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
-3. 결과를 렌더링/반환/전파합니다.
-
-## 실패 및 엣지 케이스
-
-- 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
-- 비정상 입력은 조기 반환 또는 예외 처리합니다.
-- 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
+- 핵심 CTA가 의도한 route로 이동하는지 확인합니다.
+- 목록/상세/폼의 loading, empty, error 상태가 pure page에 전달되는지 확인합니다.
+- mutation 성공 후 invalidate/refetch/redirect 동작을 확인합니다.
 
 ## 구현 체크리스트
 
-- [ ] 코드와 spec이 동일한 책임 범위를 유지함
-- [ ] 공개 계약(Props/메서드/반환값) 변경 시 동기화함
-- [ ] 의존성 변경 시 spec의 의존성 표를 갱신함
+- [ ] route page는 thin container 역할만 담당
+- [ ] pure page component path 확정
+- [ ] page role / reusable target 확정
+- [ ] 신규 \`layout.spec.md\`, story/test/e2e spec을 만들지 않음
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| ${DATE} | 누락된 sidecar spec 신규 생성 | codex |
+| ${DATE} | 허용 대상 route page spec 신규 생성 | codex |
 `;
 }
 
-function renderTierB(relPath, kind, meta) {
-  const t = titleFromPath(relPath, kind);
-  return `# ${t}
+function renderFeUiPageSpec(relPath, meta) {
+  const name = titleFromFile(relPath);
+  return `# ${name} Page 기획서
 
 > 생성일: ${DATE}
-> 타입: ${typeLabel(kind)}
+> 타입: fe-ui-page
 > 위치: ${relPath}
 
 ## 역할
 
-이 파일은 ${kind} 계층의 보조 동작(연결/조회/조합)을 담당합니다.
+${name}는 page-level visual composition을 담당하는 pure Page component입니다.
+API 호출, 라우팅, search params 해석은 route page가 소유하고 이 컴포넌트는 props로 전달받은 값과 이벤트만 사용합니다.
 
-## 주요 계약
+## Props / 공개 계약
 
 | 항목 | 설명 |
 |------|------|
-${renderSectionRows(meta)}
+${renderRows(meta.exports, 'export', 'Page component 공개 계약')}
 
-## 의존성
+## 하위 조합
 
 | 모듈 | 용도 |
 |------|------|
-${renderImportRows(meta)}
+${renderRows(meta.imports, '하위 컴포넌트', 'Page composition 의존성')}
+
+## 상태별 렌더링
+
+| 상태 | 표시/동작 |
+|------|-----------|
+| loading | props 기반 loading UI |
+| error | props 기반 error UI |
+| empty | props 기반 empty UI |
+| disabled/readOnly | props 기반 제어 |
+
+## 테스트 관점
+
+- props 조합에 따라 주요 영역이 안정적으로 렌더링되는지 확인합니다.
+- 이벤트 props가 올바른 UI 상호작용에서 호출되는지 확인합니다.
+- Page 내부에서 API/router/store를 직접 읽지 않는지 확인합니다.
 
 ## 구현 체크리스트
 
-- [ ] 핵심 입출력/반환 규약이 코드와 일치함
-- [ ] 호출 경로 변경 시 spec을 함께 갱신함
+- [ ] named export 사용
+- [ ] API/router/store 직접 접근 없음
+- [ ] route-level Surface ownership 침범 없음
+- [ ] story spec을 새로 만들지 않음
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| ${DATE} | 누락된 sidecar spec 신규 생성 | codex |
+| ${DATE} | 허용 대상 fe-ui Page spec 신규 생성 | codex |
 `;
 }
 
-function renderTierC(relPath, kind, meta) {
-  const t = titleFromPath(relPath, kind);
-  return `# ${t}
+function renderFeatureSpec(relPath, meta) {
+  const name = titleFromFile(relPath);
+  return `# ${name} Feature 기획서
 
 > 생성일: ${DATE}
-> 타입: ${typeLabel(kind)}
+> 타입: feature
 > 위치: ${relPath}
 
 ## 역할
 
-이 파일은 ${kind} 성격의 경량 구성/배럴 책임을 가집니다.
+${name}는 Store/API/router 등 런타임 책임을 Widget/UI에 연결하는 Feature component입니다.
+순수 시각 조합만 필요하면 Feature가 아니라 Widget/Page 쪽으로 책임을 옮깁니다.
 
-## 구성 요소
+## Props / 공개 계약
 
 | 항목 | 설명 |
 |------|------|
-${renderSectionRows(meta)}
+${renderRows(meta.exports, 'export', 'Feature 공개 계약')}
+
+## Store / API / Router 연결
+
+| 모듈 | 용도 |
+|------|------|
+${renderRows(meta.imports, '의존성', 'Feature 런타임/하위 UI 의존성')}
+
+## 상태와 이벤트
+
+| 항목 | 설명 |
+|------|------|
+| loading/error | API 또는 Store 상태를 사용자 UI로 변환 |
+| mutation/refetch | 성공/실패 후 상태 갱신 책임 명시 |
+| 이벤트 | Widget/UI 이벤트를 Store/API/router 동작으로 연결 |
+
+## 테스트 관점
+
+- Store/API/router 연결이 의도한 호출로 이어지는지 확인합니다.
+- loading/error/empty/permission 상태를 확인합니다.
+- 하위 Widget/UI에는 props로만 값과 이벤트를 주입하는지 확인합니다.
+
+## 구현 체크리스트
+
+- [ ] Feature component source와 같은 이름의 spec 사용
+- [ ] barrel \`index.ts\`, type, hook, story에는 별도 spec을 만들지 않음
+- [ ] observer 적용 여부 확인
+- [ ] 직접 axios/fetch 대신 Orval hook 사용
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| ${DATE} | 누락된 sidecar spec 신규 생성 | codex |
+| ${DATE} | 허용 대상 Feature spec 신규 생성 | codex |
 `;
 }
 
 function renderSpec(relPath, code) {
-  const kind = detectKind(relPath);
-  const tier = detectTier(kind);
   const meta = extractMeta(code);
-
-  if (tier === 'A') return renderTierA(relPath, kind, meta);
-  if (tier === 'B') return renderTierB(relPath, kind, meta);
-  return renderTierC(relPath, kind, meta);
+  if (isNextRoutePage(relPath)) return renderRoutePageSpec(relPath, meta);
+  if (isFeUiPageComponent(relPath)) return renderFeUiPageSpec(relPath, meta);
+  return renderFeatureSpec(relPath, meta);
 }
 
 function ensureDirFor(filePath) {
@@ -329,14 +325,15 @@ function ensureDirFor(filePath) {
 function main() {
   const options = parseArgs(process.argv.slice(2));
   const allFiles = walk(ROOT);
-  const codeFiles = allFiles.filter((relPath) => isCodeTarget(relPath, options)).sort();
+  const codeFiles = allFiles.filter((relPath) => isSpecTarget(relPath, options)).sort();
 
   const targets = codeFiles.filter((code) => {
     const spec = sidecarPath(code);
     return !fs.existsSync(path.join(ROOT, spec));
   });
 
-  console.log(`TOTAL_CODE_FILES=${codeFiles.length}`);
+  console.log('POLICY=route-page,fe-ui-page,fe-ui-feature');
+  console.log(`TOTAL_SPEC_TARGET_FILES=${codeFiles.length}`);
   console.log(`MISSING_BEFORE=${targets.length}`);
 
   let written = 0;

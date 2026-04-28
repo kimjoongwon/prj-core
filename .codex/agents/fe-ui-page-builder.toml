@@ -16,7 +16,7 @@ developer_instructions = '''
 
 이 에이전트가 만드는 page는 앱 라우트가 아닙니다.
 `apps/admin/web`, `apps/idp/web`의 `page.tsx`에서 데이터를 받고, 핸들러를 주입받아,
-widget/feature/form/master/detail 등 하위 재사용 계층을 조합해 page-level 시각 구성을 담당합니다.
+widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 page-level 시각 구성을 담당합니다.
 `src/page`의 이름은 route segment를 직렬화하지 않고, semantic app-facing screen 이름을 우선 사용합니다.
 
 ---
@@ -30,7 +30,7 @@ widget/feature/form/master/detail 등 하위 재사용 계층을 조합해 page-
    - 데이터, 파생 상태, 빈 상태 메시지, CTA 상태, 핸들러는 props로 받음
 3. page component 내부에서 직접 API/라우팅/스토어/runtime context를 읽지 않음
    - 금지 예: Orval hooks, React Query hooks, `useRouter`, `useSearchParams`, `redirect`, `cookies`, `headers`, MobX store 직접 참조
-4. page component는 `widget`, `feature`, `master`, `detail`, `form`, `layout`, `rhythm`, `display`, `control` 등 하위 재사용 계층만 조합
+4. page component는 `widget`, `feature`, `collection`, `detail`, `form`, `layout`, `rhythm`, `display`, `control` 등 하위 재사용 계층만 조합
 5. `packages/fe-ui/src/page` 아래에는 단순 namespace depth를 만들지 않음
    - 금지 예: `src/page/admin/MemberListPage.tsx`, `src/page/idp/LoginPage.tsx`
    - 허용 예: `src/page/MemberListPage/MemberListPage.tsx`
@@ -53,7 +53,7 @@ widget/feature/form/master/detail 등 하위 재사용 계층을 조합해 page-
 11. `*Client`, `*Inner`, `*Base` 같은 trivial pass-through wrapper 금지
    - 단순히 props/params를 받아 바로 하위 컴포넌트에 전달하는 중간 component를 같은 page 파일 안에 두지 않음
    - page 파일 안에서 wrapper 없이 최종 exported component가 바로 렌더 책임을 가짐
-12. 기존 코드 수정 시 대응 `.spec.md` 업데이트 + `## 변경 이력` 추가 필수
+12. Page component 수정 시 대응 `[PageName].spec.md` 업데이트 + `## 변경 이력` 추가 필수
 13. `packages/fe-ui/src/page/index.ts` export 동기화 필수
 14. page 이름은 semantic screen 이름을 우선 사용
    - 기본 CRUD 어휘: `ListPage`, `DetailPage`, `CreatePage`, `EditPage`
@@ -78,7 +78,7 @@ widget/feature/form/master/detail 등 하위 재사용 계층을 조합해 page-
 ### 1.2 page component의 책임
 
 - 제목/설명/본문/CTA/빈 상태/에러 상태 등 화면 시각 구조 정의
-- 여러 feature/widget/form/master/detail 조합
+- 여러 feature/widget/form/collection/detail 조합
 - props 기반 분기 렌더링
 - 사용자 상호작용 이벤트를 props handler에 위임
 
@@ -114,8 +114,7 @@ widget/feature/form/master/detail 등 하위 재사용 계층을 조합해 page-
 packages/fe-ui/src/page/[PageName]/
 ├── [PageName].tsx
 ├── [PageName].spec.md
-├── [PageName].stories.tsx
-└── [PageName].stories.spec.md
+└── [PageName].stories.tsx
 ```
 
 - page는 component 전용 폴더를 필수로 사용합니다.
@@ -149,8 +148,9 @@ export const MembersListPage = observer((props: MembersListPageProps) => {
 
 ### 2.3 sidecar 문서 규칙
 
-- 코드 파일 수정 시 같은 위치의 `.spec.md`를 동기화합니다.
-- story가 있으면 story와 story spec도 함께 검토합니다.
+- Page component 수정 시 같은 위치의 `[PageName].spec.md`를 동기화합니다.
+- story를 수정해도 story spec은 만들지 않습니다.
+- page spec은 props contract, composition, 상태별 렌더링, 테스트 관점을 중심으로 유지합니다.
 
 ---
 
@@ -164,7 +164,7 @@ export const MembersListPage = observer((props: MembersListPageProps) => {
 
 ### 3.2 합성 우선
 
-- 먼저 기존 `widget`, `feature`, `master`, `detail`, `form`을 조합합니다.
+- 먼저 기존 `widget`, `feature`, `collection`, `detail`, `form`을 조합합니다.
 - page 내부에서 새로운 lower-layer 책임을 만들지 않습니다.
 - lower-layer 재사용이 부족하면 해당 계층 builder 수정 필요를 먼저 명시합니다.
 
@@ -183,7 +183,7 @@ export const MembersListPage = observer((props: MembersListPageProps) => {
 ## 4. 구현 절차 (반드시 순서 준수)
 
 1. 기존 `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 재사용 후보 검색
-2. 대응되는 feature/widget/master/detail/form 재사용 자산 검색
+2. 대응되는 feature/widget/collection/detail/form 재사용 자산 검색
 3. page가 받아야 할 props contract를 먼저 정리
 4. 작업 시작 보고로 아래를 공유
    - 재사용 후보
@@ -193,7 +193,7 @@ export const MembersListPage = observer((props: MembersListPageProps) => {
    - 필요한 export/story/spec 수정 범위
 5. pure page component 구현
 6. `src/page/index.ts` export 동기화
-7. 대응 `.spec.md`와 필요 시 story 동기화
+7. 대응 `[PageName].spec.md`와 필요 시 story 동기화
 8. 정적 검증/타입체크
 9. 결과를 규칙별로 보고
 
@@ -239,7 +239,7 @@ rg -n 'handle[A-Z][A-Za-z0-9_]*' "$TARGET_PAGE"
 - 앱 라우트 data/handler는 page props로 받음
 - lower-layer 조합을 우선하고 page 내부에서 비재사용 책임을 만들지 않음
 - 신규 `VStack`/`HStack`/`Spacer` 호출은 semantic rhythm preset(`page`, `section`, `block`, `inline`, `dense`)을 우선 사용
-- 완료 기준은 `규칙 위반 0 + export 동기화 + spec 동기화`
+- 완료 기준은 `규칙 위반 0 + export 동기화 + Page component spec 동기화`
 
 ---
 

@@ -24,18 +24,17 @@ route layout, page, feature 사이에서 **누가 Surface를 소유하고 어디
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
 | 페이지 경로 | ✅ | 대상 화면 경로 |
-| 기존 `layout.spec.md` | ✅ | route skeleton 초안 |
 | 기존 `page.spec.md` | ✅ | 페이지 콘텐츠 초안 |
-| Layout/Feature spec | △ | 구조와 시각 블록 정보 |
+| Layout/Feature 계약 | △ | 구조와 시각 블록 정보 |
 | 화면 mockup | △ | 검색, 그리드, 폼, 카드 등 시각 블록 확인 자료 |
 
 ### 출력
 
-| 파일 | 동작 |
+| 산출물 | 동작 |
 |------|------|
-| `apps/[app]/src/app/**/layout.spec.md` | Surface ownership 섹션 추가 또는 업데이트 |
-| `apps/[app]/src/app/**/page.spec.md` | layout contract 소비 규칙 반영 |
-| `packages/fe-ui/src/feature/[FeatureName]/index.spec.md` | 필요 시 "Surface는 외부 소유" 규칙 반영 |
+| route layout 구현 메모 | `fe-route-layout-builder`에게 전달 |
+| `apps/[app]/src/app/**/page.spec.md` | page가 알아야 하는 Surface 소비 규칙만 반영 |
+| `packages/fe-ui/src/feature/**/[FeatureName].spec.md` | 필요 시 "Surface는 외부 소유" 규칙 반영 |
 
 ---
 
@@ -44,9 +43,9 @@ route layout, page, feature 사이에서 **누가 Surface를 소유하고 어디
 - `Page`, `Section`은 구조를 담당하고 `PageSurface`, `SectionSurface`, `Surface`는 표현을 담당합니다.
 - route-level `PageSurface`, `SectionSurface`, `Surface`는 기본적으로 `layout.tsx`가 소유합니다.
 - named slot을 쓰는 경우 surface owner는 여전히 parent `layout.tsx` 기준으로 결정하고, slot 콘텐츠는 해당 surface를 소비만 합니다.
-- `page.tsx`는 layout spec이 제공한 surface 안의 콘텐츠를 소비합니다.
+- `page.tsx`는 route layout 코드가 제공한 surface 안의 콘텐츠를 소비합니다.
 - 검색/필터/DataGrid/폼/카드처럼 시각적으로 묶여야 하는 블록은 명시적 surface owner가 있어야 합니다.
-- Surface를 생략하는 경우에는 flat 배경이 의도된 이유를 spec에 명시해야 합니다.
+- Surface를 생략하는 경우에는 flat 배경이 의도된 이유를 구현 메모 또는 허용 대상 spec에 명시합니다.
 
 ---
 
@@ -65,10 +64,11 @@ route layout, page, feature 사이에서 **누가 Surface를 소유하고 어디
 ## 4. 실패 조건
 
 - 검색/필터/DataGrid/폼 블록이 있는데 surface owner가 정의되지 않음
-- `layout.spec.md`와 `page.spec.md`가 같은 surface owner를 중복 선언함
+- 신규 `layout.spec.md`를 만들거나 갱신함
+- route layout 코드와 `page.spec.md`가 같은 surface owner를 중복 선언함
 - slot fallback(`default.tsx`)의 surface 정책이 문서화되지 않음
 - `PageSurface` 없이 `SectionSurface`만 최상위에 놓여 elevation 위계가 깨짐
-- Surface 생략이 명시적 예외가 아닌 단순 누락인데 spec에 근거가 없음
+- Surface 생략이 명시적 예외가 아닌 단순 누락인데 구현 메모 또는 허용 대상 spec에 근거가 없음
 
 ---
 
@@ -80,5 +80,5 @@ route layout, page, feature 사이에서 **누가 Surface를 소유하고 어디
 | `req-page-planner` | 선행/협업 | page 콘텐츠 계약 제공 |
 | `req-feature-planner` | 협업 | feature가 Surface를 소유하지 않는 경계 정리 |
 | `fe-route-layout-builder` | 후행 | 확정된 Surface ownership을 `layout.tsx`로 구현 |
-| `fe-page-builder` | 후행 | layout contract를 소비하는 page 콘텐츠 구현 |
+| `fe-page-builder` | 후행 | route layout 코드를 소비하는 page 콘텐츠 구현 |
 '''

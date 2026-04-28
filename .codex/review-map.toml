@@ -33,7 +33,7 @@ match = [".wt/config.json", "package.json", "apps/*/package.json", "packages/*/p
 primary_role = "qa-pr-reviewer"
 supporting_roles = []
 rule_docs = [".codex/agents/qa-pr-reviewer.toml", ".wt/config.json"]
-check_keys = ["config-contract", "role-registry-sync", "sidecar-sync"]
+check_keys = ["config-contract", "role-registry-sync"]
 exempt = false
 
 [[rules]]
@@ -42,7 +42,7 @@ match = ["scripts/**/*.js", "scripts/**/*.ts", "scripts/**/*.mjs", "scripts/**/*
 primary_role = "qa-pr-reviewer"
 supporting_roles = []
 rule_docs = [".codex/agents/qa-pr-reviewer.toml"]
-check_keys = ["config-contract", "sidecar-sync", "review-map-coverage"]
+check_keys = ["config-contract", "review-map-coverage"]
 exempt = false
 
 [[rules]]
@@ -51,12 +51,12 @@ match = ["apps/*/web/src/app/**/layout.tsx"]
 primary_role = "fe-route-layout-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["route-layout-ownership", "owner-boundary", "sidecar-sync"]
+check_keys = ["route-layout-ownership", "owner-boundary"]
 exempt = false
 
 [[rules]]
 id = "route-page-files"
-match = ["apps/*/web/src/app/**/page.tsx", "apps/*/web/src/app/**/_client.tsx", "apps/*/web/src/app/**/_prefetch.ts"]
+match = ["apps/*/web/src/app/**/page.tsx"]
 primary_role = "fe-page-builder"
 supporting_roles = ["fe-ui-page-builder"]
 rule_docs = []
@@ -65,7 +65,7 @@ exempt = false
 
 [[rules]]
 id = "fe-ui-page-files"
-match = ["packages/fe-ui/src/page/**/*.ts", "packages/fe-ui/src/page/**/*.tsx"]
+match = ["packages/fe-ui/src/page/**/*Page.tsx"]
 primary_role = "fe-ui-page-builder"
 supporting_roles = []
 rule_docs = []
@@ -78,7 +78,7 @@ match = ["packages/fe-ui/src/form/**/*.ts", "packages/fe-ui/src/form/**/*.tsx"]
 primary_role = "fe-form-builder"
 supporting_roles = ["fe-control-component-builder"]
 rule_docs = []
-check_keys = ["control-only", "owner-boundary", "sidecar-sync"]
+check_keys = ["control-only", "owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -87,7 +87,7 @@ match = ["packages/fe-ui/src/control/**/*.ts", "packages/fe-ui/src/control/**/*.
 primary_role = "fe-control-component-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -105,7 +105,7 @@ match = ["packages/fe-ui/src/widget/**/*.ts", "packages/fe-ui/src/widget/**/*.ts
 primary_role = "fe-widget-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["layer-boundary", "owner-boundary", "sidecar-sync"]
+check_keys = ["layer-boundary", "owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -114,7 +114,7 @@ match = ["packages/fe-ui/src/display/**/*.ts", "packages/fe-ui/src/display/**/*.
 primary_role = "fe-display-component-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -123,16 +123,25 @@ match = ["packages/fe-ui/src/layout/**/*.ts", "packages/fe-ui/src/layout/**/*.ts
 primary_role = "fe-layout-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "layer-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary", "layer-boundary"]
 exempt = false
 
 [[rules]]
-id = "fe-master-files"
-match = ["packages/fe-ui/src/master/**/*.ts", "packages/fe-ui/src/master/**/*.tsx"]
-primary_role = "fe-master-builder"
+id = "fe-collection-files"
+match = ["packages/fe-ui/src/collection/**/*.ts", "packages/fe-ui/src/collection/**/*.tsx"]
+primary_role = "fe-collection-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "layer-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary", "layer-boundary"]
+exempt = false
+
+[[rules]]
+id = "fe-data-grid-files"
+match = ["packages/fe-ui/src/data-grid/**/*.ts", "packages/fe-ui/src/data-grid/**/*.tsx"]
+primary_role = "fe-data-grid-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["owner-boundary", "layer-boundary"]
 exempt = false
 
 [[rules]]
@@ -141,7 +150,7 @@ match = ["packages/fe-ui/src/detail/**/*.ts", "packages/fe-ui/src/detail/**/*.ts
 primary_role = "fe-detail-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "layer-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary", "layer-boundary"]
 exempt = false
 
 [[rules]]
@@ -150,7 +159,7 @@ match = ["packages/fe-ui/src/columns/**/*.ts", "packages/fe-ui/src/columns/**/*.
 primary_role = "fe-columns-builder"
 supporting_roles = ["fe-cell-builder"]
 rule_docs = []
-check_keys = ["layer-boundary", "owner-boundary", "sidecar-sync"]
+check_keys = ["layer-boundary", "owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -159,7 +168,7 @@ match = ["packages/fe-ui/**/*.test.ts", "packages/fe-ui/**/*.test.tsx", "package
 primary_role = "qa-fe-testing"
 supporting_roles = []
 rule_docs = []
-check_keys = ["test-contract", "sidecar-sync"]
+check_keys = ["test-contract"]
 exempt = false
 
 [[rules]]
@@ -168,7 +177,7 @@ match = ["packages/fe-store/**/*.ts", "packages/fe-store/**/*.tsx"]
 primary_role = "fe-store-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -177,7 +186,7 @@ match = ["apps/*/web/src/app/**/*.e2e.ts"]
 primary_role = "qa-fe-e2e-testing"
 supporting_roles = []
 rule_docs = []
-check_keys = ["test-contract", "sidecar-sync"]
+check_keys = ["test-contract"]
 exempt = false
 
 [[rules]]
@@ -186,7 +195,7 @@ match = ["apps/*/api/src/module/**/*.controller.ts"]
 primary_role = "be-controller-builder"
 supporting_roles = ["be-app-builder", "be-facade-builder"]
 rule_docs = []
-check_keys = ["controller-entrypoint", "owner-boundary", "sidecar-sync"]
+check_keys = ["controller-entrypoint", "owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -195,7 +204,7 @@ match = ["apps/*/api/src/module/**/*.module.ts", "apps/*/api/src/module/app.modu
 primary_role = "be-module-builder"
 supporting_roles = ["be-bootstrap-integrator"]
 rule_docs = []
-check_keys = ["owner-boundary", "required-export", "sidecar-sync"]
+check_keys = ["owner-boundary", "required-export"]
 exempt = false
 
 [[rules]]
@@ -204,7 +213,7 @@ match = ["packages/be-prisma/schema/**/*.prisma"]
 primary_role = "be-prisma-builder"
 supporting_roles = ["be-prisma-annotator"]
 rule_docs = []
-check_keys = ["owner-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -213,7 +222,7 @@ match = ["packages/be-app/src/**/*.ts"]
 primary_role = "be-app-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "service-repository-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary", "service-repository-boundary"]
 exempt = false
 
 [[rules]]
@@ -222,7 +231,7 @@ match = ["packages/be-facade/src/**/*.ts"]
 primary_role = "be-facade-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "service-repository-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary", "service-repository-boundary"]
 exempt = false
 
 [[rules]]
@@ -231,7 +240,7 @@ match = ["packages/be-service/src/**/*.ts"]
 primary_role = "be-service-builder"
 supporting_roles = ["be-repository-builder"]
 rule_docs = []
-check_keys = ["service-repository-boundary", "owner-boundary", "sidecar-sync"]
+check_keys = ["service-repository-boundary", "owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -240,7 +249,7 @@ match = ["packages/be-repository/src/**/*.ts"]
 primary_role = "be-repository-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -249,7 +258,7 @@ match = ["packages/be-dto/src/**/*.ts"]
 primary_role = "be-dto-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -258,7 +267,7 @@ match = ["packages/be-entity/src/**/*.ts"]
 primary_role = "be-entity-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -267,7 +276,7 @@ match = ["packages/be-vo/src/**/*.ts"]
 primary_role = "be-vo-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -276,7 +285,7 @@ match = ["packages/common-schema/src/**/*.ts", "packages/common-schema/**/*.ts"]
 primary_role = "common-schema-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -285,7 +294,7 @@ match = ["packages/common-constant/**/*.ts", "packages/common-enum/**/*.ts", "pa
 primary_role = "qa-pr-reviewer"
 supporting_roles = []
 rule_docs = [".codex/agents/qa-pr-reviewer.toml"]
-check_keys = ["owner-boundary", "sidecar-sync"]
+check_keys = ["owner-boundary"]
 exempt = false
 
 [[rules]]
@@ -294,5 +303,5 @@ match = ["apps/*/api/src/module/**/*.spec.ts", "packages/be-common/**/*.spec.ts"
 primary_role = "qa-be-testing"
 supporting_roles = []
 rule_docs = []
-check_keys = ["test-contract", "sidecar-sync"]
+check_keys = ["test-contract"]
 exempt = false

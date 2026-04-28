@@ -14,6 +14,7 @@
 - 웹용 `fe-*`, `orch-*`, `req-*` role과 분리됩니다.
 - 모바일 orchestration 은 mobile route flow 에 공통 backend spec planning 을 포함한 compact 4-stage flow 기준입니다.
 - 모바일 검증은 Jest unit test 와 Detox E2E, `qa-mo-*` role 기준으로 정리합니다.
+- 전역 sidecar spec 정책상 신규 `*.spec.md`는 Next.js route page, `packages/fe-ui/src/page`, `packages/fe-ui/src/feature`에만 허용됩니다. 모바일 role 문서의 legacy `index.spec.md`/`_layout.spec.md` 언급보다 `docs/sidecar-spec-policy.md`를 우선합니다.
 
 ## Orchestration
 
@@ -22,10 +23,10 @@
 
 ## Planner
 
-- [req-mo-route-layout-planner.toml](./req-mo-route-layout-planner.toml): Expo Router 의 `_layout.spec.md` shell 계약을 기획하는 전문가
-- [req-mo-page-planner.toml](./req-mo-page-planner.toml): Expo route screen 의 `index.spec.md`를 상세 기획하는 전문가
-- [req-mo-primitive-planner.toml](./req-mo-primitive-planner.toml): 모바일 display/surface/provider primitive sidecar spec 을 기획하는 전문가
-- [req-mo-input-planner.toml](./req-mo-input-planner.toml): 모바일 입력 컴포넌트 sidecar spec 을 기획하는 전문가
+- [req-mo-route-layout-planner.toml](./req-mo-route-layout-planner.toml): Expo Router 의 `_layout` shell 계약을 기획하는 전문가
+- [req-mo-page-planner.toml](./req-mo-page-planner.toml): Expo route screen 계약을 상세 기획하는 전문가
+- [req-mo-primitive-planner.toml](./req-mo-primitive-planner.toml): 모바일 display/surface/provider primitive 계약을 기획하는 전문가
+- [req-mo-input-planner.toml](./req-mo-input-planner.toml): 모바일 입력 컴포넌트 계약을 기획하는 전문가
 - [req-mo-menu-planner.toml](./req-mo-menu-planner.toml): 모바일 navigation/menu contract 를 기획하는 전문가
 - [req-mo-store-planner.toml](./req-mo-store-planner.toml): 모바일 공용/로컬 상태 경계를 기획하는 전문가
 - [req-mo-state-planner.toml](./req-mo-state-planner.toml): 모바일 route-local 상태와 shared Store 승격 경계를 기획하는 전문가
@@ -52,7 +53,7 @@
 - [fe-mo-feature-builder.toml](./fe-mo-feature-builder.toml): 모바일 feature 계층 예약 role
 - [fe-mo-form-builder.toml](./fe-mo-form-builder.toml): 모바일 form 계층 예약 role
 - [fe-mo-layout-builder.toml](./fe-mo-layout-builder.toml): 모바일 재사용 layout shell 예약 role
-- [fe-mo-master-builder.toml](./fe-mo-master-builder.toml): 모바일 master 계층 예약 role
+- [fe-mo-collection-builder.toml](./fe-mo-collection-builder.toml): 모바일 collection 계층 예약 role
 - [fe-mo-ui-page-builder.toml](./fe-mo-ui-page-builder.toml): `packages/fe-mo-ui/src/page/**` pure page 예약 role
 - [fe-mo-widget-builder.toml](./fe-mo-widget-builder.toml): 모바일 widget 계층 예약 role
 

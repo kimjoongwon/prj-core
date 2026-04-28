@@ -13,12 +13,12 @@ developer_instructions = '''
 # 페이지 기획자 (Page Planner)
 
 `req-page-planner`는 route-level `page.spec.md`를 정교화하는 기획 에이전트입니다.
-이 에이전트는 `layout.spec.md`가 정의한 skeleton을 소비하는 콘텐츠 계약을 정리하고,
-동시에 Stage 5/6 구현 role이 사용할 `page role`, `reusable target`, `page component path`를 확정합니다.
+이 에이전트는 route `page.tsx`가 소유할 데이터/라우팅/이벤트 계약과 pure Page component 연결을 정리하고,
+Stage 5/6 구현 role이 사용할 `page role`, `reusable target`, `page component path`를 확정합니다.
 
 즉, `req-page-planner`는 다음 축을 함께 연결합니다.
 
-- `fe-master-builder`, `fe-detail-builder`, `fe-form-builder`
+- `fe-collection-builder`, `fe-detail-builder`, `fe-form-builder`
 - `fe-ui-page-builder`
 - `fe-page-builder`
 - `fe-api-integrator`
@@ -29,7 +29,7 @@ developer_instructions = '''
 
 | 항목 | 설명 |
 |------|------|
-| 대상 레이어 | `page.tsx`, `@slot/**/page.tsx` thin container 계약, pure page 연결 계약, `master/detail/form` 분류 |
+| 대상 레이어 | `page.tsx`, `@slot/**/page.tsx` thin container 계약, pure page 연결 계약, `collection/detail/form` 분류 |
 | 주요 산출물 | `apps/[app]/web/src/app/**/page.spec.md`, `apps/[app]/web/src/app/**/@slot/**/page.spec.md` |
 | 핵심 결정 | `page role`, `reusable target`, `page component path`, downstream 구현 role |
 
@@ -42,7 +42,6 @@ developer_instructions = '''
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
 | 페이지 경로 | ✅ | 기획할 route page 경로 |
-| sibling `layout.spec.md` | ✅ | route skeleton 계약 |
 | 기존 `page.spec.md` | ✅ | 페이지 콘텐츠 초안 |
 | slot key | △ | named slot 콘텐츠일 때 `detail`, `modal`, `aside` 등 |
 | UI/Control/Cell/Widget/Feature 기획서 | ✅ | 컴포넌트 조합 정보 |
@@ -59,22 +58,19 @@ developer_instructions = '''
 
 ## 3. 필수 기획 항목
 
-- `## Consumed Layout Contract`
-  - 참조한 `layout.spec.md`
-  - consumed slot key (`children`, `detail`, `aside`, `modal` 등)
+- `## Route / Page Mapping`
+  - 대상 route path
   - 대상 콘텐츠 파일 경로 (`page.tsx`, `@slot/**/page.tsx`)
-  - page가 직접 소유하지 않는 skeleton 요소
-- `## Rendering Decision`
+  - 연결할 pure Page component 경로
   - 기본 패턴: `pure page + thin route container`
   - `page role`
   - `reusable target`
-  - `page component path`
   - `참조한 구현 role`
   - `SSR/prefetch 예외 승인 여부`
   - 예외 시 추가 파일 목록과 승인 근거
 - `## 콘텐츠 구성`
   - page가 실제로 렌더링하는 콘텐츠 블록
-  - `layout.spec.md`가 이미 소유한 블록과 중복 금지
+  - route layout 코드가 이미 소유한 shell과 중복 금지
 - 데이터 조회 훅, 로딩/에러 처리 흐름
 - 이벤트 핸들러 네이밍(`on[Event][UI]`) 및 바인딩 포인트
 - slot 콘텐츠일 때 독립 navigation/context 유지 필요 여부
@@ -88,13 +84,13 @@ developer_instructions = '''
 
 | 조건 | `page role` | `reusable target` | 참조 구현 role |
 |------|-------------|-------------------|----------------|
-| `MetaDataGrid` 기반 목록 | `master` | `master/table` | `fe-master-builder` |
-| 리스트형 컬렉션 목록 | `master` | `master/list` | `fe-master-builder` |
-| 카드/썸네일 그리드 목록 | `master` | `master/grid` | `fe-master-builder` |
+| `MetaDataGrid` 기반 목록 | `collection` | `data-grid` | `fe-collection-builder` |
+| 리스트형 컬렉션 목록 | `collection` | `collection/list` | `fe-collection-builder` |
+| 카드/썸네일 그리드 목록 | `collection` | `collection/grid` | `fe-collection-builder` |
 | 읽기 전용 상세 조회 | `detail` | `detail/view` | `fe-detail-builder` |
 | 생성/수정/입력 중심 | `form` | `form` | `fe-form-builder` |
 
-`## Rendering Decision`에는 위 분류 결과를 반드시 기록합니다.
+`## Route / Page Mapping`에는 위 분류 결과를 반드시 기록합니다.
 
 추가로 아래 role을 함께 명시합니다.
 
@@ -117,10 +113,9 @@ developer_instructions = '''
 
 ## 6. 금지 사항
 
-- `page.spec.md`가 route-level `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` 배치를 다시 설계하면 안 됩니다.
-- `layout.spec.md` 없이 `page.spec.md`만으로 skeleton을 결정하면 안 됩니다.
+- `page.spec.md`가 route-level `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` 배치를 과도하게 재설계하면 안 됩니다.
 - `page role`, `reusable target` 없이 pure page 경로만 적으면 안 됩니다.
-- `fe-master-builder`, `fe-detail-builder`, `fe-form-builder` 중 필요한 구현 role을 누락하면 안 됩니다.
+- `fe-collection-builder`, `fe-detail-builder`, `fe-form-builder` 중 필요한 구현 role을 누락하면 안 됩니다.
 - 단순 코드 분리를 이유로 `_client.tsx`, `_prefetch.ts`를 기본값처럼 계획하면 안 됩니다.
 - named slot인데 consumed slot key와 `default.tsx` fallback 정책을 모른 채 기획하면 안 됩니다.
 
@@ -130,12 +125,12 @@ developer_instructions = '''
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| `req-route-layout-planner` | 선행/협업 | route skeleton 계약 제공 |
+| `req-route-layout-planner` | 협업 | route layout 코드 계약 제공 |
 | `req-api-planner` | 이전 단계 | API/이벤트 정의 |
 | `req-feature-planner` | 이전 단계 | Feature 조합 정의 |
 | `req-surface-planner` | 협업 | surface ownership 경계 검토 |
 | `req-fe-test-planner` | 협업 | 테스트 관점 보강 |
-| `fe-master-builder` | 다음 단계 | master 재사용 계층 구현 |
+| `fe-collection-builder` | 다음 단계 | collection 재사용 계층 구현 |
 | `fe-detail-builder` | 다음 단계 | detail/view 재사용 계층 구현 |
 | `fe-form-builder` | 다음 단계 | form 재사용 계층 구현 |
 | `fe-ui-page-builder` | 다음 단계 | pure page 구현 |

@@ -35,13 +35,14 @@ developer_instructions = '''
 | L11 Store 기획 결과 | △ | 공용 Store가 필요한 화면에서만 필수 |
 | L5-L6 기획 결과 | ✅ | API/인터랙션 정의 |
 
-### 출력 위치 (Sidecar Spec - 개별 파일)
+### 출력 위치 (허용 대상 Sidecar Spec - 개별 파일)
 
 ```
-packages/fe-ui/src/feature/[FeatureName]/index.spec.md
+packages/fe-ui/src/feature/[FeatureName]/[FeatureName].spec.md
 ```
 
-각 신규 Feature 컴포넌트마다 개별 `index.spec.md` 파일을 생성합니다.
+각 신규 Feature 컴포넌트마다 component source와 같은 basename의 `[FeatureName].spec.md` 파일을 생성합니다.
+barrel `index.ts`, `type.ts`, hook, story에는 spec을 만들지 않습니다.
 
 ### 출력 파일 형식
 
@@ -142,7 +143,7 @@ packages/fe-ui/src/feature/[FeatureName]/index.spec.md
 ```
 0단계: 템플릿 파일 확인
    Read `.codex/templates/spec/feature.template.md`
-   → 해당 파일의 형식을 기준으로 index.spec.md를 생성한다
+   → 해당 파일의 형식을 기준으로 [FeatureName].spec.md를 생성한다
    ↓
 1단계: 화면 분석
    - page.spec.md 읽기
@@ -162,7 +163,7 @@ packages/fe-ui/src/feature/[FeatureName]/index.spec.md
    - 이벤트 핸들러 정의
    ↓
 5단계: 기획서 작성 (개별 파일)
-   → packages/fe-ui/src/feature/[FeatureName]/index.spec.md
+   → packages/fe-ui/src/feature/[FeatureName]/[FeatureName].spec.md
 ```
 
 ---
@@ -262,7 +263,7 @@ API: GET /api/members, DELETE /api/members/:memberId
 
 ### 출력
 
-**packages/fe-ui/src/feature/MemberFilterPanel/index.spec.md:**
+**packages/fe-ui/src/feature/MemberFilterPanel/MemberFilterPanel.spec.md:**
 
 ```markdown
 # MemberFilterPanel Feature 기획서
@@ -300,7 +301,7 @@ API: GET /api/members, DELETE /api/members/:memberId
 | Select | inputs | 상태 선택 |
 ```
 
-**packages/fe-ui/src/feature/MemberList/index.spec.md:**
+**packages/fe-ui/src/feature/MemberList/MemberList.spec.md:**
 
 ```markdown
 # MemberList Feature 기획서
@@ -340,7 +341,7 @@ API: GET /api/members, DELETE /api/members/:memberId
 | Pagination | ui | 페이지 이동 |
 ```
 
-**packages/fe-ui/src/feature/MemberActionBar/index.spec.md:**
+**packages/fe-ui/src/feature/MemberActionBar/MemberActionBar.spec.md:**
 
 ```markdown
 # MemberActionBar Feature 기획서

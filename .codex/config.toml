@@ -25,7 +25,6 @@ child_mutation = "child entity 수정은 반드시 root aggregate service 경유
 prisma_direct_call = false
 folder_layout = "packages/be-service/src/{name}.service/"
 code_file = "packages/be-service/src/{name}.service/index.ts"
-sidecar_spec_file = "packages/be-service/src/{name}.service/index.spec.md"
 barrel_export_file = "packages/be-service/src/index.ts"
 guard = "Service는 @cocrepo/repository를 통한 영속성 접근만 수행하고, @schema-owner가 아닌 모델 별도 service를 만들지 않는다"
 
@@ -35,7 +34,6 @@ required_for_multi_step = true
 required_for_role_or_permission_or_external_integration = true
 folder_layout = "packages/be-app/src/{name}.application-service/"
 code_file = "packages/be-app/src/{name}.application-service/index.ts"
-sidecar_spec_file = "packages/be-app/src/{name}.application-service/index.spec.md"
 barrel_export_file = "packages/be-app/src/index.ts"
 guard = "ApplicationService는 사용자 과업 workflow orchestration을 담당하고, Controller 경계의 read model shaping/response composition은 Facade로 분리한다"
 
@@ -60,8 +58,20 @@ folder_required = true
 folder_layout = "packages/fe-ui/src/page/{PageName}/{PageName}.tsx"
 sidecar_spec_file = "packages/fe-ui/src/page/{PageName}/{PageName}.spec.md"
 story_file = "packages/fe-ui/src/page/{PageName}/{PageName}.stories.tsx"
-story_spec_file = "packages/fe-ui/src/page/{PageName}/{PageName}.stories.spec.md"
-guard = "page 계층에서 sidecar 방식(spec/story)을 사용할 때는 반드시 동일 이름 폴더 안에 component와 sidecar를 함께 둔다. packages/fe-ui/src/page/{PageName}.tsx 같은 flat 배치는 금지한다"
+guard = "page 계층에서 sidecar spec은 Page component에만 둔다. story spec은 만들지 않으며, packages/fe-ui/src/page/{PageName}.tsx 같은 flat 배치는 금지한다"
+
+[rules.fe_ui.feature]
+sidecar_spec_scope = "feature component only"
+allowed_component_spec = "packages/fe-ui/src/feature/**/{FeatureName}.spec.md"
+guard = "feature 계층에서 sidecar spec은 Store/API/router 연결을 소유하는 Feature component에만 둔다. barrel index.ts, type.ts, hook, story에는 spec을 만들지 않는다"
+
+[rules.sidecar_spec]
+allowed = [
+  "apps/*/web/src/app/**/page.spec.md",
+  "packages/fe-ui/src/page/{PageName}/{PageName}.spec.md",
+  "packages/fe-ui/src/feature/**/{FeatureName}.spec.md",
+]
+forbidden = "layout/story/test/e2e/barrel/type/hook/store/dto/service/repository/controller/entity/vo/script/config spec"
 
 [i18n]
 enabled = true
@@ -221,9 +231,13 @@ config_file = "agents/fe-route-layout-builder.toml"
 description = "메뉴 시스템 컴포넌트를 생성하는 전문가"
 config_file = "agents/fe-menu-builder.toml"
 
-[agents.fe-master-builder]
-description = "목록/테이블/그리드 계열 재사용 master 계층을 생성하고 정리하는 전문가"
-config_file = "agents/fe-master-builder.toml"
+[agents.fe-data-grid-builder]
+description = "packages/fe-ui/src/data-grid의 DataGrid/MetaDataGrid 단일 렌더러 구조를 생성하고 정리하는 전문가"
+config_file = "agents/fe-data-grid-builder.toml"
+
+[agents.fe-collection-builder]
+description = "목록/테이블/그리드 계열 재사용 collection 계층을 생성하고 정리하는 전문가"
+config_file = "agents/fe-collection-builder.toml"
 
 [agents.fe-detail-builder]
 description = "상세 조회/읽기 전용 재사용 detail 계층을 생성하고 정리하는 전문가"
@@ -297,9 +311,9 @@ config_file = "agents/mobile/fe-mo-form-builder.toml"
 description = "Expo/RN에서 재사용할 모바일 layout shell 컴포넌트를 설계하는 전문가"
 config_file = "agents/mobile/fe-mo-layout-builder.toml"
 
-[agents.fe-mo-master-builder]
-description = "모바일 목록/그리드 계열 재사용 master 계층을 생성하고 정리하는 전문가"
-config_file = "agents/mobile/fe-mo-master-builder.toml"
+[agents.fe-mo-collection-builder]
+description = "모바일 목록/그리드 계열 재사용 collection 계층을 생성하고 정리하는 전문가"
+config_file = "agents/mobile/fe-mo-collection-builder.toml"
 
 [agents.fe-mo-menu-builder]
 description = "React Native용 메뉴 primitive contract를 packages/fe-mo-ui/src/layout에 생성하거나 정리하는 전문가"
@@ -346,7 +360,7 @@ description = "모바일 route 와 app spec 의 unit/E2E 테스트 케이스를 
 config_file = "agents/mobile/req-mo-fe-test-planner.toml"
 
 [agents.req-mo-input-planner]
-description = "모바일 입력 컴포넌트 sidecar spec 을 기획하는 전문가"
+description = "모바일 입력 컴포넌트 계약을 기획하는 전문가"
 config_file = "agents/mobile/req-mo-input-planner.toml"
 
 [agents.req-mo-menu-planner]
@@ -354,15 +368,15 @@ description = "모바일 navigation/menu contract 를 기획하는 전문가"
 config_file = "agents/mobile/req-mo-menu-planner.toml"
 
 [agents.req-mo-page-planner]
-description = "Expo route screen 의 index.spec.md 를 상세 기획하는 전문가"
+description = "Expo route screen 계약을 상세 기획하는 전문가"
 config_file = "agents/mobile/req-mo-page-planner.toml"
 
 [agents.req-mo-primitive-planner]
-description = "모바일 display/surface/provider primitive sidecar spec 을 기획하는 전문가"
+description = "모바일 display/surface/provider primitive 계약을 기획하는 전문가"
 config_file = "agents/mobile/req-mo-primitive-planner.toml"
 
 [agents.req-mo-route-layout-planner]
-description = "Expo Router 의 _layout.spec.md shell 계약을 기획하는 전문가"
+description = "Expo Router 의 _layout shell 계약을 기획하는 전문가"
 config_file = "agents/mobile/req-mo-route-layout-planner.toml"
 
 [agents.req-mo-store-planner]
@@ -418,7 +432,7 @@ description = "TypeScript 타입 에러를 근본 원인까지 추적하여 해�
 config_file = "agents/qa-type-checker.toml"
 
 [agents.req-api-integration-planner]
-description = "Orval 기반 API 연동 sidecar spec을 기획하는 전문가"
+description = "Orval 기반 API 연동 계약을 기획하는 전문가"
 config_file = "agents/req-api-integration-planner.toml"
 
 [agents.req-api-planner]
@@ -430,7 +444,7 @@ description = "Controller workflow가 호출할 ApplicationService 유즈케이�
 config_file = "agents/req-app-planner.toml"
 
 [agents.req-cell-planner]
-description = "DataGrid/Table Cell sidecar spec을 기획하는 전문가"
+description = "DataGrid/Table Cell 계약을 기획하는 전문가"
 config_file = "agents/req-cell-planner.toml"
 
 [agents.req-columns-planner]
@@ -450,15 +464,15 @@ description = "화면별 Feature 컴포넌트를 기획하는 전문가"
 config_file = "agents/req-feature-planner.toml"
 
 [agents.req-input-planner]
-description = "입력 컴포넌트(Inputs) sidecar spec을 기획하는 전문가"
+description = "입력 컴포넌트(Inputs) 계약을 기획하는 전문가"
 config_file = "agents/req-input-planner.toml"
 
 [agents.req-layout-planner]
-description = "packages/fe-ui/src/layout 재사용 Layout sidecar spec을 기획하는 전문가"
+description = "packages/fe-ui/src/layout 재사용 Layout 계약을 기획하는 전문가"
 config_file = "agents/req-layout-planner.toml"
 
 [agents.req-route-layout-planner]
-description = "route layout.tsx의 서버 skeleton, named slot topology, layout.spec.md를 기획하는 전문가"
+description = "route layout.tsx의 서버 skeleton, named slot topology를 기획하는 전문가"
 config_file = "agents/req-route-layout-planner.toml"
 
 [agents.req-logic-planner]
@@ -466,15 +480,15 @@ description = "비즈니스 로직과 테스트 레이어를 기획하는 전문
 config_file = "agents/req-logic-planner.toml"
 
 [agents.req-menu-planner]
-description = "메뉴 경로/권한 sidecar spec을 기획하는 전문가"
+description = "메뉴 경로/권한 계약을 기획하는 전문가"
 config_file = "agents/req-menu-planner.toml"
 
 [agents.req-page-planner]
-description = "route layout contract를 소비하는 page.spec.md/@slot page.spec.md를 상세 기획하는 전문가 (다국어 키/리소스 정책 포함)"
+description = "route page.spec.md를 상세 기획하는 전문가 (다국어 키/리소스 정책 포함)"
 config_file = "agents/req-page-planner.toml"
 
 [agents.req-reverse-engineer]
-description = "기존 코드를 분석하여 코드 옆 .spec.md 기획서를 역으로 생성하는 전문가"
+description = "기존 화면 코드를 분석하여 허용 대상 .spec.md만 역으로 생성하는 전문가"
 config_file = "agents/req-reverse-engineer.toml"
 
 [agents.req-screen-planner]

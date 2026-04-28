@@ -68,14 +68,13 @@ apps/[app]/web/src/app/(admin)/[domain]/[entityId]/edit/page.spec.md
    - SSR/prefetch가 정말 필요한 경우에도 이 단계에서는 "예외 후보"만 기록하고 파일 생성을 전제하지 않습니다.
 4. 각 `page.spec.md`에는 최소 아래 섹션이 있어야 합니다.
    - `## 사용자 시나리오`
-   - `## Consumed Layout Contract` 초안
-   - `## Rendering Decision` 초안
+   - `## Route / Page Mapping` 초안
    - `## 콘텐츠 구성`
    - `## API 호출`
    - `## 이벤트 핸들러`
    - `## 구현 체크리스트`
    - `## 변경 이력`
-5. `## Rendering Decision` 초안에는 최소 아래를 기록합니다.
+5. `## Route / Page Mapping` 초안에는 최소 아래를 기록합니다.
    - `기본 패턴`
    - `page role`
    - `reusable target`
@@ -83,7 +82,7 @@ apps/[app]/web/src/app/(admin)/[domain]/[entityId]/edit/page.spec.md
    - `SSR/prefetch 예외 승인 여부`
 6. `page component path`는 반드시 `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 패턴을 사용합니다.
 7. 이 단계에서 route-level skeleton을 확정하지 않습니다.
-   - `layout.tsx`, named slot, `PageSurface`, `SectionSurface`, `Surface` ownership은 후속 `req-route-layout-planner`, `req-page-planner`, `orch-screen-planner`가 정교화합니다.
+   - `layout.tsx`, named slot, `PageSurface`, `SectionSurface`, `Surface` ownership은 후속 `req-page-planner`, `orch-screen-planner`가 코드와 page spec 기준으로 정교화합니다.
 
 ---
 
@@ -91,9 +90,9 @@ apps/[app]/web/src/app/(admin)/[domain]/[entityId]/edit/page.spec.md
 
 | 화면 유형 | 기본 path 패턴 | 초기 `page role` | 초기 `reusable target` |
 |----------|----------------|------------------|------------------------|
-| 목록 + `MetaDataGrid` 중심 | `/[resources]` | `master` | `master/table` |
-| 목록 + 리스트형 컬렉션 | `/[resources]` | `master` | `master/list` |
-| 목록 + 카드/썸네일 그리드 | `/[resources]` | `master` | `master/grid` |
+| 목록 + `MetaDataGrid` 중심 | `/[resources]` | `collection` | `data-grid` |
+| 목록 + 리스트형 컬렉션 | `/[resources]` | `collection` | `collection/list` |
+| 목록 + 카드/썸네일 그리드 | `/[resources]` | `collection` | `collection/grid` |
 | 상세 조회 | `/[resources]/[entityId]` | `detail` | `detail/view` |
 | 등록 | `/[resources]/new` | `form` | `form` |
 | 수정 | `/[resources]/[entityId]/edit` | `form` | `form` |
@@ -107,7 +106,7 @@ apps/[app]/web/src/app/(admin)/[domain]/[entityId]/edit/page.spec.md
 2. 목표별 기능(L3)을 도출합니다.
 3. 기능별 화면(L4)을 도출합니다.
 4. 각 화면의 route path를 설계합니다.
-5. 각 화면을 `master/detail/form`으로 1차 분류합니다.
+5. 각 화면을 `collection/detail/form`으로 1차 분류합니다.
 6. 각 화면별 `page.spec.md` 초안을 생성합니다.
 7. 후속 화면 상세 기획 대상으로 `orch-screen-planner`에 넘길 목록을 정리합니다.
 
@@ -118,22 +117,16 @@ apps/[app]/web/src/app/(admin)/[domain]/[entityId]/edit/page.spec.md
 ### 필수 기록 예시
 
 ```markdown
-## Consumed Layout Contract
+## Route / Page Mapping
 
 | 항목 | 값 |
 |------|----|
-| 참조 layout spec | `후속 단계에서 확정` |
-| consumed slot key | `children` |
-| 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/members/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
-
-## Rendering Decision
-
-- 기본 패턴: `page.tsx` 단일 CSR 초안
-- page role: `master`
-- reusable target: `master/table`
-- page component path: `packages/fe-ui/src/page/MemberListPage/MemberListPage.tsx`
-- SSR/prefetch 예외 승인 여부: `없음`
+| 기본 패턴 | `page.tsx` 단일 CSR 초안 |
+| route page | `apps/admin/web/src/app/(admin)/members/page.tsx` |
+| page role | `collection` |
+| reusable target | `data-grid` |
+| page component path | `packages/fe-ui/src/page/MemberListPage/MemberListPage.tsx` |
+| SSR/prefetch 예외 승인 여부 | `없음` |
 ```
 
 ### 구현 체크리스트 기본값
@@ -166,7 +159,7 @@ apps/[app]/web/src/app/(admin)/[domain]/[entityId]/edit/page.spec.md
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
 | `orch-screen-planner` | 다음 단계 | 화면별 상세 기획(L5-L12) |
-| `req-route-layout-planner` | 협업 | route `layout.spec.md` 계약 정교화 |
+| `req-route-layout-planner` | 협업 | route layout 코드 계약 정교화 |
 | `req-page-planner` | 협업 | `page role`, `reusable target`, thin container 계약 정교화 |
 | `req-api-planner` | 다음 단계 | 인터랙션/API 기획 |
 '''

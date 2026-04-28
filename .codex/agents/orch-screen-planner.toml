@@ -42,7 +42,7 @@ developer_instructions = '''
 
 - 화면 기획 시작 전에 관련 Stage 5/6 builder 문서를 먼저 읽습니다.
 - role 문서 경로는 `.codex/config.toml`의 `[agents.<role>].config_file` 또는 `.codex/agents/<role>.toml`을 source of truth로 사용합니다.
-- `page.spec.md`의 `## Rendering Decision`에는 반드시 `page role`, `reusable target`, `page component path`, `참조한 구현 role`을 기록합니다.
+- `page.spec.md`의 `## Route / Page Mapping`에는 반드시 `page role`, `reusable target`, `page component path`, `참조한 구현 role`을 기록합니다.
 - page-level 구현 규칙은 이 문서 안에서 다시 풀어쓰지 않고 builder 문서를 참조합니다.
 
 ---
@@ -76,7 +76,7 @@ developer_instructions = '''
 - `apps/[app]/web/src/app/(admin)/app.context.md`
 - 대상 route의 `page.spec.md` 초안
 - 관련 Entity spec
-- 공용 Store가 필요한 화면이면 `[domain]Store.spec.md`
+- 공용 Store가 필요한 화면이면 Store 설계 메모
 
 ---
 
@@ -87,7 +87,7 @@ developer_instructions = '''
 1. `req-page-planner`
    - `page.spec.md`를 page integration 관점으로 정리
 2. `req-api-planner`
-   - `page.spec.md`의 API/이벤트와 관련 controller/dto spec 보강
+   - `page.spec.md`의 API/이벤트 섹션 보강
 3. `page role`, `reusable target`, 참조할 Stage 5/6 구현 role 확정
 
 ### 4.2 병렬 fan-out 단계
@@ -111,7 +111,7 @@ developer_instructions = '''
 - `req-fe-test-planner`
 - 공유 파일 lock 머지
   - `page.spec.md`
-  - `packages/common-constant/src/routing/admin-menu.spec.md`
+  - 메뉴/라우팅 변경 메모
   - `**/PROGRESS.md`
 
 ### 4.4 병렬 규칙
@@ -135,13 +135,13 @@ developer_instructions = '''
 | `req-layout-planner` | `fe-layout-builder` | `.codex/agents/fe-layout-builder.toml` | `packages/fe-ui/src/display/layout/**` 출력 경로와 Layout 규칙 |
 | `req-feature-planner` | `fe-feature-builder` | `.codex/agents/fe-feature-builder.toml` | `packages/fe-ui/src/feature/**` 출력 경로와 Feature 규칙 |
 | `req-state-planner` | `fe-state-builder`, `fe-store-builder` | `.codex/agents/fe-state-builder.toml`, `.codex/agents/fe-store-builder.toml` | URL query / React Query / page-local MobX / shared Store 경계 |
-| `req-page-planner` | `fe-master-builder` | `.codex/agents/fe-master-builder.toml` | `master/table|list|grid` 재사용 계층 기준 |
+| `req-page-planner` | `fe-collection-builder` | `.codex/agents/fe-collection-builder.toml` | `data-grid|list|grid` 재사용 계층 기준 |
 | `req-page-planner` | `fe-detail-builder` | `.codex/agents/fe-detail-builder.toml` | `detail/view` 재사용 계층 기준 |
 | `req-page-planner` | `fe-form-builder` | `.codex/agents/fe-form-builder.toml` | `form` 재사용 계층 기준 |
 | `req-page-planner` | `fe-ui-page-builder` | `.codex/agents/fe-ui-page-builder.toml` | `packages/fe-ui/src/page/[PageName]/[PageName].tsx` pure page 기준 |
 | `req-page-planner` | `fe-page-builder` | `.codex/agents/fe-page-builder.toml` | `apps/*/web/src/app/**/page.tsx` thin container 기준 |
 | `req-menu-planner` | `fe-menu-builder` | `.codex/agents/fe-menu-builder.toml` | route/menu contract와 출력 경로 |
-| `req-api-integration-planner` | `fe-api-integrator` | `.codex/agents/fe-api-integrator.toml` | `apps/[app]/web/src/app/**/hooks/index.spec.md` 계약 |
+| `req-api-integration-planner` | `fe-api-integrator` | `.codex/agents/fe-api-integrator.toml` | route `page.spec.md` API 연동 계약 |
 | `req-fe-test-planner` | `fe-unit-test-builder`, `qa-fe-testing`, `fe-e2e-builder`, `qa-fe-e2e-testing` | `.codex/agents/fe-unit-test-builder.toml`, `.codex/agents/qa-fe-testing.toml`, `.codex/agents/fe-e2e-builder.toml`, `.codex/agents/qa-fe-e2e-testing.toml` | 테스트 전략, unit/E2E 케이스, 검증 기준 |
 
 ---
@@ -150,12 +150,12 @@ developer_instructions = '''
 
 | page role | reusable target | Stage 5 구현 role | 반영 대상 |
 |----------|-----------------|-------------------|----------|
-| `master` | `master/table` / `master/list` / `master/grid` | `fe-master-builder` | `packages/fe-ui/src/master/**` |
+| `collection` | `data-grid` / `collection/list` / `collection/grid` | `fe-collection-builder` | `packages/fe-ui/src/collection/**` |
 | `detail` | `detail/view` | `fe-detail-builder` | `packages/fe-ui/src/detail/view/**` |
 | `form` | `form` | `fe-form-builder` | `packages/fe-ui/src/form/**` |
 
 규칙:
-- 목록/검색/필터/페이지네이션 중심이면 `master`
+- 목록/검색/필터/페이지네이션 중심이면 `collection`
 - 읽기 전용 상세면 `detail`
 - 생성/수정/입력/검증 중심이면 `form`
 
@@ -164,34 +164,27 @@ developer_instructions = '''
 ## 7. 필수 산출물
 
 - `apps/[app]/web/src/app/(admin)/[domain]/**/page.spec.md`
-- `packages/fe-ui/src/display/[UIName]/index.spec.md`
-- `packages/fe-ui/src/control/[InputName]/index.spec.md`
-- `packages/fe-ui/src/cell/[CellName]/index.spec.md`
-- `packages/fe-ui/src/columns/master/[Domain]Columns.spec.md`
-- `packages/fe-ui/src/widget/[WidgetName]/index.spec.md`
-- `packages/fe-ui/src/display/layout/{index,Layout,type}.spec.md`
-- `packages/fe-ui/src/feature/[FeatureName]/index.spec.md`
-- `packages/common-constant/src/routing/admin-menu.spec.md` (조건부)
-- `apps/[app]/web/src/app/**/hooks/index.spec.md` (조건부)
+- `packages/fe-ui/src/page/[PageName]/[PageName].spec.md`
+- `packages/fe-ui/src/feature/**/[FeatureName].spec.md`
 
 추가 필수 기록:
-- `Rendering Decision.page role`
-- `Rendering Decision.reusable target`
-- `Rendering Decision.page component path`
-- `Rendering Decision.참조한 구현 role`
+- `Route / Page Mapping.page role`
+- `Route / Page Mapping.reusable target`
+- `Route / Page Mapping.page component path`
+- `Route / Page Mapping.참조한 구현 role`
 
 ---
 
 ## 8. 완료 체크리스트
 
-- [ ] `page.spec.md`에 `Rendering Decision`이 기록되었는가?
+- [ ] `page.spec.md`에 `Route / Page Mapping`이 기록되었는가?
 - [ ] `page role`과 `reusable target`이 확정되었는가?
 - [ ] 관련 builder 문서의 출력 경로 / 필수 규칙 / 금지 규칙 / 검증 명령을 spec에 반영했는가?
 - [ ] Cell 산출물이 `packages/fe-ui/src/cell/**` 기준인가?
-- [ ] Columns 산출물이 `packages/fe-ui/src/columns/master/**` 기준인가?
+- [ ] Columns 산출물이 `packages/fe-ui/src/columns/data-grid/**` 기준인가?
 - [ ] `req-surface-planner` 결과가 Surface/Elevation 섹션에 반영되었는가?
-- [ ] `page.spec.md`와 관련 FE sidecar spec에 unit/E2E 테스트 케이스가 추가되었는가?
-- [ ] `page.e2e.spec.md` owner/파일 경로가 필요한 화면에서 누락되지 않았는가?
+- [ ] `page.spec.md`와 관련 Page/Feature spec에 unit/E2E 테스트 관점이 추가되었는가?
+- [ ] 테스트 전용 sidecar spec을 새로 만들지 않았는가?
 
 ---
 

@@ -71,7 +71,7 @@ developer_instructions = '''
 | 4 | `orch-screen-planner` | 정확한 화면 기획 fan-out 체인 |
 | 4 | `req-route-layout-planner`, `req-spec-tracker` | route skeleton, checklist 보조 |
 | 5 | `fe-columns-builder` | columns/cell 경계 source of truth |
-| 5 | `fe-master-builder`, `fe-detail-builder`, `fe-form-builder` | `page role`별 전용 재사용 계층 |
+| 5 | `fe-collection-builder`, `fe-detail-builder`, `fe-form-builder` | `page role`별 전용 재사용 계층 |
 | 5 | `fe-state-builder`, `fe-store-builder` | page-local state 와 shared Store 승격 경계 |
 | 6 | `fe-route-layout-builder`, `fe-ui-page-builder`, `fe-page-builder`, `fe-api-integrator` | route shell / pure page / thin container / API 연동 |
 
@@ -122,7 +122,7 @@ developer_instructions = '''
 
 ### 3.4 page role / reusable target 최소 분류
 
-- 컬렉션 탐색, 검색, 필터, 페이지네이션 중심이면 `master`
+- 컬렉션 탐색, 검색, 필터, 페이지네이션 중심이면 `collection`
 - 읽기 전용 조회면 `detail`
 - 생성/수정/입력/검증 중심이면 `form`
 - 세부 기준은 `orch-screen-planner`와 `fe-page-builder` 문서를 따릅니다.
@@ -143,7 +143,7 @@ developer_instructions = '''
 | 2 | 스키마 구현 | 도메인 전체 | Prisma / Schema / Entity / DTO + BE unit test | BE schema builder chain |
 | 3 | 백엔드 구현 | 도메인 전체 | Repository / Service / App / Controller + 공통 scope rule enforcement + BE unit test | BE implementation builder chain |
 | 4 | 화면 기획 | 페이지별 | L5-L12 + route layout / surface / columns contract + FE unit/E2E test spec authoring | `orch-screen-planner`, `req-route-layout-planner`, `req-spec-tracker` |
-| 5 | 컴포넌트 구현 | 페이지별 | Display / Columns / Control / Cell / Widget / Layout / Feature / `master-detail-form` | FE component builder chain |
+| 5 | 컴포넌트 구현 | 페이지별 | Display / Columns / Control / Cell / Widget / Layout / Feature / `collection-detail-form` | FE component builder chain |
 | 6 | 페이지 통합 | 페이지별 | route layout + pure page + thin container + API/state 연동 + FE unit test | page integration builder chain |
 | 7 | E2E 검증 | 도메인 전체 | 기록된 BE/FE E2E 케이스 구현/실행과 checklist Verified 반영 | E2E builder / QA chain |
 
@@ -163,7 +163,8 @@ developer_instructions = '''
 - 변경이 발생하면 영향받는 최초 Stage부터 재시작합니다.
 - `parallel=auto`를 기본으로 사용합니다.
 - 병렬 fan-out 후 join 단계에서 테스트/검증을 1회 수행합니다.
-- 코드/스펙 변경 시 대응 sidecar와 `## 변경 이력`을 함께 반영합니다.
+- 허용 대상(route page, fe-ui Page, fe-ui Feature)의 코드/spec 변경 시 대응 spec과 `## 변경 이력`을 함께 반영합니다.
+- 허용 대상 밖의 코드에는 신규 `*.spec.md`를 만들지 않습니다.
 
 ### 5.2 금지 규칙
 
@@ -181,7 +182,7 @@ developer_instructions = '''
 - `apps/*/web/src/app/(admin)/app.context.md`
 - `packages/*/src/index.ts`
 - `packages/common-constant/src/routing/admin-menu.ts`
-- `packages/common-constant/src/routing/admin-menu.spec.md`
+- 메뉴/라우팅 변경 메모
 - `**/PROGRESS.md`
 
 ### 5.4 테스트 컨텍스트 분리 규칙
@@ -226,8 +227,7 @@ developer_instructions = '''
 - `apps/[app]/web/src/app/(admin)/app.context.md`
 - 각 `page.spec.md`
 - `packages/be-app|be-service|be-repository` 기준 spec
-- `apps/core/api/src/module/*/*.spec.md`
-- `packages/fe-store/src/stores/[domain]Store.spec.md` (조건부)
+- backend/store 구현 계약 메모
 
 **완료 gate**
 - domain / page / BE / Store spec 존재 확인
@@ -251,7 +251,7 @@ developer_instructions = '''
 - `targets`
 
 **자동 판단 소스**
-- `packages/be-entity/src/*.entity.spec.md`
+- Entity 구현 계약 메모
 - `## 구현 대상` 섹션 우선, 없으면 도메인 spec과 구조로 보정
 
 **완료 gate**
@@ -279,7 +279,7 @@ developer_instructions = '''
 - `targets`
 
 **자동 판단 소스**
-- `apps/core/api/src/module/*/*.controller.spec.md`
+- API/Controller 구현 계약 메모
 - 관련 App / Service / Repository spec
 
 **특수 규칙**
@@ -296,7 +296,7 @@ developer_instructions = '''
 - L5-L12 화면 기획
 - route layout skeleton / slot topology / surface ownership 결정
 - 목록/테이블 화면의 columns/cell 계약 확정
-- page/feature/widget/display/control/store/frontend E2E sidecar의 테스트 케이스 authoring
+- route page, fe-ui Page/Feature spec의 테스트 관점 authoring
 
 **주 호출 role**
 - `orch-screen-planner`
@@ -305,21 +305,21 @@ developer_instructions = '''
 
 **위임 규칙**
 - exact child planner fan-out은 반드시 `orch-screen-planner` 문서를 따릅니다.
-- `display`, `control`, `cell`, `columns`, `widget`, `layout`, `feature`, `state`, `master/detail/form`, `pure page`, `thin container`, `API integration`, `test` 기획 규칙은 `orch-screen-planner`가 관련 구현 role 문서를 읽고 반영해야 합니다.
+- `display`, `control`, `cell`, `columns`, `widget`, `layout`, `feature`, `state`, `collection/detail/form`, `pure page`, `thin container`, `API integration`, `test` 기획 규칙은 `orch-screen-planner`가 관련 구현 role 문서를 읽고 반영해야 합니다.
 
 **fan-out 단위**
 - `pages`
 
 **완료 gate**
-- `layout.spec.md`와 `page.spec.md` 업데이트
-- 관련 FE sidecar spec 생성/갱신
+- `page.spec.md` 업데이트
+- 관련 fe-ui Page/Feature spec 생성/갱신
 - 관련 FE unit/E2E 테스트 케이스 spec 반영
 - `spec-checklist.md`의 Spec exists 반영
 
 ### Stage 5: 컴포넌트 구현
 
 **목표**
-- Display / Columns / Control / Cell / Widget / 재사용 Layout / Feature / `master-detail-form` 전용 계층 구현
+- Display / Columns / Control / Cell / Widget / 재사용 Layout / Feature / `collection-detail-form` 전용 계층 구현
 - FE unit test 전략/기획/구현/실행
 
 **주 호출 role**
@@ -330,7 +330,7 @@ developer_instructions = '''
 - `fe-widget-builder`
 - `fe-layout-builder`
 - `fe-feature-builder`
-- `fe-master-builder` / `fe-detail-builder` / `fe-form-builder`
+- `fe-collection-builder` / `fe-detail-builder` / `fe-form-builder`
 - `fe-state-builder` (page-local state class/hook 이 필요할 때)
 - `fe-store-builder`
 - `fe-menu-builder` (조건부)
@@ -341,7 +341,7 @@ developer_instructions = '''
 
 **위임 규칙**
 - columns/cell 경계는 `fe-columns-builder`를 source of truth로 사용합니다.
-- `page role`별 구현 경계는 `fe-master-builder`, `fe-detail-builder`, `fe-form-builder`를 source of truth로 사용합니다.
+- `page role`별 구현 경계는 `fe-collection-builder`, `fe-detail-builder`, `fe-form-builder`를 source of truth로 사용합니다.
 - 단일 page / route 전용 상태는 `fe-state-builder`, 여러 page / domain 에서 재사용되는 상태는 `fe-store-builder`를 source of truth로 사용합니다.
 - route/page 시각 소유권 세부 규칙은 Stage 6 builder 문서를 재복제하지 않습니다.
 
@@ -449,8 +449,8 @@ developer_instructions = '''
 
 | Stage | 1차 분석 위치 | 보조 판단 |
 |-------|---------------|-----------|
-| 2 | `packages/be-entity/src/*.entity.spec.md` | Entity 의존성 |
-| 3 | `apps/core/api/src/module/*/*.controller.spec.md` | target별 API/Service/App spec |
+| 2 | Entity 구현 계약 메모 | Entity 의존성 |
+| 3 | API/Service/App 구현 계약 메모 | target별 API/Service/App 계약 |
 | 4 | `apps/[app]/web/src/app/(admin)/[domain]/**/page.spec.md` | page 목록 / route 구조 |
 | 5 | `apps/[app]/web/src/app/(admin)/[domain]/**/page.spec.md` | `page role`, `reusable target` |
 | 6 | `apps/[app]/web/src/app/(admin)/[domain]/**/page.spec.md` | page 목록 / slot 구조 |

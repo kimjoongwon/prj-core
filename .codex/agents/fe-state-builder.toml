@@ -48,16 +48,16 @@ developer_instructions = '''
 7. page-local state 를 plain object 여러 개로 흩뿌리지 않고 page당 하나의 route page state class 또는 명시적 state hook 으로 모읍니다.
 8. pure page 에 전체 route state 를 넘기지 않고 page component 이름 기반 page slice 만 넘깁니다.
 9. feature/widget/child 로는 해당 컴포넌트가 소유할 slice 만 넘깁니다.
-10. 기존 source 를 수정하면 대응 `.spec.md`와 `## 변경 이력`을 함께 갱신합니다.
+10. route `page.tsx` 계약이 바뀌면 대응 `page.spec.md`와 `## 변경 이력`을 함께 갱신합니다.
 11. `page.tsx`에서 화면 시각 트리를 직접 조립하지 않습니다. 필요한 pure page props 변경은 `fe-ui-page-builder`와 경계를 맞춥니다.
 12. URL 에 남아야 하는 검색/필터/페이지네이션 상태를 MobX local state 로만 숨기지 않습니다.
 13. state action 에서 직접 toast/router/navigation 을 호출하지 않습니다. route handler 가 action 결과를 받아 처리합니다.
 14. `packages/fe-ui`에서 `apps/*`의 route-local state class/type 을 import 하지 않습니다.
-15. state source 를 별도 파일로 분리하면 해당 source 의 sidecar spec 을 함께 생성/갱신합니다.
+15. state source 를 별도 파일로 분리해도 해당 source 의 sidecar spec 은 만들지 않고 `page.spec.md` 상태 섹션에 반영합니다.
 
 ## 1. 작업 순서
 
-1. 대상 `page.spec.md`, sibling `layout.spec.md`, 관련 pure page spec 을 읽고 state 요구를 확인합니다.
+1. 대상 `page.spec.md`, 관련 pure page spec 을 읽고 state 요구를 확인합니다.
 2. 이미 route-local state class/hook 이 있는지 검색합니다.
 3. 상태를 `URL query`, `React Query server state`, `MobX page-local state`, `shared Store`로 분류합니다.
 4. shared Store 후보가 있으면 재사용 근거를 확인하고, 단일 page 전용이면 route-local 로 유지합니다.
@@ -94,7 +94,7 @@ developer_instructions = '''
 - page-local state: `apps/*/web/src/app/**`
 - route-local hooks: `apps/*/web/src/app/**/hooks/**`
 - page 인접 state class: `apps/*/web/src/app/**/_state.ts` 또는 `hooks/use*State.ts`
-- 대응 sidecar spec: 해당 `page.spec.md`, hook/state source 의 `*.spec.md`
+- 대응 spec: 해당 `page.spec.md` 또는 관련 fe-ui Page/Feature component spec
 
 ## 핵심 역할
 
@@ -306,7 +306,7 @@ useEffect(() => {
 
 ## page.spec.md 반영
 
-state 를 생성/수정하면 대상 `page.spec.md` 또는 state source sidecar 에 아래 내용을 기록합니다.
+state 를 생성/수정하면 대상 `page.spec.md`에 아래 내용을 기록합니다.
 
 | 섹션 | 기록 내용 |
 |------|-----------|
@@ -351,7 +351,7 @@ state 를 생성/수정하면 대상 `page.spec.md` 또는 state source sidecar 
 
 - route-local state class/hook 구현
 - state slice 를 받는 page/feature/widget props 갱신
-- 대응 source sidecar spec 과 `## 변경 이력` 갱신
+- 대응 `page.spec.md`와 `## 변경 이력` 갱신
 - 공용 Store 승격 여부와 근거 보고
 
 ## 완료 전 점검
@@ -379,7 +379,7 @@ rg -n "from ['\"]apps/|from ['\"]@/app|from ['\"]\\.\\./\\.\\./\\.\\./apps/" pac
 # server state 복제 의심 확인
 rg -n 'response\\?\\.data|data:\\s*response|set[A-Z].*\\(response|=\\s*response\\?\\.data' [state파일]
 
-# sidecar 변경 이력 확인
+# page spec 변경 이력 확인
 rg -n '^## 변경 이력|^[|] 20[0-9]{2}-[0-9]{2}-[0-9]{2} ' [대응spec]
 ```
 
@@ -398,7 +398,7 @@ rg -n '^## 변경 이력|^[|] 20[0-9]{2}-[0-9]{2}-[0-9]{2} ' [대응spec]
 - state class 안 hook/router/API 직접 호출이 없음
 - `packages/fe-ui`가 app route-local state 를 import 하지 않음
 - observable 소비 컴포넌트가 `observer`로 감싸짐
-- sidecar spec 과 변경 이력이 갱신됨
+- `page.spec.md`와 변경 이력이 갱신됨
 - 검증 또는 검색 결과를 보고함
 
 ## 보고 포맷

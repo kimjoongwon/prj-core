@@ -106,25 +106,19 @@ developer_instructions = '''
 - `apps/[app]/web/src/app/(admin)/app.context.md`
 - 각 `page.spec.md`의 L3-L4 초안
 
-### 4.2 백엔드 / 공용 패키지 기획서
+### 4.2 백엔드 / 공용 패키지 기획
 
-- `packages/be-entity/src/{entity}.entity.spec.md`
-- `packages/common-enum/src/{name}.spec.md` (필요 시)
-- `packages/be-vo/src/{domain}/{name}.vo.spec.md` (필요 시)
-- `packages/be-dto/src/{domain}/{name}.dto.spec.md`
-- `packages/be-app/src/[name].application-service/index.spec.md`
-- `packages/be-service/src/[name].service/index.spec.md`
-- `packages/be-repository/src/[domain].repository.spec.md`
-- `apps/core/api/src/module/[module]/[domain].controller.spec.md`
-- `apps/core/api/src/module/[module]/[domain].module.spec.md`
+- 백엔드 / 공용 패키지는 신규 sidecar spec을 만들지 않습니다.
+- Entity, DTO, Service, Repository, Controller 계약은 구현 코드, Swagger/Prisma/schema, `app.context.md`, route `page.spec.md`의 API 섹션에 반영합니다.
 
-### 4.3 프론트엔드 기획서
+### 4.3 프론트엔드 기획
 
-- `packages/fe-store/src/stores/[domain]Store.spec.md` (공용 재사용 상태일 때만)
+- 공용 Store가 필요해도 Store spec은 만들지 않고 route `page.spec.md` 또는 관련 fe-ui Feature spec에 상태 경계를 기록합니다.
 
 ### 4.4 위임 산출물 경계
 
-- `display/control/cell/columns/widget/layout/feature/master/detail/form/page/hooks` 계열 상세 spec은 `orch-screen-planner`가 소유합니다.
+- `feature/page/route page` 상세 spec은 `orch-screen-planner`가 소유합니다.
+- `display/control/cell/columns/widget/layout/collection/detail/form/hooks` 계열은 신규 spec을 만들지 않습니다.
 - 이 문서는 해당 파일들의 세부 내용을 다시 정의하지 않습니다.
 
 ---

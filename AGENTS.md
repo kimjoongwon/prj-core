@@ -712,23 +712,24 @@ packages/common-type/src/
 
 ### 코드 옆 기획서 (Sidecar Spec) (Critical)
 
-**`*.spec.md`는 source code 파일의 sidecar 문서에만 사용합니다.**
+**`*.spec.md`는 화면 구현 흐름을 붙잡는 최소 문서에만 사용합니다.**
 
 ```
-source code 파일과 sidecar spec은 같은 폴더에서 1:1로 관리
-기존 source code를 수정하면 대응되는 .spec.md를 반드시 함께 업데이트
-spec.md를 수정했다면 하단 "변경 이력"에 변경 내용을 반드시 추가
-non-source 문서는 .spec.md를 쓰지 않고 context/guide/ops/notes/template suffix를 사용
+허용 대상은 feature, page, Next.js route page 세 가지뿐입니다.
+허용 대상이 아닌 코드를 수정해도 spec.md를 생성하거나 갱신하지 않습니다.
+spec.md를 수정했다면 하단 "변경 이력"에 변경 내용을 추가합니다.
+non-source 문서는 .spec.md를 쓰지 않고 context/guide/ops/notes/template suffix를 사용합니다.
 ```
 
 **운영 규칙 (Mandatory):**
-- 허용되는 sidecar source 확장자: `*.ts`, `*.tsx`, `*.js`, `*.jsx`, `*.mjs`, `*.cjs`, `*.mts`, `*.cts`, `*.sh`
-- 기존 source code 파일을 수정하면 같은 위치의 `*.spec.md`를 반드시 함께 수정합니다.
-- `*.spec.md`를 수정한 경우 하단 `## 변경 이력` 표에 당일 변경 내용을 1줄 이상 추가합니다.
-- 코드만 변경하고 spec/변경 이력을 누락한 PR/커밋은 완료로 간주하지 않습니다.
+- 신규 작성/갱신 가능한 sidecar spec은 아래 세 가지뿐입니다.
+  - Next.js route page: `apps/*/web/src/app/**/page.tsx` ↔ `page.spec.md`
+  - fe-ui Page component: `packages/fe-ui/src/page/[PageName]/[PageName].tsx` ↔ `[PageName].spec.md`
+  - fe-ui Feature component: `packages/fe-ui/src/feature/**/[FeatureName].tsx` ↔ `[FeatureName].spec.md` (component owner가 `index.tsx`인 경우만 `index.spec.md` 허용)
+- 위 세 대상의 코드를 수정하면 대응되는 `*.spec.md`를 함께 수정합니다.
+- 위 세 대상이 아닌 코드를 수정할 때는 `*.spec.md`를 생성/수정하지 않습니다.
+- `*.stories.spec.md`, `*.test.spec.md`, `*.e2e.spec.md`, `layout.spec.md`, `_client.spec.md`, `_prefetch.spec.md`, barrel `index.spec.md`, `type.spec.md`, hook/util/store/dto/service/repository/controller/entity/vo spec은 신규 작성 금지입니다.
 - `app.spec.md`, `package.spec.md`, `tsconfig.spec.md`, `*.toml.spec.md`, `*.json.spec.md`, `*.css.spec.md`, `*.html.spec.md`, `Dockerfile.*.spec.md`, `Jenkinsfile.*.spec.md`는 신규 생성하지 않습니다.
-- `packages/be-prisma/**`와 Prisma schema / generated client에는 `*.spec.md`를 붙이지 않습니다.
-- source file이 없는 디렉터리 설명용 `index.spec.md`는 금지합니다.
 - non-source 문서는 아래 suffix를 사용합니다.
   - 앱/도메인 컨텍스트: `*.context.md`
   - 설정/운영 설명: `*.guide.md`, `*.ops.md`, `*.notes.md`
@@ -736,15 +737,15 @@ non-source 문서는 .spec.md를 쓰지 않고 context/guide/ops/notes/template 
 - TOML 설정/role 파일의 보조 문서인 `*.toml.guide.md`는 생성하지 않습니다.
 - agent/role 설명은 해당 `.toml`의 `developer_instructions` 또는 인덱스 `README.md`에 직접 반영합니다.
 - `packages/fe-ui/src/page`는 page component와 sidecar를 반드시 동일 이름 폴더에 함께 둡니다.
-- 예: `packages/fe-ui/src/page/AddressEmailVerifyPage/AddressEmailVerifyPage.tsx`, `.spec.md`, `.stories.tsx`, `.stories.spec.md`
+- 예: `packages/fe-ui/src/page/AddressEmailVerifyPage/AddressEmailVerifyPage.tsx`, `AddressEmailVerifyPage.spec.md`
 - 금지 예: `packages/fe-ui/src/page/AddressEmailVerifyPage.tsx`, `packages/fe-ui/src/page/AddressEmailVerifyPage.spec.md`
 - admin/idp route의 pure page 이관 현황은 `packages/fe-ui/src/page/migration-audit.md`를 기준으로 확인합니다.
 - 전체 page 이관 완료 여부를 말하기 전에는 반드시 `packages/fe-ui/src/page/migration-audit.md`를 먼저 확인합니다.
 - 상세 정책은 `docs/sidecar-spec-policy.md`를 기준으로 합니다.
 
 **기존 코드 수정 완료 조건 (Critical):**
-- 코드 변경이 1개라도 있으면 대응되는 `*.spec.md` 업데이트와 `## 변경 이력` 추가가 모두 완료되어야 합니다.
-- 위 조건을 충족하지 못하면 구현/리뷰/커밋 단계를 진행하지 않습니다.
+- 허용 대상 세 가지의 코드 변경이 있으면 대응되는 `*.spec.md` 업데이트와 `## 변경 이력` 추가가 모두 완료되어야 합니다.
+- 허용 대상이 아닌 코드 변경에는 spec 동기화를 완료 조건으로 요구하지 않습니다.
 
 #### 기획서 파일 구조
 
@@ -755,60 +756,31 @@ apps/[app]/web/src/app/(admin)/
 apps/[app]/web/src/app/(admin)/[도메인]/
 ├── page.tsx                    # 목록 페이지
 ├── page.spec.md                # 목록 페이지 기획서 ← 코드 옆에 위치
-├── page.e2e.ts                 # E2E 테스트 ← sidecar
+├── page.e2e.ts                 # E2E 테스트 코드 (별도 spec.md 없음)
 ├── [entityId]/
 │   ├── page.tsx                # 상세 페이지
 │   ├── page.spec.md            # 상세 페이지 기획서
-│   └── page.e2e.ts             # E2E 테스트 ← sidecar
+│   └── page.e2e.ts             # E2E 테스트 코드
 ├── new/
 │   ├── page.tsx                # 등록 페이지
 │   ├── page.spec.md            # 등록 페이지 기획서
-│   └── page.e2e.ts             # E2E 테스트 ← sidecar
+│   └── page.e2e.ts             # E2E 테스트 코드
 └── [entityId]/edit/
     ├── page.tsx                # 수정 페이지
     ├── page.spec.md            # 수정 페이지 기획서
-    └── page.e2e.ts             # E2E 테스트 ← sidecar
+    └── page.e2e.ts             # E2E 테스트 코드
 
 packages/fe-ui/src/page/
 ├── [PageName]/
 │   ├── [PageName].tsx
 │   ├── [PageName].spec.md
-│   ├── [PageName].stories.tsx
-│   └── [PageName].stories.spec.md
+│   └── [PageName].stories.tsx
 
 packages/fe-ui/src/feature/[FeatureName]/
-├── index.tsx
-└── index.spec.md               # Feature 기획서 (index.tsx sidecar)
-
-packages/fe-ui/src/widget/[WidgetName]/
-├── index.tsx
-└── index.spec.md               # Widget 기획서 (index.tsx sidecar)
-
-packages/fe-ui/src/display/[DisplayName]/
-├── index.tsx
-└── index.spec.md               # Display 기획서 (index.tsx sidecar)
-
-packages/fe-store/src/stores/
-├── [StoreName].ts
-└── [StoreName].spec.md         # Store 기획서
-
-packages/be-entity/src/
-├── [name].entity.ts
-└── [name].entity.spec.md       # Entity 기획서
-
-packages/be-vo/src/[domain]/
-├── [name].vo.ts
-└── [name].vo.spec.md           # VO 기획서
-
-apps/core/api/src/[module]/
-├── [name].service.ts
-├── [name].service.spec.md      # Service 기획서
-├── repositories/
-│   ├── [name].repository.ts
-│   └── [name].repository.spec.md
-└── controllers/
-    ├── [name].controller.ts
-    └── [name].controller.spec.md
+├── [FeatureName].tsx
+├── [FeatureName].spec.md       # Feature component 기획서
+├── index.ts
+└── [FeatureName].stories.tsx
 ```
 
 #### 기획서 타입별 내용
@@ -816,36 +788,16 @@ apps/core/api/src/[module]/
 | 타입 | 파일 | 핵심 내용 |
 |------|------|----------|
 | **app-context** | `app.context.md` | 앱 컨텍스트, 사용자, 목표, 도메인 목록 (L0-L2, non-sidecar) |
-| **page** | `page.spec.md` | 시나리오, 레이아웃, API, 이벤트 |
-| **feature** | `index.spec.md` | `index.tsx` 대응. Store 연결, Props, 이벤트 |
-| **widget** | `index.spec.md` | `index.tsx` 대응. Props, 하위 UI, 슬롯, 디자인 토큰 |
-| **ui** | `index.spec.md` | `index.tsx` 대응. Props, 상태, 변형, 접근성 |
-| **store** | `.spec.md` | 상태, 액션, 비동기 흐름 |
-| **entity** | `.entity.spec.md` | 필드, 관계, Enum, 도메인 메서드, 비즈니스 규칙 |
-| **vo** | `.vo.spec.md` | 역할, Props, validate 규칙, 팩토리 메서드, 도메인 메서드 |
-| **service** | `.spec.md` | 메서드, 비즈니스 규칙, 권한 |
-| **repository** | `.spec.md` | 메서드, Prisma 매핑 |
-| **controller** | `.spec.md` | 엔드포인트, 인증/인가 |
+| **next-route-page** | `page.spec.md` | route `page.tsx`, pure page 연결, API, search/route params, 이벤트, E2E 관점 |
+| **fe-ui-page** | `[PageName].spec.md` | Page component props, 시각 composition, 상태별 렌더링, 하위 Feature/Widget 조합 |
+| **feature** | `[FeatureName].spec.md` | Store/API/router 연결, Props, 이벤트, 실패/권한/로딩 상태 |
 
 #### 기획서 템플릿 위치
 
 ```
 .codex/templates/spec/
 ├── page.template.md
-├── feature.template.md
-├── widget.template.md
-├── primitive.template.md
-├── store.template.md
-├── entity.template.md
-├── vo.template.md
-├── service.template.md
-├── repository.template.md
-├── controller.template.md
-├── application-service.template.md
-├── integration-facade.template.md
-├── dto.template.md
-├── enum.template.md
-└── module.template.md
+└── feature.template.md
 ```
 
 - 위 경로의 `*.template.md`는 generator template asset이며 source sidecar가 아닙니다.
@@ -1125,52 +1077,31 @@ apps/[app]/web/src/app/(admin)/
 apps/[app]/web/src/app/(admin)/[도메인]/
 ├── page.tsx                    # 목록 페이지
 ├── page.spec.md                # 목록 페이지 기획서
-├── page.e2e.ts                 # E2E 테스트 (sidecar)
+├── page.e2e.ts                 # E2E 테스트 코드
 ├── [entityId]/
 │   ├── page.tsx                # 상세 페이지
 │   ├── page.spec.md            # 상세 페이지 기획서
-│   └── page.e2e.ts             # E2E 테스트 (sidecar)
+│   └── page.e2e.ts             # E2E 테스트 코드
 ├── new/
 │   ├── page.tsx                # 등록 페이지
 │   ├── page.spec.md            # 등록 페이지 기획서
-│   └── page.e2e.ts             # E2E 테스트 (sidecar)
+│   └── page.e2e.ts             # E2E 테스트 코드
 └── [entityId]/edit/
     ├── page.tsx                # 수정 페이지
     ├── page.spec.md            # 수정 페이지 기획서
-    └── page.e2e.ts             # E2E 테스트 (sidecar)
+    └── page.e2e.ts             # E2E 테스트 코드
 
 packages/fe-ui/src/page/
 ├── [PageName]/
 │   ├── [PageName].tsx
 │   ├── [PageName].spec.md
-│   ├── [PageName].stories.tsx
-│   └── [PageName].stories.spec.md
+│   └── [PageName].stories.tsx
 
 packages/fe-ui/src/feature/[FeatureName]/
-├── index.tsx
-└── index.spec.md               # Feature 기획서 (index.tsx sidecar)
-
-packages/fe-ui/src/widget/[WidgetName]/
-├── index.tsx
-└── index.spec.md               # Widget 기획서 (index.tsx sidecar)
-
-packages/fe-ui/src/display/[DisplayName]/
-├── index.tsx
-└── index.spec.md               # Display 기획서 (index.tsx sidecar)
-
-packages/fe-store/src/stores/
-├── [StoreName].ts
-└── [StoreName].spec.md         # Store 기획서
-
-apps/core/api/src/[module]/
-├── [name].service.ts
-├── [name].service.spec.md      # Service 기획서
-├── repositories/
-│   ├── [name].repository.ts
-│   └── [name].repository.spec.md
-└── controllers/
-    ├── [name].controller.ts
-    └── [name].controller.spec.md
+├── [FeatureName].tsx
+├── [FeatureName].spec.md       # Feature component 기획서
+├── index.ts
+└── [FeatureName].stories.tsx
 ```
 
 #### 실행 방법
@@ -1246,7 +1177,7 @@ Stage 5: 컴포넌트 (페이지별)
 | Agent | 역할 |
 |-------|------|
 | orch-stage | 7단계 분할 개발 플로우를 조율하는 메타 에이전트 |
-| orch-requirement | 코드 옆 기획서(Sidecar Spec) 방식으로 기획서와 코드를 함께 관리하는 오케스트레이터 |
+| orch-requirement | 도메인/화면 기획을 조율하고, spec은 허용 대상(page/feature/route page)에만 남기는 오케스트레이터 |
 | orch-screen-planner | 단일 화면 기획(L5-L12)을 조율하는 오케스트레이터 |
 
 #### 기획/분석 (req-*)
@@ -1256,23 +1187,23 @@ Stage 5: 컴포넌트 (페이지별)
 | req-context-planner | 시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 기획 → `app.context.md` 업데이트 |
 | req-screen-planner | 도메인 기능/화면 구조 기획 → 각 `page.spec.md` 초안 생성 |
 | req-page-planner | 페이지 통합 기획(SSR/Prefetch/핸들러) → `page.spec.md` 통합 섹션 업데이트 |
-| req-api-planner | 인터랙션(Action)과 API 기획 → `controller.spec.md` + 페이지 API 섹션 |
-| req-app-planner | ApplicationService 유즈케이스 기획 → `application-service.spec.md` |
-| req-entity-planner | Entity/Enum/VO 기획 → `entity.spec.md`, `enum.spec.md`, `vo.spec.md` |
-| req-primitive-planner | Pure UI 컴포넌트 기획(L8) → `display/index.spec.md` |
-| req-input-planner | 입력 컴포넌트 기획 → `control/index.spec.md` |
-| req-cell-planner | DataGrid/Table Cell 기획 → `cells/index.spec.md` |
-| req-widget-planner | 화면 Widget 기획(L9) → `widget/index.spec.md` |
-| req-layout-planner | 레이아웃 기획 → `layout/index.spec.md` |
-| req-feature-planner | 화면 Feature 기획(L10) → `feature/index.spec.md` |
-| req-menu-planner | 메뉴/경로/권한 기획 → `admin-menu.spec.md` |
-| req-store-planner | 도메인 Store 기획(L11) → `[domain]Store.spec.md` |
+| req-api-planner | 인터랙션(Action)과 API 기획 → page/feature spec의 API 섹션에 반영 |
+| req-app-planner | ApplicationService 유즈케이스 기획 |
+| req-entity-planner | Entity/Enum/VO 기획 |
+| req-primitive-planner | Pure UI 컴포넌트 기획(L8) |
+| req-input-planner | 입력 컴포넌트 기획 |
+| req-cell-planner | DataGrid/Table Cell 기획 |
+| req-widget-planner | 화면 Widget 기획(L9) |
+| req-layout-planner | 레이아웃 기획 |
+| req-feature-planner | 화면 Feature 기획(L10) → `packages/fe-ui/src/feature/**/[FeatureName].spec.md` |
+| req-menu-planner | 메뉴/경로/권한 기획 |
+| req-store-planner | 도메인 Store 기획(L11), 공용 Store 여부 판단 |
 | req-state-planner | 화면 로컬 상태와 shared Store 승격 경계 기획 |
-| req-logic-planner | 비즈니스 로직/테스트 기획 → `service/repository.spec.md` + 테스트 케이스 |
-| req-be-test-planner | 백엔드 테스트 케이스 기획(L12) → Service/Controller/E2E 테스트 섹션 업데이트 |
+| req-logic-planner | 비즈니스 로직/테스트 기획 |
+| req-be-test-planner | 백엔드 테스트 케이스 기획(L12) |
 | req-fe-test-planner | 프론트엔드 테스트 케이스 기획(L12) → Page/Feature/UI 테스트 섹션 업데이트 |
-| req-api-integration-planner | Orval API 연동 기획 → `hooks/index.spec.md` |
-| req-reverse-engineer | 기존 코드를 분석하여 `.spec.md` 역생성 |
+| req-api-integration-planner | Orval API 연동 기획 → route page spec/API 섹션에 반영 |
+| req-reverse-engineer | 기존 화면 코드를 분석하여 허용 대상 spec만 역생성 |
 | /design-analyze (Skill) | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
 | /route-design (Skill) | 백엔드 엔티티 기반 라우팅 경로 설계 |
 

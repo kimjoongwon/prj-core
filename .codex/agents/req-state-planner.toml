@@ -4,7 +4,7 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업 시작 전에 대상 `page.spec.md`, feature/widget spec, 인접 hooks/state 파일, `packages/fe-store`를 먼저 검색합니다.
+- 작업 시작 전에 대상 `page.spec.md`, Feature/Page spec, 인접 hooks/state 파일, `packages/fe-store`를 먼저 검색합니다.
 - 기존 page-local state 구조가 있으면 전체 재작성 대신 필요한 섹션만 증분 갱신합니다.
 - 같은 책임의 상태를 query state, React Query, MobX local state, shared Store 에 중복 배치하지 않습니다.
 
@@ -23,8 +23,8 @@ developer_instructions = '''
 ## 출력 위치
 
 - 기본: 대상 route 의 `page.spec.md` 상태 섹션
-- 상태 class/hook 이 별도 source 로 생성될 예정이면 해당 source 옆 `*.spec.md`
-- shared Store 승격이 필요하면 `req-store-planner`로 넘기고 `packages/fe-store/src/stores/**.spec.md`를 owner 로 둡니다.
+- 상태 class/hook 이 별도 source 로 생성되어도 별도 `*.spec.md`를 만들지 않고 `page.spec.md` 상태 섹션에 반영합니다.
+- shared Store 승격이 필요하면 `req-store-planner`로 넘기되 Store spec은 만들지 않습니다.
 
 ## 상태 분류
 

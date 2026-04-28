@@ -13,6 +13,17 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 
 설명 문구는 기본적으로 `.codex/config.toml`의 agent description을 기준으로 정리합니다.
 
+## Sidecar Spec 범위
+
+`*.spec.md` 신규 작성/갱신은 아래 세 대상만 허용합니다.
+
+- Next.js route `page.tsx` → `apps/*/web/src/app/**/page.spec.md`
+- fe-ui Page component → `packages/fe-ui/src/page/[PageName]/[PageName].spec.md`
+- fe-ui Feature component → `packages/fe-ui/src/feature/**/[FeatureName].spec.md`
+
+그 외 layout/story/test/e2e/barrel/type/hook/store/dto/service/repository/controller/entity/vo/script/config 파일에는 spec을 만들지 않습니다.
+기존 role 문서에 남아 있는 legacy spec 언급보다 이 범위와 `docs/sidecar-spec-policy.md`를 우선합니다.
+
 ## 오케스트레이션
 
 - [orch-requirement.toml](./orch-requirement.toml): 도메인 기획(L0-L4) + BE/Store 기획을 총괄 조율하는 오케스트레이터
@@ -23,28 +34,28 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 
 - [req-context-planner.toml](./req-context-planner.toml): 시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 레이어를 기획하는 전문가
 - [req-screen-planner.toml](./req-screen-planner.toml): 기능(Feature)과 화면(Screen) 레이어를 기획하는 전문가
-- [req-page-planner.toml](./req-page-planner.toml): route layout contract를 소비하는 `page.spec.md`와 `@slot` 콘텐츠 spec을 상세 기획하는 전문가
-- [req-layout-planner.toml](./req-layout-planner.toml): `packages/fe-ui/src/display/layout` flat Layout sidecar spec을 기획하는 전문가
-- [req-route-layout-planner.toml](./req-route-layout-planner.toml): route `layout.tsx`의 서버 skeleton, named slot topology, `layout.spec.md`를 기획하는 전문가
+- [req-page-planner.toml](./req-page-planner.toml): route `page.spec.md`와 `@slot` 콘텐츠 spec을 상세 기획하는 전문가
+- [req-layout-planner.toml](./req-layout-planner.toml): `packages/fe-ui/src/display/layout` flat Layout 계약을 기획하는 전문가
+- [req-route-layout-planner.toml](./req-route-layout-planner.toml): route `layout.tsx`의 서버 skeleton, named slot topology를 기획하는 전문가
 - [req-surface-planner.toml](./req-surface-planner.toml): route layout/page/feature의 Surface ownership과 elevation 배치를 기획하는 전문가
 - [req-feature-planner.toml](./req-feature-planner.toml): 화면별 Feature 컴포넌트를 기획하는 전문가
 - [req-widget-planner.toml](./req-widget-planner.toml): 화면별 Widget 컴포넌트를 기획하는 전문가
 - [req-primitive-planner.toml](./req-primitive-planner.toml): 화면별 Pure UI 컴포넌트를 기획하는 전문가
-- [req-cell-planner.toml](./req-cell-planner.toml): DataGrid/Table Cell sidecar spec을 기획하는 전문가
+- [req-cell-planner.toml](./req-cell-planner.toml): DataGrid/Table Cell 계약을 기획하는 전문가
 - [req-columns-planner.toml](./req-columns-planner.toml): `packages/fe-ui/src/columns` 레이어 계약과 `MetaDataGrid`/`cell` 경계를 기획하는 전문가
-- [req-input-planner.toml](./req-input-planner.toml): 입력 컴포넌트(Inputs) sidecar spec을 기획하는 전문가
-- [req-menu-planner.toml](./req-menu-planner.toml): 메뉴 경로/권한 sidecar spec을 기획하는 전문가
+- [req-input-planner.toml](./req-input-planner.toml): 입력 컴포넌트(Inputs) 계약을 기획하는 전문가
+- [req-menu-planner.toml](./req-menu-planner.toml): 메뉴 경로/권한 계약을 기획하는 전문가
 - [req-store-planner.toml](./req-store-planner.toml): 도메인별 MobX Store를 기획하는 전문가
 - [req-state-planner.toml](./req-state-planner.toml): 웹 화면 로컬 상태와 shared Store 승격 경계를 기획하는 전문가
 - [req-entity-planner.toml](./req-entity-planner.toml): 도메인별 Entity를 기획하는 전문가
 - [req-api-planner.toml](./req-api-planner.toml): aggregate root 기준 API와 Action 계약을 기획하는 전문가
-- [req-api-integration-planner.toml](./req-api-integration-planner.toml): Orval 기반 API 연동 sidecar spec을 기획하는 전문가
+- [req-api-integration-planner.toml](./req-api-integration-planner.toml): Orval 기반 API 연동 계약을 기획하는 전문가
 - [req-app-planner.toml](./req-app-planner.toml): Controller workflow가 호출할 ApplicationService 유즈케이스를 기획하는 전문가
 - [req-logic-planner.toml](./req-logic-planner.toml): 비즈니스 로직과 테스트 레이어를 기획하는 전문가
 - [req-be-test-planner.toml](./req-be-test-planner.toml): 백엔드 테스트 케이스를 기획하는 전문가
 - [req-fe-test-planner.toml](./req-fe-test-planner.toml): 프론트엔드 테스트 케이스를 기획하는 전문가
 - [req-spec-tracker.toml](./req-spec-tracker.toml): 도메인별 spec-checklist를 생성/갱신하여 기획-구현-검증 상태를 추적하는 전문가
-- [req-reverse-engineer.toml](./req-reverse-engineer.toml): 기존 코드를 분석하여 코드 옆 `.spec.md` 기획서를 역으로 생성하는 전문가
+- [req-reverse-engineer.toml](./req-reverse-engineer.toml): 기존 화면 코드를 분석하여 허용 대상 `.spec.md`만 역으로 생성하는 전문가
 
 ## 백엔드 / Prisma
 
@@ -75,7 +86,8 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - [fe-layout-builder.toml](./fe-layout-builder.toml): `packages/fe-ui/src/display/layout`의 flat Layout primitive를 설계하고 생성하는 전문가
 - [fe-route-layout-builder.toml](./fe-route-layout-builder.toml): Next.js App Router의 `app/**/layout.tsx`와 named slot topology를 설계하고 생성하는 전문가
 - [fe-feature-builder.toml](./fe-feature-builder.toml): 비즈니스 기능을 담당하는 Feature 컴포넌트를 생성하는 전문가
-- [fe-master-builder.toml](./fe-master-builder.toml): 목록/테이블/그리드 계열 재사용 master 계층을 생성하고 정리하는 전문가
+- [fe-data-grid-builder.md](./fe-data-grid-builder.md): `packages/fe-ui/src/data-grid`의 DataGrid/MetaDataGrid 단일 렌더러 구조를 정리하는 전문가
+- [fe-collection-builder.toml](./fe-collection-builder.toml): 목록/테이블/그리드 계열 재사용 collection 계층을 생성하고 정리하는 전문가
 - [fe-detail-builder.toml](./fe-detail-builder.toml): 상세 조회/읽기 전용 재사용 detail 계층을 생성하고 정리하는 전문가
 - [fe-form-builder.toml](./fe-form-builder.toml): 생성/수정 입력 화면용 재사용 form 계층을 생성하고 정리하는 전문가
 - [fe-widget-builder.toml](./fe-widget-builder.toml): 재사용 가능한 작은 UI 조각 Widget 컴포넌트를 생성하는 전문가
@@ -95,10 +107,10 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - [mobile/README.md](./mobile/README.md): RN/Expo 전용 mobile role 인덱스
 - [mobile/orch-mobile-stage.toml](./mobile/orch-mobile-stage.toml): 모바일 route flow 와 common backend spec planning 을 함께 조율하는 메타 role
 - [mobile/orch-mobile-screen-planner.toml](./mobile/orch-mobile-screen-planner.toml): 단일 Expo route 의 모바일 화면 기획을 조율하는 오케스트레이터
-- [mobile/req-mo-route-layout-planner.toml](./mobile/req-mo-route-layout-planner.toml): Expo Router 의 `_layout.spec.md` shell 계약을 기획하는 전문가
-- [mobile/req-mo-page-planner.toml](./mobile/req-mo-page-planner.toml): Expo route screen 의 `index.spec.md`를 상세 기획하는 전문가
-- [mobile/req-mo-primitive-planner.toml](./mobile/req-mo-primitive-planner.toml): 모바일 display/surface/provider primitive sidecar spec 을 기획하는 전문가
-- [mobile/req-mo-input-planner.toml](./mobile/req-mo-input-planner.toml): 모바일 입력 컴포넌트 sidecar spec 을 기획하는 전문가
+- [mobile/req-mo-route-layout-planner.toml](./mobile/req-mo-route-layout-planner.toml): Expo Router 의 `_layout` shell 계약을 기획하는 전문가
+- [mobile/req-mo-page-planner.toml](./mobile/req-mo-page-planner.toml): Expo route screen 계약을 상세 기획하는 전문가
+- [mobile/req-mo-primitive-planner.toml](./mobile/req-mo-primitive-planner.toml): 모바일 display/surface/provider primitive 계약을 기획하는 전문가
+- [mobile/req-mo-input-planner.toml](./mobile/req-mo-input-planner.toml): 모바일 입력 컴포넌트 계약을 기획하는 전문가
 - [mobile/req-mo-menu-planner.toml](./mobile/req-mo-menu-planner.toml): 모바일 navigation/menu contract 를 기획하는 전문가
 - [mobile/req-mo-store-planner.toml](./mobile/req-mo-store-planner.toml): 모바일 공용/로컬 상태 경계를 기획하는 전문가
 - [mobile/req-mo-state-planner.toml](./mobile/req-mo-state-planner.toml): 모바일 route-local 상태와 shared Store 승격 경계를 기획하는 전문가
@@ -118,7 +130,7 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - [mobile/fe-mo-feature-builder.toml](./mobile/fe-mo-feature-builder.toml): 모바일 비즈니스 feature 계층을 생성하고 정리하는 전문가
 - [mobile/fe-mo-form-builder.toml](./mobile/fe-mo-form-builder.toml): 모바일 form 재사용 계층을 생성하고 정리하는 전문가
 - [mobile/fe-mo-layout-builder.toml](./mobile/fe-mo-layout-builder.toml): Expo/RN에서 재사용할 모바일 layout shell 컴포넌트를 설계하는 전문가
-- [mobile/fe-mo-master-builder.toml](./mobile/fe-mo-master-builder.toml): 모바일 목록/그리드 계열 재사용 master 계층을 생성하고 정리하는 전문가
+- [mobile/fe-mo-collection-builder.toml](./mobile/fe-mo-collection-builder.toml): 모바일 목록/그리드 계열 재사용 collection 계층을 생성하고 정리하는 전문가
 - [mobile/fe-mo-ui-page-builder.toml](./mobile/fe-mo-ui-page-builder.toml): `packages/fe-mo-ui/src/page/**` 기준의 pure mobile page component를 생성하는 전문가
 - [mobile/fe-mo-unit-test-builder.toml](./mobile/fe-mo-unit-test-builder.toml): 모바일 Jest unit test 전략을 설계하는 전문가
 - [mobile/fe-mo-widget-builder.toml](./mobile/fe-mo-widget-builder.toml): 모바일 재사용 widget 계층을 생성하고 정리하는 전문가
