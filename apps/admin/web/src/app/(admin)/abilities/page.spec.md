@@ -6,7 +6,7 @@
 
 ## 사용자 시나리오
 
-1. 관리자가 권한 이름, Subject, Action, 허용/거부 조건으로 권한 목록을 필터링합니다.
+1. 관리자가 권한 이름, 설명, Subject, Action, 허용/거부 조건으로 권한 목록을 필터링합니다.
 2. 특정 권한 행을 선택해 상세 페이지로 이동합니다.
 3. "권한 추가" 버튼으로 등록 페이지로 이동합니다.
 
@@ -34,9 +34,10 @@
 
 | 영역 | 구성 요소 | 설명 |
 |------|-----------|------|
-| 페이지 헤더 | `PageTitleBar` + 등록 버튼 | 권한 목록 안내와 이동 액션 |
-| 필터 패널 | `Surface` + search input + select 묶음 | 클라이언트 필터링 조건. 검색 input은 `aria-label="권한 이름 검색"` 접근성 이름을 제공해야 하며, HeroUI Select trigger에는 `Subject 선택`, `Action 선택`, `유형 선택` placeholder 텍스트가 렌더링되어야 한다. |
-| 목록 패널 | `Surface` + custom table | 권한 메타데이터와 상세 이동 |
+| 페이지 헤더 | `PageTitleBar` + 등록 버튼 | `권한 정의` 제목과 등록 이동 액션 |
+| 요약 카드 | `StatsCard` x4 | 전체, 표시 중, 거부 규칙, 조건/필드 제한 현황 |
+| 필터 패널 | `Surface` + search input + select 묶음 + active filter chip | 클라이언트 필터링 조건. 검색 input은 `aria-label="권한 이름 검색"` 접근성 이름을 제공해야 하며, HeroUI Select trigger에는 `대상(Subject)`, `행동(Action)`, `규칙 유형` placeholder 텍스트가 렌더링되어야 한다. |
+| 목록 패널 | `Surface` + `DataGrid` | 규칙, 대상, 행동, 적용 범위, 조건, 등록일 기준 권한 목록과 상세 이동 |
 
 ## API 호출
 
@@ -50,11 +51,11 @@
 
 | 이벤트 | 동작 |
 |--------|------|
-| `onChangeSearchInput` | 권한 이름 검색어 갱신 |
-| `onChangeSubjectSelect` | Subject 필터 갱신 |
-| `onChangeActionSelect` | Action 필터 갱신 |
-| `onChangeTypeSelect` | 허용/거부 필터 갱신 |
-| `onClickResetFiltersButton` | 모든 필터 초기화 |
+| `onChangeSearchInput` | 검색어 갱신 후 `skip=0`으로 초기화 |
+| `onChangeSubjectSelect` | Subject 필터 갱신 후 `skip=0`으로 초기화 |
+| `onChangeActionSelect` | Action 필터 갱신 후 `skip=0`으로 초기화 |
+| `onChangeTypeSelect` | 허용/거부 필터 갱신 후 `skip=0`으로 초기화 |
+| `onClickResetFiltersButton` | 모든 필터와 `skip` 초기화 |
 | `onClickAbilityRow` | `/abilities/[abilityId]` 이동 |
 
 ## 구현 체크리스트
@@ -68,6 +69,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-29 | 운영자 친화형 목록 개선을 위해 요약 카드, 확장 검색, URL query 기반 필터, client-side pagination slice 계약을 반영 | codex |
 | 2026-04-28 | route의 Page 전용 row 매핑을 제거하고 Orval DTO를 pure page에 직접 주입하도록 정리 | codex |
 | 2026-04-28 | grid 컴포넌트 명칭을 DataGrid로 통일한 구조 변경을 반영 | codex |
 | 2026-04-28 | page role을 `collection`으로 갱신 | codex |

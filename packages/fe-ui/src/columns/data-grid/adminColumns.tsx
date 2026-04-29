@@ -486,11 +486,39 @@ export function buildAbilityListTableColumns<
 >() {
 	return buildColumnsWithDefaultCreatedAt<TRow>([
 		createNameColumn<TRow>({
-			size: 180,
-			nameVariant: "identifier",
+			label: "규칙",
+			size: 240,
+			cell: ({ row }) => {
+				const ability = row.original;
+				return (
+					<div className="flex min-w-0 flex-col gap-1">
+						<div className="flex items-center gap-2">
+							<ChipCell
+								label={ability.inverted ? "거부" : "허용"}
+								color={ability.inverted ? "danger" : "success"}
+								align="start"
+							/>
+							<DefaultCell
+								value={ability.name}
+								weight="semibold"
+								lineClamp={1}
+							/>
+						</div>
+						{ability.description ? (
+							<DefaultCell
+								value={ability.description}
+								tone="muted"
+								size="xs"
+								lineClamp={1}
+							/>
+						) : null}
+					</div>
+				);
+			},
 		}),
 		createPresetColumn<TRow>("subjectLabel", {
-			size: 150,
+			label: "대상",
+			size: 160,
 			cell: ({ row }) => (
 				<DefaultCell
 					value={
@@ -502,7 +530,8 @@ export function buildAbilityListTableColumns<
 			),
 		}),
 		createPresetColumn<TRow>("actionLabel", {
-			size: 120,
+			label: "행동",
+			size: 140,
 			cell: ({ row }) => (
 				<DefaultCell
 					value={
@@ -511,33 +540,30 @@ export function buildAbilityListTableColumns<
 				/>
 			),
 		}),
-		createPresetColumn<TRow>("inverted", {
-			size: 100,
-			align: "center",
-			cell: ({ getValue }) => (
-				<BooleanCell
-					value={getValue() as boolean}
-					trueLabel="거부(cannot)"
-					falseLabel="허용(can)"
-					trueColor="danger"
-					falseColor="success"
-				/>
-			),
-		}),
 		createPresetColumn<TRow>("fieldCount", {
-			size: 80,
+			label: "적용 범위",
+			size: 120,
 			align: "center",
 			cell: ({ row }) => {
 				const fieldCount = row.original.fields.length;
-				return <DefaultCell value={fieldCount === 0 ? "전체" : fieldCount} />;
+				return (
+					<ChipCell
+						label={fieldCount === 0 ? "전체" : `${fieldCount}개 필드`}
+						color={fieldCount === 0 ? "default" : "warning"}
+					/>
+				);
 			},
 		}),
 		createPresetColumn<TRow>("hasConditions", {
-			size: 80,
+			label: "조건",
+			size: 100,
 			align: "center",
 			cell: ({ row }) => (
 				<BooleanCell
-					value={Boolean(row.original.conditions)}
+					value={Boolean(
+						row.original.conditions &&
+							Object.keys(row.original.conditions).length > 0,
+					)}
 					trueLabel="있음"
 					falseLabel="없음"
 					trueColor="primary"
