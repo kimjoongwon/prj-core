@@ -19,8 +19,11 @@ export type {
 } from "./AbilityListPage/AbilityListPage";
 export { AbilityListPage } from "./AbilityListPage/AbilityListPage";
 export type {
+	AccountDetailPageAccessGrant,
+	AccountDetailPageAccessGrantForm,
 	AccountDetailPageAccount,
 	AccountDetailPageModalAction,
+	AccountDetailPageOption,
 	AccountDetailPageProps,
 } from "./AccountDetailPage/AccountDetailPage";
 export { AccountDetailPage } from "./AccountDetailPage/AccountDetailPage";

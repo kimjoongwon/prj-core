@@ -1,4 +1,8 @@
-import { PageMetaDto, QueryIdpAccountDto } from "@cocrepo/dto";
+import {
+	GrantIdpAccountAccessDto,
+	PageMetaDto,
+	QueryIdpAccountDto,
+} from "@cocrepo/dto";
 import { IdpAccountInfo, IdpAccountService } from "@cocrepo/service";
 import { Injectable } from "@nestjs/common";
 
@@ -21,6 +25,14 @@ export class IdpAccountFacade {
 
 	getById(userId: string) {
 		return this.idpAccountService.getById(userId);
+	}
+
+	getAccessGrantFormBootstrap(userId: string) {
+		return this.idpAccountService.getAccessGrantFormBootstrap(userId);
+	}
+
+	grantAccess(userId: string, dto: GrantIdpAccountAccessDto) {
+		return this.idpAccountService.grantAccess(userId, dto);
 	}
 
 	toggleActive(userId: string) {

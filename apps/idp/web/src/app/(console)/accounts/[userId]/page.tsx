@@ -6,22 +6,29 @@ import {
 	useUnlockAccount,
 } from "@cocrepo/api/idp/auth";
 import {
+	getGetIdpAccountAccessGrantFormQueryKey,
 	getGetIdpAccountQueryKey,
-	type IdpAccountDto,
+	type IdpAccountAccessGrantFormBootstrapDto,
+	type IdpAccountAccessGrantFormOptionItemDto,
+	type IdpAccountDetailDto,
 	useGetIdpAccount,
+	useGetIdpAccountAccessGrantForm,
+	useGrantIdpAccountAccess,
 	useResetIdpAccountFailedAttempts,
 	useToggleIdpAccountActive,
 } from "@cocrepo/api/idp/idp-accounts";
 import {
 	AccountDetailPage,
+	type AccountDetailPageAccessGrantForm,
 	type AccountDetailPageAccount,
 	type AccountDetailPageModalAction,
+	type AccountDetailPageOption,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default observer(function AccountDetailPageRoute() {
 	const userId = useParams<{ userId: string }>().userId;
@@ -29,12 +36,36 @@ export default observer(function AccountDetailPageRoute() {
 	const queryClient = useQueryClient();
 	const [modalAction, setModalAction] =
 		useState<AccountDetailPageModalAction>(null);
+	const [accessGrantForm, setAccessGrantForm] =
+		useState<AccountDetailPageAccessGrantForm>({
+			spaceId: "",
+			roleId: "",
+		});
 	const { data: response, isLoading } = useGetIdpAccount(userId);
 	const account = response?.data;
+	const { data: accessGrantFormResponse, isLoading: isAccessGrantFormLoading } =
+		useGetIdpAccountAccessGrantForm(userId);
+	const accessGrantBootstrap = accessGrantFormResponse?.data;
+	const spaceOptions = mapOptions(accessGrantBootstrap, "spaceId");
+	const roleOptions = mapOptions(accessGrantBootstrap, "roleId");
+
+	useEffect(() => {
+		if (!accessGrantBootstrap) {
+			return;
+		}
+
+		setAccessGrantForm({
+			spaceId: getDefaultString(accessGrantBootstrap, "spaceId"),
+			roleId: getDefaultString(accessGrantBootstrap, "roleId"),
+		});
+	}, [accessGrantBootstrap]);
 
 	const invalidateAccountDetail = () => {
 		queryClient.invalidateQueries({
 			queryKey: getGetIdpAccountQueryKey(userId),
+		});
+		queryClient.invalidateQueries({
+			queryKey: getGetIdpAccountAccessGrantFormQueryKey(userId),
 		});
 	};
 
@@ -67,11 +98,22 @@ export default observer(function AccountDetailPageRoute() {
 				onSuccess: invalidateAccountDetail,
 			},
 		});
+	const { mutate: grantAccess, isPending: isGrantingAccess } =
+		useGrantIdpAccountAccess({
+			mutation: {
+				onSuccess: invalidateAccountDetail,
+			},
+		});
 
 	return (
 		<AccountDetailPage
 			account={account ? mapAccountDetail(account) : undefined}
 			isLoading={isLoading}
+			accessGrantForm={accessGrantForm}
+			spaceOptions={spaceOptions}
+			roleOptions={roleOptions}
+			isAccessGrantFormLoading={isAccessGrantFormLoading}
+			isGrantingAccess={isGrantingAccess}
 			isToggling={isToggling}
 			isResetting={isResetting}
 			isUnlocking={isUnlocking}
@@ -86,6 +128,18 @@ export default observer(function AccountDetailPageRoute() {
 			}}
 			onClickResetFailedAttemptsButton={() => {
 				resetFailedAttempts({ userId });
+			}}
+			onChangeAccessGrantSpace={(spaceId) => {
+				setAccessGrantForm((current) => ({ ...current, spaceId }));
+			}}
+			onChangeAccessGrantRole={(roleId) => {
+				setAccessGrantForm((current) => ({ ...current, roleId }));
+			}}
+			onClickGrantAccessButton={() => {
+				grantAccess({
+					userId,
+					data: accessGrantForm,
+				});
 			}}
 			onClickOpenUnlockModal={() => {
 				setModalAction("unlock");
@@ -117,7 +171,9 @@ export default observer(function AccountDetailPageRoute() {
 	);
 });
 
-function mapAccountDetail(account: IdpAccountDto): AccountDetailPageAccount {
+function mapAccountDetail(
+	account: IdpAccountDetailDto,
+): AccountDetailPageAccount {
 	return {
 		id: account.id,
 		name: account.name,
@@ -130,5 +186,37 @@ function mapAccountDetail(account: IdpAccountDto): AccountDetailPageAccount {
 		lastLoginAt: account.lastLoginAt ?? null,
 		lastLoginIp: account.lastLoginIp,
 		createdAt: account.createdAt ?? null,
+		accessGrants: (account.accessGrants ?? []).map((grant) => ({
+			tenantId: grant.tenantId,
+			spaceId: grant.spaceId,
+			spaceName: grant.spaceName,
+			spaceLabel: grant.spaceLabel ?? null,
+			roleId: grant.roleId,
+			roleName: grant.roleName,
+			roleDisplayName: grant.roleDisplayName ?? null,
+			grantedAt: grant.grantedAt,
+			updatedAt: grant.updatedAt ?? null,
+		})),
 	};
+}
+
+function mapOptions(
+	bootstrap: IdpAccountAccessGrantFormBootstrapDto | undefined,
+	path: "spaceId" | "roleId",
+): AccountDetailPageOption[] {
+	return (bootstrap?.options[path] ?? []).map(
+		(option: IdpAccountAccessGrantFormOptionItemDto) => ({
+			value: option.value,
+			label: option.label,
+			description: option.description,
+		}),
+	);
+}
+
+function getDefaultString(
+	bootstrap: IdpAccountAccessGrantFormBootstrapDto,
+	path: "spaceId" | "roleId",
+): string {
+	const value = bootstrap.defaultObject[path];
+	return typeof value === "string" ? value : "";
 }

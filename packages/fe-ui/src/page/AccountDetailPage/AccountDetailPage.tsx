@@ -10,7 +10,15 @@ import {
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Chip, Divider, Switch } from "@heroui/react";
+import {
+	Button,
+	Chip,
+	Divider,
+	Select,
+	SelectItem,
+	type Selection,
+	Switch,
+} from "@heroui/react";
 import {
 	ArrowLeft,
 	KeyRound,
@@ -18,6 +26,7 @@ import {
 	LockOpen,
 	LogOut,
 	RotateCcw,
+	ShieldCheck,
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 
@@ -27,6 +36,18 @@ export type AccountDetailPageModalAction =
 	| "forceResetPassword"
 	| "invalidateSessions"
 	| null;
+
+export interface AccountDetailPageAccessGrant {
+	tenantId: string;
+	spaceId: string;
+	spaceName: string;
+	spaceLabel?: string | null;
+	roleId: string;
+	roleName: string;
+	roleDisplayName?: string | null;
+	grantedAt: string;
+	updatedAt?: string | null;
+}
 
 export interface AccountDetailPageAccount {
 	id: string;
@@ -40,11 +61,28 @@ export interface AccountDetailPageAccount {
 	lastLoginAt?: string | null;
 	lastLoginIp?: string | null;
 	createdAt: string | null;
+	accessGrants: AccountDetailPageAccessGrant[];
+}
+
+export interface AccountDetailPageOption {
+	value: string;
+	label: string;
+	description?: string;
+}
+
+export interface AccountDetailPageAccessGrantForm {
+	spaceId: string;
+	roleId: string;
 }
 
 export interface AccountDetailPageProps {
 	account?: AccountDetailPageAccount;
 	isLoading: boolean;
+	accessGrantForm: AccountDetailPageAccessGrantForm;
+	spaceOptions: AccountDetailPageOption[];
+	roleOptions: AccountDetailPageOption[];
+	isAccessGrantFormLoading: boolean;
+	isGrantingAccess: boolean;
 	isToggling: boolean;
 	isResetting: boolean;
 	isUnlocking: boolean;
@@ -54,12 +92,24 @@ export interface AccountDetailPageProps {
 	onClickBackButton: () => void;
 	onClickToggleActiveButton: () => void;
 	onClickResetFailedAttemptsButton: () => void;
+	onChangeAccessGrantSpace: (spaceId: string) => void;
+	onChangeAccessGrantRole: (roleId: string) => void;
+	onClickGrantAccessButton: () => void;
 	onClickOpenUnlockModal: () => void;
 	onClickOpenForceResetPasswordModal: () => void;
 	onClickOpenInvalidateSessionsModal: () => void;
 	onCloseModal: () => void;
 	onClickConfirmModal: () => void;
 }
+
+const getSelectedValue = (keys: Selection): string => {
+	if (keys === "all") {
+		return "";
+	}
+
+	const selected = Array.from(keys)[0];
+	return selected ? String(selected) : "";
+};
 
 /**
  * IDP 계정 상세 pure page입니다.
@@ -68,6 +118,11 @@ export const AccountDetailPage = observer(
 	({
 		account,
 		isLoading,
+		accessGrantForm,
+		spaceOptions,
+		roleOptions,
+		isAccessGrantFormLoading,
+		isGrantingAccess,
 		isToggling,
 		isResetting,
 		isUnlocking,
@@ -77,6 +132,9 @@ export const AccountDetailPage = observer(
 		onClickBackButton,
 		onClickToggleActiveButton,
 		onClickResetFailedAttemptsButton,
+		onChangeAccessGrantSpace,
+		onChangeAccessGrantRole,
+		onClickGrantAccessButton,
 		onClickOpenUnlockModal,
 		onClickOpenForceResetPasswordModal,
 		onClickOpenInvalidateSessionsModal,
@@ -87,6 +145,16 @@ export const AccountDetailPage = observer(
 		const isLocked = account
 			? account.isPermanentlyLocked || !!account.lockedUntil
 			: false;
+		const isGrantButtonDisabled =
+			!accessGrantForm.spaceId ||
+			!accessGrantForm.roleId ||
+			isAccessGrantFormLoading;
+		const handleAccessGrantSpaceSelectionChange = (keys: Selection) => {
+			onChangeAccessGrantSpace(getSelectedValue(keys));
+		};
+		const handleAccessGrantRoleSelectionChange = (keys: Selection) => {
+			onChangeAccessGrantRole(getSelectedValue(keys));
+		};
 
 		// 모달 설정
 		const modalConfig: Record<
@@ -390,6 +458,113 @@ export const AccountDetailPage = observer(
 										onPress={onClickOpenInvalidateSessionsModal}
 									>
 										세션 무효화
+									</Button>
+								</div>
+							</DetailSection>
+						</DetailSectionCard>
+						<DetailSectionCard>
+							<DetailSection
+								top={
+									<PageTitleBar
+										level={2}
+										title="접근 권한"
+										description="계정에 부여된 Space와 Role을 관리합니다."
+									/>
+								}
+							>
+								<Divider className="mb-4" />
+								{account.accessGrants.length > 0 ? (
+									<div className="divide-y divide-divider">
+										{account.accessGrants.map((grant) => (
+											<div
+												key={grant.tenantId}
+												className="grid gap-3 py-3 md:grid-cols-[minmax(0,1fr)_minmax(0,0.7fr)_auto]"
+											>
+												<div className="min-w-0">
+													<p className="truncate font-medium">
+														{grant.spaceName}
+													</p>
+													<p className="truncate text-xs text-default-500">
+														{grant.spaceLabel ?? grant.spaceId}
+													</p>
+												</div>
+												<div className="flex items-center">
+													<Chip size="sm" variant="flat" color="primary">
+														{grant.roleDisplayName ?? grant.roleName}
+													</Chip>
+												</div>
+												<div className="text-sm text-default-500">
+													<DateTimeCell value={grant.grantedAt} />
+												</div>
+											</div>
+										))}
+									</div>
+								) : (
+									<p className="py-3 text-sm text-default-500">
+										부여된 접근 권한이 없습니다.
+									</p>
+								)}
+								<Divider className="my-4" />
+								<div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
+									<Select
+										label="Space"
+										labelPlacement="outside"
+										placeholder="Space 선택"
+										selectedKeys={
+											accessGrantForm.spaceId ? [accessGrantForm.spaceId] : []
+										}
+										isDisabled={
+											isAccessGrantFormLoading || spaceOptions.length === 0
+										}
+										onSelectionChange={handleAccessGrantSpaceSelectionChange}
+									>
+										{spaceOptions.map((option) => (
+											<SelectItem key={option.value} textValue={option.label}>
+												<div className="flex flex-col">
+													<span>{option.label}</span>
+													{option.description ? (
+														<span className="text-xs text-default-500">
+															{option.description}
+														</span>
+													) : null}
+												</div>
+											</SelectItem>
+										))}
+									</Select>
+									<Select
+										label="Role"
+										labelPlacement="outside"
+										placeholder="Role 선택"
+										selectedKeys={
+											accessGrantForm.roleId ? [accessGrantForm.roleId] : []
+										}
+										isDisabled={
+											isAccessGrantFormLoading || roleOptions.length === 0
+										}
+										onSelectionChange={handleAccessGrantRoleSelectionChange}
+									>
+										{roleOptions.map((option) => (
+											<SelectItem key={option.value} textValue={option.label}>
+												<div className="flex flex-col">
+													<span>{option.label}</span>
+													{option.description ? (
+														<span className="text-xs text-default-500">
+															{option.description}
+														</span>
+													) : null}
+												</div>
+											</SelectItem>
+										))}
+									</Select>
+									<Button
+										variant="flat"
+										color="primary"
+										startContent={<ShieldCheck className="h-4 w-4" />}
+										isLoading={isGrantingAccess}
+										isDisabled={isGrantButtonDisabled}
+										onPress={onClickGrantAccessButton}
+									>
+										권한 부여
 									</Button>
 								</div>
 							</DetailSection>

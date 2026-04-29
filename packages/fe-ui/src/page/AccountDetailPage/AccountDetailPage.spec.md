@@ -33,6 +33,14 @@ AccountDetailPage
           - PageTitleBar
           - Divider
           - Button x3
+      - DetailSectionCard
+        - DetailSection
+          - PageTitleBar
+          - Divider
+          - Chip
+          - DateTimeCell
+          - Select x2
+          - Button
   - ConfirmModal (조건부)
 ```
 
@@ -55,8 +63,11 @@ AccountDetailPage
 | `DateTimeCell` | `@cocrepo/ui` | 상태/정보를 카드 또는 표시 단위로 표현 |
 | `RotateCcw` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
 | `Divider` | `@heroui/react` | 화면 조합 요소 |
+| `Select` | `@heroui/react` | Space/Role 선택 |
+| `SelectItem` | `@heroui/react` | Space/Role 옵션 표시 |
 | `KeyRound` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
 | `LogOut` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `ShieldCheck` | `lucide-react` | 접근 권한 부여 액션을 시각화 |
 | `ConfirmModal` | `@cocrepo/ui` | 확인 또는 보조 작업 오버레이 |
 
 ## 공개 계약
@@ -64,6 +75,9 @@ AccountDetailPage
 | 항목 | 설명 |
 |------|------|
 | AccountDetailPageAccount | 상세 표시 계약 |
+| AccountDetailPageAccessGrant | 계정에 부여된 Space/Role 접근 권한 표시 계약 |
+| AccountDetailPageAccessGrantForm | 접근 권한 부여 폼 상태 계약 |
+| AccountDetailPageOption | Space/Role 선택 옵션 계약 |
 | AccountDetailPageProps | pure page 입력 계약 |
 | AccountDetailPage | 공개 계약 요소 |
 
@@ -80,6 +94,7 @@ AccountDetailPage
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-29 | 계정 상세에서 기존 접근 권한 목록과 Space/Role 권한 부여 폼을 표시하도록 공개 계약과 화면 구성을 갱신 | codex |
 | 2026-04-08 | 계정 보안 액션의 확인 절차 진입 계약 정리 | codex |
 | 2026-03-30 | 화면 데이터/이벤트 소유 경계를 상위 컨테이너 기준으로 정리 | codex |
 | 2026-03-29 | IDP 계정 상세 화면의 조회/보안 액션/라우팅 책임 경계 정리 | codex |

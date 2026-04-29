@@ -19,7 +19,7 @@
 
 | 모듈 | 용도 |
 |------|------|
-| `@cocrepo/api/idp/idp-accounts` | 계정 상세 조회, 활성 상태 전환, 실패 횟수 초기화 |
+| `@cocrepo/api/idp/idp-accounts` | 계정 상세 조회, 접근 권한 부여 폼 조회/부여, 활성 상태 전환, 실패 횟수 초기화 |
 | `@cocrepo/api/idp/auth` | 잠금 해제, 비밀번호 강제 변경, 세션 무효화 |
 | `@cocrepo/ui` | `AccountDetailPage` pure page 조합 |
 | `@tanstack/react-query` | 상세 캐시 무효화 |
@@ -28,8 +28,10 @@
 ## 동작 흐름
 
 1. 계정 상세 데이터를 조회하고 잠금/세션/비밀번호 액션 mutation을 준비합니다.
-2. 로딩/없음/정상 상태를 `DetailPage`와 `DetailSectionCard` 조합으로 분기합니다.
-3. 보안 정보와 관리 액션을 읽기 전용 detail 본문으로 렌더링합니다.
+2. 접근 권한 부여 폼 bootstrap을 조회해 Space/Role 선택 기본값과 옵션을 구성합니다.
+3. 로딩/없음/정상 상태를 `DetailPage`와 `DetailSectionCard` 조합으로 분기합니다.
+4. 보안 정보, 관리 액션, 접근 권한 목록과 권한 부여 폼을 detail 본문으로 렌더링합니다.
+5. 접근 권한 부여 성공 시 계정 상세와 권한 부여 폼 query를 무효화합니다.
 
 ## 실패 및 엣지 케이스
 
@@ -37,6 +39,7 @@
 - 비정상 입력은 조기 반환 또는 예외 처리합니다.
 - 비동기 동작 실패 시 사용자 영향 범위를 최소화합니다.
 - 상세 진입 E2E는 목록 행 액션 셀의 실제 링크(`/accounts/:userId`)를 기준으로 첫 계정 상세 페이지에 진입합니다.
+- 접근 권한 부여 폼 옵션이 비어 있으면 권한 부여 버튼을 비활성화합니다.
 
 ## 콘텐츠 구성
 
@@ -45,6 +48,7 @@
 | 페이지 헤더 | `DetailPage` + `PageTitleBar` | 계정 이름/이메일과 목록 복귀 액션 |
 | 보안 정보 | `DetailSectionCard` + `DetailSection` | 잠금 상태, 로그인 실패 횟수, 마지막 로그인, 가입일 |
 | 관리 액션 | `DetailSectionCard` + `ConfirmModal` | 잠금 해제, 비밀번호 강제 변경, 세션 무효화 |
+| 접근 권한 | `DetailSectionCard` + `Select` | 기존 Space/Role 권한 목록과 관리자 권한 부여 폼 |
 
 ## 구현 체크리스트
 
@@ -61,7 +65,7 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/accounts/[userId]/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 계정 상세 조회, 보안 mutation, 라우팅만 담당하고 시각 조합은 `AccountDetailPage`가 소유합니다.
+- `page.tsx`는 계정 상세 조회, 접근 권한 부여 query/mutation, 보안 mutation, 라우팅만 담당하고 시각 조합은 `AccountDetailPage`가 소유합니다.
 
 ## Rendering Decision
 
@@ -76,6 +80,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-29 | 접근 신청을 별도 메뉴가 아닌 계정 상세 내 Space/Role 권한 부여 흐름으로 전환하고 query/mutation/E2E 관점을 반영 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-04-08 | pure page에서 사용하지 않는 개별 보안 action callback 전달을 제거하고 confirm modal 단일 진입점만 유지 | codex |
 | 2026-03-29 | `AccountDetailPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
