@@ -23,7 +23,7 @@ id = "codex-role-files"
 match = [".codex/agents/*.toml", ".codex/agents/**/*.toml", ".codex/config.toml", ".codex/review-map.toml"]
 primary_role = "qa-pr-reviewer"
 supporting_roles = []
-rule_docs = [".codex/config.toml", ".codex/agents/README.md", ".codex/config.toml.guide.md"]
+rule_docs = [".codex/config.toml", ".codex/agents/README.md"]
 check_keys = ["role-registry-sync", "review-map-coverage", "config-contract"]
 exempt = false
 
@@ -313,6 +313,15 @@ primary_role = "common-schema-builder"
 supporting_roles = []
 rule_docs = []
 check_keys = ["owner-boundary"]
+exempt = false
+
+[[rules]]
+id = "common-admin-routing-files"
+match = ["packages/common-constant/src/routing/admin-menu.ts", "packages/common-constant/src/routing/generated/admin-route-catalog.generated.ts"]
+primary_role = "req-menu-planner"
+supporting_roles = ["fe-page-builder"]
+rule_docs = []
+check_keys = ["route-meta-contract", "owner-boundary", "required-export"]
 exempt = false
 
 [[rules]]

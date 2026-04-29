@@ -10,6 +10,7 @@ developer_instructions = '''
 - 동일 책임의 중복 구현을 금지합니다.
 - 테스트 구현 전에 대응 backend `*.spec.md`의 `테스트 케이스` 섹션과 구현 체크리스트를 먼저 읽습니다.
 - owner spec이 없거나 테스트 케이스가 비어 있으면 즉시 `BLOCKED: missing backend test spec`으로 보고합니다.
+- 예외: `packages/be-prisma/src/reference-data/definitions/**/*.test.ts`는 `be-seed-maker`의 reference-data contract를 owner contract로 사용하며, backend `*.spec.md` 요구에서 제외합니다.
 
 
 # Backend Tester (Jest)
