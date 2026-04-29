@@ -26,10 +26,6 @@ export const IDP_PATHS = {
 	// 보안 정책
 	SECURITY_POLICY: "/security-policy",
 
-	// 테넌트 접근 신청
-	TENANT_ACCESS_REQUESTS: "/tenant-access-requests",
-	TENANT_ACCESS_REQUESTS_NEW: "/tenant-access-requests/new",
-
 	// 인증
 	AUTH_LOGIN: "/auth/login",
 } as const;
@@ -41,7 +37,6 @@ export const IDP_SUBJECTS = {
 	MENU_DASHBOARD: "menu:dashboard",
 	MENU_OIDC_CLIENTS: "menu:oidc-clients",
 	MENU_ACCOUNTS: "menu:accounts",
-	MENU_TENANT_ACCESS_REQUESTS: "menu:tenant-access-requests",
 	MENU_OIDC_SESSIONS: "menu:oidc-sessions",
 	MENU_AUTH_AUDIT_LOGS: "menu:auth-audit-logs",
 	MENU_SECURITY_POLICY: "menu:security-policy",
@@ -73,14 +68,6 @@ export const IDP_NAV_ITEMS: NavItemConfig[] = [
 		icon: "UserCog",
 		path: IDP_PATHS.ACCOUNTS,
 		subject: IDP_SUBJECTS.MENU_ACCOUNTS,
-		scopeKind: "tenant-user",
-	},
-	{
-		id: "tenant-access-requests",
-		label: "접근 신청",
-		icon: "Shield",
-		path: IDP_PATHS.TENANT_ACCESS_REQUESTS,
-		subject: IDP_SUBJECTS.MENU_TENANT_ACCESS_REQUESTS,
 		scopeKind: "tenant-user",
 	},
 	{
@@ -165,20 +152,6 @@ export const IDP_SCREEN_SCOPE_ITEMS: IdpScreenScopeItem[] = [
 		pageLabel: "계정 상세",
 		pathPattern: IDP_PATHS.ACCOUNTS_DETAIL,
 		subject: IDP_SUBJECTS.MENU_ACCOUNTS,
-		scopeKind: "tenant-user",
-	},
-	{
-		pageId: "tenant-access-requests:list",
-		pageLabel: "접근 신청 목록",
-		pathPattern: IDP_PATHS.TENANT_ACCESS_REQUESTS,
-		subject: IDP_SUBJECTS.MENU_TENANT_ACCESS_REQUESTS,
-		scopeKind: "tenant-user",
-	},
-	{
-		pageId: "tenant-access-requests:new",
-		pageLabel: "접근 신청 생성",
-		pathPattern: IDP_PATHS.TENANT_ACCESS_REQUESTS_NEW,
-		subject: IDP_SUBJECTS.MENU_TENANT_ACCESS_REQUESTS,
 		scopeKind: "tenant-user",
 	},
 	{

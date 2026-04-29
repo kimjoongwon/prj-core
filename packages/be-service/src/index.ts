@@ -30,6 +30,10 @@ export {
 export { FolderService } from "./folder.service";
 export { GroupService } from "./group.service";
 export {
+	type IdpAccountAccessGrantFormBootstrap,
+	type IdpAccountAccessGrantFormOptionItem,
+	type IdpAccountAccessGrantInfo,
+	type IdpAccountDetailInfo,
 	type IdpAccountInfo,
 	IdpAccountService,
 } from "./idp-account.service";
@@ -59,8 +63,8 @@ export {
 	type OidcRedisSession,
 	OidcSessionService,
 } from "./oidc-session.service";
-export { PolicyAssignmentService } from "./policy-assignment.service";
 export { PolicyService } from "./policy.service";
+export { PolicyAssignmentService } from "./policy-assignment.service";
 export { createPrismaClient } from "./prisma.factory";
 export { PrismaService } from "./prisma.service";
 export { RedisService } from "./redis.service";
@@ -74,12 +78,12 @@ export {
 	SubjectService,
 } from "./subject.service";
 export { TaskService } from "./task.service";
+export { TemplateService } from "./template.service/index";
 export {
-	TenantAccessRequestService,
 	type TenantAccessRequestCreateFormBootstrap,
 	type TenantAccessRequestFormOptionItem,
+	TenantAccessRequestService,
 } from "./tenant-access-request.service";
-export { TemplateService } from "./template.service/index";
 export { TimelineService } from "./timeline.service";
 export { TokenService } from "./token.service/index";
 export {

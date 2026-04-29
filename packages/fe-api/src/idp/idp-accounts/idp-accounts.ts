@@ -11,12 +11,7 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import {
-	useMutation,
-	useQuery,
-	useSuspenseInfiniteQuery,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
+
 import type {
 	DataTag,
 	DefinedInitialDataOptions,
@@ -36,16 +31,24 @@ import type {
 	UseSuspenseQueryOptions,
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
-
-import type {
-	GetIdpAccount200AllOf,
-	GetIdpAccounts200AllOf,
-	GetIdpAccountsParams,
-	ToggleIdpAccountActive200AllOf,
-} from ".././model";
+import {
+	useMutation,
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { BodyType, ErrorType } from "../../libs/customIdpAxios";
 
 import { customIdpInstance } from "../../libs/customIdpAxios";
-import type { ErrorType } from "../../libs/customIdpAxios";
+import type {
+	GetIdpAccount200AllOf,
+	GetIdpAccountAccessGrantForm200AllOf,
+	GetIdpAccounts200AllOf,
+	GetIdpAccountsParams,
+	GrantIdpAccountAccess200AllOf,
+	GrantIdpAccountAccessDto,
+	ToggleIdpAccountActive200AllOf,
+} from ".././model";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -524,7 +527,7 @@ export const prefetchGetIdpAccountsInfiniteQuery = async <
 };
 
 /**
- * 계정의 보안 정보와 최근 감사 로그를 함께 조회합니다.
+ * 계정의 보안 정보와 부여된 접근 권한을 함께 조회합니다.
  * @summary IDP 계정 상세 조회
  */
 export const getIdpAccount = (
@@ -996,6 +999,633 @@ export const prefetchGetIdpAccountInfiniteQuery = async <
 	return queryClient;
 };
 
+/**
+ * 계정 상세에서 관리자가 Space와 Role을 선택해 접근 권한을 부여할 수 있도록 폼 초기값과 옵션을 반환합니다.
+ * @summary IDP 계정 접근 권한 부여 폼 조회
+ */
+export const getIdpAccountAccessGrantForm = (
+	userId: string,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
+) => {
+	return customIdpInstance<GetIdpAccountAccessGrantForm200AllOf>(
+		{
+			url: `/api/v1/idp/accounts/${userId}/access-grant-form`,
+			method: "GET",
+			signal,
+		},
+		options,
+	);
+};
+
+export const getGetIdpAccountAccessGrantFormQueryKey = (userId?: string) => {
+	return [`/api/v1/idp/accounts/${userId}/access-grant-form`] as const;
+};
+
+export const getGetIdpAccountAccessGrantFormInfiniteQueryKey = (
+	userId?: string,
+) => {
+	return [
+		"infinite",
+		`/api/v1/idp/accounts/${userId}/access-grant-form`,
+	] as const;
+};
+
+export const getGetIdpAccountAccessGrantFormQueryOptions = <
+	TData = Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ?? getGetIdpAccountAccessGrantFormQueryKey(userId);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>
+	> = ({ signal }) =>
+		getIdpAccountAccessGrantForm(userId, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		enabled: !!userId,
+		...queryOptions,
+	} as UseQueryOptions<
+		Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetIdpAccountAccessGrantFormQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>
+>;
+export type GetIdpAccountAccessGrantFormQueryError = ErrorType<void>;
+
+export function useGetIdpAccountAccessGrantForm<
+	TData = Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+					TError,
+					Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpAccountAccessGrantForm<
+	TData = Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+					TError,
+					Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpAccountAccessGrantForm<
+	TData = Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary IDP 계정 접근 권한 부여 폼 조회
+ */
+
+export function useGetIdpAccountAccessGrantForm<
+	TData = Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetIdpAccountAccessGrantFormQueryOptions(
+		userId,
+		options,
+	);
+
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary IDP 계정 접근 권한 부여 폼 조회
+ */
+export const prefetchGetIdpAccountAccessGrantFormQuery = async <
+	TData = Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	userId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetIdpAccountAccessGrantFormQueryOptions(
+		userId,
+		options,
+	);
+
+	await queryClient.prefetchQuery(queryOptions);
+
+	return queryClient;
+};
+
+export const getGetIdpAccountAccessGrantFormSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ?? getGetIdpAccountAccessGrantFormQueryKey(userId);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>
+	> = ({ signal }) =>
+		getIdpAccountAccessGrantForm(userId, requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetIdpAccountAccessGrantFormSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>
+>;
+export type GetIdpAccountAccessGrantFormSuspenseQueryError = ErrorType<void>;
+
+export function useGetIdpAccountAccessGrantFormSuspense<
+	TData = Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpAccountAccessGrantFormSuspense<
+	TData = Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpAccountAccessGrantFormSuspense<
+	TData = Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary IDP 계정 접근 권한 부여 폼 조회
+ */
+
+export function useGetIdpAccountAccessGrantFormSuspense<
+	TData = Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetIdpAccountAccessGrantFormSuspenseQueryOptions(
+		userId,
+		options,
+	);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+export const getGetIdpAccountAccessGrantFormSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<
+		Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>
+	>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ??
+		getGetIdpAccountAccessGrantFormInfiniteQueryKey(userId);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>
+	> = ({ signal }) =>
+		getIdpAccountAccessGrantForm(userId, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetIdpAccountAccessGrantFormSuspenseInfiniteQueryResult =
+	NonNullable<Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>>;
+export type GetIdpAccountAccessGrantFormSuspenseInfiniteQueryError =
+	ErrorType<void>;
+
+export function useGetIdpAccountAccessGrantFormSuspenseInfinite<
+	TData = InfiniteData<
+		Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>
+	>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpAccountAccessGrantFormSuspenseInfinite<
+	TData = InfiniteData<
+		Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>
+	>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpAccountAccessGrantFormSuspenseInfinite<
+	TData = InfiniteData<
+		Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>
+	>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary IDP 계정 접근 권한 부여 폼 조회
+ */
+
+export function useGetIdpAccountAccessGrantFormSuspenseInfinite<
+	TData = InfiniteData<
+		Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>
+	>,
+	TError = ErrorType<void>,
+>(
+	userId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions =
+		getGetIdpAccountAccessGrantFormSuspenseInfiniteQueryOptions(
+			userId,
+			options,
+		);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary IDP 계정 접근 권한 부여 폼 조회
+ */
+export const prefetchGetIdpAccountAccessGrantFormInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	userId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpAccountAccessGrantForm>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions =
+		getGetIdpAccountAccessGrantFormSuspenseInfiniteQueryOptions(
+			userId,
+			options,
+		);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
+
+/**
+ * 계정에 Space 접근 권한과 Role을 직접 부여합니다. 이미 같은 Space 권한이 있으면 Role을 갱신합니다.
+ * @summary IDP 계정 접근 권한 부여
+ */
+export const grantIdpAccountAccess = (
+	userId: string,
+	grantIdpAccountAccessDto: BodyType<GrantIdpAccountAccessDto>,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
+) => {
+	return customIdpInstance<GrantIdpAccountAccess200AllOf>(
+		{
+			url: `/api/v1/idp/accounts/${userId}/access-grants`,
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			data: grantIdpAccountAccessDto,
+			signal,
+		},
+		options,
+	);
+};
+
+export const getGrantIdpAccountAccessMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof grantIdpAccountAccess>>,
+		TError,
+		{ userId: string; data: BodyType<GrantIdpAccountAccessDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof grantIdpAccountAccess>>,
+	TError,
+	{ userId: string; data: BodyType<GrantIdpAccountAccessDto> },
+	TContext
+> => {
+	const mutationKey = ["grantIdpAccountAccess"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof grantIdpAccountAccess>>,
+		{ userId: string; data: BodyType<GrantIdpAccountAccessDto> }
+	> = (props) => {
+		const { userId, data } = props ?? {};
+
+		return grantIdpAccountAccess(userId, data, requestOptions);
+	};
+
+	return { mutationFn, ...mutationOptions };
+};
+
+export type GrantIdpAccountAccessMutationResult = NonNullable<
+	Awaited<ReturnType<typeof grantIdpAccountAccess>>
+>;
+export type GrantIdpAccountAccessMutationBody =
+	BodyType<GrantIdpAccountAccessDto>;
+export type GrantIdpAccountAccessMutationError = ErrorType<void>;
+
+/**
+ * @summary IDP 계정 접근 권한 부여
+ */
+export const useGrantIdpAccountAccess = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof grantIdpAccountAccess>>,
+			TError,
+			{ userId: string; data: BodyType<GrantIdpAccountAccessDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof grantIdpAccountAccess>>,
+	TError,
+	{ userId: string; data: BodyType<GrantIdpAccountAccessDto> },
+	TContext
+> => {
+	const mutationOptions = getGrantIdpAccountAccessMutationOptions(options);
+
+	return useMutation(mutationOptions, queryClient);
+};
 /**
  * 계정의 활성 상태를 반전시킵니다.
  * @summary 계정 활성/비활성 토글

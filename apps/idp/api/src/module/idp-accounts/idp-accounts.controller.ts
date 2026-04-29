@@ -4,9 +4,21 @@ import {
 	ApiResponseEntity,
 	ResponseMessage,
 } from "@cocrepo/decorator";
-import { IdpAccountDto, PageMetaDto, QueryIdpAccountDto } from "@cocrepo/dto";
+import {
+	GrantIdpAccountAccessDto,
+	IdpAccountAccessGrantFormBootstrapDto,
+	IdpAccountAccessGrantFormFieldMetaDto,
+	IdpAccountAccessGrantFormOptionItemDto,
+	IdpAccountAccessGrantFormSchemaDto,
+	IdpAccountAccessGrantFormUiPathsDto,
+	IdpAccountDetailDto,
+	IdpAccountDto,
+	PageMetaDto,
+	QueryIdpAccountDto,
+} from "@cocrepo/dto";
 import { IdpAccountFacade } from "@cocrepo/facade";
 import {
+	Body,
 	Controller,
 	Get,
 	HttpCode,
@@ -17,9 +29,21 @@ import {
 	Post,
 	Query,
 } from "@nestjs/common";
-import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
+import {
+	ApiBody,
+	ApiExtraModels,
+	ApiOperation,
+	ApiParam,
+	ApiTags,
+} from "@nestjs/swagger";
 
 @ApiTags("IDP_ACCOUNTS")
+@ApiExtraModels(
+	IdpAccountAccessGrantFormOptionItemDto,
+	IdpAccountAccessGrantFormUiPathsDto,
+	IdpAccountAccessGrantFormFieldMetaDto,
+	IdpAccountAccessGrantFormSchemaDto,
+)
 @Controller()
 export class IdpAccountsController {
 	constructor(private readonly idpAccountFacade: IdpAccountFacade) {}
@@ -45,15 +69,55 @@ export class IdpAccountsController {
 	@ApiOperation({
 		operationId: "getIdpAccount",
 		summary: "IDP 계정 상세 조회",
-		description: "계정의 보안 정보와 최근 감사 로그를 함께 조회합니다.",
+		description: "계정의 보안 정보와 부여된 접근 권한을 함께 조회합니다.",
 	})
 	@ApiAuth()
 	@ApiParam({ name: "userId", description: "사용자 ID (UUID)", type: String })
 	@ApiErrors(401, 404, 500)
-	@ApiResponseEntity(IdpAccountDto, HttpStatus.OK)
+	@ApiResponseEntity(IdpAccountDetailDto, HttpStatus.OK)
 	@ResponseMessage("계정 상세 조회 성공")
 	async getAccount(@Param("userId", ParseUUIDPipe) userId: string) {
 		return this.idpAccountFacade.getById(userId);
+	}
+
+	@Get(":userId/access-grant-form")
+	@ApiOperation({
+		operationId: "getIdpAccountAccessGrantForm",
+		summary: "IDP 계정 접근 권한 부여 폼 조회",
+		description:
+			"계정 상세에서 관리자가 Space와 Role을 선택해 접근 권한을 부여할 수 있도록 폼 초기값과 옵션을 반환합니다.",
+	})
+	@ApiAuth()
+	@ApiParam({ name: "userId", description: "사용자 ID (UUID)", type: String })
+	@ApiErrors(401, 404, 500)
+	@ApiResponseEntity(IdpAccountAccessGrantFormBootstrapDto, HttpStatus.OK)
+	@ResponseMessage("계정 접근 권한 부여 폼 조회 성공")
+	async getAccessGrantForm(@Param("userId", ParseUUIDPipe) userId: string) {
+		return this.idpAccountFacade.getAccessGrantFormBootstrap(userId);
+	}
+
+	@Post(":userId/access-grants")
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({
+		operationId: "grantIdpAccountAccess",
+		summary: "IDP 계정 접근 권한 부여",
+		description:
+			"계정에 Space 접근 권한과 Role을 직접 부여합니다. 이미 같은 Space 권한이 있으면 Role을 갱신합니다.",
+	})
+	@ApiAuth()
+	@ApiParam({ name: "userId", description: "사용자 ID (UUID)", type: String })
+	@ApiBody({
+		type: GrantIdpAccountAccessDto,
+		description: "계정 접근 권한 부여 payload",
+	})
+	@ApiErrors(400, 401, 404, 500)
+	@ApiResponseEntity(IdpAccountDetailDto, HttpStatus.OK)
+	@ResponseMessage("계정 접근 권한 부여 성공")
+	async grantAccess(
+		@Param("userId", ParseUUIDPipe) userId: string,
+		@Body() dto: GrantIdpAccountAccessDto,
+	) {
+		return this.idpAccountFacade.grantAccess(userId, dto);
 	}
 
 	@Patch(":userId/toggle-active")

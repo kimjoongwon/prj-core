@@ -13,7 +13,7 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 import type { IdpAccountDetailDto } from "./idpAccountDetailDto";
 
-export type GetIdpAccount200AllOf = {
+export type GrantIdpAccountAccess200AllOf = {
 	/** */
 	httpStatus?: number;
 	/** */

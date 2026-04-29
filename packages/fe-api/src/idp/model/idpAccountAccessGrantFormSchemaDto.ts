@@ -11,13 +11,12 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { IdpAccountDetailDto } from "./idpAccountDetailDto";
 
-export type GetIdpAccount200AllOf = {
-	/** */
-	httpStatus?: number;
-	/** */
-	message?: string;
-	/** @nullable */
-	data?: IdpAccountDetailDto;
-};
+export interface IdpAccountAccessGrantFormSchemaDto {
+	/** 스키마 키 */
+	key: string;
+	/** 스키마 라벨 */
+	label: string;
+	/** 스키마 대상 경로 */
+	paths: string[];
+}
