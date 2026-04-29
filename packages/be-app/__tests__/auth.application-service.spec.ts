@@ -4,6 +4,7 @@ import {
 	AuthAuditLogService,
 	AuthCacheService,
 	EmailService,
+	EmailVerificationService,
 	OidcClientService,
 	RoleService,
 	SpaceService,
@@ -71,6 +72,7 @@ describe("AuthApplicationService", () => {
 	let mockAuthCacheService: jest.Mocked<AuthCacheService>;
 	let mockAuthAuditLogService: jest.Mocked<AuthAuditLogService>;
 	let mockEmailService: jest.Mocked<EmailService>;
+	let mockEmailVerificationService: jest.Mocked<EmailVerificationService>;
 	let mockOidcFacade: jest.Mocked<OidcFacade>;
 	let mockOidcClientService: jest.Mocked<OidcClientService>;
 	let mockClsService: jest.Mocked<ClsService>;
@@ -131,7 +133,14 @@ describe("AuthApplicationService", () => {
 		mockEmailService = {
 			sendEmail: jest.fn(),
 			sendTemporaryPasswordEmail: jest.fn(),
+			sendEmailVerificationEmail: jest.fn(),
 		} as unknown as jest.Mocked<EmailService>;
+
+		mockEmailVerificationService = {
+			requestVerification: jest.fn(),
+			consumePendingByRawToken: jest.fn(),
+			markVerified: jest.fn(),
+		} as unknown as jest.Mocked<EmailVerificationService>;
 
 		mockClsService = {
 			get: jest.fn(),
@@ -230,6 +239,7 @@ describe("AuthApplicationService", () => {
 			mockAuthCacheService,
 			mockAuthAuditLogService,
 			mockEmailService,
+			mockEmailVerificationService,
 			mockOidcClientService,
 			mockOidcFacade,
 			mockClsService,
@@ -601,6 +611,81 @@ describe("AuthApplicationService", () => {
 
 			await expect(applicationService.verifyToken()).rejects.toThrow(
 				ForbiddenException,
+			);
+		});
+	});
+
+	describe("signUp email verification", () => {
+		it("회원가입 요청은 User를 즉시 만들지 않고 이메일 인증 요청을 생성해야 한다", async () => {
+			const expiresAt = new Date("2026-04-29T09:30:00.000Z");
+			mockUsersService.findUserForAuth.mockResolvedValue(null);
+			mockEmailVerificationService.requestVerification.mockResolvedValue({
+				email: "new@example.com",
+				expiresAt,
+			});
+
+			const result = await applicationService.signUp({
+				name: "New User",
+				nickname: "newbie",
+				email: "new@example.com",
+				phone: "010-0000-0000",
+				password: "Password123!",
+			});
+
+			expect(result).toEqual({
+				email: "new@example.com",
+				expiresAt,
+			});
+			expect(mockUsersService.createUserForSignUp).not.toHaveBeenCalled();
+			expect(
+				mockEmailVerificationService.requestVerification,
+			).toHaveBeenCalledWith(
+				expect.objectContaining({
+					name: "New User",
+					nickname: "newbie",
+					email: "new@example.com",
+					phone: "010-0000-0000",
+					passwordHash: expect.any(String),
+				}),
+			);
+		});
+
+		it("이메일 인증 성공 시 기존 회원가입 방식으로 User와 개인 Space를 생성해야 한다", async () => {
+			mockEmailVerificationService.consumePendingByRawToken.mockResolvedValue({
+				id: "verification-1",
+				email: "new@example.com",
+				name: "New User",
+				nickname: "newbie",
+				phone: "010-0000-0000",
+				passwordHash: "hashed-password",
+			} as never);
+			mockUsersService.findUserForAuth.mockResolvedValue(null);
+			mockRolesService.getDefaultUserRole.mockResolvedValue({
+				id: "role-user",
+			} as never);
+			mockSpacesService.createPersonalSpace.mockResolvedValue({
+				id: "space-personal",
+			} as never);
+			mockUsersService.createUserForSignUp.mockResolvedValue({
+				id: "user-new",
+			} as never);
+
+			const redirectUrl =
+				await applicationService.confirmEmailVerification("raw-token");
+
+			expect(redirectUrl).toBe("http://localhost:3000/admin/auth/login");
+			expect(mockUsersService.createUserForSignUp).toHaveBeenCalledWith({
+				name: "New User",
+				email: "new@example.com",
+				phone: "010-0000-0000",
+				password: "hashed-password",
+				spaceId: "space-personal",
+				roleId: "role-user",
+				nickname: "newbie",
+			});
+			expect(mockEmailVerificationService.markVerified).toHaveBeenCalledWith(
+				"verification-1",
+				"user-new",
 			);
 		});
 	});

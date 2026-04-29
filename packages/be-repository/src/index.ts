@@ -11,6 +11,7 @@ export { AssetsRepository } from "./assets.repository";
 export { CategoriesRepository } from "./categories.repository";
 export { AIAgentLogsRepository } from "./ai-agent-logs.repository";
 export { ContentsRepository } from "./contents.repository";
+export { EmailVerificationsRepository } from "./email-verifications.repository";
 export { FoldersRepository } from "./folders.repository";
 export { GroupsRepository } from "./groups.repository";
 export { InquiriesRepository } from "./inquiries.repository";

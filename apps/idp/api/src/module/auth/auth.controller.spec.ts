@@ -73,6 +73,7 @@ describe("AuthController", () => {
 			handleOidcCallback: jest.fn(),
 			refreshTokenWithIdp: jest.fn(),
 			signUp: jest.fn(),
+			confirmEmailVerification: jest.fn(),
 			verifyToken: jest.fn(),
 			logoutWithCookie: jest.fn(),
 			getMySpaces: jest.fn(),
@@ -281,15 +282,15 @@ describe("AuthController", () => {
 	});
 
 	describe("signUp", () => {
-		it("회원가입이 성공해야 한다", async () => {
+		it("회원가입 이메일 인증 요청이 성공해야 한다", async () => {
 			const signUpDto: SignUpPayloadDto = {
 				email: "new@example.com",
 				password: "password123",
 				name: "New User",
 			} as never;
 			const signUpResult = {
-				userId: "user-test-id",
 				email: "new@example.com",
+				expiresAt: new Date("2026-04-29T09:30:00.000Z"),
 			};
 			mockAuthApplicationService.signUp.mockResolvedValue(
 				signUpResult as never,

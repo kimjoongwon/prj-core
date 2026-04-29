@@ -26,6 +26,7 @@ export type * from "./models/Document.js";
 export type * from "./models/Derivative.js";
 export type * from "./models/Folder.js";
 export type * from "./models/AuthAuditLog.js";
+export type * from "./models/EmailVerification.js";
 export type * from "./models/PasswordHistory.js";
 export type * from "./models/SecurityPolicy.js";
 export type * from "./models/WhitelistEntry.js";

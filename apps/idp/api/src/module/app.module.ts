@@ -20,6 +20,7 @@ import { APP_GUARD, RouterModule } from "@nestjs/core";
 import { DevtoolsModule } from "@nestjs/devtools-integration";
 import { ThrottlerGuard } from "@nestjs/throttler";
 import { AuthModule } from "./auth";
+import { EmailVerificationsModule } from "./email-verification";
 import { globalModules } from "./global.module";
 import { IdpAccountsModule } from "./idp-accounts";
 import { IdpDashboardModule } from "./idp-dashboard";
@@ -56,6 +57,7 @@ const enableNestDevtools =
 		AuthModule,
 		IdpAccountsModule,
 		IdpDashboardModule,
+		EmailVerificationsModule,
 		OidcClientsModule,
 		OidcSessionsModule,
 		SecurityPolicyModule,
@@ -89,6 +91,10 @@ const enableNestDevtools =
 							{
 								path: "idp/dashboard",
 								module: IdpDashboardModule,
+							},
+							{
+								path: "idp/email-verifications",
+								module: EmailVerificationsModule,
 							},
 						],
 					},

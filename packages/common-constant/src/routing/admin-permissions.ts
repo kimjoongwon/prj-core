@@ -21,6 +21,7 @@ const CRUD_ACTIONS = ["create", "read", "update", "delete", "manage"] as const;
 const ADMIN_GLOBAL_FULL_ACCESS_PAGE_PREFIXES = [
 	"abilities:",
 	"actions:",
+	"email-verifications:",
 	"subjects:",
 	"templates:",
 ] as const;

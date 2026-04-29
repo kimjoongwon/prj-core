@@ -111,6 +111,7 @@ const PREVIOUS_ADMIN_MENU_SUBJECT_NAMES = [
 const MANAGE_EXCLUDED_ADMIN_MENU_SUBJECTS = new Set<string>([
 	"menu:templates",
 	"menu:templates:list",
+	"menu:users:email-verifications",
 	"menu:abilities:list",
 	"menu:actions:list",
 	"menu:subjects:list",

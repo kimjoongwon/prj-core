@@ -13,6 +13,7 @@ export * from "./constant";
 export * from "./create";
 export * from "./derivative";
 export * from "./dto-exclude-presets";
+export * from "./email-verification.dto";
 export * from "./exercise.dto";
 export * from "./folder";
 export * from "./ground.dto";

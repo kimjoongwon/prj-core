@@ -43,6 +43,15 @@ export const AuthAuditResult = {
 export type AuthAuditResult =
 	(typeof AuthAuditResult)[keyof typeof AuthAuditResult];
 
+export const EmailVerificationStatus = {
+	PENDING: "PENDING",
+	VERIFIED: "VERIFIED",
+	EXPIRED: "EXPIRED",
+} as const;
+
+export type EmailVerificationStatus =
+	(typeof EmailVerificationStatus)[keyof typeof EmailVerificationStatus];
+
 export const WhitelistType = {
 	IP: "IP",
 	EMAIL_DOMAIN: "EMAIL_DOMAIN",

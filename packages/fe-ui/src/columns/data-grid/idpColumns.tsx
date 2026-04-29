@@ -1,14 +1,17 @@
 "use client";
 
 import type { AuthAuditLogDto, AuthAuditResult } from "@cocrepo/api/idp/auth";
+import type { EmailVerificationDto } from "@cocrepo/api/idp/email-verifications";
 import type { IdpAccountDto } from "@cocrepo/api/idp/idp-accounts";
 import type { OidcClientDto } from "@cocrepo/api/idp/oidc-clients";
 import type { OidcSessionDto } from "@cocrepo/api/idp/oidc-sessions";
+import { Send } from "lucide-react";
 import {
-	ActiveStatusCell,
 	ActionButtonCell,
+	ActiveStatusCell,
 	AuditResultBadge,
 	AuthMethodCell,
+	ChipCell,
 	DateTimeCell,
 	DefaultCell,
 	ExpiryCell,
@@ -29,8 +32,20 @@ import {
 	createIsActiveColumn,
 	createNameColumn,
 	createPresetColumn,
+	defineColumn,
 } from "../internal/dataGridFactory";
 import { COLUMN_FIELDS } from "../internal/fieldPresets";
+
+const EMAIL_VERIFICATION_STATUS_CONFIG = {
+	PENDING: { label: "대기", color: "warning" },
+	VERIFIED: { label: "인증 완료", color: "success" },
+	EXPIRED: { label: "만료", color: "danger" },
+} as const;
+
+const EMAIL_SEND_STATUS_CONFIG = {
+	SUCCESS: { label: "성공", color: "success" },
+	FAILURE: { label: "실패", color: "danger" },
+} as const;
 
 /** OIDC Client 목록에서 사용하는 clientId 컬럼입니다. */
 export const oidcClientIdColumn = createPresetColumn<OidcClientDto>(
@@ -210,6 +225,112 @@ export function buildIdpAccountTableColumns<
 export const idpAccountTableColumns =
 	buildIdpAccountTableColumns<IdpAccountDto>({
 		onClickOpenUnlockModal: () => undefined,
+	});
+
+export function buildEmailVerificationTableColumns<
+	TRow extends {
+		id: string;
+		email: string;
+		name: string;
+		status: string;
+		lastSendStatus?: string | null;
+		sendCount: number;
+		expiresAt: string | Date;
+		verifiedAt?: string | Date | null;
+		canResend: boolean;
+		resendAvailableAt?: string | Date | null;
+	},
+>({
+	onClickOpenResendModal,
+}: {
+	onClickOpenResendModal: (verification: TRow) => void;
+}) {
+	return buildColumns<TRow>(
+		createEmailColumn<TRow>({
+			size: 240,
+			isRequired: true,
+		}),
+		createNameColumn<TRow>({
+			size: 160,
+		}),
+		createPresetColumn<TRow>("status", {
+			size: 120,
+			align: "center",
+			cell: ({ getValue }) => {
+				const status =
+					getValue() as keyof typeof EMAIL_VERIFICATION_STATUS_CONFIG;
+				const config = EMAIL_VERIFICATION_STATUS_CONFIG[status] ?? {
+					label: status,
+					color: "default" as const,
+				};
+
+				return <ChipCell label={config.label} color={config.color} />;
+			},
+		}),
+		createPresetColumn<TRow>("lastSendStatus", {
+			size: 120,
+			align: "center",
+			cell: ({ getValue }) => {
+				const status = getValue() as
+					| keyof typeof EMAIL_SEND_STATUS_CONFIG
+					| null;
+				if (!status) {
+					return <DefaultCell value={null} />;
+				}
+				const config = EMAIL_SEND_STATUS_CONFIG[status] ?? {
+					label: status,
+					color: "default" as const,
+				};
+
+				return <ChipCell label={config.label} color={config.color} />;
+			},
+		}),
+		createPresetColumn<TRow>("sendCount", {
+			size: 90,
+			align: "center",
+			cell: ({ getValue }) => (
+				<DefaultCell value={getValue() as number} tabular />
+			),
+		}),
+		createPresetColumn<TRow>("expiresAt", {
+			size: 180,
+			cell: ({ getValue }) => (
+				<ExpiryCell expiresAt={getValue() as string | Date | null} />
+			),
+		}),
+		createPresetColumn<TRow>("verifiedAt", {
+			size: 170,
+			cell: ({ getValue }) => (
+				<DateTimeCell value={getValue() as string | Date | null | undefined} />
+			),
+		}),
+		defineColumn<TRow>({
+			field: COLUMN_FIELDS.actions,
+			label: "",
+			size: 120,
+			align: "center",
+			cell: ({ row }) => {
+				const verification = row.original;
+
+				return (
+					<ActionButtonCell
+						variant="flat"
+						color="primary"
+						startContent={<Send className="size-4" />}
+						isDisabled={!verification.canResend}
+						onPress={() => onClickOpenResendModal(verification)}
+					>
+						재발송
+					</ActionButtonCell>
+				);
+			},
+		}),
+	);
+}
+
+export const emailVerificationTableColumns =
+	buildEmailVerificationTableColumns<EmailVerificationDto>({
+		onClickOpenResendModal: () => undefined,
 	});
 
 export const authAuditLogCreatedAtColumn =

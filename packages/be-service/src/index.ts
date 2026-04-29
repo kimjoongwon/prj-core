@@ -27,6 +27,11 @@ export {
 	EmailService,
 	SmtpEmailProvider,
 } from "./email.service/index";
+export {
+	EmailVerificationService,
+	type EmailVerificationCreateInput,
+	type EmailVerificationRequestResult,
+} from "./email-verification.service";
 export { FolderService } from "./folder.service";
 export { GroupService } from "./group.service";
 export {

@@ -14,6 +14,7 @@ const schemaOwnerByFile: Record<string, string> = {
 	"asset/asset.prisma": "Asset",
 	"asset/folder.prisma": "Folder",
 	"auth/auth-audit.prisma": "AuthAuditLog",
+	"auth/email-verification.prisma": "EmailVerification",
 	"auth/password-history.prisma": "PasswordHistory",
 	"auth/security-policy.prisma": "SecurityPolicy",
 	"auth/whitelist-entry.prisma": "WhitelistEntry",
@@ -48,6 +49,7 @@ const aggregateRootByFile: Record<string, string> = {
 	"asset/album.prisma": "Album",
 	"asset/asset.prisma": "Asset",
 	"asset/folder.prisma": "Folder",
+	"auth/email-verification.prisma": "EmailVerification",
 	"auth/security-policy.prisma": "SecurityPolicy",
 	"auth/whitelist-entry.prisma": "WhitelistEntry",
 	"content/content.prisma": "Content",
@@ -95,6 +97,9 @@ const expectedOwner: Record<string, string> = {
 
 	AuthAuditLog: "auth/auth-audit.prisma",
 	AuthAuditResult: "auth/auth-audit.prisma",
+
+	EmailVerification: "auth/email-verification.prisma",
+	EmailVerificationStatus: "auth/email-verification.prisma",
 
 	PasswordHistory: "auth/password-history.prisma",
 

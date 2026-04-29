@@ -435,6 +435,7 @@ export const ModelName = {
 	Derivative: "Derivative",
 	Folder: "Folder",
 	AuthAuditLog: "AuthAuditLog",
+	EmailVerification: "EmailVerification",
 	PasswordHistory: "PasswordHistory",
 	SecurityPolicy: "SecurityPolicy",
 	WhitelistEntry: "WhitelistEntry",
@@ -519,6 +520,7 @@ export type TypeMap<
 			| "derivative"
 			| "folder"
 			| "authAuditLog"
+			| "emailVerification"
 			| "passwordHistory"
 			| "securityPolicy"
 			| "whitelistEntry"
@@ -2005,6 +2007,82 @@ export type TypeMap<
 					args: Prisma.AuthAuditLogCountArgs<ExtArgs>;
 					result:
 						| runtime.Types.Utils.Optional<Prisma.AuthAuditLogCountAggregateOutputType>
+						| number;
+				};
+			};
+		};
+		EmailVerification: {
+			payload: Prisma.$EmailVerificationPayload<ExtArgs>;
+			fields: Prisma.EmailVerificationFieldRefs;
+			operations: {
+				findUnique: {
+					args: Prisma.EmailVerificationFindUniqueArgs<ExtArgs>;
+					result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailVerificationPayload> | null;
+				};
+				findUniqueOrThrow: {
+					args: Prisma.EmailVerificationFindUniqueOrThrowArgs<ExtArgs>;
+					result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailVerificationPayload>;
+				};
+				findFirst: {
+					args: Prisma.EmailVerificationFindFirstArgs<ExtArgs>;
+					result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailVerificationPayload> | null;
+				};
+				findFirstOrThrow: {
+					args: Prisma.EmailVerificationFindFirstOrThrowArgs<ExtArgs>;
+					result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailVerificationPayload>;
+				};
+				findMany: {
+					args: Prisma.EmailVerificationFindManyArgs<ExtArgs>;
+					result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailVerificationPayload>[];
+				};
+				create: {
+					args: Prisma.EmailVerificationCreateArgs<ExtArgs>;
+					result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailVerificationPayload>;
+				};
+				createMany: {
+					args: Prisma.EmailVerificationCreateManyArgs<ExtArgs>;
+					result: BatchPayload;
+				};
+				createManyAndReturn: {
+					args: Prisma.EmailVerificationCreateManyAndReturnArgs<ExtArgs>;
+					result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailVerificationPayload>[];
+				};
+				delete: {
+					args: Prisma.EmailVerificationDeleteArgs<ExtArgs>;
+					result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailVerificationPayload>;
+				};
+				update: {
+					args: Prisma.EmailVerificationUpdateArgs<ExtArgs>;
+					result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailVerificationPayload>;
+				};
+				deleteMany: {
+					args: Prisma.EmailVerificationDeleteManyArgs<ExtArgs>;
+					result: BatchPayload;
+				};
+				updateMany: {
+					args: Prisma.EmailVerificationUpdateManyArgs<ExtArgs>;
+					result: BatchPayload;
+				};
+				updateManyAndReturn: {
+					args: Prisma.EmailVerificationUpdateManyAndReturnArgs<ExtArgs>;
+					result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailVerificationPayload>[];
+				};
+				upsert: {
+					args: Prisma.EmailVerificationUpsertArgs<ExtArgs>;
+					result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailVerificationPayload>;
+				};
+				aggregate: {
+					args: Prisma.EmailVerificationAggregateArgs<ExtArgs>;
+					result: runtime.Types.Utils.Optional<Prisma.AggregateEmailVerification>;
+				};
+				groupBy: {
+					args: Prisma.EmailVerificationGroupByArgs<ExtArgs>;
+					result: runtime.Types.Utils.Optional<Prisma.EmailVerificationGroupByOutputType>[];
+				};
+				count: {
+					args: Prisma.EmailVerificationCountArgs<ExtArgs>;
+					result:
+						| runtime.Types.Utils.Optional<Prisma.EmailVerificationCountAggregateOutputType>
 						| number;
 				};
 			};
@@ -5615,6 +5693,30 @@ export const AuthAuditLogScalarFieldEnum = {
 export type AuthAuditLogScalarFieldEnum =
 	(typeof AuthAuditLogScalarFieldEnum)[keyof typeof AuthAuditLogScalarFieldEnum];
 
+export const EmailVerificationScalarFieldEnum = {
+	id: "id",
+	createdAt: "createdAt",
+	updatedAt: "updatedAt",
+	removedAt: "removedAt",
+	email: "email",
+	name: "name",
+	nickname: "nickname",
+	phone: "phone",
+	passwordHash: "passwordHash",
+	tokenHash: "tokenHash",
+	status: "status",
+	expiresAt: "expiresAt",
+	verifiedAt: "verifiedAt",
+	lastSentAt: "lastSentAt",
+	sendCount: "sendCount",
+	lastSendStatus: "lastSendStatus",
+	lastSendError: "lastSendError",
+	verifiedUserId: "verifiedUserId",
+} as const;
+
+export type EmailVerificationScalarFieldEnum =
+	(typeof EmailVerificationScalarFieldEnum)[keyof typeof EmailVerificationScalarFieldEnum];
+
 export const PasswordHistoryScalarFieldEnum = {
 	id: "id",
 	createdAt: "createdAt",
@@ -6533,6 +6635,18 @@ export type ListEnumAuthAuditResultFieldRefInput<$PrismaModel> =
 	FieldRefInputType<$PrismaModel, "AuthAuditResult[]">;
 
 /**
+ * Reference to a field of type 'EmailVerificationStatus'
+ */
+export type EnumEmailVerificationStatusFieldRefInput<$PrismaModel> =
+	FieldRefInputType<$PrismaModel, "EmailVerificationStatus">;
+
+/**
+ * Reference to a field of type 'EmailVerificationStatus[]'
+ */
+export type ListEnumEmailVerificationStatusFieldRefInput<$PrismaModel> =
+	FieldRefInputType<$PrismaModel, "EmailVerificationStatus[]">;
+
+/**
  * Reference to a field of type 'WhitelistType'
  */
 export type EnumWhitelistTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
@@ -6966,6 +7080,7 @@ export type GlobalOmitConfig = {
 	derivative?: Prisma.DerivativeOmit;
 	folder?: Prisma.FolderOmit;
 	authAuditLog?: Prisma.AuthAuditLogOmit;
+	emailVerification?: Prisma.EmailVerificationOmit;
 	passwordHistory?: Prisma.PasswordHistoryOmit;
 	securityPolicy?: Prisma.SecurityPolicyOmit;
 	whitelistEntry?: Prisma.WhitelistEntryOmit;

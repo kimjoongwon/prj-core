@@ -21,6 +21,7 @@ export const ADMIN_PATHS = {
 	// 회원 (User 엔티티)
 	USERS: "/users",
 	USERS_DETAIL: "/users/[userId]",
+	EMAIL_VERIFICATIONS: "/email-verifications",
 
 	// 역할 관리
 	ROLES: "/roles",
@@ -141,6 +142,7 @@ export const ADMIN_SUBJECTS = {
 
 	// 2depth - 회원
 	MENU_USERS_LIST: "menu:users:list",
+	MENU_USERS_EMAIL_VERIFICATIONS: "menu:users:email-verifications",
 
 	// 2depth - 일정 관리
 	MENU_TIMELINES_LIST: "menu:timelines:list",
@@ -181,6 +183,7 @@ const ADMIN_NAV_SCOPE_KIND_BY_ID: Partial<Record<string, ScreenScopeKind>> = {
 	dashboard: "space",
 	users: "space",
 	"users-list": "space",
+	"email-verifications-list": "global-full-access-only",
 	spaces: "space",
 	"spaces-list": "space",
 	timelines: "space",

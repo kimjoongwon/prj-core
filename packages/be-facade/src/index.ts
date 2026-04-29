@@ -1,6 +1,7 @@
 export { AssetFacade } from "./asset.facade";
 export { ActionFacade } from "./action.facade";
 export { CategoryFacade } from "./category.facade";
+export { EmailVerificationFacade } from "./email-verification.facade";
 export { FolderFacade } from "./folder.facade";
 export { GroupFacade } from "./group.facade";
 export { IdpAccountFacade } from "./idp-account.facade";

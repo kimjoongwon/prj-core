@@ -14,6 +14,7 @@ export * from "./category.entity";
 // Decorator는 @cocrepo/decorator에서 export됨
 export * from "./derivative.entity";
 export * from "./document.entity";
+export * from "./email-verification.entity";
 export * from "./exercise.entity";
 export * from "./folder.entity";
 export * from "./ground.entity";

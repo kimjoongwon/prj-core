@@ -13,6 +13,7 @@ export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
 	"apps/admin/web/src/app/(admin)/assets/[assetId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/assets/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/dashboard/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/email-verifications/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/edit/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/inquiries/new/route.meta.ts",
@@ -91,6 +92,12 @@ export const GENERATED_ADMIN_NAV_ITEMS: NavItemConfig[] = [
 				"label": "회원 목록",
 				"path": "/users",
 				"subject": "menu:users:list"
+			},
+			{
+				"id": "email-verifications-list",
+				"label": "이메일 인증",
+				"path": "/email-verifications",
+				"subject": "menu:users:email-verifications"
 			}
 		]
 	},
@@ -872,5 +879,15 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 		"pathPattern": "/policies/[policyId]/edit",
 		"subject": "page:policies:edit",
 		"description": "권한 정책 기본 정보와 포함 Ability를 수정합니다."
+	},
+	{
+		"groupId": "users",
+		"groupLabel": "회원",
+		"pageId": "email-verifications:list",
+		"pageLabel": "이메일 인증 목록",
+		"pathPattern": "/email-verifications",
+		"subject": "page:email-verifications:list",
+		"description": "회원가입 전 이메일 인증 요청과 발송 상태를 확인합니다.",
+		"menuLeafId": "email-verifications-list"
 	}
 ];

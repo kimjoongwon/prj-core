@@ -501,6 +501,41 @@ export type EnumAuthAuditResultWithAggregatesFilter<$PrismaModel = never> = {
 	_max?: Prisma.NestedEnumAuthAuditResultFilter<$PrismaModel>;
 };
 
+export type EnumEmailVerificationStatusFilter<$PrismaModel = never> = {
+	equals?:
+		| $Enums.EmailVerificationStatus
+		| Prisma.EnumEmailVerificationStatusFieldRefInput<$PrismaModel>;
+	in?:
+		| $Enums.EmailVerificationStatus[]
+		| Prisma.ListEnumEmailVerificationStatusFieldRefInput<$PrismaModel>;
+	notIn?:
+		| $Enums.EmailVerificationStatus[]
+		| Prisma.ListEnumEmailVerificationStatusFieldRefInput<$PrismaModel>;
+	not?:
+		| Prisma.NestedEnumEmailVerificationStatusFilter<$PrismaModel>
+		| $Enums.EmailVerificationStatus;
+};
+
+export type EnumEmailVerificationStatusWithAggregatesFilter<
+	$PrismaModel = never,
+> = {
+	equals?:
+		| $Enums.EmailVerificationStatus
+		| Prisma.EnumEmailVerificationStatusFieldRefInput<$PrismaModel>;
+	in?:
+		| $Enums.EmailVerificationStatus[]
+		| Prisma.ListEnumEmailVerificationStatusFieldRefInput<$PrismaModel>;
+	notIn?:
+		| $Enums.EmailVerificationStatus[]
+		| Prisma.ListEnumEmailVerificationStatusFieldRefInput<$PrismaModel>;
+	not?:
+		| Prisma.NestedEnumEmailVerificationStatusWithAggregatesFilter<$PrismaModel>
+		| $Enums.EmailVerificationStatus;
+	_count?: Prisma.NestedIntFilter<$PrismaModel>;
+	_min?: Prisma.NestedEnumEmailVerificationStatusFilter<$PrismaModel>;
+	_max?: Prisma.NestedEnumEmailVerificationStatusFilter<$PrismaModel>;
+};
+
 export type EnumWhitelistTypeFilter<$PrismaModel = never> = {
 	equals?:
 		| $Enums.WhitelistType
@@ -1844,6 +1879,41 @@ export type NestedEnumAuthAuditResultWithAggregatesFilter<
 	_count?: Prisma.NestedIntFilter<$PrismaModel>;
 	_min?: Prisma.NestedEnumAuthAuditResultFilter<$PrismaModel>;
 	_max?: Prisma.NestedEnumAuthAuditResultFilter<$PrismaModel>;
+};
+
+export type NestedEnumEmailVerificationStatusFilter<$PrismaModel = never> = {
+	equals?:
+		| $Enums.EmailVerificationStatus
+		| Prisma.EnumEmailVerificationStatusFieldRefInput<$PrismaModel>;
+	in?:
+		| $Enums.EmailVerificationStatus[]
+		| Prisma.ListEnumEmailVerificationStatusFieldRefInput<$PrismaModel>;
+	notIn?:
+		| $Enums.EmailVerificationStatus[]
+		| Prisma.ListEnumEmailVerificationStatusFieldRefInput<$PrismaModel>;
+	not?:
+		| Prisma.NestedEnumEmailVerificationStatusFilter<$PrismaModel>
+		| $Enums.EmailVerificationStatus;
+};
+
+export type NestedEnumEmailVerificationStatusWithAggregatesFilter<
+	$PrismaModel = never,
+> = {
+	equals?:
+		| $Enums.EmailVerificationStatus
+		| Prisma.EnumEmailVerificationStatusFieldRefInput<$PrismaModel>;
+	in?:
+		| $Enums.EmailVerificationStatus[]
+		| Prisma.ListEnumEmailVerificationStatusFieldRefInput<$PrismaModel>;
+	notIn?:
+		| $Enums.EmailVerificationStatus[]
+		| Prisma.ListEnumEmailVerificationStatusFieldRefInput<$PrismaModel>;
+	not?:
+		| Prisma.NestedEnumEmailVerificationStatusWithAggregatesFilter<$PrismaModel>
+		| $Enums.EmailVerificationStatus;
+	_count?: Prisma.NestedIntFilter<$PrismaModel>;
+	_min?: Prisma.NestedEnumEmailVerificationStatusFilter<$PrismaModel>;
+	_max?: Prisma.NestedEnumEmailVerificationStatusFilter<$PrismaModel>;
 };
 
 export type NestedEnumWhitelistTypeFilter<$PrismaModel = never> = {

@@ -25,6 +25,7 @@ export * from "./consentResultDto";
 export * from "./createOidcClient201AllOf";
 export * from "./createOidcClientDto";
 export * from "./dashboardStatsDto";
+export * from "./emailVerificationRequestedDto";
 export * from "./executePasswordResetBody";
 export * from "./forceResetPassword200AllOf";
 export * from "./forgotPasswordResultDto";

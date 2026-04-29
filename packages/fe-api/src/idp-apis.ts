@@ -45,6 +45,7 @@ import type {
 	ConsentResultDto,
 	CreateOidcClient201AllOf,
 	CreateOidcClientDto,
+	EmailVerificationRequestedDto,
 	ExecutePasswordResetBody,
 	ForceResetPassword200AllOf,
 	ForgotPasswordResultDto,
@@ -2999,7 +3000,7 @@ export const signUp = (
 	options?: SecondParameter<typeof customIdpInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<unknown>(
+	return customIdpInstance<EmailVerificationRequestedDto>(
 		{
 			url: `/api/v1/auth/sign-up`,
 			method: "POST",

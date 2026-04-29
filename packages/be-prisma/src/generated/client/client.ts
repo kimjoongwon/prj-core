@@ -138,6 +138,11 @@ export type Folder = Prisma.FolderModel;
  */
 export type AuthAuditLog = Prisma.AuthAuditLogModel;
 /**
+ * Model EmailVerification
+ * @displayName 이메일 인증
+ */
+export type EmailVerification = Prisma.EmailVerificationModel;
+/**
  * Model PasswordHistory
  * @displayName 비밀번호 히스토리
  */

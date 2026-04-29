@@ -104,6 +104,43 @@ export const templateSeedData: TemplateSeedData[] = [
 		],
 	},
 	{
+		code: "AUTH_EMAIL_VERIFICATION",
+		name: "회원가입 이메일 인증",
+		type: "EMAIL",
+		subject: "[prj-core] 이메일 인증 안내",
+		content: `<div style="max-width: 600px; margin: 0 auto; font-family: 'Pretendard', sans-serif; color: #333;">
+	<h2 style="color: #0070f3;">이메일 인증</h2>
+	<p>회원가입을 완료하려면 이메일 인증이 필요합니다.</p>
+	<p>아래 버튼을 클릭하여 이메일 인증을 완료하세요.</p>
+	<div style="margin: 24px 0;">
+		<a href="{{verificationUrl}}"
+			style="display: inline-block; padding: 12px 24px; background-color: #0070f3; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+			이메일 인증하기
+		</a>
+	</div>
+	<p style="color: #666; font-size: 14px;">
+		이 링크는 {{expiresInMinutes}}분간 유효하며, 인증이 완료되면 계정이 생성됩니다.
+	</p>
+	<p style="color: #999; font-size: 12px;">
+		본인이 요청하지 않은 경우 이 이메일을 무시하세요.
+	</p>
+</div>`,
+		description: "회원가입 이메일 인증 요청 시 발송하는 이메일",
+		isActive: true,
+		variables: [
+			{
+				name: "verificationUrl",
+				description: "이메일 인증 링크",
+				isRequired: true,
+			},
+			{
+				name: "expiresInMinutes",
+				description: "인증 링크 유효 시간(분)",
+				isRequired: true,
+			},
+		],
+	},
+	{
 		code: "EMAIL_WELCOME",
 		name: "회원 가입 환영",
 		type: "EMAIL",

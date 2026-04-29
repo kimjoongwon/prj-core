@@ -19,6 +19,7 @@ import {
 	AuthAuditLogDto,
 	AuthSessionInfoDto,
 	ChangePasswordDto,
+	EmailVerificationRequestedDto,
 	PageMetaDto,
 	QueryAuthAuditLogDto,
 	SetCurrentSpaceDto,
@@ -161,7 +162,8 @@ export class AuthController {
 	@ApiOperation({
 		operationId: "signUp",
 		summary: "회원가입",
-		description: "새로운 사용자 계정을 생성합니다.",
+		description:
+			"이메일 인증 요청을 생성하고 인증 메일을 발송합니다. User는 인증 완료 시 생성됩니다.",
 	})
 	@ApiBody({
 		type: SignUpPayloadDto,
@@ -172,9 +174,37 @@ export class AuthController {
 		{ status: 409, message: AUTH_ERRORS.EMAIL_ALREADY_EXISTS },
 		500,
 	)
+	@ApiResponseEntity(EmailVerificationRequestedDto, HttpStatus.CREATED)
 	@ResponseMessage("common.auth.register.success")
 	async signUp(@Body() signUpDto: SignUpPayloadDto) {
 		return this.authApplicationService.signUp(signUpDto);
+	}
+
+	@Public()
+	@Get("email-verifications/:token/confirm")
+	@ApiOperation({
+		operationId: "confirmEmailVerification",
+		summary: "회원가입 이메일 인증 완료",
+		description:
+			"이메일 인증 토큰을 확인하고 회원가입을 완료한 뒤 Admin 로그인 화면으로 리다이렉트합니다.",
+	})
+	@ApiParam({ name: "token", type: String })
+	@ApiErrors(400, 500)
+	async confirmEmailVerification(
+		@Param("token") token: string,
+		@Res() res: Response,
+	) {
+		try {
+			const redirectUrl =
+				await this.authApplicationService.confirmEmailVerification(token);
+			return res.redirect(redirectUrl);
+		} catch (error) {
+			const { loginUrl } =
+				await this.authApplicationService.getClientRedirects("admin-web");
+			const errorMessage =
+				error instanceof Error ? error.message : "EMAIL_VERIFICATION_FAILED";
+			return res.redirect(this.buildLoginRedirectUrl(loginUrl, errorMessage));
+		}
 	}
 
 	@HttpCode(HttpStatus.OK)

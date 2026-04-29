@@ -5,6 +5,7 @@ export * from "./query-action.dto";
 export * from "./query-auth-audit-log.dto";
 export * from "./query-assignment.dto";
 export * from "./query-category.dto";
+export * from "./query-email-verification.dto";
 export * from "./query-exercise.dto";
 export * from "./query-ground.dto";
 export * from "./query-group.dto";

@@ -96,6 +96,15 @@ export {
 export type { AuthErrorPageProps } from "./AuthErrorPage/AuthErrorPage";
 export { AuthErrorPage } from "./AuthErrorPage/AuthErrorPage";
 export { DashboardPage } from "./DashboardPage/DashboardPage";
+export type {
+	EmailVerificationListPageProps,
+	EmailVerificationListPageQueryStates,
+	EmailVerificationListPageSetQueryStates,
+} from "./EmailVerificationListPage/EmailVerificationListPage";
+export {
+	adminEmailVerificationsPageQueryInputs,
+	EmailVerificationListPage,
+} from "./EmailVerificationListPage/EmailVerificationListPage";
 export type { ForgotPasswordPageProps } from "./ForgotPasswordPage/ForgotPasswordPage";
 export { ForgotPasswordPage } from "./ForgotPasswordPage/ForgotPasswordPage";
 export type {

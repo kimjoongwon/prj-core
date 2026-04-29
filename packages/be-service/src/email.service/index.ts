@@ -13,6 +13,7 @@ import { TemplateService } from "../template.service/index";
 
 const PASSWORD_RESET_TEMPLATE_CODE = "AUTH_PASSWORD_RESET";
 const TEMPORARY_PASSWORD_TEMPLATE_CODE = "AUTH_TEMPORARY_PASSWORD";
+const EMAIL_VERIFICATION_TEMPLATE_CODE = "AUTH_EMAIL_VERIFICATION";
 
 function normalizeOptionalBooleanString(value?: string): string | undefined {
 	const normalizedValue = value?.trim();
@@ -173,6 +174,31 @@ export class EmailService {
 		await this.sendRenderedEmail(
 			email,
 			TEMPORARY_PASSWORD_TEMPLATE_CODE,
+			rendered,
+		);
+	}
+
+	/**
+	 * 회원가입 이메일 인증 링크를 발송합니다.
+	 *
+	 * @param email - 수신자 이메일
+	 * @param verificationUrl - 이메일 인증 API 링크
+	 */
+	async sendEmailVerificationEmail(
+		email: string,
+		verificationUrl: string,
+	): Promise<void> {
+		const rendered = await this.templateService.renderByCode(
+			EMAIL_VERIFICATION_TEMPLATE_CODE,
+			{
+				verificationUrl,
+				expiresInMinutes: "30",
+			},
+		);
+
+		await this.sendRenderedEmail(
+			email,
+			EMAIL_VERIFICATION_TEMPLATE_CODE,
 			rendered,
 		);
 	}

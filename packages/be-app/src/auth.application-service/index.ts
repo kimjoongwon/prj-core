@@ -16,6 +16,7 @@ import {
 	AuthAuditLogService,
 	AuthCacheService,
 	EmailService,
+	EmailVerificationService,
 	type GetAuditLogsResult,
 	OidcClientService,
 	RoleService,
@@ -109,6 +110,7 @@ export class AuthApplicationService {
 		private readonly authCacheService: AuthCacheService,
 		private readonly authAuditLogService: AuthAuditLogService,
 		private readonly emailService: EmailService,
+		private readonly emailVerificationService: EmailVerificationService,
 		private readonly oidcClientService: OidcClientService,
 		private readonly oidcFacade: OidcFacade,
 		private readonly cls: ClsService,
@@ -443,30 +445,55 @@ export class AuthApplicationService {
 	}) {
 		const { name, nickname, password, phone, email } = params;
 
-		const userRole = await this.rolesService.getDefaultUserRole();
-
-		if (!userRole) {
-			this.logger.error("User role not found");
-			throw new BadRequestException("유저 역할이 존재하지 않습니다.");
+		const existingUser = await this.usersService.findUserForAuth(email);
+		if (existingUser) {
+			throw new BadRequestException("EMAIL_ALREADY_EXISTS");
 		}
-
-		const space = await this.spacesService.createPersonalSpace();
 
 		const plainPassword = PlainPassword.create(password);
 		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
 
-		const user = await this.usersService.createUserForSignUp({
+		return this.emailVerificationService.requestVerification({
 			name,
 			email,
 			phone: phone ?? "",
-			password: hashedPassword.value,
-			spaceId: space.id,
-			roleId: userRole.id,
-			nickname,
+			passwordHash: hashedPassword.value,
+			nickname: nickname || name,
 		});
+	}
 
-		// 회원가입 후 IDP 로그인으로 리다이렉트 필요 (토큰 직접 생성 불가)
-		return { userId: user.id, email: user.email };
+	/**
+	 * 이메일 인증 토큰을 확인하고 회원가입을 완료합니다.
+	 */
+	async confirmEmailVerification(rawToken: string): Promise<string> {
+		const verification =
+			await this.emailVerificationService.consumePendingByRawToken(rawToken);
+
+		const existingUser = await this.usersService.findUserForAuth(
+			verification.email,
+		);
+		if (existingUser) {
+			await this.emailVerificationService.markVerified(
+				verification.id,
+				existingUser.id,
+			);
+			const { loginUrl } = await this.getClientRedirects(
+				DEFAULT_OIDC_CLIENT_ID,
+			);
+			return loginUrl;
+		}
+
+		const user = await this.createUserForVerifiedSignUp({
+			name: verification.name,
+			nickname: verification.nickname,
+			phone: verification.phone,
+			email: verification.email,
+			passwordHash: verification.passwordHash,
+		});
+		await this.emailVerificationService.markVerified(verification.id, user.id);
+
+		const { loginUrl } = await this.getClientRedirects(DEFAULT_OIDC_CLIENT_ID);
+		return loginUrl;
 	}
 
 	/**
@@ -569,6 +596,33 @@ export class AuthApplicationService {
 	 */
 	getAuthAuditLogStats() {
 		return this.authAuditLogService.getStats();
+	}
+
+	private async createUserForVerifiedSignUp(params: {
+		name: string;
+		nickname?: string;
+		phone: string;
+		email: string;
+		passwordHash: string;
+	}) {
+		const userRole = await this.rolesService.getDefaultUserRole();
+
+		if (!userRole) {
+			this.logger.error("User role not found");
+			throw new BadRequestException("유저 역할이 존재하지 않습니다.");
+		}
+
+		const space = await this.spacesService.createPersonalSpace();
+
+		return this.usersService.createUserForSignUp({
+			name: params.name,
+			email: params.email,
+			phone: params.phone,
+			password: params.passwordHash,
+			spaceId: space.id,
+			roleId: userRole.id,
+			nickname: params.nickname,
+		});
 	}
 
 	// =========================================================================

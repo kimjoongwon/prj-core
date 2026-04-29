@@ -73,6 +73,7 @@ export const ModelName = {
 	Derivative: "Derivative",
 	Folder: "Folder",
 	AuthAuditLog: "AuthAuditLog",
+	EmailVerification: "EmailVerification",
 	PasswordHistory: "PasswordHistory",
 	SecurityPolicy: "SecurityPolicy",
 	WhitelistEntry: "WhitelistEntry",
@@ -432,6 +433,30 @@ export const AuthAuditLogScalarFieldEnum = {
 
 export type AuthAuditLogScalarFieldEnum =
 	(typeof AuthAuditLogScalarFieldEnum)[keyof typeof AuthAuditLogScalarFieldEnum];
+
+export const EmailVerificationScalarFieldEnum = {
+	id: "id",
+	createdAt: "createdAt",
+	updatedAt: "updatedAt",
+	removedAt: "removedAt",
+	email: "email",
+	name: "name",
+	nickname: "nickname",
+	phone: "phone",
+	passwordHash: "passwordHash",
+	tokenHash: "tokenHash",
+	status: "status",
+	expiresAt: "expiresAt",
+	verifiedAt: "verifiedAt",
+	lastSentAt: "lastSentAt",
+	sendCount: "sendCount",
+	lastSendStatus: "lastSendStatus",
+	lastSendError: "lastSendError",
+	verifiedUserId: "verifiedUserId",
+} as const;
+
+export type EmailVerificationScalarFieldEnum =
+	(typeof EmailVerificationScalarFieldEnum)[keyof typeof EmailVerificationScalarFieldEnum];
 
 export const PasswordHistoryScalarFieldEnum = {
 	id: "id",

@@ -40,6 +40,7 @@ import type {
 import type {
 	ChangePassword200AllOf,
 	ChangePasswordDto,
+	EmailVerificationRequestedDto,
 	ForceResetPassword200AllOf,
 	GetAuthAuditLogStats200AllOf,
 	GetAuthAuditLogs200AllOf,
@@ -1071,7 +1072,7 @@ export const signUp = (
 	options?: SecondParameter<typeof customIdpInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<unknown>(
+	return customIdpInstance<EmailVerificationRequestedDto>(
 		{
 			url: `/api/v1/auth/sign-up`,
 			method: "POST",

@@ -51,6 +51,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | GOAL-021 | ACT-001, ACT-002 | SLA 정책을 설정하여 응답/해결 시간을 추적하고 위반 시 알림을 받는다 | 높음 |
 | GOAL-022 | ACT-001, ACT-002 | 문의 채널(웹, 이메일, 채팅, SMS)을 설정하여 옴니채널 지원을 관리한다 | 중간 |
 | GOAL-023 | ACT-001, ACT-002 | AI 기능(LLM 자동 해결, 응답 초안, 감정 분석)을 활용하여 상담 효율을 높인다 | 높음 |
+| GOAL-024 | ACT-001 | 회원가입 전 이메일 인증 요청과 발송 상태를 조회하고 필요한 경우 인증 메일을 재발송한다 | 높음 |
 
 ## 도메인 목록
 
@@ -59,6 +60,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | 대시보드 | `/dashboard` | 주요 지표 대시보드 | 폴더 존재 |
 | 시설 (Spaces) | `/spaces` | 시설(Ground) CRUD 관리. Space를 구체화하는 물리적 시설 (이름, 주소, 사업자번호 등) | 기획 중 |
 | 회원 (Users) | `/users` | 회원 CRUD 관리 | 목록 구현 완료, 상세/등록/수정 TODO |
+| 이메일 인증 | `/email-verifications` | 회원가입 전 이메일 인증 요청 목록 조회와 재발송 관리. User 생성 전 데이터이므로 FULL_ACCESS 전역 scope로 운영 | 구현 중 |
 | 역할 (Roles) | `/roles` | 역할 정의 및 관리 | 구현 중 |
 | 역할 그룹 | `/roles/groups` | 역할 그룹 관리 | 구현 중 |
 | 역할 카테고리 | `/roles/categories` | 역할 카테고리 관리 | 구현 중 |
@@ -252,6 +254,7 @@ AdminLayout
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-29 | 이메일 인증 관리 도메인과 FULL_ACCESS 전역 scope 목표를 추가 | codex |
 | 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | Timeline/Session 도메인 추가, GOAL-009/010 추가 | req-context-planner |

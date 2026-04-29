@@ -323,6 +323,7 @@ export type UserWhereInput = {
 	userPolicies?: Prisma.UserPolicyListRelationFilter;
 	passwordHistory?: Prisma.PasswordHistoryListRelationFilter;
 	authAuditLogs?: Prisma.AuthAuditLogListRelationFilter;
+	emailVerifications?: Prisma.EmailVerificationListRelationFilter;
 	createdCategories?: Prisma.CategoryListRelationFilter;
 	createdGroups?: Prisma.GroupListRelationFilter;
 	createdContents?: Prisma.ContentListRelationFilter;
@@ -366,6 +367,7 @@ export type UserOrderByWithRelationInput = {
 	userPolicies?: Prisma.UserPolicyOrderByRelationAggregateInput;
 	passwordHistory?: Prisma.PasswordHistoryOrderByRelationAggregateInput;
 	authAuditLogs?: Prisma.AuthAuditLogOrderByRelationAggregateInput;
+	emailVerifications?: Prisma.EmailVerificationOrderByRelationAggregateInput;
 	createdCategories?: Prisma.CategoryOrderByRelationAggregateInput;
 	createdGroups?: Prisma.GroupOrderByRelationAggregateInput;
 	createdContents?: Prisma.ContentOrderByRelationAggregateInput;
@@ -420,6 +422,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
 		userPolicies?: Prisma.UserPolicyListRelationFilter;
 		passwordHistory?: Prisma.PasswordHistoryListRelationFilter;
 		authAuditLogs?: Prisma.AuthAuditLogListRelationFilter;
+		emailVerifications?: Prisma.EmailVerificationListRelationFilter;
 		createdCategories?: Prisma.CategoryListRelationFilter;
 		createdGroups?: Prisma.GroupListRelationFilter;
 		createdContents?: Prisma.ContentListRelationFilter;
@@ -538,6 +541,7 @@ export type UserCreateInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -581,6 +585,7 @@ export type UserUncheckedCreateInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -644,6 +649,7 @@ export type UserUpdateInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -707,6 +713,7 @@ export type UserUncheckedUpdateInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -1031,6 +1038,34 @@ export type UserUpdateOneWithoutAuthAuditLogsNestedInput = {
 			Prisma.UserUpdateWithoutAuthAuditLogsInput
 		>,
 		Prisma.UserUncheckedUpdateWithoutAuthAuditLogsInput
+	>;
+};
+
+export type UserCreateNestedOneWithoutEmailVerificationsInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutEmailVerificationsInput,
+		Prisma.UserUncheckedCreateWithoutEmailVerificationsInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailVerificationsInput;
+	connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserUpdateOneWithoutEmailVerificationsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutEmailVerificationsInput,
+		Prisma.UserUncheckedCreateWithoutEmailVerificationsInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailVerificationsInput;
+	upsert?: Prisma.UserUpsertWithoutEmailVerificationsInput;
+	disconnect?: Prisma.UserWhereInput | boolean;
+	delete?: Prisma.UserWhereInput | boolean;
+	connect?: Prisma.UserWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.UserUpdateToOneWithWhereWithoutEmailVerificationsInput,
+			Prisma.UserUpdateWithoutEmailVerificationsInput
+		>,
+		Prisma.UserUncheckedUpdateWithoutEmailVerificationsInput
 	>;
 };
 
@@ -1575,6 +1610,7 @@ export type UserCreateWithoutUserPoliciesInput = {
 	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -1617,6 +1653,7 @@ export type UserUncheckedCreateWithoutUserPoliciesInput = {
 	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -1707,6 +1744,7 @@ export type UserUpdateWithoutUserPoliciesInput = {
 	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -1769,6 +1807,7 @@ export type UserUncheckedUpdateWithoutUserPoliciesInput = {
 	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -1812,6 +1851,7 @@ export type UserCreateWithoutCreatedAlbumsInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -1854,6 +1894,7 @@ export type UserUncheckedCreateWithoutCreatedAlbumsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -1944,6 +1985,7 @@ export type UserUpdateWithoutCreatedAlbumsInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -2006,6 +2048,7 @@ export type UserUncheckedUpdateWithoutCreatedAlbumsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -2048,6 +2091,7 @@ export type UserCreateWithoutCreatedAssetsInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -2090,6 +2134,7 @@ export type UserUncheckedCreateWithoutCreatedAssetsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -2180,6 +2225,7 @@ export type UserUpdateWithoutCreatedAssetsInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -2242,6 +2288,7 @@ export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -2284,6 +2331,7 @@ export type UserCreateWithoutCreatedFoldersInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -2326,6 +2374,7 @@ export type UserUncheckedCreateWithoutCreatedFoldersInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -2416,6 +2465,7 @@ export type UserUpdateWithoutCreatedFoldersInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -2478,6 +2528,7 @@ export type UserUncheckedUpdateWithoutCreatedFoldersInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -2519,6 +2570,7 @@ export type UserCreateWithoutAuthAuditLogsInput = {
 	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -2561,6 +2613,7 @@ export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
 	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -2651,6 +2704,7 @@ export type UserUpdateWithoutAuthAuditLogsInput = {
 	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -2713,6 +2767,247 @@ export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
 	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput;
+};
+
+export type UserCreateWithoutEmailVerificationsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput;
+};
+
+export type UserUncheckedCreateWithoutEmailVerificationsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput;
+};
+
+export type UserCreateOrConnectWithoutEmailVerificationsInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutEmailVerificationsInput,
+		Prisma.UserUncheckedCreateWithoutEmailVerificationsInput
+	>;
+};
+
+export type UserUpsertWithoutEmailVerificationsInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutEmailVerificationsInput,
+		Prisma.UserUncheckedUpdateWithoutEmailVerificationsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutEmailVerificationsInput,
+		Prisma.UserUncheckedCreateWithoutEmailVerificationsInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutEmailVerificationsInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutEmailVerificationsInput,
+		Prisma.UserUncheckedUpdateWithoutEmailVerificationsInput
+	>;
+};
+
+export type UserUpdateWithoutEmailVerificationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutEmailVerificationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -2755,6 +3050,7 @@ export type UserCreateWithoutPasswordHistoryInput = {
 	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -2797,6 +3093,7 @@ export type UserUncheckedCreateWithoutPasswordHistoryInput = {
 	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -2887,6 +3184,7 @@ export type UserUpdateWithoutPasswordHistoryInput = {
 	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -2949,6 +3247,7 @@ export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
 	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -2992,6 +3291,7 @@ export type UserCreateWithoutCreatedContentsInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
@@ -3034,6 +3334,7 @@ export type UserUncheckedCreateWithoutCreatedContentsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -3124,6 +3425,7 @@ export type UserUpdateWithoutCreatedContentsInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
@@ -3186,6 +3488,7 @@ export type UserUncheckedUpdateWithoutCreatedContentsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -3227,6 +3530,7 @@ export type UserCreateWithoutTenantAccessRequestsInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -3269,6 +3573,7 @@ export type UserUncheckedCreateWithoutTenantAccessRequestsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -3319,6 +3624,7 @@ export type UserCreateWithoutReviewedTenantAccessRequestsInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -3361,6 +3667,7 @@ export type UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -3451,6 +3758,7 @@ export type UserUpdateWithoutTenantAccessRequestsInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -3513,6 +3821,7 @@ export type UserUncheckedUpdateWithoutTenantAccessRequestsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -3595,6 +3904,7 @@ export type UserUpdateWithoutReviewedTenantAccessRequestsInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -3657,6 +3967,7 @@ export type UserUncheckedUpdateWithoutReviewedTenantAccessRequestsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -3699,6 +4010,7 @@ export type UserCreateWithoutTenantsInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -3741,6 +4053,7 @@ export type UserUncheckedCreateWithoutTenantsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -3831,6 +4144,7 @@ export type UserUpdateWithoutTenantsInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -3893,6 +4207,7 @@ export type UserUncheckedUpdateWithoutTenantsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -3935,6 +4250,7 @@ export type UserCreateWithoutClassificationInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -3977,6 +4293,7 @@ export type UserUncheckedCreateWithoutClassificationInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -4067,6 +4384,7 @@ export type UserUpdateWithoutClassificationInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -4129,6 +4447,7 @@ export type UserUncheckedUpdateWithoutClassificationInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -4171,6 +4490,7 @@ export type UserCreateWithoutAssociationsInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -4213,6 +4533,7 @@ export type UserUncheckedCreateWithoutAssociationsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -4303,6 +4624,7 @@ export type UserUpdateWithoutAssociationsInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -4365,6 +4687,7 @@ export type UserUncheckedUpdateWithoutAssociationsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -4407,6 +4730,7 @@ export type UserCreateWithoutProfilesInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -4449,6 +4773,7 @@ export type UserUncheckedCreateWithoutProfilesInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -4539,6 +4864,7 @@ export type UserUpdateWithoutProfilesInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -4601,6 +4927,7 @@ export type UserUncheckedUpdateWithoutProfilesInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -4644,6 +4971,7 @@ export type UserCreateWithoutCreatedThreadsInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -4686,6 +5014,7 @@ export type UserUncheckedCreateWithoutCreatedThreadsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -4776,6 +5105,7 @@ export type UserUpdateWithoutCreatedThreadsInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -4838,6 +5168,7 @@ export type UserUncheckedUpdateWithoutCreatedThreadsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -4880,6 +5211,7 @@ export type UserCreateWithoutInquiryMessagesInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -4922,6 +5254,7 @@ export type UserUncheckedCreateWithoutInquiryMessagesInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -5012,6 +5345,7 @@ export type UserUpdateWithoutInquiryMessagesInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -5074,6 +5408,7 @@ export type UserUncheckedUpdateWithoutInquiryMessagesInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -5116,6 +5451,7 @@ export type UserCreateWithoutInquiryParticipantsInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -5158,6 +5494,7 @@ export type UserUncheckedCreateWithoutInquiryParticipantsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -5248,6 +5585,7 @@ export type UserUpdateWithoutInquiryParticipantsInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -5310,6 +5648,7 @@ export type UserUncheckedUpdateWithoutInquiryParticipantsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -5352,6 +5691,7 @@ export type UserCreateWithoutCustomerInquiriesInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -5394,6 +5734,7 @@ export type UserUncheckedCreateWithoutCustomerInquiriesInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -5444,6 +5785,7 @@ export type UserCreateWithoutAssignedInquiriesInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -5486,6 +5828,7 @@ export type UserUncheckedCreateWithoutAssignedInquiriesInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -5576,6 +5919,7 @@ export type UserUpdateWithoutCustomerInquiriesInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -5638,6 +5982,7 @@ export type UserUncheckedUpdateWithoutCustomerInquiriesInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -5720,6 +6065,7 @@ export type UserUpdateWithoutAssignedInquiriesInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -5782,6 +6128,7 @@ export type UserUncheckedUpdateWithoutAssignedInquiriesInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -5824,6 +6171,7 @@ export type UserCreateWithoutCreatedRoutinesInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -5866,6 +6214,7 @@ export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -5956,6 +6305,7 @@ export type UserUpdateWithoutCreatedRoutinesInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -6018,6 +6368,7 @@ export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -6060,6 +6411,7 @@ export type UserCreateWithoutCreatedTasksInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -6102,6 +6454,7 @@ export type UserUncheckedCreateWithoutCreatedTasksInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -6192,6 +6545,7 @@ export type UserUpdateWithoutCreatedTasksInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -6254,6 +6608,7 @@ export type UserUncheckedUpdateWithoutCreatedTasksInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -6296,6 +6651,7 @@ export type UserCreateWithoutCreatedTimelinesInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -6338,6 +6694,7 @@ export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -6428,6 +6785,7 @@ export type UserUpdateWithoutCreatedTimelinesInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -6490,6 +6848,7 @@ export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -6532,6 +6891,7 @@ export type UserCreateWithoutCreatedCategoriesInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
@@ -6574,6 +6934,7 @@ export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -6664,6 +7025,7 @@ export type UserUpdateWithoutCreatedCategoriesInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
@@ -6726,6 +7088,7 @@ export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -6768,6 +7131,7 @@ export type UserCreateWithoutCreatedGroupsInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
@@ -6810,6 +7174,7 @@ export type UserUncheckedCreateWithoutCreatedGroupsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -6900,6 +7265,7 @@ export type UserUpdateWithoutCreatedGroupsInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
@@ -6962,6 +7328,7 @@ export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -7004,6 +7371,7 @@ export type UserCreateWithoutCreatedSafeWalletsInput = {
 	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
@@ -7046,6 +7414,7 @@ export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
@@ -7136,6 +7505,7 @@ export type UserUpdateWithoutCreatedSafeWalletsInput = {
 	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
@@ -7198,6 +7568,7 @@ export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
 	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -7227,6 +7598,7 @@ export type UserCountOutputType = {
 	userPolicies: number;
 	passwordHistory: number;
 	authAuditLogs: number;
+	emailVerifications: number;
 	createdCategories: number;
 	createdGroups: number;
 	createdContents: number;
@@ -7260,6 +7632,7 @@ export type UserCountOutputTypeSelect<
 	userPolicies?: boolean | UserCountOutputTypeCountUserPoliciesArgs;
 	passwordHistory?: boolean | UserCountOutputTypeCountPasswordHistoryArgs;
 	authAuditLogs?: boolean | UserCountOutputTypeCountAuthAuditLogsArgs;
+	emailVerifications?: boolean | UserCountOutputTypeCountEmailVerificationsArgs;
 	createdCategories?: boolean | UserCountOutputTypeCountCreatedCategoriesArgs;
 	createdGroups?: boolean | UserCountOutputTypeCountCreatedGroupsArgs;
 	createdContents?: boolean | UserCountOutputTypeCountCreatedContentsArgs;
@@ -7370,6 +7743,16 @@ export type UserCountOutputTypeCountAuthAuditLogsArgs<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	where?: Prisma.AuthAuditLogWhereInput;
+};
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountEmailVerificationsArgs<
+	ExtArgs extends
+		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+	where?: Prisma.EmailVerificationWhereInput;
 };
 
 /**
@@ -7556,6 +7939,7 @@ export type UserSelect<
 		userPolicies?: boolean | Prisma.User$userPoliciesArgs<ExtArgs>;
 		passwordHistory?: boolean | Prisma.User$passwordHistoryArgs<ExtArgs>;
 		authAuditLogs?: boolean | Prisma.User$authAuditLogsArgs<ExtArgs>;
+		emailVerifications?: boolean | Prisma.User$emailVerificationsArgs<ExtArgs>;
 		createdCategories?: boolean | Prisma.User$createdCategoriesArgs<ExtArgs>;
 		createdGroups?: boolean | Prisma.User$createdGroupsArgs<ExtArgs>;
 		createdContents?: boolean | Prisma.User$createdContentsArgs<ExtArgs>;
@@ -7686,6 +8070,7 @@ export type UserInclude<
 	userPolicies?: boolean | Prisma.User$userPoliciesArgs<ExtArgs>;
 	passwordHistory?: boolean | Prisma.User$passwordHistoryArgs<ExtArgs>;
 	authAuditLogs?: boolean | Prisma.User$authAuditLogsArgs<ExtArgs>;
+	emailVerifications?: boolean | Prisma.User$emailVerificationsArgs<ExtArgs>;
 	createdCategories?: boolean | Prisma.User$createdCategoriesArgs<ExtArgs>;
 	createdGroups?: boolean | Prisma.User$createdGroupsArgs<ExtArgs>;
 	createdContents?: boolean | Prisma.User$createdContentsArgs<ExtArgs>;
@@ -7727,6 +8112,7 @@ export type $UserPayload<
 		userPolicies: Prisma.$UserPolicyPayload<ExtArgs>[];
 		passwordHistory: Prisma.$PasswordHistoryPayload<ExtArgs>[];
 		authAuditLogs: Prisma.$AuthAuditLogPayload<ExtArgs>[];
+		emailVerifications: Prisma.$EmailVerificationPayload<ExtArgs>[];
 		createdCategories: Prisma.$CategoryPayload<ExtArgs>[];
 		createdGroups: Prisma.$GroupPayload<ExtArgs>[];
 		createdContents: Prisma.$ContentPayload<ExtArgs>[];
@@ -8449,6 +8835,19 @@ export interface Prisma__UserClient<
 	): Prisma.PrismaPromise<
 		| runtime.Types.Result.GetResult<
 				Prisma.$AuthAuditLogPayload<ExtArgs>,
+				T,
+				"findMany",
+				GlobalOmitOptions
+		  >
+		| Null
+	>;
+	emailVerifications<
+		T extends Prisma.User$emailVerificationsArgs<ExtArgs> = {},
+	>(
+		args?: Prisma.Subset<T, Prisma.User$emailVerificationsArgs<ExtArgs>>,
+	): Prisma.PrismaPromise<
+		| runtime.Types.Result.GetResult<
+				Prisma.$EmailVerificationPayload<ExtArgs>,
 				T,
 				"findMany",
 				GlobalOmitOptions
@@ -9386,6 +9785,37 @@ export type User$authAuditLogsArgs<
 	distinct?:
 		| Prisma.AuthAuditLogScalarFieldEnum
 		| Prisma.AuthAuditLogScalarFieldEnum[];
+};
+
+/**
+ * User.emailVerifications
+ */
+export type User$emailVerificationsArgs<
+	ExtArgs extends
+		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+	/**
+	 * Select specific fields to fetch from the EmailVerification
+	 */
+	select?: Prisma.EmailVerificationSelect<ExtArgs> | null;
+	/**
+	 * Omit specific fields from the EmailVerification
+	 */
+	omit?: Prisma.EmailVerificationOmit<ExtArgs> | null;
+	/**
+	 * Choose, which related nodes to fetch as well
+	 */
+	include?: Prisma.EmailVerificationInclude<ExtArgs> | null;
+	where?: Prisma.EmailVerificationWhereInput;
+	orderBy?:
+		| Prisma.EmailVerificationOrderByWithRelationInput
+		| Prisma.EmailVerificationOrderByWithRelationInput[];
+	cursor?: Prisma.EmailVerificationWhereUniqueInput;
+	take?: number;
+	skip?: number;
+	distinct?:
+		| Prisma.EmailVerificationScalarFieldEnum
+		| Prisma.EmailVerificationScalarFieldEnum[];
 };
 
 /**

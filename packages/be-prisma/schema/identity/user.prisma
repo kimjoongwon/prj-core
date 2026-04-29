@@ -69,6 +69,7 @@ model User {
   userPolicies        UserPolicy[]
   passwordHistory     PasswordHistory[]
   authAuditLogs       AuthAuditLog[]
+  emailVerifications  EmailVerification[]
   // Creator 관계
   createdCategories   Category[]
   createdGroups       Group[]
