@@ -359,6 +359,22 @@ export function getActionGroupColor(
 	}
 }
 
+/** 액션 그룹 코드를 운영자가 이해하기 쉬운 표시 라벨로 변환합니다. */
+export function getActionGroupLabel(group?: string) {
+	switch (group) {
+		case "crud":
+			return "CRUD";
+		case "visibility":
+			return "표시/마스킹";
+		case "bulk":
+			return "일괄";
+		case "workflow":
+			return "워크플로우";
+		default:
+			return group;
+	}
+}
+
 /** 초 단위 duration을 화면 표시에 맞는 한국어 문자열로 변환합니다. */
 export function formatDuration(seconds: number) {
 	const minutes = Math.floor(seconds / 60);

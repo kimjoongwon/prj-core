@@ -15,22 +15,22 @@ export default observer(function ActionsPageRoute() {
 		search: parseAsString.withDefault(""),
 		group: parseAsString.withDefault(""),
 	});
-	const { data: response, isLoading } = useGetActions({
-		group: queryStates.group || undefined,
-	});
-
-	const totalCount = response?.meta?.total ?? response?.data?.length ?? 0;
+	const { data: response, isLoading } = useGetActions(undefined);
+	const onClickCreateButton = () => {
+		router.push("/actions/new" as Route);
+	};
+	const onClickActionRow = (actionId: string) => {
+		router.push(`/actions/${actionId}` as Route);
+	};
 
 	return (
 		<ActionListPage
 			actions={response?.data}
-			totalCount={totalCount}
 			isLoading={isLoading}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
-			onClickCreateButton={() => {
-				router.push("/actions/new" as Route);
-			}}
+			onClickCreateButton={onClickCreateButton}
+			onClickActionRow={onClickActionRow}
 		/>
 	);
 });

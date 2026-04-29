@@ -12,7 +12,22 @@ test.describe("Action 목록 페이지", () => {
 		test("페이지 타이틀이 표시되어야 한다", async ({ page }) => {
 			// Then: 타이틀 확인
 			await expect(
-				page.getByRole("heading", { name: "Action 목록" }),
+				page.getByRole("heading", { name: "권한 액션 목록" }),
+			).toBeVisible();
+		});
+
+		test("권한 액션의 맥락 안내가 표시되어야 한다", async ({ page }) => {
+			await expect(
+				page.getByRole("heading", { name: "권한 액션 카탈로그" }),
+			).toBeVisible();
+			await expect(
+				page.getByText("액션은 역할과 정책에서 허용할 동작 단위입니다."),
+			).toBeVisible();
+			await expect(
+				page.getByText("Ability = 대상 + 액션", { exact: false }),
+			).toBeVisible();
+			await expect(
+				page.getByText("시스템 액션은 기본 제공 항목", { exact: false }),
 			).toBeVisible();
 		});
 
@@ -44,23 +59,23 @@ test.describe("Action 목록 페이지", () => {
 			await expect(
 				page.getByRole("columnheader", { name: "분류" }),
 			).toBeVisible();
+			await expect(
+				page.getByRole("columnheader", { name: "순서" }),
+			).toHaveCount(0);
 		});
 
-		test("그룹별 Chip이 올바르게 표시되어야 한다", async ({ page }) => {
-			// Then: crud 그룹 Chip 표시
+		test("그룹별 Chip이 이해 가능한 라벨로 표시되어야 한다", async ({
+			page,
+		}) => {
 			const grid = page.getByRole("grid");
 			await expect(
-				grid.getByRole("gridcell", { name: "crud" }).first(),
+				grid.getByRole("gridcell", { name: "CRUD" }).first(),
 			).toBeVisible();
-
-			// Then: visibility 그룹 Chip 표시
 			await expect(
-				grid.getByRole("gridcell", { name: "visibility" }).first(),
+				grid.getByRole("gridcell", { name: "표시/마스킹" }).first(),
 			).toBeVisible();
-
-			// Then: workflow 그룹 Chip 표시
 			await expect(
-				grid.getByRole("gridcell", { name: "workflow" }).first(),
+				grid.getByRole("gridcell", { name: "워크플로우" }).first(),
 			).toBeVisible();
 		});
 	});
@@ -102,17 +117,78 @@ test.describe("Action 목록 페이지", () => {
 
 			// Then: 검색 입력란 확인
 			await expect(
-				page.getByRole("textbox", { name: "이름으로 검색..." }),
+				page.getByRole("textbox", { name: "액션명 또는 표시명 검색" }),
 			).toBeVisible();
 		});
 
-		test("등록 버튼이 존재해야 한다", async ({ page }) => {
+		test("액션 등록 버튼이 존재해야 한다", async ({ page }) => {
 			// Given: Action 목록 페이지
 			await page.goto("./actions");
 			await page.waitForLoadState("networkidle");
 
 			// Then: 등록 버튼 확인
-			await expect(page.getByRole("button", { name: "등록" })).toBeVisible();
+			await expect(
+				page.getByRole("button", { name: "액션 등록" }),
+			).toBeVisible();
+		});
+
+		test("검색어로 액션 목록을 좁혀볼 수 있어야 한다", async ({ page }) => {
+			await page.goto("./actions");
+			await page.waitForLoadState("networkidle");
+
+			const searchInput = page.getByRole("textbox", {
+				name: "액션명 또는 표시명 검색",
+			});
+			await searchInput.fill("마스킹");
+			await searchInput.press("Enter");
+
+			const grid = page.getByRole("grid");
+			await expect(
+				grid.getByRole("rowheader", { name: "read:masked:email" }),
+			).toBeVisible();
+			await expect(
+				grid.getByRole("rowheader", { name: "create", exact: true }),
+			).toHaveCount(0);
+		});
+	});
+
+	// ── 그룹 필터와 상세 진입 ──
+
+	test.describe("그룹 필터와 상세 진입", () => {
+		test("그룹 탭으로 워크플로우 액션만 볼 수 있어야 한다", async ({
+			page,
+		}) => {
+			await page.goto("./actions");
+			await page.waitForLoadState("networkidle");
+
+			await page.getByRole("tab", { name: "워크플로우" }).click();
+
+			const grid = page.getByRole("grid");
+			await expect(
+				grid.getByRole("rowheader", { name: "approve", exact: true }),
+			).toBeVisible();
+			await expect(
+				grid.getByRole("rowheader", { name: "create", exact: true }),
+			).toHaveCount(0);
+		});
+
+		test("상세 버튼으로 액션 상세 화면에 진입할 수 있어야 한다", async ({
+			page,
+		}) => {
+			await page.goto("./actions");
+			await page.waitForLoadState("networkidle");
+
+			const grid = page.getByRole("grid");
+			const createRow = grid.getByRole("row").filter({
+				has: grid.getByRole("rowheader", {
+					name: "create",
+					exact: true,
+				}),
+			});
+			await expect(createRow).toBeVisible();
+			await createRow.getByRole("button", { name: "상세" }).click();
+
+			await expect(page).toHaveURL(/\/admin\/actions\/[^/]+$/);
 		});
 	});
 

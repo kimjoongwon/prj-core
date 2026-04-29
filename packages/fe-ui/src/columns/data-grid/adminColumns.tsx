@@ -53,6 +53,7 @@ import {
 	formatAssetBytes,
 	formatDuration,
 	getActionGroupColor,
+	getActionGroupLabel,
 	getAssetKindLabel,
 	getAssetStatusColor,
 	getAssetStatusLabel,
@@ -119,16 +120,16 @@ export const actionRemovedAtColumn = createRemovedAtStatusColumn<ActionDto>({
 /** Action 목록 페이지용 컬럼 조합을 생성합니다. */
 export function buildActionTableColumns<
 	TRow extends {
+		id: string;
 		name: string;
 		displayName?: string | null;
 		group?: string | null;
-		order: number;
 		isSystem: boolean;
 		createdAt: string | Date | null;
 		removedAt?: string | null;
 	},
->() {
-	return buildColumns<TRow>(
+>(options: { onClickDetailButton?: (row: TRow) => void } = {}) {
+	const columns = buildColumns<TRow>(
 		createNameColumn<TRow>({
 			fieldKey: "actionKey",
 			accessorKey: COLUMN_FIELDS.name,
@@ -146,15 +147,11 @@ export function buildActionTableColumns<
 				const group = getValue() as string | undefined;
 				return (
 					<ChipCell
-						label={group}
+						label={getActionGroupLabel(group)}
 						color={group ? getActionGroupColor(group) : undefined}
 					/>
 				);
 			},
-		}),
-		createPresetColumn<TRow>("order", {
-			size: 80,
-			align: "center",
 		}),
 		createPresetColumn<TRow>("isSystem", {
 			size: 100,
@@ -174,6 +171,28 @@ export function buildActionTableColumns<
 		}),
 		createRemovedAtStatusColumn<TRow>({
 			size: 100,
+		}),
+	);
+
+	if (!options.onClickDetailButton) {
+		return columns;
+	}
+
+	return buildColumns<TRow>(
+		...columns,
+		createActionsColumn<TRow>({
+			label: "상세",
+			size: 100,
+			cell: ({ row }) => (
+				<ActionButtonCell
+					variant="flat"
+					onPress={() => {
+						options.onClickDetailButton?.(row.original);
+					}}
+				>
+					상세
+				</ActionButtonCell>
+			),
 		}),
 	);
 }
