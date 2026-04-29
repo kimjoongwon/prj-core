@@ -8,6 +8,7 @@ import {
 	adminFullAccessAbilitySeedData,
 	adminManageMenuAccessAbilitySeedData,
 	legacyAdminMenuSubjectNames,
+	legacyAdminPageSubjectNames,
 	adminMenuSubjectSeedData,
 	adminPageSubjectSeedData,
 } from "./admin-permissions";
@@ -82,7 +83,25 @@ describe("admin permission derived seeds", () => {
 
 	it("keeps legacy admin prune targets separate from the current catalog", () => {
 		expect(legacyAdminMenuSubjectNames).toEqual(
-			expect.arrayContaining(["menu:schedules", "menu:files", "menu:settings"]),
+			expect.arrayContaining([
+				"menu:schedules",
+				"menu:files",
+				"menu:settings",
+				"menu:role-groups:list",
+				"menu:role-categories:list",
+			]),
+		);
+		expect(legacyAdminPageSubjectNames).toEqual(
+			expect.arrayContaining([
+				"page:role-groups:list",
+				"page:role-groups:new",
+				"page:role-groups:detail",
+				"page:role-groups:edit",
+				"page:role-categories:list",
+				"page:role-categories:new",
+				"page:role-categories:detail",
+				"page:role-categories:edit",
+			]),
 		);
 		expect(legacyAdminMenuSubjectNames).not.toContain("menu:assets");
 		expect(legacyAdminMenuSubjectNames).not.toContain("menu:oidc-clients");

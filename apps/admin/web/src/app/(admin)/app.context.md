@@ -31,7 +31,6 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 |----|-------|------|----------|
 | GOAL-001 | ACT-001, ACT-002 | 회원을 목록 조회/검색/등록/수정/삭제하여 관리한다 | 높음 |
 | GOAL-002 | ACT-001, ACT-002 | 역할(Role), 권한(Ability), 액션(Action), 대상(Subject)을 정의하여 접근 제어를 관리한다 | 높음 |
-| GOAL-003 | ACT-001, ACT-002 | 역할 그룹(Group)과 카테고리(Category)를 관리하여 역할을 체계적으로 분류한다 | 중간 |
 | GOAL-004 | ACT-001, ACT-002 | 메시지 템플릿(SMS, 이메일, 푸시, HTML)을 생성/관리한다 | 중간 |
 | GOAL-005 | ACT-001, ACT-002 | 대시보드에서 주요 지표를 한눈에 확인한다 | 높음 |
 | GOAL-006 | ACT-001 | IDP(Identity Provider) 관리 콘솔에 접근하여 인증 설정을 관리한다 | 낮음 |
@@ -62,8 +61,6 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | 회원 (Users) | `/users` | 회원 CRUD 관리 | 목록 구현 완료, 상세/등록/수정 TODO |
 | 이메일 인증 | `/email-verifications` | 회원가입 전 이메일 인증 요청 목록 조회와 재발송 관리. User 생성 전 데이터이므로 FULL_ACCESS 전역 scope로 운영 | 구현 중 |
 | 역할 (Roles) | `/roles` | 역할 정의 및 관리 | 구현 중 |
-| 역할 그룹 | `/roles/groups` | 역할 그룹 관리 | 구현 중 |
-| 역할 카테고리 | `/roles/categories` | 역할 카테고리 관리 | 구현 중 |
 | 권한 정의 (Abilities) | `/abilities` | 권한(Ability) CRUD 관리 | 구현 중 |
 | 액션 (Actions) | `/actions` | 액션 CRUD 관리 | 구현 중 |
 | 대상 (Subjects) | `/subjects` | 대상 조회 관리 | 구현 중 |
