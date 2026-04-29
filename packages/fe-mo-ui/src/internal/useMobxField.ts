@@ -31,20 +31,29 @@ export function useMobxField<TState extends object, TValue>(
 	) as unknown as (nextValue: TValue) => void;
 
 	useEffect(() => {
-		localState.value = getPathValue(state, path, fallback);
+		const setLocalValue = action(
+			(nextValue: TValue) => {
+				localState.value = nextValue;
+			},
+			`useMobxField.setLocalValue[${path}]`,
+		) as unknown as (nextValue: TValue) => void;
+		const setStateValue = action(
+			(nextValue: TValue) => {
+				setPathValue(state as Record<string, unknown>, path, nextValue);
+			},
+			`useMobxField.setStateValue[${path}]`,
+		) as unknown as (nextValue: TValue) => void;
+
+		setLocalValue(getPathValue(state, path, fallback));
 
 		const fromLocalDisposer = reaction(
 			() => localState.value,
-			(nextValue) => {
-				setPathValue(state as Record<string, unknown>, path, nextValue);
-			},
+			setStateValue,
 		);
 
 		const fromStateDisposer = reaction(
 			() => getPathValue(state, path, fallback),
-			(nextValue) => {
-				localState.value = nextValue;
-			},
+			setLocalValue,
 		);
 
 		return () => {

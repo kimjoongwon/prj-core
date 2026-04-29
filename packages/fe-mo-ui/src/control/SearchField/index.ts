@@ -11,6 +11,11 @@ import {
 	searchFieldClassNames,
 	useSearchField,
 } from "heroui-native/search-field";
+import {
+	type FieldChromeProps,
+	renderTextFieldChrome,
+	resolveFieldInvalid,
+} from "../../internal/fieldChrome";
 import { type MobxProps, useMobxField } from "../../internal/useMobxField";
 
 type HeroSearchFieldProps = ComponentPropsWithoutRef<typeof HeroSearchField>;
@@ -62,18 +67,55 @@ PureSearchFieldComponent.displayName = "PureSearchField";
 
 export interface SearchFieldProps<TState extends object = Record<string, unknown>>
 	extends MobxProps<TState>,
+		FieldChromeProps,
 		Omit<PureSearchFieldProps, "onChange" | "value"> {}
 
 const SearchFieldComponent = observer(
 	<TState extends object>(props: SearchFieldProps<TState>) => {
-		const { path, state, ...rest } = props;
+		const {
+			description,
+			descriptionProps,
+			error,
+			fieldErrorProps,
+			isDisabled,
+			isInvalid,
+			isRequired,
+			label,
+			labelProps,
+			path,
+			state,
+			...rest
+		} = props;
 		const field = useMobxField({ fallback: "", path, state });
+		const fieldChrome = {
+			description,
+			descriptionProps,
+			error,
+			fieldErrorProps,
+			isDisabled,
+			isInvalid,
+			isRequired,
+			label,
+			labelProps,
+		};
+		const resolvedInvalid = resolveFieldInvalid(fieldChrome);
 
-		return createElement(PureSearchFieldComponent, {
+		const control = createElement(PureSearchFieldComponent, {
 			...rest,
+			isDisabled,
+			isInvalid: resolvedInvalid,
+			isRequired,
 			onChange: field.setValue,
 			value: field.value,
 		});
+
+		return renderTextFieldChrome(
+			{
+				...fieldChrome,
+				isInvalid: resolvedInvalid,
+			},
+			control,
+		);
 	},
 );
 

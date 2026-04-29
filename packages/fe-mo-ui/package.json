@@ -48,7 +48,7 @@
     "@types/react": "catalog:",
     "react": "catalog:",
     "react-native": "0.83.4",
-    "react-test-renderer": "19.2.0",
+    "react-test-renderer": "19.2.3",
     "typescript": "catalog:"
   }
 }

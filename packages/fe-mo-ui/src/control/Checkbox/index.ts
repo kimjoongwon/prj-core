@@ -10,6 +10,11 @@ import {
 	checkboxClassNames,
 	useCheckbox,
 } from "heroui-native/checkbox";
+import {
+	type FieldChromeProps,
+	renderControlFieldChrome,
+	resolveFieldInvalid,
+} from "../../internal/fieldChrome";
 import { type MobxProps, useMobxField } from "../../internal/useMobxField";
 
 type HeroCheckboxProps = ComponentPropsWithoutRef<typeof HeroCheckbox>;
@@ -24,7 +29,7 @@ const PureCheckboxComponent = forwardRef<
 	PureCheckboxProps
 >(({ onChange, ...rest }, ref) =>
 	createElement(HeroCheckbox, {
-		...rest,
+		...(rest as HeroCheckboxProps),
 		onSelectedChange: onChange,
 		ref,
 	}),
@@ -34,16 +39,59 @@ PureCheckboxComponent.displayName = "PureCheckbox";
 
 export interface CheckboxProps<TState extends object = Record<string, unknown>>
 	extends MobxProps<TState>,
+		FieldChromeProps,
 		Omit<PureCheckboxProps, "isSelected" | "onChange"> {}
 
 const CheckboxComponent = observer(<TState extends object>(props: CheckboxProps<TState>) => {
-	const { path, state, ...rest } = props;
+	const {
+		description,
+		descriptionProps,
+		error,
+		fieldErrorProps,
+		isDisabled,
+		isInvalid,
+		isRequired,
+		label,
+		labelProps,
+		path,
+		state,
+		...rest
+	} = props;
 	const field = useMobxField({ fallback: false, path, state });
+	const fieldChrome = {
+		description,
+		descriptionProps,
+		error,
+		fieldErrorProps,
+		isDisabled,
+		isInvalid,
+		isRequired,
+		label,
+		labelProps,
+	};
+	const resolvedInvalid = resolveFieldInvalid(fieldChrome);
+	const isSelected = Boolean(field.value);
 
-	return createElement(PureCheckboxComponent, {
+	const control = createElement(PureCheckboxComponent, {
 		...rest,
-		isSelected: Boolean(field.value),
+		isDisabled,
+		isInvalid: resolvedInvalid,
+		isSelected,
 		onChange: field.setValue,
+	});
+
+	return renderControlFieldChrome({
+		...fieldChrome,
+		control,
+		controlFieldProps: {
+			isDisabled,
+			isInvalid: resolvedInvalid,
+			isRequired,
+			isSelected,
+			onSelectedChange: field.setValue,
+		},
+		indicatorVariant: "checkbox",
+		isInvalid: resolvedInvalid,
 	});
 });
 

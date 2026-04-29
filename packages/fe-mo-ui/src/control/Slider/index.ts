@@ -7,6 +7,11 @@ import {
 } from "react";
 import { observer } from "mobx-react-lite";
 import { Slider as HeroSlider, sliderClassNames, useSlider } from "heroui-native/slider";
+import {
+	type FieldChromeProps,
+	renderTextFieldChrome,
+	resolveFieldInvalid,
+} from "../../internal/fieldChrome";
 import { type MobxProps, useMobxField } from "../../internal/useMobxField";
 
 type HeroSliderProps = ComponentPropsWithoutRef<typeof HeroSlider>;
@@ -69,20 +74,49 @@ PureSliderComponent.displayName = "PureSlider";
 
 export interface SliderProps<TState extends object = Record<string, unknown>>
 	extends MobxProps<TState>,
+		FieldChromeProps,
 		Omit<PureSliderProps, "onChange" | "onChangeEnd" | "value"> {}
 
 const SliderComponent = observer(<TState extends object>(props: SliderProps<TState>) => {
-	const { defaultValue, minValue = 0, path, state, ...rest } = props;
+	const {
+		defaultValue,
+		description,
+		descriptionProps,
+		error,
+		fieldErrorProps,
+		isDisabled,
+		isInvalid,
+		isRequired,
+		label,
+		labelProps,
+		minValue = 0,
+		path,
+		state,
+		...rest
+	} = props;
 	const fallback = defaultValue ?? minValue;
 	const field = useMobxField<TState, number | number[]>({
 		fallback,
 		path,
 		state,
 	});
+	const fieldChrome = {
+		description,
+		descriptionProps,
+		error,
+		fieldErrorProps,
+		isDisabled,
+		isInvalid,
+		isRequired,
+		label,
+		labelProps,
+	};
+	const resolvedInvalid = resolveFieldInvalid(fieldChrome);
 
-	return createElement(PureSliderComponent, {
+	const control = createElement(PureSliderComponent, {
 		...rest,
 		defaultValue,
+		isDisabled,
 		onChange: (nextValue) => {
 			field.setValue(nextValue);
 		},
@@ -91,6 +125,14 @@ const SliderComponent = observer(<TState extends object>(props: SliderProps<TSta
 		},
 		value: field.value,
 	});
+
+	return renderTextFieldChrome(
+		{
+			...fieldChrome,
+			isInvalid: resolvedInvalid,
+		},
+		control,
+	);
 });
 
 SliderComponent.displayName = "Slider";

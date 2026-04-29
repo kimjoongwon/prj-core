@@ -13,6 +13,11 @@ import {
 	useSelectAnimation,
 	useSelectItem,
 } from "heroui-native/select";
+import {
+	type FieldChromeProps,
+	renderTextFieldChrome,
+	resolveFieldInvalid,
+} from "../../internal/fieldChrome";
 import { type MobxProps, useMobxField } from "../../internal/useMobxField";
 
 type HeroSelectProps = ComponentPropsWithoutRef<typeof HeroSelect>;
@@ -155,19 +160,55 @@ PureSelectComponent.displayName = "PureSelect";
 
 export interface SelectProps<TState extends object = Record<string, unknown>>
 	extends MobxProps<TState>,
+		FieldChromeProps,
 		Omit<PureSelectProps, "onChange" | "value"> {}
 
 const SelectComponent = observer(<TState extends object>(props: SelectProps<TState>) => {
-	const { options = [], path, state, ...rest } = props;
+	const {
+		description,
+		descriptionProps,
+		error,
+		fieldErrorProps,
+		isDisabled,
+		isInvalid,
+		isRequired,
+		label,
+		labelProps,
+		options = [],
+		path,
+		state,
+		...rest
+	} = props;
 	const fallback = options[0]?.value ?? "";
 	const field = useMobxField({ fallback, path, state });
+	const fieldChrome = {
+		description,
+		descriptionProps,
+		error,
+		fieldErrorProps,
+		isDisabled,
+		isInvalid,
+		isRequired,
+		label,
+		labelProps,
+	};
+	const resolvedInvalid = resolveFieldInvalid(fieldChrome);
 
-	return createElement(PureSelectComponent, {
+	const control = createElement(PureSelectComponent, {
 		...rest,
+		isDisabled,
 		onChange: field.setValue,
 		options,
 		value: field.value,
 	});
+
+	return renderTextFieldChrome(
+		{
+			...fieldChrome,
+			isInvalid: resolvedInvalid,
+		},
+		control,
+	);
 });
 
 SelectComponent.displayName = "Select";
