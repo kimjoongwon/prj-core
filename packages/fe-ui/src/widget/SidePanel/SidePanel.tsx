@@ -42,6 +42,7 @@ interface NavItemComponentProps {
 	item: NavItem;
 	isSelected: boolean;
 	isExpanded: boolean;
+	shouldUseSelectedFallback: boolean;
 	selectedSubItemId: string | null;
 	onNavItemClick: (navItemId: string) => void;
 	onSubNavItemClick: (subNavItemId: string) => void;
@@ -54,6 +55,7 @@ const NavItemComponent = observer(function NavItemComponent({
 	item,
 	isSelected,
 	isExpanded,
+	shouldUseSelectedFallback,
 	selectedSubItemId,
 	onNavItemClick,
 	onSubNavItemClick,
@@ -63,7 +65,8 @@ const NavItemComponent = observer(function NavItemComponent({
 }: NavItemComponentProps) {
 	const hasChildren = item.hasChildren;
 	const description = getItemDescription?.(item);
-	const visualExpanded = hasChildren && (isExpanded || isSelected);
+	const visualExpanded =
+		hasChildren && (isExpanded || (shouldUseSelectedFallback && isSelected));
 
 	const handleClick = () => {
 		if (hasChildren) {
@@ -171,6 +174,7 @@ export const SidePanel = observer(function SidePanel({
 	renderItemIcon,
 	getItemDescription,
 }: SidePanelProps) {
+	const hasExpandedNavItem = expandedNavItemIds.size > 0;
 	const defaultHeaderContent =
 		logo || logoDescription ? (
 			<div className="border-b border-slate-200/70 px-4 pb-4 pt-5 dark:border-white/10">
@@ -198,6 +202,7 @@ export const SidePanel = observer(function SidePanel({
 								item={item}
 								isSelected={selectedNavItem?.id === item.id}
 								isExpanded={expandedNavItemIds.has(item.id)}
+								shouldUseSelectedFallback={!hasExpandedNavItem}
 								selectedSubItemId={selectedSubNavItem?.id ?? null}
 								onNavItemClick={onNavItemClick}
 								onSubNavItemClick={onSubNavItemClick}

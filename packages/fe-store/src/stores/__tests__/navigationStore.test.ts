@@ -435,6 +435,19 @@ describe("NavigationStore", () => {
 			// Then
 			expect(navigationStore.isNavItemExpanded("members")).toBe(false);
 		});
+
+		it("다른 1depth 아이템을 펼칠 때 기존 1depth 아이템은 닫아야 한다", () => {
+			// Given
+			navigationStore.toggleNavItem("members");
+
+			// When
+			navigationStore.toggleNavItem("settings");
+
+			// Then
+			expect(Array.from(navigationStore.expandedNavItemIds)).toEqual([
+				"settings",
+			]);
+		});
 	});
 
 	describe("expandNavItem", () => {

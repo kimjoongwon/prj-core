@@ -95,6 +95,7 @@ test.describe("사이드바 메뉴 회귀", () => {
 		await expect(usersListMenuButton).toBeVisible();
 		await rolesMenuButton.click();
 		await expect(rolesListMenuButton).toBeVisible();
+		await expect(usersListMenuButton).toBeHidden();
 		await rolesListMenuButton.click();
 
 		// Then: 선택된 하위 메뉴의 1depth 부모만 열려 있고, 이전 부모는 닫힘
