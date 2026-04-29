@@ -1,7 +1,7 @@
 import type {
 	AbilityChecker,
-	NavItemScopeChecker,
 	NavItemConfig,
+	NavItemScopeChecker,
 	NavigationStoreOptions,
 	NavigatorLike,
 } from "@cocrepo/type";
@@ -228,7 +228,8 @@ export class NavigationStore {
 		this.resetAllActive();
 		navItem.setActive(true);
 		this._selectedNavItem = navItem;
-		this._expandedNavItemIds.add(navItem.id);
+		this._selectedSubNavItem = null;
+		this.expandOnlySelectedRoot(navItem);
 
 		const firstPath = navItem.firstChildPath;
 		if (firstPath) {
@@ -270,7 +271,7 @@ export class NavigationStore {
 
 		parentNavItem.setActive(true);
 		this._selectedNavItem = parentNavItem;
-		this._expandedNavItemIds.add(parentNavItem.id);
+		this.expandOnlySelectedRoot(parentNavItem);
 
 		subNavItem.setActive(true);
 		this._selectedSubNavItem = subNavItem;
@@ -337,6 +338,14 @@ export class NavigationStore {
 		for (const navItem of this._items) {
 			navItem.setActive(false);
 			navItem.resetChildrenActive();
+		}
+	}
+
+	private expandOnlySelectedRoot(navItem: NavItem): void {
+		this._expandedNavItemIds.clear();
+
+		if (navItem.hasChildren) {
+			this._expandedNavItemIds.add(navItem.id);
 		}
 	}
 
