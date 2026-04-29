@@ -12,33 +12,65 @@ import {
 	DataGridStateModel,
 	PageTitleBar,
 	Surface,
+	VStack,
 } from "@cocrepo/ui";
+import { Tab, Tabs } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { type Key, useEffect } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
 		type: "search",
 		id: "search",
-		placeholder: "이름으로 검색...",
+		placeholder: "대상명으로 검색...",
 	},
 ];
 
-const rightInputs: InputConfig[] = [
+const SUBJECT_GROUP_FILTER_ALL_KEY = "__all_subjects";
+
+const subjectGroupFilters = [
 	{
-		type: "select",
-		id: "group",
-		placeholder: "분류",
-		props: {
-			defaultValue: "",
-		},
+		key: SUBJECT_GROUP_FILTER_ALL_KEY,
+		label: "전체",
+		description: "등록된 모든 권한 대상을 한 번에 확인합니다.",
 	},
-];
+	{
+		key: "all",
+		label: "공통",
+		description: "모든 화면과 데이터에 넓게 적용되는 공통 권한 대상입니다.",
+	},
+	{
+		key: "entity",
+		label: "데이터",
+		description:
+			"사용자, 역할, 공간처럼 업무 데이터에 접근하는 권한 대상입니다.",
+	},
+	{
+		key: "menu",
+		label: "메뉴",
+		description:
+			"좌측 메뉴나 내비게이션에서 특정 메뉴를 볼 수 있는 대상입니다.",
+	},
+	{
+		key: "page",
+		label: "화면",
+		description: "특정 관리 화면에 들어갈 수 있는지 제어하는 권한 대상입니다.",
+	},
+	{
+		key: "feature",
+		label: "기능",
+		description:
+			"내보내기, 가져오기, 알림 발송처럼 화면 안에서 실행하는 작업입니다.",
+	},
+	{
+		key: "ui",
+		label: "화면 요소",
+		description:
+			"버튼, 탭, 배너처럼 화면 일부를 보거나 사용할 수 있는 대상입니다.",
+	},
+] as const;
 
-export const adminSubjectsPageQueryInputs: InputConfig[] = [
-	...leftInputs,
-	...rightInputs,
-];
+export const adminSubjectsPageQueryInputs: InputConfig[] = [...leftInputs];
 
 export interface SubjectListPageQueryStates extends DataGridQueryStates {
 	take: number;
@@ -50,13 +82,29 @@ export type SubjectListPageSetQueryStates = DataGridSetQueryStates;
 
 export interface SubjectListPageProps {
 	subjects?: SubjectDto[];
-	totalCount: number;
 	isLoading: boolean;
 	queryStates: SubjectListPageQueryStates;
 	setQueryStates: SubjectListPageSetQueryStates;
+	onClickSubject: (subjectId: string) => void;
 }
 
 const subjectTableColumns = buildSubjectTableColumns<SubjectDto>();
+
+function getSubjectGroupFilterKey(group: string) {
+	return group || SUBJECT_GROUP_FILTER_ALL_KEY;
+}
+
+function findSubjectGroupFilter(key: string) {
+	return (
+		subjectGroupFilters.find((filter) => filter.key === key) ??
+		subjectGroupFilters[0]
+	);
+}
+
+function getSubjectGroupQueryValue(key: Key) {
+	const selectedKey = String(key);
+	return selectedKey === SUBJECT_GROUP_FILTER_ALL_KEY ? null : selectedKey;
+}
 
 function filterSubjects(
 	subjects: SubjectDto[],
@@ -83,13 +131,67 @@ function filterSubjects(
 	});
 }
 
+function paginateSubjects(
+	subjects: SubjectDto[],
+	queryStates: SubjectListPageQueryStates,
+) {
+	const start = Math.max(queryStates.skip, 0);
+	const end = start + Math.max(queryStates.take, 1);
+
+	return subjects.slice(start, end);
+}
+
+interface SubjectGroupFilterTabsProps {
+	selectedGroup: string;
+	onChangeGroup: (group: string | null) => void;
+}
+
+const SubjectGroupFilterTabs = observer(
+	({ selectedGroup, onChangeGroup }: SubjectGroupFilterTabsProps) => {
+		const selectedKey = getSubjectGroupFilterKey(selectedGroup);
+		const selectedFilter = findSubjectGroupFilter(selectedKey);
+		const handleSelectionChange = (key: Key) => {
+			onChangeGroup(getSubjectGroupQueryValue(key));
+		};
+
+		return (
+			<VStack gap="block">
+				<Tabs
+					aria-label="대상 유형 필터"
+					selectedKey={selectedKey}
+					onSelectionChange={handleSelectionChange}
+					variant="bordered"
+					color="primary"
+					radius="full"
+					classNames={{
+						tabList: "flex-wrap",
+						tab: "h-9",
+					}}
+				>
+					{subjectGroupFilters.map((filter) => (
+						<Tab key={filter.key} title={filter.label} />
+					))}
+				</Tabs>
+				<div className="rounded-lg border border-divider bg-content2/40 p-4">
+					<div className="text-sm font-semibold text-foreground">
+						{selectedFilter.label} 대상
+					</div>
+					<p className="mt-1 text-sm text-default-600">
+						{selectedFilter.description}
+					</p>
+				</div>
+			</VStack>
+		);
+	},
+);
+
 export const SubjectListPage = observer(
 	({
 		subjects,
-		totalCount,
 		isLoading,
 		queryStates,
 		setQueryStates,
+		onClickSubject,
 	}: SubjectListPageProps) => {
 		const gridState = useLocalObservable(
 			() => new DataGridStateModel({ queryStates, setQueryStates }),
@@ -100,6 +202,14 @@ export const SubjectListPage = observer(
 		}, [gridState, queryStates, setQueryStates]);
 		const subjectRows = subjects ?? [];
 		const filteredSubjects = filterSubjects(subjectRows, queryStates);
+		const visibleSubjects = paginateSubjects(filteredSubjects, queryStates);
+		const totalCount = filteredSubjects.length;
+		const handleRowClick = (subject: SubjectDto) => {
+			onClickSubject(subject.id);
+		};
+		const handleSubjectGroupFilterChange = (group: string | null) => {
+			void setQueryStates({ group, skip: 0 });
+		};
 
 		if (isLoading) {
 			return <SubjectsPageFallback />;
@@ -108,23 +218,29 @@ export const SubjectListPage = observer(
 		return (
 			<div className="space-y-5">
 				<PageTitleBar
-					title="Subject 목록"
-					description="시스템에 등록된 Subject를 조회합니다."
+					title="권한 대상 목록"
+					description="역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다."
 				/>
 				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
-					<DataGrid
-						config={{
-							entity: "Subject",
-							columns: subjectTableColumns,
-							leftInputs,
-							rightInputs,
-							emptyMessage: "조회된 Subject가 없습니다.",
-						}}
-						rows={filteredSubjects}
-						totalCount={totalCount}
-						isLoading={false}
-						state={gridState}
-					/>
+					<VStack gap="section">
+						<SubjectGroupFilterTabs
+							selectedGroup={queryStates.group}
+							onChangeGroup={handleSubjectGroupFilterChange}
+						/>
+						<DataGrid
+							config={{
+								entity: "Subject",
+								columns: subjectTableColumns,
+								leftInputs,
+								onRowClick: handleRowClick,
+								emptyMessage: "조회된 대상이 없습니다.",
+							}}
+							rows={visibleSubjects}
+							totalCount={totalCount}
+							isLoading={false}
+							state={gridState}
+						/>
+					</VStack>
 				</Surface>
 			</div>
 		);
@@ -135,8 +251,8 @@ function SubjectsPageFallback() {
 	return (
 		<div className="space-y-5">
 			<PageTitleBar
-				title="Subject 목록"
-				description="시스템에 등록된 Subject를 조회합니다."
+				title="권한 대상 목록"
+				description="역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다."
 			/>
 			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
 				{null}

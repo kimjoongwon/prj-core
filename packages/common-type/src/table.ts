@@ -151,6 +151,7 @@ export interface InputTypeProps {
 	// Select / MultiSelect
 	options?: SelectOption[];
 	defaultValue?: string | string[];
+	isClearable?: boolean;
 
 	// DateRange
 	queryKeys?: { start: string; end: string };
@@ -247,6 +248,7 @@ export interface ResponsiveConfig<T> {
 // ============================================
 
 declare module "@tanstack/react-table" {
+	// biome-ignore lint/correctness/noUnusedVariables: TanStack module augmentation must keep upstream generic names.
 	interface ColumnMeta<TData extends RowData, TValue> {
 		/** 필수 컬럼 여부 */
 		isRequired?: boolean;

@@ -1,7 +1,7 @@
 "use client";
 
-import type { InputConfig, DataGridState } from "@cocrepo/type";
-import { Select, SelectItem } from "@heroui/react";
+import type { DataGridState, InputConfig } from "@cocrepo/type";
+import { Select, SelectItem, type Selection } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 
 interface SelectInputProps {
@@ -15,20 +15,35 @@ export const SelectInput = observer(({ config, state }: SelectInputProps) => {
 		typeof state.query.values[queryKey] === "string"
 			? (state.query.values[queryKey] as string)
 			: "";
-
 	const options = config.props?.options ?? [];
+	const isClearable = config.props?.isClearable === true;
+
+	const handleSelectionChange = (keys: Selection) => {
+		if (keys === "all") {
+			return;
+		}
+
+		const selected = Array.from(keys)[0]?.toString() ?? "";
+		void state.query.setValues({
+			[queryKey]: selected || null,
+			skip: 0,
+		});
+	};
+
+	const handleClear = () => {
+		void state.query.setValues({
+			[queryKey]: null,
+			skip: 0,
+		});
+	};
 
 	return (
 		<Select
 			placeholder={config.placeholder ?? config.label}
 			selectedKeys={value ? [value] : []}
-			onSelectionChange={(keys) => {
-				const selected = Array.from(keys)[0] as string;
-				void state.query.setValues({
-					[queryKey]: selected || null,
-					skip: 0,
-				});
-			}}
+			onSelectionChange={handleSelectionChange}
+			isClearable={isClearable}
+			onClear={isClearable ? handleClear : undefined}
 			classNames={{
 				base: "min-w-[160px] max-w-xs",
 				trigger: "h-10",

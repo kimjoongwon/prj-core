@@ -241,6 +241,80 @@ export const subjectCreatedAtColumn = createCreatedAtColumn<SubjectDto>({
 
 export const subjectRemovedAtColumn = createRemovedAtStatusColumn<SubjectDto>();
 
+function getSubjectGroupLabel(group?: string | null) {
+	switch (group) {
+		case "all":
+			return "공통";
+		case "entity":
+			return "데이터";
+		case "menu":
+			return "메뉴";
+		case "page":
+			return "화면";
+		case "feature":
+			return "기능";
+		case "ui":
+			return "화면 요소";
+		default:
+			return group ?? "";
+	}
+}
+
+function getSubjectGroupColor(
+	group?: string | null,
+): "default" | "primary" | "secondary" | "success" | "warning" {
+	switch (group) {
+		case "entity":
+			return "primary";
+		case "menu":
+			return "secondary";
+		case "page":
+			return "success";
+		case "feature":
+			return "warning";
+		default:
+			return "default";
+	}
+}
+
+function getSubjectDisplayLabel(subject: {
+	name: string;
+	displayName?: string | null;
+}) {
+	if (subject.displayName) {
+		return subject.displayName;
+	}
+
+	return subject.name.includes(":")
+		? subject.name.split(":").at(-1)!
+		: subject.name;
+}
+
+function getSubjectUsageDescription(subject: {
+	name: string;
+	displayName?: string | null;
+	group?: string | null;
+}) {
+	const label = getSubjectDisplayLabel(subject);
+
+	switch (subject.group) {
+		case "all":
+			return "여러 영역에 공통으로 적용되는 권한 대상입니다.";
+		case "entity":
+			return `${label} 데이터에 대한 조회, 생성, 수정 같은 접근 권한을 제어합니다.`;
+		case "menu":
+			return `${label} 메뉴가 내비게이션에 보이는지 제어합니다.`;
+		case "page":
+			return `${label} 화면에 진입할 수 있는지 제어합니다.`;
+		case "feature":
+			return `${label} 기능을 실행할 수 있는지 제어합니다.`;
+		case "ui":
+			return `${label} 같은 화면 요소를 보거나 사용할 수 있는지 제어합니다.`;
+		default:
+			return "역할과 정책에서 허용 범위를 판단할 때 사용하는 관리 대상입니다.";
+	}
+}
+
 /** Subject 목록 페이지용 컬럼 조합을 생성합니다. */
 export function buildSubjectTableColumns<
 	TRow extends {
@@ -252,15 +326,46 @@ export function buildSubjectTableColumns<
 	},
 >() {
 	return buildColumns<TRow>(
-		createNameColumn<TRow>({
-			fieldKey: "subjectKey",
-			accessorKey: COLUMN_FIELDS.name,
+		createDisplayNameColumn<TRow>({
+			label: "대상",
 			size: 220,
 			isRequired: true,
-			nameVariant: "identifier",
+			cell: ({ row }) => (
+				<div className="flex flex-col">
+					<span className="font-medium text-foreground">
+						{getSubjectDisplayLabel(row.original)}
+					</span>
+					<span className="text-xs text-default-500">
+						{getSubjectGroupLabel(row.original.group)} 권한 대상
+					</span>
+				</div>
+			),
 		}),
-		createDisplayNameColumn<TRow>(),
-		createGroupColumn<TRow>(),
+		createGroupColumn<TRow>({
+			label: "유형",
+			size: 120,
+			align: "center",
+			cell: ({ getValue }) => {
+				const group = getValue() as string | undefined;
+				return (
+					<ChipCell
+						label={getSubjectGroupLabel(group)}
+						color={getSubjectGroupColor(group)}
+					/>
+				);
+			},
+		}),
+		createPresetColumn<TRow>("description", {
+			label: "설명",
+			size: 360,
+			cell: ({ row }) => (
+				<DefaultCell
+					value={getSubjectUsageDescription(row.original)}
+					tone="muted"
+					lineClamp={2}
+				/>
+			),
+		}),
 		createCreatedAtColumn<TRow>({
 			size: 160,
 		}),

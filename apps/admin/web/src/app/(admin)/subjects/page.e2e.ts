@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("Subject 목록 페이지", () => {
+test.describe("권한 대상 목록 페이지", () => {
 	// ── 목록 페이지 렌더링 ──
 
 	test.describe("목록 페이지 렌더링", () => {
@@ -12,58 +12,95 @@ test.describe("Subject 목록 페이지", () => {
 		test("페이지 타이틀이 표시되어야 한다", async ({ page }) => {
 			// Then: 타이틀 확인
 			await expect(
-				page.getByRole("heading", { name: "Subject 목록" }),
+				page.getByRole("heading", { name: "권한 대상 목록" }),
 			).toBeVisible();
 		});
 
-		test("시드 데이터의 Subject가 표시되어야 한다", async ({ page }) => {
-			// Then: entity 그룹 Subject 확인 (grid rowheader로 매칭)
+		test("시드 데이터의 대상이 표시되어야 한다", async ({ page }) => {
+			// Then: 데이터 대상 확인 (grid rowheader로 매칭)
 			const grid = page.getByRole("grid");
 			await expect(
-				grid.getByRole("rowheader", { name: "entity:User" }),
+				grid.getByRole("rowheader", { name: /사용자/ }),
 			).toBeVisible();
 
-			// Then: menu 그룹 Subject 확인
+			// Then: 메뉴 대상 확인
 			await expect(
-				grid.getByRole("rowheader", { name: "menu:dashboard" }),
+				grid.getByRole("rowheader", { name: /대시보드/ }),
 			).toBeVisible();
 		});
 
 		test("DataGrid 컬럼 헤더가 표시되어야 한다", async ({ page }) => {
 			// Then: 컬럼 헤더 확인
 			await expect(
-				page.getByRole("columnheader", { name: "식별자" }),
+				page.getByRole("columnheader", { name: "대상" }),
 			).toBeVisible();
 			await expect(
-				page.getByRole("columnheader", { name: "표시명" }),
+				page.getByRole("columnheader", { name: "유형" }),
 			).toBeVisible();
 			await expect(
-				page.getByRole("columnheader", { name: "분류" }),
+				page.getByRole("columnheader", { name: "설명" }),
 			).toBeVisible();
 		});
 
-		test("그룹별 Chip이 표시되어야 한다", async ({ page }) => {
-			// Then: entity, menu 그룹 Chip (gridcell 내 Chip 텍스트)
+		test("유형별 Chip이 표시되어야 한다", async ({ page }) => {
+			// Then: 데이터, 메뉴 유형 Chip (gridcell 내 Chip 텍스트)
 			const grid = page.getByRole("grid");
 			await expect(
-				grid.getByRole("gridcell", { name: "entity" }).first(),
+				grid.getByRole("gridcell", { name: "데이터" }).first(),
 			).toBeVisible();
 			await expect(
-				grid.getByRole("gridcell", { name: "menu" }).first(),
+				grid.getByRole("gridcell", { name: "메뉴" }).first(),
+			).toBeVisible();
+			await expect(
+				grid.getByText("데이터에 대한 조회, 생성, 수정").first(),
+			).toBeVisible();
+		});
+
+		test("대상 행 클릭 시 상세 페이지로 이동해야 한다", async ({ page }) => {
+			// When: 대상 셀 클릭
+			const grid = page.getByRole("grid");
+			await grid.getByRole("rowheader", { name: /사용자/ }).click();
+
+			// Then: 상세 페이지 진입 확인
+			await expect(page).toHaveURL(/\/subjects\/[^/]+$/);
+			await expect(
+				page.getByRole("heading", { name: "Subject 상세" }),
 			).toBeVisible();
 		});
 	});
 
-	// ── Subject 그룹 필터링 ──
+	// ── 권한 대상 유형 필터링 ──
 
-	test.describe("그룹 필터링", () => {
-		test("분류 필터 버튼이 존재해야 한다", async ({ page }) => {
+	test.describe("유형 필터링", () => {
+		test("대상 유형 필터가 존재해야 한다", async ({ page }) => {
 			// Given: Subject 목록 페이지
 			await page.goto("./subjects");
 			await page.waitForLoadState("networkidle");
 
-			// Then: 분류 필터 버튼 확인
-			await expect(page.getByRole("button", { name: /분류/ })).toBeVisible();
+			// Then: 대상 유형 필터 확인
+			await expect(page.getByRole("tab", { name: "메뉴" })).toBeVisible();
+			await expect(page.getByText("권한 대상입니다.").first()).toBeVisible();
+		});
+
+		test("대상 유형 필터로 메뉴 대상만 조회할 수 있어야 한다", async ({
+			page,
+		}) => {
+			// Given: Subject 목록 페이지
+			await page.goto("./subjects");
+			await page.waitForLoadState("networkidle");
+
+			// When: 메뉴 유형 선택
+			await page.getByRole("tab", { name: "메뉴" }).click();
+
+			// Then: 메뉴 대상만 표시
+			const grid = page.getByRole("grid");
+			await expect(page).toHaveURL(/group=menu/);
+			await expect(
+				grid.getByRole("rowheader", { name: /대시보드/ }),
+			).toBeVisible();
+			await expect(
+				grid.getByRole("rowheader", { name: /사용자/ }),
+			).toBeHidden();
 		});
 	});
 });
