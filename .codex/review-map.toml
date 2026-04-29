@@ -64,8 +64,17 @@ check_keys = ["thin-container", "state-owner", "owner-boundary", "sidecar-sync"]
 exempt = false
 
 [[rules]]
+id = "route-meta-files"
+match = ["apps/*/web/src/app/**/route.meta.ts"]
+primary_role = "fe-page-builder"
+supporting_roles = ["req-menu-planner"]
+rule_docs = []
+check_keys = ["route-meta-contract", "owner-boundary", "required-export"]
+exempt = false
+
+[[rules]]
 id = "fe-ui-page-files"
-match = ["packages/fe-ui/src/page/**/*Page.tsx"]
+match = ["packages/fe-ui/src/page/index.ts", "packages/fe-ui/src/page/**/*Page.tsx", "packages/fe-ui/src/page/**/*.stories.tsx"]
 primary_role = "fe-ui-page-builder"
 supporting_roles = []
 rule_docs = []
@@ -101,7 +110,7 @@ exempt = false
 
 [[rules]]
 id = "fe-widget-files"
-match = ["packages/fe-ui/src/widget/**/*.ts", "packages/fe-ui/src/widget/**/*.tsx"]
+match = ["packages/fe-ui/src/widget/*.ts", "packages/fe-ui/src/widget/*.tsx", "packages/fe-ui/src/widget/**/*.ts", "packages/fe-ui/src/widget/**/*.tsx"]
 primary_role = "fe-widget-builder"
 supporting_roles = []
 rule_docs = []
@@ -214,6 +223,24 @@ primary_role = "be-prisma-builder"
 supporting_roles = ["be-prisma-annotator"]
 rule_docs = []
 check_keys = ["owner-boundary"]
+exempt = false
+
+[[rules]]
+id = "prisma-reference-data-test-files"
+match = ["packages/be-prisma/src/reference-data/definitions/*.test.ts", "packages/be-prisma/src/reference-data/definitions/**/*.test.ts"]
+primary_role = "qa-be-testing"
+supporting_roles = ["be-seed-maker"]
+rule_docs = []
+check_keys = ["test-contract", "reference-data-contract"]
+exempt = false
+
+[[rules]]
+id = "prisma-reference-data-definition-files"
+match = ["packages/be-prisma/src/reference-data/definitions/*.ts", "packages/be-prisma/src/reference-data/definitions/**/*.ts"]
+primary_role = "be-seed-maker"
+supporting_roles = ["be-prisma-builder"]
+rule_docs = []
+check_keys = ["reference-data-contract", "owner-boundary"]
 exempt = false
 
 [[rules]]

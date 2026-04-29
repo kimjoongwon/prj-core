@@ -77,6 +77,8 @@ launcher가 넘기는 `checkKeys`는 아래 의미로 해석합니다.
   - route page가 visual owner가 아닌 thin container 규칙을 지키는지 확인
 - `route-layout-ownership`
   - route `layout.tsx`와 `page.tsx`의 skeleton/surface ownership 분리가 지켜졌는지 확인
+- `route-meta-contract`
+  - route `route.meta.ts`가 admin route catalog/menu/page access contract와 일치하는지 확인
 - `state-owner`
   - page state owner와 slice 전달 경계가 role 문서와 일치하는지 확인
 - `pure-page`
@@ -87,6 +89,8 @@ launcher가 넘기는 `checkKeys`는 아래 의미로 해석합니다.
   - controller가 ApplicationService/Facade/Service 진입점 규칙을 지키는지 확인
 - `service-repository-boundary`
   - service/repository 계층 경계와 직접 호출 금지 규칙을 지키는지 확인
+- `reference-data-contract`
+  - Prisma reference-data 정의와 테스트가 seed/sync contract, legacy prune 대상, 공유 catalog와 일치하는지 확인
 - `required-export`
   - 배럴 export나 public contract 동기화가 필요한 파일인지 확인
 - `role-registry-sync`

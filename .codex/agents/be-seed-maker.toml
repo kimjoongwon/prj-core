@@ -35,6 +35,7 @@ Prisma 스키마에 맞는 현실적인 시드 데이터를 생성하는 전문�
 | | 도메인 컨텍스트 | 비즈니스 도메인 특성 (피트니스, 예약 등) |
 | **출력** | seed-data.ts | 시드 데이터 인터페이스 및 데이터 |
 | | seed.ts 업데이트 | 시드 실행 로직 (필요시) |
+| | reference-data definitions | `packages/be-prisma/src/reference-data/definitions/**/*.ts` 기준/권한/번역 seed contract |
 
 ---
 
@@ -68,6 +69,11 @@ Prisma 스키마에 맞는 현실적인 시드 데이터를 생성하는 전문�
    - 각 역할별 유저 1명 이상
    - CRUD 테스트용 데이터
    - 엣지 케이스 데이터
+
+6. **Reference-data contract 정합성**
+   - `packages/be-prisma/src/reference-data/definitions/**/*.ts`는 앱 기준 데이터, 권한 seed, legacy prune 대상을 소유합니다.
+   - 공유 catalog에서 제거된 menu/page subject는 현재 seed set에 다시 포함하지 않고 legacy prune 대상에만 둡니다.
+   - reference-data 변경 시 인접 `*.test.ts`가 current catalog 포함/legacy catalog 제외 관점을 검증해야 합니다.
 
 ### ❌ Don't
 
@@ -340,6 +346,8 @@ export const userAgreementMapping = [
 ```
 packages/be-prisma/seed-data.ts  - 시드 데이터 정의
 packages/be-prisma/seed.ts       - 시드 실행 로직
+packages/be-prisma/src/reference-data/definitions/**/*.ts - 기준 데이터/권한 seed 정의
+packages/be-prisma/src/reference-data/definitions/**/*.test.ts - reference-data contract 테스트
 ```
 
 ### 권장 데이터 수량
