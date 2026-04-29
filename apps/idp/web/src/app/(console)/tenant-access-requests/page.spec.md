@@ -4,7 +4,7 @@
 > 수정일: 2026-04-29
 > 타입: next-route-page
 > 경로: `/tenant-access-requests`
-> 위치: `apps/idp/web/src/app/tenant-access-requests/page.tsx`
+> 위치: `apps/idp/web/src/app/(console)/tenant-access-requests/page.tsx`
 
 ## 화면 목적
 
@@ -15,10 +15,11 @@
 | 항목 | 값 |
 |------|----|
 | route path | `/tenant-access-requests` |
-| route page | `apps/idp/web/src/app/tenant-access-requests/page.tsx` |
+| route page | `apps/idp/web/src/app/(console)/tenant-access-requests/page.tsx` |
 | pure page component | `TenantAccessRequestMyListPage` |
 | page role | CSR container |
 | SSR/prefetch 예외 | 없음 |
+| consumed layout | `apps/idp/web/src/app/(console)/layout.tsx` |
 
 ## 데이터 / API
 
@@ -40,11 +41,13 @@
 |----|-------|------|------|
 | IDP-TARP-LIST-001 | 로그인 상태 | 화면 진입 | 접근 신청 제목과 신청하기 버튼 표시 |
 | IDP-TARP-LIST-002 | PENDING 신청 존재 | 취소 클릭 | 취소 API 호출 후 목록 갱신 |
+| IDP-TARP-LIST-003 | 콘솔 로그인 상태 | 사이드바 접근 신청 클릭 | `/tenant-access-requests` 이동 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-29 | 접근 신청 목록 route를 IDP 콘솔 layout 아래로 이동하고 메뉴 진입 검증을 추가 | codex |
 | 2026-04-29 | 보호 라우트 간 이동 검증이 실제 콘솔 로그인 상태를 사용하도록 E2E setup을 조정 | Codex |
 | 2026-04-29 | 목록 E2E의 mock session route를 쿼리스트링 포함 verify-token 요청까지 허용하도록 안정화 | Codex |
 | 2026-04-28 | 초기 생성 | Codex |

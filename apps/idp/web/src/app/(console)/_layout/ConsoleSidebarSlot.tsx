@@ -20,6 +20,7 @@ const NAV_ITEM_COPY: Record<string, string> = {
 	dashboard: "세션, 실패, 잠금 상태를 빠르게 확인합니다.",
 	"oidc-clients": "연동 앱과 인증 흐름 구성을 관리합니다.",
 	accounts: "계정 잠금, 복구, 권한 상태를 점검합니다.",
+	"tenant-access-requests": "필요한 Space와 역할 접근을 신청합니다.",
 	"oidc-sessions": "세션과 토큰 사용 상태를 추적합니다.",
 	"auth-audit-logs": "로그인 흐름과 정책 이벤트를 확인합니다.",
 	"security-policy": "비밀번호와 잠금 정책을 조정합니다.",

@@ -34,6 +34,22 @@ test.describe("IDP 접근 신청 목록 페이지", () => {
 		await expect(page).toHaveURL(/\/tenant-access-requests\/new$/);
 	});
 
+	test("콘솔 사이드바에서 접근 신청 화면으로 이동할 수 있어야 한다", async ({
+		page,
+	}) => {
+		await page.setViewportSize({ width: 1440, height: 900 });
+		await page.goto("/dashboard");
+		await page.waitForLoadState("networkidle");
+
+		await expect(page.getByRole("button", { name: /접근 신청/ })).toBeVisible();
+		await page.getByRole("button", { name: /접근 신청/ }).click();
+
+		await expect(page).toHaveURL(/\/tenant-access-requests$/);
+		await expect(
+			page.getByRole("heading", { name: "접근 신청", exact: true }),
+		).toBeVisible();
+	});
+
 	test("PENDING 신청을 취소할 수 있어야 한다", async ({ page }) => {
 		let cancelCalls = 0;
 		await page.route(

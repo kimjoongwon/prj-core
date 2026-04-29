@@ -7,6 +7,7 @@ export type IdpConsoleIconName =
 	| "dashboard"
 	| "oidc-clients"
 	| "accounts"
+	| "tenant-access-requests"
 	| "oidc-sessions"
 	| "auth-audit-logs"
 	| "security-policy";
@@ -50,6 +51,8 @@ export function getIdpConsoleIconName(
 			return "oidc-clients";
 		case "accounts":
 			return "accounts";
+		case "tenant-access-requests":
+			return "tenant-access-requests";
 		case "oidc-sessions":
 			return "oidc-sessions";
 		case "auth-audit-logs":
@@ -103,6 +106,15 @@ export function IdpConsoleIcon({
 					<path d="M4.5 18c1.1-2.95 7.9-2.95 9 0" />
 					<circle cx="17.25" cy="9.75" r="2.25" />
 					<path d="M14.5 17.25c.65-1.85 4.85-1.85 5.5 0" />
+				</IdpConsoleIconFrame>
+			);
+		case "tenant-access-requests":
+			return (
+				<IdpConsoleIconFrame size={size} {...props}>
+					<path d="M12 3.5 19 6.65v4.95c0 4.1-2.75 7.82-7 9.4-4.25-1.58-7-5.3-7-9.4V6.65L12 3.5Z" />
+					<path d="M8.8 12.2h6.4" />
+					<path d="M9.75 15h4.5" />
+					<path d="M10 9.4h4" />
 				</IdpConsoleIconFrame>
 			);
 		case "oidc-sessions":

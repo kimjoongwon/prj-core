@@ -4,7 +4,7 @@
 > 수정일: 2026-04-29
 > 타입: next-route-page
 > 경로: `/tenant-access-requests/new`
-> 위치: `apps/idp/web/src/app/tenant-access-requests/new/page.tsx`
+> 위치: `apps/idp/web/src/app/(console)/tenant-access-requests/new/page.tsx`
 
 ## 화면 목적
 
@@ -15,10 +15,11 @@
 | 항목 | 값 |
 |------|----|
 | route path | `/tenant-access-requests/new` |
-| route page | `apps/idp/web/src/app/tenant-access-requests/new/page.tsx` |
+| route page | `apps/idp/web/src/app/(console)/tenant-access-requests/new/page.tsx` |
 | pure page component | `TenantAccessRequestCreatePage` |
 | page role | CSR form container |
 | SSR/prefetch 예외 | 없음 |
+| consumed layout | `apps/idp/web/src/app/(console)/layout.tsx` |
 
 ## 데이터 / API
 
@@ -48,5 +49,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-04-29 | 접근 신청 생성 route를 IDP 콘솔 layout 아래로 이동 | codex |
 | 2026-04-29 | 생성 폼 E2E의 Space/희망 역할 라벨 검증을 exact text 기준으로 안정화하고 verify-token/form bootstrap mock 경로를 쿼리스트링까지 허용 | Codex |
 | 2026-04-28 | 초기 생성 | Codex |

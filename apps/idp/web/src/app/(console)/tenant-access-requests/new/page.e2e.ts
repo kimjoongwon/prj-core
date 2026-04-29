@@ -1,10 +1,11 @@
+import { loginToConsole } from "@cocrepo/e2e";
 import { expect, type Page, test } from "@playwright/test";
 
 test.describe("IDP 접근 신청 생성 페이지", () => {
 	test.beforeEach(async ({ page }) => {
-		await mockConsoleSession(page);
 		await mockCreateForm(page);
 		await mockMyTenantAccessRequests(page);
+		await loginToConsole(page);
 	});
 
 	test("신청 폼이 렌더링되어야 한다", async ({ page }) => {
@@ -58,21 +59,6 @@ test.describe("IDP 접근 신청 생성 페이지", () => {
 			});
 	});
 });
-
-async function mockConsoleSession(page: Page) {
-	await page.route("**/api/v1/auth/verify-token**", async (route) => {
-		await route.fulfill({
-			status: 200,
-			contentType: "application/json",
-			body: JSON.stringify({
-				data: {
-					valid: true,
-					hasFullAccess: false,
-				},
-			}),
-		});
-	});
-}
 
 async function mockCreateForm(page: Page) {
 	await page.route(
