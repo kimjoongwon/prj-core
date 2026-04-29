@@ -13,6 +13,11 @@ import {
 	inputOTPClassNames,
 	useInputOTP,
 } from "heroui-native/input-otp";
+import {
+	type FieldChromeProps,
+	renderTextFieldChrome,
+	resolveFieldInvalid,
+} from "../../internal/fieldChrome";
 import { type MobxProps, useMobxField } from "../../internal/useMobxField";
 
 type HeroInputOTPProps = ComponentPropsWithoutRef<typeof HeroInputOTP>;
@@ -54,17 +59,53 @@ PureInputOTPComponent.displayName = "PureInputOTP";
 
 export interface InputOTPProps<TState extends object = Record<string, unknown>>
 	extends MobxProps<TState>,
+		FieldChromeProps,
 		Omit<PureInputOTPProps, "onChange" | "value"> {}
 
 const InputOTPComponent = observer(<TState extends object>(props: InputOTPProps<TState>) => {
-	const { path, state, ...rest } = props;
+	const {
+		description,
+		descriptionProps,
+		error,
+		fieldErrorProps,
+		isDisabled,
+		isInvalid,
+		isRequired,
+		label,
+		labelProps,
+		path,
+		state,
+		...rest
+	} = props;
 	const field = useMobxField({ fallback: "", path, state });
+	const fieldChrome = {
+		description,
+		descriptionProps,
+		error,
+		fieldErrorProps,
+		isDisabled,
+		isInvalid,
+		isRequired,
+		label,
+		labelProps,
+	};
+	const resolvedInvalid = resolveFieldInvalid(fieldChrome);
 
-	return createElement(PureInputOTPComponent, {
+	const control = createElement(PureInputOTPComponent, {
 		...rest,
+		isDisabled,
+		isInvalid: resolvedInvalid,
 		onChange: field.setValue,
 		value: field.value,
 	});
+
+	return renderTextFieldChrome(
+		{
+			...fieldChrome,
+			isInvalid: resolvedInvalid,
+		},
+		control,
+	);
 });
 
 InputOTPComponent.displayName = "InputOTP";

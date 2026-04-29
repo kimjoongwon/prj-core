@@ -12,6 +12,11 @@ import {
 	useRadioGroup,
 	useRadioGroupItem,
 } from "heroui-native/radio-group";
+import {
+	type FieldChromeProps,
+	renderTextFieldChrome,
+	resolveFieldInvalid,
+} from "../../internal/fieldChrome";
 import { type MobxProps, useMobxField } from "../../internal/useMobxField";
 
 type HeroRadioGroupProps = ComponentPropsWithoutRef<typeof HeroRadioGroup>;
@@ -58,20 +63,57 @@ PureRadioGroupComponent.displayName = "PureRadioGroup";
 
 export interface RadioGroupProps<TState extends object = Record<string, unknown>>
 	extends MobxProps<TState>,
+		FieldChromeProps,
 		Omit<PureRadioGroupProps, "onValueChange" | "value"> {}
 
 const RadioGroupComponent = observer(
 	<TState extends object>(props: RadioGroupProps<TState>) => {
-		const { options = [], path, state, ...rest } = props;
+		const {
+			description,
+			descriptionProps,
+			error,
+			fieldErrorProps,
+			isDisabled,
+			isInvalid,
+			isRequired,
+			label,
+			labelProps,
+			options = [],
+			path,
+			state,
+			...rest
+		} = props;
 		const fallback = options[0]?.value ?? "";
 		const field = useMobxField({ fallback, path, state });
+		const fieldChrome = {
+			description,
+			descriptionProps,
+			error,
+			fieldErrorProps,
+			isDisabled,
+			isInvalid,
+			isRequired,
+			label,
+			labelProps,
+		};
+		const resolvedInvalid = resolveFieldInvalid(fieldChrome);
 
-		return createElement(PureRadioGroupComponent, {
+		const control = createElement(PureRadioGroupComponent, {
 			...rest,
+			isDisabled,
+			isInvalid: resolvedInvalid,
 			onValueChange: field.setValue,
 			options,
 			value: field.value,
 		});
+
+		return renderTextFieldChrome(
+			{
+				...fieldChrome,
+				isInvalid: resolvedInvalid,
+			},
+			control,
+		);
 	},
 );
 
