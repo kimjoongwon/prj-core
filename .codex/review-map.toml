@@ -20,7 +20,7 @@ exempt = true
 
 [[rules]]
 id = "codex-role-files"
-match = [".codex/agents/**/*.toml", ".codex/config.toml", ".codex/review-map.toml"]
+match = [".codex/agents/*.toml", ".codex/agents/**/*.toml", ".codex/config.toml", ".codex/review-map.toml"]
 primary_role = "qa-pr-reviewer"
 supporting_roles = []
 rule_docs = [".codex/config.toml", ".codex/agents/README.md", ".codex/config.toml.guide.md"]

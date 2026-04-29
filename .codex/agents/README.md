@@ -82,7 +82,7 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 ## 프론트엔드
 
 - [fe-ui-page-builder.toml](./fe-ui-page-builder.toml): `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 기준의 semantic pure page component와 sidecar를 생성하는 전문가
-- [fe-page-builder.toml](./fe-page-builder.toml): `apps/*/src/app/**/page.tsx`와 `@slot/**/page.tsx` thin container를 구현하고 folder-based pure page를 연결하는 전문가
+- [fe-page-builder.toml](./fe-page-builder.toml): `apps/*/src/app/**/page.tsx`, `@slot/**/page.tsx`, `route.meta.ts` thin route contract를 구현하고 folder-based pure page를 연결하는 전문가
 - [fe-layout-builder.toml](./fe-layout-builder.toml): `packages/fe-ui/src/display/layout`의 flat Layout primitive를 설계하고 생성하는 전문가
 - [fe-route-layout-builder.toml](./fe-route-layout-builder.toml): Next.js App Router의 `app/**/layout.tsx`와 named slot topology를 설계하고 생성하는 전문가
 - [fe-feature-builder.toml](./fe-feature-builder.toml): 비즈니스 기능을 담당하는 Feature 컴포넌트를 생성하는 전문가
@@ -139,7 +139,7 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - [qa-type-checker.toml](./qa-type-checker.toml): TypeScript 타입 에러를 근본 원인까지 추적하여 해결하는 전문가
 - [qa-fe-testing.toml](./qa-fe-testing.toml): Vitest 기반 프론트엔드 패키지 테스트 코드를 작성하는 전문가
 - [qa-fe-e2e-testing.toml](./qa-fe-e2e-testing.toml): Playwright 기반 프론트엔드 E2E 테스트 코드를 작성하는 전문가
-- [qa-be-testing.toml](./qa-be-testing.toml): Jest 기반 백엔드 및 공용 패키지 테스트 코드를 작성하는 전문가
+- [qa-be-testing.toml](./qa-be-testing.toml): Jest 기반 백엔드/공용 패키지 테스트와 Vitest reference-data contract 테스트 코드를 작성하는 전문가
 - [qa-be-e2e-testing.toml](./qa-be-e2e-testing.toml): Jest + Supertest 기반 백엔드 E2E 테스트 코드를 작성하는 전문가
 - [mobile/qa-mo-testing.toml](./mobile/qa-mo-testing.toml): Jest + React Native Testing Library 기반 모바일 단위 테스트 코드를 작성하는 전문가
 - [mobile/qa-mo-e2e-testing.toml](./mobile/qa-mo-e2e-testing.toml): Detox 기반 모바일 E2E 테스트 코드를 작성하는 전문가
