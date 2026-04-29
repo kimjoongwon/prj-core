@@ -150,6 +150,7 @@ export class NavigationStore {
 		if (this._expandedNavItemIds.has(navItemId)) {
 			this._expandedNavItemIds.delete(navItemId);
 		} else {
+			this._expandedNavItemIds.clear();
 			this._expandedNavItemIds.add(navItemId);
 		}
 	}
