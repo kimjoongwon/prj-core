@@ -1,4 +1,20 @@
-import { expect, test } from "@playwright/test";
+import { expect, type Locator, type Page, test } from "@playwright/test";
+
+const getSidebarNav = (page: Page) =>
+	page.locator("aside").getByRole("navigation").first();
+
+const getRootMenuButton = (
+	sidebar: Locator,
+	label: string,
+	description: string,
+) =>
+	sidebar
+		.getByRole("button")
+		.filter({ hasText: label })
+		.filter({ hasText: description });
+
+const getSubMenuButton = (sidebar: Locator, label: string) =>
+	sidebar.getByRole("button", { name: label, exact: true });
 
 test.describe("Admin 앱 기본 테스트", () => {
 	test("메인 페이지 로딩 확인", async ({ page }) => {
@@ -43,6 +59,48 @@ test.describe("반응형 레이아웃 테스트", () => {
 		// 실제 selector는 구현에 맞게 수정 필요
 		// const bottomTab = page.locator('[data-testid="admin-bottom-tab"]');
 		// await expect(bottomTab).toBeVisible();
+	});
+});
+
+test.describe("사이드바 메뉴 회귀", () => {
+	test.beforeEach(async ({ page }) => {
+		// Given: 데스크톱 사이드바가 보이는 뷰포트로 대시보드 진입
+		await page.setViewportSize({ width: 1280, height: 720 });
+		await page.goto("./dashboard", {
+			waitUntil: "domcontentloaded",
+			timeout: 60000,
+		});
+	});
+
+	test("하위 메뉴 선택 시 본인이 속한 1depth 메뉴만 열려야 한다", async ({
+		page,
+	}) => {
+		const sidebar = getSidebarNav(page);
+		const usersMenuButton = getRootMenuButton(
+			sidebar,
+			"회원",
+			"회원 계정과 상태를 검색하고 조정합니다.",
+		);
+		const rolesMenuButton = getRootMenuButton(
+			sidebar,
+			"권한 관리",
+			"권한, 액션, 대상 규칙을 편집합니다.",
+		);
+		const usersListMenuButton = getSubMenuButton(sidebar, "회원 목록");
+		const rolesListMenuButton = getSubMenuButton(sidebar, "역할");
+
+		// When: 서로 다른 1depth 메뉴를 연 뒤 권한 관리의 하위 메뉴를 선택
+		await expect(sidebar).toBeVisible();
+		await usersMenuButton.click();
+		await expect(usersListMenuButton).toBeVisible();
+		await rolesMenuButton.click();
+		await expect(rolesListMenuButton).toBeVisible();
+		await rolesListMenuButton.click();
+
+		// Then: 선택된 하위 메뉴의 1depth 부모만 열려 있고, 이전 부모는 닫힘
+		await expect(page).toHaveURL(/\/roles(?:[/?#]|$)/);
+		await expect(rolesListMenuButton).toBeVisible();
+		await expect(usersListMenuButton).toBeHidden();
 	});
 });
 

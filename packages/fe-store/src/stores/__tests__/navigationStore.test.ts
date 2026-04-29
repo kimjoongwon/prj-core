@@ -266,7 +266,7 @@ describe("NavigationStore", () => {
 
 		it("abilityChecker로 아이템을 필터링해야 한다", () => {
 			// Given
-			const abilityChecker = vi.fn().mockImplementation((action, subject) => {
+			const abilityChecker = vi.fn().mockImplementation((_action, subject) => {
 				return subject !== "Security"; // Security만 숨김
 			});
 			navigationStore.setAbilityChecker(abilityChecker);
@@ -344,6 +344,34 @@ describe("NavigationStore", () => {
 			expect(navigationStore.selectedNavItem?.id).toBe("members");
 			expect(mockNavigate).toHaveBeenCalledWith("/members/list");
 		});
+
+		it("아이템 선택 시 선택된 1depth 메뉴만 펼쳐야 한다", () => {
+			// Given
+			navigationStore.expandNavItem("settings");
+
+			// When
+			navigationStore.selectNavItem("members");
+
+			// Then
+			expect(Array.from(navigationStore.expandedNavItemIds)).toEqual([
+				"members",
+			]);
+		});
+
+		it("children이 없는 1depth 아이템 선택 시 다른 1depth 메뉴를 모두 닫아야 한다", () => {
+			// Given
+			navigationStore.expandNavItem("members");
+			navigationStore.expandNavItem("settings");
+			navigationStore.selectSubNavItem("member-add");
+
+			// When
+			navigationStore.selectNavItem("dashboard");
+
+			// Then
+			expect(navigationStore.selectedNavItem?.id).toBe("dashboard");
+			expect(navigationStore.selectedSubNavItem).toBeNull();
+			expect(Array.from(navigationStore.expandedNavItemIds)).toEqual([]);
+		});
 	});
 
 	describe("selectSubNavItem", () => {
@@ -373,6 +401,20 @@ describe("NavigationStore", () => {
 			expect(navigationStore.selectedNavItem?.id).toBe("dashboard");
 			expect(navigationStore.selectedSubNavItem).toBeNull();
 			expect(mockNavigate).toHaveBeenCalledWith("/dashboard");
+		});
+
+		it("하위 아이템 선택 시 본인이 속한 1depth 메뉴만 펼쳐야 한다", () => {
+			// Given
+			navigationStore.expandNavItem("members");
+
+			// When
+			navigationStore.selectSubNavItem("security");
+
+			// Then
+			expect(navigationStore.selectedNavItem?.id).toBe("settings");
+			expect(Array.from(navigationStore.expandedNavItemIds)).toEqual([
+				"settings",
+			]);
 		});
 	});
 
