@@ -246,23 +246,6 @@ export type { RoleAbilityActionListPageProps } from "./RoleAbilityActionListPage
 export { RoleAbilityActionListPage } from "./RoleAbilityActionListPage/RoleAbilityActionListPage";
 export type { RoleAbilitySubjectListPageProps } from "./RoleAbilitySubjectListPage/RoleAbilitySubjectListPage";
 export { RoleAbilitySubjectListPage } from "./RoleAbilitySubjectListPage/RoleAbilitySubjectListPage";
-export type {
-	RoleCategoryCreatePageOption,
-	RoleCategoryCreatePageProps,
-} from "./RoleCategoryCreatePage/RoleCategoryCreatePage";
-export { RoleCategoryCreatePage } from "./RoleCategoryCreatePage/RoleCategoryCreatePage";
-export type {
-	RoleCategoryDetailPageCategory,
-	RoleCategoryDetailPageProps,
-} from "./RoleCategoryDetailPage/RoleCategoryDetailPage";
-export { RoleCategoryDetailPage } from "./RoleCategoryDetailPage/RoleCategoryDetailPage";
-export type {
-	RoleCategoryEditPageOption,
-	RoleCategoryEditPageProps,
-} from "./RoleCategoryEditPage/RoleCategoryEditPage";
-export { RoleCategoryEditPage } from "./RoleCategoryEditPage/RoleCategoryEditPage";
-export type { RoleCategoryListPageProps } from "./RoleCategoryListPage/RoleCategoryListPage";
-export { RoleCategoryListPage } from "./RoleCategoryListPage/RoleCategoryListPage";
 export type { RoleCreatePageProps } from "./RoleCreatePage/RoleCreatePage";
 export { RoleCreatePage } from "./RoleCreatePage/RoleCreatePage";
 export type {
@@ -274,17 +257,6 @@ export type {
 export { RoleDetailPage } from "./RoleDetailPage/RoleDetailPage";
 export type { RoleEditPageProps } from "./RoleEditPage/RoleEditPage";
 export { RoleEditPage } from "./RoleEditPage/RoleEditPage";
-export type { RoleGroupCreatePageProps } from "./RoleGroupCreatePage/RoleGroupCreatePage";
-export { RoleGroupCreatePage } from "./RoleGroupCreatePage/RoleGroupCreatePage";
-export type {
-	RoleGroupDetailPageGroup,
-	RoleGroupDetailPageProps,
-} from "./RoleGroupDetailPage/RoleGroupDetailPage";
-export { RoleGroupDetailPage } from "./RoleGroupDetailPage/RoleGroupDetailPage";
-export type { RoleGroupEditPageProps } from "./RoleGroupEditPage/RoleGroupEditPage";
-export { RoleGroupEditPage } from "./RoleGroupEditPage/RoleGroupEditPage";
-export type { RoleGroupListPageProps } from "./RoleGroupListPage/RoleGroupListPage";
-export { RoleGroupListPage } from "./RoleGroupListPage/RoleGroupListPage";
 export type {
 	RoleListPageProps,
 	RoleListPageQueryStates,

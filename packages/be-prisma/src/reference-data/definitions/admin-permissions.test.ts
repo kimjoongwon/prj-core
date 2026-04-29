@@ -8,10 +8,22 @@ import {
 	adminFullAccessAbilitySeedData,
 	adminManageMenuAccessAbilitySeedData,
 	legacyAdminMenuSubjectNames,
+	legacyAdminPageSubjectNames,
 	adminMenuSubjectSeedData,
 	adminPageSubjectSeedData,
 } from "./admin-permissions";
 import { fullAccessAbilitySeedData } from "./abilities";
+
+const legacyRolePageSubjectNames = [
+	"page:role-groups:list",
+	"page:role-groups:new",
+	"page:role-groups:detail",
+	"page:role-groups:edit",
+	"page:role-categories:list",
+	"page:role-categories:new",
+	"page:role-categories:detail",
+	"page:role-categories:edit",
+] as const;
 
 describe("admin permission derived seeds", () => {
 	it("covers every admin menu subject from the shared catalog", () => {
@@ -82,7 +94,16 @@ describe("admin permission derived seeds", () => {
 
 	it("keeps legacy admin prune targets separate from the current catalog", () => {
 		expect(legacyAdminMenuSubjectNames).toEqual(
-			expect.arrayContaining(["menu:schedules", "menu:files", "menu:settings"]),
+			expect.arrayContaining([
+				"menu:schedules",
+				"menu:files",
+				"menu:settings",
+				"menu:role-groups:list",
+				"menu:role-categories:list",
+			]),
+		);
+		expect(legacyAdminPageSubjectNames).toEqual(
+			expect.arrayContaining(legacyRolePageSubjectNames),
 		);
 		expect(legacyAdminMenuSubjectNames).not.toContain("menu:assets");
 		expect(legacyAdminMenuSubjectNames).not.toContain("menu:oidc-clients");
@@ -101,9 +122,12 @@ describe("admin permission derived seeds", () => {
 		);
 		expect(seededSubjectNames).not.toContain("menu:schedules");
 		expect(seededSubjectNames).not.toContain("menu:files");
+		for (const subjectName of legacyRolePageSubjectNames) {
+			expect(seededSubjectNames).not.toContain(subjectName);
+		}
 	});
 
-	it("removes legacy admin FULL_ACCESS menu grants from the seed set", () => {
+	it("removes legacy admin FULL_ACCESS menu/page grants from the seed set", () => {
 		expect(
 			fullAccessAbilitySeedData.some(
 				(ability) => ability.subject === "menu:schedules",
@@ -114,5 +138,13 @@ describe("admin permission derived seeds", () => {
 				(ability) => ability.subject === "menu:files",
 			),
 		).toBe(false);
+		for (const subjectName of legacyRolePageSubjectNames) {
+			expect(
+				fullAccessAbilitySeedData.some(
+					(ability) =>
+						ability.subject === subjectName && ability.actionName === "access",
+				),
+			).toBe(false);
+		}
 	});
 });

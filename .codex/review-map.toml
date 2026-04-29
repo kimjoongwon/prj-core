@@ -20,10 +20,10 @@ exempt = true
 
 [[rules]]
 id = "codex-role-files"
-match = [".codex/agents/**/*.toml", ".codex/config.toml", ".codex/review-map.toml"]
+match = [".codex/agents/*.toml", ".codex/agents/**/*.toml", ".codex/config.toml", ".codex/review-map.toml"]
 primary_role = "qa-pr-reviewer"
 supporting_roles = []
-rule_docs = [".codex/config.toml", ".codex/agents/README.md", ".codex/config.toml.guide.md"]
+rule_docs = [".codex/config.toml", ".codex/agents/README.md"]
 check_keys = ["role-registry-sync", "review-map-coverage", "config-contract"]
 exempt = false
 
@@ -64,8 +64,17 @@ check_keys = ["thin-container", "state-owner", "owner-boundary", "sidecar-sync"]
 exempt = false
 
 [[rules]]
+id = "route-meta-files"
+match = ["apps/*/web/src/app/**/route.meta.ts"]
+primary_role = "fe-page-builder"
+supporting_roles = ["req-menu-planner"]
+rule_docs = []
+check_keys = ["route-meta-contract", "owner-boundary", "required-export"]
+exempt = false
+
+[[rules]]
 id = "fe-ui-page-files"
-match = ["packages/fe-ui/src/page/**/*Page.tsx"]
+match = ["packages/fe-ui/src/page/index.ts", "packages/fe-ui/src/page/**/*Page.tsx", "packages/fe-ui/src/page/**/*.stories.tsx"]
 primary_role = "fe-ui-page-builder"
 supporting_roles = []
 rule_docs = []
@@ -101,7 +110,7 @@ exempt = false
 
 [[rules]]
 id = "fe-widget-files"
-match = ["packages/fe-ui/src/widget/**/*.ts", "packages/fe-ui/src/widget/**/*.tsx"]
+match = ["packages/fe-ui/src/widget/*.ts", "packages/fe-ui/src/widget/*.tsx", "packages/fe-ui/src/widget/**/*.ts", "packages/fe-ui/src/widget/**/*.tsx"]
 primary_role = "fe-widget-builder"
 supporting_roles = []
 rule_docs = []
@@ -217,6 +226,24 @@ check_keys = ["owner-boundary"]
 exempt = false
 
 [[rules]]
+id = "prisma-reference-data-test-files"
+match = ["packages/be-prisma/src/reference-data/definitions/*.test.ts", "packages/be-prisma/src/reference-data/definitions/**/*.test.ts"]
+primary_role = "qa-be-testing"
+supporting_roles = ["be-seed-maker"]
+rule_docs = []
+check_keys = ["test-contract", "reference-data-contract"]
+exempt = false
+
+[[rules]]
+id = "prisma-reference-data-definition-files"
+match = ["packages/be-prisma/src/reference-data/definitions/*.ts", "packages/be-prisma/src/reference-data/definitions/**/*.ts"]
+primary_role = "be-seed-maker"
+supporting_roles = ["be-prisma-builder"]
+rule_docs = []
+check_keys = ["reference-data-contract", "owner-boundary"]
+exempt = false
+
+[[rules]]
 id = "application-service-files"
 match = ["packages/be-app/src/**/*.ts"]
 primary_role = "be-app-builder"
@@ -286,6 +313,15 @@ primary_role = "common-schema-builder"
 supporting_roles = []
 rule_docs = []
 check_keys = ["owner-boundary"]
+exempt = false
+
+[[rules]]
+id = "common-admin-routing-files"
+match = ["packages/common-constant/src/routing/admin-menu.ts", "packages/common-constant/src/routing/generated/admin-route-catalog.generated.ts"]
+primary_role = "req-menu-planner"
+supporting_roles = ["fe-page-builder"]
+rule_docs = []
+check_keys = ["route-meta-contract", "owner-boundary", "required-export"]
 exempt = false
 
 [[rules]]

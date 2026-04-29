@@ -26,14 +26,6 @@ export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
 	"apps/admin/web/src/app/(admin)/roles/[roleId]/abilities/[abilityId]/subjects/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/roles/[roleId]/edit/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/roles/[roleId]/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/roles/categories/[categoryId]/edit/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/roles/categories/[categoryId]/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/roles/categories/new/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/roles/categories/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/roles/groups/[groupId]/edit/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/roles/groups/[groupId]/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/roles/groups/new/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/roles/groups/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/roles/new/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/roles/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/routines/[routineId]/edit/route.meta.ts",
@@ -204,18 +196,6 @@ export const GENERATED_ADMIN_NAV_ITEMS: NavItemConfig[] = [
 				"label": "역할",
 				"path": "/roles",
 				"subject": "menu:roles:list"
-			},
-			{
-				"id": "role-groups-list",
-				"label": "역할 그룹",
-				"path": "/roles/groups",
-				"subject": "menu:role-groups:list"
-			},
-			{
-				"id": "role-categories-list",
-				"label": "역할 카테고리",
-				"path": "/roles/categories",
-				"subject": "menu:role-categories:list"
 			},
 			{
 				"id": "abilities-list",
@@ -638,80 +618,6 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 		"pathPattern": "/roles/[roleId]/edit",
 		"subject": "page:roles:edit",
 		"description": "역할 정보를 수정합니다."
-	},
-	{
-		"groupId": "roles",
-		"groupLabel": "권한 관리",
-		"pageId": "role-groups:list",
-		"pageLabel": "역할 그룹 목록",
-		"pathPattern": "/roles/groups",
-		"subject": "page:role-groups:list",
-		"description": "역할 그룹 목록을 조회합니다.",
-		"menuLeafId": "role-groups-list"
-	},
-	{
-		"groupId": "roles",
-		"groupLabel": "권한 관리",
-		"pageId": "role-groups:new",
-		"pageLabel": "역할 그룹 등록",
-		"pathPattern": "/roles/groups/new",
-		"subject": "page:role-groups:new",
-		"description": "새 역할 그룹을 등록합니다."
-	},
-	{
-		"groupId": "roles",
-		"groupLabel": "권한 관리",
-		"pageId": "role-groups:detail",
-		"pageLabel": "역할 그룹 상세",
-		"pathPattern": "/roles/groups/[groupId]",
-		"subject": "page:role-groups:detail",
-		"description": "역할 그룹 상세 정보를 확인합니다."
-	},
-	{
-		"groupId": "roles",
-		"groupLabel": "권한 관리",
-		"pageId": "role-groups:edit",
-		"pageLabel": "역할 그룹 수정",
-		"pathPattern": "/roles/groups/[groupId]/edit",
-		"subject": "page:role-groups:edit",
-		"description": "역할 그룹 정보를 수정합니다."
-	},
-	{
-		"groupId": "roles",
-		"groupLabel": "권한 관리",
-		"pageId": "role-categories:list",
-		"pageLabel": "역할 카테고리 목록",
-		"pathPattern": "/roles/categories",
-		"subject": "page:role-categories:list",
-		"description": "역할 카테고리 목록을 조회합니다.",
-		"menuLeafId": "role-categories-list"
-	},
-	{
-		"groupId": "roles",
-		"groupLabel": "권한 관리",
-		"pageId": "role-categories:new",
-		"pageLabel": "역할 카테고리 등록",
-		"pathPattern": "/roles/categories/new",
-		"subject": "page:role-categories:new",
-		"description": "새 역할 카테고리를 등록합니다."
-	},
-	{
-		"groupId": "roles",
-		"groupLabel": "권한 관리",
-		"pageId": "role-categories:detail",
-		"pageLabel": "역할 카테고리 상세",
-		"pathPattern": "/roles/categories/[categoryId]",
-		"subject": "page:role-categories:detail",
-		"description": "역할 카테고리 상세 정보를 확인합니다."
-	},
-	{
-		"groupId": "roles",
-		"groupLabel": "권한 관리",
-		"pageId": "role-categories:edit",
-		"pageLabel": "역할 카테고리 수정",
-		"pathPattern": "/roles/categories/[categoryId]/edit",
-		"subject": "page:role-categories:edit",
-		"description": "역할 카테고리 정보를 수정합니다."
 	},
 	{
 		"groupId": "roles",

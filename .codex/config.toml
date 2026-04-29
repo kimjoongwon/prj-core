@@ -244,7 +244,7 @@ description = "생성/수정 입력 화면용 재사용 form 계층을 생성하
 config_file = "agents/fe-form-builder.toml"
 
 [agents.fe-page-builder]
-description = "apps/*/src/app/**/page.tsx와 @slot/**/page.tsx thin container를 구현하는 전문가 (다국어 렌더링/문구 키 적용 포함)"
+description = "apps/*/src/app/**/page.tsx, @slot/**/page.tsx, route.meta.ts thin route contract를 구현하는 전문가 (다국어 렌더링/문구 키 적용 포함)"
 config_file = "agents/fe-page-builder.toml"
 
 [agents.fe-ui-page-builder]
@@ -396,7 +396,7 @@ description = "Jest + Supertest 기반 백엔드 E2E 테스트 코드를 작성�
 config_file = "agents/qa-be-e2e-testing.toml"
 
 [agents.qa-be-testing]
-description = "Jest 기반 백엔드 및 공용 패키지 테스트 코드를 작성하는 전문가"
+description = "Jest 기반 백엔드/공용 패키지 테스트와 Vitest reference-data contract 테스트 코드를 작성하는 전문가"
 config_file = "agents/qa-be-testing.toml"
 
 [agents.qa-fe-e2e-testing]

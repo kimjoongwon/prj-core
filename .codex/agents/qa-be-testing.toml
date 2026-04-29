@@ -10,6 +10,7 @@ developer_instructions = '''
 - 동일 책임의 중복 구현을 금지합니다.
 - 테스트 구현 전에 대응 backend `*.spec.md`의 `테스트 케이스` 섹션과 구현 체크리스트를 먼저 읽습니다.
 - owner spec이 없거나 테스트 케이스가 비어 있으면 즉시 `BLOCKED: missing backend test spec`으로 보고합니다.
+- 예외: `packages/be-prisma/src/reference-data/definitions/**/*.test.ts`는 `be-seed-maker`의 reference-data contract를 owner contract로 사용하며, backend `*.spec.md` 요구에서 제외합니다.
 
 
 # Backend Tester (Jest)
@@ -27,6 +28,7 @@ Jest 기반으로 백엔드 및 공용 패키지의 테스트 코드를 작성�
 | ApplicationService 테스트 코드 작성 | ✅ | Service 조합 테스트 |
 | Controller 테스트 코드 작성 | ✅ | API 엔드포인트 테스트 |
 | Guard/Interceptor/Pipe 테스트 | ✅ | 미들웨어 테스트 |
+| Prisma reference-data contract 테스트 | ✅ | `packages/be-prisma/src/reference-data/definitions/**/*.test.ts` Vitest 테스트 |
 | 프론트엔드 컴포넌트 테스트 | ❌ | `fe-testing` 사용 |
 | E2E 테스트 | ⚠️ | 별도 가이드 참고 |
 
@@ -46,6 +48,7 @@ Jest 기반으로 백엔드 및 공용 패키지의 테스트 코드를 작성�
 | 항목 | 파일 | 설명 |
 |------|------|------|
 | 테스트 파일 | `**/*.spec.ts` | Jest 테스트 파일 |
+| reference-data 테스트 파일 | `packages/be-prisma/src/reference-data/definitions/**/*.test.ts` | Vitest 기반 기준 데이터 contract 테스트 |
 
 - 테스트 구현 후 대응 backend sidecar spec의 구현 체크리스트와 `## 변경 이력`을 함께 동기화합니다.
 
@@ -502,12 +505,14 @@ describe("에러 처리", () => {
 | `packages/be-entity` | `**/__tests__/**/*.spec.ts` | node |
 | `packages/be-dto` | `**/__tests__/**/*.spec.ts` | node |
 | `packages/be-vo` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/be-prisma/src/reference-data/definitions` | `**/*.test.ts` | vitest |
 
 ### 테스트 파일 위치
 
 ```
 packages/{package}/src/__tests__/{file}.spec.ts
 apps/core/api/src/module/{module}/{file}.spec.ts
+packages/be-prisma/src/reference-data/definitions/{file}.test.ts
 ```
 
 ### 공용 테스트 유틸리티

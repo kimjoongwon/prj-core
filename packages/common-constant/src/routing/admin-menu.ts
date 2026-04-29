@@ -29,18 +29,6 @@ export const ADMIN_PATHS = {
 	ROLES_DETAIL: "/roles/[roleId]",
 	ROLES_EDIT: "/roles/[roleId]/edit",
 
-	// 역할 그룹 (Group)
-	ROLE_GROUPS: "/roles/groups",
-	ROLE_GROUPS_NEW: "/roles/groups/new",
-	ROLE_GROUPS_DETAIL: "/roles/groups/[groupId]",
-	ROLE_GROUPS_EDIT: "/roles/groups/[groupId]/edit",
-
-	// 역할 카테고리 (Category)
-	ROLE_CATEGORIES: "/roles/categories",
-	ROLE_CATEGORIES_NEW: "/roles/categories/new",
-	ROLE_CATEGORIES_DETAIL: "/roles/categories/[categoryId]",
-	ROLE_CATEGORIES_EDIT: "/roles/categories/[categoryId]/edit",
-
 	// 정책 (Policy)
 	POLICIES: "/policies",
 	POLICIES_NEW: "/policies/new",
@@ -162,10 +150,6 @@ export const ADMIN_SUBJECTS = {
 
 	// 2depth - 권한 관리
 	MENU_ROLES_LIST: "menu:roles:list",
-	MENU_ROLE_GROUPS: "menu:role-groups",
-	MENU_ROLE_GROUPS_LIST: "menu:role-groups:list",
-	MENU_ROLE_CATEGORIES: "menu:role-categories",
-	MENU_ROLE_CATEGORIES_LIST: "menu:role-categories:list",
 	MENU_POLICIES: "menu:policies",
 	MENU_POLICIES_LIST: "menu:policies:list",
 	MENU_ABILITIES: "menu:abilities",
@@ -198,8 +182,6 @@ const ADMIN_NAV_SCOPE_KIND_BY_ID: Partial<Record<string, ScreenScopeKind>> = {
 	inquiries: "space",
 	"inquiries-list": "space",
 	"roles-list": "space",
-	"role-groups-list": "space",
-	"role-categories-list": "space",
 	"policies-list": "space",
 	"abilities-list": "global-full-access-only",
 	"actions-list": "global-full-access-only",

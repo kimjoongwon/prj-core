@@ -162,7 +162,16 @@ export const legacyAdminMenuSubjectNames =
 		(subjectName) => !currentAdminMenuSubjectNameSet.has(subjectName),
 	);
 
-export const legacyAdminPageSubjectNames: string[] = [];
+export const legacyAdminPageSubjectNames: string[] = [
+	"page:role-groups:list",
+	"page:role-groups:new",
+	"page:role-groups:detail",
+	"page:role-groups:edit",
+	"page:role-categories:list",
+	"page:role-categories:new",
+	"page:role-categories:detail",
+	"page:role-categories:edit",
+];
 
 export const adminFullAccessAbilitySeedData: AdminDerivedAbilitySeedData[] = [
 	...adminMenuSubjectSeedData.map((subject) => ({
