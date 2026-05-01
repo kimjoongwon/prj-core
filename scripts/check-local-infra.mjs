@@ -3,10 +3,15 @@
 import { existsSync, readFileSync } from "node:fs";
 import net from "node:net";
 import { resolve } from "node:path";
+import {
+  applyLocalPostgresEnvDefaults,
+  maskPostgresUrl,
+  parsePostgresUrl,
+  probePostgresUrl,
+} from "./local-postgres-env.mjs";
 
 const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
 const DEFAULT_TIMEOUT_MS = 1500;
-const DEFAULT_POSTGRES_PORT = 5432;
 const DEFAULT_REDIS_PORT = 6379;
 
 const SERVICE_CONFIG = {
@@ -87,22 +92,6 @@ function isLocalHost(hostname) {
   return LOCAL_HOSTS.has((hostname || "").trim().toLowerCase());
 }
 
-function parseDatabaseTarget(databaseUrl) {
-  if (!databaseUrl) {
-    return null;
-  }
-
-  try {
-    const parsed = new URL(databaseUrl);
-    return {
-      host: parsed.hostname || "localhost",
-      port: Number(parsed.port || DEFAULT_POSTGRES_PORT),
-    };
-  } catch (error) {
-    throw new Error(`DATABASE_URL 파싱 실패: ${error.message}`);
-  }
-}
-
 function parsePort(value, fallbackPort, variableName) {
   const resolved = firstDefined(value);
 
@@ -178,41 +167,41 @@ async function main() {
 
   for (const serviceName of requestedServices) {
     const service = SERVICE_CONFIG[serviceName];
+    const worktreeEnvValues = parseEnvFile(resolve(".env.worktree"));
     const envFileValues = parseEnvFile(resolve(service.envPath));
+    const mergedEnvValues = {
+      ...envFileValues,
+      ...worktreeEnvValues,
+      ...process.env,
+    };
+    const postgresEnv = { ...mergedEnvValues };
+    const postgresResolution =
+      await applyLocalPostgresEnvDefaults(postgresEnv);
 
-    const databaseUrl = firstDefined(
-      process.env.DATABASE_URL,
-      envFileValues.DATABASE_URL,
-    );
     const redisHost = firstDefined(
       process.env.REDIS_HOST,
+      worktreeEnvValues.REDIS_HOST,
       envFileValues.REDIS_HOST,
       "localhost",
     );
     const redisPort = parsePort(
-      firstDefined(process.env.REDIS_PORT, envFileValues.REDIS_PORT),
+      firstDefined(
+        process.env.REDIS_PORT,
+        worktreeEnvValues.REDIS_PORT,
+        envFileValues.REDIS_PORT,
+      ),
       DEFAULT_REDIS_PORT,
       "REDIS_PORT",
     );
-
-    if (!databaseUrl) {
-      throw new Error(
-        `[infra-check] ${service.label}: DATABASE_URL을 찾지 못했습니다. ${service.envPath} 또는 현재 환경 변수를 확인하세요.`,
-      );
-    }
-
-    const postgresTarget = parseDatabaseTarget(databaseUrl);
-    if (!postgresTarget) {
-      throw new Error(
-        `[infra-check] ${service.label}: DATABASE_URL 파싱 결과가 비어 있습니다.`,
-      );
-    }
+    const postgresTarget = parsePostgresUrl(postgresResolution.databaseUrl);
 
     const targets = [
       {
         kind: "PostgreSQL",
         host: postgresTarget.host,
         port: postgresTarget.port,
+        databaseUrl: postgresResolution.databaseUrl,
+        source: postgresResolution.source,
       },
       {
         kind: "Redis",
@@ -222,7 +211,10 @@ async function main() {
     ];
 
     for (const target of targets) {
-      const key = `${target.kind}:${target.host}:${target.port}`;
+      const key =
+        target.kind === "PostgreSQL"
+          ? `${target.kind}:${target.databaseUrl}`
+          : `${target.kind}:${target.host}:${target.port}`;
       const current = checks.get(key) ?? {
         ...target,
         services: [],
@@ -247,11 +239,18 @@ async function main() {
       continue;
     }
 
-    const result = await probeTcp(check.host, check.port);
+    const result =
+      check.kind === "PostgreSQL"
+        ? await probePostgresUrl(check.databaseUrl)
+        : await probeTcp(check.host, check.port);
 
     if (result.ok) {
+      const detail =
+        check.kind === "PostgreSQL"
+          ? `${check.host}:${check.port} using ${check.source}`
+          : `${check.host}:${check.port}`;
       console.log(
-        `[infra-check] ${check.kind} reachable at ${check.host}:${check.port} (${serviceList}).`,
+        `[infra-check] ${check.kind} reachable at ${detail} (${serviceList}).`,
       );
       continue;
     }
@@ -260,6 +259,11 @@ async function main() {
     console.error(
       `[infra-check] ${check.kind} is not reachable at ${check.host}:${check.port} (${serviceList}).`,
     );
+    if (check.kind === "PostgreSQL") {
+      console.error(
+        `[infra-check] Tried ${maskPostgresUrl(check.databaseUrl)}: ${result.message}`,
+      );
+    }
     console.error(
       `[infra-check] Start the local ${check.kind} service first, or bypass this guard with START_SKIP_INFRA_CHECK=1 if the target is intentionally unavailable.`,
     );

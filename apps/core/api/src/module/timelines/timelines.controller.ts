@@ -64,7 +64,7 @@ export class TimelinesController {
 	@ApiAuth()
 	@ApiErrors(401, 500)
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("common.timeline.list.success")
+	@ResponseMessage("타임라인 목록 조회 성공")
 	async getTimelines(@Query() query: QueryTimelineDto) {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
@@ -93,7 +93,7 @@ export class TimelinesController {
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
-	@ResponseMessage("common.timeline.read.success")
+	@ResponseMessage("타임라인 조회 성공")
 	async getTimelineById(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 	) {
@@ -120,7 +120,7 @@ export class TimelinesController {
 	@ApiBody({ type: CreateTimelineDto, description: "등록할 타임라인 정보" })
 	@ApiErrors(400, 401, 500)
 	@ApiResponseEntity(TimelineDto, HttpStatus.CREATED)
-	@ResponseMessage("common.timeline.create.success")
+	@ResponseMessage("타임라인 생성 성공")
 	async createTimeline(@Body() dto: CreateTimelineDto) {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
@@ -150,7 +150,7 @@ export class TimelinesController {
 	@ApiBody({ type: UpdateTimelineDto, description: "수정할 타임라인 정보" })
 	@ApiErrors(400, 401, 404, 500)
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
-	@ResponseMessage("common.timeline.update.success")
+	@ResponseMessage("타임라인 수정 성공")
 	async updateTimeline(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Body() dto: UpdateTimelineDto,
@@ -182,7 +182,7 @@ export class TimelinesController {
 		type: String,
 	})
 	@ApiErrors(400, 401, 404, 500)
-	@ResponseMessage("common.timeline.delete.success")
+	@ResponseMessage("타임라인 삭제 성공")
 	async deleteTimeline(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 	): Promise<void> {
@@ -217,7 +217,7 @@ export class TimelinesController {
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(SessionDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("common.session.list.success")
+	@ResponseMessage("세션 목록 조회 성공")
 	async getSessions(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Query() query: QuerySessionDto,
@@ -251,7 +251,7 @@ export class TimelinesController {
 	@ApiParam({ name: "sessionId", description: "세션 ID (UUID)", type: String })
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
-	@ResponseMessage("common.session.read.success")
+	@ResponseMessage("세션 조회 성공")
 	async getSessionById(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
@@ -285,7 +285,7 @@ export class TimelinesController {
 	@ApiBody({ type: CreateSessionDto, description: "등록할 세션 정보" })
 	@ApiErrors(400, 401, 404, 500)
 	@ApiResponseEntity(SessionDto, HttpStatus.CREATED)
-	@ResponseMessage("common.session.create.success")
+	@ResponseMessage("세션 생성 성공")
 	async createSession(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Body() dto: CreateSessionDto,
@@ -321,7 +321,7 @@ export class TimelinesController {
 	@ApiBody({ type: UpdateSessionDto, description: "수정할 세션 정보" })
 	@ApiErrors(400, 401, 404, 500)
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
-	@ResponseMessage("common.session.update.success")
+	@ResponseMessage("세션 수정 성공")
 	async updateSession(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
@@ -356,7 +356,7 @@ export class TimelinesController {
 	})
 	@ApiParam({ name: "sessionId", description: "세션 ID (UUID)", type: String })
 	@ApiErrors(400, 401, 404, 500)
-	@ResponseMessage("common.session.delete.success")
+	@ResponseMessage("세션 삭제 성공")
 	async deleteSession(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
@@ -394,7 +394,7 @@ export class TimelinesController {
 	@ApiParam({ name: "sessionId", description: "세션 ID (UUID)", type: String })
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("common.program.list.success")
+	@ResponseMessage("프로그램 목록 조회 성공")
 	async getPrograms(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
@@ -435,7 +435,7 @@ export class TimelinesController {
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK)
-	@ResponseMessage("common.program.read.success")
+	@ResponseMessage("프로그램 조회 성공")
 	async getProgramById(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
@@ -473,7 +473,7 @@ export class TimelinesController {
 	@ApiBody({ type: CreateProgramDto, description: "등록할 프로그램 정보" })
 	@ApiErrors(400, 401, 404, 409, 500)
 	@ApiResponseEntity(ProgramDto, HttpStatus.CREATED)
-	@ResponseMessage("common.program.create.success")
+	@ResponseMessage("프로그램 생성 성공")
 	async createProgram(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
@@ -516,7 +516,7 @@ export class TimelinesController {
 	@ApiBody({ type: UpdateProgramDto, description: "수정할 프로그램 정보" })
 	@ApiErrors(400, 401, 404, 409, 500)
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK)
-	@ResponseMessage("common.program.update.success")
+	@ResponseMessage("프로그램 수정 성공")
 	async updateProgram(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
@@ -557,7 +557,7 @@ export class TimelinesController {
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
-	@ResponseMessage("common.program.delete.success")
+	@ResponseMessage("프로그램 삭제 성공")
 	async deleteProgram(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,

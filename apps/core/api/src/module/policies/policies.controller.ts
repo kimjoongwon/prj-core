@@ -47,7 +47,7 @@ export class PoliciesController {
 	@ApiAuth()
 	@ApiErrors(401, 403, 500)
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("common.policy.list.success")
+	@ResponseMessage("정책 목록 조회 성공")
 	async getPolicies() {
 		return this.policyFacade.listPolicies();
 	}
@@ -67,7 +67,7 @@ export class PoliciesController {
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.OK)
-	@ResponseMessage("common.policy.read.success")
+	@ResponseMessage("정책 조회 성공")
 	async getPolicyById(@Param("policyId", ParseUUIDPipe) policyId: string) {
 		return this.policyFacade.getPolicyById(policyId);
 	}
@@ -87,7 +87,7 @@ export class PoliciesController {
 	})
 	@ApiErrors(400, 401, 403, 500)
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.CREATED)
-	@ResponseMessage("common.policy.create.success")
+	@ResponseMessage("정책 생성 성공")
 	async createPolicy(@Body() dto: CreatePolicyDto) {
 		return this.policyFacade.createPolicy(dto);
 	}
@@ -112,7 +112,7 @@ export class PoliciesController {
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.OK)
-	@ResponseMessage("common.policy.update.success")
+	@ResponseMessage("정책 수정 성공")
 	async updatePolicy(
 		@Param("policyId", ParseUUIDPipe) policyId: string,
 		@Body() dto: UpdatePolicyDto,
@@ -136,7 +136,7 @@ export class PoliciesController {
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.OK)
-	@ResponseMessage("common.policy.delete.success")
+	@ResponseMessage("정책 삭제 성공")
 	async deletePolicy(@Param("policyId", ParseUUIDPipe) policyId: string) {
 		return this.policyFacade.deletePolicy(policyId);
 	}
@@ -164,7 +164,7 @@ export class PoliciesController {
 	@ApiResponseEntity(PolicyAbilityResponseDto, HttpStatus.OK, {
 		isArray: true,
 	})
-	@ResponseMessage("common.policy.abilities.sync.success")
+	@ResponseMessage("정책 권한 동기화 성공")
 	async syncPolicyAbilities(
 		@Param("policyId", ParseUUIDPipe) policyId: string,
 		@Body() dto: SyncPolicyAbilitiesDto,

@@ -48,6 +48,7 @@ import { TasksModule } from "./tasks";
 import { TemplatesModule } from "./templates";
 import { TenantAccessRequestsModule } from "./tenant-access-requests";
 import { TimelinesModule } from "./timelines";
+import { TranslationsModule } from "./translations";
 import { UsersModule } from "./users";
 
 const enableNestDevtools =
@@ -88,6 +89,7 @@ const devtoolsImports = enableNestDevtools
 		PolicyAssignmentsModule,
 		FoldersModule,
 		TemplatesModule,
+		TranslationsModule,
 		TimelinesModule,
 		TasksModule,
 		RoutinesModule,
@@ -153,6 +155,10 @@ const devtoolsImports = enableNestDevtools
 							{
 								path: "templates",
 								module: TemplatesModule,
+							},
+							{
+								path: "translations",
+								module: TranslationsModule,
 							},
 							{
 								path: "timelines",

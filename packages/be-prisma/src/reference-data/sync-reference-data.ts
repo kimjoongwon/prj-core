@@ -12,6 +12,7 @@ import {
 	abilitySeedData,
 	actionSeedData,
 	legacyOidcClientIds,
+	obsoleteTranslationSeedKeys,
 	oidcClientSeedData,
 	roleAssociationSeedData,
 	roleCategorySeedData,
@@ -552,6 +553,21 @@ async function syncAbilitiesAndPolicies(
 }
 
 async function syncTranslations(db: DbClient): Promise<void> {
+	const activeSeedKeys = new Set(
+		translationSeedData.map((translation) => translation.key),
+	);
+	const obsoleteSeedKeys = obsoleteTranslationSeedKeys.filter(
+		(key) => !activeSeedKeys.has(key),
+	);
+
+	if (obsoleteSeedKeys.length > 0) {
+		await db.translation.deleteMany({
+			where: {
+				key: { in: [...obsoleteSeedKeys] },
+			},
+		});
+	}
+
 	for (const translation of translationSeedData) {
 		await db.translation.upsert({
 			where: {

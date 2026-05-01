@@ -10,13 +10,14 @@ import type { SubjectDto } from "@cocrepo/api/core/subjects";
 import type { TaskDto } from "@cocrepo/api/core/tasks";
 import type { TimelineDto } from "@cocrepo/api/core/timelines";
 import { Button } from "@heroui/react";
-import { Eye } from "lucide-react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 import {
 	ActionButtonCell,
 	BooleanCell,
 	ChipCell,
+	DateTimeCell,
 	DefaultCell,
 	InquiryAssigneeCell,
 	InquiryCategoryCell,
@@ -50,6 +51,7 @@ import {
 	createPresetColumn,
 	createRemovedAtStatusColumn,
 	createStatusColumn,
+	defineColumn,
 	formatAssetBytes,
 	formatDuration,
 	getActionGroupColor,
@@ -1099,4 +1101,156 @@ function getInquirySlaStatus(
 	}
 
 	return "ok";
+}
+
+export function getStaticTranslationLanguageLabel(
+	languageCode?: string | null,
+) {
+	switch (languageCode) {
+		case "ko_KR":
+			return "한국어";
+		case "en_US":
+			return "English";
+		case "zh_CN":
+			return "中文";
+		case "ja_JP":
+			return "日本語";
+		default:
+			return languageCode ?? "";
+	}
+}
+
+function getStaticTranslationCategoryColor(
+	category?: string | null,
+): "default" | "primary" | "secondary" | "success" | "warning" {
+	switch (category) {
+		case "common":
+		case "공통":
+			return "primary";
+		case "error":
+		case "에러":
+			return "warning";
+		case "validation":
+		case "검증":
+			return "secondary";
+		case "menu":
+		case "API 응답":
+			return "success";
+		default:
+			return "default";
+	}
+}
+
+export function buildStaticTranslationTableColumns<
+	TRow extends {
+		id: string;
+		languageCode: string;
+		key: string;
+		text: string;
+		category: string;
+		isTranslated: boolean;
+		updatedAt: string | Date | null;
+	},
+>(options: {
+	onClickEditButton: (translation: TRow) => void;
+	onClickDeleteButton: (translation: TRow) => void;
+}) {
+	return buildColumns<TRow>(
+		defineColumn<TRow>({
+			field: "languageCode",
+			label: "언어",
+			size: 110,
+			align: "center",
+			cell: ({ getValue }) => (
+				<ChipCell
+					label={getStaticTranslationLanguageLabel(getValue() as string)}
+				/>
+			),
+		}),
+		defineColumn<TRow>({
+			field: "key",
+			label: "번역 키",
+			size: 260,
+			isRequired: true,
+			cell: ({ getValue }) => (
+				<DefaultCell value={getValue() as string} mono truncate />
+			),
+		}),
+		defineColumn<TRow>({
+			field: "category",
+			label: "카테고리",
+			size: 130,
+			align: "center",
+			cell: ({ getValue }) => {
+				const category = getValue() as string;
+				return (
+					<ChipCell
+						label={category}
+						color={getStaticTranslationCategoryColor(category)}
+					/>
+				);
+			},
+		}),
+		defineColumn<TRow>({
+			field: "text",
+			label: "번역문",
+			size: 420,
+			isRequired: true,
+			cell: ({ getValue }) => (
+				<DefaultCell value={getValue() as string} lineClamp={2} />
+			),
+		}),
+		defineColumn<TRow>({
+			field: "isTranslated",
+			label: "완료",
+			size: 100,
+			align: "center",
+			cell: ({ getValue }) => (
+				<BooleanCell
+					value={getValue() as boolean}
+					trueLabel="완료"
+					falseLabel="대기"
+					trueColor="success"
+					falseColor="warning"
+				/>
+			),
+		}),
+		defineColumn<TRow>({
+			field: "updatedAt",
+			label: "수정일",
+			size: 150,
+			cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
+		}),
+		createActionsColumn<TRow>({
+			label: "관리",
+			size: 120,
+			cell: ({ row }) => (
+				<div className="flex justify-center gap-1">
+					<Button
+						isIconOnly
+						size="sm"
+						variant="light"
+						aria-label="번역 수정"
+						onPress={() => {
+							options.onClickEditButton(row.original);
+						}}
+					>
+						<Pencil className="h-4 w-4" />
+					</Button>
+					<Button
+						isIconOnly
+						size="sm"
+						variant="light"
+						color="danger"
+						aria-label="번역 삭제"
+						onPress={() => {
+							options.onClickDeleteButton(row.original);
+						}}
+					>
+						<Trash2 className="h-4 w-4" />
+					</Button>
+				</div>
+			),
+		}),
+	);
 }

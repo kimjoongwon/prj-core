@@ -1,4 +1,5 @@
 import { LanguageCode } from "@cocrepo/constant";
+import { ToBoolean } from "@cocrepo/decorator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {
@@ -28,7 +29,7 @@ export class GetTranslationsDto {
 	@ApiProperty({
 		description: "카테고리",
 		required: false,
-		example: "common",
+		example: "공통",
 	})
 	@IsString()
 	@IsOptional()
@@ -38,6 +39,7 @@ export class GetTranslationsDto {
 		description: "번역 완료 여부",
 		required: false,
 	})
+	@ToBoolean()
 	@IsBoolean()
 	@IsOptional()
 	isTranslated?: boolean;
@@ -45,7 +47,7 @@ export class GetTranslationsDto {
 	@ApiProperty({
 		description: "번역 키 검색 (부분 일치)",
 		required: false,
-		example: "common.success",
+		example: "성공",
 	})
 	@IsString()
 	@IsOptional()

@@ -142,7 +142,7 @@ export class AuthController {
 	@ApiResponseEntity(TokenRefreshResponseDto, HttpStatus.OK, {
 		withSetCookie: true,
 	})
-	@ResponseMessage("common.auth.refresh.success")
+	@ResponseMessage("토큰 재발급 성공")
 	async refreshToken(
 		@Req() req: Request,
 		@Res({ passthrough: true }) res: Response,
@@ -175,7 +175,7 @@ export class AuthController {
 		500,
 	)
 	@ApiResponseEntity(EmailVerificationRequestedDto, HttpStatus.CREATED)
-	@ResponseMessage("common.auth.register.success")
+	@ResponseMessage("회원가입 성공")
 	async signUp(@Body() signUpDto: SignUpPayloadDto) {
 		return this.authApplicationService.signUp(signUpDto);
 	}
@@ -218,7 +218,7 @@ export class AuthController {
 	@SkipSpaceCheck()
 	@ApiErrors({ status: 401, message: AUTH_ERRORS.TOKEN_INVALID })
 	@ApiResponseEntity(VerifyTokenResponseDto, HttpStatus.OK)
-	@ResponseMessage("common.auth.validate.success")
+	@ResponseMessage("토큰 유효성 검증 완료")
 	async verifyToken() {
 		return this.authApplicationService.verifyToken();
 	}
@@ -297,7 +297,7 @@ export class AuthController {
 			"로그아웃 성공 시 모든 인증 관련 쿠키가 삭제되고 토큰이 무효화됩니다.",
 	})
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
-	@ResponseMessage("common.auth.logout.success")
+	@ResponseMessage("로그아웃 성공")
 	async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
 		const accessToken = req.cookies?.accessToken;
 		const sessionId = req.cookies?.sessionId;

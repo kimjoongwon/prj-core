@@ -20,4 +20,5 @@ export { TaskFacade } from "./task.facade";
 export { TemplateFacade } from "./template.facade";
 export { TenantAccessRequestFacade } from "./tenant-access-request.facade";
 export { TimelineFacade } from "./timeline.facade";
+export { TranslationFacade } from "./translation.facade";
 export { UserFacade } from "./user.facade";

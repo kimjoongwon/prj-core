@@ -15,6 +15,7 @@ import {
 import {
 	AuthAuditLogService,
 	AuthCacheService,
+	applyFirstPartyOidcRuntimeConfig,
 	EmailService,
 	EmailVerificationService,
 	type GetAuditLogsResult,
@@ -911,13 +912,13 @@ export class AuthApplicationService {
 			);
 		}
 
-		return {
+		return applyFirstPartyOidcRuntimeConfig({
 			clientId: client.clientId,
 			clientSecret: client.clientSecret,
 			redirectUri,
 			loginUrl: client.loginUrl || "/auth/login",
 			defaultReturnTo: client.defaultReturnTo || "/",
-		};
+		});
 	}
 
 	private toProtocolClientConfig(

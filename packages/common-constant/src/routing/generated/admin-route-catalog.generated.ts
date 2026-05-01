@@ -58,6 +58,7 @@ export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
 	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/sessions/new/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/timelines/new/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/timelines/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/translations/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/users/[userId]/edit/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/users/[userId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/users/new/route.meta.ts",
@@ -235,6 +236,20 @@ export const GENERATED_ADMIN_NAV_ITEMS: NavItemConfig[] = [
 				"label": "접근 승인",
 				"path": "/tenant-access-requests",
 				"subject": "menu:tenant-access-requests:list"
+			}
+		]
+	},
+	{
+		"id": "translations",
+		"label": "다국어",
+		"icon": "Settings",
+		"subject": "menu:translations",
+		"children": [
+			{
+				"id": "translations-list",
+				"label": "정적 번역",
+				"path": "/translations",
+				"subject": "menu:translations:list"
 			}
 		]
 	}
@@ -795,5 +810,15 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 		"subject": "page:email-verifications:list",
 		"description": "회원가입 전 이메일 인증 요청과 발송 상태를 확인합니다.",
 		"menuLeafId": "email-verifications-list"
+	},
+	{
+		"groupId": "translations",
+		"groupLabel": "다국어",
+		"pageId": "translations:list",
+		"pageLabel": "정적 번역",
+		"pathPattern": "/translations",
+		"subject": "page:translations:list",
+		"description": "admin과 idp에서 사용하는 정적 다국어 key-value를 관리합니다.",
+		"menuLeafId": "translations-list"
 	}
 ];

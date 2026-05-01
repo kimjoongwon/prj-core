@@ -28,9 +28,9 @@ export {
 	SmtpEmailProvider,
 } from "./email.service/index";
 export {
-	EmailVerificationService,
 	type EmailVerificationCreateInput,
 	type EmailVerificationRequestResult,
+	EmailVerificationService,
 } from "./email-verification.service";
 export { FolderService } from "./folder.service";
 export { GroupService } from "./group.service";
@@ -64,6 +64,7 @@ export {
 	S3CompatibleStorageService,
 } from "./object-storage.service";
 export { OidcClientService } from "./oidc-client.service/index";
+export { applyFirstPartyOidcRuntimeConfig } from "./oidc-runtime-client-config";
 export {
 	type OidcRedisSession,
 	OidcSessionService,
@@ -97,4 +98,5 @@ export {
 	type SessionMetadata,
 	TokenStorageService,
 } from "./token-storage.service/index";
+export { TranslationCatalogService } from "./translation-catalog.service";
 export { UserService } from "./user.service";

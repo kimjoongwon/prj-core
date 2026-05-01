@@ -20,6 +20,7 @@ export const AdminLayoutEffects = observer(function AdminLayoutEffects() {
 	const { data: verifyTokenResponse } = useVerifyToken({
 		query: {
 			enabled: shouldVerifyCurrentTenant,
+			queryKey: ["/api/v1/auth/verify-token", persistStore.spaceId],
 			retry: false,
 			refetchOnWindowFocus: false,
 		},

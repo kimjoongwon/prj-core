@@ -1,5 +1,6 @@
 import { ResponseEntity } from "@cocrepo/entity";
 import { Prisma } from "@cocrepo/prisma";
+import { I18nTranslationService } from "@cocrepo/service";
 import {
 	type ArgumentsHost,
 	Catch,
@@ -10,7 +11,13 @@ import {
 } from "@nestjs/common";
 import { BaseExceptionFilter } from "@nestjs/core";
 import type { Request } from "express";
-import { I18nTranslationService } from "@cocrepo/service";
+
+const PRISMA_ERROR_MESSAGE_KEYS: Readonly<Record<string, string>> = {
+	P2002: "중복된 데이터가 존재합니다",
+	P2025: "요청한 데이터를 찾을 수 없습니다",
+	P2003: "연관된 데이터가 존재하지 않습니다",
+	P2016: "데이터베이스 스키마 불일치 오류",
+};
 
 @Catch()
 export class AllExceptionsFilter extends BaseExceptionFilter {
@@ -44,7 +51,9 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
 		} else if (exception instanceof Prisma.PrismaClientValidationError) {
 			// Prisma 유효성 검사 에러
 			status = HttpStatus.BAD_REQUEST;
-			message = await this.translationService.translate("error.prisma.P2016");
+			message = await this.translationService.translate(
+				PRISMA_ERROR_MESSAGE_KEYS.P2016,
+			);
 		} else if (exception instanceof Error) {
 			message = exception.message;
 		}
@@ -73,14 +82,11 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
 	private async getPrismaErrorMessage(
 		exception: Prisma.PrismaClientKnownRequestError,
 	): Promise<string> {
-		const key = `error.prisma.${exception.code}`;
-		const translated = await this.translationService.translate(key);
-
-		// 번역 키를 찾을 수 없는 경우 (키 자체가 반환됨)
-		if (translated === key) {
+		const key = PRISMA_ERROR_MESSAGE_KEYS[exception.code];
+		if (!key) {
 			return `데이터베이스 오류 (${exception.code})`;
 		}
 
-		return translated;
+		return this.translationService.translate(key);
 	}
 }

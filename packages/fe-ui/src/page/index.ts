@@ -308,6 +308,17 @@ export {
 	SpaceListPage,
 } from "./SpaceListPage/SpaceListPage";
 export type {
+	StaticTranslationForm,
+	StaticTranslationLanguageCode,
+	StaticTranslationListPageProps,
+	StaticTranslationListPageQueryStates,
+	StaticTranslationListPageSetQueryStates,
+} from "./StaticTranslationListPage/StaticTranslationListPage";
+export {
+	adminStaticTranslationsPageQueryInputs,
+	StaticTranslationListPage,
+} from "./StaticTranslationListPage/StaticTranslationListPage";
+export type {
 	SubjectDetailPageField,
 	SubjectDetailPageProps,
 	SubjectDetailPageSubject,

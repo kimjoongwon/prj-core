@@ -1,5 +1,6 @@
 import { RESPONSE_MESSAGE_METADATA } from "@cocrepo/decorator";
 import { RESPONSE_EXTRA_KEYS, ResponseEntity } from "@cocrepo/entity";
+import { I18nTranslationService } from "@cocrepo/service";
 import {
 	type CallHandler,
 	type ExecutionContext,
@@ -9,10 +10,9 @@ import {
 } from "@nestjs/common";
 import { HTTP_CODE_METADATA } from "@nestjs/common/constants";
 import { Reflector } from "@nestjs/core";
-import { Observable, from } from "rxjs";
-import { map, switchMap } from "rxjs/operators";
+import type { Observable } from "rxjs";
+import { switchMap } from "rxjs/operators";
 import { isWrappedResponse } from "../util/response.util";
-import { I18nTranslationService } from "@cocrepo/service";
 
 @Injectable()
 export class ResponseEntityInterceptor implements NestInterceptor {
@@ -108,7 +108,7 @@ export class ResponseEntityInterceptor implements NestInterceptor {
 				// 메시지 번역
 				if (!message) {
 					const defaultKey =
-						status === HttpStatus.CREATED ? "common.created" : "common.success";
+						status === HttpStatus.CREATED ? "생성 완료" : "성공";
 					message = await this.translationService.translate(defaultKey);
 				} else {
 					// 메시지가 번역 키인 경우 번역

@@ -33,7 +33,7 @@ export class SubjectsController {
 	})
 	@ApiErrors(500)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("common.subject.list.success")
+	@ResponseMessage("대상 목록 조회 성공")
 	async getSubjects(
 		@Query("group") group?: string,
 		@Query("type") _type?: string,
@@ -59,7 +59,7 @@ export class SubjectsController {
 	})
 	@ApiErrors(404, 500)
 	@ApiResponseEntity(SubjectFieldDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("common.subject.fields.success")
+	@ResponseMessage("대상 필드 목록 조회 성공")
 	async getSubjectFields(@Param("id") id: string) {
 		return this.subjectsService.getSubjectFields(id);
 	}
@@ -77,7 +77,7 @@ export class SubjectsController {
 	})
 	@ApiErrors(404, 500)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
-	@ResponseMessage("common.subject.read.success")
+	@ResponseMessage("대상 조회 성공")
 	async getSubjectById(@Param("id") id: string) {
 		return this.subjectsService.getSubjectById(id);
 	}

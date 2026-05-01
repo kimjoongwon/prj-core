@@ -6,8 +6,8 @@
   "scripts": {
     "build": "nest build",
     "start": "nest start",
-    "start:dev": "APP_PORT=${CORE_API_PORT:-3006} CHOKIDAR_USEPOLLING=1 CHOKIDAR_INTERVAL=1000 WATCHPACK_POLLING=true NODE_OPTIONS=--no-deprecation nest build --webpack --webpackPath webpack.config.js --watch",
-    "start:debug": "APP_PORT=${CORE_API_PORT:-3006} CHOKIDAR_USEPOLLING=1 CHOKIDAR_INTERVAL=1000 WATCHPACK_POLLING=true NODE_OPTIONS=--no-deprecation nest build --webpack --webpackPath webpack.config.js --watch",
+    "start:dev": "set -a; [ -f .env ] && . ./.env; set +a; APP_PORT=${CORE_API_PORT:-${APP_PORT:-3006}} nest build --webpack --webpackPath webpack.config.js --watch",
+    "start:debug": "set -a; [ -f .env ] && . ./.env; set +a; APP_PORT=${CORE_API_PORT:-${APP_PORT:-3006}} nest build --webpack --webpackPath webpack.config.js --watch",
     "start:prod": "node dist/main",
     "type-check": "tsc --noEmit",
     "lint": "biome check src",

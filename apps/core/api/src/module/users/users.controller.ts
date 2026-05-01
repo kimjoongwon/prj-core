@@ -54,7 +54,7 @@ export class UsersController {
 		metaDto: UserPaginationMetaDto,
 		statsDto: UserStatsDto,
 	})
-	@ResponseMessage("common.user.list.success")
+	@ResponseMessage("회원 목록 조회 성공")
 	async getUsers(@Query() query: QueryUsersDto) {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
@@ -84,7 +84,7 @@ export class UsersController {
 		500,
 	)
 	@ApiResponseEntity(UserDetailResponseDto, HttpStatus.OK)
-	@ResponseMessage("common.user.read.success")
+	@ResponseMessage("회원 상세 조회 성공")
 	async getUserById(@Param("id", ParseUUIDPipe) id: string) {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
@@ -115,7 +115,7 @@ export class UsersController {
 		{ status: 404, message: USER_ERRORS.USER_NOT_FOUND },
 		500,
 	)
-	@ResponseMessage("common.user.delete.success")
+	@ResponseMessage("회원 삭제 성공")
 	async deleteUser(@Param("id", ParseUUIDPipe) id: string): Promise<void> {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {

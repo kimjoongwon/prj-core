@@ -51,7 +51,7 @@ export class PolicyAssignmentsController {
 	@ApiResponseEntity(PolicyAssignmentResponseDto, HttpStatus.OK, {
 		isArray: true,
 	})
-	@ResponseMessage("common.policyAssignment.role.list.success")
+	@ResponseMessage("역할 정책 할당 목록 조회 성공")
 	async getRolePolicies(@Param("roleId", ParseUUIDPipe) roleId: string) {
 		return this.policyAssignmentFacade.getRolePolicies(roleId);
 	}
@@ -79,7 +79,7 @@ export class PolicyAssignmentsController {
 	@ApiResponseEntity(PolicyAssignmentResponseDto, HttpStatus.OK, {
 		isArray: true,
 	})
-	@ResponseMessage("common.policyAssignment.role.sync.success")
+	@ResponseMessage("역할 정책 할당 동기화 성공")
 	async syncRolePolicies(
 		@Param("roleId", ParseUUIDPipe) roleId: string,
 		@Body() dto: SyncRolePoliciesDto,
@@ -107,7 +107,7 @@ export class PolicyAssignmentsController {
 	@ApiResponseEntity(PolicyAssignmentResponseDto, HttpStatus.OK, {
 		isArray: true,
 	})
-	@ResponseMessage("common.policyAssignment.user.list.success")
+	@ResponseMessage("사용자 정책 할당 목록 조회 성공")
 	async getUserPolicies(@Param("userId", ParseUUIDPipe) userId: string) {
 		return this.policyAssignmentFacade.getUserPolicies(userId);
 	}
@@ -135,7 +135,7 @@ export class PolicyAssignmentsController {
 	@ApiResponseEntity(PolicyAssignmentResponseDto, HttpStatus.OK, {
 		isArray: true,
 	})
-	@ResponseMessage("common.policyAssignment.user.sync.success")
+	@ResponseMessage("사용자 정책 할당 동기화 성공")
 	async syncUserPolicies(
 		@Param("userId", ParseUUIDPipe) userId: string,
 		@Body() dto: SyncUserPoliciesDto,

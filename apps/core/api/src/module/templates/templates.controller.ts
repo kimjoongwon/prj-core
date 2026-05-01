@@ -50,7 +50,7 @@ export class TemplatesController {
 	@ApiAuth()
 	@ApiErrors(401, 403, 500)
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("template.list.success")
+	@ResponseMessage("템플릿 목록 조회 성공")
 	async getTemplates(@Query() query: QueryTemplateDto) {
 		return this.templatesService.getTemplates(query);
 	}
@@ -73,7 +73,7 @@ export class TemplatesController {
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK)
-	@ResponseMessage("template.read.success")
+	@ResponseMessage("템플릿 조회 성공")
 	async getTemplate(@Param("templateId", ParseUUIDPipe) templateId: string) {
 		return this.templatesService.getTemplateById(templateId);
 	}
@@ -94,7 +94,7 @@ export class TemplatesController {
 	})
 	@ApiErrors(400, 401, 403, 409, 500)
 	@ApiResponseEntity(TemplateDto, HttpStatus.CREATED)
-	@ResponseMessage("template.create.success")
+	@ResponseMessage("템플릿 생성 성공")
 	async createTemplate(@Body() dto: CreateTemplateDto) {
 		return this.templatesService.create(dto);
 	}
@@ -121,7 +121,7 @@ export class TemplatesController {
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK)
-	@ResponseMessage("template.update.success")
+	@ResponseMessage("템플릿 수정 성공")
 	async updateTemplate(
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 		@Body() dto: UpdateTemplateDto,
@@ -145,7 +145,7 @@ export class TemplatesController {
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
-	@ResponseMessage("template.delete.success")
+	@ResponseMessage("템플릿 삭제 성공")
 	async deleteTemplate(
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 	): Promise<void> {
@@ -170,7 +170,7 @@ export class TemplatesController {
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK)
-	@ResponseMessage("template.toggle-status.success")
+	@ResponseMessage("템플릿 상태 변경 성공")
 	async toggleTemplateStatus(
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 	) {
@@ -198,7 +198,7 @@ export class TemplatesController {
 		description: "미리보기 변수 데이터",
 	})
 	@ApiErrors(401, 403, 404, 500)
-	@ResponseMessage("template.preview.success")
+	@ResponseMessage("템플릿 미리보기 성공")
 	async previewTemplate(
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 		@Body() dto: PreviewTemplateDto,
@@ -227,7 +227,7 @@ export class TemplatesController {
 		description: "발송 테스트 정보 (수신자, 변수 등)",
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
-	@ResponseMessage("template.send-test.success")
+	@ResponseMessage("테스트 발송 성공")
 	async sendTestTemplate(
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 		@Body() dto: SendTestTemplateDto,

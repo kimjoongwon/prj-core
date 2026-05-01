@@ -3,16 +3,16 @@ import {
 	ADMIN_PAGE_ACCESS_ITEMS,
 } from "@cocrepo/constant";
 import { describe, expect, it } from "vitest";
+import { fullAccessAbilitySeedData } from "./abilities";
 import { subjectSeedData } from "./actions-subjects";
 import {
 	adminFullAccessAbilitySeedData,
 	adminManageMenuAccessAbilitySeedData,
-	legacyAdminMenuSubjectNames,
-	legacyAdminPageSubjectNames,
 	adminMenuSubjectSeedData,
 	adminPageSubjectSeedData,
+	legacyAdminMenuSubjectNames,
+	legacyAdminPageSubjectNames,
 } from "./admin-permissions";
-import { fullAccessAbilitySeedData } from "./abilities";
 
 const legacyRolePageSubjectNames = [
 	"page:role-groups:list",
@@ -103,7 +103,7 @@ describe("admin permission derived seeds", () => {
 			]),
 		);
 		expect(legacyAdminPageSubjectNames).toEqual(
-			expect.arrayContaining(legacyRolePageSubjectNames),
+			expect.arrayContaining([...legacyRolePageSubjectNames]),
 		);
 		expect(legacyAdminMenuSubjectNames).not.toContain("menu:assets");
 		expect(legacyAdminMenuSubjectNames).not.toContain("menu:oidc-clients");

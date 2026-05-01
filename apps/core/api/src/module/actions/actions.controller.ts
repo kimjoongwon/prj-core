@@ -60,7 +60,7 @@ export class ActionsController {
 		isArray: true,
 		exclude: ActionExcludePresets.LIST,
 	})
-	@ResponseMessage("common.action.list.success")
+	@ResponseMessage("액션 목록 조회 성공")
 	async getActions(@Query("group") group?: string) {
 		if (group) {
 			return this.actionsService.getActionsByGroup(group);
@@ -83,7 +83,7 @@ export class ActionsController {
 	})
 	@ApiErrors(404, 500)
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
-	@ResponseMessage("common.action.read.success")
+	@ResponseMessage("액션 조회 성공")
 	async getActionById(@Param("id", ParseUUIDPipe) id: string) {
 		return this.actionsService.getActionById(id);
 	}
@@ -104,7 +104,7 @@ export class ActionsController {
 	})
 	@ApiErrors(400, 401, 403, 500)
 	@ApiResponseEntity(ActionDto, HttpStatus.CREATED)
-	@ResponseMessage("common.action.create.success")
+	@ResponseMessage("액션 생성 성공")
 	async createAction(@Body() dto: CreateActionDto) {
 		return this.actionsService.createAction(dto);
 	}
@@ -137,7 +137,7 @@ export class ActionsController {
 		500,
 	)
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
-	@ResponseMessage("common.action.update.success")
+	@ResponseMessage("액션 수정 성공")
 	async updateAction(
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateActionDto,
@@ -169,7 +169,7 @@ export class ActionsController {
 		500,
 	)
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
-	@ResponseMessage("common.action.delete.success")
+	@ResponseMessage("액션 삭제 성공")
 	async deleteAction(@Param("id", ParseUUIDPipe) id: string) {
 		return this.actionsService.deleteAction(id);
 	}

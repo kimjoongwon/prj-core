@@ -40,7 +40,7 @@ export class RolesController {
 	@ApiAuth()
 	@ApiErrors(401, 403, 500)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("common.role.list.success")
+	@ResponseMessage("역할 목록 조회 성공")
 	async getRoles() {
 		return this.rolesService.getAll();
 	}
@@ -61,7 +61,7 @@ export class RolesController {
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
-	@ResponseMessage("common.role.read.success")
+	@ResponseMessage("역할 조회 성공")
 	async getRoleById(@Param("id", ParseUUIDPipe) id: string) {
 		return this.rolesService.getById(id);
 	}
@@ -83,7 +83,7 @@ export class RolesController {
 	})
 	@ApiErrors(400, 401, 403, 409, 500)
 	@ApiResponseEntity(RoleDto, HttpStatus.CREATED)
-	@ResponseMessage("common.role.create.success")
+	@ResponseMessage("역할 생성 성공")
 	async createRole(@Body() dto: CreateRoleDto) {
 		return this.rolesService.create(dto);
 	}
@@ -110,7 +110,7 @@ export class RolesController {
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
-	@ResponseMessage("common.role.update.success")
+	@ResponseMessage("역할 수정 성공")
 	async updateRole(
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateRoleDto,
@@ -136,7 +136,7 @@ export class RolesController {
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
-	@ResponseMessage("common.role.delete.success")
+	@ResponseMessage("역할 삭제 성공")
 	async deleteRole(@Param("id", ParseUUIDPipe) id: string) {
 		return this.rolesService.delete(id);
 	}

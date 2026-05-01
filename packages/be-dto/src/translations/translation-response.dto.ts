@@ -20,7 +20,7 @@ export class TranslationResponseDto {
 
 	@ApiProperty({
 		description: "번역 키",
-		example: "common.success",
+		example: "성공",
 	})
 	key!: string;
 
@@ -32,7 +32,7 @@ export class TranslationResponseDto {
 
 	@ApiProperty({
 		description: "카테고리",
-		example: "common",
+		example: "공통",
 	})
 	category!: string;
 

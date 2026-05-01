@@ -93,7 +93,7 @@ pnpm wt:finish AUTH-21 --strategy auto
 - 수행 내용:
   - `baseRef`(기본 `origin/main`)에서 새 브랜치 생성
   - `worktreeRoot`(기본 `../wt`) 아래 worktree 생성
-  - slot 할당 후 `.env.worktree` 생성
+  - slot 할당 후 `.env.worktree`와 앱별 `.env`/`.env.local` 생성
   - tmux가 있으면 세션과 윈도우 생성
 
 ### `pnpm wt:new-run <ticket> [--prompt "<text>"] [옵션]`
@@ -231,6 +231,7 @@ pnpm start
 주의:
 
 - `pnpm start`(`scripts/start.sh`)는 `.env.worktree`가 있으면 자동으로 로드합니다.
+- 앱별 직접 실행은 각 앱 폴더의 `.env` 또는 `.env.local`을 source 한 뒤 실행합니다.
 - 앱 `start:dev` 스크립트는 `*_PORT` env가 있으면 해당 값으로 실행되고, 없으면 기본 포트를 사용합니다.
 
 ### 5.3 AI 통제 마무리

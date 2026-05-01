@@ -30,6 +30,56 @@ if [[ -f ".env.worktree" ]]; then
   set +a
 fi
 
+ensure_shared_local_env() {
+  export POSTGRES_HOST="${POSTGRES_HOST:-localhost}"
+  export POSTGRES_DATABASE="${POSTGRES_DATABASE:-plate}"
+
+  export POSTGRES_PORT="${POSTGRES_PORT:-5432}"
+  export POSTGRES_USER="${POSTGRES_USER:-cocrepo}"
+  export POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-devpassword}"
+
+  if [[ -z "${DATABASE_URL:-}" ]]; then
+    if [[ -n "${POSTGRES_PASSWORD:-}" ]]; then
+      export DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?schema=public"
+    else
+      export DATABASE_URL="postgresql://${POSTGRES_USER}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?schema=public"
+    fi
+  fi
+
+  export DIRECT_URL="${DIRECT_URL:-$DATABASE_URL}"
+
+  export REDIS_HOST="${REDIS_HOST:-localhost}"
+  export REDIS_PORT="${REDIS_PORT:-6379}"
+  export CORS_ENABLED="${CORS_ENABLED:-true}"
+  export NODE_ENV="${NODE_ENV:-development}"
+  export NODE_OPTIONS="${NODE_OPTIONS:---no-deprecation}"
+  export API_PREFIX="${API_PREFIX:-api}"
+  export APP_ADMIN_EMAIL="${APP_ADMIN_EMAIL:-admin@example.com}"
+  export APP_HEADER_LANGUAGE="${APP_HEADER_LANGUAGE:-x-custom-lang}"
+  export AUTH_JWT_SECRET="${AUTH_JWT_SECRET:-dev-jwt-secret}"
+  export AUTH_JWT_TOKEN_EXPIRES_IN="${AUTH_JWT_TOKEN_EXPIRES_IN:-10d}"
+  export AUTH_JWT_TOKEN_REFRESH_IN="${AUTH_JWT_TOKEN_REFRESH_IN:-7d}"
+  export AUTH_JWT_SALT_ROUNDS="${AUTH_JWT_SALT_ROUNDS:-10}"
+
+  export ADMIN_WEB_URL="${ADMIN_WEB_URL:-http://localhost:${ADMIN_WEB_PORT:-3000}}"
+  export CORE_API_URL="${CORE_API_URL:-http://localhost:${CORE_API_PORT:-3006}}"
+  export IDP_API_URL="${IDP_API_URL:-http://localhost:${IDP_API_PORT:-3007}}"
+  export IDP_WEB_URL="${IDP_WEB_URL:-http://localhost:${IDP_WEB_PORT:-3008}}"
+  export STORYBOOK_URL="${STORYBOOK_URL:-http://localhost:${STORYBOOK_PORT:-6006}}"
+
+  export CORE_API_INTERNAL_URL="${CORE_API_INTERNAL_URL:-$CORE_API_URL}"
+  export IDP_API_INTERNAL_URL="${IDP_API_INTERNAL_URL:-$IDP_API_URL}"
+  export NEXT_PUBLIC_IDP_CLIENT_URL="${NEXT_PUBLIC_IDP_CLIENT_URL:-$IDP_WEB_URL}"
+  export NEXT_PUBLIC_WS_URL="${NEXT_PUBLIC_WS_URL:-ws://localhost:${CORE_API_PORT:-3006}}"
+  export OIDC_ISSUER="${OIDC_ISSUER:-$IDP_API_URL}"
+  export OIDC_JWKS_URI="${OIDC_JWKS_URI:-${IDP_API_URL}/oidc/jwks}"
+  export OIDC_ADMIN_BASE_URL="${OIDC_ADMIN_BASE_URL:-$ADMIN_WEB_URL}"
+  export OIDC_STORYBOOK_BASE_URL="${OIDC_STORYBOOK_BASE_URL:-$STORYBOOK_URL}"
+  export IDP_CLIENT_URL="${IDP_CLIENT_URL:-$IDP_WEB_URL}"
+}
+
+ensure_shared_local_env
+
 # -- 인자 제거 (pnpm이 -- 를 전달할 수 있음)
 ARGS=()
 for arg in "$@"; do

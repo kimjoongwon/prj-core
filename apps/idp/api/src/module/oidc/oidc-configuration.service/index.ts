@@ -1,3 +1,4 @@
+import { applyFirstPartyOidcRuntimeConfig } from "@cocrepo/service";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import type { OidcConfig } from "../../../config/oidc.config";
@@ -129,16 +130,20 @@ export class OidcConfigurationService {
 					"활성 OIDC 클라이언트가 없습니다. 어드민에서 OIDC 클라이언트를 등록해야 인증이 동작합니다.",
 				);
 			}
-			return clients.map((client) => ({
-				client_id: client.clientId,
-				client_secret: client.clientSecret || undefined,
-				client_name: client.name,
-				redirect_uris: client.redirectUris,
-				grant_types: client.grantTypes,
-				response_types: client.responseTypes,
-				token_endpoint_auth_method: client.tokenEndpointAuthMethod,
-				scope: client.scope,
-			}));
+			return clients.map((client) => {
+				const runtimeClient = applyFirstPartyOidcRuntimeConfig(client);
+
+				return {
+					client_id: runtimeClient.clientId,
+					client_secret: runtimeClient.clientSecret || undefined,
+					client_name: runtimeClient.name,
+					redirect_uris: runtimeClient.redirectUris,
+					grant_types: runtimeClient.grantTypes,
+					response_types: runtimeClient.responseTypes,
+					token_endpoint_auth_method: runtimeClient.tokenEndpointAuthMethod,
+					scope: runtimeClient.scope,
+				};
+			});
 		} catch (error) {
 			this.logger.error("DB에서 OIDC 클라이언트 로드 실패");
 			this.logger.debug(String(error));

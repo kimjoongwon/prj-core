@@ -33,11 +33,14 @@ describe("ResponseEntityInterceptor", () => {
 		mockTranslationService = {
 			translate: jest.fn(async (value: string) => value),
 		} as unknown as jest.Mocked<I18nTranslationService>;
-		interceptor = new ResponseEntityInterceptor(reflector, mockTranslationService);
+		interceptor = new ResponseEntityInterceptor(
+			reflector,
+			mockTranslationService,
+		);
 	});
 
 	const createExecutionContext = (
-		handler: (...args: any[]) => any,
+		handler: (...args: unknown[]) => unknown,
 		status: number = HttpStatus.OK,
 	): ExecutionContext =>
 		({
@@ -61,7 +64,7 @@ describe("ResponseEntityInterceptor", () => {
 
 		expect(result).toBeInstanceOf(ResponseEntity);
 		expect(result).toEqual(
-			new ResponseEntity(HttpStatus.OK, "common.success", { id: "123" }),
+			new ResponseEntity(HttpStatus.OK, "성공", { id: "123" }),
 		);
 	});
 
@@ -111,7 +114,7 @@ describe("ResponseEntityInterceptor", () => {
 				{ items: [1, 2, 3] },
 				{
 					page: 1,
-				} as any,
+				} as never,
 			),
 		);
 	});

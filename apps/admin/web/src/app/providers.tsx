@@ -1,8 +1,7 @@
 "use client";
-import { type AbilityResponseDto } from "@cocrepo/api/core/abilities";
+import { useVerifyToken } from "@cocrepo/api/idp/auth";
 
-import { convertApiToAbilityRules, useStore } from "@cocrepo/store";
-import type { AbilityApiResponse } from "@cocrepo/type";
+import { useStore } from "@cocrepo/store";
 import { DesignSystemProvider } from "@cocrepo/ui";
 import {
 	isServer,
@@ -14,7 +13,8 @@ import { useRouter } from "next/navigation";
 import { NuqsAdapter as NuqsNextAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode, useEffect } from "react";
 import { useAbilities } from "@/hooks";
-import { AppStoreProvider } from "@/stores";
+import { AppStoreProvider, usePersistStore } from "@/stores";
+import { resolveAbilityBootstrapRules } from "./ability-bootstrap";
 
 interface ProvidersProps {
 	children: ReactNode;
@@ -88,39 +88,57 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 }: {
 	children: ReactNode;
 }) {
-	const { abilities, isLoading, isError } = useAbilities();
+	const {
+		abilities,
+		isLoading,
+		isError,
+		isDisabled: isAbilitiesDisabled,
+	} = useAbilities();
+	const persistStore = usePersistStore();
 	const store = useStore();
 	const abilityStore = store.abilityStore;
+	const shouldVerifyCurrentTenant =
+		!isAbilitiesDisabled &&
+		persistStore.isHydrated &&
+		persistStore.isSpaceSelectionResolved;
+	const { data: verifyTokenResponse, isPending: isVerifyingToken } =
+		useVerifyToken({
+			query: {
+				enabled: shouldVerifyCurrentTenant,
+				queryKey: ["/api/v1/auth/verify-token", persistStore.spaceId],
+				retry: false,
+				refetchOnWindowFocus: false,
+			},
+		});
+	const hasFullAccess = verifyTokenResponse?.data?.hasFullAccess === true;
 
 	useEffect(() => {
 		if (!abilityStore) {
 			return;
 		}
 
-		if (isLoading) {
+		const rules = resolveAbilityBootstrapRules({
+			abilities,
+			hasFullAccess,
+			isAbilityLoading: isLoading,
+			isAbilityError: isError,
+			isTokenVerificationPending: shouldVerifyCurrentTenant && isVerifyingToken,
+		});
+
+		if (!rules) {
 			return;
 		}
 
-		if (isError || !abilities || abilities.length === 0) {
-			abilityStore.updateRules([]);
-			return;
-		}
-
-		const apiResponses: AbilityApiResponse[] = abilities.map(
-			(ability: AbilityResponseDto) => ({
-				action: ability.action?.name,
-				subject: ability.subject?.name,
-				fields: ability.fields,
-				conditions:
-					(ability.conditions as Record<string, unknown> | null | undefined) ??
-					undefined,
-				inverted: ability.inverted,
-				reason: ability.reason ?? undefined,
-			}),
-		);
-
-		abilityStore.updateRules(convertApiToAbilityRules(apiResponses));
-	}, [abilityStore, abilities, isLoading, isError]);
+		abilityStore.updateRules(rules);
+	}, [
+		abilityStore,
+		abilities,
+		hasFullAccess,
+		isLoading,
+		isError,
+		isVerifyingToken,
+		shouldVerifyCurrentTenant,
+	]);
 
 	return children;
 });

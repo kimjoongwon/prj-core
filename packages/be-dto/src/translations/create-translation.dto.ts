@@ -16,8 +16,8 @@ export class CreateTranslationDto {
 	languageCode!: LanguageCode;
 
 	@ApiProperty({
-		description: "번역 키 (예: common.success, error.prisma.P2002)",
-		example: "common.success",
+		description: "번역 키 (예: 성공, 번역 목록 조회 성공)",
+		example: "성공",
 	})
 	@IsString()
 	@IsNotEmpty()

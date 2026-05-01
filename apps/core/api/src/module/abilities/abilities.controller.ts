@@ -44,7 +44,7 @@ export class AbilitiesController {
 	@ApiAuth()
 	@ApiErrors(401, 500)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("common.ability.list.success")
+	@ResponseMessage("권한 목록 조회 성공")
 	async getAbilities(): Promise<Ability[]> {
 		return this.abilitiesService.getAllAbilities();
 	}
@@ -67,7 +67,7 @@ export class AbilitiesController {
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("common.ability.my.success")
+	@ResponseMessage("내 권한 조회 성공")
 	async getMyAbilities(): Promise<Ability[]> {
 		return this.abilitiesService.getMyAbilities();
 	}
@@ -94,7 +94,7 @@ export class AbilitiesController {
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
-	@ResponseMessage("common.ability.read.success")
+	@ResponseMessage("권한 조회 성공")
 	async getAbilityById(
 		@Param("id", ParseUUIDPipe) id: string,
 	): Promise<Ability> {
@@ -123,7 +123,7 @@ export class AbilitiesController {
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.CREATED)
-	@ResponseMessage("common.ability.create.success")
+	@ResponseMessage("권한 정의 생성 성공")
 	async createAbility(@Body() dto: CreateAbilityDto): Promise<Ability> {
 		const data = {
 			actionId: dto.actionId,
@@ -167,7 +167,7 @@ export class AbilitiesController {
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
-	@ResponseMessage("common.ability.update.success")
+	@ResponseMessage("권한 정의 수정 성공")
 	async updateAbility(
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateAbilityDto,
@@ -209,7 +209,7 @@ export class AbilitiesController {
 		500,
 	)
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
-	@ResponseMessage("common.ability.delete.success")
+	@ResponseMessage("권한 삭제 성공")
 	async deleteAbility(
 		@Param("id", ParseUUIDPipe) id: string,
 	): Promise<Ability> {
