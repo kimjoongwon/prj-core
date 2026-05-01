@@ -88,8 +88,8 @@ developer_instructions = '''
 | `app` | ✅ | 기본값 `mobile` |
 | `domain` | △ | Stage 1에서 backend spec 생성 책임이 있을 때 사용할 aggregate/domain 이름 |
 | `domains` | △ | Stage 1에서 다중 backend domain spec 을 함께 기획할 때 사용 |
-| `route` | △ | 단일 Expo route |
-| `routes` | △ | 다중 Expo route 목록 |
+| `route` | △ | 단일 Expo Router native route |
+| `routes` | △ | 다중 Expo Router native route 목록 |
 | `requirements` | △ | Stage 1에서 mobile feature 와 backend contract 를 함께 설명하는 요구사항 |
 | `parallel` | △ | `off` / `auto` / `force`, 기본 `auto` |
 | `maxConcurrency` | △ | 동시 실행 상한, 기본 `3` |
@@ -97,7 +97,7 @@ developer_instructions = '''
 
 ### 3.2 route 해석
 
-- route 는 Expo Router 기준 세그먼트 경로로 해석합니다.
+- route 는 Expo Router native runtime 기준 세그먼트 경로로 해석합니다.
 - 예: `/`, `/(auth)`, `/(auth)/login`, `/(tabs)/home`
 - `_layout.tsx`가 route shell, `index.tsx` 또는 해당 screen file 이 콘텐츠 owner 입니다.
 
@@ -109,7 +109,7 @@ developer_instructions = '''
 |-------|------|----------|----------|-------------|
 | 1 | 모바일 기능 기획 | feature별 (`domain` + `route`) | mobile app/route spec + 공통 backend scope/authorization invariant를 포함한 backend spec + mobile unit/E2E test contract 정리 | `orch-mobile-screen-planner` + 공통 backend `req-*` role |
 | 2 | 모바일 UI 패키지 구현 | target별 | `fe-mo-ui` primitive / control / menu 구현 + package unit test | `fe-mo-display-component-builder`, `fe-mo-control-component-builder`, `fe-mo-menu-builder` |
-| 3 | 모바일 route 통합 | route별 | Expo Router layout/screen + data/state wiring 구현 + route unit test | `fe-mo-route-layout-builder`, `fe-mo-page-builder`, `fe-mo-api-integrator`, `fe-mo-state-builder`, `fe-mo-store-builder` |
+| 3 | 모바일 route 통합 | route별 | Expo Router native layout/screen + data/state wiring 구현 + route unit test | `fe-mo-route-layout-builder`, `fe-mo-page-builder`, `fe-mo-api-integrator`, `fe-mo-state-builder`, `fe-mo-store-builder` |
 | 4 | 모바일 검증 | app 전체 | Detox E2E + type-check / doctor + Verified 반영 | mobile E2E / QA chain + 검증 명령 |
 
 ---
@@ -137,6 +137,7 @@ developer_instructions = '''
 - 사용자 승인 없이 다음 Stage 로 진행 금지
 - 단일 호출에서 여러 Stage 를 연속 실행하는 행위 금지
 - web `orch-stage` 규칙을 그대로 복제하여 `apps/*/web` 경로를 다루는 행위
+- Expo Web/react-native-web 지원을 Stage scope 에 포함하는 행위
 - deprecated / fallback / 하위호환 코드 작성
 
 ### 5.3 공유 파일 lock

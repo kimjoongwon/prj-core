@@ -24,7 +24,6 @@
     "start:idp-web": "turbo start:dev --filter=idp-web --concurrency=20",
     "start:mobile": "pnpm --filter=mobile-app run start:dev",
     "start:tool-storybook": "turbo start:dev --filter=tool-storybook --concurrency=20",
-    "web:mobile": "pnpm --filter=mobile-app run web",
     "android:mobile": "pnpm --filter=mobile-app run android",
     "type-check:mobile": "pnpm --filter=mobile-app run type-check",
     "lint:mobile": "pnpm --filter=mobile-app run lint",

@@ -304,7 +304,7 @@ description = "모바일 form 재사용 계층을 생성하고 정리하는 전�
 config_file = "agents/mobile/fe-mo-form-builder.toml"
 
 [agents.fe-mo-layout-builder]
-description = "Expo/RN에서 재사용할 모바일 layout shell 컴포넌트를 설계하는 전문가"
+description = "Expo Native/RN에서 재사용할 모바일 layout shell 컴포넌트를 설계하는 전문가"
 config_file = "agents/mobile/fe-mo-layout-builder.toml"
 
 [agents.fe-mo-menu-builder]
@@ -312,11 +312,11 @@ description = "React Native용 메뉴 primitive contract를 packages/fe-mo-ui/sr
 config_file = "agents/mobile/fe-mo-menu-builder.toml"
 
 [agents.fe-mo-page-builder]
-description = "Expo Router 기준 apps/mobile/src/app/** route page를 구현하는 전문가"
+description = "Expo Router native route 기준 apps/mobile/src/app/** screen을 구현하는 전문가"
 config_file = "agents/mobile/fe-mo-page-builder.toml"
 
 [agents.fe-mo-route-layout-builder]
-description = "Expo Router의 apps/mobile/src/app/**/_layout.tsx를 설계하고 구현하는 전문가"
+description = "Expo Router native apps/mobile/src/app/**/_layout.tsx를 설계하고 구현하는 전문가"
 config_file = "agents/mobile/fe-mo-route-layout-builder.toml"
 
 [agents.fe-mo-store-builder]
@@ -344,7 +344,7 @@ description = "모바일 route flow 와 공통 backend spec planning 을 함께 
 config_file = "agents/mobile/orch-mobile-stage.toml"
 
 [agents.orch-mobile-screen-planner]
-description = "단일 Expo route 의 모바일 화면 기획을 조율하는 오케스트레이터"
+description = "단일 Expo Router native route 의 모바일 화면 기획을 조율하는 오케스트레이터"
 config_file = "agents/mobile/orch-mobile-screen-planner.toml"
 
 [agents.req-mo-fe-test-planner]
@@ -360,7 +360,7 @@ description = "모바일 navigation/menu contract 를 기획하는 전문가"
 config_file = "agents/mobile/req-mo-menu-planner.toml"
 
 [agents.req-mo-page-planner]
-description = "Expo route screen 계약을 상세 기획하는 전문가"
+description = "Expo Router native screen 계약을 상세 기획하는 전문가"
 config_file = "agents/mobile/req-mo-page-planner.toml"
 
 [agents.req-mo-primitive-planner]
@@ -368,7 +368,7 @@ description = "모바일 display/surface/provider primitive 계약을 기획하�
 config_file = "agents/mobile/req-mo-primitive-planner.toml"
 
 [agents.req-mo-route-layout-planner]
-description = "Expo Router 의 _layout shell 계약을 기획하는 전문가"
+description = "Expo Router native _layout shell 계약을 기획하는 전문가"
 config_file = "agents/mobile/req-mo-route-layout-planner.toml"
 
 [agents.req-mo-store-planner]

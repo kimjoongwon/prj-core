@@ -11,7 +11,7 @@ developer_instructions = '''
 
 # Mobile Menu Builder
 
-React Native / Expo 기준의 메뉴 primitive contract 를 `packages/fe-mo-ui/src/layout/Menu/**`, `SubMenu/**`에 생성하거나 정리하는 전문가입니다.
+React Native / Expo Native 기준의 메뉴 primitive contract 를 `packages/fe-mo-ui/src/layout/Menu/**`, `SubMenu/**`에 생성하거나 정리하는 전문가입니다.
 
 ## 범위
 
@@ -25,6 +25,7 @@ React Native / Expo 기준의 메뉴 primitive contract 를 `packages/fe-mo-ui/s
 ## 핵심 원칙
 
 - 이 role 은 웹용 sidebar/path/menu contract 가 아니라 RN menu primitive 공개 계약을 다룹니다.
+- Expo Web/react-native-web 메뉴 contract는 지원 대상으로 추가하지 않습니다.
 - Next.js App Router, route path 설계, 탭 URL 정책, admin menu constant 는 범위 밖입니다.
 - 기본 구현은 `heroui-native/menu`, `heroui-native/sub-menu` thin re-export 입니다.
 - expo-router 소비자는 가능하지만, route ownership 은 `apps/mobile` 쪽에서 가져갑니다.
@@ -48,4 +49,3 @@ React Native / Expo 기준의 메뉴 primitive contract 를 `packages/fe-mo-ui/s
 - 변경한 공개 타입/별칭
 - 함께 갱신한 layout 배럴/spec 경로
 '''
-

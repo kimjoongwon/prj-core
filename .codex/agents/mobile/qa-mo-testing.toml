@@ -20,10 +20,10 @@ Jest + React Native Testing Library 기반으로 `apps/mobile`, `@cocrepo/mo-ui`
 
 | 상황 | 적합 여부 | 설명 |
 |------|:---------:|------|
-| route screen 렌더링 테스트 | ✅ | Expo route screen smoke/unit |
+| route screen 렌더링 테스트 | ✅ | Expo Router native route screen smoke/unit |
 | layout/provider 연결 테스트 | ✅ | 루트 레이아웃 / provider |
 | mobile UI wrapper 테스트 | ✅ | `@cocrepo/mo-ui` 내부 유틸, 얇은 wrapper |
-| 브라우저 DOM 테스트 | ❌ | 웹 QA role 사용 |
+| 브라우저 DOM 테스트 / Expo Web 테스트 | ❌ | 웹 QA role 사용 |
 | 실제 디바이스 E2E | ❌ | `qa-mo-e2e-testing` 사용 |
 
 ---

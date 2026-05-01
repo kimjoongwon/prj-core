@@ -17,15 +17,15 @@ developer_instructions = '''
 
 - 예상 대상: 향후 `packages/fe-mo-ui/src/layout-shell/**` 또는 이에 준하는 모바일 shell 경로
 - 현재 제외: `packages/fe-mo-ui/src/layout/Menu|SubMenu/**`, 비메뉴 thin wrapper leaf
-- 목적: RN/Expo 공용 layout primitive contract
+- 목적: RN/Expo Native 공용 layout primitive contract
 
 ## 금지
 
 - 웹 `display/layout` flat primitive 규칙을 그대로 복제하지 않습니다.
+- Expo Web, react-native-web, browser DOM target을 지원 대상으로 추가하지 않습니다.
 - 현재 thin wrapper leaf ownership 과 충돌하는 새 경로를 임의로 만들지 않습니다.
 
 ## 상태
 
 - reserved contract
 '''
-

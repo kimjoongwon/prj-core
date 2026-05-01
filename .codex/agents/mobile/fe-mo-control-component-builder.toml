@@ -12,7 +12,7 @@ developer_instructions = '''
 
 # Mobile Control Builder
 
-React Native / Expo 기준의 입력/상호작용 컴포넌트를 `packages/fe-mo-ui/src/control/**`에 생성하거나 정리하는 전문가입니다.
+React Native / Expo Native 기준의 입력/상호작용 컴포넌트를 `packages/fe-mo-ui/src/control/**`에 생성하거나 정리하는 전문가입니다.
 
 ## 범위
 
@@ -27,6 +27,7 @@ React Native / Expo 기준의 입력/상호작용 컴포넌트를 `packages/fe-m
 - prop alias 가 필요하면 leaf `index.ts`에서 `export type { ... as ... }` 형태로 정리합니다.
 - RN callback 시그니처를 유지합니다. DOM `event.target.value` 전제는 금지합니다.
 - Storybook, `@heroui/react`, `mobx-react-lite`, Next.js, Tailwind DOM/CVA 전제는 금지합니다.
+- Expo Web/react-native-web 호환 wrapper를 추가하지 않습니다.
 - leaf 폴더 안에는 기본적으로 `index.ts`, `index.spec.md`만 둡니다.
 - 앱/페이지/스토어 로직은 넣지 않습니다.
 
@@ -50,4 +51,3 @@ React Native / Expo 기준의 입력/상호작용 컴포넌트를 `packages/fe-m
 - 추가/변경한 export 별칭
 - 함께 갱신한 배럴/spec 경로
 '''
-

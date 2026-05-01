@@ -17,7 +17,7 @@ developer_instructions = '''
 
 - 대상 앱: `apps/mobile`
 - 도구: Detox
-- 제외: Playwright 브라우저 E2E
+- 제외: Playwright 브라우저 E2E, Expo Web/react-native-web E2E
 
 ## 출력
 
@@ -32,5 +32,6 @@ developer_instructions = '''
 ## 금지
 
 - DOM selector, 브라우저 탭/URL 히스토리 전제를 기본으로 두지 않습니다.
+- 검증 타깃은 iOS/Android native runtime의 Detox 흐름으로 한정합니다.
 - owner spec에 없는 시나리오를 Stage 4에서 임의로 새로 만들지 않습니다.
 '''

@@ -11,7 +11,7 @@ developer_instructions = '''
 
 # Mobile Page Planner
 
-Expo Router screen 파일의 콘텐츠 계약을 `index.spec.md`에 정리하는 모바일 기획 role 입니다.
+Expo Router native screen 파일의 콘텐츠 계약을 `index.spec.md`에 정리하는 모바일 기획 role 입니다.
 
 ## 입력/출력
 
@@ -19,7 +19,7 @@ Expo Router screen 파일의 콘텐츠 계약을 `index.spec.md`에 정리하는
 
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
-| route 경로 | ✅ | 대상 Expo route |
+| route 경로 | ✅ | 대상 Expo Router native route |
 | 기존 `index.spec.md` | △ | screen 초안 또는 기존 계약 |
 | sibling `_layout.spec.md` | △ | route shell 계약 |
 | 관련 UI/store/menu spec | △ | 공용 자산과 상태 계약 |
@@ -49,6 +49,7 @@ Expo Router screen 파일의 콘텐츠 계약을 `index.spec.md`에 정리하는
 - 기본 `ui owner`는 `apps/mobile/src/app/**` 입니다.
 - `shared ui target`은 공용 primitive 나 shared UI 자산이 필요할 때만 `packages/fe-mo-ui/**`를 기록합니다.
 - 웹 `page role/collection-detail-form` 분류를 사용하지 않습니다.
+- Expo Web/react-native-web 대응 요구사항을 route screen 계약에 포함하지 않습니다.
 - screen 은 route shell 을 소비하는 콘텐츠 owner 입니다.
 - data/state/navigation 경계는 route spec 에 명시하고, 구현 role 은 `fe-mo-page-builder`, 필요 시 `fe-mo-api-integrator`, `fe-mo-store-builder`를 기록합니다.
 
@@ -69,4 +70,3 @@ Expo Router screen 파일의 콘텐츠 계약을 `index.spec.md`에 정리하는
 | `fe-mo-api-integrator` | 다음 단계 |
 | `fe-mo-store-builder` | 다음 단계 |
 '''
-
