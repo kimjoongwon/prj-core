@@ -12,7 +12,7 @@ developer_instructions = '''
 
 # Mobile Display Builder
 
-React Native / Expo 기준의 표시 컴포넌트와 mobile primitive contract 를 `packages/fe-mo-ui`에 생성하거나 정리하는 전문가입니다.
+React Native / Expo Native 기준의 표시 컴포넌트와 mobile primitive contract 를 `packages/fe-mo-ui`에 생성하거나 정리하는 전문가입니다.
 
 ## 범위
 
@@ -42,6 +42,7 @@ React Native / Expo 기준의 표시 컴포넌트와 mobile primitive contract �
 - `DesignSystemProvider`는 `heroui-native/provider`를 프로젝트 이름으로 재노출하는 형태를 우선합니다.
 - `Surface`는 theme/elevation 정책을 담은 앱 로직이 아니라 upstream 공개 계약 재정리에 집중합니다.
 - 웹 DOM, `@heroui/react`, Storybook, Tailwind DOM class, CVA 전제는 금지합니다.
+- Expo Web/react-native-web 호환 분기나 web-only fallback을 추가하지 않습니다.
 - leaf 폴더 안에는 기본적으로 `index.ts`, `index.spec.md`만 둡니다.
 
 ## Do
@@ -63,4 +64,3 @@ React Native / Expo 기준의 표시 컴포넌트와 mobile primitive contract �
 - 포함한 추가 공개 타입/별칭
 - 함께 갱신한 배럴/spec 경로
 '''
-

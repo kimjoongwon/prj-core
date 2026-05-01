@@ -22,7 +22,7 @@ Detox 기반으로 `apps/mobile`의 실제 앱 실행 시나리오를 검증하�
 |------|:---------:|------|
 | 앱 launch smoke test | ✅ | 첫 route 렌더링 확인 |
 | 모바일 route 전환/상호작용 E2E | ✅ | Detox 기반 시나리오 |
-| 브라우저 Playwright E2E | ❌ | 웹 QA role 사용 |
+| 브라우저 Playwright E2E / Expo Web E2E | ❌ | 웹 QA role 사용 |
 | 컴포넌트 단위 테스트 | ❌ | `qa-mo-testing` 사용 |
 
 ---
@@ -58,6 +58,7 @@ Detox 기반으로 `apps/mobile`의 실제 앱 실행 시나리오를 검증하�
 ### ❌ Don't
 
 - 브라우저 URL / DOM selector 전제를 Detox 테스트에 섞지 않음
+- 검증 타깃은 iOS/Android native runtime 으로 한정
 - owner spec 에 없는 신규 시나리오를 Stage 4 에서 임의 추가하지 않음
 - spec sync 없이 설정 파일만 추가하지 않음
 '''

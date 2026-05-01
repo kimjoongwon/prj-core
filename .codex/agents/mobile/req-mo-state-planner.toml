@@ -4,7 +4,7 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업 시작 전에 대상 Expo route 의 `index.spec.md`, `_layout.spec.md`, 인접 hooks/state 파일, `packages/fe-store`를 먼저 검색합니다.
+- 작업 시작 전에 대상 Expo Router native route 의 `index.spec.md`, `_layout.spec.md`, 인접 hooks/state 파일, `packages/fe-store`를 먼저 검색합니다.
 - 기존 route-local state 구조가 있으면 전체 재작성 대신 필요한 섹션만 증분 갱신합니다.
 - API server state, route-local state, shared Store 를 중복 배치하지 않습니다.
 
@@ -15,7 +15,7 @@ developer_instructions = '''
 
 ## 담당 범위
 
-- 단일 Expo route 전용 상태 기획
+- 단일 Expo Router native route 전용 상태 기획
 - route 안 여러 feature/widget 이 공유하는 local MobX state 기획
 - API server state / route-local state / shared Store 경계 기획
 - persistence 필요 여부와 RN storage prerequisite 기록
@@ -31,7 +31,7 @@ developer_instructions = '''
 
 | 분류 | owner | 예시 |
 |------|-------|------|
-| route params / navigation state | Expo Router screen | route segment, search params |
+| route params / navigation state | Expo Router native screen | route segment, search params |
 | API server state | mobile API integration | 목록 데이터, 상세 데이터, mutation 결과 |
 | MobX route-local state | `fe-mo-state-builder` | 선택, modal, draft, tab, expanded |
 | shared Store | `fe-mo-store-builder` | 여러 route 가 공유하는 앱 상태 |

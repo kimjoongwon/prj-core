@@ -906,9 +906,6 @@ importers:
       react:
         specifier: 19.2.0
         version: 19.2.0
-      react-dom:
-        specifier: 19.2.0
-        version: 19.2.0(react@19.2.0)
       react-native:
         specifier: 0.83.4
         version: 0.83.4(@babel/core@7.28.5)(@types/react@19.2.14)(bufferutil@4.1.0)(react@19.2.0)(utf-8-validate@5.0.10)
@@ -927,9 +924,6 @@ importers:
       react-native-svg:
         specifier: ^15.15.3
         version: 15.15.3(react-native@0.83.4(@babel/core@7.28.5)(@types/react@19.2.14)(bufferutil@4.1.0)(react@19.2.0)(utf-8-validate@5.0.10))(react@19.2.0)
-      react-native-web:
-        specifier: ~0.21.0
-        version: 0.21.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react-native-worklets:
         specifier: 0.7.2
         version: 0.7.2(@babel/core@7.28.5)(react-native@0.83.4(@babel/core@7.28.5)(@types/react@19.2.14)(bufferutil@4.1.0)(react@19.2.0)(utf-8-validate@5.0.10))(react@19.2.0)

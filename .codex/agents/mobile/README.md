@@ -10,7 +10,8 @@
 
 운영 원칙:
 
-- 모바일 role은 RN/Expo 전용 contract입니다.
+- 모바일 role은 iOS/Android React Native + Expo Native 전용 contract입니다.
+- Expo Web, react-native-web, browser DOM 타깃은 모바일 role의 지원 범위가 아닙니다.
 - 웹용 `fe-*`, `orch-*`, `req-*` role과 분리됩니다.
 - 모바일 orchestration 은 mobile route flow 에 공통 backend spec planning 을 포함한 compact 4-stage flow 기준입니다.
 - 모바일 검증은 Jest unit test 와 Detox E2E, `qa-mo-*` role 기준으로 정리합니다.
@@ -19,12 +20,12 @@
 ## Orchestration
 
 - [orch-mobile-stage.toml](./orch-mobile-stage.toml): 모바일 route flow 와 common backend spec planning 을 함께 조율하는 메타 role
-- [orch-mobile-screen-planner.toml](./orch-mobile-screen-planner.toml): 단일 Expo route 의 모바일 화면 기획을 조율하는 오케스트레이터
+- [orch-mobile-screen-planner.toml](./orch-mobile-screen-planner.toml): 단일 Expo Router native route 의 모바일 화면 기획을 조율하는 오케스트레이터
 
 ## Planner
 
-- [req-mo-route-layout-planner.toml](./req-mo-route-layout-planner.toml): Expo Router 의 `_layout` shell 계약을 기획하는 전문가
-- [req-mo-page-planner.toml](./req-mo-page-planner.toml): Expo route screen 계약을 상세 기획하는 전문가
+- [req-mo-route-layout-planner.toml](./req-mo-route-layout-planner.toml): Expo Router native `_layout` shell 계약을 기획하는 전문가
+- [req-mo-page-planner.toml](./req-mo-page-planner.toml): Expo Router native screen 계약을 상세 기획하는 전문가
 - [req-mo-primitive-planner.toml](./req-mo-primitive-planner.toml): 모바일 display/surface/provider primitive 계약을 기획하는 전문가
 - [req-mo-input-planner.toml](./req-mo-input-planner.toml): 모바일 입력 컴포넌트 계약을 기획하는 전문가
 - [req-mo-menu-planner.toml](./req-mo-menu-planner.toml): 모바일 navigation/menu contract 를 기획하는 전문가

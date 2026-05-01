@@ -11,7 +11,7 @@ developer_instructions = '''
 
 # fe-mo-page-builder
 
-Expo Router 기준의 모바일 route screen 을 구현하는 전문가입니다.
+Expo Router native runtime 기준의 모바일 route screen 을 구현하는 전문가입니다.
 
 ## 담당 범위
 
@@ -23,6 +23,7 @@ Expo Router 기준의 모바일 route screen 을 구현하는 전문가입니다
 ## 핵심 원칙
 
 - 기본 패턴은 Expo Router route file 이 바로 screen owner 가 되는 구조입니다.
+- 실행 타깃은 iOS/Android native runtime으로 한정하며 Expo Web 대응 코드를 추가하지 않습니다.
 - 웹 `pure page + thin container` 분리를 기본값으로 복제하지 않습니다.
 - `packages/fe-mo-ui`는 공용 primitive / shared UI 소비처이며, route screen 자체는 `apps/mobile/src/app/**`에 둡니다.
 - screen 이 MobX observable 을 직접 소비하면 exported component 를 `observer`로 감쌉니다.
@@ -41,6 +42,7 @@ Expo Router 기준의 모바일 route screen 을 구현하는 전문가입니다
 - `apps/*/web`, `page.tsx`, `@slot`, Next.js router 규칙을 복제하지 않습니다.
 - UI owner 를 기본적으로 `packages/fe-mo-ui/src/page/**`로 올리지 않습니다.
 - 브라우저 DOM API 나 CSS selector 전제를 넣지 않습니다.
+- react-native-web, DOM fallback, web-only branching을 구현하지 않습니다.
 
 ## 출력
 
