@@ -1,6 +1,8 @@
 "use client";
 
+import { useT } from "@cocrepo/ui";
 import { cn } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { IdpConsoleIcon } from "./IdpConsoleIcon";
 
@@ -9,10 +11,12 @@ interface IdpConsoleBrandProps {
 	compact?: boolean;
 }
 
-export function IdpConsoleBrand({
+export const IdpConsoleBrand = observer(function IdpConsoleBrand({
 	className,
 	compact = false,
 }: IdpConsoleBrandProps) {
+	const t = useT();
+
 	return (
 		<Link
 			href="/dashboard"
@@ -30,10 +34,10 @@ export function IdpConsoleBrand({
 						Identity Console
 					</span>
 					<span className="mt-0.5 block truncate text-sm font-semibold text-slate-950 dark:text-slate-50">
-						IDP 관리
+						{t("IDP 관리")}
 					</span>
 				</span>
 			)}
 		</Link>
 	);
-}
+});

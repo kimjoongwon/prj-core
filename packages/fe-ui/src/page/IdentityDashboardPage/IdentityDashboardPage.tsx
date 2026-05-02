@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import { useT } from "../../i18n";
 
 /**
  * 통계 카드 설정
@@ -117,6 +118,7 @@ function formatShortDate(dateStr: string): string {
  */
 export const IdentityDashboardPage = observer(
 	({ stats, trendItems }: IdentityDashboardPageProps) => {
+		const t = useT();
 		// 바 차트 최대값 계산
 		const maxTrendValue = trendItems.reduce((max, item) => {
 			return Math.max(max, item.successCount, item.failureCount);
@@ -152,7 +154,9 @@ export const IdentityDashboardPage = observer(
 												{card.icon}
 											</div>
 											<div>
-												<p className="text-sm text-default-500">{card.label}</p>
+												<p className="text-sm text-default-500">
+													{t(card.label)}
+												</p>
 												<p className={`text-2xl font-bold ${card.color}`}>
 													{stats?.[card.key] ?? 0}
 												</p>
@@ -168,18 +172,22 @@ export const IdentityDashboardPage = observer(
 							>
 								{trendItems.length === 0 ? (
 									<p className="py-8 text-center text-default-400">
-										로그인 추이 데이터가 없습니다.
+										{t("로그인 추이 데이터가 없습니다.")}
 									</p>
 								) : (
 									<div className="flex flex-col gap-4">
 										<div className="flex items-center gap-4">
 											<div className="flex items-center gap-1.5">
 												<div className="h-3 w-3 rounded-sm bg-success" />
-												<span className="text-sm text-default-500">성공</span>
+												<span className="text-sm text-default-500">
+													{t("성공")}
+												</span>
 											</div>
 											<div className="flex items-center gap-1.5">
 												<div className="h-3 w-3 rounded-sm bg-danger" />
-												<span className="text-sm text-default-500">실패</span>
+												<span className="text-sm text-default-500">
+													{t("실패")}
+												</span>
 											</div>
 										</div>
 										<div

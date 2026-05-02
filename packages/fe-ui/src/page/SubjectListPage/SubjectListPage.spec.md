@@ -15,8 +15,8 @@
 SubjectListPage
 - PageTitleBar
 - Surface
-  - SubjectGroupFilterTabs
-    - Tabs
+  - SubjectGroupFilterSelect
+    - Select
     - selected filter description
   - DataGrid
     - search input
@@ -28,7 +28,7 @@ SubjectListPage
 | 컴포넌트 | 출처 | 사용 위치 |
 | --- | --- | --- |
 | `SubjectsPageFallback` | `현재 파일` | 로딩/대기 상태 표시 |
-| `SubjectGroupFilterTabs` | `현재 파일` | 대상 유형 필터와 선택된 유형 설명 표시 |
+| `SubjectGroupFilterSelect` | `현재 파일` | 대상 유형 선택과 선택된 유형 설명 표시 |
 | `PageTitleBar` | `@cocrepo/ui` | 상단 제목, 설명, 주요 액션 표시 |
 | `Surface` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
 | `DataGrid` | `@cocrepo/ui` | 목록/표 데이터 표시 |
@@ -48,7 +48,7 @@ SubjectListPage
 | 항목 | 설명 |
 |------|------|
 | 검색 | `name`, `displayName`에 대해 클라이언트 필터링하되 placeholder는 대상명 기준으로 표시 |
-| 유형 필터 | `전체`, `공통`, `데이터`, `메뉴`, `화면`, `기능`, `화면 요소` 탭을 제공하고 선택된 유형의 역할 설명을 표시 |
+| 유형 필터 | `전체`, `공통`, `데이터`, `메뉴`, `화면`, `기능`, `화면 요소` Select를 제공하고 선택된 유형의 역할 설명을 표시 |
 | 유형 표시 | 목록 행에는 내부 식별자 대신 표시명과 한글 유형 라벨을 우선 표시 |
 | 설명 표시 | 대상별 권한 사용 맥락을 설명 컬럼에 표시 |
 | 페이지네이션 | 필터링된 rows를 `skip`/`take` 기준으로 slice하고 total은 필터 결과 수로 표시 |
@@ -61,13 +61,14 @@ SubjectListPage
 | @cocrepo/api | DTO row contract type source |
 | @cocrepo/type | 기능 구현 의존성 |
 | @cocrepo/ui | 기능 구현 의존성 |
-| @heroui/react | 유형 필터 Tabs |
+| @heroui/react | 유형 필터 Select |
 | mobx-react-lite | 기능 구현 의존성 |
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-01 | 깨진 유형 탭 필터를 HeroUI Select 기반 필터로 교체 | codex |
 | 2026-04-29 | 권한 대상 설명 컬럼과 화면 유형 라벨을 추가해 목록 해석성을 개선 | codex |
 | 2026-04-29 | 내부 식별자 중심 목록을 권한 대상 표시명, 한글 유형 탭, 유형 설명 중심으로 개선 | codex |
 | 2026-04-29 | group select 옵션, clearable select, 필터 후 페이지 슬라이스, row click 상세 이동 계약을 반영 | codex |

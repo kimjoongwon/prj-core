@@ -53,4 +53,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-01 | mutation toast 문구의 런타임 i18n 번역 적용 경로 반영 | codex |
 | 2026-05-01 | 정적 번역 관리 route page 초기 생성 | codex |
+| 2026-05-01 | Orval 생성 translation mutation 계약의 `translationId` 인자 반영 | codex |

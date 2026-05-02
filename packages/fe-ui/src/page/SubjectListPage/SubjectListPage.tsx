@@ -14,9 +14,10 @@ import {
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
-import { Tab, Tabs } from "@heroui/react";
+import { Select, SelectItem, type Selection } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { type Key, useEffect } from "react";
+import { useEffect } from "react";
+import { useT } from "../../i18n";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -101,7 +102,7 @@ function findSubjectGroupFilter(key: string) {
 	);
 }
 
-function getSubjectGroupQueryValue(key: Key) {
+function getSubjectGroupQueryValue(key: string) {
 	const selectedKey = String(key);
 	return selectedKey === SUBJECT_GROUP_FILTER_ALL_KEY ? null : selectedKey;
 }
@@ -141,43 +142,51 @@ function paginateSubjects(
 	return subjects.slice(start, end);
 }
 
-interface SubjectGroupFilterTabsProps {
+interface SubjectGroupFilterSelectProps {
 	selectedGroup: string;
 	onChangeGroup: (group: string | null) => void;
 }
 
-const SubjectGroupFilterTabs = observer(
-	({ selectedGroup, onChangeGroup }: SubjectGroupFilterTabsProps) => {
+const SubjectGroupFilterSelect = observer(
+	({ selectedGroup, onChangeGroup }: SubjectGroupFilterSelectProps) => {
+		const t = useT();
 		const selectedKey = getSubjectGroupFilterKey(selectedGroup);
 		const selectedFilter = findSubjectGroupFilter(selectedKey);
-		const handleSelectionChange = (key: Key) => {
-			onChangeGroup(getSubjectGroupQueryValue(key));
+		const handleSelectionChange = (keys: Selection) => {
+			if (keys === "all") {
+				return;
+			}
+
+			const nextKey =
+				Array.from(keys)[0]?.toString() ?? SUBJECT_GROUP_FILTER_ALL_KEY;
+			onChangeGroup(getSubjectGroupQueryValue(nextKey));
 		};
 
 		return (
 			<VStack gap="block">
-				<Tabs
-					aria-label="대상 유형 필터"
-					selectedKey={selectedKey}
+				<Select
+					aria-label={t("대상 유형 필터")}
+					placeholder={t("대상 유형")}
+					selectedKeys={[selectedKey]}
 					onSelectionChange={handleSelectionChange}
 					variant="bordered"
 					color="primary"
-					radius="full"
+					disallowEmptySelection
 					classNames={{
-						tabList: "flex-wrap",
-						tab: "h-9",
+						base: "w-full max-w-xs",
+						trigger: "h-11",
 					}}
 				>
 					{subjectGroupFilters.map((filter) => (
-						<Tab key={filter.key} title={filter.label} />
+						<SelectItem key={filter.key}>{t(filter.label)}</SelectItem>
 					))}
-				</Tabs>
+				</Select>
 				<div className="rounded-lg border border-divider bg-content2/40 p-4">
 					<div className="text-sm font-semibold text-foreground">
-						{selectedFilter.label} 대상
+						{t(`${selectedFilter.label} 대상`)}
 					</div>
 					<p className="mt-1 text-sm text-default-600">
-						{selectedFilter.description}
+						{t(selectedFilter.description)}
 					</p>
 				</div>
 			</VStack>
@@ -223,7 +232,7 @@ export const SubjectListPage = observer(
 				/>
 				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 					<VStack gap="section">
-						<SubjectGroupFilterTabs
+						<SubjectGroupFilterSelect
 							selectedGroup={queryStates.group}
 							onChangeGroup={handleSubjectGroupFilterChange}
 						/>

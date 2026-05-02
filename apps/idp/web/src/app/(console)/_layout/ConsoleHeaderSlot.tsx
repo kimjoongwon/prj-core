@@ -5,11 +5,19 @@ import {
 	useSetCurrentSpace,
 	useVerifyToken,
 } from "@cocrepo/api/idp/auth";
+import type { LanguageCode } from "@cocrepo/constant";
 import {
+	useConsoleLocaleStore,
 	useConsoleNavigationStore,
 	useConsolePersistStore,
 } from "@cocrepo/store";
-import { HeaderBar, HeaderSpaceSelector, ThemeToggleButton } from "@cocrepo/ui";
+import {
+	HeaderBar,
+	HeaderSpaceSelector,
+	LanguageSelectButton,
+	ThemeToggleButton,
+	useT,
+} from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { IdpConsoleBrand } from "@/components/console/IdpConsoleBrand";
 import {
@@ -17,14 +25,11 @@ import {
 	IdpConsoleIcon,
 } from "@/components/console/IdpConsoleIcon";
 
-const userInfo = {
-	name: "IDP 관리자",
-	role: "SPACE_SCOPED",
-};
-
 export const ConsoleHeaderSlot = observer(function ConsoleHeaderSlot() {
 	const navigationStore = useConsoleNavigationStore();
 	const persistStore = useConsolePersistStore();
+	const localeStore = useConsoleLocaleStore();
+	const t = useT();
 	const shouldVerifyCurrentTenant =
 		persistStore.isHydrated && persistStore.isSpaceSelectionResolved;
 	const { data: verifyTokenResponse } = useVerifyToken({
@@ -73,6 +78,10 @@ export const ConsoleHeaderSlot = observer(function ConsoleHeaderSlot() {
 		setCurrentSpaceMutate({ spaceId: space.spaceId });
 	};
 
+	const onChangeLanguage = (languageCode: LanguageCode) => {
+		localeStore.setLanguageCode(languageCode);
+	};
+
 	const selectedNavItem = navigationStore.selectedNavItem;
 	const selectedSubNavItem = navigationStore.selectedSubNavItem;
 	const currentSectionLabel =
@@ -83,7 +92,7 @@ export const ConsoleHeaderSlot = observer(function ConsoleHeaderSlot() {
 	return (
 		<HeaderBar
 			userInfo={{
-				...userInfo,
+				name: t("IDP 관리자"),
 				role: hasFullAccessInCurrentTenant ? "FULL_ACCESS" : "SPACE_SCOPED",
 			}}
 			onLogout={onClickLogoutButton}
@@ -98,16 +107,21 @@ export const ConsoleHeaderSlot = observer(function ConsoleHeaderSlot() {
 					</span>
 					<div className="min-w-0">
 						<p className="text-[11px] font-medium uppercase tracking-[0.22em] text-slate-400 dark:text-slate-500">
-							{currentSectionCaption}
+							{t(currentSectionCaption)}
 						</p>
 						<p className="truncate text-sm font-semibold text-slate-950 dark:text-slate-50">
-							{currentSectionLabel}
+							{t(currentSectionLabel)}
 						</p>
 					</div>
 				</>
 			}
 			actions={
 				<>
+					<LanguageSelectButton
+						value={localeStore.languageCode}
+						onChange={onChangeLanguage}
+						compact
+					/>
 					<ThemeToggleButton
 						compact
 						className="h-10 w-10 rounded-2xl border border-slate-200/70 bg-white/72 text-slate-700 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10"

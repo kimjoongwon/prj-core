@@ -34,6 +34,11 @@ interface PersistStoreRef {
 }
 let persistStoreRef: PersistStoreRef | null = null;
 
+interface LocaleStoreRef {
+	languageCode?: string | null;
+}
+let localeStoreRef: LocaleStoreRef | null = null;
+
 // 401 발생 시 리다이렉트할 로그인 URL (앱별 설정 가능)
 let loginRedirectUrl = "/admin/auth/login";
 
@@ -51,6 +56,10 @@ export function setLoginRedirectUrl(url: string) {
  */
 export function setApiPersistStore(store: PersistStoreRef) {
 	persistStoreRef = store;
+}
+
+export function setApiLocaleStore(store: LocaleStoreRef) {
+	localeStoreRef = store;
 }
 
 // 토큰 갱신 상태 관리
@@ -74,9 +83,14 @@ const processQueue = (error: unknown) => {
 AXIOS_INSTANCE.interceptors.request.use((config) => {
 	const headers = AxiosHeaders.from(config.headers);
 	const spaceId = persistStoreRef?.spaceId;
+	const languageCode = localeStoreRef?.languageCode;
 
 	if (spaceId) {
 		headers.set(REQUEST_HEADER_KEYS.SPACE_ID, spaceId);
+	}
+
+	if (languageCode) {
+		headers.set(REQUEST_HEADER_KEYS.LANGUAGE, languageCode);
 	}
 
 	config.headers = headers;

@@ -11,6 +11,7 @@ import type { Selection } from "@react-types/shared";
 import { ChevronRight } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
+import { useT } from "../../i18n";
 import { VStack } from "../../rhythm/VStack/VStack";
 
 type NavTreeItem = NavItem & {};
@@ -35,6 +36,7 @@ export const NavTreePanel = observer(
 		width = 240,
 		className,
 	}: NavTreePanelProps) => {
+		const t = useT();
 		const parentItems = items.filter((item) => item.hasChildren);
 		const standaloneItems = items.filter((item) => !item.hasChildren);
 
@@ -86,7 +88,7 @@ export const NavTreePanel = observer(
 							{item.icon && (
 								<AppIcon name={item.icon} className="h-5 w-5" size={20} />
 							)}
-							<span>{item.label}</span>
+							<span>{t(item.label)}</span>
 						</button>
 					))}
 
@@ -132,7 +134,7 @@ export const NavTreePanel = observer(
 							{parentItems.map((item) => (
 								<AccordionItem
 									key={item.id}
-									aria-label={item.label}
+									aria-label={t(item.label)}
 									title={
 										<span
 											className={cn(
@@ -140,7 +142,7 @@ export const NavTreePanel = observer(
 												item.active ? "text-primary" : "text-foreground/70",
 											)}
 										>
-											{item.label}
+											{t(item.label)}
 										</span>
 									}
 									startContent={
@@ -177,7 +179,7 @@ export const NavTreePanel = observer(
 														: "text-foreground/60 hover:bg-default-50 hover:text-foreground",
 												)}
 											>
-												{child.label}
+												{t(child.label)}
 											</button>
 										))}
 									</div>

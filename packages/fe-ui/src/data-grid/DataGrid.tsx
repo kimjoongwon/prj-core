@@ -27,6 +27,7 @@ import {
 import { FileX } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import { translateNode, useT, type Translate } from "../i18n";
 import { Pagination } from "../control/Pagination/Pagination";
 import { InputRenderer } from "./InputRenderer";
 
@@ -55,8 +56,14 @@ function getColumnAlign<T extends object>(column: ColumnDef<T, unknown>) {
 	return align;
 }
 
-function getHeaderLabel<T extends object>(header: Header<T, unknown>) {
-	return flexRender(header.column.columnDef.header, header.getContext());
+function getHeaderLabel<T extends object>(
+	header: Header<T, unknown>,
+	t: Translate,
+) {
+	return translateNode(
+		flexRender(header.column.columnDef.header, header.getContext()),
+		t,
+	);
 }
 
 function resolveClassNameValue(className: unknown) {
@@ -197,6 +204,7 @@ export const DataGrid = observer(
 		totalCount,
 		isLoading = false,
 	}: DataGridProps<T>) => {
+		const t = useT();
 		const [expanded, setExpanded] = useState<ExpandedState>({});
 		const [localSelection, setLocalSelection] = useState<Selection>(
 			new Set<Key>(),
@@ -233,6 +241,9 @@ export const DataGrid = observer(
 		});
 		const headers = table.getHeaderGroups()[0]?.headers ?? [];
 		const tableRows = table.getRowModel().rows;
+		const emptyMessage = config.emptyMessage
+			? t(config.emptyMessage)
+			: t(DATA_GRID_EMPTY_MESSAGE);
 
 		const handleRowAction = (key: string | number | bigint) => {
 			if (!config.onRowClick) {
@@ -302,14 +313,12 @@ export const DataGrid = observer(
 				) : rows.length === 0 ? (
 					<div className="flex flex-col items-center justify-center py-16 text-default-400">
 						<FileX size={48} className="mb-4" />
-						<p className="text-lg">
-							{config.emptyMessage ?? DATA_GRID_EMPTY_MESSAGE}
-						</p>
+						<p className="text-lg">{emptyMessage}</p>
 					</div>
 				) : (
 					<div className="relative">
 						<HeroTable
-							aria-label="데이터 테이블"
+							aria-label={t("데이터 테이블")}
 							classNames={{
 								tr: config.onRowClick
 									? "cursor-pointer hover:bg-content2"
@@ -331,12 +340,12 @@ export const DataGrid = observer(
 											colSpan={header.colSpan}
 											align={align}
 										>
-											{header.isPlaceholder ? null : getHeaderLabel(header)}
+											{header.isPlaceholder ? null : getHeaderLabel(header, t)}
 										</TableColumn>
 									);
 								})}
 							</TableHeader>
-							<TableBody emptyContent={DATA_GRID_EMPTY_MESSAGE}>
+							<TableBody emptyContent={emptyMessage}>
 								{tableRows.map((row) => (
 									<TableRow key={row.id}>
 										{row.getVisibleCells().map((cell) => (
@@ -356,7 +365,9 @@ export const DataGrid = observer(
 
 				<div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 py-4">
 					<span className="text-sm text-default-500">
-						총 {totalCount.toLocaleString()}건
+						{t("총 {{count}}건", undefined, {
+							count: totalCount.toLocaleString(),
+						})}
 					</span>
 					<Pagination
 						totalCount={totalCount}
@@ -373,7 +384,9 @@ export const DataGrid = observer(
 						<div className="flex items-center gap-4 px-6 py-3 bg-content2 rounded-full shadow-lg border border-divider">
 							{actionBarConfig?.showCount !== false && (
 								<span className="text-sm font-medium text-default-700">
-									{selectedCount}개 선택됨
+									{t("{{count}}개 선택됨", undefined, {
+										count: selectedCount,
+									})}
 								</span>
 							)}
 							<div className="w-px h-6 bg-divider" />

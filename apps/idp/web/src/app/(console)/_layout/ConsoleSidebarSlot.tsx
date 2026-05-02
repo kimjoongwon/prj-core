@@ -8,7 +8,7 @@ import {
 	useConsoleNavigationStore,
 	useConsolePersistStore,
 } from "@cocrepo/store";
-import { SidePanel } from "@cocrepo/ui";
+import { SidePanel, useT } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { IdpConsoleBrand } from "@/components/console/IdpConsoleBrand";
 import {
@@ -26,6 +26,7 @@ const NAV_ITEM_COPY: Record<string, string> = {
 };
 
 export const ConsoleSidebarSlot = observer(function ConsoleSidebarSlot() {
+	const t = useT();
 	const persistStore = useConsolePersistStore();
 	const shouldVerifyCurrentTenant =
 		persistStore.isHydrated && persistStore.isSpaceSelectionResolved;
@@ -68,8 +69,12 @@ export const ConsoleSidebarSlot = observer(function ConsoleSidebarSlot() {
 					</p>
 					<p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
 						{hasFullAccessInCurrentTenant
-							? "현재 tenant FULL_ACCESS로 전체 리소스를 확인합니다."
-							: `${persistStore.groundName || "현재 Space"} 기준으로 리소스 범위를 제한합니다.`}
+							? t("현재 tenant FULL_ACCESS로 전체 리소스를 확인합니다.")
+							: t(
+									"{{spaceName}} 기준으로 리소스 범위를 제한합니다.",
+									undefined,
+									{ spaceName: persistStore.groundName || t("현재 Space") },
+								)}
 					</p>
 				</>
 			}

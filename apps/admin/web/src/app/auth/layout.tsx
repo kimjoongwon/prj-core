@@ -1,5 +1,6 @@
 import { Page } from "@cocrepo/ui";
 import type { ReactNode } from "react";
+import { AuthTopActions } from "./AuthTopActions";
 
 /**
  * 인증 페이지 레이아웃
@@ -13,5 +14,10 @@ import type { ReactNode } from "react";
  * 규칙: 하나의 layout.tsx에는 하나의 Layout만 선언
  */
 export default function AuthLayoutRoute({ children }: { children: ReactNode }) {
-	return <Page className="min-h-screen">{children}</Page>;
+	return (
+		<Page className="relative min-h-screen">
+			<AuthTopActions />
+			{children}
+		</Page>
+	);
 }

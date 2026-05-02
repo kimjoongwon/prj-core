@@ -4,6 +4,7 @@ import { Chip, Divider } from "@heroui/react";
 import { ArrowDownRight, ArrowUpRight, FileText } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import { useT } from "../../i18n";
 
 /** 연결 관계 정의 */
 export interface DetailConnection {
@@ -95,14 +96,15 @@ export const DetailPanel = observer(
 		emptyDescription = "상세 정보가 표시됩니다",
 		className = "",
 	}: DetailPanelProps) => {
+		const t = useT();
 		if (!item) {
 			return (
 				<div
 					className={`flex h-full flex-col items-center justify-center p-4 text-center text-default-400 ${className}`}
 				>
 					<FileText className="mb-2 size-8" />
-					<p className="text-sm">{emptyMessage}</p>
-					<p className="text-sm">{emptyDescription}</p>
+					<p className="text-sm">{t(emptyMessage)}</p>
+					<p className="text-sm">{t(emptyDescription)}</p>
 				</div>
 			);
 		}
@@ -167,7 +169,7 @@ export const DetailPanel = observer(
 				{item.description && (
 					<div>
 						<h4 className="mb-1 text-xs font-semibold text-default-500">
-							설명
+							{t("설명")}
 						</h4>
 						<p className="text-sm text-default-700">{item.description}</p>
 					</div>
@@ -177,7 +179,7 @@ export const DetailPanel = observer(
 				{item.metadata && Object.keys(item.metadata).length > 0 && (
 					<div>
 						<h4 className="mb-1 text-xs font-semibold text-default-500">
-							메타데이터
+							{t("메타데이터")}
 						</h4>
 						<div className="space-y-1 rounded-md bg-content2 p-2">
 							{Object.entries(item.metadata).map(([key, value]) => (
@@ -199,7 +201,7 @@ export const DetailPanel = observer(
 					<div>
 						<h4 className="mb-2 flex items-center gap-1 text-xs font-semibold text-default-500">
 							<ArrowDownRight className="size-3" />
-							들어오는 연결 ({item.incomingConnections.length})
+							{t("들어오는 연결")} ({item.incomingConnections.length})
 						</h4>
 						<div className="space-y-1">
 							{item.incomingConnections.map((conn) => (
@@ -219,7 +221,7 @@ export const DetailPanel = observer(
 					<div>
 						<h4 className="mb-2 flex items-center gap-1 text-xs font-semibold text-default-500">
 							<ArrowUpRight className="size-3" />
-							나가는 연결 ({item.outgoingConnections.length})
+							{t("나가는 연결")} ({item.outgoingConnections.length})
 						</h4>
 						<div className="space-y-1">
 							{item.outgoingConnections.map((conn) => (

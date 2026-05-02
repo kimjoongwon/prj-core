@@ -1,4 +1,8 @@
+"use client";
+
 import { type ButtonProps, Button as NextUIButton } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { translateNode, useT } from "../../i18n";
 
 /**
  * Button 컴포넌트
@@ -26,12 +30,23 @@ import { type ButtonProps, Button as NextUIButton } from "@heroui/react";
  * <Button isIconOnly><Plus /></Button>
  * ```
  */
-export const Button = (props: ButtonProps) => {
+export const Button = observer(function Button(props: ButtonProps) {
+	const t = useT();
 	const { children, onPress, ...rest } = props;
+	const ariaLabel =
+		typeof rest["aria-label"] === "string"
+			? t(rest["aria-label"])
+			: rest["aria-label"];
+	const title = typeof rest.title === "string" ? t(rest.title) : rest.title;
 
 	return (
-		<NextUIButton onPress={onPress} {...rest}>
-			{children}
+		<NextUIButton
+			onPress={onPress}
+			{...rest}
+			aria-label={ariaLabel}
+			title={title}
+		>
+			{translateNode(children, t)}
 		</NextUIButton>
 	);
-};
+});

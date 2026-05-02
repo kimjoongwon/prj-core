@@ -304,6 +304,16 @@ describe("NavigationStore", () => {
 			expect(navigationStore.selectedSubNavItem?.id).toBe("member-list");
 		});
 
+		it("하위 메뉴 경로와 매칭되면 부모 메뉴를 펼쳐야 한다", () => {
+			// When
+			navigationStore.setCurrentPath("/members/list");
+
+			// Then
+			expect(Array.from(navigationStore.expandedNavItemIds)).toEqual([
+				"members",
+			]);
+		});
+
 		it("중첩 경로도 매칭해야 한다", () => {
 			// When
 			navigationStore.setCurrentPath("/members/add");
@@ -320,6 +330,18 @@ describe("NavigationStore", () => {
 			// Then
 			expect(navigationStore.selectedNavItem?.id).toBe("dashboard");
 			expect(navigationStore.selectedSubNavItem).toBeNull();
+		});
+
+		it("children이 없는 경로로 이동하면 펼쳐진 부모 메뉴를 닫아야 한다", () => {
+			// Given
+			navigationStore.setCurrentPath("/members/list");
+
+			// When
+			navigationStore.setCurrentPath("/dashboard");
+
+			// Then
+			expect(navigationStore.selectedNavItem?.id).toBe("dashboard");
+			expect(Array.from(navigationStore.expandedNavItemIds)).toEqual([]);
 		});
 
 		it("동일한 경로로 재호출하면 무시해야 한다", () => {

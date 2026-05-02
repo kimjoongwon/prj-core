@@ -89,6 +89,7 @@ export interface AppStoreProviderResult<
 	TPersistStore,
 	TBottomTabStore,
 	TFABStore,
+	TLocaleStore = unknown,
 > {
 	AppStoreContext: Context<TStore | null>;
 	AppStoreProvider: FC<{ children: ReactNode }>;
@@ -97,4 +98,5 @@ export interface AppStoreProviderResult<
 	usePersistStore: () => TPersistStore;
 	useBottomTabStore: () => TBottomTabStore;
 	useFABStore: () => TFABStore;
+	useLocaleStore: () => TLocaleStore;
 }

@@ -2,6 +2,7 @@
 
 import { Chip } from "@heroui/react";
 import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 export interface AuditResultBadgeProps {
 	/** 감사 결과 (SUCCESS, FAILURE, LOCKED 등) */
@@ -25,6 +26,7 @@ const RESULT_CONFIG: Record<
  */
 export const AuditResultBadge = observer(
 	({ result }: AuditResultBadgeProps) => {
+		const t = useT();
 		const { label, color } = RESULT_CONFIG[result] ?? {
 			label: result,
 			color: "danger" as const,
@@ -32,7 +34,7 @@ export const AuditResultBadge = observer(
 
 		return (
 			<Chip size="sm" color={color} variant="flat">
-				{label}
+				{t(label)}
 			</Chip>
 		);
 	},

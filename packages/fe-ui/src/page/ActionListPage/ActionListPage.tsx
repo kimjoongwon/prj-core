@@ -15,10 +15,11 @@ import {
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Tab, Tabs } from "@heroui/react";
+import { Button, Select, SelectItem, type Selection } from "@heroui/react";
 import { KeyRound, Layers3, Plus, ShieldCheck } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { type Key, type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect } from "react";
+import { useT } from "../../i18n";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -88,7 +89,7 @@ function findActionGroupFilter(key: string) {
 	);
 }
 
-function getActionGroupQueryValue(key: Key) {
+function getActionGroupQueryValue(key: string) {
 	const selectedKey = String(key);
 	return selectedKey === ACTION_GROUP_FILTER_ALL_KEY ? null : selectedKey;
 }
@@ -180,7 +181,7 @@ export const ActionListPage = observer(
 				<ActionContextPanel />
 				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 					<VStack gap="section">
-						<ActionGroupFilterTabs
+						<ActionGroupFilterSelect
 							selectedGroup={queryStates.group}
 							onChangeGroup={handleActionGroupFilterChange}
 						/>
@@ -261,43 +262,51 @@ const ActionContextItem = observer(
 	},
 );
 
-interface ActionGroupFilterTabsProps {
+interface ActionGroupFilterSelectProps {
 	selectedGroup: string;
 	onChangeGroup: (group: string | null) => void;
 }
 
-const ActionGroupFilterTabs = observer(
-	({ selectedGroup, onChangeGroup }: ActionGroupFilterTabsProps) => {
+const ActionGroupFilterSelect = observer(
+	({ selectedGroup, onChangeGroup }: ActionGroupFilterSelectProps) => {
+		const t = useT();
 		const selectedKey = getActionGroupFilterKey(selectedGroup);
 		const selectedFilter = findActionGroupFilter(selectedKey);
-		const handleSelectionChange = (key: Key) => {
-			onChangeGroup(getActionGroupQueryValue(key));
+		const handleSelectionChange = (keys: Selection) => {
+			if (keys === "all") {
+				return;
+			}
+
+			const nextKey =
+				Array.from(keys)[0]?.toString() ?? ACTION_GROUP_FILTER_ALL_KEY;
+			onChangeGroup(getActionGroupQueryValue(nextKey));
 		};
 
 		return (
 			<VStack gap="block">
-				<Tabs
-					aria-label="권한 액션 그룹 필터"
-					selectedKey={selectedKey}
+				<Select
+					aria-label={t("권한 액션 그룹 필터")}
+					placeholder={t("액션 그룹")}
+					selectedKeys={[selectedKey]}
 					onSelectionChange={handleSelectionChange}
 					variant="bordered"
 					color="primary"
-					radius="full"
+					disallowEmptySelection
 					classNames={{
-						tabList: "flex-wrap",
-						tab: "h-9",
+						base: "w-full max-w-xs",
+						trigger: "h-11",
 					}}
 				>
 					{actionGroupFilters.map((filter) => (
-						<Tab key={filter.key} title={filter.label} />
+						<SelectItem key={filter.key}>{t(filter.label)}</SelectItem>
 					))}
-				</Tabs>
+				</Select>
 				<div className="rounded-lg border border-divider bg-content2/40 p-4">
 					<div className="text-sm font-semibold text-foreground">
-						{selectedFilter.label} 액션
+						{t(`${selectedFilter.label} 액션`)}
 					</div>
 					<p className="mt-1 text-sm text-default-600">
-						{selectedFilter.description}
+						{t(selectedFilter.description)}
 					</p>
 				</div>
 			</VStack>

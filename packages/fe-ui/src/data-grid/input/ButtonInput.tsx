@@ -3,12 +3,14 @@
 import type { InputConfig } from "@cocrepo/type";
 import { Button } from "@heroui/react";
 import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 interface ButtonInputProps {
 	config: InputConfig;
 }
 
 export const ButtonInput = observer(({ config }: ButtonInputProps) => {
+	const t = useT();
 	const handleClick = () => {
 		config.handlers?.onClick?.();
 	};
@@ -21,7 +23,7 @@ export const ButtonInput = observer(({ config }: ButtonInputProps) => {
 			startContent={config.props?.startContent}
 			onPress={handleClick}
 		>
-			{config.label}
+			{config.label ? t(config.label) : null}
 		</Button>
 	);
 });

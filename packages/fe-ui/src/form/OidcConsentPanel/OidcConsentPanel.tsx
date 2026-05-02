@@ -8,6 +8,7 @@ import {
 import { observer } from "mobx-react-lite";
 import { Button } from "../../control";
 import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
+import { useT } from "../../i18n";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 
@@ -35,6 +36,8 @@ export interface OidcConsentPanelProps {
  */
 export const OidcConsentPanel = observer(
 	({ state, client, missingScopes }: OidcConsentPanelProps) => {
+		const t = useT();
+
 		return (
 			<AuthCard>
 				<AuthCardHeader
@@ -54,7 +57,7 @@ export const OidcConsentPanel = observer(
 				{/* 요청된 권한 목록 */}
 				<div className="mb-6 rounded-xl border border-slate-200/70 bg-slate-100/80 p-4 dark:border-white/10 dark:bg-white/[0.04]">
 					<h3 className="mb-3 text-sm font-medium text-slate-700 dark:text-slate-200">
-						요청된 권한
+						{t("요청된 권한")}
 					</h3>
 					<ul className="space-y-3">
 						{missingScopes.map((scope) => (
@@ -75,7 +78,7 @@ export const OidcConsentPanel = observer(
 									</svg>
 								</div>
 								<p className="text-foreground font-medium">
-									{SCOPE_LABELS[scope] || scope}
+									{SCOPE_LABELS[scope] ? t(SCOPE_LABELS[scope]) : scope}
 								</p>
 							</li>
 						))}
@@ -107,8 +110,9 @@ export const OidcConsentPanel = observer(
 
 				{/* 개인정보 안내 */}
 				<p className="text-center text-default-400 text-xs mt-6">
-					허용하면 예약 조회와 계정 연동에 필요한 정보가{" "}
-					{client?.name || "애플리케이션"}과(와) 공유됩니다.
+					{t("허용하면 예약 조회와 계정 연동에 필요한 정보가")}{" "}
+					{client?.name || t("애플리케이션")}
+					{t("과(와) 공유됩니다.")}
 				</p>
 			</AuthCard>
 		);

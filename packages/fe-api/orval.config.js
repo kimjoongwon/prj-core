@@ -63,6 +63,10 @@ async function isServerRunning(url, timeout = 2000) {
  */
 async function resolveApiUrl(envMap, label) {
   const orvalEnv = process.env.ORVAL_ENV;
+  const explicitUrl =
+    label === "Server"
+      ? process.env.CORE_API_INTERNAL_URL
+      : process.env.IDP_API_INTERNAL_URL;
 
   // 명시적 환경 지정 시 바로 해당 URL 사용
   if (orvalEnv) {
@@ -72,6 +76,12 @@ async function resolveApiUrl(envMap, label) {
     }
     console.log(`🎯 [${label}] ORVAL_ENV=${orvalEnv} → ${url}`);
     return url;
+  }
+
+  if (explicitUrl) {
+    const apiJsonUrl = `${explicitUrl.replace(/\/$/, "")}/api-json`;
+    console.log(`🎯 [${label}] runtime env → ${apiJsonUrl}`);
+    return apiJsonUrl;
   }
 
   // ORVAL_ENV 미지정: localhost 자동 감지

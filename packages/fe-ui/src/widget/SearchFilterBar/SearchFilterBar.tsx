@@ -3,6 +3,7 @@
 import { Button, Input } from "@heroui/react";
 import { Filter, Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 export interface SearchFilterBarProps {
 	/** 검색어 값 */
@@ -53,6 +54,7 @@ export const SearchFilterBar = observer(
 		showFilterButton = true,
 		className = "",
 	}: SearchFilterBarProps) => {
+		const t = useT();
 		const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 			if (e.key === "Enter") {
 				onSearch?.();
@@ -62,7 +64,7 @@ export const SearchFilterBar = observer(
 		return (
 			<div className={`flex items-center gap-3 ${className}`}>
 				<Input
-					placeholder={placeholder}
+					placeholder={t(placeholder)}
 					size="md"
 					value={searchValue}
 					onValueChange={onSearchChange}
@@ -81,7 +83,7 @@ export const SearchFilterBar = observer(
 						startContent={<Filter className="size-4" />}
 						className="shrink-0"
 					>
-						필터
+						{t("필터")}
 						{filterCount > 0 && (
 							<span className="ml-1 rounded-full bg-primary-foreground/20 px-1.5 text-xs">
 								{filterCount}

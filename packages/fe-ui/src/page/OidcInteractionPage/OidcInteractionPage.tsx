@@ -5,6 +5,7 @@ import { observer } from "mobx-react-lite";
 import type { FormEvent, MouseEvent } from "react";
 import { Button } from "../../control";
 import { AlertBanner } from "../../display";
+import { useT } from "../../i18n";
 import {
 	OidcConsentPanel,
 	type OidcConsentPanelState,
@@ -41,6 +42,7 @@ export interface OidcInteractionPageProps {
 
 export const OidcInteractionPage = observer(
 	(props: OidcInteractionPageProps) => {
+		const t = useT();
 		const onSubmitOidcInteractionPage = (event: FormEvent<HTMLDivElement>) => {
 			event.preventDefault();
 			void props.onSubmitLoginForm();
@@ -76,9 +78,11 @@ export const OidcInteractionPage = observer(
 						<Spinner size="lg" />
 						<div className="space-y-1">
 							<p className="font-medium text-foreground">
-								인증 정보를 확인하고 있습니다
+								{t("인증 정보를 확인하고 있습니다")}
 							</p>
-							<p className="text-sm text-default-500">잠시만 기다려 주세요.</p>
+							<p className="text-sm text-default-500">
+								{t("잠시만 기다려 주세요.")}
+							</p>
 						</div>
 					</div>
 				</AuthCard>
@@ -104,7 +108,9 @@ export const OidcInteractionPage = observer(
 							color="primary"
 							onPress={props.onClickRecoveryButton}
 						>
-							{props.state.isExpiredInteraction ? "다시 로그인" : "돌아가기"}
+							{props.state.isExpiredInteraction
+								? t("다시 로그인")
+								: t("돌아가기")}
 						</Button>
 					</div>
 				</AuthCard>

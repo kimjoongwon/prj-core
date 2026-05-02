@@ -1,5 +1,9 @@
+"use client";
+
 import { Button } from "@heroui/react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { observer } from "mobx-react-lite";
+import { useT } from "../../../i18n";
 
 const connectionStatusVariants = cva(
 	"inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium",
@@ -53,29 +57,32 @@ const STATUS_INDICATOR: Record<
  * <WebSocketConnectionStatus status="disconnected" onReconnect={handleReconnect} />
  * ```
  */
-export const WebSocketConnectionStatus = ({
-	status,
-	onReconnect,
-	className,
-}: WebSocketConnectionStatusProps) => {
-	const { dot, label } =
-		STATUS_INDICATOR[status] ?? STATUS_INDICATOR.disconnected;
+export const WebSocketConnectionStatus = observer(
+	function WebSocketConnectionStatus({
+		status,
+		onReconnect,
+		className,
+	}: WebSocketConnectionStatusProps) {
+		const t = useT();
+		const { dot, label } =
+			STATUS_INDICATOR[status] ?? STATUS_INDICATOR.disconnected;
 
-	return (
-		<div className={connectionStatusVariants({ status, className })}>
-			<span>{dot}</span>
-			<span>{label}</span>
-			{status === "disconnected" && onReconnect && (
-				<Button
-					size="sm"
-					variant="flat"
-					color="danger"
-					onPress={onReconnect}
-					className="h-5 min-w-fit px-2 text-[10px]"
-				>
-					재연결
-				</Button>
-			)}
-		</div>
-	);
-};
+		return (
+			<div className={connectionStatusVariants({ status, className })}>
+				<span>{dot}</span>
+				<span>{t(label)}</span>
+				{status === "disconnected" && onReconnect && (
+					<Button
+						size="sm"
+						variant="flat"
+						color="danger"
+						onPress={onReconnect}
+						className="h-5 min-w-fit px-2 text-[10px]"
+					>
+						{t("재연결")}
+					</Button>
+				)}
+			</div>
+		);
+	},
+);

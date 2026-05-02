@@ -16,7 +16,7 @@ ActionListPage
 - PageTitleBar (권한 액션 목록 + 액션 등록)
 - Surface (권한 액션 카탈로그 맥락)
 - Surface
-  - Group filter Tabs
+  - Group filter Select
   - DataGrid
 ```
 
@@ -25,8 +25,9 @@ ActionListPage
 | 컴포넌트 | 출처 | 사용 위치 |
 | --- | --- | --- |
 | `Button` | `@heroui/react` | 주요 액션 실행 |
-| `Tab`, `Tabs` | `@heroui/react` | 액션 그룹 필터 |
+| `Select`, `SelectItem` | `@heroui/react` | 액션 그룹 필터 |
 | `KeyRound`, `Layers3`, `Plus`, `ShieldCheck` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `ActionGroupFilterSelect` | `현재 파일` | 액션 그룹 선택과 선택된 그룹 설명 표시 |
 | `ActionsPageFallback` | `현재 파일` | 로딩/대기 상태 표시 |
 | `HStack`, `VStack` | `@cocrepo/ui` | semantic rhythm 레이아웃 |
 | `PageTitleBar` | `@cocrepo/ui` | 상단 제목, 설명, 주요 액션 표시 |
@@ -57,6 +58,7 @@ ActionListPage
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-01 | 깨진 그룹 탭 필터를 HeroUI Select 기반 필터로 교체 | codex |
 | 2026-04-29 | 권한 액션 맥락 패널, 그룹 탭 필터, 상세 진입 버튼을 반영 | codex |
 | 2026-04-28 | 목록 row 계약을 Page 전용 view model 대신 Orval DTO optional props로 정리 | codex |
 | 2026-04-24 | 목록 검색과 페이지네이션 검색 조건 계약을 명시적으로 정리 | codex |

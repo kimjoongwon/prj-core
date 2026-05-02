@@ -40,7 +40,6 @@ import type {
 import type {
 	ChangePassword200AllOf,
 	ChangePasswordDto,
-	EmailVerificationRequestedDto,
 	ForceResetPassword200AllOf,
 	GetAuthAuditLogStats200AllOf,
 	GetAuthAuditLogs200AllOf,
@@ -56,6 +55,7 @@ import type {
 	RevokeSession200AllOf,
 	SetCurrentSpace200AllOf,
 	SetCurrentSpaceDto,
+	SignUp201AllOf,
 	SignUpPayloadDto,
 	UnlockAccount200AllOf,
 	VerifyToken200AllOf,
@@ -1064,7 +1064,7 @@ export const useRefreshToken = <TError = ErrorType<void>, TContext = unknown>(
 	return useMutation(mutationOptions, queryClient);
 };
 /**
- * 새로운 사용자 계정을 생성합니다.
+ * 이메일 인증 요청을 생성하고 인증 메일을 발송합니다. User는 인증 완료 시 생성됩니다.
  * @summary 회원가입
  */
 export const signUp = (
@@ -1072,7 +1072,7 @@ export const signUp = (
 	options?: SecondParameter<typeof customIdpInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<EmailVerificationRequestedDto>(
+	return customIdpInstance<SignUp201AllOf>(
 		{
 			url: `/api/v1/auth/sign-up`,
 			method: "POST",
@@ -1152,6 +1152,517 @@ export const useSignUp = <TError = ErrorType<void>, TContext = unknown>(
 
 	return useMutation(mutationOptions, queryClient);
 };
+/**
+ * 이메일 인증 토큰을 확인하고 회원가입을 완료한 뒤 Admin 로그인 화면으로 리다이렉트합니다.
+ * @summary 회원가입 이메일 인증 완료
+ */
+export const confirmEmailVerification = (
+	token: string,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
+) => {
+	return customIdpInstance<unknown>(
+		{
+			url: `/api/v1/auth/email-verifications/${token}/confirm`,
+			method: "GET",
+			signal,
+		},
+		options,
+	);
+};
+
+export const getConfirmEmailVerificationQueryKey = (token?: string) => {
+	return [`/api/v1/auth/email-verifications/${token}/confirm`] as const;
+};
+
+export const getConfirmEmailVerificationInfiniteQueryKey = (token?: string) => {
+	return [
+		"infinite",
+		`/api/v1/auth/email-verifications/${token}/confirm`,
+	] as const;
+};
+
+export const getConfirmEmailVerificationQueryOptions = <
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ?? getConfirmEmailVerificationQueryKey(token);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof confirmEmailVerification>>
+	> = ({ signal }) => confirmEmailVerification(token, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		enabled: !!token,
+		...queryOptions,
+	} as UseQueryOptions<
+		Awaited<ReturnType<typeof confirmEmailVerification>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type ConfirmEmailVerificationQueryResult = NonNullable<
+	Awaited<ReturnType<typeof confirmEmailVerification>>
+>;
+export type ConfirmEmailVerificationQueryError = ErrorType<void>;
+
+export function useConfirmEmailVerification<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof confirmEmailVerification>>,
+					TError,
+					Awaited<ReturnType<typeof confirmEmailVerification>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useConfirmEmailVerification<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof confirmEmailVerification>>,
+					TError,
+					Awaited<ReturnType<typeof confirmEmailVerification>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useConfirmEmailVerification<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 회원가입 이메일 인증 완료
+ */
+
+export function useConfirmEmailVerification<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getConfirmEmailVerificationQueryOptions(token, options);
+
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary 회원가입 이메일 인증 완료
+ */
+export const prefetchConfirmEmailVerificationQuery = async <
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	token: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getConfirmEmailVerificationQueryOptions(token, options);
+
+	await queryClient.prefetchQuery(queryOptions);
+
+	return queryClient;
+};
+
+export const getConfirmEmailVerificationSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ?? getConfirmEmailVerificationQueryKey(token);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof confirmEmailVerification>>
+	> = ({ signal }) => confirmEmailVerification(token, requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof confirmEmailVerification>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type ConfirmEmailVerificationSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof confirmEmailVerification>>
+>;
+export type ConfirmEmailVerificationSuspenseQueryError = ErrorType<void>;
+
+export function useConfirmEmailVerificationSuspense<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useConfirmEmailVerificationSuspense<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useConfirmEmailVerificationSuspense<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 회원가입 이메일 인증 완료
+ */
+
+export function useConfirmEmailVerificationSuspense<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getConfirmEmailVerificationSuspenseQueryOptions(
+		token,
+		options,
+	);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+export const getConfirmEmailVerificationSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ??
+		getConfirmEmailVerificationInfiniteQueryKey(token);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof confirmEmailVerification>>
+	> = ({ signal }) => confirmEmailVerification(token, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof confirmEmailVerification>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type ConfirmEmailVerificationSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof confirmEmailVerification>>
+>;
+export type ConfirmEmailVerificationSuspenseInfiniteQueryError =
+	ErrorType<void>;
+
+export function useConfirmEmailVerificationSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useConfirmEmailVerificationSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useConfirmEmailVerificationSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 회원가입 이메일 인증 완료
+ */
+
+export function useConfirmEmailVerificationSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getConfirmEmailVerificationSuspenseInfiniteQueryOptions(
+		token,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary 회원가입 이메일 인증 완료
+ */
+export const prefetchConfirmEmailVerificationInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getConfirmEmailVerificationSuspenseInfiniteQueryOptions(
+		token,
+		options,
+	);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
+
 /**
  * 현재 요청의 액세스 토큰이 유효한지 검증합니다.
  * @summary 토큰 유효성 검증

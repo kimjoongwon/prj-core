@@ -3,6 +3,7 @@
 import type { DataGridState, InputConfig } from "@cocrepo/type";
 import { Select, SelectItem, type Selection } from "@heroui/react";
 import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 interface SelectInputProps {
 	config: InputConfig;
@@ -10,6 +11,7 @@ interface SelectInputProps {
 }
 
 export const SelectInput = observer(({ config, state }: SelectInputProps) => {
+	const t = useT();
 	const queryKey = config.props?.queryKey ?? config.id;
 	const value =
 		typeof state.query.values[queryKey] === "string"
@@ -39,7 +41,13 @@ export const SelectInput = observer(({ config, state }: SelectInputProps) => {
 
 	return (
 		<Select
-			placeholder={config.placeholder ?? config.label}
+			placeholder={
+				config.placeholder
+					? t(config.placeholder)
+					: config.label
+						? t(config.label)
+						: undefined
+			}
 			selectedKeys={value ? [value] : []}
 			onSelectionChange={handleSelectionChange}
 			isClearable={isClearable}
@@ -48,10 +56,10 @@ export const SelectInput = observer(({ config, state }: SelectInputProps) => {
 				base: "min-w-[160px] max-w-xs",
 				trigger: "h-10",
 			}}
-			aria-label={config.label ?? config.id}
+			aria-label={config.label ? t(config.label) : config.id}
 		>
 			{options.map((opt) => (
-				<SelectItem key={opt.value}>{opt.label}</SelectItem>
+				<SelectItem key={opt.value}>{t(opt.label)}</SelectItem>
 			))}
 		</Select>
 	);

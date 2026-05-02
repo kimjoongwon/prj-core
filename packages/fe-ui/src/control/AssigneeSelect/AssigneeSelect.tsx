@@ -1,6 +1,10 @@
+"use client";
+
+import type { Option } from "@cocrepo/type";
 import type { SelectProps } from "@heroui/react";
 import { Select, SelectItem } from "@heroui/react";
-import type { Option } from "@cocrepo/type";
+import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 export interface Assignee {
 	/** 사용자 ID */
@@ -47,7 +51,10 @@ export interface AssigneeSelectProps
  * />
  * ```
  */
-export const AssigneeSelect = (props: AssigneeSelectProps) => {
+export const AssigneeSelect = observer(function AssigneeSelect(
+	props: AssigneeSelectProps,
+) {
+	const t = useT();
 	const {
 		assignees = [],
 		value,
@@ -73,8 +80,10 @@ export const AssigneeSelect = (props: AssigneeSelectProps) => {
 	return (
 		<Select
 			{...rest}
-			label={label}
-			placeholder={placeholder}
+			label={typeof label === "string" ? t(label) : label}
+			placeholder={
+				typeof placeholder === "string" ? t(placeholder) : placeholder
+			}
 			variant="bordered"
 			selectedKeys={value ? [value] : value === "" ? [""] : undefined}
 			onChange={handleChange}
@@ -87,7 +96,7 @@ export const AssigneeSelect = (props: AssigneeSelectProps) => {
 						textValue={option.text}
 					>
 						{option.value === "" ? (
-							<span className="text-default-400">{option.text}</span>
+							<span className="text-default-400">{t(option.text)}</span>
 						) : (
 							<div className="flex items-center gap-2">
 								{assignee?.avatarUrl && (
@@ -101,7 +110,7 @@ export const AssigneeSelect = (props: AssigneeSelectProps) => {
 									<span>{option.text}</span>
 									{assignee?.role && (
 										<span className="text-small text-default-400">
-											{assignee.role}
+											{t(assignee.role)}
 										</span>
 									)}
 								</div>
@@ -112,4 +121,4 @@ export const AssigneeSelect = (props: AssigneeSelectProps) => {
 			})}
 		</Select>
 	);
-};
+});

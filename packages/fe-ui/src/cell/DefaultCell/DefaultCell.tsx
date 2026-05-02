@@ -1,3 +1,8 @@
+"use client";
+
+import { observer } from "mobx-react-lite";
+import { type Translate, useT } from "../../i18n";
+
 export interface DefaultCellProps {
 	/** 표시할 값 */
 	value?: string | number | null;
@@ -26,6 +31,33 @@ export interface DefaultCellProps {
 const joinClassNames = (...values: Array<string | false | null | undefined>) =>
 	values.filter(Boolean).join(" ");
 
+function translateDisplayValue(value: string, t: Translate) {
+	const minutesSeconds = value.match(/^(\d+)분\s+(\d+)초$/);
+	if (minutesSeconds) {
+		return t("{{minutes}}분 {{seconds}}초", undefined, {
+			minutes: minutesSeconds[1],
+			seconds: minutesSeconds[2],
+		});
+	}
+
+	const seconds = value.match(/^(\d+)초$/);
+	if (seconds) {
+		return t("{{seconds}}초", undefined, { seconds: seconds[1] });
+	}
+
+	const count = value.match(/^(\d+)회$/);
+	if (count) {
+		return t("{{count}}회", undefined, { count: count[1] });
+	}
+
+	const itemCount = value.match(/^(\d+)개$/);
+	if (itemCount) {
+		return t("{{count}}개", undefined, { count: itemCount[1] });
+	}
+
+	return t(value);
+}
+
 /**
  * DefaultCell 컴포넌트
  * 기본 텍스트/숫자 값을 표시합니다. 빈 값은 "-"로 표시됩니다.
@@ -37,7 +69,7 @@ const joinClassNames = (...values: Array<string | false | null | undefined>) =>
  * <DefaultCell value="" /> // "-"
  * ```
  */
-export const DefaultCell = ({
+export const DefaultCell = observer(function DefaultCell({
 	value,
 	placeholder = "-",
 	mono = false,
@@ -49,9 +81,12 @@ export const DefaultCell = ({
 	tabular = false,
 	className,
 	title,
-}: DefaultCellProps) => {
+}: DefaultCellProps) {
+	const t = useT();
 	const isEmptyValue = value === null || value === undefined || value === "";
 	const displayValue = isEmptyValue ? placeholder : String(value);
+	const translatedDisplayValue = translateDisplayValue(displayValue, t);
+	const translatedTitle = title ? t(title) : title;
 
 	return (
 		<div className="min-w-0">
@@ -73,10 +108,10 @@ export const DefaultCell = ({
 					lineClamp === 2 && "line-clamp-2",
 					className,
 				)}
-				title={title}
+				title={translatedTitle}
 			>
-				{displayValue}
+				{translatedDisplayValue}
 			</span>
 		</div>
 	);
-};
+});

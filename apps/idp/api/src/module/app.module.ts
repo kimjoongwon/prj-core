@@ -22,6 +22,7 @@ import { ThrottlerGuard } from "@nestjs/throttler";
 import { AuthModule } from "./auth";
 import { EmailVerificationsModule } from "./email-verification";
 import { globalModules } from "./global.module";
+import { I18nCatalogModule } from "./i18n-catalog";
 import { IdpAccountsModule } from "./idp-accounts";
 import { IdpDashboardModule } from "./idp-dashboard";
 import { InteractionModule } from "./interaction/interaction.module";
@@ -50,6 +51,7 @@ const enableNestDevtools =
 		RedisModule,
 		I18nModule,
 		// 기존 IdP 모듈
+		I18nCatalogModule,
 		OidcModule,
 		InteractionModule,
 		PasswordResetModule,
@@ -68,6 +70,10 @@ const enableNestDevtools =
 					{
 						path: "v1",
 						children: [
+							{
+								path: "i18n",
+								module: I18nCatalogModule,
+							},
 							{
 								path: "auth",
 								module: AuthModule,

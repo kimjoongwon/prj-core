@@ -4,6 +4,7 @@ import { useNavigationStore } from "@cocrepo/store";
 import { cn, NavbarItem } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
+import { useT } from "../../i18n";
 
 /**
  * Nav Feature 컴포넌트
@@ -16,6 +17,7 @@ import { AppIcon } from "../../design-system/icon/AppIcon";
  * ```
  */
 export const Nav = observer(() => {
+	const t = useT();
 	const navigationStore = useNavigationStore();
 
 	const handleClickNavItem = (navItemId: string) => {
@@ -39,7 +41,7 @@ export const Nav = observer(() => {
 						{item.icon && (
 							<AppIcon name={item.icon} className="h-4 w-4" size={16} />
 						)}
-						<span>{item.label}</span>
+						<span>{t(item.label)}</span>
 					</button>
 				</NavbarItem>
 			))}

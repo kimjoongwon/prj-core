@@ -1,5 +1,9 @@
+"use client";
+
+import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { Text } from "../../display/data-display/Text/Text";
+import { translateNode, useT } from "../../i18n";
 
 export interface PageTitleBarProps {
 	/** 제목 */
@@ -18,13 +22,14 @@ export interface PageTitleBarProps {
  * PageTitleBar 컴포넌트
  * 페이지/섹션 상단 제목/설명/액션 영역의 반복 마크업을 표준화합니다.
  */
-export function PageTitleBar({
+export const PageTitleBar = observer(function PageTitleBar({
 	title,
 	description,
 	actions,
 	level = 1,
 	className,
 }: PageTitleBarProps) {
+	const t = useT();
 	const headingTag = level === 2 ? "h2" : "h1";
 	const headingVariant = level === 2 ? "h4" : "h2";
 	const descriptionVariant = level === 2 ? "subtitle2" : "subtitle1";
@@ -39,15 +44,15 @@ export function PageTitleBar({
 					className={level === 2 ? "font-semibold" : undefined}
 					variant={headingVariant}
 				>
-					{title}
+					{translateNode(title, t)}
 				</Text>
 				{description && (
 					<Text as="p" className="mt-1" variant={descriptionVariant}>
-						{description}
+						{translateNode(description, t)}
 					</Text>
 				)}
 			</div>
 			{actions && <div className="shrink-0">{actions}</div>}
 		</div>
 	);
-}
+});

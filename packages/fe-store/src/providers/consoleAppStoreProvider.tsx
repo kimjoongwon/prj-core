@@ -14,6 +14,7 @@ export const {
 	useAppStore: useConsoleAppStore,
 	useNavigationStore: useConsoleNavigationStore,
 	usePersistStore: useConsolePersistStore,
+	useLocaleStore: useConsoleLocaleStore,
 	useBottomTabStore: useConsoleBottomTabStore,
 	useFABStore: useConsoleFABStore,
 } = consoleAppStoreProvider;

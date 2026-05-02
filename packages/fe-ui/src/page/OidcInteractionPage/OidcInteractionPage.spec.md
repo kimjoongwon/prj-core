@@ -42,6 +42,7 @@ OidcInteractionPage
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-01 | loading/error 분기 문구의 런타임 i18n 번역 적용 경로 반영 | codex |
 | 2026-04-22 | OIDC 로그인/동의 상태와 액션 책임 경계 정리 | codex |
 | 2026-04-22 | OIDC 상호작용 모드와 login 폼 상태 묶음 계약 정리 | codex |
 | 2026-04-22 | OIDC 로그인 분기의 form 조합 계약 정리 | codex |

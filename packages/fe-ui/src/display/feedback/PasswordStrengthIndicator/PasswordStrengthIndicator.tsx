@@ -2,6 +2,7 @@
 
 import type { PasswordRule } from "@cocrepo/constant";
 import { observer } from "mobx-react-lite";
+import { useT } from "../../../i18n";
 
 export interface PasswordStrengthIndicatorProps {
 	/** 현재 입력된 비밀번호 */
@@ -17,6 +18,7 @@ export interface PasswordStrengthIndicatorProps {
  */
 export const PasswordStrengthIndicator = observer(
 	({ password, rules }: PasswordStrengthIndicatorProps) => {
+		const t = useT();
 		const results = rules.map((r) => ({
 			...r,
 			passed: password.length > 0 ? r.test(password) : false,
@@ -58,7 +60,7 @@ export const PasswordStrengthIndicator = observer(
 							</svg>
 						)}
 						<span className={r.passed ? "text-success" : "text-default-400"}>
-							{r.label}
+							{t(r.label)}
 						</span>
 					</div>
 				))}

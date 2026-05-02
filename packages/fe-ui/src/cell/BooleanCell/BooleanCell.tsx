@@ -1,4 +1,8 @@
+"use client";
+
 import { Chip } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 import { DefaultCell } from "../DefaultCell/DefaultCell";
 
 type BooleanCellColor =
@@ -35,14 +39,16 @@ export interface BooleanCellProps {
  * <BooleanCell value={null} />  // "-"
  * ```
  */
-export const BooleanCell = ({
+export const BooleanCell = observer(function BooleanCell({
 	value,
 	trueLabel = "예",
 	falseLabel = "아니오",
 	trueColor = "success",
 	falseColor = "default",
 	placeholder = "-",
-}: BooleanCellProps) => {
+}: BooleanCellProps) {
+	const t = useT();
+
 	if (value === null || value === undefined) {
 		return <DefaultCell value={placeholder} />;
 	}
@@ -51,7 +57,7 @@ export const BooleanCell = ({
 
 	return (
 		<Chip color={boolValue ? trueColor : falseColor} size="sm" variant="flat">
-			{boolValue ? trueLabel : falseLabel}
+			{t(boolValue ? trueLabel : falseLabel)}
 		</Chip>
 	);
-};
+});

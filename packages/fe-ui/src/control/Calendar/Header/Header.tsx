@@ -1,3 +1,7 @@
+"use client";
+
+import { observer } from "mobx-react-lite";
+import { useT } from "../../../i18n";
 import { HStack } from "../../../rhythm/HStack/HStack";
 import { Button } from "../../Button/Button";
 
@@ -8,7 +12,7 @@ interface HeaderProps {
 	onNextMonth?: () => void;
 }
 
-export const Header = (props: HeaderProps) => {
+export const Header = observer(function Header(props: HeaderProps) {
 	const { year, month, onPrevMonth, onNextMonth } = props;
 
 	return (
@@ -33,22 +37,32 @@ export const Header = (props: HeaderProps) => {
 			</HStack>
 		</div>
 	);
-};
+});
 
 interface YearProps {
 	year: number;
 }
 
-export const Year = (props: YearProps) => {
+export const Year = observer(function Year(props: YearProps) {
+	const t = useT();
 	const { year } = props;
-	return <div className="font-bold text-2xl lg:text-4xl">{year}년</div>;
-};
+	return (
+		<div className="font-bold text-2xl lg:text-4xl">
+			{t("{{year}}년", undefined, { year })}
+		</div>
+	);
+});
 
 interface MonthProps {
 	month: number;
 }
 
-export const Month = (props: MonthProps) => {
+export const Month = observer(function Month(props: MonthProps) {
+	const t = useT();
 	const { month } = props;
-	return <div className="font-bold text-2xl lg:text-4xl">{month}월</div>;
-};
+	return (
+		<div className="font-bold text-2xl lg:text-4xl">
+			{t("{{month}}월", undefined, { month })}
+		</div>
+	);
+});

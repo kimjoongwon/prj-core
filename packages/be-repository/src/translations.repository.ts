@@ -110,6 +110,26 @@ export class TranslationsRepository {
 	}
 
 	/**
+	 * 언어별 runtime catalog 조회
+	 */
+	async findCatalogByLanguage(
+		languageCode: LanguageCode,
+	): Promise<Record<string, string>> {
+		this.logger.debug(`언어별 번역 catalog 조회: ${languageCode}`);
+
+		const rows = await this.txHost.tx.translation.findMany({
+			where: { languageCode },
+			select: {
+				key: true,
+				text: true,
+			},
+			orderBy: { key: "asc" },
+		});
+
+		return Object.fromEntries(rows.map((row) => [row.key, row.text]));
+	}
+
+	/**
 	 * 번역 생성
 	 */
 	async create(

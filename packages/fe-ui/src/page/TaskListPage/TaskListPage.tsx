@@ -12,6 +12,7 @@ import {
 	DataGridStateModel,
 	PageTitleBar,
 	Surface,
+	useT,
 } from "@cocrepo/ui";
 import {
 	Button,
@@ -93,6 +94,7 @@ export const TaskListPage = observer(
 		onClickTaskName,
 		onDeleteTask,
 	}: TaskListPageProps) => {
+		const t = useT();
 		const gridState = useLocalObservable(
 			() => new DataGridStateModel({ queryStates, setQueryStates }),
 		);
@@ -131,7 +133,7 @@ export const TaskListPage = observer(
 							startContent={<Plus className="h-4 w-4" />}
 							onPress={onClickCreateButton}
 						>
-							태스크 등록
+							{t("태스크 등록")}
 						</Button>
 					}
 				/>
@@ -151,14 +153,14 @@ export const TaskListPage = observer(
 				</Surface>
 				<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
 					<ModalContent>
-						<ModalHeader>태스크 삭제</ModalHeader>
+						<ModalHeader>{t("태스크 삭제")}</ModalHeader>
 						<ModalBody>
 							<p>
-								<strong>{deleteTarget?.exercise.name}</strong> 운동 detail이
-								포함된 태스크를 삭제하시겠습니까?
+								<strong>{deleteTarget?.exercise.name}</strong>{" "}
+								{t("운동 detail이 포함된 태스크를 삭제하시겠습니까?")}
 							</p>
 							<p className="mt-2 text-sm text-danger">
-								루틴에서 사용 중인 태스크는 삭제할 수 없습니다.
+								{t("루틴에서 사용 중인 태스크는 삭제할 수 없습니다.")}
 							</p>
 						</ModalBody>
 						<ModalFooter>
@@ -167,7 +169,7 @@ export const TaskListPage = observer(
 								onPress={deleteModal.onClose}
 								isDisabled={isDeleting}
 							>
-								취소
+								{t("취소")}
 							</Button>
 							<Button
 								color="danger"
@@ -182,7 +184,7 @@ export const TaskListPage = observer(
 								}}
 								isLoading={isDeleting}
 							>
-								삭제
+								{t("삭제")}
 							</Button>
 						</ModalFooter>
 					</ModalContent>

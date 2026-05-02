@@ -1110,11 +1110,11 @@ export function getStaticTranslationLanguageLabel(
 		case "ko_KR":
 			return "한국어";
 		case "en_US":
-			return "English";
+			return "영어";
 		case "zh_CN":
-			return "中文";
+			return "중국어";
 		case "ja_JP":
-			return "日本語";
+			return "일본어";
 		default:
 			return languageCode ?? "";
 	}

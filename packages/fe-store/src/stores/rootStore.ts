@@ -4,6 +4,7 @@ import { AuthStore } from "./authStore";
 import { BottomTabStore } from "./bottomTabStore";
 import { CookieStore } from "./cookieStore";
 import { FABStore } from "./fabStore";
+import { LocaleStore } from "./localeStore";
 import { NavigationStore } from "./navigationStore";
 import type { Navigator } from "./navigator";
 import { PersistStore } from "./persistStore";
@@ -53,6 +54,7 @@ export class RootStore {
 	authStore?: AuthStore;
 	cookieStore?: CookieStore;
 	persistStore?: PersistStore;
+	localeStore?: LocaleStore;
 	abilityStore?: AbilityStore;
 	/** v7.0 신규: FAB 상태 관리 */
 	fabStore?: FABStore;

@@ -29,6 +29,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-01 | folder/asset empty state와 modal 문구가 런타임 i18n을 사용하도록 반영 | codex |
 | 2026-04-28 | 에셋 row 계약을 자체 interface 대신 Orval AssetDto alias로 정리 | codex |
 | 2026-04-28 | grid 컴포넌트 명칭을 DataGrid로 통일하고 호출부를 새 계약에 맞춤 | codex |
 | 2026-04-25 | DataGrid state를 useLocalObservable 기반 DataGridStateModel class instance로 생성하도록 변경 | codex |

@@ -3,6 +3,7 @@ export * from "./columns";
 export * from "./data-grid";
 export * from "./detail";
 export * from "./feature";
+export * from "./i18n";
 export * from "./form";
 export * from "./control";
 export * from "./layout";

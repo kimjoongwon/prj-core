@@ -1,9 +1,13 @@
+"use client";
+
 import { cva } from "class-variance-authority";
+import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import {
 	elevation as elevationTokens,
 	type ElevationLevel,
 } from "../../design-system/theme/tokens";
+import { translateNode, useT } from "../../i18n";
 
 export type SurfacePadding = "none" | "sm" | "md" | "lg";
 export const DEFAULT_SURFACE_PADDING: SurfacePadding = "md";
@@ -51,17 +55,19 @@ const surfaceVariants = cva("w-full rounded-xl", {
  * Surface 컴포넌트
  * 콘텐츠가 올라갈 시각적 표면과 엘리베이션을 담당합니다.
  */
-export const Surface = ({
+export const Surface = observer(function Surface({
 	children,
 	className,
 	elevation = DEFAULT_SURFACE_ELEVATION,
 	padding = DEFAULT_SURFACE_PADDING,
-}: SurfaceProps) => {
+}: SurfaceProps) {
+	const t = useT();
+
 	return (
 		<div className={surfaceVariants({ elevation, padding, className })}>
-			{children}
+			{translateNode(children, t)}
 		</div>
 	);
-};
+});
 
 Surface.displayName = "Surface";

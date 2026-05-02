@@ -1,5 +1,9 @@
+"use client";
+
 import type { AutocompleteProps } from "@heroui/react";
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 export interface CustomerSearchResult {
 	/** 고객 ID */
@@ -45,7 +49,10 @@ export interface CustomerSearchInputProps
  * />
  * ```
  */
-export const CustomerSearchInput = (props: CustomerSearchInputProps) => {
+export const CustomerSearchInput = observer(function CustomerSearchInput(
+	props: CustomerSearchInputProps,
+) {
+	const t = useT();
 	const {
 		items = [],
 		label = "고객 검색",
@@ -72,14 +79,16 @@ export const CustomerSearchInput = (props: CustomerSearchInputProps) => {
 	return (
 		<Autocomplete
 			{...rest}
-			label={label}
-			placeholder={placeholder}
+			label={typeof label === "string" ? t(label) : label}
+			placeholder={
+				typeof placeholder === "string" ? t(placeholder) : placeholder
+			}
 			defaultItems={items}
 			onSelectionChange={handleSelectionChange}
 			onInputChange={handleInputChange}
 			variant="bordered"
 			clearButtonProps={{
-				"aria-label": "검색어 지우기",
+				"aria-label": t("검색어 지우기"),
 			}}
 		>
 			{(item) => (
@@ -100,4 +109,4 @@ export const CustomerSearchInput = (props: CustomerSearchInputProps) => {
 			)}
 		</Autocomplete>
 	);
-};
+});

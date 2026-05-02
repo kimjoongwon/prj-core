@@ -4,21 +4,27 @@ import { createAppStoreProvider } from "../createAppStoreProvider";
 
 const {
 	mockSetApiPersistStore,
+	mockSetApiLocaleStore,
 	mockSetIdpPersistStore,
+	mockSetIdpLocaleStore,
 	mockUsePathname,
 	mockUseRouter,
 } = vi.hoisted(() => ({
 	mockSetApiPersistStore: vi.fn(),
+	mockSetApiLocaleStore: vi.fn(),
 	mockSetIdpPersistStore: vi.fn(),
+	mockSetIdpLocaleStore: vi.fn(),
 	mockUsePathname: vi.fn(),
 	mockUseRouter: vi.fn(),
 }));
 
 vi.mock("@cocrepo/api/core/client", () => ({
+	setApiLocaleStore: mockSetApiLocaleStore,
 	setApiPersistStore: mockSetApiPersistStore,
 }));
 
 vi.mock("@cocrepo/api/idp/client", () => ({
+	setIdpLocaleStore: mockSetIdpLocaleStore,
 	setIdpPersistStore: mockSetIdpPersistStore,
 }));
 
@@ -68,6 +74,11 @@ describe("createAppStoreProvider", () => {
 		expect(mockSetIdpPersistStore).toHaveBeenCalledTimes(1);
 		expect(mockSetIdpPersistStore).toHaveBeenCalledWith(
 			mockSetApiPersistStore.mock.calls[0]?.[0],
+		);
+		expect(mockSetApiLocaleStore).toHaveBeenCalledTimes(1);
+		expect(mockSetIdpLocaleStore).toHaveBeenCalledTimes(1);
+		expect(mockSetIdpLocaleStore).toHaveBeenCalledWith(
+			mockSetApiLocaleStore.mock.calls[0]?.[0],
 		);
 	});
 });

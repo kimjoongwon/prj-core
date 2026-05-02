@@ -34,6 +34,7 @@ import {
 import { Languages, Plus, RefreshCcw } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type FormEvent, useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { ConfirmModal } from "../../widget/common/ConfirmModal";
 
 export type StaticTranslationLanguageCode =
@@ -86,9 +87,9 @@ const STATIC_TRANSLATION_LANGUAGE_OPTIONS: Array<{
 	label: string;
 }> = [
 	{ value: "ko_KR", label: "한국어" },
-	{ value: "en_US", label: "English" },
-	{ value: "zh_CN", label: "中文" },
-	{ value: "ja_JP", label: "日本語" },
+	{ value: "en_US", label: "영어" },
+	{ value: "zh_CN", label: "중국어" },
+	{ value: "ja_JP", label: "일본어" },
 ];
 
 const STATIC_TRANSLATION_STATUS_OPTIONS = [
@@ -188,6 +189,7 @@ export const StaticTranslationListPage = observer(
 		onInvalidateAllTranslationCache,
 		onInvalidateTranslationCache,
 	}: StaticTranslationListPageProps) => {
+		const t = useT();
 		const gridState = useLocalObservable(
 			() => new DataGridStateModel({ queryStates, setQueryStates }),
 		);
@@ -326,7 +328,7 @@ export const StaticTranslationListPage = observer(
 								isLoading={isMutating}
 								onPress={onInvalidateAllTranslationCache}
 							>
-								전체 캐시 갱신
+								{t("전체 캐시 갱신")}
 							</Button>
 							<Button
 								variant="flat"
@@ -335,14 +337,14 @@ export const StaticTranslationListPage = observer(
 								isLoading={isMutating}
 								onPress={handleInvalidateLanguageCache}
 							>
-								언어 캐시 갱신
+								{t("언어 캐시 갱신")}
 							</Button>
 							<Button
 								color="primary"
 								startContent={<Plus className="h-4 w-4" />}
 								onPress={handleOpenCreateModal}
 							>
-								번역 등록
+								{t("번역 등록")}
 							</Button>
 						</HStack>
 					}
@@ -370,33 +372,35 @@ export const StaticTranslationListPage = observer(
 					<ModalContent>
 						<form onSubmit={handleSubmitForm}>
 							<ModalHeader className="flex flex-col gap-1">
-								{isEditMode ? "번역 수정" : "번역 등록"}
+								{isEditMode ? t("번역 수정") : t("번역 등록")}
 							</ModalHeader>
 							<ModalBody>
 								<VStack gap="block">
 									<Select
-										label="언어"
+										label={t("언어")}
 										selectedKeys={[form.languageCode]}
 										isDisabled={isEditMode}
 										onSelectionChange={handleLanguageSelectionChange}
 									>
 										{STATIC_TRANSLATION_LANGUAGE_OPTIONS.map((option) => (
-											<SelectItem key={option.value}>{option.label}</SelectItem>
+											<SelectItem key={option.value}>
+												{t(option.label)}
+											</SelectItem>
 										))}
 									</Select>
 									<Input
-										label="번역 키"
+										label={t("번역 키")}
 										value={form.key}
 										isDisabled={isEditMode}
 										onValueChange={handleKeyChange}
 									/>
 									<Input
-										label="카테고리"
+										label={t("카테고리")}
 										value={form.category}
 										onValueChange={handleCategoryChange}
 									/>
 									<Textarea
-										label="번역문"
+										label={t("번역문")}
 										value={form.text}
 										minRows={4}
 										onValueChange={handleTextChange}
@@ -405,13 +409,13 @@ export const StaticTranslationListPage = observer(
 										isSelected={form.isTranslated}
 										onValueChange={handleIsTranslatedChange}
 									>
-										번역 완료
+										{t("번역 완료")}
 									</Switch>
 								</VStack>
 							</ModalBody>
 							<ModalFooter>
 								<Button variant="light" onPress={handleCloseFormModal}>
-									취소
+									{t("취소")}
 								</Button>
 								<Button
 									color="primary"
@@ -419,7 +423,7 @@ export const StaticTranslationListPage = observer(
 									isDisabled={isFormInvalid}
 									isLoading={isMutating}
 								>
-									{isEditMode ? "수정" : "등록"}
+									{isEditMode ? t("수정") : t("등록")}
 								</Button>
 							</ModalFooter>
 						</form>
@@ -434,8 +438,8 @@ export const StaticTranslationListPage = observer(
 					message={
 						<>
 							<p>
-								<strong>{translationToDelete?.key}</strong> 번역을
-								삭제하시겠습니까?
+								<strong>{translationToDelete?.key}</strong>{" "}
+								{t("번역을 삭제하시겠습니까?")}
 							</p>
 							<p className="mt-2 text-sm text-default-400">
 								{translationToDelete
@@ -443,7 +447,7 @@ export const StaticTranslationListPage = observer(
 											translationToDelete.languageCode,
 										)
 									: ""}{" "}
-								항목이 즉시 삭제됩니다.
+								{t("항목이 즉시 삭제됩니다.")}
 							</p>
 						</>
 					}

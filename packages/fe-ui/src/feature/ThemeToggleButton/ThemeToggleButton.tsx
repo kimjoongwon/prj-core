@@ -2,19 +2,22 @@
 
 import { Button } from "@heroui/react";
 import { Moon, Sun } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { useDesignSystemTheme } from "../../design-system/provider";
+import { useT } from "../../i18n";
 
 export interface ThemeToggleButtonProps {
 	className?: string;
 	compact?: boolean;
 }
 
-export function ThemeToggleButton({
+export const ThemeToggleButton = observer(function ThemeToggleButton({
 	className,
 	compact = false,
 }: ThemeToggleButtonProps) {
 	const { resolvedTheme, toggleTheme } = useDesignSystemTheme();
+	const t = useT();
 	const [isMounted, setIsMounted] = useState(false);
 
 	useEffect(() => {
@@ -24,11 +27,15 @@ export function ThemeToggleButton({
 	const isDark = isMounted && resolvedTheme === "dark";
 	const nextThemeLabel = isMounted
 		? isDark
-			? "라이트 모드"
-			: "다크 모드"
-		: "테마 전환";
+			? t("라이트 모드")
+			: t("다크 모드")
+		: t("테마 전환");
 	const Icon = isDark ? Sun : Moon;
-	const ariaLabel = isMounted ? `${nextThemeLabel}로 전환` : "테마 전환";
+	const ariaLabel = isMounted
+		? isDark
+			? t("라이트 모드로 전환")
+			: t("다크 모드로 전환")
+		: t("테마 전환");
 
 	if (compact) {
 		return (
@@ -65,4 +72,4 @@ export function ThemeToggleButton({
 			{nextThemeLabel}
 		</Button>
 	);
-}
+});

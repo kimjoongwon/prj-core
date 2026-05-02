@@ -1,8 +1,12 @@
+"use client";
+
 import {
 	Checkbox as NextUICheckbox,
 	type CheckboxProps as NextUICheckboxProps,
 } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import type React from "react";
+import { translateNode, useT } from "../../i18n";
 
 export interface CheckboxProps extends Omit<NextUICheckboxProps, "onChange"> {
 	/** 체크 상태 변경 핸들러 */
@@ -26,7 +30,8 @@ export interface CheckboxProps extends Omit<NextUICheckboxProps, "onChange"> {
  * <Checkbox isDisabled>비활성화됨</Checkbox>
  * ```
  */
-export const Checkbox = (props: CheckboxProps) => {
+export const Checkbox = observer(function Checkbox(props: CheckboxProps) {
+	const t = useT();
 	const { onChange, size = "lg", ...rest } = props;
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +40,7 @@ export const Checkbox = (props: CheckboxProps) => {
 
 	return (
 		<NextUICheckbox {...rest} onChange={handleChange} size={size}>
-			<span className="font-bold">{props.children}</span>
+			<span className="font-bold">{translateNode(props.children, t)}</span>
 		</NextUICheckbox>
 	);
-};
+});

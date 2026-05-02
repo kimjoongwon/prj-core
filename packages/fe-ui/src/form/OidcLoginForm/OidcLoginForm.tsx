@@ -3,6 +3,7 @@
 import { observer } from "mobx-react-lite";
 import { Button, Checkbox, Input, Link } from "../../control";
 import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
+import { type Translate, useT } from "../../i18n";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 
@@ -27,22 +28,35 @@ export interface LoginErrorResponse {
 }
 
 /** 에러 응답이 표시 문구를 제공하지 않는 경우를 대비한 기본 메시지 */
-function getFallbackErrorMessage(data: LoginErrorResponse): string {
+function getFallbackErrorMessage(
+	data: LoginErrorResponse,
+	t: Translate,
+): string {
 	const threshold = data.temporaryLockThreshold ?? 5;
 	const durationMin = data.temporaryLockDurationMin ?? 15;
 
 	switch (data.error) {
 		case "INVALID_CREDENTIALS":
 			if (data.remainingAttempts !== undefined && data.remainingAttempts > 0) {
-				return `이메일 또는 비밀번호가 올바르지 않습니다. (남은 시도: ${data.remainingAttempts}/${threshold})`;
+				return t(
+					"이메일 또는 비밀번호가 올바르지 않습니다. (남은 시도: {{remainingAttempts}}/{{threshold}})",
+					undefined,
+					{ remainingAttempts: data.remainingAttempts, threshold },
+				);
 			}
-			return "이메일 또는 비밀번호가 올바르지 않습니다.";
+			return t("이메일 또는 비밀번호가 올바르지 않습니다.");
 		case "ACCOUNT_LOCKED_TEMPORARY":
-			return `계정이 일시 잠겼습니다. ${durationMin}분 후 다시 시도하세요.`;
+			return t(
+				"계정이 일시 잠겼습니다. {{durationMin}}분 후 다시 시도하세요.",
+				undefined,
+				{ durationMin },
+			);
 		case "ACCOUNT_LOCKED_PERMANENT":
-			return "계정이 잠겼습니다. 비밀번호를 재설정하거나 관리자에게 문의하세요.";
+			return t(
+				"계정이 잠겼습니다. 비밀번호를 재설정하거나 관리자에게 문의하세요.",
+			);
 		default:
-			return data.error || "로그인에 실패했습니다.";
+			return data.error || t("로그인에 실패했습니다.");
 	}
 }
 
@@ -95,6 +109,7 @@ export const OidcLoginForm = observer(
 		isDev = false,
 		forgotPasswordHref = "/forgot-password",
 	}: OidcLoginFormProps) => {
+		const t = useT();
 		const recoveryActions =
 			state.error?.recoveryActions?.filter(
 				(action) => action.href || action.label,
@@ -112,17 +127,20 @@ export const OidcLoginForm = observer(
 				: [];
 		const actionsToRender =
 			recoveryActions.length > 0 ? recoveryActions : fallbackRecoveryActions;
+		const subtitle = client
+			? t(
+					"{{clientName}}에서 예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.",
+					undefined,
+					{ clientName: client.name },
+				)
+			: "예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.";
 
 		return (
 			<AuthCard>
 				<AuthCardHeader
 					iconPath="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
 					title="로그인"
-					subtitle={
-						client
-							? `${client.name}에서 예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.`
-							: "예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요."
-					}
+					subtitle={subtitle}
 					logoUri={client?.logoUri}
 					logoAlt={client?.name}
 				/>
@@ -141,11 +159,13 @@ export const OidcLoginForm = observer(
 						title={getErrorTitle(state.error)}
 						message={
 							<>
-								{state.error.displayMessage ||
-									getFallbackErrorMessage(state.error)}
+								{t(
+									state.error.displayMessage ||
+										getFallbackErrorMessage(state.error, t),
+								)}
 								{state.error.hint && (
 									<span className="mt-2 block text-xs leading-5 opacity-80">
-										{state.error.hint}
+										{t(state.error.hint)}
 									</span>
 								)}
 							</>
@@ -160,14 +180,14 @@ export const OidcLoginForm = observer(
 												href={action.href}
 												className="font-medium text-primary"
 											>
-												{action.label}
+												{t(action.label)}
 											</Link>
 										) : (
 											<span
 												key={`${action.type}:${action.label}`}
 												className="text-default-500"
 											>
-												{action.label}
+												{t(action.label)}
 											</span>
 										),
 									)}
@@ -229,7 +249,7 @@ export const OidcLoginForm = observer(
 						data-action="abort-interaction"
 						className="text-sm text-default-400 transition-colors hover:text-default-500"
 					>
-						취소하고 돌아가기
+						{t("취소하고 돌아가기")}
 					</button>
 				</div>
 			</AuthCard>

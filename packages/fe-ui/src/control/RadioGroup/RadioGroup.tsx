@@ -1,8 +1,12 @@
+"use client";
+
 import {
 	RadioGroup as NextUIRadioGroup,
 	type RadioGroupProps as NextUIRadioGroupProps,
 	Radio,
 } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { translateNode, useT } from "../../i18n";
 
 export interface RadioOption {
 	/** 표시 텍스트 */
@@ -41,7 +45,8 @@ export interface RadioGroupProps
  * />
  * ```
  */
-export const RadioGroup = (props: RadioGroupProps) => {
+export const RadioGroup = observer(function RadioGroup(props: RadioGroupProps) {
+	const t = useT();
 	const {
 		options = [
 			{
@@ -59,12 +64,17 @@ export const RadioGroup = (props: RadioGroupProps) => {
 	} = props;
 
 	return (
-		<NextUIRadioGroup {...rest} value={value} onValueChange={onValueChange}>
+		<NextUIRadioGroup
+			{...rest}
+			label={translateNode(rest.label, t)}
+			value={value}
+			onValueChange={onValueChange}
+		>
 			{options.map((option) => (
 				<Radio key={option.value} value={option.value}>
-					{option.text}
+					{t(option.text)}
 				</Radio>
 			))}
 		</NextUIRadioGroup>
 	);
-};
+});

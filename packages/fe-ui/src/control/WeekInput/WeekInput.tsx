@@ -1,4 +1,8 @@
+"use client";
+
 import { Chip } from "@heroui/chip";
+import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 
@@ -17,7 +21,8 @@ export interface WeekInputProps {
 	disabled?: boolean;
 }
 
-export const WeekInput = (props: WeekInputProps) => {
+export const WeekInput = observer(function WeekInput(props: WeekInputProps) {
+	const t = useT();
 	const { value, onChange, disabled, ...rest } = props;
 
 	const handleChange = (dayValue: RecurringDayOfTheWeek) => {
@@ -60,7 +65,7 @@ export const WeekInput = (props: WeekInputProps) => {
 
 	return (
 		<VStack className="space-y-2" {...rest}>
-			<span className="text-sm text-default-500">반복 요일</span>
+			<span className="text-sm text-default-500">{t("반복 요일")}</span>
 			<HStack className="space-x-2">
 				{dayOptions.map((day) => {
 					return (
@@ -71,11 +76,11 @@ export const WeekInput = (props: WeekInputProps) => {
 							color={value === day.value ? "primary" : "default"}
 							isDisabled={disabled}
 						>
-							{day.text}
+							{t(day.text)}
 						</Chip>
 					);
 				})}
 			</HStack>
 		</VStack>
 	);
-};
+});

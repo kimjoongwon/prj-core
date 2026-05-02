@@ -7,6 +7,7 @@ import {
 	PageTitleBar,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 const dashboardCards = [
 	{ label: "오늘 예약", value: "-" },
@@ -21,6 +22,8 @@ const dashboardCards = [
  * 관리자 앱의 기본 랜딩 페이지입니다.
  */
 function DashboardPageContent() {
+	const t = useT();
+
 	return (
 		<DetailPage
 			top={
@@ -36,7 +39,7 @@ function DashboardPageContent() {
 						<DetailSectionCard key={card.label}>
 							<div className="p-6">
 								<h2 className="text-sm font-medium text-default-500">
-									{card.label}
+									{t(card.label)}
 								</h2>
 								<p className="mt-2 text-3xl font-bold">{card.value}</p>
 							</div>

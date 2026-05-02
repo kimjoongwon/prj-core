@@ -11,6 +11,7 @@ import {
 import { AlertTriangle, Info, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import { translateNode, useT } from "../../../i18n";
 import { HStack } from "../../../rhythm/HStack/HStack";
 import { VStack } from "../../../rhythm/VStack/VStack";
 
@@ -117,29 +118,32 @@ export const ConfirmModal = observer(
 		loading = false,
 		iconType = "none",
 	}: ConfirmModalProps) => {
+		const t = useT();
 		const icon = renderIcon(iconType);
 
 		return (
 			<Modal isOpen={isOpen} onClose={onClose} size="sm">
 				<ModalContent>
-					<ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
+					<ModalHeader className="flex flex-col gap-1">{t(title)}</ModalHeader>
 					<ModalBody>
 						<VStack gap={4} alignItems="center">
 							{icon}
-							<div className="text-center text-default-600">{message}</div>
+							<div className="text-center text-default-600">
+								{translateNode(message, t)}
+							</div>
 						</VStack>
 					</ModalBody>
 					<ModalFooter>
 						<HStack gap={8} justifyContent="end" fullWidth>
 							<Button variant="flat" onPress={onClose} isDisabled={loading}>
-								{cancelText}
+								{t(cancelText)}
 							</Button>
 							<Button
 								color={confirmColor}
 								onPress={onConfirm}
 								isLoading={loading}
 							>
-								{confirmText}
+								{t(confirmText)}
 							</Button>
 						</HStack>
 					</ModalFooter>

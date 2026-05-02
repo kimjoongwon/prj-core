@@ -2,6 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { Button } from "../../control";
+import { useT } from "../../i18n";
 import { AuthCard, AuthCardHeader } from "../../widget";
 
 export interface AuthErrorPageProps {
@@ -12,6 +13,8 @@ export interface AuthErrorPageProps {
 
 export const AuthErrorPage = observer(
 	({ error, errorDescription, onClickBack }: AuthErrorPageProps) => {
+		const t = useT();
+
 		return (
 			<AuthCard variant="danger">
 				<AuthCardHeader
@@ -23,10 +26,10 @@ export const AuthErrorPage = observer(
 
 				<div className="space-y-4">
 					<div className="rounded-lg border border-danger/30 bg-danger/10 p-4">
-						<p className="text-sm font-medium text-danger">{error}</p>
+						<p className="text-sm font-medium text-danger">{t(error)}</p>
 						{errorDescription ? (
 							<p className="mt-2 text-sm text-default-500">
-								{errorDescription}
+								{t(errorDescription)}
 							</p>
 						) : null}
 					</div>
@@ -34,7 +37,7 @@ export const AuthErrorPage = observer(
 
 				<div className="mt-6 text-center">
 					<Button variant="light" onPress={onClickBack}>
-						돌아가기
+						{t("돌아가기")}
 					</Button>
 				</div>
 			</AuthCard>

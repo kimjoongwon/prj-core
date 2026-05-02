@@ -1,5 +1,9 @@
+"use client";
+
 import { Button, Link } from "@heroui/react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 export interface RowActionsCellProps {
 	/** 아이템 ID */
@@ -23,7 +27,7 @@ export interface RowActionsCellProps {
 /**
  * 행 액션 버튼들을 표시하는 Cell 컴포넌트
  */
-export const RowActionsCell = ({
+export const RowActionsCell = observer(function RowActionsCell({
 	id,
 	basePath,
 	showView = true,
@@ -32,7 +36,9 @@ export const RowActionsCell = ({
 	disableEdit = false,
 	disableDelete = false,
 	onDelete,
-}: RowActionsCellProps) => {
+}: RowActionsCellProps) {
+	const t = useT();
+
 	return (
 		<div className="flex justify-center gap-1">
 			{showView && (
@@ -42,7 +48,7 @@ export const RowActionsCell = ({
 					size="sm"
 					variant="light"
 					isIconOnly
-					aria-label="상세 보기"
+					aria-label={t("상세 보기")}
 				>
 					<Eye className="h-4 w-4" />
 				</Button>
@@ -55,7 +61,7 @@ export const RowActionsCell = ({
 					variant="light"
 					isIconOnly
 					isDisabled={disableEdit}
-					aria-label="수정"
+					aria-label={t("수정")}
 				>
 					<Pencil className="h-4 w-4" />
 				</Button>
@@ -68,11 +74,11 @@ export const RowActionsCell = ({
 					isIconOnly
 					isDisabled={disableDelete}
 					onPress={onDelete}
-					aria-label="삭제"
+					aria-label={t("삭제")}
 				>
 					<Trash2 className="h-4 w-4" />
 				</Button>
 			)}
 		</div>
 	);
-};
+});

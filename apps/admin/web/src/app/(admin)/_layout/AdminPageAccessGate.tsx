@@ -12,6 +12,7 @@ import {
 	DetailPageSurface,
 	DetailSectionCard,
 	PageTitleBar,
+	useT,
 } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { LockKeyhole } from "lucide-react";
@@ -27,6 +28,7 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 }) {
 	const pathname = usePathname();
 	const router = useRouter();
+	const t = useT();
 	const persistStore = usePersistStore();
 	const { can, isLoaded } = useAbility();
 	const shouldVerifyCurrentTenant =
@@ -68,7 +70,7 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 				<DetailPageSurface>
 					<DetailSectionCard>
 						<div className="flex min-h-[260px] items-center justify-center text-sm text-default-500">
-							화면 접근 권한을 확인하는 중입니다.
+							{t("화면 접근 권한을 확인하는 중입니다.")}
 						</div>
 					</DetailSectionCard>
 				</DetailPageSurface>
@@ -89,8 +91,16 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 	}
 
 	const forbiddenDescription = isScopeAccessible
-		? `${pageAccessItem.pageLabel} 화면을 열 수 있는 화면 접근 권한이 현재 선택한 Space 권한에 없습니다.`
-		: `${pageAccessItem.pageLabel} 화면은 현재 선택한 tenant role이 FULL_ACCESS일 때만 열 수 있습니다.`;
+		? t(
+				"{{pageLabel}} 화면을 열 수 있는 화면 접근 권한이 현재 선택한 Space 권한에 없습니다.",
+				undefined,
+				{ pageLabel: t(pageAccessItem.pageLabel) },
+			)
+		: t(
+				"{{pageLabel}} 화면은 현재 선택한 tenant role이 FULL_ACCESS일 때만 열 수 있습니다.",
+				undefined,
+				{ pageLabel: t(pageAccessItem.pageLabel) },
+			);
 
 	return (
 		<DetailPage
@@ -109,24 +119,28 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 						</div>
 						<div className="space-y-2">
 							<p className="text-base font-semibold">
-								이 화면은 현재 선택한 Space 권한으로 열 수 없습니다.
+								{t("이 화면은 현재 선택한 Space 권한으로 열 수 없습니다.")}
 							</p>
 							<p className="max-w-xl text-sm text-default-500">
 								{isScopeAccessible
-									? "메뉴 노출 권한이 있어도 화면 접근 권한이 따로 꺼져 있으면 URL 직접 접근은 막힙니다. 역할 상세의 화면 접근 섹션에서 해당 페이지를 켜면 다시 열 수 있습니다."
-									: "현재 선택한 tenant role이 FULL_ACCESS가 아니면 global 관리 화면은 열 수 없습니다. 헤더에서 FULL_ACCESS tenant로 전환한 뒤 다시 시도해 주세요."}
+									? t(
+											"메뉴 노출 권한이 있어도 화면 접근 권한이 따로 꺼져 있으면 URL 직접 접근은 막힙니다. 역할 상세의 화면 접근 섹션에서 해당 페이지를 켜면 다시 열 수 있습니다.",
+										)
+									: t(
+											"현재 선택한 tenant role이 FULL_ACCESS가 아니면 global 관리 화면은 열 수 없습니다. 헤더에서 FULL_ACCESS tenant로 전환한 뒤 다시 시도해 주세요.",
+										)}
 							</p>
 						</div>
 						<div className="flex gap-2">
 							<Button variant="flat" onPress={() => router.back()}>
-								이전 화면
+								{t("이전 화면")}
 							</Button>
 							<Button
 								color="primary"
 								variant="flat"
 								onPress={() => router.push(ADMIN_PATHS.DASHBOARD)}
 							>
-								대시보드로 이동
+								{t("대시보드로 이동")}
 							</Button>
 						</div>
 					</div>

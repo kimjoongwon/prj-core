@@ -1,19 +1,21 @@
 "use client";
+import { useGetI18nCatalog } from "@cocrepo/api/core/i18n";
 import { useVerifyToken } from "@cocrepo/api/idp/auth";
 
 import { useStore } from "@cocrepo/store";
-import { DesignSystemProvider } from "@cocrepo/ui";
+import { DesignSystemProvider, I18nProvider } from "@cocrepo/ui";
 import {
 	isServer,
 	QueryClient,
 	QueryClientProvider,
+	useQueryClient,
 } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 import { NuqsAdapter as NuqsNextAdapter } from "nuqs/adapters/next/app";
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
 import { useAbilities } from "@/hooks";
-import { AppStoreProvider, usePersistStore } from "@/stores";
+import { AppStoreProvider, useLocaleStore, usePersistStore } from "@/stores";
 import { resolveAbilityBootstrapRules } from "./ability-bootstrap";
 
 interface ProvidersProps {
@@ -68,14 +70,55 @@ export const Providers = observer(function Providers({
 		<QueryClientProvider client={queryClient}>
 			<NuqsNextAdapter>
 				<AppStoreProvider>
-					<AbilityStoreBootstrapper>
-						<DesignSystemProvider navigate={handleNavigate}>
-							{children}
-						</DesignSystemProvider>
-					</AbilityStoreBootstrapper>
+					<LocaleI18nBootstrapper>
+						<AbilityStoreBootstrapper>
+							<DesignSystemProvider navigate={handleNavigate}>
+								{children}
+							</DesignSystemProvider>
+						</AbilityStoreBootstrapper>
+					</LocaleI18nBootstrapper>
 				</AppStoreProvider>
 			</NuqsNextAdapter>
 		</QueryClientProvider>
+	);
+});
+
+const LocaleI18nBootstrapper = observer(function LocaleI18nBootstrapper({
+	children,
+}: {
+	children: ReactNode;
+}) {
+	const localeStore = useLocaleStore();
+	const queryClient = useQueryClient();
+	const previousLanguageCodeRef = useRef(localeStore.languageCode);
+	const { data } = useGetI18nCatalog(localeStore.languageCode, {
+		query: {
+			enabled: localeStore.isHydrated,
+			staleTime: 5 * 60 * 1000,
+			refetchOnWindowFocus: false,
+		},
+	});
+
+	useEffect(() => {
+		if (!localeStore.isHydrated) {
+			return;
+		}
+
+		if (previousLanguageCodeRef.current === localeStore.languageCode) {
+			return;
+		}
+
+		previousLanguageCodeRef.current = localeStore.languageCode;
+		void queryClient.invalidateQueries();
+	}, [localeStore.isHydrated, localeStore.languageCode, queryClient]);
+
+	return (
+		<I18nProvider
+			languageCode={localeStore.languageCode}
+			messages={data?.data?.messages ?? {}}
+		>
+			{children}
+		</I18nProvider>
 	);
 });
 

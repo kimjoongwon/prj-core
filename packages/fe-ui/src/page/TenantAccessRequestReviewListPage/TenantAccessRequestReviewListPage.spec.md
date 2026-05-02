@@ -1,7 +1,7 @@
 # TenantAccessRequestReviewListPage 기획서
 
 > 생성일: 2026-04-28
-> 수정일: 2026-04-28
+> 수정일: 2026-05-01
 > 타입: fe-ui-page
 > 위치: `packages/fe-ui/src/page/TenantAccessRequestReviewListPage/TenantAccessRequestReviewListPage.tsx`
 
@@ -40,5 +40,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-01 | Table aria/empty/action 문구가 런타임 i18n을 사용하도록 반영 | codex |
 | 2026-04-28 | 초기 생성 | Codex |
 | 2026-04-28 | 목록 row 계약을 Page 전용 ListItem 대신 Orval DTO optional props로 정리 | codex |

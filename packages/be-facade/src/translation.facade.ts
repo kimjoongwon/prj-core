@@ -1,11 +1,13 @@
 import {
 	CreateTranslationDto,
 	GetTranslationsDto,
+	TranslationCatalogResponseDto,
 	UpdateTranslationDto,
 } from "@cocrepo/dto";
 import { Translation } from "@cocrepo/entity";
 import { TranslationCatalogService } from "@cocrepo/service";
 import { Injectable } from "@nestjs/common";
+import type { LanguageCode as PrismaLanguageCode } from "@cocrepo/prisma";
 
 @Injectable()
 export class TranslationFacade {
@@ -27,6 +29,12 @@ export class TranslationFacade {
 
 	getTranslationById(id: string): Promise<Translation> {
 		return this.translationCatalogService.getTranslationById(id);
+	}
+
+	getCatalog(
+		languageCode: PrismaLanguageCode,
+	): Promise<TranslationCatalogResponseDto> {
+		return this.translationCatalogService.getCatalog(languageCode);
 	}
 
 	create(dto: CreateTranslationDto): Promise<Translation> {

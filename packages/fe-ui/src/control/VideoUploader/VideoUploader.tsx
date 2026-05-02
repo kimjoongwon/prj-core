@@ -1,11 +1,18 @@
+"use client";
+
 export interface VideoUploaderProps {
 	label?: string;
 }
 
 import { Upload } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import { useRef, useState } from "react";
+import { useT } from "../../i18n";
 
-export const VideoUploader = (props: VideoUploaderProps) => {
+export const VideoUploader = observer(function VideoUploader(
+	props: VideoUploaderProps,
+) {
+	const t = useT();
 	const { label } = props;
 	const [file, setFile] = useState<File | null>(null);
 	const [uploading, setUploading] = useState(false);
@@ -21,7 +28,7 @@ export const VideoUploader = (props: VideoUploaderProps) => {
 				videoRef.current.src = URL.createObjectURL(selectedFile);
 			}
 		} else {
-			alert("유효한 비디오 파일을 선택해주세요.");
+			alert(t("유효한 비디오 파일을 선택해주세요."));
 		}
 	};
 
@@ -62,7 +69,7 @@ export const VideoUploader = (props: VideoUploaderProps) => {
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<h1 className="mb-8 text-center font-bold text-2xl text-foreground">
-				{label}
+				{label ? t(label) : null}
 			</h1>
 			<div className="mx-auto max-w-3xl rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
 				<div className="mb-8">
@@ -74,11 +81,11 @@ export const VideoUploader = (props: VideoUploaderProps) => {
 							<div className="flex flex-col items-center justify-center pt-5 pb-6">
 								<Upload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
 								<p className="mb-2 text-gray-500 text-sm dark:text-gray-400">
-									<span className="font-semibold">클릭하여 업로드</span> 또는
-									드래그 앤 드롭
+									<span className="font-semibold">{t("클릭하여 업로드")}</span>{" "}
+									{t("또는 드래그 앤 드롭")}
 								</p>
 								<p className="text-gray-500 text-xs dark:text-gray-400">
-									MP4, WebM, OGG (최대 100MB)
+									{t("MP4, WebM, OGG (최대 100MB)")}
 								</p>
 							</div>
 							<input
@@ -112,7 +119,7 @@ export const VideoUploader = (props: VideoUploaderProps) => {
 								: "bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
 						}`}
 					>
-						{uploading ? "업로드 중..." : "비디오 업로드"}
+						{uploading ? t("업로드 중...") : t("비디오 업로드")}
 					</button>
 					{uploading && (
 						<div className="mt-4">
@@ -123,7 +130,9 @@ export const VideoUploader = (props: VideoUploaderProps) => {
 								></div>
 							</div>
 							<p className="mt-2 text-center text-gray-500 text-sm dark:text-gray-400">
-								{uploadProgress}% 완료
+								{t("{{percent}}% 완료", undefined, {
+									percent: uploadProgress,
+								})}
 							</p>
 						</div>
 					)}
@@ -132,4 +141,4 @@ export const VideoUploader = (props: VideoUploaderProps) => {
 			</div>
 		</div>
 	);
-};
+});

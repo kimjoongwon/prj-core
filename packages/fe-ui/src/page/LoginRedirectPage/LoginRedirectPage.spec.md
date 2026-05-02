@@ -24,6 +24,7 @@ LoginRedirectPage
 | --- | --- | --- |
 | `Surface` | `../../surface` | 콘텐츠 그룹과 elevation 구성 |
 | `VStack` | `../../rhythm` | 화면 조합 요소 |
+| `useT` | `../../i18n` | 상태 문구 런타임 번역 |
 | `Spinner` | `@heroui/react` | 로딩/대기 상태 표시 |
 | `Button` | `../../control` | 사용자 액션 실행 |
 
@@ -38,4 +39,5 @@ LoginRedirectPage
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-01 | redirect/error 상태 문구를 런타임 번역 hook으로 치환 | codex |
 | 2026-03-25 | 초기 화면 기획 수립 | codex |

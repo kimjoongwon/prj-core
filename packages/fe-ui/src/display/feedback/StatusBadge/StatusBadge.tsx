@@ -1,5 +1,9 @@
+"use client";
+
 import { Chip } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import type { InquiryStatusCode } from "../../../cell/InquiryStatusCell/InquiryStatusCell";
+import { useT } from "../../../i18n";
 
 export interface StatusBadgeProps {
 	/** 문의 상태 코드 */
@@ -41,11 +45,12 @@ const STATUS_CONFIG: Record<
  * <StatusBadge status="IN_PROGRESS" size="lg" />
  * ```
  */
-export const StatusBadge = ({
+export const StatusBadge = observer(function StatusBadge({
 	status,
 	size = "sm",
 	className,
-}: StatusBadgeProps) => {
+}: StatusBadgeProps) {
+	const t = useT();
 	const config = STATUS_CONFIG[status] ?? {
 		label: status,
 		color: "default" as const,
@@ -53,7 +58,7 @@ export const StatusBadge = ({
 
 	return (
 		<Chip size={size} color={config.color} variant="flat" className={className}>
-			{config.label}
+			{t(config.label)}
 		</Chip>
 	);
-};
+});

@@ -1,7 +1,10 @@
 "use client";
 
-import { setApiPersistStore } from "@cocrepo/api/core/client";
-import { setIdpPersistStore } from "@cocrepo/api/idp/client";
+import {
+	setApiLocaleStore,
+	setApiPersistStore,
+} from "@cocrepo/api/core/client";
+import { setIdpLocaleStore, setIdpPersistStore } from "@cocrepo/api/idp/client";
 import type { AppStoreConfig, AppStoreProviderResult } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
@@ -17,6 +20,7 @@ import { AuthStore } from "../stores/authStore";
 import { BottomTabStore } from "../stores/bottomTabStore";
 import { CookieStore } from "../stores/cookieStore";
 import { FABStore } from "../stores/fabStore";
+import { LocaleStore } from "../stores/localeStore";
 import { NavigationStore } from "../stores/navigationStore";
 import { Navigator } from "../stores/navigator";
 import { PersistStore } from "../stores/persistStore";
@@ -62,7 +66,8 @@ export function createAppStoreProvider(
 	NavigationStore,
 	PersistStore,
 	BottomTabStore,
-	FABStore
+	FABStore,
+	LocaleStore
 > {
 	const AppStoreContext = createContext<RootStore | null>(null);
 	AppStoreContext.displayName = "AppStoreContext";
@@ -82,6 +87,9 @@ export function createAppStoreProvider(
 		rootStore.persistStore = new PersistStore({
 			storageKey: config.persistStorageKey,
 		});
+		rootStore.localeStore = new LocaleStore({
+			storageKey: `${config.persistStorageKey}:locale`,
+		});
 
 		// BottomTabStore, FABStore 추가
 		rootStore.bottomTabStore = new BottomTabStore(
@@ -97,6 +105,8 @@ export function createAppStoreProvider(
 		// Core/IDP API 인터셉터가 모두 동일한 현재 Space를 읽도록 연결합니다.
 		setApiPersistStore(rootStore.persistStore);
 		setIdpPersistStore(rootStore.persistStore);
+		setApiLocaleStore(rootStore.localeStore);
+		setIdpLocaleStore(rootStore.localeStore);
 
 		return rootStore;
 	}
@@ -134,6 +144,17 @@ export function createAppStoreProvider(
 			throw new Error("persistStore가 초기화되지 않았습니다.");
 		}
 		return store.persistStore;
+	}
+
+	/**
+	 * LocaleStore selector hook
+	 */
+	function useLocaleStore(): LocaleStore {
+		const store = useAppStore();
+		if (!store.localeStore) {
+			throw new Error("localeStore가 초기화되지 않았습니다.");
+		}
+		return store.localeStore;
 	}
 
 	/**
@@ -175,6 +196,7 @@ export function createAppStoreProvider(
 		const fabStore = store.fabStore;
 		const abilityStore = store.abilityStore;
 		const persistStore = store.persistStore;
+		const localeStore = store.localeStore;
 
 		// navigationStore가 없으면 초기화 중이므로 렌더링하지 않음
 		if (!navigationStore) {
@@ -186,6 +208,18 @@ export function createAppStoreProvider(
 		useEffect(() => {
 			persistStore?.hydrateFromStorage();
 		}, [persistStore]);
+
+		useEffect(() => {
+			localeStore?.hydrateFromStorage();
+		}, [localeStore]);
+
+		useEffect(() => {
+			if (!localeStore || typeof document === "undefined") {
+				return;
+			}
+
+			document.documentElement.lang = localeStore.htmlLang;
+		}, [localeStore, localeStore?.htmlLang]);
 
 		// ability 변경 시 체커 업데이트
 		useEffect(() => {
@@ -260,6 +294,7 @@ export function createAppStoreProvider(
 		useAppStore,
 		useNavigationStore,
 		usePersistStore,
+		useLocaleStore,
 		useBottomTabStore,
 		useFABStore,
 	};

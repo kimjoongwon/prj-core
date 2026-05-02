@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	Button,
 	Chip,
@@ -7,7 +9,9 @@ import {
 	Tooltip,
 } from "@heroui/react";
 import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import { type Translate, useT } from "../../i18n";
 
 /**
  * 가시성 상태 타입
@@ -90,17 +94,18 @@ const statusConfig: Record<
  * />
  * ```
  */
-export function VisibilityCell({
+export const VisibilityCell = observer(function VisibilityCell({
 	status,
 	fieldName,
 	roleName,
 	editable = false,
 	onStatusChange,
 }: VisibilityCellProps) {
+	const t = useT();
 	const config = statusConfig[status];
 
 	// 툴팁 내용 생성
-	const tooltipContent = buildTooltipContent(config, fieldName, roleName);
+	const tooltipContent = buildTooltipContent(config, t, fieldName, roleName);
 
 	// 칩 렌더링
 	const chip = (
@@ -111,7 +116,7 @@ export function VisibilityCell({
 			startContent={config.icon}
 			className={editable ? "cursor-pointer" : undefined}
 		>
-			{config.label}
+			{t(config.label)}
 		</Chip>
 	);
 
@@ -134,7 +139,7 @@ export function VisibilityCell({
 			</Tooltip>
 			<PopoverContent>
 				<div className="p-2">
-					<p className="text-sm font-medium mb-2">가시성 상태 변경</p>
+					<p className="text-sm font-medium mb-2">{t("가시성 상태 변경")}</p>
 					<div className="flex flex-col gap-1">
 						{(Object.keys(statusConfig) as VisibilityStatus[]).map(
 							(statusKey) => {
@@ -151,7 +156,7 @@ export function VisibilityCell({
 										className="justify-start"
 										onPress={() => onStatusChange?.(statusKey)}
 									>
-										{itemConfig.label}
+										{t(itemConfig.label)}
 									</Button>
 								);
 							},
@@ -161,27 +166,33 @@ export function VisibilityCell({
 			</PopoverContent>
 		</Popover>
 	);
-}
+});
 
 /**
  * 툴팁 내용을 생성합니다
  */
 function buildTooltipContent(
 	config: (typeof statusConfig)[VisibilityStatus],
+	t: Translate,
 	fieldName?: string,
 	roleName?: string,
 ): string {
 	const parts: string[] = [];
 
 	if (fieldName && roleName) {
-		parts.push(`${roleName}의 ${fieldName} 필드`);
+		parts.push(
+			t("{{roleName}}의 {{fieldName}} 필드", undefined, {
+				roleName,
+				fieldName,
+			}),
+		);
 	} else if (fieldName) {
-		parts.push(`${fieldName} 필드`);
+		parts.push(t("{{fieldName}} 필드", undefined, { fieldName }));
 	} else if (roleName) {
 		parts.push(`${roleName}`);
 	}
 
-	parts.push(config.description);
+	parts.push(t(config.description));
 
 	return parts.join(": ");
 }

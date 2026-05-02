@@ -20,6 +20,8 @@
 | 모듈 | 용도 |
 |------|------|
 | @heroui/react | 기능 구현 의존성 |
+| @cocrepo/store | 언어 선택 상태 연결 |
+| @cocrepo/ui | IDP redirect page와 언어 선택 feature |
 | mobx-react-lite | 기능 구현 의존성 |
 | react | 기능 구현 의존성 |
 | ./hooks | 기능 구현 의존성 |
@@ -66,6 +68,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-01 | redirect page 우상단에 언어 선택 action을 주입 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-26 | `IdentityLoginRedirectPage` 경로를 page 폴더 기반 sidecar 구조에 맞게 갱신 | codex |
 | 2026-03-25 | `IdentityLoginRedirectPage`로 상태 UI를 page 레이어로 이동하고 route page를 thin container로 정리 | codex |

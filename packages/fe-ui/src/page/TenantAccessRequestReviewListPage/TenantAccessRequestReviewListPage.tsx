@@ -14,6 +14,7 @@ import {
 } from "@heroui/react";
 import { Eye } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { PageSurface } from "../../surface/PageSurface";
@@ -62,6 +63,7 @@ export const TenantAccessRequestReviewListPage = observer(
 		isLoading,
 		onClickRequestRow,
 	}: TenantAccessRequestReviewListPageProps) => {
+		const t = useT();
 		const requestRows = requests ?? [];
 
 		return (
@@ -101,14 +103,17 @@ export const TenantAccessRequestReviewListPage = observer(
 								{isLoading ? (
 									<Skeleton className="h-56 rounded-lg" />
 								) : (
-									<Table aria-label="테넌트 접근 신청 검토 목록" removeWrapper>
+									<Table
+										aria-label={t("테넌트 접근 신청 검토 목록")}
+										removeWrapper
+									>
 										<TableHeader>
-											<TableColumn>신청</TableColumn>
-											<TableColumn>상태</TableColumn>
-											<TableColumn>신청일</TableColumn>
-											<TableColumn align="end">상세</TableColumn>
+											<TableColumn>{t("신청")}</TableColumn>
+											<TableColumn>{t("상태")}</TableColumn>
+											<TableColumn>{t("신청일")}</TableColumn>
+											<TableColumn align="end">{t("상세")}</TableColumn>
 										</TableHeader>
-										<TableBody emptyContent="검토할 신청이 없습니다.">
+										<TableBody emptyContent={t("검토할 신청이 없습니다.")}>
 											{requestRows.map((request) => (
 												<TableRow key={request.id}>
 													<TableCell>
@@ -135,7 +140,7 @@ export const TenantAccessRequestReviewListPage = observer(
 																startContent={<Eye className="size-4" />}
 																onPress={() => onClickRequestRow(request.id)}
 															>
-																보기
+																{t("보기")}
 															</Button>
 														</div>
 													</TableCell>

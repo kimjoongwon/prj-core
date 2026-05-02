@@ -1,7 +1,6 @@
 "use client";
 
 import {
-	type GetTranslationsParams,
 	getGetTranslationsQueryKey,
 	useCreateTranslation,
 	useDeleteTranslation,
@@ -10,11 +9,13 @@ import {
 	useInvalidateTranslationCache,
 	useUpdateTranslation,
 } from "@cocrepo/api/core/translations";
+import type { GetTranslationsParams } from "@cocrepo/api/core/model";
 import {
 	type StaticTranslationForm,
 	type StaticTranslationLanguageCode,
 	StaticTranslationListPage,
 	type StaticTranslationListPageQueryStates,
+	useT,
 } from "@cocrepo/ui";
 import { addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -22,6 +23,7 @@ import { observer } from "mobx-react-lite";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 
 export default observer(function TranslationsPageRoute() {
+	const t = useT();
 	const queryClient = useQueryClient();
 	const [queryStates, setQueryStates] = useQueryStates({
 		take: parseAsInteger.withDefault(20),
@@ -60,14 +62,14 @@ export default observer(function TranslationsPageRoute() {
 			await createMutation.mutateAsync({ data: form });
 			await invalidateTranslationsQuery();
 			addToast({
-				title: "번역 등록 완료",
-				description: "정적 번역 key-value가 등록되었습니다.",
+				title: t("번역 등록 완료"),
+				description: t("정적 번역 key-value가 등록되었습니다."),
 				color: "success",
 			});
 		} catch (error) {
 			addToast({
-				title: "번역 등록 실패",
-				description: "정적 번역 등록 중 오류가 발생했습니다.",
+				title: t("번역 등록 실패"),
+				description: t("정적 번역 등록 중 오류가 발생했습니다."),
 				color: "danger",
 			});
 			throw error;
@@ -80,19 +82,19 @@ export default observer(function TranslationsPageRoute() {
 	) {
 		try {
 			await updateMutation.mutateAsync({
-				id: translationId,
+				translationId,
 				data: form,
 			});
 			await invalidateTranslationsQuery();
 			addToast({
-				title: "번역 수정 완료",
-				description: "정적 번역 key-value가 수정되었습니다.",
+				title: t("번역 수정 완료"),
+				description: t("정적 번역 key-value가 수정되었습니다."),
 				color: "success",
 			});
 		} catch (error) {
 			addToast({
-				title: "번역 수정 실패",
-				description: "정적 번역 수정 중 오류가 발생했습니다.",
+				title: t("번역 수정 실패"),
+				description: t("정적 번역 수정 중 오류가 발생했습니다."),
 				color: "danger",
 			});
 			throw error;
@@ -101,17 +103,17 @@ export default observer(function TranslationsPageRoute() {
 
 	async function onDeleteTranslation(translationId: string) {
 		try {
-			await deleteMutation.mutateAsync({ id: translationId });
+			await deleteMutation.mutateAsync({ translationId });
 			await invalidateTranslationsQuery();
 			addToast({
-				title: "번역 삭제 완료",
-				description: "정적 번역 key-value가 삭제되었습니다.",
+				title: t("번역 삭제 완료"),
+				description: t("정적 번역 key-value가 삭제되었습니다."),
 				color: "success",
 			});
 		} catch (error) {
 			addToast({
-				title: "번역 삭제 실패",
-				description: "정적 번역 삭제 중 오류가 발생했습니다.",
+				title: t("번역 삭제 실패"),
+				description: t("정적 번역 삭제 중 오류가 발생했습니다."),
 				color: "danger",
 			});
 			throw error;
@@ -123,14 +125,14 @@ export default observer(function TranslationsPageRoute() {
 			await invalidateAllMutation.mutateAsync();
 			await invalidateTranslationsQuery();
 			addToast({
-				title: "전체 캐시 갱신 완료",
-				description: "전체 번역 캐시가 갱신되었습니다.",
+				title: t("전체 캐시 갱신 완료"),
+				description: t("전체 번역 캐시가 갱신되었습니다."),
 				color: "success",
 			});
 		} catch (error) {
 			addToast({
-				title: "전체 캐시 갱신 실패",
-				description: "전체 번역 캐시 갱신 중 오류가 발생했습니다.",
+				title: t("전체 캐시 갱신 실패"),
+				description: t("전체 번역 캐시 갱신 중 오류가 발생했습니다."),
 				color: "danger",
 			});
 			throw error;
@@ -144,14 +146,20 @@ export default observer(function TranslationsPageRoute() {
 			await invalidateLanguageMutation.mutateAsync({ languageCode });
 			await invalidateTranslationsQuery();
 			addToast({
-				title: "언어 캐시 갱신 완료",
-				description: `${languageCode} 번역 캐시가 갱신되었습니다.`,
+				title: t("언어 캐시 갱신 완료"),
+				description: t(
+					"{{languageCode}} 번역 캐시가 갱신되었습니다.",
+					undefined,
+					{
+						languageCode,
+					},
+				),
 				color: "success",
 			});
 		} catch (error) {
 			addToast({
-				title: "언어 캐시 갱신 실패",
-				description: "언어별 번역 캐시 갱신 중 오류가 발생했습니다.",
+				title: t("언어 캐시 갱신 실패"),
+				description: t("언어별 번역 캐시 갱신 중 오류가 발생했습니다."),
 				color: "danger",
 			});
 			throw error;

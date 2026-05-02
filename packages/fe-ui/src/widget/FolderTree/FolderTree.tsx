@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 
 export interface FolderTreeItem {
 	id: string;
@@ -134,6 +135,7 @@ const FolderTreeNodeItem = observer(
 		onSelect,
 		onToggleExpand,
 	}: FolderTreeNodeItemProps) => {
+		const t = useT();
 		const hasChildren = node.children.length > 0;
 		const isExpanded = expandedFolderIds.has(node.id);
 		const isSelected = selectedFolderId === node.id;
@@ -167,8 +169,13 @@ const FolderTreeNodeItem = observer(
 						)}
 						aria-label={
 							hasChildren
-								? `${node.name} ${isExpanded ? "축소" : "확장"}`
-								: `${node.name} 폴더`
+								? t("{{folderName}} {{action}}", undefined, {
+										folderName: node.name,
+										action: t(isExpanded ? "축소" : "확장"),
+									})
+								: t("{{folderName}} 폴더", undefined, {
+										folderName: node.name,
+									})
 						}
 						disabled={!hasChildren}
 					>
@@ -240,6 +247,7 @@ export const FolderTree = observer(
 		isLoading = false,
 		className,
 	}: FolderTreeProps) => {
+		const t = useT();
 		const [internalExpandedFolderIds, setInternalExpandedFolderIds] = useState(
 			new Set<string>(),
 		);
@@ -326,8 +334,8 @@ export const FolderTree = observer(
 			>
 				<div className="flex items-center justify-between border-b border-divider px-4 py-3">
 					<div>
-						<p className="text-sm font-semibold text-foreground">폴더</p>
-						<p className="text-xs text-default-500">에셋 탐색 기준</p>
+						<p className="text-sm font-semibold text-foreground">{t("폴더")}</p>
+						<p className="text-xs text-default-500">{t("에셋 탐색 기준")}</p>
 					</div>
 					<div className="flex items-center gap-1">
 						{showRenameButton ? (
@@ -336,7 +344,7 @@ export const FolderTree = observer(
 								size="sm"
 								variant="flat"
 								color="default"
-								aria-label="폴더 이름 변경"
+								aria-label={t("폴더 이름 변경")}
 								onPress={handleRename}
 								isDisabled={!selectedFolder || !onRename}
 							>
@@ -349,7 +357,7 @@ export const FolderTree = observer(
 								size="sm"
 								variant="flat"
 								color="danger"
-								aria-label="폴더 삭제"
+								aria-label={t("폴더 삭제")}
 								onPress={handleDelete}
 								isDisabled={!selectedFolder || !onDelete}
 							>
@@ -365,7 +373,7 @@ export const FolderTree = observer(
 								onPress={handleCreate}
 								isDisabled={!onCreate}
 							>
-								폴더 생성
+								{t("폴더 생성")}
 							</Button>
 						) : null}
 					</div>
@@ -389,12 +397,12 @@ export const FolderTree = observer(
 								)}
 							>
 								<FolderOpen className="h-4 w-4 shrink-0" />
-								<span className="truncate">{ROOT_LABEL}</span>
+								<span className="truncate">{t(ROOT_LABEL)}</span>
 							</button>
 
 							{treeNodes.length === 0 ? (
 								<div className="rounded-lg border border-dashed border-divider px-3 py-6 text-center text-sm text-default-500">
-									등록된 폴더가 없습니다.
+									{t("등록된 폴더가 없습니다.")}
 								</div>
 							) : (
 								treeNodes.map((node) => (

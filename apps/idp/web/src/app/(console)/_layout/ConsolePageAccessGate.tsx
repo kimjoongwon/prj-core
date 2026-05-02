@@ -7,6 +7,7 @@ import {
 	DetailPageSurface,
 	DetailSectionCard,
 	PageTitleBar,
+	useT,
 } from "@cocrepo/ui";
 import { Button } from "@heroui/react";
 import { LockKeyhole } from "lucide-react";
@@ -21,6 +22,7 @@ export const ConsolePageAccessGate = observer(function ConsolePageAccessGate({
 }) {
 	const pathname = usePathname();
 	const router = useRouter();
+	const t = useT();
 	const persistStore = useConsolePersistStore();
 	const { can, isLoaded } = useAbility();
 
@@ -46,7 +48,7 @@ export const ConsolePageAccessGate = observer(function ConsolePageAccessGate({
 				<DetailPageSurface>
 					<DetailSectionCard>
 						<div className="flex min-h-[260px] items-center justify-center text-sm text-default-500">
-							현재 tenant 범위와 화면 접근 권한을 확인하는 중입니다.
+							{t("현재 tenant 범위와 화면 접근 권한을 확인하는 중입니다.")}
 						</div>
 					</DetailSectionCard>
 				</DetailPageSurface>
@@ -63,7 +65,11 @@ export const ConsolePageAccessGate = observer(function ConsolePageAccessGate({
 			top={
 				<PageTitleBar
 					title="접근 권한이 없습니다"
-					description={`${screenScopeItem.pageLabel} 화면은 현재 tenant 범위에서 열 수 없습니다.`}
+					description={t(
+						"{{pageLabel}} 화면은 현재 tenant 범위에서 열 수 없습니다.",
+						undefined,
+						{ pageLabel: t(screenScopeItem.pageLabel) },
+					)}
 				/>
 			}
 		>
@@ -75,23 +81,24 @@ export const ConsolePageAccessGate = observer(function ConsolePageAccessGate({
 						</div>
 						<div className="space-y-2">
 							<p className="text-base font-semibold">
-								현재 선택한 tenant 범위로는 이 화면을 열 수 없습니다.
+								{t("현재 선택한 tenant 범위로는 이 화면을 열 수 없습니다.")}
 							</p>
 							<p className="max-w-xl text-sm text-default-500">
-								global 관리 화면은 현재 tenant role이 FULL_ACCESS일 때만 열리고,
-								그 외 화면은 현재 선택한 Space 기준으로 범위가 제한됩니다.
+								{t(
+									"global 관리 화면은 현재 tenant role이 FULL_ACCESS일 때만 열리고, 그 외 화면은 현재 선택한 Space 기준으로 범위가 제한됩니다.",
+								)}
 							</p>
 						</div>
 						<div className="flex gap-2">
 							<Button variant="flat" onPress={() => router.back()}>
-								이전 화면
+								{t("이전 화면")}
 							</Button>
 							<Button
 								color="primary"
 								variant="flat"
 								onPress={() => router.push(IDP_PATHS.DASHBOARD)}
 							>
-								대시보드로 이동
+								{t("대시보드로 이동")}
 							</Button>
 						</div>
 					</div>

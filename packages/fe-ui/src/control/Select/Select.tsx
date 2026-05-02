@@ -1,7 +1,11 @@
+"use client";
+
 import { cloneDeep } from "@cocrepo/toolkit";
 import type { Option } from "@cocrepo/type";
 import { Select as NextSelect, SelectItem } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import type React from "react";
+import { translateNode, useT } from "../../i18n";
 
 // SelectProps 인터페이스를 독립적으로 정의 (NextUI 제네릭 제거)
 export interface SelectProps {
@@ -56,7 +60,8 @@ export interface SelectProps {
  * />
  * ```
  */
-export const Select = (props: SelectProps) => {
+export const Select = observer(function Select(props: SelectProps) {
+	const t = useT();
 	const {
 		options = [],
 		value,
@@ -89,6 +94,8 @@ export const Select = (props: SelectProps) => {
 		typeof rest["aria-label"] === "string"
 			? rest["aria-label"]
 			: (label ?? placeholder ?? "선택");
+	const translatedErrorMessage =
+		typeof errorMessage === "string" ? t(errorMessage) : errorMessage;
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		onChange?.(e.target.value);
@@ -98,29 +105,31 @@ export const Select = (props: SelectProps) => {
 		<NextSelect
 			size={size}
 			variant={variant}
-			label={label}
-			placeholder={placeholder}
+			label={label ? t(label) : undefined}
+			placeholder={placeholder ? t(placeholder) : undefined}
 			isDisabled={isDisabled}
 			isInvalid={isInvalid}
-			errorMessage={errorMessage}
+			errorMessage={translatedErrorMessage}
 			className={className}
 			isRequired={isRequired}
 			disallowEmptySelection={isReadOnly}
 			onChange={handleChange}
 			selectedKeys={selectedKeys}
-			aria-label={ariaLabel}
 			{...rest}
+			aria-label={t(ariaLabel)}
 		>
 			{_options.map((option) => {
+				const text =
+					option.text === undefined
+						? String(option.value)
+						: String(option.text);
+
 				return (
-					<SelectItem
-						key={option.value}
-						textValue={String(option.text ?? option.value)}
-					>
-						{option.text}
+					<SelectItem key={option.value} textValue={t(text)}>
+						{translateNode(option.text ?? option.value, t)}
 					</SelectItem>
 				);
 			})}
 		</NextSelect>
 	);
-};
+});

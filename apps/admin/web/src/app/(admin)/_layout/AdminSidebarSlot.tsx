@@ -37,6 +37,8 @@ export const AdminSidebarSlot = observer(function AdminSidebarSlot() {
 			onNavItemClick={layoutProps.onNavItemClick}
 			onSubNavItemClick={layoutProps.onSubNavItemClick}
 			onNavItemToggle={layoutProps.onNavItemToggle}
+			density="compact"
+			descriptionVisibility="active"
 			getItemDescription={(item) =>
 				NAV_ITEM_COPY[item.id] ?? "운영 콘솔 메뉴로 이동합니다."
 			}

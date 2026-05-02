@@ -1,6 +1,10 @@
+"use client";
+
 import { cva } from "class-variance-authority";
+import { observer } from "mobx-react-lite";
 import type React from "react";
 import type { ElementType, HTMLAttributes, ReactNode } from "react";
+import { translateNode, useT } from "../../../i18n";
 
 export interface TextProps extends HTMLAttributes<HTMLElement> {
 	/** 텍스트 변형 (스타일 프리셋) @default "body1" */
@@ -152,7 +156,7 @@ const getSemanticTag = (
  * <Text variant="body1" as="span">인라인 텍스트</Text>
  * ```
  */
-export const Text = (props: TextProps) => {
+export const Text = observer(function Text(props: TextProps) {
 	const {
 		children,
 		className,
@@ -162,6 +166,7 @@ export const Text = (props: TextProps) => {
 		as = "p",
 		...rest
 	} = props as TextProps;
+	const t = useT();
 
 	const Tag = (as || getSemanticTag(variant)) as React.ElementType;
 
@@ -173,9 +178,9 @@ export const Text = (props: TextProps) => {
 				(className ? ` ${className}` : "")
 			}
 		>
-			{children}
+			{translateNode(children, t)}
 		</Tag>
 	);
-};
+});
 
 Text.displayName = "Text";

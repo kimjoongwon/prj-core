@@ -11,6 +11,7 @@ export const {
 	useAppStore,
 	useNavigationStore,
 	usePersistStore,
+	useLocaleStore,
 	useBottomTabStore,
 	useFABStore,
 } = createAppStoreProvider({

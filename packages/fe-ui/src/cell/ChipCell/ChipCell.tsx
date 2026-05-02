@@ -1,4 +1,8 @@
+"use client";
+
 import { Chip } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 import { DefaultCell } from "../DefaultCell/DefaultCell";
 
 type ChipCellColor =
@@ -45,7 +49,7 @@ const ALIGN_CLASS_NAME: Record<NonNullable<ChipCellProps["align"]>, string> = {
 /**
  * 문자열 라벨을 HeroUI Chip으로 감싸는 범용 셀
  */
-export const ChipCell = ({
+export const ChipCell = observer(function ChipCell({
 	label,
 	color = "default",
 	variant = "flat",
@@ -53,7 +57,9 @@ export const ChipCell = ({
 	placeholder = "-",
 	className,
 	align = "center",
-}: ChipCellProps) => {
+}: ChipCellProps) {
+	const t = useT();
+
 	if (label === null || label === undefined || label === "") {
 		return <DefaultCell value={placeholder} />;
 	}
@@ -61,8 +67,8 @@ export const ChipCell = ({
 	return (
 		<div className={`flex w-full ${ALIGN_CLASS_NAME[align]}`}>
 			<Chip size={size} color={color} variant={variant} className={className}>
-				{String(label)}
+				{typeof label === "string" ? t(label) : String(label)}
 			</Chip>
 		</div>
 	);
-};
+});

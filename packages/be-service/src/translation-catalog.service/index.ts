@@ -1,6 +1,7 @@
 import {
 	CreateTranslationDto,
 	GetTranslationsDto,
+	TranslationCatalogResponseDto,
 	UpdateTranslationDto,
 } from "@cocrepo/dto";
 import { Translation } from "@cocrepo/entity";
@@ -66,6 +67,18 @@ export class TranslationCatalogService {
 		}
 
 		return translation;
+	}
+
+	async getCatalog(
+		languageCode: PrismaLanguageCode,
+	): Promise<TranslationCatalogResponseDto> {
+		const messages = await this.repository.findCatalogByLanguage(languageCode);
+
+		return {
+			languageCode:
+				languageCode as TranslationCatalogResponseDto["languageCode"],
+			messages,
+		};
 	}
 
 	async create(dto: CreateTranslationDto): Promise<Translation> {

@@ -3,12 +3,14 @@
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
 import type { BottomNavProps } from "../../display/layout/type";
+import { useT } from "../../i18n";
 
 export const BottomNav = observer(function BottomNav({
 	items,
 	activeTabId,
 	onTabClick,
 }: BottomNavProps) {
+	const t = useT();
 	const handleTabClick = (tabId: string) => {
 		onTabClick(tabId);
 	};
@@ -41,7 +43,7 @@ export const BottomNav = observer(function BottomNav({
 							<span
 								className={`text-xs ${isActive ? "font-medium" : "font-normal"}`}
 							>
-								{item.label}
+								{t(item.label)}
 							</span>
 						</button>
 					);
