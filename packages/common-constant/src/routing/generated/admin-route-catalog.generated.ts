@@ -48,6 +48,7 @@ export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
 	"apps/admin/web/src/app/(admin)/templates/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/tenant-access-requests/[tenantAccessRequestId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/tenant-access-requests/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/terms/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/edit/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/timelines/[timelineId]/sessions/[sessionId]/edit/route.meta.ts",
@@ -250,6 +251,20 @@ export const GENERATED_ADMIN_NAV_ITEMS: NavItemConfig[] = [
 				"label": "정적 번역",
 				"path": "/translations",
 				"subject": "menu:translations:list"
+			}
+		]
+	},
+	{
+		"id": "terms",
+		"label": "약관 관리",
+		"icon": "FileSearch",
+		"subject": "menu:terms",
+		"children": [
+			{
+				"id": "terms-list",
+				"label": "약관 관리",
+				"path": "/terms",
+				"subject": "menu:terms:list"
 			}
 		]
 	}
@@ -820,5 +835,15 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 		"subject": "page:translations:list",
 		"description": "admin과 idp에서 사용하는 정적 다국어 key-value를 관리합니다.",
 		"menuLeafId": "translations-list"
+	},
+	{
+		"groupId": "terms",
+		"groupLabel": "약관 관리",
+		"pageId": "terms:list",
+		"pageLabel": "약관 관리",
+		"pathPattern": "/terms",
+		"subject": "page:terms:list",
+		"description": "모바일과 web 서비스에 노출할 약관/동의 문서를 관리합니다.",
+		"menuLeafId": "terms-list"
 	}
 ];

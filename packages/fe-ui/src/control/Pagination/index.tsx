@@ -30,6 +30,8 @@ export const Pagination = observer(
 		const {
 			state,
 			path,
+			totalCount,
+			limit,
 			queryParam = "page",
 			disableUrlSync = false,
 			...rest
@@ -56,7 +58,13 @@ export const Pagination = observer(
 		};
 
 		return (
-			<BasePagination {...rest} page={currentPage} onChange={handleChange} />
+			<BasePagination
+				{...rest}
+				totalCount={totalCount}
+				limit={limit}
+				page={currentPage}
+				onChange={handleChange}
+			/>
 		);
 	},
 );

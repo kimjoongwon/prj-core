@@ -1,7 +1,7 @@
 "use client";
 
 import { useT } from "@cocrepo/ui";
-import { cn } from "@heroui/react";
+import { cn } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { IdpConsoleIcon } from "./IdpConsoleIcon";

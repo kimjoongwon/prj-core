@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@cocrepo/ui/heroui";
 
 interface GrantTypeCellProps {
 	/** Grant Type 목록 */

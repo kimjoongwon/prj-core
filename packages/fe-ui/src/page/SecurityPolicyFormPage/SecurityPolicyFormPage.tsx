@@ -8,7 +8,7 @@ import {
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Input, Switch } from "@heroui/react";
+import { Button, Input, Switch } from "@cocrepo/ui/heroui";
 import { Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
 

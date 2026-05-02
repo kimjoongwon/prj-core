@@ -7,7 +7,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 	Tooltip,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";

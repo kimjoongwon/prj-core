@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/react";
+import { Card, CardBody, CardHeader } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { Select } from "../../../control/Select/Select";

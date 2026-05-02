@@ -1,5 +1,5 @@
-import type { ListboxProps as HeroListboxProps } from "@heroui/react";
-import { Listbox as HeroListbox, ListboxItem } from "@heroui/react";
+import type { ListboxProps as HeroListboxProps } from "@cocrepo/ui/heroui";
+import { Listbox as HeroListbox, ListboxItem } from "@cocrepo/ui/heroui";
 import type { ReactNode } from "react";
 
 export type ListboxSelectProps<_T> = Omit<
@@ -7,7 +7,7 @@ export type ListboxSelectProps<_T> = Omit<
 	"state" | "children"
 > & {
 	title?: string;
-	options:
+	options?:
 		| {
 				text: string;
 				value: any;
@@ -28,7 +28,7 @@ export const ListboxSelect = <T extends object>(
 	} = props;
 
 	const handleSelectionChange: ListboxSelectProps<T>["onSelectionChange"] = (
-		selection,
+		selection: any,
 	) => {
 		return selection;
 	};

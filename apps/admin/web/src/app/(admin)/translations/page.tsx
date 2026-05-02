@@ -17,7 +17,7 @@ import {
 	type StaticTranslationListPageQueryStates,
 	useT,
 } from "@cocrepo/ui";
-import { addToast } from "@heroui/react";
+import { addToast } from "@cocrepo/ui/heroui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";

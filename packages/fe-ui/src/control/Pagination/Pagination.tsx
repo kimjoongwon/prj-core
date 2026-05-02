@@ -1,7 +1,7 @@
 import {
 	Pagination as HeroUIPagination,
 	type PaginationProps as HeroUIPaginationProps,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 
 export interface PaginationProps
 	extends Omit<HeroUIPaginationProps, "total" | "page" | "onChange"> {

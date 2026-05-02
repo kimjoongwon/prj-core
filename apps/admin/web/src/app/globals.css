@@ -1,10 +1,35 @@
 @import "tailwindcss";
-@plugin '../../../../../packages/fe-ui/hero.tsx';
-@source '../../../../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@import "@heroui/styles";
+@import "../../../../../packages/fe-ui/src/design-system/heroui-v3-compat.css";
+@import "ckeditor5/ckeditor5.css";
 @source "../../../../../packages/fe-ui/src/**/*.{js,ts,jsx,tsx}";
 @custom-variant dark (&:is(.dark *));
 
 body {
   font-family: "Pretendard", sans-serif;
   height: 100vh;
+}
+
+.service-document-html-editor {
+  width: 100%;
+}
+
+.service-document-html-editor__surface {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: #ffffff;
+}
+
+.service-document-html-editor .ck.ck-editor {
+  color: #1f2937;
+}
+
+.service-document-html-editor .ck.ck-toolbar {
+  border-width: 0 0 1px;
+}
+
+.service-document-html-editor .ck.ck-editor__main > .ck-editor__editable {
+  min-height: var(--html-editor-min-height);
+  border-width: 0;
 }

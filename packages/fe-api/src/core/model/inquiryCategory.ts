@@ -13,18 +13,18 @@
 /**
  * 문의 카테고리
  */
-export type InquiryCategory =
-	(typeof InquiryCategory)[keyof typeof InquiryCategory];
+export type InquiryCategory = typeof InquiryCategory[keyof typeof InquiryCategory];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const InquiryCategory = {
-	GENERAL: "GENERAL",
-	DELIVERY: "DELIVERY",
-	PAYMENT: "PAYMENT",
-	REFUND: "REFUND",
-	PRODUCT: "PRODUCT",
-	ACCOUNT: "ACCOUNT",
-	TECHNICAL: "TECHNICAL",
-	COMPLAINT: "COMPLAINT",
-	OTHER: "OTHER",
+  GENERAL: 'GENERAL',
+  DELIVERY: 'DELIVERY',
+  PAYMENT: 'PAYMENT',
+  REFUND: 'REFUND',
+  PRODUCT: 'PRODUCT',
+  ACCOUNT: 'ACCOUNT',
+  TECHNICAL: 'TECHNICAL',
+  COMPLAINT: 'COMPLAINT',
+  OTHER: 'OTHER',
 } as const;

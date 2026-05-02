@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip, Divider } from "@heroui/react";
+import { Chip, Divider } from "@cocrepo/ui/heroui";
 import { ArrowDownRight, ArrowUpRight, FileText } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";

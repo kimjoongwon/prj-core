@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@cocrepo/ui/heroui";
 
 interface TemplateTypeChipCellProps {
 	/** 템플릿 유형 */

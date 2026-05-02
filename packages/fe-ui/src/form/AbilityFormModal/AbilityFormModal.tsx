@@ -12,7 +12,7 @@ import {
 	Select as HeroSelect,
 	SelectItem,
 	SelectSection,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Input } from "../../control/Input/Input";

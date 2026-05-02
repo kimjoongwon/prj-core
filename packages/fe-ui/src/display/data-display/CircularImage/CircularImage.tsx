@@ -1,4 +1,4 @@
-import { cn } from "@heroui/react";
+import { cn } from "@cocrepo/ui/heroui";
 
 export interface CircularImageProps {
 	/** 이미지 소스 URL */

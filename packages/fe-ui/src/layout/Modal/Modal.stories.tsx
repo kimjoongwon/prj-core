@@ -1,4 +1,4 @@
-import { Card, CardBody } from "@heroui/react";
+import { Card, CardBody } from "@cocrepo/ui/heroui";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../../control/Button/Button";
 import { HStack } from "../../rhythm/HStack/HStack";

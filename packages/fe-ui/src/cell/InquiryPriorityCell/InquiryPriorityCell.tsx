@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@cocrepo/ui/heroui";
 import { AlertTriangle, ArrowUp, Minus, ArrowDown } from "lucide-react";
 
 /** 문의 우선순위값 (Prisma Enum 값과 동일) */

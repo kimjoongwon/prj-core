@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Divider, Textarea, Tooltip } from "@heroui/react";
+import { Button, Divider, Textarea, Tooltip } from "@cocrepo/ui/heroui";
 import { BookOpen, FileText, Paperclip, Send, Sparkles, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useRef, useState } from "react";

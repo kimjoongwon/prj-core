@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Skeleton, Textarea } from "@heroui/react";
+import { Button, Skeleton, Textarea } from "@cocrepo/ui/heroui";
 import { ArrowLeft, Check, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { PageSurface } from "../../surface/PageSurface";

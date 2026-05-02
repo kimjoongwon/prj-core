@@ -17,7 +17,7 @@ import {
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
-import { Button } from "@heroui/react";
+import { Button } from "@cocrepo/ui/heroui";
 import { Activity, Trash2 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";

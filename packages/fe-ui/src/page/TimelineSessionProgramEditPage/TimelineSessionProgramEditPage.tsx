@@ -9,7 +9,7 @@ import {
 	FormSectionCard,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Chip, Input, Select, SelectItem } from "@heroui/react";
+import { Button, Chip, Input, Select, SelectItem } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type { TimelineSessionProgramCreatePageProps } from "../TimelineSessionProgramCreatePage/TimelineSessionProgramCreatePage";
 

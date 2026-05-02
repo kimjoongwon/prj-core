@@ -6,7 +6,7 @@ import {
 	CardHeader,
 	ScrollShadow,
 	Spacer,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { useRef, useEffect } from "react";
 import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";

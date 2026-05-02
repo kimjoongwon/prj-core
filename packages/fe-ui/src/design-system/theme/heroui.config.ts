@@ -3,7 +3,22 @@
  * 커스텀 테마, 컬러, 컴포넌트 기본값을 정의합니다.
  */
 
-import type { ThemeColors } from "@heroui/react";
+type ThemeColorScale = {
+	50?: string;
+	100?: string;
+	200?: string;
+	300?: string;
+	400?: string;
+	500?: string;
+	600?: string;
+	700?: string;
+	800?: string;
+	900?: string;
+	foreground?: string;
+	DEFAULT?: string;
+};
+
+type ThemeColors = Record<string, string | ThemeColorScale | undefined>;
 
 /**
  * 라이트 테마 색상

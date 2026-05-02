@@ -14,7 +14,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import {
 	type ColumnDef,
 	type ExpandedState,

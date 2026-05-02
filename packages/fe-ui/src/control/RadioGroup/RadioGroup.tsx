@@ -4,7 +4,7 @@ import {
 	RadioGroup as NextUIRadioGroup,
 	type RadioGroupProps as NextUIRadioGroupProps,
 	Radio,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { translateNode, useT } from "../../i18n";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Image, ScrollShadow } from "@heroui/react";
+import { Button, Image, ScrollShadow } from "@cocrepo/ui/heroui";
 import { Clock, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";

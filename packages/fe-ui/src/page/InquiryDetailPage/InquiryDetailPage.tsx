@@ -32,7 +32,7 @@ import {
 	SLATracker,
 	VStack,
 } from "@cocrepo/ui";
-import { Input, Select, SelectItem, type Selection } from "@heroui/react";
+import { Input, Select, SelectItem, type Selection } from "@cocrepo/ui/heroui";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { WebSocketStatus } from "./hooks/useInquiryWebSocket";

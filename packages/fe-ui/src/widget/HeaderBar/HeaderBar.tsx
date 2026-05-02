@@ -9,7 +9,7 @@ import {
 	DropdownMenu,
 	DropdownSection,
 	DropdownTrigger,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { ChevronDown, LogOut } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { HeaderBarProps } from "../../display/layout/type";

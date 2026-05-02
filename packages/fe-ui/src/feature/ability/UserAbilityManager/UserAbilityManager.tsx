@@ -8,7 +8,7 @@ import {
 	Card,
 	CardBody,
 	Chip,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { Plus, Search, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { HStack } from "../../../rhythm/HStack/HStack";

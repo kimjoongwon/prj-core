@@ -9,7 +9,7 @@ import {
 	type TemplateFormData,
 	type VariableEditItem,
 } from "@cocrepo/ui";
-import { Button, Spinner } from "@heroui/react";
+import { Button, Spinner } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 
 export interface TemplateEditPageProps {

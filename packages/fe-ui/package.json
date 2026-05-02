@@ -24,10 +24,10 @@
       "import": "./src/widget/index.ts",
       "default": "./src/widget/index.ts"
     },
-    "./hero": {
-      "types": "./hero.tsx",
-      "import": "./hero.tsx",
-      "default": "./hero.tsx"
+    "./heroui": {
+      "types": "./src/design-system/heroui.tsx",
+      "import": "./src/design-system/heroui.tsx",
+      "default": "./src/design-system/heroui.tsx"
     },
     "./package.json": "./package.json"
   },
@@ -37,7 +37,6 @@
   "files": [
     "src",
     "index.ts",
-    "hero.tsx",
     "README.md"
   ],
   "scripts": {
@@ -65,8 +64,8 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@heroui/react": "catalog:",
-    "@heroui/use-theme": "catalog:",
-    "@internationalized/date": "^3.8.2",
+    "@heroui/styles": "catalog:",
+    "@internationalized/date": "3.12.0",
     "@storybook/react": "^9.0.18",
     "@storybook/react-vite": "catalog:",
     "@tailwindcss/postcss": "catalog:",
@@ -104,7 +103,7 @@
     "react-cookie": "catalog:",
     "react-dom": "catalog:",
     "react-dropzone": "catalog:",
-    "react-test-renderer": "^19.0.0",
+    "react-test-renderer": "^19.2.5",
     "storybook": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
@@ -112,9 +111,11 @@
     "vitest": "catalog:"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-react": "^11.1.2",
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
     "@react-aria/ssr": "^3.9.10",
+    "ckeditor5": "^48.0.1",
     "frappe-gantt": "^1.2.2",
     "mermaid": "^11.12.3"
   }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card } from "@heroui/react";
+import { Button, Card } from "@cocrepo/ui/heroui";
 import { X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { v4 } from "uuid";

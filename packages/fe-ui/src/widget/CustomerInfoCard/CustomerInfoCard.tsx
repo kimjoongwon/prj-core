@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/react";
+import { Card, CardBody } from "@cocrepo/ui/heroui";
 import { Calendar, Mail, Phone, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
 

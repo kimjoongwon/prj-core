@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Textarea } from "@heroui/react";
+import { Button, Textarea } from "@cocrepo/ui/heroui";
 import { Sparkles } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";

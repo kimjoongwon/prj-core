@@ -16,7 +16,7 @@ export const RadioGroup = observer(
 		const { state, path, options, ...rest } = props;
 
 		const value =
-			options?.find((option) => option.value === tools.get(state, path))
+			options?.find((option: { value: any }) => option.value === tools.get(state, path))
 				?.value || "";
 
 		const formField = useFormField({ value, state, path });

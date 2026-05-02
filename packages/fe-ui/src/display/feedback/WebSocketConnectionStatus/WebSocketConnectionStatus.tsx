@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@heroui/react";
+import { Button } from "@cocrepo/ui/heroui";
 import { cva, type VariantProps } from "class-variance-authority";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../../i18n";

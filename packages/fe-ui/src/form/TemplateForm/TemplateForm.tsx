@@ -1,5 +1,5 @@
 "use client";
-import { Button, Input, Radio, RadioGroup, Textarea } from "@heroui/react";
+import { Button, Input, Radio, RadioGroup, Textarea } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { TemplateContentEditor } from "../../widget/TemplateContentEditor/TemplateContentEditor";

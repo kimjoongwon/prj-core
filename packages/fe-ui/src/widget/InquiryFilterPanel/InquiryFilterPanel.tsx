@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, CardBody, Input } from "@heroui/react";
+import { Button, Card, CardBody, Input } from "@cocrepo/ui/heroui";
 import type { Option } from "@cocrepo/type";
 import { RotateCcw, Search } from "lucide-react";
 import { observer } from "mobx-react-lite";

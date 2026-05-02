@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@cocrepo/ui/heroui";
 import { MessageCircle } from "lucide-react";
 
 interface InquiryUnreadCellProps {

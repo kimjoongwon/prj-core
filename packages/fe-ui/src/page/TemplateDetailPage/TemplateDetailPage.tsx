@@ -25,7 +25,7 @@ import {
 	ModalHeader,
 	Spinner,
 	Switch,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
 

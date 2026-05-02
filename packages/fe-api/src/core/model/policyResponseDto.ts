@@ -9,39 +9,39 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { PolicyAbilityResponseDto } from "./policyAbilityResponseDto";
+import type { PolicyAbilityResponseDto } from './policyAbilityResponseDto';
 
 export interface PolicyResponseDto {
-	/** Policy ID (UUID) */
-	id: string;
-	/** Space ID */
-	spaceId: string;
-	/** 정책 식별자 */
-	name: string;
-	/**
-	 * 정책 표시명
-	 * @nullable
-	 */
-	displayName?: string | null;
-	/**
-	 * 정책 설명
-	 * @nullable
-	 */
-	description?: string | null;
-	/** 시스템 정책 여부 */
-	isSystem: boolean;
-	/** 생성 일시 */
-	createdAt: string;
-	/**
-	 * 수정 일시
-	 * @nullable
-	 */
-	updatedAt?: string | null;
-	/**
-	 * 삭제 일시
-	 * @nullable
-	 */
-	removedAt?: string | null;
-	/** 정책에 연결된 Ability 목록 */
-	policyAbilities?: PolicyAbilityResponseDto[];
+  /** Policy ID (UUID) */
+  id: string;
+  /** Space ID */
+  spaceId: string;
+  /** 정책 식별자 */
+  name: string;
+  /**
+   * 정책 표시명
+   * @nullable
+   */
+  displayName?: string | null;
+  /**
+   * 정책 설명
+   * @nullable
+   */
+  description?: string | null;
+  /** 시스템 정책 여부 */
+  isSystem: boolean;
+  /** 생성 일시 */
+  createdAt: string;
+  /**
+   * 수정 일시
+   * @nullable
+   */
+  updatedAt?: string | null;
+  /**
+   * 삭제 일시
+   * @nullable
+   */
+  removedAt?: string | null;
+  /** 정책에 연결된 Ability 목록 */
+  policyAbilities?: PolicyAbilityResponseDto[];
 }

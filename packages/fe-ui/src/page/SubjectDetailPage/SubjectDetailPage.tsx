@@ -21,7 +21,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { ArrowLeft, Box } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";

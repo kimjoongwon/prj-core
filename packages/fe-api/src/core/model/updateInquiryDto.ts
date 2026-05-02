@@ -9,25 +9,25 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { InquiryCategory } from "./inquiryCategory";
-import type { InquiryStatus } from "./inquiryStatus";
-import type { InquiryPriority } from "./inquiryPriority";
+import type { InquiryCategory } from './inquiryCategory';
+import type { InquiryStatus } from './inquiryStatus';
+import type { InquiryPriority } from './inquiryPriority';
 
 export interface UpdateInquiryDto {
-	/**
-	 * 문의 제목
-	 * @minLength 2
-	 * @maxLength 200
-	 */
-	title?: string;
-	/** 문의 카테고리 */
-	category?: InquiryCategory;
-	/** 문의 상태 */
-	status?: InquiryStatus;
-	/** 문의 우선순위 */
-	priority?: InquiryPriority;
-	/** 담당자 ID */
-	assigneeId?: string;
-	/** 실시간 채팅 활성화 여부 */
-	isRealtimeChat?: boolean;
+  /**
+   * 문의 제목
+   * @minLength 2
+   * @maxLength 200
+   */
+  title?: string;
+  /** 문의 카테고리 */
+  category?: InquiryCategory;
+  /** 문의 상태 */
+  status?: InquiryStatus;
+  /** 문의 우선순위 */
+  priority?: InquiryPriority;
+  /** 담당자 ID */
+  assigneeId?: string;
+  /** 실시간 채팅 활성화 여부 */
+  isRealtimeChat?: boolean;
 }

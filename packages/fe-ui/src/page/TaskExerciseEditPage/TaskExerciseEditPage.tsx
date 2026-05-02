@@ -11,7 +11,7 @@ import {
 	MediaThumbnail,
 	PageTitleBar,
 } from "@cocrepo/ui";
-import { Button, Chip, Input, Spinner, Textarea } from "@heroui/react";
+import { Button, Chip, Input, Spinner, Textarea } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 
 export interface ExerciseMediaAsset extends AssetBrowserAsset {}

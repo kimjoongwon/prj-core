@@ -1,4 +1,4 @@
-import { Avatar } from "@heroui/react";
+import { Avatar } from "@cocrepo/ui/heroui";
 import type { ReactNode } from "react";
 
 export interface ProfileAvatarCellProps {

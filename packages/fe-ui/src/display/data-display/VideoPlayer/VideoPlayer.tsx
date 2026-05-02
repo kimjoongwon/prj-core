@@ -1,4 +1,4 @@
-import { Modal, ModalContent } from "@heroui/react";
+import { Modal, ModalContent } from "@cocrepo/ui/heroui";
 import { Maximize, Minimize, Pause, Play } from "lucide-react";
 
 import { useEffect, useRef, useState } from "react";

@@ -7,7 +7,7 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { AlertTriangle, Info, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";

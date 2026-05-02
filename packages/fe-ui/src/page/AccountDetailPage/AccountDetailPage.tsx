@@ -18,7 +18,7 @@ import {
 	SelectItem,
 	type Selection,
 	Switch,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import {
 	ArrowLeft,
 	KeyRound,

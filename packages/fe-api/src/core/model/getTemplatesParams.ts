@@ -9,28 +9,28 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { TemplateType } from "./templateType";
+import type { TemplateType } from './templateType';
 
 export type GetTemplatesParams = {
-	/**
-	 * @minimum 0
-	 */
-	skip?: number;
-	/**
-	 * @minimum 1
-	 * @maximum 50
-	 */
-	take?: number;
-	/**
-	 * 코드 또는 이름 통합 검색
-	 */
-	search?: string;
-	/**
-	 * 템플릿 유형 필터
-	 */
-	type?: TemplateType;
-	/**
-	 * 활성 상태 필터
-	 */
-	isActive?: boolean;
+/**
+ * @minimum 0
+ */
+skip?: number;
+/**
+ * @minimum 1
+ * @maximum 50
+ */
+take?: number;
+/**
+ * 코드 또는 이름 통합 검색
+ */
+search?: string;
+/**
+ * 템플릿 유형 필터
+ */
+type?: TemplateType;
+/**
+ * 활성 상태 필터
+ */
+isActive?: boolean;
 };

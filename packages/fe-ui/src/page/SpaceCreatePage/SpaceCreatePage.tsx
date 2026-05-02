@@ -8,7 +8,7 @@ import {
 	FormSectionCard,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Input } from "@heroui/react";
+import { Button, Input } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 
 export interface SpaceCreatePageProps {

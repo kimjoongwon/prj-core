@@ -1,4 +1,4 @@
-import { type ChipProps, Chip as NextUIChip } from "@heroui/react";
+import { type ChipProps, Chip as NextUIChip } from "@cocrepo/ui/heroui";
 
 /**
  * Chip 컴포넌트

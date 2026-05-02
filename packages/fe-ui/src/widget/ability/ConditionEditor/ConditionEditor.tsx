@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip, cn, Tooltip } from "@heroui/react";
+import { Chip, cn, Tooltip } from "@cocrepo/ui/heroui";
 import { AlertCircle, Info } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";

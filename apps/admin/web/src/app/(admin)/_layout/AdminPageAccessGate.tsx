@@ -14,7 +14,7 @@ import {
 	PageTitleBar,
 	useT,
 } from "@cocrepo/ui";
-import { Button } from "@heroui/react";
+import { Button } from "@cocrepo/ui/heroui";
 import { LockKeyhole } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";

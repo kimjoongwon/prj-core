@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@cocrepo/ui/heroui";
 
 interface InquiryOnlineCellProps {
 	/** 온라인 참여자 수 */

@@ -1,6 +1,6 @@
 "use client";
 
-import { Spinner } from "@heroui/react";
+import { Spinner } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../control";
 import { useT } from "../../i18n";

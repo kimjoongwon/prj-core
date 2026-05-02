@@ -11,24 +11,24 @@
  */
 
 export interface InquiryStatsDto {
-	/** 전체 문의 수 */
-	total: number;
-	/** 신규 문의 수 */
-	new: number;
-	/** 진행 중 문의 수 */
-	inProgress: number;
-	/** 대기 중 문의 수 */
-	waiting: number;
-	/** 해결된 문의 수 */
-	resolved: number;
-	/** 종료된 문의 수 */
-	closed: number;
-	/** 에스컬레이션 문의 수 */
-	escalated: number;
-	/** SLA 위반 문의 수 */
-	slaBreached: number;
-	/** 평균 응답 시간 (분) */
-	avgResponseTime: number;
-	/** 평균 해결 시간 (분) */
-	avgResolutionTime: number;
+  /** 전체 문의 수 */
+  total: number;
+  /** 신규 문의 수 */
+  new: number;
+  /** 진행 중 문의 수 */
+  inProgress: number;
+  /** 대기 중 문의 수 */
+  waiting: number;
+  /** 해결된 문의 수 */
+  resolved: number;
+  /** 종료된 문의 수 */
+  closed: number;
+  /** 에스컬레이션 문의 수 */
+  escalated: number;
+  /** SLA 위반 문의 수 */
+  slaBreached: number;
+  /** 평균 응답 시간 (분) */
+  avgResponseTime: number;
+  /** 평균 해결 시간 (분) */
+  avgResolutionTime: number;
 }

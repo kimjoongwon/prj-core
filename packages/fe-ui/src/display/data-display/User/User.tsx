@@ -4,7 +4,7 @@ import {
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 
 /**
  * User 컴포넌트

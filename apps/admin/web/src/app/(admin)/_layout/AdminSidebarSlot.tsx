@@ -16,6 +16,7 @@ const NAV_ITEM_COPY: Record<string, string> = {
 	timelines: "예약 가능한 일정과 세션 흐름을 설계합니다.",
 	tasks: "운동 태스크와 루틴 자산을 정리합니다.",
 	templates: "메시지와 운영 템플릿을 유지합니다.",
+	terms: "서비스 약관과 동의 문서를 관리합니다.",
 	assets: "이미지와 업로드 자산을 추적합니다.",
 	inquiries: "고객 문의와 처리 상태를 관리합니다.",
 	roles: "권한, 액션, 대상 규칙을 편집합니다.",

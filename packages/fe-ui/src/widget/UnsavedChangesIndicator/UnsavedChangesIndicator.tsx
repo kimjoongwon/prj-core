@@ -1,4 +1,4 @@
-import { Button, Card, CardBody } from "@heroui/react";
+import { Button, Card, CardBody } from "@cocrepo/ui/heroui";
 
 export interface UnsavedChangesIndicatorProps {
 	/** 표시 여부 */

@@ -1,5 +1,5 @@
-import type { ButtonProps, LinkProps } from "@heroui/react";
-import { Link } from "@heroui/react";
+import type { ButtonProps, LinkProps } from "@cocrepo/ui/heroui";
+import { Link } from "@cocrepo/ui/heroui";
 
 export interface GroupButton extends ButtonProps {
 	href?: LinkProps["href"];

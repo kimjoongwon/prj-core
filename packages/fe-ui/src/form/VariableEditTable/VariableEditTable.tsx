@@ -9,7 +9,7 @@ import {
 	TableHeader,
 	TableRow,
 	Tooltip,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Input } from "../../control/Input/Input";

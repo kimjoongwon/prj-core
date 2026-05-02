@@ -1,7 +1,7 @@
 "use client";
 
 import { getDate } from "@cocrepo/toolkit";
-import { Card, CardBody } from "@heroui/react";
+import { Card, CardBody } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../../i18n";
 

@@ -8,7 +8,7 @@ import {
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { Building2, Check, ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
 

@@ -8,7 +8,7 @@ import {
 	CardHeader,
 	Chip,
 	Divider,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import {

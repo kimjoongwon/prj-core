@@ -6,7 +6,7 @@ import {
 	useUpdateTimeline,
 } from "@cocrepo/api/core/timelines";
 import { TimelineEditPage } from "@cocrepo/ui";
-import { addToast } from "@heroui/react";
+import { addToast } from "@cocrepo/ui/heroui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";

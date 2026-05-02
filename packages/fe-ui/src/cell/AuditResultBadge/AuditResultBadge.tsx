@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip } from "@heroui/react";
+import { Chip } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
 

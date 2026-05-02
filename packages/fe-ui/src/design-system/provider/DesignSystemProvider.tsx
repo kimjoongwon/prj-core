@@ -1,17 +1,15 @@
 /**
  * DesignSystemProvider
  *
- * HeroUI Provider를 래핑하여 테마 설정을 중앙에서 관리합니다.
+ * HeroUI v3 스타일과 토스트 루트를 함께 제공하며 테마 설정을 중앙에서 관리합니다.
  * 앱에서는 이 Provider를 최상위에 배치하면 됩니다.
  */
-import { HeroUIProvider, ToastProvider } from "@heroui/react";
+import { Toast } from "../heroui";
 import {
 	createContext,
 	type ReactNode,
-	useCallback,
 	useContext,
 	useEffect,
-	useMemo,
 	useState,
 } from "react";
 import { defaultThemeConfig, type ThemeConfig } from "../theme/heroui.config";
@@ -80,8 +78,7 @@ export interface DesignSystemProviderProps {
 	 */
 	themeConfig?: Partial<ThemeConfig>;
 	/**
-	 * 라우터 네비게이션 함수 (선택사항)
-	 * TanStack Router, React Router 등과 통합할 때 사용
+	 * @deprecated HeroUI v3에서는 Provider 기반 라우터 주입을 사용하지 않습니다.
 	 */
 	navigate?: (path: string) => void;
 }
@@ -104,22 +101,18 @@ export interface DesignSystemProviderProps {
  */
 export function DesignSystemProvider({
 	children,
-	navigate,
 	themeConfig,
 }: DesignSystemProviderProps) {
-	const config = useMemo(
-		() => ({
-			...defaultThemeConfig,
-			...themeConfig,
-		}),
-		[themeConfig],
-	);
+	const config = {
+		...defaultThemeConfig,
+		...themeConfig,
+	};
 	const [theme, setThemeState] = useState<ThemeName>(config.defaultTheme);
 	const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(
 		resolveTheme(config.defaultTheme),
 	);
 
-	const setTheme = useCallback((nextTheme: ThemeName) => {
+	const setTheme = (nextTheme: ThemeName) => {
 		setThemeState(nextTheme);
 
 		if (typeof window === "undefined") {
@@ -132,7 +125,7 @@ export function DesignSystemProvider({
 		const nextResolvedTheme = resolveTheme(nextTheme);
 		setResolvedTheme(nextResolvedTheme);
 		applyThemeToDocument(nextResolvedTheme);
-	}, []);
+	};
 
 	useEffect(() => {
 		const storedTheme = readStoredTheme();
@@ -168,25 +161,20 @@ export function DesignSystemProvider({
 		};
 	}, [theme]);
 
-	const value = useMemo<DesignSystemThemeContextValue>(
-		() => ({
-			theme,
-			resolvedTheme,
-			setTheme,
-			toggleTheme: () => setTheme(resolvedTheme === "dark" ? "light" : "dark"),
-			isDark: resolvedTheme === "dark",
-			isLight: resolvedTheme === "light",
-			isSystem: theme === "system",
-		}),
-		[resolvedTheme, setTheme, theme],
-	);
+	const value: DesignSystemThemeContextValue = {
+		theme,
+		resolvedTheme,
+		setTheme,
+		toggleTheme: () => setTheme(resolvedTheme === "dark" ? "light" : "dark"),
+		isDark: resolvedTheme === "dark",
+		isLight: resolvedTheme === "light",
+		isSystem: theme === "system",
+	};
 
 	return (
 		<DesignSystemThemeContext.Provider value={value}>
-			<HeroUIProvider navigate={navigate}>
-				{children}
-				<ToastProvider />
-			</HeroUIProvider>
+			<Toast.Provider />
+			{children}
 		</DesignSystemThemeContext.Provider>
 	);
 }

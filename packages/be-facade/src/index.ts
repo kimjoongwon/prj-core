@@ -14,6 +14,7 @@ export { PolicyFacade } from "./policy.facade";
 export { RoleFacade } from "./role.facade";
 export { RoutineFacade } from "./routine.facade";
 export { SecurityPolicyFacade } from "./security-policy.facade";
+export { ServiceDocumentFacade } from "./service-document.facade";
 export { SpaceFacade } from "./space.facade";
 export { SubjectFacade } from "./subject.facade";
 export { TaskFacade } from "./task.facade";

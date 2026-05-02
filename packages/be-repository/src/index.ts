@@ -27,6 +27,7 @@ export { RolesRepository } from "./roles.repository";
 export { RoutinesRepository } from "./routines.repository";
 export { SafeWalletsRepository } from "./safe-wallets.repository";
 export { SecurityPoliciesRepository } from "./security-policies.repository";
+export { ServiceDocumentsRepository } from "./service-documents.repository";
 export { SpacesRepository } from "./spaces.repository";
 export { SubjectsRepository } from "./subjects.repository";
 export { TasksRepository } from "./tasks.repository";

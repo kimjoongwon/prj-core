@@ -1,4 +1,4 @@
-import { Button } from "@heroui/react";
+import { Button } from "@cocrepo/ui/heroui";
 import { ChevronLeft } from "lucide-react";
 
 export interface BackButtonProps {

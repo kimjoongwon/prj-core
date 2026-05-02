@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Chip, Spinner, Tooltip } from "@heroui/react";
+import { Button, Chip, Spinner, Tooltip } from "@cocrepo/ui/heroui";
 import {
 	AlertCircle,
 	CheckCircle2,

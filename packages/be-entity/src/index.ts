@@ -45,6 +45,7 @@ export * from "./role-classification.entity";
 export * from "./routine.entity";
 export * from "./security-policy.entity";
 export * from "./sentiment-analysis.entity";
+export * from "./service-document.entity";
 export * from "./session.entity";
 export * from "./space.entity";
 export * from "./space-association.entity";

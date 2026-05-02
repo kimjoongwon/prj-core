@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@cocrepo/ui/heroui";
 
 interface AuthMethodCellProps {
 	/** 토큰 엔드포인트 인증 방식 */

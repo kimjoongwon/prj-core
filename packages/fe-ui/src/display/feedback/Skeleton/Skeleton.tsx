@@ -1,4 +1,4 @@
-import { Skeleton as NextSkeleton, type SkeletonProps } from "@heroui/react";
+import { Skeleton as NextSkeleton, type SkeletonProps } from "@cocrepo/ui/heroui";
 
 /**
  * Skeleton 컴포넌트

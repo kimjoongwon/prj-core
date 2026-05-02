@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@cocrepo/ui/heroui";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const slaIndicatorVariants = cva("inline-flex items-center gap-1.5", {

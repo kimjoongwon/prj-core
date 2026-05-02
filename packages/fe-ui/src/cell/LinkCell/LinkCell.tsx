@@ -1,4 +1,4 @@
-import { Link, type LinkProps } from "@heroui/react";
+import { Link, type LinkProps } from "@cocrepo/ui/heroui";
 
 interface LinkCellViewProps extends LinkProps {
 	/** 링크 텍스트 */

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input, Select, SelectItem } from "@heroui/react";
+import { Button, Input, Select, SelectItem } from "@cocrepo/ui/heroui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
 

@@ -8,7 +8,7 @@ import {
 	ModalHeader,
 	type ModalHeaderProps,
 	type ModalProps,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 
 export interface ModalLayoutProps extends ModalProps {
 	/** 모달 헤더 props */

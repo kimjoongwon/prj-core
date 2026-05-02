@@ -1,4 +1,4 @@
-import { Button, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
+import { Button, Popover, PopoverContent, PopoverTrigger } from "@cocrepo/ui/heroui";
 import { Ban } from "lucide-react";
 import { useState } from "react";
 

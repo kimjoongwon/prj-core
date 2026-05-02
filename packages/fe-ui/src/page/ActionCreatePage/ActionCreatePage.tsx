@@ -6,7 +6,7 @@ import {
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
+import { Button, Input, Select, SelectItem, Textarea } from "@cocrepo/ui/heroui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
 

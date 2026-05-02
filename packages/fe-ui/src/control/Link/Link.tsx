@@ -3,7 +3,7 @@
 import {
 	Link as HeroUiLink,
 	type LinkProps as HeroUiLinkProps,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { translateNode, useT } from "../../i18n";
 

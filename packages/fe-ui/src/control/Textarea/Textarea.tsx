@@ -1,7 +1,7 @@
 "use client";
 
-import type { TextAreaProps } from "@heroui/react";
-import { Textarea as BaseTextarea } from "@heroui/react";
+import type { TextAreaProps } from "@cocrepo/ui/heroui";
+import { Textarea as BaseTextarea } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type React from "react";
 import { translateNode, useT } from "../../i18n";

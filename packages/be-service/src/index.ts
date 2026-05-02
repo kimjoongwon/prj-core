@@ -77,6 +77,7 @@ export { RedisService } from "./redis.service";
 export { RoleService } from "./role.service";
 export { RoutineService } from "./routine.service";
 export { SecurityPolicyService } from "./security-policy.service";
+export { ServiceDocumentService } from "./service-document.service";
 export { SpaceService } from "./space.service";
 export {
 	type SubjectFieldInfo,

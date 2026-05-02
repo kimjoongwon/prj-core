@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "@heroui/react";
+import { Button } from "@cocrepo/ui/heroui";
 import { Section } from "../../layout/Section";
 import { PageTitleBar } from "../../widget/PageTitleBar";
 import { SectionSurface } from "./SectionSurface";

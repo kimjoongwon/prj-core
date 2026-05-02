@@ -9,7 +9,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import {

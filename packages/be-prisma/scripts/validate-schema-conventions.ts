@@ -19,6 +19,7 @@ const schemaOwnerByFile: Record<string, string> = {
 	"auth/security-policy.prisma": "SecurityPolicy",
 	"auth/whitelist-entry.prisma": "WhitelistEntry",
 	"content/content.prisma": "Content",
+	"content/service-document.prisma": "ServiceDocument",
 	"content/template.prisma": "Template",
 	"content/translation.prisma": "Translation",
 	"identity/space.prisma": "Space",
@@ -53,6 +54,7 @@ const aggregateRootByFile: Record<string, string> = {
 	"auth/security-policy.prisma": "SecurityPolicy",
 	"auth/whitelist-entry.prisma": "WhitelistEntry",
 	"content/content.prisma": "Content",
+	"content/service-document.prisma": "ServiceDocument",
 	"content/template.prisma": "Template",
 	"content/translation.prisma": "Translation",
 	"identity/space.prisma": "Space",
@@ -89,6 +91,12 @@ const expectedOwner: Record<string, string> = {
 	Post: "content/content.prisma",
 	Content: "content/content.prisma",
 	TextTypes: "content/content.prisma",
+
+	ServiceDocument: "content/service-document.prisma",
+	ServiceDocumentKind: "content/service-document.prisma",
+	ServiceDocumentPlatform: "content/service-document.prisma",
+	ServiceDocumentStatus: "content/service-document.prisma",
+	ServiceDocumentFormat: "content/service-document.prisma",
 
 	SecurityPolicy: "auth/security-policy.prisma",
 

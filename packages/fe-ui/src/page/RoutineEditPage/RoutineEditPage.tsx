@@ -21,7 +21,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	Spinner,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 
 export interface RoutineEditPageProps {

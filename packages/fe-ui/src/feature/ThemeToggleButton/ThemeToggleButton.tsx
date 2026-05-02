@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@heroui/react";
+import { Button } from "@cocrepo/ui/heroui";
 import { Moon, Sun } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";

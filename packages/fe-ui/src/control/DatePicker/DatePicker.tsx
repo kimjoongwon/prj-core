@@ -1,7 +1,7 @@
 import {
 	DatePicker as HeroUiDatePicker,
 	type DatePickerProps as HeroUiDatePickerProps,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import type {
 	CalendarDate,
 	CalendarDateTime,

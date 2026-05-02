@@ -1,4 +1,4 @@
-import { cn } from "@heroui/react";
+import { cn } from "@cocrepo/ui/heroui";
 import { Button } from "../../../control/Button/Button";
 import { HStack } from "../../../rhythm/HStack/HStack";
 

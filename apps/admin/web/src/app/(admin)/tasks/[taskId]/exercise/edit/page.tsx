@@ -6,7 +6,7 @@ import {
 	useUpdateTaskExercise,
 } from "@cocrepo/api/core/tasks";
 import { TaskExerciseEditPage } from "@cocrepo/ui";
-import { addToast } from "@heroui/react";
+import { addToast } from "@cocrepo/ui/heroui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";

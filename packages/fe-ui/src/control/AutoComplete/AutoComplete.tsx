@@ -1,5 +1,5 @@
-import type { AutocompleteProps } from "@heroui/react";
-import { Autocomplete, AutocompleteItem } from "@heroui/react";
+import type { AutocompleteProps } from "@cocrepo/ui/heroui";
+import { Autocomplete, AutocompleteItem } from "@cocrepo/ui/heroui";
 
 type AutoCompleteItem = {
 	/** 표시 텍스트 */

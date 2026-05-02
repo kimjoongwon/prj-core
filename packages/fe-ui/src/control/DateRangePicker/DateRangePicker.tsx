@@ -1,5 +1,5 @@
-import type { DateRangePickerProps as HeroUiDateRangePickerProps } from "@heroui/react";
-import { DateRangePicker as HeroUiDateRangePicker } from "@heroui/react";
+import type { DateRangePickerProps as HeroUiDateRangePickerProps } from "@cocrepo/ui/heroui";
+import { DateRangePicker as HeroUiDateRangePicker } from "@cocrepo/ui/heroui";
 
 export interface DateRangePickerProps
 	extends Omit<HeroUiDateRangePickerProps, "value" | "onChange"> {

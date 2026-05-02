@@ -16,7 +16,7 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { cn } from "@heroui/react";
+import { cn } from "@cocrepo/ui/heroui";
 import { GripVertical } from "lucide-react";
 import type { ReactNode } from "react";
 

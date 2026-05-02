@@ -22,7 +22,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	useDisclosure,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, useState } from "react";

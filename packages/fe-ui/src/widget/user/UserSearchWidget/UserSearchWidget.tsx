@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "@heroui/react";
+import { Input } from "@cocrepo/ui/heroui";
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
 

@@ -14,7 +14,7 @@ import {
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
-import { Select, SelectItem, type Selection } from "@heroui/react";
+import { Select, SelectItem, type Selection } from "@cocrepo/ui/heroui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
 import { useT } from "../../i18n";

@@ -2,7 +2,7 @@
 
 import { cloneDeep } from "@cocrepo/toolkit";
 import type { Option } from "@cocrepo/type";
-import { Select as NextSelect, SelectItem } from "@heroui/react";
+import { Select as NextSelect, SelectItem } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type React from "react";
 import { translateNode, useT } from "../../i18n";

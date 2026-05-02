@@ -11,41 +11,41 @@
  */
 
 export interface InquiryAttachmentDto {
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	/** 소속 메시지 ID */
-	messageId: string;
-	/** 원본 파일명 */
-	fileName: string;
-	/** 파일 크기 (bytes) */
-	fileSize: number;
-	/** MIME 타입 */
-	mimeType: string;
-	/** 파일 URL */
-	url: string;
-	/**
-	 * 썸네일 URL
-	 * @nullable
-	 */
-	thumbnailUrl: string | null;
-	/**
-	 * 이미지 너비
-	 * @nullable
-	 */
-	width: number | null;
-	/**
-	 * 이미지 높이
-	 * @nullable
-	 */
-	height: number | null;
-	/**
-	 * 재생 시간 (초)
-	 * @nullable
-	 */
-	duration: number | null;
-	/** 삭제 여부 */
-	isDeleted: boolean;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  /** 소속 메시지 ID */
+  messageId: string;
+  /** 원본 파일명 */
+  fileName: string;
+  /** 파일 크기 (bytes) */
+  fileSize: number;
+  /** MIME 타입 */
+  mimeType: string;
+  /** 파일 URL */
+  url: string;
+  /**
+   * 썸네일 URL
+   * @nullable
+   */
+  thumbnailUrl: string | null;
+  /**
+   * 이미지 너비
+   * @nullable
+   */
+  width: number | null;
+  /**
+   * 이미지 높이
+   * @nullable
+   */
+  height: number | null;
+  /**
+   * 재생 시간 (초)
+   * @nullable
+   */
+  duration: number | null;
+  /** 삭제 여부 */
+  isDeleted: boolean;
 }

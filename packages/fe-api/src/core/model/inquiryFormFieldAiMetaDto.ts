@@ -11,10 +11,10 @@
  */
 
 export interface InquiryFormFieldAiMetaDto {
-	/** AI 채움 가능 여부 */
-	fillable: boolean;
-	/** 기본 선택 여부 */
-	defaultChecked?: boolean;
-	/** AI 채움 제한 사유 */
-	reason?: string;
+  /** AI 채움 가능 여부 */
+  fillable: boolean;
+  /** 기본 선택 여부 */
+  defaultChecked?: boolean;
+  /** AI 채움 제한 사유 */
+  reason?: string;
 }

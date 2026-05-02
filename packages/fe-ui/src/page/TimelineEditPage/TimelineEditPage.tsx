@@ -8,7 +8,7 @@ import {
 } from "../../form";
 import { VStack } from "../../rhythm";
 import { PageTitleBar } from "../../widget";
-import { Button, Input, Textarea } from "@heroui/react";
+import { Button, Input, Textarea } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 
 export interface TimelineEditPageProps {

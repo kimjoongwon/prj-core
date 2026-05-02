@@ -8,7 +8,7 @@ import {
 	FormSectionCard,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
+import { Button, Input, Select, SelectItem, Textarea } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type {
 	TimelineSessionPageCycleType,

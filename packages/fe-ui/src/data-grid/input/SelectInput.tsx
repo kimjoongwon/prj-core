@@ -1,7 +1,7 @@
 "use client";
 
 import type { DataGridState, InputConfig } from "@cocrepo/type";
-import { Select, SelectItem, type Selection } from "@heroui/react";
+import { Select, SelectItem, type Selection } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
 

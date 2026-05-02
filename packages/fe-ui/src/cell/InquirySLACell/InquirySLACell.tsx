@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@cocrepo/ui/heroui";
 import { AlertTriangle, Clock } from "lucide-react";
 
 /** SLA 상태 */

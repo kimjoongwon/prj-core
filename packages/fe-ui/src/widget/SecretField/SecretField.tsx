@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Snippet } from "@heroui/react";
+import { Button, Snippet } from "@cocrepo/ui/heroui";
 import { Eye, EyeOff } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";

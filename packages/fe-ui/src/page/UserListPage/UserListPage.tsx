@@ -15,7 +15,7 @@ import {
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
-import { Chip, Input, Spinner } from "@heroui/react";
+import { Chip, Input, Spinner } from "@cocrepo/ui/heroui";
 import { Search, UserCheck, UserMinus, Users } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ComponentType, useEffect } from "react";

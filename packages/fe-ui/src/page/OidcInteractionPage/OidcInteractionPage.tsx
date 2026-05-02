@@ -1,6 +1,6 @@
 "use client";
 
-import { Spinner } from "@heroui/react";
+import { Spinner } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type { FormEvent, MouseEvent } from "react";
 import { Button } from "../../control";

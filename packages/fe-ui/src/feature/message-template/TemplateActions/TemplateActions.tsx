@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@heroui/react";
+import { Button } from "@cocrepo/ui/heroui";
 import { Eye, Pencil, Send, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { HStack } from "../../../rhythm/HStack/HStack";

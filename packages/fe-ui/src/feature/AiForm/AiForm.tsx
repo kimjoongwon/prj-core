@@ -9,7 +9,7 @@ import {
 	Select,
 	SelectItem,
 	type SharedSelection,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 import { observer } from "mobx-react-lite";

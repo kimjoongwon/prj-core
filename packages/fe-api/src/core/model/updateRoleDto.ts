@@ -11,14 +11,14 @@
  */
 
 export interface UpdateRoleDto {
-	/**
-	 * 표시명
-	 * @maxLength 50
-	 */
-	displayName?: string;
-	/**
-	 * 설명
-	 * @maxLength 200
-	 */
-	description?: string;
+  /**
+   * 표시명
+   * @maxLength 50
+   */
+  displayName?: string;
+  /**
+   * 설명
+   * @maxLength 200
+   */
+  description?: string;
 }

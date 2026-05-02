@@ -1,4 +1,4 @@
-import { Avatar, Chip } from "@heroui/react";
+import { Avatar, Chip } from "@cocrepo/ui/heroui";
 import { User } from "lucide-react";
 
 interface InquiryAssigneeCellProps {

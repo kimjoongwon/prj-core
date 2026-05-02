@@ -19,7 +19,7 @@ import {
 	Select,
 	SelectItem,
 	Spinner,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { ArrowLeft, FolderInput, Maximize2, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";

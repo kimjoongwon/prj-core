@@ -10,1746 +10,954 @@
  * OpenAPI spec version: 1.0.0
  */
 import {
-	useMutation,
-	useQuery,
-	useSuspenseInfiniteQuery,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
+  useMutation,
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery
+} from '@tanstack/react-query';
 import type {
-	DataTag,
-	DefinedInitialDataOptions,
-	DefinedUseQueryResult,
-	InfiniteData,
-	MutationFunction,
-	QueryClient,
-	QueryFunction,
-	QueryKey,
-	UndefinedInitialDataOptions,
-	UseMutationOptions,
-	UseMutationResult,
-	UseQueryOptions,
-	UseQueryResult,
-	UseSuspenseInfiniteQueryOptions,
-	UseSuspenseInfiniteQueryResult,
-	UseSuspenseQueryOptions,
-	UseSuspenseQueryResult,
-} from "@tanstack/react-query";
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  InfiniteData,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
+  UseSuspenseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
+} from '@tanstack/react-query';
 
 import type {
-	GetAssetById200AllOf,
-	GetAssets200AllOf,
-	GetAssetsParams,
-	MoveAsset200AllOf,
-	MoveAssetDto,
-	UploadAsset201AllOf,
-	UploadAssetBody,
-} from ".././model";
+  GetAssetById200AllOf,
+  GetAssets200AllOf,
+  GetAssetsParams,
+  MoveAsset200AllOf,
+  MoveAssetDto,
+  UploadAsset201AllOf,
+  UploadAssetBody
+} from '.././model';
 
-import { customInstance } from "../../libs/customAxios";
-import type { ErrorType, BodyType } from "../../libs/customAxios";
+import { customInstance } from '../../libs/customAxios';
+import type { ErrorType , BodyType } from '../../libs/customAxios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * 현재 선택한 Space의 에셋 목록을 조회합니다. 검색, 상태, 타입, 폴더 필터와 페이지네이션을 지원합니다.
  * @summary 에셋 목록 조회
  */
 export const getAssets = (
-	params?: GetAssetsParams,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    params?: GetAssetsParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<GetAssets200AllOf>(
-		{ url: `/api/v1/assets`, method: "GET", params, signal },
-		options,
-	);
-};
+      
+      
+      return customInstance<GetAssets200AllOf>(
+      {url: `/api/v1/assets`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
-export const getGetAssetsQueryKey = (params?: GetAssetsParams) => {
-	return [`/api/v1/assets`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetAssetsInfiniteQueryKey = (params?: GetAssetsParams) => {
-	return ["infinite", `/api/v1/assets`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetAssetsQueryOptions = <
-	TData = Awaited<ReturnType<typeof getAssets>>,
-	TError = ErrorType<void>,
->(
-	params?: GetAssetsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+export const getGetAssetsQueryKey = (params?: GetAssetsParams,) => {
+    return [
+    `/api/v1/assets`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+export const getGetAssetsInfiniteQueryKey = (params?: GetAssetsParams,) => {
+    return [
+    'infinite', `/api/v1/assets`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetAssetsQueryOptions = <TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(params?: GetAssetsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey = queryOptions?.queryKey ?? getGetAssetsQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssets>>> = ({
-		signal,
-	}) => getAssets(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetsQueryKey(params);
 
-	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-		Awaited<ReturnType<typeof getAssets>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  
 
-export type GetAssetsQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getAssets>>
->;
-export type GetAssetsQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssets>>> = ({ signal }) => getAssets(params, requestOptions, signal);
 
-export function useGetAssets<
-	TData = Awaited<ReturnType<typeof getAssets>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetAssetsParams,
-	options: {
-		query: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getAssets>>,
-					TError,
-					Awaited<ReturnType<typeof getAssets>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssets<
-	TData = Awaited<ReturnType<typeof getAssets>>,
-	TError = ErrorType<void>,
->(
-	params?: GetAssetsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getAssets>>,
-					TError,
-					Awaited<ReturnType<typeof getAssets>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssets<
-	TData = Awaited<ReturnType<typeof getAssets>>,
-	TError = ErrorType<void>,
->(
-	params?: GetAssetsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetsQueryResult = NonNullable<Awaited<ReturnType<typeof getAssets>>>
+export type GetAssetsQueryError = ErrorType<void>
+
+
+export function useGetAssets<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params: undefined |  GetAssetsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAssets>>,
+          TError,
+          Awaited<ReturnType<typeof getAssets>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssets<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAssets>>,
+          TError,
+          Awaited<ReturnType<typeof getAssets>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssets<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 에셋 목록 조회
  */
 
-export function useGetAssets<
-	TData = Awaited<ReturnType<typeof getAssets>>,
-	TError = ErrorType<void>,
->(
-	params?: GetAssetsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetAssetsQueryOptions(params, options);
+export function useGetAssets<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const queryOptions = getGetAssetsQueryOptions(params,options)
 
-	query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-	return query;
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
 
 /**
  * @summary 에셋 목록 조회
  */
-export const prefetchGetAssetsQuery = async <
-	TData = Awaited<ReturnType<typeof getAssets>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	params?: GetAssetsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetAssetsQueryOptions(params, options);
+export const prefetchGetAssetsQuery = async <TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetAssetsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetAssetsQueryOptions(params,options)
 
-export const getGetAssetsSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getAssets>>,
-	TError = ErrorType<void>,
->(
-	params?: GetAssetsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssets>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
+  await queryClient.prefetchQuery(queryOptions);
 
-	const queryKey = queryOptions?.queryKey ?? getGetAssetsQueryKey(params);
-
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssets>>> = ({
-		signal,
-	}) => getAssets(params, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getAssets>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetAssetsSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getAssets>>
->;
-export type GetAssetsSuspenseQueryError = ErrorType<void>;
-
-export function useGetAssetsSuspense<
-	TData = Awaited<ReturnType<typeof getAssets>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetAssetsParams,
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssets>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetsSuspense<
-	TData = Awaited<ReturnType<typeof getAssets>>,
-	TError = ErrorType<void>,
->(
-	params?: GetAssetsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssets>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetsSuspense<
-	TData = Awaited<ReturnType<typeof getAssets>>,
-	TError = ErrorType<void>,
->(
-	params?: GetAssetsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssets>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 에셋 목록 조회
- */
-
-export function useGetAssetsSuspense<
-	TData = Awaited<ReturnType<typeof getAssets>>,
-	TError = ErrorType<void>,
->(
-	params?: GetAssetsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssets>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetAssetsSuspenseQueryOptions(params, options);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
+  return queryClient;
 }
 
-export const getGetAssetsSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetAssetsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssets>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+
+
+export const getGetAssetsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetAssetsInfiniteQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssets>>> = ({
-		signal,
-	}) => getAssets(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetsQueryKey(params);
 
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getAssets>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  
 
-export type GetAssetsSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getAssets>>
->;
-export type GetAssetsSuspenseInfiniteQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssets>>> = ({ signal }) => getAssets(params, requestOptions, signal);
 
-export function useGetAssetsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetAssetsParams,
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssets>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetAssetsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssets>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetAssetsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssets>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAssets>>>
+export type GetAssetsSuspenseQueryError = ErrorType<void>
+
+
+export function useGetAssetsSuspense<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params: undefined |  GetAssetsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetsSuspense<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetsSuspense<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 에셋 목록 조회
  */
 
-export function useGetAssetsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetAssetsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssets>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetAssetsSuspenseInfiniteQueryOptions(
-		params,
-		options,
-	);
+export function useGetAssetsSuspense<TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
+  const queryOptions = getGetAssetsSuspenseQueryOptions(params,options)
 
-	query.queryKey = queryOptions.queryKey;
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-	return query;
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetAssetsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>, TError = ErrorType<void>>(params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetsInfiniteQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssets>>> = ({ signal }) => getAssets(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAssets>>>
+export type GetAssetsSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetAssetsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>, TError = ErrorType<void>>(
+ params: undefined |  GetAssetsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 에셋 목록 조회
+ */
+
+export function useGetAssetsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssets>>>, TError = ErrorType<void>>(
+ params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAssetsSuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
 
 /**
  * @summary 에셋 목록 조회
  */
-export const prefetchGetAssetsInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getAssets>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	params?: GetAssetsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssets>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetAssetsSuspenseInfiniteQueryOptions(
-		params,
-		options,
-	);
+export const prefetchGetAssetsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getAssets>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetAssetsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetAssetsSuspenseInfiniteQueryOptions(params,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
 
 /**
  * 현재 선택한 Space 안의 폴더로 파일을 업로드하고 에셋 메타데이터를 생성합니다.
  * @summary 에셋 업로드
  */
 export const uploadAsset = (
-	uploadAssetBody: BodyType<UploadAssetBody>,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    uploadAssetBody: BodyType<UploadAssetBody>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	const formData = new FormData();
-	formData.append(`folderId`, uploadAssetBody.folderId);
-	formData.append(`file`, uploadAssetBody.file);
+      
+      const formData = new FormData();
+formData.append(`folderId`, uploadAssetBody.folderId)
+formData.append(`file`, uploadAssetBody.file)
 
-	return customInstance<UploadAsset201AllOf>(
-		{
-			url: `/api/v1/assets`,
-			method: "POST",
-			headers: { "Content-Type": "multipart/form-data" },
-			data: formData,
-			signal,
-		},
-		options,
-	);
-};
+      return customInstance<UploadAsset201AllOf>(
+      {url: `/api/v1/assets`, method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData, signal
+    },
+      options);
+    }
+  
 
-export const getUploadAssetMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof uploadAsset>>,
-		TError,
-		{ data: BodyType<UploadAssetBody> },
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof uploadAsset>>,
-	TError,
-	{ data: BodyType<UploadAssetBody> },
-	TContext
-> => {
-	const mutationKey = ["uploadAsset"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof uploadAsset>>,
-		{ data: BodyType<UploadAssetBody> }
-	> = (props) => {
-		const { data } = props ?? {};
+export const getUploadAssetMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadAsset>>, TError,{data: BodyType<UploadAssetBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof uploadAsset>>, TError,{data: BodyType<UploadAssetBody>}, TContext> => {
 
-		return uploadAsset(data, requestOptions);
-	};
+const mutationKey = ['uploadAsset'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-	return { mutationFn, ...mutationOptions };
-};
+      
 
-export type UploadAssetMutationResult = NonNullable<
-	Awaited<ReturnType<typeof uploadAsset>>
->;
-export type UploadAssetMutationBody = BodyType<UploadAssetBody>;
-export type UploadAssetMutationError = ErrorType<void>;
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadAsset>>, {data: BodyType<UploadAssetBody>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  uploadAsset(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UploadAssetMutationResult = NonNullable<Awaited<ReturnType<typeof uploadAsset>>>
+    export type UploadAssetMutationBody = BodyType<UploadAssetBody>
+    export type UploadAssetMutationError = ErrorType<void>
+
+    /**
  * @summary 에셋 업로드
  */
-export const useUploadAsset = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof uploadAsset>>,
-			TError,
-			{ data: BodyType<UploadAssetBody> },
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof uploadAsset>>,
-	TError,
-	{ data: BodyType<UploadAssetBody> },
-	TContext
-> => {
-	const mutationOptions = getUploadAssetMutationOptions(options);
+export const useUploadAsset = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadAsset>>, TError,{data: BodyType<UploadAssetBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof uploadAsset>>,
+        TError,
+        {data: BodyType<UploadAssetBody>},
+        TContext
+      > => {
 
-	return useMutation(mutationOptions, queryClient);
-};
-/**
+      const mutationOptions = getUploadAssetMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * 현재 선택한 Space에 속한 에셋 상세 정보를 조회합니다.
  * @summary 에셋 상세 조회
  */
 export const getAssetById = (
-	assetId: string,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    assetId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<GetAssetById200AllOf>(
-		{ url: `/api/v1/assets/${assetId}`, method: "GET", signal },
-		options,
-	);
-};
+      
+      
+      return customInstance<GetAssetById200AllOf>(
+      {url: `/api/v1/assets/${assetId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export const getGetAssetByIdQueryKey = (assetId?: string) => {
-	return [`/api/v1/assets/${assetId}`] as const;
-};
 
-export const getGetAssetByIdInfiniteQueryKey = (assetId?: string) => {
-	return ["infinite", `/api/v1/assets/${assetId}`] as const;
-};
 
-export const getGetAssetByIdQueryOptions = <
-	TData = Awaited<ReturnType<typeof getAssetById>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+export const getGetAssetByIdQueryKey = (assetId?: string,) => {
+    return [
+    `/api/v1/assets/${assetId}`
+    ] as const;
+    }
+
+export const getGetAssetByIdInfiniteQueryKey = (assetId?: string,) => {
+    return [
+    'infinite', `/api/v1/assets/${assetId}`
+    ] as const;
+    }
+
+    
+export const getGetAssetByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey = queryOptions?.queryKey ?? getGetAssetByIdQueryKey(assetId);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetById>>> = ({
-		signal,
-	}) => getAssetById(assetId, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetByIdQueryKey(assetId);
 
-	return {
-		queryKey,
-		queryFn,
-		enabled: !!assetId,
-		...queryOptions,
-	} as UseQueryOptions<
-		Awaited<ReturnType<typeof getAssetById>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  
 
-export type GetAssetByIdQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getAssetById>>
->;
-export type GetAssetByIdQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetById>>> = ({ signal }) => getAssetById(assetId, requestOptions, signal);
 
-export function useGetAssetById<
-	TData = Awaited<ReturnType<typeof getAssetById>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options: {
-		query: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getAssetById>>,
-					TError,
-					Awaited<ReturnType<typeof getAssetById>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetById<
-	TData = Awaited<ReturnType<typeof getAssetById>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getAssetById>>,
-					TError,
-					Awaited<ReturnType<typeof getAssetById>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetById<
-	TData = Awaited<ReturnType<typeof getAssetById>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(assetId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAssetById>>>
+export type GetAssetByIdQueryError = ErrorType<void>
+
+
+export function useGetAssetById<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAssetById>>,
+          TError,
+          Awaited<ReturnType<typeof getAssetById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetById<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAssetById>>,
+          TError,
+          Awaited<ReturnType<typeof getAssetById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetById<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 에셋 상세 조회
  */
 
-export function useGetAssetById<
-	TData = Awaited<ReturnType<typeof getAssetById>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetAssetByIdQueryOptions(assetId, options);
+export function useGetAssetById<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const queryOptions = getGetAssetByIdQueryOptions(assetId,options)
 
-	query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-	return query;
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
 
 /**
  * @summary 에셋 상세 조회
  */
-export const prefetchGetAssetByIdQuery = async <
-	TData = Awaited<ReturnType<typeof getAssetById>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetAssetByIdQueryOptions(assetId, options);
+export const prefetchGetAssetByIdQuery = async <TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetAssetByIdQueryOptions(assetId,options)
 
-export const getGetAssetByIdSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getAssetById>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssetById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
+  await queryClient.prefetchQuery(queryOptions);
 
-	const queryKey = queryOptions?.queryKey ?? getGetAssetByIdQueryKey(assetId);
-
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetById>>> = ({
-		signal,
-	}) => getAssetById(assetId, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getAssetById>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetAssetByIdSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getAssetById>>
->;
-export type GetAssetByIdSuspenseQueryError = ErrorType<void>;
-
-export function useGetAssetByIdSuspense<
-	TData = Awaited<ReturnType<typeof getAssetById>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssetById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetByIdSuspense<
-	TData = Awaited<ReturnType<typeof getAssetById>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssetById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetByIdSuspense<
-	TData = Awaited<ReturnType<typeof getAssetById>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssetById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 에셋 상세 조회
- */
-
-export function useGetAssetByIdSuspense<
-	TData = Awaited<ReturnType<typeof getAssetById>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssetById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetAssetByIdSuspenseQueryOptions(assetId, options);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
+  return queryClient;
 }
 
-export const getGetAssetByIdSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssetById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+
+
+export const getGetAssetByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(assetId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetAssetByIdInfiniteQueryKey(assetId);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetById>>> = ({
-		signal,
-	}) => getAssetById(assetId, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetByIdQueryKey(assetId);
 
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getAssetById>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  
 
-export type GetAssetByIdSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getAssetById>>
->;
-export type GetAssetByIdSuspenseInfiniteQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetById>>> = ({ signal }) => getAssetById(assetId, requestOptions, signal);
 
-export function useGetAssetByIdSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssetById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetByIdSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssetById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetByIdSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssetById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAssetById>>>
+export type GetAssetByIdSuspenseQueryError = ErrorType<void>
+
+
+export function useGetAssetByIdSuspense<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetByIdSuspense<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetByIdSuspense<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 에셋 상세 조회
  */
 
-export function useGetAssetByIdSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssetById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetAssetByIdSuspenseInfiniteQueryOptions(
-		assetId,
-		options,
-	);
+export function useGetAssetByIdSuspense<TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
+  const queryOptions = getGetAssetByIdSuspenseQueryOptions(assetId,options)
 
-	query.queryKey = queryOptions.queryKey;
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-	return query;
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetAssetByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>, TError = ErrorType<void>>(assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetByIdInfiniteQueryKey(assetId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetById>>> = ({ signal }) => getAssetById(assetId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAssetById>>>
+export type GetAssetByIdSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetAssetByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>, TError = ErrorType<void>>(
+ assetId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 에셋 상세 조회
+ */
+
+export function useGetAssetByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssetById>>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAssetByIdSuspenseInfiniteQueryOptions(assetId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
 
 /**
  * @summary 에셋 상세 조회
  */
-export const prefetchGetAssetByIdInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getAssetById>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssetById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetAssetByIdSuspenseInfiniteQueryOptions(
-		assetId,
-		options,
-	);
+export const prefetchGetAssetByIdInfiniteQuery = async <TData = Awaited<ReturnType<typeof getAssetById>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetAssetByIdSuspenseInfiniteQueryOptions(assetId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
 
 /**
  * 현재 선택한 Space에 속한 에셋을 삭제합니다.
  * @summary 에셋 삭제
  */
 export const removeAsset = (
-	assetId: string,
-	options?: SecondParameter<typeof customInstance>,
-) => {
-	return customInstance<unknown>(
-		{ url: `/api/v1/assets/${assetId}`, method: "DELETE" },
-		options,
-	);
-};
+    assetId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<unknown>(
+      {url: `/api/v1/assets/${assetId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
 
-export const getRemoveAssetMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof removeAsset>>,
-		TError,
-		{ assetId: string },
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof removeAsset>>,
-	TError,
-	{ assetId: string },
-	TContext
-> => {
-	const mutationKey = ["removeAsset"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof removeAsset>>,
-		{ assetId: string }
-	> = (props) => {
-		const { assetId } = props ?? {};
+export const getRemoveAssetMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAsset>>, TError,{assetId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeAsset>>, TError,{assetId: string}, TContext> => {
 
-		return removeAsset(assetId, requestOptions);
-	};
+const mutationKey = ['removeAsset'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-	return { mutationFn, ...mutationOptions };
-};
+      
 
-export type RemoveAssetMutationResult = NonNullable<
-	Awaited<ReturnType<typeof removeAsset>>
->;
 
-export type RemoveAssetMutationError = ErrorType<void>;
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeAsset>>, {assetId: string}> = (props) => {
+          const {assetId} = props ?? {};
 
-/**
+          return  removeAsset(assetId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveAssetMutationResult = NonNullable<Awaited<ReturnType<typeof removeAsset>>>
+    
+    export type RemoveAssetMutationError = ErrorType<void>
+
+    /**
  * @summary 에셋 삭제
  */
-export const useRemoveAsset = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof removeAsset>>,
-			TError,
-			{ assetId: string },
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof removeAsset>>,
-	TError,
-	{ assetId: string },
-	TContext
-> => {
-	const mutationOptions = getRemoveAssetMutationOptions(options);
+export const useRemoveAsset = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAsset>>, TError,{assetId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof removeAsset>>,
+        TError,
+        {assetId: string},
+        TContext
+      > => {
 
-	return useMutation(mutationOptions, queryClient);
-};
-/**
+      const mutationOptions = getRemoveAssetMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * 현재 선택한 Space에 속한 에셋 원본을 인증된 요청으로 반환합니다.
  * @summary 에셋 원본 조회
  */
 export const getAssetContent = (
-	assetId: string,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    assetId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<unknown>(
-		{ url: `/api/v1/assets/${assetId}/content`, method: "GET", signal },
-		options,
-	);
-};
+      
+      
+      return customInstance<unknown>(
+      {url: `/api/v1/assets/${assetId}/content`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export const getGetAssetContentQueryKey = (assetId?: string) => {
-	return [`/api/v1/assets/${assetId}/content`] as const;
-};
 
-export const getGetAssetContentInfiniteQueryKey = (assetId?: string) => {
-	return ["infinite", `/api/v1/assets/${assetId}/content`] as const;
-};
 
-export const getGetAssetContentQueryOptions = <
-	TData = Awaited<ReturnType<typeof getAssetContent>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+export const getGetAssetContentQueryKey = (assetId?: string,) => {
+    return [
+    `/api/v1/assets/${assetId}/content`
+    ] as const;
+    }
+
+export const getGetAssetContentInfiniteQueryKey = (assetId?: string,) => {
+    return [
+    'infinite', `/api/v1/assets/${assetId}/content`
+    ] as const;
+    }
+
+    
+export const getGetAssetContentQueryOptions = <TData = Awaited<ReturnType<typeof getAssetContent>>, TError = ErrorType<void>>(assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetAssetContentQueryKey(assetId);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetContent>>> = ({
-		signal,
-	}) => getAssetContent(assetId, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetContentQueryKey(assetId);
 
-	return {
-		queryKey,
-		queryFn,
-		enabled: !!assetId,
-		...queryOptions,
-	} as UseQueryOptions<
-		Awaited<ReturnType<typeof getAssetContent>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  
 
-export type GetAssetContentQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getAssetContent>>
->;
-export type GetAssetContentQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetContent>>> = ({ signal }) => getAssetContent(assetId, requestOptions, signal);
 
-export function useGetAssetContent<
-	TData = Awaited<ReturnType<typeof getAssetContent>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options: {
-		query: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getAssetContent>>,
-					TError,
-					Awaited<ReturnType<typeof getAssetContent>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetContent<
-	TData = Awaited<ReturnType<typeof getAssetContent>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getAssetContent>>,
-					TError,
-					Awaited<ReturnType<typeof getAssetContent>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetContent<
-	TData = Awaited<ReturnType<typeof getAssetContent>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(assetId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetContentQueryResult = NonNullable<Awaited<ReturnType<typeof getAssetContent>>>
+export type GetAssetContentQueryError = ErrorType<void>
+
+
+export function useGetAssetContent<TData = Awaited<ReturnType<typeof getAssetContent>>, TError = ErrorType<void>>(
+ assetId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAssetContent>>,
+          TError,
+          Awaited<ReturnType<typeof getAssetContent>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetContent<TData = Awaited<ReturnType<typeof getAssetContent>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAssetContent>>,
+          TError,
+          Awaited<ReturnType<typeof getAssetContent>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetContent<TData = Awaited<ReturnType<typeof getAssetContent>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 에셋 원본 조회
  */
 
-export function useGetAssetContent<
-	TData = Awaited<ReturnType<typeof getAssetContent>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetAssetContentQueryOptions(assetId, options);
+export function useGetAssetContent<TData = Awaited<ReturnType<typeof getAssetContent>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const queryOptions = getGetAssetContentQueryOptions(assetId,options)
 
-	query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-	return query;
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
 
 /**
  * @summary 에셋 원본 조회
  */
-export const prefetchGetAssetContentQuery = async <
-	TData = Awaited<ReturnType<typeof getAssetContent>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetAssetContentQueryOptions(assetId, options);
+export const prefetchGetAssetContentQuery = async <TData = Awaited<ReturnType<typeof getAssetContent>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, assetId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetAssetContentQueryOptions(assetId,options)
 
-export const getGetAssetContentSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getAssetContent>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
+  await queryClient.prefetchQuery(queryOptions);
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetAssetContentQueryKey(assetId);
-
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetContent>>> = ({
-		signal,
-	}) => getAssetContent(assetId, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getAssetContent>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetAssetContentSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getAssetContent>>
->;
-export type GetAssetContentSuspenseQueryError = ErrorType<void>;
-
-export function useGetAssetContentSuspense<
-	TData = Awaited<ReturnType<typeof getAssetContent>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetContentSuspense<
-	TData = Awaited<ReturnType<typeof getAssetContent>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetContentSuspense<
-	TData = Awaited<ReturnType<typeof getAssetContent>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 에셋 원본 조회
- */
-
-export function useGetAssetContentSuspense<
-	TData = Awaited<ReturnType<typeof getAssetContent>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetAssetContentSuspenseQueryOptions(assetId, options);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
+  return queryClient;
 }
 
-export const getGetAssetContentSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssetContent>>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+
+
+export const getGetAssetContentSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAssetContent>>, TError = ErrorType<void>>(assetId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetAssetContentInfiniteQueryKey(assetId);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetContent>>> = ({
-		signal,
-	}) => getAssetContent(assetId, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetContentQueryKey(assetId);
 
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getAssetContent>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  
 
-export type GetAssetContentSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getAssetContent>>
->;
-export type GetAssetContentSuspenseInfiniteQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetContent>>> = ({ signal }) => getAssetContent(assetId, requestOptions, signal);
 
-export function useGetAssetContentSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssetContent>>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetContentSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssetContent>>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetAssetContentSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssetContent>>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetContentSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAssetContent>>>
+export type GetAssetContentSuspenseQueryError = ErrorType<void>
+
+
+export function useGetAssetContentSuspense<TData = Awaited<ReturnType<typeof getAssetContent>>, TError = ErrorType<void>>(
+ assetId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetContentSuspense<TData = Awaited<ReturnType<typeof getAssetContent>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetContentSuspense<TData = Awaited<ReturnType<typeof getAssetContent>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 에셋 원본 조회
  */
 
-export function useGetAssetContentSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getAssetContent>>>,
-	TError = ErrorType<void>,
->(
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetAssetContentSuspenseInfiniteQueryOptions(
-		assetId,
-		options,
-	);
+export function useGetAssetContentSuspense<TData = Awaited<ReturnType<typeof getAssetContent>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
+  const queryOptions = getGetAssetContentSuspenseQueryOptions(assetId,options)
 
-	query.queryKey = queryOptions.queryKey;
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-	return query;
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetAssetContentSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAssetContent>>>, TError = ErrorType<void>>(assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssetContentInfiniteQueryKey(assetId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssetContent>>> = ({ signal }) => getAssetContent(assetId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAssetContentSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAssetContent>>>
+export type GetAssetContentSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetAssetContentSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssetContent>>>, TError = ErrorType<void>>(
+ assetId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetContentSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssetContent>>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAssetContentSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssetContent>>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 에셋 원본 조회
+ */
+
+export function useGetAssetContentSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssetContent>>>, TError = ErrorType<void>>(
+ assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAssetContentSuspenseInfiniteQueryOptions(assetId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
 
 /**
  * @summary 에셋 원본 조회
  */
-export const prefetchGetAssetContentInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getAssetContent>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	assetId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getAssetContent>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetAssetContentSuspenseInfiniteQueryOptions(
-		assetId,
-		options,
-	);
+export const prefetchGetAssetContentInfiniteQuery = async <TData = Awaited<ReturnType<typeof getAssetContent>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, assetId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssetContent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetAssetContentSuspenseInfiniteQueryOptions(assetId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
 
 /**
  * 현재 선택한 Space 안에서 에셋의 소속 폴더를 변경합니다.
  * @summary 에셋 폴더 이동
  */
 export const moveAsset = (
-	assetId: string,
-	moveAssetDto: BodyType<MoveAssetDto>,
-	options?: SecondParameter<typeof customInstance>,
-) => {
-	return customInstance<MoveAsset200AllOf>(
-		{
-			url: `/api/v1/assets/${assetId}/move`,
-			method: "PATCH",
-			headers: { "Content-Type": "application/json" },
-			data: moveAssetDto,
-		},
-		options,
-	);
-};
+    assetId: string,
+    moveAssetDto: BodyType<MoveAssetDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<MoveAsset200AllOf>(
+      {url: `/api/v1/assets/${assetId}/move`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: moveAssetDto
+    },
+      options);
+    }
+  
 
-export const getMoveAssetMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof moveAsset>>,
-		TError,
-		{ assetId: string; data: BodyType<MoveAssetDto> },
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof moveAsset>>,
-	TError,
-	{ assetId: string; data: BodyType<MoveAssetDto> },
-	TContext
-> => {
-	const mutationKey = ["moveAsset"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof moveAsset>>,
-		{ assetId: string; data: BodyType<MoveAssetDto> }
-	> = (props) => {
-		const { assetId, data } = props ?? {};
+export const getMoveAssetMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof moveAsset>>, TError,{assetId: string;data: BodyType<MoveAssetDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof moveAsset>>, TError,{assetId: string;data: BodyType<MoveAssetDto>}, TContext> => {
 
-		return moveAsset(assetId, data, requestOptions);
-	};
+const mutationKey = ['moveAsset'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-	return { mutationFn, ...mutationOptions };
-};
+      
 
-export type MoveAssetMutationResult = NonNullable<
-	Awaited<ReturnType<typeof moveAsset>>
->;
-export type MoveAssetMutationBody = BodyType<MoveAssetDto>;
-export type MoveAssetMutationError = ErrorType<void>;
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof moveAsset>>, {assetId: string;data: BodyType<MoveAssetDto>}> = (props) => {
+          const {assetId,data} = props ?? {};
+
+          return  moveAsset(assetId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type MoveAssetMutationResult = NonNullable<Awaited<ReturnType<typeof moveAsset>>>
+    export type MoveAssetMutationBody = BodyType<MoveAssetDto>
+    export type MoveAssetMutationError = ErrorType<void>
+
+    /**
  * @summary 에셋 폴더 이동
  */
-export const useMoveAsset = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof moveAsset>>,
-			TError,
-			{ assetId: string; data: BodyType<MoveAssetDto> },
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof moveAsset>>,
-	TError,
-	{ assetId: string; data: BodyType<MoveAssetDto> },
-	TContext
-> => {
-	const mutationOptions = getMoveAssetMutationOptions(options);
+export const useMoveAsset = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof moveAsset>>, TError,{assetId: string;data: BodyType<MoveAssetDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof moveAsset>>,
+        TError,
+        {assetId: string;data: BodyType<MoveAssetDto>},
+        TContext
+      > => {
 
-	return useMutation(mutationOptions, queryClient);
-};
+      const mutationOptions = getMoveAssetMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    

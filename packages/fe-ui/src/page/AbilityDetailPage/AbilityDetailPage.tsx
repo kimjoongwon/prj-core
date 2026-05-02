@@ -8,7 +8,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	Spinner,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { ArrowLeft, Edit, Key, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { DetailPage, DetailPageSurface, DetailSectionCard } from "../../detail";

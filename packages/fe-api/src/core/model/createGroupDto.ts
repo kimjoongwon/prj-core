@@ -9,14 +9,14 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { GroupTypes } from "./groupTypes";
+import type { GroupTypes } from './groupTypes';
 
 export interface CreateGroupDto {
-	tenantId: string;
-	name: string;
-	/** @nullable */
-	label?: string | null;
-	type: GroupTypes;
-	spaceId: string;
-	creatorId?: string;
+  tenantId: string;
+  name: string;
+  /** @nullable */
+  label?: string | null;
+  type: GroupTypes;
+  spaceId: string;
+  creatorId?: string;
 }

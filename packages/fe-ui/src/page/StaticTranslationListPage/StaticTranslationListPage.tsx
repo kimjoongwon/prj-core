@@ -30,7 +30,7 @@ import {
 	Switch,
 	Textarea,
 	useDisclosure,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { Languages, Plus, RefreshCcw } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type FormEvent, useEffect, useState } from "react";

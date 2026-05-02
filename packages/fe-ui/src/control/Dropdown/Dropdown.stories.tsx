@@ -1,4 +1,4 @@
-import { Button } from "@heroui/react";
+import { Button } from "@cocrepo/ui/heroui";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Dropdown } from "./Dropdown";
 

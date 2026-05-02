@@ -294,6 +294,14 @@ export type {
 	SecurityPolicyFormPageSubmitInput,
 } from "./SecurityPolicyFormPage/SecurityPolicyFormPage";
 export { SecurityPolicyFormPage } from "./SecurityPolicyFormPage/SecurityPolicyFormPage";
+export type {
+	ServiceDocumentFormDraft,
+	ServiceDocumentFormMode,
+	ServiceDocumentListPageProps,
+	ServiceDocumentListPageQueryStates,
+	ServiceDocumentListPageSetQueryStates,
+} from "./ServiceDocumentListPage/ServiceDocumentListPage";
+export { ServiceDocumentListPage } from "./ServiceDocumentListPage/ServiceDocumentListPage";
 export type { SessionCheckPageProps } from "./SessionCheckPage/SessionCheckPage";
 export { SessionCheckPage } from "./SessionCheckPage/SessionCheckPage";
 export type { SpaceCreatePageProps } from "./SpaceCreatePage/SpaceCreatePage";

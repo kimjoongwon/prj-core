@@ -1,7 +1,7 @@
 import {
 	Switch as NextUISwitch,
 	type SwitchProps as NextUISwitchProps,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 
 export interface SwitchProps
 	extends Omit<NextUISwitchProps, "onValueChange" | "value"> {

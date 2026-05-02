@@ -17,7 +17,7 @@ import {
 	Select,
 	SelectItem,
 	Spinner,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import {
 	Ban,
 	FilterX,

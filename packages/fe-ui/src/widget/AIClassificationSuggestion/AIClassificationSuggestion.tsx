@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, CardBody, Chip, Progress } from "@heroui/react";
+import { Button, Card, CardBody, Chip, Progress } from "@cocrepo/ui/heroui";
 import { Sparkles, Check, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 

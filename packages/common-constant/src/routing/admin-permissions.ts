@@ -24,6 +24,7 @@ const ADMIN_GLOBAL_FULL_ACCESS_PAGE_PREFIXES = [
 	"email-verifications:",
 	"subjects:",
 	"templates:",
+	"terms:",
 ] as const;
 
 export function resolveAdminPageScopeKind(pageId: string): ScreenScopeKind {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Spinner, cn } from "@heroui/react";
+import { Button, Spinner, cn } from "@cocrepo/ui/heroui";
 import {
 	ChevronRight,
 	Folder,

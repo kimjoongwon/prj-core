@@ -1,4 +1,4 @@
-import { Card, CardBody, Chip, Progress } from "@heroui/react";
+import { Card, CardBody, Chip, Progress } from "@cocrepo/ui/heroui";
 import type React from "react";
 import { Logo } from "../../data-display/Logo/Logo";
 import { Text } from "../../data-display/Text/Text";

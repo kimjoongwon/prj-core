@@ -43,6 +43,7 @@ import { PrismaModule } from "./prisma.module";
 import { RedisModule } from "./redis.module";
 import { RolesModule } from "./roles";
 import { RoutinesModule } from "./routines";
+import { ServiceDocumentsModule } from "./service-documents";
 import { SpacesModule } from "./spaces";
 import { SubjectsModule } from "./subjects";
 import { TasksModule } from "./tasks";
@@ -91,6 +92,7 @@ const devtoolsImports = enableNestDevtools
 		PolicyAssignmentsModule,
 		FoldersModule,
 		TemplatesModule,
+		ServiceDocumentsModule,
 		TranslationsModule,
 		TimelinesModule,
 		TasksModule,
@@ -161,6 +163,10 @@ const devtoolsImports = enableNestDevtools
 							{
 								path: "templates",
 								module: TemplatesModule,
+							},
+							{
+								path: "service-documents",
+								module: ServiceDocumentsModule,
 							},
 							{
 								path: "translations",

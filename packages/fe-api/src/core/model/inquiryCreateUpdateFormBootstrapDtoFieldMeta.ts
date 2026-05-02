@@ -9,11 +9,9 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { InquiryFormFieldMetaDto } from "./inquiryFormFieldMetaDto";
+import type { InquiryFormFieldMetaDto } from './inquiryFormFieldMetaDto';
 
 /**
  * 경로별 필드 메타
  */
-export type InquiryCreateUpdateFormBootstrapDtoFieldMeta = {
-	[key: string]: InquiryFormFieldMetaDto;
-};
+export type InquiryCreateUpdateFormBootstrapDtoFieldMeta = {[key: string]: InquiryFormFieldMetaDto};

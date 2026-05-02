@@ -11,6 +11,6 @@
  */
 
 export interface TenantAccessRequestFormFieldMetaDto {
-	/** 필드 라벨 */
-	label?: string;
+  /** 필드 라벨 */
+  label?: string;
 }

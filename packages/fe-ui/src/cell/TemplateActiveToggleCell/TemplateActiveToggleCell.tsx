@@ -1,6 +1,6 @@
 "use client";
 
-import { Switch } from "@heroui/react";
+import { Switch } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 

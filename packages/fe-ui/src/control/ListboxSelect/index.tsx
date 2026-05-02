@@ -17,7 +17,7 @@ export interface ListboxSelectProps<T>
 
 export const ListboxSelect = observer(
 	<T extends object>(props: ListboxSelectProps<T>) => {
-		const { state, path, selectionMode = "multiple", ...rest } = props;
+		const { state, path, selectionMode = "multiple", options, ...rest } = props;
 
 		const value = tools.get(state, path);
 		const defaultSelectedKeys = new Set([value]);
@@ -29,7 +29,7 @@ export const ListboxSelect = observer(
 		});
 
 		const handleSelectionChange: BaseListboxSelectProps<T>["onSelectionChange"] =
-			(selection) => {
+			(selection: any) => {
 				const selectedKeys = Array.from(selection);
 				if (selectionMode === "single") {
 					formField.setValue(selectedKeys[0]);
@@ -41,6 +41,7 @@ export const ListboxSelect = observer(
 		return (
 			<BaseListboxSelect
 				{...rest}
+				options={options}
 				selectionMode={selectionMode}
 				defaultSelectedKeys={formField.state.value}
 				onSelectionChange={handleSelectionChange}

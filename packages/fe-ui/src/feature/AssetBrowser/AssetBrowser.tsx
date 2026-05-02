@@ -16,7 +16,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	useDisclosure,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { Upload } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";

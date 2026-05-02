@@ -15,7 +15,7 @@ import {
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Select, SelectItem, type Selection } from "@heroui/react";
+import { Button, Select, SelectItem, type Selection } from "@cocrepo/ui/heroui";
 import { KeyRound, Layers3, Plus, ShieldCheck } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ReactNode, useEffect } from "react";

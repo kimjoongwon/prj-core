@@ -3,7 +3,7 @@
 import {
 	Input as HeroUiInput,
 	type InputProps as HeroUiInputProps,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type { ChangeEventHandler } from "react";
 import { translateNode, useT } from "../../i18n";

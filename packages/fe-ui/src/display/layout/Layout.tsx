@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type { LayoutProps } from "./type";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import type { NavItem } from "@cocrepo/store";
-import { cn } from "@heroui/react";
+import { cn } from "@cocrepo/ui/heroui";
 import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";

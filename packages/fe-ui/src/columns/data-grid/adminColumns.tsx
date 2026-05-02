@@ -9,7 +9,7 @@ import type { SpaceDto } from "@cocrepo/api/core/spaces";
 import type { SubjectDto } from "@cocrepo/api/core/subjects";
 import type { TaskDto } from "@cocrepo/api/core/tasks";
 import type { TimelineDto } from "@cocrepo/api/core/timelines";
-import { Button } from "@heroui/react";
+import { Button } from "@cocrepo/ui/heroui";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";

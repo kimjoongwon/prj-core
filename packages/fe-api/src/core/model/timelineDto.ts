@@ -9,18 +9,18 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { SessionDto } from "./sessionDto";
+import type { SessionDto } from './sessionDto';
 
 export interface TimelineDto {
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	tenantId: string;
-	spaceId: string;
-	creatorId?: string;
-	name: string;
-	description?: string;
-	sessions: SessionDto[];
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  tenantId: string;
+  spaceId: string;
+  creatorId?: string;
+  name: string;
+  description?: string;
+  sessions: SessionDto[];
 }

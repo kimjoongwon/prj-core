@@ -12,7 +12,7 @@ import {
 	useGetUsers,
 } from "@cocrepo/api/core/users";
 import { TimelineSessionProgramEditPage } from "@cocrepo/ui";
-import { addToast, useDisclosure } from "@heroui/react";
+import { addToast, useDisclosure } from "@cocrepo/ui/heroui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";

@@ -8,7 +8,7 @@ import {
 	Spinner,
 	Switch,
 	Textarea,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import {

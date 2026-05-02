@@ -2,7 +2,7 @@
 
 import { useCreateTask } from "@cocrepo/api/core/tasks";
 import { TaskCreatePage } from "@cocrepo/ui";
-import { addToast } from "@heroui/react";
+import { addToast } from "@cocrepo/ui/heroui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";

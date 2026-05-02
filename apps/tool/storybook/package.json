@@ -21,6 +21,7 @@
     "@cocrepo/store": "workspace:^",
     "@cocrepo/ui": "workspace:^",
     "@heroui/react": "catalog:",
+    "@heroui/styles": "catalog:",
     "@tanstack/react-query": "catalog:",
     "@xyflow/react": "catalog:",
     "mobx": "catalog:",

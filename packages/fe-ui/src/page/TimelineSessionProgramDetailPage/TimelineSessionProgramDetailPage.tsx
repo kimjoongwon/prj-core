@@ -16,7 +16,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	Spinner,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";

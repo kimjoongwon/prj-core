@@ -19,7 +19,7 @@
     "@cocrepo/type": "workspace:^",
     "@cocrepo/ui": "workspace:^1.5.0",
     "@heroui/react": "catalog:",
-    "@heroui/use-theme": "catalog:",
+    "@heroui/styles": "catalog:",
     "framer-motion": "catalog:",
     "lucide-react": "catalog:",
     "mobx": "catalog:",

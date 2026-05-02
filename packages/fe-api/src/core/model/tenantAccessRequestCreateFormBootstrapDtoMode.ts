@@ -13,10 +13,10 @@
 /**
  * 폼 모드
  */
-export type TenantAccessRequestCreateFormBootstrapDtoMode =
-	(typeof TenantAccessRequestCreateFormBootstrapDtoMode)[keyof typeof TenantAccessRequestCreateFormBootstrapDtoMode];
+export type TenantAccessRequestCreateFormBootstrapDtoMode = typeof TenantAccessRequestCreateFormBootstrapDtoMode[keyof typeof TenantAccessRequestCreateFormBootstrapDtoMode];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TenantAccessRequestCreateFormBootstrapDtoMode = {
-	CREATE: "CREATE",
+  CREATE: 'CREATE',
 } as const;

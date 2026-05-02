@@ -9,14 +9,14 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { InquiryParticipant } from "./inquiryParticipant";
-import type { GetInquiryParticipants200AllOfMeta } from "./getInquiryParticipants200AllOfMeta";
+import type { InquiryParticipant } from './inquiryParticipant';
+import type { GetInquiryParticipants200AllOfMeta } from './getInquiryParticipants200AllOfMeta';
 
 export type GetInquiryParticipants200AllOf = {
-	/** */
-	httpStatus?: number;
-	/** */
-	message?: string;
-	data?: InquiryParticipant[];
-	meta?: GetInquiryParticipants200AllOfMeta;
+  /** */
+  httpStatus?: number;
+  /** */
+  message?: string;
+  data?: InquiryParticipant[];
+  meta?: GetInquiryParticipants200AllOfMeta;
 };

@@ -23,7 +23,7 @@ import {
 	FormSectionCard,
 	VStack,
 } from "@cocrepo/ui";
-import { Input, Select, SelectItem, type Selection } from "@heroui/react";
+import { Input, Select, SelectItem, type Selection } from "@cocrepo/ui/heroui";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
 

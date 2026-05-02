@@ -1,4 +1,4 @@
-import type { DateRangePickerProps } from "@heroui/react";
+import type { DateRangePickerProps } from "@cocrepo/ui/heroui";
 import type { Meta, StoryObj } from "@storybook/react";
 import { makeAutoObservable } from "mobx";
 import { observer } from "mobx-react-lite";

@@ -9,11 +9,11 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { InquiryFormOptionItemDtoValue } from "./inquiryFormOptionItemDtoValue";
+import type { InquiryFormOptionItemDtoValue } from './inquiryFormOptionItemDtoValue';
 
 export interface InquiryFormOptionItemDto {
-	/** 옵션 값 */
-	value: InquiryFormOptionItemDtoValue;
-	/** 옵션 라벨 */
-	label: string;
+  /** 옵션 값 */
+  value: InquiryFormOptionItemDtoValue;
+  /** 옵션 라벨 */
+  label: string;
 }

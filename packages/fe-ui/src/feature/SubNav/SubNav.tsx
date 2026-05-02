@@ -1,7 +1,7 @@
 "use client";
 
 import { useNavigationStore } from "@cocrepo/store";
-import { cn } from "@heroui/react";
+import { cn } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
 

@@ -13,4 +13,4 @@
 /**
  * 변수 키-값 맵
  */
-export type SendTestTemplateDtoVariables = { [key: string]: string };
+export type SendTestTemplateDtoVariables = {[key: string]: string};

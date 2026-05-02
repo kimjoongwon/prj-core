@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@cocrepo/ui/heroui";
 
 /** 문의 상태값 (Prisma Enum 값과 동일) */
 export type InquiryStatusCode =

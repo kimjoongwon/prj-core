@@ -1,6 +1,6 @@
-import { cn } from "@heroui/react";
+import { cn } from "@cocrepo/ui/heroui";
 import { cva } from "class-variance-authority";
-import type { ReactNode } from "react";
+import { Children, type ReactNode } from "react";
 import {
 	isRhythmPreset,
 	resolveRhythmValue,
@@ -108,7 +108,7 @@ export const HStack = (props: HStackProps) => {
 			)}
 			{...rest}
 		>
-			{children}
+			{Children.toArray(children)}
 		</div>
 	);
 };

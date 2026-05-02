@@ -1,5 +1,5 @@
 import type React from "react";
-import { cn } from "@heroui/react";
+import { cn } from "@cocrepo/ui/heroui";
 import {
 	isRhythmPreset,
 	resolveRhythmValue,

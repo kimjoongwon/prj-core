@@ -2,7 +2,7 @@
 
 import type { AppIconName } from "@cocrepo/type";
 import { useNavigationStore } from "@cocrepo/store";
-import { Button, cn } from "@heroui/react";
+import { Button, cn } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
 

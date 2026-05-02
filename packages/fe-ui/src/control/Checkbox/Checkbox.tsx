@@ -3,7 +3,7 @@
 import {
 	Checkbox as NextUICheckbox,
 	type CheckboxProps as NextUICheckboxProps,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type React from "react";
 import { translateNode, useT } from "../../i18n";

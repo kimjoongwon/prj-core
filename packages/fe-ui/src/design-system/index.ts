@@ -6,7 +6,7 @@
  */
 
 // HeroUI re-exports (자주 사용되는 유틸리티)
-export { cn } from "@heroui/react";
+export { cn } from "@cocrepo/ui/heroui";
 
 // Provider
 export * from "./provider";

@@ -5,7 +5,7 @@ import type {
 	InquiryChannel,
 	InquiryPriority,
 } from "@cocrepo/enum";
-import { Button, Card, CardBody, Divider, Input, Spacer } from "@heroui/react";
+import { Button, Card, CardBody, Divider, Input, Spacer } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import {

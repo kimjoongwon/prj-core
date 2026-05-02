@@ -11,9 +11,9 @@
  */
 
 export interface CreateRoutineActivityItemDto {
-	taskId: string;
-	order?: number;
-	repetitions?: number;
-	restTime?: number;
-	notes?: string;
+  taskId: string;
+  order?: number;
+  repetitions?: number;
+  restTime?: number;
+  notes?: string;
 }

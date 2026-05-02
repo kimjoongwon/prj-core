@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardBody, Progress } from "@heroui/react";
+import { Card, CardBody, Progress } from "@cocrepo/ui/heroui";
 import { CheckCircle, Clock, AlertTriangle } from "lucide-react";
 import { observer } from "mobx-react-lite";
 

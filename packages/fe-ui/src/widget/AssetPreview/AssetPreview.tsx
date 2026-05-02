@@ -9,7 +9,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	cn,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { FileText, ImageIcon, Link2Off, PlayCircle } from "lucide-react";
 
 export interface AssetPreviewAsset {

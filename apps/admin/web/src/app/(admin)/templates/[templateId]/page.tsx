@@ -10,7 +10,7 @@ import {
 	useToggleTemplateStatus,
 } from "@cocrepo/api/core/templates";
 import { type PreviewResult, TemplateDetailPage } from "@cocrepo/ui";
-import { addToast, useDisclosure } from "@heroui/react";
+import { addToast, useDisclosure } from "@cocrepo/ui/heroui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";

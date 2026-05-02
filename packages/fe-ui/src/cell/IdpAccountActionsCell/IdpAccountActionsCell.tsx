@@ -1,4 +1,4 @@
-import { Button, Link as HeroLink } from "@heroui/react";
+import { Button, Link as HeroLink } from "@cocrepo/ui/heroui";
 
 export interface IdpAccountActionsCellProps {
 	/** 계정 ID */

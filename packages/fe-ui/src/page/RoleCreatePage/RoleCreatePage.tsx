@@ -7,7 +7,7 @@ import {
 	FormSectionCard,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Input, Textarea } from "@heroui/react";
+import { Button, Input, Textarea } from "@cocrepo/ui/heroui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
 

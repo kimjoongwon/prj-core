@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardBody, Chip } from "@heroui/react";
+import { Card, CardBody, Chip } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 
 export interface Participant {

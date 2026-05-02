@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Tooltip } from "@heroui/react";
+import { Button, Tooltip } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 

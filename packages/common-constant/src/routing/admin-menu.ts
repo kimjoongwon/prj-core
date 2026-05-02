@@ -86,6 +86,9 @@ export const ADMIN_PATHS = {
 	TEMPLATES_DETAIL: "/templates/[templateId]",
 	TEMPLATES_EDIT: "/templates/[templateId]/edit",
 
+	// 약관/동의 문서 (ServiceDocument 엔티티)
+	TERMS: "/terms",
+
 	// 정적 번역 (Translation 엔티티)
 	TRANSLATIONS: "/translations",
 
@@ -126,6 +129,7 @@ export const ADMIN_SUBJECTS = {
 	MENU_TASKS: "menu:tasks",
 	MENU_ROUTINES: "menu:routines",
 	MENU_TEMPLATES: "menu:templates",
+	MENU_TERMS: "menu:terms",
 	MENU_ASSETS: "menu:assets",
 	MENU_ROLES: "menu:roles",
 	MENU_INQUIRIES: "menu:inquiries",
@@ -148,6 +152,7 @@ export const ADMIN_SUBJECTS = {
 
 	// 2depth - 템플릿
 	MENU_TEMPLATES_LIST: "menu:templates:list",
+	MENU_TERMS_LIST: "menu:terms:list",
 
 	// 2depth - 다국어
 	MENU_TRANSLATIONS_LIST: "menu:translations:list",
@@ -184,6 +189,8 @@ const ADMIN_NAV_SCOPE_KIND_BY_ID: Partial<Record<string, ScreenScopeKind>> = {
 	"routines-list": "space",
 	templates: "global-full-access-only",
 	"templates-list": "global-full-access-only",
+	terms: "global-full-access-only",
+	"terms-list": "global-full-access-only",
 	translations: "global-full-access-only",
 	"translations-list": "global-full-access-only",
 	assets: "space",

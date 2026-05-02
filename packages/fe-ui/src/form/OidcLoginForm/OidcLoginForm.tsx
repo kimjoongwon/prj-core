@@ -213,6 +213,7 @@ export const OidcLoginForm = observer(
 						path="password"
 						state={state}
 						label="비밀번호"
+						type="password"
 						placeholder="********"
 						isRequired
 						autoComplete="current-password"

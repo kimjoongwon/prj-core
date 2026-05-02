@@ -1,5 +1,5 @@
 import type { AppIconName } from "@cocrepo/type";
-import { Button } from "@heroui/react";
+import { Button } from "@cocrepo/ui/heroui";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AppIcon } from "../../design-system/icon/AppIcon";
 import { VStack } from "../../rhythm/VStack/VStack";

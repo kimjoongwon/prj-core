@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, ScrollShadow, Spinner, Textarea } from "@heroui/react";
+import { Button, ScrollShadow, Spinner, Textarea } from "@cocrepo/ui/heroui";
 import {
 	Bot,
 	Maximize2,

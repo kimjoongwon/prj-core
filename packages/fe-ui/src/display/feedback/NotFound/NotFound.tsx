@@ -1,4 +1,4 @@
-import { Button, Card, CardBody } from "@heroui/react";
+import { Button, Card, CardBody } from "@cocrepo/ui/heroui";
 import type React from "react";
 import { Text } from "../../data-display/Text/Text";
 import { Container } from "../../../layout/Container/Container";

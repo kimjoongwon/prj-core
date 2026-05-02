@@ -9,14 +9,14 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { RoutineDto } from "./routineDto";
-import type { GetTaskRoutines200AllOfMeta } from "./getTaskRoutines200AllOfMeta";
+import type { RoutineDto } from './routineDto';
+import type { GetTaskRoutines200AllOfMeta } from './getTaskRoutines200AllOfMeta';
 
 export type GetTaskRoutines200AllOf = {
-	/** */
-	httpStatus?: number;
-	/** */
-	message?: string;
-	data?: RoutineDto[];
-	meta?: GetTaskRoutines200AllOfMeta;
+  /** */
+  httpStatus?: number;
+  /** */
+  message?: string;
+  data?: RoutineDto[];
+  meta?: GetTaskRoutines200AllOfMeta;
 };

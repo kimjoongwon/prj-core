@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@cocrepo/ui/heroui";
 import { NameCell } from "../NameCell/NameCell";
 
 export interface RoleNameCellProps {

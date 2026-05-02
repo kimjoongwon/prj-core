@@ -11,7 +11,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { Eye } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";

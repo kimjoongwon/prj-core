@@ -8,7 +8,7 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { AlertCircle, CheckCircle, Send } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";

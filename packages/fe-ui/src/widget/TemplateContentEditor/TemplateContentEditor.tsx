@@ -1,6 +1,6 @@
 "use client";
 
-import { Input, Textarea } from "@heroui/react";
+import { Input, Textarea } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { ByteCounter } from "../ByteCounter";
 import { HtmlEditor } from "../HtmlEditor";

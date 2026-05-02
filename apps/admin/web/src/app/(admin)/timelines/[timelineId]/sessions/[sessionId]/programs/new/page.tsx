@@ -7,7 +7,7 @@ import {
 } from "@cocrepo/api/core/timelines";
 import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
 import { TimelineSessionProgramCreatePage } from "@cocrepo/ui";
-import { addToast, useDisclosure } from "@heroui/react";
+import { addToast, useDisclosure } from "@cocrepo/ui/heroui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";

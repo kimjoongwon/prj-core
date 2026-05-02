@@ -13,13 +13,13 @@
 /**
  * 문의 우선순위
  */
-export type InquiryPriority =
-	(typeof InquiryPriority)[keyof typeof InquiryPriority];
+export type InquiryPriority = typeof InquiryPriority[keyof typeof InquiryPriority];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const InquiryPriority = {
-	LOW: "LOW",
-	NORMAL: "NORMAL",
-	HIGH: "HIGH",
-	URGENT: "URGENT",
+  LOW: 'LOW',
+  NORMAL: 'NORMAL',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT',
 } as const;

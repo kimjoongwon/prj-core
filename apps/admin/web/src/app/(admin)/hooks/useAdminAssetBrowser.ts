@@ -14,7 +14,7 @@ import {
 	useUploadAsset,
 } from "@cocrepo/api/assets";
 import type { AssetBrowserProps } from "@cocrepo/ui";
-import { addToast } from "@heroui/react";
+import { addToast } from "@cocrepo/ui/heroui";
 import { useQueryClient } from "@tanstack/react-query";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 import { usePersistStore } from "@/stores/AppStoreProvider";

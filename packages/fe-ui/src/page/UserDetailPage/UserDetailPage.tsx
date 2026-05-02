@@ -8,7 +8,7 @@ import {
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Checkbox, Chip, Input, Spinner, Switch } from "@heroui/react";
+import { Button, Checkbox, Chip, Input, Spinner, Switch } from "@cocrepo/ui/heroui";
 import { ArrowLeft, Save, ShieldCheck } from "lucide-react";
 import { observer } from "mobx-react-lite";
 

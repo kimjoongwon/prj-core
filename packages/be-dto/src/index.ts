@@ -34,6 +34,7 @@ export * from "./role.dto";
 export * from "./routine.dto";
 export * from "./security-policy.dto";
 export * from "./select-tenant.dto";
+export * from "./service-documents";
 export * from "./session.dto";
 export * from "./space-association.dto";
 export * from "./space-classification.dto";

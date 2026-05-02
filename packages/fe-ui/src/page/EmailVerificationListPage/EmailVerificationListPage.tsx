@@ -15,7 +15,7 @@ import {
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
-import { useDisclosure } from "@heroui/react";
+import { useDisclosure } from "@cocrepo/ui/heroui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 

@@ -21,7 +21,7 @@ interface UserListResponse {
 	};
 }
 
-import { Button, Pagination } from "@heroui/react";
+import { Button, Pagination } from "@cocrepo/ui/heroui";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useRouter, useSearchParams } from "next/navigation";

@@ -5,7 +5,7 @@ import {
 	Dropdown as HeroUIDropdown,
 	type DropdownItemProps as HeroUIDropdownItemProps,
 	type DropdownProps as HeroUIDropdownProps,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import type React from "react";
 
 export interface DropdownItemProps

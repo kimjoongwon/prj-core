@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Checkbox, CheckboxGroup, Input } from "@heroui/react";
+import { Button, Checkbox, CheckboxGroup, Input } from "@cocrepo/ui/heroui";
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";

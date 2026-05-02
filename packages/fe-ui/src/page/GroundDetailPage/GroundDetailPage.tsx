@@ -9,7 +9,7 @@ import {
 	DetailSectionCard,
 	VStack,
 } from "@cocrepo/ui";
-import { Badge, Button, Spinner } from "@heroui/react";
+import { Badge, Button, Spinner } from "@cocrepo/ui/heroui";
 import { ArrowLeft, Pencil } from "lucide-react";
 import { observer } from "mobx-react-lite";
 

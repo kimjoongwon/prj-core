@@ -10,7 +10,7 @@ import {
 	ThemeToggleButton,
 	useT,
 } from "@cocrepo/ui";
-import { Button, Tooltip } from "@heroui/react";
+import { Button, Tooltip } from "@cocrepo/ui/heroui";
 import { KeyRound } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { resolveIdpClientUrl } from "@/runtime-urls";

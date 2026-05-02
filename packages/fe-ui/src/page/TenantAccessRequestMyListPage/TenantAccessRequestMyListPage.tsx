@@ -10,7 +10,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { Plus, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { HStack } from "../../rhythm/HStack/HStack";

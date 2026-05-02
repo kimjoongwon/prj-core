@@ -11,7 +11,7 @@ import {
 	Input,
 	Select,
 	SelectItem,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { RefreshCw, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { RedirectUriListInput } from "../../control/RedirectUriListInput/RedirectUriListInput";

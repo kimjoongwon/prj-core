@@ -9,24 +9,24 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { InquiryCreateUpdateFormBootstrapDtoMode } from "./inquiryCreateUpdateFormBootstrapDtoMode";
-import type { InquiryCreateUpdateFormBootstrapDtoDefaultObject } from "./inquiryCreateUpdateFormBootstrapDtoDefaultObject";
-import type { InquiryCreateUpdateFormBootstrapDtoOptions } from "./inquiryCreateUpdateFormBootstrapDtoOptions";
-import type { InquiryFormUiPathsDto } from "./inquiryFormUiPathsDto";
-import type { InquiryCreateUpdateFormBootstrapDtoFieldMeta } from "./inquiryCreateUpdateFormBootstrapDtoFieldMeta";
-import type { InquiryFormSchemaDto } from "./inquiryFormSchemaDto";
+import type { InquiryCreateUpdateFormBootstrapDtoMode } from './inquiryCreateUpdateFormBootstrapDtoMode';
+import type { InquiryCreateUpdateFormBootstrapDtoDefaultObject } from './inquiryCreateUpdateFormBootstrapDtoDefaultObject';
+import type { InquiryCreateUpdateFormBootstrapDtoOptions } from './inquiryCreateUpdateFormBootstrapDtoOptions';
+import type { InquiryFormUiPathsDto } from './inquiryFormUiPathsDto';
+import type { InquiryCreateUpdateFormBootstrapDtoFieldMeta } from './inquiryCreateUpdateFormBootstrapDtoFieldMeta';
+import type { InquiryFormSchemaDto } from './inquiryFormSchemaDto';
 
 export interface InquiryCreateUpdateFormBootstrapDto {
-	/** 폼 모드 */
-	mode: InquiryCreateUpdateFormBootstrapDtoMode;
-	/** 초기 폼 객체 */
-	defaultObject: InquiryCreateUpdateFormBootstrapDtoDefaultObject;
-	/** 경로별 선택 옵션 */
-	options: InquiryCreateUpdateFormBootstrapDtoOptions;
-	/** UI 제어 경로 */
-	ui: InquiryFormUiPathsDto;
-	/** 경로별 필드 메타 */
-	fieldMeta: InquiryCreateUpdateFormBootstrapDtoFieldMeta;
-	/** AI 스키마 목록 */
-	aiSchemas: InquiryFormSchemaDto[];
+  /** 폼 모드 */
+  mode: InquiryCreateUpdateFormBootstrapDtoMode;
+  /** 초기 폼 객체 */
+  defaultObject: InquiryCreateUpdateFormBootstrapDtoDefaultObject;
+  /** 경로별 선택 옵션 */
+  options: InquiryCreateUpdateFormBootstrapDtoOptions;
+  /** UI 제어 경로 */
+  ui: InquiryFormUiPathsDto;
+  /** 경로별 필드 메타 */
+  fieldMeta: InquiryCreateUpdateFormBootstrapDtoFieldMeta;
+  /** AI 스키마 목록 */
+  aiSchemas: InquiryFormSchemaDto[];
 }

@@ -11,7 +11,7 @@ import {
 	TableHeader,
 	TableRow,
 	Tooltip,
-} from "@heroui/react";
+} from "@cocrepo/ui/heroui";
 import { Edit2, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Switch } from "../../../control/Switch/Switch";

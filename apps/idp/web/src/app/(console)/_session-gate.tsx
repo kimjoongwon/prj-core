@@ -1,7 +1,7 @@
 "use client";
 
 import { useVerifyToken } from "@cocrepo/api/idp/auth";
-import { Spinner } from "@heroui/react";
+import { Spinner } from "@cocrepo/ui/heroui";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useEffect } from "react";
