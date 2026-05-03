@@ -30,7 +30,7 @@ export interface CheckboxProps extends Omit<NextUICheckboxProps, "onChange"> {
  * <Checkbox isDisabled>비활성화됨</Checkbox>
  * ```
  */
-export const Checkbox = observer(function Checkbox(props: CheckboxProps) {
+export const Checkbox = observer((props: CheckboxProps) => {
 	const t = useT();
 	const { onChange, size = "lg", ...rest } = props;
 

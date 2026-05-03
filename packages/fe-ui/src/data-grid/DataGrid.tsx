@@ -27,8 +27,8 @@ import {
 import { FileX } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { translateNode, useT, type Translate } from "../i18n";
 import { Pagination } from "../control/Pagination/Pagination";
+import { translateNode, useT } from "../i18n";
 import { InputRenderer } from "./InputRenderer";
 
 export type Key = string | number;
@@ -56,14 +56,8 @@ function getColumnAlign<T extends object>(column: ColumnDef<T, unknown>) {
 	return align;
 }
 
-function getHeaderLabel<T extends object>(
-	header: Header<T, unknown>,
-	t: Translate,
-) {
-	return translateNode(
-		flexRender(header.column.columnDef.header, header.getContext()),
-		t,
-	);
+function getHeaderLabel<T extends object>(header: Header<T, unknown>) {
+	return flexRender(header.column.columnDef.header, header.getContext());
 }
 
 function resolveClassNameValue(className: unknown) {
@@ -241,9 +235,6 @@ export const DataGrid = observer(
 		});
 		const headers = table.getHeaderGroups()[0]?.headers ?? [];
 		const tableRows = table.getRowModel().rows;
-		const emptyMessage = config.emptyMessage
-			? t(config.emptyMessage)
-			: t(DATA_GRID_EMPTY_MESSAGE);
 
 		const handleRowAction = (key: string | number | bigint) => {
 			if (!config.onRowClick) {
@@ -313,7 +304,9 @@ export const DataGrid = observer(
 				) : rows.length === 0 ? (
 					<div className="flex flex-col items-center justify-center py-16 text-default-400">
 						<FileX size={48} className="mb-4" />
-						<p className="text-lg">{emptyMessage}</p>
+						<p className="text-lg">
+							{t(config.emptyMessage ?? DATA_GRID_EMPTY_MESSAGE)}
+						</p>
 					</div>
 				) : (
 					<div className="relative">
@@ -340,12 +333,14 @@ export const DataGrid = observer(
 											colSpan={header.colSpan}
 											align={align}
 										>
-											{header.isPlaceholder ? null : getHeaderLabel(header, t)}
+											{header.isPlaceholder
+												? null
+												: translateNode(getHeaderLabel(header), t)}
 										</TableColumn>
 									);
 								})}
 							</TableHeader>
-							<TableBody emptyContent={emptyMessage}>
+							<TableBody emptyContent={t(DATA_GRID_EMPTY_MESSAGE)}>
 								{tableRows.map((row) => (
 									<TableRow key={row.id}>
 										{row.getVisibleCells().map((cell) => (
@@ -365,9 +360,8 @@ export const DataGrid = observer(
 
 				<div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 py-4">
 					<span className="text-sm text-default-500">
-						{t("총 {{count}}건", undefined, {
-							count: totalCount.toLocaleString(),
-						})}
+						{t("총")} {totalCount.toLocaleString()}
+						{t("건")}
 					</span>
 					<Pagination
 						totalCount={totalCount}
@@ -384,9 +378,8 @@ export const DataGrid = observer(
 						<div className="flex items-center gap-4 px-6 py-3 bg-content2 rounded-full shadow-lg border border-divider">
 							{actionBarConfig?.showCount !== false && (
 								<span className="text-sm font-medium text-default-700">
-									{t("{{count}}개 선택됨", undefined, {
-										count: selectedCount,
-									})}
+									{selectedCount}
+									{t("개 선택됨")}
 								</span>
 							)}
 							<div className="w-px h-6 bg-divider" />

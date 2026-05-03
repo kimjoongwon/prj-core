@@ -13,13 +13,13 @@
 /**
  * 언어 코드
  */
-export type TranslationCatalogResponseDtoLanguageCode = typeof TranslationCatalogResponseDtoLanguageCode[keyof typeof TranslationCatalogResponseDtoLanguageCode];
-
+export type TranslationCatalogResponseDtoLanguageCode =
+	(typeof TranslationCatalogResponseDtoLanguageCode)[keyof typeof TranslationCatalogResponseDtoLanguageCode];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TranslationCatalogResponseDtoLanguageCode = {
-  ko_KR: 'ko_KR',
-  en_US: 'en_US',
-  zh_CN: 'zh_CN',
-  ja_JP: 'ja_JP',
+	ko_KR: "ko_KR",
+	en_US: "en_US",
+	zh_CN: "zh_CN",
+	ja_JP: "ja_JP",
 } as const;

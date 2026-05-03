@@ -7,6 +7,7 @@ import type {
 } from "@cocrepo/dto";
 import { SpaceScope as SpaceScopeEnum } from "@cocrepo/dto";
 import { Exercise, Routine, Task } from "@cocrepo/entity";
+import type { LanguageCode } from "@cocrepo/prisma";
 import { TasksRepository } from "@cocrepo/repository";
 import {
 	ConflictException,
@@ -32,8 +33,10 @@ export class TaskService {
 		skip: number;
 		take: number;
 		search?: string;
+		contentLanguageCode?: LanguageCode;
 	}): Promise<{ tasks: Task[]; total: number }> {
-		const { spaceId, spaceScope, skip, take, search } = params;
+		const { spaceId, spaceScope, skip, take, search, contentLanguageCode } =
+			params;
 		const spaceIds = this.resolveReadableSpaceIds(spaceScope, spaceId);
 
 		const [tasks, total] = await this.tasksRepository.findManyTasks({
@@ -41,6 +44,7 @@ export class TaskService {
 			skip,
 			take,
 			search,
+			contentLanguageCode,
 		});
 
 		return { tasks, total };

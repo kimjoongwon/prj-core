@@ -13,6 +13,7 @@ import type { Route } from "next";
 import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 
 type TimelineEditPageParams = {
 	timelineId: string;
@@ -21,6 +22,7 @@ type TimelineEditPageParams = {
 const AdminTimelinesTimelineIdEditRoute = observer(() => {
 	const { timelineId } = useParams<TimelineEditPageParams>();
 	const router = useRouter();
+	const persistStore = usePersistStore();
 	const queryClient = useQueryClient();
 
 	const state = useLocalObservable(() => ({
@@ -117,6 +119,7 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 			timelineName={timeline?.name}
 			name={state.name}
 			description={state.description}
+			contentLanguageCode={persistStore.contentLanguageCode}
 			nameError={state.errors.name}
 			descriptionError={state.errors.description}
 			isSubmitPending={isPending}

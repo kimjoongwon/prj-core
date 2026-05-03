@@ -6,7 +6,6 @@ import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
 import type { SidePanelProps } from "../../display/layout/type";
-import { translateNode, useT } from "../../i18n";
 
 interface SubMenuItemProps {
 	item: NavItem;
@@ -21,7 +20,6 @@ const SubMenuItem = observer(function SubMenuItem({
 	density,
 	onItemClick,
 }: SubMenuItemProps) {
-	const t = useT();
 	const handleClick = () => {
 		onItemClick(item.id);
 	};
@@ -40,7 +38,7 @@ const SubMenuItem = observer(function SubMenuItem({
 			)}
 			onClick={handleClick}
 		>
-			<span className="truncate">{t(item.label)}</span>
+			<span className="truncate">{item.label}</span>
 		</button>
 	);
 });
@@ -74,7 +72,6 @@ const NavItemComponent = observer(function NavItemComponent({
 	renderItemIcon,
 	getItemDescription,
 }: NavItemComponentProps) {
-	const t = useT();
 	const hasChildren = item.hasChildren;
 	const visualExpanded = hasChildren && isExpanded;
 	const shouldShowDescription =
@@ -148,15 +145,15 @@ const NavItemComponent = observer(function NavItemComponent({
 							isSelected ? "font-semibold" : "font-medium",
 						)}
 					>
-						{t(item.label)}
+						{item.label}
 					</span>
 					{description && (
 						<span
 							className={cn(
 								"block truncate",
 								density === "compact"
-									? "mt-0.5 text-[11px] leading-4"
-									: "mt-1 text-xs leading-5",
+								? "mt-0.5 text-[11px] leading-4"
+								: "mt-1 text-xs leading-5",
 								isSelected
 									? "text-white/70 dark:text-slate-600"
 									: isActiveBranch
@@ -164,7 +161,7 @@ const NavItemComponent = observer(function NavItemComponent({
 									: "text-slate-500 dark:text-slate-400",
 							)}
 						>
-							{translateNode(description, t)}
+							{description}
 						</span>
 					)}
 				</span>
@@ -227,7 +224,6 @@ export const SidePanel = observer(function SidePanel({
 	renderItemIcon,
 	getItemDescription,
 }: SidePanelProps) {
-	const t = useT();
 	const defaultHeaderContent =
 		logo || logoDescription ? (
 			<div
@@ -252,7 +248,7 @@ export const SidePanel = observer(function SidePanel({
 									: "mt-3 text-sm leading-6",
 							)}
 						>
-							{translateNode(logoDescription, t)}
+							{logoDescription}
 						</p>
 					)}
 				</div>

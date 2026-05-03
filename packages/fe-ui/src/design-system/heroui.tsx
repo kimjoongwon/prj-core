@@ -610,9 +610,9 @@ export function addToast(options: LegacyToastOptions) {
 		options.color === "warning" ||
 		options.color === "danger"
 			? options.color
-			: options.color === "primary" || options.color === "secondary"
-				? "accent"
-				: "default";
+		: options.color === "primary" || options.color === "secondary"
+			? "accent"
+			: "default";
 
 	return Hero.toast(String(title), {
 		description:
@@ -661,7 +661,7 @@ export function useDisclosure(options: LegacyDisclosureOptions = {}) {
 	};
 }
 
-export const ToastProvider = Hero.Toast.Provider;
+export const ToastProvider = Hero.ToastProvider;
 export const Toast = Hero.Toast;
 
 const ButtonImpl = forwardRef<HTMLElement, LooseButtonProps>(
@@ -1900,5 +1900,5 @@ export const DatePicker = Hero.DatePicker as unknown as (props: LooseDateInputPr
 export const DateRangePicker = Hero.DateRangePicker as unknown as (props: LooseDateInputProps) => ReactElement;
 export const TimeInput = Input;
 export const Accordion = Hero.Accordion as unknown as (props: AnyProps) => ReactElement;
-export const AccordionItem = Hero.Disclosure as unknown as (props: AnyProps) => ReactElement;
+export const AccordionItem = Hero.AccordionItem as unknown as (props: AnyProps) => ReactElement;
 export const SelectSection = ({ children }: AnyProps) => <>{children}</>;

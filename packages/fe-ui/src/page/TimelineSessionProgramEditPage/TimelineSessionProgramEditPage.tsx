@@ -3,13 +3,18 @@
 import {
 	FormPage,
 	FormPageSurface,
+	ContentLanguageNotice,
 	PageTitleBar,
 	ProgramPickerModal,
 	FormSection,
 	FormSectionCard,
 	VStack,
+	Button,
+	Input,
+	Select,
+	useT,
 } from "@cocrepo/ui";
-import { Button, Chip, Input, Select, SelectItem } from "@cocrepo/ui/heroui";
+import { Chip } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type { TimelineSessionProgramCreatePageProps } from "../TimelineSessionProgramCreatePage/TimelineSessionProgramCreatePage";
 
@@ -28,6 +33,7 @@ export interface TimelineSessionProgramEditPageProps
 export const TimelineSessionProgramEditPage = observer(
 	({
 		descriptionText,
+		contentLanguageCode,
 		name,
 		routineName,
 		instructorName,
@@ -58,11 +64,10 @@ export const TimelineSessionProgramEditPage = observer(
 		onClickCancelButton,
 		onClickSubmitButton,
 	}: TimelineSessionProgramEditPageProps) => {
-		const selectedLevelKeys = LEVEL_OPTIONS.some(
-			(option) => option.value === level,
-		)
-			? [level]
-			: [];
+		const t = useT();
+		const selectedLevel = LEVEL_OPTIONS.some((option) => option.value === level)
+			? level
+			: undefined;
 
 		return (
 			<FormPage
@@ -82,6 +87,9 @@ export const TimelineSessionProgramEditPage = observer(
 					<FormSectionCard>
 						<FormSection top={<PageTitleBar level={2} title="기본 정보" />}>
 							<VStack gap={4}>
+								<ContentLanguageNotice
+									contentLanguageCode={contentLanguageCode}
+								/>
 								<Input
 									label="프로그램 이름"
 									labelPlacement="outside"
@@ -131,25 +139,31 @@ export const TimelineSessionProgramEditPage = observer(
 									</Button>
 								</div>
 								<div className="rounded-lg bg-content2 p-3 text-sm text-default-600">
-									<p className="font-medium text-default-700">연결 요약</p>
-									<p className="mt-1">루틴: {routineName || "-"}</p>
-									<p>강사: {instructorName || "-"}</p>
+									<p className="font-medium text-default-700">
+										{t("연결 요약")}
+									</p>
+									<p className="mt-1">
+										{t("루틴")}: {routineName || "-"}
+									</p>
+									<p>
+										{t("강사")}: {instructorName || "-"}
+									</p>
 								</div>
 								<div className="rounded-lg border border-default-200 p-3">
 									<div className="flex items-center justify-between gap-3">
 										<p className="font-medium text-default-700">
-											실행 운동 preview
+											{t("실행 운동 preview")}
 										</p>
 										<Chip
 											color={hasUnschedulableRoutine ? "warning" : "success"}
 											size="sm"
 										>
-											{hasUnschedulableRoutine ? "저장 불가" : "저장 가능"}
+											{hasUnschedulableRoutine ? t("저장 불가") : t("저장 가능")}
 										</Chip>
 									</div>
 									{routinePreview.length === 0 ? (
 										<p className="mt-2 text-sm text-default-500">
-											선택한 루틴에 등록된 운동이 없습니다.
+											{t("선택한 루틴에 등록된 운동이 없습니다.")}
 										</p>
 									) : (
 										<div className="mt-3 flex flex-col gap-2">
@@ -169,12 +183,13 @@ export const TimelineSessionProgramEditPage = observer(
 															size="sm"
 															variant="flat"
 														>
-															{activity.isSchedulable ? "가능" : "불가"}
+															{activity.isSchedulable ? t("가능") : t("불가")}
 														</Chip>
 													</div>
 													<p className="mt-1 text-default-500 text-sm">
-														반복 {activity.repetitions}회 · 휴식{" "}
-														{activity.restTime}초
+														{t("반복")} {activity.repetitions}
+														{t("회")} · {t("휴식")} {activity.restTime}
+														{t("초")}
 													</p>
 													{activity.notes ? (
 														<p className="mt-1 text-default-500 text-xs">
@@ -187,8 +202,7 @@ export const TimelineSessionProgramEditPage = observer(
 									)}
 									{hasUnschedulableRoutine ? (
 										<p className="mt-3 text-sm text-warning">
-											영상이 없는 운동이 포함되어 있어 저장 버튼이
-											비활성화됩니다.
+											{t("영상이 없는 운동이 포함되어 있어 저장 버튼이 비활성화됩니다.")}
 										</p>
 									) : null}
 								</div>
@@ -206,16 +220,10 @@ export const TimelineSessionProgramEditPage = observer(
 								/>
 								<Select
 									label="난이도"
-									labelPlacement="outside"
-									selectedKeys={selectedLevelKeys}
-									onSelectionChange={(keys) => {
-										onChangeLevelSelect((Array.from(keys)[0] as string) ?? "");
-									}}
-								>
-									{LEVEL_OPTIONS.map((option) => (
-										<SelectItem key={option.value}>{option.label}</SelectItem>
-									))}
-								</Select>
+									value={selectedLevel}
+									onChange={onChangeLevelSelect}
+									options={LEVEL_OPTIONS}
+								/>
 								<div className="flex justify-end">
 									<Button
 										color="primary"

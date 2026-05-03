@@ -28,8 +28,8 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 }) {
 	const pathname = usePathname();
 	const router = useRouter();
-	const t = useT();
 	const persistStore = usePersistStore();
+	const t = useT();
 	const { can, isLoaded } = useAbility();
 	const shouldVerifyCurrentTenant =
 		persistStore.isHydrated && persistStore.isSpaceSelectionResolved;
@@ -91,16 +91,8 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 	}
 
 	const forbiddenDescription = isScopeAccessible
-		? t(
-				"{{pageLabel}} 화면을 열 수 있는 화면 접근 권한이 현재 선택한 Space 권한에 없습니다.",
-				undefined,
-				{ pageLabel: t(pageAccessItem.pageLabel) },
-			)
-		: t(
-				"{{pageLabel}} 화면은 현재 선택한 tenant role이 FULL_ACCESS일 때만 열 수 있습니다.",
-				undefined,
-				{ pageLabel: t(pageAccessItem.pageLabel) },
-			);
+		? `${t(pageAccessItem.pageLabel)} ${t("화면을 열 수 있는 화면 접근 권한이 현재 선택한 Space 권한에 없습니다.")}`
+		: `${t(pageAccessItem.pageLabel)} ${t("화면은 현재 선택한 tenant role이 FULL_ACCESS일 때만 열 수 있습니다.")}`;
 
 	return (
 		<DetailPage

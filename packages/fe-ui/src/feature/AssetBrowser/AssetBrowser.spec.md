@@ -24,12 +24,13 @@
 - 관리 화면과 picker 화면이 같은 폴더/업로드/삭제 흐름을 사용합니다.
 - folder query state는 route가 소유하고, feature는 `setQueryStates`로 선택/삭제 후 상태를 갱신합니다.
 - picker 모드에서는 선택 action이 추가되고 선택된 asset id를 강조합니다.
+- 검색/필터/빈 상태/폴더 modal/업로드 안내 문구는 런타임 i18n catalog key로 번역됩니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-05-01 | folder/asset empty state와 modal 문구가 런타임 i18n을 사용하도록 반영 | codex |
+| 2026-05-02 | 에셋 브라우저의 필터, 빈 상태, 폴더 modal, 업로드 안내 문구를 런타임 i18n 대상으로 확장 | codex |
 | 2026-04-28 | 에셋 row 계약을 자체 interface 대신 Orval AssetDto alias로 정리 | codex |
 | 2026-04-28 | grid 컴포넌트 명칭을 DataGrid로 통일하고 호출부를 새 계약에 맞춤 | codex |
 | 2026-04-25 | DataGrid state를 useLocalObservable 기반 DataGridStateModel class instance로 생성하도록 변경 | codex |

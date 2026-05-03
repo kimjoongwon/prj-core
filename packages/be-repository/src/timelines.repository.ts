@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "@cocrepo/prisma";
+import { LanguageCode, Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
@@ -25,6 +25,7 @@ export class TimelinesRepository {
 		skip: number;
 		take: number;
 		search?: string | null;
+		contentLanguageCode?: LanguageCode;
 	}) {
 		this.logger.debug(
 			`타임라인 목록 조회: spaceIds=${params.spaceIds?.length ?? "all"}개`,
@@ -32,6 +33,9 @@ export class TimelinesRepository {
 
 		const where: Prisma.TimelineWhereInput = {
 			...(params.spaceIds ? { spaceId: { in: params.spaceIds } } : {}),
+			...(params.contentLanguageCode
+				? { space: { contentLanguageCode: params.contentLanguageCode } }
+				: {}),
 			removedAt: null,
 			...(params.search
 				? { name: { contains: params.search, mode: "insensitive" } }

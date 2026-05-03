@@ -23,14 +23,16 @@
 // @materialized-by: Ground
 /// @displayName 공간
 model Space {
-  id             String               @id @default(uuid())
-  createdAt      DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime?            @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt      DateTime?            @map("removed_at") @db.Timestamptz(6)
-  ground         Ground?
-  associations   SpaceAssociation[]
-  classification SpaceClassification?
-  tenants        Tenant[]
+  id                  String               @id @default(uuid())
+  createdAt           DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime?            @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt           DateTime?            @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 콘텐츠 언어
+  contentLanguageCode LanguageCode         @default(ko_KR) @map("content_language_code")
+  ground              Ground?
+  associations        SpaceAssociation[]
+  classification      SpaceClassification?
+  tenants             Tenant[]
   tenantAccessRequests TenantAccessRequest[]
   // Space소속 리소스
   categories     Category[]
@@ -50,6 +52,7 @@ model Space {
   // Inquiry 도메인
   inquiries      Inquiry[]
 
+  @@index([contentLanguageCode])
   @@map("spaces")
 }
 

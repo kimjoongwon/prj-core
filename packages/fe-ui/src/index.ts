@@ -5,6 +5,7 @@ export * from "./detail";
 export * from "./feature";
 export * from "./i18n";
 export * from "./form";
+export * from "./i18n";
 export * from "./control";
 export * from "./layout";
 export * from "./collection";

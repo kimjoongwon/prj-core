@@ -126,6 +126,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-02 | Space 콘텐츠 언어 기준 리소스 작성 안내와 언어 선택/필터 계약 반영 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-04-08 | dev 서버에서 route 응답이 멈추는 문제를 피하기 위해 client-only(`ssr: false`) export 예외를 추가 | codex |
 | 2026-03-30 | timeline edit의 실행 로직을 route page로 이동하고 `@cocrepo/ui` page를 pure props contract로 분리 | codex |

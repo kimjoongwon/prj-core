@@ -156,7 +156,8 @@ const getSemanticTag = (
  * <Text variant="body1" as="span">인라인 텍스트</Text>
  * ```
  */
-export const Text = observer(function Text(props: TextProps) {
+export const Text = observer((props: TextProps) => {
+	const t = useT();
 	const {
 		children,
 		className,
@@ -166,7 +167,6 @@ export const Text = observer(function Text(props: TextProps) {
 		as = "p",
 		...rest
 	} = props as TextProps;
-	const t = useT();
 
 	const Tag = (as || getSemanticTag(variant)) as React.ElementType;
 

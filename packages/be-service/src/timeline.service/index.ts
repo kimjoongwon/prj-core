@@ -2,6 +2,7 @@ import { ROUTINE_ERRORS, TIMELINE_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
 import {
 	type RecurringDayOfWeek,
+	type LanguageCode,
 	type RepeatCycleTypes,
 	SessionTypes,
 } from "@cocrepo/prisma";
@@ -95,6 +96,7 @@ export class TimelineService {
 		skip: number;
 		take: number;
 		search?: string | null;
+		contentLanguageCode?: LanguageCode;
 	}) {
 		const spaceIds = this.getAccessibleSpaceIds();
 		this.logger.debug(

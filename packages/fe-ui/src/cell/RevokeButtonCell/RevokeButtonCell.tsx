@@ -1,6 +1,11 @@
-import { Button, Popover, PopoverContent, PopoverTrigger } from "@cocrepo/ui/heroui";
+"use client";
+
+import { Popover, PopoverContent, PopoverTrigger } from "@cocrepo/ui/heroui";
 import { Ban } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import { Button } from "../../control/Button/Button";
+import { useT } from "../../i18n";
 
 interface RevokeButtonCellProps {
 	/** 폐기 확인 후 호출되는 콜백 */
@@ -14,11 +19,12 @@ interface RevokeButtonCellProps {
 /**
  * 폐기 버튼 + 확인 팝오버를 표시하는 Cell 컴포넌트
  */
-export const RevokeButtonCell = ({
+export const RevokeButtonCell = observer(function RevokeButtonCell({
 	onRevoke,
 	isLoading = false,
 	confirmMessage = "이 세션/토큰을 폐기하시겠습니까?",
-}: RevokeButtonCellProps) => {
+}: RevokeButtonCellProps) {
+	const t = useT();
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleConfirm = () => {
@@ -41,7 +47,7 @@ export const RevokeButtonCell = ({
 			</PopoverTrigger>
 			<PopoverContent>
 				<div className="space-y-3 p-2">
-					<p className="text-sm">{confirmMessage}</p>
+					<p className="text-sm">{t(confirmMessage)}</p>
 					<div className="flex justify-end gap-2">
 						<Button size="sm" variant="flat" onPress={() => setIsOpen(false)}>
 							취소
@@ -59,4 +65,4 @@ export const RevokeButtonCell = ({
 			</PopoverContent>
 		</Popover>
 	);
-};
+});

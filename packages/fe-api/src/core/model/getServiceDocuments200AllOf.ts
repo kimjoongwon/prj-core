@@ -9,14 +9,14 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ServiceDocumentDto } from './serviceDocumentDto';
-import type { GetServiceDocuments200AllOfMeta } from './getServiceDocuments200AllOfMeta';
+import type { ServiceDocumentDto } from "./serviceDocumentDto";
+import type { GetServiceDocuments200AllOfMeta } from "./getServiceDocuments200AllOfMeta";
 
 export type GetServiceDocuments200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: ServiceDocumentDto[];
-  meta?: GetServiceDocuments200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: ServiceDocumentDto[];
+	meta?: GetServiceDocuments200AllOfMeta;
 };

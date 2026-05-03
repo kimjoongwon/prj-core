@@ -44,6 +44,7 @@ export class RoutineFacade {
 			skip,
 			take,
 			search: query.search,
+			contentLanguageCode: query.contentLanguageCode,
 		});
 
 		return {

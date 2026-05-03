@@ -5,6 +5,7 @@ import type {
 } from "@cocrepo/dto";
 import { SpaceScope as SpaceScopeEnum } from "@cocrepo/dto";
 import { Exercise, Routine, Task } from "@cocrepo/entity";
+import type { LanguageCode } from "@cocrepo/prisma";
 import { TaskService } from "@cocrepo/service";
 import { Injectable, Logger } from "@nestjs/common";
 
@@ -20,6 +21,7 @@ export class TaskFacade {
 		skip?: number;
 		take?: number;
 		search?: string;
+		contentLanguageCode?: LanguageCode;
 	}): Promise<{
 		data: Task[];
 		meta: {
@@ -38,6 +40,7 @@ export class TaskFacade {
 		skip?: number;
 		take?: number;
 		search?: string;
+		contentLanguageCode?: LanguageCode;
 	}): Promise<{
 		data: Task[];
 		meta: {

@@ -13,4 +13,4 @@
 /**
  * 번역 key-value catalog
  */
-export type TranslationCatalogResponseDtoMessages = {[key: string]: string};
+export type TranslationCatalogResponseDtoMessages = { [key: string]: string };

@@ -197,6 +197,7 @@ export interface UseSpaceGuardReturn {
  */
 export interface SpaceBootstrapSpaceLike {
 	id?: string | null;
+	contentLanguageCode?: string | null;
 	ground?: {
 		name?: string | null;
 	} | null;
@@ -208,6 +209,7 @@ export interface SpaceBootstrapSpaceLike {
 export interface SpaceBootstrapSelection {
 	spaceId: string;
 	groundName: string;
+	contentLanguageCode?: string | null;
 }
 
 /**
@@ -216,7 +218,11 @@ export interface SpaceBootstrapSelection {
 export interface SpaceBootstrapStoreLike {
 	isSpaceSelectionResolved?: boolean;
 	setSpaces: (spaces: SpaceBootstrapSelection[]) => void;
-	setSpace: (spaceId: string, groundName: string) => void;
+	setSpace: (
+		spaceId: string,
+		groundName: string,
+		contentLanguageCode?: string | null,
+	) => void;
 	clearSpace: () => void;
 	setSpaceSelectionResolved: (resolved: boolean) => void;
 }

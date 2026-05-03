@@ -74,7 +74,7 @@ export const ForgotPasswordForm = observer(
 								className="w-full mb-3"
 								isLoading={state.isSubmitting}
 							>
-								다시 보내기
+								{t("다시 보내기")}
 							</Button>
 						</div>
 					</form>
@@ -82,7 +82,7 @@ export const ForgotPasswordForm = observer(
 					/* 이메일 입력 폼 */
 					<>
 						{state.errorMessage && (
-							<AlertBanner type="danger" message={state.errorMessage} />
+							<AlertBanner type="danger" message={t(state.errorMessage)} />
 						)}
 
 						<form className="space-y-5">
@@ -105,7 +105,7 @@ export const ForgotPasswordForm = observer(
 								isLoading={state.isSubmitting}
 								isDisabled={!state.email}
 							>
-								재설정 링크 보내기
+								{t("재설정 링크 보내기")}
 							</Button>
 						</form>
 					</>
@@ -117,7 +117,7 @@ export const ForgotPasswordForm = observer(
 						href={loginHref}
 						className="text-default-400 hover:text-default-500 text-sm"
 					>
-						로그인으로 돌아가기
+						{t("로그인으로 돌아가기")}
 					</Link>
 				</div>
 			</AuthCard>

@@ -1,4 +1,8 @@
+"use client";
+
 import { Chip } from "@cocrepo/ui/heroui";
+import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 interface TemplateTypeChipCellProps {
 	/** 템플릿 유형 */
@@ -17,7 +21,11 @@ const TYPE_CONFIG: Record<
 /**
  * 메시지 템플릿 유형을 컬러 코딩된 Chip으로 표시하는 Cell 컴포넌트
  */
-export const TemplateTypeChipCell = ({ type }: TemplateTypeChipCellProps) => {
+export const TemplateTypeChipCell = observer(function TemplateTypeChipCell({
+	type,
+}: TemplateTypeChipCellProps) {
+	const t = useT();
+
 	if (!type) return <span className="text-default-400">-</span>;
 
 	const config = TYPE_CONFIG[type] ?? {
@@ -28,8 +36,8 @@ export const TemplateTypeChipCell = ({ type }: TemplateTypeChipCellProps) => {
 	return (
 		<div className="flex w-full justify-center">
 			<Chip size="sm" color={config.color} variant="flat">
-				{config.label}
+				{t(config.label)}
 			</Chip>
 		</div>
 	);
-};
+});

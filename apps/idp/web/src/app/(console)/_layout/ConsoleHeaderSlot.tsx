@@ -5,10 +5,9 @@ import {
 	useSetCurrentSpace,
 	useVerifyToken,
 } from "@cocrepo/api/idp/auth";
-import type { LanguageCode } from "@cocrepo/constant";
 import {
-	useConsoleLocaleStore,
 	useConsoleNavigationStore,
+	useConsoleAppStore,
 	useConsolePersistStore,
 } from "@cocrepo/store";
 import {
@@ -25,11 +24,17 @@ import {
 	IdpConsoleIcon,
 } from "@/components/console/IdpConsoleIcon";
 
+const userInfo = {
+	name: "IDP 관리자",
+	role: "SPACE_SCOPED",
+};
+
 export const ConsoleHeaderSlot = observer(function ConsoleHeaderSlot() {
+	const t = useT();
+	const appStore = useConsoleAppStore();
 	const navigationStore = useConsoleNavigationStore();
 	const persistStore = useConsolePersistStore();
-	const localeStore = useConsoleLocaleStore();
-	const t = useT();
+	const localeStore = appStore.localeStore;
 	const shouldVerifyCurrentTenant =
 		persistStore.isHydrated && persistStore.isSpaceSelectionResolved;
 	const { data: verifyTokenResponse } = useVerifyToken({
@@ -52,7 +57,15 @@ export const ConsoleHeaderSlot = observer(function ConsoleHeaderSlot() {
 							(space) => space.spaceId === variables.spaceId,
 						)?.groundName ??
 						"";
-					persistStore.setSpace(variables.spaceId, nextGroundName);
+					const nextContentLanguageCode =
+						persistStore.spaces.find(
+							(space) => space.spaceId === variables.spaceId,
+						)?.contentLanguageCode ?? null;
+					persistStore.setSpace(
+						variables.spaceId,
+						nextGroundName,
+						nextContentLanguageCode,
+					);
 					window.location.reload();
 				},
 			},
@@ -78,10 +91,6 @@ export const ConsoleHeaderSlot = observer(function ConsoleHeaderSlot() {
 		setCurrentSpaceMutate({ spaceId: space.spaceId });
 	};
 
-	const onChangeLanguage = (languageCode: LanguageCode) => {
-		localeStore.setLanguageCode(languageCode);
-	};
-
 	const selectedNavItem = navigationStore.selectedNavItem;
 	const selectedSubNavItem = navigationStore.selectedSubNavItem;
 	const currentSectionLabel =
@@ -92,7 +101,7 @@ export const ConsoleHeaderSlot = observer(function ConsoleHeaderSlot() {
 	return (
 		<HeaderBar
 			userInfo={{
-				name: t("IDP 관리자"),
+				...userInfo,
 				role: hasFullAccessInCurrentTenant ? "FULL_ACCESS" : "SPACE_SCOPED",
 			}}
 			onLogout={onClickLogoutButton}
@@ -117,11 +126,16 @@ export const ConsoleHeaderSlot = observer(function ConsoleHeaderSlot() {
 			}
 			actions={
 				<>
-					<LanguageSelectButton
-						value={localeStore.languageCode}
-						onChange={onChangeLanguage}
-						compact
-					/>
+					{localeStore && (
+						<LanguageSelectButton
+							value={localeStore.languageCode}
+							onChange={(languageCode) => {
+								localeStore.setLanguageCode(languageCode);
+							}}
+							compact
+							className="h-10 w-10 rounded-2xl border border-slate-200/70 bg-white/72 text-slate-700 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10"
+						/>
+					)}
 					<ThemeToggleButton
 						compact
 						className="h-10 w-10 rounded-2xl border border-slate-200/70 bg-white/72 text-slate-700 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10"

@@ -11,6 +11,7 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
+import type { LanguageCode } from "./languageCode";
 import type { SpaceClassificationDto } from "./spaceClassificationDto";
 import type { SpaceAssociationDto } from "./spaceAssociationDto";
 import type { GroundDto } from "./groundDto";
@@ -21,6 +22,8 @@ export interface SpaceDto {
 	updatedAt: string;
 	/** @nullable */
 	removedAt: string | null;
+	/** 이 Space에서 작성되는 운영 리소스의 콘텐츠 언어 */
+	contentLanguageCode: LanguageCode;
 	spaceClassification?: SpaceClassificationDto;
 	spaceAssociations?: SpaceAssociationDto[];
 	ground?: GroundDto;

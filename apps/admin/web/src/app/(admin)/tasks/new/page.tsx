@@ -1,15 +1,18 @@
 "use client";
 
 import { useCreateTask } from "@cocrepo/api/core/tasks";
-import { TaskCreatePage } from "@cocrepo/ui";
+import { TaskCreatePage, useT } from "@cocrepo/ui";
 import { addToast } from "@cocrepo/ui/heroui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 import { useTaskExerciseAssetBrowser } from "../hooks/useTaskExerciseAssetBrowser";
 
 const AdminTasksNewRoute = observer(() => {
+	const t = useT();
 	const router = useRouter();
+	const persistStore = usePersistStore();
 	const state = useLocalObservable(() => ({
 		name: "",
 		durationMin: 0,
@@ -46,8 +49,8 @@ const AdminTasksNewRoute = observer(() => {
 		mutation: {
 			onSuccess: (response) => {
 				addToast({
-					title: "태스크 등록 성공",
-					description: "태스크와 운동 detail이 성공적으로 등록되었습니다.",
+					title: t("태스크 등록 성공"),
+					description: t("태스크와 운동 detail이 성공적으로 등록되었습니다."),
 					color: "success",
 				});
 				const taskId = response?.data?.id;
@@ -57,8 +60,8 @@ const AdminTasksNewRoute = observer(() => {
 			},
 			onError: (error) => {
 				addToast({
-					title: "태스크 등록 실패",
-					description: error.message || "태스크 등록 중 오류가 발생했습니다.",
+					title: t("태스크 등록 실패"),
+					description: error.message || t("태스크 등록 중 오류가 발생했습니다."),
 					color: "danger",
 				});
 			},
@@ -141,6 +144,7 @@ const AdminTasksNewRoute = observer(() => {
 			durationSec={state.durationSec}
 			count={state.count}
 			description={state.description}
+			contentLanguageCode={persistStore.contentLanguageCode}
 			selectedImageAsset={selectedImageAsset}
 			selectedVideoAsset={selectedVideoAsset}
 			assetBrowserProps={assetBrowser}

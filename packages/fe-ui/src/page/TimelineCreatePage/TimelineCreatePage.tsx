@@ -3,17 +3,21 @@
 import {
 	FormPage,
 	FormPageSurface,
+	ContentLanguageNotice,
 	PageTitleBar,
 	FormSection,
 	FormSectionCard,
 	VStack,
+	Button,
+	Input,
+	Textarea,
 } from "@cocrepo/ui";
-import { Button, Input, Textarea } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 
 export interface TimelineCreatePageProps {
 	name: string;
 	description: string;
+	contentLanguageCode?: string | null;
 	nameError?: string;
 	descriptionError?: string;
 	isSubmitPending: boolean;
@@ -28,6 +32,7 @@ export const TimelineCreatePage = observer(
 	({
 		name,
 		description,
+		contentLanguageCode,
 		nameError,
 		descriptionError,
 		isSubmitPending,
@@ -55,6 +60,9 @@ export const TimelineCreatePage = observer(
 					<FormSectionCard>
 						<FormSection>
 							<VStack gap={4}>
+								<ContentLanguageNotice
+									contentLanguageCode={contentLanguageCode}
+								/>
 								<Input
 									label="타임라인명"
 									labelPlacement="outside"

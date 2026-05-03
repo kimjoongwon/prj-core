@@ -15,26 +15,24 @@ import {
 	PageTitleBar,
 	Surface,
 	VStack,
-} from "@cocrepo/ui";
-import {
 	Button,
 	Input,
+	Select,
+	Textarea,
+	useT,
+} from "@cocrepo/ui";
+import {
 	Modal,
 	ModalBody,
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	Select,
-	SelectItem,
-	type Selection,
 	Switch,
-	Textarea,
 	useDisclosure,
 } from "@cocrepo/ui/heroui";
 import { Languages, Plus, RefreshCcw } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type FormEvent, useEffect, useState } from "react";
-import { useT } from "../../i18n";
 import { ConfirmModal } from "../../widget/common/ConfirmModal";
 
 export type StaticTranslationLanguageCode =
@@ -87,9 +85,9 @@ const STATIC_TRANSLATION_LANGUAGE_OPTIONS: Array<{
 	label: string;
 }> = [
 	{ value: "ko_KR", label: "한국어" },
-	{ value: "en_US", label: "영어" },
-	{ value: "zh_CN", label: "중국어" },
-	{ value: "ja_JP", label: "일본어" },
+	{ value: "en_US", label: "English" },
+	{ value: "zh_CN", label: "中文" },
+	{ value: "ja_JP", label: "日本語" },
 ];
 
 const STATIC_TRANSLATION_STATUS_OPTIONS = [
@@ -150,14 +148,6 @@ function createFormFromTranslation(
 		category: translation.category,
 		isTranslated: translation.isTranslated,
 	};
-}
-
-function getSelectedKey(selection: Selection): string {
-	if (selection === "all") {
-		return "";
-	}
-
-	return Array.from(selection)[0]?.toString() ?? "";
 }
 
 function toStaticTranslationLanguageCode(
@@ -247,10 +237,8 @@ export const StaticTranslationListPage = observer(
 			setTranslationToDelete(null);
 		}
 
-		function handleLanguageSelectionChange(selection: Selection) {
-			const selected = toStaticTranslationLanguageCode(
-				getSelectedKey(selection),
-			);
+		function handleLanguageChange(value: string) {
+			const selected = toStaticTranslationLanguageCode(value);
 			if (!selected) {
 				return;
 			}
@@ -328,7 +316,7 @@ export const StaticTranslationListPage = observer(
 								isLoading={isMutating}
 								onPress={onInvalidateAllTranslationCache}
 							>
-								{t("전체 캐시 갱신")}
+								전체 캐시 갱신
 							</Button>
 							<Button
 								variant="flat"
@@ -337,14 +325,14 @@ export const StaticTranslationListPage = observer(
 								isLoading={isMutating}
 								onPress={handleInvalidateLanguageCache}
 							>
-								{t("언어 캐시 갱신")}
+								언어 캐시 갱신
 							</Button>
 							<Button
 								color="primary"
 								startContent={<Plus className="h-4 w-4" />}
 								onPress={handleOpenCreateModal}
 							>
-								{t("번역 등록")}
+								번역 등록
 							</Button>
 						</HStack>
 					}
@@ -372,35 +360,30 @@ export const StaticTranslationListPage = observer(
 					<ModalContent>
 						<form onSubmit={handleSubmitForm}>
 							<ModalHeader className="flex flex-col gap-1">
-								{isEditMode ? t("번역 수정") : t("번역 등록")}
+								{t(isEditMode ? "번역 수정" : "번역 등록")}
 							</ModalHeader>
 							<ModalBody>
 								<VStack gap="block">
 									<Select
-										label={t("언어")}
-										selectedKeys={[form.languageCode]}
+										label="언어"
+										value={form.languageCode}
 										isDisabled={isEditMode}
-										onSelectionChange={handleLanguageSelectionChange}
-									>
-										{STATIC_TRANSLATION_LANGUAGE_OPTIONS.map((option) => (
-											<SelectItem key={option.value}>
-												{t(option.label)}
-											</SelectItem>
-										))}
-									</Select>
+										onChange={handleLanguageChange}
+										options={STATIC_TRANSLATION_LANGUAGE_OPTIONS}
+									/>
 									<Input
-										label={t("번역 키")}
+										label="번역 키"
 										value={form.key}
 										isDisabled={isEditMode}
 										onValueChange={handleKeyChange}
 									/>
 									<Input
-										label={t("카테고리")}
+										label="카테고리"
 										value={form.category}
 										onValueChange={handleCategoryChange}
 									/>
 									<Textarea
-										label={t("번역문")}
+										label="번역문"
 										value={form.text}
 										minRows={4}
 										onValueChange={handleTextChange}
@@ -415,7 +398,7 @@ export const StaticTranslationListPage = observer(
 							</ModalBody>
 							<ModalFooter>
 								<Button variant="light" onPress={handleCloseFormModal}>
-									{t("취소")}
+									취소
 								</Button>
 								<Button
 									color="primary"
@@ -423,7 +406,7 @@ export const StaticTranslationListPage = observer(
 									isDisabled={isFormInvalid}
 									isLoading={isMutating}
 								>
-									{isEditMode ? t("수정") : t("등록")}
+									{isEditMode ? "수정" : "등록"}
 								</Button>
 							</ModalFooter>
 						</form>

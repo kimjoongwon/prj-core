@@ -1,8 +1,8 @@
 "use client";
 
-import { Button, type ButtonProps } from "@cocrepo/ui/heroui";
+import type { ButtonProps } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
-import { translateNode, useT } from "../../i18n";
+import { Button } from "../../control/Button/Button";
 
 export interface ActionButtonCellProps extends ButtonProps {
 	/** 버튼 정렬 */
@@ -27,20 +27,10 @@ export const ActionButtonCell = observer(function ActionButtonCell({
 	children,
 	...buttonProps
 }: ActionButtonCellProps) {
-	const t = useT();
-	const ariaLabel =
-		typeof buttonProps["aria-label"] === "string"
-			? t(buttonProps["aria-label"])
-			: buttonProps["aria-label"];
-	const title =
-		typeof buttonProps.title === "string"
-			? t(buttonProps.title)
-			: buttonProps.title;
-
 	return (
 		<div className={`flex w-full ${ALIGN_CLASS_NAME[align]}`}>
-			<Button size={size} {...buttonProps} aria-label={ariaLabel} title={title}>
-				{translateNode(children, t)}
+			<Button size={size} {...buttonProps}>
+				{children}
 			</Button>
 		</div>
 	);

@@ -2,7 +2,7 @@
 
 import { Spinner } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState, type ComponentType, type CSSProperties } from "react";
 import type { Editor, EditorConfig, EventInfo } from "ckeditor5";
 
 type CkeditorReactModule = typeof import("@ckeditor/ckeditor5-react");
@@ -10,7 +10,7 @@ type Ckeditor5Module = typeof import("ckeditor5");
 type CkeditorKoTranslationModule = typeof import("ckeditor5/translations/ko.js");
 
 interface CkeditorModules {
-	CKEditor: CkeditorReactModule["CKEditor"];
+	CKEditor: ComponentType<Record<string, unknown>>;
 	ClassicEditor: Ckeditor5Module["ClassicEditor"];
 	plugins: NonNullable<EditorConfig["plugins"]>;
 	koTranslation: CkeditorKoTranslationModule["default"];
@@ -77,7 +77,9 @@ export const HtmlEditor = observer(
 					if (!isActive) return;
 
 					setEditorModules({
-						CKEditor: reactModule.CKEditor,
+						CKEditor: reactModule.CKEditor as unknown as ComponentType<
+							Record<string, unknown>
+						>,
 						ClassicEditor: ckeditorModule.ClassicEditor,
 						plugins: [
 							ckeditorModule.Essentials,

@@ -8,6 +8,7 @@ import type {
 } from "@cocrepo/type";
 import {
 	buildSpaceTableColumns,
+	CONTENT_LANGUAGE_OPTIONS,
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
@@ -24,6 +25,19 @@ const leftInputs: InputConfig[] = [
 		id: "search",
 		placeholder: "시설명, 사업자등록번호로 검색...",
 	},
+	{
+		type: "select",
+		id: "contentLanguageCode",
+		label: "콘텐츠 언어",
+		placeholder: "콘텐츠 언어",
+		props: {
+			options: CONTENT_LANGUAGE_OPTIONS.map((language) => ({
+				label: language.label,
+				value: language.code,
+			})),
+			isClearable: true,
+		},
+	},
 ];
 
 export const adminSpacesPageQueryInputs = [...leftInputs];
@@ -32,6 +46,7 @@ export interface SpaceListPageQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	search: string;
+	contentLanguageCode: string;
 }
 export type SpaceListPageSetQueryStates = DataGridSetQueryStates;
 
@@ -45,16 +60,20 @@ export interface SpaceListPageProps {
 	onClickSpaceGroundName: (spaceId: string) => void;
 }
 
-function filterRows(rows: SpaceDto[], search?: string) {
+function filterRows(
+	rows: SpaceDto[],
+	search?: string,
+	contentLanguageCode?: string,
+) {
 	const searchKeyword = search?.trim().toLowerCase() ?? "";
-	if (searchKeyword.length === 0) {
-		return rows;
-	}
-
-	return rows.filter((row) =>
-		[row.ground?.name, row.ground?.businessNo, row.ground?.address]
-			.filter(Boolean)
-			.some((value) => value!.toLowerCase().includes(searchKeyword)),
+	return rows.filter(
+		(row) =>
+			(!contentLanguageCode ||
+				row.contentLanguageCode === contentLanguageCode) &&
+			(searchKeyword.length === 0 ||
+				[row.ground?.name, row.ground?.businessNo, row.ground?.address]
+					.filter(Boolean)
+					.some((value) => value!.toLowerCase().includes(searchKeyword))),
 	);
 }
 
@@ -90,7 +109,11 @@ export const SpaceListPage = observer(
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const spaceRows = spaces ?? [];
-		const filteredRows = filterRows(spaceRows, queryStates.search);
+		const filteredRows = filterRows(
+			spaceRows,
+			queryStates.search,
+			queryStates.contentLanguageCode,
+		);
 		const totalCount = queryStates.search?.trim().length
 			? filteredRows.length
 			: totalSpaceCount;

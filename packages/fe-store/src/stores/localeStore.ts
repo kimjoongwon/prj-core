@@ -1,12 +1,24 @@
 import {
 	DEFAULT_LANGUAGE,
-	type LanguageCode,
+	LanguageCode,
 	supportedLanguages,
 } from "@cocrepo/constant";
 import { makeAutoObservable, reaction } from "mobx";
 
 export interface LocaleStoreConfig {
 	storageKey: string;
+}
+
+interface PersistedLocale {
+	languageCode?: LanguageCode | null;
+}
+
+function toLanguageCode(value?: string | null): LanguageCode {
+	if (supportedLanguages.includes(value as LanguageCode)) {
+		return value as LanguageCode;
+	}
+
+	return DEFAULT_LANGUAGE;
 }
 
 export class LocaleStore {
@@ -22,61 +34,39 @@ export class LocaleStore {
 	}
 
 	hydrateFromStorage(): void {
-		if (this.isHydrated || typeof window === "undefined") return;
+		if (this.isHydrated || typeof window === "undefined") {
+			return;
+		}
 
 		const stored = localStorage.getItem(this.config.storageKey);
-		const storedLanguageCode = this.parseStoredLanguageCode(stored);
-		if (storedLanguageCode) {
-			this.languageCode = storedLanguageCode;
+		if (stored) {
+			try {
+				const data = JSON.parse(stored) as PersistedLocale;
+				this.languageCode = toLanguageCode(data.languageCode);
+			} catch {
+				this.languageCode = DEFAULT_LANGUAGE;
+			}
 		}
 
 		this.isHydrated = true;
 	}
 
-	setLanguageCode(languageCode: LanguageCode): void {
-		this.languageCode = languageCode;
-	}
-
-	get htmlLang(): string {
-		return this.languageCode.replace("_", "-");
+	setLanguageCode(languageCode: string): void {
+		this.languageCode = toLanguageCode(languageCode);
 	}
 
 	private setupAutoSave(): void {
-		if (typeof window === "undefined") return;
+		if (typeof window === "undefined") {
+			return;
+		}
 
 		reaction(
-			() => this.languageCode,
-			(languageCode) => {
-				localStorage.setItem(this.config.storageKey, languageCode);
+			() => ({
+				languageCode: this.languageCode,
+			}),
+			(data) => {
+				localStorage.setItem(this.config.storageKey, JSON.stringify(data));
 			},
 		);
 	}
-
-	private parseStoredLanguageCode(stored: string | null): LanguageCode | null {
-		if (!stored) {
-			return null;
-		}
-
-		if (isSupportedLanguageCode(stored)) {
-			return stored;
-		}
-
-		try {
-			const data = JSON.parse(stored) as { languageCode?: unknown };
-			if (isSupportedLanguageCode(data.languageCode)) {
-				return data.languageCode;
-			}
-		} catch {
-			return null;
-		}
-
-		return null;
-	}
-}
-
-function isSupportedLanguageCode(value: unknown): value is LanguageCode {
-	return (
-		typeof value === "string" &&
-		supportedLanguages.includes(value as LanguageCode)
-	);
 }

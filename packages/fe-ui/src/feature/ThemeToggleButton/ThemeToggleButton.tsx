@@ -16,8 +16,8 @@ export const ThemeToggleButton = observer(function ThemeToggleButton({
 	className,
 	compact = false,
 }: ThemeToggleButtonProps) {
-	const { resolvedTheme, toggleTheme } = useDesignSystemTheme();
 	const t = useT();
+	const { resolvedTheme, toggleTheme } = useDesignSystemTheme();
 	const [isMounted, setIsMounted] = useState(false);
 
 	useEffect(() => {
@@ -32,9 +32,7 @@ export const ThemeToggleButton = observer(function ThemeToggleButton({
 		: t("테마 전환");
 	const Icon = isDark ? Sun : Moon;
 	const ariaLabel = isMounted
-		? isDark
-			? t("라이트 모드로 전환")
-			: t("다크 모드로 전환")
+		? t("{{theme}}로 전환").replace("{{theme}}", nextThemeLabel)
 		: t("테마 전환");
 
 	if (compact) {

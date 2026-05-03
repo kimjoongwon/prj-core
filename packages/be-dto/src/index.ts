@@ -19,6 +19,7 @@ export * from "./folder";
 export * from "./ground.dto";
 export * from "./group.dto";
 export * from "./idp";
+export * from "./i18n";
 export * from "./inquiries";
 export * from "./oidc";
 export * from "./password-history.dto";

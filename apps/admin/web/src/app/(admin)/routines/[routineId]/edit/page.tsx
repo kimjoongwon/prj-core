@@ -24,6 +24,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 
 const toPositiveNumberOr = (value: string, defaultValue: number) => {
 	const parsed = Number(value);
@@ -44,6 +45,7 @@ const toNonNegativeNumberOr = (value: string, defaultValue: number) => {
 const AdminRoutinesEditRoute = observer(() => {
 	const { routineId } = useParams<{ routineId: string }>();
 	const router = useRouter();
+	const persistStore = usePersistStore();
 	const queryClient = useQueryClient();
 	const [isEmptyActivitiesWarningOpen, setIsEmptyActivitiesWarningOpen] =
 		useState(false);
@@ -191,6 +193,7 @@ const AdminRoutinesEditRoute = observer(() => {
 			routineName={routine?.name}
 			name={state.name}
 			label={state.label}
+			contentLanguageCode={persistStore.contentLanguageCode}
 			exerciseQuery={state.exerciseQuery}
 			activities={activities}
 			candidateTasks={candidateTasks}

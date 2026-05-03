@@ -44,7 +44,6 @@ export const HeaderBar = observer(function HeaderBar({
 	renderUserMenu,
 }: HeaderBarProps) {
 	const t = useT();
-
 	const handleLogout = () => {
 		onLogout?.();
 	};

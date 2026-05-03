@@ -18,6 +18,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 
 type SessionEditPageParams = {
 	timelineId: string;
@@ -27,6 +28,7 @@ type SessionEditPageParams = {
 const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 	const { timelineId, sessionId } = useParams<SessionEditPageParams>();
 	const router = useRouter();
+	const persistStore = usePersistStore();
 	const queryClient = useQueryClient();
 	const state = useLocalObservable(() => ({
 		name: "",
@@ -205,6 +207,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 	return (
 		<TimelineSessionEditPage
 			descriptionText={session?.name}
+			contentLanguageCode={persistStore.contentLanguageCode}
 			name={state.name}
 			type={state.type}
 			description={state.description}

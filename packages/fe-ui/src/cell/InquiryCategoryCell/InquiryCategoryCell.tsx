@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	AlertCircle,
 	CreditCard,
@@ -9,6 +11,8 @@ import {
 	User,
 	Wrench,
 } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 /** 문의 카테고리값 (Prisma Enum 값과 동일) */
 export type InquiryCategoryCode =
@@ -55,7 +59,11 @@ const CATEGORY_CONFIG: Record<
  * <InquiryCategoryCell value="PAYMENT" />
  * ```
  */
-export const InquiryCategoryCell = ({ value }: InquiryCategoryCellProps) => {
+export const InquiryCategoryCell = observer(function InquiryCategoryCell({
+	value,
+}: InquiryCategoryCellProps) {
+	const t = useT();
+
 	if (!value) {
 		return <span className="text-default-400">-</span>;
 	}
@@ -65,7 +73,7 @@ export const InquiryCategoryCell = ({ value }: InquiryCategoryCellProps) => {
 	return (
 		<div className="flex w-full items-center justify-center gap-1.5">
 			<span className="text-default-500">{config.icon}</span>
-			<span className="text-sm">{config.label}</span>
+			<span className="text-sm">{t(config.label)}</span>
 		</div>
 	);
-};
+});

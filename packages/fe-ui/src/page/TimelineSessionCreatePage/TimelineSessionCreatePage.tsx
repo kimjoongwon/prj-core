@@ -3,12 +3,17 @@
 import {
 	FormPage,
 	FormPageSurface,
+	ContentLanguageNotice,
 	PageTitleBar,
 	FormSection,
 	FormSectionCard,
 	VStack,
+	Button,
+	Input,
+	Select,
+	Textarea,
+	useT,
 } from "@cocrepo/ui";
-import { Button, Input, Select, SelectItem, Textarea } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 
 export type TimelineSessionPageSessionType =
@@ -60,6 +65,7 @@ const CYCLE_TYPE_OPTIONS = [
 
 export interface TimelineSessionCreatePageProps {
 	descriptionText?: string;
+	contentLanguageCode?: string | null;
 	name: string;
 	type: TimelineSessionPageSessionType;
 	description: string;
@@ -84,6 +90,7 @@ export interface TimelineSessionCreatePageProps {
 export const TimelineSessionCreatePage = observer(
 	({
 		descriptionText,
+		contentLanguageCode,
 		name,
 		type,
 		description,
@@ -104,6 +111,8 @@ export const TimelineSessionCreatePage = observer(
 		onClickCancelButton,
 		onClickSubmitButton,
 	}: TimelineSessionCreatePageProps) => {
+		const t = useT();
+
 		return (
 			<FormPage
 				top={
@@ -123,6 +132,9 @@ export const TimelineSessionCreatePage = observer(
 						<FormSectionCard>
 							<FormSection top={<PageTitleBar level={2} title="기본 정보" />}>
 								<VStack gap={4}>
+									<ContentLanguageNotice
+										contentLanguageCode={contentLanguageCode}
+									/>
 									<Input
 										label="세션명"
 										labelPlacement="outside"
@@ -135,20 +147,13 @@ export const TimelineSessionCreatePage = observer(
 									/>
 									<Select
 										label="세션 유형"
-										labelPlacement="outside"
-										selectedKeys={[type]}
-										onSelectionChange={(keys) => {
-											const value = Array.from(keys)[0] as string;
-											if (value) onChangeTypeSelect(value);
-										}}
+										value={type}
+										onChange={onChangeTypeSelect}
+										options={SESSION_TYPE_OPTIONS}
 										isRequired
-									>
-										{SESSION_TYPE_OPTIONS.map((option) => (
-											<SelectItem key={option.value}>{option.label}</SelectItem>
-										))}
-									</Select>
+									/>
 									<p className="text-sm text-default-500">
-										{SESSION_TYPE_DESCRIPTIONS[type]}
+										{t(SESSION_TYPE_DESCRIPTIONS[type])}
 									</p>
 									<Textarea
 										label="설명"
@@ -206,46 +211,24 @@ export const TimelineSessionCreatePage = observer(
 											<div className="flex gap-4">
 												<Select
 													label="반복 요일"
-													labelPlacement="outside"
-													selectedKeys={
-														recurringDayOfWeek ? [recurringDayOfWeek] : []
-													}
-													onSelectionChange={(keys) => {
-														const value = Array.from(keys)[0] as string;
-														if (value) onChangeDayOfWeekSelect(value);
-													}}
+													value={recurringDayOfWeek ?? undefined}
+													onChange={onChangeDayOfWeekSelect}
+													options={DAY_OF_WEEK_OPTIONS}
 													isRequired
 													isInvalid={!!errors.recurringDayOfWeek}
 													errorMessage={errors.recurringDayOfWeek}
 													className="flex-1"
-												>
-													{DAY_OF_WEEK_OPTIONS.map((option) => (
-														<SelectItem key={option.value}>
-															{option.label}
-														</SelectItem>
-													))}
-												</Select>
+												/>
 												<Select
 													label="반복 주기"
-													labelPlacement="outside"
-													selectedKeys={
-														repeatCycleType ? [repeatCycleType] : []
-													}
-													onSelectionChange={(keys) => {
-														const value = Array.from(keys)[0] as string;
-														if (value) onChangeCycleTypeSelect(value);
-													}}
+													value={repeatCycleType || undefined}
+													onChange={onChangeCycleTypeSelect}
+													options={CYCLE_TYPE_OPTIONS}
 													isRequired
 													isInvalid={!!errors.repeatCycleType}
 													errorMessage={errors.repeatCycleType}
 													className="flex-1"
-												>
-													{CYCLE_TYPE_OPTIONS.map((option) => (
-														<SelectItem key={option.value}>
-															{option.label}
-														</SelectItem>
-													))}
-												</Select>
+												/>
 											</div>
 											<Input
 												label="시작 일시 (선택)"

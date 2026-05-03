@@ -6,15 +6,17 @@ import type {
 } from "../RoutineCreatePage/RoutineCreatePage";
 import { RoutineActivitySection } from "../RoutineCreatePage/RoutineCreatePage";
 import {
+	ContentLanguageNotice,
 	FormPage,
 	FormPageSurface,
 	FormSection,
 	FormSectionCard,
 	PageTitleBar,
-} from "@cocrepo/ui";
-import {
 	Button,
 	Input,
+	useT,
+} from "@cocrepo/ui";
+import {
 	Modal,
 	ModalBody,
 	ModalContent,
@@ -28,6 +30,7 @@ export interface RoutineEditPageProps {
 	routineName?: string;
 	name: string;
 	label: string;
+	contentLanguageCode?: string | null;
 	exerciseQuery: string;
 	activities: RoutineActivityFormItem[];
 	candidateTasks: RoutineTaskCandidate[];
@@ -61,6 +64,7 @@ export const RoutineEditPage = observer(
 		routineName,
 		name,
 		label,
+		contentLanguageCode,
 		exerciseQuery,
 		activities,
 		candidateTasks,
@@ -84,6 +88,8 @@ export const RoutineEditPage = observer(
 		onCloseEmptyActivitiesWarningModal,
 		onClickConfirmEmptyActivitiesWarningButton,
 	}: RoutineEditPageProps) => {
+		const t = useT();
+
 		if (isLoading) {
 			return (
 				<FormPage
@@ -93,7 +99,7 @@ export const RoutineEditPage = observer(
 						<FormSectionCard>
 							<div className="flex items-center justify-center gap-2 p-8">
 								<Spinner size="sm" />
-								<span className="text-default-500">로딩 중...</span>
+								<span className="text-default-500">{t("로딩 중...")}</span>
 							</div>
 						</FormSectionCard>
 					</FormPageSurface>
@@ -114,7 +120,9 @@ export const RoutineEditPage = observer(
 					<FormPageSurface>
 						<FormSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">루틴을 찾을 수 없습니다.</p>
+								<p className="text-default-500">
+									{t("루틴을 찾을 수 없습니다.")}
+								</p>
 								<Button variant="flat" onPress={onClickCancelButton}>
 									목록으로
 								</Button>
@@ -151,7 +159,11 @@ export const RoutineEditPage = observer(
 						title="루틴 수정"
 						description={
 							routineName
-								? `${routineName} 루틴을 수정합니다.`
+								? (
+										<>
+											{routineName} {t("루틴을 수정합니다.")}
+										</>
+									)
 								: "루틴을 수정합니다."
 						}
 						actions={pageActions}
@@ -162,6 +174,9 @@ export const RoutineEditPage = observer(
 					<FormSectionCard>
 						<FormSection top={<PageTitleBar level={2} title="기본 정보" />}>
 							<div className="flex flex-col gap-4">
+								<ContentLanguageNotice
+									contentLanguageCode={contentLanguageCode}
+								/>
 								<Input
 									label="루틴 이름"
 									placeholder="예: 풀바디 루틴 A"
@@ -203,9 +218,9 @@ export const RoutineEditPage = observer(
 					onClose={onCloseEmptyActivitiesWarningModal}
 				>
 					<ModalContent>
-						<ModalHeader>활동 없이 저장</ModalHeader>
+						<ModalHeader>{t("활동 없이 저장")}</ModalHeader>
 						<ModalBody>
-							<p>활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?</p>
+							<p>{t("활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?")}</p>
 						</ModalBody>
 						<ModalFooter>
 							<Button
@@ -220,7 +235,7 @@ export const RoutineEditPage = observer(
 								onPress={onClickConfirmEmptyActivitiesWarningButton}
 								isLoading={isSubmitting}
 							>
-								저장 진행
+								{t("저장 진행")}
 							</Button>
 						</ModalFooter>
 					</ModalContent>

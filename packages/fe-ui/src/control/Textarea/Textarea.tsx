@@ -4,7 +4,7 @@ import type { TextAreaProps } from "@cocrepo/ui/heroui";
 import { Textarea as BaseTextarea } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type React from "react";
-import { translateNode, useT } from "../../i18n";
+import { useT } from "../../i18n";
 
 export interface TextareaProps
 	extends Omit<TextAreaProps, "onChange" | "value"> {
@@ -30,17 +30,9 @@ export interface TextareaProps
  * />
  * ```
  */
-export const Textarea = observer(function Textarea(props: TextareaProps) {
+export const Textarea = observer((props: TextareaProps) => {
 	const t = useT();
 	const { onChange, value, ...rest } = props;
-	const ariaLabel =
-		typeof rest["aria-label"] === "string"
-			? t(rest["aria-label"])
-			: rest["aria-label"];
-	const errorMessage =
-		typeof rest.errorMessage === "function"
-			? rest.errorMessage
-			: translateNode(rest.errorMessage, t);
 
 	const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		onChange?.(e.target.value);
@@ -49,11 +41,22 @@ export const Textarea = observer(function Textarea(props: TextareaProps) {
 	return (
 		<BaseTextarea
 			{...rest}
-			aria-label={ariaLabel}
-			label={translateNode(rest.label, t)}
-			placeholder={rest.placeholder ? t(rest.placeholder) : undefined}
-			description={translateNode(rest.description, t)}
-			errorMessage={errorMessage}
+			label={typeof rest.label === "string" ? t(rest.label) : rest.label}
+			placeholder={
+				typeof rest.placeholder === "string"
+					? t(rest.placeholder)
+					: rest.placeholder
+			}
+			description={
+				typeof rest.description === "string"
+					? t(rest.description)
+					: rest.description
+			}
+			errorMessage={
+				typeof rest.errorMessage === "string"
+					? t(rest.errorMessage)
+					: rest.errorMessage
+			}
 			value={value}
 			onChange={handleOnChange}
 		/>

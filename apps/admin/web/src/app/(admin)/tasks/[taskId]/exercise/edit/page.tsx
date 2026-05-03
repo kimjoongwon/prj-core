@@ -5,12 +5,13 @@ import {
 	useGetTaskExercise,
 	useUpdateTaskExercise,
 } from "@cocrepo/api/core/tasks";
-import { TaskExerciseEditPage } from "@cocrepo/ui";
+import { TaskExerciseEditPage, useT } from "@cocrepo/ui";
 import { addToast } from "@cocrepo/ui/heroui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 import { useTaskExerciseAssetBrowser } from "../../../hooks/useTaskExerciseAssetBrowser";
 
 type TaskExerciseEditPageParams = {
@@ -18,8 +19,10 @@ type TaskExerciseEditPageParams = {
 };
 
 const AdminTasksTaskIdExerciseEditRoute = observer(() => {
+	const t = useT();
 	const { taskId } = useParams<TaskExerciseEditPageParams>();
 	const router = useRouter();
+	const persistStore = usePersistStore();
 	const state = useLocalObservable(() => ({
 		name: "",
 		durationMin: 0,
@@ -73,17 +76,17 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 		mutation: {
 			onSuccess: () => {
 				addToast({
-					title: "운동 정보 수정 성공",
-					description: "운동 detail이 성공적으로 수정되었습니다.",
+					title: t("운동 정보 수정 성공"),
+					description: t("운동 detail이 성공적으로 수정되었습니다."),
 					color: "success",
 				});
 				router.push(`/tasks/${taskId}/exercise` as Route);
 			},
 			onError: (error) => {
 				addToast({
-					title: "운동 정보 수정 실패",
+					title: t("운동 정보 수정 실패"),
 					description:
-						error.message || "운동 detail 수정 중 오류가 발생했습니다.",
+						error.message || t("운동 detail 수정 중 오류가 발생했습니다."),
 					color: "danger",
 				});
 			},
@@ -168,6 +171,7 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 			durationSec={state.durationSec}
 			count={state.count}
 			description={state.description}
+			contentLanguageCode={persistStore.contentLanguageCode}
 			selectedImageAsset={selectedImageAsset}
 			selectedVideoAsset={selectedVideoAsset}
 			assetBrowserProps={assetBrowser}

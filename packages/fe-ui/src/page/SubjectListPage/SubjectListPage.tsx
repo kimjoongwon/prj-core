@@ -13,11 +13,11 @@ import {
 	PageTitleBar,
 	Surface,
 	VStack,
+	useT,
 } from "@cocrepo/ui";
-import { Select, SelectItem, type Selection } from "@cocrepo/ui/heroui";
+import { Tab, Tabs } from "@cocrepo/ui/heroui";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
-import { useT } from "../../i18n";
+import { type Key, useEffect } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -102,7 +102,7 @@ function findSubjectGroupFilter(key: string) {
 	);
 }
 
-function getSubjectGroupQueryValue(key: string) {
+function getSubjectGroupQueryValue(key: Key) {
 	const selectedKey = String(key);
 	return selectedKey === SUBJECT_GROUP_FILTER_ALL_KEY ? null : selectedKey;
 }
@@ -142,48 +142,41 @@ function paginateSubjects(
 	return subjects.slice(start, end);
 }
 
-interface SubjectGroupFilterSelectProps {
+interface SubjectGroupFilterTabsProps {
 	selectedGroup: string;
 	onChangeGroup: (group: string | null) => void;
 }
 
-const SubjectGroupFilterSelect = observer(
-	({ selectedGroup, onChangeGroup }: SubjectGroupFilterSelectProps) => {
+const SubjectGroupFilterTabs = observer(
+	({ selectedGroup, onChangeGroup }: SubjectGroupFilterTabsProps) => {
 		const t = useT();
 		const selectedKey = getSubjectGroupFilterKey(selectedGroup);
 		const selectedFilter = findSubjectGroupFilter(selectedKey);
-		const handleSelectionChange = (keys: Selection) => {
-			if (keys === "all") {
-				return;
-			}
-
-			const nextKey =
-				Array.from(keys)[0]?.toString() ?? SUBJECT_GROUP_FILTER_ALL_KEY;
-			onChangeGroup(getSubjectGroupQueryValue(nextKey));
+		const handleSelectionChange = (key: Key) => {
+			onChangeGroup(getSubjectGroupQueryValue(key));
 		};
 
 		return (
 			<VStack gap="block">
-				<Select
+				<Tabs
 					aria-label={t("대상 유형 필터")}
-					placeholder={t("대상 유형")}
-					selectedKeys={[selectedKey]}
+					selectedKey={selectedKey}
 					onSelectionChange={handleSelectionChange}
 					variant="bordered"
 					color="primary"
-					disallowEmptySelection
+					radius="full"
 					classNames={{
-						base: "w-full max-w-xs",
-						trigger: "h-11",
+						tabList: "flex-wrap",
+						tab: "h-9",
 					}}
 				>
 					{subjectGroupFilters.map((filter) => (
-						<SelectItem key={filter.key}>{t(filter.label)}</SelectItem>
+						<Tab key={filter.key} title={t(filter.label)} />
 					))}
-				</Select>
+				</Tabs>
 				<div className="rounded-lg border border-divider bg-content2/40 p-4">
 					<div className="text-sm font-semibold text-foreground">
-						{t(`${selectedFilter.label} 대상`)}
+						{t(selectedFilter.label)} {t("대상")}
 					</div>
 					<p className="mt-1 text-sm text-default-600">
 						{t(selectedFilter.description)}
@@ -232,7 +225,7 @@ export const SubjectListPage = observer(
 				/>
 				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
 					<VStack gap="section">
-						<SubjectGroupFilterSelect
+						<SubjectGroupFilterTabs
 							selectedGroup={queryStates.group}
 							onChangeGroup={handleSubjectGroupFilterChange}
 						/>
@@ -256,7 +249,7 @@ export const SubjectListPage = observer(
 	},
 );
 
-function SubjectsPageFallback() {
+const SubjectsPageFallback = observer(function SubjectsPageFallback() {
 	return (
 		<div className="space-y-5">
 			<PageTitleBar
@@ -268,4 +261,4 @@ function SubjectsPageFallback() {
 			</Surface>
 		</div>
 	);
-}
+});

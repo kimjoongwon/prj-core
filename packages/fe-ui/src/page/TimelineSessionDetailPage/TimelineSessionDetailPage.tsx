@@ -26,8 +26,9 @@ import {
 } from "@cocrepo/ui/heroui";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import Link from "next/link";
 import type { Route } from "next";
+import Link from "next/link";
+import type { MouseEvent } from "react";
 
 export interface TimelineSessionDetailPageSession {
 	name?: string | null;
@@ -291,7 +292,7 @@ export const TimelineSessionDetailPage = observer(
 													<Link
 														href={program.href}
 														className="text-left text-primary hover:underline"
-														onClick={(event) => {
+														onClick={(event: MouseEvent<HTMLAnchorElement>) => {
 															event.stopPropagation();
 														}}
 													>

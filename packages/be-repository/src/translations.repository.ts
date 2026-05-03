@@ -109,24 +109,28 @@ export class TranslationsRepository {
 		return result ? plainToInstance(Translation, result) : null;
 	}
 
-	/**
-	 * 언어별 runtime catalog 조회
-	 */
 	async findCatalogByLanguage(
 		languageCode: LanguageCode,
 	): Promise<Record<string, string>> {
-		this.logger.debug(`언어별 번역 catalog 조회: ${languageCode}`);
+		this.logger.debug(`언어 catalog 조회: ${languageCode}`);
 
 		const rows = await this.txHost.tx.translation.findMany({
-			where: { languageCode },
+			where: {
+				languageCode,
+			},
 			select: {
 				key: true,
 				text: true,
 			},
-			orderBy: { key: "asc" },
+			orderBy: [{ key: "asc" }],
 		});
 
-		return Object.fromEntries(rows.map((row) => [row.key, row.text]));
+		return rows.reduce<Record<string, string>>((catalog, row) => {
+			if (row.text.length > 0) {
+				catalog[row.key] = row.text;
+			}
+			return catalog;
+		}, {});
 	}
 
 	/**

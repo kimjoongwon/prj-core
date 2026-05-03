@@ -9,15 +9,15 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ServiceDocumentPlatform } from './serviceDocumentPlatform';
+import type { ServiceDocumentPlatform } from "./serviceDocumentPlatform";
 
 export type GetPublishedServiceDocumentParams = {
-/**
- * 요청 플랫폼. 미지정 시 ALL 문서를 조회합니다.
- */
-platform?: ServiceDocumentPlatform;
-/**
- * 로케일
- */
-locale?: string;
+	/**
+	 * 요청 플랫폼. 미지정 시 ALL 문서를 조회합니다.
+	 */
+	platform?: ServiceDocumentPlatform;
+	/**
+	 * 로케일
+	 */
+	locale?: string;
 };

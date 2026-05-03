@@ -13,6 +13,7 @@ import { Button } from "@cocrepo/ui/heroui";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
+import type { MouseEvent } from "react";
 import {
 	ActionButtonCell,
 	BooleanCell,
@@ -663,7 +664,7 @@ export function buildTimelineTableColumns<
 					<Link
 						href={`/timelines/${row.original.id}` as Route}
 						className="text-primary hover:underline"
-						onClick={(event) => {
+						onClick={(event: MouseEvent<HTMLAnchorElement>) => {
 							event.stopPropagation();
 						}}
 					>
@@ -752,6 +753,13 @@ export function buildSpaceTableColumns<TRow extends SpaceDto = SpaceDto>({
 }: {
 	onClickSpaceGroundName: (spaceId: string) => void;
 }) {
+	const contentLanguageLabels: Record<string, string> = {
+		ko_KR: "한국어",
+		en_US: "English",
+		zh_CN: "中文",
+		ja_JP: "日本語",
+	};
+
 	/** Space 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumnsWithDefaultCreatedAt<TRow>([
 		createNameColumn<TRow>({
@@ -765,6 +773,17 @@ export function buildSpaceTableColumns<TRow extends SpaceDto = SpaceDto>({
 			align: "center",
 			cell: ({ getValue }) => (
 				<ChipCell label={getValue() as string | null} color="secondary" />
+			),
+		}),
+		defineColumn<TRow>({
+			field: "contentLanguageCode",
+			label: "콘텐츠 언어",
+			size: 130,
+			cell: ({ getValue }) => (
+				<ChipCell
+					label={contentLanguageLabels[String(getValue() ?? "")] ?? "미설정"}
+					color="primary"
+				/>
 			),
 		}),
 		createPresetColumn<TRow>("businessNo", {

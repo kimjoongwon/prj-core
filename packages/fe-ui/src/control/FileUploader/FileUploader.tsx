@@ -155,8 +155,8 @@ export const FileUploader = observer(function FileUploader(
 					size="sm"
 					variant="solid"
 					color="danger"
-					aria-label={t("파일 삭제")}
 					className="-top-2 -right-2 absolute z-20 opacity-0 shadow-lg transition-opacity group-hover:opacity-100"
+					aria-label={t("파일 삭제")}
 					onPress={removeFile}
 				>
 					<X size={16} />

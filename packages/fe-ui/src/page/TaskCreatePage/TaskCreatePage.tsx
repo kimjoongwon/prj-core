@@ -4,12 +4,14 @@ import {
 	AssetBrowser,
 	type AssetBrowserAsset,
 	type AssetBrowserProps,
+	ContentLanguageNotice,
 	FormPage,
 	FormPageSurface,
 	FormSection,
 	FormSectionCard,
 	MediaThumbnail,
 	PageTitleBar,
+	useT,
 } from "@cocrepo/ui";
 import { Button, Chip, Input, Textarea } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
@@ -22,6 +24,7 @@ export interface TaskCreatePageProps {
 	durationSec: number;
 	count: number;
 	description: string;
+	contentLanguageCode?: string | null;
 	selectedImageAsset?: ExerciseMediaAsset;
 	selectedVideoAsset?: ExerciseMediaAsset;
 	assetBrowserProps: Omit<
@@ -59,7 +62,7 @@ export interface TaskCreatePageProps {
 	onClickSaveButton: () => void;
 }
 
-function ExerciseMediaField({
+const ExerciseMediaField = observer(function ExerciseMediaField({
 	label,
 	description,
 	selectedAsset,
@@ -74,17 +77,18 @@ function ExerciseMediaField({
 	onOpenPicker: () => void;
 	onClear: () => void;
 }) {
+	const t = useT();
 	const isImage = selectedAsset?.mimeType?.startsWith("image/");
 	return (
 		<div className="rounded-2xl border border-default-200 bg-content1 p-4">
 			<div className="mb-3 flex items-start justify-between gap-3">
 				<div>
-					<p className="font-medium">{label}</p>
-					<p className="mt-1 text-sm text-default-500">{description}</p>
+					<p className="font-medium">{t(label)}</p>
+					<p className="mt-1 text-sm text-default-500">{t(description)}</p>
 				</div>
 				<div className="flex gap-2">
 					<Button size="sm" variant="flat" onPress={onOpenPicker}>
-						{selectedAsset ? "다시 선택" : "에셋에서 선택"}
+						{selectedAsset ? t("다시 선택") : t("에셋에서 선택")}
 					</Button>
 					<Button
 						size="sm"
@@ -93,7 +97,7 @@ function ExerciseMediaField({
 						onPress={onClear}
 						isDisabled={!selectedAsset}
 					>
-						해제
+						{t("해제")}
 					</Button>
 				</div>
 			</div>
@@ -115,12 +119,12 @@ function ExerciseMediaField({
 				</div>
 			) : (
 				<div className="rounded-xl border border-dashed border-default-300 px-4 py-6 text-sm text-default-500">
-					{placeholder}
+					{t(placeholder)}
 				</div>
 			)}
 		</div>
 	);
-}
+});
 
 export const TaskCreatePage = observer(
 	({
@@ -129,6 +133,7 @@ export const TaskCreatePage = observer(
 		durationSec,
 		count,
 		description,
+		contentLanguageCode,
 		selectedImageAsset,
 		selectedVideoAsset,
 		assetBrowserProps,
@@ -155,6 +160,8 @@ export const TaskCreatePage = observer(
 		onClickCancelButton,
 		onClickSaveButton,
 	}: TaskCreatePageProps) => {
+		const t = useT();
+
 		return (
 			<FormPage
 				top={
@@ -168,14 +175,14 @@ export const TaskCreatePage = observer(
 									onPress={onClickCancelButton}
 									isDisabled={isSubmitPending}
 								>
-									취소
+									{t("취소")}
 								</Button>
 								<Button
 									color="primary"
 									onPress={onClickSaveButton}
 									isLoading={isSubmitPending}
 								>
-									저장
+									{t("저장")}
 								</Button>
 							</div>
 						}
@@ -186,67 +193,74 @@ export const TaskCreatePage = observer(
 					<FormSectionCard>
 						<FormSection top={<PageTitleBar level={2} title="기본 정보" />}>
 							<div className="flex flex-col gap-4">
+								<ContentLanguageNotice
+									contentLanguageCode={contentLanguageCode}
+								/>
 								<Input
-									label="운동명"
-									placeholder="운동 이름을 입력하세요"
+									label={t("운동명")}
+									placeholder={t("운동 이름을 입력하세요")}
 									value={name}
 									onValueChange={onChangeNameInput}
 									isRequired
 									isInvalid={Boolean(errors.name)}
-									errorMessage={errors.name}
+									errorMessage={errors.name ? t(errors.name) : undefined}
 								/>
 								<div>
 									<label className="mb-1 block text-sm font-medium text-default-700">
-										지속시간 <span className="text-danger">*</span>
+										{t("지속시간")} <span className="text-danger">*</span>
 									</label>
 									<div className="flex items-center gap-2">
 										<Input
 											type="number"
-											placeholder="분"
+											placeholder={t("분")}
 											value={String(durationMin)}
 											onValueChange={onChangeDurationMinInput}
 											min={0}
 											endContent={
-												<span className="text-default-400 text-sm">분</span>
+												<span className="text-default-400 text-sm">
+													{t("분")}
+												</span>
 											}
 											className="max-w-32"
 										/>
 										<Input
 											type="number"
-											placeholder="초"
+											placeholder={t("초")}
 											value={String(durationSec)}
 											onValueChange={onChangeDurationSecInput}
 											min={0}
 											max={59}
 											endContent={
-												<span className="text-default-400 text-sm">초</span>
+												<span className="text-default-400 text-sm">
+													{t("초")}
+												</span>
 											}
 											className="max-w-32"
 										/>
 									</div>
 									{errors.duration ? (
 										<p className="mt-1 text-sm text-danger">
-											{errors.duration}
+											{t(errors.duration)}
 										</p>
 									) : null}
 								</div>
 								<Input
-									label="반복횟수"
+									label={t("반복횟수")}
 									type="number"
-									placeholder="반복 횟수"
+									placeholder={t("반복 횟수")}
 									value={String(count)}
 									onValueChange={onChangeCountInput}
 									isRequired
 									min={1}
 									isInvalid={Boolean(errors.count)}
-									errorMessage={errors.count}
+									errorMessage={errors.count ? t(errors.count) : undefined}
 									endContent={
-										<span className="text-default-400 text-sm">회</span>
+										<span className="text-default-400 text-sm">{t("회")}</span>
 									}
 								/>
 								<Textarea
-									label="설명"
-									placeholder="운동 설명, 수행 방법 등을 입력하세요 (선택)"
+									label={t("설명")}
+									placeholder={t("운동 설명, 수행 방법 등을 입력하세요 (선택)")}
 									value={description}
 									onValueChange={onChangeDescriptionTextarea}
 									maxLength={500}
@@ -277,18 +291,19 @@ export const TaskCreatePage = observer(
 								<div className="rounded-lg bg-content2 p-3 text-sm text-default-600">
 									<div className="flex items-center gap-2">
 										<span className="font-medium text-default-700">
-											스케줄 가능 상태
+											{t("스케줄 가능 상태")}
 										</span>
 										<Chip
 											color={isSchedulable ? "success" : "warning"}
 											size="sm"
 										>
-											{isSchedulable ? "가능" : "불가"}
+											{isSchedulable ? t("가능") : t("불가")}
 										</Chip>
 									</div>
 									<p className="mt-2">
-										영상 파일 ID가 입력된 Exercise만 루틴 편성 및 Program 생성에
-										사용할 수 있습니다.
+										{t(
+											"영상 파일 ID가 입력된 Exercise만 루틴 편성 및 Program 생성에 사용할 수 있습니다.",
+										)}
 									</p>
 								</div>
 							</div>
@@ -299,8 +314,8 @@ export const TaskCreatePage = observer(
 					{...assetBrowserProps}
 					mode="picker"
 					presentation="modal"
-					title={assetBrowserTitle}
-					description={assetBrowserDescription}
+					title={t(assetBrowserTitle)}
+					description={t(assetBrowserDescription)}
 					isOpen={isAssetBrowserOpen}
 					onClose={onCloseAssetBrowser}
 					selectedAssetId={assetBrowserSelectedAssetId}

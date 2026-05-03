@@ -30,22 +30,16 @@ import { translateNode, useT } from "../../i18n";
  * <Button isIconOnly><Plus /></Button>
  * ```
  */
-export const Button = observer(function Button(props: ButtonProps) {
+export const Button = observer((props: ButtonProps) => {
 	const t = useT();
 	const { children, onPress, ...rest } = props;
 	const ariaLabel =
 		typeof rest["aria-label"] === "string"
 			? t(rest["aria-label"])
 			: rest["aria-label"];
-	const title = typeof rest.title === "string" ? t(rest.title) : rest.title;
 
 	return (
-		<NextUIButton
-			onPress={onPress}
-			{...rest}
-			aria-label={ariaLabel}
-			title={title}
-		>
+		<NextUIButton onPress={onPress} {...rest} aria-label={ariaLabel}>
 			{translateNode(children, t)}
 		</NextUIButton>
 	);

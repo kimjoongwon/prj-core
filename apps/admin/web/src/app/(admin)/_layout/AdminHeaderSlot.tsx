@@ -1,7 +1,6 @@
 "use client";
 
 import { useLogout, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
-import type { LanguageCode } from "@cocrepo/constant";
 import type { SpaceInfo } from "@cocrepo/ui";
 import {
 	HeaderBar,
@@ -15,16 +14,22 @@ import { KeyRound } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { resolveIdpClientUrl } from "@/runtime-urls";
 import {
-	useLocaleStore,
+	useAppStore,
 	useNavigationStore,
 	usePersistStore,
 } from "@/stores/AppStoreProvider";
 
+const userInfo = {
+	name: "관리자",
+	role: "Owner",
+};
+
 export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
-	const persistStore = usePersistStore();
-	const localeStore = useLocaleStore();
-	const navigationStore = useNavigationStore();
 	const t = useT();
+	const appStore = useAppStore();
+	const persistStore = usePersistStore();
+	const navigationStore = useNavigationStore();
+	const localeStore = appStore.localeStore;
 	const { mutate: setCurrentSpaceMutate, isPending: isSettingCurrentSpace } =
 		useSetCurrentSpace({
 			mutation: {
@@ -36,7 +41,15 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 							(space) => space.spaceId === variables.spaceId,
 						)?.groundName ??
 						"";
-					persistStore.setSpace(variables.spaceId, nextGroundName);
+					const nextContentLanguageCode =
+						persistStore.spaces.find(
+							(space) => space.spaceId === variables.spaceId,
+						)?.contentLanguageCode ?? null;
+					persistStore.setSpace(
+						variables.spaceId,
+						nextGroundName,
+						nextContentLanguageCode,
+					);
 					window.location.reload();
 				},
 			},
@@ -69,10 +82,6 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 		}
 	};
 
-	const onChangeLanguage = (languageCode: LanguageCode) => {
-		localeStore.setLanguageCode(languageCode);
-	};
-
 	const selectedNavItem = navigationStore.selectedNavItem;
 	const selectedSubNavItem = navigationStore.selectedSubNavItem;
 	const currentSectionLabel =
@@ -82,10 +91,7 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 
 	return (
 		<HeaderBar
-			userInfo={{
-				name: t("관리자"),
-				role: "Owner",
-			}}
+			userInfo={userInfo}
 			onLogout={onClickLogoutButton}
 			context={
 				<div className="min-w-0">
@@ -99,11 +105,16 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 			}
 			actions={
 				<>
-					<LanguageSelectButton
-						value={localeStore.languageCode}
-						onChange={onChangeLanguage}
-						compact
-					/>
+					{localeStore && (
+						<LanguageSelectButton
+							value={localeStore.languageCode}
+							onChange={(languageCode) => {
+								localeStore.setLanguageCode(languageCode);
+							}}
+							compact
+							className="h-10 w-10 rounded-2xl border border-slate-200/70 bg-white/72 text-slate-700 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10"
+						/>
+					)}
 					<ThemeToggleButton
 						compact
 						className="h-10 w-10 rounded-2xl border border-slate-200/70 bg-white/72 text-slate-700 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10"

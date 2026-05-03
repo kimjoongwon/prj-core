@@ -86,7 +86,7 @@ export const ResetPasswordForm = observer(
 							</svg>
 						</div>
 						<h2 className="text-lg font-semibold mb-2">
-							{t(tokenError || "링크가 만료되었습니다")}
+							{tokenError ? t(tokenError) : t("링크가 만료되었습니다")}
 						</h2>
 						<p className="text-default-500 text-sm mb-6">
 							{t(
@@ -99,7 +99,7 @@ export const ResetPasswordForm = observer(
 								className="w-full font-semibold"
 								size="lg"
 							>
-								다시 요청하기
+								{t("다시 요청하기")}
 							</Button>
 						</Link>
 					</div>
@@ -137,7 +137,7 @@ export const ResetPasswordForm = observer(
 								className="w-full font-semibold"
 								size="lg"
 							>
-								로그인하기
+								{t("로그인하기")}
 							</Button>
 						</Link>
 					</div>
@@ -153,7 +153,7 @@ export const ResetPasswordForm = observer(
 						/>
 
 						{state.submitError && (
-							<AlertBanner type="danger" message={state.submitError} />
+							<AlertBanner type="danger" message={t(state.submitError)} />
 						)}
 
 						<form className="space-y-5">
@@ -198,7 +198,7 @@ export const ResetPasswordForm = observer(
 								isLoading={state.isSubmitting}
 								isDisabled={!isPasswordValid || !isPasswordMatch}
 							>
-								비밀번호 변경
+								{t("비밀번호 변경")}
 							</Button>
 						</form>
 					</>
@@ -211,7 +211,7 @@ export const ResetPasswordForm = observer(
 							href={loginHref}
 							className="text-default-400 hover:text-default-500 text-sm"
 						>
-							로그인으로 돌아가기
+							{t("로그인으로 돌아가기")}
 						</Link>
 					</div>
 				)}

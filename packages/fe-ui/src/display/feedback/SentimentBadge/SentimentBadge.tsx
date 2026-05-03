@@ -1,6 +1,10 @@
+"use client";
+
 import { cva, type VariantProps } from "class-variance-authority";
+import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import type { SentimentTypeCode } from "../../../cell/InquirySentimentCell/InquirySentimentCell";
+import { useT } from "../../../i18n";
 
 export const sentimentBadgeVariants = cva(
 	"inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium",
@@ -67,22 +71,25 @@ const SENTIMENT_LABEL: Record<SentimentTypeCode, string> = {
  * <SentimentBadge sentiment="NEGATIVE" />
  * ```
  */
-export const SentimentBadge = ({
+export const SentimentBadge = observer(function SentimentBadge({
 	sentiment,
 	score: _score,
 	confidence,
 	className,
-}: SentimentBadgeProps) => {
+}: SentimentBadgeProps) {
+	const t = useT();
 	const emoji = SENTIMENT_EMOJI[sentiment] ?? SENTIMENT_EMOJI.NEUTRAL;
 	const label = SENTIMENT_LABEL[sentiment] ?? sentiment;
 
 	return (
 		<span className={sentimentBadgeVariants({ sentiment, className })}>
 			{emoji}
-			<span>{label}</span>
+			<span>{t(label)}</span>
 			{confidence !== undefined && (
-				<span className="opacity-70">(신뢰도 {confidence}%)</span>
+				<span className="opacity-70">
+					({t("신뢰도")} {confidence}%)
+				</span>
 			)}
 		</span>
 	);
-};
+});

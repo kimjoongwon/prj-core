@@ -10,6 +10,7 @@ import {
 } from "@cocrepo/ui/heroui";
 import { LogOut } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 /**
  * UserMenu Feature 컴포넌트
@@ -22,6 +23,7 @@ import { observer } from "mobx-react-lite";
  * ```
  */
 export const UserMenu = observer(() => {
+	const t = useT();
 	const authStore = useAuthStore();
 	const persistStore = usePersistStore();
 
@@ -60,8 +62,12 @@ export const UserMenu = observer(() => {
 					src={user.avatarUrl}
 				/>
 			</DropdownTrigger>
-			<DropdownMenu aria-label="사용자 메뉴">
-				<DropdownItem key="profile" className="h-14 gap-2" textValue="프로필">
+			<DropdownMenu aria-label={t("사용자 메뉴")}>
+				<DropdownItem
+					key="profile"
+					className="h-14 gap-2"
+					textValue={t("프로필")}
+				>
 					<p className="font-semibold">{user.name}</p>
 					<p className="text-sm text-default-500">{user.role}</p>
 				</DropdownItem>
@@ -71,7 +77,7 @@ export const UserMenu = observer(() => {
 					startContent={<LogOut className="h-4 w-4" size={16} />}
 					onPress={handleLogout}
 				>
-					로그아웃
+					{t("로그아웃")}
 				</DropdownItem>
 			</DropdownMenu>
 		</Dropdown>

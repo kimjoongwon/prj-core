@@ -1,7 +1,6 @@
 "use client";
 
 import {
-	Button,
 	Modal,
 	ModalBody,
 	ModalContent,
@@ -11,6 +10,7 @@ import {
 import { AlertTriangle, Info, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import { Button } from "../../../control/Button/Button";
 import { translateNode, useT } from "../../../i18n";
 import { HStack } from "../../../rhythm/HStack/HStack";
 import { VStack } from "../../../rhythm/VStack/VStack";
@@ -136,14 +136,14 @@ export const ConfirmModal = observer(
 					<ModalFooter>
 						<HStack gap={8} justifyContent="end" fullWidth>
 							<Button variant="flat" onPress={onClose} isDisabled={loading}>
-								{t(cancelText)}
+								{cancelText}
 							</Button>
 							<Button
 								color={confirmColor}
 								onPress={onConfirm}
 								isLoading={loading}
 							>
-								{t(confirmText)}
+								{confirmText}
 							</Button>
 						</HStack>
 					</ModalFooter>

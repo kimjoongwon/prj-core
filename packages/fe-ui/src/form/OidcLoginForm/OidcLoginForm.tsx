@@ -3,7 +3,7 @@
 import { observer } from "mobx-react-lite";
 import { Button, Checkbox, Input, Link } from "../../control";
 import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
-import { type Translate, useT } from "../../i18n";
+import { useT } from "../../i18n";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 
@@ -28,35 +28,22 @@ export interface LoginErrorResponse {
 }
 
 /** 에러 응답이 표시 문구를 제공하지 않는 경우를 대비한 기본 메시지 */
-function getFallbackErrorMessage(
-	data: LoginErrorResponse,
-	t: Translate,
-): string {
+function getFallbackErrorMessage(data: LoginErrorResponse): string {
 	const threshold = data.temporaryLockThreshold ?? 5;
 	const durationMin = data.temporaryLockDurationMin ?? 15;
 
 	switch (data.error) {
 		case "INVALID_CREDENTIALS":
 			if (data.remainingAttempts !== undefined && data.remainingAttempts > 0) {
-				return t(
-					"이메일 또는 비밀번호가 올바르지 않습니다. (남은 시도: {{remainingAttempts}}/{{threshold}})",
-					undefined,
-					{ remainingAttempts: data.remainingAttempts, threshold },
-				);
+				return `이메일 또는 비밀번호가 올바르지 않습니다. (남은 시도: ${data.remainingAttempts}/${threshold})`;
 			}
-			return t("이메일 또는 비밀번호가 올바르지 않습니다.");
+			return "이메일 또는 비밀번호가 올바르지 않습니다.";
 		case "ACCOUNT_LOCKED_TEMPORARY":
-			return t(
-				"계정이 일시 잠겼습니다. {{durationMin}}분 후 다시 시도하세요.",
-				undefined,
-				{ durationMin },
-			);
+			return `계정이 일시 잠겼습니다. ${durationMin}분 후 다시 시도하세요.`;
 		case "ACCOUNT_LOCKED_PERMANENT":
-			return t(
-				"계정이 잠겼습니다. 비밀번호를 재설정하거나 관리자에게 문의하세요.",
-			);
+			return "계정이 잠겼습니다. 비밀번호를 재설정하거나 관리자에게 문의하세요.";
 		default:
-			return data.error || t("로그인에 실패했습니다.");
+			return data.error || "로그인에 실패했습니다.";
 	}
 }
 
@@ -120,27 +107,26 @@ export const OidcLoginForm = observer(
 				? [
 						{
 							type: "forgot-password",
-							label: "비밀번호 재설정",
+							label: t("비밀번호 재설정"),
 							href: forgotPasswordHref,
 						},
 					]
 				: [];
 		const actionsToRender =
 			recoveryActions.length > 0 ? recoveryActions : fallbackRecoveryActions;
-		const subtitle = client
-			? t(
-					"{{clientName}}에서 예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.",
-					undefined,
-					{ clientName: client.name },
-				)
-			: "예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.";
 
 		return (
 			<AuthCard>
 				<AuthCardHeader
 					iconPath="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
 					title="로그인"
-					subtitle={subtitle}
+					subtitle={
+						client
+							? t(
+									"{{clientName}}에서 예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.",
+								).replace("{{clientName}}", client.name)
+							: "예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요."
+					}
 					logoUri={client?.logoUri}
 					logoAlt={client?.name}
 				/>
@@ -148,7 +134,7 @@ export const OidcLoginForm = observer(
 				{isDev && (
 					<AlertBanner
 						type="warning"
-						message="DEV MODE - Super Admin 계정이 자동 입력되었습니다"
+						message={t("DEV MODE - Super Admin 계정이 자동 입력되었습니다")}
 						className="text-center text-sm"
 					/>
 				)}
@@ -159,10 +145,9 @@ export const OidcLoginForm = observer(
 						title={getErrorTitle(state.error)}
 						message={
 							<>
-								{t(
-									state.error.displayMessage ||
-										getFallbackErrorMessage(state.error, t),
-								)}
+								{state.error.displayMessage
+									? t(state.error.displayMessage)
+									: t(getFallbackErrorMessage(state.error))}
 								{state.error.hint && (
 									<span className="mt-2 block text-xs leading-5 opacity-80">
 										{t(state.error.hint)}
@@ -213,7 +198,6 @@ export const OidcLoginForm = observer(
 						path="password"
 						state={state}
 						label="비밀번호"
-						type="password"
 						placeholder="********"
 						isRequired
 						autoComplete="current-password"
@@ -222,14 +206,14 @@ export const OidcLoginForm = observer(
 
 					<div className="flex items-center justify-between gap-4">
 						<Checkbox path="remember" state={state} size="sm">
-							로그인 상태 유지
+							{t("로그인 상태 유지")}
 						</Checkbox>
 
 						<Link
 							href={forgotPasswordHref}
 							className="text-sm text-default-500 hover:text-primary"
 						>
-							비밀번호를 잊으셨나요?
+							{t("비밀번호를 잊으셨나요?")}
 						</Link>
 					</div>
 
@@ -240,7 +224,7 @@ export const OidcLoginForm = observer(
 						size="lg"
 						isLoading={state.isSubmitting}
 					>
-						로그인
+						{t("로그인")}
 					</Button>
 				</form>
 

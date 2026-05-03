@@ -6,7 +6,7 @@ import {
 } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type { ChangeEventHandler } from "react";
-import { translateNode, useT } from "../../i18n";
+import { useT } from "../../i18n";
 
 export interface InputProps
 	extends Omit<HeroUiInputProps, "onChange" | "onBlur" | "value"> {
@@ -16,17 +16,6 @@ export interface InputProps
 	onChange?: (value: string | number) => void;
 	/** blur 핸들러 (type="number"일 때 number 반환) */
 	onBlur?: (value: string | number) => void;
-}
-
-function translateInputErrorMessage(
-	errorMessage: HeroUiInputProps["errorMessage"],
-	t: ReturnType<typeof useT>,
-): HeroUiInputProps["errorMessage"] {
-	if (typeof errorMessage === "function") {
-		return errorMessage;
-	}
-
-	return translateNode(errorMessage, t);
 }
 
 /**
@@ -59,7 +48,7 @@ function translateInputErrorMessage(
  * />
  * ```
  */
-export const Input = observer(function Input(props: InputProps) {
+export const Input = observer((props: InputProps) => {
 	const t = useT();
 	const {
 		onChange,
@@ -70,10 +59,6 @@ export const Input = observer(function Input(props: InputProps) {
 		value = "",
 		...rest
 	} = props;
-	const ariaLabel =
-		typeof rest["aria-label"] === "string"
-			? t(rest["aria-label"])
-			: rest["aria-label"];
 
 	const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
 		if (type === "number" && typeof Number(e.target.value) === "number") {
@@ -95,15 +80,24 @@ export const Input = observer(function Input(props: InputProps) {
 	return (
 		<HeroUiInput
 			{...rest}
-			aria-label={ariaLabel}
-			label={translateNode(rest.label, t)}
-			placeholder={rest.placeholder ? t(rest.placeholder) : undefined}
-			description={translateNode(rest.description, t)}
+			label={typeof rest.label === "string" ? t(rest.label) : rest.label}
+			placeholder={
+				typeof rest.placeholder === "string"
+					? t(rest.placeholder)
+					: rest.placeholder
+			}
+			description={
+				typeof rest.description === "string"
+					? t(rest.description)
+					: rest.description
+			}
 			type={type}
 			size={size}
 			onChange={handleChange}
 			onBlur={handleOnBlur}
-			errorMessage={translateInputErrorMessage(errorMessage, t)}
+			errorMessage={
+				typeof errorMessage === "string" ? t(errorMessage) : errorMessage
+			}
 			value={String(value)}
 		/>
 	);

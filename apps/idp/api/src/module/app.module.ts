@@ -22,9 +22,9 @@ import { ThrottlerGuard } from "@nestjs/throttler";
 import { AuthModule } from "./auth";
 import { EmailVerificationsModule } from "./email-verification";
 import { globalModules } from "./global.module";
-import { I18nCatalogModule } from "./i18n-catalog";
 import { IdpAccountsModule } from "./idp-accounts";
 import { IdpDashboardModule } from "./idp-dashboard";
+import { I18nCatalogModule } from "./i18n";
 import { InteractionModule } from "./interaction/interaction.module";
 import { OidcModule } from "./oidc/oidc.module";
 import { OidcClientsModule } from "./oidc-client";
@@ -49,17 +49,17 @@ const enableNestDevtools =
 		}),
 		PrismaModule,
 		RedisModule,
-		I18nModule,
-		// 기존 IdP 모듈
-		I18nCatalogModule,
+			I18nModule,
+			// 기존 IdP 모듈
+			I18nCatalogModule,
 		OidcModule,
 		InteractionModule,
 		PasswordResetModule,
 		// server에서 이동된 모듈
 		AuthModule,
 		IdpAccountsModule,
-		IdpDashboardModule,
-		EmailVerificationsModule,
+			IdpDashboardModule,
+			EmailVerificationsModule,
 		OidcClientsModule,
 		OidcSessionsModule,
 		SecurityPolicyModule,
@@ -98,8 +98,8 @@ const enableNestDevtools =
 								path: "idp/dashboard",
 								module: IdpDashboardModule,
 							},
-							{
-								path: "idp/email-verifications",
+								{
+									path: "idp/email-verifications",
 								module: EmailVerificationsModule,
 							},
 						],

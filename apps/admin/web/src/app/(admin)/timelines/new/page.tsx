@@ -6,9 +6,11 @@ import { addToast } from "@cocrepo/ui/heroui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 
 const AdminTimelinesNewRoute = observer(() => {
 	const router = useRouter();
+	const persistStore = usePersistStore();
 	const state = useLocalObservable(() => ({
 		name: "",
 		description: "",
@@ -86,6 +88,7 @@ const AdminTimelinesNewRoute = observer(() => {
 		<TimelineCreatePage
 			name={state.name}
 			description={state.description}
+			contentLanguageCode={persistStore.contentLanguageCode}
 			nameError={state.errors.name}
 			descriptionError={state.errors.description}
 			isSubmitPending={isPending}

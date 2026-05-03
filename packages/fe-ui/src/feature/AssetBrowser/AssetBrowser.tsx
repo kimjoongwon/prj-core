@@ -8,8 +8,6 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
-	Button,
-	Input,
 	Modal,
 	ModalBody,
 	ModalContent,
@@ -21,9 +19,11 @@ import { Upload } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { buildAssetTableColumns } from "../../columns";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input/Input";
 import { DataGrid, DataGridStateModel } from "../../data-grid";
 import { EmptyState } from "../../display";
-import { type Translate, useT } from "../../i18n";
+import { useT } from "../../i18n";
 import { Surface } from "../../surface";
 import {
 	AssetPreviewDialog,
@@ -143,7 +143,7 @@ const assetsGridPanelClassName =
 const getAssetEmptyMessage = (
 	folders: FolderTreeItem[],
 	selectedFolderId: string | null,
-	t: Translate,
+	t: (key: string) => string,
 ) => {
 	if (!selectedFolderId) {
 		return t("등록된 에셋이 없습니다.");
@@ -156,9 +156,7 @@ const getAssetEmptyMessage = (
 		return t("선택한 폴더에 등록된 에셋이 없습니다.");
 	}
 
-	return t("{{folderName}} 폴더에 등록된 에셋이 없습니다.", undefined, {
-		folderName: selectedFolder.name,
-	});
+	return `${selectedFolder.name} ${t("폴더에 등록된 에셋이 없습니다.")}`;
 };
 
 export function isUploadActionDisabled({
@@ -265,8 +263,8 @@ export const AssetBrowser = observer(
 		onDeleteAsset,
 		onCreateFolder,
 		onRenameFolder,
-		onDeleteFolder,
-	}: AssetBrowserProps) => {
+	onDeleteFolder,
+}: AssetBrowserProps) => {
 		const t = useT();
 		const gridState = useLocalObservable(
 			() => new DataGridStateModel({ queryStates, setQueryStates }),
@@ -557,19 +555,17 @@ export const AssetBrowser = observer(
 										: t("루트 폴더에 새 폴더를 생성합니다.")}
 								</p>
 								<Input
-									label={t("폴더명")}
-									placeholder={t("새 폴더명을 입력하세요")}
+									label="폴더명"
+									placeholder="새 폴더명을 입력하세요"
 									value={newFolderName}
-									onValueChange={(value) => {
+									onValueChange={(value: string) => {
 										setNewFolderName(value);
 										setNewFolderNameError(null);
 									}}
 									isRequired
 									autoFocus
 									isInvalid={Boolean(newFolderNameError)}
-									errorMessage={
-										newFolderNameError ? t(newFolderNameError) : undefined
-									}
+									errorMessage={newFolderNameError ?? undefined}
 								/>
 							</div>
 						</ModalBody>
@@ -579,7 +575,7 @@ export const AssetBrowser = observer(
 								onPress={onCloseCreateFolderModal}
 								isDisabled={isCreatingFolder}
 							>
-								{t("취소")}
+								취소
 							</Button>
 							<Button
 								color="primary"
@@ -587,7 +583,7 @@ export const AssetBrowser = observer(
 								isLoading={isCreatingFolder}
 								isDisabled={!newFolderName.trim()}
 							>
-								{t("생성")}
+								생성
 							</Button>
 						</ModalFooter>
 					</ModalContent>
@@ -602,19 +598,17 @@ export const AssetBrowser = observer(
 						<ModalHeader>{t("폴더 이름 변경")}</ModalHeader>
 						<ModalBody>
 							<Input
-								label={t("폴더명")}
-								placeholder={t("변경할 폴더명을 입력하세요")}
+								label="폴더명"
+								placeholder="변경할 폴더명을 입력하세요"
 								value={renameFolderName}
-								onValueChange={(value) => {
+								onValueChange={(value: string) => {
 									setRenameFolderName(value);
 									setRenameFolderNameError(null);
 								}}
 								isRequired
 								autoFocus
 								isInvalid={Boolean(renameFolderNameError)}
-								errorMessage={
-									renameFolderNameError ? t(renameFolderNameError) : undefined
-								}
+								errorMessage={renameFolderNameError ?? undefined}
 							/>
 						</ModalBody>
 						<ModalFooter>
@@ -623,7 +617,7 @@ export const AssetBrowser = observer(
 								onPress={onCloseRenameFolderModal}
 								isDisabled={isUpdatingFolder}
 							>
-								{t("취소")}
+								취소
 							</Button>
 							<Button
 								color="primary"
@@ -631,7 +625,7 @@ export const AssetBrowser = observer(
 								isLoading={isUpdatingFolder}
 								isDisabled={!renameFolderName.trim()}
 							>
-								{t("저장")}
+								저장
 							</Button>
 						</ModalFooter>
 					</ModalContent>
@@ -667,14 +661,14 @@ export const AssetBrowser = observer(
 								onPress={onCloseDeleteFolderModal}
 								isDisabled={isRemovingFolder}
 							>
-								{t("취소")}
+								취소
 							</Button>
 							<Button
 								color="danger"
 								onPress={onClickDeleteFolderConfirmButton}
 								isLoading={isRemovingFolder}
 							>
-								{t("삭제")}
+								삭제
 							</Button>
 						</ModalFooter>
 					</ModalContent>

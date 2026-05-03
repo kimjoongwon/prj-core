@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayout } from "@cocrepo/hook";
-import { SidePanel } from "@cocrepo/ui";
+import { SidePanel, useT } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import {
 	useBottomTabStore,
@@ -23,6 +23,7 @@ const NAV_ITEM_COPY: Record<string, string> = {
 };
 
 export const AdminSidebarSlot = observer(function AdminSidebarSlot() {
+	const t = useT();
 	const layoutProps = useLayout({
 		useNavigationStore,
 		useBottomTabStore,
@@ -41,7 +42,7 @@ export const AdminSidebarSlot = observer(function AdminSidebarSlot() {
 			density="compact"
 			descriptionVisibility="active"
 			getItemDescription={(item) =>
-				NAV_ITEM_COPY[item.id] ?? "운영 콘솔 메뉴로 이동합니다."
+				t(NAV_ITEM_COPY[item.id] ?? "운영 콘솔 메뉴로 이동합니다.")
 			}
 		/>
 	);

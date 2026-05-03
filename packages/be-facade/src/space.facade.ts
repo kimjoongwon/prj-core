@@ -1,5 +1,6 @@
 import type { CreateGroundDto, UpdateGroundDto } from "@cocrepo/dto";
 import { Ground, Space } from "@cocrepo/entity";
+import type { LanguageCode } from "@cocrepo/prisma";
 import { SpaceService } from "@cocrepo/service";
 import { Injectable, Logger } from "@nestjs/common";
 
@@ -14,6 +15,7 @@ export class SpaceFacade {
 		skip?: number;
 		take?: number;
 		search?: string;
+		contentLanguageCode?: LanguageCode;
 	}): Promise<{
 		data: Space[];
 		meta: {
@@ -31,6 +33,7 @@ export class SpaceFacade {
 		skip?: number;
 		take?: number;
 		search?: string;
+		contentLanguageCode?: LanguageCode;
 	}): Promise<{
 		data: Space[];
 		meta: {

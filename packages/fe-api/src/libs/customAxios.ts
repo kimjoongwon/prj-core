@@ -83,12 +83,12 @@ const processQueue = (error: unknown) => {
 AXIOS_INSTANCE.interceptors.request.use((config) => {
 	const headers = AxiosHeaders.from(config.headers);
 	const spaceId = persistStoreRef?.spaceId;
-	const languageCode = localeStoreRef?.languageCode;
 
 	if (spaceId) {
 		headers.set(REQUEST_HEADER_KEYS.SPACE_ID, spaceId);
 	}
 
+	const languageCode = localeStoreRef?.languageCode;
 	if (languageCode) {
 		headers.set(REQUEST_HEADER_KEYS.LANGUAGE, languageCode);
 	}

@@ -3,7 +3,7 @@
 import { Card, CardBody, CardHeader, Chip } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { useT } from "../../../i18n";
+import { translateNode, useT } from "../../../i18n";
 
 export interface EmptyStateProps {
 	/** 제목 */
@@ -67,7 +67,7 @@ export const EmptyState = observer(
 						<p className="text-default-400 text-sm">
 							{t("이 영역은 기능 구현 전 빈 상태입니다.")}
 						</p>
-						{action && <div className="mt-4">{action}</div>}
+						{action && <div className="mt-4">{translateNode(action, t)}</div>}
 					</div>
 				</CardBody>
 			</Card>

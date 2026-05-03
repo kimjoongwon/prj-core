@@ -78,6 +78,8 @@ export interface AppStoreConfig {
 	fabActions: FABAction[];
 	/** PersistStore localStorage 키 */
 	persistStorageKey: string;
+	/** LocaleStore localStorage 키. 미지정 시 `${persistStorageKey}:locale` */
+	localeStorageKey?: string;
 }
 
 /**

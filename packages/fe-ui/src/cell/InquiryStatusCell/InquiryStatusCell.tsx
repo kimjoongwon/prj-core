@@ -1,4 +1,8 @@
+"use client";
+
 import { Chip } from "@cocrepo/ui/heroui";
+import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 /** 문의 상태값 (Prisma Enum 값과 동일) */
 export type InquiryStatusCode =
@@ -49,7 +53,12 @@ const STATUS_CONFIG: Record<
  * <InquiryStatusCell value="IN_PROGRESS" />
  * ```
  */
-export const InquiryStatusCell = ({ value, isNew }: InquiryStatusCellProps) => {
+export const InquiryStatusCell = observer(function InquiryStatusCell({
+	value,
+	isNew,
+}: InquiryStatusCellProps) {
+	const t = useT();
+
 	if (!value) {
 		return <span className="text-default-400">-</span>;
 	}
@@ -64,8 +73,8 @@ export const InquiryStatusCell = ({ value, isNew }: InquiryStatusCellProps) => {
 				variant="flat"
 				startContent={isNew ? <span className="text-xs">🆕</span> : undefined}
 			>
-				{config.label}
+				{t(config.label)}
 			</Chip>
 		</div>
 	);
-};
+});

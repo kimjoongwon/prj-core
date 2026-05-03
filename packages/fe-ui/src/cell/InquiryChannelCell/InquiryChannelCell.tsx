@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	Globe,
 	Mail,
@@ -6,6 +8,8 @@ import {
 	Smartphone,
 	Users,
 } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 /** 문의 채널값 (Prisma Enum 값과 동일) */
 export type InquiryChannelCode =
@@ -43,7 +47,11 @@ const CHANNEL_CONFIG: Record<
  * <InquiryChannelCell value="EMAIL" />
  * ```
  */
-export const InquiryChannelCell = ({ value }: InquiryChannelCellProps) => {
+export const InquiryChannelCell = observer(function InquiryChannelCell({
+	value,
+}: InquiryChannelCellProps) {
+	const t = useT();
+
 	if (!value) {
 		return <span className="text-default-400">-</span>;
 	}
@@ -53,7 +61,7 @@ export const InquiryChannelCell = ({ value }: InquiryChannelCellProps) => {
 	return (
 		<div className="flex w-full items-center justify-center gap-1.5">
 			<span className="text-default-500">{config.icon}</span>
-			<span className="text-sm">{config.label}</span>
+			<span className="text-sm">{t(config.label)}</span>
 		</div>
 	);
-};
+});
