@@ -79,5 +79,6 @@ TimelineSessionProgramCreatePage
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-02 | Space 콘텐츠 언어 기준 리소스 작성 안내와 언어 선택/필터 계약 반영 | codex |
 | 2026-03-29 | Program 신규 생성 화면의 Routine 실행 미리보기와 스케줄 가능 차단 규칙 추가 | codex |
 | 2026-03-26 | 초기 화면 기획 수립 | codex |

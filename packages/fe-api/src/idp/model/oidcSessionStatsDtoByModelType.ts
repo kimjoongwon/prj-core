@@ -15,4 +15,4 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 /**
  * 모델 타입별 건수
  */
-export type OidcSessionStatsDtoByModelType = { [key: string]: number };
+export type OidcSessionStatsDtoByModelType = {[key: string]: number};

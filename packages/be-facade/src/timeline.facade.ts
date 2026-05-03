@@ -44,6 +44,7 @@ export class TimelineFacade {
 			skip,
 			take,
 			search: query.search ?? null,
+			contentLanguageCode: query.contentLanguageCode,
 		});
 
 		return {

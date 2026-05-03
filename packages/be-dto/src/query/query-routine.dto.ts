@@ -1,5 +1,5 @@
 import { EnumFieldOptional, StringFieldOptional } from "@cocrepo/decorator";
-import type { Prisma } from "@cocrepo/prisma";
+import { LanguageCode, type Prisma } from "@cocrepo/prisma";
 import { PrismaQueryDto } from "./prisma-query.dto";
 import { SpaceScope } from "./query-exercise.dto";
 
@@ -11,4 +11,7 @@ export class GetRoutinesQueryDto extends PrismaQueryDto<Prisma.RoutineWhereInput
 
 	@EnumFieldOptional(() => SpaceScope)
 	spaceScope?: SpaceScope = SpaceScope.CURRENT;
+
+	@EnumFieldOptional(() => LanguageCode)
+	contentLanguageCode?: LanguageCode;
 }

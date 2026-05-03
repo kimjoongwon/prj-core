@@ -16,6 +16,7 @@ const AdminSpacesNewRoute = observer(() => {
 		phone: "",
 		email: "",
 		businessNo: "",
+		contentLanguageCode: "ko_KR",
 		errors: {} as Record<string, string>,
 	}));
 
@@ -73,6 +74,11 @@ const AdminSpacesNewRoute = observer(() => {
 		delete state.errors.businessNo;
 	};
 
+	const onChangeContentLanguageSelect = (value: string) => {
+		state.contentLanguageCode = value;
+		delete state.errors.contentLanguageCode;
+	};
+
 	const onClickCancelButton = () => {
 		router.push("/spaces" as Route);
 	};
@@ -99,6 +105,9 @@ const AdminSpacesNewRoute = observer(() => {
 		} else if (!/^\\d{3}-\\d{2}-\\d{5}$/.test(state.businessNo)) {
 			errors.businessNo = "형식에 맞게 입력해주세요. (예: 000-00-00000)";
 		}
+		if (!state.contentLanguageCode) {
+			errors.contentLanguageCode = "콘텐츠 언어를 선택해주세요.";
+		}
 
 		if (Object.keys(errors).length > 0) {
 			state.errors = errors;
@@ -113,6 +122,11 @@ const AdminSpacesNewRoute = observer(() => {
 				phone: state.phone.trim(),
 				email: state.email.trim(),
 				businessNo: state.businessNo.trim(),
+				contentLanguageCode: state.contentLanguageCode as
+					| "ko_KR"
+					| "en_US"
+					| "zh_CN"
+					| "ja_JP",
 				spaceId: "",
 			},
 		});
@@ -126,6 +140,7 @@ const AdminSpacesNewRoute = observer(() => {
 			phone={state.phone}
 			email={state.email}
 			businessNo={state.businessNo}
+			contentLanguageCode={state.contentLanguageCode}
 			errors={state.errors}
 			isSubmitPending={isPending}
 			onChangeNameInput={onChangeNameInput}
@@ -134,6 +149,7 @@ const AdminSpacesNewRoute = observer(() => {
 			onChangePhoneInput={onChangePhoneInput}
 			onChangeEmailInput={onChangeEmailInput}
 			onChangeBusinessNoInput={onChangeBusinessNoInput}
+			onChangeContentLanguageSelect={onChangeContentLanguageSelect}
 			onClickCancelButton={onClickCancelButton}
 			onClickSaveButton={onClickSaveButton}
 		/>

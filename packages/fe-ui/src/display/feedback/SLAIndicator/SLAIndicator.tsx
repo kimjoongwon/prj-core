@@ -1,5 +1,9 @@
+"use client";
+
 import { Chip } from "@heroui/react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { observer } from "mobx-react-lite";
+import { useT } from "../../../i18n";
 
 const slaIndicatorVariants = cva("inline-flex items-center gap-1.5", {
 	variants: {
@@ -70,21 +74,21 @@ const calculateSLAStatus = (
 /**
  * 남은 시간 포맷팅
  */
-const formatRemaining = (ms: number): string => {
+const formatRemaining = (ms: number, t: (key: string) => string): string => {
 	if (ms < 0) {
 		const absMs = Math.abs(ms);
 		const minutes = Math.floor(absMs / (1000 * 60));
-		if (minutes < 60) return `${minutes}분 초과`;
+		if (minutes < 60) return `${minutes}${t("분 초과")}`;
 		const hours = Math.floor(minutes / 60);
-		return `${hours}시간 ${minutes % 60}분 초과`;
+		return `${hours}${t("시간")} ${minutes % 60}${t("분 초과")}`;
 	}
 
 	const minutes = Math.floor(ms / (1000 * 60));
-	if (minutes < 60) return `${minutes}분 남음`;
+	if (minutes < 60) return `${minutes}${t("분 남음")}`;
 	const hours = Math.floor(minutes / 60);
-	if (hours < 24) return `${hours}시간 ${minutes % 60}분 남음`;
+	if (hours < 24) return `${hours}${t("시간")} ${minutes % 60}${t("분 남음")}`;
 	const days = Math.floor(hours / 24);
-	return `${days}일 ${hours % 24}시간 남음`;
+	return `${days}${t("일")} ${hours % 24}${t("시간 남음")}`;
 };
 
 const STATUS_CHIP_COLOR: Record<
@@ -112,13 +116,14 @@ const STATUS_LABEL: Record<SLAStatusValue, string> = {
  * <SLAIndicator firstResponseAt={new Date()} resolvedAt={new Date()} />
  * ```
  */
-export const SLAIndicator = ({
+export const SLAIndicator = observer(function SLAIndicator({
 	responseDue,
 	resolveDue,
 	firstResponseAt,
 	resolvedAt,
 	className,
-}: SLAIndicatorProps) => {
+}: SLAIndicatorProps) {
+	const t = useT();
 	// 해결 SLA가 있으면 해결 기준, 없으면 응답 기준
 	const due = resolveDue ?? responseDue;
 	const completed = resolvedAt ?? firstResponseAt;
@@ -131,13 +136,13 @@ export const SLAIndicator = ({
 	return (
 		<div className={slaIndicatorVariants({ status, className })}>
 			<Chip size="sm" color={color} variant="flat">
-				{label}
+				{t(label)}
 			</Chip>
 			{due && !completed && (
 				<span className="text-xs opacity-70">
-					{formatRemaining(remainingMs)}
+					{formatRemaining(remainingMs, t)}
 				</span>
 			)}
 		</div>
 	);
-};
+});

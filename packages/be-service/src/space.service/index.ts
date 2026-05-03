@@ -1,6 +1,6 @@
 import { Ground, Space } from "@cocrepo/entity";
 import type { CreateGroundDto, UpdateGroundDto } from "@cocrepo/dto";
-import type { Prisma } from "@cocrepo/prisma";
+import type { LanguageCode, Prisma } from "@cocrepo/prisma";
 import { SpacesRepository } from "@cocrepo/repository";
 import {
 	ConflictException,
@@ -31,6 +31,7 @@ export class SpaceService {
 		skip?: number;
 		take?: number;
 		search?: string;
+		contentLanguageCode?: LanguageCode;
 	}): Promise<{ spaces: Space[]; total: number }> {
 		const [spaces, total] = await this.repository.findManyWithGround(params);
 		return { spaces, total };
@@ -80,7 +81,9 @@ export class SpaceService {
 			);
 		}
 
-		const space = await this.repository.create();
+		const space = await this.repository.create({
+			contentLanguageCode: dto.contentLanguageCode,
+		});
 
 		return this.repository.createGroundBySpaceId(space.id, {
 			name: dto.name,
@@ -102,6 +105,12 @@ export class SpaceService {
 		dto: UpdateGroundDto,
 	): Promise<Space> {
 		await this.getGroundBySpaceId(spaceId);
+
+		if (dto.contentLanguageCode !== undefined) {
+			await this.repository.updateById(spaceId, {
+				contentLanguageCode: dto.contentLanguageCode,
+			});
+		}
 
 		return this.repository.updateGroundBySpaceId(spaceId, {
 			...(dto.name !== undefined && { name: dto.name }),

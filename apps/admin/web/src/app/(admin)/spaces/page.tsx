@@ -1,6 +1,7 @@
 "use client";
 
 import { useGetSpaces } from "@cocrepo/api/core/spaces";
+import { LanguageCode } from "@cocrepo/api/core/model";
 import { SpaceListPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -13,8 +14,19 @@ export default observer(function SpacesPageRoute() {
 		take: parseAsInteger.withDefault(20),
 		skip: parseAsInteger.withDefault(0),
 		search: parseAsString.withDefault(""),
+		contentLanguageCode: parseAsString.withDefault(""),
 	});
-	const { data: response, isLoading } = useGetSpaces();
+	const contentLanguageCode = Object.values(LanguageCode).includes(
+		queryStates.contentLanguageCode as LanguageCode,
+	)
+		? (queryStates.contentLanguageCode as LanguageCode)
+		: undefined;
+	const { data: response, isLoading } = useGetSpaces({
+		take: queryStates.take,
+		skip: queryStates.skip,
+		search: queryStates.search || undefined,
+		contentLanguageCode,
+	});
 
 	return (
 		<SpaceListPage

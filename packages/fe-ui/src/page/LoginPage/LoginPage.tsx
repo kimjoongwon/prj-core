@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import type { FormEvent } from "react";
 import { Button } from "../../control/Button/Button";
 import { LoginForm, type LoginFormState } from "../../form/LoginForm/LoginForm";
+import { useT } from "../../i18n";
 import { VStack } from "../../rhythm/VStack/VStack";
 
 export interface LoginPageState {
@@ -65,6 +66,7 @@ export const LoginPage = observer(
 		title,
 		caption,
 	}: LoginPageProps) => {
+		const t = useT();
 		const onSubmitLoginPage = (event: FormEvent<HTMLFormElement>) => {
 			event.preventDefault();
 			void onSubmitLoginForm();
@@ -74,8 +76,8 @@ export const LoginPage = observer(
 			<form onSubmit={onSubmitLoginPage}>
 				<VStack fullWidth gap={8} className="p-4">
 					<VStack fullWidth gap={2}>
-						<h3 className="text-2xl font-bold">{title}</h3>
-						<span className="text-sm text-default-500">{caption}</span>
+						<h3 className="text-2xl font-bold">{t(title)}</h3>
+						<span className="text-sm text-default-500">{t(caption)}</span>
 					</VStack>
 
 					<VStack fullWidth gap={4}>
@@ -84,7 +86,7 @@ export const LoginPage = observer(
 
 					{state.errorMessage && (
 						<span className="text-sm font-medium text-danger">
-							{state.errorMessage}
+							{t(state.errorMessage)}
 						</span>
 					)}
 
@@ -95,7 +97,7 @@ export const LoginPage = observer(
 						fullWidth
 						isLoading={isLoading}
 					>
-						<span className="text-white">로그인</span>
+						<span className="text-white">{t("로그인")}</span>
 					</Button>
 				</VStack>
 			</form>

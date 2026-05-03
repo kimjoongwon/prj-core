@@ -3,13 +3,24 @@
  * Do not edit manually.
  * OIDC Identity Provider
  * OpenID Connect Identity Provider API
+
+OIDC 인증 및 IDP 관리 API를 제공합니다.
+
+**인증 방법:**
+1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인
+2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
+ * OpenAPI spec version: 1.0.0
  */
 
-export type EmailVerificationStatus =
-	(typeof EmailVerificationStatus)[keyof typeof EmailVerificationStatus];
+/**
+ * 상태
+ */
+export type EmailVerificationStatus = typeof EmailVerificationStatus[keyof typeof EmailVerificationStatus];
 
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const EmailVerificationStatus = {
-	PENDING: "PENDING",
-	VERIFIED: "VERIFIED",
-	EXPIRED: "EXPIRED",
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  EXPIRED: 'EXPIRED',
 } as const;

@@ -1,6 +1,10 @@
+"use client";
+
 import type { TextAreaProps } from "@heroui/react";
 import { Textarea as BaseTextarea } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import type React from "react";
+import { useT } from "../../i18n";
 
 export interface TextareaProps
 	extends Omit<TextAreaProps, "onChange" | "value"> {
@@ -26,12 +30,35 @@ export interface TextareaProps
  * />
  * ```
  */
-export const Textarea = (props: TextareaProps) => {
+export const Textarea = observer((props: TextareaProps) => {
+	const t = useT();
 	const { onChange, value, ...rest } = props;
 
 	const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		onChange?.(e.target.value);
 	};
 
-	return <BaseTextarea {...rest} value={value} onChange={handleOnChange} />;
-};
+	return (
+		<BaseTextarea
+			{...rest}
+			label={typeof rest.label === "string" ? t(rest.label) : rest.label}
+			placeholder={
+				typeof rest.placeholder === "string"
+					? t(rest.placeholder)
+					: rest.placeholder
+			}
+			description={
+				typeof rest.description === "string"
+					? t(rest.description)
+					: rest.description
+			}
+			errorMessage={
+				typeof rest.errorMessage === "string"
+					? t(rest.errorMessage)
+					: rest.errorMessage
+			}
+			value={value}
+			onChange={handleOnChange}
+		/>
+	);
+});

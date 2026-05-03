@@ -13,6 +13,7 @@ import {
 import { ChevronDown, LogOut } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { HeaderBarProps } from "../../display/layout/type";
+import { useT } from "../../i18n";
 
 /**
  * HeaderBar - 관리자 레이아웃 헤더 (v7.0)
@@ -42,6 +43,7 @@ export const HeaderBar = observer(function HeaderBar({
 	className,
 	renderUserMenu,
 }: HeaderBarProps) {
+	const t = useT();
 	const handleLogout = () => {
 		onLogout?.();
 	};
@@ -57,7 +59,7 @@ export const HeaderBar = observer(function HeaderBar({
 					<Button
 						variant="light"
 						className="h-11 rounded-2xl border border-slate-200/70 bg-white/72 px-2 pr-3 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
-						aria-label="사용자 메뉴"
+						aria-label={t("사용자 메뉴")}
 					>
 						<Avatar
 							size="sm"
@@ -79,7 +81,7 @@ export const HeaderBar = observer(function HeaderBar({
 						<ChevronDown className="hidden h-4 w-4 text-slate-400 sm:block" />
 					</Button>
 				</DropdownTrigger>
-				<DropdownMenu aria-label="사용자 메뉴" variant="flat">
+				<DropdownMenu aria-label={t("사용자 메뉴")} variant="flat">
 					<DropdownSection showDivider>
 						<DropdownItem
 							key="identity"
@@ -98,7 +100,7 @@ export const HeaderBar = observer(function HeaderBar({
 							}
 							onPress={handleLogout}
 						>
-							로그아웃
+							{t("로그아웃")}
 						</DropdownItem>
 					</DropdownSection>
 				</DropdownMenu>

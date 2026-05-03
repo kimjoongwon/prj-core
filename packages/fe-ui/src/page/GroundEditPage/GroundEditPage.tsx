@@ -1,14 +1,19 @@
 "use client";
 
 import {
+	CONTENT_LANGUAGE_OPTIONS,
 	FormPage,
 	FormPageSurface,
 	PageTitleBar,
 	FormSection,
 	FormSectionCard,
 	VStack,
+	Button,
+	Input,
+	Select,
+	useT,
 } from "@cocrepo/ui";
-import { Button, Input, Spinner } from "@heroui/react";
+import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 
 export interface GroundEditPageProps {
@@ -19,6 +24,7 @@ export interface GroundEditPageProps {
 	phone: string;
 	email: string;
 	businessNo: string;
+	contentLanguageCode: string;
 	errors: Record<string, string>;
 	isLoading: boolean;
 	isNotFound: boolean;
@@ -28,6 +34,7 @@ export interface GroundEditPageProps {
 	onChangeAddressInput: (value: string) => void;
 	onChangePhoneInput: (value: string) => void;
 	onChangeEmailInput: (value: string) => void;
+	onChangeContentLanguageSelect: (value: string) => void;
 	onClickCancelButton: () => void;
 	onClickSaveButton: () => void;
 }
@@ -41,6 +48,7 @@ export const GroundEditPage = observer(
 		phone,
 		email,
 		businessNo,
+		contentLanguageCode,
 		errors,
 		isLoading,
 		isNotFound,
@@ -50,9 +58,12 @@ export const GroundEditPage = observer(
 		onChangeAddressInput,
 		onChangePhoneInput,
 		onChangeEmailInput,
+		onChangeContentLanguageSelect,
 		onClickCancelButton,
 		onClickSaveButton,
 	}: GroundEditPageProps) => {
+		const t = useT();
+
 		if (isLoading) {
 			return (
 				<FormPage
@@ -62,7 +73,7 @@ export const GroundEditPage = observer(
 						<FormSectionCard>
 							<div className="flex items-center justify-center gap-2 p-8">
 								<Spinner size="sm" />
-								<span className="text-default-500">로딩 중...</span>
+								<span className="text-default-500">{t("로딩 중...")}</span>
 							</div>
 						</FormSectionCard>
 					</FormPageSurface>
@@ -84,7 +95,7 @@ export const GroundEditPage = observer(
 						<FormSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
 								<p className="text-default-500">
-									시설 detail을 찾을 수 없습니다.
+									{t("시설 detail을 찾을 수 없습니다.")}
 								</p>
 								<Button variant="flat" onPress={onClickCancelButton}>
 									목록으로
@@ -103,7 +114,11 @@ export const GroundEditPage = observer(
 						title="시설 정보 수정"
 						description={
 							groundName
-								? `${groundName} 시설 detail을 수정합니다.`
+								? (
+										<>
+											{groundName} {t("시설 detail을 수정합니다.")}
+										</>
+									)
 								: "시설 detail을 수정합니다."
 						}
 					/>
@@ -162,6 +177,19 @@ export const GroundEditPage = observer(
 									value={businessNo}
 									isDisabled
 									description="사업자등록번호는 수정할 수 없습니다."
+								/>
+								<Select
+									label="콘텐츠 언어"
+									placeholder="운영 리소스 작성 언어를 선택하세요"
+									value={contentLanguageCode}
+									onChange={onChangeContentLanguageSelect}
+									options={CONTENT_LANGUAGE_OPTIONS.map((language) => ({
+										value: language.code,
+										label: language.label,
+									}))}
+									isRequired
+									isInvalid={Boolean(errors.contentLanguageCode)}
+									errorMessage={errors.contentLanguageCode}
 								/>
 								<div className="flex justify-end gap-2 pt-4">
 									<Button variant="flat" onPress={onClickCancelButton}>

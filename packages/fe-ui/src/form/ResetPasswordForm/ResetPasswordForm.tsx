@@ -5,6 +5,7 @@ import { observer } from "mobx-react-lite";
 import { Button, Input, Link } from "../../control";
 import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
 import { PasswordStrengthIndicator } from "../../display/feedback/PasswordStrengthIndicator/PasswordStrengthIndicator";
+import { useT } from "../../i18n";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 
@@ -48,6 +49,7 @@ export const ResetPasswordForm = observer(
 		forgotPasswordHref = "/forgot-password",
 		loginHref = "/auth/login",
 	}: ResetPasswordFormProps) => {
+		const t = useT();
 		const isPasswordValid = passwordRules.every((r) => r.test(state.password));
 		const isPasswordMatch =
 			state.password === state.confirmPassword &&
@@ -59,7 +61,9 @@ export const ResetPasswordForm = observer(
 				{step === "validating" && (
 					<div className="text-center py-8">
 						<div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-						<p className="text-default-500">링크를 확인하고 있습니다...</p>
+						<p className="text-default-500">
+							{t("링크를 확인하고 있습니다...")}
+						</p>
 					</div>
 				)}
 
@@ -82,10 +86,12 @@ export const ResetPasswordForm = observer(
 							</svg>
 						</div>
 						<h2 className="text-lg font-semibold mb-2">
-							{tokenError || "링크가 만료되었습니다"}
+							{tokenError ? t(tokenError) : t("링크가 만료되었습니다")}
 						</h2>
 						<p className="text-default-500 text-sm mb-6">
-							비밀번호 재설정 링크는 30분간 유효하며, 1회만 사용할 수 있습니다.
+							{t(
+								"비밀번호 재설정 링크는 30분간 유효하며, 1회만 사용할 수 있습니다.",
+							)}
 						</p>
 						<Link href={forgotPasswordHref}>
 							<Button
@@ -93,7 +99,7 @@ export const ResetPasswordForm = observer(
 								className="w-full font-semibold"
 								size="lg"
 							>
-								다시 요청하기
+								{t("다시 요청하기")}
 							</Button>
 						</Link>
 					</div>
@@ -118,11 +124,12 @@ export const ResetPasswordForm = observer(
 							</svg>
 						</div>
 						<h2 className="text-lg font-semibold mb-2">
-							비밀번호가 변경되었습니다
+							{t("비밀번호가 변경되었습니다")}
 						</h2>
 						<p className="text-default-500 text-sm mb-6">
-							보안을 위해 모든 기기에서 로그아웃되었습니다.
-							<br />새 비밀번호로 다시 로그인해주세요.
+							{t("보안을 위해 모든 기기에서 로그아웃되었습니다.")}
+							<br />
+							{t("새 비밀번호로 다시 로그인해주세요.")}
 						</p>
 						<Link href={loginHref}>
 							<Button
@@ -130,7 +137,7 @@ export const ResetPasswordForm = observer(
 								className="w-full font-semibold"
 								size="lg"
 							>
-								로그인하기
+								{t("로그인하기")}
 							</Button>
 						</Link>
 					</div>
@@ -146,7 +153,7 @@ export const ResetPasswordForm = observer(
 						/>
 
 						{state.submitError && (
-							<AlertBanner type="danger" message={state.submitError} />
+							<AlertBanner type="danger" message={t(state.submitError)} />
 						)}
 
 						<form className="space-y-5">
@@ -191,7 +198,7 @@ export const ResetPasswordForm = observer(
 								isLoading={state.isSubmitting}
 								isDisabled={!isPasswordValid || !isPasswordMatch}
 							>
-								비밀번호 변경
+								{t("비밀번호 변경")}
 							</Button>
 						</form>
 					</>
@@ -204,7 +211,7 @@ export const ResetPasswordForm = observer(
 							href={loginHref}
 							className="text-default-400 hover:text-default-500 text-sm"
 						>
-							로그인으로 돌아가기
+							{t("로그인으로 돌아가기")}
 						</Link>
 					</div>
 				)}

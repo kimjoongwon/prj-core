@@ -11,6 +11,7 @@ import { addToast, useDisclosure } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 
 type ProgramNewPageParams = {
 	timelineId: string;
@@ -35,6 +36,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 	() => {
 		const { timelineId, sessionId } = useParams<ProgramNewPageParams>();
 		const router = useRouter();
+		const persistStore = usePersistStore();
 		const routinePickerModal = useDisclosure();
 		const instructorPickerModal = useDisclosure();
 		const state = useLocalObservable(() => ({
@@ -202,6 +204,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 				descriptionText={[session?.name, session?.timeline?.name]
 					.filter(Boolean)
 					.join(" · ")}
+				contentLanguageCode={persistStore.contentLanguageCode}
 				name={state.name}
 				routineName={selectedRoutine?.name ?? ""}
 				instructorName={selectedInstructor?.name ?? ""}

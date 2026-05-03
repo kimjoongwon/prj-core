@@ -13,9 +13,9 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export type ChangePassword200AllOf = {
-	/** */
-	httpStatus?: number;
-	/** */
-	message?: string;
-	data?: boolean;
+  /** */
+  httpStatus?: number;
+  /** */
+  message?: string;
+  data?: boolean;
 };

@@ -13,11 +13,11 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface RoleAssociationDto {
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	roleId: string;
-	groupId: string;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  roleId: string;
+  groupId: string;
 }

@@ -1,5 +1,9 @@
+"use client";
+
 import { Chip } from "@heroui/react";
 import { AlertTriangle, ArrowUp, Minus, ArrowDown } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 /** 문의 우선순위값 (Prisma Enum 값과 동일) */
 export type InquiryPriorityCode = "LOW" | "NORMAL" | "HIGH" | "URGENT";
@@ -49,10 +53,12 @@ const getPriorityIcon = (priority: InquiryPriorityCode) => {
  * <InquiryPriorityCell value="HIGH" showStars />
  * ```
  */
-export const InquiryPriorityCell = ({
+export const InquiryPriorityCell = observer(function InquiryPriorityCell({
 	value,
 	showStars,
-}: InquiryPriorityCellProps) => {
+}: InquiryPriorityCellProps) {
+	const t = useT();
+
 	if (!value) {
 		return <span className="text-default-400">-</span>;
 	}
@@ -67,8 +73,8 @@ export const InquiryPriorityCell = ({
 				variant="flat"
 				startContent={getPriorityIcon(value)}
 			>
-				{showStars ? "⭐".repeat(config.stars) : config.label}
+				{showStars ? "⭐".repeat(config.stars) : t(config.label)}
 			</Chip>
 		</div>
 	);
-};
+});

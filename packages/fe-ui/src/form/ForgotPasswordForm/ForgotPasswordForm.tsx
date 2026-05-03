@@ -3,6 +3,7 @@
 import { observer } from "mobx-react-lite";
 import { Button, Input, Link } from "../../control";
 import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
+import { useT } from "../../i18n";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 
@@ -26,6 +27,8 @@ export interface ForgotPasswordFormProps {
  */
 export const ForgotPasswordForm = observer(
 	({ state, loginHref = "/auth/login" }: ForgotPasswordFormProps) => {
+		const t = useT();
+
 		return (
 			<AuthCard>
 				<AuthCardHeader
@@ -54,15 +57,15 @@ export const ForgotPasswordForm = observer(
 								</svg>
 							</div>
 							<h2 className="text-lg font-semibold mb-2">
-								이메일을 확인하세요
+								{t("이메일을 확인하세요")}
 							</h2>
 							<p className="text-default-500 text-sm mb-6">
 								<span className="font-medium text-foreground">
 									{state.email}
 								</span>
-								으로 예약 계정 비밀번호 재설정 링크를 발송했습니다.
+								{t("으로 예약 계정 비밀번호 재설정 링크를 발송했습니다.")}
 								<br />
-								이메일이 도착하지 않았다면 스팸 폴더를 확인해주세요.
+								{t("이메일이 도착하지 않았다면 스팸 폴더를 확인해주세요.")}
 							</p>
 
 							<Button
@@ -71,7 +74,7 @@ export const ForgotPasswordForm = observer(
 								className="w-full mb-3"
 								isLoading={state.isSubmitting}
 							>
-								다시 보내기
+								{t("다시 보내기")}
 							</Button>
 						</div>
 					</form>
@@ -79,7 +82,7 @@ export const ForgotPasswordForm = observer(
 					/* 이메일 입력 폼 */
 					<>
 						{state.errorMessage && (
-							<AlertBanner type="danger" message={state.errorMessage} />
+							<AlertBanner type="danger" message={t(state.errorMessage)} />
 						)}
 
 						<form className="space-y-5">
@@ -102,7 +105,7 @@ export const ForgotPasswordForm = observer(
 								isLoading={state.isSubmitting}
 								isDisabled={!state.email}
 							>
-								재설정 링크 보내기
+								{t("재설정 링크 보내기")}
 							</Button>
 						</form>
 					</>
@@ -114,7 +117,7 @@ export const ForgotPasswordForm = observer(
 						href={loginHref}
 						className="text-default-400 hover:text-default-500 text-sm"
 					>
-						로그인으로 돌아가기
+						{t("로그인으로 돌아가기")}
 					</Link>
 				</div>
 			</AuthCard>

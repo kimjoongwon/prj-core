@@ -1,8 +1,12 @@
+"use client";
+
 import {
 	Input as HeroUiInput,
 	type InputProps as HeroUiInputProps,
 } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import type { ChangeEventHandler } from "react";
+import { useT } from "../../i18n";
 
 export interface InputProps
 	extends Omit<HeroUiInputProps, "onChange" | "onBlur" | "value"> {
@@ -44,7 +48,8 @@ export interface InputProps
  * />
  * ```
  */
-export const Input = (props: InputProps) => {
+export const Input = observer((props: InputProps) => {
+	const t = useT();
 	const {
 		onChange,
 		onBlur,
@@ -75,12 +80,25 @@ export const Input = (props: InputProps) => {
 	return (
 		<HeroUiInput
 			{...rest}
+			label={typeof rest.label === "string" ? t(rest.label) : rest.label}
+			placeholder={
+				typeof rest.placeholder === "string"
+					? t(rest.placeholder)
+					: rest.placeholder
+			}
+			description={
+				typeof rest.description === "string"
+					? t(rest.description)
+					: rest.description
+			}
 			type={type}
 			size={size}
 			onChange={handleChange}
 			onBlur={handleOnBlur}
-			errorMessage={errorMessage}
+			errorMessage={
+				typeof errorMessage === "string" ? t(errorMessage) : errorMessage
+			}
 			value={String(value)}
 		/>
 	);
-};
+});

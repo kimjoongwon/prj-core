@@ -1,9 +1,13 @@
+"use client";
+
 import { Button, Card, CardBody } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import type React from "react";
 import { Text } from "../../data-display/Text/Text";
 import { Container } from "../../../layout/Container/Container";
 import { Spacer } from "../../../rhythm/Spacer/Spacer";
 import { VStack } from "../../../rhythm/VStack/VStack";
+import { translateNode, useT } from "../../../i18n";
 
 export interface NotFoundProps {
 	/**
@@ -61,7 +65,7 @@ export interface NotFoundProps {
  * />
  * ```
  */
-export function NotFound({
+export const NotFound = observer(function NotFound({
 	title = "페이지를 찾을 수 없습니다",
 	description = "요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.",
 	homeButtonText = "홈으로 돌아가기",
@@ -71,6 +75,7 @@ export function NotFound({
 	actions,
 	icon,
 }: NotFoundProps) {
+	const t = useT();
 	const defaultIcon = (
 		<div className="font-bold text-9xl text-gray-300">404</div>
 	);
@@ -83,15 +88,17 @@ export function NotFound({
 						{icon || defaultIcon}
 
 						<VStack className="items-center gap-2">
-							<Text variant="h2">{title}</Text>
+							<Text variant="h2">{t(title)}</Text>
 							<Text variant="body1" className="text-center">
-								{description}
+								{t(description)}
 							</Text>
 						</VStack>
 
 						<Spacer size={8} />
 
-						{actions || (
+						{actions ? (
+							translateNode(actions, t)
+						) : (
 							<VStack className="w-full gap-3">
 								<Button
 									color="primary"
@@ -100,7 +107,7 @@ export function NotFound({
 									onPress={onHomeClick}
 									className="w-full"
 								>
-									{homeButtonText}
+									{t(homeButtonText)}
 								</Button>
 
 								<Button
@@ -110,7 +117,7 @@ export function NotFound({
 									onPress={onBackClick}
 									className="w-full"
 								>
-									{backButtonText}
+									{t(backButtonText)}
 								</Button>
 							</VStack>
 						)}
@@ -119,6 +126,6 @@ export function NotFound({
 			</Card>
 		</Container>
 	);
-}
+});
 
 export default NotFound;

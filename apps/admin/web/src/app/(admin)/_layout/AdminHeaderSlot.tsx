@@ -2,12 +2,22 @@
 
 import { useLogout, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
 import type { SpaceInfo } from "@cocrepo/ui";
-import { HeaderBar, HeaderSpaceSelector, ThemeToggleButton } from "@cocrepo/ui";
+import {
+	HeaderBar,
+	HeaderSpaceSelector,
+	LanguageSelectButton,
+	ThemeToggleButton,
+	useT,
+} from "@cocrepo/ui";
 import { Button, Tooltip } from "@heroui/react";
 import { KeyRound } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { resolveIdpClientUrl } from "@/runtime-urls";
-import { useNavigationStore, usePersistStore } from "@/stores/AppStoreProvider";
+import {
+	useAppStore,
+	useNavigationStore,
+	usePersistStore,
+} from "@/stores/AppStoreProvider";
 
 const userInfo = {
 	name: "관리자",
@@ -15,8 +25,11 @@ const userInfo = {
 };
 
 export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
+	const t = useT();
+	const appStore = useAppStore();
 	const persistStore = usePersistStore();
 	const navigationStore = useNavigationStore();
+	const localeStore = appStore.localeStore;
 	const { mutate: setCurrentSpaceMutate, isPending: isSettingCurrentSpace } =
 		useSetCurrentSpace({
 			mutation: {
@@ -28,7 +41,15 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 							(space) => space.spaceId === variables.spaceId,
 						)?.groundName ??
 						"";
-					persistStore.setSpace(variables.spaceId, nextGroundName);
+					const nextContentLanguageCode =
+						persistStore.spaces.find(
+							(space) => space.spaceId === variables.spaceId,
+						)?.contentLanguageCode ?? null;
+					persistStore.setSpace(
+						variables.spaceId,
+						nextGroundName,
+						nextContentLanguageCode,
+					);
 					window.location.reload();
 				},
 			},
@@ -75,25 +96,34 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 			context={
 				<div className="min-w-0">
 					<p className="text-[11px] font-medium uppercase tracking-[0.22em] text-slate-400 dark:text-slate-500">
-						{currentSectionCaption}
+						{t(currentSectionCaption)}
 					</p>
 					<p className="truncate text-sm font-semibold text-slate-950 dark:text-slate-50">
-						{currentSectionLabel}
+						{t(currentSectionLabel)}
 					</p>
 				</div>
 			}
 			actions={
 				<>
+					{localeStore && (
+						<LanguageSelectButton
+							languageCode={localeStore.languageCode}
+							onChangeLanguage={(languageCode) => {
+								localeStore.setLanguageCode(languageCode);
+							}}
+							className="h-10 w-10 rounded-2xl border border-slate-200/70 bg-white/72 text-slate-700 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10"
+						/>
+					)}
 					<ThemeToggleButton
 						compact
 						className="h-10 w-10 rounded-2xl border border-slate-200/70 bg-white/72 text-slate-700 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10"
 					/>
-					<Tooltip content="IDP 관리" placement="bottom">
+					<Tooltip content={t("IDP 관리")} placement="bottom">
 						<Button
 							variant="light"
 							isIconOnly
 							className="h-11 w-11 rounded-2xl border border-slate-200/70 bg-white/72 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
-							aria-label="IDP 관리 콘솔 열기"
+							aria-label={t("IDP 관리 콘솔 열기")}
 							onPress={onClickOpenIdpClientButton}
 						>
 							<KeyRound

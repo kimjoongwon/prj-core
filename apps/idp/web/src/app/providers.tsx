@@ -1,7 +1,10 @@
 "use client";
 import { setLoginRedirectUrl } from "@cocrepo/api/core/client";
 import { useVerifyToken } from "@cocrepo/api/idp/auth";
-import { setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
+import {
+	customIdpInstance,
+	setIdpLoginRedirectUrl,
+} from "@cocrepo/api/idp/client";
 
 import { IDP_NAV_ITEMS, isScopeKindAccessible } from "@cocrepo/constant";
 import {
@@ -10,11 +13,12 @@ import {
 	useStore,
 } from "@cocrepo/store";
 import type { AbilityApiResponse } from "@cocrepo/type";
-import { DesignSystemProvider } from "@cocrepo/ui";
+import { DesignSystemProvider, I18nProvider } from "@cocrepo/ui";
 import {
 	isServer,
 	QueryClient,
 	QueryClientProvider,
+	useQuery,
 } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
@@ -24,6 +28,15 @@ import { useEffect } from "react";
 
 interface ProvidersProps {
 	children: ReactNode;
+}
+
+interface I18nCatalogData {
+	languageCode: string;
+	messages: Record<string, string>;
+}
+
+interface ApiResponse<T> {
+	data?: T;
 }
 
 const AUTH_FLOW_PATH_PREFIXES = [
@@ -87,16 +100,49 @@ export const Providers = observer(function Providers({
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<NuqsNextAdapter>
-				<ConsoleAppStoreProvider>
-					<AbilityStoreBootstrapper>
-						<DesignSystemProvider navigate={handleNavigate}>
-							{children}
-						</DesignSystemProvider>
-					</AbilityStoreBootstrapper>
-				</ConsoleAppStoreProvider>
-			</NuqsNextAdapter>
-		</QueryClientProvider>
+				<NuqsNextAdapter>
+					<ConsoleAppStoreProvider>
+						<I18nCatalogBootstrapper>
+							<AbilityStoreBootstrapper>
+								<DesignSystemProvider navigate={handleNavigate}>
+									{children}
+								</DesignSystemProvider>
+							</AbilityStoreBootstrapper>
+						</I18nCatalogBootstrapper>
+					</ConsoleAppStoreProvider>
+				</NuqsNextAdapter>
+			</QueryClientProvider>
+	);
+});
+
+const I18nCatalogBootstrapper = observer(function I18nCatalogBootstrapper({
+	children,
+}: {
+	children: ReactNode;
+}) {
+	const store = useStore();
+	const localeStore = store.localeStore;
+	const languageCode = localeStore?.languageCode ?? "ko_KR";
+	const { data } = useQuery({
+		queryKey: ["idp-i18n-catalog", languageCode],
+		queryFn: () =>
+			customIdpInstance<ApiResponse<I18nCatalogData>>({
+				method: "GET",
+				url: `/api/v1/i18n/catalog/${languageCode}`,
+			}),
+		retry: false,
+		refetchOnWindowFocus: false,
+	});
+	const messages = data?.data?.messages ?? {};
+
+	useEffect(() => {
+		document.documentElement.lang = languageCode.replace("_", "-");
+	}, [languageCode]);
+
+	return (
+		<I18nProvider languageCode={languageCode} messages={messages}>
+			{children}
+		</I18nProvider>
 	);
 });
 

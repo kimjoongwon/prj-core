@@ -2,6 +2,7 @@ import { ROUTINE_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
 import { SpaceScope } from "@cocrepo/dto";
 import { Routine } from "@cocrepo/entity";
+import type { LanguageCode } from "@cocrepo/prisma";
 import { RoutinesRepository, TasksRepository } from "@cocrepo/repository";
 import {
 	BadRequestException,
@@ -35,12 +36,14 @@ export class RoutineService {
 		skip: number;
 		take: number;
 		search?: string;
+		contentLanguageCode?: LanguageCode;
 	}): Promise<{ routines: Routine[]; total: number }> {
 		const {
 			spaceScope = SpaceScope.INCLUDE_ANCESTORS,
 			skip,
 			take,
 			search,
+			contentLanguageCode,
 		} = params;
 		this.logger.debug(`루틴 목록 조회: spaceScope=${spaceScope}`);
 
@@ -51,6 +54,7 @@ export class RoutineService {
 			skip,
 			take,
 			search,
+			contentLanguageCode,
 		});
 
 		return { routines, total };

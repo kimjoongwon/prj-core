@@ -1,3 +1,5 @@
+"use client";
+
 import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
@@ -7,12 +9,25 @@ import {
 	type TextareaProps as BaseTextareaProps,
 } from "./Textarea";
 
-export interface TextareaProps<T>
-	extends MobxProps<T>,
-		Omit<BaseTextareaProps, "value" | "onChange"> {}
+type BoundTextareaProps<T> = MobxProps<T> &
+	Omit<BaseTextareaProps, "value" | "onChange">;
+
+export type TextareaProps<T = object> =
+	| BoundTextareaProps<T>
+	| BaseTextareaProps;
+
+function isBoundTextareaProps<T>(
+	props: TextareaProps<T>,
+): props is BoundTextareaProps<T> {
+	return "state" in props && "path" in props;
+}
 
 export const Textarea = observer(
 	<T extends object>(props: TextareaProps<T>) => {
+		if (!isBoundTextareaProps(props)) {
+			return <BaseTextarea {...props} />;
+		}
+
 		const { state, path, ...rest } = props;
 
 		const initialValue = tools.get(state, path, "") as string;

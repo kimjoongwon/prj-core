@@ -1,4 +1,8 @@
-import { Button, type ButtonProps } from "@heroui/react";
+"use client";
+
+import type { ButtonProps } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { Button } from "../../control/Button/Button";
 
 export interface ActionButtonCellProps extends ButtonProps {
 	/** 버튼 정렬 */
@@ -17,12 +21,12 @@ const ALIGN_CLASS_NAME: Record<
 /**
  * 테이블 셀 안에서 사용하는 범용 액션 버튼
  */
-export const ActionButtonCell = ({
+export const ActionButtonCell = observer(function ActionButtonCell({
 	align = "center",
 	size = "sm",
 	children,
 	...buttonProps
-}: ActionButtonCellProps) => {
+}: ActionButtonCellProps) {
 	return (
 		<div className={`flex w-full ${ALIGN_CLASS_NAME[align]}`}>
 			<Button size={size} {...buttonProps}>
@@ -30,4 +34,4 @@ export const ActionButtonCell = ({
 			</Button>
 		</div>
 	);
-};
+});

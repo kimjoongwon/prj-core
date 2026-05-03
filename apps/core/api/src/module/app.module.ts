@@ -35,6 +35,7 @@ import { CategoriesModule } from "./categories";
 import { FoldersModule } from "./folders";
 import { globalModules } from "./global.module";
 import { GroupsModule } from "./groups";
+import { I18nCatalogModule } from "./i18n";
 import { InquiriesModule } from "./inquiries";
 import { PoliciesModule } from "./policies";
 import { PolicyAssignmentsModule } from "./policy-assignments";
@@ -84,6 +85,7 @@ const devtoolsImports = enableNestDevtools
 		AbilitiesModule,
 		RolesModule,
 		GroupsModule,
+		I18nCatalogModule,
 		CategoriesModule,
 		PoliciesModule,
 		PolicyAssignmentsModule,
@@ -135,6 +137,10 @@ const devtoolsImports = enableNestDevtools
 							{
 								path: "groups",
 								module: GroupsModule,
+							},
+							{
+								path: "i18n",
+								module: I18nCatalogModule,
 							},
 							{
 								path: "categories",

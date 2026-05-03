@@ -13,12 +13,12 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface ChangePasswordDto {
-	/** 현재 비밀번호 */
-	currentPassword: string;
-	/** 새 비밀번호 (8자 이상, 대문자/소문자/숫자/특수문자 포함) */
-	newPassword: string;
-	/** 새 비밀번호 확인 */
-	confirmPassword: string;
-	/** 다른 기기 세션 로그아웃 여부 (기본값: false) */
-	logoutOtherDevices?: boolean;
+  /** 현재 비밀번호 */
+  currentPassword: string;
+  /** 새 비밀번호 (8자 이상, 대문자/소문자/숫자/특수문자 포함) */
+  newPassword: string;
+  /** 새 비밀번호 확인 */
+  confirmPassword: string;
+  /** 다른 기기 세션 로그아웃 여부 (기본값: false) */
+  logoutOtherDevices?: boolean;
 }

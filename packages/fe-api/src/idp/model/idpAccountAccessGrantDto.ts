@@ -13,31 +13,31 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface IdpAccountAccessGrantDto {
-	/** 테넌트 ID */
-	tenantId: string;
-	/** 접근 대상 Space ID */
-	spaceId: string;
-	/** 접근 대상 Space 이름 */
-	spaceName: string;
-	/**
-	 * 접근 대상 Space 라벨
-	 * @nullable
-	 */
-	spaceLabel?: string | null;
-	/** 부여된 Role ID */
-	roleId: string;
-	/** 부여된 Role 식별자 */
-	roleName: string;
-	/**
-	 * 부여된 Role 표시명
-	 * @nullable
-	 */
-	roleDisplayName?: string | null;
-	/** 권한 부여일 */
-	grantedAt: string;
-	/**
-	 * 권한 변경일
-	 * @nullable
-	 */
-	updatedAt?: string | null;
+  /** 테넌트 ID */
+  tenantId: string;
+  /** 접근 대상 Space ID */
+  spaceId: string;
+  /** 접근 대상 Space 이름 */
+  spaceName: string;
+  /**
+   * 접근 대상 Space 라벨
+   * @nullable
+   */
+  spaceLabel?: string | null;
+  /** 부여된 Role ID */
+  roleId: string;
+  /** 부여된 Role 식별자 */
+  roleName: string;
+  /**
+   * 부여된 Role 표시명
+   * @nullable
+   */
+  roleDisplayName?: string | null;
+  /** 권한 부여일 */
+  grantedAt: string;
+  /**
+   * 권한 변경일
+   * @nullable
+   */
+  updatedAt?: string | null;
 }

@@ -2,6 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import { useT } from "../../i18n";
 
 export interface AuthCardHeaderProps {
 	/** SVG path 또는 커스텀 아이콘 ReactNode */
@@ -38,12 +39,13 @@ export const AuthCardHeader = observer(
 		logoUri,
 		logoAlt,
 	}: AuthCardHeaderProps) => {
+		const t = useT();
 		const renderVisual = () => {
 			if (logoUri) {
 				return (
 					<img
 						src={logoUri}
-						alt={logoAlt ?? title}
+						alt={logoAlt ?? t(title)}
 						className="h-12 w-12 rounded-2xl border border-slate-200/80 bg-white/70 object-cover shadow-sm dark:border-white/10 dark:bg-white/[0.04]"
 					/>
 				);
@@ -93,11 +95,11 @@ export const AuthCardHeader = observer(
 					<h1
 						className={`text-2xl font-semibold tracking-tight ${titleToneClass}`}
 					>
-						{title}
+						{t(title)}
 					</h1>
 					{subtitle && (
 						<p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-							{subtitle}
+							{t(subtitle)}
 						</p>
 					)}
 				</div>

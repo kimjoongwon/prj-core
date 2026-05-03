@@ -1,5 +1,5 @@
 import { Routine } from "@cocrepo/entity";
-import { PrismaClient } from "@cocrepo/prisma";
+import { LanguageCode, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
@@ -24,8 +24,9 @@ export class RoutinesRepository {
 		skip: number;
 		take: number;
 		search?: string;
+		contentLanguageCode?: LanguageCode;
 	}): Promise<[Routine[], number]> {
-		const { spaceIds, skip, take, search } = params;
+		const { spaceIds, skip, take, search, contentLanguageCode } = params;
 		this.logger.debug(
 			`루틴 목록 조회: spaceIds=${spaceIds?.length ?? "all"}개, search=${search ?? "없음"}`,
 		);
@@ -33,6 +34,9 @@ export class RoutinesRepository {
 		const whereCondition = {
 			removedAt: null,
 			...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+			...(contentLanguageCode
+				? { space: { contentLanguageCode } }
+				: {}),
 			...(search
 				? { name: { contains: search, mode: "insensitive" as const } }
 				: {}),

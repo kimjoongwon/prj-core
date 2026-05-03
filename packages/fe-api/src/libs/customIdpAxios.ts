@@ -33,6 +33,11 @@ interface PersistStoreRef {
 }
 let persistStoreRef: PersistStoreRef | null = null;
 
+interface LocaleStoreRef {
+	languageCode?: string | null;
+}
+let localeStoreRef: LocaleStoreRef | null = null;
+
 // 401 발생 시 리다이렉트할 로그인 URL
 let loginRedirectUrl = "/admin/auth/login";
 
@@ -47,6 +52,10 @@ export function setIdpBaseUrl(baseUrl: string) {
  */
 export function setIdpPersistStore(store: PersistStoreRef) {
 	persistStoreRef = store;
+}
+
+export function setIdpLocaleStore(store: LocaleStoreRef) {
+	localeStoreRef = store;
 }
 
 /**
@@ -80,6 +89,11 @@ IDP_AXIOS_INSTANCE.interceptors.request.use((config) => {
 
 	if (spaceId) {
 		headers.set(REQUEST_HEADER_KEYS.SPACE_ID, spaceId);
+	}
+
+	const languageCode = localeStoreRef?.languageCode;
+	if (languageCode) {
+		headers.set(REQUEST_HEADER_KEYS.LANGUAGE, languageCode);
 	}
 
 	config.headers = headers;

@@ -68,6 +68,7 @@ export class TasksController {
 			skip: query.skip,
 			take: query.take,
 			search: query.search,
+			contentLanguageCode: query.contentLanguageCode,
 		});
 	}
 

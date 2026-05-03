@@ -15,20 +15,19 @@ import {
 	PageTitleBar,
 	Surface,
 	VStack,
-} from "@cocrepo/ui";
-import {
 	Button,
 	Input,
+	Select,
+	Textarea,
+	useT,
+} from "@cocrepo/ui";
+import {
 	Modal,
 	ModalBody,
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	Select,
-	SelectItem,
-	type Selection,
 	Switch,
-	Textarea,
 	useDisclosure,
 } from "@heroui/react";
 import { Languages, Plus, RefreshCcw } from "lucide-react";
@@ -151,14 +150,6 @@ function createFormFromTranslation(
 	};
 }
 
-function getSelectedKey(selection: Selection): string {
-	if (selection === "all") {
-		return "";
-	}
-
-	return Array.from(selection)[0]?.toString() ?? "";
-}
-
 function toStaticTranslationLanguageCode(
 	value: string,
 ): StaticTranslationLanguageCode | null {
@@ -188,6 +179,7 @@ export const StaticTranslationListPage = observer(
 		onInvalidateAllTranslationCache,
 		onInvalidateTranslationCache,
 	}: StaticTranslationListPageProps) => {
+		const t = useT();
 		const gridState = useLocalObservable(
 			() => new DataGridStateModel({ queryStates, setQueryStates }),
 		);
@@ -245,10 +237,8 @@ export const StaticTranslationListPage = observer(
 			setTranslationToDelete(null);
 		}
 
-		function handleLanguageSelectionChange(selection: Selection) {
-			const selected = toStaticTranslationLanguageCode(
-				getSelectedKey(selection),
-			);
+		function handleLanguageChange(value: string) {
+			const selected = toStaticTranslationLanguageCode(value);
 			if (!selected) {
 				return;
 			}
@@ -370,20 +360,17 @@ export const StaticTranslationListPage = observer(
 					<ModalContent>
 						<form onSubmit={handleSubmitForm}>
 							<ModalHeader className="flex flex-col gap-1">
-								{isEditMode ? "번역 수정" : "번역 등록"}
+								{t(isEditMode ? "번역 수정" : "번역 등록")}
 							</ModalHeader>
 							<ModalBody>
 								<VStack gap="block">
 									<Select
 										label="언어"
-										selectedKeys={[form.languageCode]}
+										value={form.languageCode}
 										isDisabled={isEditMode}
-										onSelectionChange={handleLanguageSelectionChange}
-									>
-										{STATIC_TRANSLATION_LANGUAGE_OPTIONS.map((option) => (
-											<SelectItem key={option.value}>{option.label}</SelectItem>
-										))}
-									</Select>
+										onChange={handleLanguageChange}
+										options={STATIC_TRANSLATION_LANGUAGE_OPTIONS}
+									/>
 									<Input
 										label="번역 키"
 										value={form.key}
@@ -405,7 +392,7 @@ export const StaticTranslationListPage = observer(
 										isSelected={form.isTranslated}
 										onValueChange={handleIsTranslatedChange}
 									>
-										번역 완료
+										{t("번역 완료")}
 									</Switch>
 								</VStack>
 							</ModalBody>
@@ -434,8 +421,8 @@ export const StaticTranslationListPage = observer(
 					message={
 						<>
 							<p>
-								<strong>{translationToDelete?.key}</strong> 번역을
-								삭제하시겠습니까?
+								<strong>{translationToDelete?.key}</strong>{" "}
+								{t("번역을 삭제하시겠습니까?")}
 							</p>
 							<p className="mt-2 text-sm text-default-400">
 								{translationToDelete
@@ -443,7 +430,7 @@ export const StaticTranslationListPage = observer(
 											translationToDelete.languageCode,
 										)
 									: ""}{" "}
-								항목이 즉시 삭제됩니다.
+								{t("항목이 즉시 삭제됩니다.")}
 							</p>
 						</>
 					}

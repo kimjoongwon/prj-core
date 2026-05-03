@@ -1,14 +1,27 @@
+"use client";
+
 import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { Input as BaseInput, type InputProps as BaseInputProps } from "./Input";
 
-export interface InputProps<T>
-	extends MobxProps<T>,
-		Omit<BaseInputProps, "value" | "onChange" | "onBlur"> {}
+type BoundInputProps<T> = MobxProps<T> &
+	Omit<BaseInputProps, "value" | "onChange" | "onBlur">;
+
+export type InputProps<T = object> = BoundInputProps<T> | BaseInputProps;
+
+function isBoundInputProps<T>(
+	props: InputProps<T>,
+): props is BoundInputProps<T> {
+	return "state" in props && "path" in props;
+}
 
 export const Input = observer(<T extends object>(props: InputProps<T>) => {
+	if (!isBoundInputProps(props)) {
+		return <BaseInput {...props} />;
+	}
+
 	const { path, state, ...rest } = props;
 
 	const initialValue = (tools.get(state, path) as string | number) || "";

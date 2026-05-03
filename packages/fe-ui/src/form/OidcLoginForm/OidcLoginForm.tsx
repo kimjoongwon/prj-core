@@ -3,6 +3,7 @@
 import { observer } from "mobx-react-lite";
 import { Button, Checkbox, Input, Link } from "../../control";
 import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
+import { useT } from "../../i18n";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 
@@ -95,6 +96,7 @@ export const OidcLoginForm = observer(
 		isDev = false,
 		forgotPasswordHref = "/forgot-password",
 	}: OidcLoginFormProps) => {
+		const t = useT();
 		const recoveryActions =
 			state.error?.recoveryActions?.filter(
 				(action) => action.href || action.label,
@@ -105,7 +107,7 @@ export const OidcLoginForm = observer(
 				? [
 						{
 							type: "forgot-password",
-							label: "비밀번호 재설정",
+							label: t("비밀번호 재설정"),
 							href: forgotPasswordHref,
 						},
 					]
@@ -120,7 +122,9 @@ export const OidcLoginForm = observer(
 					title="로그인"
 					subtitle={
 						client
-							? `${client.name}에서 예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.`
+							? t(
+									"{{clientName}}에서 예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.",
+								).replace("{{clientName}}", client.name)
 							: "예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요."
 					}
 					logoUri={client?.logoUri}
@@ -130,7 +134,7 @@ export const OidcLoginForm = observer(
 				{isDev && (
 					<AlertBanner
 						type="warning"
-						message="DEV MODE - Super Admin 계정이 자동 입력되었습니다"
+						message={t("DEV MODE - Super Admin 계정이 자동 입력되었습니다")}
 						className="text-center text-sm"
 					/>
 				)}
@@ -141,11 +145,12 @@ export const OidcLoginForm = observer(
 						title={getErrorTitle(state.error)}
 						message={
 							<>
-								{state.error.displayMessage ||
-									getFallbackErrorMessage(state.error)}
+								{state.error.displayMessage
+									? t(state.error.displayMessage)
+									: t(getFallbackErrorMessage(state.error))}
 								{state.error.hint && (
 									<span className="mt-2 block text-xs leading-5 opacity-80">
-										{state.error.hint}
+										{t(state.error.hint)}
 									</span>
 								)}
 							</>
@@ -160,14 +165,14 @@ export const OidcLoginForm = observer(
 												href={action.href}
 												className="font-medium text-primary"
 											>
-												{action.label}
+												{t(action.label)}
 											</Link>
 										) : (
 											<span
 												key={`${action.type}:${action.label}`}
 												className="text-default-500"
 											>
-												{action.label}
+												{t(action.label)}
 											</span>
 										),
 									)}
@@ -201,14 +206,14 @@ export const OidcLoginForm = observer(
 
 					<div className="flex items-center justify-between gap-4">
 						<Checkbox path="remember" state={state} size="sm">
-							로그인 상태 유지
+							{t("로그인 상태 유지")}
 						</Checkbox>
 
 						<Link
 							href={forgotPasswordHref}
 							className="text-sm text-default-500 hover:text-primary"
 						>
-							비밀번호를 잊으셨나요?
+							{t("비밀번호를 잊으셨나요?")}
 						</Link>
 					</div>
 
@@ -219,7 +224,7 @@ export const OidcLoginForm = observer(
 						size="lg"
 						isLoading={state.isSubmitting}
 					>
-						로그인
+						{t("로그인")}
 					</Button>
 				</form>
 
@@ -229,7 +234,7 @@ export const OidcLoginForm = observer(
 						data-action="abort-interaction"
 						className="text-sm text-default-400 transition-colors hover:text-default-500"
 					>
-						취소하고 돌아가기
+						{t("취소하고 돌아가기")}
 					</button>
 				</div>
 			</AuthCard>

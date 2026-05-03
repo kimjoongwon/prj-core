@@ -26,6 +26,7 @@ const AdminSpacesSpaceIdGroundEditRoute = observer(() => {
 		phone: "",
 		email: "",
 		businessNo: "",
+		contentLanguageCode: "ko_KR",
 		errors: {} as Record<string, string>,
 		isInitialized: false,
 	}));
@@ -41,6 +42,7 @@ const AdminSpacesSpaceIdGroundEditRoute = observer(() => {
 			state.phone = ground.phone;
 			state.email = ground.email;
 			state.businessNo = ground.businessNo;
+			state.contentLanguageCode = ground.space?.contentLanguageCode ?? "ko_KR";
 			state.isInitialized = true;
 		}
 	}, [ground, state]);
@@ -94,6 +96,11 @@ const AdminSpacesSpaceIdGroundEditRoute = observer(() => {
 		delete state.errors.email;
 	};
 
+	const onChangeContentLanguageSelect = (value: string) => {
+		state.contentLanguageCode = value;
+		delete state.errors.contentLanguageCode;
+	};
+
 	const onClickSaveButton = () => {
 		const errors: Record<string, string> = {};
 
@@ -111,6 +118,9 @@ const AdminSpacesSpaceIdGroundEditRoute = observer(() => {
 		} else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(state.email)) {
 			errors.email = "올바른 이메일 형식을 입력해주세요.";
 		}
+		if (!state.contentLanguageCode) {
+			errors.contentLanguageCode = "콘텐츠 언어를 선택해주세요.";
+		}
 
 		if (Object.keys(errors).length > 0) {
 			state.errors = errors;
@@ -125,6 +135,11 @@ const AdminSpacesSpaceIdGroundEditRoute = observer(() => {
 				address: state.address.trim(),
 				phone: state.phone.trim(),
 				email: state.email.trim(),
+				contentLanguageCode: state.contentLanguageCode as
+					| "ko_KR"
+					| "en_US"
+					| "zh_CN"
+					| "ja_JP",
 			},
 		});
 	};
@@ -138,6 +153,7 @@ const AdminSpacesSpaceIdGroundEditRoute = observer(() => {
 			phone={state.phone}
 			email={state.email}
 			businessNo={state.businessNo}
+			contentLanguageCode={state.contentLanguageCode}
 			errors={state.errors}
 			isLoading={isLoading}
 			isNotFound={!isLoading && !ground}
@@ -147,6 +163,7 @@ const AdminSpacesSpaceIdGroundEditRoute = observer(() => {
 			onChangeAddressInput={onChangeAddressInput}
 			onChangePhoneInput={onChangePhoneInput}
 			onChangeEmailInput={onChangeEmailInput}
+			onChangeContentLanguageSelect={onChangeContentLanguageSelect}
 			onClickCancelButton={onClickCancelButton}
 			onClickSaveButton={onClickSaveButton}
 		/>

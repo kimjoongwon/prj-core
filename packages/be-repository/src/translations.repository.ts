@@ -109,6 +109,30 @@ export class TranslationsRepository {
 		return result ? plainToInstance(Translation, result) : null;
 	}
 
+	async findCatalogByLanguage(
+		languageCode: LanguageCode,
+	): Promise<Record<string, string>> {
+		this.logger.debug(`언어 catalog 조회: ${languageCode}`);
+
+		const rows = await this.txHost.tx.translation.findMany({
+			where: {
+				languageCode,
+			},
+			select: {
+				key: true,
+				text: true,
+			},
+			orderBy: [{ key: "asc" }],
+		});
+
+		return rows.reduce<Record<string, string>>((catalog, row) => {
+			if (row.text.length > 0) {
+				catalog[row.key] = row.text;
+			}
+			return catalog;
+		}, {});
+	}
+
 	/**
 	 * 번역 생성
 	 */

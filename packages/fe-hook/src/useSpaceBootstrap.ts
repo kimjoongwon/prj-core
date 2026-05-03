@@ -53,6 +53,7 @@ export function useSpaceBootstrap<
 				.map((space) => ({
 					spaceId: space.id!,
 					groundName: space.ground?.name ?? "",
+					contentLanguageCode: space.contentLanguageCode ?? null,
 				})),
 		);
 	}, [spaceStore, spaces]);
@@ -66,6 +67,10 @@ export function useSpaceBootstrap<
 			spaceStore.setSpace(
 				currentSpace.id,
 				resolveCurrentSpaceGroundName(currentSpace, spaces),
+				currentSpace.contentLanguageCode ??
+					spaces.find((space) => space.id === currentSpace.id)
+						?.contentLanguageCode ??
+					null,
 			);
 		} else {
 			spaceStore.clearSpace();

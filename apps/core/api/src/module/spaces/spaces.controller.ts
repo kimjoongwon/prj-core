@@ -8,6 +8,7 @@ import {
 import {
 	CreateGroundDto,
 	GroundDto,
+	QuerySpaceDto,
 	SpaceDto,
 	UpdateGroundDto,
 } from "@cocrepo/dto";
@@ -25,6 +26,7 @@ import {
 	ParseUUIDPipe,
 	Patch,
 	Post,
+	Query,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
@@ -46,9 +48,11 @@ export class SpacesController {
 	@ApiErrors(401, 500)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("공간 목록 조회 성공")
-	async getSpaces() {
+	async getSpaces(@Query() query: QuerySpaceDto) {
 		return this.spacesService.listSpaces({
 			spaceIds: this.spaceContext.spaceIds,
+			search: query.search,
+			contentLanguageCode: query.contentLanguageCode,
 		});
 	}
 

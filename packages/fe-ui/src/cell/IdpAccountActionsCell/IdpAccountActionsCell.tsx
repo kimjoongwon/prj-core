@@ -1,4 +1,8 @@
-import { Button, Link as HeroLink } from "@heroui/react";
+"use client";
+
+import { Link as HeroLink } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { Button } from "../../control/Button/Button";
 
 export interface IdpAccountActionsCellProps {
 	/** 계정 ID */
@@ -12,11 +16,11 @@ export interface IdpAccountActionsCellProps {
 /**
  * IDP 계정용 상세/잠금해제 액션 셀
  */
-export const IdpAccountActionsCell = ({
+export const IdpAccountActionsCell = observer(function IdpAccountActionsCell({
 	accountId,
 	isLocked,
 	onUnlock,
-}: IdpAccountActionsCellProps) => {
+}: IdpAccountActionsCellProps) {
 	return (
 		<div className="flex items-center justify-center gap-1">
 			{isLocked ? (
@@ -34,4 +38,4 @@ export const IdpAccountActionsCell = ({
 			</Button>
 		</div>
 	);
-};
+});

@@ -7,14 +7,17 @@ import {
 	FormSectionCard,
 } from "../../form";
 import { VStack } from "../../rhythm";
-import { PageTitleBar } from "../../widget";
-import { Button, Input, Textarea } from "@heroui/react";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input";
+import { Textarea } from "../../control/Textarea";
+import { ContentLanguageNotice, PageTitleBar } from "../../widget";
 import { observer } from "mobx-react-lite";
 
 export interface TimelineEditPageProps {
 	timelineName?: string;
 	name: string;
 	description: string;
+	contentLanguageCode?: string | null;
 	nameError?: string;
 	descriptionError?: string;
 	isSubmitPending: boolean;
@@ -33,6 +36,7 @@ export const TimelineEditPage = observer(
 		timelineName,
 		name,
 		description,
+		contentLanguageCode,
 		nameError,
 		descriptionError,
 		isSubmitPending,
@@ -62,6 +66,9 @@ export const TimelineEditPage = observer(
 					<FormSectionCard>
 						<FormSection>
 							<VStack gap={4}>
+								<ContentLanguageNotice
+									contentLanguageCode={contentLanguageCode}
+								/>
 								<Input
 									label="타임라인명"
 									labelPlacement="outside"

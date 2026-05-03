@@ -2,6 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import { translateNode, useT } from "../../../i18n";
 
 export type AlertBannerType = "danger" | "warning" | "success" | "info";
 
@@ -57,6 +58,7 @@ const STYLES: Record<
  */
 export const AlertBanner = observer(
 	({ type, title, message, actions, className }: AlertBannerProps) => {
+		const t = useT();
 		const style = STYLES[type];
 
 		return (
@@ -79,9 +81,9 @@ export const AlertBanner = observer(
 									d={style.iconPath}
 								/>
 							</svg>
-							{title}
+							{t(title)}
 						</div>
-						<p className="text-sm">{message}</p>
+						<p className="text-sm">{translateNode(message, t)}</p>
 					</>
 				) : (
 					<div className="flex items-center gap-2 text-sm">
@@ -98,7 +100,7 @@ export const AlertBanner = observer(
 								d={style.iconPath}
 							/>
 						</svg>
-						{message}
+						{translateNode(message, t)}
 					</div>
 				)}
 				{actions && <div className="mt-2">{actions}</div>}

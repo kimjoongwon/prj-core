@@ -8,8 +8,6 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
-	Button,
-	Input,
 	Modal,
 	ModalBody,
 	ModalContent,
@@ -21,8 +19,11 @@ import { Upload } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { buildAssetTableColumns } from "../../columns";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input/Input";
 import { DataGrid, DataGridStateModel } from "../../data-grid";
 import { EmptyState } from "../../display";
+import { useT } from "../../i18n";
 import { Surface } from "../../surface";
 import {
 	AssetPreviewDialog,
@@ -142,19 +143,20 @@ const assetsGridPanelClassName =
 const getAssetEmptyMessage = (
 	folders: FolderTreeItem[],
 	selectedFolderId: string | null,
+	t: (key: string) => string,
 ) => {
 	if (!selectedFolderId) {
-		return "등록된 에셋이 없습니다.";
+		return t("등록된 에셋이 없습니다.");
 	}
 
 	const selectedFolder = folders.find(
 		(folder) => folder.id === selectedFolderId,
 	);
 	if (!selectedFolder) {
-		return "선택한 폴더에 등록된 에셋이 없습니다.";
+		return t("선택한 폴더에 등록된 에셋이 없습니다.");
 	}
 
-	return `${selectedFolder.name} 폴더에 등록된 에셋이 없습니다.`;
+	return `${selectedFolder.name} ${t("폴더에 등록된 에셋이 없습니다.")}`;
 };
 
 export function isUploadActionDisabled({
@@ -261,8 +263,9 @@ export const AssetBrowser = observer(
 		onDeleteAsset,
 		onCreateFolder,
 		onRenameFolder,
-		onDeleteFolder,
-	}: AssetBrowserProps) => {
+	onDeleteFolder,
+}: AssetBrowserProps) => {
+		const t = useT();
 		const gridState = useLocalObservable(
 			() => new DataGridStateModel({ queryStates, setQueryStates }),
 		);
@@ -470,7 +473,7 @@ export const AssetBrowser = observer(
 			selectedAssetId,
 			onClickSelectAssetButton,
 		});
-		const emptyMessage = getAssetEmptyMessage(folders, selectedFolderId);
+		const emptyMessage = getAssetEmptyMessage(folders, selectedFolderId, t);
 
 		const browserContent = (
 			<>
@@ -543,13 +546,13 @@ export const AssetBrowser = observer(
 					size="md"
 				>
 					<ModalContent>
-						<ModalHeader>폴더 생성</ModalHeader>
+						<ModalHeader>{t("폴더 생성")}</ModalHeader>
 						<ModalBody>
 							<div className="flex flex-col gap-3">
 								<p className="text-sm text-default-500">
 									{selectedFolderId
-										? "현재 선택한 폴더 아래에 새 폴더를 생성합니다."
-										: "루트 폴더에 새 폴더를 생성합니다."}
+										? t("현재 선택한 폴더 아래에 새 폴더를 생성합니다.")
+										: t("루트 폴더에 새 폴더를 생성합니다.")}
 								</p>
 								<Input
 									label="폴더명"
@@ -592,7 +595,7 @@ export const AssetBrowser = observer(
 					size="md"
 				>
 					<ModalContent>
-						<ModalHeader>폴더 이름 변경</ModalHeader>
+						<ModalHeader>{t("폴더 이름 변경")}</ModalHeader>
 						<ModalBody>
 							<Input
 								label="폴더명"
@@ -634,15 +637,16 @@ export const AssetBrowser = observer(
 					size="md"
 				>
 					<ModalContent>
-						<ModalHeader>폴더 삭제</ModalHeader>
+						<ModalHeader>{t("폴더 삭제")}</ModalHeader>
 						<ModalBody>
 							<div className="space-y-2">
 								<p className="text-sm text-default-700">
-									선택한 폴더를 삭제하시겠습니까?
+									{t("선택한 폴더를 삭제하시겠습니까?")}
 								</p>
 								<p className="text-sm text-default-500">
-									하위 폴더와 에셋이 있는 경우 서버 정책에 따라 삭제가 거부될 수
-									있습니다.
+									{t(
+										"하위 폴더와 에셋이 있는 경우 서버 정책에 따라 삭제가 거부될 수 있습니다.",
+									)}
 								</p>
 								{activeFolder ? (
 									<div className="rounded-lg bg-default-100 px-3 py-2 text-sm font-medium">
@@ -686,11 +690,11 @@ export const AssetBrowser = observer(
 						isUploadingAsset,
 					})}
 				>
-					업로드
+					{t("업로드")}
 				</Button>
 				{uploadRequirementMessage ? (
 					<output className="max-w-56 text-right text-xs text-default-500">
-						{uploadRequirementMessage}
+						{t(uploadRequirementMessage)}
 					</output>
 				) : null}
 			</div>

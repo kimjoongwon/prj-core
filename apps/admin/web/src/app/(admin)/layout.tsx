@@ -21,6 +21,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 				desktopVariant="stacked-header"
 				header={<AdminHeaderSlot />}
 				sidebar={<AdminSidebarSlot />}
+				sidebarClassName="md:!w-[264px]"
 				mobileOverlayMenu={<AdminOverlayMenuSlot />}
 				mobileFab={<AdminFabSlot />}
 				mobileBottomNav={<AdminBottomNavSlot />}

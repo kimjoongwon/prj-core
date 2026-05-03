@@ -15,6 +15,7 @@ import { addToast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 
 type SessionNewPageParams = {
 	timelineId: string;
@@ -23,6 +24,7 @@ type SessionNewPageParams = {
 const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 	const { timelineId } = useParams<SessionNewPageParams>();
 	const router = useRouter();
+	const persistStore = usePersistStore();
 	const state = useLocalObservable(() => ({
 		name: "",
 		type: "ONE_TIME" as TimelineSessionPageSessionType,
@@ -164,6 +166,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 			descriptionText={
 				timeline?.name ? `${timeline.name}에 세션을 등록합니다.` : undefined
 			}
+			contentLanguageCode={persistStore.contentLanguageCode}
 			name={state.name}
 			type={state.type}
 			description={state.description}

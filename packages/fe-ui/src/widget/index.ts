@@ -6,6 +6,7 @@ export * from "./ability";
 export * from "./BackButton";
 export * from "./BottomNav";
 export * from "./ByteCounter";
+export * from "./ContentLanguageNotice";
 export * from "./CustomerInfoCard";
 export * from "./common";
 export * from "./DetailPanel";

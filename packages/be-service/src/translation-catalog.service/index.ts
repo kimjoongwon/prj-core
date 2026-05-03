@@ -8,10 +8,15 @@ import type { LanguageCode as PrismaLanguageCode } from "@cocrepo/prisma";
 import { TranslationsRepository } from "@cocrepo/repository";
 import {
 	ConflictException,
+	BadRequestException,
 	Injectable,
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
+import {
+	LanguageCode,
+	supportedLanguages,
+} from "@cocrepo/constant";
 
 interface TranslationCatalogListResult {
 	data: Translation[];
@@ -66,6 +71,25 @@ export class TranslationCatalogService {
 		}
 
 		return translation;
+	}
+
+	async getCatalog(languageCode: string): Promise<{
+		languageCode: LanguageCode;
+		messages: Record<string, string>;
+	}> {
+		if (!supportedLanguages.includes(languageCode as LanguageCode)) {
+			throw new BadRequestException("허용된 값이 아닙니다");
+		}
+
+		const normalizedLanguageCode = languageCode as LanguageCode;
+		const messages = await this.repository.findCatalogByLanguage(
+			normalizedLanguageCode,
+		);
+
+		return {
+			languageCode: normalizedLanguageCode,
+			messages,
+		};
 	}
 
 	async create(dto: CreateTranslationDto): Promise<Translation> {

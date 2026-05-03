@@ -1,5 +1,7 @@
+"use client";
+
 import { Card, CardBody, Chip, Progress } from "@heroui/react";
-import type React from "react";
+import { observer } from "mobx-react-lite";
 import { Logo } from "../../data-display/Logo/Logo";
 import { Text } from "../../data-display/Text/Text";
 import { VStack } from "../../../rhythm/VStack/VStack";
@@ -35,12 +37,12 @@ export interface SplashScreenProps {
  * />
  * ```
  */
-export const SplashScreen: React.FC<SplashScreenProps> = ({
+export const SplashScreen = observer(function SplashScreen({
 	title = "앱을 준비하고 있습니다",
 	subtitle = "잠시만 기다려주세요...",
 	progress,
 	showProgress = true,
-}) => {
+}: SplashScreenProps) {
 	return (
 		<div className="fixed inset-0 flex items-center justify-center bg-background">
 			{/* 배경 그라디언트 */}
@@ -117,4 +119,4 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
 			/>
 		</div>
 	);
-};
+});

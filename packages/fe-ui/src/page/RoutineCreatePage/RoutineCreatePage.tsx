@@ -3,17 +3,19 @@
 import {
 	DragHandle,
 	DraggableSortableList,
+	ContentLanguageNotice,
 	FormPage,
 	FormPageSurface,
 	FormSection,
 	FormSectionCard,
 	MediaThumbnail,
 	PageTitleBar,
+	Button,
+	Input,
+	useT,
 } from "@cocrepo/ui";
 import {
-	Button,
 	Chip,
-	Input,
 	Modal,
 	ModalBody,
 	ModalContent,
@@ -51,6 +53,7 @@ export interface RoutineTaskCandidate {
 export interface RoutineCreatePageProps {
 	name: string;
 	label: string;
+	contentLanguageCode?: string | null;
 	exerciseQuery: string;
 	activities: RoutineActivityFormItem[];
 	candidateTasks: RoutineTaskCandidate[];
@@ -98,13 +101,15 @@ function RoutineMediaThumbnail({
 	);
 }
 
-function CandidateTaskCard({
+const CandidateTaskCard = observer(function CandidateTaskCard({
 	task,
 	onClickAdd,
 }: {
 	task: RoutineTaskCandidate;
 	onClickAdd: (taskId: string) => void;
 }) {
+	const t = useT();
+
 	return (
 		<div className="rounded-2xl border border-default-200 bg-content1 p-3">
 			<div className="flex gap-3">
@@ -119,7 +124,8 @@ function CandidateTaskCard({
 						<div className="min-w-0">
 							<p className="line-clamp-2 font-medium">{task.exerciseName}</p>
 							<p className="mt-1 text-xs text-default-500">
-								기본 반복 {task.exerciseCount}회
+								{t("기본 반복")} {task.exerciseCount}
+								{t("회")}
 							</p>
 						</div>
 						<Chip
@@ -127,7 +133,7 @@ function CandidateTaskCard({
 							variant="flat"
 							color={task.isSchedulable ? "success" : "warning"}
 						>
-							{task.isSchedulable ? "가능" : "불가"}
+							{task.isSchedulable ? t("가능") : t("불가")}
 						</Chip>
 					</div>
 					<div className="mt-3 flex justify-end">
@@ -137,16 +143,16 @@ function CandidateTaskCard({
 							color="primary"
 							onPress={() => onClickAdd(task.id)}
 						>
-							추가
+							{t("추가")}
 						</Button>
 					</div>
 				</div>
 			</div>
 		</div>
 	);
-}
+});
 
-function ActivityCard({
+const ActivityCard = observer(function ActivityCard({
 	activity,
 	index,
 	onChangeActivityInput,
@@ -163,6 +169,8 @@ function ActivityCard({
 	onClickRemoveActivityButton: (taskId: string) => void;
 	dragHandle: ComponentProps<typeof DragHandle>;
 }) {
+	const t = useT();
+
 	return (
 		<div className="rounded-2xl border border-default-200 bg-content1 p-4">
 			<div className="flex flex-col gap-4 md:flex-row">
@@ -183,7 +191,7 @@ function ActivityCard({
 						<div>
 							<p className="font-medium">{activity.exerciseName}</p>
 							<p className="mt-1 text-sm text-default-500">
-								드래그해서 루틴 순서를 조정할 수 있습니다.
+								{t("드래그해서 루틴 순서를 조정할 수 있습니다.")}
 							</p>
 						</div>
 						<div className="flex items-center gap-2">
@@ -192,7 +200,7 @@ function ActivityCard({
 								size="sm"
 								variant="flat"
 							>
-								{activity.isSchedulable ? "비디오 연결" : "비디오 필요"}
+								{activity.isSchedulable ? t("비디오 연결") : t("비디오 필요")}
 							</Chip>
 							<Button
 								size="sm"
@@ -200,13 +208,13 @@ function ActivityCard({
 								color="danger"
 								onPress={() => onClickRemoveActivityButton(activity.taskId)}
 							>
-								제거
+								{t("제거")}
 							</Button>
 						</div>
 					</div>
 					{!activity.isSchedulable ? (
 						<p className="mb-3 text-sm text-warning">
-							영상이 없어 Program 생성에 사용할 수 없는 운동입니다.
+							{t("영상이 없어 Program 생성에 사용할 수 없는 운동입니다.")}
 						</p>
 					) : null}
 					<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
@@ -241,9 +249,9 @@ function ActivityCard({
 			</div>
 		</div>
 	);
-}
+});
 
-export function RoutineActivitySection({
+export const RoutineActivitySection = observer(function RoutineActivitySection({
 	exerciseQuery,
 	candidateTasks,
 	activities,
@@ -267,6 +275,8 @@ export function RoutineActivitySection({
 	| "onClickRemoveActivityButton"
 	| "onReorderActivities"
 >) {
+	const t = useT();
+
 	return (
 		<FormSectionCard>
 			<FormSection top={<PageTitleBar level={2} title="활동 구성" />}>
@@ -281,20 +291,20 @@ export function RoutineActivitySection({
 					<div className="rounded-2xl border border-default-200 p-4">
 						<div className="mb-3 flex items-center justify-between gap-3">
 							<div>
-								<p className="font-medium">후보 운동</p>
+								<p className="font-medium">{t("후보 운동")}</p>
 								<p className="text-sm text-default-500">
-									이미지는 썸네일, 비디오는 편성 가능 여부 기준으로 사용합니다.
+									{t("이미지는 썸네일, 비디오는 편성 가능 여부 기준으로 사용합니다.")}
 								</p>
 							</div>
 						</div>
 						{isTasksLoading ? (
 							<div className="flex items-center gap-2 text-sm text-default-500">
 								<Spinner size="sm" />
-								<span>운동 목록을 불러오는 중...</span>
+								<span>{t("운동 목록을 불러오는 중...")}</span>
 							</div>
 						) : candidateTasks.length === 0 ? (
 							<p className="text-sm text-default-500">
-								조건에 맞는 스케줄 가능 운동이 없습니다.
+								{t("조건에 맞는 스케줄 가능 운동이 없습니다.")}
 							</p>
 						) : (
 							<div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
@@ -311,13 +321,14 @@ export function RoutineActivitySection({
 					<div className="rounded-2xl border border-default-200 p-4">
 						<div className="mb-3 flex items-center justify-between gap-3">
 							<div>
-								<p className="font-medium">추가된 활동</p>
+								<p className="font-medium">{t("추가된 활동")}</p>
 								<p className="text-sm text-default-500">
-									드래그로 순서를 바꾸면 저장 순서에도 그대로 반영됩니다.
+									{t("드래그로 순서를 바꾸면 저장 순서에도 그대로 반영됩니다.")}
 								</p>
 							</div>
 							<Chip size="sm" variant="flat" color="primary">
-								{activities.length}개
+								{activities.length}
+								{t("개")}
 							</Chip>
 						</div>
 						{activitiesError ? (
@@ -325,7 +336,7 @@ export function RoutineActivitySection({
 						) : null}
 						{activities.length === 0 ? (
 							<p className="text-sm text-default-500">
-								아직 추가된 활동이 없습니다.
+								{t("아직 추가된 활동이 없습니다.")}
 							</p>
 						) : (
 							<DraggableSortableList
@@ -351,12 +362,13 @@ export function RoutineActivitySection({
 			</FormSection>
 		</FormSectionCard>
 	);
-}
+});
 
 export const RoutineCreatePage = observer(
 	({
 		name,
 		label,
+		contentLanguageCode,
 		exerciseQuery,
 		activities,
 		candidateTasks,
@@ -378,6 +390,7 @@ export const RoutineCreatePage = observer(
 		onCloseEmptyActivitiesWarningModal,
 		onClickConfirmEmptyActivitiesWarningButton,
 	}: RoutineCreatePageProps) => {
+		const t = useT();
 		const pageActions = (
 			<div className="flex gap-2">
 				<Button
@@ -411,6 +424,9 @@ export const RoutineCreatePage = observer(
 					<FormSectionCard>
 						<FormSection top={<PageTitleBar level={2} title="기본 정보" />}>
 							<div className="flex flex-col gap-4">
+								<ContentLanguageNotice
+									contentLanguageCode={contentLanguageCode}
+								/>
 								<Input
 									label="루틴 이름"
 									placeholder="예: 풀바디 루틴 A"
@@ -452,9 +468,9 @@ export const RoutineCreatePage = observer(
 					onClose={onCloseEmptyActivitiesWarningModal}
 				>
 					<ModalContent>
-						<ModalHeader>활동 없이 저장</ModalHeader>
+						<ModalHeader>{t("활동 없이 저장")}</ModalHeader>
 						<ModalBody>
-							<p>활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?</p>
+							<p>{t("활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?")}</p>
 						</ModalBody>
 						<ModalFooter>
 							<Button
@@ -469,7 +485,7 @@ export const RoutineCreatePage = observer(
 								onPress={onClickConfirmEmptyActivitiesWarningButton}
 								isLoading={isSubmitting}
 							>
-								저장 진행
+								{t("저장 진행")}
 							</Button>
 						</ModalFooter>
 					</ModalContent>

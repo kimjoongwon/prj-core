@@ -1,12 +1,21 @@
+"use client";
+
 import { cloneDeep } from "@cocrepo/toolkit";
-import type { Option } from "@cocrepo/type";
 import { Select as NextSelect, SelectItem } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import type React from "react";
+import { useT } from "../../i18n";
+
+type SelectOption = {
+	value: unknown;
+	text?: string;
+	label?: string;
+};
 
 // SelectProps 인터페이스를 독립적으로 정의 (NextUI 제네릭 제거)
 export interface SelectProps {
 	/** 선택 옵션 목록 */
-	options?: Option[];
+	options?: SelectOption[];
 	/** 선택된 값 */
 	value?: string;
 	/** 값 변경 핸들러 */
@@ -25,6 +34,8 @@ export interface SelectProps {
 	isInvalid?: boolean;
 	/** 에러 메시지 */
 	errorMessage?: string;
+	/** 설명 */
+	description?: React.ReactNode;
 	/** 추가 클래스 */
 	className?: string;
 	/** 필수 여부 */
@@ -56,7 +67,8 @@ export interface SelectProps {
  * />
  * ```
  */
-export const Select = (props: SelectProps) => {
+export const Select = observer((props: SelectProps) => {
+	const t = useT();
 	const {
 		options = [],
 		value,
@@ -71,12 +83,15 @@ export const Select = (props: SelectProps) => {
 		className,
 		isRequired,
 		isReadOnly,
+		selectedKeys: selectedKeysProp,
+		description,
+		"aria-label": ariaLabelProp,
 		...rest
 	} = props;
 
 	const _options = cloneDeep(options);
 	const optionKeys = new Set(_options.map((option) => String(option.value)));
-	const normalizedSelectedKeys = props.selectedKeys
+	const normalizedSelectedKeys = selectedKeysProp
 		?.map((selectedKey) => String(selectedKey))
 		.filter((selectedKey) => optionKeys.has(selectedKey));
 	const selectedKeys =
@@ -86,9 +101,13 @@ export const Select = (props: SelectProps) => {
 				? [String(value)]
 				: undefined;
 	const ariaLabel =
-		typeof rest["aria-label"] === "string"
-			? rest["aria-label"]
-			: (label ?? placeholder ?? "선택");
+		typeof ariaLabelProp === "string"
+			? t(ariaLabelProp)
+			: label
+				? t(label)
+				: placeholder
+					? t(placeholder)
+					: t("선택");
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		onChange?.(e.target.value);
@@ -98,11 +117,14 @@ export const Select = (props: SelectProps) => {
 		<NextSelect
 			size={size}
 			variant={variant}
-			label={label}
-			placeholder={placeholder}
+			label={label ? t(label) : undefined}
+			placeholder={placeholder ? t(placeholder) : undefined}
 			isDisabled={isDisabled}
 			isInvalid={isInvalid}
-			errorMessage={errorMessage}
+			errorMessage={errorMessage ? t(errorMessage) : undefined}
+			description={
+				typeof description === "string" ? t(description) : description
+			}
 			className={className}
 			isRequired={isRequired}
 			disallowEmptySelection={isReadOnly}
@@ -114,13 +136,15 @@ export const Select = (props: SelectProps) => {
 			{_options.map((option) => {
 				return (
 					<SelectItem
-						key={option.value}
-						textValue={String(option.text ?? option.value)}
+						key={String(option.value)}
+						textValue={String(option.text ?? option.label ?? option.value)}
 					>
-						{option.text}
+						{typeof (option.text ?? option.label) === "string"
+							? t((option.text ?? option.label) as string)
+							: String(option.value)}
 					</SelectItem>
 				);
 			})}
 		</NextSelect>
 	);
-};
+});

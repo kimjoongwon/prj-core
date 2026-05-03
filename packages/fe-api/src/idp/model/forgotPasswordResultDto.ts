@@ -13,6 +13,6 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface ForgotPasswordResultDto {
-	/** 응답 메시지 */
-	message: string;
+  /** 응답 메시지 */
+  message: string;
 }

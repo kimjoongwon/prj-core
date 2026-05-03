@@ -5,6 +5,7 @@ import { Input } from "@heroui/react";
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState, type KeyboardEvent } from "react";
+import { useT } from "../../i18n";
 
 interface SearchInputProps {
 	config: InputConfig;
@@ -12,6 +13,7 @@ interface SearchInputProps {
 }
 
 export const SearchInput = observer(({ config, state }: SearchInputProps) => {
+	const t = useT();
 	const queryKey = config.props?.queryKey ?? config.id;
 	const query =
 		typeof state.query.values[queryKey] === "string"
@@ -53,7 +55,7 @@ export const SearchInput = observer(({ config, state }: SearchInputProps) => {
 
 	return (
 		<Input
-			placeholder={config.placeholder}
+			placeholder={config.placeholder ? t(config.placeholder) : undefined}
 			value={inputValue}
 			onValueChange={handleValueChange}
 			onKeyDown={handleKeyDown}

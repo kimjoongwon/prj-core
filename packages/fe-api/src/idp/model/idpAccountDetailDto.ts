@@ -11,40 +11,40 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { IdpAccountAccessGrantDto } from "./idpAccountAccessGrantDto";
+import type { IdpAccountAccessGrantDto } from './idpAccountAccessGrantDto';
 
 export interface IdpAccountDetailDto {
-	/** 사용자 ID */
-	id: string;
-	/** 이름 */
-	name: string;
-	/** 이메일 */
-	email: string;
-	/** 활성 상태 */
-	isActive: boolean;
-	/** 로그인 실패 횟수 */
-	failedLoginAttempts: number;
-	/** 영구 잠금 여부 */
-	isPermanentlyLocked: boolean;
-	/**
-	 * 일시 잠금 해제 시간
-	 * @nullable
-	 */
-	lockedUntil?: string | null;
-	/** 비밀번호 변경 필요 여부 */
-	mustChangePassword: boolean;
-	/**
-	 * 마지막 로그인 시간
-	 * @nullable
-	 */
-	lastLoginAt?: string | null;
-	/**
-	 * 마지막 로그인 IP
-	 * @nullable
-	 */
-	lastLoginIp?: string | null;
-	/** 가입일 */
-	createdAt: string;
-	/** 계정에 부여된 Space/Role 접근 권한 목록 */
-	accessGrants: IdpAccountAccessGrantDto[];
+  /** 사용자 ID */
+  id: string;
+  /** 이름 */
+  name: string;
+  /** 이메일 */
+  email: string;
+  /** 활성 상태 */
+  isActive: boolean;
+  /** 로그인 실패 횟수 */
+  failedLoginAttempts: number;
+  /** 영구 잠금 여부 */
+  isPermanentlyLocked: boolean;
+  /**
+   * 일시 잠금 해제 시간
+   * @nullable
+   */
+  lockedUntil?: string | null;
+  /** 비밀번호 변경 필요 여부 */
+  mustChangePassword: boolean;
+  /**
+   * 마지막 로그인 시간
+   * @nullable
+   */
+  lastLoginAt?: string | null;
+  /**
+   * 마지막 로그인 IP
+   * @nullable
+   */
+  lastLoginIp?: string | null;
+  /** 가입일 */
+  createdAt: string;
+  /** 계정에 부여된 Space/Role 접근 권한 목록 */
+  accessGrants: IdpAccountAccessGrantDto[];
 }

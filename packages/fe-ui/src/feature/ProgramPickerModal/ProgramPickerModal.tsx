@@ -1,8 +1,6 @@
 "use client";
 
 import {
-	Button,
-	Input,
 	Modal,
 	ModalBody,
 	ModalContent,
@@ -10,6 +8,9 @@ import {
 	ModalHeader,
 } from "@heroui/react";
 import { observer } from "mobx-react-lite";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input";
+import { useT } from "../../i18n";
 
 export interface ProgramPickerOption {
 	id: string;
@@ -42,10 +43,12 @@ export const ProgramPickerModal = observer(function ProgramPickerModal({
 	onSelect,
 	selectedId,
 }: ProgramPickerModalProps) {
+	const t = useT();
+
 	return (
 		<Modal isOpen={isOpen} onClose={onClose}>
 			<ModalContent>
-				<ModalHeader>{title}</ModalHeader>
+				<ModalHeader>{t(title)}</ModalHeader>
 				<ModalBody>
 					<Input
 						label={searchLabel}
@@ -77,7 +80,9 @@ export const ProgramPickerModal = observer(function ProgramPickerModal({
 							</button>
 						))}
 						{options.length === 0 && (
-							<p className="text-sm text-default-500">검색 결과가 없습니다.</p>
+							<p className="text-sm text-default-500">
+								{t("검색 결과가 없습니다.")}
+							</p>
 						)}
 					</div>
 				</ModalBody>

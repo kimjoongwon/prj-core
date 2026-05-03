@@ -1,14 +1,17 @@
 "use client";
 
 import {
+	CONTENT_LANGUAGE_OPTIONS,
 	FormPage,
 	FormPageSurface,
 	PageTitleBar,
 	FormSection,
 	FormSectionCard,
 	VStack,
+	Button,
+	Input,
+	Select,
 } from "@cocrepo/ui";
-import { Button, Input } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 
 export interface SpaceCreatePageProps {
@@ -18,6 +21,7 @@ export interface SpaceCreatePageProps {
 	phone: string;
 	email: string;
 	businessNo: string;
+	contentLanguageCode: string;
 	errors: Record<string, string>;
 	isSubmitPending: boolean;
 	onChangeNameInput: (value: string) => void;
@@ -26,6 +30,7 @@ export interface SpaceCreatePageProps {
 	onChangePhoneInput: (value: string) => void;
 	onChangeEmailInput: (value: string) => void;
 	onChangeBusinessNoInput: (value: string) => void;
+	onChangeContentLanguageSelect: (value: string) => void;
 	onClickCancelButton: () => void;
 	onClickSaveButton: () => void;
 }
@@ -38,6 +43,7 @@ export const SpaceCreatePage = observer(
 		phone,
 		email,
 		businessNo,
+		contentLanguageCode,
 		errors,
 		isSubmitPending,
 		onChangeNameInput,
@@ -46,6 +52,7 @@ export const SpaceCreatePage = observer(
 		onChangePhoneInput,
 		onChangeEmailInput,
 		onChangeBusinessNoInput,
+		onChangeContentLanguageSelect,
 		onClickCancelButton,
 		onClickSaveButton,
 	}: SpaceCreatePageProps) => {
@@ -115,6 +122,19 @@ export const SpaceCreatePage = observer(
 										isRequired
 										isInvalid={Boolean(errors.businessNo)}
 										errorMessage={errors.businessNo}
+									/>
+									<Select
+										label="콘텐츠 언어"
+										placeholder="운영 리소스 작성 언어를 선택하세요"
+										value={contentLanguageCode}
+										onChange={onChangeContentLanguageSelect}
+										options={CONTENT_LANGUAGE_OPTIONS.map((language) => ({
+											value: language.code,
+											label: language.label,
+										}))}
+										isRequired
+										isInvalid={Boolean(errors.contentLanguageCode)}
+										errorMessage={errors.contentLanguageCode}
 									/>
 								</VStack>
 							</FormSection>

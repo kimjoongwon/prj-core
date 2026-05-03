@@ -1,7 +1,6 @@
 "use client";
 
 import {
-	type GetTranslationsParams,
 	getGetTranslationsQueryKey,
 	useCreateTranslation,
 	useDeleteTranslation,
@@ -10,6 +9,7 @@ import {
 	useInvalidateTranslationCache,
 	useUpdateTranslation,
 } from "@cocrepo/api/core/translations";
+import type { GetTranslationsParams } from "@cocrepo/api/core/model";
 import {
 	type StaticTranslationForm,
 	type StaticTranslationLanguageCode,
@@ -80,7 +80,7 @@ export default observer(function TranslationsPageRoute() {
 	) {
 		try {
 			await updateMutation.mutateAsync({
-				id: translationId,
+				translationId,
 				data: form,
 			});
 			await invalidateTranslationsQuery();
@@ -101,7 +101,7 @@ export default observer(function TranslationsPageRoute() {
 
 	async function onDeleteTranslation(translationId: string) {
 		try {
-			await deleteMutation.mutateAsync({ id: translationId });
+			await deleteMutation.mutateAsync({ translationId });
 			await invalidateTranslationsQuery();
 			addToast({
 				title: "번역 삭제 완료",

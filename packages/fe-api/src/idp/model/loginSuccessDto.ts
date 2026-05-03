@@ -13,8 +13,8 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface LoginSuccessDto {
-	/** 리다이렉트 URL */
-	redirectTo: string;
-	/** 비밀번호 변경 필요 여부 */
-	mustChangePassword?: boolean;
+  /** 리다이렉트 URL */
+  redirectTo: string;
+  /** 비밀번호 변경 필요 여부 */
+  mustChangePassword?: boolean;
 }

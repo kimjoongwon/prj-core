@@ -27,6 +27,7 @@ SessionCheckPage
 | `PageTitleBar` | `../../widget` | 상단 제목, 설명, 주요 액션 표시 |
 | `DetailPageSurface` | `../../detail` | 콘텐츠 그룹과 elevation 구성 |
 | `DetailSectionCard` | `../../detail` | 콘텐츠 그룹과 elevation 구성 |
+| `useT` | `../../i18n` | 대기 메시지 런타임 번역 |
 | `Spinner` | `@heroui/react` | 로딩/대기 상태 표시 |
 
 ## 구성 요소
@@ -40,4 +41,5 @@ SessionCheckPage
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-02 | 세션 확인 대기 메시지를 런타임 i18n catalog로 번역하도록 반영 | codex |
 | 2026-03-25 | 초기 화면 기획 수립 | codex |

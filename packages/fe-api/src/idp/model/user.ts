@@ -12,6 +12,4 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  * OpenAPI spec version: 1.0.0
  */
 
-export interface User {
-	[key: string]: unknown;
-}
+export interface User { [key: string]: unknown }

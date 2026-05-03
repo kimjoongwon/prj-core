@@ -175,6 +175,8 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-02 | 생성 성공/실패 toast와 폼 검증 메시지를 런타임 i18n catalog 번역 경로로 연결 | codex |
+| 2026-05-02 | Space 콘텐츠 언어 기준 리소스 작성 안내와 언어 선택/필터 계약 반영 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-04-01 | task 신규 화면의 asset 선택/업로드를 공통 `AssetBrowser` modal과 shared hook 조합으로 전환 | codex |
 | 2026-03-30 | 태스크 등록의 mutation/router/local state를 route page로 이동하고 `@cocrepo/ui` page를 pure contract로 분리 | codex |

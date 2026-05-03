@@ -11,27 +11,27 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { InteractionDataDtoClient } from "./interactionDataDtoClient";
-import type { InteractionDataDtoPrompt } from "./interactionDataDtoPrompt";
-import type { InteractionDataDtoParams } from "./interactionDataDtoParams";
-import type { InteractionDataDtoSession } from "./interactionDataDtoSession";
+import type { InteractionDataDtoClient } from './interactionDataDtoClient';
+import type { InteractionDataDtoPrompt } from './interactionDataDtoPrompt';
+import type { InteractionDataDtoParams } from './interactionDataDtoParams';
+import type { InteractionDataDtoSession } from './interactionDataDtoSession';
 
 export interface InteractionDataDto {
-	/** 인터랙션 유형 (login | consent) */
-	type: string;
-	/** 인터랙션 UID */
-	uid: string;
-	/**
-	 * 클라이언트 정보
-	 * @nullable
-	 */
-	client?: InteractionDataDtoClient;
-	/** 프롬프트 정보 */
-	prompt: InteractionDataDtoPrompt;
-	/** 파라미터 */
-	params: InteractionDataDtoParams;
-	/** 세션 정보 */
-	session?: InteractionDataDtoSession;
-	/** 개발 모드 여부 */
-	isDev: boolean;
+  /** 인터랙션 유형 (login | consent) */
+  type: string;
+  /** 인터랙션 UID */
+  uid: string;
+  /**
+   * 클라이언트 정보
+   * @nullable
+   */
+  client?: InteractionDataDtoClient;
+  /** 프롬프트 정보 */
+  prompt: InteractionDataDtoPrompt;
+  /** 파라미터 */
+  params: InteractionDataDtoParams;
+  /** 세션 정보 */
+  session?: InteractionDataDtoSession;
+  /** 개발 모드 여부 */
+  isDev: boolean;
 }

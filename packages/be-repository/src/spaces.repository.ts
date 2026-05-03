@@ -1,5 +1,5 @@
 import { Ground, Space } from "@cocrepo/entity";
-import { Prisma, PrismaClient } from "@cocrepo/prisma";
+import { LanguageCode, Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
@@ -54,8 +54,9 @@ export class SpacesRepository {
 		skip?: number;
 		take?: number;
 		search?: string;
+		contentLanguageCode?: LanguageCode;
 	}): Promise<[Space[], number]> {
-		const { spaceIds, skip, take, search } = params ?? {};
+		const { spaceIds, skip, take, search, contentLanguageCode } = params ?? {};
 		this.logger.debug(
 			`Ground 포함 Space 목록 조회: count=${spaceIds?.length ?? "all"}, search=${search ?? "없음"}`,
 		);
@@ -63,6 +64,7 @@ export class SpacesRepository {
 		const where: Prisma.SpaceWhereInput = {
 			removedAt: null,
 			...(spaceIds ? { id: { in: spaceIds } } : {}),
+			...(contentLanguageCode ? { contentLanguageCode } : {}),
 			ground: {
 				is: {
 					removedAt: null,
@@ -123,6 +125,9 @@ export class SpacesRepository {
 			where: {
 				spaceId,
 				removedAt: null,
+			},
+			include: {
+				space: true,
 			},
 		});
 

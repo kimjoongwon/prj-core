@@ -1,5 +1,9 @@
+"use client";
+
 import { Chip } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import type { InquiryPriorityCode } from "../../../cell/InquiryPriorityCell/InquiryPriorityCell";
+import { useT } from "../../../i18n";
 
 export interface PriorityBadgeProps {
 	/** 우선순위 코드 */
@@ -33,11 +37,12 @@ const PRIORITY_CONFIG: Record<
  * <PriorityBadge priority="URGENT" size="md" />
  * ```
  */
-export const PriorityBadge = ({
+export const PriorityBadge = observer(function PriorityBadge({
 	priority,
 	size = "sm",
 	className,
-}: PriorityBadgeProps) => {
+}: PriorityBadgeProps) {
+	const t = useT();
 	const config = PRIORITY_CONFIG[priority] ?? {
 		label: priority,
 		color: "default" as const,
@@ -54,7 +59,7 @@ export const PriorityBadge = ({
 			className={className}
 			startContent={<span className="text-[10px] leading-none">{stars}</span>}
 		>
-			{config.label}
+			{t(config.label)}
 		</Chip>
 	);
-};
+});

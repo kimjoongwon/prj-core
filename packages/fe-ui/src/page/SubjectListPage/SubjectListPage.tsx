@@ -13,6 +13,7 @@ import {
 	PageTitleBar,
 	Surface,
 	VStack,
+	useT,
 } from "@cocrepo/ui";
 import { Tab, Tabs } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -148,6 +149,7 @@ interface SubjectGroupFilterTabsProps {
 
 const SubjectGroupFilterTabs = observer(
 	({ selectedGroup, onChangeGroup }: SubjectGroupFilterTabsProps) => {
+		const t = useT();
 		const selectedKey = getSubjectGroupFilterKey(selectedGroup);
 		const selectedFilter = findSubjectGroupFilter(selectedKey);
 		const handleSelectionChange = (key: Key) => {
@@ -157,7 +159,7 @@ const SubjectGroupFilterTabs = observer(
 		return (
 			<VStack gap="block">
 				<Tabs
-					aria-label="대상 유형 필터"
+					aria-label={t("대상 유형 필터")}
 					selectedKey={selectedKey}
 					onSelectionChange={handleSelectionChange}
 					variant="bordered"
@@ -169,15 +171,15 @@ const SubjectGroupFilterTabs = observer(
 					}}
 				>
 					{subjectGroupFilters.map((filter) => (
-						<Tab key={filter.key} title={filter.label} />
+						<Tab key={filter.key} title={t(filter.label)} />
 					))}
 				</Tabs>
 				<div className="rounded-lg border border-divider bg-content2/40 p-4">
 					<div className="text-sm font-semibold text-foreground">
-						{selectedFilter.label} 대상
+						{t(selectedFilter.label)} {t("대상")}
 					</div>
 					<p className="mt-1 text-sm text-default-600">
-						{selectedFilter.description}
+						{t(selectedFilter.description)}
 					</p>
 				</div>
 			</VStack>
@@ -247,7 +249,7 @@ export const SubjectListPage = observer(
 	},
 );
 
-function SubjectsPageFallback() {
+const SubjectsPageFallback = observer(function SubjectsPageFallback() {
 	return (
 		<div className="space-y-5">
 			<PageTitleBar
@@ -259,4 +261,4 @@ function SubjectsPageFallback() {
 			</Surface>
 		</div>
 	);
-}
+});

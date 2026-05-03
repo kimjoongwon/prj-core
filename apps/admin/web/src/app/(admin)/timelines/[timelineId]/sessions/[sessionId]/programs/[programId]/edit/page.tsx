@@ -18,6 +18,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { usePersistStore } from "@/stores/AppStoreProvider";
 
 type ProgramEditPageParams = {
 	timelineId: string;
@@ -44,6 +45,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 		const { timelineId, sessionId, programId } =
 			useParams<ProgramEditPageParams>();
 		const router = useRouter();
+		const persistStore = usePersistStore();
 		const queryClient = useQueryClient();
 		const routinePickerModal = useDisclosure();
 		const instructorPickerModal = useDisclosure();
@@ -265,6 +267,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 				descriptionText={[program?.name, program?.session?.name]
 					.filter(Boolean)
 					.join(" · ")}
+				contentLanguageCode={persistStore.contentLanguageCode}
 				name={state.name}
 				routineName={selectedRoutine?.name ?? ""}
 				instructorName={selectedInstructor?.name ?? program?.instructorId ?? ""}

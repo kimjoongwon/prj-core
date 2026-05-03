@@ -3,6 +3,7 @@ export * from "./authStore";
 export * from "./bottomTabStore";
 export * from "./cookieStore";
 export * from "./fabStore";
+export * from "./localeStore";
 export * from "./navItem";
 export * from "./navigationStore";
 export * from "./navigator";

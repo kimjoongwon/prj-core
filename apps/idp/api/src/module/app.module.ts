@@ -24,6 +24,7 @@ import { EmailVerificationsModule } from "./email-verification";
 import { globalModules } from "./global.module";
 import { IdpAccountsModule } from "./idp-accounts";
 import { IdpDashboardModule } from "./idp-dashboard";
+import { I18nCatalogModule } from "./i18n";
 import { InteractionModule } from "./interaction/interaction.module";
 import { OidcModule } from "./oidc/oidc.module";
 import { OidcClientsModule } from "./oidc-client";
@@ -57,6 +58,7 @@ const enableNestDevtools =
 		AuthModule,
 		IdpAccountsModule,
 		IdpDashboardModule,
+		I18nCatalogModule,
 		EmailVerificationsModule,
 		OidcClientsModule,
 		OidcSessionsModule,
@@ -91,6 +93,10 @@ const enableNestDevtools =
 							{
 								path: "idp/dashboard",
 								module: IdpDashboardModule,
+							},
+							{
+								path: "i18n",
+								module: I18nCatalogModule,
 							},
 							{
 								path: "idp/email-verifications",

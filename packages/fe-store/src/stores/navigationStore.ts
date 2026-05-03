@@ -195,8 +195,7 @@ export class NavigationStore {
 				matchedChild.setActive(true);
 				this._selectedNavItem = navItem;
 				this._selectedSubNavItem = matchedChild;
-				// Note: expandedNavItemIds는 여기서 변경하지 않음
-				// 펼침 상태는 사용자 토글 또는 아이템 선택 시에만 변경
+				this.expandOnlySelectedRoot(navItem);
 				return;
 			}
 
@@ -210,6 +209,7 @@ export class NavigationStore {
 					navItem.setActive(true);
 					this._selectedNavItem = navItem;
 					this._selectedSubNavItem = null;
+					this.expandOnlySelectedRoot(navItem);
 					return;
 				}
 			}
@@ -217,6 +217,7 @@ export class NavigationStore {
 
 		this._selectedNavItem = null;
 		this._selectedSubNavItem = null;
+		this._expandedNavItemIds.clear();
 	}
 
 	/**

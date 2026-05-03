@@ -3,6 +3,7 @@
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../control";
+import { useT } from "../../i18n";
 import { VStack } from "../../rhythm";
 import { Surface } from "../../surface";
 
@@ -14,12 +15,16 @@ export interface LoginRedirectPageProps {
 
 export const LoginRedirectPage = observer(
 	({ errorMessage, isRedirecting, onClickRetry }: LoginRedirectPageProps) => {
+		const t = useT();
+
 		if (isRedirecting) {
 			return (
 				<Surface className="rounded-2xl border-divider/80 bg-content1/80 p-8">
 					<VStack fullWidth gap="section" className="items-center text-center">
 						<Spinner size="lg" />
-						<p className="text-default-500">로그인 페이지로 이동 중...</p>
+						<p className="text-default-500">
+							{t("로그인 페이지로 이동 중...")}
+						</p>
 					</VStack>
 				</Surface>
 			);
@@ -29,7 +34,7 @@ export const LoginRedirectPage = observer(
 			<Surface className="rounded-2xl border-divider/80 bg-content1/80 p-8">
 				<VStack fullWidth gap="roomy" className="items-center">
 					<VStack fullWidth gap="inline" className="text-center">
-						<h3 className="text-2xl font-bold">로그인 실패</h3>
+						<h3 className="text-2xl font-bold">{t("로그인 실패")}</h3>
 						<p className="text-sm text-danger">{errorMessage}</p>
 					</VStack>
 					<Button
@@ -39,7 +44,7 @@ export const LoginRedirectPage = observer(
 						onPress={onClickRetry}
 						isDisabled={!onClickRetry}
 					>
-						다시 로그인
+						{t("다시 로그인")}
 					</Button>
 				</VStack>
 			</Surface>

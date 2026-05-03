@@ -158,6 +158,7 @@ apps/admin/web/.../spaces/[spaceId]/ground/edit/page.tsx
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-02 | Space 콘텐츠 언어 기준 리소스 작성 안내와 언어 선택/필터 계약 반영 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-30 | 조회/저장/local state 책임을 route container로 명시하고 pure page props 위임 구조를 문서화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |

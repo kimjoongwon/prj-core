@@ -14,8 +14,10 @@ import {
 	PageTitleBar,
 	Surface,
 	VStack,
+	Button,
+	useT,
 } from "@cocrepo/ui";
-import { Button, Tab, Tabs } from "@heroui/react";
+import { Tab, Tabs } from "@heroui/react";
 import { KeyRound, Layers3, Plus, ShieldCheck } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type Key, type ReactNode, useEffect } from "react";
@@ -243,6 +245,8 @@ interface ActionContextItemProps {
 
 const ActionContextItem = observer(
 	({ icon, title, description }: ActionContextItemProps) => {
+		const t = useT();
+
 		return (
 			<HStack
 				gap="block"
@@ -253,8 +257,10 @@ const ActionContextItem = observer(
 					{icon}
 				</span>
 				<VStack gap="dense">
-					<span className="text-sm font-semibold text-foreground">{title}</span>
-					<span className="text-sm text-default-600">{description}</span>
+					<span className="text-sm font-semibold text-foreground">
+						{t(title)}
+					</span>
+					<span className="text-sm text-default-600">{t(description)}</span>
 				</VStack>
 			</HStack>
 		);
@@ -268,6 +274,7 @@ interface ActionGroupFilterTabsProps {
 
 const ActionGroupFilterTabs = observer(
 	({ selectedGroup, onChangeGroup }: ActionGroupFilterTabsProps) => {
+		const t = useT();
 		const selectedKey = getActionGroupFilterKey(selectedGroup);
 		const selectedFilter = findActionGroupFilter(selectedKey);
 		const handleSelectionChange = (key: Key) => {
@@ -277,7 +284,7 @@ const ActionGroupFilterTabs = observer(
 		return (
 			<VStack gap="block">
 				<Tabs
-					aria-label="권한 액션 그룹 필터"
+					aria-label={t("권한 액션 그룹 필터")}
 					selectedKey={selectedKey}
 					onSelectionChange={handleSelectionChange}
 					variant="bordered"
@@ -289,15 +296,15 @@ const ActionGroupFilterTabs = observer(
 					}}
 				>
 					{actionGroupFilters.map((filter) => (
-						<Tab key={filter.key} title={filter.label} />
+						<Tab key={filter.key} title={t(filter.label)} />
 					))}
 				</Tabs>
 				<div className="rounded-lg border border-divider bg-content2/40 p-4">
 					<div className="text-sm font-semibold text-foreground">
-						{selectedFilter.label} 액션
+						{t(selectedFilter.label)} {t("액션")}
 					</div>
 					<p className="mt-1 text-sm text-default-600">
-						{selectedFilter.description}
+						{t(selectedFilter.description)}
 					</p>
 				</div>
 			</VStack>

@@ -1,6 +1,10 @@
+"use client";
+
 import { Button, Card } from "@heroui/react";
 import { X } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import { v4 } from "uuid";
+import { useT } from "../../i18n";
 
 export interface FileDto {
 	id: string;
@@ -52,7 +56,10 @@ export interface FileUploaderProps {
  * />
  * ```
  */
-export const FileUploader = (props: FileUploaderProps) => {
+export const FileUploader = observer(function FileUploader(
+	props: FileUploaderProps,
+) {
+	const t = useT();
 	const {
 		type = "image",
 		value = null,
@@ -149,6 +156,7 @@ export const FileUploader = (props: FileUploaderProps) => {
 					variant="solid"
 					color="danger"
 					className="-top-2 -right-2 absolute z-20 opacity-0 shadow-lg transition-opacity group-hover:opacity-100"
+					aria-label={t("파일 삭제")}
 					onPress={removeFile}
 				>
 					<X size={16} />
@@ -176,7 +184,7 @@ export const FileUploader = (props: FileUploaderProps) => {
 			<div className="space-y-6">
 				{label && (
 					<h3 className="text-center font-semibold text-gray-900 text-lg sm:text-xl dark:text-gray-100">
-						{label}
+						{t(label)}
 					</h3>
 				)}
 
@@ -202,10 +210,10 @@ export const FileUploader = (props: FileUploaderProps) => {
 									+
 								</div>
 								<span className="text-center font-medium text-gray-600 text-sm sm:text-base dark:text-gray-400">
-									파일 선택
+									{t("파일 선택")}
 								</span>
 								<span className="mt-2 text-center text-gray-500 text-xs dark:text-gray-500">
-									클릭하여 파일을 선택하세요
+									{t("클릭하여 파일을 선택하세요")}
 								</span>
 							</label>
 						</div>
@@ -214,14 +222,14 @@ export const FileUploader = (props: FileUploaderProps) => {
 					{!value && (
 						<div className="text-center">
 							<p className="font-medium text-gray-600 text-sm sm:text-base dark:text-gray-400">
-								{type === "image" && "이미지 파일을 업로드하세요"}
-								{type === "video" && "비디오 파일을 업로드하세요"}
-								{type === "all" && "파일을 업로드하세요"}
+								{type === "image" && t("이미지 파일을 업로드하세요")}
+								{type === "video" && t("비디오 파일을 업로드하세요")}
+								{type === "all" && t("파일을 업로드하세요")}
 							</p>
 							<p className="mt-1 text-gray-500 text-xs dark:text-gray-500">
-								{type === "image" && "JPG, PNG, GIF 등의 이미지 파일"}
-								{type === "video" && "MP4, AVI, MOV 등의 비디오 파일"}
-								{type === "all" && "모든 형태의 파일"}
+								{type === "image" && t("JPG, PNG, GIF 등의 이미지 파일")}
+								{type === "video" && t("MP4, AVI, MOV 등의 비디오 파일")}
+								{type === "all" && t("모든 형태의 파일")}
 							</p>
 						</div>
 					)}
@@ -229,4 +237,4 @@ export const FileUploader = (props: FileUploaderProps) => {
 			</div>
 		</Card>
 	);
-};
+});

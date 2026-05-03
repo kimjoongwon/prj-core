@@ -38,4 +38,5 @@ LoginRedirectPage
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-02 | redirect/error 상태 문구를 런타임 i18n catalog 번역 대상으로 연결 | codex |
 | 2026-03-25 | 초기 화면 기획 수립 | codex |

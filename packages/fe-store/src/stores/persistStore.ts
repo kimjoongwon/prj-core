@@ -18,6 +18,7 @@ export interface PersistStoreConfig {
 export interface SpaceInfo {
 	spaceId: string;
 	groundName: string;
+	contentLanguageCode?: string | null;
 }
 
 /**
@@ -26,6 +27,7 @@ export interface SpaceInfo {
 interface PersistedData {
 	spaceId: string | null;
 	groundName: string | null;
+	contentLanguageCode: string | null;
 	spaces: SpaceInfo[];
 	accessTokenExpiresAt: number | null;
 	refreshTokenExpiresAt: number | null;
@@ -56,6 +58,7 @@ export class PersistStore {
 	// Space/Ground 정보
 	spaceId: string | null = null;
 	groundName: string | null = null;
+	contentLanguageCode: string | null = null;
 
 	// 선택 가능한 Space 목록 (로그인 시 저장)
 	spaces: SpaceInfo[] = [];
@@ -93,6 +96,7 @@ export class PersistStore {
 				const data: PersistedData = JSON.parse(stored);
 				this.spaceId = data.spaceId;
 				this.groundName = data.groundName;
+				this.contentLanguageCode = data.contentLanguageCode ?? null;
 				this.spaces = data.spaces || [];
 				this.accessTokenExpiresAt = data.accessTokenExpiresAt;
 				this.refreshTokenExpiresAt = data.refreshTokenExpiresAt;
@@ -114,6 +118,7 @@ export class PersistStore {
 			() => ({
 				spaceId: this.spaceId,
 				groundName: this.groundName,
+				contentLanguageCode: this.contentLanguageCode,
 				spaces: this.spaces,
 				accessTokenExpiresAt: this.accessTokenExpiresAt,
 				refreshTokenExpiresAt: this.refreshTokenExpiresAt,
@@ -129,9 +134,18 @@ export class PersistStore {
 	/**
 	 * Space 및 Ground 정보 설정
 	 */
-	setSpace(spaceId: string, groundName: string): void {
+	setSpace(
+		spaceId: string,
+		groundName: string,
+		contentLanguageCode?: string | null,
+	): void {
 		this.spaceId = spaceId;
 		this.groundName = groundName;
+		this.contentLanguageCode =
+			contentLanguageCode === undefined
+				? (this.spaces.find((space) => space.spaceId === spaceId)
+						?.contentLanguageCode ?? null)
+				: contentLanguageCode;
 	}
 
 	setSpaceSelectionResolved(resolved: boolean): void {
@@ -144,6 +158,7 @@ export class PersistStore {
 	clearSpace(): void {
 		this.spaceId = null;
 		this.groundName = null;
+		this.contentLanguageCode = null;
 	}
 
 	/**
@@ -203,6 +218,7 @@ export class PersistStore {
 	clear(): void {
 		this.spaceId = null;
 		this.groundName = null;
+		this.contentLanguageCode = null;
 		this.spaces = [];
 		this.accessTokenExpiresAt = null;
 		this.refreshTokenExpiresAt = null;

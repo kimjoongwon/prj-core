@@ -1,4 +1,8 @@
+"use client";
+
 import { Chip } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { useT } from "../../i18n";
 
 interface StatusChipCellProps {
 	/** 상태값 (active, inactive, pending 등) */
@@ -20,7 +24,11 @@ const STATUS_CONFIG: Record<
 /**
  * 상태를 Chip으로 표시하는 Cell 컴포넌트
  */
-export const StatusChipCell = ({ status, removedAt }: StatusChipCellProps) => {
+export const StatusChipCell = observer(function StatusChipCell({
+	status,
+	removedAt,
+}: StatusChipCellProps) {
+	const t = useT();
 	const effectiveStatus = removedAt ? "removed" : (status ?? "active");
 	const config = STATUS_CONFIG[effectiveStatus] ?? {
 		label: effectiveStatus,
@@ -30,8 +38,8 @@ export const StatusChipCell = ({ status, removedAt }: StatusChipCellProps) => {
 	return (
 		<div className="flex w-full justify-center">
 			<Chip size="sm" color={config.color} variant="flat">
-				{config.label}
+				{t(config.label)}
 			</Chip>
 		</div>
 	);
-};
+});
