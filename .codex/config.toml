@@ -307,6 +307,10 @@ config_file = "agents/mobile/fe-mo-menu-builder.toml"
 description = "Expo Router native route 기준 apps/mobile/src/app/** screen을 구현하는 전문가"
 config_file = "agents/mobile/fe-mo-page-builder.toml"
 
+[agents.fe-mo-screen-builder]
+description = "packages/fe-mo-ui/src/screen 기반 모바일 screen component를 생성하는 전문가"
+config_file = "agents/mobile/fe-mo-screen-builder.toml"
+
 [agents.fe-mo-route-layout-builder]
 description = "Expo Router native apps/mobile/src/app/**/_layout.tsx를 설계하고 구현하는 전문가"
 config_file = "agents/mobile/fe-mo-route-layout-builder.toml"

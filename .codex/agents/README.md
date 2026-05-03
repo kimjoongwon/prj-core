@@ -129,6 +129,7 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - [mobile/fe-mo-menu-builder.toml](./mobile/fe-mo-menu-builder.toml): `packages/fe-mo-ui/src/layout/Menu/**`, `packages/fe-mo-ui/src/layout/SubMenu/**`의 RN 메뉴 contract를 생성하거나 정리하는 전문가
 - [mobile/fe-mo-route-layout-builder.toml](./mobile/fe-mo-route-layout-builder.toml): `apps/mobile/src/app/**/_layout.tsx`를 구현하는 전문가
 - [mobile/fe-mo-page-builder.toml](./mobile/fe-mo-page-builder.toml): `apps/mobile/src/app/**/index.tsx` route screen 을 구현하는 전문가
+- [mobile/fe-mo-screen-builder.toml](./mobile/fe-mo-screen-builder.toml): `packages/fe-mo-ui/src/screen/**`의 모바일 screen component를 생성하거나 정리하는 전문가
 - [mobile/fe-mo-api-integrator.toml](./mobile/fe-mo-api-integrator.toml): 모바일 데이터 조회/변경 연동 기준을 구현하는 전문가
 - [mobile/fe-mo-store-builder.toml](./mobile/fe-mo-store-builder.toml): 모바일 공용/로컬 상태 경계를 정리하고 MobX store 를 구현하는 전문가
 - [mobile/fe-mo-state-builder.toml](./mobile/fe-mo-state-builder.toml): 모바일 route-local MobX state class/hook과 state slice 전달 구조를 구현하는 전문가

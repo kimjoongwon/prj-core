@@ -108,8 +108,8 @@ developer_instructions = '''
 | Stage | 이름 | 실행 단위 | 핵심 목표 | 주 호출 role |
 |-------|------|----------|----------|-------------|
 | 1 | 모바일 기능 기획 | feature별 (`domain` + `route`) | mobile route screen spec + 공통 backend scope/authorization invariant handoff + mobile unit/E2E test contract 정리 | `orch-mobile-screen-planner` + 공통 backend `req-*` role |
-| 2 | 모바일 UI 패키지 구현 | target별 | `fe-mo-ui` primitive / action / input / selection / navigation / menu 구현 + package unit test | `fe-mo-data-display-component-builder`, `fe-mo-feedback-component-builder`, `fe-mo-action-component-builder`, `fe-mo-input-component-builder`, `fe-mo-selection-component-builder`, `fe-mo-navigation-component-builder`, `fe-mo-menu-builder` |
-| 3 | 모바일 route 통합 | route별 | Expo Router native layout/screen + data/state wiring 구현 + route unit test | `fe-mo-route-layout-builder`, `fe-mo-page-builder`, `fe-mo-api-integrator`, `fe-mo-state-builder`, `fe-mo-store-builder` |
+| 2 | 모바일 UI 패키지 구현 | target별 | `fe-mo-ui` primitive / action / input / selection / navigation / menu / screen 구현 + package unit test | `fe-mo-data-display-component-builder`, `fe-mo-feedback-component-builder`, `fe-mo-action-component-builder`, `fe-mo-input-component-builder`, `fe-mo-selection-component-builder`, `fe-mo-navigation-component-builder`, `fe-mo-menu-builder`, `fe-mo-screen-builder` |
+| 3 | 모바일 route 통합 | route별 | Expo Router native layout/screen + data/state wiring 구현 + route unit test | `fe-mo-route-layout-builder`, `fe-mo-page-builder`, `fe-mo-screen-builder`, `fe-mo-api-integrator`, `fe-mo-state-builder`, `fe-mo-store-builder` |
 | 4 | 모바일 검증 | app 전체 | Detox E2E + type-check / doctor + Verified 반영 | mobile E2E / QA chain + 검증 명령 |
 
 ---
@@ -153,6 +153,7 @@ developer_instructions = '''
 - `packages/fe-mo-ui/src/layout/index.ts`
 - `packages/fe-mo-ui/src/surface/index.ts`
 - `packages/fe-mo-ui/src/design-system/index.ts`
+- `packages/fe-mo-ui/src/screen/index.ts`
 - `**/PROGRESS.md`
 
 ### 5.4 리뷰 체크포인트
@@ -200,6 +201,7 @@ developer_instructions = '''
   - `fe-mo-selection-component-builder`
   - `fe-mo-navigation-component-builder`
   - `fe-mo-menu-builder`
+  - `fe-mo-screen-builder`
   - join: `fe-mo-unit-test-builder → req-mo-fe-test-planner → qa-mo-testing`
 - 대상 경로:
   - `packages/fe-mo-ui/src/data-display/**`
@@ -211,6 +213,7 @@ developer_instructions = '''
   - `packages/fe-mo-ui/src/layout/**`
   - `packages/fe-mo-ui/src/surface/**`
   - `packages/fe-mo-ui/src/design-system/**`
+  - `packages/fe-mo-ui/src/screen/**`
 
 **완료 gate**
 - 요청된 UI target 구현과 공유 barrel/index 변경이 반영되어야 합니다.
