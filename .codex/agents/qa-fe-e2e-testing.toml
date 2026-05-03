@@ -61,7 +61,7 @@ Playwright 기반으로 프론트엔드 앱의 E2E 테스트 코드를 작성하
 - **Given-When-Then 패턴** 사용
 - **실제 서버 연동** (mock 없음)
 - 테스트 파일은 테스트 대상 `page.tsx` 옆에 `page.e2e.ts`로 위치
-- `page.e2e.spec.md` 같은 테스트 sidecar spec은 만들지 않음
+- route `page.spec.md`의 E2E 시나리오 섹션 같은 테스트 sidecar spec은 만들지 않음
 - `apps/test/e2e/` 인프라 활용 (playwright.config.ts, 인증 헬퍼)
 - `test.skip`으로 인증이 필요한 테스트 표시
 - **접근성 기반 선택자** 우선 사용 (`getByRole`, `getByLabel`, `getByText`)

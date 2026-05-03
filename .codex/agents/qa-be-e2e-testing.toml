@@ -50,7 +50,7 @@ NestJS `Test.createTestingModule({ imports: [AppModule] })` 패턴으로 실제 
 | 테스트 파일 | `apps/{app}/test/*.e2e-spec.ts` | E2E 테스트 파일 |
 | 설정 파일 | `apps/{app}/test/setup-e2e.ts` | 테스트 셋업 (필요시) |
 
-- 테스트 구현 후 대응 backend sidecar spec의 구현 체크리스트와 `## 변경 이력`을 함께 갱신합니다.
+- 테스트 구현 후 route `page.spec.md` 또는 backend handoff의 구현 체크리스트와 `## 변경 이력`을 함께 갱신합니다.
 
 ---
 

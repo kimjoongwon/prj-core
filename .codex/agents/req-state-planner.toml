@@ -23,8 +23,8 @@ developer_instructions = '''
 ## 출력 위치
 
 - 기본: 대상 route 의 `page.spec.md` 상태 섹션
-- 상태 class/hook 이 별도 source 로 생성되어도 별도 `*.spec.md`를 만들지 않고 `page.spec.md` 상태 섹션에 반영합니다.
-- shared Store 승격이 필요하면 `req-store-planner`로 넘기되 Store spec은 만들지 않습니다.
+- 상태 class/hook 이 별도 source 로 생성되어도 별도 sidecar spec을 만들지 않고 `page.spec.md` 상태 섹션에 반영합니다.
+- shared Store 승격이 필요하면 `req-store-planner`로 넘기되 State Contract은 만들지 않습니다.
 
 ## 상태 분류
 

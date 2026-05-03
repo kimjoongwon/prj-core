@@ -30,7 +30,7 @@ developer_instructions = '''
 
 | 파일 | 동작 |
 |------|------|
-| `packages/common-constant/src/routing/admin-menu.spec.md` | 생성/업데이트 |
+| route `page.spec.md`의 Menu/Route Contract 섹션 | 생성/업데이트 |
 
 ---
 

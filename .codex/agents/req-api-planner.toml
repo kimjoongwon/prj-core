@@ -27,11 +27,11 @@ apps/[app]/web/src/app/(admin)/[도메인]/[entityId]/page.spec.md
 apps/[app]/web/src/app/(admin)/[도메인]/new/page.spec.md
 apps/[app]/web/src/app/(admin)/[도메인]/[entityId]/edit/page.spec.md
 
-# controller.spec.md 생성
-apps/core/api/src/module/[module]/[domain].controller.spec.md
+# API Contract 섹션 작성
+관련 route `page.spec.md`의 API Contract 섹션
 
-# dto.spec.md 생성/업데이트 (Request/Response 계약)
-packages/be-dto/src/[domain]/*.dto.spec.md
+# DTO/API Contract 섹션 작성/업데이트 (Request/Response 계약)
+관련 route `page.spec.md`의 DTO/API Contract 섹션
 ```
 
 > **참고:** 이 에이전트는 `orch-screen-planner`에 의해 호출됩니다。직접 호출 시 화면 경로를 지정해야 합니다。
@@ -71,18 +71,18 @@ packages/be-dto/src/[domain]/*.dto.spec.md
 - `## API 호출` 섹션
 - `## 이벤트 핸들러` 섹션
 
-**2. controller.spec.md 생성:**
+**2. API Contract 섹션 작성:**
 ```
-apps/core/api/src/module/[module]/[domain].controller.spec.md
+관련 route `page.spec.md`의 API Contract 섹션
 ```
 
-**3. dto.spec.md 생성/업데이트:**
+**3. DTO/API Contract 섹션 작성/업데이트:**
 ```
-packages/be-dto/src/[domain]/*.dto.spec.md
+관련 route `page.spec.md`의 DTO/API Contract 섹션
 ```
 
 **소유권 규칙 (필수):**
-- `controller.spec.md`와 `*.dto.spec.md`는 `req-api-planner`가 단독으로 작성/수정합니다.
+- `API Contract`와 `DTO/API Contract`는 `req-api-planner`가 단독으로 작성/수정합니다.
 - `req-logic-planner`는 위 파일들을 입력 참조만 하며 수정하지 않습니다.
 
 ---
@@ -98,7 +98,7 @@ packages/be-dto/src/[domain]/*.dto.spec.md
    ↓
 4단계: API 엔드포인트 설계 (L6)
    ↓
-5단계: page.spec.md 업데이트 + controller/dto.spec.md 생성
+5단계: page.spec.md 업데이트 + API/DTO Contract 섹션 작성
    ↓
 → L7-L8 기획자에게 전달
 ```
@@ -230,9 +230,9 @@ interface ApiParameter {
 }
 ```
 
-### 5단계: page.spec.md 업데이트 + controller/dto.spec.md 생성
+### 5단계: page.spec.md 업데이트 + API/DTO Contract 섹션 작성
 
-이 단계에서 세 가지 출력을 생성합니다:
+이 단계에서 세 가지 섹션을 갱신합니다:
 
 **1) 각 page.spec.md에 아래 섹션 추가/업데이트:**
 
@@ -254,7 +254,7 @@ interface ApiParameter {
 | 항목 클릭 | 테이블 행 클릭 | 상세 화면 이동 | - |
 ```
 
-**2) controller.spec.md 생성:**
+**2) API Contract 섹션 작성:**
 
 ```markdown
 # [Domain] Controller 기획서
@@ -281,9 +281,9 @@ interface ApiParameter {
 ...
 ```
 
-**3) dto.spec.md 생성/업데이트:**
+**3) DTO/API Contract 섹션 작성/업데이트:**
 
-- `Create[Domain]Dto`, `Update[Domain]Dto`, `[Domain]ResponseDto` 관련 `.dto.spec.md`를 생성/갱신합니다.
+- `Create[Domain]Dto`, `Update[Domain]Dto`, `[Domain]ResponseDto` 관련 DTO/API Contract 섹션을 갱신합니다.
 - Controller 엔드포인트의 request/response 스키마와 DTO 스펙 간 필드 불일치가 없도록 맞춥니다.
 
 ---
@@ -305,9 +305,9 @@ interface ApiParameter {
 ### 출력 체크리스트
 - [ ] 모든 page.spec.md에 `## API 호출` 섹션이 추가되었는가?
 - [ ] 모든 page.spec.md에 `## 이벤트 핸들러` 섹션이 추가되었는가?
-- [ ] controller.spec.md가 생성되었는가?
-- [ ] controller.spec.md에 모든 엔드포인트가 포함되었는가?
-- [ ] dto.spec.md가 생성/업데이트되었는가?
+- [ ] API Contract가 생성되었는가?
+- [ ] API Contract에 모든 엔드포인트가 포함되었는가?
+- [ ] DTO/API Contract가 생성/업데이트되었는가?
 
 ---
 
@@ -400,7 +400,7 @@ API 호출 (GET /api/[resource])
 | 네트워크 에러 | error | "네트워크 오류가 발생했습니다." |
 ```
 
-### controller.spec.md 템플릿
+### API Contract 템플릿
 
 ```markdown
 # [Domain] Controller 기획서
@@ -558,9 +558,9 @@ API 호출 (GET /api/[resource])
 ...
 ```
 
-### 출력 2: controller.spec.md 생성
+### 출력 2: API Contract 섹션 작성
 
-`apps/core/api/src/module/users/users.controller.spec.md`:
+관련 route `page.spec.md`의 API Contract 섹션:
 
 ```markdown
 # User Controller 기획서

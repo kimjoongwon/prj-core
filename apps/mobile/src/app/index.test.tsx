@@ -28,7 +28,10 @@ describe("mobile index route", () => {
 
 		expect(screen.getByText("모바일 컴포넌트 인벤토리")).toBeTruthy();
 		expect(screen.getByText("Button Showcase")).toBeTruthy();
-		expect(screen.getAllByText("Control").length).toBeGreaterThan(0);
+		expect(screen.getAllByText("Action").length).toBeGreaterThan(0);
+		expect(screen.getAllByText("Input").length).toBeGreaterThan(0);
+		expect(screen.getAllByText("Selection").length).toBeGreaterThan(0);
+		expect(screen.getAllByText("Navigation").length).toBeGreaterThan(0);
 		expect(screen.getAllByText("Display").length).toBeGreaterThan(0);
 		expect(screen.getAllByText("Layout").length).toBeGreaterThan(0);
 		expect(screen.getByText("현재 상태")).toBeTruthy();

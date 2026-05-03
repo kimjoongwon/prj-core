@@ -14,7 +14,7 @@ developer_instructions = '''
 
 `fe-route-layout-builder`와 1:1로 대응되는 기획 에이전트입니다.
 Next.js App Router의 `apps/**/layout.tsx`가 어떤 서버 skeleton을 소유해야 하는지 코드 구현 전 계약으로 정리합니다.
-전역 sidecar 정책상 `layout.spec.md`는 신규 작성하지 않습니다.
+전역 sidecar 정책상 `layout 전용 sidecar spec`는 신규 작성하지 않습니다.
 
 ---
 
@@ -25,7 +25,7 @@ Next.js App Router의 `apps/**/layout.tsx`가 어떤 서버 skeleton을 소유�
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
 | route 경로 | ✅ | 대상 route 폴더 |
-| child `page.spec.md` | ✅ | 페이지 콘텐츠 요구사항 |
+| route `page.spec.md` | ✅ | 페이지 콘텐츠와 route shell 요구사항 |
 | 메뉴/탭 계약 | △ | 탭/서브네비게이션 route일 때 |
 | 재사용 Layout primitive 코드 | △ | `Page`, `Section` 등 조합 기준 |
 
@@ -34,7 +34,7 @@ Next.js App Router의 `apps/**/layout.tsx`가 어떤 서버 skeleton을 소유�
 | 산출물 | 동작 |
 |------|------|
 | 구현 메모 | `fe-route-layout-builder`에게 전달 |
-| child `page.spec.md` | page가 알아야 하는 route/page mapping만 필요 시 업데이트 |
+| route `page.spec.md` | page가 알아야 하는 route/page mapping만 필요 시 업데이트 |
 
 ---
 
@@ -45,8 +45,8 @@ Next.js App Router의 `apps/**/layout.tsx`가 어떤 서버 skeleton을 소유�
 - route shell `Layout` primitive는 `packages/fe-ui/src/display/layout/Layout.tsx`를 기준으로 계획합니다.
 - route shell `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 `packages/fe-ui/src/widget/[Name]/` widget으로 마운트합니다.
 - `primitive/layout` 아래에 임의 하위 디렉터리를 만들거나, `widget` 아래에 layout 전용 하위 카테고리를 다시 만들지 않습니다.
-- route layout 계약은 별도 `layout.spec.md`가 아니라 구현 메모와 `layout.tsx` 코드로 관리합니다.
-- `page.spec.md`는 route `page.tsx`의 콘텐츠/데이터 계약을 기록하되, route shell을 과도하게 재설계하면 안 됩니다.
+- route layout 계약은 별도 `layout 전용 sidecar spec`가 아니라 구현 메모와 `layout.tsx` 코드로 관리합니다.
+- `page.spec.md`는 route `page.tsx`의 콘텐츠/데이터/layout shell 계약을 함께 기록하되, route shell을 과도하게 재설계하면 안 됩니다.
 - 상위 layout이 이미 `App` 또는 `Layout`을 소유하면 하위 route는 필요한 계층만 추가합니다.
 - named slot은 기본값이 아니라 예외 패턴입니다. independent navigation이 필요한 경우에만 계획합니다.
 - slot을 쓰면 `children`은 implicit slot으로 취급하고, 각 `@slot`의 fallback(`default.tsx`)과 hard reload 동작을 함께 계획합니다.
@@ -74,9 +74,9 @@ Next.js App Router의 `apps/**/layout.tsx`가 어떤 서버 skeleton을 소유�
 
 ## 4. 실패 조건
 
-- 신규 `layout.spec.md`를 만들거나 갱신함
+- 신규 `layout 전용 sidecar spec`를 만들거나 갱신함
 - `Page`/`PageSurface`/`Section`/`Surface` owner가 모호하거나 중복됨
-- child `page.spec.md`가 route skeleton을 다시 정의함
+- route `page.spec.md` 안에서 child content contract와 route skeleton owner가 충돌함
 - 상위 layout이 이미 가진 shell을 하위 route가 중복 선언함
 - named slot이 있는데 `default.tsx` fallback 정책이 문서화되지 않음
 - named slot이 필요하지 않은 단순 페이지인데도 slot을 과도하게 도입함

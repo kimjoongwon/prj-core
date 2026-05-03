@@ -86,7 +86,7 @@ developer_instructions = '''
 - `qa-be-e2e-testing`의 최종 구현/실행 역할을 대체하지 않음
 - Playwright 경로/셀렉터 지시를 포함하지 않음
 - 단위 테스트 전략을 섞지 않음
-- spec에 없는 신규 API E2E 범위를 임의로 확장하지 않음
+- owner contract에 없는 신규 API E2E 범위를 임의로 확장하지 않음
 
 ---
 

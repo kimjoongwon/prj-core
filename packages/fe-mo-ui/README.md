@@ -8,8 +8,12 @@ Shared mobile UI library for React Native / Expo apps in this monorepo.
 
 Entry points are organized under `src/`:
 
-- `control`: inputs and interaction controls
-- `display`: data-display and feedback components
+- `action`: command and pressable controls
+- `input`: direct text/value inputs
+- `selection`: choice and selection controls
+- `navigation`: view-switching controls
+- `data-display`: data display components such as avatar, chip, and tag group
+- `feedback`: status and feedback components such as alert, skeleton, spinner, and toast
 - `layout`: structural and overlay components
 - `surface`: surface primitives
 - `design-system`: provider exports

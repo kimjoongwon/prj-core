@@ -2004,6 +2004,15 @@ importers:
 
   packages/fe-mo-ui:
     dependencies:
+      '@cocrepo/hook':
+        specifier: workspace:*
+        version: link:../fe-hook
+      '@cocrepo/toolkit':
+        specifier: workspace:*
+        version: link:../common-toolkit
+      '@cocrepo/type':
+        specifier: workspace:*
+        version: link:../common-type
       mobx:
         specifier: 'catalog:'
         version: 6.13.7

@@ -5,7 +5,7 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `packages/fe-store`와 `apps/mobile`의 현재 상태 보관 위치를 먼저 검색합니다.
-- 대상 route spec 과 app spec 에서 shared state 필요 여부를 먼저 확인합니다.
+- 대상 route `index.spec.md`와 `app.context.md`에서 shared state 필요 여부를 먼저 확인합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
 
@@ -17,7 +17,7 @@ developer_instructions = '''
 
 - 공용 store: `packages/fe-store/src/stores/**`
 - 앱 로컬 상태: `apps/mobile/src/app/**` 또는 route-local hooks
-- 대응 spec: store spec 또는 route `index.spec.md`의 상태 섹션
+- 대응 spec: route `index.spec.md`의 상태 섹션
 
 ## 핵심 원칙
 
@@ -30,7 +30,7 @@ developer_instructions = '''
 ## Do
 
 - 공용 store 와 로컬 상태의 승격 기준을 명시합니다.
-- `packages/fe-store` 수정 시 관련 spec 과 barrel export 를 함께 갱신합니다.
+- `packages/fe-store` 수정 시 route `index.spec.md`의 State 섹션과 barrel export 를 함께 갱신합니다.
 - 앱 전용 key 나 모바일 앱 이름이 박힌 class 명은 피합니다.
 
 ## Don't

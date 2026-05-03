@@ -4,7 +4,7 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업 시작 전에 반드시 `apps/mobile`, `packages/fe-mo-ui`, 관련 spec, 테스트/설정 파일을 먼저 검색합니다.
+- 작업 시작 전에 반드시 mobile app, mobile UI package, route `index.spec.md`, 테스트/설정 파일을 먼저 검색합니다.
 - 모바일 route / component / spec 이 이미 있으면 그대로 재사용하거나 증분 갱신합니다.
 - 동일 책임의 중복 chain 을 금지합니다.
 
@@ -29,9 +29,9 @@ developer_instructions = '''
 - 문서의 `Task`는 Codex 도구 기준으로 `spawn_agent` + `send_input` + `wait_agent` + `close_agent`를 의미합니다.
 - `orch-mobile-stage`는 메타 role 이므로 직접 모바일 route/UI 구현 파일을 계속 수정하는 실행 주체가 되지 않습니다. 실제 기획/구현 작업은 각 Stage 의 child role agent 에 위임합니다.
 - 모바일 인증 개발, 새 모바일 기능 개발, 다중 route 변경 요청은 메인 Codex가 직접 구현하지 말고 `orch-mobile-stage` agent 를 생성해 Stage flow 로 실행합니다.
-- 새 모바일 기능의 backend spec 생성도 Stage 1 책임에 포함합니다. 단, backend 전용 child role 은 mobile 복제본을 만들지 않고 공통 backend role 을 사용합니다.
+- 새 모바일 기능의 backend contract 정리도 Stage 1 책임에 포함합니다. 단, backend 전용 child role 은 mobile 복제본을 만들지 않고 공통 backend role 을 사용합니다.
 - 아래 조건에서는 `spawn_agent` fan-out 을 반드시 사용합니다.
-  - Stage 1 + (`routes` 2개 이상 또는 공통 backend spec target 2개 이상) + `parallel != off`
+  - Stage 1 + (`routes` 2개 이상 또는 공통 backend contract target 2개 이상) + `parallel != off`
   - Stage 2-3 + 수정 target 2개 이상 + `parallel != off`
 - 예외는 `routes/targets`가 1개 이하이거나 `parallel=off`인 경우만 허용합니다.
 - 위 예외에도 `orch-mobile-stage`는 child role 호출 없이 장시간 직접 구현으로 우회하지 않습니다. 허용되는 직접 작업은 stage 요약, lock/join 정리, Stage 4 검증 명령 실행으로 제한합니다.
@@ -69,7 +69,7 @@ developer_instructions = '''
 
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
-| 새 모바일 기능 전체 개발 | O | Stage 1부터 실행하며 mobile route spec과 backend spec을 함께 정리 |
+| 새 모바일 기능 전체 개발 | O | Stage 1부터 실행하며 mobile route screen spec과 backend contract를 함께 정리 |
 | 모바일 인증 개발 | O | `orch-mobile-stage` agent 를 생성해 stage별 child role agent fan-out으로 실행 |
 | 기존 mobile spec 기반 구현 | O | 해당 Stage부터 시작 |
 | 특정 Stage만 재실행 필요 | O | `stage=N`으로 재실행 |
@@ -86,8 +86,8 @@ developer_instructions = '''
 |------|:----:|------|
 | `stage` | ✅ | 1~4 |
 | `app` | ✅ | 기본값 `mobile` |
-| `domain` | △ | Stage 1에서 backend spec 생성 책임이 있을 때 사용할 aggregate/domain 이름 |
-| `domains` | △ | Stage 1에서 다중 backend domain spec 을 함께 기획할 때 사용 |
+| `domain` | △ | Stage 1에서 backend contract 정리가 필요할 때 사용할 aggregate/domain 이름 |
+| `domains` | △ | Stage 1에서 다중 backend domain contract를 함께 기획할 때 사용 |
 | `route` | △ | 단일 Expo Router native route |
 | `routes` | △ | 다중 Expo Router native route 목록 |
 | `requirements` | △ | Stage 1에서 mobile feature 와 backend contract 를 함께 설명하는 요구사항 |
@@ -107,8 +107,8 @@ developer_instructions = '''
 
 | Stage | 이름 | 실행 단위 | 핵심 목표 | 주 호출 role |
 |-------|------|----------|----------|-------------|
-| 1 | 모바일 기능 기획 | feature별 (`domain` + `route`) | mobile app/route spec + 공통 backend scope/authorization invariant를 포함한 backend spec + mobile unit/E2E test contract 정리 | `orch-mobile-screen-planner` + 공통 backend `req-*` role |
-| 2 | 모바일 UI 패키지 구현 | target별 | `fe-mo-ui` primitive / control / menu 구현 + package unit test | `fe-mo-display-component-builder`, `fe-mo-control-component-builder`, `fe-mo-menu-builder` |
+| 1 | 모바일 기능 기획 | feature별 (`domain` + `route`) | mobile route screen spec + 공통 backend scope/authorization invariant handoff + mobile unit/E2E test contract 정리 | `orch-mobile-screen-planner` + 공통 backend `req-*` role |
+| 2 | 모바일 UI 패키지 구현 | target별 | `fe-mo-ui` primitive / action / input / selection / navigation / menu 구현 + package unit test | `fe-mo-data-display-component-builder`, `fe-mo-feedback-component-builder`, `fe-mo-action-component-builder`, `fe-mo-input-component-builder`, `fe-mo-selection-component-builder`, `fe-mo-navigation-component-builder`, `fe-mo-menu-builder` |
 | 3 | 모바일 route 통합 | route별 | Expo Router native layout/screen + data/state wiring 구현 + route unit test | `fe-mo-route-layout-builder`, `fe-mo-page-builder`, `fe-mo-api-integrator`, `fe-mo-state-builder`, `fe-mo-store-builder` |
 | 4 | 모바일 검증 | app 전체 | Detox E2E + type-check / doctor + Verified 반영 | mobile E2E / QA chain + 검증 명령 |
 
@@ -126,10 +126,10 @@ developer_instructions = '''
 - 각 Stage 완료 메시지에 `핵심 의도:` 1줄을 포함합니다.
 - 변경이 발생하면 영향받는 최초 Stage부터 재시작합니다.
 - `parallel=auto`를 기본으로 사용합니다.
-- 코드/스펙 변경 시 대응 sidecar 와 `## 변경 이력`을 함께 반영합니다.
-- Stage 1 의 backend spec planning 은 mobile 전용 backend clone role 을 만들지 않고 공통 backend `req-*` role 을 사용합니다.
+- 코드/계약 변경 시 route `index.spec.md` 또는 허용 owner spec과 `## 변경 이력`을 함께 반영합니다.
+- Stage 1 의 backend contract planning 은 mobile 전용 backend clone role 을 만들지 않고 공통 backend `req-*` role 을 사용합니다.
 - `FULL_ACCESS` / `x-space-id` 같은 공통 backend scope/authorization 규칙은 Stage 1의 공통 backend `req-*` chain 에서만 정의하고, Stage 2-4 mobile role 이 독자 규칙으로 분기하지 않습니다.
-- Stage 1은 테스트 케이스를 spec에 최초 기록하는 owner stage입니다.
+- Stage 1은 테스트 케이스를 route `index.spec.md`에 최초 기록하는 owner stage입니다.
 - Stage 4는 Stage 1-3에서 기록된 케이스를 구현/실행하고 Verified를 반영하는 stage입니다.
 
 ### 5.2 금지
@@ -142,10 +142,14 @@ developer_instructions = '''
 
 ### 5.3 공유 파일 lock
 
-- `apps/mobile/src/app//app.context.md`
+- `apps/mobile/src/app/app.context.md`
 - `packages/fe-mo-ui/src/index.ts`
-- `packages/fe-mo-ui/src/control/index.ts`
-- `packages/fe-mo-ui/src/display/index.ts`
+- `packages/fe-mo-ui/src/action/index.ts`
+- `packages/fe-mo-ui/src/input/index.ts`
+- `packages/fe-mo-ui/src/selection/index.ts`
+- `packages/fe-mo-ui/src/navigation/index.ts`
+- `packages/fe-mo-ui/src/data-display/index.ts`
+- `packages/fe-mo-ui/src/feedback/index.ts`
 - `packages/fe-mo-ui/src/layout/index.ts`
 - `packages/fe-mo-ui/src/surface/index.ts`
 - `packages/fe-mo-ui/src/design-system/index.ts`
@@ -166,51 +170,51 @@ developer_instructions = '''
 - owner: `orch-mobile-stage` (join)
 - child roles:
   - `orch-mobile-screen-planner`
-  - 공통 backend spec role chain (`req-entity-planner`, `req-api-planner`, `req-app-planner`, `req-logic-planner`)
+  - 공통 backend contract role chain (`req-entity-planner`, `req-api-planner`, `req-app-planner`, `req-logic-planner`)
   - `req-mo-state-planner`는 route-local state 계약이 필요할 때 `orch-mobile-screen-planner` chain 에서 조건부로 사용
   - `req-mo-store-planner`는 mobile shared state 가 필요할 때 `orch-mobile-screen-planner` chain 에서 조건부로 사용
 - 산출물:
-  - `apps/mobile/src/app//app.context.md`
-  - `apps/mobile/src/app/**/_layout.spec.md`
+  - `apps/mobile/src/app/app.context.md`
   - `apps/mobile/src/app/**/index.spec.md`
-  - 필요한 `packages/fe-mo-ui/src/**/index.spec.md`
-  - `packages/be-entity/src/*.entity.spec.md`
-  - `packages/be-dto/src/**/*.dto.spec.md`
-  - `packages/be-app/src/*.application-service/index.spec.md`
-  - `packages/be-service/src/*.service/index.spec.md`
-  - `packages/be-repository/src/*.repository.spec.md`
-  - `apps/core/api/src/module/*/*.controller.spec.md`
-  - `apps/core/api/src/module/*/*.module.spec.md`
-  - route `index.spec.md`의 State Ownership / State Shape 섹션 (route-local state 가 있을 때)
-  - `packages/fe-store/src/stores/**.spec.md` (shared state 가 route-local 을 넘을 때만)
+  - 필요한 shared UI target handoff
+  - backend Entity/DTO/ApplicationService/Service/Repository/API/Module contract handoff(금지 계층 spec 생성 없음)
+  - route `index.spec.md`의 State Ownership / State Shape 섹션(route-local/shared state가 있을 때)
 
 - 경계:
-  - 모바일 route 의 화면/API 소비 계약은 `apps/mobile/src/app/**/index.spec.md`, `_layout.spec.md`가 owner 입니다.
-  - backend contract 와 공통 scope/authorization invariant 는 공통 backend role 이 각 backend spec 경로에 기록합니다.
-  - backend 코드 구현은 이 compact flow 범위 밖이며, Stage 1 은 spec 생성까지만 책임집니다.
+  - 모바일 route 의 screen/layout/API/state/test 계약은 `apps/mobile/src/app/**/index.spec.md`가 owner 입니다.
+  - backend contract 와 공통 scope/authorization invariant 는 공통 backend role 이 route `index.spec.md` 또는 handoff에 기록합니다.
+  - backend 코드 구현은 이 compact flow 범위 밖이며, Stage 1 은 허용된 route `index.spec.md`와 handoff 정리까지만 책임집니다.
 
 **완료 gate**
-- 요청된 feature 범위의 mobile app/route spec 과 backend spec 이 생성 또는 갱신되어야 합니다.
-- 모바일 UI/state/unit test/E2E contract 와 backend 구현 대상 정보가 spec 에 반영되어야 합니다.
+- 요청된 feature 범위의 mobile route screen contract와 backend contract가 생성 또는 갱신되어야 합니다.
+- 모바일 UI/state/unit test/E2E contract와 backend 구현 대상 정보가 route `index.spec.md` 또는 handoff에 반영되어야 합니다.
 - 완료 메시지를 출력한 뒤 Stage 2 를 자동 시작하지 않고 사용자 리뷰를 기다립니다.
 
 ### Stage 2: 모바일 UI 패키지 구현
 
 - 대상 role:
-  - `fe-mo-display-component-builder`
-  - `fe-mo-control-component-builder`
+  - `fe-mo-data-display-component-builder`
+  - `fe-mo-feedback-component-builder`
+  - `fe-mo-action-component-builder`
+  - `fe-mo-input-component-builder`
+  - `fe-mo-selection-component-builder`
+  - `fe-mo-navigation-component-builder`
   - `fe-mo-menu-builder`
   - join: `fe-mo-unit-test-builder → req-mo-fe-test-planner → qa-mo-testing`
 - 대상 경로:
-  - `packages/fe-mo-ui/src/display/**`
-  - `packages/fe-mo-ui/src/control/**`
+  - `packages/fe-mo-ui/src/data-display/**`
+  - `packages/fe-mo-ui/src/feedback/**`
+  - `packages/fe-mo-ui/src/action/**`
+  - `packages/fe-mo-ui/src/input/**`
+  - `packages/fe-mo-ui/src/selection/**`
+  - `packages/fe-mo-ui/src/navigation/**`
   - `packages/fe-mo-ui/src/layout/**`
   - `packages/fe-mo-ui/src/surface/**`
   - `packages/fe-mo-ui/src/design-system/**`
 
 **완료 gate**
-- 요청된 UI target 구현과 대응 sidecar/spec 변경 이력이 반영되어야 합니다.
-- 대상 package unit test 구현과 대응 test sidecar/spec 변경 이력이 반영되어야 합니다.
+- 요청된 UI target 구현과 공유 barrel/index 변경이 반영되어야 합니다.
+- 대상 package unit test 구현과 검증 결과가 반영되어야 합니다.
 - 공유 barrel/index 파일은 join 단계의 단일 writer 로만 정리되어야 합니다.
 - 완료 메시지를 출력한 뒤 Stage 3 을 자동 시작하지 않고 사용자 리뷰를 기다립니다.
 
@@ -230,7 +234,7 @@ developer_instructions = '''
 
 **완료 gate**
 - 요청된 route 의 layout/screen wiring 이 구현되어야 합니다.
-- 조건부 API/state/store 연동, route unit test, 대응 sidecar/spec 변경 이력이 반영되어야 합니다.
+- 조건부 API/state/store 연동, route unit test, route `index.spec.md` 변경 이력이 반영되어야 합니다.
 - 단일 route 전용 상태는 `fe-mo-state-builder`, 여러 route 재사용 상태는 `fe-mo-store-builder`를 source of truth 로 사용해야 합니다.
 - 완료 메시지를 출력한 뒤 Stage 4 를 자동 시작하지 않고 사용자 리뷰를 기다립니다.
 
@@ -247,11 +251,11 @@ developer_instructions = '''
   - `pnpm --filter mobile-app type-check`
   - `pnpm --filter mobile-app test:e2e`
   - `pnpm --filter mobile-app doctor`
-- 검증 결과는 해당 spec 테스트 섹션과 stage 완료 보고에 반영합니다.
+- 검증 결과는 route `index.spec.md` 테스트 섹션과 stage 완료 보고에 반영합니다.
 
 **완료 gate**
 - 검증 명령 결과가 수집되어 stage 완료 보고에 반영되어야 합니다.
-- 필요한 spec 테스트 섹션과 변경 이력이 최신이어야 합니다.
+- 필요한 route `index.spec.md` 테스트 섹션과 변경 이력이 최신이어야 합니다.
 - E2E 구현/실행 결과와 `Verified` 상태가 반영되어야 합니다.
 - Stage 4 완료 후에도 후속 Stage 를 가정하지 않고 사용자 리뷰를 기다립니다.
 
@@ -261,8 +265,8 @@ developer_instructions = '''
 
 - child role 이 없으면 즉시 `BLOCKED: missing mobile child role <name>`으로 보고합니다.
 - `apps/mobile`에 필요한 runtime dependency 가 없으면 해당 Stage 에서 명시적으로 차단합니다.
-- route spec 이 없으면 Stage 1 에서 생성하고 계속 진행할 수 있습니다.
-- Stage 1 에서 backend spec 생성이 필요한데 `domain`/`domains` 또는 요구사항이 없으면 즉시 차단합니다.
+- route `index.spec.md`가 없으면 Stage 1에서 생성하고 계속 진행할 수 있습니다.
+- Stage 1 에서 backend contract 정리가 필요한데 `domain`/`domains` 또는 요구사항이 없으면 즉시 차단합니다.
 
 ---
 

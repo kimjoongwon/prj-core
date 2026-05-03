@@ -22,7 +22,7 @@ NestJS Facade 레이어를 생성하는 전문가입니다.
 |------|------|
 | Facade 클래스 | `packages/be-facade/src/{domain}.facade.ts` |
 | 배럴 export | `packages/be-facade/src/index.ts` |
-| sidecar spec | `packages/be-facade/src/{domain}.facade.spec.md` |
+| Facade contract | Facade Contract handoff |
 
 ## 핵심 규칙
 

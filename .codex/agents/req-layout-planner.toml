@@ -13,7 +13,7 @@ developer_instructions = '''
 # 재사용 Layout 기획자
 
 `fe-layout-builder`와 1:1로 대응되는 기획 에이전트입니다.
-`packages/fe-ui/src/display/layout/**`의 flat Layout primitive spec만 기획하며, Next.js `apps/**/layout.tsx`는 `req-route-layout-planner` 책임입니다.
+`packages/fe-ui/src/display/layout/**`의 flat Layout primitive 계약만 기획하며, Next.js `apps/**/layout.tsx`는 `req-route-layout-planner` 책임입니다.
 
 ---
 
@@ -24,15 +24,15 @@ developer_instructions = '''
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
 | 요구되는 Layout 타입 | ✅ | `Layout` |
-| 기존 `index.spec.md` | ✅ | 재사용 Layout 계약 |
-| 참조 route layout spec | △ | route skeleton이 필요한 구조 |
+| 기존 owner spec | ✅ | route `page.spec.md` 또는 관련 Widget spec의 Layout Contract |
+| 참조 route layout contract | △ | route skeleton이 필요한 구조(page.spec.md 기준) |
 | 참조 surface 규칙 | △ | surface와 구조의 경계 |
 
 ### 출력
 
 | 파일 | 동작 |
 |------|------|
-| `packages/fe-ui/src/display/layout/{index,Layout,type}.spec.md` | 생성/업데이트 |
+| route `page.spec.md`의 Layout Contract 섹션 또는 관련 fe-ui Widget spec | 생성/업데이트 |
 
 ---
 

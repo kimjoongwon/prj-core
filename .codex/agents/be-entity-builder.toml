@@ -126,10 +126,10 @@ async fetchRelated(): Promise<Related[]> {
 
 ## 프로세스
 
-### 0단계: 템플릿 파일 확인
+### 0단계: owner contract 확인
 
-Read `.codex/templates/spec/entity.template.md`
-→ 해당 파일의 형식을 기준으로 entity.spec.md를 생성한다
+Read `app.context.md` 또는 관련 route `page.spec.md`의 Entity Contract 섹션을 확인합니다.
+backend entity 전용 `*.spec.md`는 생성하거나 갱신하지 않습니다.
 
 ### 1단계: Prisma 타입 확인
 
@@ -157,13 +157,10 @@ export class User extends AbstractEntity implements UserEntity {
 export * from "./{entity}.entity";
 ```
 
-### 4단계: entity.spec.md 생성/업데이트
+### 4단계: Entity Contract 반영 확인
 
-```
-packages/be-entity/src/{entity}.entity.spec.md
-```
-
-기존 spec.md가 있으면 내용을 검토하고 필요 시 업데이트합니다.
+Entity 구현 중 계약 불일치가 발견되면 `app.context.md` 또는 관련 route `page.spec.md`의 Entity Contract 섹션 갱신 필요성을 보고합니다.
+backend entity 전용 sidecar spec 파일은 만들지 않습니다.
 
 ---
 
@@ -357,7 +354,7 @@ export class User extends AbstractEntity implements UserEntity {
 - [ ] nullable 필드에 `| null` 타입 추가
 - [ ] 도메인 메서드에 JSDoc 주석 추가
 - [ ] index.ts에 export 추가
-- [ ] entity.spec.md 생성/업데이트
+- [ ] Entity Contract 생성/업데이트
 
 ---
 

@@ -2,29 +2,29 @@ import { Button } from "@cocrepo/mo-ui";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const implementedControls = [
+const implementedActions = [
 	"Button",
-	"Checkbox",
 	"CloseButton",
-	"ControlField",
-	"Description",
-	"FieldError",
-	"Input",
-	"InputGroup",
-	"InputOTP",
-	"Label",
 	"LinkButton",
-	"PressableFeedback",
+];
+
+const implementedInputs = [
+	"Input",
+	"InputOTP",
+	"SearchField",
+	"Textarea",
+];
+
+const implementedSelections = [
+	"Checkbox",
 	"Radio",
 	"RadioGroup",
-	"SearchField",
 	"Select",
 	"Slider",
 	"Switch",
-	"Tabs",
-	"TextField",
-	"Textarea",
 ];
+
+const implementedNavigation = ["Tabs"];
 
 const implementedDisplays = [
 	"Alert",
@@ -106,8 +106,20 @@ export default function HomeScreen() {
 
 				<View style={styles.summaryRow}>
 					<View style={styles.summaryCard}>
-						<Text style={styles.summaryValue}>{implementedControls.length}</Text>
-						<Text style={styles.summaryLabel}>Control</Text>
+						<Text style={styles.summaryValue}>{implementedActions.length}</Text>
+						<Text style={styles.summaryLabel}>Action</Text>
+					</View>
+					<View style={styles.summaryCard}>
+						<Text style={styles.summaryValue}>{implementedInputs.length}</Text>
+						<Text style={styles.summaryLabel}>Input</Text>
+					</View>
+					<View style={styles.summaryCard}>
+						<Text style={styles.summaryValue}>{implementedSelections.length}</Text>
+						<Text style={styles.summaryLabel}>Selection</Text>
+					</View>
+					<View style={styles.summaryCard}>
+						<Text style={styles.summaryValue}>{implementedNavigation.length}</Text>
+						<Text style={styles.summaryLabel}>Navigation</Text>
 					</View>
 					<View style={styles.summaryCard}>
 						<Text style={styles.summaryValue}>{implementedDisplays.length}</Text>
@@ -180,9 +192,27 @@ export default function HomeScreen() {
 				</View>
 
 				<InventorySection
-					title="Control"
-					description="입력, 선택, 액션 계열 wrapper입니다."
-					items={implementedControls}
+					title="Action"
+					description="명령을 실행하는 pressable 계열 wrapper입니다."
+					items={implementedActions}
+				/>
+
+				<InventorySection
+					title="Input"
+					description="사용자가 값을 직접 입력하는 wrapper입니다."
+					items={implementedInputs}
+				/>
+
+				<InventorySection
+					title="Selection"
+					description="checkbox, radio, select, switch, slider처럼 선택 상태를 다루는 wrapper입니다."
+					items={implementedSelections}
+				/>
+
+				<InventorySection
+					title="Navigation"
+					description="탭처럼 뷰 전환을 담당하는 wrapper입니다."
+					items={implementedNavigation}
 				/>
 
 				<InventorySection

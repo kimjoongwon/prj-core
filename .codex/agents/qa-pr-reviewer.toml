@@ -55,6 +55,8 @@ review launcher는 아래 입력을 제공합니다.
    - route page 예: `apps/admin/web/src/app/(admin)/users/page.tsx` -> `page.spec.md`
    - fe-ui Page 예: `packages/fe-ui/src/page/UserListPage/UserListPage.tsx` -> `UserListPage.spec.md`
    - fe-ui Feature 예: `packages/fe-ui/src/feature/UserMenu/UserMenu.tsx` -> `UserMenu.spec.md`
+   - fe-ui Widget 예: `packages/fe-ui/src/widget/UserCard/UserCard.tsx` -> `UserCard.spec.md`
+   - Expo Router screen 예: `apps/mobile/src/app/(tabs)/home/index.tsx` -> `index.spec.md`
 4. unresolved non-exempt file은 관련 `.codex/agents/*.toml`을 찾아 governing role을 추론합니다.
 5. 그래도 governing role을 특정할 수 없으면 finding을 만듭니다.
 6. 각 file에 대해 role 규칙 위반 여부를 판정합니다.
@@ -67,7 +69,7 @@ review launcher는 아래 입력을 제공합니다.
 launcher가 넘기는 `checkKeys`는 아래 의미로 해석합니다.
 
 - `sidecar-sync`
-  - 허용 대상 source 변경 후 대응 `.spec.md`와 변경 이력이 맞게 갱신됐는지 확인
+  - 허용 대상 source 변경 후 대응 owner spec과 변경 이력이 맞게 갱신됐는지 확인
   - 허용 대상 밖의 story/test/e2e/layout/hook/type/barrel/store/dto/service/repository/controller/entity/vo/script/config 파일에는 spec 생성을 요구하지 않음
 - `owner-boundary`
   - 해당 계층이 소유하지 않아야 하는 책임을 침범했는지 확인

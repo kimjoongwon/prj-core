@@ -45,7 +45,7 @@ route layout, page, feature 사이에서 **누가 Surface를 소유하고 어디
 - named slot을 쓰는 경우 surface owner는 여전히 parent `layout.tsx` 기준으로 결정하고, slot 콘텐츠는 해당 surface를 소비만 합니다.
 - `page.tsx`는 route layout 코드가 제공한 surface 안의 콘텐츠를 소비합니다.
 - 검색/필터/DataGrid/폼/카드처럼 시각적으로 묶여야 하는 블록은 명시적 surface owner가 있어야 합니다.
-- Surface를 생략하는 경우에는 flat 배경이 의도된 이유를 구현 메모 또는 허용 대상 spec에 명시합니다.
+- Surface를 생략하는 경우에는 flat 배경이 의도된 이유를 구현 메모 또는 허용 owner spec에 명시합니다.
 
 ---
 
@@ -64,11 +64,11 @@ route layout, page, feature 사이에서 **누가 Surface를 소유하고 어디
 ## 4. 실패 조건
 
 - 검색/필터/DataGrid/폼 블록이 있는데 surface owner가 정의되지 않음
-- 신규 `layout.spec.md`를 만들거나 갱신함
+- 신규 `layout 전용 sidecar spec`를 만들거나 갱신함
 - route layout 코드와 `page.spec.md`가 같은 surface owner를 중복 선언함
 - slot fallback(`default.tsx`)의 surface 정책이 문서화되지 않음
 - `PageSurface` 없이 `SectionSurface`만 최상위에 놓여 elevation 위계가 깨짐
-- Surface 생략이 명시적 예외가 아닌 단순 누락인데 구현 메모 또는 허용 대상 spec에 근거가 없음
+- Surface 생략이 명시적 예외가 아닌 단순 누락인데 구현 메모 또는 허용 owner spec에 근거가 없음
 
 ---
 

@@ -32,33 +32,33 @@ developer_instructions = '''
 
 ## 2. 입력/출력
 
-### 입력 (Sidecar Spec 파일)
+### 입력 (Owner Contract)
 
 | 항목 | 필수 | 경로 |
 |------|:----:|------|
-| ApplicationService 기획서 | ✅ | `packages/be-app/src/[name].application-service/index.spec.md` |
-| Service 기획서 | ✅ | `packages/be-service/src/[name].service/index.spec.md` |
-| Controller 기획서 | ✅ | `apps/core/api/src/module/[module]/[domain].controller.spec.md` |
+| ApplicationService 기획서 | ✅ | `page.spec.md 또는 app handoff의 ApplicationService Contract 섹션` |
+| Service 기획서 | ✅ | `page.spec.md 또는 logic handoff의 Service Contract 섹션` |
+| Controller 기획서 | ✅ | 관련 route `page.spec.md`의 API Contract 섹션 |
 | 페이지 기획서 | ✅ | `apps/[app]/web/src/app/(admin)/[domain]/page.spec.md` |
-| Repository 기획서 | ❌ | `packages/be-repository/src/[domain].repository.spec.md` |
-| Store 기획서 (조건부) | ❌ | `packages/fe-store/src/stores/[domain]Store.spec.md` |
+| Repository 기획서 | ❌ | `logic handoff의 Repository Contract 섹션` |
+| Store 기획서 (조건부) | ❌ | route `page.spec.md` 또는 fe-ui Feature/Widget spec의 State Contract 섹션 |
 
-### 출력 (Sidecar Spec)
+### 출력 (Owner Contract)
 
 ```
-packages/be-service/src/[name].service/index.spec.md     # 비즈니스 규칙 섹션 추가 (L9)
-packages/be-repository/src/[domain].repository.spec.md   # Repository 규칙 섹션 추가 (L9)
+page.spec.md 또는 logic handoff의 Service Contract 섹션     # 비즈니스 규칙 섹션 추가 (L9)
+logic handoff의 Repository Contract 섹션   # Repository 규칙 섹션 추가 (L9)
 
 # L10 테스트 케이스는 기존 각 .spec.md에 "테스트 케이스" 섹션 추가
 ```
 
 **소유권 규칙 (필수):**
-- `controller.spec.md`는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
-- `controller.spec.md` 작성/수정 책임은 `req-api-planner` 단독 소유입니다.
-- `packages/be-app/src/[name].application-service/index.spec.md`는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
-- `application-service.spec.md` 작성/수정 책임은 `req-app-planner` 단독 소유입니다.
-- `store.spec.md`(존재 시)는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
-- `store.spec.md` 작성/수정 책임은 `req-store-planner` 단독 소유입니다.
+- `API Contract`는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
+- `API Contract` 작성/수정 책임은 `req-api-planner` 단독 소유입니다.
+- `page.spec.md 또는 app handoff의 ApplicationService Contract 섹션`는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
+- ApplicationService Contract 작성/수정 책임은 `req-app-planner` 단독 소유입니다.
+- `State Contract`(존재 시)는 입력 참조 전용이며, 이 에이전트에서 수정하지 않습니다.
+- `State Contract` 작성/수정 책임은 `req-store-planner` 단독 소유입니다.
 
 ---
 
@@ -152,11 +152,11 @@ packages/be-repository/src/[domain].repository.spec.md   # Repository 규칙 섹
 
 ### 6단계: 기획서에 비즈니스 규칙/테스트 섹션 추가
 
-각 Sidecar Spec 파일을 읽은 후, 아래 섹션을 추가하거나 업데이트합니다:
+허용 owner spec 또는 backend handoff를 읽은 후, 아래 섹션을 추가하거나 업데이트합니다:
 
-- `[name].service/index.spec.md` → `## 비즈니스 규칙` 섹션 추가
-- `[domain].repository.spec.md` → `## 쿼리 규칙` 섹션 추가
-- 각 `.spec.md` → `## 테스트 케이스` 섹션 추가
+- `[name].Service Contract 섹션` → `## 비즈니스 규칙` 섹션 추가
+- `Repository Contract` → `## 쿼리 규칙` 섹션 추가
+- 각 owner spec → `## 테스트 케이스` 섹션 추가
 
 ---
 
@@ -323,26 +323,26 @@ packages/be-repository/src/[domain].repository.spec.md   # Repository 규칙 섹
 
 ## 9. 예시
 
-### 입력 (Sidecar Spec 파일 읽기)
+### 입력 (Owner Contract 읽기)
 
 ```
 읽기 대상 파일:
-- packages/be-app/src/users.application-service/index.spec.md
-- packages/be-service/src/users.service/index.spec.md
-- apps/core/api/src/module/users/users.controller.spec.md
+- packages/be-app/src/users.ApplicationService Contract 섹션
+- packages/be-service/src/users.Service Contract 섹션
+- 관련 route `page.spec.md`의 API Contract 섹션
 - apps/admin/web/src/app/(admin)/users/page.spec.md
-- packages/be-service/src/reservations.service/index.spec.md
-- apps/core/api/src/module/reservations/reservations.controller.spec.md
+- packages/be-service/src/reservations.Service Contract 섹션
+- 관련 route `page.spec.md`의 API Contract 섹션
 ```
 
 파일 읽기 후, 각 기획서에서 다음을 추출합니다:
-- Entity 필드 목록 (Service/Repository spec에서)
-- API 엔드포인트 목록 (Controller spec에서)
+- Entity 필드 목록 (Service/Repository contract에서)
+- API 엔드포인트 목록 (API Contract에서)
 - 페이지 이벤트/인터랙션 (page.spec.md에서)
 
 ### 출력 (기존 .spec.md에 섹션 추가)
 
-**`packages/be-service/src/users.service/index.spec.md` 에 추가:**
+**`packages/be-service/src/users.Service Contract 섹션` 에 추가:**
 
 ```markdown
 ## 비즈니스 규칙
@@ -387,7 +387,7 @@ packages/be-repository/src/[domain].repository.spec.md   # Repository 규칙 섹
 |          | message: "이미 등록된 이메일입니다" |
 ```
 
-**`packages/be-service/src/reservations.service/index.spec.md` 에 추가:**
+**`packages/be-service/src/reservations.Service Contract 섹션` 에 추가:**
 
 ```markdown
 ## 비즈니스 규칙

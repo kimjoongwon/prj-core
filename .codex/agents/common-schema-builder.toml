@@ -36,7 +36,7 @@ developer_instructions = '''
 | | 도메인 설명 | 비즈니스 컨텍스트 |
 | | 필드 목록 | 필드명, 타입, 검증 규칙 |
 | **출력** | 스키마 클래스 파일 | `packages/common-schema/src/schemas/{domain}/{name}.schema.ts` |
-| | 스키마 기획서 파일 | `packages/common-schema/src/schemas/{domain}/{name}.schema.spec.md` |
+| | 스키마 기획서 파일 | 관련 route `page.spec.md` 또는 schema handoff의 Validation Contract 섹션 |
 | | 인덱스 파일 업데이트 | `packages/common-schema/src/schemas/{domain}/index.ts` |
 
 ---
@@ -238,7 +238,7 @@ export class [SchemaName] {
 ### 4단계: Sidecar 기획서 작성
 
 ```markdown
-<!-- packages/common-schema/src/schemas/[domain]/[name].schema.spec.md -->
+<!-- Validation Contract: route page.spec.md 또는 schema handoff에 반영 -->
 # [SchemaName] Schema Specification
 
 ## 목적
@@ -474,8 +474,8 @@ export const VALIDATION_MESSAGES = {
 - [ ] 기존 데코레이터를 재사용했는가?
 - [ ] 검증 메시지 상수를 사용했는가?
 - [ ] JSDoc 주석이 추가되었는가?
-- [ ] `[name].schema.spec.md`가 코드 옆에 생성되었는가?
-- [ ] `.spec.md` 하단에 변경 이력이 기록되었는가?
+- [ ] Validation Contract가 route `page.spec.md` 또는 schema handoff에 반영되었는가?
+- [ ] owner spec 하단에 변경 이력이 기록되었는가?
 - [ ] 인덱스 파일이 업데이트되었는가?
 - [ ] 불필요한 중복 검증이 없는가?
 - [ ] DTO 확장이 가능한 구조인가?
@@ -533,7 +533,7 @@ packages/common-schema/src/schemas/{domain}/{name}.schema.ts
 
 **생성된 파일:**
 - `packages/common-schema/src/schemas/[domain]/[name].schema.ts`
-- `packages/common-schema/src/schemas/[domain]/[name].schema.spec.md`
+- route `page.spec.md` 또는 schema handoff의 Validation Contract 섹션
 - `packages/common-schema/src/schemas/[domain]/index.ts` (업데이트)
 
 **필드:**

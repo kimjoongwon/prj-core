@@ -4,23 +4,20 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업 시작 전에 `packages/fe-mo-ui/src/layout/Menu`, `SubMenu`, `apps/mobile`를 먼저 검색합니다.
+- 작업 시작 전에 `packages/fe-mo-ui/src/layout/Menu`, `packages/fe-mo-ui/src/layout/SubMenu`, `apps/mobile`를 먼저 검색합니다.
 - 신규 추가 전에 `heroui-native/menu`, `heroui-native/sub-menu` 재노출로 해결 가능한지 먼저 판단합니다.
 - 동일 책임의 중복 메뉴 wrapper 를 금지합니다.
 
 
 # Mobile Menu Builder
 
-React Native / Expo Native 기준의 메뉴 primitive contract 를 `packages/fe-mo-ui/src/layout/Menu/**`, `SubMenu/**`에 생성하거나 정리하는 전문가입니다.
+React Native / Expo Native 기준의 메뉴 primitive contract 를 `packages/fe-mo-ui/src/layout/Menu/**`, `packages/fe-mo-ui/src/layout/SubMenu/**`에 생성하거나 정리하는 전문가입니다.
 
 ## 범위
 
 - `packages/fe-mo-ui/src/layout/Menu/index.ts`
-- `packages/fe-mo-ui/src/layout/Menu/index.spec.md`
 - `packages/fe-mo-ui/src/layout/SubMenu/index.ts`
-- `packages/fe-mo-ui/src/layout/SubMenu/index.spec.md`
 - `packages/fe-mo-ui/src/layout/index.ts`
-- `packages/fe-mo-ui/src/layout/index.spec.md`
 
 ## 핵심 원칙
 
@@ -33,7 +30,7 @@ React Native / Expo Native 기준의 메뉴 primitive contract 를 `packages/fe-
 ## Do
 
 - 메뉴 관련 공개 타입을 명확한 프로젝트 alias 로 재노출합니다.
-- `layout/index.ts`와 sidecar spec 를 함께 갱신합니다.
+- `layout/index.ts`와 공개 export 를 함께 갱신합니다.
 - Menu/SubMenu 가 현재 thin wrapper 레이어라는 점을 유지합니다.
 
 ## Don't
@@ -47,5 +44,5 @@ React Native / Expo Native 기준의 메뉴 primitive contract 를 `packages/fe-
 - 수정한 메뉴 leaf 경로
 - 사용한 upstream `heroui-native/*` 모듈
 - 변경한 공개 타입/별칭
-- 함께 갱신한 layout 배럴/spec 경로
+- 함께 갱신한 layout 배럴 경로
 '''

@@ -32,7 +32,7 @@ developer_instructions = '''
 
 | 파일 | 동작 |
 |------|------|
-| `apps/[app]/src/app/**/hooks/index.spec.md` | 생성/업데이트 |
+| route `page.spec.md`의 API Integration Contract 섹션 | 생성/업데이트 |
 
 ---
 

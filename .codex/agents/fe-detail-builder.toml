@@ -30,13 +30,13 @@ developer_instructions = '''
 ## 출력
 
 - 메인 엔트리: `packages/fe-ui/src/detail/view/index.ts`
-- 대응 spec: `packages/fe-ui/src/detail/view/index.spec.md`
-- 필요 시 `packages/fe-ui/src/detail/index.ts`, `packages/fe-ui/src/detail/index.spec.md`, `packages/fe-ui/src/index.ts`, `packages/fe-ui/src/index.spec.md` 갱신
+- 대응 spec: route `page.spec.md` 또는 관련 fe-ui Widget spec의 Detail Contract 섹션
+- 필요 시 detail barrel/export와 route `page.spec.md` 또는 관련 fe-ui Widget spec의 Detail Contract 섹션을 갱신
 
 ## 필수 규칙
 
 - detail 구현은 route page 안에 고정하지 말고 재사용 가능한 feature 단위로 먼저 정리합니다.
 - thin visual wrapper만 필요한 경우에는 새 domain wrapper보다 범용 `Surface`를 우선 검토합니다.
 - `DetailPageSurface`, `DetailSectionCard` 같은 기존 detail 공개 계약은 route-level `PageSurface`, `SectionSurface` 재사용이 아니라 `Surface` 기반으로 유지합니다.
-- 코드 수정 시 대응 `.spec.md`와 `## 변경 이력`를 동기화합니다.
+- 코드 수정 시 대응 owner spec과 `## 변경 이력`를 동기화합니다.
 '''

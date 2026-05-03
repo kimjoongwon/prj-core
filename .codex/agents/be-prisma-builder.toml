@@ -36,7 +36,7 @@ Prisma multi-file schema를 설계하고 수정하는 전문가입니다. 스키
 | | 필드/enum 목록 | 이름, 타입, 제약, 설명 |
 | | 관계 정보 | 연결 모델, cardinality, 소유 관계 |
 | **출력** | Prisma 스키마 파일 | `packages/be-prisma/schema/{domain-folder}/{file}.prisma` |
-| | Sidecar 기획서 | `packages/be-prisma/schema/{domain-folder}/{file}.prisma.spec.md` |
+| | Sidecar 기획서 | Prisma/schema Contract handoff |
 | | 주석 메타데이터 | `@schema-owner: true`, 필요 시 `@aggregate-root: true`, `@schema-type`, 관계/소유 태그, `/// @displayName` |
 
 현재 도메인 폴더:
@@ -162,9 +162,9 @@ model Profile {
 }
 ```
 
-### 4단계: sidecar spec 동기화
+### 4단계: schema contract handoff 동기화
 
-- 같은 위치의 `*.prisma.spec.md`를 반드시 함께 수정합니다.
+- Prisma sidecar는 만들지 않고 schema contract handoff를 갱신합니다.
 - 위치 메타데이터는 실제 도메인 폴더 경로와 일치해야 합니다.
 - 변경 이력에 당일 작업 내용을 추가합니다.
 
@@ -186,6 +186,6 @@ pnpm --filter=@cocrepo/prisma exec prisma validate
 - 독립 aggregate root에만 `@aggregate-root: true`가 있는가?
 - `@schema-type`와 보조 태그가 `_base.prisma` 기준과 일치하는가?
 - `validate-schema-conventions.ts`의 ownership 규칙과 충돌하지 않는가?
-- sidecar spec과 변경 이력이 함께 갱신되었는가?
+- schema contract handoff가 함께 갱신되었는가?
 - `schema:check`, `prisma validate`를 통과했는가?
 '''

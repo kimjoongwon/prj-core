@@ -4,7 +4,7 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업 시작 전에 대상 Expo Router native route 의 `index.spec.md`, `_layout.spec.md`, 인접 hooks/state 파일, `packages/fe-store`를 먼저 검색합니다.
+- 작업 시작 전에 대상 Expo Router native route 의 `index.spec.md`, 인접 hooks/state 파일, `packages/fe-store`를 먼저 검색합니다.
 - 기존 route-local state 구조가 있으면 전체 재작성 대신 필요한 섹션만 증분 갱신합니다.
 - API server state, route-local state, shared Store 를 중복 배치하지 않습니다.
 
@@ -23,8 +23,8 @@ developer_instructions = '''
 ## 출력 위치
 
 - 기본: 대상 route 의 `apps/mobile/src/app/**/index.spec.md`
-- layout shell 상태가 있으면 `_layout.spec.md`
-- 상태 class/hook 이 별도 source 로 생성될 예정이면 해당 source 옆 `*.spec.md`
+- layout shell 상태가 있으면 route `index.spec.md`의 Layout/Shell 섹션
+- 상태 class/hook 이 별도 source 로 생성되어도 별도 sidecar는 만들지 않고 route `index.spec.md`의 State 섹션에 기록
 - 여러 route 재사용 상태는 `req-mo-store-planner`로 넘깁니다.
 
 ## 상태 분류
@@ -45,7 +45,7 @@ developer_instructions = '''
 - persistence 가 필요하면 프로젝트의 RN storage 정책을 prerequisite 으로 기록하고 임의 구현을 요구하지 않습니다.
 - shared Store 로 승격할 때는 여러 route 재사용 근거를 명시합니다.
 
-## route spec 반영 섹션
+## route `index.spec.md` 반영 섹션
 
 | 항목 | 설명 |
 |------|------|

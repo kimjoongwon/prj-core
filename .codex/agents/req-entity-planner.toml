@@ -38,12 +38,12 @@ developer_instructions = '''
 
 | 파일 | 설명 |
 |------|------|
-| `packages/be-entity/src/{entity}.entity.spec.md` | Entity 기획서 (신규 생성) |
+| `app.context.md` 또는 관련 route `page.spec.md`의 Entity Contract 섹션 | Entity 기획서 (신규 생성) |
 | `apps/[app]/web/src/app/(admin)/[domain]/page.spec.md` | Entity 참조 섹션 추가 (선택) |
 
-### 출력 형식 (entity.spec.md)
+### 출력 형식 (Entity Contract)
 
-> 형식은 `.codex/templates/spec/entity.template.md` 참조
+Entity Contract는 backend sidecar spec 파일로 분리하지 않고 `app.context.md` 또는 관련 route `page.spec.md`의 섹션으로 작성합니다.
 
 ---
 
@@ -85,9 +85,9 @@ developer_instructions = '''
 ## 4. 프로세스
 
 ```
-0단계: 템플릿 파일 확인
-   Read `.codex/templates/spec/entity.template.md`
-   → 해당 파일의 형식을 기준으로 entity.spec.md를 생성한다
+0단계: owner 문서 확인
+   Read `app.context.md` 또는 관련 route `page.spec.md`
+   → 해당 owner 문서의 Entity Contract 섹션을 기준으로 갱신한다
    ↓
 1단계: 도메인 분석
    - app.context.md, page.spec.md 기획서 확인
@@ -109,8 +109,8 @@ developer_instructions = '''
    - Entity 간 관계 파악
    - 1:1, 1:N, N:M 관계 정의
    ↓
-6단계: entity.spec.md 생성
-   → packages/be-entity/src/{entity}.entity.spec.md 생성
+6단계: Entity Contract 갱신
+   → `app.context.md` 또는 관련 route `page.spec.md`의 Entity Contract 섹션 갱신
 ```
 
 ---
@@ -275,7 +275,7 @@ Member (Level 0) → 단일 실행
 - [ ] Enum이 별도로 정의되었는가?
 - [ ] 관계가 명확히 정의되었는가?
 - [ ] 제약조건(unique, required)이 명시되었는가?
-- [ ] entity.spec.md가 생성되었는가?
+- [ ] Entity Contract가 생성되었는가?
 
 ---
 
@@ -308,7 +308,7 @@ Member (Level 0) → 단일 실행
 API: GET /api/members, POST /api/members, PATCH /api/members/:memberId, DELETE /api/members/:memberId
 ```
 
-### 출력 (packages/be-entity/src/member.entity.spec.md 생성)
+### 출력 (`app.context.md` 또는 route `page.spec.md`의 Entity Contract 섹션)
 
 ```markdown
 # Member Entity 기획서

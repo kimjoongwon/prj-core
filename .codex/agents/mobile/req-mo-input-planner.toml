@@ -4,24 +4,29 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업 시작 전에 `packages/fe-mo-ui/src/control/**` leaf spec 과 upstream `heroui-native/*` 후보를 먼저 검색합니다.
+- 작업 시작 전에 `packages/fe-mo-ui/src/input/**` leaf contract 과 upstream `heroui-native/*` 후보를 먼저 검색합니다.
 - thin re-export 와 prop alias 수준으로 해결 가능한지 먼저 판단합니다.
 - 중복 입력 컴포넌트 기획을 금지합니다.
 
 
 # Mobile Input Planner
 
-`fe-mo-control-component-builder`와 1:1로 대응되는 모바일 입력 기획 role 입니다.
+`fe-mo-input-component-builder`와 1:1로 대응되는 모바일 입력 기획 role 입니다.
 
 ## 출력
 
-- `packages/fe-mo-ui/src/control/**/index.spec.md`
-- 필요 시 `packages/fe-mo-ui/src/control/index.spec.md`
+- `packages/fe-mo-ui/src/input` 대상 builder handoff
 
 ## 핵심 원칙
 
 - RN callback 시그니처와 공개 type alias 를 중심으로 기획합니다.
-- web DOM 이벤트, stateful wrapper, Storybook 전제는 포함하지 않습니다.
+- web DOM 이벤트, action/selection/navigation 혼합 contract, stateful wrapper, Storybook 전제는 포함하지 않습니다.
+- value, placeholder, keyboard type, helper text, validation trigger 같은 입력 계약만 다룹니다.
 - 상위 배럴 갱신 필요 여부를 함께 기록합니다.
-'''
 
+## 실패 조건
+
+- action/selection/navigation contract 를 input planner 안에 섞음
+- web DOM event 나 browser 전용 API 전제를 포함함
+- thin re-export 로 충분한데 별도 wrapper 를 새로 설계함
+'''

@@ -139,10 +139,10 @@ developer_instructions = '''
 
 | Stage | 이름 | 실행 단위 | 핵심 목표 | 주 호출 role |
 |-------|------|----------|----------|-------------|
-| 1 | 도메인 기획 | 도메인 전체 | L0-L4 + 공통 backend scope/authorization invariant를 포함한 BE/Store spec 정리 | `orch-requirement` |
+| 1 | 도메인 기획 | 도메인 전체 | L0-L4 + 공통 backend scope/authorization invariant를 포함한 BE/Store contract 정리 | `orch-requirement` |
 | 2 | 스키마 구현 | 도메인 전체 | Prisma / Schema / Entity / DTO + BE unit test | BE schema builder chain |
 | 3 | 백엔드 구현 | 도메인 전체 | Repository / Service / App / Controller + 공통 scope rule enforcement + BE unit test | BE implementation builder chain |
-| 4 | 화면 기획 | 페이지별 | L5-L12 + route layout / surface / columns contract + FE unit/E2E test spec authoring | `orch-screen-planner`, `req-route-layout-planner`, `req-spec-tracker` |
+| 4 | 화면 기획 | 페이지별 | L5-L12 + route layout / surface / columns contract + FE unit/E2E test contract authoring | `orch-screen-planner`, `req-route-layout-planner`, `req-spec-tracker` |
 | 5 | 컴포넌트 구현 | 페이지별 | Display / Columns / Control / Cell / Widget / Layout / Feature / `collection-detail-form` | FE component builder chain |
 | 6 | 페이지 통합 | 페이지별 | route layout + pure page + thin container + API/state 연동 + FE unit test | page integration builder chain |
 | 7 | E2E 검증 | 도메인 전체 | 기록된 BE/FE E2E 케이스 구현/실행과 checklist Verified 반영 | E2E builder / QA chain |
@@ -163,8 +163,8 @@ developer_instructions = '''
 - 변경이 발생하면 영향받는 최초 Stage부터 재시작합니다.
 - `parallel=auto`를 기본으로 사용합니다.
 - 병렬 fan-out 후 join 단계에서 테스트/검증을 1회 수행합니다.
-- 허용 대상(route page, fe-ui Page, fe-ui Feature)의 코드/spec 변경 시 대응 spec과 `## 변경 이력`을 함께 반영합니다.
-- 허용 대상 밖의 코드에는 신규 `*.spec.md`를 만들지 않습니다.
+- 허용 대상(route page, fe-ui Page, fe-ui Feature, fe-ui Widget)의 코드/spec 변경 시 대응 owner spec과 `## 변경 이력`을 함께 반영합니다.
+- 허용 대상 밖의 코드에는 신규 sidecar spec을 만들지 않습니다.
 
 ### 5.2 금지 규칙
 
@@ -210,8 +210,8 @@ developer_instructions = '''
 
 **목표**
 - L0-L4 기획
-- BE spec 작성
-- Store spec 작성(조건부)
+- BE contract 작성
+- State Contract 작성(조건부)
 - API 생성의 근간이 되는 공통 backend scope/authorization invariant 정의
 
 **주 호출 role**
@@ -220,17 +220,17 @@ developer_instructions = '''
 **위임 규칙**
 - exact 분기와 child role fan-out은 반드시 `orch-requirement` 문서를 따릅니다.
 - 새 도메인 / 기존 도메인 화면 추가 구분도 `orch-requirement`를 source of truth로 사용합니다.
-- 목록/검색 계열 API의 공통 scope 규칙은 Stage 1에서 `req-api-planner`와 `req-logic-planner`가 owner로 spec에 기록합니다.
+- 목록/검색 계열 API의 공통 scope 규칙은 Stage 1에서 `req-api-planner`와 `req-logic-planner`가 owner contract에 기록합니다.
 - 예: `FULL_ACCESS`면 전체 조회, 아니면 현재 `x-space-id`가 해석한 tenant/space 범위만 허용하는 규칙
 
 **핵심 산출물**
 - `apps/[app]/web/src/app/(admin)/app.context.md`
 - 각 `page.spec.md`
-- `packages/be-app|be-service|be-repository` 기준 spec
-- backend/store 구현 계약 메모
+- backend/app/service/repository 구현 계약 handoff
+- backend/store 구현 계약 메모(금지 계층 spec 생성 없음)
 
 **완료 gate**
-- domain / page / BE / Store spec 존재 확인
+- domain / page / BE / State Contract 확인
 
 ### Stage 2: 스키마 구현
 
@@ -256,7 +256,7 @@ developer_instructions = '''
 
 **완료 gate**
 - schema / entity / dto 생성
-- 관련 spec 반영
+- 관련 contract 반영
 - backend-unit 통과
 
 ### Stage 3: 백엔드 구현
@@ -312,8 +312,8 @@ developer_instructions = '''
 
 **완료 gate**
 - `page.spec.md` 업데이트
-- 관련 fe-ui Page/Feature spec 생성/갱신
-- 관련 FE unit/E2E 테스트 케이스 spec 반영
+- 관련 fe-ui Page/Feature/Widget owner spec 생성/갱신
+- route page.spec.md 또는 관련 Page/Feature/Widget spec의 테스트 케이스 반영
 - `spec-checklist.md`의 Spec exists 반영
 
 ### Stage 5: 컴포넌트 구현
@@ -347,7 +347,7 @@ developer_instructions = '''
 
 **완료 gate**
 - Stage 4 contract 반영
-- FE component 산출물 및 대응 spec 반영
+- FE component 산출물 및 허용 owner spec 반영
 - frontend-unit 통과
 
 ### Stage 6: 페이지 통합
@@ -458,7 +458,7 @@ developer_instructions = '''
 ### 7.6 lock / merge
 
 - fan-out 중 공유 파일은 수정 예약만 하고, 최종 반영은 join 단계의 단일 writer가 수행합니다.
-- `admin-menu.ts`, package barrel, app spec은 가장 흔한 충돌 지점으로 간주합니다.
+- `admin-menu.ts`, package barrel, `app.context.md`는 가장 흔한 충돌 지점으로 간주합니다.
 
 ### 7.7 failPolicy
 

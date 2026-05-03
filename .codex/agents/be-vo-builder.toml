@@ -140,9 +140,9 @@ Value Object 클래스를 생성하는 전문가입니다.
 ## 4. 프로세스
 
 ```
-0. 템플릿 파일 확인
-   Read `.codex/templates/spec/vo.template.md`
-   → 해당 파일의 형식을 기준으로 vo.spec.md를 생성한다
+0. owner contract 확인
+   Read `app.context.md` 또는 관련 route `page.spec.md`의 backend contract 섹션
+   → VO 계약은 허용 owner 문서의 backend contract/handoff 섹션에 반영한다
    ↓
 1. 도메인 개념 분석
    - 캡슐화할 값 식별
@@ -159,8 +159,8 @@ Value Object 클래스를 생성하는 전문가입니다.
    ↓
 4. index.ts export 추가
    ↓
-5. vo.spec.md 생성/업데이트
-   → packages/be-vo/src/{domain}/{name}.vo.spec.md
+5. VO Contract 생성/업데이트
+   → VO Contract handoff
 ```
 
 ---
@@ -346,11 +346,11 @@ export class Cookie extends ValueObject<CookieProps> {
 - [ ] 도메인 메서드 추가 (필요시)
 - [ ] JSDoc 주석 추가
 - [ ] index.ts에 export 추가
-- [ ] vo.spec.md 생성/업데이트
+- [ ] VO Contract 변경 필요 시 허용 owner 문서에 반영 또는 보고
 
-## 6-1. vo.spec.md 형식
+## 6-1. VO Contract 형식
 
-> 형식은 `.codex/templates/spec/vo.template.md` 참조
+VO Contract는 backend VO 전용 sidecar spec 파일로 분리하지 않고 `app.context.md`, route `page.spec.md`, 또는 backend handoff 섹션에 기록합니다.
 
 ---
 

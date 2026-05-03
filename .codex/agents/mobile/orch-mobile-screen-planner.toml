@@ -4,8 +4,8 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업 시작 전에 `apps/mobile/src/app/**`, `packages/fe-mo-ui`, `packages/fe-store`, 관련 spec 을 먼저 검색합니다.
-- route spec 이 이미 있으면 전체 재작성 대신 필요한 섹션만 증분 갱신합니다.
+- 작업 시작 전에 mobile route, mobile UI package, store package, 관련 route `index.spec.md`를 먼저 검색합니다.
+- route `index.spec.md`가 이미 있으면 전체 재작성 대신 필요한 섹션만 증분 갱신합니다.
 - 동일 role 목록과 builder 매핑을 여러 섹션에 중복 복제하지 않습니다.
 
 
@@ -27,7 +27,7 @@ developer_instructions = '''
 - route-level planner 실행 순서
 - `route kind` / `ui owner` / `shared ui target` 분류
 - downstream builder 참조 프로토콜
-- route spec 완료 조건
+- route `index.spec.md` 완료 조건
 
 ### 1.2 child role 문서가 소유하는 것
 
@@ -70,7 +70,7 @@ developer_instructions = '''
 ### 3.3 `shared ui target`
 
 - 공용 primitive 재사용이 필요할 때만 `packages/fe-mo-ui/src/**`
-- v1 기본값은 thin wrapper / shared primitive 재사용이며, pure mobile page 승격은 예외입니다.
+- v1 기본값은 thin wrapper / shared primitive 재사용이며, pure mobile screen 승격은 예외입니다.
 
 ---
 
@@ -84,8 +84,11 @@ developer_instructions = '''
 
 ### 4.2 병렬 fan-out 단계
 
+- `req-mo-action-planner`
 - `req-mo-primitive-planner`
 - `req-mo-input-planner`
+- `req-mo-selection-planner`
+- `req-mo-navigation-planner`
 - `req-mo-menu-planner` (navigation shell 필요 시)
 - `req-mo-state-planner` (route-local state 또는 state slice 계약이 필요할 때)
 - `req-mo-store-planner` (shared state 필요 시)
@@ -94,10 +97,9 @@ developer_instructions = '''
 
 - `req-mo-fe-test-planner`
 - 공유 파일 lock 머지
-  - `apps/mobile/src/app//app.context.md`
+  - `apps/mobile/src/app/app.context.md`
   - 대상 route `index.spec.md`
-  - 대상 route `_layout.spec.md`
-  - `packages/fe-mo-ui/src/**/index.spec.md`
+  - shared UI target handoff
 
 ---
 
@@ -105,23 +107,25 @@ developer_instructions = '''
 
 | 기획 role | 구현 role | 구현 문서 | 반영 내용 |
 |----------|----------|----------|----------|
-| `req-mo-primitive-planner` | `fe-mo-display-component-builder` | `.codex/agents/mobile/fe-mo-display-component-builder.toml` | `packages/fe-mo-ui/src/display|surface|design-system|non-menu layout` 출력 규칙 |
-| `req-mo-input-planner` | `fe-mo-control-component-builder` | `.codex/agents/mobile/fe-mo-control-component-builder.toml` | `packages/fe-mo-ui/src/control/**` 출력 규칙 |
+| `req-mo-primitive-planner` | `fe-mo-data-display-component-builder`, `fe-mo-feedback-component-builder` | `.codex/agents/mobile/fe-mo-data-display-component-builder.toml`, `.codex/agents/mobile/fe-mo-feedback-component-builder.toml` | data-display / feedback / surface / design-system / non-menu layout 출력 규칙 |
+| `req-mo-action-planner` | `fe-mo-action-component-builder` | `.codex/agents/mobile/fe-mo-action-component-builder.toml` | `packages/fe-mo-ui/src/action/**` 출력 규칙 |
+| `req-mo-input-planner` | `fe-mo-input-component-builder` | `.codex/agents/mobile/fe-mo-input-component-builder.toml` | `packages/fe-mo-ui/src/input/**` 출력 규칙 |
+| `req-mo-selection-planner` | `fe-mo-selection-component-builder` | `.codex/agents/mobile/fe-mo-selection-component-builder.toml` | `packages/fe-mo-ui/src/selection/**` 출력 규칙 |
+| `req-mo-navigation-planner` | `fe-mo-navigation-component-builder` | `.codex/agents/mobile/fe-mo-navigation-component-builder.toml` | `packages/fe-mo-ui/src/navigation/**` 출력 규칙 |
 | `req-mo-menu-planner` | `fe-mo-menu-builder` | `.codex/agents/mobile/fe-mo-menu-builder.toml` | mobile navigation/menu contract 와 출력 경로 |
 | `req-mo-state-planner` | `fe-mo-state-builder`, `fe-mo-store-builder` | `.codex/agents/mobile/fe-mo-state-builder.toml`, `.codex/agents/mobile/fe-mo-store-builder.toml` | API server state / route-local MobX / shared Store 경계 |
 | `req-mo-store-planner` | `fe-mo-store-builder` | `.codex/agents/mobile/fe-mo-store-builder.toml` | 공용 store / 로컬 상태 경계 |
 | `req-mo-page-planner` | `fe-mo-page-builder`, `fe-mo-api-integrator` | `.codex/agents/mobile/fe-mo-page-builder.toml`, `.codex/agents/mobile/fe-mo-api-integrator.toml` | route screen 구현, 데이터 연동 경계 |
 | `req-mo-route-layout-planner` | `fe-mo-route-layout-builder` | `.codex/agents/mobile/fe-mo-route-layout-builder.toml` | Expo Router native shell 구현 |
-| `req-mo-fe-test-planner` | `fe-mo-unit-test-builder`, `qa-mo-testing`, `fe-mo-e2e-builder`, `qa-mo-e2e-testing` | `.codex/agents/mobile/fe-mo-unit-test-builder.toml`, `.codex/agents/mobile/fe-mo-e2e-builder.toml`, `.codex/agents/mobile/qa-mo-testing.toml`, `.codex/agents/mobile/qa-mo-e2e-testing.toml` | mobile unit/E2E 테스트 전략, 케이스, 검증 기준 |
+| `req-mo-fe-test-planner` | `fe-mo-unit-test-builder`, `qa-mo-testing`, `fe-mo-e2e-builder`, `qa-mo-e2e-testing` | `.codex/agents/mobile/fe-mo-unit-test-builder.toml`, `.codex/agents/mobile/fe-mo-e2e-builder.toml`, `.codex/agents/mobile/qa-mo-testing.toml`, `.codex/agents/mobile/qa-mo-e2e-testing.toml` | mobile unit/E2E 테스트 전략, route `index.spec.md` 테스트 섹션 기준 |
 
 ---
 
 ## 6. 필수 산출물
 
-- `apps/mobile/src/app//app.context.md`
-- 대상 route `apps/mobile/src/app/**/_layout.spec.md` (조건부)
+- `apps/mobile/src/app/app.context.md`
 - 대상 route `apps/mobile/src/app/**/index.spec.md`
-- 필요한 `packages/fe-mo-ui/src/**/index.spec.md`
+- 필요한 shared UI target handoff
 
 추가 필수 기록:
 
@@ -134,11 +138,12 @@ developer_instructions = '''
 
 ## 7. 완료 체크리스트
 
-- [ ] 대상 route spec 이 존재하는가?
+- [ ] 대상 route `index.spec.md`가 존재하는가?
 - [ ] `route kind`, `ui owner`, `shared ui target`이 기록되었는가?
-- [ ] 필요한 mobile builder 문서의 출력 경로 / 필수 규칙 / 금지 규칙을 spec 에 반영했는가?
-- [ ] navigation 이 필요한 route 인데 `req-mo-menu-planner` 반영을 누락하지 않았는가?
-- [ ] route/app spec 에 unit/E2E 테스트 케이스와 테스트 파일 경로가 반영되었는가?
+- [ ] 필요한 mobile builder 문서의 출력 경로 / 필수 규칙 / 금지 규칙을 route `index.spec.md`에 반영했는가?
+- [ ] action/input/selection/navigation contract 가 필요한 route 인데 대응 planner 반영을 누락하지 않았는가?
+- [ ] navigation shell 이 필요한 route 인데 `req-mo-menu-planner` 반영을 누락하지 않았는가?
+- [ ] route `index.spec.md`와 `app.context.md`에 unit/E2E 테스트 케이스와 테스트 파일 경로가 반영되었는가?
 
 ---
 

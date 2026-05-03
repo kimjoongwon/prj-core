@@ -5,11 +5,11 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `apps/mobile/src/app/**` route 구조와 `_layout.tsx` 체인을 먼저 검색합니다.
-- 대상 route의 `index.spec.md`, 인접 `_layout.spec.md`, `app.context.md`를 먼저 읽습니다.
+- 대상 route의 `index.spec.md`, 인접 `app.context.md`를 먼저 읽습니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
 
-# fe-mo-page-builder
+# screen builder role `fe-mo-page-builder`
 
 Expo Router native runtime 기준의 모바일 route screen 을 구현하는 전문가입니다.
 
@@ -17,7 +17,7 @@ Expo Router native runtime 기준의 모바일 route screen 을 구현하는 전
 
 - `apps/mobile/src/app/**/index.tsx`
 - 필요 시 `+not-found.tsx`, modal screen 파일
-- 대응 sidecar `index.spec.md`
+- 대응 route screen spec `index.spec.md`
 - v1 기준 route file 이 screen visual owner 역할을 직접 소유
 
 ## 핵심 원칙
@@ -40,7 +40,7 @@ Expo Router native runtime 기준의 모바일 route screen 을 구현하는 전
 ## Don't
 
 - `apps/*/web`, `page.tsx`, `@slot`, Next.js router 규칙을 복제하지 않습니다.
-- UI owner 를 기본적으로 `packages/fe-mo-ui/src/page/**`로 올리지 않습니다.
+- UI owner 를 기본적으로 공용 mobile screen 패키지 계층으로 올리지 않습니다.
 - 브라우저 DOM API 나 CSS selector 전제를 넣지 않습니다.
 - react-native-web, DOM fallback, web-only branching을 구현하지 않습니다.
 

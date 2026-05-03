@@ -30,7 +30,7 @@ developer_instructions = '''
 
 | 파일 | 동작 |
 |------|------|
-| `packages/fe-ui/src/control/[InputName]/index.spec.md` | 생성/업데이트 |
+| route `page.spec.md` 또는 관련 fe-ui Feature/Widget spec의 Input Contract 섹션 | 생성/업데이트 |
 
 ---
 

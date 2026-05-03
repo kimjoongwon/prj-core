@@ -23,7 +23,7 @@ developer_instructions = '''
 
 - unit test 전략 요약
 - `qa-mo-testing`에 전달할 테스트 파일/시나리오 handoff
-- owner spec(`app.context.md`, `index.spec.md`, `_layout.spec.md`, `index.spec.md`) sync 지시
+- owner spec(`app.context.md`, route `index.spec.md`) sync 지시
 
 ## 체인
 
@@ -32,6 +32,6 @@ developer_instructions = '''
 ## 금지
 
 - Playwright/Vitest DOM 패턴을 기본값으로 두지 않습니다.
-- owner spec에 없는 케이스를 임의로 구현 대상으로 추가하지 않습니다.
+- route `index.spec.md`에 없는 케이스를 임의로 구현 대상으로 추가하지 않습니다.
 
 '''

@@ -13,7 +13,7 @@ developer_instructions = '''
 # Backend Test Planner (L12)
 
 `req-be-test-planner`는 백엔드 테스트 케이스(L12) 기획을 담당합니다.
-backend test spec authoring의 기본 owner는 Stage 2/3이며, Stage 7은 E2E 시나리오 최종 sync를 담당합니다.
+backend test contract authoring의 기본 owner는 Stage 2/3이며, Stage 7은 E2E 시나리오 최종 sync를 담당합니다.
 테스트 실행/코드 작성은 `qa-be-testing` 또는 `qa-be-e2e-testing`이 담당합니다.
 
 ---
@@ -39,14 +39,14 @@ backend test spec authoring의 기본 owner는 Stage 2/3이며, Stage 7은 E2E �
 
 ### 출력
 
-- 기존 backend sidecar spec 파일에 `테스트 케이스` 섹션 갱신
+- route `page.spec.md` 또는 backend handoff의 `테스트 케이스` 섹션 갱신
 - 대상 예시:
-  - `packages/be-app/src/*.application-service/index.spec.md`
-  - `packages/be-service/src/*.service/index.spec.md`
-  - `packages/be-repository/src/*.repository.spec.md`
-  - `apps/core/api/src/module/*/*.controller.spec.md`
-  - `apps/core/api/src/module/*/*.module.spec.md` (module wiring 검증이 필요한 경우)
-  - 필요 시 entity/dto 관련 spec
+  - `page.spec.md 또는 app handoff의 ApplicationService Contract 섹션`
+  - `page.spec.md 또는 logic handoff의 Service Contract 섹션`
+  - `logic handoff의 Repository Contract 섹션`
+  - `apps/core/api/src/module/*/*.API Contract`
+  - `module wiring handoff` (module wiring 검증이 필요한 경우)
+  - 필요 시 route `page.spec.md` 또는 backend handoff의 entity/dto 테스트 섹션
 
 ---
 
@@ -66,7 +66,7 @@ backend test spec authoring의 기본 owner는 Stage 2/3이며, Stage 7은 E2E �
 - Given-When-Then 형식으로 케이스 구조화
 - 권한/인증/유효성/예외 흐름을 분리해 커버리지 명시
 - 후속 QA가 바로 구현 가능한 수준으로 케이스를 구체화
-- controller/module spec에는 API E2E 시나리오 ID와 테스트 파일 경로를 함께 기록
+- API/Module contract에는 API E2E 시나리오 ID와 테스트 파일 경로를 함께 기록
 - Stage 7에서는 Stage 2/3에 기록된 테스트 케이스를 보강만 하고 최초 authoring owner를 대체하지 않음
 
 ### ❌ Don't

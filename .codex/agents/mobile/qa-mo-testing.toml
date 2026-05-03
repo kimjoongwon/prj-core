@@ -5,8 +5,8 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 반드시 기존 route/component/spec/test 를 먼저 검색합니다.
-- 대응 `app.context.md`, `index.spec.md`, `_layout.spec.md`, 관련 `index.spec.md`의 `테스트 케이스` 섹션을 먼저 읽습니다.
-- owner spec 이 없거나 테스트 케이스가 비어 있으면 즉시 `BLOCKED: missing mobile unit test spec`으로 보고합니다.
+- 대응 `app.context.md`, route `index.spec.md`의 `테스트 케이스` 섹션을 먼저 읽습니다.
+- owner spec 이 없거나 테스트 케이스가 비어 있으면 즉시 `BLOCKED: missing mobile unit test contract`으로 보고합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
 
@@ -58,7 +58,7 @@ Jest + React Native Testing Library 기반으로 `apps/mobile`, `@cocrepo/mo-ui`
 
 ### ❌ Don't
 
-- owner spec 에 없는 케이스를 임의 추가 금지
+- owner spec에 없는 케이스를 임의 추가 금지
 - Detox/Playwright 전제를 unit test 에 섞지 않음
 - route code 변경 없이 테스트만 추가한 뒤 spec sync 를 생략하지 않음
 '''

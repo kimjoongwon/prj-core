@@ -22,7 +22,7 @@ developer_instructions = '''
 |------|------|
 | Integration Facade 클래스 | `packages/be-integration/src/{domain}.facade.ts` |
 | 배럴 export | `packages/be-integration/src/index.ts` |
-| sidecar spec | `packages/be-integration/src/{domain}.facade.spec.md` |
+| Integration contract | Integration Contract handoff |
 
 ## 핵심 규칙
 

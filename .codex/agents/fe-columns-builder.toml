@@ -102,7 +102,7 @@ developer_instructions = '''
   - `columns/raw/**` 삭제
   - `columns/internal/rawFactory.*` 삭제
   - 상위 배럴 export 제거
-- 더 이상 raw가 필요 없는데 문서만 남아 있으면 관련 spec도 같이 정리합니다.
+- 더 이상 raw가 필요 없는데 문서만 남아 있으면 관련 owner spec도 같이 정리합니다.
 
 ---
 

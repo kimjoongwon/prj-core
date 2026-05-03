@@ -44,7 +44,7 @@ developer_instructions = '''
 ## 출력
 
 - mobile hook / route wiring 코드
-- 대응 `index.spec.md` 또는 hook spec 섹션 갱신
+- 대응 route `index.spec.md`의 API Integration 섹션 갱신
 
 ## 보고 포맷
 

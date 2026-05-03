@@ -19,7 +19,7 @@ developer_instructions = '''
 
 ## 1. 목적
 
-- `*.spec.md`와 대응 코드의 페어링 상태를 한 파일에서 점검
+- 허용 owner spec과 대응 코드의 페어링 상태를 한 파일에서 점검
 - Stage 4/6/7 완료 조건을 체크박스로 강제
 - 도메인별 추적(전역 docs 집계 파일 사용 금지)
 
@@ -45,7 +45,7 @@ apps/[app]/web/src/app/(admin)/[domain]/spec-checklist.md
 - Stage 7 종료(또는 수동 검증 완료) 후: `Verified` 갱신
 
 상태 정의:
-- `Spec exists`: 해당 화면/컴포넌트 `*.spec.md` 존재
+- `Spec exists`: 해당 route/page/screen/component owner spec 존재
 - `Code paired`: 대응 코드 파일 존재
 - `Verified`: 검증 통과 이력 반영 (`type-check/lint/test` 또는 E2E)
 
@@ -56,7 +56,7 @@ apps/[app]/web/src/app/(admin)/[domain]/spec-checklist.md
 ```markdown
 # Spec Checklist
 
-## [relative/spec/path].spec.md
+## [relative/owner/spec/path]
 - [x] Spec exists
 - [ ] Code paired
 - [ ] Verified
@@ -68,7 +68,7 @@ apps/[app]/web/src/app/(admin)/[domain]/spec-checklist.md
 
 ## 5. 실행 절차
 
-1. 도메인 폴더에서 `*.spec.md` 탐색
+1. 도메인 폴더에서 허용 owner spec만 탐색
 2. 스펙별 대응 코드 경로 규칙으로 파일 존재 확인
 3. `spec-checklist.md` 생성 또는 갱신
 4. 이미 있는 항목은 유지하되 실제 파일 상태와 불일치 시 동기화

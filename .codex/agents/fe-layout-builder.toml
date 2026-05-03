@@ -37,7 +37,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 | 항목 | 필수 | 설명 |
 |------|------|------|
 | Layout 타입 | O | `Layout` |
-| 기존 `index.spec.md` | O | 재사용 Layout 계약 |
+| 기존 owner contract | O | route `page.spec.md` 또는 관련 Widget spec의 Layout Contract |
 | 사용 시나리오 | O | 어떤 route skeleton에서 어떤 슬롯이 필요한지 |
 | 관련 surface 규칙 | △ | `PageSurface`, `SectionSurface`, `Surface`와의 조합 제약 |
 
@@ -47,7 +47,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 |------|------|
 | Layout 컴포넌트 | `packages/fe-ui/src/display/layout/Layout.tsx` |
 | 공용 타입 | `packages/fe-ui/src/display/layout/type.ts` |
-| Sidecar spec | `packages/fe-ui/src/display/layout/{index,Layout,type}.spec.md` |
+| Layout contract | route `page.spec.md`의 Layout Contract 섹션 또는 관련 fe-ui Widget spec |
 | Export 정리 | `packages/fe-ui/src/display/layout/index.ts`, 상위 barrel |
 
 ---
@@ -72,7 +72,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 5. 경로/도메인/특정 메뉴 라벨 같은 route 지식을 Layout primitive에 하드코딩하지 않습니다.
 6. `Page`, `Section`은 배치를 담당하고, surface/elevation은 자동 생성하지 않습니다.
 7. `Page`/`Section`을 대체하는 임시 scaffold 계열을 새로 만들지 않습니다.
-8. `packages/fe-ui/src/display/layout` 아래에는 `Layout.tsx`, `type.ts`, `index.ts`와 대응 sidecar만 둡니다.
+8. `packages/fe-ui/src/display/layout` 아래에는 `Layout.tsx`, `type.ts`, `index.ts` 같은 source/export만 둡니다.
 9. `packages/fe-ui/src/display/layout` 아래에 임의 하위 디렉터리를 만들거나, `packages/fe-ui/src/widget` 아래에 layout 전용 하위 카테고리를 만들지 않습니다.
 
 ---
@@ -103,11 +103,11 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 
 ## 6. 구현 절차
 
-1. 기존 `packages/fe-ui/src/display/layout/*` 구현과 sidecar spec을 먼저 검색합니다.
+1. 기존 Layout primitive 구현과 허용 owner spec(route `page.spec.md` 또는 Widget spec)을 먼저 검색합니다.
 2. route 문서가 요구하는 구조가 기존 primitive 조합으로 해결되는지 판단합니다.
 3. 신규 primitive가 필요하면 가장 작은 공통 구조만 추가합니다.
 4. props/slot 이름을 구조 의미로 정리합니다.
-5. 대응 `index.spec.md`와 export를 함께 갱신합니다.
+5. 별도 layout sidecar는 만들지 않고 허용 owner spec과 export를 함께 갱신합니다.
 6. `@cocrepo/ui` 배럴에서 재사용 가능하게 정리합니다.
 
 ---
@@ -118,7 +118,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 - [ ] `apps/**/layout.tsx`를 직접 수정하지 않았는가?
 - [ ] Layout primitive가 router/store/fetch에 의존하지 않는가?
 - [ ] 구조 슬롯과 surface 책임이 섞이지 않았는가?
-- [ ] 대응 sidecar spec와 barrel export가 함께 갱신되었는가?
+- [ ] 허용 owner spec과 barrel export가 함께 갱신되었는가?
 
 ---
 

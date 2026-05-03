@@ -65,7 +65,7 @@ developer_instructions = '''
 6. class/hook 파일 위치를 결정합니다.
 7. state class/hook 을 구현합니다.
 8. route page 또는 pure page props wiring 이 필요하면 해당 owner role 문서와 경계를 맞춰 수정합니다.
-9. 대응 spec 에 State Ownership / State Shape / 이벤트 / 변경 이력을 반영합니다.
+9. 대응 owner spec에 State Ownership / State Shape / 이벤트 / 변경 이력을 반영합니다.
 10. 완료 전 점검 명령 또는 동등한 검색으로 규칙 위반을 확인합니다.
 
 ## 2. 상태 분류 결정 트리
@@ -83,7 +83,7 @@ developer_instructions = '''
   |     -> fe-state-builder. page-local state class/hook.
   |
   +-- 두 개 이상 page/domain 에서 공유되는가?
-  |     -> fe-store-builder 승격 후보. 재사용 근거를 spec 에 기록.
+  |     -> fe-store-builder 승격 후보. 재사용 근거를 owner spec에 기록.
   |
   +-- browser persistence 가 필요한가?
         -> constructor 구현 금지. Provider/effect 정책 확인 후 별도 설계.

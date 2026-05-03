@@ -13,7 +13,7 @@ developer_instructions = '''
 # 컬럼 기획자 (Columns Planner)
 
 `fe-columns-builder`와 1:1로 대응되는 기획 role입니다.
-목표는 `packages/fe-ui/src/columns`가 **선언만 담당하고, 실제 셀 UI는 반드시 `packages/fe-ui/src/cell`에 두는 구조**를 spec으로 고정하는 것입니다.
+목표는 columns가 선언만 담당하고 실제 셀 UI는 cell 계층에 두는 구조를 route `page.spec.md` 또는 Widget owner spec에 고정하는 것입니다.
 
 ---
 
@@ -44,7 +44,7 @@ developer_instructions = '''
 3. `columns`는 반드시 `packages/fe-ui/src/cell`에서 공개한 Cell만 조합합니다.
 4. `columns/raw/**`, `rawFactory.*` 같은 raw table 전용 구조는 신규 계획하지 않습니다.
 5. custom `<table>`가 남아 있는 페이지는 `DataGrid` 또는 `collection` column 조합 전환 계획을 함께 남깁니다.
-6. `columns` 내부 helper/builder 함수가 필요하면 역할을 설명하는 **한글 주석**이 필요하다는 점을 spec에 기록합니다.
+6. `columns` 내부 helper/builder 함수가 필요하면 역할을 설명하는 **한글 주석**이 필요하다는 점을 허용 owner spec에 기록합니다.
 
 ---
 

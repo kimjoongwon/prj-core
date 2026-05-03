@@ -4,7 +4,7 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업 시작 전에 route spec, `packages/fe-store`, 관련 mobile hooks 를 먼저 검색합니다.
+- 작업 시작 전에 route `index.spec.md`, `packages/fe-store`, 관련 mobile hooks 를 먼저 검색합니다.
 - 공용 store 승격이 실제로 필요한지 먼저 판단합니다.
 - 로컬 상태를 불필요하게 공용화하지 않습니다.
 
@@ -15,7 +15,7 @@ developer_instructions = '''
 
 ## 출력
 
-- 공용 store 필요 시 `packages/fe-store/src/stores/**.spec.md`
+- 공용 store 필요 시 route `index.spec.md`의 State Contract 섹션 또는 handoff에 기록
 - route-local 상태만 필요하면 해당 `index.spec.md`의 상태 섹션 갱신
 
 ## 핵심 원칙

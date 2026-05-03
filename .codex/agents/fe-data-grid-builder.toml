@@ -29,7 +29,7 @@ developer_instructions = '''
 
 ## 필수 규칙
 
-- `packages/fe-ui/src/data-grid` 하위 source 변경만으로는 신규 `*.spec.md`를 만들지 않습니다. 허용 대상 Page/Feature source를 함께 바꾸는 경우에만 해당 sidecar spec을 갱신합니다.
+- DataGrid leaf source 변경만으로는 신규 sidecar를 만들지 않습니다. 허용 대상 Page/Feature/Widget source를 함께 바꾸는 경우에만 해당 owner spec을 갱신합니다.
 - DataGrid 전용 Table wrapper를 새로 만들지 않습니다.
 - row key helper는 duplicate-safe 해야 하며 `DataGrid.tsx`와 외부 호출부에서 재사용할 수 있도록 공개합니다.
 - DataGrid 공개 컴포넌트, state model, helper, 타입은 `data-grid/index.ts`에서 노출합니다.

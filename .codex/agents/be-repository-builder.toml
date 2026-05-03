@@ -35,7 +35,7 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에�
 | | Prisma schema 모델 | `@schema-owner: true`가 붙은 모델 |
 | | 필요한 쿼리 패턴 | CRUD, include 조회, 집계, exists 등 |
 | **출력** | Repository 클래스 | `packages/be-repository/src/{schema-owner}.repository.ts` |
-| | Sidecar 기획서 | `packages/be-repository/src/{schema-owner}.repository.spec.md` |
+| | Sidecar 기획서 | logic handoff의 Repository Contract 섹션 |
 | | index.ts 업데이트 | export 추가 |
 
 ---
@@ -148,7 +148,7 @@ interface CreateUserParams {}
 ### 2단계: 기존 Repository 확인
 
 - 기존 `{SchemaOwner}sRepository`가 있으면 우선 그 파일에 메서드를 추가합니다.
-- 없으면 새 Repository와 sidecar spec을 생성합니다.
+- 없으면 새 Repository를 생성하고 Repository Contract는 route `page.spec.md` 또는 logic handoff에 기록합니다.
 
 ### 3단계: 하위 모델 접근 설계
 
@@ -158,7 +158,7 @@ interface CreateUserParams {}
 ### 4단계: index.ts / spec 동기화
 
 - `packages/be-repository/src/index.ts` export를 갱신합니다.
-- 대응되는 `*.repository.spec.md`를 함께 갱신하고 변경 이력을 추가합니다.
+- 별도 repository sidecar spec은 만들지 않고 logic handoff 또는 route `page.spec.md`의 Repository Contract를 갱신합니다.
 
 ---
 
@@ -193,5 +193,5 @@ export class UsersRepository {
 - 비대표 모델 독립 Repository를 만들지 않았는가?
 - 메서드명이 데이터 설명 중심인가?
 - Prisma 타입을 직접 사용했는가?
-- index.ts와 sidecar spec을 함께 갱신했는가?
+- index.ts와 Repository Contract handoff를 함께 갱신했는가?
 '''

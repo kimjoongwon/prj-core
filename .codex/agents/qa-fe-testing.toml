@@ -8,7 +8,7 @@ developer_instructions = '''
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
-- 테스트 대상이 fe-ui Page/Feature component이면 대응 `*.spec.md`의 테스트 관점을 먼저 읽습니다.
+- 테스트 대상이 fe-ui Page/Feature/Widget component이면 대응 owner spec의 테스트 관점을 먼저 읽습니다.
 - 허용 대상 밖의 UI/Widget/Control/Hook/Store 테스트에는 신규 spec을 요구하지 않습니다.
 
 

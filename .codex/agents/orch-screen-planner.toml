@@ -181,11 +181,11 @@ developer_instructions = '''
 
 - [ ] `page.spec.md`에 `Route / Page Mapping`이 기록되었는가?
 - [ ] `page role`과 `reusable target`이 확정되었는가?
-- [ ] 관련 builder 문서의 출력 경로 / 필수 규칙 / 금지 규칙 / 검증 명령을 spec에 반영했는가?
+- [ ] 관련 builder 문서의 출력 경로 / 필수 규칙 / 금지 규칙 / 검증 명령을 허용 owner spec에 반영했는가?
 - [ ] Cell 산출물이 `packages/fe-ui/src/cell/**` 기준인가?
 - [ ] Columns 산출물이 `packages/fe-ui/src/columns/data-grid/**` 기준인가?
 - [ ] `req-surface-planner` 결과가 Surface/Elevation 섹션에 반영되었는가?
-- [ ] `page.spec.md`와 관련 Page/Feature spec에 unit/E2E 테스트 관점이 추가되었는가?
+- [ ] `page.spec.md`와 관련 Page/Feature/Widget owner spec에 unit/E2E 테스트 관점이 추가되었는가?
 - [ ] 테스트 전용 sidecar spec을 새로 만들지 않았는가?
 
 ---
@@ -211,7 +211,7 @@ developer_instructions = '''
 - app.context.md
 - 대상 page.spec.md
 - 관련 Entity spec
-- Store spec (조건부)
+- State Contract handoff (조건부)
 
 먼저 orch-requirement 또는 선행 req-* role을 실행하세요.
 ```

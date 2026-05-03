@@ -113,7 +113,7 @@ developer_instructions = '''
 
 ### 4.3 프론트엔드 기획
 
-- 공용 Store가 필요해도 Store spec은 만들지 않고 route `page.spec.md` 또는 관련 fe-ui Feature spec에 상태 경계를 기록합니다.
+- 공용 Store가 필요해도 별도 State sidecar는 만들지 않고 route `page.spec.md` 또는 관련 fe-ui Feature spec에 상태 경계를 기록합니다.
 
 ### 4.4 위임 산출물 경계
 
@@ -151,12 +151,12 @@ developer_instructions = '''
   - 앱
   - 도메인
   - 추가/변경하려는 화면 목록
-  - 이미 존재하는 Entity / API / Store spec 경로
+  - 이미 존재하는 Entity / API / State Contract handoff
 
 ### 5.4 완료 gate
 
 - domain-wide spec이 누락 없이 생성되었는가
-- app spec의 도메인 엔트리가 갱신되었는가
+- `app.context.md`의 도메인 엔트리가 갱신되었는가
 - Stage 2-3이 읽을 `## 구현 대상` 정보가 준비되었는가
 - 상세 화면 기획이 필요한 경우 `orch-screen-planner` 위임 경계가 명확한가
 
@@ -164,7 +164,7 @@ developer_instructions = '''
 
 ## 6. 구현 대상 기록 규칙 (Critical)
 
-Stage 2-3 자동 병렬 실행을 위해 domain-level spec에는 최소한 다음 정보를 남깁니다.
+Stage 2-3 자동 병렬 실행을 위해 domain-level contract에는 최소한 다음 정보를 남깁니다.
 
 ### 6.1 Entity spec
 
@@ -204,7 +204,7 @@ Stage 2-3 자동 병렬 실행을 위해 domain-level spec에는 최소한 다�
 - [ ] L3-L4 page 초안 생성
 - [ ] Entity / API / App / Service / Repository / Module spec 생성
 - [ ] Enum / DTO / VO 누락 여부 확인
-- [ ] Store spec 조건부 생성 여부 확인
+- [ ] State Contract 조건부 반영 여부 확인
 - [ ] domain-level `## 구현 대상` 기록 완료
 - [ ] page-level 상세 기획이 필요한 경우 `orch-screen-planner` 위임 필요성을 명시
 

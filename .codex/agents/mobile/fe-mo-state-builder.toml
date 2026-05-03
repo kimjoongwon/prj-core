@@ -4,7 +4,7 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업 시작 전에 대상 Expo Router native route spec, `apps/mobile/src/app/**`, 관련 hooks, `packages/fe-store`의 기존 상태 경계를 먼저 검색합니다.
+- 작업 시작 전에 대상 Expo Router native route `index.spec.md`, `apps/mobile/src/app/**`, 관련 hooks, `packages/fe-store`의 기존 상태 경계를 먼저 검색합니다.
 - 같은 route 안에서 재사용 가능한 local state class/hook 이 있으면 우선 재사용하거나 증분 갱신합니다.
 - route-local 상태를 불필요하게 공용 Store 로 승격하지 않습니다.
 - React Query / API client server state 를 MobX local state 로 복제하지 않습니다.
@@ -20,7 +20,7 @@ developer_instructions = '''
 - Expo Router native route-local state: `apps/mobile/src/app/**`
 - route-local hooks: `apps/mobile/src/app/**/hooks/**`
 - route 인접 state class: `apps/mobile/src/app/**/_state.ts` 또는 `hooks/use*State.ts`
-- 대응 spec: route `index.spec.md`, `_layout.spec.md`, hook/state source 의 `*.spec.md`
+- 대응 spec: route `index.spec.md`의 State 섹션
 
 ## 핵심 역할
 
@@ -54,7 +54,7 @@ developer_instructions = '''
 
 - route-local state class/hook 구현
 - screen/feature/widget props state slice 갱신
-- 대응 source sidecar spec 과 `## 변경 이력` 갱신
+- route `index.spec.md`의 State 섹션과 `## 변경 이력` 갱신
 - 공용 Store 승격 여부와 근거 보고
 
 ## 보고 포맷
