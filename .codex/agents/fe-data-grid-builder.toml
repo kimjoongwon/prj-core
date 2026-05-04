@@ -1,6 +1,6 @@
 name = "fe-data-grid-builder"
 description = "packages/fe-ui/src/data-grid의 DataGrid 단일 렌더러와 input/state 계약을 생성하고 정리하는 전문가"
-model = "gpt-5.4"
+model = "gpt-5.3-codex-spark"
 model_reasoning_effort = "xhigh"
 developer_instructions = '''
 

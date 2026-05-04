@@ -1,6 +1,6 @@
 name = "fe-detail-builder"
 description = "상세 조회/읽기 전용 재사용 detail 계층을 생성하고 정리하는 전문가"
-model = "gpt-5.4"
+model = "gpt-5.3-codex-spark"
 model_reasoning_effort = "xhigh"
 developer_instructions = '''
 

@@ -1,6 +1,6 @@
 name = "fe-columns-builder"
 description = "packages/fe-ui/src/columns 레이어와 DataGrid/cell 경계를 정리하는 전문가"
-model = "gpt-5.4"
+model = "gpt-5.3-codex-spark"
 model_reasoning_effort = "xhigh"
 developer_instructions = '''
 
