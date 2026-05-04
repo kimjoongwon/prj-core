@@ -13,8 +13,8 @@ export interface CopyrightProps {
  *
  * @example
  * ```tsx
- * <Copyright companyName="플레이트" />
- * // 출력: © 2026 플레이트. All rights reserved.
+ * <Copyright companyName="온짓다" />
+ * // 출력: © 2026 온짓다. All rights reserved.
  * ```
  */
 export const Copyright = (props: CopyrightProps) => {

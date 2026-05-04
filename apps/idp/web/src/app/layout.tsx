@@ -27,8 +27,8 @@ const THEME_BOOTSTRAP_SCRIPT = `
 `;
 
 export const metadata: Metadata = {
-	title: "플레이트 계정",
-	description: "플레이트 예약 플랫폼 계정 및 인증 관리",
+	title: "오노라 계정",
+	description: "오노라 예약 플랫폼 계정 및 인증 관리",
 };
 
 /**

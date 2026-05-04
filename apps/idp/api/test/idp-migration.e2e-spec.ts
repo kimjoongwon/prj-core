@@ -34,7 +34,7 @@ const SWAGGER_BASE_URL = process.env.IDP_CLIENT_URL ?? "http://localhost:3008";
 const SWAGGER_REDIRECT_URI =
 	process.env.OIDC_SWAGGER_REDIRECT_URI ??
 	`${SWAGGER_BASE_URL}/api/oauth2-redirect.html`;
-const DEFAULT_ADMIN_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
+const DEFAULT_ADMIN_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@onora.com";
 const DEFAULT_ADMIN_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
 
 type CookieJar = Map<string, string>;

@@ -32,7 +32,7 @@ interface OidcFlowOptions {
 	password?: string;
 }
 
-const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
+const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@onora.com";
 const DEFAULT_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
 const DEFAULT_TIMEOUT_MS = 30000;
 type OidcEntryPoint = "login" | "consent";

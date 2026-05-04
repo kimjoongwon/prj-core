@@ -33,7 +33,7 @@ export const Logo = (props: LogoProps) => {
 				className={cn(className, "p-0 font-bold text-2xl")}
 				onPress={onClick}
 			>
-				플레이트
+				오노라
 			</Button>
 		</HStack>
 	);

@@ -13,9 +13,9 @@ module.exports = {
 		"ios.debug": {
 			type: "ios.app",
 			binaryPath:
-				"ios/build/Build/Products/Debug-iphonesimulator/PlateMobile.app",
+				"ios/build/Build/Products/Debug-iphonesimulator/OnoraMobile.app",
 			build:
-				"xcodebuild -workspace ios/PlateMobile.xcworkspace -scheme PlateMobile -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+				"xcodebuild -workspace ios/OnoraMobile.xcworkspace -scheme OnoraMobile -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
 		},
 		"android.debug": {
 			type: "android.apk",

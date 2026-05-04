@@ -48,7 +48,7 @@ class IdpLoginFeatureState {
 
 	constructor(isDev: boolean) {
 		this.oidcLoginForm = {
-			email: isDev ? "admin@plate.com" : "",
+			email: isDev ? "admin@onora.com" : "",
 			password: isDev ? "rkdmf12!@" : "",
 			remember: false,
 			error: null,

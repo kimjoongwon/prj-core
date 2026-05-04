@@ -43,7 +43,7 @@ export default registerAs<AppConfig>("app", () => {
 
 	return {
 		nodeEnv: process.env.NODE_ENV || "development",
-		name: process.env.APP_NAME || "app",
+		name: process.env.APP_NAME || "Onora",
 		adminEmail: process.env.APP_ADMIN_EMAIL,
 		workingDirectory: process.cwd(),
 		frontendDomain: process.env.FRONTEND_DOMAIN,

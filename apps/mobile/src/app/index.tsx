@@ -1,6 +1,9 @@
 import { Button } from "@cocrepo/mo-ui";
+import { useRouter } from "expo-router";
+import { observer } from "mobx-react-lite";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { mobileAuthStore } from "@/auth/auth-store";
 
 const implementedActions = [
 	"Button",
@@ -88,7 +91,14 @@ function InventorySection(props: { description: string; items: string[]; title: 
 	);
 }
 
-export default function HomeScreen() {
+export default observer(function HomeScreen() {
+	const router = useRouter();
+
+	const onPressLogoutButton = async () => {
+		await mobileAuthStore.logout();
+		router.replace("/auth/login");
+	};
+
 	return (
 		<SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
 			<ScrollView
@@ -102,6 +112,21 @@ export default function HomeScreen() {
 						빈 홈 화면 대신 현재 구현된 모바일 wrapper 목록을 카테고리별로 정리해
 						보여줍니다.
 					</Text>
+					<View style={styles.heroFooter}>
+						<View style={styles.sessionMeta}>
+							<Text style={styles.sessionLabel}>현재 세션</Text>
+							<Text style={styles.sessionValue}>
+								{mobileAuthStore.isAuthenticated ? "인증됨" : "인증 확인 필요"}
+							</Text>
+						</View>
+						<Button
+							isDisabled={mobileAuthStore.isVerifying}
+							onPress={onPressLogoutButton}
+							variant="danger-soft"
+						>
+							로그아웃
+						</Button>
+					</View>
 				</View>
 
 				<View style={styles.summaryRow}>
@@ -238,7 +263,7 @@ export default function HomeScreen() {
 			</ScrollView>
 		</SafeAreaView>
 	);
-}
+});
 
 const styles = StyleSheet.create({
 	buttonList: {
@@ -278,6 +303,13 @@ const styles = StyleSheet.create({
 		color: "#475569",
 		fontSize: 15,
 		lineHeight: 22,
+	},
+	heroFooter: {
+		alignItems: "center",
+		flexDirection: "row",
+		gap: 12,
+		justifyContent: "space-between",
+		marginTop: 8,
 	},
 	heroTitle: {
 		color: "#0f172a",
@@ -322,6 +354,20 @@ const styles = StyleSheet.create({
 	sectionTitle: {
 		color: "#0f172a",
 		fontSize: 18,
+		fontWeight: "700",
+	},
+	sessionLabel: {
+		color: "#64748b",
+		fontSize: 12,
+		fontWeight: "700",
+		textTransform: "uppercase",
+	},
+	sessionMeta: {
+		gap: 4,
+	},
+	sessionValue: {
+		color: "#0f172a",
+		fontSize: 15,
 		fontWeight: "700",
 	},
 	summaryCard: {

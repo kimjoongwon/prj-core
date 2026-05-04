@@ -169,7 +169,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		sizeBytes: 245780,
 		folderPath: "/에셋 라이브러리/이미지/로고",
 		checksum: "sha256:a1b2c3d4e5f6...",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
 		originalName: "f45-logo-white.png",
@@ -180,17 +180,17 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		sizeBytes: 198450,
 		folderPath: "/에셋 라이브러리/이미지/로고",
 		checksum: "sha256:b2c3d4e5f6g7...",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
-		originalName: "plate-logo-full.svg",
-		storageKey: "assets/images/logo/plate-logo-full-2024.svg",
+		originalName: "onora-logo-full.svg",
+		storageKey: "assets/images/logo/onora-logo-full-2024.svg",
 		kind: "IMAGE",
 		mimeType: "image/svg+xml",
 		extension: "svg",
 		sizeBytes: 15420,
 		folderPath: "/에셋 라이브러리/이미지/로고",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
 		originalName: "crossfit-logo-official.png",
@@ -200,7 +200,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "png",
 		sizeBytes: 312000,
 		folderPath: "/에셋 라이브러리/이미지/로고",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 
 	// 배경 이미지
@@ -212,7 +212,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "jpg",
 		sizeBytes: 1250000,
 		folderPath: "/에셋 라이브러리/이미지/배경",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
 		originalName: "workout-class-action.jpg",
@@ -222,7 +222,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "jpg",
 		sizeBytes: 980000,
 		folderPath: "/에셋 라이브러리/이미지/배경",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
 		originalName: "fitness-equipment-banner.jpg",
@@ -232,7 +232,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "jpg",
 		sizeBytes: 1450000,
 		folderPath: "/에셋 라이브러리/이미지/배경",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 
 	// 프로필 이미지
@@ -244,7 +244,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "png",
 		sizeBytes: 45000,
 		folderPath: "/에셋 라이브러리/이미지/프로필",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
 		originalName: "profile-default-female.png",
@@ -254,7 +254,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "png",
 		sizeBytes: 42000,
 		folderPath: "/에셋 라이브러리/이미지/프로필",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
 		originalName: "trainer-avatar-sample.jpg",
@@ -264,7 +264,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "jpg",
 		sizeBytes: 89000,
 		folderPath: "/에셋 라이브러리/이미지/프로필",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 ];
 
@@ -281,7 +281,7 @@ export const videoAssetSeedData: AssetSeedData[] = [
 		extension: "mp4",
 		sizeBytes: 125000000,
 		folderPath: "/에셋 라이브러리/동영상/클래스영상",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
 		originalName: "hiit-workout-30min.mp4",
@@ -291,7 +291,7 @@ export const videoAssetSeedData: AssetSeedData[] = [
 		extension: "mp4",
 		sizeBytes: 89000000,
 		folderPath: "/에셋 라이브러리/동영상/클래스영상",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
 		originalName: "strength-training-basics.mp4",
@@ -301,7 +301,7 @@ export const videoAssetSeedData: AssetSeedData[] = [
 		extension: "mp4",
 		sizeBytes: 156000000,
 		folderPath: "/에셋 라이브러리/동영상/클래스영상",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 
 	// 홍보 영상
@@ -313,7 +313,7 @@ export const videoAssetSeedData: AssetSeedData[] = [
 		extension: "mp4",
 		sizeBytes: 45000000,
 		folderPath: "/에셋 라이브러리/동영상/홍보영상",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
 		originalName: "member-testimonial-compilation.mp4",
@@ -323,7 +323,7 @@ export const videoAssetSeedData: AssetSeedData[] = [
 		extension: "mp4",
 		sizeBytes: 78000000,
 		folderPath: "/에셋 라이브러리/동영상/홍보영상",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 ];
 
@@ -340,7 +340,7 @@ export const documentAssetSeedData: AssetSeedData[] = [
 		extension: "pdf",
 		sizeBytes: 1250000,
 		folderPath: "/에셋 라이브러리/문서/가이드",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
 		originalName: "시설 이용 규정.pdf",
@@ -350,7 +350,7 @@ export const documentAssetSeedData: AssetSeedData[] = [
 		extension: "pdf",
 		sizeBytes: 890000,
 		folderPath: "/에셋 라이브러리/문서/가이드",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
 		originalName: "운동 프로그램 가이드.docx",
@@ -361,7 +361,7 @@ export const documentAssetSeedData: AssetSeedData[] = [
 		extension: "docx",
 		sizeBytes: 2450000,
 		folderPath: "/에셋 라이브러리/문서/가이드",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 
 	// 계약서 문서
@@ -373,7 +373,7 @@ export const documentAssetSeedData: AssetSeedData[] = [
 		extension: "pdf",
 		sizeBytes: 156000,
 		folderPath: "/에셋 라이브러리/문서/계약서",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
 		originalName: "회원권 계약서 양식.pdf",
@@ -383,7 +383,7 @@ export const documentAssetSeedData: AssetSeedData[] = [
 		extension: "pdf",
 		sizeBytes: 234000,
 		folderPath: "/에셋 라이브러리/문서/계약서",
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 ];
 
@@ -434,7 +434,7 @@ export const imageDetailSeedData: ImageDetailSeedData[] = [
 		hasAlpha: true,
 	},
 	{
-		storageKey: "assets/images/logo/plate-logo-full-2024.svg",
+		storageKey: "assets/images/logo/onora-logo-full-2024.svg",
 		width: 512,
 		height: 512,
 		orientation: 1,
@@ -606,7 +606,7 @@ export const documentDetailSeedData: DocumentDetailSeedData[] = [
 		storageKey: "assets/documents/guide/member-signup-guide-2024.pdf",
 		pageCount: 12,
 		wordCount: 3500,
-		author: "플레이트 운영팀",
+		author: "오노라 운영팀",
 		title: "회원 가입 가이드",
 		subject: "회원 가입 절차 안내",
 		keywords: "회원,가입,가이드,안내",
@@ -615,7 +615,7 @@ export const documentDetailSeedData: DocumentDetailSeedData[] = [
 		storageKey: "assets/documents/guide/facility-rules-2024.pdf",
 		pageCount: 8,
 		wordCount: 2100,
-		author: "플레이트 운영팀",
+		author: "오노라 운영팀",
 		title: "시설 이용 규정",
 		subject: "피트니스 시설 이용 규정 안내",
 		keywords: "시설,이용,규정,안내",
@@ -624,7 +624,7 @@ export const documentDetailSeedData: DocumentDetailSeedData[] = [
 		storageKey: "assets/documents/guide/workout-program-guide-2024.docx",
 		pageCount: 25,
 		wordCount: 8500,
-		author: "플레이트 트레이닝팀",
+		author: "오노라 트레이닝팀",
 		title: "운동 프로그램 가이드",
 		subject: "운동 프로그램 구성 및 진행 가이드",
 		keywords: "운동,프로그램,가이드,트레이닝",
@@ -635,7 +635,7 @@ export const documentDetailSeedData: DocumentDetailSeedData[] = [
 		storageKey: "assets/documents/contract/privacy-consent-form.pdf",
 		pageCount: 3,
 		wordCount: 800,
-		author: "플레이트 법무팀",
+		author: "온짓다 법무팀",
 		title: "개인정보 수집 이용 동의서",
 		subject: "개인정보 수집 및 이용에 대한 동의",
 		keywords: "개인정보,동의,수집,이용",
@@ -644,7 +644,7 @@ export const documentDetailSeedData: DocumentDetailSeedData[] = [
 		storageKey: "assets/documents/contract/membership-contract-template.pdf",
 		pageCount: 5,
 		wordCount: 1500,
-		author: "플레이트 법무팀",
+		author: "온짓다 법무팀",
 		title: "회원권 계약서 양식",
 		subject: "회원권 계약 표준 양식",
 		keywords: "회원권,계약서,양식,표준",
@@ -824,24 +824,24 @@ export interface AlbumSeedData {
 export const albumSeedData: AlbumSeedData[] = [
 	{
 		name: "브랜드 에셋",
-		description: "플레이트 및 파트너 브랜드 로고, 아이덴티티 에셋 모음",
+		description: "오노라 및 파트너 브랜드 로고, 아이덴티티 에셋 모음",
 		coverStorageKey: "assets/images/logo/f45-logo-primary-2024.png",
 		sortOrder: 0,
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
 		name: "웹사이트 배너",
 		description: "웹사이트 메인 및 서브 배너용 이미지 모음",
 		coverStorageKey: "assets/images/background/hero-gym-interior-2024.jpg",
 		sortOrder: 1,
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 	{
 		name: "클래스 홍보 영상",
 		description: "클래스 소개 및 홍보용 영상 모음",
 		coverStorageKey: "assets/videos/promo/brand-promo-2024.mp4",
 		sortOrder: 2,
-		creatorEmail: "admin@plate.com",
+		creatorEmail: "admin@onora.com",
 	},
 ];
 
@@ -878,9 +878,9 @@ export const albumEntrySeedData: AlbumEntrySeedData[] = [
 	},
 	{
 		albumName: "브랜드 에셋",
-		assetStorageKey: "assets/images/logo/plate-logo-full-2024.svg",
+		assetStorageKey: "assets/images/logo/onora-logo-full-2024.svg",
 		position: 2,
-		caption: "플레이트 풀 로고 (SVG)",
+		caption: "오노라 풀 로고 (SVG)",
 	},
 	{
 		albumName: "브랜드 에셋",

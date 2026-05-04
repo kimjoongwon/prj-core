@@ -1,18 +1,18 @@
 {
   "expo": {
-    "name": "Plate Mobile",
-    "slug": "plate-mobile",
+    "name": "Onora Mobile",
+    "slug": "onora-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "plate-mobile",
+    "scheme": "onora-mobile",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "kr.co.cocdev.platemobile"
+      "bundleIdentifier": "kr.co.cocdev.onoramobile"
     },
     "android": {
-      "package": "kr.co.cocdev.platemobile",
+      "package": "kr.co.cocdev.onoramobile",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

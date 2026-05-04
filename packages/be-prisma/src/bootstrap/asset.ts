@@ -38,7 +38,7 @@ export async function createAssetDomainData(
 	}
 
 	const adminUser = await prisma.user.findFirst({
-		where: { email: "admin@plate.com" },
+		where: { email: "admin@onora.com" },
 	});
 	const creatorEmails = [
 		...new Set(

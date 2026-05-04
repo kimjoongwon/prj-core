@@ -231,7 +231,7 @@ async function bootstrap() {
   const oidcIssuer = process.env.OIDC_ISSUER || "http://localhost:3007";
 
   const config = new DocumentBuilder()
-    .setTitle(process.env.APP_NAME || "NestJS Application")
+    .setTitle(process.env.APP_NAME || "Onora")
     .setVersion("1.0.0")
     .setDescription(
       "API 문서입니다. 대부분의 엔드포인트는 인증이 필요합니다.\n\n" +

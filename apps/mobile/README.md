@@ -1,4 +1,4 @@
-# Plate Mobile
+# Onora Mobile
 
 Expo Router 기반 모바일 앱입니다.
 

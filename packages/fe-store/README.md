@@ -51,6 +51,6 @@ rootStore.authStore = new AuthStore(rootStore);
 
 ## Notes
 
-- The root class is `RootStore`, not `PlateStore`.
+- The root class is `RootStore`, not `OnoraStore`.
 - The auth selector hook is `useAuthStore`, not `useAuth`.
 - App-wide providers are created via `createAppStoreProvider`; there is no `AppProviders` export in the current package surface.

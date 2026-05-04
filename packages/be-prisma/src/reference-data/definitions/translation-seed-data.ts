@@ -2507,11 +2507,11 @@ const translationDefinitions = [
 		zh_CN: "保持服务授权和账户保护流程简洁，降低误操作可能性。",
 		ja_JP: "サービス連携権限承認とアカウント保護の流れをシンプルに保ち、ミスの可能性を下げます。",
 	}),
-	defineTranslation("플레이트 계정 센터", "프론트 UI", {
-		ko_KR: "플레이트 계정 센터",
-		en_US: "Plate Account Center",
-		zh_CN: "Plate 账户中心",
-		ja_JP: "Plateアカウントセンター",
+	defineTranslation("오노라 계정 센터", "프론트 UI", {
+		ko_KR: "오노라 계정 센터",
+		en_US: "Onora Account Center",
+		zh_CN: "Onora 账户中心",
+		ja_JP: "Onoraアカウントセンター",
 	}),
 	defineTranslation("로그인 · 계정 복구 · 서비스 연동 승인", "프론트 UI", {
 		ko_KR: "로그인 · 계정 복구 · 서비스 연동 승인",

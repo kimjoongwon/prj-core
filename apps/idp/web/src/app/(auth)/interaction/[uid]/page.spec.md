@@ -107,6 +107,7 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-04-22 | route page state를 `InteractionRoutePageState` class + `makeAutoObservable` + `useLocalObservable(() => new ...)` 패턴으로 정리 | codex |
+| 2026-05-04 | 개발 모드 기본 로그인 계정 이메일을 Onora 브랜드 기준으로 변경 | codex |
 | 2026-04-22 | route page가 `oidcInteractionPage` 자체를 `useLocalObservable` 기반 observable slice로 소유하도록 기준을 보강 | codex |
 | 2026-04-22 | consent용 `oidcConsentPanel` state slice를 route state에 추가하고 실제 action handler는 route/page wrapper가 소유하도록 정리 | codex |
 | 2026-04-22 | `fe-page-builder` 기준에 맞춰 route state root를 `oidcInteractionPage`로 두고 UI slice를 `oidcLoginForm` 이름으로 정리 | codex |

@@ -9,7 +9,7 @@ const expect = (playwrightTest as unknown as PlaywrightTestModule).expect;
 
 const DEFAULT_STORYBOOK_BASE_URL =
 	process.env.E2E_STORYBOOK_BASE_URL ?? "http://localhost:6006/";
-const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
+const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@onora.com";
 const DEFAULT_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
 const STORY_PATH = "/?path=/story/widget-authcard--default";
 

@@ -100,7 +100,7 @@ export interface UserAgreementMappingData {
 	agreements: AgreementType[];
 }
 
-// FULL_ACCESS(admin@plate.com)은 시스템 관리자이므로 일반 회원 약관 흐름에서 제외합니다.
+// FULL_ACCESS(admin@onora.com)은 시스템 관리자이므로 일반 회원 약관 흐름에서 제외합니다.
 export const userAgreementMapping: UserAgreementMappingData[] = [
 	// MANAGE들 - 필수 + 마케팅 동의
 	{

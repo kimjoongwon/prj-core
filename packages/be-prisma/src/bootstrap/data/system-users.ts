@@ -16,12 +16,12 @@ export interface SystemAdminSeedData {
  */
 export const systemAdminSeedData: SystemAdminSeedData[] = [
 	{
-		email: "admin@plate.com",
+		email: "admin@onora.com",
 		phone: "01073162347",
 		password: "rkdmf12!@",
 		profile: {
 			name: "Super Admin",
-			nickname: "플레이트",
+			nickname: "오노라",
 		},
 	},
 	{

@@ -38,7 +38,7 @@ export const InNavigationBar: Story = {
 	render: () => (
 		<div className="flex w-full max-w-4xl items-center justify-between border-b bg-white p-4 shadow-sm">
 			<div className="flex items-center space-x-4">
-				<div className="font-bold text-blue-600 text-xl">플레이트</div>
+				<div className="font-bold text-blue-600 text-xl">오노라</div>
 				<nav className="flex space-x-6">
 					<a href="#" className="text-gray-600 hover:text-gray-900">
 						Dashboard
@@ -98,7 +98,7 @@ export const InSidebar: Story = {
 	render: () => (
 		<div className="flex h-96 w-64 flex-col border-r bg-gray-50">
 			<div className="border-b p-4">
-				<div className="font-bold text-gray-900 text-lg">플레이트</div>
+				<div className="font-bold text-gray-900 text-lg">오노라</div>
 			</div>
 
 			<nav className="flex-1 space-y-2 p-4">

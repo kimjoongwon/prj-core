@@ -14,7 +14,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 - **API**: Orval 자동 생성 React Query 훅
 - **레이아웃**: AdminLayout (데스크톱: Header + Sidebar, 모바일: Header + BottomTab + FAB)
 - **인증**: JWT + X-Space-ID 헤더 기반 Multi-Tenancy
-- **브랜드**: "플레이트" (AppLogo)
+- **브랜드**: "오노라(Onora)" (AppLogo)
 
 ## L1: 사용자 (Actor)
 
@@ -231,7 +231,7 @@ NEW → OPEN → IN_PROGRESS → WAITING_CUSTOMER → RESOLVED → CLOSED
 ```
 AdminLayout
 ├── Header
-│   ├── AppLogo ("플레이트", LayoutGrid 아이콘)
+│   ├── AppLogo ("오노라", LayoutGrid 아이콘)
 │   ├── IDP 관리 버튼 (KeyRound 아이콘, 새 탭으로 IDP Client 열기)
 │   └── HeaderSpaceSelector (Space 전환)
 ├── Sidebar (데스크톱) / BottomTab (모바일)

@@ -108,7 +108,7 @@ class InteractionRoutePageState {
 		this.missingScopes = [...missingScopes];
 
 		if (this.isDev && !this.hasAppliedDevDefaults) {
-			this.oidcLoginForm.email = "admin@plate.com";
+			this.oidcLoginForm.email = "admin@onora.com";
 			this.oidcLoginForm.password = "rkdmf12!@";
 			this.hasAppliedDevDefaults = true;
 		}

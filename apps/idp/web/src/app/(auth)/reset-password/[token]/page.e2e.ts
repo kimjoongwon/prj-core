@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 const VALID_TOKEN = "test-valid-token-for-e2e";
-const MOCK_EMAIL = "admin@plate.com";
+const MOCK_EMAIL = "admin@onora.com";
 
 /**
  * 유효한 토큰 API 응답을 모킹합니다.

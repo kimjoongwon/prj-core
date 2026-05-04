@@ -85,7 +85,7 @@ const authLoginPath = ensureLeadingSlash(AUTH_LOGIN_PATH);
 function buildApiUrl(path: string) {
 	return `${apiBaseUrl}${ensureLeadingSlash(path)}`;
 }
-const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
+const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@onora.com";
 const DEFAULT_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
 const CONSOLE_PERSIST_KEY = "idp-persist";
 const SYSTEM_SPACE_ID =

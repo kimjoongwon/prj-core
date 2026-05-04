@@ -25,7 +25,7 @@ function AuthLayout({ children }: { children: ReactNode }) {
 				<div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-16">
 					<div className="lg:hidden">
 						<p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary-600 dark:text-primary-400">
-							Plate Account Center
+							Onora Account Center
 						</p>
 						<h1 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950 dark:text-slate-50">
 							{t("서비스 이용에 필요한 계정 확인을 진행해 주세요.")}
@@ -39,7 +39,7 @@ function AuthLayout({ children }: { children: ReactNode }) {
 
 					<div className="hidden lg:block">
 						<p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-600 dark:text-primary-400">
-							Plate Account Center
+							Onora Account Center
 						</p>
 						<h1 className="mt-4 max-w-2xl text-4xl font-semibold tracking-tight text-slate-950 dark:text-slate-50">
 							{t("로그인과 계정 복구, 서비스 연동 승인을 한 곳에서 처리합니다.")}
@@ -88,7 +88,7 @@ function AuthLayout({ children }: { children: ReactNode }) {
 				</div>
 
 				<div className="mt-8 flex flex-col gap-2 text-sm text-slate-500 dark:text-slate-400 sm:flex-row sm:items-center sm:justify-between">
-					<p>{t("플레이트 계정 센터")}</p>
+					<p>{t("오노라 계정 센터")}</p>
 					<p>{t("로그인 · 계정 복구 · 서비스 연동 승인")}</p>
 				</div>
 			</div>
