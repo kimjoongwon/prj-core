@@ -53,7 +53,7 @@ export interface AuthCallbackQuery {
 }
 
 export interface AuthLoginFlowState {
-	status: "loading" | "ready" | "error";
+	status: "loading" | "ready" | "error" | "cancelled";
 	message: string;
 	errorMessage: string;
 }
@@ -63,13 +63,12 @@ export interface MobileAuthLoginQuery {
 	clientId?: AuthQueryValue;
 }
 
-const DEFAULT_CLIENT_ID = "idp-web";
-const DEFAULT_AUTH_CALLBACK_SCHEME = "prjcore";
+const DEFAULT_CLIENT_ID = "user-mobile";
+const DEFAULT_AUTH_CALLBACK_SCHEME = "onora-mobile";
 const DEFAULT_AUTH_CALLBACK_PATH = "auth/callback";
 const DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO = "/";
 const DEFAULT_IDP_API_BASE_URL =
 	Platform.OS === "android" ? "http://10.0.2.2:3007" : "http://localhost:3007";
-const ANDROID_EMULATOR_HOST = "10.0.2.2";
 
 const API_ENV_KEYS = [
 	"EXPO_PUBLIC_IDP_API_URL",
@@ -172,22 +171,48 @@ const buildEndpoint = (path: string, base?: string) => {
 	return `${trimmedBase}${normalizedPath}`;
 };
 
+export const rewriteLocalhostUrlForAndroidEmulator = (
+	value: string,
+	platformOs: typeof Platform.OS = Platform.OS,
+) => {
+	if (platformOs !== "android") {
+		return value;
+	}
+
+	try {
+		const parsed = new URL(value);
+		if (parsed.hostname !== "localhost" && parsed.hostname !== "127.0.0.1") {
+			return value;
+		}
+
+		parsed.hostname = "10.0.2.2";
+		return parsed.toString();
+	} catch {
+		return value;
+	}
+};
+
 const buildCallbackSearchParams = (returnTo?: string) => {
 	const params = new URLSearchParams();
 	params.set("returnTo", returnTo ?? DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO);
 	return params;
 };
 
-const buildAuthCallbackUrl = (options: PrimitiveAuthParams = {}) => {
+export const buildAuthSessionRedirectUrl = (options: PrimitiveAuthParams = {}) => {
 	const scheme = (options.callbackScheme ?? DEFAULT_AUTH_CALLBACK_SCHEME).trim();
 	const path = (options.callbackPath ?? DEFAULT_AUTH_CALLBACK_PATH)
 		.trim()
 		.replace(/^\/+/, "");
+
+	return `${scheme}://${path}`;
+};
+
+const buildAuthCallbackUrl = (options: PrimitiveAuthParams = {}) => {
 	const returnTo = options.returnTo
 		? normalizeRoute(options.returnTo)
 		: DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO;
 
-	const callbackUrl = `${scheme}://${path}`;
+	const callbackUrl = buildAuthSessionRedirectUrl(options);
 	const params = buildCallbackSearchParams(returnTo);
 
 	return `${callbackUrl}?${params.toString()}`;
@@ -220,27 +245,6 @@ export const isAuthCallbackUrl = (
 		);
 	} catch {
 		return false;
-	}
-};
-
-export const rewriteLocalhostUrlForAndroidEmulator = (
-	value: string,
-	platform = Platform.OS,
-) => {
-	if (platform !== "android") {
-		return value;
-	}
-
-	try {
-		const parsed = new URL(value);
-		if (parsed.hostname !== "localhost" && parsed.hostname !== "127.0.0.1") {
-			return value;
-		}
-
-		parsed.hostname = ANDROID_EMULATOR_HOST;
-		return parsed.toString();
-	} catch {
-		return value;
 	}
 };
 
@@ -284,26 +288,32 @@ export const buildAuthLoginUrl = (options: MobileAuthLoginParams = {}) => {
 
 export const createLoginLoadingState = (): AuthLoginFlowState => ({
 	status: "loading",
-	message: "오노라 로그인 화면을 준비하고 있습니다.",
+	message: "안전한 로그인 화면을 준비하고 있습니다.",
 	errorMessage: "",
 });
 
-export const createLoginSuccessState = (loginUrl: string): AuthLoginFlowState => ({
+export const createLoginSuccessState = (): AuthLoginFlowState => ({
 	status: "ready",
-	message: `오노라 로그인 화면을 표시합니다. target=${loginUrl}`,
+	message: "로그인 화면이 준비되었습니다.",
 	errorMessage: "",
 });
 
 export const createLoginErrorState = (errorMessage: string): AuthLoginFlowState => ({
 	status: "error",
-	message: "오노라 로그인 화면을 불러오지 못했습니다.",
+	message: "로그인 화면을 불러오지 못했습니다.",
 	errorMessage,
+});
+
+export const createLoginCancelledState = (): AuthLoginFlowState => ({
+	status: "cancelled",
+	message: "로그인을 다시 시작할 수 있습니다.",
+	errorMessage: "로그인이 취소되었습니다. 다시 시도해 주세요.",
 });
 
 export const buildAuthCallbackLoadingState = (): MobileAuthCallbackTransitionState => ({
 	status: "loading",
 	exchange: undefined,
-	message: "오노라 인증 콜백을 처리하고 있습니다.",
+	message: "로그인 정보를 확인하고 있습니다. 잠시만 기다려 주세요.",
 	nextRoute: DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO,
 });
 
@@ -336,7 +346,10 @@ export const parseAuthCallbackReturnTarget = (value?: string): string => {
 	}
 
 	try {
-		const fallbackParsed = new URL(normalizedValue, "prjcore://auth/callback");
+		const fallbackParsed = new URL(
+			normalizedValue,
+			"onora-mobile://auth/callback",
+		);
 		const direct = fallbackParsed.searchParams.get("returnTo");
 		if (direct) {
 			return normalizeRoute(decodeURIComponent(direct));
@@ -364,7 +377,7 @@ export const exchangeAuthCallback = async (
 		return {
 			status: "error",
 			statusCode: 400,
-			error: "오노라 인증을 위한 code 또는 state가 없습니다.",
+			error: "로그인 정보가 올바르지 않습니다. 다시 로그인해 주세요.",
 		};
 	}
 
@@ -396,7 +409,7 @@ export const exchangeAuthCallback = async (
 			return {
 				status: "error",
 				statusCode: response.status,
-				error: `오노라 인증 콜백 API 응답 오류: ${response.status}`,
+				error: "로그인 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.",
 			};
 		}
 
@@ -405,14 +418,11 @@ export const exchangeAuthCallback = async (
 			statusCode: response.status,
 			location: location ?? undefined,
 		};
-	} catch (error) {
+	} catch {
 		return {
 			status: "error",
 			statusCode: 500,
-			error:
-				error instanceof Error
-					? error.message
-					: "오노라 인증 콜백 API 호출 실패",
+			error: "로그인 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.",
 		};
 	}
 };
@@ -432,7 +442,8 @@ export const resolveAuthCallbackResult = async (
 		return {
 			status: "error",
 			nextRoute: DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO,
-			message: errorDescription || errorFromIdp,
+			message:
+				errorDescription || "로그인을 완료하지 못했습니다. 다시 시도해 주세요.",
 		};
 	}
 
@@ -442,14 +453,14 @@ export const resolveAuthCallbackResult = async (
 			return {
 				status: "success",
 				nextRoute: directReturnRoute,
-				message: "오노라 인증 서버에서 복귀 URL을 해석해 이동합니다.",
+				message: "로그인이 완료되었습니다. 예약 화면으로 이동합니다.",
 			};
 		}
 
 		return {
 			status: "invalid",
 			nextRoute: DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO,
-			message: "오노라 인증 콜백 파라미터가 없습니다.",
+			message: "로그인 정보가 올바르지 않습니다. 다시 로그인해 주세요.",
 		};
 	}
 
@@ -464,7 +475,9 @@ export const resolveAuthCallbackResult = async (
 			status: "error",
 			nextRoute: directReturnRoute,
 			exchange: exchangeResult,
-			message: exchangeResult.error ?? "오노라 인증 콜백 교환에 실패했습니다.",
+			message:
+				exchangeResult.error ??
+				"로그인 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.",
 		};
 	}
 
@@ -477,10 +490,7 @@ export const resolveAuthCallbackResult = async (
 		status: "success",
 		nextRoute,
 		exchange: exchangeResult,
-		message:
-			exchangeResult.location !== undefined
-				? "오노라 인증 결과를 서버에서 전달받아 리다이렉트 위치를 적용했습니다."
-				: "오노라 인증 콜백을 처리했습니다.",
+		message: "로그인이 완료되었습니다. 예약 화면으로 이동합니다.",
 	};
 };
 
@@ -505,20 +515,22 @@ export const verifySession = async (
 	try {
 		const result = await resolveAuthCallbackResult(params, options);
 		if (result.status === "success") {
-			return buildAuthCallbackSuccessState(result.nextRoute, result.message, result.exchange);
+			return buildAuthCallbackSuccessState(
+				result.nextRoute,
+				result.message,
+				result.exchange,
+			);
 		}
 
 		return buildAuthCallbackErrorState(
 			result.nextRoute,
-			result.message || "오노라 인증 처리가 실패했습니다.",
+			result.message || "로그인 처리에 실패했습니다. 다시 시도해 주세요.",
 			result.exchange,
 		);
-	} catch (error) {
+	} catch {
 		return buildAuthCallbackErrorState(
 			DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO,
-			error instanceof Error
-				? error.message
-				: "오노라 인증 세션 검증 중 오류가 발생했습니다.",
+			"로그인 상태를 확인하지 못했습니다. 다시 시도해 주세요.",
 		);
 	}
 };

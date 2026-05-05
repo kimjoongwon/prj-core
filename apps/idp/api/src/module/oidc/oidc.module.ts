@@ -24,7 +24,12 @@ import { OidcProviderService } from "./oidc-provider.service";
 		OidcClientRepository,
 		DirectUserRepository,
 	],
-	exports: [OidcProviderService, DirectPrismaProvider, DirectUserRepository],
+	exports: [
+		OidcProviderService,
+		DirectPrismaProvider,
+		DirectUserRepository,
+		OidcClientRepository,
+	],
 })
 export class OidcModule implements OnModuleInit {
 	constructor(

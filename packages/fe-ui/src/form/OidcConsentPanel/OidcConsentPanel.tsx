@@ -5,6 +5,7 @@ import {
 	SCOPE_ICONS,
 	SCOPE_LABELS,
 } from "@cocrepo/constant";
+import type { OidcClientLoginUi } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../control";
 import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
@@ -24,6 +25,7 @@ export interface OidcConsentPanelProps {
 		clientId: string;
 		name: string;
 		logoUri?: string;
+		loginUi?: OidcClientLoginUi | null;
 	} | null;
 	/** 요청된 스코프 목록 */
 	missingScopes: string[];
@@ -37,14 +39,15 @@ export interface OidcConsentPanelProps {
 export const OidcConsentPanel = observer(
 	({ state, client, missingScopes }: OidcConsentPanelProps) => {
 		const t = useT();
+		const brandLabel = client?.loginUi?.brandLabel?.trim() || client?.name;
 
 		return (
 			<AuthCard>
 				<AuthCardHeader
 					iconPath="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
 					iconGradient="from-success to-secondary"
-					title={client?.name || "애플리케이션"}
-					subtitle="서비스 연동을 위해 아래 접근 권한을 확인해 주세요"
+					title={brandLabel || "애플리케이션"}
+					subtitle="요청한 서비스 이용에 필요한 접근 권한을 확인해 주세요"
 					logoUri={client?.logoUri}
 					logoAlt={client?.name}
 				/>
@@ -110,7 +113,7 @@ export const OidcConsentPanel = observer(
 
 				{/* 개인정보 안내 */}
 				<p className="text-center text-default-400 text-xs mt-6">
-					{t("허용하면 예약 조회와 계정 연동에 필요한 정보가")}{" "}
+					{t("허용하면 서비스 이용에 필요한 정보가")}{" "}
 					{client?.name || t("애플리케이션")}
 					{t("과(와) 공유됩니다.")}
 				</p>

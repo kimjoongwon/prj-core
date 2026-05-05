@@ -40,9 +40,9 @@
 | 영역 | 구성 요소 | 설명 |
 |------|-----------|------|
 | 페이지 헤더 | `DetailPage` + `PageTitleBar` | client id/name과 목록 복귀, 수정, 활성화, 삭제 액션 |
-| 기본 정보 | `DetailSectionCard` + `SecretField` | client id/secret, 이름, 활성 상태, 등록일 |
+| 기본 정보 | `DetailSectionCard` + `SecretField` | client id/secret, 이름, 활성 상태, 권한 동의 화면 생략 상태, 등록일 |
 | 인증 설정 | `DetailSectionCard` | 인증 방식, grant/response type, scope |
-| Redirect URIs / 추가 정보 | `DetailSectionCard` | redirect URI 목록, logo/policy/tos URI |
+| Redirect URIs / 로그인 화면 설정 / 추가 정보 | `DetailSectionCard` | redirect URI 목록, `loginUi` 표시 설정, logo/policy/tos URI |
 
 ## 구현 체크리스트
 
@@ -59,7 +59,7 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/oidc-clients/[oidcClientId]/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 OIDC 클라이언트 상세 조회, 활성 상태 전환, 삭제, 라우팅만 담당하고 시각 조합은 `OidcClientDetailPage`가 소유합니다.
+- `page.tsx`는 OIDC 클라이언트 상세 조회, 활성 상태 전환, 삭제, 라우팅만 담당하고 `skipConsent`, `loginUi` 표시를 포함한 시각 조합은 `OidcClientDetailPage`가 소유합니다.
 
 ## Rendering Decision
 
@@ -74,6 +74,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-05 | OIDC 클라이언트 상세 표시 계약에 client별 로그인 화면 설정 `loginUi` 전달 추가 | codex |
+| 2026-05-05 | OIDC 클라이언트 상세 표시 계약에 권한 동의 화면 생략 상태 전달 추가 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-29 | `OidcClientDetailPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-22 | parent `(console)` layout 참조와 primitive skeleton 범위를 최신 계약으로 보정 | codex |

@@ -603,6 +603,11 @@ async function syncOidcClients(db: DbClient): Promise<void> {
 	}
 
 	for (const clientData of oidcClientSeedData) {
+		const loginUi =
+			clientData.loginUi === undefined || clientData.loginUi === null
+				? Prisma.DbNull
+				: (clientData.loginUi as Prisma.InputJsonValue);
+
 		await db.oidcClient.upsert({
 			where: { clientId: clientData.clientId },
 			update: {
@@ -616,6 +621,8 @@ async function syncOidcClients(db: DbClient): Promise<void> {
 				tokenEndpointAuthMethod: clientData.tokenEndpointAuthMethod,
 				scope: clientData.scope,
 				isActive: clientData.isActive,
+				skipConsent: clientData.skipConsent ?? false,
+				loginUi,
 				logoUri: clientData.logoUri ?? null,
 				policyUri: clientData.policyUri ?? null,
 				tosUri: clientData.tosUri ?? null,
@@ -633,6 +640,8 @@ async function syncOidcClients(db: DbClient): Promise<void> {
 				tokenEndpointAuthMethod: clientData.tokenEndpointAuthMethod,
 				scope: clientData.scope,
 				isActive: clientData.isActive,
+				skipConsent: clientData.skipConsent ?? false,
+				loginUi,
 				logoUri: clientData.logoUri ?? null,
 				policyUri: clientData.policyUri ?? null,
 				tosUri: clientData.tosUri ?? null,

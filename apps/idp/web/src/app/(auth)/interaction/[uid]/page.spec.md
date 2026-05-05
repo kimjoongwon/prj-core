@@ -17,7 +17,7 @@
 
 1. 사용자는 외부 클라이언트에서 보호된 리소스 접근 후 OIDC interaction URL로 이동한다.
 2. 페이지는 `uid` 기준으로 interaction 상태를 조회한다.
-3. `type === "login"`이면 route-local login state를 준비한 뒤 primary panel 안에 로그인 안내와 입력 폼을 노출한다.
+3. `type === "login"`이면 route-local login state와 `client.loginUi` 표시 설정을 준비한 뒤 primary panel 안에 로그인 입력 폼을 노출한다.
 4. 로그인 실패 시 입력한 이메일은 유지하고, 실패 사유에 따라 잔여 시도/잠금 복구 액션을 가장 가까운 위치에서 안내한다.
 5. `type === "consent"`이면 권한 요청 정보를 보여주고 승인/거절을 진행한다.
 6. interaction이 만료되었거나 찾을 수 없으면 현재 요청을 복구할 수 없는 상태임을 설명하고 `/auth/login` 재진입 액션을 제공한다.
@@ -89,7 +89,7 @@
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface`, full-screen auth shell |
 
 - `page.tsx`는 route shell이 제공하는 primary panel 내부 콘텐츠만 담당합니다.
-- login branch의 `oidcLoginForm` state와 interaction 모드/오류/client/scope 상태는 route page가 `InteractionRoutePageState` class 안에서 함께 설계합니다.
+- login branch의 `oidcLoginForm` state와 interaction 모드/오류/client/scope/client별 `loginUi` 상태는 route page가 `InteractionRoutePageState` class 안에서 함께 설계합니다.
 - route page에서는 `useLocalObservable(() => new InteractionRoutePageState())`로 인스턴스화하고 pure page에는 page class 인스턴스를 그대로 주입합니다.
 - login/consent의 실제 submit/click handler는 route page가 소유하고 pure page/form에는 state와 page-level handler만 전달합니다.
 
@@ -106,6 +106,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-05 | interaction 조회 응답의 `client.loginUi`를 route state에 보존해 IDP Web 로그인 화면을 client-aware로 렌더링하도록 갱신 | codex |
 | 2026-04-22 | route page state를 `InteractionRoutePageState` class + `makeAutoObservable` + `useLocalObservable(() => new ...)` 패턴으로 정리 | codex |
 | 2026-05-04 | 개발 모드 기본 로그인 계정 이메일을 Onora 브랜드 기준으로 변경 | codex |
 | 2026-04-22 | route page가 `oidcInteractionPage` 자체를 `useLocalObservable` 기반 observable slice로 소유하도록 기준을 보강 | codex |

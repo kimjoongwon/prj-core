@@ -33,7 +33,7 @@ OidcInteractionPage
 
 | 항목 | 설명 |
 |------|------|
-| IdpInteractionClientInfo | 공개 계약 요소 |
+| IdpInteractionClientInfo | client별 로그인 화면 override(`loginUi`)를 포함한 공개 계약 요소 |
 | OidcInteractionPageState | 공개 계약 요소 |
 | OidcInteractionPageProps | 공개 계약 요소 |
 | OidcInteractionPage | 공개 계약 요소 |
@@ -42,6 +42,7 @@ OidcInteractionPage
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-05 | interaction client 정보에 `loginUi`를 추가해 로그인/동의 widget이 client별 표시 설정을 사용할 수 있도록 갱신 | codex |
 | 2026-05-01 | loading/error 분기 문구의 런타임 i18n 번역 적용 경로 반영 | codex |
 | 2026-04-22 | OIDC 로그인/동의 상태와 액션 책임 경계 정리 | codex |
 | 2026-04-22 | OIDC 상호작용 모드와 login 폼 상태 묶음 계약 정리 | codex |

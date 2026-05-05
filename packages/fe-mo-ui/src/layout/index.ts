@@ -6,5 +6,6 @@ export * from "./ListGroup";
 export * from "./Menu";
 export * from "./Popover";
 export * from "./ScrollShadow";
+export * from "./ScreenFrame";
 export * from "./Separator";
 export * from "./SubMenu";

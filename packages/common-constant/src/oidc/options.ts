@@ -23,6 +23,15 @@ export const RESPONSE_TYPE_OPTIONS = [
 	{ value: "code", label: "code" },
 ] as const;
 
+/** 내부 first-party OIDC 클라이언트 ID */
+export const OIDC_FIRST_PARTY_CLIENT_IDS = [
+	"admin-web",
+	"storybook-web",
+	"idp-web",
+	"user-mobile",
+	"swagger-web",
+] as const;
+
 /** 모델 타입 필터 옵션 */
 export const MODEL_TYPE_OPTIONS = [
 	{ value: "", label: "전체" },

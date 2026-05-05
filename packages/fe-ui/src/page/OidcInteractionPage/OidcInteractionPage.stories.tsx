@@ -94,8 +94,18 @@ export const Login: Story = {
 		state: {
 			mode: "login",
 			client: {
-				clientId: "swagger-web",
-				name: "Swagger Web",
+				clientId: "user-mobile",
+				name: "Onora Mobile",
+				loginUi: {
+					variant: "compact",
+					headline: "오노라 로그인",
+					description:
+						"예약과 방문 일정을 계속 확인하려면 계정으로 로그인하세요.",
+					brandLabel: "Onora Mobile",
+					brandColor: "#16a34a",
+					showIntroPanel: false,
+					mobileFullScreen: true,
+				},
 			},
 			isDev: false,
 			errorMessage: "",
@@ -127,6 +137,12 @@ export const Consent: Story = {
 			client: {
 				clientId: "proposal-web",
 				name: "Proposal Web",
+				loginUi: {
+					variant: "branded",
+					brandLabel: "Proposal Web",
+					brandColor: "#2563eb",
+					showIntroPanel: true,
+				},
 			},
 			isDev: false,
 			errorMessage: "",

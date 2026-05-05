@@ -50,6 +50,8 @@ export interface OidcClientDto {
 	scope: string;
 	/** 활성화 여부 */
 	isActive: boolean;
+	/** 로그인 화면 표시 설정 */
+	loginUi?: unknown | null;
 	/** 로고 URI */
 	logoUri?: string;
 	/** 정책 URI */

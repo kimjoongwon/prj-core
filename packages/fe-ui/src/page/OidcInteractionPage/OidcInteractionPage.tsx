@@ -1,5 +1,6 @@
 "use client";
 
+import type { OidcClientLoginUi } from "@cocrepo/type";
 import { Spinner } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type { FormEvent, MouseEvent } from "react";
@@ -18,6 +19,7 @@ export interface IdpInteractionClientInfo {
 	clientId: string;
 	name: string;
 	logoUri?: string;
+	loginUi?: OidcClientLoginUi | null;
 }
 
 export interface OidcInteractionPageState {
@@ -43,6 +45,21 @@ export interface OidcInteractionPageProps {
 export const OidcInteractionPage = observer(
 	(props: OidcInteractionPageProps) => {
 		const t = useT();
+		const shouldFocusAuthPanel = Boolean(
+			props.state.client?.loginUi?.mobileFullScreen ||
+				props.state.client?.loginUi?.showIntroPanel === false,
+		);
+		const focusedAuthLayoutStyle = shouldFocusAuthPanel ? (
+			<style>
+				{`
+					.idp-auth-intro-panel { display: none; }
+					.idp-auth-layout-grid {
+						grid-template-columns: minmax(0, 440px);
+						justify-content: center;
+					}
+				`}
+			</style>
+		) : null;
 		const onSubmitOidcInteractionPage = (event: FormEvent<HTMLDivElement>) => {
 			event.preventDefault();
 			void props.onSubmitLoginForm();
@@ -119,28 +136,34 @@ export const OidcInteractionPage = observer(
 
 		if (props.state.mode === "consent") {
 			return (
-				<div onClickCapture={onClickOidcInteractionAction}>
-					<OidcConsentPanel
-						state={props.state.oidcConsentPanel}
-						client={props.state.client ?? null}
-						missingScopes={props.state.missingScopes}
-					/>
-				</div>
+				<>
+					{focusedAuthLayoutStyle}
+					<div onClickCapture={onClickOidcInteractionAction}>
+						<OidcConsentPanel
+							state={props.state.oidcConsentPanel}
+							client={props.state.client ?? null}
+							missingScopes={props.state.missingScopes}
+						/>
+					</div>
+				</>
 			);
 		}
 
 		return (
-			<div
-				onSubmit={onSubmitOidcInteractionPage}
-				onClickCapture={onClickOidcInteractionAction}
-			>
-				<OidcLoginForm
-					state={props.state.oidcLoginForm}
-					client={props.state.client ?? null}
-					isDev={props.state.isDev}
-					forgotPasswordHref={props.forgotPasswordHref}
-				/>
-			</div>
+			<>
+				{focusedAuthLayoutStyle}
+				<div
+					onSubmit={onSubmitOidcInteractionPage}
+					onClickCapture={onClickOidcInteractionAction}
+				>
+					<OidcLoginForm
+						state={props.state.oidcLoginForm}
+						client={props.state.client ?? null}
+						isDev={props.state.isDev}
+						forgotPasswordHref={props.forgotPasswordHref}
+					/>
+				</div>
+			</>
 		);
 	},
 );

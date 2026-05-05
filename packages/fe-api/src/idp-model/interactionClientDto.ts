@@ -19,4 +19,6 @@ export interface InteractionClientDto {
 	name: string;
 	/** 로고 URI */
 	logoUri?: string;
+	/** 로그인 화면 표시 설정 */
+	loginUi?: unknown | null;
 }

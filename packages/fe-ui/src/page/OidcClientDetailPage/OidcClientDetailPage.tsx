@@ -1,5 +1,6 @@
 "use client";
 
+import type { OidcClientLoginUi } from "@cocrepo/type";
 import {
 	ActiveStatusCell,
 	AuthMethodCell,
@@ -22,6 +23,7 @@ export interface OidcClientDetailPageClient {
 	clientSecret?: string | null;
 	name: string;
 	isActive: boolean;
+	skipConsent: boolean;
 	createdAt: string | Date | null;
 	loginUrl?: string | null;
 	defaultReturnTo?: string | null;
@@ -33,6 +35,7 @@ export interface OidcClientDetailPageClient {
 	logoUri?: string | null;
 	policyUri?: string | null;
 	tosUri?: string | null;
+	loginUi?: OidcClientLoginUi | null;
 }
 
 export interface OidcClientDetailPageProps {
@@ -187,6 +190,20 @@ export const OidcClientDetailPage = observer(
 										</dd>
 									</div>
 									<div>
+										<dt className="text-sm text-default-500 mb-1">
+											권한 동의 화면
+										</dt>
+										<dd>
+											<Chip
+												color={client.skipConsent ? "success" : "default"}
+												size="sm"
+												variant="flat"
+											>
+												{client.skipConsent ? "생략" : "표시"}
+											</Chip>
+										</dd>
+									</div>
+									<div>
 										<dt className="text-sm text-default-500 mb-1">등록일</dt>
 										<dd>
 											<DateTimeCell value={client.createdAt} />
@@ -275,6 +292,70 @@ export const OidcClientDetailPage = observer(
 										등록된 Redirect URI가 없습니다.
 									</p>
 								)}
+							</DetailSection>
+						</DetailSectionCard>
+						<DetailSectionCard>
+							<DetailSection
+								top={<PageTitleBar level={2} title="로그인 화면 설정" />}
+							>
+								<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
+									<div>
+										<dt className="text-sm text-default-500 mb-1">사용 방식</dt>
+										<dd>
+											<Chip
+												color={client.loginUi ? "primary" : "default"}
+												size="sm"
+												variant="flat"
+											>
+												{client.loginUi ? "커스텀" : "공통 로그인"}
+											</Chip>
+										</dd>
+									</div>
+									<div>
+										<dt className="text-sm text-default-500 mb-1">Variant</dt>
+										<dd>{client.loginUi?.variant || "-"}</dd>
+									</div>
+									<div>
+										<dt className="text-sm text-default-500 mb-1">
+											브랜드 라벨
+										</dt>
+										<dd>{client.loginUi?.brandLabel || "-"}</dd>
+									</div>
+									<div>
+										<dt className="text-sm text-default-500 mb-1">
+											브랜드 컬러
+										</dt>
+										<dd className="font-mono text-sm">
+											{client.loginUi?.brandColor || "-"}
+										</dd>
+									</div>
+									<div>
+										<dt className="text-sm text-default-500 mb-1">헤드라인</dt>
+										<dd>{client.loginUi?.headline || "-"}</dd>
+									</div>
+									<div>
+										<dt className="text-sm text-default-500 mb-1">
+											데스크톱 소개 영역
+										</dt>
+										<dd>
+											{client.loginUi
+												? client.loginUi.showIntroPanel === false
+													? "숨김"
+													: "표시"
+												: "-"}
+										</dd>
+									</div>
+									<div className="md:col-span-2">
+										<dt className="text-sm text-default-500 mb-1">설명 문구</dt>
+										<dd>{client.loginUi?.description || "-"}</dd>
+									</div>
+									<div>
+										<dt className="text-sm text-default-500 mb-1">
+											모바일 Full-screen
+										</dt>
+										<dd>{client.loginUi?.mobileFullScreen ? "사용" : "-"}</dd>
+									</div>
+								</dl>
 							</DetailSection>
 						</DetailSectionCard>
 						<DetailSectionCard>

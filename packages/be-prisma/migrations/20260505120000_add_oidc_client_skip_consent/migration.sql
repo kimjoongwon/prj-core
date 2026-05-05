@@ -1,0 +1,2 @@
+ALTER TABLE "oidc_clients"
+ADD COLUMN "skip_consent" BOOLEAN NOT NULL DEFAULT false;

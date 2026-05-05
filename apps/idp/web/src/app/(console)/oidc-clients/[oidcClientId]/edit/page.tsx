@@ -8,6 +8,7 @@ import {
 	OidcClientEditPage,
 	type OidcClientEditPageFormState,
 } from "@cocrepo/ui";
+import type { OidcClientLoginUi } from "@cocrepo/type";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -25,12 +26,21 @@ export default observer(function OidcClientEditPageRoute() {
 		grantTypes: [],
 		responseTypes: [],
 		scope: "",
+		skipConsent: false,
 		redirectUris: [""],
 		loginUrl: "",
 		defaultReturnTo: "",
 		logoUri: "",
 		policyUri: "",
 		tosUri: "",
+		useCustomLoginUi: false,
+		loginUiVariant: "default",
+		loginUiHeadline: "",
+		loginUiDescription: "",
+		loginUiBrandLabel: "",
+		loginUiBrandColor: "",
+		loginUiShowIntroPanel: true,
+		loginUiMobileFullScreen: false,
 		errors: {},
 		redirectUriErrors: {},
 		isInitialized: false,
@@ -44,6 +54,7 @@ export default observer(function OidcClientEditPageRoute() {
 		) {
 			return;
 		}
+		const loginUi = client.loginUi as OidcClientLoginUi | null | undefined;
 		state.clientId = client.clientId;
 		state.name = client.name;
 		state.clientSecret = client.clientSecret || "";
@@ -51,6 +62,7 @@ export default observer(function OidcClientEditPageRoute() {
 		state.grantTypes = [...client.grantTypes];
 		state.responseTypes = [...client.responseTypes];
 		state.scope = client.scope;
+		state.skipConsent = client.skipConsent;
 		state.redirectUris =
 			client.redirectUris.length > 0 ? [...client.redirectUris] : [""];
 		state.loginUrl = client.loginUrl || "";
@@ -58,6 +70,14 @@ export default observer(function OidcClientEditPageRoute() {
 		state.logoUri = client.logoUri || "";
 		state.policyUri = client.policyUri || "";
 		state.tosUri = client.tosUri || "";
+		state.useCustomLoginUi = Boolean(loginUi);
+		state.loginUiVariant = loginUi?.variant ?? "default";
+		state.loginUiHeadline = loginUi?.headline ?? "";
+		state.loginUiDescription = loginUi?.description ?? "";
+		state.loginUiBrandLabel = loginUi?.brandLabel ?? "";
+		state.loginUiBrandColor = loginUi?.brandColor ?? "";
+		state.loginUiShowIntroPanel = loginUi?.showIntroPanel ?? true;
+		state.loginUiMobileFullScreen = loginUi?.mobileFullScreen ?? false;
 		state.isInitialized = true;
 	}, [client, state]);
 	const { mutate: updateClient, isPending } = useUpdateOidcClient({
@@ -81,12 +101,14 @@ export default observer(function OidcClientEditPageRoute() {
 							grantTypes: client.grantTypes,
 							responseTypes: client.responseTypes,
 							scope: client.scope,
+							skipConsent: client.skipConsent,
 							redirectUris: client.redirectUris,
 							loginUrl: client.loginUrl,
 							defaultReturnTo: client.defaultReturnTo,
 							logoUri: client.logoUri,
 							policyUri: client.policyUri,
 							tosUri: client.tosUri,
+							loginUi: client.loginUi as OidcClientLoginUi | null | undefined,
 						}
 					: undefined
 			}

@@ -1,410 +1,308 @@
-import { Button } from "@cocrepo/mo-ui";
-import { useRouter } from "expo-router";
-import { observer } from "mobx-react-lite";
+import { Button, ScreenFrame, Tabs } from "@cocrepo/mo-ui";
+import type { Href } from "expo-router";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 import { mobileAuthStore } from "@/auth/auth-store";
 
-const implementedActions = [
-	"Button",
-	"CloseButton",
-	"LinkButton",
-];
+type HomeTab = "home" | "reservations" | "profile";
 
-const implementedInputs = [
-	"Input",
-	"InputOTP",
-	"SearchField",
-	"Textarea",
-];
-
-const implementedSelections = [
-	"Checkbox",
-	"Radio",
-	"RadioGroup",
-	"Select",
-	"Slider",
-	"Switch",
-];
-
-const implementedNavigation = ["Tabs"];
-
-const implementedDisplays = [
-	"Alert",
-	"Avatar",
-	"Chip",
-	"Skeleton",
-	"SkeletonGroup",
-	"Spinner",
-	"Surface",
-	"TagGroup",
-	"Toast",
-];
-
-const implementedLayouts = [
-	"Accordion",
-	"BottomSheet",
-	"Card",
-	"Dialog",
-	"ListGroup",
-	"Menu",
-	"Popover",
-	"ScrollShadow",
-	"Separator",
-	"SubMenu",
-];
-
-const buttonVariants = [
-	"primary",
-	"secondary",
-	"tertiary",
-	"outline",
-	"ghost",
-	"danger",
-	"danger-soft",
-] as const;
-
-const buttonSizes = ["sm", "md", "lg"] as const;
-
-const buttonFeedbackVariants = [
-	"scale-highlight",
-	"scale-ripple",
-	"scale",
-	"none",
-] as const;
-
-function InventorySection(props: { description: string; items: string[]; title: string }) {
-	const { description, items, title } = props;
-
-	return (
-		<View style={styles.section}>
-			<Text style={styles.sectionTitle}>{title}</Text>
-			<Text style={styles.sectionDescription}>{description}</Text>
-			<View style={styles.tagList}>
-				{items.map((item) => (
-					<View key={item} style={styles.tag}>
-						<Text style={styles.tagLabel}>{item}</Text>
-					</View>
-				))}
-			</View>
-		</View>
-	);
+interface ReservationPreview {
+	date: string;
+	id: string;
+	label: string;
+	place: string;
+	status: string;
+	time: string;
 }
+
+const mainTabs = [
+	{ text: "홈", value: "home" },
+	{ text: "예약", value: "reservations" },
+	{ text: "내 정보", value: "profile" },
+];
+
+const todayReservations: ReservationPreview[] = [
+	{
+		date: "오늘",
+		id: "visit-1",
+		label: "헤어 케어 예약",
+		place: "라운지 온 성수",
+		status: "방문 예정",
+		time: "14:30",
+	},
+	{
+		date: "오늘",
+		id: "visit-2",
+		label: "피부 상담",
+		place: "오노라 클리닉 한남",
+		status: "확정",
+		time: "18:00",
+	},
+];
+
+const upcomingReservations: ReservationPreview[] = [
+	{
+		date: "5월 8일",
+		id: "upcoming-1",
+		label: "스튜디오 촬영 상담",
+		place: "무드 스튜디오",
+		status: "예약 요청",
+		time: "11:00",
+	},
+	{
+		date: "5월 10일",
+		id: "upcoming-2",
+		label: "필라테스 체험",
+		place: "바른핏 센터",
+		status: "확정",
+		time: "09:30",
+	},
+];
+
+const renderReservationCard = (reservation: ReservationPreview) => (
+	<View key={reservation.id} style={styles.reservationCard}>
+		<View style={styles.reservationHeader}>
+			<Text style={styles.reservationDate}>{reservation.date}</Text>
+			<Text style={styles.statusBadge}>{reservation.status}</Text>
+		</View>
+		<Text style={styles.reservationTitle}>{reservation.label}</Text>
+		<Text style={styles.reservationMeta}>
+			{reservation.time} · {reservation.place}
+		</Text>
+	</View>
+);
 
 export default observer(function HomeScreen() {
 	const router = useRouter();
+	const tabState = useLocalObservable<{ selectedTab: HomeTab }>(() => ({
+		selectedTab: "home",
+	}));
 
 	const onPressLogoutButton = async () => {
 		await mobileAuthStore.logout();
-		router.replace("/auth/login");
+		router.replace("/auth/login" as Href);
 	};
 
 	return (
-		<SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
+		<ScreenFrame backgroundColor="#0c0f0b" contentStyle={styles.root}>
 			<ScrollView
 				contentContainerStyle={styles.contentContainer}
 				showsVerticalScrollIndicator={false}
 			>
-				<View style={styles.hero}>
-					<Text style={styles.eyebrow}>@cocrepo/mo-ui</Text>
-					<Text style={styles.heroTitle}>모바일 컴포넌트 인벤토리</Text>
-					<Text style={styles.heroDescription}>
-						빈 홈 화면 대신 현재 구현된 모바일 wrapper 목록을 카테고리별로 정리해
-						보여줍니다.
-					</Text>
-					<View style={styles.heroFooter}>
-						<View style={styles.sessionMeta}>
-							<Text style={styles.sessionLabel}>현재 세션</Text>
-							<Text style={styles.sessionValue}>
-								{mobileAuthStore.isAuthenticated ? "인증됨" : "인증 확인 필요"}
+				{tabState.selectedTab === "home" && (
+					<View style={styles.tabContent}>
+						<View style={styles.hero}>
+							<Text style={styles.eyebrow}>오노라</Text>
+							<Text style={styles.heroTitle}>오늘의 예약을 한눈에</Text>
+							<Text style={styles.heroDescription}>
+								방문 일정과 예약 상태를 오노라에서 바로 확인하세요.
 							</Text>
 						</View>
-						<Button
-							isDisabled={mobileAuthStore.isVerifying}
-							onPress={onPressLogoutButton}
-							variant="danger-soft"
-						>
-							로그아웃
-						</Button>
-					</View>
-				</View>
 
-				<View style={styles.summaryRow}>
-					<View style={styles.summaryCard}>
-						<Text style={styles.summaryValue}>{implementedActions.length}</Text>
-						<Text style={styles.summaryLabel}>Action</Text>
-					</View>
-					<View style={styles.summaryCard}>
-						<Text style={styles.summaryValue}>{implementedInputs.length}</Text>
-						<Text style={styles.summaryLabel}>Input</Text>
-					</View>
-					<View style={styles.summaryCard}>
-						<Text style={styles.summaryValue}>{implementedSelections.length}</Text>
-						<Text style={styles.summaryLabel}>Selection</Text>
-					</View>
-					<View style={styles.summaryCard}>
-						<Text style={styles.summaryValue}>{implementedNavigation.length}</Text>
-						<Text style={styles.summaryLabel}>Navigation</Text>
-					</View>
-					<View style={styles.summaryCard}>
-						<Text style={styles.summaryValue}>{implementedDisplays.length}</Text>
-						<Text style={styles.summaryLabel}>Display</Text>
-					</View>
-					<View style={styles.summaryCard}>
-						<Text style={styles.summaryValue}>{implementedLayouts.length}</Text>
-						<Text style={styles.summaryLabel}>Layout</Text>
-					</View>
-				</View>
+						<View style={styles.summaryGrid}>
+							<View style={styles.summaryCard}>
+								<Text style={styles.summaryValue}>2</Text>
+								<Text style={styles.summaryLabel}>오늘 방문</Text>
+							</View>
+							<View style={styles.summaryCard}>
+								<Text style={styles.summaryValue}>4</Text>
+								<Text style={styles.summaryLabel}>예정 예약</Text>
+							</View>
+						</View>
 
-				<View style={styles.section}>
-					<Text style={styles.sectionTitle}>Button Showcase</Text>
-					<Text style={styles.sectionDescription}>
-						`@cocrepo/mo-ui` Button wrapper를 주요 속성별로 바로 확인하는 영역입니다.
-					</Text>
-
-					<View style={styles.demoBlock}>
-						<Text style={styles.demoTitle}>Variant</Text>
-						<View style={styles.buttonList}>
-							{buttonVariants.map((variant) => (
-								<Button key={variant} onPress={() => undefined} variant={variant}>
-									{variant}
-								</Button>
-							))}
+						<View style={styles.section}>
+							<Text style={styles.sectionTitle}>오늘 일정</Text>
+							{todayReservations.map(renderReservationCard)}
 						</View>
 					</View>
+				)}
 
-					<View style={styles.demoBlock}>
-						<Text style={styles.demoTitle}>Size</Text>
-						<View style={styles.buttonList}>
-							{buttonSizes.map((size) => (
-								<Button key={size} onPress={() => undefined} size={size}>
-									{`size ${size}`}
-								</Button>
-							))}
+				{tabState.selectedTab === "reservations" && (
+					<View style={styles.tabContent}>
+						<View style={styles.sectionHeader}>
+							<Text style={styles.sectionTitle}>내 예약</Text>
+							<Text style={styles.sectionDescription}>
+								요청부터 확정까지 다가오는 예약을 확인합니다.
+							</Text>
 						</View>
+						{upcomingReservations.map(renderReservationCard)}
 					</View>
+				)}
 
-					<View style={styles.demoBlock}>
-						<Text style={styles.demoTitle}>Feedback Variant</Text>
-						<View style={styles.buttonList}>
-							{buttonFeedbackVariants.map((feedbackVariant) => (
-								<Button
-									feedbackVariant={feedbackVariant}
-									key={feedbackVariant}
-									onPress={() => undefined}
-									variant="secondary"
-								>
-									{feedbackVariant}
-								</Button>
-							))}
-						</View>
-					</View>
-
-					<View style={styles.demoBlock}>
-						<Text style={styles.demoTitle}>Disabled State</Text>
-						<View style={styles.buttonList}>
-							<Button isDisabled onPress={() => undefined}>
-								disabled primary
-							</Button>
-							<Button isDisabled onPress={() => undefined} variant="outline">
-								disabled outline
-							</Button>
-							<Button isDisabled onPress={() => undefined} variant="danger">
-								disabled danger
+				{tabState.selectedTab === "profile" && (
+					<View style={styles.tabContent}>
+						<View style={styles.profileCard}>
+							<Text style={styles.sectionTitle}>내 정보</Text>
+							<Text style={styles.sectionDescription}>
+								오노라 예약 알림과 계정 상태를 관리합니다.
+							</Text>
+							<View style={styles.sessionRow}>
+								<Text style={styles.sessionLabel}>로그인 상태</Text>
+								<Text style={styles.sessionValue}>
+									{mobileAuthStore.isAuthenticated ? "로그인됨" : "확인 필요"}
+								</Text>
+							</View>
+							<Button
+								isDisabled={mobileAuthStore.isVerifying}
+								onPress={onPressLogoutButton}
+								variant="danger-soft"
+							>
+								로그아웃
 							</Button>
 						</View>
 					</View>
-				</View>
-
-				<InventorySection
-					title="Action"
-					description="명령을 실행하는 pressable 계열 wrapper입니다."
-					items={implementedActions}
-				/>
-
-				<InventorySection
-					title="Input"
-					description="사용자가 값을 직접 입력하는 wrapper입니다."
-					items={implementedInputs}
-				/>
-
-				<InventorySection
-					title="Selection"
-					description="checkbox, radio, select, switch, slider처럼 선택 상태를 다루는 wrapper입니다."
-					items={implementedSelections}
-				/>
-
-				<InventorySection
-					title="Navigation"
-					description="탭처럼 뷰 전환을 담당하는 wrapper입니다."
-					items={implementedNavigation}
-				/>
-
-				<InventorySection
-					title="Display"
-					description="표시, 피드백, surface 계열 wrapper입니다."
-					items={implementedDisplays}
-				/>
-
-				<InventorySection
-					title="Layout"
-					description="compound layout과 overlay 관련 wrapper입니다."
-					items={implementedLayouts}
-				/>
-
-				<View style={styles.noteBox}>
-					<Text style={styles.noteTitle}>현재 상태</Text>
-					<Text style={styles.noteBody}>
-						이 화면은 Expo Go에서 우선적으로 열리도록 인벤토리 중심으로 단순화했습니다.
-						다음 단계에서는 각 wrapper를 안정적인 순서대로 다시 데모 화면에 붙일 수
-						있습니다.
-					</Text>
-				</View>
+				)}
 			</ScrollView>
-		</SafeAreaView>
+
+			<View style={styles.bottomTabs}>
+				<Tabs options={mainTabs} path="selectedTab" state={tabState} />
+			</View>
+		</ScreenFrame>
 	);
 });
 
 const styles = StyleSheet.create({
-	buttonList: {
-		flexDirection: "row",
-		flexWrap: "wrap",
-		gap: 10,
+	bottomTabs: {
+		backgroundColor: "#111310",
+		borderTopColor: "#2c3128",
+		borderTopWidth: 1,
+		paddingHorizontal: 16,
+		paddingVertical: 12,
 	},
 	contentContainer: {
-		gap: 16,
 		padding: 20,
-		paddingBottom: 32,
-	},
-	demoBlock: {
-		gap: 10,
-	},
-	demoTitle: {
-		color: "#0f172a",
-		fontSize: 15,
-		fontWeight: "700",
+		paddingBottom: 28,
 	},
 	eyebrow: {
-		color: "#2563eb",
-		fontSize: 12,
+		color: "#f59e0b",
+		fontSize: 14,
 		fontWeight: "700",
-		letterSpacing: 1,
-		textTransform: "uppercase",
 	},
 	hero: {
-		backgroundColor: "#eff6ff",
-		borderColor: "#bfdbfe",
-		borderRadius: 24,
+		backgroundColor: "#181712",
+		borderColor: "#353126",
+		borderRadius: 20,
 		borderWidth: 1,
 		gap: 10,
 		padding: 20,
 	},
 	heroDescription: {
-		color: "#475569",
+		color: "#d6d3c7",
 		fontSize: 15,
 		lineHeight: 22,
 	},
-	heroFooter: {
-		alignItems: "center",
-		flexDirection: "row",
-		gap: 12,
-		justifyContent: "space-between",
-		marginTop: 8,
-	},
 	heroTitle: {
-		color: "#0f172a",
+		color: "#fffaf0",
 		fontSize: 28,
-		fontWeight: "700",
+		fontWeight: "800",
+		lineHeight: 34,
 	},
-	noteBody: {
-		color: "#475569",
-		fontSize: 14,
-		lineHeight: 21,
-	},
-	noteBox: {
-		backgroundColor: "#ffffff",
-		borderColor: "#e2e8f0",
-		borderRadius: 20,
+	profileCard: {
+		backgroundColor: "#181712",
+		borderColor: "#353126",
+		borderRadius: 18,
 		borderWidth: 1,
-		gap: 8,
+		gap: 16,
 		padding: 18,
 	},
-	noteTitle: {
-		color: "#0f172a",
-		fontSize: 16,
+	reservationCard: {
+		backgroundColor: "#151a16",
+		borderColor: "#2e382f",
+		borderRadius: 16,
+		borderWidth: 1,
+		gap: 8,
+		padding: 16,
+	},
+	reservationDate: {
+		color: "#86efac",
+		fontSize: 13,
 		fontWeight: "700",
 	},
-	safeArea: {
-		backgroundColor: "#f8fafc",
+	reservationHeader: {
+		alignItems: "center",
+		flexDirection: "row",
+		justifyContent: "space-between",
+	},
+	reservationMeta: {
+		color: "#d6d3c7",
+		fontSize: 14,
+	},
+	reservationTitle: {
+		color: "#fffaf0",
+		fontSize: 17,
+		fontWeight: "700",
+	},
+	root: {
+		backgroundColor: "#0c0f0b",
 		flex: 1,
 	},
 	section: {
-		backgroundColor: "#ffffff",
-		borderColor: "#e2e8f0",
-		borderRadius: 20,
-		borderWidth: 1,
-		gap: 10,
-		padding: 18,
+		gap: 12,
 	},
 	sectionDescription: {
-		color: "#64748b",
+		color: "#a8a29e",
 		fontSize: 14,
-		lineHeight: 20,
+		lineHeight: 21,
+	},
+	sectionHeader: {
+		gap: 6,
 	},
 	sectionTitle: {
-		color: "#0f172a",
-		fontSize: 18,
-		fontWeight: "700",
+		color: "#fffaf0",
+		fontSize: 22,
+		fontWeight: "800",
 	},
 	sessionLabel: {
-		color: "#64748b",
-		fontSize: 12,
-		fontWeight: "700",
-		textTransform: "uppercase",
+		color: "#a8a29e",
+		fontSize: 14,
 	},
-	sessionMeta: {
-		gap: 4,
+	sessionRow: {
+		alignItems: "center",
+		backgroundColor: "#111310",
+		borderRadius: 12,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		padding: 14,
 	},
 	sessionValue: {
-		color: "#0f172a",
-		fontSize: 15,
+		color: "#86efac",
+		fontSize: 14,
 		fontWeight: "700",
 	},
+	statusBadge: {
+		backgroundColor: "#7c2d12",
+		borderRadius: 999,
+		color: "#ffedd5",
+		fontSize: 12,
+		fontWeight: "700",
+		overflow: "hidden",
+		paddingHorizontal: 10,
+		paddingVertical: 4,
+	},
 	summaryCard: {
-		backgroundColor: "#0f172a",
-		borderRadius: 18,
+		backgroundColor: "#151a16",
+		borderColor: "#2e382f",
+		borderRadius: 16,
+		borderWidth: 1,
 		flex: 1,
-		gap: 6,
-		paddingHorizontal: 14,
-		paddingVertical: 16,
+		gap: 4,
+		padding: 16,
 	},
-	summaryLabel: {
-		color: "#cbd5e1",
-		fontSize: 13,
-	},
-	summaryRow: {
+	summaryGrid: {
 		flexDirection: "row",
 		gap: 12,
 	},
-	summaryValue: {
-		color: "#ffffff",
-		fontSize: 26,
-		fontWeight: "700",
-	},
-	tag: {
-		backgroundColor: "#e2e8f0",
-		borderRadius: 999,
-		paddingHorizontal: 12,
-		paddingVertical: 8,
-	},
-	tagLabel: {
-		color: "#0f172a",
+	summaryLabel: {
+		color: "#a8a29e",
 		fontSize: 13,
-		fontWeight: "600",
 	},
-	tagList: {
-		flexDirection: "row",
-		flexWrap: "wrap",
-		gap: 8,
+	summaryValue: {
+		color: "#fffaf0",
+		fontSize: 26,
+		fontWeight: "800",
+	},
+	tabContent: {
+		gap: 18,
 	},
 });

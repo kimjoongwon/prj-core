@@ -19,6 +19,21 @@ jest.mock("@cocrepo/mo-ui", () => {
 	};
 });
 
+jest.mock("react-native-safe-area-context", () => {
+	const React = jest.requireActual<typeof import("react")>("react");
+	const { View } =
+		jest.requireActual<typeof import("react-native")>("react-native");
+
+	return {
+		SafeAreaProvider: ({ children }) =>
+			React.createElement(
+				View,
+				{ accessibilityLabel: "safe-area-provider" },
+				children,
+			),
+	};
+});
+
 jest.mock("@cocrepo/api/idp/client", () => ({
 	setIdpBaseUrl: (...args: string[]) => mockSetIdpBaseUrl(...args),
 	setIdpLoginRedirectUrl: (...args: string[]) =>
@@ -92,6 +107,7 @@ describe("mobile root layout", () => {
 		expect(mockSetIdpBaseUrl).toHaveBeenCalledWith("http://localhost:3207");
 		expect(mockSetIdpLoginRedirectUrl).toHaveBeenCalledWith("/auth/login");
 		expect(screen.getByLabelText("gesture-root")).toBeTruthy();
+		expect(screen.getByLabelText("safe-area-provider")).toBeTruthy();
 		expect(screen.getByLabelText("design-system-provider")).toBeTruthy();
 		expect(screen.getByLabelText("auth-session-gate")).toBeTruthy();
 		expect(screen.getByText("stack-header-hidden")).toBeTruthy();

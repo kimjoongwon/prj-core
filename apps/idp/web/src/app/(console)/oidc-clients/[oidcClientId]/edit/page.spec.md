@@ -49,7 +49,7 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/oidc-clients/[oidcClientId]/edit/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 상세 조회, 저장 mutation, 라우팅만 담당하고 시각 조합과 로컬 폼 상태는 `OidcClientEditPage`가 소유합니다.
+- `page.tsx`는 상세 조회, 저장 mutation, 라우팅만 담당하고 `skipConsent`, `loginUi`를 포함한 시각 조합과 로컬 폼 상태는 `OidcClientEditPage`가 소유합니다.
 
 ## Rendering Decision
 
@@ -64,6 +64,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-05 | OIDC 클라이언트 수정 폼 초기화와 제출 계약에 공통/커스텀 로그인 화면 설정 전달 추가 | codex |
+| 2026-05-05 | OIDC 클라이언트 수정 폼 초기화와 제출 계약에 `skipConsent` 전달 추가 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-29 | `OidcClientEditPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
 | 2026-03-22 | parent `(console)` layout 참조와 `form` 재사용 셸 기준으로 수정 페이지 계약을 동기화 | codex |

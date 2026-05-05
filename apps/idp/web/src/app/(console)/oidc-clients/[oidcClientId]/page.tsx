@@ -5,6 +5,7 @@ import {
 	useGetOidcClient,
 	useToggleActiveOidcClient,
 } from "@cocrepo/api/idp/oidc-clients";
+import type { OidcClientLoginUi } from "@cocrepo/type";
 import { OidcClientDetailPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -34,6 +35,7 @@ export default observer(function OidcClientDetailPageRoute() {
 							clientSecret: client.clientSecret,
 							name: client.name,
 							isActive: client.isActive,
+							skipConsent: client.skipConsent,
 							createdAt: client.createdAt,
 							loginUrl: client.loginUrl,
 							defaultReturnTo: client.defaultReturnTo,
@@ -45,6 +47,7 @@ export default observer(function OidcClientDetailPageRoute() {
 							logoUri: client.logoUri,
 							policyUri: client.policyUri,
 							tosUri: client.tosUri,
+							loginUi: client.loginUi as OidcClientLoginUi | null | undefined,
 						}
 					: undefined
 			}

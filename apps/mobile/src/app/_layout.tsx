@@ -6,6 +6,7 @@ import type { ComponentType, PropsWithChildren } from "react";
 import { useEffect } from "react";
 import { StyleSheet, type ViewProps } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthSessionGate } from "@/auth/AuthSessionGate";
 import { getIdpApiBaseUrl, getLoginPath } from "@/auth/auth-config";
 import "../global.css";
@@ -24,11 +25,13 @@ export default function RootLayout() {
 
 	return (
 		<GestureRootView style={styles.root}>
-			<DesignSystemProvider>
-				<AuthSessionGate>
-					<Stack screenOptions={{ headerShown: false }} />
-				</AuthSessionGate>
-			</DesignSystemProvider>
+			<SafeAreaProvider>
+				<DesignSystemProvider>
+					<AuthSessionGate>
+						<Stack screenOptions={{ headerShown: false }} />
+					</AuthSessionGate>
+				</DesignSystemProvider>
+			</SafeAreaProvider>
 		</GestureRootView>
 	);
 }

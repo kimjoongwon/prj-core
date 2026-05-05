@@ -5,6 +5,7 @@ import {
 	StringField,
 	StringFieldOptional,
 } from "@cocrepo/decorator";
+import type { Prisma } from "@cocrepo/prisma";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 /**
@@ -19,6 +20,14 @@ export class InteractionClientDto {
 
 	@StringFieldOptional({ description: "로고 URI" })
 	logoUri?: string;
+
+	@ApiPropertyOptional({
+		description: "로그인 화면 표시 설정",
+		type: "object",
+		additionalProperties: true,
+		nullable: true,
+	})
+	loginUi?: Prisma.JsonValue | null;
 }
 
 /**

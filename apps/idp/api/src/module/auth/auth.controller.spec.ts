@@ -2,7 +2,7 @@ import { AuthApplicationService } from "@cocrepo/app";
 import { REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import { SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
 import type { SignUpPayloadDto } from "@cocrepo/dto";
-import { UnauthorizedException } from "@nestjs/common";
+import { HttpStatus, UnauthorizedException } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { AuthController } from "./auth.controller";
 
@@ -31,6 +31,8 @@ describe("AuthController", () => {
 		cookie: jest.fn().mockReturnThis(),
 		clearCookie: jest.fn().mockReturnThis(),
 		redirect: jest.fn().mockReturnThis(),
+		status: jest.fn().mockReturnThis(),
+		send: jest.fn().mockReturnThis(),
 	};
 
 	const mockRequest = {
@@ -57,16 +59,25 @@ describe("AuthController", () => {
 						return {
 							loginUrl: "http://localhost:6006/__storybook_auth/login",
 							defaultReturnTo: "http://localhost:6006/",
+							hasAuthShell: true,
 						};
 					case "idp-web":
 						return {
 							loginUrl: "http://localhost:3008/auth/login",
 							defaultReturnTo: "http://localhost:3008/dashboard",
+							hasAuthShell: true,
+						};
+					case "user-mobile":
+						return {
+							loginUrl: null,
+							defaultReturnTo: null,
+							hasAuthShell: false,
 						};
 					default:
 						return {
 							loginUrl: "http://localhost:3000/admin/auth/login",
 							defaultReturnTo: "http://localhost:3000/admin/dashboard",
+							hasAuthShell: true,
 						};
 				}
 			}),
@@ -98,11 +109,16 @@ describe("AuthController", () => {
 					useValue: mockAuthApplicationService,
 				},
 			],
-		}).compile();
+			}).compile();
 
-		controller = module.get<AuthController>(AuthController);
-		jest.clearAllMocks();
-	});
+			controller = module.get<AuthController>(AuthController);
+			jest.clearAllMocks();
+			mockResponse.cookie.mockReturnValue(mockResponse);
+			mockResponse.clearCookie.mockReturnValue(mockResponse);
+			mockResponse.redirect.mockReturnValue(mockResponse);
+			mockResponse.status.mockReturnValue(mockResponse);
+			mockResponse.send.mockReturnValue(mockResponse);
+		});
 
 	it("컨트롤러가 정의되어야 한다", () => {
 		expect(controller).toBeDefined();
@@ -144,6 +160,28 @@ describe("AuthController", () => {
 			).toHaveBeenCalledWith("http://localhost:3008/dashboard", "idp-web");
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
 				"https://idp.example.com/oidc/auth?client_id=idp-web",
+			);
+		});
+
+		it("user-mobile clientId로 모바일 native authorization URL을 리다이렉트해야 한다", async () => {
+			mockAuthApplicationService.getAuthorizationUrl.mockResolvedValue(
+				"https://idp.example.com/oidc/auth?client_id=user-mobile",
+			);
+
+			await controller.login(
+				"user-mobile",
+				"onora-mobile://auth/callback?returnTo=/",
+				mockResponse as unknown as never,
+			);
+
+			expect(
+				mockAuthApplicationService.getAuthorizationUrl,
+			).toHaveBeenCalledWith(
+				"onora-mobile://auth/callback?returnTo=/",
+				"user-mobile",
+			);
+			expect(mockResponse.redirect).toHaveBeenCalledWith(
+				"https://idp.example.com/oidc/auth?client_id=user-mobile",
 			);
 		});
 	});
@@ -237,6 +275,30 @@ describe("AuthController", () => {
 
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
 				"http://localhost:3008/auth/login?error=OIDC+%EC%9D%B8%EC%A6%9D+%EC%BD%9C%EB%B0%B1+%EC%B2%98%EB%A6%AC%EC%97%90+%EC%8B%A4%ED%8C%A8%ED%96%88%EC%8A%B5%EB%8B%88%EB%8B%A4",
+			);
+		});
+
+		it("모바일 콜백 처리 실패는 idp-web으로 보내지 않고 오류 응답을 반환해야 한다", async () => {
+			mockAuthApplicationService.handleOidcCallback.mockRejectedValue(
+				new UnauthorizedException("OIDC state 검증에 실패했습니다"),
+			);
+
+			await controller.handleCallback(
+				"user-mobile",
+				"auth-code",
+				"invalid-state",
+				undefined as unknown as string,
+				undefined as unknown as string,
+				mockRequest as unknown as never,
+				mockResponse as unknown as never,
+			);
+
+			expect(mockResponse.redirect).not.toHaveBeenCalledWith(
+				expect.stringContaining("http://localhost:3008/auth/login"),
+			);
+			expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.UNAUTHORIZED);
+			expect(mockResponse.send).toHaveBeenCalledWith(
+				"OIDC 인증 콜백 처리에 실패했습니다",
 			);
 		});
 	});

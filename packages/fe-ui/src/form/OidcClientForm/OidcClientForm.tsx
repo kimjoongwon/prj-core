@@ -2,8 +2,13 @@
 import {
 	AUTH_METHOD_OPTIONS,
 	GRANT_TYPE_OPTIONS,
+	OIDC_FIRST_PARTY_CLIENT_IDS,
 	RESPONSE_TYPE_OPTIONS,
 } from "@cocrepo/constant";
+import type {
+	OidcClientLoginUi,
+	OidcClientLoginUiVariant,
+} from "@cocrepo/type";
 import {
 	Button,
 	Checkbox,
@@ -17,6 +22,22 @@ import { observer } from "mobx-react-lite";
 import { RedirectUriListInput } from "../../control/RedirectUriListInput/RedirectUriListInput";
 import { VStack } from "../../rhythm/VStack/VStack";
 
+export const OIDC_CLIENT_LOGIN_UI_VARIANT_OPTIONS: Array<{
+	label: string;
+	value: OidcClientLoginUiVariant;
+}> = [
+	{ label: "기본", value: "default" },
+	{ label: "컴팩트", value: "compact" },
+	{ label: "브랜디드", value: "branded" },
+];
+
+const HEX_COLOR_PATTERN = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+
+export const isValidOidcLoginUiBrandColor = (value: string) => {
+	const trimmed = value.trim();
+	return !trimmed || HEX_COLOR_PATTERN.test(trimmed);
+};
+
 /** 폼 상태 인터페이스 */
 export interface OidcClientFormState {
 	clientId: string;
@@ -27,15 +48,60 @@ export interface OidcClientFormState {
 	grantTypes: string[];
 	responseTypes: string[];
 	scope: string;
+	skipConsent: boolean;
 	redirectUris: string[];
 	loginUrl: string;
 	defaultReturnTo: string;
 	logoUri: string;
 	policyUri: string;
 	tosUri: string;
+	useCustomLoginUi: boolean;
+	loginUiVariant: OidcClientLoginUiVariant;
+	loginUiHeadline: string;
+	loginUiDescription: string;
+	loginUiBrandLabel: string;
+	loginUiBrandColor: string;
+	loginUiShowIntroPanel: boolean;
+	loginUiMobileFullScreen: boolean;
 	errors: Record<string, string>;
 	redirectUriErrors: Record<number, string>;
 }
+
+export const buildOidcClientLoginUi = (
+	state: OidcClientFormState,
+): OidcClientLoginUi | null => {
+	if (!state.useCustomLoginUi) {
+		return null;
+	}
+
+	const loginUi: OidcClientLoginUi = {
+		variant: state.loginUiVariant,
+		showIntroPanel: state.loginUiShowIntroPanel,
+		mobileFullScreen: state.loginUiMobileFullScreen,
+	};
+	const headline = state.loginUiHeadline.trim();
+	const description = state.loginUiDescription.trim();
+	const brandLabel = state.loginUiBrandLabel.trim();
+	const brandColor = state.loginUiBrandColor.trim();
+
+	if (headline) {
+		loginUi.headline = headline;
+	}
+
+	if (description) {
+		loginUi.description = description;
+	}
+
+	if (brandLabel) {
+		loginUi.brandLabel = brandLabel;
+	}
+
+	if (brandColor) {
+		loginUi.brandColor = brandColor;
+	}
+
+	return loginUi;
+};
 
 export interface OidcClientFormProps {
 	/** 생성/수정 모드 */
@@ -63,6 +129,9 @@ const generateSecret = (): string => {
 	return result;
 };
 
+const isFirstPartyClientId = (clientId: string) =>
+	OIDC_FIRST_PARTY_CLIENT_IDS.some((id) => id === clientId.trim());
+
 /**
  * OIDC 클라이언트 등록/수정 폼 Widget
  *
@@ -82,6 +151,9 @@ export const OidcClientForm = observer(
 		const isPublic = isEdit
 			? state.tokenEndpointAuthMethod === "none"
 			: state.isPublic;
+		const canSkipConsent = isFirstPartyClientId(
+			readonlyClientId ?? state.clientId,
+		);
 
 		const handleGenerateSecret = () => {
 			state.clientSecret = generateSecret();
@@ -95,6 +167,22 @@ export const OidcClientForm = observer(
 			} else {
 				state.tokenEndpointAuthMethod = "client_secret_basic";
 			}
+		};
+
+		const handleToggleSkipConsent = (checked: boolean) => {
+			state.skipConsent = checked;
+		};
+
+		const handleToggleCommonLoginUi = (checked: boolean) => {
+			state.useCustomLoginUi = !checked;
+		};
+
+		const handleToggleLoginUiIntroPanel = (checked: boolean) => {
+			state.loginUiShowIntroPanel = checked;
+		};
+
+		const handleToggleLoginUiMobileFullScreen = (checked: boolean) => {
+			state.loginUiMobileFullScreen = checked;
 		};
 
 		return (
@@ -252,6 +340,18 @@ export const OidcClientForm = observer(
 							isRequired
 							description="공백으로 구분하여 입력합니다."
 						/>
+						<Checkbox
+							isDisabled={!canSkipConsent}
+							isSelected={canSkipConsent && state.skipConsent}
+							onValueChange={handleToggleSkipConsent}
+							size="sm"
+						>
+							권한 동의 화면 생략
+						</Checkbox>
+						<p className="text-xs text-default-500">
+							first-party 클라이언트에서만 사용할 수 있습니다. 명시적인
+							prompt=consent 요청은 계속 동의 화면을 표시합니다.
+						</p>
 					</div>
 				</section>
 				{/* Redirect URIs */}
@@ -291,6 +391,96 @@ export const OidcClientForm = observer(
 							}}
 							description="callback에 returnTo가 없을 때 사용할 기본 복귀 경로입니다."
 						/>
+					</div>
+				</section>
+				<section>
+					<div className="space-y-6 p-6">
+						<div>
+							<h3 className="text-lg font-semibold">로그인 화면 설정</h3>
+							<p className="mt-1 text-sm text-default-500">
+								IDP Web 로그인 폼은 공통 컴포넌트를 사용하고, 여기서는 client별
+								표현만 덮어씁니다.
+							</p>
+						</div>
+						<Checkbox
+							isSelected={!state.useCustomLoginUi}
+							onValueChange={handleToggleCommonLoginUi}
+							size="sm"
+						>
+							공통 로그인 사용
+						</Checkbox>
+
+						{state.useCustomLoginUi && (
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+								<Select
+									label="화면 Variant"
+									selectedKeys={[state.loginUiVariant]}
+									onSelectionChange={(keys) => {
+										const selected = Array.from(keys)[0] as
+											| OidcClientLoginUiVariant
+											| undefined;
+										if (selected) {
+											state.loginUiVariant = selected;
+										}
+									}}
+								>
+									{OIDC_CLIENT_LOGIN_UI_VARIANT_OPTIONS.map((opt) => (
+										<SelectItem key={opt.value}>{opt.label}</SelectItem>
+									))}
+								</Select>
+								<Input
+									label="브랜드 라벨"
+									placeholder="Onora Mobile"
+									value={state.loginUiBrandLabel}
+									onValueChange={(v) => {
+										state.loginUiBrandLabel = v;
+									}}
+								/>
+								<Input
+									label="헤드라인"
+									placeholder="오노라 로그인"
+									value={state.loginUiHeadline}
+									onValueChange={(v) => {
+										state.loginUiHeadline = v;
+									}}
+								/>
+								<Input
+									label="브랜드 컬러"
+									placeholder="#2563eb"
+									value={state.loginUiBrandColor}
+									onValueChange={(v) => {
+										state.loginUiBrandColor = v;
+									}}
+									isInvalid={!!state.errors.loginUiBrandColor}
+									errorMessage={state.errors.loginUiBrandColor}
+									description="HEX 색상만 입력합니다. 예: #2563eb"
+								/>
+								<div className="md:col-span-2">
+									<Input
+										label="설명 문구"
+										placeholder="예약과 방문 일정을 계속 확인하려면 계정으로 로그인하세요."
+										value={state.loginUiDescription}
+										onValueChange={(v) => {
+											state.loginUiDescription = v;
+										}}
+									/>
+								</div>
+								<Checkbox
+									isSelected={state.loginUiShowIntroPanel}
+									onValueChange={handleToggleLoginUiIntroPanel}
+									size="sm"
+								>
+									데스크톱 소개 영역 표시
+								</Checkbox>
+								<Checkbox
+									isSelected={state.loginUiMobileFullScreen}
+									onValueChange={handleToggleLoginUiMobileFullScreen}
+									size="sm"
+								>
+									모바일에서 로그인 카드 우선 표시
+								</Checkbox>
+							</div>
+						)}
 					</div>
 				</section>
 				{/* 추가 정보 */}

@@ -185,6 +185,7 @@ export class InteractionController {
 							clientId: client.clientId,
 							name: client.name,
 							logoUri: client.logoUri,
+							loginUi: client.loginUi ?? null,
 						}
 					: null,
 				prompt,

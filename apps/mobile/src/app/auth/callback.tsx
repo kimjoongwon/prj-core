@@ -1,5 +1,5 @@
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import { Button } from "@cocrepo/mo-ui";
+import { Button, ScreenFrame } from "@cocrepo/mo-ui";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -13,8 +13,8 @@ import {
 	verifySession,
 } from "@/auth/_utils/auth";
 
-const AUTH_CLIENT_ID = "idp-web";
-const AUTH_CALLBACK_SCHEME = "prjcore";
+const AUTH_CLIENT_ID = "user-mobile";
+const AUTH_CALLBACK_SCHEME = "onora-mobile";
 const AUTH_CALLBACK_PATH = "auth/callback";
 const DEFAULT_NEXT_ROUTE = getAuthenticatedHomePath();
 
@@ -50,7 +50,7 @@ export default observer(function AuthCallbackRoute() {
 					setUiState(
 						buildAuthCallbackErrorState(
 							nextState.nextRoute,
-							"오노라 인증 서버 콜백은 완료됐지만 앱 세션 확인에 실패했습니다.",
+							"로그인은 완료됐지만 앱에서 세션을 확인하지 못했습니다. 다시 로그인해 주세요.",
 							nextState.exchange,
 						),
 					);
@@ -65,7 +65,7 @@ export default observer(function AuthCallbackRoute() {
 			setUiState(
 				buildAuthCallbackErrorState(
 					DEFAULT_NEXT_ROUTE,
-					"오노라 인증 콜백 처리 중 오류가 발생했습니다.",
+					"로그인 완료 처리 중 문제가 발생했습니다. 다시 시도해 주세요.",
 				),
 			);
 		});
@@ -75,27 +75,32 @@ export default observer(function AuthCallbackRoute() {
 		router.replace({
 			pathname: "/auth/login",
 			params: { returnTo: uiState.nextRoute || DEFAULT_NEXT_ROUTE },
-		});
+		} as unknown as Href);
 	};
 
 	return (
-		<View style={styles.container}>
-			<Text style={styles.title}>오노라 인증</Text>
-			<Text style={styles.message}>안내: {uiState.message}</Text>
-			<Text style={styles.message}>복귀 경로: {uiState.nextRoute}</Text>
+		<ScreenFrame backgroundColor="#020617" contentStyle={styles.container}>
+			<Text style={styles.title}>
+				{uiState.status === "error"
+					? "로그인이 완료되지 않았어요"
+					: "오노라로 돌아가는 중"}
+			</Text>
+			<Text style={styles.message}>{uiState.message}</Text>
 
 			{uiState.status === "loading" && (
 				<View style={styles.statusRow}>
 					<ActivityIndicator color="#60a5fa" size="small" />
-					<Text style={styles.subText}>오노라 인증 응답을 확인하고 있습니다.</Text>
+					<Text style={styles.subText}>
+						예약 정보를 안전하게 불러올 준비를 하고 있습니다.
+					</Text>
 				</View>
 			)}
 			{uiState.status === "error" && (
 				<Button onPress={onPressRetryLoginButton} variant="secondary">
-					오노라 로그인으로 다시 이동
+					로그인 다시 시도
 				</Button>
 			)}
-		</View>
+		</ScreenFrame>
 	);
 });
 

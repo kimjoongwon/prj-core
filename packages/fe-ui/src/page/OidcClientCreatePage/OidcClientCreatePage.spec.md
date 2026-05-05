@@ -41,7 +41,7 @@ OidcClientCreatePage
 
 | 항목 | 설명 |
 |------|------|
-| OidcClientCreatePageSubmitInput | route로 전달하는 제출 계약 |
+| OidcClientCreatePageSubmitInput | route로 전달하는 제출 계약 (`skipConsent`, `loginUi` 포함) |
 | OidcClientCreatePageProps | pure page 입력 계약 |
 | OidcClientCreatePage | 공개 계약 요소 |
 
@@ -49,6 +49,8 @@ OidcClientCreatePage
 
 | 모듈 | 용도 |
 |------|------|
+| @cocrepo/constant | first-party OIDC client 판별 |
+| @cocrepo/type | OIDC client 로그인 UI override 타입 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
 
@@ -56,6 +58,8 @@ OidcClientCreatePage
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-05 | client별 로그인 화면 override를 제출하는 `loginUi` 계약과 브랜드 컬러 검증을 추가 | codex |
+| 2026-05-05 | first-party OIDC 클라이언트의 권한 동의 화면 생략 제출 계약과 custom scheme redirect URI 검증 허용 추가 | codex |
 | 2026-03-30 | 화면 데이터/이벤트 소유 경계를 상위 컨테이너 기준으로 정리 | codex |
 | 2026-03-29 | OIDC 클라이언트 등록 화면의 생성/라우팅 책임 경계 정리 | codex |
 | 2026-03-28 | OIDC 클라이언트 표시명 기준 정리 | codex |

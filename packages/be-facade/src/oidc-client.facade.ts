@@ -41,6 +41,8 @@ export class OidcClientFacade {
 			responseTypes: dto.responseTypes,
 			tokenEndpointAuthMethod: dto.tokenEndpointAuthMethod,
 			scope: dto.scope,
+			skipConsent: dto.skipConsent,
+			loginUi: dto.loginUi,
 			logoUri: dto.logoUri,
 			policyUri: dto.policyUri,
 			tosUri: dto.tosUri,

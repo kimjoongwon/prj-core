@@ -108,6 +108,10 @@ export class AuthController {
 			await this.authApplicationService.getClientRedirects(clientId);
 
 		if (error) {
+			if (!loginUrl) {
+				return res.status(HttpStatus.BAD_REQUEST).send(errorDescription || error);
+			}
+
 			return res.redirect(
 				this.buildLoginRedirectUrl(loginUrl, errorDescription || error),
 			);
@@ -125,6 +129,12 @@ export class AuthController {
 				callbackResult.returnTo || callbackResult.defaultReturnTo,
 			);
 		} catch (_e) {
+			if (!loginUrl) {
+				return res
+					.status(HttpStatus.UNAUTHORIZED)
+					.send(AUTH_ERRORS.OIDC_CALLBACK_FAILED);
+			}
+
 			return res.redirect(
 				this.buildLoginRedirectUrl(loginUrl, AUTH_ERRORS.OIDC_CALLBACK_FAILED),
 			);

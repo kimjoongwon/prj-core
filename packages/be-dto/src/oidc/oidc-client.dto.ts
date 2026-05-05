@@ -3,7 +3,9 @@ import {
 	StringField,
 	StringFieldOptional,
 } from "@cocrepo/decorator";
-import type { OidcClient } from "@cocrepo/prisma";
+import type { OidcClient, Prisma } from "@cocrepo/prisma";
+import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsObject, IsOptional } from "class-validator";
 
 import { AbstractDto } from "../abstract.dto";
 
@@ -57,6 +59,19 @@ export class OidcClientDto extends AbstractDto implements OidcClient {
 
 	@BooleanField({ description: "활성화 여부" })
 	isActive: boolean;
+
+	@BooleanField({ description: "권한 동의 화면 생략 여부" })
+	skipConsent: boolean;
+
+	@ApiPropertyOptional({
+		description: "로그인 화면 표시 설정",
+		type: "object",
+		additionalProperties: true,
+		nullable: true,
+	})
+	@IsOptional()
+	@IsObject()
+	loginUi: Prisma.JsonValue | null;
 
 	@StringFieldOptional({ description: "로고 URI" })
 	logoUri: string | null;

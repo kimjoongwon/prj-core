@@ -1,6 +1,8 @@
 import type { QueryOidcClientDto } from "@cocrepo/dto";
 import type { OidcClient } from "@cocrepo/entity";
+import { Prisma } from "@cocrepo/prisma";
 import { OidcClientsRepository } from "@cocrepo/repository";
+import type { JsonValue } from "@cocrepo/type";
 import {
 	BadRequestException,
 	ConflictException,
@@ -8,6 +10,7 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
+import { isFirstPartyOidcClientId } from "../oidc-runtime-client-config";
 
 @Injectable()
 export class OidcClientService {
@@ -54,6 +57,8 @@ export class OidcClientService {
 		responseTypes: string[];
 		tokenEndpointAuthMethod: string;
 		scope: string;
+		skipConsent?: boolean;
+		loginUi?: JsonValue | null;
 		logoUri?: string | null;
 		policyUri?: string | null;
 		tosUri?: string | null;
@@ -64,6 +69,7 @@ export class OidcClientService {
 		if (existing) {
 			throw new ConflictException("이미 존재하는 Client ID입니다");
 		}
+		this.validateSkipConsent(params.clientId, params.skipConsent);
 
 		return this.repository.create({
 			clientId: params.clientId,
@@ -77,6 +83,8 @@ export class OidcClientService {
 			tokenEndpointAuthMethod: params.tokenEndpointAuthMethod,
 			scope: params.scope,
 			isActive: true,
+			skipConsent: params.skipConsent ?? false,
+			loginUi: this.toPrismaNullableJson(params.loginUi) ?? Prisma.DbNull,
 			logoUri: params.logoUri ?? null,
 			policyUri: params.policyUri ?? null,
 			tosUri: params.tosUri ?? null,
@@ -95,6 +103,8 @@ export class OidcClientService {
 			responseTypes?: string[];
 			tokenEndpointAuthMethod?: string;
 			scope?: string;
+			skipConsent?: boolean;
+			loginUi?: JsonValue | null;
 			logoUri?: string | null;
 			policyUri?: string | null;
 			tosUri?: string | null;
@@ -106,8 +116,14 @@ export class OidcClientService {
 		if (!existing) {
 			throw new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다");
 		}
+		this.validateSkipConsent(existing.clientId, params.skipConsent);
 
-		return this.repository.updateById(id, params);
+		const updateData: Prisma.OidcClientUncheckedUpdateInput = {
+			...params,
+			loginUi: this.toPrismaNullableJson(params.loginUi),
+		};
+
+		return this.repository.updateById(id, updateData);
 	}
 
 	async getByClientId(clientId: string): Promise<OidcClient> {
@@ -166,5 +182,31 @@ export class OidcClientService {
 		return this.repository.updateById(id, {
 			isActive: !existing.isActive,
 		});
+	}
+
+	private validateSkipConsent(clientId: string, skipConsent?: boolean): void {
+		if (!skipConsent) {
+			return;
+		}
+
+		if (!isFirstPartyOidcClientId(clientId)) {
+			throw new BadRequestException(
+				"권한 동의 화면 생략은 first-party OIDC 클라이언트에만 설정할 수 있습니다",
+			);
+		}
+	}
+
+	private toPrismaNullableJson(
+		value: JsonValue | null | undefined,
+	): Prisma.OidcClientUncheckedCreateInput["loginUi"] | undefined {
+		if (value === undefined) {
+			return undefined;
+		}
+
+		if (value === null) {
+			return Prisma.DbNull;
+		}
+
+		return value as Prisma.InputJsonValue;
 	}
 }

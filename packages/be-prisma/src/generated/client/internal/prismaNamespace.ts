@@ -6046,6 +6046,8 @@ export const OidcClientScalarFieldEnum = {
   tokenEndpointAuthMethod: 'tokenEndpointAuthMethod',
   scope: 'scope',
   isActive: 'isActive',
+  skipConsent: 'skipConsent',
+  loginUi: 'loginUi',
   logoUri: 'logoUri',
   policyUri: 'policyUri',
   tosUri: 'tosUri'

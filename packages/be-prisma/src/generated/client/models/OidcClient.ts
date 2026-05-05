@@ -37,6 +37,7 @@ export type OidcClientMinAggregateOutputType = {
   tokenEndpointAuthMethod: string | null
   scope: string | null
   isActive: boolean | null
+  skipConsent: boolean | null
   logoUri: string | null
   policyUri: string | null
   tosUri: string | null
@@ -55,6 +56,7 @@ export type OidcClientMaxAggregateOutputType = {
   tokenEndpointAuthMethod: string | null
   scope: string | null
   isActive: boolean | null
+  skipConsent: boolean | null
   logoUri: string | null
   policyUri: string | null
   tosUri: string | null
@@ -76,6 +78,8 @@ export type OidcClientCountAggregateOutputType = {
   tokenEndpointAuthMethod: number
   scope: number
   isActive: number
+  skipConsent: number
+  loginUi: number
   logoUri: number
   policyUri: number
   tosUri: number
@@ -96,6 +100,7 @@ export type OidcClientMinAggregateInputType = {
   tokenEndpointAuthMethod?: true
   scope?: true
   isActive?: true
+  skipConsent?: true
   logoUri?: true
   policyUri?: true
   tosUri?: true
@@ -114,6 +119,7 @@ export type OidcClientMaxAggregateInputType = {
   tokenEndpointAuthMethod?: true
   scope?: true
   isActive?: true
+  skipConsent?: true
   logoUri?: true
   policyUri?: true
   tosUri?: true
@@ -135,6 +141,8 @@ export type OidcClientCountAggregateInputType = {
   tokenEndpointAuthMethod?: true
   scope?: true
   isActive?: true
+  skipConsent?: true
+  loginUi?: true
   logoUri?: true
   policyUri?: true
   tosUri?: true
@@ -229,6 +237,8 @@ export type OidcClientGroupByOutputType = {
   tokenEndpointAuthMethod: string
   scope: string
   isActive: boolean
+  skipConsent: boolean
+  loginUi: runtime.JsonValue | null
   logoUri: string | null
   policyUri: string | null
   tosUri: string | null
@@ -271,6 +281,8 @@ export type OidcClientWhereInput = {
   tokenEndpointAuthMethod?: Prisma.StringFilter<"OidcClient"> | string
   scope?: Prisma.StringFilter<"OidcClient"> | string
   isActive?: Prisma.BoolFilter<"OidcClient"> | boolean
+  skipConsent?: Prisma.BoolFilter<"OidcClient"> | boolean
+  loginUi?: Prisma.JsonNullableFilter<"OidcClient">
   logoUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
   policyUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
   tosUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
@@ -292,6 +304,8 @@ export type OidcClientOrderByWithRelationInput = {
   tokenEndpointAuthMethod?: Prisma.SortOrder
   scope?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  skipConsent?: Prisma.SortOrder
+  loginUi?: Prisma.SortOrderInput | Prisma.SortOrder
   logoUri?: Prisma.SortOrderInput | Prisma.SortOrder
   policyUri?: Prisma.SortOrderInput | Prisma.SortOrder
   tosUri?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -316,6 +330,8 @@ export type OidcClientWhereUniqueInput = Prisma.AtLeast<{
   tokenEndpointAuthMethod?: Prisma.StringFilter<"OidcClient"> | string
   scope?: Prisma.StringFilter<"OidcClient"> | string
   isActive?: Prisma.BoolFilter<"OidcClient"> | boolean
+  skipConsent?: Prisma.BoolFilter<"OidcClient"> | boolean
+  loginUi?: Prisma.JsonNullableFilter<"OidcClient">
   logoUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
   policyUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
   tosUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
@@ -337,6 +353,8 @@ export type OidcClientOrderByWithAggregationInput = {
   tokenEndpointAuthMethod?: Prisma.SortOrder
   scope?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  skipConsent?: Prisma.SortOrder
+  loginUi?: Prisma.SortOrderInput | Prisma.SortOrder
   logoUri?: Prisma.SortOrderInput | Prisma.SortOrder
   policyUri?: Prisma.SortOrderInput | Prisma.SortOrder
   tosUri?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -364,6 +382,8 @@ export type OidcClientScalarWhereWithAggregatesInput = {
   tokenEndpointAuthMethod?: Prisma.StringWithAggregatesFilter<"OidcClient"> | string
   scope?: Prisma.StringWithAggregatesFilter<"OidcClient"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"OidcClient"> | boolean
+  skipConsent?: Prisma.BoolWithAggregatesFilter<"OidcClient"> | boolean
+  loginUi?: Prisma.JsonNullableWithAggregatesFilter<"OidcClient">
   logoUri?: Prisma.StringNullableWithAggregatesFilter<"OidcClient"> | string | null
   policyUri?: Prisma.StringNullableWithAggregatesFilter<"OidcClient"> | string | null
   tosUri?: Prisma.StringNullableWithAggregatesFilter<"OidcClient"> | string | null
@@ -385,6 +405,8 @@ export type OidcClientCreateInput = {
   tokenEndpointAuthMethod?: string
   scope?: string
   isActive?: boolean
+  skipConsent?: boolean
+  loginUi?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   logoUri?: string | null
   policyUri?: string | null
   tosUri?: string | null
@@ -406,6 +428,8 @@ export type OidcClientUncheckedCreateInput = {
   tokenEndpointAuthMethod?: string
   scope?: string
   isActive?: boolean
+  skipConsent?: boolean
+  loginUi?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   logoUri?: string | null
   policyUri?: string | null
   tosUri?: string | null
@@ -427,6 +451,8 @@ export type OidcClientUpdateInput = {
   tokenEndpointAuthMethod?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  skipConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginUi?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   logoUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   policyUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tosUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -448,6 +474,8 @@ export type OidcClientUncheckedUpdateInput = {
   tokenEndpointAuthMethod?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  skipConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginUi?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   logoUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   policyUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tosUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -469,6 +497,8 @@ export type OidcClientCreateManyInput = {
   tokenEndpointAuthMethod?: string
   scope?: string
   isActive?: boolean
+  skipConsent?: boolean
+  loginUi?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   logoUri?: string | null
   policyUri?: string | null
   tosUri?: string | null
@@ -490,6 +520,8 @@ export type OidcClientUpdateManyMutationInput = {
   tokenEndpointAuthMethod?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  skipConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginUi?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   logoUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   policyUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tosUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -511,6 +543,8 @@ export type OidcClientUncheckedUpdateManyInput = {
   tokenEndpointAuthMethod?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  skipConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginUi?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   logoUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   policyUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tosUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -532,6 +566,8 @@ export type OidcClientCountOrderByAggregateInput = {
   tokenEndpointAuthMethod?: Prisma.SortOrder
   scope?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  skipConsent?: Prisma.SortOrder
+  loginUi?: Prisma.SortOrder
   logoUri?: Prisma.SortOrder
   policyUri?: Prisma.SortOrder
   tosUri?: Prisma.SortOrder
@@ -550,6 +586,7 @@ export type OidcClientMaxOrderByAggregateInput = {
   tokenEndpointAuthMethod?: Prisma.SortOrder
   scope?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  skipConsent?: Prisma.SortOrder
   logoUri?: Prisma.SortOrder
   policyUri?: Prisma.SortOrder
   tosUri?: Prisma.SortOrder
@@ -568,6 +605,7 @@ export type OidcClientMinOrderByAggregateInput = {
   tokenEndpointAuthMethod?: Prisma.SortOrder
   scope?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  skipConsent?: Prisma.SortOrder
   logoUri?: Prisma.SortOrder
   policyUri?: Prisma.SortOrder
   tosUri?: Prisma.SortOrder
@@ -618,6 +656,8 @@ export type OidcClientSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   tokenEndpointAuthMethod?: boolean
   scope?: boolean
   isActive?: boolean
+  skipConsent?: boolean
+  loginUi?: boolean
   logoUri?: boolean
   policyUri?: boolean
   tosUri?: boolean
@@ -639,6 +679,8 @@ export type OidcClientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   tokenEndpointAuthMethod?: boolean
   scope?: boolean
   isActive?: boolean
+  skipConsent?: boolean
+  loginUi?: boolean
   logoUri?: boolean
   policyUri?: boolean
   tosUri?: boolean
@@ -660,6 +702,8 @@ export type OidcClientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   tokenEndpointAuthMethod?: boolean
   scope?: boolean
   isActive?: boolean
+  skipConsent?: boolean
+  loginUi?: boolean
   logoUri?: boolean
   policyUri?: boolean
   tosUri?: boolean
@@ -681,12 +725,14 @@ export type OidcClientSelectScalar = {
   tokenEndpointAuthMethod?: boolean
   scope?: boolean
   isActive?: boolean
+  skipConsent?: boolean
+  loginUi?: boolean
   logoUri?: boolean
   policyUri?: boolean
   tosUri?: boolean
 }
 
-export type OidcClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "clientId" | "clientSecret" | "name" | "redirectUris" | "loginUrl" | "defaultReturnTo" | "grantTypes" | "responseTypes" | "tokenEndpointAuthMethod" | "scope" | "isActive" | "logoUri" | "policyUri" | "tosUri", ExtArgs["result"]["oidcClient"]>
+export type OidcClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "clientId" | "clientSecret" | "name" | "redirectUris" | "loginUrl" | "defaultReturnTo" | "grantTypes" | "responseTypes" | "tokenEndpointAuthMethod" | "scope" | "isActive" | "skipConsent" | "loginUi" | "logoUri" | "policyUri" | "tosUri", ExtArgs["result"]["oidcClient"]>
 
 export type $OidcClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "OidcClient"
@@ -740,6 +786,14 @@ export type $OidcClientPayload<ExtArgs extends runtime.Types.Extensions.Internal
      * @displayName 활성화 여부
      */
     isActive: boolean
+    /**
+     * @displayName 권한 동의 화면 생략
+     */
+    skipConsent: boolean
+    /**
+     * @displayName 로그인 화면 설정
+     */
+    loginUi: runtime.JsonValue | null
     /**
      * @displayName 로고 URI
      */
@@ -1190,6 +1244,8 @@ export interface OidcClientFieldRefs {
   readonly tokenEndpointAuthMethod: Prisma.FieldRef<"OidcClient", 'String'>
   readonly scope: Prisma.FieldRef<"OidcClient", 'String'>
   readonly isActive: Prisma.FieldRef<"OidcClient", 'Boolean'>
+  readonly skipConsent: Prisma.FieldRef<"OidcClient", 'Boolean'>
+  readonly loginUi: Prisma.FieldRef<"OidcClient", 'Json'>
   readonly logoUri: Prisma.FieldRef<"OidcClient", 'String'>
   readonly policyUri: Prisma.FieldRef<"OidcClient", 'String'>
   readonly tosUri: Prisma.FieldRef<"OidcClient", 'String'>

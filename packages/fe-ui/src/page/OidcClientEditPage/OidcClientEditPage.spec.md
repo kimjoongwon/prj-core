@@ -42,8 +42,8 @@ OidcClientEditPage
 
 | 항목 | 설명 |
 |------|------|
-| OidcClientEditPageClient | 수정 화면 초기값 계약 |
-| OidcClientEditPageSubmitInput | route로 전달하는 제출 계약 |
+| OidcClientEditPageClient | 수정 화면 초기값 계약 (`skipConsent`, `loginUi` 포함) |
+| OidcClientEditPageSubmitInput | route로 전달하는 제출 계약 (`skipConsent`, `loginUi` 포함) |
 | OidcClientEditPageProps | pure page 입력 계약 |
 | OidcClientEditPage | 공개 계약 요소 |
 
@@ -51,6 +51,8 @@ OidcClientEditPage
 
 | 모듈 | 용도 |
 |------|------|
+| @cocrepo/constant | first-party OIDC client 판별 |
+| @cocrepo/type | OIDC client 로그인 UI override 타입 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | @heroui/react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
@@ -60,6 +62,8 @@ OidcClientEditPage
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-05 | client별 로그인 화면 override를 초기화/저장하는 `loginUi` 계약과 브랜드 컬러 검증을 추가 | codex |
+| 2026-05-05 | first-party OIDC 클라이언트의 권한 동의 화면 생략 수정 계약과 custom scheme redirect URI 검증 허용 추가 | codex |
 | 2026-03-30 | 화면 데이터/이벤트 소유 경계를 상위 컨테이너 기준으로 정리 | codex |
 | 2026-03-29 | OIDC 클라이언트 수정 화면의 조회/저장/라우팅 책임 경계 정리 | codex |
 | 2026-03-28 | OIDC 클라이언트 표시명 기준 정리 | codex |

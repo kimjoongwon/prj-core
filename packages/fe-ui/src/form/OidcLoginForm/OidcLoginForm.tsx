@@ -1,5 +1,6 @@
 "use client";
 
+import type { OidcClientLoginUi } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { Button, Checkbox, Input, Link } from "../../control";
 import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
@@ -62,6 +63,45 @@ function getErrorTone(error: LoginErrorResponse): "danger" | "warning" {
 	return error.error === "ACCOUNT_LOCKED_TEMPORARY" ? "warning" : "danger";
 }
 
+const HEX_COLOR_PATTERN = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+
+const getSafeBrandColor = (value?: string) => {
+	const trimmed = value?.trim();
+	return trimmed && HEX_COLOR_PATTERN.test(trimmed) ? trimmed : undefined;
+};
+
+const getLoginUiText = (value?: string) => {
+	const trimmed = value?.trim();
+	return trimmed || undefined;
+};
+
+const resolveLoginHeadline = (client?: OidcLoginFormProps["client"]): string =>
+	getLoginUiText(client?.loginUi?.headline) ?? "로그인";
+
+const resolveLoginDescription = (
+	client?: OidcLoginFormProps["client"],
+): string => {
+	const customDescription = getLoginUiText(client?.loginUi?.description);
+	if (customDescription) {
+		return customDescription;
+	}
+
+	if (client) {
+		return "{{clientName}}에 계속 접속하려면 Onora 계정으로 로그인하세요.".replace(
+			"{{clientName}}",
+			client.name,
+		);
+	}
+
+	return "Onora 계정으로 로그인하세요.";
+};
+
+const resolveBrandLabel = (
+	client?: OidcLoginFormProps["client"],
+): string | undefined =>
+	getLoginUiText(client?.loginUi?.brandLabel) ??
+	(client?.loginUi?.variant === "branded" ? client.name : undefined);
+
 export interface OidcLoginFormState {
 	email: string;
 	password: string;
@@ -83,6 +123,7 @@ export interface OidcLoginFormProps {
 		clientId: string;
 		name: string;
 		logoUri?: string;
+		loginUi?: OidcClientLoginUi | null;
 	} | null;
 	/** DEV 모드 여부 */
 	isDev?: boolean;
@@ -114,19 +155,29 @@ export const OidcLoginForm = observer(
 				: [];
 		const actionsToRender =
 			recoveryActions.length > 0 ? recoveryActions : fallbackRecoveryActions;
+		const brandLabel = resolveBrandLabel(client);
+		const brandColor = getSafeBrandColor(client?.loginUi?.brandColor);
 
 		return (
 			<AuthCard>
+				{brandLabel && (
+					<div className="mb-4 flex justify-center">
+						<span
+							className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
+							style={
+								brandColor
+									? { borderColor: brandColor, color: brandColor }
+									: undefined
+							}
+						>
+							{t(brandLabel)}
+						</span>
+					</div>
+				)}
 				<AuthCardHeader
 					iconPath="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-					title="로그인"
-					subtitle={
-						client
-							? t(
-									"{{clientName}}에서 예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.",
-								).replace("{{clientName}}", client.name)
-							: "예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요."
-					}
+					title={t(resolveLoginHeadline(client))}
+					subtitle={t(resolveLoginDescription(client))}
 					logoUri={client?.logoUri}
 					logoAlt={client?.name}
 				/>

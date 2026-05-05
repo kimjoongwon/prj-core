@@ -1,11 +1,23 @@
-import { applyFirstPartyOidcRuntimeConfig } from "@cocrepo/service";
+import {
+	applyFirstPartyOidcRuntimeConfig,
+	isFirstPartyOidcClientId,
+} from "@cocrepo/service";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import type { OidcConfig } from "../../../config/oidc.config";
 import { AccountService } from "../account.service";
 import { RedisOidcAdapterFactory } from "../oidc.adapter";
 import { OidcClientRepository } from "../oidc-client.repository";
-import type { OidcClientConfig, OidcConfiguration } from "../types";
+import type {
+	Grant,
+	OidcClientConfig,
+	OidcConfiguration,
+	OidcProviderContext,
+} from "../types";
+
+interface RuntimeOidcProviderClient extends OidcClientConfig {
+	skipConsent: boolean;
+}
 
 /**
  * OIDC Configuration Service
@@ -31,11 +43,33 @@ export class OidcConfigurationService {
 			this.configService.get<string>("IDP_CLIENT_URL") ||
 			"http://localhost:3008";
 		const clients = await this.loadClients();
+		const skipConsentClientIds = new Set(
+			clients
+				.filter(
+					(client) =>
+						client.skipConsent && isFirstPartyOidcClientId(client.client_id),
+				)
+				.map((client) => client.client_id),
+		);
 
 		return {
 			adapter: this.adapterFactory.getAdapterFactory(),
 			findAccount: this.accountService.findAccount,
-			clients,
+			clients: clients.map((client) => ({
+				client_id: client.client_id,
+				client_secret: client.client_secret,
+				client_name: client.client_name,
+				redirect_uris: client.redirect_uris,
+				grant_types: client.grant_types,
+				response_types: client.response_types,
+				token_endpoint_auth_method: client.token_endpoint_auth_method,
+				scope: client.scope,
+				logo_uri: client.logo_uri,
+				policy_uri: client.policy_uri,
+				tos_uri: client.tos_uri,
+			})),
+			loadExistingGrant: (ctx) =>
+				this.loadExistingGrant(ctx, skipConsentClientIds),
 
 			// JWKS 서명 키 (RS256) - 환경변수에서 로드
 			...(oidcConfig?.jwks && { jwks: oidcConfig.jwks }),
@@ -120,7 +154,7 @@ export class OidcConfigurationService {
 	/**
 	 * DB에서 활성 OIDC 클라이언트를 로드합니다.
 	 */
-	private async loadClients(): Promise<OidcClientConfig[]> {
+	private async loadClients(): Promise<RuntimeOidcProviderClient[]> {
 		try {
 			const clients = await this.oidcClientRepository.findActiveClients();
 
@@ -142,6 +176,10 @@ export class OidcConfigurationService {
 					response_types: runtimeClient.responseTypes,
 					token_endpoint_auth_method: runtimeClient.tokenEndpointAuthMethod,
 					scope: runtimeClient.scope,
+					logo_uri: runtimeClient.logoUri ?? undefined,
+					policy_uri: runtimeClient.policyUri ?? undefined,
+					tos_uri: runtimeClient.tosUri ?? undefined,
+					skipConsent: runtimeClient.skipConsent,
 				};
 			});
 		} catch (error) {
@@ -150,5 +188,49 @@ export class OidcConfigurationService {
 		}
 
 		return [];
+	}
+
+	private async loadExistingGrant(
+		ctx: OidcProviderContext,
+		skipConsentClientIds: Set<string>,
+	): Promise<Grant | undefined> {
+		if (this.hasPromptConsent(ctx)) {
+			return undefined;
+		}
+
+		const clientId = this.resolveGrantClientId(ctx);
+		const grantId =
+			ctx.oidc?.result?.consent?.grantId ||
+			(clientId ? ctx.oidc?.session?.grantIdFor(clientId) : undefined);
+		if (grantId) {
+			return ctx.oidc?.provider?.Grant.find(grantId);
+		}
+
+		const accountId = ctx.oidc?.account?.accountId;
+		const scope = ctx.oidc?.params?.scope;
+		const provider = ctx.oidc?.provider;
+		if (
+			!accountId ||
+			!clientId ||
+			!scope ||
+			!provider ||
+			!skipConsentClientIds.has(clientId)
+		) {
+			return undefined;
+		}
+
+		const grant = new provider.Grant({ accountId, clientId });
+		grant.addOIDCScope(scope);
+		await grant.save();
+		return grant;
+	}
+
+	private hasPromptConsent(ctx: OidcProviderContext): boolean {
+		const prompt = ctx.oidc?.params?.prompt;
+		return typeof prompt === "string" && prompt.split(" ").includes("consent");
+	}
+
+	private resolveGrantClientId(ctx: OidcProviderContext): string | undefined {
+		return ctx.oidc?.client?.clientId || ctx.oidc?.params?.client_id;
 	}
 }

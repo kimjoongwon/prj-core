@@ -22,27 +22,15 @@ function AuthLayout({ children }: { children: ReactNode }) {
 			<div className="absolute bottom-[-6rem] right-[-2rem] h-80 w-80 rounded-full bg-success/10 blur-3xl dark:bg-success/15" />
 
 			<div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col justify-center px-4 py-10 sm:px-6 lg:px-8">
-				<div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-16">
-					<div className="lg:hidden">
-						<p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary-600 dark:text-primary-400">
-							Onora Account Center
-						</p>
-						<h1 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950 dark:text-slate-50">
-							{t("서비스 이용에 필요한 계정 확인을 진행해 주세요.")}
-						</h1>
-						<p className="mt-3 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300">
-							{t(
-								"로그인, 계정 복구, 서비스 연동 승인을 한 흐름으로 정리해 예약 서비스 이용을 바로 이어갈 수 있게 구성했습니다.",
-							)}
-						</p>
-					</div>
-
-					<div className="hidden lg:block">
+				<div className="idp-auth-layout-grid grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-16">
+					<div className="idp-auth-intro-panel hidden lg:block">
 						<p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-600 dark:text-primary-400">
 							Onora Account Center
 						</p>
 						<h1 className="mt-4 max-w-2xl text-4xl font-semibold tracking-tight text-slate-950 dark:text-slate-50">
-							{t("로그인과 계정 복구, 서비스 연동 승인을 한 곳에서 처리합니다.")}
+							{t(
+								"로그인과 계정 복구, 서비스 연동 승인을 한 곳에서 처리합니다.",
+							)}
 						</h1>
 						<p className="mt-4 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-300">
 							{t(

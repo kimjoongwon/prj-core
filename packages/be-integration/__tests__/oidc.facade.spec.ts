@@ -10,6 +10,7 @@ describe("OidcFacade", () => {
 		clientSecret: "admin-secret",
 		redirectUri:
 			"http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
+		scope: "openid profile email roles",
 	};
 
 	const storybookClient = {
@@ -17,6 +18,14 @@ describe("OidcFacade", () => {
 		clientSecret: "storybook-secret",
 		redirectUri:
 			"http://localhost:6006/api/v1/auth/callback?clientId=storybook-web",
+		scope: "openid profile email roles",
+	};
+
+	const mobileClient = {
+		clientId: "user-mobile",
+		clientSecret: null,
+		redirectUri: "onora-mobile://auth/callback",
+		scope: "openid profile email",
 	};
 
 	beforeEach(async () => {
@@ -68,5 +77,16 @@ describe("OidcFacade", () => {
 			storybookClient.redirectUri,
 		);
 		expect(result.returnTo).toBe("http://localhost:6006/?path=/story/example");
+	});
+
+	it("client config의 scope를 authorization request에 사용해야 한다", () => {
+		const result = facade.createAuthorizationRequest(mobileClient, "/");
+
+		const url = new URL(result.authorizationUrl);
+		expect(url.searchParams.get("client_id")).toBe("user-mobile");
+		expect(url.searchParams.get("redirect_uri")).toBe(
+			"onora-mobile://auth/callback",
+		);
+		expect(url.searchParams.get("scope")).toBe("openid profile email");
 	});
 });

@@ -1,4 +1,5 @@
 import { OmitType } from "@nestjs/swagger";
+import { BooleanFieldOptional } from "@cocrepo/decorator";
 
 import { COMMON_ENTITY_FIELDS } from "../constant";
 import { OidcClientDto } from "../oidc/oidc-client.dto";
@@ -15,4 +16,8 @@ import { OidcClientDto } from "../oidc/oidc-client.dto";
 export class CreateOidcClientDto extends OmitType(OidcClientDto, [
 	...COMMON_ENTITY_FIELDS,
 	"isActive",
-]) {}
+	"skipConsent",
+]) {
+	@BooleanFieldOptional({ description: "권한 동의 화면 생략 여부" })
+	skipConsent?: boolean;
+}

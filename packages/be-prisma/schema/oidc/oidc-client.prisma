@@ -36,6 +36,10 @@ model OidcClient {
   scope                   String    @default("openid profile email")
   /// @displayName 활성화 여부
   isActive                Boolean   @default(true) @map("is_active")
+  /// @displayName 권한 동의 화면 생략
+  skipConsent             Boolean   @default(false) @map("skip_consent")
+  /// @displayName 로그인 화면 설정
+  loginUi                 Json?     @map("login_ui")
   /// @displayName 로고 URI
   logoUri                 String?   @map("logo_uri")
   /// @displayName 정책 URI

@@ -48,15 +48,12 @@ const LEGACY_OIDC_CLIENT_ID_MAP = {
 	admin: "admin-web",
 	storybook: "storybook-web",
 	idpWeb: "idp-web",
-	mobile: "user-mobile",
 	swagger: "swagger-web",
-	"prj-core-mobile": "user-mobile",
 	"prj-core-swagger": "swagger-web",
 } as const;
 
 const LEGACY_OIDC_CLIENT_IDS_BY_CANONICAL_ID = {
 	"storybook-web": ["storybook"],
-	"user-mobile": ["prj-core-mobile"],
 	"swagger-web": ["prj-core-swagger"],
 } as const;
 
@@ -69,14 +66,16 @@ interface ResolvedOidcClient {
 	clientId: string;
 	clientSecret: string | null;
 	redirectUri: string;
-	loginUrl: string;
-	defaultReturnTo: string;
+	loginUrl: string | null;
+	defaultReturnTo: string | null;
+	scope: string;
+	hasAuthShell: boolean;
 }
 
 interface OidcCallbackResult {
 	returnTo?: string;
 	defaultReturnTo: string;
-	loginUrl: string;
+	loginUrl: string | null;
 }
 
 type SpaceTenantLike = {
@@ -126,7 +125,7 @@ export class AuthApplicationService {
 		returnTo?: string,
 		clientId = DEFAULT_OIDC_CLIENT_ID,
 	): Promise<string> {
-		const client = await this.resolveAuthShellClient(clientId);
+		const client = await this.resolveOidcClient(clientId);
 		const { state, codeVerifier, authorizationUrl } =
 			this.oidcFacade.createAuthorizationRequest(
 				this.toProtocolClientConfig(client),
@@ -177,7 +176,7 @@ export class AuthApplicationService {
 			legacyClientId,
 		);
 		const returnTo = legacyReturnTo ?? storedReturnTo;
-		const client = await this.resolveAuthShellClient(clientId, {
+		const client = await this.resolveOidcClient(clientId, {
 			requireActive: false,
 		});
 
@@ -233,11 +232,11 @@ export class AuthApplicationService {
 		);
 		this.setSessionIdCookie(res, sessionId);
 
-		return {
-			returnTo,
-			defaultReturnTo: client.defaultReturnTo,
-			loginUrl: client.loginUrl,
-		};
+			return {
+				returnTo,
+				defaultReturnTo: client.defaultReturnTo || "/",
+				loginUrl: client.loginUrl,
+			};
 	}
 
 	async refreshTokenWithIdp(
@@ -481,7 +480,7 @@ export class AuthApplicationService {
 			const { loginUrl } = await this.getClientRedirects(
 				DEFAULT_OIDC_CLIENT_ID,
 			);
-			return loginUrl;
+			return loginUrl ?? "/admin/auth/login";
 		}
 
 		const user = await this.createUserForVerifiedSignUp({
@@ -494,7 +493,7 @@ export class AuthApplicationService {
 		await this.emailVerificationService.markVerified(verification.id, user.id);
 
 		const { loginUrl } = await this.getClientRedirects(DEFAULT_OIDC_CLIENT_ID);
-		return loginUrl;
+		return loginUrl ?? "/admin/auth/login";
 	}
 
 	/**
@@ -726,16 +725,18 @@ export class AuthApplicationService {
 	// =========================================================================
 
 	async getClientRedirects(clientId: string): Promise<{
-		loginUrl: string;
-		defaultReturnTo: string;
+		loginUrl: string | null;
+		defaultReturnTo: string | null;
+		hasAuthShell: boolean;
 	}> {
-		const client = await this.resolveAuthShellClient(clientId, {
+		const client = await this.resolveOidcClient(clientId, {
 			requireActive: false,
 		});
 
 		return {
 			loginUrl: client.loginUrl,
 			defaultReturnTo: client.defaultReturnTo,
+			hasAuthShell: client.hasAuthShell,
 		};
 	}
 
@@ -849,16 +850,6 @@ export class AuthApplicationService {
 		].filter((candidate): candidate is string => Boolean(candidate));
 	}
 
-	private async resolveAuthShellClient(
-		clientId: string,
-		options?: { requireActive?: boolean },
-	): Promise<ResolvedOidcClient> {
-		return this.resolveOidcClient(clientId, {
-			requireActive: options?.requireActive,
-			requireAuthShell: true,
-		});
-	}
-
 	private async resolveOidcClient(
 		clientId: string,
 		options?: {
@@ -903,22 +894,28 @@ export class AuthApplicationService {
 			throw new BadRequestException("Redirect URI가 설정되지 않았습니다");
 		}
 
-		if (
-			options?.requireAuthShell &&
-			(!client.loginUrl || !client.defaultReturnTo)
-		) {
+		const runtimeClient = applyFirstPartyOidcRuntimeConfig({
+			clientId: client.clientId,
+			clientSecret: client.clientSecret,
+			redirectUri,
+			loginUrl: client.loginUrl,
+			defaultReturnTo: client.defaultReturnTo,
+			scope: client.scope,
+		});
+		const hasAuthShell = Boolean(
+			runtimeClient.loginUrl && runtimeClient.defaultReturnTo,
+		);
+
+		if (options?.requireAuthShell && !hasAuthShell) {
 			throw new BadRequestException(
 				"로그인 셸 URL과 기본 복귀 URL이 설정되지 않았습니다",
 			);
 		}
 
-		return applyFirstPartyOidcRuntimeConfig({
-			clientId: client.clientId,
-			clientSecret: client.clientSecret,
-			redirectUri,
-			loginUrl: client.loginUrl || "/auth/login",
-			defaultReturnTo: client.defaultReturnTo || "/",
-		});
+		return {
+			...runtimeClient,
+			hasAuthShell,
+		};
 	}
 
 	private toProtocolClientConfig(
@@ -928,6 +925,7 @@ export class AuthApplicationService {
 			clientId: client.clientId,
 			clientSecret: client.clientSecret,
 			redirectUri: client.redirectUri,
+			scope: client.scope,
 		};
 	}
 

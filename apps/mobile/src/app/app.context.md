@@ -12,11 +12,10 @@
 
 | route | owner spec | 설명 |
 |------|------------|------|
-| `/` | `apps/mobile/src/app/index.spec.md` | wrapper inventory home |
+| `/` | `apps/mobile/src/app/index.spec.md` | 예약 플랫폼 하단 탭 메인 |
 | `/_layout` | `apps/mobile/src/app/_layout.tsx` | Expo Router root shell |
-| `/auth/login` | `apps/mobile/src/app/index.spec.md` | `idp/web` 로그인 진입 라우트 |
+| `/auth/login` | `apps/mobile/src/app/index.spec.md` | `user-mobile` 로그인 진입 라우트 |
 | `/auth/callback` | `apps/mobile/src/app/index.spec.md` | OIDC 콜백 처리 라우트 |
-| `/dashboard` | `apps/mobile/src/app/index.spec.md` | 인증 필수 진입 라우트 |
 
 ## 테스트 전략
 
@@ -38,27 +37,29 @@
 
 | ID | 대상 | 설명 |
 |----|------|------|
-| `MO-E2E-001` | `/` | 앱 launch 후 인벤토리 홈 제목과 Button Showcase 섹션이 보여야 합니다. |
-| `MO-E2E-002` | `/auth/login` | 로그인 라우트에서 외부 브라우저 없이 WebView가 idp/web URL을 로드하고 callback scheme을 앱 내부로 전달해야 합니다. |
-| `MO-E2E-003` | `/auth/callback` | callback 처리 후 세션 검증 통과 시 `next` 경로로 라우트해야 합니다. |
-| `MO-E2E-004` | `/dashboard` | 비인증 접근은 `/auth/login`로 `next=/dashboard`를 보존해 이동해야 합니다. |
+| `MO-E2E-001` | `/` | 앱 launch 후 오노라 하단 탭 메인의 홈/예약/내 정보 탭이 보여야 합니다. |
+| `MO-E2E-002` | `/auth/login` | 로그인 라우트에서 외부 브라우저 없이 WebView가 `user-mobile` IDP API 로그인 URL을 로드하고 callback scheme을 앱 내부로 전달해야 합니다. |
+| `MO-E2E-003` | `/auth/callback` | callback 처리 후 세션 검증 통과 시 루트 하단 탭 메인(`/`)으로 라우트해야 합니다. |
 
 ## auth session 체크
 
 - `AuthSessionGate`는 callback route를 제외한 초기 route 렌더 전에 `mobileAuthStore.verifySession()` 기반 상태 정합성을 먼저 수행한다.
 - 인증 상태면 홈(`/`)으로, 비인증 상태면 `/auth/login`으로 route를 먼저 보낸다.
 - 목표 route 화면의 layout이 확인된 뒤에만 `SplashScreen.hideAsync()`로 native splash view를 끈다.
-- `/auth/login`은 Chrome/Safari를 열지 않고 앱 내 WebView로 idp/web 로그인 URL을 로드한다.
-- Android 에뮬레이터 WebView는 IDP가 반환한 `localhost` 절대 리다이렉트를 `10.0.2.2`로 보정해 host 머신의 idp-api/idp-web dev 서버를 계속 바라본다.
-- WebView에서 `prjcore://auth/callback` navigation이 발생하면 이를 가로채 `/auth/callback` route로 전달한다.
-- `/auth/callback`은 에러 파라미터나 콜백 교환 실패 시 재시도 가능한 실패 상태를 표시한다.
+- `/auth/login`은 Chrome/Safari를 열지 않고 앱 내 WebView로 `clientId=user-mobile` IDP API 로그인 URL을 로드한다.
+- `/auth/login`은 네이티브 로그인 폼/안내 카드/CTA를 렌더링하지 않고, 사용자 문구와 입력 폼은 WebView 내부 IDP Web이 소유한다.
+- Android 에뮬레이터 WebView는 IDP가 반환한 `localhost` 절대 리다이렉트를 `10.0.2.2`로 보정해 host 머신의 IDP dev 서버를 계속 바라본다.
+- WebView에서 `onora-mobile://auth/callback` navigation이 발생하면 이를 가로채 `/auth/callback` route로 전달한다.
+- `/auth/callback`은 에러 파라미터나 콜백 교환 실패 시 개발자용 callback/API 용어 대신 재시도 가능한 사용자 실패 상태를 표시한다.
 - 성공 callback은 `mobileAuthStore.verifySession()`으로 native API client의 쿠키 기반 세션을 검증하고, store 인증 상태가 `authenticated`로 갱신된 뒤에만 deep-link 대상을 라우팅한다.
-- 인증된 홈(`/`) 화면과 대시보드(`/dashboard`)는 `mobileAuthStore.logout()` 기반 로그아웃 버튼을 제공하고, 완료 후 `/auth/login`으로 이동한다.
+- 인증된 홈(`/`) 화면은 `홈`, `예약`, `내 정보` 하단 탭을 제공하고, `내 정보` 탭에서 `mobileAuthStore.logout()` 완료 후 `/auth/login`으로 이동한다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-05 | `/auth/login`을 native UI 없는 WebView-only 컨테이너로 정정하고 IDP Web 로그인 화면 소유권을 명시 | codex |
+| 2026-05-05 | 모바일 로그인 clientId/callback scheme/루트 하단 탭 메인 계약을 `user-mobile`/`onora-mobile`/`/` 기준으로 정정 | codex |
 | 2026-04-14 | 모바일 app 수준 route/test ownership 과 Detox smoke 시나리오를 추가 | codex |
 | 2026-05-04 | Stage 3 대상 auth 라우트(`login/callback/dashboard`) + `index.spec.md` 정렬 및 세션 체크 항목 동기화 | codex |
 | 2026-05-04 | Expo Router runtime bundle 보호를 위해 route unit test 와 non-route auth 모듈 위치를 `src/app` 밖으로 정리 | codex |
@@ -67,3 +68,4 @@
 | 2026-05-04 | Android 에뮬레이터 WebView의 IDP localhost 리다이렉트 보정 정책 추가 | codex |
 | 2026-05-04 | callback 성공 후 native verify-token 검증을 통과해야 홈으로 이동하도록 세션 갱신 정책 추가 | codex |
 | 2026-05-04 | 홈/대시보드 로그아웃 버튼 정책 추가 | codex |
+| 2026-05-05 | 모바일 로그인/콜백 화면의 오노라 예약 플랫폼 문구와 내부 경로 비노출 정책 추가 | codex |

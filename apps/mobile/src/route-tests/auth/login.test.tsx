@@ -1,31 +1,27 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
-import * as authUtils from "@/auth/_utils/auth";
+import { render, screen, waitFor } from "@testing-library/react-native";
 import LoginPage from "@/app/auth/login";
+import * as authUtils from "@/auth/_utils/auth";
 import { mobileAuthStore } from "@/auth/auth-store";
 
 const mockReplace = jest.fn();
+const mockUseLocalSearchParams = jest.fn();
 
-const LOGIN_URL =
-	"https://idp-web/api/v1/auth/login?clientId=idp-web&returnTo=prjcore%3A%2F%2Fauth%2Fcallback%3FreturnTo%3D%2Fdashboard";
 const CALLBACK_URL =
-	"prjcore://auth/callback?code=auth-code&state=auth-state&returnTo=%2Fdashboard";
+	"onora-mobile://auth/callback?code=auth-code&state=auth-state&returnTo=%2F";
 
 jest.mock("@cocrepo/mo-ui", () => {
 	const React = jest.requireActual<typeof import("react")>("react");
-	const { Pressable, Text } =
+	const { View } =
 		jest.requireActual<typeof import("react-native")>("react-native");
 
 	return {
-		Button: ({ children, onPress, isDisabled }: any) => (
-			<Pressable onPress={isDisabled ? undefined : onPress}>
-				<Text>{children}</Text>
-			</Pressable>
-		),
+		ScreenFrame: ({ children }: any) =>
+			React.createElement(View, { accessibilityLabel: "screen-frame" }, children),
 	};
 });
 
 jest.mock("expo-router", () => ({
-	useLocalSearchParams: () => ({ returnTo: "/dashboard" }),
+	useLocalSearchParams: () => mockUseLocalSearchParams(),
 	useRouter: () => ({
 		replace: mockReplace,
 	}),
@@ -49,11 +45,8 @@ jest.mock("react-native-webview", () => {
 describe("mobile auth login route", () => {
 	beforeEach(() => {
 		mockReplace.mockReset();
-		jest.spyOn(authUtils, "parseAuthLoginParams").mockReturnValue({
-			returnTo: "/dashboard",
-			clientId: "idp-web",
-		});
-		jest.spyOn(authUtils, "buildAuthLoginUrl").mockReturnValue(LOGIN_URL);
+		mockUseLocalSearchParams.mockReset();
+		mockUseLocalSearchParams.mockReturnValue({ returnTo: "/" });
 		jest
 			.spyOn(mobileAuthStore, "setNextPathAfterLogin")
 			.mockImplementation(() => undefined);
@@ -63,18 +56,19 @@ describe("mobile auth login route", () => {
 		jest.restoreAllMocks();
 	});
 
-	it("진입 즉시 외부 브라우저가 아니라 WebView에 로그인 URL을 로드해야 한다", async () => {
+	it("full-screen WebView에 user-mobile 로그인 URL만 로드해야 한다", async () => {
 		render(<LoginPage />);
 
 		await waitFor(() => {
-			expect(screen.getByLabelText("auth-login-webview").props.source).toEqual({
-				uri: LOGIN_URL,
-			});
+			const source = screen.getByLabelText("auth-login-webview").props.source;
+
+			expect(source.uri).toContain("/api/v1/auth/login");
+			expect(source.uri).toContain("clientId=user-mobile");
+			expect(source.uri).toContain("onora-mobile");
 		});
 
-		expect(mobileAuthStore.setNextPathAfterLogin).toHaveBeenCalledWith("/dashboard");
-		expect(screen.getByText("오노라 로그인")).toBeTruthy();
-		expect(LOGIN_URL).toContain("returnTo=prjcore");
+		expect(mobileAuthStore.setNextPathAfterLogin).toHaveBeenCalledWith("/");
+		expect(screen.queryByText("로그인 계속")).toBeNull();
 	});
 
 	it("WebView에서 callback scheme을 감지하면 앱 내부 callback 라우트로 이동해야 한다", async () => {
@@ -90,44 +84,23 @@ describe("mobile auth login route", () => {
 			params: {
 				code: "auth-code",
 				state: "auth-state",
-				returnTo: "/dashboard",
+				returnTo: "/",
 			},
 		});
 	});
 
 	it("Android WebView용 localhost 리다이렉트를 에뮬레이터 host로 보정해야 한다", () => {
 		const redirectedUrl =
-			"http://localhost:3207/oidc/auth?client_id=idp-web";
+			"http://localhost:3007/oidc/auth?client_id=user-mobile";
 
 		expect(
 			authUtils.rewriteLocalhostUrlForAndroidEmulator(
 				redirectedUrl,
 				"android",
 			),
-		).toBe("http://10.0.2.2:3207/oidc/auth?client_id=idp-web");
+		).toBe("http://10.0.2.2:3007/oidc/auth?client_id=user-mobile");
 		expect(
-			authUtils.rewriteLocalhostUrlForAndroidEmulator(
-				redirectedUrl,
-				"ios",
-			),
+			authUtils.rewriteLocalhostUrlForAndroidEmulator(redirectedUrl, "ios"),
 		).toBe(redirectedUrl);
-	});
-
-	it("WebView 로딩 실패 시 재시도 버튼으로 동일 URL을 다시 로드해야 한다", async () => {
-		render(<LoginPage />);
-
-		const webView = screen.getByLabelText("auth-login-webview");
-		fireEvent(webView, "error", {
-			nativeEvent: { description: "network error" },
-		});
-
-		const retryButton = await waitFor(() => screen.getByText("오노라 로그인 다시 시도"));
-		fireEvent.press(retryButton);
-
-		await waitFor(() => {
-			expect(screen.getByLabelText("auth-login-webview").props.source).toEqual({
-				uri: LOGIN_URL,
-			});
-		});
 	});
 });

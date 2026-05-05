@@ -1,3 +1,5 @@
+import { OIDC_FIRST_PARTY_CLIENT_IDS } from "@cocrepo/constant";
+
 interface RuntimeOidcClientConfig {
 	clientId: string;
 	redirectUri?: string;
@@ -47,12 +49,21 @@ const FIRST_PARTY_OIDC_CLIENT_ENV_CONFIG: Record<
 		defaultReturnToEnv: "OIDC_IDP_WEB_DEFAULT_RETURN_TO",
 		defaultReturnToPath: "/dashboard",
 	},
+	"user-mobile": {
+		redirectUriEnv: "OIDC_USER_MOBILE_REDIRECT_URI",
+	},
 	"swagger-web": {
 		baseUrlEnv: "OIDC_ISSUER",
 		redirectUriEnv: "OIDC_SWAGGER_REDIRECT_URI",
 		redirectUriPath: "/api/oauth2-redirect.html",
 	},
 };
+
+export const FIRST_PARTY_OIDC_CLIENT_IDS: readonly string[] =
+	OIDC_FIRST_PARTY_CLIENT_IDS;
+
+export const isFirstPartyOidcClientId = (clientId: string) =>
+	FIRST_PARTY_OIDC_CLIENT_IDS.includes(clientId);
 
 export function applyFirstPartyOidcRuntimeConfig<
 	TClient extends RuntimeOidcClientConfig,

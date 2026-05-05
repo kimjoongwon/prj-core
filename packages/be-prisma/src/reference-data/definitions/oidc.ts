@@ -12,6 +12,16 @@
 /**
  * OIDC Client 시드 데이터 인터페이스
  */
+type OidcClientLoginUi = {
+	variant?: "default" | "compact" | "branded";
+	headline?: string;
+	description?: string;
+	brandLabel?: string;
+	brandColor?: string;
+	showIntroPanel?: boolean;
+	mobileFullScreen?: boolean;
+};
+
 export interface OidcClientSeedData {
 	clientId: string;
 	clientSecret: string | null;
@@ -24,6 +34,8 @@ export interface OidcClientSeedData {
 	tokenEndpointAuthMethod: string;
 	scope: string;
 	isActive: boolean;
+	skipConsent?: boolean;
+	loginUi?: OidcClientLoginUi | null;
 	logoUri?: string | null;
 	policyUri?: string | null;
 	tosUri?: string | null;
@@ -90,6 +102,11 @@ const oidcIssuer =
 const oidcSwaggerRedirectUri =
 	process.env.OIDC_SWAGGER_REDIRECT_URI ||
 	resolveOidcSeedUrl(oidcIssuer, "/api/oauth2-redirect.html");
+const oidcUserMobileRedirectUri =
+	process.env.OIDC_USER_MOBILE_REDIRECT_URI || "onora-mobile://auth/callback";
+const oidcUserMobileExpoRedirectUri =
+	process.env.OIDC_USER_MOBILE_EXPO_REDIRECT_URI ||
+	"exp://localhost:8081/--/auth/callback";
 
 /**
  * OIDC Client 시드 데이터
@@ -108,6 +125,16 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tokenEndpointAuthMethod: "client_secret_post",
 		scope: "openid profile email roles",
 		isActive: true,
+		skipConsent: true,
+		loginUi: {
+			variant: "branded",
+			headline: "관리자 계정으로 로그인",
+			description: "운영 콘솔 접근을 위해 Onora 계정으로 로그인하세요.",
+			brandLabel: "Admin Web",
+			brandColor: "#2563eb",
+			showIntroPanel: true,
+			mobileFullScreen: false,
+		},
 		logoUri: null,
 		policyUri: null,
 		tosUri: null,
@@ -124,6 +151,8 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tokenEndpointAuthMethod: "client_secret_post",
 		scope: "openid profile email roles",
 		isActive: true,
+		skipConsent: true,
+		loginUi: null,
 		logoUri: null,
 		policyUri: null,
 		tosUri: null,
@@ -132,10 +161,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		clientId: "user-mobile",
 		clientSecret: null, // Public client (PKCE required)
 		name: "PRJ Core Mobile App",
-		redirectUris: [
-			"prjcore://auth/callback",
-			"exp://localhost:8081/--/auth/callback",
-		],
+		redirectUris: [oidcUserMobileRedirectUri, oidcUserMobileExpoRedirectUri],
 		loginUrl: null,
 		defaultReturnTo: null,
 		grantTypes: ["authorization_code", "refresh_token"],
@@ -143,6 +169,16 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tokenEndpointAuthMethod: "none", // Public client
 		scope: "openid profile email",
 		isActive: true,
+		skipConsent: true,
+		loginUi: {
+			variant: "compact",
+			headline: "오노라 로그인",
+			description: "예약과 방문 일정을 계속 확인하려면 계정으로 로그인하세요.",
+			brandLabel: "Onora Mobile",
+			brandColor: "#16a34a",
+			showIntroPanel: false,
+			mobileFullScreen: true,
+		},
 		logoUri: null,
 		policyUri: null,
 		tosUri: null,
@@ -159,6 +195,16 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tokenEndpointAuthMethod: "client_secret_post",
 		scope: "openid profile email roles",
 		isActive: true,
+		skipConsent: true,
+		loginUi: {
+			variant: "branded",
+			headline: "IDP Console 로그인",
+			description: "IDP 설정과 계정 관리를 위해 Onora 계정으로 로그인하세요.",
+			brandLabel: "IDP Web",
+			brandColor: "#7c3aed",
+			showIntroPanel: true,
+			mobileFullScreen: false,
+		},
 		logoUri: null,
 		policyUri: null,
 		tosUri: null,
@@ -175,6 +221,8 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tokenEndpointAuthMethod: "none",
 		scope: "openid profile email roles",
 		isActive: true,
+		skipConsent: true,
+		loginUi: null,
 		logoUri: null,
 		policyUri: null,
 		tosUri: null,

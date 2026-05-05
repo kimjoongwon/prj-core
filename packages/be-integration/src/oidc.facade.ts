@@ -6,6 +6,7 @@ export interface OidcClientProtocolConfig {
 	clientId: string;
 	clientSecret?: string | null;
 	redirectUri: string;
+	scope?: string;
 }
 
 interface OidcServerConfig {
@@ -57,7 +58,7 @@ export class OidcFacade {
 			response_type: "code",
 			client_id: client.clientId,
 			redirect_uri: client.redirectUri,
-			scope: "openid profile email roles",
+			scope: client.scope || "openid profile email",
 			state,
 			code_challenge: codeChallenge,
 			code_challenge_method: "S256",

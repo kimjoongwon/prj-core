@@ -32,25 +32,38 @@ function buildOidcClient(
 		loginUrl: string;
 		defaultReturnTo: string;
 		isActive: boolean;
+		scope: string;
+		skipConsent: boolean;
+		tokenEndpointAuthMethod: string;
 	}> = {},
 ): Awaited<ReturnType<OidcClientService["getByClientId"]>> {
 	return {
 		id: `${clientId}-db-id`,
 		clientId,
-		clientSecret: `${clientId}-secret`,
+		clientSecret:
+			overrides.clientSecret === undefined
+				? `${clientId}-secret`
+				: overrides.clientSecret,
 		name: `${clientId} app`,
 		redirectUris: [
 			overrides.redirectUri ||
 				`http://localhost:3000/api/v1/auth/callback?clientId=${clientId}`,
 		],
-		loginUrl: overrides.loginUrl || `http://localhost:3000/${clientId}/login`,
+		loginUrl:
+			overrides.loginUrl === undefined
+				? `http://localhost:3000/${clientId}/login`
+				: overrides.loginUrl,
 		defaultReturnTo:
-			overrides.defaultReturnTo || `http://localhost:3000/${clientId}`,
+			overrides.defaultReturnTo === undefined
+				? `http://localhost:3000/${clientId}`
+				: overrides.defaultReturnTo,
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
-		tokenEndpointAuthMethod: "client_secret_post",
-		scope: "openid profile email roles",
+		tokenEndpointAuthMethod:
+			overrides.tokenEndpointAuthMethod || "client_secret_post",
+		scope: overrides.scope || "openid profile email roles",
 		isActive: overrides.isActive ?? true,
+		skipConsent: overrides.skipConsent ?? false,
 		isPublicClient: false,
 		isConfidentialClient: true,
 		logoUri: null,
@@ -177,6 +190,16 @@ describe("AuthApplicationService", () => {
 							defaultReturnTo: "http://localhost:3008/dashboard",
 						});
 					}
+					if (clientId === "user-mobile") {
+						return buildOidcClient("user-mobile", {
+							clientSecret: null,
+							redirectUri: "onora-mobile://auth/callback",
+							loginUrl: "",
+							defaultReturnTo: "",
+							scope: "openid profile email",
+							tokenEndpointAuthMethod: "none",
+						});
+					}
 					if (clientId === "admin-web") {
 						return buildOidcClient("admin-web", {
 							redirectUri:
@@ -209,6 +232,16 @@ describe("AuthApplicationService", () => {
 							"http://localhost:3008/api/v1/auth/callback?clientId=idp-web",
 						loginUrl: "http://localhost:3008/auth/login",
 						defaultReturnTo: "http://localhost:3008/dashboard",
+					});
+				}
+				if (clientId === "user-mobile") {
+					return buildOidcClient("user-mobile", {
+						clientSecret: null,
+						redirectUri: "onora-mobile://auth/callback",
+						loginUrl: "",
+						defaultReturnTo: "",
+						scope: "openid profile email",
+						tokenEndpointAuthMethod: "none",
 					});
 				}
 				if (clientId === "admin-web") {
@@ -256,10 +289,8 @@ describe("AuthApplicationService", () => {
 				await applicationService.getAuthorizationUrl("/admin/dashboard");
 
 			expect(url).toContain("/oidc/auth?");
-			expect(
-				mockOidcClientService.getAuthShellClientByClientId,
-			).toHaveBeenCalledWith(
-				expect.objectContaining({ clientId: "admin-web" }),
+			expect(mockOidcClientService.getByClientId).toHaveBeenCalledWith(
+				"admin-web",
 			);
 			expect(mockOidcFacade.createAuthorizationRequest).toHaveBeenCalledWith(
 				expect.objectContaining({
@@ -284,9 +315,9 @@ describe("AuthApplicationService", () => {
 				"idp-web",
 			);
 
-			expect(
-				mockOidcClientService.getAuthShellClientByClientId,
-			).toHaveBeenCalledWith(expect.objectContaining({ clientId: "idp-web" }));
+			expect(mockOidcClientService.getByClientId).toHaveBeenCalledWith(
+				"idp-web",
+			);
 			expect(mockOidcFacade.createAuthorizationRequest).toHaveBeenCalledWith(
 				expect.objectContaining({
 					clientId: "idp-web",
@@ -301,6 +332,30 @@ describe("AuthApplicationService", () => {
 				600,
 				"http://localhost:3008/dashboard",
 				"idp-web",
+			);
+		});
+
+		it("user-mobile clientId는 auth shell 없이 native redirect URI로 authorization request를 생성해야 한다", async () => {
+			await applicationService.getAuthorizationUrl("/", "user-mobile");
+
+			expect(mockOidcClientService.getByClientId).toHaveBeenCalledWith(
+				"user-mobile",
+			);
+			expect(mockOidcFacade.createAuthorizationRequest).toHaveBeenCalledWith(
+				expect.objectContaining({
+					clientId: "user-mobile",
+					clientSecret: null,
+					redirectUri: "onora-mobile://auth/callback",
+					scope: "openid profile email",
+				}),
+				"/",
+			);
+			expect(mockTokenStorageService.saveOidcState).toHaveBeenCalledWith(
+				"state-token",
+				"verifier-token",
+				600,
+				"/",
+				"user-mobile",
 			);
 		});
 
@@ -328,8 +383,8 @@ describe("AuthApplicationService", () => {
 		});
 
 		it("canonical swagger-web 요청도 migration 전 legacy DB client로 fallback 해야 한다", async () => {
-			mockOidcClientService.getAuthShellClientByClientId.mockImplementation(
-				async ({ clientId }) => {
+			mockOidcClientService.getByClientId.mockImplementation(
+				async (clientId: string) => {
 					if (clientId === "swagger-web") {
 						throw new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다");
 					}
@@ -404,13 +459,8 @@ describe("AuthApplicationService", () => {
 				res,
 			);
 
-			expect(
-				mockOidcClientService.getAuthShellClientByClientId,
-			).toHaveBeenCalledWith(
-				expect.objectContaining({
-					clientId: "idp-web",
-					requireActive: false,
-				}),
+			expect(mockOidcClientService.getByClientId).toHaveBeenCalledWith(
+				"idp-web",
 			);
 			expect(mockOidcFacade.exchangeCodeForTokens).toHaveBeenCalledWith(
 				"auth-code",
@@ -440,6 +490,69 @@ describe("AuthApplicationService", () => {
 				returnTo: "http://localhost:3008/dashboard",
 				defaultReturnTo: "http://localhost:3008/dashboard",
 				loginUrl: "http://localhost:3008/auth/login",
+			});
+		});
+
+		it("user-mobile 콜백은 native client로 토큰을 교환하고 user-mobile 세션을 생성해야 한다", async () => {
+			mockTokenStorageService.validateAndConsumeOidcState.mockResolvedValue({
+				codeVerifier: "verifier-token",
+				returnTo: "onora-mobile://auth/callback?returnTo=/",
+				clientId: "user-mobile",
+			} as never);
+			mockOidcFacade.exchangeCodeForTokens.mockResolvedValue({
+				access_token: buildAccessToken("user-1"),
+				refresh_token: "refresh-token",
+				token_type: "Bearer",
+				expires_in: 3600,
+			});
+			mockUsersService.getByIdWithTenants.mockResolvedValue({
+				id: "user-1",
+				email: "test@example.com",
+				name: "Test User",
+				tenants: [],
+			} as never);
+
+			const req = {
+				headers: { "user-agent": "test-agent" },
+				ip: "127.0.0.1",
+				socket: { remoteAddress: "127.0.0.1" },
+			} as never;
+			const res = {
+				cookie: jest.fn(),
+			} as unknown as never;
+
+			const result = await applicationService.handleOidcCallback(
+				"auth-code",
+				"state-token",
+				req,
+				res,
+			);
+
+			expect(mockOidcClientService.getByClientId).toHaveBeenCalledWith(
+				"user-mobile",
+			);
+			expect(mockOidcFacade.exchangeCodeForTokens).toHaveBeenCalledWith(
+				"auth-code",
+				"verifier-token",
+				expect.objectContaining({
+					clientId: "user-mobile",
+					clientSecret: null,
+					redirectUri: "onora-mobile://auth/callback",
+					scope: "openid profile email",
+				}),
+			);
+			expect(mockTokenStorageService.saveSession).toHaveBeenCalledWith(
+				"user-1",
+				"user-mobile.session-raw",
+				"refresh-token",
+				expect.objectContaining({
+					clientId: "user-mobile",
+				}),
+			);
+			expect(result).toEqual({
+				returnTo: "onora-mobile://auth/callback?returnTo=/",
+				defaultReturnTo: "/",
+				loginUrl: "",
 			});
 		});
 	});

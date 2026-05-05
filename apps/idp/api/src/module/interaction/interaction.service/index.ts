@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { OidcClientRepository } from "../../oidc/oidc-client.repository";
 import { OidcProviderService } from "../../oidc/oidc-provider.service";
 import type {
 	Interaction,
@@ -32,7 +33,10 @@ export interface InteractionResult {
  */
 @Injectable()
 export class InteractionService {
-	constructor(private readonly oidcProviderService: OidcProviderService) {}
+	constructor(
+		private readonly oidcProviderService: OidcProviderService,
+		private readonly oidcClientRepository: OidcClientRepository,
+	) {}
 
 	/**
 	 * Interaction 상세 정보 조회
@@ -51,7 +55,19 @@ export class InteractionService {
 	async findClient(clientId: string): Promise<OidcClientInfo | undefined> {
 		const provider = this.oidcProviderService.getProvider();
 		const client = await provider.Client.find(clientId);
-		return client ? this.normalizeClientInfo(client) : undefined;
+		if (!client) {
+			return undefined;
+		}
+
+		const dbClient = await this.oidcClientRepository.findByClientId(clientId);
+		const providerClient = this.normalizeClientInfo(client);
+
+		return {
+			...providerClient,
+			name: dbClient?.name ?? providerClient.name,
+			logoUri: dbClient?.logoUri ?? providerClient.logoUri,
+			loginUi: dbClient?.loginUi ?? null,
+		};
 	}
 
 	private normalizeClientInfo(client: RawOidcProviderClient): OidcClientInfo {

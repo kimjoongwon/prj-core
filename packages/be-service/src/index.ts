@@ -64,7 +64,11 @@ export {
 	S3CompatibleStorageService,
 } from "./object-storage.service";
 export { OidcClientService } from "./oidc-client.service/index";
-export { applyFirstPartyOidcRuntimeConfig } from "./oidc-runtime-client-config";
+export {
+	applyFirstPartyOidcRuntimeConfig,
+	FIRST_PARTY_OIDC_CLIENT_IDS,
+	isFirstPartyOidcClientId,
+} from "./oidc-runtime-client-config";
 export {
 	type OidcRedisSession,
 	OidcSessionService,

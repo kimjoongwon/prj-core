@@ -2,15 +2,19 @@
 
 import {
 	BackButton,
+	buildOidcClientLoginUi,
 	FormPage,
 	FormPageSurface,
 	FormSection,
 	FormSectionCard,
+	isValidOidcLoginUiBrandColor,
 	OidcClientForm,
 	type OidcClientFormState,
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
+import { OIDC_FIRST_PARTY_CLIENT_IDS } from "@cocrepo/constant";
+import type { OidcClientLoginUi } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 
 export interface OidcClientCreatePageSubmitInput {
@@ -21,13 +25,21 @@ export interface OidcClientCreatePageSubmitInput {
 	grantTypes: string[];
 	responseTypes: string[];
 	scope: string;
+	skipConsent: boolean;
 	redirectUris: string[];
 	loginUrl?: string;
 	defaultReturnTo?: string;
 	logoUri?: string;
 	policyUri?: string;
 	tosUri?: string;
+	loginUi?: OidcClientLoginUi | null;
 }
+
+const isFirstPartyClientId = (clientId: string) =>
+	OIDC_FIRST_PARTY_CLIENT_IDS.some((id) => id === clientId.trim());
+
+const isValidRedirectUri = (uri: string) =>
+	/^[a-z][a-z0-9+.-]*:\/\//i.test(uri.trim());
 
 export interface OidcClientCreatePageProps {
 	formState: OidcClientFormState;
@@ -77,6 +89,15 @@ export const OidcClientCreatePage = observer(
 				isValid = false;
 			}
 
+			if (
+				formState.useCustomLoginUi &&
+				!isValidOidcLoginUiBrandColor(formState.loginUiBrandColor)
+			) {
+				errors.loginUiBrandColor =
+					"브랜드 컬러는 #2563eb 형식으로 입력해주세요.";
+				isValid = false;
+			}
+
 			const validUris = formState.redirectUris.filter((uri) => uri.trim());
 			if (validUris.length === 0) {
 				errors.redirectUris = "최소 1개의 Redirect URI를 입력해주세요.";
@@ -84,12 +105,8 @@ export const OidcClientCreatePage = observer(
 			}
 
 			formState.redirectUris.forEach((uri, index) => {
-				if (
-					uri.trim() &&
-					!uri.startsWith("http://") &&
-					!uri.startsWith("https://")
-				) {
-					redirectUriErrors[index] = "http:// 또는 https://로 시작해야 합니다.";
+				if (uri.trim() && !isValidRedirectUri(uri)) {
+					redirectUriErrors[index] = "scheme:// 형식으로 입력해야 합니다.";
 					isValid = false;
 				}
 			});
@@ -112,12 +129,16 @@ export const OidcClientCreatePage = observer(
 				grantTypes: formState.grantTypes,
 				responseTypes: formState.responseTypes,
 				scope: formState.scope,
+				skipConsent: isFirstPartyClientId(formState.clientId)
+					? formState.skipConsent
+					: false,
 				redirectUris: validUris,
 				loginUrl: formState.loginUrl || undefined,
 				defaultReturnTo: formState.defaultReturnTo || undefined,
 				logoUri: formState.logoUri || undefined,
 				policyUri: formState.policyUri || undefined,
 				tosUri: formState.tosUri || undefined,
+				loginUi: buildOidcClientLoginUi(formState),
 			});
 		};
 

@@ -23,12 +23,13 @@ OidcClientDetailPage
           - PageTitleBar
           - SecretField
           - ActiveStatusCell
+          - Consent skip Chip
           - DateTimeCell
       - DetailSectionCard
         - DetailSection
           - PageTitleBar
           - AuthMethodCell
-      - DetailSectionCard x2
+      - DetailSectionCard x3
         - DetailSection
           - PageTitleBar
   - ConfirmModal
@@ -61,7 +62,7 @@ OidcClientDetailPage
 
 | 항목 | 설명 |
 |------|------|
-| OidcClientDetailPageClient | 상세 표시 계약 |
+| OidcClientDetailPageClient | 상세 표시 계약 (`skipConsent`, `loginUi` 포함) |
 | OidcClientDetailPageProps | pure page 입력 계약 |
 | OidcClientDetailPage | 공개 계약 요소 |
 
@@ -70,6 +71,7 @@ OidcClientDetailPage
 | 모듈 | 용도 |
 |------|------|
 | @cocrepo/ui | 기능 구현 의존성 |
+| @cocrepo/type | OIDC client 로그인 UI override 타입 |
 | @heroui/react | 기능 구현 의존성 |
 | lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
@@ -78,6 +80,8 @@ OidcClientDetailPage
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-05 | 상세 화면에 `loginUi` 기반 로그인 화면 설정 표시 섹션을 추가 | codex |
+| 2026-05-05 | 권한 동의 화면 생략 상태를 기본 정보 영역에서 표시하도록 상세 계약 갱신 | codex |
 | 2026-03-29 | OIDC 클라이언트 상세 화면의 조회/상태 전환/삭제/라우팅 책임 경계 정리 | codex |
 | 2026-03-28 | OIDC 클라이언트 표시명 기준 정리 | codex |
 | 2026-03-26 | 초기 화면 기획 수립 | codex |

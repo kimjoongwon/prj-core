@@ -167,6 +167,13 @@ export type {
 // ============================================
 export type { JsonArray, JsonObject, JsonValue } from "./json";
 // ============================================
+// OIDC 로그인 UI 관련 타입
+// ============================================
+export type {
+	OidcClientLoginUi,
+	OidcClientLoginUiVariant,
+} from "./oidc-login-ui";
+// ============================================
 // 아이콘 관련 타입
 // ============================================
 export type { AppIconName } from "./icon";

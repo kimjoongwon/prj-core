@@ -43,4 +43,8 @@ export interface UpdateOidcClientDto {
 	policyUri?: string;
 	/** 서비스 약관 URI */
 	tosUri?: string;
+	/** 권한 동의 화면 생략 여부 */
+	skipConsent?: boolean;
+	/** 로그인 화면 표시 설정 */
+	loginUi?: unknown | null;
 }

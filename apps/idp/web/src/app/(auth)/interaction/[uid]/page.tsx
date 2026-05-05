@@ -14,6 +14,7 @@ import {
 	reaction,
 	runInAction,
 } from "mobx";
+import type { OidcClientLoginUi } from "@cocrepo/type";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
@@ -28,6 +29,7 @@ class InteractionRoutePageState {
 		clientId: string;
 		name: string;
 		logoUri?: string;
+		loginUi?: OidcClientLoginUi | null;
 	} | null = null;
 	isDev = false;
 	errorMessage = "";
@@ -75,6 +77,7 @@ class InteractionRoutePageState {
 						clientId: string;
 						name: string;
 						logoUri?: string;
+						loginUi?: unknown | null;
 					} | null;
 					isDev?: boolean;
 			  }
@@ -101,7 +104,14 @@ class InteractionRoutePageState {
 				: data.type === "consent"
 					? "consent"
 					: "login";
-		this.client = data?.client ?? null;
+		this.client = data?.client
+			? {
+					clientId: data.client.clientId,
+					name: data.client.name,
+					logoUri: data.client.logoUri,
+					loginUi: data.client.loginUi as OidcClientLoginUi | null | undefined,
+				}
+			: null;
 		this.isDev = Boolean(data?.isDev);
 		this.errorMessage = errorMessage;
 		this.isExpiredInteraction = isExpiredInteraction;

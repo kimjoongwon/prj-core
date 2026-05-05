@@ -22,7 +22,7 @@ const buildLoginRedirect = (returnTo: string): AuthRedirect => ({
 	href: {
 		pathname: LOGIN_ROUTE,
 		params: { returnTo },
-	},
+	} as unknown as Href,
 	targetPathname: LOGIN_ROUTE,
 });
 

@@ -49,4 +49,6 @@ export interface CreateOidcClientDto {
 	policyUri?: string;
 	/** 서비스 약관 URI */
 	tosUri?: string;
+	/** 로그인 화면 표시 설정 */
+	loginUi?: unknown | null;
 }

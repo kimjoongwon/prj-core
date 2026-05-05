@@ -105,6 +105,7 @@ export interface OidcClientInfo {
 	clientId: string;
 	name?: string;
 	logoUri?: string;
+	loginUi?: unknown;
 	[key: string]: unknown;
 }
 
@@ -124,6 +125,34 @@ export interface OidcClientConfig {
 	response_types?: string[];
 	token_endpoint_auth_method?: string;
 	scope?: string;
+	logo_uri?: string;
+	policy_uri?: string;
+	tos_uri?: string;
+}
+
+export interface OidcProviderContext {
+	oidc?: {
+		account?: {
+			accountId: string;
+		};
+		client?: {
+			clientId: string;
+		};
+		params?: {
+			client_id?: string;
+			prompt?: string;
+			scope?: string;
+		};
+		provider?: OidcProviderInstance;
+		result?: {
+			consent?: {
+				grantId?: string;
+			};
+		};
+		session?: {
+			grantIdFor: (clientId: string) => string | undefined;
+		};
+	};
 }
 
 // =================================================================
@@ -213,6 +242,7 @@ export interface OidcConfiguration {
 			client: { tokenEndpointAuthMethod?: string },
 		) => boolean;
 	};
+	loadExistingGrant?: (ctx: OidcProviderContext) => Promise<Grant | undefined>;
 	renderError?: (
 		ctx: { type: string; body: string },
 		out: Record<string, unknown>,
