@@ -22,9 +22,10 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - fe-ui Page component: `packages/fe-ui/src/page/[PageName]/[PageName].tsx` → 같은 폴더의 `[PageName].spec.md`
 - fe-ui Feature component: `packages/fe-ui/src/feature/**/[FeatureName].tsx` → 같은 component owner 위치의 `[FeatureName].spec.md`
 - fe-ui Widget component: `packages/fe-ui/src/widget/**/[WidgetName].tsx` 또는 `index.tsx` owner → 같은 component owner 위치의 `[WidgetName].spec.md` 또는 `index.spec.md`
+- fe-mo-ui Screen component: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx` → 같은 폴더의 `[ScreenName].spec.md`
 
-그 외 backend entity/dto/service/repository/controller/module/app/facade/integration/vo/prisma/schema, store/hook/type/barrel/config/script/test/e2e/layout, Next.js `layout.tsx`, Expo Router `_layout.tsx`, `packages/fe-ui` leaf 계층(display/control/cell/columns/form/detail/layout/data-grid 등), 모바일 UI leaf 계층에는 sidecar spec을 만들지 않습니다.
-금지 계층의 계약은 nearest allowed owner에 기록합니다: web route는 route `page.spec.md`, mobile route/screen/layout/state/API/test는 route `index.spec.md`, fe-ui Page/Feature/Widget은 해당 component spec이 owner입니다.
+그 외 backend entity/dto/service/repository/controller/module/app/facade/integration/vo/prisma/schema, store/hook/type/barrel/config/script/test/e2e/layout, Next.js `layout.tsx`, Expo Router `_layout.tsx`, `packages/fe-ui` leaf 계층(display/control/cell/columns/form/detail/layout/data-grid 등), 모바일 UI leaf 계층(action/input/selection/navigation/data-display/feedback/layout/surface/design-system)에는 sidecar spec을 만들지 않습니다.
+금지 계층의 계약은 nearest allowed owner에 기록합니다: web route는 route `page.spec.md`, mobile route/layout/state/API/test/native wiring은 route `index.spec.md`, mobile shared visual composition은 fe-mo-ui Screen spec, fe-ui Page/Feature/Widget은 해당 component spec이 owner입니다.
 기존 role 문서에 남아 있는 legacy spec 언급보다 이 범위와 `docs/sidecar-spec-policy.md`를 우선합니다.
 
 ## 오케스트레이션
@@ -128,8 +129,8 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - [mobile/fe-mo-feedback-component-builder.toml](./mobile/fe-mo-feedback-component-builder.toml): `packages/fe-mo-ui/src/feedback/**`, overlay feedback `layout` thin wrapper contract를 생성하거나 정리하는 전문가
 - [mobile/fe-mo-menu-builder.toml](./mobile/fe-mo-menu-builder.toml): `packages/fe-mo-ui/src/layout/Menu/**`, `packages/fe-mo-ui/src/layout/SubMenu/**`의 RN 메뉴 contract를 생성하거나 정리하는 전문가
 - [mobile/fe-mo-route-layout-builder.toml](./mobile/fe-mo-route-layout-builder.toml): `apps/mobile/src/app/**/_layout.tsx`를 구현하는 전문가
-- [mobile/fe-mo-page-builder.toml](./mobile/fe-mo-page-builder.toml): `apps/mobile/src/app/**/index.tsx` route screen 을 구현하는 전문가
-- [mobile/fe-mo-screen-builder.toml](./mobile/fe-mo-screen-builder.toml): `packages/fe-mo-ui/src/screen/**`의 모바일 screen component를 생성하거나 정리하는 전문가
+- [mobile/fe-mo-page-builder.toml](./mobile/fe-mo-page-builder.toml): `apps/mobile/src/app/**/*.tsx` route file에서 shared screen visual owner를 연결하고 navigation/API/state/native wiring을 구현하는 전문가
+- [mobile/fe-mo-screen-builder.toml](./mobile/fe-mo-screen-builder.toml): 모바일 `fe-ui-page-builder` 대응 screen visual owner를 `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx` 기준으로 생성하는 전문가
 - [mobile/fe-mo-api-integrator.toml](./mobile/fe-mo-api-integrator.toml): 모바일 데이터 조회/변경 연동 기준을 구현하는 전문가
 - [mobile/fe-mo-store-builder.toml](./mobile/fe-mo-store-builder.toml): 모바일 공용/로컬 상태 경계를 정리하고 MobX store 를 구현하는 전문가
 - [mobile/fe-mo-state-builder.toml](./mobile/fe-mo-state-builder.toml): 모바일 route-local MobX state class/hook과 state slice 전달 구조를 구현하는 전문가

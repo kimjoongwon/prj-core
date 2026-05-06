@@ -199,6 +199,60 @@ check_keys = ["test-contract"]
 exempt = false
 
 [[rules]]
+id = "mobile-route-layout-files"
+match = ["apps/mobile/src/app/**/_layout.tsx"]
+primary_role = "fe-mo-route-layout-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["route-layout-ownership", "owner-boundary", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "mobile-route-screen-files"
+match = ["apps/mobile/src/app/**/*.tsx"]
+primary_role = "fe-mo-page-builder"
+supporting_roles = ["fe-mo-screen-builder"]
+rule_docs = []
+check_keys = ["native-route-container", "screen-owner", "state-owner", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-mo-screen-files"
+match = ["packages/fe-mo-ui/src/screen/index.ts", "packages/fe-mo-ui/src/screen/**/*.ts", "packages/fe-mo-ui/src/screen/**/*.tsx"]
+primary_role = "fe-mo-screen-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["pure-screen", "required-export", "sidecar-sync"]
+exempt = false
+
+[[rules]]
+id = "fe-mo-ui-leaf-files"
+match = ["packages/fe-mo-ui/src/action/**/*.ts", "packages/fe-mo-ui/src/action/**/*.tsx", "packages/fe-mo-ui/src/input/**/*.ts", "packages/fe-mo-ui/src/input/**/*.tsx", "packages/fe-mo-ui/src/selection/**/*.ts", "packages/fe-mo-ui/src/selection/**/*.tsx", "packages/fe-mo-ui/src/navigation/**/*.ts", "packages/fe-mo-ui/src/navigation/**/*.tsx", "packages/fe-mo-ui/src/data-display/**/*.ts", "packages/fe-mo-ui/src/data-display/**/*.tsx", "packages/fe-mo-ui/src/feedback/**/*.ts", "packages/fe-mo-ui/src/feedback/**/*.tsx", "packages/fe-mo-ui/src/layout/**/*.ts", "packages/fe-mo-ui/src/layout/**/*.tsx", "packages/fe-mo-ui/src/surface/**/*.ts", "packages/fe-mo-ui/src/surface/**/*.tsx", "packages/fe-mo-ui/src/design-system/**/*.ts", "packages/fe-mo-ui/src/design-system/**/*.tsx"]
+primary_role = "qa-pr-reviewer"
+supporting_roles = []
+rule_docs = [".codex/agents/mobile/README.md"]
+check_keys = ["owner-boundary", "review-map-coverage"]
+exempt = false
+
+[[rules]]
+id = "mobile-unit-test-files"
+match = ["apps/mobile/src/**/*.test.ts", "apps/mobile/src/**/*.test.tsx", "packages/fe-mo-ui/src/**/*.test.ts", "packages/fe-mo-ui/src/**/*.test.tsx"]
+primary_role = "qa-mo-testing"
+supporting_roles = []
+rule_docs = []
+check_keys = ["test-contract"]
+exempt = false
+
+[[rules]]
+id = "mobile-e2e-files"
+match = ["apps/mobile/e2e/**/*.e2e.js", "apps/mobile/e2e/**/*.e2e.ts", "apps/mobile/detox.config.js", "apps/mobile/e2e/jest.config.js"]
+primary_role = "qa-mo-e2e-testing"
+supporting_roles = []
+rule_docs = []
+check_keys = ["test-contract"]
+exempt = false
+
+[[rules]]
 id = "controller-files"
 match = ["apps/*/api/src/module/**/*.controller.ts"]
 primary_role = "be-controller-builder"

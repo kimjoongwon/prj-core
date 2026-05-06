@@ -722,12 +722,14 @@ non-source 문서는 .spec.md를 쓰지 않고 context/guide/ops/notes/template 
 ```
 
 **운영 규칙 (Mandatory):**
-- 신규 작성/갱신 가능한 sidecar spec은 아래 세 가지뿐입니다.
+- 신규 작성/갱신 가능한 sidecar spec은 아래 다섯 가지뿐입니다.
   - Next.js route page: `apps/*/web/src/app/**/page.tsx` ↔ `page.spec.md`
+  - Expo Router native route owner: `apps/mobile/src/app/**/index.spec.md`
   - fe-ui Page component: `packages/fe-ui/src/page/[PageName]/[PageName].tsx` ↔ `[PageName].spec.md`
   - fe-ui Feature component: `packages/fe-ui/src/feature/**/[FeatureName].tsx` ↔ `[FeatureName].spec.md` (component owner가 `index.tsx`인 경우만 `index.spec.md` 허용)
-- 위 세 대상의 코드를 수정하면 대응되는 `*.spec.md`를 함께 수정합니다.
-- 위 세 대상이 아닌 코드를 수정할 때는 `*.spec.md`를 생성/수정하지 않습니다.
+  - fe-mo-ui Screen component: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx` ↔ `[ScreenName].spec.md`
+- 위 대상의 코드를 수정하면 대응되는 `*.spec.md`를 함께 수정합니다.
+- 위 대상이 아닌 코드를 수정할 때는 `*.spec.md`를 생성/수정하지 않습니다.
 - `*.stories.spec.md`, `*.test.spec.md`, `*.e2e.spec.md`, `layout.spec.md`, `_client.spec.md`, `_prefetch.spec.md`, barrel `index.spec.md`, `type.spec.md`, hook/util/store/dto/service/repository/controller/entity/vo spec은 신규 작성 금지입니다.
 - `app.spec.md`, `package.spec.md`, `tsconfig.spec.md`, `*.toml.spec.md`, `*.json.spec.md`, `*.css.spec.md`, `*.html.spec.md`, `Dockerfile.*.spec.md`, `Jenkinsfile.*.spec.md`는 신규 생성하지 않습니다.
 - non-source 문서는 아래 suffix를 사용합니다.
@@ -739,12 +741,15 @@ non-source 문서는 .spec.md를 쓰지 않고 context/guide/ops/notes/template 
 - `packages/fe-ui/src/page`는 page component와 sidecar를 반드시 동일 이름 폴더에 함께 둡니다.
 - 예: `packages/fe-ui/src/page/AddressEmailVerifyPage/AddressEmailVerifyPage.tsx`, `AddressEmailVerifyPage.spec.md`
 - 금지 예: `packages/fe-ui/src/page/AddressEmailVerifyPage.tsx`, `packages/fe-ui/src/page/AddressEmailVerifyPage.spec.md`
+- `packages/fe-mo-ui/src/screen`은 모바일 screen visual owner와 sidecar를 반드시 동일 이름 폴더에 함께 둡니다.
+- 예: `packages/fe-mo-ui/src/screen/ReservationHomeScreen/ReservationHomeScreen.tsx`, `ReservationHomeScreen.spec.md`
+- mobile route/native wiring 계약은 route `index.spec.md`, shared screen visual composition 계약은 fe-mo-ui Screen spec이 소유합니다.
 - admin/idp route의 pure page 이관 현황은 `packages/fe-ui/src/page/migration-audit.md`를 기준으로 확인합니다.
 - 전체 page 이관 완료 여부를 말하기 전에는 반드시 `packages/fe-ui/src/page/migration-audit.md`를 먼저 확인합니다.
 - 상세 정책은 `docs/sidecar-spec-policy.md`를 기준으로 합니다.
 
 **기존 코드 수정 완료 조건 (Critical):**
-- 허용 대상 세 가지의 코드 변경이 있으면 대응되는 `*.spec.md` 업데이트와 `## 변경 이력` 추가가 모두 완료되어야 합니다.
+- 허용 대상의 코드 변경이 있으면 대응되는 `*.spec.md` 업데이트와 `## 변경 이력` 추가가 모두 완료되어야 합니다.
 - 허용 대상이 아닌 코드 변경에는 spec 동기화를 완료 조건으로 요구하지 않습니다.
 
 #### 기획서 파일 구조
@@ -1223,6 +1228,17 @@ Stage 5: 컴포넌트 (페이지별)
 | fe-store-builder | MobX 기반 Store 생성 |
 | fe-state-builder | 화면 로컬 MobX state class/hook과 state slice 전달 구조 생성 |
 | fe-api-integrator | Orval 생성 React Query 훅을 사용하여 더미 데이터를 실제 API 호출로 교체 |
+
+#### 모바일 프론트엔드 (fe-mo-*)
+
+| Agent | 역할 |
+|-------|------|
+| fe-mo-screen-builder | 모바일 `fe-ui-page-builder` 대응 screen visual owner 생성 (`packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`) |
+| fe-mo-page-builder | Expo Router route file에서 shared screen을 연결하고 navigation/API/state/native wiring 구현 (`apps/mobile/src/app/**/*.tsx`) |
+| fe-mo-route-layout-builder | Expo Router native `_layout.tsx` shell 구현 |
+| fe-mo-api-integrator | 모바일 데이터 조회/변경 연동 기준 구현 |
+| fe-mo-state-builder | 모바일 route-local MobX state class/hook과 state slice 전달 구조 구현 |
+| fe-mo-store-builder | 모바일 공용/앱 로컬 상태 경계와 MobX store 구현 |
 
 #### 백엔드 (be-*)
 

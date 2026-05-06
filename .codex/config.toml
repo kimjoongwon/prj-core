@@ -65,11 +65,19 @@ sidecar_spec_scope = "feature component only"
 allowed_component_spec = "packages/fe-ui/src/feature/**/{FeatureName}.spec.md"
 guard = "feature 계층에서 sidecar spec은 Store/API/router 연결을 소유하는 Feature component에만 둔다. barrel index.ts, type.ts, hook, story에는 spec을 만들지 않는다"
 
+[rules.fe_mo_ui.screen]
+folder_required = true
+folder_layout = "packages/fe-mo-ui/src/screen/{ScreenName}/{ScreenName}.tsx"
+sidecar_spec_file = "packages/fe-mo-ui/src/screen/{ScreenName}/{ScreenName}.spec.md"
+guard = "모바일 screen 계층은 web fe-ui-page-builder에 대응하는 visual owner이며, Expo route/native runtime wiring은 apps/mobile route file이 소유한다"
+
 [rules.sidecar_spec]
 allowed = [
   "apps/*/web/src/app/**/page.spec.md",
+  "apps/mobile/src/app/**/index.spec.md",
   "packages/fe-ui/src/page/{PageName}/{PageName}.spec.md",
   "packages/fe-ui/src/feature/**/{FeatureName}.spec.md",
+  "packages/fe-mo-ui/src/screen/{ScreenName}/{ScreenName}.spec.md",
 ]
 forbidden = "layout/story/test/e2e/barrel/type/hook/store/dto/service/repository/controller/entity/vo/script/config spec"
 
@@ -304,11 +312,11 @@ description = "React Native용 메뉴 primitive contract를 packages/fe-mo-ui/sr
 config_file = "agents/mobile/fe-mo-menu-builder.toml"
 
 [agents.fe-mo-page-builder]
-description = "Expo Router native route 기준 apps/mobile/src/app/** screen을 구현하는 전문가"
+description = "Expo Router native route file에서 shared screen visual owner를 연결하고 navigation/API/state/native wiring을 구현하는 전문가"
 config_file = "agents/mobile/fe-mo-page-builder.toml"
 
 [agents.fe-mo-screen-builder]
-description = "packages/fe-mo-ui/src/screen 기반 모바일 screen component를 생성하는 전문가"
+description = "모바일 fe-ui-page-builder 대응 screen visual owner를 packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx 기준으로 생성하는 전문가"
 config_file = "agents/mobile/fe-mo-screen-builder.toml"
 
 [agents.fe-mo-route-layout-builder]

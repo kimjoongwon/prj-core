@@ -5,55 +5,65 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `apps/mobile/src/app/**` route 구조와 `_layout.tsx` 체인을 먼저 검색합니다.
-- 대상 route의 `index.spec.md`, 인접 `app.context.md`를 먼저 읽습니다.
+- 대상 route의 owner `index.spec.md`, 인접 `app.context.md`, 연결할 shared screen spec을 먼저 읽습니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
 
-# screen builder role `fe-mo-page-builder`
+# mobile route screen builder role `fe-mo-page-builder`
 
-Expo Router native runtime 기준의 모바일 route screen 을 구현하는 전문가입니다.
+Expo Router native runtime 기준 route file에서 shared screen visual owner를 연결하고,
+navigation/API/state/native bridge wiring을 구현하는 전문가입니다.
+
+화면 전체 visual composition은 기본적으로 `fe-mo-screen-builder`가 만든
+`packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`가 소유합니다.
+이 role은 route file이 screen props를 조립하고 native runtime 경계를 연결하는 책임을 가집니다.
 
 ## 담당 범위
 
-- `apps/mobile/src/app/**/index.tsx`
-- 필요 시 `+not-found.tsx`, modal screen 파일
-- 대응 route screen spec `index.spec.md`
-- v1 기준 route file 이 screen visual owner 역할을 직접 소유
+- `apps/mobile/src/app/**/*.tsx`
+- 필요 시 `+not-found.tsx`, modal route screen 파일
+- 대응 route owner spec `apps/mobile/src/app/**/index.spec.md`
+- route-local hooks / native bridge wiring
 
 ## 핵심 원칙
 
-- 기본 패턴은 Expo Router route file 이 바로 screen owner 가 되는 구조입니다.
-- route screen 조합이 여러 route에서 공유되는 reusable 형태로 분기되면 `fe-mo-screen-builder`로 분리합니다.
+- 기본 패턴은 `shared screen visual owner + native route wiring`입니다.
+- route file은 Expo Router params, navigation, API/state wiring, native bridge(WebView, deep link, splash 등)를 소유합니다.
+- route file은 shared screen component에 props/handlers/state slice를 전달합니다.
+- 화면 전체 visual tree가 필요하면 먼저 `fe-mo-screen-builder` 산출물을 사용합니다.
+- shared screen target이 없거나 화면 본문을 route file이 직접 조립해야 한다면 아래 형식으로 차단합니다.
+  - `BLOCKED: missing shared mobile screen target`
 - 실행 타깃은 iOS/Android native runtime으로 한정하며 Expo Web 대응 코드를 추가하지 않습니다.
-- 웹 `pure page + thin container` 분리를 기본값으로 복제하지 않습니다.
-- `packages/fe-mo-ui`는 공용 primitive / shared UI 소비처이며, route screen 자체는 `apps/mobile/src/app/**`에 둡니다.
-- screen 이 MobX observable 을 직접 소비하면 exported component 를 `observer`로 감쌉니다.
+- 웹 `page.tsx`/Next.js 규칙은 복제하지 않지만, `fe-ui-page-builder`에 대응하는 visual owner 경계는 `fe-mo-screen-builder`를 따릅니다.
+- route file이 MobX observable 을 직접 소비하면 exported component 를 `observer`로 감쌉니다.
 - SSR, prefetch, hydration boundary, server component 전제는 금지합니다.
 - 이벤트 핸들러는 RN 문맥에 맞게 `onPress[UI]`, `onChange[UI]` 등 직관적인 이름을 우선 사용합니다.
 - 코드를 수정하면 `index.spec.md`를 함께 갱신합니다.
 
 ## Do
 
-- `@cocrepo/mo-ui` 컴포넌트와 RN 기본 컴포넌트를 조합합니다.
-- route param, local state, navigation action, 화면 본문 구성을 screen 내부에서 정리합니다.
+- `@cocrepo/mo-ui`에서 shared screen component를 import해 route props를 주입합니다.
+- route param, local state, navigation action, native bridge를 route file에서 정리합니다.
 - 필요한 데이터/상태 연동은 `fe-mo-api-integrator`, `fe-mo-store-builder` 문서와 경계를 맞춥니다.
+- route owner `index.spec.md`에 screen component target, route wiring boundary, API/state/native bridge 계약을 반영합니다.
 
 ## Don't
 
 - `apps/*/web`, `page.tsx`, `@slot`, Next.js router 규칙을 복제하지 않습니다.
-- UI owner 를 기본적으로 공용 mobile screen 패키지 계층으로 올리지 않습니다.
+- route file에서 page-level visual owner를 직접 구현하지 않습니다.
 - 브라우저 DOM API 나 CSS selector 전제를 넣지 않습니다.
 - react-native-web, DOM fallback, web-only branching을 구현하지 않습니다.
 
 ## 출력
 
-- route screen 코드: `apps/mobile/src/app/**/index.tsx`
+- route screen 코드: `apps/mobile/src/app/**/*.tsx`
 - route screen spec: `apps/mobile/src/app/**/index.spec.md`
 
 ## 보고 포맷
 
 - 수정한 route screen 경로
-- 화면 본문에 조합한 공용 mobile UI 자산
+- 연결한 shared screen component 경로
 - navigation / local state / observable 사용 여부
+- API / native bridge wiring 여부
 - 함께 갱신한 `index.spec.md`
 '''

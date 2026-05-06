@@ -7,15 +7,17 @@
 
 ## 허용 범위
 
-신규 작성/갱신 대상은 아래 세 가지뿐입니다.
+신규 작성/갱신 대상은 아래 다섯 가지뿐입니다.
 
 | 대상 | spec 위치 | 목적 |
 |------|-----------|------|
 | Next.js route page | `apps/*/web/src/app/**/page.spec.md` | route `page.tsx`의 데이터 조회, 라우팅, 이벤트 wiring, pure page 연결 계약 |
+| Expo Router native route owner | `apps/mobile/src/app/**/index.spec.md` | mobile route layout/API/state/test/native wiring과 shared screen 연결 계약 |
 | fe-ui Page component | `packages/fe-ui/src/page/[PageName]/[PageName].spec.md` | page-level visual composition, props contract, 하위 Feature/Widget 조합 |
 | fe-ui Feature component | `packages/fe-ui/src/feature/**/[FeatureName].spec.md` 또는 component owner가 `index.tsx`인 경우 `index.spec.md` | Store/API/router가 연결되는 Feature의 책임, 상태, 이벤트 계약 |
+| fe-mo-ui Screen component | `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].spec.md` | 모바일 screen-level visual composition, props contract, route wiring boundary |
 
-허용 대상의 source 파일은 기본적으로 `.tsx`입니다. route page는 반드시 파일명이 `page.tsx`여야 합니다.
+허용 대상의 source 파일은 기본적으로 `.tsx`입니다. Next.js route page는 반드시 파일명이 `page.tsx`여야 합니다. 모바일 route owner spec은 Expo Router route 묶음의 owner 문서이며, shared visual screen source는 `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`입니다.
 
 ## 금지 범위
 
@@ -24,6 +26,7 @@
 - `*.stories.spec.md`, `*.test.spec.md`, `*.e2e.spec.md`
 - `index.spec.md`가 barrel, namespace, 디렉터리 설명을 가리키는 경우
 - `type.spec.md`, `types.spec.md`, `use*.spec.md`, hook/util/lib/store/dto/service/repository/controller/entity/vo spec
+- `packages/fe-mo-ui/src/action|input|selection|navigation|data-display|feedback|layout|surface|design-system` leaf spec
 - `package.spec.md`, `tsconfig.spec.md`, `app.spec.md`
 - `*.toml.spec.md`, `*.json.spec.md`, `*.css.spec.md`, `*.html.spec.md`
 - `*.toml.guide.md`
@@ -83,10 +86,26 @@
 - 실패/권한/disabled/loading 상태
 - 이 Feature를 소비하는 Page 목록
 
+### Expo Router native route `index.spec.md`
+
+- route path, route file, layout shell, shared screen 연결 계약
+- Expo Router params, navigation, API/state/native bridge owner 경계
+- `screen component target`과 route가 주입할 `screen props contract`
+- loading/error/empty 상태 전달 방식
+- unit/E2E에서 검증할 핵심 흐름
+
+### fe-mo-ui Screen component spec
+
+- 모바일 screen-level visual composition 책임
+- props contract와 event handler props
+- 조합하는 `@cocrepo/mo-ui` primitive/action/input/selection/navigation/menu 목록
+- 상태별 렌더링과 route/native wiring boundary
+- React Native 접근성, 테스트 관점
+
 ## 마이그레이션 순서
 
 1. `spec:audit:list`로 허용 범위 밖 legacy spec 목록을 확인합니다.
 2. 의미 있는 운영/설정 문서는 `*.guide.md`, `*.ops.md`, `*.notes.md`, `README.md`로 이관합니다.
 3. 자동 생성 흔적만 있는 legacy spec은 삭제합니다.
-4. route page, fe-ui Page, fe-ui Feature spec은 새 포맷에 맞춰 실제 화면 계약 중심으로 정리합니다.
+4. route page, mobile route, fe-ui Page, fe-ui Feature, fe-mo-ui Screen spec은 새 포맷에 맞춰 실제 화면 계약 중심으로 정리합니다.
 5. 마지막으로 `spec:audit`를 돌려 orphan 목록이 남지 않는지 확인합니다.

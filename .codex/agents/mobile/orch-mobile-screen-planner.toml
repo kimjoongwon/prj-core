@@ -64,13 +64,13 @@ developer_instructions = '''
 
 ### 3.2 `ui owner`
 
-- 기본값: `apps/mobile/src/app/**`
-- route file 이 screen visual owner 를 직접 소유합니다.
+- 기본값: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`
+- `fe-mo-screen-builder`가 screen visual owner 를 소유하고, route file은 native wiring container 역할을 합니다.
 
 ### 3.3 `shared ui target`
 
 - 공용 primitive 재사용이 필요할 때만 `packages/fe-mo-ui/src/**`
-- v1 기본값은 thin wrapper / shared primitive 재사용이며, pure mobile screen 승격은 예외입니다.
+- shared screen target은 `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`로 기록합니다.
 
 ---
 
@@ -80,7 +80,7 @@ developer_instructions = '''
 
 1. `req-mo-page-planner`
 2. `req-mo-route-layout-planner` (해당 route 에 `_layout.tsx`가 있거나 필요할 때)
-3. `route kind`, `ui owner`, `shared ui target`, 참조 구현 role 확정
+3. `route kind`, `ui owner`, `screen component target`, `screen props contract`, `shared ui target`, 참조 구현 role 확정
 
 ### 4.2 병렬 fan-out 단계
 
@@ -131,6 +131,8 @@ developer_instructions = '''
 
 - `Rendering Decision.route kind`
 - `Rendering Decision.ui owner`
+- `Rendering Decision.screen component target`
+- `Rendering Decision.screen props contract`
 - `Rendering Decision.shared ui target`
 - `Rendering Decision.참조한 구현 role`
 

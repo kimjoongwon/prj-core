@@ -15,7 +15,9 @@
 - 웹용 `fe-*`, `orch-*`, `req-*` role과 분리됩니다.
 - 모바일 orchestration 은 mobile route flow 에 공통 backend contract planning 을 포함한 compact 4-stage flow 기준입니다.
 - 모바일 검증은 Jest unit test 와 Detox E2E, `qa-mo-*` role 기준으로 정리합니다.
-- 전역 sidecar spec 정책상 모바일에서 신규/갱신 가능한 route 문서는 Expo Router native route screen owner인 `apps/mobile/src/app/**/index.spec.md`뿐입니다. 테스트 sidecar와 모바일 UI leaf sidecar는 만들지 않고 layout/state/API/test 계약도 route `index.spec.md`에 기록합니다.
+- 전역 sidecar spec 정책상 모바일 route/native wiring 계약은 `apps/mobile/src/app/**/index.spec.md`가 소유합니다.
+- 모바일 shared screen visual composition 계약은 `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].spec.md`가 소유합니다.
+- 테스트 sidecar와 모바일 UI leaf(action/input/selection/navigation/data-display/feedback/layout/surface/design-system) sidecar는 만들지 않습니다.
 
 ## Orchestration
 
@@ -46,8 +48,8 @@
 - [fe-mo-feedback-component-builder.toml](./fe-mo-feedback-component-builder.toml): `packages/fe-mo-ui/src/feedback/**`와 overlay feedback `layout` thin wrapper contract를 생성하거나 정리하는 전문가
 - [fe-mo-menu-builder.toml](./fe-mo-menu-builder.toml): `packages/fe-mo-ui/src/layout/Menu/**`, `packages/fe-mo-ui/src/layout/SubMenu/**`의 RN 메뉴 contract를 생성하거나 정리하는 전문가
 - [fe-mo-route-layout-builder.toml](./fe-mo-route-layout-builder.toml): `apps/mobile/src/app/**/_layout.tsx`를 구현하는 전문가
-- [fe-mo-page-builder.toml](./fe-mo-page-builder.toml): `apps/mobile/src/app/**/index.tsx` route screen 을 구현하는 전문가
-- [fe-mo-screen-builder.toml](./fe-mo-screen-builder.toml): `packages/fe-mo-ui/src/screen/**`의 모바일 screen component를 생성/정리하는 전문가
+- [fe-mo-page-builder.toml](./fe-mo-page-builder.toml): `apps/mobile/src/app/**/*.tsx` route file에서 shared screen visual owner를 연결하고 navigation/API/state/native wiring을 구현하는 전문가
+- [fe-mo-screen-builder.toml](./fe-mo-screen-builder.toml): 모바일 `fe-ui-page-builder` 대응 screen visual owner를 `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx` 기준으로 생성/정리하는 전문가
 - [fe-mo-api-integrator.toml](./fe-mo-api-integrator.toml): 모바일 데이터 조회/변경 연동 기준을 구현하는 전문가
 - [fe-mo-state-builder.toml](./fe-mo-state-builder.toml): 모바일 route-local MobX state class/hook과 state slice 전달 구조를 구현하는 전문가
 - [fe-mo-store-builder.toml](./fe-mo-store-builder.toml): 모바일 공용/로컬 상태 경계를 정리하고 MobX store 를 구현하는 전문가

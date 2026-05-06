@@ -107,9 +107,9 @@ developer_instructions = '''
 
 | Stage | 이름 | 실행 단위 | 핵심 목표 | 주 호출 role |
 |-------|------|----------|----------|-------------|
-| 1 | 모바일 기능 기획 | feature별 (`domain` + `route`) | mobile route screen spec + 공통 backend scope/authorization invariant handoff + mobile unit/E2E test contract 정리 | `orch-mobile-screen-planner` + 공통 backend `req-*` role |
-| 2 | 모바일 UI 패키지 구현 | target별 | `fe-mo-ui` primitive / action / input / selection / navigation / menu / screen 구현 + package unit test | `fe-mo-data-display-component-builder`, `fe-mo-feedback-component-builder`, `fe-mo-action-component-builder`, `fe-mo-input-component-builder`, `fe-mo-selection-component-builder`, `fe-mo-navigation-component-builder`, `fe-mo-menu-builder`, `fe-mo-screen-builder` |
-| 3 | 모바일 route 통합 | route별 | Expo Router native layout/screen + data/state wiring 구현 + route unit test | `fe-mo-route-layout-builder`, `fe-mo-page-builder`, `fe-mo-screen-builder`, `fe-mo-api-integrator`, `fe-mo-state-builder`, `fe-mo-store-builder` |
+| 1 | 모바일 기능 기획 | feature별 (`domain` + `route`) | mobile route spec + shared screen target/props contract + 공통 backend scope/authorization invariant handoff + mobile unit/E2E test contract 정리 | `orch-mobile-screen-planner` + 공통 backend `req-*` role |
+| 2 | 모바일 UI 패키지 구현 | target별 | `fe-mo-ui` primitive / action / input / selection / navigation / menu / screen visual owner 구현 + package unit test | `fe-mo-data-display-component-builder`, `fe-mo-feedback-component-builder`, `fe-mo-action-component-builder`, `fe-mo-input-component-builder`, `fe-mo-selection-component-builder`, `fe-mo-navigation-component-builder`, `fe-mo-menu-builder`, `fe-mo-screen-builder` |
+| 3 | 모바일 route 통합 | route별 | Expo Router native layout/route file + shared screen wiring + data/state/native bridge 구현 + route unit test | `fe-mo-route-layout-builder`, `fe-mo-page-builder`, `fe-mo-api-integrator`, `fe-mo-state-builder`, `fe-mo-store-builder` |
 | 4 | 모바일 검증 | app 전체 | Detox E2E + type-check / doctor + Verified 반영 | mobile E2E / QA chain + 검증 명령 |
 
 ---
@@ -154,6 +154,7 @@ developer_instructions = '''
 - `packages/fe-mo-ui/src/surface/index.ts`
 - `packages/fe-mo-ui/src/design-system/index.ts`
 - `packages/fe-mo-ui/src/screen/index.ts`
+- `packages/fe-mo-ui/src/screen/**/*.spec.md`
 - `**/PROGRESS.md`
 
 ### 5.4 리뷰 체크포인트
@@ -177,12 +178,14 @@ developer_instructions = '''
 - 산출물:
   - `apps/mobile/src/app/app.context.md`
   - `apps/mobile/src/app/**/index.spec.md`
+  - `screen component target` / `screen props contract` / route wiring boundary
   - 필요한 shared UI target handoff
   - backend Entity/DTO/ApplicationService/Service/Repository/API/Module contract handoff(금지 계층 spec 생성 없음)
   - route `index.spec.md`의 State Ownership / State Shape 섹션(route-local/shared state가 있을 때)
 
 - 경계:
   - 모바일 route 의 screen/layout/API/state/test 계약은 `apps/mobile/src/app/**/index.spec.md`가 owner 입니다.
+  - screen visual composition 계약은 필요 시 `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].spec.md`가 owner 입니다.
   - backend contract 와 공통 scope/authorization invariant 는 공통 backend role 이 route `index.spec.md` 또는 handoff에 기록합니다.
   - backend 코드 구현은 이 compact flow 범위 밖이며, Stage 1 은 허용된 route `index.spec.md`와 handoff 정리까지만 책임집니다.
 
@@ -214,9 +217,11 @@ developer_instructions = '''
   - `packages/fe-mo-ui/src/surface/**`
   - `packages/fe-mo-ui/src/design-system/**`
   - `packages/fe-mo-ui/src/screen/**`
+  - `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].spec.md`
 
 **완료 gate**
 - 요청된 UI target 구현과 공유 barrel/index 변경이 반영되어야 합니다.
+- `fe-mo-screen-builder`가 생성/수정한 shared screen은 screen spec과 export가 함께 동기화되어야 합니다.
 - 대상 package unit test 구현과 검증 결과가 반영되어야 합니다.
 - 공유 barrel/index 파일은 join 단계의 단일 writer 로만 정리되어야 합니다.
 - 완료 메시지를 출력한 뒤 Stage 3 을 자동 시작하지 않고 사용자 리뷰를 기다립니다.
@@ -232,11 +237,12 @@ developer_instructions = '''
   - join: `fe-mo-unit-test-builder → req-mo-fe-test-planner → qa-mo-testing`
 - 대상 경로:
   - `apps/mobile/src/app/**/_layout.tsx`
-  - `apps/mobile/src/app/**/index.tsx`
+  - `apps/mobile/src/app/**/*.tsx`
   - route-local hooks / shared store
 
 **완료 gate**
 - 요청된 route 의 layout/screen wiring 이 구현되어야 합니다.
+- Stage 2 shared screen target 이 없으면 Stage 3에서 새 visual owner를 직접 만들지 않고 Stage 2 재시작 범위로 보고해야 합니다.
 - 조건부 API/state/store 연동, route unit test, route `index.spec.md` 변경 이력이 반영되어야 합니다.
 - 단일 route 전용 상태는 `fe-mo-state-builder`, 여러 route 재사용 상태는 `fe-mo-store-builder`를 source of truth 로 사용해야 합니다.
 - 완료 메시지를 출력한 뒤 Stage 4 를 자동 시작하지 않고 사용자 리뷰를 기다립니다.

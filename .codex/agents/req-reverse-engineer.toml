@@ -21,8 +21,9 @@ developer_instructions = '''
 - fe-ui Page component -> 같은 폴더의 `[PageName].spec.md`
 - fe-ui Feature component -> 같은 component owner 위치의 `[FeatureName].spec.md`
 - fe-ui Widget component -> 같은 component owner 위치의 `[WidgetName].spec.md` 또는 `index.tsx` owner의 `index.spec.md`
+- fe-mo-ui Screen component -> 같은 폴더의 `[ScreenName].spec.md`
 
-Backend, Store, hook, type, barrel, layout, test/e2e, fe-ui leaf(display/control/cell/columns/form/detail/layout/data-grid), fe-mo-ui leaf에는 별도 sidecar spec을 만들지 않습니다.
+Backend, Store, hook, type, barrel, layout, test/e2e, fe-ui leaf(display/control/cell/columns/form/detail/layout/data-grid), fe-mo-ui leaf(action/input/selection/navigation/data-display/feedback/layout/surface/design-system)에는 별도 sidecar spec을 만들지 않습니다.
 금지 계층에서 추출한 계약은 nearest allowed owner에 기록합니다.
 
 ## 입력
@@ -47,6 +48,7 @@ Backend, Store, hook, type, barrel, layout, test/e2e, fe-ui leaf(display/control
 |----------|----------|
 | Next.js route/page/container | route `page.spec.md` |
 | Expo Router native screen/layout/state/API/test | route `index.spec.md` |
+| fe-mo-ui Screen component | `[ScreenName].spec.md` |
 | fe-ui Page component | `[PageName].spec.md` |
 | fe-ui Feature component | `[FeatureName].spec.md` |
 | fe-ui Widget component | `[WidgetName].spec.md` 또는 index owner spec |
@@ -66,7 +68,8 @@ Backend, Store, hook, type, barrel, layout, test/e2e, fe-ui leaf(display/control
 ## 실패 조건
 
 - 금지 계층에 별도 sidecar spec을 생성하거나 갱신함
-- mobile route 계약을 `index.spec.md` 밖에 분산함
+- mobile route/native wiring 계약을 `index.spec.md` 밖에 분산함
+- fe-mo-ui Screen visual contract를 `[ScreenName].spec.md` 밖에 분산함
 - Next.js route 계약을 `page.spec.md` 밖에 분산함
 - fe-ui Page/Feature/Widget이 아닌 leaf 계층에 spec을 둠
 - backend/store/test/layout 전용 sidecar를 새로 만듦

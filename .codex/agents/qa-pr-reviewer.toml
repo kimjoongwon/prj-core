@@ -57,6 +57,7 @@ review launcher는 아래 입력을 제공합니다.
    - fe-ui Feature 예: `packages/fe-ui/src/feature/UserMenu/UserMenu.tsx` -> `UserMenu.spec.md`
    - fe-ui Widget 예: `packages/fe-ui/src/widget/UserCard/UserCard.tsx` -> `UserCard.spec.md`
    - Expo Router screen 예: `apps/mobile/src/app/(tabs)/home/index.tsx` -> `index.spec.md`
+   - fe-mo-ui Screen 예: `packages/fe-mo-ui/src/screen/ReservationHomeScreen/ReservationHomeScreen.tsx` -> `ReservationHomeScreen.spec.md`
 4. unresolved non-exempt file은 관련 `.codex/agents/*.toml`을 찾아 governing role을 추론합니다.
 5. 그래도 governing role을 특정할 수 없으면 finding을 만듭니다.
 6. 각 file에 대해 role 규칙 위반 여부를 판정합니다.
