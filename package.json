@@ -102,6 +102,13 @@
     "vitest": "catalog:"
   },
   "pnpm": {
+    "packageExtensions": {
+      "react-native-worklets@0.7.4": {
+        "dependencies": {
+          "@babel/types": "^7.29.0"
+        }
+      }
+    },
     "peerDependencyRules": {
       "allowedVersions": {
         "expo-modules-core>react-native-worklets": "0.7.2"

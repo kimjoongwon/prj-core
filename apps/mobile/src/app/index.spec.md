@@ -1,9 +1,9 @@
 # mobile app route 계약서
 
 > 생성일: 2026-05-04
-> 수정일: 2026-05-05
+> 수정일: 2026-05-06
 > 타입: app
-> 위치: apps/mobile/src/app/index.tsx
+> 위치: apps/mobile/src/app/(tabs)/index.tsx
 
 ## 화면/라우트 목적
 
@@ -17,13 +17,18 @@
 4. `/auth/login`은 외부 브라우저를 열지 않고 앱 내 WebView에 `user-mobile` clientId 기반 IDP API 로그인 URL을 로드한다.
 5. IDP 인증 완료 후 `/auth/callback`에서 callback code/state를 교환하고, native 세션 검증까지 통과한 뒤 루트 하단 탭 메인(`/`)으로 이동한다.
 6. `/auth/login`은 네이티브 안내/CTA 없이 full-screen WebView만 렌더링하고, 로그인 문구와 입력 폼은 IDP Web 내부가 소유한다.
-7. 인증된 홈(`/`) 화면은 `홈`, `예약`, `내 정보` 하단 탭을 제공하고, `내 정보` 탭에서 로그아웃 완료 후 `/auth/login`으로 이동한다.
+7. 인증된 홈(`/`) 화면은 Expo Router `(tabs)` 그룹의 `홈`, `예약`, `내 정보` 하단 탭으로 진입한다.
+8. `내 정보` 탭은 로그아웃 버튼을 제공하고, 로그아웃 완료 후 `/auth/login`으로 이동한다.
+9. callback/returnTo에 IDP Web 경로(`/dashboard` 등)가 섞이면 모바일 인증 홈(`/`)으로 정규화한다.
 
 ## Route Mapping
 
 | route | route file | 설명 |
 |-------|------------|------|
-| `/` | `apps/mobile/src/app/index.tsx` | 예약 플랫폼 하단 탭 메인 화면 |
+| `/` | `apps/mobile/src/app/(tabs)/index.tsx` | 예약 플랫폼 홈 탭 화면 |
+| `/(tabs)` | `apps/mobile/src/app/(tabs)/_layout.tsx` | Expo Router 하단 탭 shell |
+| `/reservations` | `apps/mobile/src/app/(tabs)/reservations.tsx` | 예약 탭 화면 |
+| `/profile` | `apps/mobile/src/app/(tabs)/profile.tsx` | 내 정보 탭 + 로그아웃 |
 | `/_layout` | `apps/mobile/src/app/_layout.tsx` | AuthSessionGate + IDP client bootstrap shell |
 | `/auth/login` | `apps/mobile/src/app/auth/login.tsx` | native UI 없이 WebView만 렌더링하는 `user-mobile` 로그인 진입점 |
 | `/auth/callback` | `apps/mobile/src/app/auth/callback.tsx` | 사용자 친화적인 로그인 확인 상태 + OIDC callback 세션 확인/리다이렉트 처리 |
@@ -32,17 +37,18 @@
 
 - root `_layout.tsx`는 `GestureHandlerRootView` 안쪽, `DesignSystemProvider` 바깥쪽에 `SafeAreaProvider`를 한 번만 설치한다.
 - route 화면은 `react-native-safe-area-context`를 직접 읽지 않고 `@cocrepo/mo-ui`의 `ScreenFrame`으로 safe-area padding을 적용한다.
-- `/` 하단 탭 메인은 `ScreenFrame` 기본 edge를 사용해 bottom safe area까지 확보하고, 하단 탭이 home indicator 영역과 겹치지 않게 한다.
+- `(tabs)/_layout.tsx`가 Expo Router `Tabs`를 소유하고, `/`, `/reservations`, `/profile`을 하단 탭으로 등록한다.
+- 탭 화면은 `ScreenFrame`의 top/left/right edge를 사용하고, bottom safe area와 탭 바 영역은 Expo Router Tabs가 소유한다.
 - `/auth/login`은 `ScreenFrame` 안에서 full-screen WebView만 렌더링하고, `/auth/callback`은 사용자 친화적인 처리 상태를 표시한다.
 
 ## 모바일 auth 계약
 
 ### returnTo deep-link 방식
 
-- 로그인은 `apps/mobile/src/auth/_utils/auth.ts`의 `buildAuthLoginUrl()`로 `clientId=user-mobile`과 `returnTo=onora-mobile://auth/callback?returnTo=/` 형태의 deep-link를 생성한다.
+- 로그인은 `apps/mobile/src/auth/_utils/auth.ts`의 `buildAuthLoginUrl()`로 `clientId=user-mobile`과 `returnTo=kr.co.cocdev.onoramobile://auth/callback?returnTo=/` 형태의 deep-link를 생성한다.
 - 생성된 로그인 URL은 `react-native-webview`로 앱 내부에서 로드하며, Chrome/Safari 같은 외부 브라우저나 별도 네이티브 로그인 화면을 열지 않는다.
 - Android 에뮬레이터에서 IDP가 `localhost` 절대 URL로 리다이렉트하면 WebView navigation 단계에서 `10.0.2.2` host로 보정해 앱 내부 흐름을 유지한다.
-- WebView가 `onora-mobile://auth/callback?...` navigation을 감지하면 로드를 중단하고 Expo Router `/auth/callback`으로 query params를 전달한다.
+- WebView가 `kr.co.cocdev.onoramobile://auth/callback?...` navigation을 감지하면 로드를 중단하고 Expo Router `/auth/callback`으로 query params를 전달한다.
 - 콜백 URL은 `src/auth/_utils/auth.ts`의 `buildAuthCallbackUrl()`/`parseAuthCallbackReturnTarget()`로 정규화한다.
 - 초기 앱 진입 기본값은 인증 성공 시 홈(`/`), 비인증 시 `/auth/login?returnTo=/`이다.
 
@@ -58,7 +64,8 @@
 - 요청 진입:
   - `AuthSessionGate`가 callback route가 아닌 모든 초기 route에서 `mobileAuthStore.authStatus`가 `unknown`이면 `verifySession()` 수행.
   - `verifySession()` 완료 전에는 `Stack` children을 렌더하지 않고 native splash view를 유지한다.
-  - 인증 상태면 홈(`/`)으로, 비인증 상태면 `/auth/login`으로 `router.replace()`를 먼저 보낸다.
+- 인증 상태면 홈(`/`)으로, 비인증 상태면 `/auth/login`으로 `router.replace()`를 먼저 보낸다.
+- 인증/콜백 흐름에 IDP Web 경로가 섞이면 `resolveAuthenticatedRoutePath()`가 `/`, `/reservations`, `/profile`만 허용하고 나머지는 홈(`/`)으로 보정한다.
   - 목표 화면의 `onLayout` 이후에만 `SplashScreen.hideAsync()`를 호출한다.
 - 로그인 콜백:
   - `/auth/callback`에서 `verifySession(params)`가 `error`, `code`, `state`, `returnTo`를 해석한다.
@@ -75,7 +82,10 @@
 
 | route | 테스트 파일 | 핵심 검증 항목 |
 |------|------|--------------|
-| `/` | `apps/mobile/src/route-tests/index.test.tsx` | 하단 탭 메인 렌더, 탭 전환, 내 정보 로그아웃 |
+| `/(tabs)` | `apps/mobile/src/route-tests/tabs-layout.test.tsx` | Expo Router Tabs 라우트 등록 |
+| `/` | `apps/mobile/src/route-tests/index.test.tsx` | 홈 탭 렌더 |
+| `/reservations` | `apps/mobile/src/route-tests/reservations.test.tsx` | 예약 탭 렌더 |
+| `/profile` | `apps/mobile/src/route-tests/profile.test.tsx` | 내 정보 탭 렌더, 로그아웃 |
 | `/_layout` | `apps/mobile/src/route-tests/_layout.test.tsx` | `AuthSessionGate` 래핑과 IDP client bootstrap 호출 |
 | `/auth/login` | `apps/mobile/src/route-tests/auth/login.test.tsx` | full-screen WebView URL 로드, callback scheme 가로채기, native CTA 부재 |
 | `/auth/callback` | `apps/mobile/src/route-tests/auth/callback.test.tsx` | 에러/성공/재시도 처리, `verifySession` 결과 반영 |
@@ -91,6 +101,8 @@
 - [x] callback 성공 후 native `verify-token` 검증으로 store 인증 상태 갱신
 - [x] 인증된 홈 화면을 하단 탭 메인으로 제공
 - [x] `내 정보` 탭에서 로그아웃 액션 제공
+- [x] Expo Router `(tabs)` 그룹으로 홈/예약/내 정보 탭 라우트 분리
+- [x] IDP Web 경로가 callback/returnTo에 섞이면 모바일 홈(`/`)으로 보정
 - [x] 로그인/콜백 화면에서 내부 경로 노출 제거 및 오노라 예약 플랫폼 문구 적용
 - [x] root layout safe-area provider와 route 화면 `ScreenFrame` wrapper 적용
 - [x] auth callback/login/index 테스트 산출물 확보
@@ -100,9 +112,11 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-06 | 홈/예약/내 정보 화면을 Expo Router `(tabs)` 그룹으로 분리하고 IDP Web returnTo를 모바일 홈으로 보정하는 계약 추가 | codex |
 | 2026-05-05 | `/auth/login`을 native 안내/CTA 없는 full-screen WebView 전용 컨테이너로 정정 | codex |
 | 2026-05-05 | Expo root safe-area provider와 `@cocrepo/mo-ui` `ScreenFrame` 기반 route safe-area wrapper 계약 추가 | codex |
 | 2026-05-05 | 모바일 clientId를 `user-mobile`, callback scheme을 `onora-mobile`, 인증 홈을 루트 하단 탭 메인으로 정정 | codex |
+| 2026-05-06 | OIDC native client 검증에 맞춰 모바일 callback scheme을 reverse-domain 형식으로 정정 | codex |
 | 2026-05-04 | Stage 3 완료 정리를 위해 모바일 route 계약/토큰-세션 체크/라우트 unit ownership 테스트 반영 | codex |
 | 2026-05-04 | Expo Router 앱 번들에서 테스트 파일이 제외되도록 route unit test 위치를 `src/route-tests`로 이동 | codex |
 | 2026-05-04 | Expo Router route tree 경고 제거를 위해 non-route auth 유틸/스토어를 `src/auth`로 이동 | codex |

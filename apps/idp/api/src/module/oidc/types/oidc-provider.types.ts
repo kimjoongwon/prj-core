@@ -120,6 +120,7 @@ export interface OidcClientConfig {
 	client_id: string;
 	client_secret?: string;
 	client_name?: string;
+	application_type?: "native" | "web";
 	redirect_uris: string[];
 	grant_types?: string[];
 	response_types?: string[];

@@ -4,7 +4,10 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import type { Href } from "expo-router";
-import { getAuthenticatedHomePath } from "@/auth/auth-config";
+import {
+	getAuthenticatedHomePath,
+	resolveAuthenticatedRoutePath,
+} from "@/auth/auth-config";
 import { mobileAuthStore } from "@/auth/auth-store";
 import {
 	buildAuthCallbackErrorState,
@@ -14,7 +17,7 @@ import {
 } from "@/auth/_utils/auth";
 
 const AUTH_CLIENT_ID = "user-mobile";
-const AUTH_CALLBACK_SCHEME = "onora-mobile";
+const AUTH_CALLBACK_SCHEME = "kr.co.cocdev.onoramobile";
 const AUTH_CALLBACK_PATH = "auth/callback";
 const DEFAULT_NEXT_ROUTE = getAuthenticatedHomePath();
 
@@ -57,7 +60,7 @@ export default observer(function AuthCallbackRoute() {
 					return;
 				}
 
-				router.replace(nextState.nextRoute as Href);
+				router.replace(resolveAuthenticatedRoutePath(nextState.nextRoute) as Href);
 			}
 		};
 
@@ -74,7 +77,11 @@ export default observer(function AuthCallbackRoute() {
 	const onPressRetryLoginButton = () => {
 		router.replace({
 			pathname: "/auth/login",
-			params: { returnTo: uiState.nextRoute || DEFAULT_NEXT_ROUTE },
+			params: {
+				returnTo: resolveAuthenticatedRoutePath(
+					uiState.nextRoute || DEFAULT_NEXT_ROUTE,
+				),
+			},
 		} as unknown as Href);
 	};
 

@@ -170,14 +170,14 @@ describe("AuthController", () => {
 
 			await controller.login(
 				"user-mobile",
-				"onora-mobile://auth/callback?returnTo=/",
+				"kr.co.cocdev.onoramobile://auth/callback?returnTo=/",
 				mockResponse as unknown as never,
 			);
 
 			expect(
 				mockAuthApplicationService.getAuthorizationUrl,
 			).toHaveBeenCalledWith(
-				"onora-mobile://auth/callback?returnTo=/",
+				"kr.co.cocdev.onoramobile://auth/callback?returnTo=/",
 				"user-mobile",
 			);
 			expect(mockResponse.redirect).toHaveBeenCalledWith(

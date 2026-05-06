@@ -116,4 +116,39 @@ describe("AuthSessionGate", () => {
 		});
 		expect(screen.queryByText("login-screen")).toBeNull();
 	});
+
+	it("인증 상태에서 모바일 탭이 아닌 웹 경로에 있으면 홈으로 보낸다", async () => {
+		mockPathname = "/dashboard";
+		mobileAuthStore.authStatus = "authenticated";
+
+		render(
+			<AuthSessionGate>
+				<Text>idp-dashboard-screen</Text>
+			</AuthSessionGate>,
+		);
+
+		await waitFor(() => {
+			expect(mockReplace).toHaveBeenCalledWith("/");
+		});
+		expect(screen.queryByText("idp-dashboard-screen")).toBeNull();
+	});
+
+	it("비인증 상태에서 모바일 탭이 아닌 웹 경로에 있으면 returnTo를 홈으로 보정한다", async () => {
+		mockPathname = "/dashboard";
+		mobileAuthStore.authStatus = "unauthenticated";
+
+		render(
+			<AuthSessionGate>
+				<Text>idp-dashboard-screen</Text>
+			</AuthSessionGate>,
+		);
+
+		await waitFor(() => {
+			expect(mockReplace).toHaveBeenCalledWith({
+				pathname: "/auth/login",
+				params: { returnTo: "/" },
+			});
+		});
+		expect(screen.queryByText("idp-dashboard-screen")).toBeNull();
+	});
 });

@@ -6,7 +6,10 @@ import { useEffect, useRef, useState } from "react";
 import type { ComponentType } from "react";
 import { StyleSheet } from "react-native";
 import { WebView, type WebViewProps } from "react-native-webview";
-import { getAuthenticatedHomePath } from "@/auth/auth-config";
+import {
+	getAuthenticatedHomePath,
+	resolveAuthenticatedRoutePath,
+} from "@/auth/auth-config";
 import { mobileAuthStore } from "@/auth/auth-store";
 import {
 	buildAuthCallbackRouteParams,
@@ -17,7 +20,7 @@ import {
 } from "@/auth/_utils/auth";
 
 const AUTH_CLIENT_ID = "user-mobile";
-const AUTH_CALLBACK_SCHEME = "onora-mobile";
+const AUTH_CALLBACK_SCHEME = "kr.co.cocdev.onoramobile";
 const AUTH_CALLBACK_PATH = "auth/callback";
 const LoginWebView = WebView as unknown as ComponentType<WebViewProps>;
 
@@ -29,7 +32,9 @@ const buildLoginFlow = (
 	params: Record<string, string | string[] | undefined>,
 ) => {
 	const parsed = parseAuthLoginParams(params);
-	const targetReturnTo = parsed.returnTo || getAuthenticatedHomePath();
+	const targetReturnTo = resolveAuthenticatedRoutePath(
+		parsed.returnTo || getAuthenticatedHomePath(),
+	);
 	const loginUrl = rewriteLocalhostUrlForAndroidEmulator(
 		buildAuthLoginUrl({
 			clientId: AUTH_CLIENT_ID,

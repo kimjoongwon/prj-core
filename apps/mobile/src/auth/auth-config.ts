@@ -18,6 +18,8 @@ export const MOBILE_AUTH = {
 	authReturnPath: "/auth/callback",
 };
 
+const AUTHENTICATED_ROUTE_PATHS = ["/", "/reservations", "/profile"] as const;
+
 export const getIdpApiBaseUrl = () => MOBILE_AUTH.idpApiBaseUrl.replace(/\/+$/, "");
 
 export const getAuthenticatedHomePath = () => MOBILE_AUTH.authenticatedHomePath;
@@ -47,3 +49,15 @@ export const isAuthCallbackRoute = (pathname = "") =>
 
 export const isAuthRoute = (pathname = "") =>
 	pathname.startsWith("/auth/") || pathname === "/auth/login";
+
+export const isAuthenticatedRoute = (pathname = "") =>
+	AUTHENTICATED_ROUTE_PATHS.includes(
+		pathname as (typeof AUTHENTICATED_ROUTE_PATHS)[number],
+	);
+
+export const resolveAuthenticatedRoutePath = (pathname?: string | null) => {
+	const normalizedPathname = pathname?.trim() || getAuthenticatedHomePath();
+	const pathOnly = normalizedPathname.split("?")[0] || getAuthenticatedHomePath();
+
+	return isAuthenticatedRoute(pathOnly) ? pathOnly : getAuthenticatedHomePath();
+};

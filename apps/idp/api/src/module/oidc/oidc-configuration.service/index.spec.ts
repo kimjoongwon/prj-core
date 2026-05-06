@@ -33,7 +33,7 @@ describe("OidcConfigurationService", () => {
 		clientId,
 		clientSecret: null,
 		name: `${clientId} app`,
-		redirectUris: ["onora-mobile://auth/callback"],
+		redirectUris: ["kr.co.cocdev.onoramobile://auth/callback"],
 		grantTypes: ["authorization_code"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "none",
@@ -44,6 +44,7 @@ describe("OidcConfigurationService", () => {
 	it("skipConsent first-party client는 기존 grant가 없으면 grant를 자동 생성해야 한다", async () => {
 		const service = buildService([buildClient("user-mobile", true)]);
 		const configuration = await service.buildConfiguration();
+		expect(configuration.clients?.[0]?.application_type).toBe("native");
 		const grant = {
 			addOIDCScope: jest.fn(),
 			addResourceScope: jest.fn(),

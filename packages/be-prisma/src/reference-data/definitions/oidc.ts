@@ -103,10 +103,8 @@ const oidcSwaggerRedirectUri =
 	process.env.OIDC_SWAGGER_REDIRECT_URI ||
 	resolveOidcSeedUrl(oidcIssuer, "/api/oauth2-redirect.html");
 const oidcUserMobileRedirectUri =
-	process.env.OIDC_USER_MOBILE_REDIRECT_URI || "onora-mobile://auth/callback";
-const oidcUserMobileExpoRedirectUri =
-	process.env.OIDC_USER_MOBILE_EXPO_REDIRECT_URI ||
-	"exp://localhost:8081/--/auth/callback";
+	process.env.OIDC_USER_MOBILE_REDIRECT_URI ||
+	"kr.co.cocdev.onoramobile://auth/callback";
 
 /**
  * OIDC Client 시드 데이터
@@ -161,7 +159,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		clientId: "user-mobile",
 		clientSecret: null, // Public client (PKCE required)
 		name: "PRJ Core Mobile App",
-		redirectUris: [oidcUserMobileRedirectUri, oidcUserMobileExpoRedirectUri],
+		redirectUris: [oidcUserMobileRedirectUri],
 		loginUrl: null,
 		defaultReturnTo: null,
 		grantTypes: ["authorization_code", "refresh_token"],

@@ -7,7 +7,7 @@ const mockReplace = jest.fn();
 const mockUseLocalSearchParams = jest.fn();
 
 const CALLBACK_URL =
-	"onora-mobile://auth/callback?code=auth-code&state=auth-state&returnTo=%2F";
+	"kr.co.cocdev.onoramobile://auth/callback?code=auth-code&state=auth-state&returnTo=%2F";
 
 jest.mock("@cocrepo/mo-ui", () => {
 	const React = jest.requireActual<typeof import("react")>("react");
@@ -64,11 +64,29 @@ describe("mobile auth login route", () => {
 
 			expect(source.uri).toContain("/api/v1/auth/login");
 			expect(source.uri).toContain("clientId=user-mobile");
-			expect(source.uri).toContain("onora-mobile");
+			expect(source.uri).toContain("kr.co.cocdev.onoramobile");
 		});
 
 		expect(mobileAuthStore.setNextPathAfterLogin).toHaveBeenCalledWith("/");
 		expect(screen.queryByText("로그인 계속")).toBeNull();
+	});
+
+	it("IDP 웹 경로 returnTo가 들어오면 모바일 홈으로 정규화해야 한다", async () => {
+		mockUseLocalSearchParams.mockReturnValue({ returnTo: "/dashboard" });
+
+		render(<LoginPage />);
+
+		await waitFor(() => {
+			const source = screen.getByLabelText("auth-login-webview").props.source;
+			const loginUrl = new URL(source.uri);
+			const returnTo = loginUrl.searchParams.get("returnTo") ?? "";
+
+			expect(decodeURIComponent(returnTo)).toBe(
+				"kr.co.cocdev.onoramobile://auth/callback?returnTo=/",
+			);
+			expect(source.uri).not.toContain("dashboard");
+		});
+		expect(mobileAuthStore.setNextPathAfterLogin).toHaveBeenCalledWith("/");
 	});
 
 	it("WebView에서 callback scheme을 감지하면 앱 내부 callback 라우트로 이동해야 한다", async () => {

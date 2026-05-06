@@ -40,7 +40,7 @@ interface AuthCallbackResultState {
 	exchange?: MobileAuthCallbackExchangeResult;
 }
 
-export interface MobileAuthCallbackTransitionState extends AuthCallbackResultState {}
+export type MobileAuthCallbackTransitionState = AuthCallbackResultState;
 
 export interface AuthCallbackQuery {
 	code?: AuthQueryValue;
@@ -64,7 +64,7 @@ export interface MobileAuthLoginQuery {
 }
 
 const DEFAULT_CLIENT_ID = "user-mobile";
-const DEFAULT_AUTH_CALLBACK_SCHEME = "onora-mobile";
+const DEFAULT_AUTH_CALLBACK_SCHEME = "kr.co.cocdev.onoramobile";
 const DEFAULT_AUTH_CALLBACK_PATH = "auth/callback";
 const DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO = "/";
 const DEFAULT_IDP_API_BASE_URL =
@@ -348,7 +348,7 @@ export const parseAuthCallbackReturnTarget = (value?: string): string => {
 	try {
 		const fallbackParsed = new URL(
 			normalizedValue,
-			"onora-mobile://auth/callback",
+			"kr.co.cocdev.onoramobile://auth/callback",
 		);
 		const direct = fallbackParsed.searchParams.get("returnTo");
 		if (direct) {

@@ -12,7 +12,10 @@
 
 | route | owner spec | 설명 |
 |------|------------|------|
-| `/` | `apps/mobile/src/app/index.spec.md` | 예약 플랫폼 하단 탭 메인 |
+| `/` | `apps/mobile/src/app/index.spec.md` | 예약 플랫폼 홈 탭 |
+| `/(tabs)` | `apps/mobile/src/app/index.spec.md` | Expo Router 하단 탭 shell |
+| `/reservations` | `apps/mobile/src/app/index.spec.md` | 예약 탭 |
+| `/profile` | `apps/mobile/src/app/index.spec.md` | 내 정보 탭 + 로그아웃 |
 | `/_layout` | `apps/mobile/src/app/_layout.tsx` | Expo Router root shell |
 | `/auth/login` | `apps/mobile/src/app/index.spec.md` | `user-mobile` 로그인 진입 라우트 |
 | `/auth/callback` | `apps/mobile/src/app/index.spec.md` | OIDC 콜백 처리 라우트 |
@@ -49,17 +52,21 @@
 - `/auth/login`은 Chrome/Safari를 열지 않고 앱 내 WebView로 `clientId=user-mobile` IDP API 로그인 URL을 로드한다.
 - `/auth/login`은 네이티브 로그인 폼/안내 카드/CTA를 렌더링하지 않고, 사용자 문구와 입력 폼은 WebView 내부 IDP Web이 소유한다.
 - Android 에뮬레이터 WebView는 IDP가 반환한 `localhost` 절대 리다이렉트를 `10.0.2.2`로 보정해 host 머신의 IDP dev 서버를 계속 바라본다.
-- WebView에서 `onora-mobile://auth/callback` navigation이 발생하면 이를 가로채 `/auth/callback` route로 전달한다.
+- WebView에서 `kr.co.cocdev.onoramobile://auth/callback` navigation이 발생하면 이를 가로채 `/auth/callback` route로 전달한다.
 - `/auth/callback`은 에러 파라미터나 콜백 교환 실패 시 개발자용 callback/API 용어 대신 재시도 가능한 사용자 실패 상태를 표시한다.
 - 성공 callback은 `mobileAuthStore.verifySession()`으로 native API client의 쿠키 기반 세션을 검증하고, store 인증 상태가 `authenticated`로 갱신된 뒤에만 deep-link 대상을 라우팅한다.
-- 인증된 홈(`/`) 화면은 `홈`, `예약`, `내 정보` 하단 탭을 제공하고, `내 정보` 탭에서 `mobileAuthStore.logout()` 완료 후 `/auth/login`으로 이동한다.
+- 인증된 홈(`/`) 화면은 Expo Router `(tabs)` 그룹의 `홈`, `예약`, `내 정보` 하단 탭으로 진입한다.
+- callback/returnTo에 IDP Web 경로(`/dashboard` 등)가 섞이면 모바일 인증 홈(`/`)으로 정규화한다.
+- `내 정보` 탭에서 `mobileAuthStore.logout()` 완료 후 `/auth/login`으로 이동한다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-06 | 모바일 홈을 Expo Router `(tabs)` 구조로 전환하고 IDP Web returnTo를 홈으로 보정하는 정책 추가 | codex |
 | 2026-05-05 | `/auth/login`을 native UI 없는 WebView-only 컨테이너로 정정하고 IDP Web 로그인 화면 소유권을 명시 | codex |
 | 2026-05-05 | 모바일 로그인 clientId/callback scheme/루트 하단 탭 메인 계약을 `user-mobile`/`onora-mobile`/`/` 기준으로 정정 | codex |
+| 2026-05-06 | OIDC native client 검증에 맞춰 모바일 callback scheme을 reverse-domain 형식으로 정정 | codex |
 | 2026-04-14 | 모바일 app 수준 route/test ownership 과 Detox smoke 시나리오를 추가 | codex |
 | 2026-05-04 | Stage 3 대상 auth 라우트(`login/callback/dashboard`) + `index.spec.md` 정렬 및 세션 체크 항목 동기화 | codex |
 | 2026-05-04 | Expo Router runtime bundle 보호를 위해 route unit test 와 non-route auth 모듈 위치를 `src/app` 밖으로 정리 | codex |

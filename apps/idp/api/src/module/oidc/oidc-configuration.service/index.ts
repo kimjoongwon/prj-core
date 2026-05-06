@@ -59,6 +59,8 @@ export class OidcConfigurationService {
 				client_id: client.client_id,
 				client_secret: client.client_secret,
 				client_name: client.client_name,
+				application_type:
+					client.token_endpoint_auth_method === "none" ? "native" : "web",
 				redirect_uris: client.redirect_uris,
 				grant_types: client.grant_types,
 				response_types: client.response_types,

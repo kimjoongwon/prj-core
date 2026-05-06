@@ -24,7 +24,7 @@ describe("OidcFacade", () => {
 	const mobileClient = {
 		clientId: "user-mobile",
 		clientSecret: null,
-		redirectUri: "onora-mobile://auth/callback",
+		redirectUri: "kr.co.cocdev.onoramobile://auth/callback",
 		scope: "openid profile email",
 	};
 
@@ -85,7 +85,7 @@ describe("OidcFacade", () => {
 		const url = new URL(result.authorizationUrl);
 		expect(url.searchParams.get("client_id")).toBe("user-mobile");
 		expect(url.searchParams.get("redirect_uri")).toBe(
-			"onora-mobile://auth/callback",
+			"kr.co.cocdev.onoramobile://auth/callback",
 		);
 		expect(url.searchParams.get("scope")).toBe("openid profile email");
 	});

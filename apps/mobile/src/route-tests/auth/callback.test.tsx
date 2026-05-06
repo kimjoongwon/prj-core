@@ -98,9 +98,30 @@ describe("mobile auth callback route", () => {
 			{ returnTo: "/" },
 			expect.objectContaining({
 				clientId: "user-mobile",
-				callbackScheme: "onora-mobile",
+				callbackScheme: "kr.co.cocdev.onoramobile",
 			}),
 		);
+		expect(mobileAuthStore.verifySession).toHaveBeenCalled();
+	});
+
+	it("콜백 성공 후 IDP 웹 경로가 섞여도 모바일 홈으로 이동해야 한다", async () => {
+		mockUseLocalSearchParams.mockReturnValue({ returnTo: "/" });
+		(authUtils.verifySession as jest.Mock).mockResolvedValue({
+			status: "success",
+			nextRoute: "/dashboard",
+			message: "성공",
+			exchange: {
+				status: "redirect",
+				statusCode: 302,
+				location: "http://localhost:3008/dashboard",
+			},
+		});
+
+		render(<CallbackPage />);
+
+		await waitFor(() => {
+			expect(mockReplace).toHaveBeenCalledWith("/");
+		});
 		expect(mobileAuthStore.verifySession).toHaveBeenCalled();
 	});
 
@@ -143,6 +164,29 @@ describe("mobile auth callback route", () => {
 
 		const retryButton = screen.getByText("로그인 다시 시도");
 		fireEvent.press(retryButton);
+
+		expect(mockReplace).toHaveBeenCalledWith({
+			pathname: "/auth/login",
+			params: { returnTo: "/" },
+		});
+	});
+
+	it("세션 검증 실패의 재시도 경로도 모바일 홈으로 정규화해야 한다", async () => {
+		mockUseLocalSearchParams.mockReturnValue({ returnTo: "/" });
+		(authUtils.verifySession as jest.Mock).mockResolvedValue({
+			status: "error",
+			nextRoute: "/dashboard",
+			message: "실패",
+			exchange: undefined,
+		});
+
+		render(<CallbackPage />);
+
+		await waitFor(() => {
+			expect(screen.getByText("실패")).toBeTruthy();
+		});
+
+		fireEvent.press(screen.getByText("로그인 다시 시도"));
 
 		expect(mockReplace).toHaveBeenCalledWith({
 			pathname: "/auth/login",

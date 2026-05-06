@@ -5,7 +5,12 @@ import type { Href } from "expo-router";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { isAuthCallbackRoute, isAuthRoute } from "./auth-config";
+import {
+	isAuthCallbackRoute,
+	isAuthenticatedRoute,
+	isAuthRoute,
+	resolveAuthenticatedRoutePath,
+} from "./auth-config";
 import { mobileAuthStore } from "./auth-store";
 
 const HOME_ROUTE = "/" as const;
@@ -21,7 +26,7 @@ const normalizePathname = (pathname?: string | null) => pathname || HOME_ROUTE;
 const buildLoginRedirect = (returnTo: string): AuthRedirect => ({
 	href: {
 		pathname: LOGIN_ROUTE,
-		params: { returnTo },
+		params: { returnTo: resolveAuthenticatedRoutePath(returnTo) },
 	} as unknown as Href,
 	targetPathname: LOGIN_ROUTE,
 });
@@ -40,6 +45,10 @@ const resolveAuthRedirect = (
 	}
 
 	if (authStatus === "authenticated" && isAuthRoute(pathname)) {
+		return buildHomeRedirect();
+	}
+
+	if (authStatus === "authenticated" && !isAuthenticatedRoute(pathname)) {
 		return buildHomeRedirect();
 	}
 
