@@ -304,6 +304,11 @@ export type {
 export { ServiceDocumentListPage } from "./ServiceDocumentListPage/ServiceDocumentListPage";
 export type { SessionCheckPageProps } from "./SessionCheckPage/SessionCheckPage";
 export { SessionCheckPage } from "./SessionCheckPage/SessionCheckPage";
+export type {
+	SignUpPageProps,
+	SignUpPageState,
+} from "./SignUpPage/SignUpPage";
+export { SignUpPage } from "./SignUpPage/SignUpPage";
 export type { SpaceCreatePageProps } from "./SpaceCreatePage/SpaceCreatePage";
 export { SpaceCreatePage } from "./SpaceCreatePage/SpaceCreatePage";
 export type {

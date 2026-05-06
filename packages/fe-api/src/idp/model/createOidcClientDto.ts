@@ -11,6 +11,7 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
+import type { CreateOidcClientDtoLoginUi } from "./createOidcClientDtoLoginUi";
 
 export interface CreateOidcClientDto {
 	/**
@@ -43,6 +44,11 @@ export interface CreateOidcClientDto {
 	tokenEndpointAuthMethod: string;
 	/** 허용된 스코프 */
 	scope: string;
+	/**
+	 * 로그인 화면 표시 설정
+	 * @nullable
+	 */
+	loginUi?: CreateOidcClientDtoLoginUi;
 	/** 로고 URI */
 	logoUri?: string;
 	/** 정책 URI */
@@ -51,6 +57,4 @@ export interface CreateOidcClientDto {
 	tosUri?: string;
 	/** 권한 동의 화면 생략 여부 */
 	skipConsent?: boolean;
-	/** 로그인 화면 표시 설정 */
-	loginUi?: unknown | null;
 }

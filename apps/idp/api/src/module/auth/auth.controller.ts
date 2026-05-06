@@ -33,6 +33,7 @@ import {
 	Body,
 	Controller,
 	Get,
+	Headers,
 	HttpCode,
 	HttpStatus,
 	Param,
@@ -167,6 +168,23 @@ export class AuthController {
 	}
 
 	@Public()
+	@SkipSpaceCheck()
+	@HttpCode(HttpStatus.OK)
+	@Get("sign-up/spaces")
+	@ApiOperation({
+		operationId: "getSignUpSpaces",
+		summary: "회원가입 Space 목록 조회",
+		description:
+			"회원가입 전 사용자가 선택할 수 있는 Space 목록을 반환합니다. x-space-id 헤더 없이 호출할 수 있습니다.",
+	})
+	@ApiErrors(500)
+	@ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
+	@ResponseMessage("회원가입 Space 목록 조회 성공")
+	async getSignUpSpaces() {
+		return this.authApplicationService.getSignUpSpaces();
+	}
+
+	@Public()
 	@HttpCode(HttpStatus.CREATED)
 	@Post("sign-up")
 	@ApiOperation({
@@ -186,7 +204,14 @@ export class AuthController {
 	)
 	@ApiResponseEntity(EmailVerificationRequestedDto, HttpStatus.CREATED)
 	@ResponseMessage("회원가입 성공")
-	async signUp(@Body() signUpDto: SignUpPayloadDto) {
+	async signUp(
+		@Body() signUpDto: SignUpPayloadDto,
+		@Headers(REQUEST_HEADER_KEYS.SPACE_ID) requestedSpaceId?: string,
+	) {
+		if (requestedSpaceId && requestedSpaceId !== signUpDto.spaceId) {
+			throw new BadRequestException("SIGN_UP_SPACE_HEADER_MISMATCH");
+		}
+
 		return this.authApplicationService.signUp(signUpDto);
 	}
 

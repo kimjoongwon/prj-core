@@ -2594,8 +2594,7 @@ function buildWorktreeEnvValues({ ticket, branch, slot, config }) {
     values[key] = String(config.port.map[key] + offset);
   }
 
-  const localPostgresUser =
-    process.env.POSTGRES_USER || process.env.USER || process.env.LOGNAME || "cocrepo";
+  const localPostgresUser = process.env.POSTGRES_USER || "cocrepo";
   const localPostgresPassword =
     process.env.POSTGRES_PASSWORD ??
     (localPostgresUser === "cocrepo"

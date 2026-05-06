@@ -23,6 +23,8 @@ export interface SignUpPayloadDto {
 	name: string;
 	/** 전화번호 */
 	phone: string;
+	/** 주소 (2-255자) */
+	address: string;
 	/** 비밀번호 (8자 이상) */
 	password: string;
 }

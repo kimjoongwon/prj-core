@@ -15,3 +15,4 @@ export const useSetCurrentSpace = useSetCurrentSpaceWrapper;
 export type { AuthAuditLogDto } from "../model/authAuditLogDto";
 export { AuthAuditResult } from "../model/authAuditResult";
 export type { EmailVerificationRequestedDto } from "../model/emailVerificationRequestedDto";
+export type { SpaceDto } from "../model/spaceDto";

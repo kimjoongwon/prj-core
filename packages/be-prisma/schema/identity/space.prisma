@@ -33,6 +33,7 @@ model Space {
   associations        SpaceAssociation[]
   classification      SpaceClassification?
   tenants             Tenant[]
+  emailVerifications  EmailVerification[]
   tenantAccessRequests TenantAccessRequest[]
   // Space소속 리소스
   categories     Category[]

@@ -1,4 +1,5 @@
-import { render, screen, waitFor } from "@testing-library/react-native";
+import { act, render, screen, waitFor } from "@testing-library/react-native";
+import { Platform } from "react-native";
 import LoginPage from "@/app/auth/login";
 import * as authUtils from "@/auth/_utils/auth";
 import { mobileAuthStore } from "@/auth/auth-store";
@@ -120,5 +121,26 @@ describe("mobile auth login route", () => {
 		expect(
 			authUtils.rewriteLocalhostUrlForAndroidEmulator(redirectedUrl, "ios"),
 		).toBe(redirectedUrl);
+	});
+
+	it("WebView가 localhost redirect를 에러로 보고해도 에뮬레이터 host로 다시 로드해야 한다", async () => {
+		jest.replaceProperty(Platform, "OS", "android");
+		render(<LoginPage />);
+
+		const webView = screen.getByLabelText("auth-login-webview");
+		const onError = webView.props.onError;
+		act(() => {
+			onError({
+				nativeEvent: {
+					url: "http://localhost:3007/oidc/auth?client_id=user-mobile",
+				},
+			});
+		});
+
+		await waitFor(() => {
+			expect(screen.getByLabelText("auth-login-webview").props.source.uri).toBe(
+				"http://10.0.2.2:3007/oidc/auth?client_id=user-mobile",
+			);
+		});
 	});
 });

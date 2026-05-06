@@ -39,6 +39,12 @@ export class SignUpPayloadDto extends SignUpSchema {
 	phone: string;
 
 	@ApiProperty({
+		example: "서울특별시 강남구 테헤란로 123",
+		description: "주소 (2-255자)",
+	})
+	address: string;
+
+	@ApiProperty({
 		example: "Password123!",
 		description: "비밀번호 (8자 이상)",
 	})

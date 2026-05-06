@@ -13,6 +13,8 @@ export class EmailVerification
 	name!: string;
 	nickname!: string;
 	phone!: string;
+	address!: string;
+	spaceId!: string;
 	passwordHash!: string;
 	tokenHash!: string;
 	status!: EmailVerificationStatus;

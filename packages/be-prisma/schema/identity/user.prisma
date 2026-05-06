@@ -152,6 +152,8 @@ model Profile {
   name         String
   /// @displayName 닉네임
   nickname     String    @unique
+  /// @displayName 주소
+  address      String
   userId       String    @map("user_id")
   avatarFileId String?   @map("avatar_file_id")
   user         User      @relation(fields: [userId], references: [id])

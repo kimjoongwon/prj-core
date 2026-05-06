@@ -205,6 +205,7 @@ export async function createRegularUsersAndGrounds(
 							create: {
 								name: `${groundData.name} 관리자`,
 								nickname: `${groundData.name}관리자`,
+								address: groundData.address,
 							},
 						},
 					},
@@ -309,6 +310,7 @@ export async function createRegularUsersAndGrounds(
 						create: {
 							name: userData.profile.name,
 							nickname: userData.profile.nickname,
+							address: userGrounds[0]?.ground.address ?? "",
 						},
 					},
 				},

@@ -33,7 +33,7 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 
-import type { GetI18nCatalog200AllOf } from ".././model";
+import type { GetIdpI18nCatalog200AllOf } from ".././model";
 
 import { customIdpInstance } from "../../libs/customIdpAxios";
 import type { ErrorType } from "../../libs/customIdpAxios";
@@ -41,40 +41,40 @@ import type { ErrorType } from "../../libs/customIdpAxios";
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 /**
- * 인증 없이 사용할 수 있는 정적 번역 key-value catalog를 언어별로 조회합니다.
- * @summary 런타임 번역 catalog 조회
+ * IDP 프론트 런타임 번역에 사용할 언어별 static catalog를 조회합니다.
+ * @summary 공개 IDP i18n catalog 조회
  */
-export const getI18nCatalog = (
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+export const getIdpI18nCatalog = (
+	languageCode: string,
 	options?: SecondParameter<typeof customIdpInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetI18nCatalog200AllOf>(
+	return customIdpInstance<GetIdpI18nCatalog200AllOf>(
 		{ url: `/api/v1/i18n/catalog/${languageCode}`, method: "GET", signal },
 		options,
 	);
 };
 
-export const getGetI18nCatalogQueryKey = (
-	languageCode?: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
-) => {
+export const getGetIdpI18nCatalogQueryKey = (languageCode?: string) => {
 	return [`/api/v1/i18n/catalog/${languageCode}`] as const;
 };
 
-export const getGetI18nCatalogInfiniteQueryKey = (
-	languageCode?: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
-) => {
+export const getGetIdpI18nCatalogInfiniteQueryKey = (languageCode?: string) => {
 	return ["infinite", `/api/v1/i18n/catalog/${languageCode}`] as const;
 };
 
-export const getGetI18nCatalogQueryOptions = <
-	TData = Awaited<ReturnType<typeof getI18nCatalog>>,
+export const getGetIdpI18nCatalogQueryOptions = <
+	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options?: {
 		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getI18nCatalog>>, TError, TData>
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
+				TError,
+				TData
+			>
 		>;
 		request?: SecondParameter<typeof customIdpInstance>;
 	},
@@ -82,11 +82,11 @@ export const getGetI18nCatalogQueryOptions = <
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
 	const queryKey =
-		queryOptions?.queryKey ?? getGetI18nCatalogQueryKey(languageCode);
+		queryOptions?.queryKey ?? getGetIdpI18nCatalogQueryKey(languageCode);
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getI18nCatalog>>> = ({
-		signal,
-	}) => getI18nCatalog(languageCode, requestOptions, signal);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getIdpI18nCatalog>>
+	> = ({ signal }) => getIdpI18nCatalog(languageCode, requestOptions, signal);
 
 	return {
 		queryKey,
@@ -94,31 +94,35 @@ export const getGetI18nCatalogQueryOptions = <
 		enabled: !!languageCode,
 		...queryOptions,
 	} as UseQueryOptions<
-		Awaited<ReturnType<typeof getI18nCatalog>>,
+		Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 		TError,
 		TData
 	> & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
-export type GetI18nCatalogQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getI18nCatalog>>
+export type GetIdpI18nCatalogQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getIdpI18nCatalog>>
 >;
-export type GetI18nCatalogQueryError = ErrorType<void>;
+export type GetIdpI18nCatalogQueryError = ErrorType<void>;
 
-export function useGetI18nCatalog<
-	TData = Awaited<ReturnType<typeof getI18nCatalog>>,
+export function useGetIdpI18nCatalog<
+	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options: {
 		query: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getI18nCatalog>>, TError, TData>
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
+				TError,
+				TData
+			>
 		> &
 			Pick<
 				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getI18nCatalog>>,
+					Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 					TError,
-					Awaited<ReturnType<typeof getI18nCatalog>>
+					Awaited<ReturnType<typeof getIdpI18nCatalog>>
 				>,
 				"initialData"
 			>;
@@ -128,20 +132,24 @@ export function useGetI18nCatalog<
 ): DefinedUseQueryResult<TData, TError> & {
 	queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetI18nCatalog<
-	TData = Awaited<ReturnType<typeof getI18nCatalog>>,
+export function useGetIdpI18nCatalog<
+	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options?: {
 		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getI18nCatalog>>, TError, TData>
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
+				TError,
+				TData
+			>
 		> &
 			Pick<
 				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getI18nCatalog>>,
+					Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 					TError,
-					Awaited<ReturnType<typeof getI18nCatalog>>
+					Awaited<ReturnType<typeof getIdpI18nCatalog>>
 				>,
 				"initialData"
 			>;
@@ -151,14 +159,18 @@ export function useGetI18nCatalog<
 ): UseQueryResult<TData, TError> & {
 	queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetI18nCatalog<
-	TData = Awaited<ReturnType<typeof getI18nCatalog>>,
+export function useGetIdpI18nCatalog<
+	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options?: {
 		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getI18nCatalog>>, TError, TData>
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
+				TError,
+				TData
+			>
 		>;
 		request?: SecondParameter<typeof customIdpInstance>;
 	},
@@ -167,17 +179,21 @@ export function useGetI18nCatalog<
 	queryKey: DataTag<QueryKey, TData, TError>;
 };
 /**
- * @summary 런타임 번역 catalog 조회
+ * @summary 공개 IDP i18n catalog 조회
  */
 
-export function useGetI18nCatalog<
-	TData = Awaited<ReturnType<typeof getI18nCatalog>>,
+export function useGetIdpI18nCatalog<
+	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options?: {
 		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getI18nCatalog>>, TError, TData>
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
+				TError,
+				TData
+			>
 		>;
 		request?: SecondParameter<typeof customIdpInstance>;
 	},
@@ -185,7 +201,7 @@ export function useGetI18nCatalog<
 ): UseQueryResult<TData, TError> & {
 	queryKey: DataTag<QueryKey, TData, TError>;
 } {
-	const queryOptions = getGetI18nCatalogQueryOptions(languageCode, options);
+	const queryOptions = getGetIdpI18nCatalogQueryOptions(languageCode, options);
 
 	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
 		TData,
@@ -198,37 +214,41 @@ export function useGetI18nCatalog<
 }
 
 /**
- * @summary 런타임 번역 catalog 조회
+ * @summary 공개 IDP i18n catalog 조회
  */
-export const prefetchGetI18nCatalogQuery = async <
-	TData = Awaited<ReturnType<typeof getI18nCatalog>>,
+export const prefetchGetIdpI18nCatalogQuery = async <
+	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 	TError = ErrorType<void>,
 >(
 	queryClient: QueryClient,
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options?: {
 		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getI18nCatalog>>, TError, TData>
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
+				TError,
+				TData
+			>
 		>;
 		request?: SecondParameter<typeof customIdpInstance>;
 	},
 ): Promise<QueryClient> => {
-	const queryOptions = getGetI18nCatalogQueryOptions(languageCode, options);
+	const queryOptions = getGetIdpI18nCatalogQueryOptions(languageCode, options);
 
 	await queryClient.prefetchQuery(queryOptions);
 
 	return queryClient;
 };
 
-export const getGetI18nCatalogSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getI18nCatalog>>,
+export const getGetIdpI18nCatalogSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options?: {
 		query?: Partial<
 			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getI18nCatalog>>,
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 				TError,
 				TData
 			>
@@ -239,33 +259,33 @@ export const getGetI18nCatalogSuspenseQueryOptions = <
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
 	const queryKey =
-		queryOptions?.queryKey ?? getGetI18nCatalogQueryKey(languageCode);
+		queryOptions?.queryKey ?? getGetIdpI18nCatalogQueryKey(languageCode);
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getI18nCatalog>>> = ({
-		signal,
-	}) => getI18nCatalog(languageCode, requestOptions, signal);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getIdpI18nCatalog>>
+	> = ({ signal }) => getIdpI18nCatalog(languageCode, requestOptions, signal);
 
 	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getI18nCatalog>>,
+		Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 		TError,
 		TData
 	> & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
-export type GetI18nCatalogSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getI18nCatalog>>
+export type GetIdpI18nCatalogSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getIdpI18nCatalog>>
 >;
-export type GetI18nCatalogSuspenseQueryError = ErrorType<void>;
+export type GetIdpI18nCatalogSuspenseQueryError = ErrorType<void>;
 
-export function useGetI18nCatalogSuspense<
-	TData = Awaited<ReturnType<typeof getI18nCatalog>>,
+export function useGetIdpI18nCatalogSuspense<
+	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options: {
 		query: Partial<
 			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getI18nCatalog>>,
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 				TError,
 				TData
 			>
@@ -276,15 +296,15 @@ export function useGetI18nCatalogSuspense<
 ): UseSuspenseQueryResult<TData, TError> & {
 	queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetI18nCatalogSuspense<
-	TData = Awaited<ReturnType<typeof getI18nCatalog>>,
+export function useGetIdpI18nCatalogSuspense<
+	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options?: {
 		query?: Partial<
 			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getI18nCatalog>>,
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 				TError,
 				TData
 			>
@@ -295,15 +315,15 @@ export function useGetI18nCatalogSuspense<
 ): UseSuspenseQueryResult<TData, TError> & {
 	queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetI18nCatalogSuspense<
-	TData = Awaited<ReturnType<typeof getI18nCatalog>>,
+export function useGetIdpI18nCatalogSuspense<
+	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options?: {
 		query?: Partial<
 			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getI18nCatalog>>,
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 				TError,
 				TData
 			>
@@ -315,18 +335,18 @@ export function useGetI18nCatalogSuspense<
 	queryKey: DataTag<QueryKey, TData, TError>;
 };
 /**
- * @summary 런타임 번역 catalog 조회
+ * @summary 공개 IDP i18n catalog 조회
  */
 
-export function useGetI18nCatalogSuspense<
-	TData = Awaited<ReturnType<typeof getI18nCatalog>>,
+export function useGetIdpI18nCatalogSuspense<
+	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options?: {
 		query?: Partial<
 			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getI18nCatalog>>,
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 				TError,
 				TData
 			>
@@ -337,7 +357,7 @@ export function useGetI18nCatalogSuspense<
 ): UseSuspenseQueryResult<TData, TError> & {
 	queryKey: DataTag<QueryKey, TData, TError>;
 } {
-	const queryOptions = getGetI18nCatalogSuspenseQueryOptions(
+	const queryOptions = getGetIdpI18nCatalogSuspenseQueryOptions(
 		languageCode,
 		options,
 	);
@@ -354,15 +374,15 @@ export function useGetI18nCatalogSuspense<
 	return query;
 }
 
-export const getGetI18nCatalogSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getI18nCatalog>>>,
+export const getGetIdpI18nCatalogSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options?: {
 		query?: Partial<
 			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getI18nCatalog>>,
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 				TError,
 				TData
 			>
@@ -373,37 +393,38 @@ export const getGetI18nCatalogSuspenseInfiniteQueryOptions = <
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
 	const queryKey =
-		queryOptions?.queryKey ?? getGetI18nCatalogInfiniteQueryKey(languageCode);
+		queryOptions?.queryKey ??
+		getGetIdpI18nCatalogInfiniteQueryKey(languageCode);
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getI18nCatalog>>> = ({
-		signal,
-	}) => getI18nCatalog(languageCode, requestOptions, signal);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getIdpI18nCatalog>>
+	> = ({ signal }) => getIdpI18nCatalog(languageCode, requestOptions, signal);
 
 	return {
 		queryKey,
 		queryFn,
 		...queryOptions,
 	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getI18nCatalog>>,
+		Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 		TError,
 		TData
 	> & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
-export type GetI18nCatalogSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getI18nCatalog>>
+export type GetIdpI18nCatalogSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getIdpI18nCatalog>>
 >;
-export type GetI18nCatalogSuspenseInfiniteQueryError = ErrorType<void>;
+export type GetIdpI18nCatalogSuspenseInfiniteQueryError = ErrorType<void>;
 
-export function useGetI18nCatalogSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getI18nCatalog>>>,
+export function useGetIdpI18nCatalogSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options: {
 		query: Partial<
 			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getI18nCatalog>>,
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 				TError,
 				TData
 			>
@@ -414,15 +435,15 @@ export function useGetI18nCatalogSuspenseInfinite<
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
 	queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetI18nCatalogSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getI18nCatalog>>>,
+export function useGetIdpI18nCatalogSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options?: {
 		query?: Partial<
 			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getI18nCatalog>>,
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 				TError,
 				TData
 			>
@@ -433,15 +454,15 @@ export function useGetI18nCatalogSuspenseInfinite<
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
 	queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetI18nCatalogSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getI18nCatalog>>>,
+export function useGetIdpI18nCatalogSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options?: {
 		query?: Partial<
 			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getI18nCatalog>>,
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 				TError,
 				TData
 			>
@@ -453,18 +474,18 @@ export function useGetI18nCatalogSuspenseInfinite<
 	queryKey: DataTag<QueryKey, TData, TError>;
 };
 /**
- * @summary 런타임 번역 catalog 조회
+ * @summary 공개 IDP i18n catalog 조회
  */
 
-export function useGetI18nCatalogSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getI18nCatalog>>>,
+export function useGetIdpI18nCatalogSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>,
 	TError = ErrorType<void>,
 >(
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options?: {
 		query?: Partial<
 			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getI18nCatalog>>,
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 				TError,
 				TData
 			>
@@ -475,7 +496,7 @@ export function useGetI18nCatalogSuspenseInfinite<
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
 	queryKey: DataTag<QueryKey, TData, TError>;
 } {
-	const queryOptions = getGetI18nCatalogSuspenseInfiniteQueryOptions(
+	const queryOptions = getGetIdpI18nCatalogSuspenseInfiniteQueryOptions(
 		languageCode,
 		options,
 	);
@@ -493,18 +514,18 @@ export function useGetI18nCatalogSuspenseInfinite<
 }
 
 /**
- * @summary 런타임 번역 catalog 조회
+ * @summary 공개 IDP i18n catalog 조회
  */
-export const prefetchGetI18nCatalogInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getI18nCatalog>>,
+export const prefetchGetIdpI18nCatalogInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 	TError = ErrorType<void>,
 >(
 	queryClient: QueryClient,
-	languageCode: "ko_KR" | "en_US" | "zh_CN" | "ja_JP",
+	languageCode: string,
 	options?: {
 		query?: Partial<
 			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getI18nCatalog>>,
+				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
 				TError,
 				TData
 			>
@@ -512,7 +533,7 @@ export const prefetchGetI18nCatalogInfiniteQuery = async <
 		request?: SecondParameter<typeof customIdpInstance>;
 	},
 ): Promise<QueryClient> => {
-	const queryOptions = getGetI18nCatalogSuspenseInfiniteQueryOptions(
+	const queryOptions = getGetIdpI18nCatalogSuspenseInfiniteQueryOptions(
 		languageCode,
 		options,
 	);

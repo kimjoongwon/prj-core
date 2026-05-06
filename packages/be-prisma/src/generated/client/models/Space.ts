@@ -186,6 +186,7 @@ export type SpaceWhereInput = {
   associations?: Prisma.SpaceAssociationListRelationFilter
   classification?: Prisma.XOR<Prisma.SpaceClassificationNullableScalarRelationFilter, Prisma.SpaceClassificationWhereInput> | null
   tenants?: Prisma.TenantListRelationFilter
+  emailVerifications?: Prisma.EmailVerificationListRelationFilter
   tenantAccessRequests?: Prisma.TenantAccessRequestListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
   groups?: Prisma.GroupListRelationFilter
@@ -213,6 +214,7 @@ export type SpaceOrderByWithRelationInput = {
   associations?: Prisma.SpaceAssociationOrderByRelationAggregateInput
   classification?: Prisma.SpaceClassificationOrderByWithRelationInput
   tenants?: Prisma.TenantOrderByRelationAggregateInput
+  emailVerifications?: Prisma.EmailVerificationOrderByRelationAggregateInput
   tenantAccessRequests?: Prisma.TenantAccessRequestOrderByRelationAggregateInput
   categories?: Prisma.CategoryOrderByRelationAggregateInput
   groups?: Prisma.GroupOrderByRelationAggregateInput
@@ -243,6 +245,7 @@ export type SpaceWhereUniqueInput = Prisma.AtLeast<{
   associations?: Prisma.SpaceAssociationListRelationFilter
   classification?: Prisma.XOR<Prisma.SpaceClassificationNullableScalarRelationFilter, Prisma.SpaceClassificationWhereInput> | null
   tenants?: Prisma.TenantListRelationFilter
+  emailVerifications?: Prisma.EmailVerificationListRelationFilter
   tenantAccessRequests?: Prisma.TenantAccessRequestListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
   groups?: Prisma.GroupListRelationFilter
@@ -292,6 +295,7 @@ export type SpaceCreateInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -319,6 +323,7 @@ export type SpaceUncheckedCreateInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -346,6 +351,7 @@ export type SpaceUpdateInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -373,6 +379,7 @@ export type SpaceUncheckedUpdateInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -525,6 +532,20 @@ export type SpaceUpdateOneRequiredWithoutFoldersNestedInput = {
   upsert?: Prisma.SpaceUpsertWithoutFoldersInput
   connect?: Prisma.SpaceWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceUpdateToOneWithWhereWithoutFoldersInput, Prisma.SpaceUpdateWithoutFoldersInput>, Prisma.SpaceUncheckedUpdateWithoutFoldersInput>
+}
+
+export type SpaceCreateNestedOneWithoutEmailVerificationsInput = {
+  create?: Prisma.XOR<Prisma.SpaceCreateWithoutEmailVerificationsInput, Prisma.SpaceUncheckedCreateWithoutEmailVerificationsInput>
+  connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutEmailVerificationsInput
+  connect?: Prisma.SpaceWhereUniqueInput
+}
+
+export type SpaceUpdateOneRequiredWithoutEmailVerificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.SpaceCreateWithoutEmailVerificationsInput, Prisma.SpaceUncheckedCreateWithoutEmailVerificationsInput>
+  connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutEmailVerificationsInput
+  upsert?: Prisma.SpaceUpsertWithoutEmailVerificationsInput
+  connect?: Prisma.SpaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceUpdateToOneWithWhereWithoutEmailVerificationsInput, Prisma.SpaceUpdateWithoutEmailVerificationsInput>, Prisma.SpaceUncheckedUpdateWithoutEmailVerificationsInput>
 }
 
 export type SpaceCreateNestedOneWithoutContentsInput = {
@@ -719,6 +740,7 @@ export type SpaceCreateWithoutPoliciesInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -745,6 +767,7 @@ export type SpaceUncheckedCreateWithoutPoliciesInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -787,6 +810,7 @@ export type SpaceUpdateWithoutPoliciesInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -813,6 +837,7 @@ export type SpaceUncheckedUpdateWithoutPoliciesInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -839,6 +864,7 @@ export type SpaceCreateWithoutAlbumsInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -865,6 +891,7 @@ export type SpaceUncheckedCreateWithoutAlbumsInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -907,6 +934,7 @@ export type SpaceUpdateWithoutAlbumsInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -933,6 +961,7 @@ export type SpaceUncheckedUpdateWithoutAlbumsInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -959,6 +988,7 @@ export type SpaceCreateWithoutAlbumEntriesInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -985,6 +1015,7 @@ export type SpaceUncheckedCreateWithoutAlbumEntriesInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -1027,6 +1058,7 @@ export type SpaceUpdateWithoutAlbumEntriesInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -1053,6 +1085,7 @@ export type SpaceUncheckedUpdateWithoutAlbumEntriesInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1079,6 +1112,7 @@ export type SpaceCreateWithoutAssetsInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -1105,6 +1139,7 @@ export type SpaceUncheckedCreateWithoutAssetsInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -1147,6 +1182,7 @@ export type SpaceUpdateWithoutAssetsInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -1173,6 +1209,7 @@ export type SpaceUncheckedUpdateWithoutAssetsInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1199,6 +1236,7 @@ export type SpaceCreateWithoutDerivativesInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -1225,6 +1263,7 @@ export type SpaceUncheckedCreateWithoutDerivativesInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -1267,6 +1306,7 @@ export type SpaceUpdateWithoutDerivativesInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -1293,6 +1333,7 @@ export type SpaceUncheckedUpdateWithoutDerivativesInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1319,6 +1360,7 @@ export type SpaceCreateWithoutFoldersInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -1345,6 +1387,7 @@ export type SpaceUncheckedCreateWithoutFoldersInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -1387,6 +1430,7 @@ export type SpaceUpdateWithoutFoldersInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -1413,6 +1457,7 @@ export type SpaceUncheckedUpdateWithoutFoldersInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1422,6 +1467,130 @@ export type SpaceUncheckedUpdateWithoutFoldersInput = {
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
   policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
+  albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
+  albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
+  derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
+}
+
+export type SpaceCreateWithoutEmailVerificationsInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  contentLanguageCode?: $Enums.LanguageCode
+  ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
+  associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
+  classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
+  groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
+  contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
+  timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
+  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput
+  routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
+  folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
+  assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
+  albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
+  albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
+  derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
+}
+
+export type SpaceUncheckedCreateWithoutEmailVerificationsInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  contentLanguageCode?: $Enums.LanguageCode
+  ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
+  associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
+  classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
+  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
+  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
+  timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
+  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput
+  routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
+  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
+  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
+  albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
+  albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
+  derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
+}
+
+export type SpaceCreateOrConnectWithoutEmailVerificationsInput = {
+  where: Prisma.SpaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.SpaceCreateWithoutEmailVerificationsInput, Prisma.SpaceUncheckedCreateWithoutEmailVerificationsInput>
+}
+
+export type SpaceUpsertWithoutEmailVerificationsInput = {
+  update: Prisma.XOR<Prisma.SpaceUpdateWithoutEmailVerificationsInput, Prisma.SpaceUncheckedUpdateWithoutEmailVerificationsInput>
+  create: Prisma.XOR<Prisma.SpaceCreateWithoutEmailVerificationsInput, Prisma.SpaceUncheckedCreateWithoutEmailVerificationsInput>
+  where?: Prisma.SpaceWhereInput
+}
+
+export type SpaceUpdateToOneWithWhereWithoutEmailVerificationsInput = {
+  where?: Prisma.SpaceWhereInput
+  data: Prisma.XOR<Prisma.SpaceUpdateWithoutEmailVerificationsInput, Prisma.SpaceUncheckedUpdateWithoutEmailVerificationsInput>
+}
+
+export type SpaceUpdateWithoutEmailVerificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
+  ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
+  associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
+  classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
+  groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
+  contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
+  timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
+  safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput
+  routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
+  folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
+  albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
+  albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
+  derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
+}
+
+export type SpaceUncheckedUpdateWithoutEmailVerificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
+  ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
+  associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
+  classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
+  groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
+  contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
+  timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
+  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput
+  routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
+  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
+  folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1439,6 +1608,7 @@ export type SpaceCreateWithoutContentsInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -1465,6 +1635,7 @@ export type SpaceUncheckedCreateWithoutContentsInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -1507,6 +1678,7 @@ export type SpaceUpdateWithoutContentsInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -1533,6 +1705,7 @@ export type SpaceUncheckedUpdateWithoutContentsInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1558,6 +1731,7 @@ export type SpaceCreateWithoutClassificationInput = {
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -1584,6 +1758,7 @@ export type SpaceUncheckedCreateWithoutClassificationInput = {
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -1626,6 +1801,7 @@ export type SpaceUpdateWithoutClassificationInput = {
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -1652,6 +1828,7 @@ export type SpaceUncheckedUpdateWithoutClassificationInput = {
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1678,6 +1855,7 @@ export type SpaceCreateWithoutAssociationsInput = {
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -1704,6 +1882,7 @@ export type SpaceUncheckedCreateWithoutAssociationsInput = {
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -1746,6 +1925,7 @@ export type SpaceUpdateWithoutAssociationsInput = {
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -1772,6 +1952,7 @@ export type SpaceUncheckedUpdateWithoutAssociationsInput = {
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1798,6 +1979,7 @@ export type SpaceCreateWithoutGroundInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -1824,6 +2006,7 @@ export type SpaceUncheckedCreateWithoutGroundInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -1866,6 +2049,7 @@ export type SpaceUpdateWithoutGroundInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -1892,6 +2076,7 @@ export type SpaceUncheckedUpdateWithoutGroundInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1919,6 +2104,7 @@ export type SpaceCreateWithoutTenantAccessRequestsInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
@@ -1945,6 +2131,7 @@ export type SpaceUncheckedCreateWithoutTenantAccessRequestsInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
@@ -1987,6 +2174,7 @@ export type SpaceUpdateWithoutTenantAccessRequestsInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
@@ -2013,6 +2201,7 @@ export type SpaceUncheckedUpdateWithoutTenantAccessRequestsInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2038,6 +2227,7 @@ export type SpaceCreateWithoutTenantsInput = {
   ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -2064,6 +2254,7 @@ export type SpaceUncheckedCreateWithoutTenantsInput = {
   ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -2106,6 +2297,7 @@ export type SpaceUpdateWithoutTenantsInput = {
   ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -2132,6 +2324,7 @@ export type SpaceUncheckedUpdateWithoutTenantsInput = {
   ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2159,6 +2352,7 @@ export type SpaceCreateWithoutInquiriesInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -2185,6 +2379,7 @@ export type SpaceUncheckedCreateWithoutInquiriesInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -2227,6 +2422,7 @@ export type SpaceUpdateWithoutInquiriesInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -2253,6 +2449,7 @@ export type SpaceUncheckedUpdateWithoutInquiriesInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2279,6 +2476,7 @@ export type SpaceCreateWithoutRoutinesInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -2305,6 +2503,7 @@ export type SpaceUncheckedCreateWithoutRoutinesInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -2347,6 +2546,7 @@ export type SpaceUpdateWithoutRoutinesInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -2373,6 +2573,7 @@ export type SpaceUncheckedUpdateWithoutRoutinesInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2399,6 +2600,7 @@ export type SpaceCreateWithoutTasksInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -2425,6 +2627,7 @@ export type SpaceUncheckedCreateWithoutTasksInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -2467,6 +2670,7 @@ export type SpaceUpdateWithoutTasksInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -2493,6 +2697,7 @@ export type SpaceUncheckedUpdateWithoutTasksInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2519,6 +2724,7 @@ export type SpaceCreateWithoutTimelinesInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -2545,6 +2751,7 @@ export type SpaceUncheckedCreateWithoutTimelinesInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -2587,6 +2794,7 @@ export type SpaceUpdateWithoutTimelinesInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -2613,6 +2821,7 @@ export type SpaceUncheckedUpdateWithoutTimelinesInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2639,6 +2848,7 @@ export type SpaceCreateWithoutCategoriesInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
@@ -2665,6 +2875,7 @@ export type SpaceUncheckedCreateWithoutCategoriesInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
@@ -2707,6 +2918,7 @@ export type SpaceUpdateWithoutCategoriesInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
@@ -2733,6 +2945,7 @@ export type SpaceUncheckedUpdateWithoutCategoriesInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2759,6 +2972,7 @@ export type SpaceCreateWithoutGroupsInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
@@ -2785,6 +2999,7 @@ export type SpaceUncheckedCreateWithoutGroupsInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
@@ -2827,6 +3042,7 @@ export type SpaceUpdateWithoutGroupsInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
@@ -2853,6 +3069,7 @@ export type SpaceUncheckedUpdateWithoutGroupsInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2879,6 +3096,7 @@ export type SpaceCreateWithoutSafeWalletsInput = {
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -2905,6 +3123,7 @@ export type SpaceUncheckedCreateWithoutSafeWalletsInput = {
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -2947,6 +3166,7 @@ export type SpaceUpdateWithoutSafeWalletsInput = {
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -2973,6 +3193,7 @@ export type SpaceUncheckedUpdateWithoutSafeWalletsInput = {
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2997,6 +3218,7 @@ export type SpaceUncheckedUpdateWithoutSafeWalletsInput = {
 export type SpaceCountOutputType = {
   associations: number
   tenants: number
+  emailVerifications: number
   tenantAccessRequests: number
   categories: number
   groups: number
@@ -3017,6 +3239,7 @@ export type SpaceCountOutputType = {
 export type SpaceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   associations?: boolean | SpaceCountOutputTypeCountAssociationsArgs
   tenants?: boolean | SpaceCountOutputTypeCountTenantsArgs
+  emailVerifications?: boolean | SpaceCountOutputTypeCountEmailVerificationsArgs
   tenantAccessRequests?: boolean | SpaceCountOutputTypeCountTenantAccessRequestsArgs
   categories?: boolean | SpaceCountOutputTypeCountCategoriesArgs
   groups?: boolean | SpaceCountOutputTypeCountGroupsArgs
@@ -3056,6 +3279,13 @@ export type SpaceCountOutputTypeCountAssociationsArgs<ExtArgs extends runtime.Ty
  */
 export type SpaceCountOutputTypeCountTenantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TenantWhereInput
+}
+
+/**
+ * SpaceCountOutputType without action
+ */
+export type SpaceCountOutputTypeCountEmailVerificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EmailVerificationWhereInput
 }
 
 /**
@@ -3174,6 +3404,7 @@ export type SpaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   associations?: boolean | Prisma.Space$associationsArgs<ExtArgs>
   classification?: boolean | Prisma.Space$classificationArgs<ExtArgs>
   tenants?: boolean | Prisma.Space$tenantsArgs<ExtArgs>
+  emailVerifications?: boolean | Prisma.Space$emailVerificationsArgs<ExtArgs>
   tenantAccessRequests?: boolean | Prisma.Space$tenantAccessRequestsArgs<ExtArgs>
   categories?: boolean | Prisma.Space$categoriesArgs<ExtArgs>
   groups?: boolean | Prisma.Space$groupsArgs<ExtArgs>
@@ -3222,6 +3453,7 @@ export type SpaceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   associations?: boolean | Prisma.Space$associationsArgs<ExtArgs>
   classification?: boolean | Prisma.Space$classificationArgs<ExtArgs>
   tenants?: boolean | Prisma.Space$tenantsArgs<ExtArgs>
+  emailVerifications?: boolean | Prisma.Space$emailVerificationsArgs<ExtArgs>
   tenantAccessRequests?: boolean | Prisma.Space$tenantAccessRequestsArgs<ExtArgs>
   categories?: boolean | Prisma.Space$categoriesArgs<ExtArgs>
   groups?: boolean | Prisma.Space$groupsArgs<ExtArgs>
@@ -3249,6 +3481,7 @@ export type $SpacePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     associations: Prisma.$SpaceAssociationPayload<ExtArgs>[]
     classification: Prisma.$SpaceClassificationPayload<ExtArgs> | null
     tenants: Prisma.$TenantPayload<ExtArgs>[]
+    emailVerifications: Prisma.$EmailVerificationPayload<ExtArgs>[]
     tenantAccessRequests: Prisma.$TenantAccessRequestPayload<ExtArgs>[]
     categories: Prisma.$CategoryPayload<ExtArgs>[]
     groups: Prisma.$GroupPayload<ExtArgs>[]
@@ -3672,6 +3905,7 @@ export interface Prisma__SpaceClient<T, Null = never, ExtArgs extends runtime.Ty
   associations<T extends Prisma.Space$associationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$associationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SpaceAssociationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   classification<T extends Prisma.Space$classificationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$classificationArgs<ExtArgs>>): Prisma.Prisma__SpaceClassificationClient<runtime.Types.Result.GetResult<Prisma.$SpaceClassificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   tenants<T extends Prisma.Space$tenantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$tenantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  emailVerifications<T extends Prisma.Space$emailVerificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$emailVerificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tenantAccessRequests<T extends Prisma.Space$tenantAccessRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$tenantAccessRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantAccessRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   categories<T extends Prisma.Space$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   groups<T extends Prisma.Space$groupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4192,6 +4426,30 @@ export type Space$tenantsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.TenantScalarFieldEnum | Prisma.TenantScalarFieldEnum[]
+}
+
+/**
+ * Space.emailVerifications
+ */
+export type Space$emailVerificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailVerification
+   */
+  select?: Prisma.EmailVerificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailVerification
+   */
+  omit?: Prisma.EmailVerificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailVerificationInclude<ExtArgs> | null
+  where?: Prisma.EmailVerificationWhereInput
+  orderBy?: Prisma.EmailVerificationOrderByWithRelationInput | Prisma.EmailVerificationOrderByWithRelationInput[]
+  cursor?: Prisma.EmailVerificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EmailVerificationScalarFieldEnum | Prisma.EmailVerificationScalarFieldEnum[]
 }
 
 /**

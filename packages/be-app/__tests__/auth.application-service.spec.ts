@@ -107,6 +107,8 @@ describe("AuthApplicationService", () => {
 
 		mockSpacesService = {
 			createPersonalSpace: jest.fn(),
+			getById: jest.fn(),
+			getGroundBySpaceId: jest.fn(),
 			findByIdsWithGround: jest.fn(),
 		} as unknown as jest.Mocked<SpaceService>;
 
@@ -732,6 +734,14 @@ describe("AuthApplicationService", () => {
 		it("회원가입 요청은 User를 즉시 만들지 않고 이메일 인증 요청을 생성해야 한다", async () => {
 			const expiresAt = new Date("2026-04-29T09:30:00.000Z");
 			mockUsersService.findUserForAuth.mockResolvedValue(null);
+			mockSpacesService.getById.mockResolvedValue({
+				id: "space-1",
+				removedAt: null,
+			} as never);
+			mockSpacesService.getGroundBySpaceId.mockResolvedValue({
+				id: "ground-1",
+				spaceId: "space-1",
+			} as never);
 			mockEmailVerificationService.requestVerification.mockResolvedValue({
 				email: "new@example.com",
 				expiresAt,
@@ -742,7 +752,9 @@ describe("AuthApplicationService", () => {
 				nickname: "newbie",
 				email: "new@example.com",
 				phone: "010-0000-0000",
+				address: "서울특별시 강남구 테헤란로 123",
 				password: "Password123!",
+				spaceId: "space-1",
 			});
 
 			expect(result).toEqual({
@@ -758,26 +770,35 @@ describe("AuthApplicationService", () => {
 					nickname: "newbie",
 					email: "new@example.com",
 					phone: "010-0000-0000",
+					address: "서울특별시 강남구 테헤란로 123",
+					spaceId: "space-1",
 					passwordHash: expect.any(String),
 				}),
 			);
 		});
 
-		it("이메일 인증 성공 시 기존 회원가입 방식으로 User와 개인 Space를 생성해야 한다", async () => {
+		it("이메일 인증 성공 시 선택한 Space에 User를 생성해야 한다", async () => {
 			mockEmailVerificationService.consumePendingByRawToken.mockResolvedValue({
 				id: "verification-1",
 				email: "new@example.com",
 				name: "New User",
 				nickname: "newbie",
 				phone: "010-0000-0000",
+				address: "서울특별시 강남구 테헤란로 123",
+				spaceId: "space-1",
 				passwordHash: "hashed-password",
 			} as never);
 			mockUsersService.findUserForAuth.mockResolvedValue(null);
 			mockRolesService.getDefaultUserRole.mockResolvedValue({
 				id: "role-user",
 			} as never);
-			mockSpacesService.createPersonalSpace.mockResolvedValue({
-				id: "space-personal",
+			mockSpacesService.getById.mockResolvedValue({
+				id: "space-1",
+				removedAt: null,
+			} as never);
+			mockSpacesService.getGroundBySpaceId.mockResolvedValue({
+				id: "ground-1",
+				spaceId: "space-1",
 			} as never);
 			mockUsersService.createUserForSignUp.mockResolvedValue({
 				id: "user-new",
@@ -791,8 +812,9 @@ describe("AuthApplicationService", () => {
 				name: "New User",
 				email: "new@example.com",
 				phone: "010-0000-0000",
+				address: "서울특별시 강남구 테헤란로 123",
 				password: "hashed-password",
-				spaceId: "space-personal",
+				spaceId: "space-1",
 				roleId: "role-user",
 				nickname: "newbie",
 			});

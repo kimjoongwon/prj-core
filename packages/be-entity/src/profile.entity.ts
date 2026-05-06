@@ -6,6 +6,7 @@ export class Profile extends AbstractEntity implements ProfileEntity {
 	avatarFileId!: string;
 	name!: string;
 	nickname!: string;
+	address!: string;
 	userId!: string;
 	user?: User;
 }

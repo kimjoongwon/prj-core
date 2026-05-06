@@ -48,6 +48,7 @@ const AUTH_FLOW_PATH_PREFIXES = [
 	"/interaction",
 	"/forgot-password",
 	"/reset-password",
+	"/sign-up",
 	"/error",
 ];
 

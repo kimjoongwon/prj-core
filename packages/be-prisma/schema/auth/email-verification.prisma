@@ -22,6 +22,11 @@ model EmailVerification {
   nickname       String
   /// @displayName 전화번호
   phone          String
+  /// @displayName 주소
+  address        String
+  /// @displayName 가입 Space ID
+  spaceId        String                  @map("space_id")
+  space          Space                   @relation(fields: [spaceId], references: [id], onDelete: Restrict)
   /// @displayName 비밀번호 해시
   passwordHash   String                  @map("password_hash")
   /// @displayName 토큰 해시
@@ -48,6 +53,7 @@ model EmailVerification {
   @@index([status])
   @@index([expiresAt])
   @@index([createdAt])
+  @@index([spaceId])
   @@index([verifiedUserId])
   @@map("email_verifications")
 }

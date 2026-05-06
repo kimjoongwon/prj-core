@@ -31,6 +31,9 @@ export class SignUpSchema {
 	@Phone()
 	phone: string;
 
+	@String({ minLength: 2, maxLength: 255 })
+	address: string;
+
 	@Password({ minLength: 8 })
 	password: string;
 }
