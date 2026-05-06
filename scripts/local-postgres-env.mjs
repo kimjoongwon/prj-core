@@ -9,7 +9,7 @@ const DEFAULT_POSTGRES_HOST = "localhost";
 const DEFAULT_POSTGRES_PORT = "5432";
 const DEFAULT_POSTGRES_DATABASE = "plate";
 const DEFAULT_TIMEOUT_MS = 1000;
-const LOCAL_POSTGRES_CANDIDATE_PORTS = [5432, 5433];
+const LOCAL_POSTGRES_CANDIDATE_PORTS = [5432];
 
 export async function applyLocalPostgresEnvDefaults(env) {
   setDefault(env, "POSTGRES_HOST", DEFAULT_POSTGRES_HOST);
