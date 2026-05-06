@@ -1,5 +1,7 @@
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { setLoginRedirectUrl } from "@cocrepo/api/core/client";
 import { setIdpBaseUrl, setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
 import { DesignSystemProvider } from "@cocrepo/mo-ui";
 import type { ComponentType, PropsWithChildren } from "react";
@@ -17,8 +19,18 @@ const GestureRootView = GestureHandlerRootView as ComponentType<
 	PropsWithChildren<ViewProps>
 >;
 
+const mobileQueryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			retry: 1,
+			staleTime: 30_000,
+		},
+	},
+});
+
 export default function RootLayout() {
 	useEffect(() => {
+		setLoginRedirectUrl(getLoginPath());
 		setIdpBaseUrl(getIdpApiBaseUrl());
 		setIdpLoginRedirectUrl(getLoginPath());
 	}, []);
@@ -27,9 +39,11 @@ export default function RootLayout() {
 		<GestureRootView style={styles.root}>
 			<SafeAreaProvider>
 				<DesignSystemProvider>
-					<AuthSessionGate>
-						<Stack screenOptions={{ headerShown: false }} />
-					</AuthSessionGate>
+					<QueryClientProvider client={mobileQueryClient}>
+						<AuthSessionGate>
+							<Stack screenOptions={{ headerShown: false }} />
+						</AuthSessionGate>
+					</QueryClientProvider>
 				</DesignSystemProvider>
 			</SafeAreaProvider>
 		</GestureRootView>

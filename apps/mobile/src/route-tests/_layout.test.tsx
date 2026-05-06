@@ -3,6 +3,7 @@ import RootLayout from "@/app/_layout";
 
 const mockSetIdpBaseUrl = jest.fn();
 const mockSetIdpLoginRedirectUrl = jest.fn();
+const mockSetLoginRedirectUrl = jest.fn();
 
 jest.mock("@cocrepo/mo-ui", () => {
 	const React = jest.requireActual<typeof import("react")>("react");
@@ -38,6 +39,10 @@ jest.mock("@cocrepo/api/idp/client", () => ({
 	setIdpBaseUrl: (...args: string[]) => mockSetIdpBaseUrl(...args),
 	setIdpLoginRedirectUrl: (...args: string[]) =>
 		mockSetIdpLoginRedirectUrl(...args),
+}));
+
+jest.mock("@cocrepo/api/core/client", () => ({
+	setLoginRedirectUrl: (...args: string[]) => mockSetLoginRedirectUrl(...args),
 }));
 
 jest.mock("@/auth/auth-config", () => ({
@@ -99,11 +104,13 @@ describe("mobile root layout", () => {
 	beforeEach(() => {
 		mockSetIdpBaseUrl.mockReset();
 		mockSetIdpLoginRedirectUrl.mockReset();
+		mockSetLoginRedirectUrl.mockReset();
 	});
 
 	it("gesture root 안에서 design system provider, AuthSessionGate, header hidden stack 을 렌더링해야 한다", () => {
 		render(<RootLayout />);
 
+		expect(mockSetLoginRedirectUrl).toHaveBeenCalledWith("/auth/login");
 		expect(mockSetIdpBaseUrl).toHaveBeenCalledWith("http://localhost:3207");
 		expect(mockSetIdpLoginRedirectUrl).toHaveBeenCalledWith("/auth/login");
 		expect(screen.getByLabelText("gesture-root")).toBeTruthy();

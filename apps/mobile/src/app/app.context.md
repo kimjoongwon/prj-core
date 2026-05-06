@@ -20,6 +20,10 @@
 | `/auth/login` | `apps/mobile/src/app/index.spec.md` | `user-mobile` 로그인 진입 라우트 |
 | `/auth/callback` | `apps/mobile/src/app/index.spec.md` | OIDC 콜백 처리 라우트 |
 
+`(tabs)` route group은 URL segment를 만들지 않으므로 실제 홈 route는 `/`이며, route owner file은 `apps/mobile/src/app/(tabs)/index.tsx`입니다.
+
+`/` 홈 예약 기능(예약 대상/일정/옵션 조회와 예약 생성 진입)은 `apps/mobile/src/app/index.spec.md`가 단독 소유합니다. 현재 backend에는 `Reservation` 모델/API/Orval hook이 없으므로, Stage 1 계약은 기존 `Timeline`/`Session`/`Program` read API와 신규 Reservation backend handoff를 함께 기준으로 둡니다.
+
 ## 테스트 전략
 
 - route unit test 는 Expo Router runtime bundle 에 포함되지 않도록 `apps/mobile/src/route-tests/**/*.test.tsx` 를 owner file 로 사용합니다.
@@ -43,6 +47,11 @@
 | `MO-E2E-001` | `/` | 앱 launch 후 오노라 하단 탭 메인의 홈/예약/내 정보 탭이 보여야 합니다. |
 | `MO-E2E-002` | `/auth/login` | 로그인 라우트에서 외부 브라우저 없이 WebView가 `user-mobile` IDP API 로그인 URL을 로드하고 callback scheme을 앱 내부로 전달해야 합니다. |
 | `MO-E2E-003` | `/auth/callback` | callback 처리 후 세션 검증 통과 시 루트 하단 탭 메인(`/`)으로 라우트해야 합니다. |
+| `MO-E2E-004` | `/` | 홈에서 타임라인 → 세션 → 옵션 선택 이후 예약 draft가 생성되어야 합니다. |
+| `MO-E2E-005` | `/` | 타임라인/세션/옵션 조회 중 에러 발생 시 Retry가 동작하고 홈 진입 상태가 유지되어야 합니다. |
+| `MO-E2E-006` | `/` | 예약 제출 실패 시 권한, 검증, 중복 실패 메시지가 사용자에게 노출되어야 합니다. |
+| `MO-E2E-007` | `/` | 홈 예약 카탈로그가 비어 있을 때 빈 상태 가이드와 이동 액션이 동작해야 합니다. |
+| `MO-E2E-008` | `/reservations` | 홈에서 생성한 예약이 내 예약 탭에 `PENDING` 또는 `CONFIRMED` 상태로 표시되어야 합니다. |
 
 ## auth session 체크
 
@@ -63,10 +72,12 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-06 | Stage 1 재시작 기준으로 실제 홈 route(`/`)와 owner file을 명시하고 Reservation API 부재에 따른 backend handoff/test ownership을 보강 | codex |
 | 2026-05-06 | 모바일 홈을 Expo Router `(tabs)` 구조로 전환하고 IDP Web returnTo를 홈으로 보정하는 정책 추가 | codex |
 | 2026-05-05 | `/auth/login`을 native UI 없는 WebView-only 컨테이너로 정정하고 IDP Web 로그인 화면 소유권을 명시 | codex |
 | 2026-05-05 | 모바일 로그인 clientId/callback scheme/루트 하단 탭 메인 계약을 `user-mobile`/`onora-mobile`/`/` 기준으로 정정 | codex |
 | 2026-05-06 | OIDC native client 검증에 맞춰 모바일 callback scheme을 reverse-domain 형식으로 정정 | codex |
+| 2026-05-06 | `/` 홈 예약 계약(예약 대상/세션/옵션 조회 및 예약 시작 플로우)과 테스트 시나리오를 `apps/mobile/src/app/index.spec.md` 소유로 정리 | codex |
 | 2026-04-14 | 모바일 app 수준 route/test ownership 과 Detox smoke 시나리오를 추가 | codex |
 | 2026-05-04 | Stage 3 대상 auth 라우트(`login/callback/dashboard`) + `index.spec.md` 정렬 및 세션 체크 항목 동기화 | codex |
 | 2026-05-04 | Expo Router runtime bundle 보호를 위해 route unit test 와 non-route auth 모듈 위치를 `src/app` 밖으로 정리 | codex |
