@@ -441,6 +441,8 @@ export const EmailVerificationScalarFieldEnum = {
   name: 'name',
   nickname: 'nickname',
   phone: 'phone',
+  address: 'address',
+  spaceId: 'spaceId',
   passwordHash: 'passwordHash',
   tokenHash: 'tokenHash',
   status: 'status',
@@ -753,6 +755,7 @@ export const ProfileScalarFieldEnum = {
   removedAt: 'removedAt',
   name: 'name',
   nickname: 'nickname',
+  address: 'address',
   userId: 'userId',
   avatarFileId: 'avatarFileId'
 } as const

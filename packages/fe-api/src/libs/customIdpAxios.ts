@@ -1,7 +1,7 @@
 import { REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import Axios, {
-	AxiosHeaders,
 	type AxiosError,
+	AxiosHeaders,
 	type AxiosRequestConfig,
 	type InternalAxiosRequestConfig,
 } from "axios";
@@ -87,12 +87,12 @@ IDP_AXIOS_INSTANCE.interceptors.request.use((config) => {
 	const headers = AxiosHeaders.from(config.headers);
 	const spaceId = persistStoreRef?.spaceId;
 
-	if (spaceId) {
+	if (spaceId && !headers.has(REQUEST_HEADER_KEYS.SPACE_ID)) {
 		headers.set(REQUEST_HEADER_KEYS.SPACE_ID, spaceId);
 	}
 
 	const languageCode = localeStoreRef?.languageCode;
-	if (languageCode) {
+	if (languageCode && !headers.has(REQUEST_HEADER_KEYS.LANGUAGE)) {
 		headers.set(REQUEST_HEADER_KEYS.LANGUAGE, languageCode);
 	}
 

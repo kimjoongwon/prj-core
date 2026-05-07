@@ -232,11 +232,11 @@ export class AuthApplicationService {
 		);
 		this.setSessionIdCookie(res, sessionId);
 
-			return {
-				returnTo,
-				defaultReturnTo: client.defaultReturnTo || "/",
-				loginUrl: client.loginUrl,
-			};
+		return {
+			returnTo,
+			defaultReturnTo: client.defaultReturnTo || "/",
+			loginUrl: client.loginUrl,
+		};
 	}
 
 	async refreshTokenWithIdp(
@@ -411,6 +411,11 @@ export class AuthApplicationService {
 		return this.getAccessibleSpacesForUser(user);
 	}
 
+	async getSignUpSpaces(): Promise<SpaceDto[]> {
+		const { spaces } = await this.spacesService.listSpaces();
+		return spaces.map((space) => plainToInstance(SpaceDto, space));
+	}
+
 	async getCurrentSpace(
 		requestedSpaceId: string | undefined,
 	): Promise<SpaceDto | null> {
@@ -437,18 +442,21 @@ export class AuthApplicationService {
 	 * 회원가입 처리 (OIDC 외부 - 직접 처리)
 	 */
 	async signUp(params: {
+		spaceId: string;
 		name: string;
 		nickname?: string;
 		password: string;
 		phone?: string;
+		address: string;
 		email: string;
 	}) {
-		const { name, nickname, password, phone, email } = params;
+		const { spaceId, name, nickname, password, phone, address, email } = params;
 
 		const existingUser = await this.usersService.findUserForAuth(email);
 		if (existingUser) {
 			throw new BadRequestException("EMAIL_ALREADY_EXISTS");
 		}
+		await this.getSignUpSpaceOrThrow(spaceId);
 
 		const plainPassword = PlainPassword.create(password);
 		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
@@ -457,6 +465,8 @@ export class AuthApplicationService {
 			name,
 			email,
 			phone: phone ?? "",
+			address,
+			spaceId,
 			passwordHash: hashedPassword.value,
 			nickname: nickname || name,
 		});
@@ -473,20 +483,15 @@ export class AuthApplicationService {
 			verification.email,
 		);
 		if (existingUser) {
-			await this.emailVerificationService.markVerified(
-				verification.id,
-				existingUser.id,
-			);
-			const { loginUrl } = await this.getClientRedirects(
-				DEFAULT_OIDC_CLIENT_ID,
-			);
-			return loginUrl ?? "/admin/auth/login";
+			throw new BadRequestException("EMAIL_ALREADY_EXISTS");
 		}
 
 		const user = await this.createUserForVerifiedSignUp({
 			name: verification.name,
 			nickname: verification.nickname,
 			phone: verification.phone,
+			address: verification.address,
+			spaceId: verification.spaceId,
 			email: verification.email,
 			passwordHash: verification.passwordHash,
 		});
@@ -602,6 +607,8 @@ export class AuthApplicationService {
 		name: string;
 		nickname?: string;
 		phone: string;
+		address: string;
+		spaceId: string;
 		email: string;
 		passwordHash: string;
 	}) {
@@ -612,17 +619,36 @@ export class AuthApplicationService {
 			throw new BadRequestException("유저 역할이 존재하지 않습니다.");
 		}
 
-		const space = await this.spacesService.createPersonalSpace();
+		const signUpSpace = await this.getSignUpSpaceOrThrow(params.spaceId);
 
 		return this.usersService.createUserForSignUp({
 			name: params.name,
 			email: params.email,
 			phone: params.phone,
+			address: params.address,
 			password: params.passwordHash,
-			spaceId: space.id,
+			spaceId: signUpSpace.id,
 			roleId: userRole.id,
 			nickname: params.nickname,
 		});
+	}
+
+	private async getSignUpSpaceOrThrow(spaceId: string) {
+		const space = await this.spacesService.getById(spaceId);
+		if (!space || space.removedAt) {
+			throw new BadRequestException("SIGN_UP_SPACE_NOT_FOUND");
+		}
+
+		try {
+			await this.spacesService.getGroundBySpaceId(spaceId);
+		} catch (error) {
+			if (error instanceof NotFoundException) {
+				throw new BadRequestException("SIGN_UP_SPACE_NOT_FOUND");
+			}
+			throw error;
+		}
+
+		return space;
 	}
 
 	// =========================================================================

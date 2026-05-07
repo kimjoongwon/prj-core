@@ -47,6 +47,7 @@ import type {
 	GetCurrentSpace200AllOf,
 	GetMySessions200AllOf,
 	GetMySpaces200AllOf,
+	GetSignUpSpaces200AllOf,
 	InvalidateUserSessions200AllOf,
 	LoginParams,
 	OidcCallbackParams,
@@ -1063,6 +1064,464 @@ export const useRefreshToken = <TError = ErrorType<void>, TContext = unknown>(
 
 	return useMutation(mutationOptions, queryClient);
 };
+/**
+ * 회원가입 전 사용자가 선택할 수 있는 Space 목록을 반환합니다. x-space-id 헤더 없이 호출할 수 있습니다.
+ * @summary 회원가입 Space 목록 조회
+ */
+export const getSignUpSpaces = (
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
+) => {
+	return customIdpInstance<GetSignUpSpaces200AllOf>(
+		{ url: `/api/v1/auth/sign-up/spaces`, method: "GET", signal },
+		options,
+	);
+};
+
+export const getGetSignUpSpacesQueryKey = () => {
+	return [`/api/v1/auth/sign-up/spaces`] as const;
+};
+
+export const getGetSignUpSpacesInfiniteQueryKey = () => {
+	return ["infinite", `/api/v1/auth/sign-up/spaces`] as const;
+};
+
+export const getGetSignUpSpacesQueryOptions = <
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey = queryOptions?.queryKey ?? getGetSignUpSpacesQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSignUpSpaces>>> = ({
+		signal,
+	}) => getSignUpSpaces(requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getSignUpSpaces>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetSignUpSpacesQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSignUpSpaces>>
+>;
+export type GetSignUpSpacesQueryError = ErrorType<void>;
+
+export function useGetSignUpSpaces<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getSignUpSpaces>>,
+					TError,
+					Awaited<ReturnType<typeof getSignUpSpaces>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSignUpSpaces<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getSignUpSpaces>>,
+					TError,
+					Awaited<ReturnType<typeof getSignUpSpaces>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSignUpSpaces<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 회원가입 Space 목록 조회
+ */
+
+export function useGetSignUpSpaces<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSignUpSpacesQueryOptions(options);
+
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary 회원가입 Space 목록 조회
+ */
+export const prefetchGetSignUpSpacesQuery = async <
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetSignUpSpacesQueryOptions(options);
+
+	await queryClient.prefetchQuery(queryOptions);
+
+	return queryClient;
+};
+
+export const getGetSignUpSpacesSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseQueryOptions<
+			Awaited<ReturnType<typeof getSignUpSpaces>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey = queryOptions?.queryKey ?? getGetSignUpSpacesQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSignUpSpaces>>> = ({
+		signal,
+	}) => getSignUpSpaces(requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getSignUpSpaces>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetSignUpSpacesSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSignUpSpaces>>
+>;
+export type GetSignUpSpacesSuspenseQueryError = ErrorType<void>;
+
+export function useGetSignUpSpacesSuspense<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSignUpSpacesSuspense<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSignUpSpacesSuspense<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 회원가입 Space 목록 조회
+ */
+
+export function useGetSignUpSpacesSuspense<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSignUpSpacesSuspenseQueryOptions(options);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+export const getGetSignUpSpacesSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseInfiniteQueryOptions<
+			Awaited<ReturnType<typeof getSignUpSpaces>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ?? getGetSignUpSpacesInfiniteQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSignUpSpaces>>> = ({
+		signal,
+	}) => getSignUpSpaces(requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getSignUpSpaces>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetSignUpSpacesSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSignUpSpaces>>
+>;
+export type GetSignUpSpacesSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetSignUpSpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSignUpSpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSignUpSpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 회원가입 Space 목록 조회
+ */
+
+export function useGetSignUpSpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSignUpSpacesSuspenseInfiniteQueryOptions(options);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary 회원가입 Space 목록 조회
+ */
+export const prefetchGetSignUpSpacesInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetSignUpSpacesSuspenseInfiniteQueryOptions(options);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
+
 /**
  * 이메일 인증 요청을 생성하고 인증 메일을 발송합니다. User는 인증 완료 시 생성됩니다.
  * @summary 회원가입

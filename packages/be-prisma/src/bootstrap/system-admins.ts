@@ -50,6 +50,7 @@ async function ensureSystemAdminProfile(
 			userId,
 			name,
 			nickname,
+			address: "",
 		},
 	});
 }
@@ -80,6 +81,7 @@ export async function ensureSystemAdminUsers(
 						create: {
 							name: userData.profile.name,
 							nickname: userData.profile.nickname,
+							address: "",
 						},
 					},
 				},

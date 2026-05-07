@@ -1,9 +1,9 @@
-import { SpaceContext } from "@cocrepo/context";
 import { USER_ERRORS } from "@cocrepo/constant";
-import { validatePasswordPolicy } from "@cocrepo/toolkit";
+import { SpaceContext } from "@cocrepo/context";
 import type { QueryUsersDto } from "@cocrepo/dto";
 import type { Prisma } from "@cocrepo/prisma";
 import { UsersRepository } from "@cocrepo/repository";
+import { validatePasswordPolicy } from "@cocrepo/toolkit";
 import type { UserStats } from "@cocrepo/type";
 import { HashedPassword, PlainPassword } from "@cocrepo/vo";
 import {
@@ -282,33 +282,6 @@ export class UserService {
 	}
 
 	/**
-	 * 고유성 검증 (이메일, 전화번호, 이름)
-	 */
-	private async validateUniqueness(
-		email: string,
-		phone: string,
-		name: string,
-	): Promise<void> {
-		const [emailExists, phoneExists, nameExists] = await Promise.all([
-			this.repository.existsByEmail(email),
-			this.repository.existsByPhone(phone),
-			this.repository.existsByName(name),
-		]);
-
-		if (emailExists) {
-			throw new BadRequestException(USER_ERRORS.EMAIL_ALREADY_EXISTS);
-		}
-
-		if (phoneExists) {
-			throw new BadRequestException(USER_ERRORS.PHONE_ALREADY_EXISTS);
-		}
-
-		if (nameExists) {
-			throw new BadRequestException(USER_ERRORS.NAME_ALREADY_EXISTS);
-		}
-	}
-
-	/**
 	 * 임시 비밀번호 생성 (12자리)
 	 */
 	private generateTemporaryPassword(): string {
@@ -345,6 +318,7 @@ export class UserService {
 		name: string;
 		email: string;
 		phone: string;
+		address: string;
 		password: string;
 		spaceId: string;
 		roleId: string;
@@ -366,6 +340,7 @@ export class UserService {
 				create: {
 					name: params.name,
 					nickname: params.nickname || params.name,
+					address: params.address,
 				},
 			},
 		});

@@ -109,16 +109,16 @@ describe("AuthController", () => {
 					useValue: mockAuthApplicationService,
 				},
 			],
-			}).compile();
+		}).compile();
 
-			controller = module.get<AuthController>(AuthController);
-			jest.clearAllMocks();
-			mockResponse.cookie.mockReturnValue(mockResponse);
-			mockResponse.clearCookie.mockReturnValue(mockResponse);
-			mockResponse.redirect.mockReturnValue(mockResponse);
-			mockResponse.status.mockReturnValue(mockResponse);
-			mockResponse.send.mockReturnValue(mockResponse);
-		});
+		controller = module.get<AuthController>(AuthController);
+		jest.clearAllMocks();
+		mockResponse.cookie.mockReturnValue(mockResponse);
+		mockResponse.clearCookie.mockReturnValue(mockResponse);
+		mockResponse.redirect.mockReturnValue(mockResponse);
+		mockResponse.status.mockReturnValue(mockResponse);
+		mockResponse.send.mockReturnValue(mockResponse);
+	});
 
 	it("컨트롤러가 정의되어야 한다", () => {
 		expect(controller).toBeDefined();
@@ -349,6 +349,10 @@ describe("AuthController", () => {
 				email: "new@example.com",
 				password: "password123",
 				name: "New User",
+				nickname: "New User",
+				phone: "010-0000-0000",
+				address: "서울특별시 강남구 테헤란로 123",
+				spaceId: "space-test-id",
 			} as never;
 			const signUpResult = {
 				email: "new@example.com",
@@ -358,10 +362,27 @@ describe("AuthController", () => {
 				signUpResult as never,
 			);
 
-			const result = await controller.signUp(signUpDto);
+			const result = await controller.signUp(signUpDto, "space-test-id");
 
 			expect(mockAuthApplicationService.signUp).toHaveBeenCalledWith(signUpDto);
 			expect(result).toEqual(signUpResult);
+		});
+
+		it("x-space-id와 요청 body의 spaceId가 다르면 BadRequestException을 던져야 한다", async () => {
+			const signUpDto: SignUpPayloadDto = {
+				email: "new@example.com",
+				password: "password123",
+				name: "New User",
+				nickname: "New User",
+				phone: "010-0000-0000",
+				address: "서울특별시 강남구 테헤란로 123",
+				spaceId: "space-test-id",
+			} as never;
+
+			await expect(
+				controller.signUp(signUpDto, "other-space-id"),
+			).rejects.toThrow("SIGN_UP_SPACE_HEADER_MISMATCH");
+			expect(mockAuthApplicationService.signUp).not.toHaveBeenCalled();
 		});
 	});
 

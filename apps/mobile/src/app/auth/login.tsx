@@ -28,6 +28,12 @@ interface LoginWebViewRequest {
 	url: string;
 }
 
+interface LoginWebViewError {
+	nativeEvent: {
+		url?: string;
+	};
+}
+
 const buildLoginFlow = (
 	params: Record<string, string | string[] | undefined>,
 ) => {
@@ -124,6 +130,13 @@ export default observer(function AuthLoginRoute() {
 		onHandleLocalhostRedirect(navigation.url);
 	};
 
+	const onErrorLoginWebView = (event: LoginWebViewError) => {
+		const failedUrl = event.nativeEvent.url;
+		if (failedUrl) {
+			onHandleLocalhostRedirect(failedUrl);
+		}
+	};
+
 	return (
 		<ScreenFrame
 			backgroundColor="#ffffff"
@@ -134,6 +147,7 @@ export default observer(function AuthLoginRoute() {
 				accessibilityLabel="auth-login-webview"
 				domStorageEnabled
 				javaScriptEnabled
+				onError={onErrorLoginWebView}
 				onNavigationStateChange={onNavigationStateChangeLoginWebView}
 				onShouldStartLoadWithRequest={onShouldStartLoadWithRequestLoginWebView}
 				originWhitelist={["http://*", "https://*", `${AUTH_CALLBACK_SCHEME}://*`]}

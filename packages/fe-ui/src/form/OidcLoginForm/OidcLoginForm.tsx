@@ -128,6 +128,7 @@ export interface OidcLoginFormProps {
 	/** DEV 모드 여부 */
 	isDev?: boolean;
 	forgotPasswordHref?: string;
+	signUpHref?: string;
 }
 
 export const OidcLoginForm = observer(
@@ -136,6 +137,7 @@ export const OidcLoginForm = observer(
 		client,
 		isDev = false,
 		forgotPasswordHref = "/forgot-password",
+		signUpHref = "/sign-up",
 	}: OidcLoginFormProps) => {
 		const t = useT();
 		const recoveryActions =
@@ -279,7 +281,13 @@ export const OidcLoginForm = observer(
 					</Button>
 				</form>
 
-				<div className="mt-6 text-center">
+				<div className="mt-6 flex flex-col items-center gap-2 text-center">
+					<div className="text-sm text-default-500">
+						{t("계정이 없으신가요?")}{" "}
+						<Link href={signUpHref} className="font-medium text-primary">
+							{t("회원가입")}
+						</Link>
+					</div>
 					<button
 						type="button"
 						data-action="abort-interaction"

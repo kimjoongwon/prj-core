@@ -14,6 +14,9 @@ export class ProfileDto extends AbstractDto implements Profile {
 	nickname: string;
 
 	@StringField()
+	address: string;
+
+	@StringField()
 	userId: string;
 
 	@ClassField(() => User, { required: false })

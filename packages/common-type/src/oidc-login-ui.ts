@@ -1,6 +1,6 @@
 export type OidcClientLoginUiVariant = "default" | "compact" | "branded";
 
-export interface OidcClientLoginUi {
+export interface OidcClientLoginUi extends Record<string, unknown> {
 	variant?: OidcClientLoginUiVariant;
 	headline?: string;
 	description?: string;
