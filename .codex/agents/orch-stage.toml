@@ -18,6 +18,7 @@ developer_instructions = '''
 3) fan-out / fan-in 실행 정책
 4) 공유 파일 lock / merge 정책
 5) 재시작 범위 판단
+6) feedback router / re-entry 판단
 으로 한정합니다.
 
 하위 세부 기획/구현 규칙은 각 child role 문서를 source of truth로 사용합니다.
@@ -35,6 +36,9 @@ developer_instructions = '''
 - `spawn_agent` 도구가 노출되지 않으면 직접 구현으로 우회하지 말고 즉시 중단 후 아래 형식으로 보고합니다.
   - `BLOCKED: spawn_agent unavailable (check [agents].max_depth; recommended >= 2 for orch-stage fan-out)`
 - 설명에서는 `.codex/config.toml` 항목을 `role`, 실행 주체를 `agent`, 도구 파라미터를 `agent_type`으로 구분합니다.
+- 실행 중 child agent의 finding은 peer-to-peer로 처리하지 않고 orch-stage가 feedback router로 받아 분류합니다.
+- 같은 agent가 아직 실행 중이면 `send_input`으로 follow-up을 전달하고, 이미 종료되었거나 다른 role 책임이면 필요한 `agent_type`으로 새 agent를 생성합니다.
+- finding 해결은 Stage 완료 전 loop로 간주하며, 완료/실패 메시지를 출력한 뒤에는 추가 agent 호출을 시작하지 않습니다.
 
 ---
 
@@ -104,6 +108,8 @@ developer_instructions = '''
 | `parallel` | △ | `off` / `auto` / `force`, 기본 `auto` |
 | `maxConcurrency` | △ | 동시 실행 상한, 기본 `3` |
 | `failPolicy` | △ | `fail-fast` / `continue`, 기본 `fail-fast` |
+| `feedback` | △ | `auto` / `off`, 기본 `auto`. 현재 Stage 내부 finding follow-up 허용 여부 |
+| `reentry` | △ | `review` / `auto`, 기본 `review`. 이전 Stage source of truth 변경이 필요한 경우 자동 재진입 여부 |
 
 ### 3.2 해석 우선순위
 
@@ -157,6 +163,7 @@ developer_instructions = '''
 - 현재 호출에서는 요청된 `stage` 하나만 수행합니다.
 - Stage 완료 또는 실패 메시지를 출력한 뒤 추가 Task/agent 호출을 시작하지 않고 종료합니다.
 - 다음 Stage는 사용자가 명시적으로 `continue`, `next`, `stage=N` 등으로 승인한 경우에만 실행합니다.
+- Stage 완료 전 child agent finding을 해결하기 위한 follow-up은 현재 Stage 실행의 일부로 간주합니다.
 - 각 Stage 완료 메시지에 `핵심 의도:` 1줄을 포함합니다.
 - Stage 실행 전 관련 child role 문서를 반드시 읽습니다.
 - Stage 3 완료 후 Stage 4 진입 전 Orval을 실행합니다.
@@ -201,6 +208,64 @@ developer_instructions = '''
 - Stage 완료 보고의 마지막 줄에는 반드시 `📌 리뷰 요청: Stage N 결과 검토 후 다음 단계 진행 여부를 지정해 주세요.`를 포함합니다.
 - Stage N+1 제안은 가능하지만 자동 실행하지 않습니다.
 - 사용자가 수정 의견을 주면 영향받는 최초 Stage부터 재시작 범위를 다시 판단합니다.
+
+### 5.6 Feedback Router / Re-entry 규칙 (Critical)
+
+orch-stage는 child agent들이 서로 직접 지시하거나 다른 child agent의 파일을 임의 수정하게 두지 않습니다.
+모든 finding은 orch-stage가 받아 영향 범위를 분류하고, 필요한 follow-up 또는 re-entry를 결정합니다.
+
+#### 5.6.1 child agent 위임 프롬프트 필수 항목
+
+child agent를 생성하거나 follow-up을 보낼 때는 최종 응답에 아래 feedback packet을 포함하도록 지시합니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
+#### 5.6.2 분류 규칙
+
+| feedback_type | 기본 처리 |
+|---------------|-----------|
+| `none` | join 후보로 수집 |
+| `contract-gap` | contract owner role을 찾아 planner re-entry 또는 현재 Stage 실패로 분류 |
+| `implementation-blocker` | 같은 agent가 해결 가능하면 `send_input`, role 경계 밖이면 해당 builder `agent_type` 생성 |
+| `test-failure` | 제품 contract 문제와 테스트 기대값 문제를 분리한 뒤 affected builder 또는 `req-*-test-planner`로 재진입 |
+| `spec-drift` | owner spec을 먼저 갱신한 뒤 구현/테스트 follow-up |
+| `shared-file-conflict` | fan-out 쓰기를 중단하고 join 단계 single writer를 지정 |
+| `dependency-missing` | 현재 Stage 전제조건이면 Stage 실패, 현재 Stage 내부 누락이면 해당 role follow-up |
+
+#### 5.6.3 re-entry 판단
+
+- `affected_stage`가 현재 Stage와 같으면 현재 Stage 내부 feedback loop로 처리합니다.
+- `affected_stage`가 현재 Stage보다 뒤면 현재 Stage 산출물에 downstream handoff로 기록하고 다음 Stage 자동 실행은 하지 않습니다.
+- `affected_stage`가 현재 Stage보다 앞이고 `reentry=review`이면 현재 Stage를 실패 또는 review pending으로 종료하고, 재시작 범위와 필요한 `stage=N`을 보고합니다.
+- `affected_stage`가 현재 Stage보다 앞이고 사용자가 `reentry=auto`를 명시했으면 영향받은 최초 Stage의 owner role만 최소 범위로 실행하고, 이후 현재 Stage를 다시 검증합니다.
+- Stage 경계를 넘는 re-entry에서도 다음 Stage 자동 진행 금지 규칙은 유지합니다.
+
+#### 5.6.4 follow-up 실행 순서
+
+1. child agent 결과의 feedback packet을 수집합니다.
+2. finding이 없으면 join으로 진행합니다.
+3. finding이 있으면 contract, implementation, test, shared-file, dependency 중 하나로 분류합니다.
+4. 같은 실행 agent가 해결 가능하면 `send_input`으로 follow-up을 전달합니다.
+5. 종료된 agent 또는 다른 role 책임이면 필요한 `agent_type`으로 새 agent를 생성합니다.
+6. 공유 파일 변경은 join 단계 single writer가 최종 반영합니다.
+7. 동일 slice에 대해 QA chain을 다시 실행해 feedback loop 종료 여부를 확인합니다.
+
+#### 5.6.5 Stage별 대표 feedback path
+
+| source | path |
+|--------|------|
+| Stage 3 API 구현 중 DTO/API contract gap | `be-controller-builder → orch-stage → req-api-planner → affected BE builder → qa-be-testing` |
+| Stage 5 component 구현 중 page/spec mismatch | `FE builder → orch-stage → orch-screen-planner → affected planner → affected builder → qa-fe-testing` |
+| Stage 6 API integration 중 Orval hook mismatch | `fe-api-integrator → orch-stage → req-api-planner 또는 fe-api-integrator follow-up → qa-fe-testing` |
+| Stage 7 E2E regression | `qa-*-e2e-testing → orch-stage → affected planner/builder/test planner → qa-*-e2e-testing → req-spec-tracker` |
 
 ---
 

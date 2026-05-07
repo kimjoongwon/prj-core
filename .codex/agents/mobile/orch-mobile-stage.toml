@@ -18,6 +18,7 @@ developer_instructions = '''
 3) fan-out / fan-in 정책
 4) 공유 파일 lock / merge 정책
 5) 재시작 범위 판단
+6) mobile feedback router / re-entry 판단
 으로 한정합니다.
 
 하위 세부 규칙은 각 mobile child role 문서를 source of truth 로 사용합니다.
@@ -38,6 +39,9 @@ developer_instructions = '''
 - `spawn_agent` 도구가 노출되지 않으면 즉시 중단 후 아래 형식으로 보고합니다.
   - `BLOCKED: spawn_agent unavailable (mobile orchestration requires multi-agent fan-out)`
 - 설명에서는 `.codex/config.toml` 항목을 `role`, 실행 주체를 `agent`, 도구 파라미터를 `agent_type`으로 구분합니다.
+- 실행 중 child agent의 finding은 peer-to-peer로 처리하지 않고 `orch-mobile-stage`가 feedback router로 받아 분류합니다.
+- 같은 agent가 아직 실행 중이면 `send_input`으로 follow-up을 전달하고, 이미 종료되었거나 다른 role 책임이면 필요한 `agent_type`으로 새 agent를 생성합니다.
+- finding 해결은 Stage 완료 전 loop로 간주하며, 완료/실패 메시지를 출력한 뒤에는 추가 agent 호출을 시작하지 않습니다.
 
 ---
 
@@ -94,6 +98,8 @@ developer_instructions = '''
 | `parallel` | △ | `off` / `auto` / `force`, 기본 `auto` |
 | `maxConcurrency` | △ | 동시 실행 상한, 기본 `3` |
 | `failPolicy` | △ | `fail-fast` / `continue`, 기본 `fail-fast` |
+| `feedback` | △ | `auto` / `off`, 기본 `auto`. 현재 Stage 내부 finding follow-up 허용 여부 |
+| `reentry` | △ | `review` / `auto`, 기본 `review`. 이전 Stage source of truth 변경이 필요한 경우 자동 재진입 여부 |
 
 ### 3.2 route 해석
 
@@ -123,6 +129,7 @@ developer_instructions = '''
 - Stage 완료 또는 실패 메시지를 출력한 뒤 추가 Task/agent 호출을 시작하지 않고 종료합니다.
 - 다음 Stage는 사용자가 명시적으로 `continue`, `next`, `stage=N` 등으로 승인한 경우에만 실행합니다.
 - 실제 산출물 생성은 해당 Stage 의 child role agent 가 담당하고, `orch-mobile-stage`는 조율과 join 에 집중합니다.
+- Stage 완료 전 child agent finding을 해결하기 위한 follow-up은 현재 Stage 실행의 일부로 간주합니다.
 - 각 Stage 완료 메시지에 `핵심 의도:` 1줄을 포함합니다.
 - 변경이 발생하면 영향받는 최초 Stage부터 재시작합니다.
 - `parallel=auto`를 기본으로 사용합니다.
@@ -162,6 +169,66 @@ developer_instructions = '''
 - Stage 완료 보고의 마지막 줄에는 반드시 `📌 리뷰 요청: Stage N 결과 검토 후 다음 단계 진행 여부를 지정해 주세요.`를 포함합니다.
 - Stage N+1 제안은 가능하지만 자동 실행하지 않습니다.
 - 사용자가 수정 의견을 주면 영향받는 최초 Stage부터 재시작 범위를 다시 판단합니다.
+
+### 5.5 Feedback Router / Re-entry 규칙 (Critical)
+
+`orch-mobile-stage`는 child agent들이 서로 직접 지시하거나 다른 child agent의 파일을 임의 수정하게 두지 않습니다.
+모든 finding은 `orch-mobile-stage`가 받아 route contract, shared screen contract, backend handoff, test contract 중 어디가 owner인지 먼저 분류합니다.
+
+#### 5.5.1 child agent 위임 프롬프트 필수 항목
+
+child agent를 생성하거나 follow-up을 보낼 때는 최종 응답에 아래 feedback packet을 포함하도록 지시합니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-route-contract | needs-backend-contract | needs-ui | needs-test | needs-reentry
+- feedback_type: none | route-contract-gap | backend-contract-gap | screen-contract-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
+#### 5.5.2 분류 규칙
+
+| feedback_type | 기본 처리 |
+|---------------|-----------|
+| `none` | join 후보로 수집 |
+| `route-contract-gap` | `orch-mobile-screen-planner` 또는 관련 `req-mo-*` role로 re-entry |
+| `backend-contract-gap` | 공통 backend `req-*` handoff로 되돌리고, 필요하면 web `orch-stage` backend flow 재시작 범위 보고 |
+| `screen-contract-gap` | `orch-mobile-screen-planner`를 통해 shared screen props/spec만 최소 갱신 |
+| `implementation-blocker` | 같은 agent가 해결 가능하면 `send_input`, role 경계 밖이면 해당 mobile builder `agent_type` 생성 |
+| `test-failure` | 제품 contract 문제와 테스트 기대값 문제를 분리한 뒤 affected builder 또는 `req-mo-fe-test-planner`로 재진입 |
+| `spec-drift` | route `index.spec.md` 또는 screen owner spec을 먼저 갱신한 뒤 구현/테스트 follow-up |
+| `shared-file-conflict` | fan-out 쓰기를 중단하고 join 단계 single writer를 지정 |
+| `dependency-missing` | 현재 Stage 전제조건이면 Stage 실패, 현재 Stage 내부 누락이면 해당 role follow-up |
+
+#### 5.5.3 re-entry 판단
+
+- `affected_stage`가 현재 Stage와 같으면 현재 Stage 내부 feedback loop로 처리합니다.
+- `affected_stage`가 현재 Stage보다 뒤면 현재 Stage 산출물에 downstream handoff로 기록하고 다음 Stage 자동 실행은 하지 않습니다.
+- `affected_stage`가 현재 Stage보다 앞이고 `reentry=review`이면 현재 Stage를 실패 또는 review pending으로 종료하고, 재시작 범위와 필요한 `stage=N`을 보고합니다.
+- `affected_stage`가 현재 Stage보다 앞이고 사용자가 `reentry=auto`를 명시했으면 영향받은 최초 Stage의 owner role만 최소 범위로 실행하고, 이후 현재 Stage를 다시 검증합니다.
+- backend 구현이 필요한 finding은 mobile flow 안에서 직접 backend 코드를 구현하지 않고 공통 backend handoff와 `orch-stage` 재시작 범위로 보고합니다.
+
+#### 5.5.4 follow-up 실행 순서
+
+1. child agent 결과의 feedback packet을 수집합니다.
+2. finding이 없으면 join으로 진행합니다.
+3. finding이 있으면 route contract, backend contract, screen UI, implementation, test, shared-file 중 하나로 분류합니다.
+4. 같은 실행 agent가 해결 가능하면 `send_input`으로 follow-up을 전달합니다.
+5. 종료된 agent 또는 다른 role 책임이면 필요한 `agent_type`으로 새 agent를 생성합니다.
+6. 공유 파일 변경은 join 단계 single writer가 최종 반영합니다.
+7. 동일 route slice에 대해 mobile unit 또는 E2E QA chain을 다시 실행해 feedback loop 종료 여부를 확인합니다.
+
+#### 5.5.5 대표 feedback path
+
+| source | path |
+|--------|------|
+| Stage 2 screen 구현 중 props contract gap | `fe-mo-screen-builder → orch-mobile-stage → orch-mobile-screen-planner → affected req-mo-* planner → fe-mo-screen-builder → qa-mo-testing` |
+| Stage 3 route 통합 중 backend endpoint gap | `fe-mo-api-integrator → orch-mobile-stage → common backend req-* handoff → orch-stage backend flow 재시작 범위 보고` |
+| Stage 3 route 통합 중 shared screen target 누락 | `fe-mo-page-builder → orch-mobile-stage → Stage 2 re-entry 보고 또는 reentry=auto 시 fe-mo-screen-builder follow-up` |
+| Stage 4 E2E regression | `qa-mo-e2e-testing → orch-mobile-stage → affected planner/builder/test planner → qa-mo-e2e-testing` |
 
 ---
 
