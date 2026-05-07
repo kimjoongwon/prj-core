@@ -22,6 +22,9 @@ import {
 const AUTH_CLIENT_ID = "user-mobile";
 const AUTH_CALLBACK_SCHEME = "kr.co.cocdev.onoramobile";
 const AUTH_CALLBACK_PATH = "auth/callback";
+const AUTH_API_LOGIN_PATH = "/api/v1/auth/login";
+const AUTH_WEB_LOGIN_PATH = "/auth/login";
+const OIDC_AUTH_PATH = "/oidc/auth";
 const LoginWebView = WebView as unknown as ComponentType<WebViewProps>;
 
 interface LoginWebViewRequest {
@@ -59,6 +62,35 @@ const isCallbackRequest = (url: string) =>
 		callbackPath: AUTH_CALLBACK_PATH,
 	});
 
+const normalizeUrlPathname = (pathname: string) =>
+	pathname.replace(/\/+$/, "") || "/";
+
+const isNotMobileClient = (clientId: string | null) =>
+	!clientId || clientId !== AUTH_CLIENT_ID;
+
+const isLoginFlowDriftRequest = (url: string) => {
+	try {
+		const parsed = new URL(url, "http://localhost");
+		const pathname = normalizeUrlPathname(parsed.pathname);
+
+		if (pathname === AUTH_WEB_LOGIN_PATH) {
+			return true;
+		}
+
+		if (pathname === AUTH_API_LOGIN_PATH) {
+			return isNotMobileClient(parsed.searchParams.get("clientId"));
+		}
+
+		if (pathname === OIDC_AUTH_PATH) {
+			return isNotMobileClient(parsed.searchParams.get("client_id"));
+		}
+
+		return false;
+	} catch {
+		return false;
+	}
+};
+
 const buildCallbackRouteParams = (url: string, targetReturnTo: string) => {
 	try {
 		return buildAuthCallbackRouteParams(url, targetReturnTo);
@@ -76,11 +108,13 @@ export default observer(function AuthLoginRoute() {
 	const { loginUrl, targetReturnTo } = buildLoginFlow(rawParams);
 	const callbackHandledRef = useRef(false);
 	const [webViewUrl, setWebViewUrl] = useState(loginUrl);
+	const [webViewResetKey, setWebViewResetKey] = useState(0);
 
 	useEffect(() => {
 		callbackHandledRef.current = false;
 		mobileAuthStore.setNextPathAfterLogin(targetReturnTo);
 		setWebViewUrl(loginUrl);
+		setWebViewResetKey((current) => current + 1);
 	}, [loginUrl, targetReturnTo]);
 
 	const onHandleCallbackUrl = (url: string) => {
@@ -102,6 +136,22 @@ export default observer(function AuthLoginRoute() {
 		return true;
 	};
 
+	const onRestartLoginFlow = () => {
+		callbackHandledRef.current = false;
+		mobileAuthStore.setNextPathAfterLogin(targetReturnTo);
+		setWebViewUrl(loginUrl);
+		setWebViewResetKey((current) => current + 1);
+	};
+
+	const onHandleLoginFlowDrift = (url: string) => {
+		if (!isLoginFlowDriftRequest(url)) {
+			return false;
+		}
+
+		onRestartLoginFlow();
+		return true;
+	};
+
 	const onHandleLocalhostRedirect = (url: string) => {
 		const rewrittenUrl = rewriteLocalhostUrlForAndroidEmulator(url);
 		if (rewrittenUrl === url) {
@@ -119,11 +169,19 @@ export default observer(function AuthLoginRoute() {
 			return false;
 		}
 
+		if (onHandleLoginFlowDrift(request.url)) {
+			return false;
+		}
+
 		return !onHandleLocalhostRedirect(request.url);
 	};
 
 	const onNavigationStateChangeLoginWebView = (navigation: LoginWebViewRequest) => {
 		if (onHandleCallbackUrl(navigation.url)) {
+			return;
+		}
+
+		if (onHandleLoginFlowDrift(navigation.url)) {
 			return;
 		}
 
@@ -133,6 +191,10 @@ export default observer(function AuthLoginRoute() {
 	const onErrorLoginWebView = (event: LoginWebViewError) => {
 		const failedUrl = event.nativeEvent.url;
 		if (failedUrl) {
+			if (onHandleLoginFlowDrift(failedUrl)) {
+				return;
+			}
+
 			onHandleLocalhostRedirect(failedUrl);
 		}
 	};
@@ -147,6 +209,7 @@ export default observer(function AuthLoginRoute() {
 				accessibilityLabel="auth-login-webview"
 				domStorageEnabled
 				javaScriptEnabled
+				key={webViewResetKey}
 				onError={onErrorLoginWebView}
 				onNavigationStateChange={onNavigationStateChangeLoginWebView}
 				onShouldStartLoadWithRequest={onShouldStartLoadWithRequestLoginWebView}

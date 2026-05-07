@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Design Research: 예약 화면</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --text: #172033;
+      --muted: #667085;
+      --line: #e5e7eb;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --accent: #2563eb;
+      --accent-bg: #eaf2ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+    main {
+      width: min(900px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 48px 0 80px;
+    }
+    h1 { font-size: 40px; line-height: 1.15; margin: 0 0 24px; }
+    h2 { font-size: 24px; margin: 44px 0 14px; border-top: 1px solid var(--line); padding-top: 28px; }
+    h3 { font-size: 18px; margin: 28px 0 10px; }
+    p { margin: 0 0 14px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .tldr {
+      background: var(--accent-bg);
+      border: 1px solid #bfdbfe;
+      border-radius: 14px;
+      padding: 20px;
+      margin: 20px 0 32px;
+    }
+    ol, ul { padding-left: 24px; }
+    li { margin: 10px 0; }
+    pre {
+      overflow: auto;
+      background: #111827;
+      color: #f9fafb;
+      border-radius: 12px;
+      padding: 16px;
+      line-height: 1.45;
+    }
+    figure {
+      margin: 28px 0;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+    }
+    figure img {
+      display: block;
+      width: 100%;
+      max-height: 760px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: #f1f5f9;
+    }
+    figcaption {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+    .gallery figure { margin: 0; }
+    .source-list li { overflow-wrap: anywhere; }
+    .note {
+      color: var(--muted);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Design Research: 예약 화면</h1>
+
+    <section class="tldr">
+      <h2 style="border:0; padding:0; margin-top:0;">TL;DR</h2>
+      <p>운동/클래스 예약 화면은 "탐색 화면"과 "예약 확정 화면"을 분리하는 편이 가장 안정적입니다. 첫 화면에서는 수업 카드, 날짜 스트립, 잔여석/마감/대기 상태를 한눈에 보여주고, 상세에서는 날짜-시간 선택과 취소 정책, 수업권 차감, 캘린더 추가까지 확정 전후 정보를 명확히 고정해야 합니다.</p>
+      <p>하이파이브와 F45는 빠른 수업 예약과 대기 알림이 강하고, 네이버예약은 업종별 예약 유형과 결제/알림/관리까지 연결하는 범용성이 강합니다.</p>
+    </section>
+
+    <h2>Recommendations / Next Steps</h2>
+    <ol>
+      <li><strong>첫 화면은 수업 피드 + 날짜 스트립으로 시작</strong> - 사용자는 예약 전에 "오늘 갈 수 있는 수업"을 먼저 봅니다.</li>
+      <li><strong>시간 선택은 예약 슬롯 카드로 처리</strong> - 예약 시간은 운영자가 만든 재고이므로 가능한 시간, 마감, 대기, 잔여석을 슬롯 단위로 보여줘야 합니다.</li>
+      <li><strong>확정 직전에는 정책을 한 장에 요약</strong> - 노쇼, 취소 가능 시간, 수업권 차감 조건을 확인시킨 뒤 예약을 완료합니다.</li>
+      <li><strong>마감 상태는 대기/알림 액션으로 전환</strong> - 마감 카드를 숨기지 말고 "왜 못 하는지"와 "다음 액션"을 같이 보여줍니다.</li>
+    </ol>
+
+    <pre>+--------------------------------+
+| 센터명 / 지점 변경        알림 |
+| 남은 수업권 8회  만료 D-23     |
++--------------------------------+
+| 5/7 오늘 | 5/8 금 | 5/9 토 ... |
++--------------------------------+
+| [전체] [근력] [유산소] [강사] |
++--------------------------------+
+| 08:10  하체 집중  4/10석       |
+| 강사 김OO  50분        [예약] |
+| 09:10  하체 집중  마감         |
+| 빈자리 알림 가능       [대기] |
++--------------------------------+</pre>
+
+    <h2>Key Examples</h2>
+    <div class="gallery">
+      <figure>
+        <img src="references/web-hifive-class-reservation.png" alt="하이파이브 수업 예약">
+        <figcaption>하이파이브 - 날짜별 수업 리스트와 예약 버튼 [Web]</figcaption>
+      </figure>
+      <figure>
+        <img src="references/web-hifive-waitlist.png" alt="하이파이브 예약 대기">
+        <figcaption>하이파이브 - 마감 수업을 예약 대기/빈자리 알림으로 전환 [Web]</figcaption>
+      </figure>
+      <figure>
+        <img src="references/web-f45-class-schedule.png" alt="F45 클래스 스케줄">
+        <figcaption>F45 - 지점, 날짜, 수업명, 시간, 강사 중심의 모바일 스케줄 [Web]</figcaption>
+      </figure>
+      <figure>
+        <img src="references/web-f45-class-detail.png" alt="F45 수업 상세">
+        <figcaption>F45 - 수업 상세 확인 후 예약으로 이어지는 구조 [Web]</figcaption>
+      </figure>
+      <figure>
+        <img src="references/web-naver-booking-entry.png" alt="네이버 예약 진입">
+        <figcaption>네이버예약 - 플레이스 상세 안에서 예약 진입점을 자연스럽게 노출 [Web]</figcaption>
+      </figure>
+      <figure>
+        <img src="references/lazyweb-peloton-class-browse.png" alt="Peloton 클래스 탐색">
+        <figcaption>Peloton - 검색, 탭, 카테고리 칩, 클래스 카드 [Lazyweb]</figcaption>
+      </figure>
+      <figure>
+        <img src="references/lazyweb-babbel-live-class-booking.png" alt="Babbel 라이브 클래스 예약">
+        <figcaption>Babbel - 날짜/시간 필터, 강사, 정원 상태, 예약 CTA [Lazyweb]</figcaption>
+      </figure>
+      <figure>
+        <img src="references/lazyweb-fiton-date-slot-picker.png" alt="FitOn 날짜 시간 선택">
+        <figcaption>FitOn - 월간 달력과 가능한 시간 슬롯을 같은 화면에 배치 [Lazyweb]</figcaption>
+      </figure>
+      <figure>
+        <img src="references/lazyweb-taskrabbit-provider-time-picker.png" alt="Taskrabbit 시간 선택">
+        <figcaption>Taskrabbit - 제공자 목록과 시간 선택 바텀시트 결합 [Lazyweb]</figcaption>
+      </figure>
+      <figure>
+        <img src="references/lazyweb-resy-reserve-checkout.png" alt="Resy 예약 확정">
+        <figcaption>Resy - 예약 세부정보와 취소 정책을 확정 직전에 노출 [Lazyweb]</figcaption>
+      </figure>
+      <figure>
+        <img src="references/lazyweb-spring-health-policy-confirm.png" alt="Spring Health 정책 확인">
+        <figcaption>Spring Health - 취소 정책 확인 바텀시트 [Lazyweb]</figcaption>
+      </figure>
+      <figure>
+        <img src="references/lazyweb-fiton-confirmation.png" alt="FitOn 예약 완료">
+        <figcaption>FitOn - 예약 완료 후 캘린더 추가와 대시보드 복귀 [Lazyweb]</figcaption>
+      </figure>
+    </div>
+
+    <h2>Patterns</h2>
+    <ul>
+      <li><strong>날짜는 캘린더보다 먼저 요일 스트립을 노출</strong>: 근미래 예약은 상단 요일 스트립이 빠릅니다.</li>
+      <li><strong>수업 카드는 정보 밀도가 높아야 함</strong>: 시간, 수업명, 강사, 지점, 난이도, 잔여석, 예약 상태가 카드 안에 있어야 합니다.</li>
+      <li><strong>예약 가능/마감/대기 상태를 같은 컴포넌트에서 표현</strong>: 숨김보다 상태 노출이 낫습니다.</li>
+      <li><strong>확정 CTA는 화면 하단 고정</strong>: 선택 내용 요약과 CTA 활성화가 함께 움직여야 합니다.</li>
+      <li><strong>예약 후 화면은 관리 화면의 시작점</strong>: 캘린더 추가, 변경, 취소, 문의, 수업권 상태를 바로 제공합니다.</li>
+    </ul>
+
+    <h2>Anti-Patterns</h2>
+    <ul>
+      <li>연속형 시간 피커만 제공하기</li>
+      <li>마감 수업 숨기기</li>
+      <li>정책을 예약 후에만 고지하기</li>
+      <li>수업권 잔여 횟수와 만료일 숨기기</li>
+      <li>지점, 강사, 카테고리, 시간대 필터를 깊은 메뉴에 감추기</li>
+    </ul>
+
+    <h2>Unique Angles</h2>
+    <p><strong>하이파이브</strong>는 수업권 잔여 횟수, 예약 대기, 수업 알림을 한 앱에서 처리한다는 회원용 예약 감각이 강합니다.</p>
+    <p><strong>F45</strong>는 리스트에서 빠르게 예약하되 상세에서 수업의 의미와 지점 정보를 이해하게 합니다.</p>
+    <p><strong>네이버예약</strong>은 일반형, 뷰티형, 병의원형, 회차형, 시작-종료시간 선택형처럼 예약 모델을 다르게 둡니다.</p>
+    <p><strong>Resy/Spring Health</strong>는 확정 전 정책 고지를 통해 취소/노쇼 리스크를 명확히 합니다.</p>
+
+    <h2>Findings</h2>
+    <h3>1. 예약 화면의 핵심은 "예약 가능한 것만 빠르게 찾기"입니다</h3>
+    <p>하이파이브와 F45는 사용자가 특정 수업을 이미 알고 들어온다고 가정합니다. 그래서 첫 화면부터 날짜별 수업 리스트를 보여주고, 상세한 마케팅 설명보다 예약 가능한 시간과 버튼을 앞세웁니다.</p>
+    <h3>2. 네이버예약식 범용성은 정보 구조에 참고할 가치가 있습니다</h3>
+    <p>피트니스에서도 일반 수업 예약, PT 상담, 체험 수업, 바디스캔, 공간/기구 예약은 서로 다른 시간 모델을 갖습니다. UI는 하나의 예약 모듈로 보이되 내부 데이터는 분리되어야 합니다.</p>
+    <h3>3. 수업형 예약은 "정원"과 "대기"가 일반 예약보다 중요합니다</h3>
+    <p>클래스 예약에서는 빈자리 알림, 대기 등록, 마감 임박, 취소 가능 시간, 노쇼 정책이 conversion만큼 중요합니다.</p>
+    <h3>4. 확정 후에는 캘린더와 알림이 신뢰를 완성합니다</h3>
+    <p>예약 완료 후 이메일 발송, 캘린더 추가, 대시보드 복귀를 제공하면 사용자는 예약 상태를 더 확실히 인지합니다.</p>
+
+    <h2>Design Direction</h2>
+    <ul>
+      <li><strong>Mobile-first</strong>: 회원용 예약 화면은 모바일 우선. 데스크톱은 관리/운영 화면에 더 적합합니다.</li>
+      <li><strong>권장 컴포넌트</strong>: DateStrip, ClassSessionCard, SlotPickerSheet, BookingPolicySheet, BookingConfirmationPanel, PassBalanceBadge, WaitlistButton.</li>
+      <li><strong>추천 상태값</strong>: AVAILABLE, FEW_LEFT, FULL, WAITLIST_OPEN, BOOKING_CLOSED, RESERVED, CANCELED.</li>
+    </ul>
+
+    <h2>Sources</h2>
+    <ul class="source-list">
+      <li><a href="https://play.google.com/store/apps/details?hl=en-US&id=com.fitnessmobileapps.f45training">Mindbody x F45 on Google Play</a></li>
+      <li><a href="https://f45training.com/get-the-app/">F45 Training App</a></li>
+      <li><a href="https://play.google.com/store/apps/details?hl=en_US&id=kr.sleek.boost.reserve">하이파이브 Google Play</a></li>
+      <li><a href="https://hifivecenter.cafe24.com/">하이파이브 공식 소개</a></li>
+      <li><a href="https://smartplace.naver.com/introduction/solution-market/booking">네이버 스마트플레이스 예약</a></li>
+      <li><a href="https://help.worksmobile.com/ko/use-guides/resource-reserve/mobile-app/use-reservation/">네이버웍스 자원 예약 가이드</a></li>
+      <li><a href="https://baymard.com/ecommerce-design-examples/date-picker?unauthorized=19352-booking-com">Baymard Date Picker Examples</a></li>
+      <li><a href="https://help.classpass.com/hc/en-us/articles/204335689-How-do-I-make-a-reservation">ClassPass reservation help</a></li>
+    </ul>
+    <p class="note">Note: Lazyweb browse CLI was not available in this workspace, so live browser screenshots were replaced with publicly available web/app-store images plus Lazyweb screenshot references.</p>
+  </main>
+</body>
+</html>

@@ -3,9 +3,15 @@ import { Text } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { AuthSessionGate } from "@/auth/AuthSessionGate";
 import { mobileAuthStore } from "@/auth/auth-store";
+import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
 
 const mockReplace = jest.fn();
 let mockPathname = "/";
+const mockGetCurrentSpace = jest.fn();
+const mockGetMySpaces = jest.fn();
+const mockSetApiPersistStore = jest.fn();
+const mockSetIdpPersistStore = jest.fn();
+const mockVerifyToken = jest.fn();
 
 jest.mock("expo-router", () => ({
 	usePathname: () => mockPathname,
@@ -19,13 +25,20 @@ jest.mock("expo-splash-screen", () => ({
 }));
 
 jest.mock("@cocrepo/api/idp/auth", () => ({
+	getCurrentSpace: (...args: unknown[]) => mockGetCurrentSpace(...args),
+	getMySpaces: (...args: unknown[]) => mockGetMySpaces(...args),
 	logout: jest.fn(),
-	verifyToken: jest.fn(),
+	verifyToken: (...args: unknown[]) => mockVerifyToken(...args),
+}));
+
+jest.mock("@cocrepo/api/core/client", () => ({
+	setApiPersistStore: (...args: unknown[]) => mockSetApiPersistStore(...args),
 }));
 
 jest.mock("@cocrepo/api/idp/client", () => ({
 	setIdpBaseUrl: jest.fn(),
 	setIdpLoginRedirectUrl: jest.fn(),
+	setIdpPersistStore: (...args: unknown[]) => mockSetIdpPersistStore(...args),
 }));
 
 const resetAuthStore = () => {
@@ -34,12 +47,18 @@ const resetAuthStore = () => {
 	mobileAuthStore.isVerifying = false;
 	mobileAuthStore.lastFailure = "";
 	mobileAuthStore.nextPathAfterLogin = "/";
+	mobileApiScopeStore.clear();
 };
 
 describe("AuthSessionGate", () => {
 	beforeEach(() => {
 		mockPathname = "/";
 		mockReplace.mockReset();
+		mockGetCurrentSpace.mockReset();
+		mockGetMySpaces.mockReset();
+		mockSetApiPersistStore.mockReset();
+		mockSetIdpPersistStore.mockReset();
+		mockVerifyToken.mockReset();
 		resetAuthStore();
 		(SplashScreen.hideAsync as jest.Mock).mockClear();
 	});
@@ -65,6 +84,32 @@ describe("AuthSessionGate", () => {
 
 		expect(screen.queryByText("home-screen")).toBeNull();
 		expect(SplashScreen.hideAsync).not.toHaveBeenCalled();
+	});
+
+	it("세션 검증 시 현재 Space를 Core API 요청 scope에 연결한다", async () => {
+		const currentSpace = {
+			id: "space-branch",
+			contentLanguageCode: "ko_KR",
+			ground: { name: "강남점" },
+		};
+		mockVerifyToken.mockResolvedValue({
+			data: {
+				accessTokenExpiresAt: Date.now() + 60_000,
+				refreshTokenExpiresAt: Date.now() + 120_000,
+				valid: true,
+			},
+		});
+		mockGetMySpaces.mockResolvedValue({ data: [currentSpace] });
+		mockGetCurrentSpace.mockResolvedValue({ data: currentSpace });
+
+		const verified = await mobileAuthStore.verifySession();
+
+		expect(verified).toBe(true);
+		expect(mobileAuthStore.authStatus).toBe("authenticated");
+		expect(mobileApiScopeStore.spaceId).toBe("space-branch");
+		expect(mobileApiScopeStore.groundName).toBe("강남점");
+		expect(mockSetApiPersistStore).toHaveBeenCalledWith(mobileApiScopeStore);
+		expect(mockSetIdpPersistStore).toHaveBeenCalledWith(mobileApiScopeStore);
 	});
 
 	it("비인증 상태면 로그인 라우트를 먼저 보낸 뒤 layout 이후 splash를 끈다", async () => {

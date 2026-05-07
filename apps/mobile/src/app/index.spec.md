@@ -34,7 +34,8 @@
 11. `/auth/login`은 외부 브라우저를 열지 않고 앱 내 WebView에 `user-mobile` clientId 기반 IDP API 로그인 URL을 로드한다.
 12. IDP 인증 완료 후 `/auth/callback`에서 callback code/state를 교환하고, native 세션 검증까지 통과한 뒤 홈(`/`)으로 이동한다.
 13. callback/returnTo에 IDP Web 경로(`/dashboard` 등)가 섞이면 모바일 인증 홈(`/`)으로 정규화한다.
-14. `내 정보` 탭은 로그아웃 버튼을 제공하고, 로그아웃 완료 후 `/auth/login`으로 이동한다.
+14. WebView navigation이 IDP Web `/auth/login` 또는 `idp-web` OIDC authorize URL로 드리프트하면 즉시 `user-mobile` 로그인 URL로 복구한다.
+15. `내 정보` 탭은 로그아웃 버튼을 제공하고, 로그아웃 완료 후 `/auth/login`으로 이동한다.
 
 ## Route Mapping
 
@@ -292,6 +293,7 @@ Residual risk:
 - 로그인은 `apps/mobile/src/auth/_utils/auth.ts`의 `buildAuthLoginUrl()`로 `clientId=user-mobile`과 `returnTo=kr.co.cocdev.onoramobile://auth/callback?returnTo=/` 형태의 deep-link를 생성한다.
 - 생성된 로그인 URL은 `react-native-webview`로 앱 내부에서 로드하며, Chrome/Safari 같은 외부 브라우저나 별도 네이티브 로그인 화면을 열지 않는다.
 - Android 에뮬레이터에서 IDP가 `localhost` 절대 URL로 리다이렉트하면 WebView navigation 단계에서 `10.0.2.2` host로 보정해 앱 내부 흐름을 유지한다.
+- WebView가 IDP Web `/auth/login`, `clientId=idp-web`, `client_id=idp-web` 경로로 이동하려 하면 navigation을 중단하고 `clientId=user-mobile` 로그인 URL로 다시 로드한다.
 - WebView가 `kr.co.cocdev.onoramobile://auth/callback?...` navigation을 감지하면 로드를 중단하고 Expo Router `/auth/callback`으로 query params를 전달한다.
 - 콜백 URL은 `src/auth/_utils/auth.ts`의 `buildAuthCallbackUrl()`/`parseAuthCallbackReturnTarget()`로 정규화한다.
 - 초기 앱 진입 기본값은 인증 성공 시 홈(`/`), 비인증 시 `/auth/login?returnTo=/`이다.
@@ -336,6 +338,7 @@ Residual risk:
 |------|------|--------|
 | 2026-05-06 | Stage 4에서 모바일 홈 예약 route unit/type 검증 결과를 Verified로 반영하고, 오래된 인벤토리 Detox smoke를 홈 예약 시작 화면 기준으로 갱신했으며, Detox framework cache/Expo doctor 잔여 risk를 기록 | codex |
 | 2026-05-06 | Stage 3에서 모바일 홈 route를 Timeline/Session/Program Orval read hook과 Stage 2 UI target으로 통합하고, Reservation create hook 부재에 따른 route-local pending backend submit 결과와 route unit 테스트 계약을 반영 | codex |
+| 2026-05-07 | Android WebView가 IDP Web/idp-web 로그인 경로로 드리프트할 때 `user-mobile` 로그인 URL로 복구하는 계약 추가 | codex |
 | 2026-05-06 | Stage 2에서 홈 예약 플로우용 `SelectableCardList`, `OccurrencePicker`, `SummaryList`, `StatusFeedback` UI package target 구현 결과를 반영 | codex |
 | 2026-05-06 | Stage 1 재시작 기준으로 실제 `/` 홈 route, admin Timeline/Session/Program UX, 현재 backend/Orval 부재 계약을 재검증하고 Reservation handoff/UI/state/test 계약을 전면 정리 | codex |
 | 2026-05-06 | Orval hook 전제, Reservation backend handoff 계층, 제출 성공 상태 및 모바일 UI/state/test handoff를 보강 | codex |

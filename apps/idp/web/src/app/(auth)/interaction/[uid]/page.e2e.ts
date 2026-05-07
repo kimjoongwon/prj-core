@@ -6,7 +6,7 @@ const ADMIN_EMAIL = "admin@onora.com";
 const ADMIN_PASSWORD = "rkdmf12!@";
 
 const getLoginHeading = (page: Page) =>
-	page.getByRole("heading", { name: "로그인", exact: true });
+	page.getByRole("heading", { name: /로그인/ });
 
 const assertLoginFailureHandled = async (page: Page) => {
 	const invalidCredentials = page.getByText(

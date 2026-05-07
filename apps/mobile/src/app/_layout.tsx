@@ -11,6 +11,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthSessionGate } from "@/auth/AuthSessionGate";
 import { getIdpApiBaseUrl, getLoginPath } from "@/auth/auth-config";
+import { configureMobileApiScope } from "@/auth/mobile-api-scope";
 import "../global.css";
 
 void SplashScreen.preventAutoHideAsync();
@@ -30,6 +31,7 @@ const mobileQueryClient = new QueryClient({
 
 export default function RootLayout() {
 	useEffect(() => {
+		configureMobileApiScope();
 		setLoginRedirectUrl(getLoginPath());
 		setIdpBaseUrl(getIdpApiBaseUrl());
 		setIdpLoginRedirectUrl(getLoginPath());

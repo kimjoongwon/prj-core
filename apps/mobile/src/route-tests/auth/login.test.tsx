@@ -108,6 +108,56 @@ describe("mobile auth login route", () => {
 		});
 	});
 
+	it("WebView가 IDP Web 로그인 라우트로 드리프트하면 user-mobile 흐름을 다시 로드해야 한다", async () => {
+		render(<LoginPage />);
+
+		await waitFor(() => {
+			expect(screen.getByLabelText("auth-login-webview").props.source.uri).toContain(
+				"clientId=user-mobile",
+			);
+		});
+
+		const shouldStart = screen.getByLabelText("auth-login-webview").props
+			.onShouldStartLoadWithRequest;
+		let shouldContinue = true;
+
+		act(() => {
+			shouldContinue = shouldStart({
+				url: "http://10.0.2.2:3008/auth/login?returnTo=http%3A%2F%2F10.0.2.2%3A3008%2Fdashboard",
+			});
+		});
+
+		expect(shouldContinue).toBe(false);
+		await waitFor(() => {
+			const source = screen.getByLabelText("auth-login-webview").props.source;
+
+			expect(source.uri).toContain("/api/v1/auth/login");
+			expect(source.uri).toContain("clientId=user-mobile");
+			expect(source.uri).not.toContain("clientId=idp-web");
+		});
+	});
+
+	it("WebView가 idp-web OIDC authorize URL로 드리프트하면 따라가지 않아야 한다", async () => {
+		render(<LoginPage />);
+
+		const shouldStart = screen.getByLabelText("auth-login-webview").props
+			.onShouldStartLoadWithRequest;
+		let shouldContinue = true;
+
+		act(() => {
+			shouldContinue = shouldStart({
+				url: "http://10.0.2.2:3007/oidc/auth?client_id=idp-web&redirect_uri=http%3A%2F%2F10.0.2.2%3A3008%2Fapi%2Fv1%2Fauth%2Fcallback",
+			});
+		});
+
+		expect(shouldContinue).toBe(false);
+		await waitFor(() => {
+			const source = screen.getByLabelText("auth-login-webview").props.source;
+
+			expect(source.uri).toContain("clientId=user-mobile");
+		});
+	});
+
 	it("Android WebView용 localhost 리다이렉트를 에뮬레이터 host로 보정해야 한다", () => {
 		const redirectedUrl =
 			"http://localhost:3007/oidc/auth?client_id=user-mobile";

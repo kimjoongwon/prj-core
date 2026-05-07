@@ -1,10 +1,16 @@
 import { makeAutoObservable } from "mobx";
 import {
+	getCurrentSpace,
+	getMySpaces,
 	verifyToken,
 	logout as logoutApi,
 } from "@cocrepo/api/idp/auth";
 import { setIdpBaseUrl, setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
 import { getIdpApiBaseUrl, getLoginPath } from "./auth-config";
+import {
+	configureMobileApiScope,
+	mobileApiScopeStore,
+} from "./mobile-api-scope";
 
 type AuthStatus = "unknown" | "authenticated" | "unauthenticated";
 
@@ -12,9 +18,14 @@ const UNKNOWN_PATH = "/";
 const DEFAULT_HOME_PATH = "/";
 
 const configureIdpClient = () => {
+	configureMobileApiScope();
 	setIdpBaseUrl(getIdpApiBaseUrl());
 	setIdpLoginRedirectUrl(getLoginPath());
 };
+
+const getFirstUsableSpace = <TSpace extends { id?: string; ground?: unknown }>(
+	spaces: TSpace[],
+) => spaces.find((space) => space.id && space.ground) ?? spaces[0] ?? null;
 
 class MobileAuthStore {
 	isAuthenticated = false;
@@ -69,8 +80,10 @@ class MobileAuthStore {
 		try {
 			configureIdpClient();
 			await logoutApi();
+			mobileApiScopeStore.clear();
 			this.markUnauthenticated("logout");
 		} catch (error) {
+			mobileApiScopeStore.clear();
 			this.markUnauthenticated(
 				error instanceof Error ? error.message : "logout_failed",
 			);
@@ -87,10 +100,41 @@ class MobileAuthStore {
 		this.setVerifying(true);
 		try {
 			configureIdpClient();
-			await verifyToken();
+			const verifyResponse = await verifyToken({
+				baseURL: getIdpApiBaseUrl(),
+			});
+			const verifiedSession = verifyResponse.data;
+			if (
+				verifiedSession?.accessTokenExpiresAt &&
+				verifiedSession.refreshTokenExpiresAt
+			) {
+				mobileApiScopeStore.setTokenExpiries(
+					verifiedSession.accessTokenExpiresAt,
+					verifiedSession.refreshTokenExpiresAt,
+				);
+			}
+
+			const mySpacesResponse = await getMySpaces({
+				baseURL: getIdpApiBaseUrl(),
+			});
+			const spaces = mySpacesResponse.data ?? [];
+			mobileApiScopeStore.setSpaces(spaces);
+
+			const currentSpaceResponse = await getCurrentSpace({
+				baseURL: getIdpApiBaseUrl(),
+			});
+			const currentSpace =
+				currentSpaceResponse.data ?? getFirstUsableSpace(spaces);
+			if (currentSpace) {
+				mobileApiScopeStore.setSpace(currentSpace);
+			} else {
+				mobileApiScopeStore.clearSpace();
+			}
+
 			this.markAuthenticated();
 			return true;
 		} catch (error) {
+			mobileApiScopeStore.clear();
 			const failure = error instanceof Error ? error.message : "session_invalid";
 			this.markUnauthenticated(failure);
 			return false;
