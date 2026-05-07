@@ -23,6 +23,7 @@
     "@cocrepo/mo-ui": "workspace:*",
     "@expo/metro-runtime": "~55.0.10",
     "@react-navigation/native": "^7.1.33",
+    "@tanstack/react-query": "catalog:",
     "expo": "~55.0.19",
     "expo-constants": "~55.0.15",
     "expo-dev-client": "~55.0.30",

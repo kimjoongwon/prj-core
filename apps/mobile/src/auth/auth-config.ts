@@ -3,7 +3,19 @@ import { Platform } from "react-native";
 const DEFAULT_IDP_API_BASE_URL =
 	Platform.OS === "android" ? "http://10.0.2.2:3007" : "http://localhost:3007";
 
+const DEFAULT_CORE_API_BASE_URL =
+	Platform.OS === "android" ? "http://10.0.2.2:3006" : "http://localhost:3006";
+
 export const MOBILE_AUTH = {
+	coreApiBaseUrl:
+		typeof process === "undefined"
+			? DEFAULT_CORE_API_BASE_URL
+			: process.env.EXPO_PUBLIC_CORE_API_URL?.trim() ||
+				process.env.EXPO_PUBLIC_CORE_API_INTERNAL_URL?.trim() ||
+				process.env.EXPO_PUBLIC_CORE_API_BASE_URL?.trim() ||
+				process.env.CORE_API_URL?.trim() ||
+				process.env.CORE_API_INTERNAL_URL?.trim() ||
+				DEFAULT_CORE_API_BASE_URL,
 	idpApiBaseUrl:
 		typeof process === "undefined"
 			? DEFAULT_IDP_API_BASE_URL
@@ -21,6 +33,9 @@ export const MOBILE_AUTH = {
 const AUTHENTICATED_ROUTE_PATHS = ["/", "/reservations", "/profile"] as const;
 
 export const getIdpApiBaseUrl = () => MOBILE_AUTH.idpApiBaseUrl.replace(/\/+$/, "");
+
+export const getCoreApiBaseUrl = () =>
+	MOBILE_AUTH.coreApiBaseUrl.replace(/\/+$/, "");
 
 export const getAuthenticatedHomePath = () => MOBILE_AUTH.authenticatedHomePath;
 
