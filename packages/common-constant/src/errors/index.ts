@@ -9,3 +9,5 @@ export { GRANT_ERRORS } from "./grant.errors";
 export { TIMELINE_ERRORS } from "./timeline.errors";
 export { EXERCISE_ERRORS } from "./exercise.errors";
 export { ROUTINE_ERRORS } from "./routine.errors";
+export { RESERVATION_ERRORS } from "./reservation.errors";
+export { COURSE_ERRORS } from "./course.errors";

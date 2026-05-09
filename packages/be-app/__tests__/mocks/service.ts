@@ -56,7 +56,7 @@ export class EmailService {
 	sendTemporaryPasswordEmail() {}
 }
 
-export const FIRST_PARTY_OIDC_CLIENT_IDS = [
+export const RUNTIME_MANAGED_OIDC_CLIENT_IDS = [
 	"admin-web",
 	"storybook-web",
 	"idp-web",
@@ -64,10 +64,10 @@ export const FIRST_PARTY_OIDC_CLIENT_IDS = [
 	"swagger-web",
 ] as const;
 
-export const isFirstPartyOidcClientId = (clientId: string) =>
-	FIRST_PARTY_OIDC_CLIENT_IDS.includes(
-		clientId as (typeof FIRST_PARTY_OIDC_CLIENT_IDS)[number],
+export const isRuntimeManagedOidcClientId = (clientId: string) =>
+	RUNTIME_MANAGED_OIDC_CLIENT_IDS.includes(
+		clientId as (typeof RUNTIME_MANAGED_OIDC_CLIENT_IDS)[number],
 	);
 
-export const applyFirstPartyOidcRuntimeConfig = <TClient>(client: TClient) =>
+export const applyRuntimeManagedOidcClientConfig = <TClient>(client: TClient) =>
 	client;

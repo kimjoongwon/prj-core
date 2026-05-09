@@ -1,0 +1,52 @@
+// ============================================================================
+// Reservation Domain - 예약 도메인
+// ============================================================================
+
+/// @displayName 예약 상태
+enum ReservationStatus {
+  CONFIRMED
+  WAITLISTED
+  CANCELED
+}
+
+// @schema-type: ROOT
+// @schema-owner: true
+// @aggregate-root: true
+// @description: 사용자의 프로그램 발생 회차 예약 상태를 관리하는 예약 루트
+// @ownership: independent
+// @scope: mixed
+// @connects: User/CoursePass ─── Space/Timeline/Session/Program
+/// @displayName 예약
+model Reservation {
+  id                String            @id @default(uuid())
+  createdAt         DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime?         @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt         DateTime?         @map("removed_at") @db.Timestamptz(6)
+  spaceId           String            @map("space_id")
+  userId            String            @map("user_id")
+  coursePassId      String            @map("course_pass_id")
+  timelineId        String            @map("timeline_id")
+  sessionId         String            @map("session_id")
+  programId         String            @map("program_id")
+  occurrenceStartAt DateTime          @map("occurrence_start_at") @db.Timestamptz(6)
+  status            ReservationStatus @default(CONFIRMED)
+  memo              String?
+  idempotencyKey    String            @map("idempotency_key")
+  waitlistPosition  Int?              @map("waitlist_position")
+  confirmedAt       DateTime?         @map("confirmed_at") @db.Timestamptz(6)
+  canceledAt        DateTime?         @map("canceled_at") @db.Timestamptz(6)
+  cancelReason      String?           @map("cancel_reason")
+  space             Space             @relation(fields: [spaceId], references: [id])
+  user              User              @relation(fields: [userId], references: [id])
+  coursePass        CoursePass        @relation(fields: [coursePassId], references: [id])
+  timeline          Timeline          @relation(fields: [timelineId], references: [id])
+  session           Session           @relation(fields: [sessionId], references: [id])
+  program           Program           @relation(fields: [programId], references: [id])
+
+  @@unique([userId, idempotencyKey])
+  @@index([spaceId, occurrenceStartAt])
+  @@index([userId, occurrenceStartAt])
+  @@index([coursePassId, occurrenceStartAt])
+  @@index([programId, occurrenceStartAt, status])
+  @@map("reservations")
+}

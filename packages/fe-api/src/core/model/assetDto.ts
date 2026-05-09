@@ -9,11 +9,12 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
+
+import type { AssetDtoMetadata } from "./assetDtoMetadata";
 import type { AssetKind } from "./assetKind";
 import type { AssetStatus } from "./assetStatus";
-import type { AssetDtoMetadata } from "./assetDtoMetadata";
-import type { FolderDto } from "./folderDto";
 import type { DerivativeDto } from "./derivativeDto";
+import type { FolderDto } from "./folderDto";
 
 export interface AssetDto {
 	id: string;

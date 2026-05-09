@@ -9,12 +9,13 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { InquiryCreateUpdateFormBootstrapDtoMode } from "./inquiryCreateUpdateFormBootstrapDtoMode";
+
 import type { InquiryCreateUpdateFormBootstrapDtoDefaultObject } from "./inquiryCreateUpdateFormBootstrapDtoDefaultObject";
-import type { InquiryCreateUpdateFormBootstrapDtoOptions } from "./inquiryCreateUpdateFormBootstrapDtoOptions";
-import type { InquiryFormUiPathsDto } from "./inquiryFormUiPathsDto";
 import type { InquiryCreateUpdateFormBootstrapDtoFieldMeta } from "./inquiryCreateUpdateFormBootstrapDtoFieldMeta";
+import type { InquiryCreateUpdateFormBootstrapDtoMode } from "./inquiryCreateUpdateFormBootstrapDtoMode";
+import type { InquiryCreateUpdateFormBootstrapDtoOptions } from "./inquiryCreateUpdateFormBootstrapDtoOptions";
 import type { InquiryFormSchemaDto } from "./inquiryFormSchemaDto";
+import type { InquiryFormUiPathsDto } from "./inquiryFormUiPathsDto";
 
 export interface InquiryCreateUpdateFormBootstrapDto {
 	/** 폼 모드 */

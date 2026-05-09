@@ -1,5 +1,6 @@
 "use client";
 
+import type { OidcClientLoginUi } from "@cocrepo/type";
 import {
 	BackButton,
 	buildOidcClientLoginUi,
@@ -13,8 +14,6 @@ import {
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
-import { OIDC_FIRST_PARTY_CLIENT_IDS } from "@cocrepo/constant";
-import type { OidcClientLoginUi } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 
 export interface OidcClientCreatePageSubmitInput {
@@ -25,6 +24,7 @@ export interface OidcClientCreatePageSubmitInput {
 	grantTypes: string[];
 	responseTypes: string[];
 	scope: string;
+	isFirstParty: boolean;
 	skipConsent: boolean;
 	redirectUris: string[];
 	loginUrl?: string;
@@ -34,9 +34,6 @@ export interface OidcClientCreatePageSubmitInput {
 	tosUri?: string;
 	loginUi?: OidcClientLoginUi | null;
 }
-
-const isFirstPartyClientId = (clientId: string) =>
-	OIDC_FIRST_PARTY_CLIENT_IDS.some((id) => id === clientId.trim());
 
 const isValidRedirectUri = (uri: string) =>
 	/^[a-z][a-z0-9+.-]*:\/\//i.test(uri.trim());
@@ -129,9 +126,8 @@ export const OidcClientCreatePage = observer(
 				grantTypes: formState.grantTypes,
 				responseTypes: formState.responseTypes,
 				scope: formState.scope,
-				skipConsent: isFirstPartyClientId(formState.clientId)
-					? formState.skipConsent
-					: false,
+				isFirstParty: formState.isFirstParty,
+				skipConsent: formState.isFirstParty ? formState.skipConsent : false,
 				redirectUris: validUris,
 				loginUrl: formState.loginUrl || undefined,
 				defaultReturnTo: formState.defaultReturnTo || undefined,

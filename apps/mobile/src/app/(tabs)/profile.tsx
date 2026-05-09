@@ -4,9 +4,11 @@ import { useRouter } from "expo-router";
 import { observer } from "mobx-react-lite";
 import { ScrollView, Text, View } from "react-native";
 import { mobileAuthStore } from "@/auth/auth-store";
-import { mainTabStyles as styles } from "@/tabs/main-tab-styles";
+import { mainTabClassNames } from "@/tabs/main-tab-class-names";
 
-export default observer(function ProfileTabRoute() {
+const classNames = mainTabClassNames();
+
+const ProfileTabRoute = observer(() => {
 	const router = useRouter();
 
 	const onPressLogoutButton = async () => {
@@ -16,23 +18,23 @@ export default observer(function ProfileTabRoute() {
 
 	return (
 		<ScreenFrame
-			backgroundColor="#0c0f0b"
-			contentStyle={styles.root}
+			className={classNames.screenFrame()}
+			contentClassName={classNames.root()}
 			edges={["top", "right", "left"]}
 		>
 			<ScrollView
-				contentContainerStyle={styles.contentContainer}
+				contentContainerClassName={classNames.contentContainer()}
 				showsVerticalScrollIndicator={false}
 			>
-				<View style={styles.tabContent}>
-					<View style={styles.profileCard}>
-						<Text style={styles.sectionTitle}>내 정보</Text>
-						<Text style={styles.sectionDescription}>
+				<View className={classNames.tabContent()}>
+					<View className={classNames.profileCard()}>
+						<Text className={classNames.sectionTitle()}>내 정보</Text>
+						<Text className={classNames.sectionDescription()}>
 							오노라 예약 알림과 계정 상태를 관리합니다.
 						</Text>
-						<View style={styles.sessionRow}>
-							<Text style={styles.sessionLabel}>로그인 상태</Text>
-							<Text style={styles.sessionValue}>
+						<View className={classNames.sessionRow()}>
+							<Text className={classNames.sessionLabel()}>로그인 상태</Text>
+							<Text className={classNames.sessionValue()}>
 								{mobileAuthStore.isAuthenticated ? "로그인됨" : "확인 필요"}
 							</Text>
 						</View>
@@ -49,3 +51,5 @@ export default observer(function ProfileTabRoute() {
 		</ScreenFrame>
 	);
 });
+
+export default ProfileTabRoute;

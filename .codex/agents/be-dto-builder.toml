@@ -472,4 +472,20 @@ export * from "./query-{domain}s.dto";
 - 기본 DTO: `packages/be-dto/src/abstract.dto.ts`
 - Entity: `packages/be-entity/src/`
 - Query DTO 관련: `be-query-dto-builder` 에이전트 참조
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

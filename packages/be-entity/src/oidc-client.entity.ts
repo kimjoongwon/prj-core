@@ -15,6 +15,7 @@ export class OidcClient extends AbstractEntity implements OidcClientEntity {
 	tokenEndpointAuthMethod!: string;
 	scope!: string;
 	isActive!: boolean;
+	isFirstParty!: boolean;
 	skipConsent!: boolean;
 	loginUi!: JsonValue | null;
 	logoUri!: string | null;

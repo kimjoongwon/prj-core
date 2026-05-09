@@ -113,13 +113,13 @@ export const GroundEditPage = observer(
 					<PageTitleBar
 						title="시설 정보 수정"
 						description={
-							groundName
-								? (
-										<>
-											{groundName} {t("시설 detail을 수정합니다.")}
-										</>
-									)
-								: "시설 detail을 수정합니다."
+							groundName ? (
+								<>
+									{groundName} {t("시설 detail을 수정합니다.")}
+								</>
+							) : (
+								"시설 detail을 수정합니다."
+							)
 						}
 					/>
 				}

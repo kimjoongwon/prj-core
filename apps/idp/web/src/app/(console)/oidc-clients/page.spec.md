@@ -28,6 +28,62 @@
 2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
 3. 결과를 렌더링/반환/전파합니다.
 
+## 화면 러프
+
+### Desktop
+
+```text
+(console) layout > children
+┌────────────────────────────────────────────────────────────────────┐
+│ OidcClientListPage                                                 │
+│ OIDC 클라이언트                                  [+ 클라이언트 등록] │
+│                                                                    │
+│ [Client ID 또는 이름으로 검색...]                                  │
+│ ┌────────────────────────────────────────────────────────────────┐ │
+│ │ Client ID │ 이름 │ 인증 방식 │ Grant │ 신뢰 구분 │ Consent     │ │
+│ │ admin-web │ ...  │ secret    │ code  │ First     │ 동의 생략   │ │
+│ └────────────────────────────────────────────────────────────────┘ │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+### Tablet
+
+```text
+(console) layout > children
+┌──────────────────────────────────────────────┐
+│ OIDC 클라이언트                [+ 등록]       │
+│ [검색 입력은 toolbar 첫 줄에 유지]            │
+│ ┌──────────────────────────────────────────┐ │
+│ │ DataGrid table                           │ │
+│ │ 신뢰 구분 / Consent 컬럼 포함             │ │
+│ │ 좁은 폭에서는 table wrapper가 overflow를  │ │
+│ │ 처리한다.                                │ │
+│ └──────────────────────────────────────────┘ │
+│ 총 N건                         [pagination] │
+└──────────────────────────────────────────────┘
+```
+
+### Mobile
+
+```text
+(console) layout > children
+┌──────────────────────────────┐
+│ OIDC 클라이언트               │
+│ 시스템에 등록된 client 관리   │
+│ [+ 클라이언트 등록]           │
+│                              │
+│ [검색...]                    │
+│ ┌──────────────────────────┐ │
+│ │ DataGrid table           │ │
+│ │ Client ID / 신뢰 구분 /  │ │
+│ │ Consent 컬럼은 가로 스캔 │ │
+│ │ 가능해야 한다.           │ │
+│ └──────────────────────────┘ │
+│ 총 N건                       │
+│ [pagination]                 │
+└──────────────────────────────┘
+```
+
 ## 실패 및 엣지 케이스
 
 - 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
@@ -49,7 +105,7 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/oidc-clients/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 OIDC 클라이언트 조회, query state, 신규 등록 라우팅만 담당하고 시각 조합은 `OidcClientListPage`가 소유합니다.
+- `page.tsx`는 OIDC 클라이언트 조회, query state, 신규 등록 라우팅만 담당하고 first-party/consent 상태 컬럼을 포함한 시각 조합은 `OidcClientListPage`가 소유합니다.
 
 ## Rendering Decision
 
@@ -64,6 +120,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-09 | 목록 route sidecar에 Desktop/Tablet/Mobile responsive 화면 러프와 DataGrid 컬럼 노출 기준을 추가 | codex |
+| 2026-05-09 | 목록 화면에서 first-party 신뢰 구분과 consent 표시/생략 상태를 확인하는 계약을 추가 | codex |
 | 2026-04-28 | route의 Page 전용 row 매핑을 제거하고 Orval DTO를 pure page에 직접 주입하도록 정리 | codex |
 | 2026-04-29 | 검색 E2E가 DataGrid 검색 입력의 Enter 커밋 계약을 검증하도록 갱신 | codex |
 | 2026-04-28 | grid 컴포넌트 명칭을 DataGrid로 통일한 구조 변경을 반영 | codex |

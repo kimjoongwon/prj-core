@@ -114,8 +114,8 @@ VIEW (조회)
 | Entity | `packages/be-entity/src/role.entity.ts` | Role 도메인 엔티티 |
 | Repository | `packages/be-repository/src/abilities.repository.ts` | Ability CRUD |
 | Repository | `packages/be-repository/src/policies.repository.ts` | Policy 조회 (Space 기반) |
-| Service | `packages/be-service/src/ability.service/index.ts` | Ability 비즈니스 로직 |
-| Service | `packages/be-service/src/policy.service/index.ts` | Policy 비즈니스 로직 |
+| Service | `packages/be-service/src/ability.service.ts` | Ability 비즈니스 로직 |
+| Service | `packages/be-service/src/policy.service.ts` | Policy 비즈니스 로직 |
 | ApplicationService | `packages/be-app/src/ability.application-service/index.ts` | Ability + Policy 조합 로직 |
 | CASL | `packages/be-common/src/casl/casl-ability.factory.ts` | CASL Ability 생성 팩토리 (Policy repository 사용) |
 | Guard | `packages/be-common/src/guard/roles.guard.ts` | @Roles 데코레이터 Guard |

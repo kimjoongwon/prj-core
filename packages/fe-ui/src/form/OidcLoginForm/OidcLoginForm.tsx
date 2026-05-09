@@ -257,7 +257,7 @@ export const OidcLoginForm = observer(
 						variant="bordered"
 					/>
 
-					<div className="flex items-center justify-between gap-4">
+					<div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
 						<Checkbox path="remember" state={state} size="sm">
 							{t("로그인 상태 유지")}
 						</Checkbox>

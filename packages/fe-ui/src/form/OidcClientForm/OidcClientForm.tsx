@@ -2,7 +2,6 @@
 import {
 	AUTH_METHOD_OPTIONS,
 	GRANT_TYPE_OPTIONS,
-	OIDC_FIRST_PARTY_CLIENT_IDS,
 	RESPONSE_TYPE_OPTIONS,
 } from "@cocrepo/constant";
 import type {
@@ -48,6 +47,7 @@ export interface OidcClientFormState {
 	grantTypes: string[];
 	responseTypes: string[];
 	scope: string;
+	isFirstParty: boolean;
 	skipConsent: boolean;
 	redirectUris: string[];
 	loginUrl: string;
@@ -129,9 +129,6 @@ const generateSecret = (): string => {
 	return result;
 };
 
-const isFirstPartyClientId = (clientId: string) =>
-	OIDC_FIRST_PARTY_CLIENT_IDS.some((id) => id === clientId.trim());
-
 /**
  * OIDC 클라이언트 등록/수정 폼 Widget
  *
@@ -151,9 +148,6 @@ export const OidcClientForm = observer(
 		const isPublic = isEdit
 			? state.tokenEndpointAuthMethod === "none"
 			: state.isPublic;
-		const canSkipConsent = isFirstPartyClientId(
-			readonlyClientId ?? state.clientId,
-		);
 
 		const handleGenerateSecret = () => {
 			state.clientSecret = generateSecret();
@@ -169,8 +163,15 @@ export const OidcClientForm = observer(
 			}
 		};
 
+		const handleToggleFirstParty = (checked: boolean) => {
+			state.isFirstParty = checked;
+			if (!checked) {
+				state.skipConsent = false;
+			}
+		};
+
 		const handleToggleSkipConsent = (checked: boolean) => {
-			state.skipConsent = checked;
+			state.skipConsent = state.isFirstParty && checked;
 		};
 
 		const handleToggleCommonLoginUi = (checked: boolean) => {
@@ -340,18 +341,34 @@ export const OidcClientForm = observer(
 							isRequired
 							description="공백으로 구분하여 입력합니다."
 						/>
-						<Checkbox
-							isDisabled={!canSkipConsent}
-							isSelected={canSkipConsent && state.skipConsent}
-							onValueChange={handleToggleSkipConsent}
-							size="sm"
-						>
-							권한 동의 화면 생략
-						</Checkbox>
-						<p className="text-xs text-default-500">
-							first-party 클라이언트에서만 사용할 수 있습니다. 명시적인
-							prompt=consent 요청은 계속 동의 화면을 표시합니다.
-						</p>
+						<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+							<div className="rounded-xl border border-divider p-4">
+								<Checkbox
+									isSelected={state.isFirstParty}
+									onValueChange={handleToggleFirstParty}
+									size="sm"
+								>
+									First-party 클라이언트
+								</Checkbox>
+								<p className="mt-2 text-xs leading-5 text-default-500">
+									플랫폼이 소유하거나 신뢰하는 클라이언트로 표시합니다.
+								</p>
+							</div>
+							<div className="rounded-xl border border-divider p-4">
+								<Checkbox
+									isDisabled={!state.isFirstParty}
+									isSelected={state.isFirstParty && state.skipConsent}
+									onValueChange={handleToggleSkipConsent}
+									size="sm"
+								>
+									권한 동의 화면 생략
+								</Checkbox>
+								<p className="mt-2 text-xs leading-5 text-default-500">
+									First-party에서만 사용할 수 있으며, prompt=consent 요청은 항상
+									동의 화면을 표시합니다.
+								</p>
+							</div>
+						</div>
 					</div>
 				</section>
 				{/* Redirect URIs */}

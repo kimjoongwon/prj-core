@@ -24,7 +24,7 @@ match = [".codex/agents/*.toml", ".codex/agents/**/*.toml", ".codex/config.toml"
 primary_role = "qa-pr-reviewer"
 supporting_roles = []
 rule_docs = [".codex/config.toml", ".codex/agents/README.md"]
-check_keys = ["role-registry-sync", "review-map-coverage", "config-contract"]
+check_keys = ["role-registry-sync", "review-map-coverage", "config-contract", "feedback-packet-contract"]
 exempt = false
 
 [[rules]]
@@ -226,12 +226,111 @@ check_keys = ["pure-screen", "required-export", "sidecar-sync"]
 exempt = false
 
 [[rules]]
-id = "fe-mo-ui-leaf-files"
-match = ["packages/fe-mo-ui/src/action/**/*.ts", "packages/fe-mo-ui/src/action/**/*.tsx", "packages/fe-mo-ui/src/input/**/*.ts", "packages/fe-mo-ui/src/input/**/*.tsx", "packages/fe-mo-ui/src/selection/**/*.ts", "packages/fe-mo-ui/src/selection/**/*.tsx", "packages/fe-mo-ui/src/navigation/**/*.ts", "packages/fe-mo-ui/src/navigation/**/*.tsx", "packages/fe-mo-ui/src/data-display/**/*.ts", "packages/fe-mo-ui/src/data-display/**/*.tsx", "packages/fe-mo-ui/src/feedback/**/*.ts", "packages/fe-mo-ui/src/feedback/**/*.tsx", "packages/fe-mo-ui/src/layout/**/*.ts", "packages/fe-mo-ui/src/layout/**/*.tsx", "packages/fe-mo-ui/src/surface/**/*.ts", "packages/fe-mo-ui/src/surface/**/*.tsx", "packages/fe-mo-ui/src/design-system/**/*.ts", "packages/fe-mo-ui/src/design-system/**/*.tsx"]
-primary_role = "qa-pr-reviewer"
+id = "fe-mo-widget-files"
+match = ["packages/fe-mo-ui/src/widget/**/*.ts", "packages/fe-mo-ui/src/widget/**/*.tsx"]
+primary_role = "fe-mo-widget-builder"
 supporting_roles = []
 rule_docs = [".codex/agents/mobile/README.md"]
-check_keys = ["owner-boundary", "review-map-coverage"]
+check_keys = ["layer-boundary", "owner-boundary"]
+exempt = false
+
+[[rules]]
+id = "fe-mo-feature-files"
+match = ["packages/fe-mo-ui/src/feature/**/*.ts", "packages/fe-mo-ui/src/feature/**/*.tsx"]
+primary_role = "fe-mo-feature-builder"
+supporting_roles = []
+rule_docs = [".codex/agents/mobile/README.md"]
+check_keys = ["layer-boundary", "owner-boundary"]
+exempt = false
+
+[[rules]]
+id = "fe-mo-form-files"
+match = ["packages/fe-mo-ui/src/form/**/*.ts", "packages/fe-mo-ui/src/form/**/*.tsx"]
+primary_role = "fe-mo-form-builder"
+supporting_roles = ["fe-mo-input-component-builder", "fe-mo-selection-component-builder", "fe-mo-action-component-builder"]
+rule_docs = [".codex/agents/mobile/README.md"]
+check_keys = ["form-boundary", "owner-boundary"]
+exempt = false
+
+[[rules]]
+id = "fe-mo-detail-files"
+match = ["packages/fe-mo-ui/src/detail/**/*.ts", "packages/fe-mo-ui/src/detail/**/*.tsx"]
+primary_role = "fe-mo-detail-builder"
+supporting_roles = ["fe-mo-widget-builder"]
+rule_docs = [".codex/agents/mobile/README.md"]
+check_keys = ["detail-boundary", "owner-boundary"]
+exempt = false
+
+[[rules]]
+id = "fe-mo-action-files"
+match = ["packages/fe-mo-ui/src/action/**/*.ts", "packages/fe-mo-ui/src/action/**/*.tsx"]
+primary_role = "fe-mo-action-component-builder"
+supporting_roles = []
+rule_docs = [".codex/agents/mobile/README.md"]
+check_keys = ["owner-boundary", "required-export"]
+exempt = false
+
+[[rules]]
+id = "fe-mo-input-files"
+match = ["packages/fe-mo-ui/src/input/**/*.ts", "packages/fe-mo-ui/src/input/**/*.tsx"]
+primary_role = "fe-mo-input-component-builder"
+supporting_roles = []
+rule_docs = [".codex/agents/mobile/README.md"]
+check_keys = ["owner-boundary", "required-export"]
+exempt = false
+
+[[rules]]
+id = "fe-mo-selection-files"
+match = ["packages/fe-mo-ui/src/selection/**/*.ts", "packages/fe-mo-ui/src/selection/**/*.tsx"]
+primary_role = "fe-mo-selection-component-builder"
+supporting_roles = []
+rule_docs = [".codex/agents/mobile/README.md"]
+check_keys = ["owner-boundary", "required-export"]
+exempt = false
+
+[[rules]]
+id = "fe-mo-navigation-files"
+match = ["packages/fe-mo-ui/src/navigation/**/*.ts", "packages/fe-mo-ui/src/navigation/**/*.tsx"]
+primary_role = "fe-mo-navigation-component-builder"
+supporting_roles = []
+rule_docs = [".codex/agents/mobile/README.md"]
+check_keys = ["owner-boundary", "required-export"]
+exempt = false
+
+[[rules]]
+id = "fe-mo-data-display-files"
+match = ["packages/fe-mo-ui/src/data-display/**/*.ts", "packages/fe-mo-ui/src/data-display/**/*.tsx", "packages/fe-mo-ui/src/surface/**/*.ts", "packages/fe-mo-ui/src/surface/**/*.tsx", "packages/fe-mo-ui/src/design-system/**/*.ts", "packages/fe-mo-ui/src/design-system/**/*.tsx", "packages/fe-mo-ui/src/layout/Accordion/**/*.ts", "packages/fe-mo-ui/src/layout/Accordion/**/*.tsx", "packages/fe-mo-ui/src/layout/Card/**/*.ts", "packages/fe-mo-ui/src/layout/Card/**/*.tsx", "packages/fe-mo-ui/src/layout/ListGroup/**/*.ts", "packages/fe-mo-ui/src/layout/ListGroup/**/*.tsx", "packages/fe-mo-ui/src/layout/ScreenFrame/**/*.ts", "packages/fe-mo-ui/src/layout/ScreenFrame/**/*.tsx", "packages/fe-mo-ui/src/layout/ScrollShadow/**/*.ts", "packages/fe-mo-ui/src/layout/ScrollShadow/**/*.tsx", "packages/fe-mo-ui/src/layout/Separator/**/*.ts", "packages/fe-mo-ui/src/layout/Separator/**/*.tsx"]
+primary_role = "fe-mo-data-display-component-builder"
+supporting_roles = []
+rule_docs = [".codex/agents/mobile/README.md"]
+check_keys = ["owner-boundary", "required-export"]
+exempt = false
+
+[[rules]]
+id = "fe-mo-feedback-files"
+match = ["packages/fe-mo-ui/src/feedback/**/*.ts", "packages/fe-mo-ui/src/feedback/**/*.tsx", "packages/fe-mo-ui/src/layout/BottomSheet/**/*.ts", "packages/fe-mo-ui/src/layout/BottomSheet/**/*.tsx", "packages/fe-mo-ui/src/layout/Dialog/**/*.ts", "packages/fe-mo-ui/src/layout/Dialog/**/*.tsx", "packages/fe-mo-ui/src/layout/Popover/**/*.ts", "packages/fe-mo-ui/src/layout/Popover/**/*.tsx"]
+primary_role = "fe-mo-feedback-component-builder"
+supporting_roles = []
+rule_docs = [".codex/agents/mobile/README.md"]
+check_keys = ["owner-boundary", "required-export"]
+exempt = false
+
+[[rules]]
+id = "fe-mo-menu-files"
+match = ["packages/fe-mo-ui/src/layout/Menu/**/*.ts", "packages/fe-mo-ui/src/layout/Menu/**/*.tsx", "packages/fe-mo-ui/src/layout/SubMenu/**/*.ts", "packages/fe-mo-ui/src/layout/SubMenu/**/*.tsx"]
+primary_role = "fe-mo-menu-builder"
+supporting_roles = []
+rule_docs = [".codex/agents/mobile/README.md"]
+check_keys = ["owner-boundary", "required-export"]
+exempt = false
+
+[[rules]]
+id = "fe-mo-layout-barrel-files"
+match = ["packages/fe-mo-ui/src/layout/index.ts"]
+primary_role = "fe-mo-data-display-component-builder"
+supporting_roles = ["fe-mo-feedback-component-builder", "fe-mo-menu-builder"]
+rule_docs = [".codex/agents/mobile/README.md"]
+check_keys = ["shared-barrel", "owner-boundary", "required-export"]
 exempt = false
 
 [[rules]]

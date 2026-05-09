@@ -4,12 +4,12 @@ import {
 	type ReactNode,
 } from "react";
 import {
-	StyleSheet,
 	View,
 	type StyleProp,
 	type ViewProps,
 	type ViewStyle,
 } from "react-native";
+import { tv } from "tailwind-variants";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export type ScreenFrameEdge = "top" | "right" | "bottom" | "left";
@@ -17,6 +17,7 @@ export type ScreenFrameEdge = "top" | "right" | "bottom" | "left";
 export interface ScreenFrameProps extends Omit<ViewProps, "children" | "style"> {
 	backgroundColor?: string;
 	children?: ReactNode;
+	contentClassName?: string;
 	contentStyle?: StyleProp<ViewStyle>;
 	edges?: readonly ScreenFrameEdge[];
 	style?: StyleProp<ViewStyle>;
@@ -32,11 +33,20 @@ const DEFAULT_EDGES: readonly ScreenFrameEdge[] = [
 const hasEdge = (edges: readonly ScreenFrameEdge[], edge: ScreenFrameEdge) =>
 	edges.includes(edge);
 
+const screenFrameClassNames = tv({
+	slots: {
+		content: "flex-1",
+		frame: "flex-1",
+	},
+});
+
 export const ScreenFrame = forwardRef<View, ScreenFrameProps>(
 	(
 		{
-			backgroundColor = "transparent",
+			backgroundColor,
 			children,
+			className,
+			contentClassName,
 			contentStyle,
 			edges = DEFAULT_EDGES,
 			style,
@@ -50,11 +60,11 @@ export const ScreenFrame = forwardRef<View, ScreenFrameProps>(
 			View,
 			{
 				...rest,
+				className: screenFrameClassNames().frame({ className }),
 				ref,
 				style: [
-					styles.frame,
 					{
-						backgroundColor,
+						...(backgroundColor ? { backgroundColor } : {}),
 						paddingBottom: hasEdge(edges, "bottom") ? insets.bottom : 0,
 						paddingLeft: hasEdge(edges, "left") ? insets.left : 0,
 						paddingRight: hasEdge(edges, "right") ? insets.right : 0,
@@ -63,18 +73,18 @@ export const ScreenFrame = forwardRef<View, ScreenFrameProps>(
 					style,
 				],
 			},
-			createElement(View, { style: [styles.content, contentStyle] }, children),
+			createElement(
+				View,
+				{
+					className: screenFrameClassNames().content({
+						className: contentClassName,
+					}),
+					style: contentStyle,
+				},
+				children,
+			),
 		);
 	},
 );
 
 ScreenFrame.displayName = "ScreenFrame";
-
-const styles = StyleSheet.create({
-	content: {
-		flex: 1,
-	},
-	frame: {
-		flex: 1,
-	},
-});

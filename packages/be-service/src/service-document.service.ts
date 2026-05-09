@@ -130,7 +130,9 @@ export class ServiceDocumentService {
 	async publish(id: string): Promise<ServiceDocument> {
 		const document = await this.getServiceDocumentById(id);
 		if (!document.content.trim()) {
-			throw new BadRequestException("본문이 비어 있는 문서는 게시할 수 없습니다");
+			throw new BadRequestException(
+				"본문이 비어 있는 문서는 게시할 수 없습니다",
+			);
 		}
 
 		return this.repository.publishById(id);

@@ -21,11 +21,10 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - Expo Router native route screen: `apps/mobile/src/app/**/index.tsx` → 같은 route 폴더의 `index.spec.md`
 - fe-ui Page component: `packages/fe-ui/src/page/[PageName]/[PageName].tsx` → 같은 폴더의 `[PageName].spec.md`
 - fe-ui Feature component: `packages/fe-ui/src/feature/**/[FeatureName].tsx` → 같은 component owner 위치의 `[FeatureName].spec.md`
-- fe-ui Widget component: `packages/fe-ui/src/widget/**/[WidgetName].tsx` 또는 `index.tsx` owner → 같은 component owner 위치의 `[WidgetName].spec.md` 또는 `index.spec.md`
 - fe-mo-ui Screen component: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx` → 같은 폴더의 `[ScreenName].spec.md`
 
-그 외 backend entity/dto/service/repository/controller/module/app/facade/integration/vo/prisma/schema, store/hook/type/barrel/config/script/test/e2e/layout, Next.js `layout.tsx`, Expo Router `_layout.tsx`, `packages/fe-ui` leaf 계층(display/control/cell/columns/form/detail/layout/data-grid 등), 모바일 UI leaf 계층(action/input/selection/navigation/data-display/feedback/layout/surface/design-system)에는 sidecar spec을 만들지 않습니다.
-금지 계층의 계약은 nearest allowed owner에 기록합니다: web route는 route `page.spec.md`, mobile route/layout/state/API/test/native wiring은 route `index.spec.md`, mobile shared visual composition은 fe-mo-ui Screen spec, fe-ui Page/Feature/Widget은 해당 component spec이 owner입니다.
+그 외 backend entity/dto/service/repository/controller/module/app/facade/integration/vo/prisma/schema, store/hook/type/barrel/config/script/test/e2e/layout, Next.js `layout.tsx`, Expo Router `_layout.tsx`, `packages/fe-ui` leaf 계층(display/control/cell/columns/widget/collection/form/detail/layout/data-grid 등), 모바일 UI leaf/action 조합 계층(action/input/selection/navigation/data-display/feedback/layout/surface/design-system/widget/feature/form/detail)에는 sidecar spec을 만들지 않습니다.
+금지 계층의 계약은 nearest allowed owner에 기록합니다: web route는 route `page.spec.md`, mobile route/layout/state/API/test/native wiring은 route `index.spec.md`, mobile shared visual composition은 fe-mo-ui Screen spec, fe-ui Page/Feature는 해당 component spec이 owner입니다.
 기존 role 문서에 남아 있는 legacy spec 언급보다 이 범위와 `docs/sidecar-spec-policy.md`를 우선합니다.
 
 ## 오케스트레이션
@@ -33,6 +32,15 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - [orch-requirement.toml](./orch-requirement.toml): 도메인 기획(L0-L4) + BE/Store 기획을 총괄 조율하는 오케스트레이터
 - [orch-screen-planner.toml](./orch-screen-planner.toml): 단일 화면 기획(L5-L12)을 조율하는 오케스트레이터
 - [orch-stage.toml](./orch-stage.toml): 7단계 분할 개발 플로우를 조율하는 메타 에이전트
+
+### Feedback Loop 운영
+
+- child role은 peer role을 직접 호출하거나 다른 role 책임 파일을 임의 수정하지 않습니다.
+- 모든 finding은 상위 orchestrator가 `Feedback:` packet으로 수집한 뒤 `send_input` follow-up, re-entry, blocked/review pending 중 하나로 재배치합니다.
+- orchestrated child role의 최종 보고에는 `Feedback:` packet을 항상 포함합니다. finding이 없으면 `feedback_type: none`과 `affected_stage: none`으로 보고합니다.
+- packet이 누락되면 orchestrator가 같은 agent에 1회 보완 요청하고, 두 번째에도 없으면 `dependency-missing` 또는 `implementation-blocker`로 차단합니다.
+- `Feedback: none`은 Stage 완료 조건이 아닙니다. `orch-stage`와 `orch-mobile-stage`는 `stage-ledger.json`의 required item verifier를 통과해야 완료 보고할 수 있습니다.
+- ledger verifier는 `pnpm stage-ledger:check -- <stage-ledger.json>`로 실행할 수 있습니다.
 
 ## 요구사항 / 기획
 
@@ -58,7 +66,7 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - [req-logic-planner.toml](./req-logic-planner.toml): 비즈니스 로직과 테스트 레이어를 기획하는 전문가
 - [req-be-test-planner.toml](./req-be-test-planner.toml): 백엔드 테스트 케이스를 기획하는 전문가
 - [req-fe-test-planner.toml](./req-fe-test-planner.toml): 프론트엔드 테스트 케이스를 기획하는 전문가
-- [req-spec-tracker.toml](./req-spec-tracker.toml): 도메인별 spec-checklist를 생성/갱신하여 기획-구현-검증 상태를 추적하는 전문가
+- [req-spec-tracker.toml](./req-spec-tracker.toml): spec-checklist와 stage-ledger를 생성/갱신하여 기획-구현-검증 상태를 추적하는 전문가
 - [req-reverse-engineer.toml](./req-reverse-engineer.toml): 기존 화면 코드를 분석하여 허용 owner spec만 역으로 생성하는 전문가
 
 ## 백엔드 / Prisma
@@ -118,6 +126,11 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - [mobile/req-mo-selection-planner.toml](./mobile/req-mo-selection-planner.toml): 모바일 selection/stateful choice 컴포넌트 계약을 기획하는 전문가
 - [mobile/req-mo-navigation-planner.toml](./mobile/req-mo-navigation-planner.toml): 모바일 navigation control 컴포넌트 계약을 기획하는 전문가
 - [mobile/req-mo-menu-planner.toml](./mobile/req-mo-menu-planner.toml): 모바일 navigation/menu contract 를 기획하는 전문가
+- [mobile/req-mo-widget-planner.toml](./mobile/req-mo-widget-planner.toml): 모바일 순수 UI 조합 Widget 계약을 기획하는 전문가
+- [mobile/req-mo-feature-planner.toml](./mobile/req-mo-feature-planner.toml): 모바일 reusable Feature composition 계약을 기획하는 전문가
+- [mobile/req-mo-form-planner.toml](./mobile/req-mo-form-planner.toml): 모바일 입력 form 계약을 기획하는 전문가
+- [mobile/req-mo-detail-planner.toml](./mobile/req-mo-detail-planner.toml): 모바일 읽기 전용 detail/view 계약을 기획하는 전문가
+- [mobile/req-mo-api-integration-planner.toml](./mobile/req-mo-api-integration-planner.toml): 모바일 API 연동 계약을 기획하는 전문가
 - [mobile/req-mo-store-planner.toml](./mobile/req-mo-store-planner.toml): 모바일 공용/로컬 상태 경계를 기획하는 전문가
 - [mobile/req-mo-state-planner.toml](./mobile/req-mo-state-planner.toml): 모바일 route-local 상태와 shared Store 승격 경계를 기획하는 전문가
 - [mobile/req-mo-fe-test-planner.toml](./mobile/req-mo-fe-test-planner.toml): 모바일 route `index.spec.md`와 `app.context.md`의 unit/E2E 테스트 케이스를 기획하는 전문가
@@ -128,6 +141,10 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 - [mobile/fe-mo-data-display-component-builder.toml](./mobile/fe-mo-data-display-component-builder.toml): `packages/fe-mo-ui/src/data-display/**`, `surface`, `design-system`, 비오버레이 `layout` thin wrapper contract를 생성하거나 정리하는 전문가
 - [mobile/fe-mo-feedback-component-builder.toml](./mobile/fe-mo-feedback-component-builder.toml): `packages/fe-mo-ui/src/feedback/**`, overlay feedback `layout` thin wrapper contract를 생성하거나 정리하는 전문가
 - [mobile/fe-mo-menu-builder.toml](./mobile/fe-mo-menu-builder.toml): `packages/fe-mo-ui/src/layout/Menu/**`, `packages/fe-mo-ui/src/layout/SubMenu/**`의 RN 메뉴 contract를 생성하거나 정리하는 전문가
+- [mobile/fe-mo-widget-builder.toml](./mobile/fe-mo-widget-builder.toml): `packages/fe-mo-ui/src/widget/**`의 RN 순수 UI 조합 Widget을 생성하거나 정리하는 전문가
+- [mobile/fe-mo-feature-builder.toml](./mobile/fe-mo-feature-builder.toml): `packages/fe-mo-ui/src/feature/**`의 RN reusable Feature composition을 생성하거나 정리하는 전문가
+- [mobile/fe-mo-form-builder.toml](./mobile/fe-mo-form-builder.toml): `packages/fe-mo-ui/src/form/**`의 RN 입력 form 조합을 생성하거나 정리하는 전문가
+- [mobile/fe-mo-detail-builder.toml](./mobile/fe-mo-detail-builder.toml): `packages/fe-mo-ui/src/detail/**`의 RN 읽기 전용 detail/view 조합을 생성하거나 정리하는 전문가
 - [mobile/fe-mo-route-layout-builder.toml](./mobile/fe-mo-route-layout-builder.toml): `apps/mobile/src/app/**/_layout.tsx`를 구현하는 전문가
 - [mobile/fe-mo-page-builder.toml](./mobile/fe-mo-page-builder.toml): `apps/mobile/src/app/**/*.tsx` route file에서 shared screen visual owner를 연결하고 navigation/API/state/native wiring을 구현하는 전문가
 - [mobile/fe-mo-screen-builder.toml](./mobile/fe-mo-screen-builder.toml): 모바일 `fe-ui-page-builder` 대응 screen visual owner를 `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx` 기준으로 생성하는 전문가

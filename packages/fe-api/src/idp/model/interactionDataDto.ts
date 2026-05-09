@@ -12,8 +12,8 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  * OpenAPI spec version: 1.0.0
  */
 import type { InteractionDataDtoClient } from "./interactionDataDtoClient";
-import type { InteractionDataDtoPrompt } from "./interactionDataDtoPrompt";
 import type { InteractionDataDtoParams } from "./interactionDataDtoParams";
+import type { InteractionDataDtoPrompt } from "./interactionDataDtoPrompt";
 import type { InteractionDataDtoSession } from "./interactionDataDtoSession";
 
 export interface InteractionDataDto {

@@ -75,7 +75,7 @@ sequenceDiagram
 |------|------|----------|
 | 로그인 시작 | `apps/admin/src/app/auth/login/hooks/useAuthLoginPage.tsx:28` | `window.location.href = "/api/v1/auth/login"` |
 | Authorization URL 생성 | `packages/be-app/src/auth.application-service/index.ts` | `getAuthorizationUrl()` - scope: `openid profile email roles` |
-| State 저장 (Redis) | `packages/be-service/src/token-storage.service/index.ts:140-143` | `saveOidcState()` - TTL 10분, 일회용 |
+| State 저장 (Redis) | `packages/be-service/src/token-storage.service.ts:140-143` | `saveOidcState()` - TTL 10분, 일회용 |
 | IDP 리다이렉트 | `apps/server/src/module/auth/auth.controller.ts:64-67` | `login()` - Authorization URL로 redirect |
 | Interaction 화면 | `apps/idp/src/module/interaction/interaction.controller.ts:58-93` | `getInteraction()` - prompt에 따라 login/consent 분기 |
 | 사용자 인증 | `apps/idp/src/module/interaction/interaction.service.ts:67-94` | `validateUser()` - bcrypt 비밀번호 검증 |
@@ -248,7 +248,7 @@ sequenceDiagram
 | 로그아웃 컨트롤러 | `apps/server/src/module/auth/auth.controller.ts:163-184` | 쿠키에서 accessToken 추출 |
 | IDP 토큰 폐기 | `packages/be-integration/src/oidc.facade.ts` | `revokeToken()` - revocation endpoint 호출 |
 | 쿠키 삭제 | `packages/be-app/src/auth.application-service/index.ts` | `logoutWithCookie()` |
-| 토큰 쿠키 관리 | `packages/be-service/src/token.service/index.ts:64-75` | `clearTokenCookies()` |
+| 토큰 쿠키 관리 | `packages/be-service/src/token.service.ts:64-75` | `clearTokenCookies()` |
 
 ---
 
@@ -291,7 +291,7 @@ IDP에서 설정하는 토큰 수명 (`apps/idp/src/module/oidc/oidc-configurati
 
 ### 쿠키 만료 시간
 
-Server의 `TokenService`에서 설정 (`packages/be-service/src/token.service/index.ts:34-45`):
+Server의 `TokenService`에서 설정 (`packages/be-service/src/token.service.ts:34-45`):
 
 쿠키 만료 시간은 `auth` 설정의 `expires`/`refresh` 값에 따라 `Cookie.forToken()` (Value Object)으로 생성됩니다.
 
@@ -504,8 +504,8 @@ apps/idp/src/module/
 | 파일 | 역할 |
 |------|------|
 | `packages/be-app/src/auth.application-service/index.ts` | OIDC 인증 유즈케이스 로직 (회원가입, 세션, 쿠키, 내부 조합) |
-| `packages/be-service/src/token.service/index.ts` | 토큰 쿠키 관리 (설정/삭제), Cookie VO 활용 |
-| `packages/be-service/src/token-storage.service/index.ts` | Redis 기반 토큰 블랙리스트, OIDC State 관리 |
+| `packages/be-service/src/token.service.ts` | 토큰 쿠키 관리 (설정/삭제), Cookie VO 활용 |
+| `packages/be-service/src/token-storage.service.ts` | Redis 기반 토큰 블랙리스트, OIDC State 관리 |
 | `packages/be-common/src/strategy/jwt.strategy.ts` | JWKS 기반 JWT 검증 전략 (Bearer → 쿠키 순서) |
 | `packages/be-common/src/guard/jwt.auth-guard.ts` | 인증 Guard (블랙리스트 + JWT 검증) |
 

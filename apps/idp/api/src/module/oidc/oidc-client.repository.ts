@@ -1,5 +1,5 @@
-import { Injectable, Logger } from "@nestjs/common";
 import type { JsonValue } from "@cocrepo/type";
+import { Injectable, Logger } from "@nestjs/common";
 import { DirectPrismaProvider } from "./direct-prisma.provider";
 
 export interface OidcClientData {
@@ -11,6 +11,7 @@ export interface OidcClientData {
 	responseTypes: string[];
 	tokenEndpointAuthMethod: string;
 	scope: string;
+	isFirstParty: boolean;
 	skipConsent: boolean;
 	loginUi?: JsonValue | null;
 	logoUri?: string | null;
@@ -53,6 +54,7 @@ export class OidcClientRepository {
 			responseTypes: client.responseTypes,
 			tokenEndpointAuthMethod: client.tokenEndpointAuthMethod,
 			scope: client.scope,
+			isFirstParty: client.isFirstParty,
 			skipConsent: client.skipConsent,
 			loginUi: client.loginUi as JsonValue | null,
 			logoUri: client.logoUri,
@@ -80,6 +82,7 @@ export class OidcClientRepository {
 			responseTypes: client.responseTypes,
 			tokenEndpointAuthMethod: client.tokenEndpointAuthMethod,
 			scope: client.scope,
+			isFirstParty: client.isFirstParty,
 			skipConsent: client.skipConsent,
 			loginUi: client.loginUi as JsonValue | null,
 			logoUri: client.logoUri,

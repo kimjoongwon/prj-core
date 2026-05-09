@@ -6,8 +6,8 @@ import {
 	useVerifyToken,
 } from "@cocrepo/api/idp/auth";
 import {
-	useConsoleNavigationStore,
 	useConsoleAppStore,
+	useConsoleNavigationStore,
 	useConsolePersistStore,
 } from "@cocrepo/store";
 import {

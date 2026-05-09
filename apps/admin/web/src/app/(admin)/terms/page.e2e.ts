@@ -65,9 +65,7 @@ test.describe("약관 관리 페이지", () => {
 		await expect(
 			page.getByRole("heading", { name: "약관 관리" }),
 		).toBeVisible();
-		await expect(
-			page.getByRole("button", { name: "문서 등록" }),
-		).toBeVisible();
+		await expect(page.getByRole("button", { name: "문서 등록" })).toBeVisible();
 		await expect(
 			page.getByText("마케팅 정보 수신 동의", { exact: true }),
 		).toBeVisible();

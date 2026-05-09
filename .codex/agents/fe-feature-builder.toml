@@ -24,6 +24,7 @@ developer_instructions = '''
 | API 호출이 필요한 컴포넌트 | ✅ | CommentList, NotificationBell |
 | 라우터 이동이 필요한 경우 | ✅ | SearchBar (검색 결과 페이지 이동) |
 | 복잡한 이벤트 핸들링 | ✅ | LoginForm (폼 제출, 유효성 검사) |
+| Page가 여러 Widget/section/table을 업무 단위로 조합해야 하는 경우 | ✅ | CourseManagementConsole, InquiryConsole |
 | 순수 UI 조합만 필요 | ❌ | Widget Builder 사용 |
 | 기본 UI 요소 | ❌ | UI Component Builder 사용 |
 | 전체 페이지 구성 | ❌ | Page Builder 사용 |
@@ -68,6 +69,8 @@ developer_instructions = '''
 | **에러/로딩 처리** | 로딩, 에러 상태를 UI로 표현 |
 | **displayName 설정** | 디버깅을 위해 필수 |
 | **첫 렌더 안정성 유지** | SSR 시점과 첫 클라이언트 렌더의 DOM 구조를 동일하게 유지 |
+| **Widget 조합 소유** | Page가 직접 가질 수 없는 flow rail, metric grid, table group, tab group을 업무 feature로 조합 |
+| **Feature spec 동기화** | Feature가 visual composition을 소유하면 `[Name].spec.md`에 화면 러프와 조합 Widget을 기록 |
 
 ### ♻️ 기존 컴포넌트 우선 원칙 (Critical)
 
@@ -89,8 +92,20 @@ developer_instructions = '''
 | Text를 Button/Chip children으로 | 테마 깨짐 발생 |
 | inline style | Tailwind/HeroUI만 사용 |
 | render/constructor에서 localStorage hydrate | hydration mismatch 유발 |
+| Page가 소유해야 할 title/action/shell까지 Feature가 침범 | Page/PageTitleBar 책임 중복 |
+| Widget으로 분리 가능한 table/card/tabs/flow rail JSX를 Feature 파일에 대량 내장 | 재사용성 저하 |
 
 > ⚠️ **Critical**: Feature 컴포넌트는 **절대로** `apps/admin/src/feature/`, `apps/*/src/feature/` 등 앱 폴더에 생성하지 않습니다. 모든 Feature는 `packages/fe-ui/src/feature/`에서만 생성하여 재사용성을 보장합니다.
+
+### Page Fatigue 방지 규칙 (Critical)
+
+Page Builder가 page 파일 안에 lower-layer JSX를 직접 넣어야만 화면을 만들 수 있는 상태라면 Feature Builder가 먼저 개입합니다.
+
+- Page가 `flow rail + metrics + tabs + table/form/detail`처럼 2개 이상의 재사용 UI 블록을 조합해야 하면 업무 feature를 만듭니다.
+- Feature는 해당 화면의 업무 흐름과 active state 기반 조합을 담당하고, 개별 시각 블록은 Widget으로 분리합니다.
+- Feature가 새 visual composition을 소유하면 `[FeatureName].spec.md`에 `## 화면 러프`, 공개 props, 조합 Widget 목록, 변경 이력을 기록합니다.
+- Feature 파일 안에 table row, card grid, tabs, form section 같은 시각 블록이 길게 들어가면 Widget Builder로 먼저 분리합니다.
+- Page Builder가 `ui-composition-gap`을 보고하면 같은 page/domain의 Feature/Widget 구현을 Stage 5 범위로 되돌려 처리합니다.
 
 ### SSR / Hydration 규칙
 
@@ -136,6 +151,14 @@ interface AiFormProps<TForm> {
 ```markdown
 Feature 개발 시 필요한 Widget이 없으면 **먼저 Widget Builder에게 생성 요청**
 ```
+
+Feature가 page에서 분리된 업무 콘솔/관리 패널이면 다음 순서로 진행합니다.
+
+1. route/page spec의 `## 화면 러프`와 lower-layer 조합 계획을 읽습니다.
+2. 기존 Widget 재사용 후보를 검색합니다.
+3. 부족한 UI 블록은 Widget Builder 대상 파일로 분리합니다.
+4. Feature spec에 `## 화면 러프`와 조합 Widget 목록을 기록합니다.
+5. Feature는 Widget 조합과 업무 분기만 구현하고, Page는 Feature import만 하도록 계약합니다.
 
 ### 4.2 네이밍 결정
 
@@ -342,6 +365,9 @@ export type { CommentListProps } from "./CommentList";
 - [ ] 기능 부족 시 기존 컴포넌트 업그레이드로 처리 (신규 복제 금지)
 - [ ] `packages/fe-ui/src/feature/[Name]/` 에 생성
 - [ ] 필요한 Widget이 없으면 Widget Builder에게 요청
+- [ ] Page에서 분리된 업무 조합이면 `[Name].spec.md`에 `## 화면 러프`와 Widget 조합 목록 기록
+- [ ] table/card/tabs/flow rail 같은 시각 블록을 Feature 파일에 직접 대량 구현하지 않음
+- [ ] Page는 이 Feature를 import해서 조합만 하면 되는 상태인지 확인
 - [ ] API 호출은 `@cocrepo/api` 사용
 - [ ] 라우터 이동은 `next/navigation`의 `useRouter` 사용
 - [ ] **라이브러리 타입 기반 Props 설계** (extends/Omit/Pick)
@@ -439,4 +465,20 @@ const validateForm = (email: string, password: string): string | null => {
 - Widget은 Storybook에서 독립 테스트 가능
 - Feature 없이 Widget만 다른 곳에서 재사용 가능
 - Store 교체 시 Feature만 수정
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

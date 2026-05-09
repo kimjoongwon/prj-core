@@ -5,6 +5,7 @@ export * from "./AssetBrowser";
 export * from "./ability";
 export * from "./BottomTab";
 export { CollapsibleSidebar } from "./CollapsibleSidebar/CollapsibleSidebarLayout";
+export * from "./course-management";
 export * from "./HeaderSpaceSelector";
 export * from "./InquiryWebSocketProvider";
 export * from "./idp";

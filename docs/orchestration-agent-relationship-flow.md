@@ -18,15 +18,16 @@ Stage 순서 자체가 아니라 orchestration tree, planner-to-builder mapping,
 
 ## 현재 반영 상태
 
-2026-05-07 기준으로 아래 role 지시문에 feedback router / re-entry 계약이 실제 반영되어 있습니다.
+2026-05-09 기준으로 아래 role 지시문에 feedback router / re-entry / stage ledger gate 계약이 실제 반영되어 있습니다.
 
 | role | 반영된 계약 |
 |------|-------------|
-| `orch-stage` | child agent `Feedback` packet 수집, `feedback` / `reentry` 입력, feedback 분류, `send_input` follow-up, affected `agent_type` 재생성 |
-| `orch-mobile-stage` | mobile route/backend/screen/test finding 수집, `feedback` / `reentry` 입력, mobile 전용 feedback 분류, 공통 backend handoff |
+| `orch-stage` | child agent `Feedback` packet 수집, `feedback` / `reentry` 입력, feedback 분류, `send_input` follow-up, affected `agent_type` 재생성, web `stage-ledger.json` 완료 gate |
+| `orch-mobile-stage` | mobile route/backend/screen/test finding 수집, `feedback` / `reentry` 입력, mobile 전용 feedback 분류, 공통 backend handoff, mobile `stage-ledger.json` 완료 gate |
 | `orch-requirement` | `feedback_mode=reentry` 입력, domain-level contract 최소 갱신, 화면 상세 변경은 `orch-screen-planner`로 handoff |
 | `orch-screen-planner` | `feedback_mode=reentry` 입력, page-level affected owner spec만 최소 갱신, affected planner mapping 반환 |
 | `orch-mobile-screen-planner` | `feedback_mode=reentry` 입력, route `index.spec.md` / screen owner spec 최소 갱신, backend gap handoff |
+| `req-spec-tracker` | web `spec-checklist.md`, web/mobile `stage-ledger.json` 생성/갱신, required item verifier |
 
 ## 용어
 
@@ -43,6 +44,7 @@ Stage 순서 자체가 아니라 orchestration tree, planner-to-builder mapping,
 | re-entry | 실패한 gate 이후 전체를 처음부터 반복하지 않고 영향받은 planner/builder/test chain으로 재진입하는 관계 |
 | single writer | 공유 파일 충돌을 막기 위해 join 시점에 한 agent만 최종 파일을 쓰는 규칙 |
 | feedback packet | child agent가 최종 응답에 포함해야 하는 finding 구조 |
+| stage ledger | Stage 시작 전에 required work item을 고정하고 완료 전 실제 파일/검증 상태로 닫는 machine-readable 원장 |
 | `feedback_mode=reentry` | planner orchestrator를 전체 재기획이 아니라 affected contract 최소 갱신 모드로 호출하는 입력 |
 
 ## 전체 관계 개요
@@ -91,6 +93,7 @@ agent의 feedback은 peer-to-peer mesh가 아니라 root orchestrator-mediated l
 즉, child agent가 다른 child agent를 직접 수정 대상으로 삼지 않고, 발견사항을 root orchestrator에 반환합니다.
 root orchestrator는 영향 범위를 분류한 뒤 같은 agent에 follow-up을 주거나 관련 `agent_type`으로 새 agent를 생성합니다.
 이 규칙은 `orch-stage`와 `orch-mobile-stage`의 `Feedback Router / Re-entry 규칙`에 실제 실행 지침으로 들어가 있습니다.
+단, `Feedback: none`은 완료 조건이 아닙니다. root orchestrator는 Stage 시작 전에 생성한 `stage-ledger.json`의 required item을 join verifier로 확인한 뒤에만 Stage 완료를 선언합니다.
 
 ```mermaid
 flowchart TD
@@ -132,6 +135,16 @@ flowchart TD
 | QA가 테스트 실패 또는 회귀 발견 | 테스트 기대값 문제인지 제품 contract 문제인지 분류 | affected builder, `req-*-test-planner`, `qa-*` 재검증 |
 | shared file 충돌 가능성 발견 | fan-out 중 직접 쓰기 중단, join owner 지정 | root orchestrator의 single-writer join |
 
+### Stage Ledger Gate
+
+feedback loop는 발견된 문제를 되돌려 보내는 장치이고, stage ledger는 빠진 일을 발견하는 장치입니다.
+`orch-stage`는 `apps/[app]/web/src/app/(admin)/[domain]/stage-ledger.json`, `orch-mobile-stage`는 `apps/mobile/src/app/stage-ledger.json`을 사용합니다.
+각 ledger item은 `stage`, `agent_type`, `source_spec`, `expected_files`, `verification`, `status`를 가지며, `required=true` item은 실제 verifier가 확인해 `verified`가 되기 전까지 Stage 완료 조건을 만족하지 않습니다.
+공통 verifier 명령은 `pnpm stage-ledger:check -- <stage-ledger.json>`입니다.
+
+`req-spec-tracker`는 기존 `spec-checklist.md`의 `Spec exists / Code paired / Verified` 요약을 유지하면서, Stage 1-7(web)과 Stage 1-4(mobile)의 required item 원장을 생성/갱신합니다.
+child agent가 성공 요약이나 `Feedback: none`을 반환해도 ledger item은 자동으로 닫히지 않습니다.
+
 ### Root Orchestrator 입력
 
 root orchestrator는 Stage 실행 입력에 feedback 운용 파라미터를 받습니다.
@@ -151,7 +164,7 @@ root orchestrator는 Stage 실행 입력에 feedback 운용 파라미터를 받�
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
-- feedback_type: none | contract-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
 - affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
@@ -160,8 +173,10 @@ Feedback:
 
 | `feedback_type` | `orch-stage` 처리 |
 |-----------------|-------------------|
-| `none` | join 후보로 수집 |
-| `contract-gap` | contract owner role을 찾아 planner re-entry 또는 현재 Stage 실패로 분류 |
+| `none` | join 후보로 수집하되 ledger verifier 완료 전에는 Stage 완료 조건이 아님 |
+| `contract-gap` | 도메인/API/BE contract는 `orch-requirement` 또는 `req-api-planner`, 화면/page/feature contract는 `orch-screen-planner feedback_mode=reentry`로 분류 |
+| `api-integration-gap` | API contract 불일치면 `req-api-planner`, wiring 문제면 `req-api-integration-planner` 또는 `fe-api-integrator` follow-up |
+| `ui-composition-gap` | `orch-screen-planner feedback_mode=reentry`로 보내 affected `req-*` planner만 최소 재진입 |
 | `implementation-blocker` | 같은 agent가 해결 가능하면 `send_input`, role 경계 밖이면 해당 builder `agent_type` 생성 |
 | `test-failure` | 제품 contract 문제와 테스트 기대값 문제를 분리한 뒤 affected builder 또는 `req-*-test-planner`로 재진입 |
 | `spec-drift` | owner spec을 먼저 갱신한 뒤 구현/테스트 follow-up |
@@ -175,7 +190,7 @@ Feedback:
 ```text
 Feedback:
 - status: resolved | blocked | needs-route-contract | needs-backend-contract | needs-ui | needs-test | needs-reentry
-- feedback_type: none | route-contract-gap | backend-contract-gap | screen-contract-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- feedback_type: none | route-contract-gap | backend-contract-gap | api-integration-gap | screen-contract-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
 - affected_stage: 1 | 2 | 3 | 4 | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
@@ -184,10 +199,12 @@ Feedback:
 
 | `feedback_type` | `orch-mobile-stage` 처리 |
 |-----------------|--------------------------|
-| `none` | join 후보로 수집 |
+| `none` | join 후보로 수집하되 ledger verifier 완료 전에는 Stage 완료 조건이 아님 |
 | `route-contract-gap` | `orch-mobile-screen-planner` 또는 관련 `req-mo-*` role로 re-entry |
 | `backend-contract-gap` | 공통 backend `req-*` handoff로 되돌리고, 필요하면 web `orch-stage` backend flow 재시작 범위 보고 |
+| `api-integration-gap` | `req-mo-api-integration-planner`로 route API Integration 계약을 갱신하고 필요 시 `fe-mo-api-integrator` follow-up |
 | `screen-contract-gap` | `orch-mobile-screen-planner`를 통해 shared screen props/spec만 최소 갱신 |
+| `ui-composition-gap` | `orch-mobile-screen-planner`를 통해 affected `req-mo-widget/feature/form/detail/primitive` planner만 최소 재진입 |
 | `implementation-blocker` | 같은 agent가 해결 가능하면 `send_input`, role 경계 밖이면 해당 mobile builder `agent_type` 생성 |
 | `test-failure` | 제품 contract 문제와 테스트 기대값 문제를 분리한 뒤 affected builder 또는 `req-mo-fe-test-planner`로 재진입 |
 | `spec-drift` | route `index.spec.md` 또는 screen owner spec을 먼저 갱신한 뒤 구현/테스트 follow-up |
@@ -215,6 +232,7 @@ re-entry mode에서 planner orchestrator는 unrelated spec을 갱신하지 않�
 - QA 실패는 전체 stage 재시작이 아니라 affected planner/builder/test chain으로 re-entry합니다.
 - contract가 바뀌면 owner spec, Orval 생성물, page/screen props, 테스트 기대값을 같은 loop에서 동기화합니다.
 - 공유 파일은 fan-out agent가 동시에 수정하지 않고 join에서 single writer가 정리합니다.
+- Stage 완료 선언은 feedback 수집이 아니라 stage ledger required item verifier 통과로 결정합니다.
 
 ## `orch-stage` Agent 관계
 

@@ -4,8 +4,8 @@ import {
 	EmailProvider,
 	EmailService,
 	SmtpEmailProvider,
-} from "./email.service/index";
-import { TemplateService } from "./template.service/index";
+} from "./email.service";
+import { TemplateService } from "./template.service";
 
 @Module({
 	providers: [

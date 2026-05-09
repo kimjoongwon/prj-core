@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import { observer } from "mobx-react-lite";
 
-export default observer(function MainTabsLayout() {
+const MainTabsLayout = observer(() => {
 	return (
 		<Tabs
 			screenOptions={{
@@ -46,3 +46,5 @@ export default observer(function MainTabsLayout() {
 		</Tabs>
 	);
 });
+
+export default MainTabsLayout;

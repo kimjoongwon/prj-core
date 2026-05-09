@@ -95,6 +95,17 @@ export {
 } from "./AuthAuditLogListPage/AuthAuditLogListPage";
 export type { AuthErrorPageProps } from "./AuthErrorPage/AuthErrorPage";
 export { AuthErrorPage } from "./AuthErrorPage/AuthErrorPage";
+export type {
+	CourseManagementCourse,
+	CourseManagementEnrollment,
+	CourseManagementOffering,
+	CourseManagementPageProps,
+	CourseManagementPass,
+	CourseManagementQueryState,
+	CourseManagementSection,
+	CourseManagementSectionId,
+} from "./CourseManagementPage/CourseManagementPage";
+export { CourseManagementPage } from "./CourseManagementPage/CourseManagementPage";
 export { DashboardPage } from "./DashboardPage/DashboardPage";
 export type {
 	EmailVerificationListPageProps,
@@ -122,8 +133,6 @@ export type {
 	IdentityDashboardPageTrendItem,
 } from "./IdentityDashboardPage/IdentityDashboardPage";
 export { IdentityDashboardPage } from "./IdentityDashboardPage/IdentityDashboardPage";
-export type { IdentityLoginRedirectPageProps } from "./IdentityLoginRedirectPage/IdentityLoginRedirectPage";
-export { IdentityLoginRedirectPage } from "./IdentityLoginRedirectPage/IdentityLoginRedirectPage";
 export type {
 	InquiryCreatePageBootstrap,
 	InquiryCreatePageCustomerSearchResult,

@@ -61,4 +61,20 @@ Jest + React Native Testing Library 기반으로 `apps/mobile`, `@cocrepo/mo-ui`
 - owner spec에 없는 케이스를 임의 추가 금지
 - Detox/Playwright 전제를 unit test 에 섞지 않음
 - route code 변경 없이 테스트만 추가한 뒤 spec sync 를 생략하지 않음
+
+## Feedback Packet (Mandatory)
+
+이 role이 mobile orchestrator(`orch-mobile-stage`, `orch-mobile-screen-planner`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-route-contract | needs-backend-contract | needs-ui | needs-test | needs-reentry
+- feedback_type: none | route-contract-gap | backend-contract-gap | api-integration-gap | screen-contract-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

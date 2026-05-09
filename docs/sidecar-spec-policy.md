@@ -26,7 +26,7 @@
 - `*.stories.spec.md`, `*.test.spec.md`, `*.e2e.spec.md`
 - `index.spec.md`가 barrel, namespace, 디렉터리 설명을 가리키는 경우
 - `type.spec.md`, `types.spec.md`, `use*.spec.md`, hook/util/lib/store/dto/service/repository/controller/entity/vo spec
-- `packages/fe-mo-ui/src/action|input|selection|navigation|data-display|feedback|layout|surface|design-system` leaf spec
+- `packages/fe-mo-ui/src/action|input|selection|navigation|data-display|feedback|layout|surface|design-system|widget|feature|form|detail` leaf/action 조합 계층 spec
 - `package.spec.md`, `tsconfig.spec.md`, `app.spec.md`
 - `*.toml.spec.md`, `*.json.spec.md`, `*.css.spec.md`, `*.html.spec.md`
 - `*.toml.guide.md`
@@ -98,7 +98,7 @@
 
 - 모바일 screen-level visual composition 책임
 - props contract와 event handler props
-- 조합하는 `@cocrepo/mo-ui` primitive/action/input/selection/navigation/menu 목록
+- 조합하는 `@cocrepo/mo-ui` primitive/action/input/selection/navigation/menu/widget/feature/form/detail 목록
 - 상태별 렌더링과 route/native wiring boundary
 - React Native 접근성, 테스트 관점
 

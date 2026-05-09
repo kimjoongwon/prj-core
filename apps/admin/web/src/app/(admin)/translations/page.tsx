@@ -1,5 +1,6 @@
 "use client";
 
+import type { GetTranslationsParams } from "@cocrepo/api/core/model";
 import {
 	getGetTranslationsQueryKey,
 	useCreateTranslation,
@@ -9,7 +10,6 @@ import {
 	useInvalidateTranslationCache,
 	useUpdateTranslation,
 } from "@cocrepo/api/core/translations";
-import type { GetTranslationsParams } from "@cocrepo/api/core/model";
 import {
 	type StaticTranslationForm,
 	type StaticTranslationLanguageCode,

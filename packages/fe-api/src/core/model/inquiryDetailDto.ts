@@ -11,12 +11,12 @@
  */
 import type { InquiryCategory } from "./inquiryCategory";
 import type { InquiryChannel } from "./inquiryChannel";
+import type { InquiryDetailDtoSentiment } from "./inquiryDetailDtoSentiment";
+import type { InquiryParticipantDto } from "./inquiryParticipantDto";
+import type { InquiryPriority } from "./inquiryPriority";
 import type { InquirySource } from "./inquirySource";
 import type { InquiryStatus } from "./inquiryStatus";
-import type { InquiryPriority } from "./inquiryPriority";
-import type { InquiryDetailDtoSentiment } from "./inquiryDetailDtoSentiment";
 import type { InquiryThreadDto } from "./inquiryThreadDto";
-import type { InquiryParticipantDto } from "./inquiryParticipantDto";
 
 export interface InquiryDetailDto {
 	id: string;

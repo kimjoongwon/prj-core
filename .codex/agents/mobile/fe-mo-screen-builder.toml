@@ -34,7 +34,7 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 2. screen component는 pure presentational contract를 유지합니다.
    - 데이터, 파생 상태, CTA 상태, 사용자 이벤트 handler는 props로 받습니다.
 3. screen component 내부에서 API hook, router, route params, native runtime context를 직접 읽지 않습니다.
-4. screen component는 RN 기본 컴포넌트와 `@cocrepo/mo-ui` 하위 primitive/action/input/selection/navigation/menu만 조합합니다.
+4. screen component는 RN 기본 컴포넌트와 `@cocrepo/mo-ui` 하위 primitive/action/input/selection/navigation/menu/widget/feature/form/detail만 조합합니다.
 5. route 경로, 앱 환경값, deep-link scheme, WebView/native bridge 로직은 screen component에 넣지 않습니다.
 6. screen 이름은 semantic app-facing 이름을 사용합니다.
    - 허용 예: `ReservationHomeScreen`, `AuthLoginScreen`, `BookingDetailScreen`
@@ -42,8 +42,14 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 7. export는 named export만 허용합니다.
 8. `export default`, `*Client`, `*Inner`, `*Base` 같은 trivial pass-through wrapper를 금지합니다.
 9. 외부 observable state slice를 직접 소비하면 exported component를 `observer`로 감쌉니다.
-10. screen component 수정 시 대응 `[ScreenName].spec.md` 업데이트와 `## 변경 이력` 추가가 필수입니다.
-11. `packages/fe-mo-ui/src/screen/index.ts` export 동기화가 필수입니다.
+10. `observer(function Name() { ... })` 패턴을 금지합니다.
+   - screen component는 `export const [ScreenName] = observer((props: [ScreenName]Props) => { ... })` 형태로 선언합니다.
+   - props가 없으면 `export const [ScreenName] = observer(() => { ... })` 형태를 사용합니다.
+11. screen 스타일은 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 기본으로 하며 `StyleSheet`/`StyleSheet.create`를 만들지 않습니다.
+12. `style` 객체는 safe-area inset, third-party native bridge 등 className으로 표현하기 어려운 동적 값에만 제한합니다.
+13. screen component 수정 시 대응 `[ScreenName].spec.md` 업데이트와 `## 변경 이력` 추가가 필수입니다.
+14. `packages/fe-mo-ui/src/screen/index.ts` export 동기화가 필수입니다.
+13. screen spec은 `## 화면 스케치` 섹션과 fenced `text` wireframe을 반드시 포함합니다.
 
 ## 금지
 
@@ -59,6 +65,7 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 - props contract를 먼저 정의한 뒤 조합형 render를 구현합니다.
 - route에서 넘겨받는 event handler를 직접 바인딩하고 내부에서 route behavior를 분기하지 않습니다.
 - screen-level composition, 상태별 렌더링, props/event contract를 `[ScreenName].spec.md`에 기록합니다.
+- `[ScreenName].spec.md`에는 첫 화면, 주요 ready 상태, loading/empty/error 또는 overlay/sheet 상태를 Markdown fenced `text` 화면 스케치로 그립니다.
 - `packages/fe-mo-ui/src/screen/index.ts` barrel export 누락 없이 유지합니다.
 
 ## Don't
@@ -75,11 +82,11 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 
 ## 구현 절차
 
-1) 기존 screen/feature/widget 후보 검색
+1) 기존 screen/feature/widget/form/detail 후보 검색
 2) 화면이 공유 가능한지/route 고유인지 판단
 3) `ScreenProps` 정의
 4) `Screen` 구현 (`observer` 필요 시 적용)
-5) `[ScreenName].spec.md` 작성/갱신
+5) `[ScreenName].spec.md` 작성/갱신: `## 화면 스케치`와 fenced `text` wireframe 포함
 6) barrel 동기화
 7) route screen에서 재사용되는 경우 해당 route `index.spec.md`의 shared screen target을 갱신
 
@@ -90,4 +97,20 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 - route wiring boundary와 공유 여부 판단 근거
 - observer 적용 여부
 - spec/barrel 동기화 파일
+
+## Feedback Packet (Mandatory)
+
+이 role이 mobile orchestrator(`orch-mobile-stage`, `orch-mobile-screen-planner`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-route-contract | needs-backend-contract | needs-ui | needs-test | needs-reentry
+- feedback_type: none | route-contract-gap | backend-contract-gap | api-integration-gap | screen-contract-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

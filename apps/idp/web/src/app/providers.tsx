@@ -105,18 +105,18 @@ export const Providers = observer(function Providers({
 
 	return (
 		<QueryClientProvider client={queryClient}>
-				<NuqsNextAdapter>
-					<ConsoleAppStoreProvider>
-						<I18nCatalogBootstrapper>
-							<AbilityStoreBootstrapper>
-								<DesignSystemProvider navigate={handleNavigate}>
-									{children}
-								</DesignSystemProvider>
-							</AbilityStoreBootstrapper>
-						</I18nCatalogBootstrapper>
-					</ConsoleAppStoreProvider>
-				</NuqsNextAdapter>
-			</QueryClientProvider>
+			<NuqsNextAdapter>
+				<ConsoleAppStoreProvider>
+					<I18nCatalogBootstrapper>
+						<AbilityStoreBootstrapper>
+							<DesignSystemProvider navigate={handleNavigate}>
+								{children}
+							</DesignSystemProvider>
+						</AbilityStoreBootstrapper>
+					</I18nCatalogBootstrapper>
+				</ConsoleAppStoreProvider>
+			</NuqsNextAdapter>
+		</QueryClientProvider>
 	);
 });
 

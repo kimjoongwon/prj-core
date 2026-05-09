@@ -61,7 +61,8 @@ const AdminTasksNewRoute = observer(() => {
 			onError: (error) => {
 				addToast({
 					title: t("태스크 등록 실패"),
-					description: error.message || t("태스크 등록 중 오류가 발생했습니다."),
+					description:
+						error.message || t("태스크 등록 중 오류가 발생했습니다."),
 					color: "danger",
 				});
 			},

@@ -1,4 +1,3 @@
-export * from "./tenant-access-requests";
 export type { ApproveTenantAccessRequest200AllOf } from "../model/approveTenantAccessRequest200AllOf";
 export type { CancelTenantAccessRequest200AllOf } from "../model/cancelTenantAccessRequest200AllOf";
 export type { CreateTenantAccessRequest201AllOf } from "../model/createTenantAccessRequest201AllOf";
@@ -26,3 +25,4 @@ export type { TenantAccessRequestFormSchemaDto } from "../model/tenantAccessRequ
 export type { TenantAccessRequestFormUiPathsDto } from "../model/tenantAccessRequestFormUiPathsDto";
 export type { TenantAccessRequestPaginationMetaDto } from "../model/tenantAccessRequestPaginationMetaDto";
 export type { TenantAccessRequestStatus } from "../model/tenantAccessRequestStatus";
+export * from "./tenant-access-requests";

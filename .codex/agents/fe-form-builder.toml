@@ -30,7 +30,7 @@ developer_instructions = '''
 ## 출력
 
 - 메인 컴포넌트: `packages/fe-ui/src/form/<Name>/<Name>.tsx`
-- 대응 spec: route `page.spec.md` 또는 관련 fe-ui Feature/Widget spec의 Form Contract 섹션
+- 대응 spec: route `page.spec.md` 또는 관련 fe-ui Feature spec의 Form Contract 섹션
 - barrel: `packages/fe-ui/src/form/index.ts`
 - 필요 시 `packages/fe-ui/src/index.ts`와 허용 owner spec을 함께 갱신
 
@@ -54,4 +54,20 @@ developer_instructions = '''
 - 실제 이벤트 연결은 page 또는 feature가 form 바깥 wrapper에서 소유합니다.
   - pure page/feature는 `onSubmit`, `onSubmitCapture`, `onClickCapture` 등으로 native event를 연결할 수 있습니다.
 - 코드 수정 시 대응 owner spec과 `## 변경 이력`를 동기화합니다.
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

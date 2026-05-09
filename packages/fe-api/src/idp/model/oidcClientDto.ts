@@ -51,6 +51,8 @@ export interface OidcClientDto {
 	scope: string;
 	/** 활성화 여부 */
 	isActive: boolean;
+	/** First-party 클라이언트 여부 */
+	isFirstParty: boolean;
 	/** 권한 동의 화면 생략 여부 */
 	skipConsent: boolean;
 	/**

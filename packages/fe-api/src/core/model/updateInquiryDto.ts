@@ -10,8 +10,8 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { InquiryCategory } from "./inquiryCategory";
-import type { InquiryStatus } from "./inquiryStatus";
 import type { InquiryPriority } from "./inquiryPriority";
+import type { InquiryStatus } from "./inquiryStatus";
 
 export interface UpdateInquiryDto {
 	/**

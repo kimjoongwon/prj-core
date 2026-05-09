@@ -1,16 +1,15 @@
 import { createElement, type ReactNode } from "react";
 import {
 	Pressable,
-	StyleSheet,
 	Text,
 	View,
 	type PressableProps,
 	type StyleProp,
-	type TextStyle,
 	type ViewProps,
 	type ViewStyle,
 } from "react-native";
 import { observer } from "mobx-react-lite";
+import { tv } from "tailwind-variants";
 
 export interface SelectableCardItem {
 	description?: ReactNode;
@@ -72,13 +71,13 @@ const createSelectHandler = (
 const renderNodeText = (
 	node: ReactNode,
 	key: string,
-	style: StyleProp<TextStyle> | undefined,
+	className: string | undefined,
 ) => {
 	if (node === undefined || node === null || node === false) {
 		return null;
 	}
 
-	return createElement(Text, { key, style }, node);
+	return createElement(Text, { className, key }, node);
 };
 
 const renderTag = (tag: ReactNode, index: number) =>
@@ -86,17 +85,17 @@ const renderTag = (tag: ReactNode, index: number) =>
 		View,
 		{
 			key: `tag-${index}`,
-			style: styles.tag,
+			className: classNames.tag(),
 		},
-		createElement(Text, { style: styles.tagText }, tag),
+		createElement(Text, { className: classNames.tagText() }, tag),
 	);
 
 const renderMeta = (meta: ReactNode, index: number) =>
 	createElement(
 		Text,
 		{
+			className: classNames.metaText(),
 			key: `meta-${index}`,
-			style: styles.metaText,
 		},
 		meta,
 	);
@@ -106,7 +105,7 @@ const renderTags = (item: SelectableCardItem) => {
 		return null;
 	}
 
-	return createElement(View, { style: styles.tags }, item.tags.map(renderTag));
+	return createElement(View, { className: classNames.tags() }, item.tags.map(renderTag));
 };
 
 const renderMetaList = (item: SelectableCardItem) => {
@@ -114,7 +113,7 @@ const renderMetaList = (item: SelectableCardItem) => {
 		return null;
 	}
 
-	return createElement(View, { style: styles.meta }, item.meta.map(renderMeta));
+	return createElement(View, { className: classNames.meta() }, item.meta.map(renderMeta));
 };
 
 const renderDisabledReason = (item: SelectableCardItem) => {
@@ -122,7 +121,11 @@ const renderDisabledReason = (item: SelectableCardItem) => {
 		return null;
 	}
 
-	return createElement(Text, { style: styles.disabledReason }, item.disabledReason);
+	return createElement(
+		Text,
+		{ className: classNames.disabledReason() },
+		item.disabledReason,
+	);
 };
 
 const renderSelectionIndicator = (
@@ -133,15 +136,14 @@ const renderSelectionIndicator = (
 	createElement(
 		View,
 		{
-			style: [
-				styles.indicator,
-				isSelected ? styles.indicatorSelected : null,
-				isDisabled ? styles.indicatorDisabled : null,
-			],
+			className: selectableCardListClassNames({
+				disabled: isDisabled,
+				selected: isSelected,
+			}).indicator(),
 		},
 		createElement(
 			Text,
-			{ style: styles.indicatorText },
+			{ className: classNames.indicatorText() },
 			isSelected
 				? (config.selectedLabel ?? "Selected")
 				: (config.selectLabel ?? "Select"),
@@ -155,6 +157,10 @@ const renderSelectableCard = (
 ) => {
 	const isSelected = config.selectedValue === item.value;
 	const isDisabled = Boolean(config.disabled || item.isDisabled);
+	const slotClassNames = selectableCardListClassNames({
+		disabled: isDisabled,
+		selected: isSelected,
+	});
 
 	return createElement(
 		Pressable,
@@ -168,18 +174,13 @@ const renderSelectableCard = (
 			disabled: isDisabled,
 			key: item.value || `selectable-card-${index}`,
 			onPress: createSelectHandler(item, config) as PressableProps["onPress"],
-			style: [
-				styles.card,
-				isSelected ? styles.cardSelected : null,
-				isDisabled ? styles.cardDisabled : null,
-				config.cardStyle,
-				isSelected ? config.selectedCardStyle : null,
-			],
+			className: slotClassNames.card(),
+			style: [config.cardStyle, isSelected ? config.selectedCardStyle : null],
 		},
-		createElement(View, { style: styles.cardHeader }, [
-			createElement(View, { key: "title", style: styles.titleStack }, [
-				renderNodeText(item.eyebrow, "eyebrow", styles.eyebrow),
-				renderNodeText(item.title, "title", styles.cardTitle),
+		createElement(View, { className: slotClassNames.cardHeader() }, [
+			createElement(View, { className: slotClassNames.titleStack(), key: "title" }, [
+				renderNodeText(item.eyebrow, "eyebrow", slotClassNames.eyebrow()),
+				renderNodeText(item.title, "title", slotClassNames.cardTitle()),
 			]),
 			createElement(
 				View,
@@ -187,7 +188,11 @@ const renderSelectableCard = (
 				renderSelectionIndicator(isSelected, isDisabled, config),
 			),
 		]),
-		renderNodeText(item.description, "description", styles.cardDescription),
+		renderNodeText(
+			item.description,
+			"description",
+			slotClassNames.cardDescription(),
+		),
 		renderMetaList(item),
 		renderTags(item),
 		renderDisabledReason(item),
@@ -208,11 +213,11 @@ const renderEmptyContent = (emptyContent: ReactNode, emptyLabel: ReactNode) => {
 		View,
 		{
 			accessibilityRole: "summary",
-			style: styles.empty,
+			className: classNames.empty(),
 		},
 		createElement(
 			Text,
-			{ style: styles.emptyTitle },
+			{ className: classNames.emptyTitle() },
 			emptyLabel ?? "No options available",
 		),
 	);
@@ -250,16 +255,21 @@ const SelectableCardListComponent = observer((props: SelectableCardListProps) =>
 		View,
 		{
 			...rest,
-			style: [styles.root, style],
+			className: classNames.root(),
+			style,
 		},
 		title || description
-			? createElement(View, { style: styles.heading }, [
-					renderNodeText(title, "title", styles.title),
-					renderNodeText(description, "description", styles.description),
+			? createElement(View, { className: classNames.heading() }, [
+					renderNodeText(title, "title", classNames.title()),
+					renderNodeText(
+						description,
+						"description",
+						classNames.description(),
+					),
 				])
 			: null,
 		items.length > 0
-			? createElement(View, { style: styles.list }, renderCards(items, config))
+			? createElement(View, { className: classNames.list() }, renderCards(items, config))
 			: renderEmptyContent(emptyContent, emptyLabel),
 	);
 });
@@ -268,132 +278,51 @@ SelectableCardListComponent.displayName = "SelectableCardList";
 
 export const SelectableCardList = SelectableCardListComponent;
 
-const styles = StyleSheet.create({
-	card: {
-		backgroundColor: "#151915",
-		borderColor: "#2b342c",
-		borderRadius: 12,
-		borderWidth: 1,
-		gap: 10,
-		padding: 16,
+const selectableCardListClassNames = tv({
+	slots: {
+		card: "gap-2.5 rounded-xl border border-[#2b342c] bg-[#151915] p-4",
+		cardDescription: "text-sm leading-5 text-[#c5cec4]",
+		cardHeader: "flex-row items-start justify-between gap-3",
+		cardTitle: "text-base font-bold leading-[22px] text-[#f5f8f1]",
+		description: "text-sm leading-5 text-[#aeb7ac]",
+		disabledReason: "text-[13px] leading-[18px] text-[#e6b36a]",
+		empty: "rounded-xl border border-[#263026] bg-[#111511] p-4",
+		emptyTitle: "text-sm leading-5 text-[#c5cec4]",
+		eyebrow: "text-xs font-bold uppercase leading-4 text-[#9ad66d]",
+		heading: "gap-1.5",
+		indicator:
+			"min-w-16 items-center rounded-full bg-[#263026] px-2.5 py-[5px]",
+		indicatorText: "text-xs font-bold leading-4 text-[#f5f8f1]",
+		list: "gap-2.5",
+		meta: "flex-row flex-wrap gap-2",
+		metaText: "text-[13px] leading-[18px] text-[#dbe5d7]",
+		root: "gap-3",
+		tag: "rounded-full bg-[#263026] px-2.5 py-[5px]",
+		tagText: "text-xs font-semibold leading-4 text-[#dbe5d7]",
+		tags: "flex-row flex-wrap gap-2",
+		title: "text-lg font-extrabold leading-6 text-[#f5f8f1]",
+		titleStack: "flex-1 gap-1",
 	},
-	cardDescription: {
-		color: "#c5cec4",
-		fontSize: 14,
-		lineHeight: 20,
+	variants: {
+		disabled: {
+			false: {},
+			true: {
+				card: "opacity-[0.55]",
+				indicator: "bg-[#222822]",
+			},
+		},
+		selected: {
+			false: {},
+			true: {
+				card: "border-2 border-[#9ad66d]",
+				indicator: "bg-[#386626]",
+			},
+		},
 	},
-	cardDisabled: {
-		opacity: 0.55,
-	},
-	cardHeader: {
-		alignItems: "flex-start",
-		flexDirection: "row",
-		gap: 12,
-		justifyContent: "space-between",
-	},
-	cardSelected: {
-		borderColor: "#9ad66d",
-		borderWidth: 2,
-	},
-	cardTitle: {
-		color: "#f5f8f1",
-		fontSize: 16,
-		fontWeight: "700",
-		lineHeight: 22,
-	},
-	description: {
-		color: "#aeb7ac",
-		fontSize: 14,
-		lineHeight: 20,
-	},
-	disabledReason: {
-		color: "#e6b36a",
-		fontSize: 13,
-		lineHeight: 18,
-	},
-	empty: {
-		backgroundColor: "#111511",
-		borderColor: "#263026",
-		borderRadius: 12,
-		borderWidth: 1,
-		padding: 16,
-	},
-	emptyTitle: {
-		color: "#c5cec4",
-		fontSize: 14,
-		lineHeight: 20,
-	},
-	eyebrow: {
-		color: "#9ad66d",
-		fontSize: 12,
-		fontWeight: "700",
-		lineHeight: 16,
-		textTransform: "uppercase",
-	},
-	heading: {
-		gap: 6,
-	},
-	indicator: {
-		alignItems: "center",
-		backgroundColor: "#263026",
-		borderRadius: 999,
-		minWidth: 64,
-		paddingHorizontal: 10,
-		paddingVertical: 5,
-	},
-	indicatorDisabled: {
-		backgroundColor: "#222822",
-	},
-	indicatorSelected: {
-		backgroundColor: "#386626",
-	},
-	indicatorText: {
-		color: "#f5f8f1",
-		fontSize: 12,
-		fontWeight: "700",
-		lineHeight: 16,
-	},
-	list: {
-		gap: 10,
-	},
-	meta: {
-		flexDirection: "row",
-		flexWrap: "wrap",
-		gap: 8,
-	},
-	metaText: {
-		color: "#dbe5d7",
-		fontSize: 13,
-		lineHeight: 18,
-	},
-	root: {
-		gap: 12,
-	},
-	tag: {
-		backgroundColor: "#263026",
-		borderRadius: 999,
-		paddingHorizontal: 10,
-		paddingVertical: 5,
-	},
-	tagText: {
-		color: "#dbe5d7",
-		fontSize: 12,
-		fontWeight: "600",
-		lineHeight: 16,
-	},
-	tags: {
-		flexDirection: "row",
-		flexWrap: "wrap",
-		gap: 8,
-	},
-	title: {
-		color: "#f5f8f1",
-		fontSize: 18,
-		fontWeight: "800",
-		lineHeight: 24,
-	},
-	titleStack: {
-		flex: 1,
-		gap: 4,
+	defaultVariants: {
+		disabled: false,
+		selected: false,
 	},
 });
+
+const classNames = selectableCardListClassNames();

@@ -23,7 +23,7 @@ Stage 5/6은 구현에 맞춘 unit test contract sync, Stage 7은 E2E 시나리�
 
 | 구분 | 포함 | 제외 |
 |------|------|------|
-| Frontend Unit | route page, fe-ui Page/Feature/Widget owner spec의 테스트 섹션 | BE service/controller/repository |
+| Frontend Unit | route page, fe-ui Page/Feature owner spec의 테스트 섹션 | BE service/controller/repository |
 | Frontend E2E | `page.spec.md`, route `page.spec.md`의 E2E 시나리오 섹션 기준 사용자 화면 흐름/상호작용 spec 반영 | BE API E2E 시나리오 |
 
 ---
@@ -40,14 +40,14 @@ Stage 5/6은 구현에 맞춘 unit test contract sync, Stage 7은 E2E 시나리�
 
 ### 출력
 
-- route `page.spec.md` 또는 fe-ui Page/Feature/Widget owner spec의 `테스트 케이스` 섹션 갱신
+- route `page.spec.md` 또는 fe-ui Page/Feature owner spec의 `테스트 케이스` 섹션 갱신
 - 대상 예시:
   - `page.spec.md`
   - route `page.spec.md`의 E2E 시나리오 섹션
   - fe-ui Feature owner spec
-  - fe-ui Widget owner spec
+  - Widget/leaf 테스트 관점은 nearest route page 또는 Page/Feature owner spec
   - route `page.spec.md`의 Display/Control/State/Test 섹션
-  - 필요 시 route `page.spec.md` 또는 Page/Feature/Widget owner spec의 store/hook 테스트 섹션
+  - 필요 시 route `page.spec.md` 또는 Page/Feature owner spec의 store/hook 테스트 섹션
 
 ---
 
@@ -91,4 +91,20 @@ Stage 5/6은 구현에 맞춘 unit test contract sync, Stage 7은 E2E 시나리�
 | fe-e2e-builder | 분리 컨텍스트 |
 | qa-fe-e2e-testing | 후속 (E2E 구현/실행) |
 | req-be-test-planner | 분리 컨텍스트 |
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

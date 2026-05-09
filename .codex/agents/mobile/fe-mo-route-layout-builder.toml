@@ -27,6 +27,10 @@ Expo Router native runtime 기준의 `apps/mobile/src/app/**/_layout.tsx`를 구
 - 프로젝트 provider 는 직접 `heroui-native/provider`가 아니라 `@cocrepo/mo-ui`의 `DesignSystemProvider`를 우선 사용합니다.
 - Next.js `layout.tsx`, named slot, `@slot`, intercepting route 개념은 사용하지 않습니다.
 - `screenOptions`, `presentation`, `headerShown` 등 Expo Router / React Navigation native 규칙만 다룹니다.
+- layout component를 `observer`로 감쌀 때 `observer(function Name() { ... })` 패턴을 금지합니다.
+  - `const [LayoutName] = observer(() => { ... })` 형태로 선언한 뒤 `export default [LayoutName]`으로 내보냅니다.
+- layout shell 스타일은 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용하고 `StyleSheet`/`StyleSheet.create`는 만들지 않습니다.
+- `style` 객체는 React Navigation `screenOptions`처럼 className으로 표현하기 어려운 native option object에만 제한합니다.
 - 코드를 수정하면 route `index.spec.md`의 Layout/Shell 섹션을 함께 갱신합니다.
 
 ## Do
@@ -54,4 +58,20 @@ Expo Router native runtime 기준의 `apps/mobile/src/app/**/_layout.tsx`를 구
 - 사용한 navigator 종류
 - provider / shell ownership 변경점
 - 함께 갱신한 route `index.spec.md`의 Layout/Shell 섹션
+
+## Feedback Packet (Mandatory)
+
+이 role이 mobile orchestrator(`orch-mobile-stage`, `orch-mobile-screen-planner`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-route-contract | needs-backend-contract | needs-ui | needs-test | needs-reentry
+- feedback_type: none | route-contract-gap | backend-contract-gap | api-integration-gap | screen-contract-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

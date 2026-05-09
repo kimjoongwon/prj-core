@@ -2,9 +2,6 @@ import type { ReactElement } from "react";
 import { ScreenFrame, type ScreenFrameProps } from "./index";
 
 jest.mock("react-native", () => ({
-	StyleSheet: {
-		create: (styles: unknown) => styles,
-	},
 	View: "View",
 }));
 
@@ -34,7 +31,6 @@ describe("ScreenFrame", () => {
 
 		expect(frame.props.style).toEqual(
 			expect.arrayContaining([
-				expect.objectContaining({ flex: 1 }),
 				expect.objectContaining({
 					backgroundColor: "#0c0f0b",
 					paddingBottom: 30,
@@ -44,6 +40,7 @@ describe("ScreenFrame", () => {
 				}),
 			]),
 		);
+		expect(frame.props.className).toBe("flex-1");
 	});
 
 	it("선택한 edge에만 safe-area padding을 적용해야 한다", () => {

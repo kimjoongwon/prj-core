@@ -26,6 +26,8 @@ React Native / Expo Native 기준의 메뉴 primitive contract 를 `packages/fe-
 - Next.js App Router, route path 설계, 탭 URL 정책, admin menu constant 는 범위 밖입니다.
 - 기본 구현은 `heroui-native/menu`, `heroui-native/sub-menu` thin re-export 입니다.
 - expo-router 소비자는 가능하지만, route ownership 은 `apps/mobile` 쪽에서 가져갑니다.
+- 스타일이 필요한 경우 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용하고 `StyleSheet`/`StyleSheet.create`는 만들지 않습니다.
+- `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
 
 ## Do
 
@@ -45,4 +47,20 @@ React Native / Expo Native 기준의 메뉴 primitive contract 를 `packages/fe-
 - 사용한 upstream `heroui-native/*` 모듈
 - 변경한 공개 타입/별칭
 - 함께 갱신한 layout 배럴 경로
+
+## Feedback Packet (Mandatory)
+
+이 role이 mobile orchestrator(`orch-mobile-stage`, `orch-mobile-screen-planner`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-route-contract | needs-backend-contract | needs-ui | needs-test | needs-reentry
+- feedback_type: none | route-contract-gap | backend-contract-gap | api-integration-gap | screen-contract-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

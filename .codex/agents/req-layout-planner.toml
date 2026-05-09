@@ -24,7 +24,7 @@ developer_instructions = '''
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
 | 요구되는 Layout 타입 | ✅ | `Layout` |
-| 기존 owner spec | ✅ | route `page.spec.md` 또는 관련 Widget spec의 Layout Contract |
+| 기존 owner spec | ✅ | route `page.spec.md` 또는 관련 Page/Feature spec의 Layout Contract |
 | 참조 route layout contract | △ | route skeleton이 필요한 구조(page.spec.md 기준) |
 | 참조 surface 규칙 | △ | surface와 구조의 경계 |
 
@@ -32,7 +32,7 @@ developer_instructions = '''
 
 | 파일 | 동작 |
 |------|------|
-| route `page.spec.md`의 Layout Contract 섹션 또는 관련 fe-ui Widget spec | 생성/업데이트 |
+| route `page.spec.md`의 Layout Contract 섹션 또는 관련 fe-ui Page/Feature spec | 생성/업데이트 |
 
 ---
 
@@ -65,4 +65,20 @@ developer_instructions = '''
 | `req-route-layout-planner` | 참조 | route layout이 어떤 primitive를 요구하는지 제공 |
 | `req-surface-planner` | 협업 | 구조와 surface ownership 경계 정리 |
 | `fe-layout-builder` | 다음 단계 | 재사용 Layout primitive 구현 |
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

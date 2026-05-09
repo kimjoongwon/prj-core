@@ -35,6 +35,7 @@ export default observer(function OidcClientDetailPageRoute() {
 							clientSecret: client.clientSecret,
 							name: client.name,
 							isActive: client.isActive,
+							isFirstParty: client.isFirstParty,
 							skipConsent: client.skipConsent,
 							createdAt: client.createdAt,
 							loginUrl: client.loginUrl,

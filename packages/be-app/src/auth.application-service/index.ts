@@ -15,7 +15,7 @@ import {
 import {
 	AuthAuditLogService,
 	AuthCacheService,
-	applyFirstPartyOidcRuntimeConfig,
+	applyRuntimeManagedOidcClientConfig,
 	EmailService,
 	EmailVerificationService,
 	type GetAuditLogsResult,
@@ -920,7 +920,7 @@ export class AuthApplicationService {
 			throw new BadRequestException("Redirect URI가 설정되지 않았습니다");
 		}
 
-		const runtimeClient = applyFirstPartyOidcRuntimeConfig({
+		const runtimeClient = applyRuntimeManagedOidcClientConfig({
 			clientId: client.clientId,
 			clientSecret: client.clientSecret,
 			redirectUri,

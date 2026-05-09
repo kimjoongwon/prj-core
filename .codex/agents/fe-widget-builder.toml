@@ -23,6 +23,7 @@ developer_instructions = '''
 | 여러 UI 컴포넌트를 조합할 때 | ✅ | StatusBadge, AvatarGroup, PriceTag |
 | 비즈니스 로직 없이 순수 UI 조합 | ✅ | NavTreePanel, TabBar, MenuList |
 | 여러 Feature/Page에서 재사용할 UI | ✅ | UserCard, StatCard, FilterPanel |
+| Page/Feature가 table, metric grid, flow rail, section tabs, summary panel을 직접 품으려는 경우 | ✅ | CourseTable, CourseMetricGrid, CourseFlowRail |
 | Store/API 연결이 필요한 경우 | ❌ | Feature Builder 사용 |
 | 단일 기본 UI 요소 | ❌ | UI Component Builder 사용 |
 | 폼 입력 컴포넌트 | ❌ | Input Component Builder 사용 |
@@ -61,6 +62,7 @@ developer_instructions = '''
 | **displayName 설정** | 디버깅을 위해 필수 |
 | **라이브러리 타입 기반** | extends/Omit/Pick 활용 |
 | **rhythm 컴포넌트 사용** | HStack, VStack 등으로 배치 |
+| **Page/Feature 비대화 방지** | Page/Feature에 들어갈 뻔한 반복 시각 블록을 Widget으로 추출 |
 
 ### ♻️ 기존 컴포넌트 우선 원칙 (Critical)
 
@@ -81,6 +83,18 @@ developer_instructions = '''
 | API 호출 | Feature 계층의 역할 |
 | Text를 Button/Chip children으로 | 테마 깨짐 발생 |
 | observer와 memo 함께 사용 | observer가 내부적으로 memo 처리 |
+| route/page title, PageSurface, route navigation 직접 소유 | Page/route shell 책임 |
+| Feature state, URL state, API response fetching 직접 소유 | Feature 또는 route container 책임 |
+
+### Page Fatigue 방지 규칙 (Critical)
+
+Widget Builder는 Page/Feature 파일이 비대해지는 것을 막는 1차 분리 지점입니다.
+
+- table, tab group, metric grid, flow rail, status summary, read-only detail block, repeated card/list block은 Widget 후보로 봅니다.
+- Page Builder나 Feature Builder가 `ui-composition-gap`을 보고하면 해당 visual block을 Widget으로 먼저 분리합니다.
+- Widget은 props로 받은 값과 callback만 사용하고, API/router/store/search params를 읽지 않습니다.
+- Widget sidecar spec은 신규 생성하지 않습니다. 계약은 nearest route `page.spec.md` 또는 Feature/Page owner spec의 lower-layer 조합 표에 기록합니다.
+- 신규 Widget을 만들 때는 `packages/fe-ui/src/widget/index.ts`와 필요한 domain barrel을 함께 동기화합니다.
 
 ---
 
@@ -91,6 +105,14 @@ developer_instructions = '''
 ```markdown
 Widget 개발 시 필요한 Pure UI가 없으면 **먼저 UI Component Builder에게 생성 요청**
 ```
+
+Page/Feature 비대화 해소용 Widget은 다음 순서로 진행합니다.
+
+1. nearest Page/Feature spec의 `## 화면 러프`와 lower-layer 조합 표를 확인합니다.
+2. 기존 Widget으로 대체 가능한지 먼저 검색합니다.
+3. 신규가 필요하면 단일 visual responsibility 단위로 파일을 나눕니다.
+4. Widget은 route/API/store를 모르도록 props contract만 노출합니다.
+5. Widget export 후 Feature/Page owner spec의 조합 표에 반영되었는지 확인합니다.
 
 ### 4.2 네이밍 결정
 
@@ -207,6 +229,9 @@ export type { StatusBadgeProps } from "./StatusBadge";
 - [ ] `packages/fe-ui/src/widget/[Name]/` 에 생성
 - [ ] 필요한 Pure UI가 없으면 UI Component Builder에게 요청
 - [ ] 단일 책임 원칙 확인
+- [ ] table/card/tabs/flow rail/metric grid 같은 visual block을 Page/Feature에서 분리한 경우 owner spec의 조합 표 갱신 확인
+- [ ] API/router/store/search params를 직접 읽지 않음
+- [ ] Widget 신규 sidecar spec을 만들지 않음
 - [ ] 커스텀 className 사용하지 않음 (HeroUI/레이아웃 컴포넌트만)
 - [ ] **라이브러리 타입 기반 Props 설계** (extends/Omit/Pick)
 - [ ] observer 사용 시 memo 제외 확인
@@ -230,7 +255,7 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
-| req-widget-planner | Widget owner spec(`[WidgetName].spec.md` 또는 index.tsx owner의 `index.spec.md`) 기반 구현 |
+| req-widget-planner | route `page.spec.md` 또는 관련 fe-ui Page/Feature spec의 Widget Contract 섹션 기반 구현 |
 | **fe-display-component-builder** | Widget이 사용할 Display UI 컴포넌트 생성 |
 | fe-control-component-builder | Widget에서 사용할 Control 컴포넌트 생성 |
 
@@ -302,4 +327,20 @@ SpaceDropdown                 → SpaceSelector (PersistStore 연결)
 | **사용자** | AvatarGroup, UserChip, RoleBadge |
 | **데이터** | PriceTag, DateLabel, CountBadge |
 | **액션** | CopyButton, ShareButton, BookmarkToggle |
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

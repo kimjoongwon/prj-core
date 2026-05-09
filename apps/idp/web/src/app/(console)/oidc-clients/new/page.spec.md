@@ -26,6 +26,58 @@
 2. 필요한 의존 모듈을 호출해 데이터를 조합합니다.
 3. 결과를 렌더링/반환/전파합니다.
 
+## 화면 러프
+
+### Desktop
+
+```text
+(console) layout > children
+┌──────────────────────────────────────────────────────────────┐
+│ OidcClientCreatePage                                         │
+│ [목록으로] OIDC 클라이언트 등록                              │
+│                                                              │
+│ ┌──────────────────────────────────────────────────────────┐ │
+│ │ 클라이언트 설정                                          │ │
+│ │ 기본 정보 / 인증 설정 / Redirect URIs                    │ │
+│ │ □ First-party 클라이언트  □ 권한 동의 화면 생략          │ │
+│ │ submit payload: isFirstParty + gated skipConsent         │ │
+│ └──────────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### Tablet
+
+```text
+(console) layout > children
+┌──────────────────────────────────────────────┐
+│ [목록으로] OIDC 클라이언트 등록              │
+│ ┌──────────────────────────────────────────┐ │
+│ │ FormPageSurface                          │ │
+│ │ First-party / Consent 카드가 2열 또는    │ │
+│ │ 좁은 폭에서 1열로 전환된다.              │ │
+│ └──────────────────────────────────────────┘ │
+└──────────────────────────────────────────────┘
+```
+
+### Mobile
+
+```text
+(console) layout > children
+┌──────────────────────────────┐
+│ OIDC 클라이언트 등록          │
+│ [목록으로]                    │
+│ ┌──────────────────────────┐ │
+│ │ 기본 정보                │ │
+│ │ 인증 설정                │ │
+│ │ □ First-party            │ │
+│ │ □ 권한 동의 화면 생략    │ │
+│ │ First-party OFF면 false  │ │
+│ │ Redirect URIs / 추가 설정│ │
+│ └──────────────────────────┘ │
+│ [취소] [등록]                │
+└──────────────────────────────┘
+```
+
 ## 실패 및 엣지 케이스
 
 - 의존 모듈 응답 누락 시 안전한 기본값으로 처리합니다.
@@ -47,7 +99,7 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/oidc-clients/new/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 생성 mutation과 라우팅만 담당하고 `skipConsent`, `loginUi` 기본값을 포함한 로컬 폼 상태와 시각 조합은 `OidcClientCreatePage`가 소유합니다.
+- `page.tsx`는 생성 mutation과 라우팅만 담당하고 `isFirstParty`, `skipConsent`, `loginUi` 기본값을 포함한 로컬 폼 상태와 시각 조합은 `OidcClientCreatePage`가 소유합니다.
 
 ## Rendering Decision
 
@@ -62,6 +114,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-09 | 생성 route sidecar에 Desktop/Tablet/Mobile form 화면 러프와 first-party 기반 `skipConsent` 제출 기준을 추가 | codex |
+| 2026-05-09 | 생성 route-local form state에 `isFirstParty` 기본값을 추가 | codex |
 | 2026-05-05 | OIDC 클라이언트 생성 폼 상태에 공통/커스텀 로그인 화면 설정 기본값을 추가 | codex |
 | 2026-05-05 | OIDC 클라이언트 생성 폼 상태에 `skipConsent` 기본값을 추가 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |

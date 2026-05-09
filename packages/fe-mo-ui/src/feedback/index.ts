@@ -1,4 +1,5 @@
 export * from "./Alert";
+export * from "./BookingPolicySheet";
 export * from "./Skeleton";
 export * from "./SkeletonGroup";
 export * from "./Spinner";

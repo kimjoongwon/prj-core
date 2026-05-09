@@ -1,10 +1,10 @@
 "use client";
 
 import type { LanguageCode } from "@cocrepo/constant";
+import { useConsoleLocaleStore } from "@cocrepo/store";
 import { LanguageSelectButton, ThemeToggleButton, useT } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { useConsoleLocaleStore } from "@cocrepo/store";
 
 export const AuthLayoutShell = observer(function AuthLayoutShell({
 	children,

@@ -1,9 +1,10 @@
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { Button, ScreenFrame } from "@cocrepo/mo-ui";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import type { Href } from "expo-router";
+import { tv } from "tailwind-variants";
 import {
 	getAuthenticatedHomePath,
 	resolveAuthenticatedRoutePath,
@@ -21,7 +22,7 @@ const AUTH_CALLBACK_SCHEME = "kr.co.cocdev.onoramobile";
 const AUTH_CALLBACK_PATH = "auth/callback";
 const DEFAULT_NEXT_ROUTE = getAuthenticatedHomePath();
 
-export default observer(function AuthCallbackRoute() {
+const AuthCallbackRoute = observer(() => {
 	const router = useRouter();
 	const params = useLocalSearchParams() as Record<
 		string,
@@ -86,18 +87,21 @@ export default observer(function AuthCallbackRoute() {
 	};
 
 	return (
-		<ScreenFrame backgroundColor="#020617" contentStyle={styles.container}>
-			<Text style={styles.title}>
+		<ScreenFrame
+			className={classNames.screenFrame()}
+			contentClassName={classNames.container()}
+		>
+			<Text className={classNames.title()}>
 				{uiState.status === "error"
 					? "로그인이 완료되지 않았어요"
 					: "오노라로 돌아가는 중"}
 			</Text>
-			<Text style={styles.message}>{uiState.message}</Text>
+			<Text className={classNames.message()}>{uiState.message}</Text>
 
 			{uiState.status === "loading" && (
-				<View style={styles.statusRow}>
-					<ActivityIndicator color="#60a5fa" size="small" />
-					<Text style={styles.subText}>
+				<View className={classNames.statusRow()}>
+					<ActivityIndicator colorClassName="text-blue-400" size="small" />
+					<Text className={classNames.subText()}>
 						예약 정보를 안전하게 불러올 준비를 하고 있습니다.
 					</Text>
 				</View>
@@ -111,30 +115,17 @@ export default observer(function AuthCallbackRoute() {
 	);
 });
 
-const styles = StyleSheet.create({
-	container: {
-		alignItems: "center",
-		backgroundColor: "#020617",
-		flex: 1,
-		gap: 14,
-		justifyContent: "center",
-		padding: 20,
-	},
-	title: {
-		color: "#f8fafc",
-		fontSize: 24,
-		fontWeight: "800",
-	},
-	message: {
-		color: "#bfdbfe",
-		fontSize: 14,
-	},
-	subText: {
-		color: "#93c5fd",
-		fontSize: 13,
-	},
-	statusRow: {
-		alignItems: "center",
-		gap: 10,
+export default AuthCallbackRoute;
+
+const authCallbackRouteClassNames = tv({
+	slots: {
+		container: "flex-1 items-center justify-center gap-[14px] bg-slate-950 p-5",
+		message: "text-sm text-blue-200",
+		screenFrame: "bg-slate-950",
+		statusRow: "items-center gap-2.5",
+		subText: "text-[13px] text-blue-300",
+		title: "text-2xl font-extrabold text-slate-50",
 	},
 });
+
+const classNames = authCallbackRouteClassNames();

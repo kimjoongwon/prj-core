@@ -1,7 +1,10 @@
 "use client";
 
 import type { ServiceDocumentDto } from "@cocrepo/api/core/service-documents";
-import type { DataGridQueryStates, DataGridSetQueryStates } from "@cocrepo/type";
+import type {
+	DataGridQueryStates,
+	DataGridSetQueryStates,
+} from "@cocrepo/type";
 import {
 	Button,
 	Checkbox,
@@ -42,7 +45,8 @@ type ServiceDocumentPlatformValue = ServiceDocumentDto["platform"];
 type ServiceDocumentStatusValue = ServiceDocumentDto["status"];
 type ServiceDocumentFormatValue = ServiceDocumentDto["format"];
 
-export interface ServiceDocumentListPageQueryStates extends DataGridQueryStates {
+export interface ServiceDocumentListPageQueryStates
+	extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	search: string;
@@ -98,13 +102,14 @@ export interface ServiceDocumentListPageProps {
 	onClickDeleteButton: (serviceDocumentId: string) => Promise<void>;
 }
 
-const KIND_OPTIONS: Array<{ value: ServiceDocumentKindValue; label: string }> = [
-	{ value: "TERMS_OF_SERVICE", label: "서비스 이용약관" },
-	{ value: "PRIVACY_POLICY", label: "개인정보처리방침" },
-	{ value: "MARKETING_CONSENT", label: "마케팅 정보 수신 동의" },
-	{ value: "LOCATION_CONSENT", label: "위치정보 이용 동의" },
-	{ value: "THIRD_PARTY_SHARING", label: "제3자 제공 동의" },
-];
+const KIND_OPTIONS: Array<{ value: ServiceDocumentKindValue; label: string }> =
+	[
+		{ value: "TERMS_OF_SERVICE", label: "서비스 이용약관" },
+		{ value: "PRIVACY_POLICY", label: "개인정보처리방침" },
+		{ value: "MARKETING_CONSENT", label: "마케팅 정보 수신 동의" },
+		{ value: "LOCATION_CONSENT", label: "위치정보 이용 동의" },
+		{ value: "THIRD_PARTY_SHARING", label: "제3자 제공 동의" },
+	];
 
 const PLATFORM_OPTIONS: Array<{
 	value: ServiceDocumentPlatformValue;
@@ -263,13 +268,17 @@ export const ServiceDocumentListPage = observer(
 											items={KIND_FILTER_OPTIONS}
 										>
 											{(option) => (
-												<SelectItem key={option.value}>{option.label}</SelectItem>
+												<SelectItem key={option.value}>
+													{option.label}
+												</SelectItem>
 											)}
 										</Select>
 										<Select
 											key="platform-filter"
 											label="플랫폼"
-											selectedKeys={[getFilterSelectedKey(queryStates.platform)]}
+											selectedKeys={[
+												getFilterSelectedKey(queryStates.platform),
+											]}
 											onSelectionChange={(keys) =>
 												onChangePlatformFilter(
 													normalizeFilterValue(getSelectionValue(keys)),
@@ -278,7 +287,9 @@ export const ServiceDocumentListPage = observer(
 											items={PLATFORM_FILTER_OPTIONS}
 										>
 											{(option) => (
-												<SelectItem key={option.value}>{option.label}</SelectItem>
+												<SelectItem key={option.value}>
+													{option.label}
+												</SelectItem>
 											)}
 										</Select>
 										<Select
@@ -293,7 +304,9 @@ export const ServiceDocumentListPage = observer(
 											items={STATUS_FILTER_OPTIONS}
 										>
 											{(option) => (
-												<SelectItem key={option.value}>{option.label}</SelectItem>
+												<SelectItem key={option.value}>
+													{option.label}
+												</SelectItem>
 											)}
 										</Select>
 									</div>
@@ -312,25 +325,27 @@ export const ServiceDocumentListPage = observer(
 									<HStack
 										key="documents-header"
 										justifyContent="between"
-											alignItems="center"
-											fullWidth
-										>
-											<div key="documents-summary">
-												<p
-													key="documents-summary-title"
-													className="text-sm font-semibold text-foreground"
-												>
-													문서 목록
-												</p>
-												<p
-													key="documents-summary-count"
-													className="text-xs text-default-500"
-												>
-													총 {totalCount.toLocaleString("ko-KR")}개
-												</p>
+										alignItems="center"
+										fullWidth
+									>
+										<div key="documents-summary">
+											<p
+												key="documents-summary-title"
+												className="text-sm font-semibold text-foreground"
+											>
+												문서 목록
+											</p>
+											<p
+												key="documents-summary-count"
+												className="text-xs text-default-500"
+											>
+												총 {totalCount.toLocaleString("ko-KR")}개
+											</p>
 										</div>
-											{isLoading ? <Spinner key="documents-loading" size="sm" /> : null}
-										</HStack>
+										{isLoading ? (
+											<Spinner key="documents-loading" size="sm" />
+										) : null}
+									</HStack>
 									<Table
 										key="documents-table"
 										aria-label="서비스 문서 목록"
@@ -349,7 +364,9 @@ export const ServiceDocumentListPage = observer(
 										</TableHeader>
 										<TableBody
 											emptyContent={
-												isLoading ? "문서를 불러오는 중입니다." : "등록된 문서가 없습니다."
+												isLoading
+													? "문서를 불러오는 중입니다."
+													: "등록된 문서가 없습니다."
 											}
 											items={rows}
 										>
@@ -367,12 +384,16 @@ export const ServiceDocumentListPage = observer(
 																		key="document-icon"
 																		className="h-4 w-4 text-primary"
 																	/>
-																	<span key="document-title" className="font-medium">
+																	<span
+																		key="document-title"
+																		className="font-medium"
+																	>
 																		{document.title}
 																	</span>
 																</HStack>
 																<span className="text-xs text-default-500">
-																	{getKindLabel(document.kind)} · {document.locale}
+																	{getKindLabel(document.kind)} ·{" "}
+																	{document.locale}
 																</span>
 															</VStack>
 														</TableCell>
@@ -380,12 +401,18 @@ export const ServiceDocumentListPage = observer(
 															{getPlatformLabel(document.platform)}
 														</TableCell>
 														<TableCell>
-															<Chip color={status.color} size="sm" variant="flat">
+															<Chip
+																color={status.color}
+																size="sm"
+																variant="flat"
+															>
 																{status.label}
 															</Chip>
 														</TableCell>
 														<TableCell>{document.version}</TableCell>
-														<TableCell>{formatDate(document.publishedAt)}</TableCell>
+														<TableCell>
+															{formatDate(document.publishedAt)}
+														</TableCell>
 														<TableCell>
 															<HStack gap="dense" justifyContent="end">
 																<Button
@@ -407,7 +434,9 @@ export const ServiceDocumentListPage = observer(
 																	color="primary"
 																	aria-label="문서 게시"
 																	isDisabled={!canPublish}
-																	onPress={() => onClickPublishButton(document.id)}
+																	onPress={() =>
+																		onClickPublishButton(document.id)
+																	}
 																>
 																	<Rocket className="h-4 w-4" />
 																</Button>
@@ -417,7 +446,9 @@ export const ServiceDocumentListPage = observer(
 																	size="sm"
 																	variant="light"
 																	aria-label="문서 보관"
-																	onPress={() => onClickArchiveButton(document.id)}
+																	onPress={() =>
+																		onClickArchiveButton(document.id)
+																	}
 																>
 																	<Archive className="h-4 w-4" />
 																</Button>
@@ -428,7 +459,9 @@ export const ServiceDocumentListPage = observer(
 																	variant="light"
 																	color="danger"
 																	aria-label="문서 삭제"
-																	onPress={() => onClickDeleteButton(document.id)}
+																	onPress={() =>
+																		onClickDeleteButton(document.id)
+																	}
 																>
 																	<Trash2 className="h-4 w-4" />
 																</Button>
@@ -448,29 +481,29 @@ export const ServiceDocumentListPage = observer(
 								<HStack
 									key="form-header"
 									justifyContent="between"
-											alignItems="center"
-											fullWidth
+									alignItems="center"
+									fullWidth
+								>
+									<div key="form-title">
+										<p
+											key="form-title-heading"
+											className="text-sm font-semibold text-foreground"
 										>
-										<div key="form-title">
-											<p
-												key="form-title-heading"
-												className="text-sm font-semibold text-foreground"
-											>
-												{isEditing ? "문서 수정" : "새 문서"}
-											</p>
-											<p
-												key="form-title-description"
-												className="text-xs text-default-500"
-											>
-												{editingDocumentId
+											{isEditing ? "문서 수정" : "새 문서"}
+										</p>
+										<p
+											key="form-title-description"
+											className="text-xs text-default-500"
+										>
+											{editingDocumentId
 												? "초안 문서만 수정할 수 있습니다."
 												: "게시 전 초안으로 저장됩니다."}
 										</p>
-										</div>
-										<Button
-											key="close-form"
-											isIconOnly
-											size="sm"
+									</div>
+									<Button
+										key="close-form"
+										isIconOnly
+										size="sm"
 										variant="light"
 										aria-label="작성 취소"
 										onPress={onClickCancelFormButton}
@@ -539,7 +572,9 @@ export const ServiceDocumentListPage = observer(
 										className="md:col-span-2 xl:col-span-1"
 										label="제목"
 										value={draft.title}
-										onValueChange={(value) => onChangeDraftField("title", value)}
+										onValueChange={(value) =>
+											onChangeDraftField("title", value)
+										}
 									/>
 									<Input
 										key="draft-summary"
@@ -609,19 +644,19 @@ export const ServiceDocumentListPage = observer(
 										value={draft.content}
 										onValueChange={onChangeContentEditor}
 									/>
-									)}
-									<HStack key="form-actions" justifyContent="end" gap="inline">
-										<Button
-											key="cancel"
-											variant="flat"
-											onPress={onClickCancelFormButton}
-										>
-											취소
-										</Button>
-										<Button
-											key="submit"
-											color="primary"
-											isLoading={isSubmitting}
+								)}
+								<HStack key="form-actions" justifyContent="end" gap="inline">
+									<Button
+										key="cancel"
+										variant="flat"
+										onPress={onClickCancelFormButton}
+									>
+										취소
+									</Button>
+									<Button
+										key="submit"
+										color="primary"
+										isLoading={isSubmitting}
 										startContent={<Save className="h-4 w-4" />}
 										onPress={onClickSubmitButton}
 									>

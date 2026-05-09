@@ -26,6 +26,8 @@ test.describe("OIDC 클라이언트 목록 페이지", () => {
 		await expect(page.getByText("이름")).toBeVisible();
 		await expect(page.getByText("인증 방식")).toBeVisible();
 		await expect(page.getByText("Grant Types")).toBeVisible();
+		await expect(page.getByText("신뢰 구분")).toBeVisible();
+		await expect(page.getByText("Consent")).toBeVisible();
 	});
 
 	test("검색어 입력 시 필터링되어야 한다", async ({ page }) => {
@@ -53,5 +55,7 @@ test.describe("OIDC 클라이언트 등록 페이지", () => {
 
 		// Then: 등록 페이지 확인
 		await expect(page.getByText("클라이언트 등록")).toBeVisible();
+		await expect(page.getByText("First-party 클라이언트")).toBeVisible();
+		await expect(page.getByText("권한 동의 화면 생략")).toBeVisible();
 	});
 });

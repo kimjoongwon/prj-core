@@ -31,6 +31,7 @@ import { AbilitiesModule } from "./abilities";
 import { ActionsModule } from "./actions";
 import { AssetsModule } from "./assets";
 import { CategoriesModule } from "./categories";
+import { CoursesModule } from "./courses";
 // Global modules
 import { FoldersModule } from "./folders";
 import { globalModules } from "./global.module";
@@ -41,6 +42,7 @@ import { PoliciesModule } from "./policies";
 import { PolicyAssignmentsModule } from "./policy-assignments";
 import { PrismaModule } from "./prisma.module";
 import { RedisModule } from "./redis.module";
+import { ReservationsModule } from "./reservations";
 import { RolesModule } from "./roles";
 import { RoutinesModule } from "./routines";
 import { ServiceDocumentsModule } from "./service-documents";
@@ -94,11 +96,13 @@ const devtoolsImports = enableNestDevtools
 		TemplatesModule,
 		ServiceDocumentsModule,
 		TranslationsModule,
+		CoursesModule,
 		TimelinesModule,
 		TasksModule,
 		RoutinesModule,
 		InquiriesModule,
 		TenantAccessRequestsModule,
+		ReservationsModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/be-controller-builder.md
 		RouterModule.register([
@@ -173,6 +177,10 @@ const devtoolsImports = enableNestDevtools
 								module: TranslationsModule,
 							},
 							{
+								path: "courses",
+								module: CoursesModule,
+							},
+							{
 								path: "timelines",
 								module: TimelinesModule,
 							},
@@ -191,6 +199,10 @@ const devtoolsImports = enableNestDevtools
 							{
 								path: "tenant-access-requests",
 								module: TenantAccessRequestsModule,
+							},
+							{
+								path: "reservations",
+								module: ReservationsModule,
 							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],

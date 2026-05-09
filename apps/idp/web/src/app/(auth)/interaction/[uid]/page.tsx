@@ -6,6 +6,7 @@ import {
 	useGetInteraction,
 	useSubmitLogin,
 } from "@cocrepo/api/idp/interaction";
+import type { OidcClientLoginUi } from "@cocrepo/type";
 import { type LoginErrorResponse, OidcInteractionPage } from "@cocrepo/ui";
 import type { AxiosError } from "axios";
 import {
@@ -14,7 +15,6 @@ import {
 	reaction,
 	runInAction,
 } from "mobx";
-import type { OidcClientLoginUi } from "@cocrepo/type";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
@@ -309,6 +309,7 @@ const InteractionPage = observer(() => {
 		return (
 			<OidcInteractionPage
 				state={oidcInteractionPage}
+				onClickRecoveryButton={onClickRecoveryButton}
 				onAbortInteraction={onAbortInteraction}
 				onSubmitLoginForm={onSubmitLoginForm}
 				onConfirmConsent={onConfirmConsent}

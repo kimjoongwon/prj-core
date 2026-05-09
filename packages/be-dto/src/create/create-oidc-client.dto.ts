@@ -11,6 +11,7 @@ import { OidcClientDto } from "../oidc/oidc-client.dto";
  * - clientSecret: Confidential 클라이언트만 (Public은 null)
  * - redirectUris: 리다이렉트 URI 목록
  * - grantTypes: 허용할 Grant 타입
+ * - isFirstParty: 관리자 지정 first-party 여부
  * - isActive는 자동으로 true 설정
  */
 export class CreateOidcClientDto extends OmitType(OidcClientDto, [

@@ -1,6 +1,7 @@
 export { AssetFacade } from "./asset.facade";
 export { ActionFacade } from "./action.facade";
 export { CategoryFacade } from "./category.facade";
+export { CourseFacade } from "./course.facade";
 export { EmailVerificationFacade } from "./email-verification.facade";
 export { FolderFacade } from "./folder.facade";
 export { GroupFacade } from "./group.facade";
@@ -12,6 +13,7 @@ export { OidcSessionFacade } from "./oidc-session.facade";
 export { PolicyAssignmentFacade } from "./policy-assignment.facade";
 export { PolicyFacade } from "./policy.facade";
 export { RoleFacade } from "./role.facade";
+export { ReservationFacade } from "./reservation.facade";
 export { RoutineFacade } from "./routine.facade";
 export { SecurityPolicyFacade } from "./security-policy.facade";
 export { ServiceDocumentFacade } from "./service-document.facade";

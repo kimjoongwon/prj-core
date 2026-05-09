@@ -28,7 +28,7 @@
 | `inquiry/` | Inquiry/Thread/AI 로그 |
 | `oidc/` | OIDC client/model |
 | `platform/` | 운영 메타데이터 및 배포 이력 |
-| `scheduling/` | Timeline/Routine/Task |
+| `scheduling/` | Course/Reservation/Timeline/Routine/Task |
 | `taxonomy/` | Category/Group |
 | `wallet/` | SafeWallet |
 
@@ -60,6 +60,8 @@
 | `oidc/oidc-client.prisma` | `OidcClient` |
 | `oidc/oidc-model.prisma` | `OidcModel` |
 | `platform/reference-data-migration.prisma` | `ReferenceDataMigrationHistory` |
+| `scheduling/course.prisma` | `Course` |
+| `scheduling/reservation.prisma` | `Reservation` |
 | `scheduling/routine.prisma` | `Routine` |
 | `scheduling/task.prisma` | `Task` |
 | `scheduling/timeline.prisma` | `Timeline` |
@@ -91,6 +93,8 @@
 | `oidc/oidc-client.prisma` | `OidcClient` |
 | `oidc/oidc-model.prisma` | `OidcModel` |
 | `platform/reference-data-migration.prisma` | `ReferenceDataMigrationHistory` |
+| `scheduling/course.prisma` | `Course` |
+| `scheduling/reservation.prisma` | `Reservation` |
 | `scheduling/routine.prisma` | `Routine` |
 | `scheduling/task.prisma` | `Task` |
 | `scheduling/timeline.prisma` | `Timeline` |
@@ -133,6 +137,8 @@
 | `oidc/oidc-client.prisma` | `OidcClient` |
 | `oidc/oidc-model.prisma` | `OidcModel` |
 | `platform/reference-data-migration.prisma` | `ReferenceDataMigrationHistory` |
+| `scheduling/course.prisma` | `Course`, `CourseOffering`, `Enrollment`, `CoursePass`, `CourseStatus`, `CourseOfferingStatus`, `EnrollmentStatus`, `CoursePassStatus`, `CoursePassKind`, `PaymentStatus`, `TimelineProvisioningMode` |
+| `scheduling/reservation.prisma` | `Reservation`, `ReservationStatus` |
 | `scheduling/routine.prisma` | `Routine`, `Activity` |
 | `scheduling/task.prisma` | `Task`, `Exercise` |
 | `scheduling/timeline.prisma` | `Timeline`, `Session`, `Program`, `SessionTypes`, `RepeatCycleTypes`, `RecurringDayOfWeek` |

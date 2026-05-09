@@ -307,9 +307,12 @@ function getSubjectDisplayLabel(subject: {
 		return subject.displayName;
 	}
 
-	return subject.name.includes(":")
-		? subject.name.split(":").at(-1)!
-		: subject.name;
+	if (!subject.name.includes(":")) {
+		return subject.name;
+	}
+
+	const parts = subject.name.split(":");
+	return parts[parts.length - 1] ?? subject.name;
 }
 
 function getSubjectUsageDescription(subject: {

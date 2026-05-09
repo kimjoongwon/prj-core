@@ -46,6 +46,10 @@ model Timeline {
   space       Space     @relation(fields: [spaceId], references: [id])
   creator     User?     @relation(fields: [creatorId], references: [id])
   sessions    Session[]
+  courseOfferings CourseOffering[]
+  assignedEnrollments Enrollment[]
+  coursePasses CoursePass[]
+  reservations Reservation[]
 
   @@index([spaceId])
   @@index([spaceId, createdAt])
@@ -76,6 +80,7 @@ model Session {
   description        String?
   programs           Program[]
   timeline           Timeline            @relation(fields: [timelineId], references: [id])
+  reservations       Reservation[]
 
   @@index([timelineId, startDateTime])
   @@index([startDateTime, endDateTime])
@@ -107,6 +112,7 @@ model Program {
   routine             Routine           @relation(fields: [routineId], references: [id])
   session             Session           @relation(fields: [sessionId], references: [id])
   programActivities   ProgramActivity[]
+  reservations        Reservation[]
 
   @@unique([sessionId, routineId])
   @@index([sessionId])

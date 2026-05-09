@@ -1,7 +1,4 @@
-import {
-	applyFirstPartyOidcRuntimeConfig,
-	isFirstPartyOidcClientId,
-} from "@cocrepo/service";
+import { applyRuntimeManagedOidcClientConfig } from "@cocrepo/service";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import type { OidcConfig } from "../../../config/oidc.config";
@@ -16,6 +13,7 @@ import type {
 } from "../types";
 
 interface RuntimeOidcProviderClient extends OidcClientConfig {
+	isFirstParty: boolean;
 	skipConsent: boolean;
 }
 
@@ -45,10 +43,7 @@ export class OidcConfigurationService {
 		const clients = await this.loadClients();
 		const skipConsentClientIds = new Set(
 			clients
-				.filter(
-					(client) =>
-						client.skipConsent && isFirstPartyOidcClientId(client.client_id),
-				)
+				.filter((client) => client.isFirstParty && client.skipConsent)
 				.map((client) => client.client_id),
 		);
 
@@ -167,7 +162,7 @@ export class OidcConfigurationService {
 				);
 			}
 			return clients.map((client) => {
-				const runtimeClient = applyFirstPartyOidcRuntimeConfig(client);
+				const runtimeClient = applyRuntimeManagedOidcClientConfig(client);
 
 				return {
 					client_id: runtimeClient.clientId,
@@ -181,6 +176,7 @@ export class OidcConfigurationService {
 					logo_uri: runtimeClient.logoUri ?? undefined,
 					policy_uri: runtimeClient.policyUri ?? undefined,
 					tos_uri: runtimeClient.tosUri ?? undefined,
+					isFirstParty: runtimeClient.isFirstParty,
 					skipConsent: runtimeClient.skipConsent,
 				};
 			});

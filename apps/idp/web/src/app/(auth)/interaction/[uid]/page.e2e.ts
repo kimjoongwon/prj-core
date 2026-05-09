@@ -42,6 +42,20 @@ test.describe("OIDC 로그인 인터랙션", () => {
 			await expect(page.getByRole("button", { name: "로그인" })).toBeVisible();
 		});
 
+		test("모바일 폭에서도 로그인 폼 주요 액션이 표시되어야 한다", async ({
+			page,
+		}) => {
+			// Given: 모바일 viewport에서 OIDC 로그인 폼 진입
+			await page.setViewportSize({ width: 360, height: 740 });
+			await navigateToLoginForm(page);
+
+			// Then: 핵심 입력과 CTA가 모바일 폭 안에서 표시됨
+			await expect(getLoginHeading(page)).toBeVisible();
+			await expect(page.getByLabel("이메일")).toBeVisible();
+			await expect(page.getByLabel("비밀번호")).toBeVisible();
+			await expect(page.getByRole("button", { name: "로그인" })).toBeVisible();
+		});
+
 		test("비밀번호를 잊으셨나요? 링크가 표시되어야 한다", async ({ page }) => {
 			// Given: 로그인 폼 진입
 			await navigateToLoginForm(page);

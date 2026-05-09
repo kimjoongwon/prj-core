@@ -30,9 +30,7 @@ export class TasksRepository {
 		const where: Prisma.TaskWhereInput = {
 			removedAt: null,
 			...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
-			...(contentLanguageCode
-				? { space: { contentLanguageCode } }
-				: {}),
+			...(contentLanguageCode ? { space: { contentLanguageCode } } : {}),
 			exercise: {
 				is: {
 					removedAt: null,

@@ -33,7 +33,7 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 |------|------|------|
 | **입력** | Repository 클래스 | `@cocrepo/repository` |
 | | 비즈니스 요구사항 | 도메인 로직 |
-| **출력** | Service 클래스 | `packages/be-service/src/{name}.service/index.ts` |
+| **출력** | Service 클래스 | `packages/be-service/src/{name}.service.ts` |
 | | Service contract | route `page.spec.md` 또는 logic handoff의 Service Contract 섹션 |
 | | index.ts 업데이트 | export 추가 |
 
@@ -128,8 +128,8 @@ constructor(
 
 ### 파일 배치 규칙
 
-- 폴더명은 `xxx.service`
-- 구현 파일은 `index.ts`
+- Service 구현 파일은 `packages/be-service/src/{name}.service.ts` 단일 파일로 생성합니다.
+- 폴더형 Service(예: `xxx.service` 디렉터리 안의 `index.ts`) 생성은 금지합니다.
 - 별도 sidecar spec은 만들지 않고 route `page.spec.md` 또는 logic handoff의 Service Contract 섹션을 갱신
 - 배럴 export는 `packages/be-service/src/index.ts`에서 유지
 
@@ -299,7 +299,7 @@ export class OrderService {
 ### 파일 위치
 
 ```
-packages/be-service/src/{entity}.service/index.ts
+packages/be-service/src/{entity}.service.ts
 ```
 
 ### 네이밍 규칙 상세
@@ -369,4 +369,20 @@ if (!tenant?.spaceId) {
 
 - Repository: `packages/be-repository/src/{entity}.repository.ts`
 - Entity: `packages/be-entity/src/{entity}.ts`
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

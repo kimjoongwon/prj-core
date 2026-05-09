@@ -20,10 +20,9 @@ developer_instructions = '''
 - Expo Router native route screen `index.tsx` -> 같은 route 폴더의 `index.spec.md`
 - fe-ui Page component -> 같은 폴더의 `[PageName].spec.md`
 - fe-ui Feature component -> 같은 component owner 위치의 `[FeatureName].spec.md`
-- fe-ui Widget component -> 같은 component owner 위치의 `[WidgetName].spec.md` 또는 `index.tsx` owner의 `index.spec.md`
 - fe-mo-ui Screen component -> 같은 폴더의 `[ScreenName].spec.md`
 
-Backend, Store, hook, type, barrel, layout, test/e2e, fe-ui leaf(display/control/cell/columns/form/detail/layout/data-grid), fe-mo-ui leaf(action/input/selection/navigation/data-display/feedback/layout/surface/design-system)에는 별도 sidecar spec을 만들지 않습니다.
+Backend, Store, hook, type, barrel, layout, test/e2e, fe-ui leaf(display/control/cell/columns/widget/collection/form/detail/layout/data-grid), fe-mo-ui leaf/action 조합 계층(action/input/selection/navigation/data-display/feedback/layout/surface/design-system/widget/feature/form/detail)에는 별도 sidecar spec을 만들지 않습니다.
 금지 계층에서 추출한 계약은 nearest allowed owner에 기록합니다.
 
 ## 입력
@@ -33,13 +32,13 @@ Backend, Store, hook, type, barrel, layout, test/e2e, fe-ui leaf(display/control
 | domain | ✅ | 분석할 도메인 이름 |
 | app | △ | web app 또는 mobile app 범위 |
 | routes | △ | 역기획할 route 목록 |
-| components | △ | 역기획할 fe-ui Page/Feature/Widget 목록 |
+| components | △ | 역기획할 fe-ui Page/Feature 또는 fe-mo-ui Screen 목록 |
 
 ## 출력
 
 - web route 분석 결과: 해당 route의 `page.spec.md`
 - mobile route screen 분석 결과: 해당 route의 `index.spec.md`
-- fe-ui Page/Feature/Widget 분석 결과: 해당 component owner spec
+- fe-ui Page/Feature 분석 결과: 해당 component owner spec
 - backend/API/DTO/Entity/Service/Repository/Store/Menu/Layout/Test 관점: 위 허용 owner spec의 섹션으로 반영
 
 ## 분석 매핑
@@ -51,9 +50,8 @@ Backend, Store, hook, type, barrel, layout, test/e2e, fe-ui leaf(display/control
 | fe-mo-ui Screen component | `[ScreenName].spec.md` |
 | fe-ui Page component | `[PageName].spec.md` |
 | fe-ui Feature component | `[FeatureName].spec.md` |
-| fe-ui Widget component | `[WidgetName].spec.md` 또는 index owner spec |
 | Backend/API/DTO/Entity/Prisma/Repository/Service | route owner spec의 Backend/API/Data Contract 섹션 |
-| Store/local state | route owner spec 또는 Feature/Widget owner spec의 State 섹션 |
+| Store/local state | route owner spec 또는 Feature owner spec의 State 섹션 |
 | Test/E2E | route/component owner spec의 Test 섹션 |
 
 ## 프로세스
@@ -71,7 +69,22 @@ Backend, Store, hook, type, barrel, layout, test/e2e, fe-ui leaf(display/control
 - mobile route/native wiring 계약을 `index.spec.md` 밖에 분산함
 - fe-mo-ui Screen visual contract를 `[ScreenName].spec.md` 밖에 분산함
 - Next.js route 계약을 `page.spec.md` 밖에 분산함
-- fe-ui Page/Feature/Widget이 아닌 leaf 계층에 spec을 둠
+- fe-ui Page/Feature, fe-mo-ui Screen이 아닌 leaf/조합 계층에 spec을 둠
 - backend/store/test/layout 전용 sidecar를 새로 만듦
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
 
 '''

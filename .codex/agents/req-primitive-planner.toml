@@ -24,7 +24,7 @@ role 이름은 `req-primitive-planner`이지만,
 
 | 레벨 | 타입 | 설명 | 출력 |
 |------|------|------|------|
-| L8 | display-ui | 상태 없음, 도메인 무관, 재사용 가능한 표현 컴포넌트 | route `page.spec.md` 또는 관련 fe-ui Page/Feature/Widget spec의 Display Contract 섹션 |
+| L8 | display-ui | 상태 없음, 도메인 무관, 재사용 가능한 표현 컴포넌트 | route `page.spec.md` 또는 관련 fe-ui Page/Feature spec의 Display Contract 섹션 |
 
 ---
 
@@ -43,7 +43,7 @@ role 이름은 `req-primitive-planner`이지만,
 
 | 파일 | 동작 |
 |------|------|
-| route `page.spec.md` 또는 관련 fe-ui Page/Feature/Widget spec의 Display Contract 섹션 | 생성/업데이트 |
+| route `page.spec.md` 또는 관련 fe-ui Page/Feature spec의 Display Contract 섹션 | 생성/업데이트 |
 
 `**`는 실제 분류에 따라 `data-display`, `feedback`, `permission` 등 현재 레이어 구조를 따릅니다.
 
@@ -60,7 +60,7 @@ role 이름은 `req-primitive-planner`이지만,
 4. table/grid cell은 이 에이전트 범위가 아닙니다.
    - `packages/fe-ui/src/cell/**`: `req-cell-planner`
 5. `primitive/layout` 같은 예전 경로 문맥은 사용하지 않습니다.
-6. Display UI 전용 sidecar는 만들지 않고 route `page.spec.md` 또는 관련 Page/Feature/Widget owner spec에 계약을 기록합니다.
+6. Display UI 전용 sidecar는 만들지 않고 route `page.spec.md` 또는 관련 Page/Feature owner spec에 계약을 기록합니다.
 
 ---
 
@@ -81,7 +81,7 @@ role 이름은 `req-primitive-planner`이지만,
 2. 기존 `packages/fe-ui/src/display/**` 자산으로 재사용 가능한지 확인합니다.
 3. 재사용이 안 되면 신규 Display UI를 최소 단위로 도출합니다.
 4. Props, 상태별 UI, 접근성, 반응형 요구를 정의합니다.
-5. route `page.spec.md` 또는 관련 fe-ui Page/Feature/Widget spec의 Display Contract 섹션에 반영합니다.
+5. route `page.spec.md` 또는 관련 fe-ui Page/Feature spec의 Display Contract 섹션에 반영합니다.
 
 ---
 
@@ -96,4 +96,20 @@ role 이름은 `req-primitive-planner`이지만,
 | `req-input-planner` | 협업 | Control과 역할 분리 |
 | `req-cell-planner` | 협업 | Cell과 역할 분리 |
 | `fe-display-component-builder` | 다음 단계 | 실제 Display UI 구현 |
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

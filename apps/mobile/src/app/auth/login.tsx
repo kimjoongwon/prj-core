@@ -4,7 +4,6 @@ import type { Href } from "expo-router";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import type { ComponentType } from "react";
-import { StyleSheet } from "react-native";
 import { WebView, type WebViewProps } from "react-native-webview";
 import {
 	getAuthenticatedHomePath,
@@ -26,6 +25,10 @@ const AUTH_API_LOGIN_PATH = "/api/v1/auth/login";
 const AUTH_WEB_LOGIN_PATH = "/auth/login";
 const OIDC_AUTH_PATH = "/oidc/auth";
 const LoginWebView = WebView as unknown as ComponentType<WebViewProps>;
+const WEB_VIEW_STYLE = {
+	backgroundColor: "#ffffff",
+	flex: 1,
+} as const;
 
 interface LoginWebViewRequest {
 	url: string;
@@ -99,7 +102,7 @@ const buildCallbackRouteParams = (url: string, targetReturnTo: string) => {
 	}
 };
 
-export default observer(function AuthLoginRoute() {
+const AuthLoginRoute = observer(() => {
 	const router = useRouter();
 	const rawParams = useLocalSearchParams() as Record<
 		string,
@@ -201,8 +204,8 @@ export default observer(function AuthLoginRoute() {
 
 	return (
 		<ScreenFrame
-			backgroundColor="#ffffff"
-			contentStyle={styles.container}
+			className="bg-white"
+			contentClassName="flex-1 bg-white"
 			edges={[]}
 		>
 			<LoginWebView
@@ -217,20 +220,11 @@ export default observer(function AuthLoginRoute() {
 				sharedCookiesEnabled
 				source={{ uri: webViewUrl }}
 				startInLoadingState
-				style={styles.webView}
+				style={WEB_VIEW_STYLE}
 				thirdPartyCookiesEnabled
 			/>
 		</ScreenFrame>
 	);
 });
 
-const styles = StyleSheet.create({
-	container: {
-		backgroundColor: "#ffffff",
-		flex: 1,
-	},
-	webView: {
-		backgroundColor: "#ffffff",
-		flex: 1,
-	},
-});
+export default AuthLoginRoute;

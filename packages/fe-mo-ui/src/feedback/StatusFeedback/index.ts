@@ -1,13 +1,13 @@
 import { createElement, type ReactNode } from "react";
 import {
 	Pressable,
-	StyleSheet,
 	Text,
 	View,
 	type PressableProps,
 	type ViewProps,
 } from "react-native";
 import { observer } from "mobx-react-lite";
+import { tv } from "tailwind-variants";
 
 export type StatusFeedbackStatus =
 	| "idle"
@@ -41,7 +41,7 @@ const renderDescription = (description: ReactNode) => {
 		return null;
 	}
 
-	return createElement(Text, { style: styles.description }, description);
+	return createElement(Text, { className: classNames.description() }, description);
 };
 
 const renderAction = (
@@ -52,6 +52,10 @@ const renderAction = (
 	if (!label) {
 		return null;
 	}
+	const actionClassNames = statusFeedbackClassNames({
+		actionVariant: variant,
+		disabled: !onPress,
+	});
 
 	return createElement(
 		Pressable,
@@ -61,19 +65,12 @@ const renderAction = (
 			disabled: !onPress,
 			key: variant,
 			onPress: onPress as PressableProps["onPress"],
-			style: [
-				styles.action,
-				variant === "primary" ? styles.primaryAction : styles.secondaryAction,
-				!onPress ? styles.actionDisabled : null,
-			],
+			className: actionClassNames.action(),
 		},
 		createElement(
 			Text,
 			{
-				style:
-					variant === "primary"
-						? styles.primaryActionText
-						: styles.secondaryActionText,
+				className: actionClassNames.actionText(),
 			},
 			label,
 		),
@@ -97,41 +94,7 @@ const renderActions = (props: StatusFeedbackProps) => {
 		return null;
 	}
 
-	return createElement(View, { style: styles.actions }, actions);
-};
-
-const getRootStatusStyle = (status: StatusFeedbackStatus) => {
-	switch (status) {
-		case "empty":
-			return styles.emptyRoot;
-		case "error":
-			return styles.errorRoot;
-		case "loading":
-			return styles.loadingRoot;
-		case "submitting":
-			return styles.submittingRoot;
-		case "success":
-			return styles.successRoot;
-		default:
-			return styles.idleRoot;
-	}
-};
-
-const getBadgeStatusStyle = (status: StatusFeedbackStatus) => {
-	switch (status) {
-		case "empty":
-			return styles.emptyBadge;
-		case "error":
-			return styles.errorBadge;
-		case "loading":
-			return styles.loadingBadge;
-		case "submitting":
-			return styles.submittingBadge;
-		case "success":
-			return styles.successBadge;
-		default:
-			return styles.idleBadge;
-	}
+	return createElement(View, { className: classNames.actions() }, actions);
 };
 
 const StatusFeedbackComponent = observer((props: StatusFeedbackProps) => {
@@ -156,6 +119,7 @@ const StatusFeedbackComponent = observer((props: StatusFeedbackProps) => {
 		status,
 		title,
 	};
+	const slotClassNames = statusFeedbackClassNames({ status });
 
 	return createElement(
 		View,
@@ -165,18 +129,23 @@ const StatusFeedbackComponent = observer((props: StatusFeedbackProps) => {
 			accessibilityState: {
 				busy: isBusy,
 			},
-			style: [styles.root, getRootStatusStyle(status), style],
+			className: slotClassNames.root(),
+			style,
 		},
-		createElement(View, { style: styles.header }, [
+		createElement(View, { className: slotClassNames.header() }, [
 			createElement(
 				View,
 				{
+					className: slotClassNames.badge(),
 					key: "badge",
-					style: [styles.badge, getBadgeStatusStyle(status)],
 				},
-				createElement(Text, { style: styles.badgeText }, STATUS_LABELS[status]),
+				createElement(
+					Text,
+					{ className: slotClassNames.badgeText() },
+					STATUS_LABELS[status],
+				),
 			),
-			createElement(Text, { key: "title", style: styles.title }, title),
+			createElement(Text, { className: slotClassNames.title(), key: "title" }, title),
 		]),
 		renderDescription(description),
 		renderActions(actionProps),
@@ -187,107 +156,67 @@ StatusFeedbackComponent.displayName = "StatusFeedback";
 
 export const StatusFeedback = StatusFeedbackComponent;
 
-const styles = StyleSheet.create({
-	action: {
-		alignItems: "center",
-		borderRadius: 999,
-		minHeight: 42,
-		paddingHorizontal: 16,
-		paddingVertical: 10,
+const statusFeedbackClassNames = tv({
+	slots: {
+		action: "min-h-[42px] items-center rounded-full px-4 py-2.5",
+		actionText: "text-sm leading-[18px]",
+		actions: "flex-row flex-wrap gap-2.5",
+		badge: "self-start rounded-full px-2.5 py-[5px]",
+		badgeText: "text-xs font-bold leading-4 text-[#f5f8f1]",
+		description: "text-sm leading-5 text-[#c5cec4]",
+		header: "gap-2.5",
+		root: "gap-3 rounded-xl border bg-[#151915] p-4",
+		title: "text-[17px] font-extrabold leading-[23px] text-[#f5f8f1]",
 	},
-	actionDisabled: {
-		opacity: 0.45,
+	variants: {
+		actionVariant: {
+			primary: {
+				action: "bg-[#9ad66d]",
+				actionText: "font-extrabold text-[#10200d]",
+			},
+			secondary: {
+				action: "bg-[#263026]",
+				actionText: "font-bold text-[#f5f8f1]",
+			},
+		},
+		disabled: {
+			false: {},
+			true: {
+				action: "opacity-[0.45]",
+			},
+		},
+		status: {
+			empty: {
+				badge: "bg-gray-700",
+				root: "border-gray-700",
+			},
+			error: {
+				badge: "bg-[#8f2923]",
+				root: "border-[#8f2923]",
+			},
+			idle: {
+				badge: "bg-[#263026]",
+				root: "border-[#2b342c]",
+			},
+			loading: {
+				badge: "bg-[#2f5f98]",
+				root: "border-[#2f5f98]",
+			},
+			submitting: {
+				badge: "bg-[#6b5d1f]",
+				root: "border-[#6b5d1f]",
+			},
+			success: {
+				badge: "bg-[#386626]",
+				root: "border-[#386626]",
+			},
+		},
 	},
-	actions: {
-		flexDirection: "row",
-		flexWrap: "wrap",
-		gap: 10,
-	},
-	badge: {
-		alignSelf: "flex-start",
-		borderRadius: 999,
-		paddingHorizontal: 10,
-		paddingVertical: 5,
-	},
-	badgeText: {
-		color: "#f5f8f1",
-		fontSize: 12,
-		fontWeight: "700",
-		lineHeight: 16,
-	},
-	description: {
-		color: "#c5cec4",
-		fontSize: 14,
-		lineHeight: 20,
-	},
-	emptyBadge: {
-		backgroundColor: "#374151",
-	},
-	emptyRoot: {
-		borderColor: "#374151",
-	},
-	errorBadge: {
-		backgroundColor: "#8f2923",
-	},
-	errorRoot: {
-		borderColor: "#8f2923",
-	},
-	header: {
-		gap: 10,
-	},
-	idleBadge: {
-		backgroundColor: "#263026",
-	},
-	idleRoot: {
-		borderColor: "#2b342c",
-	},
-	loadingBadge: {
-		backgroundColor: "#2f5f98",
-	},
-	loadingRoot: {
-		borderColor: "#2f5f98",
-	},
-	primaryAction: {
-		backgroundColor: "#9ad66d",
-	},
-	primaryActionText: {
-		color: "#10200d",
-		fontSize: 14,
-		fontWeight: "800",
-		lineHeight: 18,
-	},
-	root: {
-		backgroundColor: "#151915",
-		borderRadius: 12,
-		borderWidth: 1,
-		gap: 12,
-		padding: 16,
-	},
-	secondaryAction: {
-		backgroundColor: "#263026",
-	},
-	secondaryActionText: {
-		color: "#f5f8f1",
-		fontSize: 14,
-		fontWeight: "700",
-		lineHeight: 18,
-	},
-	submittingBadge: {
-		backgroundColor: "#6b5d1f",
-	},
-	submittingRoot: {
-		borderColor: "#6b5d1f",
-	},
-	successBadge: {
-		backgroundColor: "#386626",
-	},
-	successRoot: {
-		borderColor: "#386626",
-	},
-	title: {
-		color: "#f5f8f1",
-		fontSize: 17,
-		fontWeight: "800",
-		lineHeight: 23,
+	defaultVariants: {
+		actionVariant: "primary",
+		disabled: false,
+		status: "idle",
 	},
 });
+
+const classNames = statusFeedbackClassNames();

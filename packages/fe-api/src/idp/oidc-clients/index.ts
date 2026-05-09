@@ -1,2 +1,2 @@
-export * from "./oidc-clients";
 export type { OidcClientDto } from "../model/oidcClientDto";
+export * from "./oidc-clients";

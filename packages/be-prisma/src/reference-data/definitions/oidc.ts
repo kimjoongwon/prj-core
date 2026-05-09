@@ -34,6 +34,7 @@ export interface OidcClientSeedData {
 	tokenEndpointAuthMethod: string;
 	scope: string;
 	isActive: boolean;
+	isFirstParty?: boolean;
 	skipConsent?: boolean;
 	loginUi?: OidcClientLoginUi | null;
 	logoUri?: string | null;
@@ -123,6 +124,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tokenEndpointAuthMethod: "client_secret_post",
 		scope: "openid profile email roles",
 		isActive: true,
+		isFirstParty: true,
 		skipConsent: true,
 		loginUi: {
 			variant: "branded",
@@ -149,6 +151,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tokenEndpointAuthMethod: "client_secret_post",
 		scope: "openid profile email roles",
 		isActive: true,
+		isFirstParty: true,
 		skipConsent: true,
 		loginUi: null,
 		logoUri: null,
@@ -167,6 +170,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tokenEndpointAuthMethod: "none", // Public client
 		scope: "openid profile email",
 		isActive: true,
+		isFirstParty: true,
 		skipConsent: true,
 		loginUi: {
 			variant: "compact",
@@ -193,6 +197,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tokenEndpointAuthMethod: "client_secret_post",
 		scope: "openid profile email roles",
 		isActive: true,
+		isFirstParty: true,
 		skipConsent: true,
 		loginUi: {
 			variant: "branded",
@@ -219,6 +224,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tokenEndpointAuthMethod: "none",
 		scope: "openid profile email roles",
 		isActive: true,
+		isFirstParty: true,
 		skipConsent: true,
 		loginUi: null,
 		logoUri: null,

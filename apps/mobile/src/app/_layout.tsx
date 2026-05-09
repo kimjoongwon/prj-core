@@ -6,7 +6,7 @@ import { setIdpBaseUrl, setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
 import { DesignSystemProvider } from "@cocrepo/mo-ui";
 import type { ComponentType, PropsWithChildren } from "react";
 import { useEffect } from "react";
-import { StyleSheet, type ViewProps } from "react-native";
+import { type ViewProps } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthSessionGate } from "@/auth/AuthSessionGate";
@@ -19,6 +19,10 @@ void SplashScreen.preventAutoHideAsync();
 const GestureRootView = GestureHandlerRootView as ComponentType<
 	PropsWithChildren<ViewProps>
 >;
+
+const GESTURE_ROOT_STYLE = {
+	flex: 1,
+} as const;
 
 const mobileQueryClient = new QueryClient({
 	defaultOptions: {
@@ -38,7 +42,7 @@ export default function RootLayout() {
 	}, []);
 
 	return (
-		<GestureRootView style={styles.root}>
+		<GestureRootView style={GESTURE_ROOT_STYLE}>
 			<SafeAreaProvider>
 				<DesignSystemProvider>
 					<QueryClientProvider client={mobileQueryClient}>
@@ -51,9 +55,3 @@ export default function RootLayout() {
 		</GestureRootView>
 	);
 }
-
-const styles = StyleSheet.create({
-	root: {
-		flex: 1,
-	},
-});

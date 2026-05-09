@@ -11,10 +11,10 @@
  */
 import type { InquiryCategory } from "./inquiryCategory";
 import type { InquiryChannel } from "./inquiryChannel";
+import type { InquiryDtoSentiment } from "./inquiryDtoSentiment";
+import type { InquiryPriority } from "./inquiryPriority";
 import type { InquirySource } from "./inquirySource";
 import type { InquiryStatus } from "./inquiryStatus";
-import type { InquiryPriority } from "./inquiryPriority";
-import type { InquiryDtoSentiment } from "./inquiryDtoSentiment";
 
 export interface InquiryDto {
 	id: string;

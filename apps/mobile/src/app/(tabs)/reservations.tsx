@@ -1,46 +1,133 @@
-import { ScreenFrame } from "@cocrepo/mo-ui";
-import { observer } from "mobx-react-lite";
-import { ScrollView, Text, View } from "react-native";
 import {
-	type ReservationPreview,
-	upcomingReservations,
-} from "@/tabs/reservation-data";
-import { mainTabStyles as styles } from "@/tabs/main-tab-styles";
+	MyReservationsScreen,
+	type MyReservationCardItem,
+	type MyReservationsScreenStatus,
+} from "@cocrepo/mo-ui";
+import { useGetMyReservations } from "@cocrepo/api/core/reservations";
+import type { ReservationDto, ReservationStatus } from "@cocrepo/api/core/model";
+import { observer } from "mobx-react-lite";
+import { getCoreApiBaseUrl } from "@/auth/auth-config";
 
-const renderReservationCard = (reservation: ReservationPreview) => (
-	<View key={reservation.id} style={styles.reservationCard}>
-		<View style={styles.reservationHeader}>
-			<Text style={styles.reservationDate}>{reservation.date}</Text>
-			<Text style={styles.statusBadge}>{reservation.status}</Text>
-		</View>
-		<Text style={styles.reservationTitle}>{reservation.label}</Text>
-		<Text style={styles.reservationMeta}>
-			{reservation.time} · {reservation.place}
-		</Text>
-	</View>
-);
+const RESERVATION_QUERY_PARAMS = {
+	skip: 0,
+	take: 20,
+};
 
-export default observer(function ReservationsTabRoute() {
+const STATUS_LABELS: Record<ReservationStatus, string> = {
+	CANCELED: "취소됨",
+	CONFIRMED: "예약 확정",
+	WAITLISTED: "대기중",
+};
+
+const pad2 = (value: number) => value.toString().padStart(2, "0");
+
+const formatReservationDate = (value: string) => {
+	const date = new Date(value);
+	if (Number.isNaN(date.getTime())) {
+		return value;
+	}
+
+	return `${date.getMonth() + 1}월 ${date.getDate()}일`;
+};
+
+const formatReservationTime = (value: string) => {
+	const date = new Date(value);
+	if (Number.isNaN(date.getTime())) {
+		return "시간 미정";
+	}
+
+	return `${pad2(date.getHours())}:${pad2(date.getMinutes())}`;
+};
+
+const getApiErrorDescription = (error: unknown) => {
+	const status = (error as { response?: { status?: number } })?.response?.status;
+
+	switch (status) {
+		case 401:
+			return "로그인이 만료되었습니다. 다시 로그인한 뒤 확인해 주세요.";
+		case 403:
+			return "현재 공간에서 예약 목록을 볼 권한이 없습니다.";
+		default:
+			return "내 예약 목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.";
+	}
+};
+
+const getReservationTitle = (reservation: ReservationDto) =>
+	reservation.program?.name ?? reservation.session?.name ?? "예약 수업";
+
+const getReservationMeta = (reservation: ReservationDto) => {
+	const parts = [
+		formatReservationTime(reservation.occurrenceStartAt),
+		reservation.timeline?.name,
+		reservation.session?.name,
+		reservation.waitlistPosition
+			? `대기 ${reservation.waitlistPosition}번`
+			: undefined,
+	].filter(Boolean);
+
+	return parts.join(" · ");
+};
+
+const toMyReservationCardItem = (
+	reservation: ReservationDto,
+): MyReservationCardItem => ({
+	dateLabel: formatReservationDate(reservation.occurrenceStartAt),
+	id: reservation.id,
+	memo: reservation.memo ?? undefined,
+	metaLabel: getReservationMeta(reservation),
+	statusLabel: STATUS_LABELS[reservation.status],
+	title: getReservationTitle(reservation),
+});
+
+const getReservationsStatus = (params: {
+	isError: boolean;
+	isLoading: boolean;
+	itemCount: number;
+}): MyReservationsScreenStatus => {
+	if (params.isLoading) {
+		return "loading";
+	}
+
+	if (params.isError) {
+		return "error";
+	}
+
+	if (params.itemCount === 0) {
+		return "empty";
+	}
+
+	return "ready";
+};
+
+const ReservationsTabRoute = observer(() => {
+	const requestOptions = { baseURL: getCoreApiBaseUrl() };
+	const reservationsQuery = useGetMyReservations(RESERVATION_QUERY_PARAMS, {
+		request: requestOptions,
+	});
+	const reservations = reservationsQuery.data?.data ?? [];
+	const items = reservations.map(toMyReservationCardItem);
+	const status = getReservationsStatus({
+		isError: reservationsQuery.isError,
+		isLoading: reservationsQuery.isLoading,
+		itemCount: items.length,
+	});
+
+	function handlePressRetry() {
+		void reservationsQuery.refetch();
+	}
+
 	return (
-		<ScreenFrame
-			backgroundColor="#0c0f0b"
-			contentStyle={styles.root}
-			edges={["top", "right", "left"]}
-		>
-			<ScrollView
-				contentContainerStyle={styles.contentContainer}
-				showsVerticalScrollIndicator={false}
-			>
-				<View style={styles.tabContent}>
-					<View style={styles.sectionHeader}>
-						<Text style={styles.sectionTitle}>내 예약</Text>
-						<Text style={styles.sectionDescription}>
-							요청부터 확정까지 다가오는 예약을 확인합니다.
-						</Text>
-					</View>
-					{upcomingReservations.map(renderReservationCard)}
-				</View>
-			</ScrollView>
-		</ScreenFrame>
+		<MyReservationsScreen
+			errorDescription={
+				reservationsQuery.isError
+					? getApiErrorDescription(reservationsQuery.error)
+					: undefined
+			}
+			items={items}
+			onPressRetry={handlePressRetry}
+			status={status}
+		/>
 	);
 });
+
+export default ReservationsTabRoute;

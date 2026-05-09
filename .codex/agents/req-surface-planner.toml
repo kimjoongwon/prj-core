@@ -81,4 +81,20 @@ route layout, page, feature 사이에서 **누가 Surface를 소유하고 어디
 | `req-feature-planner` | 협업 | feature가 Surface를 소유하지 않는 경계 정리 |
 | `fe-route-layout-builder` | 후행 | 확정된 Surface ownership을 `layout.tsx`로 구현 |
 | `fe-page-builder` | 후행 | route layout 코드를 소비하는 page 콘텐츠 구현 |
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

@@ -1,29 +1,29 @@
 "use client";
 
 import {
+	type CreateServiceDocumentDto,
+	type GetServiceDocumentsParams,
 	getGetServiceDocumentsQueryKey,
+	type ServiceDocumentDto,
+	type UpdateServiceDocumentDto,
 	useArchiveServiceDocument,
 	useCreateServiceDocument,
 	useDeleteServiceDocument,
 	useGetServiceDocuments,
 	usePublishServiceDocument,
 	useUpdateServiceDocument,
-	type CreateServiceDocumentDto,
-	type GetServiceDocumentsParams,
-	type ServiceDocumentDto,
-	type UpdateServiceDocumentDto,
 } from "@cocrepo/api/core/service-documents";
 import {
-	ServiceDocumentListPage,
 	type ServiceDocumentFormDraft,
 	type ServiceDocumentFormMode,
+	ServiceDocumentListPage,
 	type ServiceDocumentListPageQueryStates,
 } from "@cocrepo/ui";
 import { addToast } from "@cocrepo/ui/heroui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
-import { useState } from "react";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
+import { useState } from "react";
 
 const EMPTY_DRAFT: ServiceDocumentFormDraft = {
 	kind: "TERMS_OF_SERVICE" as ServiceDocumentFormDraft["kind"],
@@ -50,10 +50,11 @@ export default observer(function TermsPageRoute() {
 		status: parseAsString.withDefault(""),
 		locale: parseAsString.withDefault("ko-KR"),
 	});
-	const [formMode, setFormMode] =
-		useState<ServiceDocumentFormMode>("create");
+	const [formMode, setFormMode] = useState<ServiceDocumentFormMode>("create");
 	const [draft, setDraft] = useState<ServiceDocumentFormDraft>(EMPTY_DRAFT);
-	const [editingDocumentId, setEditingDocumentId] = useState<string | null>(null);
+	const [editingDocumentId, setEditingDocumentId] = useState<string | null>(
+		null,
+	);
 	const params = getServiceDocumentsParams(queryStates);
 	const { data: response, isLoading } = useGetServiceDocuments(params);
 	const createMutation = useCreateServiceDocument();

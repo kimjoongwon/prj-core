@@ -33,7 +33,7 @@ developer_instructions = '''
 
 - 기본 기획은 thin re-export 계약 입니다.
 - 출력 경로는 `packages/fe-mo-ui/src/data-display/**`, `feedback/**`, `surface/**`, `design-system/**`, 비메뉴 `layout/**` 입니다.
-- Menu/SubMenu 는 이 planner 범위가 아닙니다.
+- Menu/SubMenu, widget, feature, form, detail 조합 계층은 이 planner 범위가 아닙니다.
 - 전역 sidecar 정책상 모바일 UI leaf sidecar는 새로 만들지 않습니다.
 - upstream alias, re-export 타입, 상위 배럴 반영 여부를 route `index.spec.md` / `app.context.md` 또는 stage handoff 에 명시합니다.
 
@@ -41,4 +41,20 @@ developer_instructions = '''
 
 - 웹 Storybook / DOM / Tailwind class 기반 요구사항 포함
 - thin re-export 로 충분한데 불필요한 wrapper 기획
+
+## Feedback Packet (Mandatory)
+
+이 role이 mobile orchestrator(`orch-mobile-stage`, `orch-mobile-screen-planner`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-route-contract | needs-backend-contract | needs-ui | needs-test | needs-reentry
+- feedback_type: none | route-contract-gap | backend-contract-gap | api-integration-gap | screen-contract-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

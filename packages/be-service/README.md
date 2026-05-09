@@ -31,7 +31,7 @@ export class UsersModule {}
 
 ## 구조
 
-- **service/**: 리소스별 비즈니스 서비스
+- **src/*.service.ts**: 리소스별 비즈니스 서비스
   - UserService: 사용자 관리
 - **infra/**: 인프라 서비스
   - PrismaService: Prisma 클라이언트 래퍼

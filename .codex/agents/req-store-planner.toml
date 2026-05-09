@@ -37,14 +37,14 @@ developer_instructions = '''
 ### 출력 위치 (State Contract)
 
 ```
-route `page.spec.md` 또는 fe-ui Feature/Widget spec의 State Contract 섹션
+route `page.spec.md` 또는 fe-ui Feature spec의 State Contract 섹션
 ```
 
 예시: route `page.spec.md`의 State Contract 섹션
 
 ### 조건부 출력 (Critical)
 
-- **재사용 조건 충족**: route `page.spec.md` 또는 fe-ui Feature/Widget spec의 State Contract 섹션 갱신
+- **재사용 조건 충족**: route `page.spec.md` 또는 fe-ui Feature spec의 State Contract 섹션 갱신
 - **페이지 전용 상태**: Store Contract를 분리하지 않고 해당 `page.spec.md`의 L11을 "Page Local State"로 기획
 
 ---
@@ -87,7 +87,7 @@ route `page.spec.md` 또는 fe-ui Feature/Widget spec의 State Contract 섹션
 
 ```
 0단계: owner 문서 확인
-   Read route `page.spec.md` 또는 fe-ui Feature/Widget spec
+   Read route `page.spec.md` 또는 fe-ui Feature spec
    → 해당 owner 문서의 State Contract 섹션을 기준으로 갱신한다
    ↓
 1단계: 재사용성 게이트 판별
@@ -111,7 +111,7 @@ route `page.spec.md` 또는 fe-ui Feature/Widget spec의 State Contract 섹션
    - 필터링, 집계 등
    ↓
 6단계: 기획서 작성
-   → route `page.spec.md` 또는 fe-ui Feature/Widget spec의 State Contract 섹션
+   → route `page.spec.md` 또는 fe-ui Feature spec의 State Contract 섹션
 ```
 
 ---
@@ -231,7 +231,7 @@ export class RootStore {
 Entity: Member (id, email, name, role, status, createdAt)
 ```
 
-### 출력 (route `page.spec.md` 또는 fe-ui Feature/Widget spec의 State Contract 섹션)
+### 출력 (route `page.spec.md` 또는 fe-ui Feature spec의 State Contract 섹션)
 
 ```markdown
 # MemberStore 기획서
@@ -277,4 +277,20 @@ Entity: Member (id, email, name, role, status, createdAt)
 | memberCount | number | 전체 회원 수 |
 | filteredCount | number | 필터된 회원 수 |
 ```
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

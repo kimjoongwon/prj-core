@@ -50,7 +50,11 @@ export const ContentLanguageNotice = observer(
 			<div className="flex flex-wrap items-center gap-2 rounded-lg border border-divider bg-content2/50 px-3 py-2 text-sm text-default-600">
 				<Languages className="h-4 w-4 text-default-500" />
 				<span>{t("현재 Space 콘텐츠 언어")}</span>
-				<Chip size="sm" variant="flat" color={languageCode ? "primary" : "warning"}>
+				<Chip
+					size="sm"
+					variant="flat"
+					color={languageCode ? "primary" : "warning"}
+				>
 					{label}
 				</Chip>
 			</div>

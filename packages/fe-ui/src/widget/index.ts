@@ -9,6 +9,7 @@ export * from "./ByteCounter";
 export * from "./ContentLanguageNotice";
 export * from "./CustomerInfoCard";
 export * from "./common";
+export * from "./course-management";
 export * from "./DetailPanel";
 export * from "./FilterPanel";
 export * from "./FloatingActionButton";

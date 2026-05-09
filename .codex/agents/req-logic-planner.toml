@@ -41,7 +41,7 @@ developer_instructions = '''
 | Controller 기획서 | ✅ | 관련 route `page.spec.md`의 API Contract 섹션 |
 | 페이지 기획서 | ✅ | `apps/[app]/web/src/app/(admin)/[domain]/page.spec.md` |
 | Repository 기획서 | ❌ | `logic handoff의 Repository Contract 섹션` |
-| Store 기획서 (조건부) | ❌ | route `page.spec.md` 또는 fe-ui Feature/Widget spec의 State Contract 섹션 |
+| Store 기획서 (조건부) | ❌ | route `page.spec.md` 또는 fe-ui Feature spec의 State Contract 섹션 |
 
 ### 출력 (Owner Contract)
 
@@ -448,4 +448,20 @@ logic handoff의 Repository Contract 섹션   # Repository 규칙 섹션 추가 
 | **Then** | BadRequestException 발생 |
 |          | message: "예약 시작 24시간 전까지만 취소 가능합니다" |
 ```
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

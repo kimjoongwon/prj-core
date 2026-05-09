@@ -1,12 +1,12 @@
-import { Module } from "@nestjs/common";
-import {
-	I18nModule as NestI18nModule,
-	QueryResolver,
-	AcceptLanguageResolver,
-} from "nestjs-i18n";
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { I18nTranslationService } from "./translation.service/index";
+import { Module } from "@nestjs/common";
+import {
+	AcceptLanguageResolver,
+	I18nModule as NestI18nModule,
+	QueryResolver,
+} from "nestjs-i18n";
+import { I18nTranslationService } from "./translation.service";
 
 // 실행 CWD가 워크스페이스 루트(/app) 또는 앱 경로(/app/apps/*/api)일 수 있어
 // 존재하는 경로를 우선 선택한다.

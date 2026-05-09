@@ -9,8 +9,9 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDto } from "./userDto";
+
 import type { CategoryDto } from "./categoryDto";
+import type { UserDto } from "./userDto";
 
 export interface UserClassificationDto {
 	id: string;

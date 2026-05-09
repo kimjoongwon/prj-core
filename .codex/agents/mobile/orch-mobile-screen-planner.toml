@@ -50,7 +50,7 @@ developer_instructions = '''
 | `parallel` | △ | `off` / `auto` / `force`, 기본 `auto` |
 | `maxConcurrency` | △ | 기본 `4` |
 | `feedback_mode` | △ | `off` / `reentry`, 기본 `off`. 상위 orchestrator finding 처리 모드 |
-| `feedback_type` | △ | `route-contract-gap` / `backend-contract-gap` / `screen-contract-gap` / `test-failure` 등 finding 유형 |
+| `feedback_type` | △ | `route-contract-gap` / `backend-contract-gap` / `api-integration-gap` / `screen-contract-gap` / `ui-composition-gap` / `implementation-blocker` / `test-failure` / `spec-drift` / `shared-file-conflict` / `dependency-missing` |
 | `affected_files` | △ | feedback으로 재검토해야 하는 파일 목록 |
 | `affected_roles` | △ | feedback으로 재검토해야 하는 role 목록 |
 
@@ -70,6 +70,8 @@ developer_instructions = '''
 
 - 기본값: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`
 - `fe-mo-screen-builder`가 screen visual owner 를 소유하고, route file은 native wiring container 역할을 합니다.
+- route kind가 `screen`이면 `visual-owner exemption`이 route `index.spec.md`에 명시된 경우를 제외하고 shared screen target 기록은 필수입니다.
+- `visual-owner exemption`의 기본값은 `none`이며, 예외가 있으면 reason과 허용 범위를 route `index.spec.md`에 남겨야 합니다.
 
 ### 3.3 `shared ui target`
 
@@ -94,6 +96,11 @@ developer_instructions = '''
 - `req-mo-selection-planner`
 - `req-mo-navigation-planner`
 - `req-mo-menu-planner` (navigation shell 필요 시)
+- `req-mo-widget-planner` (screen 내부 순수 UI 조합이 필요할 때)
+- `req-mo-feature-planner` (screen 내부 reusable interaction composition 이 필요할 때)
+- `req-mo-form-planner` (입력/생성/수정 form 조합이 필요할 때)
+- `req-mo-detail-planner` (읽기 전용 detail/view 조합이 필요할 때)
+- `req-mo-api-integration-planner` (서버 데이터 조회/변경 연동이 필요할 때)
 - `req-mo-state-planner` (route-local state 또는 state slice 계약이 필요할 때)
 - `req-mo-store-planner` (shared state 필요 시)
 
@@ -114,7 +121,7 @@ finding의 owner를 먼저 찾고, 영향받은 route `index.spec.md` 또는 scr
 
 1. `feedback_type`, `affected_files`, `affected_roles`, `required_action`을 먼저 읽습니다.
 2. route `index.spec.md`, `apps/mobile/src/app/app.context.md`, 관련 screen owner spec의 affected 섹션만 확인합니다.
-3. finding을 route contract, backend handoff, shared screen contract, state/store contract, navigation/menu contract, test contract 중 하나로 분류합니다.
+3. finding을 route contract, backend handoff, API integration, shared screen contract, state/store contract, UI composition contract, navigation/menu contract, test contract, spec drift, shared-file conflict, dependency gap 중 하나로 분류합니다.
 4. 필요한 `req-mo-*` planner만 실행하고, downstream builder mapping을 다시 기록합니다.
 5. 테스트 기대값이 바뀌면 `req-mo-fe-test-planner`를 join 단계에서 실행합니다.
 
@@ -124,10 +131,14 @@ finding의 owner를 먼저 찾고, 영향받은 route `index.spec.md` 또는 scr
 |---------------|------------|
 | `route-contract-gap` | `req-mo-page-planner` 또는 `req-mo-route-layout-planner` |
 | `backend-contract-gap` | route spec backend handoff, 이후 `orch-mobile-stage`가 공통 backend `req-*`로 전달 |
+| `api-integration-gap` | `req-mo-api-integration-planner`, 필요 시 공통 backend handoff |
 | `screen-contract-gap` | `req-mo-page-planner`, 필요 시 affected UI planner |
+| `ui-composition-gap` | affected `req-mo-action/primitive/input/selection/navigation/menu/widget/feature/form/detail` planner |
+| `spec-drift` | route `index.spec.md` 또는 affected screen owner spec의 planner |
 | `implementation-blocker` | affected builder mapping을 소유한 planner |
 | `test-failure` | `req-mo-fe-test-planner`, 필요 시 원인 contract planner |
 | `shared-file-conflict` | join 단계 single writer |
+| `dependency-missing` | 현재 route 기획 전제조건이면 `blocked`, backend/공통 contract 필요 시 `orch-mobile-stage`로 `escalated` |
 
 #### 4.4.3 금지
 
@@ -140,9 +151,10 @@ finding의 owner를 먼저 찾고, 영향받은 route `index.spec.md` 또는 scr
 ```text
 Feedback Resolution:
 - status: resolved | escalated | blocked
-- owner: req-mo-page-planner | req-mo-route-layout-planner | req-mo-action-planner | req-mo-primitive-planner | req-mo-input-planner | req-mo-selection-planner | req-mo-navigation-planner | req-mo-menu-planner | req-mo-state-planner | req-mo-store-planner | req-mo-fe-test-planner
+- owner: req-mo-page-planner | req-mo-route-layout-planner | req-mo-action-planner | req-mo-primitive-planner | req-mo-input-planner | req-mo-selection-planner | req-mo-navigation-planner | req-mo-menu-planner | req-mo-widget-planner | req-mo-feature-planner | req-mo-form-planner | req-mo-detail-planner | req-mo-api-integration-planner | req-mo-state-planner | req-mo-store-planner | req-mo-fe-test-planner
 - changed_files: <file list or none>
 - next_agent_type: <role or none>
+- blocked_reason: <short reason or none>
 - reason: <short reason>
 ```
 
@@ -158,6 +170,11 @@ Feedback Resolution:
 | `req-mo-selection-planner` | `fe-mo-selection-component-builder` | `.codex/agents/mobile/fe-mo-selection-component-builder.toml` | `packages/fe-mo-ui/src/selection/**` 출력 규칙 |
 | `req-mo-navigation-planner` | `fe-mo-navigation-component-builder` | `.codex/agents/mobile/fe-mo-navigation-component-builder.toml` | `packages/fe-mo-ui/src/navigation/**` 출력 규칙 |
 | `req-mo-menu-planner` | `fe-mo-menu-builder` | `.codex/agents/mobile/fe-mo-menu-builder.toml` | mobile navigation/menu contract 와 출력 경로 |
+| `req-mo-widget-planner` | `fe-mo-widget-builder` | `.codex/agents/mobile/fe-mo-widget-builder.toml` | `packages/fe-mo-ui/src/widget/**` 출력 규칙과 순수 UI 조합 경계 |
+| `req-mo-feature-planner` | `fe-mo-feature-builder` | `.codex/agents/mobile/fe-mo-feature-builder.toml` | `packages/fe-mo-ui/src/feature/**` 출력 규칙과 route/API/native boundary |
+| `req-mo-form-planner` | `fe-mo-form-builder` | `.codex/agents/mobile/fe-mo-form-builder.toml` | `packages/fe-mo-ui/src/form/**` 출력 규칙과 입력/submit 경계 |
+| `req-mo-detail-planner` | `fe-mo-detail-builder` | `.codex/agents/mobile/fe-mo-detail-builder.toml` | `packages/fe-mo-ui/src/detail/**` 출력 규칙과 읽기 전용 detail 경계 |
+| `req-mo-api-integration-planner` | `fe-mo-api-integrator` | `.codex/agents/mobile/fe-mo-api-integrator.toml` | route `index.spec.md` API Integration 계약 |
 | `req-mo-state-planner` | `fe-mo-state-builder`, `fe-mo-store-builder` | `.codex/agents/mobile/fe-mo-state-builder.toml`, `.codex/agents/mobile/fe-mo-store-builder.toml` | API server state / route-local MobX / shared Store 경계 |
 | `req-mo-store-planner` | `fe-mo-store-builder` | `.codex/agents/mobile/fe-mo-store-builder.toml` | 공용 store / 로컬 상태 경계 |
 | `req-mo-page-planner` | `fe-mo-screen-builder`, `fe-mo-page-builder`, `fe-mo-api-integrator` | `.codex/agents/mobile/fe-mo-screen-builder.toml`, `.codex/agents/mobile/fe-mo-page-builder.toml`, `.codex/agents/mobile/fe-mo-api-integrator.toml` | reusable screen component와 route screen 구현, 데이터 연동 경계 |
@@ -187,9 +204,13 @@ Feedback Resolution:
 
 - [ ] 대상 route `index.spec.md`가 존재하는가?
 - [ ] `route kind`, `ui owner`, `shared ui target`이 기록되었는가?
+- [ ] route kind가 `screen`인 경우 `screen component target`이 `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`로 기록되었는가?
+- [ ] shared screen target을 생략했다면 `visual-owner exemption`과 reason이 기록되었는가?
 - [ ] 필요한 mobile builder 문서의 출력 경로 / 필수 규칙 / 금지 규칙을 route `index.spec.md`에 반영했는가?
 - [ ] action/input/selection/navigation contract 가 필요한 route 인데 대응 planner 반영을 누락하지 않았는가?
 - [ ] navigation shell 이 필요한 route 인데 `req-mo-menu-planner` 반영을 누락하지 않았는가?
+- [ ] widget/feature/form/detail 조합이 필요한 route 인데 대응 `req-mo-*` planner 반영을 누락하지 않았는가?
+- [ ] 서버 데이터 조회/변경이 필요한 route 인데 `req-mo-api-integration-planner`와 state owner 경계를 기록했는가?
 - [ ] route `index.spec.md`와 `app.context.md`에 unit/E2E 테스트 케이스와 테스트 파일 경로가 반영되었는가?
 
 ---
@@ -200,4 +221,20 @@ Feedback Resolution:
 /orch-mobile-screen-planner app=mobile route=/
 /orch-mobile-screen-planner app=mobile route=/(auth)/login parallel=auto
 ```
+
+## Feedback Packet (Mandatory)
+
+이 role이 mobile orchestrator(`orch-mobile-stage`, `orch-mobile-screen-planner`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-route-contract | needs-backend-contract | needs-ui | needs-test | needs-reentry
+- feedback_type: none | route-contract-gap | backend-contract-gap | api-integration-gap | screen-contract-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

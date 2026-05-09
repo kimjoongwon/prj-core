@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "expo-router";
 import type { Href } from "expo-router";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import {
 	isAuthCallbackRoute,
 	isAuthenticatedRoute,
@@ -19,6 +19,10 @@ const LOGIN_ROUTE = "/auth/login" as const;
 interface AuthRedirect {
 	href: Href;
 	targetPathname: string;
+}
+
+interface AuthSessionGateProps {
+	children: ReactNode;
 }
 
 const normalizePathname = (pathname?: string | null) => pathname || HOME_ROUTE;
@@ -59,11 +63,9 @@ const resolveAuthRedirect = (
 	return null;
 };
 
-export const AuthSessionGate = observer(function AuthSessionGate({
+export const AuthSessionGate = observer(({
 	children,
-}: {
-	children: ReactNode;
-}) {
+}: AuthSessionGateProps) => {
 	const rawPathname = usePathname();
 	const router = useRouter();
 	const pathname = normalizePathname(rawPathname);
@@ -126,16 +128,10 @@ export const AuthSessionGate = observer(function AuthSessionGate({
 	return (
 		<View
 			accessibilityLabel="auth-session-ready"
+			className="flex-1"
 			onLayout={onLayoutReadyScreen}
-			style={styles.root}
 		>
 			{children}
 		</View>
 	);
-});
-
-const styles = StyleSheet.create({
-	root: {
-		flex: 1,
-	},
 });

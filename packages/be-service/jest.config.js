@@ -7,6 +7,7 @@ module.exports = {
   setupFiles: ["reflect-metadata"],
   moduleNameMapper: {
     "^@cocrepo/repository$": "<rootDir>/../be-repository/dist",
+    "^@cocrepo/context$": "<rootDir>/../be-context/dist",
     "^@cocrepo/prisma$": "<rootDir>/__tests__/mocks/prisma.ts",
     "^@cocrepo/entity$": "<rootDir>/../be-entity/dist",
     "^@cocrepo/vo$": "<rootDir>/../be-vo/dist",

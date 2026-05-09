@@ -1,11 +1,11 @@
 import { createElement, type ReactNode } from "react";
 import {
-	StyleSheet,
 	Text,
 	View,
 	type ViewProps,
 } from "react-native";
 import { observer } from "mobx-react-lite";
+import { tv } from "tailwind-variants";
 import {
 	SelectableCardList,
 	type SelectableCardItem,
@@ -103,9 +103,9 @@ const renderEmptyMessage = (props: OccurrencePickerProps) =>
 		View,
 		{
 			accessibilityRole: "summary",
-			style: styles.empty,
+			className: classNames.empty(),
 		},
-		createElement(Text, { style: styles.emptyText }, getEmptyMessage(props)),
+		createElement(Text, { className: classNames.emptyText() }, getEmptyMessage(props)),
 	);
 
 const renderErrorMessage = (errorMessage: ReactNode) => {
@@ -117,7 +117,7 @@ const renderErrorMessage = (errorMessage: ReactNode) => {
 		Text,
 		{
 			accessibilityRole: "alert",
-			style: styles.errorText,
+			className: classNames.errorText(),
 		},
 		errorMessage,
 	);
@@ -165,7 +165,8 @@ const OccurrencePickerComponent = observer((props: OccurrencePickerProps) => {
 		View,
 		{
 			...viewProps,
-			style: [styles.root, style],
+			className: classNames.root(),
+			style,
 		},
 		createElement(SelectableCardList, {
 			description,
@@ -184,25 +185,13 @@ OccurrencePickerComponent.displayName = "OccurrencePicker";
 
 export const OccurrencePicker = OccurrencePickerComponent;
 
-const styles = StyleSheet.create({
-	empty: {
-		backgroundColor: "#111511",
-		borderColor: "#303830",
-		borderRadius: 12,
-		borderWidth: 1,
-		padding: 16,
-	},
-	emptyText: {
-		color: "#c5cec4",
-		fontSize: 14,
-		lineHeight: 20,
-	},
-	errorText: {
-		color: "#ffb4ab",
-		fontSize: 13,
-		lineHeight: 18,
-	},
-	root: {
-		gap: 8,
+const occurrencePickerClassNames = tv({
+	slots: {
+		empty: "rounded-xl border border-[#303830] bg-[#111511] p-4",
+		emptyText: "text-sm leading-5 text-[#c5cec4]",
+		errorText: "text-[13px] leading-[18px] text-[#ffb4ab]",
+		root: "gap-2",
 	},
 });
+
+const classNames = occurrencePickerClassNames();

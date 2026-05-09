@@ -1,7 +1,7 @@
 "use client";
 
-import { useGetSpaces } from "@cocrepo/api/core/spaces";
 import { LanguageCode } from "@cocrepo/api/core/model";
+import { useGetSpaces } from "@cocrepo/api/core/spaces";
 import { SpaceListPage } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";

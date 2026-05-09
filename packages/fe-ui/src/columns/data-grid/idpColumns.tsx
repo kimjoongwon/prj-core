@@ -108,6 +108,8 @@ export function buildOidcClientTableColumns<
 		name: string;
 		tokenEndpointAuthMethod: string;
 		grantTypes: string[];
+		isFirstParty: boolean;
+		skipConsent: boolean;
 		isActive: boolean;
 		createdAt: string | Date | null;
 	},
@@ -128,6 +130,30 @@ export function buildOidcClientTableColumns<
 		createPresetColumn<TRow>("grantTypes", {
 			size: 200,
 			cell: ({ getValue }) => <GrantTypeCell types={getValue() as string[]} />,
+		}),
+		createPresetColumn<TRow>("isFirstParty", {
+			size: 130,
+			cell: ({ getValue }) => {
+				const isFirstParty = Boolean(getValue());
+				return (
+					<ChipCell
+						label={isFirstParty ? "First-party" : "Third-party"}
+						color={isFirstParty ? "primary" : "default"}
+					/>
+				);
+			},
+		}),
+		createPresetColumn<TRow>("skipConsent", {
+			size: 120,
+			cell: ({ getValue }) => {
+				const skipConsent = Boolean(getValue());
+				return (
+					<ChipCell
+						label={skipConsent ? "동의 생략" : "동의 표시"}
+						color={skipConsent ? "success" : "default"}
+					/>
+				);
+			},
 		}),
 		createIsActiveColumn<TRow>({
 			size: 80,

@@ -137,22 +137,23 @@ export class ServiceDocumentsRepository {
 			],
 		});
 
-		const fallback = params.platform === "ALL"
-			? []
-			: await this.txHost.tx.serviceDocument.findMany({
-					where: {
-						platform: "ALL",
-						locale: params.locale,
-						status: "PUBLISHED",
-						removedAt: null,
-					},
-					orderBy: [
-						{ kind: "asc" },
-						{ publishedAt: "desc" },
-						{ createdAt: "desc" },
-						{ displayOrder: "asc" },
-					],
-				});
+		const fallback =
+			params.platform === "ALL"
+				? []
+				: await this.txHost.tx.serviceDocument.findMany({
+						where: {
+							platform: "ALL",
+							locale: params.locale,
+							status: "PUBLISHED",
+							removedAt: null,
+						},
+						orderBy: [
+							{ kind: "asc" },
+							{ publishedAt: "desc" },
+							{ createdAt: "desc" },
+							{ displayOrder: "asc" },
+						],
+					});
 
 		const selectedByKind = new Map<string, (typeof exact)[number]>();
 		for (const item of [...exact, ...fallback]) {

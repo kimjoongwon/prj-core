@@ -1,0 +1,70 @@
+# MyReservationsScreen 계약서
+
+## 대상
+
+- `packages/fe-mo-ui/src/screen/MyReservationsScreen/MyReservationsScreen.tsx`
+
+## 목적
+
+모바일 `/reservations` 탭의 내 예약/대기 목록 visual composition을 소유한다. route file은 `getMyReservations` API 연동과 `ReservationDto -> MyReservationCardItem` mapping만 담당한다.
+
+## Props 계약
+
+- `items`: screen 전용 표시 타입인 `MyReservationCardItem[]`.
+- `status`: `loading`, `error`, `empty`, `ready` 중 하나의 목록 상태.
+- `errorDescription`: error 상태에서 노출할 사용자 메시지.
+- `onPressRetry`: error/empty 상태의 재조회 handler.
+
+## 화면 스케치
+
+```text
+┌────────────────────────────────────┐
+│ 내 예약                              │
+│ 예약 확정과 대기 상태를 실제 Reservation │
+│ API 기준으로 확인합니다.                │
+│                                    │
+│ ┌────────────────────────────────┐ │
+│ │ 5월 9일              예약 확정  │ │
+│ │ F45 Strength                    │ │
+│ │ 10:00 · Gangnam Studio          │ │
+│ │ Morning Class                   │ │
+│ │ front desk note                 │ │
+│ └────────────────────────────────┘ │
+│                                    │
+│ ┌────────────────────────────────┐ │
+│ │ 5월 10일              대기중    │ │
+│ │ HIIT Waitlist                   │ │
+│ │ 19:00 · Gangnam Studio          │ │
+│ │ Evening Class · 대기 2번         │ │
+│ └────────────────────────────────┘ │
+└────────────────────────────────────┘
+
+loading:
+┌────────────────────────────────────┐
+│ 내 예약을 불러오는 중                  │
+│ 예약과 대기 목록을 확인하고 있습니다.     │
+└────────────────────────────────────┘
+
+empty/error:
+┌────────────────────────────────────┐
+│ 아직 예약이 없습니다                    │
+│ 홈에서 수업을 선택하면 예약 또는 대기...   │
+│ [목록 새로고침]                       │
+└────────────────────────────────────┘
+```
+
+## 렌더링 계약
+
+- `ScreenFrame`으로 safe-area shell을 적용한다.
+- 시각 스타일은 `StyleSheet`가 아니라 uniwind `className`과 `tailwind-variants` slot/variant로 정의한다.
+- ready 상태에서는 예약일, 상태, 제목, 메타, memo를 카드로 표시한다.
+- loading/empty/error 상태는 `StatusFeedback`으로 표시한다.
+- API hook, router, route params, app alias, backend DTO를 직접 import하지 않는다.
+
+## 변경 이력
+
+| 날짜 | 변경 내용 |
+| --- | --- |
+| 2026-05-09 | screen 스타일 계약을 uniwind className과 tailwind-variants slot 기반으로 정리했습니다. |
+| 2026-05-09 | screen visual owner spec에 Markdown 화면 스케치를 추가했습니다. |
+| 2026-05-09 | `/reservations` route의 visual owner를 route file에서 shared screen component로 복구했습니다. |

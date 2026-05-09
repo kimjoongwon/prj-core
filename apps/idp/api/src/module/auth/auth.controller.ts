@@ -110,7 +110,9 @@ export class AuthController {
 
 		if (error) {
 			if (!loginUrl) {
-				return res.status(HttpStatus.BAD_REQUEST).send(errorDescription || error);
+				return res
+					.status(HttpStatus.BAD_REQUEST)
+					.send(errorDescription || error);
 			}
 
 			return res.redirect(

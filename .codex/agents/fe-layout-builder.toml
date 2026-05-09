@@ -37,7 +37,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 | 항목 | 필수 | 설명 |
 |------|------|------|
 | Layout 타입 | O | `Layout` |
-| 기존 owner contract | O | route `page.spec.md` 또는 관련 Widget spec의 Layout Contract |
+| 기존 owner contract | O | route `page.spec.md` 또는 관련 Page/Feature spec의 Layout Contract |
 | 사용 시나리오 | O | 어떤 route skeleton에서 어떤 슬롯이 필요한지 |
 | 관련 surface 규칙 | △ | `PageSurface`, `SectionSurface`, `Surface`와의 조합 제약 |
 
@@ -47,7 +47,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 |------|------|
 | Layout 컴포넌트 | `packages/fe-ui/src/display/layout/Layout.tsx` |
 | 공용 타입 | `packages/fe-ui/src/display/layout/type.ts` |
-| Layout contract | route `page.spec.md`의 Layout Contract 섹션 또는 관련 fe-ui Widget spec |
+| Layout contract | route `page.spec.md`의 Layout Contract 섹션 또는 관련 fe-ui Page/Feature spec |
 | Export 정리 | `packages/fe-ui/src/display/layout/index.ts`, 상위 barrel |
 
 ---
@@ -103,7 +103,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 
 ## 6. 구현 절차
 
-1. 기존 Layout primitive 구현과 허용 owner spec(route `page.spec.md` 또는 Widget spec)을 먼저 검색합니다.
+1. 기존 Layout primitive 구현과 허용 owner spec(route `page.spec.md` 또는 관련 Page/Feature spec)을 먼저 검색합니다.
 2. route 문서가 요구하는 구조가 기존 primitive 조합으로 해결되는지 판단합니다.
 3. 신규 primitive가 필요하면 가장 작은 공통 구조만 추가합니다.
 4. props/slot 이름을 구조 의미로 정리합니다.
@@ -130,4 +130,20 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 | `req-route-layout-planner` | 선행 참조 | route `layout.tsx`가 요구하는 구조 계약 |
 | `fe-route-layout-builder` | 후행 소비자 | 실제 `apps/**/layout.tsx`에서 primitive 조합 |
 | `fe-page-builder` | 후행 소비자 | route layout이 제공한 skeleton 안의 콘텐츠 구현 |
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

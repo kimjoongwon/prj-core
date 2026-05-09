@@ -1,11 +1,13 @@
 import { ConfigService } from "@nestjs/config";
-import { OidcConfigurationService } from ".";
 import { AccountService } from "../account.service";
 import { RedisOidcAdapterFactory } from "../oidc.adapter";
 import { OidcClientRepository } from "../oidc-client.repository";
+import { OidcConfigurationService } from ".";
 
 describe("OidcConfigurationService", () => {
-	const buildService = (clients: Awaited<ReturnType<OidcClientRepository["findActiveClients"]>>) =>
+	const buildService = (
+		clients: Awaited<ReturnType<OidcClientRepository["findActiveClients"]>>,
+	) =>
 		new OidcConfigurationService(
 			{
 				get: jest.fn((key: string) => {
@@ -29,7 +31,11 @@ describe("OidcConfigurationService", () => {
 			} as unknown as OidcClientRepository,
 		);
 
-	const buildClient = (clientId: string, skipConsent: boolean) => ({
+	const buildClient = (
+		clientId: string,
+		isFirstParty: boolean,
+		skipConsent: boolean,
+	) => ({
 		clientId,
 		clientSecret: null,
 		name: `${clientId} app`,
@@ -38,11 +44,12 @@ describe("OidcConfigurationService", () => {
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "none",
 		scope: "openid profile email",
+		isFirstParty,
 		skipConsent,
 	});
 
-	it("skipConsent first-party client는 기존 grant가 없으면 grant를 자동 생성해야 한다", async () => {
-		const service = buildService([buildClient("user-mobile", true)]);
+	it("first-party skipConsent client는 기존 grant가 없으면 grant를 자동 생성해야 한다", async () => {
+		const service = buildService([buildClient("partner-web", true, true)]);
 		const configuration = await service.buildConfiguration();
 		expect(configuration.clients?.[0]?.application_type).toBe("native");
 		const grant = {
@@ -55,9 +62,9 @@ describe("OidcConfigurationService", () => {
 		const result = await configuration.loadExistingGrant?.({
 			oidc: {
 				account: { accountId: "user-1" },
-				client: { clientId: "user-mobile" },
+				client: { clientId: "partner-web" },
 				params: {
-					client_id: "user-mobile",
+					client_id: "partner-web",
 					scope: "openid profile email",
 				},
 				provider: {
@@ -71,7 +78,7 @@ describe("OidcConfigurationService", () => {
 
 		expect(GrantConstructor).toHaveBeenCalledWith({
 			accountId: "user-1",
-			clientId: "user-mobile",
+			clientId: "partner-web",
 		});
 		expect(grant.addOIDCScope).toHaveBeenCalledWith("openid profile email");
 		expect(grant.save).toHaveBeenCalled();
@@ -80,8 +87,8 @@ describe("OidcConfigurationService", () => {
 
 	it("prompt=consent 요청과 third-party client는 자동 grant를 생성하지 않아야 한다", async () => {
 		const service = buildService([
-			buildClient("user-mobile", true),
-			buildClient("partner-web", true),
+			buildClient("user-mobile", true, true),
+			buildClient("partner-web", false, true),
 		]);
 		const configuration = await service.buildConfiguration();
 		const GrantConstructor = jest.fn();

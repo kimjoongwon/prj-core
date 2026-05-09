@@ -9,6 +9,11 @@
 - **스타일링**: Tailwind CSS
 - **API 클라이언트**: Orval (자동 생성) + React Query
 
+### 모바일
+- **프레임워크**: Expo Router + React Native
+- **UI 라이브러리**: heroui-native + `@cocrepo/mo-ui`
+- **스타일링**: uniwind + tailwind-variants
+
 ### 백엔드
 - **프레임워크**: NestJS
 - **ORM**: Prisma 7.0
@@ -61,6 +66,7 @@
 | `fe-hook` | `@cocrepo/hook` | React 커스텀 훅 |
 | `fe-store` | `@cocrepo/store` | MobX Store |
 | `fe-ui` | `@cocrepo/ui` | UI 컴포넌트 |
+| `fe-mo-ui` | `@cocrepo/mo-ui` | 모바일 UI 컴포넌트 |
 
 ## Claude Code 버그 회피
 
@@ -85,7 +91,24 @@
 - **`subagent`, `서브에이전트` 같은 비공식 용어는 사용하지 않습니다**
 - **설명 시에는 `role`, `agent`, `agent_type`을 구분해서 사용합니다**
 
+## Codex orchestration feedback loop
+
+- `orch-stage`, `orch-screen-planner`, `orch-requirement`, `orch-mobile-stage`, `orch-mobile-screen-planner`가 child agent finding을 수집하고 재배치합니다.
+- child agent는 peer role을 직접 호출하거나 다른 role 책임 파일을 임의 수정하지 않고, 최종 보고에 `Feedback:` packet을 포함합니다.
+- finding이 없으면 `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 보고합니다.
+- orchestrator는 packet 기준으로 `send_input` follow-up, re-entry, blocked/review pending을 결정합니다.
+
 ## 프론트엔드 개발 규칙
+
+### 모바일 스타일링 규칙 (Critical)
+
+**모바일(`apps/mobile`, `packages/fe-mo-ui`)은 uniwind와 tailwind-variants를 주 스타일링 수단으로 사용합니다.**
+
+- 신규/수정 모바일 화면과 `@cocrepo/mo-ui` 컴포넌트에서 `StyleSheet`/`StyleSheet.create`를 사용하지 않습니다.
+- reusable class 조합은 `tailwind-variants`의 `tv({ slots, variants })`로 정의합니다.
+- RN 기본 컴포넌트에는 `className`, `contentContainerClassName`, `colorClassName`, `placeholderTextColorClassName` 등 uniwind class prop을 우선 사용합니다.
+- `style` 객체는 safe-area inset, navigator option object, third-party native bridge 값처럼 className으로 표현하기 어려운 동적 값에만 제한합니다.
+- `react-native-web`, DOM Tailwind class 전제, web-only fallback을 모바일 UI 구현에 끌어오지 않습니다.
 
 ### UI 디자인 가이드 (HeroUI 공식 스타일)
 
@@ -1212,6 +1235,21 @@ Stage 5: 컴포넌트 (페이지별)
 | /design-analyze (Skill) | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
 | /route-design (Skill) | 백엔드 엔티티 기반 라우팅 경로 설계 |
 
+#### 모바일 기획 (req-mo-*)
+
+| Agent | 역할 |
+|-------|------|
+| req-mo-page-planner | Expo Router native screen 계약 기획 |
+| req-mo-route-layout-planner | Expo Router native `_layout` shell 계약 기획 |
+| req-mo-api-integration-planner | 모바일 API 연동 계약 기획 |
+| req-mo-widget-planner | 모바일 순수 UI 조합 Widget 계약 기획 |
+| req-mo-feature-planner | 모바일 reusable Feature composition 계약 기획 |
+| req-mo-form-planner | 모바일 입력 form 계약 기획 |
+| req-mo-detail-planner | 모바일 읽기 전용 detail/view 계약 기획 |
+| req-mo-state-planner | 모바일 route-local 상태와 shared Store 승격 경계 기획 |
+| req-mo-store-planner | 모바일 공용/로컬 상태 경계 기획 |
+| req-mo-fe-test-planner | 모바일 unit/E2E 테스트 케이스 기획 |
+
 #### 프론트엔드 (fe-*)
 
 | Agent | 역할 |
@@ -1237,6 +1275,10 @@ Stage 5: 컴포넌트 (페이지별)
 | fe-mo-page-builder | Expo Router route file에서 shared screen을 연결하고 navigation/API/state/native wiring 구현 (`apps/mobile/src/app/**/*.tsx`) |
 | fe-mo-route-layout-builder | Expo Router native `_layout.tsx` shell 구현 |
 | fe-mo-api-integrator | 모바일 데이터 조회/변경 연동 기준 구현 |
+| fe-mo-widget-builder | 모바일 순수 UI 조합 Widget 구현 (`packages/fe-mo-ui/src/widget/**`) |
+| fe-mo-feature-builder | 모바일 reusable Feature composition 구현 (`packages/fe-mo-ui/src/feature/**`) |
+| fe-mo-form-builder | 모바일 입력 form 조합 구현 (`packages/fe-mo-ui/src/form/**`) |
+| fe-mo-detail-builder | 모바일 읽기 전용 detail/view 조합 구현 (`packages/fe-mo-ui/src/detail/**`) |
 | fe-mo-state-builder | 모바일 route-local MobX state class/hook과 state slice 전달 구조 구현 |
 | fe-mo-store-builder | 모바일 공용/앱 로컬 상태 경계와 MobX store 구현 |
 

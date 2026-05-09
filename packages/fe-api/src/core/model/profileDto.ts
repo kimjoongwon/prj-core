@@ -21,6 +21,7 @@ export interface ProfileDto {
 	avatarFileId: string | null;
 	name: string;
 	nickname: string;
+	address: string;
 	userId: string;
 	user?: User;
 }

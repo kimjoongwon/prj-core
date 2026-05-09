@@ -4,15 +4,16 @@ import type { OidcClientLoginUi } from "@cocrepo/type";
 import { Spinner } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type { FormEvent, MouseEvent } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../../control";
 import { AlertBanner } from "../../display";
-import { useT } from "../../i18n";
 import {
 	OidcConsentPanel,
 	type OidcConsentPanelState,
 	OidcLoginForm,
 	type OidcLoginFormState,
 } from "../../form";
+import { useT } from "../../i18n";
 import { AuthCard, AuthCardHeader } from "../../widget";
 
 export interface IdpInteractionClientInfo {
@@ -45,10 +46,31 @@ export interface OidcInteractionPageProps {
 export const OidcInteractionPage = observer(
 	(props: OidcInteractionPageProps) => {
 		const t = useT();
+		const [showLoadingRecovery, setShowLoadingRecovery] = useState(false);
 		const shouldFocusAuthPanel = Boolean(
 			props.state.client?.loginUi?.mobileFullScreen ||
 				props.state.client?.loginUi?.showIntroPanel === false,
 		);
+
+		useEffect(() => {
+			if (props.state.mode !== "loading") {
+				setShowLoadingRecovery(false);
+				return;
+			}
+
+			const timeoutId = window.setTimeout(() => {
+				setShowLoadingRecovery(true);
+			}, 4000);
+
+			return () => {
+				window.clearTimeout(timeoutId);
+			};
+		}, [props.state.mode]);
+
+		const onClickLoadingRecoveryButton = () => {
+			props.onClickRecoveryButton?.();
+		};
+
 		const focusedAuthLayoutStyle = shouldFocusAuthPanel ? (
 			<style>
 				{`
@@ -91,16 +113,25 @@ export const OidcInteractionPage = observer(
 		if (props.state.mode === "loading") {
 			return (
 				<AuthCard>
-					<div className="flex flex-col items-center gap-4 py-10 text-center">
+					<div className="flex flex-col items-center gap-5 py-10 text-center">
 						<Spinner size="lg" />
 						<div className="space-y-1">
 							<p className="font-medium text-foreground">
-								{t("인증 정보를 확인하고 있습니다")}
+								{t("로그인 화면을 준비하고 있어요")}
 							</p>
 							<p className="text-sm text-default-500">
-								{t("잠시만 기다려 주세요.")}
+								{t("잠시 후 안전한 인증 화면으로 이동합니다.")}
 							</p>
 						</div>
+						{showLoadingRecovery && props.onClickRecoveryButton ? (
+							<Button
+								className="min-h-11 w-full font-semibold sm:w-auto sm:min-w-40"
+								variant="flat"
+								onPress={onClickLoadingRecoveryButton}
+							>
+								{t("다시 시도")}
+							</Button>
+						) : null}
 					</div>
 				</AuthCard>
 			);

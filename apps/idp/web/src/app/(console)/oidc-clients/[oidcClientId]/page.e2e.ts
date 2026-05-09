@@ -19,5 +19,7 @@ test.describe("OIDC 클라이언트 상세 페이지", () => {
 		// Then: 상세 페이지로 이동하고 정보가 표시됨
 		await expect(page).toHaveURL(/\/oidc-clients\/.+/);
 		await expect(page.getByText("Client ID")).toBeVisible();
+		await expect(page.getByText("클라이언트 신뢰 구분")).toBeVisible();
+		await expect(page.getByText(/First-party|Third-party/)).toBeVisible();
 	});
 });

@@ -9,7 +9,8 @@ const defaultArgs = {
 		defaultReturnTo: "default-return-to-1",
 		grantTypes: ["authorization_code", "refresh_token"],
 		isActive: false,
-		skipConsent: false,
+		isFirstParty: true,
+		skipConsent: true,
 		loginUi: {
 			variant: "branded",
 			headline: "Client 로그인",

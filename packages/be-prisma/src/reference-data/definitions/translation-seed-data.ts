@@ -147,8 +147,7 @@ const translationDefinitions = [
 			en_US:
 				"does not have page access permission in the currently selected Space.",
 			zh_CN: "在当前选择的 Space 权限中没有可打开该页面的访问权限。",
-			ja_JP:
-				"は現在選択中のSpace権限では画面アクセス権限がありません。",
+			ja_JP: "は現在選択中のSpace権限では画面アクセス権限がありません。",
 		},
 	),
 	defineTranslation(
@@ -160,8 +159,7 @@ const translationDefinitions = [
 			en_US:
 				"can only be opened when the currently selected tenant role has FULL_ACCESS.",
 			zh_CN: "仅当当前选择的 tenant role 为 FULL_ACCESS 时才能打开。",
-			ja_JP:
-				"は現在選択中のtenant roleがFULL_ACCESSの場合のみ開けます。",
+			ja_JP: "は現在選択中のtenant roleがFULL_ACCESSの場合のみ開けます。",
 		},
 	),
 	defineTranslation(
@@ -389,16 +387,12 @@ const translationDefinitions = [
 		zh_CN: "请先创建文件夹再上传。",
 		ja_JP: "アップロードするには先にフォルダを作成してください。",
 	}),
-	defineTranslation(
-		"Space를 선택하면 에셋을 조회할 수 있습니다",
-		"프론트 UI",
-		{
-			ko_KR: "Space를 선택하면 에셋을 조회할 수 있습니다",
-			en_US: "Select a Space to view assets",
-			zh_CN: "选择 Space 后可查看资产",
-			ja_JP: "Spaceを選択するとアセットを表示できます",
-		},
-	),
+	defineTranslation("Space를 선택하면 에셋을 조회할 수 있습니다", "프론트 UI", {
+		ko_KR: "Space를 선택하면 에셋을 조회할 수 있습니다",
+		en_US: "Select a Space to view assets",
+		zh_CN: "选择 Space 后可查看资产",
+		ja_JP: "Spaceを選択するとアセットを表示できます",
+	}),
 	defineTranslation(
 		"상단 Space 선택기를 통해 관리하려는 공간을 먼저 선택해주세요.",
 		"프론트 UI",
@@ -1181,24 +1175,35 @@ const translationDefinitions = [
 		zh_CN: "按运动名称搜索。",
 		ja_JP: "運動名で検索してください。",
 	}),
-	defineTranslation("현재 Space + 상위 Space 운동 중 비디오가 연결된 운동만 후보로 표시합니다.", "프론트 UI", {
-		ko_KR: "현재 Space + 상위 Space 운동 중 비디오가 연결된 운동만 후보로 표시합니다.",
-		en_US: "Only video-linked exercises from the current Space and ancestor Spaces are shown as candidates.",
-		zh_CN: "仅显示当前 Space 和上级 Space 中已关联视频的运动候选项。",
-		ja_JP: "現在のSpaceと上位Spaceの運動のうち、動画が接続された運動のみ候補に表示します。",
-	}),
+	defineTranslation(
+		"현재 Space + 상위 Space 운동 중 비디오가 연결된 운동만 후보로 표시합니다.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"현재 Space + 상위 Space 운동 중 비디오가 연결된 운동만 후보로 표시합니다.",
+			en_US:
+				"Only video-linked exercises from the current Space and ancestor Spaces are shown as candidates.",
+			zh_CN: "仅显示当前 Space 和上级 Space 中已关联视频的运动候选项。",
+			ja_JP:
+				"現在のSpaceと上位Spaceの運動のうち、動画が接続された運動のみ候補に表示します。",
+		},
+	),
 	defineTranslation("후보 운동", "프론트 UI", {
 		ko_KR: "후보 운동",
 		en_US: "Candidate exercises",
 		zh_CN: "候选运动",
 		ja_JP: "候補運動",
 	}),
-	defineTranslation("이미지는 썸네일, 비디오는 편성 가능 여부 기준으로 사용합니다.", "프론트 UI", {
-		ko_KR: "이미지는 썸네일, 비디오는 편성 가능 여부 기준으로 사용합니다.",
-		en_US: "Images are used as thumbnails; videos determine schedulability.",
-		zh_CN: "图片用作缩略图，视频用于判断是否可编排。",
-		ja_JP: "画像はサムネイル、動画は編成可能判定に使用します。",
-	}),
+	defineTranslation(
+		"이미지는 썸네일, 비디오는 편성 가능 여부 기준으로 사용합니다.",
+		"프론트 UI",
+		{
+			ko_KR: "이미지는 썸네일, 비디오는 편성 가능 여부 기준으로 사용합니다.",
+			en_US: "Images are used as thumbnails; videos determine schedulability.",
+			zh_CN: "图片用作缩略图，视频用于判断是否可编排。",
+			ja_JP: "画像はサムネイル、動画は編成可能判定に使用します。",
+		},
+	),
 	defineTranslation("기본 반복", "프론트 UI", {
 		ko_KR: "기본 반복",
 		en_US: "Default repetitions",
@@ -1217,12 +1222,16 @@ const translationDefinitions = [
 		zh_CN: "已添加活动",
 		ja_JP: "追加済みアクティビティ",
 	}),
-	defineTranslation("드래그로 순서를 바꾸면 저장 순서에도 그대로 반영됩니다.", "프론트 UI", {
-		ko_KR: "드래그로 순서를 바꾸면 저장 순서에도 그대로 반영됩니다.",
-		en_US: "Drag to reorder; the saved order will follow.",
-		zh_CN: "拖拽调整顺序后会按该顺序保存。",
-		ja_JP: "ドラッグで順序を変えると保存順にも反映されます。",
-	}),
+	defineTranslation(
+		"드래그로 순서를 바꾸면 저장 순서에도 그대로 반영됩니다.",
+		"프론트 UI",
+		{
+			ko_KR: "드래그로 순서를 바꾸면 저장 순서에도 그대로 반영됩니다.",
+			en_US: "Drag to reorder; the saved order will follow.",
+			zh_CN: "拖拽调整顺序后会按该顺序保存。",
+			ja_JP: "ドラッグで順序を変えると保存順にも反映されます。",
+		},
+	),
 	defineTranslation("드래그해서 루틴 순서를 조정할 수 있습니다.", "프론트 UI", {
 		ko_KR: "드래그해서 루틴 순서를 조정할 수 있습니다.",
 		en_US: "Drag to adjust the routine order.",
@@ -1265,12 +1274,17 @@ const translationDefinitions = [
 		zh_CN: "移除",
 		ja_JP: "削除",
 	}),
-	defineTranslation("영상이 없어 Program 생성에 사용할 수 없는 운동입니다.", "프론트 UI", {
-		ko_KR: "영상이 없어 Program 생성에 사용할 수 없는 운동입니다.",
-		en_US: "This exercise has no video and cannot be used to create a Program.",
-		zh_CN: "该运动没有视频，不能用于创建 Program。",
-		ja_JP: "動画がないためProgram作成に使用できない運動です。",
-	}),
+	defineTranslation(
+		"영상이 없어 Program 생성에 사용할 수 없는 운동입니다.",
+		"프론트 UI",
+		{
+			ko_KR: "영상이 없어 Program 생성에 사용할 수 없는 운동입니다.",
+			en_US:
+				"This exercise has no video and cannot be used to create a Program.",
+			zh_CN: "该运动没有视频，不能用于创建 Program。",
+			ja_JP: "動画がないためProgram作成に使用できない運動です。",
+		},
+	),
 	defineTranslation("휴식 시간(초)", "프론트 UI", {
 		ko_KR: "휴식 시간(초)",
 		en_US: "Rest time (sec)",
@@ -1295,12 +1309,16 @@ const translationDefinitions = [
 		zh_CN: "无活动保存",
 		ja_JP: "アクティビティなしで保存",
 	}),
-	defineTranslation("활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?", "프론트 UI", {
-		ko_KR: "활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?",
-		en_US: "This routine has no activities. Save it anyway?",
-		zh_CN: "该例程没有活动。仍要保存吗？",
-		ja_JP: "アクティビティが0件のルーティンです。このまま保存しますか？",
-	}),
+	defineTranslation(
+		"활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?",
+		"프론트 UI",
+		{
+			ko_KR: "활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?",
+			en_US: "This routine has no activities. Save it anyway?",
+			zh_CN: "该例程没有活动。仍要保存吗？",
+			ja_JP: "アクティビティが0件のルーティンです。このまま保存しますか？",
+		},
+	),
 	defineTranslation("저장 진행", "프론트 UI", {
 		ko_KR: "저장 진행",
 		en_US: "Continue saving",
@@ -1367,12 +1385,16 @@ const translationDefinitions = [
 		zh_CN: "在特定日期时间仅进行一次的课程。",
 		ja_JP: "特定日時に一度だけ行うクラスです。",
 	}),
-	defineTranslation("특정 기간 동안 집중적으로 진행되는 프로그램입니다.", "프론트 UI", {
-		ko_KR: "특정 기간 동안 집중적으로 진행되는 프로그램입니다.",
-		en_US: "A program run intensively during a specific period.",
-		zh_CN: "在特定期间集中进行的项目。",
-		ja_JP: "特定期間に集中して行うプログラムです。",
-	}),
+	defineTranslation(
+		"특정 기간 동안 집중적으로 진행되는 프로그램입니다.",
+		"프론트 UI",
+		{
+			ko_KR: "특정 기간 동안 집중적으로 진행되는 프로그램입니다.",
+			en_US: "A program run intensively during a specific period.",
+			zh_CN: "在特定期间集中进行的项目。",
+			ja_JP: "特定期間に集中して行うプログラムです。",
+		},
+	),
 	defineTranslation("매주 또는 매월 반복되는 정기 수업입니다.", "프론트 UI", {
 		ko_KR: "매주 또는 매월 반복되는 정기 수업입니다.",
 		en_US: "A recurring class repeated weekly or monthly.",
@@ -1625,12 +1647,17 @@ const translationDefinitions = [
 		zh_CN: "休息",
 		ja_JP: "休憩",
 	}),
-	defineTranslation("영상이 없는 운동이 포함되어 있어 저장 버튼이 비활성화됩니다.", "프론트 UI", {
-		ko_KR: "영상이 없는 운동이 포함되어 있어 저장 버튼이 비활성화됩니다.",
-		en_US: "The save button is disabled because the routine includes exercises without videos.",
-		zh_CN: "包含没有视频的运动，因此保存按钮已禁用。",
-		ja_JP: "動画がない運動が含まれているため、保存ボタンが無効になります。",
-	}),
+	defineTranslation(
+		"영상이 없는 운동이 포함되어 있어 저장 버튼이 비활성화됩니다.",
+		"프론트 UI",
+		{
+			ko_KR: "영상이 없는 운동이 포함되어 있어 저장 버튼이 비활성화됩니다.",
+			en_US:
+				"The save button is disabled because the routine includes exercises without videos.",
+			zh_CN: "包含没有视频的运动，因此保存按钮已禁用。",
+			ja_JP: "動画がない運動が含まれているため、保存ボタンが無効になります。",
+		},
+	),
 	defineTranslation("정원", "프론트 UI", {
 		ko_KR: "정원",
 		en_US: "Capacity",
@@ -1685,12 +1712,19 @@ const translationDefinitions = [
 		zh_CN: "权限操作列表",
 		ja_JP: "権限アクション一覧",
 	}),
-	defineTranslation("역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다.", "프론트 UI", {
-		ko_KR: "역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다.",
-		en_US: "A permission action catalog for managing operations allowed by roles and policies.",
-		zh_CN: "用于管理角色和策略允许的操作单位的权限操作目录。",
-		ja_JP: "ロールとポリシーで許可する動作単位を管理する権限アクションカタログです。",
-	}),
+	defineTranslation(
+		"역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다.",
+			en_US:
+				"A permission action catalog for managing operations allowed by roles and policies.",
+			zh_CN: "用于管理角色和策略允许的操作单位的权限操作目录。",
+			ja_JP:
+				"ロールとポリシーで許可する動作単位を管理する権限アクションカタログです。",
+		},
+	),
 	defineTranslation("액션 등록", "프론트 UI", {
 		ko_KR: "액션 등록",
 		en_US: "Create action",
@@ -1709,48 +1743,68 @@ const translationDefinitions = [
 		zh_CN: "权限操作目录",
 		ja_JP: "権限アクションカタログ",
 	}),
-	defineTranslation("액션은 권한 규칙이 사용자의 동작을 판단할 때 참조하는 기준입니다.", "프론트 UI", {
-		ko_KR: "액션은 권한 규칙이 사용자의 동작을 판단할 때 참조하는 기준입니다.",
-		en_US: "Actions are the references permission rules use to evaluate user operations.",
-		zh_CN: "操作是权限规则判断用户行为时参考的基准。",
-		ja_JP: "アクションは権限ルールがユーザー操作を判断するときの基準です。",
-	}),
+	defineTranslation(
+		"액션은 권한 규칙이 사용자의 동작을 판단할 때 참조하는 기준입니다.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"액션은 권한 규칙이 사용자의 동작을 판단할 때 참조하는 기준입니다.",
+			en_US:
+				"Actions are the references permission rules use to evaluate user operations.",
+			zh_CN: "操作是权限规则判断用户行为时参考的基准。",
+			ja_JP: "アクションは権限ルールがユーザー操作を判断するときの基準です。",
+		},
+	),
 	defineTranslation("동작 단위", "프론트 UI", {
 		ko_KR: "동작 단위",
 		en_US: "Operation unit",
 		zh_CN: "操作单位",
 		ja_JP: "動作単位",
 	}),
-	defineTranslation("액션은 역할과 정책에서 허용할 동작 단위입니다.", "프론트 UI", {
-		ko_KR: "액션은 역할과 정책에서 허용할 동작 단위입니다.",
-		en_US: "Actions are operation units allowed by roles and policies.",
-		zh_CN: "操作是角色和策略允许的操作单位。",
-		ja_JP: "アクションはロールとポリシーで許可する動作単位です。",
-	}),
+	defineTranslation(
+		"액션은 역할과 정책에서 허용할 동작 단위입니다.",
+		"프론트 UI",
+		{
+			ko_KR: "액션은 역할과 정책에서 허용할 동작 단위입니다.",
+			en_US: "Actions are operation units allowed by roles and policies.",
+			zh_CN: "操作是角色和策略允许的操作单位。",
+			ja_JP: "アクションはロールとポリシーで許可する動作単位です。",
+		},
+	),
 	defineTranslation("Ability 조합", "프론트 UI", {
 		ko_KR: "Ability 조합",
 		en_US: "Ability composition",
 		zh_CN: "Ability 组合",
 		ja_JP: "Abilityの組み合わせ",
 	}),
-	defineTranslation("Ability = 대상 + 액션 조합으로 실제 권한을 구성합니다.", "프론트 UI", {
-		ko_KR: "Ability = 대상 + 액션 조합으로 실제 권한을 구성합니다.",
-		en_US: "Ability combines a subject and an action to form the actual permission.",
-		zh_CN: "Ability 通过对象 + 操作组合构成实际权限。",
-		ja_JP: "Abilityは対象 + アクションの組み合わせで実際の権限を構成します。",
-	}),
+	defineTranslation(
+		"Ability = 대상 + 액션 조합으로 실제 권한을 구성합니다.",
+		"프론트 UI",
+		{
+			ko_KR: "Ability = 대상 + 액션 조합으로 실제 권한을 구성합니다.",
+			en_US:
+				"Ability combines a subject and an action to form the actual permission.",
+			zh_CN: "Ability 通过对象 + 操作组合构成实际权限。",
+			ja_JP: "Abilityは対象 + アクションの組み合わせで実際の権限を構成します。",
+		},
+	),
 	defineTranslation("시스템 액션", "프론트 UI", {
 		ko_KR: "시스템 액션",
 		en_US: "System action",
 		zh_CN: "系统操作",
 		ja_JP: "システムアクション",
 	}),
-	defineTranslation("시스템 액션은 기본 제공 항목이며 수정/삭제가 제한됩니다.", "프론트 UI", {
-		ko_KR: "시스템 액션은 기본 제공 항목이며 수정/삭제가 제한됩니다.",
-		en_US: "System actions are built-in and have restricted update/delete operations.",
-		zh_CN: "系统操作为内置项目，限制修改/删除。",
-		ja_JP: "システムアクションは標準項目で、編集/削除が制限されます。",
-	}),
+	defineTranslation(
+		"시스템 액션은 기본 제공 항목이며 수정/삭제가 제한됩니다.",
+		"프론트 UI",
+		{
+			ko_KR: "시스템 액션은 기본 제공 항목이며 수정/삭제가 제한됩니다.",
+			en_US:
+				"System actions are built-in and have restricted update/delete operations.",
+			zh_CN: "系统操作为内置项目，限制修改/删除。",
+			ja_JP: "システムアクションは標準項目で、編集/削除が制限されます。",
+		},
+	),
 	defineTranslation("권한 액션 그룹 필터", "프론트 UI", {
 		ko_KR: "권한 액션 그룹 필터",
 		en_US: "Permission action group filter",
@@ -1769,60 +1823,85 @@ const translationDefinitions = [
 		zh_CN: "查看所有已注册的权限操作。",
 		ja_JP: "登録済みのすべての権限アクションを確認します。",
 	}),
-	defineTranslation("생성, 조회, 수정, 삭제처럼 기본 데이터 조작에 쓰입니다.", "프론트 UI", {
-		ko_KR: "생성, 조회, 수정, 삭제처럼 기본 데이터 조작에 쓰입니다.",
-		en_US: "Used for basic data operations such as create, read, update, and delete.",
-		zh_CN: "用于创建、查询、修改、删除等基础数据操作。",
-		ja_JP: "作成、照会、更新、削除など基本データ操作に使います。",
-	}),
+	defineTranslation(
+		"생성, 조회, 수정, 삭제처럼 기본 데이터 조작에 쓰입니다.",
+		"프론트 UI",
+		{
+			ko_KR: "생성, 조회, 수정, 삭제처럼 기본 데이터 조작에 쓰입니다.",
+			en_US:
+				"Used for basic data operations such as create, read, update, and delete.",
+			zh_CN: "用于创建、查询、修改、删除等基础数据操作。",
+			ja_JP: "作成、照会、更新、削除など基本データ操作に使います。",
+		},
+	),
 	defineTranslation("표시/마스킹", "프론트 UI", {
 		ko_KR: "표시/마스킹",
 		en_US: "Display/masking",
 		zh_CN: "显示/脱敏",
 		ja_JP: "表示/マスキング",
 	}),
-	defineTranslation("민감 정보 노출 수준과 마스킹 조회 권한을 구분합니다.", "프론트 UI", {
-		ko_KR: "민감 정보 노출 수준과 마스킹 조회 권한을 구분합니다.",
-		en_US: "Separates sensitive information exposure levels from masked view permissions.",
-		zh_CN: "区分敏感信息暴露级别和脱敏查询权限。",
-		ja_JP: "機密情報の露出レベルとマスキング照会権限を区分します。",
-	}),
+	defineTranslation(
+		"민감 정보 노출 수준과 마스킹 조회 권한을 구분합니다.",
+		"프론트 UI",
+		{
+			ko_KR: "민감 정보 노출 수준과 마스킹 조회 권한을 구분합니다.",
+			en_US:
+				"Separates sensitive information exposure levels from masked view permissions.",
+			zh_CN: "区分敏感信息暴露级别和脱敏查询权限。",
+			ja_JP: "機密情報の露出レベルとマスキング照会権限を区分します。",
+		},
+	),
 	defineTranslation("일괄", "프론트 UI", {
 		ko_KR: "일괄",
 		en_US: "Bulk",
 		zh_CN: "批量",
 		ja_JP: "一括",
 	}),
-	defineTranslation("가져오기, 내보내기처럼 여러 데이터를 한 번에 다룹니다.", "프론트 UI", {
-		ko_KR: "가져오기, 내보내기처럼 여러 데이터를 한 번에 다룹니다.",
-		en_US: "Handles multiple records at once, such as import and export.",
-		zh_CN: "用于导入、导出等一次处理多条数据的操作。",
-		ja_JP: "インポート、エクスポートなど複数データを一度に扱います。",
-	}),
+	defineTranslation(
+		"가져오기, 내보내기처럼 여러 데이터를 한 번에 다룹니다.",
+		"프론트 UI",
+		{
+			ko_KR: "가져오기, 내보내기처럼 여러 데이터를 한 번에 다룹니다.",
+			en_US: "Handles multiple records at once, such as import and export.",
+			zh_CN: "用于导入、导出等一次处理多条数据的操作。",
+			ja_JP: "インポート、エクスポートなど複数データを一度に扱います。",
+		},
+	),
 	defineTranslation("워크플로우", "프론트 UI", {
 		ko_KR: "워크플로우",
 		en_US: "Workflow",
 		zh_CN: "工作流",
 		ja_JP: "ワークフロー",
 	}),
-	defineTranslation("접근, 승인, 반려 같은 운영 흐름의 상태 전환에 쓰입니다.", "프론트 UI", {
-		ko_KR: "접근, 승인, 반려 같은 운영 흐름의 상태 전환에 쓰입니다.",
-		en_US: "Used for operational state transitions such as access, approval, and rejection.",
-		zh_CN: "用于访问、批准、拒绝等运营流程状态转换。",
-		ja_JP: "アクセス、承認、却下など運用フローの状態遷移に使います。",
-	}),
+	defineTranslation(
+		"접근, 승인, 반려 같은 운영 흐름의 상태 전환에 쓰입니다.",
+		"프론트 UI",
+		{
+			ko_KR: "접근, 승인, 반려 같은 운영 흐름의 상태 전환에 쓰입니다.",
+			en_US:
+				"Used for operational state transitions such as access, approval, and rejection.",
+			zh_CN: "用于访问、批准、拒绝等运营流程状态转换。",
+			ja_JP: "アクセス、承認、却下など運用フローの状態遷移に使います。",
+		},
+	),
 	defineTranslation("권한 대상 목록", "프론트 UI", {
 		ko_KR: "권한 대상 목록",
 		en_US: "Permission subjects",
 		zh_CN: "权限对象列表",
 		ja_JP: "権限対象一覧",
 	}),
-	defineTranslation("역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다.", "프론트 UI", {
-		ko_KR: "역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다.",
-		en_US: "Managed subjects used when choosing what roles or policies allow.",
-		zh_CN: "用于选择角色或策略允许内容的管理对象。",
-		ja_JP: "ロールやポリシーで何を許可するか選ぶときに使う管理対象です。",
-	}),
+	defineTranslation(
+		"역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다.",
+			en_US:
+				"Managed subjects used when choosing what roles or policies allow.",
+			zh_CN: "用于选择角色或策略允许内容的管理对象。",
+			ja_JP: "ロールやポリシーで何を許可するか選ぶときに使う管理対象です。",
+		},
+	),
 	defineTranslation("조회된 대상이 없습니다.", "프론트 UI", {
 		ko_KR: "조회된 대상이 없습니다.",
 		en_US: "No subjects found.",
@@ -1835,96 +1914,136 @@ const translationDefinitions = [
 		zh_CN: "对象类型筛选",
 		ja_JP: "対象タイプフィルター",
 	}),
-	defineTranslation("등록된 모든 권한 대상을 한 번에 확인합니다.", "프론트 UI", {
-		ko_KR: "등록된 모든 권한 대상을 한 번에 확인합니다.",
-		en_US: "View all registered permission subjects at once.",
-		zh_CN: "一次查看所有已注册的权限对象。",
-		ja_JP: "登録済みのすべての権限対象を一度に確認します。",
-	}),
+	defineTranslation(
+		"등록된 모든 권한 대상을 한 번에 확인합니다.",
+		"프론트 UI",
+		{
+			ko_KR: "등록된 모든 권한 대상을 한 번에 확인합니다.",
+			en_US: "View all registered permission subjects at once.",
+			zh_CN: "一次查看所有已注册的权限对象。",
+			ja_JP: "登録済みのすべての権限対象を一度に確認します。",
+		},
+	),
 	defineTranslation("공통", "프론트 UI", {
 		ko_KR: "공통",
 		en_US: "Common",
 		zh_CN: "通用",
 		ja_JP: "共通",
 	}),
-	defineTranslation("모든 화면과 데이터에 넓게 적용되는 공통 권한 대상입니다.", "프론트 UI", {
-		ko_KR: "모든 화면과 데이터에 넓게 적용되는 공통 권한 대상입니다.",
-		en_US: "A common permission subject broadly applied to screens and data.",
-		zh_CN: "广泛应用于所有画面和数据的通用权限对象。",
-		ja_JP: "すべての画面とデータに広く適用される共通権限対象です。",
-	}),
+	defineTranslation(
+		"모든 화면과 데이터에 넓게 적용되는 공통 권한 대상입니다.",
+		"프론트 UI",
+		{
+			ko_KR: "모든 화면과 데이터에 넓게 적용되는 공통 권한 대상입니다.",
+			en_US: "A common permission subject broadly applied to screens and data.",
+			zh_CN: "广泛应用于所有画面和数据的通用权限对象。",
+			ja_JP: "すべての画面とデータに広く適用される共通権限対象です。",
+		},
+	),
 	defineTranslation("데이터", "프론트 UI", {
 		ko_KR: "데이터",
 		en_US: "Data",
 		zh_CN: "数据",
 		ja_JP: "データ",
 	}),
-	defineTranslation("사용자, 역할, 공간처럼 업무 데이터에 접근하는 권한 대상입니다.", "프론트 UI", {
-		ko_KR: "사용자, 역할, 공간처럼 업무 데이터에 접근하는 권한 대상입니다.",
-		en_US: "A permission subject for accessing business data such as users, roles, and spaces.",
-		zh_CN: "用于访问用户、角色、空间等业务数据的权限对象。",
-		ja_JP: "ユーザー、ロール、スペースなど業務データにアクセスする権限対象です。",
-	}),
+	defineTranslation(
+		"사용자, 역할, 공간처럼 업무 데이터에 접근하는 권한 대상입니다.",
+		"프론트 UI",
+		{
+			ko_KR: "사용자, 역할, 공간처럼 업무 데이터에 접근하는 권한 대상입니다.",
+			en_US:
+				"A permission subject for accessing business data such as users, roles, and spaces.",
+			zh_CN: "用于访问用户、角色、空间等业务数据的权限对象。",
+			ja_JP:
+				"ユーザー、ロール、スペースなど業務データにアクセスする権限対象です。",
+		},
+	),
 	defineTranslation("메뉴", "프론트 UI", {
 		ko_KR: "메뉴",
 		en_US: "Menu",
 		zh_CN: "菜单",
 		ja_JP: "メニュー",
 	}),
-	defineTranslation("좌측 메뉴나 내비게이션에서 특정 메뉴를 볼 수 있는 대상입니다.", "프론트 UI", {
-		ko_KR: "좌측 메뉴나 내비게이션에서 특정 메뉴를 볼 수 있는 대상입니다.",
-		en_US: "A subject for viewing specific menus in side menus or navigation.",
-		zh_CN: "用于在左侧菜单或导航中查看特定菜单的对象。",
-		ja_JP: "左メニューやナビゲーションで特定メニューを表示できる対象です。",
-	}),
+	defineTranslation(
+		"좌측 메뉴나 내비게이션에서 특정 메뉴를 볼 수 있는 대상입니다.",
+		"프론트 UI",
+		{
+			ko_KR: "좌측 메뉴나 내비게이션에서 특정 메뉴를 볼 수 있는 대상입니다.",
+			en_US:
+				"A subject for viewing specific menus in side menus or navigation.",
+			zh_CN: "用于在左侧菜单或导航中查看特定菜单的对象。",
+			ja_JP: "左メニューやナビゲーションで特定メニューを表示できる対象です。",
+		},
+	),
 	defineTranslation("화면", "프론트 UI", {
 		ko_KR: "화면",
 		en_US: "Page",
 		zh_CN: "页面",
 		ja_JP: "画面",
 	}),
-	defineTranslation("특정 관리 화면에 들어갈 수 있는지 제어하는 권한 대상입니다.", "프론트 UI", {
-		ko_KR: "특정 관리 화면에 들어갈 수 있는지 제어하는 권한 대상입니다.",
-		en_US: "A permission subject controlling access to specific admin pages.",
-		zh_CN: "控制是否可进入特定管理页面的权限对象。",
-		ja_JP: "特定管理画面に入れるかを制御する権限対象です。",
-	}),
+	defineTranslation(
+		"특정 관리 화면에 들어갈 수 있는지 제어하는 권한 대상입니다.",
+		"프론트 UI",
+		{
+			ko_KR: "특정 관리 화면에 들어갈 수 있는지 제어하는 권한 대상입니다.",
+			en_US: "A permission subject controlling access to specific admin pages.",
+			zh_CN: "控制是否可进入特定管理页面的权限对象。",
+			ja_JP: "特定管理画面に入れるかを制御する権限対象です。",
+		},
+	),
 	defineTranslation("기능", "프론트 UI", {
 		ko_KR: "기능",
 		en_US: "Feature",
 		zh_CN: "功能",
 		ja_JP: "機能",
 	}),
-	defineTranslation("내보내기, 가져오기, 알림 발송처럼 화면 안에서 실행하는 작업입니다.", "프론트 UI", {
-		ko_KR: "내보내기, 가져오기, 알림 발송처럼 화면 안에서 실행하는 작업입니다.",
-		en_US: "An action executed within a page, such as export, import, or notification sending.",
-		zh_CN: "页面内执行的操作，例如导出、导入、发送通知。",
-		ja_JP: "エクスポート、インポート、通知送信など画面内で実行する作業です。",
-	}),
+	defineTranslation(
+		"내보내기, 가져오기, 알림 발송처럼 화면 안에서 실행하는 작업입니다.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"내보내기, 가져오기, 알림 발송처럼 화면 안에서 실행하는 작업입니다.",
+			en_US:
+				"An action executed within a page, such as export, import, or notification sending.",
+			zh_CN: "页面内执行的操作，例如导出、导入、发送通知。",
+			ja_JP: "エクスポート、インポート、通知送信など画面内で実行する作業です。",
+		},
+	),
 	defineTranslation("화면 요소", "프론트 UI", {
 		ko_KR: "화면 요소",
 		en_US: "UI element",
 		zh_CN: "页面元素",
 		ja_JP: "画面要素",
 	}),
-	defineTranslation("버튼, 탭, 배너처럼 화면 일부를 보거나 사용할 수 있는 대상입니다.", "프론트 UI", {
-		ko_KR: "버튼, 탭, 배너처럼 화면 일부를 보거나 사용할 수 있는 대상입니다.",
-		en_US: "A subject for viewing or using parts of a page such as buttons, tabs, or banners.",
-		zh_CN: "用于查看或使用按钮、标签页、横幅等页面部分的对象。",
-		ja_JP: "ボタン、タブ、バナーなど画面の一部を表示または使用できる対象です。",
-	}),
+	defineTranslation(
+		"버튼, 탭, 배너처럼 화면 일부를 보거나 사용할 수 있는 대상입니다.",
+		"프론트 UI",
+		{
+			ko_KR: "버튼, 탭, 배너처럼 화면 일부를 보거나 사용할 수 있는 대상입니다.",
+			en_US:
+				"A subject for viewing or using parts of a page such as buttons, tabs, or banners.",
+			zh_CN: "用于查看或使用按钮、标签页、横幅等页面部分的对象。",
+			ja_JP:
+				"ボタン、タブ、バナーなど画面の一部を表示または使用できる対象です。",
+		},
+	),
 	defineTranslation("정적 번역", "프론트 UI", {
 		ko_KR: "정적 번역",
 		en_US: "Static translations",
 		zh_CN: "静态翻译",
 		ja_JP: "静的翻訳",
 	}),
-	defineTranslation("admin과 idp에서 사용하는 정적 다국어 key-value를 관리합니다.", "프론트 UI", {
-		ko_KR: "admin과 idp에서 사용하는 정적 다국어 key-value를 관리합니다.",
-		en_US: "Manage static multilingual key-value pairs used by admin and idp.",
-		zh_CN: "管理 admin 和 idp 使用的静态多语言键值。",
-		ja_JP: "adminとidpで使用する静的多言語key-valueを管理します。",
-	}),
+	defineTranslation(
+		"admin과 idp에서 사용하는 정적 다국어 key-value를 관리합니다.",
+		"프론트 UI",
+		{
+			ko_KR: "admin과 idp에서 사용하는 정적 다국어 key-value를 관리합니다.",
+			en_US:
+				"Manage static multilingual key-value pairs used by admin and idp.",
+			zh_CN: "管理 admin 和 idp 使用的静态多语言键值。",
+			ja_JP: "adminとidpで使用する静的多言語key-valueを管理します。",
+		},
+	),
 	defineTranslation("전체 캐시 갱신", "프론트 UI", {
 		ko_KR: "전체 캐시 갱신",
 		en_US: "Refresh all caches",
@@ -2105,48 +2224,71 @@ const translationDefinitions = [
 		zh_CN: "说明",
 		ja_JP: "説明",
 	}),
-	defineTranslation("운동 설명, 수행 방법 등을 입력하세요 (선택)", "프론트 UI", {
-		ko_KR: "운동 설명, 수행 방법 등을 입력하세요 (선택)",
-		en_US: "Enter exercise description or instructions (optional)",
-		zh_CN: "请输入运动说明或执行方法（可选）",
-		ja_JP: "運動説明や実施方法を入力してください（任意）",
-	}),
+	defineTranslation(
+		"운동 설명, 수행 방법 등을 입력하세요 (선택)",
+		"프론트 UI",
+		{
+			ko_KR: "운동 설명, 수행 방법 등을 입력하세요 (선택)",
+			en_US: "Enter exercise description or instructions (optional)",
+			zh_CN: "请输入运动说明或执行方法（可选）",
+			ja_JP: "運動説明や実施方法を入力してください（任意）",
+		},
+	),
 	defineTranslation("대표 이미지", "프론트 UI", {
 		ko_KR: "대표 이미지",
 		en_US: "Main image",
 		zh_CN: "主图",
 		ja_JP: "代表画像",
 	}),
-	defineTranslation("운동 카드와 상세 화면에서 먼저 보일 이미지를 선택합니다.", "프론트 UI", {
-		ko_KR: "운동 카드와 상세 화면에서 먼저 보일 이미지를 선택합니다.",
-		en_US: "Select the image shown first on exercise cards and detail pages.",
-		zh_CN: "选择运动卡片和详情页面优先显示的图片。",
-		ja_JP: "運動カードと詳細画面で最初に表示する画像を選択します。",
-	}),
-	defineTranslation("이미지 에셋을 선택하면 여기서 바로 미리보기를 확인할 수 있습니다.", "프론트 UI", {
-		ko_KR: "이미지 에셋을 선택하면 여기서 바로 미리보기를 확인할 수 있습니다.",
-		en_US: "Select an image asset to preview it here.",
-		zh_CN: "选择图片资产后可在此预览。",
-		ja_JP: "画像アセットを選択するとここでプレビューできます。",
-	}),
+	defineTranslation(
+		"운동 카드와 상세 화면에서 먼저 보일 이미지를 선택합니다.",
+		"프론트 UI",
+		{
+			ko_KR: "운동 카드와 상세 화면에서 먼저 보일 이미지를 선택합니다.",
+			en_US: "Select the image shown first on exercise cards and detail pages.",
+			zh_CN: "选择运动卡片和详情页面优先显示的图片。",
+			ja_JP: "運動カードと詳細画面で最初に表示する画像を選択します。",
+		},
+	),
+	defineTranslation(
+		"이미지 에셋을 선택하면 여기서 바로 미리보기를 확인할 수 있습니다.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"이미지 에셋을 선택하면 여기서 바로 미리보기를 확인할 수 있습니다.",
+			en_US: "Select an image asset to preview it here.",
+			zh_CN: "选择图片资产后可在此预览。",
+			ja_JP: "画像アセットを選択するとここでプレビューできます。",
+		},
+	),
 	defineTranslation("운동 영상", "프론트 UI", {
 		ko_KR: "운동 영상",
 		en_US: "Exercise video",
 		zh_CN: "运动视频",
 		ja_JP: "運動動画",
 	}),
-	defineTranslation("루틴 편성과 프로그램 생성에는 영상이 연결된 운동이 필요합니다.", "프론트 UI", {
-		ko_KR: "루틴 편성과 프로그램 생성에는 영상이 연결된 운동이 필요합니다.",
-		en_US: "Routine planning and program creation require an exercise with a video.",
-		zh_CN: "编排例程和创建项目需要关联视频的运动。",
-		ja_JP: "ルーティン編成とプログラム作成には動画付きの運動が必要です。",
-	}),
-	defineTranslation("영상 에셋을 선택하면 루틴 카드에서 영상 썸네일로 활용됩니다.", "프론트 UI", {
-		ko_KR: "영상 에셋을 선택하면 루틴 카드에서 영상 썸네일로 활용됩니다.",
-		en_US: "Select a video asset to use it as the routine card thumbnail.",
-		zh_CN: "选择视频资产后将用作例程卡片缩略图。",
-		ja_JP: "動画アセットを選択するとルーティンカードのサムネイルに使われます。",
-	}),
+	defineTranslation(
+		"루틴 편성과 프로그램 생성에는 영상이 연결된 운동이 필요합니다.",
+		"프론트 UI",
+		{
+			ko_KR: "루틴 편성과 프로그램 생성에는 영상이 연결된 운동이 필요합니다.",
+			en_US:
+				"Routine planning and program creation require an exercise with a video.",
+			zh_CN: "编排例程和创建项目需要关联视频的运动。",
+			ja_JP: "ルーティン編成とプログラム作成には動画付きの運動が必要です。",
+		},
+	),
+	defineTranslation(
+		"영상 에셋을 선택하면 루틴 카드에서 영상 썸네일로 활용됩니다.",
+		"프론트 UI",
+		{
+			ko_KR: "영상 에셋을 선택하면 루틴 카드에서 영상 썸네일로 활용됩니다.",
+			en_US: "Select a video asset to use it as the routine card thumbnail.",
+			zh_CN: "选择视频资产后将用作例程卡片缩略图。",
+			ja_JP:
+				"動画アセットを選択するとルーティンカードのサムネイルに使われます。",
+		},
+	),
 	defineTranslation("다시 선택", "프론트 UI", {
 		ko_KR: "다시 선택",
 		en_US: "Choose again",
@@ -2183,12 +2325,19 @@ const translationDefinitions = [
 		zh_CN: "不可用",
 		ja_JP: "不可",
 	}),
-	defineTranslation("영상 파일 ID가 입력된 Exercise만 루틴 편성 및 Program 생성에 사용할 수 있습니다.", "프론트 UI", {
-		ko_KR: "영상 파일 ID가 입력된 Exercise만 루틴 편성 및 Program 생성에 사용할 수 있습니다.",
-		en_US: "Only exercises with a video file ID can be used for routine planning and program creation.",
-		zh_CN: "只有输入视频文件 ID 的运动才能用于例程编排和项目创建。",
-		ja_JP: "動画ファイルIDが入力されたExerciseのみ、ルーティン編成とProgram作成に使用できます。",
-	}),
+	defineTranslation(
+		"영상 파일 ID가 입력된 Exercise만 루틴 편성 및 Program 생성에 사용할 수 있습니다.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"영상 파일 ID가 입력된 Exercise만 루틴 편성 및 Program 생성에 사용할 수 있습니다.",
+			en_US:
+				"Only exercises with a video file ID can be used for routine planning and program creation.",
+			zh_CN: "只有输入视频文件 ID 的运动才能用于例程编排和项目创建。",
+			ja_JP:
+				"動画ファイルIDが入力されたExerciseのみ、ルーティン編成とProgram作成に使用できます。",
+		},
+	),
 	defineTranslation("운동명을 입력해주세요.", "프론트 UI", {
 		ko_KR: "운동명을 입력해주세요.",
 		en_US: "Please enter an exercise name.",
@@ -2213,12 +2362,16 @@ const translationDefinitions = [
 		zh_CN: "任务创建成功",
 		ja_JP: "タスク登録成功",
 	}),
-	defineTranslation("태스크와 운동 detail이 성공적으로 등록되었습니다.", "프론트 UI", {
-		ko_KR: "태스크와 운동 detail이 성공적으로 등록되었습니다.",
-		en_US: "The task and exercise detail were created successfully.",
-		zh_CN: "任务和运动详情已成功创建。",
-		ja_JP: "タスクと運動詳細が正常に登録されました。",
-	}),
+	defineTranslation(
+		"태스크와 운동 detail이 성공적으로 등록되었습니다.",
+		"프론트 UI",
+		{
+			ko_KR: "태스크와 운동 detail이 성공적으로 등록되었습니다.",
+			en_US: "The task and exercise detail were created successfully.",
+			zh_CN: "任务和运动详情已成功创建。",
+			ja_JP: "タスクと運動詳細が正常に登録されました。",
+		},
+	),
 	defineTranslation("태스크 등록 실패", "프론트 UI", {
 		ko_KR: "태스크 등록 실패",
 		en_US: "Task creation failed",
@@ -2291,12 +2444,20 @@ const translationDefinitions = [
 		zh_CN: "还没有账户？",
 		ja_JP: "アカウントをお持ちではありませんか？",
 	}),
-	defineTranslation("가입할 Space와 계정 정보를 입력하면 이메일 인증 링크를 보내드립니다.", "프론트 UI", {
-		ko_KR: "가입할 Space와 계정 정보를 입력하면 이메일 인증 링크를 보내드립니다.",
-		en_US: "Choose a Space and enter your account details to receive an email verification link.",
-		zh_CN: "选择要加入的 Space 并输入账户信息后，我们会发送电子邮件验证链接。",
-		ja_JP: "参加する Space とアカウント情報を入力すると、メール認証リンクを送信します。",
-	}),
+	defineTranslation(
+		"가입할 Space와 계정 정보를 입력하면 이메일 인증 링크를 보내드립니다.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"가입할 Space와 계정 정보를 입력하면 이메일 인증 링크를 보내드립니다.",
+			en_US:
+				"Choose a Space and enter your account details to receive an email verification link.",
+			zh_CN:
+				"选择要加入的 Space 并输入账户信息后，我们会发送电子邮件验证链接。",
+			ja_JP:
+				"参加する Space とアカウント情報を入力すると、メール認証リンクを送信します。",
+		},
+	),
 	defineTranslation("가입 가능한 Space를 불러오는 중입니다.", "프론트 UI", {
 		ko_KR: "가입 가능한 Space를 불러오는 중입니다.",
 		en_US: "Loading available Spaces.",
@@ -2369,12 +2530,16 @@ const translationDefinitions = [
 		zh_CN: "请检查验证邮件",
 		ja_JP: "認証メールを確認してください",
 	}),
-	defineTranslation("으로 회원가입 이메일 인증 링크를 발송했습니다.", "프론트 UI", {
-		ko_KR: "으로 회원가입 이메일 인증 링크를 발송했습니다.",
-		en_US: ", we sent a sign-up verification link.",
-		zh_CN: "，我们已发送注册验证链接。",
-		ja_JP: "に会員登録用の認証リンクを送信しました。",
-	}),
+	defineTranslation(
+		"으로 회원가입 이메일 인증 링크를 발송했습니다.",
+		"프론트 UI",
+		{
+			ko_KR: "으로 회원가입 이메일 인증 링크를 발송했습니다.",
+			en_US: ", we sent a sign-up verification link.",
+			zh_CN: "，我们已发送注册验证链接。",
+			ja_JP: "に会員登録用の認証リンクを送信しました。",
+		},
+	),
 	defineTranslation("메일의 인증 링크를 열면 가입이 완료됩니다.", "프론트 UI", {
 		ko_KR: "메일의 인증 링크를 열면 가입이 완료됩니다.",
 		en_US: "Open the verification link in the email to complete sign-up.",
@@ -2465,48 +2630,73 @@ const translationDefinitions = [
 		zh_CN: "取消并返回",
 		ja_JP: "キャンセルして戻る",
 	}),
-	defineTranslation("예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.", "프론트 UI", {
-		ko_KR: "예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.",
-		en_US: "Log in with your account to continue checking reservations and managing schedules.",
-		zh_CN: "请登录账户以继续查看预约并管理日程。",
-		ja_JP: "予約確認とスケジュール管理を続けるにはアカウントでログインしてください。",
-	}),
-	defineTranslation("{{clientName}}에서 예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.", "프론트 UI", {
-		ko_KR: "{{clientName}}에서 예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.",
-		en_US: "Log in with your account to continue checking reservations and managing schedules in {{clientName}}.",
-		zh_CN: "请登录账户以继续在 {{clientName}} 中查看预约并管理日程。",
-		ja_JP: "{{clientName}}で予約確認とスケジュール管理を続けるにはアカウントでログインしてください。",
-	}),
+	defineTranslation(
+		"예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.",
+		"프론트 UI",
+		{
+			ko_KR: "예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.",
+			en_US:
+				"Log in with your account to continue checking reservations and managing schedules.",
+			zh_CN: "请登录账户以继续查看预约并管理日程。",
+			ja_JP:
+				"予約確認とスケジュール管理を続けるにはアカウントでログインしてください。",
+		},
+	),
+	defineTranslation(
+		"{{clientName}}에서 예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"{{clientName}}에서 예약 확인과 일정 관리를 계속하려면 계정으로 로그인하세요.",
+			en_US:
+				"Log in with your account to continue checking reservations and managing schedules in {{clientName}}.",
+			zh_CN: "请登录账户以继续在 {{clientName}} 中查看预约并管理日程。",
+			ja_JP:
+				"{{clientName}}で予約確認とスケジュール管理を続けるにはアカウントでログインしてください。",
+		},
+	),
 	defineTranslation("비밀번호 찾기", "프론트 UI", {
 		ko_KR: "비밀번호 찾기",
 		en_US: "Find password",
 		zh_CN: "找回密码",
 		ja_JP: "パスワードを探す",
 	}),
-	defineTranslation("예약 계정에 등록한 이메일 주소를 입력하세요", "프론트 UI", {
-		ko_KR: "예약 계정에 등록한 이메일 주소를 입력하세요",
-		en_US: "Enter the email address registered to your reservation account",
-		zh_CN: "请输入预约账户中注册的电子邮件地址",
-		ja_JP: "予約アカウントに登録したメールアドレスを入力してください",
-	}),
+	defineTranslation(
+		"예약 계정에 등록한 이메일 주소를 입력하세요",
+		"프론트 UI",
+		{
+			ko_KR: "예약 계정에 등록한 이메일 주소를 입력하세요",
+			en_US: "Enter the email address registered to your reservation account",
+			zh_CN: "请输入预约账户中注册的电子邮件地址",
+			ja_JP: "予約アカウントに登録したメールアドレスを入力してください",
+		},
+	),
 	defineTranslation("이메일을 확인하세요", "프론트 UI", {
 		ko_KR: "이메일을 확인하세요",
 		en_US: "Check your email",
 		zh_CN: "请检查电子邮件",
 		ja_JP: "メールを確認してください",
 	}),
-	defineTranslation("으로 예약 계정 비밀번호 재설정 링크를 발송했습니다.", "프론트 UI", {
-		ko_KR: "으로 예약 계정 비밀번호 재설정 링크를 발송했습니다.",
-		en_US: ", we sent a password reset link for your reservation account.",
-		zh_CN: "，我们已发送预约账户密码重置链接。",
-		ja_JP: "に予約アカウントのパスワード再設定リンクを送信しました。",
-	}),
-	defineTranslation("이메일이 도착하지 않았다면 스팸 폴더를 확인해주세요.", "프론트 UI", {
-		ko_KR: "이메일이 도착하지 않았다면 스팸 폴더를 확인해주세요.",
-		en_US: "If the email has not arrived, please check your spam folder.",
-		zh_CN: "如果没有收到邮件，请检查垃圾邮件文件夹。",
-		ja_JP: "メールが届かない場合は迷惑メールフォルダをご確認ください。",
-	}),
+	defineTranslation(
+		"으로 예약 계정 비밀번호 재설정 링크를 발송했습니다.",
+		"프론트 UI",
+		{
+			ko_KR: "으로 예약 계정 비밀번호 재설정 링크를 발송했습니다.",
+			en_US: ", we sent a password reset link for your reservation account.",
+			zh_CN: "，我们已发送预约账户密码重置链接。",
+			ja_JP: "に予約アカウントのパスワード再設定リンクを送信しました。",
+		},
+	),
+	defineTranslation(
+		"이메일이 도착하지 않았다면 스팸 폴더를 확인해주세요.",
+		"프론트 UI",
+		{
+			ko_KR: "이메일이 도착하지 않았다면 스팸 폴더를 확인해주세요.",
+			en_US: "If the email has not arrived, please check your spam folder.",
+			zh_CN: "如果没有收到邮件，请检查垃圾邮件文件夹。",
+			ja_JP: "メールが届かない場合は迷惑メールフォルダをご確認ください。",
+		},
+	),
 	defineTranslation("다시 보내기", "프론트 UI", {
 		ko_KR: "다시 보내기",
 		en_US: "Send again",
@@ -2537,12 +2727,18 @@ const translationDefinitions = [
 		zh_CN: "链接已过期",
 		ja_JP: "リンクの有効期限が切れました",
 	}),
-	defineTranslation("비밀번호 재설정 링크는 30분간 유효하며, 1회만 사용할 수 있습니다.", "프론트 UI", {
-		ko_KR: "비밀번호 재설정 링크는 30분간 유효하며, 1회만 사용할 수 있습니다.",
-		en_US: "Password reset links are valid for 30 minutes and can be used only once.",
-		zh_CN: "密码重置链接有效期为 30 分钟，且只能使用一次。",
-		ja_JP: "パスワード再設定リンクは30分間有効で、1回のみ使用できます。",
-	}),
+	defineTranslation(
+		"비밀번호 재설정 링크는 30분간 유효하며, 1회만 사용할 수 있습니다.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"비밀번호 재설정 링크는 30분간 유효하며, 1회만 사용할 수 있습니다.",
+			en_US:
+				"Password reset links are valid for 30 minutes and can be used only once.",
+			zh_CN: "密码重置链接有效期为 30 分钟，且只能使用一次。",
+			ja_JP: "パスワード再設定リンクは30分間有効で、1回のみ使用できます。",
+		},
+	),
 	defineTranslation("다시 요청하기", "프론트 UI", {
 		ko_KR: "다시 요청하기",
 		en_US: "Request again",
@@ -2555,12 +2751,16 @@ const translationDefinitions = [
 		zh_CN: "密码已更改",
 		ja_JP: "パスワードが変更されました",
 	}),
-	defineTranslation("보안을 위해 모든 기기에서 로그아웃되었습니다.", "프론트 UI", {
-		ko_KR: "보안을 위해 모든 기기에서 로그아웃되었습니다.",
-		en_US: "For security, you have been logged out of all devices.",
-		zh_CN: "出于安全考虑，所有设备均已登出。",
-		ja_JP: "セキュリティのため、すべての端末からログアウトされました。",
-	}),
+	defineTranslation(
+		"보안을 위해 모든 기기에서 로그아웃되었습니다.",
+		"프론트 UI",
+		{
+			ko_KR: "보안을 위해 모든 기기에서 로그아웃되었습니다.",
+			en_US: "For security, you have been logged out of all devices.",
+			zh_CN: "出于安全考虑，所有设备均已登出。",
+			ja_JP: "セキュリティのため、すべての端末からログアウトされました。",
+		},
+	),
 	defineTranslation("새 비밀번호로 다시 로그인해주세요.", "프론트 UI", {
 		ko_KR: "새 비밀번호로 다시 로그인해주세요.",
 		en_US: "Please log in again with your new password.",
@@ -2603,66 +2803,111 @@ const translationDefinitions = [
 		zh_CN: "更改密码",
 		ja_JP: "パスワード変更",
 	}),
-	defineTranslation("서비스 이용에 필요한 계정 확인을 진행해 주세요.", "프론트 UI", {
-		ko_KR: "서비스 이용에 필요한 계정 확인을 진행해 주세요.",
-		en_US: "Please verify the account needed to use the service.",
-		zh_CN: "请完成使用服务所需的账户确认。",
-		ja_JP: "サービス利用に必要なアカウント確認を行ってください。",
-	}),
-	defineTranslation("로그인, 계정 복구, 서비스 연동 승인을 한 흐름으로 정리해 예약 서비스 이용을 바로 이어갈 수 있게 구성했습니다.", "프론트 UI", {
-		ko_KR: "로그인, 계정 복구, 서비스 연동 승인을 한 흐름으로 정리해 예약 서비스 이용을 바로 이어갈 수 있게 구성했습니다.",
-		en_US: "Login, account recovery, and service authorization are organized into one flow so you can continue using reservations right away.",
-		zh_CN: "登录、账户恢复和服务授权整合为一个流程，便于立即继续使用预约服务。",
-		ja_JP: "ログイン、アカウント復旧、サービス連携承認を一つの流れにまとめ、予約サービス利用をすぐ続けられるようにしました。",
-	}),
-	defineTranslation("로그인과 계정 복구, 서비스 연동 승인을 한 곳에서 처리합니다.", "프론트 UI", {
-		ko_KR: "로그인과 계정 복구, 서비스 연동 승인을 한 곳에서 처리합니다.",
-		en_US: "Handle login, account recovery, and service authorization in one place.",
-		zh_CN: "在一处处理登录、账户恢复和服务授权。",
-		ja_JP: "ログイン、アカウント復旧、サービス連携承認を一か所で処理します。",
-	}),
-	defineTranslation("예약 서비스 이용에 필요한 인증 단계를 같은 흐름으로 묶어 고객과 운영자가 계정 문제를 빠르게 해결하고 필요한 화면으로 돌아갈 수 있도록 구성했습니다.", "프론트 UI", {
-		ko_KR: "예약 서비스 이용에 필요한 인증 단계를 같은 흐름으로 묶어 고객과 운영자가 계정 문제를 빠르게 해결하고 필요한 화면으로 돌아갈 수 있도록 구성했습니다.",
-		en_US: "Authentication steps for reservation services are grouped into one flow so customers and operators can quickly resolve account issues and return to the needed screen.",
-		zh_CN: "将预约服务所需的认证步骤整合为同一流程，帮助客户和运营者快速解决账户问题并返回所需页面。",
-		ja_JP: "予約サービス利用に必要な認証手順を同じ流れにまとめ、顧客と運営者がアカウント問題を素早く解決し、必要な画面へ戻れるようにしました。",
-	}),
+	defineTranslation(
+		"서비스 이용에 필요한 계정 확인을 진행해 주세요.",
+		"프론트 UI",
+		{
+			ko_KR: "서비스 이용에 필요한 계정 확인을 진행해 주세요.",
+			en_US: "Please verify the account needed to use the service.",
+			zh_CN: "请完成使用服务所需的账户确认。",
+			ja_JP: "サービス利用に必要なアカウント確認を行ってください。",
+		},
+	),
+	defineTranslation(
+		"로그인, 계정 복구, 서비스 연동 승인을 한 흐름으로 정리해 예약 서비스 이용을 바로 이어갈 수 있게 구성했습니다.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"로그인, 계정 복구, 서비스 연동 승인을 한 흐름으로 정리해 예약 서비스 이용을 바로 이어갈 수 있게 구성했습니다.",
+			en_US:
+				"Login, account recovery, and service authorization are organized into one flow so you can continue using reservations right away.",
+			zh_CN:
+				"登录、账户恢复和服务授权整合为一个流程，便于立即继续使用预约服务。",
+			ja_JP:
+				"ログイン、アカウント復旧、サービス連携承認を一つの流れにまとめ、予約サービス利用をすぐ続けられるようにしました。",
+		},
+	),
+	defineTranslation(
+		"로그인과 계정 복구, 서비스 연동 승인을 한 곳에서 처리합니다.",
+		"프론트 UI",
+		{
+			ko_KR: "로그인과 계정 복구, 서비스 연동 승인을 한 곳에서 처리합니다.",
+			en_US:
+				"Handle login, account recovery, and service authorization in one place.",
+			zh_CN: "在一处处理登录、账户恢复和服务授权。",
+			ja_JP: "ログイン、アカウント復旧、サービス連携承認を一か所で処理します。",
+		},
+	),
+	defineTranslation(
+		"예약 서비스 이용에 필요한 인증 단계를 같은 흐름으로 묶어 고객과 운영자가 계정 문제를 빠르게 해결하고 필요한 화면으로 돌아갈 수 있도록 구성했습니다.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"예약 서비스 이용에 필요한 인증 단계를 같은 흐름으로 묶어 고객과 운영자가 계정 문제를 빠르게 해결하고 필요한 화면으로 돌아갈 수 있도록 구성했습니다.",
+			en_US:
+				"Authentication steps for reservation services are grouped into one flow so customers and operators can quickly resolve account issues and return to the needed screen.",
+			zh_CN:
+				"将预约服务所需的认证步骤整合为同一流程，帮助客户和运营者快速解决账户问题并返回所需页面。",
+			ja_JP:
+				"予約サービス利用に必要な認証手順を同じ流れにまとめ、顧客と運営者がアカウント問題を素早く解決し、必要な画面へ戻れるようにしました。",
+		},
+	),
 	defineTranslation("계정 상태 바로 확인", "프론트 UI", {
 		ko_KR: "계정 상태 바로 확인",
 		en_US: "Check account status",
 		zh_CN: "立即确认账户状态",
 		ja_JP: "アカウント状態をすぐ確認",
 	}),
-	defineTranslation("로그인 실패, 세션 만료, 계정 잠금 여부를 같은 위치에서 바로 확인할 수 있습니다.", "프론트 UI", {
-		ko_KR: "로그인 실패, 세션 만료, 계정 잠금 여부를 같은 위치에서 바로 확인할 수 있습니다.",
-		en_US: "Check login failure, session expiration, and account lock status in one place.",
-		zh_CN: "可在同一位置确认登录失败、会话过期和账户锁定状态。",
-		ja_JP: "ログイン失敗、セッション期限切れ、アカウントロック状態を同じ場所ですぐ確認できます。",
-	}),
+	defineTranslation(
+		"로그인 실패, 세션 만료, 계정 잠금 여부를 같은 위치에서 바로 확인할 수 있습니다.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"로그인 실패, 세션 만료, 계정 잠금 여부를 같은 위치에서 바로 확인할 수 있습니다.",
+			en_US:
+				"Check login failure, session expiration, and account lock status in one place.",
+			zh_CN: "可在同一位置确认登录失败、会话过期和账户锁定状态。",
+			ja_JP:
+				"ログイン失敗、セッション期限切れ、アカウントロック状態を同じ場所ですぐ確認できます。",
+		},
+	),
 	defineTranslation("빠른 접근 복구", "프론트 UI", {
 		ko_KR: "빠른 접근 복구",
 		en_US: "Fast access recovery",
 		zh_CN: "快速恢复访问",
 		ja_JP: "素早いアクセス復旧",
 	}),
-	defineTranslation("재로그인과 비밀번호 재설정 이후에도 필요한 화면으로 자연스럽게 돌아갈 수 있습니다.", "프론트 UI", {
-		ko_KR: "재로그인과 비밀번호 재설정 이후에도 필요한 화면으로 자연스럽게 돌아갈 수 있습니다.",
-		en_US: "After logging in again or resetting a password, users can naturally return to the screen they need.",
-		zh_CN: "重新登录或重置密码后，也可以自然返回所需页面。",
-		ja_JP: "再ログインやパスワード再設定後も、必要な画面へ自然に戻れます。",
-	}),
+	defineTranslation(
+		"재로그인과 비밀번호 재설정 이후에도 필요한 화면으로 자연스럽게 돌아갈 수 있습니다.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"재로그인과 비밀번호 재설정 이후에도 필요한 화면으로 자연스럽게 돌아갈 수 있습니다.",
+			en_US:
+				"After logging in again or resetting a password, users can naturally return to the screen they need.",
+			zh_CN: "重新登录或重置密码后，也可以自然返回所需页面。",
+			ja_JP: "再ログインやパスワード再設定後も、必要な画面へ自然に戻れます。",
+		},
+	),
 	defineTranslation("안전한 연동 승인", "프론트 UI", {
 		ko_KR: "안전한 연동 승인",
 		en_US: "Secure authorization",
 		zh_CN: "安全授权",
 		ja_JP: "安全な連携承認",
 	}),
-	defineTranslation("서비스 연동 권한 승인과 계정 보호 흐름을 단순하게 유지해 실수 가능성을 낮춥니다.", "프론트 UI", {
-		ko_KR: "서비스 연동 권한 승인과 계정 보호 흐름을 단순하게 유지해 실수 가능성을 낮춥니다.",
-		en_US: "Keep service authorization and account protection flows simple to reduce mistakes.",
-		zh_CN: "保持服务授权和账户保护流程简洁，降低误操作可能性。",
-		ja_JP: "サービス連携権限承認とアカウント保護の流れをシンプルに保ち、ミスの可能性を下げます。",
-	}),
+	defineTranslation(
+		"서비스 연동 권한 승인과 계정 보호 흐름을 단순하게 유지해 실수 가능성을 낮춥니다.",
+		"프론트 UI",
+		{
+			ko_KR:
+				"서비스 연동 권한 승인과 계정 보호 흐름을 단순하게 유지해 실수 가능성을 낮춥니다.",
+			en_US:
+				"Keep service authorization and account protection flows simple to reduce mistakes.",
+			zh_CN: "保持服务授权和账户保护流程简洁，降低误操作可能性。",
+			ja_JP:
+				"サービス連携権限承認とアカウント保護の流れをシンプルに保ち、ミスの可能性を下げます。",
+		},
+	),
 	defineTranslation("오노라 계정 센터", "프론트 UI", {
 		ko_KR: "오노라 계정 센터",
 		en_US: "Onora Account Center",

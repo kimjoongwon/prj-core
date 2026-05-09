@@ -158,7 +158,9 @@ export const TimelineSessionProgramEditPage = observer(
 											color={hasUnschedulableRoutine ? "warning" : "success"}
 											size="sm"
 										>
-											{hasUnschedulableRoutine ? t("저장 불가") : t("저장 가능")}
+											{hasUnschedulableRoutine
+												? t("저장 불가")
+												: t("저장 가능")}
 										</Chip>
 									</div>
 									{routinePreview.length === 0 ? (
@@ -202,7 +204,9 @@ export const TimelineSessionProgramEditPage = observer(
 									)}
 									{hasUnschedulableRoutine ? (
 										<p className="mt-3 text-sm text-warning">
-											{t("영상이 없는 운동이 포함되어 있어 저장 버튼이 비활성화됩니다.")}
+											{t(
+												"영상이 없는 운동이 포함되어 있어 저장 버튼이 비활성화됩니다.",
+											)}
 										</p>
 									) : null}
 								</div>

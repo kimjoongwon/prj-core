@@ -19,10 +19,7 @@ import { AbstractDto } from "../abstract.dto";
 /**
  * 서비스 문서 응답 DTO
  */
-export class ServiceDocumentDto
-	extends AbstractDto
-	implements ServiceDocument
-{
+export class ServiceDocumentDto extends AbstractDto implements ServiceDocument {
 	@EnumField(() => ServiceDocumentKind, { description: "문서 종류" })
 	kind!: ServiceDocumentKind;
 

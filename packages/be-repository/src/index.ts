@@ -11,6 +11,7 @@ export { AssetsRepository } from "./assets.repository";
 export { AuthAuditLogsRepository } from "./auth-audit-logs.repository";
 export { CategoriesRepository } from "./categories.repository";
 export { ContentsRepository } from "./contents.repository";
+export { CoursesRepository } from "./courses.repository";
 export { EmailVerificationsRepository } from "./email-verifications.repository";
 export { FoldersRepository } from "./folders.repository";
 export { GroupsRepository } from "./groups.repository";
@@ -21,6 +22,10 @@ export { OidcModelsRepository } from "./oidc-models.repository";
 export { PasswordHistoriesRepository } from "./password-histories.repository";
 export { PoliciesRepository } from "./policies.repository";
 export { PolicyAbilitiesRepository } from "./policy-abilities.repository";
+export {
+	type BookingProgramRecord,
+	ReservationsRepository,
+} from "./reservations.repository";
 export type { PolicyAssignmentInput } from "./role-policies.repository";
 export { RolePoliciesRepository } from "./role-policies.repository";
 export { RolesRepository } from "./roles.repository";

@@ -1,4 +1,4 @@
-import { OIDC_FIRST_PARTY_CLIENT_IDS } from "@cocrepo/constant";
+import { OIDC_RUNTIME_MANAGED_CLIENT_IDS } from "@cocrepo/constant";
 
 interface RuntimeOidcClientConfig {
 	clientId: string;
@@ -8,7 +8,7 @@ interface RuntimeOidcClientConfig {
 	defaultReturnTo?: string | null;
 }
 
-interface FirstPartyOidcClientEnvConfig {
+interface RuntimeManagedOidcClientEnvConfig {
 	baseUrlEnv?: string;
 	defaultReturnToEnv?: string;
 	defaultReturnToPath?: string;
@@ -18,9 +18,9 @@ interface FirstPartyOidcClientEnvConfig {
 	redirectUriPath?: string;
 }
 
-const FIRST_PARTY_OIDC_CLIENT_ENV_CONFIG: Record<
+const RUNTIME_MANAGED_OIDC_CLIENT_ENV_CONFIG: Record<
 	string,
-	FirstPartyOidcClientEnvConfig
+	RuntimeManagedOidcClientEnvConfig
 > = {
 	"admin-web": {
 		baseUrlEnv: "OIDC_ADMIN_BASE_URL",
@@ -59,16 +59,16 @@ const FIRST_PARTY_OIDC_CLIENT_ENV_CONFIG: Record<
 	},
 };
 
-export const FIRST_PARTY_OIDC_CLIENT_IDS: readonly string[] =
-	OIDC_FIRST_PARTY_CLIENT_IDS;
+export const RUNTIME_MANAGED_OIDC_CLIENT_IDS: readonly string[] =
+	OIDC_RUNTIME_MANAGED_CLIENT_IDS;
 
-export const isFirstPartyOidcClientId = (clientId: string) =>
-	FIRST_PARTY_OIDC_CLIENT_IDS.includes(clientId);
+export const isRuntimeManagedOidcClientId = (clientId: string) =>
+	RUNTIME_MANAGED_OIDC_CLIENT_IDS.includes(clientId);
 
-export function applyFirstPartyOidcRuntimeConfig<
+export function applyRuntimeManagedOidcClientConfig<
 	TClient extends RuntimeOidcClientConfig,
 >(client: TClient): TClient {
-	const envConfig = FIRST_PARTY_OIDC_CLIENT_ENV_CONFIG[client.clientId];
+	const envConfig = RUNTIME_MANAGED_OIDC_CLIENT_ENV_CONFIG[client.clientId];
 	if (!envConfig) {
 		return client;
 	}

@@ -71,7 +71,7 @@ developer_instructions = '''
 | `parallel` | △ | `off` / `auto` / `force`, 기본 `auto` |
 | `maxConcurrency` | △ | 동시 실행 상한, 기본 `4` |
 | `feedback_mode` | △ | `off` / `reentry`, 기본 `off`. 상위 orchestrator finding 처리 모드 |
-| `feedback_type` | △ | `contract-gap` / `spec-drift` / `test-failure` 등 finding 유형 |
+| `feedback_type` | △ | `contract-gap` / `api-integration-gap` / `ui-composition-gap` / `implementation-blocker` / `test-failure` / `spec-drift` / `shared-file-conflict` / `dependency-missing` |
 | `affected_files` | △ | feedback으로 재검토해야 하는 파일 목록 |
 | `affected_roles` | △ | feedback으로 재검토해야 하는 role 목록 |
 
@@ -134,7 +134,7 @@ finding의 owner를 먼저 찾고, 영향받은 route page / fe-ui Page / fe-ui 
 
 1. `feedback_type`, `affected_files`, `affected_roles`, `required_action`을 먼저 읽습니다.
 2. route `page.spec.md`와 관련 fe-ui owner spec의 affected 섹션만 확인합니다.
-3. finding을 page contract, API integration, component contract, state contract, surface/layout, test contract 중 하나로 분류합니다.
+3. finding을 page contract, API integration, component contract, UI composition, state contract, surface/layout, test contract, dependency gap 중 하나로 분류합니다.
 4. 필요한 `req-*` planner만 실행하고, downstream builder mapping을 다시 기록합니다.
 5. 테스트 기대값이 바뀌면 `req-fe-test-planner`를 join 단계에서 실행합니다.
 
@@ -143,10 +143,13 @@ finding의 owner를 먼저 찾고, 영향받은 route page / fe-ui Page / fe-ui 
 | feedback_type | 우선 owner |
 |---------------|------------|
 | `contract-gap` | `req-page-planner` 또는 `req-api-planner` |
+| `api-integration-gap` | `req-api-integration-planner`, 필요 시 `req-api-planner` |
+| `ui-composition-gap` | affected `req-primitive/input/cell/columns/widget/layout/feature/menu/surface` planner |
 | `spec-drift` | affected owner spec의 planner |
 | `implementation-blocker` | affected builder mapping을 소유한 planner |
 | `test-failure` | `req-fe-test-planner`, 필요 시 원인 contract planner |
 | `shared-file-conflict` | join 단계 single writer |
+| `dependency-missing` | 현재 화면 기획 전제조건이면 `blocked`, 상위 `orch-stage` re-entry 필요 시 `escalated` |
 
 #### 4.5.3 금지
 
@@ -162,6 +165,7 @@ Feedback Resolution:
 - owner: req-page-planner | req-api-planner | req-primitive-planner | req-input-planner | req-cell-planner | req-columns-planner | req-widget-planner | req-layout-planner | req-feature-planner | req-state-planner | req-menu-planner | req-api-integration-planner | req-surface-planner | req-fe-test-planner
 - changed_files: <file list or none>
 - next_agent_type: <role or none>
+- blocked_reason: <short reason or none>
 - reason: <short reason>
 ```
 
@@ -229,7 +233,7 @@ Feedback Resolution:
 - [ ] Cell 산출물이 `packages/fe-ui/src/cell/**` 기준인가?
 - [ ] Columns 산출물이 `packages/fe-ui/src/columns/data-grid/**` 기준인가?
 - [ ] `req-surface-planner` 결과가 Surface/Elevation 섹션에 반영되었는가?
-- [ ] `page.spec.md`와 관련 Page/Feature/Widget owner spec에 unit/E2E 테스트 관점이 추가되었는가?
+- [ ] `page.spec.md`와 관련 Page/Feature owner spec에 unit/E2E 테스트 관점이 추가되었는가?
 - [ ] 테스트 전용 sidecar spec을 새로 만들지 않았는가?
 
 ---
@@ -267,6 +271,21 @@ Feedback Resolution:
 
 기존 내용을 보존한 채 필요한 섹션만 갱신합니다.
 중복 생성이나 role 목록 재복제를 하지 않습니다.
+```
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
 ```
 
 '''

@@ -1,7 +1,7 @@
 import type { ScreenScopeKind } from "@cocrepo/type";
+import { ADMIN_MENU_PERMISSION_LEAFS } from "./admin-menu";
 import type { GeneratedAdminPageAccessItem } from "./admin-route-meta";
 import { GENERATED_ADMIN_PAGE_ACCESS_ITEMS } from "./generated/admin-route-catalog.generated";
-import { ADMIN_MENU_PERMISSION_LEAFS } from "./admin-menu";
 
 export interface AdminPageAccessItem extends GeneratedAdminPageAccessItem {
 	scopeKind: ScreenScopeKind;
@@ -81,6 +81,38 @@ export const ADMIN_CRUD_BUNDLES: AdminCrudBundle[] = [
 		bundleLabel: "예약 데이터",
 		subject: "entity:Reservation",
 		description: "예약 엔티티에 대한 기본 CRUD 권한을 묶어 편집합니다.",
+		actions: CRUD_ACTIONS,
+	},
+	{
+		bundleId: "course",
+		groupLabel: "수강 관리",
+		bundleLabel: "Course 데이터",
+		subject: "entity:Course",
+		description: "무엇을 배우는지 정의하는 Course 데이터를 관리합니다.",
+		actions: CRUD_ACTIONS,
+	},
+	{
+		bundleId: "course-offering",
+		groupLabel: "수강 관리",
+		bundleLabel: "CourseOffering 데이터",
+		subject: "entity:CourseOffering",
+		description: "실제 개설 반/기수와 모집 상태를 관리합니다.",
+		actions: CRUD_ACTIONS,
+	},
+	{
+		bundleId: "enrollment",
+		groupLabel: "수강 관리",
+		bundleLabel: "Enrollment 데이터",
+		subject: "entity:Enrollment",
+		description: "결제 후 활성화되는 수강 신청 상태를 관리합니다.",
+		actions: CRUD_ACTIONS,
+	},
+	{
+		bundleId: "course-pass",
+		groupLabel: "수강 관리",
+		bundleLabel: "CoursePass 데이터",
+		subject: "entity:CoursePass",
+		description: "수강권의 유효기간과 잔여 예약 권리를 관리합니다.",
 		actions: CRUD_ACTIONS,
 	},
 	{

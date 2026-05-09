@@ -40,9 +40,64 @@
 | 영역 | 구성 요소 | 설명 |
 |------|-----------|------|
 | 페이지 헤더 | `DetailPage` + `PageTitleBar` | client id/name과 목록 복귀, 수정, 활성화, 삭제 액션 |
-| 기본 정보 | `DetailSectionCard` + `SecretField` | client id/secret, 이름, 활성 상태, 권한 동의 화면 생략 상태, 등록일 |
+| 기본 정보 | `DetailSectionCard` + `SecretField` | client id/secret, 이름, 활성 상태, first-party 신뢰 구분, 권한 동의 화면 생략 상태, 등록일 |
 | 인증 설정 | `DetailSectionCard` | 인증 방식, grant/response type, scope |
 | Redirect URIs / 로그인 화면 설정 / 추가 정보 | `DetailSectionCard` | redirect URI 목록, `loginUi` 표시 설정, logo/policy/tos URI |
+
+## 화면 러프
+
+### Desktop
+
+```text
+(console) layout > children
+┌──────────────────────────────────────────────────────────────┐
+│ OidcClientDetailPage                                         │
+│ admin-web                                  [수정][비활성][삭제]│
+│ ┌──────────────────────────────────────────────────────────┐ │
+│ │ 기본 정보                                                │ │
+│ │ 신뢰 구분 [First-party]  권한 동의 화면 [생략]           │ │
+│ ├──────────────────────────────────────────────────────────┤ │
+│ │ 인증 설정 / Redirect URIs / 로그인 화면 설정 / 추가 정보 │ │
+│ └──────────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### Tablet
+
+```text
+(console) layout > children
+┌──────────────────────────────────────────────┐
+│ admin-web                         [actions]  │
+│ ┌──────────────────────────────────────────┐ │
+│ │ 기본 정보 grid는 2열에서 1~2열로 조정    │ │
+│ │ [First-party] [생략/표시] chip 유지      │ │
+│ ├──────────────────────────────────────────┤ │
+│ │ 긴 URI와 URL은 줄바꿈/가로폭 안에서 표시 │ │
+│ └──────────────────────────────────────────┘ │
+└──────────────────────────────────────────────┘
+```
+
+### Mobile
+
+```text
+(console) layout > children
+┌──────────────────────────────┐
+│ admin-web                     │
+│ [목록][수정][비활성][삭제]    │
+│ ┌──────────────────────────┐ │
+│ │ 기본 정보                │ │
+│ │ 신뢰 구분                │ │
+│ │ [First-party]            │ │
+│ │ 권한 동의 화면           │ │
+│ │ [생략] 또는 [표시]       │ │
+│ ├──────────────────────────┤ │
+│ │ 인증 설정                │ │
+│ ├──────────────────────────┤ │
+│ │ Redirect URIs            │ │
+│ │ 긴 값은 break-all        │ │
+│ └──────────────────────────┘ │
+└──────────────────────────────┘
+```
 
 ## 구현 체크리스트
 
@@ -59,7 +114,7 @@
 | 콘텐츠 파일 | `apps/idp/web/src/app/(console)/oidc-clients/[oidcClientId]/page.tsx` |
 | page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
 
-- `page.tsx`는 OIDC 클라이언트 상세 조회, 활성 상태 전환, 삭제, 라우팅만 담당하고 `skipConsent`, `loginUi` 표시를 포함한 시각 조합은 `OidcClientDetailPage`가 소유합니다.
+- `page.tsx`는 OIDC 클라이언트 상세 조회, 활성 상태 전환, 삭제, 라우팅만 담당하고 `isFirstParty`, `skipConsent`, `loginUi` 표시를 포함한 시각 조합은 `OidcClientDetailPage`가 소유합니다.
 
 ## Rendering Decision
 
@@ -74,6 +129,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-09 | 상세 route sidecar에 Desktop/Tablet/Mobile detail 화면 러프와 신뢰 구분/consent chip 표시 기준을 추가 | codex |
+| 2026-05-09 | OIDC 클라이언트 상세 표시 계약에 `isFirstParty` 전달 추가 | codex |
 | 2026-05-05 | OIDC 클라이언트 상세 표시 계약에 client별 로그인 화면 설정 `loginUi` 전달 추가 | codex |
 | 2026-05-05 | OIDC 클라이언트 상세 표시 계약에 권한 동의 화면 생략 상태 전달 추가 | codex |
 | 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |

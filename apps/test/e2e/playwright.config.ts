@@ -181,7 +181,7 @@ const adminWebServer = {
 
 const idpWebServer = {
 	command: "pnpm --filter=idp-web dev",
-	url: new URL("/auth/login", idpBaseUrl).toString(),
+	url: new URL("/", idpBaseUrl).toString(),
 	reuseExistingServer,
 	timeout: 120000,
 	cwd: "../../..",

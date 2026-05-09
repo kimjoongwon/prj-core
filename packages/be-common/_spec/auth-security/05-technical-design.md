@@ -213,7 +213,7 @@ getMySession(userId, currentAccessToken):
 
 ### 이메일 서비스
 
-**위치**: `packages/be-service/src/email.service/index.ts`
+**위치**: `packages/be-service/src/email.service.ts`
 
 ```typescript
 @Injectable()
@@ -543,7 +543,7 @@ describe("SessionCard", () => {
 |------|------|
 | `packages/be-prisma/schema/identity/user.prisma` | PasswordHistory 추가 |
 | `packages/be-common/src/utils/password-policy.ts` | 신규 |
-| `packages/be-service/src/email.service/index.ts` | 신규 |
+| `packages/be-service/src/email.service.ts` | 신규 |
 | `apps/idp/api/src/module/password-reset/` | 신규 모듈 |
 | `apps/idp/web/src/app/forgot-password/` | 신규 페이지 |
 | `apps/idp/web/src/app/reset-password/[token]/` | 신규 페이지 |

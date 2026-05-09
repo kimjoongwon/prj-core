@@ -158,13 +158,13 @@ export const RoutineEditPage = observer(
 					<PageTitleBar
 						title="루틴 수정"
 						description={
-							routineName
-								? (
-										<>
-											{routineName} {t("루틴을 수정합니다.")}
-										</>
-									)
-								: "루틴을 수정합니다."
+							routineName ? (
+								<>
+									{routineName} {t("루틴을 수정합니다.")}
+								</>
+							) : (
+								"루틴을 수정합니다."
+							)
 						}
 						actions={pageActions}
 					/>

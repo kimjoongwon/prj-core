@@ -44,6 +44,8 @@ export interface CreateOidcClientDto {
 	tokenEndpointAuthMethod: string;
 	/** 허용된 스코프 */
 	scope: string;
+	/** First-party 클라이언트 여부 */
+	isFirstParty: boolean;
 	/**
 	 * 로그인 화면 표시 설정
 	 * @nullable

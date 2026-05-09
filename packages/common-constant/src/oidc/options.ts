@@ -23,8 +23,8 @@ export const RESPONSE_TYPE_OPTIONS = [
 	{ value: "code", label: "code" },
 ] as const;
 
-/** 내부 first-party OIDC 클라이언트 ID */
-export const OIDC_FIRST_PARTY_CLIENT_IDS = [
+/** 런타임 환경변수로 URL 보정을 적용하는 OIDC 클라이언트 ID */
+export const OIDC_RUNTIME_MANAGED_CLIENT_IDS = [
 	"admin-web",
 	"storybook-web",
 	"idp-web",

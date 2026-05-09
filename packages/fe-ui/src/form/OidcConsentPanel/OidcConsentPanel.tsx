@@ -64,8 +64,8 @@ export const OidcConsentPanel = observer(
 					</h3>
 					<ul className="space-y-3">
 						{missingScopes.map((scope) => (
-							<li key={scope} className="flex items-center">
-								<div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center mr-3">
+							<li key={scope} className="flex min-w-0 items-center">
+								<div className="w-8 h-8 rounded-lg bg-primary/20 flex shrink-0 items-center justify-center mr-3">
 									<svg
 										className="w-4 h-4 text-primary"
 										fill="none"
@@ -80,7 +80,7 @@ export const OidcConsentPanel = observer(
 										/>
 									</svg>
 								</div>
-								<p className="text-foreground font-medium">
+								<p className="min-w-0 break-words text-foreground font-medium">
 									{SCOPE_LABELS[scope] ? t(SCOPE_LABELS[scope]) : scope}
 								</p>
 							</li>
@@ -89,7 +89,7 @@ export const OidcConsentPanel = observer(
 				</div>
 
 				{/* 액션 버튼 */}
-				<div className="flex gap-4">
+				<div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
 					<Button
 						type="button"
 						data-action="confirm-consent"

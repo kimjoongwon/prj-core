@@ -1,14 +1,14 @@
 import {
-	useMutation,
-	useQuery,
 	type QueryClient,
 	type UseMutationOptions,
 	type UseMutationResult,
 	type UseQueryOptions,
 	type UseQueryResult,
+	useMutation,
+	useQuery,
 } from "@tanstack/react-query";
-import { customIdpInstance } from "../../libs/customIdpAxios";
 import type { ErrorType } from "../../libs/customIdpAxios";
+import { customIdpInstance } from "../../libs/customIdpAxios";
 import type { SpaceDto } from "../model/spaceDto";
 
 type CurrentSpaceResponse = {

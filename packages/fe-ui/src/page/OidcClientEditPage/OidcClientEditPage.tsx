@@ -1,5 +1,9 @@
 "use client";
 
+import type {
+	OidcClientLoginUi,
+	OidcClientLoginUiVariant,
+} from "@cocrepo/type";
 import {
 	BackButton,
 	buildOidcClientLoginUi,
@@ -12,11 +16,6 @@ import {
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
-import { OIDC_FIRST_PARTY_CLIENT_IDS } from "@cocrepo/constant";
-import type {
-	OidcClientLoginUi,
-	OidcClientLoginUiVariant,
-} from "@cocrepo/type";
 import { Button } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 
@@ -28,6 +27,7 @@ export interface OidcClientEditPageFormState {
 	grantTypes: string[];
 	responseTypes: string[];
 	scope: string;
+	isFirstParty: boolean;
 	skipConsent: boolean;
 	redirectUris: string[];
 	loginUrl: string;
@@ -58,6 +58,7 @@ export interface OidcClientEditPageClient {
 	grantTypes: string[];
 	responseTypes: string[];
 	scope: string;
+	isFirstParty?: boolean;
 	skipConsent?: boolean;
 	redirectUris: string[];
 	loginUrl?: string | null;
@@ -75,6 +76,7 @@ export interface OidcClientEditPageSubmitInput {
 	grantTypes: string[];
 	responseTypes: string[];
 	scope: string;
+	isFirstParty: boolean;
 	skipConsent: boolean;
 	redirectUris: string[];
 	loginUrl?: string;
@@ -84,9 +86,6 @@ export interface OidcClientEditPageSubmitInput {
 	tosUri?: string;
 	loginUi?: OidcClientLoginUi | null;
 }
-
-const isFirstPartyClientId = (clientId: string) =>
-	OIDC_FIRST_PARTY_CLIENT_IDS.some((id) => id === clientId.trim());
 
 const isValidRedirectUri = (uri: string) =>
 	/^[a-z][a-z0-9+.-]*:\/\//i.test(uri.trim());
@@ -174,9 +173,8 @@ export const OidcClientEditPage = observer(
 				grantTypes: formState.grantTypes,
 				responseTypes: formState.responseTypes,
 				scope: formState.scope,
-				skipConsent: isFirstPartyClientId(formState.clientId)
-					? formState.skipConsent
-					: false,
+				isFirstParty: formState.isFirstParty,
+				skipConsent: formState.isFirstParty ? formState.skipConsent : false,
 				redirectUris: validUris,
 				loginUrl: formState.loginUrl || undefined,
 				defaultReturnTo: formState.defaultReturnTo || undefined,

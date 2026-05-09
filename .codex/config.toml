@@ -24,7 +24,7 @@ scope = "schema-owner aggregate root 단위로 service를 구성"
 child_mutation = "child entity 수정은 반드시 root aggregate service 경유"
 prisma_direct_call = false
 folder_layout = "packages/be-service/src/{name}.service/"
-code_file = "packages/be-service/src/{name}.service/index.ts"
+code_file = "packages/be-service/src/{name}.service.ts"
 barrel_export_file = "packages/be-service/src/index.ts"
 guard = "Service는 @cocrepo/repository를 통한 영속성 접근만 수행하고, @schema-owner가 아닌 모델 별도 service를 만들지 않는다"
 
@@ -70,6 +70,12 @@ folder_required = true
 folder_layout = "packages/fe-mo-ui/src/screen/{ScreenName}/{ScreenName}.tsx"
 sidecar_spec_file = "packages/fe-mo-ui/src/screen/{ScreenName}/{ScreenName}.spec.md"
 guard = "모바일 screen 계층은 web fe-ui-page-builder에 대응하는 visual owner이며, Expo route/native runtime wiring은 apps/mobile route file이 소유한다"
+
+[rules.fe_mo_ui.styling]
+primary = "uniwind className + tailwind-variants tv({ slots, variants })"
+stylesheet_allowed = false
+style_object_scope = "safe-area inset, navigator option object, third-party native bridge 등 className으로 표현하기 어려운 동적 값에만 제한"
+guard = "모바일 앱과 @cocrepo/mo-ui 신규/수정 UI는 StyleSheet/StyleSheet.create를 사용하지 않고 uniwind class props와 tailwind-variants slot/variant로 스타일을 정의한다"
 
 [rules.sidecar_spec]
 allowed = [
@@ -303,6 +309,22 @@ config_file = "agents/mobile/fe-mo-data-display-component-builder.toml"
 description = "React Native용 feedback/status/overlay feedback contract를 packages/fe-mo-ui에 생성하거나 정리하는 전문가"
 config_file = "agents/mobile/fe-mo-feedback-component-builder.toml"
 
+[agents.fe-mo-widget-builder]
+description = "React Native용 재사용 순수 UI 조합 Widget을 packages/fe-mo-ui/src/widget에 생성하거나 정리하는 전문가"
+config_file = "agents/mobile/fe-mo-widget-builder.toml"
+
+[agents.fe-mo-feature-builder]
+description = "React Native용 reusable Feature composition을 packages/fe-mo-ui/src/feature에 생성하거나 정리하는 전문가"
+config_file = "agents/mobile/fe-mo-feature-builder.toml"
+
+[agents.fe-mo-form-builder]
+description = "React Native용 생성/수정/입력 form 조합을 packages/fe-mo-ui/src/form에 생성하거나 정리하는 전문가"
+config_file = "agents/mobile/fe-mo-form-builder.toml"
+
+[agents.fe-mo-detail-builder]
+description = "React Native용 읽기 전용 detail/view 조합을 packages/fe-mo-ui/src/detail에 생성하거나 정리하는 전문가"
+config_file = "agents/mobile/fe-mo-detail-builder.toml"
+
 [agents.fe-mo-e2e-builder]
 description = "모바일 E2E 테스트 전략을 설계하는 전문가"
 config_file = "agents/mobile/fe-mo-e2e-builder.toml"
@@ -374,6 +396,26 @@ config_file = "agents/mobile/req-mo-page-planner.toml"
 [agents.req-mo-primitive-planner]
 description = "모바일 data-display/feedback/surface/provider primitive 계약을 기획하는 전문가"
 config_file = "agents/mobile/req-mo-primitive-planner.toml"
+
+[agents.req-mo-widget-planner]
+description = "모바일 순수 UI 조합 Widget 계약을 기획하는 전문가"
+config_file = "agents/mobile/req-mo-widget-planner.toml"
+
+[agents.req-mo-feature-planner]
+description = "모바일 reusable Feature composition 계약을 기획하는 전문가"
+config_file = "agents/mobile/req-mo-feature-planner.toml"
+
+[agents.req-mo-form-planner]
+description = "모바일 입력 form 계약을 기획하는 전문가"
+config_file = "agents/mobile/req-mo-form-planner.toml"
+
+[agents.req-mo-detail-planner]
+description = "모바일 읽기 전용 detail/view 계약을 기획하는 전문가"
+config_file = "agents/mobile/req-mo-detail-planner.toml"
+
+[agents.req-mo-api-integration-planner]
+description = "모바일 API 연동 계약을 기획하는 전문가"
+config_file = "agents/mobile/req-mo-api-integration-planner.toml"
 
 [agents.req-mo-route-layout-planner]
 description = "Expo Router native _layout shell 계약을 기획하는 전문가"
@@ -500,7 +542,7 @@ description = "route layout/page/feature의 Surface ownership과 elevation 배�
 config_file = "agents/req-surface-planner.toml"
 
 [agents.req-spec-tracker]
-description = "도메인별 spec-checklist를 생성/갱신하여 기획-구현-검증 상태를 추적하는 전문가"
+description = "spec-checklist와 stage-ledger를 생성/갱신하여 기획-구현-검증 상태를 추적하는 전문가"
 config_file = "agents/req-spec-tracker.toml"
 
 [agents.req-store-planner]

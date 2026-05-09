@@ -9,12 +9,7 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import {
-	useMutation,
-	useQuery,
-	useSuspenseInfiniteQuery,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
+
 import type {
 	DataTag,
 	DefinedInitialDataOptions,
@@ -34,7 +29,15 @@ import type {
 	UseSuspenseQueryOptions,
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
+import {
+	useMutation,
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { BodyType, ErrorType } from "../../libs/customAxios";
 
+import { customInstance } from "../../libs/customAxios";
 import type {
 	CreateTemplate201AllOf,
 	CreateTemplateDto,
@@ -47,9 +50,6 @@ import type {
 	UpdateTemplate200AllOf,
 	UpdateTemplateDto,
 } from ".././model";
-
-import { customInstance } from "../../libs/customAxios";
-import type { ErrorType, BodyType } from "../../libs/customAxios";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

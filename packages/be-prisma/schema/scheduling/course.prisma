@@ -1,0 +1,213 @@
+// ============================================================================
+// Course Domain - 코스/개설/수강권 도메인
+// ============================================================================
+
+/// @displayName 코스 상태
+enum CourseStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+/// @displayName 코스 개설 상태
+enum CourseOfferingStatus {
+  DRAFT
+  ENROLLING
+  ACTIVE
+  CLOSED
+  CANCELED
+}
+
+/// @displayName 수강 등록 상태
+enum EnrollmentStatus {
+  PENDING
+  ACTIVE
+  CANCELED
+  COMPLETED
+  EXPIRED
+}
+
+/// @displayName 수강권 상태
+enum CoursePassStatus {
+  ACTIVE
+  SUSPENDED
+  EXPIRED
+  CANCELED
+}
+
+/// @displayName 수강권 종류
+enum CoursePassKind {
+  STANDARD
+  MANUAL_GRANT
+  MAKEUP
+}
+
+/// @displayName 결제 상태
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELED
+  REFUNDED
+}
+
+/// @displayName 타임라인 준비 방식
+enum TimelineProvisioningMode {
+  SHARED
+  DEDICATED_ON_ENROLLMENT
+}
+
+// @schema-type: ROOT
+// @schema-owner: true
+// @aggregate-root: true
+// @description: Space 범위에서 학습 상품의 기본 정책과 운영 집계를 관리하는 코스 루트
+// @ownership: independent
+// @scope: space
+// @extended-by: CourseOffering, Enrollment, CoursePass
+/// @displayName 코스
+model Course {
+  id                    String           @id @default(uuid())
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime?        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt             DateTime?        @map("removed_at") @db.Timestamptz(6)
+  spaceId               String           @map("space_id")
+  name                  String
+  description           String?
+  durationMonths        Int              @default(6) @map("duration_months")
+  basePriceAmount       Int              @default(0) @map("base_price_amount")
+  currency              String           @default("KRW")
+  status                CourseStatus     @default(DRAFT)
+  activeOfferingCount   Int              @default(0) @map("active_offering_count")
+  activeEnrollmentCount Int              @default(0) @map("active_enrollment_count")
+  space                 Space            @relation(fields: [spaceId], references: [id])
+  offerings             CourseOffering[]
+  enrollments           Enrollment[]
+  passes                CoursePass[]
+
+  @@index([spaceId])
+  @@index([spaceId, status])
+  @@index([name])
+  @@map("courses")
+}
+
+// @schema-type: JOIN
+// @description: Course를 특정 Space/Timeline의 실제 반 또는 기수로 개설하는 운영 링크
+// @relation-pattern: one-to-many
+// @ownership: dependent
+// @scope: space
+// @join-role: operational-link
+// @connects: Course ─── Space/Timeline
+/// @displayName 코스 개설
+model CourseOffering {
+  id                       String                   @id @default(uuid())
+  createdAt                DateTime                 @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                DateTime?                @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt                DateTime?                @map("removed_at") @db.Timestamptz(6)
+  courseId                 String                   @map("course_id")
+  spaceId                  String                   @map("space_id")
+  timelineId               String?                  @map("timeline_id")
+  timelineProvisioningMode TimelineProvisioningMode @default(SHARED) @map("timeline_provisioning_mode")
+  name                     String
+  startsAt                 DateTime                 @map("starts_at") @db.Timestamptz(6)
+  endsAt                   DateTime                 @map("ends_at") @db.Timestamptz(6)
+  enrollmentStartsAt       DateTime?                @map("enrollment_starts_at") @db.Timestamptz(6)
+  enrollmentEndsAt         DateTime?                @map("enrollment_ends_at") @db.Timestamptz(6)
+  capacity                 Int
+  enrolledCount            Int                      @default(0) @map("enrolled_count")
+  status                   CourseOfferingStatus     @default(DRAFT)
+  course                   Course                   @relation(fields: [courseId], references: [id])
+  space                    Space                    @relation(fields: [spaceId], references: [id])
+  timeline                 Timeline?                @relation(fields: [timelineId], references: [id])
+  enrollments              Enrollment[]
+  passes                   CoursePass[]
+
+  @@index([courseId])
+  @@index([spaceId])
+  @@index([timelineId])
+  @@index([spaceId, status])
+  @@index([startsAt, endsAt])
+  @@map("course_offerings")
+}
+
+// @schema-type: JOIN
+// @description: User가 CourseOffering에 결제 또는 관리자 부여로 등록된 상태와 결제 참조를 관리하는 멤버십 링크
+// @relation-pattern: many-to-many
+// @ownership: dependent
+// @scope: mixed
+// @join-role: membership
+// @connects: User ─── CourseOffering
+// @extended-by: CoursePass
+/// @displayName 수강 등록
+model Enrollment {
+  id                 String           @id @default(uuid())
+  createdAt          DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime?        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt          DateTime?        @map("removed_at") @db.Timestamptz(6)
+  userId             String           @map("user_id")
+  courseId           String           @map("course_id")
+  courseOfferingId   String           @map("course_offering_id")
+  assignedTimelineId String?          @map("assigned_timeline_id")
+  paymentStatus      PaymentStatus    @default(PENDING) @map("payment_status")
+  paymentProvider    String?          @map("payment_provider")
+  paymentExternalId  String?          @map("payment_external_id")
+  paidAt             DateTime?        @map("paid_at") @db.Timestamptz(6)
+  paidAmount         Int?             @map("paid_amount")
+  currency           String           @default("KRW")
+  validFrom          DateTime?        @map("valid_from") @db.Timestamptz(6)
+  validUntil         DateTime?        @map("valid_until") @db.Timestamptz(6)
+  status             EnrollmentStatus @default(PENDING)
+  user               User             @relation(fields: [userId], references: [id])
+  course             Course           @relation(fields: [courseId], references: [id])
+  courseOffering     CourseOffering   @relation(fields: [courseOfferingId], references: [id])
+  assignedTimeline   Timeline?        @relation(fields: [assignedTimelineId], references: [id])
+  coursePass         CoursePass?
+
+  @@index([userId])
+  @@index([courseId])
+  @@index([courseOfferingId])
+  @@index([assignedTimelineId])
+  @@index([paymentStatus])
+  @@index([status])
+  @@map("enrollments")
+}
+
+// @schema-type: DETAIL
+// @description: Enrollment에서 발급되는 1:1 수강 권리와 예약권 사용량을 관리하는 상세 모델
+// @relation-pattern: one-to-one
+// @ownership: dependent
+// @scope: mixed
+// @extends: Enrollment
+/// @displayName 수강권
+model CoursePass {
+  id                        String           @id @default(uuid())
+  createdAt                 DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                 DateTime?        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt                 DateTime?        @map("removed_at") @db.Timestamptz(6)
+  enrollmentId              String           @unique @map("enrollment_id")
+  userId                    String           @map("user_id")
+  courseId                  String           @map("course_id")
+  courseOfferingId          String           @map("course_offering_id")
+  timelineId                String           @map("timeline_id")
+  kind                      CoursePassKind   @default(STANDARD)
+  issuedAt                  DateTime         @default(now()) @map("issued_at") @db.Timestamptz(6)
+  validFrom                 DateTime         @map("valid_from") @db.Timestamptz(6)
+  expiresAt                 DateTime         @map("expires_at") @db.Timestamptz(6)
+  reservationLimit          Int              @default(0) @map("reservation_limit")
+  reservationUsedCount      Int              @default(0) @map("reservation_used_count")
+  reservationRemainingCount Int              @default(0) @map("reservation_remaining_count")
+  status                    CoursePassStatus @default(ACTIVE)
+  enrollment                Enrollment       @relation(fields: [enrollmentId], references: [id])
+  user                      User             @relation(fields: [userId], references: [id])
+  course                    Course           @relation(fields: [courseId], references: [id])
+  courseOffering            CourseOffering   @relation(fields: [courseOfferingId], references: [id])
+  timeline                  Timeline         @relation(fields: [timelineId], references: [id])
+  reservations              Reservation[]
+
+  @@index([userId])
+  @@index([courseId])
+  @@index([courseOfferingId])
+  @@index([timelineId])
+  @@index([status])
+  @@index([expiresAt])
+  @@map("course_passes")
+}

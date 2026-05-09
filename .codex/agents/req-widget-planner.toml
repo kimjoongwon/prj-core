@@ -35,13 +35,13 @@ developer_instructions = '''
 | L7 Entity 기획 결과 | ✅ | 엔티티 정의 |
 | page.spec.md | ✅ | 해당 페이지 기획서 |
 
-### 출력 위치 (Sidecar Spec - 개별 파일)
+### 출력 위치 (허용 owner spec 섹션)
 
 ```
-packages/fe-ui/src/widget/[WidgetName]/[WidgetName].spec.md 또는 index.tsx owner의 index.spec.md
+route `page.spec.md` 또는 관련 fe-ui Page/Feature spec의 Widget Contract 섹션
 ```
 
-각 신규 Widget 컴포넌트마다 component owner와 같은 basename의 spec을 생성합니다. `index.tsx`가 owner인 경우에만 `index.spec.md`를 사용합니다.
+Widget 전용 sidecar spec은 생성하지 않습니다. 각 신규/변경 Widget의 목적, Props, 내부 컴포넌트, 반응형 대응은 가장 가까운 허용 owner spec에 섹션으로 기록합니다.
 
 ### 출력 파일 형식
 
@@ -118,9 +118,9 @@ packages/fe-ui/src/widget/[WidgetName]/[WidgetName].spec.md 또는 index.tsx own
 ## 4. 프로세스
 
 ```
-0단계: 템플릿 파일 확인
-   Read `.codex/templates/spec/widget.template.md`
-   → 해당 파일의 형식을 기준으로 Widget owner spec을 생성한다
+0단계: 허용 owner spec 확인
+   route `page.spec.md` 또는 관련 fe-ui Page/Feature spec을 찾는다
+   → Widget 전용 sidecar를 만들지 않고 해당 owner spec의 Widget Contract 섹션을 갱신한다
    ↓
 1단계: 화면 분석
    - page.spec.md 읽기
@@ -139,8 +139,8 @@ packages/fe-ui/src/widget/[WidgetName]/[WidgetName].spec.md 또는 index.tsx own
    - 내부 UI 컴포넌트 구성
    - 반응형 대응
    ↓
-5단계: 기획서 작성 (개별 파일)
-   → packages/fe-ui/src/widget/[WidgetName]/[WidgetName].spec.md 또는 index.tsx owner의 index.spec.md
+5단계: 허용 owner spec 갱신
+   → route `page.spec.md` 또는 관련 fe-ui Page/Feature spec의 Widget Contract 섹션
 ```
 
 ---
@@ -187,7 +187,7 @@ Entity: Member (id, email, name, role, status, createdAt)
 
 ### 출력
 
-**packages/fe-ui/src/widget/MemberTable/MemberTable.spec.md:**
+**route `page.spec.md` 또는 관련 fe-ui Page/Feature spec의 Widget Contract 섹션:**
 
 ```markdown
 # MemberTable Widget 기획서
@@ -231,7 +231,7 @@ Entity: Member (id, email, name, role, status, createdAt)
 - Mobile: 카드 뷰로 전환 (MemberCard 사용)
 ```
 
-**packages/fe-ui/src/widget/MemberCard/MemberCard.spec.md:**
+**같은 owner spec의 추가 Widget Contract 항목:**
 
 ```markdown
 # MemberCard Widget 기획서
@@ -256,4 +256,20 @@ Entity: Member (id, email, name, role, status, createdAt)
 | Avatar | ui | 프로필 이미지 |
 | MemberStatusBadge | ui | 상태 뱃지 |
 ```
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

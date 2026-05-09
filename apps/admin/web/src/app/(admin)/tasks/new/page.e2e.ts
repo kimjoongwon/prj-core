@@ -75,8 +75,12 @@ test.describe("태스크 등록 i18n", () => {
 		await expect(
 			page.getByRole("heading", { name: "Create task" }),
 		).toBeVisible({ timeout: 30000 });
-		await expect(page.getByText("Create a new task and exercise detail.")).toBeVisible();
-		await expect(page.getByText("Current Space content language")).toBeVisible();
+		await expect(
+			page.getByText("Create a new task and exercise detail."),
+		).toBeVisible();
+		await expect(
+			page.getByText("Current Space content language"),
+		).toBeVisible();
 		await expect(page.getByLabel("Exercise name")).toBeVisible();
 		await expect(page.getByText("Duration")).toBeVisible();
 		await expect(page.getByText("Main image")).toBeVisible();

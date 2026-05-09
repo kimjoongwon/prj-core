@@ -1,0 +1,9 @@
+node_modules/
+.expo/
+dist/
+dist-web/
+web-build/
+expo-env.d.ts
+*.tsbuildinfo
+
+.rnstorybook/storybook.requires.ts

@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "Onora Mobile Storybook",
+    "slug": "onora-mobile-storybook",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "kr.co.cocdev.onoramobilestorybook",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "bundleIdentifier": "kr.co.cocdev.onoramobilestorybook"
+    },
+    "android": {
+      "package": "kr.co.cocdev.onoramobilestorybook",
+      "predictiveBackGestureEnabled": false
+    },
+    "experiments": {
+      "reactCompiler": true
+    }
+  }
+}

@@ -12,7 +12,9 @@ import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @ApiTags("I18N")
 @Controller()
 export class I18nCatalogController {
-	constructor(private readonly translationCatalogService: TranslationCatalogService) {}
+	constructor(
+		private readonly translationCatalogService: TranslationCatalogService,
+	) {}
 
 	@Public()
 	@Get("catalog/:languageCode")
@@ -20,7 +22,8 @@ export class I18nCatalogController {
 	@ApiOperation({
 		operationId: "getIdpI18nCatalog",
 		summary: "공개 IDP i18n catalog 조회",
-		description: "IDP 프론트 런타임 번역에 사용할 언어별 static catalog를 조회합니다.",
+		description:
+			"IDP 프론트 런타임 번역에 사용할 언어별 static catalog를 조회합니다.",
 	})
 	@ApiParam({
 		name: "languageCode",

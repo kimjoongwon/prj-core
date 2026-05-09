@@ -9,11 +9,12 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { SessionTypes } from "./sessionTypes";
-import type { UpdateSessionDtoRepeatCycleType } from "./updateSessionDtoRepeatCycleType";
-import type { UpdateSessionDtoRecurringDayOfWeek } from "./updateSessionDtoRecurringDayOfWeek";
+
 import type { ProgramDto } from "./programDto";
+import type { SessionTypes } from "./sessionTypes";
 import type { TimelineDto } from "./timelineDto";
+import type { UpdateSessionDtoRecurringDayOfWeek } from "./updateSessionDtoRecurringDayOfWeek";
+import type { UpdateSessionDtoRepeatCycleType } from "./updateSessionDtoRepeatCycleType";
 
 export interface UpdateSessionDto {
 	id?: string;

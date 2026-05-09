@@ -17,6 +17,7 @@ export default observer(function OidcClientNewPageRoute() {
 		grantTypes: ["authorization_code"],
 		responseTypes: ["code"],
 		scope: "openid profile email",
+		isFirstParty: false,
 		skipConsent: false,
 		redirectUris: [""],
 		loginUrl: "",

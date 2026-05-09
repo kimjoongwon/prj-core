@@ -293,7 +293,9 @@ export const RoutineActivitySection = observer(function RoutineActivitySection({
 							<div>
 								<p className="font-medium">{t("후보 운동")}</p>
 								<p className="text-sm text-default-500">
-									{t("이미지는 썸네일, 비디오는 편성 가능 여부 기준으로 사용합니다.")}
+									{t(
+										"이미지는 썸네일, 비디오는 편성 가능 여부 기준으로 사용합니다.",
+									)}
 								</p>
 							</div>
 						</div>

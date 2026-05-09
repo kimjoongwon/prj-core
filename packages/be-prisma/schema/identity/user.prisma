@@ -75,9 +75,12 @@ model User {
   createdGroups       Group[]
   createdContents     Content[]
   createdTimelines    Timeline[]
+  enrollments         Enrollment[]
+  coursePasses        CoursePass[]
   createdTasks        Task[]
   createdSafeWallets  SafeWallet[]
   createdRoutines     Routine[]
+  reservations         Reservation[]
   // Asset 도메인 Creator 관계
   createdAssets       Asset[]
   createdFolders      Folder[]

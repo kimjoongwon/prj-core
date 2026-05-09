@@ -4,10 +4,7 @@ import {
 	setApiLocaleStore,
 	setApiPersistStore,
 } from "@cocrepo/api/core/client";
-import {
-	setIdpLocaleStore,
-	setIdpPersistStore,
-} from "@cocrepo/api/idp/client";
+import { setIdpLocaleStore, setIdpPersistStore } from "@cocrepo/api/idp/client";
 import type { AppStoreConfig, AppStoreProviderResult } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
@@ -91,7 +88,8 @@ export function createAppStoreProvider(
 			storageKey: config.persistStorageKey,
 		});
 		rootStore.localeStore = new LocaleStore({
-			storageKey: config.localeStorageKey ?? `${config.persistStorageKey}:locale`,
+			storageKey:
+				config.localeStorageKey ?? `${config.persistStorageKey}:locale`,
 		});
 
 		// BottomTabStore, FABStore 추가
@@ -221,7 +219,10 @@ export function createAppStoreProvider(
 				return;
 			}
 
-			document.documentElement.lang = localeStore.languageCode.replace("_", "-");
+			document.documentElement.lang = localeStore.languageCode.replace(
+				"_",
+				"-",
+			);
 		}, [localeStore, localeStore?.languageCode]);
 
 		// ability 변경 시 체커 업데이트

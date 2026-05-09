@@ -405,7 +405,7 @@ ls packages/fe-ui/src/cell/
 
 | 관계 | 에이전트 | 설명 |
 |------|---------|------|
-| **선행** | req-cell-planner | Cell 계약은 route `page.spec.md` 또는 관련 Widget spec에 정의 |
+| **선행** | req-cell-planner | Cell 계약은 route `page.spec.md` 또는 관련 Page/Feature spec에 정의 |
 | **관련** | fe-display-component-builder | 일반 display UI 컴포넌트 (Cell 외) |
 | **후행** | fe-page-builder | 목록 페이지에서 Cell 사용 |
 
@@ -484,4 +484,20 @@ Cell 빌더는 DataGrid/Table용 Cell 컴포넌트를 **Pure UI → Widget → F
 | **Feature** | `[위치/역할][기능]Cell` | RowActionsCell, InlineEditCell |
 
 재활용성을 극대화하기 위해 기존 Cell을 먼저 확인하고, 계층에 맞는 Props 설계와 구현 규칙을 준수합니다.
+
+## Feedback Packet (Mandatory)
+
+이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```
+
 '''

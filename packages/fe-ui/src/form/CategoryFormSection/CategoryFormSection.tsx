@@ -1,6 +1,11 @@
 "use client";
 
-import { Input, Select, SelectItem, type SharedSelection } from "@cocrepo/ui/heroui";
+import {
+	Input,
+	Select,
+	SelectItem,
+	type SharedSelection,
+} from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 
 export interface CategoryOption {

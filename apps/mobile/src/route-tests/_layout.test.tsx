@@ -4,6 +4,8 @@ import RootLayout from "@/app/_layout";
 const mockSetIdpBaseUrl = jest.fn();
 const mockSetIdpLoginRedirectUrl = jest.fn();
 const mockSetLoginRedirectUrl = jest.fn();
+const mockSetApiPersistStore = jest.fn();
+const mockSetIdpPersistStore = jest.fn();
 
 jest.mock("@cocrepo/mo-ui", () => {
 	const React = jest.requireActual<typeof import("react")>("react");
@@ -39,9 +41,11 @@ jest.mock("@cocrepo/api/idp/client", () => ({
 	setIdpBaseUrl: (...args: string[]) => mockSetIdpBaseUrl(...args),
 	setIdpLoginRedirectUrl: (...args: string[]) =>
 		mockSetIdpLoginRedirectUrl(...args),
+	setIdpPersistStore: (...args: unknown[]) => mockSetIdpPersistStore(...args),
 }));
 
 jest.mock("@cocrepo/api/core/client", () => ({
+	setApiPersistStore: (...args: unknown[]) => mockSetApiPersistStore(...args),
 	setLoginRedirectUrl: (...args: string[]) => mockSetLoginRedirectUrl(...args),
 }));
 
@@ -105,6 +109,8 @@ describe("mobile root layout", () => {
 		mockSetIdpBaseUrl.mockReset();
 		mockSetIdpLoginRedirectUrl.mockReset();
 		mockSetLoginRedirectUrl.mockReset();
+		mockSetApiPersistStore.mockReset();
+		mockSetIdpPersistStore.mockReset();
 	});
 
 	it("gesture root 안에서 design system provider, AuthSessionGate, header hidden stack 을 렌더링해야 한다", () => {

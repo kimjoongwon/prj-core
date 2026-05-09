@@ -34,9 +34,7 @@ export class RoutinesRepository {
 		const whereCondition = {
 			removedAt: null,
 			...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
-			...(contentLanguageCode
-				? { space: { contentLanguageCode } }
-				: {}),
+			...(contentLanguageCode ? { space: { contentLanguageCode } } : {}),
 			...(search
 				? { name: { contains: search, mode: "insensitive" as const } }
 				: {}),

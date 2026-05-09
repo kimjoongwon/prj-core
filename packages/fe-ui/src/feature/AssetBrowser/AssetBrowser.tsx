@@ -263,8 +263,8 @@ export const AssetBrowser = observer(
 		onDeleteAsset,
 		onCreateFolder,
 		onRenameFolder,
-	onDeleteFolder,
-}: AssetBrowserProps) => {
+		onDeleteFolder,
+	}: AssetBrowserProps) => {
 		const t = useT();
 		const gridState = useLocalObservable(
 			() => new DataGridStateModel({ queryStates, setQueryStates }),

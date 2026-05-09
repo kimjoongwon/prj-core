@@ -11,10 +11,15 @@ export * from "./asset.entity";
 export * from "./assignment.entity";
 export * from "./auth-audit-log.entity";
 export * from "./category.entity";
+// Course Domain Entities
+export * from "./course.entity";
+export * from "./course-offering.entity";
+export * from "./course-pass.entity";
 // Decorator는 @cocrepo/decorator에서 export됨
 export * from "./derivative.entity";
 export * from "./document.entity";
 export * from "./email-verification.entity";
+export * from "./enrollment.entity";
 export * from "./exercise.entity";
 export * from "./folder.entity";
 export * from "./ground.entity";
@@ -36,6 +41,7 @@ export * from "./policy-ability.entity";
 export * from "./profile.entity";
 export * from "./program-activity.entity";
 export * from "./program.entity";
+export * from "./reservation.entity";
 // Response Entity
 export * from "./response.entity";
 export * from "./role.entity";

@@ -107,7 +107,7 @@ const NavItemComponent = observer(function NavItemComponent({
 							)
 						: isActiveBranch
 							? "bg-slate-100/90 text-slate-950 dark:bg-white/5 dark:text-slate-50"
-						: "bg-transparent text-slate-700 hover:bg-slate-100/80 dark:text-slate-200 dark:hover:bg-white/5",
+							: "bg-transparent text-slate-700 hover:bg-slate-100/80 dark:text-slate-200 dark:hover:bg-white/5",
 				)}
 				onClick={handleClick}
 			>
@@ -122,7 +122,7 @@ const NavItemComponent = observer(function NavItemComponent({
 								? "border-white/15 bg-white/10 text-white dark:border-slate-200/70 dark:bg-slate-100 dark:text-slate-950"
 								: isActiveBranch
 									? "border-primary/20 bg-primary/10 text-primary dark:border-primary/30 dark:bg-primary/15 dark:text-primary-300"
-								: "border-slate-200/70 bg-white/80 text-slate-500 group-hover:border-slate-300 group-hover:text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:group-hover:text-slate-50",
+									: "border-slate-200/70 bg-white/80 text-slate-500 group-hover:border-slate-300 group-hover:text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:group-hover:text-slate-50",
 						)}
 					>
 						{renderItemIcon ? (
@@ -152,13 +152,13 @@ const NavItemComponent = observer(function NavItemComponent({
 							className={cn(
 								"block truncate",
 								density === "compact"
-								? "mt-0.5 text-[11px] leading-4"
-								: "mt-1 text-xs leading-5",
+									? "mt-0.5 text-[11px] leading-4"
+									: "mt-1 text-xs leading-5",
 								isSelected
 									? "text-white/70 dark:text-slate-600"
 									: isActiveBranch
 										? "text-slate-500 dark:text-slate-400"
-									: "text-slate-500 dark:text-slate-400",
+										: "text-slate-500 dark:text-slate-400",
 							)}
 						>
 							{description}
@@ -175,7 +175,7 @@ const NavItemComponent = observer(function NavItemComponent({
 								? "text-white/70 dark:text-slate-600"
 								: isActiveBranch
 									? "text-slate-500 dark:text-slate-300"
-								: "text-slate-400 dark:text-slate-500",
+									: "text-slate-400 dark:text-slate-500",
 							visualExpanded ? "rotate-180" : "",
 						)}
 					/>

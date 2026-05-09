@@ -23,6 +23,7 @@ export interface OidcClientDetailPageClient {
 	clientSecret?: string | null;
 	name: string;
 	isActive: boolean;
+	isFirstParty: boolean;
 	skipConsent: boolean;
 	createdAt: string | Date | null;
 	loginUrl?: string | null;
@@ -187,6 +188,20 @@ export const OidcClientDetailPage = observer(
 										<dt className="text-sm text-default-500 mb-1">활성 상태</dt>
 										<dd>
 											<ActiveStatusCell isActive={client.isActive} />
+										</dd>
+									</div>
+									<div>
+										<dt className="text-sm text-default-500 mb-1">
+											클라이언트 신뢰 구분
+										</dt>
+										<dd>
+											<Chip
+												color={client.isFirstParty ? "primary" : "default"}
+												size="sm"
+												variant="flat"
+											>
+												{client.isFirstParty ? "First-party" : "Third-party"}
+											</Chip>
 										</dd>
 									</div>
 									<div>

@@ -40,9 +40,12 @@ model Space {
   groups         Group[]
   contents       Content[]
   timelines      Timeline[]
+  courses        Course[]
+  courseOfferings CourseOffering[]
   tasks          Task[]
   safeWallets    SafeWallet[]
   routines       Routine[]
+  reservations   Reservation[]
   policies       Policy[]
   // Asset 도메인
   folders        Folder[]

@@ -32,6 +32,7 @@ function buildOidcClient(
 		loginUrl: string;
 		defaultReturnTo: string;
 		isActive: boolean;
+		isFirstParty: boolean;
 		scope: string;
 		skipConsent: boolean;
 		tokenEndpointAuthMethod: string;
@@ -63,6 +64,7 @@ function buildOidcClient(
 			overrides.tokenEndpointAuthMethod || "client_secret_post",
 		scope: overrides.scope || "openid profile email roles",
 		isActive: overrides.isActive ?? true,
+		isFirstParty: overrides.isFirstParty ?? false,
 		skipConsent: overrides.skipConsent ?? false,
 		isPublicClient: false,
 		isConfidentialClient: true,

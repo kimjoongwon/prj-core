@@ -20,13 +20,14 @@ export {
 } from "./auth-audit-log.service";
 export { AuthCacheService } from "./auth-cache.service";
 export { CategoryService } from "./category.service";
+export { CourseService } from "./course.service";
 export { EmailModule } from "./email.module";
 export {
 	EmailProvider,
 	type EmailSendInput,
 	EmailService,
 	SmtpEmailProvider,
-} from "./email.service/index";
+} from "./email.service";
 export {
 	type EmailVerificationCreateInput,
 	type EmailVerificationRequestResult,
@@ -63,11 +64,11 @@ export {
 	type PutObjectResult,
 	S3CompatibleStorageService,
 } from "./object-storage.service";
-export { OidcClientService } from "./oidc-client.service/index";
+export { OidcClientService } from "./oidc-client.service";
 export {
-	applyFirstPartyOidcRuntimeConfig,
-	FIRST_PARTY_OIDC_CLIENT_IDS,
-	isFirstPartyOidcClientId,
+	applyRuntimeManagedOidcClientConfig,
+	isRuntimeManagedOidcClientId,
+	RUNTIME_MANAGED_OIDC_CLIENT_IDS,
 } from "./oidc-runtime-client-config";
 export {
 	type OidcRedisSession,
@@ -78,6 +79,7 @@ export { PolicyAssignmentService } from "./policy-assignment.service";
 export { createPrismaClient } from "./prisma.factory";
 export { PrismaService } from "./prisma.service";
 export { RedisService } from "./redis.service";
+export { ReservationService } from "./reservation.service";
 export { RoleService } from "./role.service";
 export { RoutineService } from "./routine.service";
 export { SecurityPolicyService } from "./security-policy.service";
@@ -89,19 +91,19 @@ export {
 	SubjectService,
 } from "./subject.service";
 export { TaskService } from "./task.service";
-export { TemplateService } from "./template.service/index";
+export { TemplateService } from "./template.service";
 export {
 	type TenantAccessRequestCreateFormBootstrap,
 	type TenantAccessRequestFormOptionItem,
 	TenantAccessRequestService,
 } from "./tenant-access-request.service";
 export { TimelineService } from "./timeline.service";
-export { TokenService } from "./token.service/index";
+export { TokenService } from "./token.service";
 export {
 	type OidcStatePayload,
 	type SessionInfo,
 	type SessionMetadata,
 	TokenStorageService,
-} from "./token-storage.service/index";
+} from "./token-storage.service";
 export { TranslationCatalogService } from "./translation-catalog.service";
 export { UserService } from "./user.service";

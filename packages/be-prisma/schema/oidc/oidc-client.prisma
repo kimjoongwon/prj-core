@@ -36,6 +36,8 @@ model OidcClient {
   scope                   String    @default("openid profile email")
   /// @displayName 활성화 여부
   isActive                Boolean   @default(true) @map("is_active")
+  /// @displayName First-party 클라이언트 여부
+  isFirstParty            Boolean   @default(false) @map("is_first_party")
   /// @displayName 권한 동의 화면 생략
   skipConsent             Boolean   @default(false) @map("skip_consent")
   /// @displayName 로그인 화면 설정

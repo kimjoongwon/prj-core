@@ -11,11 +11,7 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import {
-	useQuery,
-	useSuspenseInfiniteQuery,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
+
 import type {
 	DataTag,
 	DefinedInitialDataOptions,
@@ -32,14 +28,18 @@ import type {
 	UseSuspenseQueryOptions,
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
+import {
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { ErrorType } from "../../libs/customIdpAxios";
 
+import { customIdpInstance } from "../../libs/customIdpAxios";
 import type {
 	GetIdpDashboardStats200AllOf,
 	GetIdpLoginTrend200AllOf,
 } from ".././model";
-
-import { customIdpInstance } from "../../libs/customIdpAxios";
-import type { ErrorType } from "../../libs/customIdpAxios";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

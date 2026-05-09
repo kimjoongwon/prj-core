@@ -4,11 +4,11 @@ import {
 	useGetOidcClient,
 	useUpdateOidcClient,
 } from "@cocrepo/api/idp/oidc-clients";
+import type { OidcClientLoginUi } from "@cocrepo/type";
 import {
 	OidcClientEditPage,
 	type OidcClientEditPageFormState,
 } from "@cocrepo/ui";
-import type { OidcClientLoginUi } from "@cocrepo/type";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -26,6 +26,7 @@ export default observer(function OidcClientEditPageRoute() {
 		grantTypes: [],
 		responseTypes: [],
 		scope: "",
+		isFirstParty: false,
 		skipConsent: false,
 		redirectUris: [""],
 		loginUrl: "",
@@ -62,6 +63,7 @@ export default observer(function OidcClientEditPageRoute() {
 		state.grantTypes = [...client.grantTypes];
 		state.responseTypes = [...client.responseTypes];
 		state.scope = client.scope;
+		state.isFirstParty = client.isFirstParty;
 		state.skipConsent = client.skipConsent;
 		state.redirectUris =
 			client.redirectUris.length > 0 ? [...client.redirectUris] : [""];
@@ -101,6 +103,7 @@ export default observer(function OidcClientEditPageRoute() {
 							grantTypes: client.grantTypes,
 							responseTypes: client.responseTypes,
 							scope: client.scope,
+							isFirstParty: client.isFirstParty,
 							skipConsent: client.skipConsent,
 							redirectUris: client.redirectUris,
 							loginUrl: client.loginUrl,

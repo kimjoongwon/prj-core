@@ -1,13 +1,18 @@
 "use client";
 
 import { Spinner } from "@cocrepo/ui/heroui";
-import { observer } from "mobx-react-lite";
-import { useEffect, useState, type ComponentType, type CSSProperties } from "react";
 import type { Editor, EditorConfig, EventInfo } from "ckeditor5";
+import { observer } from "mobx-react-lite";
+import {
+	type ComponentType,
+	type CSSProperties,
+	useEffect,
+	useState,
+} from "react";
 
-type CkeditorReactModule = typeof import("@ckeditor/ckeditor5-react");
 type Ckeditor5Module = typeof import("ckeditor5");
-type CkeditorKoTranslationModule = typeof import("ckeditor5/translations/ko.js");
+type CkeditorKoTranslationModule =
+	typeof import("ckeditor5/translations/ko.js");
 
 interface CkeditorModules {
 	CKEditor: ComponentType<Record<string, unknown>>;
@@ -55,8 +60,9 @@ export const HtmlEditor = observer(
 		licenseKey = DEFAULT_LICENSE_KEY,
 		className,
 	}: HtmlEditorProps) => {
-		const [editorModules, setEditorModules] =
-			useState<CkeditorModules | null>(null);
+		const [editorModules, setEditorModules] = useState<CkeditorModules | null>(
+			null,
+		);
 		const [loadError, setLoadError] = useState<string | null>(null);
 		const editorStyle = {
 			"--html-editor-min-height": `${minHeight}px`,
