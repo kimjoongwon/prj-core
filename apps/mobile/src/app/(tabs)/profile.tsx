@@ -20,7 +20,7 @@ const ProfileTabRoute = observer(() => {
 		<ScreenFrame
 			className={classNames.screenFrame()}
 			contentClassName={classNames.root()}
-			edges={["top", "right", "left"]}
+			edges={["right", "left"]}
 		>
 			<ScrollView
 				contentContainerClassName={classNames.contentContainer()}

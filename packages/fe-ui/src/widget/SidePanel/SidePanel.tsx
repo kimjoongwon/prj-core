@@ -33,8 +33,8 @@ const SubMenuItem = observer(function SubMenuItem({
 					? "rounded-lg px-2.5 py-1.5 text-[13px] leading-5"
 					: "rounded-2xl px-3 py-2.5 text-sm",
 				isSelected
-					? "bg-primary/10 font-semibold text-primary dark:bg-primary/15 dark:text-primary-300"
-					: "text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-slate-50",
+					? "bg-primary/10 font-semibold text-primary"
+					: "text-default-600 hover:bg-content2 hover:text-foreground",
 			)}
 			onClick={handleClick}
 		>
@@ -100,14 +100,14 @@ const NavItemComponent = observer(function NavItemComponent({
 						: "gap-3 rounded-[22px] px-3 py-3",
 					isSelected
 						? cn(
-								"bg-slate-950 text-white dark:bg-white dark:text-slate-950",
+								"bg-foreground text-background",
 								density === "compact"
 									? "shadow-[0_12px_28px_-24px_rgba(15,23,42,0.72)]"
 									: "shadow-[0_22px_46px_-28px_rgba(15,23,42,0.7)]",
 							)
-						: isActiveBranch
-							? "bg-slate-100/90 text-slate-950 dark:bg-white/5 dark:text-slate-50"
-							: "bg-transparent text-slate-700 hover:bg-slate-100/80 dark:text-slate-200 dark:hover:bg-white/5",
+					: isActiveBranch
+						? "bg-content2 text-foreground"
+						: "bg-transparent text-default-600 hover:bg-content2 hover:text-foreground",
 				)}
 				onClick={handleClick}
 			>
@@ -119,10 +119,10 @@ const NavItemComponent = observer(function NavItemComponent({
 								? "h-8 w-8 rounded-lg"
 								: "mt-0.5 h-11 w-11 rounded-2xl",
 							isSelected
-								? "border-white/15 bg-white/10 text-white dark:border-slate-200/70 dark:bg-slate-100 dark:text-slate-950"
+								? "border-background/15 bg-background/10 text-background"
 								: isActiveBranch
-									? "border-primary/20 bg-primary/10 text-primary dark:border-primary/30 dark:bg-primary/15 dark:text-primary-300"
-									: "border-slate-200/70 bg-white/80 text-slate-500 group-hover:border-slate-300 group-hover:text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:group-hover:text-slate-50",
+									? "border-primary/20 bg-primary/10 text-primary"
+									: "border-divider bg-content1/80 text-default-500 group-hover:text-foreground",
 						)}
 					>
 						{renderItemIcon ? (
@@ -155,10 +155,10 @@ const NavItemComponent = observer(function NavItemComponent({
 									? "mt-0.5 text-[11px] leading-4"
 									: "mt-1 text-xs leading-5",
 								isSelected
-									? "text-white/70 dark:text-slate-600"
+									? "text-background/70"
 									: isActiveBranch
-										? "text-slate-500 dark:text-slate-400"
-										: "text-slate-500 dark:text-slate-400",
+										? "text-default-500"
+										: "text-default-500",
 							)}
 						>
 							{description}
@@ -172,10 +172,10 @@ const NavItemComponent = observer(function NavItemComponent({
 							"shrink-0 transition-transform",
 							density === "compact" ? "mt-0.5 h-3.5 w-3.5" : "mt-1 h-4 w-4",
 							isSelected
-								? "text-white/70 dark:text-slate-600"
+								? "text-background/70"
 								: isActiveBranch
-									? "text-slate-500 dark:text-slate-300"
-									: "text-slate-400 dark:text-slate-500",
+									? "text-default-500"
+									: "text-default-400",
 							visualExpanded ? "rotate-180" : "",
 						)}
 					/>
@@ -185,7 +185,7 @@ const NavItemComponent = observer(function NavItemComponent({
 			{visualExpanded && (
 				<div
 					className={cn(
-						"border-l border-slate-200/80 dark:border-white/10",
+						"border-l border-divider",
 						density === "compact"
 							? "ml-4 space-y-1 pl-3"
 							: "ml-5 space-y-1.5 pl-4",
@@ -228,13 +228,13 @@ export const SidePanel = observer(function SidePanel({
 		logo || logoDescription ? (
 			<div
 				className={cn(
-					"border-b border-slate-200/70 dark:border-white/10",
+					"border-b border-divider",
 					density === "compact" ? "px-3 pb-3 pt-3" : "px-4 pb-4 pt-5",
 				)}
 			>
 				<div
 					className={cn(
-						"border border-slate-200/70 bg-slate-100/82 dark:border-white/10 dark:bg-white/5",
+						"border border-divider bg-content2/82",
 						density === "compact" ? "rounded-2xl p-3" : "rounded-[24px] p-4",
 					)}
 				>
@@ -242,7 +242,7 @@ export const SidePanel = observer(function SidePanel({
 					{logoDescription && (
 						<p
 							className={cn(
-								"text-slate-600 dark:text-slate-300",
+								"text-default-600",
 								density === "compact"
 									? "mt-2 text-xs leading-5"
 									: "mt-3 text-sm leading-6",
@@ -265,7 +265,7 @@ export const SidePanel = observer(function SidePanel({
 		>
 			<div
 				className={cn(
-					"flex min-h-0 flex-1 flex-col overflow-hidden border border-slate-200/70 bg-white/84 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/72",
+					"flex min-h-0 flex-1 flex-col overflow-hidden border border-divider bg-content1/84 backdrop-blur-xl",
 					density === "compact"
 						? "rounded-[20px] shadow-[0_18px_52px_-44px_rgba(15,23,42,0.58)]"
 						: "rounded-[30px] shadow-[0_28px_80px_-56px_rgba(15,23,42,0.55)]",
@@ -307,7 +307,7 @@ export const SidePanel = observer(function SidePanel({
 				{footer && (
 					<div
 						className={cn(
-							"border-t border-slate-200/70 dark:border-white/10",
+							"border-t border-divider",
 							density === "compact" ? "px-3 py-2" : "px-4 py-3",
 						)}
 					>

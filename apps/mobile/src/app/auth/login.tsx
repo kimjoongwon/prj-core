@@ -179,7 +179,9 @@ const AuthLoginRoute = observer(() => {
 		return !onHandleLocalhostRedirect(request.url);
 	};
 
-	const onNavigationStateChangeLoginWebView = (navigation: LoginWebViewRequest) => {
+	const onNavigationStateChangeLoginWebView = (
+		navigation: LoginWebViewRequest,
+	) => {
 		if (onHandleCallbackUrl(navigation.url)) {
 			return;
 		}
@@ -211,17 +213,22 @@ const AuthLoginRoute = observer(() => {
 			<LoginWebView
 				accessibilityLabel="auth-login-webview"
 				domStorageEnabled
+				incognito
 				javaScriptEnabled
 				key={webViewResetKey}
 				onError={onErrorLoginWebView}
 				onNavigationStateChange={onNavigationStateChangeLoginWebView}
 				onShouldStartLoadWithRequest={onShouldStartLoadWithRequestLoginWebView}
-				originWhitelist={["http://*", "https://*", `${AUTH_CALLBACK_SCHEME}://*`]}
-				sharedCookiesEnabled
+				originWhitelist={[
+					"http://*",
+					"https://*",
+					`${AUTH_CALLBACK_SCHEME}://*`,
+				]}
+				sharedCookiesEnabled={false}
 				source={{ uri: webViewUrl }}
 				startInLoadingState
 				style={WEB_VIEW_STYLE}
-				thirdPartyCookiesEnabled
+				thirdPartyCookiesEnabled={false}
 			/>
 		</ScreenFrame>
 	);

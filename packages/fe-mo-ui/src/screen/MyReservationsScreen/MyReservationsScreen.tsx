@@ -118,7 +118,7 @@ export const MyReservationsScreen = observer(
 				...viewProps,
 				className: classNames.screenFrame(),
 				contentClassName: classNames.root(),
-				edges: ["top", "right", "left"],
+				edges: ["right", "left"],
 				style,
 			},
 			createElement(
@@ -153,18 +153,18 @@ const myReservationsScreenClassNames = tv({
 	slots: {
 		contentContainer: "px-5 pb-9 pt-5",
 		reservationCard:
-			"gap-2 rounded-2xl border border-[#2e382f] bg-[#151a16] p-4",
-		reservationDate: "text-[13px] font-bold text-green-300",
+			"gap-2 rounded-2xl border border-border bg-surface p-4 shadow-surface",
+		reservationDate: "text-[13px] font-bold text-success",
 		reservationHeader: "flex-row items-center justify-between",
-		reservationMeta: "text-sm text-[#d6d3c7]",
-		reservationTitle: "text-[17px] font-bold text-[#fffaf0]",
-		root: "flex-1 bg-[#0c0f0b]",
-		screenFrame: "bg-[#0c0f0b]",
-		sectionDescription: "text-sm leading-[21px] text-stone-400",
+		reservationMeta: "text-sm text-surface-foreground",
+		reservationTitle: "text-[17px] font-bold text-foreground",
+		root: "flex-1 bg-background",
+		screenFrame: "bg-background",
+		sectionDescription: "text-sm leading-[21px] text-muted",
 		sectionHeader: "gap-1.5",
-		sectionTitle: "text-[22px] font-extrabold text-[#fffaf0]",
+		sectionTitle: "text-[22px] font-extrabold text-foreground",
 		statusBadge:
-			"overflow-hidden rounded-full bg-orange-900 px-2.5 py-1 text-xs font-bold text-orange-100",
+			"overflow-hidden rounded-full bg-warning px-2.5 py-1 text-xs font-bold text-warning-foreground",
 		tabContent: "gap-[18px]",
 	},
 });

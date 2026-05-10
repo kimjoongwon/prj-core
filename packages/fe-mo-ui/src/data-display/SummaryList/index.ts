@@ -107,27 +107,27 @@ export const SummaryList = SummaryListComponent;
 
 const summaryListClassNames = tv({
 	slots: {
-		description: "text-sm leading-5 text-[#aeb7ac]",
+		description: "text-sm leading-5 text-muted",
 		footer: "pt-1",
 		heading: "gap-1.5",
-		helperText: "text-xs leading-4 text-[#aeb7ac]",
+		helperText: "text-xs leading-4 text-muted",
 		item: "gap-1.5 py-3",
-		itemLabel: "flex-1 text-[13px] leading-[18px] text-[#aeb7ac]",
+		itemLabel: "flex-1 text-[13px] leading-[18px] text-muted",
 		itemRow: "flex-row items-start justify-between gap-3",
 		itemValue:
-			"flex-[1.2] text-right text-sm font-bold leading-5 text-[#f5f8f1]",
-		items: "rounded-xl border border-[#2b342c] bg-[#151915] px-4",
+			"flex-[1.2] text-right text-sm font-bold leading-5 text-foreground",
+		items: "rounded-xl border border-border bg-surface px-4",
 		root: "gap-3",
-		title: "text-lg font-extrabold leading-6 text-[#f5f8f1]",
+		title: "text-lg font-extrabold leading-6 text-foreground",
 	},
 	variants: {
 		state: {
 			complete: {},
 			missing: {
-				itemValue: "font-medium text-[#7f897d]",
+				itemValue: "font-medium text-muted",
 			},
 			warning: {
-				itemValue: "text-[#e6b36a]",
+				itemValue: "text-warning",
 			},
 		},
 	},

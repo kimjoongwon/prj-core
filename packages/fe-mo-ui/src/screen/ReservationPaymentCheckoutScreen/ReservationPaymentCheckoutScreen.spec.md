@@ -21,14 +21,12 @@
 - `errorDescription`: route/API가 매핑한 사용자 표시 오류 문구.
 - `isSubmitDisabled`, `submitLabel`: submit 버튼 상태와 문구.
 - `onPressSubmit`: route가 `createReservationCheckout` mutation을 실행한다.
-- `onPressBack`: route가 이전 예약 선택 화면으로 돌아간다.
 - `onPressReservations`: 성공 후 예약 내역으로 이동한다.
 
 ## 화면 스케치
 
 ```text
 ┌────────────────────────────────────┐
-│ [뒤로]                              │
 │ RESERVATION CHECKOUT               │
 │ 결제 후 예약                         │
 │ 선택한 수업에 필요한 과정을...          │
@@ -60,8 +58,10 @@
 
 ## 렌더링 계약
 
-- `ScreenFrame`으로 safe-area shell을 적용한다.
+- Expo Router의 `CustomHeader`가 상단 safe-area, title, back action을 소유하고, screen은 결제 본문만 렌더링한다.
+- `ScreenFrame`으로 본문 safe-area shell을 적용한다.
 - `StyleSheet`를 쓰지 않고 uniwind `className`과 `tailwind-variants` slot/variant만 사용한다.
+- 색상은 heroui-native semantic token(`background`, `surface`, `foreground`, `muted`, `accent`, `border`)을 사용한다.
 - 예약 요약 조각은 `ReservationCheckoutSummary`가 소유한다.
 - 과정/결제수단 선택은 `SelectableCardList` 같은 selection 계층으로 분리한다.
 - API hook, route params, app alias, backend DTO를 직접 import하지 않는다.
@@ -72,5 +72,6 @@
 
 | 날짜 | 변경 내용 |
 | --- | --- |
+| 2026-05-10 | back action을 Expo Router `CustomHeader` 소유로 옮기고 screen은 본문과 semantic token 스타일만 담당하도록 계약을 갱신했습니다. |
 | 2026-05-10 | 화면 계약을 과정 선택, 결제 방법 선택, 가격 요약, checkout 진행 상태 중심으로 갱신했습니다. |
 | 2026-05-10 | `/payments/checkout`용 provider-neutral 예약 결제 screen target을 추가했습니다. |

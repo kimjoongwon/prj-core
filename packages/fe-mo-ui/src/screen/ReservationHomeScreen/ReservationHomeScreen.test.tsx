@@ -74,7 +74,7 @@ describe("ReservationHomeScreen", () => {
 
 		render(<ReservationHomeScreen {...props} />);
 
-		expect(screen.getByText("오늘의 수업")).toBeTruthy();
+		expect(screen.getByText("예약 현황")).toBeTruthy();
 		expect(screen.getByText("F45 Strength")).toBeTruthy();
 		expect(screen.getByText("예약 가능")).toBeTruthy();
 

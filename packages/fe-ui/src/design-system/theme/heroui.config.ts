@@ -177,7 +177,7 @@ export interface ThemeConfig {
  * 기본 테마 설정
  */
 export const defaultThemeConfig: ThemeConfig = {
-	defaultTheme: "light",
+	defaultTheme: "dark",
 	disableBaseline: false,
 };
 

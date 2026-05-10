@@ -72,14 +72,20 @@ export class AuthController {
 	async login(
 		@Query("clientId") clientId: string,
 		@Query("returnTo") returnTo: string,
+		@Query("prompt") prompt: string,
 		@Res() res: Response,
 	) {
 		if (!clientId) {
 			throw new BadRequestException("clientId 쿼리가 필요합니다");
 		}
 
+		const authorizationOptions = prompt ? { prompt } : undefined;
 		const authorizationUrl =
-			await this.authApplicationService.getAuthorizationUrl(returnTo, clientId);
+			await this.authApplicationService.getAuthorizationUrl(
+				returnTo,
+				clientId,
+				authorizationOptions,
+			);
 		return res.redirect(authorizationUrl);
 	}
 
@@ -98,6 +104,7 @@ export class AuthController {
 		@Query("state") state: string,
 		@Query("error") error: string,
 		@Query("error_description") errorDescription: string,
+		@Query("responseMode") responseMode: string,
 		@Req() req: Request,
 		@Res() res: Response,
 	) {
@@ -128,6 +135,21 @@ export class AuthController {
 					req,
 					res,
 				);
+			const mobileSession = (
+				callbackResult as typeof callbackResult & { session?: unknown }
+			).session;
+			if (
+				clientId === "user-mobile" &&
+				responseMode === "mobile-json" &&
+				mobileSession
+			) {
+				return res.status(HttpStatus.OK).json({
+					httpStatus: HttpStatus.OK,
+					message: "로그인 성공",
+					data: mobileSession,
+				});
+			}
+
 			return res.redirect(
 				callbackResult.returnTo || callbackResult.defaultReturnTo,
 			);
@@ -159,8 +181,9 @@ export class AuthController {
 	async refreshToken(
 		@Req() req: Request,
 		@Res({ passthrough: true }) res: Response,
+		@Headers(REQUEST_HEADER_KEYS.REFRESH_TOKEN) refreshTokenHeader?: string,
 	) {
-		const refreshToken = req.cookies.refreshToken;
+		const refreshToken = req.cookies.refreshToken || refreshTokenHeader;
 		const sessionId = req.cookies?.sessionId;
 		return this.authApplicationService.refreshTokenWithIdp(
 			refreshToken,
@@ -322,6 +345,7 @@ export class AuthController {
 
 	@HttpCode(HttpStatus.OK)
 	@Post("logout")
+	@Public()
 	@ApiOperation({
 		operationId: "logout",
 		summary: "로그아웃",
@@ -336,13 +360,24 @@ export class AuthController {
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("로그아웃 성공")
 	async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-		const accessToken = req.cookies?.accessToken;
+		const accessToken =
+			req.cookies?.accessToken ??
+			this.parseBearerToken(req.headers.authorization);
 		const sessionId = req.cookies?.sessionId;
 		return this.authApplicationService.logoutWithCookie(
 			accessToken,
 			sessionId,
 			res,
 		);
+	}
+
+	private parseBearerToken(authorization?: string) {
+		const [scheme, token] = authorization?.split(" ") ?? [];
+		if (scheme?.toLowerCase() !== "bearer" || !token) {
+			return undefined;
+		}
+
+		return token;
 	}
 
 	@HttpCode(HttpStatus.OK)

@@ -24,13 +24,13 @@ export const Layout = observer(function Layout({
 }: LayoutProps) {
 	if (desktopVariant === "stacked-header") {
 		return (
-			<div
-				className={cn(
-					"relative flex h-screen flex-col overflow-hidden bg-slate-100 text-slate-950 dark:bg-[#04060b] dark:text-slate-50",
-					className,
-				)}
-			>
-				<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,111,238,0.08),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(23,201,100,0.08),transparent_24%)]" />
+				<div
+					className={cn(
+						"relative flex h-screen flex-col overflow-hidden bg-background text-foreground",
+						className,
+					)}
+				>
+				<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,color-mix(in_oklab,var(--color-primary)_16%,transparent),transparent_30%),radial-gradient(circle_at_bottom_right,color-mix(in_oklab,var(--color-success)_12%,transparent),transparent_28%)]" />
 				<div className="relative flex min-h-0 flex-1 flex-col">
 					{header}
 					<div className={cn("flex min-h-0 flex-1", bodyClassName)}>

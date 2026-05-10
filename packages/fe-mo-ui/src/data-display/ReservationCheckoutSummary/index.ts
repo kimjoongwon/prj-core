@@ -104,18 +104,18 @@ export const ReservationCheckoutSummary = ReservationCheckoutSummaryComponent;
 
 const reservationCheckoutSummaryClassNames = tv({
 	slots: {
-		amountLabel: "text-sm font-bold text-[#d6d3c7]",
+		amountLabel: "text-sm font-bold text-surface-foreground",
 		amountRow:
-			"flex-row items-center justify-between rounded-xl bg-[#20301d] px-4 py-3",
-		amountValue: "text-[22px] font-extrabold leading-7 text-[#b9f68b]",
+			"flex-row items-center justify-between rounded-xl bg-success-soft px-4 py-3",
+		amountValue: "text-[22px] font-extrabold leading-7 text-success-soft-foreground",
 		amountValueBlock: "items-end",
-		currency: "text-xs font-bold text-[#d6d3c7]",
-		item: "gap-1 border-b border-[#293229] py-3 last:border-b-0",
-		itemLabel: "text-xs font-bold uppercase tracking-[0px] text-[#aeb7ac]",
-		itemValue: "text-[15px] font-bold leading-5 text-[#fffaf0]",
-		items: "rounded-xl border border-[#2b342c] bg-[#151915] px-4",
-		root: "gap-4 rounded-2xl border border-[#2e382f] bg-[#121711] p-4",
-		title: "text-lg font-extrabold leading-6 text-[#fffaf0]",
+		currency: "text-xs font-bold text-surface-foreground",
+		item: "gap-1 border-b border-border py-3 last:border-b-0",
+		itemLabel: "text-xs font-bold uppercase tracking-[0px] text-muted",
+		itemValue: "text-[15px] font-bold leading-5 text-foreground",
+		items: "rounded-xl border border-border bg-surface px-4",
+		root: "gap-4 rounded-2xl border border-border bg-surface p-4 shadow-surface",
+		title: "text-lg font-extrabold leading-6 text-foreground",
 	},
 });
 

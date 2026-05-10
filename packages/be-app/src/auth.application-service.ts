@@ -1,5 +1,6 @@
 import { CONTEXT_KEYS, SYSTEM_ROLES, Token } from "@cocrepo/constant";
 import {
+	LoginResponseDto,
 	PageMetaDto,
 	QueryAuthAuditLogDto,
 	SetCurrentSpaceDto,
@@ -9,6 +10,7 @@ import {
 	VerifyTokenResponseDto,
 } from "@cocrepo/dto";
 import {
+	type OidcAuthorizationRequestOptions,
 	type OidcClientProtocolConfig,
 	OidcFacade,
 } from "@cocrepo/integration";
@@ -43,6 +45,11 @@ import { ClsService } from "nestjs-cls";
 const DEFAULT_OIDC_CLIENT_ID = "admin-web";
 const OIDC_STATE_CONTEXT_PREFIX = "__oidc_ctx__:";
 const SESSION_ID_SEPARATOR = ".";
+const OIDC_PROVIDER_COOKIE_NAMES = [
+	"_session",
+	"_interaction",
+	"_interaction_resume",
+] as const;
 
 const LEGACY_OIDC_CLIENT_ID_MAP = {
 	admin: "admin-web",
@@ -76,6 +83,7 @@ interface OidcCallbackResult {
 	returnTo?: string;
 	defaultReturnTo: string;
 	loginUrl: string | null;
+	session?: LoginResponseDto;
 }
 
 type SpaceTenantLike = {
@@ -124,12 +132,14 @@ export class AuthApplicationService {
 	async getAuthorizationUrl(
 		returnTo?: string,
 		clientId = DEFAULT_OIDC_CLIENT_ID,
+		options: OidcAuthorizationRequestOptions = {},
 	): Promise<string> {
 		const client = await this.resolveOidcClient(clientId);
 		const { state, codeVerifier, authorizationUrl } =
 			this.oidcFacade.createAuthorizationRequest(
 				this.toProtocolClientConfig(client),
 				returnTo,
+				options,
 			);
 
 		// state와 code_verifier, returnTo/clientId 컨텍스트를 함께 Redis에 저장
@@ -236,6 +246,15 @@ export class AuthApplicationService {
 			returnTo,
 			defaultReturnTo: client.defaultReturnTo || "/",
 			loginUrl: client.loginUrl,
+			session: {
+				accessToken: tokenResponse.access_token,
+				refreshToken: tokenResponse.refresh_token ?? "",
+				accessTokenExpiresAt: expSeconds * 1000,
+				refreshTokenExpiresAt: tokenResponse.refresh_token
+					? Date.now() + 30 * 24 * 60 * 60 * 1000
+					: expSeconds * 1000,
+				user: plainToInstance(UserDto, user),
+			},
 		};
 	}
 
@@ -344,6 +363,7 @@ export class AuthApplicationService {
 		res.clearCookie(Token.SESSION_ID);
 		res.clearCookie("tenantId");
 		res.clearCookie("workspaceId");
+		this.clearOidcProviderCookies(res);
 
 		return true;
 	}
@@ -366,6 +386,15 @@ export class AuthApplicationService {
 		}
 
 		return payload;
+	}
+
+	private clearOidcProviderCookies(res: Response) {
+		for (const cookieName of OIDC_PROVIDER_COOKIE_NAMES) {
+			res.clearCookie(cookieName);
+			res.clearCookie(`${cookieName}.sig`);
+			res.clearCookie(`${cookieName}.legacy`);
+			res.clearCookie(`${cookieName}.legacy.sig`);
+		}
 	}
 
 	/**
@@ -914,6 +943,9 @@ export class AuthApplicationService {
 				lastNotFoundError ??
 				new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다")
 			);
+		}
+		if (options?.requireActive !== false && !client.isActive) {
+			throw new BadRequestException("비활성화된 OIDC 클라이언트입니다");
 		}
 		const redirectUri = client.redirectUris[0];
 		if (!redirectUri) {

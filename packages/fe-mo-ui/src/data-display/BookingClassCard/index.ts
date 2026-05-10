@@ -80,10 +80,13 @@ const renderOptionalText = (
 
 const renderCapacity = (item: BookingClassFeedItem) => {
 	const parts = [
-		item.capacity === undefined ? undefined : `Capacity ${item.capacity}`,
-		item.confirmedCount === undefined ? undefined : `Confirmed ${item.confirmedCount}`,
-		item.availableCount === undefined ? undefined : `Available ${item.availableCount}`,
-		item.waitlistCount === undefined ? undefined : `Waitlist ${item.waitlistCount}`,
+		item.availableCount === undefined ? undefined : `잔여 ${item.availableCount}석`,
+		item.capacity === undefined && item.confirmedCount === undefined
+			? undefined
+			: `예약 ${item.confirmedCount ?? 0}${
+					item.capacity === undefined ? "" : `/${item.capacity}`
+				}`,
+		item.waitlistCount === undefined ? undefined : `대기 ${item.waitlistCount}명`,
 	].filter(Boolean);
 
 	if (!parts.length) {
@@ -93,7 +96,7 @@ const renderCapacity = (item: BookingClassFeedItem) => {
 	return createElement(
 		Text,
 		{ className: classNames.capacityText() },
-		parts.join(" / "),
+		parts.join(" · "),
 	);
 };
 
@@ -189,25 +192,27 @@ const BookingClassCardComponent = observer((props: BookingClassCardProps) => {
 					{ className: slotClassNames.time(), key: "time-label" },
 					item.timeLabel,
 				),
-				createElement(
-					View,
-					{
-						className: slotClassNames.statusBadge(),
-						key: "status",
-					},
-					createElement(
-						Text,
-						{ className: slotClassNames.statusText() },
-						item.statusLabel ?? STATUS_LABELS[item.status],
-					),
-				),
 			]),
 			createElement(View, { className: slotClassNames.titleBlock(), key: "titles" }, [
-				createElement(
-					Text,
-					{ className: slotClassNames.program(), key: "program" },
-					item.programName,
-				),
+				createElement(View, { className: slotClassNames.titleRow(), key: "title-row" }, [
+					createElement(
+						Text,
+						{ className: slotClassNames.program(), key: "program" },
+						item.programName,
+					),
+					createElement(
+						View,
+						{
+							className: slotClassNames.statusBadge(),
+							key: "status",
+						},
+						createElement(
+							Text,
+							{ className: slotClassNames.statusText() },
+							item.statusLabel ?? STATUS_LABELS[item.status],
+						),
+					),
+				]),
 				renderOptionalText(item.sessionName, "session", slotClassNames.session()),
 				renderOptionalText(item.timelineName, "timeline", slotClassNames.timeline()),
 			]),
@@ -251,52 +256,59 @@ export const BookingClassCard = BookingClassCardComponent;
 const bookingClassCardClassNames = tv({
 	slots: {
 		action:
-			"min-h-[46px] items-center justify-center rounded-xl bg-[#9ad66d] px-4 py-3",
+			"min-h-[46px] items-center justify-center rounded-xl bg-accent px-4 py-3",
 		actionText:
-			"text-[15px] font-extrabold leading-5 text-[#10200d]",
-		capacityText: "text-[13px] leading-[18px] text-[#dbe5d7]",
-		header: "flex-row items-start gap-[14px]",
+			"text-[15px] font-extrabold leading-5 text-accent-foreground",
+		capacityText:
+			"rounded-xl bg-surface-secondary px-3 py-2 text-[13px] font-bold leading-[18px] text-surface-secondary-foreground",
+		header: "flex-row items-stretch gap-3",
 		meta: "flex-row flex-wrap gap-2",
-		metaText: "text-[13px] leading-[18px] text-[#c5cec4]",
-		myStatus: "text-[13px] font-bold leading-[18px] text-[#9ad66d]",
-		program: "text-[17px] font-extrabold leading-[23px] text-[#f5f8f1]",
-		root: "gap-3 rounded-[14px] border border-[#2b342c] bg-[#151915] p-4",
-		session: "text-sm font-bold leading-5 text-[#dbe5d7]",
+		metaText: "text-[13px] leading-[18px] text-muted",
+		myStatus: "text-[13px] font-bold leading-[18px] text-success",
+		program: "flex-1 text-[17px] font-extrabold leading-[23px] text-foreground",
+		root: "gap-3 rounded-[14px] border border-border bg-surface p-4 shadow-surface",
+		session: "text-sm font-bold leading-5 text-surface-foreground",
 		statusBadge:
-			"items-center self-start rounded-full bg-[#263026] px-[9px] py-[5px]",
-		statusText: "text-[11px] font-extrabold leading-[14px] text-[#f5f8f1]",
-		tag: "rounded-full bg-[#263026] px-2.5 py-[5px]",
-		tagText: "text-xs font-bold leading-4 text-[#dbe5d7]",
+			"items-center self-start rounded-full bg-surface-secondary px-[9px] py-[5px]",
+		statusText: "text-[11px] font-extrabold leading-[14px] text-surface-secondary-foreground",
+		tag: "rounded-full bg-surface-secondary px-2.5 py-[5px]",
+		tagText: "text-xs font-bold leading-4 text-surface-secondary-foreground",
 		tags: "flex-row flex-wrap gap-2",
-		time: "text-lg font-black leading-6 text-[#f5f8f1]",
-		timeBlock: "min-w-[88px] gap-2",
-		timeline: "text-[13px] leading-[18px] text-[#aeb7ac]",
+		time: "text-center text-[16px] font-black leading-6 text-foreground",
+		timeBlock:
+			"min-w-[86px] items-center justify-center rounded-xl bg-surface-secondary px-3 py-3",
+		timeline: "text-[13px] leading-[18px] text-muted",
 		titleBlock: "flex-1 gap-1",
+		titleRow: "flex-row items-start gap-2",
 	},
 	variants: {
 		disabled: {
 			false: {},
 			true: {
-				action: "bg-[#263026] opacity-75",
-				actionText: "text-[#f5f8f1]",
+				action: "bg-surface-secondary opacity-75",
+				actionText: "text-surface-secondary-foreground",
 			},
 		},
 		status: {
 			AVAILABLE: {},
 			BOOKING_CLOSED: {
-				statusBadge: "bg-gray-700",
+				statusBadge: "bg-default",
 			},
 			FEW_LEFT: {
-				statusBadge: "bg-[#6b5d1f]",
+				statusBadge: "bg-warning",
+				statusText: "text-warning-foreground",
 			},
 			RESERVED: {
-				statusBadge: "bg-[#386626]",
+				statusBadge: "bg-success",
+				statusText: "text-success-foreground",
 			},
 			WAITLISTED: {
-				statusBadge: "bg-[#386626]",
+				statusBadge: "bg-success",
+				statusText: "text-success-foreground",
 			},
 			WAITLIST_OPEN: {
-				statusBadge: "bg-[#2f5f98]",
+				statusBadge: "bg-accent",
+				statusText: "text-accent-foreground",
 			},
 		},
 	},

@@ -1,6 +1,6 @@
 import { AuthApplicationService } from "@cocrepo/app";
 import { REQUEST_HEADER_KEYS } from "@cocrepo/constant";
-import { SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
+import { IS_PUBLIC_KEY, SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
 import type { SignUpPayloadDto } from "@cocrepo/dto";
 import { HttpStatus, UnauthorizedException } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
@@ -33,6 +33,7 @@ describe("AuthController", () => {
 		redirect: jest.fn().mockReturnThis(),
 		status: jest.fn().mockReturnThis(),
 		send: jest.fn().mockReturnThis(),
+		json: jest.fn().mockReturnThis(),
 	};
 
 	const mockRequest = {
@@ -133,12 +134,13 @@ describe("AuthController", () => {
 			await controller.login(
 				"admin-web",
 				"/admin/dashboard",
+				undefined as unknown as string,
 				mockResponse as unknown as never,
 			);
 
 			expect(
 				mockAuthApplicationService.getAuthorizationUrl,
-			).toHaveBeenCalledWith("/admin/dashboard", "admin-web");
+			).toHaveBeenCalledWith("/admin/dashboard", "admin-web", undefined);
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
 				"https://idp.example.com/oidc/auth?client_id=admin-web",
 			);
@@ -152,12 +154,17 @@ describe("AuthController", () => {
 			await controller.login(
 				"idp-web",
 				"http://localhost:3008/dashboard",
+				undefined as unknown as string,
 				mockResponse as unknown as never,
 			);
 
 			expect(
 				mockAuthApplicationService.getAuthorizationUrl,
-			).toHaveBeenCalledWith("http://localhost:3008/dashboard", "idp-web");
+			).toHaveBeenCalledWith(
+				"http://localhost:3008/dashboard",
+				"idp-web",
+				undefined,
+			);
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
 				"https://idp.example.com/oidc/auth?client_id=idp-web",
 			);
@@ -171,6 +178,7 @@ describe("AuthController", () => {
 			await controller.login(
 				"user-mobile",
 				"kr.co.cocdev.onoramobile://auth/callback?returnTo=/",
+				undefined as unknown as string,
 				mockResponse as unknown as never,
 			);
 
@@ -179,9 +187,34 @@ describe("AuthController", () => {
 			).toHaveBeenCalledWith(
 				"kr.co.cocdev.onoramobile://auth/callback?returnTo=/",
 				"user-mobile",
+				undefined,
 			);
 			expect(mockResponse.redirect).toHaveBeenCalledWith(
 				"https://idp.example.com/oidc/auth?client_id=user-mobile",
+			);
+		});
+
+		it("prompt 쿼리가 있으면 authorization request 옵션으로 전달해야 한다", async () => {
+			mockAuthApplicationService.getAuthorizationUrl.mockResolvedValue(
+				"https://idp.example.com/oidc/auth?client_id=user-mobile&prompt=login",
+			);
+
+			await controller.login(
+				"user-mobile",
+				"kr.co.cocdev.onoramobile://auth/callback?returnTo=/",
+				"login",
+				mockResponse as unknown as never,
+			);
+
+			expect(
+				mockAuthApplicationService.getAuthorizationUrl,
+			).toHaveBeenCalledWith(
+				"kr.co.cocdev.onoramobile://auth/callback?returnTo=/",
+				"user-mobile",
+				{ prompt: "login" },
+			);
+			expect(mockResponse.redirect).toHaveBeenCalledWith(
+				"https://idp.example.com/oidc/auth?client_id=user-mobile&prompt=login",
 			);
 		});
 	});
@@ -198,6 +231,7 @@ describe("AuthController", () => {
 				"idp-web",
 				"auth-code",
 				"state-value",
+				undefined as unknown as string,
 				undefined as unknown as string,
 				undefined as unknown as string,
 				mockRequest as unknown as never,
@@ -230,6 +264,7 @@ describe("AuthController", () => {
 				"state-value",
 				undefined as unknown as string,
 				undefined as unknown as string,
+				undefined as unknown as string,
 				mockRequest as unknown as never,
 				mockResponse as unknown as never,
 			);
@@ -239,6 +274,41 @@ describe("AuthController", () => {
 			);
 		});
 
+		it("모바일 JSON 콜백은 리다이렉트 대신 토큰 응답을 반환해야 한다", async () => {
+			const session = {
+				accessToken: "mobile-access-token",
+				refreshToken: "mobile-refresh-token",
+				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
+				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
+				user: mockUser,
+			};
+			mockAuthApplicationService.handleOidcCallback.mockResolvedValue({
+				returnTo: "kr.co.cocdev.onoramobile://auth/callback?returnTo=/",
+				defaultReturnTo: "/",
+				loginUrl: null,
+				session,
+			} as never);
+
+			await controller.handleCallback(
+				"user-mobile",
+				"auth-code",
+				"state-value",
+				undefined as unknown as string,
+				undefined as unknown as string,
+				"mobile-json",
+				mockRequest as unknown as never,
+				mockResponse as unknown as never,
+			);
+
+			expect(mockResponse.redirect).not.toHaveBeenCalled();
+			expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.OK);
+			expect(mockResponse.json).toHaveBeenCalledWith({
+				httpStatus: HttpStatus.OK,
+				message: "로그인 성공",
+				data: session,
+			});
+		});
+
 		it("OIDC 에러는 clientId에 맞는 loginUrl로 리다이렉트해야 한다", async () => {
 			await controller.handleCallback(
 				"storybook-web",
@@ -246,6 +316,7 @@ describe("AuthController", () => {
 				undefined as unknown as string,
 				"access_denied",
 				"사용자가 인증을 거부했습니다",
+				undefined as unknown as string,
 				mockRequest as unknown as never,
 				mockResponse as unknown as never,
 			);
@@ -269,6 +340,7 @@ describe("AuthController", () => {
 				"invalid-state",
 				undefined as unknown as string,
 				undefined as unknown as string,
+				undefined as unknown as string,
 				mockRequest as unknown as never,
 				mockResponse as unknown as never,
 			);
@@ -287,6 +359,7 @@ describe("AuthController", () => {
 				"user-mobile",
 				"auth-code",
 				"invalid-state",
+				undefined as unknown as string,
 				undefined as unknown as string,
 				undefined as unknown as string,
 				mockRequest as unknown as never,
@@ -418,6 +491,15 @@ describe("AuthController", () => {
 	});
 
 	describe("logout", () => {
+		it("인증 토큰이 만료되어도 쿠키를 정리할 수 있도록 Public 메타데이터가 선언되어야 한다", () => {
+			const metadata = Reflect.getMetadata(
+				IS_PUBLIC_KEY,
+				AuthController.prototype.logout,
+			);
+
+			expect(metadata).toBe(true);
+		});
+
 		it("액세스 토큰이 있으면 토큰을 무효화해야 한다", async () => {
 			mockAuthApplicationService.logoutWithCookie.mockResolvedValue(true);
 
@@ -429,6 +511,32 @@ describe("AuthController", () => {
 			expect(mockAuthApplicationService.logoutWithCookie).toHaveBeenCalledWith(
 				"test-access-token",
 				"idp-web.test-session-id",
+				mockResponse,
+			);
+			expect(result).toBe(true);
+		});
+
+		it("모바일 Authorization 헤더를 액세스 토큰 fallback으로 사용해야 한다", async () => {
+			mockAuthApplicationService.logoutWithCookie.mockResolvedValue(true);
+			const request = {
+				...mockRequest,
+				cookies: {
+					sessionId: "user-mobile.test-session-id",
+				},
+				headers: {
+					...mockRequest.headers,
+					authorization: "Bearer mobile-access-token",
+				},
+			};
+
+			const result = await controller.logout(
+				request as unknown as never,
+				mockResponse as unknown as never,
+			);
+
+			expect(mockAuthApplicationService.logoutWithCookie).toHaveBeenCalledWith(
+				"mobile-access-token",
+				"user-mobile.test-session-id",
 				mockResponse,
 			);
 			expect(result).toBe(true);

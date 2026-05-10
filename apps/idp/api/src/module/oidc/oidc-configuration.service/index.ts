@@ -66,7 +66,7 @@ export class OidcConfigurationService {
 				tos_uri: client.tos_uri,
 			})),
 			loadExistingGrant: (ctx) =>
-				this.loadExistingGrant(ctx, skipConsentClientIds),
+				this.loadExistingGrant(ctx, skipConsentClientIds, issuer),
 
 			// JWKS 서명 키 (RS256) - 환경변수에서 로드
 			...(oidcConfig?.jwks && { jwks: oidcConfig.jwks }),
@@ -191,6 +191,7 @@ export class OidcConfigurationService {
 	private async loadExistingGrant(
 		ctx: OidcProviderContext,
 		skipConsentClientIds: Set<string>,
+		defaultResource: string,
 	): Promise<Grant | undefined> {
 		if (this.hasPromptConsent(ctx)) {
 			return undefined;
@@ -219,6 +220,12 @@ export class OidcConfigurationService {
 
 		const grant = new provider.Grant({ accountId, clientId });
 		grant.addOIDCScope(scope);
+		for (const resourceIndicator of this.resolveGrantResourceIndicators(
+			ctx,
+			defaultResource,
+		)) {
+			grant.addResourceScope(resourceIndicator, scope);
+		}
 		await grant.save();
 		return grant;
 	}
@@ -230,5 +237,19 @@ export class OidcConfigurationService {
 
 	private resolveGrantClientId(ctx: OidcProviderContext): string | undefined {
 		return ctx.oidc?.client?.clientId || ctx.oidc?.params?.client_id;
+	}
+
+	private resolveGrantResourceIndicators(
+		ctx: OidcProviderContext,
+		defaultResource: string,
+	): string[] {
+		const resource = ctx.oidc?.params?.resource;
+		const resources = Array.isArray(resource)
+			? resource
+			: typeof resource === "string"
+				? [resource]
+				: [defaultResource];
+
+		return [...new Set(resources.filter((value) => value.length > 0))];
 	}
 }

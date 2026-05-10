@@ -55,8 +55,10 @@ empty/error:
 
 ## 렌더링 계약
 
-- `ScreenFrame`으로 safe-area shell을 적용한다.
+- Expo Router의 `CustomHeader`가 상단 safe-area와 header를 소유하고, screen은 본문 safe-area shell만 적용한다.
+- `ScreenFrame`으로 본문 safe-area shell을 적용한다.
 - 시각 스타일은 `StyleSheet`가 아니라 uniwind `className`과 `tailwind-variants` slot/variant로 정의한다.
+- 색상은 heroui-native semantic token(`background`, `surface`, `foreground`, `muted`, `accent`, `border`)을 사용한다.
 - ready 상태에서는 예약일, 상태, 제목, 메타, memo를 카드로 표시한다.
 - loading/empty/error 상태는 `StatusFeedback`으로 표시한다.
 - API hook, router, route params, app alias, backend DTO를 직접 import하지 않는다.
@@ -65,6 +67,7 @@ empty/error:
 
 | 날짜 | 변경 내용 |
 | --- | --- |
+| 2026-05-10 | Expo Router `CustomHeader` 아래에서 본문 safe-area만 소유하고 heroui-native semantic token을 쓰도록 렌더링 계약을 갱신했습니다. |
 | 2026-05-09 | screen 스타일 계약을 uniwind className과 tailwind-variants slot 기반으로 정리했습니다. |
 | 2026-05-09 | screen visual owner spec에 Markdown 화면 스케치를 추가했습니다. |
 | 2026-05-09 | `/reservations` route의 visual owner를 route file에서 shared screen component로 복구했습니다. |

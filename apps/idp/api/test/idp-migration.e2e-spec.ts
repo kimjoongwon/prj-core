@@ -230,11 +230,16 @@ async function fetchAuthorizedJson(
 		headers,
 	});
 	const rawBody = await response.text();
+	const contentType = response.headers.get("content-type") ?? "";
+	const trimmedBody = rawBody.trim();
 	const body = (rawBody
-		? (JSON.parse(rawBody) as {
-				data?: unknown;
-				message?: string;
-			})
+		? contentType.includes("application/json") &&
+			(trimmedBody.startsWith("{") || trimmedBody.startsWith("["))
+			? (JSON.parse(rawBody) as {
+					data?: unknown;
+					message?: string;
+				})
+			: { message: rawBody }
 		: {}) as {
 		data?: unknown;
 		message?: string;
@@ -382,10 +387,10 @@ describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 			expect(res.status).toBe(400);
 		});
 
-		it("GET /api/v1/auth/login?clientId=admin-web - admin-web 로그인 리다이렉트", async () => {
+		it("GET /api/v1/auth/login?clientId=admin-web - admin-web 로그인 리다이렉트에 prompt를 강제하지 않아야 한다", async () => {
 			const url = await expectOidcLoginRedirect("admin-web");
 
-			expect(url.searchParams.get("prompt")).toBe("login");
+			expect(url.searchParams.get("prompt")).toBeNull();
 		});
 
 		it("GET /api/v1/auth/login?clientId=idp-web - OIDC 로그인 리다이렉트", async () => {
@@ -566,6 +571,8 @@ describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 							responseTypes: ["code"],
 							tokenEndpointAuthMethod: "client_secret_post",
 							scope: "openid profile email roles",
+							isFirstParty: true,
+							skipConsent: true,
 						}),
 					},
 				);
@@ -625,7 +632,7 @@ describe("IDP 모듈 마이그레이션 E2E 테스트", () => {
 				);
 
 				expect(disableResult.response.status).toBe(200);
-				const disabledLoginRes = await fetch(
+				const disabledLoginRes = await requestManualRedirect(
 					`${BASE_URL}/api/v1/auth/login?clientId=${clientId}`,
 				);
 				expect(disabledLoginRes.status).toBe(400);

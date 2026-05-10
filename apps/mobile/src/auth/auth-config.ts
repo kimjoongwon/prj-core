@@ -6,24 +6,54 @@ const DEFAULT_IDP_API_BASE_URL =
 const DEFAULT_CORE_API_BASE_URL =
 	Platform.OS === "android" ? "http://10.0.2.2:3006" : "http://localhost:3006";
 
+const trimTrailingSlash = (value: string) => value.replace(/\/+$/, "");
+
+const rewriteLocalhostBaseUrlForAndroidEmulator = (value: string) => {
+	if (Platform.OS !== "android") {
+		return value;
+	}
+
+	try {
+		const parsed = new URL(value);
+		if (parsed.hostname !== "localhost" && parsed.hostname !== "127.0.0.1") {
+			return value;
+		}
+
+		parsed.hostname = "10.0.2.2";
+		return parsed.toString();
+	} catch {
+		return value;
+	}
+};
+
+const normalizeBaseUrl = (value: string) =>
+	trimTrailingSlash(rewriteLocalhostBaseUrlForAndroidEmulator(value.trim()));
+
+const getEnvValue = (key: string) =>
+	typeof process === "undefined" ? undefined : process.env[key]?.trim();
+
+const resolveMobileBaseUrl = (fallback: string, envKeys: string[]) => {
+	const configured = envKeys
+		.map((key) => getEnvValue(key))
+		.find((value) => value && value.length > 0);
+
+	return normalizeBaseUrl(configured ?? fallback);
+};
+
 export const MOBILE_AUTH = {
-	coreApiBaseUrl:
-		typeof process === "undefined"
-			? DEFAULT_CORE_API_BASE_URL
-			: process.env.EXPO_PUBLIC_CORE_API_URL?.trim() ||
-				process.env.EXPO_PUBLIC_CORE_API_INTERNAL_URL?.trim() ||
-				process.env.EXPO_PUBLIC_CORE_API_BASE_URL?.trim() ||
-				process.env.CORE_API_URL?.trim() ||
-				process.env.CORE_API_INTERNAL_URL?.trim() ||
-				DEFAULT_CORE_API_BASE_URL,
-	idpApiBaseUrl:
-		typeof process === "undefined"
-			? DEFAULT_IDP_API_BASE_URL
-			: process.env.EXPO_PUBLIC_IDP_API_URL?.trim() ||
-					process.env.EXPO_PUBLIC_IDP_API_INTERNAL_URL?.trim() ||
-					process.env.IDP_API_URL?.trim() ||
-					process.env.IDP_API_INTERNAL_URL?.trim() ||
-					DEFAULT_IDP_API_BASE_URL,
+	coreApiBaseUrl: resolveMobileBaseUrl(DEFAULT_CORE_API_BASE_URL, [
+		"EXPO_PUBLIC_CORE_API_URL",
+		"EXPO_PUBLIC_CORE_API_INTERNAL_URL",
+		"EXPO_PUBLIC_CORE_API_BASE_URL",
+		"CORE_API_URL",
+		"CORE_API_INTERNAL_URL",
+	]),
+	idpApiBaseUrl: resolveMobileBaseUrl(DEFAULT_IDP_API_BASE_URL, [
+		"EXPO_PUBLIC_IDP_API_URL",
+		"EXPO_PUBLIC_IDP_API_INTERNAL_URL",
+		"IDP_API_URL",
+		"IDP_API_INTERNAL_URL",
+	]),
 	loginClientId: "user-mobile",
 	authenticatedHomePath: "/",
 	loginPath: "/auth/login",
@@ -37,10 +67,10 @@ const AUTHENTICATED_ROUTE_PATHS = [
 	"/reservations",
 ] as const;
 
-export const getIdpApiBaseUrl = () => MOBILE_AUTH.idpApiBaseUrl.replace(/\/+$/, "");
+export const getIdpApiBaseUrl = () => trimTrailingSlash(MOBILE_AUTH.idpApiBaseUrl);
 
 export const getCoreApiBaseUrl = () =>
-	MOBILE_AUTH.coreApiBaseUrl.replace(/\/+$/, "");
+	trimTrailingSlash(MOBILE_AUTH.coreApiBaseUrl);
 
 export const getAuthenticatedHomePath = () => MOBILE_AUTH.authenticatedHomePath;
 

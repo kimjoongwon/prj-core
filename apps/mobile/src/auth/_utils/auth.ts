@@ -8,6 +8,7 @@ interface PrimitiveAuthParams {
 	apiBaseUrl?: string;
 	callbackScheme?: string;
 	callbackPath?: string;
+	prompt?: string;
 }
 
 export interface MobileAuthLoginParams extends PrimitiveAuthParams {
@@ -24,6 +25,14 @@ export interface MobileAuthCallbackExchangeResult {
 	statusCode: number;
 	location?: string;
 	error?: string;
+	session?: MobileAuthSession;
+}
+
+export interface MobileAuthSession {
+	accessToken?: string | null;
+	accessTokenExpiresAt?: number | null;
+	refreshToken?: string | null;
+	refreshTokenExpiresAt?: number | null;
 }
 
 export interface MobileAuthCallbackHandleResult {
@@ -85,9 +94,11 @@ const API_ENV_KEYS = [
 ];
 
 const toStringArray = (value: AuthQueryValue | undefined): string[] =>
-	typeof value === "string" ? [value] : value ?? [];
+	typeof value === "string" ? [value] : (value ?? []);
 
-const firstQueryValue = (value: AuthQueryValue | undefined): string | undefined => {
+const firstQueryValue = (
+	value: AuthQueryValue | undefined,
+): string | undefined => {
 	for (const item of toStringArray(value)) {
 		const trimmed = item.trim();
 		if (trimmed) {
@@ -105,6 +116,30 @@ const ensureLeadingSlash = (value: string) =>
 	value.startsWith("/") ? value : `/${value}`;
 
 const isHttpUrl = (value: string) => /^https?:\/\//i.test(value);
+
+export const rewriteLocalhostUrlForAndroidEmulator = (
+	value: string,
+	platformOs: typeof Platform.OS = Platform.OS,
+) => {
+	if (platformOs !== "android") {
+		return value;
+	}
+
+	try {
+		const parsed = new URL(value);
+		if (parsed.hostname !== "localhost" && parsed.hostname !== "127.0.0.1") {
+			return value;
+		}
+
+		parsed.hostname = "10.0.2.2";
+		return parsed.toString();
+	} catch {
+		return value;
+	}
+};
+
+const normalizeApiBaseUrl = (value: string) =>
+	trimTrailingSlash(rewriteLocalhostUrlForAndroidEmulator(value.trim()));
 
 const normalizeRoute = (value: string) => {
 	const trimmed = value.trim();
@@ -128,10 +163,12 @@ const buildApiBaseUrl = (overrideBaseUrl?: string) => {
 	const configured = [
 		overrideBaseUrl,
 		...API_ENV_KEYS.map((key) => process.env[key]),
-	].find((candidate) => typeof candidate === "string" && candidate.trim().length > 0);
+	].find(
+		(candidate) => typeof candidate === "string" && candidate.trim().length > 0,
+	);
 
 	if (configured) {
-		return trimTrailingSlash(configured.trim());
+		return normalizeApiBaseUrl(configured);
 	}
 
 	if (
@@ -142,7 +179,7 @@ const buildApiBaseUrl = (overrideBaseUrl?: string) => {
 		return window.location.origin.replace(/\/+$/, "");
 	}
 
-	return DEFAULT_IDP_API_BASE_URL;
+	return normalizeApiBaseUrl(DEFAULT_IDP_API_BASE_URL);
 };
 
 const buildEndpoint = (path: string, base?: string) => {
@@ -171,35 +208,18 @@ const buildEndpoint = (path: string, base?: string) => {
 	return `${trimmedBase}${normalizedPath}`;
 };
 
-export const rewriteLocalhostUrlForAndroidEmulator = (
-	value: string,
-	platformOs: typeof Platform.OS = Platform.OS,
-) => {
-	if (platformOs !== "android") {
-		return value;
-	}
-
-	try {
-		const parsed = new URL(value);
-		if (parsed.hostname !== "localhost" && parsed.hostname !== "127.0.0.1") {
-			return value;
-		}
-
-		parsed.hostname = "10.0.2.2";
-		return parsed.toString();
-	} catch {
-		return value;
-	}
-};
-
 const buildCallbackSearchParams = (returnTo?: string) => {
 	const params = new URLSearchParams();
 	params.set("returnTo", returnTo ?? DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO);
 	return params;
 };
 
-export const buildAuthSessionRedirectUrl = (options: PrimitiveAuthParams = {}) => {
-	const scheme = (options.callbackScheme ?? DEFAULT_AUTH_CALLBACK_SCHEME).trim();
+export const buildAuthSessionRedirectUrl = (
+	options: PrimitiveAuthParams = {},
+) => {
+	const scheme = (
+		options.callbackScheme ?? DEFAULT_AUTH_CALLBACK_SCHEME
+	).trim();
 	const path = (options.callbackPath ?? DEFAULT_AUTH_CALLBACK_PATH)
 		.trim()
 		.replace(/^\/+/, "");
@@ -281,6 +301,10 @@ export const buildAuthLoginUrl = (options: MobileAuthLoginParams = {}) => {
 		clientId,
 		returnTo: callbackUrl,
 	});
+	const prompt = options.prompt?.trim();
+	if (prompt) {
+		loginParams.set("prompt", prompt);
+	}
 	const endpoint = buildEndpoint("/api/v1/auth/login", apiBase);
 
 	return `${endpoint}?${loginParams.toString()}`;
@@ -298,7 +322,9 @@ export const createLoginSuccessState = (): AuthLoginFlowState => ({
 	errorMessage: "",
 });
 
-export const createLoginErrorState = (errorMessage: string): AuthLoginFlowState => ({
+export const createLoginErrorState = (
+	errorMessage: string,
+): AuthLoginFlowState => ({
 	status: "error",
 	message: "로그인 화면을 불러오지 못했습니다.",
 	errorMessage,
@@ -310,12 +336,13 @@ export const createLoginCancelledState = (): AuthLoginFlowState => ({
 	errorMessage: "로그인이 취소되었습니다. 다시 시도해 주세요.",
 });
 
-export const buildAuthCallbackLoadingState = (): MobileAuthCallbackTransitionState => ({
-	status: "loading",
-	exchange: undefined,
-	message: "로그인 정보를 확인하고 있습니다. 잠시만 기다려 주세요.",
-	nextRoute: DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO,
-});
+export const buildAuthCallbackLoadingState =
+	(): MobileAuthCallbackTransitionState => ({
+		status: "loading",
+		exchange: undefined,
+		message: "로그인 정보를 확인하고 있습니다. 잠시만 기다려 주세요.",
+		nextRoute: DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO,
+	});
 
 export const buildAuthCallbackSuccessState = (
 	nextRoute: string,
@@ -384,15 +411,21 @@ export const exchangeAuthCallback = async (
 	const clientId = params.clientId?.trim() || DEFAULT_CLIENT_ID;
 	const apiBase = buildApiBaseUrl(params.apiBaseUrl);
 	const endpoint = buildEndpoint("/api/v1/auth/callback", apiBase);
-	const query = new URLSearchParams({ clientId, code, state });
+	const query = new URLSearchParams({
+		clientId,
+		code,
+		responseMode: "mobile-json",
+		state,
+	});
 	const callbackUrl = `${endpoint}?${query.toString()}`;
 
 	try {
 		const response = await fetch(callbackUrl, {
+			credentials: "include",
 			method: "GET",
 			redirect: "manual",
 			headers: {
-				Accept: "*/*",
+				Accept: "application/json",
 			},
 		});
 		const location = response.headers.get("location");
@@ -413,10 +446,12 @@ export const exchangeAuthCallback = async (
 			};
 		}
 
+		const payload = await readAuthCallbackJson(response);
 		return {
 			status: "ok",
 			statusCode: response.status,
 			location: location ?? undefined,
+			session: payload?.data,
 		};
 	} catch {
 		return {
@@ -424,6 +459,21 @@ export const exchangeAuthCallback = async (
 			statusCode: 500,
 			error: "로그인 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.",
 		};
+	}
+};
+
+const readAuthCallbackJson = async (
+	response: Response,
+): Promise<{ data?: MobileAuthSession } | undefined> => {
+	const contentType = response.headers.get("content-type") ?? "";
+	if (!contentType.toLowerCase().includes("application/json")) {
+		return undefined;
+	}
+
+	try {
+		return (await response.json()) as { data?: MobileAuthSession };
+	} catch {
+		return undefined;
 	}
 };
 
@@ -435,7 +485,8 @@ export const resolveAuthCallbackResult = async (
 	const state = firstQueryValue(params.state);
 	const errorFromIdp = firstQueryValue(params.error);
 	const errorDescription = firstQueryValue(params.error_description);
-	const returnTo = firstQueryValue(params.returnTo) ?? firstQueryValue(params.return_to);
+	const returnTo =
+		firstQueryValue(params.returnTo) ?? firstQueryValue(params.return_to);
 	const apiBaseUrl = options.apiBaseUrl;
 
 	if (errorFromIdp) {
@@ -495,9 +546,9 @@ export const resolveAuthCallbackResult = async (
 };
 
 export const parseAuthLoginParams = (params: Record<string, unknown>) => {
-	const returnTo = firstQueryValue(
-		params.returnTo as AuthQueryValue | undefined,
-	) ?? firstQueryValue(params.return_to as AuthQueryValue | undefined);
+	const returnTo =
+		firstQueryValue(params.returnTo as AuthQueryValue | undefined) ??
+		firstQueryValue(params.return_to as AuthQueryValue | undefined);
 	const clientId = firstQueryValue(
 		params.clientId as AuthQueryValue | undefined,
 	);

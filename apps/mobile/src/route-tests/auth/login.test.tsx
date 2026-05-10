@@ -17,7 +17,11 @@ jest.mock("@cocrepo/mo-ui", () => {
 
 	return {
 		ScreenFrame: ({ children }: any) =>
-			React.createElement(View, { accessibilityLabel: "screen-frame" }, children),
+			React.createElement(
+				View,
+				{ accessibilityLabel: "screen-frame" },
+				children,
+			),
 	};
 });
 
@@ -69,6 +73,12 @@ describe("mobile auth login route", () => {
 		});
 
 		expect(mobileAuthStore.setNextPathAfterLogin).toHaveBeenCalledWith("/");
+		expect(screen.getByLabelText("auth-login-webview").props.incognito).toBe(
+			true,
+		);
+		expect(
+			screen.getByLabelText("auth-login-webview").props.sharedCookiesEnabled,
+		).toBe(false);
 		expect(screen.queryByText("로그인 계속")).toBeNull();
 	});
 
@@ -93,8 +103,9 @@ describe("mobile auth login route", () => {
 	it("WebView에서 callback scheme을 감지하면 앱 내부 callback 라우트로 이동해야 한다", async () => {
 		render(<LoginPage />);
 
-		const shouldStart = screen.getByLabelText("auth-login-webview").props
-			.onShouldStartLoadWithRequest;
+		const shouldStart =
+			screen.getByLabelText("auth-login-webview").props
+				.onShouldStartLoadWithRequest;
 		const shouldContinue = shouldStart({ url: CALLBACK_URL });
 
 		expect(shouldContinue).toBe(false);
@@ -112,13 +123,14 @@ describe("mobile auth login route", () => {
 		render(<LoginPage />);
 
 		await waitFor(() => {
-			expect(screen.getByLabelText("auth-login-webview").props.source.uri).toContain(
-				"clientId=user-mobile",
-			);
+			expect(
+				screen.getByLabelText("auth-login-webview").props.source.uri,
+			).toContain("clientId=user-mobile");
 		});
 
-		const shouldStart = screen.getByLabelText("auth-login-webview").props
-			.onShouldStartLoadWithRequest;
+		const shouldStart =
+			screen.getByLabelText("auth-login-webview").props
+				.onShouldStartLoadWithRequest;
 		let shouldContinue = true;
 
 		act(() => {
@@ -140,8 +152,9 @@ describe("mobile auth login route", () => {
 	it("WebView가 idp-web OIDC authorize URL로 드리프트하면 따라가지 않아야 한다", async () => {
 		render(<LoginPage />);
 
-		const shouldStart = screen.getByLabelText("auth-login-webview").props
-			.onShouldStartLoadWithRequest;
+		const shouldStart =
+			screen.getByLabelText("auth-login-webview").props
+				.onShouldStartLoadWithRequest;
 		let shouldContinue = true;
 
 		act(() => {
@@ -163,10 +176,7 @@ describe("mobile auth login route", () => {
 			"http://localhost:3007/oidc/auth?client_id=user-mobile";
 
 		expect(
-			authUtils.rewriteLocalhostUrlForAndroidEmulator(
-				redirectedUrl,
-				"android",
-			),
+			authUtils.rewriteLocalhostUrlForAndroidEmulator(redirectedUrl, "android"),
 		).toBe("http://10.0.2.2:3007/oidc/auth?client_id=user-mobile");
 		expect(
 			authUtils.rewriteLocalhostUrlForAndroidEmulator(redirectedUrl, "ios"),

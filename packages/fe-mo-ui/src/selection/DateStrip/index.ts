@@ -60,6 +60,7 @@ const createSelectHandler = (
 
 const renderBadge = (option: DateStripOption, isSelected: boolean) => {
 	const badge = option.badge ?? option.count;
+	const slotClassNames = dateStripClassNames({ selected: isSelected });
 
 	if (badge === undefined || badge === null || badge === false) {
 		return null;
@@ -68,9 +69,9 @@ const renderBadge = (option: DateStripOption, isSelected: boolean) => {
 	return createElement(
 		View,
 		{
-			className: dateStripClassNames({ selected: isSelected }).badge(),
+			className: slotClassNames.badge(),
 		},
-		createElement(Text, { className: classNames.badgeText() }, badge),
+		createElement(Text, { className: slotClassNames.badgeText() }, badge),
 	);
 };
 
@@ -81,6 +82,10 @@ const renderOption = (
 ) => {
 	const isSelected = props.selectedValue === option.value;
 	const isDisabled = Boolean(props.disabled || option.isDisabled);
+	const slotClassNames = dateStripClassNames({
+		disabled: isDisabled,
+		selected: isSelected,
+	});
 
 	return createElement(
 		Pressable,
@@ -98,13 +103,10 @@ const renderOption = (
 				Boolean(props.disabled),
 				props.onSelect,
 			) as PressableProps["onPress"],
-			className: dateStripClassNames({
-				disabled: isDisabled,
-				selected: isSelected,
-			}).option(),
+			className: slotClassNames.option(),
 		},
-		createElement(Text, { className: classNames.dayLabel() }, option.dayLabel),
-		createElement(Text, { className: classNames.dateLabel() }, option.dateLabel),
+		createElement(Text, { className: slotClassNames.dayLabel() }, option.dayLabel),
+		createElement(Text, { className: slotClassNames.dateLabel() }, option.dateLabel),
 		renderBadge(option, isSelected),
 	);
 };
@@ -177,15 +179,15 @@ export const DateStrip = DateStripComponent;
 const dateStripClassNames = tv({
 	slots: {
 		badge:
-			"min-w-6 items-center rounded-full bg-[#263026] px-[7px] py-[3px]",
-		badgeText: "text-[11px] font-extrabold leading-[14px] text-[#f5f8f1]",
+			"min-w-6 items-center rounded-full bg-surface-secondary px-[7px] py-[3px]",
+		badgeText: "text-[11px] font-extrabold leading-[14px] text-surface-secondary-foreground",
 		content: "gap-2 px-0.5 py-0.5",
-		dateLabel: "text-lg font-extrabold leading-[22px] text-[#f5f8f1]",
-		dayLabel: "text-xs font-bold uppercase leading-4 text-[#aeb7ac]",
-		empty: "rounded-xl border border-[#263026] bg-[#111511] p-4",
-		emptyText: "text-sm leading-5 text-[#c5cec4]",
+		dateLabel: "text-lg font-extrabold leading-[22px] text-foreground",
+		dayLabel: "text-xs font-bold uppercase leading-4 text-muted",
+		empty: "rounded-xl border border-border bg-surface-secondary p-4",
+		emptyText: "text-sm leading-5 text-muted",
 		option:
-			"min-h-[92px] min-w-[72px] items-center justify-center gap-1.5 rounded-xl border border-[#2b342c] bg-[#151915] px-2.5 py-3",
+			"min-h-[92px] min-w-[72px] items-center justify-center gap-1.5 rounded-xl border border-border bg-surface px-2.5 py-3 shadow-surface",
 	},
 	variants: {
 		disabled: {
@@ -197,8 +199,11 @@ const dateStripClassNames = tv({
 		selected: {
 			false: {},
 			true: {
-				badge: "bg-[#386626]",
-				option: "border-2 border-[#9ad66d]",
+				badge: "bg-accent-foreground",
+				badgeText: "text-accent",
+				dateLabel: "text-accent-foreground",
+				dayLabel: "text-accent-foreground",
+				option: "border-2 border-accent bg-accent",
 			},
 		},
 	},

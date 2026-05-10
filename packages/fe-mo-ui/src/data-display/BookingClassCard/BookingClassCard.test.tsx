@@ -33,7 +33,7 @@ describe("BookingClassCard", () => {
 		expect(onPressCta).toHaveBeenCalledWith(item);
 		expect(screen.getByText("Morning Pilates")).toBeTruthy();
 		expect(screen.getByText("Few left")).toBeTruthy();
-		expect(screen.getByText("Capacity 12 / Confirmed 10 / Available 2 / Waitlist 1")).toBeTruthy();
+		expect(screen.getByText("잔여 2석 · 예약 10/12 · 대기 1명")).toBeTruthy();
 		expect(screen.getByText("Squat")).toBeTruthy();
 		expect(screen.getByText("내 예약 없음")).toBeTruthy();
 	});

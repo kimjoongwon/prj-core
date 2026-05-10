@@ -187,9 +187,9 @@ export const OccurrencePicker = OccurrencePickerComponent;
 
 const occurrencePickerClassNames = tv({
 	slots: {
-		empty: "rounded-xl border border-[#303830] bg-[#111511] p-4",
-		emptyText: "text-sm leading-5 text-[#c5cec4]",
-		errorText: "text-[13px] leading-[18px] text-[#ffb4ab]",
+		empty: "rounded-xl border border-border bg-surface p-4",
+		emptyText: "text-sm leading-5 text-muted",
+		errorText: "text-[13px] leading-[18px] text-danger",
 		root: "gap-2",
 	},
 });

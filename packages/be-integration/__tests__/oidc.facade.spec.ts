@@ -63,6 +63,7 @@ describe("OidcFacade", () => {
 		expect(url.searchParams.get("scope")).toBe("openid profile email roles");
 		expect(url.searchParams.get("code_challenge")).toBeTruthy();
 		expect(url.searchParams.get("code_challenge_method")).toBe("S256");
+		expect(url.searchParams.get("prompt")).toBeNull();
 	});
 
 	it("storybook client config도 동일한 방식으로 authorization request를 생성해야 한다", () => {
@@ -88,5 +89,14 @@ describe("OidcFacade", () => {
 			"kr.co.cocdev.onoramobile://auth/callback",
 		);
 		expect(url.searchParams.get("scope")).toBe("openid profile email");
+	});
+
+	it("prompt 옵션이 있으면 authorization request에 포함해야 한다", () => {
+		const result = facade.createAuthorizationRequest(mobileClient, "/", {
+			prompt: "login",
+		});
+
+		const url = new URL(result.authorizationUrl);
+		expect(url.searchParams.get("prompt")).toBe("login");
 	});
 });

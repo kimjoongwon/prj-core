@@ -34,7 +34,6 @@ const createProps = (
 			value: "CARD",
 		},
 	],
-	onPressBack: jest.fn(),
 	onPressReservations: jest.fn(),
 	onPressSubmit: jest.fn(),
 	onSelectCourseOption: jest.fn(),
@@ -52,7 +51,7 @@ const createProps = (
 });
 
 describe("ReservationPaymentCheckoutScreen", () => {
-	it("예약 결제 요약과 submit/back 이벤트를 렌더링해야 한다", () => {
+	it("예약 결제 요약과 submit 이벤트를 렌더링해야 한다", () => {
 		const props = createProps();
 
 		render(<ReservationPaymentCheckoutScreen {...props} />);
@@ -63,12 +62,10 @@ describe("ReservationPaymentCheckoutScreen", () => {
 		expect(screen.getByText("카드")).toBeTruthy();
 		expect(screen.getByText("₩120,000")).toBeTruthy();
 
-		fireEvent.press(screen.getByLabelText("checkout-back"));
 		fireEvent.press(screen.getByLabelText("create-reservation-checkout"));
 		fireEvent.press(screen.getByLabelText("초급 필라테스 6개월권"));
 		fireEvent.press(screen.getByLabelText("카드"));
 
-		expect(props.onPressBack).toHaveBeenCalled();
 		expect(props.onPressSubmit).toHaveBeenCalled();
 		expect(props.onSelectCourseOption).toHaveBeenCalledWith("offering-1");
 		expect(props.onSelectPaymentMethod).toHaveBeenCalledWith("CARD");

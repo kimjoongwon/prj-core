@@ -58,7 +58,7 @@ export const HeaderBar = observer(function HeaderBar({
 				<DropdownTrigger>
 					<Button
 						variant="light"
-						className="h-11 rounded-2xl border border-slate-200/70 bg-white/72 px-2 pr-3 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+						className="h-11 rounded-2xl border border-divider bg-content1/80 px-2 pr-3 text-foreground shadow-sm backdrop-blur-md hover:bg-content2"
 						aria-label={t("사용자 메뉴")}
 					>
 						<Avatar
@@ -66,19 +66,19 @@ export const HeaderBar = observer(function HeaderBar({
 							src={userInfo.avatarUrl}
 							name={userInfo.name}
 							showFallback
-							className="h-8 w-8 bg-slate-950 text-white dark:bg-white dark:text-slate-950"
+							className="h-8 w-8 bg-foreground text-background"
 						/>
 						<div className="hidden flex-col items-start sm:flex">
-							<span className="text-sm font-semibold text-slate-950 dark:text-slate-50">
+							<span className="text-sm font-semibold text-foreground">
 								{userInfo.name}
 							</span>
 							{userInfo.role && (
-								<span className="text-xs text-slate-500 dark:text-slate-400">
+								<span className="text-xs text-default-500">
 									{userInfo.role}
 								</span>
 							)}
 						</div>
-						<ChevronDown className="hidden h-4 w-4 text-slate-400 sm:block" />
+						<ChevronDown className="hidden h-4 w-4 text-default-400 sm:block" />
 					</Button>
 				</DropdownTrigger>
 				<DropdownMenu aria-label={t("사용자 메뉴")} variant="flat">
@@ -110,7 +110,7 @@ export const HeaderBar = observer(function HeaderBar({
 	return (
 		<header
 			className={cn(
-				"relative z-30 border-b border-slate-200/70 bg-white/82 backdrop-blur-2xl dark:border-white/10 dark:bg-[#06080d]/82",
+				"relative z-30 border-b border-divider bg-background/82 backdrop-blur-2xl",
 				className,
 			)}
 		>
@@ -121,7 +121,7 @@ export const HeaderBar = observer(function HeaderBar({
 					{context && (
 						<>
 							{leadingContent && (
-								<div className="hidden h-8 w-px bg-slate-200/80 dark:bg-white/10 md:block" />
+								<div className="hidden h-8 w-px bg-divider md:block" />
 							)}
 							<div className="hidden min-w-0 items-center gap-3 md:flex">
 								{context}

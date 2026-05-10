@@ -64,9 +64,10 @@
 - `/auth/login`은 Chrome/Safari를 열지 않고 앱 내 WebView로 `clientId=user-mobile` IDP API 로그인 URL을 로드한다.
 - `/auth/login`은 네이티브 로그인 폼/안내 카드/CTA를 렌더링하지 않고, 사용자 문구와 입력 폼은 WebView 내부 IDP Web이 소유한다.
 - Android 에뮬레이터 WebView는 IDP가 반환한 `localhost` 절대 리다이렉트를 `10.0.2.2`로 보정해 host 머신의 IDP dev 서버를 계속 바라본다.
+- `/auth/login` WebView는 incognito 모드와 shared/third-party cookie 비활성화를 사용해 로그아웃 이후 stale OIDC interaction cookie가 다음 로그인에 섞이지 않게 한다.
 - WebView에서 `kr.co.cocdev.onoramobile://auth/callback` navigation이 발생하면 이를 가로채 `/auth/callback` route로 전달한다.
 - `/auth/callback`은 에러 파라미터나 콜백 교환 실패 시 개발자용 callback/API 용어 대신 재시도 가능한 사용자 실패 상태를 표시한다.
-- 성공 callback은 `mobileAuthStore.verifySession()`으로 native API client의 쿠키 기반 세션을 검증하고, store 인증 상태가 `authenticated`로 갱신된 뒤에만 deep-link 대상을 라우팅한다.
+- `/auth/callback`은 `responseMode=mobile-json` 교환 결과의 access/refresh/session token을 native API scope store에 저장한 뒤 `mobileAuthStore.verifySession()`으로 세션을 검증하고, store 인증 상태가 `authenticated`로 갱신된 뒤에만 deep-link 대상을 라우팅한다.
 - 인증된 홈(`/`) 화면은 Expo Router `(tabs)` 그룹의 `홈`, `예약`, `내 정보` 하단 탭으로 진입한다.
 - callback/returnTo에 IDP Web 경로(`/dashboard` 등)가 섞이면 모바일 인증 홈(`/`)으로 정규화한다.
 - `내 정보` 탭에서 `mobileAuthStore.logout()` 완료 후 `/auth/login`으로 이동한다.
@@ -75,6 +76,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-10 | 모바일 OIDC callback을 `mobile-json` 세션 저장 후 검증하는 흐름으로 정리하고 WebView stale cookie 차단 계약을 추가 | codex |
 | 2026-05-09 | `/`와 `/reservations`를 shared mobile screen owner 기반으로 정리하고 screen target 자동 검증 명령을 추가 | codex |
 | 2026-05-09 | `/`를 실제 Reservation booking feed API 기반 날짜 스트립 + 수업 카드 홈으로, `/reservations`를 `getMyReservations` 기반 내 예약 목록으로 갱신 | codex |
 | 2026-05-06 | Stage 1 재시작 기준으로 실제 홈 route(`/`)와 owner file을 명시하고 Reservation API 부재에 따른 backend handoff/test ownership을 보강 | codex |

@@ -6,19 +6,32 @@ const mockSetIdpLoginRedirectUrl = jest.fn();
 const mockSetLoginRedirectUrl = jest.fn();
 const mockSetApiPersistStore = jest.fn();
 const mockSetIdpPersistStore = jest.fn();
+const mockSetUniwindTheme = jest.fn();
 
 jest.mock("@cocrepo/mo-ui", () => {
 	const React = jest.requireActual<typeof import("react")>("react");
-	const { View } =
+	const { Text, View } =
 		jest.requireActual<typeof import("react-native")>("react-native");
+	const { useQueryClient } =
+		jest.requireActual<typeof import("@tanstack/react-query")>(
+			"@tanstack/react-query",
+		);
 
 	return {
-		DesignSystemProvider: ({ children }) =>
-			React.createElement(
+		DesignSystemProvider: ({ children }) => {
+			const queryClient = useQueryClient();
+
+			return React.createElement(
 				View,
-				{ accessibilityLabel: "design-system-provider" },
+				{
+					accessibilityLabel: "design-system-provider",
+					queryClientReady: Boolean(queryClient),
+				},
 				children,
-			),
+			);
+		},
+		CustomHeader: ({ title }) =>
+			React.createElement(Text, null, `custom-header:${title ?? ""}`),
 	};
 });
 
@@ -58,6 +71,12 @@ jest.mock("expo-splash-screen", () => ({
 	preventAutoHideAsync: jest.fn(),
 }));
 
+jest.mock("uniwind", () => ({
+	Uniwind: {
+		setTheme: (...args: string[]) => mockSetUniwindTheme(...args),
+	},
+}));
+
 jest.mock("@/auth/AuthSessionGate", () => {
 	const React = jest.requireActual<typeof import("react")>("react");
 	const { Text, View } =
@@ -76,20 +95,37 @@ jest.mock("@/auth/AuthSessionGate", () => {
 
 jest.mock("expo-router", () => {
 	const React = jest.requireActual<typeof import("react")>("react");
-	const { Text } =
+	const { Text, View } =
 		jest.requireActual<typeof import("react-native")>("react-native");
+
+	const Stack = ({ children, screenOptions }) =>
+		React.createElement(View, null, [
+			React.createElement(
+				Text,
+				{ key: "stack-mode" },
+				typeof screenOptions?.header === "function"
+					? "stack-custom-header"
+					: "stack",
+			),
+			children,
+		]);
+
+	const StackScreen = ({ name, options }) =>
+		React.createElement(
+			Text,
+			null,
+			options?.headerShown === false ? `${name}:header-hidden` : name,
+		);
+
+	StackScreen.displayName = "StackScreen";
+	Stack.Screen = StackScreen;
 
 	return {
 		usePathname: () => "/",
 		useRouter: () => ({
 			replace: jest.fn(),
 		}),
-		Stack: ({ screenOptions }) =>
-			React.createElement(
-				Text,
-				null,
-				screenOptions?.headerShown === false ? "stack-header-hidden" : "stack",
-			),
+		Stack,
 	};
 });
 
@@ -111,18 +147,26 @@ describe("mobile root layout", () => {
 		mockSetLoginRedirectUrl.mockReset();
 		mockSetApiPersistStore.mockReset();
 		mockSetIdpPersistStore.mockReset();
+		mockSetUniwindTheme.mockReset();
 	});
 
-	it("gesture root 안에서 design system provider, AuthSessionGate, header hidden stack 을 렌더링해야 한다", () => {
+	it("gesture root 안에서 design system provider, AuthSessionGate, custom header stack 을 렌더링해야 한다", () => {
 		render(<RootLayout />);
 
+		expect(mockSetUniwindTheme).toHaveBeenCalledWith("system");
 		expect(mockSetLoginRedirectUrl).toHaveBeenCalledWith("/auth/login");
 		expect(mockSetIdpBaseUrl).toHaveBeenCalledWith("http://localhost:3207");
 		expect(mockSetIdpLoginRedirectUrl).toHaveBeenCalledWith("/auth/login");
 		expect(screen.getByLabelText("gesture-root")).toBeTruthy();
 		expect(screen.getByLabelText("safe-area-provider")).toBeTruthy();
-		expect(screen.getByLabelText("design-system-provider")).toBeTruthy();
+		expect(
+			screen.getByLabelText("design-system-provider").props.queryClientReady,
+		).toBe(true);
 		expect(screen.getByLabelText("auth-session-gate")).toBeTruthy();
-		expect(screen.getByText("stack-header-hidden")).toBeTruthy();
+		expect(screen.getByText("stack-custom-header")).toBeTruthy();
+		expect(screen.getByText("(tabs):header-hidden")).toBeTruthy();
+		expect(screen.getByText("auth/login:header-hidden")).toBeTruthy();
+		expect(screen.getByText("auth/callback:header-hidden")).toBeTruthy();
+		expect(screen.getByText("payments/checkout")).toBeTruthy();
 	});
 });

@@ -1,7 +1,7 @@
 # mobile home route 계약서
 
 > 생성일: 2026-05-04
-> 수정일: 2026-05-09
+> 수정일: 2026-05-10
 > 타입: next-route-page
 > route: `/`
 > owner route file: `apps/mobile/src/app/(tabs)/index.tsx`
@@ -19,7 +19,7 @@
 | `/reservations` | `apps/mobile/src/app/(tabs)/reservations.tsx` | `getMyReservations` 기반 내 예약/대기 목록 |
 | `/profile` | `apps/mobile/src/app/(tabs)/profile.tsx` | 내 정보 탭 + 로그아웃 |
 | `/(tabs)` | `apps/mobile/src/app/(tabs)/_layout.tsx` | Expo Router 하단 탭 shell |
-| `/_layout` | `apps/mobile/src/app/_layout.tsx` | AuthSessionGate + QueryClientProvider + IDP bootstrap shell |
+| `/_layout` | `apps/mobile/src/app/_layout.tsx` | QueryClientProvider-first shell + DesignSystemProvider + AuthSessionGate + IDP bootstrap shell |
 | `/auth/login` | `apps/mobile/src/app/auth/login.tsx` | `user-mobile` 로그인 WebView 컨테이너 |
 | `/auth/callback` | `apps/mobile/src/app/auth/callback.tsx` | OIDC callback 세션 확인/리다이렉트 처리 |
 
@@ -35,10 +35,10 @@
 
 | 영역 | 계약 |
 |------|------|
-| 상단 컨텍스트 | 현재 지점/회원 맥락을 “오늘의 수업” 피드로 요약하고 조회 기간/내 예약 수를 표시한다. |
+| 상단 컨텍스트 | Expo Router `CustomHeader`가 “오늘의 수업” 제목을 소유하고, 본문은 선택 날짜 중심의 예약 현황 summary로 조회 기간/내 예약 수/표시 수업 수를 요약한다. |
 | 날짜 스트립 | `@cocrepo/mo-ui` `DateStrip`으로 오늘부터 14일을 표시하며, 날짜별 feed item count를 함께 보여준다. |
 | 필터 칩 | `전체`, `예약 가능`, `내 예약`, `대기 가능`을 route-local filter로 제공한다. |
-| 수업 카드 | `ReservationHomeScreen`이 `BookingClassCard`를 조합해 시간, 프로그램명, 세션명, 타임라인명, 코치, 난이도, 루틴, 운동 미리보기, 정원/예약/잔여석/대기 수, 상태, CTA를 한 카드에 표시한다. |
+| 수업 카드 | `ReservationHomeScreen`이 `BookingClassCard`를 조합해 시간, 프로그램명, 세션명, 타임라인명, 코치, 난이도, 루틴, 운동 미리보기, 잔여석/예약 수/대기 수, 상태, CTA를 한 카드에 표시한다. |
 | 정책 sheet | 예약/대기 CTA를 누르면 `ReservationHomeScreen`의 `BookingPolicySheet`가 취소 정책과 memo 입력을 보여주고, 확인 이벤트는 route가 받아 `createReservation`을 호출한다. |
 
 ### CTA 상태
@@ -173,9 +173,15 @@ type ReservationPaymentCheckoutRouteState = {
 ## Auth Shell 계약
 
 - `AuthSessionGate`는 callback route가 아닌 초기 route 렌더 전에 `mobileAuthStore.verifySession()`으로 세션을 확인한다.
+- Root layout은 `QueryClientProvider`를 `DesignSystemProvider`보다 바깥에 배치해 heroui-native와 route hook이 같은 React Query 컨텍스트를 공유한다.
+- Metro resolver는 `react`, `@tanstack/react-query`, `@tanstack/query-core`를 모바일 앱 인스턴스로 고정해 `@cocrepo/api` Orval hook과 root layout이 같은 React/React Query 컨텍스트를 공유한다.
+- Metro resolver는 Expo HMR runtime의 `pretty-format` import를 CJS entry로 고정해 dev bundle에서 MJS default wrapper mismatch가 발생하지 않게 한다.
 - 인증 상태면 홈(`/`)으로, 비인증 상태면 `/auth/login?returnTo=/`로 보낸다.
 - `/auth/login`은 외부 브라우저를 열지 않고 앱 내 WebView로 `clientId=user-mobile` IDP 로그인 URL을 로드한다.
+- `/auth/login` WebView는 incognito 모드와 shared/third-party cookie 비활성화를 사용해 로그아웃 이후 stale OIDC interaction cookie가 다음 로그인에 섞이지 않게 한다.
+- `user-mobile`은 first-party `skipConsent` client이므로 로그인 완료 후 별도 서비스 연동 승인 화면 없이 native callback으로 이어져야 한다.
 - callback/returnTo에 IDP Web 경로(`/dashboard` 등)가 섞이면 모바일 인증 홈(`/`)으로 정규화한다.
+- `/auth/callback`은 `responseMode=mobile-json` callback 교환 결과의 access/refresh/session token을 native API scope store에 저장한 뒤 `verify-token`으로 세션을 확인한다.
 - `(tabs)/_layout.tsx`는 `/`, `/reservations`, `/profile`을 하단 탭으로 등록한다.
 - route 화면은 `@cocrepo/mo-ui` shared screen owner가 조합한 `ScreenFrame`으로 safe-area padding을 적용한다.
 
@@ -183,7 +189,11 @@ type ReservationPaymentCheckoutRouteState = {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-10 | 모바일 OIDC 로그인 후 first-party consent 화면을 건너뛰고 `mobile-json` 세션 저장 후 홈으로 진입하는 auth route 계약을 반영 | codex |
+| 2026-05-10 | Lazyweb 예약 화면 개선 리뷰를 반영해 홈 본문을 CustomHeader 중복 hero 대신 예약 현황 summary + 수업 목록 구조로 정리 | codex |
 | 2026-05-09 | `/`와 `/reservations`의 shared screen target을 명시하고 route file은 API/state wiring만 소유하도록 screen ownership 계약을 복구 | codex |
+| 2026-05-10 | Metro resolver가 workspace package의 React Query/React와 Expo HMR pretty-format entry를 안정적인 인스턴스로 고정하도록 런타임 계약을 추가 | codex |
+| 2026-05-10 | Root layout의 Provider 순서를 QueryClientProvider-first로 명시해 로그인 후 앱 진입 시 React Query 컨텍스트가 먼저 준비되도록 갱신 | codex |
 | 2026-05-10 | 모바일 결제 흐름을 `/reservations/checkout/bootstrap` + `/reservations/checkout` 기준으로 갱신하고 `paymentRequired` CTA 계약을 반영 | codex |
 | 2026-05-10 | 활성 수강권이 없는 예약 의도를 `/payments/checkout` provider-neutral 결제 checkout으로 연결하는 route/API/screen/test 계약 추가 | codex |
 | 2026-05-09 | 홈 route를 날짜 스트립 + booking feed + 정책 sheet 기반 실제 Reservation API 계약으로 전환하고 `/reservations` 더미 제거 및 `getMyReservations` 계약을 반영 | codex |

@@ -1,11 +1,15 @@
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import type { OidcConfig } from "../../../config/oidc.config";
 import { OidcClientRepository } from "../../oidc/oidc-client.repository";
 import { OidcProviderService } from "../../oidc/oidc-provider.service";
 import type {
+	Grant,
 	Interaction,
 	KoaLikeRequest,
 	KoaLikeResponse,
 	OidcClientInfo,
+	OidcProviderInstance,
 	RawOidcProviderClient,
 } from "../../oidc/types";
 
@@ -36,6 +40,7 @@ export class InteractionService {
 	constructor(
 		private readonly oidcProviderService: OidcProviderService,
 		private readonly oidcClientRepository: OidcClientRepository,
+		private readonly configService: ConfigService,
 	) {}
 
 	/**
@@ -93,8 +98,15 @@ export class InteractionService {
 		remember: boolean,
 	): Promise<InteractionResult> {
 		const provider = this.oidcProviderService.getProvider();
+		const interaction = await provider.interactionDetails(req, res);
+		const grantId = await this.createLoginConsentGrantIfAllowed(
+			provider,
+			interaction,
+			accountId,
+		);
 		const result = {
 			login: { accountId, remember },
+			...(grantId ? { consent: { grantId } } : {}),
 		};
 
 		const redirectTo = await provider.interactionResult(req, res, result, {
@@ -102,6 +114,67 @@ export class InteractionService {
 		});
 
 		return { redirectTo };
+	}
+
+	private async createLoginConsentGrantIfAllowed(
+		provider: OidcProviderInstance,
+		interaction: Interaction,
+		accountId: string,
+	): Promise<string | undefined> {
+		const clientId = interaction.params.client_id;
+		if (!clientId || this.hasExplicitConsentPrompt(interaction)) {
+			return undefined;
+		}
+
+		const client = await this.oidcClientRepository.findByClientId(clientId);
+		if (!client?.isFirstParty || !client.skipConsent) {
+			return undefined;
+		}
+
+		const grant = interaction.grantId
+			? await provider.Grant.find(interaction.grantId)
+			: new provider.Grant({ accountId, clientId });
+		if (!grant) {
+			return undefined;
+		}
+
+		this.applyRequestedGrantScopes(grant, interaction);
+		return grant.save();
+	}
+
+	private hasExplicitConsentPrompt(interaction: Interaction): boolean {
+		const prompt = interaction.params.prompt;
+		return typeof prompt === "string" && prompt.split(" ").includes("consent");
+	}
+
+	private applyRequestedGrantScopes(
+		grant: Grant,
+		interaction: Interaction,
+	): void {
+		const scope = interaction.params.scope;
+		if (!scope) {
+			return;
+		}
+
+		grant.addOIDCScope(scope);
+		for (const resourceIndicator of this.resolveGrantResourceIndicators(
+			interaction,
+		)) {
+			grant.addResourceScope(resourceIndicator, scope);
+		}
+	}
+
+	private resolveGrantResourceIndicators(interaction: Interaction): string[] {
+		const oidcConfig = this.configService.get<OidcConfig>("oidc");
+		const defaultResource = oidcConfig?.issuer || "http://localhost:3007";
+		const resource = interaction.params.resource;
+		const resources = Array.isArray(resource)
+			? resource
+			: typeof resource === "string"
+				? [resource]
+				: [defaultResource];
+
+		return [...new Set(resources.filter((value) => value.length > 0))];
 	}
 
 	/**

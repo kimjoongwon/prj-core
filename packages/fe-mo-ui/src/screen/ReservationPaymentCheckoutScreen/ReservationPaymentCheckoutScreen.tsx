@@ -57,7 +57,6 @@ export interface ReservationPaymentCheckoutScreenProps
 	errorDescription?: ReactNode;
 	isSubmitDisabled?: boolean;
 	methodOptions: readonly ReservationPaymentMethodOption[];
-	onPressBack?: () => void;
 	onPressReservations?: () => void;
 	onPressSubmit?: () => void;
 	onSelectCourseOption?: (courseOfferingId: string) => void;
@@ -69,26 +68,6 @@ export interface ReservationPaymentCheckoutScreenProps
 	submitLabel?: string;
 	summaryItems: readonly ReservationCheckoutSummaryItem[];
 }
-
-const renderBackAction = (
-	onPressBack: ReservationPaymentCheckoutScreenProps["onPressBack"],
-) => {
-	if (!onPressBack) {
-		return null;
-	}
-
-	return createElement(
-		Pressable,
-		{
-			accessibilityLabel: "checkout-back",
-			accessibilityRole: "button",
-			className: classNames.backAction(),
-			key: "back-action",
-			onPress: onPressBack as PressableProps["onPress"],
-		},
-		createElement(Text, { className: classNames.backActionText() }, "뒤로"),
-	);
-};
 
 const renderCheckoutStatus = (props: ReservationPaymentCheckoutScreenProps) => {
 	if (props.status === "loading") {
@@ -245,7 +224,6 @@ export const ReservationPaymentCheckoutScreen = observer(
 			errorDescription: _errorDescription,
 			isSubmitDisabled: _isSubmitDisabled,
 			methodOptions,
-			onPressBack,
 			onPressReservations: _onPressReservations,
 			onPressSubmit: _onPressSubmit,
 			onSelectCourseOption,
@@ -266,7 +244,7 @@ export const ReservationPaymentCheckoutScreen = observer(
 				...viewProps,
 				className: classNames.screenFrame(),
 				contentClassName: classNames.root(),
-				edges: ["top", "right", "left"],
+				edges: ["right", "left"],
 				style,
 			},
 			createElement(
@@ -277,7 +255,6 @@ export const ReservationPaymentCheckoutScreen = observer(
 				},
 				createElement(View, { className: classNames.content() }, [
 					createElement(View, { className: classNames.header(), key: "header" }, [
-						renderBackAction(onPressBack),
 						createElement(
 							Text,
 							{ className: classNames.eyebrow(), key: "eyebrow" },
@@ -334,27 +311,24 @@ ReservationPaymentCheckoutScreen.displayName = "ReservationPaymentCheckoutScreen
 
 const reservationPaymentCheckoutScreenClassNames = tv({
 	slots: {
-		backAction:
-			"mb-2 self-start rounded-full border border-[#354033] bg-[#182018] px-4 py-2",
-		backActionText: "text-sm font-bold text-[#f5f8f1]",
 		content: "gap-[18px]",
 		contentContainer: "px-5 pb-9 pt-5",
-		description: "text-sm leading-[21px] text-stone-400",
-		eyebrow: "text-xs font-extrabold tracking-[0px] text-[#9ad66d]",
+		description: "text-sm leading-[21px] text-muted",
+		eyebrow: "text-xs font-extrabold tracking-[0px] text-accent",
 		header: "gap-2",
-		progressBox: "gap-3 rounded-2xl border border-[#2e382f] bg-[#121711] p-4",
-		progressLabel: "flex-1 text-sm font-bold leading-5 text-[#d6d3c7]",
+		progressBox: "gap-3 rounded-2xl border border-border bg-surface p-4 shadow-surface",
+		progressLabel: "flex-1 text-sm font-bold leading-5 text-surface-foreground",
 		progressList: "gap-2",
 		progressMark:
-			"w-7 text-center text-base font-extrabold leading-6 text-[#aeb7ac]",
+			"w-7 text-center text-base font-extrabold leading-6 text-muted",
 		progressStep: "flex-row items-center gap-2",
-		root: "flex-1 bg-[#0c0f0b]",
-		screenFrame: "bg-[#0c0f0b]",
-		sectionTitle: "text-lg font-extrabold leading-6 text-[#fffaf0]",
+		root: "flex-1 bg-background",
+		screenFrame: "bg-background",
+		sectionTitle: "text-lg font-extrabold leading-6 text-foreground",
 		submitAction:
-			"min-h-[50px] items-center justify-center rounded-xl bg-[#9ad66d] px-5 py-3",
-		submitActionText: "text-[15px] font-extrabold text-[#10200d]",
-		title: "text-[26px] font-extrabold leading-8 text-[#fffaf0]",
+			"min-h-[50px] items-center justify-center rounded-xl bg-accent px-5 py-3",
+		submitActionText: "text-[15px] font-extrabold text-accent-foreground",
+		title: "text-[26px] font-extrabold leading-8 text-foreground",
 	},
 	variants: {
 		disabled: {
@@ -365,12 +339,12 @@ const reservationPaymentCheckoutScreenClassNames = tv({
 		},
 		progressStatus: {
 			COMPLETED: {
-				progressMark: "text-[#9ad66d]",
-				progressLabel: "text-[#f5f8f1]",
+				progressMark: "text-success",
+				progressLabel: "text-foreground",
 			},
 			CURRENT: {
-				progressMark: "text-[#f1c96b]",
-				progressLabel: "text-[#f1c96b]",
+				progressMark: "text-warning",
+				progressLabel: "text-warning",
 			},
 			PENDING: {},
 		},

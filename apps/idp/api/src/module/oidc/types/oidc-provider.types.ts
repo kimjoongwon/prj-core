@@ -76,6 +76,8 @@ export interface Interaction {
 	};
 	params: {
 		client_id: string;
+		prompt?: string;
+		resource?: string | string[];
 		scope?: string;
 		[key: string]: unknown;
 	};
@@ -142,6 +144,7 @@ export interface OidcProviderContext {
 		params?: {
 			client_id?: string;
 			prompt?: string;
+			resource?: string | string[];
 			scope?: string;
 		};
 		provider?: OidcProviderInstance;

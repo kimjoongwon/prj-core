@@ -55,7 +55,7 @@ export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 }: SpaceSelectorDropdownProps) {
 	const buttonLabel = currentSpaceName ?? "Space 확인 중";
 	const buttonClasses =
-		"h-11 gap-2 rounded-2xl border border-slate-200/70 bg-white/72 px-3 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10";
+		"h-11 gap-2 rounded-2xl border border-divider bg-content1/80 px-3 text-foreground shadow-sm backdrop-blur-md hover:bg-content2";
 
 	if (spaces.length === 0) {
 		return (
@@ -65,12 +65,12 @@ export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 				className={buttonClasses}
 				startContent={
 					<Building2
-						className="h-4 w-4 text-slate-400 dark:text-slate-500"
+						className="h-4 w-4 text-default-400"
 						size={16}
 					/>
 				}
 			>
-				<span className="max-w-32 truncate text-sm text-slate-500 dark:text-slate-400">
+				<span className="max-w-32 truncate text-sm text-default-500">
 					{buttonLabel}
 				</span>
 			</Button>
@@ -85,18 +85,18 @@ export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 					className={buttonClasses}
 					startContent={
 						<Building2
-							className="h-4 w-4 text-slate-500 dark:text-slate-300"
+							className="h-4 w-4 text-default-500"
 							size={16}
 						/>
 					}
 					endContent={
 						<ChevronDown
-							className="h-4 w-4 text-slate-400 dark:text-slate-500"
+							className="h-4 w-4 text-default-400"
 							size={16}
 						/>
 					}
 				>
-					<span className="max-w-32 truncate text-sm text-slate-700 dark:text-slate-100">
+					<span className="max-w-32 truncate text-sm text-foreground">
 						{buttonLabel}
 					</span>
 				</Button>

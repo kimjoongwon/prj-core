@@ -95,10 +95,10 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 			onLogout={onClickLogoutButton}
 			context={
 				<div className="min-w-0">
-					<p className="text-[11px] font-medium uppercase tracking-[0.22em] text-slate-400 dark:text-slate-500">
+					<p className="text-[11px] font-medium uppercase tracking-[0.22em] text-default-500">
 						{t(currentSectionCaption)}
 					</p>
-					<p className="truncate text-sm font-semibold text-slate-950 dark:text-slate-50">
+					<p className="truncate text-sm font-semibold text-foreground">
 						{t(currentSectionLabel)}
 					</p>
 				</div>
@@ -112,25 +112,22 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 								localeStore.setLanguageCode(languageCode);
 							}}
 							compact
-							className="h-10 w-10 rounded-2xl border border-slate-200/70 bg-white/72 text-slate-700 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10"
+							className="h-10 w-10 rounded-2xl border border-divider bg-content1/80 text-foreground shadow-sm backdrop-blur-md hover:bg-content2"
 						/>
 					)}
 					<ThemeToggleButton
 						compact
-						className="h-10 w-10 rounded-2xl border border-slate-200/70 bg-white/72 text-slate-700 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10"
+						className="h-10 w-10 rounded-2xl border border-divider bg-content1/80 text-foreground shadow-sm backdrop-blur-md hover:bg-content2"
 					/>
 					<Tooltip content={t("IDP 관리")} placement="bottom">
 						<Button
 							variant="light"
 							isIconOnly
-							className="h-11 w-11 rounded-2xl border border-slate-200/70 bg-white/72 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+							className="h-11 w-11 rounded-2xl border border-divider bg-content1/80 shadow-sm backdrop-blur-md hover:bg-content2"
 							aria-label={t("IDP 관리 콘솔 열기")}
 							onPress={onClickOpenIdpClientButton}
 						>
-							<KeyRound
-								className="h-5 w-5 text-slate-600 dark:text-slate-200"
-								size={20}
-							/>
+							<KeyRound className="h-5 w-5 text-default-600" size={20} />
 						</Button>
 					</Tooltip>
 					<HeaderSpaceSelector

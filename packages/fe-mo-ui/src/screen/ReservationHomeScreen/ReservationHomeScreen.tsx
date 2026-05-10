@@ -111,6 +111,50 @@ const renderFilterChip = (
 const renderFilterChips = (props: ReservationHomeScreenProps) =>
 	props.filterOptions.map((option) => renderFilterChip(option, props));
 
+const renderSummaryCard = (
+	label: ReactNode,
+	value: ReactNode,
+	key: string,
+) =>
+	createElement(View, { className: classNames.summaryCard(), key }, [
+		createElement(
+			Text,
+			{ className: classNames.summaryLabel(), key: "label" },
+			label,
+		),
+		createElement(
+			Text,
+			{ className: classNames.summaryValue(), key: "value" },
+			value,
+		),
+	]);
+
+const renderOverview = (props: ReservationHomeScreenProps) =>
+	createElement(View, { className: classNames.overview(), key: "overview" }, [
+		createElement(View, { className: classNames.overviewHeader(), key: "header" }, [
+			createElement(
+				Text,
+				{ className: classNames.eyebrow(), key: "eyebrow" },
+				"예약 현황",
+			),
+			createElement(
+				Text,
+				{ className: classNames.overviewTitle(), key: "title" },
+				props.selectedDateLabel ?? "선택한 날짜",
+			),
+		]),
+		createElement(
+			Text,
+			{ className: classNames.overviewDescription(), key: "description" },
+			"예약 가능한 수업과 내 예약 상태를 한 화면에서 확인합니다.",
+		),
+		createElement(View, { className: classNames.summaryGrid(), key: "summary" }, [
+			renderSummaryCard("조회 기간", `${props.bookingWindowDays}일`, "window"),
+			renderSummaryCard("내 예약", props.reservedCount, "reserved"),
+			renderSummaryCard("표시 수업", `${props.cardItems.length}개`, "visible"),
+		]),
+	]);
+
 const renderBookingClassCard = (
 	item: BookingClassFeedItem,
 	onPressBookingCta: ReservationHomeScreenProps["onPressBookingCta"],
@@ -241,7 +285,7 @@ export const ReservationHomeScreen = observer(
 				...viewProps,
 				className: classNames.screenFrame(),
 				contentClassName: classNames.root(),
-				edges: ["top", "right", "left"],
+				edges: ["right", "left"],
 				style,
 			},
 			createElement(
@@ -251,61 +295,23 @@ export const ReservationHomeScreen = observer(
 					showsVerticalScrollIndicator: false,
 				},
 				createElement(View, { className: classNames.tabContent() }, [
-					createElement(View, { className: classNames.hero(), key: "hero" }, [
-						createElement(
-							Text,
-							{ className: classNames.eyebrow(), key: "eyebrow" },
-							"ONORA BOOKING",
-						),
-						createElement(
-							Text,
-							{ className: classNames.heroTitle(), key: "title" },
-							"오늘의 수업",
-						),
-						createElement(
-							Text,
-							{ className: classNames.heroDescription(), key: "description" },
-							"지점의 예약 가능한 클래스와 내 예약 상태를 날짜별로 확인합니다.",
-						),
-						createElement(View, { className: classNames.summaryGrid(), key: "summary" }, [
-							createElement(View, { className: classNames.summaryCard(), key: "window" }, [
-								createElement(
-									Text,
-									{ className: classNames.summaryLabel(), key: "label" },
-									"조회 기간",
-								),
-								createElement(
-									Text,
-									{ className: classNames.summaryValue(), key: "value" },
-									bookingWindowDays,
-									"일",
-								),
-							]),
-							createElement(View, { className: classNames.summaryCard(), key: "reserved" }, [
-								createElement(
-									Text,
-									{ className: classNames.summaryLabel(), key: "label" },
-									"내 예약",
-								),
-								createElement(
-									Text,
-									{ className: classNames.summaryValue(), key: "value" },
-									reservedCount,
-								),
-							]),
-						]),
-					]),
+					renderOverview({
+						...props,
+						bookingWindowDays,
+						reservedCount,
+						selectedDateLabel,
+					}),
 					createElement(View, { className: classNames.section(), key: "dates" }, [
 						createElement(View, { className: classNames.sectionHeader(), key: "header" }, [
 							createElement(
 								Text,
 								{ className: classNames.sectionTitle(), key: "title" },
-								"날짜",
+								"예약 날짜",
 							),
 							createElement(
 								Text,
 								{ className: classNames.sectionDescription(), key: "description" },
-								"클래스를 볼 날짜를 선택하세요.",
+								"오늘부터 14일간의 예약 가능 수업입니다.",
 							),
 						]),
 						createElement(DateStrip, {
@@ -316,6 +322,19 @@ export const ReservationHomeScreen = observer(
 						}),
 					]),
 					createElement(View, { className: classNames.section(), key: "feed" }, [
+						createElement(View, { className: classNames.sectionHeader(), key: "header" }, [
+							createElement(
+								Text,
+								{ className: classNames.sectionTitle(), key: "title" },
+								"수업 목록",
+							),
+							createElement(
+								Text,
+								{ className: classNames.sectionDescription(), key: "description" },
+								selectedDateLabel ?? "선택한 날짜",
+								" 기준으로 예약 상태를 보여줍니다.",
+							),
+						]),
 						createElement(
 							View,
 							{ className: classNames.filterRow(), key: "filters" },
@@ -333,14 +352,6 @@ export const ReservationHomeScreen = observer(
 					renderReservationSuccess(reservationSuccessDescription),
 					renderPolicySheet(policySheet),
 					renderReservationError(reservationErrorDescription),
-					selectedDateLabel
-						? createElement(
-								Text,
-								{ className: classNames.sectionDescription(), key: "selected-date" },
-								"선택 날짜: ",
-								selectedDateLabel,
-							)
-						: null,
 				]),
 			),
 		);
@@ -351,35 +362,37 @@ ReservationHomeScreen.displayName = "ReservationHomeScreen";
 
 const reservationHomeScreenClassNames = tv({
 	slots: {
-		contentContainer: "px-5 pb-9 pt-5",
-		eyebrow: "text-sm font-bold text-amber-500",
+		contentContainer: "px-5 pb-9 pt-4",
+		eyebrow: "text-xs font-extrabold uppercase text-accent",
 		filterChip:
-			"rounded-full border border-[#2e382f] bg-[#151a16] px-[14px] py-[9px]",
-		filterChipText: "text-[13px] font-extrabold text-[#d6d3c7]",
+			"rounded-full border border-border bg-surface px-[14px] py-[9px]",
+		filterChipText: "text-[13px] font-extrabold text-foreground",
 		filterRow: "flex-row flex-wrap gap-2",
-		hero: "gap-2.5 rounded-[20px] border border-[#353126] bg-[#181712] p-5",
-		heroDescription: "text-[15px] leading-[22px] text-[#d6d3c7]",
-		heroTitle: "text-[28px] font-extrabold leading-[34px] text-[#fffaf0]",
-		root: "flex-1 bg-[#0c0f0b]",
-		screenFrame: "bg-[#0c0f0b]",
+		overview:
+			"gap-3 rounded-[18px] border border-border bg-surface p-4 shadow-surface",
+		overviewDescription: "text-[14px] leading-5 text-muted",
+		overviewHeader: "gap-1",
+		overviewTitle: "text-[24px] font-extrabold leading-[30px] text-foreground",
+		root: "flex-1 bg-background",
+		screenFrame: "bg-background",
 		section: "gap-3",
-		sectionDescription: "text-sm leading-[21px] text-stone-400",
+		sectionDescription: "text-sm leading-[21px] text-muted",
 		sectionHeader: "gap-1.5",
-		sectionTitle: "text-[22px] font-extrabold text-[#fffaf0]",
-		sessionLabel: "text-sm text-stone-400",
+		sectionTitle: "text-[18px] font-extrabold leading-6 text-foreground",
+		sessionLabel: "text-sm text-muted",
 		summaryCard:
-			"flex-1 gap-1 rounded-2xl border border-[#2e382f] bg-[#151a16] p-4",
-		summaryGrid: "flex-row gap-3",
-		summaryLabel: "text-[13px] text-stone-400",
-		summaryValue: "text-[26px] font-extrabold text-[#fffaf0]",
+			"min-h-[74px] flex-1 justify-between rounded-xl border border-border bg-surface-secondary p-3",
+		summaryGrid: "flex-row gap-2",
+		summaryLabel: "text-[12px] font-bold leading-4 text-muted",
+		summaryValue: "text-[20px] font-extrabold leading-6 text-foreground",
 		tabContent: "gap-[18px]",
 	},
 	variants: {
 		selected: {
 			false: {},
 			true: {
-				filterChip: "border-[#9ad66d] bg-[#9ad66d]",
-				filterChipText: "text-[#10200d]",
+				filterChip: "border-accent bg-accent",
+				filterChipText: "text-accent-foreground",
 			},
 		},
 	},

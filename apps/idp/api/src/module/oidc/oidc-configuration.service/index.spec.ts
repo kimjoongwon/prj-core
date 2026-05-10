@@ -65,6 +65,7 @@ describe("OidcConfigurationService", () => {
 				client: { clientId: "partner-web" },
 				params: {
 					client_id: "partner-web",
+					resource: "http://localhost:3007",
 					scope: "openid profile email",
 				},
 				provider: {
@@ -81,6 +82,10 @@ describe("OidcConfigurationService", () => {
 			clientId: "partner-web",
 		});
 		expect(grant.addOIDCScope).toHaveBeenCalledWith("openid profile email");
+		expect(grant.addResourceScope).toHaveBeenCalledWith(
+			"http://localhost:3007",
+			"openid profile email",
+		);
 		expect(grant.save).toHaveBeenCalled();
 		expect(result).toBe(grant);
 	});

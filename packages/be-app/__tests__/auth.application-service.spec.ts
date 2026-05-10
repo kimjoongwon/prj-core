@@ -12,7 +12,11 @@ import {
 	TokenStorageService,
 	UserService,
 } from "@cocrepo/service";
-import { ForbiddenException, NotFoundException } from "@nestjs/common";
+import {
+	BadRequestException,
+	ForbiddenException,
+	NotFoundException,
+} from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 import { AuthApplicationService } from "../src/auth.application-service";
 
@@ -303,6 +307,7 @@ describe("AuthApplicationService", () => {
 						"http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
 				}),
 				"/admin/dashboard",
+				{},
 			);
 			expect(mockTokenStorageService.saveOidcState).toHaveBeenCalledWith(
 				"state-token",
@@ -329,6 +334,7 @@ describe("AuthApplicationService", () => {
 						"http://localhost:3008/api/v1/auth/callback?clientId=idp-web",
 				}),
 				"http://localhost:3008/dashboard",
+				{},
 			);
 			expect(mockTokenStorageService.saveOidcState).toHaveBeenCalledWith(
 				"state-token",
@@ -353,6 +359,7 @@ describe("AuthApplicationService", () => {
 					scope: "openid profile email",
 				}),
 				"/",
+				{},
 			);
 			expect(mockTokenStorageService.saveOidcState).toHaveBeenCalledWith(
 				"state-token",
@@ -361,6 +368,18 @@ describe("AuthApplicationService", () => {
 				"/",
 				"user-mobile",
 			);
+		});
+
+		it("비활성 clientId는 authorization request를 생성하지 않아야 한다", async () => {
+			mockOidcClientService.getByClientId.mockResolvedValueOnce(
+				buildOidcClient("disabled-web", { isActive: false }),
+			);
+
+			await expect(
+				applicationService.getAuthorizationUrl("/", "disabled-web"),
+			).rejects.toBeInstanceOf(BadRequestException);
+			expect(mockOidcFacade.createAuthorizationRequest).not.toHaveBeenCalled();
+			expect(mockTokenStorageService.saveOidcState).not.toHaveBeenCalled();
 		});
 
 		it("legacy storybook clientId를 canonical storybook-web으로 정규화해야 한다", async () => {
@@ -376,6 +395,7 @@ describe("AuthApplicationService", () => {
 						"http://localhost:6006/api/v1/auth/callback?clientId=storybook-web",
 				}),
 				"http://localhost:6006/",
+				{},
 			);
 			expect(mockTokenStorageService.saveOidcState).toHaveBeenCalledWith(
 				"state-token",
@@ -416,6 +436,7 @@ describe("AuthApplicationService", () => {
 					redirectUri: "http://localhost:3007/api/oauth2-redirect.html",
 				}),
 				"http://localhost:3007/api",
+				{},
 			);
 			expect(mockTokenStorageService.saveOidcState).toHaveBeenCalledWith(
 				"state-token",
@@ -490,11 +511,21 @@ describe("AuthApplicationService", () => {
 				"idp-web.session-raw",
 				expect.any(Object),
 			);
-			expect(result).toEqual({
-				returnTo: "http://localhost:3008/dashboard",
-				defaultReturnTo: "http://localhost:3008/dashboard",
-				loginUrl: "http://localhost:3008/auth/login",
-			});
+			expect(result).toEqual(
+				expect.objectContaining({
+					returnTo: "http://localhost:3008/dashboard",
+					defaultReturnTo: "http://localhost:3008/dashboard",
+					loginUrl: "http://localhost:3008/auth/login",
+				}),
+			);
+			expect(result.session).toEqual(
+				expect.objectContaining({
+					accessToken: expect.any(String),
+					refreshToken: "refresh-token",
+					accessTokenExpiresAt: expect.any(Number),
+					refreshTokenExpiresAt: expect.any(Number),
+				}),
+			);
 		});
 
 		it("user-mobile 콜백은 native client로 토큰을 교환하고 user-mobile 세션을 생성해야 한다", async () => {
@@ -553,11 +584,19 @@ describe("AuthApplicationService", () => {
 					clientId: "user-mobile",
 				}),
 			);
-			expect(result).toEqual({
-				returnTo: "onora-mobile://auth/callback?returnTo=/",
-				defaultReturnTo: "/",
-				loginUrl: "",
-			});
+			expect(result).toEqual(
+				expect.objectContaining({
+					returnTo: "onora-mobile://auth/callback?returnTo=/",
+					defaultReturnTo: "/",
+					loginUrl: "",
+				}),
+			);
+			expect(result.session).toEqual(
+				expect.objectContaining({
+					accessToken: expect.any(String),
+					refreshToken: "refresh-token",
+				}),
+			);
 		});
 	});
 
@@ -637,6 +676,12 @@ describe("AuthApplicationService", () => {
 			expect(
 				(res as { clearCookie: jest.Mock }).clearCookie,
 			).toHaveBeenCalledWith("sessionId");
+			expect(
+				(res as { clearCookie: jest.Mock }).clearCookie,
+			).toHaveBeenCalledWith("_session");
+			expect(
+				(res as { clearCookie: jest.Mock }).clearCookie,
+			).toHaveBeenCalledWith("_interaction");
 			expect(result).toBe(true);
 		});
 	});

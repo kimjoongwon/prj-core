@@ -23,6 +23,10 @@ export interface OidcTokenResponse {
 	scope?: string;
 }
 
+export interface OidcAuthorizationRequestOptions {
+	prompt?: string;
+}
+
 const DEFAULT_OIDC_CONFIG: OidcServerConfig = {
 	issuer: "http://localhost:3007",
 	jwksUri: "http://localhost:3007/oidc/jwks",
@@ -41,6 +45,7 @@ export class OidcFacade {
 	createAuthorizationRequest(
 		client: OidcClientProtocolConfig,
 		returnTo?: string,
+		options: OidcAuthorizationRequestOptions = {},
 	): {
 		state: string;
 		codeVerifier: string;
@@ -62,8 +67,11 @@ export class OidcFacade {
 			state,
 			code_challenge: codeChallenge,
 			code_challenge_method: "S256",
-			prompt: "login",
 		});
+		const prompt = options.prompt?.trim();
+		if (prompt) {
+			params.set("prompt", prompt);
+		}
 
 		return {
 			state,
