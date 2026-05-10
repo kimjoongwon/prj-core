@@ -10,6 +10,7 @@
  */
 
 import * as process from "node:process";
+
 globalThis["__dirname"] = __dirname;
 
 import * as runtime from "@prisma/client/runtime/client";
@@ -157,6 +158,21 @@ export type SecurityPolicy = Prisma.SecurityPolicyModel;
  * @displayName 화이트리스트 항목
  */
 export type WhitelistEntry = Prisma.WhitelistEntryModel;
+/**
+ * Model Payment
+ * @displayName 결제
+ */
+export type Payment = Prisma.PaymentModel;
+/**
+ * Model PaymentSubject
+ * @displayName 결제 대상
+ */
+export type PaymentSubject = Prisma.PaymentSubjectModel;
+/**
+ * Model PaymentReference
+ * @displayName 결제 참조
+ */
+export type PaymentReference = Prisma.PaymentReferenceModel;
 /**
  * Model Post
  * @displayName 게시물

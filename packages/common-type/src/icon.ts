@@ -8,6 +8,7 @@ export type AppIconName =
 	| "Building2"
 	| "CalendarDays"
 	| "Circle"
+	| "CreditCard"
 	| "Dumbbell"
 	| "Ellipsis"
 	| "FileSearch"

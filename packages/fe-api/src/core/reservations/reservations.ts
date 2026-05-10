@@ -41,12 +41,16 @@ import { customInstance } from "../../libs/customAxios";
 import type {
 	CancelMyReservation200AllOf,
 	CancelReservationDto,
+	CreateReservationCheckout201AllOf,
+	CreateReservationCheckoutDto,
 	CreateReservation201AllOf,
 	CreateReservationDto,
 	GetMyReservations200AllOf,
 	GetMyReservationsParams,
 	GetReservationBookingFeed200AllOf,
 	GetReservationBookingFeedParams,
+	GetReservationCheckoutBootstrap200AllOf,
+	GetReservationCheckoutBootstrapParams,
 } from ".././model";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -565,6 +569,198 @@ export const prefetchGetReservationBookingFeedInfiniteQuery = async <
 	await queryClient.prefetchInfiniteQuery(queryOptions);
 
 	return queryClient;
+};
+
+/**
+ * 예약하려는 회차 기준으로 결제 가능한 과정과 placeholder 결제 수단을 조회합니다.
+ * @summary 예약 결제 Bootstrap 조회
+ */
+export const getReservationCheckoutBootstrap = (
+	params: GetReservationCheckoutBootstrapParams,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
+) => {
+	return customInstance<GetReservationCheckoutBootstrap200AllOf>(
+		{
+			url: `/api/v1/reservations/checkout/bootstrap`,
+			method: "GET",
+			params,
+			signal,
+		},
+		options,
+	);
+};
+
+export const getGetReservationCheckoutBootstrapQueryKey = (
+	params: GetReservationCheckoutBootstrapParams,
+) => {
+	return [
+		`/api/v1/reservations/checkout/bootstrap`,
+		...(params ? [params] : []),
+	] as const;
+};
+
+export const getGetReservationCheckoutBootstrapQueryOptions = <
+	TData = Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>,
+	TError = ErrorType<void>,
+>(
+	params: GetReservationCheckoutBootstrapParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ??
+		getGetReservationCheckoutBootstrapQueryKey(params);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>
+	> = ({ signal }) =>
+		getReservationCheckoutBootstrap(params, requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetReservationCheckoutBootstrapQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>
+>;
+export type GetReservationCheckoutBootstrapQueryError = ErrorType<void>;
+
+export function useGetReservationCheckoutBootstrap<
+	TData = Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>,
+	TError = ErrorType<void>,
+>(
+	params: GetReservationCheckoutBootstrapParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetReservationCheckoutBootstrapQueryOptions(
+		params,
+		options,
+	);
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * provider-neutral placeholder 결제로 Payment, Enrollment, CoursePass, Reservation을 생성합니다.
+ * @summary 예약 결제 생성
+ */
+export const createReservationCheckout = (
+	createReservationCheckoutDto: BodyType<CreateReservationCheckoutDto>,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
+) => {
+	return customInstance<CreateReservationCheckout201AllOf>(
+		{
+			url: `/api/v1/reservations/checkout`,
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			data: createReservationCheckoutDto,
+			signal,
+		},
+		options,
+	);
+};
+
+export const getCreateReservationCheckoutMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof createReservationCheckout>>,
+		TError,
+		{ data: BodyType<CreateReservationCheckoutDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof createReservationCheckout>>,
+	TError,
+	{ data: BodyType<CreateReservationCheckoutDto> },
+	TContext
+> => {
+	const mutationKey = ["createReservationCheckout"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof createReservationCheckout>>,
+		{ data: BodyType<CreateReservationCheckoutDto> }
+	> = (props) => {
+		const { data } = props ?? {};
+
+		return createReservationCheckout(data, requestOptions);
+	};
+
+	return { mutationFn, ...mutationOptions };
+};
+
+export type CreateReservationCheckoutMutationResult = NonNullable<
+	Awaited<ReturnType<typeof createReservationCheckout>>
+>;
+export type CreateReservationCheckoutMutationBody =
+	BodyType<CreateReservationCheckoutDto>;
+export type CreateReservationCheckoutMutationError = ErrorType<void>;
+
+/**
+ * @summary 예약 결제 생성
+ */
+export const useCreateReservationCheckout = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof createReservationCheckout>>,
+			TError,
+			{ data: BodyType<CreateReservationCheckoutDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof createReservationCheckout>>,
+	TError,
+	{ data: BodyType<CreateReservationCheckoutDto> },
+	TContext
+> => {
+	const mutationOptions = getCreateReservationCheckoutMutationOptions(options);
+
+	return useMutation(mutationOptions, queryClient);
 };
 
 /**

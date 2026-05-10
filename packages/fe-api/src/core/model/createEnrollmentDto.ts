@@ -25,6 +25,11 @@ export interface CreateEnrollmentDto {
 	 * @nullable
 	 */
 	assignedTimelineId?: string | null;
+	/**
+	 * 결제 ID
+	 * @nullable
+	 */
+	paymentId?: string | null;
 	/** 결제 상태 */
 	paymentStatus?: PaymentStatus;
 	/**

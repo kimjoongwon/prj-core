@@ -1,0 +1,149 @@
+// ============================================================================
+// Payment Domain - 결제 도메인
+// ============================================================================
+
+/// @displayName 결제 상태
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELED
+  REFUNDED
+}
+
+/// @displayName 결제 수단
+enum PaymentMethod {
+  CARD
+  VIRTUAL_ACCOUNT
+  BANK_TRANSFER
+  CASH
+  FREE
+  EXTERNAL
+}
+
+/// @displayName 결제 대상 종류
+enum PaymentSubjectType {
+  COURSE
+  COURSE_OFFERING
+  ENROLLMENT
+  COURSE_PASS
+  PRODUCT
+  CUSTOM
+}
+
+/// @displayName 결제 참조 종류
+enum PaymentReferenceType {
+  ENROLLMENT
+  COURSE_PASS
+  PRODUCT_ENTITLEMENT
+  SERVICE_USAGE
+  REFUND
+  CUSTOM
+}
+
+// @schema-type: ROOT
+// @schema-owner: true
+// @aggregate-root: true
+// @description: Space 범위에서 다양한 서비스의 결제 승인/실패/환불 기록을 공통 장부로 관리하는 결제 루트
+// @ownership: independent
+// @scope: space
+// @extended-by: PaymentItem
+/// @displayName 결제
+model Payment {
+  id                String        @id @default(uuid())
+  createdAt         DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime?     @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt         DateTime?     @map("removed_at") @db.Timestamptz(6)
+  spaceId           String        @map("space_id")
+  payerUserId       String?       @map("payer_user_id")
+  title             String
+  status            PaymentStatus @default(PENDING)
+  method            PaymentMethod?
+  provider          String?       @map("provider")
+  providerPaymentId String?       @map("provider_payment_id")
+  providerOrderId   String?       @map("provider_order_id")
+  totalAmount       Int           @default(0) @map("total_amount")
+  currency          String        @default("KRW")
+  requestedAt       DateTime?     @map("requested_at") @db.Timestamptz(6)
+  approvedAt        DateTime?     @map("approved_at") @db.Timestamptz(6)
+  canceledAt        DateTime?     @map("canceled_at") @db.Timestamptz(6)
+  receiptUrl        String?       @map("receipt_url")
+  memo              String?
+  metadata          Json?
+  space             Space         @relation(fields: [spaceId], references: [id])
+  payer             User?         @relation(fields: [payerUserId], references: [id])
+  subjects          PaymentSubject[]
+  references        PaymentReference[]
+  enrollments       Enrollment[]
+
+  @@unique([provider, providerPaymentId])
+  @@index([spaceId])
+  @@index([payerUserId])
+  @@index([status])
+  @@index([providerOrderId])
+  @@index([approvedAt])
+  @@map("payments")
+}
+
+// @schema-type: CHILD
+// @description: Payment 하위에서 각 서비스의 구매 대상과 금액 snapshot을 기록하는 결제 항목
+// @relation-pattern: one-to-many
+// @ownership: dependent
+// @scope: space
+// @extends: Payment
+/// @displayName 결제 대상
+model PaymentSubject {
+  id           String             @id @default(uuid())
+  createdAt    DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime?          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt    DateTime?          @map("removed_at") @db.Timestamptz(6)
+  paymentId    String             @map("payment_id")
+  spaceId      String             @map("space_id")
+  serviceCode  String             @default("core") @map("service_code")
+  subjectType  PaymentSubjectType @map("subject_type")
+  subjectId    String             @map("subject_id")
+  subjectLabel String             @map("subject_label")
+  quantity     Int                @default(1)
+  unitAmount   Int                @default(0) @map("unit_amount")
+  totalAmount  Int                @default(0) @map("total_amount")
+  currency     String             @default("KRW")
+  metadata     Json?
+  payment      Payment            @relation(fields: [paymentId], references: [id])
+  space        Space              @relation(fields: [spaceId], references: [id])
+
+  @@index([paymentId])
+  @@index([spaceId])
+  @@index([serviceCode])
+  @@index([subjectType, subjectId])
+  @@map("payment_subjects")
+}
+
+// @schema-type: CHILD
+// @description: Payment가 생성하거나 정산한 서비스 리소스를 FK 없는 다형 참조로 기록하는 결제 결과 링크
+// @relation-pattern: one-to-many
+// @ownership: dependent
+// @scope: space
+// @extends: Payment
+/// @displayName 결제 참조
+model PaymentReference {
+  id            String               @id @default(uuid())
+  createdAt     DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime?            @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt     DateTime?            @map("removed_at") @db.Timestamptz(6)
+  paymentId     String               @map("payment_id")
+  spaceId       String               @map("space_id")
+  serviceCode   String               @default("core") @map("service_code")
+  referenceType PaymentReferenceType @map("reference_type")
+  referenceId   String               @map("reference_id")
+  role          String               @default("primary")
+  label         String?
+  metadata      Json?
+  payment       Payment              @relation(fields: [paymentId], references: [id])
+  space         Space                @relation(fields: [spaceId], references: [id])
+
+  @@index([paymentId])
+  @@index([spaceId])
+  @@index([serviceCode])
+  @@index([referenceType, referenceId])
+  @@map("payment_references")
+}

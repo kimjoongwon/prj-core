@@ -209,6 +209,9 @@ export type SpaceWhereInput = {
 	safeWallets?: Prisma.SafeWalletListRelationFilter;
 	routines?: Prisma.RoutineListRelationFilter;
 	reservations?: Prisma.ReservationListRelationFilter;
+	payments?: Prisma.PaymentListRelationFilter;
+	paymentSubjects?: Prisma.PaymentSubjectListRelationFilter;
+	paymentReferences?: Prisma.PaymentReferenceListRelationFilter;
 	policies?: Prisma.PolicyListRelationFilter;
 	folders?: Prisma.FolderListRelationFilter;
 	assets?: Prisma.AssetListRelationFilter;
@@ -240,6 +243,9 @@ export type SpaceOrderByWithRelationInput = {
 	safeWallets?: Prisma.SafeWalletOrderByRelationAggregateInput;
 	routines?: Prisma.RoutineOrderByRelationAggregateInput;
 	reservations?: Prisma.ReservationOrderByRelationAggregateInput;
+	payments?: Prisma.PaymentOrderByRelationAggregateInput;
+	paymentSubjects?: Prisma.PaymentSubjectOrderByRelationAggregateInput;
+	paymentReferences?: Prisma.PaymentReferenceOrderByRelationAggregateInput;
 	policies?: Prisma.PolicyOrderByRelationAggregateInput;
 	folders?: Prisma.FolderOrderByRelationAggregateInput;
 	assets?: Prisma.AssetOrderByRelationAggregateInput;
@@ -283,6 +289,9 @@ export type SpaceWhereUniqueInput = Prisma.AtLeast<
 		safeWallets?: Prisma.SafeWalletListRelationFilter;
 		routines?: Prisma.RoutineListRelationFilter;
 		reservations?: Prisma.ReservationListRelationFilter;
+		payments?: Prisma.PaymentListRelationFilter;
+		paymentSubjects?: Prisma.PaymentSubjectListRelationFilter;
+		paymentReferences?: Prisma.PaymentReferenceListRelationFilter;
 		policies?: Prisma.PolicyListRelationFilter;
 		folders?: Prisma.FolderListRelationFilter;
 		assets?: Prisma.AssetListRelationFilter;
@@ -352,6 +361,9 @@ export type SpaceCreateInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -383,6 +395,9 @@ export type SpaceUncheckedCreateInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -424,6 +439,9 @@ export type SpaceUpdateInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -465,6 +483,9 @@ export type SpaceUncheckedUpdateInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -726,6 +747,84 @@ export type SpaceUpdateOneRequiredWithoutEmailVerificationsNestedInput = {
 			Prisma.SpaceUpdateWithoutEmailVerificationsInput
 		>,
 		Prisma.SpaceUncheckedUpdateWithoutEmailVerificationsInput
+	>;
+};
+
+export type SpaceCreateNestedOneWithoutPaymentsInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPaymentsInput,
+		Prisma.SpaceUncheckedCreateWithoutPaymentsInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutPaymentsInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+};
+
+export type SpaceUpdateOneRequiredWithoutPaymentsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPaymentsInput,
+		Prisma.SpaceUncheckedCreateWithoutPaymentsInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutPaymentsInput;
+	upsert?: Prisma.SpaceUpsertWithoutPaymentsInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.SpaceUpdateToOneWithWhereWithoutPaymentsInput,
+			Prisma.SpaceUpdateWithoutPaymentsInput
+		>,
+		Prisma.SpaceUncheckedUpdateWithoutPaymentsInput
+	>;
+};
+
+export type SpaceCreateNestedOneWithoutPaymentSubjectsInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPaymentSubjectsInput,
+		Prisma.SpaceUncheckedCreateWithoutPaymentSubjectsInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutPaymentSubjectsInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+};
+
+export type SpaceUpdateOneRequiredWithoutPaymentSubjectsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPaymentSubjectsInput,
+		Prisma.SpaceUncheckedCreateWithoutPaymentSubjectsInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutPaymentSubjectsInput;
+	upsert?: Prisma.SpaceUpsertWithoutPaymentSubjectsInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.SpaceUpdateToOneWithWhereWithoutPaymentSubjectsInput,
+			Prisma.SpaceUpdateWithoutPaymentSubjectsInput
+		>,
+		Prisma.SpaceUncheckedUpdateWithoutPaymentSubjectsInput
+	>;
+};
+
+export type SpaceCreateNestedOneWithoutPaymentReferencesInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPaymentReferencesInput,
+		Prisma.SpaceUncheckedCreateWithoutPaymentReferencesInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutPaymentReferencesInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+};
+
+export type SpaceUpdateOneRequiredWithoutPaymentReferencesNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPaymentReferencesInput,
+		Prisma.SpaceUncheckedCreateWithoutPaymentReferencesInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutPaymentReferencesInput;
+	upsert?: Prisma.SpaceUpsertWithoutPaymentReferencesInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.SpaceUpdateToOneWithWhereWithoutPaymentReferencesInput,
+			Prisma.SpaceUpdateWithoutPaymentReferencesInput
+		>,
+		Prisma.SpaceUncheckedUpdateWithoutPaymentReferencesInput
 	>;
 };
 
@@ -1167,6 +1266,9 @@ export type SpaceCreateWithoutPoliciesInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
 	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
@@ -1197,6 +1299,9 @@ export type SpaceUncheckedCreateWithoutPoliciesInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
 	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
@@ -1265,6 +1370,9 @@ export type SpaceUpdateWithoutPoliciesInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
 	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
@@ -1305,6 +1413,9 @@ export type SpaceUncheckedUpdateWithoutPoliciesInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
 	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -1335,6 +1446,9 @@ export type SpaceCreateWithoutAlbumsInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -1365,6 +1479,9 @@ export type SpaceUncheckedCreateWithoutAlbumsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -1433,6 +1550,9 @@ export type SpaceUpdateWithoutAlbumsInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -1473,6 +1593,9 @@ export type SpaceUncheckedUpdateWithoutAlbumsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -1503,6 +1626,9 @@ export type SpaceCreateWithoutAlbumEntriesInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -1533,6 +1659,9 @@ export type SpaceUncheckedCreateWithoutAlbumEntriesInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -1601,6 +1730,9 @@ export type SpaceUpdateWithoutAlbumEntriesInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -1641,6 +1773,9 @@ export type SpaceUncheckedUpdateWithoutAlbumEntriesInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -1671,6 +1806,9 @@ export type SpaceCreateWithoutAssetsInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
@@ -1701,6 +1839,9 @@ export type SpaceUncheckedCreateWithoutAssetsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
@@ -1769,6 +1910,9 @@ export type SpaceUpdateWithoutAssetsInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
@@ -1809,6 +1953,9 @@ export type SpaceUncheckedUpdateWithoutAssetsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -1839,6 +1986,9 @@ export type SpaceCreateWithoutDerivativesInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -1869,6 +2019,9 @@ export type SpaceUncheckedCreateWithoutDerivativesInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -1937,6 +2090,9 @@ export type SpaceUpdateWithoutDerivativesInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -1977,6 +2133,9 @@ export type SpaceUncheckedUpdateWithoutDerivativesInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -2007,6 +2166,9 @@ export type SpaceCreateWithoutFoldersInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
 	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
@@ -2037,6 +2199,9 @@ export type SpaceUncheckedCreateWithoutFoldersInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
 	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
@@ -2105,6 +2270,9 @@ export type SpaceUpdateWithoutFoldersInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
 	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
@@ -2145,6 +2313,9 @@ export type SpaceUncheckedUpdateWithoutFoldersInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
 	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -2174,6 +2345,9 @@ export type SpaceCreateWithoutEmailVerificationsInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -2204,6 +2378,9 @@ export type SpaceUncheckedCreateWithoutEmailVerificationsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -2272,6 +2449,9 @@ export type SpaceUpdateWithoutEmailVerificationsInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -2312,6 +2492,549 @@ export type SpaceUncheckedUpdateWithoutEmailVerificationsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceCreateWithoutPaymentsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
+	courses?: Prisma.CourseCreateNestedManyWithoutSpaceInput;
+	courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceUncheckedCreateWithoutPaymentsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
+	courses?: Prisma.CourseUncheckedCreateNestedManyWithoutSpaceInput;
+	courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceCreateOrConnectWithoutPaymentsInput = {
+	where: Prisma.SpaceWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPaymentsInput,
+		Prisma.SpaceUncheckedCreateWithoutPaymentsInput
+	>;
+};
+
+export type SpaceUpsertWithoutPaymentsInput = {
+	update: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutPaymentsInput,
+		Prisma.SpaceUncheckedUpdateWithoutPaymentsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPaymentsInput,
+		Prisma.SpaceUncheckedCreateWithoutPaymentsInput
+	>;
+	where?: Prisma.SpaceWhereInput;
+};
+
+export type SpaceUpdateToOneWithWhereWithoutPaymentsInput = {
+	where?: Prisma.SpaceWhereInput;
+	data: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutPaymentsInput,
+		Prisma.SpaceUncheckedUpdateWithoutPaymentsInput
+	>;
+};
+
+export type SpaceUpdateWithoutPaymentsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
+	courses?: Prisma.CourseUpdateManyWithoutSpaceNestedInput;
+	courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceUncheckedUpdateWithoutPaymentsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
+	courses?: Prisma.CourseUncheckedUpdateManyWithoutSpaceNestedInput;
+	courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceCreateWithoutPaymentSubjectsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
+	courses?: Prisma.CourseCreateNestedManyWithoutSpaceInput;
+	courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceUncheckedCreateWithoutPaymentSubjectsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
+	courses?: Prisma.CourseUncheckedCreateNestedManyWithoutSpaceInput;
+	courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceCreateOrConnectWithoutPaymentSubjectsInput = {
+	where: Prisma.SpaceWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPaymentSubjectsInput,
+		Prisma.SpaceUncheckedCreateWithoutPaymentSubjectsInput
+	>;
+};
+
+export type SpaceUpsertWithoutPaymentSubjectsInput = {
+	update: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutPaymentSubjectsInput,
+		Prisma.SpaceUncheckedUpdateWithoutPaymentSubjectsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPaymentSubjectsInput,
+		Prisma.SpaceUncheckedCreateWithoutPaymentSubjectsInput
+	>;
+	where?: Prisma.SpaceWhereInput;
+};
+
+export type SpaceUpdateToOneWithWhereWithoutPaymentSubjectsInput = {
+	where?: Prisma.SpaceWhereInput;
+	data: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutPaymentSubjectsInput,
+		Prisma.SpaceUncheckedUpdateWithoutPaymentSubjectsInput
+	>;
+};
+
+export type SpaceUpdateWithoutPaymentSubjectsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
+	courses?: Prisma.CourseUpdateManyWithoutSpaceNestedInput;
+	courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceUncheckedUpdateWithoutPaymentSubjectsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
+	courses?: Prisma.CourseUncheckedUpdateManyWithoutSpaceNestedInput;
+	courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceCreateWithoutPaymentReferencesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	ground?: Prisma.GroundCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
+	courses?: Prisma.CourseCreateNestedManyWithoutSpaceInput;
+	courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceUncheckedCreateWithoutPaymentReferencesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	ground?: Prisma.GroundUncheckedCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
+	courses?: Prisma.CourseUncheckedCreateNestedManyWithoutSpaceInput;
+	courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceCreateOrConnectWithoutPaymentReferencesInput = {
+	where: Prisma.SpaceWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPaymentReferencesInput,
+		Prisma.SpaceUncheckedCreateWithoutPaymentReferencesInput
+	>;
+};
+
+export type SpaceUpsertWithoutPaymentReferencesInput = {
+	update: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutPaymentReferencesInput,
+		Prisma.SpaceUncheckedUpdateWithoutPaymentReferencesInput
+	>;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPaymentReferencesInput,
+		Prisma.SpaceUncheckedCreateWithoutPaymentReferencesInput
+	>;
+	where?: Prisma.SpaceWhereInput;
+};
+
+export type SpaceUpdateToOneWithWhereWithoutPaymentReferencesInput = {
+	where?: Prisma.SpaceWhereInput;
+	data: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutPaymentReferencesInput,
+		Prisma.SpaceUncheckedUpdateWithoutPaymentReferencesInput
+	>;
+};
+
+export type SpaceUpdateWithoutPaymentReferencesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	ground?: Prisma.GroundUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
+	courses?: Prisma.CourseUpdateManyWithoutSpaceNestedInput;
+	courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceUncheckedUpdateWithoutPaymentReferencesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	ground?: Prisma.GroundUncheckedUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
+	courses?: Prisma.CourseUncheckedUpdateManyWithoutSpaceNestedInput;
+	courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -2342,6 +3065,9 @@ export type SpaceCreateWithoutContentsInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -2372,6 +3098,9 @@ export type SpaceUncheckedCreateWithoutContentsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -2440,6 +3169,9 @@ export type SpaceUpdateWithoutContentsInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -2480,6 +3212,9 @@ export type SpaceUncheckedUpdateWithoutContentsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -2510,6 +3245,9 @@ export type SpaceCreateWithoutClassificationInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -2540,6 +3278,9 @@ export type SpaceUncheckedCreateWithoutClassificationInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -2608,6 +3349,9 @@ export type SpaceUpdateWithoutClassificationInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -2648,6 +3392,9 @@ export type SpaceUncheckedUpdateWithoutClassificationInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -2678,6 +3425,9 @@ export type SpaceCreateWithoutAssociationsInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -2708,6 +3458,9 @@ export type SpaceUncheckedCreateWithoutAssociationsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -2776,6 +3529,9 @@ export type SpaceUpdateWithoutAssociationsInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -2816,6 +3572,9 @@ export type SpaceUncheckedUpdateWithoutAssociationsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -2846,6 +3605,9 @@ export type SpaceCreateWithoutGroundInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -2876,6 +3638,9 @@ export type SpaceUncheckedCreateWithoutGroundInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -2944,6 +3709,9 @@ export type SpaceUpdateWithoutGroundInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -2984,6 +3752,9 @@ export type SpaceUncheckedUpdateWithoutGroundInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -3014,6 +3785,9 @@ export type SpaceCreateWithoutTenantAccessRequestsInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -3044,6 +3818,9 @@ export type SpaceUncheckedCreateWithoutTenantAccessRequestsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -3112,6 +3889,9 @@ export type SpaceUpdateWithoutTenantAccessRequestsInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -3152,6 +3932,9 @@ export type SpaceUncheckedUpdateWithoutTenantAccessRequestsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -3182,6 +3965,9 @@ export type SpaceCreateWithoutTenantsInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -3212,6 +3998,9 @@ export type SpaceUncheckedCreateWithoutTenantsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -3280,6 +4069,9 @@ export type SpaceUpdateWithoutTenantsInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -3320,6 +4112,9 @@ export type SpaceUncheckedUpdateWithoutTenantsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -3351,6 +4146,9 @@ export type SpaceCreateWithoutInquiriesInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -3381,6 +4179,9 @@ export type SpaceUncheckedCreateWithoutInquiriesInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -3449,6 +4250,9 @@ export type SpaceUpdateWithoutInquiriesInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -3489,6 +4293,9 @@ export type SpaceUncheckedUpdateWithoutInquiriesInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -3518,6 +4325,9 @@ export type SpaceCreateWithoutCoursesInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -3548,6 +4358,9 @@ export type SpaceUncheckedCreateWithoutCoursesInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -3616,6 +4429,9 @@ export type SpaceUpdateWithoutCoursesInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -3656,6 +4472,9 @@ export type SpaceUncheckedUpdateWithoutCoursesInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -3686,6 +4505,9 @@ export type SpaceCreateWithoutCourseOfferingsInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -3716,6 +4538,9 @@ export type SpaceUncheckedCreateWithoutCourseOfferingsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -3784,6 +4609,9 @@ export type SpaceUpdateWithoutCourseOfferingsInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -3824,6 +4652,9 @@ export type SpaceUncheckedUpdateWithoutCourseOfferingsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -3854,6 +4685,9 @@ export type SpaceCreateWithoutReservationsInput = {
 	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -3884,6 +4718,9 @@ export type SpaceUncheckedCreateWithoutReservationsInput = {
 	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -3952,6 +4789,9 @@ export type SpaceUpdateWithoutReservationsInput = {
 	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -3992,6 +4832,9 @@ export type SpaceUncheckedUpdateWithoutReservationsInput = {
 	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -4022,6 +4865,9 @@ export type SpaceCreateWithoutRoutinesInput = {
 	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -4052,6 +4898,9 @@ export type SpaceUncheckedCreateWithoutRoutinesInput = {
 	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -4120,6 +4969,9 @@ export type SpaceUpdateWithoutRoutinesInput = {
 	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -4160,6 +5012,9 @@ export type SpaceUncheckedUpdateWithoutRoutinesInput = {
 	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -4190,6 +5045,9 @@ export type SpaceCreateWithoutTasksInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -4220,6 +5078,9 @@ export type SpaceUncheckedCreateWithoutTasksInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -4288,6 +5149,9 @@ export type SpaceUpdateWithoutTasksInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -4328,6 +5192,9 @@ export type SpaceUncheckedUpdateWithoutTasksInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -4358,6 +5225,9 @@ export type SpaceCreateWithoutTimelinesInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -4388,6 +5258,9 @@ export type SpaceUncheckedCreateWithoutTimelinesInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -4456,6 +5329,9 @@ export type SpaceUpdateWithoutTimelinesInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -4496,6 +5372,9 @@ export type SpaceUncheckedUpdateWithoutTimelinesInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -4526,6 +5405,9 @@ export type SpaceCreateWithoutCategoriesInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -4556,6 +5438,9 @@ export type SpaceUncheckedCreateWithoutCategoriesInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -4624,6 +5509,9 @@ export type SpaceUpdateWithoutCategoriesInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -4664,6 +5552,9 @@ export type SpaceUncheckedUpdateWithoutCategoriesInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -4694,6 +5585,9 @@ export type SpaceCreateWithoutGroupsInput = {
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -4724,6 +5618,9 @@ export type SpaceUncheckedCreateWithoutGroupsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -4792,6 +5689,9 @@ export type SpaceUpdateWithoutGroupsInput = {
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -4832,6 +5732,9 @@ export type SpaceUncheckedUpdateWithoutGroupsInput = {
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -4862,6 +5765,9 @@ export type SpaceCreateWithoutSafeWalletsInput = {
 	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
@@ -4892,6 +5798,9 @@ export type SpaceUncheckedCreateWithoutSafeWalletsInput = {
 	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutSpaceInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
@@ -4960,6 +5869,9 @@ export type SpaceUpdateWithoutSafeWalletsInput = {
 	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
@@ -5000,6 +5912,9 @@ export type SpaceUncheckedUpdateWithoutSafeWalletsInput = {
 	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutSpaceNestedInput;
+	paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -5028,6 +5943,9 @@ export type SpaceCountOutputType = {
 	safeWallets: number;
 	routines: number;
 	reservations: number;
+	payments: number;
+	paymentSubjects: number;
+	paymentReferences: number;
 	policies: number;
 	folders: number;
 	assets: number;
@@ -5059,6 +5977,9 @@ export type SpaceCountOutputTypeSelect<
 	safeWallets?: boolean | SpaceCountOutputTypeCountSafeWalletsArgs;
 	routines?: boolean | SpaceCountOutputTypeCountRoutinesArgs;
 	reservations?: boolean | SpaceCountOutputTypeCountReservationsArgs;
+	payments?: boolean | SpaceCountOutputTypeCountPaymentsArgs;
+	paymentSubjects?: boolean | SpaceCountOutputTypeCountPaymentSubjectsArgs;
+	paymentReferences?: boolean | SpaceCountOutputTypeCountPaymentReferencesArgs;
 	policies?: boolean | SpaceCountOutputTypeCountPoliciesArgs;
 	folders?: boolean | SpaceCountOutputTypeCountFoldersArgs;
 	assets?: boolean | SpaceCountOutputTypeCountAssetsArgs;
@@ -5224,6 +6145,36 @@ export type SpaceCountOutputTypeCountReservationsArgs<
 /**
  * SpaceCountOutputType without action
  */
+export type SpaceCountOutputTypeCountPaymentsArgs<
+	ExtArgs extends
+		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+	where?: Prisma.PaymentWhereInput;
+};
+
+/**
+ * SpaceCountOutputType without action
+ */
+export type SpaceCountOutputTypeCountPaymentSubjectsArgs<
+	ExtArgs extends
+		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+	where?: Prisma.PaymentSubjectWhereInput;
+};
+
+/**
+ * SpaceCountOutputType without action
+ */
+export type SpaceCountOutputTypeCountPaymentReferencesArgs<
+	ExtArgs extends
+		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+	where?: Prisma.PaymentReferenceWhereInput;
+};
+
+/**
+ * SpaceCountOutputType without action
+ */
 export type SpaceCountOutputTypeCountPoliciesArgs<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
@@ -5319,6 +6270,9 @@ export type SpaceSelect<
 		safeWallets?: boolean | Prisma.Space$safeWalletsArgs<ExtArgs>;
 		routines?: boolean | Prisma.Space$routinesArgs<ExtArgs>;
 		reservations?: boolean | Prisma.Space$reservationsArgs<ExtArgs>;
+		payments?: boolean | Prisma.Space$paymentsArgs<ExtArgs>;
+		paymentSubjects?: boolean | Prisma.Space$paymentSubjectsArgs<ExtArgs>;
+		paymentReferences?: boolean | Prisma.Space$paymentReferencesArgs<ExtArgs>;
 		policies?: boolean | Prisma.Space$policiesArgs<ExtArgs>;
 		folders?: boolean | Prisma.Space$foldersArgs<ExtArgs>;
 		assets?: boolean | Prisma.Space$assetsArgs<ExtArgs>;
@@ -5396,6 +6350,9 @@ export type SpaceInclude<
 	safeWallets?: boolean | Prisma.Space$safeWalletsArgs<ExtArgs>;
 	routines?: boolean | Prisma.Space$routinesArgs<ExtArgs>;
 	reservations?: boolean | Prisma.Space$reservationsArgs<ExtArgs>;
+	payments?: boolean | Prisma.Space$paymentsArgs<ExtArgs>;
+	paymentSubjects?: boolean | Prisma.Space$paymentSubjectsArgs<ExtArgs>;
+	paymentReferences?: boolean | Prisma.Space$paymentReferencesArgs<ExtArgs>;
 	policies?: boolean | Prisma.Space$policiesArgs<ExtArgs>;
 	folders?: boolean | Prisma.Space$foldersArgs<ExtArgs>;
 	assets?: boolean | Prisma.Space$assetsArgs<ExtArgs>;
@@ -5436,6 +6393,9 @@ export type $SpacePayload<
 		safeWallets: Prisma.$SafeWalletPayload<ExtArgs>[];
 		routines: Prisma.$RoutinePayload<ExtArgs>[];
 		reservations: Prisma.$ReservationPayload<ExtArgs>[];
+		payments: Prisma.$PaymentPayload<ExtArgs>[];
+		paymentSubjects: Prisma.$PaymentSubjectPayload<ExtArgs>[];
+		paymentReferences: Prisma.$PaymentReferencePayload<ExtArgs>[];
 		policies: Prisma.$PolicyPayload<ExtArgs>[];
 		folders: Prisma.$FolderPayload<ExtArgs>[];
 		assets: Prisma.$AssetPayload<ExtArgs>[];
@@ -6182,6 +7142,39 @@ export interface Prisma__SpaceClient<
 	): Prisma.PrismaPromise<
 		| runtime.Types.Result.GetResult<
 				Prisma.$ReservationPayload<ExtArgs>,
+				T,
+				"findMany",
+				GlobalOmitOptions
+		  >
+		| Null
+	>;
+	payments<T extends Prisma.Space$paymentsArgs<ExtArgs> = {}>(
+		args?: Prisma.Subset<T, Prisma.Space$paymentsArgs<ExtArgs>>,
+	): Prisma.PrismaPromise<
+		| runtime.Types.Result.GetResult<
+				Prisma.$PaymentPayload<ExtArgs>,
+				T,
+				"findMany",
+				GlobalOmitOptions
+		  >
+		| Null
+	>;
+	paymentSubjects<T extends Prisma.Space$paymentSubjectsArgs<ExtArgs> = {}>(
+		args?: Prisma.Subset<T, Prisma.Space$paymentSubjectsArgs<ExtArgs>>,
+	): Prisma.PrismaPromise<
+		| runtime.Types.Result.GetResult<
+				Prisma.$PaymentSubjectPayload<ExtArgs>,
+				T,
+				"findMany",
+				GlobalOmitOptions
+		  >
+		| Null
+	>;
+	paymentReferences<T extends Prisma.Space$paymentReferencesArgs<ExtArgs> = {}>(
+		args?: Prisma.Subset<T, Prisma.Space$paymentReferencesArgs<ExtArgs>>,
+	): Prisma.PrismaPromise<
+		| runtime.Types.Result.GetResult<
+				Prisma.$PaymentReferencePayload<ExtArgs>,
 				T,
 				"findMany",
 				GlobalOmitOptions
@@ -7212,6 +8205,97 @@ export type Space$reservationsArgs<
 	distinct?:
 		| Prisma.ReservationScalarFieldEnum
 		| Prisma.ReservationScalarFieldEnum[];
+};
+
+/**
+ * Space.payments
+ */
+export type Space$paymentsArgs<
+	ExtArgs extends
+		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+	/**
+	 * Select specific fields to fetch from the Payment
+	 */
+	select?: Prisma.PaymentSelect<ExtArgs> | null;
+	/**
+	 * Omit specific fields from the Payment
+	 */
+	omit?: Prisma.PaymentOmit<ExtArgs> | null;
+	/**
+	 * Choose, which related nodes to fetch as well
+	 */
+	include?: Prisma.PaymentInclude<ExtArgs> | null;
+	where?: Prisma.PaymentWhereInput;
+	orderBy?:
+		| Prisma.PaymentOrderByWithRelationInput
+		| Prisma.PaymentOrderByWithRelationInput[];
+	cursor?: Prisma.PaymentWhereUniqueInput;
+	take?: number;
+	skip?: number;
+	distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[];
+};
+
+/**
+ * Space.paymentSubjects
+ */
+export type Space$paymentSubjectsArgs<
+	ExtArgs extends
+		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+	/**
+	 * Select specific fields to fetch from the PaymentSubject
+	 */
+	select?: Prisma.PaymentSubjectSelect<ExtArgs> | null;
+	/**
+	 * Omit specific fields from the PaymentSubject
+	 */
+	omit?: Prisma.PaymentSubjectOmit<ExtArgs> | null;
+	/**
+	 * Choose, which related nodes to fetch as well
+	 */
+	include?: Prisma.PaymentSubjectInclude<ExtArgs> | null;
+	where?: Prisma.PaymentSubjectWhereInput;
+	orderBy?:
+		| Prisma.PaymentSubjectOrderByWithRelationInput
+		| Prisma.PaymentSubjectOrderByWithRelationInput[];
+	cursor?: Prisma.PaymentSubjectWhereUniqueInput;
+	take?: number;
+	skip?: number;
+	distinct?:
+		| Prisma.PaymentSubjectScalarFieldEnum
+		| Prisma.PaymentSubjectScalarFieldEnum[];
+};
+
+/**
+ * Space.paymentReferences
+ */
+export type Space$paymentReferencesArgs<
+	ExtArgs extends
+		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+	/**
+	 * Select specific fields to fetch from the PaymentReference
+	 */
+	select?: Prisma.PaymentReferenceSelect<ExtArgs> | null;
+	/**
+	 * Omit specific fields from the PaymentReference
+	 */
+	omit?: Prisma.PaymentReferenceOmit<ExtArgs> | null;
+	/**
+	 * Choose, which related nodes to fetch as well
+	 */
+	include?: Prisma.PaymentReferenceInclude<ExtArgs> | null;
+	where?: Prisma.PaymentReferenceWhereInput;
+	orderBy?:
+		| Prisma.PaymentReferenceOrderByWithRelationInput
+		| Prisma.PaymentReferenceOrderByWithRelationInput[];
+	cursor?: Prisma.PaymentReferenceWhereUniqueInput;
+	take?: number;
+	skip?: number;
+	distinct?:
+		| Prisma.PaymentReferenceScalarFieldEnum
+		| Prisma.PaymentReferenceScalarFieldEnum[];
 };
 
 /**

@@ -7,6 +7,7 @@ import { AbstractEntity } from "./abstract.entity";
 import type { Course } from "./course.entity";
 import type { CourseOffering } from "./course-offering.entity";
 import type { CoursePass } from "./course-pass.entity";
+import type { Payment } from "./payment.entity";
 import type { Timeline } from "./timeline.entity";
 import type { User } from "./user.entity";
 
@@ -14,6 +15,7 @@ export class Enrollment extends AbstractEntity implements EnrollmentEntity {
 	userId!: string;
 	courseId!: string;
 	courseOfferingId!: string;
+	paymentId!: string | null;
 	paymentStatus!: PaymentStatus;
 	currency!: string;
 	status!: EnrollmentStatus;
@@ -29,6 +31,7 @@ export class Enrollment extends AbstractEntity implements EnrollmentEntity {
 	user?: User;
 	course?: Course;
 	courseOffering?: CourseOffering;
+	payment?: Payment | null;
 	assignedTimeline?: Timeline | null;
 	coursePass?: CoursePass | null;
 

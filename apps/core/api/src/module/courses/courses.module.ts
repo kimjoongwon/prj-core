@@ -1,6 +1,10 @@
 import { CourseApplicationService } from "@cocrepo/app";
 import { CourseFacade } from "@cocrepo/facade";
-import { CoursesRepository, TimelinesRepository } from "@cocrepo/repository";
+import {
+	CoursesRepository,
+	PaymentsRepository,
+	TimelinesRepository,
+} from "@cocrepo/repository";
 import { AuthContext, CourseService, SpaceContext } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
 import { CoursesController } from "./courses.controller";
@@ -12,6 +16,7 @@ import { CoursesController } from "./courses.controller";
 		CourseApplicationService,
 		CourseService,
 		CoursesRepository,
+		PaymentsRepository,
 		TimelinesRepository,
 		AuthContext,
 		SpaceContext,

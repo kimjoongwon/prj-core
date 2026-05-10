@@ -8,6 +8,7 @@ export * from "./create-exercise.dto";
 export * from "./create-ground.dto";
 export * from "./create-group.dto";
 export * from "./create-oidc-client.dto";
+export * from "./create-payment.dto";
 export * from "./create-program.dto";
 export * from "./create-role.dto";
 export * from "./create-role-association.dto";

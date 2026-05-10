@@ -1,11 +1,15 @@
 import { ReservationFacade } from "@cocrepo/facade";
 import {
 	CoursesRepository,
+	PaymentsRepository,
 	ReservationsRepository,
 	TenantsRepository,
+	TimelinesRepository,
 } from "@cocrepo/repository";
 import {
 	AuthContext,
+	CourseService,
+	PaymentService,
 	ReservationService,
 	SpaceContext,
 } from "@cocrepo/service";
@@ -17,9 +21,13 @@ import { ReservationsController } from "./reservations.controller";
 	providers: [
 		ReservationFacade,
 		ReservationService,
+		CourseService,
+		PaymentService,
 		CoursesRepository,
+		PaymentsRepository,
 		ReservationsRepository,
 		TenantsRepository,
+		TimelinesRepository,
 		AuthContext,
 		SpaceContext,
 	],

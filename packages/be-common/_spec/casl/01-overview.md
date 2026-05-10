@@ -116,7 +116,7 @@ VIEW (조회)
 | Repository | `packages/be-repository/src/policies.repository.ts` | Policy 조회 (Space 기반) |
 | Service | `packages/be-service/src/ability.service.ts` | Ability 비즈니스 로직 |
 | Service | `packages/be-service/src/policy.service.ts` | Policy 비즈니스 로직 |
-| ApplicationService | `packages/be-app/src/ability.application-service/index.ts` | Ability + Policy 조합 로직 |
+| ApplicationService | `packages/be-app/src/ability.application-service.ts` | Ability + Policy 조합 로직 |
 | CASL | `packages/be-common/src/casl/casl-ability.factory.ts` | CASL Ability 생성 팩토리 (Policy repository 사용) |
 | Guard | `packages/be-common/src/guard/roles.guard.ts` | @Roles 데코레이터 Guard |
 | Guard | `packages/be-common/src/guard/role-category.guard.ts` | @RoleCategories 데코레이터 Guard |

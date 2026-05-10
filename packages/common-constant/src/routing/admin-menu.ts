@@ -63,6 +63,9 @@ export const ADMIN_PATHS = {
 	ENROLLMENTS: "/enrollments",
 	COURSE_PASSES: "/course-passes",
 
+	// 결제 관리 (Payment 공통 원장)
+	PAYMENTS: "/payments",
+
 	// 세션 (Session 엔티티 - Timeline 종속)
 	TIMELINE_SESSIONS_NEW: "/timelines/[timelineId]/sessions/new",
 	TIMELINE_SESSIONS_DETAIL: "/timelines/[timelineId]/sessions/[sessionId]",
@@ -133,6 +136,7 @@ export const ADMIN_SUBJECTS = {
 	MENU_SPACES: "menu:spaces",
 	MENU_TIMELINES: "menu:timelines",
 	MENU_COURSES: "menu:courses",
+	MENU_PAYMENTS: "menu:payments",
 	MENU_TASKS: "menu:tasks",
 	MENU_ROUTINES: "menu:routines",
 	MENU_TEMPLATES: "menu:templates",
@@ -155,6 +159,9 @@ export const ADMIN_SUBJECTS = {
 	MENU_COURSE_OFFERINGS_LIST: "menu:course-offerings:list",
 	MENU_ENROLLMENTS_LIST: "menu:enrollments:list",
 	MENU_COURSE_PASSES_LIST: "menu:course-passes:list",
+
+	// 2depth - 결제 관리
+	MENU_PAYMENTS_LIST: "menu:payments:list",
 
 	// 2depth - 공간 관리
 	MENU_SPACES_LIST: "menu:spaces:list",
@@ -202,6 +209,8 @@ const ADMIN_NAV_SCOPE_KIND_BY_ID: Partial<Record<string, ScreenScopeKind>> = {
 	"course-offerings-list": "space",
 	"enrollments-list": "space",
 	"course-passes-list": "space",
+	payments: "space",
+	"payments-list": "space",
 	tasks: "space",
 	"tasks-list": "space",
 	"routines-list": "space",

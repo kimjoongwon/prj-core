@@ -60,6 +60,51 @@ export const WhitelistType = {
 
 export type WhitelistType = (typeof WhitelistType)[keyof typeof WhitelistType];
 
+export const PaymentStatus = {
+	PENDING: "PENDING",
+	PAID: "PAID",
+	FAILED: "FAILED",
+	CANCELED: "CANCELED",
+	REFUNDED: "REFUNDED",
+} as const;
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus];
+
+export const PaymentMethod = {
+	CARD: "CARD",
+	VIRTUAL_ACCOUNT: "VIRTUAL_ACCOUNT",
+	BANK_TRANSFER: "BANK_TRANSFER",
+	CASH: "CASH",
+	FREE: "FREE",
+	EXTERNAL: "EXTERNAL",
+} as const;
+
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod];
+
+export const PaymentSubjectType = {
+	COURSE: "COURSE",
+	COURSE_OFFERING: "COURSE_OFFERING",
+	ENROLLMENT: "ENROLLMENT",
+	COURSE_PASS: "COURSE_PASS",
+	PRODUCT: "PRODUCT",
+	CUSTOM: "CUSTOM",
+} as const;
+
+export type PaymentSubjectType =
+	(typeof PaymentSubjectType)[keyof typeof PaymentSubjectType];
+
+export const PaymentReferenceType = {
+	ENROLLMENT: "ENROLLMENT",
+	COURSE_PASS: "COURSE_PASS",
+	PRODUCT_ENTITLEMENT: "PRODUCT_ENTITLEMENT",
+	SERVICE_USAGE: "SERVICE_USAGE",
+	REFUND: "REFUND",
+	CUSTOM: "CUSTOM",
+} as const;
+
+export type PaymentReferenceType =
+	(typeof PaymentReferenceType)[keyof typeof PaymentReferenceType];
+
 export const TextTypes = {
 	Editor: "Editor",
 	Input: "Input",
@@ -307,16 +352,6 @@ export const CoursePassKind = {
 
 export type CoursePassKind =
 	(typeof CoursePassKind)[keyof typeof CoursePassKind];
-
-export const PaymentStatus = {
-	PENDING: "PENDING",
-	PAID: "PAID",
-	FAILED: "FAILED",
-	CANCELED: "CANCELED",
-	REFUNDED: "REFUNDED",
-} as const;
-
-export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus];
 
 export const TimelineProvisioningMode = {
 	SHARED: "SHARED",

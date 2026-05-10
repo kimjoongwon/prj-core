@@ -55,6 +55,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | GOAL-026 | ACT-001, ACT-002 | Course를 정의하여 무엇을 배우는지와 기본 수강 상품 정책을 관리한다 | 높음 |
 | GOAL-027 | ACT-001, ACT-002 | CourseOffering을 통해 실제 개설된 반/기수와 Timeline 연결을 관리한다 | 높음 |
 | GOAL-028 | ACT-001, ACT-002 | Enrollment와 CoursePass로 결제 후 생기는 수강 권리와 유효기간을 관리한다 | 높음 |
+| GOAL-029 | ACT-001, ACT-002 | Payment 공통 원장에서 Course와 Product 등 여러 서비스의 결제 기록을 Space별로 조회한다 | 높음 |
 
 ## 도메인 목록
 
@@ -82,6 +83,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | CourseOffering | `/course-offerings` | 실제 개설된 과정/반/기수와 Timeline 연결 관리 | nested Course API + admin route 구현 완료 |
 | Enrollment | `/enrollments` | 결제 후 활성화되는 수강 신청 상태 관리 | nested Course API + admin route 구현 완료 |
 | CoursePass | `/course-passes` | 수강권의 유효기간과 잔여 예약 권리 관리 | nested Course API + admin route 구현 완료 |
+| Payment | `/payments` | Course와 Product 등 여러 서비스 결제를 공통 원장으로 조회하고 subject/reference를 추적 | backend/API/Orval/admin route 구현 완료 |
 | 문의 (Inquiries) | `/inquiries` | 옴니채널 고객 문의 관리 (웹, 이메일, 채팅, SMS). AI 기반 자동 해결/응답 초안/감정 분석 지원 | 기획 완료 |
 | 문의 상세 | `/inquiries/[inquiryId]` | 문의 스레드 뷰, 메시지 작성, AI 응답 초안, 지식베이스 연동 | 기획 완료 |
 | 문의 등록 | `/inquiries/new` | 새 문의 수동 접수 (전화/현장 문의 등) | 기획 완료 |
@@ -211,7 +213,7 @@ Course 계열 Prisma/DTO/Entity/Repository/Service/Facade/ApplicationService/Con
 | Enrollment | `id`, `userId`, `courseId`, `courseOfferingId`, `coursePassId`, `assignedTimelineId`, `paymentStatus`, `paymentProvider`, `paymentExternalId`, `paidAt`, `validFrom`, `validUntil`, `status`; 결제 성공 시 CoursePass 발급 |
 | CoursePass | `id`, `enrollmentId`, `userId`, `courseId`, `courseOfferingId`, `timelineId`, `kind`, `issuedAt`, `validFrom`, `expiresAt`, `reservationLimit`, `reservationUsedCount`, `reservationRemainingCount`, `status` |
 | Reservation linkage | 기존 Reservation에 `coursePassId`를 추가해 좌석 점유가 어떤 수강 권리를 소비했는지 추적; 예약 생성 시 pass 유효기간, Timeline 범위, 잔여 예약권을 검증 |
-| Payment linkage | 독립 Payment 도메인이 아직 없으므로 Enrollment가 최소 결제 참조(`paymentProvider`, `paymentExternalId`, `paymentStatus`, `paidAt`, `paidAmount`, `currency`)를 보관; 향후 Payment root가 생기면 이 참조를 `paymentId` FK로 전체 마이그레이션 |
+| Payment linkage | 독립 Payment root가 결제 원장을 소유하고 Enrollment는 `paymentId`로 연결합니다. 기존 최소 결제 참조(`paymentProvider`, `paymentExternalId`, `paymentStatus`, `paidAt`, `paidAmount`, `currency`)는 Course 화면 요약/마이그레이션 보조 필드로만 유지합니다. |
 
 필수 enum: `CourseStatus`, `CourseOfferingStatus`, `EnrollmentStatus`, `CoursePassStatus`, `CoursePassKind`, `PaymentStatus`, `TimelineProvisioningMode`.
 
@@ -259,6 +261,48 @@ Course 계열 Prisma/DTO/Entity/Repository/Service/Facade/ApplicationService/Con
 
 Admin route는 `_course-management-data.ts` mock을 사용하지 않습니다. `useCourseManagementPageData`가 Orval 응답과 `isLoading`/`isFetching`/`isError` 상태를 `CourseManagementPage`의 row/query state 계약으로 변환하고, `CourseManagementConsole`이 loading/refreshing/error/empty 상태를 렌더링합니다.
 
+## Payment 도메인 맥락
+
+Payment는 특정 서비스에 종속되지 않는 Space-scoped 결제 원장입니다. Course 결제는 `serviceCode=course`와 `subjectType=COURSE_OFFERING|ENROLLMENT|COURSE_PASS`로 기록하고, 앞으로 Product나 Subscription이 추가되어도 같은 Payment root에 `PaymentSubject`를 추가해 확장합니다.
+
+```
+Space
+  └─── Payment
+          ├─── PaymentSubject
+          │       ├─── serviceCode (course, product, subscription ...)
+          │       ├─── subjectType
+          │       └─── subjectId / subjectLabel
+          └─── PaymentReference
+                  ├─── Enrollment / CoursePass
+                  ├─── Order / Invoice
+                  └─── External Payment ID
+```
+
+### 핵심 원칙
+
+1. **공통 원장**: Payment는 Course, Product, Subscription 같은 여러 서비스가 공유합니다.
+2. **Space scope**: 목록과 상세 조회는 `SpaceContext.spaceIds` 기준으로 제한하고, FULL_ACCESS가 아닌 관리자는 다른 Space 결제를 볼 수 없습니다.
+3. **대상/참조 분리**: `PaymentSubject`는 무엇을 결제했는지, `PaymentReference`는 어떤 운영 리소스나 외부 ID와 연결되는지 추적합니다.
+4. **Course 연결**: Enrollment는 `paymentId`로 Payment를 참조하고, Payment reference는 Enrollment/CoursePass 역추적을 보조합니다.
+
+### API Surface
+
+| Resource | Endpoint | OperationId | 용도 |
+|----------|----------|-------------|------|
+| Payment | `GET /api/v1/payments` | `getPayments` | `/payments` 목록, Space/상태/수단/대상/참조 필터 |
+| Payment | `GET /api/v1/payments/:paymentId` | `getPaymentById` | Payment 상세와 subject/reference 확인 |
+| Payment | `POST /api/v1/payments` | `createPayment` | 서비스별 결제 성공/수동 기록 생성 |
+| Payment | `PATCH /api/v1/payments/:paymentId` | `updatePayment` | 결제 상태/제공자/영수증/메모 보정 |
+| Payment | `DELETE /api/v1/payments/:paymentId` | `deletePayment` | soft delete |
+
+### Orval / Frontend Handoff
+
+`pnpm --filter=@cocrepo/api codegen:server`로 Payment API hook이 `packages/fe-api/src/core/payments`에 생성되어 있습니다.
+
+| Admin route | API endpoint | Orval hook |
+|-------------|--------------|------------|
+| `/payments` | `GET /api/v1/payments` | `useGetPayments` |
+
 ## 구현 대상
 
 | Stage | Item ID | Owner role | 정확한 대상 |
@@ -271,6 +315,9 @@ Admin route는 `_course-management-data.ts` mock을 사용하지 않습니다. `
 | 3 | COURSE-S3-API-001 | `fe-api-integrator` | `pnpm --filter=@cocrepo/api codegen:server`, generated `packages/fe-api/src/core/courses` and model exports |
 | 3 | COURSE-S3-FE-001 | `fe-api-integrator`, `fe-page-builder` | `apps/admin/web/src/app/(admin)/{courses,course-offerings,enrollments,course-passes}/page.tsx`, `useCourseManagementPageData`, query state rendering |
 | 3 | COURSE-S3-QA-001 | `qa-fe-e2e-testing` | Course route sidecar E2E assertions for API-backed data and empty states |
+| 2 | PAYMENT-S2-BE-001 | `be-prisma-builder`, `be-entity-builder`, `be-dto-builder`, `be-repository-builder`, `be-service-builder`, `be-facade-builder`, `be-app-builder`, `be-controller-builder` | `packages/be-prisma/schema/billing/payment.prisma`, `packages/be-service/src/payment.service.ts`, `apps/core/api/src/module/payments` |
+| 3 | PAYMENT-S3-API-001 | `fe-api-integrator` | `pnpm --filter=@cocrepo/api codegen:server`, generated `packages/fe-api/src/core/payments` |
+| 3 | PAYMENT-S3-FE-001 | `fe-api-integrator`, `fe-page-builder`, `fe-feature-builder`, `fe-widget-builder` | `apps/admin/web/src/app/(admin)/payments/page.tsx`, `usePaymentManagementPageData`, `packages/fe-ui/src/page/PaymentManagementPage`, `packages/fe-ui/src/feature/payment-management`, `packages/fe-ui/src/widget/payment-management` |
 
 ## Inquiry 도메인 맥락
 
@@ -367,6 +414,7 @@ AdminLayout
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-05-09 | Course backend/API/Orval 구현 완료 상태, nested Course API path, route query state 렌더링 계약으로 갱신 | codex |
+| 2026-05-10 | Payment 공통 원장 도메인, Space-scoped API/Orval/admin route 계약 추가 | codex |
 | 2026-05-09 | Course backend/API/Orval 누락 re-entry 계약, Payment/Timeline/Reservation linkage, Stage 2/3 구현 대상 추가 | orch-requirement |
 | 2026-05-09 | Course/CourseOffering/Enrollment/CoursePass 관리 목표와 도메인 책임 분리 추가 | codex |
 | 2026-04-29 | 이메일 인증 관리 도메인과 FULL_ACCESS 전역 scope 목표를 추가 | codex |

@@ -46,6 +46,9 @@ model Space {
   safeWallets    SafeWallet[]
   routines       Routine[]
   reservations   Reservation[]
+  payments       Payment[]
+  paymentSubjects PaymentSubject[]
+  paymentReferences PaymentReference[]
   policies       Policy[]
   // Asset 도메인
   folders        Folder[]

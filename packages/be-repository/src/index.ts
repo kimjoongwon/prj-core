@@ -20,6 +20,11 @@ export { InquiryThreadsRepository } from "./inquiry-threads.repository";
 export { OidcClientsRepository } from "./oidc-clients.repository";
 export { OidcModelsRepository } from "./oidc-models.repository";
 export { PasswordHistoriesRepository } from "./password-histories.repository";
+export {
+	type CreatePaymentReferenceInput,
+	type CreatePaymentSubjectInput,
+	PaymentsRepository,
+} from "./payments.repository";
 export { PoliciesRepository } from "./policies.repository";
 export { PolicyAbilitiesRepository } from "./policy-abilities.repository";
 export {

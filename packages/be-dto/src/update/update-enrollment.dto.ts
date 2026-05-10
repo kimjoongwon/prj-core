@@ -11,6 +11,9 @@ export class UpdateEnrollmentDto {
 	@UUIDFieldOptional({ description: "배정 Timeline ID", nullable: true })
 	assignedTimelineId?: string | null;
 
+	@UUIDFieldOptional({ description: "결제 ID", nullable: true })
+	paymentId?: string | null;
+
 	@EnumFieldOptional(() => PaymentStatus, { description: "결제 상태" })
 	paymentStatus?: PaymentStatus;
 

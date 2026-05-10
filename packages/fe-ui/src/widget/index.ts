@@ -32,6 +32,7 @@ export * from "./PageTitleBar";
 export * from "./ParticipantList";
 export * from "./PreviewModal";
 export * from "./ProgressPanel";
+export * from "./payment-management";
 export * from "./role";
 export * from "./SearchFilterBar";
 export * from "./SecretField";

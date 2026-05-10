@@ -330,6 +330,7 @@ export type UserWhereInput = {
 	createdTimelines?: Prisma.TimelineListRelationFilter;
 	enrollments?: Prisma.EnrollmentListRelationFilter;
 	coursePasses?: Prisma.CoursePassListRelationFilter;
+	payments?: Prisma.PaymentListRelationFilter;
 	createdTasks?: Prisma.TaskListRelationFilter;
 	createdSafeWallets?: Prisma.SafeWalletListRelationFilter;
 	createdRoutines?: Prisma.RoutineListRelationFilter;
@@ -377,6 +378,7 @@ export type UserOrderByWithRelationInput = {
 	createdTimelines?: Prisma.TimelineOrderByRelationAggregateInput;
 	enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput;
 	coursePasses?: Prisma.CoursePassOrderByRelationAggregateInput;
+	payments?: Prisma.PaymentOrderByRelationAggregateInput;
 	createdTasks?: Prisma.TaskOrderByRelationAggregateInput;
 	createdSafeWallets?: Prisma.SafeWalletOrderByRelationAggregateInput;
 	createdRoutines?: Prisma.RoutineOrderByRelationAggregateInput;
@@ -435,6 +437,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
 		createdTimelines?: Prisma.TimelineListRelationFilter;
 		enrollments?: Prisma.EnrollmentListRelationFilter;
 		coursePasses?: Prisma.CoursePassListRelationFilter;
+		payments?: Prisma.PaymentListRelationFilter;
 		createdTasks?: Prisma.TaskListRelationFilter;
 		createdSafeWallets?: Prisma.SafeWalletListRelationFilter;
 		createdRoutines?: Prisma.RoutineListRelationFilter;
@@ -557,6 +560,7 @@ export type UserCreateInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -604,6 +608,7 @@ export type UserUncheckedCreateInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -671,6 +676,7 @@ export type UserUpdateInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -738,6 +744,7 @@ export type UserUncheckedUpdateInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -1113,6 +1120,34 @@ export type UserUpdateOneRequiredWithoutPasswordHistoryNestedInput = {
 			Prisma.UserUpdateWithoutPasswordHistoryInput
 		>,
 		Prisma.UserUncheckedUpdateWithoutPasswordHistoryInput
+	>;
+};
+
+export type UserCreateNestedOneWithoutPaymentsInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutPaymentsInput,
+		Prisma.UserUncheckedCreateWithoutPaymentsInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutPaymentsInput;
+	connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserUpdateOneWithoutPaymentsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutPaymentsInput,
+		Prisma.UserUncheckedCreateWithoutPaymentsInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutPaymentsInput;
+	upsert?: Prisma.UserUpsertWithoutPaymentsInput;
+	disconnect?: Prisma.UserWhereInput | boolean;
+	delete?: Prisma.UserWhereInput | boolean;
+	connect?: Prisma.UserWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.UserUpdateToOneWithWhereWithoutPaymentsInput,
+			Prisma.UserUpdateWithoutPaymentsInput
+		>,
+		Prisma.UserUncheckedUpdateWithoutPaymentsInput
 	>;
 };
 
@@ -1716,6 +1751,7 @@ export type UserCreateWithoutUserPoliciesInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -1762,6 +1798,7 @@ export type UserUncheckedCreateWithoutUserPoliciesInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -1856,6 +1893,7 @@ export type UserUpdateWithoutUserPoliciesInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -1922,6 +1960,7 @@ export type UserUncheckedUpdateWithoutUserPoliciesInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -1969,6 +2008,7 @@ export type UserCreateWithoutCreatedAlbumsInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -2015,6 +2055,7 @@ export type UserUncheckedCreateWithoutCreatedAlbumsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -2109,6 +2150,7 @@ export type UserUpdateWithoutCreatedAlbumsInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -2175,6 +2217,7 @@ export type UserUncheckedUpdateWithoutCreatedAlbumsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -2221,6 +2264,7 @@ export type UserCreateWithoutCreatedAssetsInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -2267,6 +2311,7 @@ export type UserUncheckedCreateWithoutCreatedAssetsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -2361,6 +2406,7 @@ export type UserUpdateWithoutCreatedAssetsInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -2427,6 +2473,7 @@ export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -2473,6 +2520,7 @@ export type UserCreateWithoutCreatedFoldersInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -2519,6 +2567,7 @@ export type UserUncheckedCreateWithoutCreatedFoldersInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -2613,6 +2662,7 @@ export type UserUpdateWithoutCreatedFoldersInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -2679,6 +2729,7 @@ export type UserUncheckedUpdateWithoutCreatedFoldersInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -2724,6 +2775,7 @@ export type UserCreateWithoutAuthAuditLogsInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -2770,6 +2822,7 @@ export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -2864,6 +2917,7 @@ export type UserUpdateWithoutAuthAuditLogsInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -2930,6 +2984,7 @@ export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -2976,6 +3031,7 @@ export type UserCreateWithoutEmailVerificationsInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -3022,6 +3078,7 @@ export type UserUncheckedCreateWithoutEmailVerificationsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -3116,6 +3173,7 @@ export type UserUpdateWithoutEmailVerificationsInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -3182,6 +3240,7 @@ export type UserUncheckedUpdateWithoutEmailVerificationsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -3228,6 +3287,7 @@ export type UserCreateWithoutPasswordHistoryInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -3274,6 +3334,7 @@ export type UserUncheckedCreateWithoutPasswordHistoryInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -3368,6 +3429,7 @@ export type UserUpdateWithoutPasswordHistoryInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -3434,6 +3496,263 @@ export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatorNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput;
+};
+
+export type UserCreateWithoutPaymentsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	userPolicies?: Prisma.UserPolicyCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatorInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatorInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
+	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
+	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatorInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatorInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatorInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatorInput;
+};
+
+export type UserUncheckedCreateWithoutPaymentsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	userPolicies?: Prisma.UserPolicyUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatorInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatorInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
+	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
+	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatorInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatorInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput;
+};
+
+export type UserCreateOrConnectWithoutPaymentsInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutPaymentsInput,
+		Prisma.UserUncheckedCreateWithoutPaymentsInput
+	>;
+};
+
+export type UserUpsertWithoutPaymentsInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutPaymentsInput,
+		Prisma.UserUncheckedUpdateWithoutPaymentsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutPaymentsInput,
+		Prisma.UserUncheckedCreateWithoutPaymentsInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutPaymentsInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutPaymentsInput,
+		Prisma.UserUncheckedUpdateWithoutPaymentsInput
+	>;
+};
+
+export type UserUpdateWithoutPaymentsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	userPolicies?: Prisma.UserPolicyUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatorNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatorNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
+	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
+	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatorNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatorNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatorNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutPaymentsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	userPolicies?: Prisma.UserPolicyUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
+	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
+	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -3480,6 +3799,7 @@ export type UserCreateWithoutCreatedContentsInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -3526,6 +3846,7 @@ export type UserUncheckedCreateWithoutCreatedContentsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -3620,6 +3941,7 @@ export type UserUpdateWithoutCreatedContentsInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -3686,6 +4008,7 @@ export type UserUncheckedUpdateWithoutCreatedContentsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -3732,6 +4055,7 @@ export type UserCreateWithoutTenantAccessRequestsInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -3778,6 +4102,7 @@ export type UserUncheckedCreateWithoutTenantAccessRequestsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -3832,6 +4157,7 @@ export type UserCreateWithoutReviewedTenantAccessRequestsInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -3878,6 +4204,7 @@ export type UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -3972,6 +4299,7 @@ export type UserUpdateWithoutTenantAccessRequestsInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -4038,6 +4366,7 @@ export type UserUncheckedUpdateWithoutTenantAccessRequestsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -4124,6 +4453,7 @@ export type UserUpdateWithoutReviewedTenantAccessRequestsInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -4190,6 +4520,7 @@ export type UserUncheckedUpdateWithoutReviewedTenantAccessRequestsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -4236,6 +4567,7 @@ export type UserCreateWithoutTenantsInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -4282,6 +4614,7 @@ export type UserUncheckedCreateWithoutTenantsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -4376,6 +4709,7 @@ export type UserUpdateWithoutTenantsInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -4442,6 +4776,7 @@ export type UserUncheckedUpdateWithoutTenantsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -4488,6 +4823,7 @@ export type UserCreateWithoutClassificationInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -4534,6 +4870,7 @@ export type UserUncheckedCreateWithoutClassificationInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -4628,6 +4965,7 @@ export type UserUpdateWithoutClassificationInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -4694,6 +5032,7 @@ export type UserUncheckedUpdateWithoutClassificationInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -4740,6 +5079,7 @@ export type UserCreateWithoutAssociationsInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -4786,6 +5126,7 @@ export type UserUncheckedCreateWithoutAssociationsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -4880,6 +5221,7 @@ export type UserUpdateWithoutAssociationsInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -4946,6 +5288,7 @@ export type UserUncheckedUpdateWithoutAssociationsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -4992,6 +5335,7 @@ export type UserCreateWithoutProfilesInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -5038,6 +5382,7 @@ export type UserUncheckedCreateWithoutProfilesInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -5132,6 +5477,7 @@ export type UserUpdateWithoutProfilesInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -5198,6 +5544,7 @@ export type UserUncheckedUpdateWithoutProfilesInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -5245,6 +5592,7 @@ export type UserCreateWithoutCreatedThreadsInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -5291,6 +5639,7 @@ export type UserUncheckedCreateWithoutCreatedThreadsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -5385,6 +5734,7 @@ export type UserUpdateWithoutCreatedThreadsInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -5451,6 +5801,7 @@ export type UserUncheckedUpdateWithoutCreatedThreadsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -5497,6 +5848,7 @@ export type UserCreateWithoutInquiryMessagesInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -5543,6 +5895,7 @@ export type UserUncheckedCreateWithoutInquiryMessagesInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -5637,6 +5990,7 @@ export type UserUpdateWithoutInquiryMessagesInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -5703,6 +6057,7 @@ export type UserUncheckedUpdateWithoutInquiryMessagesInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -5749,6 +6104,7 @@ export type UserCreateWithoutInquiryParticipantsInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -5795,6 +6151,7 @@ export type UserUncheckedCreateWithoutInquiryParticipantsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -5889,6 +6246,7 @@ export type UserUpdateWithoutInquiryParticipantsInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -5955,6 +6313,7 @@ export type UserUncheckedUpdateWithoutInquiryParticipantsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -6001,6 +6360,7 @@ export type UserCreateWithoutCustomerInquiriesInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -6047,6 +6407,7 @@ export type UserUncheckedCreateWithoutCustomerInquiriesInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -6101,6 +6462,7 @@ export type UserCreateWithoutAssignedInquiriesInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -6147,6 +6509,7 @@ export type UserUncheckedCreateWithoutAssignedInquiriesInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -6241,6 +6604,7 @@ export type UserUpdateWithoutCustomerInquiriesInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -6307,6 +6671,7 @@ export type UserUncheckedUpdateWithoutCustomerInquiriesInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -6393,6 +6758,7 @@ export type UserUpdateWithoutAssignedInquiriesInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -6459,6 +6825,7 @@ export type UserUncheckedUpdateWithoutAssignedInquiriesInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -6504,6 +6871,7 @@ export type UserCreateWithoutEnrollmentsInput = {
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -6550,6 +6918,7 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -6644,6 +7013,7 @@ export type UserUpdateWithoutEnrollmentsInput = {
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -6710,6 +7080,7 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -6756,6 +7127,7 @@ export type UserCreateWithoutCoursePassesInput = {
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -6802,6 +7174,7 @@ export type UserUncheckedCreateWithoutCoursePassesInput = {
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -6896,6 +7269,7 @@ export type UserUpdateWithoutCoursePassesInput = {
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -6962,6 +7336,7 @@ export type UserUncheckedUpdateWithoutCoursePassesInput = {
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -7009,6 +7384,7 @@ export type UserCreateWithoutReservationsInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -7055,6 +7431,7 @@ export type UserUncheckedCreateWithoutReservationsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -7149,6 +7526,7 @@ export type UserUpdateWithoutReservationsInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -7215,6 +7593,7 @@ export type UserUncheckedUpdateWithoutReservationsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -7261,6 +7640,7 @@ export type UserCreateWithoutCreatedRoutinesInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
@@ -7307,6 +7687,7 @@ export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
@@ -7401,6 +7782,7 @@ export type UserUpdateWithoutCreatedRoutinesInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
@@ -7467,6 +7849,7 @@ export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
@@ -7513,6 +7896,7 @@ export type UserCreateWithoutCreatedTasksInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
@@ -7559,6 +7943,7 @@ export type UserUncheckedCreateWithoutCreatedTasksInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
@@ -7653,6 +8038,7 @@ export type UserUpdateWithoutCreatedTasksInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
@@ -7719,6 +8105,7 @@ export type UserUncheckedUpdateWithoutCreatedTasksInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
@@ -7764,6 +8151,7 @@ export type UserCreateWithoutCreatedTimelinesInput = {
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -7810,6 +8198,7 @@ export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -7904,6 +8293,7 @@ export type UserUpdateWithoutCreatedTimelinesInput = {
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -7970,6 +8360,7 @@ export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -8016,6 +8407,7 @@ export type UserCreateWithoutCreatedCategoriesInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -8062,6 +8454,7 @@ export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -8156,6 +8549,7 @@ export type UserUpdateWithoutCreatedCategoriesInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -8222,6 +8616,7 @@ export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -8268,6 +8663,7 @@ export type UserCreateWithoutCreatedGroupsInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
@@ -8314,6 +8710,7 @@ export type UserUncheckedCreateWithoutCreatedGroupsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
@@ -8408,6 +8805,7 @@ export type UserUpdateWithoutCreatedGroupsInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
@@ -8474,6 +8872,7 @@ export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
@@ -8521,6 +8920,7 @@ export type UserCreateWithoutCreatedSafeWalletsInput = {
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatorInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
@@ -8567,6 +8967,7 @@ export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatorInput;
 	enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput;
 	coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutUserInput;
+	payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatorInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatorInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
@@ -8661,6 +9062,7 @@ export type UserUpdateWithoutCreatedSafeWalletsInput = {
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatorNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
@@ -8727,6 +9129,7 @@ export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatorNestedInput;
 	enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput;
 	coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutUserNestedInput;
+	payments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatorNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatorNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
@@ -8760,6 +9163,7 @@ export type UserCountOutputType = {
 	createdTimelines: number;
 	enrollments: number;
 	coursePasses: number;
+	payments: number;
 	createdTasks: number;
 	createdSafeWallets: number;
 	createdRoutines: number;
@@ -8797,6 +9201,7 @@ export type UserCountOutputTypeSelect<
 	createdTimelines?: boolean | UserCountOutputTypeCountCreatedTimelinesArgs;
 	enrollments?: boolean | UserCountOutputTypeCountEnrollmentsArgs;
 	coursePasses?: boolean | UserCountOutputTypeCountCoursePassesArgs;
+	payments?: boolean | UserCountOutputTypeCountPaymentsArgs;
 	createdTasks?: boolean | UserCountOutputTypeCountCreatedTasksArgs;
 	createdSafeWallets?: boolean | UserCountOutputTypeCountCreatedSafeWalletsArgs;
 	createdRoutines?: boolean | UserCountOutputTypeCountCreatedRoutinesArgs;
@@ -8979,6 +9384,16 @@ export type UserCountOutputTypeCountCoursePassesArgs<
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountPaymentsArgs<
+	ExtArgs extends
+		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+	where?: Prisma.PaymentWhereInput;
+};
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountCreatedTasksArgs<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
@@ -9137,6 +9552,7 @@ export type UserSelect<
 		createdTimelines?: boolean | Prisma.User$createdTimelinesArgs<ExtArgs>;
 		enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>;
 		coursePasses?: boolean | Prisma.User$coursePassesArgs<ExtArgs>;
+		payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>;
 		createdTasks?: boolean | Prisma.User$createdTasksArgs<ExtArgs>;
 		createdSafeWallets?: boolean | Prisma.User$createdSafeWalletsArgs<ExtArgs>;
 		createdRoutines?: boolean | Prisma.User$createdRoutinesArgs<ExtArgs>;
@@ -9271,6 +9687,7 @@ export type UserInclude<
 	createdTimelines?: boolean | Prisma.User$createdTimelinesArgs<ExtArgs>;
 	enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>;
 	coursePasses?: boolean | Prisma.User$coursePassesArgs<ExtArgs>;
+	payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>;
 	createdTasks?: boolean | Prisma.User$createdTasksArgs<ExtArgs>;
 	createdSafeWallets?: boolean | Prisma.User$createdSafeWalletsArgs<ExtArgs>;
 	createdRoutines?: boolean | Prisma.User$createdRoutinesArgs<ExtArgs>;
@@ -9316,6 +9733,7 @@ export type $UserPayload<
 		createdTimelines: Prisma.$TimelinePayload<ExtArgs>[];
 		enrollments: Prisma.$EnrollmentPayload<ExtArgs>[];
 		coursePasses: Prisma.$CoursePassPayload<ExtArgs>[];
+		payments: Prisma.$PaymentPayload<ExtArgs>[];
 		createdTasks: Prisma.$TaskPayload<ExtArgs>[];
 		createdSafeWallets: Prisma.$SafeWalletPayload<ExtArgs>[];
 		createdRoutines: Prisma.$RoutinePayload<ExtArgs>[];
@@ -10114,6 +10532,17 @@ export interface Prisma__UserClient<
 	): Prisma.PrismaPromise<
 		| runtime.Types.Result.GetResult<
 				Prisma.$CoursePassPayload<ExtArgs>,
+				T,
+				"findMany",
+				GlobalOmitOptions
+		  >
+		| Null
+	>;
+	payments<T extends Prisma.User$paymentsArgs<ExtArgs> = {}>(
+		args?: Prisma.Subset<T, Prisma.User$paymentsArgs<ExtArgs>>,
+	): Prisma.PrismaPromise<
+		| runtime.Types.Result.GetResult<
+				Prisma.$PaymentPayload<ExtArgs>,
 				T,
 				"findMany",
 				GlobalOmitOptions
@@ -11227,6 +11656,35 @@ export type User$coursePassesArgs<
 	distinct?:
 		| Prisma.CoursePassScalarFieldEnum
 		| Prisma.CoursePassScalarFieldEnum[];
+};
+
+/**
+ * User.payments
+ */
+export type User$paymentsArgs<
+	ExtArgs extends
+		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+> = {
+	/**
+	 * Select specific fields to fetch from the Payment
+	 */
+	select?: Prisma.PaymentSelect<ExtArgs> | null;
+	/**
+	 * Omit specific fields from the Payment
+	 */
+	omit?: Prisma.PaymentOmit<ExtArgs> | null;
+	/**
+	 * Choose, which related nodes to fetch as well
+	 */
+	include?: Prisma.PaymentInclude<ExtArgs> | null;
+	where?: Prisma.PaymentWhereInput;
+	orderBy?:
+		| Prisma.PaymentOrderByWithRelationInput
+		| Prisma.PaymentOrderByWithRelationInput[];
+	cursor?: Prisma.PaymentWhereUniqueInput;
+	take?: number;
+	skip?: number;
+	distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[];
 };
 
 /**

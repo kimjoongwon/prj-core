@@ -22,15 +22,15 @@ NestJS `ApplicationService` 레이어를 생성하는 전문가입니다.
 
 | 항목 | 경로 |
 |------|------|
-| ApplicationService 클래스 | `packages/be-app/src/{name}.application-service/index.ts` |
+| ApplicationService 클래스 | `packages/be-app/src/{name}.application-service.ts` |
 | 배럴 export | `packages/be-app/src/index.ts` |
 | ApplicationService contract | route `page.spec.md` 또는 app handoff의 ApplicationService Contract 섹션 |
 
 ## 핵심 규칙
 
 - 클래스명은 `XxxApplicationService`
-- 폴더명은 `xxx.application-service`
-- 구현 파일은 `index.ts`
+- 구현 파일은 `packages/be-app/src/xxx.application-service.ts` 단일 파일
+- `packages/be-app/src/xxx.application-service/index.ts` 폴더 구조 생성 금지
 - 별도 sidecar spec은 만들지 않고 route `page.spec.md` 또는 app handoff의 ApplicationService Contract 섹션을 갱신
 - 메서드명은 `signUp`, `submitOrder`, `assignInquiry`처럼 유즈케이스를 표현
 - Prisma/Repository 직접 호출 금지

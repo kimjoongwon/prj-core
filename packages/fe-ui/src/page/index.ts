@@ -225,6 +225,13 @@ export type {
 } from "./PasswordInputPage/PasswordInputPage";
 export { PasswordInputPage } from "./PasswordInputPage/PasswordInputPage";
 export type {
+	PaymentManagementPageProps,
+	PaymentManagementPayment,
+	PaymentManagementQueryState,
+	PaymentManagementSummary,
+} from "./PaymentManagementPage/PaymentManagementPage";
+export { PaymentManagementPage } from "./PaymentManagementPage/PaymentManagementPage";
+export type {
 	PhoneVerifyPageProps,
 	PhoneVerifyPageState,
 } from "./PhoneVerifyPage/PhoneVerifyPage";

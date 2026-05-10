@@ -30,7 +30,12 @@ export const MOBILE_AUTH = {
 	authReturnPath: "/auth/callback",
 };
 
-const AUTHENTICATED_ROUTE_PATHS = ["/", "/reservations", "/profile"] as const;
+const AUTHENTICATED_ROUTE_PATHS = [
+	"/",
+	"/payments/checkout",
+	"/profile",
+	"/reservations",
+] as const;
 
 export const getIdpApiBaseUrl = () => MOBILE_AUTH.idpApiBaseUrl.replace(/\/+$/, "");
 

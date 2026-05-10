@@ -8,10 +8,17 @@ const mockUseGetMyReservations = jest.fn();
 const mockGetGetReservationBookingFeedQueryKey = jest.fn();
 const mockGetGetMyReservationsQueryKey = jest.fn();
 const mockInvalidateQueries = jest.fn();
+const mockPush = jest.fn();
 
 jest.mock("@tanstack/react-query", () => ({
 	useQueryClient: () => ({
 		invalidateQueries: mockInvalidateQueries,
+	}),
+}));
+
+jest.mock("expo-router", () => ({
+	useRouter: () => ({
+		push: mockPush,
 	}),
 }));
 
@@ -457,6 +464,37 @@ describe("mobile reservation booking routes", () => {
 			queryKey: ["/api/v1/reservations/me"],
 		});
 		expect(screen.getByText("예약 요청 완료")).toBeTruthy();
+	});
+
+	it("활성 수강권이 없는 예약 CTA는 결제 checkout route로 이동한다", () => {
+		bookingFeedQuery = createQuery([
+			createFeedItem({
+				coursePassId: null,
+				ctaLabel: "결제 후 예약",
+				feedItemId: "program-checkout:today",
+				paymentRequired: true,
+				programName: "Checkout Required",
+			}),
+		]);
+
+		render(<HomeTabRoute />);
+
+		expect(screen.getByText("Checkout Required")).toBeTruthy();
+		expect(screen.getAllByText("결제 후 예약").length).toBeGreaterThan(0);
+
+		fireEvent.press(screen.getByLabelText("cta-program-checkout:today"));
+
+		expect(mockPush).toHaveBeenCalledWith({
+			pathname: "/payments/checkout",
+			params: expect.objectContaining({
+				occurrenceStartAt: `${todayKey}T10:00:00.000Z`,
+				programId: "program-1",
+				programName: "Checkout Required",
+				sessionId: "session-1",
+				timelineId: "timeline-1",
+			}),
+		});
+		expect(createMutationState.mutate).not.toHaveBeenCalled();
 	});
 
 	it("내 예약 탭은 getMyReservations API 결과를 렌더링하고 더미 예약을 노출하지 않는다", () => {

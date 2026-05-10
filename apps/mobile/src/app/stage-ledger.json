@@ -1,0 +1,108 @@
+{
+  "items": [
+    {
+      "id": "M1-ROUTE-CONTRACT-PAYMENT-CHECKOUT-001",
+      "stage": 1,
+      "route": "/payments/checkout",
+      "domain": "Payment",
+      "agent_type": "orch-mobile-screen-planner",
+      "required": true,
+      "source_spec": [
+        "apps/mobile/src/app/payments/index.spec.md"
+      ],
+      "expected_files": [
+        "apps/mobile/src/app/payments/index.spec.md",
+        "packages/be-dto/src/reservations/checkout.dto.ts",
+        "packages/be-service/src/reservation.service.ts",
+        "packages/be-facade/src/reservation.facade.ts",
+        "apps/core/api/src/module/reservations/reservations.controller.ts",
+        "apps/core/api/src/module/reservations/reservations.module.ts"
+      ],
+      "verification": [
+        "pnpm --filter=core-api type-check",
+        "pnpm --filter=@cocrepo/dto type-check",
+        "pnpm --filter=@cocrepo/service type-check",
+        "pnpm --filter=@cocrepo/app type-check",
+        "pnpm --filter=@cocrepo/api type-check"
+      ],
+      "status": "verified",
+      "blocked_reason": null
+    },
+    {
+      "id": "M2-SCREEN-PAYMENT-CHECKOUT-001",
+      "stage": 2,
+      "route": "/payments/checkout",
+      "domain": "Payment",
+      "agent_type": "fe-mo-screen-builder",
+      "required": true,
+      "source_spec": [
+        "apps/mobile/src/app/payments/index.spec.md",
+        "packages/fe-mo-ui/src/screen/ReservationPaymentCheckoutScreen/ReservationPaymentCheckoutScreen.spec.md"
+      ],
+      "expected_files": [
+        "packages/fe-mo-ui/src/data-display/ReservationCheckoutSummary/index.ts",
+        "packages/fe-mo-ui/src/screen/ReservationPaymentCheckoutScreen/ReservationPaymentCheckoutScreen.tsx",
+        "packages/fe-mo-ui/src/screen/ReservationPaymentCheckoutScreen/ReservationPaymentCheckoutScreen.spec.md",
+        "packages/fe-mo-ui/src/screen/ReservationPaymentCheckoutScreen/ReservationPaymentCheckoutScreen.test.tsx",
+        "packages/fe-mo-ui/src/screen/index.ts",
+        "packages/fe-mo-ui/src/data-display/index.ts"
+      ],
+      "verification": [
+        "pnpm mobile:screen-targets:check",
+        "pnpm --filter=@cocrepo/mo-ui test",
+        "pnpm --filter=@cocrepo/mo-ui type-check"
+      ],
+      "status": "verified",
+      "blocked_reason": null
+    },
+    {
+      "id": "M3-ROUTE-WIRING-PAYMENT-CHECKOUT-001",
+      "stage": 3,
+      "route": "/payments/checkout",
+      "domain": "Payment",
+      "agent_type": "fe-mo-page-builder",
+      "required": true,
+      "source_spec": [
+        "apps/mobile/src/app/payments/index.spec.md"
+      ],
+      "expected_files": [
+        "apps/mobile/src/app/payments/checkout.tsx",
+        "apps/mobile/src/auth/auth-config.ts",
+        "apps/mobile/src/app/(tabs)/index.tsx",
+        "packages/fe-api/src/core/reservations/reservations.ts",
+        "apps/mobile/src/route-tests/payments-checkout.test.tsx",
+        "apps/mobile/src/route-tests/index.test.tsx"
+      ],
+      "verification": [
+        "pnpm --filter=mobile-app test",
+        "pnpm --filter=mobile-app type-check"
+      ],
+      "status": "verified",
+      "blocked_reason": null
+    },
+    {
+      "id": "M4-MOBILE-VERIFY-PAYMENT-CHECKOUT-001",
+      "stage": 4,
+      "route": "/payments/checkout",
+      "domain": "Payment",
+      "agent_type": "qa-mo-testing",
+      "required": true,
+      "source_spec": [
+        "apps/mobile/src/app/payments/index.spec.md"
+      ],
+      "expected_files": [
+        "apps/mobile/src/app/payments/index.spec.md"
+      ],
+      "verification": [
+        "pnpm --filter=@cocrepo/mo-ui test",
+        "pnpm --filter=@cocrepo/mo-ui type-check",
+        "pnpm --filter=mobile-app test",
+        "pnpm --filter=mobile-app type-check",
+        "pnpm mobile:screen-targets:check",
+        "pnpm stage-ledger:check -- apps/mobile/src/app/stage-ledger.json"
+      ],
+      "status": "verified",
+      "blocked_reason": null
+    }
+  ]
+}

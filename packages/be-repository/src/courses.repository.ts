@@ -31,6 +31,7 @@ const enrollmentInclude = {
 	},
 	assignedTimeline: true,
 	coursePass: true,
+	payment: true,
 } satisfies Prisma.EnrollmentInclude;
 
 const coursePassInclude = {

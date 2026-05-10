@@ -18,6 +18,8 @@ import type {
 	GetReservationBookingFeedParams,
 } from "@cocrepo/api/core/model";
 import { useQueryClient } from "@tanstack/react-query";
+import type { Href } from "expo-router";
+import { useRouter } from "expo-router";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { getCoreApiBaseUrl } from "@/auth/auth-config";
@@ -198,6 +200,17 @@ const toBookingClassCardItem = (
 	};
 };
 
+const createCheckoutParams = (item: BookingFeedItemDto) => ({
+	occurrenceStartAt: item.startsAt,
+	programId: item.programId,
+	programName: item.programName,
+	sessionId: item.sessionId,
+	sessionName: item.sessionName,
+	timeLabel: formatTimeRange(item.startsAt, item.endsAt),
+	timelineId: item.timelineId,
+	timelineName: item.timelineName,
+});
+
 const getFeedItemsForDate = (
 	items: readonly BookingFeedItemDto[],
 	selectedDate: string,
@@ -275,6 +288,7 @@ const getFeedStatus = (params: {
 };
 
 const HomeTabRoute = observer(() => {
+	const router = useRouter();
 	const queryClient = useQueryClient();
 	const bookingDates = createBookingDates();
 	const firstBookingDate = bookingDates[0] ?? startOfLocalDay(new Date());
@@ -355,6 +369,17 @@ const HomeTabRoute = observer(() => {
 	function handlePressBookingCta(cardItem: BookingClassFeedItem) {
 		const nextFeedItem = feedItems.find((item) => item.feedItemId === cardItem.id);
 		if (!nextFeedItem) {
+			return;
+		}
+
+		if (
+			nextFeedItem.paymentRequired ??
+			(!nextFeedItem.coursePassId && isBookableStatus(toBookingStatus(nextFeedItem)))
+		) {
+			router.push({
+				pathname: "/payments/checkout",
+				params: createCheckoutParams(nextFeedItem),
+			} as unknown as Href);
 			return;
 		}
 

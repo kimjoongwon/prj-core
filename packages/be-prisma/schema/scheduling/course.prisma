@@ -42,15 +42,6 @@ enum CoursePassKind {
   MAKEUP
 }
 
-/// @displayName 결제 상태
-enum PaymentStatus {
-  PENDING
-  PAID
-  FAILED
-  CANCELED
-  REFUNDED
-}
-
 /// @displayName 타임라인 준비 방식
 enum TimelineProvisioningMode {
   SHARED
@@ -147,6 +138,7 @@ model Enrollment {
   courseId           String           @map("course_id")
   courseOfferingId   String           @map("course_offering_id")
   assignedTimelineId String?          @map("assigned_timeline_id")
+  paymentId          String?          @map("payment_id")
   paymentStatus      PaymentStatus    @default(PENDING) @map("payment_status")
   paymentProvider    String?          @map("payment_provider")
   paymentExternalId  String?          @map("payment_external_id")
@@ -160,12 +152,14 @@ model Enrollment {
   course             Course           @relation(fields: [courseId], references: [id])
   courseOffering     CourseOffering   @relation(fields: [courseOfferingId], references: [id])
   assignedTimeline   Timeline?        @relation(fields: [assignedTimelineId], references: [id])
+  payment            Payment?         @relation(fields: [paymentId], references: [id])
   coursePass         CoursePass?
 
   @@index([userId])
   @@index([courseId])
   @@index([courseOfferingId])
   @@index([assignedTimelineId])
+  @@index([paymentId])
   @@index([paymentStatus])
   @@index([status])
   @@map("enrollments")

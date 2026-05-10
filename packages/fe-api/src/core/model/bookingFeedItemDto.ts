@@ -33,6 +33,23 @@ export interface BookingFeedItemDto {
 	 * @nullable
 	 */
 	coursePassId?: string | null;
+	/** 예약 전 결제 필요 여부 */
+	paymentRequired: boolean;
+	/**
+	 * 결제 필요 사유
+	 * @nullable
+	 */
+	paymentRequiredReason?: string | null;
+	/**
+	 * 결제 화면 진입 전 표시할 대표 가격
+	 * @nullable
+	 */
+	checkoutPreviewPriceAmount?: number | null;
+	/**
+	 * 대표 가격 통화 코드
+	 * @nullable
+	 */
+	checkoutPreviewCurrency?: string | null;
 	/** 타임라인 이름 */
 	timelineName: string;
 	/** 세션 이름 */

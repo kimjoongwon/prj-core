@@ -38,6 +38,7 @@ import { globalModules } from "./global.module";
 import { GroupsModule } from "./groups";
 import { I18nCatalogModule } from "./i18n";
 import { InquiriesModule } from "./inquiries";
+import { PaymentsModule } from "./payments";
 import { PoliciesModule } from "./policies";
 import { PolicyAssignmentsModule } from "./policy-assignments";
 import { PrismaModule } from "./prisma.module";
@@ -90,6 +91,7 @@ const devtoolsImports = enableNestDevtools
 		GroupsModule,
 		I18nCatalogModule,
 		CategoriesModule,
+		PaymentsModule,
 		PoliciesModule,
 		PolicyAssignmentsModule,
 		FoldersModule,
@@ -151,6 +153,10 @@ const devtoolsImports = enableNestDevtools
 							{
 								path: "categories",
 								module: CategoriesModule,
+							},
+							{
+								path: "payments",
+								module: PaymentsModule,
 							},
 							{
 								path: "policies",

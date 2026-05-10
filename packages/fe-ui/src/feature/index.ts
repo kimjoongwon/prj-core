@@ -14,6 +14,7 @@ export * from "./Logo";
 export * from "./message-template";
 export * from "./Nav";
 export * from "./ProgramPickerModal";
+export * from "./payment-management";
 export * from "./RealtimeChatPanel";
 export * from "./SideNav";
 export * from "./SpaceSelector";

@@ -22,6 +22,7 @@ export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
 	"apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/inquiries/new/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/inquiries/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/payments/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/policies/[policyId]/edit/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/policies/[policyId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/policies/new/route.meta.ts",
@@ -301,6 +302,20 @@ export const GENERATED_ADMIN_NAV_ITEMS: NavItemConfig[] = [
 				"label": "CoursePass",
 				"path": "/course-passes",
 				"subject": "menu:course-passes:list"
+			}
+		]
+	},
+	{
+		"id": "payments",
+		"label": "결제 관리",
+		"icon": "CreditCard",
+		"subject": "menu:payments",
+		"children": [
+			{
+				"id": "payments-list",
+				"label": "Payment",
+				"path": "/payments",
+				"subject": "menu:payments:list"
 			}
 		]
 	}
@@ -921,5 +936,15 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 		"subject": "page:course-passes:list",
 		"description": "수강권의 유효기간과 잔여 예약 권리를 관리합니다.",
 		"menuLeafId": "course-passes-list"
+	},
+	{
+		"groupId": "payments",
+		"groupLabel": "결제 관리",
+		"pageId": "payments:list",
+		"pageLabel": "Payment",
+		"pathPattern": "/payments",
+		"subject": "page:payments:list",
+		"description": "Course와 Product 등 여러 서비스의 Space-scoped 결제 원장을 관리합니다.",
+		"menuLeafId": "payments-list"
 	}
 ];

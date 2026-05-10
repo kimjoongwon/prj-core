@@ -7,9 +7,13 @@ import {
 import {
 	BookingFeedItemDto,
 	CancelReservationDto,
+	CreateReservationCheckoutDto,
 	CreateReservationDto,
 	QueryBookingFeedDto,
 	QueryMyReservationsDto,
+	QueryReservationCheckoutBootstrapDto,
+	ReservationCheckoutBootstrapDto,
+	ReservationCheckoutResultDto,
 	ReservationDto,
 } from "@cocrepo/dto";
 import { ReservationFacade } from "@cocrepo/facade";
@@ -46,6 +50,42 @@ export class ReservationsController {
 	@ResponseMessage("예약 Booking Feed 조회 성공")
 	getBookingFeed(@Query() query: QueryBookingFeedDto) {
 		return this.reservationFacade.getBookingFeed(query);
+	}
+
+	@Get("checkout/bootstrap")
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({
+		operationId: "getReservationCheckoutBootstrap",
+		summary: "예약 결제 Bootstrap 조회",
+		description:
+			"예약하려는 회차 기준으로 결제 가능한 과정과 placeholder 결제 수단을 조회합니다.",
+	})
+	@ApiAuth()
+	@ApiErrors(400, 401, 403, 404, 409, 500)
+	@ApiResponseEntity(ReservationCheckoutBootstrapDto, HttpStatus.OK)
+	@ResponseMessage("예약 결제 Bootstrap 조회 성공")
+	getCheckoutBootstrap(@Query() query: QueryReservationCheckoutBootstrapDto) {
+		return this.reservationFacade.getCheckoutBootstrap(query);
+	}
+
+	@Post("checkout")
+	@HttpCode(HttpStatus.CREATED)
+	@ApiOperation({
+		operationId: "createReservationCheckout",
+		summary: "예약 결제 생성",
+		description:
+			"provider-neutral placeholder 결제로 Payment, Enrollment, CoursePass, Reservation을 생성합니다.",
+	})
+	@ApiAuth()
+	@ApiBody({
+		type: CreateReservationCheckoutDto,
+		description: "예약 결제 생성 정보",
+	})
+	@ApiErrors(400, 401, 403, 404, 409, 500)
+	@ApiResponseEntity(ReservationCheckoutResultDto, HttpStatus.CREATED)
+	@ResponseMessage("예약 결제 생성 성공")
+	createCheckout(@Body() dto: CreateReservationCheckoutDto) {
+		return this.reservationFacade.createCheckout(dto);
 	}
 
 	@Post()

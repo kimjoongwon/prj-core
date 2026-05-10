@@ -16,6 +16,7 @@ export * from "./query-group.dto";
 export * from "./query-idp-account.dto";
 export * from "./query-oidc-client.dto";
 export * from "./query-oidc-session.dto";
+export * from "./query-payment.dto";
 export * from "./query-program.dto";
 export * from "./query-role.dto";
 export * from "./query-role-association.dto";

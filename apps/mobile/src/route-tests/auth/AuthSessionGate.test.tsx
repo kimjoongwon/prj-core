@@ -178,6 +178,20 @@ describe("AuthSessionGate", () => {
 		expect(screen.queryByText("idp-dashboard-screen")).toBeNull();
 	});
 
+	it("인증 상태에서 결제 checkout route는 보호된 모바일 route로 허용한다", () => {
+		mockPathname = "/payments/checkout";
+		mobileAuthStore.authStatus = "authenticated";
+
+		render(
+			<AuthSessionGate>
+				<Text>checkout-screen</Text>
+			</AuthSessionGate>,
+		);
+
+		expect(mockReplace).not.toHaveBeenCalled();
+		expect(screen.getByText("checkout-screen")).toBeTruthy();
+	});
+
 	it("비인증 상태에서 모바일 탭이 아닌 웹 경로에 있으면 returnTo를 홈으로 보정한다", async () => {
 		mockPathname = "/dashboard";
 		mobileAuthStore.authStatus = "unauthenticated";

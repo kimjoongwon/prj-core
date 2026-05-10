@@ -15,6 +15,7 @@
 | route | route file | 설명 |
 |-------|------------|------|
 | `/` | `apps/mobile/src/app/(tabs)/index.tsx` | 날짜 스트립 + 수업 카드 booking feed + 예약 정책 sheet |
+| `/payments/checkout` | `apps/mobile/src/app/payments/checkout.tsx` | 활성 수강권이 없는 예약 의도의 provider-neutral 예약 결제 checkout |
 | `/reservations` | `apps/mobile/src/app/(tabs)/reservations.tsx` | `getMyReservations` 기반 내 예약/대기 목록 |
 | `/profile` | `apps/mobile/src/app/(tabs)/profile.tsx` | 내 정보 탭 + 로그아웃 |
 | `/(tabs)` | `apps/mobile/src/app/(tabs)/_layout.tsx` | Expo Router 하단 탭 shell |
@@ -27,6 +28,7 @@
 | route | shared screen target | screen spec | route boundary |
 |-------|----------------------|-------------|----------------|
 | `/` | `packages/fe-mo-ui/src/screen/ReservationHomeScreen/ReservationHomeScreen.tsx` | `packages/fe-mo-ui/src/screen/ReservationHomeScreen/ReservationHomeScreen.spec.md` | route는 Orval hook, query invalidation, DTO mapping, route-local state만 소유하고 screen에 props/handler를 전달한다. |
+| `/payments/checkout` | `packages/fe-mo-ui/src/screen/ReservationPaymentCheckoutScreen/ReservationPaymentCheckoutScreen.tsx` | `packages/fe-mo-ui/src/screen/ReservationPaymentCheckoutScreen/ReservationPaymentCheckoutScreen.spec.md` | route는 checkout params, bootstrap/checkout Orval hooks, cache invalidate, navigation만 소유한다. |
 | `/reservations` | `packages/fe-mo-ui/src/screen/MyReservationsScreen/MyReservationsScreen.tsx` | `packages/fe-mo-ui/src/screen/MyReservationsScreen/MyReservationsScreen.spec.md` | route는 `getMyReservations` API wiring과 `ReservationDto -> MyReservationCardItem` mapping만 소유한다. |
 
 ## Home UX
@@ -46,6 +48,7 @@
 | `AVAILABLE` | `예약` | 정책 확인 후 확정 예약 요청 |
 | `FEW_LEFT` | `예약` | 정책 확인 후 확정 예약 요청 |
 | `WAITLIST_OPEN` | `대기` | 정책 확인 후 대기 등록 요청 |
+| `AVAILABLE`/`FEW_LEFT`/`WAITLIST_OPEN` + `paymentRequired = true` | `결제 후 예약` 또는 `결제 후 대기` | `/payments/checkout`으로 이동해 과정 선택, 결제 수단 선택, 결제 후 예약 확정을 진행 |
 | `RESERVED` | `예약됨` | 카드 CTA disabled |
 | `WAITLISTED` | `대기중` | 카드 CTA disabled |
 | `BOOKING_CLOSED` | `마감` | 카드 CTA disabled |
@@ -60,6 +63,8 @@
 | `createReservation` | `useCreateReservation` | `POST /api/v1/reservations` | `/` 정책 sheet 확인 |
 | `getMyReservations` | `useGetMyReservations` | `GET /api/v1/reservations/me` | `/reservations` 탭 |
 | `cancelMyReservation` | `useCancelMyReservation` | `PATCH /api/v1/reservations/me/:reservationId/cancel` | future 목록/상세 취소 |
+| `getReservationCheckoutBootstrap` | `useGetReservationCheckoutBootstrap` | `GET /api/v1/reservations/checkout/bootstrap` | `/payments/checkout` 과정/가격/결제수단 bootstrap |
+| `createReservationCheckout` | `useCreateReservationCheckout` | `POST /api/v1/reservations/checkout` | `/payments/checkout` 결제 원장 + 수강권 + 예약 확정 |
 
 `getReservationBookingFeed` query:
 
@@ -104,6 +109,16 @@ type HomeBookingState = {
 };
 ```
 
+`/payments/checkout` route는 단일 route 전용 state만 소유한다.
+
+```ts
+type ReservationPaymentCheckoutRouteState = {
+  idempotencyKey: string;
+  selectedCourseOfferingId: string | null;
+  selectedPaymentMethod: PaymentMethod | null;
+};
+```
+
 예약 성공 후에는 React Query cache만 갱신한다.
 
 - `getGetReservationBookingFeedQueryKey(feedParams)` invalidate
@@ -138,16 +153,20 @@ type HomeBookingState = {
 | `MO-UNIT-HOME-BOOKING-002` | same | feed loading/empty/error + retry 상태 |
 | `MO-UNIT-HOME-BOOKING-003` | same | 날짜 선택과 대기 필터가 카드 목록을 변경 |
 | `MO-UNIT-HOME-BOOKING-004` | same | CTA -> 정책 sheet -> `createReservation` payload + cache invalidate |
+| `MO-UNIT-HOME-CHECKOUT-001` | same | `paymentRequired = true` CTA는 `/payments/checkout`으로 이동하고 기존 `createReservation`은 호출하지 않음 |
 | `MO-UNIT-RESERVATIONS-001` | same | `/reservations`가 `getMyReservations` 결과를 렌더링하고 dummy 예약을 노출하지 않음 |
 | `MO-UNIT-RESERVATIONS-002` | same | `/reservations` empty/error + retry 상태 |
+| `MO-UNIT-PAYMENT-CHECKOUT-001` | `apps/mobile/src/route-tests/payments-checkout.test.tsx` | `/payments/checkout` route params와 bootstrap 결과를 screen props로 매핑하고 checkout mutation payload 생성 |
+| `MO-UNIT-PAYMENT-CHECKOUT-002` | same | checkout 성공 후 진행 상태와 예약 내역 이동 표시 |
+| `MO-UNIT-PAYMENT-CHECKOUT-003` | same | 필수 param 누락 시 bootstrap/checkout 미실행과 오류 표시 |
 
 ## Verification Status
 
 | 항목 | 상태 | 결과 |
 |------|------|------|
-| mobile screen target guard | Verified | `pnpm mobile:screen-targets:check` passed, 2 screen targets verified |
-| `@cocrepo/mo-ui` unit/type | Verified | `pnpm --filter=@cocrepo/mo-ui test`: 10 suites, 22 tests passed; `pnpm --filter=@cocrepo/mo-ui type-check` passed |
-| `mobile-app` route unit | Verified | `pnpm --filter=mobile-app test`: 8 suites, 30 tests passed |
+| mobile screen target guard | Verified | `pnpm mobile:screen-targets:check` passed, 3 screen targets verified |
+| `@cocrepo/mo-ui` unit/type | Verified | `pnpm --filter=@cocrepo/mo-ui test`: 11 suites, 25 tests passed; `pnpm --filter=@cocrepo/mo-ui type-check` passed |
+| `mobile-app` route unit | Verified | `pnpm --filter=mobile-app test`: 9 suites, 35 tests passed |
 | `mobile-app` type | Verified | `pnpm --filter=mobile-app type-check` passed |
 | `mobile-app` E2E smoke | Pending | native runtime fixture 준비 후 검증 |
 
@@ -165,6 +184,8 @@ type HomeBookingState = {
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-05-09 | `/`와 `/reservations`의 shared screen target을 명시하고 route file은 API/state wiring만 소유하도록 screen ownership 계약을 복구 | codex |
+| 2026-05-10 | 모바일 결제 흐름을 `/reservations/checkout/bootstrap` + `/reservations/checkout` 기준으로 갱신하고 `paymentRequired` CTA 계약을 반영 | codex |
+| 2026-05-10 | 활성 수강권이 없는 예약 의도를 `/payments/checkout` provider-neutral 결제 checkout으로 연결하는 route/API/screen/test 계약 추가 | codex |
 | 2026-05-09 | 홈 route를 날짜 스트립 + booking feed + 정책 sheet 기반 실제 Reservation API 계약으로 전환하고 `/reservations` 더미 제거 및 `getMyReservations` 계약을 반영 | codex |
 | 2026-05-09 | Reservation backend v1 정책, Orval hook, route-local state, React Query invalidate, unit test contract를 실제 구현 기준으로 갱신 | codex |
 | 2026-05-06 | Stage 3에서 모바일 홈 route를 Timeline/Session/Program Orval read hook과 Stage 2 UI target으로 통합하고 Reservation backend handoff 상태를 기록 | codex |

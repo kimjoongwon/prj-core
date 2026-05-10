@@ -77,6 +77,9 @@ export const ModelName = {
 	PasswordHistory: "PasswordHistory",
 	SecurityPolicy: "SecurityPolicy",
 	WhitelistEntry: "WhitelistEntry",
+	Payment: "Payment",
+	PaymentSubject: "PaymentSubject",
+	PaymentReference: "PaymentReference",
 	Post: "Post",
 	Content: "Content",
 	ServiceDocument: "ServiceDocument",
@@ -514,6 +517,71 @@ export const WhitelistEntryScalarFieldEnum = {
 
 export type WhitelistEntryScalarFieldEnum =
 	(typeof WhitelistEntryScalarFieldEnum)[keyof typeof WhitelistEntryScalarFieldEnum];
+
+export const PaymentScalarFieldEnum = {
+	id: "id",
+	createdAt: "createdAt",
+	updatedAt: "updatedAt",
+	removedAt: "removedAt",
+	spaceId: "spaceId",
+	payerUserId: "payerUserId",
+	title: "title",
+	status: "status",
+	method: "method",
+	provider: "provider",
+	providerPaymentId: "providerPaymentId",
+	providerOrderId: "providerOrderId",
+	totalAmount: "totalAmount",
+	currency: "currency",
+	requestedAt: "requestedAt",
+	approvedAt: "approvedAt",
+	canceledAt: "canceledAt",
+	receiptUrl: "receiptUrl",
+	memo: "memo",
+	metadata: "metadata",
+} as const;
+
+export type PaymentScalarFieldEnum =
+	(typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum];
+
+export const PaymentSubjectScalarFieldEnum = {
+	id: "id",
+	createdAt: "createdAt",
+	updatedAt: "updatedAt",
+	removedAt: "removedAt",
+	paymentId: "paymentId",
+	spaceId: "spaceId",
+	serviceCode: "serviceCode",
+	subjectType: "subjectType",
+	subjectId: "subjectId",
+	subjectLabel: "subjectLabel",
+	quantity: "quantity",
+	unitAmount: "unitAmount",
+	totalAmount: "totalAmount",
+	currency: "currency",
+	metadata: "metadata",
+} as const;
+
+export type PaymentSubjectScalarFieldEnum =
+	(typeof PaymentSubjectScalarFieldEnum)[keyof typeof PaymentSubjectScalarFieldEnum];
+
+export const PaymentReferenceScalarFieldEnum = {
+	id: "id",
+	createdAt: "createdAt",
+	updatedAt: "updatedAt",
+	removedAt: "removedAt",
+	paymentId: "paymentId",
+	spaceId: "spaceId",
+	serviceCode: "serviceCode",
+	referenceType: "referenceType",
+	referenceId: "referenceId",
+	role: "role",
+	label: "label",
+	metadata: "metadata",
+} as const;
+
+export type PaymentReferenceScalarFieldEnum =
+	(typeof PaymentReferenceScalarFieldEnum)[keyof typeof PaymentReferenceScalarFieldEnum];
 
 export const PostScalarFieldEnum = {
 	id: "id",
@@ -1035,6 +1103,7 @@ export const EnrollmentScalarFieldEnum = {
 	courseId: "courseId",
 	courseOfferingId: "courseOfferingId",
 	assignedTimelineId: "assignedTimelineId",
+	paymentId: "paymentId",
 	paymentStatus: "paymentStatus",
 	paymentProvider: "paymentProvider",
 	paymentExternalId: "paymentExternalId",

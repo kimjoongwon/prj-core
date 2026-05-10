@@ -132,6 +132,21 @@ export type SecurityPolicy = Prisma.SecurityPolicyModel;
  */
 export type WhitelistEntry = Prisma.WhitelistEntryModel;
 /**
+ * Model Payment
+ * @displayName 결제
+ */
+export type Payment = Prisma.PaymentModel;
+/**
+ * Model PaymentSubject
+ * @displayName 결제 대상
+ */
+export type PaymentSubject = Prisma.PaymentSubjectModel;
+/**
+ * Model PaymentReference
+ * @displayName 결제 참조
+ */
+export type PaymentReference = Prisma.PaymentReferenceModel;
+/**
  * Model Post
  * @displayName 게시물
  */

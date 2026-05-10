@@ -1,9 +1,11 @@
 import { RESERVATION_ERRORS } from "@cocrepo/constant";
 import {
 	CancelReservationDto,
+	CreateReservationCheckoutDto,
 	CreateReservationDto,
 	QueryBookingFeedDto,
 	QueryMyReservationsDto,
+	QueryReservationCheckoutBootstrapDto,
 } from "@cocrepo/dto";
 import { AuthContext, ReservationService, SpaceContext } from "@cocrepo/service";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
@@ -84,6 +86,34 @@ export class ReservationFacade {
 			userId,
 			reservationId,
 			cancelReason: dto.cancelReason ?? null,
+		});
+	}
+
+	getCheckoutBootstrap(query: QueryReservationCheckoutBootstrapDto) {
+		const { spaceId, userId } = this.requireContext();
+		return this.reservationService.getCheckoutBootstrap({
+			spaceId,
+			userId,
+			occurrenceStartAt: query.occurrenceStartAt,
+			programId: query.programId,
+			sessionId: query.sessionId,
+			timelineId: query.timelineId,
+		});
+	}
+
+	createCheckout(dto: CreateReservationCheckoutDto) {
+		const { spaceId, userId } = this.requireContext();
+		return this.reservationService.checkout({
+			spaceId,
+			userId,
+			courseOfferingId: dto.courseOfferingId,
+			idempotencyKey: dto.idempotencyKey,
+			memo: dto.memo ?? null,
+			occurrenceStartAt: dto.occurrenceStartAt,
+			paymentMethod: dto.paymentMethod,
+			programId: dto.programId,
+			sessionId: dto.sessionId,
+			timelineId: dto.timelineId,
 		});
 	}
 

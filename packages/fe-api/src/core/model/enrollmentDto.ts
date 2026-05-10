@@ -14,6 +14,7 @@ import type { CourseDto } from "./courseDto";
 import type { CourseOfferingDto } from "./courseOfferingDto";
 import type { CoursePassDto } from "./coursePassDto";
 import type { EnrollmentStatus } from "./enrollmentStatus";
+import type { PaymentDto } from "./paymentDto";
 import type { PaymentStatus } from "./paymentStatus";
 import type { TimelineDto } from "./timelineDto";
 import type { UserDto } from "./userDto";
@@ -40,6 +41,11 @@ export interface EnrollmentDto {
 	 * @nullable
 	 */
 	assignedTimelineId?: string | null;
+	/**
+	 * 결제 ID
+	 * @nullable
+	 */
+	paymentId?: string | null;
 	/** 결제 상태 */
 	paymentStatus: PaymentStatus;
 	/**
@@ -89,6 +95,8 @@ export interface EnrollmentDto {
 	course?: CourseDto;
 	/** 코스 개설 정보 */
 	courseOffering?: CourseOfferingDto;
+	/** 결제 정보 */
+	payment?: PaymentDto;
 	/** 배정 Timeline */
 	assignedTimeline?: TimelineDto;
 	/** 발급된 수강권 */

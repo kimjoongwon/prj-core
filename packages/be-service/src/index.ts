@@ -74,6 +74,12 @@ export {
 	type OidcRedisSession,
 	OidcSessionService,
 } from "./oidc-session.service";
+export {
+	type CreatePaymentInput,
+	type PaymentListInput,
+	PaymentService,
+	type UpdatePaymentInput,
+} from "./payment.service";
 export { PolicyService } from "./policy.service";
 export { PolicyAssignmentService } from "./policy-assignment.service";
 export { createPrismaClient } from "./prisma.factory";

@@ -10,6 +10,7 @@ export { IdpDashboardFacade } from "./idp-dashboard.facade";
 export { InquiryFacade } from "./inquiry.facade";
 export { OidcClientFacade } from "./oidc-client.facade";
 export { OidcSessionFacade } from "./oidc-session.facade";
+export { PaymentFacade } from "./payment.facade";
 export { PolicyAssignmentFacade } from "./policy-assignment.facade";
 export { PolicyFacade } from "./policy.facade";
 export { RoleFacade } from "./role.facade";

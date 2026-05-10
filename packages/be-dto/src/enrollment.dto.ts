@@ -9,14 +9,15 @@ import {
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import {
-	EnrollmentStatus,
 	type Enrollment,
+	EnrollmentStatus,
 	PaymentStatus,
 } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { CourseDto } from "./course.dto";
 import { CourseOfferingDto } from "./course-offering.dto";
 import { CoursePassDto } from "./course-pass.dto";
+import { PaymentDto } from "./payment.dto";
 import { TimelineDto } from "./timeline.dto";
 import { UserDto } from "./user.dto";
 
@@ -35,6 +36,9 @@ export class EnrollmentDto extends AbstractDto implements Enrollment {
 
 	@UUIDFieldOptional({ description: "배정 Timeline ID", nullable: true })
 	assignedTimelineId!: string | null;
+
+	@UUIDFieldOptional({ description: "결제 ID", nullable: true })
+	paymentId!: string | null;
 
 	@EnumField(() => PaymentStatus, { description: "결제 상태" })
 	paymentStatus!: PaymentStatus;
@@ -98,6 +102,12 @@ export class EnrollmentDto extends AbstractDto implements Enrollment {
 		required: false,
 	})
 	courseOffering?: CourseOfferingDto;
+
+	@ClassField(() => PaymentDto, {
+		description: "결제 정보",
+		required: false,
+	})
+	payment?: PaymentDto;
 
 	@ClassField(() => TimelineDto, {
 		description: "배정 Timeline",

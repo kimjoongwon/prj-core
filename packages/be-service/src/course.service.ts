@@ -16,7 +16,11 @@ import {
 	type Prisma,
 	TimelineProvisioningMode,
 } from "@cocrepo/prisma";
-import { CoursesRepository, TimelinesRepository } from "@cocrepo/repository";
+import {
+	CoursesRepository,
+	PaymentsRepository,
+	TimelinesRepository,
+} from "@cocrepo/repository";
 import {
 	BadRequestException,
 	ForbiddenException,
@@ -56,6 +60,7 @@ export interface EnrollmentListInput {
 	courseOfferingId?: string;
 	userId?: string;
 	timelineId?: string;
+	paymentId?: string;
 	paymentStatus?: PaymentStatus;
 	status?: EnrollmentStatus;
 	validOn?: Date;
@@ -100,6 +105,7 @@ export class CourseService {
 		private readonly repository: CoursesRepository,
 		private readonly timelinesRepository: TimelinesRepository,
 		private readonly spaceContext: SpaceContext,
+		private readonly paymentsRepository?: PaymentsRepository,
 	) {}
 
 	async findCourses(
@@ -304,6 +310,11 @@ export class CourseService {
 			);
 		}
 
+		const paymentId = this.readNullableStringUpdate(data.paymentId);
+		if (paymentId !== undefined && paymentId !== null) {
+			await this.assertPaymentBelongsToSpace(paymentId, offeringSpaceId);
+		}
+
 		await this.repository.updateEnrollmentById(enrollmentId, data);
 		await this.issueCoursePassIfReady(enrollmentId);
 
@@ -426,6 +437,10 @@ export class CourseService {
 			);
 		}
 
+		if (data.paymentId) {
+			await this.assertPaymentBelongsToSpace(data.paymentId, offering.spaceId);
+		}
+
 		const status = data.status ?? EnrollmentStatus.PENDING;
 		const paymentStatus = data.paymentStatus ?? PaymentStatus.PENDING;
 		if (
@@ -473,6 +488,20 @@ export class CourseService {
 			throw new BadRequestException(
 				COURSE_ERRORS.COURSE_OFFERING_SCOPE_INVALID,
 			);
+		}
+	}
+
+	private async assertPaymentBelongsToSpace(
+		paymentId: string,
+		spaceId: string,
+	): Promise<void> {
+		if (!this.paymentsRepository) {
+			return;
+		}
+
+		const payment = await this.paymentsRepository.findById(paymentId);
+		if (!payment || payment.spaceId !== spaceId) {
+			throw new BadRequestException(COURSE_ERRORS.ENROLLMENT_SCOPE_INVALID);
 		}
 	}
 
@@ -565,6 +594,7 @@ export class CourseService {
 				: {}),
 			...(params.userId ? { userId: params.userId } : {}),
 			...(params.timelineId ? { assignedTimelineId: params.timelineId } : {}),
+			...(params.paymentId ? { paymentId: params.paymentId } : {}),
 			...(params.paymentStatus ? { paymentStatus: params.paymentStatus } : {}),
 			...(params.status ? { status: params.status } : {}),
 		};
@@ -581,6 +611,8 @@ export class CourseService {
 				{ user: { email: search } },
 				{ course: { name: search } },
 				{ courseOffering: { name: search } },
+				{ payment: { is: { title: search } } },
+				{ payment: { is: { providerPaymentId: search } } },
 				{ paymentProvider: search },
 				{ paymentExternalId: search },
 			];
