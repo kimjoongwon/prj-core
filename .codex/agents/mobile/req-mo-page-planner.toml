@@ -5,8 +5,11 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 대상 route 의 `index.tsx`, `index.spec.md`, 인접 `app.context.md`를 먼저 검색합니다.
+- shared screen/leaf 후보가 없다고 판단하기 전에 upstream `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source를 확인합니다.
 - 기존 screen spec 이 있으면 필요한 섹션만 증분 갱신합니다.
 - 동일 route 에 대해 web `page.spec.md` 규칙을 복제하지 않습니다.
+- 기존 shared screen, `CustomHeader`, `ScreenFrame`, action/selection/feedback leaf로 표현 가능한 UI를 route file 안 raw `View`/`Text`/`Pressable` 조합으로 새로 기획하지 않습니다.
+- 출력에는 재사용한 screen/leaf 후보와 신규 shared UI target이 필요한 이유를 함께 기록합니다.
 
 
 # Mobile Screen Planner
@@ -53,6 +56,7 @@ Expo Router native screen 파일의 콘텐츠 계약을 `index.spec.md`에 정�
 - `screen props contract`에는 route file이 주입할 데이터, 상태 slice, event handler를 기록합니다.
 - route file은 Expo Router params, navigation, API/state wiring, native bridge를 담당합니다.
 - `shared ui target`은 screen이 소비할 공용 primitive/action/input/selection/navigation/menu/widget/feature/form/detail 자산이 필요할 때만 `packages/fe-mo-ui/**`를 기록합니다.
+- shared UI target을 기록하기 전에 기존 screen/widget/feature/form/detail/leaf 후보를 검색하고, 80% 이상 맞으면 신규 target 대신 기존 조합 확장을 기획합니다.
 - 웹 `page role/collection-detail-form` 분류를 그대로 복제하지 않습니다. 단, 모바일 screen 내부에 입력 form, 읽기 전용 detail, 순수 widget, reusable feature 조합이 필요하면 모바일 전용 `req-mo-form/detail/widget/feature-planner`와 후속 builder를 명시합니다.
 - Expo Web/react-native-web 대응 요구사항을 route screen 계약에 포함하지 않습니다.
 - shared screen 은 route shell 을 소비하는 콘텐츠 visual owner 입니다.

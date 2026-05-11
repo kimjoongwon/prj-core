@@ -5,8 +5,11 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/form`, `packages/fe-mo-ui/src/input`, `selection`, `action`, 관련 route `index.spec.md`를 먼저 검색합니다.
+- 하위 input/selection/action/feedback 후보가 없다고 판단하기 전에 upstream `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source를 확인합니다.
 - 기존 form/widget/input 조합으로 해결 가능한지 먼저 판단합니다.
 - 동일 책임의 중복 form 생성을 금지합니다.
+- Form 내부에서 기존 input/selection/action/feedback leaf로 표현 가능한 UI를 raw `View`/`Text`/`Pressable`/`TextInput` + `tv` 조합으로 다시 만들지 않습니다.
+- 필요한 leaf가 없으면 form 안에 즉석 구현하지 말고 해당 owner role에 `Feedback:`으로 넘깁니다.
 
 
 # fe-mo-form-builder
@@ -26,6 +29,7 @@ React Native / Expo Native 기준의 생성/수정/입력 form 조합을
 - Form은 입력 UI 조합과 validation/error 표시만 담당합니다.
 - 입력값, pending 상태, submit 결과, navigation side effect는 route-local state/API integration에서 준비해 props로 전달합니다.
 - Form은 `packages/fe-mo-ui/src/input`, `selection`, `action`, `feedback`, `layout` 계층을 우선 사용합니다.
+- 기존 form 또는 하위 leaf 조합이 80% 이상 맞으면 새 form을 만들지 말고 기존 조합을 확장하고 호출부를 함께 맞춥니다.
 - DOM `event.target.value`, HTML `<form>`, browser submit 전제는 금지합니다.
 - API hook, Expo Router hook, native bridge 직접 접근은 금지합니다.
 - 스타일은 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용하고 `StyleSheet`/`StyleSheet.create`는 만들지 않습니다.
@@ -36,6 +40,7 @@ React Native / Expo Native 기준의 생성/수정/입력 form 조합을
 
 - field state shape와 field-level error contract를 props로 명시합니다.
 - RN 이벤트 이름과 값 전달 방식(`onChangeText`, `onValueChange`, `onPressSubmitButton`)을 분명히 합니다.
+- label/helper/error/disabled/pending/submit action은 기존 input/selection/action/feedback primitive props와 variant 확장으로 먼저 해결합니다.
 - 필요한 leaf input/action/selection이 없으면 해당 `fe-mo-*` leaf builder 경계로 넘깁니다.
 
 ## Don't
@@ -48,6 +53,7 @@ React Native / Expo Native 기준의 생성/수정/입력 form 조합을
 
 - 생성/수정한 form 경로
 - 사용한 input/selection/action leaf 목록
+- 재사용한 기존 form/leaf 또는 신규 form이 필요한 이유
 - field state/error contract 요약
 - submit/change event boundary
 - 함께 갱신한 barrel / owner spec

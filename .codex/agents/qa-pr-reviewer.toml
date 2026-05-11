@@ -25,6 +25,12 @@ developer_instructions = '''
    - review-map에 없고, `.codex/agents/*.toml`을 읽어도 governing role을 특정할 수 없으면 finding으로 보고합니다.
 6. diff scope 밖의 unrelated code를 넓게 재설계하지 않습니다.
    - 판단 기준은 항상 `git diff <baseRef>...HEAD`입니다.
+7. 모바일 UI 변경(`apps/mobile`, `packages/fe-mo-ui`)은 HeroUI Native upstream package(`node_modules/heroui-native`, `heroui-native/*`)와 기존 `@cocrepo/mo-ui` primitive/component 재사용 근거를 확인해야 합니다.
+   - `@cocrepo/mo-ui`에 아직 노출되지 않았어도 `heroui-native/package.json` exports에 있는 컴포넌트면 custom 구현보다 thin re-export/alias가 우선입니다.
+   - 기존 `Button`, `Card`, `Surface`, `Radio`, `Checkbox`, `Select`, `Chip`, `StatusFeedback`, `CustomHeader` 등으로 표현 가능한 UI를 raw `Pressable`/`View`/`Text` 조합으로 재구현하면 finding입니다.
+8. PC/Web UI 변경(`apps/*/web`, `packages/fe-ui`)은 HeroUI React upstream package(`node_modules/@heroui/react`, `@heroui/react`)와 기존 `@cocrepo/ui` primitive/component 재사용 근거를 확인해야 합니다.
+   - `@cocrepo/ui`에 아직 노출되지 않았어도 `@heroui/react/package.json` exports에 있는 컴포넌트면 custom 구현보다 thin wrapper/re-export/alias가 우선입니다.
+   - 기존 `Button`, `Card`, `Surface`, `PageSurface`, `SectionSurface`, `Input`, `Select`, `Checkbox`, `Radio`, `Tabs`, `Dropdown`, `Modal`, `Table`, `DataGrid`, `Chip`, `Avatar` 등으로 표현 가능한 UI를 raw `div`/`button`/`input`/`table` + className 조합으로 재구현하면 finding입니다.
 
 ---
 
@@ -105,6 +111,15 @@ launcher가 넘기는 `checkKeys`는 아래 의미로 해석합니다.
   - orchestrated role 문서가 최종 보고 `Feedback:` packet을 유지하고, orchestrator의 feedback_type/status/affected_stage 라우팅 표와 모순되지 않는지 확인
 - `test-contract`
   - 테스트/검증 파일 위치와 관점이 해당 QA role 규칙과 맞는지 확인
+- `reuse-first`
+  - changed mobile UI/screen/route files under `apps/mobile` and `packages/fe-mo-ui` must show upstream HeroUI Native (`node_modules/heroui-native`, `heroui-native/*`) / `@cocrepo/mo-ui` primitive reuse before new UI composition
+  - flag custom mobile UI when an equivalent upstream `heroui-native/package.json` export exists and could be exposed through thin re-export/alias
+  - flag raw `Pressable`/`View`/`Text`/`TextInput` reimplementation of existing action/input/surface/selection/navigation/feedback/data-display primitives such as `Button`, `Input`, `Card`, `Surface`, `Radio`, `Checkbox`, `Select`, `Chip`, `StatusFeedback`, `CustomHeader`
+  - flag new mobile widget/feature/form/detail/screen composition when an existing component or 80% matching leaf could be extended instead
+  - changed PC/Web UI/page/route files under `apps/*/web` and `packages/fe-ui` must show upstream HeroUI React (`node_modules/@heroui/react`, `@heroui/react`) / `@cocrepo/ui` primitive reuse before new UI composition
+  - flag custom web UI when an equivalent upstream `@heroui/react/package.json` export exists and could be exposed through thin wrapper/re-export/alias
+  - flag raw `div`/`button`/`input`/`select`/`textarea`/`table` + className/Tailwind reimplementation of existing display/control/layout/surface/data-grid/cell primitives such as `Button`, `Input`, `Card`, `Surface`, `PageSurface`, `SectionSurface`, `Table`, `DataGrid`, `Tabs`, `Dropdown`, `Modal`, `Chip`, `Avatar`
+  - flag new web widget/feature/form/detail/page composition when an existing component or 80% matching component could be extended instead
 
 없는 key를 받아도 무시하지 말고, 이름 그대로 합리적으로 해석한 뒤 필요하면 rule docs를 근거로 판정합니다.
 

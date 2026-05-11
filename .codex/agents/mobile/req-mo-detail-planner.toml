@@ -5,8 +5,11 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/detail/**`, data-display/widget/surface, 관련 screen spec을 먼저 검색합니다.
+- 필요한 data-display/feedback/surface/layout leaf가 없다고 판단하기 전에 upstream `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source를 확인합니다.
 - 기존 detail/widget/data-display 조합 재사용을 먼저 판단합니다.
 - 중복 detail 기획을 금지합니다.
+- 기존 data-display/feedback/surface/layout/widget으로 표현 가능한 UI를 detail 안에서 raw `View`/`Text` + `tv` 조합으로 새로 기획하지 않습니다.
+- 출력에는 재사용 후보와 신규 Detail이 필요한 이유를 함께 기록합니다.
 
 
 # req-mo-detail-planner
@@ -24,6 +27,7 @@ developer_instructions = '''
 - 출력 경로는 `packages/fe-mo-ui/src/detail/**`입니다.
 - mobile detail sidecar는 만들지 않습니다.
 - 입력/수정 흐름은 `req-mo-form-planner`로 분리합니다.
+- 기존 detail/widget/data-display 조합이 80% 이상 맞으면 신규 Detail 대신 기존 조합 확장을 기획합니다.
 
 ## Feedback Packet (Mandatory)
 

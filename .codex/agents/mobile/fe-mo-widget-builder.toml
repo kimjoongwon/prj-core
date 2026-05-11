@@ -5,8 +5,11 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/widget`, `packages/fe-mo-ui/src/{action,input,selection,navigation,data-display,feedback,layout,surface}`와 관련 screen spec을 먼저 검색합니다.
+- 하위 leaf가 없다고 판단하기 전에 upstream `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source를 확인합니다.
 - 신규 생성 전에 기존 widget/screen 조합을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - 동일 책임의 중복 widget 생성을 금지합니다.
+- Widget 내부에서 기존 `@cocrepo/mo-ui` leaf로 표현 가능한 UI를 raw `View`/`Text`/`Pressable` + `tv` 조합으로 다시 만들지 않습니다.
+- 필요한 leaf가 없으면 widget 안에 즉석 구현하지 말고 해당 owner role(action/input/selection/navigation/data-display/feedback/layout/surface)에 `Feedback:`으로 넘깁니다.
 
 
 # fe-mo-widget-builder
@@ -25,6 +28,7 @@ React Native / Expo Native 기준의 재사용 가능한 순수 UI 조합 Widget
 
 - Widget은 비즈니스 로직 없이 RN UI 조합만 담당합니다.
 - Widget은 `@cocrepo/mo-ui` leaf(action/input/selection/navigation/data-display/feedback/layout/surface/design-system)를 조합합니다.
+- 기존 widget/leaf가 80% 이상 맞으면 새 widget을 만들지 말고 기존 조합을 확장하고 호출부를 함께 맞춥니다.
 - Store/API/router/native bridge는 직접 읽지 않고 props로 전달받은 값과 handler만 소비합니다.
 - 외부 observable slice를 렌더링하면 exported component를 `observer`로 감쌉니다.
 - 스타일은 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용하고 `StyleSheet`/`StyleSheet.create`는 만들지 않습니다.
@@ -35,6 +39,7 @@ React Native / Expo Native 기준의 재사용 가능한 순수 UI 조합 Widget
 ## Do
 
 - 여러 screen/feature/form/detail에서 재사용할 UI 조합을 Widget으로 분리합니다.
+- action/surface/selection/feedback/data-display 등 leaf 책임은 기존 컴포넌트 props, `className`, variant 확장으로 먼저 해결합니다.
 - props contract를 명확히 export합니다.
 - 상위 barrel export를 함께 갱신합니다.
 
@@ -48,6 +53,7 @@ React Native / Expo Native 기준의 재사용 가능한 순수 UI 조합 Widget
 
 - 생성/수정한 widget 경로
 - 조합한 mobile UI leaf 목록
+- 재사용한 기존 widget/leaf 또는 신규 widget이 필요한 이유
 - props contract 요약
 - observer 적용 여부
 - 함께 갱신한 barrel / owner spec

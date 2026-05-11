@@ -51,7 +51,7 @@ match = ["apps/*/web/src/app/**/layout.tsx"]
 primary_role = "fe-route-layout-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["route-layout-ownership", "owner-boundary"]
+check_keys = ["route-layout-ownership", "owner-boundary", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -60,7 +60,7 @@ match = ["apps/*/web/src/app/**/page.tsx"]
 primary_role = "fe-page-builder"
 supporting_roles = ["fe-ui-page-builder"]
 rule_docs = []
-check_keys = ["thin-container", "state-owner", "owner-boundary", "sidecar-sync"]
+check_keys = ["thin-container", "state-owner", "owner-boundary", "sidecar-sync", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -69,7 +69,7 @@ match = ["apps/*/web/src/app/**/route.meta.ts"]
 primary_role = "fe-page-builder"
 supporting_roles = ["req-menu-planner"]
 rule_docs = []
-check_keys = ["route-meta-contract", "owner-boundary", "required-export"]
+check_keys = ["route-meta-contract", "owner-boundary", "required-export", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -78,7 +78,7 @@ match = ["packages/fe-ui/src/page/index.ts", "packages/fe-ui/src/page/**/*Page.t
 primary_role = "fe-ui-page-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["pure-page", "required-export", "sidecar-sync"]
+check_keys = ["pure-page", "required-export", "sidecar-sync", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -87,7 +87,7 @@ match = ["packages/fe-ui/src/form/**/*.ts", "packages/fe-ui/src/form/**/*.tsx"]
 primary_role = "fe-form-builder"
 supporting_roles = ["fe-control-component-builder"]
 rule_docs = []
-check_keys = ["control-only", "owner-boundary"]
+check_keys = ["control-only", "owner-boundary", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -96,7 +96,7 @@ match = ["packages/fe-ui/src/control/**/*.ts", "packages/fe-ui/src/control/**/*.
 primary_role = "fe-control-component-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary"]
+check_keys = ["owner-boundary", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -105,7 +105,7 @@ match = ["packages/fe-ui/src/feature/**/*.ts", "packages/fe-ui/src/feature/**/*.
 primary_role = "fe-feature-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["layer-boundary", "owner-boundary", "sidecar-sync"]
+check_keys = ["layer-boundary", "owner-boundary", "sidecar-sync", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -114,7 +114,7 @@ match = ["packages/fe-ui/src/widget/*.ts", "packages/fe-ui/src/widget/*.tsx", "p
 primary_role = "fe-widget-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["layer-boundary", "owner-boundary"]
+check_keys = ["layer-boundary", "owner-boundary", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -123,7 +123,7 @@ match = ["packages/fe-ui/src/display/**/*.ts", "packages/fe-ui/src/display/**/*.
 primary_role = "fe-display-component-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary"]
+check_keys = ["owner-boundary", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -132,7 +132,7 @@ match = ["packages/fe-ui/src/layout/**/*.ts", "packages/fe-ui/src/layout/**/*.ts
 primary_role = "fe-layout-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "layer-boundary"]
+check_keys = ["owner-boundary", "layer-boundary", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -141,7 +141,7 @@ match = ["packages/fe-ui/src/collection/**/*.ts", "packages/fe-ui/src/collection
 primary_role = "fe-widget-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "layer-boundary"]
+check_keys = ["owner-boundary", "layer-boundary", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -150,7 +150,7 @@ match = ["packages/fe-ui/src/data-grid/**/*.ts", "packages/fe-ui/src/data-grid/*
 primary_role = "fe-data-grid-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "layer-boundary"]
+check_keys = ["owner-boundary", "layer-boundary", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -159,7 +159,7 @@ match = ["packages/fe-ui/src/detail/**/*.ts", "packages/fe-ui/src/detail/**/*.ts
 primary_role = "fe-detail-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["owner-boundary", "layer-boundary"]
+check_keys = ["owner-boundary", "layer-boundary", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -168,7 +168,16 @@ match = ["packages/fe-ui/src/columns/**/*.ts", "packages/fe-ui/src/columns/**/*.
 primary_role = "fe-columns-builder"
 supporting_roles = ["fe-cell-builder"]
 rule_docs = []
-check_keys = ["layer-boundary", "owner-boundary"]
+check_keys = ["layer-boundary", "owner-boundary", "reuse-first"]
+exempt = false
+
+[[rules]]
+id = "fe-cell-files"
+match = ["packages/fe-ui/src/cell/**/*.ts", "packages/fe-ui/src/cell/**/*.tsx"]
+primary_role = "fe-cell-builder"
+supporting_roles = []
+rule_docs = []
+check_keys = ["layer-boundary", "owner-boundary", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -204,7 +213,7 @@ match = ["apps/mobile/src/app/**/_layout.tsx"]
 primary_role = "fe-mo-route-layout-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["route-layout-ownership", "owner-boundary", "sidecar-sync"]
+check_keys = ["route-layout-ownership", "owner-boundary", "sidecar-sync", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -213,7 +222,7 @@ match = ["apps/mobile/src/app/**/*.tsx"]
 primary_role = "fe-mo-page-builder"
 supporting_roles = ["fe-mo-screen-builder"]
 rule_docs = []
-check_keys = ["native-route-container", "screen-owner", "state-owner", "sidecar-sync"]
+check_keys = ["native-route-container", "screen-owner", "state-owner", "sidecar-sync", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -222,7 +231,7 @@ match = ["packages/fe-mo-ui/src/screen/index.ts", "packages/fe-mo-ui/src/screen/
 primary_role = "fe-mo-screen-builder"
 supporting_roles = []
 rule_docs = []
-check_keys = ["pure-screen", "required-export", "sidecar-sync"]
+check_keys = ["pure-screen", "required-export", "sidecar-sync", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -231,7 +240,7 @@ match = ["packages/fe-mo-ui/src/widget/**/*.ts", "packages/fe-mo-ui/src/widget/*
 primary_role = "fe-mo-widget-builder"
 supporting_roles = []
 rule_docs = [".codex/agents/mobile/README.md"]
-check_keys = ["layer-boundary", "owner-boundary"]
+check_keys = ["layer-boundary", "owner-boundary", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -240,7 +249,7 @@ match = ["packages/fe-mo-ui/src/feature/**/*.ts", "packages/fe-mo-ui/src/feature
 primary_role = "fe-mo-feature-builder"
 supporting_roles = []
 rule_docs = [".codex/agents/mobile/README.md"]
-check_keys = ["layer-boundary", "owner-boundary"]
+check_keys = ["layer-boundary", "owner-boundary", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -249,7 +258,7 @@ match = ["packages/fe-mo-ui/src/form/**/*.ts", "packages/fe-mo-ui/src/form/**/*.
 primary_role = "fe-mo-form-builder"
 supporting_roles = ["fe-mo-input-component-builder", "fe-mo-selection-component-builder", "fe-mo-action-component-builder"]
 rule_docs = [".codex/agents/mobile/README.md"]
-check_keys = ["form-boundary", "owner-boundary"]
+check_keys = ["form-boundary", "owner-boundary", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -258,7 +267,7 @@ match = ["packages/fe-mo-ui/src/detail/**/*.ts", "packages/fe-mo-ui/src/detail/*
 primary_role = "fe-mo-detail-builder"
 supporting_roles = ["fe-mo-widget-builder"]
 rule_docs = [".codex/agents/mobile/README.md"]
-check_keys = ["detail-boundary", "owner-boundary"]
+check_keys = ["detail-boundary", "owner-boundary", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -267,7 +276,7 @@ match = ["packages/fe-mo-ui/src/action/**/*.ts", "packages/fe-mo-ui/src/action/*
 primary_role = "fe-mo-action-component-builder"
 supporting_roles = []
 rule_docs = [".codex/agents/mobile/README.md"]
-check_keys = ["owner-boundary", "required-export"]
+check_keys = ["owner-boundary", "required-export", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -276,7 +285,7 @@ match = ["packages/fe-mo-ui/src/input/**/*.ts", "packages/fe-mo-ui/src/input/**/
 primary_role = "fe-mo-input-component-builder"
 supporting_roles = []
 rule_docs = [".codex/agents/mobile/README.md"]
-check_keys = ["owner-boundary", "required-export"]
+check_keys = ["owner-boundary", "required-export", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -285,7 +294,7 @@ match = ["packages/fe-mo-ui/src/selection/**/*.ts", "packages/fe-mo-ui/src/selec
 primary_role = "fe-mo-selection-component-builder"
 supporting_roles = []
 rule_docs = [".codex/agents/mobile/README.md"]
-check_keys = ["owner-boundary", "required-export"]
+check_keys = ["owner-boundary", "required-export", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -294,7 +303,7 @@ match = ["packages/fe-mo-ui/src/navigation/**/*.ts", "packages/fe-mo-ui/src/navi
 primary_role = "fe-mo-navigation-component-builder"
 supporting_roles = []
 rule_docs = [".codex/agents/mobile/README.md"]
-check_keys = ["owner-boundary", "required-export"]
+check_keys = ["owner-boundary", "required-export", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -303,7 +312,7 @@ match = ["packages/fe-mo-ui/src/data-display/**/*.ts", "packages/fe-mo-ui/src/da
 primary_role = "fe-mo-data-display-component-builder"
 supporting_roles = []
 rule_docs = [".codex/agents/mobile/README.md"]
-check_keys = ["owner-boundary", "required-export"]
+check_keys = ["owner-boundary", "required-export", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -312,7 +321,7 @@ match = ["packages/fe-mo-ui/src/feedback/**/*.ts", "packages/fe-mo-ui/src/feedba
 primary_role = "fe-mo-feedback-component-builder"
 supporting_roles = []
 rule_docs = [".codex/agents/mobile/README.md"]
-check_keys = ["owner-boundary", "required-export"]
+check_keys = ["owner-boundary", "required-export", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -321,7 +330,7 @@ match = ["packages/fe-mo-ui/src/layout/Menu/**/*.ts", "packages/fe-mo-ui/src/lay
 primary_role = "fe-mo-menu-builder"
 supporting_roles = []
 rule_docs = [".codex/agents/mobile/README.md"]
-check_keys = ["owner-boundary", "required-export"]
+check_keys = ["owner-boundary", "required-export", "reuse-first"]
 exempt = false
 
 [[rules]]
@@ -330,7 +339,7 @@ match = ["packages/fe-mo-ui/src/layout/index.ts"]
 primary_role = "fe-mo-data-display-component-builder"
 supporting_roles = ["fe-mo-feedback-component-builder", "fe-mo-menu-builder"]
 rule_docs = [".codex/agents/mobile/README.md"]
-check_keys = ["shared-barrel", "owner-boundary", "required-export"]
+check_keys = ["shared-barrel", "owner-boundary", "required-export", "reuse-first"]
 exempt = false
 
 [[rules]]

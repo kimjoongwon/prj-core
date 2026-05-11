@@ -61,6 +61,9 @@
 - Expo Router의 `CustomHeader`가 상단 safe-area, title, back action을 소유하고, screen은 결제 본문만 렌더링한다.
 - `ScreenFrame`으로 본문 safe-area shell을 적용한다.
 - `StyleSheet`를 쓰지 않고 uniwind `className`과 `tailwind-variants` slot/variant만 사용한다.
+- render tree는 JSX로 작성하고 `createElement` 기반 visual composition을 사용하지 않는다.
+- 화면 본문과 본문이 조합하는 재사용 컴포넌트는 heroui-native/@cocrepo/mo-ui primitive로 표현 가능한 CTA, 컨테이너, 선택 컨트롤을 직접 `Pressable`/박스 조합으로 재구현하지 않고 `Button`, `Card`, `Radio` 같은 기존 컴포넌트를 우선 사용한다.
+- 상태별 feedback, 진행 상태, submit CTA는 별도 `render*` helper, return 밖 JSX 변수, 재사용 목적 없는 조각 컴포넌트로 분리하지 않고 returned JSX 안에서 직접 조합한다.
 - 색상은 heroui-native semantic token(`background`, `surface`, `foreground`, `muted`, `accent`, `border`)을 사용한다.
 - 예약 요약 조각은 `ReservationCheckoutSummary`가 소유한다.
 - 과정/결제수단 선택은 `SelectableCardList` 같은 selection 계층으로 분리한다.
@@ -70,8 +73,11 @@
 
 ## 변경 이력
 
-| 날짜 | 변경 내용 |
-| --- | --- |
-| 2026-05-10 | back action을 Expo Router `CustomHeader` 소유로 옮기고 screen은 본문과 semantic token 스타일만 담당하도록 계약을 갱신했습니다. |
-| 2026-05-10 | 화면 계약을 과정 선택, 결제 방법 선택, 가격 요약, checkout 진행 상태 중심으로 갱신했습니다. |
-| 2026-05-10 | `/payments/checkout`용 provider-neutral 예약 결제 screen target을 추가했습니다. |
+| 날짜       | 변경 내용                                                                                                                                                               |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-05-11 | 헤더/진행 상태 컨테이너와 submit CTA를 `Card`, `Button` 기반으로 정리하고, 요약/상태/선택 조각도 `Card`, `Button`, `Radio` primitive를 우선 쓰도록 계약을 추가했습니다. |
+| 2026-05-11 | checkout 상태/진행/submit JSX를 returned JSX 안으로 인라인하고 `render*` helper, return 밖 JSX 변수, 일회성 조각 컴포넌트 금지 계약을 추가했습니다.                     |
+| 2026-05-11 | screen render tree를 JSX로 전환하고 `createElement` 기반 visual composition 금지 계약을 추가했습니다.                                                                   |
+| 2026-05-10 | back action을 Expo Router `CustomHeader` 소유로 옮기고 screen은 본문과 semantic token 스타일만 담당하도록 계약을 갱신했습니다.                                          |
+| 2026-05-10 | 화면 계약을 과정 선택, 결제 방법 선택, 가격 요약, checkout 진행 상태 중심으로 갱신했습니다.                                                                             |
+| 2026-05-10 | `/payments/checkout`용 provider-neutral 예약 결제 screen target을 추가했습니다.                                                                                         |

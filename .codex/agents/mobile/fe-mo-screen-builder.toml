@@ -5,8 +5,11 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/screen`, 기존 route screen, 동급 화면 컴포넌트를 먼저 검색합니다.
+- screen 내부에서 필요한 action/surface/selection/feedback/data-display는 `packages/fe-mo-ui/src/{action,input,selection,navigation,data-display,feedback,layout,surface,design-system}`와 upstream `heroui-native/*` 후보를 먼저 검색합니다.
+- upstream 후보는 `@cocrepo/mo-ui` export만 보지 말고 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source까지 확인합니다.
 - `heroui-native`, `@cocrepo/mo-ui` 노출 컴포넌트 재노출로 동일 책임을 커버할 수 있으면 커스텀 구현을 먼저 배제합니다.
 - 동일 책임의 중복 구현을 금지합니다.
+- 최종 보고에는 재사용한 기존 component와, 새 조합이 필요했다면 기존 후보를 배제한 이유를 함께 적습니다.
 
 
 # Mobile Screen Builder
@@ -47,9 +50,21 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
    - props가 없으면 `export const [ScreenName] = observer(() => { ... })` 형태를 사용합니다.
 11. screen 스타일은 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 기본으로 하며 `StyleSheet`/`StyleSheet.create`를 만들지 않습니다.
 12. `style` 객체는 safe-area inset, third-party native bridge 등 className으로 표현하기 어려운 동적 값에만 제한합니다.
-13. screen component 수정 시 대응 `[ScreenName].spec.md` 업데이트와 `## 변경 이력` 추가가 필수입니다.
-14. `packages/fe-mo-ui/src/screen/index.ts` export 동기화가 필수입니다.
-13. screen spec은 `## 화면 스케치` 섹션과 fenced `text` wireframe을 반드시 포함합니다.
+13. screen 및 screen이 직접 조합하는 `@cocrepo/mo-ui` visual component의 render tree는 JSX로 작성합니다.
+   - `React.createElement` 또는 `createElement` import/call을 visual composition에 사용하지 않습니다.
+   - third-party primitive wrapper도 JSX로 감싸며, createElement 기반 pass-through wrapper를 만들지 않습니다.
+14. heroui-native/@cocrepo/mo-ui primitive로 표현 가능한 UI는 screen에서 raw `Pressable`/`View`/`Text` 조합으로 재구현하지 않습니다.
+   - CTA/action은 `Button`, `LinkButton`, `CloseButton` 같은 action primitive를 우선 사용합니다.
+   - 카드/섹션/표면은 `Card`, `Surface`, `ScreenFrame` 같은 layout/surface primitive를 우선 사용합니다.
+   - primitive가 없는 도메인 조합만 `@cocrepo/mo-ui` 하위 reusable component로 분리하고, screen 안에서는 기존 컴포넌트를 조합합니다.
+15. JSX를 반환하는 `render*` helper 함수를 만들지 않습니다.
+   - screen-local 상태별/반복별 JSX는 returned JSX 안에서 조건식과 반복으로 직접 조합합니다.
+   - JSX 노드를 `checkoutStatusFeedback`, `progressStepNodes` 같은 return 밖 변수에 미리 담지 않습니다.
+   - 재사용 목적이 없는 작은 JSX 조각을 `CheckoutStatusFeedback`, `ProgressSection` 같은 별도 컴포넌트로 빼지 않습니다.
+   - `toCourseCardItems`, `getStatusLabel`처럼 JSX를 반환하지 않는 data mapper/helper만 lowercase 함수로 둡니다.
+16. screen component 수정 시 대응 `[ScreenName].spec.md` 업데이트와 `## 변경 이력` 추가가 필수입니다.
+17. `packages/fe-mo-ui/src/screen/index.ts` export 동기화가 필수입니다.
+18. screen spec은 `## 화면 스케치` 섹션과 fenced `text` wireframe을 반드시 포함합니다.
 
 ## 금지
 
@@ -57,6 +72,8 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 - `useLocalSearchParams`, `useRouter`, `usePathname`, `useNavigation`, `Link`를 통한 네비게이션
 - `expo-router`, `expo-linking`, `expo-splash-screen`, `react-native-webview` 같은 route/native runtime 직접 의존
 - `window`, `document`, `cookies`, `headers` 접근
+- `React.createElement` 또는 `createElement` 기반 visual composition
+- JSX를 반환하는 `render*` helper 함수
 - route shell/layout/테스트 파일(`_layout.tsx`, `_prefetch.ts`, `index.spec.md`)의 소유권 침범
 - route screen을 감싸는 wrapper 목적의 trivial `*Client`, `*Inner` 컴포넌트
 
@@ -64,6 +81,7 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 
 - props contract를 먼저 정의한 뒤 조합형 render를 구현합니다.
 - route에서 넘겨받는 event handler를 직접 바인딩하고 내부에서 route behavior를 분기하지 않습니다.
+- 상태별/반복별 UI 조각은 screen component 본문 안에서 읽히도록 JSX를 직접 배치합니다.
 - screen-level composition, 상태별 렌더링, props/event contract를 `[ScreenName].spec.md`에 기록합니다.
 - `[ScreenName].spec.md`에는 첫 화면, 주요 ready 상태, loading/empty/error 또는 overlay/sheet 상태를 Markdown fenced `text` 화면 스케치로 그립니다.
 - `packages/fe-mo-ui/src/screen/index.ts` barrel export 누락 없이 유지합니다.

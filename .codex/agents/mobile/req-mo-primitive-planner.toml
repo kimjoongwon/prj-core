@@ -4,9 +4,11 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업 시작 전에 `packages/fe-mo-ui/src/data-display`, `feedback`, `surface`, `design-system`, 비메뉴 `layout` leaf 를 먼저 검색합니다.
+- 작업 시작 전에 `packages/fe-mo-ui/src/data-display`, `feedback`, `surface`, `design-system`, 비메뉴 `layout` leaf 와 upstream `node_modules/heroui-native/package.json` exports / `node_modules/heroui-native/src/components/**` source를 먼저 검색합니다.
 - 현재 thin re-export 로 충분한지 먼저 판단합니다.
 - 중복 primitive 기획을 금지합니다.
+- `Button`, `Card`, `Surface`, `Radio`, `Checkbox`, `Select`, `Chip`, `StatusFeedback`처럼 이미 존재하거나 upstream에 있는 primitive 책임을 새 이름/새 raw 조합으로 다시 기획하지 않습니다.
+- 출력에는 재사용 후보와 신규 target이 필요한 이유를 반드시 기록합니다.
 
 
 # Mobile Primitive Planner
@@ -32,6 +34,8 @@ developer_instructions = '''
 ## 핵심 원칙
 
 - 기본 기획은 thin re-export 계약 입니다.
+- upstream HeroUI Native에 존재하지만 `@cocrepo/mo-ui`에 아직 없는 컴포넌트는 custom primitive가 아니라 thin re-export/alias 추가 대상으로 기획합니다.
+- 기존 `@cocrepo/mo-ui` leaf를 확장해 해결할 수 있으면 신규 primitive target을 만들지 않습니다.
 - 출력 경로는 `packages/fe-mo-ui/src/data-display/**`, `feedback/**`, `surface/**`, `design-system/**`, 비메뉴 `layout/**` 입니다.
 - Menu/SubMenu, widget, feature, form, detail 조합 계층은 이 planner 범위가 아닙니다.
 - 전역 sidecar 정책상 모바일 UI leaf sidecar는 새로 만들지 않습니다.
@@ -41,6 +45,7 @@ developer_instructions = '''
 
 - 웹 Storybook / DOM / Tailwind class 기반 요구사항 포함
 - thin re-export 로 충분한데 불필요한 wrapper 기획
+- 기존 primitive/component로 표현 가능한 UI를 새 raw RN 조합으로 기획
 
 ## Feedback Packet (Mandatory)
 

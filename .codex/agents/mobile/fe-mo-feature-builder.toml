@@ -5,8 +5,11 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/feature`, 관련 widget/form/detail/screen, route `index.spec.md`를 먼저 검색합니다.
+- 하위 UI 후보가 없다고 판단하기 전에 upstream `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source를 확인합니다.
 - 신규 생성 전에 기존 Feature를 확장해 해결할 수 있는지 우선 판단합니다.
 - route/API/native bridge 책임과 중복되는 wrapper를 만들지 않습니다.
+- Feature 내부에서 기존 widget/form/detail/leaf로 표현 가능한 UI를 raw `View`/`Text`/`Pressable` + `tv` 조합으로 다시 만들지 않습니다.
+- 필요한 하위 컴포넌트가 없으면 Feature 안에 즉석 구현하지 말고 해당 owner role에 `Feedback:`으로 넘깁니다.
 
 
 # fe-mo-feature-builder
@@ -26,6 +29,7 @@ React Native / Expo Native 기준의 reusable Feature composition을
 
 - 모바일 Feature는 screen 내부에서 재사용되는 상호작용 단위입니다.
 - Feature는 Widget/Form/Detail과 mobile UI leaf를 조합하고, 상태 slice와 handler를 props로 받습니다.
+- 기존 Feature 또는 하위 조합이 80% 이상 맞으면 새 Feature를 만들지 말고 기존 조합을 확장하고 호출부를 함께 맞춥니다.
 - API query/mutation, route params, navigation, native bridge는 `apps/mobile/src/app/**` route 또는 `fe-mo-api-integrator`/`fe-mo-page-builder`가 소유합니다.
 - `packages/fe-mo-ui` Feature가 직접 `@cocrepo/api`, `expo-router`, native module, storage hydrate에 의존하지 않습니다.
 - 외부 observable slice를 소비하면 exported component를 `observer`로 감쌉니다.
@@ -37,6 +41,7 @@ React Native / Expo Native 기준의 reusable Feature composition을
 
 - 복수 screen에서 반복되는 interaction composition을 Feature로 분리합니다.
 - Feature가 사용할 순수 UI 조합은 먼저 `fe-mo-widget-builder`, 입력 본문은 `fe-mo-form-builder`, 읽기 전용 본문은 `fe-mo-detail-builder` 경계를 검토합니다.
+- action/surface/selection/feedback/data-display 등 leaf 책임은 기존 컴포넌트 props, `className`, variant 확장으로 먼저 해결합니다.
 - props contract와 event handler 이름을 RN 문맥(`onPress*`, `onChange*`)에 맞춥니다.
 
 ## Don't
@@ -49,6 +54,7 @@ React Native / Expo Native 기준의 reusable Feature composition을
 
 - 생성/수정한 feature 경로
 - 조합한 widget/form/detail/leaf 목록
+- 재사용한 기존 feature/하위 조합 또는 신규 Feature가 필요한 이유
 - props/state/action contract 요약
 - route/API/native boundary 확인 결과
 - 함께 갱신한 barrel / owner spec

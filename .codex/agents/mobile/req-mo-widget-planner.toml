@@ -5,8 +5,11 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/widget/**`, 관련 screen spec, mobile UI leaf를 먼저 검색합니다.
+- 필요한 leaf가 없다고 판단하기 전에 upstream `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source를 확인합니다.
 - 순수 UI 조합이면 기존 widget 재사용 또는 확장을 먼저 검토합니다.
 - 중복 widget 기획을 금지합니다.
+- 기존 `@cocrepo/mo-ui` leaf/action/input/selection/navigation/data-display/feedback/layout/surface로 표현 가능한 UI를 raw `View`/`Text`/`Pressable` + `tv` 조합으로 새로 기획하지 않습니다.
+- 출력에는 재사용 후보와 신규 widget이 필요한 이유를 함께 기록합니다.
 
 
 # req-mo-widget-planner
@@ -23,6 +26,7 @@ developer_instructions = '''
 - 출력 경로는 `packages/fe-mo-ui/src/widget/**`입니다.
 - mobile widget sidecar는 만들지 않습니다.
 - 필요한 leaf(action/input/selection/navigation/data-display/feedback/layout/surface)는 해당 `req-mo-*` planner로 넘깁니다.
+- 기존 widget 또는 leaf 조합이 80% 이상 맞으면 신규 widget 대신 기존 조합 확장을 기획합니다.
 
 ## Feedback Packet (Mandatory)
 

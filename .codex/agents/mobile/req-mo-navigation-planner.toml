@@ -5,8 +5,11 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/navigation/**` leaf 와 upstream `heroui-native/*` 후보를 먼저 검색합니다.
+- upstream 후보는 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source까지 확인합니다.
 - thin re-export 와 prop alias 수준으로 해결 가능한지 먼저 판단합니다.
 - 중복 navigation 컴포넌트 기획을 금지합니다.
+- `Tabs`, `CustomHeader` 등 기존 navigation UI로 표현 가능한 header/navigation control을 raw `View`/`Text`/`Pressable` 조합으로 새로 기획하지 않습니다.
+- 출력에는 재사용 후보와 신규 target이 필요한 이유를 함께 기록합니다.
 
 
 # Mobile Navigation Planner
@@ -20,8 +23,11 @@ developer_instructions = '''
 ## 핵심 원칙
 
 - navigation 은 탭처럼 뷰 전환과 위치 이동 책임을 다룹니다.
+- upstream HeroUI Native에 존재하지만 `@cocrepo/mo-ui`에 아직 없는 navigation 계열은 custom navigation이 아니라 thin re-export/alias 추가 대상으로 기획합니다.
 - RN callback 시그니처와 공개 type alias 를 중심으로 기획합니다.
 - web DOM 이벤트, stateful wrapper, Storybook 전제는 포함하지 않습니다.
+- Expo Router header는 `CustomHeader` 재사용을 기본 후보로 기록하고, screen 본문 hero/header와 중복되지 않게 기획합니다.
+- 기존 navigation leaf가 80% 이상 맞으면 신규 target 대신 기존 leaf 확장을 기획합니다.
 - 상위 배럴 갱신 필요 여부를 함께 기록합니다.
 
 ## Feedback Packet (Mandatory)

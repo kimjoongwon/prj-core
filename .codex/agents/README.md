@@ -93,6 +93,12 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 
 ## 프론트엔드
 
+프론트엔드 공통 운영 원칙:
+
+- PC/Web UI 기획/구현 전에 HeroUI React upstream 패키지(`node_modules/@heroui/react`, import path `@heroui/react`)와 `@cocrepo/ui` 기존 display/control/layout/widget/feature/form/detail/page/data-grid/cell/columns 후보를 먼저 검색합니다.
+- `@cocrepo/ui`에 아직 노출되지 않았어도 `@heroui/react/package.json` exports 또는 `@heroui/react/dist/components/**`에 있는 컴포넌트면 custom 구현보다 thin wrapper/re-export/alias 추가를 우선합니다.
+- 이미 있는 primitive/component로 표현 가능한 UI를 raw `div`/`button`/`input`/`table` + className/Tailwind 조합으로 다시 만들지 않습니다. 부족하면 기존 컴포넌트를 확장하거나 owner role에 `Feedback:` packet으로 넘깁니다.
+
 - [fe-ui-page-builder.toml](./fe-ui-page-builder.toml): `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 기준의 semantic pure page component와 sidecar를 생성하는 전문가
 - [fe-page-builder.toml](./fe-page-builder.toml): `apps/*/src/app/**/page.tsx`, `@slot/**/page.tsx`, `route.meta.ts` thin route contract를 구현하고 folder-based pure page를 연결하는 전문가
 - [fe-layout-builder.toml](./fe-layout-builder.toml): `packages/fe-ui/src/display/layout`의 flat Layout primitive를 설계하고 생성하는 전문가

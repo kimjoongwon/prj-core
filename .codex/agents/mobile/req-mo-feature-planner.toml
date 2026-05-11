@@ -5,7 +5,10 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/feature/**`, 관련 widget/form/detail/screen, route `index.spec.md`를 먼저 검색합니다.
+- 필요한 하위 UI가 없다고 판단하기 전에 upstream `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source를 확인합니다.
 - route/API/native bridge와 중복되는 Feature 기획을 금지합니다.
+- 기존 widget/form/detail/leaf로 표현 가능한 UI를 Feature 안에서 raw `View`/`Text`/`Pressable` + `tv` 조합으로 새로 기획하지 않습니다.
+- 출력에는 재사용 후보와 신규 Feature가 필요한 이유를 함께 기록합니다.
 
 
 # req-mo-feature-planner
@@ -23,6 +26,7 @@ developer_instructions = '''
 - 출력 경로는 `packages/fe-mo-ui/src/feature/**`입니다.
 - mobile feature sidecar는 만들지 않습니다.
 - shared state가 필요하면 `req-mo-state-planner` 또는 `req-mo-store-planner`와 경계를 맞춥니다.
+- 기존 Feature 또는 하위 조합이 80% 이상 맞으면 신규 Feature 대신 기존 조합 확장을 기획합니다.
 
 ## Feedback Packet (Mandatory)
 

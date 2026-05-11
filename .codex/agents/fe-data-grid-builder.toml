@@ -4,6 +4,15 @@ model = "gpt-5.5"
 model_reasoning_effort = "xhigh"
 developer_instructions = '''
 
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 `DataGrid`, `columns`, `cell`, `@cocrepo/ui` export, 허용 대상 Page/Feature spec, 테스트를 먼저 검색합니다.
+- DataGrid/Table 후보는 upstream `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
+- `@heroui/react` Table/Pagination/Checkbox/Button/Dropdown 등과 기존 `DataGrid`로 표현 가능한 table UI를 raw `<table>`/`div`/`button` + className 조합으로 재구현하지 않습니다.
+- 신규 grid/table wrapper 생성 전에 기존 `DataGrid`를 확장하고 호출부를 함께 맞출 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 구현이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 DataGrid/Table wrapper를 금지합니다.
+
 # FE Data Grid Builder
 
 `packages/fe-ui/src/data-grid` 전용 role 입니다.

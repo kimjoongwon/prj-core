@@ -58,6 +58,8 @@ empty/error:
 - Expo Router의 `CustomHeader`가 상단 safe-area와 header를 소유하고, screen은 본문 safe-area shell만 적용한다.
 - `ScreenFrame`으로 본문 safe-area shell을 적용한다.
 - 시각 스타일은 `StyleSheet`가 아니라 uniwind `className`과 `tailwind-variants` slot/variant로 정의한다.
+- render tree는 JSX로 작성하고 `createElement` 기반 visual composition을 사용하지 않는다.
+- 상태별 feedback과 예약 카드 반복 JSX는 별도 `render*` helper나 재사용 목적 없는 조각 컴포넌트로 분리하지 않고 `MyReservationsScreen` 본문 안에서 직접 조합한다.
 - 색상은 heroui-native semantic token(`background`, `surface`, `foreground`, `muted`, `accent`, `border`)을 사용한다.
 - ready 상태에서는 예약일, 상태, 제목, 메타, memo를 카드로 표시한다.
 - loading/empty/error 상태는 `StatusFeedback`으로 표시한다.
@@ -65,9 +67,11 @@ empty/error:
 
 ## 변경 이력
 
-| 날짜 | 변경 내용 |
-| --- | --- |
+| 날짜       | 변경 내용                                                                                                                       |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-05-11 | 예약 목록 상태/카드 JSX를 screen 본문 안으로 인라인하고 `render*` helper 및 일회성 조각 컴포넌트 금지 계약을 추가했습니다.      |
+| 2026-05-11 | screen render tree를 JSX로 전환하고 `createElement` 기반 visual composition 금지 계약을 추가했습니다.                           |
 | 2026-05-10 | Expo Router `CustomHeader` 아래에서 본문 safe-area만 소유하고 heroui-native semantic token을 쓰도록 렌더링 계약을 갱신했습니다. |
-| 2026-05-09 | screen 스타일 계약을 uniwind className과 tailwind-variants slot 기반으로 정리했습니다. |
-| 2026-05-09 | screen visual owner spec에 Markdown 화면 스케치를 추가했습니다. |
-| 2026-05-09 | `/reservations` route의 visual owner를 route file에서 shared screen component로 복구했습니다. |
+| 2026-05-09 | screen 스타일 계약을 uniwind className과 tailwind-variants slot 기반으로 정리했습니다.                                          |
+| 2026-05-09 | screen visual owner spec에 Markdown 화면 스케치를 추가했습니다.                                                                 |
+| 2026-05-09 | `/reservations` route의 visual owner를 route file에서 shared screen component로 복구했습니다.                                   |

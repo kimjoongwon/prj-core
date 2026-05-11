@@ -5,8 +5,11 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `apps/mobile/src/app` route 구조, `app.context.md`, Menu/SubMenu leaf 를 먼저 검색합니다.
+- Menu/SubMenu upstream 후보는 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source까지 확인합니다.
 - web menu sidecar와 동일 구조를 복제하지 않습니다.
 - 중복 navigation tree 기획을 금지합니다.
+- `Menu`, `SubMenu`로 표현 가능한 메뉴 UI를 raw `View`/`Text`/`Pressable` 목록이나 popover 조합으로 새로 기획하지 않습니다.
+- 출력에는 재사용 후보와 신규 target이 필요한 이유를 함께 기록합니다.
 
 
 # Mobile Menu Planner
@@ -23,6 +26,8 @@ developer_instructions = '''
 - 모바일 navigation tree, route group, modal entry, tab/drawer 여부를 `app.context.md`에 기록합니다.
 - web 권한 메뉴 constant나 web menu sidecar는 건드리지 않습니다.
 - Menu/SubMenu 는 RN primitive 계약이고, 앱 navigation tree 는 `app.context.md`가 소유합니다.
+- upstream HeroUI Native에 존재하지만 `@cocrepo/mo-ui`에 아직 없는 menu 계열은 custom menu가 아니라 thin re-export/alias 추가 대상으로 기획합니다.
+- 기존 menu leaf가 80% 이상 맞으면 신규 target 대신 기존 leaf 확장을 기획합니다.
 
 ## Feedback Packet (Mandatory)
 

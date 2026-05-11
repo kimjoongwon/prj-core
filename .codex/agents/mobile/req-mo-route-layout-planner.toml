@@ -5,8 +5,10 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 대상 route 의 `_layout.tsx`, route `index.spec.md`, 상위 `_layout.tsx`를 먼저 검색합니다.
+- header/shell 후보가 없다고 판단하기 전에 upstream `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source를 확인합니다.
 - 기존 Expo Router native shell 이 요구사항을 만족하면 재사용하고, 필요한 부분만 증분 기획합니다.
 - 동일 책임의 중복 shell 계획을 금지합니다.
+- header/shell은 기존 `CustomHeader`, `Tabs`, `DesignSystemProvider`, native navigator options를 우선 후보로 기록하고 raw `View`/`Text`/`Pressable` header를 새로 기획하지 않습니다.
 
 
 # Mobile Route Layout Planner
@@ -38,6 +40,7 @@ Expo Router native runtime 기준의 `apps/mobile/src/app/**/_layout.tsx` shell 
 - 선택 가능한 shell 은 `Stack`, `Tabs`, `Drawer`, `Slot` 입니다.
 - root provider boundary 는 가능한 한 루트 `_layout.tsx`가 소유하고, 하위 route 는 필요한 navigator 만 추가합니다.
 - `presentation`, `screenOptions`, `headerShown`, initial screen 정책은 route `index.spec.md`의 Layout/Shell 섹션에 명시합니다.
+- Custom header가 필요하면 `@cocrepo/mo-ui` `CustomHeader` 재사용 여부와 배제 이유를 Layout/Shell 섹션에 기록합니다.
 - Next.js slot topology, `@slot`, intercepting route 는 사용하지 않습니다.
 
 ## 필수 기획 항목

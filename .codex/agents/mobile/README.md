@@ -17,6 +17,9 @@
 - 모바일 검증은 Jest unit test 와 Detox E2E, `qa-mo-*` role 기준으로 정리합니다.
 - 모바일 UI 스타일링은 uniwind `className` 계열 prop과 `tailwind-variants`의 `tv({ slots, variants })`를 기본으로 하며, `StyleSheet`/`StyleSheet.create`를 새로 만들지 않습니다.
 - `style` 객체는 safe-area inset, navigator option object, third-party native bridge 값처럼 className으로 표현하기 어려운 동적 값에만 제한합니다.
+- 모바일 UI 기획/구현 전에 HeroUI Native upstream 패키지(`node_modules/heroui-native`, import path `heroui-native/*`)와 `@cocrepo/mo-ui` 기존 leaf/action/input/selection/navigation/data-display/feedback/layout/surface/design-system/screen 후보를 먼저 검색합니다.
+- `@cocrepo/mo-ui`에 아직 노출되지 않았어도 `heroui-native/package.json` exports 또는 `heroui-native/src/components/**`에 있는 컴포넌트면 custom 구현보다 thin re-export/alias 추가를 우선합니다.
+- 이미 있는 primitive/component로 표현 가능한 UI를 raw `Pressable`/`View`/`Text` 조합으로 다시 만들지 않습니다. 부족하면 기존 컴포넌트를 확장하거나 owner role에 `Feedback:` packet으로 넘깁니다.
 - 전역 sidecar spec 정책상 모바일 route/native wiring 계약은 `apps/mobile/src/app/**/index.spec.md`가 소유합니다.
 - 모바일 shared screen visual composition 계약은 `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].spec.md`가 소유합니다.
 - 테스트 sidecar와 모바일 UI leaf/action 조합 계층(action/input/selection/navigation/data-display/feedback/layout/surface/design-system/widget/feature/form/detail) sidecar는 만들지 않습니다.

@@ -5,8 +5,11 @@ developer_instructions = '''
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/input/**` leaf contract 과 upstream `heroui-native/*` 후보를 먼저 검색합니다.
+- upstream 후보는 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source까지 확인합니다.
 - thin re-export 와 prop alias 수준으로 해결 가능한지 먼저 판단합니다.
 - 중복 입력 컴포넌트 기획을 금지합니다.
+- `Input`, `Textarea`, `SearchField`, `InputOTP`로 표현 가능한 입력 UI를 raw `TextInput`/`View`/`Text` 조합으로 새로 기획하지 않습니다.
+- 출력에는 재사용 후보와 신규 target이 필요한 이유를 함께 기록합니다.
 
 
 # Mobile Input Planner
@@ -22,12 +25,15 @@ developer_instructions = '''
 - RN callback 시그니처와 공개 type alias 를 중심으로 기획합니다.
 - web DOM 이벤트, action/selection/navigation 혼합 contract, stateful wrapper, Storybook 전제는 포함하지 않습니다.
 - value, placeholder, keyboard type, helper text, validation trigger 같은 입력 계약만 다룹니다.
+- upstream HeroUI Native에 존재하지만 `@cocrepo/mo-ui`에 아직 없는 input/control-field/label/helper 계열은 custom input이 아니라 thin re-export/alias 추가 대상으로 기획합니다.
+- 기존 input leaf가 80% 이상 맞으면 신규 target 대신 기존 leaf 확장을 기획합니다.
 - 상위 배럴 갱신 필요 여부를 함께 기록합니다.
 
 ## 실패 조건
 
 - action/selection/navigation contract 를 input planner 안에 섞음
 - web DOM event 나 browser 전용 API 전제를 포함함
+- 기존 input primitive로 표현 가능한 입력 UI를 새 raw RN 조합으로 계획함
 - thin re-export 로 충분한데 별도 wrapper 를 새로 설계함
 
 ## Feedback Packet (Mandatory)
