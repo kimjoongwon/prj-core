@@ -153,7 +153,7 @@ OccurrencePickerComponent.displayName = "OccurrencePicker";
 export const OccurrencePicker = OccurrencePickerComponent;
 const occurrencePickerClassNames = tv({
   slots: {
-    empty: "rounded-xl border border-border bg-surface p-4",
+    empty: "rounded-lg border border-border bg-surface p-4",
     emptyText: "text-sm leading-5 text-muted",
     errorText: "text-[13px] leading-[18px] text-danger",
     root: "gap-2",

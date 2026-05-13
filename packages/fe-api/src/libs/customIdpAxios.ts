@@ -35,6 +35,9 @@ interface PersistStoreRef {
 }
 let persistStoreRef: PersistStoreRef | null = null;
 
+type NativeRefreshHandler = () => Promise<void>;
+let nativeRefreshHandler: NativeRefreshHandler | null = null;
+
 interface LocaleStoreRef {
   languageCode?: string | null;
 }
@@ -54,6 +57,12 @@ export function setIdpBaseUrl(baseUrl: string) {
  */
 export function setIdpPersistStore(store: PersistStoreRef) {
   persistStoreRef = store;
+}
+
+export function setIdpNativeRefreshHandler(
+  handler: NativeRefreshHandler | null,
+) {
+  nativeRefreshHandler = handler;
 }
 
 export function setIdpLocaleStore(store: LocaleStoreRef) {
@@ -83,6 +92,26 @@ const processQueue = (error: unknown) => {
     }
   }
   failedQueue = [];
+};
+
+const applyTokenRefreshData = (responseData?: {
+  accessToken?: string;
+  accessTokenExpiresAt?: number;
+  refreshToken?: string;
+  refreshTokenExpiresAt?: number;
+}) => {
+  if (!responseData || !persistStoreRef) {
+    return;
+  }
+
+  persistStoreRef.accessToken =
+    responseData.accessToken ?? persistStoreRef.accessToken ?? null;
+  persistStoreRef.refreshToken =
+    responseData.refreshToken ?? persistStoreRef.refreshToken ?? null;
+  if (responseData.accessTokenExpiresAt) {
+    persistStoreRef.accessTokenExpiresAt = responseData.accessTokenExpiresAt;
+    persistStoreRef.refreshTokenExpiresAt = responseData.refreshTokenExpiresAt;
+  }
 };
 
 IDP_AXIOS_INSTANCE.interceptors.request.use((config) => {
@@ -121,15 +150,22 @@ IDP_AXIOS_INSTANCE.interceptors.response.use(
       _retry?: boolean;
     };
 
+    const canHandleRefresh = isBrowser || nativeRefreshHandler;
+
     if (
-      isBrowser &&
+      canHandleRefresh &&
       error.response?.status === 401 &&
       originalRequest &&
       !originalRequest._retry
     ) {
       // refresh 엔드포인트 자체의 401은 갱신 시도하지 않음
-      if (originalRequest.url?.includes("/auth/token/refresh")) {
-        window.location.href = loginRedirectUrl;
+      if (
+        originalRequest.url?.includes("/auth/token/refresh") ||
+        originalRequest.url?.includes("/auth/native/token/refresh")
+      ) {
+        if (isBrowser && !nativeRefreshHandler) {
+          window.location.href = loginRedirectUrl;
+        }
         return Promise.reject(error);
       }
 
@@ -144,37 +180,31 @@ IDP_AXIOS_INSTANCE.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // auth 모듈이 idp-server에 있으므로 같은 인스턴스로 refresh 요청
-        const refreshResponse = await IDP_AXIOS_INSTANCE.post(
-          "/api/v1/auth/token/refresh",
-        );
-        const responseData = (
-          refreshResponse.data as {
-            data?: {
-              accessToken?: string;
-              accessTokenExpiresAt?: number;
-              refreshToken?: string;
-              refreshTokenExpiresAt?: number;
-            };
-          }
-        )?.data;
-        if (responseData && persistStoreRef) {
-          persistStoreRef.accessToken =
-            responseData.accessToken ?? persistStoreRef.accessToken ?? null;
-          persistStoreRef.refreshToken =
-            responseData.refreshToken ?? persistStoreRef.refreshToken ?? null;
-          if (responseData.accessTokenExpiresAt) {
-            persistStoreRef.accessTokenExpiresAt =
-              responseData.accessTokenExpiresAt;
-            persistStoreRef.refreshTokenExpiresAt =
-              responseData.refreshTokenExpiresAt;
-          }
+        if (nativeRefreshHandler) {
+          await nativeRefreshHandler();
+        } else {
+          const refreshResponse = await IDP_AXIOS_INSTANCE.post(
+            "/api/v1/auth/token/refresh",
+          );
+          const responseData = (
+            refreshResponse.data as {
+              data?: {
+                accessToken?: string;
+                accessTokenExpiresAt?: number;
+                refreshToken?: string;
+                refreshTokenExpiresAt?: number;
+              };
+            }
+          )?.data;
+          applyTokenRefreshData(responseData);
         }
         processQueue(null);
         return IDP_AXIOS_INSTANCE(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);
-        window.location.href = loginRedirectUrl;
+        if (isBrowser && !nativeRefreshHandler) {
+          window.location.href = loginRedirectUrl;
+        }
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

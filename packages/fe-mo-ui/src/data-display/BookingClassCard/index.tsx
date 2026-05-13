@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
+import { Icon, type MobileIconName } from "../../icon";
 export type BookingAvailabilityStatus =
   | "AVAILABLE"
   | "FEW_LEFT"
@@ -54,6 +55,14 @@ const DEFAULT_CTA_LABELS: Record<BookingAvailabilityStatus, string> = {
   WAITLISTED: "Waitlisted",
   WAITLIST_OPEN: "Join waitlist",
 };
+const STATUS_ICONS: Record<BookingAvailabilityStatus, MobileIconName> = {
+  AVAILABLE: "circleCheck",
+  BOOKING_CLOSED: "circleSlash",
+  FEW_LEFT: "triangleAlert",
+  RESERVED: "ticketCheck",
+  WAITLISTED: "hourglass",
+  WAITLIST_OPEN: "hourglass",
+};
 const isActionDisabled = (item: BookingClassFeedItem, onPressCta?: unknown) =>
   !onPressCta ||
   item.status === "BOOKING_CLOSED" ||
@@ -86,7 +95,12 @@ const CapacityText = ({ item }: { item: BookingClassFeedItem }) => {
   if (!parts.length) {
     return null;
   }
-  return <Text className={classNames.capacityText()}>{parts.join(" · ")}</Text>;
+  return (
+    <View className={classNames.capacityRow()}>
+      <Icon name="users" size="xs" tone="muted" />
+      <Text className={classNames.capacityText()}>{parts.join(" · ")}</Text>
+    </View>
+  );
 };
 const ExerciseTag = ({ tag }: { tag: ReactNode }) => (
   <View className={classNames.tag()}>
@@ -129,6 +143,17 @@ const BookingMeta = ({ item }: { item: BookingClassFeedItem }) => {
     </View>
   );
 };
+const TimelineText = ({ value }: { value?: ReactNode }) => {
+  if (value === undefined || value === null || value === false) {
+    return null;
+  }
+  return (
+    <View className={classNames.timelineRow()}>
+      <Icon name="mapPin" size="xs" tone="muted" />
+      <Text className={classNames.timeline()}>{value}</Text>
+    </View>
+  );
+};
 const createPressHandler = (
   item: BookingClassFeedItem,
   onPressCta: BookingClassCardProps["onPressCta"],
@@ -152,6 +177,7 @@ const BookingClassCardComponent = observer((props: BookingClassCardProps) => {
     <View {...rest} className={slotClassNames.root()} style={style}>
       <View className={slotClassNames.header()}>
         <View className={slotClassNames.timeBlock()} key="time">
+          <Icon name="clock" size="sm" tone="muted" />
           <Text className={slotClassNames.time()} key="time-label">
             {item.timeLabel}
           </Text>
@@ -162,6 +188,21 @@ const BookingClassCardComponent = observer((props: BookingClassCardProps) => {
               {item.programName}
             </Text>
             <View className={slotClassNames.statusBadge()} key="status">
+              <Icon
+                name={STATUS_ICONS[item.status]}
+                size="xs"
+                tone={
+                  item.status === "AVAILABLE" ||
+                  item.status === "RESERVED" ||
+                  item.status === "WAITLISTED"
+                    ? "success"
+                    : item.status === "FEW_LEFT"
+                      ? "warning"
+                      : item.status === "WAITLIST_OPEN"
+                        ? "accent"
+                        : "muted"
+                }
+              />
               <Text className={slotClassNames.statusText()}>
                 {item.statusLabel ?? STATUS_LABELS[item.status]}
               </Text>
@@ -171,10 +212,7 @@ const BookingClassCardComponent = observer((props: BookingClassCardProps) => {
             className={slotClassNames.session()}
             value={item.sessionName}
           />
-          <OptionalText
-            className={slotClassNames.timeline()}
-            value={item.timelineName}
-          />
+          <TimelineText value={item.timelineName} />
         </View>
       </View>
       <BookingMeta item={item} />
@@ -200,6 +238,11 @@ const BookingClassCardComponent = observer((props: BookingClassCardProps) => {
         className={slotClassNames.action()}
       >
         <Text className={slotClassNames.actionText()}>{ctaLabel}</Text>
+        <Icon
+          name="arrowRight"
+          size="sm"
+          tone={disabled ? "muted" : "accentForeground"}
+        />
       </Pressable>
     </View>
   );
@@ -209,28 +252,31 @@ export const BookingClassCard = BookingClassCardComponent;
 const bookingClassCardClassNames = tv({
   slots: {
     action:
-      "min-h-[46px] items-center justify-center rounded-xl bg-accent px-4 py-3",
-    actionText: "text-[15px] font-extrabold leading-5 text-accent-foreground",
+      "min-h-11 flex-row items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5",
+    actionText: "text-sm font-extrabold leading-5 text-accent-foreground",
+    capacityRow:
+      "flex-row items-center gap-2 rounded-lg border border-border bg-surface-secondary px-3 py-2",
     capacityText:
-      "rounded-xl bg-surface-secondary px-3 py-2 text-[13px] font-bold leading-[18px] text-surface-secondary-foreground",
-    header: "flex-row items-stretch gap-3",
+      "flex-1 text-[13px] font-bold leading-[18px] text-surface-secondary-foreground",
+    header: "flex-row items-stretch gap-2",
     meta: "flex-row flex-wrap gap-2",
     metaText: "text-[13px] leading-[18px] text-muted",
     myStatus: "text-[13px] font-bold leading-[18px] text-success",
-    program: "flex-1 text-[17px] font-extrabold leading-[23px] text-foreground",
-    root: "gap-3 rounded-[14px] border border-border bg-surface p-4 shadow-surface",
+    program: "flex-1 text-base font-extrabold leading-6 text-foreground",
+    root: "gap-3 rounded-lg border border-border bg-surface p-4",
     session: "text-sm font-bold leading-5 text-surface-foreground",
     statusBadge:
-      "items-center self-start rounded-full bg-surface-secondary px-[9px] py-[5px]",
+      "flex-row items-center gap-1 self-start rounded-full border border-border bg-surface-secondary px-2 py-1",
     statusText:
       "text-[11px] font-extrabold leading-[14px] text-surface-secondary-foreground",
-    tag: "rounded-full bg-surface-secondary px-2.5 py-[5px]",
+    tag: "rounded-full border border-border bg-surface-secondary px-2 py-1",
     tagText: "text-xs font-bold leading-4 text-surface-secondary-foreground",
     tags: "flex-row flex-wrap gap-2",
-    time: "text-center text-[16px] font-black leading-6 text-foreground",
+    time: "text-center text-[15px] font-black leading-6 text-foreground",
     timeBlock:
-      "min-w-[86px] items-center justify-center rounded-xl bg-surface-secondary px-3 py-3",
+      "min-w-20 items-center justify-center gap-1 rounded-lg border border-border bg-surface-secondary px-2 py-2",
     timeline: "text-[13px] leading-[18px] text-muted",
+    timelineRow: "flex-row items-center gap-1.5",
     titleBlock: "flex-1 gap-1",
     titleRow: "flex-row items-start gap-2",
   },
@@ -238,7 +284,7 @@ const bookingClassCardClassNames = tv({
     disabled: {
       false: {},
       true: {
-        action: "bg-surface-secondary opacity-75",
+        action: "border border-border bg-surface-secondary opacity-75",
         actionText: "text-surface-secondary-foreground",
       },
     },
@@ -248,20 +294,20 @@ const bookingClassCardClassNames = tv({
         statusBadge: "bg-default",
       },
       FEW_LEFT: {
-        statusBadge: "bg-warning",
-        statusText: "text-warning-foreground",
+        statusBadge: "border-warning bg-warning-soft",
+        statusText: "text-warning-soft-foreground",
       },
       RESERVED: {
-        statusBadge: "bg-success",
-        statusText: "text-success-foreground",
+        statusBadge: "border-success bg-success-soft",
+        statusText: "text-success-soft-foreground",
       },
       WAITLISTED: {
-        statusBadge: "bg-success",
-        statusText: "text-success-foreground",
+        statusBadge: "border-success bg-success-soft",
+        statusText: "text-success-soft-foreground",
       },
       WAITLIST_OPEN: {
-        statusBadge: "bg-accent",
-        statusText: "text-accent-foreground",
+        statusBadge: "border-accent bg-accent-soft",
+        statusText: "text-accent-soft-foreground",
       },
     },
   },

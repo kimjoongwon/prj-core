@@ -1,6 +1,10 @@
+import { randomBytes } from "node:crypto";
 import { CONTEXT_KEYS, SYSTEM_ROLES, Token } from "@cocrepo/constant";
 import {
 	LoginResponseDto,
+	NativeAuthResponseDto,
+	NativeLogoutPayloadDto,
+	NativeTokenRefreshPayloadDto,
 	PageMetaDto,
 	QueryAuthAuditLogDto,
 	SetCurrentSpaceDto,
@@ -9,6 +13,7 @@ import {
 	UserDto,
 	VerifyTokenResponseDto,
 } from "@cocrepo/dto";
+import type { AuthConfig } from "@cocrepo/type";
 import {
 	type OidcAuthorizationRequestOptions,
 	type OidcClientProtocolConfig,
@@ -38,11 +43,16 @@ import {
 	NotFoundException,
 	UnauthorizedException,
 } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { JwtService } from "@nestjs/jwt";
 import { plainToInstance } from "class-transformer";
 import type { Request, Response } from "express";
+import type { SignOptions } from "jsonwebtoken";
 import { ClsService } from "nestjs-cls";
 
 const DEFAULT_OIDC_CLIENT_ID = "admin-web";
+const MOBILE_NATIVE_CLIENT_ID = "user-mobile";
+const NATIVE_TOKEN_ISSUER_SUFFIX = "/native";
 const OIDC_STATE_CONTEXT_PREFIX = "__oidc_ctx__:";
 const SESSION_ID_SEPARATOR = ".";
 const OIDC_PROVIDER_COOKIE_NAMES = [
@@ -97,6 +107,28 @@ type UserWithTenantsLike = {
 	tenants?: SpaceTenantLike[];
 };
 
+function parseExpiresInToMilliseconds(expiresIn: string | number): number {
+	if (typeof expiresIn === "number") {
+		return expiresIn * 1000;
+	}
+
+	const match = expiresIn.match(/^(\d+)(ms|s|m|h|d)$/);
+	if (!match) {
+		return 60 * 60 * 1000;
+	}
+
+	const value = Number.parseInt(match[1], 10);
+	const unitToMilliseconds: Record<string, number> = {
+		ms: 1,
+		s: 1000,
+		m: 60 * 1000,
+		h: 60 * 60 * 1000,
+		d: 24 * 60 * 60 * 1000,
+	};
+
+	return value * unitToMilliseconds[match[2]];
+}
+
 /**
  * 인증 Application Service
  * OIDC 기반 인증 유즈케이스를 조합하고 내부 서비스 및 Integration Facade를 호출합니다.
@@ -122,6 +154,8 @@ export class AuthApplicationService {
 		private readonly oidcClientService: OidcClientService,
 		private readonly oidcFacade: OidcFacade,
 		private readonly cls: ClsService,
+		private readonly jwtService: JwtService,
+		private readonly configService: ConfigService,
 	) {}
 
 	/**
@@ -258,6 +292,107 @@ export class AuthApplicationService {
 		};
 	}
 
+	async createNativeMobileSession(
+		userId: string,
+		req: Request,
+		options: { mustChangePassword?: boolean } = {},
+	): Promise<NativeAuthResponseDto> {
+		const user = await this.usersService.getByIdWithTenants(userId);
+		if (!user) {
+			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
+		}
+
+		const sessionId = this.buildSessionId(
+			MOBILE_NATIVE_CLIENT_ID,
+			this.tokenStorageService.generateSessionId(),
+		);
+		const refreshToken = this.generateNativeRefreshToken();
+		await this.tokenStorageService.saveSession(user.id, sessionId, refreshToken, {
+			userAgent: this.resolveUserAgent(req),
+			ipAddress: this.resolveClientIp(req),
+			clientId: MOBILE_NATIVE_CLIENT_ID,
+		});
+
+		return this.buildNativeAuthResponse({
+			user,
+			sessionId,
+			refreshToken,
+			mustChangePassword: options.mustChangePassword,
+		});
+	}
+
+	async refreshNativeMobileSession(
+		dto: NativeTokenRefreshPayloadDto,
+	): Promise<NativeAuthResponseDto> {
+		const lookup = await this.tokenStorageService.getSessionBySessionId(
+			dto.sessionId,
+		);
+		if (!lookup || lookup.session.refreshToken !== dto.refreshToken) {
+			throw new UnauthorizedException("리프레시 토큰이 유효하지 않습니다");
+		}
+
+		const user = await this.usersService.getByIdWithTenants(lookup.userId);
+		if (!user) {
+			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
+		}
+
+		const refreshToken = this.generateNativeRefreshToken();
+		await this.tokenStorageService.updateSession(
+			lookup.userId,
+			lookup.sessionId,
+			refreshToken,
+		);
+
+		return this.buildNativeAuthResponse({
+			user,
+			sessionId: lookup.sessionId,
+			refreshToken,
+		});
+	}
+
+	async logoutNativeMobileSession(
+		dto: NativeLogoutPayloadDto,
+		accessToken?: string,
+	): Promise<boolean> {
+		const lookup = await this.tokenStorageService.getSessionBySessionId(
+			dto.sessionId,
+		);
+		if (lookup && dto.refreshToken && lookup.session.refreshToken !== dto.refreshToken) {
+			throw new UnauthorizedException("리프레시 토큰이 유효하지 않습니다");
+		}
+
+		if (accessToken) {
+			try {
+				const payload = this.decodeAccessToken(accessToken);
+				if (lookup && payload.sub !== lookup.userId) {
+					throw new UnauthorizedException("세션 사용자와 토큰 사용자가 다릅니다");
+				}
+
+				const expSeconds = payload.exp ?? 0;
+				const remainingSeconds = expSeconds - Math.floor(Date.now() / 1000);
+				if (remainingSeconds > 0) {
+					await this.tokenStorageService.addToBlacklist(
+						accessToken,
+						remainingSeconds,
+					);
+				}
+			} catch (error) {
+				if (error instanceof UnauthorizedException) {
+					throw error;
+				}
+				this.logger.warn(`모바일 로그아웃 토큰 정리 실패: ${error}`);
+			}
+		}
+
+		if (lookup) {
+			await this.tokenStorageService.deleteSession(
+				lookup.userId,
+				lookup.sessionId,
+			);
+		}
+		return true;
+	}
+
 	async refreshTokenWithIdp(
 		refreshToken: string,
 		sessionId: string | undefined,
@@ -371,7 +506,12 @@ export class AuthApplicationService {
 	/**
 	 * Access Token에서 payload 디코딩 (검증 없이, 검증은 JwtStrategy에서 수행)
 	 */
-	private decodeAccessToken(token: string): { sub: string } {
+	private decodeAccessToken(token: string): {
+		sub: string;
+		exp?: number;
+		iss?: string;
+		aud?: string | string[];
+	} {
 		const parts = token.split(".");
 		if (parts.length !== 3) {
 			throw new UnauthorizedException("유효하지 않은 토큰 형식입니다");
@@ -386,6 +526,86 @@ export class AuthApplicationService {
 		}
 
 		return payload;
+	}
+
+	private async buildNativeAuthResponse(params: {
+		user: Awaited<ReturnType<UserService["getByIdWithTenants"]>>;
+		sessionId: string;
+		refreshToken: string;
+		mustChangePassword?: boolean;
+	}): Promise<NativeAuthResponseDto> {
+		if (!params.user) {
+			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
+		}
+
+		const accessToken = this.signNativeAccessToken(params.user.id);
+		const payload = this.decodeAccessToken(accessToken);
+		const expSeconds = payload.exp ?? 0;
+		const remainingSeconds = expSeconds - Math.floor(Date.now() / 1000);
+		if (remainingSeconds > 0) {
+			await this.authCacheService.set(
+				params.user.id,
+				JSON.stringify(params.user),
+				remainingSeconds,
+			);
+		}
+
+		const authConfig = this.configService.get<AuthConfig>("auth");
+		return {
+			accessToken,
+			refreshToken: params.refreshToken,
+			sessionId: params.sessionId,
+			accessTokenExpiresAt: expSeconds * 1000,
+			refreshTokenExpiresAt:
+				Date.now() + parseExpiresInToMilliseconds(authConfig?.refresh ?? "7d"),
+			user: plainToInstance(UserDto, params.user),
+			mustChangePassword: params.mustChangePassword,
+		};
+	}
+
+	private signNativeAccessToken(userId: string): string {
+		const authConfig = this.configService.get<AuthConfig>("auth");
+		if (!authConfig?.secret) {
+			throw new Error("JWT secret is not defined in the configuration.");
+		}
+
+		return this.jwtService.sign(
+			{
+				client_id: MOBILE_NATIVE_CLIENT_ID,
+			},
+			{
+				algorithm: "HS256",
+				audience: MOBILE_NATIVE_CLIENT_ID,
+				expiresIn: authConfig.expires as SignOptions["expiresIn"],
+				issuer: this.getNativeTokenIssuer(),
+				subject: userId,
+			},
+		);
+	}
+
+	private getNativeTokenIssuer(): string {
+		const oidcConfig = this.configService.get<{ issuer?: string }>("oidc");
+		return `${oidcConfig?.issuer || "http://localhost:3007"}${NATIVE_TOKEN_ISSUER_SUFFIX}`;
+	}
+
+	private generateNativeRefreshToken(): string {
+		return randomBytes(32).toString("base64url");
+	}
+
+	private resolveClientIp(req: Request): string {
+		const forwarded = req.headers["x-forwarded-for"];
+		if (typeof forwarded === "string") {
+			return forwarded.split(",")[0].trim();
+		}
+		return req.ip || req.socket.remoteAddress || "unknown";
+	}
+
+	private resolveUserAgent(req: Request): string {
+		const userAgent = req.headers["user-agent"];
+		if (Array.isArray(userAgent)) {
+			return userAgent[0] ?? "unknown";
+		}
+		return userAgent || "unknown";
 	}
 
 	private clearOidcProviderCookies(res: Response) {

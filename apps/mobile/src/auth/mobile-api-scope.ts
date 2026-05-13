@@ -1,5 +1,11 @@
-import { setApiPersistStore } from "@cocrepo/api/core/client";
-import { setIdpPersistStore } from "@cocrepo/api/idp/client";
+import {
+  setApiNativeRefreshHandler,
+  setApiPersistStore,
+} from "@cocrepo/api/core/client";
+import {
+  setIdpNativeRefreshHandler,
+  setIdpPersistStore,
+} from "@cocrepo/api/idp/client";
 import type { SpaceDto } from "@cocrepo/api/idp/model";
 
 interface MobileSpaceInfo {
@@ -13,6 +19,7 @@ interface MobileSessionTokens {
   accessTokenExpiresAt?: number | null;
   refreshToken?: string | null;
   refreshTokenExpiresAt?: number | null;
+  sessionId?: string | null;
 }
 
 const resolveGroundName = (space: SpaceDto) => space.ground?.name ?? "";
@@ -26,6 +33,7 @@ class MobileApiScopeStore {
   accessTokenExpiresAt: number | null = null;
   refreshToken: string | null = null;
   refreshTokenExpiresAt: number | null = null;
+  sessionId: string | null = null;
   isSpaceSelectionResolved = false;
 
   setSpaces(spaces: SpaceDto[]) {
@@ -77,6 +85,7 @@ class MobileApiScopeStore {
   setSessionTokens(session: MobileSessionTokens) {
     this.accessToken = session.accessToken || this.accessToken;
     this.refreshToken = session.refreshToken || this.refreshToken;
+    this.sessionId = session.sessionId || this.sessionId;
     this.accessTokenExpiresAt =
       session.accessTokenExpiresAt ?? this.accessTokenExpiresAt;
     this.refreshTokenExpiresAt =
@@ -92,13 +101,20 @@ class MobileApiScopeStore {
     this.accessTokenExpiresAt = null;
     this.refreshToken = null;
     this.refreshTokenExpiresAt = null;
+    this.sessionId = null;
     this.isSpaceSelectionResolved = true;
   }
 }
 
 export const mobileApiScopeStore = new MobileApiScopeStore();
 
-export const configureMobileApiScope = () => {
+export const configureMobileApiScope = (
+  nativeRefreshHandler?: (() => Promise<void>) | null,
+) => {
   setApiPersistStore(mobileApiScopeStore);
   setIdpPersistStore(mobileApiScopeStore);
+  if (nativeRefreshHandler !== undefined) {
+    setApiNativeRefreshHandler(nativeRefreshHandler);
+    setIdpNativeRefreshHandler(nativeRefreshHandler);
+  }
 };

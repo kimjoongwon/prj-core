@@ -1,6 +1,45 @@
 {
   "items": [
     {
+      "id": "M1-ROUTE-CONTRACT-NATIVE-AUTH-001",
+      "stage": 1,
+      "route": "/auth/login",
+      "domain": "Auth",
+      "agent_type": "orch-mobile-screen-planner",
+      "required": true,
+      "source_spec": [
+        "apps/mobile/src/app/index.spec.md",
+        "apps/mobile/src/app/app.context.md"
+      ],
+      "expected_files": [
+        "apps/mobile/src/app/index.spec.md",
+        "apps/mobile/src/app/app.context.md",
+        "apps/idp/api/src/module/auth/auth.controller.ts",
+        "packages/be-app/src/auth.application-service.ts",
+        "packages/be-dto/src/auth/native-auth.dto.ts",
+        "packages/be-service/src/token-storage.service.ts",
+        "packages/be-service/src/strategy/jwt.strategy.ts",
+        "packages/be-common/src/strategy/jwt.strategy.ts",
+        "packages/fe-api/src/libs/customAxios.ts",
+        "packages/fe-api/src/libs/customIdpAxios.ts",
+        "apps/mobile/src/auth/auth-store.ts",
+        "apps/mobile/src/auth/mobile-api-scope.ts",
+        "apps/mobile/src/auth/_utils/auth.ts",
+        "apps/mobile/src/app/auth/login.tsx"
+      ],
+      "verification": [
+        "pnpm --filter=@cocrepo/dto build",
+        "pnpm --filter=@cocrepo/service build",
+        "pnpm --filter=@cocrepo/app build",
+        "pnpm --filter=idp-api type-check",
+        "pnpm --filter=idp-api test -- --runTestsByPath src/module/auth/auth.controller.spec.ts",
+        "pnpm --filter=mobile-app type-check",
+        "pnpm --filter=mobile-app test -- --runTestsByPath src/route-tests/auth/login.test.tsx src/route-tests/auth/auth-utils.test.ts src/route-tests/auth/AuthSessionGate.test.tsx src/route-tests/_layout.test.tsx"
+      ],
+      "status": "verified",
+      "blocked_reason": null
+    },
+    {
       "id": "M1-ROUTE-CONTRACT-PAYMENT-CHECKOUT-001",
       "stage": 1,
       "route": "/payments/checkout",

@@ -9,7 +9,9 @@ const mockReplace = jest.fn();
 let mockPathname = "/";
 const mockGetCurrentSpace = jest.fn();
 const mockGetMySpaces = jest.fn();
+const mockSetApiNativeRefreshHandler = jest.fn();
 const mockSetApiPersistStore = jest.fn();
+const mockSetIdpNativeRefreshHandler = jest.fn();
 const mockSetIdpPersistStore = jest.fn();
 const mockVerifyToken = jest.fn();
 
@@ -32,13 +34,23 @@ jest.mock("@cocrepo/api/idp/auth", () => ({
 }));
 
 jest.mock("@cocrepo/api/core/client", () => ({
+	setApiNativeRefreshHandler: (...args: unknown[]) =>
+		mockSetApiNativeRefreshHandler(...args),
 	setApiPersistStore: (...args: unknown[]) => mockSetApiPersistStore(...args),
 }));
 
 jest.mock("@cocrepo/api/idp/client", () => ({
 	setIdpBaseUrl: jest.fn(),
 	setIdpLoginRedirectUrl: jest.fn(),
+	setIdpNativeRefreshHandler: (...args: unknown[]) =>
+		mockSetIdpNativeRefreshHandler(...args),
 	setIdpPersistStore: (...args: unknown[]) => mockSetIdpPersistStore(...args),
+}));
+
+jest.mock("expo-secure-store", () => ({
+	deleteItemAsync: jest.fn(async () => undefined),
+	getItemAsync: jest.fn(async () => null),
+	setItemAsync: jest.fn(async () => undefined),
 }));
 
 const resetAuthStore = () => {
@@ -56,7 +68,9 @@ describe("AuthSessionGate", () => {
 		mockReplace.mockReset();
 		mockGetCurrentSpace.mockReset();
 		mockGetMySpaces.mockReset();
+		mockSetApiNativeRefreshHandler.mockReset();
 		mockSetApiPersistStore.mockReset();
+		mockSetIdpNativeRefreshHandler.mockReset();
 		mockSetIdpPersistStore.mockReset();
 		mockVerifyToken.mockReset();
 		resetAuthStore();
@@ -101,6 +115,11 @@ describe("AuthSessionGate", () => {
 		});
 		mockGetMySpaces.mockResolvedValue({ data: [currentSpace] });
 		mockGetCurrentSpace.mockResolvedValue({ data: currentSpace });
+		mobileApiScopeStore.setSessionTokens({
+			accessToken: "mobile-access-token",
+			refreshToken: "mobile-refresh-token",
+			sessionId: "user-mobile.session-1",
+		});
 
 		const verified = await mobileAuthStore.verifySession();
 
@@ -110,6 +129,8 @@ describe("AuthSessionGate", () => {
 		expect(mobileApiScopeStore.groundName).toBe("강남점");
 		expect(mockSetApiPersistStore).toHaveBeenCalledWith(mobileApiScopeStore);
 		expect(mockSetIdpPersistStore).toHaveBeenCalledWith(mobileApiScopeStore);
+		expect(mockSetApiNativeRefreshHandler).toHaveBeenCalled();
+		expect(mockSetIdpNativeRefreshHandler).toHaveBeenCalled();
 	});
 
 	it("비인증 상태면 로그인 라우트를 먼저 보낸 뒤 layout 이후 splash를 끈다", async () => {

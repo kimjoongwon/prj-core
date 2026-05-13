@@ -20,6 +20,11 @@ import {
 	AuthSessionInfoDto,
 	ChangePasswordDto,
 	EmailVerificationRequestedDto,
+	LoginErrorDto,
+	NativeAuthResponseDto,
+	NativeLoginPayloadDto,
+	NativeLogoutPayloadDto,
+	NativeTokenRefreshPayloadDto,
 	PageMetaDto,
 	QueryAuthAuditLogDto,
 	SetCurrentSpaceDto,
@@ -35,6 +40,7 @@ import {
 	Get,
 	Headers,
 	HttpCode,
+	HttpException,
 	HttpStatus,
 	Param,
 	ParseUUIDPipe,
@@ -53,12 +59,17 @@ import {
 	ApiTags,
 } from "@nestjs/swagger";
 import { Request, Response } from "express";
+import {
+	InteractionLoginService,
+	type LoginValidationResult,
+} from "../interaction/interaction-login.service";
 
 @ApiTags("AUTH")
 @Controller()
 export class AuthController {
 	constructor(
 		private readonly authApplicationService: AuthApplicationService,
+		private readonly interactionLoginService: InteractionLoginService,
 	) {}
 
 	@Public()
@@ -104,7 +115,6 @@ export class AuthController {
 		@Query("state") state: string,
 		@Query("error") error: string,
 		@Query("error_description") errorDescription: string,
-		@Query("responseMode") responseMode: string,
 		@Req() req: Request,
 		@Res() res: Response,
 	) {
@@ -135,20 +145,6 @@ export class AuthController {
 					req,
 					res,
 				);
-			const mobileSession = (
-				callbackResult as typeof callbackResult & { session?: unknown }
-			).session;
-			if (
-				clientId === "user-mobile" &&
-				responseMode === "mobile-json" &&
-				mobileSession
-			) {
-				return res.status(HttpStatus.OK).json({
-					httpStatus: HttpStatus.OK,
-					message: "로그인 성공",
-					data: mobileSession,
-				});
-			}
 
 			return res.redirect(
 				callbackResult.returnTo || callbackResult.defaultReturnTo,
@@ -164,6 +160,87 @@ export class AuthController {
 				this.buildLoginRedirectUrl(loginUrl, AUTH_ERRORS.OIDC_CALLBACK_FAILED),
 			);
 		}
+	}
+
+	@Public()
+	@SkipSpaceCheck()
+	@HttpCode(HttpStatus.OK)
+	@Post("native/login")
+	@ApiOperation({
+		operationId: "nativeLogin",
+		summary: "모바일 native 로그인",
+		description:
+			"모바일 first-party 앱에서 이메일/비밀번호로 로그인하고 native access/refresh token을 발급합니다. OIDC authorization redirect를 사용하지 않습니다.",
+	})
+	@ApiBody({ type: NativeLoginPayloadDto })
+	@ApiResponseEntity(NativeAuthResponseDto, HttpStatus.OK)
+	@ResponseMessage("모바일 로그인 성공")
+	async nativeLogin(
+		@Body() loginDto: NativeLoginPayloadDto,
+		@Req() req: Request,
+	) {
+		const result = await this.interactionLoginService.validateUser(
+			loginDto.email,
+			loginDto.password,
+			this.getClientIp(req),
+			this.readUserAgent(req),
+			"user-mobile",
+		);
+
+		if (!result.success) {
+			const statusCode =
+				result.error === "ACCOUNT_LOCKED_TEMPORARY" ||
+				result.error === "ACCOUNT_LOCKED_PERMANENT"
+					? HttpStatus.FORBIDDEN
+					: HttpStatus.UNAUTHORIZED;
+			throw new HttpException(
+				this.buildLoginErrorResponse(result),
+				statusCode,
+			);
+		}
+
+		return this.authApplicationService.createNativeMobileSession(
+			result.userId!,
+			req,
+			{ mustChangePassword: result.mustChangePassword },
+		);
+	}
+
+	@Public()
+	@SkipSpaceCheck()
+	@HttpCode(HttpStatus.OK)
+	@Post("native/token/refresh")
+	@ApiOperation({
+		operationId: "nativeRefreshToken",
+		summary: "모바일 native 토큰 재발급",
+		description:
+			"모바일 앱이 SecureStore에 보관한 sessionId/refreshToken으로 native token을 직접 갱신합니다.",
+	})
+	@ApiBody({ type: NativeTokenRefreshPayloadDto })
+	@ApiResponseEntity(NativeAuthResponseDto, HttpStatus.OK)
+	@ResponseMessage("모바일 토큰 재발급 성공")
+	async nativeRefreshToken(@Body() dto: NativeTokenRefreshPayloadDto) {
+		return this.authApplicationService.refreshNativeMobileSession(dto);
+	}
+
+	@Public()
+	@SkipSpaceCheck()
+	@HttpCode(HttpStatus.OK)
+	@Post("native/logout")
+	@ApiOperation({
+		operationId: "nativeLogout",
+		summary: "모바일 native 로그아웃",
+		description:
+			"모바일 native 세션을 삭제하고 전달된 access token을 best-effort로 블랙리스트 처리합니다.",
+	})
+	@ApiBody({ type: NativeLogoutPayloadDto })
+	@ApiResponseEntity(Boolean, HttpStatus.OK)
+	@ResponseMessage("모바일 로그아웃 성공")
+	async nativeLogout(@Req() req: Request, @Body() dto: NativeLogoutPayloadDto) {
+		return this.authApplicationService.logoutNativeMobileSession(
+			dto,
+			this.parseBearerToken(req.headers.authorization),
+		);
 	}
 
 	@Public()
@@ -378,6 +455,84 @@ export class AuthController {
 		}
 
 		return token;
+	}
+
+	private getClientIp(req: Request): string {
+		const forwarded = req.headers["x-forwarded-for"];
+		if (typeof forwarded === "string") {
+			return forwarded.split(",")[0].trim();
+		}
+		return req.ip || req.socket.remoteAddress || "unknown";
+	}
+
+	private readUserAgent(req: Request): string | undefined {
+		const userAgent = req.headers["user-agent"];
+		return Array.isArray(userAgent) ? userAgent[0] : userAgent;
+	}
+
+	private buildLoginErrorResponse(
+		result: LoginValidationResult,
+	): LoginErrorDto {
+		const baseResponse: LoginErrorDto = {
+			error: result.error || "LOGIN_FAILED",
+			displayMessage: "로그인에 실패했습니다.",
+			remainingAttempts: result.remainingAttempts,
+			lockedUntil: result.lockedUntil?.toISOString(),
+			temporaryLockThreshold: result.temporaryLockThreshold,
+			temporaryLockDurationMin: result.temporaryLockDurationMin,
+		};
+
+		switch (result.error) {
+			case "INVALID_CREDENTIALS":
+				return {
+					...baseResponse,
+					displayMessage:
+						result.remainingAttempts !== undefined &&
+						result.remainingAttempts > 0
+							? `이메일 또는 비밀번호가 올바르지 않습니다. 남은 시도 ${result.remainingAttempts}회`
+							: "이메일 또는 비밀번호가 올바르지 않습니다.",
+					hint: "계속 실패하면 계정이 일시 잠길 수 있습니다.",
+					recoveryActions: [
+						{
+							type: "forgot-password",
+							label: "비밀번호 재설정",
+							href: "/forgot-password",
+						},
+					],
+				};
+			case "ACCOUNT_LOCKED_TEMPORARY":
+				return {
+					...baseResponse,
+					displayMessage: `로그인 시도가 반복되어 계정이 일시 잠겼습니다. ${result.temporaryLockDurationMin ?? 15}분 후 다시 시도하세요.`,
+					hint: "급한 경우 비밀번호 재설정을 진행할 수 있습니다.",
+					recoveryActions: [
+						{
+							type: "forgot-password",
+							label: "비밀번호 재설정",
+							href: "/forgot-password",
+						},
+					],
+				};
+			case "ACCOUNT_LOCKED_PERMANENT":
+				return {
+					...baseResponse,
+					displayMessage: "보안을 위해 계정이 잠겼습니다.",
+					hint: "비밀번호를 재설정하거나 관리자에게 문의하세요.",
+					recoveryActions: [
+						{
+							type: "forgot-password",
+							label: "비밀번호 재설정",
+							href: "/forgot-password",
+						},
+						{
+							type: "contact-admin",
+							label: "관리자 문의",
+						},
+					],
+				};
+			default:
+				return baseResponse;
+		}
 	}
 
 	@HttpCode(HttpStatus.OK)

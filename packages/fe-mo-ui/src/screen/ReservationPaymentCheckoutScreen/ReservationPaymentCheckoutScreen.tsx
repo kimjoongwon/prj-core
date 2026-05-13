@@ -8,6 +8,7 @@ import {
   type ReservationCheckoutSummaryItem,
 } from "../../data-display/ReservationCheckoutSummary";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
+import { Icon } from "../../icon";
 import { Card } from "../../layout/Card";
 import { ScreenFrame } from "../../layout/ScreenFrame";
 import { SelectableCardList } from "../../selection/SelectableCardList";
@@ -65,6 +66,7 @@ const toCourseCardItems = (
   options.map((option) => ({
     description: option.description,
     eyebrow: option.priceLabel,
+    iconName: "walletCards" as const,
     meta: option.meta,
     title: option.title,
     value: option.id,
@@ -74,6 +76,7 @@ const toPaymentMethodCardItems = (
 ) =>
   options.map((option) => ({
     description: option.description,
+    iconName: "creditCard" as const,
     title: option.label,
     value: option.value,
   }));
@@ -115,9 +118,12 @@ export const ReservationPaymentCheckoutScreen = observer(
         >
           <View className={classNames.content()}>
             <Card className={classNames.header()} key="header">
-              <Text className={classNames.eyebrow()} key="eyebrow">
-                RESERVATION CHECKOUT
-              </Text>
+              <View className={classNames.headerTop()} key="eyebrow">
+                <Icon name="receipt" size="sm" tone="accent" />
+                <Text className={classNames.eyebrow()}>
+                  RESERVATION CHECKOUT
+                </Text>
+              </View>
               <Card.Title className={classNames.title()} key="title">
                 결제 후 예약
               </Card.Title>
@@ -172,16 +178,28 @@ export const ReservationPaymentCheckoutScreen = observer(
                         className={progressClassNames.progressStep()}
                         key={step.id || `progress-step-${index}`}
                       >
-                        <Text
+                        <View
                           className={progressClassNames.progressMark()}
                           key="mark"
                         >
-                          {step.status === "COMPLETED"
-                            ? "✓"
-                            : step.status === "CURRENT"
-                              ? "…"
-                              : "○"}
-                        </Text>
+                          <Icon
+                            name={
+                              step.status === "COMPLETED"
+                                ? "circleCheck"
+                                : step.status === "CURRENT"
+                                  ? "hourglass"
+                                  : "circle"
+                            }
+                            size="sm"
+                            tone={
+                              step.status === "COMPLETED"
+                                ? "success"
+                                : step.status === "CURRENT"
+                                  ? "warning"
+                                  : "muted"
+                            }
+                          />
+                        </View>
                         <Text
                           className={progressClassNames.progressLabel()}
                           key="label"
@@ -262,22 +280,22 @@ ReservationPaymentCheckoutScreen.displayName =
   "ReservationPaymentCheckoutScreen";
 const reservationPaymentCheckoutScreenClassNames = tv({
   slots: {
-    content: "gap-[18px]",
-    contentContainer: "px-5 pb-9 pt-5",
-    description: "text-sm leading-[21px] text-muted",
+    content: "gap-4",
+    contentContainer: "px-4 pb-8 pt-4",
+    description: "text-[13px] leading-5 text-muted",
     eyebrow: "text-xs font-extrabold tracking-[0px] text-accent",
-    header: "gap-2 border border-border",
-    progressBox: "gap-3 border border-border",
-    progressLabel: "flex-1 text-sm font-bold leading-5 text-surface-foreground",
+    header: "gap-2 rounded-lg border border-border bg-surface p-4",
+    headerTop: "flex-row items-center gap-2",
+    progressBox: "gap-3 rounded-lg border border-border bg-surface p-4",
+    progressLabel: "flex-1 text-[13px] font-bold leading-5 text-surface-foreground",
     progressList: "gap-2",
-    progressMark:
-      "w-7 text-center text-base font-extrabold leading-6 text-muted",
+    progressMark: "w-6 items-center justify-center",
     progressStep: "flex-row items-center gap-2",
     root: "flex-1 bg-background",
     screenFrame: "bg-background",
-    sectionTitle: "text-lg font-extrabold leading-6 text-foreground",
-    submitAction: "w-full",
-    title: "text-[26px] font-extrabold leading-8 text-foreground",
+    sectionTitle: "text-base font-extrabold leading-6 text-foreground",
+    submitAction: "w-full rounded-lg",
+    title: "text-[24px] font-extrabold leading-8 text-foreground",
   },
   variants: {
     progressStatus: {

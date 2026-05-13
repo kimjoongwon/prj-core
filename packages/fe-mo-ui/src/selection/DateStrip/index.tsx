@@ -183,16 +183,16 @@ export const DateStrip = DateStripComponent;
 const dateStripClassNames = tv({
   slots: {
     badge:
-      "min-w-6 items-center rounded-full bg-surface-secondary px-[7px] py-[3px]",
+      "min-w-6 items-center rounded-full border border-border bg-surface-secondary px-1.5 py-0.5",
     badgeText:
       "text-[11px] font-extrabold leading-[14px] text-surface-secondary-foreground",
     content: "gap-2 px-0.5 py-0.5",
-    dateLabel: "text-lg font-extrabold leading-[22px] text-foreground",
+    dateLabel: "text-base font-extrabold leading-6 text-foreground",
     dayLabel: "text-xs font-bold uppercase leading-4 text-muted",
-    empty: "rounded-xl border border-border bg-surface-secondary p-4",
+    empty: "rounded-lg border border-border bg-surface-secondary p-4",
     emptyText: "text-sm leading-5 text-muted",
     option:
-      "min-h-[92px] min-w-[72px] items-center justify-center gap-1.5 rounded-xl border border-border bg-surface px-2.5 py-3 shadow-surface",
+      "min-h-20 min-w-16 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface px-2 py-2",
   },
   variants: {
     disabled: {
@@ -204,11 +204,11 @@ const dateStripClassNames = tv({
     selected: {
       false: {},
       true: {
-        badge: "bg-accent-foreground",
+        badge: "border-accent-foreground bg-accent-foreground",
         badgeText: "text-accent",
         dateLabel: "text-accent-foreground",
         dayLabel: "text-accent-foreground",
-        option: "border-2 border-accent bg-accent",
+        option: "border-accent bg-accent",
       },
     },
   },

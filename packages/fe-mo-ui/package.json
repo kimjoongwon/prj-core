@@ -36,6 +36,7 @@
 		"@cocrepo/hook": "workspace:*",
 		"@cocrepo/toolkit": "workspace:*",
 		"@cocrepo/type": "workspace:*",
+		"lucide-react-native": "^1.14.0",
 		"mobx": "catalog:",
 		"mobx-react-lite": "catalog:",
 		"tailwind-variants": "^3.2.2"

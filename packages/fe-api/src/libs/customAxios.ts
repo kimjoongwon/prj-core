@@ -36,6 +36,9 @@ interface PersistStoreRef {
 }
 let persistStoreRef: PersistStoreRef | null = null;
 
+type NativeRefreshHandler = () => Promise<void>;
+let nativeRefreshHandler: NativeRefreshHandler | null = null;
+
 interface LocaleStoreRef {
   languageCode?: string | null;
 }
@@ -60,6 +63,10 @@ export function setApiPersistStore(store: PersistStoreRef) {
   persistStoreRef = store;
 }
 
+export function setApiNativeRefreshHandler(handler: NativeRefreshHandler | null) {
+  nativeRefreshHandler = handler;
+}
+
 export function setApiLocaleStore(store: LocaleStoreRef) {
   localeStoreRef = store;
 }
@@ -80,6 +87,26 @@ const processQueue = (error: unknown) => {
     }
   }
   failedQueue = [];
+};
+
+const applyTokenRefreshData = (responseData?: {
+  accessToken?: string;
+  accessTokenExpiresAt?: number;
+  refreshToken?: string;
+  refreshTokenExpiresAt?: number;
+}) => {
+  if (!responseData || !persistStoreRef) {
+    return;
+  }
+
+  persistStoreRef.accessToken =
+    responseData.accessToken ?? persistStoreRef.accessToken ?? null;
+  persistStoreRef.refreshToken =
+    responseData.refreshToken ?? persistStoreRef.refreshToken ?? null;
+  if (responseData.accessTokenExpiresAt) {
+    persistStoreRef.accessTokenExpiresAt = responseData.accessTokenExpiresAt;
+    persistStoreRef.refreshTokenExpiresAt = responseData.refreshTokenExpiresAt;
+  }
 };
 
 AXIOS_INSTANCE.interceptors.request.use((config) => {
@@ -118,17 +145,22 @@ AXIOS_INSTANCE.interceptors.response.use(
       _retry?: boolean;
     };
 
-    // 브라우저에서만 401 토큰 갱신 및 리다이렉트를 처리합니다.
-    // 서버 컴포넌트에서는 현재 요청만 실패시키고 페이지 레벨에서 처리합니다.
+    const canHandleRefresh = isBrowser || nativeRefreshHandler;
+
     if (
-      isBrowser &&
+      canHandleRefresh &&
       error.response?.status === 401 &&
       originalRequest &&
       !originalRequest._retry
     ) {
       // refresh 엔드포인트 자체의 401은 갱신 시도하지 않음
-      if (originalRequest.url?.includes("/auth/token/refresh")) {
-        window.location.href = loginRedirectUrl;
+      if (
+        originalRequest.url?.includes("/auth/token/refresh") ||
+        originalRequest.url?.includes("/auth/native/token/refresh")
+      ) {
+        if (isBrowser && !nativeRefreshHandler) {
+          window.location.href = loginRedirectUrl;
+        }
         return Promise.reject(error);
       }
 
@@ -143,38 +175,32 @@ AXIOS_INSTANCE.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const refreshResponse = await AXIOS_INSTANCE.post(
-          "/api/v1/auth/token/refresh",
-        );
-        // refresh 응답에서 만료 시간 추출하여 PersistStore 업데이트
-        const responseData = (
-          refreshResponse.data as {
-            data?: {
-              accessToken?: string;
-              accessTokenExpiresAt?: number;
-              refreshToken?: string;
-              refreshTokenExpiresAt?: number;
-            };
-          }
-        )?.data;
-        if (responseData && persistStoreRef) {
-          persistStoreRef.accessToken =
-            responseData.accessToken ?? persistStoreRef.accessToken ?? null;
-          persistStoreRef.refreshToken =
-            responseData.refreshToken ?? persistStoreRef.refreshToken ?? null;
-          if (responseData.accessTokenExpiresAt) {
-            persistStoreRef.accessTokenExpiresAt =
-              responseData.accessTokenExpiresAt;
-            persistStoreRef.refreshTokenExpiresAt =
-              responseData.refreshTokenExpiresAt;
-          }
+        if (nativeRefreshHandler) {
+          await nativeRefreshHandler();
+        } else {
+          const refreshResponse = await AXIOS_INSTANCE.post(
+            "/api/v1/auth/token/refresh",
+          );
+          const responseData = (
+            refreshResponse.data as {
+              data?: {
+                accessToken?: string;
+                accessTokenExpiresAt?: number;
+                refreshToken?: string;
+                refreshTokenExpiresAt?: number;
+              };
+            }
+          )?.data;
+          applyTokenRefreshData(responseData);
         }
         processQueue(null);
         // 갱신 성공 → 원래 요청 재시도 (새 쿠키 자동 적용)
         return AXIOS_INSTANCE(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);
-        window.location.href = loginRedirectUrl;
+        if (isBrowser && !nativeRefreshHandler) {
+          window.location.href = loginRedirectUrl;
+        }
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

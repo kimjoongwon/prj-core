@@ -3,6 +3,7 @@ import { ScrollView, Text, View, type ViewProps } from "react-native";
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
+import { Icon } from "../../icon";
 import { ScreenFrame } from "../../layout/ScreenFrame";
 export type MyReservationsScreenStatus =
   | "loading"
@@ -73,12 +74,18 @@ export const MyReservationsScreen = observer(
         reservationCards.push(
           <View className={classNames.reservationCard()} key={item.id}>
             <View className={classNames.reservationHeader()} key="header">
-              <Text className={classNames.reservationDate()} key="date">
-                {item.dateLabel}
-              </Text>
-              <Text className={classNames.statusBadge()} key="status">
-                {item.statusLabel}
-              </Text>
+              <View className={classNames.reservationDateRow()} key="date">
+                <Icon name="calendarCheck" size="xs" tone="success" />
+                <Text className={classNames.reservationDate()}>
+                  {item.dateLabel}
+                </Text>
+              </View>
+              <View className={classNames.statusBadge()} key="status">
+                <Icon name="badgeCheck" size="xs" tone="warning" />
+                <Text className={classNames.statusText()}>
+                  {item.statusLabel}
+                </Text>
+              </View>
             </View>
             <Text className={classNames.reservationTitle()} key="title">
               {item.title}
@@ -135,21 +142,24 @@ export const MyReservationsScreen = observer(
 MyReservationsScreen.displayName = "MyReservationsScreen";
 const myReservationsScreenClassNames = tv({
   slots: {
-    contentContainer: "px-5 pb-9 pt-5",
+    contentContainer: "px-4 pb-8 pt-4",
     reservationCard:
-      "gap-2 rounded-2xl border border-border bg-surface p-4 shadow-surface",
-    reservationDate: "text-[13px] font-bold text-success",
+      "gap-2 rounded-lg border border-border bg-surface p-4",
+    reservationDate: "text-[13px] font-extrabold leading-5 text-success",
+    reservationDateRow: "flex-row items-center gap-1.5",
     reservationHeader: "flex-row items-center justify-between",
-    reservationMeta: "text-sm text-surface-foreground",
-    reservationTitle: "text-[17px] font-bold text-foreground",
+    reservationMeta: "text-[13px] leading-5 text-surface-foreground",
+    reservationTitle: "text-base font-extrabold leading-6 text-foreground",
     root: "flex-1 bg-background",
     screenFrame: "bg-background",
-    sectionDescription: "text-sm leading-[21px] text-muted",
-    sectionHeader: "gap-1.5",
-    sectionTitle: "text-[22px] font-extrabold text-foreground",
+    sectionDescription: "text-[13px] leading-5 text-muted",
+    sectionHeader: "gap-1",
+    sectionTitle: "text-xl font-extrabold leading-7 text-foreground",
     statusBadge:
-      "overflow-hidden rounded-full bg-warning px-2.5 py-1 text-xs font-bold text-warning-foreground",
-    tabContent: "gap-[18px]",
+      "flex-row items-center gap-1 overflow-hidden rounded-full border border-warning bg-warning-soft px-2 py-1",
+    statusText:
+      "text-xs font-extrabold leading-4 text-warning-soft-foreground",
+    tabContent: "gap-4",
   },
 });
 const classNames = myReservationsScreenClassNames();

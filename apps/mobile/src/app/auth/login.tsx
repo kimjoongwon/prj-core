@@ -1,105 +1,33 @@
-import { ScreenFrame } from "@cocrepo/mo-ui";
+import { Button, Icon, ScreenFrame, Spinner } from "@cocrepo/mo-ui";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import type { Href } from "expo-router";
 import { observer } from "mobx-react-lite";
-import { useEffect, useRef, useState } from "react";
-import type { ComponentType } from "react";
-import { WebView, type WebViewProps } from "react-native-webview";
+import { useState } from "react";
+import {
+	KeyboardAvoidingView,
+	Platform,
+	Text,
+	TextInput,
+	View,
+} from "react-native";
+import { tv } from "tailwind-variants";
 import {
 	getAuthenticatedHomePath,
 	resolveAuthenticatedRoutePath,
 } from "@/auth/auth-config";
 import { mobileAuthStore } from "@/auth/auth-store";
 import {
-	buildAuthCallbackRouteParams,
-	buildAuthLoginUrl,
-	isAuthCallbackUrl,
+	NativeAuthRequestError,
 	parseAuthLoginParams,
-	rewriteLocalhostUrlForAndroidEmulator,
 } from "@/auth/_utils/auth";
 
-const AUTH_CLIENT_ID = "user-mobile";
-const AUTH_CALLBACK_SCHEME = "kr.co.cocdev.onoramobile";
-const AUTH_CALLBACK_PATH = "auth/callback";
-const AUTH_API_LOGIN_PATH = "/api/v1/auth/login";
-const AUTH_WEB_LOGIN_PATH = "/auth/login";
-const OIDC_AUTH_PATH = "/oidc/auth";
-const LoginWebView = WebView as unknown as ComponentType<WebViewProps>;
-const WEB_VIEW_STYLE = {
-	backgroundColor: "#ffffff",
-	flex: 1,
-} as const;
-
-interface LoginWebViewRequest {
-	url: string;
-}
-
-interface LoginWebViewError {
-	nativeEvent: {
-		url?: string;
-	};
-}
-
-const buildLoginFlow = (
+const buildLoginTarget = (
 	params: Record<string, string | string[] | undefined>,
 ) => {
 	const parsed = parseAuthLoginParams(params);
-	const targetReturnTo = resolveAuthenticatedRoutePath(
+	return resolveAuthenticatedRoutePath(
 		parsed.returnTo || getAuthenticatedHomePath(),
 	);
-	const loginUrl = rewriteLocalhostUrlForAndroidEmulator(
-		buildAuthLoginUrl({
-			clientId: AUTH_CLIENT_ID,
-			targetReturnTo,
-			callbackScheme: AUTH_CALLBACK_SCHEME,
-			callbackPath: AUTH_CALLBACK_PATH,
-		}),
-	);
-
-	return { loginUrl, targetReturnTo };
-};
-
-const isCallbackRequest = (url: string) =>
-	isAuthCallbackUrl(url, {
-		callbackScheme: AUTH_CALLBACK_SCHEME,
-		callbackPath: AUTH_CALLBACK_PATH,
-	});
-
-const normalizeUrlPathname = (pathname: string) =>
-	pathname.replace(/\/+$/, "") || "/";
-
-const isNotMobileClient = (clientId: string | null) =>
-	!clientId || clientId !== AUTH_CLIENT_ID;
-
-const isLoginFlowDriftRequest = (url: string) => {
-	try {
-		const parsed = new URL(url, "http://localhost");
-		const pathname = normalizeUrlPathname(parsed.pathname);
-
-		if (pathname === AUTH_WEB_LOGIN_PATH) {
-			return true;
-		}
-
-		if (pathname === AUTH_API_LOGIN_PATH) {
-			return isNotMobileClient(parsed.searchParams.get("clientId"));
-		}
-
-		if (pathname === OIDC_AUTH_PATH) {
-			return isNotMobileClient(parsed.searchParams.get("client_id"));
-		}
-
-		return false;
-	} catch {
-		return false;
-	}
-};
-
-const buildCallbackRouteParams = (url: string, targetReturnTo: string) => {
-	try {
-		return buildAuthCallbackRouteParams(url, targetReturnTo);
-	} catch {
-		return { returnTo: targetReturnTo };
-	}
 };
 
 const AuthLoginRoute = observer(() => {
@@ -108,130 +36,172 @@ const AuthLoginRoute = observer(() => {
 		string,
 		string | string[] | undefined
 	>;
-	const { loginUrl, targetReturnTo } = buildLoginFlow(rawParams);
-	const callbackHandledRef = useRef(false);
-	const [webViewUrl, setWebViewUrl] = useState(loginUrl);
-	const [webViewResetKey, setWebViewResetKey] = useState(0);
+	const targetReturnTo = buildLoginTarget(rawParams);
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	useEffect(() => {
-		callbackHandledRef.current = false;
-		mobileAuthStore.setNextPathAfterLogin(targetReturnTo);
-		setWebViewUrl(loginUrl);
-		setWebViewResetKey((current) => current + 1);
-	}, [loginUrl, targetReturnTo]);
-
-	const onHandleCallbackUrl = (url: string) => {
-		if (!isCallbackRequest(url)) {
-			return false;
+	const onChangeEmailInput = (value: string) => {
+		setEmail(value);
+		if (errorMessage) {
+			setErrorMessage("");
 		}
-
-		if (callbackHandledRef.current) {
-			return true;
-		}
-
-		callbackHandledRef.current = true;
-		mobileAuthStore.setNextPathAfterLogin(targetReturnTo);
-		router.replace({
-			pathname: "/auth/callback",
-			params: buildCallbackRouteParams(url, targetReturnTo),
-		} as Href);
-
-		return true;
 	};
 
-	const onRestartLoginFlow = () => {
-		callbackHandledRef.current = false;
-		mobileAuthStore.setNextPathAfterLogin(targetReturnTo);
-		setWebViewUrl(loginUrl);
-		setWebViewResetKey((current) => current + 1);
+	const onChangePasswordInput = (value: string) => {
+		setPassword(value);
+		if (errorMessage) {
+			setErrorMessage("");
+		}
 	};
 
-	const onHandleLoginFlowDrift = (url: string) => {
-		if (!isLoginFlowDriftRequest(url)) {
-			return false;
-		}
-
-		onRestartLoginFlow();
-		return true;
-	};
-
-	const onHandleLocalhostRedirect = (url: string) => {
-		const rewrittenUrl = rewriteLocalhostUrlForAndroidEmulator(url);
-		if (rewrittenUrl === url) {
-			return false;
-		}
-
-		setWebViewUrl(rewrittenUrl);
-		return true;
-	};
-
-	const onShouldStartLoadWithRequestLoginWebView = (
-		request: LoginWebViewRequest,
-	) => {
-		if (onHandleCallbackUrl(request.url)) {
-			return false;
-		}
-
-		if (onHandleLoginFlowDrift(request.url)) {
-			return false;
-		}
-
-		return !onHandleLocalhostRedirect(request.url);
-	};
-
-	const onNavigationStateChangeLoginWebView = (
-		navigation: LoginWebViewRequest,
-	) => {
-		if (onHandleCallbackUrl(navigation.url)) {
+	const onPressLoginButton = async () => {
+		const normalizedEmail = email.trim();
+		if (!normalizedEmail || !password) {
+			setErrorMessage("이메일과 비밀번호를 입력해 주세요.");
 			return;
 		}
 
-		if (onHandleLoginFlowDrift(navigation.url)) {
-			return;
-		}
-
-		onHandleLocalhostRedirect(navigation.url);
-	};
-
-	const onErrorLoginWebView = (event: LoginWebViewError) => {
-		const failedUrl = event.nativeEvent.url;
-		if (failedUrl) {
-			if (onHandleLoginFlowDrift(failedUrl)) {
+		setIsSubmitting(true);
+		setErrorMessage("");
+		try {
+			mobileAuthStore.setNextPathAfterLogin(targetReturnTo);
+			const loggedIn = await mobileAuthStore.loginWithCredentials(
+				normalizedEmail,
+				password,
+			);
+			if (!loggedIn) {
+				setErrorMessage("로그인 세션을 확인하지 못했습니다. 다시 시도해 주세요.");
 				return;
 			}
 
-			onHandleLocalhostRedirect(failedUrl);
+			router.replace(resolveAuthenticatedRoutePath(targetReturnTo) as Href);
+		} catch (error) {
+			setErrorMessage(
+				error instanceof NativeAuthRequestError || error instanceof Error
+					? error.message
+					: "로그인에 실패했습니다. 다시 시도해 주세요.",
+			);
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
 	return (
 		<ScreenFrame
-			className="bg-white"
-			contentClassName="flex-1 bg-white"
-			edges={[]}
+			className={classNames.screenFrame()}
+			contentClassName={classNames.container()}
 		>
-			<LoginWebView
-				accessibilityLabel="auth-login-webview"
-				domStorageEnabled
-				incognito
-				javaScriptEnabled
-				key={webViewResetKey}
-				onError={onErrorLoginWebView}
-				onNavigationStateChange={onNavigationStateChangeLoginWebView}
-				onShouldStartLoadWithRequest={onShouldStartLoadWithRequestLoginWebView}
-				originWhitelist={[
-					"http://*",
-					"https://*",
-					`${AUTH_CALLBACK_SCHEME}://*`,
-				]}
-				sharedCookiesEnabled={false}
-				source={{ uri: webViewUrl }}
-				startInLoadingState
-				style={WEB_VIEW_STYLE}
-				thirdPartyCookiesEnabled={false}
-			/>
+			<KeyboardAvoidingView
+				behavior={Platform.OS === "ios" ? "padding" : undefined}
+				className={classNames.keyboardView()}
+			>
+				<View className={classNames.header()}>
+					<Text className={classNames.eyebrow()}>ONORA</Text>
+					<Text className={classNames.title()}>로그인</Text>
+					<Text className={classNames.description()}>
+						예약과 내 공간 정보를 바로 이어서 확인할 수 있습니다.
+					</Text>
+				</View>
+
+				<View className={classNames.form()}>
+					<View className={classNames.field()}>
+						<Text className={classNames.label()}>이메일</Text>
+						<View className={classNames.inputShell()}>
+							<Icon name="mail" size="sm" tone="muted" />
+							<TextInput
+								accessibilityLabel="이메일"
+								autoCapitalize="none"
+								autoComplete="email"
+								className={classNames.input()}
+								editable={!isSubmitting}
+								keyboardType="email-address"
+								onChangeText={onChangeEmailInput}
+								placeholder="name@example.com"
+								placeholderTextColorClassName="text-muted"
+								returnKeyType="next"
+								textContentType="username"
+								value={email}
+							/>
+						</View>
+					</View>
+
+					<View className={classNames.field()}>
+						<Text className={classNames.label()}>비밀번호</Text>
+						<View className={classNames.inputShell()}>
+							<Icon name="lockKeyhole" size="sm" tone="muted" />
+							<TextInput
+								accessibilityLabel="비밀번호"
+								autoCapitalize="none"
+								className={classNames.input()}
+								editable={!isSubmitting}
+								onChangeText={onChangePasswordInput}
+								onSubmitEditing={onPressLoginButton}
+								placeholder="비밀번호"
+								placeholderTextColorClassName="text-muted"
+								returnKeyType="done"
+								secureTextEntry
+								textContentType="password"
+								value={password}
+							/>
+						</View>
+					</View>
+
+					{errorMessage ? (
+						<Text accessibilityRole="alert" className={classNames.errorText()}>
+							{errorMessage}
+						</Text>
+					) : null}
+
+					<Button
+						accessibilityLabel="login-submit"
+						className="rounded-lg"
+						isDisabled={isSubmitting}
+						onPress={onPressLoginButton}
+						variant="primary"
+					>
+						{isSubmitting ? (
+							<View className={classNames.buttonContent()}>
+								<Spinner color="default" size="sm" />
+								<Text className={classNames.buttonText()}>로그인 중</Text>
+							</View>
+						) : (
+							<View className={classNames.buttonContent()}>
+								<Icon name="logIn" size="sm" tone="accentForeground" />
+								<Text className={classNames.buttonText()}>로그인</Text>
+							</View>
+						)}
+					</Button>
+				</View>
+			</KeyboardAvoidingView>
 		</ScreenFrame>
 	);
 });
 
 export default AuthLoginRoute;
+
+const loginRouteClassNames = tv({
+	slots: {
+		buttonContent: "flex-row items-center justify-center gap-2",
+		buttonText: "text-sm font-semibold text-accent-foreground",
+		container: "flex-1 bg-background px-4 py-6",
+		description: "text-sm leading-5 text-muted",
+		errorText:
+			"rounded-lg border border-danger bg-danger-soft px-3 py-2 text-[13px] font-medium leading-5 text-danger",
+		eyebrow: "text-xs font-extrabold uppercase tracking-[0px] text-accent",
+		field: "gap-2",
+		form: "gap-4",
+		header: "gap-2 border-b border-border pb-6 pt-8",
+		input:
+			"min-h-12 flex-1 text-[15px] text-foreground",
+		inputShell:
+			"min-h-12 flex-row items-center gap-2 rounded-lg border border-border bg-surface px-3",
+		keyboardView: "flex-1 justify-center",
+		label: "text-[13px] font-bold leading-5 text-foreground",
+		screenFrame: "bg-background",
+		title: "text-[28px] font-extrabold leading-8 text-foreground",
+	},
+});
+
+const classNames = loginRouteClassNames();

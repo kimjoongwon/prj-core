@@ -9,5 +9,6 @@ import { InteractionLoginService } from "./interaction-login.service";
 	imports: [OidcModule],
 	controllers: [InteractionController],
 	providers: [InteractionFacade, InteractionLoginService, InteractionService],
+	exports: [InteractionLoginService],
 })
 export class InteractionModule {}

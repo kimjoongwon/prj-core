@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import { Text, View, type ViewProps } from "react-native";
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
+import { Icon } from "../../icon";
 import { Card } from "../../layout/Card";
 export interface ReservationCheckoutSummaryItem {
   label: ReactNode;
@@ -70,9 +71,10 @@ const ReservationCheckoutSummaryComponent = observer(
     const { amountLabel, currencyLabel, items, style, title, ...rest } = props;
     return (
       <Card {...rest} className={classNames.root()} style={style}>
-        <Card.Title className={classNames.title()} key="title">
-          {title}
-        </Card.Title>
+        <View className={classNames.titleRow()} key="title">
+          <Icon name="receipt" size="sm" tone="accent" />
+          <Card.Title className={classNames.title()}>{title}</Card.Title>
+        </View>
         <View className={classNames.items()} key="items">
           <SummaryItems items={items} />
         </View>
@@ -85,19 +87,20 @@ ReservationCheckoutSummaryComponent.displayName = "ReservationCheckoutSummary";
 export const ReservationCheckoutSummary = ReservationCheckoutSummaryComponent;
 const reservationCheckoutSummaryClassNames = tv({
   slots: {
-    amountLabel: "text-sm font-bold text-surface-foreground",
+    amountLabel: "text-[13px] font-bold leading-5 text-surface-foreground",
     amountRow:
-      "flex-row items-center justify-between rounded-xl bg-success-soft px-4 py-3",
+      "flex-row items-center justify-between rounded-lg border border-success bg-success-soft px-3 py-2",
     amountValue:
-      "text-[22px] font-extrabold leading-7 text-success-soft-foreground",
+      "text-xl font-extrabold leading-7 text-success-soft-foreground",
     amountValueBlock: "items-end",
     currency: "text-xs font-bold text-surface-foreground",
     item: "gap-1 border-b border-border py-3 last:border-b-0",
     itemLabel: "text-xs font-bold uppercase tracking-[0px] text-muted",
     itemValue: "text-[15px] font-bold leading-5 text-foreground",
-    items: "rounded-xl border border-border bg-surface px-4",
-    root: "gap-4 border border-border",
-    title: "text-lg font-extrabold leading-6 text-foreground",
+    items: "rounded-lg border border-border bg-surface px-3",
+    root: "gap-4 rounded-lg border border-border bg-surface p-4",
+    title: "text-base font-extrabold leading-6 text-foreground",
+    titleRow: "flex-row items-center gap-2",
   },
 });
 const classNames = reservationCheckoutSummaryClassNames();

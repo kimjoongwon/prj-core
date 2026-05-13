@@ -147,10 +147,20 @@ jest.mock("react-native-reanimated", () => {
 
 const { Uniwind } = require("uniwind");
 const testThemeVariables = {
+  "--color-accent": "#2563eb",
+  "--color-accent-foreground": "#ffffff",
   "--color-accent-hover": "#2563eb",
+  "--color-danger": "#dc2626",
   "--color-danger-hover": "#dc2626",
+  "--color-danger-soft": "#fee2e2",
+  "--color-danger-soft-foreground": "#dc2626",
   "--color-danger-soft-hover": "#fee2e2",
+  "--color-default": "#e4e4e7",
   "--color-default-hover": "#e4e4e7",
+  "--color-foreground": "#18181b",
+  "--color-muted": "#71717a",
+  "--color-success": "#16a34a",
+  "--color-warning": "#ca8a04",
 };
 
 Uniwind.updateCSSVariables("light", testThemeVariables);

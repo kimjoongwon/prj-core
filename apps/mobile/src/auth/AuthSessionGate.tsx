@@ -6,7 +6,6 @@ import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import {
-	isAuthCallbackRoute,
 	isAuthenticatedRoute,
 	isAuthRoute,
 	resolveAuthenticatedRoutePath,
@@ -44,10 +43,6 @@ const resolveAuthRedirect = (
 	authStatus: "authenticated" | "unauthenticated",
 	pathname: string,
 ): AuthRedirect | null => {
-	if (isAuthCallbackRoute(pathname)) {
-		return null;
-	}
-
 	if (authStatus === "authenticated" && isAuthRoute(pathname)) {
 		return buildHomeRedirect();
 	}
@@ -71,28 +66,18 @@ export const AuthSessionGate = observer(({
 	const pathname = normalizePathname(rawPathname);
 	const { authStatus } = mobileAuthStore;
 	const isVerifying = mobileAuthStore.isVerifying;
-	const isCallbackRoute = isAuthCallbackRoute(pathname);
 	const [isInitialRouteReady, setIsInitialRouteReady] = useState(false);
 	const isSplashHiddenRef = useRef(false);
 
 	useEffect(() => {
-		if (
-			isCallbackRoute ||
-			authStatus !== "unknown" ||
-			isVerifying
-		) {
+		if (authStatus !== "unknown" || isVerifying) {
 			return;
 		}
 
 		void mobileAuthStore.verifySession();
-	}, [isCallbackRoute, authStatus, isVerifying]);
+	}, [authStatus, isVerifying]);
 
 	useEffect(() => {
-		if (isCallbackRoute) {
-			setIsInitialRouteReady(true);
-			return;
-		}
-
 		if (authStatus === "unknown" || isVerifying) {
 			setIsInitialRouteReady(false);
 			return;
@@ -110,7 +95,7 @@ export const AuthSessionGate = observer(({
 		}
 
 		setIsInitialRouteReady(true);
-	}, [isCallbackRoute, authStatus, isVerifying, pathname, router]);
+	}, [authStatus, isVerifying, pathname, router]);
 
 	const onLayoutReadyScreen = () => {
 		if (!isInitialRouteReady || isSplashHiddenRef.current) {

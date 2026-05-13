@@ -1,4 +1,4 @@
-import { Button, ScreenFrame } from "@cocrepo/mo-ui";
+import { Button, Icon, ScreenFrame } from "@cocrepo/mo-ui";
 import type { Href } from "expo-router";
 import { useRouter } from "expo-router";
 import { observer } from "mobx-react-lite";
@@ -33,17 +33,24 @@ const ProfileTabRoute = observer(() => {
 							오노라 예약 알림과 계정 상태를 관리합니다.
 						</Text>
 						<View className={classNames.sessionRow()}>
-							<Text className={classNames.sessionLabel()}>로그인 상태</Text>
+							<View className={classNames.sessionLabelRow()}>
+								<Icon name="shieldCheck" size="xs" tone="success" />
+								<Text className={classNames.sessionLabel()}>로그인 상태</Text>
+							</View>
 							<Text className={classNames.sessionValue()}>
 								{mobileAuthStore.isAuthenticated ? "로그인됨" : "확인 필요"}
 							</Text>
 						</View>
 						<Button
+							className="rounded-lg"
 							isDisabled={mobileAuthStore.isVerifying}
 							onPress={onPressLogoutButton}
 							variant="danger-soft"
 						>
-							로그아웃
+							<View className={classNames.buttonContent()}>
+								<Icon name="logOut" size="sm" tone="danger" />
+								<Text className={classNames.dangerButtonText()}>로그아웃</Text>
+							</View>
 						</Button>
 					</View>
 				</View>

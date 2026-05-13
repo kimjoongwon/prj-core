@@ -6,20 +6,20 @@ import {
 	ScreenFrame,
 } from "@cocrepo/mo-ui";
 import type { ComponentType, PropsWithChildren } from "react";
-import { StyleSheet, type ViewProps } from "react-native";
+import { type ViewProps } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../src/global.css";
 
 const GestureRootView = GestureHandlerRootView as ComponentType<
-	PropsWithChildren<ViewProps>
+	PropsWithChildren<ViewProps & { className?: string }>
 >;
 
 const withMobileRuntime: Preview["decorators"][number] = (Story) => (
-	<GestureRootView style={styles.root}>
+	<GestureRootView className="flex-1 bg-background">
 		<SafeAreaProvider>
 			<DesignSystemProvider>
-				<ScreenFrame backgroundColor="#09090b" edges={["left", "right"]}>
+				<ScreenFrame edges={["left", "right"]}>
 					<Story />
 				</ScreenFrame>
 				<PortalHost />
@@ -48,11 +48,5 @@ const preview: Preview = {
 		layout: "padded",
 	},
 };
-
-const styles = StyleSheet.create({
-	root: {
-		flex: 1,
-	},
-});
 
 export default preview;

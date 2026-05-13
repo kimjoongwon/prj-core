@@ -8,11 +8,13 @@ import {
 } from "react-native";
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
+import { Icon, type MobileIconName } from "../../icon";
 import { Radio } from "../Radio";
 export interface SelectableCardItem {
   description?: ReactNode;
   disabledReason?: ReactNode;
   eyebrow?: ReactNode;
+  iconName?: MobileIconName;
   isDisabled?: boolean;
   meta?: readonly ReactNode[];
   tags?: readonly ReactNode[];
@@ -79,6 +81,16 @@ const SelectableTag = ({ tag }: { tag: ReactNode }) => (
 const SelectableMeta = ({ meta }: { meta: ReactNode }) => (
   <Text className={classNames.metaText()}>{meta}</Text>
 );
+const SelectableTitleIcon = ({ item }: { item: SelectableCardItem }) => {
+  if (!item.iconName) {
+    return null;
+  }
+  return (
+    <View className={classNames.titleIcon()}>
+      <Icon name={item.iconName} size="sm" tone="accent" />
+    </View>
+  );
+};
 const SelectableTags = ({ item }: { item: SelectableCardItem }) => {
   if (!item.tags?.length) {
     return null;
@@ -167,9 +179,18 @@ const SelectableCard = ({
       variant="secondary"
     >
       <View className={slotClassNames.cardHeader()}>
-        <View className={slotClassNames.titleStack()} key="title">
-          <NodeText className={slotClassNames.eyebrow()} node={item.eyebrow} />
-          <NodeText className={slotClassNames.cardTitle()} node={item.title} />
+        <View className={slotClassNames.titleRow()} key="title">
+          <SelectableTitleIcon item={item} />
+          <View className={slotClassNames.titleStack()}>
+            <NodeText
+              className={slotClassNames.eyebrow()}
+              node={item.eyebrow}
+            />
+            <NodeText
+              className={slotClassNames.cardTitle()}
+              node={item.title}
+            />
+          </View>
         </View>
         <View key="indicator">
           <SelectionIndicator
@@ -275,30 +296,33 @@ SelectableCardListComponent.displayName = "SelectableCardList";
 export const SelectableCardList = SelectableCardListComponent;
 const selectableCardListClassNames = tv({
   slots: {
-    card: "flex-col items-stretch justify-start gap-2.5 rounded-xl border border-border bg-surface p-4 shadow-surface",
-    cardDescription: "text-sm leading-5 text-muted",
-    cardHeader: "flex-row items-start justify-between gap-3",
+    card: "flex-col items-stretch justify-start gap-2 rounded-lg border border-border bg-surface p-4",
+    cardDescription: "text-[13px] leading-5 text-muted",
+    cardHeader: "flex-row items-start justify-between gap-2",
     cardTitle: "text-base font-bold leading-[22px] text-foreground",
-    description: "text-sm leading-5 text-muted",
+    description: "text-[13px] leading-5 text-muted",
     disabledReason: "text-[13px] leading-[18px] text-warning",
-    empty: "rounded-xl border border-border bg-surface-secondary p-4",
+    empty: "rounded-lg border border-border bg-surface-secondary p-4",
     emptyTitle: "text-sm leading-5 text-muted",
     eyebrow: "text-xs font-bold uppercase leading-4 text-accent",
-    heading: "gap-1.5",
+    heading: "gap-1",
     indicator:
-      "min-w-16 flex-row items-center justify-center gap-1.5 rounded-full bg-surface-secondary px-2.5 py-[5px]",
+      "min-w-16 flex-row items-center justify-center gap-1.5 rounded-full border border-border bg-surface-secondary px-2 py-1",
     indicatorText:
       "text-xs font-bold leading-4 text-surface-secondary-foreground",
-    list: "gap-2.5",
+    list: "gap-2",
     meta: "flex-row flex-wrap gap-2",
     metaText: "text-[13px] leading-[18px] text-surface-foreground",
     root: "gap-3",
     radioIndicator: "size-4",
-    tag: "rounded-full bg-surface-secondary px-2.5 py-[5px]",
+    tag: "rounded-full border border-border bg-surface-secondary px-2 py-1",
     tagText:
       "text-xs font-semibold leading-4 text-surface-secondary-foreground",
     tags: "flex-row flex-wrap gap-2",
-    title: "text-lg font-extrabold leading-6 text-foreground",
+    title: "text-base font-extrabold leading-6 text-foreground",
+    titleIcon:
+      "mt-0.5 h-8 w-8 items-center justify-center rounded-lg border border-border bg-surface-secondary",
+    titleRow: "flex-1 flex-row items-start gap-2",
     titleStack: "flex-1 gap-1",
   },
   variants: {
@@ -312,8 +336,8 @@ const selectableCardListClassNames = tv({
     selected: {
       false: {},
       true: {
-        card: "border-2 border-accent",
-        indicator: "bg-accent",
+        card: "border-accent bg-accent-soft",
+        indicator: "border-accent bg-accent",
         indicatorText: "text-accent-foreground",
       },
     },

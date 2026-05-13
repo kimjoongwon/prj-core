@@ -10,6 +10,7 @@ import {
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
 import type { BookingClassFeedItem } from "../../data-display/BookingClassCard";
+import { Icon } from "../../icon";
 export interface BookingPolicySheetProps extends Omit<ViewProps, "children"> {
   cancelLabel?: ReactNode;
   cancellationPolicy?: ReactNode;
@@ -79,6 +80,13 @@ const SheetAction = ({
       onPress={onPress as PressableProps["onPress"]}
       className={actionClassNames.action()}
     >
+      {variant === "confirm" ? (
+        <Icon
+          name="shieldCheck"
+          size="sm"
+          tone={disabled ? "muted" : "accentForeground"}
+        />
+      ) : null}
       <Text className={actionClassNames.actionText()}>{label}</Text>
     </Pressable>
   );
@@ -128,9 +136,12 @@ const BookingPolicySheetComponent = observer(
         </View>
         {cancellationPolicy ? (
           <View className={classNames.policy()}>
-            <Text className={classNames.policyLabel()} key="policy-label">
-              Cancellation policy
-            </Text>
+            <View className={classNames.policyHeader()} key="policy-label">
+              <Icon name="shieldCheck" size="xs" tone="accent" />
+              <Text className={classNames.policyLabel()}>
+                Cancellation policy
+              </Text>
+            </View>
             <Text className={classNames.policyText()} key="policy-value">
               {cancellationPolicy}
             </Text>
@@ -182,28 +193,29 @@ export const BookingPolicySheet = BookingPolicySheetComponent;
 const bookingPolicySheetClassNames = tv({
   slots: {
     action:
-      "min-h-[46px] flex-1 items-center justify-center rounded-xl px-[14px] py-3",
+      "min-h-11 flex-1 flex-row items-center justify-center gap-2 rounded-lg px-3 py-2.5",
     actionText: "text-sm leading-[18px]",
-    actions: "flex-row gap-2.5",
+    actions: "flex-row gap-2",
     classMeta: "text-[13px] leading-[18px] text-muted",
     classTitle: "text-[15px] font-extrabold leading-5 text-surface-foreground",
     handle: "h-1 w-11 self-center rounded-full bg-surface-tertiary",
-    header: "gap-1.5",
+    header: "gap-1",
     memo: "gap-2",
     memoInput:
-      "min-h-[90px] rounded-xl border border-border bg-surface-secondary p-3 text-sm leading-5 text-foreground",
+      "min-h-20 rounded-lg border border-border bg-surface-secondary p-3 text-sm leading-5 text-foreground",
     memoLabel:
       "text-[13px] font-extrabold leading-[18px] text-surface-foreground",
-    policy: "gap-1.5 rounded-xl border border-border bg-surface-secondary p-3",
+    policy: "gap-1 rounded-lg border border-border bg-surface-secondary p-3",
+    policyHeader: "flex-row items-center gap-1.5",
     policyLabel: "text-xs font-extrabold uppercase leading-4 text-accent",
     policyText: "text-[13px] leading-[18px] text-surface-foreground",
-    root: "gap-4 rounded-[18px] border border-border bg-surface p-4 shadow-surface",
-    title: "text-lg font-black leading-6 text-foreground",
+    root: "gap-4 rounded-lg border border-border bg-surface p-4",
+    title: "text-base font-black leading-6 text-foreground",
   },
   variants: {
     actionVariant: {
       cancel: {
-        action: "bg-surface-secondary",
+        action: "border border-border bg-surface-secondary",
         actionText: "font-extrabold text-surface-secondary-foreground",
       },
       confirm: {

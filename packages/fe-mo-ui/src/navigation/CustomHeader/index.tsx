@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { tv } from "tailwind-variants";
+import { Icon } from "../../icon";
 
 export interface CustomHeaderProps {
 	title?: ReactNode;
@@ -36,7 +37,7 @@ export const CustomHeader = observer(function CustomHeader({
 							className={classNames.backButton()}
 							onPress={onPressBack}
 						>
-							<Text className={classNames.backIcon()}>‹</Text>
+							<Icon name="chevronLeft" size="md" tone="foreground" />
 						</Pressable>
 					) : null}
 				</View>
@@ -61,13 +62,12 @@ CustomHeader.displayName = "CustomHeader";
 const customHeaderClassNames = tv({
 	slots: {
 		backButton:
-			"h-10 w-10 items-center justify-center rounded-full bg-surface-secondary",
-		backIcon: "text-[30px] font-bold leading-9 text-foreground",
-		bar: "min-h-14 flex-row items-center gap-3 px-5 pb-3",
+			"h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface",
+		bar: "min-h-12 flex-row items-center gap-2 px-4 pb-2",
 		root: "border-b border-border bg-background",
-		side: "w-12 items-start justify-center",
-		subtitle: "text-xs font-medium leading-4 text-muted",
-		title: "text-lg font-extrabold leading-6 text-foreground",
+		side: "w-10 items-start justify-center",
+		subtitle: "text-[11px] font-semibold leading-4 text-muted",
+		title: "text-base font-extrabold leading-6 text-foreground",
 		titleBlock: "flex-1 items-center justify-center",
 	},
 });

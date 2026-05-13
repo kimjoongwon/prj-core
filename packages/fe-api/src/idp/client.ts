@@ -4,5 +4,6 @@ export {
 	setIdpBaseUrl,
 	setIdpLocaleStore,
 	setIdpLoginRedirectUrl,
+	setIdpNativeRefreshHandler,
 	setIdpPersistStore,
 } from "../libs/customIdpAxios";

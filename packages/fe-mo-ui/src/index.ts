@@ -1,4 +1,5 @@
 export * from "./action";
+export * from "./icon";
 export * from "./input";
 export * from "./selection";
 export * from "./navigation";

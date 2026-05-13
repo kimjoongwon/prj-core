@@ -1,7 +1,7 @@
 # mobile home route 계약서
 
 > 생성일: 2026-05-04
-> 수정일: 2026-05-10
+> 수정일: 2026-05-13
 > 타입: next-route-page
 > route: `/`
 > owner route file: `apps/mobile/src/app/(tabs)/index.tsx`
@@ -20,8 +20,7 @@
 | `/profile` | `apps/mobile/src/app/(tabs)/profile.tsx` | 내 정보 탭 + 로그아웃 |
 | `/(tabs)` | `apps/mobile/src/app/(tabs)/_layout.tsx` | Expo Router 하단 탭 shell |
 | `/_layout` | `apps/mobile/src/app/_layout.tsx` | QueryClientProvider-first shell + DesignSystemProvider + AuthSessionGate + IDP bootstrap shell |
-| `/auth/login` | `apps/mobile/src/app/auth/login.tsx` | `user-mobile` 로그인 WebView 컨테이너 |
-| `/auth/callback` | `apps/mobile/src/app/auth/callback.tsx` | OIDC callback 세션 확인/리다이렉트 처리 |
+| `/auth/login` | `apps/mobile/src/app/auth/login.tsx` | first-party native email/password 로그인 route |
 
 ## Shared Screen Targets
 
@@ -30,6 +29,16 @@
 | `/` | `packages/fe-mo-ui/src/screen/ReservationHomeScreen/ReservationHomeScreen.tsx` | `packages/fe-mo-ui/src/screen/ReservationHomeScreen/ReservationHomeScreen.spec.md` | route는 Orval hook, query invalidation, DTO mapping, route-local state만 소유하고 screen에 props/handler를 전달한다. |
 | `/payments/checkout` | `packages/fe-mo-ui/src/screen/ReservationPaymentCheckoutScreen/ReservationPaymentCheckoutScreen.tsx` | `packages/fe-mo-ui/src/screen/ReservationPaymentCheckoutScreen/ReservationPaymentCheckoutScreen.spec.md` | route는 checkout params, bootstrap/checkout Orval hooks, cache invalidate, navigation만 소유한다. |
 | `/reservations` | `packages/fe-mo-ui/src/screen/MyReservationsScreen/MyReservationsScreen.tsx` | `packages/fe-mo-ui/src/screen/MyReservationsScreen/MyReservationsScreen.spec.md` | route는 `getMyReservations` API wiring과 `ReservationDto -> MyReservationCardItem` mapping만 소유한다. |
+| `/auth/login` | `packages/fe-mo-ui/src/screen/NativeAuthLoginScreen/NativeAuthLoginScreen.tsx` | `packages/fe-mo-ui/src/screen/NativeAuthLoginScreen/NativeAuthLoginScreen.spec.md` | Stage 2에서 로그인 visual owner를 shared screen으로 승격하고, route는 email/password form state, native login mutation, SecureStore restore/logout wiring만 소유한다. |
+
+## Mobile Visual System
+
+- 모바일 전역 톤은 Linear/Stripe 계열의 dense premium aesthetic을 따른다.
+- 배경은 muted neutral semantic token을 사용하고, primary surface/card/list는 shadow 대신 subtle border로 분리한다.
+- 화면 여백은 8pt rhythm 중심으로 유지한다: route body `px-4`, 큰 stack `gap-4`, compact stack `gap-2`, card body `p-4`.
+- 카드와 주요 control은 `rounded-lg` 중심으로 맞추며, 상태색은 soft token(`accent-soft`, `success-soft`, `warning-soft`, `danger-soft`)을 우선 사용해 과한 색 대비를 피한다.
+- 아이콘은 `@cocrepo/mo-ui` `Icon` primitive와 curated `mobileIcons`만 사용한다. 하단 탭, 로그인 input/CTA, 예약 metadata, 상태 badge, 결제 신뢰 cue처럼 사용자의 scan/decision을 돕는 곳에만 배치한다.
+- 로그인, 하단 탭, 프로필 route도 같은 토큰/간격/radius 계약을 따른다.
 
 ## Home UX
 
@@ -65,6 +74,9 @@
 | `cancelMyReservation` | `useCancelMyReservation` | `PATCH /api/v1/reservations/me/:reservationId/cancel` | future 목록/상세 취소 |
 | `getReservationCheckoutBootstrap` | `useGetReservationCheckoutBootstrap` | `GET /api/v1/reservations/checkout/bootstrap` | `/payments/checkout` 과정/가격/결제수단 bootstrap |
 | `createReservationCheckout` | `useCreateReservationCheckout` | `POST /api/v1/reservations/checkout` | `/payments/checkout` 결제 원장 + 수강권 + 예약 확정 |
+| `nativeLogin` | generated mutation | `POST /api/v1/auth/native/login` | `/auth/login` first-party native 로그인 |
+| `nativeRefreshToken` | generated mutation 또는 axios native refresh handler | `POST /api/v1/auth/native/token/refresh` | mobile access token 401 refresh |
+| `nativeLogout` | generated mutation 또는 auth store request | `POST /api/v1/auth/native/logout` | `/profile` 로그아웃 |
 
 `getReservationBookingFeed` query:
 
@@ -149,6 +161,11 @@ type ReservationPaymentCheckoutRouteState = {
 
 | ID | owner | 검증 |
 |----|-------|------|
+| `MO-UNIT-AUTH-NATIVE-001` | `apps/mobile/src/route-tests/auth/login.test.tsx` | `/auth/login`이 WebView 없이 email/password native form을 렌더링 |
+| `MO-UNIT-AUTH-NATIVE-002` | same | email/password 제출 시 `mobileAuthStore.loginWithCredentials()` 호출 후 인증 route로 이동 |
+| `MO-UNIT-AUTH-NATIVE-003` | `apps/mobile/src/route-tests/auth/auth-utils.test.ts` | native login/refresh request가 `/api/v1/auth/native/**` endpoint와 JSON body를 사용 |
+| `MO-UNIT-AUTH-NATIVE-004` | same | native session token이 SecureStore에 저장/복원/삭제 |
+| `MO-UNIT-AUTH-NATIVE-005` | `apps/mobile/src/route-tests/auth/AuthSessionGate.test.tsx` | 앱 시작 시 memory/SecureStore token restore 후 `verify-token`, `my-spaces`, `current-space`로 인증 context를 복원 |
 | `MO-UNIT-HOME-BOOKING-001` | `apps/mobile/src/route-tests/index.test.tsx` | 홈이 booking feed 카드와 날짜 스트립을 렌더링하고 PENDING_BACKEND_HANDOFF 문구를 노출하지 않음 |
 | `MO-UNIT-HOME-BOOKING-002` | same | feed loading/empty/error + retry 상태 |
 | `MO-UNIT-HOME-BOOKING-003` | same | 날짜 선택과 대기 필터가 카드 목록을 변경 |
@@ -166,29 +183,42 @@ type ReservationPaymentCheckoutRouteState = {
 |------|------|------|
 | mobile screen target guard | Verified | `pnpm mobile:screen-targets:check` passed, 3 screen targets verified |
 | `@cocrepo/mo-ui` unit/type | Verified | `pnpm --filter=@cocrepo/mo-ui test`: 11 suites, 25 tests passed; `pnpm --filter=@cocrepo/mo-ui type-check` passed |
-| `mobile-app` route unit | Verified | `pnpm --filter=mobile-app test`: 9 suites, 35 tests passed |
+| `mobile-app` route unit | Verified | `pnpm --filter=mobile-app test`: 9 suites, 32 tests passed |
 | `mobile-app` type | Verified | `pnpm --filter=mobile-app type-check` passed |
 | `mobile-app` E2E smoke | Pending | native runtime fixture 준비 후 검증 |
 
 ## Auth Shell 계약
 
-- `AuthSessionGate`는 callback route가 아닌 초기 route 렌더 전에 `mobileAuthStore.verifySession()`으로 세션을 확인한다.
+- `AuthSessionGate`는 초기 route 렌더 전에 `mobileAuthStore.verifySession()`으로 memory/SecureStore native 세션을 복원하고 세션을 확인한다.
 - Root layout은 `QueryClientProvider`를 `DesignSystemProvider`보다 바깥에 배치해 heroui-native와 route hook이 같은 React Query 컨텍스트를 공유한다.
 - Metro resolver는 `react`, `@tanstack/react-query`, `@tanstack/query-core`를 모바일 앱 인스턴스로 고정해 `@cocrepo/api` Orval hook과 root layout이 같은 React/React Query 컨텍스트를 공유한다.
 - Metro resolver는 Expo HMR runtime의 `pretty-format` import를 CJS entry로 고정해 dev bundle에서 MJS default wrapper mismatch가 발생하지 않게 한다.
 - 인증 상태면 홈(`/`)으로, 비인증 상태면 `/auth/login?returnTo=/`로 보낸다.
-- `/auth/login`은 외부 브라우저를 열지 않고 앱 내 WebView로 `clientId=user-mobile` IDP 로그인 URL을 로드한다.
-- `/auth/login` WebView는 incognito 모드와 shared/third-party cookie 비활성화를 사용해 로그아웃 이후 stale OIDC interaction cookie가 다음 로그인에 섞이지 않게 한다.
-- `user-mobile`은 first-party `skipConsent` client이므로 로그인 완료 후 별도 서비스 연동 승인 화면 없이 native callback으로 이어져야 한다.
-- callback/returnTo에 IDP Web 경로(`/dashboard` 등)가 섞이면 모바일 인증 홈(`/`)으로 정규화한다.
-- `/auth/callback`은 `responseMode=mobile-json` callback 교환 결과의 access/refresh/session token을 native API scope store에 저장한 뒤 `verify-token`으로 세션을 확인한다.
+- `/auth/login`은 시스템 브라우저, WebView, `/oidc/auth`, `/interaction/:uid`, `/api/v1/auth/callback`, `responseMode=mobile-json`을 사용하지 않는다.
+- `/auth/login`은 앱 내부 native email/password form에서 `POST /api/v1/auth/native/login`을 호출하고 `accessToken`, `refreshToken`, `sessionId`, 만료 시각을 받는다.
+- mobile token은 `mobileApiScopeStore` memory store와 `expo-secure-store`에 저장하며, 앱 시작 시 SecureStore에서 복원한다.
+- mobile axios 401 refresh는 web cookie refresh endpoint가 아니라 `POST /api/v1/auth/native/token/refresh`를 사용한다.
+- `/profile` 로그아웃은 `POST /api/v1/auth/native/logout` 후 memory store와 SecureStore를 삭제한다.
+- IDP Web returnTo(`/dashboard` 등)가 섞이면 모바일 인증 홈(`/`)으로 정규화한다.
 - `(tabs)/_layout.tsx`는 `/`, `/reservations`, `/profile`을 하단 탭으로 등록한다.
 - route 화면은 `@cocrepo/mo-ui` shared screen owner가 조합한 `ScreenFrame`으로 safe-area padding을 적용한다.
+
+## Backend Native Auth Handoff
+
+- `apps/idp/api/src/module/auth/auth.controller.ts`는 기존 web OIDC `GET /login`, `GET /callback`, cookie refresh/logout을 유지하고, mobile 전용 `POST /api/v1/auth/native/login`, `POST /api/v1/auth/native/token/refresh`, `POST /api/v1/auth/native/logout`을 추가한다.
+- credential 검증은 interaction login의 계정 잠금, 실패 횟수, audit 정책을 재사용한다. 후속 정리에서는 `InteractionLoginService`를 mobile/web 공용 credential login service로 승격한다.
+- native access token은 `issuer=<oidc issuer>/native`, `aud=user-mobile`, `client_id=user-mobile`로 web OIDC RS256 token과 구분한다.
+- core/idp `JwtStrategy`는 cookie token은 RS256만 허용하고, Authorization Bearer token은 RS256 또는 native HS256 token을 검증한다.
+- native refresh token은 Redis session(`sessionId -> userId index`)에 저장하고 refresh마다 rotation한다.
+- `responseMode=mobile-json` callback branch와 mobile callback exchange 테스트는 제거 대상이다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-13 | 모바일 전역/route visual system을 Linear/Stripe 계열의 muted background, subtle border, 8pt rhythm, rounded-lg 중심으로 갱신 | codex |
+| 2026-05-13 | `@cocrepo/mo-ui` icon primitive 기반으로 하단 탭, 로그인, 예약/결제 metadata의 semantic icon cue 계약을 추가 | codex |
+| 2026-05-13 | 모바일 인증을 WebView/OIDC callback/mobile-json에서 first-party native login + native token/refresh/logout + SecureStore 복원 계약으로 전환 | codex |
 | 2026-05-10 | 모바일 OIDC 로그인 후 first-party consent 화면을 건너뛰고 `mobile-json` 세션 저장 후 홈으로 진입하는 auth route 계약을 반영 | codex |
 | 2026-05-10 | Lazyweb 예약 화면 개선 리뷰를 반영해 홈 본문을 CustomHeader 중복 hero 대신 예약 현황 summary + 수업 목록 구조로 정리 | codex |
 | 2026-05-09 | `/`와 `/reservations`의 shared screen target을 명시하고 route file은 API/state wiring만 소유하도록 screen ownership 계약을 복구 | codex |

@@ -99,18 +99,18 @@ SummaryListComponent.displayName = "SummaryList";
 export const SummaryList = SummaryListComponent;
 const summaryListClassNames = tv({
   slots: {
-    description: "text-sm leading-5 text-muted",
+    description: "text-[13px] leading-5 text-muted",
     footer: "pt-1",
-    heading: "gap-1.5",
+    heading: "gap-1",
     helperText: "text-xs leading-4 text-muted",
     item: "gap-1.5 py-3",
     itemLabel: "flex-1 text-[13px] leading-[18px] text-muted",
     itemRow: "flex-row items-start justify-between gap-3",
     itemValue:
       "flex-[1.2] text-right text-sm font-bold leading-5 text-foreground",
-    items: "rounded-xl border border-border bg-surface px-4",
+    items: "rounded-lg border border-border bg-surface px-3",
     root: "gap-3",
-    title: "text-lg font-extrabold leading-6 text-foreground",
+    title: "text-base font-extrabold leading-6 text-foreground",
   },
   variants: {
     state: {

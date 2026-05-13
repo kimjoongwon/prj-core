@@ -15,6 +15,7 @@ import {
 } from "../../data-display/BookingClassCard";
 import { BookingPolicySheet } from "../../feedback/BookingPolicySheet";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
+import { Icon } from "../../icon";
 import { ScreenFrame } from "../../layout/ScreenFrame";
 import { DateStrip, type DateStripOption } from "../../selection/DateStrip";
 export type ReservationHomeFilterValue =
@@ -205,25 +206,28 @@ export const ReservationHomeScreen = observer(
               </Text>
               <View className={classNames.summaryGrid()} key="summary">
                 <View className={classNames.summaryCard()} key="window">
-                  <Text className={classNames.summaryLabel()} key="label">
-                    조회 기간
-                  </Text>
+                  <View className={classNames.summaryHeader()} key="label">
+                    <Icon name="calendarRange" size="xs" tone="muted" />
+                    <Text className={classNames.summaryLabel()}>조회 기간</Text>
+                  </View>
                   <Text className={classNames.summaryValue()} key="value">
                     {bookingWindowDays}일
                   </Text>
                 </View>
                 <View className={classNames.summaryCard()} key="reserved">
-                  <Text className={classNames.summaryLabel()} key="label">
-                    내 예약
-                  </Text>
+                  <View className={classNames.summaryHeader()} key="label">
+                    <Icon name="ticketCheck" size="xs" tone="muted" />
+                    <Text className={classNames.summaryLabel()}>내 예약</Text>
+                  </View>
                   <Text className={classNames.summaryValue()} key="value">
                     {reservedCount}
                   </Text>
                 </View>
                 <View className={classNames.summaryCard()} key="visible">
-                  <Text className={classNames.summaryLabel()} key="label">
-                    표시 수업
-                  </Text>
+                  <View className={classNames.summaryHeader()} key="label">
+                    <Icon name="listChecks" size="xs" tone="muted" />
+                    <Text className={classNames.summaryLabel()}>표시 수업</Text>
+                  </View>
                   <Text className={classNames.summaryValue()} key="value">
                     {cardItems.length}개
                   </Text>
@@ -314,30 +318,31 @@ export const ReservationHomeScreen = observer(
 ReservationHomeScreen.displayName = "ReservationHomeScreen";
 const reservationHomeScreenClassNames = tv({
   slots: {
-    contentContainer: "px-5 pb-9 pt-4",
+    contentContainer: "px-4 pb-8 pt-4",
     eyebrow: "text-xs font-extrabold uppercase text-accent",
     filterChip:
-      "rounded-full border border-border bg-surface px-[14px] py-[9px]",
-    filterChipText: "text-[13px] font-extrabold text-foreground",
+      "rounded-full border border-border bg-surface px-3 py-2",
+    filterChipText: "text-[13px] font-extrabold leading-4 text-foreground",
     filterRow: "flex-row flex-wrap gap-2",
     overview:
-      "gap-3 rounded-[18px] border border-border bg-surface p-4 shadow-surface",
-    overviewDescription: "text-[14px] leading-5 text-muted",
+      "gap-3 rounded-lg border border-border bg-surface p-4",
+    overviewDescription: "text-[13px] leading-5 text-muted",
     overviewHeader: "gap-1",
-    overviewTitle: "text-[24px] font-extrabold leading-[30px] text-foreground",
+    overviewTitle: "text-[24px] font-extrabold leading-8 text-foreground",
     root: "flex-1 bg-background",
     screenFrame: "bg-background",
     section: "gap-3",
-    sectionDescription: "text-sm leading-[21px] text-muted",
-    sectionHeader: "gap-1.5",
-    sectionTitle: "text-[18px] font-extrabold leading-6 text-foreground",
-    sessionLabel: "text-sm text-muted",
+    sectionDescription: "text-[13px] leading-5 text-muted",
+    sectionHeader: "gap-1",
+    sectionTitle: "text-base font-extrabold leading-6 text-foreground",
+    sessionLabel: "text-[13px] leading-5 text-muted",
     summaryCard:
-      "min-h-[74px] flex-1 justify-between rounded-xl border border-border bg-surface-secondary p-3",
+      "min-h-16 flex-1 justify-between rounded-lg border border-border bg-surface-secondary px-3 py-2",
     summaryGrid: "flex-row gap-2",
-    summaryLabel: "text-[12px] font-bold leading-4 text-muted",
+    summaryHeader: "flex-row items-center gap-1.5",
+    summaryLabel: "text-[11px] font-bold uppercase leading-4 text-muted",
     summaryValue: "text-[20px] font-extrabold leading-6 text-foreground",
-    tabContent: "gap-[18px]",
+    tabContent: "gap-4",
   },
   variants: {
     selected: {

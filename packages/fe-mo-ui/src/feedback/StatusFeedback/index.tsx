@@ -3,6 +3,7 @@ import { Text, View, type ViewProps } from "react-native";
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
 import { Button } from "../../action/Button";
+import { Icon, type IconTone, type MobileIconName } from "../../icon";
 import { Card } from "../../layout/Card";
 export type StatusFeedbackStatus =
   | "idle"
@@ -27,6 +28,22 @@ const STATUS_LABELS: Record<StatusFeedbackStatus, string> = {
   loading: "Loading",
   submitting: "Submitting",
   success: "Success",
+};
+const STATUS_ICONS: Record<StatusFeedbackStatus, MobileIconName> = {
+  empty: "circleDashed",
+  error: "circleAlert",
+  idle: "info",
+  loading: "loaderCircle",
+  submitting: "hourglass",
+  success: "circleCheck",
+};
+const STATUS_ICON_TONES: Record<StatusFeedbackStatus, IconTone> = {
+  empty: "muted",
+  error: "danger",
+  idle: "muted",
+  loading: "accent",
+  submitting: "warning",
+  success: "success",
 };
 const FeedbackDescription = ({ description }: { description?: ReactNode }) => {
   if (!description) {
@@ -120,6 +137,11 @@ const StatusFeedbackComponent = observer((props: StatusFeedbackProps) => {
     >
       <View className={slotClassNames.header()}>
         <View className={slotClassNames.badge()} key="badge">
+          <Icon
+            name={STATUS_ICONS[status]}
+            size="xs"
+            tone={STATUS_ICON_TONES[status]}
+          />
           <Text className={slotClassNames.badgeText()}>
             {STATUS_LABELS[status]}
           </Text>
@@ -142,14 +164,15 @@ StatusFeedbackComponent.displayName = "StatusFeedback";
 export const StatusFeedback = StatusFeedbackComponent;
 const statusFeedbackClassNames = tv({
   slots: {
-    action: "",
-    actions: "flex-row flex-wrap gap-2.5",
-    badge: "self-start rounded-full px-2.5 py-[5px]",
+    action: "rounded-lg",
+    actions: "flex-row flex-wrap gap-2",
+    badge:
+      "self-start flex-row items-center gap-1.5 rounded-full border border-border px-2 py-1",
     badgeText: "text-xs font-bold leading-4 text-foreground",
-    description: "text-sm leading-5 text-muted",
-    header: "gap-2.5",
-    root: "gap-3 border",
-    title: "text-[17px] font-extrabold leading-[23px] text-foreground",
+    description: "text-[13px] leading-5 text-muted",
+    header: "gap-2",
+    root: "gap-3 rounded-lg border border-border bg-surface p-4",
+    title: "text-base font-extrabold leading-6 text-foreground",
   },
   variants: {
     actionVariant: {
@@ -162,8 +185,8 @@ const statusFeedbackClassNames = tv({
         root: "border-border",
       },
       error: {
-        badge: "bg-danger",
-        badgeText: "text-danger-foreground",
+        badge: "border-danger bg-danger-soft",
+        badgeText: "text-danger-soft-foreground",
         root: "border-danger",
       },
       idle: {
@@ -171,18 +194,18 @@ const statusFeedbackClassNames = tv({
         root: "border-border",
       },
       loading: {
-        badge: "bg-accent",
-        badgeText: "text-accent-foreground",
+        badge: "border-accent bg-accent-soft",
+        badgeText: "text-accent-soft-foreground",
         root: "border-accent",
       },
       submitting: {
-        badge: "bg-warning",
-        badgeText: "text-warning-foreground",
+        badge: "border-warning bg-warning-soft",
+        badgeText: "text-warning-soft-foreground",
         root: "border-warning",
       },
       success: {
-        badge: "bg-success",
-        badgeText: "text-success-foreground",
+        badge: "border-success bg-success-soft",
+        badgeText: "text-success-soft-foreground",
         root: "border-success",
       },
     },

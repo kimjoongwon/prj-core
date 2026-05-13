@@ -11,7 +11,14 @@ jest.mock("@cocrepo/mo-ui", () => {
 
 	return {
 		Button: ({ children, onPress }: any) =>
-			React.createElement(Pressable, { onPress }, React.createElement(Text, null, children)),
+			React.createElement(
+				Pressable,
+				{ onPress },
+				typeof children === "string"
+					? React.createElement(Text, null, children)
+					: children,
+			),
+		Icon: ({ name }: any) => React.createElement(Text, null, `icon:${name}`),
 		ScreenFrame: ({ children }: any) =>
 			React.createElement(View, { accessibilityLabel: "screen-frame" }, children),
 	};

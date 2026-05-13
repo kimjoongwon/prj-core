@@ -71,7 +71,6 @@ export default function RootLayout() {
 							<Stack screenOptions={{ header: renderRootStackHeader }}>
 								<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 								<Stack.Screen name="auth/login" options={{ headerShown: false }} />
-								<Stack.Screen name="auth/callback" options={{ headerShown: false }} />
 								<Stack.Screen
 									name="payments/checkout"
 									options={{ title: "예약 결제" }}

@@ -9,6 +9,8 @@ jest.mock("@cocrepo/mo-ui", () => {
   return {
     CustomHeader: ({ title }: { title: string }) =>
       React.createElement(Text, null, `header:${title}`),
+    Icon: ({ name }: { name: string }) =>
+      React.createElement(Text, null, `icon:${name}`),
   };
 });
 

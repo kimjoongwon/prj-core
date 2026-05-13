@@ -1,6 +1,7 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { User } from "@cocrepo/entity";
 import { AuthCacheService, UserService } from "@cocrepo/service";
+import type { AuthConfig } from "@cocrepo/type";
 import {
 	Global,
 	Injectable,
@@ -22,6 +23,24 @@ interface OidcServerConfig {
 	clientSecret: string;
 }
 
+interface JwtHeader {
+	alg?: string;
+}
+
+const parseJwtHeader = (token?: string): JwtHeader | null => {
+	if (!token?.includes(".")) {
+		return null;
+	}
+
+	try {
+		return JSON.parse(
+			Buffer.from(token.split(".")[0], "base64url").toString(),
+		) as JwtHeader;
+	} catch {
+		return null;
+	}
+};
+
 @Global()
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -34,6 +53,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		private readonly authCacheService: AuthCacheService,
 	) {
 		const oidcConfig = config.get<OidcServerConfig>("oidc");
+		const authConfig = config.get<AuthConfig>("auth");
+		const oidcIssuer = oidcConfig?.issuer || "http://localhost:3007";
+		const jwksSecretProvider = jwksRsa.passportJwtSecret({
+			jwksUri: oidcConfig?.jwksUri || "http://localhost:3007/oidc/jwks",
+			cache: true,
+			cacheMaxAge: 600000, // 10분
+			rateLimit: true,
+			jwksRequestsPerMinute: 10,
+		});
 
 		super({
 			jwtFromRequest: ExtractJwt.fromExtractors([
@@ -51,12 +79,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 				(req: Request) => {
 					const token = req.cookies?.accessToken;
 					if (token && token.includes(".")) {
-						try {
-							const header = JSON.parse(
-								Buffer.from(token.split(".")[0], "base64url").toString(),
-							);
-							if (header.alg !== "RS256") return null;
-						} catch {
+						const header = parseJwtHeader(token);
+						if (header?.alg !== "RS256") {
 							return null;
 						}
 						this.cls.set(CONTEXT_KEYS.TOKEN, token);
@@ -65,16 +89,23 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 					return null;
 				},
 			]),
-			// JWKS 기반 RS256 검증 (IDP의 공개키로 토큰 검증)
-			secretOrKeyProvider: jwksRsa.passportJwtSecret({
-				jwksUri: oidcConfig?.jwksUri || "http://localhost:3007/oidc/jwks",
-				cache: true,
-				cacheMaxAge: 600000, // 10분
-				rateLimit: true,
-				jwksRequestsPerMinute: 10,
-			}),
-			issuer: oidcConfig?.issuer || "http://localhost:3007",
-			algorithms: ["RS256"],
+			secretOrKeyProvider: (
+				req: Request,
+				token: string,
+				done: (error: Error | null, secretOrKey?: string | Buffer) => void,
+			) => {
+				const header = parseJwtHeader(token);
+				if (header?.alg === "HS256") {
+					if (!authConfig?.secret) {
+						return done(new Error("JWT secret is not defined."));
+					}
+					return done(null, authConfig.secret);
+				}
+
+				return jwksSecretProvider(req, token, done);
+			},
+			issuer: [oidcIssuer, `${oidcIssuer}/native`],
+			algorithms: ["RS256", "HS256"],
 		});
 	}
 

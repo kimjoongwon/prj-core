@@ -4,11 +4,13 @@ import { IS_PUBLIC_KEY, SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
 import type { SignUpPayloadDto } from "@cocrepo/dto";
 import { HttpStatus, UnauthorizedException } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
+import { InteractionLoginService } from "../interaction/interaction-login.service";
 import { AuthController } from "./auth.controller";
 
 describe("AuthController", () => {
 	let controller: AuthController;
 	let mockAuthApplicationService: jest.Mocked<AuthApplicationService>;
+	let mockInteractionLoginService: jest.Mocked<InteractionLoginService>;
 
 	const mockTokenExpiryInfo = {
 		accessTokenExpiresAt: Date.now() + 60 * 60 * 1000,
@@ -83,6 +85,9 @@ describe("AuthController", () => {
 				}
 			}),
 			handleOidcCallback: jest.fn(),
+			createNativeMobileSession: jest.fn(),
+			refreshNativeMobileSession: jest.fn(),
+			logoutNativeMobileSession: jest.fn(),
 			refreshTokenWithIdp: jest.fn(),
 			signUp: jest.fn(),
 			confirmEmailVerification: jest.fn(),
@@ -100,17 +105,24 @@ describe("AuthController", () => {
 			getMySessions: jest.fn(),
 			revokeSession: jest.fn(),
 			revokeOtherSessions: jest.fn(),
-		} as unknown as jest.Mocked<AuthApplicationService>;
+			} as unknown as jest.Mocked<AuthApplicationService>;
+			mockInteractionLoginService = {
+				validateUser: jest.fn(),
+			} as unknown as jest.Mocked<InteractionLoginService>;
 
-		const module: TestingModule = await Test.createTestingModule({
-			controllers: [AuthController],
-			providers: [
-				{
-					provide: AuthApplicationService,
-					useValue: mockAuthApplicationService,
-				},
-			],
-		}).compile();
+			const module: TestingModule = await Test.createTestingModule({
+				controllers: [AuthController],
+				providers: [
+					{
+						provide: AuthApplicationService,
+						useValue: mockAuthApplicationService,
+					},
+					{
+						provide: InteractionLoginService,
+						useValue: mockInteractionLoginService,
+					},
+				],
+			}).compile();
 
 		controller = module.get<AuthController>(AuthController);
 		jest.clearAllMocks();
@@ -233,7 +245,6 @@ describe("AuthController", () => {
 				"state-value",
 				undefined as unknown as string,
 				undefined as unknown as string,
-				undefined as unknown as string,
 				mockRequest as unknown as never,
 				mockResponse as unknown as never,
 			);
@@ -264,7 +275,6 @@ describe("AuthController", () => {
 				"state-value",
 				undefined as unknown as string,
 				undefined as unknown as string,
-				undefined as unknown as string,
 				mockRequest as unknown as never,
 				mockResponse as unknown as never,
 			);
@@ -274,52 +284,16 @@ describe("AuthController", () => {
 			);
 		});
 
-		it("모바일 JSON 콜백은 리다이렉트 대신 토큰 응답을 반환해야 한다", async () => {
-			const session = {
-				accessToken: "mobile-access-token",
-				refreshToken: "mobile-refresh-token",
-				accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
-				refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
-				user: mockUser,
-			};
-			mockAuthApplicationService.handleOidcCallback.mockResolvedValue({
-				returnTo: "kr.co.cocdev.onoramobile://auth/callback?returnTo=/",
-				defaultReturnTo: "/",
-				loginUrl: null,
-				session,
-			} as never);
-
-			await controller.handleCallback(
-				"user-mobile",
-				"auth-code",
-				"state-value",
-				undefined as unknown as string,
-				undefined as unknown as string,
-				"mobile-json",
-				mockRequest as unknown as never,
-				mockResponse as unknown as never,
-			);
-
-			expect(mockResponse.redirect).not.toHaveBeenCalled();
-			expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.OK);
-			expect(mockResponse.json).toHaveBeenCalledWith({
-				httpStatus: HttpStatus.OK,
-				message: "로그인 성공",
-				data: session,
-			});
-		});
-
-		it("OIDC 에러는 clientId에 맞는 loginUrl로 리다이렉트해야 한다", async () => {
-			await controller.handleCallback(
-				"storybook-web",
-				undefined as unknown as string,
-				undefined as unknown as string,
-				"access_denied",
-				"사용자가 인증을 거부했습니다",
-				undefined as unknown as string,
-				mockRequest as unknown as never,
-				mockResponse as unknown as never,
-			);
+			it("OIDC 에러는 clientId에 맞는 loginUrl로 리다이렉트해야 한다", async () => {
+				await controller.handleCallback(
+					"storybook-web",
+					undefined as unknown as string,
+					undefined as unknown as string,
+					"access_denied",
+					"사용자가 인증을 거부했습니다",
+					mockRequest as unknown as never,
+					mockResponse as unknown as never,
+				);
 
 			expect(
 				mockAuthApplicationService.handleOidcCallback,
@@ -340,7 +314,6 @@ describe("AuthController", () => {
 				"invalid-state",
 				undefined as unknown as string,
 				undefined as unknown as string,
-				undefined as unknown as string,
 				mockRequest as unknown as never,
 				mockResponse as unknown as never,
 			);
@@ -359,7 +332,6 @@ describe("AuthController", () => {
 				"user-mobile",
 				"auth-code",
 				"invalid-state",
-				undefined as unknown as string,
 				undefined as unknown as string,
 				undefined as unknown as string,
 				mockRequest as unknown as never,
@@ -413,6 +385,110 @@ describe("AuthController", () => {
 					mockResponse as unknown as never,
 				),
 			).rejects.toThrow(UnauthorizedException);
+		});
+	});
+
+	describe("native auth", () => {
+		const nativeSession = {
+			accessToken: "native-access-token",
+			refreshToken: "native-refresh-token",
+			sessionId: "user-mobile.test-session-id",
+			accessTokenExpiresAt: mockTokenExpiryInfo.accessTokenExpiresAt,
+			refreshTokenExpiresAt: mockTokenExpiryInfo.refreshTokenExpiresAt,
+			user: mockUser,
+		};
+
+		it("모바일 native 로그인은 credential 검증 후 native 세션을 발급해야 한다", async () => {
+			mockInteractionLoginService.validateUser.mockResolvedValue({
+				success: true,
+				userId: "user-test-id",
+				mustChangePassword: false,
+			});
+			mockAuthApplicationService.createNativeMobileSession.mockResolvedValue(
+				nativeSession as never,
+			);
+
+			const result = await controller.nativeLogin(
+				{ email: "test@example.com", password: "password123" },
+				mockRequest as unknown as never,
+			);
+
+			expect(mockInteractionLoginService.validateUser).toHaveBeenCalledWith(
+				"test@example.com",
+				"password123",
+				"127.0.0.1",
+				"test-agent",
+				"user-mobile",
+			);
+			expect(
+				mockAuthApplicationService.createNativeMobileSession,
+			).toHaveBeenCalledWith("user-test-id", mockRequest, {
+				mustChangePassword: false,
+			});
+			expect(result).toBe(nativeSession);
+		});
+
+		it("모바일 native 로그인 실패는 interaction 로그인 에러를 유지해야 한다", async () => {
+			mockInteractionLoginService.validateUser.mockResolvedValue({
+				success: false,
+				error: "INVALID_CREDENTIALS",
+				remainingAttempts: 4,
+				temporaryLockThreshold: 5,
+				temporaryLockDurationMin: 15,
+			});
+
+			await expect(
+				controller.nativeLogin(
+					{ email: "test@example.com", password: "wrong-password" },
+					mockRequest as unknown as never,
+				),
+			).rejects.toMatchObject({
+				status: HttpStatus.UNAUTHORIZED,
+			});
+		});
+
+		it("모바일 native refresh는 body의 sessionId/refreshToken을 서비스에 전달해야 한다", async () => {
+			mockAuthApplicationService.refreshNativeMobileSession.mockResolvedValue(
+				nativeSession as never,
+			);
+
+			const dto = {
+				sessionId: "user-mobile.test-session-id",
+				refreshToken: "native-refresh-token",
+			};
+			const result = await controller.nativeRefreshToken(dto);
+
+			expect(
+				mockAuthApplicationService.refreshNativeMobileSession,
+			).toHaveBeenCalledWith(dto);
+			expect(result).toBe(nativeSession);
+		});
+
+		it("모바일 native logout은 Authorization Bearer와 body를 서비스에 전달해야 한다", async () => {
+			mockAuthApplicationService.logoutNativeMobileSession.mockResolvedValue(
+				true,
+			);
+			const request = {
+				...mockRequest,
+				headers: {
+					...mockRequest.headers,
+					authorization: "Bearer native-access-token",
+				},
+			};
+			const dto = {
+				sessionId: "user-mobile.test-session-id",
+				refreshToken: "native-refresh-token",
+			};
+
+			const result = await controller.nativeLogout(
+				request as unknown as never,
+				dto,
+			);
+
+			expect(
+				mockAuthApplicationService.logoutNativeMobileSession,
+			).toHaveBeenCalledWith(dto, "native-access-token");
+			expect(result).toBe(true);
 		});
 	});
 

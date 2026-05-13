@@ -31,11 +31,12 @@ import {
 	UserService,
 } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
+import { InteractionModule } from "../interaction/interaction.module";
 import { OidcClientsModule } from "../oidc-client/oidc-clients.module";
 import { AuthController } from "./auth.controller";
 
 @Module({
-	imports: [OidcClientsModule],
+	imports: [OidcClientsModule, InteractionModule],
 	providers: [
 		AuthApplicationService,
 		OidcFacade,

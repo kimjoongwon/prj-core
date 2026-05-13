@@ -1,8 +1,28 @@
 import { Platform } from "react-native";
-import { buildAuthLoginUrl, exchangeAuthCallback } from "@/auth/_utils/auth";
+import {
+	buildAuthLoginUrl,
+	clearNativeAuthSession,
+	loadNativeAuthSession,
+	requestNativeLogin,
+	requestNativeTokenRefresh,
+	saveNativeAuthSession,
+} from "@/auth/_utils/auth";
+
+const mockSecureStore = new Map<string, string>();
+
+jest.mock("expo-secure-store", () => ({
+	deleteItemAsync: jest.fn(async (key: string) => {
+		mockSecureStore.delete(key);
+	}),
+	getItemAsync: jest.fn(async (key: string) => mockSecureStore.get(key) ?? null),
+	setItemAsync: jest.fn(async (key: string, value: string) => {
+		mockSecureStore.set(key, value);
+	}),
+}));
 
 describe("mobile auth utils", () => {
 	afterEach(() => {
+		mockSecureStore.clear();
 		jest.restoreAllMocks();
 	});
 
@@ -14,13 +34,12 @@ describe("mobile auth utils", () => {
 		try {
 			const loginUrl = buildAuthLoginUrl({
 				clientId: "user-mobile",
-				prompt: "login",
 				targetReturnTo: "/",
 			});
 
-			expect(loginUrl).toContain("http://10.0.2.2:3007/api/v1/auth/login?");
-			expect(loginUrl).toContain("clientId=user-mobile");
-			expect(loginUrl).toContain("prompt=login");
+			expect(loginUrl).toBe(
+				"http://10.0.2.2:3007/api/v1/auth/native/login",
+			);
 		} finally {
 			if (originalIdpApiUrl === undefined) {
 				delete process.env.EXPO_PUBLIC_IDP_API_URL;
@@ -30,46 +49,12 @@ describe("mobile auth utils", () => {
 		}
 	});
 
-	it("콜백 교환 요청은 세션 쿠키 저장을 포함해야 한다", async () => {
-		const originalFetch = global.fetch;
-		const fetchMock = jest.fn().mockResolvedValue({
-			headers: {
-				get: (key: string) =>
-					key.toLowerCase() === "location"
-						? "kr.co.cocdev.onoramobile://auth/callback?returnTo=/"
-						: null,
-			},
-			ok: false,
-			status: 302,
-		});
-		global.fetch = fetchMock as unknown as typeof fetch;
-
-		try {
-			const result = await exchangeAuthCallback({
-				apiBaseUrl: "http://localhost:3007",
-				code: "auth-code",
-				state: "auth-state",
-			});
-
-			expect(fetchMock).toHaveBeenCalledWith(
-				"http://localhost:3007/api/v1/auth/callback?clientId=user-mobile&code=auth-code&responseMode=mobile-json&state=auth-state",
-				expect.objectContaining({
-					credentials: "include",
-					method: "GET",
-					redirect: "manual",
-				}),
-			);
-			expect(result.status).toBe("redirect");
-		} finally {
-			global.fetch = originalFetch;
-		}
-	});
-
-	it("콜백 JSON 응답의 모바일 토큰을 결과에 포함해야 한다", async () => {
+	it("native 로그인 요청은 JSON body로 credential을 전달해야 한다", async () => {
 		const originalFetch = global.fetch;
 		const session = {
-			accessToken: "mobile-access-token",
-			refreshToken: "mobile-refresh-token",
+			accessToken: "native-access-token",
+			refreshToken: "native-refresh-token",
+			sessionId: "user-mobile.session-1",
 			accessTokenExpiresAt: 1000,
 			refreshTokenExpiresAt: 2000,
 		};
@@ -78,25 +63,87 @@ describe("mobile auth utils", () => {
 				get: (key: string) =>
 					key.toLowerCase() === "content-type" ? "application/json" : null,
 			},
-			json: jest.fn().mockResolvedValue({
-				data: session,
-			}),
+			json: jest.fn().mockResolvedValue({ data: session }),
 			ok: true,
 			status: 200,
 		});
 		global.fetch = fetchMock as unknown as typeof fetch;
 
 		try {
-			const result = await exchangeAuthCallback({
+			const result = await requestNativeLogin({
 				apiBaseUrl: "http://localhost:3007",
-				code: "auth-code",
-				state: "auth-state",
+				email: "user@example.com",
+				password: "password123",
 			});
 
-			expect(result.status).toBe("ok");
-			expect(result.session).toEqual(session);
+			expect(fetchMock).toHaveBeenCalledWith(
+				"http://localhost:3007/api/v1/auth/native/login",
+				expect.objectContaining({
+					body: JSON.stringify({
+						email: "user@example.com",
+						password: "password123",
+					}),
+					method: "POST",
+				}),
+			);
+			expect(result).toEqual(session);
 		} finally {
 			global.fetch = originalFetch;
 		}
+	});
+
+	it("native refresh 요청은 sessionId와 refreshToken을 전달해야 한다", async () => {
+		const originalFetch = global.fetch;
+		const session = {
+			accessToken: "new-native-access-token",
+			refreshToken: "new-native-refresh-token",
+			sessionId: "user-mobile.session-1",
+		};
+		const fetchMock = jest.fn().mockResolvedValue({
+			headers: {
+				get: (key: string) =>
+					key.toLowerCase() === "content-type" ? "application/json" : null,
+			},
+			json: jest.fn().mockResolvedValue({ data: session }),
+			ok: true,
+			status: 200,
+		});
+		global.fetch = fetchMock as unknown as typeof fetch;
+
+		try {
+			const result = await requestNativeTokenRefresh({
+				apiBaseUrl: "http://localhost:3007",
+				refreshToken: "native-refresh-token",
+				sessionId: "user-mobile.session-1",
+			});
+
+			expect(fetchMock).toHaveBeenCalledWith(
+				"http://localhost:3007/api/v1/auth/native/token/refresh",
+				expect.objectContaining({
+					body: JSON.stringify({
+						sessionId: "user-mobile.session-1",
+						refreshToken: "native-refresh-token",
+					}),
+					method: "POST",
+				}),
+			);
+			expect(result).toEqual(session);
+		} finally {
+			global.fetch = originalFetch;
+		}
+	});
+
+	it("native 세션은 SecureStore에 저장하고 복원해야 한다", async () => {
+		const session = {
+			accessToken: "native-access-token",
+			refreshToken: "native-refresh-token",
+			sessionId: "user-mobile.session-1",
+		};
+
+		await saveNativeAuthSession(session);
+		await expect(loadNativeAuthSession()).resolves.toEqual(session);
+
+		await clearNativeAuthSession();
+		await expect(loadNativeAuthSession()).resolves.toBeNull();
 	});
 });

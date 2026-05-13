@@ -15,7 +15,7 @@ module.exports = {
 			binaryPath:
 				"ios/build/Build/Products/Debug-iphonesimulator/PlateMobile.app",
 			build:
-				"xcodebuild -workspace ios/PlateMobile.xcworkspace -scheme PlateMobile -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+				"xcodebuild -workspace ios/PlateMobile.xcworkspace -scheme PlateMobile -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.5' -derivedDataPath ios/build ONLY_ACTIVE_ARCH=YES ARCHS=arm64",
 		},
 		"android.debug": {
 			type: "android.apk",

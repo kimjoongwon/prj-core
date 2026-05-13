@@ -1,31 +1,15 @@
+import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
 
 export type AuthQueryValue = string | string[];
 
 interface PrimitiveAuthParams {
-	clientId?: string;
-	returnTo?: string;
 	apiBaseUrl?: string;
-	callbackScheme?: string;
-	callbackPath?: string;
-	prompt?: string;
 }
 
 export interface MobileAuthLoginParams extends PrimitiveAuthParams {
 	targetReturnTo?: string;
-}
-
-export interface MobileAuthCallbackExchangeInput extends PrimitiveAuthParams {
-	code?: string;
-	state?: string;
-}
-
-export interface MobileAuthCallbackExchangeResult {
-	status: "ok" | "error" | "redirect";
-	statusCode: number;
-	location?: string;
-	error?: string;
-	session?: MobileAuthSession;
+	clientId?: string;
 }
 
 export interface MobileAuthSession {
@@ -33,38 +17,30 @@ export interface MobileAuthSession {
 	accessTokenExpiresAt?: number | null;
 	refreshToken?: string | null;
 	refreshTokenExpiresAt?: number | null;
+	sessionId?: string | null;
+	mustChangePassword?: boolean | null;
 }
 
-export interface MobileAuthCallbackHandleResult {
-	status: "success" | "error" | "invalid";
-	nextRoute: string;
-	message: string;
-	exchange?: MobileAuthCallbackExchangeResult;
+export interface NativeLoginInput extends PrimitiveAuthParams {
+	email: string;
+	password: string;
 }
 
-interface AuthCallbackResultState {
+export interface NativeRefreshInput extends PrimitiveAuthParams {
+	sessionId: string;
+	refreshToken: string;
+}
+
+export interface NativeLogoutInput extends PrimitiveAuthParams {
+	accessToken?: string | null;
+	sessionId: string;
+	refreshToken?: string | null;
+}
+
+export interface MobileAuthCallbackTransitionState {
 	status: "loading" | "success" | "error";
 	nextRoute: string;
 	message: string;
-	exchange?: MobileAuthCallbackExchangeResult;
-}
-
-export type MobileAuthCallbackTransitionState = AuthCallbackResultState;
-
-export interface AuthCallbackQuery {
-	code?: AuthQueryValue;
-	state?: AuthQueryValue;
-	error?: AuthQueryValue;
-	error_description?: AuthQueryValue;
-	returnTo?: AuthQueryValue;
-	return_to?: AuthQueryValue;
-	clientId?: AuthQueryValue;
-}
-
-export interface AuthLoginFlowState {
-	status: "loading" | "ready" | "error" | "cancelled";
-	message: string;
-	errorMessage: string;
 }
 
 export interface MobileAuthLoginQuery {
@@ -72,12 +48,17 @@ export interface MobileAuthLoginQuery {
 	clientId?: AuthQueryValue;
 }
 
-const DEFAULT_CLIENT_ID = "user-mobile";
-const DEFAULT_AUTH_CALLBACK_SCHEME = "kr.co.cocdev.onoramobile";
-const DEFAULT_AUTH_CALLBACK_PATH = "auth/callback";
+interface ApiResponseEnvelope<T> {
+	data?: T;
+	displayMessage?: string;
+	error?: string;
+	message?: string;
+}
+
 const DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO = "/";
 const DEFAULT_IDP_API_BASE_URL =
 	Platform.OS === "android" ? "http://10.0.2.2:3007" : "http://localhost:3007";
+const NATIVE_SESSION_STORAGE_KEY = "onora.mobile.native.session.v1";
 
 const API_ENV_KEYS = [
 	"EXPO_PUBLIC_IDP_API_URL",
@@ -92,6 +73,17 @@ const API_ENV_KEYS = [
 	"IDP_API_INTERNAL_URL",
 	"IDP_API_BASE_URL",
 ];
+
+export class NativeAuthRequestError extends Error {
+	constructor(
+		message: string,
+		readonly statusCode: number,
+		readonly response?: ApiResponseEnvelope<unknown>,
+	) {
+		super(message);
+		this.name = "NativeAuthRequestError";
+	}
+}
 
 const toStringArray = (value: AuthQueryValue | undefined): string[] =>
 	typeof value === "string" ? [value] : (value ?? []);
@@ -208,342 +200,159 @@ const buildEndpoint = (path: string, base?: string) => {
 	return `${trimmedBase}${normalizedPath}`;
 };
 
-const buildCallbackSearchParams = (returnTo?: string) => {
-	const params = new URLSearchParams();
-	params.set("returnTo", returnTo ?? DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO);
-	return params;
-};
+const readJsonEnvelope = async <T>(
+	response: Response,
+): Promise<ApiResponseEnvelope<T>> => {
+	const contentType = response.headers.get("content-type") ?? "";
+	if (!contentType.toLowerCase().includes("application/json")) {
+		return {};
+	}
 
-export const buildAuthSessionRedirectUrl = (
-	options: PrimitiveAuthParams = {},
-) => {
-	const scheme = (
-		options.callbackScheme ?? DEFAULT_AUTH_CALLBACK_SCHEME
-	).trim();
-	const path = (options.callbackPath ?? DEFAULT_AUTH_CALLBACK_PATH)
-		.trim()
-		.replace(/^\/+/, "");
-
-	return `${scheme}://${path}`;
-};
-
-const buildAuthCallbackUrl = (options: PrimitiveAuthParams = {}) => {
-	const returnTo = options.returnTo
-		? normalizeRoute(options.returnTo)
-		: DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO;
-
-	const callbackUrl = buildAuthSessionRedirectUrl(options);
-	const params = buildCallbackSearchParams(returnTo);
-
-	return `${callbackUrl}?${params.toString()}`;
-};
-
-const normalizeCallbackPath = (value: string) =>
-	value.trim().replace(/^\/+/, "").replace(/\/+$/, "");
-
-const getCallbackUrlPath = (url: URL) =>
-	[url.host, normalizeCallbackPath(url.pathname)]
-		.filter((part) => part.length > 0)
-		.join("/");
-
-export const isAuthCallbackUrl = (
-	value: string,
-	options: PrimitiveAuthParams = {},
-) => {
 	try {
-		const scheme = (options.callbackScheme ?? DEFAULT_AUTH_CALLBACK_SCHEME)
-			.trim()
-			.toLowerCase();
-		const path = normalizeCallbackPath(
-			options.callbackPath ?? DEFAULT_AUTH_CALLBACK_PATH,
-		);
-		const parsed = new URL(value);
-
-		return (
-			parsed.protocol.replace(/:$/, "").toLowerCase() === scheme &&
-			getCallbackUrlPath(parsed) === path
-		);
+		return (await response.json()) as ApiResponseEnvelope<T>;
 	} catch {
-		return false;
+		return {};
 	}
 };
 
-export const buildAuthCallbackRouteParams = (
-	value: string,
-	fallbackReturnTo = DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO,
-) => {
-	const parsed = new URL(value);
-	const params: Record<string, string> = {};
-
-	parsed.searchParams.forEach((paramValue, key) => {
-		params[key] = paramValue;
-	});
-
-	if (!params.returnTo && !params.return_to) {
-		params.returnTo = fallbackReturnTo;
+const unwrapData = <T>(payload: ApiResponseEnvelope<T>): T | undefined => {
+	if (payload.data) {
+		return payload.data;
 	}
 
-	return params;
+	return payload as T;
 };
 
-export const buildAuthLoginUrl = (options: MobileAuthLoginParams = {}) => {
-	const apiBase = buildApiBaseUrl(options.apiBaseUrl);
-	const clientId = options.clientId?.trim() || DEFAULT_CLIENT_ID;
-	const targetReturnTo = options.targetReturnTo
-		? normalizeRoute(options.targetReturnTo)
-		: DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO;
-	const callbackUrl = buildAuthCallbackUrl({
-		callbackScheme: options.callbackScheme,
-		callbackPath: options.callbackPath,
-		returnTo: targetReturnTo,
+const buildErrorMessage = (payload: ApiResponseEnvelope<unknown>) =>
+	payload.displayMessage ??
+	payload.message ??
+	payload.error ??
+	"인증 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.";
+
+const requestNativeAuth = async <T>(
+	path: string,
+	body: Record<string, unknown>,
+	options: PrimitiveAuthParams = {},
+	headers: Record<string, string> = {},
+): Promise<T> => {
+	const endpoint = buildEndpoint(path, buildApiBaseUrl(options.apiBaseUrl));
+	const response = await fetch(endpoint, {
+		headers: {
+			Accept: "application/json",
+			"Content-Type": "application/json",
+			...headers,
+		},
+		method: "POST",
+		body: JSON.stringify(body),
 	});
-	const loginParams = new URLSearchParams({
-		clientId,
-		returnTo: callbackUrl,
-	});
-	const prompt = options.prompt?.trim();
-	if (prompt) {
-		loginParams.set("prompt", prompt);
+	const payload = await readJsonEnvelope<T>(response);
+
+	if (!response.ok) {
+		throw new NativeAuthRequestError(
+			buildErrorMessage(payload),
+			response.status,
+			payload,
+		);
 	}
-	const endpoint = buildEndpoint("/api/v1/auth/login", apiBase);
 
-	return `${endpoint}?${loginParams.toString()}`;
+	const data = unwrapData(payload);
+	if (!data) {
+		throw new NativeAuthRequestError(
+			"인증 응답이 올바르지 않습니다. 다시 시도해 주세요.",
+			response.status,
+			payload,
+		);
+	}
+
+	return data;
 };
 
-export const createLoginLoadingState = (): AuthLoginFlowState => ({
-	status: "loading",
-	message: "안전한 로그인 화면을 준비하고 있습니다.",
-	errorMessage: "",
-});
+export const buildNativeLoginEndpoint = (
+	options: PrimitiveAuthParams = {},
+): string =>
+	buildEndpoint(
+		"/api/v1/auth/native/login",
+		buildApiBaseUrl(options.apiBaseUrl),
+	);
 
-export const createLoginSuccessState = (): AuthLoginFlowState => ({
-	status: "ready",
-	message: "로그인 화면이 준비되었습니다.",
-	errorMessage: "",
-});
+export const buildAuthLoginUrl = (
+	options: MobileAuthLoginParams = {},
+): string => buildNativeLoginEndpoint(options);
 
-export const createLoginErrorState = (
-	errorMessage: string,
-): AuthLoginFlowState => ({
-	status: "error",
-	message: "로그인 화면을 불러오지 못했습니다.",
-	errorMessage,
-});
+export const requestNativeLogin = (
+	input: NativeLoginInput,
+): Promise<MobileAuthSession> =>
+	requestNativeAuth<MobileAuthSession>("/api/v1/auth/native/login", {
+		email: input.email,
+		password: input.password,
+	}, input);
 
-export const createLoginCancelledState = (): AuthLoginFlowState => ({
-	status: "cancelled",
-	message: "로그인을 다시 시작할 수 있습니다.",
-	errorMessage: "로그인이 취소되었습니다. 다시 시도해 주세요.",
-});
+export const requestNativeTokenRefresh = (
+	input: NativeRefreshInput,
+): Promise<MobileAuthSession> =>
+	requestNativeAuth<MobileAuthSession>("/api/v1/auth/native/token/refresh", {
+		sessionId: input.sessionId,
+		refreshToken: input.refreshToken,
+	}, input);
+
+export const requestNativeLogout = (
+	input: NativeLogoutInput,
+): Promise<boolean> =>
+	requestNativeAuth<boolean>(
+		"/api/v1/auth/native/logout",
+		{
+			sessionId: input.sessionId,
+			refreshToken: input.refreshToken,
+		},
+		input,
+		input.accessToken
+			? {
+					Authorization: `Bearer ${input.accessToken}`,
+				}
+			: {},
+	);
+
+export const saveNativeAuthSession = async (session: MobileAuthSession) => {
+	await SecureStore.setItemAsync(
+		NATIVE_SESSION_STORAGE_KEY,
+		JSON.stringify(session),
+	);
+};
+
+export const loadNativeAuthSession =
+	async (): Promise<MobileAuthSession | null> => {
+		const rawSession = await SecureStore.getItemAsync(NATIVE_SESSION_STORAGE_KEY);
+		if (!rawSession) {
+			return null;
+		}
+
+		try {
+			return JSON.parse(rawSession) as MobileAuthSession;
+		} catch {
+			await clearNativeAuthSession();
+			return null;
+		}
+	};
+
+export const clearNativeAuthSession = async () => {
+	await SecureStore.deleteItemAsync(NATIVE_SESSION_STORAGE_KEY);
+};
 
 export const buildAuthCallbackLoadingState =
 	(): MobileAuthCallbackTransitionState => ({
 		status: "loading",
-		exchange: undefined,
 		message: "로그인 정보를 확인하고 있습니다. 잠시만 기다려 주세요.",
 		nextRoute: DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO,
 	});
 
-export const buildAuthCallbackSuccessState = (
-	nextRoute: string,
-	message: string,
-	exchange?: MobileAuthCallbackExchangeResult,
-): MobileAuthCallbackTransitionState => ({
-	status: "success",
-	exchange,
-	message,
-	nextRoute: normalizeRoute(nextRoute),
-});
-
 export const buildAuthCallbackErrorState = (
 	nextRoute: string,
 	message: string,
-	exchange?: MobileAuthCallbackExchangeResult,
 ): MobileAuthCallbackTransitionState => ({
 	status: "error",
-	exchange,
 	message,
 	nextRoute: normalizeRoute(nextRoute),
 });
-
-export const parseAuthCallbackReturnTarget = (value?: string): string => {
-	const normalizedValue = value?.trim() || "";
-	if (!normalizedValue) {
-		return DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO;
-	}
-
-	try {
-		const fallbackParsed = new URL(
-			normalizedValue,
-			"kr.co.cocdev.onoramobile://auth/callback",
-		);
-		const direct = fallbackParsed.searchParams.get("returnTo");
-		if (direct) {
-			return normalizeRoute(decodeURIComponent(direct));
-		}
-
-		if (fallbackParsed.pathname === "/auth/callback") {
-			const nestedLegacy = fallbackParsed.searchParams.get("return_to");
-			if (nestedLegacy) {
-				return normalizeRoute(decodeURIComponent(nestedLegacy));
-			}
-		}
-
-		return normalizeRoute(fallbackParsed.pathname);
-	} catch {
-		return normalizeRoute(normalizedValue);
-	}
-};
-
-export const exchangeAuthCallback = async (
-	params: MobileAuthCallbackExchangeInput,
-): Promise<MobileAuthCallbackExchangeResult> => {
-	const code = firstQueryValue(params.code);
-	const state = firstQueryValue(params.state);
-	if (!code || !state) {
-		return {
-			status: "error",
-			statusCode: 400,
-			error: "로그인 정보가 올바르지 않습니다. 다시 로그인해 주세요.",
-		};
-	}
-
-	const clientId = params.clientId?.trim() || DEFAULT_CLIENT_ID;
-	const apiBase = buildApiBaseUrl(params.apiBaseUrl);
-	const endpoint = buildEndpoint("/api/v1/auth/callback", apiBase);
-	const query = new URLSearchParams({
-		clientId,
-		code,
-		responseMode: "mobile-json",
-		state,
-	});
-	const callbackUrl = `${endpoint}?${query.toString()}`;
-
-	try {
-		const response = await fetch(callbackUrl, {
-			credentials: "include",
-			method: "GET",
-			redirect: "manual",
-			headers: {
-				Accept: "application/json",
-			},
-		});
-		const location = response.headers.get("location");
-
-		if (response.status >= 300 && response.status < 400) {
-			return {
-				status: "redirect",
-				statusCode: response.status,
-				location: location ?? undefined,
-			};
-		}
-
-		if (!response.ok) {
-			return {
-				status: "error",
-				statusCode: response.status,
-				error: "로그인 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.",
-			};
-		}
-
-		const payload = await readAuthCallbackJson(response);
-		return {
-			status: "ok",
-			statusCode: response.status,
-			location: location ?? undefined,
-			session: payload?.data,
-		};
-	} catch {
-		return {
-			status: "error",
-			statusCode: 500,
-			error: "로그인 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.",
-		};
-	}
-};
-
-const readAuthCallbackJson = async (
-	response: Response,
-): Promise<{ data?: MobileAuthSession } | undefined> => {
-	const contentType = response.headers.get("content-type") ?? "";
-	if (!contentType.toLowerCase().includes("application/json")) {
-		return undefined;
-	}
-
-	try {
-		return (await response.json()) as { data?: MobileAuthSession };
-	} catch {
-		return undefined;
-	}
-};
-
-export const resolveAuthCallbackResult = async (
-	params: AuthCallbackQuery,
-	options: PrimitiveAuthParams = {},
-): Promise<MobileAuthCallbackHandleResult> => {
-	const code = firstQueryValue(params.code);
-	const state = firstQueryValue(params.state);
-	const errorFromIdp = firstQueryValue(params.error);
-	const errorDescription = firstQueryValue(params.error_description);
-	const returnTo =
-		firstQueryValue(params.returnTo) ?? firstQueryValue(params.return_to);
-	const apiBaseUrl = options.apiBaseUrl;
-
-	if (errorFromIdp) {
-		return {
-			status: "error",
-			nextRoute: DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO,
-			message:
-				errorDescription || "로그인을 완료하지 못했습니다. 다시 시도해 주세요.",
-		};
-	}
-
-	const directReturnRoute = parseAuthCallbackReturnTarget(returnTo);
-	if (!code || !state) {
-		if (returnTo) {
-			return {
-				status: "success",
-				nextRoute: directReturnRoute,
-				message: "로그인이 완료되었습니다. 예약 화면으로 이동합니다.",
-			};
-		}
-
-		return {
-			status: "invalid",
-			nextRoute: DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO,
-			message: "로그인 정보가 올바르지 않습니다. 다시 로그인해 주세요.",
-		};
-	}
-
-	const exchangeResult = await exchangeAuthCallback({
-		clientId: options.clientId,
-		code,
-		state,
-		apiBaseUrl,
-	});
-	if (exchangeResult.status === "error") {
-		return {
-			status: "error",
-			nextRoute: directReturnRoute,
-			exchange: exchangeResult,
-			message:
-				exchangeResult.error ??
-				"로그인 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.",
-		};
-	}
-
-	let nextRoute = directReturnRoute;
-	if (exchangeResult.location) {
-		nextRoute = parseAuthCallbackReturnTarget(exchangeResult.location);
-	}
-
-	return {
-		status: "success",
-		nextRoute,
-		exchange: exchangeResult,
-		message: "로그인이 완료되었습니다. 예약 화면으로 이동합니다.",
-	};
-};
 
 export const parseAuthLoginParams = (params: Record<string, unknown>) => {
 	const returnTo =
@@ -557,31 +366,4 @@ export const parseAuthLoginParams = (params: Record<string, unknown>) => {
 		returnTo: returnTo ?? DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO,
 		clientId,
 	};
-};
-
-export const verifySession = async (
-	params: AuthCallbackQuery,
-	options: PrimitiveAuthParams = {},
-): Promise<MobileAuthCallbackTransitionState> => {
-	try {
-		const result = await resolveAuthCallbackResult(params, options);
-		if (result.status === "success") {
-			return buildAuthCallbackSuccessState(
-				result.nextRoute,
-				result.message,
-				result.exchange,
-			);
-		}
-
-		return buildAuthCallbackErrorState(
-			result.nextRoute,
-			result.message || "로그인 처리에 실패했습니다. 다시 시도해 주세요.",
-			result.exchange,
-		);
-	} catch {
-		return buildAuthCallbackErrorState(
-			DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO,
-			"로그인 상태를 확인하지 못했습니다. 다시 시도해 주세요.",
-		);
-	}
 };

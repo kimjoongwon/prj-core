@@ -57,7 +57,6 @@ export const MOBILE_AUTH = {
 	loginClientId: "user-mobile",
 	authenticatedHomePath: "/",
 	loginPath: "/auth/login",
-	authReturnPath: "/auth/callback",
 };
 
 const AUTHENTICATED_ROUTE_PATHS = [
@@ -75,27 +74,6 @@ export const getCoreApiBaseUrl = () =>
 export const getAuthenticatedHomePath = () => MOBILE_AUTH.authenticatedHomePath;
 
 export const getLoginPath = () => MOBILE_AUTH.loginPath;
-
-export const buildLoginRedirectUrl = (
-	returnToUrl: string,
-	extraClientId = MOBILE_AUTH.loginClientId,
-) => {
-	const base = getIdpApiBaseUrl();
-	const params = new URLSearchParams({
-		clientId: extraClientId,
-		returnTo: returnToUrl,
-	});
-
-	return `${base}/api/v1/auth/login?${params.toString()}`;
-};
-
-export const getCallbackPath = () => MOBILE_AUTH.authReturnPath;
-
-export const getLoginUrl = (returnToUrl: string) =>
-	buildLoginRedirectUrl(returnToUrl, MOBILE_AUTH.loginClientId);
-
-export const isAuthCallbackRoute = (pathname = "") =>
-	pathname === MOBILE_AUTH.authReturnPath;
 
 export const isAuthRoute = (pathname = "") =>
 	pathname.startsWith("/auth/") || pathname === "/auth/login";

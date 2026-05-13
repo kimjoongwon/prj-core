@@ -65,6 +65,8 @@
 - 화면 본문과 본문이 조합하는 재사용 컴포넌트는 heroui-native/@cocrepo/mo-ui primitive로 표현 가능한 CTA, 컨테이너, 선택 컨트롤을 직접 `Pressable`/박스 조합으로 재구현하지 않고 `Button`, `Card`, `Radio` 같은 기존 컴포넌트를 우선 사용한다.
 - 상태별 feedback, 진행 상태, submit CTA는 별도 `render*` helper, return 밖 JSX 변수, 재사용 목적 없는 조각 컴포넌트로 분리하지 않고 returned JSX 안에서 직접 조합한다.
 - 색상은 heroui-native semantic token(`background`, `surface`, `foreground`, `muted`, `accent`, `border`)을 사용한다.
+- 예약 결제 화면은 Linear/Stripe 계열의 dense premium 톤을 따른다. 결제 요약, 선택 카드, 진행 상태는 shadow 대신 subtle border, muted neutral 배경, 8pt 리듬(`px-4`, `gap-4`, `gap-2`, `p-4`)과 `rounded-lg` 중심으로 표현한다.
+- 아이콘은 결제 의도와 신뢰감을 보강하는 semantic cue로만 사용한다. checkout header/summary는 `receipt`, 과정 선택은 `walletCards`, 결제 방법은 `creditCard`, 진행 상태는 `circleCheck`/`hourglass`/`circle`을 사용한다.
 - 예약 요약 조각은 `ReservationCheckoutSummary`가 소유한다.
 - 과정/결제수단 선택은 `SelectableCardList` 같은 selection 계층으로 분리한다.
 - API hook, route params, app alias, backend DTO를 직접 import하지 않는다.
@@ -75,6 +77,8 @@
 
 | 날짜       | 변경 내용                                                                                                                                                               |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-05-13 | checkout header, summary, 선택 카드, 진행 상태에 semantic icon cue를 추가하는 계약을 반영했습니다.                                                                      |
+| 2026-05-13 | Linear/Stripe 계열의 조밀한 프리미엄 모바일 톤을 반영해 shadow 제거, subtle border, 8pt 리듬, 작은 radius 계약을 추가했습니다.                                         |
 | 2026-05-11 | 헤더/진행 상태 컨테이너와 submit CTA를 `Card`, `Button` 기반으로 정리하고, 요약/상태/선택 조각도 `Card`, `Button`, `Radio` primitive를 우선 쓰도록 계약을 추가했습니다. |
 | 2026-05-11 | checkout 상태/진행/submit JSX를 returned JSX 안으로 인라인하고 `render*` helper, return 밖 JSX 변수, 일회성 조각 컴포넌트 금지 계약을 추가했습니다.                     |
 | 2026-05-11 | screen render tree를 JSX로 전환하고 `createElement` 기반 visual composition 금지 계약을 추가했습니다.                                                                   |
