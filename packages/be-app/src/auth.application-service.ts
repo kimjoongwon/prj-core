@@ -55,6 +55,8 @@ const MOBILE_NATIVE_CLIENT_ID = "user-mobile";
 const NATIVE_TOKEN_ISSUER_SUFFIX = "/native";
 const OIDC_STATE_CONTEXT_PREFIX = "__oidc_ctx__:";
 const SESSION_ID_SEPARATOR = ".";
+const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
+const PLATFORM_GROUND_NAME = "플랫폼 운영본부";
 const OIDC_PROVIDER_COOKIE_NAMES = [
 	"_session",
 	"_interaction",
@@ -662,7 +664,13 @@ export class AuthApplicationService {
 
 	async getSignUpSpaces(): Promise<SpaceDto[]> {
 		const { spaces } = await this.spacesService.listSpaces();
-		return spaces.map((space) => plainToInstance(SpaceDto, space));
+		return spaces
+			.filter(
+				(space) =>
+					space.id !== SYSTEM_SPACE_ID &&
+					space.ground?.name !== PLATFORM_GROUND_NAME,
+			)
+			.map((space) => plainToInstance(SpaceDto, space));
 	}
 
 	async getCurrentSpace(
@@ -884,12 +892,15 @@ export class AuthApplicationService {
 
 	private async getSignUpSpaceOrThrow(spaceId: string) {
 		const space = await this.spacesService.getById(spaceId);
-		if (!space || space.removedAt) {
+		if (!space || space.removedAt || space.id === SYSTEM_SPACE_ID) {
 			throw new BadRequestException("SIGN_UP_SPACE_NOT_FOUND");
 		}
 
 		try {
-			await this.spacesService.getGroundBySpaceId(spaceId);
+			const ground = await this.spacesService.getGroundBySpaceId(spaceId);
+			if (ground.name === PLATFORM_GROUND_NAME) {
+				throw new BadRequestException("SIGN_UP_SPACE_NOT_FOUND");
+			}
 		} catch (error) {
 			if (error instanceof NotFoundException) {
 				throw new BadRequestException("SIGN_UP_SPACE_NOT_FOUND");

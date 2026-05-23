@@ -1,6 +1,7 @@
 import { act, render, screen, waitFor } from "@testing-library/react-native";
 import { Text } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
+import * as SecureStore from "expo-secure-store";
 import { AuthSessionGate } from "@/auth/AuthSessionGate";
 import { mobileAuthStore } from "@/auth/auth-store";
 import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
@@ -73,6 +74,9 @@ describe("AuthSessionGate", () => {
 		mockSetIdpNativeRefreshHandler.mockReset();
 		mockSetIdpPersistStore.mockReset();
 		mockVerifyToken.mockReset();
+		(SecureStore.getItemAsync as jest.Mock).mockImplementation(async () => null);
+		(SecureStore.setItemAsync as jest.Mock).mockClear();
+		(SecureStore.deleteItemAsync as jest.Mock).mockClear();
 		resetAuthStore();
 		(SplashScreen.hideAsync as jest.Mock).mockClear();
 	});
@@ -104,8 +108,19 @@ describe("AuthSessionGate", () => {
 		const currentSpace = {
 			id: "space-branch",
 			contentLanguageCode: "ko_KR",
-			ground: { name: "강남점" },
+			ground: { address: "서울 강남구", name: "강남점" },
 		};
+		(SecureStore.getItemAsync as jest.Mock).mockImplementation(
+			async (key: string) =>
+				key.includes("space-selection")
+					? JSON.stringify({
+							address: "서울 강남구",
+							contentLanguageCode: "ko_KR",
+							groundName: "강남점",
+							spaceId: "space-branch",
+						})
+					: null,
+		);
 		mockVerifyToken.mockResolvedValue({
 			data: {
 				accessTokenExpiresAt: Date.now() + 60_000,
@@ -127,10 +142,31 @@ describe("AuthSessionGate", () => {
 		expect(mobileAuthStore.authStatus).toBe("authenticated");
 		expect(mobileApiScopeStore.spaceId).toBe("space-branch");
 		expect(mobileApiScopeStore.groundName).toBe("강남점");
+		expect(mobileApiScopeStore.isSpaceSelectionResolved).toBe(true);
+		expect(mockGetCurrentSpace).toHaveBeenCalled();
 		expect(mockSetApiPersistStore).toHaveBeenCalledWith(mobileApiScopeStore);
 		expect(mockSetIdpPersistStore).toHaveBeenCalledWith(mobileApiScopeStore);
 		expect(mockSetApiNativeRefreshHandler).toHaveBeenCalled();
 		expect(mockSetIdpNativeRefreshHandler).toHaveBeenCalled();
+	});
+
+	it("인증됐지만 지점 선택이 미확정이면 지점 선택 라우트로 보낸다", async () => {
+		mobileAuthStore.authStatus = "authenticated";
+		mobileApiScopeStore.markSpaceSelectionPending();
+
+		render(
+			<AuthSessionGate>
+				<Text>home-screen</Text>
+			</AuthSessionGate>,
+		);
+
+		await waitFor(() => {
+			expect(mockReplace).toHaveBeenCalledWith({
+				pathname: "/select-space",
+				params: { returnTo: "/" },
+			});
+		});
+		expect(screen.queryByText("home-screen")).toBeNull();
 	});
 
 	it("비인증 상태면 로그인 라우트를 먼저 보낸 뒤 layout 이후 splash를 끈다", async () => {

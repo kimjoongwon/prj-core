@@ -13,9 +13,11 @@ import {
 import { tv } from "tailwind-variants";
 import {
 	getAuthenticatedHomePath,
+	getSpaceSelectPath,
 	resolveAuthenticatedRoutePath,
 } from "@/auth/auth-config";
 import { mobileAuthStore } from "@/auth/auth-store";
+import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
 import {
 	NativeAuthRequestError,
 	parseAuthLoginParams,
@@ -73,6 +75,14 @@ const AuthLoginRoute = observer(() => {
 			);
 			if (!loggedIn) {
 				setErrorMessage("로그인 세션을 확인하지 못했습니다. 다시 시도해 주세요.");
+				return;
+			}
+
+			if (!mobileApiScopeStore.isSpaceSelectionResolved) {
+				router.replace({
+					pathname: getSpaceSelectPath(),
+					params: { returnTo: targetReturnTo },
+				} as unknown as Href);
 				return;
 			}
 

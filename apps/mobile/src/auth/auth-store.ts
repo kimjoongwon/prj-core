@@ -1,19 +1,26 @@
 import { makeAutoObservable } from "mobx";
 import { getCurrentSpace, getMySpaces, verifyToken } from "@cocrepo/api/idp/auth";
+import type { SpaceDto } from "@cocrepo/api/idp/model";
 import { setIdpBaseUrl, setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
 import { getIdpApiBaseUrl, getLoginPath } from "./auth-config";
 import {
   clearNativeAuthSession,
+  clearNativeSpaceSelection,
   loadNativeAuthSession,
+  loadNativeSpaceSelection,
   requestNativeLogin,
   requestNativeLogout,
   requestNativeTokenRefresh,
+  saveNativeSpaceSelection,
   saveNativeAuthSession,
   type MobileAuthSession,
 } from "./_utils/auth";
 import {
   configureMobileApiScope,
+  isSelectableMobileSpace,
   mobileApiScopeStore,
+  toMobileSpaceInfo,
+  type MobileSpaceInfo,
 } from "./mobile-api-scope";
 
 type AuthStatus = "unknown" | "authenticated" | "unauthenticated";
@@ -26,10 +33,6 @@ const configureIdpClient = (nativeRefreshHandler?: () => Promise<void>) => {
   setIdpBaseUrl(getIdpApiBaseUrl());
   setIdpLoginRedirectUrl(getLoginPath());
 };
-
-const getFirstUsableSpace = <TSpace extends { id?: string; ground?: unknown }>(
-  spaces: TSpace[],
-) => spaces.find((space) => space.id && space.ground) ?? spaces[0] ?? null;
 
 class MobileAuthStore {
   isAuthenticated = false;
@@ -163,6 +166,20 @@ class MobileAuthStore {
     }
   }
 
+  async selectSpace(space: SpaceDto): Promise<void> {
+    if (!isSelectableMobileSpace(space)) {
+      throw new Error("selectable_space_required");
+    }
+
+    mobileApiScopeStore.setSpace(space);
+    await saveNativeSpaceSelection(toMobileSpaceInfo(space));
+  }
+
+  async selectSpaceInfo(space: MobileSpaceInfo): Promise<void> {
+    mobileApiScopeStore.setSpaceInfo(space);
+    await saveNativeSpaceSelection(space);
+  }
+
   private async restorePersistedSession() {
     if (mobileApiScopeStore.accessToken && mobileApiScopeStore.refreshToken) {
       return;
@@ -189,6 +206,7 @@ class MobileAuthStore {
   private async clearLocalSession() {
     mobileApiScopeStore.clear();
     await clearNativeAuthSession();
+    await clearNativeSpaceSelection();
   }
 
   private async loadAuthenticatedContext() {
@@ -207,21 +225,36 @@ class MobileAuthStore {
     }
 
     mobileApiScopeStore.markSpaceSelectionPending();
+    const storedSpaceSelection = await loadNativeSpaceSelection();
+    if (storedSpaceSelection) {
+      mobileApiScopeStore.setSpaceInfo(storedSpaceSelection, false);
+    }
+
     const mySpacesResponse = await getMySpaces({
       baseURL: getIdpApiBaseUrl(),
     });
     const spaces = mySpacesResponse.data ?? [];
     mobileApiScopeStore.setSpaces(spaces);
 
+    if (!storedSpaceSelection) {
+      return;
+    }
+
     const currentSpaceResponse = await getCurrentSpace({
       baseURL: getIdpApiBaseUrl(),
     });
-    const currentSpace = currentSpaceResponse.data ?? getFirstUsableSpace(spaces);
-    if (currentSpace) {
+    const currentSpace = currentSpaceResponse.data;
+    if (
+      currentSpace?.id === storedSpaceSelection.spaceId &&
+      isSelectableMobileSpace(currentSpace)
+    ) {
       mobileApiScopeStore.setSpace(currentSpace);
-    } else {
-      mobileApiScopeStore.clearSpace();
+      await saveNativeSpaceSelection(toMobileSpaceInfo(currentSpace));
+      return;
     }
+
+    await clearNativeSpaceSelection();
+    mobileApiScopeStore.markSpaceSelectionPending();
   }
 }
 

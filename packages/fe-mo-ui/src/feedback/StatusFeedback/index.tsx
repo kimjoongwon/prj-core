@@ -167,12 +167,12 @@ const statusFeedbackClassNames = tv({
     action: "rounded-lg",
     actions: "flex-row flex-wrap gap-2",
     badge:
-      "self-start flex-row items-center gap-1.5 rounded-full border border-border px-2 py-1",
-    badgeText: "text-xs font-bold leading-4 text-foreground",
+      "self-start flex-row items-center gap-1.5 rounded-full border border-border px-2 py-0.5",
+    badgeText: "text-xs font-semibold leading-4 text-foreground",
     description: "text-[13px] leading-5 text-muted",
     header: "gap-2",
-    root: "gap-3 rounded-lg border border-border bg-surface p-4",
-    title: "text-base font-extrabold leading-6 text-foreground",
+    root: "gap-3 rounded-lg border border-border bg-surface px-4 py-3",
+    title: "text-[15px] font-bold leading-6 text-foreground",
   },
   variants: {
     actionVariant: {
@@ -187,7 +187,7 @@ const statusFeedbackClassNames = tv({
       error: {
         badge: "border-danger bg-danger-soft",
         badgeText: "text-danger-soft-foreground",
-        root: "border-danger",
+        root: "border-danger bg-surface",
       },
       idle: {
         badge: "bg-surface-secondary",

@@ -166,6 +166,7 @@ describe("mobile root layout", () => {
 		expect(screen.getByText("stack-custom-header")).toBeTruthy();
 		expect(screen.getByText("(tabs):header-hidden")).toBeTruthy();
 		expect(screen.getByText("auth/login:header-hidden")).toBeTruthy();
+		expect(screen.getByText("select-space:header-hidden")).toBeTruthy();
 		expect(screen.getByText("payments/checkout")).toBeTruthy();
 	});
 });

@@ -17,7 +17,7 @@ export class QueryDto {
 
 	@NumberFieldOptional({
 		minimum: 1,
-		maximum: 50,
+		maximum: 200,
 		default: undefined,
 		int: true,
 	})

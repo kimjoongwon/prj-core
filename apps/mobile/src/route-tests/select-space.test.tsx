@@ -1,0 +1,144 @@
+import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
+import SpaceSelectRoute from "@/app/select-space";
+import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+
+const mockInvalidateQueries = jest.fn();
+const mockMutateAsync = jest.fn();
+const mockReplace = jest.fn();
+const mockUseGetMySpaces = jest.fn();
+const mockUseLocalSearchParams = jest.fn();
+
+jest.mock("expo-secure-store", () => ({
+  deleteItemAsync: jest.fn(),
+  getItemAsync: jest.fn(async () => null),
+  setItemAsync: jest.fn(async () => undefined),
+}));
+
+jest.mock("@tanstack/react-query", () => ({
+  useQueryClient: () => ({
+    invalidateQueries: mockInvalidateQueries,
+  }),
+}));
+
+jest.mock("expo-router", () => ({
+  useLocalSearchParams: () => mockUseLocalSearchParams(),
+  useRouter: () => ({
+    replace: mockReplace,
+  }),
+}));
+
+jest.mock("@cocrepo/api/idp/auth", () => ({
+  useGetMySpaces: (...args: unknown[]) => mockUseGetMySpaces(...args),
+  useSetCurrentSpace: jest.fn(() => ({
+    isPending: false,
+    mutateAsync: mockMutateAsync,
+  })),
+}));
+
+jest.mock("@cocrepo/mo-ui", () => {
+  const React = jest.requireActual<typeof import("react")>("react");
+  const { Pressable, Text, View } =
+    jest.requireActual<typeof import("react-native")>("react-native");
+
+  return {
+    SpaceSelectScreen: ({
+      onPressRetry,
+      onSelectSpace,
+      spaces = [],
+      status,
+    }: any) =>
+      React.createElement(View, null, [
+        React.createElement(Text, { key: "status" }, `status:${status}`),
+        React.createElement(
+          Pressable,
+          {
+            accessibilityLabel: "retry-spaces",
+            accessibilityRole: "button",
+            key: "retry",
+            onPress: onPressRetry,
+          },
+          React.createElement(Text, null, "retry"),
+        ),
+        ...spaces.map((space: any) =>
+          React.createElement(
+            Pressable,
+            {
+              accessibilityLabel: `space-${space.id}`,
+              accessibilityRole: "button",
+              key: space.id,
+              onPress: () => onSelectSpace?.(space),
+            },
+            React.createElement(Text, null, `${space.name}:${space.address}`),
+          ),
+        ),
+      ]),
+  };
+});
+
+const branchSpace = {
+  contentLanguageCode: "ko_KR",
+  createdAt: "2026-05-17T00:00:00.000Z",
+  ground: {
+    address: "서울 강남구 테헤란로",
+    createdAt: "2026-05-17T00:00:00.000Z",
+    email: "gangnam@example.com",
+    id: "ground-branch",
+    name: "강남점",
+    phone: "02-0000-0000",
+    removedAt: null,
+    spaceId: "space-branch",
+    updatedAt: "2026-05-17T00:00:00.000Z",
+  },
+  id: "space-branch",
+  removedAt: null,
+  updatedAt: "2026-05-17T00:00:00.000Z",
+};
+
+const platformSpace = {
+  ...branchSpace,
+  ground: {
+    ...branchSpace.ground,
+    id: "ground-system",
+    name: "플랫폼 운영본부",
+    spaceId: "61ddca20-1752-466e-b4da-879ebdbe54e3",
+  },
+  id: "61ddca20-1752-466e-b4da-879ebdbe54e3",
+};
+
+describe("mobile select space route", () => {
+  beforeEach(() => {
+    mockInvalidateQueries.mockReset();
+    mockMutateAsync.mockReset();
+    mockReplace.mockReset();
+    mockUseGetMySpaces.mockReset();
+    mockUseLocalSearchParams.mockReset();
+    mockUseLocalSearchParams.mockReturnValue({ returnTo: "/" });
+    mobileApiScopeStore.clear();
+  });
+
+  it("플랫폼 운영본부를 제외한 지점 목록을 보여주고 선택 지점을 x-space-id scope로 저장한다", async () => {
+    mockUseGetMySpaces.mockReturnValue({
+      data: { data: [platformSpace, branchSpace] },
+      isError: false,
+      isLoading: false,
+      refetch: jest.fn(),
+    });
+    mockMutateAsync.mockResolvedValue({ data: branchSpace });
+
+    render(<SpaceSelectRoute />);
+
+    expect(screen.getByText("status:ready")).toBeTruthy();
+    expect(screen.getByText("강남점:서울 강남구 테헤란로")).toBeTruthy();
+    expect(screen.queryByText(/플랫폼 운영본부/)).toBeNull();
+
+    fireEvent.press(screen.getByLabelText("space-space-branch"));
+
+    await waitFor(() => {
+      expect(mockMutateAsync).toHaveBeenCalledWith({ spaceId: "space-branch" });
+    });
+    expect(mobileApiScopeStore.spaceId).toBe("space-branch");
+    expect(mobileApiScopeStore.groundName).toBe("강남점");
+    expect(mockInvalidateQueries).toHaveBeenCalled();
+    expect(mockReplace).toHaveBeenCalledWith("/");
+  });
+});

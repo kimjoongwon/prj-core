@@ -6,4 +6,5 @@ export * from "./RadioGroup";
 export * from "./Select";
 export * from "./SelectableCardList";
 export * from "./Slider";
+export * from "./SpaceSelectionList";
 export * from "./Switch";

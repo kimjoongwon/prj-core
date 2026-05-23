@@ -25,10 +25,7 @@
 │ 5월 9일 토요일                       │
 │ 예약 가능한 수업과 내 예약 상태를 한 화면에서 │
 │ 확인합니다.                          │
-│ ┌────────┐ ┌────────┐ ┌────────┐ │
-│ │ 조회 기간│ │ 내 예약 │ │ 표시 수업│ │
-│ │ 14일   │ │ 2      │ │ 3개    │ │
-│ └────────┘ └────────┘ └────────┘ │
+│  조회 기간 14일  ·  내 예약 2  ·  표시 수업 3개 │
 │                                    │
 │ 예약 날짜                           │
 │ 오늘부터 14일간의 예약 가능 수업입니다.     │
@@ -72,7 +69,7 @@
 - render tree는 JSX로 작성하고 `createElement` 기반 visual composition을 사용하지 않는다.
 - 상태별 feedback, filter chip, summary, card 반복 JSX는 별도 `render*` helper나 재사용 목적 없는 조각 컴포넌트로 분리하지 않고 `ReservationHomeScreen` 본문 안에서 직접 조합한다.
 - 색상은 heroui-native semantic token(`background`, `surface`, `foreground`, `muted`, `accent`, `border`)을 사용한다.
-- 모바일 예약 홈은 Linear/Stripe 계열의 dense premium 톤을 따른다. `background`는 muted neutral, 카드/요약/날짜/필터는 shadow 대신 subtle border, 8pt 리듬(`px-4`, `gap-4`, `gap-2`, `p-4`)과 `rounded-lg` 중심으로 표현한다.
+- 모바일 예약 홈은 Linear/Stripe 계열의 dense premium 톤을 따르되, 첫 화면은 답답하게 보이지 않도록 summary와 section의 visual weight를 낮춘다. `background`는 밝은 neutral, 주요 surface는 border보다 면과 여백으로 구분하고, 요약/날짜/필터는 필요한 최소 border와 `font-bold` 중심으로 표현한다.
 - 아이콘은 장식이 아니라 예약 맥락을 읽게 하는 semantic cue로만 사용한다. 요약 카드(`calendarRange`, `ticketCheck`, `listChecks`), 수업 카드의 시간/지점/정원/상태/CTA, 정책 확인 shield icon만 허용한다.
 - `DateStrip`, `BookingClassCard`, `BookingPolicySheet`, `StatusFeedback`만 조합한다.
 - screen 내부에서는 `CustomHeader`와 중복되는 큰 hero title을 만들지 않고, 선택 날짜 중심의 예약 현황 summary를 표시한다.
@@ -83,6 +80,7 @@
 
 | 날짜       | 변경 내용                                                                                                                          |
 | ---------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-05-17 | 홈 화면의 답답함을 줄이기 위해 summary border/폰트 무게/날짜 strip 높이/상태 feedback 밀도를 낮추는 계약을 반영했습니다.          |
 | 2026-05-13 | 예약 홈 요약/수업 카드/정책 sheet에 semantic icon cue를 추가하는 계약을 반영했습니다.                                             |
 | 2026-05-13 | Linear/Stripe 계열의 조밀한 프리미엄 모바일 톤을 반영해 shadow 제거, subtle border, 8pt 리듬, 작은 radius 계약을 추가했습니다.   |
 | 2026-05-11 | 예약 홈 상태/필터/요약/카드 JSX를 screen 본문 안으로 인라인하고 `render*` helper 및 일회성 조각 컴포넌트 금지 계약을 추가했습니다. |

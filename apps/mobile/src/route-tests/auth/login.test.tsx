@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react-nativ
 import LoginPage from "@/app/auth/login";
 import * as authUtils from "@/auth/_utils/auth";
 import { mobileAuthStore } from "@/auth/auth-store";
+import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
 
 const mockReplace = jest.fn();
 const mockUseLocalSearchParams = jest.fn();
@@ -55,6 +56,7 @@ describe("mobile auth login route", () => {
 		mockReplace.mockReset();
 		mockUseLocalSearchParams.mockReset();
 		mockUseLocalSearchParams.mockReturnValue({ returnTo: "/" });
+		mobileApiScopeStore.clear();
 		jest
 			.spyOn(mobileAuthStore, "setNextPathAfterLogin")
 			.mockImplementation(() => undefined);
@@ -91,6 +93,22 @@ describe("mobile auth login route", () => {
 		});
 		expect(mobileAuthStore.setNextPathAfterLogin).toHaveBeenCalledWith("/");
 		expect(mockReplace).toHaveBeenCalledWith("/");
+	});
+
+	it("로그인 후 지점 선택이 미확정이면 지점 선택 라우트로 이동해야 한다", async () => {
+		mobileApiScopeStore.markSpaceSelectionPending();
+		render(<LoginPage />);
+
+		fireEvent.changeText(screen.getByLabelText("이메일"), "user@example.com");
+		fireEvent.changeText(screen.getByLabelText("비밀번호"), "password123");
+		fireEvent.press(screen.getByLabelText("login-submit"));
+
+		await waitFor(() => {
+			expect(mockReplace).toHaveBeenCalledWith({
+				pathname: "/select-space",
+				params: { returnTo: "/" },
+			});
+		});
 	});
 
 	it("IDP 웹 경로 returnTo가 들어오면 모바일 홈으로 정규화해야 한다", async () => {

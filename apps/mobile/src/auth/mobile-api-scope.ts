@@ -7,11 +7,18 @@ import {
   setIdpPersistStore,
 } from "@cocrepo/api/idp/client";
 import type { SpaceDto } from "@cocrepo/api/idp/model";
+import { makeAutoObservable } from "mobx";
 
-interface MobileSpaceInfo {
+export const MOBILE_PLATFORM_GROUND_NAME = "플랫폼 운영본부";
+export const MOBILE_SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
+
+export interface MobileSpaceInfo {
   spaceId: string;
   groundName: string;
+  address?: string | null;
   contentLanguageCode?: string | null;
+  imageFileId?: string | null;
+  logoImageFileId?: string | null;
 }
 
 interface MobileSessionTokens {
@@ -23,10 +30,27 @@ interface MobileSessionTokens {
 }
 
 const resolveGroundName = (space: SpaceDto) => space.ground?.name ?? "";
+const resolveGroundAddress = (space: SpaceDto) =>
+  space.ground?.address ?? space.ground?.label ?? null;
+
+export const isSelectableMobileSpace = (space: SpaceDto) =>
+  Boolean(space.id && space.ground) &&
+  space.id !== MOBILE_SYSTEM_SPACE_ID &&
+  space.ground?.name !== MOBILE_PLATFORM_GROUND_NAME;
+
+export const toMobileSpaceInfo = (space: SpaceDto): MobileSpaceInfo => ({
+  address: resolveGroundAddress(space),
+  contentLanguageCode: space.contentLanguageCode ?? null,
+  groundName: resolveGroundName(space),
+  imageFileId: space.ground?.imageFileId ?? null,
+  logoImageFileId: space.ground?.logoImageFileId ?? null,
+  spaceId: space.id,
+});
 
 class MobileApiScopeStore {
   spaceId: string | null = null;
   groundName: string | null = null;
+  address: string | null = null;
   contentLanguageCode: string | null = null;
   spaces: MobileSpaceInfo[] = [];
   accessToken: string | null = null;
@@ -36,33 +60,43 @@ class MobileApiScopeStore {
   sessionId: string | null = null;
   isSpaceSelectionResolved = false;
 
+  constructor() {
+    makeAutoObservable(this);
+  }
+
   setSpaces(spaces: SpaceDto[]) {
     this.spaces = spaces
-      .filter((space) => space.id && space.ground)
-      .map((space) => ({
-        spaceId: space.id,
-        groundName: resolveGroundName(space),
-        contentLanguageCode: space.contentLanguageCode ?? null,
-      }));
+      .filter(isSelectableMobileSpace)
+      .map(toMobileSpaceInfo);
   }
 
   setSpace(space: SpaceDto) {
+    const existingSpace = this.spaces.find((item) => item.spaceId === space.id);
     this.spaceId = space.id;
     this.groundName =
       resolveGroundName(space) ||
-      this.spaces.find((item) => item.spaceId === space.id)?.groundName ||
+      existingSpace?.groundName ||
       null;
+    this.address = resolveGroundAddress(space) ?? existingSpace?.address ?? null;
     this.contentLanguageCode =
       space.contentLanguageCode ??
-      this.spaces.find((item) => item.spaceId === space.id)
-        ?.contentLanguageCode ??
+      existingSpace?.contentLanguageCode ??
       null;
     this.isSpaceSelectionResolved = true;
+  }
+
+  setSpaceInfo(space: MobileSpaceInfo, resolved = true) {
+    this.spaceId = space.spaceId;
+    this.groundName = space.groundName || null;
+    this.address = space.address ?? null;
+    this.contentLanguageCode = space.contentLanguageCode ?? null;
+    this.isSpaceSelectionResolved = resolved;
   }
 
   clearSpace() {
     this.spaceId = null;
     this.groundName = null;
+    this.address = null;
     this.contentLanguageCode = null;
     this.isSpaceSelectionResolved = true;
   }
@@ -70,6 +104,7 @@ class MobileApiScopeStore {
   markSpaceSelectionPending() {
     this.spaceId = null;
     this.groundName = null;
+    this.address = null;
     this.contentLanguageCode = null;
     this.isSpaceSelectionResolved = false;
   }
@@ -95,6 +130,7 @@ class MobileApiScopeStore {
   clear() {
     this.spaceId = null;
     this.groundName = null;
+    this.address = null;
     this.contentLanguageCode = null;
     this.spaces = [];
     this.accessToken = null;

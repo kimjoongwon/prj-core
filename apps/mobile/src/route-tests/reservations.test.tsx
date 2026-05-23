@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react-native";
+import { act, render, screen } from "@testing-library/react-native";
 import ReservationsTabRoute from "@/app/(tabs)/reservations";
 import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
 
@@ -141,7 +141,9 @@ describe("mobile reservations tab route", () => {
 
   afterEach(() => {
     jest.clearAllMocks();
-    mobileApiScopeStore.clear();
+    act(() => {
+      mobileApiScopeStore.clear();
+    });
   });
 
   it("예약 탭에서 실제 내 예약 목록을 렌더링해야 한다", () => {

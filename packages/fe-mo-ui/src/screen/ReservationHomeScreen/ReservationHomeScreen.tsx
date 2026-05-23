@@ -318,31 +318,31 @@ export const ReservationHomeScreen = observer(
 ReservationHomeScreen.displayName = "ReservationHomeScreen";
 const reservationHomeScreenClassNames = tv({
   slots: {
-    contentContainer: "px-4 pb-8 pt-4",
-    eyebrow: "text-xs font-extrabold uppercase text-accent",
+    contentContainer: "px-4 pb-8 pt-3",
+    eyebrow: "text-xs font-bold uppercase text-accent",
     filterChip:
       "rounded-full border border-border bg-surface px-3 py-2",
-    filterChipText: "text-[13px] font-extrabold leading-4 text-foreground",
+    filterChipText: "text-[13px] font-bold leading-4 text-foreground",
     filterRow: "flex-row flex-wrap gap-2",
     overview:
-      "gap-3 rounded-lg border border-border bg-surface p-4",
+      "gap-4 rounded-lg border border-border bg-surface px-4 py-4",
     overviewDescription: "text-[13px] leading-5 text-muted",
     overviewHeader: "gap-1",
-    overviewTitle: "text-[24px] font-extrabold leading-8 text-foreground",
+    overviewTitle: "text-[22px] font-bold leading-7 text-foreground",
     root: "flex-1 bg-background",
     screenFrame: "bg-background",
-    section: "gap-3",
+    section: "gap-2.5",
     sectionDescription: "text-[13px] leading-5 text-muted",
     sectionHeader: "gap-1",
-    sectionTitle: "text-base font-extrabold leading-6 text-foreground",
+    sectionTitle: "text-base font-bold leading-6 text-foreground",
     sessionLabel: "text-[13px] leading-5 text-muted",
     summaryCard:
-      "min-h-16 flex-1 justify-between rounded-lg border border-border bg-surface-secondary px-3 py-2",
-    summaryGrid: "flex-row gap-2",
+      "min-h-14 flex-1 justify-between rounded-md bg-background px-3 py-2",
+    summaryGrid: "flex-row gap-1 rounded-lg bg-background p-1",
     summaryHeader: "flex-row items-center gap-1.5",
-    summaryLabel: "text-[11px] font-bold uppercase leading-4 text-muted",
-    summaryValue: "text-[20px] font-extrabold leading-6 text-foreground",
-    tabContent: "gap-4",
+    summaryLabel: "text-[11px] font-semibold uppercase leading-4 text-muted",
+    summaryValue: "text-[19px] font-bold leading-6 text-foreground",
+    tabContent: "gap-5",
   },
   variants: {
     selected: {

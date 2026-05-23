@@ -1,5 +1,6 @@
 import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
+import type { MobileSpaceInfo } from "../mobile-api-scope";
 
 export type AuthQueryValue = string | string[];
 
@@ -59,6 +60,8 @@ const DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO = "/";
 const DEFAULT_IDP_API_BASE_URL =
 	Platform.OS === "android" ? "http://10.0.2.2:3007" : "http://localhost:3007";
 const NATIVE_SESSION_STORAGE_KEY = "onora.mobile.native.session.v1";
+const NATIVE_SPACE_SELECTION_STORAGE_KEY =
+	"onora.mobile.native.space-selection.v1";
 
 const API_ENV_KEYS = [
 	"EXPO_PUBLIC_IDP_API_URL",
@@ -336,6 +339,34 @@ export const loadNativeAuthSession =
 
 export const clearNativeAuthSession = async () => {
 	await SecureStore.deleteItemAsync(NATIVE_SESSION_STORAGE_KEY);
+};
+
+export const saveNativeSpaceSelection = async (space: MobileSpaceInfo) => {
+	await SecureStore.setItemAsync(
+		NATIVE_SPACE_SELECTION_STORAGE_KEY,
+		JSON.stringify(space),
+	);
+};
+
+export const loadNativeSpaceSelection =
+	async (): Promise<MobileSpaceInfo | null> => {
+		const rawSelection = await SecureStore.getItemAsync(
+			NATIVE_SPACE_SELECTION_STORAGE_KEY,
+		);
+		if (!rawSelection) {
+			return null;
+		}
+
+		try {
+			return JSON.parse(rawSelection) as MobileSpaceInfo;
+		} catch {
+			await clearNativeSpaceSelection();
+			return null;
+		}
+	};
+
+export const clearNativeSpaceSelection = async () => {
+	await SecureStore.deleteItemAsync(NATIVE_SPACE_SELECTION_STORAGE_KEY);
 };
 
 export const buildAuthCallbackLoadingState =

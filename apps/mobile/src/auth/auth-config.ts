@@ -57,6 +57,7 @@ export const MOBILE_AUTH = {
 	loginClientId: "user-mobile",
 	authenticatedHomePath: "/",
 	loginPath: "/auth/login",
+	spaceSelectPath: "/select-space",
 };
 
 const AUTHENTICATED_ROUTE_PATHS = [
@@ -64,6 +65,7 @@ const AUTHENTICATED_ROUTE_PATHS = [
 	"/payments/checkout",
 	"/profile",
 	"/reservations",
+	"/select-space",
 ] as const;
 
 export const getIdpApiBaseUrl = () => trimTrailingSlash(MOBILE_AUTH.idpApiBaseUrl);
@@ -74,6 +76,8 @@ export const getCoreApiBaseUrl = () =>
 export const getAuthenticatedHomePath = () => MOBILE_AUTH.authenticatedHomePath;
 
 export const getLoginPath = () => MOBILE_AUTH.loginPath;
+
+export const getSpaceSelectPath = () => MOBILE_AUTH.spaceSelectPath;
 
 export const isAuthRoute = (pathname = "") =>
 	pathname.startsWith("/auth/") || pathname === "/auth/login";

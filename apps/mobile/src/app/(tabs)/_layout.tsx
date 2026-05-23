@@ -1,14 +1,55 @@
 import { Tabs } from "expo-router";
-import type { BottomTabHeaderProps } from "@react-navigation/bottom-tabs";
-import { CustomHeader, Icon } from "@cocrepo/mo-ui";
+import type {
+	BottomTabBarButtonProps,
+	BottomTabHeaderProps,
+} from "@react-navigation/bottom-tabs";
+import {
+	AnimatedTabIcon,
+	CustomHeader,
+	SpaceSelectionSheet,
+	type SpaceListItemInfo,
+} from "@cocrepo/mo-ui";
+import { useGetMySpaces, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
+import type { SpaceDto } from "@cocrepo/api/idp/model";
+import { useQueryClient } from "@tanstack/react-query";
 import { useThemeColor } from "heroui-native";
 import { observer } from "mobx-react-lite";
+import { useState } from "react";
+import {
+	Pressable,
+	type GestureResponderEvent,
+	type PressableProps,
+} from "react-native";
+import { getIdpApiBaseUrl } from "@/auth/auth-config";
+import { mobileAuthStore } from "@/auth/auth-store";
+import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import {
+	toSelectableMobileSpaceInfos,
+	toSpaceListItemInfos,
+} from "@/auth/mobile-space-options";
 
 interface TabBarIconProps {
 	color: string;
 	focused: boolean;
 	size: number;
 }
+
+const INITIAL_TAB_ANIMATION_KEYS = {
+	home: 0,
+	profile: 0,
+	reservations: 0,
+};
+
+type TabAnimationKeyName = keyof typeof INITIAL_TAB_ANIMATION_KEYS;
+type TabAnimationKeys = typeof INITIAL_TAB_ANIMATION_KEYS;
+
+const getNextTabAnimationKeys = (
+	keys: TabAnimationKeys,
+	tabName: TabAnimationKeyName,
+) => ({
+	...keys,
+	[tabName]: keys[tabName] + 1,
+});
 
 const getTabHeaderTitle = (props: BottomTabHeaderProps) => {
 	if (typeof props.options.title === "string") {
@@ -18,37 +59,164 @@ const getTabHeaderTitle = (props: BottomTabHeaderProps) => {
 	return props.route.name;
 };
 
+const findSpaceByItem = (
+	spaces: readonly SpaceDto[],
+	item: SpaceListItemInfo,
+) => spaces.find((space) => space.id === item.id);
+
+const getHeaderSubtitle = () =>
+	mobileApiScopeStore.groundName || "지점 선택";
+
+const MobileTabHeader = observer((props: BottomTabHeaderProps) => {
+	const queryClient = useQueryClient();
+	const [isSpaceSheetOpen, setIsSpaceSheetOpen] = useState(false);
+	const [selectedSpaceId, setSelectedSpaceId] = useState<string | null>(
+		mobileApiScopeStore.spaceId,
+	);
+	const [selectionErrorDescription, setSelectionErrorDescription] =
+		useState("");
+	const requestOptions = { baseURL: getIdpApiBaseUrl() };
+	const spacesQuery = useGetMySpaces({
+		query: {
+			enabled: isSpaceSheetOpen,
+			refetchOnWindowFocus: false,
+			retry: false,
+		},
+		request: requestOptions,
+	});
+	const setCurrentSpaceMutation = useSetCurrentSpace({
+		request: requestOptions,
+	});
+	const rawSpaces = spacesQuery.data?.data ?? [];
+	const spaceInfos =
+		rawSpaces.length > 0
+			? toSelectableMobileSpaceInfos(rawSpaces)
+			: mobileApiScopeStore.spaces;
+	const spaceItems = toSpaceListItemInfos(spaceInfos);
+
+	const onPressSubtitle = () => {
+		setSelectedSpaceId(mobileApiScopeStore.spaceId);
+		setSelectionErrorDescription("");
+		setIsSpaceSheetOpen(true);
+	};
+
+	const onOpenChangeSpaceSheet = (isOpen: boolean) => {
+		setIsSpaceSheetOpen(isOpen);
+		if (!isOpen) {
+			setSelectionErrorDescription("");
+		}
+	};
+
+	const onSelectSpace = async (item: SpaceListItemInfo) => {
+		setSelectedSpaceId(item.id);
+		setSelectionErrorDescription("");
+		try {
+			const response = await setCurrentSpaceMutation.mutateAsync({
+				spaceId: item.id,
+			});
+			const selectedSpace = response.data ?? findSpaceByItem(rawSpaces, item);
+			if (selectedSpace) {
+				await mobileAuthStore.selectSpace(selectedSpace);
+			} else {
+				const selectedInfo = spaceInfos.find((space) => space.spaceId === item.id);
+				if (selectedInfo) {
+					await mobileAuthStore.selectSpaceInfo(selectedInfo);
+				}
+			}
+			setIsSpaceSheetOpen(false);
+			await queryClient.invalidateQueries();
+		} catch {
+			setSelectionErrorDescription("지점 변경을 저장하지 못했습니다.");
+		}
+	};
+
+	return (
+		<>
+			<CustomHeader
+				title={getTabHeaderTitle(props)}
+				subtitle={getHeaderSubtitle()}
+				onPressSubtitle={onPressSubtitle}
+				subtitleAccessibilityLabel="현재 지점 변경"
+			/>
+			<SpaceSelectionSheet
+				description={
+					selectionErrorDescription || "예약에 사용할 지점을 선택해 주세요."
+				}
+				disabled={setCurrentSpaceMutation.isPending}
+				isOpen={isSpaceSheetOpen}
+				onOpenChange={onOpenChangeSpaceSheet}
+				onSelectSpace={onSelectSpace}
+				selectedSpaceId={selectedSpaceId}
+				spaces={spaceItems}
+			/>
+		</>
+	);
+});
+
 const renderTabHeader = (props: BottomTabHeaderProps) => (
-	<CustomHeader title={getTabHeaderTitle(props)} subtitle="Onora" />
+	<MobileTabHeader {...props} />
 );
 
-const renderHomeTabIcon = ({ color, focused, size }: TabBarIconProps) => (
-	<Icon
+const renderTabBarButton = (
+	props: BottomTabBarButtonProps,
+	onPressTab: () => void,
+) => {
+	const {
+		onPress,
+		ref: _ref,
+		...pressableProps
+	} = props as BottomTabBarButtonProps & { ref?: unknown };
+	const onPressTabButton = (event: GestureResponderEvent) => {
+		onPressTab();
+		onPress?.(event);
+	};
+
+	return (
+		<Pressable
+			{...(pressableProps as PressableProps)}
+			onPress={onPressTabButton}
+		/>
+	);
+};
+
+const renderHomeTabIcon = (
+	{ color, focused, size }: TabBarIconProps,
+	animationKey: number,
+) => (
+	<AnimatedTabIcon
+		animationKey={animationKey}
 		color={color}
+		focused={focused}
 		name="house"
-		size={focused ? size + 1 : size}
+		size={size}
 		strokeWidth={focused ? 2 : 1.75}
 	/>
 );
 
-const renderReservationsTabIcon = ({
-	color,
-	focused,
-	size,
-}: TabBarIconProps) => (
-	<Icon
+const renderReservationsTabIcon = (
+	{ color, focused, size }: TabBarIconProps,
+	animationKey: number,
+) => (
+	<AnimatedTabIcon
+		animationKey={animationKey}
 		color={color}
+		focused={focused}
 		name="calendarCheck"
-		size={focused ? size + 1 : size}
+		size={size}
 		strokeWidth={focused ? 2 : 1.75}
 	/>
 );
 
-const renderProfileTabIcon = ({ color, focused, size }: TabBarIconProps) => (
-	<Icon
+const renderProfileTabIcon = (
+	{ color, focused, size }: TabBarIconProps,
+	animationKey: number,
+) => (
+	<AnimatedTabIcon
+		animationKey={animationKey}
 		color={color}
+		focused={focused}
 		name="userRound"
-		size={focused ? size + 1 : size}
+		size={size}
 		strokeWidth={focused ? 2 : 1.75}
 	/>
 );
@@ -60,6 +228,41 @@ const MainTabsLayout = observer(() => {
 		"surface",
 		"border",
 	]);
+	const [tabAnimationKeys, setTabAnimationKeys] = useState(
+		INITIAL_TAB_ANIMATION_KEYS,
+	);
+
+	const onPressHomeTab = () => {
+		setTabAnimationKeys((keys) => getNextTabAnimationKeys(keys, "home"));
+	};
+
+	const onPressReservationsTab = () => {
+		setTabAnimationKeys((keys) =>
+			getNextTabAnimationKeys(keys, "reservations"),
+		);
+	};
+
+	const onPressProfileTab = () => {
+		setTabAnimationKeys((keys) => getNextTabAnimationKeys(keys, "profile"));
+	};
+
+	const onRenderHomeTabIcon = (props: TabBarIconProps) =>
+		renderHomeTabIcon(props, tabAnimationKeys.home);
+
+	const onRenderReservationsTabIcon = (props: TabBarIconProps) =>
+		renderReservationsTabIcon(props, tabAnimationKeys.reservations);
+
+	const onRenderProfileTabIcon = (props: TabBarIconProps) =>
+		renderProfileTabIcon(props, tabAnimationKeys.profile);
+
+	const onRenderHomeTabButton = (props: BottomTabBarButtonProps) =>
+		renderTabBarButton(props, onPressHomeTab);
+
+	const onRenderReservationsTabButton = (props: BottomTabBarButtonProps) =>
+		renderTabBarButton(props, onPressReservationsTab);
+
+	const onRenderProfileTabButton = (props: BottomTabBarButtonProps) =>
+		renderTabBarButton(props, onPressProfileTab);
 
 	return (
 		<Tabs
@@ -84,7 +287,8 @@ const MainTabsLayout = observer(() => {
 			<Tabs.Screen
 				name="index"
 				options={{
-					tabBarIcon: renderHomeTabIcon,
+					tabBarButton: onRenderHomeTabButton,
+					tabBarIcon: onRenderHomeTabIcon,
 					tabBarLabel: "홈",
 					title: "오늘의 수업",
 				}}
@@ -92,7 +296,8 @@ const MainTabsLayout = observer(() => {
 			<Tabs.Screen
 				name="reservations"
 				options={{
-					tabBarIcon: renderReservationsTabIcon,
+					tabBarButton: onRenderReservationsTabButton,
+					tabBarIcon: onRenderReservationsTabIcon,
 					tabBarLabel: "예약",
 					title: "예약",
 				}}
@@ -100,7 +305,8 @@ const MainTabsLayout = observer(() => {
 			<Tabs.Screen
 				name="profile"
 				options={{
-					tabBarIcon: renderProfileTabIcon,
+					tabBarButton: onRenderProfileTabButton,
+					tabBarIcon: onRenderProfileTabIcon,
 					tabBarLabel: "내 정보",
 					title: "내 정보",
 				}}

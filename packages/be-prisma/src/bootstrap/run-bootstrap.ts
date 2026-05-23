@@ -10,6 +10,7 @@ import {
 	ensureSystemBootstrap,
 } from "./system-space";
 import { ensureBootstrapTemplates } from "./templates";
+import { createMobileReservationDemoData } from "./mobile-reservation-demo";
 import { createTimelineSessionExerciseDomainData } from "./timeline";
 
 /**
@@ -29,6 +30,7 @@ export async function runBootstrap(prisma: PrismaClient): Promise<void> {
 	await classifyGroundSpacesAsBranch(prisma, SYSTEM_SPACE_ID);
 	await createHierarchicalTenants(prisma, SYSTEM_SPACE_ID);
 	await createTimelineSessionExerciseDomainData(prisma);
+	await createMobileReservationDemoData(prisma);
 	await ensureSecurityPolicyDefaults(prisma);
 	await createAssetDomainData(prisma);
 	await ensureBootstrapTemplates(prisma);

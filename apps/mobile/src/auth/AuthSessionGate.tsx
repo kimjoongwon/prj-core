@@ -8,12 +8,15 @@ import { View } from "react-native";
 import {
 	isAuthenticatedRoute,
 	isAuthRoute,
+	getSpaceSelectPath,
 	resolveAuthenticatedRoutePath,
 } from "./auth-config";
 import { mobileAuthStore } from "./auth-store";
+import { mobileApiScopeStore } from "./mobile-api-scope";
 
 const HOME_ROUTE = "/" as const;
 const LOGIN_ROUTE = "/auth/login" as const;
+const SELECT_SPACE_ROUTE = getSpaceSelectPath();
 
 interface AuthRedirect {
 	href: Href;
@@ -39,10 +42,35 @@ const buildHomeRedirect = (): AuthRedirect => ({
 	targetPathname: HOME_ROUTE,
 });
 
+const buildSpaceSelectRedirect = (returnTo: string): AuthRedirect => ({
+	href: {
+		pathname: SELECT_SPACE_ROUTE,
+		params: { returnTo: resolveAuthenticatedRoutePath(returnTo) },
+	} as unknown as Href,
+	targetPathname: SELECT_SPACE_ROUTE,
+});
+
 const resolveAuthRedirect = (
 	authStatus: "authenticated" | "unauthenticated",
 	pathname: string,
+	isSpaceSelectionResolved: boolean,
 ): AuthRedirect | null => {
+	if (
+		authStatus === "authenticated" &&
+		!isSpaceSelectionResolved &&
+		pathname !== SELECT_SPACE_ROUTE
+	) {
+		return buildSpaceSelectRedirect(pathname);
+	}
+
+	if (
+		authStatus === "authenticated" &&
+		isSpaceSelectionResolved &&
+		pathname === SELECT_SPACE_ROUTE
+	) {
+		return buildHomeRedirect();
+	}
+
 	if (authStatus === "authenticated" && isAuthRoute(pathname)) {
 		return buildHomeRedirect();
 	}
@@ -66,6 +94,8 @@ export const AuthSessionGate = observer(({
 	const pathname = normalizePathname(rawPathname);
 	const { authStatus } = mobileAuthStore;
 	const isVerifying = mobileAuthStore.isVerifying;
+	const isSpaceSelectionResolved =
+		mobileApiScopeStore.isSpaceSelectionResolved;
 	const [isInitialRouteReady, setIsInitialRouteReady] = useState(false);
 	const isSplashHiddenRef = useRef(false);
 
@@ -83,7 +113,11 @@ export const AuthSessionGate = observer(({
 			return;
 		}
 
-		const redirect = resolveAuthRedirect(authStatus, pathname);
+		const redirect = resolveAuthRedirect(
+			authStatus,
+			pathname,
+			isSpaceSelectionResolved,
+		);
 		if (redirect) {
 			if (redirect.targetPathname === LOGIN_ROUTE) {
 				mobileAuthStore.setNextPathAfterLogin(pathname);
@@ -95,7 +129,7 @@ export const AuthSessionGate = observer(({
 		}
 
 		setIsInitialRouteReady(true);
-	}, [authStatus, isVerifying, pathname, router]);
+	}, [authStatus, isSpaceSelectionResolved, isVerifying, pathname, router]);
 
 	const onLayoutReadyScreen = () => {
 		if (!isInitialRouteReady || isSplashHiddenRef.current) {

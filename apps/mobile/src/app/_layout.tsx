@@ -72,6 +72,10 @@ export default function RootLayout() {
 								<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 								<Stack.Screen name="auth/login" options={{ headerShown: false }} />
 								<Stack.Screen
+									name="select-space"
+									options={{ headerShown: false }}
+								/>
+								<Stack.Screen
 									name="payments/checkout"
 									options={{ title: "예약 결제" }}
 								/>

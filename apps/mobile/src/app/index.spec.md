@@ -16,6 +16,7 @@
 |-------|------------|------|
 | `/` | `apps/mobile/src/app/(tabs)/index.tsx` | 날짜 스트립 + 수업 카드 booking feed + 예약 정책 sheet |
 | `/payments/checkout` | `apps/mobile/src/app/payments/checkout.tsx` | 활성 수강권이 없는 예약 의도의 provider-neutral 예약 결제 checkout |
+| `/select-space` | `apps/mobile/src/app/select-space.tsx` | 인증 직후 또는 지점 변경 시 `x-space-id`를 확정하는 지점 선택 화면 |
 | `/reservations` | `apps/mobile/src/app/(tabs)/reservations.tsx` | `getMyReservations` 기반 내 예약/대기 목록 |
 | `/profile` | `apps/mobile/src/app/(tabs)/profile.tsx` | 내 정보 탭 + 로그아웃 |
 | `/(tabs)` | `apps/mobile/src/app/(tabs)/_layout.tsx` | Expo Router 하단 탭 shell |
@@ -30,6 +31,7 @@
 | `/payments/checkout` | `packages/fe-mo-ui/src/screen/ReservationPaymentCheckoutScreen/ReservationPaymentCheckoutScreen.tsx` | `packages/fe-mo-ui/src/screen/ReservationPaymentCheckoutScreen/ReservationPaymentCheckoutScreen.spec.md` | route는 checkout params, bootstrap/checkout Orval hooks, cache invalidate, navigation만 소유한다. |
 | `/reservations` | `packages/fe-mo-ui/src/screen/MyReservationsScreen/MyReservationsScreen.tsx` | `packages/fe-mo-ui/src/screen/MyReservationsScreen/MyReservationsScreen.spec.md` | route는 `getMyReservations` API wiring과 `ReservationDto -> MyReservationCardItem` mapping만 소유한다. |
 | `/auth/login` | `packages/fe-mo-ui/src/screen/NativeAuthLoginScreen/NativeAuthLoginScreen.tsx` | `packages/fe-mo-ui/src/screen/NativeAuthLoginScreen/NativeAuthLoginScreen.spec.md` | Stage 2에서 로그인 visual owner를 shared screen으로 승격하고, route는 email/password form state, native login mutation, SecureStore restore/logout wiring만 소유한다. |
+| `/select-space` | `packages/fe-mo-ui/src/screen/SpaceSelectScreen/SpaceSelectScreen.tsx` | `packages/fe-mo-ui/src/screen/SpaceSelectScreen/SpaceSelectScreen.spec.md` | route는 `getMySpaces`, `setCurrentSpace`, SecureStore 저장, 홈 이동만 소유하고 화면은 지점 목록/상태 표시만 담당한다. |
 
 ## Mobile Visual System
 
@@ -45,6 +47,7 @@
 | 영역 | 계약 |
 |------|------|
 | 상단 컨텍스트 | Expo Router `CustomHeader`가 “오늘의 수업” 제목을 소유하고, 본문은 선택 날짜 중심의 예약 현황 summary로 조회 기간/내 예약 수/표시 수업 수를 요약한다. |
+| 현재 지점 | `CustomHeader` subtitle은 현재 선택된 지점명을 표시하며, 누르면 `SpaceSelectionSheet`로 지점을 변경한다. 변경 완료 후 Core/IDP API `x-space-id` scope와 React Query cache를 갱신한다. |
 | 날짜 스트립 | `@cocrepo/mo-ui` `DateStrip`으로 오늘부터 14일을 표시하며, 날짜별 feed item count를 함께 보여준다. |
 | 필터 칩 | `전체`, `예약 가능`, `내 예약`, `대기 가능`을 route-local filter로 제공한다. |
 | 수업 카드 | `ReservationHomeScreen`이 `BookingClassCard`를 조합해 시간, 프로그램명, 세션명, 타임라인명, 코치, 난이도, 루틴, 운동 미리보기, 잔여석/예약 수/대기 수, 상태, CTA를 한 카드에 표시한다. |
@@ -77,6 +80,16 @@
 | `nativeLogin` | generated mutation | `POST /api/v1/auth/native/login` | `/auth/login` first-party native 로그인 |
 | `nativeRefreshToken` | generated mutation 또는 axios native refresh handler | `POST /api/v1/auth/native/token/refresh` | mobile access token 401 refresh |
 | `nativeLogout` | generated mutation 또는 auth store request | `POST /api/v1/auth/native/logout` | `/profile` 로그아웃 |
+| `getMySpaces` | `useGetMySpaces` | `GET /api/v1/auth/my-spaces` | `/select-space` 지점 선택 + 홈 헤더 지점 변경 |
+| `setCurrentSpace` | `useSetCurrentSpace` | `POST /api/v1/auth/current-space` | 선택 지점 검증 후 `x-space-id` 확정 |
+
+## Space Selection 계약
+
+- 인증 직후 저장된 지점 선택이 없으면 `AuthSessionGate`가 `/select-space`로 보낸다.
+- `/select-space`는 인증된 사용자가 접근 가능한 지점을 모두 보여주되, `플랫폼 운영본부`/system space는 노출하지 않는다.
+- 사용자가 지점을 누르면 `setCurrentSpace({ spaceId })`로 접근 가능한 지점인지 검증하고, 성공 시 `mobileApiScopeStore`와 SecureStore에 선택 정보를 저장한다.
+- 이후 `@cocrepo/api` Core/IDP axios interceptor는 저장된 `spaceId`를 `x-space-id` 헤더로 넣는다.
+- 홈 상단 지점명 버튼은 같은 지점 리스트 UI를 `SpaceSelectionSheet`에서 재사용한다.
 
 `getReservationBookingFeed` query:
 
@@ -92,6 +105,8 @@
   take?: number;
 }
 ```
+
+- 홈은 14일치 날짜 스트립과 수업 카드를 한 번에 구성하므로 `take: 200`으로 요청해 지점별 다수 수업 seed가 뒤쪽 날짜에서 잘리지 않게 한다.
 
 `createReservation` body:
 
@@ -166,6 +181,8 @@ type ReservationPaymentCheckoutRouteState = {
 | `MO-UNIT-AUTH-NATIVE-003` | `apps/mobile/src/route-tests/auth/auth-utils.test.ts` | native login/refresh request가 `/api/v1/auth/native/**` endpoint와 JSON body를 사용 |
 | `MO-UNIT-AUTH-NATIVE-004` | same | native session token이 SecureStore에 저장/복원/삭제 |
 | `MO-UNIT-AUTH-NATIVE-005` | `apps/mobile/src/route-tests/auth/AuthSessionGate.test.tsx` | 앱 시작 시 memory/SecureStore token restore 후 `verify-token`, `my-spaces`, `current-space`로 인증 context를 복원 |
+| `MO-UNIT-SPACE-SELECT-001` | `apps/mobile/src/route-tests/select-space.test.tsx` | `/select-space`가 플랫폼 운영본부를 제외한 지점 목록을 렌더링하고 선택 시 `setCurrentSpace` 후 홈으로 이동 |
+| `MO-UNIT-SPACE-SELECT-002` | `apps/mobile/src/route-tests/auth/AuthSessionGate.test.tsx` | 인증됐지만 지점 선택이 미확정이면 `/select-space`로 이동 |
 | `MO-UNIT-HOME-BOOKING-001` | `apps/mobile/src/route-tests/index.test.tsx` | 홈이 booking feed 카드와 날짜 스트립을 렌더링하고 PENDING_BACKEND_HANDOFF 문구를 노출하지 않음 |
 | `MO-UNIT-HOME-BOOKING-002` | same | feed loading/empty/error + retry 상태 |
 | `MO-UNIT-HOME-BOOKING-003` | same | 날짜 선택과 대기 필터가 카드 목록을 변경 |
@@ -216,7 +233,9 @@ type ReservationPaymentCheckoutRouteState = {
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-17 | 광화문 지점처럼 수업 수가 많은 예약 seed를 홈에서 누락하지 않도록 booking feed 기본 조회량을 200으로 상향 | codex |
 | 2026-05-13 | 모바일 전역/route visual system을 Linear/Stripe 계열의 muted background, subtle border, 8pt rhythm, rounded-lg 중심으로 갱신 | codex |
+| 2026-05-17 | 인증 직후 지점 선택 route와 홈 헤더 지점 변경 sheet 계약 추가 | codex |
 | 2026-05-13 | `@cocrepo/mo-ui` icon primitive 기반으로 하단 탭, 로그인, 예약/결제 metadata의 semantic icon cue 계약을 추가 | codex |
 | 2026-05-13 | 모바일 인증을 WebView/OIDC callback/mobile-json에서 first-party native login + native token/refresh/logout + SecureStore 복원 계약으로 전환 | codex |
 | 2026-05-10 | 모바일 OIDC 로그인 후 first-party consent 화면을 건너뛰고 `mobile-json` 세션 저장 후 홈으로 진입하는 auth route 계약을 반영 | codex |

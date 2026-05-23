@@ -95,6 +95,8 @@ describe("AuthApplicationService", () => {
 	let mockOidcFacade: jest.Mocked<OidcFacade>;
 	let mockOidcClientService: jest.Mocked<OidcClientService>;
 	let mockClsService: jest.Mocked<ClsService>;
+	let mockJwtService: { sign: jest.Mock };
+	let mockConfigService: { get: jest.Mock };
 
 	beforeEach(async () => {
 		mockUsersService = {
@@ -116,6 +118,7 @@ describe("AuthApplicationService", () => {
 			getById: jest.fn(),
 			getGroundBySpaceId: jest.fn(),
 			findByIdsWithGround: jest.fn(),
+			listSpaces: jest.fn(),
 		} as unknown as jest.Mocked<SpaceService>;
 
 		mockTokenService = {
@@ -166,6 +169,24 @@ describe("AuthApplicationService", () => {
 		mockClsService = {
 			get: jest.fn(),
 		} as unknown as jest.Mocked<ClsService>;
+		mockJwtService = {
+			sign: jest.fn().mockReturnValue(buildAccessToken("user-1")),
+		};
+		mockConfigService = {
+			get: jest.fn((key: string) => {
+				if (key === "auth") {
+					return {
+						expires: "1h",
+						refresh: "7d",
+						secret: "test-secret",
+					};
+				}
+				if (key === "oidc") {
+					return { issuer: "http://localhost:3007" };
+				}
+				return undefined;
+			}),
+		};
 
 		mockOidcFacade = {
 			createAuthorizationRequest: jest.fn().mockImplementation((client) => ({
@@ -284,6 +305,8 @@ describe("AuthApplicationService", () => {
 			mockOidcClientService,
 			mockOidcFacade,
 			mockClsService,
+			mockJwtService as never,
+			mockConfigService as never,
 		);
 	});
 
@@ -778,6 +801,26 @@ describe("AuthApplicationService", () => {
 	});
 
 	describe("signUp email verification", () => {
+		it("회원가입 지점 목록은 플랫폼 운영본부를 제외해야 한다", async () => {
+			mockSpacesService.listSpaces.mockResolvedValue({
+				spaces: [
+					{
+						id: "61ddca20-1752-466e-b4da-879ebdbe54e3",
+						ground: { name: "플랫폼 운영본부" },
+					},
+					{
+						id: "space-branch",
+						ground: { address: "서울 강남구", name: "강남점" },
+					},
+				],
+				total: 2,
+			} as never);
+
+			const result = await applicationService.getSignUpSpaces();
+
+			expect(result.map((space) => space.id)).toEqual(["space-branch"]);
+		});
+
 		it("회원가입 요청은 User를 즉시 만들지 않고 이메일 인증 요청을 생성해야 한다", async () => {
 			const expiresAt = new Date("2026-04-29T09:30:00.000Z");
 			mockUsersService.findUserForAuth.mockResolvedValue(null);

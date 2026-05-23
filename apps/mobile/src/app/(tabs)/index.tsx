@@ -26,7 +26,7 @@ import { getCoreApiBaseUrl } from "@/auth/auth-config";
 import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
 
 const BOOKING_WINDOW_DAYS = 14;
-const DEFAULT_TAKE = 50;
+const DEFAULT_TAKE = 200;
 const TIME_ZONE = "Asia/Seoul";
 const WEEKDAY_LABELS = ["일", "월", "화", "수", "목", "금", "토"] as const;
 
