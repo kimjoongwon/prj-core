@@ -491,6 +491,7 @@ Skipped phases:
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-05-24 | 모바일 route-local 텍스트도 `@cocrepo/mo-ui` `Text` primitive를 사용하도록 profile route 계약을 동기화 | codex |
 | 2026-05-17 | 광화문 지점처럼 수업 수가 많은 예약 seed를 홈에서 누락하지 않도록 booking feed 기본 조회량을 200으로 상향 | codex |
 | 2026-05-24 | `/profile` 하단 탭을 마이 페이지로 정리하고 `MyPageScreen` shared screen owner 계약을 추가 | orch-delivery |
 | 2026-05-13 | 모바일 전역/route visual system을 muted background, subtle border, rhythm, rounded radius 중심으로 갱신 | codex |

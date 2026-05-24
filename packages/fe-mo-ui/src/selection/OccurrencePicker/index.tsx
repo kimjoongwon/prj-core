@@ -1,7 +1,8 @@
 import { type ReactNode } from "react";
-import { Text, View, type ViewProps } from "react-native";
+import { View, type ViewProps } from "react-native";
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
+import { Text } from "../../data-display/Text";
 import {
   SelectableCardList,
   type SelectableCardItem,

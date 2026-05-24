@@ -1,5 +1,5 @@
+import { Text } from "@cocrepo/mo-ui";
 import { act, render, screen, waitFor } from "@testing-library/react-native";
-import { Text } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import * as SecureStore from "expo-secure-store";
 import { AuthSessionGate } from "@/auth/AuthSessionGate";

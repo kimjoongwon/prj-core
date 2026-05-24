@@ -67,6 +67,7 @@
 - `ScreenFrame`으로 본문 safe-area shell을 적용한다.
 - 시각 스타일은 `StyleSheet`가 아니라 uniwind `className`과 `tailwind-variants` slot/variant로 정의한다.
 - render tree는 JSX로 작성하고 `createElement` 기반 visual composition을 사용하지 않는다.
+- 사용자 노출 텍스트는 `@cocrepo/mo-ui` `Text` primitive로 감싸고, `react-native` `Text`를 직접 import하지 않는다.
 - 상태별 feedback, filter chip, summary, card 반복 JSX는 별도 `render*` helper나 재사용 목적 없는 조각 컴포넌트로 분리하지 않고 `ReservationHomeScreen` 본문 안에서 직접 조합한다.
 - 색상은 heroui-native semantic token(`background`, `surface`, `foreground`, `muted`, `accent`, `border`)을 사용한다.
 - 모바일 예약 홈은 Linear/Stripe 계열의 dense premium 톤을 따르되, 첫 화면은 답답하게 보이지 않도록 summary와 section의 visual weight를 낮춘다. `background`는 밝은 neutral, 주요 surface는 border보다 면과 여백으로 구분하고, 요약/날짜/필터는 필요한 최소 border와 `font-bold` 중심으로 표현한다.
@@ -80,6 +81,7 @@
 
 | 날짜       | 변경 내용                                                                                                                          |
 | ---------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-05-24 | 화면 내부 텍스트를 `@cocrepo/mo-ui` `Text` primitive로 감싸도록 렌더링 계약을 추가했습니다.                                        |
 | 2026-05-17 | 홈 화면의 답답함을 줄이기 위해 summary border/폰트 무게/날짜 strip 높이/상태 feedback 밀도를 낮추는 계약을 반영했습니다.          |
 | 2026-05-13 | 예약 홈 요약/수업 카드/정책 sheet에 semantic icon cue를 추가하는 계약을 반영했습니다.                                             |
 | 2026-05-13 | Linear/Stripe 계열의 조밀한 프리미엄 모바일 톤을 반영해 shadow 제거, subtle border, 8pt 리듬, 작은 radius 계약을 추가했습니다.   |

@@ -62,6 +62,7 @@
 - `ScreenFrame`으로 본문 safe-area shell을 적용한다.
 - `StyleSheet`를 쓰지 않고 uniwind `className`과 `tailwind-variants` slot/variant만 사용한다.
 - render tree는 JSX로 작성하고 `createElement` 기반 visual composition을 사용하지 않는다.
+- 사용자 노출 텍스트는 `@cocrepo/mo-ui` `Text` primitive로 감싸고, `react-native` `Text`를 직접 import하지 않는다.
 - 화면 본문과 본문이 조합하는 재사용 컴포넌트는 heroui-native/@cocrepo/mo-ui primitive로 표현 가능한 CTA, 컨테이너, 선택 컨트롤을 직접 `Pressable`/박스 조합으로 재구현하지 않고 `Button`, `Card`, `Radio` 같은 기존 컴포넌트를 우선 사용한다.
 - 상태별 feedback, 진행 상태, submit CTA는 별도 `render*` helper, return 밖 JSX 변수, 재사용 목적 없는 조각 컴포넌트로 분리하지 않고 returned JSX 안에서 직접 조합한다.
 - 색상은 heroui-native semantic token(`background`, `surface`, `foreground`, `muted`, `accent`, `border`)을 사용한다.
@@ -77,6 +78,7 @@
 
 | 날짜       | 변경 내용                                                                                                                                                               |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-05-24 | 화면 내부 텍스트를 `@cocrepo/mo-ui` `Text` primitive로 감싸도록 렌더링 계약을 추가했습니다.                                                                             |
 | 2026-05-13 | checkout header, summary, 선택 카드, 진행 상태에 semantic icon cue를 추가하는 계약을 반영했습니다.                                                                      |
 | 2026-05-13 | Linear/Stripe 계열의 조밀한 프리미엄 모바일 톤을 반영해 shadow 제거, subtle border, 8pt 리듬, 작은 radius 계약을 추가했습니다.                                         |
 | 2026-05-11 | 헤더/진행 상태 컨테이너와 submit CTA를 `Card`, `Button` 기반으로 정리하고, 요약/상태/선택 조각도 `Card`, `Button`, `Radio` primitive를 우선 쓰도록 계약을 추가했습니다. |

@@ -107,6 +107,10 @@
 - 신규/수정 모바일 화면과 `@cocrepo/mo-ui` 컴포넌트에서 `StyleSheet`/`StyleSheet.create`를 사용하지 않습니다.
 - reusable class 조합은 `tailwind-variants`의 `tv({ slots, variants })`로 정의합니다.
 - 신규 모바일 조합의 간격/정렬은 `@cocrepo/mo-ui`의 `VStack`/`HStack` semantic rhythm preset을 우선 사용합니다.
+- 신규/수정 모바일 화면과 `@cocrepo/mo-ui` 컴포넌트의 사용자 노출 텍스트는 `@cocrepo/mo-ui`의 `Text` primitive로 감쌉니다.
+- Button, Chip, Switch, Checkbox, RadioGroup.Item처럼 텍스트 ownership을 내부에서 소유하는 compound/action primitive도 문자열 children을 받으면 wrapper 내부에서 `Text`로 정규화합니다. HeroUI Native에 raw string children을 그대로 넘기지 않습니다.
+- `react-native`의 `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 구현 내부에서만 허용합니다.
+- HeroUI Native compound component를 `return <HeroX {...props} />` 형태로만 재노출하지 않습니다. `title`, `description`, `items`, `trigger`, `actions` 같은 의미 있는 props로 기본 조합을 미리 제공하고, 필요한 경우 dot-slot도 함께 노출합니다.
 - RN 기본 컴포넌트에는 `className`, `contentContainerClassName`, `colorClassName`, `placeholderTextColorClassName` 등 uniwind class prop을 우선 사용합니다.
 - `style` 객체는 safe-area inset, navigator option object, third-party native bridge 값처럼 className으로 표현하기 어려운 동적 값에만 제한합니다.
 - `react-native-web`, DOM Tailwind class 전제, web-only fallback을 모바일 UI 구현에 끌어오지 않습니다.

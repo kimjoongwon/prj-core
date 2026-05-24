@@ -13,6 +13,15 @@ developer_instructions = '''
 - 승인된 route delivery spec이 있으면 그 spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
 
 
+
+## 모바일 Text 정책 (Mandatory)
+
+- `packages/fe-mo-ui`와 `apps/mobile`의 사용자 노출 텍스트는 `@cocrepo/mo-ui`의 `Text` primitive를 사용합니다.
+- `react-native`의 `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 구현 내부에서만 허용합니다.
+- Button, Chip, Switch, Checkbox, RadioGroup.Item처럼 텍스트 ownership을 내부에서 소유하는 compound/action primitive도 문자열 children을 받으면 wrapper 내부에서 `Text`로 정규화합니다. HeroUI Native에 raw string children을 그대로 넘기지 않습니다.
+- HeroUI Native compound wrapper는 `return <HeroX {...props} />` 형태의 return-only re-export로 끝내지 않습니다. `title`, `description`, `items`, `trigger`, `actions` 같은 의미 있는 props로 기본 조합을 제공하고 dot-slot escape hatch를 함께 유지합니다.
+- 신규/수정 story에서도 예시 텍스트는 같은 `Text` primitive를 사용합니다.
+
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/selection`, `apps/mobile`, `packages/fe-store`를 먼저 검색합니다.

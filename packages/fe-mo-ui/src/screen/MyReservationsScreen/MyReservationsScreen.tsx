@@ -1,5 +1,6 @@
 import { type ReactNode } from "react";
-import { ScrollView, Text, View, type ViewProps } from "react-native";
+import { ScrollView, View, type ViewProps } from "react-native";
+import { Text } from "../../data-display/Text";
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
@@ -143,8 +144,7 @@ MyReservationsScreen.displayName = "MyReservationsScreen";
 const myReservationsScreenClassNames = tv({
   slots: {
     contentContainer: "px-4 pb-8 pt-4",
-    reservationCard:
-      "gap-2 rounded-lg border border-border bg-surface p-4",
+    reservationCard: "gap-2 rounded-lg border border-border bg-surface p-4",
     reservationDate: "text-[13px] font-extrabold leading-5 text-success",
     reservationDateRow: "flex-row items-center gap-1.5",
     reservationHeader: "flex-row items-center justify-between",
@@ -157,8 +157,7 @@ const myReservationsScreenClassNames = tv({
     sectionTitle: "text-xl font-extrabold leading-7 text-foreground",
     statusBadge:
       "flex-row items-center gap-1 overflow-hidden rounded-full border border-warning bg-warning-soft px-2 py-1",
-    statusText:
-      "text-xs font-extrabold leading-4 text-warning-soft-foreground",
+    statusText: "text-xs font-extrabold leading-4 text-warning-soft-foreground",
     tabContent: "gap-4",
   },
 });

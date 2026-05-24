@@ -15,8 +15,18 @@ import {
   useSelectAnimation,
   useSelectItem,
 } from "heroui-native/select";
+import { Text } from "../../data-display/Text";
 type HeroSelectProps = ComponentPropsWithoutRef<typeof HeroSelect>;
 type HeroSelectCloseProps = ComponentPropsWithoutRef<typeof HeroSelect.Close>;
+type HeroSelectItemDescriptionProps = ComponentPropsWithoutRef<
+  typeof HeroSelect.ItemDescription
+>;
+type HeroSelectItemLabelProps = ComponentPropsWithoutRef<
+  typeof HeroSelect.ItemLabel
+>;
+type HeroSelectListLabelProps = ComponentPropsWithoutRef<
+  typeof HeroSelect.ListLabel
+>;
 export interface SelectOption {
   description?: ReactNode;
   isDisabled?: boolean;
@@ -86,9 +96,7 @@ const PureSelectComponent = forwardRef<
     };
     const contentChildren = [
       listLabel ? (
-        <HeroSelect.ListLabel key="list-label">
-          {listLabel}
-        </HeroSelect.ListLabel>
+        <SelectListLabel key="list-label">{listLabel}</SelectListLabel>
       ) : null,
       ...options.map((option) => (
         <HeroSelect.Item
@@ -97,11 +105,11 @@ const PureSelectComponent = forwardRef<
           label={option.label}
           value={option.value}
         >
-          <HeroSelect.ItemLabel key={`${option.value}-label`} />
+          <SelectItemLabel key={`${option.value}-label`} />
           {option.description ? (
-            <HeroSelect.ItemDescription key={`${option.value}-description`}>
+            <SelectItemDescription key={`${option.value}-description`}>
               {option.description}
-            </HeroSelect.ItemDescription>
+            </SelectItemDescription>
           ) : null}
           <HeroSelect.ItemIndicator key={`${option.value}-indicator`} />
         </HeroSelect.Item>
@@ -159,14 +167,64 @@ const SelectComponent = observer(
   },
 );
 SelectComponent.displayName = "Select";
+const SelectItemLabel = forwardRef<
+  ComponentRef<typeof Text>,
+  HeroSelectItemLabelProps
+>(({ className, ...props }, ref) => {
+  const { label } = useSelectItem();
+
+  return (
+    <Text
+      {...props}
+      ref={ref}
+      accessibilityRole="text"
+      className={className}
+      variant="label"
+    >
+      {label}
+    </Text>
+  );
+});
+SelectItemLabel.displayName = "Select.ItemLabel";
+const SelectItemDescription = forwardRef<
+  ComponentRef<typeof Text>,
+  HeroSelectItemDescriptionProps
+>(({ children, className, ...props }, ref) => (
+  <Text
+    {...props}
+    ref={ref}
+    accessibilityRole="summary"
+    className={className}
+    tone="muted"
+    variant="body"
+  >
+    {children}
+  </Text>
+));
+SelectItemDescription.displayName = "Select.ItemDescription";
+const SelectListLabel = forwardRef<
+  ComponentRef<typeof Text>,
+  HeroSelectListLabelProps
+>(({ children, className, ...props }, ref) => (
+  <Text
+    {...props}
+    ref={ref}
+    className={className}
+    tone="muted"
+    variant="caption"
+  >
+    {children}
+  </Text>
+));
+SelectListLabel.displayName = "Select.ListLabel";
 export const Select = Object.assign(SelectComponent, {
   Close: HeroSelect.Close,
   Content: HeroSelect.Content,
   Item: HeroSelect.Item,
-  ItemDescription: HeroSelect.ItemDescription,
+  ItemDescription: SelectItemDescription,
   ItemIndicator: HeroSelect.ItemIndicator,
-  ItemLabel: HeroSelect.ItemLabel,
-  ListLabel: HeroSelect.ListLabel,
+  ItemLabel: SelectItemLabel,
+  ListLabel: SelectListLabel,
   Overlay: HeroSelect.Overlay,
   Portal: HeroSelect.Portal,
   Trigger: HeroSelect.Trigger,
@@ -178,14 +236,15 @@ export const Select = Object.assign(SelectComponent, {
     | "Close"
     | "Content"
     | "Item"
-    | "ItemDescription"
     | "ItemIndicator"
-    | "ItemLabel"
-    | "ListLabel"
     | "Overlay"
     | "Portal"
     | "Trigger"
     | "TriggerIndicator"
     | "Value"
-  >;
+  > & {
+    ItemDescription: typeof SelectItemDescription;
+    ItemLabel: typeof SelectItemLabel;
+    ListLabel: typeof SelectListLabel;
+  };
 export { selectClassNames, useSelect, useSelectAnimation, useSelectItem };

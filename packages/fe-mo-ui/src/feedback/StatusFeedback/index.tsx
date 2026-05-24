@@ -1,8 +1,9 @@
 import { type ReactNode } from "react";
-import { Text, View, type ViewProps } from "react-native";
+import { View, type ViewProps } from "react-native";
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
 import { Button } from "../../action/Button";
+import { Text } from "../../data-display/Text";
 import { Icon, type IconTone, type MobileIconName } from "../../icon";
 import { Card } from "../../layout/Card";
 export type StatusFeedbackStatus =

@@ -2,11 +2,11 @@ import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import {
   Pressable,
-  Text,
   View,
   type ImageSourcePropType,
   type PressableProps,
 } from "react-native";
+import { Text } from "../Text";
 import { tv } from "tailwind-variants";
 import { Icon } from "../../icon";
 import { Card } from "../../layout/Card";
@@ -19,8 +19,10 @@ export interface SpaceListItemInfo {
   imageSource?: ImageSourcePropType;
 }
 
-export interface SpaceListItemProps
-  extends Omit<PressableProps, "children" | "onPress"> {
+export interface SpaceListItemProps extends Omit<
+  PressableProps,
+  "children" | "onPress"
+> {
   accessory?: ReactNode;
   isSelected?: boolean;
   onPressSpace?: (space: SpaceListItemInfo) => void;
@@ -62,7 +64,12 @@ export const SpaceListItem = observer(function SpaceListItem({
     >
       <Card className={slotClassNames.root()}>
         <View className={slotClassNames.thumbnail()}>
-          <Avatar alt={`${space.name} 지점 이미지`} color="accent" size="lg" variant="soft">
+          <Avatar
+            alt={`${space.name} 지점 이미지`}
+            color="accent"
+            size="lg"
+            variant="soft"
+          >
             {space.imageSource ? (
               <Avatar.Image
                 className={slotClassNames.avatarImage()}
@@ -104,8 +111,7 @@ const spaceListItemClassNames = tv({
     content: "min-w-0 flex-1 gap-1",
     name: "text-[15px] font-bold leading-5 text-foreground",
     pressable: "rounded-lg",
-    root:
-      "min-h-[84px] flex-row items-center gap-3 rounded-lg border border-border bg-surface px-3 py-3",
+    root: "min-h-[84px] flex-row items-center gap-3 rounded-lg border border-border bg-surface px-3 py-3",
     thumbnail:
       "h-14 w-14 items-center justify-center overflow-hidden rounded-lg bg-accent-soft",
   },

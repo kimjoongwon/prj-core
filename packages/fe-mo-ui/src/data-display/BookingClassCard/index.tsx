@@ -1,11 +1,11 @@
 import { type ReactNode } from "react";
 import {
   Pressable,
-  Text,
   View,
   type PressableProps,
   type ViewProps,
 } from "react-native";
+import { Text } from "../Text";
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
 import { Icon, type MobileIconName } from "../../icon";

@@ -1,5 +1,6 @@
 import { type ReactNode } from "react";
-import { ScrollView, Text, View, type ViewProps } from "react-native";
+import { ScrollView, View, type ViewProps } from "react-native";
+import { Text } from "../../data-display/Text";
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
 import { Button } from "../../action/Button";
@@ -287,7 +288,8 @@ const reservationPaymentCheckoutScreenClassNames = tv({
     header: "gap-2 rounded-lg border border-border bg-surface p-4",
     headerTop: "flex-row items-center gap-2",
     progressBox: "gap-3 rounded-lg border border-border bg-surface p-4",
-    progressLabel: "flex-1 text-[13px] font-bold leading-5 text-surface-foreground",
+    progressLabel:
+      "flex-1 text-[13px] font-bold leading-5 text-surface-foreground",
     progressList: "gap-2",
     progressMark: "w-6 items-center justify-center",
     progressStep: "flex-row items-center gap-2",

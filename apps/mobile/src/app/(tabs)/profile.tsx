@@ -1,8 +1,8 @@
-import { Button, Icon, ScreenFrame } from "@cocrepo/mo-ui";
+import { Button, Icon, ScreenFrame, Text } from "@cocrepo/mo-ui";
 import type { Href } from "expo-router";
 import { useRouter } from "expo-router";
 import { observer } from "mobx-react-lite";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { mobileAuthStore } from "@/auth/auth-store";
 import { mainTabClassNames } from "@/tabs/main-tab-class-names";
 

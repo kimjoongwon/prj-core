@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, View } from "react-native";
+import { Text } from "../../data-display/Text";
 import { tv } from "tailwind-variants";
 import { Icon, mobileIcons, type MobileIconName } from "./index";
 
@@ -68,8 +69,7 @@ export const GlyphGrid: Story = {
 const iconStoryClassNames = tv({
   slots: {
     grid: "w-[360px] flex-row flex-wrap gap-3 p-4",
-    item:
-      "h-20 w-[76px] items-center justify-center gap-2 rounded-lg border border-border bg-surface px-2",
+    item: "h-20 w-[76px] items-center justify-center gap-2 rounded-lg border border-border bg-surface px-2",
     label: "text-center text-[10px] font-semibold leading-3 text-muted",
     scroll: "max-h-[640px]",
   },

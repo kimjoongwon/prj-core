@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
-import { Text, View, type ViewProps } from "react-native";
+import { View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
+import { Text } from "../../data-display/Text";
 import {
   SpaceListItem,
   type SpaceListItemInfo,

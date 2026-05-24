@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, View } from "react-native";
+import { Text } from "../../data-display/Text";
 import { tv } from "tailwind-variants";
 import { Button } from "../../action/Button";
 import { Icon } from "../../icon";
@@ -98,7 +99,9 @@ export const SpaceSelectScreen = observer(function SpaceSelectScreen({
             <Icon name="mapPin" size="xs" tone="accent" />
             <Text className={classNames.badgeText()}>Branch</Text>
           </View>
-          <Text className={classNames.title()}>이용할 지점을 선택해 주세요</Text>
+          <Text className={classNames.title()}>
+            이용할 지점을 선택해 주세요
+          </Text>
           <Text className={classNames.description()}>
             선택한 지점으로 예약 목록과 내 수강권이 연결됩니다.
           </Text>

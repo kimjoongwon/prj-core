@@ -1,12 +1,12 @@
 import { type ReactNode } from "react";
 import {
   Pressable,
-  Text,
   TextInput,
   View,
   type PressableProps,
   type ViewProps,
 } from "react-native";
+import { Text } from "../../data-display/Text";
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
 import type { BookingClassFeedItem } from "../../data-display/BookingClassCard";

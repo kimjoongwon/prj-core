@@ -2,13 +2,13 @@ import { type ReactNode } from "react";
 import {
   Pressable,
   ScrollView,
-  Text,
   View,
   type PressableProps,
   type StyleProp,
   type ViewProps,
   type ViewStyle,
 } from "react-native";
+import { Text } from "../../data-display/Text";
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
 export interface DateStripOption {

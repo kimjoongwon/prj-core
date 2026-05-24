@@ -8,12 +8,27 @@ import {
   buttonClassNames,
   useButton,
 } from "heroui-native/button";
+import { getTextContent, Text } from "../../data-display/Text";
 type HeroButtonProps = ComponentPropsWithoutRef<typeof HeroButton>;
 export type ButtonProps = HeroButtonProps & {};
 const ButtonComponent = forwardRef<
   ComponentRef<typeof HeroButton>,
   ButtonProps
->((props, ref) => <HeroButton {...props} ref={ref} />);
+>(({ children, size = "md", variant = "primary", ...props }, ref) => {
+  const label = getTextContent(children);
+
+  return (
+    <HeroButton {...props} ref={ref} size={size} variant={variant}>
+      {label === null ? (
+        children
+      ) : (
+        <Text className={buttonClassNames.label({ size, variant })}>
+          {label}
+        </Text>
+      )}
+    </HeroButton>
+  );
+});
 ButtonComponent.displayName = "Button";
 export const Button = Object.assign(
   ButtonComponent,

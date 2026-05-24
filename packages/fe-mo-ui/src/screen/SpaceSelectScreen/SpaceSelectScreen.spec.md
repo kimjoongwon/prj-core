@@ -15,6 +15,7 @@
 - 각 지점은 `SpaceListItem`으로 렌더링하며 왼쪽에는 지점 이미지 또는 placeholder, 오른쪽에는 지점명과 주소를 표시한다.
 - 플랫폼 운영 본부는 이 화면에 노출하지 않는다.
 - loading, empty, error 상태는 `StatusFeedback`으로 렌더링한다.
+- 사용자 노출 텍스트는 `@cocrepo/mo-ui` `Text` primitive로 감싸고, `react-native` `Text`를 직접 import하지 않는다.
 
 ## 이벤트 계약
 
@@ -25,4 +26,5 @@
 
 ## 변경 이력
 
+- 2026-05-24: 화면 내부 텍스트를 `@cocrepo/mo-ui` `Text` primitive로 감싸도록 화면 계약을 추가.
 - 2026-05-17: 인증 직후 지점 선택 화면 계약 추가.

@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, View } from "react-native";
+import { Text } from "../../data-display/Text";
 import { tv } from "tailwind-variants";
 import { BottomSheet } from "../../layout/BottomSheet";
 import {
@@ -7,11 +8,10 @@ import {
   type SpaceSelectionListProps,
 } from "../../selection/SpaceSelectionList";
 
-export interface SpaceSelectionSheetProps
-  extends Pick<
-    SpaceSelectionListProps,
-    "disabled" | "onSelectSpace" | "selectedSpaceId" | "spaces"
-  > {
+export interface SpaceSelectionSheetProps extends Pick<
+  SpaceSelectionListProps,
+  "disabled" | "onSelectSpace" | "selectedSpaceId" | "spaces"
+> {
   description?: string;
   isOpen: boolean;
   onOpenChange?: (isOpen: boolean) => void;
@@ -32,7 +32,10 @@ export const SpaceSelectionSheet = observer(function SpaceSelectionSheet({
     <BottomSheet isOpen={isOpen} onOpenChange={onOpenChange}>
       <BottomSheet.Portal>
         <BottomSheet.Overlay className={classNames.overlay()} />
-        <BottomSheet.Content className={classNames.content()} snapPoints={["72%"]}>
+        <BottomSheet.Content
+          className={classNames.content()}
+          snapPoints={["72%"]}
+        >
           <View className={classNames.header()}>
             <View className={classNames.titleBlock()}>
               <BottomSheet.Title className={classNames.title()}>

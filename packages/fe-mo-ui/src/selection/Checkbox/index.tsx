@@ -3,6 +3,7 @@ import {
   type ComponentPropsWithoutRef,
   type ComponentRef,
 } from "react";
+import { View } from "react-native";
 import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
@@ -12,6 +13,8 @@ import {
   checkboxClassNames,
   useCheckbox,
 } from "heroui-native/checkbox";
+import { getTextContent, Text } from "../../data-display/Text";
+import { joinClassNames } from "../../rhythm/class-name";
 type HeroCheckboxProps = ComponentPropsWithoutRef<typeof HeroCheckbox>;
 export interface PureCheckboxProps extends Omit<
   HeroCheckboxProps,
@@ -22,13 +25,42 @@ export interface PureCheckboxProps extends Omit<
 const PureCheckboxComponent = forwardRef<
   ComponentRef<typeof HeroCheckbox>,
   PureCheckboxProps
->(({ onChange, ...rest }, ref) => (
-  <HeroCheckbox
-    {...(rest as HeroCheckboxProps)}
-    onSelectedChange={onChange}
-    ref={ref}
-  />
-));
+>(({ children, className, onChange, ...rest }, ref) => {
+  const label =
+    typeof children === "function" ? null : getTextContent(children);
+
+  if (label === null) {
+    return (
+      <HeroCheckbox
+        {...(rest as HeroCheckboxProps)}
+        className={className}
+        onSelectedChange={onChange}
+        ref={ref}
+      >
+        {children}
+      </HeroCheckbox>
+    );
+  }
+
+  return (
+    <HeroCheckbox
+      {...(rest as HeroCheckboxProps)}
+      className={joinClassNames(
+        "h-auto w-full flex-row items-center gap-3 overflow-visible rounded-none bg-transparent shadow-none",
+        className,
+      )}
+      onSelectedChange={onChange}
+      ref={ref}
+    >
+      <View className="relative size-6 overflow-hidden rounded-lg bg-field shadow-field">
+        <HeroCheckbox.Indicator />
+      </View>
+      <Text className="flex-1" variant="label">
+        {label}
+      </Text>
+    </HeroCheckbox>
+  );
+});
 PureCheckboxComponent.displayName = "PureCheckbox";
 export interface CheckboxProps<TState extends object = Record<string, unknown>>
   extends

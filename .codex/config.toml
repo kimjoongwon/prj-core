@@ -103,8 +103,9 @@ guard = "모바일 feature planning spec은 interaction composition의 기획/pr
 [rules.fe_mo_ui.styling]
 primary = "uniwind className + tailwind-variants tv({ slots, variants })"
 stylesheet_allowed = false
+text_component_required = true
 style_object_scope = "safe-area inset, navigator option object, third-party native bridge 등 className으로 표현하기 어려운 동적 값에만 제한"
-guard = "모바일 앱과 @cocrepo/mo-ui 신규/수정 UI는 StyleSheet/StyleSheet.create를 사용하지 않고 uniwind class props와 tailwind-variants slot/variant로 스타일을 정의한다"
+guard = "모바일 앱과 @cocrepo/mo-ui 신규/수정 UI는 StyleSheet/StyleSheet.create를 사용하지 않고 uniwind class props와 tailwind-variants slot/variant로 스타일을 정의한다. 사용자 노출 텍스트는 @cocrepo/mo-ui Text primitive를 사용하고 react-native Text 직접 import는 Text primitive 구현 내부에서만 허용한다. compound/action primitive도 문자열 children을 받으면 wrapper 내부에서 Text로 정규화하고 HeroUI Native에 raw string children을 그대로 넘기지 않는다. HeroUI Native compound wrapper는 return-only re-export로 끝내지 않고 의미 있는 기본 조합 props와 dot-slot escape hatch를 함께 제공한다"
 
 [rules.delivery_spec]
 allowed = [

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import { Text, View } from "react-native";
+import { View } from "react-native";
+import { Text } from "../../data-display/Text";
 import { tv } from "tailwind-variants";
 import { AnimatedTabIcon } from "./index";
 
@@ -68,10 +69,8 @@ const animatedTabIconStoryClassNames = tv({
   slots: {
     label: "text-[11px] font-extrabold text-accent",
     tab: "w-20 items-center justify-center gap-1",
-    tabs:
-      "w-[320px] flex-row items-center justify-around rounded-xl border border-border bg-surface px-5 py-4",
+    tabs: "w-[320px] flex-row items-center justify-around rounded-xl border border-border bg-surface px-5 py-4",
   },
 });
 
 const classNames = animatedTabIconStoryClassNames();
-
