@@ -11,22 +11,32 @@
 `*.toml.guide.md` 보조 문서는 생성하지 않습니다.
 role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 둡니다.
 
-## Unified Spec 운영
+## Route Delivery Spec 운영
 
-모든 orchestration은 허용된 `*.spec.md` 하나에서 시작합니다.
+모든 orchestration은 route delivery spec 하나에서 시작합니다.
 
 - owner: [orch-delivery.toml](./orch-delivery.toml)
 
 `orch-delivery` 하나가 **Spec → Ask → Build → QA**를 소유합니다.
-별도 Delivery Plan 문서는 만들지 않고, 실행 계약은 구현 대상의 허용된 `*.spec.md` 안에 `## Delivery` 섹션으로 함께 둡니다.
+별도 Delivery Plan 문서는 만들지 않고, 실행 계약은 route delivery spec 안에 `## Delivery` 섹션으로 함께 둡니다.
 이 spec은 화면, 백엔드, API, 상태, UI 요소, 테스트, 담당 `agent_type`, 실행 순서를 모두 명시합니다.
-`orch-delivery`는 승인된 spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
+`orch-delivery`는 승인된 route delivery spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
+
+Screen/Feature spec은 planning spec입니다. 목표, 화면 러프, props/event, rendering/rhythm, 하위 조합, 상태별 렌더링, story/unit test 계약만 소유하고 실행 그래프나 backend/foundation build order를 소유하지 않습니다.
 
 `## Delivery` 필수 하위 섹션:
 
 - `### Goal`
+- `### Planning Spec References`
+- `### Design Alignment`
 - `### Screen Rough`
+- `### Rhythm / Layout Contract`
 - `### Component Inventory`
+- `### Foundation Contract`
+  - `#### Hook 인벤토리`
+  - `#### Toolkit 인벤토리`
+  - `#### Type 인벤토리`
+  - `#### Store / State 인벤토리`
 - `### Storybook / Test Contract`
   - `#### Storybook 인벤토리`
   - `#### Unit Test 인벤토리`
@@ -58,27 +68,33 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 
 병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
 
-구현 대상의 허용된 `*.spec.md`를 먼저 작성하거나 갱신한 뒤, Codex 질문 도구로 사용자의 진행 승인을 받습니다.
+구현 대상의 route delivery spec을 먼저 작성하거나 갱신한 뒤, Codex 질문 도구로 사용자의 진행 승인을 받습니다.
 승인 전에는 builder/QA agent를 실행하지 않습니다.
 
 Storybook/Test 소유권:
 
 - PC/Web은 `packages/fe-ui/src/**` component source를 소유한 builder role이 story/test를 함께 작성합니다.
 - Mobile은 `packages/fe-mo-ui/src/**` component source를 소유한 builder role이 story/test를 함께 작성합니다.
-- route `page.tsx`, Expo route file, `layout.tsx`, `_layout.tsx`, Store, backend-only step은 Storybook 대상이 아니며 필요한 unit/E2E 검증만 spec에 적습니다.
+- route `page.tsx`, Expo route file, `layout.tsx`, `_layout.tsx`, Store, backend-only step은 Storybook 대상이 아니며 필요한 unit/E2E 검증만 route delivery spec에 적습니다.
 - QA role은 story/test 누락, 실패, contract drift를 검증합니다.
 
-## Sidecar Spec 범위
+## Spec 범위
 
-`*.spec.md` 신규 작성/갱신은 아래 다섯 대상만 허용합니다.
+Route delivery spec:
 
 - Next.js route page: `apps/*/web/src/app/**/page.tsx` → 같은 route 폴더의 `page.spec.md`
 - Expo Router native route screen: `apps/mobile/src/app/**/index.tsx` → 같은 route 폴더의 `index.spec.md`
+
+Planning spec:
+
 - fe-ui Screen component: `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` → 같은 폴더의 `[ScreenName].spec.md`
 - fe-ui Feature component: `packages/fe-ui/src/feature/**/[FeatureName].tsx` → 같은 component owner 위치의 `[FeatureName].spec.md`
 - fe-mo-ui Screen component: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx` → 같은 폴더의 `[ScreenName].spec.md`
+- fe-mo-ui Feature component: `packages/fe-mo-ui/src/feature/**/[FeatureName].tsx` → 같은 component owner 위치의 `[FeatureName].spec.md`
 
-그 외 backend entity/dto/service/repository/controller/module/app/facade/integration/vo/prisma/schema, store/hook/type/barrel/config/script/test/e2e/layout, Next.js `layout.tsx`, Expo Router `_layout.tsx`, web/mobile leaf 계층에는 sidecar spec을 만들지 않습니다.
+그 외 backend entity/dto/service/repository/controller/module/app/facade/integration/vo/prisma/schema, store/hook/toolkit/type/barrel/config/script/test/e2e/layout, Next.js `layout.tsx`, Expo Router `_layout.tsx`, web/mobile leaf 계층에는 spec을 만들지 않습니다.
+
+상세 정책은 별도 문서로 분리하지 않고 이 README, `.codex/config.toml`, 각 role TOML의 내장 지시문에 직접 유지합니다.
 
 ## Feedback Loop 운영
 
@@ -98,6 +114,8 @@ Storybook/Test 소유권:
 - [be-prisma-annotator.toml](./be-prisma-annotator.toml): Prisma 스키마 `@displayName` 주석 role
 - [be-dmmf-parser-builder.toml](./be-dmmf-parser-builder.toml): Prisma DMMF 파싱 유틸리티 role
 - [common-schema-builder.toml](./common-schema-builder.toml): 프론트엔드/백엔드 공용 검증 스키마 role
+- [common-toolkit-builder.toml](./common-toolkit-builder.toml): 공용 `@cocrepo/toolkit` utility role
+- [common-type-builder.toml](./common-type-builder.toml): 공용 `@cocrepo/type` type contract role
 - [be-entity-builder.toml](./be-entity-builder.toml): 도메인 Entity role
 - [be-vo-builder.toml](./be-vo-builder.toml): Value Object role
 - [be-dto-builder.toml](./be-dto-builder.toml): Request/Response DTO role
@@ -123,6 +141,7 @@ Storybook/Test 소유권:
 - [fe-feature-builder.toml](./fe-feature-builder.toml): Feature role
 - [fe-data-grid-builder.toml](./fe-data-grid-builder.toml): DataGrid renderer/input/state contract role
 - [fe-form-builder.toml](./fe-form-builder.toml): create/update form layer role
+- [fe-hook-builder.toml](./fe-hook-builder.toml): web/mobile 공통 React hook role
 - [fe-menu-builder.toml](./fe-menu-builder.toml): menu system role
 - [fe-store-builder.toml](./fe-store-builder.toml): shared MobX Store role
 - [fe-screen-builder.toml](./fe-screen-builder.toml): `packages/fe-ui/src/screen/[ScreenName]` web screen visual owner role

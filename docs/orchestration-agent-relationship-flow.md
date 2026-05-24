@@ -1,14 +1,16 @@
-# Unified Spec Agent Relationship Flow
+# Route Delivery Spec Agent Relationship Flow
 
-이 문서는 Codex role 간 관계를 단일 `*.spec.md` 중심으로 설명합니다.
-별도 Domain/Web/Mobile 기획 분기나 Delivery Plan 문서를 두지 않고, 구현 대상의 허용된 spec이 실행 그래프를 소유합니다.
+이 문서는 Codex role 간 관계를 route delivery spec 중심으로 설명합니다.
+별도 Domain/Web/Mobile 기획 분기나 Delivery Plan 문서를 두지 않고, route delivery spec이 실행 그래프를 소유합니다.
+Screen/Feature spec은 planning spec으로 남겨 시각/조합 계약을 설명하지만 실행 순서와 승인 gate는 소유하지 않습니다.
 
 ## Core Model
 
 ```mermaid
 flowchart TD
   Request["User Request"] --> Delivery["orch-delivery"]
-  Delivery --> Spec["Allowed *.spec.md + Delivery section"]
+  Delivery --> Spec["Route delivery spec + Delivery section"]
+  Spec --> Planning["Planning Spec References"]
   Spec --> Ask["Codex question gate"]
   Ask -->|approved| Backend["backend phase"]
   Backend --> Codegen["API codegen phase, if needed"]
@@ -29,12 +31,14 @@ flowchart TD
 
 - 목표와 사용자 시나리오
 - web/mobile screen map
+- planning spec references
 - component가 표시된 annotated 화면 러프
 - 재사용/신규/계층/담당 `agent_type`이 보이는 component inventory
+- Hook/Toolkit/Type/Store가 분리된 foundation inventory
 - Storybook/Test 인벤토리와 필수 상태/검증 케이스
 - Prisma/Common Schema/DTO/Repository/Service/Application/Facade/Gateway/Controller/Module/Seed/Codegen이 분리된 Backend/API inventory
 - 각 backend inventory의 재사용/수정/신규 여부, 소스 담당 `agent_type`, 소비 `agent_type`
-- 필요한 backend/API/state/UI/test 요소
+- 필요한 backend/API/foundation/state/UI/test 요소
 - `Agent Assignment Matrix`
 - backend부터 frontend/mobile/QA까지의 실행 그래프
 - shared file lock
@@ -65,7 +69,7 @@ PC/Web과 Mobile 모두 같은 방식입니다.
 |------|------|
 | `orch-delivery` | Spec → Ask → Build → QA를 단일 흐름으로 소유 |
 
-`orch-delivery`는 승인된 spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
+`orch-delivery`는 승인된 route delivery spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
 
 ## Visual Execution Graph
 
@@ -89,6 +93,11 @@ flowchart TD
   DTO --> Runtime
   QueryDto --> Runtime
   Runtime --> Codegen["codegen, if API changed"]
+  Codegen --> Foundation["foundation contracts"]
+  Foundation --> Types["common-type-builder"]
+  Foundation --> Toolkit["common-toolkit-builder"]
+  Foundation --> Hook["fe-hook-builder"]
+  Foundation --> Store["fe-store-builder"]
 
   subgraph WebParallel["parallel: web leaf builders"]
     Display["fe-display-builder"]
@@ -96,10 +105,10 @@ flowchart TD
     Widget["fe-widget-builder"]
     Feature["fe-feature-builder"]
   end
-  Codegen --> Display
-  Codegen --> Control
-  Codegen --> Widget
-  Codegen --> Feature
+  Types --> Display
+  Toolkit --> Control
+  Hook --> Widget
+  Store --> Feature
   Display --> WebRoute["fe-screen-builder → fe-route-builder"]
   Control --> WebRoute
   Widget --> WebRoute
@@ -110,9 +119,9 @@ flowchart TD
     MoWidget["fe-mo-widget-builder"]
     MoFeature["fe-mo-feature-builder"]
   end
-  Codegen --> Action
-  Codegen --> MoWidget
-  Codegen --> MoFeature
+  Types --> Action
+  Toolkit --> MoWidget
+  Hook --> MoFeature
   Action --> MobileRoute["fe-mo-screen-builder → fe-mo-route-builder"]
   MoWidget --> MobileRoute
   MoFeature --> MobileRoute
@@ -148,7 +157,7 @@ Backend phase는 spec의 `Backend / API Contract` 아래 구조별 inventory를 
 
 ```mermaid
 flowchart TD
-  Spec["*.spec.md"] --> P["be-prisma-builder"]
+  Spec["route delivery spec"] --> P["be-prisma-builder"]
   P --> PA["be-prisma-annotator"]
   PA --> S["common-schema-builder"]
   S --> M["be-entity / be-vo / be-dto / be-query-dto"]
@@ -163,11 +172,28 @@ flowchart TD
   SEED --> QA["qa-be-testing / qa-be-e2e-testing"]
 ```
 
+## Foundation Phase
+
+Foundation phase는 route delivery spec의 `Foundation Contract` 아래 구조별 inventory를 기준으로 실행합니다.
+
+| 인벤토리 | 주 담당 role | 소비 예시 |
+|----------|--------------|----------|
+| `Hook 인벤토리` | `fe-hook-builder` | `fe-route-builder`, `fe-mo-route-builder`, UI builder |
+| `Toolkit 인벤토리` | `common-toolkit-builder` | backend/web/mobile/common packages |
+| `Type 인벤토리` | `common-type-builder` | backend/web/mobile/store/hook/toolkit |
+| `Store / State 인벤토리` | `fe-store-builder` 또는 route builder | Feature, route container, screen props |
+
+route-local hook/util/type/state는 공용 builder를 호출하지 않고 `fe-route-builder` 또는 `fe-mo-route-builder`가 처리합니다.
+shared foundation row가 `new` 또는 `modify`이면 `Agent Assignment Matrix`와 `Execution Graph`에 반드시 같은 step을 둡니다.
+
 ## Web Phase
 
 ```mermaid
 flowchart TD
-  Spec["*.spec.md"] --> Leaf{"web leaf/component steps needed?"}
+  Spec["route delivery spec"] --> Planning["web screen/feature planning refs"]
+  Planning --> Leaf{"web leaf/component steps needed?"}
+  Spec --> Foundation["foundation steps, if needed"]
+  Foundation --> Leaf
   Leaf --> Display["fe-display-builder"]
   Leaf --> Control["fe-control-builder"]
   Leaf --> Cell["fe-cell-builder"]
@@ -190,7 +216,10 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-  Spec["*.spec.md"] --> Leaf{"mobile leaf UI steps needed?"}
+  Spec["route delivery spec"] --> Planning["mobile screen/feature planning refs"]
+  Planning --> Leaf{"mobile leaf UI steps needed?"}
+  Spec --> Foundation["foundation steps, if needed"]
+  Foundation --> Leaf
   Leaf --> Action["fe-mo-action-builder"]
   Leaf --> Input["fe-mo-input-builder"]
   Leaf --> Selection["fe-mo-selection-builder"]
@@ -225,11 +254,12 @@ flowchart TD
 
 ## Operating Rule
 
-- 허용된 `*.spec.md` 없이 builder를 실행하지 않습니다.
-- spec 작성과 사용자 승인 없이 builder를 실행하지 않습니다.
+- route delivery spec 없이 builder를 실행하지 않습니다.
+- route delivery spec 작성과 사용자 승인 없이 builder를 실행하지 않습니다.
 - 병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
 - 테스트 전략 전용 intermediate role 없이 QA role이 spec 기준으로 테스트를 구현합니다.
-- spec은 허용된 sidecar spec 자체이며, `.codex/plans/**/*.delivery-plan.md` 같은 별도 기획서는 만들지 않습니다.
+- route delivery spec은 실행 source of truth이며, `.codex/plans/**/*.delivery-plan.md` 같은 별도 기획서는 만들지 않습니다.
+- Screen/Feature planning spec에는 `Agent Assignment Matrix`, `Execution Graph`, backend build order, foundation 세부 실행표를 쓰지 않습니다.
 
 ## Scenario Checks
 
@@ -239,3 +269,4 @@ flowchart TD
 | 기존 API 변경 + web 화면 | 변경 endpoint와 Orval hook 영향을 Required Elements에 기록하고, backend/codegen/web route wiring/QA step만 포함합니다. |
 | mobile route 추가 | mobile screen/leaf/route/native wiring/QA step을 우선 배치하고, API contract gap이 있으면 backend/codegen step을 선행시킵니다. |
 | web/mobile 동시 화면 추가 | backend와 codegen은 한 번만 실행하고, web phase와 mobile phase는 파일 ownership이 분리된 step만 병렬 허용한 뒤 QA에서 합류합니다. |
+| shared hook/toolkit/type/store 변경 | route delivery spec의 Foundation Contract에 row와 step을 추가하고 필요한 planning spec은 reference로만 연결합니다. |

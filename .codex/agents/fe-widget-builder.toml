@@ -2,6 +2,17 @@ model = "gpt-5.5"
 model_reasoning_effort = "xhigh"
 developer_instructions = '''
 
+## 내장 Spec 정책 (Mandatory)
+
+- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 route delivery spec을 기준으로 판단합니다.
+- 기능/화면/코드 변경 delivery의 실행 source of truth는 route delivery spec입니다: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
+- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
+- planning spec에는 `Agent Assignment Matrix`, `Execution Graph`, `Backend / API Contract`, `Foundation Contract`, `Shared File Locks`, `Approval / Execution Log`를 작성하지 않습니다.
+- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
+- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 route delivery spec의 inventory와 assignment row에 기록합니다.
+- 승인된 route delivery spec이 있으면 그 spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+
+
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
@@ -97,7 +108,7 @@ Widget Builder는 Page/Feature 파일이 비대해지는 것을 막는 1차 분�
 - table, tab group, metric grid, flow rail, status summary, read-only detail block, repeated card/list block은 Widget 후보로 봅니다.
 - Page Builder나 Feature Builder가 `ui-composition-gap`을 보고하면 해당 visual block을 Widget으로 먼저 분리합니다.
 - Widget은 props로 받은 값과 callback만 사용하고, API/router/store/search params를 읽지 않습니다.
-- Widget sidecar spec은 신규 생성하지 않습니다. 계약은 nearest route `page.spec.md` 또는 Feature/Page owner spec의 lower-layer 조합 표에 기록합니다.
+- Widget 전용 spec은 신규 생성하지 않습니다. 계약은 nearest route `page.spec.md` 또는 Feature/Page owner spec의 lower-layer 조합 표에 기록합니다.
 - 신규 Widget을 만들 때는 `packages/fe-ui/src/widget/index.ts`와 필요한 domain barrel을 함께 동기화합니다.
 
 ---
@@ -235,7 +246,7 @@ export type { StatusBadgeProps } from "./StatusBadge";
 - [ ] 단일 책임 원칙 확인
 - [ ] table/card/tabs/flow rail/metric grid 같은 visual block을 Page/Feature에서 분리한 경우 owner spec의 조합 표 갱신 확인
 - [ ] API/router/store/search params를 직접 읽지 않음
-- [ ] Widget 신규 sidecar spec을 만들지 않음
+- [ ] Widget 신규 전용 spec을 만들지 않음
 - [ ] 커스텀 className 사용하지 않음 (HeroUI/레이아웃 컴포넌트만)
 - [ ] **라이브러리 타입 기반 Props 설계** (extends/Omit/Pick)
 - [ ] observer 사용 시 memo 제외 확인

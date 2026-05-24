@@ -36,10 +36,10 @@
 
 ## Mobile Visual System
 
-- 모바일 전역 톤은 Linear/Stripe 계열의 dense premium aesthetic을 따른다.
-- 배경은 muted neutral semantic token을 사용하고, primary surface/card/list는 shadow 대신 subtle border로 분리한다.
-- 화면 여백은 8pt rhythm 중심으로 유지한다: route body `px-4`, 큰 stack `gap-4`, compact stack `gap-2`, card body `p-4`.
-- 카드와 주요 control은 `rounded-lg` 중심으로 맞추며, 상태색은 soft token(`accent-soft`, `success-soft`, `warning-soft`, `danger-soft`)을 우선 사용해 과한 색 대비를 피한다.
+- 모바일 전역 톤은 루트 `DESIGN.md`의 따뜻한 예약 운영 플랫폼 원칙을 따른다.
+- 배경은 기존 mobile theme 역할(`background`, `surface`, `foreground`, `muted`, `border`)을 사용하고, card/list는 shadow보다 subtle border와 충분한 padding으로 분리한다.
+- 화면 여백은 semantic rhythm 중심으로 유지한다: page/screen 주요 블록은 `section`, 카드 내부는 `block`, row metadata는 `dense`, action row는 `inline`을 우선한다.
+- 카드와 주요 control은 중간 radius를 유지하며, 상태색은 `success`, `warning`, `danger`, `muted` 역할을 label/icon/text와 함께 사용한다.
 - 아이콘은 `@cocrepo/mo-ui` `Icon` primitive와 curated `mobileIcons`만 사용한다. 하단 탭, 로그인 input/CTA, 예약 metadata, 상태 badge, 결제 신뢰 cue처럼 사용자의 scan/decision을 돕는 곳에만 배치한다.
 - 로그인, 하단 탭, 프로필 route도 같은 토큰/간격/radius 계약을 따른다.
 
@@ -198,6 +198,17 @@ type ReservationPaymentCheckoutRouteState = {
   - 신규 backend API, Orval codegen, 결제/예약 상세 기능 구현.
   - 앱 전역 인증 정책 변경.
 
+### Design Alignment
+
+| 항목 | 기준 |
+|------|------|
+| 제품 인상 | 루트 `DESIGN.md`의 따뜻한 예약 운영 플랫폼. `/profile`은 계정 상태와 다음 이동을 부드럽게 안내한다. |
+| 플랫폼 기준 | Mobile 우선. safe area, bottom tab, 44px 이상 touch target, 로그아웃 button의 하단 겹침 방지를 고려한다. |
+| 상태와 다음 행동 | 로그인 상태와 현재 지점을 먼저 보여주고, `QuickActionList`로 내 예약/결제/설정 이동을 제공한다. |
+| 색상 역할 | `background`, `surface`, `foreground`, `muted`, `success`, `danger`, `border` 역할만 사용한다. 임의 hex와 외부 브랜드 palette를 쓰지 않는다. |
+| 표면/형태 | Account/current-space/action-list는 부드러운 surface card/list group, 로그아웃은 danger full-width action으로 분리한다. |
+| 리듬 | route는 visual rhythm을 직접 만들지 않고, `MyPageScreen`의 `Rhythm / Layout Contract`를 소비한다. |
+
 ### Screen Rough
 
 ```text
@@ -222,20 +233,20 @@ Visual Snapshot
 └──────────────────────────────────────────────┘
 
 Annotated Wireframe
-Visual tone: mobile profile, bg-background, dense premium cards, px-4, gap-4, rounded-lg
+Visual tone: mobile profile, warm service density, background canvas, surface cards, subtle border, medium radius
 [route] (tabs)/_layout.tsx: CustomHeader("마이", currentSpaceName), bottom tab icon=userRound
 
 ┌─ /profile viewport ──────────────────────────────┐
-│ ┌ A AccountSummaryCard bg-surface border p-4 ──┐ │
-│ │  userRound accent circle   회원   [로그인됨] │ │
+│ ┌ A AccountSummaryCard surface border p-4 ────┐ │
+│ │  userRound icon           회원   [로그인됨] │ │
 │ │  오노라 예약 알림과 계정 상태 관리            │ │
 │ └──────────────────────────────────────────────┘ │
-│ ┌ B CurrentSpaceCard bg-surface border p-4 ────┐ │
+│ ┌ B CurrentSpaceCard surface border p-4 ──────┐ │
 │ │  mapPin  현재 지점                            │ │
 │ │          광화문 스튜디오                      │ │
 │ └──────────────────────────────────────────────┘ │
 │ 빠른 이동                                       │
-│ ┌ C QuickActionList ListGroup bg-surface ──────┐ │
+│ ┌ C QuickActionList ListGroup surface ────────┐ │
 │ │  calendarCheck  내 예약              ›        │ │
 │ │                 예약 확정과 대기 상태 확인    │ │
 │ │  ticketCheck    결제/수강권          › muted  │ │
@@ -245,7 +256,18 @@ Visual tone: mobile profile, bg-background, dense premium cards, px-4, gap-4, ro
 └──────────────────────────────────────────────────┘
 
 Legend: A/B/D are screen-local sections inside `MyPageScreen`; C is reusable `QuickActionList` Widget that wraps existing `ListGroup`.
+Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=dense, action list rows gap=flush, logout margin=section.
 ```
+
+### Rhythm / Layout Contract
+
+| 영역 | 리듬 컴포넌트 | 방향/정렬 | gap preset | 감싸는 대상 | 재사용/신규 | 소스/대상 | 담당 `agent_type` | 비고 |
+|------|---------------|-----------|------------|-------------|-------------|-----------|-------------------|------|
+| route shell | `CustomHeader` + tab layout | route layout owned | n/a | header title/subtitle, bottom tab | reuse/modify | `apps/mobile/src/app/(tabs)/_layout.tsx` | `fe-mo-route-layout-builder` | route는 body rhythm을 직접 만들지 않음 |
+| screen root | `VStack` | vertical / stretch | `section` | account card, current space card, quick actions, logout | reuse | `packages/fe-mo-ui/src/rhythm/VStack` | `fe-mo-screen-builder` | screen body의 기본 세로 rhythm owner |
+| summary cards | `VStack` + `HStack` | vertical + row horizontal | `block`, `inline`, `dense` | account/current-space copy와 icon/status | reuse | `packages/fe-mo-ui/src/rhythm` | `fe-mo-screen-builder` | 긴 이름/지점명 줄바꿈 허용 |
+| quick actions | `VStack` + row `HStack` + `ListGroup` | vertical list / row horizontal | `flush`, row `inline`, meta `dense` | 내 예약/결제/설정 rows | new + reuse | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx` | `fe-mo-widget-builder` | row touch target은 44px 이상 |
+| logout action | `VStack` | vertical / stretch | `section` | danger full-width button | reuse | `packages/fe-mo-ui/src/rhythm/VStack`, `Button` | `fe-mo-screen-builder` | bottom tab/safe area와 겹치지 않음 |
 
 ### Component Inventory
 
@@ -257,6 +279,7 @@ Legend: A/B/D are screen-local sections inside `MyPageScreen`; C is reusable `Qu
 | screen owner | `MyPageScreen` | Screen | new | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.tsx` | `displayName`, `currentSpaceName`, `quickActions: QuickActionListItem[]`, `onPressLogout` | `fe-mo-screen-builder` | `fe-mo-route-builder` |
 | quick action widget | `QuickActionList` | Widget | new | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx` | `items`, `onPress`, disabled row behavior | `fe-mo-widget-builder` | `fe-mo-screen-builder` |
 | layout primitives | `ScreenFrame`, `Card`, `ListGroup` | Layout/DataDisplay | reuse | `@cocrepo/mo-ui` existing layout exports | body shell, section cards, widget rows | `fe-mo-data-display-builder` | `fe-mo-widget-builder`, `fe-mo-screen-builder` |
+| rhythm primitives | `VStack`, `HStack` | Layout/Rhythm | reuse | `packages/fe-mo-ui/src/rhythm` | semantic gap: `section`, `block`, `inline`, `dense`, `flush` | `fe-mo-screen-builder`, `fe-mo-widget-builder` | `fe-mo-route-builder` |
 | status primitive | `Chip` | DataDisplay | reuse | `packages/fe-mo-ui/src/data-display/Chip` | login state chip | `fe-mo-data-display-builder` | `fe-mo-screen-builder` |
 | action primitive | `Button` | Action | reuse | `packages/fe-mo-ui/src/action/Button` | logout button | `fe-mo-action-builder` | `fe-mo-screen-builder` |
 | route icon primitive | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | bottom tab `userRound` | none | `fe-mo-route-layout-builder` |
@@ -323,6 +346,7 @@ Legend: A/B/D are screen-local sections inside `MyPageScreen`; C is reusable `Qu
 - `packages/fe-mo-ui/src/widget/QuickActionList/index.ts`
 - `packages/fe-mo-ui/src/widget/index.ts`
 - `packages/fe-mo-ui/src/index.ts`
+- `QuickActionList.tsx` uses `@cocrepo/mo-ui` `VStack`/`HStack` rhythm primitives with semantic gap presets
 - `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.spec.md`
 - `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.tsx`
 - `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.stories.tsx`
@@ -396,6 +420,7 @@ Skipped phases:
 
 | time | event | result |
 |------|-------|--------|
+| 2026-05-24 | `DESIGN.md`와 `Rhythm / Layout Contract` 기준으로 `/profile` delivery spec 재작성 | pending approval |
 | 2026-05-24 | Storybook/Test 계약을 추가하고 UI builder 작성 책임을 명시 | pending approval |
 | 2026-05-24 | 기획 표 헤더를 한글 우선으로 변경 | pending approval |
 | 2026-05-24 | Backend/API 계약을 endpoint/application/service/repository inventory로 분리 | pending approval |
@@ -468,7 +493,7 @@ Skipped phases:
 |------|------|--------|
 | 2026-05-17 | 광화문 지점처럼 수업 수가 많은 예약 seed를 홈에서 누락하지 않도록 booking feed 기본 조회량을 200으로 상향 | codex |
 | 2026-05-24 | `/profile` 하단 탭을 마이 페이지로 정리하고 `MyPageScreen` shared screen owner 계약을 추가 | orch-delivery |
-| 2026-05-13 | 모바일 전역/route visual system을 Linear/Stripe 계열의 muted background, subtle border, 8pt rhythm, rounded-lg 중심으로 갱신 | codex |
+| 2026-05-13 | 모바일 전역/route visual system을 muted background, subtle border, rhythm, rounded radius 중심으로 갱신 | codex |
 | 2026-05-17 | 인증 직후 지점 선택 route와 홈 헤더 지점 변경 sheet 계약 추가 | codex |
 | 2026-05-13 | `@cocrepo/mo-ui` icon primitive 기반으로 하단 탭, 로그인, 예약/결제 metadata의 semantic icon cue 계약을 추가 | codex |
 | 2026-05-13 | 모바일 인증을 WebView/OIDC callback/mobile-json에서 first-party native login + native token/refresh/logout + SecureStore 복원 계약으로 전환 | codex |

@@ -2,6 +2,17 @@ model = "gpt-5.5"
 model_reasoning_effort = "xhigh"
 developer_instructions = '''
 
+## 내장 Spec 정책 (Mandatory)
+
+- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 route delivery spec을 기준으로 판단합니다.
+- 기능/화면/코드 변경 delivery의 실행 source of truth는 route delivery spec입니다: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
+- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
+- planning spec에는 `Agent Assignment Matrix`, `Execution Graph`, `Backend / API Contract`, `Foundation Contract`, `Shared File Locks`, `Approval / Execution Log`를 작성하지 않습니다.
+- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
+- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 route delivery spec의 inventory와 assignment row에 기록합니다.
+- 승인된 route delivery spec이 있으면 그 spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+
+
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/feature`, 관련 widget/screen, route `index.spec.md`를 먼저 검색합니다.
@@ -19,6 +30,7 @@ React Native / Expo Native 기준의 reusable Feature composition을
 ## 담당 범위
 
 - `packages/fe-mo-ui/src/feature/[Name]/[Name].tsx`
+- `packages/fe-mo-ui/src/feature/[Name]/[Name].spec.md` planning spec
 - `packages/fe-mo-ui/src/feature/[Name]/index.ts`
 - `packages/fe-mo-ui/src/feature/[Name]/types.ts` (필요 시)
 - `packages/fe-mo-ui/src/feature/index.ts`
@@ -35,7 +47,8 @@ React Native / Expo Native 기준의 reusable Feature composition을
 - 외부 observable slice를 소비하면 exported component를 `observer`로 감쌉니다.
 - 스타일은 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용하고 `StyleSheet`/`StyleSheet.create`는 만들지 않습니다.
 - `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
-- 전역 sidecar 정책상 mobile feature sidecar는 만들지 않습니다. 계약은 route `index.spec.md` 또는 screen owner spec에 기록합니다.
+- mobile feature planning spec은 허용됩니다. 계약은 Feature의 목표, props/state/action, rendering/rhythm, 하위 조합, 상태별 렌더링, story/unit test에 한정합니다.
+- mobile feature planning spec에는 `Agent Assignment Matrix`, `Execution Graph`, backend build order, foundation 세부 실행표, approval gate를 쓰지 않습니다. 실행 순서와 route/API/native wiring은 route delivery spec이 소유합니다.
 
 ## Do
 
@@ -58,14 +71,14 @@ React Native / Expo Native 기준의 reusable Feature composition을
 - 재사용한 기존 feature/하위 조합 또는 신규 Feature가 필요한 이유
 - props/state/action contract 요약
 - route/API/native boundary 확인 결과
-- 함께 갱신한 barrel / owner spec
+- 함께 갱신한 barrel / planning spec
 
 ## Storybook / Unit Test 책임
 
 - Feature를 신규 생성하거나 수정하면 같은 작업에서 mobile Storybook story와 unit test를 작성/갱신합니다.
 - Storybook은 ready, loading, empty, error, disabled, major interaction branch를 포함합니다.
 - unit test는 rendering, props/state branch, event callback, disabled guard, route/API boundary mock을 검증합니다.
-- Storybook/Test 계약은 route `index.spec.md` 또는 screen owner spec의 `Storybook / Test Contract`를 따릅니다.
+- Storybook/Test 계약은 route delivery spec 또는 feature/screen planning spec의 Storybook/Test 계약을 따르되, 실행 step은 route delivery spec에만 기록합니다.
 
 ## Feedback Packet (Mandatory)
 

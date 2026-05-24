@@ -56,9 +56,9 @@ guard = "packages/fe-ui/src 아래에는 공개 축만 그룹 폴더로 두고, 
 [rules.fe_ui.screen]
 folder_required = true
 folder_layout = "packages/fe-ui/src/screen/{ScreenName}/{ScreenName}.tsx"
-sidecar_spec_file = "packages/fe-ui/src/screen/{ScreenName}/{ScreenName}.spec.md"
+planning_spec_file = "packages/fe-ui/src/screen/{ScreenName}/{ScreenName}.spec.md"
 story_file = "packages/fe-ui/src/screen/{ScreenName}/{ScreenName}.stories.tsx"
-guard = "screen 계층에서 sidecar spec은 Screen visual owner에만 둔다. story spec은 만들지 않으며, packages/fe-ui/src/screen/{ScreenName}.tsx 같은 flat 배치는 금지한다"
+guard = "screen 계층 planning spec은 시각/props/하위 조합 계약만 소유한다. 실행 순서, backend/foundation 계약, 승인 gate는 route delivery spec이 소유하며, story spec은 만들지 않는다"
 
 [rules.component_file]
 one_exported_ui_component_per_file = true
@@ -77,27 +77,28 @@ skip_requires_reason = true
 guard = "컴포넌트 builder는 신규/수정 UI component와 같은 작업에서 Storybook story와 unit test를 작성/갱신한다. orch-delivery는 story/test 계약을 spec에 먼저 적고, QA role은 누락/실패/contract drift를 검증한다"
 
 [rules.fe_ui.feature]
-sidecar_spec_scope = "feature component only"
-allowed_component_spec = "packages/fe-ui/src/feature/**/{FeatureName}.spec.md"
-guard = "feature 계층에서 sidecar spec은 Store/API/router 연결을 소유하는 Feature component에만 둔다. barrel index.ts, type.ts, hook, story에는 spec을 만들지 않는다"
+planning_spec_scope = "feature component only"
+allowed_planning_spec = "packages/fe-ui/src/feature/**/{FeatureName}.spec.md"
+guard = "feature 계층 planning spec은 Store/API/router 연결 의도, props, 이벤트, 상태별 렌더링 계약만 소유한다. Agent Assignment Matrix, Execution Graph, backend build order, approval gate는 route delivery spec에만 둔다"
 
 [rules.fe_mo_ui.screen]
 folder_required = true
 folder_layout = "packages/fe-mo-ui/src/screen/{ScreenName}/{ScreenName}.tsx"
-sidecar_spec_file = "packages/fe-mo-ui/src/screen/{ScreenName}/{ScreenName}.spec.md"
-guard = "모바일 screen 계층은 web fe-screen-builder에 대응하는 visual owner이며, Expo route/native runtime wiring은 apps/mobile route file이 소유한다"
+planning_spec_file = "packages/fe-mo-ui/src/screen/{ScreenName}/{ScreenName}.spec.md"
+guard = "모바일 screen planning spec은 visual owner의 props/화면 러프/조합 계약만 소유한다. Expo route/native runtime wiring과 실행 순서는 apps/mobile route delivery spec이 소유한다"
 
 [rules.fe_mo_ui.widget]
 folder_required = true
 folder_layout = "packages/fe-mo-ui/src/widget/{WidgetName}/{WidgetName}.tsx"
-sidecar_spec_allowed = false
-guard = "모바일 widget 계층은 screen/feature에서 재사용되는 순수 UI 조합이며, 계약은 route index.spec.md 또는 screen owner spec에 기록한다"
+planning_spec_allowed = false
+guard = "모바일 widget 계층은 screen/feature에서 재사용되는 순수 UI 조합이며, 계약은 route delivery spec 또는 screen planning spec에 기록한다"
 
 [rules.fe_mo_ui.feature]
 folder_required = true
 folder_layout = "packages/fe-mo-ui/src/feature/{FeatureName}/{FeatureName}.tsx"
-sidecar_spec_allowed = false
-guard = "모바일 feature 계층은 screen에서 재사용되는 interaction composition이며, API/router/native wiring은 apps/mobile route가 소유한다"
+planning_spec_allowed = true
+planning_spec_file = "packages/fe-mo-ui/src/feature/{FeatureName}/{FeatureName}.spec.md"
+guard = "모바일 feature planning spec은 interaction composition의 기획/props/state/action 계약만 소유한다. API/router/native wiring과 실행 순서는 apps/mobile route delivery spec이 소유한다"
 
 [rules.fe_mo_ui.styling]
 primary = "uniwind className + tailwind-variants tv({ slots, variants })"
@@ -105,15 +106,26 @@ stylesheet_allowed = false
 style_object_scope = "safe-area inset, navigator option object, third-party native bridge 등 className으로 표현하기 어려운 동적 값에만 제한"
 guard = "모바일 앱과 @cocrepo/mo-ui 신규/수정 UI는 StyleSheet/StyleSheet.create를 사용하지 않고 uniwind class props와 tailwind-variants slot/variant로 스타일을 정의한다"
 
-[rules.sidecar_spec]
+[rules.delivery_spec]
 allowed = [
   "apps/*/web/src/app/**/page.spec.md",
   "apps/mobile/src/app/**/index.spec.md",
+]
+source_of_truth = "execution"
+required_sections = "Delivery, Planning Spec References, Foundation Contract, Agent Assignment Matrix, Execution Graph, Approval / Execution Log"
+guard = "route delivery spec만 실행 source of truth다. backend/API/foundation/route wiring/QA 실행 순서와 승인 gate는 web page.spec.md 또는 mobile index.spec.md 하나에만 기록한다"
+
+[rules.planning_spec]
+allowed = [
   "packages/fe-ui/src/screen/{ScreenName}/{ScreenName}.spec.md",
   "packages/fe-ui/src/feature/**/{FeatureName}.spec.md",
   "packages/fe-mo-ui/src/screen/{ScreenName}/{ScreenName}.spec.md",
+  "packages/fe-mo-ui/src/feature/**/{FeatureName}.spec.md",
 ]
-forbidden = "layout/story/test/e2e/barrel/type/hook/store/dto/service/repository/controller/entity/vo/script/config spec"
+source_of_truth = "visual/planning contract"
+forbidden_sections = "Agent Assignment Matrix, Execution Graph, Backend / API Contract, Foundation Contract, Approval / Execution Log"
+forbidden_specs = "layout/story/test/e2e/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/script/config spec"
+guard = "screen/feature planning spec은 목표, 화면 러프, props/event, rendering/rhythm, 하위 조합, 상태별 렌더링, story/unit test 계약만 기록한다. 실행 그래프와 build order는 route delivery spec만 소유한다"
 
 [i18n]
 enabled = true
@@ -221,6 +233,14 @@ config_file = "agents/be-vo-builder.toml"
 description = "프론트엔드와 백엔드에서 공유하는 검증 스키마를 생성하는 전문가 (다국어 검증 메시지 포함)"
 config_file = "agents/common-schema-builder.toml"
 
+[agents.common-toolkit-builder]
+description = "공용 @cocrepo/toolkit 유틸리티를 생성하고 정리하는 전문가"
+config_file = "agents/common-toolkit-builder.toml"
+
+[agents.common-type-builder]
+description = "공용 @cocrepo/type 타입 계약을 생성하고 정리하는 전문가"
+config_file = "agents/common-type-builder.toml"
+
 [agents.dev-service-starter]
 description = "개발 서비스를 시작하는 에이전트"
 config_file = "agents/dev-service-starter.toml"
@@ -264,6 +284,10 @@ config_file = "agents/fe-data-grid-builder.toml"
 [agents.fe-form-builder]
 description = "생성/수정 입력 화면용 재사용 form 계층을 생성하고 정리하는 전문가"
 config_file = "agents/fe-form-builder.toml"
+
+[agents.fe-hook-builder]
+description = "web/mobile 공통 React hook을 @cocrepo/hook에 생성하고 정리하는 전문가"
+config_file = "agents/fe-hook-builder.toml"
 
 [agents.fe-route-builder]
 description = "apps/*/src/app/**/page.tsx, @slot/**/page.tsx, route.meta.ts thin route contract를 구현하는 전문가 (다국어 렌더링/문구 키 적용 포함)"

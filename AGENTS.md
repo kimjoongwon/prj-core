@@ -80,7 +80,7 @@
 - **프론트엔드 E2E 테스트 작성/수정/안정화 요청은 기본적으로 `qa-fe-e2e-testing` role의 `agent`를 우선 사용**
 - **기존 프론트엔드 E2E 테스트를 단순 실행만 하는 요청은 메인 Codex가 직접 실행할 수 있음**
 - **브라우저를 띄운 headed 실행 요청도 단순 실행 범주로 간주하되, 테스트 수정이 필요해지면 `qa-fe-e2e-testing` role의 `agent`로 전환**
-- **페이지별 E2E 테스트 코드는 각 페이지와 함께 관리되는 sidecar 형태로 작성**
+- **페이지별 E2E 테스트 코드는 각 route와 함께 관리되는 route-local 형태로 작성**
 - **Codex가 페이지 기능을 구현, 수정, 삭제할 때는 관련 E2E 테스트도 같은 작업에서 최신 상태로 함께 갱신**
 
 ## Codex 용어 규칙
@@ -106,6 +106,7 @@
 
 - 신규/수정 모바일 화면과 `@cocrepo/mo-ui` 컴포넌트에서 `StyleSheet`/`StyleSheet.create`를 사용하지 않습니다.
 - reusable class 조합은 `tailwind-variants`의 `tv({ slots, variants })`로 정의합니다.
+- 신규 모바일 조합의 간격/정렬은 `@cocrepo/mo-ui`의 `VStack`/`HStack` semantic rhythm preset을 우선 사용합니다.
 - RN 기본 컴포넌트에는 `className`, `contentContainerClassName`, `colorClassName`, `placeholderTextColorClassName` 등 uniwind class prop을 우선 사용합니다.
 - `style` 객체는 safe-area inset, navigator option object, third-party native bridge 값처럼 className으로 표현하기 어려운 동적 값에만 제한합니다.
 - `react-native-web`, DOM Tailwind class 전제, web-only fallback을 모바일 UI 구현에 끌어오지 않습니다.
@@ -153,7 +154,8 @@ HeroUI 공식 문서(https://heroui.com) 스타일을 따릅니다.
   ```
 
 #### 간격 규칙
-- 신규 조합에서는 `VStack`/`HStack`/`Spacer`의 semantic rhythm preset 우선
+- 신규 web 조합에서는 `@cocrepo/ui`의 `VStack`/`HStack`/`Spacer` semantic rhythm preset 우선
+- 신규 mobile 조합에서는 `@cocrepo/mo-ui`의 `VStack`/`HStack` semantic rhythm preset 우선
 - 페이지 큰 블록: `gap="page"`
 - 섹션 내부 기본 리듬: `gap="section"`
 - 제목/본문/작은 블록: `gap="block"`
@@ -763,53 +765,43 @@ packages/common-type/src/
 - 하위호환 코드는 기술 부채가 됨
 - 승인된 spec의 phase와 QA gate로 변경 영향을 관리
 
-### 코드 옆 기획서 (Sidecar Spec) (Critical)
+### Spec 정책 (Critical)
 
-**`*.spec.md`는 화면 구현 흐름을 붙잡는 최소 문서에만 사용합니다.**
+**실행 기준은 Route Delivery Spec 하나이고, Screen/Feature spec은 기획/시각/조합 계약입니다.**
 
-```
-허용 대상은 feature, page, Next.js route page 세 가지뿐입니다.
-허용 대상이 아닌 코드를 수정해도 spec.md를 생성하거나 갱신하지 않습니다.
-spec.md를 수정했다면 하단 "변경 이력"에 변경 내용을 추가합니다.
-non-source 문서는 .spec.md를 쓰지 않고 context/guide/ops/notes/template suffix를 사용합니다.
-```
+**Route Delivery Spec**
+- web route: `apps/*/web/src/app/**/page.spec.md`
+- mobile route: `apps/mobile/src/app/**/index.spec.md`
+- owner: `orch-delivery`
+- 포함: backend/API, route wiring, foundation contract, component inventory, story/test/E2E, `Agent Assignment Matrix`, `Execution Graph`, shared file lock, approval log
+- builder/QA agent는 route delivery spec 승인 전 실행하지 않습니다.
 
-**운영 규칙 (Mandatory):**
-- 신규 작성/갱신 가능한 sidecar spec은 아래 다섯 가지뿐입니다.
-  - Next.js route page: `apps/*/web/src/app/**/page.tsx` ↔ `page.spec.md`
-  - Expo Router native route owner: `apps/mobile/src/app/**/index.spec.md`
-  - fe-ui Screen component: `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` ↔ `[ScreenName].spec.md`
-  - fe-ui Feature component: `packages/fe-ui/src/feature/**/[FeatureName].tsx` ↔ `[FeatureName].spec.md` (component owner가 `index.tsx`인 경우만 `index.spec.md` 허용)
-  - fe-mo-ui Screen component: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx` ↔ `[ScreenName].spec.md`
-- 위 대상의 코드를 수정하면 대응되는 `*.spec.md`를 함께 수정합니다.
-- 위 대상이 아닌 코드를 수정할 때는 `*.spec.md`를 생성/수정하지 않습니다.
-- `*.stories.spec.md`, `*.test.spec.md`, `*.e2e.spec.md`, `layout.spec.md`, `_client.spec.md`, `_prefetch.spec.md`, barrel `index.spec.md`, `type.spec.md`, hook/util/store/dto/service/repository/controller/entity/vo spec은 신규 작성 금지입니다.
+**Screen / Feature Planning Spec**
+- web screen: `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].spec.md`
+- web feature: `packages/fe-ui/src/feature/**/[FeatureName].spec.md`
+- mobile screen: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].spec.md`
+- mobile feature: `packages/fe-mo-ui/src/feature/**/[FeatureName].spec.md`
+- 포함: 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약
+- 제외: `Agent Assignment Matrix`, `Execution Graph`, backend build order, foundation 세부 실행표, approval gate
+
+**공통 금지**
+- `*.stories.spec.md`, `*.test.spec.md`, `*.e2e.spec.md`, `layout.spec.md`, `_client.spec.md`, `_prefetch.spec.md`, barrel `index.spec.md`, `type.spec.md`, hook/toolkit/store/dto/service/repository/controller/entity/vo spec은 신규 작성 금지입니다.
 - `app.spec.md`, `package.spec.md`, `tsconfig.spec.md`, `*.toml.spec.md`, `*.json.spec.md`, `*.css.spec.md`, `*.html.spec.md`, `Dockerfile.*.spec.md`, `Jenkinsfile.*.spec.md`는 신규 생성하지 않습니다.
-- non-source 문서는 아래 suffix를 사용합니다.
-  - 앱/도메인 컨텍스트: `*.context.md`
-  - 설정/운영 설명: `*.guide.md`, `*.ops.md`, `*.notes.md`
-  - 템플릿 자산 설명: `*.template.md`
+- non-source 문서는 `*.context.md`, `*.guide.md`, `*.ops.md`, `*.notes.md`, `*.template.md`, `README.md`를 사용합니다.
 - TOML 설정/role 파일의 보조 문서인 `*.toml.guide.md`는 생성하지 않습니다.
 - agent/role 설명은 해당 `.toml`의 `developer_instructions` 또는 인덱스 `README.md`에 직접 반영합니다.
-- `packages/fe-ui/src/screen`는 web screen visual owner와 sidecar를 반드시 동일 이름 폴더에 함께 둡니다.
-- 예: `packages/fe-ui/src/screen/AddressEmailVerifyPage/AddressEmailVerifyPage.tsx`, `AddressEmailVerifyPage.spec.md`
-- 금지 예: `packages/fe-ui/src/screen/AddressEmailVerifyPage.tsx`, `packages/fe-ui/src/screen/AddressEmailVerifyPage.spec.md`
-- `packages/fe-mo-ui/src/screen`은 모바일 screen visual owner와 sidecar를 반드시 동일 이름 폴더에 함께 둡니다.
-- 예: `packages/fe-mo-ui/src/screen/ReservationHomeScreen/ReservationHomeScreen.tsx`, `ReservationHomeScreen.spec.md`
-- mobile route/native wiring 계약은 route `index.spec.md`, shared screen visual composition 계약은 fe-mo-ui Screen spec이 소유합니다.
-- admin/idp route의 pure screen 이관 현황은 `packages/fe-ui/src/screen/migration-audit.md`를 기준으로 확인합니다.
-- 전체 page 이관 완료 여부를 말하기 전에는 반드시 `packages/fe-ui/src/screen/migration-audit.md`를 먼저 확인합니다.
-- 상세 정책은 `docs/sidecar-spec-policy.md`를 기준으로 합니다.
 
 **기존 코드 수정 완료 조건 (Critical):**
-- 허용 대상의 코드 변경이 있으면 대응되는 `*.spec.md` 업데이트와 `## 변경 이력` 추가가 모두 완료되어야 합니다.
-- 허용 대상이 아닌 코드 변경에는 spec 동기화를 완료 조건으로 요구하지 않습니다.
+- route/page 코드나 route wiring을 변경하면 대응 route delivery spec의 `## Delivery`와 `## 변경 이력` 또는 `Approval / Execution Log`를 갱신합니다.
+- Screen/Feature source를 변경하면 대응 planning spec의 visual/props/story-test 계약과 `## 변경 이력`을 갱신합니다.
+- hook/toolkit/type/store/backend/leaf 파일에는 별도 spec을 만들지 않고 route delivery spec의 inventory row로 기록합니다.
+- 이 정책은 별도 문서로 분리하지 않고 `AGENTS.md`, `.codex/config.toml`, 각 role TOML의 내장 지시문에 직접 유지합니다.
 
 #### 기획서 파일 구조
 
 ```
 apps/[app]/web/src/app/(admin)/
-├── app.context.md              # 앱 컨텍스트 문서 (L0-L2, non-sidecar)
+├── app.context.md              # 앱 컨텍스트 문서 (L0-L2, non-source)
 
 apps/[app]/web/src/app/(admin)/[도메인]/
 ├── page.tsx                    # 목록 페이지
@@ -839,16 +831,22 @@ packages/fe-ui/src/feature/[FeatureName]/
 ├── [FeatureName].spec.md       # Feature component 기획서
 ├── index.ts
 └── [FeatureName].stories.tsx
+
+packages/fe-mo-ui/src/feature/[FeatureName]/
+├── [FeatureName].tsx
+├── [FeatureName].spec.md       # Mobile Feature planning spec
+├── index.ts
+└── [FeatureName].stories.tsx
 ```
 
 #### 기획서 타입별 내용
 
 | 타입 | 파일 | 핵심 내용 |
 |------|------|----------|
-| **app-context** | `app.context.md` | 앱 컨텍스트, 사용자, 목표, 도메인 목록 (L0-L2, non-sidecar) |
-| **next-route-page** | `page.spec.md` | route `page.tsx`, pure screen 연결, API, search/route params, 이벤트, E2E 관점 |
-| **fe-ui-screen** | `[ScreenName].spec.md` | Screen component props, 시각 composition, 상태별 렌더링, 하위 Feature/Widget 조합 |
-| **feature** | `[FeatureName].spec.md` | Store/API/router 연결, Props, 이벤트, 실패/권한/로딩 상태 |
+| **app-context** | `app.context.md` | 앱 컨텍스트, 사용자, 목표, 도메인 목록 (L0-L2, non-source) |
+| **route-delivery** | `page.spec.md`, `index.spec.md` | 실행 source of truth, backend/API/foundation/route wiring/QA 실행 계약 |
+| **screen-planning** | `[ScreenName].spec.md` | Screen props, 시각 composition, 상태별 렌더링, 하위 Feature/Widget 조합 |
+| **feature-planning** | `[FeatureName].spec.md` | Feature props/event/state, Store/API/router 연결 의도, 실패/권한/로딩 상태 |
 
 #### 기획서 변경 이력 관리
 
@@ -869,8 +867,8 @@ packages/fe-ui/src/feature/[FeatureName]/
 |------|------|
 | **발견성** | 코드 파일만 보면 기획서도 바로 옆에 있음 |
 | **동기화** | 기획서와 코드가 같은 폴더에 있어 버전 관리 용이 |
-| **점진적** | 한 번에 다 만들지 않고, 필요한 것부터 |
-| **역설계 호환** | 기존 source code 분석 → 대응 sidecar만 생성하면 됨 |
+| **실행 단일화** | route delivery spec 하나가 승인/실행/QA 기준을 소유 |
+| **기획 보존** | Screen/Feature planning spec으로 화면 의도를 보존 |
 
 ## 백엔드 개발 규칙
 
@@ -1090,15 +1088,18 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 ### 단일 Spec 개발 플로우 (권장)
 
 **orch-delivery** 하나가 요청 단위 spec 작성, 승인 질문, 백엔드/프론트엔드/모바일/QA 실행을 모두 소유합니다.
-별도 Delivery Plan 문서는 만들지 않고, 허용된 `*.spec.md` 안의 `## Delivery` 섹션으로 실행 계약까지 통일합니다.
+별도 Delivery Plan 문서는 만들지 않고, route delivery spec 안의 `## Delivery` 섹션으로 실행 계약까지 통일합니다.
+Screen/Feature spec은 planning spec으로 유지하되 실행 그래프와 승인 gate를 소유하지 않습니다.
 
-#### 핵심 개념: 한 spec이 전체 실행 그래프를 소유
+#### 핵심 개념: route delivery spec 하나가 전체 실행 그래프를 소유
 
 ```
-1 spec = 1 요청/기능 = 화면 계약 + backend + web/mobile 화면 + QA 실행 그래프
+1 route delivery spec = 1 요청/기능 = backend + foundation + route wiring + web/mobile 화면 + QA 실행 그래프
 ```
 
-- spec은 화면, 백엔드, API, 상태, UI 요소, 테스트, 담당 `agent_type`, 실행 순서를 모두 명시합니다.
+- route delivery spec은 화면, 백엔드, API, foundation, 상태, UI 요소, 테스트, 담당 `agent_type`, 실행 순서를 모두 명시합니다.
+- Screen/Feature planning spec은 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 명시합니다.
+- route delivery spec에는 `Planning Spec References` 표를 두어 소비/갱신할 Screen/Feature planning spec을 연결합니다.
 - 화면 러프는 component명이 없는 `Visual Snapshot`과 component/계층을 표시하는 `Annotated Wireframe`을 함께 작성합니다.
 - `Visual Snapshot`은 배경, surface, border, radius, spacing, typography, 상태색, CTA 위치만 보고도 대략적인 디자인을 떠올릴 수 있어야 합니다.
 - 기획 spec의 표 헤더는 한글을 우선 사용합니다. `agent_type`, `operationId`, `codegen`처럼 고정된 기술 식별자만 원문을 유지합니다.
@@ -1110,10 +1111,13 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 - route `page.tsx`, Expo route file, `layout.tsx`, `_layout.tsx`, Store, backend-only step은 Storybook 대상이 아니며 필요한 unit/E2E 검증만 spec에 기록합니다.
 - thin re-export나 barrel-only 변경처럼 story/test가 불필요하면 spec의 비고에 불필요 사유를 남깁니다.
 - backend/API 계약은 `Prisma / Database`, `Prisma Annotation`, `Common Schema`, `Entity / VO`, `DTO / Query DTO`, `Repository`, `Service`, `ApplicationService`, `Facade / Gateway`, `엔드포인트`, `Module / Bootstrap`, `Seed`, `Codegen / API Client` 인벤토리를 구조별로 작성합니다.
+- foundation 계약은 `Hook`, `Toolkit`, `Type`, `Store / State` 인벤토리를 구조별로 작성합니다.
 - 각 backend inventory row는 재사용/수정/신규 여부, 대상 파일, 소스 담당 `agent_type`, 호출/Wiring 소비 `agent_type`을 드러내야 합니다.
+- reusable hook은 `fe-hook-builder`, shared toolkit은 `common-toolkit-builder`, shared type은 `common-type-builder`, shared store는 `fe-store-builder`가 소스 담당입니다.
+- route-local hook/util/type/state는 `fe-route-builder` 또는 `fe-mo-route-builder`가 처리하고 별도 spec을 만들지 않습니다.
 - endpoint row는 controller endpoint, operationId, DTO/schema, Orval hook/codegen 영향을 보여주고, application/service/repository row는 어떤 workflow/capability/persistence method가 쓰이는지 보여줍니다.
 - common schema row는 `common-schema-builder`, DTO row는 `be-dto-builder`/`be-query-dto-builder`, facade/gateway row는 `be-facade-builder`/`be-gateway-builder`처럼 실제 source owner role이 보이도록 분리합니다.
-- `orch-delivery`는 승인된 spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
+- `orch-delivery`는 승인된 route delivery spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
 - 구현 대상의 spec 작성 후 Codex 질문 도구로 사용자 승인을 받기 전에는 builder/QA agent를 실행하지 않습니다.
 - 병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
 - `Execution Graph`는 Mermaid `Visual Execution Flow`, `Parallel Group Table`, `Step Order Table`을 함께 작성해 직렬 순서와 병렬 그룹을 시각적으로 보여줍니다.
@@ -1121,38 +1125,39 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 #### 플로우
 
 ```
-Spec: orch-delivery → 허용된 *.spec.md + ## Delivery
+Spec: orch-delivery → route delivery spec + ## Delivery
 Ask: "작성한 spec 기준으로 개발을 시작할까요?"
 Backend: prisma → annotation → common schema → entity/vo/dto/query-dto → repository → service → app/facade/gateway → controller/module/bootstrap → seed
 Codegen: pnpm --filter=@cocrepo/api codegen, API 변경 시
-Web: 필요한 leaf builders → fe-screen-builder → fe-route-layout-builder(필요 시) → fe-route-builder
-Mobile: 필요한 leaf builders → fe-mo-widget-builder/fe-mo-feature-builder(필요 시) → fe-mo-screen-builder → fe-mo-route-layout-builder(필요 시) → fe-mo-route-builder
+Foundation: common-type-builder/common-toolkit-builder/fe-hook-builder/fe-store-builder, 필요한 경우
+Web: planning spec references → 필요한 leaf builders → fe-screen-builder → fe-route-layout-builder(필요 시) → fe-route-builder
+Mobile: planning spec references → 필요한 leaf builders → fe-mo-widget-builder/fe-mo-feature-builder(필요 시) → fe-mo-screen-builder → fe-mo-route-layout-builder(필요 시) → fe-mo-route-builder
 QA: qa-be-testing/e2e → qa-fe-testing/e2e → qa-mo-testing/e2e
 ```
 
-> 화살표는 의존성 순서를 의미합니다. 독립 작업은 spec의 `Agent Assignment Matrix`에서만 병렬화할 수 있습니다.
+> 화살표는 의존성 순서를 의미합니다. 독립 작업은 route delivery spec의 `Agent Assignment Matrix`에서만 병렬화할 수 있습니다.
 
 #### Spec 위치
 
 ```
 apps/[app]/web/src/app/(admin)/
-├── app.context.md              # 앱 컨텍스트 문서 (L0-L2, non-sidecar)
+├── app.context.md              # 앱 컨텍스트 문서 (L0-L2, non-source)
 
 apps/[app]/web/src/app/(admin)/[도메인]/
 ├── page.tsx                    # 목록 페이지
-├── page.spec.md                # 목록 페이지 기획서
+├── page.spec.md                # 목록 route delivery spec
 ├── page.e2e.ts                 # E2E 테스트 코드
 ├── [entityId]/
 │   ├── page.tsx                # 상세 페이지
-│   ├── page.spec.md            # 상세 페이지 기획서
+│   ├── page.spec.md            # 상세 route delivery spec
 │   └── page.e2e.ts             # E2E 테스트 코드
 ├── new/
 │   ├── page.tsx                # 등록 페이지
-│   ├── page.spec.md            # 등록 페이지 기획서
+│   ├── page.spec.md            # 등록 route delivery spec
 │   └── page.e2e.ts             # E2E 테스트 코드
 └── [entityId]/edit/
     ├── page.tsx                # 수정 페이지
-    ├── page.spec.md            # 수정 페이지 기획서
+    ├── page.spec.md            # 수정 route delivery spec
     └── page.e2e.ts             # E2E 테스트 코드
 
 packages/fe-ui/src/screen/
@@ -1163,7 +1168,7 @@ packages/fe-ui/src/screen/
 
 packages/fe-ui/src/feature/[FeatureName]/
 ├── [FeatureName].tsx
-├── [FeatureName].spec.md       # Feature component 기획서
+├── [FeatureName].spec.md       # Feature planning spec
 ├── index.ts
 └── [FeatureName].stories.tsx
 ```
@@ -1187,12 +1192,13 @@ packages/fe-ui/src/feature/[FeatureName]/
 #### 장점
 - **기능 단위 백엔드**: API/스키마가 한 번에 완성되어 일관성 유지
 - **페이지별 프론트엔드**: 점진적 개발, 컴포넌트 재사용 가능
-- **화면별 spec**: 코드 옆에 실행 계약이 있어 참조 용이
+- **실행 spec 단일화**: route delivery spec 하나가 승인/실행/QA 기준을 소유
+- **기획 spec 보존**: Screen/Feature planning spec으로 시각/조합 의도를 유지
 - **phase별 검증**: 문제 발견 시 spec의 해당 step부터 재진입
 
 #### 메뉴 업데이트
 
-목록 페이지(List)나 신규 navigation entry가 필요한 경우 spec의 `Agent Assignment Matrix`에 `fe-menu-builder` step을 명시합니다.
+목록 페이지(List)나 신규 navigation entry가 필요한 경우 route delivery spec의 `Agent Assignment Matrix`에 `fe-menu-builder` step을 명시합니다.
 
 ```
 spec web phase
@@ -1236,6 +1242,7 @@ spec web phase
 | fe-widget-builder | 재사용 가능한 작은 UI 조각 Widget 컴포넌트 생성 |
 | fe-feature-builder | 비즈니스 기능을 담당하는 Feature 컴포넌트 생성 |
 | fe-layout-builder | Layout 컴포넌트 설계 및 생성 |
+| fe-hook-builder | web/mobile 공통 React hook 생성 (`@cocrepo/hook`) |
 | fe-screen-builder | `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` web screen visual owner 생성 |
 | fe-route-builder | `apps/*/src/app/**/page.tsx` thin container와 route/API/state wiring 소유 |
 | fe-menu-builder | 메뉴 시스템 컴포넌트 생성 |
@@ -1257,6 +1264,8 @@ spec web phase
 |-------|------|
 | be-prisma-builder | Prisma 스키마 생성 및 유형 분류 |
 | common-schema-builder | 프론트엔드와 백엔드에서 공유하는 검증 스키마 생성 |
+| common-toolkit-builder | 공용 `@cocrepo/toolkit` utility 생성 |
+| common-type-builder | 공용 `@cocrepo/type` 타입 계약 생성 |
 | be-entity-builder | 도메인 Entity 클래스 생성 |
 | be-dto-builder | Create/Update/Response DTO 클래스 생성 |
 | be-query-dto-builder | PrismaQueryDto 기반 목록 조회용 Query DTO 생성 |

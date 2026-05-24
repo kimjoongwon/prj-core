@@ -2,6 +2,17 @@ model = "gpt-5.5"
 model_reasoning_effort = "xhigh"
 developer_instructions = '''
 
+## 내장 Spec 정책 (Mandatory)
+
+- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 route delivery spec을 기준으로 판단합니다.
+- 기능/화면/코드 변경 delivery의 실행 source of truth는 route delivery spec입니다: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
+- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
+- planning spec에는 `Agent Assignment Matrix`, `Execution Graph`, `Backend / API Contract`, `Foundation Contract`, `Shared File Locks`, `Approval / Execution Log`를 작성하지 않습니다.
+- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
+- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 route delivery spec의 inventory와 assignment row에 기록합니다.
+- 승인된 route delivery spec이 있으면 그 spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+
+
 ## 재사용 우선 점검 (Mandatory)
 
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
@@ -42,7 +53,7 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
 5. `packages/fe-ui/src/screen` 아래에는 단순 namespace depth를 만들지 않음
    - 금지 예: `src/screen/admin/MemberListPage.tsx`, `src/screen/idp/LoginPage.tsx`
    - 허용 예: `src/screen/MemberListPage/MemberListPage.tsx`
-6. `packages/fe-ui/src/screen`의 screen component와 sidecar는 반드시 동일 이름 폴더에 함께 둠
+6. `packages/fe-ui/src/screen`의 screen component와 planning spec은 반드시 동일 이름 폴더에 함께 둠
    - 허용 예: `src/screen/AddressEmailVerifyPage/AddressEmailVerifyPage.tsx`
    - 허용 예: `src/screen/AddressEmailVerifyPage/AddressEmailVerifyPage.spec.md`
    - 허용 예: `src/screen/AddressEmailVerifyPage/AddressEmailVerifyPage.stories.tsx`
@@ -61,9 +72,10 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
 11. `*Client`, `*Inner`, `*Base` 같은 trivial pass-through wrapper 금지
    - 단순히 props/params를 받아 바로 하위 컴포넌트에 전달하는 중간 component를 같은 page 파일 안에 두지 않음
    - page 파일 안에서 wrapper 없이 최종 exported component가 바로 렌더 책임을 가짐
-12. Screen component 수정 시 대응 `[ScreenName].spec.md` 업데이트 + `## 변경 이력` 추가 필수
+12. Screen component 수정 시 대응 `[ScreenName].spec.md` planning spec 업데이트 + `## 변경 이력` 추가 필수
    - spec에는 `## 화면 러프` 섹션을 반드시 두고 Markdown text/ASCII wireframe으로 Desktop/Tablet/Mobile 또는 해당 화면의 주요 responsive 상태를 그립니다.
    - 화면 러프 없이 props/의존성 표만 남기면 실패 처리
+   - planning spec에는 `Agent Assignment Matrix`, `Execution Graph`, backend build order, foundation 세부 실행표, approval gate를 쓰지 않습니다.
 13. `packages/fe-ui/src/screen/index.ts` export 동기화 필수
 14. screen 이름은 semantic app-facing 이름을 우선 사용
    - 기본 CRUD 어휘: `ListPage`, `DetailPage`, `CreatePage`, `EditPage`
@@ -129,7 +141,7 @@ packages/fe-ui/src/screen/[ScreenName]/
 
 - page는 component 전용 폴더를 필수로 사용합니다.
 - 단순 app/domain namespace 폴더는 금지합니다.
-- screen component와 sidecar를 `src/screen` 바로 아래에 flat하게 두는 구조는 금지합니다.
+- screen component와 planning spec을 `src/screen` 바로 아래에 flat하게 두는 구조는 금지합니다.
 - 폴더 이름은 route path mirror가 아니라 semantic page 이름을 그대로 사용합니다.
 
 ### 2.2 export 규칙
@@ -156,7 +168,7 @@ export const MembersListPage = observer((props: MembersListPageProps) => {
 - `const MembersListPage = ...; export { MembersListPage };` 같은 우회 export보다 직접 `export const`를 우선합니다.
 - `MembersListPageClient`, `MembersListPageInner`처럼 최종 export 직전 wrapper 이름을 만드는 패턴을 금지합니다.
 
-### 2.3 sidecar 문서 규칙
+### 2.3 planning spec 문서 규칙
 
 - Screen component 수정 시 같은 위치의 `[ScreenName].spec.md`를 동기화합니다.
 - story를 수정해도 story spec은 만들지 않습니다.
@@ -164,6 +176,7 @@ export const MembersListPage = observer((props: MembersListPageProps) => {
 - page spec에는 `## 화면 러프` 섹션을 두고 텍스트 기반 wireframe을 포함합니다.
 - responsive 구조가 달라지는 화면은 Desktop/Tablet/Mobile을 나눠 그립니다.
 - lower-layer 조합은 표로 적고, page 파일에 넣지 않은 feature/widget/form 이름을 명시합니다.
+- 이 planning spec은 실행 source of truth가 아닙니다. 실행 순서, backend/API/foundation contract, 승인 기록은 nearest route delivery spec이 소유합니다.
 
 ---
 

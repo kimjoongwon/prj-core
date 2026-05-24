@@ -8,6 +8,8 @@
 
 모바일 `/profile` 하단 탭의 마이 페이지 visual composition을 소유한다. route file은 인증 상태, 현재 지점, 로그아웃, navigation wiring만 담당하고 screen에는 표시 props와 handler를 전달한다.
 
+루트 `DESIGN.md`의 따뜻한 예약 운영 플랫폼 원칙을 따른다. 색상은 외부 palette나 임의 hex가 아니라 기존 mobile theme 역할(`background`, `surface`, `foreground`, `muted`, `success`, `danger`, `border`)로 표현하고, 상태와 다음 행동을 가장 먼저 읽히게 한다.
+
 ## Props 계약
 
 | prop | type | 소스 담당 | 사용 영역 |
@@ -21,6 +23,18 @@
 | `onPressLogout` | `() => void` | route logout handler | `D LogoutAction` |
 
 `QuickActionListItem`: `id`, `label`, `description`, `iconName: MobileIconName`, `disabled?`, `onPress?`. 타입 source는 `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx`가 소유하고 `MyPageScreen`은 이를 소비한다.
+
+## Design Alignment
+
+| 항목 | 기준 |
+|------|------|
+| 제품 인상 | 따뜻한 예약 운영 플랫폼. 계정 상태, 현재 지점, 다음 이동을 차분하게 안내한다. |
+| 플랫폼 기준 | Mobile 우선. safe area, 44px 이상 touch target, 하단 탭과 로그아웃 버튼 겹침 방지. |
+| 상태와 다음 행동 | `A AccountSummary`에서 로그인 상태를 먼저 보여주고, `C QuickActionList`에서 예약/결제/설정 이동을 바로 제공한다. |
+| 색상 역할 | `background`, `surface`, `foreground`, `muted`, `success`, `danger`, `border` 역할만 사용한다. 임의 hex와 외부 브랜드 색상은 사용하지 않는다. |
+| 타이포그래피 | 화면 제목은 route header가 소유하고, screen 내부는 section title/body/caption 역할로 간결하게 구성한다. |
+| 표면/형태 | summary/current-space/action-list는 부드러운 `surface` card/list group으로 묶고, 로그아웃은 danger action으로 분리한다. |
+| 큰 섹션 | 마이 페이지는 큰 hero가 아니라 상태 요약 + 다음 행동 리스트 중심의 compact service screen으로 유지한다. |
 
 ## 화면 러프
 
@@ -46,21 +60,20 @@ Visual Snapshot
 └──────────────────────────────────────────────┘
 
 Annotated Wireframe
-Visual tone: bg-background, px-4, pt-4, gap-4, rounded-lg, border-border, bg-surface
+Visual tone: background canvas, surface cards, subtle border, medium radius, warm service density
 [route/layout] CustomHeader title="마이" subtitle=currentSpaceName
 
 ┌─ MyPageScreen / ScreenFrame ─────────────────────┐
-│ ┌ A AccountSummaryCard bg-surface p-4 ─────────┐ │
-│ │  ◯ Icon(userRound, accent-soft)              │ │
-│ │  회원                         [로그인됨]     │ │
+│ ┌ A AccountSummaryCard surface p-4 ───────────┐ │
+│ │  ◯ Icon(userRound)     회원      [로그인됨]  │ │
 │ │  오노라 예약 알림과 계정 상태 관리            │ │
 │ └──────────────────────────────────────────────┘ │
-│ ┌ B CurrentSpaceCard bg-surface p-4 ───────────┐ │
+│ ┌ B CurrentSpaceCard surface p-4 ─────────────┐ │
 │ │  Icon(mapPin)  현재 지점                      │ │
 │ │              광화문 스튜디오                  │ │
 │ └──────────────────────────────────────────────┘ │
-│ 빠른 이동  text-sm/extrabold                    │
-│ ┌ C QuickActionList / ListGroup bg-surface ────┐ │
+│ 빠른 이동  section label                        │
+│ ┌ C QuickActionList / ListGroup surface ──────┐ │
 │ │  Icon(calendarCheck) 내 예약         ›        │ │
 │ │    예약 확정과 대기 상태 확인                 │ │
 │ │  Icon(ticketCheck)   결제/수강권     › muted  │ │
@@ -72,8 +85,19 @@ Visual tone: bg-background, px-4, pt-4, gap-4, rounded-lg, border-border, bg-sur
 └──────────────────────────────────────────────────┘
 
 Legend: A/B=screen-local DataDisplay sections, C=reusable Widget owned by `fe-mo-widget-builder`, D=reused Action Button.
-Tokens: title text-xl/extrabold, card text-base+text-[13px], status chip success-soft, disabled rows muted.
+Rhythm: root `VStack` vertical gap=section, card inner `VStack` gap=block, horizontal rows `HStack` gap=inline, row meta gap=dense, action list rows gap=flush, logout margin uses section rhythm.
 ```
+
+## Rhythm / Layout Contract
+
+| 영역 | 리듬 컴포넌트 | 방향/정렬 | gap preset | 감싸는 대상 | 재사용/신규 | 소스/대상 | 담당 `agent_type` | 비고 |
+|------|---------------|-----------|------------|-------------|-------------|-----------|-------------------|------|
+| root content | `VStack` | vertical / stretch | `section` | A AccountSummary, B CurrentSpace, C QuickActionList, D LogoutAction | reuse | `packages/fe-mo-ui/src/rhythm/VStack` | `fe-mo-screen-builder` | screen body의 기본 세로 rhythm owner |
+| A AccountSummary | `VStack` + `HStack` | vertical + top row horizontal | `block`, `inline` | icon/name/status/description | reuse | `packages/fe-mo-ui/src/rhythm` | `fe-mo-screen-builder` | 상태 badge는 제목 row 오른쪽에 배치 |
+| B CurrentSpace | `HStack` + `VStack` | horizontal icon + vertical copy | `inline`, `dense` | map icon, label, currentSpaceName | reuse | `packages/fe-mo-ui/src/rhythm` | `fe-mo-screen-builder` | 지점명이 길면 2줄까지 자연스럽게 줄바꿈 |
+| C QuickActionList | `VStack` + row `HStack` + `ListGroup` | vertical list / row horizontal | `flush`, row `inline`, meta `dense` | quick action rows | new + reuse | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx` | `fe-mo-widget-builder` | row touch target은 44px 이상 |
+| D LogoutAction | `VStack` | vertical / stretch | `section` | danger full-width button | reuse | `packages/fe-mo-ui/src/rhythm/VStack`, `Button` | `fe-mo-screen-builder` | bottom tab/safe area와 겹치지 않게 ScreenFrame content padding 고려 |
+| route header | `CustomHeader` | route layout owned | n/a | title/subtitle | reuse | `(tabs)/_layout.tsx` | `fe-mo-route-layout-builder` | screen 내부에서 title을 중복 렌더링하지 않음 |
 
 ## 렌더링 계약
 
@@ -115,6 +139,7 @@ Tokens: title text-xl/extrabold, card text-base+text-[13px], status chip success
 Rendering rules:
 
 - 스타일은 `StyleSheet`/`StyleSheet.create` 없이 uniwind `className`과 `tailwind-variants` slot/variant로 정의한다.
+- layout rhythm은 raw `gap-*` class를 흩뿌리지 않고 `tailwind-variants` slot 이름과 semantic rhythm 의도를 함께 드러낸다.
 - render tree는 JSX로 작성하고 `React.createElement` 기반 visual composition을 사용하지 않는다.
 - screen은 API hook, router, route params, app alias, backend DTO를 직접 import하지 않는다.
 - disabled quick action은 muted 처리하고 press handler를 호출하지 않는다.
@@ -175,6 +200,7 @@ route-local UI가 필요해도 raw `View`/`Text` 조합을 직접 늘리지 않�
 
 | 날짜 | 변경 내용 | 작성자 |
 |------|-----------|--------|
+| 2026-05-24 | `DESIGN.md`와 `Rhythm / Layout Contract` 기준으로 디자인 정렬 및 리듬 계약 보강 | orch-delivery |
 | 2026-05-24 | Storybook/Test 계약을 추가하고 builder 작성 책임을 명시 | orch-delivery |
 | 2026-05-24 | 기획 표 헤더를 한글 우선으로 변경 | orch-delivery |
 | 2026-05-24 | Backend/API 계약을 endpoint/application/service/repository inventory로 분리 | orch-delivery |
