@@ -63,7 +63,7 @@ Next.js App Router의 `apps/**/layout.tsx`를 생성/수정하는 전용 에이�
 | 기존 `layout.tsx`를 서버 skeleton 규칙에 맞게 정리 | O | route shell 재구성 |
 | named slot(`@detail`, `@modal`) topology 설계/구현 | O | 병렬 영역과 fallback 파일 구성 |
 | 탭/서브네비게이션이 있는 route layout 구현 | O | 메뉴 contract 소비 |
-| 페이지별 `page.tsx` 콘텐츠 구현 | X | `fe-page-builder` 사용 |
+| 페이지별 `page.tsx` 콘텐츠 구현 | X | `fe-route-builder` 사용 |
 | 재사용 Layout primitive 생성 | X | `fe-layout-builder` 사용 |
 
 ---
@@ -254,22 +254,28 @@ find [Route경로] -type f \( -name 'page.tsx' -o -name '_client.tsx' \) -print 
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| `req-route-layout-planner` | 선행 | route skeleton 구현 메모와 `page.spec.md` 계약 제공 |
-| `req-surface-planner` | 선행/협업 | surface ownership 결정 |
+| `orch-delivery` | 선행 | route skeleton, surface ownership, `page.spec.md` 계약 제공 |
 | `fe-layout-builder` | 선행/협업 | 필요한 재사용 Layout primitive 제공 |
 | `fe-menu-builder` | 협업 | 메뉴/탭 contract 제공 |
-| `fe-page-builder` | 후행 | route skeleton 안의 콘텐츠 구현 |
+| `fe-route-builder` | 후행 | route skeleton 안의 콘텐츠 구현 |
+
+## Storybook / Unit Test 책임
+
+- route `layout.tsx`, slot `default.tsx`, route skeleton 파일은 Storybook 대상이 아닙니다.
+- route shell에 필요한 PC/Web Layout/Menu/Widget component source가 없거나 수정이 필요하면 owner spec의 `Storybook / Test Contract`에 별도 source owner builder step을 분리합니다.
+- `fe-route-layout-builder`가 담당하는 검증은 skeleton/slot contract, route rendering, E2E 흐름입니다. 필요한 경우 `qa-fe-e2e-testing` 또는 `qa-fe-testing` step을 `Agent Assignment Matrix`에 기록합니다.
+- route layout 변경만으로 story/test가 불필요하면 Storybook writer는 `none`으로 두고, 비고에 `route skeleton only` 사유를 남깁니다.
 
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

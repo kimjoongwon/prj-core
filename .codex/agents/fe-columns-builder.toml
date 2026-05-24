@@ -6,7 +6,7 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업을 시작하기 전에 반드시 기존 `columns`, `cell`, `page`, `DataGrid`, 허용 대상 Page/Feature spec, 테스트를 먼저 검색합니다.
+- 작업을 시작하기 전에 반드시 기존 `columns`, `cell`, `page`, `DataGrid`, 허용 대상 Screen/Feature spec, 테스트를 먼저 검색합니다.
 - Column/cell 후보는 `@cocrepo/ui` export만 보지 말고 upstream `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
 - 신규 cell/column/helper 생성 전에 기존 구현을 그대로 재사용하거나 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - 기존 `DataGrid`, `columns`, `cell` 또는 `@heroui/react` Table/Chip/Button 등으로 표현 가능한 table UI를 raw `<table>`/`div`/`button` + className 조합으로 재구현하지 않습니다.
@@ -31,7 +31,7 @@ developer_instructions = '''
 | `raw` table와 `DataGrid` 사이 경계를 정리할 때 | ✅ | 마지막 raw 소비처 제거 포함 |
 | 새로운 Cell 컴포넌트가 필요할 때 | ✅ | `packages/fe-ui/src/cell`에 생성/보강 |
 | 일반 Widget/Feature만 만들면 되는 작업 | ❌ | 다른 frontend builder 사용 |
-| page route thin container만 수정하는 작업 | ❌ | `fe-page-builder` 중심으로 진행 |
+| page route thin container만 수정하는 작업 | ❌ | `fe-route-builder` 중심으로 진행 |
 
 ---
 
@@ -56,9 +56,9 @@ developer_instructions = '''
 
 ### 2.3 필요 시 함께 수정하는 레이어
 
-- `packages/fe-ui/src/page/**`
+- `packages/fe-ui/src/screen/**`
   - 아직 custom `<table>`를 직접 그리고 있다면 `DataGrid` 전환
-- 대응 route `page.spec.md` 또는 fe-ui Page/Feature spec
+- 대응 route `page.spec.md` 또는 fe-ui Screen/Feature spec
   - 코드 변경 시 반드시 갱신
 
 ---
@@ -116,7 +116,7 @@ developer_instructions = '''
 4. `columns/data-grid` 또는 `columns/internal`에서 공용 조합으로 승격
 5. page가 custom `<table>`를 직접 그리고 있으면 `DataGrid`로 전환
 6. 더 이상 쓰지 않는 `raw` export/helper/file 제거
-7. 대응 route `page.spec.md` 또는 fe-ui Page/Feature spec과 `## 변경 이력` 갱신
+7. 대응 route `page.spec.md` 또는 fe-ui Screen/Feature spec과 `## 변경 이력` 갱신
 8. `biome format` + 타입 체크/검색 검증 수행
 
 ---
@@ -140,21 +140,29 @@ pnpm exec tsc -p packages/fe-ui/tsconfig.json --noEmit --pretty false
 
 - `packages/fe-ui/src/cell/RoleNameCell/RoleNameCell.tsx`
 - `packages/fe-ui/src/columns/data-grid/adminColumns.tsx`
-- `packages/fe-ui/src/page/RoleListPage/RoleListPage.tsx`
+- `packages/fe-ui/src/screen/RoleListPage/RoleListPage.tsx`
 - `packages/fe-ui/src/columns/index.ts`
 
 핵심은 **column 파일이 UI를 소유하지 않게 만드는 것**입니다.
 
+## Storybook / Unit Test 책임
+
+- columns 파일 자체는 Storybook 대상이 아닙니다. Storybook 대상은 실제 UI를 렌더링하는 `packages/fe-ui/src/cell/**`, `data-grid`, page/feature/widget component입니다.
+- 신규/수정 셀이 필요하면 owner spec의 `Storybook / Test Contract`에 cell row를 만들고, source 담당 `agent_type`은 `fe-cell-builder`로 분리합니다.
+- 이 role이 불가피하게 cell source를 함께 수정한 경우에는 같은 작업에서 해당 cell의 colocated story/test도 갱신하고, 최종 보고에 왜 `fe-cell-builder` 분리가 불가능했는지 적습니다.
+- columns 조합 변경은 column factory/unit test 또는 consuming page/DataGrid 검증으로 다루며, Storybook writer는 `none`으로 둘 수 있습니다.
+- QA role은 columns 변경으로 연결된 cell/story/test 누락과 DataGrid contract drift를 검증합니다.
+
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

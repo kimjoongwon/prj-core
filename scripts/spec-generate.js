@@ -65,8 +65,8 @@ function isNextRoutePage(relPath) {
   return /^apps\/[^/]+\/web\/src\/app\/(?:.*\/)?page\.tsx$/.test(relPath);
 }
 
-function isFeUiPageComponent(relPath) {
-  if (!relPath.startsWith('packages/fe-ui/src/page/')) return false;
+function isFeUiScreenComponent(relPath) {
+  if (!relPath.startsWith('packages/fe-ui/src/screen/')) return false;
   if (!relPath.endsWith(TARGET_EXT)) return false;
   if (relPath.endsWith('.stories.tsx') || relPath.endsWith('.test.tsx')) return false;
 
@@ -85,7 +85,7 @@ function isFeUiFeatureComponent(relPath) {
 
 function isSpecTarget(relPath, options) {
   if (!isInScope(relPath, options.scope)) return false;
-  return isNextRoutePage(relPath) || isFeUiPageComponent(relPath) || isFeUiFeatureComponent(relPath);
+  return isNextRoutePage(relPath) || isFeUiScreenComponent(relPath) || isFeUiFeatureComponent(relPath);
 }
 
 function sidecarPath(codePath) {
@@ -154,15 +154,15 @@ function renderRoutePageSpec(relPath, meta) {
 ## 화면 목적
 
 이 route page는 Next.js App Router의 thin container입니다.
-데이터 조회, route/search params 해석, 라우팅 이벤트를 소유하고 시각 구성은 fe-ui Page component에 위임합니다.
+데이터 조회, route/search params 해석, 라우팅 이벤트를 소유하고 시각 구성은 fe-ui Screen component에 위임합니다.
 
-## Route / Page Mapping
+## Route / Screen Mapping
 
 | 항목 | 값 |
 |------|----|
 | route path | \`${route}\` |
 | route page | \`${relPath}\` |
-| pure page component | TODO: \`packages/fe-ui/src/page/[PageName]/[PageName].tsx\` |
+| pure screen component | TODO: \`packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx\` |
 | page role | TODO: \`collection | detail | form\` |
 | reusable target | TODO: \`data-grid | collection/list | collection/grid | detail/view | form\` |
 | SSR/prefetch 예외 | 없음 |
@@ -171,26 +171,26 @@ function renderRoutePageSpec(relPath, meta) {
 
 | 항목 | 설명 |
 |------|------|
-${renderRows(meta.imports.filter((item) => item.startsWith('@cocrepo/api')), 'Orval hook', 'route page에서 호출 후 pure page props로 전달')}
+${renderRows(meta.imports.filter((item) => item.startsWith('@cocrepo/api')), 'Orval hook', 'route page에서 호출 후 pure screen props로 전달')}
 
 ## 상태와 이벤트
 
 | 항목 | 설명 |
 |------|------|
-| route/search params | route page가 해석하고 pure page에는 필요한 값만 전달 |
-| loading/error/empty | API 결과를 pure page props로 전달 |
+| route/search params | route page가 해석하고 pure screen에는 필요한 값만 전달 |
+| loading/error/empty | API 결과를 pure screen props로 전달 |
 | 이벤트 핸들러 | \`on[Event][UI]\` 이름으로 선언 |
 
 ## 테스트 관점
 
 - 핵심 CTA가 의도한 route로 이동하는지 확인합니다.
-- 목록/상세/폼의 loading, empty, error 상태가 pure page에 전달되는지 확인합니다.
+- 목록/상세/폼의 loading, empty, error 상태가 pure screen에 전달되는지 확인합니다.
 - mutation 성공 후 invalidate/refetch/redirect 동작을 확인합니다.
 
 ## 구현 체크리스트
 
 - [ ] route page는 thin container 역할만 담당
-- [ ] pure page component path 확정
+- [ ] pure screen component path 확정
 - [ ] page role / reusable target 확정
 - [ ] 신규 \`layout.spec.md\`, story/test/e2e spec을 만들지 않음
 
@@ -202,30 +202,30 @@ ${renderRows(meta.imports.filter((item) => item.startsWith('@cocrepo/api')), 'Or
 `;
 }
 
-function renderFeUiPageSpec(relPath, meta) {
+function renderFeUiScreenSpec(relPath, meta) {
   const name = titleFromFile(relPath);
-  return `# ${name} Page 기획서
+  return `# ${name} Screen 기획서
 
 > 생성일: ${DATE}
-> 타입: fe-ui-page
+> 타입: fe-ui-screen
 > 위치: ${relPath}
 
 ## 역할
 
-${name}는 page-level visual composition을 담당하는 pure Page component입니다.
+${name}는 screen-level visual composition을 담당하는 pure Screen component입니다.
 API 호출, 라우팅, search params 해석은 route page가 소유하고 이 컴포넌트는 props로 전달받은 값과 이벤트만 사용합니다.
 
 ## Props / 공개 계약
 
 | 항목 | 설명 |
 |------|------|
-${renderRows(meta.exports, 'export', 'Page component 공개 계약')}
+${renderRows(meta.exports, 'export', 'Screen component 공개 계약')}
 
 ## 하위 조합
 
 | 모듈 | 용도 |
 |------|------|
-${renderRows(meta.imports, '하위 컴포넌트', 'Page composition 의존성')}
+${renderRows(meta.imports, '하위 컴포넌트', 'Screen composition 의존성')}
 
 ## 상태별 렌더링
 
@@ -240,7 +240,7 @@ ${renderRows(meta.imports, '하위 컴포넌트', 'Page composition 의존성')}
 
 - props 조합에 따라 주요 영역이 안정적으로 렌더링되는지 확인합니다.
 - 이벤트 props가 올바른 UI 상호작용에서 호출되는지 확인합니다.
-- Page 내부에서 API/router/store를 직접 읽지 않는지 확인합니다.
+- Screen 내부에서 API/router/store를 직접 읽지 않는지 확인합니다.
 
 ## 구현 체크리스트
 
@@ -253,7 +253,7 @@ ${renderRows(meta.imports, '하위 컴포넌트', 'Page composition 의존성')}
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| ${DATE} | 허용 대상 fe-ui Page spec 신규 생성 | codex |
+| ${DATE} | 허용 대상 fe-ui Screen spec 신규 생성 | codex |
 `;
 }
 
@@ -314,7 +314,7 @@ ${renderRows(meta.imports, '의존성', 'Feature 런타임/하위 UI 의존성')
 function renderSpec(relPath, code) {
   const meta = extractMeta(code);
   if (isNextRoutePage(relPath)) return renderRoutePageSpec(relPath, meta);
-  if (isFeUiPageComponent(relPath)) return renderFeUiPageSpec(relPath, meta);
+  if (isFeUiScreenComponent(relPath)) return renderFeUiScreenSpec(relPath, meta);
   return renderFeatureSpec(relPath, meta);
 }
 
@@ -332,7 +332,7 @@ function main() {
     return !fs.existsSync(path.join(ROOT, spec));
   });
 
-  console.log('POLICY=route-page,fe-ui-page,fe-ui-feature');
+  console.log('POLICY=route-page,fe-ui-screen,fe-ui-feature');
   console.log(`TOTAL_SPEC_TARGET_FILES=${codeFiles.length}`);
   console.log(`MISSING_BEFORE=${targets.length}`);
 

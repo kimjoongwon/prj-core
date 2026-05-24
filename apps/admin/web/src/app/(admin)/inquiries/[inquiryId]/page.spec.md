@@ -469,10 +469,10 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-03-30 | 실시간/WebSocket/mutation/delete modal state를 route container로 이동하고 `InquiryDetailPage`를 pure page props contract로 재정의 | codex |
+| 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-03-30 | 실시간/WebSocket/mutation/delete modal state를 route container로 이동하고 `InquiryDetailPage`를 pure screen props contract로 재정의 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
-| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
 | 2026-03-15 | 문의 상세 spec에 `PageSurface`/`SectionSurface` ownership과 elevation 결정을 명시 | codex |
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |

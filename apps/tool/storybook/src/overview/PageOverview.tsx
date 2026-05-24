@@ -198,7 +198,7 @@ export function PageOverview({ manifest }: { manifest: OverviewManifest }) {
 					<p style={eyebrowStyle}>Storybook Overview</p>
 					<h1 style={titleStyle}>Page Flow Workspace</h1>
 					<p style={descriptionStyle}>
-						`packages/fe-ui/src/page` 기준 화면 자산, 앱 route binding,
+						`packages/fe-ui/src/screen` 기준 화면 자산, 앱 route binding,
 						Storybook 딥링크를 React Flow 캔버스에서 함께 점검합니다.
 					</p>
 				</div>

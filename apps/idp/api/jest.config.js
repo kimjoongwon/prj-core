@@ -10,7 +10,7 @@ module.exports = {
 		"^@cocrepo/app$": "<rootDir>/test/mocks/app.ts",
 		"^@cocrepo/be-common$": "<rootDir>/test/mocks/be-common.ts",
 		"^@cocrepo/dto$": "<rootDir>/test/mocks/dto.ts",
-		"^@cocrepo/integration$": "<rootDir>/test/mocks/integration.ts",
+		"^@cocrepo/gateway$": "<rootDir>/test/mocks/gateway.ts",
 		"^@cocrepo/service$": "<rootDir>/test/mocks/service.ts",
 		"^@cocrepo/prisma$": "<rootDir>/test/mocks/prisma.ts",
 	},

@@ -21,7 +21,7 @@
 |------|------|
 | `@cocrepo/api/idp/idp-accounts` | 계정 상세 조회, 접근 권한 부여 폼 조회/부여, 활성 상태 전환, 실패 횟수 초기화 |
 | `@cocrepo/api/idp/auth` | 잠금 해제, 비밀번호 강제 변경, 세션 무효화 |
-| `@cocrepo/ui` | `AccountDetailPage` pure page 조합 |
+| `@cocrepo/ui` | `AccountDetailPage` pure screen 조합 |
 | `@tanstack/react-query` | 상세 캐시 무효화 |
 | `next/navigation` | 상세 라우팅과 목록 복귀 |
 
@@ -69,10 +69,10 @@
 
 ## Rendering Decision
 
-- 기본 패턴: `pure page + thin route container`
+- 기본 패턴: `pure screen + thin route container`
 - page role: `detail`
 - reusable target: `detail/view`
-- page component path: `packages/fe-ui/src/page/AccountDetailPage/AccountDetailPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/AccountDetailPage/AccountDetailPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -81,18 +81,18 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-04-29 | 접근 신청을 별도 메뉴가 아닌 계정 상세 내 Space/Role 권한 부여 흐름으로 전환하고 query/mutation/E2E 관점을 반영 | codex |
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-04-08 | pure page에서 사용하지 않는 개별 보안 action callback 전달을 제거하고 confirm modal 단일 진입점만 유지 | codex |
-| 2026-03-29 | `AccountDetailPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
+| 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-04-08 | pure screen에서 사용하지 않는 개별 보안 action callback 전달을 제거하고 confirm modal 단일 진입점만 유지 | codex |
+| 2026-03-29 | `AccountDetailPage` pure screen와 thin route container 구조로 전환하고 screen component path를 반영 | codex |
 | 2026-03-28 | 상세 진입 E2E가 `aria-label` 대신 실제 계정 상세 링크 계약(`/accounts/:userId`)을 사용하도록 기준을 정리 | codex |
 | 2026-03-22 | `(console)` layout contract 변경에 맞춰 primitive skeleton 범위를 보정 | codex |
 | 2026-03-22 | 계정 상세를 `DetailPage`/`DetailSectionCard` 기반 detail/view shell로 정리하고 spec 의존성을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
-| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-03-14 | Biome import 정렬 규칙 반영에 맞춰 상세 페이지 E2E lint 기준을 동기화 | codex |
 | 2026-03-06 | 공통 로그인 헬퍼 import를 `@cocrepo/e2e`(fe-e2e 패키지)로 전환 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-04 | IDP 로그인 헬퍼 import를 test-e2e 경로로 변경 | codex |
 | 2026-03-04 | 로그인 헬퍼 import를 @cocrepo/e2e 패키지 경로로 전환 | codex |
-| 2026-03-30 | route가 query/mutation/navigation/local state를 소유하고 pure page props를 주입하는 구조로 정리 | codex |
+| 2026-03-30 | route가 query/mutation/navigation/local state를 소유하고 pure screen props를 주입하는 구조로 정리 | codex |

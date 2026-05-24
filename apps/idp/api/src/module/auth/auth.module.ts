@@ -1,5 +1,5 @@
 import { AuthApplicationService } from "@cocrepo/app";
-import { OidcFacade } from "@cocrepo/integration";
+import { OidcGateway } from "@cocrepo/gateway";
 import {
 	AbilitiesRepository,
 	AuthAuditLogsRepository,
@@ -39,7 +39,7 @@ import { AuthController } from "./auth.controller";
 	imports: [OidcClientsModule, InteractionModule],
 	providers: [
 		AuthApplicationService,
-		OidcFacade,
+		OidcGateway,
 		AbilityService,
 		AbilitiesRepository,
 		PolicyAbilitiesRepository,

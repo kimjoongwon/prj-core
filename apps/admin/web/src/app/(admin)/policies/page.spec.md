@@ -14,7 +14,7 @@
 
 - 기본 패턴: `page.tsx` 단일 CSR
 - API: `useGetPolicies`, `useDeletePolicy`
-- reusable target: `packages/fe-ui/src/page/PolicyListPage/PolicyListPage.tsx`
+- reusable target: `packages/fe-ui/src/screen/PolicyListPage/PolicyListPage.tsx`
 
 ## Surface / Elevation
 
@@ -36,6 +36,6 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-28 | route의 Page 전용 row 매핑을 제거하고 Orval DTO를 pure page에 직접 주입하도록 정리 | codex |
+| 2026-04-28 | route의 Page 전용 row 매핑을 제거하고 Orval DTO를 pure screen에 직접 주입하도록 정리 | codex |
 | 2026-04-28 | 정책 기반 인가 목록 route page 스캐폴딩 추가 | codex |
 | 2026-04-28 | 생성된 Orval Policy API와 실제 Policy 필드 기준으로 정리 | codex |

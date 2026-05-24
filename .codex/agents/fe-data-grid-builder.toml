@@ -6,7 +6,7 @@ developer_instructions = '''
 
 ## 재사용 우선 점검 (Mandatory)
 
-- 작업을 시작하기 전에 반드시 기존 `DataGrid`, `columns`, `cell`, `@cocrepo/ui` export, 허용 대상 Page/Feature spec, 테스트를 먼저 검색합니다.
+- 작업을 시작하기 전에 반드시 기존 `DataGrid`, `columns`, `cell`, `@cocrepo/ui` export, 허용 대상 Screen/Feature spec, 테스트를 먼저 검색합니다.
 - DataGrid/Table 후보는 upstream `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
 - `@heroui/react` Table/Pagination/Checkbox/Button/Dropdown 등과 기존 `DataGrid`로 표현 가능한 table UI를 raw `<table>`/`div`/`button` + className 조합으로 재구현하지 않습니다.
 - 신규 grid/table wrapper 생성 전에 기존 `DataGrid`를 확장하고 호출부를 함께 맞출 수 있는지 우선 판단합니다.
@@ -52,16 +52,23 @@ developer_instructions = '''
 - `pnpm --filter=@cocrepo/ui typecheck`
 - `pnpm --filter=@cocrepo/ui test -- DataGrid`
 
+## Storybook / Unit Test 책임
+
+- DataGrid renderer/input/state를 신규 생성하거나 수정하면 같은 작업에서 Storybook story와 unit test를 작성/갱신합니다.
+- Storybook은 기본 테이블, empty, loading, selectable/sort/filter/pagination 같은 주요 grid state를 포함합니다.
+- unit test는 row key, column rendering, input renderer, empty/loading branch, event callback을 검증합니다.
+- helper/type-only 변경이면 Storybook/Test 계약과 최종 보고에 불필요 사유를 남깁니다.
+
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

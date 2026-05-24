@@ -332,7 +332,7 @@ flowchart TD
 GET /api/v1/auth/login
   -> AuthApplicationService.getAuthorizationUrl()
   -> resolveOidcClient("user-mobile")
-  -> OidcFacade.createAuthorizationRequest()
+  -> OidcGateway.createAuthorizationRequest()
   -> Redis에 state + code_verifier + returnTo + clientId 저장
   -> 302 /oidc/auth?...
   -> IDP interaction login

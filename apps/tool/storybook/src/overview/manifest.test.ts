@@ -54,8 +54,8 @@ describe("overview manifest helpers", () => {
 				'import { PageStoryScaffold } from "../storybookFrame"; export const Default = {};',
 			),
 		).toBe("scaffold");
-		expect(createStoryId("page/RoleListPage", "Default")).toBe(
-			"page-rolelistpage--default",
+		expect(createStoryId("screen/RoleListPage", "Default")).toBe(
+			"screen-rolelistpage--default",
 		);
 	});
 });
@@ -146,7 +146,7 @@ describe("buildOverviewManifest", () => {
 		const manifest = buildOverviewManifest();
 		const entry = findCatalogEntryForStory(
 			manifest,
-			"page-rolelistpage--loading",
+			"screen-rolelistpage--loading",
 		);
 
 		expect(entry?.componentName).toBe("RoleListPage");
@@ -154,12 +154,12 @@ describe("buildOverviewManifest", () => {
 
 	it("maps autodocs entries back to the owning page entry", () => {
 		const manifest = buildOverviewManifest();
-		const entry = findCatalogEntryForStory(manifest, "page-rolelistpage--docs");
+		const entry = findCatalogEntryForStory(manifest, "screen-rolelistpage--docs");
 
 		expect(entry?.componentName).toBe("RoleListPage");
 	});
 
-	it("loads pure page and route planning documents for page stories", () => {
+	it("loads pure screen and route planning documents for page stories", () => {
 		const manifest = buildOverviewManifest();
 		const entry = manifest.entries.find(
 			(item) => item.componentName === "RoleListPage",
@@ -188,19 +188,19 @@ describe("createOverviewManifest", () => {
 	it("merges manual flow overrides into the lane graph", () => {
 		const manifest = createOverviewManifest({
 			storySources: {
-				"/repo/packages/fe-ui/src/page/RoleListPage/RoleListPage.stories.tsx": `
+				"/repo/packages/fe-ui/src/screen/RoleListPage/RoleListPage.stories.tsx": `
 						export default {};
 						export const Default = {};
 					`,
-				"/repo/packages/fe-ui/src/page/RoleEditPage/RoleEditPage.stories.tsx": `
+				"/repo/packages/fe-ui/src/screen/RoleEditPage/RoleEditPage.stories.tsx": `
 						export default {};
 						export const Default = {};
 					`,
 			},
 			purePageSpecSources: {
-				"/repo/packages/fe-ui/src/page/RoleListPage/RoleListPage.spec.md":
+				"/repo/packages/fe-ui/src/screen/RoleListPage/RoleListPage.spec.md":
 					"# RoleListPage ui 기획서\n\n## 역할\n\n역할 목록",
-				"/repo/packages/fe-ui/src/page/RoleEditPage/RoleEditPage.spec.md":
+				"/repo/packages/fe-ui/src/screen/RoleEditPage/RoleEditPage.spec.md":
 					"# RoleEditPage ui 기획서\n\n## 역할\n\n역할 수정",
 			},
 			adminRouteSources: {

@@ -27,8 +27,8 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 | 기존 Layout primitive 슬롯/props 확장 | O | 재사용 레이아웃 primitive 보강 |
 | `packages/fe-ui` export 정리 | O | 배럴 export/타입 export 정리 |
 | `apps/**/layout.tsx` 작성 | X | `fe-route-layout-builder` 사용 |
-| `page.tsx` 화면 통합 | X | `fe-page-builder` 사용 |
-| 메뉴/탭 경로 계약 결정 | X | `req-menu-planner`, `fe-menu-builder` 사용 |
+| `page.tsx` 화면 통합 | X | `fe-route-builder` 사용 |
+| 메뉴/탭 경로 계약 결정 | X | owner spec과 `fe-menu-builder` 사용 |
 
 ---
 
@@ -39,7 +39,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 | 항목 | 필수 | 설명 |
 |------|------|------|
 | Layout 타입 | O | `Layout` |
-| 기존 owner contract | O | route `page.spec.md` 또는 관련 Page/Feature spec의 Layout Contract |
+| 기존 owner contract | O | route `page.spec.md` 또는 관련 Screen/Feature spec의 Layout Contract |
 | 사용 시나리오 | O | 어떤 route skeleton에서 어떤 슬롯이 필요한지 |
 | 관련 surface 규칙 | △ | `PageSurface`, `SectionSurface`, `Surface`와의 조합 제약 |
 
@@ -49,7 +49,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 |------|------|
 | Layout 컴포넌트 | `packages/fe-ui/src/display/layout/Layout.tsx` |
 | 공용 타입 | `packages/fe-ui/src/display/layout/type.ts` |
-| Layout contract | route `page.spec.md`의 Layout Contract 섹션 또는 관련 fe-ui Page/Feature spec |
+| Layout contract | route `page.spec.md`의 Layout Contract 섹션 또는 관련 fe-ui Screen/Feature spec |
 | Export 정리 | `packages/fe-ui/src/display/layout/index.ts`, 상위 barrel |
 
 ---
@@ -94,7 +94,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 
 - `Page`, `Section`은 위치와 슬롯만 정의합니다.
 - `PageSurface`, `SectionSurface`, `Surface`는 별도 surface 계층입니다.
-- route 수준에서 어떤 surface를 어디에 둘지는 `req-route-layout-planner`와 `fe-route-layout-builder`가 결정합니다.
+- route 수준에서 어떤 surface를 어디에 둘지는 owner spec과 `fe-route-layout-builder`가 결정합니다.
 
 ### 5.3 서버 호환
 
@@ -105,7 +105,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 
 ## 6. 구현 절차
 
-1. 기존 Layout primitive 구현과 허용 owner spec(route `page.spec.md` 또는 관련 Page/Feature spec)을 먼저 검색합니다.
+1. 기존 Layout primitive 구현과 허용 owner spec(route `page.spec.md` 또는 관련 Screen/Feature spec)을 먼저 검색합니다.
 2. route 문서가 요구하는 구조가 기존 primitive 조합으로 해결되는지 판단합니다.
 3. 신규 primitive가 필요하면 가장 작은 공통 구조만 추가합니다.
 4. props/slot 이름을 구조 의미로 정리합니다.
@@ -128,21 +128,27 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-builder` 책임�
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| `req-layout-planner` | 선행 | 재사용 Layout primitive spec |
-| `req-route-layout-planner` | 선행 참조 | route `layout.tsx`가 요구하는 구조 계약 |
+| `orch-delivery` | 선행 | 재사용 Layout primitive와 route `layout.tsx` 구조 계약 |
 | `fe-route-layout-builder` | 후행 소비자 | 실제 `apps/**/layout.tsx`에서 primitive 조합 |
-| `fe-page-builder` | 후행 소비자 | route layout이 제공한 skeleton 안의 콘텐츠 구현 |
+| `fe-route-builder` | 후행 소비자 | route layout이 제공한 skeleton 안의 콘텐츠 구현 |
+
+## Storybook / Unit Test 책임
+
+- Layout primitive를 신규 생성하거나 수정하면 같은 작업에서 Storybook story와 unit test를 작성/갱신합니다.
+- Storybook은 기본 slot, dense/wide, overflow, nested-safe 상태를 포함합니다.
+- unit test는 slot rendering, class/variant branch, accessibility landmark가 있으면 해당 role을 검증합니다.
+- type-only 변경이면 Storybook/Test 계약과 최종 보고에 불필요 사유를 남깁니다.
 
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

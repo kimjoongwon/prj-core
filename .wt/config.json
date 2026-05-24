@@ -4,11 +4,6 @@
   "branchPrefix": "feat",
   "baseRef": "origin/main",
   "envFileName": ".env.worktree",
-  "reviewGate": {
-    "enabled": true,
-    "role": "qa-pr-reviewer",
-    "reviewMapFile": ".codex/review-map.toml"
-  },
   "port": {
     "offsetStep": 20,
     "map": {

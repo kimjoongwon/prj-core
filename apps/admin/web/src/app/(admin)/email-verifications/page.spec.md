@@ -24,10 +24,10 @@
 
 ## Rendering Decision
 
-- 기본 패턴: `pure page + thin route container`
+- 기본 패턴: `pure screen + thin route container`
 - page role: `collection`
 - reusable target: `data-grid`
-- page component path: `packages/fe-ui/src/page/EmailVerificationListPage/EmailVerificationListPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/EmailVerificationListPage/EmailVerificationListPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 - page-level `SuspenseQuery`는 사용하지 않고 `useGetEmailVerifications`의 `isLoading`/`isFetching`으로 목록 상태를 제어합니다.
@@ -47,7 +47,7 @@
 | 상태 필터 변경 | `status` URL 파라미터 갱신 후 재조회 |
 | 페이지 변경 | `skip` 상태 갱신 후 재조회 |
 | 페이지 크기 변경 | `take` 상태 갱신 후 재조회 |
-| 재발송 클릭 | pure page modal open |
+| 재발송 클릭 | pure screen modal open |
 | 재발송 확인 | mutation 성공 후 `getGetEmailVerificationsQueryKey()` prefix invalidate |
 
 ## 권한과 Scope

@@ -26,7 +26,6 @@ const forcedModules = new Map(
 		"react-dom": resolveFromStorybook("react-dom"),
 		"react/jsx-dev-runtime": resolveFromStorybook("react/jsx-dev-runtime"),
 		"react/jsx-runtime": resolveFromStorybook("react/jsx-runtime"),
-		"react-native": resolveFromStorybook("react-native"),
 		"react-native-gesture-handler": resolveFromStorybook(
 			"react-native-gesture-handler",
 		),
@@ -40,7 +39,6 @@ const forcedModules = new Map(
 		"react-native-worklets": resolveFromStorybook("react-native-worklets"),
 		"tailwind-merge": resolveFromStorybook("tailwind-merge"),
 		"tailwind-variants": resolveFromStorybook("tailwind-variants"),
-		uniwind: resolveFromStorybook("uniwind"),
 	}),
 );
 const upstreamResolveRequest = config.resolver.resolveRequest;
@@ -64,6 +62,23 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
 const uniwindConfig = withUniwindConfig(config, {
 	cssEntryFile: "./src/global.css",
 });
+
+const uniwindResolveRequest = uniwindConfig.resolver.resolveRequest;
+uniwindConfig.resolver.resolveRequest = (context, moduleName, platform) => {
+	const isHeroUINativeOrigin = context.originModulePath.includes(
+		`${path.sep}heroui-native${path.sep}`,
+	);
+
+	if (
+		platform !== "web" &&
+		isHeroUINativeOrigin &&
+		moduleName === "react-native"
+	) {
+		return context.resolveRequest(context, "uniwind/components", platform);
+	}
+
+	return uniwindResolveRequest(context, moduleName, platform);
+};
 
 module.exports = withStorybook(uniwindConfig, {
 	configPath: "./.rnstorybook",

@@ -16,7 +16,7 @@
 - 기본 패턴: `page.tsx` 단일 CSR
 - page role: `detail`
 - API: `useGetRoleById`, `useDeleteRole`, `useGetPolicies`, `useGetRolePolicies`, `useSyncRolePolicies`
-- reusable target: `packages/fe-ui/src/page/RoleDetailPage/RoleDetailPage.tsx`
+- reusable target: `packages/fe-ui/src/screen/RoleDetailPage/RoleDetailPage.tsx`
 
 ## API 호출
 

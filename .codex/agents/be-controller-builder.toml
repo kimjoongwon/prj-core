@@ -27,6 +27,7 @@ NestJS REST Controller를 생성하는 전문가
 
 | 항목 | 설명 |
 |------|------|
+| 엔드포인트 인벤토리 | owner spec의 `Backend / API Contract` 아래 endpoint row |
 | ApplicationService | `@cocrepo/app`의 workflow 진입 레이어 |
 | Facade | `@cocrepo/facade`의 boundary composition 레이어 |
 | DTO 클래스 | `@cocrepo/dto` |
@@ -38,7 +39,7 @@ NestJS REST Controller를 생성하는 전문가
 | Controller 클래스 | `apps/core/api/src/module/{aggregate-root}/{resource}.controller.ts` |
 | | API contract | route `page.spec.md`의 API Contract 섹션 |
 | | Module 파일 | `apps/core/api/src/module/{aggregate-root}/{aggregate-root}.module.ts` |
-| | Module contract | module wiring handoff |
+| | Module contract | owner spec 또는 route `page.spec.md`의 Module/Wiring Contract |
 | | app.module.ts 업데이트 | 라우팅 등록 |
 
 ## How to use
@@ -47,6 +48,8 @@ NestJS REST Controller를 생성하는 전문가
 
 - 기본 원칙: Controller는 workflow 유즈케이스면 `ApplicationService`, boundary composition이면 `Facade`를 진입점으로 사용한다.
 - 각 endpoint는 기본적으로 `ApplicationService` 또는 `Facade` 또는 단일 pass-through `Service` 중 하나를 주 진입점으로 사용한다.
+- owner spec의 `엔드포인트 인벤토리`에 명시된 endpoint만 생성/수정하고, row의 `재사용/신규`, `소스/대상`, 소스 담당 `agent_type`, 소비/Wiring `agent_type`, `codegen` 계약을 벗어나지 않는다.
+- endpoint가 호출할 ApplicationService/Service/Repository는 owner spec의 각 inventory row와 일치해야 한다. 누락되면 구현하지 말고 `contract-gap`으로 보고한다.
 - Controller가 같은 endpoint에서 `Facade`와 `ApplicationService`를 직접 연쇄 호출해 workflow를 만드는 패턴은 기본값으로 사용하지 않는다.
 - 단일 aggregate-root 전달형 API만 `Service` 직접 호출 허용.
 - 유즈케이스 workflow orchestration(다수 서비스 조합, 조건 분기, 외부 연동 포함)은 `ApplicationService`로 이동.
@@ -110,7 +113,7 @@ Create/Update 화면에서 폼을 즉시 렌더링할 수 있도록 Controller�
 - [ ] **URL 파라미터명이 `:{entity}Id` 형식인지 확인 (예: `:userId`, `:orderId`)**
 - [ ] workflow 유즈케이스는 `@cocrepo/app`의 ApplicationService를 주입
 - [ ] boundary composition 유즈케이스는 `@cocrepo/facade`의 Facade를 주입
-- [ ] Service/Repository/Integration Facade 직접 주입은 **동일 aggregate root에서 단일 전달형일 때만** 허용
+- [ ] Service/Repository/Gateway 직접 주입은 **동일 aggregate root에서 단일 전달형일 때만** 허용
 - [ ] 각 endpoint의 primary entrypoint가 하나인지 확인 (`ApplicationService` / `Facade` / 단일 `Service`)
 - [ ] 같은 endpoint에서 Controller가 `Facade`와 `ApplicationService`를 모두 호출하지 않는지 확인
 - [ ] pass-through 허용 시에도 주입 대상을 하나의 `Service`로 제한
@@ -129,7 +132,7 @@ Create/Update 화면에서 폼을 즉시 렌더링할 수 있도록 Controller�
 - [ ] `state path` 기반 옵션/경로 규칙 검증
 - [ ] `POST /form/ai-fill` 시 fillable/권한 서버 검증
 - [ ] Module 파일 생성
-- [ ] route `page.spec.md` 또는 stage handoff의 API/Module contract 동시 갱신
+- [ ] route `page.spec.md` 또는 owner spec의 API/Module contract 동시 갱신
 - [ ] `app.module.ts`에 Module import
 - [ ] RouterModule에 경로 등록
 
@@ -137,14 +140,14 @@ Create/Update 화면에서 폼을 즉시 렌더링할 수 있도록 Controller�
 
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

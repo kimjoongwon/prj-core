@@ -1,578 +1,241 @@
-# Orchestration Agent Relationship Flow
+# Unified Spec Agent Relationship Flow
 
-## 목적
+이 문서는 Codex role 간 관계를 단일 `*.spec.md` 중심으로 설명합니다.
+별도 Domain/Web/Mobile 기획 분기나 Delivery Plan 문서를 두지 않고, 구현 대상의 허용된 spec이 실행 그래프를 소유합니다.
 
-`orch-stage`와 `orch-mobile-stage`가 어떤 child role agent들을 호출하고, 각 agent 결과가 어디에서 합류하는지 보여주는 관계 지도입니다.
-Stage 순서 자체가 아니라 orchestration tree, planner-to-builder mapping, test join chain을 파악하는 데 초점을 둡니다.
-이 문서는 단방향 waterfall을 고정하지 않습니다. 현재 role 지시문은 root orchestrator가 실행 중인 agent의 결과를 받고, 필요하면 같은 agent에 추가 지시를 보내거나 관련 role의 agent를 다시 생성하는 방식으로 feedback loop를 구성하도록 업데이트되어 있습니다.
+## Core Model
 
-원본 source of truth는 아래 role 지시문입니다.
+```mermaid
+flowchart TD
+  Request["User Request"] --> Delivery["orch-delivery"]
+  Delivery --> Spec["Allowed *.spec.md + Delivery section"]
+  Spec --> Ask["Codex question gate"]
+  Ask -->|approved| Backend["backend phase"]
+  Backend --> Codegen["API codegen phase, if needed"]
+  Codegen --> Web["web phase"]
+  Codegen --> Mobile["mobile phase"]
+  Backend --> Web
+  Backend --> Mobile
+  Web --> QA["QA phase"]
+  Mobile --> QA
+  Backend --> QA
 
-| root role | source |
-|-----------|--------|
-| `orch-stage` | `.codex/agents/orch-stage.toml` |
-| `orch-mobile-stage` | `.codex/agents/mobile/orch-mobile-stage.toml` |
-| `orch-requirement` | `.codex/agents/orch-requirement.toml` |
-| `orch-screen-planner` | `.codex/agents/orch-screen-planner.toml` |
-| `orch-mobile-screen-planner` | `.codex/agents/mobile/orch-mobile-screen-planner.toml` |
+  QA -. feedback .-> Delivery
+  Delivery -. spec re-entry .-> Spec
+  Spec -. re-approval .-> Ask
+```
 
-## 현재 반영 상태
+## Spec 필수 항목
 
-2026-05-09 기준으로 아래 role 지시문에 feedback router / re-entry / stage ledger gate 계약이 실제 반영되어 있습니다.
+- 목표와 사용자 시나리오
+- web/mobile screen map
+- component가 표시된 annotated 화면 러프
+- 재사용/신규/계층/담당 `agent_type`이 보이는 component inventory
+- Storybook/Test 인벤토리와 필수 상태/검증 케이스
+- Prisma/Common Schema/DTO/Repository/Service/Application/Facade/Gateway/Controller/Module/Seed/Codegen이 분리된 Backend/API inventory
+- 각 backend inventory의 재사용/수정/신규 여부, 소스 담당 `agent_type`, 소비 `agent_type`
+- 필요한 backend/API/state/UI/test 요소
+- `Agent Assignment Matrix`
+- backend부터 frontend/mobile/QA까지의 실행 그래프
+- shared file lock
+- QA/acceptance 기준
+- blocked/re-entry 규칙
+- approval/execution log
 
-| role | 반영된 계약 |
-|------|-------------|
-| `orch-stage` | child agent `Feedback` packet 수집, `feedback` / `reentry` 입력, feedback 분류, `send_input` follow-up, affected `agent_type` 재생성, web `stage-ledger.json` 완료 gate |
-| `orch-mobile-stage` | mobile route/backend/screen/test finding 수집, `feedback` / `reentry` 입력, mobile 전용 feedback 분류, 공통 backend handoff, mobile `stage-ledger.json` 완료 gate |
-| `orch-requirement` | `feedback_mode=reentry` 입력, domain-level contract 최소 갱신, 화면 상세 변경은 `orch-screen-planner`로 handoff |
-| `orch-screen-planner` | `feedback_mode=reentry` 입력, page-level affected owner spec만 최소 갱신, affected planner mapping 반환 |
-| `orch-mobile-screen-planner` | `feedback_mode=reentry` 입력, route `index.spec.md` / screen owner spec 최소 갱신, backend gap handoff |
-| `req-spec-tracker` | web `spec-checklist.md`, web/mobile `stage-ledger.json` 생성/갱신, required item verifier |
+## Storybook / Test Ownership
 
-## 용어
-
-| 용어 | 의미 |
+| 책임 | 담당 |
 |------|------|
-| role | `.codex/config.toml`에 정의된 실행 역할 |
-| agent | `spawn_agent`로 생성되는 실행 주체 |
-| `agent_type` | agent 생성 시 지정하는 role 이름 |
-| root orchestrator | `orch-stage`, `orch-mobile-stage`처럼 전체 흐름을 조율하는 role |
-| child role | root orchestrator가 작업을 위임하는 planner, builder, QA role |
-| fan-out | 독립 child role agent를 병렬로 실행하는 관계 |
-| join | fan-out 결과를 합쳐 spec, 공유 파일, 테스트 상태를 정리하는 관계 |
-| feedback router | QA, builder, reviewer의 발견사항을 root orchestrator가 받아 영향 role로 되돌려 보내는 관계 |
-| re-entry | 실패한 gate 이후 전체를 처음부터 반복하지 않고 영향받은 planner/builder/test chain으로 재진입하는 관계 |
-| single writer | 공유 파일 충돌을 막기 위해 join 시점에 한 agent만 최종 파일을 쓰는 규칙 |
-| feedback packet | child agent가 최종 응답에 포함해야 하는 finding 구조 |
-| stage ledger | Stage 시작 전에 required work item을 고정하고 완료 전 실제 파일/검증 상태로 닫는 machine-readable 원장 |
-| `feedback_mode=reentry` | planner orchestrator를 전체 재기획이 아니라 affected contract 최소 갱신 모드로 호출하는 입력 |
+| story/test 계약 작성 | `orch-delivery`가 spec의 `Storybook / Test Contract`에 작성 |
+| story/test 파일 작성 | component source를 소유한 builder role |
+| 누락/실패/회귀 검증 | `qa-fe-testing`, `qa-mo-testing`, E2E role |
 
-## 전체 관계 개요
+UI builder가 신규/수정 UI component를 만들면 같은 step에서 story와 unit test를 함께 작성하거나 갱신합니다.
+QA role은 builder 산출물을 재검증하고, 누락된 story/test는 `test-failure` 또는 `spec-drift`로 보고합니다.
 
-```mermaid
-flowchart LR
-  RootWeb["orch-stage"] --> WebReq["orch-requirement"]
-  RootWeb --> WebScreen["orch-screen-planner"]
-  RootWeb --> WebBE["BE builder agents"]
-  RootWeb --> WebFE["FE builder agents"]
-  RootWeb --> WebQA["BE/FE QA agents"]
-  WebBE -. contract gap .-> RootWeb
-  WebFE -. contract gap .-> RootWeb
-  WebQA -. finding .-> RootWeb
-  RootWeb -. re-entry .-> WebReq
-  RootWeb -. re-entry .-> WebScreen
+PC/Web과 Mobile 모두 같은 방식입니다.
 
-  RootMobile["orch-mobile-stage"] --> MoScreen["orch-mobile-screen-planner"]
-  RootMobile --> MoBackendReq["common backend req-* agents"]
-  RootMobile --> MoUI["fe-mo-ui builder agents"]
-  RootMobile --> MoRoute["mobile route integration agents"]
-  RootMobile --> MoQA["mobile QA agents"]
-  MoUI -. contract gap .-> RootMobile
-  MoRoute -. backend gap .-> RootMobile
-  MoQA -. finding .-> RootMobile
-  RootMobile -. re-entry .-> MoScreen
-  RootMobile -. backend handoff .-> MoBackendReq
+- PC/Web: `packages/fe-ui/src/**` component source owner builder가 story/test를 작성합니다.
+- Mobile: `packages/fe-mo-ui/src/**` component source owner builder가 story/test를 작성합니다.
+- route container, route layout, Store, backend-only step은 Storybook 대상이 아니며 unit/E2E 검증만 spec에 남깁니다.
 
-  WebReq --> WebScreen
-  MoScreen --> MoUI
-  MoScreen --> MoRoute
-```
+## Delivery Role
 
-관계의 큰 방향은 다음과 같습니다.
+| role | 책임 |
+|------|------|
+| `orch-delivery` | Spec → Ask → Build → QA를 단일 흐름으로 소유 |
 
-| root | 1차 위임 | downstream |
-|------|---------|------------|
-| `orch-stage` | `orch-requirement` | domain planning에서 Entity/API/App/Logic contract를 만든 뒤 BE builder family가 소비 |
-| `orch-stage` | `orch-screen-planner` | page planning에서 UI/Feature/Page/API/Test contract를 만든 뒤 FE builder family가 소비 |
-| `orch-mobile-stage` | `orch-mobile-screen-planner` | route planning에서 screen props/native wiring/test contract를 만든 뒤 mobile builder family가 소비 |
-| `orch-mobile-stage` | 공통 backend `req-*` role | 모바일 기능에 필요한 backend contract handoff 작성, backend 구현은 별도 BE flow로 처리 |
+`orch-delivery`는 승인된 spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
 
-## Feedback Loop 운용 원칙
+## Visual Execution Graph
 
-agent의 feedback은 peer-to-peer mesh가 아니라 root orchestrator-mediated loop로 운용합니다.
-즉, child agent가 다른 child agent를 직접 수정 대상으로 삼지 않고, 발견사항을 root orchestrator에 반환합니다.
-root orchestrator는 영향 범위를 분류한 뒤 같은 agent에 follow-up을 주거나 관련 `agent_type`으로 새 agent를 생성합니다.
-이 규칙은 `orch-stage`와 `orch-mobile-stage`의 `Feedback Router / Re-entry 규칙`에 실제 실행 지침으로 들어가 있습니다.
-단, `Feedback: none`은 완료 조건이 아닙니다. root orchestrator는 Stage 시작 전에 생성한 `stage-ledger.json`의 required item을 join verifier로 확인한 뒤에만 Stage 완료를 선언합니다.
+spec의 `Execution Graph`는 직렬 순서와 병렬 가능 구간을 같이 보여야 합니다.
 
 ```mermaid
 flowchart TD
-  O["root orchestrator"]
-  P["planner agent"]
-  B["builder agent"]
-  Q["QA or review agent"]
-  F["finding / contract gap"]
-  D{"impact classification"}
-  CP["contract re-entry"]
-  BP["builder follow-up"]
-  TP["test/spec follow-up"]
-  J["single-writer join"]
+  Gate["S0 orch-delivery: approval"] --> Backend["backend serial contracts"]
+  subgraph BParallel["parallel: backend model contracts"]
+    Entity["be-entity-builder"]
+    VO["be-vo-builder"]
+    DTO["be-dto-builder"]
+    QueryDto["be-query-dto-builder"]
+  end
+  Backend --> Entity
+  Backend --> VO
+  Backend --> DTO
+  Backend --> QueryDto
+  Entity --> Runtime["repository → service → app/facade/gateway → controller/module"]
+  VO --> Runtime
+  DTO --> Runtime
+  QueryDto --> Runtime
+  Runtime --> Codegen["codegen, if API changed"]
 
-  O --> P
-  P --> B
-  B --> Q
-  Q --> F
-  B -. implementation blocker .-> F
-  F --> O
-  O --> D
-  D --> CP
-  D --> BP
-  D --> TP
-  CP --> P
-  BP --> B
-  TP --> Q
-  P --> J
-  B --> J
-  Q --> J
-  J --> O
+  subgraph WebParallel["parallel: web leaf builders"]
+    Display["fe-display-builder"]
+    Control["fe-control-builder"]
+    Widget["fe-widget-builder"]
+    Feature["fe-feature-builder"]
+  end
+  Codegen --> Display
+  Codegen --> Control
+  Codegen --> Widget
+  Codegen --> Feature
+  Display --> WebRoute["fe-screen-builder → fe-route-builder"]
+  Control --> WebRoute
+  Widget --> WebRoute
+  Feature --> WebRoute
+
+  subgraph MobileParallel["parallel: mobile leaf builders"]
+    Action["fe-mo-action-builder"]
+    MoWidget["fe-mo-widget-builder"]
+    MoFeature["fe-mo-feature-builder"]
+  end
+  Codegen --> Action
+  Codegen --> MoWidget
+  Codegen --> MoFeature
+  Action --> MobileRoute["fe-mo-screen-builder → fe-mo-route-builder"]
+  MoWidget --> MobileRoute
+  MoFeature --> MobileRoute
+
+  WebRoute --> QA["QA / type-check"]
+  MobileRoute --> QA
+  Runtime --> QA
 ```
 
-| feedback source | root orchestrator 판단 | 재진입 대상 |
-|-----------------|------------------------|-------------|
-| builder가 API/DTO/route contract gap 발견 | 기획 누락인지 구현 누락인지 분류 | `req-api-planner`, `req-page-planner`, `req-mo-page-planner`, 이후 관련 builder |
-| page 또는 route integration 중 props/state mismatch 발견 | UI owner spec과 route wiring 중 어느 쪽이 틀렸는지 분류 | `orch-screen-planner`, `orch-mobile-screen-planner`, 관련 page/screen/state builder |
-| mobile integration 중 backend endpoint gap 발견 | 모바일 전용 handoff인지 공통 backend 구현 대상인지 분류 | `orch-mobile-stage → common backend req-*`, 필요 시 `orch-stage` backend flow |
-| QA가 테스트 실패 또는 회귀 발견 | 테스트 기대값 문제인지 제품 contract 문제인지 분류 | affected builder, `req-*-test-planner`, `qa-*` 재검증 |
-| shared file 충돌 가능성 발견 | fan-out 중 직접 쓰기 중단, join owner 지정 | root orchestrator의 single-writer join |
+그래프와 함께 `Parallel Group Table`을 두어 병렬 step, 병렬 가능 사유, shared file lock, 합류 step을 명시합니다.
 
-### Stage Ledger Gate
+## Backend Phase
 
-feedback loop는 발견된 문제를 되돌려 보내는 장치이고, stage ledger는 빠진 일을 발견하는 장치입니다.
-`orch-stage`는 `apps/[app]/web/src/app/(admin)/[domain]/stage-ledger.json`, `orch-mobile-stage`는 `apps/mobile/src/app/stage-ledger.json`을 사용합니다.
-각 ledger item은 `stage`, `agent_type`, `source_spec`, `expected_files`, `verification`, `status`를 가지며, `required=true` item은 실제 verifier가 확인해 `verified`가 되기 전까지 Stage 완료 조건을 만족하지 않습니다.
-공통 verifier 명령은 `pnpm stage-ledger:check -- <stage-ledger.json>`입니다.
+Backend phase는 spec의 `Backend / API Contract` 아래 구조별 inventory를 기준으로 실행합니다.
 
-`req-spec-tracker`는 기존 `spec-checklist.md`의 `Spec exists / Code paired / Verified` 요약을 유지하면서, Stage 1-7(web)과 Stage 1-4(mobile)의 required item 원장을 생성/갱신합니다.
-child agent가 성공 요약이나 `Feedback: none`을 반환해도 ledger item은 자동으로 닫히지 않습니다.
+| 인벤토리 | 주 담당 role | 소비 예시 |
+|----------|--------------|----------|
+| `Prisma / Database 인벤토리` | `be-prisma-builder` | `be-repository-builder`, `common-schema-builder`, QA |
+| `Prisma Annotation 인벤토리` | `be-prisma-annotator` | Swagger/관리 UI 표시 계약 |
+| `Common Schema 인벤토리` | `common-schema-builder` | `be-dto-builder`, `fe-route-builder`, `fe-mo-route-builder` |
+| `Entity / VO 인벤토리` | `be-entity-builder`, `be-vo-builder` | `be-service-builder`, `be-app-builder` |
+| `DTO / Query DTO 인벤토리` | `be-dto-builder`, `be-query-dto-builder` | `be-controller-builder`, codegen |
+| `Repository 인벤토리` | `be-repository-builder` | `be-service-builder` |
+| `Service 인벤토리` | `be-service-builder` | `be-app-builder`, `be-facade-builder`, `be-controller-builder` |
+| `ApplicationService 인벤토리` | `be-app-builder` | `be-controller-builder` |
+| `Facade / Gateway 인벤토리` | `be-facade-builder`, `be-gateway-builder` | `be-controller-builder`, `be-service-builder` |
+| `엔드포인트 인벤토리` | `be-controller-builder` | `fe-route-builder`, `fe-mo-route-builder`, `qa-*-testing` |
+| `Module / Bootstrap 인벤토리` | `be-module-builder`, `be-bootstrap-integrator` | 앱 부트스트랩 |
+| `Seed 인벤토리` | `be-seed-maker` | QA, local dev |
+| `Codegen / API Client 인벤토리` | command step | `fe-route-builder`, `fe-mo-route-builder` |
 
-### Root Orchestrator 입력
-
-root orchestrator는 Stage 실행 입력에 feedback 운용 파라미터를 받습니다.
-
-| 입력 | 값 | 기본값 | 의미 |
-|------|----|--------|------|
-| `feedback` | `auto` / `off` | `auto` | 현재 Stage 내부에서 child agent finding follow-up을 허용할지 결정 |
-| `reentry` | `review` / `auto` | `review` | 이전 Stage source of truth 변경이 필요한 finding을 자동 재진입할지, review pending으로 멈출지 결정 |
-
-`feedback=auto`에서는 Stage 완료 전 finding 해결 follow-up이 현재 Stage 실행의 일부입니다.
-완료/실패 메시지를 출력한 뒤에는 추가 agent 호출을 시작하지 않습니다.
-
-### Web Feedback Packet
-
-`orch-stage`가 child agent를 생성하거나 follow-up을 보낼 때 요구하는 packet입니다.
-
-```text
-Feedback:
-- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
-- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
-- affected_roles: <role list or none>
-- affected_files: <file list or none>
-- required_action: <short action or none>
-```
-
-| `feedback_type` | `orch-stage` 처리 |
-|-----------------|-------------------|
-| `none` | join 후보로 수집하되 ledger verifier 완료 전에는 Stage 완료 조건이 아님 |
-| `contract-gap` | 도메인/API/BE contract는 `orch-requirement` 또는 `req-api-planner`, 화면/page/feature contract는 `orch-screen-planner feedback_mode=reentry`로 분류 |
-| `api-integration-gap` | API contract 불일치면 `req-api-planner`, wiring 문제면 `req-api-integration-planner` 또는 `fe-api-integrator` follow-up |
-| `ui-composition-gap` | `orch-screen-planner feedback_mode=reentry`로 보내 affected `req-*` planner만 최소 재진입 |
-| `implementation-blocker` | 같은 agent가 해결 가능하면 `send_input`, role 경계 밖이면 해당 builder `agent_type` 생성 |
-| `test-failure` | 제품 contract 문제와 테스트 기대값 문제를 분리한 뒤 affected builder 또는 `req-*-test-planner`로 재진입 |
-| `spec-drift` | owner spec을 먼저 갱신한 뒤 구현/테스트 follow-up |
-| `shared-file-conflict` | fan-out 쓰기를 중단하고 join 단계 single writer 지정 |
-| `dependency-missing` | 현재 Stage 전제조건이면 Stage 실패, 현재 Stage 내부 누락이면 해당 role follow-up |
-
-### Mobile Feedback Packet
-
-`orch-mobile-stage`가 child agent를 생성하거나 follow-up을 보낼 때 요구하는 packet입니다.
-
-```text
-Feedback:
-- status: resolved | blocked | needs-route-contract | needs-backend-contract | needs-ui | needs-test | needs-reentry
-- feedback_type: none | route-contract-gap | backend-contract-gap | api-integration-gap | screen-contract-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | none
-- affected_roles: <role list or none>
-- affected_files: <file list or none>
-- required_action: <short action or none>
-```
-
-| `feedback_type` | `orch-mobile-stage` 처리 |
-|-----------------|--------------------------|
-| `none` | join 후보로 수집하되 ledger verifier 완료 전에는 Stage 완료 조건이 아님 |
-| `route-contract-gap` | `orch-mobile-screen-planner` 또는 관련 `req-mo-*` role로 re-entry |
-| `backend-contract-gap` | 공통 backend `req-*` handoff로 되돌리고, 필요하면 web `orch-stage` backend flow 재시작 범위 보고 |
-| `api-integration-gap` | `req-mo-api-integration-planner`로 route API Integration 계약을 갱신하고 필요 시 `fe-mo-api-integrator` follow-up |
-| `screen-contract-gap` | `orch-mobile-screen-planner`를 통해 shared screen props/spec만 최소 갱신 |
-| `ui-composition-gap` | `orch-mobile-screen-planner`를 통해 affected `req-mo-widget/feature/form/detail/primitive` planner만 최소 재진입 |
-| `implementation-blocker` | 같은 agent가 해결 가능하면 `send_input`, role 경계 밖이면 해당 mobile builder `agent_type` 생성 |
-| `test-failure` | 제품 contract 문제와 테스트 기대값 문제를 분리한 뒤 affected builder 또는 `req-mo-fe-test-planner`로 재진입 |
-| `spec-drift` | route `index.spec.md` 또는 screen owner spec을 먼저 갱신한 뒤 구현/테스트 follow-up |
-| `shared-file-conflict` | fan-out 쓰기를 중단하고 join 단계 single writer 지정 |
-| `dependency-missing` | 현재 Stage 전제조건이면 Stage 실패, 현재 Stage 내부 누락이면 해당 role follow-up |
-
-### Planner Re-entry 입력
-
-planner orchestrator는 상위 root orchestrator가 finding 해결을 위해 다시 호출할 때 아래 입력을 받습니다.
-
-| 입력 | 대상 role | 의미 |
-|------|-----------|------|
-| `feedback_mode=reentry` | `orch-requirement`, `orch-screen-planner`, `orch-mobile-screen-planner` | 전체 재기획 대신 affected contract만 최소 갱신 |
-| `feedback_type` | 동일 | finding 유형 |
-| `affected_files` | 동일 | 재검토해야 하는 파일 목록 |
-| `affected_roles` | 동일 | 재검토해야 하는 role 목록 |
-
-re-entry mode에서 planner orchestrator는 unrelated spec을 갱신하지 않고, owner를 찾아 필요한 planner만 실행합니다.
-화면 상세 변경, backend handoff, test contract 변경은 각각 owner role로 escalation하거나 `Feedback Resolution` 형식으로 반환합니다.
-
-### Waterfall 완화 규칙
-
-- Stage gate는 완료 선언 지점이 아니라 feedback 수집 지점으로 봅니다.
-- 큰 도메인 전체를 한 번에 밀지 않고 route/page 단위 thin vertical slice로 닫습니다.
-- QA 실패는 전체 stage 재시작이 아니라 affected planner/builder/test chain으로 re-entry합니다.
-- contract가 바뀌면 owner spec, Orval 생성물, page/screen props, 테스트 기대값을 같은 loop에서 동기화합니다.
-- 공유 파일은 fan-out agent가 동시에 수정하지 않고 join에서 single writer가 정리합니다.
-- Stage 완료 선언은 feedback 수집이 아니라 stage ledger required item verifier 통과로 결정합니다.
-
-## `orch-stage` Agent 관계
-
-`orch-stage`는 직접 세부 파일을 계속 구현하는 agent가 아니라, domain planning, backend 구현, frontend planning, page integration, QA agent를 조율합니다.
+각 row는 `재사용/신규`, `소스/대상`, 소스 담당 `agent_type`, 소비 `agent_type`을 포함해야 하며, 누락된 backend element는 builder가 추측해 만들지 않습니다.
 
 ```mermaid
 flowchart TD
-  OS["orch-stage"]
-
-  OS --> OR["orch-requirement"]
-  OR --> RC["req-context-planner"]
-  RC --> RS["req-screen-planner"]
-  RS --> RE{"domain fan-out"}
-  RE --> REP["req-entity-planner"]
-  RE --> RAP["req-api-planner"]
-  RE --> RSP["req-store-planner (conditional)"]
-  REP --> RJ["requirement join"]
-  RAP --> RJ
-  RSP --> RJ
-  RJ --> RAPP["req-app-planner"]
-  RAPP --> RLOG["req-logic-planner"]
-  RLOG --> OSP["orch-screen-planner (when page detail is needed)"]
-
-  OS --> BESchema{"BE schema builder family"}
-  BESchema --> BP["be-prisma-builder"]
-  BESchema --> CS["common-schema-builder"]
-  BESchema --> BE["be-entity-builder"]
-  BESchema --> BD["be-dto-builder"]
-  BESchema --> BQ["be-query-dto-builder"]
-  BESchema --> BSeed["be-seed-maker"]
-  BESchema --> BUT["be-unit-test-builder"]
-  BUT --> RBT["req-be-test-planner"]
-  RBT --> QBT["qa-be-testing"]
-
-  OS --> BEImpl{"BE implementation builder family"}
-  BEImpl --> BR["be-repository-builder"]
-  BEImpl --> BS["be-service-builder"]
-  BEImpl --> BA["be-app-builder"]
-  BEImpl --> BF["be-facade-builder (conditional)"]
-  BEImpl --> BI["be-integration-builder (conditional)"]
-  BEImpl --> BC["be-controller-builder"]
-  BEImpl --> BM["be-module-builder"]
-  BEImpl --> BUT2["be-unit-test-builder"]
-  BUT2 --> RBT2["req-be-test-planner"]
-  RBT2 --> QBT2["qa-be-testing"]
-
-  OS --> OSP
-  OSP --> OSPJoin["screen planning join"]
-
-  OS --> FEComp{"FE component builder family"}
-  FEComp --> FD["fe-display-component-builder"]
-  FEComp --> FCtrl["fe-control-component-builder"]
-  FEComp --> FCell["fe-cell-builder"]
-  FEComp --> FCol["fe-columns-builder"]
-  FEComp --> FW["fe-widget-builder"]
-  FEComp --> FL["fe-layout-builder"]
-  FEComp --> FF["fe-feature-builder"]
-  FEComp --> FDG["fe-data-grid-builder"]
-  FEComp --> FDetail["fe-detail-builder"]
-  FEComp --> FForm["fe-form-builder"]
-  FEComp --> FState["fe-state-builder"]
-  FEComp --> FStore["fe-store-builder"]
-  FEComp --> FMenu["fe-menu-builder (conditional)"]
-  FEComp --> FUT["fe-unit-test-builder"]
-  FUT --> RFT["req-fe-test-planner"]
-  RFT --> QFT["qa-fe-testing"]
-
-  OS --> FEPage{"FE page integration family"}
-  FEPage --> FRL["fe-route-layout-builder"]
-  FEPage --> FUIP["fe-ui-page-builder"]
-  FEPage --> FP["fe-page-builder"]
-  FEPage --> FAPI["fe-api-integrator"]
-  FEPage --> FState2["fe-state-builder (conditional)"]
-  FEPage --> FUT2["fe-unit-test-builder"]
-  FUT2 --> RFT2["req-fe-test-planner"]
-  RFT2 --> QFT2["qa-fe-testing"]
-  QFT2 --> RST["req-spec-tracker"]
-  QFT2 -. finding .-> OS
-  RST -. spec drift .-> OS
-
-  OS --> E2E{"E2E QA family"}
-  E2E --> BEE["be-e2e-builder"]
-  BEE --> RBT3["req-be-test-planner"]
-  RBT3 --> QBEE["qa-be-e2e-testing"]
-  QBEE --> FEE["fe-e2e-builder"]
-  FEE --> RFT3["req-fe-test-planner"]
-  RFT3 --> QFEE["qa-fe-e2e-testing"]
-  QFEE --> RST2["req-spec-tracker"]
-  QFEE -. regression .-> OS
-  QBEE -. regression .-> OS
-
-  OS -. contract re-entry .-> OR
-  OS -. screen re-entry .-> OSP
-  OS -. implementation follow-up .-> FEComp
-  OS -. implementation follow-up .-> FEPage
-  OS -. implementation follow-up .-> BEImpl
+  Spec["*.spec.md"] --> P["be-prisma-builder"]
+  P --> PA["be-prisma-annotator"]
+  PA --> S["common-schema-builder"]
+  S --> M["be-entity / be-vo / be-dto / be-query-dto"]
+  M --> R["be-repository-builder"]
+  R --> SV["be-service-builder"]
+  SV --> APP["be-app-builder"]
+  APP --> F["be-facade-builder / be-gateway-builder"]
+  F --> C["be-controller-builder"]
+  C --> MOD["be-module-builder"]
+  MOD --> BOOT["be-bootstrap-integrator"]
+  BOOT --> SEED["be-seed-maker"]
+  SEED --> QA["qa-be-testing / qa-be-e2e-testing"]
 ```
 
-### `orch-requirement` 내부 관계
-
-`orch-requirement`는 domain-wide 기획의 첫 번째 fan-out owner입니다.
+## Web Phase
 
 ```mermaid
 flowchart TD
-  OR["orch-requirement"] --> C["req-context-planner"]
-  C --> S["req-screen-planner"]
-  S --> F{"parallel fan-out"}
-  F --> E["req-entity-planner"]
-  F --> A["req-api-planner"]
-  F --> ST["req-store-planner (conditional)"]
-  E --> J["join"]
-  A --> J
-  ST --> J
-  J --> APP["req-app-planner"]
-  APP --> L["req-logic-planner"]
-  L --> HANDOFF["Stage 2-3 implementation targets"]
-  L --> SCREEN["orch-screen-planner when page detail is needed"]
-  HANDOFF -. contract gap .-> OR
-  SCREEN -. screen gap .-> OR
+  Spec["*.spec.md"] --> Leaf{"web leaf/component steps needed?"}
+  Leaf --> Display["fe-display-builder"]
+  Leaf --> Control["fe-control-builder"]
+  Leaf --> Cell["fe-cell-builder"]
+  Leaf --> Columns["fe-columns-builder"]
+  Leaf --> Widget["fe-widget-builder"]
+  Leaf --> Layout["fe-layout-builder"]
+  Leaf --> Feature["fe-feature-builder"]
+  Leaf --> DataGrid["fe-data-grid-builder"]
+  Leaf --> Form["fe-form-builder"]
+  Leaf --> Menu["fe-menu-builder"]
+  Leaf --> Store["fe-store-builder, if shared store"]
+  Leaf --> Page["fe-screen-builder"]
+  Page --> RouteLayout["fe-route-layout-builder, if needed"]
+  RouteLayout --> Route["fe-route-builder"]
+  Page --> Route
+  Route --> QA["qa-fe-testing / qa-fe-e2e-testing"]
 ```
 
-| relationship | 의미 |
-|--------------|------|
-| `req-context-planner → req-screen-planner` | 사용자/목표/도메인 맥락 이후 L3-L4 화면 구조 초안 작성 |
-| `req-entity-planner ∥ req-api-planner` | Entity/API contract는 병렬 fan-out 가능 |
-| `req-store-planner` | 공용 Store가 필요할 때만 조건부 fan-out |
-| `req-app-planner → req-logic-planner` | fan-out 결과를 합쳐 ApplicationService/Service/Repository/test contract 정리 |
-| `orch-screen-planner` | page-level L5-L12 상세 기획이 필요할 때 위임 |
-
-### `orch-screen-planner` 내부 관계
-
-`orch-screen-planner`는 web 단일 화면의 planner-to-builder mapping을 고정합니다.
+## Mobile Phase
 
 ```mermaid
 flowchart TD
-  OSP["orch-screen-planner"] --> RPP["req-page-planner"]
-  RPP --> RAP["req-api-planner"]
-  RAP --> CLASSIFY["page role / reusable target / downstream builder 확정"]
-  CLASSIFY --> F{"parallel planner fan-out"}
-
-  F --> RPR["req-primitive-planner"]
-  F --> RIN["req-input-planner"]
-  F --> RCE["req-cell-planner"]
-  F --> RCO["req-columns-planner"]
-  F --> RWI["req-widget-planner"]
-  F --> RLA["req-layout-planner"]
-  F --> RFE["req-feature-planner"]
-  F --> RST["req-state-planner (conditional)"]
-  F --> RME["req-menu-planner (conditional)"]
-  F --> RAI["req-api-integration-planner"]
-
-  RPR --> J["join"]
-  RIN --> J
-  RCE --> J
-  RCO --> J
-  RWI --> J
-  RLA --> J
-  RFE --> J
-  RST --> J
-  RME --> J
-  RAI --> J
-
-  J --> RSU["req-surface-planner"]
-  RSU --> RFT["req-fe-test-planner"]
-  RFT --> SPEC["page / fe-ui owner specs"]
-  SPEC -. review finding .-> OSP
-  OSP -. affected planner re-entry .-> F
+  Spec["*.spec.md"] --> Leaf{"mobile leaf UI steps needed?"}
+  Leaf --> Action["fe-mo-action-builder"]
+  Leaf --> Input["fe-mo-input-builder"]
+  Leaf --> Selection["fe-mo-selection-builder"]
+  Leaf --> Navigation["fe-mo-navigation-builder"]
+  Leaf --> DataDisplay["fe-mo-data-display-builder"]
+  Leaf --> Feedback["fe-mo-feedback-builder"]
+  Leaf --> Menu["fe-mo-menu-builder"]
+  Leaf --> Widget["fe-mo-widget-builder"]
+  Leaf --> Feature["fe-mo-feature-builder"]
+  Leaf --> Screen["fe-mo-screen-builder"]
+  Widget --> Feature
+  Feature --> Screen
+  Screen --> Layout["fe-mo-route-layout-builder, if needed"]
+  Layout --> Route["fe-mo-route-builder"]
+  Screen --> Route
+  Route --> QA["qa-mo-testing / qa-mo-e2e-testing"]
 ```
 
-| planner role | downstream builder role |
-|--------------|-------------------------|
-| `req-primitive-planner` | `fe-display-component-builder` |
-| `req-input-planner` | `fe-control-component-builder` |
-| `req-cell-planner` | `fe-cell-builder` |
-| `req-columns-planner` | `fe-columns-builder` |
-| `req-widget-planner` | `fe-widget-builder` |
-| `req-layout-planner` | `fe-layout-builder` |
-| `req-feature-planner` | `fe-feature-builder` |
-| `req-state-planner` | `fe-state-builder`, `fe-store-builder` |
-| `req-menu-planner` | `fe-menu-builder` |
-| `req-api-integration-planner` | `fe-api-integrator` |
-| `req-page-planner` | `fe-data-grid-builder`, `fe-detail-builder`, `fe-form-builder`, `fe-ui-page-builder`, `fe-page-builder` |
-| `req-fe-test-planner` | `fe-unit-test-builder`, `qa-fe-testing`, `fe-e2e-builder`, `qa-fe-e2e-testing` |
+## Feedback Routing
 
-## `orch-mobile-stage` Agent 관계
+| feedback type | 처리 |
+|---------------|------|
+| `spec-gap` | `orch-delivery`가 spec을 보강하고 승인 gate 재진입 |
+| `contract-gap` | spec의 affected step 보강 |
+| `api-integration-gap` | API contract 문제면 spec 보강, wiring 문제면 route/page builder follow-up |
+| `ui-composition-gap` | spec의 Required Elements와 Agent Assignment Matrix 보강 후 담당 builder follow-up |
+| `implementation-blocker` | 같은 agent가 해결 가능하면 follow-up, role 경계 밖이면 spec re-entry |
+| `test-failure` | 제품 contract 문제와 테스트 기대값 문제를 분리해 spec re-entry 또는 QA follow-up |
+| `spec-drift` | spec을 먼저 갱신한 뒤 구현/테스트 follow-up |
+| `shared-file-conflict` | 병렬 쓰기를 중단하고 single writer 지정 |
+| `dependency-missing` | 현재 phase 전제조건이면 blocked, downstream 전제면 spec의 downstream step에 required input 기록 |
 
-`orch-mobile-stage`는 mobile route planning, `fe-mo-ui` screen 구현, Expo Router route integration, mobile 검증 agent를 조율합니다.
+## Operating Rule
 
-```mermaid
-flowchart TD
-  OMS["orch-mobile-stage"]
+- 허용된 `*.spec.md` 없이 builder를 실행하지 않습니다.
+- spec 작성과 사용자 승인 없이 builder를 실행하지 않습니다.
+- 병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
+- 테스트 전략 전용 intermediate role 없이 QA role이 spec 기준으로 테스트를 구현합니다.
+- spec은 허용된 sidecar spec 자체이며, `.codex/plans/**/*.delivery-plan.md` 같은 별도 기획서는 만들지 않습니다.
 
-  OMS --> MSP["orch-mobile-screen-planner"]
-  OMS --> MBR{"common backend contract agents"}
-  MBR --> MRE["req-entity-planner"]
-  MBR --> MRA["req-api-planner"]
-  MBR --> MRAPP["req-app-planner"]
-  MBR --> MRLOG["req-logic-planner"]
-  MBR --> MH["backend handoff only"]
+## Scenario Checks
 
-  OMS --> MUI{"fe-mo-ui builder family"}
-  MUI --> MDD["fe-mo-data-display-component-builder"]
-  MUI --> MFB["fe-mo-feedback-component-builder"]
-  MUI --> MAC["fe-mo-action-component-builder"]
-  MUI --> MIC["fe-mo-input-component-builder"]
-  MUI --> MSC["fe-mo-selection-component-builder"]
-  MUI --> MNC["fe-mo-navigation-component-builder"]
-  MUI --> MMM["fe-mo-menu-builder"]
-  MUI --> MSB["fe-mo-screen-builder"]
-  MUI --> MUT["fe-mo-unit-test-builder"]
-  MUT --> MRFT["req-mo-fe-test-planner"]
-  MRFT --> QMT["qa-mo-testing"]
-
-  OMS --> MRT{"mobile route integration family"}
-  MRT --> MRL["fe-mo-route-layout-builder"]
-  MRT --> MPB["fe-mo-page-builder"]
-  MRT --> MAI["fe-mo-api-integrator (conditional)"]
-  MRT --> MST["fe-mo-state-builder (conditional)"]
-  MRT --> MSTO["fe-mo-store-builder (conditional)"]
-  MRT --> MUT2["fe-mo-unit-test-builder"]
-  MUT2 --> MRFT2["req-mo-fe-test-planner"]
-  MRFT2 --> QMT2["qa-mo-testing"]
-
-  OMS --> ME2E{"mobile verification family"}
-  ME2E --> MEE["fe-mo-e2e-builder"]
-  MEE --> MRFT3["req-mo-fe-test-planner"]
-  MRFT3 --> QME["qa-mo-e2e-testing"]
-  QMT2 -. finding .-> OMS
-  QME -. regression .-> OMS
-  MPB -. backend gap .-> OMS
-  MAI -. API gap .-> OMS
-  OMS -. route re-entry .-> MSP
-  OMS -. builder follow-up .-> MUI
-  OMS -. route follow-up .-> MRT
-  OMS -. backend contract re-entry .-> MBR
-```
-
-### `orch-mobile-screen-planner` 내부 관계
-
-`orch-mobile-screen-planner`는 단일 Expo Router native route의 planning agent 관계를 고정합니다.
-
-```mermaid
-flowchart TD
-  MSP["orch-mobile-screen-planner"] --> RMP["req-mo-page-planner"]
-  RMP --> RMRL["req-mo-route-layout-planner (conditional)"]
-  RMRL --> CLASS["route kind / ui owner / screen target / props contract 확정"]
-  CLASS --> F{"parallel planner fan-out"}
-
-  F --> RMA["req-mo-action-planner"]
-  F --> RMPri["req-mo-primitive-planner"]
-  F --> RMI["req-mo-input-planner"]
-  F --> RMS["req-mo-selection-planner"]
-  F --> RMN["req-mo-navigation-planner"]
-  F --> RMM["req-mo-menu-planner (conditional)"]
-  F --> RMState["req-mo-state-planner (conditional)"]
-  F --> RMStore["req-mo-store-planner (conditional)"]
-
-  RMA --> J["join"]
-  RMPri --> J
-  RMI --> J
-  RMS --> J
-  RMN --> J
-  RMM --> J
-  RMState --> J
-  RMStore --> J
-  J --> RMFT["req-mo-fe-test-planner"]
-  RMFT --> SPEC["route index.spec.md / screen spec handoff"]
-  SPEC -. review finding .-> MSP
-  MSP -. affected planner re-entry .-> F
-```
-
-| mobile planner role | downstream builder role |
-|---------------------|-------------------------|
-| `req-mo-page-planner` | `fe-mo-screen-builder`, `fe-mo-page-builder`, `fe-mo-api-integrator` |
-| `req-mo-route-layout-planner` | `fe-mo-route-layout-builder` |
-| `req-mo-primitive-planner` | `fe-mo-data-display-component-builder`, `fe-mo-feedback-component-builder` |
-| `req-mo-action-planner` | `fe-mo-action-component-builder` |
-| `req-mo-input-planner` | `fe-mo-input-component-builder` |
-| `req-mo-selection-planner` | `fe-mo-selection-component-builder` |
-| `req-mo-navigation-planner` | `fe-mo-navigation-component-builder` |
-| `req-mo-menu-planner` | `fe-mo-menu-builder` |
-| `req-mo-state-planner` | `fe-mo-state-builder`, `fe-mo-store-builder` |
-| `req-mo-store-planner` | `fe-mo-store-builder` |
-| `req-mo-fe-test-planner` | `fe-mo-unit-test-builder`, `qa-mo-testing`, `fe-mo-e2e-builder`, `qa-mo-e2e-testing` |
-
-## Test Join 관계
-
-테스트 관련 agent는 builder 결과를 검증 가능한 계약으로 합류시키는 join chain입니다.
-
-| context | relationship chain |
-|---------|--------------------|
-| backend unit | `be-unit-test-builder → req-be-test-planner → qa-be-testing` |
-| backend E2E | `be-e2e-builder → req-be-test-planner → qa-be-e2e-testing` |
-| frontend unit | `fe-unit-test-builder → req-fe-test-planner → qa-fe-testing` |
-| frontend E2E | `fe-e2e-builder → req-fe-test-planner → qa-fe-e2e-testing → req-spec-tracker` |
-| mobile unit | `fe-mo-unit-test-builder → req-mo-fe-test-planner → qa-mo-testing` |
-| mobile E2E | `fe-mo-e2e-builder → req-mo-fe-test-planner → qa-mo-e2e-testing` |
-
-## Feedback Join 관계
-
-feedback join은 waterfall 흐름의 예외 처리가 아니라 기본 운용 경로입니다.
-각 finding은 root orchestrator에서 아래 순서로 처리합니다.
-
-1. source agent가 `Feedback` packet을 반환합니다.
-2. root orchestrator가 contract, implementation, test, shared-file conflict, dependency 중 하나로 분류합니다.
-3. 영향받은 owner spec 또는 shared file을 확인합니다.
-4. 같은 실행 agent가 해결 가능하면 `send_input`으로 follow-up을 보냅니다.
-5. 종료된 agent 또는 다른 role 책임이면 관련 `agent_type`의 agent를 생성합니다.
-6. 수정 결과를 single-writer join으로 합칩니다.
-7. QA agent가 같은 slice를 재검증합니다.
-
-| loop | relationship chain |
-|------|--------------------|
-| web API contract gap | `fe-api-integrator / fe-page-builder → orch-stage → req-api-planner → fe-api-integrator → qa-fe-testing` |
-| web page spec drift | `qa-fe-testing / qa-fe-e2e-testing → orch-stage → orch-screen-planner → affected planner → affected builder → qa-fe-testing` |
-| backend contract gap | `be-controller-builder / qa-be-testing → orch-stage → req-api-planner → affected BE builder → qa-be-testing` |
-| mobile route contract gap | `fe-mo-page-builder / qa-mo-testing → orch-mobile-stage → orch-mobile-screen-planner → affected mobile planner → affected builder → qa-mo-testing` |
-| mobile backend gap | `fe-mo-api-integrator → orch-mobile-stage → common backend req-* handoff → orch-stage backend flow → fe-mo-api-integrator` |
-| E2E regression | `qa-*-e2e-testing → root orchestrator → affected planner/builder/test planner → qa-*-e2e-testing → req-spec-tracker` |
-
-## Shared File Join 관계
-
-다음 파일은 여러 agent가 동시에 쓰기 쉬운 공유 지점입니다.
-fan-out 중에는 수정 예약 또는 handoff만 남기고, join에서 단일 writer가 정리합니다.
-
-| flow | shared file examples |
-|------|----------------------|
-| web app context | `apps/*/web/src/app/(admin)/app.context.md` |
-| web route/page | `apps/*/web/src/app/**/page.spec.md`, `packages/fe-ui/src/page/**`, `packages/fe-ui/src/feature/**` |
-| web package barrels | `packages/*/src/index.ts` |
-| web menu/routing | `packages/common-constant/src/routing/admin-menu.ts` |
-| mobile app context | `apps/mobile/src/app/app.context.md` |
-| mobile route | `apps/mobile/src/app/**/index.spec.md` |
-| mobile package barrels | `packages/fe-mo-ui/src/**/index.ts`, `packages/fe-mo-ui/src/index.ts` |
-| mobile screen spec | `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].spec.md` |
-
-## 읽는 법
-
-- `orch-*` role은 관계를 조율하고 join을 관리합니다.
-- `req-*` / `req-mo-*` role은 구현 전에 contract를 작성합니다.
-- `be-*`, `fe-*`, `fe-mo-*` role은 contract를 실제 코드로 구현합니다.
-- `qa-*` role은 테스트 코드 작성과 실행 관점의 최종 검증을 맡습니다.
-- `req-*-test-planner`는 테스트 케이스를 owner spec에 동기화하는 중간 join 역할입니다.
+| scenario | spec 판단 기준 |
+|----------|-------------------------|
+| 신규 도메인 + web 화면 | backend phase를 Prisma부터 controller/module까지 포함하고, API 변경이면 codegen 후 web leaf/page/route/QA step을 배치합니다. |
+| 기존 API 변경 + web 화면 | 변경 endpoint와 Orval hook 영향을 Required Elements에 기록하고, backend/codegen/web route wiring/QA step만 포함합니다. |
+| mobile route 추가 | mobile screen/leaf/route/native wiring/QA step을 우선 배치하고, API contract gap이 있으면 backend/codegen step을 선행시킵니다. |
+| web/mobile 동시 화면 추가 | backend와 codegen은 한 번만 실행하고, web phase와 mobile phase는 파일 ownership이 분리된 step만 병렬 허용한 뒤 QA에서 합류합니다. |

@@ -134,6 +134,7 @@ const config = {
       "@cocrepo/hook/nuqs": join(process.cwd(), "../../../packages/fe-hook/src/nuqs.ts"),
       "@cocrepo/hook": join(process.cwd(), "../../../packages/fe-hook/index.ts"),
       "@cocrepo/store": join(process.cwd(), "../../../packages/fe-store/index.ts"),
+      "@cocrepo/ui/heroui": join(process.cwd(), "../../../packages/fe-ui/src/design-system/heroui.tsx"),
       "@cocrepo/ui": join(process.cwd(), "../../../packages/fe-ui/index.ts"),
     };
     config.define = {

@@ -26,8 +26,8 @@ developer_instructions = '''
 | 기존 Cell을 재활용하여 새로운 Cell을 만들 때 | ✅ | Widget/Feature Cell 조합 |
 | 값을 포맷팅/표시만 하는 단순 Cell | ✅ | Pure UI Cell |
 | 비즈니스 로직이 포함된 Cell | ✅ | Feature Cell |
-| Cell이 아닌 일반 UI 컴포넌트 | ❌ | ui-component-builder 사용 |
-| 폼 입력 컴포넌트 | ❌ | input-component-builder 사용 |
+| Cell이 아닌 일반 UI 컴포넌트 | ❌ | `fe-display-builder` 사용 |
+| 폼 입력 컴포넌트 | ❌ | `fe-control-builder` 사용 |
 
 ---
 
@@ -407,9 +407,9 @@ ls packages/fe-ui/src/cell/
 
 | 관계 | 에이전트 | 설명 |
 |------|---------|------|
-| **선행** | req-cell-planner | Cell 계약은 route `page.spec.md` 또는 관련 Page/Feature spec에 정의 |
-| **관련** | fe-display-component-builder | 일반 display UI 컴포넌트 (Cell 외) |
-| **후행** | fe-page-builder | 목록 페이지에서 Cell 사용 |
+| **선행** | orch-delivery | Cell 계약은 owner spec 또는 관련 Screen/Feature spec에 정의 |
+| **관련** | fe-display-builder | 일반 display UI 컴포넌트 (Cell 외) |
+| **후행** | fe-route-builder | 목록 페이지에서 Cell 사용 |
 
 ---
 
@@ -487,16 +487,23 @@ Cell 빌더는 DataGrid/Table용 Cell 컴포넌트를 **Pure UI → Widget → F
 
 재활용성을 극대화하기 위해 기존 Cell을 먼저 확인하고, 계층에 맞는 Props 설계와 구현 규칙을 준수합니다.
 
+## Storybook / Unit Test 책임
+
+- Cell component를 신규 생성하거나 수정하면 같은 작업에서 colocated Storybook story와 unit test를 작성/갱신합니다.
+- Storybook은 기본값, empty/null, long text, status/variant, interactive 상태를 포함합니다.
+- unit test는 formatting, fallback, link/action callback, accessibility text를 검증합니다.
+- thin formatting alias만 바뀌어 unit test가 불필요하면 Storybook/Test 계약과 최종 보고에 사유를 남깁니다.
+
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

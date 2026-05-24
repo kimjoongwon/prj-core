@@ -130,10 +130,10 @@
 
 ## Rendering Decision
 
-- 기본 패턴: `pure page + thin route container`
+- 기본 패턴: `pure screen + thin route container`
 - page role: `detail`
 - reusable target: `detail/view`
-- page component path: `packages/fe-ui/src/page/AbilityDetailPage/AbilityDetailPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/AbilityDetailPage/AbilityDetailPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -142,10 +142,10 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-28 | 목록→상세 E2E 기준을 `상세` 버튼 클릭에서 첫 행 클릭으로 현재 DataGrid 계약에 맞게 조정 | codex |
-| 2026-03-26 | `AbilityDetailPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
+| 2026-03-26 | `AbilityDetailPage` pure screen와 thin route container 구조로 전환하고 screen component path를 반영 | codex |
 | 2026-03-23 | 목록→상세 전환 E2E가 고정 시드 권한명 대신 첫 행 `상세` 액션을 사용하도록 검증 기준 보강 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
-| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |
 | 2026-03-15 | Surface ownership/elevation 규칙과 PageSurface/SectionSurface 적용 기준을 문서화 | codex |
 | 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |

@@ -114,10 +114,10 @@
 
 ## Rendering Decision
 
-- 기본 패턴: `pure page + thin route container`
+- 기본 패턴: `pure screen + thin route container`
 - page role: `form`
 - reusable target: `form`
-- page component path: `packages/fe-ui/src/page/LoginRedirectPage/LoginRedirectPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/LoginRedirectPage/LoginRedirectPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -125,12 +125,12 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-26 | `LoginRedirectPage` 경로를 page 폴더 기반 sidecar 구조에 맞게 갱신 | codex |
 | 2026-03-25 | `LoginRedirectPage`로 상태 UI를 page 레이어로 이동하고 route page를 thin container로 정리 | codex |
 | 2026-03-21 | `page.tsx` default export를 `observer(...)`로 정리해 client page 규칙을 맞춤 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
-| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | 로그인 페이지 레이아웃 네이밍을 `Section` 기준으로 갱신 | codex |

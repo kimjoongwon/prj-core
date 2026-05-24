@@ -23,13 +23,13 @@
 
 ## Rendering Decision
 
-- 기본 패턴: `pure page + thin route container`
+- 기본 패턴: `pure screen + thin route container`
 - page role: `collection`
 - reusable target: `data-grid`
-- page component path: `packages/fe-ui/src/page/ActionListPage/ActionListPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/ActionListPage/ActionListPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
-- route는 `useGetActions(undefined)`와 ``nuqs` `useQueryStates()``를 소유하고 pure page에 props를 주입합니다.
+- route는 `useGetActions(undefined)`와 ``nuqs` `useQueryStates()``를 소유하고 pure screen에 props를 주입합니다.
 
 ## 콘텐츠 구성
 
@@ -51,8 +51,8 @@
 |--------|------|
 | `onClickCreateButton` | `/actions/new` 이동 |
 | `onClickActionRow` | `/actions/${actionId}` 상세 이동 |
-| `queryStates.search` 변경 | pure page 내부 이름/표시명 클라이언트 필터링 |
-| `queryStates.group` 변경 | pure page 내부 그룹 탭 필터링 |
+| `queryStates.search` 변경 | pure screen 내부 이름/표시명 클라이언트 필터링 |
+| `queryStates.group` 변경 | pure screen 내부 그룹 탭 필터링 |
 
 ## E2E 검증 메모
 
@@ -71,13 +71,13 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-04-29 | 권한 액션 맥락 패널, 클라이언트 그룹 필터, 상세 진입 흐름을 반영 | codex |
-| 2026-04-28 | route의 Page 전용 row 매핑을 제거하고 Orval DTO를 pure page에 직접 주입하도록 정리 | codex |
+| 2026-04-28 | route의 Page 전용 row 매핑을 제거하고 Orval DTO를 pure screen에 직접 주입하도록 정리 | codex |
 | 2026-04-28 | grid 컴포넌트 명칭을 DataGrid로 통일한 구조 변경을 반영 | codex |
 | 2026-04-28 | page role을 `collection`으로 갱신 | codex |
 | 2026-04-28 | DataGrid 공식 재사용 타깃을 `data-grid`로 갱신 | codex |
 | 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-03-29 | `ActionListPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
+| 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-03-29 | `ActionListPage` pure screen와 thin route container 구조로 전환하고 screen component path를 반영 | codex |
 | 2026-03-28 | 목록 E2E가 현재 시드 데이터 기준으로 시스템 컬럼의 `시스템` 표시를 검증하도록 기준을 보강 | codex |
 | 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
 | 2026-03-21 | Action 목록을 `data-grid` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |

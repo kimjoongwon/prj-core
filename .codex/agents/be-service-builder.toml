@@ -32,9 +32,10 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 | 구분 | 항목 | 설명 |
 |------|------|------|
 | **입력** | Repository 클래스 | `@cocrepo/repository` |
+| | Service 인벤토리 | owner spec의 `Backend / API Contract` 아래 service row |
 | | 비즈니스 요구사항 | 도메인 로직 |
 | **출력** | Service 클래스 | `packages/be-service/src/{name}.service.ts` |
-| | Service contract | route `page.spec.md` 또는 logic handoff의 Service Contract 섹션 |
+| | Service contract | owner spec의 `Service 인벤토리` row |
 | | index.ts 업데이트 | export 추가 |
 
 ---
@@ -42,6 +43,8 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 ## 핵심 규칙
 
 - 서비스는 `@schema-owner: true` 모델(또는 그와 1:1 대응 aggregate root) 단위로 구성한다.
+- owner spec의 `Service 인벤토리`에 명시된 domain capability/method만 생성/수정하고, row의 `재사용/신규`, `소스/대상`, `의존 요소`, 소스 담당 `agent_type`, 소비 `agent_type` 계약을 벗어나지 않는다.
+- 호출할 Repository/Integration이 `Repository 인벤토리` 또는 관련 backend inventory에 없으면 구현하지 말고 `contract-gap`으로 보고한다.
 - 동일 aggregate root 내부의 CHILD/DETAIL/JOIN 변경은 root aggregate service를 통해서만 수행한다.
 - Controller가 하나의 aggregate root에 대해 pass-through할 때도 service 책임 범위를 벗어나지 않는다.
 
@@ -130,7 +133,7 @@ constructor(
 
 - Service 구현 파일은 `packages/be-service/src/{name}.service.ts` 단일 파일로 생성합니다.
 - 폴더형 Service(예: `xxx.service` 디렉터리 안의 `index.ts`) 생성은 금지합니다.
-- 별도 sidecar spec은 만들지 않고 route `page.spec.md` 또는 logic handoff의 Service Contract 섹션을 갱신
+- 별도 sidecar spec은 만들지 않고 route `page.spec.md` 또는 owner spec의 Service Contract 섹션을 갱신
 - 배럴 export는 `packages/be-service/src/index.ts`에서 유지
 
 ---
@@ -372,14 +375,14 @@ if (!tenant?.spaceId) {
 
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

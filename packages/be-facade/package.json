@@ -24,7 +24,7 @@
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/dto": "workspace:*",
     "@cocrepo/entity": "workspace:*",
-    "@cocrepo/integration": "workspace:*",
+    "@cocrepo/gateway": "workspace:*",
     "@cocrepo/prisma": "workspace:*",
     "@cocrepo/service": "workspace:*",
     "@cocrepo/vo": "workspace:*"

@@ -24,7 +24,7 @@
 			"./packages/be-dto/**/*.ts",
 			"./packages/be-entity/**/*.ts",
 			"./packages/be-app/**/*.ts",
-			"./packages/be-integration/**/*.ts",
+			"./packages/be-gateway/**/*.ts",
 			"./packages/be-prisma/**/*.ts",
 			"./packages/be-repository/**/*.ts",
 			"./packages/be-service/**/*.ts",

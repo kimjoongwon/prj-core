@@ -4,7 +4,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const ROOT = path.resolve(__dirname, "..");
-const PAGE_ROOT = path.join(ROOT, "packages/fe-ui/src/page");
+const PAGE_ROOT = path.join(ROOT, "packages/fe-ui/src/screen");
 
 function getPageDirectories() {
 	return fs
@@ -41,7 +41,7 @@ const meta = {
 \ttags: ["autodocs"],
 \targs: {
 \t\tcomponentName: "${pageName}",
-\t\tcomponentPath: "page/${pageName}/${pageName}.tsx",
+\t\tcomponentPath: "screen/${pageName}/${pageName}.tsx",
 \t},
 } satisfies Meta<typeof PageStoryScaffold>;
 
@@ -57,12 +57,12 @@ function renderSpec(pageName) {
 	return `# ${pageName}.stories.tsx Spec
 
 ## 목적
-- \`page/${pageName}\` Storybook 엔트리를 제공해 페이지 컴포넌트를 사이드바에서 찾을 수 있게 합니다.
+- \`screen/${pageName}\` Storybook 엔트리를 제공해 화면 컴포넌트를 사이드바에서 찾을 수 있게 합니다.
 - 실제 fixture 기반 스토리가 준비되기 전까지 baseline scaffold를 통해 대상 컴포넌트 경로를 문서화합니다.
 
 ## 핵심 동작
-- Storybook 사이드바 제목은 \`page/${pageName}\`입니다.
-- 스토리 파일 기준 경로는 \`page/${pageName}/${pageName}.stories.tsx\`입니다.
+- Storybook 사이드바 제목은 \`screen/${pageName}\`입니다.
+- 스토리 파일 기준 경로는 \`screen/${pageName}/${pageName}.stories.tsx\`입니다.
 - 기본 스토리는 공용 \`PageStoryScaffold\`를 렌더링합니다.
 
 ## 변경 이력

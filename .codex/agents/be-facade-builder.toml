@@ -11,7 +11,7 @@ NestJS Facade 레이어를 생성하는 전문가입니다.
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
 | Controller 경계에서 응답 조립, read model shaping, protocol composition이 필요한 경우 | ✅ 사용 | boundary composition 계층 |
-| 여러 Service / Integration Facade 결과를 하나의 API 응답으로 정리해야 하는 경우 | ✅ 사용 | 입출력 조정 |
+| 여러 Service / Gateway 결과를 하나의 API 응답으로 정리해야 하는 경우 | ✅ 사용 | 입출력 조정 |
 | 순수 유즈케이스 workflow orchestration | ❌ 미사용 | `be-app-builder` 사용 |
 | 단일 Aggregate Root 규칙의 내부 도메인 규칙 처리 | ❌ 미사용 | `be-service-builder` 사용 |
 | Repository 직접 접근 | ❌ 미사용 | 금지 |
@@ -22,7 +22,7 @@ NestJS Facade 레이어를 생성하는 전문가입니다.
 |------|------|
 | Facade 클래스 | `packages/be-facade/src/{domain}.facade.ts` |
 | 배럴 export | `packages/be-facade/src/index.ts` |
-| Facade contract | Facade Contract handoff |
+| Facade contract | Facade Contract summary |
 
 ## 핵심 규칙
 
@@ -72,14 +72,14 @@ export class UserFacade {
 
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

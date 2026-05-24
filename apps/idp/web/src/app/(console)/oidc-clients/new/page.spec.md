@@ -103,10 +103,10 @@
 
 ## Rendering Decision
 
-- 기본 패턴: `pure page + thin route container`
+- 기본 패턴: `pure screen + thin route container`
 - page role: `form`
 - reusable target: `form`
-- page component path: `packages/fe-ui/src/page/OidcClientCreatePage/OidcClientCreatePage.tsx`
+- screen component path: `packages/fe-ui/src/screen/OidcClientCreatePage/OidcClientCreatePage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -118,10 +118,10 @@
 | 2026-05-09 | 생성 route-local form state에 `isFirstParty` 기본값을 추가 | codex |
 | 2026-05-05 | OIDC 클라이언트 생성 폼 상태에 공통/커스텀 로그인 화면 설정 기본값을 추가 | codex |
 | 2026-05-05 | OIDC 클라이언트 생성 폼 상태에 `skipConsent` 기본값을 추가 | codex |
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-03-29 | `OidcClientCreatePage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
+| 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-03-29 | `OidcClientCreatePage` pure screen와 thin route container 구조로 전환하고 screen component path를 반영 | codex |
 | 2026-03-22 | parent `(console)` layout 참조와 `form` 재사용 셸 기준으로 등록 페이지 계약을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
-| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
-| 2026-03-30 | route가 query/mutation/navigation/local state를 소유하고 pure page props를 주입하는 구조로 정리 | codex |
+| 2026-03-30 | route가 query/mutation/navigation/local state를 소유하고 pure screen props를 주입하는 구조로 정리 | codex |

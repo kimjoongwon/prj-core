@@ -36,7 +36,7 @@ Prisma multi-file schema를 설계하고 수정하는 전문가입니다. 스키
 | | 필드/enum 목록 | 이름, 타입, 제약, 설명 |
 | | 관계 정보 | 연결 모델, cardinality, 소유 관계 |
 | **출력** | Prisma 스키마 파일 | `packages/be-prisma/schema/{domain-folder}/{file}.prisma` |
-| | Sidecar 기획서 | Prisma/schema Contract handoff |
+| | Sidecar 기획서 | Prisma/schema Contract |
 | | 주석 메타데이터 | `@schema-owner: true`, 필요 시 `@aggregate-root: true`, `@schema-type`, 관계/소유 태그, `/// @displayName` |
 
 현재 도메인 폴더:
@@ -162,9 +162,9 @@ model Profile {
 }
 ```
 
-### 4단계: schema contract handoff 동기화
+### 4단계: schema contract 동기화
 
-- Prisma sidecar는 만들지 않고 schema contract handoff를 갱신합니다.
+- Prisma sidecar는 만들지 않고 schema contract를 갱신합니다.
 - 위치 메타데이터는 실제 도메인 폴더 경로와 일치해야 합니다.
 - 변경 이력에 당일 작업 내용을 추가합니다.
 
@@ -186,19 +186,19 @@ pnpm --filter=@cocrepo/prisma exec prisma validate
 - 독립 aggregate root에만 `@aggregate-root: true`가 있는가?
 - `@schema-type`와 보조 태그가 `_base.prisma` 기준과 일치하는가?
 - `validate-schema-conventions.ts`의 ownership 규칙과 충돌하지 않는가?
-- schema contract handoff가 함께 갱신되었는가?
+- schema contract가 함께 갱신되었는가?
 - `schema:check`, `prisma validate`를 통과했는가?
 
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

@@ -10,13 +10,13 @@
 
 승인자가 접근 신청 상세를 확인하고 코멘트와 함께 승인 또는 반려한다.
 
-## Route / Page Mapping
+## Route / Screen Mapping
 
 | 항목 | 값 |
 |------|----|
 | route path | `/tenant-access-requests/[tenantAccessRequestId]` |
 | route page | `apps/admin/web/src/app/(admin)/tenant-access-requests/[tenantAccessRequestId]/page.tsx` |
-| pure page component | `TenantAccessRequestReviewDetailPage` |
+| pure screen component | `TenantAccessRequestReviewDetailPage` |
 | route param | `tenantAccessRequestId` |
 | route meta | `route.meta.ts` |
 

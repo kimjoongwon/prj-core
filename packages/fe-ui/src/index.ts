@@ -9,7 +9,7 @@ export * from "./i18n";
 export * from "./control";
 export * from "./layout";
 export * from "./collection";
-export * from "./page";
+export * from "./screen";
 export * from "./display";
 export * from "./rhythm";
 export * from "./surface";

@@ -124,7 +124,7 @@ loading 4초 이상:
 | 항목 | 위치 | 역할 |
 |------|------|------|
 | `useGetInteraction` | `@cocrepo/api/idp/interaction` | interaction 데이터 조회 |
-| `OidcInteractionPage` | `packages/fe-ui/src/page/OidcInteractionPage/OidcInteractionPage.tsx` | 상태별 page-level 시각 구성 |
+| `OidcInteractionPage` | `packages/fe-ui/src/screen/OidcInteractionPage/OidcInteractionPage.tsx` | 상태별 page-level 시각 구성 |
 | `OidcLoginForm` | `packages/fe-ui/src/form/OidcLoginForm/` | 로그인 폼 widget |
 | `OidcConsentPanel` | `packages/fe-ui/src/form/OidcConsentPanel/` | 권한 동의 widget |
 
@@ -152,15 +152,15 @@ loading 4초 이상:
 
 - `page.tsx`는 route shell이 제공하는 primary panel 내부 콘텐츠만 담당합니다.
 - login branch의 `oidcLoginForm` state와 interaction 모드/오류/client/scope/client별 `loginUi` 상태는 route page가 `InteractionRoutePageState` class 안에서 함께 설계합니다.
-- route page에서는 `useLocalObservable(() => new InteractionRoutePageState())`로 인스턴스화하고 pure page에는 page class 인스턴스를 그대로 주입합니다.
-- login/consent의 실제 submit/click handler는 route page가 소유하고 pure page/form에는 state와 page-level handler만 전달합니다.
+- route page에서는 `useLocalObservable(() => new InteractionRoutePageState())`로 인스턴스화하고 pure screen에는 page class 인스턴스를 그대로 주입합니다.
+- login/consent의 실제 submit/click handler는 route page가 소유하고 pure screen/form에는 state와 page-level handler만 전달합니다.
 
 ## Rendering Decision
 
-- 기본 패턴: `pure page + thin route container`
+- 기본 패턴: `pure screen + thin route container`
 - page role: `form`
 - reusable target: `form`
-- page component path: `packages/fe-ui/src/page/OidcInteractionPage/OidcInteractionPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/OidcInteractionPage/OidcInteractionPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -175,14 +175,14 @@ loading 4초 이상:
 | 2026-05-04 | 개발 모드 기본 로그인 계정 이메일을 Onora 브랜드 기준으로 변경 | codex |
 | 2026-04-22 | route page가 `oidcInteractionPage` 자체를 `useLocalObservable` 기반 observable slice로 소유하도록 기준을 보강 | codex |
 | 2026-04-22 | consent용 `oidcConsentPanel` state slice를 route state에 추가하고 실제 action handler는 route/page wrapper가 소유하도록 정리 | codex |
-| 2026-04-22 | `fe-page-builder` 기준에 맞춰 route state root를 `oidcInteractionPage`로 두고 UI slice를 `oidcLoginForm` 이름으로 정리 | codex |
-| 2026-04-22 | interaction login branch가 route-local form state를 소유하고 pure page로 주입하도록 정리 | codex |
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-04-22 | `fe-route-builder` 기준에 맞춰 route state root를 `oidcInteractionPage`로 두고 UI slice를 `oidcLoginForm` 이름으로 정리 | codex |
+| 2026-04-22 | interaction login branch가 route-local form state를 소유하고 pure screen로 주입하도록 정리 | codex |
+| 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-26 | `OidcInteractionPage` 경로를 page 폴더 기반 sidecar 구조에 맞게 갱신 | codex |
 | 2026-03-25 | `OidcInteractionPage`를 도입해 loading/error/login/consent 시각 구성을 page 레이어로 이동하고 route page는 API/handler wiring만 담당하도록 정리 | codex |
 | 2026-03-23 | 로그인 UX 재기획에 맞춰 interaction page의 상태 분기, route shell 소비 계약, 복구 UX 기준을 구체화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
-| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-14 | 존재하지 않는 계정 로그인 실패 시나리오를 공통 실패 처리 계약(에러 배너 또는 로그인 폼 재표시) 기준으로 정렬 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-03-14 | Biome import 정렬 규칙 반영에 맞춰 E2E 시나리오 lint 기준을 동기화 | codex |

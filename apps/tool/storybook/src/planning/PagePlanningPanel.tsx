@@ -250,12 +250,12 @@ export function PagePlanningPanelView({
 				<h2 style={titleStyle}>{entry.componentName}</h2>
 				<p style={descriptionStyle}>
 					{entry.bindings.length === 0
-						? "Standalone page story입니다. pure page spec를 중심으로 확인합니다."
+						? "Standalone page story입니다. pure screen spec를 중심으로 확인합니다."
 						: isCompact
 							? `${entry.bindings.length}개의 route context 중 핵심 요약만 빠르게 보여줍니다.`
 							: isBoard
 								? `${entry.bindings.length}개의 route context를 planning card로 배치했습니다. 필요한 카드만 펼쳐서 확인하세요.`
-								: `${entry.bindings.length}개의 route context와 pure page spec를 함께 보여줍니다.`}
+								: `${entry.bindings.length}개의 route context와 pure screen spec를 함께 보여줍니다.`}
 				</p>
 				<div style={chipRowStyle}>
 					<InfoChip
@@ -311,7 +311,7 @@ export function PagePlanningPanelView({
 					{purePageDocument ? (
 						<PlanningDocumentGroup
 							documents={[purePageDocument]}
-							groupLabel="Pure Page"
+							groupLabel="Pure Screen"
 							isCompact={isCompact}
 							variant={variant}
 						/>
@@ -780,7 +780,7 @@ function CodexEditDialog({
 						<p style={eyebrowStyle}>Storybook Codex</p>
 						<h3 style={codexModalTitleStyle}>{componentName}</h3>
 						<p style={descriptionStyle}>
-							현재는 route/pure page에 연결된 spec만 수정하고, 승인 후 `main`
+							현재는 route/pure screen에 연결된 spec만 수정하고, 승인 후 `main`
 							대상 draft PR을 생성합니다.
 						</p>
 					</div>
@@ -1048,7 +1048,7 @@ function getSummarySections(document: PlanningDocument, isCompact = false) {
 }
 
 function getDocumentKindLabel(kind: PlanningDocumentKind) {
-	return kind === "route-page" ? "Route Spec" : "Pure Page Spec";
+	return kind === "route-page" ? "Route Spec" : "Pure Screen Spec";
 }
 
 const panelStyle: CSSProperties = {

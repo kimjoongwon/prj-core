@@ -17,8 +17,8 @@ import type { AuthConfig } from "@cocrepo/type";
 import {
 	type OidcAuthorizationRequestOptions,
 	type OidcClientProtocolConfig,
-	OidcFacade,
-} from "@cocrepo/integration";
+	OidcGateway,
+} from "@cocrepo/gateway";
 import {
 	AuthAuditLogService,
 	AuthCacheService,
@@ -133,10 +133,10 @@ function parseExpiresInToMilliseconds(expiresIn: string | number): number {
 
 /**
  * 인증 Application Service
- * OIDC 기반 인증 유즈케이스를 조합하고 내부 서비스 및 Integration Facade를 호출합니다.
+ * OIDC 기반 인증 유즈케이스를 조합하고 내부 서비스 및 외부 Gateway를 호출합니다.
  *
  * ✅ Service Layer를 통해 데이터 접근
- * ✅ 외부 OIDC 연동은 OidcFacade를 통해 처리
+ * ✅ 외부 OIDC 연동은 OidcGateway를 통해 처리
  * ❌ Prisma 직접 호출 금지
  */
 @Injectable()
@@ -154,7 +154,7 @@ export class AuthApplicationService {
 		private readonly emailService: EmailService,
 		private readonly emailVerificationService: EmailVerificationService,
 		private readonly oidcClientService: OidcClientService,
-		private readonly oidcFacade: OidcFacade,
+		private readonly oidcGateway: OidcGateway,
 		private readonly cls: ClsService,
 		private readonly jwtService: JwtService,
 		private readonly configService: ConfigService,
@@ -172,7 +172,7 @@ export class AuthApplicationService {
 	): Promise<string> {
 		const client = await this.resolveOidcClient(clientId);
 		const { state, codeVerifier, authorizationUrl } =
-			this.oidcFacade.createAuthorizationRequest(
+			this.oidcGateway.createAuthorizationRequest(
 				this.toProtocolClientConfig(client),
 				returnTo,
 				options,
@@ -227,7 +227,7 @@ export class AuthApplicationService {
 		});
 
 		// IDP token endpoint에 code + code_verifier 교환
-		const tokenResponse = await this.oidcFacade.exchangeCodeForTokens(
+		const tokenResponse = await this.oidcGateway.exchangeCodeForTokens(
 			code,
 			codeVerifier,
 			this.toProtocolClientConfig(client),
@@ -409,7 +409,7 @@ export class AuthApplicationService {
 			requireActive: false,
 			requireAuthShell: false,
 		});
-		const tokenResponse = await this.oidcFacade.refreshTokens(
+		const tokenResponse = await this.oidcGateway.refreshTokens(
 			refreshToken,
 			this.toProtocolClientConfig(client),
 		);
@@ -466,7 +466,7 @@ export class AuthApplicationService {
 				requireActive: false,
 				requireAuthShell: false,
 			});
-			await this.oidcFacade.revokeToken(
+			await this.oidcGateway.revokeToken(
 				accessToken,
 				this.toProtocolClientConfig(client),
 			);
@@ -951,7 +951,7 @@ export class AuthApplicationService {
 				requireActive: false,
 				requireAuthShell: false,
 			});
-			await this.oidcFacade.revokeToken(
+			await this.oidcGateway.revokeToken(
 				session.refreshToken,
 				this.toProtocolClientConfig(client),
 			);
@@ -992,7 +992,7 @@ export class AuthApplicationService {
 						requireActive: false,
 						requireAuthShell: false,
 					});
-					await this.oidcFacade.revokeToken(
+					await this.oidcGateway.revokeToken(
 						sessionData.refreshToken,
 						this.toProtocolClientConfig(client),
 					);

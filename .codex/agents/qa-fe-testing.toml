@@ -8,8 +8,9 @@ developer_instructions = '''
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
-- 테스트 대상이 fe-ui Page/Feature component이면 대응 owner spec의 테스트 관점을 먼저 읽고, Widget/leaf 테스트는 nearest route page 또는 Page/Feature spec의 테스트 관점을 참고합니다.
+- 테스트 대상이 fe-ui Screen/Feature component이면 대응 owner spec의 테스트 관점을 먼저 읽고, Widget/leaf 테스트는 nearest route page 또는 Screen/Feature spec의 테스트 관점을 참고합니다.
 - 허용 대상 밖의 UI/Widget/Control/Hook/Store 테스트에는 신규 spec을 요구하지 않습니다.
+- UI component 변경이 있으면 owner spec의 `Storybook / Test Contract`를 확인하고, story/test 누락은 `test-failure` 또는 `spec-drift`로 보고합니다.
 
 
 # Frontend Tester (Vitest)
@@ -47,7 +48,8 @@ Vitest 기반으로 프론트엔드 패키지의 테스트 코드를 작성하�
 |------|------|------|
 | 테스트 파일 | `**/*.test.ts`, `**/*.test.tsx` | Vitest 테스트 파일 |
 
-- 테스트 구현 후 대상이 fe-ui Page/Feature component이면 대응 spec의 테스트 관점과 `## 변경 이력`도 함께 동기화합니다.
+- 테스트 구현 후 대상이 fe-ui Screen/Feature component이면 대응 spec의 테스트 관점과 `## 변경 이력`도 함께 동기화합니다.
+- UI builder가 이미 작성한 Storybook story는 QA가 소유하지 않지만, 테스트 계약과 맞지 않거나 누락되면 보강 또는 finding으로 처리합니다.
 
 ---
 
@@ -435,7 +437,7 @@ describe("Button 스냅샷", () => {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| ui-component-builder | 테스트 대상 | UI 컴포넌트 구현 완료 후 |
+| fe-display-builder / fe-control-builder | 테스트 대상 | UI 컴포넌트 구현 완료 후 |
 | widget-builder | 테스트 대상 | Widget 구현 완료 후 |
 | feature-builder | 테스트 대상 | Feature 구현 완료 후 |
 | store-builder | 테스트 대상 | Store 구현 완료 후 |
@@ -663,14 +665,14 @@ afterEach(() => {
 
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

@@ -28,7 +28,7 @@ developer_instructions = '''
 | 복잡한 이벤트 핸들링 | ✅ | LoginForm (폼 제출, 유효성 검사) |
 | Page가 여러 Widget/section/table을 업무 단위로 조합해야 하는 경우 | ✅ | CourseManagementConsole, InquiryConsole |
 | 순수 UI 조합만 필요 | ❌ | Widget Builder 사용 |
-| 기본 UI 요소 | ❌ | UI Component Builder 사용 |
+| 기본 UI 요소 | ❌ | `fe-display-builder` 또는 `fe-control-builder` 사용 |
 | 전체 페이지 구성 | ❌ | Page Builder 사용 |
 
 ---
@@ -73,6 +73,7 @@ developer_instructions = '''
 | **첫 렌더 안정성 유지** | SSR 시점과 첫 클라이언트 렌더의 DOM 구조를 동일하게 유지 |
 | **Widget 조합 소유** | Page가 직접 가질 수 없는 flow rail, metric grid, table group, tab group을 업무 feature로 조합 |
 | **Feature spec 동기화** | Feature가 visual composition을 소유하면 `[Name].spec.md`에 화면 러프와 조합 Widget을 기록 |
+| **One Component Per File** | Feature 파일은 exported Feature component 하나만 소유하고, private JSX subcomponent는 별도 Widget/Feature 파일로 분리 |
 
 ### ♻️ 기존 컴포넌트 우선 원칙 (Critical)
 
@@ -96,6 +97,7 @@ developer_instructions = '''
 | render/constructor에서 localStorage hydrate | hydration mismatch 유발 |
 | Page가 소유해야 할 title/action/shell까지 Feature가 침범 | Page/PageTitleBar 책임 중복 |
 | Widget으로 분리 가능한 table/card/tabs/flow rail JSX를 Feature 파일에 대량 내장 | 재사용성 저하 |
+| private JSX subcomponent를 같은 Feature 파일에 선언 | component ownership과 Storybook/test 추적이 흐려짐 |
 
 > ⚠️ **Critical**: Feature 컴포넌트는 **절대로** `apps/admin/src/feature/`, `apps/*/src/feature/` 등 앱 폴더에 생성하지 않습니다. 모든 Feature는 `packages/fe-ui/src/feature/`에서만 생성하여 재사용성을 보장합니다.
 
@@ -107,7 +109,7 @@ Page Builder가 page 파일 안에 lower-layer JSX를 직접 넣어야만 화면
 - Feature는 해당 화면의 업무 흐름과 active state 기반 조합을 담당하고, 개별 시각 블록은 Widget으로 분리합니다.
 - Feature가 새 visual composition을 소유하면 `[FeatureName].spec.md`에 `## 화면 러프`, 공개 props, 조합 Widget 목록, 변경 이력을 기록합니다.
 - Feature 파일 안에 table row, card grid, tabs, form section 같은 시각 블록이 길게 들어가면 Widget Builder로 먼저 분리합니다.
-- Page Builder가 `ui-composition-gap`을 보고하면 같은 page/domain의 Feature/Widget 구현을 Stage 5 범위로 되돌려 처리합니다.
+- Page Builder가 `ui-composition-gap`을 보고하면 owner spec의 web phase에서 해당 page/domain의 Feature/Widget step을 보강해 처리합니다.
 
 ### SSR / Hydration 규칙
 
@@ -397,8 +399,8 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
-| req-feature-planner | Feature 기획서(`[FeatureName].spec.md`) 기반 구현 |
-| fe-display-component-builder | Feature가 사용할 Display UI 컴포넌트 생성 |
+| orch-delivery | owner spec과 Feature owner spec 기반 구현 |
+| fe-display-builder | Feature가 사용할 Display UI 컴포넌트 생성 |
 | **fe-widget-builder** | Feature가 사용할 Widget 컴포넌트 생성 |
 | **fe-store-builder** | Feature가 연결할 Store 생성 |
 
@@ -406,8 +408,7 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
-| **fe-page-builder** | Feature를 조합하여 Page 생성 |
-| /fe-review (Skill) | 생성된 Feature/Page 검증 |
+| **fe-route-builder** | Feature를 조합하여 Page 생성 |
 
 ### 관련 에이전트
 
@@ -468,16 +469,24 @@ const validateForm = (email: string, password: string): string | null => {
 - Feature 없이 Widget만 다른 곳에서 재사용 가능
 - Store 교체 시 Feature만 수정
 
+## Storybook / Unit Test 책임
+
+- Feature를 신규 생성하거나 수정하면 같은 작업에서 colocated Storybook story와 unit test를 작성/갱신합니다.
+- Storybook은 ready, loading/empty/error, permission/disabled, 주요 state branch를 보여줍니다.
+- unit test는 Store/API/router를 mock하고 렌더링, 이벤트 위임, state branch, 접근성 query를 검증합니다.
+- Storybook/Test 계약은 owner spec의 `Storybook / Test Contract`를 따르고, 불필요한 경우 사유를 남깁니다.
+- QA role은 누락/실패/contract drift를 검증하며, builder는 story/test 파일을 QA로 넘기기 전 완료해야 합니다.
+
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

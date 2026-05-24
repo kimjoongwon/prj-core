@@ -10,13 +10,13 @@
 
 `FULL_ACCESS` 또는 Space `MANAGE` 승인자가 처리 가능한 접근 신청 목록을 확인하고 상세 검토 화면으로 이동한다.
 
-## Route / Page Mapping
+## Route / Screen Mapping
 
 | 항목 | 값 |
 |------|----|
 | route path | `/tenant-access-requests` |
 | route page | `apps/admin/web/src/app/(admin)/tenant-access-requests/page.tsx` |
-| pure page component | `TenantAccessRequestReviewListPage` |
+| pure screen component | `TenantAccessRequestReviewListPage` |
 | route meta | `route.meta.ts` |
 | SSR/prefetch 예외 | 없음 |
 
@@ -45,4 +45,4 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-04-28 | 초기 생성 | Codex |
-| 2026-04-28 | route의 Page 전용 row 매핑을 제거하고 Orval DTO를 pure page에 직접 주입하도록 정리 | codex |
+| 2026-04-28 | route의 Page 전용 row 매핑을 제거하고 Orval DTO를 pure screen에 직접 주입하도록 정리 | codex |

@@ -54,17 +54,17 @@
       "id": "PAYMENT-S3-FE-001",
       "stage": 3,
       "slice": "PaymentAdminPage",
-      "agent_type": "fe-api-integrator, fe-page-builder, fe-feature-builder, fe-widget-builder",
+      "agent_type": "fe-api-integrator, fe-route-builder, fe-feature-builder, fe-widget-builder",
       "required": true,
       "source_spec": [
         "apps/admin/web/src/app/(admin)/payments/page.spec.md",
-        "packages/fe-ui/src/page/PaymentManagementPage/PaymentManagementPage.spec.md",
+        "packages/fe-ui/src/screen/PaymentManagementPage/PaymentManagementPage.spec.md",
         "packages/fe-ui/src/feature/payment-management/PaymentManagementConsole/PaymentManagementConsole.spec.md"
       ],
       "expected_files": [
         "apps/admin/web/src/app/(admin)/payments/page.tsx",
         "apps/admin/web/src/app/(admin)/hooks/usePaymentManagementPageData.ts",
-        "packages/fe-ui/src/page/PaymentManagementPage/PaymentManagementPage.tsx",
+        "packages/fe-ui/src/screen/PaymentManagementPage/PaymentManagementPage.tsx",
         "packages/fe-ui/src/feature/payment-management/PaymentManagementConsole/PaymentManagementConsole.tsx",
         "packages/fe-ui/src/widget/payment-management"
       ],

@@ -118,10 +118,10 @@
 
 ## Rendering Decision
 
-- 기본 패턴: `pure page + thin route container`
+- 기본 패턴: `pure screen + thin route container`
 - page role: `detail`
 - reusable target: `detail/view`
-- page component path: `packages/fe-ui/src/page/OidcClientDetailPage/OidcClientDetailPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/OidcClientDetailPage/OidcClientDetailPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -133,12 +133,12 @@
 | 2026-05-09 | OIDC 클라이언트 상세 표시 계약에 `isFirstParty` 전달 추가 | codex |
 | 2026-05-05 | OIDC 클라이언트 상세 표시 계약에 client별 로그인 화면 설정 `loginUi` 전달 추가 | codex |
 | 2026-05-05 | OIDC 클라이언트 상세 표시 계약에 권한 동의 화면 생략 상태 전달 추가 | codex |
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-03-29 | `OidcClientDetailPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
+| 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-03-29 | `OidcClientDetailPage` pure screen와 thin route container 구조로 전환하고 screen component path를 반영 | codex |
 | 2026-03-22 | parent `(console)` layout 참조와 primitive skeleton 범위를 최신 계약으로 보정 | codex |
 | 2026-03-22 | OIDC 클라이언트 상세를 `DetailPage`/`DetailSectionCard` 기반 detail/view shell로 정리하고 spec 의존성을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
-| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-14 | Biome lint organizeImports/format cleanup reflected | codex |
 | 2026-03-14 | Biome import 정렬 규칙 반영에 맞춰 OIDC 클라이언트 상세 E2E lint 기준을 동기화 | codex |
 | 2026-03-06 | 공통 로그인 헬퍼 import를 `@cocrepo/e2e`(fe-e2e 패키지)로 전환 | codex |

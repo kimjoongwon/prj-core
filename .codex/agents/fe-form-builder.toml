@@ -42,31 +42,38 @@ developer_instructions = '''
 - form은 반드시 `packages/fe-ui/src/control`의 control component만 사용합니다.
   - raw HeroUI `Input`, `Button`, `Checkbox`, `Link` 등을 form 안에서 직접 사용하는 패턴은 금지합니다.
 - 필요한 control이 `packages/fe-ui/src/control`에 없으면 form을 계속 만들지 말고,
-  먼저 `fe-control-component-builder` 규칙에 맞는 control을 생성/정리합니다.
+  먼저 `fe-control-builder` 규칙에 맞는 control을 생성/정리합니다.
 - form은 field state를 내부에서 선언하지 않습니다.
   - 금지 예: `useState`, `useReducer`, `useLocalObservable`로 form 입력값을 직접 소유
   - 허용: page/feature가 page MobX class 내부에 선언한 `state` slice를 props로 받아 `control`에 전달
 - form이 받는 `state`는 form slice만 의미합니다.
   - 예: `loginForm`, `forgotPasswordForm`, `resetPasswordForm`
-  - page root state(`loginPage`, `resetPasswordPage`) 설계는 `fe-page-builder` 책임입니다.
+  - page root state(`loginPage`, `resetPasswordPage`) 설계는 `fe-route-builder` 책임입니다.
   - form slice는 page MobX class 내부에 선언된 observable field를 기본 계약으로 사용합니다.
 - form은 submit/cancel/click 같은 이벤트 handler props를 직접 받지 않습니다.
   - 금지 예: `onSubmitForm`, `onClickCancelButton`, `onAbortInteraction`
   - 허용: `type="submit"`, `data-action="abort-interaction"` 같은 semantic signal
 - 실제 이벤트 연결은 page 또는 feature가 form 바깥 wrapper에서 소유합니다.
-  - pure page/feature는 `onSubmit`, `onSubmitCapture`, `onClickCapture` 등으로 native event를 연결할 수 있습니다.
+  - pure screen/feature는 `onSubmit`, `onSubmitCapture`, `onClickCapture` 등으로 native event를 연결할 수 있습니다.
 - 코드 수정 시 대응 owner spec과 `## 변경 이력`를 동기화합니다.
+
+## Storybook / Unit Test 책임
+
+- Form component를 신규 생성하거나 수정하면 같은 작업에서 Storybook story와 unit test를 작성/갱신합니다.
+- Storybook은 create/update, disabled/readOnly/hidden, validation error, AI fillable state를 포함합니다.
+- unit test는 field rendering, validation message, disabled/readOnly/hidden priority, submit signal을 검증합니다.
+- schema/type-only 변경이면 Storybook/Test 계약과 최종 보고에 불필요 사유를 남깁니다.
 
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

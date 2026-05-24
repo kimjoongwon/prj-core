@@ -9,7 +9,7 @@
     { "path": "../common-constant" },
     { "path": "../be-dto" },
     { "path": "../be-entity" },
-    { "path": "../be-integration" },
+    { "path": "../be-gateway" },
     { "path": "../be-prisma" },
     { "path": "../be-service" },
     { "path": "../be-vo" }

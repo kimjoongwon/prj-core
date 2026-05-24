@@ -23,10 +23,10 @@
 
 ## Rendering Decision
 
-- 기본 패턴: `pure page + thin route container`
+- 기본 패턴: `pure screen + thin route container`
 - page role: `collection`
 - reusable target: `data-grid`
-- page component path: `packages/fe-ui/src/page/AbilityListPage/AbilityListPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/AbilityListPage/AbilityListPage.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -70,13 +70,13 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-04-29 | 운영자 친화형 목록 개선을 위해 요약 카드, 확장 검색, URL query 기반 필터, client-side pagination slice 계약을 반영 | codex |
-| 2026-04-28 | route의 Page 전용 row 매핑을 제거하고 Orval DTO를 pure page에 직접 주입하도록 정리 | codex |
+| 2026-04-28 | route의 Page 전용 row 매핑을 제거하고 Orval DTO를 pure screen에 직접 주입하도록 정리 | codex |
 | 2026-04-28 | grid 컴포넌트 명칭을 DataGrid로 통일한 구조 변경을 반영 | codex |
 | 2026-04-28 | page role을 `collection`으로 갱신 | codex |
 | 2026-04-28 | DataGrid 공식 재사용 타깃을 `data-grid`로 갱신 | codex |
 | 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
 | 2026-03-29 | `AbilityListPage`가 `DataGrid` 기반 테이블 조합을 사용하도록 정착된 상태에 맞춰 reusable target을 `data-grid`로 보정 | codex |
-| 2026-03-26 | `AbilityListPage` pure page와 thin route container 구조로 전환하고 page component path를 반영 | codex |
+| 2026-03-26 | `AbilityListPage` pure screen와 thin route container 구조로 전환하고 screen component path를 반영 | codex |
 | 2026-03-23 | 필터 Select 검증 기준을 접근성 role name이 아닌 HeroUI trigger placeholder 텍스트로 명시 | codex |
 | 2026-03-23 | 검색 input이 자동화/스크린리더에서 일관되게 식별되도록 `aria-label="권한 이름 검색"` 계약을 추가 | codex |
 | 2026-03-22 | 필터/목록 wrapper를 범용 `Surface` 기준으로 문서화 | codex |

@@ -16,14 +16,14 @@ describe("storybookCodexBridge", () => {
 		).toBe("apps/admin/web/src/app/(admin)/roles/page.spec.md");
 		expect(
 			sanitizeCodexTargetFile(
-				"packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.spec.md",
+				"packages/fe-ui/src/screen/AdminRolesPage/AdminRolesPage.spec.md",
 				"/repo",
 			),
 		).toBe(
-			"packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.spec.md",
+			"packages/fe-ui/src/screen/AdminRolesPage/AdminRolesPage.spec.md",
 		);
 		expect(
-			sanitizeCodexTargetFile("../packages/fe-ui/src/page/Bad.spec.md", "/repo"),
+			sanitizeCodexTargetFile("../packages/fe-ui/src/screen/Bad.spec.md", "/repo"),
 		).toBeNull();
 		expect(
 			sanitizeCodexTargetFile("apps/core/api/src/users.service.ts", "/repo"),
@@ -41,23 +41,23 @@ describe("storybookCodexBridge", () => {
 			collectAllowedJobChanges(
 				[
 					" M apps/admin/web/src/app/(admin)/roles/page.spec.md",
-					" M packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.spec.md",
-					"?? packages/fe-ui/src/page/AdminUsersPage/AdminUsersPage.spec.md",
+					" M packages/fe-ui/src/screen/AdminRolesPage/AdminRolesPage.spec.md",
+					"?? packages/fe-ui/src/screen/AdminUsersPage/AdminUsersPage.spec.md",
 					" D apps/admin/web/src/app/(admin)/users/page.spec.md",
 				].join("\n"),
 				[
 					"apps/admin/web/src/app/(admin)/roles/page.spec.md",
-					"packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.spec.md",
+					"packages/fe-ui/src/screen/AdminRolesPage/AdminRolesPage.spec.md",
 				],
 			),
 		).toEqual({
 			invalidFiles: [
-				"packages/fe-ui/src/page/AdminUsersPage/AdminUsersPage.spec.md",
+				"packages/fe-ui/src/screen/AdminUsersPage/AdminUsersPage.spec.md",
 				"apps/admin/web/src/app/(admin)/users/page.spec.md",
 			],
 			touchedFiles: [
 				"apps/admin/web/src/app/(admin)/roles/page.spec.md",
-				"packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.spec.md",
+				"packages/fe-ui/src/screen/AdminRolesPage/AdminRolesPage.spec.md",
 			],
 			unsupportedChanges: [],
 		});
@@ -67,17 +67,17 @@ describe("storybookCodexBridge", () => {
 		const prompt = buildCodexExecutionPrompt({
 			componentName: "AdminRolesPage",
 			instruction: "역할 설명 문구를 최신 정책에 맞게 고쳐 주세요.",
-			storyId: "page-adminrolespage--default",
-			storyTitle: "page/AdminRolesPage",
+			storyId: "screen-adminrolespage--default",
+			storyTitle: "screen/AdminRolesPage",
 			targetFiles: [
 				"apps/admin/web/src/app/(admin)/roles/page.spec.md",
-				"packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.spec.md",
+				"packages/fe-ui/src/screen/AdminRolesPage/AdminRolesPage.spec.md",
 			],
 		});
 
 		expect(prompt).toContain("Modify only the allowed files above.");
 		expect(prompt).toContain("apps/admin/web/src/app/(admin)/roles/page.spec.md");
-		expect(prompt).toContain("packages/fe-ui/src/page/AdminRolesPage/AdminRolesPage.spec.md");
+		expect(prompt).toContain("packages/fe-ui/src/screen/AdminRolesPage/AdminRolesPage.spec.md");
 		expect(prompt).toContain("author `codex`");
 	});
 });

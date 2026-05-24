@@ -1,5 +1,5 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import { OidcFacade } from "@cocrepo/integration";
+import { OidcGateway } from "@cocrepo/gateway";
 import {
 	AuthAuditLogService,
 	AuthCacheService,
@@ -92,7 +92,7 @@ describe("AuthApplicationService", () => {
 	let mockAuthAuditLogService: jest.Mocked<AuthAuditLogService>;
 	let mockEmailService: jest.Mocked<EmailService>;
 	let mockEmailVerificationService: jest.Mocked<EmailVerificationService>;
-	let mockOidcFacade: jest.Mocked<OidcFacade>;
+	let mockOidcGateway: jest.Mocked<OidcGateway>;
 	let mockOidcClientService: jest.Mocked<OidcClientService>;
 	let mockClsService: jest.Mocked<ClsService>;
 	let mockJwtService: { sign: jest.Mock };
@@ -188,7 +188,7 @@ describe("AuthApplicationService", () => {
 			}),
 		};
 
-		mockOidcFacade = {
+		mockOidcGateway = {
 			createAuthorizationRequest: jest.fn().mockImplementation((client) => ({
 				state: "state-token",
 				codeVerifier: "verifier-token",
@@ -197,7 +197,7 @@ describe("AuthApplicationService", () => {
 			exchangeCodeForTokens: jest.fn(),
 			refreshTokens: jest.fn(),
 			revokeToken: jest.fn(),
-		} as unknown as jest.Mocked<OidcFacade>;
+		} as unknown as jest.Mocked<OidcGateway>;
 
 		mockOidcClientService = {
 			getAuthShellClientByClientId: jest
@@ -303,7 +303,7 @@ describe("AuthApplicationService", () => {
 			mockEmailService,
 			mockEmailVerificationService,
 			mockOidcClientService,
-			mockOidcFacade,
+			mockOidcGateway,
 			mockClsService,
 			mockJwtService as never,
 			mockConfigService as never,
@@ -323,7 +323,7 @@ describe("AuthApplicationService", () => {
 			expect(mockOidcClientService.getByClientId).toHaveBeenCalledWith(
 				"admin-web",
 			);
-			expect(mockOidcFacade.createAuthorizationRequest).toHaveBeenCalledWith(
+			expect(mockOidcGateway.createAuthorizationRequest).toHaveBeenCalledWith(
 				expect.objectContaining({
 					clientId: "admin-web",
 					redirectUri:
@@ -350,7 +350,7 @@ describe("AuthApplicationService", () => {
 			expect(mockOidcClientService.getByClientId).toHaveBeenCalledWith(
 				"idp-web",
 			);
-			expect(mockOidcFacade.createAuthorizationRequest).toHaveBeenCalledWith(
+			expect(mockOidcGateway.createAuthorizationRequest).toHaveBeenCalledWith(
 				expect.objectContaining({
 					clientId: "idp-web",
 					redirectUri:
@@ -374,7 +374,7 @@ describe("AuthApplicationService", () => {
 			expect(mockOidcClientService.getByClientId).toHaveBeenCalledWith(
 				"user-mobile",
 			);
-			expect(mockOidcFacade.createAuthorizationRequest).toHaveBeenCalledWith(
+			expect(mockOidcGateway.createAuthorizationRequest).toHaveBeenCalledWith(
 				expect.objectContaining({
 					clientId: "user-mobile",
 					clientSecret: null,
@@ -401,7 +401,7 @@ describe("AuthApplicationService", () => {
 			await expect(
 				applicationService.getAuthorizationUrl("/", "disabled-web"),
 			).rejects.toBeInstanceOf(BadRequestException);
-			expect(mockOidcFacade.createAuthorizationRequest).not.toHaveBeenCalled();
+			expect(mockOidcGateway.createAuthorizationRequest).not.toHaveBeenCalled();
 			expect(mockTokenStorageService.saveOidcState).not.toHaveBeenCalled();
 		});
 
@@ -411,7 +411,7 @@ describe("AuthApplicationService", () => {
 				"storybook",
 			);
 
-			expect(mockOidcFacade.createAuthorizationRequest).toHaveBeenCalledWith(
+			expect(mockOidcGateway.createAuthorizationRequest).toHaveBeenCalledWith(
 				expect.objectContaining({
 					clientId: "storybook-web",
 					redirectUri:
@@ -453,7 +453,7 @@ describe("AuthApplicationService", () => {
 				"swagger-web",
 			);
 
-			expect(mockOidcFacade.createAuthorizationRequest).toHaveBeenCalledWith(
+			expect(mockOidcGateway.createAuthorizationRequest).toHaveBeenCalledWith(
 				expect.objectContaining({
 					clientId: "prj-core-swagger",
 					redirectUri: "http://localhost:3007/api/oauth2-redirect.html",
@@ -478,7 +478,7 @@ describe("AuthApplicationService", () => {
 				returnTo: "http://localhost:3008/dashboard",
 				clientId: "idp-web",
 			} as never);
-			mockOidcFacade.exchangeCodeForTokens.mockResolvedValue({
+			mockOidcGateway.exchangeCodeForTokens.mockResolvedValue({
 				access_token: buildAccessToken("user-1"),
 				refresh_token: "refresh-token",
 				token_type: "Bearer",
@@ -510,7 +510,7 @@ describe("AuthApplicationService", () => {
 			expect(mockOidcClientService.getByClientId).toHaveBeenCalledWith(
 				"idp-web",
 			);
-			expect(mockOidcFacade.exchangeCodeForTokens).toHaveBeenCalledWith(
+			expect(mockOidcGateway.exchangeCodeForTokens).toHaveBeenCalledWith(
 				"auth-code",
 				"verifier-token",
 				expect.objectContaining({
@@ -557,7 +557,7 @@ describe("AuthApplicationService", () => {
 				returnTo: "onora-mobile://auth/callback?returnTo=/",
 				clientId: "user-mobile",
 			} as never);
-			mockOidcFacade.exchangeCodeForTokens.mockResolvedValue({
+			mockOidcGateway.exchangeCodeForTokens.mockResolvedValue({
 				access_token: buildAccessToken("user-1"),
 				refresh_token: "refresh-token",
 				token_type: "Bearer",
@@ -589,7 +589,7 @@ describe("AuthApplicationService", () => {
 			expect(mockOidcClientService.getByClientId).toHaveBeenCalledWith(
 				"user-mobile",
 			);
-			expect(mockOidcFacade.exchangeCodeForTokens).toHaveBeenCalledWith(
+			expect(mockOidcGateway.exchangeCodeForTokens).toHaveBeenCalledWith(
 				"auth-code",
 				"verifier-token",
 				expect.objectContaining({
@@ -625,7 +625,7 @@ describe("AuthApplicationService", () => {
 
 	describe("refreshTokenWithIdp", () => {
 		it("sessionId prefix에서 clientId를 복원해야 한다", async () => {
-			mockOidcFacade.refreshTokens.mockResolvedValue({
+			mockOidcGateway.refreshTokens.mockResolvedValue({
 				access_token: buildAccessToken("user-1"),
 				refresh_token: "new-refresh-token",
 				token_type: "Bearer",
@@ -647,7 +647,7 @@ describe("AuthApplicationService", () => {
 			expect(mockOidcClientService.getByClientId).toHaveBeenCalledWith(
 				"idp-web",
 			);
-			expect(mockOidcFacade.refreshTokens).toHaveBeenCalledWith(
+			expect(mockOidcGateway.refreshTokens).toHaveBeenCalledWith(
 				"refresh-token",
 				expect.objectContaining({
 					clientId: "idp-web",
@@ -680,7 +680,7 @@ describe("AuthApplicationService", () => {
 			expect(mockOidcClientService.getByClientId).toHaveBeenCalledWith(
 				"idp-web",
 			);
-			expect(mockOidcFacade.revokeToken).toHaveBeenCalledWith(
+			expect(mockOidcGateway.revokeToken).toHaveBeenCalledWith(
 				accessToken,
 				expect.objectContaining({
 					clientId: "idp-web",

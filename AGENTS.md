@@ -52,7 +52,7 @@
 | `be-entity` | `@cocrepo/entity` | 도메인 Entity |
 | `be-app` | `@cocrepo/app` | ApplicationService 레이어 |
 | `be-facade` | `@cocrepo/facade` | Controller 경계 조정 레이어 (응답 조립, read model, protocol composition) |
-| `be-integration` | `@cocrepo/integration` | 외부 시스템 Integration Facade 레이어 |
+| `be-gateway` | `@cocrepo/gateway` | 외부 시스템 Gateway/Client/Adapter 레이어 |
 | `be-prisma` | `@cocrepo/prisma` | Prisma 스키마 및 클라이언트 |
 | `be-repository` | `@cocrepo/repository` | Repository 레이어 |
 | `be-service` | `@cocrepo/service` | Service 레이어 |
@@ -93,10 +93,10 @@
 
 ## Codex orchestration feedback loop
 
-- `orch-stage`, `orch-screen-planner`, `orch-requirement`, `orch-mobile-stage`, `orch-mobile-screen-planner`가 child agent finding을 수집하고 재배치합니다.
-- child agent는 peer role을 직접 호출하거나 다른 role 책임 파일을 임의 수정하지 않고, 최종 보고에 `Feedback:` packet을 포함합니다.
-- finding이 없으면 `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 보고합니다.
-- orchestrator는 packet 기준으로 `send_input` follow-up, re-entry, blocked/review pending을 결정합니다.
+- `orch-delivery`가 승인된 spec 기준으로 실행 agent finding을 수집하고 재배치합니다.
+- 실행 agent는 peer role을 직접 호출하거나 다른 role 책임 파일을 임의 수정하지 않고, 최종 보고에 `Feedback:` packet을 포함합니다.
+- finding이 없으면 `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 보고합니다.
+- orchestrator는 packet 기준으로 `send_input` follow-up, re-entry, blocked/pending을 결정합니다.
 
 ## 프론트엔드 개발 규칙
 
@@ -290,7 +290,7 @@ apps/admin/web/src/app/[route]/
 - `loading.tsx` 또는 수동 `<Suspense>`가 있고 전체 fallback이 UX상 허용되는 화면에서만 `useSuspenseQuery`를 예외적으로 검토합니다.
 - 서버 쿠키/권한/space bootstrap 없이는 첫 렌더 구조를 결정할 수 없는 경우에만 SSR prefetch를 허용합니다.
 
-**상세 템플릿은 `fe-page-builder` role 지시문을 참고하세요.**
+**상세 템플릿은 `fe-route-builder` role 지시문을 참고하세요.**
 
 ### 라우팅 규칙 (Critical)
 
@@ -469,6 +469,36 @@ UserCard                      → UserMenu (AuthStore 연결)
 - Widget은 Storybook에서 독립 테스트 가능
 - Feature 없이 Widget만 다른 곳에서 재사용 가능
 - Store 교체 시 Feature만 수정
+
+### One Component Per File 규칙 (Critical)
+
+**source file 하나는 하나의 exported UI component만 소유합니다.**
+
+규칙:
+- 파일명과 exported component 이름은 일치해야 합니다.
+- route/page/screen/feature/widget 파일 안에 private JSX subcomponent를 추가하지 않습니다.
+- 반복되거나 이름 붙일 만한 JSX 조각은 적절한 계층의 별도 component 파일로 분리합니다.
+- JSX를 반환하지 않는 mapper/helper 함수와 타입 선언은 같은 파일에 둘 수 있습니다.
+- `*.stories.tsx`, `*.test.tsx`의 fixture/test-only component는 예외로 허용합니다.
+- compound primitive는 예외적으로 같은 폴더에서 구성할 수 있지만, 공개 component는 파일별로 분리합니다.
+
+예시:
+```tsx
+// ✅ 올바른 예시
+// packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx
+export const QuickActionList = observer((props: QuickActionListProps) => {
+  return <ListGroup>{/* ... */}</ListGroup>;
+});
+
+// ❌ 금지 - 하나의 파일에 여러 JSX component 선언
+const QuickActionRow = () => <ListGroup.Item />;
+export const QuickActionList = () => <QuickActionRow />;
+```
+
+이유:
+- component 단위가 파일 단위로 드러나야 `agent_type` ownership이 명확해집니다.
+- page/screen/feature가 내부 component를 품고 비대해지는 것을 방지합니다.
+- Storybook/test owner 추적이 쉬워집니다.
 
 ### 컴포넌트 위치 규칙 (Critical)
 
@@ -731,7 +761,7 @@ packages/common-type/src/
 **이유:**
 - 이 프로젝트는 내부 사용 목적으로 외부 API 제공 없음
 - 하위호환 코드는 기술 부채가 됨
-- 7단계 플로우에서 각 단계별 리뷰로 변경 영향을 관리
+- 승인된 spec의 phase와 QA gate로 변경 영향을 관리
 
 ### 코드 옆 기획서 (Sidecar Spec) (Critical)
 
@@ -748,7 +778,7 @@ non-source 문서는 .spec.md를 쓰지 않고 context/guide/ops/notes/template 
 - 신규 작성/갱신 가능한 sidecar spec은 아래 다섯 가지뿐입니다.
   - Next.js route page: `apps/*/web/src/app/**/page.tsx` ↔ `page.spec.md`
   - Expo Router native route owner: `apps/mobile/src/app/**/index.spec.md`
-  - fe-ui Page component: `packages/fe-ui/src/page/[PageName]/[PageName].tsx` ↔ `[PageName].spec.md`
+  - fe-ui Screen component: `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` ↔ `[ScreenName].spec.md`
   - fe-ui Feature component: `packages/fe-ui/src/feature/**/[FeatureName].tsx` ↔ `[FeatureName].spec.md` (component owner가 `index.tsx`인 경우만 `index.spec.md` 허용)
   - fe-mo-ui Screen component: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx` ↔ `[ScreenName].spec.md`
 - 위 대상의 코드를 수정하면 대응되는 `*.spec.md`를 함께 수정합니다.
@@ -761,14 +791,14 @@ non-source 문서는 .spec.md를 쓰지 않고 context/guide/ops/notes/template 
   - 템플릿 자산 설명: `*.template.md`
 - TOML 설정/role 파일의 보조 문서인 `*.toml.guide.md`는 생성하지 않습니다.
 - agent/role 설명은 해당 `.toml`의 `developer_instructions` 또는 인덱스 `README.md`에 직접 반영합니다.
-- `packages/fe-ui/src/page`는 page component와 sidecar를 반드시 동일 이름 폴더에 함께 둡니다.
-- 예: `packages/fe-ui/src/page/AddressEmailVerifyPage/AddressEmailVerifyPage.tsx`, `AddressEmailVerifyPage.spec.md`
-- 금지 예: `packages/fe-ui/src/page/AddressEmailVerifyPage.tsx`, `packages/fe-ui/src/page/AddressEmailVerifyPage.spec.md`
+- `packages/fe-ui/src/screen`는 web screen visual owner와 sidecar를 반드시 동일 이름 폴더에 함께 둡니다.
+- 예: `packages/fe-ui/src/screen/AddressEmailVerifyPage/AddressEmailVerifyPage.tsx`, `AddressEmailVerifyPage.spec.md`
+- 금지 예: `packages/fe-ui/src/screen/AddressEmailVerifyPage.tsx`, `packages/fe-ui/src/screen/AddressEmailVerifyPage.spec.md`
 - `packages/fe-mo-ui/src/screen`은 모바일 screen visual owner와 sidecar를 반드시 동일 이름 폴더에 함께 둡니다.
 - 예: `packages/fe-mo-ui/src/screen/ReservationHomeScreen/ReservationHomeScreen.tsx`, `ReservationHomeScreen.spec.md`
 - mobile route/native wiring 계약은 route `index.spec.md`, shared screen visual composition 계약은 fe-mo-ui Screen spec이 소유합니다.
-- admin/idp route의 pure page 이관 현황은 `packages/fe-ui/src/page/migration-audit.md`를 기준으로 확인합니다.
-- 전체 page 이관 완료 여부를 말하기 전에는 반드시 `packages/fe-ui/src/page/migration-audit.md`를 먼저 확인합니다.
+- admin/idp route의 pure screen 이관 현황은 `packages/fe-ui/src/screen/migration-audit.md`를 기준으로 확인합니다.
+- 전체 page 이관 완료 여부를 말하기 전에는 반드시 `packages/fe-ui/src/screen/migration-audit.md`를 먼저 확인합니다.
 - 상세 정책은 `docs/sidecar-spec-policy.md`를 기준으로 합니다.
 
 **기존 코드 수정 완료 조건 (Critical):**
@@ -798,11 +828,11 @@ apps/[app]/web/src/app/(admin)/[도메인]/
     ├── page.spec.md            # 수정 페이지 기획서
     └── page.e2e.ts             # E2E 테스트 코드
 
-packages/fe-ui/src/page/
-├── [PageName]/
-│   ├── [PageName].tsx
-│   ├── [PageName].spec.md
-│   └── [PageName].stories.tsx
+packages/fe-ui/src/screen/
+├── [ScreenName]/
+│   ├── [ScreenName].tsx
+│   ├── [ScreenName].spec.md
+│   └── [ScreenName].stories.tsx
 
 packages/fe-ui/src/feature/[FeatureName]/
 ├── [FeatureName].tsx
@@ -816,20 +846,9 @@ packages/fe-ui/src/feature/[FeatureName]/
 | 타입 | 파일 | 핵심 내용 |
 |------|------|----------|
 | **app-context** | `app.context.md` | 앱 컨텍스트, 사용자, 목표, 도메인 목록 (L0-L2, non-sidecar) |
-| **next-route-page** | `page.spec.md` | route `page.tsx`, pure page 연결, API, search/route params, 이벤트, E2E 관점 |
-| **fe-ui-page** | `[PageName].spec.md` | Page component props, 시각 composition, 상태별 렌더링, 하위 Feature/Widget 조합 |
+| **next-route-page** | `page.spec.md` | route `page.tsx`, pure screen 연결, API, search/route params, 이벤트, E2E 관점 |
+| **fe-ui-screen** | `[ScreenName].spec.md` | Screen component props, 시각 composition, 상태별 렌더링, 하위 Feature/Widget 조합 |
 | **feature** | `[FeatureName].spec.md` | Store/API/router 연결, Props, 이벤트, 실패/권한/로딩 상태 |
-
-#### 기획서 템플릿 위치
-
-```
-.codex/templates/spec/
-├── page.template.md
-└── feature.template.md
-```
-
-- 위 경로의 `*.template.md`는 generator template asset이며 source sidecar가 아닙니다.
-- 신규 일반 문서도 성격에 맞게 `*.template.md` suffix를 사용합니다.
 
 #### 기획서 변경 이력 관리
 
@@ -840,8 +859,8 @@ packages/fe-ui/src/feature/[FeatureName]/
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-02-18 | 초기 생성 | orch-requirement |
-| 2026-02-19 | 검색 기능 추가 | orch-requirement |
+| 2026-02-18 | 초기 생성 | orch-delivery |
+| 2026-02-19 | 검색 기능 추가 | orch-delivery |
 ```
 
 #### 장점
@@ -876,7 +895,7 @@ import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
 - **ApplicationService**: 사용자 과업 중심의 usecase workflow를 조율하는 계층 (Prisma 직접 호출 금지)
 - **Facade**: Controller 경계에서 응답 조립, read model shaping, protocol composition을 담당하는 계층
 - **Service**: 단일 Aggregate Root 또는 단일 도메인 로직 담당 (Repository를 통해서만 데이터 접근)
-- **Integration Facade**: 외부 시스템 또는 복잡한 기술 서브시스템을 단순화해서 노출하는 레이어
+- **Gateway/Client/Adapter**: 외부 시스템 또는 복잡한 기술 서브시스템을 단순화해서 노출하는 레이어
 - **Repository**: Prisma 쿼리 작성
 
 ### Aggregate Root / Entity 규칙
@@ -1068,35 +1087,52 @@ feat(coin): 멀티시그 지갑 서비스 초기 구현
 
 ## Agent 활용 가이드
 
-### 7단계 분할 개발 플로우 (권장)
+### 단일 Spec 개발 플로우 (권장)
 
-**orch-stage**를 사용하여 각 단계별 사용자 리뷰를 받으며 개발합니다。
+**orch-delivery** 하나가 요청 단위 spec 작성, 승인 질문, 백엔드/프론트엔드/모바일/QA 실행을 모두 소유합니다.
+별도 Delivery Plan 문서는 만들지 않고, 허용된 `*.spec.md` 안의 `## Delivery` 섹션으로 실행 계약까지 통일합니다.
 
-#### 핵심 개념: 기능 단위 기획
+#### 핵심 개념: 한 spec이 전체 실행 그래프를 소유
 
 ```
-1 기획 = 1 기능(도메인) = 1 백엔드 + N 페이지
+1 spec = 1 요청/기능 = 화면 계약 + backend + web/mobile 화면 + QA 실행 그래프
 ```
 
-- **Stage 1-3**: 기능 전체를 한 번에 처리 (기획, 스키마, 백엔드)
-- **Stage 4-6**: 페이지별로 반복 실행 (화면 기획, 컴포넌트, 페이지)
-- **Stage 7**: E2E 검증 (선택)
+- spec은 화면, 백엔드, API, 상태, UI 요소, 테스트, 담당 `agent_type`, 실행 순서를 모두 명시합니다.
+- 화면 러프는 component명이 없는 `Visual Snapshot`과 component/계층을 표시하는 `Annotated Wireframe`을 함께 작성합니다.
+- `Visual Snapshot`은 배경, surface, border, radius, spacing, typography, 상태색, CTA 위치만 보고도 대략적인 디자인을 떠올릴 수 있어야 합니다.
+- 기획 spec의 표 헤더는 한글을 우선 사용합니다. `agent_type`, `operationId`, `codegen`처럼 고정된 기술 식별자만 원문을 유지합니다.
+- 렌더링 계약은 component inventory 표로 작성해 `Feature`/`Widget`/`Input`/`Action`/`DataDisplay`/`Layout` 등 계층, 재사용/신규 여부, 대상 파일, 담당 `agent_type`을 드러냅니다.
+- component inventory의 `agent_type`은 소스를 만들거나 수정하는 소스 담당 `agent_type`과 화면에 조립하는 소비/Wiring `agent_type`을 분리합니다.
+- Storybook/Test 계약은 `Storybook 인벤토리`와 `Unit Test 인벤토리`로 작성하고, 필수 상태/variant와 검증 케이스를 먼저 정합니다.
+- 신규/수정 UI component의 story/test 작성은 기본적으로 해당 UI builder `agent_type`이 같은 작업에서 담당하고, QA role은 누락/실패/contract drift를 검증합니다.
+- PC/Web은 `packages/fe-ui/src/**` component source owner builder가 story/test를 담당하고, Mobile은 `packages/fe-mo-ui/src/**` component source owner builder가 story/test를 담당합니다.
+- route `page.tsx`, Expo route file, `layout.tsx`, `_layout.tsx`, Store, backend-only step은 Storybook 대상이 아니며 필요한 unit/E2E 검증만 spec에 기록합니다.
+- thin re-export나 barrel-only 변경처럼 story/test가 불필요하면 spec의 비고에 불필요 사유를 남깁니다.
+- backend/API 계약은 `Prisma / Database`, `Prisma Annotation`, `Common Schema`, `Entity / VO`, `DTO / Query DTO`, `Repository`, `Service`, `ApplicationService`, `Facade / Gateway`, `엔드포인트`, `Module / Bootstrap`, `Seed`, `Codegen / API Client` 인벤토리를 구조별로 작성합니다.
+- 각 backend inventory row는 재사용/수정/신규 여부, 대상 파일, 소스 담당 `agent_type`, 호출/Wiring 소비 `agent_type`을 드러내야 합니다.
+- endpoint row는 controller endpoint, operationId, DTO/schema, Orval hook/codegen 영향을 보여주고, application/service/repository row는 어떤 workflow/capability/persistence method가 쓰이는지 보여줍니다.
+- common schema row는 `common-schema-builder`, DTO row는 `be-dto-builder`/`be-query-dto-builder`, facade/gateway row는 `be-facade-builder`/`be-gateway-builder`처럼 실제 source owner role이 보이도록 분리합니다.
+- `orch-delivery`는 승인된 spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
+- 구현 대상의 spec 작성 후 Codex 질문 도구로 사용자 승인을 받기 전에는 builder/QA agent를 실행하지 않습니다.
+- 병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
+- `Execution Graph`는 Mermaid `Visual Execution Flow`, `Parallel Group Table`, `Step Order Table`을 함께 작성해 직렬 순서와 병렬 그룹을 시각적으로 보여줍니다.
 
 #### 플로우
 
 ```
-Stage 1: 도메인 기획        → orch-requirement (L0~L4 + BE/Store 스펙) → [리뷰]
-Stage 2: 스키마 구현        → schema → entity → dto → query-dto → seed → [리뷰]
-Stage 3: 백엔드 구현        → repository → service → controller → [리뷰]
-Stage 4: 화면 기획 (페이지별) → orch-screen-planner (L5~L12) → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
-Stage 5: 컴포넌트 (페이지별) → display → control → cell → widget → layout → feature → store → menu → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
-Stage 6: 페이지 (페이지별)   → fe-ui-page-builder → fe-page-builder → fe-api-integrator → [리뷰] ← page 파라미터 권장 (미지정 시 자연어 추론, 불명확 시 확인)
-Stage 7: E2E 검증 (선택)    → qa-be-e2e-testing → qa-fe-e2e-testing → [리뷰]
+Spec: orch-delivery → 허용된 *.spec.md + ## Delivery
+Ask: "작성한 spec 기준으로 개발을 시작할까요?"
+Backend: prisma → annotation → common schema → entity/vo/dto/query-dto → repository → service → app/facade/gateway → controller/module/bootstrap → seed
+Codegen: pnpm --filter=@cocrepo/api codegen, API 변경 시
+Web: 필요한 leaf builders → fe-screen-builder → fe-route-layout-builder(필요 시) → fe-route-builder
+Mobile: 필요한 leaf builders → fe-mo-widget-builder/fe-mo-feature-builder(필요 시) → fe-mo-screen-builder → fe-mo-route-layout-builder(필요 시) → fe-mo-route-builder
+QA: qa-be-testing/e2e → qa-fe-testing/e2e → qa-mo-testing/e2e
 ```
 
-> 화살표는 의존성 순서를 의미합니다. 동일 Stage 내부의 독립 작업은 `parallel=auto`에서 병렬 fan-out 가능합니다.
+> 화살표는 의존성 순서를 의미합니다. 독립 작업은 spec의 `Agent Assignment Matrix`에서만 병렬화할 수 있습니다.
 
-#### 기획서 폴더 구조
+#### Spec 위치
 
 ```
 apps/[app]/web/src/app/(admin)/
@@ -1119,11 +1155,11 @@ apps/[app]/web/src/app/(admin)/[도메인]/
     ├── page.spec.md            # 수정 페이지 기획서
     └── page.e2e.ts             # E2E 테스트 코드
 
-packages/fe-ui/src/page/
-├── [PageName]/
-│   ├── [PageName].tsx
-│   ├── [PageName].spec.md
-│   └── [PageName].stories.tsx
+packages/fe-ui/src/screen/
+├── [ScreenName]/
+│   ├── [ScreenName].tsx
+│   ├── [ScreenName].spec.md
+│   └── [ScreenName].stories.tsx
 
 packages/fe-ui/src/feature/[FeatureName]/
 ├── [FeatureName].tsx
@@ -1134,69 +1170,46 @@ packages/fe-ui/src/feature/[FeatureName]/
 
 #### 실행 방법
 
-`/orch-stage`는 구조화 파라미터와 자연어 실행을 모두 지원합니다.
+`/orch-delivery`는 새 요청을 받으면 spec을 작성하고 승인 질문을 연 뒤, 승인된 범위만 실행합니다.
 
 ```bash
-# 1. 도메인 기획 시작
-/orch-stage full
-# 📌 앱 선택? → admin
-# 📌 도메인명? → Member
-# 📌 요구사항? → 회원 목록/상세/등록/수정/삭제
+# 1. spec 작성 후 승인 질문
+/orch-delivery app=admin domain=Member feature=member-management requirements="회원 목록/상세/등록/수정/삭제"
 
-# → Stage 1~3은 리뷰 게이트 기준 순차 진행
-# → Stage 내부는 parallel=auto로 fan-out 가능
+# 2. 승인된 spec 재실행
+/orch-delivery spec="apps/admin/web/src/app/(admin)/members/page.spec.md" phase=all parallel=auto
 
-# 2. 화면별 프론트엔드 개발
-/orch-stage run stage=4 app=admin domain=Member page=List
-/orch-stage run stage=5 app=admin domain=Member page=List
-/orch-stage run stage=6 app=admin domain=Member page=List
-
-/orch-stage run stage=4 app=admin domain=Member page=Detail
-/orch-stage run stage=5 app=admin domain=Member page=Detail
-/orch-stage run stage=6 app=admin domain=Member page=Detail
-
-# ... Create, Edit 반복
-
-# 자연어로도 실행 가능
-/orch-stage admin 회원 관리 기능 처음부터 진행해줘
-/orch-stage 회원 목록 화면 기획해줘
-/orch-stage 회원 목록 컴포넌트 구현해줘
-/orch-stage 회원 목록 페이지 통합해줘
-
-# 병렬 실행 예시
-/orch-stage run stage=3 app=admin domain=Member targets=User,Post parallel=auto maxConcurrency=2
-/orch-stage run stage=5 app=admin domain=Member pages=List,Detail parallel=auto maxConcurrency=2
+# 3. 일부 phase만 재실행
+/orch-delivery spec="apps/admin/web/src/app/(admin)/members/page.spec.md" phase=web
+/orch-delivery spec="apps/admin/web/src/app/(admin)/members/page.spec.md" phase=qa
 ```
 
 #### 장점
 - **기능 단위 백엔드**: API/스키마가 한 번에 완성되어 일관성 유지
 - **페이지별 프론트엔드**: 점진적 개발, 컴포넌트 재사용 가능
-- **화면별 기획서**: 코드 옆에 기획서가 있어 참조 용이
-- **각 단계별 리뷰**: 문제 발견 시 해당 단계부터 재시작
+- **화면별 spec**: 코드 옆에 실행 계약이 있어 참조 용이
+- **phase별 검증**: 문제 발견 시 spec의 해당 step부터 재진입
 
-#### Stage 5: 자동 메뉴 업데이트
+#### 메뉴 업데이트
 
-**Stage 5에서는 목록 페이지(List) 개발 시 `fe-menu-builder` 에이전트가 자동으로 실행됩니다。**
+목록 페이지(List)나 신규 navigation entry가 필요한 경우 spec의 `Agent Assignment Matrix`에 `fe-menu-builder` step을 명시합니다.
 
 ```
-Stage 5: 컴포넌트 (페이지별)
-├── display-component-builder
-├── control-component-builder
-├── widget-builder
-├── feature-builder
-├── store-builder
-└── menu-builder (자동) ← 목록 페이지 개발 시만 실행
+spec web phase
+├── display/control/widget/feature builders, 필요한 경우
+├── fe-store-builder, shared store 필요 시
+└── fe-menu-builder, navigation entry 필요 시
     - admin-menu.ts 업데이트
     - 경로, Subject, 아이콘 설정
     - 엔티티 관계 기반 경로 구조 적용
 ```
 
-**자동 실행 조건:**
-- 페이지 타입이 "List" (목록 페이지)인 경우에만 실행
-- MemberList, UserList 등 첫 페이지 개발 시 메뉴 자동 생성
-- Detail, Create, Edit 페이지는 메뉴 업데이트 없음
+**실행 조건:**
+- spec에 menu/navigation step이 있을 때만 실행
+- 목록 페이지가 도메인의 첫 진입점이면 보통 포함
+- Detail, Create, Edit 페이지는 route catalog 변경이 필요할 때만 포함
 
-이 자동화로 메뉴 시스템이 항상 최신 상태로 유지됩니다。
+이 기준으로 메뉴 변경도 spec의 파일 ownership과 shared lock 아래에서 처리합니다.
 
 ### 개별 Agent
 
@@ -1204,83 +1217,39 @@ Stage 5: 컴포넌트 (페이지별)
 
 | Agent | 역할 |
 |-------|------|
-| orch-stage | 7단계 분할 개발 플로우를 조율하는 메타 에이전트 |
-| orch-requirement | 도메인/화면 기획을 조율하고, spec은 허용 대상(page/feature/route page)에만 남기는 오케스트레이터 |
-| orch-screen-planner | 단일 화면 기획(L5-L12)을 조율하는 오케스트레이터 |
+| orch-delivery | Spec → Ask → Build → QA를 단일 흐름으로 소유하는 delivery 오케스트레이터 |
 
-#### 기획/분석 (req-*)
+#### 기획 보조 Skill
 
-| Agent | 역할 |
+| Skill | 역할 |
 |-------|------|
-| req-context-planner | 시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 기획 → `app.context.md` 업데이트 |
-| req-screen-planner | 도메인 기능/화면 구조 기획 → 각 `page.spec.md` 초안 생성 |
-| req-page-planner | 페이지 통합 기획(SSR/Prefetch/핸들러) → `page.spec.md` 통합 섹션 업데이트 |
-| req-api-planner | 인터랙션(Action)과 API 기획 → page/feature spec의 API 섹션에 반영 |
-| req-app-planner | ApplicationService 유즈케이스 기획 |
-| req-entity-planner | Entity/Enum/VO 기획 |
-| req-primitive-planner | Pure UI 컴포넌트 기획(L8) |
-| req-input-planner | 입력 컴포넌트 기획 |
-| req-cell-planner | DataGrid/Table Cell 기획 |
-| req-widget-planner | 화면 Widget 기획(L9) |
-| req-layout-planner | 레이아웃 기획 |
-| req-feature-planner | 화면 Feature 기획(L10) → `packages/fe-ui/src/feature/**/[FeatureName].spec.md` |
-| req-menu-planner | 메뉴/경로/권한 기획 |
-| req-store-planner | 도메인 Store 기획(L11), 공용 Store 여부 판단 |
-| req-state-planner | 화면 로컬 상태와 shared Store 승격 경계 기획 |
-| req-logic-planner | 비즈니스 로직/테스트 기획 |
-| req-be-test-planner | 백엔드 테스트 케이스 기획(L12) |
-| req-fe-test-planner | 프론트엔드 테스트 케이스 기획(L12) → Page/Feature/UI 테스트 섹션 업데이트 |
-| req-api-integration-planner | Orval API 연동 기획 → route page spec/API 섹션에 반영 |
-| req-reverse-engineer | 기존 화면 코드를 분석하여 허용 대상 spec만 역생성 |
 | /design-analyze (Skill) | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
 | /route-design (Skill) | 백엔드 엔티티 기반 라우팅 경로 설계 |
-
-#### 모바일 기획 (req-mo-*)
-
-| Agent | 역할 |
-|-------|------|
-| req-mo-page-planner | Expo Router native screen 계약 기획 |
-| req-mo-route-layout-planner | Expo Router native `_layout` shell 계약 기획 |
-| req-mo-api-integration-planner | 모바일 API 연동 계약 기획 |
-| req-mo-widget-planner | 모바일 순수 UI 조합 Widget 계약 기획 |
-| req-mo-feature-planner | 모바일 reusable Feature composition 계약 기획 |
-| req-mo-form-planner | 모바일 입력 form 계약 기획 |
-| req-mo-detail-planner | 모바일 읽기 전용 detail/view 계약 기획 |
-| req-mo-state-planner | 모바일 route-local 상태와 shared Store 승격 경계 기획 |
-| req-mo-store-planner | 모바일 공용/로컬 상태 경계 기획 |
-| req-mo-fe-test-planner | 모바일 unit/E2E 테스트 케이스 기획 |
 
 #### 프론트엔드 (fe-*)
 
 | Agent | 역할 |
 |-------|------|
-| fe-display-component-builder | Display UI 컴포넌트 생성 (packages/fe-ui/src/display) |
+| fe-display-builder | Display UI 컴포넌트 생성 (packages/fe-ui/src/display) |
 | fe-cell-builder | DataGrid/Table용 Cell 컴포넌트 생성 (계층별) |
-| fe-control-component-builder | Control 컴포넌트 생성 (packages/fe-ui/src/control) |
+| fe-control-builder | Control 컴포넌트 생성 (packages/fe-ui/src/control) |
 | fe-widget-builder | 재사용 가능한 작은 UI 조각 Widget 컴포넌트 생성 |
 | fe-feature-builder | 비즈니스 기능을 담당하는 Feature 컴포넌트 생성 |
 | fe-layout-builder | Layout 컴포넌트 설계 및 생성 |
-| fe-ui-page-builder | `packages/fe-ui/src/page/[PageName]/[PageName].tsx` pure page 컴포넌트 생성 |
-| fe-page-builder | `apps/*/src/app/**/page.tsx` thin container 생성 |
+| fe-screen-builder | `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` web screen visual owner 생성 |
+| fe-route-builder | `apps/*/src/app/**/page.tsx` thin container와 route/API/state wiring 소유 |
 | fe-menu-builder | 메뉴 시스템 컴포넌트 생성 |
 | fe-store-builder | MobX 기반 Store 생성 |
-| fe-state-builder | 화면 로컬 MobX state class/hook과 state slice 전달 구조 생성 |
-| fe-api-integrator | Orval 생성 React Query 훅을 사용하여 더미 데이터를 실제 API 호출로 교체 |
 
 #### 모바일 프론트엔드 (fe-mo-*)
 
 | Agent | 역할 |
 |-------|------|
-| fe-mo-screen-builder | 모바일 `fe-ui-page-builder` 대응 screen visual owner 생성 (`packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`) |
-| fe-mo-page-builder | Expo Router route file에서 shared screen을 연결하고 navigation/API/state/native wiring 구현 (`apps/mobile/src/app/**/*.tsx`) |
+| fe-mo-screen-builder | 모바일 `fe-screen-builder` 대응 screen visual owner 생성 (`packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`) |
+| fe-mo-route-builder | Expo Router route file에서 shared screen을 연결하고 navigation/API/state/native wiring 구현 (`apps/mobile/src/app/**/*.tsx`) |
 | fe-mo-route-layout-builder | Expo Router native `_layout.tsx` shell 구현 |
-| fe-mo-api-integrator | 모바일 데이터 조회/변경 연동 기준 구현 |
 | fe-mo-widget-builder | 모바일 순수 UI 조합 Widget 구현 (`packages/fe-mo-ui/src/widget/**`) |
 | fe-mo-feature-builder | 모바일 reusable Feature composition 구현 (`packages/fe-mo-ui/src/feature/**`) |
-| fe-mo-form-builder | 모바일 입력 form 조합 구현 (`packages/fe-mo-ui/src/form/**`) |
-| fe-mo-detail-builder | 모바일 읽기 전용 detail/view 조합 구현 (`packages/fe-mo-ui/src/detail/**`) |
-| fe-mo-state-builder | 모바일 route-local MobX state class/hook과 state slice 전달 구조 구현 |
-| fe-mo-store-builder | 모바일 공용/앱 로컬 상태 경계와 MobX store 구현 |
 
 #### 백엔드 (be-*)
 
@@ -1296,7 +1265,7 @@ Stage 5: 컴포넌트 (페이지별)
 | be-service-builder | NestJS Service 레이어 생성 |
 | be-app-builder | NestJS ApplicationService 레이어 생성 (여러 Service 조합) |
 | be-facade-builder | NestJS Facade 레이어 생성 (Controller 경계 응답 조립 / protocol composition) |
-| be-integration-builder | 외부 시스템 Integration Facade 레이어 생성 |
+| be-gateway-builder | 외부 시스템 Gateway/Client/Adapter 레이어 생성 |
 | be-module-builder | aggregate root 기준 NestJS Module + Router wiring 생성 |
 | be-controller-builder | NestJS REST Controller 생성 |
 | be-database-expert | PostgreSQL/Prisma 데이터베이스 설계 및 최적화 |
@@ -1313,10 +1282,7 @@ Stage 5: 컴포넌트 (페이지별)
 | qa-fe-testing | Vitest 기반 프론트엔드 패키지 테스트 코드 작성 |
 | qa-be-e2e-testing | Jest+Supertest 기반 백엔드 E2E 테스트 작성 |
 | qa-fe-e2e-testing | Playwright 기반 프론트엔드 E2E 테스트 작성 |
-| qa-pr-reviewer | 변경된 PR diff를 role 규칙 기준으로 검증하고 code/rule 위치를 함께 보고 |
 | qa-type-checker | TypeScript 타입 에러를 근본 원인까지 추적하여 해결 |
-| /fe-review (Skill) | 프론트엔드 코드 규칙 검증 (리포트만) |
-| /be-review (Skill) | 백엔드 코드 규칙 검증 (리포트만) |
 | /type-check (Skill) | TypeScript 타입 에러 정확히 검사 및 보고 |
 | /lint-format (Skill) | Biome으로 린트 및 포맷 검사/수정 |
 | /vitest (Skill) | Vitest 테스트 프레임워크 패턴 |
@@ -1364,14 +1330,14 @@ Stage 5: 컴포넌트 (페이지별)
 ⚠️ 원인: [실패 원인]
 ```
 
-#### 2. PROGRESS.md 업데이트 (필수)
+#### 2. Spec 실행 로그 업데이트 (필수)
 
-기획 폴더에 `PROGRESS.md`가 있으면 에이전트 실행 결과를 기록합니다:
+spec에 실행 로그 섹션이 있으면 agent 실행 결과를 기록합니다:
 
 ```markdown
-## Stage X: [단계명]
-- [x] [에이전트명] 에이전트 실행 완료 (YYYY-MM-DD HH:MM)
-  - 생성: `파일경로`
+## Execution Log
+- [x] [step id] [agent_type] 실행 완료 (YYYY-MM-DD HH:MM)
+  - 생성/수정: `파일경로`
 ```
 
 #### 3. 에이전트 미호출 시 명시

@@ -1,7 +1,7 @@
 # mobile home route 계약서
 
 > 생성일: 2026-05-04
-> 수정일: 2026-05-13
+> 수정일: 2026-05-24
 > 타입: next-route-page
 > route: `/`
 > owner route file: `apps/mobile/src/app/(tabs)/index.tsx`
@@ -18,7 +18,7 @@
 | `/payments/checkout` | `apps/mobile/src/app/payments/checkout.tsx` | 활성 수강권이 없는 예약 의도의 provider-neutral 예약 결제 checkout |
 | `/select-space` | `apps/mobile/src/app/select-space.tsx` | 인증 직후 또는 지점 변경 시 `x-space-id`를 확정하는 지점 선택 화면 |
 | `/reservations` | `apps/mobile/src/app/(tabs)/reservations.tsx` | `getMyReservations` 기반 내 예약/대기 목록 |
-| `/profile` | `apps/mobile/src/app/(tabs)/profile.tsx` | 내 정보 탭 + 로그아웃 |
+| `/profile` | `apps/mobile/src/app/(tabs)/profile.tsx` | 마이 페이지 + 계정 상태 + 빠른 이동 + 로그아웃 |
 | `/(tabs)` | `apps/mobile/src/app/(tabs)/_layout.tsx` | Expo Router 하단 탭 shell |
 | `/_layout` | `apps/mobile/src/app/_layout.tsx` | QueryClientProvider-first shell + DesignSystemProvider + AuthSessionGate + IDP bootstrap shell |
 | `/auth/login` | `apps/mobile/src/app/auth/login.tsx` | first-party native email/password 로그인 route |
@@ -30,6 +30,7 @@
 | `/` | `packages/fe-mo-ui/src/screen/ReservationHomeScreen/ReservationHomeScreen.tsx` | `packages/fe-mo-ui/src/screen/ReservationHomeScreen/ReservationHomeScreen.spec.md` | route는 Orval hook, query invalidation, DTO mapping, route-local state만 소유하고 screen에 props/handler를 전달한다. |
 | `/payments/checkout` | `packages/fe-mo-ui/src/screen/ReservationPaymentCheckoutScreen/ReservationPaymentCheckoutScreen.tsx` | `packages/fe-mo-ui/src/screen/ReservationPaymentCheckoutScreen/ReservationPaymentCheckoutScreen.spec.md` | route는 checkout params, bootstrap/checkout Orval hooks, cache invalidate, navigation만 소유한다. |
 | `/reservations` | `packages/fe-mo-ui/src/screen/MyReservationsScreen/MyReservationsScreen.tsx` | `packages/fe-mo-ui/src/screen/MyReservationsScreen/MyReservationsScreen.spec.md` | route는 `getMyReservations` API wiring과 `ReservationDto -> MyReservationCardItem` mapping만 소유한다. |
+| `/profile` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.tsx` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.spec.md` | route는 auth/session/current-space state, quick action navigation, logout wiring만 소유한다. |
 | `/auth/login` | `packages/fe-mo-ui/src/screen/NativeAuthLoginScreen/NativeAuthLoginScreen.tsx` | `packages/fe-mo-ui/src/screen/NativeAuthLoginScreen/NativeAuthLoginScreen.spec.md` | Stage 2에서 로그인 visual owner를 shared screen으로 승격하고, route는 email/password form state, native login mutation, SecureStore restore/logout wiring만 소유한다. |
 | `/select-space` | `packages/fe-mo-ui/src/screen/SpaceSelectScreen/SpaceSelectScreen.tsx` | `packages/fe-mo-ui/src/screen/SpaceSelectScreen/SpaceSelectScreen.spec.md` | route는 `getMySpaces`, `setCurrentSpace`, SecureStore 저장, 홈 이동만 소유하고 화면은 지점 목록/상태 표시만 담당한다. |
 
@@ -172,6 +173,235 @@ type ReservationPaymentCheckoutRouteState = {
 - 카드에는 예약일, 상태(`CONFIRMED`, `WAITLISTED`, `CANCELED`), 프로그램명, 시간, 타임라인/세션명, 대기 순번, memo를 표시한다.
 - loading, empty, error + retry 상태를 `StatusFeedback`으로 렌더링한다.
 
+## `/profile` 마이 페이지 계약
+
+- `apps/mobile/src/app/(tabs)/profile.tsx`는 route-local JSX로 마이 페이지 본문을 직접 조합하지 않는다.
+- visual composition은 `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.tsx`가 소유한다.
+- route는 `mobileAuthStore.isAuthenticated`, `mobileAuthStore.isVerifying`, `mobileApiScopeStore.groundName`, `mobileApiScopeStore.spaceId`를 읽어 screen props로 전달한다.
+- route는 quick action navigation과 logout wiring만 소유한다.
+- 하단 탭 label과 header title은 "마이"로 맞춘다.
+- 로그아웃은 `mobileAuthStore.logout()` 후 `/auth/login`으로 이동한다.
+- `MyPageScreen`은 계정 summary, 현재 지점, 빠른 이동 action list, logout danger action을 렌더링한다.
+
+## Delivery
+
+### Goal
+
+- 사용자 목표: 모바일 하단 탭의 `/profile`을 "마이 페이지"로 정리해 계정 상태, 현재 지점, 예약/결제 관련 빠른 이동, 로그아웃을 한 화면에서 제공한다.
+- 대상 app/domain/platform: `apps/mobile`, Profile, Expo Router + React Native.
+- 성공 기준:
+  - `/profile` 하단 탭 라벨/헤더가 "마이" 기준으로 정리된다.
+  - route file은 auth/logout/navigation wiring만 소유하고, visual composition은 `MyPageScreen`이 소유한다.
+  - 구현 전 이 spec 기준 승인 gate를 통과한다.
+  - 모바일 route/screen unit test가 마이 페이지 ready 상태와 로그아웃 wiring을 검증한다.
+- Out of scope:
+  - 신규 backend API, Orval codegen, 결제/예약 상세 기능 구현.
+  - 앱 전역 인증 정책 변경.
+
+### Screen Rough
+
+```text
+Visual Snapshot
+┌─ 마이 · 광화문 스튜디오 ───────────────────────┐
+│ ┌──────────────────────────────────────────┐ │
+│ │ ◯  회원                         로그인됨 │ │
+│ │    오노라 예약 알림과 계정 상태 관리       │ │
+│ └──────────────────────────────────────────┘ │
+│ ┌──────────────────────────────────────────┐ │
+│ │ 현재 지점                                │ │
+│ │ 광화문 스튜디오                          │ │
+│ └──────────────────────────────────────────┘ │
+│ 빠른 이동                                   │
+│ ┌──────────────────────────────────────────┐ │
+│ │ 내 예약                              ›   │ │
+│ │ 예약 확정과 대기 상태 확인                │ │
+│ │ 결제/수강권                         ›   │ │
+│ │ 알림/설정                           ›   │ │
+│ └──────────────────────────────────────────┘ │
+│ [ 로그아웃 ]                                │
+└──────────────────────────────────────────────┘
+
+Annotated Wireframe
+Visual tone: mobile profile, bg-background, dense premium cards, px-4, gap-4, rounded-lg
+[route] (tabs)/_layout.tsx: CustomHeader("마이", currentSpaceName), bottom tab icon=userRound
+
+┌─ /profile viewport ──────────────────────────────┐
+│ ┌ A AccountSummaryCard bg-surface border p-4 ──┐ │
+│ │  userRound accent circle   회원   [로그인됨] │ │
+│ │  오노라 예약 알림과 계정 상태 관리            │ │
+│ └──────────────────────────────────────────────┘ │
+│ ┌ B CurrentSpaceCard bg-surface border p-4 ────┐ │
+│ │  mapPin  현재 지점                            │ │
+│ │          광화문 스튜디오                      │ │
+│ └──────────────────────────────────────────────┘ │
+│ 빠른 이동                                       │
+│ ┌ C QuickActionList ListGroup bg-surface ──────┐ │
+│ │  calendarCheck  내 예약              ›        │ │
+│ │                 예약 확정과 대기 상태 확인    │ │
+│ │  ticketCheck    결제/수강권          › muted  │ │
+│ │  info           알림/설정            › muted  │ │
+│ └──────────────────────────────────────────────┘ │
+│ [ D danger Button full-width  로그아웃 ]         │
+└──────────────────────────────────────────────────┘
+
+Legend: A/B/D are screen-local sections inside `MyPageScreen`; C is reusable `QuickActionList` Widget that wraps existing `ListGroup`.
+```
+
+### Component Inventory
+
+| 영역 | 컴포넌트 | 계층 | 재사용/신규 | 소스/대상 | Props/이벤트 | 소스 담당 `agent_type` | 소비/Wiring `agent_type` |
+|------|-----------|------|-------------|-----------|--------------|-------------------------|---------------------------|
+| route header | `CustomHeader` | Navigation/Layout | reuse | `packages/fe-mo-ui/src/navigation/CustomHeader` via `(tabs)/_layout.tsx` | title `"마이"`, subtitle `currentSpaceName` | `fe-mo-navigation-builder` | `fe-mo-route-layout-builder` |
+| route tab | bottom tab item | Route/Layout | modify | `apps/mobile/src/app/(tabs)/_layout.tsx` | label `"마이"`, icon `userRound` | `fe-mo-route-layout-builder` | `fe-mo-route-layout-builder` |
+| route container | `/profile` route | Route | modify | `apps/mobile/src/app/(tabs)/profile.tsx` | auth/space/logout/navigation props | `fe-mo-route-builder` | `fe-mo-route-builder` |
+| screen owner | `MyPageScreen` | Screen | new | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.tsx` | `displayName`, `currentSpaceName`, `quickActions: QuickActionListItem[]`, `onPressLogout` | `fe-mo-screen-builder` | `fe-mo-route-builder` |
+| quick action widget | `QuickActionList` | Widget | new | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx` | `items`, `onPress`, disabled row behavior | `fe-mo-widget-builder` | `fe-mo-screen-builder` |
+| layout primitives | `ScreenFrame`, `Card`, `ListGroup` | Layout/DataDisplay | reuse | `@cocrepo/mo-ui` existing layout exports | body shell, section cards, widget rows | `fe-mo-data-display-builder` | `fe-mo-widget-builder`, `fe-mo-screen-builder` |
+| status primitive | `Chip` | DataDisplay | reuse | `packages/fe-mo-ui/src/data-display/Chip` | login state chip | `fe-mo-data-display-builder` | `fe-mo-screen-builder` |
+| action primitive | `Button` | Action | reuse | `packages/fe-mo-ui/src/action/Button` | logout button | `fe-mo-action-builder` | `fe-mo-screen-builder` |
+| route icon primitive | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | bottom tab `userRound` | none | `fe-mo-route-layout-builder` |
+| screen icon primitive | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | `userRound`, `mapPin`, action icons, `logOut` | none | `fe-mo-screen-builder` |
+| state | route-local pending state | State | new | `apps/mobile/src/app/(tabs)/profile.tsx` if needed | `isLogoutPending` | `fe-mo-route-builder` | `fe-mo-route-builder` |
+| input | none | Input | none | no form/input in this request | none | none | none |
+| feature package | none | Feature | none | no cross-screen interaction feature in this request | route injects props directly | none | none |
+
+### Storybook / Test Contract
+
+#### Storybook 인벤토리
+
+| 대상 | Story 파일 | 필수 상태/Variant | Fixture/데이터 | 작성 담당 `agent_type` | 검증 담당 `agent_type` | 비고 |
+|------|------------|-------------------|----------------|-------------------------|-------------------------|------|
+| `QuickActionList` | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.stories.tsx` | ready, disabled row, long label | 예약/결제/알림 quick action items | `fe-mo-widget-builder` | `qa-mo-testing` | Widget builder가 component와 함께 작성 |
+| `MyPageScreen` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.stories.tsx` | authenticated ready, no current space, logout pending, long display name | `QuickActionListItem[]`, auth/current-space props | `fe-mo-screen-builder` | `qa-mo-testing` | Screen builder가 screen과 함께 작성 |
+
+#### Unit Test 인벤토리
+
+| 대상 | Test 파일 | 검증 관점 | 주요 케이스 | 작성 담당 `agent_type` | 검증 담당 `agent_type` | 비고 |
+|------|-----------|-----------|-------------|-------------------------|-------------------------|------|
+| `QuickActionList` | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.test.tsx` | row rendering, press event, disabled guard | enabled row press, disabled row no-op, long label rendering | `fe-mo-widget-builder` | `qa-mo-testing` | Widget builder가 component와 함께 작성 |
+| `MyPageScreen` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.test.tsx` | props rendering, quick action composition, logout event | account summary, current space, quick actions, logout pending | `fe-mo-screen-builder` | `qa-mo-testing` | Screen builder가 screen과 함께 작성 |
+| `/profile` route | `apps/mobile/src/route-tests/profile.test.tsx` 또는 existing route test | route wiring, logout navigation | store props mapping, `mobileAuthStore.logout()`, `/auth/login` replace | `qa-mo-testing` | `qa-mo-testing` | route integration은 QA가 보강 |
+
+### Backend / API Contract
+
+#### 엔드포인트 인벤토리
+
+| 필요 | Method/Path | operationId | Controller | DTO/Schema | 재사용/신규 | 소스/대상 | 소스 담당 `agent_type` | 소비/Wiring `agent_type` | codegen |
+|------|-------------|-------------|------------|------------|-------------|-----------|-------------------------|---------------------------|---------|
+| account summary | none | none | none | none | none | no backend change, use existing auth/session store fallback | none | none | none |
+| current space | none | none | none | none | none | no backend change, use `mobileApiScopeStore.groundName` | none | none | none |
+| logout | `POST /api/v1/auth/native/logout` | `nativeLogout` | existing `AuthController.nativeLogout` | existing `NativeLogoutPayloadDto` | reuse | `apps/idp/api/src/module/auth/auth.controller.ts`, `packages/be-dto/src/auth/native-auth.dto.ts` | `be-controller-builder`, `be-dto-builder` | `fe-mo-route-builder` | existing `requestNativeLogout`, no codegen |
+| reservations quick action | none | none | none | none | none | route navigation to existing `/reservations` only | none | `fe-mo-route-builder` | none |
+
+#### ApplicationService 인벤토리
+
+| 유즈케이스/워크플로 | ApplicationService | 메서드 | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
+|---------------------|--------------------|--------|-------------|-----------|-----------|-------------------------|---------------------|
+| native mobile logout | `AuthApplicationService` | `logoutNativeMobileSession` | reuse | `packages/be-app/src/auth.application-service.ts` | `TokenStorageService` | `be-app-builder` | `be-controller-builder` |
+| account summary/current space | none | none | none | no backend change | route uses existing mobile stores | none | none |
+
+#### Service 인벤토리
+
+| 도메인 기능 | Service | 메서드 | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
+|-------------|---------|--------|-------------|-----------|-----------|-------------------------|---------------------|
+| native token/session cleanup | `TokenStorageService` | blacklist/delete native session methods used by `logoutNativeMobileSession` | reuse | `packages/be-service/src/token-storage.service.ts` | Redis-backed token/session storage | `be-service-builder` | `be-app-builder` |
+| profile read | none | none | none | no backend change | route uses existing auth/session/current-space state | none | none |
+
+#### Repository 인벤토리
+
+| 영속성 필요 | Repository | 모델/Aggregate | 메서드 | 재사용/신규 | 소스/대상 | 소스 담당 `agent_type` | 소비 `agent_type` |
+|-------------|------------|----------------|--------|-------------|-----------|-------------------------|---------------------|
+| profile route backend persistence | none | none | none | none | no repository change for this delivery | none | none |
+
+### Required Elements
+
+- 신규 Prisma/schema/DTO/Entity/Repository/Service/ApplicationService/Facade/Controller/Module 없음.
+- 신규 Orval hook/codegen 없음.
+- `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx`
+- `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.stories.tsx`
+- `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.test.tsx`
+- `packages/fe-mo-ui/src/widget/QuickActionList/index.ts`
+- `packages/fe-mo-ui/src/widget/index.ts`
+- `packages/fe-mo-ui/src/index.ts`
+- `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.spec.md`
+- `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.tsx`
+- `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.stories.tsx`
+- `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.test.tsx`
+- `packages/fe-mo-ui/src/screen/index.ts`
+- `apps/mobile/src/app/(tabs)/profile.tsx`
+- `apps/mobile/src/app/(tabs)/_layout.tsx`
+- route unit test, 필요 시 `apps/mobile/src/route-tests/index.test.tsx` 또는 profile 전용 route test
+
+### Agent Assignment Matrix
+
+| step id | phase | agent_type | input files | output files | editable files | depends on | parallel | completion |
+|---------|-------|------------|-------------|--------------|----------------|------------|----------|------------|
+| S1 | planning | orch-delivery | user request, existing mobile tab files | this spec update | `apps/mobile/src/app/index.spec.md`, `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.spec.md` | none | false | route/screen delivery contract written |
+| A1 | approval | orch-delivery | this spec | approval log | `apps/mobile/src/app/index.spec.md` | S1 | false | user approves build |
+| M1 | mobile | fe-mo-widget-builder | this spec, `ListGroup`/`Icon` primitives | `QuickActionList.tsx`, `QuickActionList.stories.tsx`, `QuickActionList.test.tsx`, widget barrel export, root export | `packages/fe-mo-ui/src/widget/QuickActionList/**`, `packages/fe-mo-ui/src/widget/index.ts`, `packages/fe-mo-ui/src/index.ts` | A1 | false | widget/story/test cover enabled/disabled quick action rows |
+| M2 | mobile | fe-mo-screen-builder | `MyPageScreen.spec.md`, `QuickActionList` export, existing screen patterns | `MyPageScreen.tsx`, `MyPageScreen.stories.tsx`, `MyPageScreen.test.tsx`, screen barrel export | `packages/fe-mo-ui/src/screen/MyPageScreen/**`, `packages/fe-mo-ui/src/screen/index.ts` | M1 | false | shared screen story/test render ready state and logout action |
+| M3 | mobile | fe-mo-route-layout-builder | this spec, current tab layout | tab label/icon/header title update | `apps/mobile/src/app/(tabs)/_layout.tsx` | A1 | false | bottom tab and header use "마이" contract |
+| M4 | mobile | fe-mo-route-builder | this spec, MyPageScreen export, current profile route | profile route wiring | `apps/mobile/src/app/(tabs)/profile.tsx`, route test if needed | M2, M3 | false | route passes auth/space/logout props to screen |
+| Q1 | qa | qa-mo-testing | changed mobile route/screen/widget files | unit test updates | `packages/fe-mo-ui/src/widget/QuickActionList/**`, `packages/fe-mo-ui/src/screen/MyPageScreen/**`, `apps/mobile/src/route-tests/**` | M1, M2, M3, M4 | false | relevant mobile tests pass |
+
+### Execution Graph
+
+```text
+orch-delivery spec gate
+→ fe-mo-widget-builder
+→ fe-mo-screen-builder
+→ fe-mo-route-layout-builder
+→ fe-mo-route-builder
+→ qa-mo-testing
+```
+
+Skipped phases:
+
+- backend: no new API/data contract.
+- codegen: no API contract change.
+- web: mobile-only request.
+
+### Shared File Locks
+
+| file | lock owner | rule |
+|------|------------|------|
+| `packages/fe-mo-ui/src/widget/index.ts` | M1 | single writer when exporting `QuickActionList` |
+| `packages/fe-mo-ui/src/index.ts` | M1 | add widget root export only; do not reorder unrelated exports |
+| `packages/fe-mo-ui/src/screen/index.ts` | M2 | single writer when exporting `MyPageScreen` |
+| `apps/mobile/src/app/(tabs)/_layout.tsx` | M3 | tab label/title only; no visual body composition |
+| `apps/mobile/src/app/index.spec.md` | S1/M3/M4 | route contract and 변경 이력 must stay synchronized |
+| `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.spec.md` | S1/M2 | screen visual contract must stay synchronized |
+
+### QA / Acceptance
+
+- `pnpm --filter=@cocrepo/mo-ui test -- QuickActionList`
+- `pnpm --filter=@cocrepo/mo-ui test -- MyPageScreen`
+- `pnpm --filter=@cocrepo/mo-ui type-check`
+- `pnpm --filter=tool-mobile-storybook type-check`
+- mobile route unit test for `/profile`, if existing test harness supports route import.
+- Manual acceptance:
+  - bottom tab shows "마이".
+  - header title shows "마이".
+  - body shows account/session, current space, quick actions, logout.
+  - logout calls `mobileAuthStore.logout()` and navigates to `/auth/login`.
+
+### Blocked / Re-entry Rules
+
+- `spec-gap`: if profile route requires more account data than current stores expose, keep UI to available state only and update this spec.
+- `ui-composition-gap`: if existing mo-ui primitives are insufficient, add the smallest screen-local composition using `ScreenFrame`, `Icon`, `Button`, and existing layout primitives.
+- `shared-file-conflict`: stop parallel work and make M1 or M2 the single writer for the shared file.
+- `test-failure`: distinguish visual screen failure from route wiring failure before re-entry.
+
+### Approval / Execution Log
+
+| time | event | result |
+|------|-------|--------|
+| 2026-05-24 | Storybook/Test 계약을 추가하고 UI builder 작성 책임을 명시 | pending approval |
+| 2026-05-24 | 기획 표 헤더를 한글 우선으로 변경 | pending approval |
+| 2026-05-24 | Backend/API 계약을 endpoint/application/service/repository inventory로 분리 | pending approval |
+| 2026-05-24 | mobile `QuickActionList`를 `fe-mo-widget-builder` step으로 분리 | pending approval |
+| 2026-05-24 | `/profile` delivery contract unified into this route spec | pending approval |
+
 ## Unit Test Contract
 
 | ID | owner | 검증 |
@@ -190,6 +420,9 @@ type ReservationPaymentCheckoutRouteState = {
 | `MO-UNIT-HOME-CHECKOUT-001` | same | `paymentRequired = true` CTA는 `/payments/checkout`으로 이동하고 기존 `createReservation`은 호출하지 않음 |
 | `MO-UNIT-RESERVATIONS-001` | same | `/reservations`가 `getMyReservations` 결과를 렌더링하고 dummy 예약을 노출하지 않음 |
 | `MO-UNIT-RESERVATIONS-002` | same | `/reservations` empty/error + retry 상태 |
+| `MO-UNIT-QUICK-ACTION-LIST-001` | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.test.tsx` | quick action row 렌더링, enabled press, disabled press guard |
+| `MO-UNIT-MY-PAGE-001` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.test.tsx` | 마이 페이지 계정 summary, 현재 지점, quick action, 로그아웃 버튼 렌더링 |
+| `MO-UNIT-MY-PAGE-002` | `apps/mobile/src/route-tests/index.test.tsx` 또는 profile route test | `/profile` route가 `mobileAuthStore.logout()` 후 `/auth/login`으로 이동 |
 | `MO-UNIT-PAYMENT-CHECKOUT-001` | `apps/mobile/src/route-tests/payments-checkout.test.tsx` | `/payments/checkout` route params와 bootstrap 결과를 screen props로 매핑하고 checkout mutation payload 생성 |
 | `MO-UNIT-PAYMENT-CHECKOUT-002` | same | checkout 성공 후 진행 상태와 예약 내역 이동 표시 |
 | `MO-UNIT-PAYMENT-CHECKOUT-003` | same | 필수 param 누락 시 bootstrap/checkout 미실행과 오류 표시 |
@@ -234,6 +467,7 @@ type ReservationPaymentCheckoutRouteState = {
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-05-17 | 광화문 지점처럼 수업 수가 많은 예약 seed를 홈에서 누락하지 않도록 booking feed 기본 조회량을 200으로 상향 | codex |
+| 2026-05-24 | `/profile` 하단 탭을 마이 페이지로 정리하고 `MyPageScreen` shared screen owner 계약을 추가 | orch-delivery |
 | 2026-05-13 | 모바일 전역/route visual system을 Linear/Stripe 계열의 muted background, subtle border, 8pt rhythm, rounded-lg 중심으로 갱신 | codex |
 | 2026-05-17 | 인증 직후 지점 선택 route와 홈 헤더 지점 변경 sheet 계약 추가 | codex |
 | 2026-05-13 | `@cocrepo/mo-ui` icon primitive 기반으로 하단 탭, 로그인, 예약/결제 metadata의 semantic icon cue 계약을 추가 | codex |

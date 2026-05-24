@@ -16,14 +16,14 @@ const manifest: OverviewManifest = {
 	entries: [
 		{
 			componentName: "RoleListPage",
-			componentPath: "page/RoleListPage/RoleListPage.tsx",
-			storyTitle: "page/RoleListPage",
-			storyId: "page-rolelistpage--default",
-			storyHref: "./?path=/story/page-rolelistpage--default",
+			componentPath: "screen/RoleListPage/RoleListPage.tsx",
+			storyTitle: "screen/RoleListPage",
+			storyId: "screen-rolelistpage--default",
+			storyHref: "./?path=/story/screen-rolelistpage--default",
 			storyIds: [
-				"page-rolelistpage--default",
-				"page-rolelistpage--loading",
-				"page-rolelistpage--docs",
+				"screen-rolelistpage--default",
+				"screen-rolelistpage--loading",
+				"screen-rolelistpage--docs",
 			],
 			maturity: "scenario",
 			appIds: ["admin"],
@@ -77,18 +77,18 @@ const manifest: OverviewManifest = {
 			kind: "pure-page",
 			metadata: ["타입: ui"],
 			rawMarkdown:
-				"# RoleListPage ui 기획서\n\n## 역할\n\n역할 목록 화면의 pure page 컴포넌트입니다.\n\n## 공개 계약\n\n- RoleListPage: 공개 계약 요소\n",
+				"# RoleListPage ui 기획서\n\n## 역할\n\n역할 목록 화면의 pure screen 컴포넌트입니다.\n\n## 공개 계약\n\n- RoleListPage: 공개 계약 요소\n",
 			sections: [
 				{
 					heading: "역할",
-					content: "역할 목록 화면의 pure page 컴포넌트입니다.",
+					content: "역할 목록 화면의 pure screen 컴포넌트입니다.",
 				},
 				{
 					heading: "공개 계약",
 					content: "- RoleListPage: 공개 계약 요소",
 				},
 			],
-			sourcePath: "packages/fe-ui/src/page/RoleListPage/RoleListPage.spec.md",
+			sourcePath: "packages/fe-ui/src/screen/RoleListPage/RoleListPage.spec.md",
 			summary: null,
 			title: "RoleListPage ui 기획서",
 		},
@@ -100,7 +100,7 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-rolelistpage--loading"
+				storyId="screen-rolelistpage--loading"
 			/>,
 		);
 
@@ -117,7 +117,7 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-rolelistpage--default"
+				storyId="screen-rolelistpage--default"
 			/>,
 		);
 
@@ -146,7 +146,7 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-rolelistpage--docs"
+				storyId="screen-rolelistpage--docs"
 			/>,
 		);
 
@@ -160,7 +160,7 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-rolelistpage--default"
+				storyId="screen-rolelistpage--default"
 				variant="compact"
 			/>,
 		);
@@ -175,7 +175,7 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-rolelistpage--default"
+				storyId="screen-rolelistpage--default"
 				variant="board"
 			/>,
 		);
@@ -215,7 +215,7 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-rolelistpage--default"
+				storyId="screen-rolelistpage--default"
 			/>,
 		);
 
@@ -224,7 +224,7 @@ describe("PagePlanningPanelView", () => {
 		expect(
 			await screen.findByRole("button", { name: "Codex 실행" }),
 		).toBeInTheDocument();
-		expect(screen.getByText("page/RoleListPage")).toBeInTheDocument();
+		expect(screen.getByText("screen/RoleListPage")).toBeInTheDocument();
 		expect(
 			screen.getByText("apps/admin/web/src/app/(admin)/roles/page.spec.md"),
 		).toBeInTheDocument();
@@ -245,7 +245,7 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-rolelistpage--default"
+				storyId="screen-rolelistpage--default"
 			/>,
 		);
 
@@ -273,7 +273,7 @@ describe("PagePlanningPanelView", () => {
 		render(
 			<PagePlanningPanelView
 				manifest={manifest}
-				storyId="page-rolelistpage--default"
+				storyId="screen-rolelistpage--default"
 			/>,
 		);
 
@@ -293,7 +293,7 @@ describe("PagePlanningPanelView", () => {
 			<PagePlanningPanelView
 				codexEnabled={false}
 				manifest={manifest}
-				storyId="page-rolelistpage--default"
+				storyId="screen-rolelistpage--default"
 			/>,
 		);
 

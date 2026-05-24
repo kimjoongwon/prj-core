@@ -12,10 +12,10 @@
 
 ## Rendering Decision
 
-- 기본 패턴: `pure page + thin route container`
+- 기본 패턴: `pure screen + thin route container`
 - page role: `collection`
 - reusable target: `PaymentManagementPage`
-- page component path: `packages/fe-ui/src/page/PaymentManagementPage/PaymentManagementPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/PaymentManagementPage/PaymentManagementPage.tsx`
 - route는 Orval Payment API 응답 변환, query state 전달, 새로고침 이벤트를 소유합니다.
 
 ## API 호출

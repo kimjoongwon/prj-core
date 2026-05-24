@@ -16,7 +16,7 @@ const JOBS_PATH = "/__codex/jobs";
 const TARGET_FILE_PREFIXES = [
 	"apps/admin/web/src/app/",
 	"apps/idp/web/src/app/",
-	"packages/fe-ui/src/page/",
+	"packages/fe-ui/src/screen/",
 ];
 const FINAL_JOB_STATUSES = new Set(["ready", "failed", "published"]);
 const jobs = new Map();

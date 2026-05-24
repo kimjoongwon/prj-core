@@ -66,8 +66,8 @@ function isMobileRouteOwner(relPath) {
   return /^apps\/mobile\/src\/app\/(?:.*\/)?index\.tsx$/.test(relPath);
 }
 
-function isFeUiPageComponent(relPath) {
-  if (!relPath.startsWith('packages/fe-ui/src/page/')) return false;
+function isFeUiScreenComponent(relPath) {
+  if (!relPath.startsWith('packages/fe-ui/src/screen/')) return false;
   if (!relPath.endsWith(TARGET_EXT)) return false;
   if (relPath.endsWith('.stories.tsx') || relPath.endsWith('.test.tsx')) return false;
 
@@ -100,7 +100,7 @@ function isAllowedSpecTarget(relPath, options) {
   return (
     isNextRoutePage(relPath) ||
     isMobileRouteOwner(relPath) ||
-    isFeUiPageComponent(relPath) ||
+    isFeUiScreenComponent(relPath) ||
     isFeUiFeatureComponent(relPath) ||
     isFeMoScreenComponent(relPath)
   );
@@ -198,7 +198,7 @@ function main() {
   fs.writeFileSync(orphanReportPath, orphan.length > 0 ? `${orphan.join('\n')}\n` : '', 'utf8');
 
   console.log(`SCOPE=${options.scope}`);
-  console.log('POLICY=route-page,mobile-route,fe-ui-page,fe-ui-feature,fe-mo-screen');
+  console.log('POLICY=route-page,mobile-route,fe-ui-screen,fe-ui-feature,fe-mo-screen');
   console.log(`TOTAL_SPEC_TARGET_FILES=${codeFiles.length}`);
   console.log(`MISSING_SPEC=${missing.length}`);
   console.log(`ORPHAN_SPEC=${orphan.length}`);

@@ -597,9 +597,9 @@ importers:
       '@cocrepo/facade':
         specifier: workspace:*
         version: link:../../../packages/be-facade
-      '@cocrepo/integration':
+      '@cocrepo/gateway':
         specifier: workspace:*
-        version: link:../../../packages/be-integration
+        version: link:../../../packages/be-gateway
       '@cocrepo/prisma':
         specifier: workspace:*
         version: link:../../../packages/be-prisma
@@ -1308,9 +1308,9 @@ importers:
       '@cocrepo/entity':
         specifier: workspace:*
         version: link:../be-entity
-      '@cocrepo/integration':
+      '@cocrepo/gateway':
         specifier: workspace:*
-        version: link:../be-integration
+        version: link:../be-gateway
       '@cocrepo/prisma':
         specifier: workspace:*
         version: link:../be-prisma
@@ -1617,9 +1617,9 @@ importers:
       '@cocrepo/entity':
         specifier: workspace:*
         version: link:../be-entity
-      '@cocrepo/integration':
+      '@cocrepo/gateway':
         specifier: workspace:*
-        version: link:../be-integration
+        version: link:../be-gateway
       '@cocrepo/prisma':
         specifier: workspace:*
         version: link:../be-prisma
@@ -1670,7 +1670,7 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
-  packages/be-integration:
+  packages/be-gateway:
     devDependencies:
       '@cocrepo/tsconfig':
         specifier: workspace:*

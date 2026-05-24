@@ -108,7 +108,7 @@
 ## 런타임 책임
 
 - route container가 `useParams`, `useRouter`, `useGetSpaceGround`, `useUpdateSpaceGround`, `useLocalObservable`을 소유합니다.
-- route container가 조회 결과를 pure page props로 매핑하고 저장 성공/실패 toast와 상세 페이지 이동을 처리합니다.
+- route container가 조회 결과를 pure screen props로 매핑하고 저장 성공/실패 toast와 상세 페이지 이동을 처리합니다.
 - `GroundEditPage`는 입력값/에러/CTA handler만 렌더링합니다.
 
 ## 컴포넌트 구성
@@ -159,10 +159,10 @@ apps/admin/web/.../spaces/[spaceId]/ground/edit/page.tsx
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-05-02 | Space 콘텐츠 언어 기준 리소스 작성 안내와 언어 선택/필터 계약 반영 | codex |
-| 2026-04-22 | semantic pure page naming sweep에 맞춰 pure page 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-03-30 | 조회/저장/local state 책임을 route container로 명시하고 pure page props 위임 구조를 문서화 | codex |
+| 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
+| 2026-03-30 | 조회/저장/local state 책임을 route container로 명시하고 pure screen props 위임 구조를 문서화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
-| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |
 | 2026-03-15 | Surface ownership/elevation 규칙과 PageSurface/SectionSurface 적용 기준을 문서화 | codex |
 | 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |

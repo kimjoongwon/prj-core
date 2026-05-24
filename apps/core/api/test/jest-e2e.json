@@ -29,7 +29,7 @@
     "^@cocrepo/repository$": "<rootDir>/../../../packages/be-repository/dist",
     "^@cocrepo/service$": "<rootDir>/../../../packages/be-service/dist",
     "^@cocrepo/app$": "<rootDir>/../../../packages/be-app/dist",
-    "^@cocrepo/integration$": "<rootDir>/../../../packages/be-integration/dist",
+    "^@cocrepo/gateway$": "<rootDir>/../../../packages/be-gateway/dist",
     "^@cocrepo/entity$": "<rootDir>/../../../packages/be-entity/dist",
     "^@cocrepo/vo$": "<rootDir>/../../../packages/be-vo/dist",
     "^@cocrepo/dto$": "<rootDir>/../../../packages/be-dto/dist",

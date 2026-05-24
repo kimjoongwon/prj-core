@@ -9,7 +9,7 @@
 ## 렌더링
 
 - CSR route page이며 Orval React Query 훅으로 서비스 문서 목록을 조회한다.
-- pure page는 `ServiceDocumentListPage`를 사용한다.
+- pure screen는 `ServiceDocumentListPage`를 사용한다.
 - 목록, 필터, 초안 작성/수정, 게시/보관/삭제를 한 화면에서 처리한다.
 - HTML 본문 작성은 CKEditor 기반 WYSIWYG 에디터를 사용하며, Markdown/Plain text 형식은 textarea 입력을 유지한다.
 

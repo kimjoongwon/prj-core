@@ -12,10 +12,10 @@
 
 ## Rendering Decision
 
-- 기본 패턴: `pure page + thin route container`
+- 기본 패턴: `pure screen + thin route container`
 - page role: `collection`
 - reusable target: `CourseManagementPage`
-- page component path: `packages/fe-ui/src/page/CourseManagementPage/CourseManagementPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/CourseManagementPage/CourseManagementPage.tsx`
 - route는 현재 섹션(`courses`) 선택, Orval Course API 응답 변환, query state 전달, section routing, Timeline routing을 소유합니다.
 
 ## API 호출

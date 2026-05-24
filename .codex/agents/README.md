@@ -1,6 +1,6 @@
 # Codex Agent Index
 
-이 문서는 `.codex/agents/**/*.toml`의 역할군 인덱스입니다.
+이 문서는 `.codex/agents/**/*.toml`의 active role 인덱스입니다.
 
 원문 우선순위:
 
@@ -11,7 +11,62 @@
 `*.toml.guide.md` 보조 문서는 생성하지 않습니다.
 role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 둡니다.
 
-설명 문구는 기본적으로 `.codex/config.toml`의 agent description을 기준으로 정리합니다.
+## Unified Spec 운영
+
+모든 orchestration은 허용된 `*.spec.md` 하나에서 시작합니다.
+
+- owner: [orch-delivery.toml](./orch-delivery.toml)
+
+`orch-delivery` 하나가 **Spec → Ask → Build → QA**를 소유합니다.
+별도 Delivery Plan 문서는 만들지 않고, 실행 계약은 구현 대상의 허용된 `*.spec.md` 안에 `## Delivery` 섹션으로 함께 둡니다.
+이 spec은 화면, 백엔드, API, 상태, UI 요소, 테스트, 담당 `agent_type`, 실행 순서를 모두 명시합니다.
+`orch-delivery`는 승인된 spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
+
+`## Delivery` 필수 하위 섹션:
+
+- `### Goal`
+- `### Screen Rough`
+- `### Component Inventory`
+- `### Storybook / Test Contract`
+  - `#### Storybook 인벤토리`
+  - `#### Unit Test 인벤토리`
+- `### Backend / API Contract`
+  - `#### Prisma / Database 인벤토리`
+  - `#### Prisma Annotation 인벤토리`
+  - `#### Common Schema 인벤토리`
+  - `#### Entity / VO 인벤토리`
+  - `#### DTO / Query DTO 인벤토리`
+  - `#### Repository 인벤토리`
+  - `#### Service 인벤토리`
+  - `#### ApplicationService 인벤토리`
+  - `#### Facade / Gateway 인벤토리`
+  - `#### 엔드포인트 인벤토리`
+  - `#### Module / Bootstrap 인벤토리`
+  - `#### Seed 인벤토리`
+  - `#### Codegen / API Client 인벤토리`
+- `### Required Elements`
+- `### Agent Assignment Matrix`
+- `### Execution Graph`
+  - `#### Visual Execution Flow`
+  - `#### Parallel Group Table`
+  - `#### Step Order Table`
+  - `#### Canonical Phase Order`
+- `### Shared File Locks`
+- `### QA / Acceptance`
+- `### Blocked / Re-entry Rules`
+- `### Approval / Execution Log`
+
+병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
+
+구현 대상의 허용된 `*.spec.md`를 먼저 작성하거나 갱신한 뒤, Codex 질문 도구로 사용자의 진행 승인을 받습니다.
+승인 전에는 builder/QA agent를 실행하지 않습니다.
+
+Storybook/Test 소유권:
+
+- PC/Web은 `packages/fe-ui/src/**` component source를 소유한 builder role이 story/test를 함께 작성합니다.
+- Mobile은 `packages/fe-mo-ui/src/**` component source를 소유한 builder role이 story/test를 함께 작성합니다.
+- route `page.tsx`, Expo route file, `layout.tsx`, `_layout.tsx`, Store, backend-only step은 Storybook 대상이 아니며 필요한 unit/E2E 검증만 spec에 적습니다.
+- QA role은 story/test 누락, 실패, contract drift를 검증합니다.
 
 ## Sidecar Spec 범위
 
@@ -19,160 +74,87 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 
 - Next.js route page: `apps/*/web/src/app/**/page.tsx` → 같은 route 폴더의 `page.spec.md`
 - Expo Router native route screen: `apps/mobile/src/app/**/index.tsx` → 같은 route 폴더의 `index.spec.md`
-- fe-ui Page component: `packages/fe-ui/src/page/[PageName]/[PageName].tsx` → 같은 폴더의 `[PageName].spec.md`
+- fe-ui Screen component: `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` → 같은 폴더의 `[ScreenName].spec.md`
 - fe-ui Feature component: `packages/fe-ui/src/feature/**/[FeatureName].tsx` → 같은 component owner 위치의 `[FeatureName].spec.md`
 - fe-mo-ui Screen component: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx` → 같은 폴더의 `[ScreenName].spec.md`
 
-그 외 backend entity/dto/service/repository/controller/module/app/facade/integration/vo/prisma/schema, store/hook/type/barrel/config/script/test/e2e/layout, Next.js `layout.tsx`, Expo Router `_layout.tsx`, `packages/fe-ui` leaf 계층(display/control/cell/columns/widget/collection/form/detail/layout/data-grid 등), 모바일 UI leaf/action 조합 계층(action/input/selection/navigation/data-display/feedback/layout/surface/design-system/widget/feature/form/detail)에는 sidecar spec을 만들지 않습니다.
-금지 계층의 계약은 nearest allowed owner에 기록합니다: web route는 route `page.spec.md`, mobile route/layout/state/API/test/native wiring은 route `index.spec.md`, mobile shared visual composition은 fe-mo-ui Screen spec, fe-ui Page/Feature는 해당 component spec이 owner입니다.
-기존 role 문서에 남아 있는 legacy spec 언급보다 이 범위와 `docs/sidecar-spec-policy.md`를 우선합니다.
+그 외 backend entity/dto/service/repository/controller/module/app/facade/integration/vo/prisma/schema, store/hook/type/barrel/config/script/test/e2e/layout, Next.js `layout.tsx`, Expo Router `_layout.tsx`, web/mobile leaf 계층에는 sidecar spec을 만들지 않습니다.
 
-## 오케스트레이션
+## Feedback Loop 운영
 
-- [orch-requirement.toml](./orch-requirement.toml): 도메인 기획(L0-L4) + BE/Store 기획을 총괄 조율하는 오케스트레이터
-- [orch-screen-planner.toml](./orch-screen-planner.toml): 단일 화면 기획(L5-L12)을 조율하는 오케스트레이터
-- [orch-stage.toml](./orch-stage.toml): 7단계 분할 개발 플로우를 조율하는 메타 에이전트
+- 실행 agent는 peer role을 직접 호출하거나 다른 role 책임 파일을 임의 수정하지 않습니다.
+- 모든 finding은 `orch-delivery`가 `Feedback:` packet으로 수집한 뒤 follow-up, spec re-entry, blocked/pending 중 하나로 재배치합니다.
+- orchestrated 실행 agent의 최종 보고에는 `Feedback:` packet을 항상 포함합니다.
+- packet이 누락되면 `orch-delivery`가 같은 agent에 1회 보완 요청하고, 두 번째에도 없으면 `dependency-missing` 또는 `implementation-blocker`로 차단합니다.
 
-### Feedback Loop 운영
+## Planning / Orchestration
 
-- child role은 peer role을 직접 호출하거나 다른 role 책임 파일을 임의 수정하지 않습니다.
-- 모든 finding은 상위 orchestrator가 `Feedback:` packet으로 수집한 뒤 `send_input` follow-up, re-entry, blocked/review pending 중 하나로 재배치합니다.
-- orchestrated child role의 최종 보고에는 `Feedback:` packet을 항상 포함합니다. finding이 없으면 `feedback_type: none`과 `affected_stage: none`으로 보고합니다.
-- packet이 누락되면 orchestrator가 같은 agent에 1회 보완 요청하고, 두 번째에도 없으면 `dependency-missing` 또는 `implementation-blocker`로 차단합니다.
-- `Feedback: none`은 Stage 완료 조건이 아닙니다. `orch-stage`와 `orch-mobile-stage`는 `stage-ledger.json`의 required item verifier를 통과해야 완료 보고할 수 있습니다.
-- ledger verifier는 `pnpm stage-ledger:check -- <stage-ledger.json>`로 실행할 수 있습니다.
+- [orch-delivery.toml](./orch-delivery.toml): spec 작성, 승인 질문, backend/frontend/mobile/QA 실행을 모두 소유하는 role
 
-## 요구사항 / 기획
+## Backend / Prisma
 
-- [req-context-planner.toml](./req-context-planner.toml): 시스템 컨텍스트, 사용자(Actor), 사용자 목표(Goal) 레이어를 기획하는 전문가
-- [req-screen-planner.toml](./req-screen-planner.toml): 기능(Feature)과 화면(Screen) 레이어를 기획하는 전문가
-- [req-page-planner.toml](./req-page-planner.toml): route `page.spec.md`와 `@slot` 콘텐츠 spec을 상세 기획하는 전문가
-- [req-layout-planner.toml](./req-layout-planner.toml): `packages/fe-ui/src/display/layout` flat Layout 계약을 기획하는 전문가
-- [req-route-layout-planner.toml](./req-route-layout-planner.toml): route `layout.tsx`의 서버 skeleton, named slot topology를 기획하는 전문가
-- [req-surface-planner.toml](./req-surface-planner.toml): route layout/page/feature의 Surface ownership과 elevation 배치를 기획하는 전문가
-- [req-feature-planner.toml](./req-feature-planner.toml): 화면별 Feature 컴포넌트를 기획하는 전문가
-- [req-widget-planner.toml](./req-widget-planner.toml): 화면별 Widget 컴포넌트를 기획하는 전문가
-- [req-primitive-planner.toml](./req-primitive-planner.toml): 화면별 Pure UI 컴포넌트를 기획하는 전문가
-- [req-cell-planner.toml](./req-cell-planner.toml): DataGrid/Table Cell 계약을 기획하는 전문가
-- [req-columns-planner.toml](./req-columns-planner.toml): `packages/fe-ui/src/columns` 레이어 계약과 `DataGrid`/`cell` 경계를 기획하는 전문가
-- [req-input-planner.toml](./req-input-planner.toml): 입력 컴포넌트(Inputs) 계약을 기획하는 전문가
-- [req-menu-planner.toml](./req-menu-planner.toml): 메뉴 경로/권한 계약을 기획하는 전문가
-- [req-store-planner.toml](./req-store-planner.toml): 도메인별 MobX Store를 기획하는 전문가
-- [req-state-planner.toml](./req-state-planner.toml): 웹 화면 로컬 상태와 shared Store 승격 경계를 기획하는 전문가
-- [req-entity-planner.toml](./req-entity-planner.toml): 도메인별 Entity를 기획하는 전문가
-- [req-api-planner.toml](./req-api-planner.toml): aggregate root 기준 API와 Action 계약을 기획하는 전문가
-- [req-api-integration-planner.toml](./req-api-integration-planner.toml): Orval 기반 API 연동 계약을 기획하는 전문가
-- [req-app-planner.toml](./req-app-planner.toml): Controller workflow가 호출할 ApplicationService 유즈케이스를 기획하는 전문가
-- [req-logic-planner.toml](./req-logic-planner.toml): 비즈니스 로직과 테스트 레이어를 기획하는 전문가
-- [req-be-test-planner.toml](./req-be-test-planner.toml): 백엔드 테스트 케이스를 기획하는 전문가
-- [req-fe-test-planner.toml](./req-fe-test-planner.toml): 프론트엔드 테스트 케이스를 기획하는 전문가
-- [req-spec-tracker.toml](./req-spec-tracker.toml): spec-checklist와 stage-ledger를 생성/갱신하여 기획-구현-검증 상태를 추적하는 전문가
-- [req-reverse-engineer.toml](./req-reverse-engineer.toml): 기존 화면 코드를 분석하여 허용 owner spec만 역으로 생성하는 전문가
+- [be-database-expert.toml](./be-database-expert.toml): PostgreSQL/Prisma 데이터베이스 설계 및 최적화 role
+- [be-prisma-builder.toml](./be-prisma-builder.toml): Prisma 스키마 생성 role
+- [be-prisma-annotator.toml](./be-prisma-annotator.toml): Prisma 스키마 `@displayName` 주석 role
+- [be-dmmf-parser-builder.toml](./be-dmmf-parser-builder.toml): Prisma DMMF 파싱 유틸리티 role
+- [common-schema-builder.toml](./common-schema-builder.toml): 프론트엔드/백엔드 공용 검증 스키마 role
+- [be-entity-builder.toml](./be-entity-builder.toml): 도메인 Entity role
+- [be-vo-builder.toml](./be-vo-builder.toml): Value Object role
+- [be-dto-builder.toml](./be-dto-builder.toml): Request/Response DTO role
+- [be-query-dto-builder.toml](./be-query-dto-builder.toml): PrismaQueryDto 기반 Query DTO role
+- [be-repository-builder.toml](./be-repository-builder.toml): Prisma 기반 Repository role
+- [be-service-builder.toml](./be-service-builder.toml): NestJS Service role
+- [be-app-builder.toml](./be-app-builder.toml): ApplicationService role
+- [be-facade-builder.toml](./be-facade-builder.toml): Controller boundary Facade role
+- [be-gateway-builder.toml](./be-gateway-builder.toml): 외부 시스템 Gateway/Client/Adapter role
+- [be-controller-builder.toml](./be-controller-builder.toml): NestJS REST Controller role
+- [be-module-builder.toml](./be-module-builder.toml): NestJS Module/Router wiring role
+- [be-bootstrap-integrator.toml](./be-bootstrap-integrator.toml): AppModule bootstrap role
+- [be-seed-maker.toml](./be-seed-maker.toml): seed/reference-data role
 
-## 백엔드 / Prisma
+## Web Frontend
 
-- [be-database-expert.toml](./be-database-expert.toml): PostgreSQL/Prisma 데이터베이스 설계 및 최적화 전문가
-- [be-prisma-builder.toml](./be-prisma-builder.toml): Prisma 스키마를 생성하고 유형을 분류하는 전문가
-- [be-prisma-annotator.toml](./be-prisma-annotator.toml): Prisma 스키마에 `@displayName` 한글 주석을 추가하는 전문가
-- [be-dmmf-parser-builder.toml](./be-dmmf-parser-builder.toml): Prisma DMMF 파싱 유틸리티를 생성하는 전문가
-- [be-repository-builder.toml](./be-repository-builder.toml): Prisma 기반 Repository 레이어를 생성하는 전문가
-- [be-service-builder.toml](./be-service-builder.toml): NestJS Service 레이어를 생성하는 전문가
-- [be-app-builder.toml](./be-app-builder.toml): workflow orchestration용 NestJS ApplicationService 레이어를 생성하는 전문가
-- [be-facade-builder.toml](./be-facade-builder.toml): Controller boundary composition과 read model shaping을 위한 NestJS Facade 레이어를 생성하는 전문가
-- [be-integration-builder.toml](./be-integration-builder.toml): 외부 시스템 Integration Facade 레이어를 생성하는 전문가
-- [be-controller-builder.toml](./be-controller-builder.toml): aggregate root Module과 `@cocrepo/facade`/`@cocrepo/app` 기준 NestJS REST Controller를 생성하는 전문가
-- [be-module-builder.toml](./be-module-builder.toml): aggregate root 기준 NestJS Module과 Router wiring을 생성하는 전문가
-- [be-dto-builder.toml](./be-dto-builder.toml): Request/Response DTO 클래스를 생성하는 전문가
-- [be-query-dto-builder.toml](./be-query-dto-builder.toml): PrismaQueryDto 기반 목록 조회용 Query DTO를 생성하는 전문가
-- [be-entity-builder.toml](./be-entity-builder.toml): 도메인 Entity 클래스를 생성하는 전문가
-- [be-vo-builder.toml](./be-vo-builder.toml): Value Object 클래스를 생성하는 전문가
-- [be-seed-maker.toml](./be-seed-maker.toml): 현실 세계와 연결된 시드 데이터를 생성하는 전문가
-- [be-bootstrap-integrator.toml](./be-bootstrap-integrator.toml): AppModule 부트스트랩에 서비스를 통합하는 전문가
-- [be-e2e-builder.toml](./be-e2e-builder.toml): 백엔드 E2E 테스트 전략을 설계하는 전문가
-- [be-unit-test-builder.toml](./be-unit-test-builder.toml): 백엔드 단위 테스트 전략을 설계하는 전문가
+- [fe-display-builder.toml](./fe-display-builder.toml): Display UI role
+- [fe-control-builder.toml](./fe-control-builder.toml): Control/input role
+- [fe-cell-builder.toml](./fe-cell-builder.toml): DataGrid/Table Cell role
+- [fe-columns-builder.toml](./fe-columns-builder.toml): columns/DataGrid boundary role
+- [fe-widget-builder.toml](./fe-widget-builder.toml): Widget role
+- [fe-layout-builder.toml](./fe-layout-builder.toml): reusable Layout role
+- [fe-feature-builder.toml](./fe-feature-builder.toml): Feature role
+- [fe-data-grid-builder.toml](./fe-data-grid-builder.toml): DataGrid renderer/input/state contract role
+- [fe-form-builder.toml](./fe-form-builder.toml): create/update form layer role
+- [fe-menu-builder.toml](./fe-menu-builder.toml): menu system role
+- [fe-store-builder.toml](./fe-store-builder.toml): shared MobX Store role
+- [fe-screen-builder.toml](./fe-screen-builder.toml): `packages/fe-ui/src/screen/[ScreenName]` web screen visual owner role
+- [fe-route-layout-builder.toml](./fe-route-layout-builder.toml): Next.js route layout/shell role
+- [fe-route-builder.toml](./fe-route-builder.toml): route/API/state thin container integration role
 
-## 프론트엔드
+## Mobile
 
-프론트엔드 공통 운영 원칙:
-
-- PC/Web UI 기획/구현 전에 HeroUI React upstream 패키지(`node_modules/@heroui/react`, import path `@heroui/react`)와 `@cocrepo/ui` 기존 display/control/layout/widget/feature/form/detail/page/data-grid/cell/columns 후보를 먼저 검색합니다.
-- `@cocrepo/ui`에 아직 노출되지 않았어도 `@heroui/react/package.json` exports 또는 `@heroui/react/dist/components/**`에 있는 컴포넌트면 custom 구현보다 thin wrapper/re-export/alias 추가를 우선합니다.
-- 이미 있는 primitive/component로 표현 가능한 UI를 raw `div`/`button`/`input`/`table` + className/Tailwind 조합으로 다시 만들지 않습니다. 부족하면 기존 컴포넌트를 확장하거나 owner role에 `Feedback:` packet으로 넘깁니다.
-
-- [fe-ui-page-builder.toml](./fe-ui-page-builder.toml): `packages/fe-ui/src/page/[PageName]/[PageName].tsx` 기준의 semantic pure page component와 sidecar를 생성하는 전문가
-- [fe-page-builder.toml](./fe-page-builder.toml): `apps/*/src/app/**/page.tsx`, `@slot/**/page.tsx`, `route.meta.ts` thin route contract를 구현하고 folder-based pure page를 연결하는 전문가
-- [fe-layout-builder.toml](./fe-layout-builder.toml): `packages/fe-ui/src/display/layout`의 flat Layout primitive를 설계하고 생성하는 전문가
-- [fe-route-layout-builder.toml](./fe-route-layout-builder.toml): Next.js App Router의 `app/**/layout.tsx`와 named slot topology를 설계하고 생성하는 전문가
-- [fe-feature-builder.toml](./fe-feature-builder.toml): 비즈니스 기능을 담당하는 Feature 컴포넌트를 생성하는 전문가
-- [fe-data-grid-builder.toml](./fe-data-grid-builder.toml): `packages/fe-ui/src/data-grid`의 DataGrid 단일 렌더러와 input/state 계약을 정리하는 전문가
-- [fe-detail-builder.toml](./fe-detail-builder.toml): 상세 조회/읽기 전용 재사용 detail 계층을 생성하고 정리하는 전문가
-- [fe-form-builder.toml](./fe-form-builder.toml): 생성/수정 입력 화면용 재사용 form 계층을 생성하고 정리하는 전문가
-- [fe-widget-builder.toml](./fe-widget-builder.toml): 재사용 가능한 작은 UI 조각 Widget 컴포넌트를 생성하는 전문가
-- [fe-display-component-builder.toml](./fe-display-component-builder.toml): Display UI 컴포넌트를 `packages/fe-ui/src/display`에 생성하는 전문가
-- [fe-control-component-builder.toml](./fe-control-component-builder.toml): 사용자 조작/입력 컴포넌트를 `packages/fe-ui/src/control`에 생성하는 전문가
-- [fe-cell-builder.toml](./fe-cell-builder.toml): DataGrid/Table용 Cell 컴포넌트를 계층별로 생성하는 전문가
-- [fe-columns-builder.toml](./fe-columns-builder.toml): `packages/fe-ui/src/columns` 레이어와 `DataGrid`/`cell` 경계를 정리하는 전문가
-- [fe-menu-builder.toml](./fe-menu-builder.toml): 메뉴 시스템 컴포넌트를 생성하는 전문가
-- [fe-store-builder.toml](./fe-store-builder.toml): MobX 기반 Store를 생성하는 전문가
-- [fe-state-builder.toml](./fe-state-builder.toml): 웹 화면 로컬 MobX state class/hook과 state slice 전달 구조를 구현하는 전문가
-- [fe-api-integrator.toml](./fe-api-integrator.toml): Orval 생성 React Query 훅을 사용하여 더미 데이터를 실제 API 호출로 교체하는 전문가
-- [fe-e2e-builder.toml](./fe-e2e-builder.toml): 프론트엔드 E2E 테스트 전략을 설계하는 전문가
-- [fe-unit-test-builder.toml](./fe-unit-test-builder.toml): 프론트엔드 단위 테스트 전략을 설계하는 전문가
-
-## 모바일
-
-- [mobile/README.md](./mobile/README.md): RN/Expo 전용 mobile role 인덱스
-- [mobile/orch-mobile-stage.toml](./mobile/orch-mobile-stage.toml): 모바일 route flow 와 common backend contract planning 을 함께 조율하는 메타 role
-- [mobile/orch-mobile-screen-planner.toml](./mobile/orch-mobile-screen-planner.toml): 단일 Expo route 의 모바일 화면 기획을 조율하는 오케스트레이터
-- [mobile/req-mo-route-layout-planner.toml](./mobile/req-mo-route-layout-planner.toml): Expo Router 의 `_layout` shell 계약을 기획하는 전문가
-- [mobile/req-mo-page-planner.toml](./mobile/req-mo-page-planner.toml): Expo route screen 계약을 상세 기획하는 전문가
-- [mobile/req-mo-primitive-planner.toml](./mobile/req-mo-primitive-planner.toml): 모바일 data-display/feedback/surface/provider primitive 계약을 기획하는 전문가
-- [mobile/req-mo-action-planner.toml](./mobile/req-mo-action-planner.toml): 모바일 command/action 컴포넌트 계약을 기획하는 전문가
-- [mobile/req-mo-input-planner.toml](./mobile/req-mo-input-planner.toml): 모바일 text/input 컴포넌트 계약을 기획하는 전문가
-- [mobile/req-mo-selection-planner.toml](./mobile/req-mo-selection-planner.toml): 모바일 selection/stateful choice 컴포넌트 계약을 기획하는 전문가
-- [mobile/req-mo-navigation-planner.toml](./mobile/req-mo-navigation-planner.toml): 모바일 navigation control 컴포넌트 계약을 기획하는 전문가
-- [mobile/req-mo-menu-planner.toml](./mobile/req-mo-menu-planner.toml): 모바일 navigation/menu contract 를 기획하는 전문가
-- [mobile/req-mo-widget-planner.toml](./mobile/req-mo-widget-planner.toml): 모바일 순수 UI 조합 Widget 계약을 기획하는 전문가
-- [mobile/req-mo-feature-planner.toml](./mobile/req-mo-feature-planner.toml): 모바일 reusable Feature composition 계약을 기획하는 전문가
-- [mobile/req-mo-form-planner.toml](./mobile/req-mo-form-planner.toml): 모바일 입력 form 계약을 기획하는 전문가
-- [mobile/req-mo-detail-planner.toml](./mobile/req-mo-detail-planner.toml): 모바일 읽기 전용 detail/view 계약을 기획하는 전문가
-- [mobile/req-mo-api-integration-planner.toml](./mobile/req-mo-api-integration-planner.toml): 모바일 API 연동 계약을 기획하는 전문가
-- [mobile/req-mo-store-planner.toml](./mobile/req-mo-store-planner.toml): 모바일 공용/로컬 상태 경계를 기획하는 전문가
-- [mobile/req-mo-state-planner.toml](./mobile/req-mo-state-planner.toml): 모바일 route-local 상태와 shared Store 승격 경계를 기획하는 전문가
-- [mobile/req-mo-fe-test-planner.toml](./mobile/req-mo-fe-test-planner.toml): 모바일 route `index.spec.md`와 `app.context.md`의 unit/E2E 테스트 케이스를 기획하는 전문가
-- [mobile/fe-mo-action-component-builder.toml](./mobile/fe-mo-action-component-builder.toml): `packages/fe-mo-ui/src/action/**`의 RN command/action contract를 생성하거나 정리하는 전문가
-- [mobile/fe-mo-input-component-builder.toml](./mobile/fe-mo-input-component-builder.toml): `packages/fe-mo-ui/src/input/**`의 RN text/input contract를 생성하거나 정리하는 전문가
-- [mobile/fe-mo-selection-component-builder.toml](./mobile/fe-mo-selection-component-builder.toml): `packages/fe-mo-ui/src/selection/**`의 RN selection/stateful choice contract를 생성하거나 정리하는 전문가
-- [mobile/fe-mo-navigation-component-builder.toml](./mobile/fe-mo-navigation-component-builder.toml): `packages/fe-mo-ui/src/navigation/**`의 RN navigation control contract를 생성하거나 정리하는 전문가
-- [mobile/fe-mo-data-display-component-builder.toml](./mobile/fe-mo-data-display-component-builder.toml): `packages/fe-mo-ui/src/data-display/**`, `surface`, `design-system`, 비오버레이 `layout` thin wrapper contract를 생성하거나 정리하는 전문가
-- [mobile/fe-mo-feedback-component-builder.toml](./mobile/fe-mo-feedback-component-builder.toml): `packages/fe-mo-ui/src/feedback/**`, overlay feedback `layout` thin wrapper contract를 생성하거나 정리하는 전문가
-- [mobile/fe-mo-menu-builder.toml](./mobile/fe-mo-menu-builder.toml): `packages/fe-mo-ui/src/layout/Menu/**`, `packages/fe-mo-ui/src/layout/SubMenu/**`의 RN 메뉴 contract를 생성하거나 정리하는 전문가
-- [mobile/fe-mo-widget-builder.toml](./mobile/fe-mo-widget-builder.toml): `packages/fe-mo-ui/src/widget/**`의 RN 순수 UI 조합 Widget을 생성하거나 정리하는 전문가
-- [mobile/fe-mo-feature-builder.toml](./mobile/fe-mo-feature-builder.toml): `packages/fe-mo-ui/src/feature/**`의 RN reusable Feature composition을 생성하거나 정리하는 전문가
-- [mobile/fe-mo-form-builder.toml](./mobile/fe-mo-form-builder.toml): `packages/fe-mo-ui/src/form/**`의 RN 입력 form 조합을 생성하거나 정리하는 전문가
-- [mobile/fe-mo-detail-builder.toml](./mobile/fe-mo-detail-builder.toml): `packages/fe-mo-ui/src/detail/**`의 RN 읽기 전용 detail/view 조합을 생성하거나 정리하는 전문가
-- [mobile/fe-mo-route-layout-builder.toml](./mobile/fe-mo-route-layout-builder.toml): `apps/mobile/src/app/**/_layout.tsx`를 구현하는 전문가
-- [mobile/fe-mo-page-builder.toml](./mobile/fe-mo-page-builder.toml): `apps/mobile/src/app/**/*.tsx` route file에서 shared screen visual owner를 연결하고 navigation/API/state/native wiring을 구현하는 전문가
-- [mobile/fe-mo-screen-builder.toml](./mobile/fe-mo-screen-builder.toml): 모바일 `fe-ui-page-builder` 대응 screen visual owner를 `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx` 기준으로 생성하는 전문가
-- [mobile/fe-mo-api-integrator.toml](./mobile/fe-mo-api-integrator.toml): 모바일 데이터 조회/변경 연동 기준을 구현하는 전문가
-- [mobile/fe-mo-store-builder.toml](./mobile/fe-mo-store-builder.toml): 모바일 공용/로컬 상태 경계를 정리하고 MobX store 를 구현하는 전문가
-- [mobile/fe-mo-state-builder.toml](./mobile/fe-mo-state-builder.toml): 모바일 route-local MobX state class/hook과 state slice 전달 구조를 구현하는 전문가
-- [mobile/fe-mo-e2e-builder.toml](./mobile/fe-mo-e2e-builder.toml): 모바일 Detox E2E 테스트 전략을 설계하는 전문가
-- [mobile/fe-mo-unit-test-builder.toml](./mobile/fe-mo-unit-test-builder.toml): 모바일 Jest unit test 전략을 설계하는 전문가
+- [fe-mo-action-builder.toml](./fe-mo-action-builder.toml): RN command/action role
+- [fe-mo-input-builder.toml](./fe-mo-input-builder.toml): RN text/input role
+- [fe-mo-selection-builder.toml](./fe-mo-selection-builder.toml): RN selection/stateful choice role
+- [fe-mo-navigation-builder.toml](./fe-mo-navigation-builder.toml): RN navigation control role
+- [fe-mo-data-display-builder.toml](./fe-mo-data-display-builder.toml): RN data-display/surface/layout primitive role
+- [fe-mo-feedback-builder.toml](./fe-mo-feedback-builder.toml): RN feedback/status/overlay role
+- [fe-mo-menu-builder.toml](./fe-mo-menu-builder.toml): RN Menu/SubMenu role
+- [fe-mo-widget-builder.toml](./fe-mo-widget-builder.toml): RN reusable Widget composition role
+- [fe-mo-feature-builder.toml](./fe-mo-feature-builder.toml): RN reusable Feature composition role
+- [fe-mo-screen-builder.toml](./fe-mo-screen-builder.toml): shared screen visual owner role
+- [fe-mo-route-layout-builder.toml](./fe-mo-route-layout-builder.toml): Expo Router native `_layout.tsx` shell role
+- [fe-mo-route-builder.toml](./fe-mo-route-builder.toml): Expo route/API/state/native wiring role
 
 ## QA / 검증
 
-- [qa-pr-reviewer.toml](./qa-pr-reviewer.toml): 변경된 PR diff를 role 규칙 기준으로 검증하고 code/rule 위치를 함께 보고하는 리뷰 전문가
-- [qa-type-checker.toml](./qa-type-checker.toml): TypeScript 타입 에러를 근본 원인까지 추적하여 해결하는 전문가
-- [qa-fe-testing.toml](./qa-fe-testing.toml): Vitest 기반 프론트엔드 패키지 테스트 코드를 작성하는 전문가
-- [qa-fe-e2e-testing.toml](./qa-fe-e2e-testing.toml): Playwright 기반 프론트엔드 E2E 테스트 코드를 작성하는 전문가
-- [qa-be-testing.toml](./qa-be-testing.toml): Jest 기반 백엔드/공용 패키지 테스트와 Vitest reference-data contract 테스트 코드를 작성하는 전문가
-- [qa-be-e2e-testing.toml](./qa-be-e2e-testing.toml): Jest + Supertest 기반 백엔드 E2E 테스트 코드를 작성하는 전문가
-- [mobile/qa-mo-testing.toml](./mobile/qa-mo-testing.toml): Jest + React Native Testing Library 기반 모바일 단위 테스트 코드를 작성하는 전문가
-- [mobile/qa-mo-e2e-testing.toml](./mobile/qa-mo-e2e-testing.toml): Detox 기반 모바일 E2E 테스트 코드를 작성하는 전문가
+- [qa-type-checker.toml](./qa-type-checker.toml): TypeScript type error 해결 role
+- [qa-be-testing.toml](./qa-be-testing.toml): Jest backend/common unit test role
+- [qa-be-e2e-testing.toml](./qa-be-e2e-testing.toml): Jest + Supertest backend E2E role
+- [qa-fe-testing.toml](./qa-fe-testing.toml): Vitest frontend unit test role
+- [qa-fe-e2e-testing.toml](./qa-fe-e2e-testing.toml): Playwright frontend E2E role
+- [qa-mo-testing.toml](./qa-mo-testing.toml): Jest + React Native Testing Library mobile unit test role
+- [qa-mo-e2e-testing.toml](./qa-mo-e2e-testing.toml): Detox mobile E2E role
 
 ## 공용 / 운영 보조
 
-- [common-schema-builder.toml](./common-schema-builder.toml): 프론트엔드와 백엔드에서 공유하는 검증 스키마를 생성하는 전문가
-- [dev-service-starter.toml](./dev-service-starter.toml): 개발 서비스를 시작하는 에이전트
-- [etc-jenkinsfile-builder.toml](./etc-jenkinsfile-builder.toml): Jenkins CI/CD 파이프라인 파일을 생성하는 전문가
+- [dev-service-starter.toml](./dev-service-starter.toml): 개발 서비스 시작 role
+- [etc-jenkinsfile-builder.toml](./etc-jenkinsfile-builder.toml): Jenkins pipeline role

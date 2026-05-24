@@ -4,7 +4,7 @@ Shared UI library for the Cocrepo monorepo.
 
 ## Overview
 
-`@cocrepo/ui` exposes reusable UI building blocks and page-level components used by the web apps in this repository.
+`@cocrepo/ui` exposes reusable UI building blocks and screen-level visual owners used by the web apps in this repository.
 
 Entry points are organized under `src/`:
 
@@ -14,14 +14,14 @@ Entry points are organized under `src/`:
 - `form`: form flows and form sections
 - `layout`: structural primitives such as `App`, `Page`, `Section`, `Container`
 - `collection`: list/table oriented page building blocks
-- `page`: semantic app-facing pure page UI components
+- `screen`: semantic app-facing pure screen UI components
 - `rhythm`: spacing and flow primitives such as `VStack`, `HStack`, `Spacer`
 - `surface`: surface and elevation primitives
 - `widget`: reusable domain widgets
 
 Domain sub-groups under `feature` and `widget` are allowed when they improve discoverability, for example `src/feature/idp/*` or `src/widget/ability/*`.
 
-`src/page` uses folder-based sidecars. Keep each page in `src/page/[PageName]/`.
+`src/screen` uses folder-based sidecars. Keep each screen in `src/screen/[ScreenName]/`.
 Prefer semantic screen names such as `AssetListPage`, `RoleDetailPage`, `SecurityPolicyFormPage`.
 Avoid route-mirror names such as `AdminAssetsAssetIdPage` or `IdpConsoleOidcClientsOidcClientIdPage`.
 

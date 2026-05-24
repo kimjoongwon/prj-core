@@ -372,7 +372,7 @@ Pure UI → Widget → Feature → Page
 | 에이전트 | 관계 |
 |----------|------|
 | **fe-feature-builder** | Store를 연결하여 Feature 컴포넌트 생성 |
-| fe-page-builder | 통합 훅에서 Store 사용 |
+| fe-route-builder | 통합 훅에서 Store 사용 |
 
 ### 관련 에이전트
 
@@ -466,16 +466,23 @@ useEffect(() => {
 - useStore hooks: `packages/fe-store/src/stores/useStore.ts`
 - Export: `packages/fe-store/src/stores/index.ts`
 
+## Storybook / Unit Test 책임
+
+- Store는 Storybook 대상이 아닙니다.
+- shared Store를 신규 생성하거나 수정하면 같은 작업에서 store unit test를 작성/갱신합니다.
+- Store가 UI state branch를 새로 만들면 owner spec의 `Unit Test 인벤토리`에 store test row를 기록하고, consuming component story/test row는 해당 component source owner builder가 담당하도록 분리합니다.
+- route-local state는 `fe-store-builder`가 아니라 `fe-route-builder`의 route-local implementation 또는 해당 route QA test로 검증합니다.
+
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

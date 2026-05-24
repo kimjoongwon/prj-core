@@ -142,7 +142,7 @@ Value Object 클래스를 생성하는 전문가입니다.
 ```
 0. owner contract 확인
    Read `app.context.md` 또는 관련 route `page.spec.md`의 backend contract 섹션
-   → VO 계약은 허용 owner 문서의 backend contract/handoff 섹션에 반영한다
+   → VO 계약은 허용 owner 문서의 backend contract 섹션에 반영한다
    ↓
 1. 도메인 개념 분석
    - 캡슐화할 값 식별
@@ -160,7 +160,7 @@ Value Object 클래스를 생성하는 전문가입니다.
 4. index.ts export 추가
    ↓
 5. VO Contract 생성/업데이트
-   → VO Contract handoff
+   → VO Contract summary
 ```
 
 ---
@@ -350,7 +350,7 @@ export class Cookie extends ValueObject<CookieProps> {
 
 ## 6-1. VO Contract 형식
 
-VO Contract는 backend VO 전용 sidecar spec 파일로 분리하지 않고 `app.context.md`, route `page.spec.md`, 또는 backend handoff 섹션에 기록합니다.
+VO Contract는 backend VO 전용 sidecar spec 파일로 분리하지 않고 `app.context.md`, route `page.spec.md`, 또는 owner spec 섹션에 기록합니다.
 
 ---
 
@@ -410,14 +410,14 @@ export * from "./common";
 
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

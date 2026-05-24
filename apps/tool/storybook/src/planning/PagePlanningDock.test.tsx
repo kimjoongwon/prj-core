@@ -16,11 +16,11 @@ const manifest: OverviewManifest = {
 	entries: [
 		{
 			componentName: "RoleListPage",
-			componentPath: "page/RoleListPage/RoleListPage.tsx",
-			storyTitle: "page/RoleListPage",
-			storyId: "page-rolelistpage--default",
-			storyHref: "./?path=/story/page-rolelistpage--default",
-			storyIds: ["page-rolelistpage--default", "page-rolelistpage--docs"],
+			componentPath: "screen/RoleListPage/RoleListPage.tsx",
+			storyTitle: "screen/RoleListPage",
+			storyId: "screen-rolelistpage--default",
+			storyHref: "./?path=/story/screen-rolelistpage--default",
+			storyIds: ["screen-rolelistpage--default", "screen-rolelistpage--docs"],
 			maturity: "scenario",
 			appIds: ["admin"],
 			planning: {
@@ -69,14 +69,14 @@ const manifest: OverviewManifest = {
 			kind: "pure-page",
 			metadata: [],
 			rawMarkdown:
-				"# RoleListPage ui 기획서\n\n## 역할\n\n역할 목록 화면의 pure page 컴포넌트입니다.",
+				"# RoleListPage ui 기획서\n\n## 역할\n\n역할 목록 화면의 pure screen 컴포넌트입니다.",
 			sections: [
 				{
 					heading: "역할",
-					content: "역할 목록 화면의 pure page 컴포넌트입니다.",
+					content: "역할 목록 화면의 pure screen 컴포넌트입니다.",
 				},
 			],
-			sourcePath: "packages/fe-ui/src/page/RoleListPage/RoleListPage.spec.md",
+			sourcePath: "packages/fe-ui/src/screen/RoleListPage/RoleListPage.spec.md",
 			summary: null,
 			title: "RoleListPage ui 기획서",
 		},
@@ -88,7 +88,7 @@ describe("PagePlanningDock", () => {
 		render(
 			<PagePlanningDock
 				manifest={manifest}
-				storyId="page-rolelistpage--default"
+				storyId="screen-rolelistpage--default"
 			>
 				<div>Story Canvas</div>
 			</PagePlanningDock>,

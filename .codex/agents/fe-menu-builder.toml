@@ -494,13 +494,13 @@ export default function UsersLayout({ children }: { children: React.ReactNode })
 
 - `fe-menu-builder`: 메뉴 트리, 탭 contract, `PageTabs`/`BottomTab`/`SideNav`/`QuickActionFAB` 같은 feature와 route shell이 소비할 메뉴 widget 조합 규칙
 - `fe-route-layout-builder`: 실제 `layout.tsx` 파일에서 skeleton 조립
-- `fe-page-builder`: route skeleton 안의 실제 페이지 콘텐츠 구현
+- `fe-route-builder`: route skeleton 안의 실제 페이지 콘텐츠 구현
 
 ### 운영 규칙
 
 1. 3depth 탭은 route `layout.tsx` skeleton 안에서 한 번만 렌더링합니다.
 2. `page.tsx`가 동일 탭을 다시 렌더링하면 안 됩니다.
-3. title/description/actions가 layout skeleton에 포함될지 page 콘텐츠에 남을지는 `req-route-layout-planner`와 `req-page-planner` 계약을 따릅니다.
+3. title/description/actions가 layout skeleton에 포함될지 page 콘텐츠에 남을지는 owner spec 계약을 따릅니다.
 4. 활성 탭 판단이 client 상태를 필요로 하면 `PageTabs` 내부 feature/widget이 담당하고, route `layout.tsx` 자체는 서버 파일로 유지합니다.
 
 ---
@@ -888,20 +888,26 @@ const SideNav = observer(() => {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| req-menu-planner | 선행 | 메뉴 경로/권한 기획서 기반 구현 |
-| req-page-planner | 선행 | 화면 경로 구조 참조 |
+| orch-delivery | 선행 | 메뉴 경로/권한과 화면 경로 구조가 포함된 owner spec 참조 |
 | fe-feature-builder | 관련 | 메뉴에 연결되는 Feature 컴포넌트 참조 |
+
+## Storybook / Unit Test 책임
+
+- Menu component를 신규 생성하거나 수정하면 같은 작업에서 Storybook story와 unit test를 작성/갱신합니다.
+- Storybook은 default, nested, selected, disabled, permission-hidden 상태를 포함합니다.
+- unit test는 item rendering, selected state, disabled guard, click/keyboard callback을 검증합니다.
+- route catalog만 바뀌는 경우에는 Storybook/Test 계약과 최종 보고에 불필요 사유를 남깁니다.
 
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

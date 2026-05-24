@@ -86,7 +86,7 @@ sequenceDiagram
 | Claims 필터 | `apps/idp/src/module/oidc/account.service.ts:145-173` | `filterClaimsByScope()` - scope별 claims 필터링 |
 | Callback 처리 | `apps/server/src/module/auth/auth.controller.ts:78-100` | `handleCallback()` - 에러 처리 + 쿠키 설정 + 리다이렉트 |
 | State 검증 + 토큰 교환 | `packages/be-app/src/auth.application-service.ts` | `handleOidcCallback()` - state 검증 → code 교환 → 쿠키 설정 |
-| IDP 토큰 교환 | `packages/be-integration/src/oidc.facade.ts` | `exchangeCodeForTokens()` - IDP token endpoint 호출 |
+| IDP 토큰 교환 | `packages/be-gateway/src/oidc.gateway.ts` | `exchangeCodeForTokens()` - IDP token endpoint 호출 |
 
 ---
 
@@ -206,7 +206,7 @@ sequenceDiagram
 |-----------|------|----------|
 | 401 인터셉터 | `packages/fe-api/src/libs/customAxios.ts:63-124` | 토큰 갱신 + 큐 패턴 + PersistStore 업데이트 |
 | Refresh 엔드포인트 | `apps/server/src/module/auth/auth.controller.ts:102-124` | 쿠키에서 refreshToken 추출 |
-| IDP 토큰 갱신 | `packages/be-integration/src/oidc.facade.ts` | `refreshTokens()` |
+| IDP 토큰 갱신 | `packages/be-gateway/src/oidc.gateway.ts` | `refreshTokens()` |
 
 ---
 
@@ -246,7 +246,7 @@ sequenceDiagram
 |-----------|------|----------|
 | 프론트엔드 로그아웃 | `packages/fe-store/src/stores/authStore.ts:27-42` | `logout(logoutApi?)` - API 호출 후 리다이렉트 |
 | 로그아웃 컨트롤러 | `apps/server/src/module/auth/auth.controller.ts:163-184` | 쿠키에서 accessToken 추출 |
-| IDP 토큰 폐기 | `packages/be-integration/src/oidc.facade.ts` | `revokeToken()` - revocation endpoint 호출 |
+| IDP 토큰 폐기 | `packages/be-gateway/src/oidc.gateway.ts` | `revokeToken()` - revocation endpoint 호출 |
 | 쿠키 삭제 | `packages/be-app/src/auth.application-service.ts` | `logoutWithCookie()` |
 | 토큰 쿠키 관리 | `packages/be-service/src/token.service.ts:64-75` | `clearTokenCookies()` |
 

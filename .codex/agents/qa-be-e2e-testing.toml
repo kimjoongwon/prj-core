@@ -27,7 +27,7 @@ NestJS `Test.createTestingModule({ imports: [AppModule] })` 패턴으로 실제 
 | 인증/인가 플로우 E2E 테스트 | ✅ | JWT + Guard 통합 테스트 |
 | API 응답 구조 검증 | ✅ | ResponseEntity 래핑 검증 |
 | 다중 서비스 통합 시나리오 | ✅ | ApplicationService 레벨 통합 테스트 |
-| 외부 시스템 wrapper가 포함된 엔드포인트 | ✅ | Integration Facade가 연결된 API 검증 |
+| 외부 시스템 wrapper가 포함된 엔드포인트 | ✅ | Gateway가 연결된 API 검증 |
 | 프론트엔드 E2E 테스트 | ❌ | `qa-fe-e2e-testing` 사용 |
 | 백엔드 단위 테스트 | ❌ | `qa-be-testing` 사용 |
 
@@ -50,7 +50,7 @@ NestJS `Test.createTestingModule({ imports: [AppModule] })` 패턴으로 실제 
 | 테스트 파일 | `apps/{app}/test/*.e2e-spec.ts` | E2E 테스트 파일 |
 | 설정 파일 | `apps/{app}/test/setup-e2e.ts` | 테스트 셋업 (필요시) |
 
-- 테스트 구현 후 route `page.spec.md` 또는 backend handoff의 구현 체크리스트와 `## 변경 이력`을 함께 갱신합니다.
+- 테스트 구현 후 route `page.spec.md` 또는 owner spec의 구현 체크리스트와 `## 변경 이력`을 함께 갱신합니다.
 
 ---
 
@@ -373,14 +373,14 @@ expect(response.body).toEqual({});
 
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

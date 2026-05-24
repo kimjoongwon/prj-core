@@ -84,7 +84,7 @@ Facade (user.facade.ts - UserFacade)
     ├── Space/Auth context 해석
     └── 필요 시 workflow 위임
         ↓
-ApplicationService / Service / Integration Facade
+ApplicationService / Service / Gateway
     ↓
 Repository (Prisma)
     ↓

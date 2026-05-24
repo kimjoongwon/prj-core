@@ -16,7 +16,7 @@ IDP 공개 인증 플로우에서 사용자가 가입할 Space를 선택하고 �
 ## 조사 결과
 
 - 현재 idp/web 인증 구조는 `/auth/login` OIDC redirect route와 `(auth)` group의 `/forgot-password`, `/reset-password/[token]`, `/interaction/[uid]`, `/error` route로 구성됩니다.
-- 기존 공개 인증 route는 route-local MobX state class를 만들고 `@cocrepo/ui` pure page에 state와 handler를 주입합니다.
+- 기존 공개 인증 route는 route-local MobX state class를 만들고 `@cocrepo/ui` pure screen에 state와 handler를 주입합니다.
 - `useSignUp`은 `@cocrepo/api/idp/auth`의 Orval 생성 mutation이며 `SignUpPayloadDto`는 `email`, `password`, `name`, `nickname`, `phone`, `address`, `spaceId`를 받습니다.
 - 기존 인증된 Space 목록 API는 회원가입 전 호출에 맞지 않아 `GET /api/v1/auth/sign-up/spaces` public endpoint와 Orval 생성 `useGetSignUpSpaces` hook을 사용합니다.
 
@@ -70,7 +70,7 @@ stateDiagram-v2
 ## UI 계층
 
 - route page: `apps/idp/web/src/app/(auth)/sign-up/page.tsx`
-- pure page: `packages/fe-ui/src/page/SignUpPage/SignUpPage.tsx`
+- pure screen: `packages/fe-ui/src/screen/SignUpPage/SignUpPage.tsx`
 - form widget: `packages/fe-ui/src/form/SignUpForm/SignUpForm.tsx`
 - 앱 내부에는 재사용 UI 컴포넌트를 만들지 않습니다.
 

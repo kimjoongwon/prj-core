@@ -11,9 +11,9 @@
 
 | 대상 | spec 위치 | 목적 |
 |------|-----------|------|
-| Next.js route page | `apps/*/web/src/app/**/page.spec.md` | route `page.tsx`의 데이터 조회, 라우팅, 이벤트 wiring, pure page 연결 계약 |
+| Next.js route page | `apps/*/web/src/app/**/page.spec.md` | route `page.tsx`의 데이터 조회, 라우팅, 이벤트 wiring, pure screen 연결 계약 |
 | Expo Router native route owner | `apps/mobile/src/app/**/index.spec.md` | mobile route layout/API/state/test/native wiring과 shared screen 연결 계약 |
-| fe-ui Page component | `packages/fe-ui/src/page/[PageName]/[PageName].spec.md` | page-level visual composition, props contract, 하위 Feature/Widget 조합 |
+| fe-ui Screen component | `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].spec.md` | screen-level visual composition, props contract, 하위 Feature/Widget 조합 |
 | fe-ui Feature component | `packages/fe-ui/src/feature/**/[FeatureName].spec.md` 또는 component owner가 `index.tsx`인 경우 `index.spec.md` | Store/API/router가 연결되는 Feature의 책임, 상태, 이벤트 계약 |
 | fe-mo-ui Screen component | `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].spec.md` | 모바일 screen-level visual composition, props contract, route wiring boundary |
 
@@ -43,7 +43,6 @@
 | 설정 설명 | `package.spec.md`, `vitest.config.spec.md` | `package.guide.md`, `vitest.config.guide.md` |
 | 배포/운영 설명 | `Dockerfile.*.spec.md`, `Jenkinsfile.*.spec.md` | `*.ops.md` |
 | agent / tool 규칙 | `*.toml.spec.md`, `*.toml.guide.md` | 해당 `*.toml`의 `developer_instructions`, `README.md` |
-| 템플릿 문서 | `page.spec.md` template 파일 | `page.template.md` |
 | 테스트 의도 | `*.test.spec.md`, `*.e2e.spec.md` | 테스트 코드 주석, `*.test-notes.md` |
 
 ## 운영 원칙
@@ -61,19 +60,24 @@
 ### Next.js route `page.spec.md`
 
 - 화면 목적과 사용자 시나리오
-- route path, `page.tsx` path, 연결할 `packages/fe-ui/src/page/[PageName]/[PageName].tsx`
+- component명 없는 `Visual Snapshot`과 component/계층을 표시하는 `Annotated Wireframe`
+- route path, `page.tsx` path, 연결할 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`
 - `page role`: `collection`, `detail`, `form` 중 하나
 - `reusable target`: `data-grid`, `collection/list`, `collection/grid`, `detail/view`, `form`
+- component inventory: 계층, 재사용/신규, 대상 파일, 소스 담당 `agent_type`, 소비/Wiring `agent_type`
+- Storybook/Test contract: `Storybook 인벤토리`, `Unit Test 인벤토리`, 작성/검증 담당 `agent_type`
+- PC/Web story/test는 `packages/fe-ui/src/**` component source owner builder가 작성하며, route `page.tsx`와 `layout.tsx`는 Storybook 대상이 아닙니다.
 - Orval hook/API, search params, route params, redirect/navigation 책임
 - loading/error/empty 상태 전달 방식
 - `on[Event][UI]` 이벤트 handler와 이동/ mutation 결과
 - E2E에서 검증할 핵심 흐름
 
-### fe-ui Page component spec
+### fe-ui Screen component spec
 
-- page-level visual composition 책임
+- screen-level visual composition 책임
 - props contract와 이벤트 props
 - 조합하는 Feature/Widget/Form/Collection/Detail 목록
+- 신규/수정 component story와 unit test 계약
 - loading/error/empty/disabled 상태별 렌더링
 - Surface owner와 elevation 경계
 - 접근성, 반응형, 테스트 관점
@@ -83,12 +87,16 @@
 - Feature가 연결하는 Store/API/router 책임
 - props contract, observable state, mutation/refetch 흐름
 - Widget/UI에 주입하는 값과 이벤트
+- Feature source 변경과 함께 작성/갱신할 Storybook story와 unit test 계약
 - 실패/권한/disabled/loading 상태
 - 이 Feature를 소비하는 Page 목록
 
 ### Expo Router native route `index.spec.md`
 
 - route path, route file, layout shell, shared screen 연결 계약
+- component명 없는 `Visual Snapshot`과 component/계층을 표시하는 `Annotated Wireframe`
+- mobile component inventory: Screen/Feature/Widget/Action/Input/Selection/Feedback/Layout 계층, 재사용/신규, 대상 파일, 담당 `agent_type`
+- mobile Storybook/Test contract: story variant와 unit test 케이스, 작성/검증 담당 `agent_type`
 - Expo Router params, navigation, API/state/native bridge owner 경계
 - `screen component target`과 route가 주입할 `screen props contract`
 - loading/error/empty 상태 전달 방식
@@ -98,7 +106,8 @@
 
 - 모바일 screen-level visual composition 책임
 - props contract와 event handler props
-- 조합하는 `@cocrepo/mo-ui` primitive/action/input/selection/navigation/menu/widget/feature/form/detail 목록
+- 조합하는 `@cocrepo/mo-ui` primitive/action/input/selection/navigation/data-display/feedback/layout/menu/widget/feature 목록
+- Screen source 변경과 함께 작성/갱신할 mobile Storybook story와 unit test 계약
 - 상태별 렌더링과 route/native wiring boundary
 - React Native 접근성, 테스트 관점
 
@@ -107,5 +116,5 @@
 1. `spec:audit:list`로 허용 범위 밖 legacy spec 목록을 확인합니다.
 2. 의미 있는 운영/설정 문서는 `*.guide.md`, `*.ops.md`, `*.notes.md`, `README.md`로 이관합니다.
 3. 자동 생성 흔적만 있는 legacy spec은 삭제합니다.
-4. route page, mobile route, fe-ui Page, fe-ui Feature, fe-mo-ui Screen spec은 새 포맷에 맞춰 실제 화면 계약 중심으로 정리합니다.
+4. route page, mobile route, fe-ui Screen, fe-ui Feature, fe-mo-ui Screen spec은 새 포맷에 맞춰 실제 화면 계약 중심으로 정리합니다.
 5. 마지막으로 `spec:audit`를 돌려 orphan 목록이 남지 않는지 확인합니다.

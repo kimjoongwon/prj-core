@@ -58,7 +58,7 @@ export function createOverviewManifestSourceMaps(
     repoRoot,
     "apps/tool/storybook/src/overview",
   );
-  const purePageDirectory = join(repoRoot, "packages/fe-ui/src/page");
+  const purePageDirectory = join(repoRoot, "packages/fe-ui/src/screen");
   const adminRouteDirectory = join(repoRoot, "apps/admin/web/src/app");
   const idpRouteDirectory = join(repoRoot, "apps/idp/web/src/app");
 

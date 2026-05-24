@@ -254,14 +254,14 @@ function extractStoryExportNames(source: string) {
 
 function getComponentNameFromStoryPath(filePath: string) {
 	const normalized = normalizeSlashes(filePath);
-	const match = normalized.match(/\/page\/([^/]+)\/[^/]+\.stories\.tsx$/);
+	const match = normalized.match(/\/screen\/([^/]+)\/[^/]+\.stories\.tsx$/);
 
 	return match?.[1] ?? null;
 }
 
 function getComponentNameFromPureSpecPath(filePath: string) {
 	const normalized = normalizeSlashes(filePath);
-	const match = normalized.match(/\/page\/([^/]+)\/[^/]+\.spec\.md$/);
+	const match = normalized.match(/\/screen\/([^/]+)\/[^/]+\.spec\.md$/);
 
 	return match?.[1] ?? null;
 }
@@ -276,7 +276,7 @@ function createStoryRecords(storySources: Record<string, string>) {
 			continue;
 		}
 
-		const storyTitle = `page/${componentName}`;
+		const storyTitle = `screen/${componentName}`;
 		const storyExports = extractStoryExportNames(source);
 		const storyIds = storyExports.map((exportName) =>
 			createStoryId(storyTitle, exportName),
@@ -288,7 +288,7 @@ function createStoryRecords(storySources: Record<string, string>) {
 
 		storyRecords.push({
 			componentName,
-			componentPath: `page/${componentName}/${componentName}.tsx`,
+			componentPath: `screen/${componentName}/${componentName}.tsx`,
 			storyTitle,
 			storyId,
 			storyHref: storyId ? `./?path=/story/${storyId}` : null,

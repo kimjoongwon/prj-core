@@ -192,7 +192,7 @@ executeReset(rawToken, newPassword):
 
 ### 세션 조회 로직
 
-**위치**: `packages/be-app/src/auth.application-service.ts` 또는 `packages/be-integration/src/oidc.facade.ts`
+**위치**: `packages/be-app/src/auth.application-service.ts` 또는 `packages/be-gateway/src/oidc.gateway.ts`
 
 ```
 getMySession(userId, currentAccessToken):

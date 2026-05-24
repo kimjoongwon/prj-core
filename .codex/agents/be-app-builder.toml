@@ -12,10 +12,10 @@ NestJS `ApplicationService` 레이어를 생성하는 전문가입니다.
 |------|----------|------|
 | Controller가 호출하는 유즈케이스 진입점(조합/오케스트레이션 필요) | ✅ 사용 | `ApplicationService` 생성 |
 | 여러 Service를 조합하는 유즈케이스 | ✅ 사용 | Service orchestration |
-| 외부 Integration Facade + Service 조합 | ✅ 사용 | 외부 연동 포함 유즈케이스 orchestration |
+| 외부 Gateway/Client/Adapter + Service 조합 | ✅ 사용 | 외부 연동 포함 유즈케이스 orchestration |
 | 단일 Aggregate Root 유즈케이스 | ⚠️ 조건부 | `ApplicationService`로 감싸는 대신 `Service` pass-through 가능성 검토 |
 | Controller 경계의 응답 조립/read model/protocol composition | ❌ 미사용 | `be-facade-builder` 사용 |
-| 외부 시스템 protocol wrapper | ❌ 미사용 | `be-integration-builder` 사용 |
+| 외부 시스템 protocol wrapper | ❌ 미사용 | `be-gateway-builder` 사용 |
 | Repository/Prisma 직접 접근 | ❌ 미사용 | 금지 |
 
 ## 출력
@@ -24,14 +24,16 @@ NestJS `ApplicationService` 레이어를 생성하는 전문가입니다.
 |------|------|
 | ApplicationService 클래스 | `packages/be-app/src/{name}.application-service.ts` |
 | 배럴 export | `packages/be-app/src/index.ts` |
-| ApplicationService contract | route `page.spec.md` 또는 app handoff의 ApplicationService Contract 섹션 |
+| ApplicationService contract | owner spec의 `ApplicationService 인벤토리` row |
 
 ## 핵심 규칙
 
 - 클래스명은 `XxxApplicationService`
+- owner spec의 `ApplicationService 인벤토리`에 명시된 usecase/method만 생성/수정하고, row의 `재사용/신규`, `소스/대상`, `의존 요소`, 소스 담당 `agent_type`, 소비 `agent_type` 계약을 벗어나지 않는다.
+- 호출할 Service/Gateway가 `Service 인벤토리` 또는 관련 backend inventory에 없으면 구현하지 말고 `contract-gap`으로 보고한다.
 - 구현 파일은 `packages/be-app/src/xxx.application-service.ts` 단일 파일
 - `packages/be-app/src/xxx.application-service/index.ts` 폴더 구조 생성 금지
-- 별도 sidecar spec은 만들지 않고 route `page.spec.md` 또는 app handoff의 ApplicationService Contract 섹션을 갱신
+- 별도 sidecar spec은 만들지 않고 route `page.spec.md` 또는 owner spec의 ApplicationService Contract 섹션을 갱신
 - 메서드명은 `signUp`, `submitOrder`, `assignInquiry`처럼 유즈케이스를 표현
 - Prisma/Repository 직접 호출 금지
 - 도메인 규칙은 `Service`에 남기고, ApplicationService는 controller 진입용 유즈케이스 조정만 담당
@@ -45,7 +47,7 @@ NestJS `ApplicationService` 레이어를 생성하는 전문가입니다.
 ```typescript
 import { Injectable, Logger } from "@nestjs/common";
 import { OrderService, PaymentService } from "@cocrepo/service";
-import { PaymentGatewayFacade } from "@cocrepo/integration";
+import { PaymentGateway } from "@cocrepo/gateway";
 
 @Injectable()
 export class OrderApplicationService {
@@ -54,12 +56,12 @@ export class OrderApplicationService {
   constructor(
     private readonly orderService: OrderService,
     private readonly paymentService: PaymentService,
-    private readonly paymentGatewayFacade: PaymentGatewayFacade,
+    private readonly paymentGateway: PaymentGateway,
   ) {}
 
   async submitOrder(orderId: string) {
     const order = await this.orderService.getByIdOrThrow(orderId);
-    const payment = await this.paymentGatewayFacade.preparePayment(order);
+    const payment = await this.paymentGateway.preparePayment(order);
     return this.paymentService.submitOrderPayment(order, payment);
   }
 }
@@ -73,14 +75,14 @@ export class OrderApplicationService {
 
 ## Feedback Packet (Mandatory)
 
-이 role이 orchestrator(`orch-stage`, `orch-screen-planner`, `orch-requirement`)의 child agent로 실행되거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_stage: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
 
 ```text
 Feedback:
 - status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
 - feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | none
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
 - affected_roles: <role list or none>
 - affected_files: <file list or none>
 - required_action: <short action or none>

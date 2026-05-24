@@ -112,7 +112,7 @@
 |------|------|--------|
 | 2026-03-22 | 관리자 대시보드를 `DetailPage`/`DetailPageSurface`/`DetailSectionCard` 조합으로 정리하고 spec 설명을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
-| 2026-03-21 | fe-page-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-14 | 로그인 후 대시보드 진입 시 hydration recoverable error가 없어야 한다는 E2E 회귀 조건 추가 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
