@@ -8,6 +8,9 @@ import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
+import { Description as HeroDescription } from "heroui-native/description";
+import { FieldError as HeroFieldError } from "heroui-native/field-error";
+import { Label as HeroLabel } from "heroui-native/label";
 import {
   SearchField as HeroSearchField,
   searchFieldClassNames,
@@ -23,10 +26,16 @@ type SearchFieldInputProps = ComponentPropsWithoutRef<
 type SearchFieldSearchIconProps = ComponentPropsWithoutRef<
   typeof HeroSearchField.SearchIcon
 >;
+interface SearchFieldCompositionProps {
+  description?: ReactNode;
+  errorMessage?: ReactNode;
+  helperText?: ReactNode;
+  label?: ReactNode;
+}
 export interface PureSearchFieldProps extends Omit<
   HeroSearchFieldProps,
-  "children"
-> {
+  "children" | keyof SearchFieldCompositionProps
+>, SearchFieldCompositionProps {
   children?: ReactNode;
   clearButtonProps?: SearchFieldClearButtonProps;
   inputProps?: SearchFieldInputProps;
@@ -37,19 +46,48 @@ const PureSearchFieldComponent = forwardRef<
   PureSearchFieldProps
 >(
   (
-    { children, clearButtonProps, inputProps, searchIconProps, ...rest },
+    {
+      children,
+      clearButtonProps,
+      description,
+      errorMessage,
+      helperText,
+      inputProps,
+      isInvalid,
+      label,
+      searchIconProps,
+      ...rest
+    },
     ref,
-  ) => (
-    <HeroSearchField {...rest} ref={ref}>
-      {children ?? (
-        <HeroSearchField.Group>
-          <HeroSearchField.SearchIcon {...searchIconProps} key="icon" />
-          <HeroSearchField.Input {...inputProps} key="input" />
-          <HeroSearchField.ClearButton {...clearButtonProps} key="clear" />
-        </HeroSearchField.Group>
-      )}
-    </HeroSearchField>
-  ),
+  ) => {
+    const resolvedInvalid = Boolean(isInvalid || errorMessage);
+
+    return (
+      <HeroSearchField {...rest} isInvalid={resolvedInvalid} ref={ref}>
+        {children ?? (
+          <>
+            {label && <HeroLabel>{label}</HeroLabel>}
+            <HeroSearchField.Group>
+              <HeroSearchField.SearchIcon {...searchIconProps} />
+              <HeroSearchField.Input {...inputProps} />
+              <HeroSearchField.ClearButton {...clearButtonProps} />
+            </HeroSearchField.Group>
+            {description && (
+              <HeroDescription hideOnInvalid={Boolean(errorMessage)}>
+                {description}
+              </HeroDescription>
+            )}
+            {helperText && (
+              <HeroDescription hideOnInvalid={Boolean(errorMessage)}>
+                {helperText}
+              </HeroDescription>
+            )}
+            {errorMessage && <HeroFieldError>{errorMessage}</HeroFieldError>}
+          </>
+        )}
+      </HeroSearchField>
+    );
+  },
 );
 PureSearchFieldComponent.displayName = "PureSearchField";
 export interface SearchFieldProps<
@@ -76,12 +114,18 @@ const SearchFieldComponent = observer(
 SearchFieldComponent.displayName = "SearchField";
 export const SearchField = Object.assign(SearchFieldComponent, {
   ClearButton: HeroSearchField.ClearButton,
+  Description: HeroDescription,
+  Error: HeroFieldError,
+  FieldError: HeroFieldError,
   Group: HeroSearchField.Group,
   Input: HeroSearchField.Input,
+  Label: HeroLabel,
   SearchIcon: HeroSearchField.SearchIcon,
 }) as typeof SearchFieldComponent &
-  Pick<
-    typeof HeroSearchField,
-    "ClearButton" | "Group" | "Input" | "SearchIcon"
-  >;
+  Pick<typeof HeroSearchField, "ClearButton" | "Group" | "Input" | "SearchIcon"> & {
+    Description: typeof HeroDescription;
+    Error: typeof HeroFieldError;
+    FieldError: typeof HeroFieldError;
+    Label: typeof HeroLabel;
+  };
 export { searchFieldClassNames, useSearchField };

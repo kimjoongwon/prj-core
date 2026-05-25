@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { observable } from "mobx";
-import { ScrollView, View } from "react-native";
+import { ScrollView } from "react-native";
 import { Text } from "../../data-display/Text";
+import { VStack } from "../../rhythm";
 import { InputOTP } from "./index";
 
 const state = observable({
@@ -23,13 +24,19 @@ type Story = StoryObj;
 export const Default: Story = {
   render: () => (
     <ScrollView contentContainerClassName="gap-3 px-4 py-5">
-      <View className="gap-2">
-        <Text className="text-lg font-extrabold text-foreground">InputOTP</Text>
-        <Text className="text-sm leading-5 text-muted">
+      <VStack gap="dense">
+        <Text variant="heading">InputOTP</Text>
+        <Text tone="muted">
           휴대폰 인증, 초대 코드 같은 짧은 보안 입력을 확인합니다.
         </Text>
-      </View>
-      <InputOTP maxLength={6} path="code" state={state} />
+      </VStack>
+      <InputOTP
+        description="문자로 받은 6자리 인증번호를 입력합니다."
+        helperText="인증번호는 3분 동안 유효합니다."
+        label="인증번호"
+        path="code"
+        state={state}
+      />
     </ScrollView>
   ),
 };

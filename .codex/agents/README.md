@@ -75,9 +75,10 @@ Storybook/Test 소유권:
 
 - PC/Web은 `packages/fe-ui/src/**` component source를 소유한 builder role이 story/test를 함께 작성합니다.
 - Mobile은 `packages/fe-mo-ui/src/**` component source를 소유한 builder role이 story/test를 함께 작성합니다.
+- Mobile builder role은 작업 전에 `https://heroui.com/llms-patterns.txt`를 열어 HeroUI Native Composition/Styling/Provider/Portal 패턴을 확인합니다.
 - Mobile의 사용자 노출 텍스트는 `@cocrepo/mo-ui` `Text` primitive를 사용합니다. `react-native` `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 구현 내부에서만 허용합니다.
 - Mobile compound/action primitive가 문자열 children을 받으면 wrapper 내부에서 `Text`로 정규화합니다. `Switch`, `Checkbox`, `RadioGroup.Item`, `Button`, `Chip` 등이 HeroUI Native에 raw string children을 그대로 넘기면 안 됩니다.
-- Mobile HeroUI Native compound wrapper는 return-only re-export로 끝내지 않습니다. `title`, `description`, `items`, `trigger`, `actions` 같은 의미 있는 props로 기본 조합을 제공하고 dot-slot escape hatch를 함께 유지합니다.
+- Mobile HeroUI Native compound wrapper는 return-only re-export로 끝내지 않습니다. field 계열은 upstream `TextField`, `Label`, `Description`, `FieldError`, `InputGroup` composition을 먼저 사용하고, `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` 같은 의미 있는 props와 dot-slot escape hatch를 함께 유지합니다.
 - route `page.tsx`, Expo route file, `layout.tsx`, `_layout.tsx`, Store, backend-only step은 Storybook 대상이 아니며 필요한 unit/E2E 검증만 route delivery spec에 적습니다.
 - QA role은 story/test 누락, 실패, contract drift를 검증합니다.
 
