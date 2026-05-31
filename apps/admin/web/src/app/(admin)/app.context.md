@@ -313,11 +313,11 @@ Space
 | 2 | COURSE-S2-BE-004 | `be-controller-builder`, `be-module-builder`, `be-bootstrap-integrator` | `/api/v1/courses`, `/api/v1/courses/offerings`, `/api/v1/courses/enrollments`, `/api/v1/courses/passes` controller/module and `apps/core/api/src/module/app.module.ts` wiring |
 | 2 | COURSE-S2-BE-005 | `be-service-builder`, `be-repository-builder`, `be-dto-builder` | Reservation create/list contract update for `coursePassId` and CoursePass entitlement validation |
 | 3 | COURSE-S3-API-001 | `fe-api-integrator` | `pnpm --filter=@cocrepo/api codegen:server`, generated `packages/fe-api/src/core/courses` and model exports |
-| 3 | COURSE-S3-FE-001 | `fe-api-integrator`, `fe-route-builder` | `apps/admin/web/src/app/(admin)/{courses,course-offerings,enrollments,course-passes}/page.tsx`, `useCourseManagementPageData`, query state rendering |
+| 3 | COURSE-S3-FE-001 | `fe-api-integrator`, `fe-route-agent` | `apps/admin/web/src/app/(admin)/{courses,course-offerings,enrollments,course-passes}/page.tsx`, `useCourseManagementPageData`, query state rendering |
 | 3 | COURSE-S3-QA-001 | `qa-fe-e2e-testing` | Course route sidecar E2E assertions for API-backed data and empty states |
 | 2 | PAYMENT-S2-BE-001 | `be-prisma-builder`, `be-entity-builder`, `be-dto-builder`, `be-repository-builder`, `be-service-builder`, `mig-be-usecase-builder`, `be-controller-builder` | `packages/be-prisma/schema/billing/payment.prisma`, `packages/be-service/src/payment/payment.service.ts`, `apps/core/api/src/module/payments` |
 | 3 | PAYMENT-S3-API-001 | `fe-api-integrator` | `pnpm --filter=@cocrepo/api codegen:server`, generated `packages/fe-api/src/core/payments` |
-| 3 | PAYMENT-S3-FE-001 | `fe-api-integrator`, `fe-route-builder`, `fe-feature-builder`, `fe-widget-builder` | `apps/admin/web/src/app/(admin)/payments/page.tsx`, `usePaymentManagementPageData`, `packages/fe-ui/src/screen/PaymentManagementPage`, `packages/fe-ui/src/feature/payment-management`, `packages/fe-ui/src/widget/payment-management` |
+| 3 | PAYMENT-S3-FE-001 | `fe-api-integrator`, `fe-route-agent`, `fe-feature-agent`, `fe-widget-agent` | `apps/admin/web/src/app/(admin)/payments/page.tsx`, `usePaymentManagementPageData`, `packages/fe-ui/src/screen/PaymentManagementPage`, `packages/fe-ui/src/feature/payment-management`, `packages/fe-ui/src/widget/payment-management` |
 
 ## Inquiry 도메인 맥락
 

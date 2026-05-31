@@ -11,32 +11,32 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { EmailVerificationStatus } from "./emailVerificationStatus";
+import type { EmailVerificationStatus } from './emailVerificationStatus';
 
 export type GetEmailVerificationsParams = {
-	/**
-	 * @minimum 0
-	 */
-	skip?: number;
-	/**
-	 * @minimum 1
-	 * @maximum 200
-	 */
-	take?: number;
-	/**
-	 * 이메일 (부분 일치)
-	 */
-	email?: string;
-	/**
-	 * 상태
-	 */
-	status?: EmailVerificationStatus;
-	/**
-	 * 시작일 (createdAt >= startDate)
-	 */
-	startDate?: string;
-	/**
-	 * 종료일 (createdAt <= endDate)
-	 */
-	endDate?: string;
+/**
+ * @minimum 0
+ */
+skip?: number;
+/**
+ * @minimum 1
+ * @maximum 200
+ */
+take?: number;
+/**
+ * 이메일 (부분 일치)
+ */
+email?: string;
+/**
+ * 상태
+ */
+status?: EmailVerificationStatus;
+/**
+ * 시작일 (createdAt >= startDate)
+ */
+startDate?: string;
+/**
+ * 종료일 (createdAt <= endDate)
+ */
+endDate?: string;
 };

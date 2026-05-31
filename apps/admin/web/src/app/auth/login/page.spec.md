@@ -30,10 +30,10 @@ OIDC login/callback/interaction은 IDP/OIDC protocol boundary로 유지한다. �
 | 대상 | Planning Spec | Source 파일 | 역할 | 재사용/신규 | 갱신 여부 | 담당 `agent_type` | 비고 |
 |------|---------------|-------------|------|-------------|-----------|-------------------|------|
 | login route | this route delivery spec | `apps/admin/web/src/app/auth/login/page.tsx` | route execution source of truth, native login policy, route/hook/store/API/QA 실행 계약 | modify | done in this re-entry | `orch-delivery` | 별도 delivery plan 파일 없음 |
-| login visual owner | `packages/fe-ui/src/screen/LoginPage/LoginPage.spec.md` | `packages/fe-ui/src/screen/LoginPage/LoginPage.tsx` | title/caption/form/error/CTA visual contract | reuse/modify | 승인 후 visual reconciliation 필요 시 갱신 | `fe-screen-builder` | 실행 순서와 approval log는 이 route spec만 소유 |
-| login input form | none-current | `packages/fe-ui/src/form/LoginForm/LoginForm.tsx` | email/password input composition | reuse | no planning spec change in this re-entry | `fe-screen-builder` | source 변경이 필요하면 LoginPage planning spec 하위 계약으로만 보강 |
-| app auth bridge | none-current | `apps/admin/web/src/app/providers.tsx` | native refresh handler, verify-token bootstrap | reuse/modify | route delivery spec에서만 실행 계약 기록 | `fe-route-builder` | provider source 자체 별도 spec 없음 |
-| admin header logout | none-current | `apps/admin/web/src/app/(admin)/_layout/AdminHeaderSlot.tsx` | native logout mutation + local session clear | reuse/modify | route delivery spec에서만 실행 계약 기록 | `fe-route-builder` | header route layout owner와 lock 분리 |
+| login visual owner | `packages/fe-ui/src/screen/LoginPage/LoginPage.spec.md` | `packages/fe-ui/src/screen/LoginPage/LoginPage.tsx` | title/caption/form/error/CTA visual contract | reuse/modify | 승인 후 visual reconciliation 필요 시 갱신 | `fe-screen-agent` | 실행 순서와 approval log는 이 route spec만 소유 |
+| login input form | none-current | `packages/fe-ui/src/form/LoginForm/LoginForm.tsx` | email/password input composition | reuse | no planning spec change in this re-entry | `fe-screen-agent` | source 변경이 필요하면 LoginPage planning spec 하위 계약으로만 보강 |
+| app auth bridge | none-current | `apps/admin/web/src/app/providers.tsx` | native refresh handler, verify-token bootstrap | reuse/modify | route delivery spec에서만 실행 계약 기록 | `fe-route-agent` | provider source 자체 별도 spec 없음 |
+| admin header logout | none-current | `apps/admin/web/src/app/(admin)/_layout/AdminHeaderSlot.tsx` | native logout mutation + local session clear | reuse/modify | route delivery spec에서만 실행 계약 기록 | `fe-route-agent` | header route layout owner와 lock 분리 |
 
 ### Design Alignment
 
@@ -104,32 +104,32 @@ Legend: A=route-local auth actions, B=route layout large auth section, C=shared 
 
 | 영역 | 리듬 컴포넌트 | 방향/정렬 | gap preset | 감싸는 대상 | 재사용/신규 | 소스/대상 | 담당 `agent_type` | 비고 |
 |------|---------------|-----------|------------|-------------|-------------|-----------|-------------------|------|
-| auth shell | `Section` + `VStack` 또는 route shell wrapper | vertical / center | `roomy` | intro copy, login surface | modify | `apps/admin/web/src/app/auth/login/layout.tsx` | `fe-route-builder` | 현재 raw flex centering은 구현 reconciliation 대상. full viewport centering 외 예외 raw gap 남용 금지 |
-| top actions | `HStack` | horizontal / end | `inline` | language/theme action buttons | modify | `apps/admin/web/src/app/auth/login/AuthLoginActions.tsx` | `fe-route-builder` | 현재 raw `flex gap-2`는 승인 후 HStack 전환 검토 |
-| route page | none thin container | n/a | n/a | `LoginPage` props | reuse | `apps/admin/web/src/app/auth/login/page.tsx` | `fe-route-builder` | page는 visual JSX를 소유하지 않음 |
-| login screen root | `VStack` | vertical / stretch | `roomy` | title, form, error, submit | modify | `packages/fe-ui/src/screen/LoginPage/LoginPage.tsx` | `fe-screen-builder` | 현재 numeric gap은 semantic preset으로 reconciliation 필요 |
-| title/caption | `VStack` | vertical / start | `block` | title, caption | modify | `LoginPage.tsx` | `fe-screen-builder` | auth large section의 첫 인상과 중복되지 않게 route/screen title hierarchy 확인 |
-| form fields | `VStack` | vertical / stretch | `section` | email/password inputs | reuse/modify | `packages/fe-ui/src/form/LoginForm/LoginForm.tsx` | `fe-screen-builder` | field label/helper/error proximity 유지 |
-| error feedback | `VStack` or Text role | vertical / start | `block` | server/display error | modify | `LoginPage.tsx` | `fe-screen-builder` | `danger` role + retry 가능한 submit CTA 근접 |
-| submit action | full-width `Button` | action / stretch | n/a | login CTA | reuse/modify | `LoginPage.tsx` | `fe-screen-builder` | loading/disabled guard must not shift layout |
+| auth shell | `Section` + `VStack` 또는 route shell wrapper | vertical / center | `roomy` | intro copy, login surface | modify | `apps/admin/web/src/app/auth/login/layout.tsx` | `fe-route-agent` | 현재 raw flex centering은 구현 reconciliation 대상. full viewport centering 외 예외 raw gap 남용 금지 |
+| top actions | `HStack` | horizontal / end | `inline` | language/theme action buttons | modify | `apps/admin/web/src/app/auth/login/AuthLoginActions.tsx` | `fe-route-agent` | 현재 raw `flex gap-2`는 승인 후 HStack 전환 검토 |
+| route page | none thin container | n/a | n/a | `LoginPage` props | reuse | `apps/admin/web/src/app/auth/login/page.tsx` | `fe-route-agent` | page는 visual JSX를 소유하지 않음 |
+| login screen root | `VStack` | vertical / stretch | `roomy` | title, form, error, submit | modify | `packages/fe-ui/src/screen/LoginPage/LoginPage.tsx` | `fe-screen-agent` | 현재 numeric gap은 semantic preset으로 reconciliation 필요 |
+| title/caption | `VStack` | vertical / start | `block` | title, caption | modify | `LoginPage.tsx` | `fe-screen-agent` | auth large section의 첫 인상과 중복되지 않게 route/screen title hierarchy 확인 |
+| form fields | `VStack` | vertical / stretch | `section` | email/password inputs | reuse/modify | `packages/fe-ui/src/form/LoginForm/LoginForm.tsx` | `fe-screen-agent` | field label/helper/error proximity 유지 |
+| error feedback | `VStack` or Text role | vertical / start | `block` | server/display error | modify | `LoginPage.tsx` | `fe-screen-agent` | `danger` role + retry 가능한 submit CTA 근접 |
+| submit action | full-width `Button` | action / stretch | n/a | login CTA | reuse/modify | `LoginPage.tsx` | `fe-screen-agent` | loading/disabled guard must not shift layout |
 
 ### Component Inventory
 
 | 영역 | 컴포넌트 | 계층 | 재사용/신규 | 소스/대상 | Props/이벤트 | 소스 담당 `agent_type` | 소비/Wiring `agent_type` |
 |------|-----------|------|-------------|-----------|--------------|-------------------------|---------------------------|
-| route page | `AuthLoginPage` | Route | modify | `apps/admin/web/src/app/auth/login/page.tsx` | `state`, `isLoading`, `onSubmitLoginForm`, title/caption props to `LoginPage` | `fe-route-builder` | `fe-route-builder` |
-| route hook | `useAuthLoginPage` | Hook/Route | modify | `apps/admin/web/src/app/auth/login/hooks/useAuthLoginPage.tsx` | native login mutation, error message, safe return path, session store writes | `fe-route-builder` | `fe-route-builder` |
-| route layout | `LoginLayoutRoute` | Route/Layout | modify | `apps/admin/web/src/app/auth/login/layout.tsx` | auth large section, centering, children slot | `fe-route-builder` | `fe-route-builder` |
-| route actions | `AuthLoginActions` | Action/Navigation | modify | `apps/admin/web/src/app/auth/login/AuthLoginActions.tsx` | language/theme action buttons | `fe-route-builder` | `fe-route-builder` |
-| login screen | `LoginPage` | Screen | reuse/modify | `packages/fe-ui/src/screen/LoginPage/LoginPage.tsx` | `LoginPageState`, `title`, `caption`, `isLoading`, `onSubmitLoginForm` | `fe-screen-builder` | `fe-route-builder` |
-| login form | `LoginForm` | Form/Input | reuse/modify | `packages/fe-ui/src/form/LoginForm/LoginForm.tsx` | `state.email`, `state.password` | `fe-screen-builder` | `fe-screen-builder` |
-| primitive input | `Input` | Input | reuse | `packages/fe-ui/src/control/Input` | path-bound email/password input | none | `fe-screen-builder` |
-| primitive action | `Button` | Action | reuse | `packages/fe-ui/src/control/Button/Button.tsx` | submit, loading, disabled | none | `fe-screen-builder` |
-| auth bridge | `NativeAuthBridge` | Provider/Feature | modify | `apps/admin/web/src/app/providers.tsx` | native refresh handler registration for core/idp clients | `fe-route-builder` | `fe-route-builder` |
-| ability bootstrap | `AbilityStoreBootstrapper` | Provider/Feature | reuse/modify | `apps/admin/web/src/app/providers.tsx` | `useVerifyToken`, ability rule refresh | `fe-route-builder` | `fe-route-builder` |
-| header logout | `AdminHeaderSlot` | Navigation/Action | modify | `apps/admin/web/src/app/(admin)/_layout/AdminHeaderSlot.tsx` | `useNativeLogout`, session clear, redirect to login | `fe-route-builder` | `fe-route-builder` |
-| persisted session | `PersistStore` | Store | modify | `packages/fe-store/src/stores/persistStore.ts` | native access/refresh/session fields and methods | `fe-store-builder` | `fe-route-builder` |
-| API hooks | Orval generated idp auth hooks | API | reuse/verify | `packages/fe-api/src/idp/auth/auth.ts` | `useNativeLogin`, `nativeRefreshToken`, `useNativeLogout`, `useVerifyToken` | `fe-route-builder` | `fe-route-builder` |
+| route page | `AuthLoginPage` | Route | modify | `apps/admin/web/src/app/auth/login/page.tsx` | `state`, `isLoading`, `onSubmitLoginForm`, title/caption props to `LoginPage` | `fe-route-agent` | `fe-route-agent` |
+| route hook | `useAuthLoginPage` | Hook/Route | modify | `apps/admin/web/src/app/auth/login/hooks/useAuthLoginPage.tsx` | native login mutation, error message, safe return path, session store writes | `fe-route-agent` | `fe-route-agent` |
+| route layout | `LoginLayoutRoute` | Route/Layout | modify | `apps/admin/web/src/app/auth/login/layout.tsx` | auth large section, centering, children slot | `fe-route-agent` | `fe-route-agent` |
+| route actions | `AuthLoginActions` | Action/Navigation | modify | `apps/admin/web/src/app/auth/login/AuthLoginActions.tsx` | language/theme action buttons | `fe-route-agent` | `fe-route-agent` |
+| login screen | `LoginPage` | Screen | reuse/modify | `packages/fe-ui/src/screen/LoginPage/LoginPage.tsx` | `LoginPageState`, `title`, `caption`, `isLoading`, `onSubmitLoginForm` | `fe-screen-agent` | `fe-route-agent` |
+| login form | `LoginForm` | Form/Input | reuse/modify | `packages/fe-ui/src/form/LoginForm/LoginForm.tsx` | `state.email`, `state.password` | `fe-screen-agent` | `fe-screen-agent` |
+| primitive input | `Input` | Input | reuse | `packages/fe-ui/src/control/Input` | path-bound email/password input | none | `fe-screen-agent` |
+| primitive action | `Button` | Action | reuse | `packages/fe-ui/src/control/Button/Button.tsx` | submit, loading, disabled | none | `fe-screen-agent` |
+| auth bridge | `NativeAuthBridge` | Provider/Feature | modify | `apps/admin/web/src/app/providers.tsx` | native refresh handler registration for core/idp clients | `fe-route-agent` | `fe-route-agent` |
+| ability bootstrap | `AbilityStoreBootstrapper` | Provider/Feature | reuse/modify | `apps/admin/web/src/app/providers.tsx` | `useVerifyToken`, ability rule refresh | `fe-route-agent` | `fe-route-agent` |
+| header logout | `AdminHeaderSlot` | Navigation/Action | modify | `apps/admin/web/src/app/(admin)/_layout/AdminHeaderSlot.tsx` | `useNativeLogout`, session clear, redirect to login | `fe-route-agent` | `fe-route-agent` |
+| persisted session | `PersistStore` | Store | modify | `packages/fe-store/src/stores/persistStore.ts` | native access/refresh/session fields and methods | `fe-store-agent` | `fe-route-agent` |
+| API hooks | Orval generated idp auth hooks | API | reuse/verify | `packages/fe-api/src/idp/auth/auth.ts` | `useNativeLogin`, `nativeRefreshToken`, `useNativeLogout`, `useVerifyToken` | `fe-route-agent` | `fe-route-agent` |
 
 ### Foundation Contract
 
@@ -137,37 +137,37 @@ Legend: A=route-local auth actions, B=route layout large auth section, C=shared 
 
 | 필요 | Hook | 범위 | 재사용/신규 | 소스/대상 | 입력/반환 계약 | 의존 요소 | 소스 담당 `agent_type` | 소비/Wiring `agent_type` | 검증 `agent_type` |
 |------|------|------|-------------|-----------|----------------|-----------|-------------------------|---------------------------|-------------------|
-| login route state/mutation | `useAuthLoginPage` | route-local | modify | `apps/admin/web/src/app/auth/login/hooks/useAuthLoginPage.tsx` | returns `{ state: { loginForm, errorMessage }, isLoading, onSubmitLoginForm }`; submit calls native login and stores session | `useNativeLogin`, `usePersistStore`, `next/navigation` | `fe-route-builder` | `fe-route-builder` | `qa-fe-testing`, `qa-fe-e2e-testing` |
-| native login mutation | `useNativeLogin` | generated Orval | reuse/verify | `packages/fe-api/src/idp/auth/auth.ts` | payload `{ email, password }` -> `NativeAuthResponseDto` wrapped response | Swagger/Orval generated client | `fe-route-builder` | `fe-route-builder` | `qa-fe-testing` |
-| native logout mutation | `useNativeLogout` | generated Orval | reuse/verify | `packages/fe-api/src/idp/auth/auth.ts` | payload `{ sessionId, refreshToken? }` -> boolean wrapped response | Swagger/Orval generated client | `fe-route-builder` | `fe-route-builder` | `qa-fe-testing`, `qa-fe-e2e-testing` |
-| token verification query | `useVerifyToken` | generated Orval | reuse/verify | `packages/fe-api/src/idp/auth/auth.ts` | no body, auth header context -> `{ valid, hasFullAccess, expiresAt... }` | custom IDP axios auth header | `fe-route-builder` | `fe-route-builder` | `qa-fe-testing` |
-| local store access | `usePersistStore` | app store provider | reuse | `apps/admin/web/src/app/stores` exports | returns injected `PersistStore` | RootStore/AppStoreProvider | none | `fe-route-builder` | `qa-fe-testing` |
+| login route state/mutation | `useAuthLoginPage` | route-local | modify | `apps/admin/web/src/app/auth/login/hooks/useAuthLoginPage.tsx` | returns `{ state: { loginForm, errorMessage }, isLoading, onSubmitLoginForm }`; submit calls native login and stores session | `useNativeLogin`, `usePersistStore`, `next/navigation` | `fe-route-agent` | `fe-route-agent` | `qa-fe-testing`, `qa-fe-e2e-testing` |
+| native login mutation | `useNativeLogin` | generated Orval | reuse/verify | `packages/fe-api/src/idp/auth/auth.ts` | payload `{ email, password }` -> `NativeAuthResponseDto` wrapped response | Swagger/Orval generated client | `fe-route-agent` | `fe-route-agent` | `qa-fe-testing` |
+| native logout mutation | `useNativeLogout` | generated Orval | reuse/verify | `packages/fe-api/src/idp/auth/auth.ts` | payload `{ sessionId, refreshToken? }` -> boolean wrapped response | Swagger/Orval generated client | `fe-route-agent` | `fe-route-agent` | `qa-fe-testing`, `qa-fe-e2e-testing` |
+| token verification query | `useVerifyToken` | generated Orval | reuse/verify | `packages/fe-api/src/idp/auth/auth.ts` | no body, auth header context -> `{ valid, hasFullAccess, expiresAt... }` | custom IDP axios auth header | `fe-route-agent` | `fe-route-agent` | `qa-fe-testing` |
+| local store access | `usePersistStore` | app store provider | reuse | `apps/admin/web/src/app/stores` exports | returns injected `PersistStore` | RootStore/AppStoreProvider | none | `fe-route-agent` | `qa-fe-testing` |
 
 #### Toolkit 인벤토리
 
 | 필요 | Utility | 범주 | 재사용/신규 | 소스/대상 | 입력/출력 | 런타임 제약 | 소스 담당 `agent_type` | 소비 `agent_type` | 검증 `agent_type` |
 |------|---------|------|-------------|-----------|-----------|-------------|-------------------------|-------------------|-------------------|
-| safe return path | `resolveReturnPath` | route-local utility | modify/extract if approved | currently inside `hooks/useAuthLoginPage.tsx`; target `apps/admin/web/src/app/auth/login/hooks/resolveReturnPath.ts` if split | `window.location.search` -> same-origin path or `/dashboard` | SSR render must not depend on `window`; function returns fallback on server | `fe-route-builder` | `fe-route-builder` | `qa-fe-testing` |
-| server error message | `resolveLoginErrorMessage` | route-local utility | modify/extract if approved | currently inside `hooks/useAuthLoginPage.tsx`; target `apps/admin/web/src/app/auth/login/hooks/resolveLoginErrorMessage.ts` if split | unknown error -> displayable string | handle generated Axios error shape without throwing | `fe-route-builder` | `fe-route-builder` | `qa-fe-testing` |
-| native refresh handler | `refreshNativeSession` | provider-local utility | reuse/modify | `apps/admin/web/src/app/providers.tsx` | current sessionId/refreshToken -> new native session | must throw if session missing; registered/unregistered in effect | `fe-route-builder` | `fe-route-builder` | `qa-fe-testing` |
+| safe return path | `resolveReturnPath` | route-local utility | modify/extract if approved | currently inside `hooks/useAuthLoginPage.tsx`; target `apps/admin/web/src/app/auth/login/hooks/resolveReturnPath.ts` if split | `window.location.search` -> same-origin path or `/dashboard` | SSR render must not depend on `window`; function returns fallback on server | `fe-route-agent` | `fe-route-agent` | `qa-fe-testing` |
+| server error message | `resolveLoginErrorMessage` | route-local utility | modify/extract if approved | currently inside `hooks/useAuthLoginPage.tsx`; target `apps/admin/web/src/app/auth/login/hooks/resolveLoginErrorMessage.ts` if split | unknown error -> displayable string | handle generated Axios error shape without throwing | `fe-route-agent` | `fe-route-agent` | `qa-fe-testing` |
+| native refresh handler | `refreshNativeSession` | provider-local utility | reuse/modify | `apps/admin/web/src/app/providers.tsx` | current sessionId/refreshToken -> new native session | must throw if session missing; registered/unregistered in effect | `fe-route-agent` | `fe-route-agent` | `qa-fe-testing` |
 | shared toolkit | none | shared | none | no `@cocrepo/toolkit` change | no shared utility required | route-only behavior | none | none | none |
 
 #### Type 인벤토리
 
 | 필요 | Type/Interface | 범위 | 재사용/신규 | 소스/대상 | 소비 패키지 | 의존 방향 | 소스 담당 `agent_type` | 검증 `agent_type` |
 |------|----------------|------|-------------|-----------|-------------|-----------|-------------------------|-------------------|
-| screen state | `LoginPageState`, `LoginFormState` | UI package | reuse/verify | `packages/fe-ui/src/screen/LoginPage/LoginPage.tsx`, `packages/fe-ui/src/form/LoginForm/LoginForm.tsx` | admin route | route consumes UI state contract, UI does not import route | `fe-screen-builder` | `qa-fe-testing` |
-| native session | `NativeAuthSession` | shared store | modify/verify | `packages/fe-store/src/stores/persistStore.ts` | admin web providers/header/login route | store owns persisted native session shape | `fe-store-builder` | `qa-fe-testing`, `qa-type-checker` |
-| generated native response | `NativeAuthResponseDto`, `NativeLoginPayloadDto`, `NativeTokenRefreshPayloadDto`, `NativeLogoutPayloadDto`, `VerifyToken200AllOf` | generated API | reuse/done | `packages/fe-api/src/idp/model/**` | admin web route/provider/header | generated from backend DTO; frontend imports from `@cocrepo/api` only | `fe-route-builder` | `qa-type-checker` |
+| screen state | `LoginPageState`, `LoginFormState` | UI package | reuse/verify | `packages/fe-ui/src/screen/LoginPage/LoginPage.tsx`, `packages/fe-ui/src/form/LoginForm/LoginForm.tsx` | admin route | route consumes UI state contract, UI does not import route | `fe-screen-agent` | `qa-fe-testing` |
+| native session | `NativeAuthSession` | shared store | modify/verify | `packages/fe-store/src/stores/persistStore.ts` | admin web providers/header/login route | store owns persisted native session shape | `fe-store-agent` | `qa-fe-testing`, `qa-type-checker` |
+| generated native response | `NativeAuthResponseDto`, `NativeLoginPayloadDto`, `NativeTokenRefreshPayloadDto`, `NativeLogoutPayloadDto`, `VerifyToken200AllOf` | generated API | reuse/done | `packages/fe-api/src/idp/model/**` | admin web route/provider/header | generated from backend DTO; frontend imports from `@cocrepo/api` only | `fe-route-agent` | `qa-type-checker` |
 | shared type package | none | shared | none | no `@cocrepo/type` change | none | no cross-package hand-authored type needed beyond store/UI contracts | none | none |
 
 #### Store / State 인벤토리
 
 | 필요 | Store/State | 범위 | 재사용/신규 | 소스/대상 | 상태/액션/computed | 소비 화면 | 소스 담당 `agent_type` | 소비/Wiring `agent_type` | 검증 `agent_type` |
 |------|-------------|------|-------------|-----------|--------------------|-----------|-------------------------|---------------------------|-------------------|
-| native session persistence | `PersistStore` | shared MobX store | modify/verify | `packages/fe-store/src/stores/persistStore.ts` | `accessToken`, `refreshToken`, `sessionId`, expiry fields, `setNativeAuthSession`, `clearNativeAuthSession`, `clear`, `isAuthenticated`, `needsTokenRefresh` | login route, providers, admin header | `fe-store-builder` | `fe-route-builder` | `qa-fe-testing`, `qa-type-checker` |
-| route form state | `useLocalObservable` state | route-local | modify/verify | `apps/admin/web/src/app/auth/login/hooks/useAuthLoginPage.tsx` | `loginForm.email`, `loginForm.password`, `errorMessage` | `/auth/login` only | `fe-route-builder` | `fe-route-builder` | `qa-fe-testing`, `qa-fe-e2e-testing` |
-| ability bootstrap state | existing `AbilityStore` rules | shared app store | reuse | `apps/admin/web/src/app/providers.tsx`, `@cocrepo/store` | token verification result influences ability rules | admin app shell | none | `fe-route-builder` | `qa-fe-testing` |
+| native session persistence | `PersistStore` | shared MobX store | modify/verify | `packages/fe-store/src/stores/persistStore.ts` | `accessToken`, `refreshToken`, `sessionId`, expiry fields, `setNativeAuthSession`, `clearNativeAuthSession`, `clear`, `isAuthenticated`, `needsTokenRefresh` | login route, providers, admin header | `fe-store-agent` | `fe-route-agent` | `qa-fe-testing`, `qa-type-checker` |
+| route form state | `useLocalObservable` state | route-local | modify/verify | `apps/admin/web/src/app/auth/login/hooks/useAuthLoginPage.tsx` | `loginForm.email`, `loginForm.password`, `errorMessage` | `/auth/login` only | `fe-route-agent` | `fe-route-agent` | `qa-fe-testing`, `qa-fe-e2e-testing` |
+| ability bootstrap state | existing `AbilityStore` rules | shared app store | reuse | `apps/admin/web/src/app/providers.tsx`, `@cocrepo/store` | token verification result influences ability rules | admin app shell | none | `fe-route-agent` | `qa-fe-testing` |
 | shared new store | none | shared | none | no new store | 단일 route state는 `@cocrepo/store`로 승격하지 않음 | none | none | none | none |
 
 ### Storybook / Test Contract
@@ -176,18 +176,18 @@ Legend: A=route-local auth actions, B=route layout large auth section, C=shared 
 
 | 대상 | Story 파일 | 필수 상태/Variant | Fixture/데이터 | 작성 담당 `agent_type` | 검증 담당 `agent_type` | 비고 |
 |------|------------|-------------------|----------------|-------------------------|-------------------------|------|
-| `LoginPage` | `packages/fe-ui/src/screen/LoginPage/LoginPage.stories.tsx` | ready, loading, server error, disabled/pending submit, long caption/error, narrow viewport | admin email/password fixture and Korean error message | `fe-screen-builder` | `qa-fe-testing` | 현재 Default/WithEmailError/Loading 있음. long/narrow/disabled coverage reconciliation 필요 |
-| `LoginForm` | `packages/fe-ui/src/form/LoginForm/LoginForm.stories.tsx` | empty, with values, long placeholder/label if applicable | email/password fixture | `fe-screen-builder` | `qa-fe-testing` | input primitive state coverage 확인 |
+| `LoginPage` | `packages/fe-ui/src/screen/LoginPage/LoginPage.stories.tsx` | ready, loading, server error, disabled/pending submit, long caption/error, narrow viewport | admin email/password fixture and Korean error message | `fe-screen-agent` | `qa-fe-testing` | 현재 Default/WithEmailError/Loading 있음. long/narrow/disabled coverage reconciliation 필요 |
+| `LoginForm` | `packages/fe-ui/src/form/LoginForm/LoginForm.stories.tsx` | empty, with values, long placeholder/label if applicable | email/password fixture | `fe-screen-agent` | `qa-fe-testing` | input primitive state coverage 확인 |
 | route page | none | n/a | n/a | none | none | `apps/admin/web/src/app/auth/login/page.tsx`는 Storybook 대상이 아닌 thin route container |
 
 #### Unit Test 인벤토리
 
 | 대상 | Test 파일 | 검증 관점 | 주요 케이스 | 작성 담당 `agent_type` | 검증 담당 `agent_type` | 비고 |
 |------|-----------|-----------|-------------|-------------------------|-------------------------|------|
-| `PersistStore` native session | `packages/fe-store/src/stores/__tests__/persistStore.test.ts` | session persistence, clear, expiry computed | `setNativeAuthSession`, `clearNativeAuthSession`, `clear`, expired/not expired branch | `fe-store-builder` | `qa-fe-testing`, `qa-type-checker` | 기존 test를 native session contract로 보강/검증 |
-| route utilities | `apps/admin/web/src/app/auth/login/hooks/useAuthLoginPage.test.tsx` 또는 helper tests | return path safety, error message parsing | external origin blocked, invalid URL fallback, server displayMessage priority | `fe-route-builder` | `qa-fe-testing` | helper split 승인 시 파일별 단위 test 권장 |
-| provider bridge | `apps/admin/web/src/app/providers.test.tsx` or existing provider tests | native refresh handler registration and cleanup | missing session throws, response stored, handler cleared on unmount | `fe-route-builder` | `qa-fe-testing` | provider test harness가 없으면 route QA에서 blocked 사유 기록 |
-| `LoginPage` | `packages/fe-ui/src/screen/LoginPage/LoginPage.test.tsx` | rendering, submit event, loading guard, error feedback | title/caption/input/button render, submit prevents default, error danger text | `fe-screen-builder` | `qa-fe-testing` | current story-only이면 test 신규 필요 |
+| `PersistStore` native session | `packages/fe-store/src/stores/__tests__/persistStore.test.ts` | session persistence, clear, expiry computed | `setNativeAuthSession`, `clearNativeAuthSession`, `clear`, expired/not expired branch | `fe-store-agent` | `qa-fe-testing`, `qa-type-checker` | 기존 test를 native session contract로 보강/검증 |
+| route utilities | `apps/admin/web/src/app/auth/login/hooks/useAuthLoginPage.test.tsx` 또는 helper tests | return path safety, error message parsing | external origin blocked, invalid URL fallback, server displayMessage priority | `fe-route-agent` | `qa-fe-testing` | helper split 승인 시 파일별 단위 test 권장 |
+| provider bridge | `apps/admin/web/src/app/providers.test.tsx` or existing provider tests | native refresh handler registration and cleanup | missing session throws, response stored, handler cleared on unmount | `fe-route-agent` | `qa-fe-testing` | provider test harness가 없으면 route QA에서 blocked 사유 기록 |
+| `LoginPage` | `packages/fe-ui/src/screen/LoginPage/LoginPage.test.tsx` | rendering, submit event, loading guard, error feedback | title/caption/input/button render, submit prevents default, error danger text | `fe-screen-agent` | `qa-fe-testing` | current story-only이면 test 신규 필요 |
 
 #### E2E Test 인벤토리
 
@@ -218,24 +218,24 @@ Backend endpoint contract는 이번 re-entry에서 변경하지 않는다. Admin
 
 | 필요 | Schema/검증 계약 | Validation 메시지/i18n | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
 |------|------------------|------------------------|-------------|-----------|-----------|-------------------------|-------------------|
-| login payload validation | existing backend login schema through DTO | existing email/password validation messages | reuse | `packages/be-dto/src/auth/native-login-payload.dto.ts`, inherited `LoginPayloadDto` | backend decorators/schema | none | `fe-route-builder` via generated client |
+| login payload validation | existing backend login schema through DTO | existing email/password validation messages | reuse | `packages/be-dto/src/auth/native-login-payload.dto.ts`, inherited `LoginPayloadDto` | backend decorators/schema | none | `fe-route-agent` via generated client |
 | frontend form schema | none | no frontend schema change in this route | none | visual form relies on API error display for now | n/a | none | none |
 
 #### Entity / VO 인벤토리
 
 | 도메인 객체 | 구조 | 책임 | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
 |-------------|------|------|-------------|-----------|-----------|-------------------------|-------------------|
-| native auth session | backend response DTO + store session | token/session state transport | reuse | `NativeAuthResponseDto`, `PersistStore.NativeAuthSession` | token service/session storage | none | `fe-store-builder`, `fe-route-builder` |
+| native auth session | backend response DTO + store session | token/session state transport | reuse | `NativeAuthResponseDto`, `PersistStore.NativeAuthSession` | token service/session storage | none | `fe-store-agent`, `fe-route-agent` |
 | VO | none | no VO change | none | no backend change | none | none | none |
 
 #### DTO / Query DTO 인벤토리
 
 | API/유즈케이스 | DTO/Query DTO | 요청/응답/쿼리 | 재사용/신규 | 소스/대상 | Schema/Entity 의존 | 소스 담당 `agent_type` | 소비 `agent_type` |
 |----------------|---------------|----------------|-------------|-----------|--------------------|-------------------------|-------------------|
-| native login | `NativeLoginPayloadDto`, `NativeAuthResponseDto` | request/response | reuse | `packages/be-dto/src/auth/native-login-payload.dto.ts`, `native-auth-response.dto.ts` | Login payload, user DTO | none | `fe-route-builder` |
-| native refresh | `NativeTokenRefreshPayloadDto`, `NativeAuthResponseDto` | request/response | reuse | `packages/be-dto/src/auth/native-token-refresh-payload.dto.ts` | sessionId/refreshToken | none | `fe-route-builder` |
-| native logout | `NativeLogoutPayloadDto` | request | reuse | `packages/be-dto/src/auth/native-logout-payload.dto.ts` | sessionId/refreshToken | none | `fe-route-builder` |
-| token verify | `VerifyTokenResponseDto` | response | reuse | `packages/be-dto/src/auth/verify-token-response.dto.ts` | auth context | none | `fe-route-builder` |
+| native login | `NativeLoginPayloadDto`, `NativeAuthResponseDto` | request/response | reuse | `packages/be-dto/src/auth/native-login-payload.dto.ts`, `native-auth-response.dto.ts` | Login payload, user DTO | none | `fe-route-agent` |
+| native refresh | `NativeTokenRefreshPayloadDto`, `NativeAuthResponseDto` | request/response | reuse | `packages/be-dto/src/auth/native-token-refresh-payload.dto.ts` | sessionId/refreshToken | none | `fe-route-agent` |
+| native logout | `NativeLogoutPayloadDto` | request | reuse | `packages/be-dto/src/auth/native-logout-payload.dto.ts` | sessionId/refreshToken | none | `fe-route-agent` |
+| token verify | `VerifyTokenResponseDto` | response | reuse | `packages/be-dto/src/auth/verify-token-response.dto.ts` | auth context | none | `fe-route-agent` |
 | query DTO | none | none | none | no query DTO change | none | none | none |
 
 #### Repository 인벤토리
@@ -271,10 +271,10 @@ Backend endpoint contract는 이번 re-entry에서 변경하지 않는다. Admin
 
 | 필요 | Method/Path | operationId | Controller | DTO/Schema | 재사용/신규 | 소스/대상 | 소스 담당 `agent_type` | 소비/Wiring `agent_type` | codegen |
 |------|-------------|-------------|------------|------------|-------------|-----------|-------------------------|---------------------------|---------|
-| login submit | `POST /api/v1/auth/native/login` | `nativeLogin` | `AuthController.nativeLogin` | `NativeLoginPayloadDto`, `NativeAuthResponseDto` | reuse | `apps/idp/api/src/module/auth/auth.controller.ts` | none | `fe-route-builder` | generated `useNativeLogin`, verify |
-| token refresh | `POST /api/v1/auth/native/token/refresh` | `nativeRefreshToken` | `AuthController.nativeRefreshToken` | `NativeTokenRefreshPayloadDto`, `NativeAuthResponseDto` | reuse | same | none | `fe-route-builder` | generated `nativeRefreshToken`, verify |
-| logout | `POST /api/v1/auth/native/logout` | `nativeLogout` | `AuthController.nativeLogout` | `NativeLogoutPayloadDto`, `Boolean` | reuse | same | none | `fe-route-builder` | generated `useNativeLogout`, verify |
-| token verify | `GET /api/v1/auth/verify-token` | `verifyToken` | `AuthController.verifyToken` | `VerifyTokenResponseDto` | reuse | same | none | `fe-route-builder` | generated `useVerifyToken`, verify |
+| login submit | `POST /api/v1/auth/native/login` | `nativeLogin` | `AuthController.nativeLogin` | `NativeLoginPayloadDto`, `NativeAuthResponseDto` | reuse | `apps/idp/api/src/module/auth/auth.controller.ts` | none | `fe-route-agent` | generated `useNativeLogin`, verify |
+| token refresh | `POST /api/v1/auth/native/token/refresh` | `nativeRefreshToken` | `AuthController.nativeRefreshToken` | `NativeTokenRefreshPayloadDto`, `NativeAuthResponseDto` | reuse | same | none | `fe-route-agent` | generated `nativeRefreshToken`, verify |
+| logout | `POST /api/v1/auth/native/logout` | `nativeLogout` | `AuthController.nativeLogout` | `NativeLogoutPayloadDto`, `Boolean` | reuse | same | none | `fe-route-agent` | generated `useNativeLogout`, verify |
+| token verify | `GET /api/v1/auth/verify-token` | `verifyToken` | `AuthController.verifyToken` | `VerifyTokenResponseDto` | reuse | same | none | `fe-route-agent` | generated `useVerifyToken`, verify |
 | OIDC protocol login | `GET /api/v1/auth/login` | `login` | `AuthController.login` | `LoginParams` | reuse, out of route flow | same | none | none for admin native login | keep generated client, not used by `/auth/login` |
 | OIDC callback/interaction | existing OIDC paths | existing operationIds | IDP/OIDC controllers | existing DTOs | reuse, protocol boundary | IDP/OIDC modules | none | none for admin native login | no removal |
 
@@ -283,7 +283,7 @@ Backend endpoint contract는 이번 re-entry에서 변경하지 않는다. Admin
 | 필요 | Module/Provider | Router/Wiring | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
 |------|-----------------|----------------|-------------|-----------|-----------|-------------------------|-------------------|
 | backend auth module | `AuthModule` | existing controller/usecase wiring | reuse | `apps/idp/api/src/module/auth/auth.module.ts` | command/query bus providers | none | existing API |
-| admin provider bridge | `Providers` / `NativeAuthBridge` | app-level native refresh handler | modify/verify | `apps/admin/web/src/app/providers.tsx` | generated API clients, PersistStore | `fe-route-builder` | admin app |
+| admin provider bridge | `Providers` / `NativeAuthBridge` | app-level native refresh handler | modify/verify | `apps/admin/web/src/app/providers.tsx` | generated API clients, PersistStore | `fe-route-agent` | admin app |
 
 #### Seed 인벤토리
 
@@ -296,8 +296,8 @@ Backend endpoint contract는 이번 re-entry에서 변경하지 않는다. Admin
 
 | 필요 | Trigger | 생성 대상 | 영향 Hook/Client | 실행 명령 | 소비 `agent_type` | 검증 `agent_type` |
 |------|---------|-----------|----------------|-----------|-------------------|-------------------|
-| native auth generated hooks | verify existing generated output | `packages/fe-api/src/idp/auth/auth.ts`, `packages/fe-api/src/idp/model/**` | `useNativeLogin`, `nativeRefreshToken`, `useNativeLogout`, `useVerifyToken` | `pnpm --filter=@cocrepo/api codegen` only if Swagger/generated output drift is found | `fe-route-builder` | `fe-route-builder`, `qa-type-checker` |
-| core API refresh handler | verify existing client exports | `@cocrepo/api/core/client`, `@cocrepo/api/idp/client` | `setApiNativeRefreshHandler`, `setIdpNativeRefreshHandler` | none-current | `fe-route-builder` | `qa-type-checker` |
+| native auth generated hooks | verify existing generated output | `packages/fe-api/src/idp/auth/auth.ts`, `packages/fe-api/src/idp/model/**` | `useNativeLogin`, `nativeRefreshToken`, `useNativeLogout`, `useVerifyToken` | `pnpm --filter=@cocrepo/api codegen` only if Swagger/generated output drift is found | `fe-route-agent` | `fe-route-agent`, `qa-type-checker` |
+| core API refresh handler | verify existing client exports | `@cocrepo/api/core/client`, `@cocrepo/api/idp/client` | `setApiNativeRefreshHandler`, `setIdpNativeRefreshHandler` | none-current | `fe-route-agent` | `qa-type-checker` |
 
 ### Required Elements
 
@@ -306,15 +306,15 @@ Backend endpoint contract는 이번 re-entry에서 변경하지 않는다. Admin
 | Prisma / Database / annotation | none | none | none | backend DB schema unchanged |
 | Common schema / DTO / Query DTO / Entity / VO | existing native auth DTOs | reuse | none | endpoint response shape matches generated API |
 | Repository / Service / UseCase / Client / Controller / Module / Bootstrap / Seed | existing IDP native auth backend chain | reuse | none | no backend builder required |
-| API endpoint / Orval hook | native login/refresh/logout/verify-token hooks | reuse/verify | `fe-route-builder`, `qa-type-checker` | generated hooks available and route imports from `@cocrepo/api/idp/auth` |
-| Hook / route-local hook | `useAuthLoginPage` | modify/verify | `fe-route-builder` | safe returnTo, native mutation, session write, error display |
-| Toolkit utility | `resolveReturnPath`, `resolveLoginErrorMessage` route-local helpers | modify/extract if approved | `fe-route-builder` | helper behavior covered by unit tests or route tests |
-| Shared type / local type | `NativeAuthSession`, `LoginPageState`, generated DTO types | reuse/modify | `fe-store-builder`, `fe-screen-builder`, `fe-route-builder` | no hand-written duplicate API type |
-| Web screen / feature / widget / form | `LoginPage`, `LoginForm`, auth route shell/actions | reuse/modify | `fe-screen-builder`, `fe-route-builder` | DESIGN rhythm/status/form contract reconciled |
+| API endpoint / Orval hook | native login/refresh/logout/verify-token hooks | reuse/verify | `fe-route-agent`, `qa-type-checker` | generated hooks available and route imports from `@cocrepo/api/idp/auth` |
+| Hook / route-local hook | `useAuthLoginPage` | modify/verify | `fe-route-agent` | safe returnTo, native mutation, session write, error display |
+| Toolkit utility | `resolveReturnPath`, `resolveLoginErrorMessage` route-local helpers | modify/extract if approved | `fe-route-agent` | helper behavior covered by unit tests or route tests |
+| Shared type / local type | `NativeAuthSession`, `LoginPageState`, generated DTO types | reuse/modify | `fe-store-agent`, `fe-screen-agent`, `fe-route-agent` | no hand-written duplicate API type |
+| Web screen / feature / widget / form | `LoginPage`, `LoginForm`, auth route shell/actions | reuse/modify | `fe-screen-agent`, `fe-route-agent` | DESIGN rhythm/status/form contract reconciled |
 | Mobile screen / feature / widget / action / input / selection / feedback / route | none | none | none | no mobile change |
-| Rhythm / layout primitive | `VStack`, `HStack`, `Section`, route shell centering | modify/verify | `fe-screen-builder`, `fe-route-builder` | semantic gap presets or documented low-level exception |
-| Shared Store / route-local state | `PersistStore`, route `useLocalObservable` state | modify/verify | `fe-store-builder`, `fe-route-builder` | native session persists and clears predictably |
-| Storybook story | `LoginPage`, `LoginForm` stories | modify/verify | `fe-screen-builder` | ready/loading/error/long/narrow variants covered |
+| Rhythm / layout primitive | `VStack`, `HStack`, `Section`, route shell centering | modify/verify | `fe-screen-agent`, `fe-route-agent` | semantic gap presets or documented low-level exception |
+| Shared Store / route-local state | `PersistStore`, route `useLocalObservable` state | modify/verify | `fe-store-agent`, `fe-route-agent` | native session persists and clears predictably |
+| Storybook story | `LoginPage`, `LoginForm` stories | modify/verify | `fe-screen-agent` | ready/loading/error/long/narrow variants covered |
 | Unit / E2E test | PersistStore, route hook/helpers, provider bridge, login route E2E | modify/new as approved | `qa-fe-testing`, `qa-fe-e2e-testing` | smoke/success/error/unsafe returnTo covered |
 
 ### Agent Assignment Matrix
@@ -323,10 +323,10 @@ Backend endpoint contract는 이번 re-entry에서 변경하지 않는다. Admin
 |---------|-------|-------------------|-----------|-----------|----------------|-----------|----------|-----------|
 | S0 | planning | `orch-delivery` | user request, `DESIGN.md`, `AGENTS.md`, current implementation references | route delivery spec update | `apps/admin/web/src/app/auth/login/page.spec.md` | none | false | 기존 역기획 spec을 route delivery spec으로 보강하고 approval 상태 기록 |
 | A1 | approval | `orch-delivery` | this spec | approval log | `apps/admin/web/src/app/auth/login/page.spec.md` | S0 | false | 사용자가 승인/수정/중단 중 하나를 선택 |
-| C1 | api-client-verify | `fe-route-builder` | `packages/fe-api/src/idp/auth/auth.ts`, Swagger output if available | generated client verify or regenerated files | `packages/fe-api/src/idp/**`, generated index files only if drift found | A1 | false | native endpoints generated hooks가 현재 endpoint contract와 일치 |
-| F1 | store | `fe-store-builder` | this spec, `packages/fe-store/src/stores/persistStore.ts` | store/session reconciliation + tests if approved | `packages/fe-store/src/stores/persistStore.ts`, `packages/fe-store/src/stores/__tests__/persistStore.test.ts` | A1 | true | native session fields/actions/clear/expiry contract verified |
-| W1 | web screen | `fe-screen-builder` | this spec, `LoginPage.spec.md`, current `LoginPage`/`LoginForm` stories | screen/form visual reconciliation + stories/tests if approved | `packages/fe-ui/src/screen/LoginPage/**`, `packages/fe-ui/src/form/LoginForm/**` | A1 | true | auth large section form/error/loading story/test contract satisfied |
-| W2 | web route | `fe-route-builder` | this spec, current route/hook/provider/header files, C1/F1 outputs | route/hook/provider/header reconciliation + route tests if approved | `apps/admin/web/src/app/auth/login/**`, `apps/admin/web/src/app/providers.tsx`, `apps/admin/web/src/app/(admin)/_layout/AdminHeaderSlot.tsx` | C1, F1, W1 | false | native login/refresh/logout/verify wiring matches route spec and OIDC redirect is not used for admin login |
+| C1 | api-client-verify | `fe-route-agent` | `packages/fe-api/src/idp/auth/auth.ts`, Swagger output if available | generated client verify or regenerated files | `packages/fe-api/src/idp/**`, generated index files only if drift found | A1 | false | native endpoints generated hooks가 현재 endpoint contract와 일치 |
+| F1 | store | `fe-store-agent` | this spec, `packages/fe-store/src/stores/persistStore.ts` | store/session reconciliation + tests if approved | `packages/fe-store/src/stores/persistStore.ts`, `packages/fe-store/src/stores/__tests__/persistStore.test.ts` | A1 | true | native session fields/actions/clear/expiry contract verified |
+| W1 | web screen | `fe-screen-agent` | this spec, `LoginPage.spec.md`, current `LoginPage`/`LoginForm` stories | screen/form visual reconciliation + stories/tests if approved | `packages/fe-ui/src/screen/LoginPage/**`, `packages/fe-ui/src/form/LoginForm/**` | A1 | true | auth large section form/error/loading story/test contract satisfied |
+| W2 | web route | `fe-route-agent` | this spec, current route/hook/provider/header files, C1/F1 outputs | route/hook/provider/header reconciliation + route tests if approved | `apps/admin/web/src/app/auth/login/**`, `apps/admin/web/src/app/providers.tsx`, `apps/admin/web/src/app/(admin)/_layout/AdminHeaderSlot.tsx` | C1, F1, W1 | false | native login/refresh/logout/verify wiring matches route spec and OIDC redirect is not used for admin login |
 | Q1 | qa | `qa-fe-testing` | F1/W1/W2 changed files | unit/story test fixes if approved | related `*.test.tsx`, `*.stories.tsx`, test setup only within approved files | W2 | false | frontend unit/story tests pass or blocked reason recorded |
 | Q2 | qa | `qa-fe-e2e-testing` | W2, current `page.e2e.ts` | route-local E2E scenarios if approved | `apps/admin/web/src/app/auth/login/page.e2e.ts`, E2E fixtures/mocks if already owned | W2 | false | form visible, success, failure, unsafe returnTo flows pass or blocked reason recorded |
 | Q3 | qa | `qa-type-checker` | generated/store/route/screen changes | type fixes if approved | files already touched by C1/F1/W1/W2 or type-only adjacent files approved by spec | Q1, Q2 | false | TypeScript contract errors resolved |
@@ -342,15 +342,15 @@ flowchart TD
   S0 --> A1
 
   subgraph P1["parallel: post-approval verification owners"]
-    C1["C1 fe-route-builder: native auth generated client verify"]
-    F1["F1 fe-store-builder: PersistStore native session"]
-    W1["W1 fe-screen-builder: LoginPage visual/story/test"]
+    C1["C1 fe-route-agent: native auth generated client verify"]
+    F1["F1 fe-store-agent: PersistStore native session"]
+    W1["W1 fe-screen-agent: LoginPage visual/story/test"]
   end
 
   A1 --> C1
   A1 --> F1
   A1 --> W1
-  C1 --> W2["W2 fe-route-builder: login route/provider/header wiring"]
+  C1 --> W2["W2 fe-route-agent: login route/provider/header wiring"]
   F1 --> W2
   W1 --> W2
   W2 --> Q1["Q1 qa-fe-testing: unit/story verification"]
@@ -371,10 +371,10 @@ flowchart TD
 |------|---------|-------|--------------|-----------|-----------|--------|-----------|
 | 1 | `S0` | planning | `orch-delivery` | serial | none | `page.spec.md` route delivery spec | 문서 re-entry 완료 |
 | 2 | `A1` | approval | `orch-delivery` | serial | `S0` | approval log | 승인/수정/중단 결정 |
-| 3 | `C1` | api-client-verify | `fe-route-builder` | parallel | `A1` | generated client verify | native auth hooks drift 없음 또는 Orval generation 완료 |
-| 4 | `F1` | store | `fe-store-builder` | parallel | `A1` | PersistStore reconciliation | native session store contract verified |
-| 5 | `W1` | web screen | `fe-screen-builder` | parallel | `A1` | LoginPage/LoginForm visual contract | auth screen story/test contract verified |
-| 6 | `W2` | web route | `fe-route-builder` | serial | `C1`, `F1`, `W1` | route/hook/provider/header reconciliation | native login flow wired without OIDC redirect |
+| 3 | `C1` | api-client-verify | `fe-route-agent` | parallel | `A1` | generated client verify | native auth hooks drift 없음 또는 Orval generation 완료 |
+| 4 | `F1` | store | `fe-store-agent` | parallel | `A1` | PersistStore reconciliation | native session store contract verified |
+| 5 | `W1` | web screen | `fe-screen-agent` | parallel | `A1` | LoginPage/LoginForm visual contract | auth screen story/test contract verified |
+| 6 | `W2` | web route | `fe-route-agent` | serial | `C1`, `F1`, `W1` | route/hook/provider/header reconciliation | native login flow wired without OIDC redirect |
 | 7 | `Q1` | qa | `qa-fe-testing` | serial | `W2` | frontend unit/story verification | unit/story tests pass or blocked reason recorded |
 | 8 | `Q2` | qa | `qa-fe-e2e-testing` | serial | `W2` | route-local E2E verification | visible/success/failure/returnTo scenarios pass or blocked reason recorded |
 | 9 | `Q3` | qa | `qa-type-checker` | serial | `Q1`, `Q2` | type verification | TypeScript errors resolved or blocked reason recorded |
@@ -423,14 +423,14 @@ flowchart TD
 
 | blocker | re-entry 대상 | 처리 |
 |---------|---------------|------|
-| generated API lacks native endpoints or operationId changed | `orch-delivery` + `fe-route-builder` | update endpoint/Orval generation inventory, run codegen only after approval, then route import reconciliation |
+| generated API lacks native endpoints or operationId changed | `orch-delivery` + `fe-route-agent` | update endpoint/Orval generation inventory, run codegen only after approval, then route import reconciliation |
 | backend endpoint response differs from `NativeAuthSession` | `orch-delivery` | mark contract-gap and decide whether backend DTO or store contract is source; do not patch backend without spec approval |
 | OIDC protocol endpoint removal is requested during implementation | `orch-delivery` | mark out-of-scope; IDP/OIDC boundary requires separate route/API delivery spec |
-| `PersistStore` has concurrent edits | `orch-delivery` + `fe-store-builder` | use shared file lock; stop and record blocked rather than reverting other changes |
-| `providers.tsx` or `AdminHeaderSlot.tsx` has unrelated active edits | `fe-route-builder` | preserve user changes, narrow patch to native auth bridge/logout, or request re-entry if conflict prevents safe edit |
-| auth layout requires a new reusable UI primitive | `orch-delivery` + `fe-screen-builder` | update Planning Spec References and Component Inventory before implementation |
+| `PersistStore` has concurrent edits | `orch-delivery` + `fe-store-agent` | use shared file lock; stop and record blocked rather than reverting other changes |
+| `providers.tsx` or `AdminHeaderSlot.tsx` has unrelated active edits | `fe-route-agent` | preserve user changes, narrow patch to native auth bridge/logout, or request re-entry if conflict prevents safe edit |
+| auth layout requires a new reusable UI primitive | `orch-delivery` + `fe-screen-agent` | update Planning Spec References and Component Inventory before implementation |
 | E2E environment has no seeded admin credentials | `qa-fe-e2e-testing` | use route-level network mock or mark E2E success flow blocked with fixture requirement |
-| route helper tests require splitting helpers from hook file | `fe-route-builder` | allowed only within `apps/admin/web/src/app/auth/login/hooks/**` after approval; update locks and test inventory |
+| route helper tests require splitting helpers from hook file | `fe-route-agent` | allowed only within `apps/admin/web/src/app/auth/login/hooks/**` after approval; update locks and test inventory |
 
 ### Approval / Execution Log
 
@@ -439,7 +439,7 @@ flowchart TD
 | 2026-05-31 | planning re-entry | completed | 기존 단순 역기획 spec을 `orch-delivery` route delivery spec으로 보강. `DESIGN.md`, `AGENTS.md`, current route/hook/provider/header/store/generated API를 참고함. | Codex |
 | 2026-05-31 | scope correction | completed | `.codex/agents/orch-delivery.toml` 및 구현 코드 수정 없이 `page.spec.md`만 갱신. | Codex |
 | 2026-05-31 | native login policy | approved | Admin web `/auth/login`은 OIDC redirect가 아니라 native login form으로 유지하고, OIDC login/callback/interaction은 IDP/OIDC protocol boundary로 유지한다고 명시. | Codex |
-| 2026-05-31 | implementation reconciliation | completed | `fe-route-builder`, `fe-store-builder`, `fe-screen-builder`, API client verify slice 기준으로 route/store/screen/provider/header/test reconciliation을 진행함. | Codex |
+| 2026-05-31 | implementation reconciliation | completed | `fe-route-agent`, `fe-store-agent`, `fe-screen-agent`, API client verify slice 기준으로 route/store/screen/provider/header/test reconciliation을 진행함. | Codex |
 | 2026-05-31 | QA gate | completed | route helper tests, `PersistStore` tests, `LoginPage/LoginForm` tests, admin/API type-check, route-local Playwright E2E, browser screenshot check 통과. | Codex |
 
 ## 기존 역기획 요약
@@ -490,5 +490,5 @@ flowchart TD
 | 2026-03-25 | `LoginRedirectPage`로 상태 UI를 page 레이어로 이동하고 route page를 thin container로 정리 | codex |
 | 2026-03-21 | page.tsx default export를 `observer(...)`로 정리해 client page 규칙을 맞춤 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
-| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

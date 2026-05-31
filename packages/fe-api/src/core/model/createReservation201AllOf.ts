@@ -9,13 +9,13 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ReservationDto } from "./reservationDto";
+import type { ReservationDto } from './reservationDto';
 
 export type CreateReservation201AllOf = {
-	/** */
-	httpStatus?: number;
-	/** */
-	message?: string;
-	/** @nullable */
-	data?: ReservationDto;
+  /** */
+  httpStatus?: number;
+  /** */
+  message?: string;
+  /** @nullable */
+  data?: ReservationDto;
 };

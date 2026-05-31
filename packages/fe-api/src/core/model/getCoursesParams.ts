@@ -9,32 +9,32 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { CourseStatus } from "./courseStatus";
+import type { CourseStatus } from './courseStatus';
 
 export type GetCoursesParams = {
-	/**
-	 * @minimum 0
-	 */
-	skip?: number;
-	/**
-	 * @minimum 1
-	 * @maximum 50
-	 */
-	take?: number;
-	/**
-	 * 코스명 또는 설명 통합 검색
-	 */
-	search?: string;
-	/**
-	 * 코스 상태 필터 (DRAFT, ACTIVE, ARCHIVED)
-	 */
-	status?: CourseStatus;
-	/**
-	 * 스페이스 ID 필터
-	 */
-	spaceId?: string;
-	/**
-	 * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, name, status, activeOfferingCount, activeEnrollmentCount. 예: ?sort=name&sort=-createdAt
-	 */
-	sort?: string[];
+/**
+ * @minimum 0
+ */
+skip?: number;
+/**
+ * @minimum 1
+ * @maximum 200
+ */
+take?: number;
+/**
+ * 코스명 또는 설명 통합 검색
+ */
+search?: string;
+/**
+ * 코스 상태 필터 (DRAFT, ACTIVE, ARCHIVED)
+ */
+status?: CourseStatus;
+/**
+ * 스페이스 ID 필터
+ */
+spaceId?: string;
+/**
+ * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, name, status, activeOfferingCount, activeEnrollmentCount. 예: ?sort=name&sort=-createdAt
+ */
+sort?: string[];
 };

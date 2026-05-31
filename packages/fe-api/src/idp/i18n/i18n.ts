@@ -12,533 +12,273 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  * OpenAPI spec version: 1.0.0
  */
 import {
-	useQuery,
-	useSuspenseInfiniteQuery,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery
+} from '@tanstack/react-query';
 import type {
-	DataTag,
-	DefinedInitialDataOptions,
-	DefinedUseQueryResult,
-	InfiniteData,
-	QueryClient,
-	QueryFunction,
-	QueryKey,
-	UndefinedInitialDataOptions,
-	UseQueryOptions,
-	UseQueryResult,
-	UseSuspenseInfiniteQueryOptions,
-	UseSuspenseInfiniteQueryResult,
-	UseSuspenseQueryOptions,
-	UseSuspenseQueryResult,
-} from "@tanstack/react-query";
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  InfiniteData,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseQueryOptions,
+  UseQueryResult,
+  UseSuspenseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
+} from '@tanstack/react-query';
 
-import type { GetIdpI18nCatalog200AllOf } from ".././model";
+import type {
+  GetIdpI18nCatalog200AllOf
+} from '.././model';
 
-import { customIdpInstance } from "../../libs/customIdpAxios";
-import type { ErrorType } from "../../libs/customIdpAxios";
+import { customIdpInstance } from '../../libs/customIdpAxios';
+import type { ErrorType } from '../../libs/customIdpAxios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * IDP 프론트 런타임 번역에 사용할 언어별 static catalog를 조회합니다.
  * @summary 공개 IDP i18n catalog 조회
  */
 export const getIdpI18nCatalog = (
-	languageCode: string,
-	options?: SecondParameter<typeof customIdpInstance>,
-	signal?: AbortSignal,
+    languageCode: string,
+ options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
 ) => {
-	return customIdpInstance<GetIdpI18nCatalog200AllOf>(
-		{ url: `/api/v1/i18n/catalog/${languageCode}`, method: "GET", signal },
-		options,
-	);
-};
+      
+      
+      return customIdpInstance<GetIdpI18nCatalog200AllOf>(
+      {url: `/api/v1/i18n/catalog/${languageCode}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export const getGetIdpI18nCatalogQueryKey = (languageCode?: string) => {
-	return [`/api/v1/i18n/catalog/${languageCode}`] as const;
-};
 
-export const getGetIdpI18nCatalogInfiniteQueryKey = (languageCode?: string) => {
-	return ["infinite", `/api/v1/i18n/catalog/${languageCode}`] as const;
-};
 
-export const getGetIdpI18nCatalogQueryOptions = <
-	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
+export const getGetIdpI18nCatalogQueryKey = (languageCode?: string,) => {
+    return [
+    `/api/v1/i18n/catalog/${languageCode}`
+    ] as const;
+    }
+
+export const getGetIdpI18nCatalogInfiniteQueryKey = (languageCode?: string,) => {
+    return [
+    'infinite', `/api/v1/i18n/catalog/${languageCode}`
+    ] as const;
+    }
+
+    
+export const getGetIdpI18nCatalogQueryOptions = <TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError = ErrorType<void>>(languageCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetIdpI18nCatalogQueryKey(languageCode);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getIdpI18nCatalog>>
-	> = ({ signal }) => getIdpI18nCatalog(languageCode, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetIdpI18nCatalogQueryKey(languageCode);
 
-	return {
-		queryKey,
-		queryFn,
-		enabled: !!languageCode,
-		...queryOptions,
-	} as UseQueryOptions<
-		Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  
 
-export type GetIdpI18nCatalogQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getIdpI18nCatalog>>
->;
-export type GetIdpI18nCatalogQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdpI18nCatalog>>> = ({ signal }) => getIdpI18nCatalog(languageCode, requestOptions, signal);
 
-export function useGetIdpI18nCatalog<
-	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options: {
-		query: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-					TError,
-					Awaited<ReturnType<typeof getIdpI18nCatalog>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetIdpI18nCatalog<
-	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-					TError,
-					Awaited<ReturnType<typeof getIdpI18nCatalog>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetIdpI18nCatalog<
-	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(languageCode), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetIdpI18nCatalogQueryResult = NonNullable<Awaited<ReturnType<typeof getIdpI18nCatalog>>>
+export type GetIdpI18nCatalogQueryError = ErrorType<void>
+
+
+export function useGetIdpI18nCatalog<TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError = ErrorType<void>>(
+ languageCode: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIdpI18nCatalog>>,
+          TError,
+          Awaited<ReturnType<typeof getIdpI18nCatalog>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdpI18nCatalog<TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError = ErrorType<void>>(
+ languageCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIdpI18nCatalog>>,
+          TError,
+          Awaited<ReturnType<typeof getIdpI18nCatalog>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdpI18nCatalog<TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError = ErrorType<void>>(
+ languageCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 공개 IDP i18n catalog 조회
  */
 
-export function useGetIdpI18nCatalog<
-	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetIdpI18nCatalogQueryOptions(languageCode, options);
+export function useGetIdpI18nCatalog<TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError = ErrorType<void>>(
+ languageCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const queryOptions = getGetIdpI18nCatalogQueryOptions(languageCode,options)
 
-	query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-	return query;
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
 
 /**
  * @summary 공개 IDP i18n catalog 조회
  */
-export const prefetchGetIdpI18nCatalogQuery = async <
-	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	languageCode: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetIdpI18nCatalogQueryOptions(languageCode, options);
+export const prefetchGetIdpI18nCatalogQuery = async <TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, languageCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
 
-	await queryClient.prefetchQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetIdpI18nCatalogQueryOptions(languageCode,options)
 
-export const getGetIdpI18nCatalogSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
+  await queryClient.prefetchQuery(queryOptions);
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetIdpI18nCatalogQueryKey(languageCode);
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getIdpI18nCatalog>>
-	> = ({ signal }) => getIdpI18nCatalog(languageCode, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetIdpI18nCatalogSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getIdpI18nCatalog>>
->;
-export type GetIdpI18nCatalogSuspenseQueryError = ErrorType<void>;
-
-export function useGetIdpI18nCatalogSuspense<
-	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetIdpI18nCatalogSuspense<
-	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetIdpI18nCatalogSuspense<
-	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 공개 IDP i18n catalog 조회
- */
-
-export function useGetIdpI18nCatalogSuspense<
-	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetIdpI18nCatalogSuspenseQueryOptions(
-		languageCode,
-		options,
-	);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
+  return queryClient;
 }
 
-export const getGetIdpI18nCatalogSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
+
+
+export const getGetIdpI18nCatalogSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError = ErrorType<void>>(languageCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey =
-		queryOptions?.queryKey ??
-		getGetIdpI18nCatalogInfiniteQueryKey(languageCode);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getIdpI18nCatalog>>
-	> = ({ signal }) => getIdpI18nCatalog(languageCode, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetIdpI18nCatalogQueryKey(languageCode);
 
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  
 
-export type GetIdpI18nCatalogSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getIdpI18nCatalog>>
->;
-export type GetIdpI18nCatalogSuspenseInfiniteQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdpI18nCatalog>>> = ({ signal }) => getIdpI18nCatalog(languageCode, requestOptions, signal);
 
-export function useGetIdpI18nCatalogSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetIdpI18nCatalogSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetIdpI18nCatalogSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetIdpI18nCatalogSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getIdpI18nCatalog>>>
+export type GetIdpI18nCatalogSuspenseQueryError = ErrorType<void>
+
+
+export function useGetIdpI18nCatalogSuspense<TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError = ErrorType<void>>(
+ languageCode: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdpI18nCatalogSuspense<TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError = ErrorType<void>>(
+ languageCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdpI18nCatalogSuspense<TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError = ErrorType<void>>(
+ languageCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 공개 IDP i18n catalog 조회
  */
 
-export function useGetIdpI18nCatalogSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>,
-	TError = ErrorType<void>,
->(
-	languageCode: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetIdpI18nCatalogSuspenseInfiniteQueryOptions(
-		languageCode,
-		options,
-	);
+export function useGetIdpI18nCatalogSuspense<TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError = ErrorType<void>>(
+ languageCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
+  const queryOptions = getGetIdpI18nCatalogSuspenseQueryOptions(languageCode,options)
 
-	query.queryKey = queryOptions.queryKey;
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-	return query;
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetIdpI18nCatalogSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>, TError = ErrorType<void>>(languageCode: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetIdpI18nCatalogInfiniteQueryKey(languageCode);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdpI18nCatalog>>> = ({ signal }) => getIdpI18nCatalog(languageCode, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetIdpI18nCatalogSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getIdpI18nCatalog>>>
+export type GetIdpI18nCatalogSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetIdpI18nCatalogSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>, TError = ErrorType<void>>(
+ languageCode: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdpI18nCatalogSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>, TError = ErrorType<void>>(
+ languageCode: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdpI18nCatalogSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>, TError = ErrorType<void>>(
+ languageCode: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 공개 IDP i18n catalog 조회
+ */
+
+export function useGetIdpI18nCatalogSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpI18nCatalog>>>, TError = ErrorType<void>>(
+ languageCode: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetIdpI18nCatalogSuspenseInfiniteQueryOptions(languageCode,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
 
 /**
  * @summary 공개 IDP i18n catalog 조회
  */
-export const prefetchGetIdpI18nCatalogInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	languageCode: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getIdpI18nCatalog>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetIdpI18nCatalogSuspenseInfiniteQueryOptions(
-		languageCode,
-		options,
-	);
+export const prefetchGetIdpI18nCatalogInfiniteQuery = async <TData = Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, languageCode: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpI18nCatalog>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetIdpI18nCatalogSuspenseInfiniteQueryOptions(languageCode,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+

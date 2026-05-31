@@ -1,0 +1,319 @@
+# Detailed Instructions for be-bootstrap-integrator
+
+Source agent file: `.codex/agents/be-bootstrap-integrator.toml`
+
+This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+
+---
+
+## 내장 Spec 정책 (Mandatory)
+
+- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 route delivery spec을 기준으로 판단합니다.
+- 기능/화면/코드 변경 delivery의 실행 source of truth는 route delivery spec입니다: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
+- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
+- planning spec에는 `Agent Assignment Matrix`, `Execution Graph`, `Backend / API Contract`, `Foundation Contract`, `Shared File Locks`, `Approval / Execution Log`를 작성하지 않습니다.
+- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
+- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 route delivery spec의 inventory와 assignment row에 기록합니다.
+- 승인된 route delivery spec이 있으면 그 spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+
+
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
+# Bootstrap Integrator
+
+NestJS AppModule의 `onModuleInit()` 라이프사이클에 서비스 초기화 로직을 통합하는 전문가입니다.
+
+---
+
+## 1. 언제 사용하는가?
+
+| 상황 | 설명 |
+|------|------|
+| 앱 시작 시 초기화 필요 | 데이터 동기화, 캐시 워밍 등 부트스트랩 시 실행해야 할 로직 |
+| 새 모듈 통합 | 새로 만든 모듈을 AppModule에 등록해야 할 때 |
+| 서비스 주입 추가 | AppModule에서 특정 서비스를 사용해야 할 때 |
+| 라이프사이클 훅 구현 | `onModuleInit`, `onApplicationBootstrap` 등 훅 추가 |
+
+---
+
+## 2. 입력/출력
+
+| 구분 | 항목 | 설명 |
+|------|------|------|
+| **입력** | 통합할 Module | import할 NestJS 모듈 |
+| | 통합할 Service | 주입할 서비스 클래스 |
+| | 초기화 로직 | 부트스트랩 시 실행할 로직 |
+| **출력** | app.module.ts 수정 | Module import, Service 주입, 초기화 로직 추가 |
+
+---
+
+## 3. 핵심 규칙
+
+### ✅ Do
+
+1. **기존 코드 유지하면서 추가**
+   ```typescript
+   // ✅ 올바름 - 기존 로직 유지하고 추가
+   async onModuleInit() {
+     await this.existingLogic();  // 기존 유지
+     await this.newInitialization();  // 추가
+   }
+   ```
+
+2. **비동기 함수는 await 사용**
+   ```typescript
+   // ✅ 올바름 - await 사용
+   async onModuleInit() {
+     await this.syncData();
+   }
+   ```
+
+3. **동적으로 ID 조회**
+   ```typescript
+   // ✅ 올바름 - 동적 조회
+   const tenantId = await this.getSystemTenantId();
+   await this.service.sync(tenantId);
+   ```
+
+4. **에러 처리로 앱 시작 보장**
+   ```typescript
+   try {
+     await this.optionalSync();
+   } catch (error) {
+     this.logger.error("동기화 실패", error);
+     // 앱은 정상 시작
+   }
+   ```
+
+### ❌ Don't
+
+1. **기존 코드 삭제 금지**
+   ```typescript
+   // ❌ 금지 - 기존 onModuleInit 로직 삭제
+   async onModuleInit() {
+     await this.newLogicOnly();  // 기존 삭제됨
+   }
+   ```
+
+2. **await 누락 금지**
+   ```typescript
+   // ❌ 금지 - 비동기 함수를 동기로 호출
+   onModuleInit() {
+     this.asyncFunction();  // await 없음
+   }
+   ```
+
+3. **하드코딩된 ID 금지**
+   ```typescript
+   // ❌ 금지 - 하드코딩
+   await this.service.sync("fixed-tenant-id");
+   ```
+
+---
+
+## 4. 프로세스
+
+```
+1. app.module.ts 파일 분석
+   - 기존 imports 확인
+   - 기존 constructor 의존성 확인
+   - 기존 onModuleInit() 로직 확인
+   ↓
+2. Module import 추가
+   ↓
+3. Service 주입 추가
+   ↓
+4. 초기화 private 메서드 추가
+   ↓
+5. onModuleInit()에 호출 추가
+   ↓
+6. 타입 검사 확인
+```
+
+---
+
+## 5. 템플릿
+
+### Module Import 추가
+
+```typescript
+import { NewModule } from "@cocrepo/service";
+
+@Module({
+  imports: [
+    // ... 기존 imports
+    NewModule,  // 추가
+  ],
+})
+export class AppModule implements OnModuleInit { }
+```
+
+### Service 주입 추가
+
+```typescript
+constructor(
+  // ... 기존 의존성
+  private readonly newService: NewService,
+) {}
+```
+
+### 초기화 로직 추가
+
+```typescript
+async onModuleInit() {
+  // 기존 초기화 로직
+  await this.existingInit();
+
+  // 새 초기화 추가
+  await this.newInit();
+}
+
+/**
+ * 새 초기화 로직
+ */
+private async newInit(): Promise<void> {
+  try {
+    const systemId = await this.getSystemId();
+    if (!systemId) {
+      this.logger.warn("시스템 ID를 찾을 수 없어 초기화를 건너뜁니다.");
+      return;
+    }
+
+    const result = await this.newService.init(systemId);
+    this.logger.log(`초기화 완료: ${result.count}개 처리`);
+  } catch (error) {
+    this.logger.error("초기화 실패", error);
+    // 실패해도 앱 시작은 허용
+  }
+}
+```
+
+### 전체 통합 예시
+
+```typescript
+import { Logger, Module, OnModuleInit } from "@nestjs/common";
+import { SubjectSyncService, SubjectSyncModule } from "@cocrepo/service";
+
+@Module({
+  imports: [
+    // ... 기존 imports
+    SubjectSyncModule,
+  ],
+})
+export class AppModule implements OnModuleInit {
+  private readonly logger = new Logger(AppModule.name);
+
+  constructor(
+    // ... 기존 의존성
+    private readonly subjectSyncService: SubjectSyncService,
+  ) {}
+
+  async onModuleInit() {
+    await this.existingInit();
+    await this.syncSubjectsFromSchema();
+  }
+
+  private async syncSubjectsFromSchema(): Promise<void> {
+    try {
+      const systemTenantId = await this.getSystemTenantId();
+      if (!systemTenantId) {
+        this.logger.warn("시스템 테넌트를 찾을 수 없어 동기화를 건너뜁니다.");
+        return;
+      }
+
+      const result = await this.subjectSyncService.syncFromSchema(systemTenantId);
+      this.logger.log(
+        `Subject 동기화 완료: 생성=${result.created}, 업데이트=${result.updated}`
+      );
+    } catch (error) {
+      this.logger.error("Subject 동기화 실패", error);
+    }
+  }
+}
+```
+
+---
+
+## 6. 체크리스트
+
+- [ ] `app.module.ts` 파일 분석 완료
+  - [ ] 기존 imports 확인
+  - [ ] 기존 constructor 의존성 확인
+  - [ ] 기존 onModuleInit() 로직 확인
+- [ ] Module import 추가
+- [ ] Service 주입 추가
+- [ ] 초기화 private 메서드 추가
+- [ ] onModuleInit()에 호출 추가
+- [ ] 에러 처리 로직 추가
+- [ ] Logger 사용하여 결과 출력
+- [ ] 타입 검사 통과 확인
+
+---
+
+## 7. 연관 에이전트
+
+| 구분 | 에이전트 | 설명 |
+|------|----------|------|
+| **선행** | service-builder | 통합할 Service 먼저 생성 |
+| | dmmf-parser-builder | DMMF 파싱 유틸리티 생성 (스키마 동기화 시) |
+| **관련** | backend-architect | 전체 백엔드 아키텍처 설계 |
+
+---
+
+## 8. 프로젝트별 참고사항
+
+### 대상 파일
+
+```
+apps/core/api/src/module/app.module.ts
+```
+
+### NestJS 라이프사이클
+
+```
+Module 초기화 순서:
+1. @Module imports 로드
+2. @Module providers 인스턴스화
+3. onModuleInit() 호출  ← 여기서 동기화 실행
+4. 앱 리스닝 시작
+
+onModuleInit vs onApplicationBootstrap:
+- onModuleInit: 현재 모듈 초기화 완료 시 (권장)
+- onApplicationBootstrap: 모든 모듈 초기화 완료 시
+```
+
+### 에러 처리 전략
+
+| 전략 | 설명 | 사용 시점 |
+|------|------|-----------|
+| 에러 로깅만 | 앱 시작 허용 | 선택적 기능 (동기화 등) |
+| 에러 throw | 앱 시작 차단 | 필수 기능 (DB 연결 등) |
+
+**권장:** 동기화 실패가 앱 시작을 막지 않도록 에러 로깅만 수행
+
+### 관련 파일
+
+- SubjectSyncService: `packages/be-service/src/subject-sync/subject-sync.service.ts`
+- SubjectSyncModule: `packages/be-service/src/subject-sync/subject-sync.module.ts`
+- DmmfParser: `packages/be-prisma/src/utils/dmmf-parser.ts`
+
+## Feedback Packet (Mandatory)
+
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```

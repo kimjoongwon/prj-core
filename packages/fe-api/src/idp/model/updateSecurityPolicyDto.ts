@@ -13,64 +13,64 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface UpdateSecurityPolicyDto {
-	/**
-	 * 최소 비밀번호 길이
-	 * @minimum 4
-	 * @maximum 128
-	 */
-	passwordMinLength?: number;
-	/** 대문자 필수 */
-	passwordRequireUppercase?: boolean;
-	/** 소문자 필수 */
-	passwordRequireLowercase?: boolean;
-	/** 숫자 필수 */
-	passwordRequireNumber?: boolean;
-	/** 특수문자 필수 */
-	passwordRequireSpecial?: boolean;
-	/**
-	 * 비밀번호 만료 일수 (0=무제한)
-	 * @minimum 0
-	 */
-	passwordExpirationDays?: number;
-	/**
-	 * 비밀번호 재사용 제한 횟수
-	 * @minimum 0
-	 */
-	passwordReuseLimit?: number;
-	/**
-	 * 일시 잠금 임계값
-	 * @minimum 1
-	 */
-	temporaryLockThreshold?: number;
-	/**
-	 * 일시 잠금 시간 (분)
-	 * @minimum 1
-	 */
-	temporaryLockDurationMin?: number;
-	/**
-	 * 영구 잠금 임계값
-	 * @minimum 1
-	 */
-	permanentLockThreshold?: number;
-	/**
-	 * Access Token TTL (초)
-	 * @minimum 60
-	 */
-	accessTokenTtlSec?: number;
-	/**
-	 * Refresh Token TTL (초)
-	 * @minimum 60
-	 */
-	refreshTokenTtlSec?: number;
-	/**
-	 * 세션 TTL (초)
-	 * @minimum 60
-	 */
-	sessionTtlSec?: number;
-	/** IP 화이트리스트 활성화 */
-	ipWhitelistEnabled?: boolean;
-	/** 이메일 도메인 화이트리스트 활성화 */
-	emailDomainWhitelistEnabled?: boolean;
-	/** CORS Origin 화이트리스트 활성화 */
-	corsOriginWhitelistEnabled?: boolean;
+  /**
+   * 최소 비밀번호 길이
+   * @minimum 4
+   * @maximum 128
+   */
+  passwordMinLength?: number;
+  /** 대문자 필수 */
+  passwordRequireUppercase?: boolean;
+  /** 소문자 필수 */
+  passwordRequireLowercase?: boolean;
+  /** 숫자 필수 */
+  passwordRequireNumber?: boolean;
+  /** 특수문자 필수 */
+  passwordRequireSpecial?: boolean;
+  /**
+   * 비밀번호 만료 일수 (0=무제한)
+   * @minimum 0
+   */
+  passwordExpirationDays?: number;
+  /**
+   * 비밀번호 재사용 제한 횟수
+   * @minimum 0
+   */
+  passwordReuseLimit?: number;
+  /**
+   * 일시 잠금 임계값
+   * @minimum 1
+   */
+  temporaryLockThreshold?: number;
+  /**
+   * 일시 잠금 시간 (분)
+   * @minimum 1
+   */
+  temporaryLockDurationMin?: number;
+  /**
+   * 영구 잠금 임계값
+   * @minimum 1
+   */
+  permanentLockThreshold?: number;
+  /**
+   * Access Token TTL (초)
+   * @minimum 60
+   */
+  accessTokenTtlSec?: number;
+  /**
+   * Refresh Token TTL (초)
+   * @minimum 60
+   */
+  refreshTokenTtlSec?: number;
+  /**
+   * 세션 TTL (초)
+   * @minimum 60
+   */
+  sessionTtlSec?: number;
+  /** IP 화이트리스트 활성화 */
+  ipWhitelistEnabled?: boolean;
+  /** 이메일 도메인 화이트리스트 활성화 */
+  emailDomainWhitelistEnabled?: boolean;
+  /** CORS Origin 화이트리스트 활성화 */
+  corsOriginWhitelistEnabled?: boolean;
 }

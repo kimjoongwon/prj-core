@@ -13,12 +13,12 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface VerifyTokenResponseDto {
-	/** 토큰 유효 여부 */
-	valid: boolean;
-	/** Access Token 만료 시간 (Unix timestamp, ms) */
-	accessTokenExpiresAt: number;
-	/** Refresh Token 만료 시간 (Unix timestamp, ms) */
-	refreshTokenExpiresAt: number;
-	/** 현재 `x-space-id`로 해석된 tenant role이 `FULL_ACCESS`인지 여부 */
-	hasFullAccess: boolean;
+  /** 토큰 유효 여부 */
+  valid: boolean;
+  /** Access Token 만료 시간 (Unix timestamp, ms) */
+  accessTokenExpiresAt: number;
+  /** Refresh Token 만료 시간 (Unix timestamp, ms) */
+  refreshTokenExpiresAt: number;
+  /** 현재 `x-space-id`로 해석된 tenant role이 `FULL_ACCESS`인지 여부 */
+  hasFullAccess: boolean;
 }

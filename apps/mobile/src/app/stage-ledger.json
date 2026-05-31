@@ -72,7 +72,7 @@
       "stage": 2,
       "route": "/payments/checkout",
       "domain": "Payment",
-      "agent_type": "fe-mo-screen-builder",
+      "agent_type": "fe-screen-agent",
       "required": true,
       "source_spec": [
         "apps/mobile/src/app/payments/index.spec.md",
@@ -99,7 +99,7 @@
       "stage": 3,
       "route": "/payments/checkout",
       "domain": "Payment",
-      "agent_type": "fe-mo-page-builder",
+      "agent_type": "fe-route-agent",
       "required": true,
       "source_spec": [
         "apps/mobile/src/app/payments/index.spec.md"

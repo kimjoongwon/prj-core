@@ -13,11 +13,11 @@
 /**
  * 타임라인 준비 방식
  */
-export type TimelineProvisioningMode =
-	(typeof TimelineProvisioningMode)[keyof typeof TimelineProvisioningMode];
+export type TimelineProvisioningMode = typeof TimelineProvisioningMode[keyof typeof TimelineProvisioningMode];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TimelineProvisioningMode = {
-	SHARED: "SHARED",
-	DEDICATED_ON_ENROLLMENT: "DEDICATED_ON_ENROLLMENT",
+  SHARED: 'SHARED',
+  DEDICATED_ON_ENROLLMENT: 'DEDICATED_ON_ENROLLMENT',
 } as const;

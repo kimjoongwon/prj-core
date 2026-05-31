@@ -312,7 +312,7 @@
       "id": "COURSE-S3-FE-001",
       "stage": 3,
       "slice": "CourseRouteApiIntegration",
-      "agent_type": "fe-api-integrator, fe-route-builder",
+      "agent_type": "fe-api-integrator, fe-route-agent",
       "required": true,
       "source_spec": [
         "apps/admin/web/src/app/(admin)/courses/page.spec.md",

@@ -13,10 +13,10 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface IdpAccountAccessGrantFormUiPathsDto {
-	/** 읽기 전용 경로 목록 */
-	readOnlyPaths: string[];
-	/** 숨김 경로 목록 */
-	hiddenPaths: string[];
-	/** 비활성 경로 목록 */
-	disabledPaths: string[];
+  /** 읽기 전용 경로 목록 */
+  readOnlyPaths: string[];
+  /** 숨김 경로 목록 */
+  hiddenPaths: string[];
+  /** 비활성 경로 목록 */
+  disabledPaths: string[];
 }

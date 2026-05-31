@@ -9,16 +9,16 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDto } from "./userDto";
-import type { UserPaginationMetaDto } from "./userPaginationMetaDto";
-import type { UserStatsDto } from "./userStatsDto";
+import type { UserDto } from './userDto';
+import type { UserPaginationMetaDto } from './userPaginationMetaDto';
+import type { UserStatsDto } from './userStatsDto';
 
 export type GetUsers200AllOf = {
-	/** */
-	httpStatus?: number;
-	/** */
-	message?: string;
-	data?: UserDto[];
-	meta?: UserPaginationMetaDto;
-	stats?: UserStatsDto;
+  /** */
+  httpStatus?: number;
+  /** */
+  message?: string;
+  data?: UserDto[];
+  meta?: UserPaginationMetaDto;
+  stats?: UserStatsDto;
 };

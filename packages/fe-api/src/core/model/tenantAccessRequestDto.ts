@@ -9,66 +9,65 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-
-import type { RoleDto } from "./roleDto";
-import type { SpaceDto } from "./spaceDto";
-import type { TenantAccessRequestDtoAppliedTenant } from "./tenantAccessRequestDtoAppliedTenant";
-import type { TenantAccessRequestDtoPreviousRole } from "./tenantAccessRequestDtoPreviousRole";
-import type { TenantAccessRequestDtoReviewer } from "./tenantAccessRequestDtoReviewer";
-import type { TenantAccessRequestStatus } from "./tenantAccessRequestStatus";
-import type { UserDto } from "./userDto";
+import type { TenantAccessRequestStatus } from './tenantAccessRequestStatus';
+import type { UserDto } from './userDto';
+import type { TenantAccessRequestDtoReviewer } from './tenantAccessRequestDtoReviewer';
+import type { SpaceDto } from './spaceDto';
+import type { RoleDto } from './roleDto';
+import type { TenantAccessRequestDtoPreviousRole } from './tenantAccessRequestDtoPreviousRole';
+import type { TenantAccessRequestDtoAppliedTenant } from './tenantAccessRequestDtoAppliedTenant';
 
 export interface TenantAccessRequestDto {
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	/** 신청자 ID */
-	requesterId: string;
-	/** 신청 대상 Space ID */
-	spaceId: string;
-	/** 희망 Role ID */
-	requestedRoleId: string;
-	/**
-	 * 신청 시점 기존 Role ID
-	 * @nullable
-	 */
-	previousRoleId?: string | null;
-	/**
-	 * 신청 사유
-	 * @nullable
-	 */
-	reason?: string | null;
-	/** 신청 상태 */
-	status: TenantAccessRequestStatus;
-	/**
-	 * 검토자 ID
-	 * @nullable
-	 */
-	reviewerId?: string | null;
-	/**
-	 * 검토 코멘트
-	 * @nullable
-	 */
-	reviewComment?: string | null;
-	/**
-	 * 검토 시각
-	 * @nullable
-	 */
-	reviewedAt: string | null;
-	/**
-	 * 승인 적용 Tenant ID
-	 * @nullable
-	 */
-	appliedTenantId?: string | null;
-	requester?: UserDto;
-	/** @nullable */
-	reviewer?: TenantAccessRequestDtoReviewer;
-	space?: SpaceDto;
-	requestedRole?: RoleDto;
-	/** @nullable */
-	previousRole?: TenantAccessRequestDtoPreviousRole;
-	/** @nullable */
-	appliedTenant?: TenantAccessRequestDtoAppliedTenant;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  /** 신청자 ID */
+  requesterId: string;
+  /** 신청 대상 Space ID */
+  spaceId: string;
+  /** 희망 Role ID */
+  requestedRoleId: string;
+  /**
+   * 신청 시점 기존 Role ID
+   * @nullable
+   */
+  previousRoleId?: string | null;
+  /**
+   * 신청 사유
+   * @nullable
+   */
+  reason?: string | null;
+  /** 신청 상태 */
+  status: TenantAccessRequestStatus;
+  /**
+   * 검토자 ID
+   * @nullable
+   */
+  reviewerId?: string | null;
+  /**
+   * 검토 코멘트
+   * @nullable
+   */
+  reviewComment?: string | null;
+  /**
+   * 검토 시각
+   * @nullable
+   */
+  reviewedAt: string | null;
+  /**
+   * 승인 적용 Tenant ID
+   * @nullable
+   */
+  appliedTenantId?: string | null;
+  requester?: UserDto;
+  /** @nullable */
+  reviewer?: TenantAccessRequestDtoReviewer;
+  space?: SpaceDto;
+  requestedRole?: RoleDto;
+  /** @nullable */
+  previousRole?: TenantAccessRequestDtoPreviousRole;
+  /** @nullable */
+  appliedTenant?: TenantAccessRequestDtoAppliedTenant;
 }

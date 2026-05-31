@@ -13,11 +13,12 @@
 /**
  * 코스 상태
  */
-export type CourseStatus = (typeof CourseStatus)[keyof typeof CourseStatus];
+export type CourseStatus = typeof CourseStatus[keyof typeof CourseStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CourseStatus = {
-	DRAFT: "DRAFT",
-	ACTIVE: "ACTIVE",
-	ARCHIVED: "ARCHIVED",
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED',
 } as const;

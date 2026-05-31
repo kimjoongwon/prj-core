@@ -97,7 +97,7 @@
 | 2026-03-25 | `SessionCheckPage`로 시각 구성을 page 레이어로 이동하고 route page를 thin container로 정리 | codex |
 | 2026-03-22 | 루트 리다이렉트 로딩 상태를 `DetailPage`/`DetailSectionCard` 기반 detail/view shell로 정리 | codex |
 | 2026-03-21 | 루트 진입 page를 `_client.tsx` 없는 단일 CSR 리다이렉트로 정리하고 계약을 detail/view 기준으로 보정 | codex |
-| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-20 | 인증 쿠키가 있을 때 `/dashboard`로 우선 진입하도록 운영 리다이렉트 규칙 보강 | codex |

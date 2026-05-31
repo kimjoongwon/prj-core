@@ -13,13 +13,13 @@
 /**
  * 수강권 상태
  */
-export type CoursePassStatus =
-	(typeof CoursePassStatus)[keyof typeof CoursePassStatus];
+export type CoursePassStatus = typeof CoursePassStatus[keyof typeof CoursePassStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CoursePassStatus = {
-	ACTIVE: "ACTIVE",
-	SUSPENDED: "SUSPENDED",
-	EXPIRED: "EXPIRED",
-	CANCELED: "CANCELED",
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED',
+  EXPIRED: 'EXPIRED',
+  CANCELED: 'CANCELED',
 } as const;

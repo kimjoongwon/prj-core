@@ -9,41 +9,41 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { DerivativeKind } from "./derivativeKind";
+import type { DerivativeKind } from './derivativeKind';
 
 export interface DerivativeDto {
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	/** 소속 Space ID */
-	spaceId: string;
-	/** 원본 에셋 ID */
-	assetId: string;
-	/** 파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT) */
-	kind: DerivativeKind;
-	/** 프로필명 (예: thumbnail-256, preview-1080p) */
-	profile: string;
-	/** 스토리지 저장 키 */
-	storageKey: string;
-	/** MIME 타입 */
-	mimeType: string;
-	/** 파일 크기 (바이트) */
-	sizeBytes: number;
-	/**
-	 * 너비 (이미지/비디오)
-	 * @nullable
-	 */
-	width?: number | null;
-	/**
-	 * 높이 (이미지/비디오)
-	 * @nullable
-	 */
-	height?: number | null;
-	/**
-	 * 재생 시간 (밀리초, 비디오)
-	 * @nullable
-	 */
-	durationMs?: number | null;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  /** 소속 Space ID */
+  spaceId: string;
+  /** 원본 에셋 ID */
+  assetId: string;
+  /** 파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT) */
+  kind: DerivativeKind;
+  /** 프로필명 (예: thumbnail-256, preview-1080p) */
+  profile: string;
+  /** 스토리지 저장 키 */
+  storageKey: string;
+  /** MIME 타입 */
+  mimeType: string;
+  /** 파일 크기 (바이트) */
+  sizeBytes: number;
+  /**
+   * 너비 (이미지/비디오)
+   * @nullable
+   */
+  width?: number | null;
+  /**
+   * 높이 (이미지/비디오)
+   * @nullable
+   */
+  height?: number | null;
+  /**
+   * 재생 시간 (밀리초, 비디오)
+   * @nullable
+   */
+  durationMs?: number | null;
 }

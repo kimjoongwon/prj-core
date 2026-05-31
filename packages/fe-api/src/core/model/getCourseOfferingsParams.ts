@@ -9,49 +9,49 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { CourseOfferingStatus } from "./courseOfferingStatus";
-import type { TimelineProvisioningMode } from "./timelineProvisioningMode";
+import type { CourseOfferingStatus } from './courseOfferingStatus';
+import type { TimelineProvisioningMode } from './timelineProvisioningMode';
 
 export type GetCourseOfferingsParams = {
-	/**
-	 * @minimum 0
-	 */
-	skip?: number;
-	/**
-	 * @minimum 1
-	 * @maximum 50
-	 */
-	take?: number;
-	/**
-	 * 개설 과정명, 코스명, 타임라인명 통합 검색
-	 */
-	search?: string;
-	/**
-	 * 코스 ID 필터
-	 */
-	courseId?: string;
-	/**
-	 * 스페이스 ID 필터
-	 */
-	spaceId?: string;
-	/**
-	 * 타임라인 ID 필터
-	 */
-	timelineId?: string;
-	/**
-	 * 개설 상태 필터 (DRAFT, ENROLLING, ACTIVE, CLOSED, CANCELED)
-	 */
-	status?: CourseOfferingStatus;
-	/**
-	 * 타임라인 준비 방식 필터 (SHARED, DEDICATED_ON_ENROLLMENT)
-	 */
-	timelineProvisioningMode?: TimelineProvisioningMode;
-	/**
-	 * 현재 모집 중인 개설 과정만 조회
-	 */
-	recruitingOnly?: boolean;
-	/**
-	 * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, name, startsAt, endsAt, enrollmentStartsAt, enrollmentEndsAt, capacity, enrolledCount, status. 예: ?sort=startsAt&sort=-createdAt
-	 */
-	sort?: string[];
+/**
+ * @minimum 0
+ */
+skip?: number;
+/**
+ * @minimum 1
+ * @maximum 200
+ */
+take?: number;
+/**
+ * 개설 과정명, 코스명, 타임라인명 통합 검색
+ */
+search?: string;
+/**
+ * 코스 ID 필터
+ */
+courseId?: string;
+/**
+ * 스페이스 ID 필터
+ */
+spaceId?: string;
+/**
+ * 타임라인 ID 필터
+ */
+timelineId?: string;
+/**
+ * 개설 상태 필터 (DRAFT, ENROLLING, ACTIVE, CLOSED, CANCELED)
+ */
+status?: CourseOfferingStatus;
+/**
+ * 타임라인 준비 방식 필터 (SHARED, DEDICATED_ON_ENROLLMENT)
+ */
+timelineProvisioningMode?: TimelineProvisioningMode;
+/**
+ * 현재 모집 중인 개설 과정만 조회
+ */
+recruitingOnly?: boolean;
+/**
+ * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, name, startsAt, endsAt, enrollmentStartsAt, enrollmentEndsAt, capacity, enrolledCount, status. 예: ?sort=startsAt&sort=-createdAt
+ */
+sort?: string[];
 };

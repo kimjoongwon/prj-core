@@ -13,6 +13,6 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface IdpAccountAccessGrantFormFieldMetaDto {
-	/** 필드 라벨 */
-	label?: string;
+  /** 필드 라벨 */
+  label?: string;
 }

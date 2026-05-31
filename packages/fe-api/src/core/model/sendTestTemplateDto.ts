@@ -9,11 +9,11 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { SendTestTemplateDtoVariables } from "./sendTestTemplateDtoVariables";
+import type { SendTestTemplateDtoVariables } from './sendTestTemplateDtoVariables';
 
 export interface SendTestTemplateDto {
-	/** 수신자 (이메일 주소 / 전화번호 / 디바이스 토큰) */
-	recipient: string;
-	/** 변수 키-값 맵 */
-	variables: SendTestTemplateDtoVariables;
+  /** 수신자 (이메일 주소 / 전화번호 / 디바이스 토큰) */
+  recipient: string;
+  /** 변수 키-값 맵 */
+  variables: SendTestTemplateDtoVariables;
 }

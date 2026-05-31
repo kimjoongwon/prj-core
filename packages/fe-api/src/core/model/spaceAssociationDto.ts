@@ -11,11 +11,11 @@
  */
 
 export interface SpaceAssociationDto {
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	spaceId: string;
-	groupId: string;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  spaceId: string;
+  groupId: string;
 }

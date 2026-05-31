@@ -13,14 +13,14 @@
 /**
  * 수강 등록 상태
  */
-export type EnrollmentStatus =
-	(typeof EnrollmentStatus)[keyof typeof EnrollmentStatus];
+export type EnrollmentStatus = typeof EnrollmentStatus[keyof typeof EnrollmentStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const EnrollmentStatus = {
-	PENDING: "PENDING",
-	ACTIVE: "ACTIVE",
-	CANCELED: "CANCELED",
-	COMPLETED: "COMPLETED",
-	EXPIRED: "EXPIRED",
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  CANCELED: 'CANCELED',
+  COMPLETED: 'COMPLETED',
+  EXPIRED: 'EXPIRED',
 } as const;

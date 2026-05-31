@@ -11,37 +11,37 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { AuthAuditResult } from "./authAuditResult";
+import type { AuthAuditResult } from './authAuditResult';
 
 export interface AuthAuditLogDto {
-	/** ID */
-	id: string;
-	/** 생성일 */
-	createdAt: string;
-	/** 이메일 */
-	email: string;
-	/**
-	 * 사용자 ID
-	 * @nullable
-	 */
-	userId?: string | null;
-	/** 결과 */
-	result: AuthAuditResult;
-	/**
-	 * 실패 사유
-	 * @nullable
-	 */
-	failureReason?: string | null;
-	/** IP 주소 */
-	ipAddress: string;
-	/**
-	 * User Agent
-	 * @nullable
-	 */
-	userAgent?: string | null;
-	/**
-	 * 클라이언트 ID
-	 * @nullable
-	 */
-	clientId?: string | null;
+  /** ID */
+  id: string;
+  /** 생성일 */
+  createdAt: string;
+  /** 이메일 */
+  email: string;
+  /**
+   * 사용자 ID
+   * @nullable
+   */
+  userId?: string | null;
+  /** 결과 */
+  result: AuthAuditResult;
+  /**
+   * 실패 사유
+   * @nullable
+   */
+  failureReason?: string | null;
+  /** IP 주소 */
+  ipAddress: string;
+  /**
+   * User Agent
+   * @nullable
+   */
+  userAgent?: string | null;
+  /**
+   * 클라이언트 ID
+   * @nullable
+   */
+  clientId?: string | null;
 }

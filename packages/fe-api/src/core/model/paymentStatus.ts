@@ -13,13 +13,14 @@
 /**
  * 결제 상태
  */
-export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus];
+export type PaymentStatus = typeof PaymentStatus[keyof typeof PaymentStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PaymentStatus = {
-	PENDING: "PENDING",
-	PAID: "PAID",
-	FAILED: "FAILED",
-	CANCELED: "CANCELED",
-	REFUNDED: "REFUNDED",
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  FAILED: 'FAILED',
+  CANCELED: 'CANCELED',
+  REFUNDED: 'REFUNDED',
 } as const;

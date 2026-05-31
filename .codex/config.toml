@@ -92,22 +92,6 @@ direct_service_injection_allowed = false
 single_root_passthrough_allowed = false
 guard = "Controller는 HTTP protocol adapter로 유지하고 CommandBus/QueryBus만 호출한다. Service, Repository, Client, legacy boundary provider, UseCase handler를 Controller에 직접 주입하지 않는다"
 
-[rules.migration_cqrs]
-role_root = ".codex/agents/mig"
-runbook = "docs/backend/cqrs-usecase-migration.md"
-role_prefix = "mig-"
-target_write_flow = "Controller -> CommandBus/QueryBus -> Command/Query(@cocrepo/command) -> UseCase Handler(@cocrepo/usecase) -> AggregateRootService(@cocrepo/aggregate) -> AggregateRootEntity(@cocrepo/entity) -> Repository"
-target_external_flow = "Client -> Service -> UseCase Handler"
-command_message_package = "@cocrepo/command"
-event_message_package = "@cocrepo/event"
-aggregate_package = "@cocrepo/aggregate"
-package_rename = "@cocrepo/app -> @cocrepo/usecase, @cocrepo/gateway -> @cocrepo/client, Command/Query message -> @cocrepo/command, Event message -> @cocrepo/event, aggregate root service -> @cocrepo/aggregate"
-facade_policy = "migration target removes @cocrepo/facade after pilot validation"
-controller_entrypoint = "Controller uses CommandBus/QueryBus instead of facade/service/application direct injection"
-aggregate_root_base = "Aggregate root service providers live in @cocrepo/aggregate and are named {Domain}AggregateRoot; aggregate root entities stay in @cocrepo/entity and extend AbstractAggregateRootEntity"
-terminology = "Use role for config entries, agent for spawned execution, agent_type for creation parameter"
-guard = "CQRS/UseCase migration roles live only under .codex/agents/mig and execute from docs/backend/cqrs-usecase-migration.md. Existing legacy backend roles remain until migration roles are validated."
-
 [rules.fe_ui]
 root_axis_only = true
 no_namespace_group_depth = true
@@ -305,50 +289,6 @@ config_file = "agents/be-aggregate-builder.toml"
 [agents.be-vo-builder]
 description = "Value Object 클래스를 생성하는 전문가"
 config_file = "agents/be-vo-builder.toml"
-
-[agents.mig-arch-cqrs-migration-spec-writer]
-description = "CQRS/UseCase 마이그레이션 runbook과 agent execution 문서를 작성하는 role"
-config_file = "agents/mig/arch-cqrs-migration-spec-writer.toml"
-
-[agents.mig-be-usecase-builder]
-description = "Nest CQRS UseCase handler 마이그레이션 role"
-config_file = "agents/mig/be-usecase-builder.toml"
-
-[agents.mig-be-command-builder]
-description = "CQRS Command/Query message를 @cocrepo/command로 이동하는 migration role"
-config_file = "agents/mig/be-command-builder.toml"
-
-[agents.mig-be-event-builder]
-description = "CQRS Event message를 @cocrepo/event로 이동하는 migration role"
-config_file = "agents/mig/be-event-builder.toml"
-
-[agents.mig-be-aggregate-entity-builder]
-description = "AbstractAggregateRootEntity와 aggregate root entity 전환 role"
-config_file = "agents/mig/be-aggregate-entity-builder.toml"
-
-[agents.mig-be-aggregate-service-builder]
-description = "Aggregate root service를 @cocrepo/aggregate의 {Domain}AggregateRoot provider로 이동/정리하는 role"
-config_file = "agents/mig/be-aggregate-service-builder.toml"
-
-[agents.mig-be-cqrs-repository-builder]
-description = "Aggregate rehydrate/save repository 전환 role"
-config_file = "agents/mig/be-cqrs-repository-builder.toml"
-
-[agents.mig-be-cqrs-controller-builder]
-description = "Controller를 CommandBus/QueryBus entrypoint로 전환하는 role"
-config_file = "agents/mig/be-cqrs-controller-builder.toml"
-
-[agents.mig-be-cqrs-module-builder]
-description = "CqrsModule, usecase handler, service/repository/client provider wiring role"
-config_file = "agents/mig/be-cqrs-module-builder.toml"
-
-[agents.mig-be-client-builder]
-description = "외부 API 단일 연동을 Client로 전환하는 role"
-config_file = "agents/mig/be-client-builder.toml"
-
-[agents.mig-be-package-migration-builder]
-description = "be-command 추가, be-app/usecase, be-gateway/client, facade 제거 package migration role"
-config_file = "agents/mig/be-package-migration-builder.toml"
 
 [agents.common-schema-builder]
 description = "프론트엔드와 백엔드에서 공유하는 검증 스키마를 생성하는 전문가 (다국어 검증 메시지 포함)"

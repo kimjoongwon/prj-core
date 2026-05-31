@@ -11,21 +11,21 @@
  */
 
 export interface ProgramActivityDto {
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	programId: string;
-	taskId: string;
-	order: number;
-	repetitions: number;
-	restTime: number;
-	notes?: string;
-	exerciseName: string;
-	exerciseDescription?: string;
-	exerciseDuration: number;
-	exerciseCount: number;
-	imageFileId?: string;
-	videoFileId?: string;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  programId: string;
+  taskId: string;
+  order: number;
+  repetitions: number;
+  restTime: number;
+  notes?: string;
+  exerciseName: string;
+  exerciseDescription?: string;
+  exerciseDuration: number;
+  exerciseCount: number;
+  imageFileId?: string;
+  videoFileId?: string;
 }

@@ -13,12 +13,12 @@
 /**
  * 본문 형식
  */
-export type ServiceDocumentFormat =
-	(typeof ServiceDocumentFormat)[keyof typeof ServiceDocumentFormat];
+export type ServiceDocumentFormat = typeof ServiceDocumentFormat[keyof typeof ServiceDocumentFormat];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ServiceDocumentFormat = {
-	MARKDOWN: "MARKDOWN",
-	HTML: "HTML",
-	PLAIN_TEXT: "PLAIN_TEXT",
+  MARKDOWN: 'MARKDOWN',
+  HTML: 'HTML',
+  PLAIN_TEXT: 'PLAIN_TEXT',
 } as const;

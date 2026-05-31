@@ -54,7 +54,7 @@
       "id": "PAYMENT-S3-FE-001",
       "stage": 3,
       "slice": "PaymentAdminPage",
-      "agent_type": "fe-api-integrator, fe-route-builder, fe-feature-builder, fe-widget-builder",
+      "agent_type": "fe-api-integrator, fe-route-agent, fe-feature-agent, fe-widget-agent",
       "required": true,
       "source_spec": [
         "apps/admin/web/src/app/(admin)/payments/page.spec.md",

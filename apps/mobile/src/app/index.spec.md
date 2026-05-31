@@ -263,28 +263,28 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 
 | 영역 | 리듬 컴포넌트 | 방향/정렬 | gap preset | 감싸는 대상 | 재사용/신규 | 소스/대상 | 담당 `agent_type` | 비고 |
 |------|---------------|-----------|------------|-------------|-------------|-----------|-------------------|------|
-| route shell | `CustomHeader` + tab layout | route layout owned | n/a | header title/subtitle, bottom tab | reuse/modify | `apps/mobile/src/app/(tabs)/_layout.tsx` | `fe-mo-route-layout-builder` | route는 body rhythm을 직접 만들지 않음 |
-| screen root | `VStack` | vertical / stretch | `section` | account card, current space card, quick actions, logout | reuse | `packages/fe-mo-ui/src/rhythm/VStack` | `fe-mo-screen-builder` | screen body의 기본 세로 rhythm owner |
-| summary cards | `VStack` + `HStack` | vertical + row horizontal | `block`, `inline`, `dense` | account/current-space copy와 icon/status | reuse | `packages/fe-mo-ui/src/rhythm` | `fe-mo-screen-builder` | 긴 이름/지점명 줄바꿈 허용 |
-| quick actions | `VStack` + row `HStack` + `ListGroup` | vertical list / row horizontal | `flush`, row `inline`, meta `dense` | 내 예약/결제/설정 rows | new + reuse | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx` | `fe-mo-widget-builder` | row touch target은 44px 이상 |
-| logout action | `VStack` | vertical / stretch | `section` | danger full-width button | reuse | `packages/fe-mo-ui/src/rhythm/VStack`, `Button` | `fe-mo-screen-builder` | bottom tab/safe area와 겹치지 않음 |
+| route shell | `CustomHeader` + tab layout | route layout owned | n/a | header title/subtitle, bottom tab | reuse/modify | `apps/mobile/src/app/(tabs)/_layout.tsx` | `fe-route-layout-agent` | route는 body rhythm을 직접 만들지 않음 |
+| screen root | `VStack` | vertical / stretch | `section` | account card, current space card, quick actions, logout | reuse | `packages/fe-mo-ui/src/rhythm/VStack` | `fe-screen-agent` | screen body의 기본 세로 rhythm owner |
+| summary cards | `VStack` + `HStack` | vertical + row horizontal | `block`, `inline`, `dense` | account/current-space copy와 icon/status | reuse | `packages/fe-mo-ui/src/rhythm` | `fe-screen-agent` | 긴 이름/지점명 줄바꿈 허용 |
+| quick actions | `VStack` + row `HStack` + `ListGroup` | vertical list / row horizontal | `flush`, row `inline`, meta `dense` | 내 예약/결제/설정 rows | new + reuse | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx` | `fe-widget-agent` | row touch target은 44px 이상 |
+| logout action | `VStack` | vertical / stretch | `section` | danger full-width button | reuse | `packages/fe-mo-ui/src/rhythm/VStack`, `Button` | `fe-screen-agent` | bottom tab/safe area와 겹치지 않음 |
 
 ### Component Inventory
 
 | 영역 | 컴포넌트 | 계층 | 재사용/신규 | 소스/대상 | Props/이벤트 | 소스 담당 `agent_type` | 소비/Wiring `agent_type` |
 |------|-----------|------|-------------|-----------|--------------|-------------------------|---------------------------|
-| route header | `CustomHeader` | Navigation/Layout | reuse | `packages/fe-mo-ui/src/navigation/CustomHeader` via `(tabs)/_layout.tsx` | title `"마이"`, subtitle `currentSpaceName` | `fe-mo-navigation-builder` | `fe-mo-route-layout-builder` |
-| route tab | bottom tab item | Route/Layout | modify | `apps/mobile/src/app/(tabs)/_layout.tsx` | label `"마이"`, icon `userRound` | `fe-mo-route-layout-builder` | `fe-mo-route-layout-builder` |
-| route container | `/profile` route | Route | modify | `apps/mobile/src/app/(tabs)/profile.tsx` | auth/space/logout/navigation props | `fe-mo-route-builder` | `fe-mo-route-builder` |
-| screen owner | `MyPageScreen` | Screen | new | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.tsx` | `displayName`, `currentSpaceName`, `quickActions: QuickActionListItem[]`, `onPressLogout` | `fe-mo-screen-builder` | `fe-mo-route-builder` |
-| quick action widget | `QuickActionList` | Widget | new | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx` | `items`, `onPress`, disabled row behavior | `fe-mo-widget-builder` | `fe-mo-screen-builder` |
-| layout primitives | `ScreenFrame`, `Card`, `ListGroup` | Layout/DataDisplay | reuse | `@cocrepo/mo-ui` existing layout exports | body shell, section cards, widget rows | `fe-mo-data-display-builder` | `fe-mo-widget-builder`, `fe-mo-screen-builder` |
-| rhythm primitives | `VStack`, `HStack` | Layout/Rhythm | reuse | `packages/fe-mo-ui/src/rhythm` | semantic gap: `section`, `block`, `inline`, `dense`, `flush` | `fe-mo-screen-builder`, `fe-mo-widget-builder` | `fe-mo-route-builder` |
-| status primitive | `Chip` | DataDisplay | reuse | `packages/fe-mo-ui/src/data-display/Chip` | login state chip | `fe-mo-data-display-builder` | `fe-mo-screen-builder` |
-| action primitive | `Button` | Action | reuse | `packages/fe-mo-ui/src/action/Button` | logout button | `fe-mo-action-builder` | `fe-mo-screen-builder` |
-| route icon primitive | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | bottom tab `userRound` | none | `fe-mo-route-layout-builder` |
-| screen icon primitive | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | `userRound`, `mapPin`, action icons, `logOut` | none | `fe-mo-screen-builder` |
-| state | route-local pending state | State | new | `apps/mobile/src/app/(tabs)/profile.tsx` if needed | `isLogoutPending` | `fe-mo-route-builder` | `fe-mo-route-builder` |
+| route header | `CustomHeader` | Navigation/Layout | reuse | `packages/fe-mo-ui/src/navigation/CustomHeader` via `(tabs)/_layout.tsx` | title `"마이"`, subtitle `currentSpaceName` | `fe-control-agent` | `fe-route-layout-agent` |
+| route tab | bottom tab item | Route/Layout | modify | `apps/mobile/src/app/(tabs)/_layout.tsx` | label `"마이"`, icon `userRound` | `fe-route-layout-agent` | `fe-route-layout-agent` |
+| route container | `/profile` route | Route | modify | `apps/mobile/src/app/(tabs)/profile.tsx` | auth/space/logout/navigation props | `fe-route-agent` | `fe-route-agent` |
+| screen owner | `MyPageScreen` | Screen | new | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.tsx` | `displayName`, `currentSpaceName`, `quickActions: QuickActionListItem[]`, `onPressLogout` | `fe-screen-agent` | `fe-route-agent` |
+| quick action widget | `QuickActionList` | Widget | new | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx` | `items`, `onPress`, disabled row behavior | `fe-widget-agent` | `fe-screen-agent` |
+| layout primitives | `ScreenFrame`, `Card`, `ListGroup` | Layout/DataDisplay | reuse | `@cocrepo/mo-ui` existing layout exports | body shell, section cards, widget rows | `fe-display-agent` | `fe-widget-agent`, `fe-screen-agent` |
+| rhythm primitives | `VStack`, `HStack` | Layout/Rhythm | reuse | `packages/fe-mo-ui/src/rhythm` | semantic gap: `section`, `block`, `inline`, `dense`, `flush` | `fe-screen-agent`, `fe-widget-agent` | `fe-route-agent` |
+| status primitive | `Chip` | DataDisplay | reuse | `packages/fe-mo-ui/src/data-display/Chip` | login state chip | `fe-display-agent` | `fe-screen-agent` |
+| action primitive | `Button` | Action | reuse | `packages/fe-mo-ui/src/action/Button` | logout button | `fe-control-agent` | `fe-screen-agent` |
+| route icon primitive | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | bottom tab `userRound` | none | `fe-route-layout-agent` |
+| screen icon primitive | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | `userRound`, `mapPin`, action icons, `logOut` | none | `fe-screen-agent` |
+| state | route-local pending state | State | new | `apps/mobile/src/app/(tabs)/profile.tsx` if needed | `isLogoutPending` | `fe-route-agent` | `fe-route-agent` |
 | input | none | Input | none | no form/input in this request | none | none | none |
 | feature package | none | Feature | none | no cross-screen interaction feature in this request | route injects props directly | none | none |
 
@@ -294,15 +294,15 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 
 | 대상 | Story 파일 | 필수 상태/Variant | Fixture/데이터 | 작성 담당 `agent_type` | 검증 담당 `agent_type` | 비고 |
 |------|------------|-------------------|----------------|-------------------------|-------------------------|------|
-| `QuickActionList` | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.stories.tsx` | ready, disabled row, long label | 예약/결제/알림 quick action items | `fe-mo-widget-builder` | `qa-mo-testing` | Widget builder가 component와 함께 작성 |
-| `MyPageScreen` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.stories.tsx` | authenticated ready, no current space, logout pending, long display name | `QuickActionListItem[]`, auth/current-space props | `fe-mo-screen-builder` | `qa-mo-testing` | Screen builder가 screen과 함께 작성 |
+| `QuickActionList` | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.stories.tsx` | ready, disabled row, long label | 예약/결제/알림 quick action items | `fe-widget-agent` | `qa-mo-testing` | Widget builder가 component와 함께 작성 |
+| `MyPageScreen` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.stories.tsx` | authenticated ready, no current space, logout pending, long display name | `QuickActionListItem[]`, auth/current-space props | `fe-screen-agent` | `qa-mo-testing` | Screen builder가 screen과 함께 작성 |
 
 #### Unit Test 인벤토리
 
 | 대상 | Test 파일 | 검증 관점 | 주요 케이스 | 작성 담당 `agent_type` | 검증 담당 `agent_type` | 비고 |
 |------|-----------|-----------|-------------|-------------------------|-------------------------|------|
-| `QuickActionList` | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.test.tsx` | row rendering, press event, disabled guard | enabled row press, disabled row no-op, long label rendering | `fe-mo-widget-builder` | `qa-mo-testing` | Widget builder가 component와 함께 작성 |
-| `MyPageScreen` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.test.tsx` | props rendering, quick action composition, logout event | account summary, current space, quick actions, logout pending | `fe-mo-screen-builder` | `qa-mo-testing` | Screen builder가 screen과 함께 작성 |
+| `QuickActionList` | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.test.tsx` | row rendering, press event, disabled guard | enabled row press, disabled row no-op, long label rendering | `fe-widget-agent` | `qa-mo-testing` | Widget builder가 component와 함께 작성 |
+| `MyPageScreen` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.test.tsx` | props rendering, quick action composition, logout event | account summary, current space, quick actions, logout pending | `fe-screen-agent` | `qa-mo-testing` | Screen builder가 screen과 함께 작성 |
 | `/profile` route | `apps/mobile/src/route-tests/profile.test.tsx` 또는 existing route test | route wiring, logout navigation | store props mapping, `mobileAuthStore.logout()`, `/auth/login` replace | `qa-mo-testing` | `qa-mo-testing` | route integration은 QA가 보강 |
 
 ### Backend / API Contract
@@ -313,8 +313,8 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 |------|-------------|-------------|------------|------------|-------------|-----------|-------------------------|---------------------------|---------|
 | account summary | none | none | none | none | none | no backend change, use existing auth/session store fallback | none | none | none |
 | current space | none | none | none | none | none | no backend change, use `mobileApiScopeStore.groundName` | none | none | none |
-| logout | `POST /api/v1/auth/native/logout` | `nativeLogout` | existing `AuthController.nativeLogout` | existing `NativeLogoutPayloadDto` | reuse | `apps/idp/api/src/module/auth/auth.controller.ts`, `packages/be-dto/src/auth/native-auth.dto.ts` | `be-controller-builder`, `be-dto-builder` | `fe-mo-route-builder` | existing `requestNativeLogout`, no codegen |
-| reservations quick action | none | none | none | none | none | route navigation to existing `/reservations` only | none | `fe-mo-route-builder` | none |
+| logout | `POST /api/v1/auth/native/logout` | `nativeLogout` | existing `AuthController.nativeLogout` | existing `NativeLogoutPayloadDto` | reuse | `apps/idp/api/src/module/auth/auth.controller.ts`, `packages/be-dto/src/auth/native-auth.dto.ts` | `be-controller-builder`, `be-dto-builder` | `fe-route-agent` | existing `requestNativeLogout`, no codegen |
+| reservations quick action | none | none | none | none | none | route navigation to existing `/reservations` only | none | `fe-route-agent` | none |
 
 #### UseCase 인벤토리
 
@@ -362,20 +362,20 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 |---------|-------|------------|-------------|--------------|----------------|------------|----------|------------|
 | S1 | planning | orch-delivery | user request, existing mobile tab files | this spec update | `apps/mobile/src/app/index.spec.md`, `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.spec.md` | none | false | route/screen delivery contract written |
 | A1 | approval | orch-delivery | this spec | approval log | `apps/mobile/src/app/index.spec.md` | S1 | false | user approves build |
-| M1 | mobile | fe-mo-widget-builder | this spec, `ListGroup`/`Icon` primitives | `QuickActionList.tsx`, `QuickActionList.stories.tsx`, `QuickActionList.test.tsx`, widget barrel export, root export | `packages/fe-mo-ui/src/widget/QuickActionList/**`, `packages/fe-mo-ui/src/widget/index.ts`, `packages/fe-mo-ui/src/index.ts` | A1 | false | widget/story/test cover enabled/disabled quick action rows |
-| M2 | mobile | fe-mo-screen-builder | `MyPageScreen.spec.md`, `QuickActionList` export, existing screen patterns | `MyPageScreen.tsx`, `MyPageScreen.stories.tsx`, `MyPageScreen.test.tsx`, screen barrel export | `packages/fe-mo-ui/src/screen/MyPageScreen/**`, `packages/fe-mo-ui/src/screen/index.ts` | M1 | false | shared screen story/test render ready state and logout action |
-| M3 | mobile | fe-mo-route-layout-builder | this spec, current tab layout | tab label/icon/header title update | `apps/mobile/src/app/(tabs)/_layout.tsx` | A1 | false | bottom tab and header use "마이" contract |
-| M4 | mobile | fe-mo-route-builder | this spec, MyPageScreen export, current profile route | profile route wiring | `apps/mobile/src/app/(tabs)/profile.tsx`, route test if needed | M2, M3 | false | route passes auth/space/logout props to screen |
+| M1 | mobile | fe-widget-agent | this spec, `ListGroup`/`Icon` primitives | `QuickActionList.tsx`, `QuickActionList.stories.tsx`, `QuickActionList.test.tsx`, widget barrel export, root export | `packages/fe-mo-ui/src/widget/QuickActionList/**`, `packages/fe-mo-ui/src/widget/index.ts`, `packages/fe-mo-ui/src/index.ts` | A1 | false | widget/story/test cover enabled/disabled quick action rows |
+| M2 | mobile | fe-screen-agent | `MyPageScreen.spec.md`, `QuickActionList` export, existing screen patterns | `MyPageScreen.tsx`, `MyPageScreen.stories.tsx`, `MyPageScreen.test.tsx`, screen barrel export | `packages/fe-mo-ui/src/screen/MyPageScreen/**`, `packages/fe-mo-ui/src/screen/index.ts` | M1 | false | shared screen story/test render ready state and logout action |
+| M3 | mobile | fe-route-layout-agent | this spec, current tab layout | tab label/icon/header title update | `apps/mobile/src/app/(tabs)/_layout.tsx` | A1 | false | bottom tab and header use "마이" contract |
+| M4 | mobile | fe-route-agent | this spec, MyPageScreen export, current profile route | profile route wiring | `apps/mobile/src/app/(tabs)/profile.tsx`, route test if needed | M2, M3 | false | route passes auth/space/logout props to screen |
 | Q1 | qa | qa-mo-testing | changed mobile route/screen/widget files | unit test updates | `packages/fe-mo-ui/src/widget/QuickActionList/**`, `packages/fe-mo-ui/src/screen/MyPageScreen/**`, `apps/mobile/src/route-tests/**` | M1, M2, M3, M4 | false | relevant mobile tests pass |
 
 ### Execution Graph
 
 ```text
 orch-delivery spec gate
-→ fe-mo-widget-builder
-→ fe-mo-screen-builder
-→ fe-mo-route-layout-builder
-→ fe-mo-route-builder
+→ fe-widget-agent
+→ fe-screen-agent
+→ fe-route-layout-agent
+→ fe-route-agent
 → qa-mo-testing
 ```
 
@@ -424,7 +424,7 @@ Skipped phases:
 | 2026-05-24 | Storybook/Test 계약을 추가하고 UI builder 작성 책임을 명시 | pending approval |
 | 2026-05-24 | 기획 표 헤더를 한글 우선으로 변경 | pending approval |
 | 2026-05-24 | Backend/API 계약을 endpoint/application/service/repository inventory로 분리 | pending approval |
-| 2026-05-24 | mobile `QuickActionList`를 `fe-mo-widget-builder` step으로 분리 | pending approval |
+| 2026-05-24 | mobile `QuickActionList`를 `fe-widget-agent` step으로 분리 | pending approval |
 | 2026-05-24 | `/profile` delivery contract unified into this route spec | pending approval |
 
 ## Unit Test Contract

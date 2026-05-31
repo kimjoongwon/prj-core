@@ -11,6 +11,6 @@
  */
 
 export interface MoveAssetDto {
-	/** 이동할 대상 폴더 ID */
-	targetFolderId: string;
+  /** 이동할 대상 폴더 ID */
+  targetFolderId: string;
 }

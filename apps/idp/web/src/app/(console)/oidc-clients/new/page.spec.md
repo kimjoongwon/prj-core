@@ -122,6 +122,6 @@
 | 2026-03-29 | `OidcClientCreatePage` pure screen와 thin route container 구조로 전환하고 screen component path를 반영 | codex |
 | 2026-03-22 | parent `(console)` layout 참조와 `form` 재사용 셸 기준으로 등록 페이지 계약을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
-| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-30 | route가 query/mutation/navigation/local state를 소유하고 pure screen props를 주입하는 구조로 정리 | codex |

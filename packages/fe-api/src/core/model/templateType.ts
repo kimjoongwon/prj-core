@@ -13,11 +13,12 @@
 /**
  * 템플릿 유형
  */
-export type TemplateType = (typeof TemplateType)[keyof typeof TemplateType];
+export type TemplateType = typeof TemplateType[keyof typeof TemplateType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TemplateType = {
-	EMAIL: "EMAIL",
-	SMS: "SMS",
-	PUSH: "PUSH",
+  EMAIL: 'EMAIL',
+  SMS: 'SMS',
+  PUSH: 'PUSH',
 } as const;

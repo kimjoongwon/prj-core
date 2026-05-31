@@ -123,6 +123,6 @@
 | 2026-03-28 | 상단 제안 메시지는 유지하고 하단에 실전 경력, 이력 상세, 포트폴리오 섹션을 추가하도록 랜딩 구조를 조정 | codex |
 | 2026-03-21 | `_client.tsx`와 `_prefetch.ts`를 제거하고 `page.tsx` + `proposal-page-data.ts` 구조로 단순화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
-| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-20 | 공용 ingress 경로와 일치하도록 외부 노출 경로를 `/proposal` 기준으로 조정 | codex |
 | 2026-03-12 | proposal-web 정적 랜딩 페이지 기획서 신규 생성 | codex |

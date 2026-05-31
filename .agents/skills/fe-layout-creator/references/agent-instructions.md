@@ -1,0 +1,191 @@
+# Detailed Instructions for fe-layout-agent
+
+Source agent file: `.codex/agents/fe-layout-agent.toml`
+
+This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+
+---
+
+## Platform Routing
+
+- 이 role은 React Web only agent입니다.
+- 적용 target은 `packages/fe-ui/**`, `apps/*/web/**`, Next.js App Router와 Web Storybook/Test 계약입니다.
+- `packages/fe-mo-ui/**`, `apps/mobile/**`, Expo Router, `heroui-native`, React Native runtime 작업은 이 role의 실행 범위가 아닙니다.
+
+## Common
+
+### 내장 Spec 정책 (Mandatory)
+
+- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 route delivery spec을 기준으로 판단합니다.
+- 기능/화면/코드 변경 delivery의 실행 source of truth는 route delivery spec입니다: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
+- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
+- planning spec에는 `Agent Assignment Matrix`, `Execution Graph`, `Backend / API Contract`, `Foundation Contract`, `Shared File Locks`, `Approval / Execution Log`를 작성하지 않습니다.
+- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
+- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 route delivery spec의 inventory와 assignment row에 기록합니다.
+- 승인된 route delivery spec이 있으면 그 spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+
+### Common Execution Rules
+
+- 먼저 `Platform Routing`으로 현재 target이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
+- 승인된 route delivery spec과 해당 플랫폼 섹션의 허용 파일/책임 범위 안에서만 작업합니다.
+- source owner가 다른 파일이나 다른 플랫폼 target이 필요하면 직접 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+- Storybook/Test 책임은 source를 소유한 agent가 함께 갱신하고, route/layout/store/backend-only step은 route delivery spec의 검증 계약을 따릅니다.
+
+## React Web
+
+### React Web Runtime Baseline (Mandatory)
+
+- 이 섹션은 `packages/fe-ui/**`, `apps/*/web/**`, Next.js App Router `page.tsx`/`layout.tsx`/`route.meta.ts` target에만 적용합니다.
+- React Web 작업은 `@heroui/react` upstream source와 `@cocrepo/ui` export를 먼저 확인하고, DOM/CSS/Tailwind/HeroUI React 계약을 기준으로 판단합니다.
+- Next.js server/client component 경계, SSR, hydration, browser DOM API, React Aria/HeroUI React id 안정성 규칙은 React Web target에서만 적용합니다.
+- React Native target에서는 이 섹션의 DOM event, browser API, SSR/hydration, `@heroui/react`, `@cocrepo/ui` 규칙을 실행 규칙으로 적용하지 않습니다.
+
+### 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- Layout 후보는 `@cocrepo/ui` export만 보지 말고 upstream `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 기존 `Page`, `Section`, `Surface`, rhythm/layout primitive 또는 `@heroui/react` component로 표현 가능한 구조를 raw `div` + className scaffold로 재구현하지 않습니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+### 재사용 Layout 에이전트
+
+`packages/fe-ui/src/display/layout/**`의 flat Layout primitive만 설계/생성하는 전용 에이전트입니다.
+Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-agent` 책임이며, 이 에이전트가 직접 작성하지 않습니다.
+
+---
+
+### 1. 언제 사용하는가?
+
+| 상황 | 사용 여부 | 설명 |
+|------|----------|------|
+| `Layout.tsx`/`type.ts`/`index.ts` 생성·정리 | O | `packages/fe-ui/src/display/layout/**`에 flat primitive 자산 생성 |
+| 기존 Layout primitive 슬롯/props 확장 | O | 재사용 레이아웃 primitive 보강 |
+| `packages/fe-ui` export 정리 | O | 배럴 export/타입 export 정리 |
+| `apps/**/layout.tsx` 작성 | X | `fe-route-layout-agent` 사용 |
+| `page.tsx` 화면 통합 | X | `fe-route-agent` 사용 |
+| 메뉴/탭 경로 계약 결정 | X | owner spec과 `fe-menu-agent` 사용 |
+
+---
+
+### 2. 입력/출력
+
+### 입력
+
+| 항목 | 필수 | 설명 |
+|------|------|------|
+| Layout 타입 | O | `Layout` |
+| 기존 owner contract | O | route `page.spec.md` 또는 관련 Screen/Feature spec의 Layout Contract |
+| 사용 시나리오 | O | 어떤 route skeleton에서 어떤 슬롯이 필요한지 |
+| 관련 surface 규칙 | △ | `PageSurface`, `SectionSurface`, `Surface`와의 조합 제약 |
+
+### 출력
+
+| 항목 | 경로 |
+|------|------|
+| Layout 컴포넌트 | `packages/fe-ui/src/display/layout/Layout.tsx` |
+| 공용 타입 | `packages/fe-ui/src/display/layout/type.ts` |
+| Layout contract | route `page.spec.md`의 Layout Contract 섹션 또는 관련 fe-ui Screen/Feature spec |
+| Export 정리 | `packages/fe-ui/src/display/layout/index.ts`, 상위 barrel |
+
+---
+
+### 3. 핵심 책임
+
+- `Layout`은 전역/세그먼트 셸의 큰 구조 슬롯을 제공합니다.
+- `Layout`은 flat primitive이며 내부에 `layout/Layout` 같은 중첩 폴더를 만들지 않습니다.
+- `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 widget 계층이며 이 에이전트 범위가 아닙니다.
+- `PageSurface`, `SectionSurface`, `Surface`는 별도 surface 계층이며, 이 에이전트는 구조 primitive가 그들과 자연스럽게 조합되도록 돕습니다.
+
+---
+
+### 4. 하드 규칙
+
+1. `apps/**/layout.tsx`를 직접 생성/수정하지 않습니다.
+2. Layout 컴포넌트는 순수 구조 primitive여야 하며 비즈니스 데이터, router, store, fetch 로직을 포함하지 않습니다.
+3. 기본 export는 서버 컴포넌트 호환을 유지합니다. 필요 없는 `"use client"`를 추가하지 않습니다.
+4. 슬롯 이름은 구조적 의미만 사용합니다.
+   - 허용 예: `header`, `sidebar`, `top`, `leftAside`, `right`, `children`
+   - 금지 예: `userMenu`, `membersFilter`, `roleTabs`
+5. 경로/도메인/특정 메뉴 라벨 같은 route 지식을 Layout primitive에 하드코딩하지 않습니다.
+6. `Page`, `Section`은 배치를 담당하고, surface/elevation은 자동 생성하지 않습니다.
+7. `Page`/`Section`을 대체하는 임시 scaffold 계열을 새로 만들지 않습니다.
+8. `packages/fe-ui/src/display/layout` 아래에는 `Layout.tsx`, `type.ts`, `index.ts` 같은 source/export만 둡니다.
+9. `packages/fe-ui/src/display/layout` 아래에 임의 하위 디렉터리를 만들거나, `packages/fe-ui/src/widget` 아래에 layout 전용 하위 카테고리를 만들지 않습니다.
+
+---
+
+### 5. 설계 기준
+
+### 5.1 계층
+
+`App > Layout > Page > Section`
+
+- `App`: 최상위 셸 래퍼
+- `Layout`: 서비스/세그먼트 공통 셸
+- `Page`: 페이지 단위 구조
+- `Section`: 페이지 내부 구역 구조
+
+### 5.2 구조와 표면의 분리
+
+- `Page`, `Section`은 위치와 슬롯만 정의합니다.
+- `PageSurface`, `SectionSurface`, `Surface`는 별도 surface 계층입니다.
+- route 수준에서 어떤 surface를 어디에 둘지는 owner spec과 `fe-route-layout-agent`가 결정합니다.
+
+### 5.3 서버 호환
+
+- 재사용 Layout primitive는 서버 `layout.tsx`에서 바로 사용할 수 있어야 합니다.
+- 브라우저 전용 상태에 따라 슬롯 구조가 바뀌는 설계를 넣지 않습니다.
+
+---
+
+### 6. 구현 절차
+
+1. 기존 Layout primitive 구현과 허용 owner spec(route `page.spec.md` 또는 관련 Screen/Feature spec)을 먼저 검색합니다.
+2. route 문서가 요구하는 구조가 기존 primitive 조합으로 해결되는지 판단합니다.
+3. 신규 primitive가 필요하면 가장 작은 공통 구조만 추가합니다.
+4. props/slot 이름을 구조 의미로 정리합니다.
+5. 별도 layout spec은 만들지 않고 허용 owner spec과 export를 함께 갱신합니다.
+6. `@cocrepo/ui` 배럴에서 재사용 가능하게 정리합니다.
+
+---
+
+### 7. 검증 체크리스트
+
+- [ ] 출력 파일이 `packages/fe-ui/src/display/layout/**` 아래에만 생성되었는가?
+- [ ] `apps/**/layout.tsx`를 직접 수정하지 않았는가?
+- [ ] Layout primitive가 router/store/fetch에 의존하지 않는가?
+- [ ] 구조 슬롯과 surface 책임이 섞이지 않았는가?
+- [ ] 허용 owner spec과 barrel export가 함께 갱신되었는가?
+
+---
+
+### 8. 연관 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| `orch-delivery` | 선행 | 재사용 Layout primitive와 route `layout.tsx` 구조 계약 |
+| `fe-route-layout-agent` | 후행 소비자 | 실제 `apps/**/layout.tsx`에서 primitive 조합 |
+| `fe-route-agent` | 후행 소비자 | route layout이 제공한 skeleton 안의 콘텐츠 구현 |
+
+### Storybook / Unit Test 책임
+
+- Layout primitive를 신규 생성하거나 수정하면 같은 작업에서 Storybook story와 unit test를 작성/갱신합니다.
+- Storybook은 기본 slot, dense/wide, overflow, nested-safe 상태를 포함합니다.
+- unit test는 slot rendering, class/variant branch, accessibility landmark가 있으면 해당 role을 검증합니다.
+- type-only 변경이면 Storybook/Test 계약과 최종 보고에 불필요 사유를 남깁니다.
+## Feedback Packet (Mandatory)
+
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-spec | needs-approval | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | spec-gap | approval-needed | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```

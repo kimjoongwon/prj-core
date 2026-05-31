@@ -15,12 +15,12 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 /**
  * 결과
  */
-export type AuthAuditResult =
-	(typeof AuthAuditResult)[keyof typeof AuthAuditResult];
+export type AuthAuditResult = typeof AuthAuditResult[keyof typeof AuthAuditResult];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthAuditResult = {
-	SUCCESS: "SUCCESS",
-	FAILURE: "FAILURE",
-	LOCKED: "LOCKED",
+  SUCCESS: 'SUCCESS',
+  FAILURE: 'FAILURE',
+  LOCKED: 'LOCKED',
 } as const;

@@ -11,13 +11,13 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { I18nCatalogResponseDto } from "./i18nCatalogResponseDto";
+import type { I18nCatalogResponseDto } from './i18nCatalogResponseDto';
 
 export type GetIdpI18nCatalog200AllOf = {
-	/** */
-	httpStatus?: number;
-	/** */
-	message?: string;
-	/** @nullable */
-	data?: I18nCatalogResponseDto;
+  /** */
+  httpStatus?: number;
+  /** */
+  message?: string;
+  /** @nullable */
+  data?: I18nCatalogResponseDto;
 };

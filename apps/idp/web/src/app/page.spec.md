@@ -69,6 +69,6 @@
 | 2026-03-25 | `SessionCheckPage`로 시각 구성을 page 레이어로 이동하고 route page를 thin container로 정리 | codex |
 | 2026-03-22 | 루트 리다이렉트 로딩 상태를 `DetailPage`/`DetailSectionCard` 기반 detail/view shell로 정리 | codex |
 | 2026-03-21 | 루트 진입 page를 `_client.tsx` 없는 단일 CSR 리다이렉트로 정리하고 계약을 detail/view 기준으로 보정 | codex |
-| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-20 | 루트 진입 시 비인증 사용자를 `/auth/login`으로 바로 보내도록 인증 쿠키 분기 추가 | codex |

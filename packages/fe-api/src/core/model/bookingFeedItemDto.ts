@@ -9,102 +9,104 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-
-import type { BookingFeedItemDtoMyReservationStatus } from "./bookingFeedItemDtoMyReservationStatus";
-import type { ReservationAvailabilityStatus } from "./reservationAvailabilityStatus";
+import type { ReservationAvailabilityStatus } from './reservationAvailabilityStatus';
+import type { BookingFeedItemDtoMyReservationStatus } from './bookingFeedItemDtoMyReservationStatus';
 
 export interface BookingFeedItemDto {
-	/** 피드 항목 ID */
-	feedItemId: string;
-	/** 일자(YYYY-MM-DD) */
-	date: string;
-	/** 시작 시각 */
-	startsAt: string;
-	/** 종료 시각 */
-	endsAt: string;
-	/** 타임라인 ID */
-	timelineId: string;
-	/** 세션 ID */
-	sessionId: string;
-	/** 프로그램 ID */
-	programId: string;
-	/**
-	 * 예약 생성에 사용할 수강권 ID
-	 * @nullable
-	 */
-	coursePassId?: string | null;
-	/** 예약 전 결제 필요 여부 */
-	paymentRequired: boolean;
-	/**
-	 * 결제 필요 사유
-	 * @nullable
-	 */
-	paymentRequiredReason?: string | null;
-	/**
-	 * 결제 화면 진입 전 표시할 대표 가격
-	 * @nullable
-	 */
-	checkoutPreviewPriceAmount?: number | null;
-	/**
-	 * 대표 가격 통화 코드
-	 * @nullable
-	 */
-	checkoutPreviewCurrency?: string | null;
-	/** 타임라인 이름 */
-	timelineName: string;
-	/** 세션 이름 */
-	sessionName: string;
-	/** 프로그램 이름 */
-	programName: string;
-	/**
-	 * 코치 이름
-	 * @nullable
-	 */
-	coachName?: string | null;
-	/**
-	 * 정원
-	 * @minimum 0
-	 */
-	capacity: number;
-	/**
-	 * 확정 예약 수
-	 * @minimum 0
-	 */
-	confirmedCount: number;
-	/**
-	 * 예약 가능 좌석 수
-	 * @minimum 0
-	 */
-	availableSeatCount: number;
-	/**
-	 * 대기 예약 수
-	 * @minimum 0
-	 */
-	waitlistCount: number;
-	/** 예약 가능 상태 */
-	availabilityStatus: ReservationAvailabilityStatus;
-	/**
-	 * 내 예약 상태
-	 * @nullable
-	 */
-	myReservationStatus?: BookingFeedItemDtoMyReservationStatus;
-	/** CTA 라벨 */
-	ctaLabel: string;
-	/**
-	 * 취소 가능 마감 시각
-	 * @nullable
-	 */
-	cancelableUntilAt: string | null;
-	/**
-	 * 난이도
-	 * @nullable
-	 */
-	level?: string | null;
-	/**
-	 * 루틴 라벨 스냅샷
-	 * @nullable
-	 */
-	routineLabelSnapshot?: string | null;
-	/** 운동 미리보기 */
-	previewExerciseNames?: string[];
+  /** 피드 항목 ID */
+  feedItemId: string;
+  /** 일자(YYYY-MM-DD) */
+  date: string;
+  /** 시작 시각 */
+  startsAt: string;
+  /** 종료 시각 */
+  endsAt: string;
+  /** 타임라인 ID */
+  timelineId: string;
+  /** 세션 ID */
+  sessionId: string;
+  /** 프로그램 ID */
+  programId: string;
+  /**
+   * 예약 생성에 사용할 수강권 ID
+   * @nullable
+   */
+  coursePassId?: string | null;
+  /** 예약 전 결제 필요 여부 */
+  paymentRequired: boolean;
+  /**
+   * 결제 필요 사유
+   * @nullable
+   */
+  paymentRequiredReason?: string | null;
+  /**
+   * 결제 화면 진입 전 표시할 대표 가격
+   * @minimum 0
+   * @nullable
+   */
+  checkoutPreviewPriceAmount?: number | null;
+  /**
+   * 대표 가격 통화 코드
+   * @minLength 3
+   * @maxLength 3
+   * @nullable
+   */
+  checkoutPreviewCurrency?: string | null;
+  /** 타임라인 이름 */
+  timelineName: string;
+  /** 세션 이름 */
+  sessionName: string;
+  /** 프로그램 이름 */
+  programName: string;
+  /**
+   * 코치 이름
+   * @nullable
+   */
+  coachName?: string | null;
+  /**
+   * 정원
+   * @minimum 0
+   */
+  capacity: number;
+  /**
+   * 확정 예약 수
+   * @minimum 0
+   */
+  confirmedCount: number;
+  /**
+   * 예약 가능 좌석 수
+   * @minimum 0
+   */
+  availableSeatCount: number;
+  /**
+   * 대기 예약 수
+   * @minimum 0
+   */
+  waitlistCount: number;
+  /** 예약 가능 상태 */
+  availabilityStatus: ReservationAvailabilityStatus;
+  /**
+   * 내 예약 상태
+   * @nullable
+   */
+  myReservationStatus?: BookingFeedItemDtoMyReservationStatus;
+  /** CTA 라벨 */
+  ctaLabel: string;
+  /**
+   * 취소 가능 마감 시각
+   * @nullable
+   */
+  cancelableUntilAt: string | null;
+  /**
+   * 난이도
+   * @nullable
+   */
+  level?: string | null;
+  /**
+   * 루틴 라벨 스냅샷
+   * @nullable
+   */
+  routineLabelSnapshot?: string | null;
+  /** 운동 미리보기 */
+  previewExerciseNames?: string[];
 }

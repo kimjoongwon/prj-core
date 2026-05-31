@@ -9,21 +9,21 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { RoutineDto } from "./routineDto";
-import type { TaskDto } from "./taskDto";
+import type { RoutineDto } from './routineDto';
+import type { TaskDto } from './taskDto';
 
 export interface ActivityDto {
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	routineId: string;
-	taskId: string;
-	order: number;
-	repetitions: number;
-	restTime: number;
-	notes?: string;
-	routine: RoutineDto;
-	task: TaskDto;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  routineId: string;
+  taskId: string;
+  order: number;
+  repetitions: number;
+  restTime: number;
+  notes?: string;
+  routine: RoutineDto;
+  task: TaskDto;
 }

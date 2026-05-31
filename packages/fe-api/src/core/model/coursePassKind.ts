@@ -13,12 +13,12 @@
 /**
  * 수강권 종류
  */
-export type CoursePassKind =
-	(typeof CoursePassKind)[keyof typeof CoursePassKind];
+export type CoursePassKind = typeof CoursePassKind[keyof typeof CoursePassKind];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CoursePassKind = {
-	STANDARD: "STANDARD",
-	MANUAL_GRANT: "MANUAL_GRANT",
-	MAKEUP: "MAKEUP",
+  STANDARD: 'STANDARD',
+  MANUAL_GRANT: 'MANUAL_GRANT',
+  MAKEUP: 'MAKEUP',
 } as const;

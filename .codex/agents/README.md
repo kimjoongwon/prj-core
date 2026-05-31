@@ -9,7 +9,7 @@
 3. 이 인덱스
 
 `*.toml.guide.md` 보조 문서는 생성하지 않습니다.
-role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 둡니다.
+role TOML은 얇은 실행 contract만 소유합니다. 상세 작업 지시는 repo-scoped skill인 `.agents/skills/*-creator/SKILL.md`와 해당 skill의 `references/agent-instructions.md`에 둡니다.
 
 ## Route Delivery Spec 운영
 
@@ -71,13 +71,13 @@ Screen/Feature spec은 planning spec입니다. 목표, 화면 러프, props/even
 병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
 
 구현 대상의 route delivery spec을 먼저 작성하거나 갱신한 뒤, Codex 질문 도구로 사용자의 진행 승인을 받습니다.
-승인 전에는 builder/QA agent를 실행하지 않습니다.
+승인 전에는 agent/QA role를 실행하지 않습니다.
 
 Storybook/Test 소유권:
 
-- PC/Web은 `packages/fe-ui/src/**` component source를 소유한 builder role이 story/test를 함께 작성합니다.
-- Mobile은 `packages/fe-mo-ui/src/**` component source를 소유한 builder role이 story/test를 함께 작성합니다.
-- Mobile builder role은 작업 전에 `https://heroui.com/llms-patterns.txt`를 열어 HeroUI Native Composition/Styling/Provider/Portal 패턴을 확인합니다.
+- PC/Web은 `packages/fe-ui/src/**` component source를 소유한 agent role이 story/test를 함께 작성합니다.
+- Mobile은 `packages/fe-mo-ui/src/**` component source를 소유한 agent role이 story/test를 함께 작성합니다.
+- Mobile agent role은 작업 전에 `https://heroui.com/llms-patterns.txt`를 열어 HeroUI Native Composition/Styling/Provider/Portal 패턴을 확인합니다.
 - Mobile의 사용자 노출 텍스트는 `@cocrepo/mo-ui` `Text` primitive를 사용합니다. `react-native` `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 구현 내부에서만 허용합니다.
 - Mobile compound/action primitive가 문자열 children을 받으면 wrapper 내부에서 `Text`로 정규화합니다. `Switch`, `Checkbox`, `RadioGroup.Item`, `Button`, `Chip` 등이 HeroUI Native에 raw string children을 그대로 넘기면 안 됩니다.
 - Mobile HeroUI Native compound wrapper는 return-only re-export로 끝내지 않습니다. field 계열은 upstream `TextField`, `Label`, `Description`, `FieldError`, `InputGroup` composition을 먼저 사용하고, `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` 같은 의미 있는 props와 dot-slot escape hatch를 함께 유지합니다.
@@ -100,7 +100,7 @@ Planning spec:
 
 그 외 backend entity/dto/service/repository/controller/module/app/facade/integration/vo/prisma/schema, store/hook/toolkit/type/barrel/config/script/test/e2e/layout, Next.js `layout.tsx`, Expo Router `_layout.tsx`, web/mobile leaf 계층에는 spec을 만들지 않습니다.
 
-상세 정책은 별도 문서로 분리하지 않고 이 README, `.codex/config.toml`, 각 role TOML의 내장 지시문에 직접 유지합니다.
+상세 정책은 별도 `*.toml.guide.md`로 분리하지 않습니다. 실행 guardrail은 이 README, `.codex/config.toml`, 각 role TOML에 두고, 구현 절차와 기술별 상세 규칙은 `.agents/skills/*-creator` skill에 유지합니다.
 
 ## Feedback Loop 운영
 
@@ -138,55 +138,31 @@ Planning spec:
 - [be-bootstrap-integrator.toml](./be-bootstrap-integrator.toml): AppModule bootstrap role
 - [be-seed-maker.toml](./be-seed-maker.toml): seed/reference-data role
 
-## Migration Roles
+## Frontend
 
-마이그레이션 전용 role은 기존 backend role 루트에 섞지 않고 [.codex/agents/mig](./mig) 아래에 둡니다.
-등록명은 모두 `mig-` prefix를 사용하며, 실행 기준 문서는 [docs/backend/cqrs-usecase-migration.md](../../docs/backend/cqrs-usecase-migration.md)입니다.
+Web과 Mobile 구현 role은 `fe-*agent` 하나로 통합합니다. 각 dual-platform role TOML은 플랫폼 판별 guardrail만 유지하고, 상세 `Common`, `React Web`, `React Native` 섹션은 대응 `.agents/skills/*-creator/references/agent-instructions.md`에 유지합니다.
 
-- [mig/arch-cqrs-migration-spec-writer.toml](./mig/arch-cqrs-migration-spec-writer.toml): CQRS/UseCase 마이그레이션 runbook 작성 role
-- [mig/be-package-migration-builder.toml](./mig/be-package-migration-builder.toml): `@cocrepo/command`, `@cocrepo/event` 추가, `@cocrepo/app -> @cocrepo/usecase`, `@cocrepo/gateway -> @cocrepo/client`, `@cocrepo/facade` 제거 package migration role
-- [mig/be-command-builder.toml](./mig/be-command-builder.toml): Command/Query message를 `@cocrepo/command`로 이동하는 role
-- [mig/be-event-builder.toml](./mig/be-event-builder.toml): Event message를 `@cocrepo/event`로 이동하는 role
-- [mig/be-usecase-builder.toml](./mig/be-usecase-builder.toml): Nest CQRS UseCase handler role
-- [mig/be-aggregate-entity-builder.toml](./mig/be-aggregate-entity-builder.toml): `AbstractAggregateRootEntity`와 aggregate root entity 전환 role
-- [mig/be-cqrs-repository-builder.toml](./mig/be-cqrs-repository-builder.toml): aggregate rehydrate/save repository 전환 role
-- [mig/be-aggregate-service-builder.toml](./mig/be-aggregate-service-builder.toml): aggregate root service를 `@cocrepo/aggregate`의 `{Domain}AggregateRoot` provider로 이동/정리하는 role
-- [mig/be-cqrs-controller-builder.toml](./mig/be-cqrs-controller-builder.toml): Controller를 `CommandBus`/`QueryBus` entrypoint로 전환하는 role
-- [mig/be-cqrs-module-builder.toml](./mig/be-cqrs-module-builder.toml): `CqrsModule`, usecase handler, provider wiring role
-- [mig/be-client-builder.toml](./mig/be-client-builder.toml): 외부 API 연동을 단일 연동 Client로 전환하는 role
+- 대상 파일이 `packages/fe-ui/**`, `apps/*/web/**`이면 agent는 `Common`과 `React Web` 섹션만 실행 규칙으로 적용합니다.
+- 대상 파일이 `packages/fe-mo-ui/**`, `apps/mobile/**`이면 agent는 `Common`과 `React Native` 섹션만 실행 규칙으로 적용합니다.
+- 대상과 다른 플랫폼 섹션은 참고 자료로만 읽고 금지/허용/출력 규칙을 적용하지 않습니다.
+- React Web only role은 `Platform Routing`에 명시하고 React Native target을 범위 밖으로 둡니다.
+- Shared role은 공용 hook/store 계약만 다루며 UI runtime별 세부 규칙은 소비 owner agent의 플랫폼 섹션을 따릅니다.
 
-## Web Frontend
-
-- [fe-display-builder.toml](./fe-display-builder.toml): Display UI role
-- [fe-control-builder.toml](./fe-control-builder.toml): Control/input role
-- [fe-cell-builder.toml](./fe-cell-builder.toml): DataGrid/Table Cell role
-- [fe-columns-builder.toml](./fe-columns-builder.toml): columns/DataGrid boundary role
-- [fe-widget-builder.toml](./fe-widget-builder.toml): Widget role
-- [fe-layout-builder.toml](./fe-layout-builder.toml): reusable Layout role
-- [fe-feature-builder.toml](./fe-feature-builder.toml): Feature role
-- [fe-data-grid-builder.toml](./fe-data-grid-builder.toml): DataGrid renderer/input/state contract role
-- [fe-form-builder.toml](./fe-form-builder.toml): create/update form layer role
-- [fe-hook-builder.toml](./fe-hook-builder.toml): web/mobile 공통 React hook role
-- [fe-menu-builder.toml](./fe-menu-builder.toml): menu system role
-- [fe-store-builder.toml](./fe-store-builder.toml): shared MobX Store role
-- [fe-screen-builder.toml](./fe-screen-builder.toml): `packages/fe-ui/src/screen/[ScreenName]` web screen visual owner role
-- [fe-route-layout-builder.toml](./fe-route-layout-builder.toml): Next.js route layout/shell role
-- [fe-route-builder.toml](./fe-route-builder.toml): route/API/state thin container integration role
-
-## Mobile
-
-- [fe-mo-action-builder.toml](./fe-mo-action-builder.toml): RN command/action role
-- [fe-mo-input-builder.toml](./fe-mo-input-builder.toml): RN text/input role
-- [fe-mo-selection-builder.toml](./fe-mo-selection-builder.toml): RN selection/stateful choice role
-- [fe-mo-navigation-builder.toml](./fe-mo-navigation-builder.toml): RN navigation control role
-- [fe-mo-data-display-builder.toml](./fe-mo-data-display-builder.toml): RN data-display/surface/layout primitive role
-- [fe-mo-feedback-builder.toml](./fe-mo-feedback-builder.toml): RN feedback/status/overlay role
-- [fe-mo-menu-builder.toml](./fe-mo-menu-builder.toml): RN Menu/SubMenu role
-- [fe-mo-widget-builder.toml](./fe-mo-widget-builder.toml): RN reusable Widget composition role
-- [fe-mo-feature-builder.toml](./fe-mo-feature-builder.toml): RN reusable Feature composition role
-- [fe-mo-screen-builder.toml](./fe-mo-screen-builder.toml): shared screen visual owner role
-- [fe-mo-route-layout-builder.toml](./fe-mo-route-layout-builder.toml): Expo Router native `_layout.tsx` shell role
-- [fe-mo-route-builder.toml](./fe-mo-route-builder.toml): Expo route/API/state/native wiring role
+- [fe-display-agent.toml](./fe-display-agent.toml): Web display와 RN data-display/feedback/surface/layout primitive role
+- [fe-control-agent.toml](./fe-control-agent.toml): Web control과 RN action/input/selection/navigation role
+- [fe-cell-agent.toml](./fe-cell-agent.toml): DataGrid/Table Cell role
+- [fe-columns-agent.toml](./fe-columns-agent.toml): columns/DataGrid boundary role
+- [fe-widget-agent.toml](./fe-widget-agent.toml): Web/Mobile Widget role
+- [fe-layout-agent.toml](./fe-layout-agent.toml): reusable Web Layout role
+- [fe-feature-agent.toml](./fe-feature-agent.toml): Web/Mobile Feature role
+- [fe-data-grid-agent.toml](./fe-data-grid-agent.toml): DataGrid renderer/input/state contract role
+- [fe-form-agent.toml](./fe-form-agent.toml): create/update form layer role
+- [fe-hook-agent.toml](./fe-hook-agent.toml): web/mobile 공통 React hook role
+- [fe-menu-agent.toml](./fe-menu-agent.toml): Web/Mobile menu, tab, navigation composition role
+- [fe-store-agent.toml](./fe-store-agent.toml): shared MobX Store role
+- [fe-screen-agent.toml](./fe-screen-agent.toml): Web/Mobile screen visual owner role
+- [fe-route-layout-agent.toml](./fe-route-layout-agent.toml): Next.js layout and Expo Router `_layout.tsx` shell role
+- [fe-route-agent.toml](./fe-route-agent.toml): Next.js/Expo route API/state/navigation thin container role
 
 ## QA / 검증
 

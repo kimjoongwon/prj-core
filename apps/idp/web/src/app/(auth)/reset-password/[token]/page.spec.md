@@ -66,11 +66,11 @@
 |------|------|--------|
 | 2026-04-22 | route page state를 `ResetPasswordRoutePageState` class + `makeAutoObservable` + `useLocalObservable(() => new ...)` 패턴으로 정리 | codex |
 | 2026-04-22 | route page가 `resetPasswordPage` 자체를 `useLocalObservable` 기반 observable slice로 소유하도록 기준을 보강 | codex |
-| 2026-04-22 | `fe-route-builder` 기준에 맞춰 route state root를 `resetPasswordPage`로 두고 form slice를 `resetPasswordForm`으로 정리 | codex |
+| 2026-04-22 | `fe-route-agent` 기준에 맞춰 route state root를 `resetPasswordPage`로 두고 form slice를 `resetPasswordForm`으로 정리 | codex |
 | 2026-04-22 | 비밀번호 재설정 field state와 제출/완료 상태를 route page가 소유하고 pure screen에 주입하도록 정리 | codex |
 | 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
 | 2026-03-26 | `ResetPasswordPage` 경로를 page 폴더 기반 sidecar 구조에 맞게 갱신 | codex |
 | 2026-03-25 | `ResetPasswordPage`로 시각 구성을 page 레이어로 이동하고 토큰 검증/제출 핸들러를 route page가 소유하도록 정리 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
-| 2026-03-21 | fe-route-builder 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
+| 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

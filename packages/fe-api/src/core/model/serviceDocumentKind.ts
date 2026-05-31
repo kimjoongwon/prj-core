@@ -13,14 +13,14 @@
 /**
  * 문서 종류
  */
-export type ServiceDocumentKind =
-	(typeof ServiceDocumentKind)[keyof typeof ServiceDocumentKind];
+export type ServiceDocumentKind = typeof ServiceDocumentKind[keyof typeof ServiceDocumentKind];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ServiceDocumentKind = {
-	TERMS_OF_SERVICE: "TERMS_OF_SERVICE",
-	PRIVACY_POLICY: "PRIVACY_POLICY",
-	MARKETING_CONSENT: "MARKETING_CONSENT",
-	LOCATION_CONSENT: "LOCATION_CONSENT",
-	THIRD_PARTY_SHARING: "THIRD_PARTY_SHARING",
+  TERMS_OF_SERVICE: 'TERMS_OF_SERVICE',
+  PRIVACY_POLICY: 'PRIVACY_POLICY',
+  MARKETING_CONSENT: 'MARKETING_CONSENT',
+  LOCATION_CONSENT: 'LOCATION_CONSENT',
+  THIRD_PARTY_SHARING: 'THIRD_PARTY_SHARING',
 } as const;

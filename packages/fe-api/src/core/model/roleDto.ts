@@ -9,36 +9,35 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-
-import type { RoleAssociationDto } from "./roleAssociationDto";
-import type { RoleDtoClassification } from "./roleDtoClassification";
+import type { RoleDtoClassification } from './roleDtoClassification';
+import type { RoleAssociationDto } from './roleAssociationDto';
 
 export interface RoleDto {
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	/**
-	 * 역할 식별자
-	 * @maxLength 50
-	 * @pattern ^[A-Z][A-Z0-9_]*$
-	 */
-	name: string;
-	/**
-	 * 표시명
-	 * @maxLength 50
-	 */
-	displayName?: string;
-	/**
-	 * 설명
-	 * @maxLength 200
-	 */
-	description?: string;
-	/** 시스템 역할 여부 */
-	isSystem: boolean;
-	/** @nullable */
-	classification: RoleDtoClassification;
-	/** @nullable */
-	associations: RoleAssociationDto[] | null;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  /**
+   * 역할 식별자
+   * @maxLength 50
+   * @pattern ^[A-Z][A-Z0-9_]*$
+   */
+  name: string;
+  /**
+   * 표시명
+   * @maxLength 50
+   */
+  displayName?: string;
+  /**
+   * 설명
+   * @maxLength 200
+   */
+  description?: string;
+  /** 시스템 역할 여부 */
+  isSystem: boolean;
+  /** @nullable */
+  classification: RoleDtoClassification;
+  /** @nullable */
+  associations: RoleAssociationDto[] | null;
 }

@@ -13,6 +13,6 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface ResetPasswordErrorDto {
-	/** 에러 코드 */
-	error: string;
+  /** 에러 코드 */
+  error: string;
 }

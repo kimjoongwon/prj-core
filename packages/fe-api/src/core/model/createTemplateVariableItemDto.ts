@@ -11,12 +11,12 @@
  */
 
 export interface CreateTemplateVariableItemDto {
-	/** 변수명 */
-	name: string;
-	/** 변수 설명 */
-	description?: string;
-	/** 기본값 */
-	defaultValue?: string;
-	/** 필수 여부 */
-	isRequired?: boolean;
+  /** 변수명 */
+  name: string;
+  /** 변수 설명 */
+  description?: string;
+  /** 기본값 */
+  defaultValue?: string;
+  /** 필수 여부 */
+  isRequired?: boolean;
 }

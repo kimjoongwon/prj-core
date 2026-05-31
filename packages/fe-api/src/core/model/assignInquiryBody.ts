@@ -11,6 +11,6 @@
  */
 
 export type AssignInquiryBody = {
-	/** 담당자 ID */
-	assigneeId: string;
+  /** 담당자 ID */
+  assigneeId: string;
 };

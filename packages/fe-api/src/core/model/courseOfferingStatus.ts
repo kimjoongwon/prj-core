@@ -13,14 +13,14 @@
 /**
  * 개설 상태
  */
-export type CourseOfferingStatus =
-	(typeof CourseOfferingStatus)[keyof typeof CourseOfferingStatus];
+export type CourseOfferingStatus = typeof CourseOfferingStatus[keyof typeof CourseOfferingStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CourseOfferingStatus = {
-	DRAFT: "DRAFT",
-	ENROLLING: "ENROLLING",
-	ACTIVE: "ACTIVE",
-	CLOSED: "CLOSED",
-	CANCELED: "CANCELED",
+  DRAFT: 'DRAFT',
+  ENROLLING: 'ENROLLING',
+  ACTIVE: 'ACTIVE',
+  CLOSED: 'CLOSED',
+  CANCELED: 'CANCELED',
 } as const;

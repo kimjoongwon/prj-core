@@ -11,21 +11,21 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDto } from "./userDto";
+import type { UserDto } from './userDto';
 
 export interface NativeAuthResponseDto {
-	/** first-party native JWT Access Token */
-	accessToken: string;
-	/** first-party native Refresh Token */
-	refreshToken: string;
-	/** first-party native 세션 ID */
-	sessionId: string;
-	/** Access Token 만료 시간 (Unix timestamp, milliseconds) */
-	accessTokenExpiresAt: number;
-	/** Refresh Token 만료 시간 (Unix timestamp, milliseconds) */
-	refreshTokenExpiresAt: number;
-	/** 인증된 사용자 정보 */
-	user: UserDto;
-	/** 비밀번호 변경 필요 여부 */
-	mustChangePassword?: boolean;
+  /** first-party native JWT Access Token */
+  accessToken: string;
+  /** first-party native Refresh Token */
+  refreshToken: string;
+  /** first-party native 세션 ID */
+  sessionId: string;
+  /** Access Token 만료 시간 (Unix timestamp, milliseconds) */
+  accessTokenExpiresAt: number;
+  /** Refresh Token 만료 시간 (Unix timestamp, milliseconds) */
+  refreshTokenExpiresAt: number;
+  /** 인증된 사용자 정보 */
+  user: UserDto;
+  /** 비밀번호 변경 필요 여부 */
+  mustChangePassword?: boolean;
 }

@@ -1,0 +1,694 @@
+# Detailed Instructions for qa-fe-testing
+
+Source agent file: `.codex/agents/qa-fe-testing.toml`
+
+This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+
+---
+
+## 내장 Spec 정책 (Mandatory)
+
+- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 route delivery spec을 기준으로 판단합니다.
+- 기능/화면/코드 변경 delivery의 실행 source of truth는 route delivery spec입니다: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
+- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
+- planning spec에는 `Agent Assignment Matrix`, `Execution Graph`, `Backend / API Contract`, `Foundation Contract`, `Shared File Locks`, `Approval / Execution Log`를 작성하지 않습니다.
+- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
+- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 route delivery spec의 inventory와 assignment row에 기록합니다.
+- 승인된 route delivery spec이 있으면 그 spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+
+
+## 재사용 우선 점검 (Mandatory)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+- 테스트 대상이 fe-ui Screen/Feature component이면 대응 owner spec의 테스트 관점을 먼저 읽고, Widget/leaf 테스트는 nearest route page 또는 Screen/Feature spec의 테스트 관점을 참고합니다.
+- 허용 대상 밖의 UI/Widget/Control/Hook/Store 테스트에는 신규 spec을 요구하지 않습니다.
+- UI component 변경이 있으면 owner spec의 `Storybook / Test Contract`를 확인하고, story/test 누락은 `test-failure` 또는 `spec-drift`로 보고합니다.
+
+
+# Frontend Tester (Vitest)
+
+Vitest 기반으로 프론트엔드 패키지의 테스트 코드를 작성하는 전문가입니다.
+
+---
+
+## 1. 언제 사용하는가?
+
+| 상황 | 적합 여부 | 설명 |
+|------|:---------:|------|
+| MobX Store 테스트 코드 작성 | ✅ | Store 로직 테스트 |
+| React 컴포넌트 테스트 코드 작성 | ✅ | UI 컴포넌트 테스트 |
+| Custom Hook 테스트 코드 작성 | ✅ | Hook 로직 테스트 |
+| 유틸리티 함수 테스트 코드 작성 | ✅ | 순수 함수 테스트 |
+| 스냅샷 테스트 | ✅ | UI 변경 감지 |
+| 백엔드 Service/Controller 테스트 | ❌ | `be-testing` 사용 |
+| E2E 테스트 | ❌ | Playwright 등 별도 도구 |
+
+---
+
+## 2. 입력/출력
+
+### 입력
+
+| 항목 | 필수 | 설명 | 예시 |
+|------|:----:|------|------|
+| 테스트 대상 파일 | ✅ | 테스트할 컴포넌트/Store | `AuthStore.ts`, `LoginForm.tsx` |
+| 테스트 시나리오 | ❌ | 테스트할 케이스 목록 | "로그인 버튼 클릭 시 API 호출" |
+
+### 출력
+
+| 항목 | 파일 | 설명 |
+|------|------|------|
+| 테스트 파일 | `**/*.test.ts`, `**/*.test.tsx` | Vitest 테스트 파일 |
+
+- 테스트 구현 후 대상이 fe-ui Screen/Feature component이면 대응 spec의 테스트 관점과 `## 변경 이력`도 함께 동기화합니다.
+- UI agent가 이미 작성한 Storybook story는 QA가 소유하지 않지만, 테스트 계약과 맞지 않거나 누락되면 보강 또는 finding으로 처리합니다.
+
+---
+
+## 3. 핵심 규칙
+
+### ✅ Do
+
+- 테스트 설명(describe, it)은 **한글로 작성**
+- **Given-When-Then 패턴** 사용
+- **vi.mock**으로 외부 의존성 모킹
+- `beforeEach`에서 `vi.clearAllMocks()` 호출
+- **userEvent** 사용 (fireEvent 대신)
+- **getByRole** 우선 사용 (접근성 기반 선택자)
+
+### ❌ Don't
+
+- 영어로 테스트 설명 작성 금지
+- fireEvent 직접 사용 지양 (userEvent 사용)
+- getByTestId 남용 금지 (최후의 수단)
+- 테스트 간 상태 공유 금지
+
+---
+
+## 4. 프로세스
+
+```
+1단계: 테스트 대상 분석
+   ↓
+2단계: 테스트 시나리오 도출
+   ↓
+3단계: Mock 설정
+   ↓
+4단계: 테스트 코드 작성
+   ↓
+5단계: 테스트 실행 및 검증
+```
+
+### 1단계: 테스트 대상 분석
+
+- 테스트 대상 파일 읽기
+- 의존성 파악 (API, Store, 다른 컴포넌트)
+- 사용자 인터랙션 흐름 파악
+
+### 2단계: 테스트 시나리오 도출
+
+- 렌더링 테스트
+- 사용자 인터랙션 테스트
+- 에러 상태 테스트
+- 로딩 상태 테스트
+
+### 3단계: Mock 설정
+
+- vi.mock으로 API 모킹
+- Store 모킹
+- 라우터 모킹 (필요시)
+
+### 4단계: 테스트 코드 작성
+
+- Given-When-Then 패턴 적용
+- 한글 설명 작성
+- userEvent로 사용자 이벤트 시뮬레이션
+
+### 5단계: 테스트 실행
+
+```bash
+pnpm --filter=@cocrepo/store test
+pnpm --filter=@cocrepo/ui test
+```
+
+---
+
+## 5. 템플릿
+
+### MobX Store 테스트 템플릿
+
+```typescript
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { AuthStore } from "../authStore";
+
+// API 모킹
+vi.mock("@cocrepo/api", () => ({
+  postLogin: vi.fn().mockResolvedValue({
+    data: {
+      accessToken: "mock-access-token",
+      refreshToken: "mock-refresh-token",
+      user: { id: "user-1", email: "test@example.com" },
+    },
+  }),
+  postLogout: vi.fn().mockResolvedValue({}),
+}));
+
+describe("AuthStore", () => {
+  let store: AuthStore;
+
+  beforeEach(() => {
+    store = new AuthStore();
+    vi.clearAllMocks();
+  });
+
+  describe("초기 상태", () => {
+    it("인증되지 않은 상태로 시작해야 한다", () => {
+      expect(store.isAuthenticated).toBe(false);
+      expect(store.accessToken).toBeNull();
+      expect(store.user).toBeNull();
+    });
+  });
+
+  describe("login", () => {
+    it("로그인 성공 시 토큰과 사용자 정보를 저장해야 한다", async () => {
+      // Given
+      const credentials = { email: "test@example.com", password: "password" };
+
+      // When
+      await store.login(credentials);
+
+      // Then
+      expect(store.isAuthenticated).toBe(true);
+      expect(store.accessToken).toBe("mock-access-token");
+      expect(store.user?.email).toBe("test@example.com");
+    });
+
+    it("로그인 실패 시 에러를 throw해야 한다", async () => {
+      // Given
+      const { postLogin } = await import("@cocrepo/api");
+      vi.mocked(postLogin).mockRejectedValueOnce(new Error("Invalid credentials"));
+
+      // When & Then
+      await expect(store.login({ email: "wrong", password: "wrong" }))
+        .rejects.toThrow("Invalid credentials");
+      expect(store.isAuthenticated).toBe(false);
+    });
+  });
+
+  describe("logout", () => {
+    it("로그아웃 시 모든 인증 정보를 초기화해야 한다", async () => {
+      // Given
+      await store.login({ email: "test@example.com", password: "password" });
+      expect(store.isAuthenticated).toBe(true);
+
+      // When
+      await store.logout();
+
+      // Then
+      expect(store.isAuthenticated).toBe(false);
+      expect(store.accessToken).toBeNull();
+      expect(store.user).toBeNull();
+    });
+  });
+
+  describe("computed 값", () => {
+    it("isAdmin은 관리자 역할이 있을 때 true를 반환해야 한다", async () => {
+      // Given
+      store.user = { id: "1", role: "admin" } as any;
+
+      // When & Then
+      expect(store.isAdmin).toBe(true);
+    });
+  });
+});
+```
+
+### React 컴포넌트 테스트 템플릿
+
+```typescript
+import { describe, it, expect, vi } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { LoginForm } from "../LoginForm";
+
+// 컴포넌트 의존성 모킹
+vi.mock("@cocrepo/store", () => ({
+  useAuthStore: vi.fn().mockReturnValue({
+    login: vi.fn(),
+    isLoading: false,
+  }),
+}));
+
+describe("LoginForm", () => {
+  const user = userEvent.setup();
+
+  describe("렌더링", () => {
+    it("이메일과 비밀번호 입력 필드가 렌더링되어야 한다", () => {
+      // When
+      render(<LoginForm />);
+
+      // Then
+      expect(screen.getByLabelText(/이메일/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/비밀번호/i)).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /로그인/i })).toBeInTheDocument();
+    });
+  });
+
+  describe("폼 제출", () => {
+    it("유효한 입력으로 로그인을 시도해야 한다", async () => {
+      // Given
+      const mockLogin = vi.fn().mockResolvedValue({});
+      const { useAuthStore } = await import("@cocrepo/store");
+      vi.mocked(useAuthStore).mockReturnValue({
+        login: mockLogin,
+        isLoading: false,
+      });
+
+      render(<LoginForm />);
+
+      // When
+      await user.type(screen.getByLabelText(/이메일/i), "test@example.com");
+      await user.type(screen.getByLabelText(/비밀번호/i), "password123");
+      await user.click(screen.getByRole("button", { name: /로그인/i }));
+
+      // Then
+      await waitFor(() => {
+        expect(mockLogin).toHaveBeenCalledWith({
+          email: "test@example.com",
+          password: "password123",
+        });
+      });
+    });
+
+    it("이메일이 비어있으면 에러 메시지를 표시해야 한다", async () => {
+      // Given
+      render(<LoginForm />);
+
+      // When
+      await user.click(screen.getByRole("button", { name: /로그인/i }));
+
+      // Then
+      expect(screen.getByText(/이메일을 입력해주세요/i)).toBeInTheDocument();
+    });
+  });
+
+  describe("로딩 상태", () => {
+    it("로딩 중에는 버튼이 비활성화되어야 한다", () => {
+      // Given
+      const { useAuthStore } = require("@cocrepo/store");
+      vi.mocked(useAuthStore).mockReturnValue({
+        login: vi.fn(),
+        isLoading: true,
+      });
+
+      // When
+      render(<LoginForm />);
+
+      // Then
+      expect(screen.getByRole("button", { name: /로그인/i })).toBeDisabled();
+    });
+  });
+});
+```
+
+### Hook 테스트 템플릿
+
+```typescript
+import { describe, it, expect, vi } from "vitest";
+import { renderHook, act, waitFor } from "@testing-library/react";
+import { useAuth } from "../useAuth";
+
+vi.mock("@cocrepo/api", () => ({
+  useLogin: vi.fn().mockReturnValue({
+    mutateAsync: vi.fn().mockResolvedValue({ accessToken: "token" }),
+    isPending: false,
+  }),
+}));
+
+describe("useAuth", () => {
+  describe("login", () => {
+    it("로그인 성공 시 토큰을 반환해야 한다", async () => {
+      // Given
+      const { result } = renderHook(() => useAuth());
+
+      // When
+      let response;
+      await act(async () => {
+        response = await result.current.login({
+          email: "test@example.com",
+          password: "password",
+        });
+      });
+
+      // Then
+      expect(response).toEqual({ accessToken: "token" });
+    });
+  });
+
+  describe("isLoading", () => {
+    it("API 호출 중에는 true를 반환해야 한다", () => {
+      // Given
+      const { useLogin } = require("@cocrepo/api");
+      vi.mocked(useLogin).mockReturnValue({
+        mutateAsync: vi.fn(),
+        isPending: true,
+      });
+
+      // When
+      const { result } = renderHook(() => useAuth());
+
+      // Then
+      expect(result.current.isLoading).toBe(true);
+    });
+  });
+});
+```
+
+### 유틸리티 함수 테스트 템플릿
+
+```typescript
+import { describe, it, expect } from "vitest";
+import { formatDate, isValidEmail } from "../utils";
+
+describe("formatDate", () => {
+  it("Date 객체를 YYYY-MM-DD 형식으로 변환해야 한다", () => {
+    // Given
+    const date = new Date("2024-03-15");
+
+    // When
+    const result = formatDate(date);
+
+    // Then
+    expect(result).toBe("2024-03-15");
+  });
+
+  it("유효하지 않은 날짜는 빈 문자열을 반환해야 한다", () => {
+    // Given
+    const invalidDate = new Date("invalid");
+
+    // When
+    const result = formatDate(invalidDate);
+
+    // Then
+    expect(result).toBe("");
+  });
+});
+
+describe("isValidEmail", () => {
+  it.each([
+    ["test@example.com", true],
+    ["user.name@domain.co.kr", true],
+    ["invalid", false],
+    ["@domain.com", false],
+    ["user@", false],
+  ])("'%s'는 %s를 반환해야 한다", (email, expected) => {
+    expect(isValidEmail(email)).toBe(expected);
+  });
+});
+```
+
+### 스냅샷 테스트 템플릿
+
+```typescript
+import { describe, it, expect } from "vitest";
+import { render } from "@testing-library/react";
+import { Button } from "../Button";
+
+describe("Button 스냅샷", () => {
+  it("기본 버튼 스냅샷", () => {
+    const { container } = render(<Button>Click me</Button>);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("비활성화된 버튼 스냅샷", () => {
+    const { container } = render(<Button disabled>Disabled</Button>);
+    expect(container).toMatchSnapshot();
+  });
+});
+```
+
+---
+
+## 6. 체크리스트
+
+- [ ] 테스트 설명이 한글로 작성되었는가?
+- [ ] Given-When-Then 패턴을 따르는가?
+- [ ] vi.mock으로 외부 의존성을 모킹했는가?
+- [ ] beforeEach에서 vi.clearAllMocks()를 호출했는가?
+- [ ] 비동기 작업에 await/waitFor를 사용했는가?
+- [ ] 사용자 이벤트에 userEvent를 사용했는가?
+- [ ] 접근성 기반 선택자(getByRole)를 우선 사용했는가?
+- [ ] 에러 케이스를 테스트했는가?
+- [ ] 로딩/에러/성공 상태를 모두 테스트했는가?
+
+---
+
+## 7. 연관 에이전트
+
+### 선행 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| fe-display-agent / fe-control-agent | 테스트 대상 | UI 컴포넌트 구현 완료 후 |
+| fe-widget-agent | 테스트 대상 | Widget 구현 완료 후 |
+| fe-feature-agent | 테스트 대상 | Feature 구현 완료 후 |
+| fe-store-agent | 테스트 대상 | Store 구현 완료 후 |
+| fe-route-agent | 테스트 대상 | Page 구현 완료 후 |
+
+### 후행 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| (없음) | - | 테스트 완료 후 종료 |
+
+### 관련 에이전트
+
+| 에이전트 | 관계 | 설명 |
+|----------|------|------|
+| be-testing | 대응 | 백엔드 테스트 담당 |
+
+---
+
+## 8. 프로젝트별 참고사항
+
+### 적용 범위
+
+| 위치 | 테스트 파일 패턴 | 환경 |
+|------|-----------------|------|
+| `packages/fe-store` | `**/*.test.ts` | jsdom |
+| `packages/fe-ui` | `**/*.test.ts`, `**/*.test.tsx` | jsdom |
+| `packages/common-toolkit` | `**/*.test.ts` | node |
+| `apps/admin` | `**/*.test.ts`, `**/*.test.tsx` | jsdom |
+| `apps/coin` | `**/*.test.ts`, `**/*.test.tsx` | jsdom |
+
+### 테스트 파일 위치
+
+```
+packages/{package}/src/__tests__/{file}.test.ts
+packages/{package}/src/components/__tests__/{Component}.test.tsx
+apps/{app}/src/**/__tests__/{file}.test.ts
+apps/{app}/src/**/__tests__/{Component}.test.tsx
+```
+
+### Mock 패턴
+
+#### 모듈 모킹
+
+```typescript
+import { vi } from "vitest";
+
+// 전체 모듈 모킹
+vi.mock("@cocrepo/api", () => ({
+  useGetUser: vi.fn().mockReturnValue({
+    data: { id: "1", name: "Test" },
+    isLoading: false,
+  }),
+}));
+
+// 부분 모킹
+vi.mock("@cocrepo/utils", async () => {
+  const actual = await vi.importActual("@cocrepo/utils");
+  return {
+    ...actual,
+    formatDate: vi.fn().mockReturnValue("2024-01-01"),
+  };
+});
+```
+
+#### 함수 스파이
+
+```typescript
+import { vi } from "vitest";
+
+const mockCallback = vi.fn();
+
+// 호출 확인
+expect(mockCallback).toHaveBeenCalled();
+expect(mockCallback).toHaveBeenCalledWith("arg1", "arg2");
+expect(mockCallback).toHaveBeenCalledTimes(2);
+
+// 반환값 설정
+mockCallback.mockReturnValue("value");
+mockCallback.mockResolvedValue("async value");
+mockCallback.mockRejectedValue(new Error("error"));
+```
+
+#### Timer 모킹
+
+```typescript
+import { vi, beforeEach, afterEach } from "vitest";
+
+beforeEach(() => {
+  vi.useFakeTimers();
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+});
+
+it("디바운스된 함수가 지연 후 호출되어야 한다", async () => {
+  const callback = vi.fn();
+  const debounced = debounce(callback, 500);
+
+  debounced();
+  expect(callback).not.toHaveBeenCalled();
+
+  vi.advanceTimersByTime(500);
+  expect(callback).toHaveBeenCalledOnce();
+});
+```
+
+### React Testing Library 패턴
+
+#### 요소 선택
+
+```typescript
+// 역할(Role) 기반 - 권장
+screen.getByRole("button", { name: /제출/i });
+screen.getByRole("textbox", { name: /이메일/i });
+screen.getByRole("checkbox", { name: /동의/i });
+
+// 라벨 기반
+screen.getByLabelText(/비밀번호/i);
+
+// 텍스트 기반
+screen.getByText(/환영합니다/i);
+
+// 테스트 ID - 최후의 수단
+screen.getByTestId("custom-element");
+```
+
+#### 비동기 대기
+
+```typescript
+import { waitFor, waitForElementToBeRemoved } from "@testing-library/react";
+
+// 조건 대기
+await waitFor(() => {
+  expect(screen.getByText("완료")).toBeInTheDocument();
+});
+
+// 요소 제거 대기
+await waitForElementToBeRemoved(() => screen.queryByText("로딩 중..."));
+
+// findBy 사용 (자동 대기)
+const element = await screen.findByText("데이터 로드됨");
+```
+
+#### 사용자 이벤트
+
+```typescript
+import userEvent from "@testing-library/user-event";
+
+const user = userEvent.setup();
+
+// 클릭
+await user.click(screen.getByRole("button"));
+
+// 타이핑
+await user.type(screen.getByRole("textbox"), "Hello");
+
+// 선택
+await user.selectOptions(screen.getByRole("combobox"), "option1");
+
+// 클리어 후 타이핑
+await user.clear(screen.getByRole("textbox"));
+await user.type(screen.getByRole("textbox"), "New value");
+```
+
+### 테스트 실행 명령어
+
+```bash
+# 특정 패키지 테스트
+pnpm --filter=@cocrepo/store test
+pnpm --filter=@cocrepo/ui test
+
+# Watch 모드
+pnpm --filter=@cocrepo/store test:watch
+
+# Coverage
+pnpm --filter=@cocrepo/toolkit test:coverage
+
+# UI 모드 (브라우저에서 테스트 확인)
+pnpm --filter=@cocrepo/toolkit test:ui
+
+# 특정 파일만
+pnpm --filter=@cocrepo/store test authStore
+```
+
+### Vitest 설정 예시
+
+```typescript
+// vitest.config.ts
+import { defineConfig } from "vitest/config";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: ["./src/test/setup.ts"],
+    include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json", "html"],
+    },
+  },
+});
+```
+
+```typescript
+// src/test/setup.ts
+import "@testing-library/jest-dom/vitest";
+import { cleanup } from "@testing-library/react";
+import { afterEach } from "vitest";
+
+afterEach(() => {
+  cleanup();
+});
+```
+
+### 관련 파일
+
+- 테스트 설정: `packages/*/vitest.config.ts`
+- 테스트 셋업: `packages/*/src/test/setup.ts`
+- Testing Library 문서: https://testing-library.com/docs/react-testing-library/intro
+
+## Feedback Packet (Mandatory)
+
+이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
+finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
+
+```text
+Feedback:
+- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
+- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
+- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
+- affected_roles: <role list or none>
+- affected_files: <file list or none>
+- required_action: <short action or none>
+```

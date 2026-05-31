@@ -9,21 +9,21 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ServiceDocumentFormat } from "./serviceDocumentFormat";
+import type { ServiceDocumentFormat } from './serviceDocumentFormat';
 
 export interface UpdateServiceDocumentDto {
-	/** 제목 */
-	title?: string;
-	/** 요약 */
-	summary?: string;
-	/** 본문 */
-	content?: string;
-	/** 본문 형식 */
-	format?: ServiceDocumentFormat;
-	/** 필수 동의 여부 */
-	isRequired?: boolean;
-	/** 정렬 순서 */
-	displayOrder?: number;
-	/** 효력 시작 시각 */
-	effectiveAt?: string;
+  /** 제목 */
+  title?: string;
+  /** 요약 */
+  summary?: string;
+  /** 본문 */
+  content?: string;
+  /** 본문 형식 */
+  format?: ServiceDocumentFormat;
+  /** 필수 동의 여부 */
+  isRequired?: boolean;
+  /** 정렬 순서 */
+  displayOrder?: number;
+  /** 효력 시작 시각 */
+  effectiveAt?: string;
 }

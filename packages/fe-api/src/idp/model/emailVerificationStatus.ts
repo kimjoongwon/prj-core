@@ -15,12 +15,12 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 /**
  * 상태
  */
-export type EmailVerificationStatus =
-	(typeof EmailVerificationStatus)[keyof typeof EmailVerificationStatus];
+export type EmailVerificationStatus = typeof EmailVerificationStatus[keyof typeof EmailVerificationStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const EmailVerificationStatus = {
-	PENDING: "PENDING",
-	VERIFIED: "VERIFIED",
-	EXPIRED: "EXPIRED",
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  EXPIRED: 'EXPIRED',
 } as const;
