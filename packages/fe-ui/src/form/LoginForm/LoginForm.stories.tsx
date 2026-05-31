@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { LoginForm } from "../LoginForm/LoginForm";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import { LoginForm, type LoginFormState } from "../LoginForm/LoginForm";
 
 const meta = {
-	title: "Widget/form/LoginForm",
+	title: "Form/LoginForm",
 	component: LoginForm,
 	parameters: {
 		layout: "centered",
@@ -24,6 +26,27 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+class LoginFormStoryState implements LoginFormState {
+	email: string;
+	password: string;
+
+	constructor(state: LoginFormState) {
+		this.email = state.email;
+		this.password = state.password;
+		makeAutoObservable(this, {}, { autoBind: true });
+	}
+}
+
+const renderLoginForm: Story["render"] = (args) => {
+	const state = useLocalObservable(() => new LoginFormStoryState(args.state));
+
+	return (
+		<div className="w-[360px] max-w-[calc(100vw-32px)]">
+			<LoginForm {...args} state={state} />
+		</div>
+	);
+};
+
 export const Default: Story = {
 	args: {
 		state: {
@@ -31,6 +54,7 @@ export const Default: Story = {
 			password: "",
 		},
 	},
+	render: renderLoginForm,
 	parameters: {
 		docs: {
 			description: {
@@ -47,6 +71,7 @@ export const WithValues: Story = {
 			password: "password123",
 		},
 	},
+	render: renderLoginForm,
 	parameters: {
 		docs: {
 			description: {
@@ -63,10 +88,29 @@ export const WithEmail: Story = {
 			password: "",
 		},
 	},
+	render: renderLoginForm,
 	parameters: {
 		docs: {
 			description: {
 				story: "Login form with only email field filled.",
+			},
+		},
+	},
+};
+
+export const LongValues: Story = {
+	args: {
+		state: {
+			email: "operations.manager.with.long.name@example-reservations.com",
+			password: "very-long-password-value",
+		},
+	},
+	render: renderLoginForm,
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"Login form with longer field values to verify the stacked field layout remains stable.",
 			},
 		},
 	},

@@ -1,6 +1,8 @@
 "use client";
 
 import type { TenantAccessRequestDto } from "@cocrepo/api/core/tenant-access-requests";
+import { Plus, X } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Button,
 	Skeleton,
@@ -10,9 +12,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@cocrepo/ui/heroui";
-import { Plus, X } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { PageSurface } from "../../surface/PageSurface";

@@ -1,10 +1,10 @@
 "use client";
 
-import { Chip, cn, Tooltip } from "@cocrepo/ui/heroui";
 import { AlertCircle, Info } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Textarea } from "../../../control/Textarea/Textarea";
+import { Chip, cn, Tooltip } from "../../../design-system/primitives";
 import { HStack } from "../../../rhythm/HStack/HStack";
 import { VStack } from "../../../rhythm/VStack/VStack";
 

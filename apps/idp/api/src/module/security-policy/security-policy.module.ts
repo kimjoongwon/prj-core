@@ -1,16 +1,17 @@
-import { SecurityPolicyFacade } from "@cocrepo/facade";
 import { SecurityPoliciesRepository } from "@cocrepo/repository";
-import { SecurityPolicyService } from "@cocrepo/service";
+import { SecurityPolicyAggregateRoot } from "@cocrepo/aggregate";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { SecurityPolicyController } from "./security-policy.controller";
+import { SecurityPolicyUseCaseProviders } from "@cocrepo/usecase";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [SecurityPolicyController],
 	providers: [
-		SecurityPolicyFacade,
-		SecurityPolicyService,
+		...SecurityPolicyUseCaseProviders,
+		SecurityPolicyAggregateRoot,
 		SecurityPoliciesRepository,
 	],
-	exports: [SecurityPolicyFacade],
 })
 export class SecurityPolicyModule {}

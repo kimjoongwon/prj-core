@@ -1,8 +1,8 @@
 "use client";
 
-import { Card, CardBody } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import { Card, CardBody } from "../../design-system/primitives";
 
 export interface StatsCardProps {
 	/** 통계 제목 */

@@ -2,8 +2,8 @@ import { SpaceContext } from "@cocrepo/context";
 import { UsersRepository } from "@cocrepo/repository";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { type DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
-import { AuthCacheService } from "../src/auth-cache.service";
-import { UserService } from "../src/user.service";
+import { AuthCacheService } from "../src/auth/auth-cache.service";
+import { UserService } from "../src/user/user.service";
 
 describe("UserService", () => {
 	let service: UserService;

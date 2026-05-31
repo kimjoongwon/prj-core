@@ -45,20 +45,19 @@ export class OidcClientsRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ data: OidcClient[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
 		this.logger.debug("클라이언트 목록 조회");
 
 		const notRemoved: Prisma.OidcClientWhereInput = {
-			...where,
+			...params.where,
 			removedAt: null,
 		};
 
 		const [data, totalCount] = await Promise.all([
 			this.txHost.tx.oidcClient.findMany({
 				where: notRemoved,
-				orderBy,
-				skip,
-				take,
+				orderBy: params.orderBy,
+				skip: params.skip,
+				take: params.take,
 			}),
 			this.txHost.tx.oidcClient.count({ where: notRemoved }),
 		]);

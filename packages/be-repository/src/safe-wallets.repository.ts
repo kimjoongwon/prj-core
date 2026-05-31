@@ -68,15 +68,14 @@ export class SafeWalletsRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ wallets: SafeWallet[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
 		const [wallets, totalCount] = await Promise.all([
 			this.txHost.tx.safeWallet.findMany({
-				where,
-				orderBy: orderBy ?? [{ createdAt: "desc" }],
-				skip,
-				take,
+				where: params.where,
+				orderBy: params.orderBy ?? [{ createdAt: "desc" }],
+				skip: params.skip,
+				take: params.take,
 			}),
-			this.txHost.tx.safeWallet.count({ where }),
+			this.txHost.tx.safeWallet.count({ where: params.where }),
 		]);
 
 		return { wallets, totalCount };

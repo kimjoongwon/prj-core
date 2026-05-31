@@ -1,16 +1,16 @@
 "use client";
 
+import { FileText, ImageIcon, Link2Off, PlayCircle } from "lucide-react";
 import {
 	Button,
 	Chip,
+	cn,
 	Modal,
 	ModalBody,
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	cn,
-} from "@cocrepo/ui/heroui";
-import { FileText, ImageIcon, Link2Off, PlayCircle } from "lucide-react";
+} from "../../design-system/primitives";
 
 export interface AssetPreviewAsset {
 	id: string;
@@ -238,6 +238,7 @@ function AssetPreviewMedia({
 
 	if (mode === "video" && previewUrl) {
 		return (
+			// biome-ignore lint/a11y/useMediaCaption: uploaded asset previews do not provide caption tracks.
 			<video
 				src={previewUrl}
 				controls

@@ -22,20 +22,21 @@ export class TasksRepository {
 		search?: string;
 		contentLanguageCode?: LanguageCode;
 	}): Promise<[Task[], number]> {
-		const { spaceIds, skip, take, search, contentLanguageCode } = params;
 		this.logger.debug(
-			`Task 목록 조회: spaceIds=${spaceIds?.length ?? "all"}, search=${search ?? "없음"}`,
+			`Task 목록 조회: spaceIds=${params.spaceIds?.length ?? "all"}, search=${params.search ?? "없음"}`,
 		);
 
 		const where: Prisma.TaskWhereInput = {
 			removedAt: null,
-			...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
-			...(contentLanguageCode ? { space: { contentLanguageCode } } : {}),
+			...(params.spaceIds ? { spaceId: { in: params.spaceIds } } : {}),
+			...(params.contentLanguageCode
+				? { space: { contentLanguageCode: params.contentLanguageCode } }
+				: {}),
 			exercise: {
 				is: {
 					removedAt: null,
-					...(search
-						? { name: { contains: search, mode: "insensitive" } }
+					...(params.search
+						? { name: { contains: params.search, mode: "insensitive" } }
 						: {}),
 				},
 			},
@@ -50,8 +51,8 @@ export class TasksRepository {
 					creator: { select: { id: true, name: true } },
 				},
 				orderBy: { createdAt: "desc" },
-				skip,
-				take,
+				skip: params.skip,
+				take: params.take,
 			}),
 			this.txHost.tx.task.count({ where }),
 		]);

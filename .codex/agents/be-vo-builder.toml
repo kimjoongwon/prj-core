@@ -65,6 +65,10 @@ Value Object 클래스를 생성하는 전문가입니다.
 
 ## 3. 핵심 규칙
 
+- VO class는 class당 하나의 `*.vo.ts` 파일을 가집니다.
+- VO class 파일에는 top-level props/interface/type/helper/constant를 함께 두지 않습니다.
+- Props/Options/helper/constant는 같은 domain 폴더의 별도 파일로 분리합니다.
+
 ### ✅ Do
 
 1. **간결한 네이밍** - 개념 그 자체로 명명
@@ -98,11 +102,15 @@ Value Object 클래스를 생성하는 전문가입니다.
    }
    ```
 
-4. **Props 인터페이스는 파일 내부에 선언**
+4. **Props/Options/helper는 별도 파일로 분리**
    ```typescript
-   interface EmailProps {
+   // email.props.ts
+   export interface EmailProps {
      value: string;
    }
+
+   // email.vo.ts
+   import type { EmailProps } from "./email.props";
 
    export class Email extends ValueObject<EmailProps> { }
    ```
@@ -133,17 +141,20 @@ Value Object 클래스를 생성하는 전문가입니다.
    Cookie.forToken("7d")    // Refresh Token용
    ```
 
-3. **과도한 파일 분리 금지**
+3. **여러 책임을 한 파일에 묶기 금지**
    ```typescript
-   // ❌ 작은 VO를 각각 파일로 분리
+   // ❌ 관련 VO와 helper를 하나의 파일에 묶음
    auth/
-     cookie.vo.ts
-     access-token-cookie.vo.ts
-     refresh-token-cookie.vo.ts
+     token.vo.ts    // AccessToken, RefreshToken, TokenPair, TokenProps 포함
 
-   // ✅ 관련 VO는 하나의 파일에
+   // ✅ VO class와 계약 타입을 각각 파일로 분리하고 같은 폴더에 배치
    auth/
-     cookie.vo.ts    // Cookie, JwtExpiration 포함 가능
+     access-token.vo.ts
+     access-token.props.ts
+     refresh-token.vo.ts
+     refresh-token.props.ts
+     token-pair.vo.ts
+     token-pair.props.ts
    ```
 
 ---
@@ -159,8 +170,9 @@ Value Object 클래스를 생성하는 전문가입니다.
    - 캡슐화할 값 식별
    - 유효성 규칙 정의
    ↓
-2. Props 인터페이스 정의
+2. Props/Options/helper 파일 정의
    - 내부 속성 설계
+   - `{name}.props.ts`, `{name}.options.ts`, `{name}.helper.ts`처럼 별도 파일로 분리
    ↓
 3. VO 클래스 구현
    - ValueObject 상속
@@ -183,10 +195,7 @@ Value Object 클래스를 생성하는 전문가입니다.
 ```typescript
 import { ValueObject } from "../common/value-object.base";
 import { VoValidationError } from "../errors/vo.error";
-
-interface {Name}Props {
-  // VO 속성 정의
-}
+import type { {Name}Props } from "./{name}.props";
 
 /**
  * {설명}
@@ -217,9 +226,7 @@ export class {Name} extends ValueObject<{Name}Props> {
 ### 단순 값 래핑
 
 ```typescript
-interface EmailProps {
-  value: string;
-}
+import type { EmailProps } from "./email.props";
 
 export class Email extends ValueObject<EmailProps> {
   private static readonly EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -247,10 +254,7 @@ export class Email extends ValueObject<EmailProps> {
 ### 복합 값 (여러 속성)
 
 ```typescript
-interface MoneyProps {
-  amount: number;
-  currency: string;
-}
+import type { MoneyProps } from "./money.props";
 
 export class Money extends ValueObject<MoneyProps> {
   protected validate(props: MoneyProps): void {
@@ -297,13 +301,7 @@ export class Money extends ValueObject<MoneyProps> {
 ### 용도별 팩토리 메서드
 
 ```typescript
-interface CookieProps {
-  maxAge: number;
-  httpOnly: boolean;
-  secure: boolean;
-  sameSite: "strict" | "lax" | "none";
-  path: string;
-}
+import type { CookieProps } from "./cookie.props";
 
 export class Cookie extends ValueObject<CookieProps> {
   protected validate(props: CookieProps): void {
@@ -352,7 +350,7 @@ export class Cookie extends ValueObject<CookieProps> {
 - [ ] validate() 메서드 구현
 - [ ] 간결한 클래스명 (접미사 없음)
 - [ ] 불필요한 상속 없음
-- [ ] Props 인터페이스 내부 선언
+- [ ] Props/Options/helper가 VO class 파일에서 분리됨
 - [ ] 팩토리 메서드 제공
 - [ ] 도메인 메서드 추가 (필요시)
 - [ ] JSDoc 주석 추가

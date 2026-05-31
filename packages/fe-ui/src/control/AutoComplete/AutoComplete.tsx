@@ -1,5 +1,5 @@
-import type { AutocompleteProps } from "@cocrepo/ui/heroui";
-import { Autocomplete, AutocompleteItem } from "@cocrepo/ui/heroui";
+import type { AutocompleteProps } from "../../design-system/primitives";
+import { Autocomplete, AutocompleteItem } from "../../design-system/primitives";
 
 type AutoCompleteItem = {
 	/** 표시 텍스트 */

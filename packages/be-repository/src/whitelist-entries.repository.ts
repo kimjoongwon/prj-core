@@ -1,5 +1,6 @@
 import { WhitelistEntry } from "@cocrepo/entity";
 import { Prisma, PrismaClient, WhitelistType } from "@cocrepo/prisma";
+import { WhitelistValue, type WhitelistValueType } from "@cocrepo/vo";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
@@ -42,10 +43,14 @@ export class WhitelistEntriesRepository {
 		type: WhitelistType,
 		value: string,
 	): Promise<WhitelistEntry | null> {
-		this.logger.debug(`타입/값 조회: ${type}/${value}`);
+		const whitelistValue = WhitelistValue.create(
+			type as WhitelistValueType,
+			value,
+		);
+		this.logger.debug(`타입/값 조회: ${type}/${whitelistValue.value}`);
 
 		const result = await this.txHost.tx.whitelistEntry.findFirst({
-			where: { type, value },
+			where: { type, value: whitelistValue.value },
 		});
 
 		return result ? plainToInstance(WhitelistEntry, result) : null;
@@ -57,16 +62,14 @@ export class WhitelistEntriesRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ entries: WhitelistEntry[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
-
 		const [entries, totalCount] = await Promise.all([
 			this.txHost.tx.whitelistEntry.findMany({
-				where,
-				orderBy: orderBy ?? [{ createdAt: "desc" }],
-				skip,
-				take,
+				where: params.where,
+				orderBy: params.orderBy ?? [{ createdAt: "desc" }],
+				skip: params.skip,
+				take: params.take,
 			}),
-			this.txHost.tx.whitelistEntry.count({ where }),
+			this.txHost.tx.whitelistEntry.count({ where: params.where }),
 		]);
 
 		return {
@@ -82,8 +85,9 @@ export class WhitelistEntriesRepository {
 	async create(
 		data: Prisma.WhitelistEntryUncheckedCreateInput,
 	): Promise<WhitelistEntry> {
+		const normalizedData = this.normalizeCreateData(data);
 		const result = await this.txHost.tx.whitelistEntry.create({
-			data,
+			data: normalizedData,
 		});
 
 		return plainToInstance(WhitelistEntry, result);
@@ -95,9 +99,10 @@ export class WhitelistEntriesRepository {
 	): Promise<WhitelistEntry> {
 		this.logger.debug(`ID 수정: ${id.slice(-8)}`);
 
+		const normalizedData = await this.normalizeUpdateData(id, data);
 		const result = await this.txHost.tx.whitelistEntry.update({
 			where: { id },
-			data,
+			data: normalizedData,
 		});
 
 		return plainToInstance(WhitelistEntry, result);
@@ -111,5 +116,70 @@ export class WhitelistEntriesRepository {
 		});
 
 		return plainToInstance(WhitelistEntry, result);
+	}
+
+	private normalizeCreateData(
+		data: Prisma.WhitelistEntryUncheckedCreateInput,
+	): Prisma.WhitelistEntryUncheckedCreateInput {
+		const whitelistValue = WhitelistValue.create(
+			data.type as WhitelistValueType,
+			data.value,
+		);
+		return {
+			...data,
+			value: whitelistValue.value,
+		};
+	}
+
+	private async normalizeUpdateData(
+		id: string,
+		data: Prisma.WhitelistEntryUncheckedUpdateInput,
+	): Promise<Prisma.WhitelistEntryUncheckedUpdateInput> {
+		const current = await this.txHost.tx.whitelistEntry.findUnique({
+			where: { id },
+			select: { type: true, value: true },
+		});
+
+		if (!current) {
+			return data;
+		}
+
+		const nextType = this.resolveUpdateValue(data.type, current.type);
+		const nextValue = this.resolveUpdateValue(data.value, current.value);
+		const whitelistValue = WhitelistValue.create(
+			nextType as WhitelistValueType,
+			nextValue,
+		);
+
+		return {
+			...data,
+			value: this.applyNormalizedUpdateValue(data.value, whitelistValue.value),
+		};
+	}
+
+	private resolveUpdateValue<T>(
+		input: T | { set?: T } | undefined,
+		current: T,
+	): T {
+		if (input === undefined) {
+			return current;
+		}
+
+		if (typeof input === "object" && input !== null && "set" in input) {
+			return input.set ?? current;
+		}
+
+		return input as T;
+	}
+
+	private applyNormalizedUpdateValue(
+		input: Prisma.WhitelistEntryUncheckedUpdateInput["value"],
+		value: string,
+	): Prisma.WhitelistEntryUncheckedUpdateInput["value"] {
+		if (typeof input === "object" && input !== null && "set" in input) {
+			return { ...input, set: value };
+		}
+
+		return value;
 	}
 }

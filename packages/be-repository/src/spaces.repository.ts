@@ -56,25 +56,32 @@ export class SpacesRepository {
 		search?: string;
 		contentLanguageCode?: LanguageCode;
 	}): Promise<[Space[], number]> {
-		const { spaceIds, skip, take, search, contentLanguageCode } = params ?? {};
+		const queryParams = params ?? {};
 		this.logger.debug(
-			`Ground 포함 Space 목록 조회: count=${spaceIds?.length ?? "all"}, search=${search ?? "없음"}`,
+			`Ground 포함 Space 목록 조회: count=${queryParams.spaceIds?.length ?? "all"}, search=${queryParams.search ?? "없음"}`,
 		);
 
 		const where: Prisma.SpaceWhereInput = {
 			removedAt: null,
-			...(spaceIds ? { id: { in: spaceIds } } : {}),
-			...(contentLanguageCode ? { contentLanguageCode } : {}),
+			...(queryParams.spaceIds ? { id: { in: queryParams.spaceIds } } : {}),
+			...(queryParams.contentLanguageCode
+				? { contentLanguageCode: queryParams.contentLanguageCode }
+				: {}),
 			ground: {
 				is: {
 					removedAt: null,
-					...(search
+					...(queryParams.search
 						? {
 								OR: [
-									{ name: { contains: search, mode: "insensitive" } },
+									{
+										name: {
+											contains: queryParams.search,
+											mode: "insensitive",
+										},
+									},
 									{
 										businessNo: {
-											contains: search,
+											contains: queryParams.search,
 											mode: "insensitive",
 										},
 									},
@@ -92,8 +99,8 @@ export class SpacesRepository {
 					ground: true,
 				},
 				orderBy: { createdAt: "desc" },
-				skip,
-				take,
+				skip: queryParams.skip,
+				take: queryParams.take,
 			}),
 			this.txHost.tx.space.count({ where }),
 		]);
@@ -379,27 +386,5 @@ export class SpacesRepository {
 		});
 
 		return results.map((result) => plainToInstance(Space, result));
-	}
-
-	/**
-	 * Space 소프트 삭제
-	 */
-	async removeById(id: string): Promise<Space> {
-		this.logger.debug(`Space 소프트 삭제: ${id.slice(-8)}`);
-
-		await this.txHost.tx.ground.updateMany({
-			where: {
-				spaceId: id,
-				removedAt: null,
-			},
-			data: { removedAt: new Date() },
-		});
-
-		const result = await this.txHost.tx.space.update({
-			where: { id },
-			data: { removedAt: new Date() },
-		});
-
-		return plainToInstance(Space, result);
 	}
 }

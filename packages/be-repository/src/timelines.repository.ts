@@ -3,6 +3,16 @@ import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 
+function omitProgramActivities<T extends { programActivities: unknown }>(
+	program: T,
+): Omit<T, "programActivities"> {
+	const programRecord = { ...program } as Omit<T, "programActivities"> & {
+		programActivities?: unknown;
+	};
+	delete programRecord.programActivities;
+	return programRecord;
+}
+
 @Injectable()
 export class TimelinesRepository {
 	private readonly logger = new Logger(TimelinesRepository.name);
@@ -276,9 +286,10 @@ export class TimelinesRepository {
 
 		return [
 			programs.map((program) => {
-				const { programActivities, ...rest } = program;
+				const programRecord = omitProgramActivities(program);
+				const programActivities = program.programActivities;
 				return {
-					...rest,
+					...programRecord,
 					activityCount: programActivities.length,
 					previewExerciseNames: programActivities
 						.slice(0, 3)
@@ -318,9 +329,10 @@ export class TimelinesRepository {
 					return null;
 				}
 
-				const { programActivities, ...rest } = program;
+				const programRecord = omitProgramActivities(program);
+				const programActivities = program.programActivities;
 				return {
-					...rest,
+					...programRecord,
 					activityCount: programActivities.length,
 					previewExerciseNames: programActivities
 						.slice(0, 3)

@@ -16,8 +16,8 @@ import {
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
-import { Button } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { Button } from "../../design-system/primitives";
 
 export interface OidcClientEditPageFormState {
 	name: string;

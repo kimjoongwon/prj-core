@@ -1,21 +1,17 @@
 "use client";
 
-import type {
-	RoutineActivityFormItem,
-	RoutineTaskCandidate,
-} from "../RoutineCreatePage/RoutineCreatePage";
-import { RoutineActivitySection } from "../RoutineCreatePage/RoutineCreatePage";
 import {
+	Button,
 	ContentLanguageNotice,
 	FormPage,
 	FormPageSurface,
 	FormSection,
 	FormSectionCard,
-	PageTitleBar,
-	Button,
 	Input,
+	PageTitleBar,
 	useT,
 } from "@cocrepo/ui";
+import { observer } from "mobx-react-lite";
 import {
 	Modal,
 	ModalBody,
@@ -23,8 +19,12 @@ import {
 	ModalFooter,
 	ModalHeader,
 	Spinner,
-} from "@cocrepo/ui/heroui";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
+import type {
+	RoutineActivityFormItem,
+	RoutineTaskCandidate,
+} from "../RoutineCreatePage/RoutineCreatePage";
+import { RoutineActivitySection } from "../RoutineCreatePage/RoutineCreatePage";
 
 export interface RoutineEditPageProps {
 	routineName?: string;

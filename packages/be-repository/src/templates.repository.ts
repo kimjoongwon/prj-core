@@ -63,20 +63,19 @@ export class TemplatesRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ data: Template[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
 		this.logger.debug("템플릿 목록 조회");
 
 		const notRemoved: Prisma.TemplateWhereInput = {
-			...where,
+			...params.where,
 			removedAt: null,
 		};
 
 		const [data, totalCount] = await Promise.all([
 			this.txHost.tx.template.findMany({
 				where: notRemoved,
-				orderBy,
-				skip,
-				take,
+				orderBy: params.orderBy,
+				skip: params.skip,
+				take: params.take,
 			}),
 			this.txHost.tx.template.count({ where: notRemoved }),
 		]);

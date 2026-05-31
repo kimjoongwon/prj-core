@@ -1,4 +1,4 @@
-import { Link, type LinkProps } from "@cocrepo/ui/heroui";
+import { Link, type LinkProps } from "../../design-system/primitives";
 
 interface LinkCellViewProps extends LinkProps {
 	/** 링크 텍스트 */

@@ -8,16 +8,20 @@ import {
 	SkipSpaceCheck,
 } from "@cocrepo/decorator";
 import { DashboardStatsDto, LoginTrendItemDto } from "@cocrepo/dto";
-import { IdpDashboardFacade } from "@cocrepo/facade";
 import { Controller, Get, HttpStatus } from "@nestjs/common";
+import { QueryBus } from "@nestjs/cqrs";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import {
+	GetIdpDashboardStatsQuery,
+	GetIdpLoginTrendQuery,
+} from "@cocrepo/command";
 
 @ApiTags("IDP_DASHBOARD")
 @Controller()
 @Roles([SYSTEM_ROLES.FULL_ACCESS])
 @SkipSpaceCheck()
 export class IdpDashboardController {
-	constructor(private readonly idpDashboardService: IdpDashboardFacade) {}
+	constructor(private readonly queryBus: QueryBus) {}
 
 	@Get("stats")
 	@ApiOperation({
@@ -31,7 +35,7 @@ export class IdpDashboardController {
 	@ApiResponseEntity(DashboardStatsDto, HttpStatus.OK)
 	@ResponseMessage("대시보드 통계 조회 성공")
 	async getStats() {
-		return this.idpDashboardService.getStats();
+		return this.queryBus.execute(new GetIdpDashboardStatsQuery());
 	}
 
 	@Get("login-trend")
@@ -45,6 +49,6 @@ export class IdpDashboardController {
 	@ApiResponseEntity(LoginTrendItemDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("로그인 추이 조회 성공")
 	async getLoginTrend() {
-		return this.idpDashboardService.getLoginTrend();
+		return this.queryBus.execute(new GetIdpLoginTrendQuery());
 	}
 }

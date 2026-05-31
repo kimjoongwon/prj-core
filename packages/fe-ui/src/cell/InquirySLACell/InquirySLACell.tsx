@@ -1,5 +1,5 @@
-import { Chip } from "@cocrepo/ui/heroui";
 import { AlertTriangle, Clock } from "lucide-react";
+import { Chip } from "../../design-system/primitives";
 
 /** SLA 상태 */
 export type SLAStatus = "ok" | "warning" | "breach";

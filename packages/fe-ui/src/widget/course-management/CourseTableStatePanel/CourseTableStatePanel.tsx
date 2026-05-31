@@ -1,9 +1,9 @@
 "use client";
 
 import { HStack, Surface, VStack } from "@cocrepo/ui";
-import { Spinner } from "@cocrepo/ui/heroui";
 import { AlertCircle, Database, RefreshCw } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Spinner } from "../../../design-system/primitives";
 
 export type CourseTableStatePanelStatus =
 	| "loading"

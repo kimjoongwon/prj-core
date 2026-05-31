@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "@cocrepo/ui/heroui";
+import { Button } from "../../design-system/primitives";
 import { Page } from "../../layout/Page";
 import { PageTitleBar } from "../../widget/PageTitleBar";
-import { PageSurface } from "./PageSurface";
 import { SectionSurface } from "../SectionSurface";
+import { PageSurface } from "./PageSurface";
 
 const meta: Meta<typeof PageSurface> = {
 	title: "Surface/PageSurface",

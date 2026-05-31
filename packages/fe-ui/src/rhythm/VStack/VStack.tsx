@@ -1,10 +1,10 @@
-import { cn } from "@cocrepo/ui/heroui";
 import { cva } from "class-variance-authority";
 import { Children, type ReactNode } from "react";
+import { cn } from "../../design-system/primitives";
 import {
+	type RhythmValue,
 	resolveRhythmValue,
 	rhythmDefaults,
-	type RhythmValue,
 } from "../presets";
 import { getRhythmTailwindGapClass } from "../tokens";
 

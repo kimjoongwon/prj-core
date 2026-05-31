@@ -1,7 +1,10 @@
 "use client";
 
-import { type ButtonProps, Button as NextUIButton } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import {
+	type ButtonProps,
+	Button as NextUIButton,
+} from "../../design-system/primitives";
 import { translateNode, useT } from "../../i18n";
 
 /**

@@ -3,14 +3,14 @@
 import {
 	FormPage,
 	FormPageSurface,
-	PageTitleBar,
 	FormSectionCard,
+	PageTitleBar,
 	TemplateForm,
 	type TemplateFormData,
 	type VariableEditItem,
 } from "@cocrepo/ui";
-import { Button, Spinner } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { Button, Spinner } from "../../design-system/primitives";
 
 export interface TemplateEditPageProps {
 	templateName?: string;

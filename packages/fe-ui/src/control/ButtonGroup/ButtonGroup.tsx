@@ -1,5 +1,5 @@
-import type { ButtonProps, LinkProps } from "@cocrepo/ui/heroui";
-import { Link } from "@cocrepo/ui/heroui";
+import type { ButtonProps, LinkProps } from "../../design-system/primitives";
+import { Link } from "../../design-system/primitives";
 
 export interface GroupButton extends ButtonProps {
 	href?: LinkProps["href"];

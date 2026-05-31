@@ -1,3 +1,19 @@
+import {
+	AssignInquiryCommand,
+	CreateInquiryCommand,
+	DeleteInquiryCommand,
+	FillInquiryFormWithAiQuery,
+	GetInquiryByIdQuery,
+	GetInquiryCreateFormBootstrapQuery,
+	GetInquiryMessagesQuery,
+	GetInquiryParticipantsQuery,
+	GetInquiryStatsQuery,
+	GetInquiryUpdateFormBootstrapQuery,
+	ListInquiriesQuery,
+	UpdateInquiryCommand,
+	UpdateInquiryPriorityCommand,
+	UpdateInquiryStatusCommand,
+} from "@cocrepo/command";
 import { USER_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -26,7 +42,6 @@ import {
 	UpdateInquiryDto,
 } from "@cocrepo/dto";
 import { Inquiry, InquiryParticipant } from "@cocrepo/entity";
-import { InquiryFacade } from "@cocrepo/facade";
 import type { InquiryPriority, InquiryStatus } from "@cocrepo/prisma";
 import { AuthContext, SpaceContext } from "@cocrepo/service";
 import {
@@ -43,6 +58,7 @@ import {
 	Query,
 	UnauthorizedException,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import {
 	ApiBody,
 	ApiExtraModels,
@@ -63,7 +79,8 @@ import {
 @Controller()
 export class InquiriesController {
 	constructor(
-		private readonly inquiriesService: InquiryFacade,
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
 		private readonly authContext: AuthContext,
 		private readonly spaceContext: SpaceContext,
 	) {}
@@ -94,12 +111,14 @@ export class InquiriesController {
 
 		const where = query.toPrismaWhere();
 		const orderBy = query.toPrismaOrderBy();
-		return this.inquiriesService.listInquiries({
-			where,
-			orderBy,
-			skip: query.skip,
-			take: query.take,
-		});
+		return this.queryBus.execute(
+			new ListInquiriesQuery({
+				where,
+				orderBy,
+				skip: query.skip,
+				take: query.take,
+			}),
+		);
 	}
 
 	@Get("stats")
@@ -123,7 +142,7 @@ export class InquiriesController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		const stats = await this.inquiriesService.getInquiryStats();
+		const stats = await this.queryBus.execute(new GetInquiryStatsQuery());
 		return stats;
 	}
 
@@ -143,7 +162,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryCreateUpdateFormBootstrapDto, HttpStatus.OK)
 	@ResponseMessage("문의 생성 폼 bootstrap 조회 성공")
 	async getCreateInquiryForm(): Promise<InquiryCreateUpdateFormBootstrapDto> {
-		return this.inquiriesService.getCreateFormBootstrap();
+		return this.queryBus.execute(new GetInquiryCreateFormBootstrapQuery());
 	}
 
 	@Get(":inquiryId/form/update")
@@ -170,7 +189,9 @@ export class InquiriesController {
 	async getUpdateInquiryForm(
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 	): Promise<InquiryCreateUpdateFormBootstrapDto> {
-		return this.inquiriesService.getUpdateFormBootstrap(inquiryId);
+		return this.queryBus.execute(
+			new GetInquiryUpdateFormBootstrapQuery(inquiryId),
+		);
 	}
 
 	@Post("form/ai-fill")
@@ -201,7 +222,7 @@ export class InquiriesController {
 	async fillInquiryFormWithAi(
 		@Body() dto: FillInquiryFormRequestDto,
 	): Promise<FillInquiryFormResponseDto> {
-		return this.inquiriesService.fillFormWithAi(dto);
+		return this.queryBus.execute(new FillInquiryFormWithAiQuery(dto));
 	}
 
 	@Get(":inquiryId")
@@ -228,7 +249,7 @@ export class InquiriesController {
 	async getInquiryById(
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 	): Promise<Inquiry> {
-		return this.inquiriesService.getInquiryById(inquiryId);
+		return this.queryBus.execute(new GetInquiryByIdQuery(inquiryId));
 	}
 
 	@Post()
@@ -261,11 +282,9 @@ export class InquiriesController {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		return this.inquiriesService.createInquiry({
-			dto,
-			actorUserId,
-			spaceId,
-		});
+		return this.commandBus.execute(
+			new CreateInquiryCommand(dto, spaceId, actorUserId),
+		);
 	}
 
 	@Patch(":inquiryId")
@@ -296,7 +315,7 @@ export class InquiriesController {
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 		@Body() dto: UpdateInquiryDto,
 	): Promise<Inquiry> {
-		return this.inquiriesService.updateInquiry(inquiryId, dto);
+		return this.commandBus.execute(new UpdateInquiryCommand(inquiryId, dto));
 	}
 
 	@Delete(":inquiryId")
@@ -322,7 +341,7 @@ export class InquiriesController {
 	async deleteInquiry(
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 	): Promise<void> {
-		await this.inquiriesService.deleteInquiry(inquiryId);
+		await this.commandBus.execute(new DeleteInquiryCommand(inquiryId));
 	}
 
 	@Patch(":inquiryId/assign")
@@ -364,7 +383,9 @@ export class InquiriesController {
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 		@Body() body: { assigneeId: string },
 	): Promise<Inquiry> {
-		return this.inquiriesService.assignInquiry(inquiryId, body.assigneeId);
+		return this.commandBus.execute(
+			new AssignInquiryCommand(inquiryId, body.assigneeId),
+		);
 	}
 
 	@Patch(":inquiryId/status")
@@ -414,7 +435,9 @@ export class InquiriesController {
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 		@Body() body: { status: InquiryStatus },
 	): Promise<Inquiry> {
-		return this.inquiriesService.updateInquiryStatus(inquiryId, body.status);
+		return this.commandBus.execute(
+			new UpdateInquiryStatusCommand(inquiryId, body.status),
+		);
 	}
 
 	@Patch(":inquiryId/priority")
@@ -454,9 +477,8 @@ export class InquiriesController {
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 		@Body() body: { priority: InquiryPriority },
 	): Promise<Inquiry> {
-		return this.inquiriesService.updateInquiryPriority(
-			inquiryId,
-			body.priority,
+		return this.commandBus.execute(
+			new UpdateInquiryPriorityCommand(inquiryId, body.priority),
 		);
 	}
 
@@ -487,11 +509,13 @@ export class InquiriesController {
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 		@Query() query: { skip?: number; take?: number },
 	) {
-		return this.inquiriesService.getInquiryMessages({
-			inquiryId,
-			skip: query.skip,
-			take: query.take,
-		});
+		return this.queryBus.execute(
+			new GetInquiryMessagesQuery({
+				inquiryId,
+				skip: query.skip,
+				take: query.take,
+			}),
+		);
 	}
 
 	@Get(":inquiryId/participants")
@@ -517,6 +541,6 @@ export class InquiriesController {
 	async getParticipants(
 		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
 	): Promise<InquiryParticipant[]> {
-		return this.inquiriesService.getInquiryParticipants(inquiryId);
+		return this.queryBus.execute(new GetInquiryParticipantsQuery(inquiryId));
 	}
 }

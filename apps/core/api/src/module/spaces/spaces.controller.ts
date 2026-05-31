@@ -1,3 +1,9 @@
+import {
+	CreateSpaceCommand,
+	GetSpaceGroundQuery,
+	ListSpacesQuery,
+	UpdateSpaceGroundCommand,
+} from "@cocrepo/command";
 import { SpaceContext } from "@cocrepo/context";
 import {
 	ApiAuth,
@@ -13,11 +19,9 @@ import {
 	UpdateGroundDto,
 } from "@cocrepo/dto";
 import { Ground, Space } from "@cocrepo/entity";
-import { SpaceFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
-	Delete,
 	ForbiddenException,
 	Get,
 	HttpCode,
@@ -28,13 +32,15 @@ import {
 	Post,
 	Query,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("SPACES")
 @Controller()
 export class SpacesController {
 	constructor(
-		private readonly spacesService: SpaceFacade,
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
 		private readonly spaceContext: SpaceContext,
 	) {}
 
@@ -49,11 +55,13 @@ export class SpacesController {
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("공간 목록 조회 성공")
 	async getSpaces(@Query() query: QuerySpaceDto) {
-		return this.spacesService.listSpaces({
-			spaceIds: this.spaceContext.spaceIds,
-			search: query.search,
-			contentLanguageCode: query.contentLanguageCode,
-		});
+		return this.queryBus.execute(
+			new ListSpacesQuery({
+				spaceIds: this.spaceContext.spaceIds,
+				search: query.search,
+				contentLanguageCode: query.contentLanguageCode,
+			}),
+		);
 	}
 
 	@Get(":spaceId/ground")
@@ -75,7 +83,7 @@ export class SpacesController {
 		@Param("spaceId", ParseUUIDPipe) spaceId: string,
 	): Promise<Ground> {
 		this.assertSpaceAccess(spaceId);
-		return this.spacesService.getGroundBySpaceId(spaceId);
+		return this.queryBus.execute(new GetSpaceGroundQuery(spaceId));
 	}
 
 	@Post()
@@ -94,7 +102,7 @@ export class SpacesController {
 	@ApiResponseEntity(SpaceDto, HttpStatus.CREATED)
 	@ResponseMessage("공간 생성 성공")
 	async createSpace(@Body() dto: CreateGroundDto): Promise<Space> {
-		return this.spacesService.createSpaceWithGround(dto);
+		return this.commandBus.execute(new CreateSpaceCommand(dto));
 	}
 
 	@Patch(":spaceId/ground")
@@ -121,30 +129,7 @@ export class SpacesController {
 		@Body() dto: UpdateGroundDto,
 	): Promise<Space> {
 		this.assertSpaceAccess(spaceId);
-		return this.spacesService.updateGroundBySpaceId(spaceId, dto);
-	}
-
-	@Delete(":spaceId")
-	@HttpCode(HttpStatus.OK)
-	@ApiOperation({
-		operationId: "deleteSpace",
-		summary: "공간 삭제",
-		description: "Space root와 종속 Ground detail을 소프트 삭제합니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "spaceId",
-		description: "Space ID (UUID)",
-		type: String,
-	})
-	@ApiErrors(401, 404, 500)
-	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
-	@ResponseMessage("공간 삭제 성공")
-	async deleteSpace(
-		@Param("spaceId", ParseUUIDPipe) spaceId: string,
-	): Promise<Space> {
-		this.assertSpaceAccess(spaceId);
-		return this.spacesService.deleteSpace(spaceId);
+		return this.commandBus.execute(new UpdateSpaceGroundCommand(spaceId, dto));
 	}
 
 	private assertSpaceAccess(spaceId: string): void {

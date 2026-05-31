@@ -1,9 +1,9 @@
 "use client";
 
-import { Button, Textarea } from "@cocrepo/ui/heroui";
 import { Sparkles } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import { Button, Textarea } from "../../design-system/primitives";
 
 export interface PromptFormProps {
 	/** 메인 프롬프트 값 */

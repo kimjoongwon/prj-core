@@ -1,10 +1,10 @@
+import { OidcRedisSession, OidcSessionAggregateRoot } from "@cocrepo/aggregate";
 import { PageMetaDto, QueryOidcSessionDto } from "@cocrepo/dto";
-import { OidcRedisSession, OidcSessionService } from "@cocrepo/service";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class OidcSessionFacade {
-	constructor(private readonly oidcSessionService: OidcSessionService) {}
+	constructor(private readonly oidcSessionService: OidcSessionAggregateRoot) {}
 
 	getMany(query: QueryOidcSessionDto): Promise<{
 		data: OidcRedisSession[];
@@ -13,9 +13,9 @@ export class OidcSessionFacade {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 20;
 
-		return this.oidcSessionService.getMany(query).then(({ data, totalCount }) => ({
-			data,
-			meta: new PageMetaDto(skip, take, totalCount),
+		return this.oidcSessionService.getMany(query).then((oidcSessionResult) => ({
+			data: oidcSessionResult.data,
+			meta: new PageMetaDto(skip, take, oidcSessionResult.totalCount),
 		}));
 	}
 

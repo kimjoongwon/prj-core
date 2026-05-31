@@ -1,11 +1,11 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
+import type React from "react";
 import {
 	Checkbox as NextUICheckbox,
 	type CheckboxProps as NextUICheckboxProps,
-} from "@cocrepo/ui/heroui";
-import { observer } from "mobx-react-lite";
-import type React from "react";
+} from "../../design-system/primitives";
 import { translateNode, useT } from "../../i18n";
 
 export interface CheckboxProps extends Omit<NextUICheckboxProps, "onChange"> {

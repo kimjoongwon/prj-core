@@ -1,3 +1,4 @@
+import type React from "react";
 import {
 	DropdownItem,
 	DropdownMenu,
@@ -5,8 +6,7 @@ import {
 	Dropdown as HeroUIDropdown,
 	type DropdownItemProps as HeroUIDropdownItemProps,
 	type DropdownProps as HeroUIDropdownProps,
-} from "@cocrepo/ui/heroui";
-import type React from "react";
+} from "../../design-system/primitives";
 
 export interface DropdownItemProps
 	extends Omit<HeroUIDropdownItemProps, "children"> {

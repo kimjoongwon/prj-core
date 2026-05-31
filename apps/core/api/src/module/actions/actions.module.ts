@@ -1,12 +1,18 @@
-import { ActionFacade } from "@cocrepo/facade";
 import { ActionsRepository } from "@cocrepo/repository";
-import { ActionService } from "@cocrepo/service";
+import { ActionAggregateRoot } from "@cocrepo/aggregate";
+import { ActionCommandHandlers, ActionQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { ActionsController } from "./actions.controller";
 
 @Module({
-	providers: [ActionFacade, ActionService, ActionsRepository],
+	imports: [CqrsModule],
+	providers: [
+		ActionAggregateRoot,
+		ActionsRepository,
+		...ActionCommandHandlers,
+		...ActionQueryHandlers,
+	],
 	controllers: [ActionsController],
-	exports: [ActionFacade],
 })
 export class ActionsModule {}

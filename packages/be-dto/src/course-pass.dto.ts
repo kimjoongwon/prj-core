@@ -6,8 +6,8 @@ import {
 	UUIDField,
 } from "@cocrepo/decorator";
 import {
-	CoursePassKind,
 	type CoursePass,
+	CoursePassKind,
 	CoursePassStatus,
 } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";

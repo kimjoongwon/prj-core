@@ -1,29 +1,50 @@
-import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useNativeLogin } from "@cocrepo/api/idp/auth";
+import { useLocalObservable } from "mobx-react-lite";
+import type { Route } from "next";
+import { useRouter } from "next/navigation";
+import { usePersistStore } from "@/stores/AppStoreProvider";
+import { resolveLoginErrorMessage } from "./resolveLoginErrorMessage";
+import { resolveReturnPath } from "./resolveReturnPath";
 
-/**
- * OIDC 기반 로그인 페이지 훅
- *
- * 페이지 진입 시 즉시 IDP의 OIDC Authorization 엔드포인트로 리다이렉트합니다.
- * OIDC 콜백 에러가 있을 경우에만 에러 메시지를 표시합니다.
- */
 export const useAuthLoginPage = () => {
-	const searchParams = useSearchParams();
-	const errorFromCallback = searchParams.get("error");
+	const router = useRouter();
+	const persistStore = usePersistStore();
+	const state = useLocalObservable(() => ({
+		loginForm: {
+			email: "",
+			password: "",
+		},
+		errorMessage: "",
+	}));
+	const { mutateAsync: nativeLogin, isPending } = useNativeLogin();
 
-	useEffect(() => {
-		if (!errorFromCallback) {
-			window.location.href = "/api/v1/auth/login?clientId=admin-web";
+	const onSubmitLoginForm = async () => {
+		state.errorMessage = "";
+
+		try {
+			const response = await nativeLogin({
+				data: {
+					email: state.loginForm.email,
+					password: state.loginForm.password,
+				},
+			});
+			const session = response.data;
+			if (!session) {
+				state.errorMessage = "로그인 응답이 올바르지 않습니다.";
+				return;
+			}
+
+			persistStore.setNativeAuthSession(session);
+			persistStore.setSpaceSelectionResolved(false);
+			router.replace(resolveReturnPath() as Route);
+		} catch (error) {
+			state.errorMessage = resolveLoginErrorMessage(error);
 		}
-	}, [errorFromCallback]);
-
-	const onClickRetry = () => {
-		window.location.href = "/api/v1/auth/login?clientId=admin-web";
 	};
 
 	return {
-		errorMessage: errorFromCallback || "",
-		isRedirecting: !errorFromCallback,
-		onClickRetry,
+		state,
+		isLoading: isPending,
+		onSubmitLoginForm,
 	};
 };

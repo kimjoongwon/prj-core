@@ -1,5 +1,5 @@
-import { Button } from "@cocrepo/ui/heroui";
 import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "../../design-system/primitives";
 import { Dropdown } from "./Dropdown";
 
 const meta: Meta<typeof Dropdown> = {

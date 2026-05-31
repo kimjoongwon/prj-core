@@ -1,8 +1,8 @@
 "use client";
 
-import { Link as HeroLink } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../control/Button/Button";
+import { Link as HeroLink } from "../../design-system/primitives";
 
 export interface IdpAccountActionsCellProps {
 	/** 계정 ID */

@@ -1,7 +1,7 @@
 import {
 	type TimeInputProps as HeroUiTimeInputProps,
 	TimeInput as NextUiTimeInput,
-} from "@cocrepo/ui/heroui";
+} from "../../design-system/primitives";
 
 export interface TimeInputProps<_T>
 	extends Omit<HeroUiTimeInputProps, "onChange"> {

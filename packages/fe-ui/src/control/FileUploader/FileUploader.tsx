@@ -1,9 +1,9 @@
 "use client";
 
-import { Button, Card } from "@cocrepo/ui/heroui";
 import { X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { v4 } from "uuid";
+import { Button, Card } from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 export interface FileDto {

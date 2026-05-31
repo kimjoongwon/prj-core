@@ -1,5 +1,8 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
+import { Input } from "../../control/Input/Input";
 import {
 	Button,
 	Modal,
@@ -8,10 +11,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	Textarea,
-} from "@cocrepo/ui/heroui";
-import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
-import { Input } from "../../control/Input/Input";
+} from "../../design-system/primitives";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 

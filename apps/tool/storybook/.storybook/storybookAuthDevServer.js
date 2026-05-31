@@ -1,8 +1,10 @@
 const LOGIN_PATH = "/__storybook_auth/login";
+const NATIVE_LOGIN_PATH = "/__storybook_auth/native-login";
 const LOGOUT_PATH = "/__storybook_auth/logout";
 const SESSION_PATH = "/__storybook_auth/session";
 const LOGIN_ALIAS_PATHS = new Set(["/admin/auth/login", "/auth/login"]);
 const JSON_GATE_PATHS = new Set(["/index.json", "/stories.json", "/project.json"]);
+const AUTH_COOKIE_NAMES = ["accessToken", "refreshToken", "sessionId"];
 const STATIC_FILE_PATTERN =
 	/\.(?:avif|bmp|css|gif|ico|jpeg|jpg|js|map|mjs|png|svg|txt|webp|woff2?)$/i;
 
@@ -27,6 +29,81 @@ function buildRequestUrl(request) {
 	return new URL(request.url || "/", `http://${host}`);
 }
 
+function parseCookieHeader(cookieHeader = "") {
+	return cookieHeader.split(";").reduce((cookies, part) => {
+		const [rawName, ...rawValueParts] = part.trim().split("=");
+		if (!rawName) {
+			return cookies;
+		}
+
+		cookies[rawName] = decodeURIComponent(rawValueParts.join("=") || "");
+		return cookies;
+	}, {});
+}
+
+function appendSetCookie(response, cookie) {
+	const current = response.getHeader?.("set-cookie");
+	if (!current) {
+		response.setHeader("Set-Cookie", cookie);
+		return;
+	}
+
+	response.setHeader(
+		"Set-Cookie",
+		Array.isArray(current) ? [...current, cookie] : [current, cookie],
+	);
+}
+
+function createAuthCookie(requestUrl, name, value, expiresAt) {
+	const maxAgeSeconds = Math.max(
+		0,
+		Math.floor((expiresAt - Date.now()) / 1000),
+	);
+	const secure = requestUrl.protocol === "https:" ? "; Secure" : "";
+
+	return `${name}=${encodeURIComponent(value)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAgeSeconds}${secure}`;
+}
+
+function setNativeAuthCookies(response, requestUrl, session) {
+	appendSetCookie(
+		response,
+		createAuthCookie(
+			requestUrl,
+			"accessToken",
+			session.accessToken,
+			session.accessTokenExpiresAt,
+		),
+	);
+	appendSetCookie(
+		response,
+		createAuthCookie(
+			requestUrl,
+			"refreshToken",
+			session.refreshToken,
+			session.refreshTokenExpiresAt,
+		),
+	);
+	appendSetCookie(
+		response,
+		createAuthCookie(
+			requestUrl,
+			"sessionId",
+			session.sessionId,
+			session.refreshTokenExpiresAt,
+		),
+	);
+}
+
+function clearNativeAuthCookies(response, requestUrl) {
+	const secure = requestUrl.protocol === "https:" ? "; Secure" : "";
+	for (const name of AUTH_COOKIE_NAMES) {
+		appendSetCookie(
+			response,
+			`${name}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure}`,
+		);
+	}
+}
+
 function normalizeReturnTo(rawValue, requestUrl) {
 	try {
 		const candidate = new URL(rawValue || "/", requestUrl);
@@ -43,13 +120,6 @@ function getLoginPath(requestUrl, returnTo = requestUrl.toString()) {
 	const loginUrl = new URL(LOGIN_PATH, requestUrl.origin);
 	loginUrl.searchParams.set("returnTo", normalizeReturnTo(returnTo, requestUrl));
 	return `${loginUrl.pathname}${loginUrl.search}`;
-}
-
-function buildIdpLoginUrl(requestUrl, returnTo) {
-	const loginUrl = new URL("/api/v1/auth/login", requestUrl.origin);
-	loginUrl.searchParams.set("clientId", "storybook");
-	loginUrl.searchParams.set("returnTo", normalizeReturnTo(returnTo, requestUrl));
-	return loginUrl.toString();
 }
 
 function getAliasReturnTo(request, requestUrl) {
@@ -75,6 +145,45 @@ function getAliasReturnTo(request, requestUrl) {
 	return new URL("/", requestUrl).toString();
 }
 
+function readRequestBody(request) {
+	if (typeof request.body === "string") {
+		return Promise.resolve(request.body);
+	}
+
+	return new Promise((resolve, reject) => {
+		let body = "";
+
+		request.on?.("data", (chunk) => {
+			body += chunk;
+		});
+		request.on?.("end", () => {
+			resolve(body);
+		});
+		request.on?.("error", reject);
+	});
+}
+
+function parseNativeLoginPayload(rawBody, contentType = "") {
+	if (contentType.includes("application/json")) {
+		return JSON.parse(rawBody || "{}");
+	}
+
+	const params = new URLSearchParams(rawBody || "");
+	return {
+		email: params.get("email") || "",
+		password: params.get("password") || "",
+	};
+}
+
+function resolveNativeLoginErrorMessage(body) {
+	return (
+		body?.data?.displayMessage ||
+		body?.message ||
+		body?.error ||
+		"Storybook login failed."
+	);
+}
+
 function shouldSkipGate(pathname) {
 	if (
 		pathname.startsWith("/api/") ||
@@ -89,6 +198,7 @@ function shouldSkipGate(pathname) {
 
 	if (
 		pathname === LOGIN_PATH ||
+		pathname === NATIVE_LOGIN_PATH ||
 		pathname === LOGOUT_PATH ||
 		pathname === SESSION_PATH ||
 		LOGIN_ALIAS_PATHS.has(pathname)
@@ -134,12 +244,19 @@ function shouldProtectRequest(request, requestUrl) {
 
 async function verifySession(request, authConfig) {
 	try {
+		const cookies = parseCookieHeader(request.headers.cookie || "");
+		const headers = {
+			accept: "application/json",
+			cookie: request.headers.cookie || "",
+		};
+
+		if (cookies.accessToken) {
+			headers.authorization = `Bearer ${cookies.accessToken}`;
+		}
+
 		const response = await fetch(`${authConfig.idpApiTarget}/api/v1/auth/verify-token`, {
 			method: "GET",
-			headers: {
-				accept: "application/json",
-				cookie: request.headers.cookie || "",
-			},
+			headers,
 			redirect: "manual",
 		});
 
@@ -188,6 +305,7 @@ function renderShellHtml({
 	ctaHref,
 	secondaryHref,
 	secondaryLabel,
+	formHtml,
 	extraScript,
 	statusMessage,
 }) {
@@ -281,7 +399,42 @@ function renderShellHtml({
         gap: 12px;
       }
 
-      .button {
+      .native-login-form {
+        margin-top: 28px;
+        display: grid;
+        gap: 16px;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+      }
+
+	      .field span {
+	        color: var(--muted);
+	        font-size: 13px;
+	        font-weight: 600;
+	      }
+
+      input[type="email"],
+      input[type="password"] {
+        width: 100%;
+        min-height: 46px;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+        outline: none;
+        padding: 0 14px;
+        font: inherit;
+      }
+
+      input[type="email"]:focus,
+      input[type="password"]:focus {
+        border-color: rgba(242, 178, 54, 0.7);
+      }
+
+	      .button {
         appearance: none;
         display: inline-flex;
         align-items: center;
@@ -329,14 +482,19 @@ function renderShellHtml({
 					? `<div class="status">${escapeHtml(statusMessage)}</div>`
 					: ""
 			}
-      <div class="actions">
+      ${formHtml ?? ""}
+      ${
+				ctaHref && ctaLabel
+					? `<div class="actions">
         <a class="button button-primary" href="${escapeHtml(ctaHref)}">${escapeHtml(ctaLabel)}</a>
         ${
 					secondaryHref && secondaryLabel
 						? `<a class="button button-secondary" href="${escapeHtml(secondaryHref)}">${escapeHtml(secondaryLabel)}</a>`
 						: ""
 				}
-      </div>
+      </div>`
+					: ""
+			}
       <div class="meta">Local dev only. Static Storybook builds and Chromatic stay unauthenticated.</div>
     </main>
     ${extraScript ? `<script>${extraScript}</script>` : ""}
@@ -344,10 +502,23 @@ function renderShellHtml({
 </html>`;
 }
 
-function renderLoginShell(requestUrl, returnTo, session) {
-	const loginApiUrl = buildIdpLoginUrl(requestUrl, returnTo);
+function renderLoginShell(requestUrl, returnTo, session, statusMessage) {
+	const loginActionUrl = new URL(NATIVE_LOGIN_PATH, requestUrl.origin);
+	loginActionUrl.searchParams.set("returnTo", normalizeReturnTo(returnTo, requestUrl));
 	const sessionUrl = `${SESSION_PATH}?returnTo=${encodeURIComponent(returnTo)}`;
 	const loginUrl = `${LOGIN_PATH}?returnTo=${encodeURIComponent(returnTo)}`;
+	const formHtml = `
+      <form class="native-login-form" method="post" action="${escapeHtml(`${loginActionUrl.pathname}${loginActionUrl.search}`)}">
+        <label class="field">
+          <span>Email</span>
+          <input name="email" type="email" autocomplete="username" required />
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input name="password" type="password" autocomplete="current-password" required />
+        </label>
+	        <button class="button button-primary" type="submit">Sign in</button>
+	      </form>`;
 	const script = `
       (() => {
         const sessionUrl = ${JSON.stringify(sessionUrl)};
@@ -395,17 +566,92 @@ function renderLoginShell(requestUrl, returnTo, session) {
 		title: "PLATE Storybook Login",
 		heading: "Sign in to unlock Storybook",
 		description:
-			"Local Storybook uses the existing IDP cookie session. Continue through the login flow, then you will return to the exact story URL.",
-		ctaLabel: "Continue with IDP",
-		ctaHref: loginApiUrl,
-		secondaryHref: "/",
-		secondaryLabel: "Back to root",
+			"Use the same native login contract as the admin web app, then return to the exact story URL.",
+		formHtml,
 		extraScript: script,
 		statusMessage:
-			session.status >= 500
+			statusMessage ||
+			(session.status >= 500
 				? `Auth check failed: ${session.message}`
-				: "Checking your local session...",
+				: "Checking your local session..."),
 	}).replace('<div class="status">', '<div class="status" data-status>');
+}
+
+async function handleNativeLogin(request, response, authConfig) {
+	const requestUrl = buildRequestUrl(request);
+	const returnTo = normalizeReturnTo(
+		requestUrl.searchParams.get("returnTo") || "/",
+		requestUrl,
+	);
+	const session = await verifySession(request, authConfig);
+
+	try {
+		const rawBody = await readRequestBody(request);
+		const payload = parseNativeLoginPayload(
+			rawBody,
+			request.headers["content-type"] || "",
+		);
+
+		if (!payload.email || !payload.password) {
+			response.statusCode = 400;
+			response.setHeader("Content-Type", "text/html; charset=utf-8");
+			response.end(
+				renderLoginShell(
+					requestUrl,
+					returnTo,
+					session,
+					"Email and password are required.",
+				),
+			);
+			return;
+		}
+
+		const loginResponse = await fetch(
+			`${authConfig.idpApiTarget}/api/v1/auth/native/login`,
+			{
+				method: "POST",
+				headers: {
+					accept: "application/json",
+					"content-type": "application/json",
+					"user-agent": request.headers["user-agent"] || "storybook",
+				},
+				body: JSON.stringify({
+					email: payload.email,
+					password: payload.password,
+				}),
+			},
+		);
+		const body = await loginResponse.json().catch(() => null);
+		const authSession = body?.data;
+
+		if (!loginResponse.ok || !authSession) {
+			response.statusCode = loginResponse.status || 401;
+			response.setHeader("Content-Type", "text/html; charset=utf-8");
+			response.end(
+				renderLoginShell(
+					requestUrl,
+					returnTo,
+					session,
+					resolveNativeLoginErrorMessage(body),
+				),
+			);
+			return;
+		}
+
+		setNativeAuthCookies(response, requestUrl, authSession);
+		redirect(response, returnTo);
+	} catch (error) {
+		response.statusCode = 503;
+		response.setHeader("Content-Type", "text/html; charset=utf-8");
+		response.end(
+			renderLoginShell(
+				requestUrl,
+				returnTo,
+				session,
+				error instanceof Error ? error.message : "Local IDP API is unavailable.",
+			),
+		);
+	}
 }
 
 function renderLogoutShell(returnTo) {
@@ -519,12 +765,23 @@ export function createStorybookAuthPlugin(authConfig) {
 					return;
 				}
 
+				if (pathname === NATIVE_LOGIN_PATH) {
+					if (request.method?.toUpperCase() !== "POST") {
+						redirect(response, getLoginPath(requestUrl));
+						return;
+					}
+
+					await handleNativeLogin(request, response, authConfig);
+					return;
+				}
+
 				if (pathname === LOGOUT_PATH) {
 					const returnTo = normalizeReturnTo(
 						requestUrl.searchParams.get("returnTo") || "/",
 						requestUrl,
 					);
 					response.statusCode = 200;
+					clearNativeAuthCookies(response, requestUrl);
 					response.setHeader("Content-Type", "text/html; charset=utf-8");
 					response.end(renderLogoutShell(returnTo));
 					return;

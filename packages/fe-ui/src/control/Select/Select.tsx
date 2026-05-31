@@ -1,9 +1,12 @@
 "use client";
 
 import { cloneDeep } from "@cocrepo/toolkit";
-import { Select as NextSelect, SelectItem } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type React from "react";
+import {
+	Select as NextSelect,
+	SelectItem,
+} from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 type SelectOption = {

@@ -58,18 +58,17 @@ export class ServiceDocumentsRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ data: ServiceDocument[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
 		const notRemoved: Prisma.ServiceDocumentWhereInput = {
-			...where,
+			...params.where,
 			removedAt: null,
 		};
 
 		const [data, totalCount] = await Promise.all([
 			this.txHost.tx.serviceDocument.findMany({
 				where: notRemoved,
-				orderBy,
-				skip,
-				take,
+				orderBy: params.orderBy,
+				skip: params.skip,
+				take: params.take,
 			}),
 			this.txHost.tx.serviceDocument.count({ where: notRemoved }),
 		]);
@@ -78,97 +77,6 @@ export class ServiceDocumentsRepository {
 			data: data.map((item) => plainToInstance(ServiceDocument, item)),
 			totalCount,
 		};
-	}
-
-	async findPublishedCurrent(params: {
-		kind: Prisma.ServiceDocumentCreateInput["kind"];
-		platform: Prisma.ServiceDocumentCreateInput["platform"];
-		locale: string;
-	}): Promise<ServiceDocument | null> {
-		const exact = await this.txHost.tx.serviceDocument.findFirst({
-			where: {
-				kind: params.kind,
-				platform: params.platform,
-				locale: params.locale,
-				status: "PUBLISHED",
-				removedAt: null,
-			},
-			orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
-		});
-
-		if (exact) {
-			return plainToInstance(ServiceDocument, exact);
-		}
-
-		if (params.platform === "ALL") {
-			return null;
-		}
-
-		const fallback = await this.txHost.tx.serviceDocument.findFirst({
-			where: {
-				kind: params.kind,
-				platform: "ALL",
-				locale: params.locale,
-				status: "PUBLISHED",
-				removedAt: null,
-			},
-			orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
-		});
-
-		return fallback ? plainToInstance(ServiceDocument, fallback) : null;
-	}
-
-	async findPublishedBundle(params: {
-		platform: Prisma.ServiceDocumentCreateInput["platform"];
-		locale: string;
-	}): Promise<ServiceDocument[]> {
-		const exact = await this.txHost.tx.serviceDocument.findMany({
-			where: {
-				platform: params.platform,
-				locale: params.locale,
-				status: "PUBLISHED",
-				removedAt: null,
-			},
-			orderBy: [
-				{ kind: "asc" },
-				{ publishedAt: "desc" },
-				{ createdAt: "desc" },
-				{ displayOrder: "asc" },
-			],
-		});
-
-		const fallback =
-			params.platform === "ALL"
-				? []
-				: await this.txHost.tx.serviceDocument.findMany({
-						where: {
-							platform: "ALL",
-							locale: params.locale,
-							status: "PUBLISHED",
-							removedAt: null,
-						},
-						orderBy: [
-							{ kind: "asc" },
-							{ publishedAt: "desc" },
-							{ createdAt: "desc" },
-							{ displayOrder: "asc" },
-						],
-					});
-
-		const selectedByKind = new Map<string, (typeof exact)[number]>();
-		for (const item of [...exact, ...fallback]) {
-			if (!selectedByKind.has(item.kind)) {
-				selectedByKind.set(item.kind, item);
-			}
-		}
-
-		return Array.from(selectedByKind.values())
-			.sort(
-				(left, right) =>
-					left.displayOrder - right.displayOrder ||
-					left.kind.localeCompare(right.kind),
-			)
-			.map((item) => plainToInstance(ServiceDocument, item));
 	}
 
 	async create(

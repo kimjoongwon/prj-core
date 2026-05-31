@@ -1,7 +1,7 @@
 # Mobile OIDC Flow Guide
 
 > Updated: 2026-05-11
-> Scope: `apps/mobile`, `apps/idp/api`, `packages/be-app`, `packages/fe-api`
+> Scope: `apps/mobile`, `apps/idp/api`, `packages/be-usecase`, `packages/fe-api`
 
 이 문서는 모바일 앱의 OIDC 로그인 흐름을 실제 코드 기준으로 설명합니다. 모바일 앱은 Expo Router 화면 안에서 IDP Web 로그인 화면을 `WebView`로 열고, native custom scheme callback을 앱 내부 route로 변환한 뒤, IDP API의 `mobile-json` 응답으로 token과 Space scope를 구성합니다.
 
@@ -53,7 +53,7 @@ Mermaid가 렌더되지 않는 viewer에서는 아래 텍스트 흐름을 기준
 | mobile API scope | `apps/mobile/src/auth/mobile-api-scope.ts` | access/refresh token, token expiry, Space 목록/current Space 보관 |
 | mobile auth store | `apps/mobile/src/auth/auth-store.ts` | `verifySession()`, `logout()`, 인증 상태 관리 |
 | IDP auth controller | `apps/idp/api/src/module/auth/auth.controller.ts` | `/api/v1/auth/login`, `/api/v1/auth/callback`, token/space/logout endpoint |
-| auth application service | `packages/be-app/src/auth.application-service.ts` | OIDC state/PKCE, token exchange, cookie/session 생성, verify/refresh/logout |
+| auth use cases | `packages/be-usecase/src/auth/*.usecase.ts` | OIDC state/PKCE, token exchange, cookie/session 생성, verify/refresh/logout |
 | Orval Axios clients | `packages/fe-api/src/libs/customAxios.ts`, `packages/fe-api/src/libs/customIdpAxios.ts` | Bearer token, refresh token, `x-space-id` header 주입 |
 
 ## Client 계약
@@ -330,9 +330,9 @@ flowchart TD
 
 ```text
 GET /api/v1/auth/login
-  -> AuthApplicationService.getAuthorizationUrl()
+  -> GetAuthLoginRedirectUseCase
   -> resolveOidcClient("user-mobile")
-  -> OidcGateway.createAuthorizationRequest()
+  -> OidcClient.createAuthorizationRequest()
   -> Redis에 state + code_verifier + returnTo + clientId 저장
   -> 302 /oidc/auth?...
   -> IDP interaction login

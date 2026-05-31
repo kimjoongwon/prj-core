@@ -19,7 +19,7 @@ export type GetIdpAccountsParams = {
 	skip?: number;
 	/**
 	 * @minimum 1
-	 * @maximum 50
+	 * @maximum 200
 	 */
 	take?: number;
 	/**

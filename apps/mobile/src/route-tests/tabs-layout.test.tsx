@@ -145,16 +145,18 @@ describe("mobile expo tabs layout", () => {
     });
   });
 
-  it("홈, 예약, 내 정보 라우트를 Expo Router Tabs로 등록해야 한다", () => {
+  it("홈, 예약, 커뮤니티, 내 정보 라우트를 Expo Router Tabs로 등록해야 한다", () => {
     render(<MainTabsLayout />);
 
     expect(screen.getByLabelText("expo-tabs")).toBeTruthy();
     expect(screen.getAllByText("subtitle:강남점").length).toBeGreaterThan(0);
     expect(screen.getByText("index:오늘의 수업")).toBeTruthy();
     expect(screen.getByText("reservations:예약")).toBeTruthy();
+    expect(screen.getByText("community:커뮤니티")).toBeTruthy();
     expect(screen.getByText("profile:내 정보")).toBeTruthy();
     expect(screen.getByText("animated-icon:house:focused:0")).toBeTruthy();
     expect(screen.getByText("animated-icon:calendarCheck:rest:0")).toBeTruthy();
+    expect(screen.getByText("animated-icon:users:rest:0")).toBeTruthy();
     expect(screen.getByText("animated-icon:userRound:rest:0")).toBeTruthy();
   });
 

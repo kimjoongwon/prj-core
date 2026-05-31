@@ -1,4 +1,12 @@
 import { RolesGuard } from "@cocrepo/be-common";
+import {
+	CreateTranslationCommand,
+	DeleteTranslationCommand,
+	GetTranslationsQuery,
+	InvalidateAllTranslationsCacheCommand,
+	InvalidateTranslationLanguageCacheCommand,
+	UpdateTranslationCommand,
+} from "@cocrepo/command";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -13,7 +21,6 @@ import {
 	TranslationResponseDto,
 	UpdateTranslationDto,
 } from "@cocrepo/dto";
-import { TranslationFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -27,6 +34,7 @@ import {
 	Query,
 	UseGuards,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("TRANSLATIONS")
@@ -35,7 +43,10 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @Roles([SYSTEM_ROLES.FULL_ACCESS])
 @ApiAuth()
 export class TranslationsController {
-	constructor(private readonly translationsService: TranslationFacade) {}
+	constructor(
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
+	) {}
 
 	@Get()
 	@HttpCode(HttpStatus.OK)
@@ -49,7 +60,7 @@ export class TranslationsController {
 	@ApiResponseEntity(TranslationResponseDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("번역 목록 조회 성공")
 	getTranslations(@Query() query: GetTranslationsDto) {
-		return this.translationsService.getTranslations(query);
+		return this.queryBus.execute(new GetTranslationsQuery(query));
 	}
 
 	@Post()
@@ -67,26 +78,7 @@ export class TranslationsController {
 	@ApiResponseEntity(TranslationResponseDto, HttpStatus.CREATED)
 	@ResponseMessage("번역 등록 성공")
 	createTranslation(@Body() dto: CreateTranslationDto) {
-		return this.translationsService.create(dto);
-	}
-
-	@Get(":translationId")
-	@HttpCode(HttpStatus.OK)
-	@ApiOperation({
-		operationId: "getTranslationById",
-		summary: "번역 조회",
-		description: "ID로 특정 번역을 조회합니다. FULL_ACCESS 전용.",
-	})
-	@ApiParam({
-		name: "translationId",
-		description: "번역 ID (cuid)",
-		type: String,
-	})
-	@ApiErrors(401, 403, 404, 500)
-	@ApiResponseEntity(TranslationResponseDto, HttpStatus.OK)
-	@ResponseMessage("번역 조회 성공")
-	getTranslationById(@Param("translationId") translationId: string) {
-		return this.translationsService.getTranslationById(translationId);
+		return this.commandBus.execute(new CreateTranslationCommand(dto));
 	}
 
 	@Patch(":translationId")
@@ -112,7 +104,9 @@ export class TranslationsController {
 		@Param("translationId") translationId: string,
 		@Body() dto: UpdateTranslationDto,
 	) {
-		return this.translationsService.update(translationId, dto);
+		return this.commandBus.execute(
+			new UpdateTranslationCommand(translationId, dto),
+		);
 	}
 
 	@Delete("cache")
@@ -126,7 +120,7 @@ export class TranslationsController {
 	@ApiErrors(401, 403, 500)
 	@ResponseMessage("전체 번역 캐시 갱신 성공")
 	async invalidateAllTranslationCache(): Promise<void> {
-		await this.translationsService.invalidateAllCache();
+		await this.commandBus.execute(new InvalidateAllTranslationsCacheCommand());
 	}
 
 	@Delete("cache/:languageCode")
@@ -147,7 +141,9 @@ export class TranslationsController {
 	async invalidateTranslationCache(
 		@Param("languageCode") languageCode: string,
 	): Promise<void> {
-		await this.translationsService.invalidateLanguageCache(languageCode);
+		await this.commandBus.execute(
+			new InvalidateTranslationLanguageCacheCommand(languageCode),
+		);
 	}
 
 	@Delete(":translationId")
@@ -167,6 +163,6 @@ export class TranslationsController {
 	async deleteTranslation(
 		@Param("translationId") translationId: string,
 	): Promise<void> {
-		await this.translationsService.remove(translationId);
+		await this.commandBus.execute(new DeleteTranslationCommand(translationId));
 	}
 }

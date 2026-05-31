@@ -1,9 +1,6 @@
 import { ValueObject } from "../../common/value-object.base";
 import { VoValidationError } from "../../errors/vo.error";
-
-interface RefreshTokenProps {
-	value: string;
-}
+import type { RefreshTokenProps } from "./refresh-token.props";
 
 /**
  * Refresh Token Value Object
@@ -16,13 +13,11 @@ export class RefreshToken extends ValueObject<RefreshTokenProps> {
 		/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
 
 	protected validate(props: RefreshTokenProps): void {
-		const { value } = props;
-
-		if (!value) {
+		if (!props.value) {
 			throw new VoValidationError("Refresh Token은 필수입니다.");
 		}
 
-		if (!RefreshToken.JWT_REGEX.test(value)) {
+		if (!RefreshToken.JWT_REGEX.test(props.value)) {
 			throw new VoValidationError("유효하지 않은 JWT 형식입니다.");
 		}
 	}

@@ -187,20 +187,19 @@ export class InteractionService {
 	): Promise<InteractionResult> {
 		const provider = this.oidcProviderService.getProvider();
 		const interaction = await provider.interactionDetails(req, res);
-		const { prompt, params, session } = interaction;
 
 		const grant = interaction.grantId
 			? await provider.Grant.find(interaction.grantId)
 			: new provider.Grant({
-					accountId: session?.accountId ?? "",
-					clientId: params.client_id as string,
+					accountId: interaction.session?.accountId ?? "",
+					clientId: interaction.params.client_id as string,
 				});
 
 		if (!grant) {
 			throw new Error("Grant not found");
 		}
 
-		const details = prompt.details || {};
+		const details = interaction.prompt.details || {};
 
 		// 누락된 OIDC scope 추가
 		if (details.missingOIDCScope) {

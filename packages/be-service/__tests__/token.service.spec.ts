@@ -4,8 +4,8 @@ import { ConfigService } from "@nestjs/config";
 import { Test, type TestingModule } from "@nestjs/testing";
 import type { Request, Response } from "express";
 import { ClsService } from "nestjs-cls";
-import { TokenService } from "../src/token.service";
-import { TokenStorageService } from "../src/token-storage.service";
+import { TokenService } from "../src/auth/token.service";
+import { TokenStorageService } from "../src/auth/token-storage.service";
 
 describe("TokenService", () => {
 	let service: TokenService;

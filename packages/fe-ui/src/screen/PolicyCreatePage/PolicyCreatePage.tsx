@@ -8,9 +8,15 @@ import {
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Checkbox, Input, Switch, Textarea } from "@cocrepo/ui/heroui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import {
+	Button,
+	Checkbox,
+	Input,
+	Switch,
+	Textarea,
+} from "../../design-system/primitives";
 
 export interface PolicyCreatePageAbilityOption {
 	id: string;

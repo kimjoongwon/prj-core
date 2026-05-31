@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@cocrepo/ui/heroui";
 import { CalendarDays } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Button } from "../../design-system/primitives";
 import type {
 	CourseManagementConsoleProps,
 	CourseManagementCourse,

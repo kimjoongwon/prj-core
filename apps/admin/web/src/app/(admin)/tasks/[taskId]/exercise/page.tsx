@@ -7,7 +7,7 @@ import {
 	useGetTaskRoutines,
 } from "@cocrepo/api/core/tasks";
 import { TaskExerciseDetailPage } from "@cocrepo/ui";
-import { addToast, useDisclosure } from "@cocrepo/ui/heroui";
+import { addToast, useDisclosure } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";

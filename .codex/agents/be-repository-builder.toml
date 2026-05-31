@@ -61,6 +61,9 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에�
 - Repository row가 없거나 schema-owner가 불명확하면 구현하지 말고 `contract-gap`으로 보고합니다.
 - `CHILD`, `DETAIL`, `JOIN` 모델이더라도 별도 marker가 없으면 독립 Repository를 만들지 않습니다.
 - 하위 모델 접근은 부모 schema-owner Repository 안의 include/where/query 메서드로 처리합니다.
+- persistence mapping과 query input 조립 시 `input.xxx`, `entity.id`, `row.field`처럼 값의 원천을 보존합니다. 여러 source가 섞이면 deep destructuring으로 bare variable을 남기지 않습니다.
+- Repository class는 class당 하나의 파일을 가집니다.
+- Repository class 파일에는 top-level helper/mapper/type/interface를 함께 두지 않습니다. query input/result/mapper/helper가 필요하면 가까운 별도 파일로 분리합니다.
 
 예시:
 

@@ -1,15 +1,16 @@
 "use client";
 
-import { useLogout, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
+import { useNativeLogout, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
 import type { SpaceInfo } from "@cocrepo/ui";
 import {
+	Button,
 	HeaderBar,
 	HeaderSpaceSelector,
 	LanguageSelectButton,
 	ThemeToggleButton,
+	Tooltip,
 	useT,
 } from "@cocrepo/ui";
-import { Button, Tooltip } from "@cocrepo/ui/heroui";
 import { KeyRound } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { resolveIdpClientUrl } from "@/runtime-urls";
@@ -54,17 +55,28 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 				},
 			},
 		});
-	const { mutate: logoutMutate } = useLogout({
+	const { mutate: nativeLogoutMutate } = useNativeLogout({
 		mutation: {
 			onSettled: () => {
-				persistStore.clearSpace();
+				persistStore.clear();
 				window.location.href = "/admin/auth/login";
 			},
 		},
 	});
 
 	const onClickLogoutButton = () => {
-		logoutMutate();
+		if (!persistStore.sessionId) {
+			persistStore.clear();
+			window.location.href = "/admin/auth/login";
+			return;
+		}
+
+		nativeLogoutMutate({
+			data: {
+				sessionId: persistStore.sessionId,
+				refreshToken: persistStore.refreshToken ?? undefined,
+			},
+		});
 	};
 
 	const onSelectSpace = (space: SpaceInfo) => {

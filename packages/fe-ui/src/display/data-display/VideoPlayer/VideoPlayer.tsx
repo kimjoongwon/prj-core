@@ -1,7 +1,6 @@
-import { Modal, ModalContent } from "@cocrepo/ui/heroui";
 import { Maximize, Minimize, Pause, Play } from "lucide-react";
-
 import { useEffect, useRef, useState } from "react";
+import { Modal, ModalContent } from "../../../design-system/primitives";
 
 export interface VideoPlayerProps {
 	/** 비디오 소스 URL */

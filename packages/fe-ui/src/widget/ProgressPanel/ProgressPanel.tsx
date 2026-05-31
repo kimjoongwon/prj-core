@@ -1,9 +1,9 @@
 "use client";
 
-import { Progress } from "@cocrepo/ui/heroui";
 import { Loader2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import { Progress } from "../../design-system/primitives";
 
 export type ProgressStatus = "queued" | "processing" | "completed" | "error";
 

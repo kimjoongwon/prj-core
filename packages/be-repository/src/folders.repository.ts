@@ -79,16 +79,14 @@ export class FoldersRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ folders: Folder[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
-
 		const [folders, totalCount] = await Promise.all([
 			this.txHost.tx.folder.findMany({
-				where,
-				orderBy: orderBy ?? [{ path: "asc" }],
-				skip,
-				take,
+				where: params.where,
+				orderBy: params.orderBy ?? [{ path: "asc" }],
+				skip: params.skip,
+				take: params.take,
 			}),
-			this.txHost.tx.folder.count({ where }),
+			this.txHost.tx.folder.count({ where: params.where }),
 		]);
 
 		return {

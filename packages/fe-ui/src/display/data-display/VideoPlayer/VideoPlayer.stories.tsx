@@ -1,6 +1,6 @@
-import { Button } from "@cocrepo/ui/heroui";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
+import { Button } from "../../../design-system/primitives";
 import { VideoPlayer } from "./VideoPlayer";
 
 const meta: Meta<typeof VideoPlayer> = {

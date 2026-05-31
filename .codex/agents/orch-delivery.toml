@@ -104,7 +104,7 @@ route delivery spec은 backend/API, route wiring, foundation contract, component
 planning spec은 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
 planning spec에는 `Agent Assignment Matrix`, `Execution Graph`, backend build order, foundation 세부 실행표, approval gate를 쓰지 않습니다.
 
-그 외 `.codex/plans/**/*.delivery-plan.md`, backend entity/dto/service/repository/controller/module/app/facade/integration/vo/prisma/schema, hook/toolkit/type/store/barrel/config/script/test/e2e/layout, Next.js `layout.tsx`, Expo Router `_layout.tsx`, web/mobile leaf 계층에는 별도 spec을 만들지 않습니다.
+그 외 `.codex/plans/**/*.delivery-plan.md`, backend entity/dto/service/repository/controller/module/usecase/client/integration/vo/prisma/schema, hook/toolkit/type/store/barrel/config/script/test/e2e/layout, Next.js `layout.tsx`, Expo Router `_layout.tsx`, web/mobile leaf 계층에는 별도 spec을 만들지 않습니다.
 
 ---
 
@@ -346,15 +346,15 @@ backend/API 필요 여부는 구조별 인벤토리 표로 나누어 명시합�
 | 도메인 기능 | Service | 메서드 | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
 |-------------|---------|--------|-------------|-----------|-----------|-------------------------|---------------------|
 
-#### ApplicationService 인벤토리
+#### UseCase 인벤토리
 
-| 유즈케이스/워크플로 | ApplicationService | 메서드 | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
-|---------------------|--------------------|--------|-------------|-----------|-----------|-------------------------|---------------------|
+| 유즈케이스/워크플로 | Command/Query (`@cocrepo/command`) | UseCase Handler (`@cocrepo/usecase`) | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
+|---------------------|---------------|-----------------|-------------|-----------|-----------|-------------------------|---------------------|
 
-#### Facade / Gateway 인벤토리
+#### Client 인벤토리
 
-| 경계/외부 연동 | 구조 | 클래스/메서드 | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
-|---------------|------|-------------|-------------|-----------|-----------|-------------------------|-------------------|
+| 외부 연동 | Client | 메서드 | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
+|-----------|--------|--------|-------------|-----------|-----------|-------------------------|-------------------|
 
 #### 엔드포인트 인벤토리
 
@@ -382,9 +382,13 @@ backend/API 필요 여부는 구조별 인벤토리 표로 나누어 명시합�
 - Prisma row는 `be-prisma-builder`, annotation row는 `be-prisma-annotator`, common schema row는 `common-schema-builder`를 소스 담당으로 둡니다.
 - Entity/VO/DTO/Query DTO row는 각각 `be-entity-builder`, `be-vo-builder`, `be-dto-builder`, `be-query-dto-builder` 중 가장 가까운 role을 소스 담당으로 둡니다.
 - endpoint row는 controller, DTO/schema, operationId, Orval codegen 영향을 반드시 함께 보여줍니다.
-- Facade row는 Controller boundary composition/read model shaping이면 `be-facade-builder`, 외부 시스템 Gateway/Client/Adapter면 `be-gateway-builder`를 소스 담당으로 둡니다.
-- ApplicationService row는 Controller workflow가 호출할 usecase boundary를 보여주고, 어떤 Service/Integration을 조합하는지 `의존 요소`에 적습니다.
-- Service row는 도메인 capability와 호출할 Repository/Gateway를 `의존 요소`에 적습니다.
+- UseCase row는 Controller가 CommandBus/QueryBus로 실행할 `@cocrepo/command` message와 `@cocrepo/usecase` handler를 보여주고, 어떤 Service/Client/Event를 조합하는지 `의존 요소`에 적습니다.
+- UseCase row의 `소스/대상`은 handler class당 하나의 `packages/be-usecase/src/{domain}/{name}.usecase.ts` 또는 `packages/be-usecase/src/{namespace}/{domain}/{name}.usecase.ts` 파일을 가리켜야 합니다. 여러 handler를 한 파일에 묶는 `core.usecase.ts`식 target과 `packages/be-usecase/src/core/*.usecase.ts`처럼 여러 aggregate root를 담는 namespace 폴더에 평면 배치하는 target은 신규 spec에서 금지합니다.
+- EventHandler/Saga row도 class당 하나의 `*.event-handler.ts` 또는 `*.saga.ts` 파일을 가리키고, provider array/barrel 조립은 domain `index.ts` shared file lock으로 분리합니다.
+- Event row는 UseCase가 EventBus로 발행하거나 EventHandler/Saga가 구독할 `@cocrepo/event` message를 보여줍니다.
+- Command/Query message source를 새로 만들거나 수정하면 소스 담당은 `be-command-builder`, Event message source를 새로 만들거나 수정하면 `be-event-builder`, handler/EventHandler/Saga source를 새로 만들거나 수정하면 소스 담당은 `be-usecase-builder`로 분리합니다.
+- Client row는 외부 시스템 단일 연동이면 `be-client-builder`를 소스 담당으로 둡니다.
+- Service row는 도메인 capability와 호출할 Repository/Client를 `의존 요소`에 적습니다.
 - Repository row는 Prisma model/aggregate와 필요한 method를 적습니다.
 - Module/Bootstrap row는 Provider export/import, AppModule 연결, Router registration을 분리해서 기록합니다.
 - 재사용 API/store만 쓰면 관련 backend 구조 row를 `reuse` 또는 `none`으로 기록합니다.
@@ -394,7 +398,7 @@ backend/API 필요 여부는 구조별 인벤토리 표로 나누어 명시합�
 
 - Prisma / Database / annotation
 - Common schema / DTO / Query DTO / Entity / VO
-- Repository / Service / ApplicationService / Facade / Gateway / Controller / Module / Bootstrap / Seed
+- Repository / Service / UseCase / Client / Controller / Module / Bootstrap / Seed
 - API endpoint / Orval hook
 - Hook / route-local hook
 - Toolkit utility
@@ -460,13 +464,17 @@ flowchart TD
   B6 --> B8
   B7 --> B8
   B8 --> B9["B9 be-service-builder: domain logic"]
-  B9 --> B10["B10 be-app-builder: workflow"]
-  B10 --> B11["B11 be-facade-builder / be-gateway-builder: boundary"]
-  B11 --> B12["B12 be-controller-builder: endpoint"]
-  B12 --> B13["B13 be-module-builder: module wiring"]
-  B13 --> B14["B14 be-bootstrap-integrator: app bootstrap"]
-  B14 --> B15["B15 be-seed-maker: seed"]
-  B15 --> BQA["BQA qa-be-testing / qa-be-e2e-testing"]
+  B9 --> B10["B10 be-client-builder: external client, if needed"]
+  B9 --> B11["B11 be-command-builder: command/query messages"]
+  B9 --> B12["B12 be-event-builder: event messages"]
+  B10 --> B13["B13 be-usecase-builder: handlers / event handlers / sagas"]
+  B11 --> B13
+  B12 --> B13
+  B13 --> B14["B14 be-controller-builder: endpoint"]
+  B14 --> B15["B15 be-module-builder: module wiring"]
+  B15 --> B16["B16 be-bootstrap-integrator: app bootstrap"]
+  B16 --> B17["B17 be-seed-maker: seed"]
+  B17 --> BQA["BQA qa-be-testing / qa-be-e2e-testing"]
   BQA --> CG["CG codegen: @cocrepo/api"]
 
   subgraph FP["parallel: foundation contracts"]
@@ -523,7 +531,7 @@ flowchart TD
 
 #### Step Order Table
 
-`Step Order Table`은 그래프의 보조 설명이 아니라 실행자가 실제로 따라갈 순서표입니다. backend를 `backend builder chain`, `B1-B13`, `be-prisma-builder -> be-controller-builder` 같은 통합 row로 뭉치지 않습니다. backend 변경이 하나라도 있으면 아래 backend 순서를 필요한 step 단위로 펼쳐 씁니다. 생략하는 step은 row를 지우거나 `완료 조건`에 `생략 사유`를 적습니다.
+`Step Order Table`은 그래프의 보조 설명이 아니라 실행자가 실제로 따라갈 순서표입니다. backend를 `backend builder chain`, `B1-B17`, `be-prisma-builder -> be-controller-builder` 같은 통합 row로 뭉치지 않습니다. backend 변경이 하나라도 있으면 아래 backend 순서를 필요한 step 단위로 펼쳐 씁니다. 생략하는 step은 row를 지우거나 `완료 조건`에 `생략 사유`를 적습니다.
 
 | 순서 | step id | phase | `agent_type` | 직렬/병렬 | 의존 step | 산출물 | 완료 조건 |
 |------|---------|-------|--------------|-----------|-----------|--------|-----------|
@@ -531,21 +539,25 @@ flowchart TD
 | 2 | `B1` | Prisma model | `be-prisma-builder` | serial | `S0` | Prisma schema/model/enum | Prisma 변경 시 |
 | 3 | `B2` | Prisma annotation | `be-prisma-annotator` | serial | `B1` | 한글 표시명/주석 | Prisma 변경 시 |
 | 4 | `B3` | Common schema | `common-schema-builder` | serial | `B1` | shared schema/message | 검증/API schema 변경 시 |
-| 5 | `B4` | Entity / VO | `be-entity-builder` / `be-vo-builder` | serial | `B1` | entity/vo source | 도메인 객체 변경 시 |
-| 6 | `B5` | DTO / Query DTO | `be-dto-builder` / `be-query-dto-builder` | serial | `B3`, `B4` | DTO/query DTO | API 요청/응답 변경 시 |
-| 7 | `B6` | Repository | `be-repository-builder` | serial | `B1`, `B4` | repository source | 영속성 변경 시 |
-| 8 | `B7` | Service | `be-service-builder` | serial | `B5`, `B6` | service source | 도메인 로직 변경 시 |
-| 9 | `B8` | ApplicationService | `be-app-builder` | serial | `B7` | application service | workflow 변경 시 |
-| 10 | `B9` | Facade / Gateway | `be-facade-builder` / `be-gateway-builder` | serial | `B7`, `B8` | facade/gateway source | controller boundary 또는 외부 연동 변경 시 |
-| 11 | `B10` | Controller | `be-controller-builder` | serial | `B5`, `B9` | controller source | endpoint/Swagger 변경 시 |
-| 12 | `B11` | Module | `be-module-builder` | serial | `B10` | Nest module | provider/controller wiring 변경 시 |
-| 13 | `B12` | Bootstrap | `be-bootstrap-integrator` | serial | `B11` | AppModule/router wiring | app bootstrap 변경 시 |
-| 14 | `B13` | Seed | `be-seed-maker` | serial | `B12` | seed data | seed 변경 시 |
-| 15 | `BQA` | Backend QA | `qa-be-testing` / `qa-be-e2e-testing` | serial | `B10-B13` | test result/patch | backend 변경 시 |
-| 16 | `F1` | Shared type | `common-type-builder` | serial/parallel | `BQA` 또는 `CG` | shared type contract | shared type 변경 시 |
-| 17 | `F2` | Toolkit utility | `common-toolkit-builder` | serial/parallel | `F1` 또는 `CG` | shared utility | shared utility 변경 시 |
-| 18 | `F3` | Reusable hook | `fe-hook-builder` | serial/parallel | `F1`, `F2` | reusable hook | reusable hook 변경 시 |
-| 19 | `F4` | Shared store | `fe-store-builder` | serial/parallel | `F1`, `F2` | shared MobX Store | shared store 변경 시 |
+| 5 | `B4` | Entity | `be-entity-builder` | serial/parallel | `B1` | entity source | 도메인 객체 변경 시 |
+| 6 | `B5` | VO | `be-vo-builder` | serial/parallel | `B1` | vo source | 값 객체 변경 시 |
+| 7 | `B6` | DTO | `be-dto-builder` | serial/parallel | `B3`, `B4` | DTO source | API 요청/응답 변경 시 |
+| 8 | `B7` | Query DTO | `be-query-dto-builder` | serial/parallel | `B3`, `B4` | query DTO source | 목록/검색 query 변경 시 |
+| 9 | `B8` | Repository | `be-repository-builder` | serial | `B1`, `B4`, `B7` | repository source | 영속성 변경 시 |
+| 10 | `B9` | Service | `be-service-builder` | serial | `B6`, `B8` | service source | 도메인 로직 변경 시 |
+| 11 | `B10` | Client | `be-client-builder` | serial | `B9` | client source | 외부 연동 변경 시 |
+| 12 | `B11` | Command/Query | `be-command-builder` | serial | `B6`, `B7`, `B9` | command/query message source | CQRS message 변경 시 |
+| 13 | `B12` | Event | `be-event-builder` | serial | `B9`, `B11` | event message source | 비동기/후속 처리 event 변경 시 |
+| 14 | `B13` | UseCase | `be-usecase-builder` | serial | `B9`, `B10`, `B11`, `B12` | usecase/event handler/saga source | workflow 또는 event 후속 처리 변경 시 |
+| 15 | `B14` | Controller | `be-controller-builder` | serial | `B6`, `B7`, `B11`, `B13` | controller source | endpoint/Swagger 변경 시 |
+| 16 | `B15` | Module | `be-module-builder` | serial | `B13`, `B14` | Nest module | provider/controller wiring 변경 시 |
+| 17 | `B16` | Bootstrap | `be-bootstrap-integrator` | serial | `B15` | AppModule/router wiring | app bootstrap 변경 시 |
+| 18 | `B17` | Seed | `be-seed-maker` | serial | `B16` | seed data | seed 변경 시 |
+| 19 | `BQA` | Backend QA | `qa-be-testing` / `qa-be-e2e-testing` | serial | `B13-B17` | test result/patch | backend 변경 시 |
+| 20 | `F1` | Shared type | `common-type-builder` | serial/parallel | `BQA` 또는 `CG` | shared type contract | shared type 변경 시 |
+| 21 | `F2` | Toolkit utility | `common-toolkit-builder` | serial/parallel | `F1` 또는 `CG` | shared utility | shared utility 변경 시 |
+| 22 | `F3` | Reusable hook | `fe-hook-builder` | serial/parallel | `F1`, `F2` | reusable hook | reusable hook 변경 시 |
+| 23 | `F4` | Shared store | `fe-store-builder` | serial/parallel | `F1`, `F2` | shared MobX Store | shared store 변경 시 |
 
 #### Canonical Phase Order
 
@@ -560,8 +572,10 @@ orch-delivery spec gate
 → be-entity-builder / be-vo-builder / be-dto-builder / be-query-dto-builder, 필요한 경우
 → be-repository-builder, 영속성 변경 시
 → be-service-builder, 도메인 로직 변경 시
-→ be-app-builder, workflow orchestration 필요 시
-→ be-facade-builder / be-gateway-builder, 경계 조합 또는 외부 연동 필요 시
+→ be-client-builder, 외부 연동 필요 시
+→ be-command-builder, Command/Query message 변경 시
+→ be-event-builder, Event message 변경 시
+→ be-usecase-builder, workflow orchestration handler/EventHandler/Saga 필요 시
 → be-controller-builder, endpoint 변경 시
 → be-module-builder, module/router wiring 변경 시
 → be-bootstrap-integrator, AppModule bootstrap 변경 시

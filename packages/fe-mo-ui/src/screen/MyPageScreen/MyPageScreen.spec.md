@@ -156,18 +156,18 @@ Rendering rules:
 | logout | `POST /api/v1/auth/native/logout` | `nativeLogout` | existing `AuthController.nativeLogout` | existing `NativeLogoutPayloadDto` | reuse | `apps/idp/api/src/module/auth/auth.controller.ts`, `packages/be-dto/src/auth/native-auth.dto.ts` | `be-controller-builder`, `be-dto-builder` | `fe-mo-route-builder` | existing `requestNativeLogout`, no codegen |
 | quick action navigation | none | none | none | none | none | route-only navigation to existing/future routes | none | `fe-mo-route-builder` | none |
 
-### ApplicationService 인벤토리
+### UseCase 인벤토리
 
-| 유즈케이스/워크플로 | ApplicationService | 메서드 | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
-|---------------------|--------------------|--------|-------------|-----------|-----------|-------------------------|---------------------|
-| native mobile logout | `AuthApplicationService` | `logoutNativeMobileSession` | reuse | `packages/be-app/src/auth.application-service.ts` | `TokenStorageService` | `be-app-builder` | `be-controller-builder` |
+| 유즈케이스/워크플로 | UseCase | Command/Query | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
+|---------------------|---------|---------------|-------------|-----------|-----------|-------------------------|---------------------|
+| native mobile logout | `LogoutNativeMobileSessionUseCase` | `LogoutNativeMobileSessionCommand` | reuse | `packages/be-usecase/src/auth/logout-native-mobile-session.usecase.ts` | `TokenStorageService` | `be-usecase-builder` | `be-controller-builder` |
 | account summary/current space | none | none | none | no backend change | route uses existing mobile stores | none | none |
 
 ### Service 인벤토리
 
 | 도메인 기능 | Service | 메서드 | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
 |-------------|---------|--------|-------------|-----------|-----------|-------------------------|---------------------|
-| native token/session cleanup | `TokenStorageService` | blacklist/delete native session methods used by `logoutNativeMobileSession` | reuse | `packages/be-service/src/token-storage.service.ts` | Redis-backed token/session storage | `be-service-builder` | `be-app-builder` |
+| native token/session cleanup | `TokenStorageService` | blacklist/delete native session methods used by `LogoutNativeMobileSessionUseCase` | reuse | `packages/be-service/src/auth/token-storage.service.ts` | Redis-backed token/session storage | `be-service-builder` | `be-usecase-builder` |
 | profile read | none | none | none | no backend change | route uses existing auth/session/current-space state | none | none |
 
 ### Repository 인벤토리

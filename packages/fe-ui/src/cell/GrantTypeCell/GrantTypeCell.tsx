@@ -1,4 +1,4 @@
-import { Chip } from "@cocrepo/ui/heroui";
+import { Chip } from "../../design-system/primitives";
 
 interface GrantTypeCellProps {
 	/** Grant Type 목록 */

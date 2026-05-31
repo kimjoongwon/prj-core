@@ -1,3 +1,7 @@
+import {
+	GetUserDetailForSpaceQuery,
+	GetUsersBySpaceQuery,
+} from "@cocrepo/command";
 import { USER_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -12,28 +16,25 @@ import {
 	UserPaginationMetaDto,
 	UserStatsDto,
 } from "@cocrepo/dto";
-import { UserFacade } from "@cocrepo/facade";
-import { AuthContext, SpaceContext } from "@cocrepo/service";
+import { SpaceContext } from "@cocrepo/service";
 import {
 	Controller,
-	Delete,
 	Get,
-	HttpCode,
 	HttpStatus,
 	Param,
 	ParseUUIDPipe,
 	Query,
 	UnauthorizedException,
 } from "@nestjs/common";
+import { QueryBus } from "@nestjs/cqrs";
 import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("USERS")
 @Controller()
 export class UsersController {
 	constructor(
-		private readonly usersService: UserFacade,
+		private readonly queryBus: QueryBus,
 		private readonly spaceContext: SpaceContext,
-		private readonly authContext: AuthContext,
 	) {}
 
 	@Get()
@@ -56,12 +57,7 @@ export class UsersController {
 	})
 	@ResponseMessage("회원 목록 조회 성공")
 	async getUsers(@Query() query: QueryUsersDto) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		return this.usersService.getUsersBySpace(query);
+		return this.queryBus.execute(new GetUsersBySpaceQuery(query));
 	}
 
 	@Get(":id")
@@ -91,42 +87,6 @@ export class UsersController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		return this.usersService.getUserDetailForSpace(id, spaceId);
-	}
-
-	@Delete(":id")
-	@HttpCode(HttpStatus.NO_CONTENT)
-	@ApiOperation({
-		operationId: "deleteUser",
-		summary: "사용자 삭제",
-		description:
-			"사용자를 삭제합니다 (Soft Delete). 자신의 계정은 삭제할 수 없습니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "id",
-		description: "사용자 ID (UUID)",
-		type: String,
-	})
-	@ApiErrors(
-		{ status: 400, message: USER_ERRORS.CANNOT_DELETE_SELF },
-		{ status: 401, message: USER_ERRORS.USER_NOT_FOUND },
-		{ status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
-		{ status: 404, message: USER_ERRORS.USER_NOT_FOUND },
-		500,
-	)
-	@ResponseMessage("회원 삭제 성공")
-	async deleteUser(@Param("id", ParseUUIDPipe) id: string): Promise<void> {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		const currentUserId = this.authContext.user?.id;
-		if (!currentUserId) {
-			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
-		}
-
-		await this.usersService.deleteUserForSpace(id, spaceId);
+		return this.queryBus.execute(new GetUserDetailForSpaceQuery(id, spaceId));
 	}
 }

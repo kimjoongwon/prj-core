@@ -52,6 +52,10 @@ Request/Response DTO 클래스를 생성하는 전문가입니다.
 
 ## 핵심 규칙
 
+- DTO class는 class당 하나의 파일을 가집니다.
+- DTO class 파일에는 top-level helper/mapper/type/interface를 함께 두지 않습니다.
+- Response item, nested DTO, helper type이 필요하면 각각 별도 DTO/type 파일로 분리하고 barrel에서 조립합니다.
+
 ### ✅ Do
 
 ```typescript

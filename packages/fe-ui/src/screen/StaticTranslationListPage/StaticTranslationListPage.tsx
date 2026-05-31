@@ -7,20 +7,23 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
+	Button,
 	buildStaticTranslationTableColumns,
 	DataGrid,
 	DataGridStateModel,
 	getStaticTranslationLanguageLabel,
 	HStack,
-	PageTitleBar,
-	Surface,
-	VStack,
-	Button,
 	Input,
+	PageTitleBar,
 	Select,
+	Surface,
 	Textarea,
 	useT,
+	VStack,
 } from "@cocrepo/ui";
+import { Languages, Plus, RefreshCcw } from "lucide-react";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { type FormEvent, useEffect, useState } from "react";
 import {
 	Modal,
 	ModalBody,
@@ -29,10 +32,7 @@ import {
 	ModalHeader,
 	Switch,
 	useDisclosure,
-} from "@cocrepo/ui/heroui";
-import { Languages, Plus, RefreshCcw } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { type FormEvent, useEffect, useState } from "react";
+} from "../../design-system/primitives";
 import { ConfirmModal } from "../../widget/common/ConfirmModal";
 
 export type StaticTranslationLanguageCode =

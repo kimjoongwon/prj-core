@@ -1,4 +1,12 @@
 import { RolesGuard } from "@cocrepo/be-common";
+import {
+	DeleteAssetCommand,
+	GetAssetByIdQuery,
+	GetAssetContentQuery,
+	GetAssetsQuery,
+	MoveAssetCommand,
+	UploadAssetCommand,
+} from "@cocrepo/command";
 import { SYSTEM_ROLES, USER_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -13,8 +21,7 @@ import {
 	MoveAssetDto,
 	UploadAssetDto,
 } from "@cocrepo/dto";
-import { AssetFacade } from "@cocrepo/facade";
-import { AuthContext, SpaceContext } from "@cocrepo/service";
+import { AuthContext } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -33,6 +40,7 @@ import {
 	UseGuards,
 	UseInterceptors,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { FileInterceptor } from "@nestjs/platform-express";
 import {
 	ApiBody,
@@ -48,9 +56,9 @@ import type { Response } from "express";
 @Controller()
 export class AssetsController {
 	constructor(
-		private readonly assetFacade: AssetFacade,
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
 		private readonly authContext: AuthContext,
-		private readonly spaceContext: SpaceContext,
 	) {}
 
 	@Get()
@@ -68,7 +76,7 @@ export class AssetsController {
 	@ApiResponseEntity(AssetDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("에셋 목록 조회 성공")
 	async getAssets(@Query() query: AssetQueryDto) {
-		return this.assetFacade.getAssets(query);
+		return this.queryBus.execute(new GetAssetsQuery(query));
 	}
 
 	@Get(":assetId")
@@ -90,7 +98,7 @@ export class AssetsController {
 	@ApiResponseEntity(AssetDto, HttpStatus.OK)
 	@ResponseMessage("에셋 상세 조회 성공")
 	async getAssetById(@Param("assetId", ParseUUIDPipe) assetId: string) {
-		return this.assetFacade.getAssetById(assetId);
+		return this.queryBus.execute(new GetAssetByIdQuery(assetId));
 	}
 
 	@Get(":assetId/content")
@@ -115,7 +123,9 @@ export class AssetsController {
 		@Param("assetId", ParseUUIDPipe) assetId: string,
 		@Res() res: Response,
 	) {
-		const content = await this.assetFacade.getAssetContent(assetId);
+		const content = await this.queryBus.execute(
+			new GetAssetContentQuery(assetId),
+		);
 
 		res.setHeader("Content-Type", content.contentType);
 		res.setHeader(
@@ -177,17 +187,12 @@ export class AssetsController {
 		@Body() dto: UploadAssetDto,
 		@UploadedFile() file: Express.Multer.File | undefined,
 	) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
 		const userId = this.authContext.user?.id;
 		if (!userId) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		return this.assetFacade.uploadAsset(dto, file, userId);
+		return this.commandBus.execute(new UploadAssetCommand(dto, file, userId));
 	}
 
 	@Patch(":assetId/move")
@@ -216,7 +221,7 @@ export class AssetsController {
 		@Param("assetId", ParseUUIDPipe) assetId: string,
 		@Body() dto: MoveAssetDto,
 	) {
-		return this.assetFacade.moveAsset(assetId, dto);
+		return this.commandBus.execute(new MoveAssetCommand(assetId, dto));
 	}
 
 	@Delete(":assetId")
@@ -239,6 +244,6 @@ export class AssetsController {
 	async removeAsset(
 		@Param("assetId", ParseUUIDPipe) assetId: string,
 	): Promise<void> {
-		await this.assetFacade.deleteAsset(assetId);
+		await this.commandBus.execute(new DeleteAssetCommand(assetId));
 	}
 }

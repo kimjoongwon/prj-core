@@ -1,5 +1,7 @@
 "use client";
 
+import { Plus, Search, User } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Autocomplete,
 	AutocompleteItem,
@@ -8,13 +10,11 @@ import {
 	Card,
 	CardBody,
 	Chip,
-} from "@cocrepo/ui/heroui";
-import { Plus, Search, User } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import { HStack } from "../../../rhythm/HStack/HStack";
-import { VStack } from "../../../rhythm/VStack/VStack";
+} from "../../../design-system/primitives";
 import { Text } from "../../../display/data-display/Text/Text";
 import { AbilityFormModal } from "../../../form/AbilityFormModal";
+import { HStack } from "../../../rhythm/HStack/HStack";
+import { VStack } from "../../../rhythm/VStack/VStack";
 import { AbilityRuleList } from "../../../widget/ability/AbilityRuleList";
 import type { UserAbilityManagerProps } from "./type";
 import { useUserAbilityManager } from "./useUserAbilityManager";

@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "@cocrepo/ui/heroui";
 import { X, Zap } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
+import { Button } from "../../design-system/primitives";
 import type { ActionFabProps } from "../../display/layout/type";
 
 export const ActionFab = observer(function ActionFab({

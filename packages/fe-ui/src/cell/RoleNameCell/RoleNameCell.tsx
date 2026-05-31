@@ -1,4 +1,4 @@
-import { Chip } from "@cocrepo/ui/heroui";
+import { Chip } from "../../design-system/primitives";
 import { NameCell } from "../NameCell/NameCell";
 
 export interface RoleNameCellProps {

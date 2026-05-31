@@ -1,5 +1,5 @@
-import { OmitType } from "@nestjs/swagger";
 import { BooleanFieldOptional } from "@cocrepo/decorator";
+import { OmitType } from "@nestjs/swagger";
 
 import { COMMON_ENTITY_FIELDS } from "../constant";
 import { OidcClientDto } from "../oidc/oidc-client.dto";

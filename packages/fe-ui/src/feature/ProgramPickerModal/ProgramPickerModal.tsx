@@ -1,15 +1,15 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input";
 import {
 	Modal,
 	ModalBody,
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-} from "@cocrepo/ui/heroui";
-import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
-import { Input } from "../../control/Input";
+} from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 export interface ProgramPickerOption {

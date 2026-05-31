@@ -1,6 +1,5 @@
 "use client";
 
-import { Button, Spinner, cn } from "@cocrepo/ui/heroui";
 import {
 	ChevronRight,
 	Folder,
@@ -11,6 +10,7 @@ import {
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
+import { Button, cn, Spinner } from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 export interface FolderTreeItem {

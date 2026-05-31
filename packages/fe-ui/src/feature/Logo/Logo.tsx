@@ -1,10 +1,10 @@
 "use client";
 
-import type { AppIconName } from "@cocrepo/type";
 import { useNavigationStore } from "@cocrepo/store";
-import { Button, cn } from "@cocrepo/ui/heroui";
+import type { AppIconName } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
+import { Button, cn } from "../../design-system/primitives";
 
 export interface AppLogoProps {
 	/** 로고 아이콘 (Lucide 아이콘 이름) */

@@ -1,5 +1,5 @@
-import { Button } from "@cocrepo/ui/heroui";
 import { ChevronLeft } from "lucide-react";
+import { Button } from "../../design-system/primitives";
 
 export interface BackButtonProps {
 	/** 뒤로가기 클릭 핸들러 */

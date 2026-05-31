@@ -1,20 +1,21 @@
-import { AssetFacade } from "@cocrepo/facade";
 import { AssetsRepository, FoldersRepository } from "@cocrepo/repository";
+import { AssetAggregateRoot } from "@cocrepo/aggregate";
 import {
-	AssetService,
 	AuthContext,
 	ObjectStorageService,
 	S3CompatibleStorageService,
 	SpaceContext,
 } from "@cocrepo/service";
+import { AssetCommandHandlers, AssetQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { AssetsController } from "./assets.controller";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [AssetsController],
 	providers: [
-		AssetFacade,
-		AssetService,
+		AssetAggregateRoot,
 		S3CompatibleStorageService,
 		{
 			provide: ObjectStorageService,
@@ -24,7 +25,8 @@ import { AssetsController } from "./assets.controller";
 		FoldersRepository,
 		AuthContext,
 		SpaceContext,
+		...AssetCommandHandlers,
+		...AssetQueryHandlers,
 	],
-	exports: [AssetFacade],
 })
 export class AssetsModule {}

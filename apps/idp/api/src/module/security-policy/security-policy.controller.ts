@@ -8,16 +8,23 @@ import {
 	SkipSpaceCheck,
 } from "@cocrepo/decorator";
 import { SecurityPolicyDto, UpdateSecurityPolicyDto } from "@cocrepo/dto";
-import { SecurityPolicyFacade } from "@cocrepo/facade";
 import { Body, Controller, Get, HttpStatus, Patch } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
+import {
+	GetSecurityPolicyQuery,
+	UpdateSecurityPolicyCommand,
+} from "@cocrepo/command";
 
 @ApiTags("SECURITY_POLICY")
 @Controller()
 @Roles([SYSTEM_ROLES.FULL_ACCESS])
 @SkipSpaceCheck()
 export class SecurityPolicyController {
-	constructor(private readonly securityPolicyService: SecurityPolicyFacade) {}
+	constructor(
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
+	) {}
 
 	@Get()
 	@ApiOperation({
@@ -30,7 +37,7 @@ export class SecurityPolicyController {
 	@ApiResponseEntity(SecurityPolicyDto, HttpStatus.OK)
 	@ResponseMessage("보안 정책 조회 성공")
 	async getSecurityPolicy() {
-		return this.securityPolicyService.getDefault();
+		return this.queryBus.execute(new GetSecurityPolicyQuery());
 	}
 
 	@Patch()
@@ -48,6 +55,6 @@ export class SecurityPolicyController {
 	@ApiResponseEntity(SecurityPolicyDto, HttpStatus.OK)
 	@ResponseMessage("보안 정책 수정 성공")
 	async updateSecurityPolicy(@Body() dto: UpdateSecurityPolicyDto) {
-		return this.securityPolicyService.update(dto);
+		return this.commandBus.execute(new UpdateSecurityPolicyCommand(dto));
 	}
 }

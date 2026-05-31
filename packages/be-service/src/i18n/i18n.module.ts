@@ -1,24 +1,12 @@
-import { existsSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { join } from "node:path";
 import { Module } from "@nestjs/common";
 import {
 	AcceptLanguageResolver,
 	I18nModule as NestI18nModule,
 	QueryResolver,
 } from "nestjs-i18n";
+import { SERVICE_PKG_ROOT } from "./service-pkg-root";
 import { I18nTranslationService } from "./translation.service";
-
-// 실행 CWD가 워크스페이스 루트(/app) 또는 앱 경로(/app/apps/*/api)일 수 있어
-// 존재하는 경로를 우선 선택한다.
-const SERVICE_PKG_ROOT_CANDIDATES = [
-	resolve(process.cwd(), "packages/be-service"),
-	resolve(process.cwd(), "../../../packages/be-service"),
-];
-
-const SERVICE_PKG_ROOT =
-	SERVICE_PKG_ROOT_CANDIDATES.find((candidate) =>
-		existsSync(join(candidate, "src/i18n/locales")),
-	) ?? SERVICE_PKG_ROOT_CANDIDATES[0];
 
 @Module({
 	imports: [

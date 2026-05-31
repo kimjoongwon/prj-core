@@ -1,6 +1,9 @@
-import type { ListboxProps as HeroListboxProps } from "@cocrepo/ui/heroui";
-import { Listbox as HeroListbox, ListboxItem } from "@cocrepo/ui/heroui";
 import type { ReactNode } from "react";
+import type { ListboxProps as HeroListboxProps } from "../../design-system/primitives";
+import {
+	Listbox as HeroListbox,
+	ListboxItem,
+} from "../../design-system/primitives";
 
 export type ListboxSelectProps<_T> = Omit<
 	HeroListboxProps,

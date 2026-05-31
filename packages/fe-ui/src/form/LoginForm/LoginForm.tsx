@@ -1,3 +1,8 @@
+"use client";
+
+import { KeyRound, Mail } from "lucide-react";
+import { runInAction } from "mobx";
+import { observer } from "mobx-react-lite";
 import { Input } from "../../control/Input";
 import { VStack } from "../../rhythm/VStack/VStack";
 
@@ -11,6 +16,18 @@ export interface LoginFormProps {
 	state: LoginFormState;
 }
 
+function setEmail(state: LoginFormState, email: string | number) {
+	runInAction(() => {
+		state.email = String(email);
+	});
+}
+
+function setPassword(state: LoginFormState, password: string | number) {
+	runInAction(() => {
+		state.password = String(password);
+	});
+}
+
 /**
  * LoginForm 컴포넌트
  * 이메일과 비밀번호 입력 필드를 제공하는 로그인 폼입니다.
@@ -22,25 +39,51 @@ export interface LoginFormProps {
  * <LoginForm state={state} />
  * ```
  */
-export const LoginForm = ({ state }: LoginFormProps) => {
+export const LoginForm = observer(({ state }: LoginFormProps) => {
+	const handleChangeEmailInput = (email: string | number) => {
+		setEmail(state, email);
+	};
+	const handleChangePasswordInput = (password: string | number) => {
+		setPassword(state, password);
+	};
+
 	return (
-		<VStack fullWidth justifyContent="center">
+		<VStack fullWidth gap="section" justifyContent="center">
 			<Input
-				path="email"
-				state={state}
-				variant="flat"
+				key="email"
+				autoComplete="email"
+				inputMode="email"
+				variant="bordered"
 				type="email"
-				placeholder="Enter your email"
+				placeholder="ops@example.com"
 				label="Email"
+				className="text-left"
+				classNames={{
+					input:
+						"h-12 rounded-xl border border-divider bg-background/70 px-4 pl-10 text-base shadow-sm",
+					label: "text-sm font-semibold text-foreground",
+				}}
+				startContent={<Mail aria-hidden className="size-4" />}
+				value={state.email}
+				onChange={handleChangeEmailInput}
 			/>
 			<Input
-				path="password"
-				state={state}
-				variant="flat"
+				key="password"
+				autoComplete="current-password"
+				variant="bordered"
 				type="password"
-				placeholder="Enter your password"
+				placeholder="비밀번호를 입력하세요"
 				label="Password"
+				className="text-left"
+				classNames={{
+					input:
+						"h-12 rounded-xl border border-divider bg-background/70 px-4 pl-10 text-base shadow-sm",
+					label: "text-sm font-semibold text-foreground",
+				}}
+				startContent={<KeyRound aria-hidden className="size-4" />}
+				value={state.password}
+				onChange={handleChangePasswordInput}
 			/>
 		</VStack>
 	);
-};
+});

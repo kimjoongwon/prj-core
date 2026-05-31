@@ -4,7 +4,7 @@ import { Test, type TestingModule } from "@nestjs/testing";
 import {
 	ObjectStorageService,
 	S3CompatibleStorageService,
-} from "../src/object-storage.service";
+} from "../src/object-storage";
 
 jest.mock("@aws-sdk/client-s3", () => {
 	const mockSend = jest.fn();

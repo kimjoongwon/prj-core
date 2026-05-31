@@ -1,6 +1,5 @@
 "use client";
 
-import { Button, Tooltip } from "@cocrepo/ui/heroui";
 import {
 	Bold,
 	Code,
@@ -18,6 +17,7 @@ import {
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { useRef } from "react";
+import { Button, Tooltip } from "../../design-system/primitives";
 
 interface ToolbarItem {
 	icon?: React.ComponentType<{ className?: string }>;

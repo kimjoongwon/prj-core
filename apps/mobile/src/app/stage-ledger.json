@@ -15,9 +15,9 @@
         "apps/mobile/src/app/index.spec.md",
         "apps/mobile/src/app/app.context.md",
         "apps/idp/api/src/module/auth/auth.controller.ts",
-        "packages/be-app/src/auth.application-service.ts",
+        "packages/be-usecase/src/auth/logout-native-mobile-session.usecase.ts",
         "packages/be-dto/src/auth/native-auth.dto.ts",
-        "packages/be-service/src/token-storage.service.ts",
+        "packages/be-service/src/auth/token-storage.service.ts",
         "packages/be-service/src/strategy/jwt.strategy.ts",
         "packages/be-common/src/strategy/jwt.strategy.ts",
         "packages/fe-api/src/libs/customAxios.ts",
@@ -30,7 +30,7 @@
       "verification": [
         "pnpm --filter=@cocrepo/dto build",
         "pnpm --filter=@cocrepo/service build",
-        "pnpm --filter=@cocrepo/app build",
+        "pnpm --filter=@cocrepo/usecase build",
         "pnpm --filter=idp-api type-check",
         "pnpm --filter=idp-api test -- --runTestsByPath src/module/auth/auth.controller.spec.ts",
         "pnpm --filter=mobile-app type-check",
@@ -52,8 +52,8 @@
       "expected_files": [
         "apps/mobile/src/app/payments/index.spec.md",
         "packages/be-dto/src/reservations/checkout.dto.ts",
-        "packages/be-service/src/reservation.service.ts",
-        "packages/be-facade/src/reservation.facade.ts",
+        "packages/be-service/src/reservation/reservation.service.ts",
+        "packages/be-usecase/src/reservation",
         "apps/core/api/src/module/reservations/reservations.controller.ts",
         "apps/core/api/src/module/reservations/reservations.module.ts"
       ],
@@ -61,7 +61,7 @@
         "pnpm --filter=core-api type-check",
         "pnpm --filter=@cocrepo/dto type-check",
         "pnpm --filter=@cocrepo/service type-check",
-        "pnpm --filter=@cocrepo/app type-check",
+        "pnpm --filter=@cocrepo/usecase type-check",
         "pnpm --filter=@cocrepo/api type-check"
       ],
       "status": "verified",

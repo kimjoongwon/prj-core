@@ -3,13 +3,13 @@
 import {
 	FormPage,
 	FormPageSurface,
-	PageTitleBar,
 	FormSectionCard,
+	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Input, Textarea } from "@cocrepo/ui/heroui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Button, Input, Textarea } from "../../design-system/primitives";
 
 export interface RoleEditPageProps {
 	roleName?: string;

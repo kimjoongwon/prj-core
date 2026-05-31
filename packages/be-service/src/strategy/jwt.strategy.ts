@@ -17,31 +17,8 @@ import { Request } from "express";
 import jwksRsa from "jwks-rsa";
 import { ClsService } from "nestjs-cls";
 import { ExtractJwt, Strategy } from "passport-jwt";
-
-interface OidcServerConfig {
-	issuer: string;
-	jwksUri: string;
-	clientId: string;
-	clientSecret: string;
-}
-
-interface JwtHeader {
-	alg?: string;
-}
-
-const parseJwtHeader = (token?: string): JwtHeader | null => {
-	if (!token?.includes(".")) {
-		return null;
-	}
-
-	try {
-		return JSON.parse(
-			Buffer.from(token.split(".")[0], "base64url").toString(),
-		) as JwtHeader;
-	} catch {
-		return null;
-	}
-};
+import type { OidcServerConfig } from "./oidc-server-config";
+import { parseJwtHeader } from "./parse-jwt-header";
 
 @Global()
 @Injectable()

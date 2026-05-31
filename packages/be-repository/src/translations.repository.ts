@@ -27,17 +27,18 @@ export class TranslationsRepository {
 		page?: number;
 		limit?: number;
 	}): Promise<{ data: Translation[]; totalCount: number }> {
-		const { languageCode, category, isTranslated, key, page, limit } = params;
-		const safePage = page && page > 0 ? page : 1;
-		const safeLimit = limit && limit > 0 ? limit : 20;
+		const safePage = params.page && params.page > 0 ? params.page : 1;
+		const safeLimit = params.limit && params.limit > 0 ? params.limit : 20;
 		const where: Prisma.TranslationWhereInput = {
-			...(languageCode ? { languageCode } : {}),
-			...(category ? { category } : {}),
-			...(typeof isTranslated === "boolean" ? { isTranslated } : {}),
-			...(key
+			...(params.languageCode ? { languageCode: params.languageCode } : {}),
+			...(params.category ? { category: params.category } : {}),
+			...(typeof params.isTranslated === "boolean"
+				? { isTranslated: params.isTranslated }
+				: {}),
+			...(params.key
 				? {
 						key: {
-							contains: key,
+							contains: params.key,
 							mode: "insensitive",
 						},
 					}
@@ -45,7 +46,7 @@ export class TranslationsRepository {
 		};
 
 		this.logger.debug(
-			`번역 목록 조회: page=${safePage}, limit=${safeLimit}, languageCode=${languageCode ?? "all"}, category=${category ?? "all"}`,
+			`번역 목록 조회: page=${safePage}, limit=${safeLimit}, languageCode=${params.languageCode ?? "all"}, category=${params.category ?? "all"}`,
 		);
 
 		const [data, totalCount] = await Promise.all([

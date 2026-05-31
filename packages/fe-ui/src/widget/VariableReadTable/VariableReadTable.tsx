@@ -1,5 +1,6 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
 import {
 	Chip,
 	Table,
@@ -8,8 +9,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@cocrepo/ui/heroui";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 
 /** 템플릿 변수 정보 */
 export interface TemplateVariable {

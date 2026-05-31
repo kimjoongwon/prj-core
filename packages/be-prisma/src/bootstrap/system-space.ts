@@ -93,9 +93,9 @@ export async function ensureSystemBootstrap(
 ): Promise<SystemBootstrapResult> {
 	// Reference data must exist before bootstrap because role/system-space
 	// contracts are reused immediately below.
-	const { roles } = await syncReferenceData(prisma);
-	const fullAccessRole = getRequiredRole(roles, "FULL_ACCESS");
-	const manageRole = getRequiredRole(roles, "MANAGE");
+	const referenceData = await syncReferenceData(prisma);
+	const fullAccessRole = getRequiredRole(referenceData.roles, "FULL_ACCESS");
+	const manageRole = getRequiredRole(referenceData.roles, "MANAGE");
 
 	const superAdminUsers = await ensureSystemAdminUsers(
 		prisma,

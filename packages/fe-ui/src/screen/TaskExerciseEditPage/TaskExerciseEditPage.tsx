@@ -13,8 +13,14 @@ import {
 	PageTitleBar,
 	useT,
 } from "@cocrepo/ui";
-import { Button, Chip, Input, Spinner, Textarea } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import {
+	Button,
+	Chip,
+	Input,
+	Spinner,
+	Textarea,
+} from "../../design-system/primitives";
 
 export interface ExerciseMediaAsset extends AssetBrowserAsset {}
 

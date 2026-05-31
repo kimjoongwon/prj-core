@@ -1,8 +1,13 @@
 "use client";
 
-import { Card, CardBody, CardHeader, Chip } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import {
+	Card,
+	CardBody,
+	CardHeader,
+	Chip,
+} from "../../../design-system/primitives";
 import { translateNode, useT } from "../../../i18n";
 
 export interface EmptyStateProps {

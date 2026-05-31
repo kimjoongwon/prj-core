@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@cocrepo/ui/heroui";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Button } from "../../design-system/primitives";
 
 export interface UserEditPageProps {
 	onClickBackButton: () => void;

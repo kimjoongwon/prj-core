@@ -1,0 +1,22 @@
+{
+  "extends": "@cocrepo/tsconfig/nestjs-package.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+  },
+  "references": [
+    { "path": "../be-aggregate" },
+    { "path": "../be-client" },
+    { "path": "../be-command" },
+    { "path": "../be-event" },
+    { "path": "../common-constant" },
+    { "path": "../common-toolkit" },
+    { "path": "../be-dto" },
+    { "path": "../be-prisma" },
+    { "path": "../be-service" },
+    { "path": "../be-vo" }
+  ],
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "**/__tests__/**", "**/*.spec.ts"]
+}

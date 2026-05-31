@@ -2,11 +2,7 @@ import { ValueObject } from "../../common/value-object.base";
 import { VoValidationError } from "../../errors/vo.error";
 import { AccessToken } from "./access-token.vo";
 import { RefreshToken } from "./refresh-token.vo";
-
-interface TokenPairProps {
-	accessToken: AccessToken;
-	refreshToken: RefreshToken;
-}
+import type { TokenPairProps } from "./token-pair.props";
 
 /**
  * Token 쌍 Value Object

@@ -1,0 +1,28 @@
+import { InquiryAggregateRoot } from "@cocrepo/aggregate";
+import { ListInquiriesQuery } from "@cocrepo/command";
+import { SpaceContext } from "@cocrepo/service";
+import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
+import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+
+@QueryHandler(ListInquiriesQuery)
+export class ListInquiriesUseCase implements IQueryHandler<ListInquiriesQuery> {
+	constructor(
+		private readonly inquiryService: InquiryAggregateRoot,
+		private readonly spaceContext: SpaceContext,
+	) {}
+
+	async execute(query: ListInquiriesQuery): Promise<unknown> {
+		const skip = query.params.skip ?? 0;
+		const take = query.params.take ?? 10;
+		const inquiryResult = await this.inquiryService.list({
+			...query.params,
+			spaceIds: this.spaceContext.spaceIds,
+		});
+		return buildOffsetPaginatedResponse(
+			inquiryResult.items,
+			inquiryResult.totalCount,
+			skip,
+			take,
+		);
+	}
+}

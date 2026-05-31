@@ -1,10 +1,3 @@
-import {
-	NumberField,
-	StringField,
-	StringFieldOptional,
-	UUIDField,
-	UUIDFieldOptional,
-} from "@cocrepo/decorator";
 import { Album } from "@cocrepo/entity";
 import { OmitType } from "@nestjs/swagger";
 import { COMMON_ENTITY_FIELDS } from "../constant";

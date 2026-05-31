@@ -27,9 +27,11 @@ developer_instructions = '''
 ## 책임
 
 - 순수 utility, formatter, parser, logger/helper, date/path/language/password/form helper를 생성하거나 정리합니다.
+- pagination response builder처럼 여러 package/domain이 공유하는 순수 runtime builder를 소유합니다.
 - web, mobile, backend가 함께 쓸 수 있는 runtime-safe helper를 우선합니다.
 - 신규/수정 utility는 `packages/common-toolkit/src/**`와 package export를 함께 정리합니다.
 - 필요한 unit test를 같은 작업에서 작성하거나 갱신합니다.
+- utility/helper/parser/formatter는 파일당 하나의 exported function 또는 exported constant group만 소유합니다.
 
 ## 비책임
 

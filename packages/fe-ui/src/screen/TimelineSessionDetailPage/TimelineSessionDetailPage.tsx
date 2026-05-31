@@ -4,11 +4,16 @@ import {
 	DateTimeCell,
 	DetailPage,
 	DetailPageSurface,
-	PageTitleBar,
 	DetailSection,
 	DetailSectionCard,
+	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
+import { Pencil, Plus, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import type { Route } from "next";
+import Link from "next/link";
+import type { MouseEvent } from "react";
 import {
 	Button,
 	Chip,
@@ -23,12 +28,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@cocrepo/ui/heroui";
-import { Pencil, Plus, Trash2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import type { Route } from "next";
-import Link from "next/link";
-import type { MouseEvent } from "react";
+} from "../../design-system/primitives";
 
 export interface TimelineSessionDetailPageSession {
 	name?: string | null;

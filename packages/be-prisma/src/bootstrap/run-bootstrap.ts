@@ -3,6 +3,7 @@ import { SYSTEM_SPACE_ID } from "../reference-data/constants";
 import { createAssetDomainData } from "./asset";
 import { ensureSecurityPolicyDefaults } from "./defaults";
 import { createInquiryDomainData } from "./inquiry";
+import { createMobileReservationDemoData } from "./mobile-reservation-demo";
 import {
 	classifyGroundSpacesAsBranch,
 	createHierarchicalTenants,
@@ -10,7 +11,6 @@ import {
 	ensureSystemBootstrap,
 } from "./system-space";
 import { ensureBootstrapTemplates } from "./templates";
-import { createMobileReservationDemoData } from "./mobile-reservation-demo";
 import { createTimelineSessionExerciseDomainData } from "./timeline";
 
 /**
@@ -24,9 +24,9 @@ export async function runBootstrap(prisma: PrismaClient): Promise<void> {
 	// 1) reference/system primitives
 	// 2) user/ground seeds
 	// 3) branch classification + domain demo data that depends on those primitives
-	const { manageRole, superAdminUser } = await ensureSystemBootstrap(prisma);
+	const systemBootstrap = await ensureSystemBootstrap(prisma);
 
-	await createRegularUsersAndGrounds(prisma, manageRole);
+	await createRegularUsersAndGrounds(prisma, systemBootstrap.manageRole);
 	await classifyGroundSpacesAsBranch(prisma, SYSTEM_SPACE_ID);
 	await createHierarchicalTenants(prisma, SYSTEM_SPACE_ID);
 	await createTimelineSessionExerciseDomainData(prisma);
@@ -36,5 +36,5 @@ export async function runBootstrap(prisma: PrismaClient): Promise<void> {
 	await ensureBootstrapTemplates(prisma);
 	await createInquiryDomainData(prisma);
 
-	console.log({ superAdminUser });
+	console.log({ superAdminUser: systemBootstrap.superAdminUser });
 }

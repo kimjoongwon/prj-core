@@ -1,10 +1,10 @@
 "use client";
 
-import type { InputConfig, DataGridState } from "@cocrepo/type";
-import { Input } from "@cocrepo/ui/heroui";
+import type { DataGridState, InputConfig } from "@cocrepo/type";
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { useEffect, useState, type KeyboardEvent } from "react";
+import { type KeyboardEvent, useEffect, useState } from "react";
+import { Input } from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 interface SearchInputProps {

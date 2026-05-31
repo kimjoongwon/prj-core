@@ -1,4 +1,4 @@
-import { Content, Prisma, PrismaClient } from "@cocrepo/prisma";
+import { Content, Prisma, PrismaClient, TextTypes } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
@@ -64,18 +64,76 @@ export class ContentsRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ items: Content[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
+		const [items, totalCount] = await Promise.all([
+			this.txHost.tx.content.findMany({
+				where: params.where,
+				orderBy: params.orderBy ?? [{ createdAt: "desc" }],
+				skip: params.skip,
+				take: params.take,
+			}),
+			this.txHost.tx.content.count({ where: params.where }),
+		]);
+
+		return { items, totalCount };
+	}
+
+	async findCommunityPostsBySpaceId(params: {
+		skip?: number;
+		spaceId: string;
+		take?: number;
+	}): Promise<{ items: CommunityPostRecord[]; totalCount: number }> {
+		const where: Prisma.ContentWhereInput = {
+			removedAt: null,
+			spaceId: params.spaceId,
+			post: {
+				is: {
+					removedAt: null,
+				},
+			},
+		};
 		const [items, totalCount] = await Promise.all([
 			this.txHost.tx.content.findMany({
 				where,
-				orderBy: orderBy ?? [{ createdAt: "desc" }],
-				skip,
-				take,
+				include: COMMUNITY_POST_INCLUDE,
+				orderBy: [{ createdAt: "desc" }],
+				skip: params.skip,
+				take: params.take,
 			}),
 			this.txHost.tx.content.count({ where }),
 		]);
 
 		return { items, totalCount };
+	}
+
+	async createCommunityPost(params: {
+		spaceId: string;
+		text: string;
+		title?: string | null;
+		userId: string;
+	}): Promise<CommunityPostRecord> {
+		this.logger.debug("커뮤니티 게시글 생성");
+
+		return this.txHost.tx.content.create({
+			data: {
+				creator: {
+					connect: {
+						id: params.userId,
+					},
+				},
+				post: {
+					create: {},
+				},
+				space: {
+					connect: {
+						id: params.spaceId,
+					},
+				},
+				text: params.text,
+				title: params.title ?? null,
+				type: TextTypes.Textarea,
+			},
+			include: COMMUNITY_POST_INCLUDE,
+		});
 	}
 
 	async create(data: Prisma.ContentUncheckedCreateInput): Promise<Content> {
@@ -104,3 +162,17 @@ export class ContentsRepository {
 		});
 	}
 }
+
+const COMMUNITY_POST_INCLUDE = {
+	creator: {
+		select: {
+			id: true,
+			name: true,
+		},
+	},
+	post: true,
+} satisfies Prisma.ContentInclude;
+
+export type CommunityPostRecord = Prisma.ContentGetPayload<{
+	include: typeof COMMUNITY_POST_INCLUDE;
+}>;

@@ -160,7 +160,7 @@ try {
 
 ```typescript
 @Injectable()
-export class AuthApplicationService {
+export class AuthUseCase {
   async signUp(dto: SignUpPayloadDto) {
     // DTO → VO 변환
     const plainPassword = PlainPassword.create(dto.password);

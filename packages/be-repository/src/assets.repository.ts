@@ -69,18 +69,17 @@ export class AssetsRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ assets: Asset[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
 		const [assets, totalCount] = await Promise.all([
 			this.txHost.tx.asset.findMany({
-				where,
-				orderBy: orderBy ?? [{ createdAt: "desc" }],
-				skip,
-				take,
+				where: params.where,
+				orderBy: params.orderBy ?? [{ createdAt: "desc" }],
+				skip: params.skip,
+				take: params.take,
 				include: {
 					folder: true,
 				},
 			}),
-			this.txHost.tx.asset.count({ where }),
+			this.txHost.tx.asset.count({ where: params.where }),
 		]);
 
 		return {

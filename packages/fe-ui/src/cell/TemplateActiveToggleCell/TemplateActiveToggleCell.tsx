@@ -1,8 +1,8 @@
 "use client";
 
-import { Switch } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import { Switch } from "../../design-system/primitives";
 
 interface TemplateActiveToggleCellProps {
 	/** 활성 여부 */

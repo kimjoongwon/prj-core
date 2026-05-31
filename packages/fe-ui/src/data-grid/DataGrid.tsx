@@ -6,16 +6,6 @@ import type {
 	DataGridState as DataGridControllerState,
 } from "@cocrepo/type";
 import {
-	type Selection,
-	Skeleton,
-	Table as HeroTable,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-} from "@cocrepo/ui/heroui";
-import {
 	type ColumnDef,
 	type ExpandedState,
 	flexRender,
@@ -28,6 +18,16 @@ import { FileX } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { Pagination } from "../control/Pagination/Pagination";
+import {
+	Table as HeroTable,
+	type Selection,
+	Skeleton,
+	TableBody,
+	TableCell,
+	TableColumn,
+	TableHeader,
+	TableRow,
+} from "../design-system/primitives";
 import { translateNode, useT } from "../i18n";
 import { InputRenderer } from "./InputRenderer";
 

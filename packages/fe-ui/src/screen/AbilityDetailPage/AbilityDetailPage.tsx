@@ -1,5 +1,7 @@
 "use client";
 
+import { ArrowLeft, Edit, Key, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Button,
 	Modal,
@@ -8,9 +10,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	Spinner,
-} from "@cocrepo/ui/heroui";
-import { ArrowLeft, Edit, Key, Trash2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 import { DetailPage, DetailPageSurface, DetailSectionCard } from "../../detail";
 import { Chip } from "../../display";
 import { VStack } from "../../rhythm";

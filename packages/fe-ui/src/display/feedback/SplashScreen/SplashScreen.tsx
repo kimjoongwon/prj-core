@@ -1,10 +1,15 @@
 "use client";
 
-import { Card, CardBody, Chip, Progress } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import {
+	Card,
+	CardBody,
+	Chip,
+	Progress,
+} from "../../../design-system/primitives";
+import { VStack } from "../../../rhythm/VStack/VStack";
 import { Logo } from "../../data-display/Logo/Logo";
 import { Text } from "../../data-display/Text/Text";
-import { VStack } from "../../../rhythm/VStack/VStack";
 
 export interface SplashScreenProps {
 	/** 메인 타이틀 @default "앱을 준비하고 있습니다" */

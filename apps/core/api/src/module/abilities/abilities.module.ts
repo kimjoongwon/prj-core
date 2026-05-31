@@ -1,24 +1,26 @@
-import { AbilityApplicationService } from "@cocrepo/app";
 import {
 	AbilitiesRepository,
 	PolicyAbilitiesRepository,
 	RolePoliciesRepository,
 	UserPoliciesRepository,
 } from "@cocrepo/repository";
-import { AbilityService } from "@cocrepo/service";
+import { AbilityAggregateRoot } from "@cocrepo/aggregate";
+import { AbilityCommandHandlers, AbilityQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { AbilitiesController } from "./abilities.controller";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [AbilitiesController],
 	providers: [
-		AbilityApplicationService,
-		AbilityService,
+		AbilityAggregateRoot,
 		AbilitiesRepository,
 		PolicyAbilitiesRepository,
 		RolePoliciesRepository,
 		UserPoliciesRepository,
+		...AbilityCommandHandlers,
+		...AbilityQueryHandlers,
 	],
-	exports: [AbilityApplicationService],
 })
 export class AbilitiesModule {}

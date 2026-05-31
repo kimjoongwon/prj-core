@@ -19,20 +19,20 @@ import {
 	Button,
 	FormPage,
 	FormPageSurface,
-	PageTitleBar,
 	FormSection,
 	FormSectionCard,
+	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
+import { ArrowLeft } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Input,
 	Select,
 	SelectItem,
 	type Selection,
 	Textarea,
-} from "@cocrepo/ui/heroui";
-import { ArrowLeft } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 
 const getSelectedValue = (keys: Selection): string => {
 	if (keys === "all") {

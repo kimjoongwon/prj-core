@@ -1,10 +1,6 @@
 import { EnumFieldKey } from "@cocrepo/decorator";
+import { BASE_EXCLUDED_FIELDS } from "./base-excluded-fields";
 import { QueryDto } from "./query.dto";
-
-/**
- * 자동 매핑에서 항상 제외되는 기본 필드
- */
-const BASE_EXCLUDED_FIELDS = new Set(["skip", "take", "sort"]);
 
 /**
  * Prisma 쿼리 변환을 지원하는 베이스 Query DTO

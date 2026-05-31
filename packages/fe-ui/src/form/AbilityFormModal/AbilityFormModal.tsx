@@ -1,23 +1,23 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
+import { Checkbox } from "../../control/Checkbox/Checkbox";
+import { Input } from "../../control/Input/Input";
+import { RadioGroup } from "../../control/RadioGroup/RadioGroup";
 import {
 	Button,
-	Checkbox as HeroCheckbox,
 	CheckboxGroup,
+	Checkbox as HeroCheckbox,
+	Select as HeroSelect,
 	Modal,
 	ModalBody,
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	Select as HeroSelect,
 	SelectItem,
 	SelectSection,
-} from "@cocrepo/ui/heroui";
-import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
-import { Input } from "../../control/Input/Input";
-import { RadioGroup } from "../../control/RadioGroup/RadioGroup";
-import { Checkbox } from "../../control/Checkbox/Checkbox";
+} from "../../design-system/primitives";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { ConditionEditor } from "../../widget/ability/ConditionEditor";

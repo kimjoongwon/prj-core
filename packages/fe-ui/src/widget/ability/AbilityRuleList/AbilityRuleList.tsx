@@ -1,5 +1,8 @@
 "use client";
 
+import { Edit2, Plus, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { Switch } from "../../../control/Switch/Switch";
 import {
 	Button,
 	Chip,
@@ -11,10 +14,7 @@ import {
 	TableHeader,
 	TableRow,
 	Tooltip,
-} from "@cocrepo/ui/heroui";
-import { Edit2, Plus, Trash2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import { Switch } from "../../../control/Switch/Switch";
+} from "../../../design-system/primitives";
 import { HStack } from "../../../rhythm/HStack/HStack";
 import { VStack } from "../../../rhythm/VStack/VStack";
 

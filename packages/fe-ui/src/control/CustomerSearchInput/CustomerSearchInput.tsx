@@ -1,8 +1,8 @@
 "use client";
 
-import type { AutocompleteProps } from "@cocrepo/ui/heroui";
-import { Autocomplete, AutocompleteItem } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import type { AutocompleteProps } from "../../design-system/primitives";
+import { Autocomplete, AutocompleteItem } from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 export interface CustomerSearchResult {

@@ -13,10 +13,10 @@ import {
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
-import { Button } from "@cocrepo/ui/heroui";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
+import { Button } from "../../design-system/primitives";
 
 export interface RoleListPageQueryStates extends DataGridQueryStates {
 	take: number;

@@ -1,6 +1,8 @@
 "use client";
 
 import { LanguageCode } from "@cocrepo/constant";
+import { Check, Globe2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Button,
 	cn,
@@ -8,9 +10,7 @@ import {
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger,
-} from "@cocrepo/ui/heroui";
-import { Check, Globe2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 export interface LanguageSelectButtonProps {

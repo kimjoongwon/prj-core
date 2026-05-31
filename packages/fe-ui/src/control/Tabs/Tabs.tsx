@@ -1,6 +1,6 @@
 import type { Option } from "@cocrepo/type";
-import { Tabs as HeroUITabs, Tab } from "@cocrepo/ui/heroui";
 import type { Key } from "react";
+import { Tabs as HeroUITabs, Tab } from "../../design-system/primitives";
 
 export interface TabsProps {
 	/** 탭 옵션 목록 */

@@ -1,3 +1,4 @@
+import { GetTranslationCatalogQuery } from "@cocrepo/command";
 import {
 	ApiErrors,
 	ApiResponseEntity,
@@ -5,16 +6,15 @@ import {
 	ResponseMessage,
 } from "@cocrepo/decorator";
 import { I18nCatalogResponseDto } from "@cocrepo/dto";
-import { TranslationCatalogService } from "@cocrepo/service";
+import type { LanguageCode } from "@cocrepo/prisma";
 import { Controller, Get, HttpCode, HttpStatus, Param } from "@nestjs/common";
+import { QueryBus } from "@nestjs/cqrs";
 import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("I18N")
 @Controller()
 export class I18nCatalogController {
-	constructor(
-		private readonly translationCatalogService: TranslationCatalogService,
-	) {}
+	constructor(private readonly queryBus: QueryBus) {}
 
 	@Public()
 	@Get("catalog/:languageCode")
@@ -34,6 +34,8 @@ export class I18nCatalogController {
 	@ApiResponseEntity(I18nCatalogResponseDto, HttpStatus.OK)
 	@ResponseMessage("조회 성공")
 	getI18nCatalog(@Param("languageCode") languageCode: string) {
-		return this.translationCatalogService.getCatalog(languageCode);
+		return this.queryBus.execute(
+			new GetTranslationCatalogQuery(languageCode as LanguageCode),
+		);
 	}
 }

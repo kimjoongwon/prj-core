@@ -1,4 +1,4 @@
-import { Chip } from "@cocrepo/ui/heroui";
+import { Chip } from "../../design-system/primitives";
 
 interface AuthMethodCellProps {
 	/** 토큰 엔드포인트 인증 방식 */

@@ -1,8 +1,8 @@
 "use client";
 
 import { VStack } from "@cocrepo/ui";
-import { Divider } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { Divider } from "../../../design-system/primitives";
 import type {
 	PaymentManagementMetric,
 	PaymentManagementPayment,

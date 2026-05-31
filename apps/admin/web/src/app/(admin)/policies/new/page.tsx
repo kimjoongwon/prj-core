@@ -12,7 +12,7 @@ import {
 	PolicyCreatePage,
 	type PolicyCreatePageAbilityOption,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui/heroui";
+import { addToast } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";

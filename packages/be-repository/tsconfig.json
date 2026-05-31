@@ -7,7 +7,8 @@
   },
   "references": [
     { "path": "../be-entity" },
-    { "path": "../be-prisma" }
+    { "path": "../be-prisma" },
+    { "path": "../be-vo" }
   ],
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]

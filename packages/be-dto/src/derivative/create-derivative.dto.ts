@@ -1,12 +1,4 @@
-import {
-	EnumField,
-	NumberField,
-	NumberFieldOptional,
-	StringField,
-	UUIDField,
-} from "@cocrepo/decorator";
 import { Derivative } from "@cocrepo/entity";
-import { DerivativeKind } from "@cocrepo/prisma";
 import { OmitType } from "@nestjs/swagger";
 import { COMMON_ENTITY_FIELDS } from "../constant";
 import { DerivativeDto } from "./derivative.dto";

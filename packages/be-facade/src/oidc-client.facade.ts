@@ -1,3 +1,4 @@
+import { OidcClientAggregateRoot } from "@cocrepo/aggregate";
 import {
 	CreateOidcClientDto,
 	PageMetaDto,
@@ -5,12 +6,11 @@ import {
 	UpdateOidcClientDto,
 } from "@cocrepo/dto";
 import { OidcClient } from "@cocrepo/entity";
-import { OidcClientService } from "@cocrepo/service";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class OidcClientFacade {
-	constructor(private readonly oidcClientService: OidcClientService) {}
+	constructor(private readonly oidcClientService: OidcClientAggregateRoot) {}
 
 	getMany(query: QueryOidcClientDto): Promise<{
 		data: OidcClient[];
@@ -19,9 +19,9 @@ export class OidcClientFacade {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 20;
 
-		return this.oidcClientService.getMany(query).then(({ data, totalCount }) => ({
-			data,
-			meta: new PageMetaDto(skip, take, totalCount),
+		return this.oidcClientService.getMany(query).then((oidcClientResult) => ({
+			data: oidcClientResult.data,
+			meta: new PageMetaDto(skip, take, oidcClientResult.totalCount),
 		}));
 	}
 

@@ -5,14 +5,6 @@ import type {
 	InquiryChannel,
 	InquiryPriority,
 } from "@cocrepo/enum";
-import {
-	Button,
-	Card,
-	CardBody,
-	Divider,
-	Input,
-	Spacer,
-} from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import {
@@ -27,6 +19,14 @@ import { InquiryCategorySelect } from "../../control/InquiryCategorySelect/Inqui
 import { InquiryChannelSelect } from "../../control/InquiryChannelSelect/InquiryChannelSelect";
 import { InquiryPrioritySelect } from "../../control/InquiryPrioritySelect/InquiryPrioritySelect";
 import { Textarea } from "../../control/Textarea/Textarea";
+import {
+	Button,
+	Card,
+	CardBody,
+	Divider,
+	Input,
+	Spacer,
+} from "../../design-system/primitives";
 import { AIClassificationSuggestion } from "../../widget/AIClassificationSuggestion/AIClassificationSuggestion";
 
 export interface CustomerInfo {

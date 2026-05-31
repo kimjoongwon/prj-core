@@ -13,6 +13,9 @@ export interface ScreenFrameProps extends Omit<
   "children" | "style"
 > {
   backgroundColor?: string;
+  bottom?: ReactNode;
+  bottomClassName?: string;
+  bottomStyle?: StyleProp<ViewStyle>;
   children?: ReactNode;
   contentClassName?: string;
   contentStyle?: StyleProp<ViewStyle>;
@@ -29,6 +32,7 @@ const hasEdge = (edges: readonly ScreenFrameEdge[], edge: ScreenFrameEdge) =>
   edges.includes(edge);
 const screenFrameClassNames = tv({
   slots: {
+    bottom: "shrink-0",
     content: "flex-1",
     frame: "flex-1",
   },
@@ -37,6 +41,9 @@ export const ScreenFrame = forwardRef<View, ScreenFrameProps>(
   (
     {
       backgroundColor,
+      bottom,
+      bottomClassName,
+      bottomStyle,
       children,
       className,
       contentClassName,
@@ -78,6 +85,16 @@ export const ScreenFrame = forwardRef<View, ScreenFrameProps>(
         >
           {children}
         </View>
+        {bottom ? (
+          <View
+            className={screenFrameClassNames().bottom({
+              className: bottomClassName,
+            })}
+            style={bottomStyle}
+          >
+            {bottom}
+          </View>
+        ) : null}
       </View>
     );
   },

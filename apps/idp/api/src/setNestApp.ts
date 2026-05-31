@@ -53,7 +53,7 @@ class IdpAllExceptionsFilter extends BaseExceptionFilter {
 }
 
 export function setNestApp<T extends INestApplication>(app: T): void {
-	const { httpAdapter } = app.get(HttpAdapterHost);
+	const httpAdapterHost = app.get(HttpAdapterHost);
 	const translationService = app.get(I18nTranslationService);
 
 	// =================================================================
@@ -61,11 +61,14 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	// AllExceptionsFilter를 래핑하여 headersSent 체크 추가
 	// =================================================================
 	const allExceptionsFilter = new AllExceptionsFilter(
-		httpAdapter,
+		httpAdapterHost.httpAdapter,
 		translationService,
 	);
 	app.useGlobalFilters(
-		new IdpAllExceptionsFilter(httpAdapter, allExceptionsFilter),
+		new IdpAllExceptionsFilter(
+			httpAdapterHost.httpAdapter,
+			allExceptionsFilter,
+		),
 	);
 
 	// =================================================================

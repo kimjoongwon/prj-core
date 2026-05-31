@@ -18,7 +18,7 @@ import {
 	RoutineEditPage,
 	type RoutineTaskCandidate,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui/heroui";
+import { addToast } from "@cocrepo/ui";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";

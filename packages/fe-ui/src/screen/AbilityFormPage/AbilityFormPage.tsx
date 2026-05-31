@@ -1,5 +1,7 @@
 "use client";
 
+import { ArrowLeft, Save } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Button,
 	Input,
@@ -8,9 +10,7 @@ import {
 	Spinner,
 	Switch,
 	Textarea,
-} from "@cocrepo/ui/heroui";
-import { ArrowLeft, Save } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 import {
 	FormPage,
 	FormPageSurface,

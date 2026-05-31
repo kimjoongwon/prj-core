@@ -1,4 +1,12 @@
 import { RolesGuard } from "@cocrepo/be-common";
+import {
+	CreateTaskCommand,
+	DeleteTaskCommand,
+	FindTasksQuery,
+	GetTaskExerciseQuery,
+	GetTaskRoutinesQuery,
+	UpdateTaskExerciseCommand,
+} from "@cocrepo/command";
 import { SYSTEM_ROLES, USER_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -17,7 +25,6 @@ import {
 	UpdateExerciseDto,
 } from "@cocrepo/dto";
 import { Routine, Task } from "@cocrepo/entity";
-import { TaskFacade } from "@cocrepo/facade";
 import { AuthContext, SpaceContext } from "@cocrepo/service";
 import {
 	Body,
@@ -34,13 +41,15 @@ import {
 	UnauthorizedException,
 	UseGuards,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("TASKS")
 @Controller()
 export class TasksController {
 	constructor(
-		private readonly tasksService: TaskFacade,
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
 		private readonly authContext: AuthContext,
 		private readonly spaceContext: SpaceContext,
 	) {}
@@ -62,14 +71,16 @@ export class TasksController {
 		}
 		const spaceScope = query.spaceScope ?? SpaceScope.CURRENT;
 
-		return this.tasksService.findTasks({
-			spaceId,
-			spaceScope,
-			skip: query.skip,
-			take: query.take,
-			search: query.search,
-			contentLanguageCode: query.contentLanguageCode,
-		});
+		return this.queryBus.execute(
+			new FindTasksQuery({
+				spaceId,
+				spaceScope,
+				skip: query.skip,
+				take: query.take,
+				search: query.search,
+				contentLanguageCode: query.contentLanguageCode,
+			}),
+		);
 	}
 
 	@Get(":taskId/exercise")
@@ -93,7 +104,7 @@ export class TasksController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		return this.tasksService.getExerciseByTaskId(taskId, spaceId);
+		return this.queryBus.execute(new GetTaskExerciseQuery(taskId, spaceId));
 	}
 
 	@Get(":taskId/routines")
@@ -119,7 +130,7 @@ export class TasksController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		return this.tasksService.findTaskRoutines(taskId, spaceId);
+		return this.queryBus.execute(new GetTaskRoutinesQuery(taskId, spaceId));
 	}
 
 	@Post()
@@ -150,7 +161,7 @@ export class TasksController {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		return this.tasksService.createTaskWithExercise(dto, spaceId, userId);
+		return this.commandBus.execute(new CreateTaskCommand(dto, spaceId, userId));
 	}
 
 	@Patch(":taskId/exercise")
@@ -183,7 +194,9 @@ export class TasksController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		return this.tasksService.updateTaskExercise(taskId, dto, spaceId);
+		return this.commandBus.execute(
+			new UpdateTaskExerciseCommand(taskId, dto, spaceId),
+		);
 	}
 
 	@Delete(":taskId")
@@ -211,6 +224,6 @@ export class TasksController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		await this.tasksService.deleteTask(taskId, spaceId);
+		await this.commandBus.execute(new DeleteTaskCommand(taskId, spaceId));
 	}
 }

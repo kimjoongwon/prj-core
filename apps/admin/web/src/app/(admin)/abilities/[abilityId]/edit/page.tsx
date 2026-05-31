@@ -8,7 +8,7 @@ import {
 import { useGetActions } from "@cocrepo/api/core/actions";
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
 import { AbilityFormPage } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui/heroui";
+import { addToast } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";

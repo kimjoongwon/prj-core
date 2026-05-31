@@ -1,14 +1,11 @@
-import {
-	PageMetaDto,
-	QueryEmailVerificationDto,
-} from "@cocrepo/dto";
-import { EmailVerificationService } from "@cocrepo/service";
+import { EmailVerificationAggregateRoot } from "@cocrepo/aggregate";
+import { PageMetaDto, QueryEmailVerificationDto } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class EmailVerificationFacade {
 	constructor(
-		private readonly emailVerificationService: EmailVerificationService,
+		private readonly emailVerificationService: EmailVerificationAggregateRoot,
 	) {}
 
 	getMany(query: QueryEmailVerificationDto) {
@@ -17,9 +14,9 @@ export class EmailVerificationFacade {
 
 		return this.emailVerificationService
 			.getMany(query)
-			.then(({ data, totalCount }) => ({
-				data,
-				meta: new PageMetaDto(skip, take, totalCount),
+			.then((emailVerificationResult) => ({
+				data: emailVerificationResult.data,
+				meta: new PageMetaDto(skip, take, emailVerificationResult.totalCount),
 			}));
 	}
 

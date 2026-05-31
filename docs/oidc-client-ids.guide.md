@@ -51,7 +51,7 @@ reference-data sync에서는 오래된 seed business key가 DB에 남아 provide
 | OIDC seed data | `packages/be-prisma/src/reference-data/definitions/oidc.ts` |
 | Runtime managed client 목록 | `packages/common-constant/src/oidc/options.ts` |
 | Runtime URL override 적용 | `packages/be-service/src/oidc-runtime-client-config/index.ts` |
-| Auth service 기본값과 legacy alias | `packages/be-app/src/auth.application-service.ts` |
+| Auth usecase 기본값과 legacy alias | `packages/be-usecase/src/auth/auth-support.ts` |
 | Mobile login client | `apps/mobile/src/auth/auth-config.ts` |
 | IDP Web login client | `apps/idp/web/src/app/auth/login/route.ts` |
 | Swagger OAuth client | `apps/idp/api/src/main.ts` |

@@ -1,5 +1,5 @@
-import { Chip } from "@cocrepo/ui/heroui";
 import { MessageCircle } from "lucide-react";
+import { Chip } from "../../design-system/primitives";
 
 interface InquiryUnreadCellProps {
 	/** 읽지 않은 메시지 수 */

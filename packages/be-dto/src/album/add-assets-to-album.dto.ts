@@ -1,5 +1,5 @@
+import { StringField } from "@cocrepo/decorator";
 import { Transform } from "class-transformer";
-import { StringField, UUIDField } from "@cocrepo/decorator";
 
 /**
  * 앨범에 에셋 추가 DTO

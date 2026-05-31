@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "@cocrepo/ui/heroui";
 import { Check, ChevronRight, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
+import { Button } from "../../design-system/primitives";
 import type { OverlayMenuProps } from "../../display/layout/type";
 
 export const OverlayMenu = observer(function OverlayMenu({

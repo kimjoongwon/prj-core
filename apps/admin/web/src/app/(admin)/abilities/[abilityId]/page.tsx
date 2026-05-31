@@ -5,7 +5,7 @@ import {
 	useGetAbilityById,
 } from "@cocrepo/api/core/abilities";
 import { AbilityDetailPage } from "@cocrepo/ui";
-import { useDisclosure } from "@cocrepo/ui/heroui";
+import { useDisclosure } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";

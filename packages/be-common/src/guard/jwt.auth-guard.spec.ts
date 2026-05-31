@@ -1,12 +1,16 @@
-import { CONTEXT_KEYS } from "@cocrepo/constant";
+import {
+	CONTEXT_KEYS } from "@cocrepo/constant";
 import { PUBLIC_ROUTE_KEY } from "@cocrepo/decorator";
-import { ExecutionContext, UnauthorizedException } from "@nestjs/common";
+import { ExecutionContext,
+	UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test,
+	TestingModule } from "@nestjs/testing";
 import { ClsService } from "nestjs-cls";
 
 // @cocrepo/service import 체인의 masking.interceptor 에러 회피
-jest.mock("@cocrepo/service", () => {
+jest.mock("@cocrepo/service",
+	() => {
 	class TokenStorageService {
 		isBlacklisted = jest.fn();
 		saveRefreshToken = jest.fn();
@@ -16,11 +20,12 @@ jest.mock("@cocrepo/service", () => {
 	}
 	return {
 		__esModule: true,
-		TokenStorageService,
+	TokenStorageService,
 	};
 });
 
-import { TokenStorageService } from "@cocrepo/service";
+import { TokenStorageService,
+} from "@cocrepo/service";
 import { JwtAuthGuard } from "./jwt.auth-guard";
 
 describe("JwtAuthGuard", () => {

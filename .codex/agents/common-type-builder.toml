@@ -26,6 +26,7 @@ developer_instructions = '''
 ## 책임
 
 - web/mobile/backend가 공유하는 순수 TypeScript type, interface, union, contract type을 생성하거나 정리합니다.
+- pagination meta/response처럼 여러 backend/frontend 패키지가 공유하는 response shape 타입을 소유합니다.
 - `packages/common-type/src/**`에 원본 타입을 두고 `src/index.ts`와 package export를 동기화합니다.
 - 여러 패키지가 쓰는 타입은 `@cocrepo/type`에서 직접 import하도록 정리합니다.
 - 타입 변경으로 downstream이 깨질 수 있으면 route delivery spec의 `Type 인벤토리`에 소비 패키지와 검증을 명시합니다.
@@ -35,7 +36,7 @@ developer_instructions = '''
 - runtime utility는 `common-toolkit-builder` 책임입니다.
 - React hook은 `fe-hook-builder` 책임입니다.
 - DTO/schema/entity/VO를 type alias로 대체하지 않습니다.
-- 단일 컴포넌트 내부에서만 쓰는 props/helper type은 해당 source owner가 파일 내부 또는 가까운 타입 파일에 둡니다.
+- 단일 컴포넌트/클래스 내부에서만 쓰는 props/helper type도 해당 source owner의 가까운 타입 파일에 둡니다. class/component 파일 내부에 top-level type/interface를 함께 두지 않습니다.
 
 ## Spec 정책
 

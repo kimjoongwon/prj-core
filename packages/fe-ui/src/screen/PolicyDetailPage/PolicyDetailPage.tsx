@@ -8,6 +8,8 @@ import {
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
+import { ArrowLeft, Edit, Save, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Button,
 	Checkbox,
@@ -18,9 +20,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	Spinner,
-} from "@cocrepo/ui/heroui";
-import { ArrowLeft, Edit, Save, Trash2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 
 export interface PolicyDetailPagePolicy {
 	id: string;

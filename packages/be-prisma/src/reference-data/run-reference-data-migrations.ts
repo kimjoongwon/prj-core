@@ -90,7 +90,7 @@ export async function runReferenceDataMigrations(): Promise<void> {
 	// 1) CLI 실행마다 독립적인 Prisma handle을 연다.
 	// app runtime 싱글턴을 재사용하지 않고, 스크립트 수명주기 안에서 열고 닫는다.
 	const prismaHandle = createPrismaClient();
-	const { prisma } = prismaHandle;
+	const prisma = prismaHandle.prisma;
 
 	try {
 		// 2) runner가 의존하는 최소 메타데이터부터 보장한다.

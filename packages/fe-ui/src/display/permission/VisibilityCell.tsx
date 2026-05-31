@@ -1,5 +1,8 @@
 "use client";
 
+import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import type { ReactNode } from "react";
 import {
 	Button,
 	Chip,
@@ -7,10 +10,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 	Tooltip,
-} from "@cocrepo/ui/heroui";
-import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import type { ReactNode } from "react";
+} from "../../design-system/primitives";
 import { type Translate, useT } from "../../i18n";
 
 /**

@@ -4,12 +4,14 @@ import {
 	DateTimeCell,
 	DetailPage,
 	DetailPageSurface,
-	MediaThumbnail,
-	PageTitleBar,
 	DetailSection,
 	DetailSectionCard,
+	MediaThumbnail,
+	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
+import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Button,
 	Chip,
@@ -19,9 +21,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	Spinner,
-} from "@cocrepo/ui/heroui";
-import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 
 export interface RoutineDetailPageActivity {
 	id: string;

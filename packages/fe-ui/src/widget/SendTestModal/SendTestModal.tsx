@@ -1,5 +1,8 @@
 "use client";
 
+import { AlertCircle, CheckCircle, Send } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { useState } from "react";
 import {
 	Button,
 	Input,
@@ -8,10 +11,7 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-} from "@cocrepo/ui/heroui";
-import { AlertCircle, CheckCircle, Send } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import { useState } from "react";
+} from "../../design-system/primitives";
 import { VariableInputForm } from "../../form/VariableInputForm/VariableInputForm";
 import type { TemplateVariable } from "../VariableReadTable/VariableReadTable";
 

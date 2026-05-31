@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@cocrepo/ui/heroui";
 import { Eye, Pencil, Send, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Button } from "../../../design-system/primitives";
 import { HStack } from "../../../rhythm/HStack/HStack";
 
 export interface TemplateActionsProps {

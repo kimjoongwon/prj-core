@@ -1,9 +1,14 @@
 "use client";
 
-import { Button, Checkbox, CheckboxGroup, Input } from "@cocrepo/ui/heroui";
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import {
+	Button,
+	Checkbox,
+	CheckboxGroup,
+	Input,
+} from "../../design-system/primitives";
 
 /** 필터 그룹 정의 */
 export interface FilterGroup {

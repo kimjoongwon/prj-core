@@ -24,11 +24,6 @@
       "import": "./src/widget/index.ts",
       "default": "./src/widget/index.ts"
     },
-    "./heroui": {
-      "types": "./src/design-system/heroui.tsx",
-      "import": "./src/design-system/heroui.tsx",
-      "default": "./src/design-system/heroui.tsx"
-    },
     "./package.json": "./package.json"
   },
   "main": "./index.ts",

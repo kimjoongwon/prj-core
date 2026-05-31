@@ -1,8 +1,8 @@
 "use client";
 
-import { Button, Image } from "@cocrepo/ui/heroui";
 import { Copy, Download, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Button, Image } from "../../design-system/primitives";
 
 export interface ImageCardProps {
 	/** 이미지 소스 URL */

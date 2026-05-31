@@ -1,11 +1,13 @@
 "use client";
 
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { FormEvent } from "react";
 import { Button } from "../../control/Button/Button";
 import { LoginForm, type LoginFormState } from "../../form/LoginForm/LoginForm";
 import { useT } from "../../i18n";
 import { VStack } from "../../rhythm/VStack/VStack";
+import { Surface } from "../../surface";
 
 export interface LoginPageState {
 	loginForm: LoginFormState;
@@ -53,7 +55,7 @@ export interface LoginPageProps {
  *   state={state.loginPage}
  *   title="관리자 로그인"
  *   caption="관리자 계정으로 로그인해주세요."
- *   onSubmitLoginForm={handleLogin}
+ *   onSubmitLoginForm={onSubmitLoginForm}
  *   isLoading={isLoading}
  * />
  * ```
@@ -69,37 +71,82 @@ export const LoginPage = observer(
 		const t = useT();
 		const onSubmitLoginPage = (event: FormEvent<HTMLFormElement>) => {
 			event.preventDefault();
+			if (isLoading) {
+				return;
+			}
 			void onSubmitLoginForm();
 		};
 
 		return (
-			<form onSubmit={onSubmitLoginPage}>
-				<VStack fullWidth gap={8} className="p-4">
-					<VStack fullWidth gap={2}>
-						<h3 className="text-2xl font-bold">{t(title)}</h3>
-						<span className="text-sm text-default-500">{t(caption)}</span>
+			<form
+				aria-busy={isLoading}
+				aria-label={t(title)}
+				className="w-full"
+				onSubmit={onSubmitLoginPage}
+			>
+				<Surface
+					className="overflow-hidden rounded-[2rem] border border-divider bg-content1/95 shadow-2xl shadow-default-100/10"
+					padding="none"
+				>
+					<VStack fullWidth gap="flush">
+						<VStack
+							key="header"
+							fullWidth
+							gap="block"
+							className="border-b border-divider bg-content2/50 px-6 py-5 text-left"
+						>
+							<span
+								key="badge"
+								className="inline-flex w-fit items-center gap-2 rounded-full border border-divider bg-background px-3 py-1 text-xs font-medium text-default-600"
+							>
+								<ShieldCheck aria-hidden className="size-4 text-primary" />
+								Native access
+							</span>
+							<h3
+								key="title"
+								className="text-2xl font-bold leading-tight text-foreground"
+							>
+								{t(title)}
+							</h3>
+							<p key="caption" className="text-sm leading-6 text-default-500">
+								{t(caption)}
+							</p>
+						</VStack>
+
+						<VStack
+							key="body"
+							fullWidth
+							gap="section"
+							className="px-6 pb-6 pt-5 text-left"
+						>
+							<LoginForm key="form" state={state.loginForm} />
+
+							<p
+								key="feedback"
+								aria-hidden={!state.errorMessage}
+								aria-live="polite"
+								className="min-h-5 text-sm font-medium text-danger"
+								role={state.errorMessage ? "alert" : undefined}
+							>
+								{state.errorMessage ? t(state.errorMessage) : " "}
+							</p>
+
+							<Button
+								key="submit"
+								type="submit"
+								color="primary"
+								className="h-12 w-full rounded-xl shadow-lg shadow-primary/20"
+								endContent={<ArrowRight aria-hidden className="size-4" />}
+								fullWidth
+								isDisabled={isLoading}
+								isLoading={isLoading}
+								size="lg"
+							>
+								{t("로그인")}
+							</Button>
+						</VStack>
 					</VStack>
-
-					<VStack fullWidth gap={4}>
-						<LoginForm state={state.loginForm} />
-					</VStack>
-
-					{state.errorMessage && (
-						<span className="text-sm font-medium text-danger">
-							{t(state.errorMessage)}
-						</span>
-					)}
-
-					<Button
-						type="submit"
-						color="primary"
-						size="lg"
-						fullWidth
-						isLoading={isLoading}
-					>
-						<span className="text-white">{t("로그인")}</span>
-					</Button>
-				</VStack>
+				</Surface>
 			</form>
 		);
 	},

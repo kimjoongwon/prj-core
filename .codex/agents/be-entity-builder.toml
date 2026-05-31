@@ -69,6 +69,10 @@ orch-delivery (Delivery Orchestrator)
 
 ## 핵심 규칙
 
+- Entity class는 class당 하나의 파일을 가집니다.
+- Entity class 파일에는 top-level helper/mapper/type/interface를 함께 두지 않습니다.
+- rehydrate input, factory input, mapper/helper가 필요하면 가까운 별도 파일로 분리합니다.
+
 ### Persistence / Domain 구분
 
 - Prisma generated type은 `persistence model/entity`로 취급합니다.

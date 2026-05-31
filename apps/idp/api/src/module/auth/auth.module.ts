@@ -1,5 +1,11 @@
-import { AuthApplicationService } from "@cocrepo/app";
-import { OidcGateway } from "@cocrepo/gateway";
+import {
+	AuthAuditLogAggregateRoot,
+	EmailVerificationAggregateRoot,
+	RoleAggregateRoot,
+	SpaceAggregateRoot,
+} from "@cocrepo/aggregate";
+import {} from "@cocrepo/aggregate";
+import { OidcClient } from "@cocrepo/client";
 import {
 	AbilitiesRepository,
 	AuthAuditLogsRepository,
@@ -12,35 +18,41 @@ import {
 	UserPoliciesRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
+import { AbilityAggregateRoot } from "@cocrepo/aggregate";
 import {
-	AbilityService,
-	AuthAuditLogService,
 	AuthCacheService,
 	EmailProvider,
 	EmailService,
-	EmailVerificationService,
 	JwtStrategy,
 	RedisService,
-	RoleService,
 	SmtpEmailProvider,
 	SpaceContext,
-	SpaceService,
 	TemplateService,
 	TokenService,
 	TokenStorageService,
 	UserService,
 } from "@cocrepo/service";
+import {
+	AuthUseCaseProviders,
+	IDP_INTERACTION_LOGIN_SERVICE,
+} from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { InteractionModule } from "../interaction/interaction.module";
+import { InteractionLoginService } from "../interaction/interaction-login.service";
 import { OidcClientsModule } from "../oidc-client/oidc-clients.module";
 import { AuthController } from "./auth.controller";
 
 @Module({
-	imports: [OidcClientsModule, InteractionModule],
+	imports: [CqrsModule, OidcClientsModule, InteractionModule],
 	providers: [
-		AuthApplicationService,
-		OidcGateway,
-		AbilityService,
+		...AuthUseCaseProviders,
+		{
+			provide: IDP_INTERACTION_LOGIN_SERVICE,
+			useExisting: InteractionLoginService,
+		},
+		OidcClient,
+		AbilityAggregateRoot,
 		AbilitiesRepository,
 		PolicyAbilitiesRepository,
 		RolePoliciesRepository,
@@ -51,15 +63,15 @@ import { AuthController } from "./auth.controller";
 		JwtStrategy,
 		UserService,
 		UsersRepository,
-		RoleService,
+		RoleAggregateRoot,
 		RolesRepository,
-		SpaceService,
+		SpaceAggregateRoot,
 		SpacesRepository,
 		SpaceContext,
-		AuthAuditLogService,
+		AuthAuditLogAggregateRoot,
 		AuthAuditLogsRepository,
 		AuthCacheService,
-		EmailVerificationService,
+		EmailVerificationAggregateRoot,
 		EmailVerificationsRepository,
 		SmtpEmailProvider,
 		TemplateService,
@@ -71,6 +83,6 @@ import { AuthController } from "./auth.controller";
 		EmailService,
 	],
 	controllers: [AuthController],
-	exports: [AuthApplicationService, TokenStorageService, RedisService],
+	exports: [TokenStorageService, RedisService],
 })
 export class AuthModule {}

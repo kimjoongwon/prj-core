@@ -19,7 +19,7 @@ developer_instructions = '''
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
-- 테스트 구현 전에 controller/module/application-service/service spec의 E2E 테스트 케이스와 시나리오 ID를 먼저 읽습니다.
+- 테스트 구현 전에 controller/module/usecase/service spec의 E2E 테스트 케이스와 시나리오 ID를 먼저 읽습니다.
 - backend E2E owner spec이 없거나 케이스가 비어 있으면 즉시 `BLOCKED: missing backend e2e spec`으로 보고합니다.
 
 
@@ -37,8 +37,8 @@ NestJS `Test.createTestingModule({ imports: [AppModule] })` 패턴으로 실제 
 | REST API 엔드포인트 E2E 테스트 | ✅ | 실제 DB와 연동된 API 테스트 |
 | 인증/인가 플로우 E2E 테스트 | ✅ | JWT + Guard 통합 테스트 |
 | API 응답 구조 검증 | ✅ | ResponseEntity 래핑 검증 |
-| 다중 서비스 통합 시나리오 | ✅ | ApplicationService 레벨 통합 테스트 |
-| 외부 시스템 wrapper가 포함된 엔드포인트 | ✅ | Gateway가 연결된 API 검증 |
+| 다중 서비스 통합 시나리오 | ✅ | UseCase handler 레벨 통합 테스트 |
+| 외부 시스템 wrapper가 포함된 엔드포인트 | ✅ | Client가 연결된 API 검증 |
 | 프론트엔드 E2E 테스트 | ❌ | `qa-fe-e2e-testing` 사용 |
 | 백엔드 단위 테스트 | ❌ | `qa-be-testing` 사용 |
 

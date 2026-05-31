@@ -11,7 +11,12 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-
+import {
+	useMutation,
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
 import type {
 	DataTag,
 	DefinedInitialDataOptions,
@@ -31,32 +36,25 @@ import type {
 	UseSuspenseQueryOptions,
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
-import {
-	useMutation,
-	useQuery,
-	useSuspenseInfiniteQuery,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
-import type { BodyType, ErrorType } from "../../libs/customIdpAxios";
 
-import { customIdpInstance } from "../../libs/customIdpAxios";
 import type {
-	ChangePassword200AllOf,
-	ChangePasswordDto,
 	ForceResetPassword200AllOf,
 	GetAuthAuditLogStats200AllOf,
 	GetAuthAuditLogs200AllOf,
 	GetAuthAuditLogsParams,
 	GetCurrentSpace200AllOf,
-	GetMySessions200AllOf,
 	GetMySpaces200AllOf,
 	GetSignUpSpaces200AllOf,
 	InvalidateUserSessions200AllOf,
 	LoginParams,
+	NativeLogin200AllOf,
+	NativeLoginPayloadDto,
+	NativeLogout200AllOf,
+	NativeLogoutPayloadDto,
+	NativeRefreshToken200AllOf,
+	NativeTokenRefreshPayloadDto,
 	OidcCallbackParams,
 	RefreshToken200AllOf,
-	RevokeOtherSessions200AllOf,
-	RevokeSession200AllOf,
 	SetCurrentSpace200AllOf,
 	SetCurrentSpaceDto,
 	SignUp201AllOf,
@@ -64,6 +62,9 @@ import type {
 	UnlockAccount200AllOf,
 	VerifyToken200AllOf,
 } from ".././model";
+
+import { customIdpInstance } from "../../libs/customIdpAxios";
+import type { ErrorType, BodyType } from "../../libs/customIdpAxios";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -984,6 +985,280 @@ export const prefetchOidcCallbackInfiniteQuery = async <
 	return queryClient;
 };
 
+/**
+ * first-party 앱에서 이메일/비밀번호로 로그인하고 native access/refresh token을 발급합니다. OIDC authorization redirect를 사용하지 않습니다.
+ * @summary first-party native 로그인
+ */
+export const nativeLogin = (
+	nativeLoginPayloadDto: BodyType<NativeLoginPayloadDto>,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
+) => {
+	return customIdpInstance<NativeLogin200AllOf>(
+		{
+			url: `/api/v1/auth/native/login`,
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			data: nativeLoginPayloadDto,
+			signal,
+		},
+		options,
+	);
+};
+
+export const getNativeLoginMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof nativeLogin>>,
+		TError,
+		{ data: BodyType<NativeLoginPayloadDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof nativeLogin>>,
+	TError,
+	{ data: BodyType<NativeLoginPayloadDto> },
+	TContext
+> => {
+	const mutationKey = ["nativeLogin"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof nativeLogin>>,
+		{ data: BodyType<NativeLoginPayloadDto> }
+	> = (props) => {
+		const { data } = props ?? {};
+
+		return nativeLogin(data, requestOptions);
+	};
+
+	return { mutationFn, ...mutationOptions };
+};
+
+export type NativeLoginMutationResult = NonNullable<
+	Awaited<ReturnType<typeof nativeLogin>>
+>;
+export type NativeLoginMutationBody = BodyType<NativeLoginPayloadDto>;
+export type NativeLoginMutationError = ErrorType<unknown>;
+
+/**
+ * @summary first-party native 로그인
+ */
+export const useNativeLogin = <TError = ErrorType<unknown>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof nativeLogin>>,
+			TError,
+			{ data: BodyType<NativeLoginPayloadDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof nativeLogin>>,
+	TError,
+	{ data: BodyType<NativeLoginPayloadDto> },
+	TContext
+> => {
+	const mutationOptions = getNativeLoginMutationOptions(options);
+
+	return useMutation(mutationOptions, queryClient);
+};
+/**
+ * first-party 앱이 보관한 sessionId/refreshToken으로 native token을 직접 갱신합니다.
+ * @summary first-party native 토큰 재발급
+ */
+export const nativeRefreshToken = (
+	nativeTokenRefreshPayloadDto: BodyType<NativeTokenRefreshPayloadDto>,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
+) => {
+	return customIdpInstance<NativeRefreshToken200AllOf>(
+		{
+			url: `/api/v1/auth/native/token/refresh`,
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			data: nativeTokenRefreshPayloadDto,
+			signal,
+		},
+		options,
+	);
+};
+
+export const getNativeRefreshTokenMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof nativeRefreshToken>>,
+		TError,
+		{ data: BodyType<NativeTokenRefreshPayloadDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof nativeRefreshToken>>,
+	TError,
+	{ data: BodyType<NativeTokenRefreshPayloadDto> },
+	TContext
+> => {
+	const mutationKey = ["nativeRefreshToken"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof nativeRefreshToken>>,
+		{ data: BodyType<NativeTokenRefreshPayloadDto> }
+	> = (props) => {
+		const { data } = props ?? {};
+
+		return nativeRefreshToken(data, requestOptions);
+	};
+
+	return { mutationFn, ...mutationOptions };
+};
+
+export type NativeRefreshTokenMutationResult = NonNullable<
+	Awaited<ReturnType<typeof nativeRefreshToken>>
+>;
+export type NativeRefreshTokenMutationBody =
+	BodyType<NativeTokenRefreshPayloadDto>;
+export type NativeRefreshTokenMutationError = ErrorType<unknown>;
+
+/**
+ * @summary first-party native 토큰 재발급
+ */
+export const useNativeRefreshToken = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof nativeRefreshToken>>,
+			TError,
+			{ data: BodyType<NativeTokenRefreshPayloadDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof nativeRefreshToken>>,
+	TError,
+	{ data: BodyType<NativeTokenRefreshPayloadDto> },
+	TContext
+> => {
+	const mutationOptions = getNativeRefreshTokenMutationOptions(options);
+
+	return useMutation(mutationOptions, queryClient);
+};
+/**
+ * first-party native 세션을 삭제하고 전달된 access token을 best-effort로 블랙리스트 처리합니다.
+ * @summary first-party native 로그아웃
+ */
+export const nativeLogout = (
+	nativeLogoutPayloadDto: BodyType<NativeLogoutPayloadDto>,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
+) => {
+	return customIdpInstance<NativeLogout200AllOf>(
+		{
+			url: `/api/v1/auth/native/logout`,
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			data: nativeLogoutPayloadDto,
+			signal,
+		},
+		options,
+	);
+};
+
+export const getNativeLogoutMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof nativeLogout>>,
+		TError,
+		{ data: BodyType<NativeLogoutPayloadDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof nativeLogout>>,
+	TError,
+	{ data: BodyType<NativeLogoutPayloadDto> },
+	TContext
+> => {
+	const mutationKey = ["nativeLogout"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof nativeLogout>>,
+		{ data: BodyType<NativeLogoutPayloadDto> }
+	> = (props) => {
+		const { data } = props ?? {};
+
+		return nativeLogout(data, requestOptions);
+	};
+
+	return { mutationFn, ...mutationOptions };
+};
+
+export type NativeLogoutMutationResult = NonNullable<
+	Awaited<ReturnType<typeof nativeLogout>>
+>;
+export type NativeLogoutMutationBody = BodyType<NativeLogoutPayloadDto>;
+export type NativeLogoutMutationError = ErrorType<unknown>;
+
+/**
+ * @summary first-party native 로그아웃
+ */
+export const useNativeLogout = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof nativeLogout>>,
+			TError,
+			{ data: BodyType<NativeLogoutPayloadDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof nativeLogout>>,
+	TError,
+	{ data: BodyType<NativeLogoutPayloadDto> },
+	TContext
+> => {
+	const mutationOptions = getNativeLogoutMutationOptions(options);
+
+	return useMutation(mutationOptions, queryClient);
+};
 /**
  * 리프레시 토큰을 사용하여 IDP에서 새로운 토큰을 발급받습니다.
  * @summary 토큰 재발급
@@ -4593,95 +4868,6 @@ export const prefetchGetAuthAuditLogStatsInfiniteQuery = async <
 };
 
 /**
- * 현재 비밀번호를 확인 후 새 비밀번호로 변경합니다. 비밀번호 정책 검증 및 재사용 방지가 적용됩니다.
- * @summary 비밀번호 변경
- */
-export const changePassword = (
-	changePasswordDto: BodyType<ChangePasswordDto>,
-	options?: SecondParameter<typeof customIdpInstance>,
-	signal?: AbortSignal,
-) => {
-	return customIdpInstance<ChangePassword200AllOf>(
-		{
-			url: `/api/v1/auth/change-password`,
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			data: changePasswordDto,
-			signal,
-		},
-		options,
-	);
-};
-
-export const getChangePasswordMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof changePassword>>,
-		TError,
-		{ data: BodyType<ChangePasswordDto> },
-		TContext
-	>;
-	request?: SecondParameter<typeof customIdpInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof changePassword>>,
-	TError,
-	{ data: BodyType<ChangePasswordDto> },
-	TContext
-> => {
-	const mutationKey = ["changePassword"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
-
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof changePassword>>,
-		{ data: BodyType<ChangePasswordDto> }
-	> = (props) => {
-		const { data } = props ?? {};
-
-		return changePassword(data, requestOptions);
-	};
-
-	return { mutationFn, ...mutationOptions };
-};
-
-export type ChangePasswordMutationResult = NonNullable<
-	Awaited<ReturnType<typeof changePassword>>
->;
-export type ChangePasswordMutationBody = BodyType<ChangePasswordDto>;
-export type ChangePasswordMutationError = ErrorType<void>;
-
-/**
- * @summary 비밀번호 변경
- */
-export const useChangePassword = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof changePassword>>,
-			TError,
-			{ data: BodyType<ChangePasswordDto> },
-			TContext
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof changePassword>>,
-	TError,
-	{ data: BodyType<ChangePasswordDto> },
-	TContext
-> => {
-	const mutationOptions = getChangePasswordMutationOptions(options);
-
-	return useMutation(mutationOptions, queryClient);
-};
-/**
  * 잠긴 계정을 해제합니다. FULL_ACCESS 권한이 필요합니다.
  * @summary 계정 잠금 해제
  */
@@ -4941,613 +5127,6 @@ export const useInvalidateUserSessions = <
 	TContext
 > => {
 	const mutationOptions = getInvalidateUserSessionsMutationOptions(options);
-
-	return useMutation(mutationOptions, queryClient);
-};
-/**
- * 현재 인증된 사용자의 모든 활성 세션 목록을 반환합니다. 현재 세션에 isCurrent=true가 표시됩니다.
- * @summary 내 활성 세션 목록
- */
-export const getMySessions = (
-	options?: SecondParameter<typeof customIdpInstance>,
-	signal?: AbortSignal,
-) => {
-	return customIdpInstance<GetMySessions200AllOf>(
-		{ url: `/api/v1/auth/my-sessions`, method: "GET", signal },
-		options,
-	);
-};
-
-export const getGetMySessionsQueryKey = () => {
-	return [`/api/v1/auth/my-sessions`] as const;
-};
-
-export const getGetMySessionsInfiniteQueryKey = () => {
-	return ["infinite", `/api/v1/auth/my-sessions`] as const;
-};
-
-export const getGetMySessionsQueryOptions = <
-	TData = Awaited<ReturnType<typeof getMySessions>>,
-	TError = ErrorType<void>,
->(options?: {
-	query?: Partial<
-		UseQueryOptions<Awaited<ReturnType<typeof getMySessions>>, TError, TData>
-	>;
-	request?: SecondParameter<typeof customIdpInstance>;
-}) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey = queryOptions?.queryKey ?? getGetMySessionsQueryKey();
-
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getMySessions>>> = ({
-		signal,
-	}) => getMySessions(requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-		Awaited<ReturnType<typeof getMySessions>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetMySessionsQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getMySessions>>
->;
-export type GetMySessionsQueryError = ErrorType<void>;
-
-export function useGetMySessions<
-	TData = Awaited<ReturnType<typeof getMySessions>>,
-	TError = ErrorType<void>,
->(
-	options: {
-		query: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getMySessions>>, TError, TData>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getMySessions>>,
-					TError,
-					Awaited<ReturnType<typeof getMySessions>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetMySessions<
-	TData = Awaited<ReturnType<typeof getMySessions>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getMySessions>>, TError, TData>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getMySessions>>,
-					TError,
-					Awaited<ReturnType<typeof getMySessions>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetMySessions<
-	TData = Awaited<ReturnType<typeof getMySessions>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getMySessions>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 내 활성 세션 목록
- */
-
-export function useGetMySessions<
-	TData = Awaited<ReturnType<typeof getMySessions>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getMySessions>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetMySessionsQueryOptions(options);
-
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
-}
-
-/**
- * @summary 내 활성 세션 목록
- */
-export const prefetchGetMySessionsQuery = async <
-	TData = Awaited<ReturnType<typeof getMySessions>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getMySessions>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetMySessionsQueryOptions(options);
-
-	await queryClient.prefetchQuery(queryOptions);
-
-	return queryClient;
-};
-
-export const getGetMySessionsSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getMySessions>>,
-	TError = ErrorType<void>,
->(options?: {
-	query?: Partial<
-		UseSuspenseQueryOptions<
-			Awaited<ReturnType<typeof getMySessions>>,
-			TError,
-			TData
-		>
-	>;
-	request?: SecondParameter<typeof customIdpInstance>;
-}) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey = queryOptions?.queryKey ?? getGetMySessionsQueryKey();
-
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getMySessions>>> = ({
-		signal,
-	}) => getMySessions(requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getMySessions>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetMySessionsSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getMySessions>>
->;
-export type GetMySessionsSuspenseQueryError = ErrorType<void>;
-
-export function useGetMySessionsSuspense<
-	TData = Awaited<ReturnType<typeof getMySessions>>,
-	TError = ErrorType<void>,
->(
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getMySessions>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetMySessionsSuspense<
-	TData = Awaited<ReturnType<typeof getMySessions>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getMySessions>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetMySessionsSuspense<
-	TData = Awaited<ReturnType<typeof getMySessions>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getMySessions>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 내 활성 세션 목록
- */
-
-export function useGetMySessionsSuspense<
-	TData = Awaited<ReturnType<typeof getMySessions>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getMySessions>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetMySessionsSuspenseQueryOptions(options);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
-}
-
-export const getGetMySessionsSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getMySessions>>>,
-	TError = ErrorType<void>,
->(options?: {
-	query?: Partial<
-		UseSuspenseInfiniteQueryOptions<
-			Awaited<ReturnType<typeof getMySessions>>,
-			TError,
-			TData
-		>
-	>;
-	request?: SecondParameter<typeof customIdpInstance>;
-}) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey = queryOptions?.queryKey ?? getGetMySessionsInfiniteQueryKey();
-
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getMySessions>>> = ({
-		signal,
-	}) => getMySessions(requestOptions, signal);
-
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getMySessions>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetMySessionsSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getMySessions>>
->;
-export type GetMySessionsSuspenseInfiniteQueryError = ErrorType<void>;
-
-export function useGetMySessionsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getMySessions>>>,
-	TError = ErrorType<void>,
->(
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getMySessions>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetMySessionsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getMySessions>>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getMySessions>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetMySessionsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getMySessions>>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getMySessions>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 내 활성 세션 목록
- */
-
-export function useGetMySessionsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getMySessions>>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getMySessions>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetMySessionsSuspenseInfiniteQueryOptions(options);
-
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
-}
-
-/**
- * @summary 내 활성 세션 목록
- */
-export const prefetchGetMySessionsInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getMySessions>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getMySessions>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetMySessionsSuspenseInfiniteQueryOptions(options);
-
-	await queryClient.prefetchInfiniteQuery(queryOptions);
-
-	return queryClient;
-};
-
-/**
- * 지정된 세션을 종료합니다. 다른 기기의 세션을 종료할 때 사용합니다.
- * @summary 특정 세션 종료
- */
-export const revokeSession = (
-	sessionId: string,
-	options?: SecondParameter<typeof customIdpInstance>,
-	signal?: AbortSignal,
-) => {
-	return customIdpInstance<RevokeSession200AllOf>(
-		{
-			url: `/api/v1/auth/my-sessions/${sessionId}/revoke`,
-			method: "POST",
-			signal,
-		},
-		options,
-	);
-};
-
-export const getRevokeSessionMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof revokeSession>>,
-		TError,
-		{ sessionId: string },
-		TContext
-	>;
-	request?: SecondParameter<typeof customIdpInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof revokeSession>>,
-	TError,
-	{ sessionId: string },
-	TContext
-> => {
-	const mutationKey = ["revokeSession"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
-
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof revokeSession>>,
-		{ sessionId: string }
-	> = (props) => {
-		const { sessionId } = props ?? {};
-
-		return revokeSession(sessionId, requestOptions);
-	};
-
-	return { mutationFn, ...mutationOptions };
-};
-
-export type RevokeSessionMutationResult = NonNullable<
-	Awaited<ReturnType<typeof revokeSession>>
->;
-
-export type RevokeSessionMutationError = ErrorType<void>;
-
-/**
- * @summary 특정 세션 종료
- */
-export const useRevokeSession = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof revokeSession>>,
-			TError,
-			{ sessionId: string },
-			TContext
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof revokeSession>>,
-	TError,
-	{ sessionId: string },
-	TContext
-> => {
-	const mutationOptions = getRevokeSessionMutationOptions(options);
-
-	return useMutation(mutationOptions, queryClient);
-};
-/**
- * 현재 세션을 제외한 다른 모든 세션을 종료합니다.
- * @summary 다른 모든 세션 종료
- */
-export const revokeOtherSessions = (
-	options?: SecondParameter<typeof customIdpInstance>,
-	signal?: AbortSignal,
-) => {
-	return customIdpInstance<RevokeOtherSessions200AllOf>(
-		{ url: `/api/v1/auth/my-sessions/revoke-others`, method: "POST", signal },
-		options,
-	);
-};
-
-export const getRevokeOtherSessionsMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof revokeOtherSessions>>,
-		TError,
-		void,
-		TContext
-	>;
-	request?: SecondParameter<typeof customIdpInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof revokeOtherSessions>>,
-	TError,
-	void,
-	TContext
-> => {
-	const mutationKey = ["revokeOtherSessions"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
-
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof revokeOtherSessions>>,
-		void
-	> = () => {
-		return revokeOtherSessions(requestOptions);
-	};
-
-	return { mutationFn, ...mutationOptions };
-};
-
-export type RevokeOtherSessionsMutationResult = NonNullable<
-	Awaited<ReturnType<typeof revokeOtherSessions>>
->;
-
-export type RevokeOtherSessionsMutationError = ErrorType<void>;
-
-/**
- * @summary 다른 모든 세션 종료
- */
-export const useRevokeOtherSessions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof revokeOtherSessions>>,
-			TError,
-			void,
-			TContext
-		>;
-		request?: SecondParameter<typeof customIdpInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof revokeOtherSessions>>,
-	TError,
-	void,
-	TContext
-> => {
-	const mutationOptions = getRevokeOtherSessionsMutationOptions(options);
 
 	return useMutation(mutationOptions, queryClient);
 };

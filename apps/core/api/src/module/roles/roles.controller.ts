@@ -1,4 +1,11 @@
 import { RolesGuard } from "@cocrepo/be-common";
+import {
+	CreateRoleCommand,
+	DeleteRoleCommand,
+	GetRoleByIdQuery,
+	GetRolesQuery,
+	UpdateRoleCommand,
+} from "@cocrepo/command";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -8,7 +15,6 @@ import {
 	Roles,
 } from "@cocrepo/decorator";
 import { CreateRoleDto, RoleDto, UpdateRoleDto } from "@cocrepo/dto";
-import { RoleFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -22,12 +28,16 @@ import {
 	Post,
 	UseGuards,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("ROLES")
 @Controller()
 export class RolesController {
-	constructor(private readonly rolesService: RoleFacade) {}
+	constructor(
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
+	) {}
 
 	@Get()
 	@UseGuards(RolesGuard)
@@ -42,7 +52,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("역할 목록 조회 성공")
 	async getRoles() {
-		return this.rolesService.getAll();
+		return this.queryBus.execute(new GetRolesQuery());
 	}
 
 	@Get(":id")
@@ -63,7 +73,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	@ResponseMessage("역할 조회 성공")
 	async getRoleById(@Param("id", ParseUUIDPipe) id: string) {
-		return this.rolesService.getById(id);
+		return this.queryBus.execute(new GetRoleByIdQuery(id));
 	}
 
 	@Post()
@@ -85,7 +95,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.CREATED)
 	@ResponseMessage("역할 생성 성공")
 	async createRole(@Body() dto: CreateRoleDto) {
-		return this.rolesService.create(dto);
+		return this.commandBus.execute(new CreateRoleCommand(dto));
 	}
 
 	@Patch(":id")
@@ -115,7 +125,7 @@ export class RolesController {
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateRoleDto,
 	) {
-		return this.rolesService.update(id, dto);
+		return this.commandBus.execute(new UpdateRoleCommand(id, dto));
 	}
 
 	@Delete(":id")
@@ -138,6 +148,6 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	@ResponseMessage("역할 삭제 성공")
 	async deleteRole(@Param("id", ParseUUIDPipe) id: string) {
-		return this.rolesService.delete(id);
+		return this.commandBus.execute(new DeleteRoleCommand(id));
 	}
 }

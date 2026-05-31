@@ -1,11 +1,11 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
 import {
 	RadioGroup as NextUIRadioGroup,
 	type RadioGroupProps as NextUIRadioGroupProps,
 	Radio,
-} from "@cocrepo/ui/heroui";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 import { translateNode, useT } from "../../i18n";
 
 export interface RadioOption {

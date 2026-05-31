@@ -1,14 +1,16 @@
+import { SpaceAggregateRoot } from "@cocrepo/aggregate";
 import type { CreateGroundDto, UpdateGroundDto } from "@cocrepo/dto";
 import { Ground, Space } from "@cocrepo/entity";
 import type { LanguageCode } from "@cocrepo/prisma";
-import { SpaceService } from "@cocrepo/service";
+import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
+import type { OffsetPaginatedResponse } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 
 @Injectable()
 export class SpaceFacade {
 	private readonly logger = new Logger(SpaceFacade.name);
 
-	constructor(private readonly spaceService: SpaceService) {}
+	constructor(private readonly spaceService: SpaceAggregateRoot) {}
 
 	listSpaces(params?: {
 		spaceIds?: string[];
@@ -16,15 +18,7 @@ export class SpaceFacade {
 		take?: number;
 		search?: string;
 		contentLanguageCode?: LanguageCode;
-	}): Promise<{
-		data: Space[];
-		meta: {
-			total: number;
-			skip: number;
-			take: number;
-			totalPages: number;
-		};
-	}> {
+	}): Promise<OffsetPaginatedResponse<Space[]>> {
 		return this.getSpaces(params);
 	}
 
@@ -34,29 +28,18 @@ export class SpaceFacade {
 		take?: number;
 		search?: string;
 		contentLanguageCode?: LanguageCode;
-	}): Promise<{
-		data: Space[];
-		meta: {
-			total: number;
-			skip: number;
-			take: number;
-			totalPages: number;
-		};
-	}> {
+	}): Promise<OffsetPaginatedResponse<Space[]>> {
 		this.logger.debug("공간 목록 조회");
-		const { spaces, total } = await this.spaceService.listSpaces(params);
+		const spaceResult = await this.spaceService.listSpaces(params);
 		const skip = 0;
-		const take = spaces.length;
+		const take = spaceResult.spaces.length;
 
-		return {
-			data: spaces,
-			meta: {
-				total,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(total / take) : 1,
-			},
-		};
+		return buildOffsetPaginatedResponse(
+			spaceResult.spaces,
+			spaceResult.total,
+			skip,
+			take,
+		);
 	}
 
 	getGroundBySpaceId(spaceId: string): Promise<Ground> {
@@ -81,9 +64,5 @@ export class SpaceFacade {
 
 	updateSpaceGround(spaceId: string, dto: UpdateGroundDto): Promise<Space> {
 		return this.spaceService.updateGroundBySpaceId(spaceId, dto);
-	}
-
-	deleteSpace(spaceId: string): Promise<Space> {
-		return this.spaceService.removeById(spaceId);
 	}
 }

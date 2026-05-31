@@ -6,23 +6,6 @@ import type {
 	DataGridSetQueryStates,
 } from "@cocrepo/type";
 import {
-	Button,
-	Checkbox,
-	Chip,
-	Input,
-	Select,
-	SelectItem,
-	Spinner,
-	Table,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-	Textarea,
-	type Selection,
-} from "@cocrepo/ui/heroui";
-import {
 	Archive,
 	FileText,
 	Pencil,
@@ -33,6 +16,23 @@ import {
 	X,
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import {
+	Button,
+	Checkbox,
+	Chip,
+	Input,
+	Select,
+	SelectItem,
+	type Selection,
+	Spinner,
+	Table,
+	TableBody,
+	TableCell,
+	TableColumn,
+	TableHeader,
+	TableRow,
+	Textarea,
+} from "../../design-system/primitives";
 import { Page } from "../../layout/Page/Page";
 import { HStack, VStack } from "../../rhythm";
 import { PageSurface } from "../../surface/PageSurface";

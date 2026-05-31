@@ -1,18 +1,18 @@
 "use client";
 
+import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";
+import { observer } from "mobx-react-lite";
+import { useEffect, useRef } from "react";
 import {
 	Card,
 	CardBody,
 	CardHeader,
 	ScrollShadow,
 	Spacer,
-} from "@cocrepo/ui/heroui";
-import { observer } from "mobx-react-lite";
-import { useRef, useEffect } from "react";
-import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";
+} from "../../design-system/primitives";
+import { MessageStatus } from "../../display/feedback/MessageStatus/MessageStatus";
 import { TypingIndicator } from "../../display/feedback/TypingIndicator/TypingIndicator";
 import { WebSocketConnectionStatus } from "../../display/feedback/WebSocketConnectionStatus/WebSocketConnectionStatus";
-import { MessageStatus } from "../../display/feedback/MessageStatus/MessageStatus";
 import { InquiryReplyForm } from "../../form/InquiryReplyForm";
 
 export interface RealtimeChatPanelProps {

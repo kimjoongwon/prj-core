@@ -11,15 +11,6 @@ import {
 	VStack,
 } from "@cocrepo/ui";
 import {
-	Button,
-	Chip,
-	Divider,
-	Select,
-	SelectItem,
-	type Selection,
-	Switch,
-} from "@cocrepo/ui/heroui";
-import {
 	ArrowLeft,
 	KeyRound,
 	Lock,
@@ -29,6 +20,15 @@ import {
 	ShieldCheck,
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import {
+	Button,
+	Chip,
+	Divider,
+	Select,
+	SelectItem,
+	type Selection,
+	Switch,
+} from "../../design-system/primitives";
 
 /** 모달 액션 타입 */
 export type AccountDetailPageModalAction =

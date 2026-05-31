@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "@cocrepo/ui/heroui";
+import { Button } from "../../design-system/primitives";
 import { PageTitleBar } from "./PageTitleBar";
 
 const meta: Meta<typeof PageTitleBar> = {

@@ -4,14 +4,14 @@ import {
 	DateTimeCell,
 	DetailPage,
 	DetailPageSurface,
-	PageTitleBar,
 	DetailSection,
 	DetailSectionCard,
+	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
-import { Badge, Button, Spinner } from "@cocrepo/ui/heroui";
 import { ArrowLeft, Pencil } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Badge, Button, Spinner } from "../../design-system/primitives";
 
 export interface GroundDetailPageGround {
 	name: string;

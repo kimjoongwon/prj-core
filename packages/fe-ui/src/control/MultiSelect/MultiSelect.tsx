@@ -3,7 +3,7 @@ import {
 	type SelectProps as NextUISelectProps,
 	SelectItem,
 	type Selection,
-} from "@cocrepo/ui/heroui";
+} from "../../design-system/primitives";
 
 export interface MultiSelectProps<_T>
 	extends Omit<

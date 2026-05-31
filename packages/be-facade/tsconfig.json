@@ -6,7 +6,9 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "references": [
+    { "path": "../be-aggregate" },
     { "path": "../common-constant" },
+    { "path": "../common-toolkit" },
     { "path": "../be-dto" },
     { "path": "../be-entity" },
     { "path": "../be-gateway" },

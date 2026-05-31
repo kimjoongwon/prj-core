@@ -17,10 +17,10 @@ import {
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
-import { Button } from "@cocrepo/ui/heroui";
 import { Activity, Trash2 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
+import { Button } from "../../design-system/primitives";
 
 /**
  * 좌측 입력 정의 (모델 타입 필터 + accountId 검색)

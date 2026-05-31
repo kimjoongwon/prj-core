@@ -1,5 +1,7 @@
 "use client";
 
+import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Chip,
 	Spinner,
@@ -9,9 +11,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@cocrepo/ui/heroui";
-import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../../design-system/primitives";
 import {
 	VisibilityCell,
 	type VisibilityStatus,

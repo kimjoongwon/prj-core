@@ -35,6 +35,7 @@ interface TabBarIconProps {
 }
 
 const INITIAL_TAB_ANIMATION_KEYS = {
+	community: 0,
 	home: 0,
 	profile: 0,
 	reservations: 0,
@@ -207,6 +208,20 @@ const renderReservationsTabIcon = (
 	/>
 );
 
+const renderCommunityTabIcon = (
+	{ color, focused, size }: TabBarIconProps,
+	animationKey: number,
+) => (
+	<AnimatedTabIcon
+		animationKey={animationKey}
+		color={color}
+		focused={focused}
+		name="users"
+		size={size}
+		strokeWidth={focused ? 2 : 1.75}
+	/>
+);
+
 const renderProfileTabIcon = (
 	{ color, focused, size }: TabBarIconProps,
 	animationKey: number,
@@ -242,6 +257,10 @@ const MainTabsLayout = observer(() => {
 		);
 	};
 
+	const onPressCommunityTab = () => {
+		setTabAnimationKeys((keys) => getNextTabAnimationKeys(keys, "community"));
+	};
+
 	const onPressProfileTab = () => {
 		setTabAnimationKeys((keys) => getNextTabAnimationKeys(keys, "profile"));
 	};
@@ -252,6 +271,9 @@ const MainTabsLayout = observer(() => {
 	const onRenderReservationsTabIcon = (props: TabBarIconProps) =>
 		renderReservationsTabIcon(props, tabAnimationKeys.reservations);
 
+	const onRenderCommunityTabIcon = (props: TabBarIconProps) =>
+		renderCommunityTabIcon(props, tabAnimationKeys.community);
+
 	const onRenderProfileTabIcon = (props: TabBarIconProps) =>
 		renderProfileTabIcon(props, tabAnimationKeys.profile);
 
@@ -260,6 +282,9 @@ const MainTabsLayout = observer(() => {
 
 	const onRenderReservationsTabButton = (props: BottomTabBarButtonProps) =>
 		renderTabBarButton(props, onPressReservationsTab);
+
+	const onRenderCommunityTabButton = (props: BottomTabBarButtonProps) =>
+		renderTabBarButton(props, onPressCommunityTab);
 
 	const onRenderProfileTabButton = (props: BottomTabBarButtonProps) =>
 		renderTabBarButton(props, onPressProfileTab);
@@ -300,6 +325,15 @@ const MainTabsLayout = observer(() => {
 					tabBarIcon: onRenderReservationsTabIcon,
 					tabBarLabel: "예약",
 					title: "예약",
+				}}
+			/>
+			<Tabs.Screen
+				name="community"
+				options={{
+					tabBarButton: onRenderCommunityTabButton,
+					tabBarIcon: onRenderCommunityTabIcon,
+					tabBarLabel: "커뮤니티",
+					title: "커뮤니티",
 				}}
 			/>
 			<Tabs.Screen

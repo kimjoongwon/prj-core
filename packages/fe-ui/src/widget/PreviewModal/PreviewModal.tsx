@@ -1,5 +1,7 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
 import {
 	Button,
 	Chip,
@@ -9,15 +11,13 @@ import {
 	ModalFooter,
 	ModalHeader,
 	Spinner,
-} from "@cocrepo/ui/heroui";
-import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
-import { VStack } from "../../rhythm/VStack/VStack";
-import { HStack } from "../../rhythm/HStack/HStack";
+} from "../../design-system/primitives";
 import { VariableInputForm } from "../../form/VariableInputForm";
-import type { TemplateVariable } from "../VariableReadTable";
-import { HtmlContentRenderer } from "../HtmlContentRenderer";
+import { HStack } from "../../rhythm/HStack/HStack";
+import { VStack } from "../../rhythm/VStack/VStack";
 import { ByteCounter } from "../ByteCounter";
+import { HtmlContentRenderer } from "../HtmlContentRenderer";
+import type { TemplateVariable } from "../VariableReadTable";
 
 /** 템플릿 유형 */
 type TemplateType = "EMAIL" | "SMS" | "PUSH";

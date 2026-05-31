@@ -36,7 +36,7 @@ Jest 기반으로 백엔드 및 공용 패키지의 테스트 코드를 작성�
 |------|:---------:|------|
 | Repository 테스트 코드 작성 | ✅ | Prisma 쿼리 테스트 |
 | Service 테스트 코드 작성 | ✅ | 비즈니스 로직 테스트 |
-| ApplicationService 테스트 코드 작성 | ✅ | Service 조합 테스트 |
+| UseCase handler 테스트 코드 작성 | ✅ | Command/Query workflow 테스트 |
 | Controller 테스트 코드 작성 | ✅ | API 엔드포인트 테스트 |
 | Guard/Interceptor/Pipe 테스트 | ✅ | 미들웨어 테스트 |
 | Prisma reference-data contract 테스트 | ✅ | `packages/be-prisma/src/reference-data/definitions/**/*.test.ts` Vitest 테스트 |
@@ -240,22 +240,23 @@ describe("UserService", () => {
 });
 ```
 
-### ApplicationService 테스트 템플릿
+### UseCase 테스트 템플릿
 
 ```typescript
 import { Test, TestingModule } from "@nestjs/testing";
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
+import { LoginCommand } from "@cocrepo/command";
 import { UserService, TokenService } from "@cocrepo/service";
 import { JwtService } from "@nestjs/jwt";
-import { AuthApplicationService } from "../auth.application-service";
+import { LoginUseCase } from "../auth/login.usecase";
 import {
   createTestUserEntity,
   createMockJwtService,
   createMockResponse,
 } from "@cocrepo/be-common/src/test";
 
-describe("AuthApplicationService", () => {
-  let applicationService: AuthApplicationService;
+describe("LoginUseCase", () => {
+  let useCase: LoginUseCase;
   let mockUserService: DeepMockProxy<UserService>;
   let mockTokenService: DeepMockProxy<TokenService>;
 
@@ -267,14 +268,14 @@ describe("AuthApplicationService", () => {
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        AuthApplicationService,
+        LoginUseCase,
         { provide: UserService, useValue: mockUserService },
         { provide: TokenService, useValue: mockTokenService },
         { provide: JwtService, useValue: createMockJwtService() },
       ],
     }).compile();
 
-    applicationService = module.get<AuthApplicationService>(AuthApplicationService);
+    useCase = module.get<LoginUseCase>(LoginUseCase);
   });
 
   afterEach(() => {
@@ -289,7 +290,7 @@ describe("AuthApplicationService", () => {
       mockUserService.findUserForAuth.mockResolvedValue(mockUser);
 
       // When
-      const result = await applicationService.login(loginDto);
+      const result = await useCase.execute(new LoginCommand(loginDto.email, loginDto.password));
 
       // Then
       expect(mockUserService.findUserForAuth).toHaveBeenCalledWith(loginDto.email);
@@ -301,15 +302,14 @@ describe("AuthApplicationService", () => {
 
 ### Controller 테스트 템플릿
 
-Controller 테스트는 실제 primary entrypoint만 mock합니다.
-- workflow endpoint: `ApplicationService` mock
-- boundary composition endpoint: `Facade` mock
-- single aggregate-root pass-through endpoint: `Service` mock
-- 같은 endpoint에서 `Facade`와 `ApplicationService`를 동시에 mock하는 기본 템플릿은 만들지 않습니다.
+Controller 테스트는 CQRS bus만 mock합니다.
+- write endpoint: `CommandBus` mock
+- read endpoint: `QueryBus` mock
+- Service/Repository/Client/UseCase handler를 Controller 테스트에서 직접 mock하지 않습니다.
 
 ```typescript
 import { Test, TestingModule } from "@nestjs/testing";
-import { AuthApplicationService } from "@cocrepo/app";
+import { CommandBus } from "@nestjs/cqrs";
 import { AuthController } from "./auth.controller";
 import {
   createTestUserEntity,
@@ -318,21 +318,19 @@ import {
 
 describe("AuthController", () => {
   let controller: AuthController;
-  let mockAuthApplicationService: jest.Mocked<AuthApplicationService>;
+  let mockCommandBus: jest.Mocked<CommandBus>;
 
   const mockUser = createTestUserEntity();
   const mockResponse = createMockResponse();
 
   beforeEach(async () => {
-    mockAuthApplicationService = {
-      login: jest.fn(),
-      loginWithCookie: jest.fn(),
-      logout: jest.fn(),
-    } as unknown as jest.Mocked<AuthApplicationService>;
+    mockCommandBus = {
+      execute: jest.fn(),
+    } as unknown as jest.Mocked<CommandBus>;
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [{ provide: AuthApplicationService, useValue: mockAuthApplicationService }],
+      providers: [{ provide: CommandBus, useValue: mockCommandBus }],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
@@ -342,7 +340,7 @@ describe("AuthController", () => {
     it("로그인이 성공하면 토큰을 반환해야 한다", async () => {
       // Given
       const loginDto = { email: "test@example.com", password: "password123" };
-      mockAuthApplicationService.loginWithCookie.mockResolvedValue({
+      mockCommandBus.execute.mockResolvedValue({
         accessToken: "access-token",
         refreshToken: "refresh-token",
         user: mockUser as any,
@@ -352,38 +350,9 @@ describe("AuthController", () => {
       const result = await controller.login(loginDto, mockResponse as any);
 
       // Then
-      expect(mockAuthApplicationService.loginWithCookie).toHaveBeenCalledWith(
-        loginDto,
-        mockResponse,
-      );
+      expect(mockCommandBus.execute).toHaveBeenCalled();
       expect(result.accessToken).toBe("access-token");
     });
-  });
-});
-```
-
-### Controller 테스트 템플릿 (Facade 예시)
-
-```typescript
-import { Test, TestingModule } from "@nestjs/testing";
-import { UserFacade } from "@cocrepo/facade";
-import { UsersController } from "./users.controller";
-
-describe("UsersController", () => {
-  let controller: UsersController;
-  let mockUserFacade: jest.Mocked<UserFacade>;
-
-  beforeEach(async () => {
-    mockUserFacade = {
-      getUsersBySpace: jest.fn(),
-    } as unknown as jest.Mocked<UserFacade>;
-
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [UsersController],
-      providers: [{ provide: UserFacade, useValue: mockUserFacade }],
-    }).compile();
-
-    controller = module.get<UsersController>(UsersController);
   });
 });
 ```
@@ -484,7 +453,7 @@ describe("에러 처리", () => {
 |----------|------|------|
 | repository-builder | 테스트 대상 | Repository 구현 완료 후 |
 | service-builder | 테스트 대상 | Service 구현 완료 후 |
-| be-app-builder | 테스트 대상 | ApplicationService 구현 완료 후 |
+| be-usecase-builder | 테스트 대상 | UseCase handler 구현 완료 후 |
 | controller-builder | 테스트 대상 | Controller 구현 완료 후 |
 
 ### 후행 에이전트
@@ -509,8 +478,8 @@ describe("에러 처리", () => {
 |------|-----------------|------|
 | `apps/server` | `**/*.spec.ts` | node |
 | `packages/be-common` | `**/*.spec.ts` | node |
-| `packages/be-app` | `**/__tests__/**/*.spec.ts` | node |
-| `packages/be-gateway` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/be-usecase` | `**/__tests__/**/*.spec.ts` | node |
+| `packages/be-client` | `**/__tests__/**/*.spec.ts` | node |
 | `packages/be-service` | `**/__tests__/**/*.spec.ts` | node |
 | `packages/be-repository` | `**/__tests__/**/*.spec.ts` | node |
 | `packages/be-entity` | `**/__tests__/**/*.spec.ts` | node |
@@ -565,10 +534,9 @@ mockReset(mockService);
 
 ```typescript
 // 필요한 메서드만 mock
-const mockApplicationService: jest.Mocked<AuthApplicationService> = {
-  login: jest.fn(),
-  logout: jest.fn(),
-} as unknown as jest.Mocked<AuthApplicationService>;
+const mockCommandBus: jest.Mocked<CommandBus> = {
+  execute: jest.fn(),
+} as unknown as jest.Mocked<CommandBus>;
 ```
 
 ### 테스트 실행 명령어
@@ -576,7 +544,7 @@ const mockApplicationService: jest.Mocked<AuthApplicationService> = {
 ```bash
 # 특정 패키지 테스트
 pnpm --filter=@cocrepo/service test
-pnpm --filter=@cocrepo/app test
+pnpm --filter=@cocrepo/usecase test
 
 # Watch 모드
 pnpm --filter=@cocrepo/service test:watch

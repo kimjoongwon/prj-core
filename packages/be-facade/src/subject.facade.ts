@@ -1,13 +1,13 @@
 import {
+	SubjectAggregateRoot,
 	type SubjectFieldInfo,
 	type SubjectInfo,
-	SubjectService,
-} from "@cocrepo/service";
+} from "@cocrepo/aggregate";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class SubjectFacade {
-	constructor(private readonly subjectsService: SubjectService) {}
+	constructor(private readonly subjectsService: SubjectAggregateRoot) {}
 
 	getSubjectsByGroup(group: string): Promise<SubjectInfo[]> {
 		return this.subjectsService.getSubjectsByGroup(group);

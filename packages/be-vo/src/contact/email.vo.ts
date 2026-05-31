@@ -1,9 +1,6 @@
 import { ValueObject } from "../common/value-object.base";
 import { VoValidationError } from "../errors/vo.error";
-
-interface EmailProps {
-	value: string;
-}
+import type { EmailProps } from "./email.props";
 
 /**
  * 이메일 Value Object
@@ -17,14 +14,14 @@ export class Email extends ValueObject<EmailProps> {
 		/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 	protected validate(props: EmailProps): void {
-		const { value } = props;
-
-		if (!value) {
+		if (!props.value) {
 			throw new VoValidationError("이메일은 필수입니다.");
 		}
 
-		if (!Email.EMAIL_REGEX.test(value)) {
-			throw new VoValidationError(`유효하지 않은 이메일 형식입니다: ${value}`);
+		if (!Email.EMAIL_REGEX.test(props.value)) {
+			throw new VoValidationError(
+				`유효하지 않은 이메일 형식입니다: ${props.value}`,
+			);
 		}
 	}
 

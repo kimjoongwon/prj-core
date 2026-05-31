@@ -1,4 +1,4 @@
-import type { ChipProps } from "@cocrepo/ui/heroui";
+import type { ChipProps } from "../../design-system/primitives";
 
 export interface PaymentManagementQueryState {
 	isLoading: boolean;

@@ -1,14 +1,17 @@
-import { IdpAccountFacade } from "@cocrepo/facade";
 import { AuthAuditLogsRepository } from "@cocrepo/repository";
-import { IdpAccountService, SpaceContext } from "@cocrepo/service";
+import { IdpAccountAggregateRoot } from "@cocrepo/aggregate";
+import { SpaceContext } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { IdpAccountsController } from "./idp-accounts.controller";
+import { IdpAccountUseCaseProviders } from "@cocrepo/usecase";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [IdpAccountsController],
 	providers: [
-		IdpAccountFacade,
-		IdpAccountService,
+		...IdpAccountUseCaseProviders,
+		IdpAccountAggregateRoot,
 		SpaceContext,
 		AuthAuditLogsRepository,
 	],

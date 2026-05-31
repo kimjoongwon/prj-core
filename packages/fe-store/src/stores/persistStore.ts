@@ -29,8 +29,19 @@ interface PersistedData {
 	groundName: string | null;
 	contentLanguageCode: string | null;
 	spaces: SpaceInfo[];
+	accessToken: string | null;
+	refreshToken: string | null;
+	sessionId: string | null;
 	accessTokenExpiresAt: number | null;
 	refreshTokenExpiresAt: number | null;
+}
+
+export interface NativeAuthSession {
+	accessToken: string;
+	refreshToken: string;
+	sessionId: string;
+	accessTokenExpiresAt: number;
+	refreshTokenExpiresAt: number;
 }
 
 /**
@@ -63,7 +74,10 @@ export class PersistStore {
 	// 선택 가능한 Space 목록 (로그인 시 저장)
 	spaces: SpaceInfo[] = [];
 
-	// 토큰 만료 시간 (Unix timestamp, 실제 토큰은 httpOnly 쿠키에 저장)
+	// native 로그인 세션 정보
+	accessToken: string | null = null;
+	refreshToken: string | null = null;
+	sessionId: string | null = null;
 	accessTokenExpiresAt: number | null = null;
 	refreshTokenExpiresAt: number | null = null;
 
@@ -98,8 +112,11 @@ export class PersistStore {
 				this.groundName = data.groundName;
 				this.contentLanguageCode = data.contentLanguageCode ?? null;
 				this.spaces = data.spaces || [];
-				this.accessTokenExpiresAt = data.accessTokenExpiresAt;
-				this.refreshTokenExpiresAt = data.refreshTokenExpiresAt;
+				this.accessToken = data.accessToken ?? null;
+				this.refreshToken = data.refreshToken ?? null;
+				this.sessionId = data.sessionId ?? null;
+				this.accessTokenExpiresAt = data.accessTokenExpiresAt ?? null;
+				this.refreshTokenExpiresAt = data.refreshTokenExpiresAt ?? null;
 			} catch {
 				// 파싱 실패 시 무시
 			}
@@ -120,6 +137,9 @@ export class PersistStore {
 				groundName: this.groundName,
 				contentLanguageCode: this.contentLanguageCode,
 				spaces: this.spaces,
+				accessToken: this.accessToken,
+				refreshToken: this.refreshToken,
+				sessionId: this.sessionId,
 				accessTokenExpiresAt: this.accessTokenExpiresAt,
 				refreshTokenExpiresAt: this.refreshTokenExpiresAt,
 			}),
@@ -178,11 +198,27 @@ export class PersistStore {
 		this.refreshTokenExpiresAt = refreshExpiresAt;
 	}
 
+	setNativeAuthSession(session: NativeAuthSession): void {
+		this.accessToken = session.accessToken;
+		this.refreshToken = session.refreshToken;
+		this.sessionId = session.sessionId;
+		this.accessTokenExpiresAt = session.accessTokenExpiresAt;
+		this.refreshTokenExpiresAt = session.refreshTokenExpiresAt;
+	}
+
+	clearNativeAuthSession(): void {
+		this.accessToken = null;
+		this.refreshToken = null;
+		this.sessionId = null;
+		this.accessTokenExpiresAt = null;
+		this.refreshTokenExpiresAt = null;
+	}
+
 	/**
 	 * Access Token 만료 여부
 	 */
 	get isAccessTokenExpired(): boolean {
-		if (!this.accessTokenExpiresAt) return true;
+		if (typeof this.accessTokenExpiresAt !== "number") return true;
 		return Date.now() >= this.accessTokenExpiresAt - TOKEN_BUFFER_MS;
 	}
 
@@ -190,14 +226,24 @@ export class PersistStore {
 	 * Refresh Token 만료 여부
 	 */
 	get isRefreshTokenExpired(): boolean {
-		if (!this.refreshTokenExpiresAt) return true;
+		if (typeof this.refreshTokenExpiresAt !== "number") return true;
 		return Date.now() >= this.refreshTokenExpiresAt - TOKEN_BUFFER_MS;
 	}
 
 	/**
-	 * 인증 상태 (Access Token 유효 여부)
+	 * 인증 상태 (완전한 native session + Access Token 유효 여부)
 	 */
 	get isAuthenticated(): boolean {
+		if (
+			!this.accessToken ||
+			!this.refreshToken ||
+			!this.sessionId ||
+			typeof this.accessTokenExpiresAt !== "number" ||
+			typeof this.refreshTokenExpiresAt !== "number"
+		) {
+			return false;
+		}
+
 		return !this.isAccessTokenExpired;
 	}
 
@@ -205,7 +251,17 @@ export class PersistStore {
 	 * 토큰 갱신 필요 여부 (Access Token 만료 5분 전)
 	 */
 	get needsTokenRefresh(): boolean {
-		if (!this.accessTokenExpiresAt) return false;
+		if (
+			!this.accessToken ||
+			!this.refreshToken ||
+			!this.sessionId ||
+			typeof this.accessTokenExpiresAt !== "number" ||
+			typeof this.refreshTokenExpiresAt !== "number" ||
+			this.isRefreshTokenExpired
+		) {
+			return false;
+		}
+
 		const remaining = this.accessTokenExpiresAt - Date.now();
 		return remaining > 0 && remaining <= TOKEN_REFRESH_THRESHOLD_MS;
 	}
@@ -220,8 +276,7 @@ export class PersistStore {
 		this.groundName = null;
 		this.contentLanguageCode = null;
 		this.spaces = [];
-		this.accessTokenExpiresAt = null;
-		this.refreshTokenExpiresAt = null;
+		this.clearNativeAuthSession();
 		this.isHydrated = true;
 		this.isSpaceSelectionResolved = true;
 		if (typeof window !== "undefined") {

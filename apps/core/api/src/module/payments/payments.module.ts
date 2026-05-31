@@ -1,26 +1,20 @@
-import { PaymentApplicationService } from "@cocrepo/app";
-import { PaymentFacade } from "@cocrepo/facade";
-import {
-	CoursesRepository,
-	PaymentsRepository,
-	ReservationsRepository,
-} from "@cocrepo/repository";
-import { AuthContext, PaymentService, SpaceContext } from "@cocrepo/service";
+import { PaymentsRepository } from "@cocrepo/repository";
+import { PaymentAggregateRoot } from "@cocrepo/aggregate";
+import { SpaceContext } from "@cocrepo/service";
+import { PaymentCommandHandlers, PaymentQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { PaymentsController } from "./payments.controller";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [PaymentsController],
 	providers: [
-		PaymentFacade,
-		PaymentApplicationService,
-		PaymentService,
-		CoursesRepository,
+		PaymentAggregateRoot,
 		PaymentsRepository,
-		ReservationsRepository,
-		AuthContext,
 		SpaceContext,
+		...PaymentCommandHandlers,
+		...PaymentQueryHandlers,
 	],
-	exports: [PaymentFacade, PaymentApplicationService],
 })
 export class PaymentsModule {}

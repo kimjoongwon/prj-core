@@ -1,17 +1,16 @@
-import type { CreateInquiryDto } from "@cocrepo/dto";
-import { Inquiry, InquiryMessage, InquiryParticipant } from "@cocrepo/entity";
-import type {
-	InquiryPriority,
-	InquiryStatus,
-} from "@cocrepo/prisma";
 import {
 	type FillInquiryFormInput,
 	type FillInquiryFormResult,
+	InquiryAggregateRoot,
 	type InquiryCreateUpdateFormBootstrap,
 	type InquiryStats,
-	InquiryService,
-	SpaceContext,
-} from "@cocrepo/service";
+} from "@cocrepo/aggregate";
+import type { CreateInquiryDto } from "@cocrepo/dto";
+import { Inquiry, InquiryMessage, InquiryParticipant } from "@cocrepo/entity";
+import type { InquiryPriority, InquiryStatus } from "@cocrepo/prisma";
+import { SpaceContext } from "@cocrepo/service";
+import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
+import type { OffsetPaginatedResponse } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 
 @Injectable()
@@ -19,41 +18,30 @@ export class InquiryFacade {
 	private readonly logger = new Logger(InquiryFacade.name);
 
 	constructor(
-		private readonly inquiryService: InquiryService,
+		private readonly inquiryService: InquiryAggregateRoot,
 		private readonly spaceContext: SpaceContext,
 	) {}
 
 	async listInquiries(params: {
-		where: Parameters<InquiryService["list"]>[0]["where"];
-		orderBy: Parameters<InquiryService["list"]>[0]["orderBy"];
+		where: Parameters<InquiryAggregateRoot["list"]>[0]["where"];
+		orderBy: Parameters<InquiryAggregateRoot["list"]>[0]["orderBy"];
 		skip?: number;
 		take?: number;
-	}): Promise<{
-		data: Inquiry[];
-		meta: {
-			total: number;
-			skip: number;
-			take: number;
-			totalPages: number;
-		};
-	}> {
+	}): Promise<OffsetPaginatedResponse<Inquiry[]>> {
 		this.logger.debug("문의 목록 조회");
 		const skip = params.skip ?? 0;
 		const take = params.take ?? 10;
-		const { items, totalCount } = await this.inquiryService.list({
+		const inquiryResult = await this.inquiryService.list({
 			...params,
 			spaceIds: this.spaceContext.spaceIds,
 		});
 
-		return {
-			data: items,
-			meta: {
-				total: totalCount,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(totalCount / take) : 1,
-			},
-		};
+		return buildOffsetPaginatedResponse(
+			inquiryResult.items,
+			inquiryResult.totalCount,
+			skip,
+			take,
+		);
 	}
 
 	getInquiryStats(): Promise<InquiryStats> {
@@ -107,7 +95,7 @@ export class InquiryFacade {
 
 	updateInquiry(
 		inquiryId: string,
-		data: Parameters<InquiryService["update"]>[1],
+		data: Parameters<InquiryAggregateRoot["update"]>[1],
 	): Promise<Inquiry> {
 		return this.inquiryService.update(inquiryId, data);
 	}
@@ -138,28 +126,17 @@ export class InquiryFacade {
 		inquiryId: string;
 		skip?: number;
 		take?: number;
-	}): Promise<{
-		data: InquiryMessage[];
-		meta: {
-			total: number;
-			skip: number;
-			take: number;
-			totalPages: number;
-		};
-	}> {
+	}): Promise<OffsetPaginatedResponse<InquiryMessage[]>> {
 		const skip = params.skip ?? 0;
 		const take = params.take ?? 50;
-		const { items, totalCount } = await this.inquiryService.listMessages(params);
+		const messageResult = await this.inquiryService.listMessages(params);
 
-		return {
-			data: items,
-			meta: {
-				total: totalCount,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(totalCount / take) : 1,
-			},
-		};
+		return buildOffsetPaginatedResponse(
+			messageResult.items,
+			messageResult.totalCount,
+			skip,
+			take,
+		);
 	}
 
 	getInquiryParticipants(inquiryId: string): Promise<InquiryParticipant[]> {

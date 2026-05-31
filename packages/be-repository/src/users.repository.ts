@@ -206,12 +206,14 @@ export class UsersRepository {
 		spaceIds?: string[];
 		includedRoleNames?: string[];
 	}): Promise<{ users: User[]; totalCount: number }> {
-		const { where, orderBy, skip, take, spaceIds, includedRoleNames } = params;
 		this.logger.debug(
-			`접근 가능 Space 내 회원 목록 조회: spaceIds=${spaceIds?.length ?? "all"}개, includedRoles=${includedRoleNames?.join(",") ?? "없음"}`,
+			`접근 가능 Space 내 회원 목록 조회: spaceIds=${params.spaceIds?.length ?? "all"}개, includedRoles=${params.includedRoleNames?.join(",") ?? "없음"}`,
 		);
 
-		const scopedWhere = this.applySpaceScopeToUserWhere(where, spaceIds);
+		const scopedWhere = this.applySpaceScopeToUserWhere(
+			params.where,
+			params.spaceIds,
+		);
 
 		const [users, totalCount] = await Promise.all([
 			this.txHost.tx.user.findMany({
@@ -221,11 +223,11 @@ export class UsersRepository {
 					tenants: {
 						where: {
 							removedAt: null,
-							...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
-							...(includedRoleNames?.length
+							...(params.spaceIds ? { spaceId: { in: params.spaceIds } } : {}),
+							...(params.includedRoleNames?.length
 								? {
 										role: {
-											name: { in: includedRoleNames },
+											name: { in: params.includedRoleNames },
 										},
 									}
 								: {}),
@@ -247,9 +249,9 @@ export class UsersRepository {
 						},
 					},
 				},
-				orderBy,
-				skip,
-				take,
+				orderBy: params.orderBy,
+				skip: params.skip,
+				take: params.take,
 			}),
 			this.txHost.tx.user.count({ where: scopedWhere }),
 		]);
@@ -295,9 +297,9 @@ export class UsersRepository {
 	async countStatsBySpaceIds(params?: {
 		spaceIds?: string[];
 	}): Promise<UserStats> {
-		const { spaceIds } = params ?? {};
+		const queryParams = params ?? {};
 		this.logger.debug(
-			`접근 가능 Space 내 회원 통계 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
+			`접근 가능 Space 내 회원 통계 조회: spaceIds=${queryParams.spaceIds?.length ?? "all"}개`,
 		);
 
 		const startOfMonth = new Date();
@@ -306,11 +308,11 @@ export class UsersRepository {
 
 		const baseWhere = {
 			removedAt: null,
-			...(spaceIds
+			...(queryParams.spaceIds
 				? {
 						tenants: {
 							some: {
-								spaceId: { in: spaceIds },
+								spaceId: { in: queryParams.spaceIds },
 								removedAt: null,
 							},
 						},
@@ -567,32 +569,6 @@ export class UsersRepository {
 	}
 
 	/**
-	 * 소프트 삭제
-	 */
-	async removeById(id: string): Promise<User> {
-		this.logger.debug(`소프트 삭제 중: ${id.slice(-8)}`);
-
-		const result = await this.txHost.tx.user.update({
-			where: { id },
-			data: { removedAt: new Date() },
-		});
-
-		return plainToInstance(User, result);
-	}
-
-	/**
-	 * ID로 비밀번호 해시만 조회
-	 */
-	async findPasswordById(id: string): Promise<{ password: string } | null> {
-		this.logger.debug(`비밀번호 해시 조회: ${id.slice(-8)}`);
-
-		return this.txHost.tx.user.findUnique({
-			where: { id },
-			select: { password: true },
-		});
-	}
-
-	/**
 	 * 비밀번호 업데이트 (관련 필드 함께)
 	 */
 	async updatePassword(id: string, hashedPassword: string): Promise<void> {
@@ -609,61 +585,6 @@ export class UsersRepository {
 				isPermanentlyLocked: false,
 			},
 		});
-	}
-
-	/**
-	 * 비밀번호 히스토리 조회 (최신순)
-	 */
-	async getPasswordHistory(
-		userId: string,
-		limit: number,
-	): Promise<{ id: string; passwordHash: string }[]> {
-		this.logger.debug(
-			`비밀번호 히스토리 조회: ${userId.slice(-8)}, limit=${limit}`,
-		);
-
-		return this.txHost.tx.passwordHistory.findMany({
-			where: { userId },
-			select: { id: true, passwordHash: true },
-			orderBy: { createdAt: "desc" },
-			take: limit,
-		});
-	}
-
-	/**
-	 * 비밀번호 히스토리 추가
-	 */
-	async addPasswordHistory(
-		userId: string,
-		passwordHash: string,
-	): Promise<void> {
-		this.logger.debug(`비밀번호 히스토리 추가: ${userId.slice(-8)}`);
-
-		await this.txHost.tx.passwordHistory.create({
-			data: { userId, passwordHash },
-		});
-	}
-
-	/**
-	 * 오래된 비밀번호 히스토리 삭제 (최대 N개 유지)
-	 */
-	async prunePasswordHistory(userId: string, maxCount: number): Promise<void> {
-		this.logger.debug(
-			`비밀번호 히스토리 정리: ${userId.slice(-8)}, max=${maxCount}`,
-		);
-
-		const histories = await this.txHost.tx.passwordHistory.findMany({
-			where: { userId },
-			select: { id: true },
-			orderBy: { createdAt: "desc" },
-			skip: maxCount,
-		});
-
-		if (histories.length > 0) {
-			await this.txHost.tx.passwordHistory.deleteMany({
-				where: { id: { in: histories.map((h) => h.id) } },
-			});
-		}
 	}
 
 	/**

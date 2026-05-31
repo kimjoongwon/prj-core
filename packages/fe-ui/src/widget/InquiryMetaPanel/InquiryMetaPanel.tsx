@@ -1,11 +1,17 @@
 "use client";
 
-import { Button, Card, CardBody, Chip, Input } from "@cocrepo/ui/heroui";
 import type { Option } from "@cocrepo/type";
 import { Plus, Tag } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { Select } from "../../control/Select/Select";
+import {
+	Button,
+	Card,
+	CardBody,
+	Chip,
+	Input,
+} from "../../design-system/primitives";
 
 export interface InquiryMetaPanelProps {
 	/** 문의 상태 */

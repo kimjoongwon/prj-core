@@ -1,12 +1,7 @@
 import { ValueObject } from "../common/value-object.base";
 import { VoValidationError } from "../errors/vo.error";
-
-export type ChecksumAlgorithm = "md5" | "sha256" | "sha512";
-
-interface ChecksumProps {
-	algorithm: ChecksumAlgorithm;
-	value: string;
-}
+import type { ChecksumProps } from "./checksum.props";
+import type { ChecksumAlgorithm } from "./checksum-algorithm";
 
 export class Checksum extends ValueObject<ChecksumProps> {
 	private static readonly HEX_REGEX = /^[a-f0-9]+$/;
@@ -21,34 +16,34 @@ export class Checksum extends ValueObject<ChecksumProps> {
 	};
 
 	protected validate(props: ChecksumProps): void {
-		const { algorithm, value } = props;
-
-		if (!algorithm) {
+		if (!props.algorithm) {
 			throw new VoValidationError("알고리즘은 필수입니다.");
 		}
 
-		if (!(algorithm in Checksum.LENGTH_BY_ALGORITHM)) {
-			throw new VoValidationError(`지원하지 않는 알고리즘입니다: ${algorithm}`);
+		if (!(props.algorithm in Checksum.LENGTH_BY_ALGORITHM)) {
+			throw new VoValidationError(
+				`지원하지 않는 알고리즘입니다: ${props.algorithm}`,
+			);
 		}
 
-		if (!value) {
+		if (!props.value) {
 			throw new VoValidationError("체크섬 값은 필수입니다.");
 		}
 
-		const expectedLength = Checksum.LENGTH_BY_ALGORITHM[algorithm];
-		if (value.length !== expectedLength) {
-			if (algorithm === "md5") {
+		const expectedLength = Checksum.LENGTH_BY_ALGORITHM[props.algorithm];
+		if (props.value.length !== expectedLength) {
+			if (props.algorithm === "md5") {
 				throw new VoValidationError("MD5 체크섬은 32자여야 합니다.");
 			}
 
-			if (algorithm === "sha256") {
+			if (props.algorithm === "sha256") {
 				throw new VoValidationError("SHA-256 체크섬은 64자여야 합니다.");
 			}
 
 			throw new VoValidationError("SHA-512 체크섬은 128자여야 합니다.");
 		}
 
-		if (!Checksum.HEX_REGEX.test(value)) {
+		if (!Checksum.HEX_REGEX.test(props.value)) {
 			throw new VoValidationError("체크섬 값은 소문자 hex 형식이어야 합니다.");
 		}
 	}

@@ -1,4 +1,14 @@
 import { RolesGuard } from "@cocrepo/be-common";
+import {
+	CreateTemplateCommand,
+	DeleteTemplateCommand,
+	GetTemplateByIdQuery,
+	GetTemplatesQuery,
+	PreviewTemplateQuery,
+	SendTestTemplateCommand,
+	ToggleTemplateStatusCommand,
+	UpdateTemplateCommand,
+} from "@cocrepo/command";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -15,7 +25,6 @@ import {
 	TemplateDto,
 	UpdateTemplateDto,
 } from "@cocrepo/dto";
-import { TemplateFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -30,12 +39,16 @@ import {
 	Query,
 	UseGuards,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("TEMPLATES")
 @Controller()
 export class TemplatesController {
-	constructor(private readonly templatesService: TemplateFacade) {}
+	constructor(
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
+	) {}
 
 	@Get()
 	@HttpCode(HttpStatus.OK)
@@ -52,7 +65,7 @@ export class TemplatesController {
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("템플릿 목록 조회 성공")
 	async getTemplates(@Query() query: QueryTemplateDto) {
-		return this.templatesService.getTemplates(query);
+		return this.queryBus.execute(new GetTemplatesQuery(query));
 	}
 
 	@Get(":templateId")
@@ -75,7 +88,7 @@ export class TemplatesController {
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK)
 	@ResponseMessage("템플릿 조회 성공")
 	async getTemplate(@Param("templateId", ParseUUIDPipe) templateId: string) {
-		return this.templatesService.getTemplateById(templateId);
+		return this.queryBus.execute(new GetTemplateByIdQuery(templateId));
 	}
 
 	@Post()
@@ -96,7 +109,7 @@ export class TemplatesController {
 	@ApiResponseEntity(TemplateDto, HttpStatus.CREATED)
 	@ResponseMessage("템플릿 생성 성공")
 	async createTemplate(@Body() dto: CreateTemplateDto) {
-		return this.templatesService.create(dto);
+		return this.commandBus.execute(new CreateTemplateCommand(dto));
 	}
 
 	@Patch(":templateId")
@@ -126,7 +139,7 @@ export class TemplatesController {
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 		@Body() dto: UpdateTemplateDto,
 	) {
-		return this.templatesService.update(templateId, dto);
+		return this.commandBus.execute(new UpdateTemplateCommand(templateId, dto));
 	}
 
 	@Delete(":templateId")
@@ -149,7 +162,7 @@ export class TemplatesController {
 	async deleteTemplate(
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 	): Promise<void> {
-		await this.templatesService.remove(templateId);
+		await this.commandBus.execute(new DeleteTemplateCommand(templateId));
 	}
 
 	@Patch(":templateId/toggle-status")
@@ -174,7 +187,7 @@ export class TemplatesController {
 	async toggleTemplateStatus(
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 	) {
-		return this.templatesService.toggleStatus(templateId);
+		return this.commandBus.execute(new ToggleTemplateStatusCommand(templateId));
 	}
 
 	@Post(":templateId/preview")
@@ -203,7 +216,7 @@ export class TemplatesController {
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 		@Body() dto: PreviewTemplateDto,
 	) {
-		return this.templatesService.preview(templateId, dto);
+		return this.queryBus.execute(new PreviewTemplateQuery(templateId, dto));
 	}
 
 	@Post(":templateId/send-test")
@@ -232,6 +245,8 @@ export class TemplatesController {
 		@Param("templateId", ParseUUIDPipe) templateId: string,
 		@Body() dto: SendTestTemplateDto,
 	) {
-		return this.templatesService.sendTest(templateId, dto);
+		return this.commandBus.execute(
+			new SendTestTemplateCommand(templateId, dto),
+		);
 	}
 }

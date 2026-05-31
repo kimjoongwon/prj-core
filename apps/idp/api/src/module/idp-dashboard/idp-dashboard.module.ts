@@ -1,10 +1,12 @@
-import { IdpDashboardFacade } from "@cocrepo/facade";
-import { IdpDashboardService } from "@cocrepo/service";
+import { IdpDashboardAggregateRoot } from "@cocrepo/aggregate";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { IdpDashboardController } from "./idp-dashboard.controller";
+import { IdpDashboardUseCaseProviders } from "@cocrepo/usecase";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [IdpDashboardController],
-	providers: [IdpDashboardFacade, IdpDashboardService],
+	providers: [...IdpDashboardUseCaseProviders, IdpDashboardAggregateRoot],
 })
 export class IdpDashboardModule {}

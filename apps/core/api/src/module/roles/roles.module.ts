@@ -1,12 +1,18 @@
-import { RoleFacade } from "@cocrepo/facade";
 import { RolesRepository } from "@cocrepo/repository";
-import { RoleService } from "@cocrepo/service";
+import { RoleAggregateRoot } from "@cocrepo/aggregate";
+import { RoleCommandHandlers, RoleQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { RolesController } from "./roles.controller";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [RolesController],
-	providers: [RoleFacade, RoleService, RolesRepository],
-	exports: [RoleFacade],
+	providers: [
+		RoleAggregateRoot,
+		RolesRepository,
+		...RoleCommandHandlers,
+		...RoleQueryHandlers,
+	],
 })
 export class RolesModule {}

@@ -1,5 +1,7 @@
-import { PRISMA_SERVICE_TOKEN, SYSTEM_ROLES } from "@cocrepo/constant";
-import { SpaceFacade } from "@cocrepo/facade";
+import { SpaceAggregateRoot } from "@cocrepo/aggregate";
+import {
+	PRISMA_SERVICE_TOKEN,
+	SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	AuthCacheService,
 	JwtStrategy,
@@ -66,12 +68,11 @@ describe("Spaces API (E2E)", () => {
 	let app: INestApplication;
 	let jwtToken: string;
 
-	const spaceFacadeMock = {
+	const spaceServiceMock = {
 		listSpaces: jest.fn(),
 		getGroundBySpaceId: jest.fn(),
 		createSpaceWithGround: jest.fn(),
 		updateGroundBySpaceId: jest.fn(),
-		deleteSpace: jest.fn(),
 	};
 
 	beforeAll(async () => {
@@ -96,8 +97,8 @@ describe("Spaces API (E2E)", () => {
 			.useValue({
 				invalidate: async () => {},
 			})
-			.overrideProvider(SpaceFacade)
-			.useValue(spaceFacadeMock)
+			.overrideProvider(SpaceAggregateRoot)
+			.useValue(spaceServiceMock)
 			.compile();
 
 		app = moduleFixture.createNestApplication();
@@ -108,21 +109,16 @@ describe("Spaces API (E2E)", () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 
-		spaceFacadeMock.listSpaces.mockResolvedValue({
-			data: [
+		spaceServiceMock.listSpaces.mockResolvedValue({
+			spaces: [
 				{
 					id: SPACE_RESULT_ID,
 					name: "Scope space",
 				},
 			],
-			meta: {
-				total: 1,
-				skip: 0,
-				take: 1,
-				totalPages: 1,
-			},
+			total: 1,
 		});
-		spaceFacadeMock.getGroundBySpaceId.mockImplementation(async (spaceId: string) => ({
+		spaceServiceMock.getGroundBySpaceId.mockImplementation(async (spaceId: string) => ({
 			id: GROUND_ID,
 			spaceId,
 			name: "Main ground",
@@ -134,17 +130,13 @@ describe("Spaces API (E2E)", () => {
 			logoImageFileId: null,
 			imageFileId: null,
 		}));
-		spaceFacadeMock.createSpaceWithGround.mockResolvedValue({
+		spaceServiceMock.createSpaceWithGround.mockResolvedValue({
 			id: SPACE_RESULT_ID,
 			name: "Created space",
 		});
-		spaceFacadeMock.updateGroundBySpaceId.mockResolvedValue({
+		spaceServiceMock.updateGroundBySpaceId.mockResolvedValue({
 			id: SPACE_RESULT_ID,
 			name: "Updated space",
-		});
-		spaceFacadeMock.deleteSpace.mockResolvedValue({
-			id: SPACE_RESULT_ID,
-			name: "Deleted space",
 		});
 	});
 
@@ -177,7 +169,7 @@ describe("Spaces API (E2E)", () => {
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
 		expect(response.body.data).toBeInstanceOf(Array);
-		expect(spaceFacadeMock.listSpaces).toHaveBeenCalledWith({
+		expect(spaceServiceMock.listSpaces).toHaveBeenCalledWith({
 			spaceIds: [SPACE_VIEW_ID],
 		});
 	});
@@ -190,7 +182,7 @@ describe("Spaces API (E2E)", () => {
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
-		expect(spaceFacadeMock.listSpaces).toHaveBeenCalledWith({
+		expect(spaceServiceMock.listSpaces).toHaveBeenCalledWith({
 			spaceIds: undefined,
 		});
 	});
@@ -204,7 +196,7 @@ describe("Spaces API (E2E)", () => {
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
 		expect(response.body.data.spaceId).toBe(SPACE_VIEW_ID);
-		expect(spaceFacadeMock.getGroundBySpaceId).toHaveBeenCalledWith(SPACE_VIEW_ID);
+		expect(spaceServiceMock.getGroundBySpaceId).toHaveBeenCalledWith(SPACE_VIEW_ID);
 	});
 
 	it("비 FULL_ACCESS tenant는 다른 space ground 조회 시 403을 반환해야 한다", async () => {
@@ -214,7 +206,7 @@ describe("Spaces API (E2E)", () => {
 			.set("x-space-id", SPACE_VIEW_ID);
 
 		expect(response.status).toBe(403);
-		expect(spaceFacadeMock.getGroundBySpaceId).not.toHaveBeenCalled();
+		expect(spaceServiceMock.getGroundBySpaceId).not.toHaveBeenCalled();
 	});
 
 	it("FULL_ACCESS tenant는 다른 space ground도 조회할 수 있어야 한다", async () => {
@@ -226,12 +218,12 @@ describe("Spaces API (E2E)", () => {
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
 		expect(response.body.data.spaceId).toBe(UNKNOWN_SPACE_ID);
-		expect(spaceFacadeMock.getGroundBySpaceId).toHaveBeenCalledWith(
+		expect(spaceServiceMock.getGroundBySpaceId).toHaveBeenCalledWith(
 			UNKNOWN_SPACE_ID,
 		);
 	});
 
-	it("공간 생성은 현재 DTO를 그대로 facade에 전달해야 한다", async () => {
+	it("공간 생성은 현재 DTO를 그대로 service에 전달해야 한다", async () => {
 		const createDto = {
 			name: "Scope ground",
 			label: "HQ",
@@ -242,6 +234,7 @@ describe("Spaces API (E2E)", () => {
 			logoImageFileId: null,
 			imageFileId: null,
 			spaceId: SPACE_MANAGE_ID,
+			contentLanguageCode: "ko_KR",
 		};
 
 		const response = await request(app.getHttpServer())
@@ -253,7 +246,7 @@ describe("Spaces API (E2E)", () => {
 		expect(response.status).toBe(201);
 		expect(response.body.httpStatus).toBe(201);
 		expect(response.body.data.id).toBe(SPACE_RESULT_ID);
-		expect(spaceFacadeMock.createSpaceWithGround).toHaveBeenCalledWith(createDto);
+		expect(spaceServiceMock.createSpaceWithGround).toHaveBeenCalledWith(createDto);
 	});
 
 	it("현재 접근 가능한 space의 ground는 수정할 수 있어야 한다", async () => {
@@ -270,7 +263,7 @@ describe("Spaces API (E2E)", () => {
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
-		expect(spaceFacadeMock.updateGroundBySpaceId).toHaveBeenCalledWith(
+		expect(spaceServiceMock.updateGroundBySpaceId).toHaveBeenCalledWith(
 			SPACE_VIEW_ID,
 			updateDto,
 		);
@@ -284,19 +277,7 @@ describe("Spaces API (E2E)", () => {
 			.send({ name: "Blocked update" });
 
 		expect(response.status).toBe(403);
-		expect(spaceFacadeMock.updateGroundBySpaceId).not.toHaveBeenCalled();
-	});
-
-	it("현재 접근 가능한 space는 삭제할 수 있어야 한다", async () => {
-		const response = await request(app.getHttpServer())
-			.delete(`/api/v1/spaces/${SPACE_VIEW_ID}`)
-			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-space-id", SPACE_VIEW_ID);
-
-		expect(response.status).toBe(200);
-		expect(response.body.httpStatus).toBe(200);
-		expect(response.body.data.id).toBe(SPACE_RESULT_ID);
-		expect(spaceFacadeMock.deleteSpace).toHaveBeenCalledWith(SPACE_VIEW_ID);
+		expect(spaceServiceMock.updateGroundBySpaceId).not.toHaveBeenCalled();
 	});
 
 	it("유효하지 않은 UUID spaceId는 400을 반환해야 한다", async () => {
@@ -306,6 +287,6 @@ describe("Spaces API (E2E)", () => {
 			.set("x-space-id", SPACE_VIEW_ID);
 
 		expect(response.status).toBe(400);
-		expect(spaceFacadeMock.getGroundBySpaceId).not.toHaveBeenCalled();
+		expect(spaceServiceMock.getGroundBySpaceId).not.toHaveBeenCalled();
 	});
 });

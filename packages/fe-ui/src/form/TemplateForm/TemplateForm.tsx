@@ -1,12 +1,18 @@
 "use client";
-import { Button, Input, Radio, RadioGroup, Textarea } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import {
+	Button,
+	Input,
+	Radio,
+	RadioGroup,
+	Textarea,
+} from "../../design-system/primitives";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { TemplateContentEditor } from "../../widget/TemplateContentEditor/TemplateContentEditor";
 import { TemplateTypeBadge } from "../../widget/TemplateTypeBadge/TemplateTypeBadge";
 import {
-	VariableEditTable,
 	type VariableEditItem,
+	VariableEditTable,
 } from "../VariableEditTable/VariableEditTable";
 
 /** 폼 데이터 인터페이스 */

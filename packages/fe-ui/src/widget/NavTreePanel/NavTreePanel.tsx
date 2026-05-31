@@ -1,16 +1,16 @@
 "use client";
 
 import type { NavItem } from "@cocrepo/store";
+import type { Selection } from "@react-types/shared";
+import { ChevronRight } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { AppIcon } from "../../design-system/icon/AppIcon";
 import {
 	Accordion,
 	AccordionItem,
 	type AccordionItemIndicatorProps,
 	cn,
-} from "@cocrepo/ui/heroui";
-import type { Selection } from "@react-types/shared";
-import { ChevronRight } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import { AppIcon } from "../../design-system/icon/AppIcon";
+} from "../../design-system/primitives";
 import { useT } from "../../i18n";
 import { VStack } from "../../rhythm/VStack/VStack";
 

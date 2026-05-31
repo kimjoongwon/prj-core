@@ -15,18 +15,21 @@
     "type-check": "tsc --noEmit",
     "build": "tsc --build",
     "start:dev": "tsc --build --watch",
-		"format": "biome format --write . --no-errors-on-unmatched",
+    "format": "biome format --write . --no-errors-on-unmatched",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "clean": "rm -rf dist && rm -rf node_modules"
   },
   "dependencies": {
+    "@cocrepo/aggregate": "workspace:*",
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/dto": "workspace:*",
     "@cocrepo/entity": "workspace:*",
     "@cocrepo/gateway": "workspace:*",
     "@cocrepo/prisma": "workspace:*",
     "@cocrepo/service": "workspace:*",
+    "@cocrepo/toolkit": "workspace:*",
+    "@cocrepo/type": "workspace:*",
     "@cocrepo/vo": "workspace:*"
   },
   "peerDependencies": {

@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@cocrepo/ui/heroui";
 import { cva, type VariantProps } from "class-variance-authority";
 import { observer } from "mobx-react-lite";
+import { Button } from "../../../design-system/primitives";
 import { useT } from "../../../i18n";
 
 const connectionStatusVariants = cva(

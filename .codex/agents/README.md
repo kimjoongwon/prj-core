@@ -24,6 +24,8 @@ role별 상세 지시는 해당 `*.toml`의 `developer_instructions`에 직접 �
 
 Screen/Feature spec은 planning spec입니다. 목표, 화면 러프, props/event, rendering/rhythm, 하위 조합, 상태별 렌더링, story/unit test 계약만 소유하고 실행 그래프나 backend/foundation build order를 소유하지 않습니다.
 
+모든 source target은 단일 책임 파일 규칙을 따릅니다. class/function/type/interface/enum은 파일별 하나만 소유하고, class 파일 안에 top-level props/interface/type/helper/mapper를 함께 두지 않습니다. Props/Params/Input/Result/Options/helper/mapper/parser/normalizer/constant는 같은 owner 폴더의 별도 파일로 지정합니다.
+
 `## Delivery` 필수 하위 섹션:
 
 - `### Goal`
@@ -48,8 +50,8 @@ Screen/Feature spec은 planning spec입니다. 목표, 화면 러프, props/even
   - `#### DTO / Query DTO 인벤토리`
   - `#### Repository 인벤토리`
   - `#### Service 인벤토리`
-  - `#### ApplicationService 인벤토리`
-  - `#### Facade / Gateway 인벤토리`
+  - `#### UseCase 인벤토리` (`@cocrepo/command` message와 `@cocrepo/usecase` handler를 분리 기록하고, command/query/handler class당 하나의 source file을 target으로 지정)
+  - `#### Client 인벤토리`
   - `#### 엔드포인트 인벤토리`
   - `#### Module / Bootstrap 인벤토리`
   - `#### Seed 인벤토리`
@@ -125,14 +127,33 @@ Planning spec:
 - [be-dto-builder.toml](./be-dto-builder.toml): Request/Response DTO role
 - [be-query-dto-builder.toml](./be-query-dto-builder.toml): PrismaQueryDto 기반 Query DTO role
 - [be-repository-builder.toml](./be-repository-builder.toml): Prisma 기반 Repository role
+- [be-aggregate-builder.toml](./be-aggregate-builder.toml): Aggregate root service provider role
 - [be-service-builder.toml](./be-service-builder.toml): NestJS Service role
-- [be-app-builder.toml](./be-app-builder.toml): ApplicationService role
-- [be-facade-builder.toml](./be-facade-builder.toml): Controller boundary Facade role
-- [be-gateway-builder.toml](./be-gateway-builder.toml): 외부 시스템 Gateway/Client/Adapter role
+- [be-command-builder.toml](./be-command-builder.toml): Nest CQRS Command/Query message contract role
+- [be-event-builder.toml](./be-event-builder.toml): Nest CQRS Event message contract role
+- [be-usecase-builder.toml](./be-usecase-builder.toml): Nest CQRS UseCase handler role
+- [be-client-builder.toml](./be-client-builder.toml): 외부 시스템 단일 연동 Client role
 - [be-controller-builder.toml](./be-controller-builder.toml): NestJS REST Controller role
 - [be-module-builder.toml](./be-module-builder.toml): NestJS Module/Router wiring role
 - [be-bootstrap-integrator.toml](./be-bootstrap-integrator.toml): AppModule bootstrap role
 - [be-seed-maker.toml](./be-seed-maker.toml): seed/reference-data role
+
+## Migration Roles
+
+마이그레이션 전용 role은 기존 backend role 루트에 섞지 않고 [.codex/agents/mig](./mig) 아래에 둡니다.
+등록명은 모두 `mig-` prefix를 사용하며, 실행 기준 문서는 [docs/backend/cqrs-usecase-migration.md](../../docs/backend/cqrs-usecase-migration.md)입니다.
+
+- [mig/arch-cqrs-migration-spec-writer.toml](./mig/arch-cqrs-migration-spec-writer.toml): CQRS/UseCase 마이그레이션 runbook 작성 role
+- [mig/be-package-migration-builder.toml](./mig/be-package-migration-builder.toml): `@cocrepo/command`, `@cocrepo/event` 추가, `@cocrepo/app -> @cocrepo/usecase`, `@cocrepo/gateway -> @cocrepo/client`, `@cocrepo/facade` 제거 package migration role
+- [mig/be-command-builder.toml](./mig/be-command-builder.toml): Command/Query message를 `@cocrepo/command`로 이동하는 role
+- [mig/be-event-builder.toml](./mig/be-event-builder.toml): Event message를 `@cocrepo/event`로 이동하는 role
+- [mig/be-usecase-builder.toml](./mig/be-usecase-builder.toml): Nest CQRS UseCase handler role
+- [mig/be-aggregate-entity-builder.toml](./mig/be-aggregate-entity-builder.toml): `AbstractAggregateRootEntity`와 aggregate root entity 전환 role
+- [mig/be-cqrs-repository-builder.toml](./mig/be-cqrs-repository-builder.toml): aggregate rehydrate/save repository 전환 role
+- [mig/be-aggregate-service-builder.toml](./mig/be-aggregate-service-builder.toml): aggregate root service를 `@cocrepo/aggregate`의 `{Domain}AggregateRoot` provider로 이동/정리하는 role
+- [mig/be-cqrs-controller-builder.toml](./mig/be-cqrs-controller-builder.toml): Controller를 `CommandBus`/`QueryBus` entrypoint로 전환하는 role
+- [mig/be-cqrs-module-builder.toml](./mig/be-cqrs-module-builder.toml): `CqrsModule`, usecase handler, provider wiring role
+- [mig/be-client-builder.toml](./mig/be-client-builder.toml): 외부 API 연동을 단일 연동 Client로 전환하는 role
 
 ## Web Frontend
 

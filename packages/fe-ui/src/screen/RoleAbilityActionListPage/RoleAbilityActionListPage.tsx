@@ -2,12 +2,12 @@
 import {
 	DetailPage,
 	DetailPageSurface,
-	PageTitleBar,
 	DetailSectionCard,
+	PageTitleBar,
 } from "@cocrepo/ui";
-import { Button } from "@cocrepo/ui/heroui";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Button } from "../../design-system/primitives";
 
 export interface RoleAbilityActionListPageProps {
 	abilityId: string;

@@ -16,9 +16,9 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { cn } from "@cocrepo/ui/heroui";
 import { GripVertical } from "lucide-react";
 import type { ReactNode } from "react";
+import { cn } from "../../../design-system/primitives";
 
 /**
  * 드래그 핸들에 전달되는 Props

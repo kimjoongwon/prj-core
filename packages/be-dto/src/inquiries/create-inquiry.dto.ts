@@ -6,11 +6,11 @@ import {
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import {
+	type Inquiry,
 	InquiryCategory,
 	InquiryChannel,
 	InquiryPriority,
 	InquirySource,
-	type Inquiry,
 } from "@cocrepo/prisma";
 
 /**

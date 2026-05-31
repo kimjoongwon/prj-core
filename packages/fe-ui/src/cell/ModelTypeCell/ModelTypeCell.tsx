@@ -1,4 +1,4 @@
-import { Chip } from "@cocrepo/ui/heroui";
+import { Chip } from "../../design-system/primitives";
 
 /**
  * 모델 타입별 컬러 설정

@@ -1,7 +1,7 @@
 import {
 	Pagination as HeroUIPagination,
 	type PaginationProps as HeroUIPaginationProps,
-} from "@cocrepo/ui/heroui";
+} from "../../design-system/primitives";
 
 export interface PaginationProps
 	extends Omit<HeroUIPaginationProps, "total" | "page" | "onChange"> {

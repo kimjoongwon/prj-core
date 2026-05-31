@@ -12,12 +12,12 @@ import {
 	DataGridStateModel,
 	PageTitleBar,
 	Surface,
-	VStack,
 	useT,
+	VStack,
 } from "@cocrepo/ui";
-import { Tab, Tabs } from "@cocrepo/ui/heroui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type Key, useEffect } from "react";
+import { Tab, Tabs } from "../../design-system/primitives";
 
 const leftInputs: InputConfig[] = [
 	{

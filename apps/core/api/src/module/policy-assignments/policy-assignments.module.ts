@@ -1,4 +1,3 @@
-import { PolicyAssignmentFacade } from "@cocrepo/facade";
 import {
 	PoliciesRepository,
 	RolePoliciesRepository,
@@ -6,22 +5,29 @@ import {
 	UserPoliciesRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
-import { PolicyAssignmentService, SpaceContext } from "@cocrepo/service";
+import { PolicyAssignmentAggregateRoot } from "@cocrepo/aggregate";
+import { SpaceContext } from "@cocrepo/service";
+import {
+	PolicyAssignmentCommandHandlers,
+	PolicyAssignmentQueryHandlers,
+} from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { PolicyAssignmentsController } from "./policy-assignments.controller";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [PolicyAssignmentsController],
 	providers: [
-		PolicyAssignmentFacade,
-		PolicyAssignmentService,
+		PolicyAssignmentAggregateRoot,
 		PoliciesRepository,
 		RolePoliciesRepository,
 		UserPoliciesRepository,
 		RolesRepository,
 		UsersRepository,
 		SpaceContext,
+		...PolicyAssignmentCommandHandlers,
+		...PolicyAssignmentQueryHandlers,
 	],
-	exports: [PolicyAssignmentFacade],
 })
 export class PolicyAssignmentsModule {}

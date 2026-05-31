@@ -1,14 +1,14 @@
+import { PolicyAggregateRoot } from "@cocrepo/aggregate";
 import {
 	CreatePolicyDto,
 	SyncPolicyAbilitiesDto,
 	UpdatePolicyDto,
 } from "@cocrepo/dto";
-import { PolicyService } from "@cocrepo/service";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class PolicyFacade {
-	constructor(private readonly policyService: PolicyService) {}
+	constructor(private readonly policyService: PolicyAggregateRoot) {}
 
 	listPolicies(): Promise<unknown> {
 		return this.policyService.listPolicies();

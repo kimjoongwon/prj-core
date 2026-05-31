@@ -1,4 +1,11 @@
 import { RolesGuard } from "@cocrepo/be-common";
+import {
+	CreateRoutineCommand,
+	DeleteRoutineCommand,
+	GetRoutineByIdQuery,
+	GetRoutinesQuery,
+	UpdateRoutineCommand,
+} from "@cocrepo/command";
 import { ROUTINE_ERRORS, SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -14,7 +21,6 @@ import {
 	UpdateRoutineDto,
 } from "@cocrepo/dto";
 import { Routine } from "@cocrepo/entity";
-import { RoutineFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -29,12 +35,16 @@ import {
 	Query,
 	UseGuards,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("ROUTINES")
 @Controller()
 export class RoutinesController {
-	constructor(private readonly routinesService: RoutineFacade) {}
+	constructor(
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
+	) {}
 
 	/**
 	 * 루틴 목록 조회
@@ -52,7 +62,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("루틴 목록 조회 성공")
 	async getRoutines(@Query() query: GetRoutinesQueryDto) {
-		return this.routinesService.findRoutines(query);
+		return this.queryBus.execute(new GetRoutinesQuery(query));
 	}
 
 	/**
@@ -82,7 +92,7 @@ export class RoutinesController {
 	async getRoutine(
 		@Param("routineId", ParseUUIDPipe) routineId: string,
 	): Promise<Routine> {
-		return this.routinesService.findRoutineById(routineId);
+		return this.queryBus.execute(new GetRoutineByIdQuery(routineId));
 	}
 
 	/**
@@ -111,7 +121,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.CREATED)
 	@ResponseMessage("루틴 등록 성공")
 	async createRoutine(@Body() dto: CreateRoutineDto): Promise<Routine> {
-		return this.routinesService.createRoutine(dto);
+		return this.commandBus.execute(new CreateRoutineCommand(dto));
 	}
 
 	/**
@@ -149,7 +159,7 @@ export class RoutinesController {
 		@Param("routineId", ParseUUIDPipe) routineId: string,
 		@Body() dto: UpdateRoutineDto,
 	): Promise<Routine> {
-		return this.routinesService.updateRoutine(routineId, dto);
+		return this.commandBus.execute(new UpdateRoutineCommand(routineId, dto));
 	}
 
 	/**
@@ -183,6 +193,6 @@ export class RoutinesController {
 	async deleteRoutine(
 		@Param("routineId", ParseUUIDPipe) routineId: string,
 	): Promise<void> {
-		await this.routinesService.removeRoutine(routineId);
+		await this.commandBus.execute(new DeleteRoutineCommand(routineId));
 	}
 }

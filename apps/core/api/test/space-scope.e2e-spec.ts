@@ -1,10 +1,14 @@
-import { PRISMA_SERVICE_TOKEN, SYSTEM_ROLES } from "@cocrepo/constant";
-import { UsersRepository, TasksRepository, SpacesRepository } from "@cocrepo/repository";
+import { TaskAggregateRoot } from "@cocrepo/aggregate";
+import {
+	PRISMA_SERVICE_TOKEN,
+	SYSTEM_ROLES } from "@cocrepo/constant";
+import { UsersRepository,
+	TasksRepository,
+	SpacesRepository } from "@cocrepo/repository";
 import {
 	AuthCacheService,
 	JwtStrategy,
 	SpaceContext,
-	TaskService,
 	TokenStorageService,
 	UserService,
 } from "@cocrepo/service";
@@ -87,7 +91,7 @@ class SpaceScopeTestController {
 	constructor(
 		private readonly spaceContext: SpaceContext,
 		private readonly userService: UserService,
-		private readonly taskService: TaskService,
+		private readonly taskService: TaskAggregateRoot,
 	) {}
 
 	@Get("context")
@@ -194,7 +198,7 @@ describe("Space Scope API (E2E)", () => {
 			providers: [
 				SpaceContext,
 				UserService,
-				TaskService,
+				TaskAggregateRoot,
 				{
 					provide: AuthCacheService,
 					useValue: {

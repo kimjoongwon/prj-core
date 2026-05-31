@@ -2,9 +2,8 @@ import {
 	ClassField,
 	NumberFieldOptional,
 	StringField,
-	StringFieldOptional,
 } from "@cocrepo/decorator";
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import { UserDto } from "../user.dto";
 
 export class TokenDto {

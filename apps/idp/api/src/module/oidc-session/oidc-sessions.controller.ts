@@ -13,7 +13,6 @@ import {
 	PageMetaDto,
 	QueryOidcSessionDto,
 } from "@cocrepo/dto";
-import { OidcSessionFacade } from "@cocrepo/facade";
 import {
 	Controller,
 	Get,
@@ -23,14 +22,25 @@ import {
 	Post,
 	Query,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
+import {
+	GetOidcSessionStatsQuery,
+	GetOidcSessionsQuery,
+	RevokeAllOidcSessionsCommand,
+	RevokeOidcSessionCommand,
+	RevokeOidcSessionsByGrantCommand,
+} from "@cocrepo/command";
 
 @ApiTags("OIDC_SESSIONS")
 @Controller()
 @Roles([SYSTEM_ROLES.FULL_ACCESS])
 @SkipSpaceCheck()
 export class OidcSessionsController {
-	constructor(private readonly oidcSessionFacade: OidcSessionFacade) {}
+	constructor(
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
+	) {}
 
 	@Get()
 	@ApiOperation({
@@ -47,7 +57,7 @@ export class OidcSessionsController {
 	})
 	@ResponseMessage("OIDC 세션 목록 조회 성공")
 	async getOidcSessions(@Query() query: QueryOidcSessionDto) {
-		return this.oidcSessionFacade.getMany(query);
+		return this.queryBus.execute(new GetOidcSessionsQuery(query));
 	}
 
 	@Get("stats")
@@ -61,7 +71,7 @@ export class OidcSessionsController {
 	@ApiResponseEntity(OidcSessionStatsDto, HttpStatus.OK)
 	@ResponseMessage("OIDC 세션 통계 조회 성공")
 	async getOidcSessionStats() {
-		return this.oidcSessionFacade.getStats();
+		return this.queryBus.execute(new GetOidcSessionStatsQuery());
 	}
 
 	@Post(":key/revoke")
@@ -80,7 +90,7 @@ export class OidcSessionsController {
 	@ApiErrors(401, 404, 500)
 	@ResponseMessage("세션/토큰 폐기 성공")
 	async revokeOidcSession(@Param("key") key: string): Promise<void> {
-		await this.oidcSessionFacade.revokeByKey(key);
+		await this.commandBus.execute(new RevokeOidcSessionCommand(key));
 	}
 
 	@Post("revoke-all")
@@ -94,7 +104,7 @@ export class OidcSessionsController {
 	@ApiErrors(401, 500)
 	@ResponseMessage("전체 세션/토큰 일괄 폐기 성공")
 	async revokeAllOidcSessions(): Promise<void> {
-		await this.oidcSessionFacade.revokeAll();
+		await this.commandBus.execute(new RevokeAllOidcSessionsCommand());
 	}
 
 	@Post("revoke-by-grant/:grantId")
@@ -115,6 +125,8 @@ export class OidcSessionsController {
 	async revokeOidcSessionsByGrant(
 		@Param("grantId") grantId: string,
 	): Promise<void> {
-		await this.oidcSessionFacade.revokeByGrantId(grantId);
+		await this.commandBus.execute(
+			new RevokeOidcSessionsByGrantCommand(grantId),
+		);
 	}
 }

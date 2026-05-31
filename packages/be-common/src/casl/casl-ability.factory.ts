@@ -96,7 +96,7 @@ export class CaslAbilityFactory {
 	 * 7. CAN/CAN_NOT에 따라 can/cannot 호출
 	 */
 	async createForUser(user: UserDto): Promise<AppAbility> {
-		const { can, cannot, build } = new AbilityBuilder<AppAbility>(
+		const abilityBuilder = new AbilityBuilder<AppAbility>(
 			Ability as AppAbilityClass,
 		);
 
@@ -108,7 +108,7 @@ export class CaslAbilityFactory {
 			this.logger.warn(
 				`사용자에게 현재 Space의 Tenant 또는 Role이 없습니다: userId=${user.id}, spaceId=${spaceId}`,
 			);
-			return build();
+			return abilityBuilder.build();
 		}
 
 		const roleId = currentTenant.roleId;
@@ -145,10 +145,15 @@ export class CaslAbilityFactory {
 
 		// 각 Ability를 CASL 규칙으로 변환
 		for (const ability of mergedAbilities) {
-			this.applyAbilityRule(ability, userContext, can, cannot);
+			this.applyAbilityRule(
+				ability,
+				userContext,
+				abilityBuilder.can.bind(abilityBuilder),
+				abilityBuilder.cannot.bind(abilityBuilder),
+			);
 		}
 
-		return build();
+		return abilityBuilder.build();
 	}
 
 	/**
@@ -184,8 +189,8 @@ export class CaslAbilityFactory {
 			}
 		}
 
-		const mergedAbilities = Array.from(abilityMap.values()).sort(
-			(a, b) => this.compareAbilityPriority(b, a),
+		const mergedAbilities = Array.from(abilityMap.values()).sort((a, b) =>
+			this.compareAbilityPriority(b, a),
 		);
 
 		return mergedAbilities;

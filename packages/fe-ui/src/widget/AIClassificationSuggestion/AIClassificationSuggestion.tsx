@@ -1,8 +1,14 @@
 "use client";
 
-import { Button, Card, CardBody, Chip, Progress } from "@cocrepo/ui/heroui";
-import { Sparkles, Check, X } from "lucide-react";
+import { Check, Sparkles, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import {
+	Button,
+	Card,
+	CardBody,
+	Chip,
+	Progress,
+} from "../../design-system/primitives";
 
 export interface AIClassificationResult {
 	/** 추천 카테고리 코드 */

@@ -1,15 +1,15 @@
 "use client";
 
 import { useAuthStore, usePersistStore } from "@cocrepo/store";
+import { LogOut } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Avatar,
 	Dropdown,
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger,
-} from "@cocrepo/ui/heroui";
-import { LogOut } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 /**

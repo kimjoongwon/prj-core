@@ -1,4 +1,10 @@
 import { RolesGuard } from "@cocrepo/be-common";
+import {
+	CreateFolderCommand,
+	DeleteFolderCommand,
+	GetFoldersQuery,
+	UpdateFolderCommand,
+} from "@cocrepo/command";
 import { SYSTEM_ROLES, USER_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -14,8 +20,7 @@ import {
 	UpdateFolderDto,
 } from "@cocrepo/dto";
 import { Folder } from "@cocrepo/entity";
-import { FolderFacade } from "@cocrepo/facade";
-import { AuthContext, SpaceContext } from "@cocrepo/service";
+import { AuthContext } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -31,15 +36,16 @@ import {
 	UnauthorizedException,
 	UseGuards,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("FOLDERS")
 @Controller()
 export class FoldersController {
 	constructor(
-		private readonly folderFacade: FolderFacade,
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
 		private readonly authContext: AuthContext,
-		private readonly spaceContext: SpaceContext,
 	) {}
 
 	@Get()
@@ -57,7 +63,7 @@ export class FoldersController {
 	@ApiResponseEntity(FolderDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("폴더 목록 조회 성공")
 	async getFolders(@Query() query: FolderQueryDto) {
-		return this.folderFacade.getFolders(query);
+		return this.queryBus.execute(new GetFoldersQuery(query));
 	}
 
 	@Post()
@@ -79,17 +85,12 @@ export class FoldersController {
 	@ApiResponseEntity(FolderDto, HttpStatus.CREATED)
 	@ResponseMessage("폴더 생성 성공")
 	async createFolder(@Body() dto: CreateFolderDto): Promise<Folder> {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
 		const userId = this.authContext.user?.id;
 		if (!userId) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		return this.folderFacade.createFolder(dto, userId);
+		return this.commandBus.execute(new CreateFolderCommand(dto, userId));
 	}
 
 	@Patch(":folderId")
@@ -113,12 +114,7 @@ export class FoldersController {
 		@Param("folderId", ParseUUIDPipe) folderId: string,
 		@Body() dto: UpdateFolderDto,
 	): Promise<Folder> {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		return this.folderFacade.updateFolder(folderId, dto);
+		return this.commandBus.execute(new UpdateFolderCommand(folderId, dto));
 	}
 
 	@Delete(":folderId")
@@ -137,11 +133,6 @@ export class FoldersController {
 	async deleteFolder(
 		@Param("folderId", ParseUUIDPipe) folderId: string,
 	): Promise<void> {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		await this.folderFacade.deleteFolder(folderId);
+		await this.commandBus.execute(new DeleteFolderCommand(folderId));
 	}
 }

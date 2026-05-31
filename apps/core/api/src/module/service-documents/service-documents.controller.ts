@@ -1,23 +1,26 @@
 import { RolesGuard } from "@cocrepo/be-common";
+import {
+	ArchiveServiceDocumentCommand,
+	CreateServiceDocumentCommand,
+	DeleteServiceDocumentCommand,
+	GetServiceDocumentsQuery,
+	PublishServiceDocumentCommand,
+	UpdateServiceDocumentCommand,
+} from "@cocrepo/command";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
-	ApiPublicErrors,
 	ApiResponseEntity,
-	Public,
 	ResponseMessage,
 	Roles,
 } from "@cocrepo/decorator";
 import {
 	CreateServiceDocumentDto,
-	QueryPublicServiceDocumentDto,
 	QueryServiceDocumentDto,
 	ServiceDocumentDto,
 	UpdateServiceDocumentDto,
 } from "@cocrepo/dto";
-import { ServiceDocumentFacade } from "@cocrepo/facade";
-import { ServiceDocumentKind } from "@cocrepo/prisma";
 import {
 	Body,
 	Controller,
@@ -26,60 +29,22 @@ import {
 	HttpCode,
 	HttpStatus,
 	Param,
-	ParseEnumPipe,
 	ParseUUIDPipe,
 	Patch,
 	Post,
 	Query,
 	UseGuards,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("SERVICE_DOCUMENTS")
 @Controller()
 export class ServiceDocumentsController {
-	constructor(private readonly serviceDocumentsFacade: ServiceDocumentFacade) {}
-
-	@Get("public")
-	@Public()
-	@HttpCode(HttpStatus.OK)
-	@ApiOperation({
-		operationId: "getPublishedServiceDocuments",
-		summary: "게시된 서비스 문서 묶음 조회",
-		description:
-			"모바일과 web 서비스가 가입/설정 화면에서 노출할 게시 문서 묶음을 조회합니다.",
-	})
-	@ApiPublicErrors()
-	@ApiResponseEntity(ServiceDocumentDto, HttpStatus.OK, { isArray: true })
-	@ResponseMessage("게시 서비스 문서 묶음 조회 성공")
-	getPublishedServiceDocuments(@Query() query: QueryPublicServiceDocumentDto) {
-		return this.serviceDocumentsFacade.getPublishedServiceDocuments(query);
-	}
-
-	@Get("public/:kind")
-	@Public()
-	@HttpCode(HttpStatus.OK)
-	@ApiOperation({
-		operationId: "getPublishedServiceDocument",
-		summary: "게시된 서비스 문서 단건 조회",
-		description:
-			"문서 종류, 플랫폼, 로케일 기준으로 현재 게시된 서비스 문서를 조회합니다.",
-	})
-	@ApiParam({
-		name: "kind",
-		enum: ServiceDocumentKind,
-		description: "서비스 문서 종류",
-	})
-	@ApiPublicErrors()
-	@ApiResponseEntity(ServiceDocumentDto, HttpStatus.OK)
-	@ResponseMessage("게시 서비스 문서 조회 성공")
-	getPublishedServiceDocument(
-		@Param("kind", new ParseEnumPipe(ServiceDocumentKind))
-		kind: ServiceDocumentKind,
-		@Query() query: QueryPublicServiceDocumentDto,
-	) {
-		return this.serviceDocumentsFacade.getPublishedServiceDocument(kind, query);
-	}
+	constructor(
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
+	) {}
 
 	@Get()
 	@HttpCode(HttpStatus.OK)
@@ -96,33 +61,7 @@ export class ServiceDocumentsController {
 	@ApiResponseEntity(ServiceDocumentDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("서비스 문서 목록 조회 성공")
 	getServiceDocuments(@Query() query: QueryServiceDocumentDto) {
-		return this.serviceDocumentsFacade.getServiceDocuments(query);
-	}
-
-	@Get(":serviceDocumentId")
-	@HttpCode(HttpStatus.OK)
-	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
-	@ApiOperation({
-		operationId: "getServiceDocument",
-		summary: "서비스 문서 상세 조회",
-		description: "특정 서비스 문서의 상세 정보를 조회합니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "serviceDocumentId",
-		description: "서비스 문서 ID (UUID)",
-		type: String,
-	})
-	@ApiErrors(401, 403, 404, 500)
-	@ApiResponseEntity(ServiceDocumentDto, HttpStatus.OK)
-	@ResponseMessage("서비스 문서 조회 성공")
-	getServiceDocument(
-		@Param("serviceDocumentId", ParseUUIDPipe) serviceDocumentId: string,
-	) {
-		return this.serviceDocumentsFacade.getServiceDocumentById(
-			serviceDocumentId,
-		);
+		return this.queryBus.execute(new GetServiceDocumentsQuery(query));
 	}
 
 	@Post()
@@ -143,7 +82,7 @@ export class ServiceDocumentsController {
 	@ApiResponseEntity(ServiceDocumentDto, HttpStatus.CREATED)
 	@ResponseMessage("서비스 문서 생성 성공")
 	createServiceDocument(@Body() dto: CreateServiceDocumentDto) {
-		return this.serviceDocumentsFacade.create(dto);
+		return this.commandBus.execute(new CreateServiceDocumentCommand(dto));
 	}
 
 	@Patch(":serviceDocumentId")
@@ -173,7 +112,9 @@ export class ServiceDocumentsController {
 		@Param("serviceDocumentId", ParseUUIDPipe) serviceDocumentId: string,
 		@Body() dto: UpdateServiceDocumentDto,
 	) {
-		return this.serviceDocumentsFacade.update(serviceDocumentId, dto);
+		return this.commandBus.execute(
+			new UpdateServiceDocumentCommand(serviceDocumentId, dto),
+		);
 	}
 
 	@Patch(":serviceDocumentId/publish")
@@ -198,7 +139,9 @@ export class ServiceDocumentsController {
 	publishServiceDocument(
 		@Param("serviceDocumentId", ParseUUIDPipe) serviceDocumentId: string,
 	) {
-		return this.serviceDocumentsFacade.publish(serviceDocumentId);
+		return this.commandBus.execute(
+			new PublishServiceDocumentCommand(serviceDocumentId),
+		);
 	}
 
 	@Patch(":serviceDocumentId/archive")
@@ -222,7 +165,9 @@ export class ServiceDocumentsController {
 	archiveServiceDocument(
 		@Param("serviceDocumentId", ParseUUIDPipe) serviceDocumentId: string,
 	) {
-		return this.serviceDocumentsFacade.archive(serviceDocumentId);
+		return this.commandBus.execute(
+			new ArchiveServiceDocumentCommand(serviceDocumentId),
+		);
 	}
 
 	@Delete(":serviceDocumentId")
@@ -245,6 +190,8 @@ export class ServiceDocumentsController {
 	async deleteServiceDocument(
 		@Param("serviceDocumentId", ParseUUIDPipe) serviceDocumentId: string,
 	): Promise<void> {
-		await this.serviceDocumentsFacade.remove(serviceDocumentId);
+		await this.commandBus.execute(
+			new DeleteServiceDocumentCommand(serviceDocumentId),
+		);
 	}
 }

@@ -1,8 +1,8 @@
 "use client";
 
-import { Chip } from "@cocrepo/ui/heroui";
-import { AlertTriangle, ArrowUp, Minus, ArrowDown } from "lucide-react";
+import { AlertTriangle, ArrowDown, ArrowUp, Minus } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Chip } from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 /** 문의 우선순위값 (Prisma Enum 값과 동일) */

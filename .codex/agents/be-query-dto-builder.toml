@@ -101,6 +101,10 @@ QueryDto (packages/be-dto/src/query/query.dto.ts)
 
 ## 핵심 규칙
 
+- Query DTO class는 class당 하나의 파일을 가집니다.
+- Query DTO class 파일에는 top-level helper/mapper/type/interface를 함께 두지 않습니다.
+- 커스텀 sort/filter helper나 params type이 필요하면 가까운 별도 파일로 분리합니다.
+
 ### Query DTO 설계 원칙 (Critical)
 
 **Query DTO는 순수한 검색/필터 파라미터 컨테이너입니다.**

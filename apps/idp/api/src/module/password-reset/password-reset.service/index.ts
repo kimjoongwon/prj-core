@@ -1,6 +1,10 @@
-import * as crypto from "node:crypto";
 import { EmailService, RedisService } from "@cocrepo/service";
-import { HashedPassword, PlainPassword } from "@cocrepo/vo";
+import {
+	Email,
+	HashedPassword,
+	PasswordResetToken,
+	PlainPassword,
+} from "@cocrepo/vo";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { DirectPrismaProvider } from "../../oidc/direct-prisma.provider";
@@ -78,21 +82,27 @@ export class PasswordResetService {
 	async requestReset(email: string): Promise<void> {
 		this.logger.debug(`비밀번호 재설정 요청: ${email}`);
 
+		let normalizedEmail: string;
+		try {
+			normalizedEmail = Email.create(email).value;
+		} catch {
+			this.logger.debug("재설정 요청 무시 (이메일 형식 오류)");
+			return;
+		}
+
 		// 사용자 조회 (없으면 조용히 종료)
-		const user = await this.directUserRepository.findByEmailForAuth(email);
+		const user =
+			await this.directUserRepository.findByEmailForAuth(normalizedEmail);
 		if (!user || !user.isActive) {
 			this.logger.debug(
-				`재설정 요청 무시 (사용자 미존재 또는 비활성): ${email}`,
+				`재설정 요청 무시 (사용자 미존재 또는 비활성): ${normalizedEmail}`,
 			);
 			return;
 		}
 
 		// 토큰 생성
-		const rawToken = crypto.randomBytes(32).toString("hex");
-		const hashedToken = crypto
-			.createHash("sha256")
-			.update(rawToken)
-			.digest("hex");
+		const resetToken = PasswordResetToken.generate();
+		const hashedToken = resetToken.toHash();
 
 		// Redis 저장
 		await this.saveResetToken(hashedToken, {
@@ -101,12 +111,12 @@ export class PasswordResetService {
 		});
 
 		// 이메일 발송
-		const resetUrl = `${this.idpClientUrl}/reset-password/${rawToken}`;
+		const resetUrl = `${this.idpClientUrl}/reset-password/${resetToken.value}`;
 		try {
-			await this.emailService.sendPasswordResetEmail(email, resetUrl);
-			this.logger.log(`비밀번호 재설정 이메일 발송: ${email}`);
+			await this.emailService.sendPasswordResetEmail(normalizedEmail, resetUrl);
+			this.logger.log(`비밀번호 재설정 이메일 발송: ${normalizedEmail}`);
 		} catch (error) {
-			this.logger.error(`이메일 발송 실패: ${email} - ${error}`);
+			this.logger.error(`이메일 발송 실패: ${normalizedEmail} - ${error}`);
 			// 이메일 발송 실패해도 사용자에게는 성공으로 응답 (보안)
 		}
 	}
@@ -115,10 +125,12 @@ export class PasswordResetService {
 	 * 재설정 토큰 검증
 	 */
 	async validateToken(rawToken: string): Promise<TokenValidationResult> {
-		const hashedToken = crypto
-			.createHash("sha256")
-			.update(rawToken)
-			.digest("hex");
+		let hashedToken: string;
+		try {
+			hashedToken = PasswordResetToken.create(rawToken).toHash();
+		} catch {
+			return { valid: false, reason: "TOKEN_EXPIRED" };
+		}
 
 		const data = await this.getResetToken(hashedToken);
 		if (!data) {
@@ -133,10 +145,12 @@ export class PasswordResetService {
 	 */
 	async executeReset(rawToken: string, newPassword: string): Promise<void> {
 		// 1. 토큰 검증
-		const hashedToken = crypto
-			.createHash("sha256")
-			.update(rawToken)
-			.digest("hex");
+		let hashedToken: string;
+		try {
+			hashedToken = PasswordResetToken.create(rawToken).toHash();
+		} catch {
+			throw new BadRequestException("TOKEN_EXPIRED");
+		}
 
 		const tokenData = await this.getResetToken(hashedToken);
 		if (!tokenData) {

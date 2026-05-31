@@ -1,4 +1,7 @@
-import { type ChipProps, Chip as NextUIChip } from "@cocrepo/ui/heroui";
+import {
+	type ChipProps,
+	Chip as NextUIChip,
+} from "../../../design-system/primitives";
 
 /**
  * Chip 컴포넌트

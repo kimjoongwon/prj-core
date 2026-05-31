@@ -1,8 +1,8 @@
 "use client";
 
 import { HStack, Surface } from "@cocrepo/ui";
-import { Chip } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { Chip } from "../../../design-system/primitives";
 import type {
 	CourseManagementSection,
 	CourseManagementSectionId,

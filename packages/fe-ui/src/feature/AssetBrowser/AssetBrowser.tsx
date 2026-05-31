@@ -7,14 +7,6 @@ import type {
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
-import {
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	useDisclosure,
-} from "@cocrepo/ui/heroui";
 import { Upload } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
@@ -22,6 +14,14 @@ import { buildAssetTableColumns } from "../../columns";
 import { Button } from "../../control/Button/Button";
 import { Input } from "../../control/Input/Input";
 import { DataGrid, DataGridStateModel } from "../../data-grid";
+import {
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	useDisclosure,
+} from "../../design-system/primitives";
 import { EmptyState } from "../../display";
 import { useT } from "../../i18n";
 import { Surface } from "../../surface";

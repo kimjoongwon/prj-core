@@ -1,20 +1,20 @@
 "use client";
 import {
 	FormPage,
-	FormSectionCard,
 	FormPageSurface,
+	FormSectionCard,
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
+import { ArrowLeft, Save } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Button,
 	Input,
 	Select,
 	SelectItem,
 	Textarea,
-} from "@cocrepo/ui/heroui";
-import { ArrowLeft, Save } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 
 export interface ActionEditPageFormState {
 	displayName: string;

@@ -14,9 +14,9 @@ import {
 	SecretField,
 	VStack,
 } from "@cocrepo/ui";
-import { Button, Chip, useDisclosure } from "@cocrepo/ui/heroui";
 import { ArrowLeft, Edit, Power, PowerOff, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Button, Chip, useDisclosure } from "../../design-system/primitives";
 
 export interface OidcClientDetailPageClient {
 	clientId: string;

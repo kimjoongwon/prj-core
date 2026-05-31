@@ -4,7 +4,7 @@ import {
 	StringFieldOptional,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
-import { TenantAccessRequestStatus, type Prisma } from "@cocrepo/prisma";
+import { type Prisma, TenantAccessRequestStatus } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
 import { PrismaQueryDto } from "../query/prisma-query.dto";
 

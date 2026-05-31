@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { cn } from "../../design-system/primitives";
 import type { LayoutProps } from "./type";
 
 /**
@@ -24,12 +24,12 @@ export const Layout = observer(function Layout({
 }: LayoutProps) {
 	if (desktopVariant === "stacked-header") {
 		return (
-				<div
-					className={cn(
-						"relative flex h-screen flex-col overflow-hidden bg-background text-foreground",
-						className,
-					)}
-				>
+			<div
+				className={cn(
+					"relative flex h-screen flex-col overflow-hidden bg-background text-foreground",
+					className,
+				)}
+			>
 				<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,color-mix(in_oklab,var(--color-primary)_16%,transparent),transparent_30%),radial-gradient(circle_at_bottom_right,color-mix(in_oklab,var(--color-success)_12%,transparent),transparent_28%)]" />
 				<div className="relative flex min-h-0 flex-1 flex-col">
 					{header}

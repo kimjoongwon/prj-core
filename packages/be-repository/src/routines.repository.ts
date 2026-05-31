@@ -26,17 +26,18 @@ export class RoutinesRepository {
 		search?: string;
 		contentLanguageCode?: LanguageCode;
 	}): Promise<[Routine[], number]> {
-		const { spaceIds, skip, take, search, contentLanguageCode } = params;
 		this.logger.debug(
-			`루틴 목록 조회: spaceIds=${spaceIds?.length ?? "all"}개, search=${search ?? "없음"}`,
+			`루틴 목록 조회: spaceIds=${params.spaceIds?.length ?? "all"}개, search=${params.search ?? "없음"}`,
 		);
 
 		const whereCondition = {
 			removedAt: null,
-			...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
-			...(contentLanguageCode ? { space: { contentLanguageCode } } : {}),
-			...(search
-				? { name: { contains: search, mode: "insensitive" as const } }
+			...(params.spaceIds ? { spaceId: { in: params.spaceIds } } : {}),
+			...(params.contentLanguageCode
+				? { space: { contentLanguageCode: params.contentLanguageCode } }
+				: {}),
+			...(params.search
+				? { name: { contains: params.search, mode: "insensitive" as const } }
 				: {}),
 		};
 
@@ -65,8 +66,8 @@ export class RoutinesRepository {
 					},
 				},
 				orderBy: { createdAt: "desc" },
-				skip,
-				take,
+				skip: params.skip,
+				take: params.take,
 			}),
 			this.txHost.tx.routine.count({
 				where: whereCondition,

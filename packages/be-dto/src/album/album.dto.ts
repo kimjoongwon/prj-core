@@ -6,8 +6,8 @@ import {
 	UUIDField,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
-import { AbstractDto } from "../abstract.dto";
 import type { Album } from "@cocrepo/prisma";
+import { AbstractDto } from "../abstract.dto";
 import { AssetDto } from "../asset/asset.dto";
 
 /**

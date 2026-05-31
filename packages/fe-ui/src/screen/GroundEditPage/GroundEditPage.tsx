@@ -1,20 +1,20 @@
 "use client";
 
 import {
+	Button,
 	CONTENT_LANGUAGE_OPTIONS,
 	FormPage,
 	FormPageSurface,
-	PageTitleBar,
 	FormSection,
 	FormSectionCard,
-	VStack,
-	Button,
 	Input,
+	PageTitleBar,
 	Select,
 	useT,
+	VStack,
 } from "@cocrepo/ui";
-import { Spinner } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { Spinner } from "../../design-system/primitives";
 
 export interface GroundEditPageProps {
 	groundName?: string;

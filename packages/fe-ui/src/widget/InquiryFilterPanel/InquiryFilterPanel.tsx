@@ -1,11 +1,11 @@
 "use client";
 
-import { Button, Card, CardBody, Input } from "@cocrepo/ui/heroui";
 import type { Option } from "@cocrepo/type";
 import { RotateCcw, Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Select } from "../../control/Select/Select";
 import { DateRangePicker } from "../../control/DateRangePicker/DateRangePicker";
+import { Select } from "../../control/Select/Select";
+import { Button, Card, CardBody, Input } from "../../design-system/primitives";
 
 export interface InquiryFilterValue {
 	/** 상태 필터 */

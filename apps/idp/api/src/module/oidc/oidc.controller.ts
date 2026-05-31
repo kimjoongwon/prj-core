@@ -1,8 +1,9 @@
 import { Public } from "@cocrepo/decorator";
 import { All, Controller, Req, Res } from "@nestjs/common";
+import { CommandBus } from "@nestjs/cqrs";
 import { ApiExcludeController } from "@nestjs/swagger";
 import type { Request, Response } from "express";
-import { OidcFacade } from "./oidc.facade";
+import { HandleOidcCommand } from "@cocrepo/command";
 
 /**
  * OIDC Controller
@@ -32,13 +33,13 @@ import { OidcFacade } from "./oidc.facade";
 @ApiExcludeController()
 @Controller("oidc")
 export class OidcController {
-	constructor(private readonly oidcApplicationService: OidcFacade) {}
+	constructor(private readonly commandBus: CommandBus) {}
 
 	/**
 	 * 모든 OIDC 엔드포인트를 oidc-provider에 위임
 	 */
 	@All("*path")
 	async handleOidc(@Req() req: Request, @Res() res: Response): Promise<void> {
-		return this.oidcApplicationService.handleOidc(req, res);
+		return this.commandBus.execute(new HandleOidcCommand(req, res));
 	}
 }

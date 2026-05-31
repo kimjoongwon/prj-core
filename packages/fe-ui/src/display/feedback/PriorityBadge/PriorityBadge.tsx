@@ -1,8 +1,8 @@
 "use client";
 
-import { Chip } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type { InquiryPriorityCode } from "../../../cell/InquiryPriorityCell/InquiryPriorityCell";
+import { Chip } from "../../../design-system/primitives";
 import { useT } from "../../../i18n";
 
 export interface PriorityBadgeProps {

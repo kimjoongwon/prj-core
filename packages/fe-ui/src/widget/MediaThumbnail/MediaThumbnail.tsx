@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@cocrepo/ui/heroui";
 import { ImageIcon, PlayCircle } from "lucide-react";
+import { cn } from "../../design-system/primitives";
 
 export interface MediaThumbnailProps {
 	imageUrl?: string | null;

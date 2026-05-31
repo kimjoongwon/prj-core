@@ -11,7 +11,7 @@ import {
 	type TemplateFormData,
 	type VariableEditItem,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui/heroui";
+import { addToast } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";

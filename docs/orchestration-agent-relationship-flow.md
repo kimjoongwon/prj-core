@@ -142,11 +142,11 @@ Backend phase는 spec의 `Backend / API Contract` 아래 구조별 inventory를 
 | `Prisma / Database 인벤토리` | `be-prisma-builder` | `be-repository-builder`, `common-schema-builder`, QA |
 | `Prisma Annotation 인벤토리` | `be-prisma-annotator` | Swagger/관리 UI 표시 계약 |
 | `Common Schema 인벤토리` | `common-schema-builder` | `be-dto-builder`, `fe-route-builder`, `fe-mo-route-builder` |
-| `Entity / VO 인벤토리` | `be-entity-builder`, `be-vo-builder` | `be-service-builder`, `be-app-builder` |
+| `Entity / VO 인벤토리` | `be-entity-builder`, `be-vo-builder` | `be-service-builder`, `be-usecase-builder` |
 | `DTO / Query DTO 인벤토리` | `be-dto-builder`, `be-query-dto-builder` | `be-controller-builder`, codegen |
 | `Repository 인벤토리` | `be-repository-builder` | `be-service-builder` |
-| `Service 인벤토리` | `be-service-builder` | `be-app-builder`, `be-facade-builder`, `be-controller-builder` |
-| `ApplicationService 인벤토리` | `be-app-builder` | `be-controller-builder` |
+| `Service 인벤토리` | `be-service-builder` | `be-usecase-builder`, `be-facade-builder`, `be-controller-builder` |
+| `UseCase 인벤토리` | `be-usecase-builder` | `be-controller-builder` |
 | `Facade / Gateway 인벤토리` | `be-facade-builder`, `be-gateway-builder` | `be-controller-builder`, `be-service-builder` |
 | `엔드포인트 인벤토리` | `be-controller-builder` | `fe-route-builder`, `fe-mo-route-builder`, `qa-*-testing` |
 | `Module / Bootstrap 인벤토리` | `be-module-builder`, `be-bootstrap-integrator` | 앱 부트스트랩 |
@@ -163,8 +163,8 @@ flowchart TD
   S --> M["be-entity / be-vo / be-dto / be-query-dto"]
   M --> R["be-repository-builder"]
   R --> SV["be-service-builder"]
-  SV --> APP["be-app-builder"]
-  APP --> F["be-facade-builder / be-gateway-builder"]
+  SV --> UC["be-usecase-builder"]
+  UC --> F["be-facade-builder / be-gateway-builder"]
   F --> C["be-controller-builder"]
   C --> MOD["be-module-builder"]
   MOD --> BOOT["be-bootstrap-integrator"]

@@ -1,5 +1,7 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
+import { useState } from "react";
 import {
 	Button,
 	Listbox,
@@ -9,10 +11,7 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-} from "@cocrepo/ui/heroui";
-import { observer } from "mobx-react-lite";
-
-import { useState } from "react";
+} from "../../design-system/primitives";
 
 /** 그라운드 정보 */
 interface Ground {

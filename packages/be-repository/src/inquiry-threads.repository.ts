@@ -1,7 +1,7 @@
 import {
-	InquiryThread,
 	InquiryMessage,
 	InquiryParticipant,
+	InquiryThread,
 } from "@cocrepo/entity";
 import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
@@ -91,15 +91,14 @@ export class InquiryThreadsRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ threads: InquiryThread[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
 		const [threads, totalCount] = await Promise.all([
 			this.txHost.tx.inquiryThread.findMany({
-				where,
-				orderBy: orderBy ?? [{ createdAt: "asc" }],
-				skip,
-				take,
+				where: params.where,
+				orderBy: params.orderBy ?? [{ createdAt: "asc" }],
+				skip: params.skip,
+				take: params.take,
 			}),
-			this.txHost.tx.inquiryThread.count({ where }),
+			this.txHost.tx.inquiryThread.count({ where: params.where }),
 		]);
 
 		return {

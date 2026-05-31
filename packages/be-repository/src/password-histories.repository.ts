@@ -55,16 +55,14 @@ export class PasswordHistoriesRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ items: PasswordHistory[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
-
 		const [items, totalCount] = await Promise.all([
 			this.txHost.tx.passwordHistory.findMany({
-				where,
-				orderBy: orderBy ?? [{ createdAt: "desc" }],
-				skip,
-				take,
+				where: params.where,
+				orderBy: params.orderBy ?? [{ createdAt: "desc" }],
+				skip: params.skip,
+				take: params.take,
 			}),
-			this.txHost.tx.passwordHistory.count({ where }),
+			this.txHost.tx.passwordHistory.count({ where: params.where }),
 		]);
 
 		return {

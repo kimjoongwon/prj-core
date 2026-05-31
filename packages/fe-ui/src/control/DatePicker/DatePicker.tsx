@@ -1,12 +1,12 @@
-import {
-	DatePicker as HeroUiDatePicker,
-	type DatePickerProps as HeroUiDatePickerProps,
-} from "@cocrepo/ui/heroui";
 import type {
 	CalendarDate,
 	CalendarDateTime,
 	ZonedDateTime,
 } from "@internationalized/date";
+import {
+	DatePicker as HeroUiDatePicker,
+	type DatePickerProps as HeroUiDatePickerProps,
+} from "../../design-system/primitives";
 
 export interface DatePickerProps
 	extends Omit<HeroUiDatePickerProps, "value" | "onChange"> {

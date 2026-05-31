@@ -54,16 +54,14 @@ export class AIAgentLogsRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ logs: AIAgentLog[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
-
 		const [logs, totalCount] = await Promise.all([
 			this.txHost.tx.aIAgentLog.findMany({
-				where,
-				orderBy: orderBy ?? [{ createdAt: "desc" }],
-				skip,
-				take,
+				where: params.where,
+				orderBy: params.orderBy ?? [{ createdAt: "desc" }],
+				skip: params.skip,
+				take: params.take,
 			}),
-			this.txHost.tx.aIAgentLog.count({ where }),
+			this.txHost.tx.aIAgentLog.count({ where: params.where }),
 		]);
 
 		return {

@@ -1,8 +1,8 @@
 "use client";
 
-import { Spinner } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../control";
+import { Spinner } from "../../design-system/primitives";
 import { useT } from "../../i18n";
 import { VStack } from "../../rhythm";
 import { Surface } from "../../surface";

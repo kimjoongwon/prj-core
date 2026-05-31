@@ -1,4 +1,4 @@
-import { Chip } from "@cocrepo/ui/heroui";
+import { Chip } from "../../design-system/primitives";
 
 /**
  * AI 제공자 타입

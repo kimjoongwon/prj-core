@@ -1,7 +1,7 @@
 import type { AppIconName } from "@cocrepo/type";
-import { Button } from "@cocrepo/ui/heroui";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AppIcon } from "../../design-system/icon/AppIcon";
+import { Button } from "../../design-system/primitives";
 import { VStack } from "../../rhythm/VStack/VStack";
 
 interface ParentMenuInfo {

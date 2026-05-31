@@ -15,9 +15,9 @@ import {
 	Surface,
 	VStack,
 } from "@cocrepo/ui";
-import { useDisclosure } from "@cocrepo/ui/heroui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, useState } from "react";
+import { useDisclosure } from "../../design-system/primitives";
 
 const EMAIL_VERIFICATION_STATUS_OPTIONS = [
 	{ value: "PENDING", label: "대기" },

@@ -1,8 +1,8 @@
 "use client";
 
 import { getDate } from "@cocrepo/toolkit";
-import { Card, CardBody } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { Card, CardBody } from "../../../design-system/primitives";
 import { useT } from "../../../i18n";
 
 export interface DateProps {

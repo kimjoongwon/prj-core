@@ -5,8 +5,8 @@ import {
 	UUIDField,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
-import { AbstractDto } from "../abstract.dto";
 import type { Folder } from "@cocrepo/prisma";
+import { AbstractDto } from "../abstract.dto";
 
 /**
  * 폴더 DTO

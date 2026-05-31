@@ -11,14 +11,6 @@ import {
 	DataGridStateModel,
 } from "@cocrepo/ui";
 import {
-	Button,
-	Chip,
-	Input,
-	Select,
-	SelectItem,
-	Spinner,
-} from "@cocrepo/ui/heroui";
-import {
 	Ban,
 	FilterX,
 	ListChecks,
@@ -30,6 +22,14 @@ import {
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Key } from "react";
 import { useEffect } from "react";
+import {
+	Button,
+	Chip,
+	Input,
+	Select,
+	SelectItem,
+	Spinner,
+} from "../../design-system/primitives";
 import { VStack } from "../../rhythm";
 import { Surface } from "../../surface";
 import { PageTitleBar, StatsCard } from "../../widget";

@@ -8,6 +8,8 @@ import {
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
+import { ArrowLeft, Save, ShieldCheck } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Button,
 	Checkbox,
@@ -15,9 +17,7 @@ import {
 	Input,
 	Spinner,
 	Switch,
-} from "@cocrepo/ui/heroui";
-import { ArrowLeft, Save, ShieldCheck } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 
 export interface UserDetailPageUser {
 	id: string;

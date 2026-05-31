@@ -1,8 +1,8 @@
 "use client";
 
-import { Button, Link } from "@cocrepo/ui/heroui";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Button, Link } from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 export interface RowActionsCellProps {

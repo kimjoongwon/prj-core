@@ -1,6 +1,10 @@
 "use client";
-import { customInstance } from "@cocrepo/api/core/client";
-import { useVerifyToken } from "@cocrepo/api/idp/auth";
+import {
+	customInstance,
+	setApiNativeRefreshHandler,
+} from "@cocrepo/api/core/client";
+import { setIdpNativeRefreshHandler } from "@cocrepo/api/idp/client";
+import { nativeRefreshToken, useVerifyToken } from "@cocrepo/api/idp/auth";
 import { DEFAULT_LANGUAGE } from "@cocrepo/constant";
 
 import { useStore } from "@cocrepo/store";
@@ -80,17 +84,56 @@ export const Providers = observer(function Providers({
 		<QueryClientProvider client={queryClient}>
 			<NuqsNextAdapter>
 				<AppStoreProvider>
-					<I18nCatalogBootstrapper>
-						<AbilityStoreBootstrapper>
-							<DesignSystemProvider navigate={handleNavigate}>
-								{children}
-							</DesignSystemProvider>
-						</AbilityStoreBootstrapper>
-					</I18nCatalogBootstrapper>
+					<NativeAuthBridge>
+						<I18nCatalogBootstrapper>
+							<AbilityStoreBootstrapper>
+								<DesignSystemProvider navigate={handleNavigate}>
+									{children}
+								</DesignSystemProvider>
+							</AbilityStoreBootstrapper>
+						</I18nCatalogBootstrapper>
+					</NativeAuthBridge>
 				</AppStoreProvider>
 			</NuqsNextAdapter>
 		</QueryClientProvider>
 	);
+});
+
+const NativeAuthBridge = observer(function NativeAuthBridge({
+	children,
+}: {
+	children: ReactNode;
+}) {
+	const persistStore = usePersistStore();
+
+	useEffect(() => {
+		const refreshNativeSession = async () => {
+			if (!persistStore.sessionId || !persistStore.refreshToken) {
+				throw new Error("Native auth session is missing.");
+			}
+
+			const response = await nativeRefreshToken({
+				sessionId: persistStore.sessionId,
+				refreshToken: persistStore.refreshToken,
+			});
+			const session = response.data;
+			if (!session) {
+				throw new Error("Native auth refresh response is empty.");
+			}
+
+			persistStore.setNativeAuthSession(session);
+		};
+
+		setApiNativeRefreshHandler(refreshNativeSession);
+		setIdpNativeRefreshHandler(refreshNativeSession);
+
+		return () => {
+			setApiNativeRefreshHandler(null);
+			setIdpNativeRefreshHandler(null);
+		};
+	}, [persistStore]);
+
+	return children;
 });
 
 const I18nCatalogBootstrapper = observer(function I18nCatalogBootstrapper({

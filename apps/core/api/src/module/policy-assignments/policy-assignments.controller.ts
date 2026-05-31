@@ -1,4 +1,10 @@
 import { RolesGuard } from "@cocrepo/be-common";
+import {
+	GetRolePoliciesQuery,
+	GetUserPoliciesQuery,
+	SyncRolePoliciesCommand,
+	SyncUserPoliciesCommand,
+} from "@cocrepo/command";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -12,7 +18,6 @@ import {
 	SyncRolePoliciesDto,
 	SyncUserPoliciesDto,
 } from "@cocrepo/dto";
-import { PolicyAssignmentFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -24,6 +29,7 @@ import {
 	Put,
 	UseGuards,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("POLICY_ASSIGNMENTS")
@@ -31,7 +37,8 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @UseGuards(RolesGuard)
 export class PolicyAssignmentsController {
 	constructor(
-		private readonly policyAssignmentFacade: PolicyAssignmentFacade,
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
 	) {}
 
 	@Get("roles/:roleId")
@@ -53,7 +60,7 @@ export class PolicyAssignmentsController {
 	})
 	@ResponseMessage("역할 정책 할당 목록 조회 성공")
 	async getRolePolicies(@Param("roleId", ParseUUIDPipe) roleId: string) {
-		return this.policyAssignmentFacade.getRolePolicies(roleId);
+		return this.queryBus.execute(new GetRolePoliciesQuery(roleId));
 	}
 
 	@Put("roles/:roleId")
@@ -84,9 +91,8 @@ export class PolicyAssignmentsController {
 		@Param("roleId", ParseUUIDPipe) roleId: string,
 		@Body() dto: SyncRolePoliciesDto,
 	) {
-		return this.policyAssignmentFacade.syncRolePolicies(
-			roleId,
-			dto.rolePolicies,
+		return this.commandBus.execute(
+			new SyncRolePoliciesCommand(roleId, dto.rolePolicies),
 		);
 	}
 
@@ -109,7 +115,7 @@ export class PolicyAssignmentsController {
 	})
 	@ResponseMessage("사용자 정책 할당 목록 조회 성공")
 	async getUserPolicies(@Param("userId", ParseUUIDPipe) userId: string) {
-		return this.policyAssignmentFacade.getUserPolicies(userId);
+		return this.queryBus.execute(new GetUserPoliciesQuery(userId));
 	}
 
 	@Put("users/:userId")
@@ -140,9 +146,8 @@ export class PolicyAssignmentsController {
 		@Param("userId", ParseUUIDPipe) userId: string,
 		@Body() dto: SyncUserPoliciesDto,
 	) {
-		return this.policyAssignmentFacade.syncUserPolicies(
-			userId,
-			dto.userPolicies,
+		return this.commandBus.execute(
+			new SyncUserPoliciesCommand(userId, dto.userPolicies),
 		);
 	}
 }

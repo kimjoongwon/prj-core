@@ -1,27 +1,29 @@
-import { TenantAccessRequestFacade } from "@cocrepo/facade";
+import { TenantAccessRequestAggregateRoot } from "@cocrepo/aggregate";
 import {
-	RolesRepository,
-	SpacesRepository,
 	TenantAccessRequestsRepository,
 	TenantsRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
-import { AuthContext, TenantAccessRequestService } from "@cocrepo/service";
+import { AuthContext } from "@cocrepo/service";
+import {
+	TenantAccessRequestCommandHandlers,
+	TenantAccessRequestQueryHandlers,
+} from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { TenantAccessRequestsController } from "./tenant-access-requests.controller";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [TenantAccessRequestsController],
 	providers: [
-		TenantAccessRequestFacade,
-		TenantAccessRequestService,
+		TenantAccessRequestAggregateRoot,
 		TenantAccessRequestsRepository,
 		TenantsRepository,
 		UsersRepository,
-		SpacesRepository,
-		RolesRepository,
 		AuthContext,
+		...TenantAccessRequestCommandHandlers,
+		...TenantAccessRequestQueryHandlers,
 	],
-	exports: [TenantAccessRequestFacade],
 })
 export class TenantAccessRequestsModule {}

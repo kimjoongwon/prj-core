@@ -1,8 +1,8 @@
 "use client";
 
-import { Chip } from "@cocrepo/ui/heroui";
 import { Languages } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Chip } from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 export type ContentLanguageCode = "ko_KR" | "en_US" | "zh_CN" | "ja_JP";

@@ -158,7 +158,7 @@ type ReservationPaymentCheckoutRouteState = {
 | mobile screen target guard | Verified | `pnpm mobile:screen-targets:check` passed, 3 screen targets verified |
 | `@cocrepo/mo-ui` unit/type | Verified | `pnpm --filter=@cocrepo/mo-ui test`: 11 suites, 25 tests passed; `pnpm --filter=@cocrepo/mo-ui type-check` passed |
 | `mobile-app` route unit/type | Verified | `pnpm --filter=mobile-app test`: 9 suites, 35 tests passed; `pnpm --filter=mobile-app type-check` passed |
-| backend/API type | Verified | `pnpm --filter=core-api type-check`, `pnpm --filter=@cocrepo/dto type-check`, `pnpm --filter=@cocrepo/service type-check`, `pnpm --filter=@cocrepo/app type-check`, `pnpm --filter=@cocrepo/api type-check` passed |
+| backend/API type | Verified | `pnpm --filter=core-api type-check`, `pnpm --filter=@cocrepo/dto type-check`, `pnpm --filter=@cocrepo/service type-check`, `pnpm --filter=@cocrepo/usecase type-check`, `pnpm --filter=@cocrepo/api type-check` passed |
 | API generation | Pending | local Swagger 서버 실행 후 `pnpm --filter=@cocrepo/api codegen`로 재생성 |
 
 ## 변경 이력

@@ -1,24 +1,21 @@
-import { UserFacade } from "@cocrepo/facade";
 import { UsersRepository } from "@cocrepo/repository";
-import {
-	AuthCacheService,
-	AuthContext,
-	SpaceContext,
-	UserService,
-} from "@cocrepo/service";
+import { AuthCacheService, SpaceContext, UserService } from "@cocrepo/service";
+import { UserCommandHandlers, UserQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { UsersController } from "./users.controller";
 
 @Module({
+	imports: [CqrsModule],
 	providers: [
-		UserFacade,
 		UserService,
 		UsersRepository,
-		AuthContext,
 		SpaceContext,
 		AuthCacheService,
+		...UserCommandHandlers,
+		...UserQueryHandlers,
 	],
 	controllers: [UsersController],
-	exports: [UserFacade, UserService, AuthCacheService],
+	exports: [UserService, AuthCacheService],
 })
 export class UsersModule {}

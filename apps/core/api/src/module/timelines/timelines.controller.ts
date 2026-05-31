@@ -1,4 +1,20 @@
-import { USER_ERRORS } from "@cocrepo/constant";
+import {
+	CreateProgramCommand,
+	CreateSessionCommand,
+	CreateTimelineCommand,
+	DeleteProgramCommand,
+	DeleteSessionCommand,
+	DeleteTimelineCommand,
+	GetProgramByIdQuery,
+	GetProgramsQuery,
+	GetSessionByIdQuery,
+	GetSessionsQuery,
+	GetTimelineByIdQuery,
+	GetTimelinesQuery,
+	UpdateProgramCommand,
+	UpdateSessionCommand,
+	UpdateTimelineCommand,
+} from "@cocrepo/command";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -19,8 +35,6 @@ import {
 	UpdateSessionDto,
 	UpdateTimelineDto,
 } from "@cocrepo/dto";
-import { TimelineFacade } from "@cocrepo/facade";
-import { SpaceContext } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -33,16 +47,16 @@ import {
 	Patch,
 	Post,
 	Query,
-	UnauthorizedException,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("TIMELINES")
 @Controller()
 export class TimelinesController {
 	constructor(
-		private readonly timelinesService: TimelineFacade,
-		private readonly spaceContext: SpaceContext,
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
 	) {}
 
 	// ============================================================================
@@ -66,12 +80,7 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("타임라인 목록 조회 성공")
 	async getTimelines(@Query() query: QueryTimelineDto) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		return this.timelinesService.getTimelines(query);
+		return this.queryBus.execute(new GetTimelinesQuery(query));
 	}
 
 	/**
@@ -97,12 +106,7 @@ export class TimelinesController {
 	async getTimelineById(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 	) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		return this.timelinesService.getTimelineById(timelineId);
+		return this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
 	}
 
 	/**
@@ -122,12 +126,7 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.CREATED)
 	@ResponseMessage("타임라인 생성 성공")
 	async createTimeline(@Body() dto: CreateTimelineDto) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		return this.timelinesService.createTimeline(dto);
+		return this.commandBus.execute(new CreateTimelineCommand(dto));
 	}
 
 	/**
@@ -155,12 +154,7 @@ export class TimelinesController {
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Body() dto: UpdateTimelineDto,
 	) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		return this.timelinesService.updateTimeline(timelineId, dto);
+		return this.commandBus.execute(new UpdateTimelineCommand(timelineId, dto));
 	}
 
 	/**
@@ -186,12 +180,7 @@ export class TimelinesController {
 	async deleteTimeline(
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 	): Promise<void> {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		await this.timelinesService.deleteTimeline(timelineId);
+		await this.commandBus.execute(new DeleteTimelineCommand(timelineId));
 	}
 
 	// ============================================================================
@@ -222,13 +211,8 @@ export class TimelinesController {
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Query() query: QuerySessionDto,
 	) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		await this.timelinesService.getTimelineById(timelineId);
-		return this.timelinesService.getSessions(timelineId, query);
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
+		return this.queryBus.execute(new GetSessionsQuery(timelineId, query));
 	}
 
 	/**
@@ -256,13 +240,10 @@ export class TimelinesController {
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
 	) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		await this.timelinesService.getTimelineById(timelineId);
-		return this.timelinesService.getSessionById(timelineId, sessionId);
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
+		return this.queryBus.execute(
+			new GetSessionByIdQuery(timelineId, sessionId),
+		);
 	}
 
 	/**
@@ -290,13 +271,8 @@ export class TimelinesController {
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Body() dto: CreateSessionDto,
 	) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		await this.timelinesService.getTimelineById(timelineId);
-		return this.timelinesService.createSession(timelineId, dto);
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
+		return this.commandBus.execute(new CreateSessionCommand(timelineId, dto));
 	}
 
 	/**
@@ -327,13 +303,10 @@ export class TimelinesController {
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
 		@Body() dto: UpdateSessionDto,
 	) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		await this.timelinesService.getTimelineById(timelineId);
-		return this.timelinesService.updateSession(timelineId, sessionId, dto);
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
+		return this.commandBus.execute(
+			new UpdateSessionCommand(timelineId, sessionId, dto),
+		);
 	}
 
 	/**
@@ -361,13 +334,10 @@ export class TimelinesController {
 		@Param("timelineId", ParseUUIDPipe) timelineId: string,
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
 	): Promise<void> {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		await this.timelinesService.getTimelineById(timelineId);
-		await this.timelinesService.deleteSession(timelineId, sessionId);
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
+		await this.commandBus.execute(
+			new DeleteSessionCommand(timelineId, sessionId),
+		);
 	}
 
 	// ============================================================================
@@ -400,14 +370,9 @@ export class TimelinesController {
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
 		@Query() query: QueryProgramDto,
 	) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		await this.timelinesService.getTimelineById(timelineId);
-		await this.timelinesService.getSessionById(timelineId, sessionId);
-		return this.timelinesService.getPrograms(sessionId, query);
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
+		await this.queryBus.execute(new GetSessionByIdQuery(timelineId, sessionId));
+		return this.queryBus.execute(new GetProgramsQuery(sessionId, query));
 	}
 
 	/**
@@ -441,14 +406,9 @@ export class TimelinesController {
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
 		@Param("programId", ParseUUIDPipe) programId: string,
 	) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		await this.timelinesService.getTimelineById(timelineId);
-		await this.timelinesService.getSessionById(timelineId, sessionId);
-		return this.timelinesService.getProgramById(sessionId, programId);
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
+		await this.queryBus.execute(new GetSessionByIdQuery(timelineId, sessionId));
+		return this.queryBus.execute(new GetProgramByIdQuery(sessionId, programId));
 	}
 
 	/**
@@ -479,14 +439,9 @@ export class TimelinesController {
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
 		@Body() dto: CreateProgramDto,
 	) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		await this.timelinesService.getTimelineById(timelineId);
-		await this.timelinesService.getSessionById(timelineId, sessionId);
-		return this.timelinesService.createProgram(sessionId, dto);
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
+		await this.queryBus.execute(new GetSessionByIdQuery(timelineId, sessionId));
+		return this.commandBus.execute(new CreateProgramCommand(sessionId, dto));
 	}
 
 	/**
@@ -523,14 +478,11 @@ export class TimelinesController {
 		@Param("programId", ParseUUIDPipe) programId: string,
 		@Body() dto: UpdateProgramDto,
 	) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		await this.timelinesService.getTimelineById(timelineId);
-		await this.timelinesService.getSessionById(timelineId, sessionId);
-		return this.timelinesService.updateProgram(sessionId, programId, dto);
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
+		await this.queryBus.execute(new GetSessionByIdQuery(timelineId, sessionId));
+		return this.commandBus.execute(
+			new UpdateProgramCommand(sessionId, programId, dto),
+		);
 	}
 
 	/**
@@ -563,13 +515,10 @@ export class TimelinesController {
 		@Param("sessionId", ParseUUIDPipe) sessionId: string,
 		@Param("programId", ParseUUIDPipe) programId: string,
 	): Promise<void> {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
-			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
-		}
-
-		await this.timelinesService.getTimelineById(timelineId);
-		await this.timelinesService.getSessionById(timelineId, sessionId);
-		await this.timelinesService.deleteProgram(sessionId, programId);
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
+		await this.queryBus.execute(new GetSessionByIdQuery(timelineId, sessionId));
+		await this.commandBus.execute(
+			new DeleteProgramCommand(sessionId, programId),
+		);
 	}
 }

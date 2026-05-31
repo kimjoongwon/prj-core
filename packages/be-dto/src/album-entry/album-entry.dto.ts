@@ -4,10 +4,10 @@ import {
 	StringFieldOptional,
 	UUIDField,
 } from "@cocrepo/decorator";
-import { AbstractDto } from "../abstract.dto";
 import type { AlbumEntry } from "@cocrepo/prisma";
-import { AssetDto } from "../asset/asset.dto";
+import { AbstractDto } from "../abstract.dto";
 import { AlbumDto } from "../album/album.dto";
+import { AssetDto } from "../asset/asset.dto";
 
 /**
  * 앨범 엔트리 DTO

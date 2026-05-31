@@ -6,7 +6,6 @@ import {
 	ResponseMessage,
 } from "@cocrepo/decorator";
 import { TranslationCatalogResponseDto } from "@cocrepo/dto";
-import { TranslationFacade } from "@cocrepo/facade";
 import type { LanguageCode as PrismaLanguageCode } from "@cocrepo/prisma";
 import {
 	Controller,
@@ -15,13 +14,15 @@ import {
 	Param,
 	ParseEnumPipe,
 } from "@nestjs/common";
+import { QueryBus } from "@nestjs/cqrs";
 import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
+import { GetI18nCatalogQuery } from "@cocrepo/command";
 
 @ApiTags("I18N")
 @Public()
 @Controller()
 export class I18nCatalogController {
-	constructor(private readonly translationFacade: TranslationFacade) {}
+	constructor(private readonly queryBus: QueryBus) {}
 
 	@Get("catalog/:languageCode")
 	@ApiOperation({
@@ -43,6 +44,6 @@ export class I18nCatalogController {
 		@Param("languageCode", new ParseEnumPipe(LanguageCode))
 		languageCode: PrismaLanguageCode,
 	): Promise<TranslationCatalogResponseDto> {
-		return this.translationFacade.getCatalog(languageCode);
+		return this.queryBus.execute(new GetI18nCatalogQuery(languageCode));
 	}
 }

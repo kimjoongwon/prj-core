@@ -1,17 +1,17 @@
 "use client";
 
-import { Button, Skeleton, Textarea } from "@cocrepo/ui/heroui";
 import { ArrowLeft, Check, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { PageSurface } from "../../surface/PageSurface";
-import { SectionSurface } from "../../surface/SectionSurface";
+import { Button, Skeleton, Textarea } from "../../design-system/primitives";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
+import { PageSurface } from "../../surface/PageSurface";
+import { SectionSurface } from "../../surface/SectionSurface";
 import { PageTitleBar } from "../../widget/PageTitleBar";
 import {
+	type TenantAccessRequestStatus,
 	TenantAccessRequestStatusBadge,
 	TenantAccessRequestSummary,
-	type TenantAccessRequestStatus,
 } from "../../widget/tenant-access-request";
 
 export interface TenantAccessRequestReviewDetail {

@@ -1,7 +1,7 @@
 "use client";
 
-import { Spinner } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { Spinner } from "../../design-system/primitives";
 import { DetailPage, DetailPageSurface, DetailSectionCard } from "../../detail";
 import { useT } from "../../i18n";
 import { PageTitleBar } from "../../widget";

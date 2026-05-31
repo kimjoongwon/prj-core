@@ -1,14 +1,14 @@
+import { IdpAccountAggregateRoot, IdpAccountInfo } from "@cocrepo/aggregate";
 import {
 	GrantIdpAccountAccessDto,
 	PageMetaDto,
 	QueryIdpAccountDto,
 } from "@cocrepo/dto";
-import { IdpAccountInfo, IdpAccountService } from "@cocrepo/service";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class IdpAccountFacade {
-	constructor(private readonly idpAccountService: IdpAccountService) {}
+	constructor(private readonly idpAccountService: IdpAccountAggregateRoot) {}
 
 	getMany(query: QueryIdpAccountDto): Promise<{
 		data: IdpAccountInfo[];
@@ -17,9 +17,9 @@ export class IdpAccountFacade {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 20;
 
-		return this.idpAccountService.getMany(query).then(({ data, totalCount }) => ({
-			data,
-			meta: new PageMetaDto(skip, take, totalCount),
+		return this.idpAccountService.getMany(query).then((idpAccountResult) => ({
+			data: idpAccountResult.data,
+			meta: new PageMetaDto(skip, take, idpAccountResult.totalCount),
 		}));
 	}
 

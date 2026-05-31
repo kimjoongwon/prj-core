@@ -13,6 +13,9 @@ import {
 	PageTitleBar,
 	Surface,
 } from "@cocrepo/ui";
+import { Plus } from "lucide-react";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect, useState } from "react";
 import {
 	Button,
 	Modal,
@@ -21,10 +24,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	useDisclosure,
-} from "@cocrepo/ui/heroui";
-import { Plus } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+} from "../../design-system/primitives";
 
 const leftInputs: InputConfig[] = [
 	{

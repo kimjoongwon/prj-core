@@ -332,6 +332,23 @@ export class ReservationsRepository {
 		return plainToInstance(Reservation, result);
 	}
 
+	async save(reservation: Reservation): Promise<Reservation> {
+		const result = await this.txHost.tx.reservation.update({
+			where: { id: reservation.id },
+			data: {
+				status: reservation.status,
+				memo: reservation.memo,
+				waitlistPosition: reservation.waitlistPosition,
+				confirmedAt: reservation.confirmedAt,
+				canceledAt: reservation.canceledAt,
+				cancelReason: reservation.cancelReason,
+			},
+			include: reservationInclude,
+		});
+
+		return plainToInstance(Reservation, result);
+	}
+
 	async findNextWaitlisted(params: {
 		programId: string;
 		occurrenceStartAt: Date;

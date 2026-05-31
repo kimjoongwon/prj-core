@@ -1,8 +1,8 @@
 "use client";
 
-import { Input } from "@cocrepo/ui/heroui";
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Input } from "../../../design-system/primitives";
 
 /**
  * 회원 검색 위젯 Props

@@ -1,8 +1,8 @@
 "use client";
 
 import type { InputConfig } from "@cocrepo/type";
-import { Button } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { Button } from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 interface ButtonInputProps {

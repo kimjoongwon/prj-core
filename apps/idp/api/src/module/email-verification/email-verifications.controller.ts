@@ -12,7 +12,6 @@ import {
 	PageMetaDto,
 	QueryEmailVerificationDto,
 } from "@cocrepo/dto";
-import { EmailVerificationFacade } from "@cocrepo/facade";
 import {
 	Controller,
 	Get,
@@ -23,7 +22,12 @@ import {
 	Post,
 	Query,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
+import {
+	GetEmailVerificationsQuery,
+	ResendEmailVerificationCommand,
+} from "@cocrepo/command";
 
 @ApiTags("EMAIL_VERIFICATIONS")
 @Controller()
@@ -31,7 +35,8 @@ import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 @SkipSpaceCheck()
 export class EmailVerificationsController {
 	constructor(
-		private readonly emailVerificationFacade: EmailVerificationFacade,
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
 	) {}
 
 	@Get()
@@ -49,7 +54,7 @@ export class EmailVerificationsController {
 	})
 	@ResponseMessage("이메일 인증 목록 조회 성공")
 	getEmailVerifications(@Query() query: QueryEmailVerificationDto) {
-		return this.emailVerificationFacade.getMany(query);
+		return this.queryBus.execute(new GetEmailVerificationsQuery(query));
 	}
 
 	@Post(":emailVerificationId/resend")
@@ -72,6 +77,8 @@ export class EmailVerificationsController {
 	resendEmailVerification(
 		@Param("emailVerificationId", ParseUUIDPipe) emailVerificationId: string,
 	) {
-		return this.emailVerificationFacade.resend(emailVerificationId);
+		return this.commandBus.execute(
+			new ResendEmailVerificationCommand(emailVerificationId),
+		);
 	}
 }

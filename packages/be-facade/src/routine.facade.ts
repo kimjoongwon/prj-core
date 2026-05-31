@@ -1,3 +1,4 @@
+import { RoutineAggregateRoot } from "@cocrepo/aggregate";
 import {
 	CreateRoutineDto,
 	GetRoutinesQueryDto,
@@ -5,41 +6,31 @@ import {
 	UpdateRoutineDto,
 } from "@cocrepo/dto";
 import { Routine } from "@cocrepo/entity";
-import { AuthContext, RoutineService } from "@cocrepo/service";
+import { AuthContext } from "@cocrepo/service";
+import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
+import type { OffsetPaginatedResponse } from "@cocrepo/type";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 
 @Injectable()
 export class RoutineFacade {
 	constructor(
-		private readonly routinesService: RoutineService,
+		private readonly routinesService: RoutineAggregateRoot,
 		private readonly authContext: AuthContext,
 	) {}
 
-	findRoutines(query: GetRoutinesQueryDto): Promise<{
-		data: Routine[];
-		meta: {
-			total: number;
-			skip: number;
-			take: number;
-			totalPages: number;
-		};
-	}> {
+	findRoutines(
+		query: GetRoutinesQueryDto,
+	): Promise<OffsetPaginatedResponse<Routine[]>> {
 		return this.getRoutines(query);
 	}
 
-	async getRoutines(query: GetRoutinesQueryDto): Promise<{
-		data: Routine[];
-		meta: {
-			total: number;
-			skip: number;
-			take: number;
-			totalPages: number;
-		};
-	}> {
+	async getRoutines(
+		query: GetRoutinesQueryDto,
+	): Promise<OffsetPaginatedResponse<Routine[]>> {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 10;
 		const spaceScope = query.spaceScope ?? SpaceScope.CURRENT;
-		const { routines, total } = await this.routinesService.findRoutines({
+		const routineResult = await this.routinesService.findRoutines({
 			spaceScope,
 			skip,
 			take,
@@ -47,15 +38,12 @@ export class RoutineFacade {
 			contentLanguageCode: query.contentLanguageCode,
 		});
 
-		return {
-			data: routines,
-			meta: {
-				total,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(total / take) : 1,
-			},
-		};
+		return buildOffsetPaginatedResponse(
+			routineResult.routines,
+			routineResult.total,
+			skip,
+			take,
+		);
 	}
 
 	findRoutineById(
@@ -66,10 +54,7 @@ export class RoutineFacade {
 	}
 
 	getRoutine(routineId: string): Promise<Routine> {
-		return this.routinesService.findRoutineById(
-			routineId,
-			SpaceScope.CURRENT,
-		);
+		return this.routinesService.findRoutineById(routineId, SpaceScope.CURRENT);
 	}
 
 	async createRoutine(dto: CreateRoutineDto): Promise<Routine> {

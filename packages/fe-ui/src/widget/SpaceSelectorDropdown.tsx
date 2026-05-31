@@ -1,14 +1,14 @@
 "use client";
 
+import { Building2, Check, ChevronDown } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Button,
 	Dropdown,
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger,
-} from "@cocrepo/ui/heroui";
-import { Building2, Check, ChevronDown } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../design-system/primitives";
 
 /**
  * Space 정보 인터페이스
@@ -64,10 +64,7 @@ export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 				isDisabled
 				className={buttonClasses}
 				startContent={
-					<Building2
-						className="h-4 w-4 text-default-400"
-						size={16}
-					/>
+					<Building2 className="h-4 w-4 text-default-400" size={16} />
 				}
 			>
 				<span className="max-w-32 truncate text-sm text-default-500">
@@ -84,16 +81,10 @@ export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 					variant="light"
 					className={buttonClasses}
 					startContent={
-						<Building2
-							className="h-4 w-4 text-default-500"
-							size={16}
-						/>
+						<Building2 className="h-4 w-4 text-default-500" size={16} />
 					}
 					endContent={
-						<ChevronDown
-							className="h-4 w-4 text-default-400"
-							size={16}
-						/>
+						<ChevronDown className="h-4 w-4 text-default-400" size={16} />
 					}
 				>
 					<span className="max-w-32 truncate text-sm text-foreground">

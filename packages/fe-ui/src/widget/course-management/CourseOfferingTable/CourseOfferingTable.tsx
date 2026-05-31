@@ -1,8 +1,8 @@
 "use client";
 
-import { Button, Chip, Tooltip } from "@cocrepo/ui/heroui";
 import { ExternalLink } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Button, Chip, Tooltip } from "../../../design-system/primitives";
 import { CourseTableShell } from "../CourseTableShell";
 import type { CourseManagementOffering } from "../types";
 

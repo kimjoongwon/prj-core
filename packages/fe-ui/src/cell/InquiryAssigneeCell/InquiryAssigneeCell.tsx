@@ -1,5 +1,5 @@
-import { Avatar, Chip } from "@cocrepo/ui/heroui";
 import { User } from "lucide-react";
+import { Avatar, Chip } from "../../design-system/primitives";
 
 interface InquiryAssigneeCellProps {
 	/** 담당자 이름 */

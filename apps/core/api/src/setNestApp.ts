@@ -6,19 +6,18 @@ import {
 	SpaceAccessGuard,
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
-import { I18nTranslationService } from "@cocrepo/service";
-import { TokenStorageService } from "@cocrepo/service";
-import cookieParser from "cookie-parser";
-import { ClsService } from "nestjs-cls";
+import { I18nTranslationService, TokenStorageService } from "@cocrepo/service";
 import {
 	ClassSerializerInterceptor,
 	type INestApplication,
 	ValidationPipe,
 } from "@nestjs/common";
 import { HttpAdapterHost, Reflector } from "@nestjs/core";
+import cookieParser from "cookie-parser";
+import { ClsService } from "nestjs-cls";
 
 export function setNestApp<T extends INestApplication>(app: T): void {
-	const { httpAdapter } = app.get(HttpAdapterHost);
+	const httpAdapterHost = app.get(HttpAdapterHost);
 	const translationService = app.get(I18nTranslationService);
 
 	// Cookie 기반 인증/Space 선택을 위해 테스트/런타임 모두 cookie-parser를 등록합니다.
@@ -28,7 +27,7 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	// Global Exception Filters (모든 예외를 일관되게 처리)
 	// =================================================================
 	app.useGlobalFilters(
-		new AllExceptionsFilter(httpAdapter, translationService),
+		new AllExceptionsFilter(httpAdapterHost.httpAdapter, translationService),
 	);
 
 	// =================================================================
@@ -47,7 +46,11 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	// AuthMiddleware가 request.user를 설정한 후 Guard가 검증
 	// =================================================================
 	app.useGlobalGuards(
-		new JwtAuthGuard(app.get(Reflector), app.get(TokenStorageService), app.get(ClsService)),
+		new JwtAuthGuard(
+			app.get(Reflector),
+			app.get(TokenStorageService),
+			app.get(ClsService),
+		),
 		app.get(SpaceAccessGuard),
 	);
 

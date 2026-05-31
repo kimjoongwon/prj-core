@@ -1,3 +1,4 @@
+import { TaskAggregateRoot } from "@cocrepo/aggregate";
 import type {
 	CreateExerciseDto,
 	SpaceScope,
@@ -6,14 +7,15 @@ import type {
 import { SpaceScope as SpaceScopeEnum } from "@cocrepo/dto";
 import { Exercise, Routine, Task } from "@cocrepo/entity";
 import type { LanguageCode } from "@cocrepo/prisma";
-import { TaskService } from "@cocrepo/service";
+import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
+import type { OffsetPaginatedResponse } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 
 @Injectable()
 export class TaskFacade {
 	private readonly logger = new Logger(TaskFacade.name);
 
-	constructor(private readonly taskService: TaskService) {}
+	constructor(private readonly taskService: TaskAggregateRoot) {}
 
 	findTasks(params: {
 		spaceId: string;
@@ -22,15 +24,7 @@ export class TaskFacade {
 		take?: number;
 		search?: string;
 		contentLanguageCode?: LanguageCode;
-	}): Promise<{
-		data: Task[];
-		meta: {
-			total: number;
-			skip: number;
-			take: number;
-			totalPages: number;
-		};
-	}> {
+	}): Promise<OffsetPaginatedResponse<Task[]>> {
 		return this.getTasks(params);
 	}
 
@@ -41,34 +35,23 @@ export class TaskFacade {
 		take?: number;
 		search?: string;
 		contentLanguageCode?: LanguageCode;
-	}): Promise<{
-		data: Task[];
-		meta: {
-			total: number;
-			skip: number;
-			take: number;
-			totalPages: number;
-		};
-	}> {
+	}): Promise<OffsetPaginatedResponse<Task[]>> {
 		this.logger.debug("Task 목록 조회");
 		const skip = params.skip ?? 0;
 		const take = params.take ?? 10;
 
-		const { tasks, total } = await this.taskService.findTasks({
+		const taskResult = await this.taskService.findTasks({
 			...params,
 			skip,
 			take,
 		});
 
-		return {
-			data: tasks,
-			meta: {
-				total,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(total / take) : 1,
-			},
-		};
+		return buildOffsetPaginatedResponse(
+			taskResult.tasks,
+			taskResult.total,
+			skip,
+			take,
+		);
 	}
 
 	getExerciseByTaskId(taskId: string, spaceId: string): Promise<Exercise> {

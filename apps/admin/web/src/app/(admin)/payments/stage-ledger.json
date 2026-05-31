@@ -34,12 +34,12 @@
       "id": "PAYMENT-S2-BE-001",
       "stage": 2,
       "slice": "PaymentBackend",
-      "agent_type": "be-prisma-builder, be-entity-builder, be-dto-builder, be-repository-builder, be-service-builder, be-facade-builder, be-app-builder, be-controller-builder",
+      "agent_type": "be-prisma-builder, be-entity-builder, be-dto-builder, be-repository-builder, be-service-builder, be-facade-builder, be-usecase-builder, be-controller-builder",
       "required": true,
       "source_spec": ["apps/admin/web/src/app/(admin)/payments/page.spec.md"],
       "expected_files": [
         "packages/be-prisma/schema/billing/payment.prisma",
-        "packages/be-service/src/payment.service.ts",
+        "packages/be-service/src/payment/payment.service.ts",
         "apps/core/api/src/module/payments/payments.controller.ts"
       ],
       "verification": [

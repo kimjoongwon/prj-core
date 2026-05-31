@@ -2,7 +2,7 @@
 
 import { useDeletePolicy, useGetPolicies } from "@cocrepo/api/core/policies";
 import { PolicyListPage } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui/heroui";
+import { addToast } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";

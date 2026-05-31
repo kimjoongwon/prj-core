@@ -30,12 +30,11 @@ import { ThrottlerGuard } from "@nestjs/throttler";
 import { AbilitiesModule } from "./abilities";
 import { ActionsModule } from "./actions";
 import { AssetsModule } from "./assets";
-import { CategoriesModule } from "./categories";
+import { CommunityModule } from "./community";
 import { CoursesModule } from "./courses";
 // Global modules
 import { FoldersModule } from "./folders";
 import { globalModules } from "./global.module";
-import { GroupsModule } from "./groups";
 import { I18nCatalogModule } from "./i18n";
 import { InquiriesModule } from "./inquiries";
 import { PaymentsModule } from "./payments";
@@ -88,9 +87,8 @@ const devtoolsImports = enableNestDevtools
 		SubjectsModule,
 		AbilitiesModule,
 		RolesModule,
-		GroupsModule,
 		I18nCatalogModule,
-		CategoriesModule,
+		CommunityModule,
 		PaymentsModule,
 		PoliciesModule,
 		PolicyAssignmentsModule,
@@ -143,16 +141,12 @@ const devtoolsImports = enableNestDevtools
 								module: RolesModule,
 							},
 							{
-								path: "groups",
-								module: GroupsModule,
-							},
-							{
 								path: "i18n",
 								module: I18nCatalogModule,
 							},
 							{
-								path: "categories",
-								module: CategoriesModule,
+								path: "community",
+								module: CommunityModule,
 							},
 							{
 								path: "payments",

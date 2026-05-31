@@ -1,7 +1,5 @@
 export class AuditLogStatsDto {}
 export class AuthAuditLogDto {}
-export class AuthSessionInfoDto {}
-export class ChangePasswordDto {}
 export class PageMetaDto {}
 export class QueryAuthAuditLogDto {}
 export class SignUpPayloadDto {}

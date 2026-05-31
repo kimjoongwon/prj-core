@@ -4,11 +4,15 @@ import {
 	DateTimeCell,
 	DetailPage,
 	DetailPageSurface,
-	PageTitleBar,
 	DetailSection,
 	DetailSectionCard,
+	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
+import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import type { Route } from "next";
+import Link from "next/link";
 import {
 	Button,
 	Chip,
@@ -18,11 +22,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	Spinner,
-} from "@cocrepo/ui/heroui";
-import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import Link from "next/link";
-import type { Route } from "next";
+} from "../../design-system/primitives";
 
 const formatDuration = (seconds: number) => {
 	const minutes = Math.floor(seconds / 60);

@@ -1,4 +1,4 @@
-import { EmailVerificationFacade } from "@cocrepo/facade";
+import { EmailVerificationAggregateRoot } from "@cocrepo/aggregate";
 import {
 	EmailVerificationsRepository,
 	TemplatesRepository,
@@ -6,18 +6,20 @@ import {
 import {
 	EmailProvider,
 	EmailService,
-	EmailVerificationService,
 	SmtpEmailProvider,
 	TemplateService,
 } from "@cocrepo/service";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { EmailVerificationsController } from "./email-verifications.controller";
+import { EmailVerificationUseCaseProviders } from "@cocrepo/usecase";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [EmailVerificationsController],
 	providers: [
-		EmailVerificationFacade,
-		EmailVerificationService,
+		...EmailVerificationUseCaseProviders,
+		EmailVerificationAggregateRoot,
 		EmailVerificationsRepository,
 		SmtpEmailProvider,
 		TemplateService,
@@ -28,6 +30,5 @@ import { EmailVerificationsController } from "./email-verifications.controller";
 		},
 		EmailService,
 	],
-	exports: [EmailVerificationFacade],
 })
 export class EmailVerificationsModule {}

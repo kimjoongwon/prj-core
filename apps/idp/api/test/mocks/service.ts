@@ -1,4 +1,4 @@
-export class AuthAuditLogService {}
+export class AuthAuditLogAggregateRoot {}
 
 export const RUNTIME_MANAGED_OIDC_CLIENT_IDS = [
 	"admin-web",

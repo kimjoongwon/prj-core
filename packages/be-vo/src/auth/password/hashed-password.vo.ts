@@ -1,11 +1,8 @@
 import { compare, hash, hashSync } from "bcrypt";
 import { ValueObject } from "../../common/value-object.base";
 import { VoValidationError } from "../../errors/vo.error";
+import type { HashedPasswordProps } from "./hashed-password.props";
 import type { PlainPassword } from "./plain-password.vo";
-
-interface HashedPasswordProps {
-	value: string;
-}
 
 /**
  * 해시된 비밀번호 Value Object
@@ -19,13 +16,11 @@ export class HashedPassword extends ValueObject<HashedPasswordProps> {
 	private static readonly DEFAULT_SALT_ROUNDS = 10;
 
 	protected validate(props: HashedPasswordProps): void {
-		const { value } = props;
-
-		if (!value) {
+		if (!props.value) {
 			throw new VoValidationError("해시된 비밀번호는 필수입니다.");
 		}
 
-		if (!HashedPassword.BCRYPT_REGEX.test(value)) {
+		if (!HashedPassword.BCRYPT_REGEX.test(props.value)) {
 			throw new VoValidationError("유효하지 않은 bcrypt 해시 형식입니다.");
 		}
 	}

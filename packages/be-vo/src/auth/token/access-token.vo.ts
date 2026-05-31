@@ -1,9 +1,6 @@
 import { ValueObject } from "../../common/value-object.base";
 import { VoValidationError } from "../../errors/vo.error";
-
-interface AccessTokenProps {
-	value: string;
-}
+import type { AccessTokenProps } from "./access-token.props";
 
 /**
  * Access Token Value Object
@@ -16,13 +13,11 @@ export class AccessToken extends ValueObject<AccessTokenProps> {
 		/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
 
 	protected validate(props: AccessTokenProps): void {
-		const { value } = props;
-
-		if (!value) {
+		if (!props.value) {
 			throw new VoValidationError("Access Token은 필수입니다.");
 		}
 
-		if (!AccessToken.JWT_REGEX.test(value)) {
+		if (!AccessToken.JWT_REGEX.test(props.value)) {
 			throw new VoValidationError("유효하지 않은 JWT 형식입니다.");
 		}
 	}

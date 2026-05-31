@@ -50,12 +50,16 @@
 | `be-decorator` | `@cocrepo/decorator` | NestJS 데코레이터 |
 | `be-dto` | `@cocrepo/dto` | Request/Response DTO |
 | `be-entity` | `@cocrepo/entity` | 도메인 Entity |
-| `be-app` | `@cocrepo/app` | ApplicationService 레이어 |
+| `be-command` | `@cocrepo/command` | CQRS Command/Query message contract |
+| `be-event` | `@cocrepo/event` | CQRS Event message contract |
+| `be-usecase` | `@cocrepo/usecase` | CQRS UseCase/EventHandler/Saga 레이어 |
+| `be-aggregate` | `@cocrepo/aggregate` | Aggregate root service provider (`{Domain}AggregateRoot`) |
+| `be-client` | `@cocrepo/client` | 외부 시스템 단일 연동 Client |
 | `be-facade` | `@cocrepo/facade` | Controller 경계 조정 레이어 (응답 조립, read model, protocol composition) |
 | `be-gateway` | `@cocrepo/gateway` | 외부 시스템 Gateway/Client/Adapter 레이어 |
 | `be-prisma` | `@cocrepo/prisma` | Prisma 스키마 및 클라이언트 |
 | `be-repository` | `@cocrepo/repository` | Repository 레이어 |
-| `be-service` | `@cocrepo/service` | Service 레이어 |
+| `be-service` | `@cocrepo/service` | Token/Redis/Prisma/Email/ObjectStorage 등 support service 레이어 |
 | `be-vo` | `@cocrepo/vo` | Value Object |
 | `common-constant` | `@cocrepo/constant` | 공통 상수 |
 | `common-enum` | `@cocrepo/enum` | 공통 Enum |
@@ -485,7 +489,7 @@ UserCard                      → UserMenu (AuthStore 연결)
 - 파일명과 exported component 이름은 일치해야 합니다.
 - route/page/screen/feature/widget 파일 안에 private JSX subcomponent를 추가하지 않습니다.
 - 반복되거나 이름 붙일 만한 JSX 조각은 적절한 계층의 별도 component 파일로 분리합니다.
-- JSX를 반환하지 않는 mapper/helper 함수와 타입 선언은 같은 파일에 둘 수 있습니다.
+- component props/type/mapper/helper도 별도 파일로 분리합니다. 예: `QuickActionList.props.ts`, `quick-action-list.mapper.ts`.
 - `*.stories.tsx`, `*.test.tsx`의 fixture/test-only component는 예외로 허용합니다.
 - compound primitive는 예외적으로 같은 폴더에서 구성할 수 있지만, 공개 component는 파일별로 분리합니다.
 
@@ -746,6 +750,24 @@ packages/common-type/src/
 └── user-stats.ts     # 사용자 통계 타입
 ```
 
+### Source File 단일 책임 규칙 (Critical)
+
+**source file 하나는 하나의 책임 요소만 소유합니다.**
+
+규칙:
+- 하나의 파일에는 하나의 exported class/function/type/interface/enum만 둡니다.
+- class 파일에는 top-level helper/mapper 함수, props/interface/type 선언, 보조 class를 함께 두지 않습니다.
+- Props/Params/Input/Result/Options 같은 계약 타입은 `{name}.props.ts`, `{name}.input.ts`, `{name}.result.ts`, `{name}.options.ts`처럼 별도 파일로 분리합니다.
+- helper/mapper/parser/normalizer/constant도 `{name}.ts`, `{name}.mapper.ts`, `{name}.parser.ts`, `{name}.normalizer.ts`, `{name}.constants.ts`처럼 별도 파일로 분리합니다.
+- 같은 도메인에서만 함께 쓰는 파일은 같은 폴더에 가깝게 두고, 여러 도메인/패키지가 공유하면 해당 owner 패키지(`@cocrepo/type`, `@cocrepo/toolkit` 등)로 이동합니다.
+- private class method와 private static field는 class 책임 내부이므로 같은 파일에 둘 수 있습니다.
+- barrel export 전용 파일(`index.ts` 또는 legacy compatibility barrel), `*.stories.tsx`, `*.test.ts(x)`, generated 파일, Prisma schema 파일은 예외로 허용합니다.
+
+이유:
+- 파일 단위가 owner/agent_type 책임 단위로 드러납니다.
+- class, 타입 계약, 유틸리티 변경을 독립적으로 추적하고 검증할 수 있습니다.
+- 단일 파일에 여러 책임이 숨어 생기는 재사용/마이그레이션 누락을 줄입니다.
+
 ## 기획/설계 원칙
 
 ### 하위호환성 미고려 (Critical)
@@ -895,11 +917,95 @@ import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
 ### 레이어 분리 규칙
 
 - **Controller**: 라우팅, DTO 검증, 인증 컨텍스트 수집만 담당
-- **ApplicationService**: 사용자 과업 중심의 usecase workflow를 조율하는 계층 (Prisma 직접 호출 금지)
+- **UseCase/Handler**: CQRS Command/Query/EventHandler/Saga 흐름과 사용자 과업 중심 workflow를 조율하는 계층 (Prisma 직접 호출 금지)
 - **Facade**: Controller 경계에서 응답 조립, read model shaping, protocol composition을 담당하는 계층
 - **Service**: 단일 Aggregate Root 또는 단일 도메인 로직 담당 (Repository를 통해서만 데이터 접근)
 - **Gateway/Client/Adapter**: 외부 시스템 또는 복잡한 기술 서브시스템을 단순화해서 노출하는 레이어
 - **Repository**: Prisma 쿼리 작성
+
+### UseCase 파일 배치 규칙 (Critical)
+
+**`packages/be-usecase`의 handler class는 반드시 class당 하나의 파일을 가집니다.**
+
+규칙:
+- `@CommandHandler`/`@QueryHandler`가 붙은 UseCase class 1개 = `*.usecase.ts` 파일 1개
+- `@EventsHandler`가 붙은 EventHandler class 1개 = `*.event-handler.ts` 파일 1개
+- `@Saga`를 가진 Saga class 1개 = `*.saga.ts` 파일 1개
+- 같은 파일에 여러 handler/EventHandler/Saga class를 선언하지 않습니다.
+- `core`, `idp`처럼 여러 aggregate root를 포함하는 namespace 폴더에 handler 파일을 평면으로 모아두지 않습니다.
+- `packages/be-usecase/src/core/{domain}/`처럼 provider array 단위의 bounded context 폴더로 묶습니다.
+- handler provider array와 barrel export는 domain `index.ts`에서만 조립합니다.
+- handler class 파일에는 top-level type/helper/mapper를 함께 두지 않습니다.
+- handler 한 개에서만 쓰는 input/result/mapper도 `{handler}.input.ts`, `{handler}.result.ts`, `{handler}.mapper.ts`처럼 별도 파일로 분리합니다.
+- 둘 이상의 handler가 공유하는 context/mapper/helper는 `{domain}.context.ts`, `{domain}.mapper.ts`, `{domain}.support.ts`처럼 별도 파일로 분리합니다.
+- domain을 넘는 shared type은 `@cocrepo/type`, pure runtime utility는 `@cocrepo/toolkit`에 둡니다.
+- pagination처럼 여러 usecase domain이 공유하는 계약/빌더를 `packages/be-usecase/src/common`에 만들지 않습니다.
+
+예시:
+
+```text
+packages/be-usecase/src/core/community/
+├── get-community-posts.usecase.ts
+├── create-community-post.usecase.ts
+└── index.ts
+```
+
+```typescript
+// packages/be-usecase/src/core/community/index.ts
+import { CreateCommunityPostUseCase } from "./create-community-post.usecase";
+import { GetCommunityPostsUseCase } from "./get-community-posts.usecase";
+
+export const CommunityQueryHandlers = [GetCommunityPostsUseCase];
+export const CommunityCommandHandlers = [CreateCommunityPostUseCase];
+export const CommunityUseCaseProviders = [
+  ...CommunityQueryHandlers,
+  ...CommunityCommandHandlers,
+];
+
+export * from "./create-community-post.usecase";
+export * from "./get-community-posts.usecase";
+```
+
+### 백엔드 값 출처 보존 규칙 (Critical)
+
+**백엔드 코드에서 여러 출처의 값을 조합할 때는 값의 원천이 드러나도록 작성합니다.**
+
+적용 범위:
+- Controller, UseCase/Handler, Service, Repository, Client 등 모든 backend TypeScript 코드
+- Command/Query/DTO/context/entity/config/repository result를 service input, repository input, response로 매핑하는 코드
+
+규칙:
+- `const { timelineId } = command.params`처럼 출처가 사라지는 deep destructuring은 짧고 단일 출처인 코드에서만 제한적으로 사용합니다.
+- 여러 출처 값이 섞이는 함수에서는 `command.params.timelineId`, `context.userId`, `reservation.id`처럼 원천을 보존합니다.
+- 반복이 길어지면 `const params = command.params`, `const actor = context.actor`처럼 출처 이름을 가진 alias까지만 허용하고, bare variable로 풀어내지 않습니다.
+- Service/Repository input object를 만들 때는 어떤 값이 command, context, entity, config 중 어디서 왔는지 코드에서 바로 보여야 합니다.
+- 단순 중간 계산값, 검증된 파생값, 같은 줄 근처에서만 쓰는 지역 변수는 예외로 허용합니다.
+
+```typescript
+// ❌ 금지 - 여러 출처가 섞일 때 값의 원천이 사라짐
+const { courseOfferingId, timelineId, memo } = command.params;
+const { spaceId, userId } = this.context.requireContext();
+
+return this.reservationService.checkout({
+  spaceId,
+  userId,
+  courseOfferingId,
+  timelineId,
+  memo: memo ?? null,
+});
+
+// ✅ 권장 - input mapping에서 값의 원천 보존
+const context = this.context.requireContext();
+const params = command.params;
+
+return this.reservationService.checkout({
+  spaceId: context.spaceId,
+  userId: context.userId,
+  courseOfferingId: params.courseOfferingId,
+  timelineId: params.timelineId,
+  memo: params.memo ?? null,
+});
+```
 
 ### Aggregate Root / Entity 규칙
 
@@ -1115,7 +1221,7 @@ Screen/Feature spec은 planning spec으로 유지하되 실행 그래프와 승�
 - PC/Web은 `packages/fe-ui/src/**` component source owner builder가 story/test를 담당하고, Mobile은 `packages/fe-mo-ui/src/**` component source owner builder가 story/test를 담당합니다.
 - route `page.tsx`, Expo route file, `layout.tsx`, `_layout.tsx`, Store, backend-only step은 Storybook 대상이 아니며 필요한 unit/E2E 검증만 spec에 기록합니다.
 - thin re-export나 barrel-only 변경처럼 story/test가 불필요하면 spec의 비고에 불필요 사유를 남깁니다.
-- backend/API 계약은 `Prisma / Database`, `Prisma Annotation`, `Common Schema`, `Entity / VO`, `DTO / Query DTO`, `Repository`, `Service`, `ApplicationService`, `Facade / Gateway`, `엔드포인트`, `Module / Bootstrap`, `Seed`, `Codegen / API Client` 인벤토리를 구조별로 작성합니다.
+- backend/API 계약은 `Prisma / Database`, `Prisma Annotation`, `Common Schema`, `Entity / VO`, `DTO / Query DTO`, `Repository`, `Service`, `UseCase / Handler / EventHandler / Saga`, `Facade / Gateway`, `엔드포인트`, `Module / Bootstrap`, `Seed`, `Codegen / API Client` 인벤토리를 구조별로 작성합니다.
 - foundation 계약은 `Hook`, `Toolkit`, `Type`, `Store / State` 인벤토리를 구조별로 작성합니다.
 - 각 backend inventory row는 재사용/수정/신규 여부, 대상 파일, 소스 담당 `agent_type`, 호출/Wiring 소비 `agent_type`을 드러내야 합니다.
 - reusable hook은 `fe-hook-builder`, shared toolkit은 `common-toolkit-builder`, shared type은 `common-type-builder`, shared store는 `fe-store-builder`가 소스 담당입니다.
@@ -1276,8 +1382,9 @@ spec web phase
 | be-query-dto-builder | PrismaQueryDto 기반 목록 조회용 Query DTO 생성 |
 | be-vo-builder | Value Object 클래스 생성 |
 | be-repository-builder | Prisma 기반 Repository 레이어 생성 |
-| be-service-builder | NestJS Service 레이어 생성 |
-| be-app-builder | NestJS ApplicationService 레이어 생성 (여러 Service 조합) |
+| be-aggregate-builder | NestJS aggregate root service provider 생성 (`{Domain}AggregateRoot`) |
+| be-service-builder | NestJS support service 레이어 생성 |
+| be-usecase-builder | NestJS CQRS UseCase/EventHandler/Saga 레이어 생성 (여러 Service 조합 / workflow orchestration) |
 | be-facade-builder | NestJS Facade 레이어 생성 (Controller 경계 응답 조립 / protocol composition) |
 | be-gateway-builder | 외부 시스템 Gateway/Client/Adapter 레이어 생성 |
 | be-module-builder | aggregate root 기준 NestJS Module + Router wiring 생성 |

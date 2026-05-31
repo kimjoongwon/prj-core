@@ -1,4 +1,12 @@
 import { RolesGuard } from "@cocrepo/be-common";
+import {
+	CreatePolicyCommand,
+	DeletePolicyCommand,
+	GetPolicyByIdQuery,
+	ListPoliciesQuery,
+	SyncPolicyAbilitiesCommand,
+	UpdatePolicyCommand,
+} from "@cocrepo/command";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -14,7 +22,6 @@ import {
 	SyncPolicyAbilitiesDto,
 	UpdatePolicyDto,
 } from "@cocrepo/dto";
-import { PolicyFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -29,13 +36,17 @@ import {
 	Put,
 	UseGuards,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("POLICIES")
 @Controller()
 @UseGuards(RolesGuard)
 export class PoliciesController {
-	constructor(private readonly policyFacade: PolicyFacade) {}
+	constructor(
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
+	) {}
 
 	@Get()
 	@Roles([SYSTEM_ROLES.FULL_ACCESS])
@@ -49,7 +60,7 @@ export class PoliciesController {
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("정책 목록 조회 성공")
 	async getPolicies() {
-		return this.policyFacade.listPolicies();
+		return this.queryBus.execute(new ListPoliciesQuery());
 	}
 
 	@Get(":policyId")
@@ -69,7 +80,7 @@ export class PoliciesController {
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.OK)
 	@ResponseMessage("정책 조회 성공")
 	async getPolicyById(@Param("policyId", ParseUUIDPipe) policyId: string) {
-		return this.policyFacade.getPolicyById(policyId);
+		return this.queryBus.execute(new GetPolicyByIdQuery(policyId));
 	}
 
 	@Post()
@@ -89,7 +100,7 @@ export class PoliciesController {
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.CREATED)
 	@ResponseMessage("정책 생성 성공")
 	async createPolicy(@Body() dto: CreatePolicyDto) {
-		return this.policyFacade.createPolicy(dto);
+		return this.commandBus.execute(new CreatePolicyCommand(dto));
 	}
 
 	@Patch(":policyId")
@@ -117,7 +128,7 @@ export class PoliciesController {
 		@Param("policyId", ParseUUIDPipe) policyId: string,
 		@Body() dto: UpdatePolicyDto,
 	) {
-		return this.policyFacade.updatePolicy(policyId, dto);
+		return this.commandBus.execute(new UpdatePolicyCommand(policyId, dto));
 	}
 
 	@Delete(":policyId")
@@ -138,7 +149,7 @@ export class PoliciesController {
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.OK)
 	@ResponseMessage("정책 삭제 성공")
 	async deletePolicy(@Param("policyId", ParseUUIDPipe) policyId: string) {
-		return this.policyFacade.deletePolicy(policyId);
+		return this.commandBus.execute(new DeletePolicyCommand(policyId));
 	}
 
 	@Put(":policyId/abilities")
@@ -169,6 +180,8 @@ export class PoliciesController {
 		@Param("policyId", ParseUUIDPipe) policyId: string,
 		@Body() dto: SyncPolicyAbilitiesDto,
 	) {
-		return this.policyFacade.syncPolicyAbilities(policyId, dto.abilityIds);
+		return this.commandBus.execute(
+			new SyncPolicyAbilitiesCommand(policyId, dto.abilityIds),
+		);
 	}
 }

@@ -1,4 +1,4 @@
-import { HashedPassword, PlainPassword } from "@cocrepo/vo";
+import { Email, HashedPassword, PlainPassword } from "@cocrepo/vo";
 import { Injectable, Logger } from "@nestjs/common";
 import { DirectPrismaProvider } from "../oidc/direct-prisma.provider";
 import { DirectUserRepository } from "../oidc/direct-user.repository";
@@ -95,12 +95,31 @@ export class InteractionLoginService {
 	): Promise<LoginValidationResult> {
 		this.logger.debug(`로그인 시도: ${email}`);
 
-		const auditBase = { email, ipAddress, userAgent, clientId };
+		let normalizedEmail: string;
+		try {
+			normalizedEmail = Email.create(email).value;
+		} catch {
+			const auditBase = { email, ipAddress, userAgent, clientId };
+			await this.directUserRepository.createAuditLog({
+				...auditBase,
+				result: "FAILURE",
+				failureReason: "INVALID_EMAIL",
+			});
+			return { success: false, error: "INVALID_CREDENTIALS" };
+		}
+
+		const auditBase = {
+			email: normalizedEmail,
+			ipAddress,
+			userAgent,
+			clientId,
+		};
 
 		// 1. 사용자 조회
-		const user = await this.directUserRepository.findByEmailForAuth(email);
+		const user =
+			await this.directUserRepository.findByEmailForAuth(normalizedEmail);
 		if (!user) {
-			this.logger.debug(`사용자 미존재: ${email}`);
+			this.logger.debug(`사용자 미존재: ${normalizedEmail}`);
 			await this.directUserRepository.createAuditLog({
 				...auditBase,
 				result: "FAILURE",
@@ -111,7 +130,7 @@ export class InteractionLoginService {
 
 		// 2. 활성 상태 확인
 		if (!user.isActive) {
-			this.logger.debug(`비활성 계정: ${email}`);
+			this.logger.debug(`비활성 계정: ${normalizedEmail}`);
 			await this.directUserRepository.createAuditLog({
 				...auditBase,
 				userId: user.id,
@@ -123,7 +142,7 @@ export class InteractionLoginService {
 
 		// 3. 영구 잠금 확인
 		if (user.isPermanentlyLocked) {
-			this.logger.debug(`영구 잠금 계정: ${email}`);
+			this.logger.debug(`영구 잠금 계정: ${normalizedEmail}`);
 			await this.directUserRepository.createAuditLog({
 				...auditBase,
 				userId: user.id,
@@ -136,7 +155,7 @@ export class InteractionLoginService {
 		// 4. 일시 잠금 확인
 		if (user.lockedUntil) {
 			if (user.lockedUntil > new Date()) {
-				this.logger.debug(`일시 잠금 중: ${email}`);
+				this.logger.debug(`일시 잠금 중: ${normalizedEmail}`);
 				await this.directUserRepository.createAuditLog({
 					...auditBase,
 					userId: user.id,
@@ -162,7 +181,7 @@ export class InteractionLoginService {
 			if (!isValid) {
 				return this.handleLoginFailure(
 					user.id,
-					email,
+					normalizedEmail,
 					user.failedLoginAttempts,
 					auditBase,
 				);
@@ -171,14 +190,14 @@ export class InteractionLoginService {
 			this.logger.debug(`비밀번호 검증 오류: ${error}`);
 			return this.handleLoginFailure(
 				user.id,
-				email,
+				normalizedEmail,
 				user.failedLoginAttempts,
 				auditBase,
 			);
 		}
 
 		// 6. 로그인 성공
-		this.logger.debug(`로그인 성공: ${email}`);
+		this.logger.debug(`로그인 성공: ${normalizedEmail}`);
 		await this.directUserRepository.updateLoginSuccess(user.id, ipAddress);
 		await this.directUserRepository.createAuditLog({
 			...auditBase,

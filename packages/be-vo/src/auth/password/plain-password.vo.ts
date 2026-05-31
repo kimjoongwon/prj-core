@@ -1,9 +1,6 @@
 import { ValueObject } from "../../common/value-object.base";
 import { VoValidationError } from "../../errors/vo.error";
-
-interface PlainPasswordProps {
-	value: string;
-}
+import type { PlainPasswordProps } from "./plain-password.props";
 
 /**
  * 평문 비밀번호 Value Object
@@ -17,25 +14,23 @@ export class PlainPassword extends ValueObject<PlainPasswordProps> {
 	private static readonly PASSWORD_REGEX = /^[\d!#$%&*@A-Z^a-z]*$/;
 
 	protected validate(props: PlainPasswordProps): void {
-		const { value } = props;
-
-		if (!value) {
+		if (!props.value) {
 			throw new VoValidationError("비밀번호는 필수입니다.");
 		}
 
-		if (value.length < PlainPassword.MIN_LENGTH) {
+		if (props.value.length < PlainPassword.MIN_LENGTH) {
 			throw new VoValidationError(
 				`비밀번호는 최소 ${PlainPassword.MIN_LENGTH}자 이상이어야 합니다.`,
 			);
 		}
 
-		if (value.length > PlainPassword.MAX_LENGTH) {
+		if (props.value.length > PlainPassword.MAX_LENGTH) {
 			throw new VoValidationError(
 				`비밀번호는 최대 ${PlainPassword.MAX_LENGTH}자를 초과할 수 없습니다.`,
 			);
 		}
 
-		if (!PlainPassword.PASSWORD_REGEX.test(value)) {
+		if (!PlainPassword.PASSWORD_REGEX.test(props.value)) {
 			throw new VoValidationError(
 				"비밀번호는 영문, 숫자, 특수문자만 포함할 수 있습니다.",
 			);

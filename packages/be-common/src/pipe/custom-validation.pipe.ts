@@ -13,9 +13,10 @@ export class CustomValidationPipe extends ValidationPipe {
 
 	async transform(value: any, metadata: ArgumentMetadata) {
 		if (value?.content) {
-			const { content, ...rest } = value;
-			const result = await super.transform(rest, metadata);
-			return { ...result, content: JSON.parse(content) };
+			const valueWithoutContent = { ...value };
+			delete valueWithoutContent.content;
+			const result = await super.transform(valueWithoutContent, metadata);
+			return { ...result, content: JSON.parse(value.content) };
 		}
 		return super.transform(value, metadata);
 	}

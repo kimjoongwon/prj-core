@@ -1,7 +1,26 @@
 /// <reference types="vitest/globals" />
 
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { PersistStore, type SpaceInfo } from "../persistStore";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+	type NativeAuthSession,
+	PersistStore,
+	type SpaceInfo,
+} from "../persistStore";
+
+const NOW = new Date("2026-05-31T00:00:00.000Z").getTime();
+const ACCESS_TOKEN_EXPIRES_AT = NOW + 60 * 60 * 1000;
+const REFRESH_TOKEN_EXPIRES_AT = NOW + 24 * 60 * 60 * 1000;
+
+const createNativeAuthSession = (
+	overrides: Partial<NativeAuthSession> = {},
+): NativeAuthSession => ({
+	accessToken: "access-token",
+	refreshToken: "refresh-token",
+	sessionId: "native-session-id",
+	accessTokenExpiresAt: ACCESS_TOKEN_EXPIRES_AT,
+	refreshTokenExpiresAt: REFRESH_TOKEN_EXPIRES_AT,
+	...overrides,
+});
 
 describe("PersistStore", () => {
 	let persistStore: PersistStore;
@@ -16,6 +35,8 @@ describe("PersistStore", () => {
 	};
 
 	beforeEach(() => {
+		vi.useFakeTimers();
+		vi.setSystemTime(NOW);
 		vi.clearAllMocks();
 
 		// localStorage 모킹 설정
@@ -29,11 +50,18 @@ describe("PersistStore", () => {
 		persistStore = new PersistStore({ storageKey: STORAGE_KEY });
 	});
 
+	afterEach(() => {
+		vi.useRealTimers();
+	});
+
 	describe("초기화", () => {
 		it("초기 상태가 null이어야 한다", () => {
 			expect(persistStore.spaceId).toBeNull();
 			expect(persistStore.groundName).toBeNull();
 			expect(persistStore.spaces).toEqual([]);
+			expect(persistStore.accessToken).toBeNull();
+			expect(persistStore.refreshToken).toBeNull();
+			expect(persistStore.sessionId).toBeNull();
 			expect(persistStore.accessTokenExpiresAt).toBeNull();
 			expect(persistStore.refreshTokenExpiresAt).toBeNull();
 			expect(persistStore.isHydrated).toBe(false);
@@ -45,8 +73,7 @@ describe("PersistStore", () => {
 				spaceId: "space-123",
 				groundName: "Test Ground",
 				spaces: [{ spaceId: "space-123", groundName: "Test Ground" }],
-				accessTokenExpiresAt: Date.now() + 3600000,
-				refreshTokenExpiresAt: Date.now() + 86400000,
+				...createNativeAuthSession(),
 			};
 			mockLocalStorage.getItem.mockReturnValue(JSON.stringify(storedData));
 
@@ -58,7 +85,36 @@ describe("PersistStore", () => {
 			expect(store.spaceId).toBe("space-123");
 			expect(store.groundName).toBe("Test Ground");
 			expect(store.spaces).toHaveLength(1);
+			expect(store.accessToken).toBe("access-token");
+			expect(store.refreshToken).toBe("refresh-token");
+			expect(store.sessionId).toBe("native-session-id");
+			expect(store.accessTokenExpiresAt).toBe(ACCESS_TOKEN_EXPIRES_AT);
+			expect(store.refreshTokenExpiresAt).toBe(REFRESH_TOKEN_EXPIRES_AT);
+			expect(store.isAuthenticated).toBe(true);
 			expect(store.isHydrated).toBe(true);
+		});
+
+		it("legacy 저장 데이터에 native session 필드가 없으면 null로 복원해야 한다", () => {
+			// Given
+			const storedData = {
+				spaceId: "space-123",
+				groundName: "Test Ground",
+				spaces: [{ spaceId: "space-123", groundName: "Test Ground" }],
+			};
+			mockLocalStorage.getItem.mockReturnValue(JSON.stringify(storedData));
+
+			// When
+			const store = new PersistStore({ storageKey: STORAGE_KEY });
+			store.hydrateFromStorage();
+
+			// Then
+			expect(store.accessToken).toBeNull();
+			expect(store.refreshToken).toBeNull();
+			expect(store.sessionId).toBeNull();
+			expect(store.accessTokenExpiresAt).toBeNull();
+			expect(store.refreshTokenExpiresAt).toBeNull();
+			expect(store.isAuthenticated).toBe(false);
+			expect(store.needsTokenRefresh).toBe(false);
 		});
 
 		it("constructor에서는 localStorage를 읽지 않아야 한다", () => {
@@ -157,8 +213,8 @@ describe("PersistStore", () => {
 	describe("setTokenExpiries", () => {
 		it("토큰 만료 시간을 설정해야 한다", () => {
 			// Given
-			const accessExpires = Date.now() + 3600000;
-			const refreshExpires = Date.now() + 86400000;
+			const accessExpires = ACCESS_TOKEN_EXPIRES_AT;
+			const refreshExpires = REFRESH_TOKEN_EXPIRES_AT;
 
 			// When
 			persistStore.setTokenExpiries(accessExpires, refreshExpires);
@@ -169,6 +225,70 @@ describe("PersistStore", () => {
 		});
 	});
 
+	describe("setNativeAuthSession", () => {
+		it("native auth 세션 정보를 설정해야 한다", () => {
+			// Given
+			const session = createNativeAuthSession();
+
+			// When
+			persistStore.setNativeAuthSession(session);
+
+			// Then
+			expect(persistStore.accessToken).toBe("access-token");
+			expect(persistStore.refreshToken).toBe("refresh-token");
+			expect(persistStore.sessionId).toBe("native-session-id");
+			expect(persistStore.accessTokenExpiresAt).toBe(ACCESS_TOKEN_EXPIRES_AT);
+			expect(persistStore.refreshTokenExpiresAt).toBe(REFRESH_TOKEN_EXPIRES_AT);
+			expect(persistStore.isAuthenticated).toBe(true);
+		});
+
+		it("native auth 세션 정보를 localStorage 자동 저장 대상에 포함해야 한다", async () => {
+			// When
+			persistStore.setNativeAuthSession(createNativeAuthSession());
+			await Promise.resolve();
+
+			// Then
+			expect(mockLocalStorage.setItem).toHaveBeenCalled();
+			const latestCall = mockLocalStorage.setItem.mock.calls.at(-1);
+			expect(latestCall?.[0]).toBe(STORAGE_KEY);
+			expect(JSON.parse(latestCall?.[1] as string)).toMatchObject({
+				accessToken: "access-token",
+				refreshToken: "refresh-token",
+				sessionId: "native-session-id",
+				accessTokenExpiresAt: ACCESS_TOKEN_EXPIRES_AT,
+				refreshTokenExpiresAt: REFRESH_TOKEN_EXPIRES_AT,
+			});
+		});
+	});
+
+	describe("clearNativeAuthSession", () => {
+		it("native auth 세션 정보만 초기화해야 한다", () => {
+			// Given
+			persistStore.setSpace("space-123", "Test Ground");
+			persistStore.setSpaces([
+				{ spaceId: "space-123", groundName: "Test Ground" },
+			]);
+			persistStore.setSpaceSelectionResolved(false);
+			persistStore.setNativeAuthSession(createNativeAuthSession());
+
+			// When
+			persistStore.clearNativeAuthSession();
+
+			// Then
+			expect(persistStore.accessToken).toBeNull();
+			expect(persistStore.refreshToken).toBeNull();
+			expect(persistStore.sessionId).toBeNull();
+			expect(persistStore.accessTokenExpiresAt).toBeNull();
+			expect(persistStore.refreshTokenExpiresAt).toBeNull();
+			expect(persistStore.isAuthenticated).toBe(false);
+			expect(persistStore.needsTokenRefresh).toBe(false);
+			expect(persistStore.spaceId).toBe("space-123");
+			expect(persistStore.groundName).toBe("Test Ground");
+			expect(persistStore.spaces).toHaveLength(1);
+			expect(persistStore.isSpaceSelectionResolved).toBe(false);
+		});
+	});
+
 	describe("isAccessTokenExpired", () => {
 		it("만료 시간이 없으면 true를 반환해야 한다", () => {
 			expect(persistStore.isAccessTokenExpired).toBe(true);
@@ -176,7 +296,7 @@ describe("PersistStore", () => {
 
 		it("만료되었으면 true를 반환해야 한다", () => {
 			// Given - 이미 만료된 시간
-			persistStore.setTokenExpiries(Date.now() - 60000, Date.now() + 86400000);
+			persistStore.setTokenExpiries(NOW - 60000, REFRESH_TOKEN_EXPIRES_AT);
 
 			// Then
 			expect(persistStore.isAccessTokenExpired).toBe(true);
@@ -185,8 +305,8 @@ describe("PersistStore", () => {
 		it("유효하면 false를 반환해야 한다", () => {
 			// Given - 1시간 후 만료
 			persistStore.setTokenExpiries(
-				Date.now() + 3600000,
-				Date.now() + 86400000,
+				ACCESS_TOKEN_EXPIRES_AT,
+				REFRESH_TOKEN_EXPIRES_AT,
 			);
 
 			// Then
@@ -195,7 +315,7 @@ describe("PersistStore", () => {
 
 		it("버퍼 시간(30초) 이내면 만료로 간주해야 한다", () => {
 			// Given - 20초 후 만료 (버퍼 30초보다 작음)
-			persistStore.setTokenExpiries(Date.now() + 20000, Date.now() + 86400000);
+			persistStore.setTokenExpiries(NOW + 20000, REFRESH_TOKEN_EXPIRES_AT);
 
 			// Then
 			expect(persistStore.isAccessTokenExpired).toBe(true);
@@ -210,8 +330,8 @@ describe("PersistStore", () => {
 		it("유효하면 false를 반환해야 한다", () => {
 			// Given
 			persistStore.setTokenExpiries(
-				Date.now() + 3600000,
-				Date.now() + 86400000,
+				ACCESS_TOKEN_EXPIRES_AT,
+				REFRESH_TOKEN_EXPIRES_AT,
 			);
 
 			// Then
@@ -220,20 +340,44 @@ describe("PersistStore", () => {
 	});
 
 	describe("isAuthenticated", () => {
-		it("Access Token이 유효하면 true를 반환해야 한다", () => {
+		it("완전한 native session의 Access Token이 유효하면 true를 반환해야 한다", () => {
 			// Given
-			persistStore.setTokenExpiries(
-				Date.now() + 3600000,
-				Date.now() + 86400000,
-			);
+			persistStore.setNativeAuthSession(createNativeAuthSession());
 
 			// Then
 			expect(persistStore.isAuthenticated).toBe(true);
 		});
 
+		it("토큰 만료 시간만 있고 native session 값이 없으면 false를 반환해야 한다", () => {
+			// Given
+			persistStore.setTokenExpiries(
+				ACCESS_TOKEN_EXPIRES_AT,
+				REFRESH_TOKEN_EXPIRES_AT,
+			);
+
+			// Then
+			expect(persistStore.isAuthenticated).toBe(false);
+		});
+
+		it("native session 필수 값이 비어 있으면 false를 반환해야 한다", () => {
+			// Given
+			persistStore.setNativeAuthSession(
+				createNativeAuthSession({
+					sessionId: "",
+				}),
+			);
+
+			// Then
+			expect(persistStore.isAuthenticated).toBe(false);
+		});
+
 		it("Access Token이 만료되었으면 false를 반환해야 한다", () => {
 			// Given
-			persistStore.setTokenExpiries(Date.now() - 60000, Date.now() + 86400000);
+			persistStore.setNativeAuthSession(
+				createNativeAuthSession({
+					accessTokenExpiresAt: NOW - 60000,
+				}),
+			);
 
 			// Then
 			expect(persistStore.isAuthenticated).toBe(false);
@@ -247,7 +391,11 @@ describe("PersistStore", () => {
 
 		it("만료 5분 전이면 true를 반환해야 한다", () => {
 			// Given - 3분 후 만료
-			persistStore.setTokenExpiries(Date.now() + 180000, Date.now() + 86400000);
+			persistStore.setNativeAuthSession(
+				createNativeAuthSession({
+					accessTokenExpiresAt: NOW + 180000,
+				}),
+			);
 
 			// Then
 			expect(persistStore.needsTokenRefresh).toBe(true);
@@ -255,7 +403,11 @@ describe("PersistStore", () => {
 
 		it("만료까지 5분 이상 남았으면 false를 반환해야 한다", () => {
 			// Given - 10분 후 만료
-			persistStore.setTokenExpiries(Date.now() + 600000, Date.now() + 86400000);
+			persistStore.setNativeAuthSession(
+				createNativeAuthSession({
+					accessTokenExpiresAt: NOW + 600000,
+				}),
+			);
 
 			// Then
 			expect(persistStore.needsTokenRefresh).toBe(false);
@@ -263,7 +415,32 @@ describe("PersistStore", () => {
 
 		it("이미 만료되었으면 false를 반환해야 한다", () => {
 			// Given
-			persistStore.setTokenExpiries(Date.now() - 60000, Date.now() + 86400000);
+			persistStore.setNativeAuthSession(
+				createNativeAuthSession({
+					accessTokenExpiresAt: NOW - 60000,
+				}),
+			);
+
+			// Then
+			expect(persistStore.needsTokenRefresh).toBe(false);
+		});
+
+		it("토큰 만료 시간만 있고 native session 값이 없으면 false를 반환해야 한다", () => {
+			// Given
+			persistStore.setTokenExpiries(NOW + 180000, REFRESH_TOKEN_EXPIRES_AT);
+
+			// Then
+			expect(persistStore.needsTokenRefresh).toBe(false);
+		});
+
+		it("Refresh Token이 만료되었으면 false를 반환해야 한다", () => {
+			// Given
+			persistStore.setNativeAuthSession(
+				createNativeAuthSession({
+					accessTokenExpiresAt: NOW + 180000,
+					refreshTokenExpiresAt: NOW - 60000,
+				}),
+			);
 
 			// Then
 			expect(persistStore.needsTokenRefresh).toBe(false);
@@ -275,10 +452,8 @@ describe("PersistStore", () => {
 			// Given
 			persistStore.setSpace("space-123", "Test");
 			persistStore.setSpaces([{ spaceId: "space-1", groundName: "G1" }]);
-			persistStore.setTokenExpiries(
-				Date.now() + 3600000,
-				Date.now() + 86400000,
-			);
+			persistStore.setSpaceSelectionResolved(false);
+			persistStore.setNativeAuthSession(createNativeAuthSession());
 
 			// When
 			persistStore.clear();
@@ -287,8 +462,13 @@ describe("PersistStore", () => {
 			expect(persistStore.spaceId).toBeNull();
 			expect(persistStore.groundName).toBeNull();
 			expect(persistStore.spaces).toEqual([]);
+			expect(persistStore.accessToken).toBeNull();
+			expect(persistStore.refreshToken).toBeNull();
+			expect(persistStore.sessionId).toBeNull();
 			expect(persistStore.accessTokenExpiresAt).toBeNull();
 			expect(persistStore.refreshTokenExpiresAt).toBeNull();
+			expect(persistStore.isHydrated).toBe(true);
+			expect(persistStore.isSpaceSelectionResolved).toBe(true);
 		});
 
 		it("localStorage에서 데이터를 삭제해야 한다", () => {

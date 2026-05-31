@@ -1,6 +1,7 @@
 export * from "./Avatar";
 export * from "./BookingClassCard";
 export * from "./Chip";
+export * from "./CommunityPostCard";
 export * from "./ReservationCheckoutSummary";
 export * from "./SpaceListItem";
 export * from "./SummaryList";

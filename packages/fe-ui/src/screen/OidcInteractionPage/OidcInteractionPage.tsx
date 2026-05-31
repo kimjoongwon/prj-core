@@ -1,11 +1,11 @@
 "use client";
 
 import type { OidcClientLoginUi } from "@cocrepo/type";
-import { Spinner } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type { FormEvent, MouseEvent } from "react";
 import { useEffect, useState } from "react";
 import { Button } from "../../control";
+import { Spinner } from "../../design-system/primitives";
 import { AlertBanner } from "../../display";
 import {
 	OidcConsentPanel,

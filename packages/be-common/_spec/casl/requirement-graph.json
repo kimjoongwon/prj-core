@@ -14,7 +14,7 @@
       "packages/be-decorator/src/roles.decorator.ts",
       "packages/be-entity/src/role.entity.ts",
       "packages/be-entity/src/ability.entity.ts",
-      "packages/be-service/src/role.service.ts",
+      "packages/be-service/src/role/role.service.ts",
       "apps/server/src/module/role/roles.controller.ts",
       "apps/server/src/module/ability/abilities.controller.ts"
     ]
@@ -672,7 +672,7 @@
       "name": "시스템 역할 보호",
       "description": "isSystem=true인 역할은 수정/삭제 불가",
       "metadata": {
-        "source": "packages/be-service/src/role.service.ts:78"
+        "source": "packages/be-service/src/role/role.service.ts:78"
       }
     },
     {
@@ -683,7 +683,7 @@
       "name": "연결된 테넌트 확인",
       "description": "테넌트가 연결된 역할은 삭제 불가",
       "metadata": {
-        "source": "packages/be-service/src/role.service.ts:106"
+        "source": "packages/be-service/src/role/role.service.ts:106"
       }
     },
     {
@@ -694,7 +694,7 @@
       "name": "역할 이름 중복 체크",
       "description": "역할 이름(name)은 고유해야 함",
       "metadata": {
-        "source": "packages/be-service/src/role.service.ts:52"
+        "source": "packages/be-service/src/role/role.service.ts:52"
       }
     }
   ],

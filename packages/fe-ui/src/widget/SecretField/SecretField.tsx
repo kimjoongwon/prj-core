@@ -1,9 +1,9 @@
 "use client";
 
-import { Button, Snippet } from "@cocrepo/ui/heroui";
 import { Eye, EyeOff } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import { Button, Snippet } from "../../design-system/primitives";
 
 export interface SecretFieldProps {
 	/** 비밀 값 */

@@ -1,16 +1,21 @@
-import { TranslationFacade } from "@cocrepo/facade";
 import { TranslationsRepository } from "@cocrepo/repository";
-import { TranslationCatalogService } from "@cocrepo/service";
+import { TranslationCatalogAggregateRoot } from "@cocrepo/aggregate";
+import {
+	TranslationCommandHandlers,
+	TranslationQueryHandlers,
+} from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { TranslationsController } from "./translations.controller";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [TranslationsController],
 	providers: [
-		TranslationFacade,
-		TranslationCatalogService,
+		TranslationCatalogAggregateRoot,
 		TranslationsRepository,
+		...TranslationCommandHandlers,
+		...TranslationQueryHandlers,
 	],
-	exports: [TranslationFacade],
 })
 export class TranslationsModule {}

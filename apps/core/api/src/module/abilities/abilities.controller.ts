@@ -1,4 +1,11 @@
-import { AbilityApplicationService } from "@cocrepo/app";
+import {
+	CreateAbilityCommand,
+	DeleteAbilityCommand,
+	GetAbilityByIdQuery,
+	GetAllAbilitiesQuery,
+	GetMyAbilitiesQuery,
+	UpdateAbilityCommand,
+} from "@cocrepo/command";
 import { ABILITY_ERRORS, USER_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -23,12 +30,16 @@ import {
 	Patch,
 	Post,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("ABILITIES")
 @Controller()
 export class AbilitiesController {
-	constructor(private readonly abilitiesService: AbilityApplicationService) {}
+	constructor(
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
+	) {}
 
 	/**
 	 * 전체 권한 정의 목록 조회
@@ -46,7 +57,7 @@ export class AbilitiesController {
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("권한 목록 조회 성공")
 	async getAbilities(): Promise<Ability[]> {
-		return this.abilitiesService.getAllAbilities();
+		return this.queryBus.execute(new GetAllAbilitiesQuery());
 	}
 
 	/**
@@ -69,7 +80,7 @@ export class AbilitiesController {
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("내 권한 조회 성공")
 	async getMyAbilities(): Promise<Ability[]> {
-		return this.abilitiesService.getMyAbilities();
+		return this.queryBus.execute(new GetMyAbilitiesQuery());
 	}
 
 	/**
@@ -98,7 +109,7 @@ export class AbilitiesController {
 	async getAbilityById(
 		@Param("id", ParseUUIDPipe) id: string,
 	): Promise<Ability> {
-		return this.abilitiesService.getAbilityById(id);
+		return this.queryBus.execute(new GetAbilityByIdQuery(id));
 	}
 
 	/**
@@ -136,7 +147,7 @@ export class AbilitiesController {
 			description: dto.description ?? null,
 		};
 
-		return this.abilitiesService.createAbility(data);
+		return this.commandBus.execute(new CreateAbilityCommand(data));
 	}
 
 	/**
@@ -183,7 +194,7 @@ export class AbilitiesController {
 			...(dto.description !== undefined && { description: dto.description }),
 		};
 
-		return this.abilitiesService.updateAbility(id, data);
+		return this.commandBus.execute(new UpdateAbilityCommand(id, data));
 	}
 
 	/**
@@ -213,6 +224,6 @@ export class AbilitiesController {
 	async deleteAbility(
 		@Param("id", ParseUUIDPipe) id: string,
 	): Promise<Ability> {
-		return this.abilitiesService.deleteAbility(id);
+		return this.commandBus.execute(new DeleteAbilityCommand(id));
 	}
 }

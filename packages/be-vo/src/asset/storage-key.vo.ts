@@ -1,48 +1,43 @@
 import { ValueObject } from "../common/value-object.base";
 import { VoValidationError } from "../errors/vo.error";
-
-interface StorageKeyProps {
-	value: string;
-}
+import type { StorageKeyProps } from "./storage-key.props";
 
 export class StorageKey extends ValueObject<StorageKeyProps> {
 	private static readonly MAX_LENGTH = 1024;
-	private static readonly ALLOWED_REGEX = /^[a-zA-Z0-9\-_.\/]+$/;
+	private static readonly ALLOWED_REGEX = /^[a-zA-Z0-9\-_./]+$/;
 
 	protected validate(props: StorageKeyProps): void {
-		const { value } = props;
-
-		if (!value) {
+		if (!props.value) {
 			throw new VoValidationError("스토리지 키는 필수입니다.");
 		}
 
-		if (value.length < 1) {
+		if (props.value.length < 1) {
 			throw new VoValidationError("스토리지 키는 최소 1자 이상이어야 합니다.");
 		}
 
-		if (value.length > StorageKey.MAX_LENGTH) {
+		if (props.value.length > StorageKey.MAX_LENGTH) {
 			throw new VoValidationError("스토리지 키는 최대 1024자까지 가능합니다.");
 		}
 
-		if (/\s/.test(value)) {
+		if (/\s/.test(props.value)) {
 			throw new VoValidationError("스토리지 키에 공백을 포함할 수 없습니다.");
 		}
 
-		if (value.startsWith("/")) {
+		if (props.value.startsWith("/")) {
 			throw new VoValidationError(
 				"스토리지 키는 슬래시(/)로 시작할 수 없습니다.",
 			);
 		}
 
-		if (value.endsWith("/")) {
+		if (props.value.endsWith("/")) {
 			throw new VoValidationError(
 				"스토리지 키는 슬래시(/)로 끝날 수 없습니다.",
 			);
 		}
 
-		if (!StorageKey.ALLOWED_REGEX.test(value)) {
+		if (!StorageKey.ALLOWED_REGEX.test(props.value)) {
 			throw new VoValidationError(
-				`스토리지 키에 허용되지 않는 문자가 포함되어 있습니다: ${value}`,
+				`스토리지 키에 허용되지 않는 문자가 포함되어 있습니다: ${props.value}`,
 			);
 		}
 	}

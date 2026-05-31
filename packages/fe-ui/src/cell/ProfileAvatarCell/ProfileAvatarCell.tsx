@@ -1,5 +1,5 @@
-import { Avatar } from "@cocrepo/ui/heroui";
 import type { ReactNode } from "react";
+import { Avatar } from "../../design-system/primitives";
 
 export interface ProfileAvatarCellProps {
 	/** 이름 */

@@ -5,8 +5,19 @@
  * 테마, 토큰, Provider를 중앙에서 관리합니다.
  */
 
-// HeroUI re-exports (자주 사용되는 유틸리티)
-export { cn } from "@cocrepo/ui/heroui";
+// Public design-system utilities.
+export {
+	addToast,
+	Card,
+	CardBody,
+	CardFooter,
+	CardHeader,
+	cn,
+	Divider,
+	Spinner,
+	Tooltip,
+	useDisclosure,
+} from "./primitives";
 
 // Provider
 export * from "./provider";

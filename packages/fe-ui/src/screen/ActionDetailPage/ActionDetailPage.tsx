@@ -1,12 +1,14 @@
 "use client";
 
 import {
-	DetailSectionCard,
 	DetailPage,
 	DetailPageSurface,
+	DetailSectionCard,
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
+import { ArrowLeft, Edit, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Button,
 	Chip,
@@ -16,9 +18,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	useDisclosure,
-} from "@cocrepo/ui/heroui";
-import { ArrowLeft, Edit, Trash2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 
 export interface ActionDetailPageAction {
 	id: string;

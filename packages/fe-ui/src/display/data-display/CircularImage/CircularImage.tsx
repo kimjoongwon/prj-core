@@ -1,4 +1,4 @@
-import { cn } from "@cocrepo/ui/heroui";
+import { cn } from "../../../design-system/primitives";
 
 export interface CircularImageProps {
 	/** 이미지 소스 URL */

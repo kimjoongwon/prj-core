@@ -8,6 +8,9 @@ import type {
 	OidcClientLoginUi,
 	OidcClientLoginUiVariant,
 } from "@cocrepo/type";
+import { RefreshCw, Save } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { RedirectUriListInput } from "../../control/RedirectUriListInput/RedirectUriListInput";
 import {
 	Button,
 	Checkbox,
@@ -15,10 +18,7 @@ import {
 	Input,
 	Select,
 	SelectItem,
-} from "@cocrepo/ui/heroui";
-import { RefreshCw, Save } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import { RedirectUriListInput } from "../../control/RedirectUriListInput/RedirectUriListInput";
+} from "../../design-system/primitives";
 import { VStack } from "../../rhythm/VStack/VStack";
 
 export const OIDC_CLIENT_LOGIN_UI_VARIANT_OPTIONS: Array<{

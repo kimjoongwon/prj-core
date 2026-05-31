@@ -227,7 +227,7 @@ COPY packages/be-dto/package.json ./packages/be-dto/
 COPY packages/be-entity/package.json ./packages/be-entity/
 COPY packages/be-repository/package.json ./packages/be-repository/
 COPY packages/be-service/package.json ./packages/be-service/
-COPY packages/be-app/package.json ./packages/be-app/
+COPY packages/be-usecase/package.json ./packages/be-usecase/
 COPY packages/be-gateway/package.json ./packages/be-gateway/
 COPY apps/core/api/package.json ./apps/core/api/
 

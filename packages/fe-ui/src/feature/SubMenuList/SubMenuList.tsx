@@ -1,8 +1,8 @@
 "use client";
 
 import { useNavigationStore } from "@cocrepo/store";
-import { cn } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { cn } from "../../design-system/primitives";
 import { VStack } from "../../rhythm/VStack/VStack";
 
 export interface SubMenuListProps {

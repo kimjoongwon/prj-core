@@ -26,17 +26,16 @@ export class AuthAuditLogsRepository {
 		skip: number;
 		take: number;
 	}): Promise<{ logs: AuthAuditLog[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
 		this.logger.debug("인증 감사 로그 목록 조회");
 
 		const [logs, totalCount] = await Promise.all([
 			this.txHost.tx.authAuditLog.findMany({
-				where,
-				orderBy,
-				skip,
-				take,
+				where: params.where,
+				orderBy: params.orderBy,
+				skip: params.skip,
+				take: params.take,
 			}),
-			this.txHost.tx.authAuditLog.count({ where }),
+			this.txHost.tx.authAuditLog.count({ where: params.where }),
 		]);
 
 		return {

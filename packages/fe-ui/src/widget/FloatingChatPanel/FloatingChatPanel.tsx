@@ -1,6 +1,5 @@
 "use client";
 
-import { Button, ScrollShadow, Spinner, Textarea } from "@cocrepo/ui/heroui";
 import {
 	Bot,
 	Maximize2,
@@ -12,6 +11,12 @@ import {
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
+import {
+	Button,
+	ScrollShadow,
+	Spinner,
+	Textarea,
+} from "../../design-system/primitives";
 
 export interface ChatMessage {
 	/** 역할 (user 또는 assistant) */

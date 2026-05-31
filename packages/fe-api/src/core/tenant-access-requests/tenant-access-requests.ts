@@ -9,2491 +9,510 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-
-import type {
-	DataTag,
-	DefinedInitialDataOptions,
-	DefinedUseQueryResult,
-	InfiniteData,
-	MutationFunction,
-	QueryClient,
-	QueryFunction,
-	QueryKey,
-	UndefinedInitialDataOptions,
-	UseMutationOptions,
-	UseMutationResult,
-	UseQueryOptions,
-	UseQueryResult,
-	UseSuspenseInfiniteQueryOptions,
-	UseSuspenseInfiniteQueryResult,
-	UseSuspenseQueryOptions,
-	UseSuspenseQueryResult,
-} from "@tanstack/react-query";
-import {
-	useMutation,
-	useQuery,
-	useSuspenseInfiniteQuery,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
+import type { DataTag, DefinedInitialDataOptions, DefinedUseQueryResult, InfiniteData, MutationFunction, QueryClient, QueryFunction, QueryKey, UndefinedInitialDataOptions, UseMutationOptions, UseMutationResult, UseQueryOptions, UseQueryResult, UseSuspenseInfiniteQueryOptions, UseSuspenseInfiniteQueryResult, UseSuspenseQueryOptions, UseSuspenseQueryResult, } from "@tanstack/react-query";
+import { useMutation, useQuery, useSuspenseInfiniteQuery, useSuspenseQuery, } from "@tanstack/react-query";
 import type { BodyType, ErrorType } from "../../libs/customAxios";
-
 import { customInstance } from "../../libs/customAxios";
-import type {
-	ApproveTenantAccessRequest200AllOf,
-	CancelTenantAccessRequest200AllOf,
-	CreateTenantAccessRequest201AllOf,
-	CreateTenantAccessRequestDto,
-	GetCreateTenantAccessRequestForm200AllOf,
-	GetMyTenantAccessRequests200AllOf,
-	GetMyTenantAccessRequestsParams,
-	GetTenantAccessRequest200AllOf,
-	GetTenantAccessRequests200AllOf,
-	GetTenantAccessRequestsParams,
-	RejectTenantAccessRequest200AllOf,
-	ReviewTenantAccessRequestDto,
-} from ".././model";
-
+import type { ApproveTenantAccessRequest200AllOf, GetTenantAccessRequest200AllOf, GetTenantAccessRequests200AllOf, GetTenantAccessRequestsParams, RejectTenantAccessRequest200AllOf, ReviewTenantAccessRequestDto, } from ".././model";
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-/**
- * 신청자가 Space와 희망 Role을 선택할 수 있도록 폼 초기값과 옵션을 반환합니다.
- * @summary 테넌트 접근 신청 생성 폼 bootstrap 조회
- */
-export const getCreateTenantAccessRequestForm = (
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
-) => {
-	return customInstance<GetCreateTenantAccessRequestForm200AllOf>(
-		{
-			url: `/api/v1/tenant-access-requests/form/create`,
-			method: "GET",
-			signal,
-		},
-		options,
-	);
-};
-
-export const getGetCreateTenantAccessRequestFormQueryKey = () => {
-	return [`/api/v1/tenant-access-requests/form/create`] as const;
-};
-
-export const getGetCreateTenantAccessRequestFormInfiniteQueryKey = () => {
-	return ["infinite", `/api/v1/tenant-access-requests/form/create`] as const;
-};
-
-export const getGetCreateTenantAccessRequestFormQueryOptions = <
-	TData = Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-	TError = ErrorType<void>,
->(options?: {
-	query?: Partial<
-		UseQueryOptions<
-			Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-			TError,
-			TData
-		>
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey =
-		queryOptions?.queryKey ?? getGetCreateTenantAccessRequestFormQueryKey();
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>
-	> = ({ signal }) => getCreateTenantAccessRequestForm(requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-		Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetCreateTenantAccessRequestFormQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>
->;
-export type GetCreateTenantAccessRequestFormQueryError = ErrorType<void>;
-
-export function useGetCreateTenantAccessRequestForm<
-	TData = Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-	TError = ErrorType<void>,
->(
-	options: {
-		query: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-					TError,
-					Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetCreateTenantAccessRequestForm<
-	TData = Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-					TError,
-					Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetCreateTenantAccessRequestForm<
-	TData = Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 테넌트 접근 신청 생성 폼 bootstrap 조회
- */
-
-export function useGetCreateTenantAccessRequestForm<
-	TData = Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetCreateTenantAccessRequestFormQueryOptions(options);
-
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
-}
-
-/**
- * @summary 테넌트 접근 신청 생성 폼 bootstrap 조회
- */
-export const prefetchGetCreateTenantAccessRequestFormQuery = async <
-	TData = Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetCreateTenantAccessRequestFormQueryOptions(options);
-
-	await queryClient.prefetchQuery(queryOptions);
-
-	return queryClient;
-};
-
-export const getGetCreateTenantAccessRequestFormSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-	TError = ErrorType<void>,
->(options?: {
-	query?: Partial<
-		UseSuspenseQueryOptions<
-			Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-			TError,
-			TData
-		>
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey =
-		queryOptions?.queryKey ?? getGetCreateTenantAccessRequestFormQueryKey();
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>
-	> = ({ signal }) => getCreateTenantAccessRequestForm(requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetCreateTenantAccessRequestFormSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>
->;
-export type GetCreateTenantAccessRequestFormSuspenseQueryError =
-	ErrorType<void>;
-
-export function useGetCreateTenantAccessRequestFormSuspense<
-	TData = Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-	TError = ErrorType<void>,
->(
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetCreateTenantAccessRequestFormSuspense<
-	TData = Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetCreateTenantAccessRequestFormSuspense<
-	TData = Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 테넌트 접근 신청 생성 폼 bootstrap 조회
- */
-
-export function useGetCreateTenantAccessRequestFormSuspense<
-	TData = Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions =
-		getGetCreateTenantAccessRequestFormSuspenseQueryOptions(options);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
-}
-
-export const getGetCreateTenantAccessRequestFormSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<
-		Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>
-	>,
-	TError = ErrorType<void>,
->(options?: {
-	query?: Partial<
-		UseSuspenseInfiniteQueryOptions<
-			Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-			TError,
-			TData
-		>
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey =
-		queryOptions?.queryKey ??
-		getGetCreateTenantAccessRequestFormInfiniteQueryKey();
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>
-	> = ({ signal }) => getCreateTenantAccessRequestForm(requestOptions, signal);
-
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetCreateTenantAccessRequestFormSuspenseInfiniteQueryResult =
-	NonNullable<Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>>;
-export type GetCreateTenantAccessRequestFormSuspenseInfiniteQueryError =
-	ErrorType<void>;
-
-export function useGetCreateTenantAccessRequestFormSuspenseInfinite<
-	TData = InfiniteData<
-		Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>
-	>,
-	TError = ErrorType<void>,
->(
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetCreateTenantAccessRequestFormSuspenseInfinite<
-	TData = InfiniteData<
-		Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>
-	>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetCreateTenantAccessRequestFormSuspenseInfinite<
-	TData = InfiniteData<
-		Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>
-	>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 테넌트 접근 신청 생성 폼 bootstrap 조회
- */
-
-export function useGetCreateTenantAccessRequestFormSuspenseInfinite<
-	TData = InfiniteData<
-		Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>
-	>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions =
-		getGetCreateTenantAccessRequestFormSuspenseInfiniteQueryOptions(options);
-
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
-}
-
-/**
- * @summary 테넌트 접근 신청 생성 폼 bootstrap 조회
- */
-export const prefetchGetCreateTenantAccessRequestFormInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getCreateTenantAccessRequestForm>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions =
-		getGetCreateTenantAccessRequestFormSuspenseInfiniteQueryOptions(options);
-
-	await queryClient.prefetchInfiniteQuery(queryOptions);
-
-	return queryClient;
-};
-
-/**
- * 신청자가 특정 Space와 Role에 대한 접근 신청을 생성합니다. 같은 user+space의 PENDING 신청은 1개만 허용합니다.
- * @summary 테넌트 접근 신청 생성
- */
-export const createTenantAccessRequest = (
-	createTenantAccessRequestDto: BodyType<CreateTenantAccessRequestDto>,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
-) => {
-	return customInstance<CreateTenantAccessRequest201AllOf>(
-		{
-			url: `/api/v1/tenant-access-requests`,
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			data: createTenantAccessRequestDto,
-			signal,
-		},
-		options,
-	);
-};
-
-export const getCreateTenantAccessRequestMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof createTenantAccessRequest>>,
-		TError,
-		{ data: BodyType<CreateTenantAccessRequestDto> },
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof createTenantAccessRequest>>,
-	TError,
-	{ data: BodyType<CreateTenantAccessRequestDto> },
-	TContext
-> => {
-	const mutationKey = ["createTenantAccessRequest"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
-
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof createTenantAccessRequest>>,
-		{ data: BodyType<CreateTenantAccessRequestDto> }
-	> = (props) => {
-		const { data } = props ?? {};
-
-		return createTenantAccessRequest(data, requestOptions);
-	};
-
-	return { mutationFn, ...mutationOptions };
-};
-
-export type CreateTenantAccessRequestMutationResult = NonNullable<
-	Awaited<ReturnType<typeof createTenantAccessRequest>>
->;
-export type CreateTenantAccessRequestMutationBody =
-	BodyType<CreateTenantAccessRequestDto>;
-export type CreateTenantAccessRequestMutationError = ErrorType<void>;
-
-/**
- * @summary 테넌트 접근 신청 생성
- */
-export const useCreateTenantAccessRequest = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof createTenantAccessRequest>>,
-			TError,
-			{ data: BodyType<CreateTenantAccessRequestDto> },
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof createTenantAccessRequest>>,
-	TError,
-	{ data: BodyType<CreateTenantAccessRequestDto> },
-	TContext
-> => {
-	const mutationOptions = getCreateTenantAccessRequestMutationOptions(options);
-
-	return useMutation(mutationOptions, queryClient);
-};
 /**
  * FULL_ACCESS는 전체 신청을, MANAGE는 본인이 관리하는 Space의 신청만 조회합니다.
  * @summary 테넌트 접근 신청 승인 목록 조회
  */
-export const getTenantAccessRequests = (
-	params?: GetTenantAccessRequestsParams,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
-) => {
-	return customInstance<GetTenantAccessRequests200AllOf>(
-		{ url: `/api/v1/tenant-access-requests`, method: "GET", params, signal },
-		options,
-	);
+export const getTenantAccessRequests = (params?: GetTenantAccessRequestsParams, options?: SecondParameter<typeof customInstance>, signal?: AbortSignal) => {
+    return customInstance<GetTenantAccessRequests200AllOf>({ url: `/api/v1/tenant-access-requests`, method: "GET", params, signal }, options);
 };
-
-export const getGetTenantAccessRequestsQueryKey = (
-	params?: GetTenantAccessRequestsParams,
-) => {
-	return [
-		`/api/v1/tenant-access-requests`,
-		...(params ? [params] : []),
-	] as const;
+export const getGetTenantAccessRequestsQueryKey = (params?: GetTenantAccessRequestsParams) => {
+    return [
+        `/api/v1/tenant-access-requests`,
+        ...(params ? [params] : []),
+    ] as const;
 };
-
-export const getGetTenantAccessRequestsInfiniteQueryKey = (
-	params?: GetTenantAccessRequestsParams,
-) => {
-	return [
-		"infinite",
-		`/api/v1/tenant-access-requests`,
-		...(params ? [params] : []),
-	] as const;
+export const getGetTenantAccessRequestsInfiniteQueryKey = (params?: GetTenantAccessRequestsParams) => {
+    return [
+        "infinite",
+        `/api/v1/tenant-access-requests`,
+        ...(params ? [params] : []),
+    ] as const;
 };
-
-export const getGetTenantAccessRequestsQueryOptions = <
-	TData = Awaited<ReturnType<typeof getTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey =
-		queryOptions?.queryKey ?? getGetTenantAccessRequestsQueryKey(params);
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getTenantAccessRequests>>
-	> = ({ signal }) => getTenantAccessRequests(params, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-		Awaited<ReturnType<typeof getTenantAccessRequests>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+export const getGetTenantAccessRequestsQueryOptions = <TData = Awaited<ReturnType<typeof getTenantAccessRequests>>, TError = ErrorType<void>,>(params?: GetTenantAccessRequestsParams, options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetTenantAccessRequestsQueryKey(params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTenantAccessRequests>>> = ({ signal }) => getTenantAccessRequests(params, requestOptions, signal);
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData> & {
+        queryKey: DataTag<QueryKey, TData, TError>;
+    };
 };
-
-export type GetTenantAccessRequestsQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getTenantAccessRequests>>
->;
+export type GetTenantAccessRequestsQueryResult = NonNullable<Awaited<ReturnType<typeof getTenantAccessRequests>>>;
 export type GetTenantAccessRequestsQueryError = ErrorType<void>;
-
-export function useGetTenantAccessRequests<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetTenantAccessRequestsParams,
-	options: {
-		query: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getTenantAccessRequests>>,
-					TError,
-					Awaited<ReturnType<typeof getTenantAccessRequests>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequests<TData = Awaited<ReturnType<typeof getTenantAccessRequests>>, TError = ErrorType<void>>(params: undefined | GetTenantAccessRequestsParams, options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>> & Pick<DefinedInitialDataOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, Awaited<ReturnType<typeof getTenantAccessRequests>>>, "initialData">;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): DefinedUseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetTenantAccessRequests<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getTenantAccessRequests>>,
-					TError,
-					Awaited<ReturnType<typeof getTenantAccessRequests>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequests<TData = Awaited<ReturnType<typeof getTenantAccessRequests>>, TError = ErrorType<void>>(params?: GetTenantAccessRequestsParams, options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>> & Pick<UndefinedInitialDataOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, Awaited<ReturnType<typeof getTenantAccessRequests>>>, "initialData">;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetTenantAccessRequests<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequests<TData = Awaited<ReturnType<typeof getTenantAccessRequests>>, TError = ErrorType<void>>(params?: GetTenantAccessRequestsParams, options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
 /**
  * @summary 테넌트 접근 신청 승인 목록 조회
  */
-
-export function useGetTenantAccessRequests<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequests<TData = Awaited<ReturnType<typeof getTenantAccessRequests>>, TError = ErrorType<void>>(params?: GetTenantAccessRequestsParams, options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 } {
-	const queryOptions = getGetTenantAccessRequestsQueryOptions(params, options);
-
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
+    const queryOptions = getGetTenantAccessRequestsQueryOptions(params, options);
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>;
+    };
+    query.queryKey = queryOptions.queryKey;
+    return query;
 }
-
 /**
  * @summary 테넌트 접근 신청 승인 목록 조회
  */
-export const prefetchGetTenantAccessRequestsQuery = async <
-	TData = Awaited<ReturnType<typeof getTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	params?: GetTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetTenantAccessRequestsQueryOptions(params, options);
-
-	await queryClient.prefetchQuery(queryOptions);
-
-	return queryClient;
+export const prefetchGetTenantAccessRequestsQuery = async <TData = Awaited<ReturnType<typeof getTenantAccessRequests>>, TError = ErrorType<void>,>(queryClient: QueryClient, params?: GetTenantAccessRequestsParams, options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}): Promise<QueryClient> => {
+    const queryOptions = getGetTenantAccessRequestsQueryOptions(params, options);
+    await queryClient.prefetchQuery(queryOptions);
+    return queryClient;
 };
-
-export const getGetTenantAccessRequestsSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey =
-		queryOptions?.queryKey ?? getGetTenantAccessRequestsQueryKey(params);
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getTenantAccessRequests>>
-	> = ({ signal }) => getTenantAccessRequests(params, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getTenantAccessRequests>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+export const getGetTenantAccessRequestsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTenantAccessRequests>>, TError = ErrorType<void>,>(params?: GetTenantAccessRequestsParams, options?: {
+    query?: Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetTenantAccessRequestsQueryKey(params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTenantAccessRequests>>> = ({ signal }) => getTenantAccessRequests(params, requestOptions, signal);
+    return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData> & {
+        queryKey: DataTag<QueryKey, TData, TError>;
+    };
 };
-
-export type GetTenantAccessRequestsSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getTenantAccessRequests>>
->;
+export type GetTenantAccessRequestsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTenantAccessRequests>>>;
 export type GetTenantAccessRequestsSuspenseQueryError = ErrorType<void>;
-
-export function useGetTenantAccessRequestsSuspense<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetTenantAccessRequestsParams,
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestsSuspense<TData = Awaited<ReturnType<typeof getTenantAccessRequests>>, TError = ErrorType<void>>(params: undefined | GetTenantAccessRequestsParams, options: {
+    query: Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetTenantAccessRequestsSuspense<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestsSuspense<TData = Awaited<ReturnType<typeof getTenantAccessRequests>>, TError = ErrorType<void>>(params?: GetTenantAccessRequestsParams, options?: {
+    query?: Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetTenantAccessRequestsSuspense<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestsSuspense<TData = Awaited<ReturnType<typeof getTenantAccessRequests>>, TError = ErrorType<void>>(params?: GetTenantAccessRequestsParams, options?: {
+    query?: Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
 /**
  * @summary 테넌트 접근 신청 승인 목록 조회
  */
-
-export function useGetTenantAccessRequestsSuspense<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestsSuspense<TData = Awaited<ReturnType<typeof getTenantAccessRequests>>, TError = ErrorType<void>>(params?: GetTenantAccessRequestsParams, options?: {
+    query?: Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 } {
-	const queryOptions = getGetTenantAccessRequestsSuspenseQueryOptions(
-		params,
-		options,
-	);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
+    const queryOptions = getGetTenantAccessRequestsSuspenseQueryOptions(params, options);
+    const query = useSuspenseQuery(queryOptions, queryClient) as UseSuspenseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>;
+    };
+    query.queryKey = queryOptions.queryKey;
+    return query;
 }
-
-export const getGetTenantAccessRequestsSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequests>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey =
-		queryOptions?.queryKey ??
-		getGetTenantAccessRequestsInfiniteQueryKey(params);
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getTenantAccessRequests>>
-	> = ({ signal }) => getTenantAccessRequests(params, requestOptions, signal);
-
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getTenantAccessRequests>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+export const getGetTenantAccessRequestsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequests>>>, TError = ErrorType<void>,>(params?: GetTenantAccessRequestsParams, options?: {
+    query?: Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {};
+    const queryKey = queryOptions?.queryKey ??
+        getGetTenantAccessRequestsInfiniteQueryKey(params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTenantAccessRequests>>> = ({ signal }) => getTenantAccessRequests(params, requestOptions, signal);
+    return {
+        queryKey,
+        queryFn,
+        ...queryOptions,
+    } as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData> & {
+        queryKey: DataTag<QueryKey, TData, TError>;
+    };
 };
-
-export type GetTenantAccessRequestsSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getTenantAccessRequests>>
->;
+export type GetTenantAccessRequestsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTenantAccessRequests>>>;
 export type GetTenantAccessRequestsSuspenseInfiniteQueryError = ErrorType<void>;
-
-export function useGetTenantAccessRequestsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequests>>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetTenantAccessRequestsParams,
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequests>>>, TError = ErrorType<void>>(params: undefined | GetTenantAccessRequestsParams, options: {
+    query: Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetTenantAccessRequestsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequests>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequests>>>, TError = ErrorType<void>>(params?: GetTenantAccessRequestsParams, options?: {
+    query?: Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetTenantAccessRequestsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequests>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequests>>>, TError = ErrorType<void>>(params?: GetTenantAccessRequestsParams, options?: {
+    query?: Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
 /**
  * @summary 테넌트 접근 신청 승인 목록 조회
  */
-
-export function useGetTenantAccessRequestsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequests>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequests>>>, TError = ErrorType<void>>(params?: GetTenantAccessRequestsParams, options?: {
+    query?: Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 } {
-	const queryOptions = getGetTenantAccessRequestsSuspenseInfiniteQueryOptions(
-		params,
-		options,
-	);
-
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
+    const queryOptions = getGetTenantAccessRequestsSuspenseInfiniteQueryOptions(params, options);
+    const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>;
+    };
+    query.queryKey = queryOptions.queryKey;
+    return query;
 }
-
 /**
  * @summary 테넌트 접근 신청 승인 목록 조회
  */
-export const prefetchGetTenantAccessRequestsInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	params?: GetTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetTenantAccessRequestsSuspenseInfiniteQueryOptions(
-		params,
-		options,
-	);
-
-	await queryClient.prefetchInfiniteQuery(queryOptions);
-
-	return queryClient;
-};
-
-/**
- * 현재 로그인한 사용자의 테넌트 접근 신청 목록을 조회합니다.
- * @summary 내 테넌트 접근 신청 목록 조회
- */
-export const getMyTenantAccessRequests = (
-	params?: GetMyTenantAccessRequestsParams,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
-) => {
-	return customInstance<GetMyTenantAccessRequests200AllOf>(
-		{ url: `/api/v1/tenant-access-requests/my`, method: "GET", params, signal },
-		options,
-	);
-};
-
-export const getGetMyTenantAccessRequestsQueryKey = (
-	params?: GetMyTenantAccessRequestsParams,
-) => {
-	return [
-		`/api/v1/tenant-access-requests/my`,
-		...(params ? [params] : []),
-	] as const;
-};
-
-export const getGetMyTenantAccessRequestsInfiniteQueryKey = (
-	params?: GetMyTenantAccessRequestsParams,
-) => {
-	return [
-		"infinite",
-		`/api/v1/tenant-access-requests/my`,
-		...(params ? [params] : []),
-	] as const;
-};
-
-export const getGetMyTenantAccessRequestsQueryOptions = <
-	TData = Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetMyTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey =
-		queryOptions?.queryKey ?? getGetMyTenantAccessRequestsQueryKey(params);
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getMyTenantAccessRequests>>
-	> = ({ signal }) => getMyTenantAccessRequests(params, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-		Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetMyTenantAccessRequestsQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getMyTenantAccessRequests>>
->;
-export type GetMyTenantAccessRequestsQueryError = ErrorType<void>;
-
-export function useGetMyTenantAccessRequests<
-	TData = Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetMyTenantAccessRequestsParams,
-	options: {
-		query: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-					TError,
-					Awaited<ReturnType<typeof getMyTenantAccessRequests>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetMyTenantAccessRequests<
-	TData = Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetMyTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-					TError,
-					Awaited<ReturnType<typeof getMyTenantAccessRequests>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetMyTenantAccessRequests<
-	TData = Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetMyTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 내 테넌트 접근 신청 목록 조회
- */
-
-export function useGetMyTenantAccessRequests<
-	TData = Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetMyTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetMyTenantAccessRequestsQueryOptions(
-		params,
-		options,
-	);
-
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
-}
-
-/**
- * @summary 내 테넌트 접근 신청 목록 조회
- */
-export const prefetchGetMyTenantAccessRequestsQuery = async <
-	TData = Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	params?: GetMyTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetMyTenantAccessRequestsQueryOptions(
-		params,
-		options,
-	);
-
-	await queryClient.prefetchQuery(queryOptions);
-
-	return queryClient;
-};
-
-export const getGetMyTenantAccessRequestsSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetMyTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey =
-		queryOptions?.queryKey ?? getGetMyTenantAccessRequestsQueryKey(params);
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getMyTenantAccessRequests>>
-	> = ({ signal }) => getMyTenantAccessRequests(params, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetMyTenantAccessRequestsSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getMyTenantAccessRequests>>
->;
-export type GetMyTenantAccessRequestsSuspenseQueryError = ErrorType<void>;
-
-export function useGetMyTenantAccessRequestsSuspense<
-	TData = Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetMyTenantAccessRequestsParams,
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetMyTenantAccessRequestsSuspense<
-	TData = Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetMyTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetMyTenantAccessRequestsSuspense<
-	TData = Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetMyTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 내 테넌트 접근 신청 목록 조회
- */
-
-export function useGetMyTenantAccessRequestsSuspense<
-	TData = Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	params?: GetMyTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetMyTenantAccessRequestsSuspenseQueryOptions(
-		params,
-		options,
-	);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
-}
-
-export const getGetMyTenantAccessRequestsSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getMyTenantAccessRequests>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetMyTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey =
-		queryOptions?.queryKey ??
-		getGetMyTenantAccessRequestsInfiniteQueryKey(params);
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getMyTenantAccessRequests>>
-	> = ({ signal }) => getMyTenantAccessRequests(params, requestOptions, signal);
-
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetMyTenantAccessRequestsSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getMyTenantAccessRequests>>
->;
-export type GetMyTenantAccessRequestsSuspenseInfiniteQueryError =
-	ErrorType<void>;
-
-export function useGetMyTenantAccessRequestsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getMyTenantAccessRequests>>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetMyTenantAccessRequestsParams,
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetMyTenantAccessRequestsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getMyTenantAccessRequests>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetMyTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetMyTenantAccessRequestsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getMyTenantAccessRequests>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetMyTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 내 테넌트 접근 신청 목록 조회
- */
-
-export function useGetMyTenantAccessRequestsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getMyTenantAccessRequests>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetMyTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetMyTenantAccessRequestsSuspenseInfiniteQueryOptions(
-		params,
-		options,
-	);
-
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
-}
-
-/**
- * @summary 내 테넌트 접근 신청 목록 조회
- */
-export const prefetchGetMyTenantAccessRequestsInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	params?: GetMyTenantAccessRequestsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getMyTenantAccessRequests>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetMyTenantAccessRequestsSuspenseInfiniteQueryOptions(
-		params,
-		options,
-	);
-
-	await queryClient.prefetchInfiniteQuery(queryOptions);
-
-	return queryClient;
-};
-
-/**
- * 신청자가 본인의 PENDING 신청을 취소합니다.
- * @summary 테넌트 접근 신청 취소
- */
-export const cancelTenantAccessRequest = (
-	tenantAccessRequestId: string,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
-) => {
-	return customInstance<CancelTenantAccessRequest200AllOf>(
-		{
-			url: `/api/v1/tenant-access-requests/${tenantAccessRequestId}/cancel`,
-			method: "POST",
-			signal,
-		},
-		options,
-	);
-};
-
-export const getCancelTenantAccessRequestMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof cancelTenantAccessRequest>>,
-		TError,
-		{ tenantAccessRequestId: string },
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof cancelTenantAccessRequest>>,
-	TError,
-	{ tenantAccessRequestId: string },
-	TContext
-> => {
-	const mutationKey = ["cancelTenantAccessRequest"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
-
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof cancelTenantAccessRequest>>,
-		{ tenantAccessRequestId: string }
-	> = (props) => {
-		const { tenantAccessRequestId } = props ?? {};
-
-		return cancelTenantAccessRequest(tenantAccessRequestId, requestOptions);
-	};
-
-	return { mutationFn, ...mutationOptions };
-};
-
-export type CancelTenantAccessRequestMutationResult = NonNullable<
-	Awaited<ReturnType<typeof cancelTenantAccessRequest>>
->;
-
-export type CancelTenantAccessRequestMutationError = ErrorType<void>;
-
-/**
- * @summary 테넌트 접근 신청 취소
- */
-export const useCancelTenantAccessRequest = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof cancelTenantAccessRequest>>,
-			TError,
-			{ tenantAccessRequestId: string },
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof cancelTenantAccessRequest>>,
-	TError,
-	{ tenantAccessRequestId: string },
-	TContext
-> => {
-	const mutationOptions = getCancelTenantAccessRequestMutationOptions(options);
-
-	return useMutation(mutationOptions, queryClient);
+export const prefetchGetTenantAccessRequestsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getTenantAccessRequests>>, TError = ErrorType<void>,>(queryClient: QueryClient, params?: GetTenantAccessRequestsParams, options?: {
+    query?: Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequests>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}): Promise<QueryClient> => {
+    const queryOptions = getGetTenantAccessRequestsSuspenseInfiniteQueryOptions(params, options);
+    await queryClient.prefetchInfiniteQuery(queryOptions);
+    return queryClient;
 };
 /**
  * FULL_ACCESS는 전체 신청을, MANAGE는 본인이 관리하는 Space의 신청만 상세 조회합니다.
  * @summary 테넌트 접근 신청 상세 조회
  */
-export const getTenantAccessRequest = (
-	tenantAccessRequestId: string,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
-) => {
-	return customInstance<GetTenantAccessRequest200AllOf>(
-		{
-			url: `/api/v1/tenant-access-requests/${tenantAccessRequestId}`,
-			method: "GET",
-			signal,
-		},
-		options,
-	);
+export const getTenantAccessRequest = (tenantAccessRequestId: string, options?: SecondParameter<typeof customInstance>, signal?: AbortSignal) => {
+    return customInstance<GetTenantAccessRequest200AllOf>({
+        url: `/api/v1/tenant-access-requests/${tenantAccessRequestId}`,
+        method: "GET",
+        signal,
+    }, options);
 };
-
-export const getGetTenantAccessRequestQueryKey = (
-	tenantAccessRequestId?: string,
-) => {
-	return [`/api/v1/tenant-access-requests/${tenantAccessRequestId}`] as const;
+export const getGetTenantAccessRequestQueryKey = (tenantAccessRequestId?: string) => {
+    return [`/api/v1/tenant-access-requests/${tenantAccessRequestId}`] as const;
 };
-
-export const getGetTenantAccessRequestInfiniteQueryKey = (
-	tenantAccessRequestId?: string,
-) => {
-	return [
-		"infinite",
-		`/api/v1/tenant-access-requests/${tenantAccessRequestId}`,
-	] as const;
+export const getGetTenantAccessRequestInfiniteQueryKey = (tenantAccessRequestId?: string) => {
+    return [
+        "infinite",
+        `/api/v1/tenant-access-requests/${tenantAccessRequestId}`,
+    ] as const;
 };
-
-export const getGetTenantAccessRequestQueryOptions = <
-	TData = Awaited<ReturnType<typeof getTenantAccessRequest>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey =
-		queryOptions?.queryKey ??
-		getGetTenantAccessRequestQueryKey(tenantAccessRequestId);
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getTenantAccessRequest>>
-	> = ({ signal }) =>
-		getTenantAccessRequest(tenantAccessRequestId, requestOptions, signal);
-
-	return {
-		queryKey,
-		queryFn,
-		enabled: !!tenantAccessRequestId,
-		...queryOptions,
-	} as UseQueryOptions<
-		Awaited<ReturnType<typeof getTenantAccessRequest>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+export const getGetTenantAccessRequestQueryOptions = <TData = Awaited<ReturnType<typeof getTenantAccessRequest>>, TError = ErrorType<void>,>(tenantAccessRequestId: string, options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {};
+    const queryKey = queryOptions?.queryKey ??
+        getGetTenantAccessRequestQueryKey(tenantAccessRequestId);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTenantAccessRequest>>> = ({ signal }) => getTenantAccessRequest(tenantAccessRequestId, requestOptions, signal);
+    return {
+        queryKey,
+        queryFn,
+        enabled: !!tenantAccessRequestId,
+        ...queryOptions,
+    } as UseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData> & {
+        queryKey: DataTag<QueryKey, TData, TError>;
+    };
 };
-
-export type GetTenantAccessRequestQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getTenantAccessRequest>>
->;
+export type GetTenantAccessRequestQueryResult = NonNullable<Awaited<ReturnType<typeof getTenantAccessRequest>>>;
 export type GetTenantAccessRequestQueryError = ErrorType<void>;
-
-export function useGetTenantAccessRequest<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequest>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options: {
-		query: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getTenantAccessRequest>>,
-					TError,
-					Awaited<ReturnType<typeof getTenantAccessRequest>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequest<TData = Awaited<ReturnType<typeof getTenantAccessRequest>>, TError = ErrorType<void>>(tenantAccessRequestId: string, options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>> & Pick<DefinedInitialDataOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, Awaited<ReturnType<typeof getTenantAccessRequest>>>, "initialData">;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): DefinedUseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetTenantAccessRequest<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequest>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getTenantAccessRequest>>,
-					TError,
-					Awaited<ReturnType<typeof getTenantAccessRequest>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequest<TData = Awaited<ReturnType<typeof getTenantAccessRequest>>, TError = ErrorType<void>>(tenantAccessRequestId: string, options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>> & Pick<UndefinedInitialDataOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, Awaited<ReturnType<typeof getTenantAccessRequest>>>, "initialData">;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetTenantAccessRequest<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequest>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequest<TData = Awaited<ReturnType<typeof getTenantAccessRequest>>, TError = ErrorType<void>>(tenantAccessRequestId: string, options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
 /**
  * @summary 테넌트 접근 신청 상세 조회
  */
-
-export function useGetTenantAccessRequest<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequest>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequest<TData = Awaited<ReturnType<typeof getTenantAccessRequest>>, TError = ErrorType<void>>(tenantAccessRequestId: string, options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 } {
-	const queryOptions = getGetTenantAccessRequestQueryOptions(
-		tenantAccessRequestId,
-		options,
-	);
-
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
+    const queryOptions = getGetTenantAccessRequestQueryOptions(tenantAccessRequestId, options);
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>;
+    };
+    query.queryKey = queryOptions.queryKey;
+    return query;
 }
-
 /**
  * @summary 테넌트 접근 신청 상세 조회
  */
-export const prefetchGetTenantAccessRequestQuery = async <
-	TData = Awaited<ReturnType<typeof getTenantAccessRequest>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	tenantAccessRequestId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetTenantAccessRequestQueryOptions(
-		tenantAccessRequestId,
-		options,
-	);
-
-	await queryClient.prefetchQuery(queryOptions);
-
-	return queryClient;
+export const prefetchGetTenantAccessRequestQuery = async <TData = Awaited<ReturnType<typeof getTenantAccessRequest>>, TError = ErrorType<void>,>(queryClient: QueryClient, tenantAccessRequestId: string, options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}): Promise<QueryClient> => {
+    const queryOptions = getGetTenantAccessRequestQueryOptions(tenantAccessRequestId, options);
+    await queryClient.prefetchQuery(queryOptions);
+    return queryClient;
 };
-
-export const getGetTenantAccessRequestSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getTenantAccessRequest>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey =
-		queryOptions?.queryKey ??
-		getGetTenantAccessRequestQueryKey(tenantAccessRequestId);
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getTenantAccessRequest>>
-	> = ({ signal }) =>
-		getTenantAccessRequest(tenantAccessRequestId, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getTenantAccessRequest>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+export const getGetTenantAccessRequestSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTenantAccessRequest>>, TError = ErrorType<void>,>(tenantAccessRequestId: string, options?: {
+    query?: Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {};
+    const queryKey = queryOptions?.queryKey ??
+        getGetTenantAccessRequestQueryKey(tenantAccessRequestId);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTenantAccessRequest>>> = ({ signal }) => getTenantAccessRequest(tenantAccessRequestId, requestOptions, signal);
+    return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData> & {
+        queryKey: DataTag<QueryKey, TData, TError>;
+    };
 };
-
-export type GetTenantAccessRequestSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getTenantAccessRequest>>
->;
+export type GetTenantAccessRequestSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTenantAccessRequest>>>;
 export type GetTenantAccessRequestSuspenseQueryError = ErrorType<void>;
-
-export function useGetTenantAccessRequestSuspense<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequest>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestSuspense<TData = Awaited<ReturnType<typeof getTenantAccessRequest>>, TError = ErrorType<void>>(tenantAccessRequestId: string, options: {
+    query: Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetTenantAccessRequestSuspense<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequest>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestSuspense<TData = Awaited<ReturnType<typeof getTenantAccessRequest>>, TError = ErrorType<void>>(tenantAccessRequestId: string, options?: {
+    query?: Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetTenantAccessRequestSuspense<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequest>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestSuspense<TData = Awaited<ReturnType<typeof getTenantAccessRequest>>, TError = ErrorType<void>>(tenantAccessRequestId: string, options?: {
+    query?: Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
 /**
  * @summary 테넌트 접근 신청 상세 조회
  */
-
-export function useGetTenantAccessRequestSuspense<
-	TData = Awaited<ReturnType<typeof getTenantAccessRequest>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestSuspense<TData = Awaited<ReturnType<typeof getTenantAccessRequest>>, TError = ErrorType<void>>(tenantAccessRequestId: string, options?: {
+    query?: Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 } {
-	const queryOptions = getGetTenantAccessRequestSuspenseQueryOptions(
-		tenantAccessRequestId,
-		options,
-	);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
+    const queryOptions = getGetTenantAccessRequestSuspenseQueryOptions(tenantAccessRequestId, options);
+    const query = useSuspenseQuery(queryOptions, queryClient) as UseSuspenseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>;
+    };
+    query.queryKey = queryOptions.queryKey;
+    return query;
 }
-
-export const getGetTenantAccessRequestSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequest>>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
-
-	const queryKey =
-		queryOptions?.queryKey ??
-		getGetTenantAccessRequestInfiniteQueryKey(tenantAccessRequestId);
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getTenantAccessRequest>>
-	> = ({ signal }) =>
-		getTenantAccessRequest(tenantAccessRequestId, requestOptions, signal);
-
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getTenantAccessRequest>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+export const getGetTenantAccessRequestSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequest>>>, TError = ErrorType<void>,>(tenantAccessRequestId: string, options?: {
+    query?: Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {};
+    const queryKey = queryOptions?.queryKey ??
+        getGetTenantAccessRequestInfiniteQueryKey(tenantAccessRequestId);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTenantAccessRequest>>> = ({ signal }) => getTenantAccessRequest(tenantAccessRequestId, requestOptions, signal);
+    return {
+        queryKey,
+        queryFn,
+        ...queryOptions,
+    } as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData> & {
+        queryKey: DataTag<QueryKey, TData, TError>;
+    };
 };
-
-export type GetTenantAccessRequestSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getTenantAccessRequest>>
->;
+export type GetTenantAccessRequestSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTenantAccessRequest>>>;
 export type GetTenantAccessRequestSuspenseInfiniteQueryError = ErrorType<void>;
-
-export function useGetTenantAccessRequestSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequest>>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequest>>>, TError = ErrorType<void>>(tenantAccessRequestId: string, options: {
+    query: Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetTenantAccessRequestSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequest>>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequest>>>, TError = ErrorType<void>>(tenantAccessRequestId: string, options?: {
+    query?: Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetTenantAccessRequestSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequest>>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequest>>>, TError = ErrorType<void>>(tenantAccessRequestId: string, options?: {
+    query?: Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 };
 /**
  * @summary 테넌트 접근 신청 상세 조회
  */
-
-export function useGetTenantAccessRequestSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequest>>>,
-	TError = ErrorType<void>,
->(
-	tenantAccessRequestId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
+export function useGetTenantAccessRequestSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTenantAccessRequest>>>, TError = ErrorType<void>>(tenantAccessRequestId: string, options?: {
+    query?: Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseSuspenseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
 } {
-	const queryOptions = getGetTenantAccessRequestSuspenseInfiniteQueryOptions(
-		tenantAccessRequestId,
-		options,
-	);
-
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
+    const queryOptions = getGetTenantAccessRequestSuspenseInfiniteQueryOptions(tenantAccessRequestId, options);
+    const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>;
+    };
+    query.queryKey = queryOptions.queryKey;
+    return query;
 }
-
 /**
  * @summary 테넌트 접근 신청 상세 조회
  */
-export const prefetchGetTenantAccessRequestInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getTenantAccessRequest>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	tenantAccessRequestId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTenantAccessRequest>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetTenantAccessRequestSuspenseInfiniteQueryOptions(
-		tenantAccessRequestId,
-		options,
-	);
-
-	await queryClient.prefetchInfiniteQuery(queryOptions);
-
-	return queryClient;
+export const prefetchGetTenantAccessRequestInfiniteQuery = async <TData = Awaited<ReturnType<typeof getTenantAccessRequest>>, TError = ErrorType<void>,>(queryClient: QueryClient, tenantAccessRequestId: string, options?: {
+    query?: Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTenantAccessRequest>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+}): Promise<QueryClient> => {
+    const queryOptions = getGetTenantAccessRequestSuspenseInfiniteQueryOptions(tenantAccessRequestId, options);
+    await queryClient.prefetchInfiniteQuery(queryOptions);
+    return queryClient;
 };
-
 /**
  * 승인 시 requester의 user+space Tenant를 생성하거나 roleId를 갱신합니다. MANAGE는 본인 Space의 non-FULL_ACCESS 신청만 승인할 수 있습니다.
  * @summary 테넌트 접근 신청 승인
  */
-export const approveTenantAccessRequest = (
-	tenantAccessRequestId: string,
-	reviewTenantAccessRequestDto: BodyType<ReviewTenantAccessRequestDto>,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
-) => {
-	return customInstance<ApproveTenantAccessRequest200AllOf>(
-		{
-			url: `/api/v1/tenant-access-requests/${tenantAccessRequestId}/approve`,
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			data: reviewTenantAccessRequestDto,
-			signal,
-		},
-		options,
-	);
+export const approveTenantAccessRequest = (tenantAccessRequestId: string, reviewTenantAccessRequestDto: BodyType<ReviewTenantAccessRequestDto>, options?: SecondParameter<typeof customInstance>, signal?: AbortSignal) => {
+    return customInstance<ApproveTenantAccessRequest200AllOf>({
+        url: `/api/v1/tenant-access-requests/${tenantAccessRequestId}/approve`,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        data: reviewTenantAccessRequestDto,
+        signal,
+    }, options);
 };
-
-export const getApproveTenantAccessRequestMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof approveTenantAccessRequest>>,
-		TError,
-		{
-			tenantAccessRequestId: string;
-			data: BodyType<ReviewTenantAccessRequestDto>;
-		},
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof approveTenantAccessRequest>>,
-	TError,
-	{
-		tenantAccessRequestId: string;
-		data: BodyType<ReviewTenantAccessRequestDto>;
-	},
-	TContext
-> => {
-	const mutationKey = ["approveTenantAccessRequest"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
-
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof approveTenantAccessRequest>>,
-		{
-			tenantAccessRequestId: string;
-			data: BodyType<ReviewTenantAccessRequestDto>;
-		}
-	> = (props) => {
-		const { tenantAccessRequestId, data } = props ?? {};
-
-		return approveTenantAccessRequest(
-			tenantAccessRequestId,
-			data,
-			requestOptions,
-		);
-	};
-
-	return { mutationFn, ...mutationOptions };
+export const getApproveTenantAccessRequestMutationOptions = <TError = ErrorType<void>, TContext = unknown,>(options?: {
+    mutation?: UseMutationOptions<Awaited<ReturnType<typeof approveTenantAccessRequest>>, TError, {
+        tenantAccessRequestId: string;
+        data: BodyType<ReviewTenantAccessRequestDto>;
+    }, TContext>;
+    request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<Awaited<ReturnType<typeof approveTenantAccessRequest>>, TError, {
+    tenantAccessRequestId: string;
+    data: BodyType<ReviewTenantAccessRequestDto>;
+}, TContext> => {
+    const mutationKey = ["approveTenantAccessRequest"];
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+            "mutationKey" in options.mutation &&
+            options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined };
+    const mutationFn: MutationFunction<Awaited<ReturnType<typeof approveTenantAccessRequest>>, {
+        tenantAccessRequestId: string;
+        data: BodyType<ReviewTenantAccessRequestDto>;
+    }> = (props) => {
+        const { tenantAccessRequestId, data } = props ?? {};
+        return approveTenantAccessRequest(tenantAccessRequestId, data, requestOptions);
+    };
+    return { mutationFn, ...mutationOptions };
 };
-
-export type ApproveTenantAccessRequestMutationResult = NonNullable<
-	Awaited<ReturnType<typeof approveTenantAccessRequest>>
->;
-export type ApproveTenantAccessRequestMutationBody =
-	BodyType<ReviewTenantAccessRequestDto>;
+export type ApproveTenantAccessRequestMutationResult = NonNullable<Awaited<ReturnType<typeof approveTenantAccessRequest>>>;
+export type ApproveTenantAccessRequestMutationBody = BodyType<ReviewTenantAccessRequestDto>;
 export type ApproveTenantAccessRequestMutationError = ErrorType<void>;
-
 /**
  * @summary 테넌트 접근 신청 승인
  */
-export const useApproveTenantAccessRequest = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof approveTenantAccessRequest>>,
-			TError,
-			{
-				tenantAccessRequestId: string;
-				data: BodyType<ReviewTenantAccessRequestDto>;
-			},
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof approveTenantAccessRequest>>,
-	TError,
-	{
-		tenantAccessRequestId: string;
-		data: BodyType<ReviewTenantAccessRequestDto>;
-	},
-	TContext
-> => {
-	const mutationOptions = getApproveTenantAccessRequestMutationOptions(options);
-
-	return useMutation(mutationOptions, queryClient);
+export const useApproveTenantAccessRequest = <TError = ErrorType<void>, TContext = unknown,>(options?: {
+    mutation?: UseMutationOptions<Awaited<ReturnType<typeof approveTenantAccessRequest>>, TError, {
+        tenantAccessRequestId: string;
+        data: BodyType<ReviewTenantAccessRequestDto>;
+    }, TContext>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseMutationResult<Awaited<ReturnType<typeof approveTenantAccessRequest>>, TError, {
+    tenantAccessRequestId: string;
+    data: BodyType<ReviewTenantAccessRequestDto>;
+}, TContext> => {
+    const mutationOptions = getApproveTenantAccessRequestMutationOptions(options);
+    return useMutation(mutationOptions, queryClient);
 };
 /**
  * FULL_ACCESS는 전체 신청을, MANAGE는 본인이 관리하는 Space의 신청만 반려합니다. FULL_ACCESS 역할 신청도 반려할 수 있습니다.
  * @summary 테넌트 접근 신청 반려
  */
-export const rejectTenantAccessRequest = (
-	tenantAccessRequestId: string,
-	reviewTenantAccessRequestDto: BodyType<ReviewTenantAccessRequestDto>,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
-) => {
-	return customInstance<RejectTenantAccessRequest200AllOf>(
-		{
-			url: `/api/v1/tenant-access-requests/${tenantAccessRequestId}/reject`,
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			data: reviewTenantAccessRequestDto,
-			signal,
-		},
-		options,
-	);
+export const rejectTenantAccessRequest = (tenantAccessRequestId: string, reviewTenantAccessRequestDto: BodyType<ReviewTenantAccessRequestDto>, options?: SecondParameter<typeof customInstance>, signal?: AbortSignal) => {
+    return customInstance<RejectTenantAccessRequest200AllOf>({
+        url: `/api/v1/tenant-access-requests/${tenantAccessRequestId}/reject`,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        data: reviewTenantAccessRequestDto,
+        signal,
+    }, options);
 };
-
-export const getRejectTenantAccessRequestMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof rejectTenantAccessRequest>>,
-		TError,
-		{
-			tenantAccessRequestId: string;
-			data: BodyType<ReviewTenantAccessRequestDto>;
-		},
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof rejectTenantAccessRequest>>,
-	TError,
-	{
-		tenantAccessRequestId: string;
-		data: BodyType<ReviewTenantAccessRequestDto>;
-	},
-	TContext
-> => {
-	const mutationKey = ["rejectTenantAccessRequest"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
-
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof rejectTenantAccessRequest>>,
-		{
-			tenantAccessRequestId: string;
-			data: BodyType<ReviewTenantAccessRequestDto>;
-		}
-	> = (props) => {
-		const { tenantAccessRequestId, data } = props ?? {};
-
-		return rejectTenantAccessRequest(
-			tenantAccessRequestId,
-			data,
-			requestOptions,
-		);
-	};
-
-	return { mutationFn, ...mutationOptions };
+export const getRejectTenantAccessRequestMutationOptions = <TError = ErrorType<void>, TContext = unknown,>(options?: {
+    mutation?: UseMutationOptions<Awaited<ReturnType<typeof rejectTenantAccessRequest>>, TError, {
+        tenantAccessRequestId: string;
+        data: BodyType<ReviewTenantAccessRequestDto>;
+    }, TContext>;
+    request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<Awaited<ReturnType<typeof rejectTenantAccessRequest>>, TError, {
+    tenantAccessRequestId: string;
+    data: BodyType<ReviewTenantAccessRequestDto>;
+}, TContext> => {
+    const mutationKey = ["rejectTenantAccessRequest"];
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+            "mutationKey" in options.mutation &&
+            options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined };
+    const mutationFn: MutationFunction<Awaited<ReturnType<typeof rejectTenantAccessRequest>>, {
+        tenantAccessRequestId: string;
+        data: BodyType<ReviewTenantAccessRequestDto>;
+    }> = (props) => {
+        const { tenantAccessRequestId, data } = props ?? {};
+        return rejectTenantAccessRequest(tenantAccessRequestId, data, requestOptions);
+    };
+    return { mutationFn, ...mutationOptions };
 };
-
-export type RejectTenantAccessRequestMutationResult = NonNullable<
-	Awaited<ReturnType<typeof rejectTenantAccessRequest>>
->;
-export type RejectTenantAccessRequestMutationBody =
-	BodyType<ReviewTenantAccessRequestDto>;
+export type RejectTenantAccessRequestMutationResult = NonNullable<Awaited<ReturnType<typeof rejectTenantAccessRequest>>>;
+export type RejectTenantAccessRequestMutationBody = BodyType<ReviewTenantAccessRequestDto>;
 export type RejectTenantAccessRequestMutationError = ErrorType<void>;
-
 /**
  * @summary 테넌트 접근 신청 반려
  */
-export const useRejectTenantAccessRequest = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof rejectTenantAccessRequest>>,
-			TError,
-			{
-				tenantAccessRequestId: string;
-				data: BodyType<ReviewTenantAccessRequestDto>;
-			},
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof rejectTenantAccessRequest>>,
-	TError,
-	{
-		tenantAccessRequestId: string;
-		data: BodyType<ReviewTenantAccessRequestDto>;
-	},
-	TContext
-> => {
-	const mutationOptions = getRejectTenantAccessRequestMutationOptions(options);
-
-	return useMutation(mutationOptions, queryClient);
+export const useRejectTenantAccessRequest = <TError = ErrorType<void>, TContext = unknown,>(options?: {
+    mutation?: UseMutationOptions<Awaited<ReturnType<typeof rejectTenantAccessRequest>>, TError, {
+        tenantAccessRequestId: string;
+        data: BodyType<ReviewTenantAccessRequestDto>;
+    }, TContext>;
+    request?: SecondParameter<typeof customInstance>;
+}, queryClient?: QueryClient): UseMutationResult<Awaited<ReturnType<typeof rejectTenantAccessRequest>>, TError, {
+    tenantAccessRequestId: string;
+    data: BodyType<ReviewTenantAccessRequestDto>;
+}, TContext> => {
+    const mutationOptions = getRejectTenantAccessRequestMutationOptions(options);
+    return useMutation(mutationOptions, queryClient);
 };

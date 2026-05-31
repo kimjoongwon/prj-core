@@ -1,7 +1,7 @@
 "use client";
 
-import { Chip, type ChipProps } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { Chip, type ChipProps } from "../../../design-system/primitives";
 
 export type TenantAccessRequestStatus =
 	| "PENDING"

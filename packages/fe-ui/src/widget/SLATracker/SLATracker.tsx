@@ -1,8 +1,8 @@
 "use client";
 
-import { Card, CardBody, Progress } from "@cocrepo/ui/heroui";
-import { CheckCircle, Clock, AlertTriangle } from "lucide-react";
+import { AlertTriangle, CheckCircle, Clock } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Card, CardBody, Progress } from "../../design-system/primitives";
 
 export interface SLAMetric {
 	/** 라벨 (예: 첫 응답, 해결) */

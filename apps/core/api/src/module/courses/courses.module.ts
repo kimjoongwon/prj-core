@@ -1,26 +1,26 @@
-import { CourseApplicationService } from "@cocrepo/app";
-import { CourseFacade } from "@cocrepo/facade";
 import {
 	CoursesRepository,
 	PaymentsRepository,
 	TimelinesRepository,
 } from "@cocrepo/repository";
-import { AuthContext, CourseService, SpaceContext } from "@cocrepo/service";
+import { CourseAggregateRoot } from "@cocrepo/aggregate";
+import { SpaceContext } from "@cocrepo/service";
+import { CourseCommandHandlers, CourseQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { CoursesController } from "./courses.controller";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [CoursesController],
 	providers: [
-		CourseFacade,
-		CourseApplicationService,
-		CourseService,
+		CourseAggregateRoot,
 		CoursesRepository,
 		PaymentsRepository,
 		TimelinesRepository,
-		AuthContext,
 		SpaceContext,
+		...CourseCommandHandlers,
+		...CourseQueryHandlers,
 	],
-	exports: [CourseFacade, CourseApplicationService],
 })
 export class CoursesModule {}

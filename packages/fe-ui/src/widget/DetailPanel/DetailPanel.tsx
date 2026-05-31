@@ -1,9 +1,9 @@
 "use client";
 
-import { Chip, Divider } from "@cocrepo/ui/heroui";
 import { ArrowDownRight, ArrowUpRight, FileText } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import { Chip, Divider } from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 /** 연결 관계 정의 */

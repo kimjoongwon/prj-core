@@ -2,11 +2,7 @@ import type { PhoneNumber } from "libphonenumber-js";
 import { parsePhoneNumber } from "libphonenumber-js";
 import { ValueObject } from "../common/value-object.base";
 import { VoValidationError } from "../errors/vo.error";
-
-interface PhoneProps {
-	value: string;
-	normalized: string; // E.164 형식
-}
+import type { PhoneProps } from "./phone.props";
 
 /**
  * 전화번호 Value Object
@@ -19,20 +15,20 @@ export class Phone extends ValueObject<PhoneProps> {
 	private phoneNumber!: PhoneNumber;
 
 	protected validate(props: PhoneProps): void {
-		const { value } = props;
-
-		if (!value) {
+		if (!props.value) {
 			throw new VoValidationError("전화번호는 필수입니다.");
 		}
 
 		try {
-			this.phoneNumber = parsePhoneNumber(value);
+			this.phoneNumber = parsePhoneNumber(props.value);
 
 			if (!this.phoneNumber.isValid()) {
-				throw new VoValidationError(`유효하지 않은 전화번호입니다: ${value}`);
+				throw new VoValidationError(
+					`유효하지 않은 전화번호입니다: ${props.value}`,
+				);
 			}
 		} catch (_error) {
-			throw new VoValidationError(`전화번호 파싱 실패: ${value}`);
+			throw new VoValidationError(`전화번호 파싱 실패: ${props.value}`);
 		}
 	}
 

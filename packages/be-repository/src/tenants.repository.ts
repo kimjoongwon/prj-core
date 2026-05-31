@@ -102,15 +102,14 @@ export class TenantsRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ tenants: Tenant[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
 		const [tenants, totalCount] = await Promise.all([
 			this.txHost.tx.tenant.findMany({
-				where,
-				orderBy: orderBy ?? [{ createdAt: "desc" }],
-				skip,
-				take,
+				where: params.where,
+				orderBy: params.orderBy ?? [{ createdAt: "desc" }],
+				skip: params.skip,
+				take: params.take,
 			}),
-			this.txHost.tx.tenant.count({ where }),
+			this.txHost.tx.tenant.count({ where: params.where }),
 		]);
 
 		return {

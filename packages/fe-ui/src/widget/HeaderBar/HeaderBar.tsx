@@ -1,5 +1,7 @@
 "use client";
 
+import { ChevronDown, LogOut } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Avatar,
 	Button,
@@ -9,9 +11,7 @@ import {
 	DropdownMenu,
 	DropdownSection,
 	DropdownTrigger,
-} from "@cocrepo/ui/heroui";
-import { ChevronDown, LogOut } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 import type { HeaderBarProps } from "../../display/layout/type";
 import { useT } from "../../i18n";
 

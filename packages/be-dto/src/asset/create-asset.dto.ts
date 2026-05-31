@@ -1,12 +1,4 @@
-import {
-	EnumField,
-	StringField,
-	StringFieldOptional,
-	UUIDField,
-	UUIDFieldOptional,
-} from "@cocrepo/decorator";
 import { Asset } from "@cocrepo/entity";
-import type { AssetKind, AssetStatus, Prisma } from "@cocrepo/prisma";
 import { OmitType } from "@nestjs/swagger";
 import { COMMON_ENTITY_FIELDS } from "../constant";
 import { AssetDto } from "./asset.dto";

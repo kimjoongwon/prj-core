@@ -1,19 +1,25 @@
-import { TimelineFacade } from "@cocrepo/facade";
+import { TimelineAggregateRoot } from "@cocrepo/aggregate";
 import { RoutinesRepository, TimelinesRepository } from "@cocrepo/repository";
-import { AuthContext, SpaceContext, TimelineService } from "@cocrepo/service";
+import { AuthContext, SpaceContext } from "@cocrepo/service";
+import {
+	TimelineCommandHandlers,
+	TimelineQueryHandlers,
+} from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { TimelinesController } from "./timelines.controller";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [TimelinesController],
 	providers: [
-		TimelineFacade,
-		TimelineService,
+		TimelineAggregateRoot,
 		TimelinesRepository,
 		RoutinesRepository,
 		AuthContext,
 		SpaceContext,
+		...TimelineCommandHandlers,
+		...TimelineQueryHandlers,
 	],
-	exports: [TimelineFacade],
 })
 export class TimelinesModule {}

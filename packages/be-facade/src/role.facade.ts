@@ -1,11 +1,11 @@
+import { RoleAggregateRoot } from "@cocrepo/aggregate";
 import { CreateRoleDto, UpdateRoleDto } from "@cocrepo/dto";
 import { Role } from "@cocrepo/entity";
-import { RoleService } from "@cocrepo/service";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class RoleFacade {
-	constructor(private readonly rolesService: RoleService) {}
+	constructor(private readonly rolesService: RoleAggregateRoot) {}
 
 	getAll() {
 		return this.getRoles();

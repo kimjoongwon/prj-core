@@ -1,18 +1,23 @@
 import {
+	GetSubjectByIdQuery,
+	GetSubjectFieldsQuery,
+	GetSubjectsQuery,
+} from "@cocrepo/command";
+import {
 	ApiErrors,
 	ApiResponseEntity,
 	Public,
 	ResponseMessage,
 } from "@cocrepo/decorator";
 import { SubjectDto, SubjectFieldDto } from "@cocrepo/dto";
-import { SubjectFacade } from "@cocrepo/facade";
 import { Controller, Get, HttpStatus, Param, Query } from "@nestjs/common";
+import { QueryBus } from "@nestjs/cqrs";
 import { ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("SUBJECTS")
 @Controller()
 export class SubjectsController {
-	constructor(private readonly subjectsService: SubjectFacade) {}
+	constructor(private readonly queryBus: QueryBus) {}
 
 	@Public()
 	@Get()
@@ -38,11 +43,7 @@ export class SubjectsController {
 		@Query("group") group?: string,
 		@Query("type") _type?: string,
 	) {
-		if (group) {
-			return this.subjectsService.getSubjectsByGroup(group);
-		}
-
-		return this.subjectsService.getSubjects();
+		return this.queryBus.execute(new GetSubjectsQuery(group));
 	}
 
 	@Public()
@@ -61,7 +62,7 @@ export class SubjectsController {
 	@ApiResponseEntity(SubjectFieldDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("대상 필드 목록 조회 성공")
 	async getSubjectFields(@Param("id") id: string) {
-		return this.subjectsService.getSubjectFields(id);
+		return this.queryBus.execute(new GetSubjectFieldsQuery(id));
 	}
 
 	@Public()
@@ -79,6 +80,6 @@ export class SubjectsController {
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	@ResponseMessage("대상 조회 성공")
 	async getSubjectById(@Param("id") id: string) {
-		return this.subjectsService.getSubjectById(id);
+		return this.queryBus.execute(new GetSubjectByIdQuery(id));
 	}
 }

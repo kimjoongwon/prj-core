@@ -1,7 +1,7 @@
 import {
 	Skeleton as NextSkeleton,
 	type SkeletonProps,
-} from "@cocrepo/ui/heroui";
+} from "../../../design-system/primitives";
 
 /**
  * Skeleton 컴포넌트

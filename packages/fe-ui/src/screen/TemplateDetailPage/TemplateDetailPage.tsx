@@ -5,10 +5,10 @@ import {
 	DateTimeCell,
 	DetailPage,
 	DetailPageSurface,
-	PageTitleBar,
-	PreviewModal,
 	DetailSection,
 	DetailSectionCard,
+	PageTitleBar,
+	PreviewModal,
 	SendTestModal,
 	TemplateActions,
 	TemplateContentViewer,
@@ -16,6 +16,8 @@ import {
 	VariableReadTable,
 	VStack,
 } from "@cocrepo/ui";
+import { ArrowLeft } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Button,
 	Modal,
@@ -25,9 +27,7 @@ import {
 	ModalHeader,
 	Spinner,
 	Switch,
-} from "@cocrepo/ui/heroui";
-import { ArrowLeft } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 
 export interface TemplateDetailPageTemplate {
 	id: string;

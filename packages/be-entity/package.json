@@ -23,6 +23,7 @@
 		"@cocrepo/decorator": "workspace:*",
 		"@cocrepo/type": "workspace:*",
 		"@cocrepo/enum": "workspace:*",
+		"@nestjs/cqrs": "^11.0.3",
 		"class-transformer": "^0.5.1"
 	},
   "peerDependencies": {

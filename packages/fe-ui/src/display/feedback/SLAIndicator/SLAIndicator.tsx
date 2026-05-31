@@ -1,8 +1,8 @@
 "use client";
 
-import { Chip } from "@cocrepo/ui/heroui";
 import { cva, type VariantProps } from "class-variance-authority";
 import { observer } from "mobx-react-lite";
+import { Chip } from "../../../design-system/primitives";
 import { useT } from "../../../i18n";
 
 const slaIndicatorVariants = cva("inline-flex items-center gap-1.5", {

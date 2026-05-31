@@ -1,18 +1,21 @@
-import { TaskFacade } from "@cocrepo/facade";
+import { TaskAggregateRoot } from "@cocrepo/aggregate";
 import { TasksRepository } from "@cocrepo/repository";
-import { AuthContext, SpaceContext, TaskService } from "@cocrepo/service";
+import { AuthContext, SpaceContext } from "@cocrepo/service";
+import { TaskCommandHandlers, TaskQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { TasksController } from "./tasks.controller";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [TasksController],
 	providers: [
-		TaskFacade,
-		TaskService,
+		TaskAggregateRoot,
 		TasksRepository,
 		AuthContext,
 		SpaceContext,
+		...TaskCommandHandlers,
+		...TaskQueryHandlers,
 	],
-	exports: [TaskFacade],
 })
 export class TasksModule {}

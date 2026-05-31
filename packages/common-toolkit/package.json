@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "@cocrepo/constant": "workspace:*",
+    "@cocrepo/type": "workspace:*",
     "es-toolkit": "^1.26.1"
   }
 }

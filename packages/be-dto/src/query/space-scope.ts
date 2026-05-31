@@ -1,0 +1,4 @@
+export enum SpaceScope {
+	CURRENT = "CURRENT",
+	INCLUDE_ANCESTORS = "INCLUDE_ANCESTORS",
+}

@@ -7,109 +7,39 @@ export { I18nModule, I18nTranslationService } from "./i18n";
 // Strategy
 export { JwtStrategy } from "./strategy";
 
-// Services
-// 필요할 때 생성합니다. 가이드: .claude/agents/be-service-builder.md
+// Support services
+// Aggregate root service providers live in @cocrepo/aggregate.
 
 export { MASKING_PRESETS, type MaskingPreset } from "@cocrepo/constant";
-export { AbilityService } from "./ability.service";
-export { ActionService } from "./action.service";
-export { AssetService } from "./asset.service";
-export {
-	AuthAuditLogService,
-	type GetAuditLogsResult,
-} from "./auth-audit-log.service";
-export { AuthCacheService } from "./auth-cache.service";
-export { CategoryService } from "./category.service";
-export { CourseService } from "./course.service";
-export { EmailModule } from "./email.module";
+export { AuthCacheService } from "./auth/auth-cache.service";
+export type { OidcStatePayload } from "./auth/oidc-state-payload";
+export type { SessionInfo } from "./auth/session-info";
+export type { SessionMetadata } from "./auth/session-metadata";
+export { TokenService } from "./auth/token.service";
+export { TokenStorageService } from "./auth/token-storage.service";
 export {
 	EmailProvider,
 	type EmailSendInput,
 	EmailService,
 	SmtpEmailProvider,
-} from "./email.service";
-export {
-	type EmailVerificationCreateInput,
-	type EmailVerificationRequestResult,
-	EmailVerificationService,
-} from "./email-verification.service";
-export { FolderService } from "./folder.service";
-export { GroupService } from "./group.service";
-export {
-	type IdpAccountAccessGrantFormBootstrap,
-	type IdpAccountAccessGrantFormOptionItem,
-	type IdpAccountAccessGrantInfo,
-	type IdpAccountDetailInfo,
-	type IdpAccountInfo,
-	IdpAccountService,
-} from "./idp-account.service";
-export {
-	type DashboardStats,
-	IdpDashboardService,
-	type LoginTrendItem,
-} from "./idp-dashboard.service";
-// Inquiry Domain Services
-export {
-	type FillInquiryFormInput,
-	type FillInquiryFormResult,
-	type InquiryCreateUpdateFormBootstrap,
-	InquiryService,
-	type InquiryStats,
-	type SentimentAnalysisResult,
-} from "./inquiry.service";
-export { MaskingService } from "./masking.service";
+} from "./email";
+export { EmailModule } from "./email/email.module";
+export { MaskingService } from "./masking/masking.service";
 export {
 	ObjectStorageService,
 	type PutObjectInput,
 	type PutObjectResult,
 	S3CompatibleStorageService,
-} from "./object-storage.service";
-export { OidcClientService } from "./oidc-client.service";
+} from "./object-storage";
 export {
 	applyRuntimeManagedOidcClientConfig,
 	isRuntimeManagedOidcClientId,
 	RUNTIME_MANAGED_OIDC_CLIENT_IDS,
 } from "./oidc-runtime-client-config";
-export {
-	type OidcRedisSession,
-	OidcSessionService,
-} from "./oidc-session.service";
-export {
-	type CreatePaymentInput,
-	type PaymentListInput,
-	PaymentService,
-	type UpdatePaymentInput,
-} from "./payment.service";
-export { PolicyService } from "./policy.service";
-export { PolicyAssignmentService } from "./policy-assignment.service";
-export { createPrismaClient } from "./prisma.factory";
-export { PrismaService } from "./prisma.service";
-export { RedisService } from "./redis.service";
-export { ReservationService } from "./reservation.service";
-export { RoleService } from "./role.service";
-export { RoutineService } from "./routine.service";
-export { SecurityPolicyService } from "./security-policy.service";
-export { ServiceDocumentService } from "./service-document.service";
-export { SpaceService } from "./space.service";
-export {
-	type SubjectFieldInfo,
-	type SubjectInfo,
-	SubjectService,
-} from "./subject.service";
-export { TaskService } from "./task.service";
-export { TemplateService } from "./template.service";
-export {
-	type TenantAccessRequestCreateFormBootstrap,
-	type TenantAccessRequestFormOptionItem,
-	TenantAccessRequestService,
-} from "./tenant-access-request.service";
-export { TimelineService } from "./timeline.service";
-export { TokenService } from "./token.service";
-export {
-	type OidcStatePayload,
-	type SessionInfo,
-	type SessionMetadata,
-	TokenStorageService,
-} from "./token-storage.service";
-export { TranslationCatalogService } from "./translation-catalog.service";
-export { UserService } from "./user.service";
+export { DatabaseConnectionException } from "./prisma/database-connection.exception";
+export { createPrismaClient } from "./prisma/prisma.factory";
+export { PrismaService } from "./prisma/prisma.service";
+export { RedisService } from "./redis/redis.service";
+export { type RenderedTemplateResult, TemplateService } from "./template";
+export type { GetUsersResult } from "./user/get-users.result";
+export { UserService } from "./user/user.service";

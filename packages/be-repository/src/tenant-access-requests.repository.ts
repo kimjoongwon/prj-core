@@ -82,20 +82,19 @@ export class TenantAccessRequestsRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ items: TenantAccessRequest[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
 		this.logger.debug(
-			`테넌트 접근 신청 목록 조회: skip=${skip ?? 0}, take=${take ?? "all"}`,
+			`테넌트 접근 신청 목록 조회: skip=${params.skip ?? 0}, take=${params.take ?? "all"}`,
 		);
 
 		const [items, totalCount] = await Promise.all([
 			this.txHost.tx.tenantAccessRequest.findMany({
-				where,
+				where: params.where,
 				include: tenantAccessRequestInclude,
-				orderBy: orderBy ?? [{ createdAt: "desc" }],
-				skip,
-				take,
+				orderBy: params.orderBy ?? [{ createdAt: "desc" }],
+				skip: params.skip,
+				take: params.take,
 			}),
-			this.txHost.tx.tenantAccessRequest.count({ where }),
+			this.txHost.tx.tenantAccessRequest.count({ where: params.where }),
 		]);
 
 		return {

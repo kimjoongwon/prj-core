@@ -58,15 +58,14 @@ export class AlbumsRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ albums: Album[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
 		const [albums, totalCount] = await Promise.all([
 			this.txHost.tx.album.findMany({
-				where,
-				orderBy: orderBy ?? [{ createdAt: "desc" }],
-				skip,
-				take,
+				where: params.where,
+				orderBy: params.orderBy ?? [{ createdAt: "desc" }],
+				skip: params.skip,
+				take: params.take,
 			}),
-			this.txHost.tx.album.count({ where }),
+			this.txHost.tx.album.count({ where: params.where }),
 		]);
 
 		return {

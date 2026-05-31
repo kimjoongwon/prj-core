@@ -1,21 +1,21 @@
 "use client";
 
 import {
+	Button,
+	ContentLanguageNotice,
 	FormPage,
 	FormPageSurface,
-	ContentLanguageNotice,
-	PageTitleBar,
-	ProgramPickerModal,
 	FormSection,
 	FormSectionCard,
-	VStack,
-	Button,
 	Input,
+	PageTitleBar,
+	ProgramPickerModal,
 	Select,
 	useT,
+	VStack,
 } from "@cocrepo/ui";
-import { Chip } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { Chip } from "../../design-system/primitives";
 import type { TimelineSessionProgramCreatePageProps } from "../TimelineSessionProgramCreatePage/TimelineSessionProgramCreatePage";
 
 const LEVEL_OPTIONS = [

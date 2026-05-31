@@ -1,5 +1,5 @@
-import type { DateRangePickerProps as HeroUiDateRangePickerProps } from "@cocrepo/ui/heroui";
-import { DateRangePicker as HeroUiDateRangePicker } from "@cocrepo/ui/heroui";
+import type { DateRangePickerProps as HeroUiDateRangePickerProps } from "../../design-system/primitives";
+import { DateRangePicker as HeroUiDateRangePicker } from "../../design-system/primitives";
 
 export interface DateRangePickerProps
 	extends Omit<HeroUiDateRangePickerProps, "value" | "onChange"> {

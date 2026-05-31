@@ -1,6 +1,8 @@
 "use client";
 
 import { usePersistStore } from "@cocrepo/store";
+import { Building2, Check, ChevronDown } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Avatar,
 	Button,
@@ -8,9 +10,7 @@ import {
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger,
-} from "@cocrepo/ui/heroui";
-import { Building2, Check, ChevronDown } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 
 export interface SpaceSelectorProps {
 	/** Space 변경 시 콜백 (서버에 현재 Space를 반영한 뒤 상태를 갱신) */

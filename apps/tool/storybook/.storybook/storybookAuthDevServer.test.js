@@ -70,7 +70,7 @@ afterEach(() => {
 });
 
 describe("storybookAuthDevServer", () => {
-	it("login shell builds the generic storybook client login URL", async () => {
+	it("login shell renders the native login form", async () => {
 		vi.stubGlobal(
 			"fetch",
 			vi.fn(async () =>
@@ -98,7 +98,80 @@ describe("storybookAuthDevServer", () => {
 
 		expect(response.statusCode).toBe(200);
 		expect(String(response.body)).toContain(
-			'http://localhost:6006/api/v1/auth/login?clientId=storybook&amp;returnTo=http%3A%2F%2Flocalhost%3A6006%2Fiframe.html%3Fid%3Dfeatures-button--primary',
+			'action="/__storybook_auth/native-login?returnTo=http%3A%2F%2Flocalhost%3A6006%2Fiframe.html%3Fid%3Dfeatures-button--primary"',
+		);
+		expect(String(response.body)).toContain('name="email"');
+		expect(String(response.body)).toContain('name="password"');
+		expect(String(response.body)).not.toContain(
+			"/api/v1/auth/login?clientId=storybook",
+		);
+		expect(next).not.toHaveBeenCalled();
+	});
+
+	it("native login stores storybook auth cookies and redirects back", async () => {
+		const fetchMock = vi.fn(async (url) => {
+			if (String(url).endsWith("/api/v1/auth/verify-token")) {
+				return createSessionResponse(401, {
+					authenticated: false,
+					status: 401,
+					data: null,
+					message: "Storybook auth session not found.",
+				});
+			}
+
+			return createSessionResponse(200, {
+				data: {
+					accessToken: "access-token",
+					refreshToken: "refresh-token",
+					sessionId: "storybook.session",
+					accessTokenExpiresAt: Date.now() + 60_000,
+					refreshTokenExpiresAt: Date.now() + 120_000,
+					user: {},
+				},
+			});
+		});
+		vi.stubGlobal("fetch", fetchMock);
+
+		const middleware = await installMiddleware({
+			requireAuth: true,
+			coreApiTarget: "http://localhost:3006",
+			idpApiTarget: "http://localhost:3007",
+		});
+		const request = createRequest(
+			"/__storybook_auth/native-login?returnTo=%2Fiframe.html%3Fid%3Dfeatures-button--primary",
+			{
+				method: "POST",
+				headers: {
+					"content-type": "application/x-www-form-urlencoded",
+				},
+					body: "email=admin%40example.com&password=secret",
+			},
+		);
+		const response = createResponse();
+		const next = vi.fn();
+
+		await middleware(request, response, next);
+
+		expect(response.statusCode).toBe(302);
+		expect(response.getHeader("location")).toBe(
+			"http://localhost:6006/iframe.html?id=features-button--primary",
+		);
+		expect(response.getHeader("set-cookie")).toEqual(
+			expect.arrayContaining([
+				expect.stringContaining("accessToken=access-token"),
+				expect.stringContaining("refreshToken=refresh-token"),
+				expect.stringContaining("sessionId=storybook.session"),
+			]),
+		);
+		expect(fetchMock).toHaveBeenCalledWith(
+			"http://localhost:3007/api/v1/auth/native/login",
+			expect.objectContaining({
+				method: "POST",
+				body: JSON.stringify({
+					email: "admin@example.com",
+					password: "secret",
+				}),
+			}),
 		);
 		expect(next).not.toHaveBeenCalled();
 	});

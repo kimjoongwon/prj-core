@@ -1,7 +1,7 @@
 "use client";
 
-import { Chip } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { Chip } from "../../../design-system/primitives";
 import { CourseTableShell } from "../CourseTableShell";
 import type { CourseManagementCourse } from "../types";
 

@@ -7,7 +7,7 @@ import { type PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 import { I18nService } from "nestjs-i18n";
-import { PrismaService } from "../prisma.service";
+import { PrismaService } from "../prisma/prisma.service";
 
 /**
  * 다국어 번역 서비스

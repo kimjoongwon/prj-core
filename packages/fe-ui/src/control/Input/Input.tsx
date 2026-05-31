@@ -1,11 +1,11 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
+import type { ChangeEventHandler } from "react";
 import {
 	Input as HeroUiInput,
 	type InputProps as HeroUiInputProps,
-} from "@cocrepo/ui/heroui";
-import { observer } from "mobx-react-lite";
-import type { ChangeEventHandler } from "react";
+} from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 export interface InputProps

@@ -2,6 +2,8 @@
 
 import type { PolicyResponseDto } from "@cocrepo/api/core/policies";
 import { PageTitleBar, Surface, VStack } from "@cocrepo/ui";
+import { Edit, Eye, Plus, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Button,
 	Chip,
@@ -12,9 +14,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@cocrepo/ui/heroui";
-import { Edit, Eye, Plus, Trash2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 
 export interface PolicyListPageProps {
 	policies?: PolicyResponseDto[];

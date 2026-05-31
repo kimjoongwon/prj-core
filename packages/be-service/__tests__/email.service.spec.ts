@@ -4,8 +4,8 @@ import {
 	type EmailProvider,
 	EmailService,
 	SmtpEmailProvider,
-} from "../src/email.service";
-import { TemplateService } from "../src/template.service";
+} from "../src/email";
+import { TemplateService } from "../src/template/template.service";
 
 jest.mock("nodemailer", () => ({
 	createTransport: jest.fn(),

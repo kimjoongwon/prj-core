@@ -6,7 +6,7 @@ import {
 	StringFieldOptional,
 	UUIDField,
 } from "@cocrepo/decorator";
-import { CourseStatus, type Course } from "@cocrepo/prisma";
+import { type Course, CourseStatus } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { CourseOfferingDto } from "./course-offering.dto";
 import { CoursePassDto } from "./course-pass.dto";

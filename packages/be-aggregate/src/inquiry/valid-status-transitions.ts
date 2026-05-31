@@ -1,0 +1,12 @@
+import type { InquiryStatus } from "@cocrepo/prisma";
+
+export const VALID_STATUS_TRANSITIONS: Record<InquiryStatus, InquiryStatus[]> =
+	{
+		NEW: ["OPEN", "IN_PROGRESS", "ESCALATED"],
+		OPEN: ["IN_PROGRESS", "WAITING_CUSTOMER", "RESOLVED", "ESCALATED"],
+		IN_PROGRESS: ["WAITING_CUSTOMER", "RESOLVED", "ESCALATED"],
+		WAITING_CUSTOMER: ["IN_PROGRESS", "RESOLVED", "ESCALATED"],
+		RESOLVED: ["CLOSED", "IN_PROGRESS"],
+		CLOSED: [],
+		ESCALATED: ["IN_PROGRESS", "RESOLVED"],
+	};

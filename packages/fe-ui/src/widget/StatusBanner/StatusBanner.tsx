@@ -1,6 +1,5 @@
 "use client";
 
-import { Button, Chip, Spinner, Tooltip } from "@cocrepo/ui/heroui";
 import {
 	AlertCircle,
 	CheckCircle2,
@@ -11,6 +10,7 @@ import {
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
+import { Button, Chip, Spinner, Tooltip } from "../../design-system/primitives";
 
 export type ConnectionStatus = "connected" | "disconnected" | "checking";
 

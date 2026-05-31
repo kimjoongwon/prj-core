@@ -59,25 +59,6 @@ const coursePassInclude = {
 	timeline: true,
 } satisfies Prisma.CoursePassInclude;
 
-const courseDetailInclude = {
-	space: true,
-	offerings: {
-		where: { removedAt: null },
-		include: courseOfferingInclude,
-		orderBy: { startsAt: "desc" },
-	},
-	enrollments: {
-		where: { removedAt: null },
-		include: enrollmentInclude,
-		orderBy: { createdAt: "desc" },
-	},
-	passes: {
-		where: { removedAt: null },
-		include: coursePassInclude,
-		orderBy: { createdAt: "desc" },
-	},
-} satisfies Prisma.CourseInclude;
-
 const courseOfferingDetailInclude = {
 	...courseOfferingInclude,
 	enrollments: {
@@ -132,66 +113,6 @@ export class CoursesRepository {
 		};
 	}
 
-	async findById(id: string): Promise<Course | null> {
-		this.logger.debug(`Course 단건 조회: ${id.slice(-8)}`);
-
-		const result = await this.txHost.tx.course.findFirst({
-			where: { id, removedAt: null },
-			include: courseInclude,
-		});
-
-		return result ? plainToInstance(Course, result) : null;
-	}
-
-	async findByIdWithRelations(id: string): Promise<Course | null> {
-		this.logger.debug(`Course 관계 포함 조회: ${id.slice(-8)}`);
-
-		const result = await this.txHost.tx.course.findFirst({
-			where: { id, removedAt: null },
-			include: courseDetailInclude,
-		});
-
-		return result ? plainToInstance(Course, result) : null;
-	}
-
-	async create(data: Prisma.CourseUncheckedCreateInput): Promise<Course> {
-		this.logger.debug("Course 생성");
-
-		const result = await this.txHost.tx.course.create({
-			data,
-			include: courseInclude,
-		});
-
-		return plainToInstance(Course, result);
-	}
-
-	async updateById(
-		id: string,
-		data: Prisma.CourseUncheckedUpdateInput,
-	): Promise<Course> {
-		this.logger.debug(`Course 수정: ${id.slice(-8)}`);
-
-		const result = await this.txHost.tx.course.update({
-			where: { id },
-			data,
-			include: courseInclude,
-		});
-
-		return plainToInstance(Course, result);
-	}
-
-	async removeById(id: string): Promise<Course> {
-		this.logger.debug(`Course 소프트 삭제: ${id.slice(-8)}`);
-
-		const result = await this.txHost.tx.course.update({
-			where: { id },
-			data: { removedAt: new Date() },
-			include: courseInclude,
-		});
-
-		return plainToInstance(Course, result);
-	}
-
 	async findManyOfferings(params?: {
 		where?: Prisma.CourseOfferingWhereInput;
 		orderBy?: Prisma.CourseOfferingOrderByWithRelationInput[];
@@ -231,46 +152,6 @@ export class CoursesRepository {
 		});
 
 		return result ? plainToInstance(CourseOffering, result) : null;
-	}
-
-	async createOffering(
-		data: Prisma.CourseOfferingUncheckedCreateInput,
-	): Promise<CourseOffering> {
-		this.logger.debug("CourseOffering 생성");
-
-		const result = await this.txHost.tx.courseOffering.create({
-			data,
-			include: courseOfferingInclude,
-		});
-
-		return plainToInstance(CourseOffering, result);
-	}
-
-	async updateOfferingById(
-		id: string,
-		data: Prisma.CourseOfferingUncheckedUpdateInput,
-	): Promise<CourseOffering> {
-		this.logger.debug(`CourseOffering 수정: ${id.slice(-8)}`);
-
-		const result = await this.txHost.tx.courseOffering.update({
-			where: { id },
-			data,
-			include: courseOfferingInclude,
-		});
-
-		return plainToInstance(CourseOffering, result);
-	}
-
-	async removeOfferingById(id: string): Promise<CourseOffering> {
-		this.logger.debug(`CourseOffering 소프트 삭제: ${id.slice(-8)}`);
-
-		const result = await this.txHost.tx.courseOffering.update({
-			where: { id },
-			data: { removedAt: new Date() },
-			include: courseOfferingInclude,
-		});
-
-		return plainToInstance(CourseOffering, result);
 	}
 
 	async findManyEnrollments(params?: {
@@ -321,33 +202,6 @@ export class CoursesRepository {
 
 		const result = await this.txHost.tx.enrollment.create({
 			data,
-			include: enrollmentInclude,
-		});
-
-		return plainToInstance(Enrollment, result);
-	}
-
-	async updateEnrollmentById(
-		id: string,
-		data: Prisma.EnrollmentUncheckedUpdateInput,
-	): Promise<Enrollment> {
-		this.logger.debug(`Enrollment 수정: ${id.slice(-8)}`);
-
-		const result = await this.txHost.tx.enrollment.update({
-			where: { id },
-			data,
-			include: enrollmentInclude,
-		});
-
-		return plainToInstance(Enrollment, result);
-	}
-
-	async removeEnrollmentById(id: string): Promise<Enrollment> {
-		this.logger.debug(`Enrollment 소프트 삭제: ${id.slice(-8)}`);
-
-		const result = await this.txHost.tx.enrollment.update({
-			where: { id },
-			data: { removedAt: new Date() },
 			include: enrollmentInclude,
 		});
 

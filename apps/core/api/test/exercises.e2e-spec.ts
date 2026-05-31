@@ -1,6 +1,8 @@
-import { PRISMA_SERVICE_TOKEN, SYSTEM_ROLES } from "@cocrepo/constant";
+import { TaskAggregateRoot } from "@cocrepo/aggregate";
+import {
+	PRISMA_SERVICE_TOKEN,
+	SYSTEM_ROLES } from "@cocrepo/constant";
 import { SpaceScope } from "@cocrepo/dto";
-import { TaskFacade } from "@cocrepo/facade";
 import {
 	AuthCacheService,
 	JwtStrategy,
@@ -68,7 +70,7 @@ describe("Tasks API (E2E)", () => {
 	let app: INestApplication;
 	let jwtToken: string;
 
-	const taskFacadeMock = {
+	const taskServiceMock = {
 		findTasks: jest.fn(),
 		getExerciseByTaskId: jest.fn(),
 		findTaskRoutines: jest.fn(),
@@ -99,8 +101,8 @@ describe("Tasks API (E2E)", () => {
 			.useValue({
 				invalidate: async () => {},
 			})
-			.overrideProvider(TaskFacade)
-			.useValue(taskFacadeMock)
+			.overrideProvider(TaskAggregateRoot)
+			.useValue(taskServiceMock)
 			.compile();
 
 		app = moduleFixture.createNestApplication();
@@ -111,21 +113,16 @@ describe("Tasks API (E2E)", () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 
-		taskFacadeMock.findTasks.mockResolvedValue({
-			data: [
+		taskServiceMock.findTasks.mockResolvedValue({
+			tasks: [
 				{
 					id: TASK_ID,
 					spaceId: SPACE_MANAGE_ID,
 				},
 			],
-			meta: {
-				total: 1,
-				skip: 0,
-				take: 10,
-				totalPages: 1,
-			},
+			total: 1,
 		});
-		taskFacadeMock.getExerciseByTaskId.mockResolvedValue({
+		taskServiceMock.getExerciseByTaskId.mockResolvedValue({
 			id: EXERCISE_ID,
 			taskId: TASK_ID,
 			name: "Burpee",
@@ -135,22 +132,22 @@ describe("Tasks API (E2E)", () => {
 			imageFileId: null,
 			videoFileId: null,
 		});
-		taskFacadeMock.findTaskRoutines.mockResolvedValue([
+		taskServiceMock.findTaskRoutines.mockResolvedValue([
 			{
 				id: ROUTINE_ID,
 				name: "Morning routine",
 				label: "A",
 			},
 		]);
-		taskFacadeMock.createTaskWithExercise.mockResolvedValue({
+		taskServiceMock.createTaskWithExercise.mockResolvedValue({
 			id: TASK_ID,
 			spaceId: SPACE_MANAGE_ID,
 		});
-		taskFacadeMock.updateTaskExercise.mockResolvedValue({
+		taskServiceMock.updateTaskExercise.mockResolvedValue({
 			id: TASK_ID,
 			spaceId: SPACE_MANAGE_ID,
 		});
-		taskFacadeMock.deleteTask.mockResolvedValue(undefined);
+		taskServiceMock.deleteTask.mockResolvedValue(undefined);
 	});
 
 	afterAll(async () => {
@@ -173,7 +170,7 @@ describe("Tasks API (E2E)", () => {
 		expect(response.status).toBe(400);
 	});
 
-	it("목록 조회는 현재 선택된 space와 query를 facade에 전달해야 한다", async () => {
+	it("목록 조회는 현재 선택된 space와 query를 service에 전달해야 한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/tasks")
 			.query({
@@ -190,11 +187,11 @@ describe("Tasks API (E2E)", () => {
 		expect(response.body.data).toBeInstanceOf(Array);
 		expect(response.body.meta).toMatchObject({
 			total: 1,
-			skip: 0,
-			take: 10,
+			skip: 1,
+			take: 5,
 			totalPages: 1,
 		});
-		expect(taskFacadeMock.findTasks).toHaveBeenCalledWith({
+		expect(taskServiceMock.findTasks).toHaveBeenCalledWith({
 			spaceId: SPACE_MANAGE_ID,
 			spaceScope: SpaceScope.INCLUDE_ANCESTORS,
 			skip: 1,
@@ -212,9 +209,10 @@ describe("Tasks API (E2E)", () => {
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
 		expect(response.body.data.id).toBe(EXERCISE_ID);
-		expect(taskFacadeMock.getExerciseByTaskId).toHaveBeenCalledWith(
+		expect(taskServiceMock.getExerciseByTaskId).toHaveBeenCalledWith(
 			TASK_ID,
 			SPACE_MANAGE_ID,
+			SpaceScope.CURRENT,
 		);
 	});
 
@@ -227,7 +225,7 @@ describe("Tasks API (E2E)", () => {
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
 		expect(response.body.data).toHaveLength(1);
-		expect(taskFacadeMock.findTaskRoutines).toHaveBeenCalledWith(
+		expect(taskServiceMock.findTaskRoutines).toHaveBeenCalledWith(
 			TASK_ID,
 			SPACE_MANAGE_ID,
 		);
@@ -250,7 +248,7 @@ describe("Tasks API (E2E)", () => {
 		expect(response.status).toBe(201);
 		expect(response.body.httpStatus).toBe(201);
 		expect(response.body.data.id).toBe(TASK_ID);
-		expect(taskFacadeMock.createTaskWithExercise).toHaveBeenCalledWith(
+		expect(taskServiceMock.createTaskWithExercise).toHaveBeenCalledWith(
 			createDto,
 			SPACE_MANAGE_ID,
 			USER_ID,
@@ -270,7 +268,7 @@ describe("Tasks API (E2E)", () => {
 			});
 
 		expect(response.status).toBe(403);
-		expect(taskFacadeMock.createTaskWithExercise).not.toHaveBeenCalled();
+		expect(taskServiceMock.createTaskWithExercise).not.toHaveBeenCalled();
 	});
 
 	it("Task exercise 수정 시 현재 spaceId를 함께 사용해야 한다", async () => {
@@ -288,7 +286,7 @@ describe("Tasks API (E2E)", () => {
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
 		expect(response.body.data.id).toBe(TASK_ID);
-		expect(taskFacadeMock.updateTaskExercise).toHaveBeenCalledWith(
+		expect(taskServiceMock.updateTaskExercise).toHaveBeenCalledWith(
 			TASK_ID,
 			updateDto,
 			SPACE_MANAGE_ID,
@@ -303,7 +301,7 @@ describe("Tasks API (E2E)", () => {
 
 		expect(response.status).toBe(204);
 		expect(response.body).toEqual({});
-		expect(taskFacadeMock.deleteTask).toHaveBeenCalledWith(
+		expect(taskServiceMock.deleteTask).toHaveBeenCalledWith(
 			TASK_ID,
 			SPACE_MANAGE_ID,
 		);
@@ -316,7 +314,7 @@ describe("Tasks API (E2E)", () => {
 			.set("x-space-id", UNKNOWN_SPACE_ID);
 
 		expect(response.status).toBe(403);
-		expect(taskFacadeMock.findTasks).not.toHaveBeenCalled();
+		expect(taskServiceMock.findTasks).not.toHaveBeenCalled();
 	});
 
 	it("유효하지 않은 UUID taskId는 400을 반환해야 한다", async () => {
@@ -326,6 +324,6 @@ describe("Tasks API (E2E)", () => {
 			.set("x-space-id", SPACE_MANAGE_ID);
 
 		expect(response.status).toBe(400);
-		expect(taskFacadeMock.getExerciseByTaskId).not.toHaveBeenCalled();
+		expect(taskServiceMock.getExerciseByTaskId).not.toHaveBeenCalled();
 	});
 });

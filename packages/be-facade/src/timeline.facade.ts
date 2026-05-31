@@ -1,3 +1,4 @@
+import { TimelineAggregateRoot } from "@cocrepo/aggregate";
 import { TIMELINE_ERRORS } from "@cocrepo/constant";
 import {
 	CreateProgramDto,
@@ -10,29 +11,32 @@ import {
 	UpdateSessionDto,
 	UpdateTimelineDto,
 } from "@cocrepo/dto";
-import { AuthContext, SpaceContext, TimelineService } from "@cocrepo/service";
+import { AuthContext, SpaceContext } from "@cocrepo/service";
+import {
+	buildOffsetPaginatedResponse,
+	buildOffsetStatsPaginatedResponse,
+} from "@cocrepo/toolkit";
+import type {
+	OffsetPaginatedResponse,
+	OffsetStatsPaginatedResponse,
+} from "@cocrepo/type";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 
 @Injectable()
 export class TimelineFacade {
 	constructor(
-		private readonly timelinesService: TimelineService,
+		private readonly timelinesService: TimelineAggregateRoot,
 		private readonly authContext: AuthContext,
 		private readonly spaceContext: SpaceContext,
 	) {}
 
-	async getTimelines(query: QueryTimelineDto): Promise<{
-		data: Awaited<ReturnType<TimelineService["findTimelines"]>>["timelines"];
-		meta: {
-			total: number;
-			skip: number;
-			take: number;
-			totalPages: number;
-		};
-		stats: {
-			total: number;
-		};
-	}> {
+	async getTimelines(
+		query: QueryTimelineDto,
+	): Promise<
+		OffsetStatsPaginatedResponse<
+			Awaited<ReturnType<TimelineAggregateRoot["findTimelines"]>>["timelines"]
+		>
+	> {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
 			throw new UnauthorizedException(TIMELINE_ERRORS.INVALID_DATA);
@@ -40,25 +44,19 @@ export class TimelineFacade {
 
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 10;
-		const { timelines, total } = await this.timelinesService.findTimelines({
+		const timelineResult = await this.timelinesService.findTimelines({
 			skip,
 			take,
 			search: query.search ?? null,
 			contentLanguageCode: query.contentLanguageCode,
 		});
 
-		return {
-			data: timelines,
-			meta: {
-				total,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(total / take) : 1,
-			},
-			stats: {
-				total,
-			},
-		};
+		return buildOffsetStatsPaginatedResponse(
+			timelineResult.timelines,
+			timelineResult.total,
+			skip,
+			take,
+		);
 	}
 
 	getTimelineById(timelineId: string) {
@@ -112,34 +110,29 @@ export class TimelineFacade {
 	async getSessions(
 		timelineId: string,
 		query: QuerySessionDto,
-	): Promise<{
-		data: Awaited<
-			ReturnType<TimelineService["findSessionsInTimeline"]>
-		>["sessions"];
-		meta: {
-			total: number;
-			skip: number;
-			take: number;
-			totalPages: number;
-		};
-	}> {
+	): Promise<
+		OffsetPaginatedResponse<
+			Awaited<
+				ReturnType<TimelineAggregateRoot["findSessionsInTimeline"]>
+			>["sessions"]
+		>
+	> {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 10;
-		const { sessions, total } =
-			await this.timelinesService.findSessionsInTimeline(timelineId, {
+		const sessionResult = await this.timelinesService.findSessionsInTimeline(
+			timelineId,
+			{
 				skip,
 				take,
-			});
-
-		return {
-			data: sessions,
-			meta: {
-				total,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(total / take) : 1,
 			},
-		};
+		);
+
+		return buildOffsetPaginatedResponse(
+			sessionResult.sessions,
+			sessionResult.total,
+			skip,
+			take,
+		);
 	}
 
 	getSessionById(timelineId: string, sessionId: string) {
@@ -168,34 +161,29 @@ export class TimelineFacade {
 	async getPrograms(
 		sessionId: string,
 		query: QueryProgramDto,
-	): Promise<{
-		data: Awaited<
-			ReturnType<TimelineService["findProgramsInSession"]>
-		>["programs"];
-		meta: {
-			total: number;
-			skip: number;
-			take: number;
-			totalPages: number;
-		};
-	}> {
+	): Promise<
+		OffsetPaginatedResponse<
+			Awaited<
+				ReturnType<TimelineAggregateRoot["findProgramsInSession"]>
+			>["programs"]
+		>
+	> {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 10;
-		const { programs, total } =
-			await this.timelinesService.findProgramsInSession(sessionId, {
+		const programResult = await this.timelinesService.findProgramsInSession(
+			sessionId,
+			{
 				skip,
 				take,
-			});
-
-		return {
-			data: programs,
-			meta: {
-				total,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(total / take) : 1,
 			},
-		};
+		);
+
+		return buildOffsetPaginatedResponse(
+			programResult.programs,
+			programResult.total,
+			skip,
+			take,
+		);
 	}
 
 	getProgramById(sessionId: string, programId: string) {

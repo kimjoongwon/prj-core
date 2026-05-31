@@ -1,8 +1,8 @@
 "use client";
 
-import { Button, Input } from "@cocrepo/ui/heroui";
 import { Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Button, Input } from "../../design-system/primitives";
 
 export interface RedirectUriListInputProps {
 	/** URI 목록 */

@@ -1,8 +1,8 @@
 "use client";
 
-import type { ButtonProps } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../control/Button/Button";
+import type { ButtonProps } from "../../design-system/primitives";
 
 export interface ActionButtonCellProps extends ButtonProps {
 	/** 버튼 정렬 */

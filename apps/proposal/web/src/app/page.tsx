@@ -1,14 +1,14 @@
 "use client";
 
-import { Container } from "@cocrepo/ui";
 import {
 	Button,
 	Card,
 	CardBody,
 	CardHeader,
 	Chip,
+	Container,
 	Divider,
-} from "@cocrepo/ui/heroui";
+} from "@cocrepo/ui";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import {

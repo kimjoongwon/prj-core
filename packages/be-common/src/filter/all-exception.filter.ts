@@ -1,6 +1,8 @@
-import { ResponseEntity } from "@cocrepo/entity";
+import {
+	ResponseEntity } from "@cocrepo/entity";
 import { Prisma } from "@cocrepo/prisma";
-import { I18nTranslationService } from "@cocrepo/service";
+import { I18nTranslationService,
+} from "@cocrepo/service";
 import {
 	type ArgumentsHost,
 	Catch,

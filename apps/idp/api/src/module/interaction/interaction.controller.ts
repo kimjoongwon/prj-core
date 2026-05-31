@@ -1,3 +1,9 @@
+import {
+	AbortInteractionCommand,
+	ConfirmInteractionConsentCommand,
+	GetInteractionQuery,
+	SubmitInteractionLoginCommand,
+} from "@cocrepo/command";
 import { Public } from "@cocrepo/decorator";
 import {
 	AbortResultDto,
@@ -19,7 +25,7 @@ import {
 	Req,
 	Res,
 } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import {
 	ApiBody,
 	ApiOperation,
@@ -28,10 +34,7 @@ import {
 	ApiTags,
 } from "@nestjs/swagger";
 import type { Request, Response } from "express";
-import type { OidcConfig } from "../../config/oidc.config";
 import type { KoaLikeRequest, KoaLikeResponse } from "../oidc/types";
-import { InteractionFacade } from "./interaction.facade";
-import type { LoginValidationResult } from "./interaction-login.service";
 
 /**
  * OIDC Interaction Controller
@@ -45,105 +48,11 @@ import type { LoginValidationResult } from "./interaction-login.service";
 @Controller("api/interaction")
 export class InteractionController {
 	private readonly logger = new Logger(InteractionController.name);
-	private readonly isDev =
-		process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "staging";
 
 	constructor(
-		private readonly interactionApplicationService: InteractionFacade,
-		private readonly configService: ConfigService,
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
 	) {}
-
-	/**
-	 * 상대경로를 절대경로로 변환
-	 * oidc-provider가 반환하는 redirectTo가 /oidc/auth/... 형태일 수 있음
-	 */
-	private toAbsoluteUrl(redirectTo: string): string {
-		if (redirectTo.startsWith("http")) {
-			return redirectTo;
-		}
-		const oidcConfig = this.configService.get<OidcConfig>("oidc");
-		const issuer = oidcConfig?.issuer || "http://localhost:3007";
-		return `${issuer}${redirectTo}`;
-	}
-
-	/**
-	 * 요청에서 클라이언트 IP 주소를 추출합니다
-	 */
-	private getClientIp(req: Request): string {
-		const forwarded = req.headers["x-forwarded-for"];
-		if (typeof forwarded === "string") {
-			return forwarded.split(",")[0].trim();
-		}
-		return req.ip || req.socket.remoteAddress || "unknown";
-	}
-
-	/**
-	 * 로그인 실패 결과를 사용자 친화적인 응답 DTO로 변환합니다.
-	 */
-	private buildLoginErrorResponse(
-		result: LoginValidationResult,
-	): LoginErrorDto {
-		const baseResponse: LoginErrorDto = {
-			error: result.error || "LOGIN_FAILED",
-			displayMessage: "로그인에 실패했습니다.",
-			remainingAttempts: result.remainingAttempts,
-			lockedUntil: result.lockedUntil?.toISOString(),
-			temporaryLockThreshold: result.temporaryLockThreshold,
-			temporaryLockDurationMin: result.temporaryLockDurationMin,
-		};
-
-		switch (result.error) {
-			case "INVALID_CREDENTIALS":
-				return {
-					...baseResponse,
-					displayMessage:
-						result.remainingAttempts !== undefined &&
-						result.remainingAttempts > 0
-							? `이메일 또는 비밀번호가 올바르지 않습니다. 남은 시도 ${result.remainingAttempts}회`
-							: "이메일 또는 비밀번호가 올바르지 않습니다.",
-					hint: "계속 실패하면 계정이 일시 잠길 수 있습니다.",
-					recoveryActions: [
-						{
-							type: "forgot-password",
-							label: "비밀번호 재설정",
-							href: "/forgot-password",
-						},
-					],
-				};
-			case "ACCOUNT_LOCKED_TEMPORARY":
-				return {
-					...baseResponse,
-					displayMessage: `로그인 시도가 반복되어 계정이 일시 잠겼습니다. ${result.temporaryLockDurationMin ?? 15}분 후 다시 시도하세요.`,
-					hint: "급한 경우 비밀번호 재설정을 진행할 수 있습니다.",
-					recoveryActions: [
-						{
-							type: "forgot-password",
-							label: "비밀번호 재설정",
-							href: "/forgot-password",
-						},
-					],
-				};
-			case "ACCOUNT_LOCKED_PERMANENT":
-				return {
-					...baseResponse,
-					displayMessage: "보안을 위해 계정이 잠겼습니다.",
-					hint: "비밀번호를 재설정하거나 관리자에게 문의하세요.",
-					recoveryActions: [
-						{
-							type: "forgot-password",
-							label: "비밀번호 재설정",
-							href: "/forgot-password",
-						},
-						{
-							type: "contact-admin",
-							label: "관리자 문의",
-						},
-					],
-				};
-			default:
-				return baseResponse;
-		}
-	}
 
 	@ApiOperation({
 		operationId: "getInteraction",
@@ -167,32 +76,11 @@ export class InteractionController {
 			const req = res.req as unknown as KoaLikeRequest;
 			const koaRes = res as unknown as KoaLikeResponse;
 
-			const interaction =
-				await this.interactionApplicationService.getInteractionDetails(
-					req,
-					koaRes,
-				);
-			const { prompt, params, session } = interaction;
-			const client = await this.interactionApplicationService.findClient(
-				params.client_id as string,
+			const interaction = await this.queryBus.execute(
+				new GetInteractionQuery(uid, req, koaRes),
 			);
 
-			return res.json({
-				type: prompt.name,
-				uid,
-				client: client
-					? {
-							clientId: client.clientId,
-							name: client.name,
-							logoUri: client.logoUri,
-							loginUi: client.loginUi ?? null,
-						}
-					: null,
-				prompt,
-				params,
-				session,
-				isDev: this.isDev,
-			});
+			return res.json(interaction);
 		} catch (error) {
 			this.logger.error(`Interaction error: ${error}`);
 			return res.status(400).json({ error: "유효하지 않은 인터랙션입니다." });
@@ -224,44 +112,12 @@ export class InteractionController {
 		@Req() req: Request,
 		@Res() res: Response,
 	) {
-		const koaReq = req as unknown as KoaLikeRequest;
-		const koaRes = res as unknown as KoaLikeResponse;
-
 		try {
-			const ipAddress = this.getClientIp(req);
-			const userAgent = req.headers["user-agent"];
-
-			const result = await this.interactionApplicationService.validateUser(
-				loginDto.email,
-				loginDto.password,
-				ipAddress,
-				userAgent,
+			const result = await this.commandBus.execute(
+				new SubmitInteractionLoginCommand(loginDto, req, res),
 			);
 
-			if (!result.success) {
-				const statusCode =
-					result.error === "ACCOUNT_LOCKED_TEMPORARY" ||
-					result.error === "ACCOUNT_LOCKED_PERMANENT"
-						? 403
-						: 401;
-
-				return res
-					.status(statusCode)
-					.json(this.buildLoginErrorResponse(result));
-			}
-
-			const { redirectTo } =
-				await this.interactionApplicationService.completeLogin(
-					koaReq,
-					koaRes,
-					result.userId!,
-					loginDto.remember || false,
-				);
-
-			return res.json({
-				redirectTo: this.toAbsoluteUrl(redirectTo),
-				mustChangePassword: result.mustChangePassword,
-			});
+			return res.status(result.statusCode).json(result.body);
 		} catch (error) {
 			this.logger.error(`Login error: ${error}`);
 			return res
@@ -288,10 +144,11 @@ export class InteractionController {
 			const req = res.req as unknown as KoaLikeRequest;
 			const koaRes = res as unknown as KoaLikeResponse;
 
-			const { redirectTo } =
-				await this.interactionApplicationService.processConsent(req, koaRes);
+			const consentResult = await this.commandBus.execute(
+				new ConfirmInteractionConsentCommand(req, koaRes),
+			);
 
-			return res.json({ redirectTo: this.toAbsoluteUrl(redirectTo) });
+			return res.json({ redirectTo: consentResult.redirectTo });
 		} catch (error) {
 			this.logger.error(`Consent error: ${error}`);
 			return res
@@ -318,10 +175,11 @@ export class InteractionController {
 			const req = res.req as unknown as KoaLikeRequest;
 			const koaRes = res as unknown as KoaLikeResponse;
 
-			const { redirectTo } =
-				await this.interactionApplicationService.abortInteraction(req, koaRes);
+			const abortResult = await this.commandBus.execute(
+				new AbortInteractionCommand(req, koaRes),
+			);
 
-			return res.json({ redirectTo: this.toAbsoluteUrl(redirectTo) });
+			return res.json({ redirectTo: abortResult.redirectTo });
 		} catch (error) {
 			this.logger.error(`Abort error: ${error}`);
 			return res

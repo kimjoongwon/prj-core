@@ -8,6 +8,8 @@ import {
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
+import { ArrowLeft, Edit, Save, ShieldCheck, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Button,
 	Checkbox,
@@ -20,9 +22,7 @@ import {
 	ModalHeader,
 	Spinner,
 	Switch,
-} from "@cocrepo/ui/heroui";
-import { ArrowLeft, Edit, Save, ShieldCheck, Trash2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 
 export interface RoleDetailPageRole {
 	id: string;

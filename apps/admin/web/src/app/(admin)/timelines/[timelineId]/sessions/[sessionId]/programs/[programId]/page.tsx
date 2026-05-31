@@ -7,7 +7,7 @@ import {
 	useGetProgramById,
 } from "@cocrepo/api/core/timelines";
 import { TimelineSessionProgramDetailPage } from "@cocrepo/ui";
-import { addToast, useDisclosure } from "@cocrepo/ui/heroui";
+import { addToast, useDisclosure } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";

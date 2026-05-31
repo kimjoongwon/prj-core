@@ -1,10 +1,10 @@
 "use client";
 
 import type { NavItem } from "@cocrepo/store";
-import { cn } from "@cocrepo/ui/heroui";
 import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
+import { cn } from "../../design-system/primitives";
 import type { SidePanelProps } from "../../display/layout/type";
 
 interface SubMenuItemProps {
@@ -105,9 +105,9 @@ const NavItemComponent = observer(function NavItemComponent({
 									? "shadow-[0_12px_28px_-24px_rgba(15,23,42,0.72)]"
 									: "shadow-[0_22px_46px_-28px_rgba(15,23,42,0.7)]",
 							)
-					: isActiveBranch
-						? "bg-content2 text-foreground"
-						: "bg-transparent text-default-600 hover:bg-content2 hover:text-foreground",
+						: isActiveBranch
+							? "bg-content2 text-foreground"
+							: "bg-transparent text-default-600 hover:bg-content2 hover:text-foreground",
 				)}
 				onClick={handleClick}
 			>

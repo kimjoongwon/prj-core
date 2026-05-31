@@ -1,10 +1,10 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
 import {
 	Link as HeroUiLink,
 	type LinkProps as HeroUiLinkProps,
-} from "@cocrepo/ui/heroui";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
 import { translateNode, useT } from "../../i18n";
 
 export type LinkProps = HeroUiLinkProps;

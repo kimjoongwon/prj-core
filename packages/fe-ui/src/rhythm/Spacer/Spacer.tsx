@@ -1,10 +1,10 @@
 import type React from "react";
-import { cn } from "@cocrepo/ui/heroui";
+import { cn } from "../../design-system/primitives";
 import {
 	isRhythmPreset,
+	type RhythmPreset,
 	resolveRhythmValue,
 	rhythmDefaults,
-	type RhythmPreset,
 } from "../presets";
 import { getRhythmTailwindAxisClass } from "../tokens";
 

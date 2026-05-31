@@ -16,7 +16,6 @@ import {
 	PageMetaDto,
 	QueryIdpAccountDto,
 } from "@cocrepo/dto";
-import { IdpAccountFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -29,6 +28,7 @@ import {
 	Post,
 	Query,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import {
 	ApiBody,
 	ApiExtraModels,
@@ -36,6 +36,14 @@ import {
 	ApiParam,
 	ApiTags,
 } from "@nestjs/swagger";
+import {
+	GetIdpAccountAccessGrantFormQuery,
+	GetIdpAccountQuery,
+	GetIdpAccountsQuery,
+	GrantIdpAccountAccessCommand,
+	ResetIdpAccountFailedAttemptsCommand,
+	ToggleIdpAccountActiveCommand,
+} from "@cocrepo/command";
 
 @ApiTags("IDP_ACCOUNTS")
 @ApiExtraModels(
@@ -46,7 +54,10 @@ import {
 )
 @Controller()
 export class IdpAccountsController {
-	constructor(private readonly idpAccountFacade: IdpAccountFacade) {}
+	constructor(
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
+	) {}
 
 	@Get()
 	@ApiOperation({
@@ -62,7 +73,7 @@ export class IdpAccountsController {
 	})
 	@ResponseMessage("계정 목록 조회 성공")
 	async getAccounts(@Query() query: QueryIdpAccountDto) {
-		return this.idpAccountFacade.getMany(query);
+		return this.queryBus.execute(new GetIdpAccountsQuery(query));
 	}
 
 	@Get(":userId")
@@ -77,7 +88,7 @@ export class IdpAccountsController {
 	@ApiResponseEntity(IdpAccountDetailDto, HttpStatus.OK)
 	@ResponseMessage("계정 상세 조회 성공")
 	async getAccount(@Param("userId", ParseUUIDPipe) userId: string) {
-		return this.idpAccountFacade.getById(userId);
+		return this.queryBus.execute(new GetIdpAccountQuery(userId));
 	}
 
 	@Get(":userId/access-grant-form")
@@ -93,7 +104,7 @@ export class IdpAccountsController {
 	@ApiResponseEntity(IdpAccountAccessGrantFormBootstrapDto, HttpStatus.OK)
 	@ResponseMessage("계정 접근 권한 부여 폼 조회 성공")
 	async getAccessGrantForm(@Param("userId", ParseUUIDPipe) userId: string) {
-		return this.idpAccountFacade.getAccessGrantFormBootstrap(userId);
+		return this.queryBus.execute(new GetIdpAccountAccessGrantFormQuery(userId));
 	}
 
 	@Post(":userId/access-grants")
@@ -117,7 +128,9 @@ export class IdpAccountsController {
 		@Param("userId", ParseUUIDPipe) userId: string,
 		@Body() dto: GrantIdpAccountAccessDto,
 	) {
-		return this.idpAccountFacade.grantAccess(userId, dto);
+		return this.commandBus.execute(
+			new GrantIdpAccountAccessCommand(userId, dto),
+		);
 	}
 
 	@Patch(":userId/toggle-active")
@@ -132,7 +145,7 @@ export class IdpAccountsController {
 	@ApiResponseEntity(IdpAccountDto, HttpStatus.OK)
 	@ResponseMessage("계정 상태 변경 성공")
 	async toggleActive(@Param("userId", ParseUUIDPipe) userId: string) {
-		return this.idpAccountFacade.toggleActive(userId);
+		return this.commandBus.execute(new ToggleIdpAccountActiveCommand(userId));
 	}
 
 	@Post(":userId/reset-failed-attempts")
@@ -149,6 +162,8 @@ export class IdpAccountsController {
 	async resetFailedAttempts(
 		@Param("userId", ParseUUIDPipe) userId: string,
 	): Promise<void> {
-		await this.idpAccountFacade.resetFailedAttempts(userId);
+		await this.commandBus.execute(
+			new ResetIdpAccountFailedAttemptsCommand(userId),
+		);
 	}
 }

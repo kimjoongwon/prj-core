@@ -51,17 +51,16 @@ export class EmailVerificationsRepository {
 		skip: number;
 		take: number;
 	}): Promise<{ items: EmailVerification[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
 		this.logger.debug("이메일 인증 목록 조회");
 
 		const [items, totalCount] = await Promise.all([
 			this.txHost.tx.emailVerification.findMany({
-				where,
-				orderBy,
-				skip,
-				take,
+				where: params.where,
+				orderBy: params.orderBy,
+				skip: params.skip,
+				take: params.take,
 			}),
-			this.txHost.tx.emailVerification.count({ where }),
+			this.txHost.tx.emailVerification.count({ where: params.where }),
 		]);
 
 		return {

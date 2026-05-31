@@ -1,4 +1,11 @@
 import {
+	CreateReservationCheckoutCommand,
+	CreateReservationCommand,
+	GetMyReservationsQuery,
+	GetReservationBookingFeedQuery,
+	GetReservationCheckoutBootstrapQuery,
+} from "@cocrepo/command";
+import {
 	ApiAuth,
 	ApiErrors,
 	ApiResponseEntity,
@@ -6,7 +13,6 @@ import {
 } from "@cocrepo/decorator";
 import {
 	BookingFeedItemDto,
-	CancelReservationDto,
 	CreateReservationCheckoutDto,
 	CreateReservationDto,
 	QueryBookingFeedDto,
@@ -16,25 +22,25 @@ import {
 	ReservationCheckoutResultDto,
 	ReservationDto,
 } from "@cocrepo/dto";
-import { ReservationFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
 	Get,
 	HttpCode,
 	HttpStatus,
-	Param,
-	ParseUUIDPipe,
-	Patch,
 	Post,
 	Query,
 } from "@nestjs/common";
-import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
+import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("RESERVATIONS")
 @Controller()
 export class ReservationsController {
-	constructor(private readonly reservationFacade: ReservationFacade) {}
+	constructor(
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
+	) {}
 
 	@Get("booking-feed")
 	@HttpCode(HttpStatus.OK)
@@ -49,7 +55,17 @@ export class ReservationsController {
 	@ApiResponseEntity(BookingFeedItemDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("예약 Booking Feed 조회 성공")
 	getBookingFeed(@Query() query: QueryBookingFeedDto) {
-		return this.reservationFacade.getBookingFeed(query);
+		return this.queryBus.execute(
+			new GetReservationBookingFeedQuery({
+				dateFrom: query.dateFrom,
+				dateTo: query.dateTo,
+				programId: query.programId,
+				search: query.search,
+				skip: query.skip,
+				take: query.take,
+				timelineId: query.timelineId,
+			}),
+		);
 	}
 
 	@Get("checkout/bootstrap")
@@ -65,7 +81,14 @@ export class ReservationsController {
 	@ApiResponseEntity(ReservationCheckoutBootstrapDto, HttpStatus.OK)
 	@ResponseMessage("예약 결제 Bootstrap 조회 성공")
 	getCheckoutBootstrap(@Query() query: QueryReservationCheckoutBootstrapDto) {
-		return this.reservationFacade.getCheckoutBootstrap(query);
+		return this.queryBus.execute(
+			new GetReservationCheckoutBootstrapQuery({
+				occurrenceStartAt: query.occurrenceStartAt,
+				programId: query.programId,
+				sessionId: query.sessionId,
+				timelineId: query.timelineId,
+			}),
+		);
 	}
 
 	@Post("checkout")
@@ -85,7 +108,18 @@ export class ReservationsController {
 	@ApiResponseEntity(ReservationCheckoutResultDto, HttpStatus.CREATED)
 	@ResponseMessage("예약 결제 생성 성공")
 	createCheckout(@Body() dto: CreateReservationCheckoutDto) {
-		return this.reservationFacade.createCheckout(dto);
+		return this.commandBus.execute(
+			new CreateReservationCheckoutCommand({
+				courseOfferingId: dto.courseOfferingId,
+				idempotencyKey: dto.idempotencyKey,
+				memo: dto.memo,
+				occurrenceStartAt: dto.occurrenceStartAt,
+				paymentMethod: dto.paymentMethod,
+				programId: dto.programId,
+				sessionId: dto.sessionId,
+				timelineId: dto.timelineId,
+			}),
+		);
 	}
 
 	@Post()
@@ -102,7 +136,17 @@ export class ReservationsController {
 	@ApiResponseEntity(ReservationDto, HttpStatus.CREATED)
 	@ResponseMessage("예약 생성 성공")
 	createReservation(@Body() dto: CreateReservationDto) {
-		return this.reservationFacade.create(dto);
+		return this.commandBus.execute(
+			new CreateReservationCommand({
+				coursePassId: dto.coursePassId,
+				idempotencyKey: dto.idempotencyKey,
+				memo: dto.memo,
+				occurrenceStartAt: dto.occurrenceStartAt,
+				programId: dto.programId,
+				sessionId: dto.sessionId,
+				timelineId: dto.timelineId,
+			}),
+		);
 	}
 
 	@Get("me")
@@ -117,30 +161,14 @@ export class ReservationsController {
 	@ApiResponseEntity(ReservationDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("내 예약 목록 조회 성공")
 	getMine(@Query() query: QueryMyReservationsDto) {
-		return this.reservationFacade.getMine(query);
-	}
-
-	@Patch("me/:reservationId/cancel")
-	@HttpCode(HttpStatus.OK)
-	@ApiOperation({
-		operationId: "cancelMyReservation",
-		summary: "내 예약 취소",
-		description: "현재 Space에서 로그인 사용자의 예약을 취소합니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "reservationId",
-		description: "예약 ID (UUID)",
-		type: String,
-	})
-	@ApiBody({ type: CancelReservationDto, description: "예약 취소 정보" })
-	@ApiErrors(400, 401, 403, 404, 409, 500)
-	@ApiResponseEntity(ReservationDto, HttpStatus.OK)
-	@ResponseMessage("예약 취소 성공")
-	cancelMine(
-		@Param("reservationId", ParseUUIDPipe) reservationId: string,
-		@Body() dto: CancelReservationDto,
-	) {
-		return this.reservationFacade.cancel(reservationId, dto);
+		return this.queryBus.execute(
+			new GetMyReservationsQuery({
+				from: query.from,
+				skip: query.skip,
+				status: query.status,
+				take: query.take,
+				to: query.to,
+			}),
+		);
 	}
 }

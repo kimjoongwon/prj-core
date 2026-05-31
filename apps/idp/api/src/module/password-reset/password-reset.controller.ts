@@ -17,6 +17,7 @@ import {
 	Post,
 	Res,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import {
 	ApiBody,
 	ApiOperation,
@@ -25,7 +26,12 @@ import {
 	ApiTags,
 } from "@nestjs/swagger";
 import type { Response } from "express";
-import { PasswordResetFacade } from "./password-reset.facade";
+import {
+	ExecutePasswordResetCommand,
+	GetPasswordPolicyQuery,
+	RequestPasswordResetCommand,
+	ValidateResetTokenQuery,
+} from "@cocrepo/command";
 
 /**
  * 비밀번호 재설정 Controller
@@ -40,7 +46,8 @@ export class PasswordResetController {
 	private readonly logger = new Logger(PasswordResetController.name);
 
 	constructor(
-		private readonly passwordResetApplicationService: PasswordResetFacade,
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
 	) {}
 
 	@ApiOperation({
@@ -56,8 +63,7 @@ export class PasswordResetController {
 	})
 	@Get("password-policy")
 	async getPasswordPolicy(@Res() res: Response) {
-		const policy =
-			await this.passwordResetApplicationService.getPasswordPolicy();
+		const policy = await this.queryBus.execute(new GetPasswordPolicyQuery());
 		return res.json(policy);
 	}
 
@@ -85,7 +91,7 @@ export class PasswordResetController {
 	@Post("forgot-password")
 	async requestReset(@Body("email") email: string, @Res() res: Response) {
 		try {
-			await this.passwordResetApplicationService.requestReset(email);
+			await this.commandBus.execute(new RequestPasswordResetCommand(email));
 			return res.json({
 				message: "입력하신 이메일로 재설정 링크를 발송했습니다.",
 			});
@@ -114,8 +120,9 @@ export class PasswordResetController {
 	})
 	@Get("reset-password/:token")
 	async validateToken(@Param("token") token: string, @Res() res: Response) {
-		const result =
-			await this.passwordResetApplicationService.validateToken(token);
+		const result = await this.queryBus.execute(
+			new ValidateResetTokenQuery(token),
+		);
 		return res.json(result);
 	}
 
@@ -162,9 +169,8 @@ export class PasswordResetController {
 		}
 
 		try {
-			await this.passwordResetApplicationService.executeReset(
-				token,
-				body.password,
+			await this.commandBus.execute(
+				new ExecutePasswordResetCommand(token, body.password),
 			);
 			return res.json({
 				message: "비밀번호가 변경되었습니다. 다시 로그인해주세요.",

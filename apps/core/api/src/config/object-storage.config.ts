@@ -1,10 +1,7 @@
 import { ValidationUtil } from "@cocrepo/decorator";
 import { registerAs } from "@nestjs/config";
 import { IsBooleanString, IsIn, IsOptional, IsString } from "class-validator";
-import type {
-	ObjectStorageConfig,
-	ObjectStorageProvider,
-} from "./config.type";
+import type { ObjectStorageConfig, ObjectStorageProvider } from "./config.type";
 
 class EnvironmentVariablesValidator {
 	@IsString()
@@ -96,16 +93,22 @@ function resolveForcePathStyle(
 }
 
 export default registerAs<ObjectStorageConfig>("objectStorage", () => {
-	const provider = process.env.OBJECT_STORAGE_PROVIDER! as ObjectStorageProvider;
+	const provider = process.env
+		.OBJECT_STORAGE_PROVIDER! as ObjectStorageProvider;
 	const bucket = process.env.OBJECT_STORAGE_BUCKET!;
 	const forcePathStyle = normalizeOptionalBooleanString(
 		process.env.OBJECT_STORAGE_FORCE_PATH_STYLE,
 	);
-	const endpoint = normalizeEndpoint(process.env.OBJECT_STORAGE_ENDPOINT, bucket);
+	const endpoint = normalizeEndpoint(
+		process.env.OBJECT_STORAGE_ENDPOINT,
+		bucket,
+	);
 	const publicBaseUrl = normalizePublicBaseUrl(
 		process.env.OBJECT_STORAGE_PUBLIC_BASE_URL,
 	);
-	const apiToken = normalizeOptionalString(process.env.OBJECT_STORAGE_API_TOKEN);
+	const apiToken = normalizeOptionalString(
+		process.env.OBJECT_STORAGE_API_TOKEN,
+	);
 
 	ValidationUtil.validateConfig(
 		{

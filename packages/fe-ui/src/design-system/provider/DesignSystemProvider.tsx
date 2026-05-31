@@ -4,7 +4,7 @@
  * HeroUI v3 스타일과 토스트 루트를 함께 제공하며 테마 설정을 중앙에서 관리합니다.
  * 앱에서는 이 Provider를 최상위에 배치하면 됩니다.
  */
-import { ToastProvider } from "../heroui";
+
 import {
 	createContext,
 	type ReactNode,
@@ -12,6 +12,7 @@ import {
 	useEffect,
 	useState,
 } from "react";
+import { ToastProvider } from "../primitives";
 import { defaultThemeConfig, type ThemeConfig } from "../theme/heroui.config";
 
 const THEME_STORAGE_KEY = "heroui-theme";

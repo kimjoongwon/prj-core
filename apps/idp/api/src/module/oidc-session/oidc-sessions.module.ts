@@ -1,11 +1,12 @@
-import { OidcSessionFacade } from "@cocrepo/facade";
-import { OidcSessionService } from "@cocrepo/service";
+import { OidcSessionAggregateRoot } from "@cocrepo/aggregate";
 import { Module } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { OidcSessionsController } from "./oidc-sessions.controller";
+import { OidcSessionUseCaseProviders } from "@cocrepo/usecase";
 
 @Module({
+	imports: [CqrsModule],
 	controllers: [OidcSessionsController],
-	providers: [OidcSessionFacade, OidcSessionService],
-	exports: [OidcSessionFacade],
+	providers: [...OidcSessionUseCaseProviders, OidcSessionAggregateRoot],
 })
 export class OidcSessionsModule {}

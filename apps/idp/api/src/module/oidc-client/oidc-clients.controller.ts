@@ -14,7 +14,6 @@ import {
 	QueryOidcClientDto,
 	UpdateOidcClientDto,
 } from "@cocrepo/dto";
-import { OidcClientFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -28,8 +27,16 @@ import {
 	Post,
 	Query,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { OidcProviderService } from "../oidc/oidc-provider.service";
+import {
+	CreateOidcClientCommand,
+	DeleteOidcClientCommand,
+	GetOidcClientQuery,
+	GetOidcClientsQuery,
+	ToggleActiveOidcClientCommand,
+	UpdateOidcClientCommand,
+} from "@cocrepo/command";
 
 @ApiTags("OIDC_CLIENTS")
 @Controller()
@@ -37,8 +44,8 @@ import { OidcProviderService } from "../oidc/oidc-provider.service";
 @SkipSpaceCheck()
 export class OidcClientsController {
 	constructor(
-		private readonly oidcClientFacade: OidcClientFacade,
-		private readonly oidcProviderService: OidcProviderService,
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
 	) {}
 
 	@Get()
@@ -56,7 +63,7 @@ export class OidcClientsController {
 	})
 	@ResponseMessage("OIDC 클라이언트 목록 조회 성공")
 	async getOidcClients(@Query() query: QueryOidcClientDto) {
-		return this.oidcClientFacade.getMany(query);
+		return this.queryBus.execute(new GetOidcClientsQuery(query));
 	}
 
 	@Get(":oidcClientId")
@@ -77,7 +84,7 @@ export class OidcClientsController {
 	async getOidcClient(
 		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
 	) {
-		return this.oidcClientFacade.getById(oidcClientId);
+		return this.queryBus.execute(new GetOidcClientQuery(oidcClientId));
 	}
 
 	@Post()
@@ -97,9 +104,7 @@ export class OidcClientsController {
 	@ApiResponseEntity(OidcClientDto, HttpStatus.CREATED)
 	@ResponseMessage("OIDC 클라이언트 등록 성공")
 	async createOidcClient(@Body() dto: CreateOidcClientDto) {
-		const client = await this.oidcClientFacade.create(dto);
-		await this.oidcProviderService.reload();
-		return client;
+		return this.commandBus.execute(new CreateOidcClientCommand(dto));
 	}
 
 	@Patch(":oidcClientId")
@@ -126,9 +131,9 @@ export class OidcClientsController {
 		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
 		@Body() dto: UpdateOidcClientDto,
 	) {
-		const client = await this.oidcClientFacade.update(oidcClientId, dto);
-		await this.oidcProviderService.reload();
-		return client;
+		return this.commandBus.execute(
+			new UpdateOidcClientCommand(oidcClientId, dto),
+		);
 	}
 
 	@Delete(":oidcClientId")
@@ -149,8 +154,7 @@ export class OidcClientsController {
 	async deleteOidcClient(
 		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
 	): Promise<void> {
-		await this.oidcClientFacade.remove(oidcClientId);
-		await this.oidcProviderService.reload();
+		await this.commandBus.execute(new DeleteOidcClientCommand(oidcClientId));
 	}
 
 	@Patch(":oidcClientId/toggle-active")
@@ -171,8 +175,8 @@ export class OidcClientsController {
 	async toggleActiveOidcClient(
 		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
 	) {
-		const client = await this.oidcClientFacade.toggleActive(oidcClientId);
-		await this.oidcProviderService.reload();
-		return client;
+		return this.commandBus.execute(
+			new ToggleActiveOidcClientCommand(oidcClientId),
+		);
 	}
 }

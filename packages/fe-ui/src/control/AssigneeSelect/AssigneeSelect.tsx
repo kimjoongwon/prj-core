@@ -1,9 +1,9 @@
 "use client";
 
 import type { Option } from "@cocrepo/type";
-import type { SelectProps } from "@cocrepo/ui/heroui";
-import { Select, SelectItem } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import type { SelectProps } from "../../design-system/primitives";
+import { Select, SelectItem } from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 export interface Assignee {

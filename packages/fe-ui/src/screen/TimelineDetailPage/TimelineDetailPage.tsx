@@ -1,14 +1,8 @@
 "use client";
 
-import {
-	DetailPage,
-	DetailPageSurface,
-	DetailSection,
-	DetailSectionCard,
-} from "../../detail";
+import { Pencil, Plus, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import { DateTimeCell } from "../../cell";
-import { VStack } from "../../rhythm";
-import { PageTitleBar } from "../../widget";
 import {
 	Button,
 	Chip,
@@ -23,9 +17,15 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@cocrepo/ui/heroui";
-import { Pencil, Plus, Trash2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../design-system/primitives";
+import {
+	DetailPage,
+	DetailPageSurface,
+	DetailSection,
+	DetailSectionCard,
+} from "../../detail";
+import { VStack } from "../../rhythm";
+import { PageTitleBar } from "../../widget";
 
 export interface TimelineDetailPageTimeline {
 	name?: string | null;

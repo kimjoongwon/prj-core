@@ -1,0 +1,1 @@
+export const CONFIRMED_CANCEL_CUTOFF_HOURS = 2;

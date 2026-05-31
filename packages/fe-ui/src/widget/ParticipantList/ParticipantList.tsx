@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardBody, Chip } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { Card, CardBody, Chip } from "../../design-system/primitives";
 
 export interface Participant {
 	/** 참여자 ID */

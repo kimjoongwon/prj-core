@@ -1,4 +1,4 @@
-import { Button, Card, CardBody } from "@cocrepo/ui/heroui";
+import { Button, Card, CardBody } from "../../design-system/primitives";
 
 export interface UnsavedChangesIndicatorProps {
 	/** 표시 여부 */

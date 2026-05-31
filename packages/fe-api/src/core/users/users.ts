@@ -9,19 +9,15 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-
 import type {
 	DataTag,
 	DefinedInitialDataOptions,
 	DefinedUseQueryResult,
 	InfiniteData,
-	MutationFunction,
 	QueryClient,
 	QueryFunction,
 	QueryKey,
 	UndefinedInitialDataOptions,
-	UseMutationOptions,
-	UseMutationResult,
 	UseQueryOptions,
 	UseQueryResult,
 	UseSuspenseInfiniteQueryOptions,
@@ -30,22 +26,18 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
-	useMutation,
 	useQuery,
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import type { ErrorType } from "../../libs/customAxios";
-
 import { customInstance } from "../../libs/customAxios";
 import type {
 	GetUserById200AllOf,
 	GetUsers200AllOf,
 	GetUsersParams,
 } from ".././model";
-
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
 /**
  * 현재 x-space-id로 선택된 Tenant의 role이 FULL_ACCESS면 전체 사용자 목록을, 그 외에는 현재 Space 기준 사용자 목록을 조회합니다. 검색/필터링/페이지네이션과 통계 정보를 함께 반환합니다.
  * @summary 사용자 목록 조회
@@ -60,15 +52,12 @@ export const getUsers = (
 		options,
 	);
 };
-
 export const getGetUsersQueryKey = (params?: GetUsersParams) => {
 	return [`/api/v1/users`, ...(params ? [params] : [])] as const;
 };
-
 export const getGetUsersInfiniteQueryKey = (params?: GetUsersParams) => {
 	return ["infinite", `/api/v1/users`, ...(params ? [params] : [])] as const;
 };
-
 export const getGetUsersQueryOptions = <
 	TData = Awaited<ReturnType<typeof getUsers>>,
 	TError = ErrorType<void>,
@@ -82,25 +71,22 @@ export const getGetUsersQueryOptions = <
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
-
 	const queryKey = queryOptions?.queryKey ?? getGetUsersQueryKey(params);
-
 	const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsers>>> = ({
 		signal,
 	}) => getUsers(params, requestOptions, signal);
-
 	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
 		Awaited<ReturnType<typeof getUsers>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 };
-
 export type GetUsersQueryResult = NonNullable<
 	Awaited<ReturnType<typeof getUsers>>
 >;
 export type GetUsersQueryError = ErrorType<void>;
-
 export function useGetUsers<
 	TData = Awaited<ReturnType<typeof getUsers>>,
 	TError = ErrorType<void>,
@@ -165,7 +151,6 @@ export function useGetUsers<
 /**
  * @summary 사용자 목록 조회
  */
-
 export function useGetUsers<
 	TData = Awaited<ReturnType<typeof getUsers>>,
 	TError = ErrorType<void>,
@@ -182,17 +167,15 @@ export function useGetUsers<
 	queryKey: DataTag<QueryKey, TData, TError>;
 } {
 	const queryOptions = getGetUsersQueryOptions(params, options);
-
 	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
 		TData,
 		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-
+	> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 	query.queryKey = queryOptions.queryKey;
-
 	return query;
 }
-
 /**
  * @summary 사용자 목록 조회
  */
@@ -210,12 +193,9 @@ export const prefetchGetUsersQuery = async <
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetUsersQueryOptions(params, options);
-
 	await queryClient.prefetchQuery(queryOptions);
-
 	return queryClient;
 };
-
 export const getGetUsersSuspenseQueryOptions = <
 	TData = Awaited<ReturnType<typeof getUsers>>,
 	TError = ErrorType<void>,
@@ -233,25 +213,22 @@ export const getGetUsersSuspenseQueryOptions = <
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
-
 	const queryKey = queryOptions?.queryKey ?? getGetUsersQueryKey(params);
-
 	const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsers>>> = ({
 		signal,
 	}) => getUsers(params, requestOptions, signal);
-
 	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getUsers>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 };
-
 export type GetUsersSuspenseQueryResult = NonNullable<
 	Awaited<ReturnType<typeof getUsers>>
 >;
 export type GetUsersSuspenseQueryError = ErrorType<void>;
-
 export function useGetUsersSuspense<
 	TData = Awaited<ReturnType<typeof getUsers>>,
 	TError = ErrorType<void>,
@@ -312,7 +289,6 @@ export function useGetUsersSuspense<
 /**
  * @summary 사용자 목록 조회
  */
-
 export function useGetUsersSuspense<
 	TData = Awaited<ReturnType<typeof getUsers>>,
 	TError = ErrorType<void>,
@@ -333,19 +309,15 @@ export function useGetUsersSuspense<
 	queryKey: DataTag<QueryKey, TData, TError>;
 } {
 	const queryOptions = getGetUsersSuspenseQueryOptions(params, options);
-
 	const query = useSuspenseQuery(
 		queryOptions,
 		queryClient,
 	) as UseSuspenseQueryResult<TData, TError> & {
 		queryKey: DataTag<QueryKey, TData, TError>;
 	};
-
 	query.queryKey = queryOptions.queryKey;
-
 	return query;
 }
-
 export const getGetUsersSuspenseInfiniteQueryOptions = <
 	TData = InfiniteData<Awaited<ReturnType<typeof getUsers>>>,
 	TError = ErrorType<void>,
@@ -363,14 +335,11 @@ export const getGetUsersSuspenseInfiniteQueryOptions = <
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
-
 	const queryKey =
 		queryOptions?.queryKey ?? getGetUsersInfiniteQueryKey(params);
-
 	const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsers>>> = ({
 		signal,
 	}) => getUsers(params, requestOptions, signal);
-
 	return {
 		queryKey,
 		queryFn,
@@ -379,14 +348,14 @@ export const getGetUsersSuspenseInfiniteQueryOptions = <
 		Awaited<ReturnType<typeof getUsers>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 };
-
 export type GetUsersSuspenseInfiniteQueryResult = NonNullable<
 	Awaited<ReturnType<typeof getUsers>>
 >;
 export type GetUsersSuspenseInfiniteQueryError = ErrorType<void>;
-
 export function useGetUsersSuspenseInfinite<
 	TData = InfiniteData<Awaited<ReturnType<typeof getUsers>>>,
 	TError = ErrorType<void>,
@@ -447,7 +416,6 @@ export function useGetUsersSuspenseInfinite<
 /**
  * @summary 사용자 목록 조회
  */
-
 export function useGetUsersSuspenseInfinite<
 	TData = InfiniteData<Awaited<ReturnType<typeof getUsers>>>,
 	TError = ErrorType<void>,
@@ -468,19 +436,15 @@ export function useGetUsersSuspenseInfinite<
 	queryKey: DataTag<QueryKey, TData, TError>;
 } {
 	const queryOptions = getGetUsersSuspenseInfiniteQueryOptions(params, options);
-
 	const query = useSuspenseInfiniteQuery(
 		queryOptions,
 		queryClient,
 	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
 		queryKey: DataTag<QueryKey, TData, TError>;
 	};
-
 	query.queryKey = queryOptions.queryKey;
-
 	return query;
 }
-
 /**
  * @summary 사용자 목록 조회
  */
@@ -502,12 +466,9 @@ export const prefetchGetUsersInfiniteQuery = async <
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetUsersSuspenseInfiniteQueryOptions(params, options);
-
 	await queryClient.prefetchInfiniteQuery(queryOptions);
-
 	return queryClient;
 };
-
 /**
  * 특정 사용자의 상세 정보를 조회합니다. Profile, Tenant, Role, Space 정보를 포함합니다.
  * @summary 사용자 상세 조회
@@ -522,15 +483,12 @@ export const getUserById = (
 		options,
 	);
 };
-
 export const getGetUserByIdQueryKey = (id?: string) => {
 	return [`/api/v1/users/${id}`] as const;
 };
-
 export const getGetUserByIdInfiniteQueryKey = (id?: string) => {
 	return ["infinite", `/api/v1/users/${id}`] as const;
 };
-
 export const getGetUserByIdQueryOptions = <
 	TData = Awaited<ReturnType<typeof getUserById>>,
 	TError = ErrorType<void>,
@@ -544,13 +502,10 @@ export const getGetUserByIdQueryOptions = <
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
-
 	const queryKey = queryOptions?.queryKey ?? getGetUserByIdQueryKey(id);
-
 	const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserById>>> = ({
 		signal,
 	}) => getUserById(id, requestOptions, signal);
-
 	return {
 		queryKey,
 		queryFn,
@@ -560,14 +515,14 @@ export const getGetUserByIdQueryOptions = <
 		Awaited<ReturnType<typeof getUserById>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 };
-
 export type GetUserByIdQueryResult = NonNullable<
 	Awaited<ReturnType<typeof getUserById>>
 >;
 export type GetUserByIdQueryError = ErrorType<void>;
-
 export function useGetUserById<
 	TData = Awaited<ReturnType<typeof getUserById>>,
 	TError = ErrorType<void>,
@@ -632,7 +587,6 @@ export function useGetUserById<
 /**
  * @summary 사용자 상세 조회
  */
-
 export function useGetUserById<
 	TData = Awaited<ReturnType<typeof getUserById>>,
 	TError = ErrorType<void>,
@@ -649,17 +603,15 @@ export function useGetUserById<
 	queryKey: DataTag<QueryKey, TData, TError>;
 } {
 	const queryOptions = getGetUserByIdQueryOptions(id, options);
-
 	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
 		TData,
 		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-
+	> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 	query.queryKey = queryOptions.queryKey;
-
 	return query;
 }
-
 /**
  * @summary 사용자 상세 조회
  */
@@ -677,12 +629,9 @@ export const prefetchGetUserByIdQuery = async <
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetUserByIdQueryOptions(id, options);
-
 	await queryClient.prefetchQuery(queryOptions);
-
 	return queryClient;
 };
-
 export const getGetUserByIdSuspenseQueryOptions = <
 	TData = Awaited<ReturnType<typeof getUserById>>,
 	TError = ErrorType<void>,
@@ -700,25 +649,22 @@ export const getGetUserByIdSuspenseQueryOptions = <
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
-
 	const queryKey = queryOptions?.queryKey ?? getGetUserByIdQueryKey(id);
-
 	const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserById>>> = ({
 		signal,
 	}) => getUserById(id, requestOptions, signal);
-
 	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getUserById>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 };
-
 export type GetUserByIdSuspenseQueryResult = NonNullable<
 	Awaited<ReturnType<typeof getUserById>>
 >;
 export type GetUserByIdSuspenseQueryError = ErrorType<void>;
-
 export function useGetUserByIdSuspense<
 	TData = Awaited<ReturnType<typeof getUserById>>,
 	TError = ErrorType<void>,
@@ -779,7 +725,6 @@ export function useGetUserByIdSuspense<
 /**
  * @summary 사용자 상세 조회
  */
-
 export function useGetUserByIdSuspense<
 	TData = Awaited<ReturnType<typeof getUserById>>,
 	TError = ErrorType<void>,
@@ -800,19 +745,15 @@ export function useGetUserByIdSuspense<
 	queryKey: DataTag<QueryKey, TData, TError>;
 } {
 	const queryOptions = getGetUserByIdSuspenseQueryOptions(id, options);
-
 	const query = useSuspenseQuery(
 		queryOptions,
 		queryClient,
 	) as UseSuspenseQueryResult<TData, TError> & {
 		queryKey: DataTag<QueryKey, TData, TError>;
 	};
-
 	query.queryKey = queryOptions.queryKey;
-
 	return query;
 }
-
 export const getGetUserByIdSuspenseInfiniteQueryOptions = <
 	TData = InfiniteData<Awaited<ReturnType<typeof getUserById>>>,
 	TError = ErrorType<void>,
@@ -830,13 +771,10 @@ export const getGetUserByIdSuspenseInfiniteQueryOptions = <
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
-
 	const queryKey = queryOptions?.queryKey ?? getGetUserByIdInfiniteQueryKey(id);
-
 	const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserById>>> = ({
 		signal,
 	}) => getUserById(id, requestOptions, signal);
-
 	return {
 		queryKey,
 		queryFn,
@@ -845,14 +783,14 @@ export const getGetUserByIdSuspenseInfiniteQueryOptions = <
 		Awaited<ReturnType<typeof getUserById>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 };
-
 export type GetUserByIdSuspenseInfiniteQueryResult = NonNullable<
 	Awaited<ReturnType<typeof getUserById>>
 >;
 export type GetUserByIdSuspenseInfiniteQueryError = ErrorType<void>;
-
 export function useGetUserByIdSuspenseInfinite<
 	TData = InfiniteData<Awaited<ReturnType<typeof getUserById>>>,
 	TError = ErrorType<void>,
@@ -913,7 +851,6 @@ export function useGetUserByIdSuspenseInfinite<
 /**
  * @summary 사용자 상세 조회
  */
-
 export function useGetUserByIdSuspenseInfinite<
 	TData = InfiniteData<Awaited<ReturnType<typeof getUserById>>>,
 	TError = ErrorType<void>,
@@ -934,19 +871,15 @@ export function useGetUserByIdSuspenseInfinite<
 	queryKey: DataTag<QueryKey, TData, TError>;
 } {
 	const queryOptions = getGetUserByIdSuspenseInfiniteQueryOptions(id, options);
-
 	const query = useSuspenseInfiniteQuery(
 		queryOptions,
 		queryClient,
 	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
 		queryKey: DataTag<QueryKey, TData, TError>;
 	};
-
 	query.queryKey = queryOptions.queryKey;
-
 	return query;
 }
-
 /**
  * @summary 사용자 상세 조회
  */
@@ -968,91 +901,6 @@ export const prefetchGetUserByIdInfiniteQuery = async <
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetUserByIdSuspenseInfiniteQueryOptions(id, options);
-
 	await queryClient.prefetchInfiniteQuery(queryOptions);
-
 	return queryClient;
-};
-
-/**
- * 사용자를 삭제합니다 (Soft Delete). 자신의 계정은 삭제할 수 없습니다.
- * @summary 사용자 삭제
- */
-export const deleteUser = (
-	id: string,
-	options?: SecondParameter<typeof customInstance>,
-) => {
-	return customInstance<unknown>(
-		{ url: `/api/v1/users/${id}`, method: "DELETE" },
-		options,
-	);
-};
-
-export const getDeleteUserMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof deleteUser>>,
-		TError,
-		{ id: string },
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof deleteUser>>,
-	TError,
-	{ id: string },
-	TContext
-> => {
-	const mutationKey = ["deleteUser"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
-
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof deleteUser>>,
-		{ id: string }
-	> = (props) => {
-		const { id } = props ?? {};
-
-		return deleteUser(id, requestOptions);
-	};
-
-	return { mutationFn, ...mutationOptions };
-};
-
-export type DeleteUserMutationResult = NonNullable<
-	Awaited<ReturnType<typeof deleteUser>>
->;
-
-export type DeleteUserMutationError = ErrorType<void>;
-
-/**
- * @summary 사용자 삭제
- */
-export const useDeleteUser = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof deleteUser>>,
-			TError,
-			{ id: string },
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof deleteUser>>,
-	TError,
-	{ id: string },
-	TContext
-> => {
-	const mutationOptions = getDeleteUserMutationOptions(options);
-
-	return useMutation(mutationOptions, queryClient);
 };

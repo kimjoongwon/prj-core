@@ -1,5 +1,5 @@
-import { cn } from "@cocrepo/ui/heroui";
 import { Button } from "../../../control/Button/Button";
+import { cn } from "../../../design-system/primitives";
 import { HStack } from "../../../rhythm/HStack/HStack";
 
 export interface LogoProps {

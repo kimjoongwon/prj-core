@@ -5,6 +5,7 @@ module.exports = {
   testMatch: ["**/*.spec.ts", "**/*.test.ts"],
   moduleFileExtensions: ["ts", "js", "json"],
   moduleNameMapper: {
+    "^@cocrepo/command$": "<rootDir>/../../../packages/be-command/dist",
     "^@cocrepo/db$": "<rootDir>/../../../packages/db/src",
     "^@cocrepo/utils$": "<rootDir>/../../../packages/shared-utils/src",
     "^@cocrepo/utils$": "<rootDir>/../../../packages/shared-vars/src",

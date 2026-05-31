@@ -1,3 +1,4 @@
+import { TranslationCatalogAggregateRoot } from "@cocrepo/aggregate";
 import {
 	CreateTranslationDto,
 	GetTranslationsDto,
@@ -5,30 +6,20 @@ import {
 	UpdateTranslationDto,
 } from "@cocrepo/dto";
 import { Translation } from "@cocrepo/entity";
-import { TranslationCatalogService } from "@cocrepo/service";
-import { Injectable } from "@nestjs/common";
 import type { LanguageCode as PrismaLanguageCode } from "@cocrepo/prisma";
+import type { PagePaginatedResponse } from "@cocrepo/type";
+import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class TranslationFacade {
 	constructor(
-		private readonly translationCatalogService: TranslationCatalogService,
+		private readonly translationCatalogService: TranslationCatalogAggregateRoot,
 	) {}
 
-	async getTranslations(query: GetTranslationsDto): Promise<{
-		data: Translation[];
-		meta: {
-			total: number;
-			page: number;
-			limit: number;
-			totalPages: number;
-		};
-	}> {
+	async getTranslations(
+		query: GetTranslationsDto,
+	): Promise<PagePaginatedResponse<Translation[]>> {
 		return this.translationCatalogService.getTranslations(query);
-	}
-
-	getTranslationById(id: string): Promise<Translation> {
-		return this.translationCatalogService.getTranslationById(id);
 	}
 
 	getCatalog(

@@ -12,6 +12,9 @@ import {
 	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
+import { ArrowLeft, FolderInput, Maximize2, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { useState } from "react";
 import {
 	Button,
 	Chip,
@@ -19,10 +22,7 @@ import {
 	Select,
 	SelectItem,
 	Spinner,
-} from "@cocrepo/ui/heroui";
-import { ArrowLeft, FolderInput, Maximize2, Trash2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import { useState } from "react";
+} from "../../design-system/primitives";
 
 export interface AssetDetailPageFolder {
 	id: string;

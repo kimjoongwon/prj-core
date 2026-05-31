@@ -37,17 +37,16 @@ export class OidcModelsRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ data: OidcModel[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
 		this.logger.debug("세션/토큰 목록 조회");
 
 		const [data, totalCount] = await Promise.all([
 			this.txHost.tx.oidcModel.findMany({
-				where,
-				orderBy: orderBy ?? [{ createdAt: "desc" }],
-				skip,
-				take,
+				where: params.where,
+				orderBy: params.orderBy ?? [{ createdAt: "desc" }],
+				skip: params.skip,
+				take: params.take,
 			}),
-			this.txHost.tx.oidcModel.count({ where }),
+			this.txHost.tx.oidcModel.count({ where: params.where }),
 		]);
 
 		return {

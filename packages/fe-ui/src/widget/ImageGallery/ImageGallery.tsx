@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@cocrepo/ui/heroui";
 import { Download, RefreshCw } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Button } from "../../design-system/primitives";
 import { ImageCard } from "../ImageCard";
 
 export interface GalleryImage {

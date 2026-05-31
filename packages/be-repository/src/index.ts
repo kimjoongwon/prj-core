@@ -9,12 +9,13 @@ export { AIAgentLogsRepository } from "./ai-agent-logs.repository";
 export { AlbumsRepository } from "./albums.repository";
 export { AssetsRepository } from "./assets.repository";
 export { AuthAuditLogsRepository } from "./auth-audit-logs.repository";
-export { CategoriesRepository } from "./categories.repository";
-export { ContentsRepository } from "./contents.repository";
+export {
+	type CommunityPostRecord,
+	ContentsRepository,
+} from "./contents.repository";
 export { CoursesRepository } from "./courses.repository";
 export { EmailVerificationsRepository } from "./email-verifications.repository";
 export { FoldersRepository } from "./folders.repository";
-export { GroupsRepository } from "./groups.repository";
 export { InquiriesRepository } from "./inquiries.repository";
 export { InquiryThreadsRepository } from "./inquiry-threads.repository";
 export { OidcClientsRepository } from "./oidc-clients.repository";

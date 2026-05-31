@@ -6,11 +6,14 @@ import {
 	DefaultCell,
 	DetailPage,
 	DetailPageSurface,
-	PageTitleBar,
 	DetailSection,
 	DetailSectionCard,
+	PageTitleBar,
 	VStack,
 } from "@cocrepo/ui";
+import { ArrowLeft, Box } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import type { ReactNode } from "react";
 import {
 	Button,
 	Chip,
@@ -21,10 +24,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@cocrepo/ui/heroui";
-import { ArrowLeft, Box } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import type { ReactNode } from "react";
+} from "../../design-system/primitives";
 
 export interface SubjectDetailPageSubject {
 	name: string;

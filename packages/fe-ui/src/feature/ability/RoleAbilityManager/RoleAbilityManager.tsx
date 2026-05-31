@@ -1,13 +1,13 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { Select } from "../../../control/Select/Select";
-import { HStack } from "../../../rhythm/HStack/HStack";
-import { VStack } from "../../../rhythm/VStack/VStack";
+import { Card, CardBody, CardHeader } from "../../../design-system/primitives";
 import { Text } from "../../../display/data-display/Text/Text";
 import { AbilityFormModal } from "../../../form/AbilityFormModal";
+import { HStack } from "../../../rhythm/HStack/HStack";
+import { VStack } from "../../../rhythm/VStack/VStack";
 import { AbilityRuleList } from "../../../widget/ability/AbilityRuleList";
 import type { RoleAbilityManagerProps } from "./type";
 import { useRoleAbilityManager } from "./useRoleAbilityManager";

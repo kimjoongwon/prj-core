@@ -1,7 +1,7 @@
 import { ConfigService } from "@nestjs/config";
 import { Test, type TestingModule } from "@nestjs/testing";
-import { RedisService } from "../src/redis.service";
-import { TokenStorageService } from "../src/token-storage.service";
+import { TokenStorageService } from "../src/auth/token-storage.service";
+import { RedisService } from "../src/redis/redis.service";
 
 describe("TokenStorageService", () => {
 	let service: TokenStorageService;
@@ -20,6 +20,7 @@ describe("TokenStorageService", () => {
 			del: jest.fn(),
 			delByPattern: jest.fn(),
 			exists: jest.fn(),
+			keys: jest.fn().mockResolvedValue([]),
 		} as unknown as jest.Mocked<RedisService>;
 
 		mockConfigService = {
@@ -179,6 +180,7 @@ describe("TokenStorageService", () => {
 			await service.deleteRefreshToken(userId);
 
 			// Then
+			expect(mockRedisService.keys).toHaveBeenCalledWith(`session:${userId}:*`);
 			expect(mockRedisService.delByPattern).toHaveBeenCalledWith(
 				`session:${userId}:*`,
 			);
@@ -257,6 +259,7 @@ describe("TokenStorageService", () => {
 			await service.invalidateAllUserTokens(userId);
 
 			// Then
+			expect(mockRedisService.keys).toHaveBeenCalledWith(`session:${userId}:*`);
 			expect(mockRedisService.delByPattern).toHaveBeenCalledWith(
 				`session:${userId}:*`,
 			);

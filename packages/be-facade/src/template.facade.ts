@@ -7,34 +7,27 @@ import {
 } from "@cocrepo/dto";
 import { Template } from "@cocrepo/entity";
 import { TemplateService } from "@cocrepo/service";
+import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
+import type { OffsetPaginatedResponse } from "@cocrepo/type";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class TemplateFacade {
 	constructor(private readonly templateService: TemplateService) {}
 
-	async getTemplates(query: QueryTemplateDto): Promise<{
-		data: Template[];
-		meta: {
-			total: number;
-			skip: number;
-			take: number;
-			totalPages: number;
-		};
-	}> {
-		const { data, totalCount } = await this.templateService.getTemplates(query);
+	async getTemplates(
+		query: QueryTemplateDto,
+	): Promise<OffsetPaginatedResponse<Template[]>> {
+		const templateResult = await this.templateService.getTemplates(query);
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 10;
 
-		return {
-			data,
-			meta: {
-				total: totalCount,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(totalCount / take) : 1,
-			},
-		};
+		return buildOffsetPaginatedResponse(
+			templateResult.data,
+			templateResult.totalCount,
+			skip,
+			take,
+		);
 	}
 
 	getTemplateById(templateId: string): Promise<Template> {
@@ -57,7 +50,10 @@ export class TemplateFacade {
 		return this.updateTemplate(templateId, dto);
 	}
 
-	updateTemplate(templateId: string, dto: UpdateTemplateDto): Promise<Template> {
+	updateTemplate(
+		templateId: string,
+		dto: UpdateTemplateDto,
+	): Promise<Template> {
 		return this.templateService.update(templateId, dto);
 	}
 

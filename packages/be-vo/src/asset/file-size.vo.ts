@@ -1,9 +1,6 @@
 import { ValueObject } from "../common/value-object.base";
 import { VoValidationError } from "../errors/vo.error";
-
-interface FileSizeProps {
-	bytes: bigint;
-}
+import type { FileSizeProps } from "./file-size.props";
 
 export class FileSize extends ValueObject<FileSizeProps> {
 	private static readonly KB = 1024n;
@@ -12,13 +9,11 @@ export class FileSize extends ValueObject<FileSizeProps> {
 	private static readonly TB = 1024n * 1024n * 1024n * 1024n;
 
 	protected validate(props: FileSizeProps): void {
-		const { bytes } = props;
-
-		if (bytes === null || bytes === undefined) {
+		if (props.bytes === null || props.bytes === undefined) {
 			throw new VoValidationError("파일 크기는 필수입니다.");
 		}
 
-		if (bytes < 0n) {
+		if (props.bytes < 0n) {
 			throw new VoValidationError("파일 크기는 0 이상이어야 합니다.");
 		}
 	}

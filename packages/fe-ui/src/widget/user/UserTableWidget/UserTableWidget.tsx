@@ -1,6 +1,7 @@
 "use client";
 import { type UserDto } from "@cocrepo/api/core/users";
-
+import { Eye, Pencil, Trash2, User } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Avatar,
 	Button,
@@ -11,9 +12,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@cocrepo/ui/heroui";
-import { Eye, Pencil, Trash2, User } from "lucide-react";
-import { observer } from "mobx-react-lite";
+} from "../../../design-system/primitives";
 
 /**
  * 회원 상태 타입

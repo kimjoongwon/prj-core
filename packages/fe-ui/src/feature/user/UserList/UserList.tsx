@@ -21,11 +21,11 @@ interface UserListResponse {
 	};
 }
 
-import { Button, Pagination } from "@cocrepo/ui/heroui";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { Button, Pagination } from "../../../design-system/primitives";
 import { UserSearchWidget, UserTableWidget } from "../../../widget/user";
 
 /**

@@ -46,7 +46,8 @@ export class OidcProviderService {
 	private async buildProvider(
 		oidcConfig: OidcConfig,
 	): Promise<OidcProviderInstance> {
-		const { default: OidcProvider } = await import("oidc-provider");
+		const oidcProviderModule = await import("oidc-provider");
+		const OidcProvider = oidcProviderModule.default;
 		const configuration = await this.configurationService.buildConfiguration();
 
 		const provider = new OidcProvider(

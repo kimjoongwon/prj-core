@@ -4,7 +4,7 @@ import {
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger,
-} from "@cocrepo/ui/heroui";
+} from "../../../design-system/primitives";
 
 /**
  * User 컴포넌트

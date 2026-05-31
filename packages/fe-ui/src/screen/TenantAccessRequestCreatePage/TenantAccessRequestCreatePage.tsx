@@ -1,18 +1,18 @@
 "use client";
 
+import { ArrowLeft, Send } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import {
 	Button,
 	Select,
 	SelectItem,
 	Skeleton,
 	Textarea,
-} from "@cocrepo/ui/heroui";
-import { ArrowLeft, Send } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import { PageSurface } from "../../surface/PageSurface";
-import { SectionSurface } from "../../surface/SectionSurface";
+} from "../../design-system/primitives";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
+import { PageSurface } from "../../surface/PageSurface";
+import { SectionSurface } from "../../surface/SectionSurface";
 import { PageTitleBar } from "../../widget/PageTitleBar";
 
 export interface TenantAccessRequestCreateOption {

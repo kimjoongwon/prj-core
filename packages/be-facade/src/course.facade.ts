@@ -1,3 +1,4 @@
+import { CourseAggregateRoot } from "@cocrepo/aggregate";
 import { COMMON_ERRORS } from "@cocrepo/constant";
 import type {
 	QueryCourseDto,
@@ -5,33 +6,24 @@ import type {
 	QueryCoursePassDto,
 	QueryEnrollmentDto,
 } from "@cocrepo/dto";
-import { CourseService, SpaceContext } from "@cocrepo/service";
+import { SpaceContext } from "@cocrepo/service";
+import { buildOffsetStatsPaginatedResponse } from "@cocrepo/toolkit";
+import type { OffsetStatsPaginatedResponse } from "@cocrepo/type";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
-
-type ListResponse<TItems> = {
-	data: TItems;
-	meta: {
-		total: number;
-		skip: number;
-		take: number;
-		totalPages: number;
-	};
-	stats: {
-		total: number;
-	};
-};
 
 @Injectable()
 export class CourseFacade {
 	constructor(
-		private readonly courseService: CourseService,
+		private readonly courseService: CourseAggregateRoot,
 		private readonly spaceContext: SpaceContext,
 	) {}
 
 	async getCourses(
 		query: QueryCourseDto,
 	): Promise<
-		ListResponse<Awaited<ReturnType<CourseService["findCourses"]>>["courses"]>
+		OffsetStatsPaginatedResponse<
+			Awaited<ReturnType<CourseAggregateRoot["findCourses"]>>["courses"]
+		>
 	> {
 		this.requireSpaceId();
 		const skip = query.skip ?? 0;
@@ -45,20 +37,20 @@ export class CourseFacade {
 			sort: query.sort,
 		});
 
-		return this.toListResponse(result.courses, result.total, skip, take);
-	}
-
-	getCourseById(courseId: string) {
-		this.requireSpaceId();
-		return this.courseService.findCourseDetails(courseId);
+		return buildOffsetStatsPaginatedResponse(
+			result.courses,
+			result.total,
+			skip,
+			take,
+		);
 	}
 
 	async getCourseOfferings(
 		query: QueryCourseOfferingDto,
 	): Promise<
-		ListResponse<
+		OffsetStatsPaginatedResponse<
 			Awaited<
-				ReturnType<CourseService["findCourseOfferings"]>
+				ReturnType<CourseAggregateRoot["findCourseOfferings"]>
 			>["courseOfferings"]
 		>
 	> {
@@ -78,7 +70,7 @@ export class CourseFacade {
 			sort: query.sort,
 		});
 
-		return this.toListResponse(
+		return buildOffsetStatsPaginatedResponse(
 			result.courseOfferings,
 			result.total,
 			skip,
@@ -86,16 +78,11 @@ export class CourseFacade {
 		);
 	}
 
-	getCourseOfferingById(courseOfferingId: string) {
-		this.requireSpaceId();
-		return this.courseService.findCourseOfferingDetails(courseOfferingId);
-	}
-
 	async getEnrollments(
 		query: QueryEnrollmentDto,
 	): Promise<
-		ListResponse<
-			Awaited<ReturnType<CourseService["findEnrollments"]>>["enrollments"]
+		OffsetStatsPaginatedResponse<
+			Awaited<ReturnType<CourseAggregateRoot["findEnrollments"]>>["enrollments"]
 		>
 	> {
 		this.requireSpaceId();
@@ -115,19 +102,21 @@ export class CourseFacade {
 			sort: query.sort,
 		});
 
-		return this.toListResponse(result.enrollments, result.total, skip, take);
-	}
-
-	getEnrollmentById(enrollmentId: string) {
-		this.requireSpaceId();
-		return this.courseService.findEnrollmentDetails(enrollmentId);
+		return buildOffsetStatsPaginatedResponse(
+			result.enrollments,
+			result.total,
+			skip,
+			take,
+		);
 	}
 
 	async getCoursePasses(
 		query: QueryCoursePassDto,
 	): Promise<
-		ListResponse<
-			Awaited<ReturnType<CourseService["findCoursePasses"]>>["coursePasses"]
+		OffsetStatsPaginatedResponse<
+			Awaited<
+				ReturnType<CourseAggregateRoot["findCoursePasses"]>
+			>["coursePasses"]
 		>
 	> {
 		this.requireSpaceId();
@@ -149,40 +138,12 @@ export class CourseFacade {
 			sort: query.sort,
 		});
 
-		return this.toListResponse(result.coursePasses, result.total, skip, take);
-	}
-
-	getCoursePassById(coursePassId: string) {
-		this.requireSpaceId();
-		return this.courseService.findCoursePassDetails(coursePassId);
-	}
-
-	async getCoursePassUpdateReadModel(coursePassId: string): Promise<{
-		data: Awaited<ReturnType<CourseService["findCoursePassDetails"]>>;
-	}> {
-		const data = await this.getCoursePassById(coursePassId);
-
-		return { data };
-	}
-
-	private toListResponse<TItems>(
-		data: TItems,
-		total: number,
-		skip: number,
-		take: number,
-	): ListResponse<TItems> {
-		return {
-			data,
-			meta: {
-				total,
-				skip,
-				take,
-				totalPages: take > 0 ? Math.ceil(total / take) : 1,
-			},
-			stats: {
-				total,
-			},
-		};
+		return buildOffsetStatsPaginatedResponse(
+			result.coursePasses,
+			result.total,
+			skip,
+			take,
+		);
 	}
 
 	private requireSpaceId(): string {

@@ -1,9 +1,9 @@
 "use client";
 
 import { useNavigationStore } from "@cocrepo/store";
-import { cn, Tab, Tabs } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
+import { cn, Tab, Tabs } from "../../design-system/primitives";
 
 export interface BottomTabProps {
 	/** 탭 선택 시 콜백 (SubMenuList 표시 여부 결정용) */

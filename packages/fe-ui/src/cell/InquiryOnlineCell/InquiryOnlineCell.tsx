@@ -1,4 +1,4 @@
-import { Chip } from "@cocrepo/ui/heroui";
+import { Chip } from "../../design-system/primitives";
 
 interface InquiryOnlineCellProps {
 	/** 온라인 참여자 수 */

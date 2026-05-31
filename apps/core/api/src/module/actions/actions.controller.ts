@@ -1,4 +1,11 @@
 import { RoleCategoryGuard } from "@cocrepo/be-common";
+import {
+	CreateActionCommand,
+	DeleteActionCommand,
+	GetActionByIdQuery,
+	GetActionsQuery,
+	UpdateActionCommand,
+} from "@cocrepo/command";
 import { ACTION_ERRORS } from "@cocrepo/constant";
 import {
 	ApiAuth,
@@ -15,7 +22,6 @@ import {
 	UpdateActionDto,
 } from "@cocrepo/dto";
 import { RoleCategoryName } from "@cocrepo/enum";
-import { ActionFacade } from "@cocrepo/facade";
 import {
 	Body,
 	Controller,
@@ -30,6 +36,7 @@ import {
 	Query,
 	UseGuards,
 } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import {
 	ApiBody,
 	ApiOperation,
@@ -41,7 +48,10 @@ import {
 @ApiTags("ACTIONS")
 @Controller()
 export class ActionsController {
-	constructor(private readonly actionsService: ActionFacade) {}
+	constructor(
+		private readonly commandBus: CommandBus,
+		private readonly queryBus: QueryBus,
+	) {}
 
 	@Public()
 	@Get()
@@ -62,11 +72,7 @@ export class ActionsController {
 	})
 	@ResponseMessage("액션 목록 조회 성공")
 	async getActions(@Query("group") group?: string) {
-		if (group) {
-			return this.actionsService.getActionsByGroup(group);
-		}
-
-		return this.actionsService.getAllActions();
+		return this.queryBus.execute(new GetActionsQuery(group));
 	}
 
 	@Public()
@@ -85,7 +91,7 @@ export class ActionsController {
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
 	@ResponseMessage("액션 조회 성공")
 	async getActionById(@Param("id", ParseUUIDPipe) id: string) {
-		return this.actionsService.getActionById(id);
+		return this.queryBus.execute(new GetActionByIdQuery(id));
 	}
 
 	@Post()
@@ -106,7 +112,7 @@ export class ActionsController {
 	@ApiResponseEntity(ActionDto, HttpStatus.CREATED)
 	@ResponseMessage("액션 생성 성공")
 	async createAction(@Body() dto: CreateActionDto) {
-		return this.actionsService.createAction(dto);
+		return this.commandBus.execute(new CreateActionCommand(dto));
 	}
 
 	@Patch(":id")
@@ -142,7 +148,7 @@ export class ActionsController {
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateActionDto,
 	) {
-		return this.actionsService.updateAction(id, dto);
+		return this.commandBus.execute(new UpdateActionCommand(id, dto));
 	}
 
 	@Delete(":id")
@@ -171,6 +177,6 @@ export class ActionsController {
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
 	@ResponseMessage("액션 삭제 성공")
 	async deleteAction(@Param("id", ParseUUIDPipe) id: string) {
-		return this.actionsService.deleteAction(id);
+		return this.commandBus.execute(new DeleteActionCommand(id));
 	}
 }

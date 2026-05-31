@@ -1,3 +1,4 @@
+import { SpaceAggregateRoot } from "@cocrepo/aggregate";
 import {
 	AuthMiddleware,
 	DtoTransformInterceptor,
@@ -8,7 +9,7 @@ import {
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
 import { SpacesRepository } from "@cocrepo/repository";
-import { I18nModule, SpaceContext, SpaceService } from "@cocrepo/service";
+import { I18nModule, SpaceContext } from "@cocrepo/service";
 import {
 	Logger,
 	type MiddlewareConsumer,
@@ -111,7 +112,7 @@ const enableNestDevtools =
 	providers: [
 		// Space 도메인 (RequestContextMiddleware 의존)
 		SpacesRepository,
-		SpaceService,
+		SpaceAggregateRoot,
 		// Guards (setNestApp에서 순서대로 등록됨)
 		SpaceAccessGuard,
 		// Middleware (DI 주입 필요)

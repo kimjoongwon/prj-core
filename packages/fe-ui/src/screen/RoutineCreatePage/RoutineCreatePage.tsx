@@ -1,19 +1,21 @@
 "use client";
 
 import {
-	DragHandle,
-	DraggableSortableList,
+	Button,
 	ContentLanguageNotice,
+	DraggableSortableList,
+	DragHandle,
 	FormPage,
 	FormPageSurface,
 	FormSection,
 	FormSectionCard,
+	Input,
 	MediaThumbnail,
 	PageTitleBar,
-	Button,
-	Input,
 	useT,
 } from "@cocrepo/ui";
+import { observer } from "mobx-react-lite";
+import type { ComponentProps } from "react";
 import {
 	Chip,
 	Modal,
@@ -22,9 +24,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	Spinner,
-} from "@cocrepo/ui/heroui";
-import { observer } from "mobx-react-lite";
-import type { ComponentProps } from "react";
+} from "../../design-system/primitives";
 
 export interface RoutineActivityFormItem {
 	taskId: string;

@@ -1,9 +1,14 @@
 import { environment } from "@cocrepo/toolkit";
-import { Button, Chip, Avatar as HeroUIAvatar, User } from "@cocrepo/ui/heroui";
 import {
 	Dropdown,
 	type DropdownItemProps,
 } from "../../../control/Dropdown/Dropdown";
+import {
+	Button,
+	Chip,
+	Avatar as HeroUIAvatar,
+	User,
+} from "../../../design-system/primitives";
 
 interface AvatarProps {
 	/** 사용자 정보(이름, 설명) 표시 여부 @default true */

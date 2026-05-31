@@ -1,11 +1,11 @@
+import { PolicyAssignmentAggregateRoot } from "@cocrepo/aggregate";
 import { SyncRolePoliciesDto, SyncUserPoliciesDto } from "@cocrepo/dto";
-import { PolicyAssignmentService } from "@cocrepo/service";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class PolicyAssignmentFacade {
 	constructor(
-		private readonly policyAssignmentService: PolicyAssignmentService,
+		private readonly policyAssignmentService: PolicyAssignmentAggregateRoot,
 	) {}
 
 	getRolePolicies(roleId: string): Promise<unknown> {

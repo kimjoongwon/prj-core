@@ -101,15 +101,14 @@ export class InquiriesRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ items: Inquiry[]; totalCount: number }> {
-		const { where, orderBy, skip, take } = params;
 		this.logger.debug("문의 목록 조회");
 
 		const [items, totalCount] = await Promise.all([
 			this.txHost.tx.inquiry.findMany({
-				where,
-				orderBy,
-				skip,
-				take,
+				where: params.where,
+				orderBy: params.orderBy,
+				skip: params.skip,
+				take: params.take,
 				include: {
 					customer: {
 						select: { id: true, name: true, email: true },
@@ -120,7 +119,7 @@ export class InquiriesRepository {
 					tags: true,
 				},
 			}),
-			this.txHost.tx.inquiry.count({ where }),
+			this.txHost.tx.inquiry.count({ where: params.where }),
 		]);
 
 		return {
@@ -196,11 +195,10 @@ export class InquiriesRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ items: InquiryMessage[]; totalCount: number }> {
-		const { inquiryId, skip, take } = params;
-		this.logger.debug(`문의별 메시지 조회: ${inquiryId.slice(-8)}`);
+		this.logger.debug(`문의별 메시지 조회: ${params.inquiryId.slice(-8)}`);
 
 		const where: Prisma.InquiryMessageWhereInput = {
-			inquiryId,
+			inquiryId: params.inquiryId,
 			isDeleted: false,
 		};
 
@@ -208,8 +206,8 @@ export class InquiriesRepository {
 			this.txHost.tx.inquiryMessage.findMany({
 				where,
 				orderBy: [{ createdAt: "asc" }],
-				skip,
-				take,
+				skip: params.skip,
+				take: params.take,
 				include: {
 					sender: {
 						select: { id: true, name: true, email: true },
@@ -397,21 +395,23 @@ export class InquiriesRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ items: Inquiry[]; totalCount: number }> {
-		const { assigneeId, where, orderBy, skip, take } = params;
-		this.logger.debug(`담당자별 문의 조회: ${assigneeId.slice(-8)}`);
+		this.logger.debug(`담당자별 문의 조회: ${params.assigneeId.slice(-8)}`);
 
 		const baseWhere: Prisma.InquiryWhereInput = {
-			assigneeId,
+			assigneeId: params.assigneeId,
 			removedAt: null,
-			...where,
+			...params.where,
 		};
 
 		const [items, totalCount] = await Promise.all([
 			this.txHost.tx.inquiry.findMany({
 				where: baseWhere,
-				orderBy: orderBy ?? [{ priority: "desc" }, { createdAt: "desc" }],
-				skip,
-				take,
+				orderBy: params.orderBy ?? [
+					{ priority: "desc" },
+					{ createdAt: "desc" },
+				],
+				skip: params.skip,
+				take: params.take,
 				include: {
 					customer: {
 						select: { id: true, name: true, email: true },
@@ -442,21 +442,20 @@ export class InquiriesRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<{ items: Inquiry[]; totalCount: number }> {
-		const { customerId, where, orderBy, skip, take } = params;
-		this.logger.debug(`고객별 문의 조회: ${customerId.slice(-8)}`);
+		this.logger.debug(`고객별 문의 조회: ${params.customerId.slice(-8)}`);
 
 		const baseWhere: Prisma.InquiryWhereInput = {
-			customerId,
+			customerId: params.customerId,
 			removedAt: null,
-			...where,
+			...params.where,
 		};
 
 		const [items, totalCount] = await Promise.all([
 			this.txHost.tx.inquiry.findMany({
 				where: baseWhere,
-				orderBy: orderBy ?? [{ createdAt: "desc" }],
-				skip,
-				take,
+				orderBy: params.orderBy ?? [{ createdAt: "desc" }],
+				skip: params.skip,
+				take: params.take,
 				include: {
 					assignee: {
 						select: { id: true, name: true, email: true },

@@ -1,7 +1,7 @@
 "use client";
 
-import { Input } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
+import { Input } from "../../design-system/primitives";
 
 export interface GroupFormValues {
 	name: string;

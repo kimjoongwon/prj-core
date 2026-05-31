@@ -1,8 +1,8 @@
 "use client";
 
-import { Button, Input } from "@cocrepo/ui/heroui";
 import { Filter, Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Button, Input } from "../../design-system/primitives";
 import { useT } from "../../i18n";
 
 export interface SearchFilterBarProps {

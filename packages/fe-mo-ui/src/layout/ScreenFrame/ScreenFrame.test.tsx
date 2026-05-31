@@ -63,4 +63,17 @@ describe("ScreenFrame", () => {
 			]),
 		);
 	});
+
+	it("하단 슬롯을 content 아래에 배치해야 한다", () => {
+		const frame = renderScreenFrame({
+			bottom: "bottom-action",
+			bottomClassName: "border-t border-border",
+			children: "content",
+		});
+		const [content, bottom] = frame.props.children;
+
+		expect(content.props.className).toBe("flex-1");
+		expect(bottom.props.className).toBe("shrink-0 border-t border-border");
+		expect(bottom.props.children).toBe("bottom-action");
+	});
 });

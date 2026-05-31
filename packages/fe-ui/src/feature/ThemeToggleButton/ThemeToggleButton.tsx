@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "@cocrepo/ui/heroui";
 import { Moon, Sun } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
+import { Button } from "../../design-system/primitives";
 import { useDesignSystemTheme } from "../../design-system/provider";
 import { useT } from "../../i18n";
 

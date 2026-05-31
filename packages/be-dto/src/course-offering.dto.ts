@@ -9,8 +9,8 @@ import {
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import {
-	CourseOfferingStatus,
 	type CourseOffering,
+	CourseOfferingStatus,
 	TimelineProvisioningMode,
 } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";

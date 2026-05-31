@@ -4,9 +4,9 @@ import {
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import {
+	type InquiryMessage,
 	MessageContentType,
 	SenderType,
-	type InquiryMessage,
 } from "@cocrepo/prisma";
 
 /**

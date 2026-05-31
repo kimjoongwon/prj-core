@@ -1,5 +1,13 @@
 // Language utilities
-export { parseAcceptLanguage } from "./src/Language";
+
+// Pagination utilities
+export type {
+	OffsetPaginatedResponse,
+	OffsetPaginationMeta,
+	OffsetStatsPaginatedResponse,
+	PagePaginatedResponse,
+	PagePaginationMeta,
+} from "@cocrepo/type";
 
 // Browser utilities
 export {
@@ -8,17 +16,6 @@ export {
 	navigateTo,
 	reload,
 } from "./src/Browser";
-
-// Device utilities
-export type { DeviceType } from "./src/Device";
-export {
-	DEVICE_BREAKPOINTS,
-	getDeviceType,
-	isDesktop,
-	isMobile,
-	isTablet,
-} from "./src/Device";
-
 // DateTime utilities
 export {
 	add,
@@ -34,6 +31,15 @@ export {
 	subtract,
 	toISOString,
 } from "./src/DateTime";
+// Device utilities
+export type { DeviceType } from "./src/Device";
+export {
+	DEVICE_BREAKPOINTS,
+	getDeviceType,
+	isDesktop,
+	isMobile,
+	isTablet,
+} from "./src/Device";
 // Types
 export type { EnvironmentInfo } from "./src/Environment";
 // Environment utilities
@@ -47,9 +53,17 @@ export {
 export type { Validation } from "./src/Form";
 // Form validation utilities
 export { validateFields, validateSingleField } from "./src/Form";
+export { parseAcceptLanguage } from "./src/Language";
 export type { LogData, Logger } from "./src/Logger";
 // Logger utilities
 export { createLogger } from "./src/Logger";
+export {
+	buildOffsetPaginatedResponse,
+	buildOffsetPaginationMeta,
+	buildOffsetStatsPaginatedResponse,
+	buildPagePaginatedResponse,
+	buildPagePaginationMeta,
+} from "./src/Pagination";
 // Path utilities
 export {
 	convertFromPathParamsToQueryParams,
@@ -71,6 +85,7 @@ import * as DeviceModule from "./src/Device";
 import * as EnvironmentModule from "./src/Environment";
 import * as FormModule from "./src/Form";
 import * as LoggerModule from "./src/Logger";
+import * as PaginationModule from "./src/Pagination";
 import * as PathModule from "./src/Path";
 import * as ToolModule from "./src/Tool";
 
@@ -127,6 +142,14 @@ export const path = {
 		PathModule.convertFromPathParamsToQueryParams,
 } as const;
 
+export const pagination = {
+	buildPageMeta: PaginationModule.buildPagePaginationMeta,
+	buildPageResponse: PaginationModule.buildPagePaginatedResponse,
+	buildMeta: PaginationModule.buildOffsetPaginationMeta,
+	buildResponse: PaginationModule.buildOffsetPaginatedResponse,
+	buildStatsResponse: PaginationModule.buildOffsetStatsPaginatedResponse,
+} as const;
+
 export const tool = {
 	getProperty: ToolModule.getProperty,
 	setProperty: ToolModule.setProperty,
@@ -139,13 +162,6 @@ import * as LanguageModule from "./src/Language";
 export const language = {
 	parseAcceptLanguage: LanguageModule.parseAcceptLanguage,
 } as const;
-
-// Password utilities
-export type {
-	PasswordPolicyResult,
-	PasswordPolicyRule,
-} from "./src/Password";
-export { validatePasswordPolicy } from "./src/Password";
 
 // es-toolkit utilities re-export for convenient access
 export {
@@ -166,3 +182,9 @@ export {
 	range,
 	set,
 } from "es-toolkit/compat";
+// Password utilities
+export type {
+	PasswordPolicyResult,
+	PasswordPolicyRule,
+} from "./src/Password";
+export { validatePasswordPolicy } from "./src/Password";

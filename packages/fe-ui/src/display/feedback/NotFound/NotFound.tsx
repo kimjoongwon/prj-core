@@ -1,13 +1,13 @@
 "use client";
 
-import { Button, Card, CardBody } from "@cocrepo/ui/heroui";
 import { observer } from "mobx-react-lite";
 import type React from "react";
-import { Text } from "../../data-display/Text/Text";
+import { Button, Card, CardBody } from "../../../design-system/primitives";
+import { translateNode, useT } from "../../../i18n";
 import { Container } from "../../../layout/Container/Container";
 import { Spacer } from "../../../rhythm/Spacer/Spacer";
 import { VStack } from "../../../rhythm/VStack/VStack";
-import { translateNode, useT } from "../../../i18n";
+import { Text } from "../../data-display/Text/Text";
 
 export interface NotFoundProps {
 	/**

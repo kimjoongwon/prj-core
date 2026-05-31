@@ -86,7 +86,7 @@ function ApiFileDecorator(
 	options: Partial<{ isRequired: boolean }> = {},
 ): MethodDecorator {
 	return (target, propertyKey, descriptor: PropertyDescriptor) => {
-		const { isRequired = false } = options;
+		const isRequired = options.isRequired ?? false;
 		const fileSchema: SchemaObject = {
 			type: "string",
 			format: "binary",

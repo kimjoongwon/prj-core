@@ -1,5 +1,9 @@
 "use client";
 
+import { Plus, Trash2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { Input } from "../../control/Input/Input";
+import { Switch } from "../../control/Switch/Switch";
 import {
 	Button,
 	Table,
@@ -9,11 +13,7 @@ import {
 	TableHeader,
 	TableRow,
 	Tooltip,
-} from "@cocrepo/ui/heroui";
-import { Plus, Trash2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import { Input } from "../../control/Input/Input";
-import { Switch } from "../../control/Switch/Switch";
+} from "../../design-system/primitives";
 import { VStack } from "../../rhythm/VStack/VStack";
 
 /** 변수 편집 항목 */
