@@ -118,7 +118,7 @@ folder_required = true
 folder_layout = "packages/fe-ui/src/screen/{ScreenName}/{ScreenName}.tsx"
 planning_spec_file = "packages/fe-ui/src/screen/{ScreenName}/{ScreenName}.spec.md"
 story_file = "packages/fe-ui/src/screen/{ScreenName}/{ScreenName}.stories.tsx"
-guard = "screen 계층 planning spec은 시각/props/하위 조합 계약만 소유한다. 실행 순서, backend/foundation 계약, 승인 gate는 route delivery spec이 소유하며, story spec은 만들지 않는다"
+guard = "screen 계층 planning spec은 시각/props/하위 조합 계약만 소유한다. 실행 순서, backend/foundation 계약, 승인 gate는 service delivery spec이 소유하며 route delivery spec은 해당 화면 execution slice만 소유한다. story spec은 만들지 않는다"
 
 [rules.component_file]
 one_exported_ui_component_per_file = true
@@ -139,26 +139,26 @@ guard = "컴포넌트 builder는 신규/수정 UI component와 같은 작업에�
 [rules.fe_ui.feature]
 planning_spec_scope = "feature component only"
 allowed_planning_spec = "packages/fe-ui/src/feature/**/{FeatureName}.spec.md"
-guard = "feature 계층 planning spec은 Store/API/router 연결 의도, props, 이벤트, 상태별 렌더링 계약만 소유한다. Agent Assignment Matrix, Execution Graph, backend build order, approval gate는 route delivery spec에만 둔다"
+guard = "feature 계층 planning spec은 Store/API/router 연결 의도, props, 이벤트, 상태별 렌더링 계약만 소유한다. 에이전트 배정 매트릭스, 실행 그래프, backend build order, approval gate는 service delivery spec과 generated route delivery spec에만 둔다"
 
 [rules.fe_mo_ui.screen]
 folder_required = true
 folder_layout = "packages/fe-mo-ui/src/screen/{ScreenName}/{ScreenName}.tsx"
 planning_spec_file = "packages/fe-mo-ui/src/screen/{ScreenName}/{ScreenName}.spec.md"
-guard = "모바일 screen planning spec은 visual owner의 props/화면 러프/조합 계약만 소유한다. Expo route/native runtime wiring과 실행 순서는 apps/mobile route delivery spec이 소유한다"
+guard = "모바일 screen planning spec은 visual owner의 props/화면 러프/조합 계약만 소유한다. Expo route/native runtime wiring과 실행 순서는 service delivery spec과 apps/mobile generated route delivery spec이 소유한다"
 
 [rules.fe_mo_ui.widget]
 folder_required = true
 folder_layout = "packages/fe-mo-ui/src/widget/{WidgetName}/{WidgetName}.tsx"
 planning_spec_allowed = false
-guard = "모바일 widget 계층은 screen/feature에서 재사용되는 순수 UI 조합이며, 계약은 route delivery spec 또는 screen planning spec에 기록한다"
+guard = "모바일 widget 계층은 screen/feature에서 재사용되는 순수 UI 조합이며, 계약은 service delivery spec, generated route delivery spec 또는 screen planning spec에 기록한다"
 
 [rules.fe_mo_ui.feature]
 folder_required = true
 folder_layout = "packages/fe-mo-ui/src/feature/{FeatureName}/{FeatureName}.tsx"
 planning_spec_allowed = true
 planning_spec_file = "packages/fe-mo-ui/src/feature/{FeatureName}/{FeatureName}.spec.md"
-guard = "모바일 feature planning spec은 interaction composition의 기획/props/state/action 계약만 소유한다. API/router/native wiring과 실행 순서는 apps/mobile route delivery spec이 소유한다"
+guard = "모바일 feature planning spec은 interaction composition의 기획/props/state/action 계약만 소유한다. API/router/native wiring과 실행 순서는 service delivery spec과 apps/mobile generated route delivery spec이 소유한다"
 
 [rules.fe_mo_ui.styling]
 primary = "uniwind className + tailwind-variants tv({ slots, variants })"
@@ -167,14 +167,22 @@ text_component_required = true
 style_object_scope = "safe-area inset, navigator option object, third-party native bridge 등 className으로 표현하기 어려운 동적 값에만 제한"
 guard = "모바일 앱과 @cocrepo/mo-ui 신규/수정 UI는 StyleSheet/StyleSheet.create를 사용하지 않고 uniwind class props와 tailwind-variants slot/variant로 스타일을 정의한다. 작업 전 https://heroui.com/llms-patterns.txt 를 열어 HeroUI Native Composition/Styling/Provider/Portal 패턴을 확인한다. 사용자 노출 텍스트는 @cocrepo/mo-ui Text primitive를 사용하고 react-native Text 직접 import는 Text primitive 구현 내부에서만 허용한다. compound/action primitive도 문자열 children을 받으면 wrapper 내부에서 Text로 정규화하고 HeroUI Native에 raw string children을 그대로 넘기지 않는다. HeroUI Native compound wrapper는 return-only re-export로 끝내지 않고 field 계열은 upstream TextField/Label/Description/FieldError/InputGroup composition을 우선 사용하며 label/helperText/errorMessage/title/description/items/trigger/actions 같은 의미 있는 기본 조합 props와 dot-slot escape hatch를 함께 제공한다"
 
+[rules.service_delivery_spec]
+allowed = [
+  "docs/services/**/*.delivery.spec.md",
+]
+source_of_truth = "서비스 기획과 실행"
+required_sections = "서비스 목표, 사용자 / 역할 / 권한, 도메인 모델 / 생명주기, 사용자 여정, 필수 페이지 / 라우트, 백엔드 / API / 기반 계약, DESIGN.md 기반 디자인 방향, 생성된 라우트 Spec, 에이전트 배정 매트릭스, 실행 그래프, QA / 승인 기준, 승인 / 실행 로그"
+guard = "service delivery spec이 서비스 전체 설계와 실행의 상위 source of truth다. 질문 기반 기획, 모든 web/mobile route 목록, backend/API/foundation 계약, DESIGN.md 기반 디자인 방향, 승인 gate, 실행 순서, QA 기준은 docs/services/**/*.delivery.spec.md에 한글로 기록한다. `agent_type`, operationId, codegen, 파일 경로, 패키지명 같은 고정 기술 식별자만 원문을 유지한다"
+
 [rules.delivery_spec]
 allowed = [
   "apps/*/web/src/app/**/page.spec.md",
   "apps/mobile/src/app/**/index.spec.md",
 ]
-source_of_truth = "execution"
-required_sections = "Delivery, Planning Spec References, Foundation Contract, Agent Assignment Matrix, Execution Graph, Approval / Execution Log"
-guard = "route delivery spec만 실행 source of truth다. backend/API/foundation/route wiring/QA 실행 순서와 승인 gate는 web page.spec.md 또는 mobile index.spec.md 하나에만 기록한다"
+source_of_truth = "서비스 delivery spec에서 생성된 실행 slice"
+required_sections = "딜리버리, 상위 서비스 Spec, 기획 Spec 참조, 디자인 정렬, 화면 러프, 리듬 / 레이아웃 계약, 컴포넌트 인벤토리, 기반 Slice, Storybook / 테스트 계약, 백엔드 / API Slice, 필수 요소, 에이전트 배정 매트릭스, 실행 그래프, 공유 파일 잠금, QA / 승인 기준, 승인 / 실행 로그"
+guard = "route delivery spec은 service delivery spec에서 파생된 page/route 실행 slice다. 화면 계약, route wiring, component inventory, route-local hook/state, E2E, 해당 route가 소비하는 backend/API/foundation slice만 한글로 기록하고, 서비스 전체 설계와 build order는 docs/services/**/*.delivery.spec.md를 따른다"
 
 [rules.planning_spec]
 allowed = [
@@ -184,9 +192,9 @@ allowed = [
   "packages/fe-mo-ui/src/feature/**/{FeatureName}.spec.md",
 ]
 source_of_truth = "visual/planning contract"
-forbidden_sections = "Agent Assignment Matrix, Execution Graph, Backend / API Contract, Foundation Contract, Approval / Execution Log"
+forbidden_sections = "에이전트 배정 매트릭스, 실행 그래프, 백엔드 / API 계약, 기반 계약, 승인 / 실행 로그"
 forbidden_specs = "layout/story/test/e2e/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/script/config spec"
-guard = "screen/feature planning spec은 목표, 화면 러프, props/event, rendering/rhythm, 하위 조합, 상태별 렌더링, story/unit test 계약만 기록한다. 실행 그래프와 build order는 route delivery spec만 소유한다"
+guard = "screen/feature planning spec은 목표, 화면 러프, props/event, rendering/rhythm, 하위 조합, 상태별 렌더링, story/unit test 계약만 한글로 기록한다. 실행 그래프와 build order는 service delivery spec과 generated route delivery spec만 소유한다"
 
 [i18n]
 enabled = true
@@ -200,13 +208,13 @@ planning = [
   "orch-delivery",
 ]
 implementation = [
-  "fe-screen-builder",
-  "fe-route-builder",
-  "fe-columns-builder",
-  "fe-feature-builder",
-  "fe-widget-builder",
-  "fe-display-builder",
-  "fe-control-builder",
+  "fe-screen-agent",
+  "fe-route-agent",
+  "fe-columns-agent",
+  "fe-feature-agent",
+  "fe-widget-agent",
+  "fe-display-agent",
+  "fe-control-agent",
   "common-schema-builder",
   "be-dto-builder",
   "be-controller-builder",
@@ -362,116 +370,68 @@ config_file = "agents/dev-service-starter.toml"
 description = "Jenkins CI/CD 파이프라인 파일을 생성하는 전문가"
 config_file = "agents/etc-jenkinsfile-builder.toml"
 
-[agents.fe-cell-builder]
+[agents.fe-cell-agent]
 description = "DataGrid/Table용 Cell 컴포넌트를 계층별로 생성하는 전문가"
-config_file = "agents/fe-cell-builder.toml"
+config_file = "agents/fe-cell-agent.toml"
 
-[agents.fe-columns-builder]
+[agents.fe-columns-agent]
 description = "packages/fe-ui/src/columns 레이어와 DataGrid/cell 경계를 정리하는 전문가"
-config_file = "agents/fe-columns-builder.toml"
+config_file = "agents/fe-columns-agent.toml"
 
-[agents.fe-feature-builder]
-description = "비즈니스 기능을 담당하는 Feature 컴포넌트를 생성하는 전문가"
-config_file = "agents/fe-feature-builder.toml"
+[agents.fe-feature-agent]
+description = "Web/Mobile reusable Feature composition을 생성하고 정리하는 전문가"
+config_file = "agents/fe-feature-agent.toml"
 
-[agents.fe-control-builder]
-description = "사용자 조작/입력 컴포넌트를 packages/fe-ui/src/control에 생성하는 전문가"
-config_file = "agents/fe-control-builder.toml"
+[agents.fe-control-agent]
+description = "Web control과 React Native action/input/selection/navigation 컴포넌트를 생성하고 정리하는 전문가"
+config_file = "agents/fe-control-agent.toml"
 
-[agents.fe-layout-builder]
+[agents.fe-layout-agent]
 description = "packages/fe-ui/src/layout의 재사용 Layout 컴포넌트를 설계하고 생성하는 전문가"
-config_file = "agents/fe-layout-builder.toml"
+config_file = "agents/fe-layout-agent.toml"
 
-[agents.fe-route-layout-builder]
-description = "Next.js App Router의 app/**/layout.tsx와 named slot topology를 설계하고 생성하는 전문가"
-config_file = "agents/fe-route-layout-builder.toml"
+[agents.fe-route-layout-agent]
+description = "Next.js layout과 Expo Router _layout.tsx shell/topology를 설계하고 구현하는 전문가"
+config_file = "agents/fe-route-layout-agent.toml"
 
-[agents.fe-menu-builder]
-description = "메뉴 시스템 컴포넌트를 생성하는 전문가"
-config_file = "agents/fe-menu-builder.toml"
+[agents.fe-menu-agent]
+description = "Web/Mobile 메뉴, 탭, navigation composition을 생성하고 정리하는 전문가"
+config_file = "agents/fe-menu-agent.toml"
 
-[agents.fe-data-grid-builder]
+[agents.fe-data-grid-agent]
 description = "packages/fe-ui/src/data-grid의 DataGrid 단일 렌더러와 input/state 계약을 생성하고 정리하는 전문가"
-config_file = "agents/fe-data-grid-builder.toml"
+config_file = "agents/fe-data-grid-agent.toml"
 
-[agents.fe-form-builder]
+[agents.fe-form-agent]
 description = "생성/수정 입력 화면용 재사용 form 계층을 생성하고 정리하는 전문가"
-config_file = "agents/fe-form-builder.toml"
+config_file = "agents/fe-form-agent.toml"
 
-[agents.fe-hook-builder]
+[agents.fe-hook-agent]
 description = "web/mobile 공통 React hook을 @cocrepo/hook에 생성하고 정리하는 전문가"
-config_file = "agents/fe-hook-builder.toml"
+config_file = "agents/fe-hook-agent.toml"
 
-[agents.fe-route-builder]
-description = "apps/*/src/app/**/page.tsx, @slot/**/page.tsx, route.meta.ts thin route contract를 구현하는 전문가 (다국어 렌더링/문구 키 적용 포함)"
-config_file = "agents/fe-route-builder.toml"
+[agents.fe-route-agent]
+description = "Next.js page.tsx와 Expo route file의 API/state/navigation thin route contract를 구현하는 전문가"
+config_file = "agents/fe-route-agent.toml"
 
-[agents.fe-screen-builder]
-description = "packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx 기준의 web screen visual owner를 생성하는 전문가"
-config_file = "agents/fe-screen-builder.toml"
+[agents.fe-screen-agent]
+description = "Web/Mobile screen visual owner를 packages/fe-ui 또는 packages/fe-mo-ui 기준으로 생성하는 전문가"
+config_file = "agents/fe-screen-agent.toml"
 
-[agents.fe-store-builder]
+[agents.fe-store-agent]
 description = "MobX 기반 Store를 생성하는 전문가"
-config_file = "agents/fe-store-builder.toml"
+config_file = "agents/fe-store-agent.toml"
 
-[agents.fe-display-builder]
-description = "Display UI 컴포넌트를 packages/fe-ui/src/display에 생성하는 전문가"
-config_file = "agents/fe-display-builder.toml"
+[agents.fe-display-agent]
+description = "Web display와 React Native data-display/feedback/surface/layout primitive를 생성하고 정리하는 전문가"
+config_file = "agents/fe-display-agent.toml"
 
-[agents.fe-widget-builder]
-description = "재사용 가능한 작은 UI 조각 Widget 컴포넌트를 생성하는 전문가"
-config_file = "agents/fe-widget-builder.toml"
-
-[agents.fe-mo-action-builder]
-description = "React Native용 command/action 컴포넌트를 packages/fe-mo-ui/src/action에 생성하거나 정리하는 전문가"
-config_file = "agents/fe-mo-action-builder.toml"
-
-[agents.fe-mo-input-builder]
-description = "React Native용 text/input 컴포넌트를 packages/fe-mo-ui/src/input에 생성하거나 정리하는 전문가"
-config_file = "agents/fe-mo-input-builder.toml"
-
-[agents.fe-mo-selection-builder]
-description = "React Native용 selection/stateful choice 컴포넌트를 packages/fe-mo-ui/src/selection에 생성하거나 정리하는 전문가"
-config_file = "agents/fe-mo-selection-builder.toml"
-
-[agents.fe-mo-navigation-builder]
-description = "React Native용 navigation control 컴포넌트를 packages/fe-mo-ui/src/navigation에 생성하거나 정리하는 전문가"
-config_file = "agents/fe-mo-navigation-builder.toml"
-
-[agents.fe-mo-data-display-builder]
-description = "React Native용 data-display, surface, design-system, 비오버레이 layout contract를 packages/fe-mo-ui에 생성하거나 정리하는 전문가"
-config_file = "agents/fe-mo-data-display-builder.toml"
-
-[agents.fe-mo-feedback-builder]
-description = "React Native용 feedback/status/overlay feedback contract를 packages/fe-mo-ui에 생성하거나 정리하는 전문가"
-config_file = "agents/fe-mo-feedback-builder.toml"
-
-[agents.fe-mo-menu-builder]
-description = "React Native용 메뉴 primitive contract를 packages/fe-mo-ui/src/layout에 생성하거나 정리하는 전문가"
-config_file = "agents/fe-mo-menu-builder.toml"
-
-[agents.fe-mo-widget-builder]
-description = "React Native용 순수 UI 조합 Widget을 packages/fe-mo-ui/src/widget에 생성하거나 정리하는 전문가"
-config_file = "agents/fe-mo-widget-builder.toml"
-
-[agents.fe-mo-feature-builder]
-description = "React Native용 reusable Feature composition을 packages/fe-mo-ui/src/feature에 생성하거나 정리하는 전문가"
-config_file = "agents/fe-mo-feature-builder.toml"
-
-[agents.fe-mo-route-builder]
-description = "Expo Router native route file에서 shared screen owner를 연결하고 navigation/API/state/native wiring을 구현하는 전문가"
-config_file = "agents/fe-mo-route-builder.toml"
-
-[agents.fe-mo-screen-builder]
-description = "모바일 fe-screen-builder 대응 screen visual owner를 packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx 기준으로 생성하는 전문가"
-config_file = "agents/fe-mo-screen-builder.toml"
-
-[agents.fe-mo-route-layout-builder]
-description = "Expo Router native apps/mobile/src/app/**/_layout.tsx를 설계하고 구현하는 전문가"
-config_file = "agents/fe-mo-route-layout-builder.toml"
+[agents.fe-widget-agent]
+description = "Web/Mobile reusable Widget composition을 생성하고 정리하는 전문가"
+config_file = "agents/fe-widget-agent.toml"
 
 [agents.orch-delivery]
-description = "Spec → Ask → Build → QA를 단일 흐름으로 소유하는 delivery 오케스트레이터"
+description = "질문 기획 → 서비스 Spec → 승인 → 라우트 Spec → 구현 → QA를 단일 흐름으로 소유하는 서비스 delivery 오케스트레이터"
 config_file = "agents/orch-delivery.toml"
 
 [agents.qa-be-e2e-testing]

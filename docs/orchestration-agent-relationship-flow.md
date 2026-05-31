@@ -1,19 +1,22 @@
-# Route Delivery Spec Agent Relationship Flow
+# 서비스 Delivery Spec Agent 관계 흐름
 
-이 문서는 Codex role 간 관계를 route delivery spec 중심으로 설명합니다.
-별도 Domain/Web/Mobile 기획 분기나 Delivery Plan 문서를 두지 않고, route delivery spec이 실행 그래프를 소유합니다.
+이 문서는 Codex role 간 관계를 서비스 delivery spec 중심으로 설명합니다.
+별도 도메인/Web/Mobile 기획 분기나 Delivery Plan 문서를 두지 않고, 서비스 delivery spec이 서비스 전체 설계와 실행 그래프를 소유합니다.
+route delivery spec은 승인된 service delivery spec에서 생성된 page/route 실행 slice입니다.
 Screen/Feature spec은 planning spec으로 남겨 시각/조합 계약을 설명하지만 실행 순서와 승인 gate는 소유하지 않습니다.
 
-## Core Model
+## 핵심 모델
 
 ```mermaid
 flowchart TD
-  Request["User Request"] --> Delivery["orch-delivery"]
-  Delivery --> Spec["Route delivery spec + Delivery section"]
-  Spec --> Planning["Planning Spec References"]
-  Spec --> Ask["Codex question gate"]
-  Ask -->|approved| Backend["backend phase"]
-  Backend --> Codegen["API codegen phase, if needed"]
+  Request["사용자 요청"] --> Delivery["orch-delivery"]
+  Delivery --> Discovery["기획 질문"]
+  Discovery --> ServiceSpec["서비스 delivery spec"]
+  ServiceSpec --> Ask["Codex 승인 질문"]
+  Ask -->|승인| RouteSpecs["생성된 route delivery spec"]
+  RouteSpecs --> Planning["기획 spec 참조"]
+  RouteSpecs --> Backend["백엔드 phase"]
+  Backend --> Codegen["API codegen phase, 필요 시"]
   Codegen --> Web["web phase"]
   Codegen --> Mobile["mobile phase"]
   Backend --> Web
@@ -23,62 +26,76 @@ flowchart TD
   Backend --> QA
 
   QA -. feedback .-> Delivery
-  Delivery -. spec re-entry .-> Spec
-  Spec -. re-approval .-> Ask
+  Delivery -. spec 재진입 .-> ServiceSpec
+  ServiceSpec -. 재승인 .-> Ask
 ```
 
 ## Spec 필수 항목
 
-- 목표와 사용자 시나리오
-- web/mobile screen map
-- planning spec references
-- component가 표시된 annotated 화면 러프
-- 재사용/신규/계층/담당 `agent_type`이 보이는 component inventory
-- Hook/Toolkit/Type/Store가 분리된 foundation inventory
-- Storybook/Test 인벤토리와 필수 상태/검증 케이스
-- Prisma/Common Schema/DTO/Repository/Service/Application/Facade/Gateway/Controller/Module/Seed/Codegen이 분리된 Backend/API inventory
-- 각 backend inventory의 재사용/수정/신규 여부, 소스 담당 `agent_type`, 소비 `agent_type`
-- 필요한 backend/API/foundation/state/UI/test 요소
-- `Agent Assignment Matrix`
-- backend부터 frontend/mobile/QA까지의 실행 그래프
-- shared file lock
-- QA/acceptance 기준
-- blocked/re-entry 규칙
-- approval/execution log
+서비스 delivery spec은 다음 항목을 소유합니다.
 
-## Storybook / Test Ownership
+- 서비스 목표와 성공 기준
+- 사용자/역할/권한
+- 도메인 모델과 생명주기
+- 사용자 여정
+- 필요한 모든 web/mobile page/route 목록
+- Backend/API/Foundation 계약
+- `DESIGN.md` 기반 서비스 디자인 방향
+- 생성된 route spec 목록
+- 에이전트 배정 매트릭스
+- backend부터 frontend/mobile/QA까지의 실행 그래프
+- 공유 파일 잠금
+- QA/승인 기준
+- 차단/재진입 규칙
+- 승인/실행 로그
+
+생성된 route delivery spec은 다음 항목을 소유합니다.
+
+- 상위 service spec
+- route/page 목표와 사용자 시나리오
+- 기획 spec 참조
+- component가 표시된 주석 화면 러프
+- 재사용/신규/계층/담당 `agent_type`이 보이는 component 인벤토리
+- route-local Hook/Toolkit/Type/Store slice
+- Storybook/Test 인벤토리와 필수 상태/검증 케이스
+- 해당 route가 소비하는 Backend/API slice
+- route-level 에이전트 배정 매트릭스
+- route-level 공유 파일 잠금
+
+## Storybook / Test 소유권
 
 | 책임 | 담당 |
 |------|------|
-| story/test 계약 작성 | `orch-delivery`가 spec의 `Storybook / Test Contract`에 작성 |
-| story/test 파일 작성 | component source를 소유한 builder role |
+| story/test 계약 작성 | `orch-delivery`가 spec의 `Storybook / 테스트 계약`에 작성 |
+| story/test 파일 작성 | component source를 소유한 agent role |
 | 누락/실패/회귀 검증 | `qa-fe-testing`, `qa-mo-testing`, E2E role |
 
-UI builder가 신규/수정 UI component를 만들면 같은 step에서 story와 unit test를 함께 작성하거나 갱신합니다.
-QA role은 builder 산출물을 재검증하고, 누락된 story/test는 `test-failure` 또는 `spec-drift`로 보고합니다.
+UI agent가 신규/수정 UI component를 만들면 같은 step에서 story와 unit test를 함께 작성하거나 갱신합니다.
+QA role은 agent 산출물을 재검증하고, 누락된 story/test는 `test-failure` 또는 `spec-drift`로 보고합니다.
 
 PC/Web과 Mobile 모두 같은 방식입니다.
 
-- PC/Web: `packages/fe-ui/src/**` component source owner builder가 story/test를 작성합니다.
-- Mobile: `packages/fe-mo-ui/src/**` component source owner builder가 story/test를 작성합니다.
+- PC/Web: `packages/fe-ui/src/**` component source owner agent가 story/test를 작성합니다.
+- Mobile: `packages/fe-mo-ui/src/**` component source owner agent가 story/test를 작성합니다.
 - route container, route layout, Store, backend-only step은 Storybook 대상이 아니며 unit/E2E 검증만 spec에 남깁니다.
 
 ## Delivery Role
 
 | role | 책임 |
 |------|------|
-| `orch-delivery` | Spec → Ask → Build → QA를 단일 흐름으로 소유 |
+| `orch-delivery` | 기획 질문 → 서비스 Spec → 승인 → 라우트 Spec → 구현 → QA를 단일 흐름으로 소유 |
 
-`orch-delivery`는 승인된 route delivery spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
+`orch-delivery`는 승인된 service delivery spec과 연결된 route delivery spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
 
-## Visual Execution Graph
+## 시각 실행 그래프
 
-spec의 `Execution Graph`는 직렬 순서와 병렬 가능 구간을 같이 보여야 합니다.
+spec의 `실행 그래프`는 직렬 순서와 병렬 가능 구간을 같이 보여야 합니다.
 
 ```mermaid
 flowchart TD
-  Gate["S0 orch-delivery: approval"] --> Backend["backend serial contracts"]
-  subgraph BParallel["parallel: backend model contracts"]
+  Gate["S0 orch-delivery: 서비스 spec 승인"] --> RouteGen["S1 orch-delivery: 생성된 route spec"]
+  RouteGen --> Backend["backend 직렬 계약"]
+  subgraph BParallel["parallel: backend model 계약"]
     Entity["be-entity-builder"]
     VO["be-vo-builder"]
     DTO["be-dto-builder"]
@@ -92,37 +109,37 @@ flowchart TD
   VO --> Runtime
   DTO --> Runtime
   QueryDto --> Runtime
-  Runtime --> Codegen["codegen, if API changed"]
-  Codegen --> Foundation["foundation contracts"]
+  Runtime --> Codegen["codegen, API 변경 시"]
+  Codegen --> Foundation["foundation 계약"]
   Foundation --> Types["common-type-builder"]
   Foundation --> Toolkit["common-toolkit-builder"]
-  Foundation --> Hook["fe-hook-builder"]
-  Foundation --> Store["fe-store-builder"]
+  Foundation --> Hook["fe-hook-agent"]
+  Foundation --> Store["fe-store-agent"]
 
-  subgraph WebParallel["parallel: web leaf builders"]
-    Display["fe-display-builder"]
-    Control["fe-control-builder"]
-    Widget["fe-widget-builder"]
-    Feature["fe-feature-builder"]
+  subgraph WebParallel["parallel: web leaf agent"]
+    Display["fe-display-agent"]
+    Control["fe-control-agent"]
+    Widget["fe-widget-agent"]
+    Feature["fe-feature-agent"]
   end
   Types --> Display
   Toolkit --> Control
   Hook --> Widget
   Store --> Feature
-  Display --> WebRoute["fe-screen-builder → fe-route-builder"]
+  Display --> WebRoute["fe-screen-agent → fe-route-agent"]
   Control --> WebRoute
   Widget --> WebRoute
   Feature --> WebRoute
 
-  subgraph MobileParallel["parallel: mobile leaf builders"]
-    Action["fe-mo-action-builder"]
-    MoWidget["fe-mo-widget-builder"]
-    MoFeature["fe-mo-feature-builder"]
+  subgraph MobileParallel["parallel: mobile leaf agent"]
+    Action["fe-control-agent"]
+    MoWidget["fe-widget-agent"]
+    MoFeature["fe-feature-agent"]
   end
   Types --> Action
   Toolkit --> MoWidget
   Hook --> MoFeature
-  Action --> MobileRoute["fe-mo-screen-builder → fe-mo-route-builder"]
+  Action --> MobileRoute["fe-screen-agent → fe-route-agent"]
   MoWidget --> MobileRoute
   MoFeature --> MobileRoute
 
@@ -131,33 +148,33 @@ flowchart TD
   Runtime --> QA
 ```
 
-그래프와 함께 `Parallel Group Table`을 두어 병렬 step, 병렬 가능 사유, shared file lock, 합류 step을 명시합니다.
+그래프와 함께 `병렬 그룹 표`를 두어 병렬 step, 병렬 가능 사유, 공유 파일 잠금, 합류 step을 명시합니다.
 
-## Backend Phase
+## 백엔드 Phase
 
-Backend phase는 spec의 `Backend / API Contract` 아래 구조별 inventory를 기준으로 실행합니다.
+백엔드 phase는 service delivery spec의 `백엔드 / API / 기반 계약` 아래 구조별 인벤토리를 기준으로 실행합니다.
 
 | 인벤토리 | 주 담당 role | 소비 예시 |
 |----------|--------------|----------|
 | `Prisma / Database 인벤토리` | `be-prisma-builder` | `be-repository-builder`, `common-schema-builder`, QA |
 | `Prisma Annotation 인벤토리` | `be-prisma-annotator` | Swagger/관리 UI 표시 계약 |
-| `Common Schema 인벤토리` | `common-schema-builder` | `be-dto-builder`, `fe-route-builder`, `fe-mo-route-builder` |
+| `Common Schema 인벤토리` | `common-schema-builder` | `be-dto-builder`, `fe-route-agent` |
 | `Entity / VO 인벤토리` | `be-entity-builder`, `be-vo-builder` | `be-service-builder`, `be-usecase-builder` |
 | `DTO / Query DTO 인벤토리` | `be-dto-builder`, `be-query-dto-builder` | `be-controller-builder`, codegen |
 | `Repository 인벤토리` | `be-repository-builder` | `be-service-builder` |
 | `Service 인벤토리` | `be-service-builder` | `be-usecase-builder`, `be-facade-builder`, `be-controller-builder` |
 | `UseCase 인벤토리` | `be-usecase-builder` | `be-controller-builder` |
 | `Facade / Gateway 인벤토리` | `be-facade-builder`, `be-gateway-builder` | `be-controller-builder`, `be-service-builder` |
-| `엔드포인트 인벤토리` | `be-controller-builder` | `fe-route-builder`, `fe-mo-route-builder`, `qa-*-testing` |
+| `엔드포인트 인벤토리` | `be-controller-builder` | `fe-route-agent`, `qa-*-testing` |
 | `Module / Bootstrap 인벤토리` | `be-module-builder`, `be-bootstrap-integrator` | 앱 부트스트랩 |
 | `Seed 인벤토리` | `be-seed-maker` | QA, local dev |
-| `Codegen / API Client 인벤토리` | command step | `fe-route-builder`, `fe-mo-route-builder` |
+| `Codegen / API Client 인벤토리` | command step | `fe-route-agent` |
 
 각 row는 `재사용/신규`, `소스/대상`, 소스 담당 `agent_type`, 소비 `agent_type`을 포함해야 하며, 누락된 backend element는 builder가 추측해 만들지 않습니다.
 
 ```mermaid
 flowchart TD
-  Spec["route delivery spec"] --> P["be-prisma-builder"]
+  Spec["서비스 delivery spec"] --> P["be-prisma-builder"]
   P --> PA["be-prisma-annotator"]
   PA --> S["common-schema-builder"]
   S --> M["be-entity / be-vo / be-dto / be-query-dto"]
@@ -172,42 +189,42 @@ flowchart TD
   SEED --> QA["qa-be-testing / qa-be-e2e-testing"]
 ```
 
-## Foundation Phase
+## 기반 Phase
 
-Foundation phase는 route delivery spec의 `Foundation Contract` 아래 구조별 inventory를 기준으로 실행합니다.
+기반 phase는 service delivery spec의 `백엔드 / API / 기반 계약`과 생성된 route delivery spec의 route-local slice를 기준으로 실행합니다.
 
 | 인벤토리 | 주 담당 role | 소비 예시 |
 |----------|--------------|----------|
-| `Hook 인벤토리` | `fe-hook-builder` | `fe-route-builder`, `fe-mo-route-builder`, UI builder |
+| `Hook 인벤토리` | `fe-hook-agent` | `fe-route-agent`, UI agent |
 | `Toolkit 인벤토리` | `common-toolkit-builder` | backend/web/mobile/common packages |
 | `Type 인벤토리` | `common-type-builder` | backend/web/mobile/store/hook/toolkit |
-| `Store / State 인벤토리` | `fe-store-builder` 또는 route builder | Feature, route container, screen props |
+| `Store / State 인벤토리` | `fe-store-agent` 또는 route agent | Feature, route container, screen props |
 
-route-local hook/util/type/state는 공용 builder를 호출하지 않고 `fe-route-builder` 또는 `fe-mo-route-builder`가 처리합니다.
-shared foundation row가 `new` 또는 `modify`이면 `Agent Assignment Matrix`와 `Execution Graph`에 반드시 같은 step을 둡니다.
+route-local hook/util/type/state는 공용 agent를 호출하지 않고 Web/Mobile 모두 `fe-route-agent`가 처리합니다.
+shared foundation row가 `new` 또는 `modify`이면 `에이전트 배정 매트릭스`와 `실행 그래프`에 반드시 같은 step을 둡니다.
 
 ## Web Phase
 
 ```mermaid
 flowchart TD
-  Spec["route delivery spec"] --> Planning["web screen/feature planning refs"]
-  Planning --> Leaf{"web leaf/component steps needed?"}
-  Spec --> Foundation["foundation steps, if needed"]
+  Spec["생성된 route delivery spec"] --> Planning["web screen/feature planning 참조"]
+  Planning --> Leaf{"web leaf/component step 필요?"}
+  Spec --> Foundation["foundation step, 필요 시"]
   Foundation --> Leaf
-  Leaf --> Display["fe-display-builder"]
-  Leaf --> Control["fe-control-builder"]
-  Leaf --> Cell["fe-cell-builder"]
-  Leaf --> Columns["fe-columns-builder"]
-  Leaf --> Widget["fe-widget-builder"]
-  Leaf --> Layout["fe-layout-builder"]
-  Leaf --> Feature["fe-feature-builder"]
-  Leaf --> DataGrid["fe-data-grid-builder"]
-  Leaf --> Form["fe-form-builder"]
-  Leaf --> Menu["fe-menu-builder"]
-  Leaf --> Store["fe-store-builder, if shared store"]
-  Leaf --> Page["fe-screen-builder"]
-  Page --> RouteLayout["fe-route-layout-builder, if needed"]
-  RouteLayout --> Route["fe-route-builder"]
+  Leaf --> Display["fe-display-agent"]
+  Leaf --> Control["fe-control-agent"]
+  Leaf --> Cell["fe-cell-agent"]
+  Leaf --> Columns["fe-columns-agent"]
+  Leaf --> Widget["fe-widget-agent"]
+  Leaf --> Layout["fe-layout-agent"]
+  Leaf --> Feature["fe-feature-agent"]
+  Leaf --> DataGrid["fe-data-grid-agent"]
+  Leaf --> Form["fe-form-agent"]
+  Leaf --> Menu["fe-menu-agent"]
+  Leaf --> Store["fe-store-agent, shared store 필요 시"]
+  Leaf --> Page["fe-screen-agent"]
+  Page --> RouteLayout["fe-route-layout-agent, 필요 시"]
+  RouteLayout --> Route["fe-route-agent"]
   Page --> Route
   Route --> QA["qa-fe-testing / qa-fe-e2e-testing"]
 ```
@@ -216,57 +233,58 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-  Spec["route delivery spec"] --> Planning["mobile screen/feature planning refs"]
-  Planning --> Leaf{"mobile leaf UI steps needed?"}
-  Spec --> Foundation["foundation steps, if needed"]
+  Spec["생성된 route delivery spec"] --> Planning["mobile screen/feature planning 참조"]
+  Planning --> Leaf{"mobile leaf UI step 필요?"}
+  Spec --> Foundation["foundation step, 필요 시"]
   Foundation --> Leaf
-  Leaf --> Action["fe-mo-action-builder"]
-  Leaf --> Input["fe-mo-input-builder"]
-  Leaf --> Selection["fe-mo-selection-builder"]
-  Leaf --> Navigation["fe-mo-navigation-builder"]
-  Leaf --> DataDisplay["fe-mo-data-display-builder"]
-  Leaf --> Feedback["fe-mo-feedback-builder"]
-  Leaf --> Menu["fe-mo-menu-builder"]
-  Leaf --> Widget["fe-mo-widget-builder"]
-  Leaf --> Feature["fe-mo-feature-builder"]
-  Leaf --> Screen["fe-mo-screen-builder"]
+  Leaf --> Action["fe-control-agent"]
+  Leaf --> Input["fe-control-agent"]
+  Leaf --> Selection["fe-control-agent"]
+  Leaf --> Navigation["fe-control-agent"]
+  Leaf --> DataDisplay["fe-display-agent"]
+  Leaf --> Feedback["fe-display-agent"]
+  Leaf --> Menu["fe-menu-agent"]
+  Leaf --> Widget["fe-widget-agent"]
+  Leaf --> Feature["fe-feature-agent"]
+  Leaf --> Screen["fe-screen-agent"]
   Widget --> Feature
   Feature --> Screen
-  Screen --> Layout["fe-mo-route-layout-builder, if needed"]
-  Layout --> Route["fe-mo-route-builder"]
+  Screen --> Layout["fe-route-layout-agent, 필요 시"]
+  Layout --> Route["fe-route-agent"]
   Screen --> Route
   Route --> QA["qa-mo-testing / qa-mo-e2e-testing"]
 ```
 
-## Feedback Routing
+## Feedback 라우팅
 
 | feedback type | 처리 |
 |---------------|------|
-| `spec-gap` | `orch-delivery`가 spec을 보강하고 승인 gate 재진입 |
-| `contract-gap` | spec의 affected step 보강 |
-| `api-integration-gap` | API contract 문제면 spec 보강, wiring 문제면 route/page builder follow-up |
-| `ui-composition-gap` | spec의 Required Elements와 Agent Assignment Matrix 보강 후 담당 builder follow-up |
+| `spec-gap` | `orch-delivery`가 service spec을 보강하고 승인 gate 재진입 |
+| `contract-gap` | service spec의 affected step과 생성된 route spec slice 보강 |
+| `api-integration-gap` | API contract 문제면 service spec 보강, wiring 문제면 route/page agent follow-up |
+| `ui-composition-gap` | service spec의 page/component 전략과 생성된 route spec의 필수 요소/에이전트 배정 매트릭스 보강 후 담당 agent follow-up |
 | `implementation-blocker` | 같은 agent가 해결 가능하면 follow-up, role 경계 밖이면 spec re-entry |
 | `test-failure` | 제품 contract 문제와 테스트 기대값 문제를 분리해 spec re-entry 또는 QA follow-up |
-| `spec-drift` | spec을 먼저 갱신한 뒤 구현/테스트 follow-up |
+| `spec-drift` | service spec을 먼저 갱신하고 affected route spec을 재생성/갱신한 뒤 구현/테스트 follow-up |
 | `shared-file-conflict` | 병렬 쓰기를 중단하고 single writer 지정 |
-| `dependency-missing` | 현재 phase 전제조건이면 blocked, downstream 전제면 spec의 downstream step에 required input 기록 |
+| `dependency-missing` | 현재 phase 전제조건이면 blocked, downstream 전제면 service spec의 downstream step에 required input 기록 |
 
-## Operating Rule
+## 운영 규칙
 
-- route delivery spec 없이 builder를 실행하지 않습니다.
-- route delivery spec 작성과 사용자 승인 없이 builder를 실행하지 않습니다.
+- service delivery spec 없이 agent를 실행하지 않습니다.
+- service delivery spec 작성과 사용자 승인 없이 route/page spec 생성 또는 agent 실행을 하지 않습니다.
+- 생성된 route delivery spec 없이 route/page leaf agent를 실행하지 않습니다.
 - 병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
 - 테스트 전략 전용 intermediate role 없이 QA role이 spec 기준으로 테스트를 구현합니다.
-- route delivery spec은 실행 source of truth이며, `.codex/plans/**/*.delivery-plan.md` 같은 별도 기획서는 만들지 않습니다.
-- Screen/Feature planning spec에는 `Agent Assignment Matrix`, `Execution Graph`, backend build order, foundation 세부 실행표를 쓰지 않습니다.
+- service delivery spec이 상위 실행 기준이며, 별도 Delivery Plan 문서는 만들지 않습니다.
+- Screen/Feature planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, backend build order, foundation 세부 실행표를 쓰지 않습니다.
 
-## Scenario Checks
+## 시나리오 점검
 
-| scenario | spec 판단 기준 |
+| 시나리오 | spec 판단 기준 |
 |----------|-------------------------|
 | 신규 도메인 + web 화면 | backend phase를 Prisma부터 controller/module까지 포함하고, API 변경이면 codegen 후 web leaf/page/route/QA step을 배치합니다. |
-| 기존 API 변경 + web 화면 | 변경 endpoint와 Orval hook 영향을 Required Elements에 기록하고, backend/codegen/web route wiring/QA step만 포함합니다. |
+| 기존 API 변경 + web 화면 | 변경 endpoint와 Orval hook 영향을 필수 요소에 기록하고, backend/codegen/web route wiring/QA step만 포함합니다. |
 | mobile route 추가 | mobile screen/leaf/route/native wiring/QA step을 우선 배치하고, API contract gap이 있으면 backend/codegen step을 선행시킵니다. |
 | web/mobile 동시 화면 추가 | backend와 codegen은 한 번만 실행하고, web phase와 mobile phase는 파일 ownership이 분리된 step만 병렬 허용한 뒤 QA에서 합류합니다. |
-| shared hook/toolkit/type/store 변경 | route delivery spec의 Foundation Contract에 row와 step을 추가하고 필요한 planning spec은 reference로만 연결합니다. |
+| shared hook/toolkit/type/store 변경 | service delivery spec의 백엔드/API/기반 계약에 row와 step을 추가하고, 필요한 생성 route spec에는 slice로 연결합니다. |
