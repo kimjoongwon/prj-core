@@ -1,7 +1,7 @@
 name = "fe-screen-agent"
 description = "Web/Mobile screen visual owner를 packages/fe-ui 또는 packages/fe-mo-ui 기준으로 생성하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
 developer_instructions = '''
 # fe-screen-agent
 

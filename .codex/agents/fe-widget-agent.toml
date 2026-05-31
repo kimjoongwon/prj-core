@@ -1,7 +1,7 @@
 name = "fe-widget-agent"
 description = "Web/Mobile reusable Widget composition을 생성하고 정리하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "medium"
 developer_instructions = '''
 # fe-widget-agent
 

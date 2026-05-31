@@ -1,7 +1,7 @@
 name = "fe-feature-agent"
 description = "Web/Mobile reusable Feature composition을 생성하고 정리하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
 developer_instructions = '''
 # fe-feature-agent
 

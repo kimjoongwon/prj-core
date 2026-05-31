@@ -1,7 +1,7 @@
 name = "be-service-builder"
 description = "NestJS Service 레이어를 생성하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
 developer_instructions = '''
 # be-service-builder
 

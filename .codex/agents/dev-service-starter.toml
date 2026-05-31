@@ -1,7 +1,7 @@
 name = "dev-service-starter"
 description = "개발 서비스를 시작하는 에이전트"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "low"
 developer_instructions = '''
 # dev-service-starter
 

@@ -1,7 +1,7 @@
 name = "fe-form-agent"
 description = "생성/수정 입력 화면용 재사용 form 계층을 생성하고 정리하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
 developer_instructions = '''
 # fe-form-agent
 

@@ -1,7 +1,7 @@
 name = "fe-display-agent"
 description = "Web display와 React Native data-display/feedback/surface/layout primitive를 생성하고 정리하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "medium"
 developer_instructions = '''
 # fe-display-agent
 

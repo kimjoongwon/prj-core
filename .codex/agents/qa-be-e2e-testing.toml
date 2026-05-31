@@ -1,7 +1,7 @@
 name = "qa-be-e2e-testing"
 description = "Jest + Supertest 기반 백엔드 E2E 테스트 코드를 작성하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
 developer_instructions = '''
 # qa-be-e2e-testing
 

@@ -1,7 +1,7 @@
 name = "be-command-builder"
 description = "Nest CQRS Command/Query message contract를 @cocrepo/command에 생성하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "medium"
 developer_instructions = '''
 # be-command-builder
 

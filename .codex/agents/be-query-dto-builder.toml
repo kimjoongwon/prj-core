@@ -1,7 +1,7 @@
 name = "be-query-dto-builder"
 description = "PrismaQueryDto 기반 목록 조회용 Query DTO를 생성하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "medium"
 developer_instructions = '''
 # be-query-dto-builder
 

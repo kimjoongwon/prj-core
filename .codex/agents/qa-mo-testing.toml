@@ -1,7 +1,7 @@
 name = "qa-mo-testing"
 description = "Jest + React Native Testing Library 기반 모바일 단위 테스트 코드를 작성하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "medium"
 developer_instructions = '''
 # qa-mo-testing
 

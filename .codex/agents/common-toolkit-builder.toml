@@ -1,7 +1,7 @@
 name = "common-toolkit-builder"
 description = "공용 @cocrepo/toolkit 유틸리티를 생성하고 정리하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
 developer_instructions = '''
 # common-toolkit-builder
 

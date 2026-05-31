@@ -1,7 +1,7 @@
 name = "fe-store-agent"
 description = "MobX 기반 Store를 생성하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
 developer_instructions = '''
 # fe-store-agent
 

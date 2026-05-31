@@ -1,7 +1,7 @@
 name = "fe-layout-agent"
 description = "packages/fe-ui/src/layout의 재사용 Layout 컴포넌트를 설계하고 생성하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "medium"
 developer_instructions = '''
 # fe-layout-agent
 

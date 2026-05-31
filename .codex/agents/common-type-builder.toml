@@ -1,7 +1,7 @@
 name = "common-type-builder"
 description = "공용 @cocrepo/type 타입 계약을 생성하고 정리하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
 developer_instructions = '''
 # common-type-builder
 

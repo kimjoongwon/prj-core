@@ -1,7 +1,7 @@
 name = "qa-fe-e2e-testing"
 description = "Playwright 기반 프론트엔드 E2E 테스트 코드를 작성하는 전문가 (로케일/번역 회귀 포함)"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
 developer_instructions = '''
 # qa-fe-e2e-testing
 

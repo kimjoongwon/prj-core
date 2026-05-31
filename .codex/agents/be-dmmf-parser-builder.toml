@@ -1,7 +1,7 @@
 name = "be-dmmf-parser-builder"
 description = "Prisma DMMF 파싱 유틸리티를 생성하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "medium"
 developer_instructions = '''
 # be-dmmf-parser-builder
 

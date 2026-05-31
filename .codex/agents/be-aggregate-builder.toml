@@ -1,7 +1,7 @@
 name = "be-aggregate-builder"
 description = "Aggregate root service를 @cocrepo/aggregate의 {Domain}AggregateRoot provider로 생성하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
 developer_instructions = '''
 # be-aggregate-builder
 

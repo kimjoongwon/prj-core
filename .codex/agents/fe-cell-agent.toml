@@ -1,7 +1,7 @@
 name = "fe-cell-agent"
 description = "DataGrid/Table용 Cell 컴포넌트를 계층별로 생성하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "low"
 developer_instructions = '''
 # fe-cell-agent
 

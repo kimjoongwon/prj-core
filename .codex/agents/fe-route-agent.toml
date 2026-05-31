@@ -1,7 +1,7 @@
 name = "fe-route-agent"
 description = "Next.js page.tsx와 Expo route file의 API/state/navigation thin route contract를 구현하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "medium"
 developer_instructions = '''
 # fe-route-agent
 

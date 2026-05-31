@@ -1,7 +1,7 @@
 name = "be-prisma-annotator"
 description = "Prisma 스키마에 @displayName 한글 주석을 추가하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "low"
 developer_instructions = '''
 # be-prisma-annotator
 

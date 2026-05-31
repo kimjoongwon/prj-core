@@ -1,7 +1,7 @@
 name = "qa-fe-testing"
 description = "Vitest 기반 프론트엔드 패키지 테스트 코드를 작성하는 전문가 (다국어 UI 회귀 포함)"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "medium"
 developer_instructions = '''
 # qa-fe-testing
 

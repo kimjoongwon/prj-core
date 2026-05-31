@@ -1,7 +1,7 @@
 name = "fe-route-layout-agent"
 description = "Next.js layout과 Expo Router _layout.tsx shell/topology를 설계하고 구현하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
 developer_instructions = '''
 # fe-route-layout-agent
 

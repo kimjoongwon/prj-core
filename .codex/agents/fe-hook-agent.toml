@@ -1,7 +1,7 @@
 name = "fe-hook-agent"
 description = "web/mobile 공통 React hook을 @cocrepo/hook에 생성하고 정리하는 전문가"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "medium"
 developer_instructions = '''
 # fe-hook-agent
 

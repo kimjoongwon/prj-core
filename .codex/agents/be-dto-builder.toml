@@ -1,7 +1,7 @@
 name = "be-dto-builder"
 description = "Request/Response DTO 클래스를 생성하는 전문가 (다국어 메시지/응답 계약 고려)"
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "medium"
 developer_instructions = '''
 # be-dto-builder
 
