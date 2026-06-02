@@ -115,6 +115,33 @@ const applyTokenRefreshData = (responseData?: {
 	}
 };
 
+const syncSessionHeaders = (config: InternalAxiosRequestConfig) => {
+	const headers = AxiosHeaders.from(config.headers);
+	const accessToken = persistStoreRef?.accessToken;
+	const refreshToken = persistStoreRef?.refreshToken;
+	const spaceId = persistStoreRef?.spaceId;
+	const languageCode = localeStoreRef?.languageCode;
+
+	if (accessToken) {
+		headers.set("Authorization", `Bearer ${accessToken}`);
+	}
+
+	if (refreshToken) {
+		headers.set(REQUEST_HEADER_KEYS.REFRESH_TOKEN, refreshToken);
+	}
+
+	if (spaceId) {
+		headers.set(REQUEST_HEADER_KEYS.SPACE_ID, spaceId);
+	}
+
+	if (languageCode) {
+		headers.set(REQUEST_HEADER_KEYS.LANGUAGE, languageCode);
+	}
+
+	config.headers = headers;
+	return config;
+};
+
 AXIOS_INSTANCE.interceptors.request.use((config) => {
 	const headers = AxiosHeaders.from(config.headers);
 	const accessToken = persistStoreRef?.accessToken;
@@ -174,7 +201,7 @@ AXIOS_INSTANCE.interceptors.response.use(
 			if (isRefreshing) {
 				return new Promise((resolve, reject) => {
 					failedQueue.push({ resolve, reject });
-				}).then(() => AXIOS_INSTANCE(originalRequest));
+				}).then(() => AXIOS_INSTANCE(syncSessionHeaders(originalRequest)));
 			}
 
 			originalRequest._retry = true;
@@ -200,8 +227,7 @@ AXIOS_INSTANCE.interceptors.response.use(
 					applyTokenRefreshData(responseData);
 				}
 				processQueue(null);
-				// 갱신 성공 → 원래 요청 재시도 (새 쿠키 자동 적용)
-				return AXIOS_INSTANCE(originalRequest);
+				return AXIOS_INSTANCE(syncSessionHeaders(originalRequest));
 			} catch (refreshError) {
 				processQueue(refreshError);
 				if (isBrowser && !nativeRefreshHandler) {

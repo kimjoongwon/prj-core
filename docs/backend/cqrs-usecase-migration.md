@@ -1,19 +1,19 @@
 # CQRS / UseCase Migration Runbook
 
-이 문서는 CQRS / UseCase 전환의 실행 source of truth이다. 실행 agent는 이 runbook의 phase, ownership, lock, QA gate 안에서만 작업하고, 누락된 계약은 임의 구현하지 않고 `Feedback:` packet으로 보고한다.
+이 문서는 CQRS / UseCase 전환의 backend reference runbook이다. 신규 실행 기준은 `docs/services/**/*.delivery.spec.md`의 service delivery spec이며, 이 문서는 backend 구조와 legacy 제거 기준을 보조한다. 실행 agent는 승인된 service delivery spec과 생성된 route delivery spec의 phase, ownership, lock, QA gate 안에서만 작업하고, 누락된 계약은 임의 구현하지 않고 `Feedback:` packet으로 보고한다.
 
 ## 용어
 
 | 용어 | 의미 | 예시 |
 |---|---|---|
-| `role` | `.codex/config.toml`에 등록된 역할 이름 | `mig-be-usecase-builder`, `be-usecase-builder` |
+| `role` | `.codex/config.toml`에 등록된 역할 이름 | `be-usecase-builder`, `be-command-builder` |
 | `agent` | agent 생성 도구로 만들어진 실행 주체 | Reservation pilot을 수행하는 실행 agent |
-| `agent_type` | agent 생성 도구 호출 시 사용하는 role 선택 파라미터 | `agent_type: "mig-be-usecase-builder"` |
+| `agent_type` | agent 생성 도구 호출 시 사용하는 role 선택 파라미터 | `agent_type: "be-usecase-builder"` |
 
 규칙:
 
-- migration role 파일은 `.codex/agents/mig/` 아래에만 둔다.
-- migration role 등록명은 `mig-` prefix를 사용한다.
+- active role 파일은 `.codex/agents/` 아래에만 둔다.
+- active role 등록명에는 별도 migration prefix를 사용하지 않는다.
 - 실행 agent는 peer role을 직접 호출하지 않는다.
 - 실행 agent는 peer role 책임 파일을 임의 수정하지 않는다.
 - `*.toml.guide.md` 보조 문서를 만들지 않는다.
@@ -84,25 +84,25 @@ Backend value source rule:
 
 ## Package Rename Matrix
 
-| 현재 | 목표 | 처리 기준 | migration role |
+| 현재 | 목표 | 처리 기준 | active role |
 |---|---|---|---|
-| 신규 | `packages/be-command` | 프로젝트 전체 Command/Query message contract package | `mig-be-package-migration-builder`, `mig-be-command-builder` |
-| 신규 | `@cocrepo/command` | Controller와 UseCase handler가 공유하는 request intent package | `mig-be-package-migration-builder`, `mig-be-command-builder` |
-| 신규 | `packages/be-event` | 프로젝트 전체 Event message contract package | `mig-be-package-migration-builder`, `mig-be-event-builder` |
-| 신규 | `@cocrepo/event` | UseCase handler, EventHandler, Saga가 공유하는 발생 사실 package | `mig-be-package-migration-builder`, `mig-be-event-builder` |
-| `apps/*/api/src/module/**/*.cqrs.ts` | 제거 | message는 `@cocrepo/command`, handler는 `@cocrepo/usecase`로 분리 이동 | `mig-be-command-builder`, `mig-be-usecase-builder` |
-| `packages/be-app` | `packages/be-usecase` | ApplicationService 제거, UseCase handler package로 전환 | `mig-be-package-migration-builder`, `mig-be-usecase-builder` |
-| `@cocrepo/app` | `@cocrepo/usecase` | import, package name, dependency, export 전체 변경 | `mig-be-package-migration-builder` |
-| `packages/be-gateway` | `packages/be-client` | 외부 API 단일 연동 Client package로 전환 | `mig-be-package-migration-builder`, `mig-be-client-builder` |
-| `@cocrepo/gateway` | `@cocrepo/client` | import, package name, dependency, export 전체 변경 | `mig-be-package-migration-builder` |
-| `packages/be-facade` | 제거 | Controller boundary 조합은 UseCase로 이동, read model shaping은 Query UseCase로 이동 | `mig-be-package-migration-builder`, `mig-be-cqrs-controller-builder`, `mig-be-usecase-builder` |
-| `@cocrepo/facade` | 제거 | legacy import가 남으면 migration incomplete | `mig-be-package-migration-builder` |
-| 신규 | `packages/be-aggregate` | aggregate root service provider package | `mig-be-package-migration-builder`, `mig-be-aggregate-service-builder` |
-| 신규 | `@cocrepo/aggregate` | `{Domain}AggregateRoot` provider package. entity가 아니라 aggregate root service | `mig-be-package-migration-builder`, `mig-be-aggregate-service-builder` |
+| 신규 | `packages/be-command` | 프로젝트 전체 Command/Query message contract package | `orch-delivery`, `be-command-builder` |
+| 신규 | `@cocrepo/command` | Controller와 UseCase handler가 공유하는 request intent package | `orch-delivery`, `be-command-builder` |
+| 신규 | `packages/be-event` | 프로젝트 전체 Event message contract package | `orch-delivery`, `be-event-builder` |
+| 신규 | `@cocrepo/event` | UseCase handler, EventHandler, Saga가 공유하는 발생 사실 package | `orch-delivery`, `be-event-builder` |
+| `apps/*/api/src/module/**/*.cqrs.ts` | 제거 | message는 `@cocrepo/command`, handler는 `@cocrepo/usecase`로 분리 이동 | `be-command-builder`, `be-usecase-builder` |
+| `packages/be-app` | `packages/be-usecase` | ApplicationService 제거, UseCase handler package로 전환 | `orch-delivery`, `be-usecase-builder` |
+| `@cocrepo/app` | `@cocrepo/usecase` | import, package name, dependency, export 전체 변경 | `orch-delivery` |
+| `packages/be-gateway` | `packages/be-client` | 외부 API 단일 연동 Client package로 전환 | `orch-delivery`, `be-client-builder` |
+| `@cocrepo/gateway` | `@cocrepo/client` | import, package name, dependency, export 전체 변경 | `orch-delivery` |
+| `packages/be-facade` | 제거 | Controller boundary 조합은 UseCase로 이동, read model shaping은 Query UseCase로 이동 | `orch-delivery`, `be-controller-builder`, `be-usecase-builder` |
+| `@cocrepo/facade` | 제거 | legacy import가 남으면 migration incomplete | `orch-delivery` |
+| 신규 | `packages/be-aggregate` | aggregate root service provider package | `orch-delivery`, `be-aggregate-builder` |
+| 신규 | `@cocrepo/aggregate` | `{Domain}AggregateRoot` provider package. entity가 아니라 aggregate root service | `orch-delivery`, `be-aggregate-builder` |
 | `packages/be-service` | 유지 | aggregate root service가 아닌 support/domain helper service 유지 | `be-service-builder` |
-| `packages/be-entity` | 유지 | aggregate root entity만 `AbstractAggregateRootEntity`로 전환 | `mig-be-aggregate-entity-builder` |
-| `packages/be-repository` | 유지 | aggregate rehydrate/save method와 read projection query 구분 | `mig-be-cqrs-repository-builder` |
-| `@nestjs/cqrs` | 추가 | `CqrsModule`, `CommandBus`, `QueryBus`, `AggregateRoot`, handler decorator 사용 | `mig-be-package-migration-builder`, `mig-be-cqrs-module-builder` |
+| `packages/be-entity` | 유지 | aggregate root entity만 `AbstractAggregateRootEntity`로 전환 | `be-entity-builder` |
+| `packages/be-repository` | 유지 | aggregate rehydrate/save method와 read projection query 구분 | `be-repository-builder` |
+| `@nestjs/cqrs` | 추가 | `CqrsModule`, `CommandBus`, `QueryBus`, `AggregateRoot`, handler decorator 사용 | `orch-delivery`, `be-module-builder` |
 
 Package migration 원칙:
 
@@ -138,23 +138,23 @@ Legacy active role은 신규 실행에 사용하지 않는다. 아래 이름은 
 | `be-gateway-builder` | `be-client-builder` | Gateway/Adapter 중심 지시 제거, 단일 외부 연동 Client role로 전환 |
 | `be-facade-builder` | 제거 | facade layer는 신규 실행 role에서 제거 |
 
-Migration pilot에는 active backend role 대신 `.codex/agents/mig/` 아래 migration role을 사용한다. 예를 들어 Reservation UseCase migration agent를 만들 때의 `agent_type`은 `mig-be-usecase-builder`이다.
+CQRS / UseCase 전환 작업도 별도 전환 전용 role 없이 `.codex/agents/` 아래 active role을 사용한다. 예를 들어 Reservation UseCase 전환 agent를 만들 때의 `agent_type`은 `be-usecase-builder`이다.
 
 ## Role별 책임
 
 | role | 책임 파일 | 책임 |
 |---|---|---|
-| `mig-arch-cqrs-migration-spec-writer` | `docs/backend/cqrs-usecase-migration.md` | runbook, execution graph, lock, QA gate 갱신 |
-| `mig-be-package-migration-builder` | package.json, tsconfig, barrel, import path | package rename, dependency, export, legacy package 제거 |
-| `mig-be-command-builder` | `packages/be-command/src/**`, app-local `*.cqrs.ts` message source | Command/Query message package 이동/생성 |
-| `mig-be-event-builder` | `packages/be-event/src/**` | Event message package 이동/생성 |
-| `mig-be-aggregate-entity-builder` | `packages/be-entity/src/**` | `AbstractAggregateRootEntity`, aggregate root entity 전환 |
-| `mig-be-cqrs-repository-builder` | `packages/be-repository/src/**` | `plainToInstance(AggregateEntity, row)` rehydrate, aggregate save, read projection query 구분 |
-| `mig-be-aggregate-service-builder` | `packages/be-aggregate/src/**`, legacy `packages/be-service/src/{domain}/{domain}.service.ts` | aggregate root service를 `{Domain}AggregateRoot` provider로 이동/정리, workflow orchestration 제거 |
-| `mig-be-usecase-builder` | `packages/be-usecase/src/**` | UseCase handler, EventHandler, Saga, provider array |
-| `mig-be-cqrs-controller-builder` | `apps/*/api/src/**/*.controller.ts`, `apps/server/src/**/*.controller.ts` | facade/service 주입 제거, `CommandBus`/`QueryBus` 전환 |
-| `mig-be-cqrs-module-builder` | `apps/*/api/src/**/*.module.ts`, `apps/server/src/**/*.module.ts` | `CqrsModule`, handler providers, service/repository/client wiring |
-| `mig-be-client-builder` | `packages/be-client/src/**` | 외부 API 단일 연동 Client 전환 |
+| `orch-delivery` | `docs/backend/cqrs-usecase-migration.md` | runbook, execution graph, lock, QA gate 갱신 |
+| `orch-delivery` | package.json, tsconfig, barrel, import path | package rename, dependency, export, legacy package 제거 |
+| `be-command-builder` | `packages/be-command/src/**`, app-local `*.cqrs.ts` message source | Command/Query message package 이동/생성 |
+| `be-event-builder` | `packages/be-event/src/**` | Event message package 이동/생성 |
+| `be-entity-builder` | `packages/be-entity/src/**` | `AbstractAggregateRootEntity`, aggregate root entity 전환 |
+| `be-repository-builder` | `packages/be-repository/src/**` | `plainToInstance(AggregateEntity, row)` rehydrate, aggregate save, read projection query 구분 |
+| `be-aggregate-builder` | `packages/be-aggregate/src/**`, legacy `packages/be-service/src/{domain}/{domain}.service.ts` | aggregate root service를 `{Domain}AggregateRoot` provider로 이동/정리, workflow orchestration 제거 |
+| `be-usecase-builder` | `packages/be-usecase/src/**` | UseCase handler, EventHandler, Saga, provider array |
+| `be-controller-builder` | `apps/*/api/src/**/*.controller.ts`, `apps/server/src/**/*.controller.ts` | facade/service 주입 제거, `CommandBus`/`QueryBus` 전환 |
+| `be-module-builder` | `apps/*/api/src/**/*.module.ts`, `apps/server/src/**/*.module.ts` | `CqrsModule`, handler providers, service/repository/client wiring |
+| `be-client-builder` | `packages/be-client/src/**` | 외부 API 단일 연동 Client 전환 |
 
 ## AbstractEntity / AggregateRoot 전환 기준
 
@@ -263,18 +263,18 @@ flowchart TD
 
 | phase | owner role | input | required output | blocked if |
 |---|---|---|---|---|
-| 0. Baseline scan | `mig-be-package-migration-builder` | current imports, package refs, Reservation files | scan summary in final report | Reservation files or package refs cannot be located |
-| 1. Package rename scaffold | `mig-be-package-migration-builder` | `packages/be-app`, `packages/be-gateway`, `packages/be-facade` refs | `packages/be-usecase`, `packages/be-client`, `@nestjs/cqrs` dependency wiring ready for pilot | package rename would require touching files outside ownership without lock |
-| 2. Aggregate root base | `mig-be-aggregate-entity-builder` | `AbstractEntity`, `Reservation` | `AbstractAggregateRootEntity` exported, `Reservation` extends it | `BaseEntityFields` or DTO transform contract is unclear |
-| 3. Aggregate methods | `mig-be-aggregate-entity-builder` | Reservation workflow currently in facade/service | pure Reservation state transition methods | method requires async dependency inside entity |
-| 4. Repository rehydrate/save | `mig-be-cqrs-repository-builder` | Prisma row mapping, current repository methods | aggregate rehydrate/save methods and read projection methods separated | aggregate save contract or transaction boundary is unclear |
-| 5. AggregateRootService package migration | `mig-be-aggregate-service-builder` | current `ReservationService` | `ReservationAggregateRoot` provider in `@cocrepo/aggregate`, domain inputs, repository load/save, aggregate rules | service still needs controller DTO or facade workflow |
-| 6. Command/Query messages | `mig-be-command-builder` | endpoint mapping, DTO/input contract | `@cocrepo/command` Command/Query classes and barrel exports | message contract is missing |
-| 7. Event messages | `mig-be-event-builder` | side-effect/orchestration contract | `@cocrepo/event` Event classes and barrel exports | no event contract is needed |
-| 8. UseCase/EventHandler/Saga providers | `mig-be-usecase-builder` | command/query/event message, service contract | `@CommandHandler`/`@QueryHandler`, `@EventsHandler`, `@Saga`, provider arrays | service/repository contract is missing |
-| 9. Controller bus entrypoint | `mig-be-cqrs-controller-builder` | current controller, `@cocrepo/command` messages | constructor has only `CommandBus` and `QueryBus`, methods execute command/query | handler command/query contract is missing |
-| 10. Module wiring | `mig-be-cqrs-module-builder` | provider arrays, service/repository/client providers | `CqrsModule` import, providers include handler/event/saga arrays | package rename or handler export missing |
-| 11. Legacy removal | `mig-be-package-migration-builder` | pilot migrated imports | Reservation facade removed, legacy package refs removed from pilot path | any active import still uses legacy package |
+| 0. Baseline scan | `orch-delivery` | current imports, package refs, Reservation files | scan summary in final report | Reservation files or package refs cannot be located |
+| 1. Package rename scaffold | `orch-delivery` | `packages/be-app`, `packages/be-gateway`, `packages/be-facade` refs | `packages/be-usecase`, `packages/be-client`, `@nestjs/cqrs` dependency wiring ready for pilot | package rename would require touching files outside ownership without lock |
+| 2. Aggregate root base | `be-entity-builder` | `AbstractEntity`, `Reservation` | `AbstractAggregateRootEntity` exported, `Reservation` extends it | `BaseEntityFields` or DTO transform contract is unclear |
+| 3. Aggregate methods | `be-entity-builder` | Reservation workflow currently in facade/service | pure Reservation state transition methods | method requires async dependency inside entity |
+| 4. Repository rehydrate/save | `be-repository-builder` | Prisma row mapping, current repository methods | aggregate rehydrate/save methods and read projection methods separated | aggregate save contract or transaction boundary is unclear |
+| 5. AggregateRootService package migration | `be-aggregate-builder` | current `ReservationService` | `ReservationAggregateRoot` provider in `@cocrepo/aggregate`, domain inputs, repository load/save, aggregate rules | service still needs controller DTO or facade workflow |
+| 6. Command/Query messages | `be-command-builder` | endpoint mapping, DTO/input contract | `@cocrepo/command` Command/Query classes and barrel exports | message contract is missing |
+| 7. Event messages | `be-event-builder` | side-effect/orchestration contract | `@cocrepo/event` Event classes and barrel exports | no event contract is needed |
+| 8. UseCase/EventHandler/Saga providers | `be-usecase-builder` | command/query/event message, service contract | `@CommandHandler`/`@QueryHandler`, `@EventsHandler`, `@Saga`, provider arrays | service/repository contract is missing |
+| 9. Controller bus entrypoint | `be-controller-builder` | current controller, `@cocrepo/command` messages | constructor has only `CommandBus` and `QueryBus`, methods execute command/query | handler command/query contract is missing |
+| 10. Module wiring | `be-module-builder` | provider arrays, service/repository/client providers | `CqrsModule` import, providers include handler/event/saga arrays | package rename or handler export missing |
+| 11. Legacy removal | `orch-delivery` | pilot migrated imports | Reservation facade removed, legacy package refs removed from pilot path | any active import still uses legacy package |
 | 12. QA gate | QA role | migrated pilot | type-check/test/legacy scans pass | any required check fails |
 
 Execution rules:
@@ -381,43 +381,43 @@ Post-pilot execution rules:
 
 | 파일/패턴 | lock owner role | 병렬 여부 | 기준 |
 |---|---|---|---|
-| `.codex/agents/mig/*.toml` | read-only | false | migration role 파일은 여기에만 두며 pilot 실행 중 수정하지 않음 |
-| `docs/backend/cqrs-usecase-migration.md` | `mig-arch-cqrs-migration-spec-writer` | false | 이 runbook |
-| package rename 관련 `package.json`, `tsconfig*.json`, workspace import | `mig-be-package-migration-builder` | false | package rename은 atomic하게 진행 |
-| `packages/be-entity/src/abstract-aggregate-root.entity.ts` | `mig-be-aggregate-entity-builder` | false | 신규 aggregate root base |
-| `packages/be-entity/src/reservation.entity.ts` | `mig-be-aggregate-entity-builder` | false | Reservation aggregate root 전환 |
-| `packages/be-entity/src/index.ts` | `mig-be-aggregate-entity-builder` | false | entity barrel export |
-| `packages/be-repository/src/reservations.repository.ts` | `mig-be-cqrs-repository-builder` | false | rehydrate/save/query separation |
-| `packages/be-repository/src/index.ts` | `mig-be-cqrs-repository-builder` | false | repository export가 필요할 때만 |
-| `packages/be-aggregate/src/reservation/reservation.aggregate-root.ts` | `mig-be-aggregate-service-builder` | false | Reservation aggregate root service provider |
-| `packages/be-aggregate/src/index.ts` | `mig-be-aggregate-service-builder` | false | aggregate provider export |
-| legacy `packages/be-service/src/reservation/reservation.service.ts` | `mig-be-aggregate-service-builder` | false | aggregate root service 이동 후 cleanup |
-| `packages/be-service/src/index.ts` | `mig-be-aggregate-service-builder` | false | legacy service export cleanup |
-| `packages/be-command/src/reservation/**` | `mig-be-command-builder` | false | Reservation command/query message |
-| `packages/be-command/src/{domain}/**` | `mig-be-command-builder` | domain별 독립 시 true | domain command/query message |
-| `packages/be-command/src/index.ts` | `mig-be-command-builder` | false | command package barrel |
-| `packages/be-event/src/reservation/**` | `mig-be-event-builder` | false | Reservation event message |
-| `packages/be-event/src/{domain}/**` | `mig-be-event-builder` | domain별 독립 시 true | domain event message |
-| `packages/be-event/src/index.ts` | `mig-be-event-builder` | false | event package barrel |
-| `packages/be-usecase/src/reservation/**` | `mig-be-usecase-builder` | false | Reservation usecase/event handler/saga |
-| `packages/be-usecase/src/index.ts` | `mig-be-usecase-builder` | false | usecase package barrel |
-| `packages/be-usecase/src/{domain}/**` | `mig-be-usecase-builder` | domain별 독립 시 true | domain usecase/event handler/saga |
-| `packages/be-app/src/*.application-service.ts` | `mig-be-usecase-builder` | false | workflow를 usecase로 이동한 뒤 제거 |
-| `packages/be-app/src/index.ts` | `mig-be-package-migration-builder` | false | app package legacy export 제거 |
-| `packages/be-facade/src/*.facade.ts` | `mig-be-usecase-builder`, `mig-be-cqrs-controller-builder` | domain별 독립 시 true | facade workflow/read shaping을 usecase로 이동한 뒤 제거 |
-| `packages/be-facade/src/index.ts` | `mig-be-package-migration-builder` | false | facade package legacy export 제거 |
-| `packages/be-gateway/src/*.gateway.ts` | `mig-be-client-builder` | false | external gateway를 client로 이동한 뒤 제거 |
-| `packages/be-gateway/src/index.ts` | `mig-be-package-migration-builder` | false | gateway package legacy export 제거 |
-| `apps/core/api/src/module/reservations/reservations.controller.ts` | `mig-be-cqrs-controller-builder` | false | controller bus entrypoint |
-| `apps/core/api/src/module/reservations/reservations.module.ts` | `mig-be-cqrs-module-builder` | false | module provider wiring |
-| `apps/core/api/src/module/**/*.controller.ts` | `mig-be-cqrs-controller-builder` | domain별 독립 시 true | controller bus entrypoint |
-| `apps/core/api/src/module/**/*.module.ts` | `mig-be-cqrs-module-builder` | domain별 독립 시 true | `CqrsModule` and provider wiring |
-| `apps/core/api/package.json`, `apps/core/api/test/**` | `mig-be-package-migration-builder`, `qa-be-e2e-testing` | false | dependency/test mapper cleanup and E2E provider update |
-| `apps/idp/api/src/module/**/*.controller.ts` | `mig-be-cqrs-controller-builder` | domain별 독립 시 true | controller bus entrypoint |
-| `apps/idp/api/src/module/**/*.module.ts` | `mig-be-cqrs-module-builder` | domain별 독립 시 true | `CqrsModule` and provider wiring |
-| `apps/idp/api/src/module/**/*.facade.ts` | `mig-be-usecase-builder`, `mig-be-cqrs-controller-builder` | domain별 독립 시 true | app-local facade workflow extraction/removal |
-| `apps/idp/api/package.json`, `apps/idp/api/jest.config.js` | `mig-be-package-migration-builder`, `qa-be-testing` | false | dependency/test mapper cleanup |
-| `packages/be-client/src/**` | `mig-be-client-builder` | domain별 독립 시 true | provider별 Client 파일 |
+| active backend role TOML | read-only | false | active role 파일은 여기에만 두며 pilot 실행 중 수정하지 않음 |
+| `docs/backend/cqrs-usecase-migration.md` | `orch-delivery` | false | 이 runbook |
+| package rename 관련 `package.json`, `tsconfig*.json`, workspace import | `orch-delivery` | false | package rename은 atomic하게 진행 |
+| `packages/be-entity/src/abstract-aggregate-root.entity.ts` | `be-entity-builder` | false | 신규 aggregate root base |
+| `packages/be-entity/src/reservation.entity.ts` | `be-entity-builder` | false | Reservation aggregate root 전환 |
+| `packages/be-entity/src/index.ts` | `be-entity-builder` | false | entity barrel export |
+| `packages/be-repository/src/reservations.repository.ts` | `be-repository-builder` | false | rehydrate/save/query separation |
+| `packages/be-repository/src/index.ts` | `be-repository-builder` | false | repository export가 필요할 때만 |
+| `packages/be-aggregate/src/reservation/reservation.aggregate-root.ts` | `be-aggregate-builder` | false | Reservation aggregate root service provider |
+| `packages/be-aggregate/src/index.ts` | `be-aggregate-builder` | false | aggregate provider export |
+| legacy `packages/be-service/src/reservation/reservation.service.ts` | `be-aggregate-builder` | false | aggregate root service 이동 후 cleanup |
+| `packages/be-service/src/index.ts` | `be-aggregate-builder` | false | legacy service export cleanup |
+| `packages/be-command/src/reservation/**` | `be-command-builder` | false | Reservation command/query message |
+| `packages/be-command/src/{domain}/**` | `be-command-builder` | domain별 독립 시 true | domain command/query message |
+| `packages/be-command/src/index.ts` | `be-command-builder` | false | command package barrel |
+| `packages/be-event/src/reservation/**` | `be-event-builder` | false | Reservation event message |
+| `packages/be-event/src/{domain}/**` | `be-event-builder` | domain별 독립 시 true | domain event message |
+| `packages/be-event/src/index.ts` | `be-event-builder` | false | event package barrel |
+| `packages/be-usecase/src/reservation/**` | `be-usecase-builder` | false | Reservation usecase/event handler/saga |
+| `packages/be-usecase/src/index.ts` | `be-usecase-builder` | false | usecase package barrel |
+| `packages/be-usecase/src/{domain}/**` | `be-usecase-builder` | domain별 독립 시 true | domain usecase/event handler/saga |
+| `packages/be-app/src/*.application-service.ts` | `be-usecase-builder` | false | workflow를 usecase로 이동한 뒤 제거 |
+| `packages/be-app/src/index.ts` | `orch-delivery` | false | app package legacy export 제거 |
+| `packages/be-facade/src/*.facade.ts` | `be-usecase-builder`, `be-controller-builder` | domain별 독립 시 true | facade workflow/read shaping을 usecase로 이동한 뒤 제거 |
+| `packages/be-facade/src/index.ts` | `orch-delivery` | false | facade package legacy export 제거 |
+| `packages/be-gateway/src/*.gateway.ts` | `be-client-builder` | false | external gateway를 client로 이동한 뒤 제거 |
+| `packages/be-gateway/src/index.ts` | `orch-delivery` | false | gateway package legacy export 제거 |
+| `apps/core/api/src/module/reservations/reservations.controller.ts` | `be-controller-builder` | false | controller bus entrypoint |
+| `apps/core/api/src/module/reservations/reservations.module.ts` | `be-module-builder` | false | module provider wiring |
+| `apps/core/api/src/module/**/*.controller.ts` | `be-controller-builder` | domain별 독립 시 true | controller bus entrypoint |
+| `apps/core/api/src/module/**/*.module.ts` | `be-module-builder` | domain별 독립 시 true | `CqrsModule` and provider wiring |
+| `apps/core/api/package.json`, `apps/core/api/test/**` | `orch-delivery`, `qa-be-e2e-testing` | false | dependency/test mapper cleanup and E2E provider update |
+| `apps/idp/api/src/module/**/*.controller.ts` | `be-controller-builder` | domain별 독립 시 true | controller bus entrypoint |
+| `apps/idp/api/src/module/**/*.module.ts` | `be-module-builder` | domain별 독립 시 true | `CqrsModule` and provider wiring |
+| `apps/idp/api/src/module/**/*.facade.ts` | `be-usecase-builder`, `be-controller-builder` | domain별 독립 시 true | app-local facade workflow extraction/removal |
+| `apps/idp/api/package.json`, `apps/idp/api/jest.config.js` | `orch-delivery`, `qa-be-testing` | false | dependency/test mapper cleanup |
+| `packages/be-client/src/**` | `be-client-builder` | domain별 독립 시 true | provider별 Client 파일 |
 
 ## QA Gate
 
@@ -551,12 +551,12 @@ Reservation pilot과 core-api/idp-api phase QA 통과 후 다음 조건을 모�
 Feedback:
   feedback_type: none|contract-gap|dependency-missing|implementation-blocker|qa-failure
   affected_phase: package|package-migration|entity|aggregate-entity|aggregate-root-service|repository|service|usecase|controller|module|client|qa|none
-  affected_roles: mig-role-name-or-none
+  affected_roles: active-role-name-or-none
   affected_files: path-or-none
   required_action: none-or-action
 ```
 
-이 runbook을 수정하는 `mig-arch-cqrs-migration-spec-writer` role의 최종 보고 packet은 finding이 없을 때 반드시 아래 형식을 사용한다.
+이 runbook을 수정하는 `orch-delivery` role의 최종 보고 packet은 finding이 없을 때 반드시 아래 형식을 사용한다.
 
 ```yaml
 Feedback:

@@ -222,7 +222,7 @@ folder_required = true
 folder_layout = "packages/fe-ui/src/screen/{ScreenName}/{ScreenName}.tsx"
 planning_spec_file = "packages/fe-ui/src/screen/{ScreenName}/{ScreenName}.spec.md"
 story_file = "packages/fe-ui/src/screen/{ScreenName}/{ScreenName}.stories.tsx"
-guard = "screen 계층 planning spec은 시각/props/하위 조합 계약만 소유한다. 실행 순서, backend/foundation 계약, 승인 gate는 service delivery spec이 소유하며 route delivery spec은 해당 화면 execution slice만 소유한다. story spec은 만들지 않는다"
+guard = "screen 계층 planning spec은 시각/props/하위 조합 계약만 소유한다. 실행 순서, backend/foundation 계약, 승인 gate는 service delivery spec이 소유하며 route delivery spec은 해당 화면 실행 slice만 소유한다. story spec은 만들지 않는다"
 
 [rules.component_file]
 one_exported_ui_component_per_file = true
@@ -277,7 +277,7 @@ allowed = [
 ]
 source_of_truth = "서비스 기획과 실행"
 required_sections = "서비스 목표, 사용자 / 역할 / 권한, 도메인 모델 / 생명주기, 사용자 여정, 필수 페이지 / 라우트, 백엔드 / API / 기반 계약, DESIGN.md 기반 디자인 방향, 생성된 라우트 Spec, 에이전트 배정 매트릭스, 실행 그래프, QA / 승인 기준, 승인 / 실행 로그"
-guard = "service delivery spec이 서비스 전체 설계와 실행의 상위 source of truth다. 질문 기반 기획, 모든 web/mobile route 목록, backend/API/foundation 계약, DESIGN.md 기반 디자인 방향, 승인 gate, 실행 순서, QA 기준은 docs/services/**/*.delivery.spec.md에 한글로 기록한다. `agent_type`, operationId, codegen, 파일 경로, 패키지명 같은 고정 기술 식별자만 원문을 유지한다"
+guard = "service delivery spec이 서비스 전체 설계와 실행의 상위 기준이다. 질문 기반 기획, 모든 web/mobile route 목록, backend/API/foundation 계약, DESIGN.md 기반 디자인 방향, 승인 gate, 실행 순서, QA 기준은 docs/services/**/*.delivery.spec.md에 한글로 기록한다. `agent_type`, operationId, codegen, 파일 경로, 패키지명 같은 고정 기술 식별자만 원문을 유지한다"
 
 [rules.delivery_spec]
 allowed = [

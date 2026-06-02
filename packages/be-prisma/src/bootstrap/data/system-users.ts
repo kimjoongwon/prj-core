@@ -1,5 +1,6 @@
 export interface SystemAdminSeedData {
 	email: string;
+	legacyEmails?: string[];
 	phone: string;
 	password: string;
 	profile: {
@@ -16,7 +17,8 @@ export interface SystemAdminSeedData {
  */
 export const systemAdminSeedData: SystemAdminSeedData[] = [
 	{
-		email: "admin@onora.com",
+		email: "admin@plate.com",
+		legacyEmails: ["admin@onora.com"],
 		phone: "01073162347",
 		password: "rkdmf12!@",
 		profile: {

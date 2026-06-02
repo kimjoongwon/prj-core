@@ -58,7 +58,9 @@ describe("LocaleStore", () => {
 		expect(store.htmlLang).toBe("ja-JP");
 		expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
 			STORAGE_KEY,
-			LanguageCode.ja_JP,
+			JSON.stringify({
+				languageCode: LanguageCode.ja_JP,
+			}),
 		);
 	});
 });

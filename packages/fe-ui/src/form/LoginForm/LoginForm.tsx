@@ -55,15 +55,18 @@ export const LoginForm = observer(({ state }: LoginFormProps) => {
 				inputMode="email"
 				variant="bordered"
 				type="email"
-				placeholder="ops@example.com"
-				label="Email"
+				placeholder="admin@plate.com"
+				label="이메일"
 				className="text-left"
 				classNames={{
-					input:
-						"h-12 rounded-xl border border-divider bg-background/70 px-4 pl-10 text-base shadow-sm",
+					input: "text-base",
+					inputWrapper:
+						"h-12 rounded-xl border border-divider bg-background/70 px-4 shadow-sm",
 					label: "text-sm font-semibold text-foreground",
 				}}
-				startContent={<Mail aria-hidden className="size-4" />}
+				startContent={
+					<Mail aria-hidden className="size-4 text-default-400" />
+				}
 				value={state.email}
 				onChange={handleChangeEmailInput}
 			/>
@@ -73,14 +76,17 @@ export const LoginForm = observer(({ state }: LoginFormProps) => {
 				variant="bordered"
 				type="password"
 				placeholder="비밀번호를 입력하세요"
-				label="Password"
+				label="비밀번호"
 				className="text-left"
 				classNames={{
-					input:
-						"h-12 rounded-xl border border-divider bg-background/70 px-4 pl-10 text-base shadow-sm",
+					input: "text-base",
+					inputWrapper:
+						"h-12 rounded-xl border border-divider bg-background/70 px-4 shadow-sm",
 					label: "text-sm font-semibold text-foreground",
 				}}
-				startContent={<KeyRound aria-hidden className="size-4" />}
+				startContent={
+					<KeyRound aria-hidden className="size-4 text-default-400" />
+				}
 				value={state.password}
 				onChange={handleChangePasswordInput}
 			/>

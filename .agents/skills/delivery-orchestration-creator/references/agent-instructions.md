@@ -6,11 +6,11 @@
 
 ---
 
-## 내장 Spec 정책 (Mandatory)
+## 내장 Spec 정책 (필수)
 
 - 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec, 그리고 그 spec에서 생성된 route delivery spec을 기준으로 판단합니다.
-- 서비스/기능/화면/코드 변경 delivery의 상위 source of truth는 service delivery spec입니다: `docs/services/**/*.delivery.spec.md`.
-- route delivery spec은 service delivery spec에서 파생된 execution slice입니다: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
+- 서비스/기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec입니다: `docs/services/**/*.delivery.spec.md`.
+- route delivery spec은 service delivery spec에서 파생된 실행 slice입니다: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
 - Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
 - planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
 - story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
@@ -18,7 +18,7 @@
 - 승인된 service delivery spec이 있으면 그 spec과 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
 
 
-## 모바일 Text 정책 (Mandatory)
+## 모바일 Text 정책 (필수)
 
 - `packages/fe-mo-ui`와 `apps/mobile`의 사용자 노출 텍스트는 `@cocrepo/mo-ui`의 `Text` primitive를 사용합니다.
 - `react-native`의 `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 구현 내부에서만 허용합니다.
@@ -26,32 +26,32 @@
 - HeroUI Native compound wrapper는 `return <HeroX {...props} />` 형태의 return-only re-export로 끝내지 않습니다. `title`, `description`, `items`, `trigger`, `actions` 같은 의미 있는 props로 기본 조합을 제공하고 dot-slot escape hatch를 함께 유지합니다.
 - 신규/수정 story에서도 예시 텍스트는 같은 `Text` primitive를 사용합니다.
 
-## 재사용 우선 점검 (Mandatory)
+## 재사용 우선 점검 (필수)
 
 - 실행 전에 기존 코드, route, screen, page, component, API, Prisma schema, Store, spec, 테스트, generated output 상태를 먼저 확인합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 결과에 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
-## 디자인 언어 기준 (Mandatory)
+## 디자인 언어 기준 (필수)
 
 - 화면, page, screen, feature, widget, form, data-display, feedback, navigation, route UI가 포함된 delivery는 루트 `DESIGN.md`를 먼저 읽고 적용합니다.
-- `DESIGN.md`는 프로젝트 디자인 언어의 source of truth입니다. 외부 브랜드 색상/스타일 복제가 아니라 프로젝트의 따뜻한 예약 운영 플랫폼 원칙을 따릅니다.
+- `DESIGN.md`는 프로젝트 디자인 언어의 기준입니다. 외부 브랜드 색상/스타일 복제가 아니라 프로젝트의 따뜻한 예약 운영 플랫폼 원칙을 따릅니다.
 - 색상은 값이나 외부 브랜드 palette가 아니라 `canvas`, `surface`, `primary`, `muted`, `success`, `warning`, `danger`, `border` 같은 기존 theme 역할로만 설명합니다.
 - service delivery spec은 서비스 전체의 정보 위계, navigation, 상태/다음 행동 패턴, web/mobile density 차이, shared component 전략을 `DESIGN.md` 기준으로 기록합니다.
-- route delivery spec은 각 페이지의 `Design Alignment`, `Screen Rough`, `Rhythm / Layout Contract`를 `DESIGN.md` 기준으로 기록합니다.
+- route delivery spec은 각 페이지의 `디자인 정렬`, `화면 러프`, `리듬 / 레이아웃 계약`을 `DESIGN.md` 기준으로 기록합니다.
 - spec과 구현은 `DESIGN.md`의 핵심 원칙인 상태 우선, 다음 행동 우선, 따뜻하지만 느슨하지 않은 밀도, 부드러운 surface, 과한 장식 금지를 반영해야 합니다.
 - Admin web은 스캔성과 반복 작업 효율을 우선하고, Mobile은 safe area, touch target, 편안한 상태 확인과 다음 행동 안내를 우선합니다.
 - UI가 전혀 없는 backend/codegen-only delivery는 service delivery spec과 관련 route slice의 디자인 항목에 `no UI design impact` 사유를 남깁니다.
 - 사용자 요구나 기존 화면 제약이 `DESIGN.md`와 충돌하면 임의로 무시하지 말고 spec에 예외 사유를 기록하고 approval gate에서 확인합니다.
 
-# Service Delivery Orchestrator
+# 서비스 딜리버리 오케스트레이터
 
 `orch-delivery`는 서비스 단위 기획, 설계, route spec 생성, 실행, QA를 끝까지 소유하는 유일한 orchestration role입니다.
 이 role 하나가 **기획 질문 → 서비스 Spec → 승인 → 라우트 Spec → 구현 → QA** 흐름을 수행합니다.
 
 별도 planning role과 별도 Delivery Plan 파일을 만들지 않습니다.
-실행 계약은 승인된 service delivery spec과 그 spec에서 생성된 route delivery spec 안의 `## Delivery` 섹션으로 통일합니다.
+실행 계약은 승인된 service delivery spec과 그 spec에서 생성된 route delivery spec 안의 `## 딜리버리` 섹션으로 통일합니다.
 Screen/Feature spec은 planning spec으로 유지하되 실행 그래프, backend/foundation build order, 승인 gate를 소유하지 않습니다.
 
 ---
@@ -96,18 +96,18 @@ Screen/Feature spec은 planning spec으로 유지하되 실행 그래프, backen
 
 ### 서비스 Delivery Spec
 
-상위 source of truth는 아래 service spec입니다.
+상위 기준은 아래 service spec입니다.
 
 - service delivery: `docs/services/{service-name}.delivery.spec.md`
 
-service delivery spec은 서비스 목표, 권한, 도메인 모델/생명주기, 사용자 여정, 모든 web/mobile route 목록, backend/API/foundation 계약, DESIGN.md 기반 서비스 디자인 방향, 생성된 route spec 목록, 에이전트 배정 매트릭스, 실행 그래프, 공유 파일 잠금, 승인 로그를 소유합니다.
+service delivery spec은 서비스 목표, 권한, 도메인 모델/생명주기, 사용자 여정, 모든 web/mobile route 목록, backend/API/foundation 계약, DESIGN.md 기반 서비스 디자인 방향, 생성된 route spec 목록, 에이전트 배정 매트릭스, 실행 그래프, 승인 로그를 소유합니다.
 
 ### 생성된 Route Delivery Spec
 
 route delivery spec은 service delivery spec에서 파생된 실행 slice입니다.
 
 - Next.js route page: `apps/*/web/src/app/**/page.spec.md`
-- Expo Router native route owner: `apps/mobile/src/app/**/index.spec.md`
+- Expo Router native route: `apps/mobile/src/app/**/index.spec.md`
 
 route delivery spec은 해당 route/page의 화면 계약, route wiring, component inventory, route-local hook/state, route-local test/E2E, 그리고 service spec의 backend/API/foundation 계약 중 해당 route가 소비하는 slice를 소유합니다.
 backend/API/foundation의 전체 설계와 build order는 service delivery spec이 소유하며 route spec은 이를 참조합니다.
@@ -153,7 +153,7 @@ service delivery spec은 아래 섹션을 반드시 한글로 포함합니다.
 - 사용자 목표와 운영 목표
 - 대상 app/domain/platform
 - 성공 기준
-- in/out of scope
+- 범위 포함/제외
 - 기존 구현 재사용 후보와 신규 생성 사유
 
 ### 사용자 / 역할 / 권한
@@ -177,7 +177,7 @@ Prisma model, Entity, VO, Command/Query, Event, UseCase가 필요한 경우 여�
 사용자가 서비스 안에서 이동하는 흐름을 web/mobile, happy path, empty/error/recovery path로 나눠 작성합니다.
 각 journey는 어떤 route와 API를 소비하는지 보여줘야 합니다.
 
-| Journey | Actor | 시작점 | 단계 | 완료 조건 | 실패/복구 | 관련 route/API |
+| 여정 | 행위자 | 시작점 | 단계 | 완료 조건 | 실패/복구 | 관련 route/API |
 |---------|-------|--------|------|-----------|-----------|----------------|
 
 ### 필수 페이지 / 라우트
@@ -185,7 +185,7 @@ Prisma model, Entity, VO, Command/Query, Event, UseCase가 필요한 경우 여�
 서비스에 필요한 모든 web/mobile route를 먼저 나열합니다.
 목록/상세/생성/수정/설정/권한/empty/error/admin-only/mobile-only 화면을 누락하지 않습니다.
 
-| 플랫폼 | route | 페이지/화면 | 목적 | 주요 상태 | Primary action | route spec path | source owner `agent_type` | 비고 |
+| 플랫폼 | route | 페이지/화면 | 목적 | 주요 상태 | 주요 행동 | route spec 경로 | 소스 담당 `agent_type` | 비고 |
 |--------|-------|-------------|------|-----------|----------------|-----------------|---------------------------|------|
 
 - route spec path는 web이면 `apps/*/web/src/app/**/page.spec.md`, mobile이면 `apps/mobile/src/app/**/index.spec.md`를 가리킵니다.
@@ -236,11 +236,11 @@ route-local hook/util/type/state는 Web/Mobile 모두 route spec의 `fe-route-ag
 
 승인된 service delivery spec에서 생성하거나 갱신할 route delivery spec 목록을 기록합니다.
 
-| route spec | 플랫폼 | route 파일 | 역할 | 생성/갱신 | parent service spec | 담당 `agent_type` | 비고 |
+| route spec | 플랫폼 | route 파일 | 역할 | 생성/갱신 | 상위 service spec | 담당 `agent_type` | 비고 |
 |------------|--------|------------|------|-----------|---------------------|-------------------|------|
 
 - service spec approval 전에는 route spec을 생성하지 않습니다.
-- route spec에는 parent service spec 경로와 service-level 계약 참조를 반드시 기록합니다.
+- route spec에는 상위 service spec 경로와 service-level 계약 참조를 반드시 기록합니다.
 - route spec이 service spec과 다르게 확장되어야 하면 route spec을 먼저 고치지 말고 service spec에 re-entry합니다.
 
 ### 에이전트 배정 매트릭스
@@ -308,7 +308,7 @@ service spec approval, route spec generation, 실행 결과, QA 결과, re-entry
 
 ## 5. 생성된 Route Delivery Spec 규칙
 
-각 route delivery spec은 기존 route spec 형식을 유지하되 parent service spec을 명확히 참조합니다.
+각 route delivery spec은 기존 route spec 형식을 유지하되 상위 service spec을 명확히 참조합니다.
 
 ```text
 ## 딜리버리
@@ -368,13 +368,13 @@ Codex 질문 도구 문구:
 - route delivery spec에 없는 파일은 leaf agent가 수정하지 않습니다.
 - route spec이 필요하지만 누락되어 있으면 구현하지 말고 service spec re-entry를 요청합니다.
 - `parallel=auto`여도 spec row의 `parallel: true`이고 수정 허용 파일이 겹치지 않는 step만 병렬 실행합니다.
-- shared file lock은 service spec과 route spec의 `Shared File Locks`를 따릅니다.
+- shared file lock은 service spec과 route spec의 `공유 파일 잠금`를 따릅니다.
 - backend/API 변경 후 service spec에 codegen step이 있으면 web/mobile wiring 전에 codegen을 실행합니다.
 - 완료 보고에는 실행한 service step id, route step id, agent_type, 변경 파일, 검증 결과, re-entry 여부를 포함합니다.
 
 ---
 
-## 8. Feedback Router
+## 8. Feedback 라우터
 
 - `spec-gap`: service spec을 보강하고 approval gate 재진입
 - `approval-needed`: approval gate를 다시 열고 승인 전 실행 중단
@@ -411,7 +411,7 @@ Codex 질문 도구 문구:
 - approval gate 전에는 route spec 생성, agent 호출, QA role 호출을 하지 않습니다.
 - 하위호환 wrapper, deprecated 경로, 임시 fallback API를 계획하지 않습니다.
 
-## Feedback Packet (Mandatory)
+## Feedback Packet (필수)
 
 이 role이 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
 finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.

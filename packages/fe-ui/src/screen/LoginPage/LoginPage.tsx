@@ -1,11 +1,13 @@
 "use client";
 
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck, TriangleAlert } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { FormEvent } from "react";
 import { Button } from "../../control/Button/Button";
+import { Text } from "../../display/data-display/Text/Text";
 import { LoginForm, type LoginFormState } from "../../form/LoginForm/LoginForm";
 import { useT } from "../../i18n";
+import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { Surface } from "../../surface";
 
@@ -54,7 +56,7 @@ export interface LoginPageProps {
  * <LoginPage
  *   state={state.loginPage}
  *   title="관리자 로그인"
- *   caption="관리자 계정으로 로그인해주세요."
+ *   caption="예약, 결제, 권한 상태를 이어서 확인하세요."
  *   onSubmitLoginForm={onSubmitLoginForm}
  *   isLoading={isLoading}
  * />
@@ -85,66 +87,115 @@ export const LoginPage = observer(
 				onSubmit={onSubmitLoginPage}
 			>
 				<Surface
-					className="overflow-hidden rounded-[2rem] border border-divider bg-content1/95 shadow-2xl shadow-default-100/10"
+					className="overflow-hidden rounded-2xl border border-divider bg-content1 shadow-lg shadow-default-100/10"
 					padding="none"
 				>
-					<VStack fullWidth gap="flush">
-						<VStack
-							key="header"
-							fullWidth
-							gap="block"
-							className="border-b border-divider bg-content2/50 px-6 py-5 text-left"
-						>
-							<span
+					<VStack fullWidth gap="section" className="p-6 sm:p-7">
+						<VStack key="header" fullWidth gap="block" className="text-left">
+							<HStack
 								key="badge"
-								className="inline-flex w-fit items-center gap-2 rounded-full border border-divider bg-background px-3 py-1 text-xs font-medium text-default-600"
+								alignItems="center"
+								gap="inline"
+								className="w-fit rounded-full border border-divider bg-content2 px-3 py-1 text-default-600"
 							>
-								<ShieldCheck aria-hidden className="size-4 text-primary" />
-								Native access
-							</span>
-							<h3
+								<ShieldCheck
+									key="icon"
+									aria-hidden
+									className="size-4 text-primary"
+								/>
+								<Text
+									key="text"
+									as="span"
+									variant="caption"
+									className="font-medium !text-foreground opacity-70"
+								>
+									안전한 운영 세션
+								</Text>
+							</HStack>
+							<Text
 								key="title"
-								className="text-2xl font-bold leading-tight text-foreground"
+								as="h2"
+								variant="h3"
+								className="leading-tight"
 							>
 								{t(title)}
-							</h3>
-							<p key="caption" className="text-sm leading-6 text-default-500">
+							</Text>
+							<Text
+								key="caption"
+								variant="subtitle2"
+								className="leading-6 !text-foreground opacity-70"
+							>
 								{t(caption)}
-							</p>
+							</Text>
 						</VStack>
 
-						<VStack
-							key="body"
-							fullWidth
-							gap="section"
-							className="px-6 pb-6 pt-5 text-left"
+						<HStack
+							key="session-hint"
+							alignItems="center"
+							gap="block"
+							className="rounded-2xl border border-divider bg-content2/60 p-3 text-left"
 						>
-							<LoginForm key="form" state={state.loginForm} />
-
-							<p
-								key="feedback"
-								aria-hidden={!state.errorMessage}
-								aria-live="polite"
-								className="min-h-5 text-sm font-medium text-danger"
-								role={state.errorMessage ? "alert" : undefined}
+							<span
+								key="indicator"
+								className="size-2 shrink-0 rounded-full bg-success"
+							/>
+							<Text
+								key="text"
+								variant="caption"
+								className="leading-5 !text-foreground opacity-75"
 							>
-								{state.errorMessage ? t(state.errorMessage) : " "}
-							</p>
+								로그인 후 선택된 지점 scope로 관리자 API를 호출합니다.
+							</Text>
+						</HStack>
 
-							<Button
-								key="submit"
-								type="submit"
-								color="primary"
-								className="h-12 w-full rounded-xl shadow-lg shadow-primary/20"
-								endContent={<ArrowRight aria-hidden className="size-4" />}
-								fullWidth
-								isDisabled={isLoading}
-								isLoading={isLoading}
-								size="lg"
-							>
-								{t("로그인")}
-							</Button>
-						</VStack>
+						<LoginForm key="form" state={state.loginForm} />
+
+						<div key="feedback" className="min-h-10">
+							{state.errorMessage ? (
+								<div
+									aria-live="polite"
+									className="rounded-xl border border-danger/30 bg-danger/10 px-3 py-2 text-danger"
+									role="alert"
+								>
+									<HStack alignItems="center" gap="inline">
+										<TriangleAlert
+											key="icon"
+											aria-hidden
+											className="size-4 shrink-0"
+										/>
+										<Text
+											key="text"
+											as="span"
+											variant="error"
+											className="leading-5"
+										>
+											{t(state.errorMessage)}
+										</Text>
+									</HStack>
+								</div>
+							) : (
+								<Text
+									variant="caption"
+									className="leading-5 !text-foreground opacity-70"
+								>
+									입력한 계정으로 운영 콘솔 접근 권한을 확인합니다.
+								</Text>
+							)}
+						</div>
+
+						<Button
+							key="submit"
+							type="submit"
+							color="primary"
+							className="h-12 w-full rounded-full shadow-md shadow-primary/15"
+							endContent={<ArrowRight aria-hidden className="size-4" />}
+							fullWidth
+							isDisabled={isLoading}
+							isLoading={isLoading}
+							size="lg"
+						>
+							{t("로그인")}
+						</Button>
 					</VStack>
 				</Surface>
 			</form>

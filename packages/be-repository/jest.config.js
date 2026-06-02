@@ -6,7 +6,7 @@ module.exports = {
   moduleFileExtensions: ["ts", "js", "json"],
   moduleNameMapper: {
     "^@cocrepo/entity$": "<rootDir>/../be-entity/dist",
-    "^@cocrepo/prisma$": "<rootDir>/../prisma/dist/src",
+    "^@cocrepo/prisma$": "<rootDir>/../be-prisma/dist/src",
   },
   setupFiles: ["reflect-metadata"],
   transform: {

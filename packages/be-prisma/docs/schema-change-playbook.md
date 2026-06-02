@@ -14,7 +14,7 @@
 
 현재 `packages/be-prisma`는 아래가 공존하는 하이브리드 상태입니다.
 
-- `schema/**`: Prisma schema source of truth
+- `schema/**`: Prisma schema 기준
 - `migrations/**`: schema migration SQL
 - `src/reference-data/definitions/**`: 운영 기준 데이터 정의
 - `src/bootstrap/data/**`, `src/demo-data/**`: bootstrap default/demo definition source

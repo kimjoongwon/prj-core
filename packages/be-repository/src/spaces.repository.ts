@@ -305,6 +305,20 @@ export class SpacesRepository {
 	}
 
 	/**
+	 * Space 소프트 삭제
+	 */
+	async removeById(id: string): Promise<Space> {
+		this.logger.debug(`Space 소프트 삭제: ${id.slice(-8)}`);
+
+		const result = await this.txHost.tx.space.update({
+			where: { id },
+			data: { removedAt: new Date() },
+		});
+
+		return plainToInstance(Space, result);
+	}
+
+	/**
 	 * Space의 Ground detail 수정
 	 */
 	async updateGroundBySpaceId(

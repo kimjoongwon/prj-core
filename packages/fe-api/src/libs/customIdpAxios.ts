@@ -118,6 +118,33 @@ const applyTokenRefreshData = (responseData?: {
 	}
 };
 
+const syncSessionHeaders = (config: InternalAxiosRequestConfig) => {
+	const headers = AxiosHeaders.from(config.headers);
+	const accessToken = persistStoreRef?.accessToken;
+	const refreshToken = persistStoreRef?.refreshToken;
+	const spaceId = persistStoreRef?.spaceId;
+	const languageCode = localeStoreRef?.languageCode;
+
+	if (accessToken) {
+		headers.set("Authorization", `Bearer ${accessToken}`);
+	}
+
+	if (refreshToken) {
+		headers.set(REQUEST_HEADER_KEYS.REFRESH_TOKEN, refreshToken);
+	}
+
+	if (spaceId) {
+		headers.set(REQUEST_HEADER_KEYS.SPACE_ID, spaceId);
+	}
+
+	if (languageCode) {
+		headers.set(REQUEST_HEADER_KEYS.LANGUAGE, languageCode);
+	}
+
+	config.headers = headers;
+	return config;
+};
+
 IDP_AXIOS_INSTANCE.interceptors.request.use((config) => {
 	const headers = AxiosHeaders.from(config.headers);
 	const accessToken = persistStoreRef?.accessToken;
@@ -177,7 +204,7 @@ IDP_AXIOS_INSTANCE.interceptors.response.use(
 			if (isRefreshing) {
 				return new Promise((resolve, reject) => {
 					failedQueue.push({ resolve, reject });
-				}).then(() => IDP_AXIOS_INSTANCE(originalRequest));
+				}).then(() => IDP_AXIOS_INSTANCE(syncSessionHeaders(originalRequest)));
 			}
 
 			originalRequest._retry = true;
@@ -203,7 +230,7 @@ IDP_AXIOS_INSTANCE.interceptors.response.use(
 					applyTokenRefreshData(responseData);
 				}
 				processQueue(null);
-				return IDP_AXIOS_INSTANCE(originalRequest);
+				return IDP_AXIOS_INSTANCE(syncSessionHeaders(originalRequest));
 			} catch (refreshError) {
 				processQueue(refreshError);
 				if (isBrowser && !nativeRefreshHandler) {

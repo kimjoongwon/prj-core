@@ -36,7 +36,7 @@
 | Stage 2 target | `COURSE-S2-BE-001` ~ `COURSE-S2-BE-005` |
 | Stage 3 target | `COURSE-S3-API-001`, `COURSE-S3-FE-001` |
 
-route는 `useGetCoursePasses`의 `isLoading`/`isFetching`/`isError` 상태를 `queryState`로 전달합니다. `CourseManagementConsole`은 loading/refreshing/error/empty 상태를 표 영역에 렌더링하고, 잔여 예약 권리는 API의 `reservationRemainingCount`를 단일 source of truth로 표시합니다.
+route는 `useGetCoursePasses`의 `isLoading`/`isFetching`/`isError` 상태를 `queryState`로 전달합니다. `CourseManagementConsole`은 loading/refreshing/error/empty 상태를 표 영역에 렌더링하고, 잔여 예약 권리는 API의 `reservationRemainingCount`를 단일 기준으로 표시합니다.
 
 ## 이벤트 핸들러
 

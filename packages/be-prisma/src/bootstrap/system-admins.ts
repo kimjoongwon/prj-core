@@ -70,23 +70,59 @@ export async function ensureSystemAdminUsers(
 		});
 
 		if (!systemAdminUser) {
+			const legacySystemAdminUser =
+				userData.legacyEmails && userData.legacyEmails.length > 0
+					? await db.user.findFirst({
+							where: {
+								email: {
+									in: userData.legacyEmails,
+								},
+							},
+						})
+					: null;
 			const hashedPassword = await hash(userData.password, 10);
-			systemAdminUser = await db.user.create({
-				data: {
-					name: userData.profile.name,
-					phone: userData.phone,
-					email: userData.email,
-					password: hashedPassword,
-					profiles: {
-						create: {
-							name: userData.profile.name,
-							nickname: userData.profile.nickname,
-							address: "",
+
+			if (legacySystemAdminUser) {
+				systemAdminUser = await db.user.update({
+					where: { id: legacySystemAdminUser.id },
+					data: {
+						name: userData.profile.name,
+						phone: userData.phone,
+						email: userData.email,
+						password: hashedPassword,
+						failedLoginAttempts: 0,
+						lockedUntil: null,
+						isPermanentlyLocked: false,
+						mustChangePassword: false,
+					},
+				});
+				console.log(
+					`System admin user migrated: ${legacySystemAdminUser.email} -> ${userData.email}`,
+				);
+				await ensureSystemAdminProfile(
+					db,
+					systemAdminUser.id,
+					userData.profile.name,
+					userData.profile.nickname,
+				);
+			} else {
+				systemAdminUser = await db.user.create({
+					data: {
+						name: userData.profile.name,
+						phone: userData.phone,
+						email: userData.email,
+						password: hashedPassword,
+						profiles: {
+							create: {
+								name: userData.profile.name,
+								nickname: userData.profile.nickname,
+								address: "",
+							},
 						},
 					},
-				},
-			});
-			console.log(`System admin user created: ${userData.email}`);
+				});
+				console.log(`System admin user created: ${userData.email}`);
+			}
 		} else {
 			await ensureSystemAdminProfile(
 				db,

@@ -2,7 +2,7 @@ import { navigateToConsentForm, navigateToLoginForm } from "@cocrepo/e2e";
 import { expect, type Page, test } from "@playwright/test";
 
 /** 시드 데이터 기준 FULL_ACCESS 계정 */
-const ADMIN_EMAIL = "admin@onora.com";
+const ADMIN_EMAIL = "admin@plate.com";
 const ADMIN_PASSWORD = "rkdmf12!@";
 
 const getLoginHeading = (page: Page) =>
@@ -84,7 +84,7 @@ test.describe("OIDC 로그인 인터랙션", () => {
 			await expect(page.getByText("DEV MODE")).toBeVisible();
 
 			// Then: 이메일/비밀번호가 자동 입력됨
-			await expect(page.getByLabel("이메일")).toHaveValue("admin@onora.com");
+			await expect(page.getByLabel("이메일")).toHaveValue("admin@plate.com");
 		});
 	});
 

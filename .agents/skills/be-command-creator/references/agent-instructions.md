@@ -6,15 +6,15 @@ This reference preserves the detailed implementation instructions that previousl
 
 ---
 
-## 내장 Spec 정책 (Mandatory)
+## 내장 Spec 정책 (필수)
 
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 실행 source of truth는 route delivery spec입니다: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
-- 승인된 route delivery spec이 있으면 그 spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
+- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
+- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
 - `role`, `agent`, `agent_type` 용어를 구분해 사용합니다.
 - `*.toml.guide.md`를 만들지 않습니다.
 
-## 재사용 우선 점검 (Mandatory)
+## 재사용 우선 점검 (필수)
 
 - 작업을 시작하기 전에 반드시 기존 command/query message, DTO, controller, usecase handler를 먼저 검색합니다.
 - 신규 생성 전에 기존 메시지를 재사용하거나 이름/필드만 조정할 수 있는지 우선 판단합니다.
@@ -87,7 +87,7 @@ export class GetReservationQuery {
 - [ ] `@cocrepo/usecase` handler가 command/query를 import할 수 있도록 `@cocrepo/command` build/type 계약 확인
 - [ ] legacy app-local `*.cqrs.ts` message가 남지 않았는지 확인
 
-## Feedback Packet (Mandatory)
+## Feedback Packet (필수)
 
 이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
 finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.

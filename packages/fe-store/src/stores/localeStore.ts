@@ -13,6 +13,19 @@ interface PersistedLocale {
 	languageCode?: LanguageCode | null;
 }
 
+function parsePersistedLanguageCode(stored: string): LanguageCode {
+	try {
+		const data = JSON.parse(stored) as PersistedLocale | LanguageCode;
+		if (typeof data === "string") {
+			return toLanguageCode(data);
+		}
+
+		return toLanguageCode(data.languageCode);
+	} catch {
+		return toLanguageCode(stored);
+	}
+}
+
 function toLanguageCode(value?: string | null): LanguageCode {
 	if (supportedLanguages.includes(value as LanguageCode)) {
 		return value as LanguageCode;
@@ -40,12 +53,7 @@ export class LocaleStore {
 
 		const stored = localStorage.getItem(this.config.storageKey);
 		if (stored) {
-			try {
-				const data = JSON.parse(stored) as PersistedLocale;
-				this.languageCode = toLanguageCode(data.languageCode);
-			} catch {
-				this.languageCode = DEFAULT_LANGUAGE;
-			}
+			this.languageCode = parsePersistedLanguageCode(stored);
 		}
 
 		this.isHydrated = true;
@@ -53,6 +61,10 @@ export class LocaleStore {
 
 	setLanguageCode(languageCode: string): void {
 		this.languageCode = toLanguageCode(languageCode);
+	}
+
+	get htmlLang(): string {
+		return this.languageCode.replace("_", "-");
 	}
 
 	private setupAutoSave(): void {

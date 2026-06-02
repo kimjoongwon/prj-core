@@ -40,6 +40,7 @@
     "lint": "biome lint",
     "format": "biome format --write .",
     "type-check": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
@@ -51,7 +52,8 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "orval": "^7.8.0",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "engines": {
     "node": ">=18.0.0",

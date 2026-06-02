@@ -4,11 +4,21 @@
 > 타입: expo-route-delivery
 > route: `/community`
 > owner route file: `apps/mobile/src/app/(tabs)/community.tsx`
-> source of truth: route delivery spec
+> 상위 service spec: `docs/services/mobile-community.delivery.spec.md`
+> 실행 slice: route delivery spec
 
-## Delivery
+## 딜리버리
 
-### Goal
+### 상위 서비스 Spec
+
+| 항목 | 내용 |
+|------|------|
+| service spec | `docs/services/mobile-community.delivery.spec.md` |
+| service step | `MOBILE-COMMUNITY-ROUTE` |
+| route 역할 | 모바일 커뮤니티 탭 실행 slice |
+| ownership | 서비스 전체 도메인/API/foundation/build order는 service spec이 소유하고, 이 문서는 `/community` route wiring과 화면/QA 계약만 소유한다. |
+
+### 목표
 
 모바일 사용자가 현재 선택된 지점의 커뮤니티 게시글을 확인하고, 짧은 게시글을 작성할 수 있는 `/community` 하단 탭을 만든다.
 
@@ -18,16 +28,16 @@
 | 대상 app/domain/platform | `apps/mobile`, `content/community`, Expo Router mobile tab |
 | 성공 기준 | `/community` 탭에서 게시글 목록, loading/empty/error, 작성 bottom sheet, 작성 성공 후 feed 갱신이 동작한다. |
 | in scope | community feed 조회, 게시글 작성, tab wiring, mobile screen/story/unit/route test, backend API + Orval codegen |
-| out of scope | 댓글, 좋아요, 신고, 파일 첨부, 게시글 상세 route, push notification, admin moderation UI |
+| 범위 제외 | 댓글, 좋아요, 신고, 파일 첨부, 게시글 상세 route, push notification, admin moderation UI |
 
-### Planning Spec References
+### 기획 Spec 참조
 
 | 대상 | Planning Spec | Source 파일 | 역할 | 재사용/신규 | 갱신 여부 | 담당 `agent_type` | 비고 |
 |------|---------------|-------------|------|-------------|-----------|-------------------|------|
-| `/community` visual owner | `packages/fe-mo-ui/src/screen/CommunityScreen/CommunityScreen.spec.md` | `packages/fe-mo-ui/src/screen/CommunityScreen/CommunityScreen.tsx` | 커뮤니티 화면 visual/props/state rendering 계약 | new | build 시 신규 작성 | `fe-screen-agent` | 실행 순서와 backend 계약은 이 route spec만 소유 |
+| `/community` visual owner | `packages/fe-mo-ui/src/screen/CommunityScreen/CommunityScreen.spec.md` | `packages/fe-mo-ui/src/screen/CommunityScreen/CommunityScreen.tsx` | 커뮤니티 화면 visual/props/state rendering 계약 | new | build 시 신규 작성 | `fe-screen-agent` | 실행 순서와 backend 전체 계약은 service spec이 소유 |
 | 게시글 카드 | none | `packages/fe-mo-ui/src/data-display/CommunityPostCard/index.tsx` | feed 반복 게시글 카드 | new | spec 없음 | `fe-display-agent` | component story/test는 builder가 함께 작성 |
 
-### Design Alignment
+### 디자인 정렬
 
 | 항목 | 기준 |
 |------|------|
@@ -39,7 +49,7 @@
 | 표면/형태 | 게시글은 `surface` card, 작성 영역은 bottom sheet, 주요 작성 action은 `ScreenActionBar`/primary button 계열을 사용한다. |
 | 큰 섹션 | 커뮤니티 홈은 큰 hero가 아니라 compact intro + feed 중심이다. Empty/Error 상태에서만 roomy한 안내 영역을 허용한다. |
 
-### Screen Rough
+### 화면 러프
 
 ```text
 Visual Snapshot
@@ -83,7 +93,7 @@ Visual tone: bg-background, px-4, gap=section, surface cards, subtle border, no 
 Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-local composer composition using existing Input/Feedback/Layout.
 ```
 
-### Rhythm / Layout Contract
+### 리듬 / 레이아웃 계약
 
 | 영역 | 리듬 컴포넌트 | 방향/정렬 | gap preset | 감싸는 대상 | 재사용/신규 | 소스/대상 | 담당 `agent_type` | 비고 |
 |------|---------------|-----------|------------|-------------|-------------|-----------|-------------------|------|
@@ -94,7 +104,7 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 | composer sheet | `VStack` | vertical/stretch | `block` | title field, text field, actions | reuse | `BottomSheet`, `Text`, `TextInput`, `Button` | `fe-screen-agent` | controlled field는 route-local state를 props로 받음 |
 | route tab | n/a | tab layout | n/a | community tab icon/label | modify | `apps/mobile/src/app/(tabs)/_layout.tsx` | `fe-route-layout-agent` | icon은 기존 `users` 재사용 |
 
-### Component Inventory
+### 컴포넌트 인벤토리
 
 | 영역 | 컴포넌트 | 계층 | 재사용/신규 | 소스/대상 | Props/이벤트 | 소스 담당 `agent_type` | 소비/Wiring `agent_type` |
 |------|-----------|------|-------------|-----------|--------------|-------------------------|---------------------------|
@@ -110,7 +120,7 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 | composer action | `ScreenActionBar` | Layout/Action | reuse | `packages/fe-mo-ui/src/layout/ScreenActionBar` | primary submit, secondary cancel, loading label | `fe-display-agent` | `fe-screen-agent` |
 | text | `Text` | DataDisplay | reuse | `packages/fe-mo-ui/src/data-display/Text` | all user-facing copy | `fe-display-agent` | all mobile builders |
 
-### Foundation Contract
+### 기반 계약
 
 #### Hook 인벤토리
 
@@ -142,7 +152,7 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 | composer draft | route-local state | single route | new | `apps/mobile/src/app/(tabs)/community.tsx` | title/text/open/submitting | `fe-route-agent` | `fe-route-agent` | `qa-mo-testing` |
 | shared MobX store | none | shared | none | no shared store | 단일 route 전용 상태이므로 `@cocrepo/store` 만들지 않음 | none | none | none |
 
-### Storybook / Test Contract
+### Storybook / 테스트 계약
 
 #### Storybook 인벤토리
 
@@ -166,7 +176,7 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 | `MO-E2E-COMMUNITY-001` | `/community` | 로그인 후 커뮤니티 탭 진입, feed 표시 | `qa-mo-e2e-testing` | E2E 환경에서 API seed/mock 가능할 때 작성 |
 | `MO-E2E-COMMUNITY-002` | `/community` | 글쓰기 sheet 열기, 필수값 검증, 게시 성공 후 feed 반영 | `qa-mo-e2e-testing` | backend seed 준비 후 활성화 |
 
-### Backend / API Contract
+### 백엔드 / API 계약
 
 #### 엔드포인트 인벤토리
 
@@ -181,7 +191,7 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 |------|------|-------------|-----------|------|-------------------|------|
 | 콘텐츠 루트 | `Content` | reuse | `packages/be-prisma/schema/content/content.prisma` | 제목/본문/space/creator 소유 | none | 기존 schema 활용 |
 | 게시물 상세 | `Post` | reuse | same | Content를 게시글로 materialize | none | v1 댓글/좋아요 없음 |
-| 댓글/반응 | none | none | none | out of scope | none | 다음 phase에서 별도 설계 |
+| 댓글/반응 | none | none | none | 범위 제외 | none | 다음 phase에서 별도 설계 |
 
 #### DTO / Schema 인벤토리
 
@@ -227,7 +237,7 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 | Nest module | `CommunityModule` | new | `apps/core/api/src/module/community/community.module.ts` | controller/usecase/service provider wiring | `be-module-builder` |
 | AppModule 등록 | `CoreApiModule` 또는 root module | modify | core api module tree | community module import | `be-bootstrap-integrator` |
 
-### Required Elements
+### 필수 요소
 
 | 분류 | 필요 요소 | 재사용/신규 | 담당 `agent_type` | 완료 조건 |
 |------|-----------|-------------|-------------------|-----------|
@@ -239,7 +249,7 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 | Mobile Route | tab + route file + route test | new/modify | `fe-route-agent`, `fe-route-layout-agent` | `/community` 탭 진입과 작성 mutation |
 | QA | backend/mobile unit + mobile E2E 계획 | new/modify | `qa-be-testing`, `qa-mo-testing`, `qa-mo-e2e-testing` | contract drift 없음 |
 
-### Agent Assignment Matrix
+### 에이전트 배정 매트릭스
 
 | step id | phase | 담당 `agent_type` | 입력 파일 | 출력 파일 | 수정 허용 파일 | 의존 step | 병렬 가능 여부 | 완료 조건 |
 |---------|-------|-------------------|-----------|-----------|----------------|-----------|----------------|-----------|
@@ -262,7 +272,7 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 | MQA | mobile QA | `qa-mo-testing` | M1-M4 | test fixes if needed | mobile test files only | M4 | no | mo-ui + mobile-app tests pass |
 | E2E | mobile E2E | `qa-mo-e2e-testing` | M4 | E2E spec/test | E2E files | MQA | no | seed/mock 가능 시 활성화 |
 
-### Execution Graph
+### 실행 그래프
 
 ```mermaid
 flowchart TD
@@ -297,7 +307,7 @@ flowchart TD
 | backend chain | 없음 | DTO/repository/service/usecase/controller 의존성이 있어 직렬 |
 | mobile route | 없음 | Orval codegen과 screen 산출물 이후 진행 |
 
-### Shared File Locks
+### 공유 파일 잠금
 
 | 파일/영역 | lock 사유 | 소유 step |
 |-----------|-----------|-----------|
@@ -312,11 +322,11 @@ flowchart TD
 | `apps/mobile/src/app/(tabs)/_layout.tsx` | bottom tab catalog | M3 |
 | `apps/mobile/src/app/(tabs)/community.tsx` | route owner | M4 |
 
-### QA / Acceptance
+### QA / 승인 기준
 
 | 영역 | 명령/검증 | 기준 |
 |------|-----------|------|
-| TOML/spec | n/a | 이 spec만 실행 source of truth, screen spec은 planning contract |
+| TOML/spec | n/a | service spec이 상위 기준이며, 이 route spec은 `/community` 실행 slice이고 screen spec은 planning contract |
 | Backend unit | `pnpm --filter=@cocrepo/dto type-check`, service/usecase/controller tests | community DTO/service/usecase/controller type/test pass |
 | API client | generated-shape client files under `packages/fe-api/src/core/community/**` | `useGetCommunityPosts`, `useCreateCommunityPost` available to mobile route |
 | Mobile UI | `pnpm --filter=@cocrepo/mo-ui test`, `pnpm --filter=@cocrepo/mo-ui type-check` | CommunityPostCard/CommunityScreen tests pass |
@@ -324,7 +334,7 @@ flowchart TD
 | Storybook | story 목록 확인 | CommunityPostCard/CommunityScreen ready/loading/empty/error/composer 상태 등록 |
 | E2E | `qa-mo-e2e-testing` 판단 | seed/mock 준비 후 탭 진입 + 작성 흐름 검증 |
 
-### Blocked / Re-entry Rules
+### 차단 / 재진입 규칙
 
 | blocker | re-entry 대상 | 처리 |
 |---------|---------------|------|
@@ -334,7 +344,7 @@ flowchart TD
 | generated API가 mobile route에서 타입 불일치 | `qa-type-checker` 또는 `fe-route-agent` | DTO/response/read model 중 source를 확인해 재진입 |
 | tab이 4개가 되어 하단 폭/라벨이 답답함 | `fe-route-layout-agent` | label 축약 또는 탭 우선순위 재검토 |
 
-### Approval / Execution Log
+### 승인 / 실행 로그
 
 | 날짜 | 단계 | 상태 | 내용 | 작성자 |
 |------|------|------|------|--------|

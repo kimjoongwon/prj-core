@@ -25,12 +25,9 @@ import {
 import { EmptyState } from "../../display";
 import { useT } from "../../i18n";
 import { Surface } from "../../surface";
-import {
-	AssetPreviewDialog,
-	FolderTree,
-	type FolderTreeItem,
-	PageTitleBar,
-} from "../../widget";
+import { AssetPreviewDialog } from "../../widget/AssetPreview";
+import { FolderTree, type FolderTreeItem } from "../../widget/FolderTree";
+import { PageTitleBar } from "../../widget/PageTitleBar";
 
 const searchInputConfig: InputConfig = {
 	type: "search",

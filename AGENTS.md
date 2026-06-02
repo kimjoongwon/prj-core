@@ -798,7 +798,7 @@ packages/common-type/src/
 
 **서비스 Delivery Spec**
 - service: `docs/services/**/*.delivery.spec.md`
-- owner: `orch-delivery`
+- 담당 role: `orch-delivery`
 - 포함: 서비스 목표, 사용자/권한, 도메인 모델/생명주기, 사용자 여정, 필요한 모든 web/mobile route 목록, backend/API/foundation 계약, `DESIGN.md` 기반 서비스 디자인 방향, 생성된 route spec 목록, 에이전트 배정 매트릭스, 실행 그래프, QA/승인 기준, 승인 로그
 - `orch-delivery`는 Codex 질문 도구를 반복 사용해 서비스 목표, 사용자/운영자 journey, 권한, 도메인 모델, API, web/mobile 필요 페이지, 디자인 방향, QA 기준을 확정한 뒤 service delivery spec을 작성합니다.
 - service delivery spec 승인 전에는 route/page spec 생성, agent 실행, QA role 실행을 하지 않습니다.
@@ -806,7 +806,7 @@ packages/common-type/src/
 **생성된 Route Delivery Spec**
 - web route: `apps/*/web/src/app/**/page.spec.md`
 - mobile route: `apps/mobile/src/app/**/index.spec.md`
-- owner: `orch-delivery`
+- 담당 role: `orch-delivery`
 - 성격: 승인된 service delivery spec에서 파생된 page/route 실행 slice
 - 포함: 상위 service spec, 화면 계약, route wiring, component inventory, route-local hook/state, story/test/E2E, 해당 route가 소비하는 backend/API/foundation slice, route-level 에이전트 배정 매트릭스, 실행 그래프, 공유 파일 잠금, 승인 로그
 - backend/API/foundation의 최상위 설계와 build order는 service delivery spec이 소유하고 route spec은 관련 slice만 참조합니다.
@@ -838,7 +838,7 @@ packages/common-type/src/
 
 ```
 docs/services/
-└── [service-name].delivery.spec.md # 서비스 전체 설계/실행 source of truth
+└── [service-name].delivery.spec.md # 서비스 전체 설계/실행 기준
 
 apps/[app]/web/src/app/(admin)/
 ├── app.context.md              # 앱 컨텍스트 문서 (L0-L2, non-source)
@@ -884,8 +884,8 @@ packages/fe-mo-ui/src/feature/[FeatureName]/
 | 타입 | 파일 | 핵심 내용 |
 |------|------|----------|
 | **app-context** | `app.context.md` | 앱 컨텍스트, 사용자, 목표, 도메인 목록 (L0-L2, non-source) |
-| **service-delivery** | `docs/services/**/*.delivery.spec.md` | 서비스 전체 source of truth, 질문 기반 기획, 도메인/API/foundation, route 목록, 디자인 방향, 실행/QA 계약 |
-| **route-delivery** | `page.spec.md`, `index.spec.md` | service spec에서 생성된 route/page execution slice, 화면/route wiring/component/E2E 계약 |
+| **service-delivery** | `docs/services/**/*.delivery.spec.md` | 서비스 전체 기준, 질문 기반 기획, 도메인/API/foundation, route 목록, 디자인 방향, 실행/QA 계약 |
+| **route-delivery** | `page.spec.md`, `index.spec.md` | service spec에서 생성된 route/page 실행 slice, 화면/route wiring/component/E2E 계약 |
 | **screen-planning** | `[ScreenName].spec.md` | Screen props, 시각 composition, 상태별 렌더링, 하위 Feature/Widget 조합 |
 | **feature-planning** | `[FeatureName].spec.md` | Feature props/event/state, Store/API/router 연결 의도, 실패/권한/로딩 상태 |
 
@@ -1238,7 +1238,7 @@ Route delivery spec은 승인된 service spec에서 생성된 page/route 실행 
 - component inventory의 `agent_type`은 소스를 만들거나 수정하는 소스 담당 `agent_type`과 화면에 조립하는 소비/Wiring `agent_type`을 분리합니다.
 - Storybook/Test 계약은 `Storybook 인벤토리`와 `Unit Test 인벤토리`로 작성하고, 필수 상태/variant와 검증 케이스를 먼저 정합니다.
 - 신규/수정 UI component의 story/test 작성은 기본적으로 해당 UI agent `agent_type`이 같은 작업에서 담당하고, QA role은 누락/실패/contract drift를 검증합니다.
-- PC/Web은 `packages/fe-ui/src/**` component source owner agent가 story/test를 담당하고, Mobile은 `packages/fe-mo-ui/src/**` component source owner agent가 story/test를 담당합니다.
+- PC/Web은 `packages/fe-ui/src/**` component 소스 담당 agent가 story/test를 담당하고, Mobile은 `packages/fe-mo-ui/src/**` component 소스 담당 agent가 story/test를 담당합니다.
 - route `page.tsx`, Expo route file, `layout.tsx`, `_layout.tsx`, Store, backend-only step은 Storybook 대상이 아니며 필요한 unit/E2E 검증만 spec에 기록합니다.
 - thin re-export나 barrel-only 변경처럼 story/test가 불필요하면 spec의 비고에 불필요 사유를 남깁니다.
 - backend/API 계약은 `Prisma / Database`, `Prisma Annotation`, `Common Schema`, `Entity / VO`, `DTO / Query DTO`, `Repository`, `Service`, `Command/Query`, `Event`, `UseCase / Handler / EventHandler / Saga`, `Client / Gateway`, `엔드포인트`, `Module / Bootstrap`, `Seed`, `Codegen / API Client` 인벤토리를 구조별로 작성합니다.
@@ -1247,7 +1247,7 @@ Route delivery spec은 승인된 service spec에서 생성된 page/route 실행 
 - reusable hook은 `fe-hook-agent`, shared toolkit은 `common-toolkit-builder`, shared type은 `common-type-builder`, shared store는 `fe-store-agent`가 소스 담당입니다.
 - route-local hook/util/type/state는 Web/Mobile 모두 generated route delivery spec의 `fe-route-agent` slice로 기록하고 별도 spec을 만들지 않습니다.
 - endpoint row는 controller endpoint, operationId, DTO/schema, Orval hook/codegen 영향을 보여주고, application/service/repository row는 어떤 workflow/capability/persistence method가 쓰이는지 보여줍니다.
-- common schema row는 `common-schema-builder`, DTO row는 `be-dto-builder`/`be-query-dto-builder`, facade/gateway row는 `be-facade-builder`/`be-gateway-builder`처럼 실제 source owner role이 보이도록 분리합니다.
+- common schema row는 `common-schema-builder`, DTO row는 `be-dto-builder`/`be-query-dto-builder`, facade/gateway row는 `be-facade-builder`/`be-gateway-builder`처럼 실제 소스 담당 role이 보이도록 분리합니다.
 - `orch-delivery`는 승인된 service delivery spec과 연결된 route delivery spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
 - 병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
 - `실행 그래프`는 Mermaid `시각 실행 흐름`, `병렬 그룹 표`, `단계 순서 표`를 함께 작성해 직렬 순서와 병렬 그룹을 시각적으로 보여줍니다.
@@ -1273,26 +1273,26 @@ QA: qa-be-testing/e2e → qa-fe-testing/e2e → qa-mo-testing/e2e
 
 ```
 docs/services/
-└── members.delivery.spec.md     # 서비스 전체 설계/실행 source of truth
+└── members.delivery.spec.md     # 서비스 전체 설계/실행 기준
 
 apps/[app]/web/src/app/(admin)/
 ├── app.context.md              # 앱 컨텍스트 문서 (L0-L2, non-source)
 
 apps/[app]/web/src/app/(admin)/[도메인]/
 ├── page.tsx                    # 목록 페이지
-├── page.spec.md                # service spec에서 생성된 목록 route execution slice
+├── page.spec.md                # service spec에서 생성된 목록 route 실행 slice
 ├── page.e2e.ts                 # E2E 테스트 코드
 ├── [entityId]/
 │   ├── page.tsx                # 상세 페이지
-│   ├── page.spec.md            # service spec에서 생성된 상세 route execution slice
+│   ├── page.spec.md            # service spec에서 생성된 상세 route 실행 slice
 │   └── page.e2e.ts             # E2E 테스트 코드
 ├── new/
 │   ├── page.tsx                # 등록 페이지
-│   ├── page.spec.md            # service spec에서 생성된 등록 route execution slice
+│   ├── page.spec.md            # service spec에서 생성된 등록 route 실행 slice
 │   └── page.e2e.ts             # E2E 테스트 코드
 └── [entityId]/edit/
     ├── page.tsx                # 수정 페이지
-    ├── page.spec.md            # service spec에서 생성된 수정 route execution slice
+    ├── page.spec.md            # service spec에서 생성된 수정 route 실행 slice
     └── page.e2e.ts             # E2E 테스트 코드
 
 packages/fe-ui/src/screen/

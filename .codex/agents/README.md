@@ -22,38 +22,57 @@ role TOML은 얇은 실행 contract만 소유합니다. 상세 작업 지시는 
 | `gpt-5.3-codex-spark` | `medium` | `be-command-builder`, `be-dmmf-parser-builder`, `be-dto-builder`, `be-entity-builder`, `be-event-builder`, `be-query-dto-builder`, `be-vo-builder`, `etc-jenkinsfile-builder`, `fe-control-agent`, `fe-display-agent`, `fe-hook-agent`, `fe-layout-agent`, `fe-route-agent`, `fe-widget-agent`, `qa-be-testing`, `qa-fe-testing`, `qa-mo-testing` | 계약/컴포넌트/단위 테스트처럼 범위가 비교적 명확한 일반 구현 |
 | `gpt-5.3-codex-spark` | `low` | `be-prisma-annotator`, `be-seed-maker`, `dev-service-starter`, `fe-cell-agent`, `fe-columns-agent` | 주석, 시드, 서비스 시작, 셀/컬럼 같은 기계적이고 반복적인 작업 |
 
-## Route Delivery Spec 운영
+## 서비스 Delivery Spec 운영
 
-모든 orchestration은 route delivery spec 하나에서 시작합니다.
+모든 orchestration은 service delivery spec에서 시작합니다.
 
-- owner: [orch-delivery.toml](./orch-delivery.toml)
+- 담당 role: [orch-delivery.toml](./orch-delivery.toml)
+- service spec: `docs/services/**/*.delivery.spec.md`
+- generated route spec: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`
 
-`orch-delivery` 하나가 **Spec → Ask → Build → QA**를 소유합니다.
-별도 Delivery Plan 문서는 만들지 않고, 실행 계약은 route delivery spec 안에 `## Delivery` 섹션으로 함께 둡니다.
-이 spec은 화면, 백엔드, API, 상태, UI 요소, 테스트, 담당 `agent_type`, 실행 순서를 모두 명시합니다.
-`orch-delivery`는 승인된 route delivery spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
+`orch-delivery` 하나가 **기획 질문 → 서비스 Spec → 승인 → 라우트 Spec → 구현 → QA**를 소유합니다.
+별도 Delivery Plan 문서는 만들지 않고, 실행 계약은 승인된 service delivery spec과 여기서 생성된 route delivery spec 실행 slice에 둡니다.
+service delivery spec은 서비스 목표, 사용자/권한, 도메인 모델, 모든 web/mobile route 목록, backend/API/foundation 계약, `DESIGN.md` 기반 디자인 방향, 담당 `agent_type`, 실행 순서, QA 기준을 소유합니다.
+route delivery spec은 service spec에서 파생된 page/route 실행 slice이며 화면 계약, route wiring, component inventory, route-local hook/state, E2E, 해당 route가 소비하는 backend/API/foundation slice만 소유합니다.
+`orch-delivery`는 승인된 service delivery spec과 연결된 route delivery spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
 
 Screen/Feature spec은 planning spec입니다. 목표, 화면 러프, props/event, rendering/rhythm, 하위 조합, 상태별 렌더링, story/unit test 계약만 소유하고 실행 그래프나 backend/foundation build order를 소유하지 않습니다.
 
 모든 source target은 단일 책임 파일 규칙을 따릅니다. class/function/type/interface/enum은 파일별 하나만 소유하고, class 파일 안에 top-level props/interface/type/helper/mapper를 함께 두지 않습니다. Props/Params/Input/Result/Options/helper/mapper/parser/normalizer/constant는 같은 owner 폴더의 별도 파일로 지정합니다.
 
-`## Delivery` 필수 하위 섹션:
+service delivery spec 필수 섹션:
 
-- `### Goal`
-- `### Planning Spec References`
-- `### Design Alignment`
-- `### Screen Rough`
-- `### Rhythm / Layout Contract`
-- `### Component Inventory`
-- `### Foundation Contract`
+- `## 서비스 목표`
+- `## 사용자 / 역할 / 권한`
+- `## 도메인 모델 / 생명주기`
+- `## 사용자 여정`
+- `## 필수 페이지 / 라우트`
+- `## 백엔드 / API / 기반 계약`
+- `## DESIGN.md 기반 디자인 방향`
+- `## 생성된 라우트 Spec`
+- `## 에이전트 배정 매트릭스`
+- `## 실행 그래프`
+- `## QA / 승인 기준`
+- `## 승인 / 실행 로그`
+
+generated route delivery spec의 `## 딜리버리` 필수 하위 섹션:
+
+- `### 상위 서비스 Spec`
+- `### 목표`
+- `### 기획 Spec 참조`
+- `### 디자인 정렬`
+- `### 화면 러프`
+- `### 리듬 / 레이아웃 계약`
+- `### 컴포넌트 인벤토리`
+- `### 기반 Slice`
   - `#### Hook 인벤토리`
   - `#### Toolkit 인벤토리`
   - `#### Type 인벤토리`
   - `#### Store / State 인벤토리`
-- `### Storybook / Test Contract`
+- `### Storybook / 테스트 계약`
   - `#### Storybook 인벤토리`
   - `#### Unit Test 인벤토리`
-- `### Backend / API Contract`
+- `### 백엔드 / API Slice`
   - `#### Prisma / Database 인벤토리`
   - `#### Prisma Annotation 인벤토리`
   - `#### Common Schema 인벤토리`
@@ -67,22 +86,22 @@ Screen/Feature spec은 planning spec입니다. 목표, 화면 러프, props/even
   - `#### Module / Bootstrap 인벤토리`
   - `#### Seed 인벤토리`
   - `#### Codegen / API Client 인벤토리`
-- `### Required Elements`
-- `### Agent Assignment Matrix`
-- `### Execution Graph`
-  - `#### Visual Execution Flow`
-  - `#### Parallel Group Table`
-  - `#### Step Order Table`
-  - `#### Canonical Phase Order`
-- `### Shared File Locks`
-- `### QA / Acceptance`
-- `### Blocked / Re-entry Rules`
-- `### Approval / Execution Log`
+- `### 필수 요소`
+- `### 에이전트 배정 매트릭스`
+- `### 실행 그래프`
+  - `#### 시각 실행 흐름`
+  - `#### 병렬 그룹 표`
+  - `#### 단계 순서 표`
+  - `#### 표준 Phase 순서`
+- `### 공유 파일 잠금`
+- `### QA / 승인 기준`
+- `### 차단 / 재진입 규칙`
+- `### 승인 / 실행 로그`
 
 병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
 
-구현 대상의 route delivery spec을 먼저 작성하거나 갱신한 뒤, Codex 질문 도구로 사용자의 진행 승인을 받습니다.
-승인 전에는 agent/QA role를 실행하지 않습니다.
+구현 대상의 service delivery spec을 먼저 작성하거나 갱신한 뒤, Codex 질문 도구로 사용자의 진행 승인을 받습니다.
+승인 전에는 route/page spec 생성, agent 실행, QA role 실행을 하지 않습니다.
 
 Storybook/Test 소유권:
 
@@ -97,7 +116,11 @@ Storybook/Test 소유권:
 
 ## Spec 범위
 
-Route delivery spec:
+Service delivery spec:
+
+- 서비스 전체 설계: `docs/services/{service-name}.delivery.spec.md`
+
+Generated route delivery spec:
 
 - Next.js route page: `apps/*/web/src/app/**/page.tsx` → 같은 route 폴더의 `page.spec.md`
 - Expo Router native route screen: `apps/mobile/src/app/**/index.tsx` → 같은 route 폴더의 `index.spec.md`

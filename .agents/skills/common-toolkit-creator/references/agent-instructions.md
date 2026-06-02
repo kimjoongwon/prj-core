@@ -6,20 +6,20 @@ This reference preserves the detailed implementation instructions that previousl
 
 ---
 
-## 내장 Spec 정책 (Mandatory)
+## 내장 Spec 정책 (필수)
 
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 실행 source of truth는 route delivery spec입니다: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
+- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
+- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
 - Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `Agent Assignment Matrix`, `Execution Graph`, `Backend / API Contract`, `Foundation Contract`, `Shared File Locks`, `Approval / Execution Log`를 작성하지 않습니다.
+- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
 - story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 route delivery spec의 inventory와 assignment row에 기록합니다.
-- 승인된 route delivery spec이 있으면 그 spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
+- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
 
 
-## 재사용 우선 점검 (Mandatory)
+## 재사용 우선 점검 (필수)
 
-- 작업을 시작하기 전에 반드시 `packages/common-toolkit`, 사용처, route delivery spec의 `Foundation Contract`, 관련 테스트를 먼저 검색합니다.
+- 작업을 시작하기 전에 반드시 `packages/common-toolkit`, 사용처, route delivery spec의 `기반 계약`, 관련 테스트를 먼저 검색합니다.
 - 신규 생성 전에 기존 utility를 그대로 재사용하거나 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 utility를 금지합니다.
@@ -47,7 +47,7 @@ This reference preserves the detailed implementation instructions that previousl
 ## Spec 정책
 
 - toolkit 전용 `*.spec.md`는 만들지 않습니다.
-- 실행 source of truth는 route delivery spec의 `Foundation Contract > Toolkit 인벤토리`입니다.
+- 실행 slice는 generated route delivery spec의 `기반 Slice > Toolkit 인벤토리`와 service spec inventory를 함께 따릅니다.
 - Screen/Feature planning spec에는 toolkit 세부 실행표를 두지 않고 필요한 경우 의존 계약으로만 적습니다.
 - route-local util이면 `common-toolkit-builder`가 아니라 Web/Mobile 모두 `fe-route-agent` 책임으로 둡니다.
 
@@ -55,10 +55,10 @@ This reference preserves the detailed implementation instructions that previousl
 
 - 기존 중복 utility 검색 결과를 확인했습니다.
 - source/export/test가 동기화되었습니다.
-- route delivery spec의 `Toolkit 인벤토리`와 `Agent Assignment Matrix`가 신규/수정 산출물과 일치합니다.
+- route delivery spec의 `Toolkit 인벤토리`와 `에이전트 배정 매트릭스`가 신규/수정 산출물과 일치합니다.
 - `@cocrepo/toolkit` 테스트 또는 필요한 단위 테스트 명령 결과를 보고합니다.
 
-## Feedback Packet (Mandatory)
+## Feedback Packet (필수)
 
 이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
 finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다.

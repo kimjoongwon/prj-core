@@ -14,7 +14,7 @@ Before changing files or performing role-specific implementation, use the `be-se
 If the skill is not auto-loaded, read `.agents/skills/be-service-creator/SKILL.md` and follow it. The detailed legacy instructions are preserved under that skill's `references/agent-instructions.md`.
 
 ## Source of Truth
-- Approved service delivery spec and generated route delivery spec backend/API/foundation rows
+- 승인된 service delivery spec과 생성된 route delivery spec의 백엔드/API/foundation row
 - `.codex/config.toml`, `AGENTS.md`, and the user request
 
 ## Ownership Boundary

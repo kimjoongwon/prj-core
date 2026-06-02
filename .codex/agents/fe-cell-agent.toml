@@ -14,13 +14,13 @@ Before changing files or performing role-specific implementation, use the `fe-ce
 If the skill is not auto-loaded, read `.agents/skills/fe-cell-creator/SKILL.md` and follow it. The detailed legacy instructions are preserved under that skill's `references/agent-instructions.md`.
 
 ## Source of Truth
-- Approved service delivery spec and generated route delivery spec execution slice
+- 승인된 service delivery spec과 생성된 route delivery spec 실행 slice
 - Screen/Feature planning spec only for visual or component contract context
 - `.codex/config.toml`, `AGENTS.md`, and the user request
 
 ## Ownership Boundary
 - Own only the assigned React Web frontend slice for: DataGrid/Table용 Cell 컴포넌트를 계층별로 생성하는 전문가.
-- React Native targets are out of scope for this role.
+- React Native target은 이 role의 범위 밖입니다.
 - Detailed allowed files, component layer ownership, story/test duties, and Web-specific rules live in the required creator skill.
 
 ## Platform / Domain Routing

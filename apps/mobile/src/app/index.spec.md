@@ -2,9 +2,10 @@
 
 > 생성일: 2026-05-04
 > 수정일: 2026-05-24
-> 타입: next-route-page
+> 타입: expo-route-delivery-context
 > route: `/`
 > owner route file: `apps/mobile/src/app/(tabs)/index.tsx`
+> 상위 service spec: `docs/services/mobile-reservation.delivery.spec.md`
 
 ## 목적
 
@@ -183,9 +184,18 @@ type ReservationPaymentCheckoutRouteState = {
 - 로그아웃은 `mobileAuthStore.logout()` 후 `/auth/login`으로 이동한다.
 - `MyPageScreen`은 계정 summary, 현재 지점, 빠른 이동 action list, logout danger action을 렌더링한다.
 
-## Delivery
+## 딜리버리
 
-### Goal
+### 상위 서비스 Spec
+
+| 항목 | 내용 |
+|------|------|
+| service spec | `docs/services/mobile-reservation.delivery.spec.md` |
+| service step | `MOBILE-RESERVATION-PROFILE` |
+| route 역할 | 모바일 예약/내 정보 서비스의 route 실행 slice 묶음 |
+| ownership | 모바일 예약 서비스 전체 route 목록, 인증/space/예약/결제/프로필 build order는 service spec이 소유하고, 이 문서는 기존 mobile route 실행 계약을 보조한다. |
+
+### 목표
 
 - 사용자 목표: 모바일 하단 탭의 `/profile`을 "마이 페이지"로 정리해 계정 상태, 현재 지점, 예약/결제 관련 빠른 이동, 로그아웃을 한 화면에서 제공한다.
 - 대상 app/domain/platform: `apps/mobile`, Profile, Expo Router + React Native.
@@ -198,7 +208,7 @@ type ReservationPaymentCheckoutRouteState = {
   - 신규 backend API, Orval codegen, 결제/예약 상세 기능 구현.
   - 앱 전역 인증 정책 변경.
 
-### Design Alignment
+### 디자인 정렬
 
 | 항목 | 기준 |
 |------|------|
@@ -207,9 +217,9 @@ type ReservationPaymentCheckoutRouteState = {
 | 상태와 다음 행동 | 로그인 상태와 현재 지점을 먼저 보여주고, `QuickActionList`로 내 예약/결제/설정 이동을 제공한다. |
 | 색상 역할 | `background`, `surface`, `foreground`, `muted`, `success`, `danger`, `border` 역할만 사용한다. 임의 hex와 외부 브랜드 palette를 쓰지 않는다. |
 | 표면/형태 | Account/current-space/action-list는 부드러운 surface card/list group, 로그아웃은 danger full-width action으로 분리한다. |
-| 리듬 | route는 visual rhythm을 직접 만들지 않고, `MyPageScreen`의 `Rhythm / Layout Contract`를 소비한다. |
+| 리듬 | route는 visual rhythm을 직접 만들지 않고, `MyPageScreen`의 `리듬 / 레이아웃 계약`을 소비한다. |
 
-### Screen Rough
+### 화면 러프
 
 ```text
 Visual Snapshot
@@ -259,7 +269,7 @@ Legend: A/B/D are screen-local sections inside `MyPageScreen`; C is reusable `Qu
 Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=dense, action list rows gap=flush, logout margin=section.
 ```
 
-### Rhythm / Layout Contract
+### 리듬 / 레이아웃 계약
 
 | 영역 | 리듬 컴포넌트 | 방향/정렬 | gap preset | 감싸는 대상 | 재사용/신규 | 소스/대상 | 담당 `agent_type` | 비고 |
 |------|---------------|-----------|------------|-------------|-------------|-----------|-------------------|------|
@@ -269,7 +279,7 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 | quick actions | `VStack` + row `HStack` + `ListGroup` | vertical list / row horizontal | `flush`, row `inline`, meta `dense` | 내 예약/결제/설정 rows | new + reuse | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx` | `fe-widget-agent` | row touch target은 44px 이상 |
 | logout action | `VStack` | vertical / stretch | `section` | danger full-width button | reuse | `packages/fe-mo-ui/src/rhythm/VStack`, `Button` | `fe-screen-agent` | bottom tab/safe area와 겹치지 않음 |
 
-### Component Inventory
+### 컴포넌트 인벤토리
 
 | 영역 | 컴포넌트 | 계층 | 재사용/신규 | 소스/대상 | Props/이벤트 | 소스 담당 `agent_type` | 소비/Wiring `agent_type` |
 |------|-----------|------|-------------|-----------|--------------|-------------------------|---------------------------|
@@ -288,7 +298,7 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 | input | none | Input | none | no form/input in this request | none | none | none |
 | feature package | none | Feature | none | no cross-screen interaction feature in this request | route injects props directly | none | none |
 
-### Storybook / Test Contract
+### Storybook / 테스트 계약
 
 #### Storybook 인벤토리
 
@@ -305,7 +315,7 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 | `MyPageScreen` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.test.tsx` | props rendering, quick action composition, logout event | account summary, current space, quick actions, logout pending | `fe-screen-agent` | `qa-mo-testing` | Screen builder가 screen과 함께 작성 |
 | `/profile` route | `apps/mobile/src/route-tests/profile.test.tsx` 또는 existing route test | route wiring, logout navigation | store props mapping, `mobileAuthStore.logout()`, `/auth/login` replace | `qa-mo-testing` | `qa-mo-testing` | route integration은 QA가 보강 |
 
-### Backend / API Contract
+### 백엔드 / API 계약
 
 #### 엔드포인트 인벤토리
 
@@ -320,14 +330,14 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 
 | 유즈케이스/워크플로 | UseCase handler | Command/Query | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
 |---------------------|-----------------|---------------|-------------|-----------|-----------|-------------------------|---------------------|
-| native mobile logout | `LogoutNativeMobileSessionUseCase` | `LogoutNativeMobileSessionCommand` | reuse | `packages/be-usecase/src/auth/auth.usecase.ts` | `TokenStorageService` | `mig-be-usecase-builder` | `be-controller-builder` |
+| native mobile logout | `LogoutNativeMobileSessionUseCase` | `LogoutNativeMobileSessionCommand` | reuse | `packages/be-usecase/src/auth/auth.usecase.ts` | `TokenStorageService` | `be-usecase-builder` | `be-controller-builder` |
 | account summary/current space | none | none | none | no backend change | route uses existing mobile stores | none | none |
 
 #### Service 인벤토리
 
 | 도메인 기능 | Service | 메서드 | 재사용/신규 | 소스/대상 | 의존 요소 | 소스 담당 `agent_type` | 소비 `agent_type` |
 |-------------|---------|--------|-------------|-----------|-----------|-------------------------|---------------------|
-| native token/session cleanup | `TokenStorageService` | blacklist/delete native session methods used by `logoutNativeMobileSession` | reuse | `packages/be-service/src/auth/token-storage.service.ts` | Redis-backed token/session storage | `be-service-builder` | `mig-be-usecase-builder` |
+| native token/session cleanup | `TokenStorageService` | blacklist/delete native session methods used by `logoutNativeMobileSession` | reuse | `packages/be-service/src/auth/token-storage.service.ts` | Redis-backed token/session storage | `be-service-builder` | `be-usecase-builder` |
 | profile read | none | none | none | no backend change | route uses existing auth/session/current-space state | none | none |
 
 #### Repository 인벤토리
@@ -336,7 +346,7 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 |-------------|------------|----------------|--------|-------------|-----------|-------------------------|---------------------|
 | profile route backend persistence | none | none | none | none | no repository change for this delivery | none | none |
 
-### Required Elements
+### 필수 요소
 
 - 신규 Prisma/schema/DTO/Entity/Repository/Service/UseCase/Controller/Module 없음.
 - 신규 Orval hook/codegen 없음.
@@ -356,7 +366,7 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 - `apps/mobile/src/app/(tabs)/_layout.tsx`
 - route unit test, 필요 시 `apps/mobile/src/route-tests/index.test.tsx` 또는 profile 전용 route test
 
-### Agent Assignment Matrix
+### 에이전트 배정 매트릭스
 
 | step id | phase | agent_type | input files | output files | editable files | depends on | parallel | completion |
 |---------|-------|------------|-------------|--------------|----------------|------------|----------|------------|
@@ -368,7 +378,7 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 | M4 | mobile | fe-route-agent | this spec, MyPageScreen export, current profile route | profile route wiring | `apps/mobile/src/app/(tabs)/profile.tsx`, route test if needed | M2, M3 | false | route passes auth/space/logout props to screen |
 | Q1 | qa | qa-mo-testing | changed mobile route/screen/widget files | unit test updates | `packages/fe-mo-ui/src/widget/QuickActionList/**`, `packages/fe-mo-ui/src/screen/MyPageScreen/**`, `apps/mobile/src/route-tests/**` | M1, M2, M3, M4 | false | relevant mobile tests pass |
 
-### Execution Graph
+### 실행 그래프
 
 ```text
 orch-delivery spec gate
@@ -385,7 +395,7 @@ Skipped phases:
 - codegen: no API contract change.
 - web: mobile-only request.
 
-### Shared File Locks
+### 공유 파일 잠금
 
 | file | lock owner | rule |
 |------|------------|------|
@@ -396,7 +406,7 @@ Skipped phases:
 | `apps/mobile/src/app/index.spec.md` | S1/M3/M4 | route contract and 변경 이력 must stay synchronized |
 | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.spec.md` | S1/M2 | screen visual contract must stay synchronized |
 
-### QA / Acceptance
+### QA / 승인 기준
 
 - `pnpm --filter=@cocrepo/mo-ui test -- QuickActionList`
 - `pnpm --filter=@cocrepo/mo-ui test -- MyPageScreen`
@@ -409,18 +419,18 @@ Skipped phases:
   - body shows account/session, current space, quick actions, logout.
   - logout calls `mobileAuthStore.logout()` and navigates to `/auth/login`.
 
-### Blocked / Re-entry Rules
+### 차단 / 재진입 규칙
 
 - `spec-gap`: if profile route requires more account data than current stores expose, keep UI to available state only and update this spec.
 - `ui-composition-gap`: if existing mo-ui primitives are insufficient, add the smallest screen-local composition using `ScreenFrame`, `Icon`, `Button`, and existing layout primitives.
 - `shared-file-conflict`: stop parallel work and make M1 or M2 the single writer for the shared file.
 - `test-failure`: distinguish visual screen failure from route wiring failure before re-entry.
 
-### Approval / Execution Log
+### 승인 / 실행 로그
 
 | time | event | result |
 |------|-------|--------|
-| 2026-05-24 | `DESIGN.md`와 `Rhythm / Layout Contract` 기준으로 `/profile` delivery spec 재작성 | pending approval |
+| 2026-05-24 | `DESIGN.md`와 `리듬 / 레이아웃 계약` 기준으로 `/profile` delivery spec 재작성 | pending approval |
 | 2026-05-24 | Storybook/Test 계약을 추가하고 UI builder 작성 책임을 명시 | pending approval |
 | 2026-05-24 | 기획 표 헤더를 한글 우선으로 변경 | pending approval |
 | 2026-05-24 | Backend/API 계약을 endpoint/application/service/repository inventory로 분리 | pending approval |

@@ -154,11 +154,11 @@ export async function createTimelineSessionExerciseDomainData(
 			where: { name: { in: timelineGroundNames } },
 		}),
 		prisma.user.findMany({ where: { email: { in: creatorEmails } } }),
-		prisma.user.findFirst({ where: { email: "admin@onora.com" } }),
+		prisma.user.findFirst({ where: { email: "admin@plate.com" } }),
 	]);
 
 	if (!fallbackUser) {
-		throw new Error("기본 시드 유저(admin@onora.com)를 찾을 수 없습니다.");
+		throw new Error("기본 시드 유저(admin@plate.com)를 찾을 수 없습니다.");
 	}
 
 	const groundByName = new Map(grounds.map((ground) => [ground.name, ground]));

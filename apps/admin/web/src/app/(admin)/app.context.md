@@ -16,9 +16,9 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 - **인증**: JWT + X-Space-ID 헤더 기반 Multi-Tenancy
 - **브랜드**: "오노라(Onora)" (AppLogo)
 
-## L1: 사용자 (Actor)
+## L1: 사용자 (행위자)
 
-| ID | Actor | 역할 | 설명 |
+| ID | 행위자 | 역할 | 설명 |
 |----|-------|------|------|
 | ACT-001 | 플랫폼 관리자 | FULL_ACCESS | 전체 시스템 접근 권한. System Space에서 모든 Space의 데이터를 조회/관리 |
 | ACT-002 | Space 관리자 | MANAGE | 특정 Space 내의 리소스를 관리. 회원, 예약, 콘텐츠, 알림 등 운영 업무 담당 |
@@ -27,7 +27,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 
 ## L2: 사용자 목표 (Goal)
 
-| ID | Actor | 목표 | 우선순위 |
+| ID | 행위자 | 목표 | 우선순위 |
 |----|-------|------|----------|
 | GOAL-001 | ACT-001, ACT-002 | 회원을 목록 조회/검색/등록/수정/삭제하여 관리한다 | 높음 |
 | GOAL-002 | ACT-001, ACT-002 | 역할(Role), 권한(Ability), 액션(Action), 대상(Subject)을 정의하여 접근 제어를 관리한다 | 높음 |
@@ -309,13 +309,13 @@ Space
 |-------|---------|------------|-------------|
 | 2 | COURSE-S2-BE-001 | `be-prisma-builder` | `packages/be-prisma/schema/scheduling/course.prisma`, `packages/be-prisma/schema/identity/space.prisma`, `packages/be-prisma/schema/identity/user.prisma`, `packages/be-prisma/schema/scheduling/timeline.prisma`, `packages/be-prisma/schema/scheduling/reservation.prisma`, `packages/be-prisma/scripts/validate-schema-conventions.ts` |
 | 2 | COURSE-S2-BE-002 | `be-entity-builder`, `be-dto-builder`, `be-query-dto-builder` | Course/CourseOffering/Enrollment/CoursePass entity, DTO, create/update/query DTO, package exports |
-| 2 | COURSE-S2-BE-003 | `be-repository-builder`, `be-service-builder`, `mig-be-usecase-builder` | `CoursesRepository`, `CourseService`, Course usecase handlers, enrollment activation/CoursePass issuance use case |
+| 2 | COURSE-S2-BE-003 | `be-repository-builder`, `be-service-builder`, `be-usecase-builder` | `CoursesRepository`, `CourseService`, Course usecase handlers, enrollment activation/CoursePass issuance use case |
 | 2 | COURSE-S2-BE-004 | `be-controller-builder`, `be-module-builder`, `be-bootstrap-integrator` | `/api/v1/courses`, `/api/v1/courses/offerings`, `/api/v1/courses/enrollments`, `/api/v1/courses/passes` controller/module and `apps/core/api/src/module/app.module.ts` wiring |
 | 2 | COURSE-S2-BE-005 | `be-service-builder`, `be-repository-builder`, `be-dto-builder` | Reservation create/list contract update for `coursePassId` and CoursePass entitlement validation |
 | 3 | COURSE-S3-API-001 | `fe-api-integrator` | `pnpm --filter=@cocrepo/api codegen:server`, generated `packages/fe-api/src/core/courses` and model exports |
 | 3 | COURSE-S3-FE-001 | `fe-api-integrator`, `fe-route-agent` | `apps/admin/web/src/app/(admin)/{courses,course-offerings,enrollments,course-passes}/page.tsx`, `useCourseManagementPageData`, query state rendering |
 | 3 | COURSE-S3-QA-001 | `qa-fe-e2e-testing` | Course route sidecar E2E assertions for API-backed data and empty states |
-| 2 | PAYMENT-S2-BE-001 | `be-prisma-builder`, `be-entity-builder`, `be-dto-builder`, `be-repository-builder`, `be-service-builder`, `mig-be-usecase-builder`, `be-controller-builder` | `packages/be-prisma/schema/billing/payment.prisma`, `packages/be-service/src/payment/payment.service.ts`, `apps/core/api/src/module/payments` |
+| 2 | PAYMENT-S2-BE-001 | `be-prisma-builder`, `be-entity-builder`, `be-dto-builder`, `be-repository-builder`, `be-service-builder`, `be-usecase-builder`, `be-controller-builder` | `packages/be-prisma/schema/billing/payment.prisma`, `packages/be-service/src/payment/payment.service.ts`, `apps/core/api/src/module/payments` |
 | 3 | PAYMENT-S3-API-001 | `fe-api-integrator` | `pnpm --filter=@cocrepo/api codegen:server`, generated `packages/fe-api/src/core/payments` |
 | 3 | PAYMENT-S3-FE-001 | `fe-api-integrator`, `fe-route-agent`, `fe-feature-agent`, `fe-widget-agent` | `apps/admin/web/src/app/(admin)/payments/page.tsx`, `usePaymentManagementPageData`, `packages/fe-ui/src/screen/PaymentManagementPage`, `packages/fe-ui/src/feature/payment-management`, `packages/fe-ui/src/widget/payment-management` |
 

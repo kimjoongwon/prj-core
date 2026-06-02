@@ -137,7 +137,7 @@ export const groundSeedData: GroundSeedData[] = [
 		label: "본사",
 		address: "서울시 강남구",
 		phone: "02-0000-0000",
-		email: "admin@onora.com",
+		email: "admin@plate.com",
 		businessNo: "000-00-00000",
 		isSystem: true,
 	},
@@ -237,7 +237,7 @@ export interface UserGroundMappingData {
 export const userGroundMapping: UserGroundMappingData[] = [
 	// FULL_ACCESS - 플랫폼 운영본부 (System Space)
 	{
-		userEmail: "admin@onora.com",
+		userEmail: "admin@plate.com",
 		groundNames: ["플랫폼 운영본부"],
 	},
 	{

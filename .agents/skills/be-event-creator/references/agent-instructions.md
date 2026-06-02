@@ -61,7 +61,7 @@ export class ReservationCreatedEvent {
 - [ ] `packages/be-event/src/{domain}/index.ts`와 `src/index.ts` export 추가
 - [ ] EventHandler/Saga 작업은 `be-usecase-builder` 책임으로 남김
 
-## Feedback Packet (Mandatory)
+## Feedback Packet (필수)
 
 ```text
 Feedback:

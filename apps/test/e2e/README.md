@@ -111,7 +111,7 @@ pnpm --filter=test-e2e test:idp:mobile
 
 ## 환경 변수
 
-- `E2E_ADMIN_EMAIL`: 로그인 계정 이메일 (기본값 `admin@onora.com`)
+- `E2E_ADMIN_EMAIL`: 로그인 계정 이메일 (기본값 `admin@plate.com`)
 - `E2E_ADMIN_PASSWORD`: 로그인 계정 비밀번호 (기본값 `rkdmf12!@`)
 - `E2E_SYSTEM_SPACE_ID`: Admin 로그인 후 고정할 Space ID
 - `E2E_ENV`: `local|prod` 실행 환경 선택

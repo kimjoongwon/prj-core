@@ -9,14 +9,14 @@ function createLoginFormState(state: LoginFormState): LoginFormState {
 describe("LoginForm", () => {
 	it("renders email and password fields with bound values", () => {
 		const state = createLoginFormState({
-			email: "ops@example.com",
+			email: "admin@plate.com",
 			password: "password123!",
 		});
 
 		render(<LoginForm state={state} />);
 
-		expect(screen.getByLabelText("Email")).toHaveValue("ops@example.com");
-		expect(screen.getByLabelText("Password")).toHaveValue("password123!");
+		expect(screen.getByLabelText("이메일")).toHaveValue("admin@plate.com");
+		expect(screen.getByLabelText("비밀번호")).toHaveValue("password123!");
 	});
 
 	it("updates the provided form state when fields change", async () => {
@@ -27,10 +27,10 @@ describe("LoginForm", () => {
 
 		render(<LoginForm state={state} />);
 
-		fireEvent.change(screen.getByLabelText("Email"), {
+		fireEvent.change(screen.getByLabelText("이메일"), {
 			target: { value: "admin@example.com" },
 		});
-		fireEvent.change(screen.getByLabelText("Password"), {
+		fireEvent.change(screen.getByLabelText("비밀번호"), {
 			target: { value: "new-password" },
 		});
 

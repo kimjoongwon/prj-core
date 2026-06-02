@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 import ProfileTabRoute from "@/app/(tabs)/profile";
 import { mobileAuthStore } from "@/auth/auth-store";
+import { runInAction } from "mobx";
 
 const mockReplace = jest.fn();
 
@@ -21,6 +22,7 @@ jest.mock("@cocrepo/mo-ui", () => {
 		Icon: ({ name }: any) => React.createElement(Text, null, `icon:${name}`),
 		ScreenFrame: ({ children }: any) =>
 			React.createElement(View, { accessibilityLabel: "screen-frame" }, children),
+		Text: ({ children }: any) => React.createElement(Text, null, children),
 	};
 });
 
@@ -33,9 +35,11 @@ jest.mock("expo-router", () => ({
 describe("mobile profile tab route", () => {
 	beforeEach(() => {
 		mockReplace.mockReset();
-		mobileAuthStore.authStatus = "authenticated";
-		mobileAuthStore.isAuthenticated = true;
-		mobileAuthStore.isVerifying = false;
+		runInAction(() => {
+			mobileAuthStore.authStatus = "authenticated";
+			mobileAuthStore.isAuthenticated = true;
+			mobileAuthStore.isVerifying = false;
+		});
 		jest.spyOn(mobileAuthStore, "logout").mockResolvedValue(undefined);
 	});
 

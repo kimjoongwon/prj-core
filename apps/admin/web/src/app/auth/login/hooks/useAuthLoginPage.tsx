@@ -3,16 +3,18 @@ import { useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { usePersistStore } from "@/stores/AppStoreProvider";
+import { getDefaultAdminLoginCredentials } from "./getDefaultAdminLoginCredentials";
 import { resolveLoginErrorMessage } from "./resolveLoginErrorMessage";
 import { resolveReturnPath } from "./resolveReturnPath";
 
 export const useAuthLoginPage = () => {
 	const router = useRouter();
 	const persistStore = usePersistStore();
+	const defaultLoginCredentials = getDefaultAdminLoginCredentials();
 	const state = useLocalObservable(() => ({
 		loginForm: {
-			email: "",
-			password: "",
+			email: defaultLoginCredentials.email,
+			password: defaultLoginCredentials.password,
 		},
 		errorMessage: "",
 	}));

@@ -6,18 +6,18 @@ This reference preserves the detailed implementation instructions that previousl
 
 ---
 
-## 내장 Spec 정책 (Mandatory)
+## 내장 Spec 정책 (필수)
 
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 실행 source of truth는 route delivery spec입니다: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
+- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
+- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
 - Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `Agent Assignment Matrix`, `Execution Graph`, `Backend / API Contract`, `Foundation Contract`, `Shared File Locks`, `Approval / Execution Log`를 작성하지 않습니다.
+- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
 - story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 route delivery spec의 inventory와 assignment row에 기록합니다.
-- 승인된 route delivery spec이 있으면 그 spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
+- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
 
 
-## 재사용 우선 점검 (Mandatory)
+## 재사용 우선 점검 (필수)
 
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
@@ -25,7 +25,7 @@ This reference preserves the detailed implementation instructions that previousl
 - 동일 책임의 중복 구현을 금지합니다.
 - 테스트 대상이 fe-ui Screen/Feature component이면 대응 owner spec의 테스트 관점을 먼저 읽고, Widget/leaf 테스트는 nearest route page 또는 Screen/Feature spec의 테스트 관점을 참고합니다.
 - 허용 대상 밖의 UI/Widget/Control/Hook/Store 테스트에는 신규 spec을 요구하지 않습니다.
-- UI component 변경이 있으면 owner spec의 `Storybook / Test Contract`를 확인하고, story/test 누락은 `test-failure` 또는 `spec-drift`로 보고합니다.
+- UI component 변경이 있으면 owner spec의 `Storybook / 테스트 계약`를 확인하고, story/test 누락은 `test-failure` 또는 `spec-drift`로 보고합니다.
 
 
 # Frontend Tester (Vitest)
@@ -678,7 +678,7 @@ afterEach(() => {
 - 테스트 셋업: `packages/*/src/test/setup.ts`
 - Testing Library 문서: https://testing-library.com/docs/react-testing-library/intro
 
-## Feedback Packet (Mandatory)
+## Feedback Packet (필수)
 
 이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
 finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.

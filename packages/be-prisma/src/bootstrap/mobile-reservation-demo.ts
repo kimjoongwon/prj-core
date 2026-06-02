@@ -351,10 +351,10 @@ export async function createMobileReservationDemoData(
 			where: { email: { in: userEmails } },
 			select: { id: true, email: true },
 		}),
-		prisma.user.findFirst({ select: { id: true }, where: { email: "admin@onora.com" } }),
+		prisma.user.findFirst({ select: { id: true }, where: { email: "admin@plate.com" } }),
 	]);
 	if (!fallbackInstructor) {
-		throw new Error("모바일 예약 데모 seed에 필요한 admin@onora.com 사용자를 찾을 수 없습니다.");
+		throw new Error("모바일 예약 데모 seed에 필요한 admin@plate.com 사용자를 찾을 수 없습니다.");
 	}
 	const timelineById = new Map(timelines.map((timeline) => [timeline.id, timeline]));
 	const userByEmail = new Map(users.map((user) => [user.email, user]));

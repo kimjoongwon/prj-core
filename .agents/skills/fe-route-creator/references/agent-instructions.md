@@ -16,33 +16,33 @@ This reference preserves the detailed implementation instructions that previousl
 
 ## Common
 
-### 내장 Spec 정책 (Mandatory)
+### 내장 Spec 정책 (필수)
 
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 실행 source of truth는 route delivery spec입니다: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
+- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
+- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
 - Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `Agent Assignment Matrix`, `Execution Graph`, `Backend / API Contract`, `Foundation Contract`, `Shared File Locks`, `Approval / Execution Log`를 작성하지 않습니다.
+- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
 - story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 route delivery spec의 inventory와 assignment row에 기록합니다.
-- 승인된 route delivery spec이 있으면 그 spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
+- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
 
 ### Common Execution Rules
 
 - 먼저 `Platform Routing`으로 현재 target이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
-- 승인된 route delivery spec과 해당 플랫폼 섹션의 허용 파일/책임 범위 안에서만 작업합니다.
-- source owner가 다른 파일이나 다른 플랫폼 target이 필요하면 직접 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+- 승인된 service delivery spec과 생성된 route delivery spec의 해당 플랫폼 섹션의 허용 파일/책임 범위 안에서만 작업합니다.
+- 소스 담당가 다른 파일이나 다른 플랫폼 target이 필요하면 직접 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
 - Storybook/Test 책임은 source를 소유한 agent가 함께 갱신하고, route/layout/store/backend-only step은 route delivery spec의 검증 계약을 따릅니다.
 
 ## React Web
 
-### React Web Runtime Baseline (Mandatory)
+### React Web Runtime Baseline (필수)
 
 - 이 섹션은 `packages/fe-ui/**`, `apps/*/web/**`, Next.js App Router `page.tsx`/`layout.tsx`/`route.meta.ts` target에만 적용합니다.
 - React Web 작업은 `@heroui/react` upstream source와 `@cocrepo/ui` export를 먼저 확인하고, DOM/CSS/Tailwind/HeroUI React 계약을 기준으로 판단합니다.
 - Next.js server/client component 경계, SSR, hydration, browser DOM API, React Aria/HeroUI React id 안정성 규칙은 React Web target에서만 적용합니다.
 - React Native target에서는 이 섹션의 DOM event, browser API, SSR/hydration, `@heroui/react`, `@cocrepo/ui` 규칙을 실행 규칙으로 적용하지 않습니다.
 
-### 재사용 우선 점검 (Mandatory)
+### 재사용 우선 점검 (필수)
 
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
 - PC/Web UI 후보는 `@cocrepo/ui` export만 보지 말고 upstream `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
@@ -134,9 +134,9 @@ This reference preserves the detailed implementation instructions that previousl
 
 ### 1.5 page state 설계 원칙
 
-- page-local state와 API wiring의 source of truth는 `orch-delivery`가 만든 route delivery spec입니다.
+- page-local state와 API wiring의 상위 기준은 `orch-delivery`가 만든 service delivery spec이며, 세부 실행 계약은 생성된 route delivery spec입니다.
 - `fe-route-agent`는 thin route container에서 API hook, route/search param, mutation, invalidation, local state, handler wiring을 함께 담당합니다.
-- shared Store 생성이 필요한 경우에만 route delivery spec의 `Foundation Contract`와 `Agent Assignment Matrix`에 `fe-store-agent` step을 별도로 기록합니다.
+- shared Store 생성이 필요한 경우에만 route delivery spec의 `기반 계약`와 `에이전트 배정 매트릭스`에 `fe-store-agent` step을 별도로 기록합니다.
 - route page 는 pure screen 에 page slice 만 전달합니다.
   - 예: `<LoginPage state={state.loginPage} />`
 - server data 는 MobX state 로 복제하지 않고 별도 props 로 전달합니다.
@@ -319,7 +319,7 @@ echo "$TARGET_FILES" | xargs rg -n 'from\\s+"@cocrepo/ui".*\\b(Page|PageSurface|
 - `Route / Screen Mapping`에 `page role`, `reusable target`, `screen component path`를 필수로 기록
 - `screen component path`는 folder-based planning spec 규칙에 맞는 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`만 허용
 - named slot 콘텐츠도 root page와 같은 규칙으로 `page.spec.md`를 둡니다.
-- hook/util/type/state가 route-local이면 route delivery spec의 `Foundation Contract`에 `fe-route-agent` 담당 row로 기록하고 별도 spec을 만들지 않습니다.
+- hook/util/type/state가 route-local이면 route delivery spec의 `기반 계약`에 `fe-route-agent` 담당 row로 기록하고 별도 spec을 만들지 않습니다.
 - SSR/prefetch 예외가 승인된 경우 승인 근거와 추가 파일 목록 기록
 - `## 변경 이력`에 당일 행 추가
 - route `page.tsx`만 바꾸고 spec 누락 시 실패
@@ -340,8 +340,8 @@ echo "$TARGET_FILES" | xargs rg -n 'from\\s+"@cocrepo/ui".*\\b(Page|PageSurface|
 
 - route `page.tsx`, `_client.tsx`, `route.meta.ts`는 Storybook 대상이 아닙니다.
 - PC/Web screen visual owner는 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`이며, page story/test는 `fe-screen-agent`가 작성/갱신합니다.
-- route page에서 필요한 Feature/Widget/Form/DataGrid/Cell 변경이 보이면 owner spec의 `Storybook / Test Contract`에 source owner agent step을 분리합니다.
-- route wiring 자체는 unit/E2E 검증 대상입니다. route-specific unit test나 `page.e2e.ts`가 필요하면 `Unit Test 인벤토리`, `QA / Acceptance`, `Agent Assignment Matrix`에 `qa-fe-testing` 또는 `qa-fe-e2e-testing` step으로 기록합니다.
+- route page에서 필요한 Feature/Widget/Form/DataGrid/Cell 변경이 보이면 owner spec의 `Storybook / 테스트 계약`에 소스 담당 agent step을 분리합니다.
+- route wiring 자체는 unit/E2E 검증 대상입니다. route-specific unit test나 `page.e2e.ts`가 필요하면 `Unit Test 인벤토리`, `QA / Acceptance`, `에이전트 배정 매트릭스`에 `qa-fe-testing` 또는 `qa-fe-e2e-testing` step으로 기록합니다.
 - spec에 없는 UI component source를 route page 안에서 직접 만들거나, Storybook/Test row 없이 component 변경을 완료하지 않습니다.
 
 ---
@@ -386,7 +386,7 @@ BLOCKED: thin route container 구현 전 page ownership 정리 필요
 ---
 ## React Native
 
-### React Native Runtime Baseline (Mandatory)
+### React Native Runtime Baseline (필수)
 
 - 이 섹션은 `packages/fe-mo-ui/**`, `apps/mobile/**`, Expo Router route/`_layout.tsx` target에만 적용합니다.
 - 작업 전에 `https://heroui.com/llms-patterns.txt`를 열어 HeroUI Native Composition/Styling/Provider/Portal 패턴을 확인합니다.
@@ -400,7 +400,7 @@ BLOCKED: thin route container 구현 전 page ownership 정리 필요
 
 ### Mobile Scope
 
-### 재사용 우선 점검 (Mandatory)
+### 재사용 우선 점검 (필수)
 
 - 작업 시작 전에 `apps/mobile/src/app/**` route 구조와 `_layout.tsx` 체인을 먼저 검색합니다.
 - 대상 route의 `index.spec.md`, 인접 `app.context.md`, 연결할 shared screen spec을 먼저 읽습니다.
@@ -458,7 +458,7 @@ navigation/API/state/native bridge wiring을 구현하는 role입니다.
 - header는 route layout/native navigator의 `CustomHeader` 소유 여부를 먼저 확인하고, screen/route 본문에서 중복 hero/header를 만들지 않습니다.
 - route param, local state, server data, mutation, invalidation, navigation action, native bridge를 route file에서 정리합니다.
 - route delivery spec인 `index.spec.md`에 screen component target, route wiring boundary, API/state/native bridge 계약을 반영합니다.
-- hook/util/type/state가 route-local이면 `Foundation Contract`에 `fe-route-agent` 담당 row로 기록하고 별도 spec을 만들지 않습니다.
+- hook/util/type/state가 route-local이면 `기반 계약`에 `fe-route-agent` 담당 row로 기록하고 별도 spec을 만들지 않습니다.
 
 ---
 
@@ -484,7 +484,7 @@ navigation/API/state/native bridge wiring을 구현하는 role입니다.
 - navigation / local state / observable 사용 여부
 - API / native bridge wiring 여부
 - 함께 갱신한 `index.spec.md`
-## Feedback Packet (Mandatory)
+## Feedback Packet (필수)
 
 이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
 finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.

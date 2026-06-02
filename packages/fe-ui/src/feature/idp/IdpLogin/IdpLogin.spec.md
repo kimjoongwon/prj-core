@@ -59,4 +59,4 @@ feature 로컬 state는 `IdpLoginFeatureState` MobX class 하나가 소유합니
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |
 | 2026-03-06 | widget 경로를 widgets로 통합 | codex |
-| 2026-05-04 | 개발용 기본 계정 이메일 예시를 `admin@onora.com`으로 리브랜딩 | codex |
+| 2026-05-04 | 개발용 기본 계정 이메일 예시를 `admin@plate.com`으로 리브랜딩 | codex |

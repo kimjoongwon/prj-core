@@ -75,8 +75,8 @@ QA role은 agent 산출물을 재검증하고, 누락된 story/test는 `test-fai
 
 PC/Web과 Mobile 모두 같은 방식입니다.
 
-- PC/Web: `packages/fe-ui/src/**` component source owner agent가 story/test를 작성합니다.
-- Mobile: `packages/fe-mo-ui/src/**` component source owner agent가 story/test를 작성합니다.
+- PC/Web: `packages/fe-ui/src/**` component 소스 담당 agent가 story/test를 작성합니다.
+- Mobile: `packages/fe-mo-ui/src/**` component 소스 담당 agent가 story/test를 작성합니다.
 - route container, route layout, Store, backend-only step은 Storybook 대상이 아니며 unit/E2E 검증만 spec에 남깁니다.
 
 ## Delivery Role

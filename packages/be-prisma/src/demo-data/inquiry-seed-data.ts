@@ -880,7 +880,7 @@ export const inquiryParticipantSeedData: InquiryParticipantSeedData[] = [
 	},
 	{
 		inquiryNumber: "INQ-2026-0010",
-		userEmail: "admin@onora.com",
+		userEmail: "admin@plate.com",
 		role: "SUPERVISOR",
 		isOnline: false,
 	},

@@ -61,7 +61,7 @@ const defaultPagination = DEFAULT_OBJECTS.PAGINATION;
 
 ## Features
 
-- 🎯 **Centralized Constants** - Single source of truth for shared values
+- 🎯 **중앙화된 상수** - 공유 값의 단일 기준
 - 🔒 **Type-Safe** - Full TypeScript support
 - 📦 **Tree-Shakeable** - Import only what you need
 - ⚙️ **Environment-Aware** - Different values for dev/staging/production
