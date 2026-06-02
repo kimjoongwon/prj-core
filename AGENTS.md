@@ -95,12 +95,11 @@
 - **`subagent`, `서브에이전트` 같은 비공식 용어는 사용하지 않습니다**
 - **설명 시에는 `role`, `agent`, `agent_type`을 구분해서 사용합니다**
 
-## Codex orchestration feedback loop
+## Codex orchestration execution
 
-- `orch-delivery`가 승인된 spec 기준으로 실행 agent finding을 수집하고 재배치합니다.
-- 실행 agent는 peer role을 직접 호출하거나 다른 role 책임 파일을 임의 수정하지 않고, 최종 보고에 `Feedback:` packet을 포함합니다.
-- finding이 없으면 `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 보고합니다.
-- orchestrator는 packet 기준으로 `send_input` follow-up, re-entry, blocked/pending을 결정합니다.
+- `orch-delivery`는 승인된 spec 기준으로 직렬/병렬 실행 순서만 배정합니다.
+- 실행 agent는 peer role을 직접 호출하거나 다른 role 책임 파일을 임의 수정하지 않습니다.
+- 실행 결과와 남은 이슈는 각 agent의 최종 보고와 변경 diff, 테스트 결과를 사람이 검증합니다.
 
 ## 프론트엔드 개발 규칙
 
@@ -1323,7 +1322,7 @@ packages/fe-ui/src/feature/[FeatureName]/
 /orch-delivery spec="docs/services/members.delivery.spec.md" phase=web
 /orch-delivery spec="docs/services/members.delivery.spec.md" phase=qa
 
-# 4. 특정 generated route slice 재진입
+# 4. 특정 generated route slice 재실행
 /orch-delivery spec="apps/admin/web/src/app/(admin)/members/page.spec.md" phase=web
 ```
 
@@ -1333,7 +1332,7 @@ packages/fe-ui/src/feature/[FeatureName]/
 - **페이지별 프론트엔드**: 점진적 개발, 컴포넌트 재사용 가능
 - **실행 기준 일관화**: service delivery spec이 전체 승인/실행/QA 기준을 소유하고 route spec은 leaf 실행 범위를 제한
 - **기획 spec 보존**: Screen/Feature planning spec으로 시각/조합 의도를 유지
-- **phase별 검증**: 문제 발견 시 spec의 해당 step부터 재진입
+- **phase별 검증**: 사람이 문제를 확인한 뒤 필요한 phase 또는 route slice를 다시 실행
 
 #### 메뉴 업데이트
 

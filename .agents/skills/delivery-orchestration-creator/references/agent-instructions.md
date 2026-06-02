@@ -12,10 +12,10 @@
 - 서비스/기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec입니다: `docs/services/**/*.delivery.spec.md`.
 - route delivery spec은 service delivery spec에서 파생된 실행 slice입니다: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
 - Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
+- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`을 작성하지 않습니다.
 - story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
 - hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 그 spec과 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+- 승인된 service delivery spec이 있으면 그 spec과 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 
 
 ## 모바일 Text 정책 (필수)
@@ -44,6 +44,28 @@
 - Admin web은 스캔성과 반복 작업 효율을 우선하고, Mobile은 safe area, touch target, 편안한 상태 확인과 다음 행동 안내를 우선합니다.
 - UI가 전혀 없는 backend/codegen-only delivery는 service delivery spec과 관련 route slice의 디자인 항목에 `no UI design impact` 사유를 남깁니다.
 - 사용자 요구나 기존 화면 제약이 `DESIGN.md`와 충돌하면 임의로 무시하지 말고 spec에 예외 사유를 기록하고 approval gate에서 확인합니다.
+
+## Markdown 출력물 정책 (필수)
+
+- 신규 route, 화면, 기능 조합, 위젯, 컴포넌트, 패널, 메뉴, 목록, 표, 채팅, 상태 안내처럼 화면에 보이는 산출물은 코드 생성 전에 Markdown으로 먼저 그립니다.
+- Markdown 출력물은 이미지나 Storybook 캡처가 아니라 spec 안의 Markdown 표, bullet, fenced `text` wireframe, 상태별 Markdown block으로 작성합니다.
+- service delivery spec은 서비스 첫 화면, 주요 상태, 신규 컴포넌트 inventory별 재사용 검토, 생성 폴더, 재활용 컴포넌트, 신규 조합 의존, 이름 기준, 출력물, 필수 상태를 포함해야 합니다.
+- `신규 컴포넌트별 출력물` 표는 `컴포넌트`, `생성 폴더`, `재사용 검토`, `재활용 컴포넌트`, `신규 조합 의존`, `이름 기준`, `출력물`, `필수 상태` 컬럼을 필수로 가집니다.
+- 신규 컴포넌트명은 app/route 전용 이름보다 UI 역할 또는 재사용 가능한 도메인 역할을 우선합니다. app명, route명, 특정 기능명에 강하게 묶이는 이름은 피하고, 필요한 경우 `이름 기준`에 이유를 남깁니다.
+- 신규 컴포넌트 생성 전 기존 `packages/fe-ui`의 screen/feature/widget/control/display/surface/rhythm 재사용 가능성을 검토하고, 그대로 재사용하지 않는 이유를 `재사용 검토`에 남깁니다.
+- route delivery spec은 해당 route의 desktop/tablet/mobile 또는 해당 플랫폼 breakpoint, loading/empty/error/permission/long text 상태를 Markdown으로 그려야 합니다.
+- Screen/Feature planning spec은 하위 컴포넌트 조합, props/event 흐름, 상태별 렌더링을 Markdown 출력물로 기록합니다.
+- 재사용 검토, 생성 폴더, 재활용 컴포넌트, 신규 조합 의존, 이름 기준, 출력물, 필수 상태 중 하나라도 없는 신규 UI 산출물은 approval gate를 통과할 수 없습니다. 이 경우 route spec 생성이나 agent 호출 전에 service spec 또는 route spec을 보강합니다.
+- 컴포넌트명, 파일 경로, enum/key 같은 기술 식별자를 제외한 사용자 노출 텍스트는 Markdown 출력물에서도 실제 한글 문구로 씁니다.
+
+## 테스트 인벤토리 정책 (필수)
+
+- service delivery spec과 route delivery spec은 구현 전에 단위 테스트, E2E 테스트, 정적 검증을 표로 먼저 정리합니다.
+- `단위 테스트 인벤토리` 표는 `테스트 대상`, `검증 항목`, `테스트 파일`, `mock/stub`, `작성 agent_type`, `검증 agent_type`, `통과 기준` 컬럼을 필수로 가집니다.
+- `E2E 테스트 인벤토리` 표는 `시나리오`, `검증 흐름`, `테스트 파일`, `mock/stub`, `작성 agent_type`, `검증 agent_type`, `통과 기준` 컬럼을 필수로 가집니다.
+- `정적 검증 / 금지 grep` 표는 `검증 항목`, `명령`, `검증 agent_type`, `통과 기준` 컬럼을 필수로 가집니다.
+- `테스트 검증 agent 표`에는 각 테스트 그룹을 최종 확인하는 `agent_type`, 입력 파일, 산출물, 재실행 조건을 기록합니다.
+- 신규 UI 산출물에 대한 테스트 row가 없거나 검증 agent_type이 비어 있으면 approval gate를 통과할 수 없습니다.
 
 # 서비스 딜리버리 오케스트레이터
 
@@ -84,11 +106,11 @@ Screen/Feature spec은 planning spec으로 유지하되 실행 그래프, backen
 1. 사용자 요구와 기존 코드를 읽고 서비스 경계, 기존 도메인, route, screen, API, Prisma schema, Store, 테스트, generated output을 먼저 확인합니다.
 2. Codex 질문 도구(`request_user_input` 또는 AskUserQuestion)를 반복 사용해 서비스 목표, 사용자/운영자 journey, 권한, 도메인 모델, API, web/mobile 필요 페이지, 디자인 방향, QA 기준을 확정합니다.
 3. 질문 답변과 탐색 결과를 바탕으로 `docs/services/{service-name}.delivery.spec.md`를 작성하거나 갱신합니다.
-4. service delivery spec에는 서비스 전체 설계, 모든 필요한 route/page 목록, backend/API/foundation 계약, DESIGN.md 기반 디자인 방향, QA 기준, 에이전트 배정 매트릭스, 실행 그래프를 한글로 기록합니다.
+4. service delivery spec에는 서비스 전체 설계, 모든 필요한 route/page 목록, backend/API/foundation 계약, DESIGN.md 기반 디자인 방향, Markdown 출력물, QA 기준, 에이전트 배정 매트릭스, 실행 그래프를 한글로 기록합니다.
 5. service delivery spec approval gate를 열고 사용자 승인을 받습니다.
 6. 승인된 service delivery spec의 `필수 페이지 / 라우트`와 `생성된 라우트 Spec`에 있는 모든 web/mobile route에 대해 기존 형식의 `page.spec.md` 또는 `index.spec.md`를 생성/갱신합니다.
 7. 사용자가 승인한 service delivery spec과 연결된 route delivery spec 범위에서만 agent/QA role를 실행합니다.
-8. 실행 중 gap이 생기면 service delivery spec을 보강하고, 영향을 받는 route delivery spec을 다시 생성/갱신한 뒤 필요한 경우 approval gate로 재진입합니다.
+8. 실행 중 gap이 생기면 임의 확장하지 않고 중단합니다. 필요한 service delivery spec 또는 route delivery spec 보강과 재실행 여부는 사용자가 검증 후 결정합니다.
 
 ---
 
@@ -100,7 +122,7 @@ Screen/Feature spec은 planning spec으로 유지하되 실행 그래프, backen
 
 - service delivery: `docs/services/{service-name}.delivery.spec.md`
 
-service delivery spec은 서비스 목표, 권한, 도메인 모델/생명주기, 사용자 여정, 모든 web/mobile route 목록, backend/API/foundation 계약, DESIGN.md 기반 서비스 디자인 방향, 생성된 route spec 목록, 에이전트 배정 매트릭스, 실행 그래프, 승인 로그를 소유합니다.
+service delivery spec은 서비스 목표, 권한, 도메인 모델/생명주기, 사용자 여정, 모든 web/mobile route 목록, backend/API/foundation 계약, DESIGN.md 기반 서비스 디자인 방향, 생성된 route spec 목록, 에이전트 배정 매트릭스, 실행 그래프를 소유합니다.
 
 ### 생성된 Route Delivery Spec
 
@@ -140,11 +162,12 @@ service delivery spec은 아래 섹션을 반드시 한글로 포함합니다.
 ## 필수 페이지 / 라우트
 ## 백엔드 / API / 기반 계약
 ## DESIGN.md 기반 디자인 방향
+## Markdown 출력물
 ## 생성된 라우트 Spec
 ## 에이전트 배정 매트릭스
 ## 실행 그래프
+## 테스트 인벤토리 / 검증 에이전트
 ## QA / 승인 기준
-## 승인 / 실행 로그
 ```
 
 ### 서비스 목표
@@ -232,6 +255,16 @@ route-local hook/util/type/state는 Web/Mobile 모두 route spec의 `fe-route-ag
 - route별 세부 화면 러프는 각 generated route delivery spec의 `디자인 정렬`, `화면 러프`, `리듬 / 레이아웃 계약`에 기록합니다.
 - backend/codegen-only처럼 UI 영향이 없으면 `no UI design impact`와 사유를 기록합니다.
 
+### Markdown 출력물
+
+신규 UI 산출물은 코드 생성 전에 Markdown으로 그립니다.
+
+- 서비스 첫 화면과 주요 상태를 fenced `text` wireframe으로 작성합니다.
+- 신규 화면/기능 조합/위젯/컴포넌트 inventory마다 `신규 컴포넌트별 출력물` 표에 재사용 검토, 생성 폴더, 재활용 컴포넌트, 신규 조합 의존, 이름 기준, 출력물, 필수 상태를 둡니다.
+- loading/empty/error/permission/long text처럼 주요 상태가 있으면 상태별 Markdown block을 추가합니다.
+- 사용자에게 보이는 일반 텍스트는 한국어로 작성하고, 컴포넌트명/경로/key만 원문을 유지합니다.
+- 재사용 검토, 생성 폴더, 재활용 컴포넌트, 신규 조합 의존, 이름 기준, 출력물, 필수 상태 중 하나라도 빠진 신규 UI 산출물이 있으면 approval gate를 열지 않고 service spec 보강 대상으로 남깁니다.
+
 ### 생성된 라우트 Spec
 
 승인된 service delivery spec에서 생성하거나 갱신할 route delivery spec 목록을 기록합니다.
@@ -241,7 +274,7 @@ route-local hook/util/type/state는 Web/Mobile 모두 route spec의 `fe-route-ag
 
 - service spec approval 전에는 route spec을 생성하지 않습니다.
 - route spec에는 상위 service spec 경로와 service-level 계약 참조를 반드시 기록합니다.
-- route spec이 service spec과 다르게 확장되어야 하면 route spec을 먼저 고치지 말고 service spec에 re-entry합니다.
+- route spec이 service spec과 다르게 확장되어야 하면 route spec을 먼저 고치지 말고 service spec을 먼저 갱신합니다.
 
 ### 에이전트 배정 매트릭스
 
@@ -286,6 +319,16 @@ generated route spec의 matrix는 해당 route/page slice에서 leaf agent가 �
 | 순서 | step id | phase | `agent_type` | 직렬/병렬 | 의존 step | 산출물 | 완료 조건 |
 |------|---------|-------|--------------|-----------|-----------|--------|-----------|
 
+### 테스트 인벤토리 / 검증 에이전트
+
+구현 전에 어떤 테스트가 어떤 위험을 막는지, 누가 작성하고 누가 검증하는지를 표로 정리합니다.
+
+- `단위 테스트 인벤토리`: scanner, registry, component, feature, route-local util/state, bridge 단위 테스트를 기록합니다.
+- `E2E 테스트 인벤토리`: 사용자 journey, empty/error/recovery, query deep link, long text/narrow viewport 같은 브라우저 검증을 기록합니다.
+- `정적 검증 / 금지 grep`: Storybook 금지, observer 패턴, `useMemo`/`useCallback` 금지, scope 금지, unsafe exec 금지를 기록합니다.
+- `테스트 검증 agent 표`: `qa-fe-testing`, `qa-fe-e2e-testing`, `qa-type-checker`, 필요한 경우 `orch-delivery` spec guard가 어떤 row를 최종 확인하는지 기록합니다.
+- 테스트 row가 없는 신규 UI 산출물은 QA 기준을 승인할 수 없습니다.
+
 ### QA / 승인 기준
 
 - service-level acceptance criteria
@@ -295,16 +338,7 @@ generated route spec의 matrix는 해당 route/page slice에서 leaf agent가 �
 - mobile unit/story/e2e
 - typecheck/codegen 검증
 - empty/loading/error/permission/long text/narrow viewport/mobile safe area 검증
-- re-entry 기준
-
-### 승인 / 실행 로그
-
-service spec approval, route spec generation, 실행 결과, QA 결과, re-entry 이력을 기록합니다.
-
-| 일시 | 단계 | 결정/결과 | 작성자 | 비고 |
-|------|------|-----------|--------|------|
-
----
+- spec 갱신 / 재실행 기준
 
 ## 5. 생성된 Route Delivery Spec 규칙
 
@@ -317,6 +351,7 @@ service spec approval, route spec generation, 실행 결과, QA 결과, re-entry
 ### 기획 Spec 참조
 ### 디자인 정렬
 ### 화면 러프
+### Markdown 출력물
 ### 리듬 / 레이아웃 계약
 ### 컴포넌트 인벤토리
 ### 기반 Slice
@@ -326,18 +361,20 @@ service spec approval, route spec generation, 실행 결과, QA 결과, re-entry
 ### 에이전트 배정 매트릭스
 ### 실행 그래프
 ### 공유 파일 잠금
+### 테스트 인벤토리 / 검증 에이전트
 ### QA / 승인 기준
-### 승인 / 실행 로그
 ```
 
 - `상위 서비스 Spec`에는 `docs/services/{service-name}.delivery.spec.md` 경로와 관련 service step id를 기록합니다.
 - `목표`는 해당 route/page의 목적과 성공 기준만 적습니다.
-- `디자인 정렬`, `화면 러프`, `리듬 / 레이아웃 계약`은 `DESIGN.md`와 service spec의 `DESIGN.md 기반 디자인 방향`을 route 단위로 구체화합니다.
+- `디자인 정렬`, `화면 러프`, `Markdown 출력물`, `리듬 / 레이아웃 계약`은 `DESIGN.md`와 service spec의 `DESIGN.md 기반 디자인 방향`을 route 단위로 구체화합니다.
+- `신규 컴포넌트별 출력물` 표에는 route가 새로 렌더링하는 화면/기능 조합/위젯의 재사용 검토, 생성 폴더, 재활용 컴포넌트, 신규 조합 의존, 이름 기준을 적고, `Markdown 출력물`에는 상태별 화면을 fenced `text` block으로 그립니다.
 - `컴포넌트 인벤토리`에는 무엇을 렌더링하는지 적고, `리듬 / 레이아웃 계약`에는 어떤 rhythm primitive로 묶는지 적습니다.
 - `기반 Slice`와 `백엔드 / API Slice`에는 service spec의 전체 계약 중 해당 route가 직접 소비하는 hook/type/store/API/operationId만 기록합니다.
 - route spec은 service-level backend build order를 다시 소유하지 않습니다.
 - route-local hook/util/type/state는 Web/Mobile 모두 `fe-route-agent` row로 기록하고 별도 spec을 만들지 않습니다.
 - route `page.tsx`, Expo route file, `layout.tsx`, `_layout.tsx`, Store, backend-only step은 Storybook 대상이 아니며 필요한 unit/E2E 검증만 spec에 기록합니다.
+- route spec의 `테스트 인벤토리 / 검증 에이전트`는 service spec의 테스트 row 중 해당 route slice가 직접 작성/실행할 테스트만 복사하고, 검증 agent_type을 비워두지 않습니다.
 - E2E가 현재 불필요하거나 인프라가 없으면 row를 생략하지 말고 `E2E 파일`에 `none-current`, `비고`에 생략/blocked 사유를 적습니다.
 
 ---
@@ -366,36 +403,27 @@ Codex 질문 도구 문구:
 - service delivery spec의 `에이전트 배정 매트릭스`와 `실행 그래프`, 그리고 `생성된 라우트 Spec`에 연결된 route delivery spec만 실행합니다.
 - service delivery spec에 없는 route spec, `agent_type`, 파일은 생성하거나 수정하지 않습니다.
 - route delivery spec에 없는 파일은 leaf agent가 수정하지 않습니다.
-- route spec이 필요하지만 누락되어 있으면 구현하지 말고 service spec re-entry를 요청합니다.
+- route spec이 필요하지만 누락되어 있으면 구현하지 말고 service spec 보강 필요성을 최종 보고에 남깁니다.
 - `parallel=auto`여도 spec row의 `parallel: true`이고 수정 허용 파일이 겹치지 않는 step만 병렬 실행합니다.
 - shared file lock은 service spec과 route spec의 `공유 파일 잠금`를 따릅니다.
 - backend/API 변경 후 service spec에 codegen step이 있으면 web/mobile wiring 전에 codegen을 실행합니다.
-- 완료 보고에는 실행한 service step id, route step id, agent_type, 변경 파일, 검증 결과, re-entry 여부를 포함합니다.
+- 완료 보고에는 실행한 service step id, route step id, agent_type, 변경 파일, 검증 결과, 재실행 필요 여부를 포함합니다.
 
 ---
 
-## 8. Feedback 라우터
+## 8. 실행 이슈 처리
 
-- `spec-gap`: service spec을 보강하고 approval gate 재진입
-- `approval-needed`: approval gate를 다시 열고 승인 전 실행 중단
-- `contract-gap`: service spec의 affected step과 관련 route slice 보강
-- `api-integration-gap`: API contract 문제면 service spec 보강, route wiring 문제면 해당 route spec과 route agent follow-up
-- `ui-composition-gap`: service spec의 page/component 전략과 affected route spec의 필수 요소/에이전트 배정 매트릭스 보강 후 담당 agent follow-up
-- `implementation-blocker`: 같은 agent가 해결 가능하면 follow-up, role 경계 밖이면 service spec re-entry
-- `test-failure`: 제품 contract 문제와 테스트 기대값 문제를 분리해 service spec re-entry 또는 QA follow-up
-- `spec-drift`: service spec을 먼저 갱신하고 affected route spec을 재생성/갱신한 뒤 구현/테스트 follow-up
-- `shared-file-conflict`: 병렬 쓰기를 중단하고 single writer 지정
-- `dependency-missing`: 현재 phase 전제조건이면 blocked, downstream 전제면 service spec의 downstream step에 required input 기록
+- 실행 agent는 승인된 spec과 ownership boundary 밖으로 작업을 확장하지 않습니다.
+- 이슈가 생기면 최종 보고에 변경 파일, 검증 결과, 중단 사유, 필요한 후속 작업을 사람이 확인할 수 있게 남깁니다.
+- spec 보강, phase 재실행, agent 재배정, 차단 처리는 사용자가 최종 보고와 diff를 검증한 뒤 결정합니다.
 
 ---
 
 ## 9. 완료 조건
 
 - service spec의 required step이 완료되거나 명시적으로 blocked 처리되어야 합니다.
-- service spec approval gate 결과가 `승인 / 실행 로그`에 기록되어야 합니다.
 - `생성된 라우트 Spec`의 route spec이 모두 생성/갱신되어야 합니다. route가 없는 서비스는 `no route surface` 사유가 기록되어야 합니다.
 - required QA/Acceptance 검증이 통과해야 합니다.
-- spec이 변경되면 service spec과 affected route spec의 `승인 / 실행 로그` 또는 `## 변경 이력`에 남겨야 합니다.
 - stale agent_type, spec에 없는 파일 변경, shared lock 위반이 없어야 합니다.
 
 ---
@@ -410,18 +438,3 @@ Codex 질문 도구 문구:
 - agent가 결정해야 할 세부 구현 규칙을 spec에 복제하지 않습니다.
 - approval gate 전에는 route spec 생성, agent 호출, QA role 호출을 하지 않습니다.
 - 하위호환 wrapper, deprecated 경로, 임시 fallback API를 계획하지 않습니다.
-
-## Feedback Packet (필수)
-
-이 role이 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
-
-```text
-Feedback:
-- status: resolved | blocked | needs-spec | needs-approval | needs-implementation | needs-test | needs-reentry
-- feedback_type: none | spec-gap | approval-needed | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
-- affected_roles: <role list or none>
-- affected_files: <file list or none>
-- required_action: <short action or none>
-```

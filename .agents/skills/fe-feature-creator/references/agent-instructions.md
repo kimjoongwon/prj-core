@@ -24,13 +24,13 @@ This reference preserves the detailed implementation instructions that previousl
 - planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
 - story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
 - hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 
 ### Common Execution Rules
 
 - 먼저 `Platform Routing`으로 현재 target이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
 - 승인된 service delivery spec과 생성된 route delivery spec의 해당 플랫폼 섹션의 허용 파일/책임 범위 안에서만 작업합니다.
-- 소스 담당가 다른 파일이나 다른 플랫폼 target이 필요하면 직접 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+- 소스 담당가 다른 파일이나 다른 플랫폼 target이 필요하면 직접 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 - Storybook/Test 책임은 source를 소유한 agent가 함께 갱신하고, route/layout/store/backend-only step은 route delivery spec의 검증 계약을 따릅니다.
 
 ## React Web
@@ -542,7 +542,7 @@ const validateForm = (email: string, password: string): string | null => {
 - 신규 생성 전에 기존 Feature를 확장해 해결할 수 있는지 우선 판단합니다.
 - route/API/native bridge 책임과 중복되는 wrapper를 만들지 않습니다.
 - Feature 내부에서 기존 widget/leaf로 표현 가능한 UI를 raw `View`/`Text`/`Pressable` + `tv` 조합으로 다시 만들지 않습니다.
-- 필요한 하위 컴포넌트가 없으면 Feature 안에 즉석 구현하지 말고 해당 owner role에 `Feedback:`으로 넘깁니다.
+- 필요한 하위 컴포넌트가 없으면 Feature 안에 즉석 구현하지 말고 해당 owner role의 선행 작업 필요성을 최종 보고에 남깁니다.
 
 ### Mobile fe-feature-agent
 
@@ -601,17 +601,3 @@ React Native / Expo Native 기준의 reusable Feature composition을
 - Storybook은 ready, loading, empty, error, disabled, major interaction branch를 포함합니다.
 - unit test는 rendering, props/state branch, event callback, disabled guard, route/API boundary mock을 검증합니다.
 - Storybook/Test 계약은 route delivery spec 또는 feature/screen planning spec의 Storybook/Test 계약을 따르되, 실행 step은 route delivery spec에만 기록합니다.
-## Feedback Packet (필수)
-
-이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
-
-```text
-Feedback:
-- status: resolved | blocked | needs-spec | needs-approval | needs-contract | needs-implementation | needs-test | needs-reentry
-- feedback_type: none | spec-gap | approval-needed | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
-- affected_roles: <role list or none>
-- affected_files: <file list or none>
-- required_action: <short action or none>
-```

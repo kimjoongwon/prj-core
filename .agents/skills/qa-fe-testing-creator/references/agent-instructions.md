@@ -14,7 +14,7 @@ This reference preserves the detailed implementation instructions that previousl
 - planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
 - story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
 - hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 
 
 ## 재사용 우선 점검 (필수)
@@ -64,7 +64,7 @@ Vitest 기반으로 프론트엔드 패키지의 테스트 코드를 작성하�
 | 테스트 파일 | `**/*.test.ts`, `**/*.test.tsx` | Vitest 테스트 파일 |
 
 - 테스트 구현 후 대상이 fe-ui Screen/Feature component이면 대응 spec의 테스트 관점과 `## 변경 이력`도 함께 동기화합니다.
-- UI agent가 이미 작성한 Storybook story는 QA가 소유하지 않지만, 테스트 계약과 맞지 않거나 누락되면 보강 또는 finding으로 처리합니다.
+- UI agent가 이미 작성한 Storybook story는 QA가 소유하지 않지만, 테스트 계약과 맞지 않거나 누락되면 보강하거나 최종 보고에 이슈로 남깁니다.
 
 ---
 
@@ -677,18 +677,3 @@ afterEach(() => {
 - 테스트 설정: `packages/*/vitest.config.ts`
 - 테스트 셋업: `packages/*/src/test/setup.ts`
 - Testing Library 문서: https://testing-library.com/docs/react-testing-library/intro
-
-## Feedback Packet (필수)
-
-이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
-
-```text
-Feedback:
-- status: resolved | blocked | needs-contract | needs-implementation | needs-test | needs-reentry
-- feedback_type: none | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
-- affected_roles: <role list or none>
-- affected_files: <file list or none>
-- required_action: <short action or none>
-```

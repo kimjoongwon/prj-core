@@ -1,6 +1,6 @@
 # CQRS / UseCase Migration Runbook
 
-이 문서는 CQRS / UseCase 전환의 backend reference runbook이다. 신규 실행 기준은 `docs/services/**/*.delivery.spec.md`의 service delivery spec이며, 이 문서는 backend 구조와 legacy 제거 기준을 보조한다. 실행 agent는 승인된 service delivery spec과 생성된 route delivery spec의 phase, ownership, lock, QA gate 안에서만 작업하고, 누락된 계약은 임의 구현하지 않고 `Feedback:` packet으로 보고한다.
+이 문서는 CQRS / UseCase 전환의 backend reference runbook이다. 신규 실행 기준은 `docs/services/**/*.delivery.spec.md`의 service delivery spec이며, 이 문서는 backend 구조와 legacy 제거 기준을 보조한다. 실행 agent는 승인된 service delivery spec과 생성된 route delivery spec의 phase, ownership, lock, QA gate 안에서만 작업하고, 누락된 계약은 임의 구현하지 않고 최종 보고에 남긴다.
 
 ## 용어
 
@@ -171,7 +171,7 @@ Reservation pilot 이전에는 `packages/be-entity/src/reservation.entity.ts`가
 9. repository의 `plainToInstance(Reservation, row)` 결과는 `Reservation -> AbstractAggregateRootEntity -> AggregateRoot` prototype chain을 가져야 한다.
 10. aggregate event를 발행해야 하는 상태 전이는 `Reservation` instance method에서 수행하고, event commit 위치는 UseCase handler 또는 AggregateRootService 중 해당 phase에서 하나로 고정한다.
 
-Pilot 후 중복이 커지면 `AbstractEntity`와 `AbstractAggregateRootEntity`가 공유하는 DTO 변환 helper를 추출한다. helper 추출이 필요하지만 owner가 불명확하면 실행 agent는 구현하지 않고 `Feedback:` packet으로 보고한다.
+Pilot 후 중복이 커지면 `AbstractEntity`와 `AbstractAggregateRootEntity`가 공유하는 DTO 변환 helper를 추출한다. helper 추출이 필요하지만 owner가 불명확하면 실행 agent는 구현하지 않고 최종 보고에 남긴다.
 
 예상 형태:
 
@@ -281,8 +281,8 @@ Execution rules:
 
 - 각 phase의 실행 agent는 phase 시작 전 owner 파일을 `rg`로 검색한다.
 - phase output이 다음 phase의 input이므로 phase 순서를 건너뛰지 않는다.
-- blocker가 발생하면 peer role 파일을 수정하지 않고 `Feedback:` packet을 남긴다.
-- pilot 중 shared file lock 충돌이 있으면 가장 먼저 lock owner role에 re-entry가 필요하다고 보고한다.
+- blocker가 발생하면 peer role 파일을 수정하지 않고 최종 보고에 남긴다.
+- pilot 중 shared file lock 충돌이 있으면 가장 먼저 lock owner role의 후속 작업 필요성을 최종 보고에 남긴다.
 
 ## Reservation Endpoint Mapping
 
@@ -543,26 +543,7 @@ Reservation pilot과 core-api/idp-api phase QA 통과 후 다음 조건을 모�
 - active backend role 참조는 `be-command-builder`, `be-event-builder`, `be-usecase-builder`, `be-client-builder`를 사용한다.
 - legacy active role인 `be-app-builder`, `be-facade-builder`, `be-gateway-builder`는 제거/rename 대상으로만 남는다.
 
-## Feedback Packet
+## 실행 결과 보고
 
-실행 agent 최종 보고에는 항상 아래 packet을 포함한다. finding이 없으면 모든 값을 `none`으로 둔다.
-
-```yaml
-Feedback:
-  feedback_type: none|contract-gap|dependency-missing|implementation-blocker|qa-failure
-  affected_phase: package|package-migration|entity|aggregate-entity|aggregate-root-service|repository|service|usecase|controller|module|client|qa|none
-  affected_roles: active-role-name-or-none
-  affected_files: path-or-none
-  required_action: none-or-action
-```
-
-이 runbook을 수정하는 `orch-delivery` role의 최종 보고 packet은 finding이 없을 때 반드시 아래 형식을 사용한다.
-
-```yaml
-Feedback:
-  feedback_type: none
-  affected_phase: none
-  affected_roles: none
-  affected_files: none
-  required_action: none
-```
+실행 agent 최종 보고에는 변경 파일, 실행한 검증, 차단 사유, 필요한 후속 작업을 사람이 확인할 수 있게 요약한다.
+부모 Codex는 필요한 경우 agent 최종 보고 중 필요한 요약만 다음 agent 입력으로 전달할 수 있다.

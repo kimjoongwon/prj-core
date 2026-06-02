@@ -24,13 +24,13 @@ This reference preserves the detailed implementation instructions that previousl
 - planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
 - story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
 - hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 
 ### Common Execution Rules
 
 - 먼저 `Platform Routing`으로 현재 target이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
 - 승인된 service delivery spec과 생성된 route delivery spec의 해당 플랫폼 섹션의 허용 파일/책임 범위 안에서만 작업합니다.
-- 소스 담당가 다른 파일이나 다른 플랫폼 target이 필요하면 직접 확장하지 말고 `Feedback:` packet으로 `orch-delivery`에 되돌립니다.
+- 소스 담당가 다른 파일이나 다른 플랫폼 target이 필요하면 직접 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 - Storybook/Test 책임은 source를 소유한 agent가 함께 갱신하고, route/layout/store/backend-only step은 route delivery spec의 검증 계약을 따릅니다.
 
 ## React Web
@@ -434,11 +434,11 @@ navigation/API/state/native bridge wiring을 구현하는 role입니다.
 - route file은 Expo Router params, navigation, API/state wiring, native bridge(WebView, deep link, splash 등)를 소유합니다.
 - route file은 shared screen component에 props/handlers/state slice를 전달합니다.
 - 화면 전체 visual tree가 필요하면 먼저 `fe-screen-agent` 산출물을 사용합니다.
-- route-local UI가 불가피해도 기존 `@cocrepo/mo-ui` leaf와 shared screen을 우선 조합하고, 부족하면 `Feedback:`으로 route contract re-entry를 요청합니다.
+- route-local UI가 불가피해도 기존 `@cocrepo/mo-ui` leaf와 shared screen을 우선 조합하고, 부족하면 route contract 보강 필요성을 최종 보고에 남깁니다.
 - route 수정 전 연결할 shared screen target 파일, sibling screen spec, `packages/fe-mo-ui/src/screen/index.ts` export, `@cocrepo/mo-ui` root export 존재를 확인합니다.
 - shared screen target이 없거나 화면 본문을 route file이 직접 조립해야 한다면 아래 형식으로 차단합니다.
   - `BLOCKED: missing shared mobile screen target`
-  - `Feedback: status=needs-reentry, feedback_type=ui-composition-gap, affected_phase=mobile, affected_roles=fe-screen-agent`
+  - `필요 조치: fe-screen-agent가 shared mobile screen target을 먼저 보강`
 - 실행 타깃은 iOS/Android native runtime으로 한정하며 Expo Web 대응 코드를 추가하지 않습니다.
 - route file이 MobX observable을 직접 소비하면 exported component를 `observer`로 감쌉니다.
 - `observer(function Name() { ... })` 패턴을 금지합니다.
@@ -484,17 +484,3 @@ navigation/API/state/native bridge wiring을 구현하는 role입니다.
 - navigation / local state / observable 사용 여부
 - API / native bridge wiring 여부
 - 함께 갱신한 `index.spec.md`
-## Feedback Packet (필수)
-
-이 role이 `orch-delivery`의 실행 agent로 동작하거나 follow-up을 받으면 최종 보고 마지막에 아래 packet을 반드시 포함합니다.
-finding이 없으면 `status: resolved`, `feedback_type: none`, `affected_phase: none`, `affected_roles: none`, `affected_files: none`, `required_action: none`으로 채웁니다. packet은 생략하지 않습니다.
-
-```text
-Feedback:
-- status: resolved | blocked | needs-spec | needs-approval | needs-contract | needs-implementation | needs-test | needs-reentry
-- feedback_type: none | spec-gap | approval-needed | contract-gap | api-integration-gap | ui-composition-gap | implementation-blocker | test-failure | spec-drift | shared-file-conflict | dependency-missing
-- affected_phase: planning | approval | backend | codegen | web | mobile | qa | none
-- affected_roles: <role list or none>
-- affected_files: <file list or none>
-- required_action: <short action or none>
-```

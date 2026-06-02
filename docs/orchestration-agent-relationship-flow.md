@@ -25,9 +25,11 @@ flowchart TD
   Mobile --> QA
   Backend --> QA
 
-  QA -. feedback .-> Delivery
-  Delivery -. spec 재진입 .-> ServiceSpec
-  ServiceSpec -. 재승인 .-> Ask
+  QA --> HumanReview["사람 검증: 최종 보고 / diff / 테스트"]
+  HumanReview --> Decision{"후속 작업 필요?"}
+  Decision -->|spec 갱신| ServiceSpec
+  Decision -->|phase 재실행| RouteSpecs
+  Decision -->|완료| Done["완료"]
 ```
 
 ## Spec 필수 항목
@@ -46,7 +48,7 @@ flowchart TD
 - backend부터 frontend/mobile/QA까지의 실행 그래프
 - 공유 파일 잠금
 - QA/승인 기준
-- 차단/재진입 규칙
+- 차단/재실행 규칙
 - 승인/실행 로그
 
 생성된 route delivery spec은 다음 항목을 소유합니다.
@@ -71,7 +73,7 @@ flowchart TD
 | 누락/실패/회귀 검증 | `qa-fe-testing`, `qa-mo-testing`, E2E role |
 
 UI agent가 신규/수정 UI component를 만들면 같은 step에서 story와 unit test를 함께 작성하거나 갱신합니다.
-QA role은 agent 산출물을 재검증하고, 누락된 story/test는 `test-failure` 또는 `spec-drift`로 보고합니다.
+QA role은 agent 산출물을 재검증하고, 누락된 story/test는 최종 보고에 사람이 확인할 수 있는 이슈로 남깁니다.
 
 PC/Web과 Mobile 모두 같은 방식입니다.
 
@@ -255,19 +257,12 @@ flowchart TD
   Route --> QA["qa-mo-testing / qa-mo-e2e-testing"]
 ```
 
-## Feedback 라우팅
+## 실행 결과 검증
 
-| feedback type | 처리 |
-|---------------|------|
-| `spec-gap` | `orch-delivery`가 service spec을 보강하고 승인 gate 재진입 |
-| `contract-gap` | service spec의 affected step과 생성된 route spec slice 보강 |
-| `api-integration-gap` | API contract 문제면 service spec 보강, wiring 문제면 route/page agent follow-up |
-| `ui-composition-gap` | service spec의 page/component 전략과 생성된 route spec의 필수 요소/에이전트 배정 매트릭스 보강 후 담당 agent follow-up |
-| `implementation-blocker` | 같은 agent가 해결 가능하면 follow-up, role 경계 밖이면 spec re-entry |
-| `test-failure` | 제품 contract 문제와 테스트 기대값 문제를 분리해 spec re-entry 또는 QA follow-up |
-| `spec-drift` | service spec을 먼저 갱신하고 affected route spec을 재생성/갱신한 뒤 구현/테스트 follow-up |
-| `shared-file-conflict` | 병렬 쓰기를 중단하고 single writer 지정 |
-| `dependency-missing` | 현재 phase 전제조건이면 blocked, downstream 전제면 service spec의 downstream step에 required input 기록 |
+- 실행 결과는 각 agent의 최종 보고, 변경 diff, 테스트 결과를 사람이 검증합니다.
+- `spawn_agent`, `wait_agent`, `send_input`은 자동 라우팅 보장 기능이 아니라 부모 Codex가 필요할 때 사용하는 운영 도구입니다.
+- 부모 Codex는 agent 최종 보고 중 필요한 요약만 다음 agent 입력으로 전달할 수 있습니다.
+- spec 갱신, phase 재실행, agent 재배정, 차단 처리는 사람이 검증한 뒤 결정합니다.
 
 ## 운영 규칙
 

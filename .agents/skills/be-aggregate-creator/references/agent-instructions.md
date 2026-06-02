@@ -99,13 +99,4 @@ export class ReservationAggregateRoot {
 
 ## Final Report
 
-최종 보고에는 항상 아래 packet을 포함합니다.
-
-```yaml
-Feedback:
-  feedback_type: none|contract-gap|dependency-missing|implementation-blocker|qa-failure
-  affected_phase: aggregate-root-service
-  affected_roles: be-aggregate-builder
-  affected_files: none
-  required_action: none
-```
+최종 보고에는 변경 파일, 실행한 검증, 남은 이슈를 사람이 확인할 수 있게 요약합니다.

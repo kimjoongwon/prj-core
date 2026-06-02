@@ -95,7 +95,7 @@ generated route delivery spec의 `## 딜리버리` 필수 하위 섹션:
   - `#### 표준 Phase 순서`
 - `### 공유 파일 잠금`
 - `### QA / 승인 기준`
-- `### 차단 / 재진입 규칙`
+- `### 차단 / 재실행 규칙`
 - `### 승인 / 실행 로그`
 
 병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
@@ -136,12 +136,11 @@ Planning spec:
 
 상세 정책은 별도 `*.toml.guide.md`로 분리하지 않습니다. 실행 guardrail은 이 README, `.codex/config.toml`, 각 role TOML에 두고, 구현 절차와 기술별 상세 규칙은 `.agents/skills/*-creator` skill에 유지합니다.
 
-## Feedback Loop 운영
+## 실행 결과 검증
 
 - 실행 agent는 peer role을 직접 호출하거나 다른 role 책임 파일을 임의 수정하지 않습니다.
-- 모든 finding은 `orch-delivery`가 `Feedback:` packet으로 수집한 뒤 follow-up, spec re-entry, blocked/pending 중 하나로 재배치합니다.
-- orchestrated 실행 agent의 최종 보고에는 `Feedback:` packet을 항상 포함합니다.
-- packet이 누락되면 `orch-delivery`가 같은 agent에 1회 보완 요청하고, 두 번째에도 없으면 `dependency-missing` 또는 `implementation-blocker`로 차단합니다.
+- `orch-delivery`는 승인된 spec 기준으로 직렬/병렬 실행 순서만 배정합니다.
+- 실행 결과와 남은 이슈는 각 agent의 최종 보고, 변경 diff, 테스트 결과를 사람이 검증합니다.
 
 ## Planning / Orchestration
 
