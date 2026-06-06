@@ -20,7 +20,7 @@ TimelineEditPage
       - FormSection
         - VStack
           - Input
-          - Textarea
+          - TextArea
           - Button
 ```
 
@@ -36,7 +36,7 @@ TimelineEditPage
 | `FormSection` | `../../form` | 콘텐츠 그룹과 elevation 구성 |
 | `VStack` | `../../rhythm` | 화면 조합 요소 |
 | `Input` | `@heroui/react` | 사용자 입력 컨트롤 |
-| `Textarea` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `TextArea` | `@heroui/react` | 사용자 입력 컨트롤 |
 
 ## 공개 계약
 
@@ -65,7 +65,7 @@ TimelineEditPage
 | isSubmitPending | `boolean` | 수정 API 진행 상태 |
 | isSubmitDisabled | `boolean` | 수정 버튼 활성화 여부 |
 | onChangeNameInput | `(value: string) => void` | 이름 입력 변경 핸들러 |
-| onChangeDescriptionTextarea | `(value: string) => void` | 설명 입력 변경 핸들러 |
+| onChangeDescriptionTextArea | `(value: string) => void` | 설명 입력 변경 핸들러 |
 | onClickCancelButton | `() => void` | 취소 버튼 핸들러 |
 | onClickSubmitButton | `() => void` | 수정 버튼 핸들러 |
 

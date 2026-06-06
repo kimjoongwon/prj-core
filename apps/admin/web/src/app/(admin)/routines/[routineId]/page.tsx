@@ -11,7 +11,7 @@ import {
 	useGetRoutine,
 } from "@cocrepo/api/core/routines";
 import { RoutineDetailPage } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { observer } from "mobx-react-lite";
@@ -124,10 +124,8 @@ const AdminRoutinesDetailRoute = observer(() => {
 					{ routineId },
 					{
 						onSuccess: () => {
-							addToast({
-								title: "삭제 성공",
+							toast.success("삭제 성공", {
 								description: "루틴이 삭제되었습니다.",
-								color: "success",
 							});
 							setIsDeleteModalOpen(false);
 							queryClient.invalidateQueries({
@@ -136,12 +134,10 @@ const AdminRoutinesDetailRoute = observer(() => {
 							router.push("/routines" as Route);
 						},
 						onError: (mutationError) => {
-							addToast({
-								title: "삭제 실패",
+							toast.danger("삭제 실패", {
 								description:
 									mutationError.message ||
 									"삭제 중 오류가 발생했습니다. 프로그램에서 사용 중인 루틴은 삭제할 수 없습니다.",
-								color: "danger",
 							});
 						},
 					},

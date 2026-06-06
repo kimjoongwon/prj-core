@@ -1,5 +1,9 @@
 import { expect, type Page, test } from "@playwright/test";
 
+function toAdminPath(href: string) {
+	return href.startsWith("/admin") ? href : `/admin${href}`;
+}
+
 async function openFullAccessRoleDetail(page: Page) {
 	await page.goto("./roles");
 	await page.waitForLoadState("networkidle");
@@ -9,7 +13,17 @@ async function openFullAccessRoleDetail(page: Page) {
 		.filter({ has: page.getByText("FULL_ACCESS", { exact: true }) })
 		.first();
 	await expect(fullAccessRow).toBeVisible();
-	await fullAccessRow.getByRole("button", { name: "상세" }).click();
+	const detailAction = fullAccessRow
+		.getByRole("link", { name: "상세" })
+		.or(fullAccessRow.getByRole("button", { name: "상세" }))
+		.first();
+	const href = await detailAction.getAttribute("href").catch(() => null);
+	if (href) {
+		await page.goto(toAdminPath(href), { waitUntil: "domcontentloaded" });
+	} else {
+		await detailAction.click();
+	}
+	await expect(page).toHaveURL(/\/admin\/roles\/[^/]+$/);
 	await page.waitForLoadState("networkidle");
 }
 

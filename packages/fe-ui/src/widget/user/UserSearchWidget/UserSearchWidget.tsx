@@ -2,7 +2,7 @@
 
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Input } from "../../../design-system/primitives";
+import { Input } from "../../../control/Input/Input";
 
 /**
  * 회원 검색 위젯 Props
@@ -47,13 +47,13 @@ export const UserSearchWidget = observer(
 				onValueChange={onChange}
 				onKeyDown={handleKeyDown}
 				placeholder={placeholder}
-				startContent={<Search className="h-4 w-4 text-default-400" />}
+				startContent={<Search className="h-4 w-4 text-muted" />}
 				isClearable
 				onClear={() => onChange("")}
 				isDisabled={isLoading}
 				classNames={{
 					base: "max-w-sm",
-					inputWrapper: "bg-content1",
+					inputWrapper: "bg-surface",
 				}}
 			/>
 		);

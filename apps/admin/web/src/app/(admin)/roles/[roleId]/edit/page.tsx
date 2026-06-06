@@ -71,7 +71,7 @@ const AdminRolesRoleIdEditRoute = observer(() => {
 		state.errors.displayName = "";
 	};
 
-	const onChangeDescriptionTextarea = (value: string) => {
+	const onChangeDescriptionTextArea = (value: string) => {
 		state.description = value;
 	};
 
@@ -108,7 +108,7 @@ const AdminRolesRoleIdEditRoute = observer(() => {
 			isNotFound={!isLoading && !role}
 			isSubmitPending={isPending}
 			onChangeDisplayNameInput={onChangeDisplayNameInput}
-			onChangeDescriptionTextarea={onChangeDescriptionTextarea}
+			onChangeDescriptionTextArea={onChangeDescriptionTextArea}
 			onClickBackButton={onClickBackButton}
 			onClickListButton={onClickListButton}
 			onClickSubmitButton={onClickSubmitButton}

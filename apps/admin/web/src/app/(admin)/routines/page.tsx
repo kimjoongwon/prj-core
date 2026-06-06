@@ -6,7 +6,7 @@ import {
 	useGetRoutines,
 } from "@cocrepo/api/core/routines";
 import { RoutineListPage } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -53,19 +53,13 @@ export default observer(function RoutinesPageRoute() {
 					await queryClient.invalidateQueries({
 						queryKey: getGetRoutinesQueryKey(),
 					});
-					addToast({
-						title: "삭제 성공",
-						description: "루틴이 삭제되었습니다.",
-						color: "success",
-					});
+					toast.success("삭제 성공", { description: "루틴이 삭제되었습니다." });
 				} catch (error) {
-					addToast({
-						title: "삭제 실패",
+					toast.danger("삭제 실패", {
 						description:
 							error instanceof Error
 								? error.message
 								: "삭제 중 오류가 발생했습니다. 프로그램에서 사용 중인 루틴은 삭제할 수 없습니다.",
-						color: "danger",
 					});
 					throw error;
 				}

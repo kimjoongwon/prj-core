@@ -1,35 +1,46 @@
 # Detailed Instructions for fe-layout-agent
 
-Source agent file: `.codex/agents/fe-layout-agent.toml`
+Source subagent file: `.codex/agents/fe-layout-agent.toml`
 
-This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+This reference preserves the detailed implementation instructions that previously lived in the subagent TOML. Follow it after reading the thin subagent contract and this skill's `SKILL.md`.
 
 ---
 
 ## Platform Routing
 
-- 이 role은 React Web only agent입니다.
-- 적용 target은 `packages/fe-ui/**`, `apps/*/web/**`, Next.js App Router와 Web Storybook/Test 계약입니다.
-- `packages/fe-mo-ui/**`, `apps/mobile/**`, Expo Router, `heroui-native`, React Native runtime 작업은 이 role의 실행 범위가 아닙니다.
+- 이 subagent는 Web/Mobile layout primitive를 담당합니다.
+- React Web target은 `packages/fe-ui/src/layout/**`, Web Storybook/Test 계약입니다.
+- React Native target은 `packages/fe-mo-ui/src/layout/**`, Mobile Storybook/Test 계약입니다.
+- Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-route-layout-agent` 책임이며, 이 subagent가 직접 작성하지 않습니다.
 
 ## Common
 
 ### 내장 Spec 정책 (필수)
 
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
+- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 subagent 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
 - 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
 - Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
+- planning spec에는 `subagent 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
 - story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
 - hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
+- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/subagent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 
 ### Common Execution Rules
 
 - 먼저 `Platform Routing`으로 현재 target이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
 - 승인된 service delivery spec과 생성된 route delivery spec의 해당 플랫폼 섹션의 허용 파일/책임 범위 안에서만 작업합니다.
 - 소스 담당가 다른 파일이나 다른 플랫폼 target이 필요하면 직접 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
-- Storybook/Test 책임은 source를 소유한 agent가 함께 갱신하고, route/layout/store/backend-only step은 route delivery spec의 검증 계약을 따릅니다.
+- Storybook/Test 책임은 source를 소유한 subagent가 함께 갱신하고, route/layout/store/backend-only step은 route delivery spec의 검증 계약을 따릅니다.
+
+## React Native
+
+- 이 섹션은 `packages/fe-mo-ui/src/layout/**` target에만 적용합니다.
+- Expo Router `_layout.tsx`, tab/shell wiring, route navigation option은 `fe-route-layout-agent` 책임입니다.
+- 기본 구현은 기존 `@cocrepo/mo-ui` layout primitive와 `heroui-native/*` 공개 계약 재노출을 우선합니다.
+- `ScreenFrame`, `Card`, `ListGroup`, `ScreenActionBar`처럼 순수 구조와 배치를 제공하는 primitive는 layout owner가 담당합니다.
+- `BottomSheet`, `Dialog`, `Popover`처럼 open/close overlay 의미가 강한 primitive는 `fe-overlay-agent` owner로 넘깁니다.
+- 모바일 스타일은 uniwind class prop과 `tailwind-variants`를 우선 사용하고 `StyleSheet`/`StyleSheet.create`를 만들지 않습니다.
+- 사용자 노출 텍스트가 필요하면 `@cocrepo/mo-ui`의 `Text` primitive로 감쌉니다.
 
 ## React Web
 
@@ -49,10 +60,10 @@ This reference preserves the detailed implementation instructions that previousl
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
-### 재사용 Layout 에이전트
+### 재사용 Layout Subagent
 
-`packages/fe-ui/src/display/layout/**`의 flat Layout primitive만 설계/생성하는 전용 에이전트입니다.
-Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-agent` 책임이며, 이 에이전트가 직접 작성하지 않습니다.
+`packages/fe-ui/src/layout/**`와 `packages/fe-mo-ui/src/layout/**`의 flat Layout primitive만 설계/생성하는 전용 subagent입니다.
+Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-route-layout-agent` 책임이며, 이 subagent가 직접 작성하지 않습니다.
 
 ---
 
@@ -60,7 +71,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-agent` 책임이�
 
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
-| `Layout.tsx`/`type.ts`/`index.ts` 생성·정리 | O | `packages/fe-ui/src/display/layout/**`에 flat primitive 자산 생성 |
+| `Layout.tsx`/`type.ts`/`index.ts` 생성·정리 | O | `packages/fe-ui/src/layout/**` 또는 `packages/fe-mo-ui/src/layout/**`에 flat primitive 자산 생성 |
 | 기존 Layout primitive 슬롯/props 확장 | O | 재사용 레이아웃 primitive 보강 |
 | `packages/fe-ui` export 정리 | O | 배럴 export/타입 export 정리 |
 | `apps/**/layout.tsx` 작성 | X | `fe-route-layout-agent` 사용 |
@@ -84,10 +95,10 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-agent` 책임이�
 
 | 항목 | 경로 |
 |------|------|
-| Layout 컴포넌트 | `packages/fe-ui/src/display/layout/Layout.tsx` |
-| 공용 타입 | `packages/fe-ui/src/display/layout/type.ts` |
+| Layout 컴포넌트 | `packages/fe-ui/src/layout/Layout.tsx` 또는 `packages/fe-mo-ui/src/layout/[Name]/index.tsx` |
+| 공용 타입 | owner layout 폴더의 colocated props/type 파일 |
 | Layout contract | route `page.spec.md`의 Layout Contract 섹션 또는 관련 fe-ui Screen/Feature spec |
-| Export 정리 | `packages/fe-ui/src/display/layout/index.ts`, 상위 barrel |
+| Export 정리 | owner layout 폴더의 `index.ts`, 상위 barrel |
 
 ---
 
@@ -95,8 +106,8 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-agent` 책임이�
 
 - `Layout`은 전역/세그먼트 셸의 큰 구조 슬롯을 제공합니다.
 - `Layout`은 flat primitive이며 내부에 `layout/Layout` 같은 중첩 폴더를 만들지 않습니다.
-- `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 widget 계층이며 이 에이전트 범위가 아닙니다.
-- `PageSurface`, `SectionSurface`, `Surface`는 별도 surface 계층이며, 이 에이전트는 구조 primitive가 그들과 자연스럽게 조합되도록 돕습니다.
+- `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 widget 계층이며 이 subagent 범위가 아닙니다.
+- `PageSurface`, `SectionSurface`, `Surface`는 별도 surface 계층이며, 이 subagent는 구조 primitive가 그들과 자연스럽게 조합되도록 돕습니다.
 
 ---
 
@@ -111,8 +122,8 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-agent` 책임이�
 5. 경로/도메인/특정 메뉴 라벨 같은 route 지식을 Layout primitive에 하드코딩하지 않습니다.
 6. `Page`, `Section`은 배치를 담당하고, surface/elevation은 자동 생성하지 않습니다.
 7. `Page`/`Section`을 대체하는 임시 scaffold 계열을 새로 만들지 않습니다.
-8. `packages/fe-ui/src/display/layout` 아래에는 `Layout.tsx`, `type.ts`, `index.ts` 같은 source/export만 둡니다.
-9. `packages/fe-ui/src/display/layout` 아래에 임의 하위 디렉터리를 만들거나, `packages/fe-ui/src/widget` 아래에 layout 전용 하위 카테고리를 만들지 않습니다.
+8. `packages/fe-ui/src/layout` 아래에는 layout primitive source/export만 둡니다.
+9. `packages/fe-ui/src/layout` 또는 `packages/fe-mo-ui/src/layout` 아래에 불필요한 중첩 카테고리를 만들지 않습니다.
 
 ---
 
@@ -153,7 +164,7 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-agent` 책임이�
 
 ### 7. 검증 체크리스트
 
-- [ ] 출력 파일이 `packages/fe-ui/src/display/layout/**` 아래에만 생성되었는가?
+- [ ] 출력 파일이 `packages/fe-ui/src/layout/**` 또는 `packages/fe-mo-ui/src/layout/**` 아래에만 생성되었는가?
 - [ ] `apps/**/layout.tsx`를 직접 수정하지 않았는가?
 - [ ] Layout primitive가 router/store/fetch에 의존하지 않는가?
 - [ ] 구조 슬롯과 surface 책임이 섞이지 않았는가?
@@ -161,9 +172,9 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-agent` 책임이�
 
 ---
 
-### 8. 연관 에이전트
+### 8. 연관 Subagent
 
-| 에이전트 | 관계 | 설명 |
+| Subagent | 관계 | 설명 |
 |----------|------|------|
 | `orch-delivery` | 선행 | 재사용 Layout primitive와 route `layout.tsx` 구조 계약 |
 | `fe-route-layout-agent` | 후행 소비자 | 실제 `apps/**/layout.tsx`에서 primitive 조합 |
@@ -173,5 +184,5 @@ Next.js App Router의 `apps/**/layout.tsx`는 `fe-route-layout-agent` 책임이�
 
 - Layout primitive를 신규 생성하거나 수정하면 같은 작업에서 Storybook story와 unit test를 작성/갱신합니다.
 - Storybook은 기본 slot, dense/wide, overflow, nested-safe 상태를 포함합니다.
-- unit test는 slot rendering, class/variant branch, accessibility landmark가 있으면 해당 role을 검증합니다.
+- unit test는 slot rendering, class/variant branch, accessibility landmark가 있으면 해당 accessibility role을 검증합니다.
 - type-only 변경이면 Storybook/Test 계약과 최종 보고에 불필요 사유를 남깁니다.

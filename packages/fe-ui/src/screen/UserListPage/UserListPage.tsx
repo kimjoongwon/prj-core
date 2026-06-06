@@ -18,7 +18,9 @@ import {
 import { Search, UserCheck, UserMinus, Users } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ComponentType, useEffect } from "react";
-import { Chip, Input, Spinner } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Input } from "../../control/Input/Input";
+import { Spinner } from "@heroui/react";
 
 export interface UserListPageStats {
 	total: number;
@@ -49,12 +51,12 @@ const userListTableColumns = buildUserListTableColumns<UserDto>();
 
 function UsersDirectoryHeader({ totalCount }: { totalCount: number }) {
 	return (
-		<div className="mb-5 flex flex-col gap-3 border-b border-divider/80 pb-4 md:flex-row md:items-end md:justify-between">
+		<div className="mb-5 flex flex-col gap-3 border-b border-border/80 pb-4 md:flex-row md:items-end md:justify-between">
 			<div className="space-y-1">
 				<h2 className="text-base font-semibold tracking-tight text-foreground">
 					회원 디렉터리
 				</h2>
-				<p className="text-sm text-default-500">
+				<p className="text-sm text-muted">
 					등록된 이용자를 빠르게 검색하고 상태를 확인할 수 있습니다.
 				</p>
 			</div>
@@ -109,18 +111,11 @@ export const UserListPage = observer(
 					component: (() => (
 						<Input
 							aria-label={SEARCH_PLACEHOLDER}
-							classNames={{
-								base: "w-full min-w-0 md:w-[360px] lg:w-[440px]",
-								inputWrapper:
-									"h-11 border border-divider bg-content2/70 shadow-none transition-colors hover:border-default-300 group-data-[focus=true]:border-primary group-data-[focus=true]:bg-background",
-								input: "text-sm",
-								innerWrapper: "gap-2",
-							}}
 							isClearable
 							onClear={onClearSearch}
 							onValueChange={onChangeSearchValue}
 							placeholder={SEARCH_PLACEHOLDER}
-							startContent={<Search className="size-4 text-default-400" />}
+							startContent={<Search className="size-4 text-muted" />}
 							value={searchValue}
 						/>
 					)) as unknown as ComponentType<unknown>,
@@ -138,7 +133,7 @@ export const UserListPage = observer(
 					{stats ? (
 						<div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
 							<StatsCard
-								className="h-full border border-primary/10 bg-primary/5 lg:col-span-6"
+								className="h-full border border-accent/10 bg-accent/5 lg:col-span-6"
 								description={`활성 ${stats.active.toLocaleString()}명 · 비활성 ${stats.inactive.toLocaleString()}명`}
 								icon={<Users className="size-5" />}
 								title="전체 이용자"
@@ -154,7 +149,7 @@ export const UserListPage = observer(
 								color="success"
 							/>
 							<StatsCard
-								className="h-full border border-default-200 bg-content2/70 lg:col-span-3"
+								className="h-full border border-border bg-surface-secondary/70 lg:col-span-3"
 								description="접속이 중지되었거나 비활성화된 계정"
 								icon={<UserMinus className="size-5" />}
 								title="비활성 이용자"
@@ -163,7 +158,7 @@ export const UserListPage = observer(
 							/>
 						</div>
 					) : null}
-					<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+					<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 						<UsersDirectoryHeader totalCount={totalCount} />
 						<DataGrid
 							config={{
@@ -174,7 +169,6 @@ export const UserListPage = observer(
 							}}
 							rows={userRows}
 							totalCount={totalCount}
-							isLoading={isLoading}
 							state={gridState}
 						/>
 					</Surface>

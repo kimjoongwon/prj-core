@@ -3,7 +3,8 @@
 import { Sparkles } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Button, Textarea } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { TextArea } from "../../control/TextArea/TextArea";
 
 export interface PromptFormProps {
 	/** 메인 프롬프트 값 */
@@ -92,10 +93,10 @@ export const PromptForm = observer(
 		return (
 			<div className={`space-y-4 ${className}`}>
 				<div>
-					<label className="block text-sm font-medium text-default-700 mb-2">
+					<label className="block text-sm font-medium text-foreground mb-2">
 						{promptLabel}
 					</label>
-					<Textarea
+					<TextArea
 						placeholder={promptPlaceholder}
 						value={prompt}
 						onValueChange={onPromptChange}
@@ -105,20 +106,20 @@ export const PromptForm = observer(
 						variant="bordered"
 						classNames={{
 							input: "text-sm",
-							inputWrapper: "bg-content1",
+							inputWrapper: "bg-surface",
 						}}
 					/>
 					{promptHint && (
-						<p className="text-xs text-default-400 mt-1">{promptHint}</p>
+						<p className="text-xs text-muted mt-1">{promptHint}</p>
 					)}
 				</div>
 
 				{showNegativePrompt && onNegativePromptChange && (
 					<div>
-						<label className="block text-sm font-medium text-default-700 mb-2">
+						<label className="block text-sm font-medium text-foreground mb-2">
 							{negativePromptLabel}
 						</label>
-						<Textarea
+						<TextArea
 							placeholder={negativePromptPlaceholder}
 							value={negativePrompt}
 							onValueChange={onNegativePromptChange}
@@ -127,11 +128,11 @@ export const PromptForm = observer(
 							variant="bordered"
 							classNames={{
 								input: "text-sm",
-								inputWrapper: "bg-content1",
+								inputWrapper: "bg-surface",
 							}}
 						/>
 						{negativePromptHint && (
-							<p className="text-xs text-default-400 mt-1">
+							<p className="text-xs text-muted mt-1">
 								{negativePromptHint}
 							</p>
 						)}
@@ -151,7 +152,7 @@ export const PromptForm = observer(
 				</Button>
 
 				{shortcutHint && (
-					<p className="text-xs text-default-500 text-center">{shortcutHint}</p>
+					<p className="text-xs text-muted text-center">{shortcutHint}</p>
 				)}
 			</div>
 		);

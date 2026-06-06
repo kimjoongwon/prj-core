@@ -1,5 +1,6 @@
 export * from "./Checkbox";
 export * from "./DateStrip";
+export * from "./ControlField";
 export * from "./OccurrencePicker";
 export * from "./Radio";
 export * from "./RadioGroup";

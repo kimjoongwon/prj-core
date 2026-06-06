@@ -3,15 +3,9 @@
 import { AlertCircle, CheckCircle, Send } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import {
-	Button,
-	Input,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input/Input";
+import { Modal, useOverlayState } from "@heroui/react";
 import { VariableInputForm } from "../../form/VariableInputForm/VariableInputForm";
 import type { TemplateVariable } from "../VariableReadTable/VariableReadTable";
 
@@ -113,8 +107,8 @@ export const SendTestModal = observer(
 		const [status, setStatus] = useState<SendTestStatus>("idle");
 
 		const config = recipientConfig[type];
-		const isRecipientEmpty = recipient.trim() === "";
-		const isSendDisabled = isRecipientEmpty || status === "loading";
+			const isRecipientEmpty = recipient.trim() === "";
+			const isSendDisabled = isRecipientEmpty || status === "loading";
 
 		/** 모달이 열릴 때 상태 초기화 */
 		const handleOpenChange = (open: boolean) => {
@@ -126,8 +120,12 @@ export const SendTestModal = observer(
 			}
 			if (!open) {
 				onClose();
-			}
-		};
+				}
+			};
+			const modalState = useOverlayState({
+				isOpen,
+				onOpenChange: handleOpenChange,
+			});
 
 		/** 발송 테스트 실행 */
 		const handleSendTest = async () => {
@@ -152,12 +150,12 @@ export const SendTestModal = observer(
 			}
 		};
 
-		return (
-			<Modal isOpen={isOpen} onOpenChange={handleOpenChange} size="2xl">
-				<ModalContent>
-					<ModalHeader className="flex flex-col gap-1">테스트 발송</ModalHeader>
+			return (
+				<Modal state={modalState}>
+					<Modal.Backdrop><Modal.Container size="lg"><Modal.Dialog>
+					<Modal.Header className="flex flex-col gap-1">테스트 발송</Modal.Header>
 
-					<ModalBody>
+					<Modal.Body>
 						<div className="flex flex-col gap-4">
 							{/* 수신자 입력 */}
 							<Input
@@ -173,7 +171,7 @@ export const SendTestModal = observer(
 							{/* 변수 입력 폼 */}
 							{variables.length > 0 && (
 								<div className="flex flex-col gap-2">
-									<p className="text-sm font-semibold text-default-700">
+									<p className="text-sm font-semibold text-foreground">
 										변수 값
 									</p>
 									<VariableInputForm
@@ -204,7 +202,7 @@ export const SendTestModal = observer(
 												<span className="text-sm font-medium text-success">
 													발송 성공
 												</span>
-												<span className="text-xs text-default-500">
+												<span className="text-xs text-muted">
 													발송 시각: {formatSentAt(result.sentAt)}
 												</span>
 											</>
@@ -217,9 +215,9 @@ export const SendTestModal = observer(
 								</div>
 							)}
 						</div>
-					</ModalBody>
+					</Modal.Body>
 
-					<ModalFooter>
+					<Modal.Footer>
 						<Button
 							variant="flat"
 							onPress={onClose}
@@ -230,7 +228,6 @@ export const SendTestModal = observer(
 						<Button
 							color="primary"
 							onPress={handleSendTest}
-							isLoading={status === "loading"}
 							isDisabled={isSendDisabled}
 							startContent={
 								status !== "loading" ? <Send className="h-4 w-4" /> : undefined
@@ -238,8 +235,8 @@ export const SendTestModal = observer(
 						>
 							발송
 						</Button>
-					</ModalFooter>
-				</ModalContent>
+					</Modal.Footer>
+				</Modal.Dialog></Modal.Container></Modal.Backdrop>
 			</Modal>
 		);
 	},

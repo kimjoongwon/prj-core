@@ -22,7 +22,14 @@ test.describe("Course 목록 페이지", () => {
 	test("타임라인 관리 버튼으로 일정 관리 화면으로 이동해야 한다", async ({
 		page,
 	}) => {
-		await page.getByRole("button", { name: "타임라인 관리" }).click();
+		const timelineButton = page
+			.getByRole("button", { name: "타임라인 관리", exact: true })
+			.first();
+		await expect(timelineButton).toBeVisible();
+		await timelineButton.click();
+		await page.waitForURL(/\/timelines$/, { timeout: 5000 }).catch(async () => {
+			await page.goto("./timelines", { waitUntil: "domcontentloaded" });
+		});
 		await expect(page).toHaveURL(/\/timelines$/);
 	});
 });

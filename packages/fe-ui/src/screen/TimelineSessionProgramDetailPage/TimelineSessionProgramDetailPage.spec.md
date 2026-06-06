@@ -26,10 +26,10 @@ TimelineSessionProgramDetailPage
       - DetailSection
         - PageTitleBar
   - Modal
-    - ModalContent
-      - ModalHeader
-      - ModalBody
-      - ModalFooter
+    - Modal overlay content
+      - Modal.Header
+      - Modal.Body
+      - Modal.Footer
         - Button x2
 ```
 
@@ -49,10 +49,10 @@ TimelineSessionProgramDetailPage
 | `Link` | `next/link` | 사용자 액션 실행 |
 | `DateTimeCell` | `../../cell` | 상태/정보를 카드 또는 표시 단위로 표현 |
 | `Modal` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalContent` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalHeader` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalBody` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalFooter` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal overlay content` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Header` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Body` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Footer` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
 
 ## 공개 계약
 

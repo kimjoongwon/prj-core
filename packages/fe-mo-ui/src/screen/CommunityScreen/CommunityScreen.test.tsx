@@ -16,7 +16,10 @@ jest.mock("react-native-safe-area-context", () => ({
 	}),
 }));
 
-jest.mock("heroui-native/bottom-sheet", () => {
+jest.mock("heroui-native", () => {
+	const actual = jest.requireActual<typeof import("heroui-native")>(
+		"heroui-native",
+	);
 	const React = jest.requireActual<typeof import("react")>("react");
 	const { Pressable, Text, View } =
 		jest.requireActual<typeof import("react-native")>("react-native");
@@ -42,6 +45,7 @@ jest.mock("heroui-native/bottom-sheet", () => {
 		);
 
 	return {
+		...actual,
 		BottomSheet,
 		bottomSheetClassNames: {},
 		useBottomSheet: () => ({ nativeID: "community-bottom-sheet" }),

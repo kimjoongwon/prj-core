@@ -41,7 +41,7 @@
 | name | Input | 필수, 1-100자 | exercise.name | 운동 이름 |
 | duration | DurationInput | 필수, 1초 이상 | exercise.duration | 지속시간 (분/초 분리 입력) |
 | count | NumberInput | 필수, 최소 1 | exercise.count | 반복 횟수 |
-| description | Textarea | 선택, 최대 500자 | exercise.description | 운동 설명 |
+| description | TextArea | 선택, 최대 500자 | exercise.description | 운동 설명 |
 
 **DurationInput 기본값 처리:**
 - `exercise.duration`(초) → 분: `Math.floor(duration / 60)`, 초: `duration % 60`

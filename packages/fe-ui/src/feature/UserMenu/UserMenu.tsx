@@ -3,13 +3,7 @@
 import { useAuthStore, usePersistStore } from "@cocrepo/store";
 import { LogOut } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Avatar,
-	Dropdown,
-	DropdownItem,
-	DropdownMenu,
-	DropdownTrigger,
-} from "../../design-system/primitives";
+import { Avatar, Dropdown } from "@heroui/react";
 import { useT } from "../../i18n";
 
 /**
@@ -51,35 +45,39 @@ export const UserMenu = observer(() => {
 	}
 
 	return (
-		<Dropdown placement="bottom-end">
-			<DropdownTrigger>
-				<Avatar
-					as="button"
-					className="transition-transform"
-					color="primary"
-					name={user.name}
-					size="sm"
-					src={user.avatarUrl}
-				/>
-			</DropdownTrigger>
-			<DropdownMenu aria-label={t("사용자 메뉴")}>
-				<DropdownItem
-					key="profile"
-					className="h-14 gap-2"
-					textValue={t("프로필")}
-				>
-					<p className="font-semibold">{user.name}</p>
-					<p className="text-sm text-default-500">{user.role}</p>
-				</DropdownItem>
-				<DropdownItem
-					key="logout"
-					color="danger"
-					startContent={<LogOut className="h-4 w-4" size={16} />}
-					onPress={handleLogout}
-				>
-					{t("로그아웃")}
-				</DropdownItem>
-			</DropdownMenu>
+		<Dropdown>
+			<Dropdown.Trigger>
+				<Avatar className="transition-transform" color="accent" size="sm">
+					{user.avatarUrl ? (
+						<Avatar.Image src={user.avatarUrl} alt={user.name} />
+					) : null}
+					<Avatar.Fallback>{user.name.slice(0, 1)}</Avatar.Fallback>
+				</Avatar>
+			</Dropdown.Trigger>
+			<Dropdown.Popover placement="bottom end">
+				<Dropdown.Menu aria-label={t("사용자 메뉴")}>
+					<Dropdown.Item
+						id="profile"
+						key="profile"
+						className="h-14 gap-2"
+						textValue={t("프로필")}
+					>
+						<p className="font-semibold">{user.name}</p>
+						<p className="text-sm text-muted">{user.role}</p>
+					</Dropdown.Item>
+					<Dropdown.Item
+						id="logout"
+						key="logout"
+						className="text-danger"
+						onAction={handleLogout}
+					>
+						<span className="flex items-center gap-2">
+							<LogOut className="h-4 w-4" size={16} />
+							{t("로그아웃")}
+						</span>
+					</Dropdown.Item>
+				</Dropdown.Menu>
+			</Dropdown.Popover>
 		</Dropdown>
 	);
 });

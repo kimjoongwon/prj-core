@@ -8,11 +8,11 @@ import {
 	CustomHeader,
 	SpaceSelectionSheet,
 	type SpaceListItemInfo,
+	useThemeColor,
 } from "@cocrepo/mo-ui";
 import { useGetMySpaces, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
 import type { SpaceDto } from "@cocrepo/api/idp/model";
 import { useQueryClient } from "@tanstack/react-query";
-import { useThemeColor } from "heroui-native";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import {

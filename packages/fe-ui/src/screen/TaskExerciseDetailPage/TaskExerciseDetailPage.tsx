@@ -13,16 +13,9 @@ import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import Link from "next/link";
-import {
-	Button,
-	Chip,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	Spinner,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Modal, Spinner, useOverlayState } from "@heroui/react";
 
 const formatDuration = (seconds: number) => {
 	const minutes = Math.floor(seconds / 60);
@@ -80,10 +73,19 @@ export const TaskExerciseDetailPage = observer(
 		onClickBackButton,
 		onClickEditButton,
 		onClickDeleteButton,
-		onClickDeleteConfirmButton,
-		onClickDeleteCancelButton,
-	}: TaskExerciseDetailPageProps) => {
-		if (isLoading) {
+			onClickDeleteConfirmButton,
+			onClickDeleteCancelButton,
+		}: TaskExerciseDetailPageProps) => {
+			const deleteModalState = useOverlayState({
+				isOpen: isDeleteModalOpen,
+				onOpenChange: (open) => {
+					if (!open) {
+						onClickDeleteCancelButton();
+					}
+				},
+			});
+
+			if (isLoading) {
 			return (
 				<DetailPage
 					top={<PageTitleBar title="운동 정보" description="로딩 중..." />}
@@ -112,7 +114,7 @@ export const TaskExerciseDetailPage = observer(
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">
+								<p className="text-muted">
 									운동 detail을 찾을 수 없습니다.
 								</p>
 								<Button
@@ -164,19 +166,19 @@ export const TaskExerciseDetailPage = observer(
 							<DetailSection top={<PageTitleBar level={2} title="기본 정보" />}>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<label className="text-sm text-default-500">운동명</label>
+										<label className="text-sm text-muted">운동명</label>
 										<p className="mt-1 font-medium">{exercise.name}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">지속시간</label>
+										<label className="text-sm text-muted">지속시간</label>
 										<p className="mt-1">{formatDuration(exercise.duration)}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">반복횟수</label>
+										<label className="text-sm text-muted">반복횟수</label>
 										<p className="mt-1">{exercise.count}회</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">
+										<label className="text-sm text-muted">
 											스케줄 가능
 										</label>
 										<div className="mt-1">
@@ -189,18 +191,18 @@ export const TaskExerciseDetailPage = observer(
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">설명</label>
+										<label className="text-sm text-muted">설명</label>
 										<p className="mt-1">{exercise.description || "-"}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">
+										<label className="text-sm text-muted">
 											이미지 파일
 										</label>
 										<div className="mt-1">
 											{exercise.imageFileId && exercise.imageAssetHref ? (
 												<Link
 													href={exercise.imageAssetHref}
-													className="font-mono text-primary text-sm hover:underline"
+													className="font-mono text-accent text-sm hover:underline"
 												>
 													{exercise.imageFileId}
 												</Link>
@@ -210,14 +212,14 @@ export const TaskExerciseDetailPage = observer(
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">
+										<label className="text-sm text-muted">
 											영상 파일
 										</label>
 										<div className="mt-1">
 											{exercise.videoFileId && exercise.videoAssetHref ? (
 												<Link
 													href={exercise.videoAssetHref}
-													className="font-mono text-primary text-sm hover:underline"
+													className="font-mono text-accent text-sm hover:underline"
 												>
 													{exercise.videoFileId}
 												</Link>
@@ -227,13 +229,13 @@ export const TaskExerciseDetailPage = observer(
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">등록일</label>
+										<label className="text-sm text-muted">등록일</label>
 										<div className="mt-1">
 											<DateTimeCell value={exercise.createdAt} />
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">수정일</label>
+										<label className="text-sm text-muted">수정일</label>
 										<div className="mt-1">
 											<DateTimeCell value={exercise.updatedAt ?? "-"} />
 										</div>
@@ -247,11 +249,11 @@ export const TaskExerciseDetailPage = observer(
 							>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<label className="text-sm text-default-500">Task ID</label>
+										<label className="text-sm text-muted">Task ID</label>
 										<p className="mt-1 font-mono text-sm">{taskId}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">Space ID</label>
+										<label className="text-sm text-muted">Space ID</label>
 										<p className="mt-1 font-mono text-sm">
 											{exercise.spaceId ?? "-"}
 										</p>
@@ -268,15 +270,15 @@ export const TaskExerciseDetailPage = observer(
 										{routines.map((routine, index) => (
 											<div
 												key={`${routine.id}:${index}`}
-												className="flex items-center justify-between rounded-lg bg-content2 p-3"
+												className="flex items-center justify-between rounded-lg bg-surface-secondary p-3"
 											>
 												<div>
 													<p className="font-medium">{routine.name}</p>
-													<p className="text-sm text-default-500">
+													<p className="text-sm text-muted">
 														{routine.label || "-"}
 													</p>
 												</div>
-												<div className="text-sm text-default-400">
+												<div className="text-sm text-muted">
 													<DateTimeCell value={routine.createdAt} />
 												</div>
 											</div>
@@ -287,10 +289,10 @@ export const TaskExerciseDetailPage = observer(
 						) : null}
 					</VStack>
 				</DetailPageSurface>
-				<Modal isOpen={isDeleteModalOpen} onClose={onClickDeleteCancelButton}>
-					<ModalContent>
-						<ModalHeader>태스크 삭제</ModalHeader>
-						<ModalBody>
+				<Modal state={deleteModalState}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>태스크 삭제</Modal.Header>
+						<Modal.Body>
 							<p>
 								<strong>{exercise.name}</strong> 운동 detail이 포함된 태스크를
 								삭제하시겠습니까?
@@ -298,8 +300,8 @@ export const TaskExerciseDetailPage = observer(
 							<p className="mt-2 text-sm text-danger">
 								이 작업은 되돌릴 수 없습니다.
 							</p>
-						</ModalBody>
-						<ModalFooter>
+						</Modal.Body>
+						<Modal.Footer>
 							<Button
 								variant="flat"
 								onPress={onClickDeleteCancelButton}
@@ -314,8 +316,8 @@ export const TaskExerciseDetailPage = observer(
 							>
 								삭제
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
 			</DetailPage>
 		);

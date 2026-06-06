@@ -2,6 +2,7 @@
 
 import {
 	type InquiryStatus,
+	useGetCreateInquiryForm,
 	useGetInquiries,
 	useGetInquiryStats,
 } from "@cocrepo/api/core/inquiries";
@@ -12,13 +13,11 @@ import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 
-const FILTERABLE_INQUIRY_STATUSES: InquiryStatus[] = [
-	"NEW",
-	"IN_PROGRESS",
-	"WAITING_CUSTOMER",
-	"RESOLVED",
-	"CLOSED",
-];
+const mapSelectOptions = (items?: Array<{ value: unknown; label: string }>) =>
+	(items ?? []).map((item) => ({
+		value: String(item.value ?? ""),
+		label: item.label,
+	}));
 
 export default observer(function InquiriesPageRoute() {
 	const router = useRouter();
@@ -28,11 +27,19 @@ export default observer(function InquiriesPageRoute() {
 		search: parseAsString.withDefault(""),
 		inquiryStatus: parseAsString.withDefault(""),
 	});
+	const { data: filterBootstrapResponse, isLoading: isLoadingFilterBootstrap } =
+		useGetCreateInquiryForm();
+	const statusOptions = mapSelectOptions(
+		filterBootstrapResponse?.data?.options.status,
+	);
 	const inquiryParams = {
 		take: getNumberQueryValue(queryStates.take, 20),
 		skip: getNumberQueryValue(queryStates.skip, 0),
 		search: getSearchQueryValue(queryStates.search),
-		inquiryStatus: getInquiryStatusFilter(queryStates.inquiryStatus),
+		inquiryStatus: getInquiryStatusFilter(
+			queryStates.inquiryStatus,
+			statusOptions,
+		),
 	};
 	const { data: inquiriesResponse, isLoading: isLoadingInquiries } =
 		useGetInquiries(inquiryParams);
@@ -54,8 +61,11 @@ export default observer(function InquiriesPageRoute() {
 				resolved: statsResponse?.data?.resolved ?? 0,
 				slaBreached: statsResponse?.data?.slaBreached ?? 0,
 			}}
+			statusOptions={statusOptions}
 			activeStatus={activeStatus}
-			isLoading={isLoadingInquiries || isLoadingStats}
+			isLoading={
+				isLoadingInquiries || isLoadingStats || isLoadingFilterBootstrap
+			}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onClickNewInquiry={() => {
@@ -72,7 +82,7 @@ export default observer(function InquiriesPageRoute() {
 			onClickStatusFilter={(status) => {
 				const inquiryStatus =
 					typeof status === "string" &&
-					FILTERABLE_INQUIRY_STATUSES.includes(status as InquiryStatus)
+					statusOptions.some((option) => option.value === status)
 						? status
 						: null;
 				void setQueryStates({
@@ -97,12 +107,15 @@ function getSearchQueryValue(value: unknown): string | undefined {
 	return trimmed.length > 0 ? trimmed : undefined;
 }
 
-function getInquiryStatusFilter(value: unknown): InquiryStatus | undefined {
+function getInquiryStatusFilter(
+	value: unknown,
+	statusOptions: Array<{ value: string }>,
+): InquiryStatus | undefined {
 	if (typeof value !== "string") {
 		return undefined;
 	}
 
-	return FILTERABLE_INQUIRY_STATUSES.includes(value as InquiryStatus)
+	return statusOptions.some((option) => option.value === value)
 		? (value as InquiryStatus)
 		: undefined;
 }

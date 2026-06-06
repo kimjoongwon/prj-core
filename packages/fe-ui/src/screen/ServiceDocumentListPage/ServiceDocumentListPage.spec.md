@@ -22,7 +22,7 @@
 - `Page`의 `top`에는 `PageTitleBar`를 배치한다.
 - 본문은 `PageSurface`로 감싸고, 목록/폼 영역은 각각 `SectionSurface`를 소유한다.
 - 좌측에는 검색/필터와 테이블을 배치하고, 우측에는 초안 작성/수정 패널을 배치한다.
-- 우측 폼의 본문 입력은 `format=HTML`일 때 CKEditor 기반 `HtmlEditor`를 사용하고, 그 외 형식은 일반 `Textarea`를 사용한다.
+- 우측 폼의 본문 입력은 `format=HTML`일 때 CKEditor 기반 `HtmlEditor`를 사용하고, 그 외 형식은 일반 `TextArea`를 사용한다.
 
 ## 상태
 

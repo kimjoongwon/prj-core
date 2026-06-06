@@ -10,9 +10,6 @@
 		"includes": [
 			"./apps/admin/web/**/*.ts",
 			"./apps/admin/web/**/*.tsx",
-			"./apps/idp/api/src/**/*.ts",
-			"./apps/idp/web/**/*.ts",
-			"./apps/idp/web/**/*.tsx",
 			"./apps/proposal/web/**/*.ts",
 			"./apps/proposal/web/**/*.tsx",
 			"./apps/proposal/web/**/*.css",

@@ -3,8 +3,8 @@
 import { Check, ChevronRight, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import { Button } from "../../design-system/primitives";
-import type { OverlayMenuProps } from "../../display/layout/type";
+import { Button } from "../../control/Button/Button";
+import type { OverlayMenuProps } from "../../layout/Layout/type";
 
 export const OverlayMenu = observer(function OverlayMenu({
 	title,
@@ -23,7 +23,7 @@ export const OverlayMenu = observer(function OverlayMenu({
 
 	return (
 		<div className="fixed inset-x-0 top-14 bottom-16 z-30 bg-background md:hidden">
-			<div className="flex h-14 items-center justify-between border-divider border-b bg-content1 px-4">
+			<div className="flex h-14 items-center justify-between border-border border-b bg-surface px-4">
 				<h2 className="font-semibold text-foreground text-lg">{title}</h2>
 				<Button
 					isIconOnly
@@ -32,12 +32,12 @@ export const OverlayMenu = observer(function OverlayMenu({
 					onPress={handleClose}
 					aria-label="Close sub menu"
 				>
-					<X className="text-default-500" size={20} />
+					<X className="text-muted" size={20} />
 				</Button>
 			</div>
 
-			<div className="h-full overflow-y-auto bg-content2 pb-4">
-				<ul className="divide-y divide-divider">
+			<div className="h-full overflow-y-auto bg-surface-secondary pb-4">
+				<ul className="divide-y divide-border">
 					{items.map((item) => {
 						const isSelected = selectedItemId === item.id;
 
@@ -47,8 +47,8 @@ export const OverlayMenu = observer(function OverlayMenu({
 									type="button"
 									className={`flex w-full items-center gap-3 px-4 py-4 text-left transition-colors ${
 										isSelected
-											? "bg-primary/10 text-primary"
-											: "bg-content1 text-foreground hover:bg-content3"
+											? "bg-accent/10 text-accent"
+											: "bg-surface text-foreground hover:bg-surface-tertiary"
 									}`}
 									onClick={() => handleItemClick(item.id)}
 								>
@@ -57,7 +57,7 @@ export const OverlayMenu = observer(function OverlayMenu({
 											<AppIcon
 												name={item.icon}
 												className={
-													isSelected ? "text-primary" : "text-default-500"
+													isSelected ? "text-accent" : "text-muted"
 												}
 												size={20}
 											/>
@@ -72,13 +72,13 @@ export const OverlayMenu = observer(function OverlayMenu({
 
 									{isSelected && (
 										<span className="flex-shrink-0">
-											<Check className="text-primary" size={20} />
+											<Check className="text-accent" size={20} />
 										</span>
 									)}
 
 									{!isSelected && (
 										<span className="flex-shrink-0">
-											<ChevronRight className="text-default-400" size={20} />
+											<ChevronRight className="text-muted" size={20} />
 										</span>
 									)}
 								</button>

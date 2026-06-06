@@ -12,7 +12,7 @@ import {
 	type TimelineSessionPageDayOfWeek,
 	type TimelineSessionPageSessionType,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -94,7 +94,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 		state.errors = {};
 	};
 
-	const onChangeDescriptionTextarea = (value: string) => {
+	const onChangeDescriptionTextArea = (value: string) => {
 		state.description = value;
 	};
 
@@ -171,11 +171,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 			},
 			{
 				onSuccess: () => {
-					addToast({
-						title: "수정 성공",
-						description: "세션이 수정되었습니다.",
-						color: "success",
-					});
+					toast.success("수정 성공", { description: "세션이 수정되었습니다." });
 					queryClient.invalidateQueries({
 						queryKey: getGetSessionByIdQueryKey(timelineId, sessionId),
 					});
@@ -184,10 +180,8 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 					);
 				},
 				onError: () => {
-					addToast({
-						title: "수정 실패",
+					toast.danger("수정 실패", {
 						description: "세션 수정 중 오류가 발생했습니다.",
-						color: "danger",
 					});
 				},
 			},
@@ -220,7 +214,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 			isSubmitDisabled={!hasChanged || !state.name.trim()}
 			onChangeNameInput={onChangeNameInput}
 			onChangeTypeSelect={onChangeTypeSelect}
-			onChangeDescriptionTextarea={onChangeDescriptionTextarea}
+			onChangeDescriptionTextArea={onChangeDescriptionTextArea}
 			onChangeStartDateTimeInput={onChangeStartDateTimeInput}
 			onChangeEndDateTimeInput={onChangeEndDateTimeInput}
 			onChangeDayOfWeekSelect={onChangeDayOfWeekSelect}

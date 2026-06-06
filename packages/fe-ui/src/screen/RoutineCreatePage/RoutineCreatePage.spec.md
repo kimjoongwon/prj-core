@@ -22,10 +22,10 @@ RoutineCreatePage
         - Input x2
     - RoutineActivitySection
   - Modal
-    - ModalContent
-      - ModalHeader
-      - ModalBody
-      - ModalFooter
+    - Modal overlay content
+      - Modal.Header
+      - Modal.Body
+      - Modal.Footer
         - Button x2
 ```
 
@@ -50,10 +50,10 @@ RoutineCreatePage
 | `FormPageSurface` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
 | `RoutineActivitySection` | `현재 파일` | 콘텐츠 그룹과 elevation 구성 |
 | `Modal` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalContent` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalHeader` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalBody` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalFooter` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal overlay content` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Header` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Body` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Footer` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
 
 ## 공개 계약
 

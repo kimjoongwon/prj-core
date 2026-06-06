@@ -22,7 +22,7 @@
 | @heroui/react | 기능 구현 의존성 |
 | lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
-| ../../../display/data-display/Text/Text | 기능 구현 의존성 |
+| ../../../display/data-display/Typography | 기능 구현 의존성 |
 | ../../../rhythm/HStack/HStack | 기능 구현 의존성 |
 | ../../../rhythm/VStack/VStack | 기능 구현 의존성 |
 | ../../../form/AbilityFormModal | 기능 구현 의존성 |

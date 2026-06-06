@@ -3,17 +3,13 @@
 import { useNativeLogout, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
 import type { SpaceInfo } from "@cocrepo/ui";
 import {
-	Button,
 	HeaderBar,
 	HeaderSpaceSelector,
 	LanguageSelectButton,
 	ThemeToggleButton,
-	Tooltip,
 	useT,
 } from "@cocrepo/ui";
-import { KeyRound } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { resolveIdpClientUrl } from "@/runtime-urls";
 import {
 	useAppStore,
 	useNavigationStore,
@@ -87,13 +83,6 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 		setCurrentSpaceMutate({ spaceId: space.spaceId });
 	};
 
-	const onClickOpenIdpClientButton = () => {
-		const idpClientUrl = resolveIdpClientUrl();
-		if (idpClientUrl) {
-			window.open(idpClientUrl, "_blank");
-		}
-	};
-
 	const selectedNavItem = navigationStore.selectedNavItem;
 	const selectedSubNavItem = navigationStore.selectedSubNavItem;
 	const currentSectionLabel =
@@ -107,7 +96,7 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 			onLogout={onClickLogoutButton}
 			context={
 				<div className="min-w-0">
-					<p className="text-[11px] font-medium uppercase tracking-[0.22em] text-default-500">
+					<p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted">
 						{t(currentSectionCaption)}
 					</p>
 					<p className="truncate text-sm font-semibold text-foreground">
@@ -124,24 +113,13 @@ export const AdminHeaderSlot = observer(function AdminHeaderSlot() {
 								localeStore.setLanguageCode(languageCode);
 							}}
 							compact
-							className="h-10 w-10 rounded-2xl border border-divider bg-content1/80 text-foreground shadow-sm backdrop-blur-md hover:bg-content2"
+							className="h-10 w-10 rounded-2xl border border-border bg-surface/80 text-foreground shadow-sm backdrop-blur-md hover:bg-surface-secondary"
 						/>
 					)}
 					<ThemeToggleButton
 						compact
-						className="h-10 w-10 rounded-2xl border border-divider bg-content1/80 text-foreground shadow-sm backdrop-blur-md hover:bg-content2"
+						className="h-10 w-10 rounded-2xl border border-border bg-surface/80 text-foreground shadow-sm backdrop-blur-md hover:bg-surface-secondary"
 					/>
-					<Tooltip content={t("IDP 관리")} placement="bottom">
-						<Button
-							variant="light"
-							isIconOnly
-							className="h-11 w-11 rounded-2xl border border-divider bg-content1/80 shadow-sm backdrop-blur-md hover:bg-content2"
-							aria-label={t("IDP 관리 콘솔 열기")}
-							onPress={onClickOpenIdpClientButton}
-						>
-							<KeyRound className="h-5 w-5 text-default-600" size={20} />
-						</Button>
-					</Tooltip>
 					<HeaderSpaceSelector
 						spaces={persistStore.spaces}
 						currentSpaceId={persistStore.spaceId}

@@ -37,11 +37,6 @@ const meta = {
 			],
 			description: "체크박스 색상 테마",
 		},
-		size: {
-			control: "select",
-			options: ["sm", "md", "lg"],
-			description: "체크박스 크기",
-		},
 		radius: {
 			control: "select",
 			options: ["none", "sm", "md", "lg", "full"],
@@ -99,19 +94,6 @@ export const 다양한색상: Story = {
 			<Checkbox color="success">성공</Checkbox>
 			<Checkbox color="warning">경고</Checkbox>
 			<Checkbox color="danger">위험</Checkbox>
-		</div>
-	),
-};
-
-export const 다양한크기: Story = {
-	args: {
-		children: "크기 예시",
-	},
-	render: () => (
-		<div className="flex flex-col gap-4">
-			<Checkbox size="sm">작은 크기</Checkbox>
-			<Checkbox size="md">보통 크기</Checkbox>
-			<Checkbox size="lg">큰 크기</Checkbox>
 		</div>
 	),
 };

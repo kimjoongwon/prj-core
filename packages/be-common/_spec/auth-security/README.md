@@ -12,10 +12,9 @@
 
 | 시스템 | 포트 | 역할 |
 |--------|------|------|
-| idp-server | :3007 | OIDC Provider (oidc-provider), 로그인/동의 API |
-| idp-client | :3008 | 로그인/동의 UI (Next.js) |
+| core-api | :3006 | OIDC Provider (oidc-provider), 로그인/동의 API |
 | main server | :3006 | OIDC Client, 비즈니스 API, 토큰 관리 |
-| admin | :3000 | 관리자 웹 (Next.js) |
+| admin | :3000 | 관리자 웹 및 인증/동의 UI (Next.js) |
 
 ### 사용자 여정 기반 범위
 

@@ -10,14 +10,12 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Save, ShieldCheck } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Checkbox,
-	Chip,
-	Input,
-	Spinner,
-	Switch,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Checkbox } from "../../control/Checkbox/Checkbox";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Input } from "../../control/Input/Input";
+import { Spinner } from "@heroui/react";
+import { Switch } from "../../control/Switch/Switch";
 
 export interface UserDetailPageUser {
 	id: string;
@@ -130,7 +128,7 @@ export const UserDetailPage = observer(
 						<DetailSectionCard>
 							<div className="flex items-center justify-center gap-2 p-8">
 								<Spinner size="sm" />
-								<span className="text-default-500">로딩 중...</span>
+								<span className="text-muted">로딩 중...</span>
 							</div>
 						</DetailSectionCard>
 					</DetailPageSurface>
@@ -226,7 +224,7 @@ export const UserDetailPage = observer(
 								{isLoadingPolicies ? (
 									<div className="flex items-center justify-center gap-2 p-8">
 										<Spinner size="sm" />
-										<span className="text-default-500">
+										<span className="text-muted">
 											정책을 불러오는 중...
 										</span>
 									</div>
@@ -245,7 +243,7 @@ export const UserDetailPage = observer(
 												return (
 													<div
 														key={policy.id}
-														className="rounded-xl border border-divider bg-background/60 p-4"
+														className="rounded-xl border border-border bg-background/60 p-4"
 													>
 														<div className="flex items-start justify-between gap-4">
 															<div className="min-w-0">
@@ -277,10 +275,10 @@ export const UserDetailPage = observer(
 																		{policy.isSystem ? "시스템" : "공간"}
 																	</Chip>
 																</div>
-																<p className="mt-1 text-sm text-default-500">
+																<p className="mt-1 text-sm text-muted">
 																	{policy.description || policy.name}
 																</p>
-																<p className="mt-2 text-xs text-default-400">
+																<p className="mt-2 text-xs text-muted">
 																	우선순위 {assignment?.priority ?? 10} ·
 																	Ability {policy.abilityCount ?? 0}개
 																</p>
@@ -327,7 +325,7 @@ export const UserDetailPage = observer(
 												);
 											})
 										) : (
-											<div className="rounded-xl border border-divider bg-background/60 p-6 text-center text-sm text-default-500">
+											<div className="rounded-xl border border-border bg-background/60 p-6 text-center text-sm text-muted">
 												사용 가능한 정책이 없습니다.
 											</div>
 										)}
@@ -344,8 +342,8 @@ export const UserDetailPage = observer(
 
 function Info({ label, value }: { label: string; value: string }) {
 	return (
-		<div className="rounded-lg border border-divider bg-background/60 p-3">
-			<p className="text-xs text-default-500">{label}</p>
+		<div className="rounded-lg border border-border bg-background/60 p-3">
+			<p className="text-xs text-muted">{label}</p>
 			<p className="mt-1 break-all text-sm font-medium">{value}</p>
 		</div>
 	);

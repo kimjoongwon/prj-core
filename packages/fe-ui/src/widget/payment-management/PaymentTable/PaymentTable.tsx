@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Chip } from "../../../design-system/primitives";
+import { Chip } from "../../../data-display/Chip/Chip";
 import { PaymentTableShell } from "../PaymentTableShell";
 import type { PaymentManagementPayment } from "../types";
 
@@ -29,23 +29,23 @@ export const PaymentTable = observer(({ payments }: PaymentTableProps) => {
 			}
 		>
 			{payments.map((payment) => (
-				<tr key={payment.id} className="border-divider/70 border-b">
+				<tr key={payment.id} className="border-border/70 border-b">
 					<td className="px-3 py-4">
 						<div className="min-w-0">
 							<div className="truncate font-medium text-foreground">
 								{payment.title}
 							</div>
-							<div className="truncate text-xs text-default-500">
+							<div className="truncate text-xs text-muted">
 								{payment.providerLabel} · {payment.methodLabel}
 							</div>
 						</div>
 					</td>
-					<td className="px-3 py-4 text-default-700">{payment.spaceLabel}</td>
-					<td className="px-3 py-4 text-default-700">{payment.payerLabel}</td>
-					<td className="px-3 py-4 text-default-700">
+					<td className="px-3 py-4 text-foreground">{payment.spaceLabel}</td>
+					<td className="px-3 py-4 text-foreground">{payment.payerLabel}</td>
+					<td className="px-3 py-4 text-foreground">
 						<div className="truncate">{payment.subjectLabel}</div>
 					</td>
-					<td className="px-3 py-4 text-default-600">
+					<td className="px-3 py-4 text-muted">
 						<div className="truncate">{payment.referenceLabel}</div>
 					</td>
 					<td className="px-3 py-4 font-medium text-foreground">
@@ -56,7 +56,7 @@ export const PaymentTable = observer(({ payments }: PaymentTableProps) => {
 							{payment.statusLabel}
 						</Chip>
 					</td>
-					<td className="px-3 py-4 text-default-600">
+					<td className="px-3 py-4 text-muted">
 						{payment.approvedAtLabel}
 					</td>
 				</tr>

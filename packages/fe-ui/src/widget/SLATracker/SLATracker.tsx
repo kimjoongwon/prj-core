@@ -2,7 +2,7 @@
 
 import { AlertTriangle, CheckCircle, Clock } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Card, CardBody, Progress } from "../../design-system/primitives";
+import { Card, ProgressBar } from "@heroui/react";
 
 export interface SLAMetric {
 	/** 라벨 (예: 첫 응답, 해결) */
@@ -52,10 +52,10 @@ export interface SLATrackerProps {
 export const SLATracker = observer(
 	({ firstResponse, resolution, className = "" }: SLATrackerProps) => {
 		return (
-			<Card className={`bg-content1 ${className}`} shadow="sm">
-				<CardBody className="gap-4 p-4">
+			<Card className={`bg-surface ${className}`}>
+				<Card.Content className="gap-4 p-4">
 					{/* 헤더 */}
-					<h3 className="text-sm font-semibold text-default-500">⏱️ SLA 추적</h3>
+					<h3 className="text-sm font-semibold text-muted">⏱️ SLA 추적</h3>
 
 					<div className="flex flex-col gap-4">
 						{/* 첫 응답 */}
@@ -64,7 +64,7 @@ export const SLATracker = observer(
 						{/* 해결 */}
 						{resolution && <SLAMetricItem metric={resolution} />}
 					</div>
-				</CardBody>
+				</Card.Content>
 			</Card>
 		);
 	},
@@ -91,28 +91,28 @@ const SLAMetricItem = observer(({ metric }: SLAMetricItemProps) => {
 			<div className="flex items-center justify-between">
 				<div className="flex items-center gap-2">
 					{icon}
-					<span className="text-sm text-default-700">{metric.label}</span>
+					<span className="text-sm text-foreground">{metric.label}</span>
 				</div>
 				<span className={`text-xs font-medium ${color}`}>{status}</span>
 			</div>
 
 			{/* 시간 표시 */}
-			<div className="flex items-center justify-between text-xs text-default-500">
+			<div className="flex items-center justify-between text-xs text-muted">
 				<span>{elapsedFormatted}</span>
 				<span>목표: {targetFormatted}</span>
 			</div>
 
 			{/* 진행 바 */}
-			<Progress
+			<ProgressBar
 				aria-label={`${metric.label} 진행률`}
 				value={progress}
 				color={
-					metric.isBreached
-						? "danger"
-						: metric.isCompleted
-							? "success"
-							: "primary"
-				}
+						metric.isBreached
+							? "danger"
+							: metric.isCompleted
+								? "success"
+								: "accent"
+					}
 				size="sm"
 				className="h-2"
 			/>
@@ -157,8 +157,8 @@ function getMetricStatus(metric: SLAMetric) {
 
 	return {
 		status: "진행중",
-		color: "text-primary",
-		icon: <Clock className="size-4 text-primary" />,
+		color: "text-accent",
+		icon: <Clock className="size-4 text-accent" />,
 	};
 }
 

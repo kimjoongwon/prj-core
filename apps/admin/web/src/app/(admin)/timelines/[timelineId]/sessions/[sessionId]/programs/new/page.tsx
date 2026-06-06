@@ -7,7 +7,7 @@ import {
 } from "@cocrepo/api/core/timelines";
 import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
 import { TimelineSessionProgramCreatePage } from "@cocrepo/ui";
-import { addToast, useDisclosure } from "@cocrepo/ui";
+import { toast, useOverlayState } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -37,8 +37,8 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 		const { timelineId, sessionId } = useParams<ProgramNewPageParams>();
 		const router = useRouter();
 		const persistStore = usePersistStore();
-		const routinePickerModal = useDisclosure();
-		const instructorPickerModal = useDisclosure();
+		const routinePickerModal = useOverlayState();
+		const instructorPickerModal = useOverlayState();
 		const state = useLocalObservable(() => ({
 			name: "",
 			routineId: "",
@@ -178,21 +178,17 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 				},
 				{
 					onSuccess: () => {
-						addToast({
-							title: "등록 성공",
+						toast.success("등록 성공", {
 							description: "프로그램이 등록되었습니다.",
-							color: "success",
 						});
 						router.push(
 							`/timelines/${timelineId}/sessions/${sessionId}` as Route,
 						);
 					},
 					onError: () => {
-						addToast({
-							title: "등록 실패",
+						toast.danger("등록 실패", {
 							description:
 								"프로그램 등록 중 오류가 발생했습니다. 같은 루틴이 이미 등록되어 있지 않은지 확인해주세요.",
-							color: "danger",
 						});
 					},
 				},
@@ -250,10 +246,10 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 				onChangeInstructorQueryInput={onChangeInstructorQueryInput}
 				onSelectRoutineOption={onSelectRoutineOption}
 				onSelectInstructorOption={onSelectInstructorOption}
-				onClickOpenRoutinePickerButton={routinePickerModal.onOpen}
-				onClickCloseRoutinePickerButton={routinePickerModal.onClose}
-				onClickOpenInstructorPickerButton={instructorPickerModal.onOpen}
-				onClickCloseInstructorPickerButton={instructorPickerModal.onClose}
+				onClickOpenRoutinePickerButton={routinePickerModal.open}
+				onClickCloseRoutinePickerButton={routinePickerModal.close}
+				onClickOpenInstructorPickerButton={instructorPickerModal.open}
+				onClickCloseInstructorPickerButton={instructorPickerModal.close}
 				onClickCancelButton={onClickCancelButton}
 				onClickSubmitButton={onClickSubmitButton}
 			/>

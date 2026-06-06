@@ -73,7 +73,7 @@ const AdminRolesNewRoute = observer(() => {
 		state.errors.displayName = "";
 	};
 
-	const onChangeDescriptionTextarea = (value: string) => {
+	const onChangeDescriptionTextArea = (value: string) => {
 		state.description = value;
 	};
 
@@ -105,7 +105,7 @@ const AdminRolesNewRoute = observer(() => {
 			isSubmitPending={isPending}
 			onChangeNameInput={onChangeNameInput}
 			onChangeDisplayNameInput={onChangeDisplayNameInput}
-			onChangeDescriptionTextarea={onChangeDescriptionTextarea}
+			onChangeDescriptionTextArea={onChangeDescriptionTextArea}
 			onClickBackButton={onClickBackButton}
 			onClickSubmitButton={onClickSubmitButton}
 		/>

@@ -14,7 +14,7 @@ import {
 	useUploadAsset,
 } from "@cocrepo/api/assets";
 import type { AssetBrowserProps } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 import { usePersistStore } from "@/stores/AppStoreProvider";
@@ -126,11 +126,7 @@ export function useAdminAssetBrowser({
 			await queryClient.invalidateQueries({
 				queryKey: ["/api/v1/assets"],
 			});
-			addToast({
-				title: "업로드 완료",
-				description: "에셋이 업로드되었습니다.",
-				color: "success",
-			});
+			toast.success("업로드 완료", { description: "에셋이 업로드되었습니다." });
 		},
 		onDeleteAsset: async (assetId) => {
 			await removeAssetMutation.mutateAsync({ assetId });
@@ -138,11 +134,7 @@ export function useAdminAssetBrowser({
 				queryKey: ["/api/v1/assets"],
 			});
 			onDeleteAssetSuccess?.(assetId);
-			addToast({
-				title: "삭제 완료",
-				description: "에셋이 삭제되었습니다.",
-				color: "success",
-			});
+			toast.success("삭제 완료", { description: "에셋이 삭제되었습니다." });
 		},
 		onCreateFolder: async (input) => {
 			const response = await createFolderMutation.mutateAsync({
@@ -151,10 +143,8 @@ export function useAdminAssetBrowser({
 			await queryClient.invalidateQueries({
 				queryKey: getGetFoldersQueryKey(),
 			});
-			addToast({
-				title: "폴더 생성 완료",
+			toast.success("폴더 생성 완료", {
 				description: "새 폴더가 생성되었습니다.",
-				color: "success",
 			});
 
 			const createdFolderId = response?.data?.id;
@@ -175,10 +165,8 @@ export function useAdminAssetBrowser({
 			await queryClient.invalidateQueries({
 				queryKey: getGetFoldersQueryKey(),
 			});
-			addToast({
-				title: "폴더 수정 완료",
+			toast.success("폴더 수정 완료", {
 				description: "폴더가 수정되었습니다.",
-				color: "success",
 			});
 		},
 		onDeleteFolder: async (folderId) => {
@@ -186,10 +174,8 @@ export function useAdminAssetBrowser({
 			await queryClient.invalidateQueries({
 				queryKey: getGetFoldersQueryKey(),
 			});
-			addToast({
-				title: "폴더 삭제 완료",
+			toast.success("폴더 삭제 완료", {
 				description: "폴더가 삭제되었습니다.",
-				color: "success",
 			});
 		},
 	};

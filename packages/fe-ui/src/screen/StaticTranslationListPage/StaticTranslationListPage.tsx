@@ -6,33 +6,12 @@ import type {
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
-import {
-	Button,
-	buildStaticTranslationTableColumns,
-	DataGrid,
-	DataGridStateModel,
-	getStaticTranslationLanguageLabel,
-	HStack,
-	Input,
-	PageTitleBar,
-	Select,
-	Surface,
-	Textarea,
-	useT,
-	VStack,
-} from "@cocrepo/ui";
+import { Button, buildStaticTranslationTableColumns, DataGrid, DataGridStateModel, getStaticTranslationLanguageLabel, HStack, Input, PageTitleBar, Select, Surface, TextArea, useT, VStack } from "@cocrepo/ui";
 import { Languages, Plus, RefreshCcw } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type FormEvent, useEffect, useState } from "react";
-import {
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	Switch,
-	useDisclosure,
-} from "../../design-system/primitives";
+import { Modal, useOverlayState } from "@heroui/react";
+import { Switch } from "../../control/Switch/Switch";
 import { ConfirmModal } from "../../widget/common/ConfirmModal";
 
 export type StaticTranslationLanguageCode =
@@ -183,8 +162,8 @@ export const StaticTranslationListPage = observer(
 		const gridState = useLocalObservable(
 			() => new DataGridStateModel({ queryStates, setQueryStates }),
 		);
-		const formModal = useDisclosure();
-		const deleteModal = useDisclosure();
+		const formModal = useOverlayState();
+		const deleteModal = useOverlayState();
 		const [editingTranslation, setEditingTranslation] =
 			useState<TranslationResponseDto | null>(null);
 		const [translationToDelete, setTranslationToDelete] =
@@ -212,28 +191,28 @@ export const StaticTranslationListPage = observer(
 		function handleOpenCreateModal() {
 			setEditingTranslation(null);
 			setForm(createEmptyForm());
-			formModal.onOpen();
+			formModal.open();
 		}
 
 		function handleOpenEditModal(translation: TranslationResponseDto) {
 			setEditingTranslation(translation);
 			setForm(createFormFromTranslation(translation));
-			formModal.onOpen();
+			formModal.open();
 		}
 
 		function handleCloseFormModal() {
-			formModal.onClose();
+			formModal.close();
 			setEditingTranslation(null);
 			setForm(createEmptyForm());
 		}
 
 		function handleOpenDeleteModal(translation: TranslationResponseDto) {
 			setTranslationToDelete(translation);
-			deleteModal.onOpen();
+			deleteModal.open();
 		}
 
 		function handleCloseDeleteModal() {
-			deleteModal.onClose();
+			deleteModal.close();
 			setTranslationToDelete(null);
 		}
 
@@ -313,7 +292,6 @@ export const StaticTranslationListPage = observer(
 							<Button
 								variant="flat"
 								startContent={<RefreshCcw className="h-4 w-4" />}
-								isLoading={isMutating}
 								onPress={onInvalidateAllTranslationCache}
 							>
 								전체 캐시 갱신
@@ -322,7 +300,6 @@ export const StaticTranslationListPage = observer(
 								variant="flat"
 								startContent={<Languages className="h-4 w-4" />}
 								isDisabled={!selectedLanguageCode}
-								isLoading={isMutating}
 								onPress={handleInvalidateLanguageCache}
 							>
 								언어 캐시 갱신
@@ -337,7 +314,7 @@ export const StaticTranslationListPage = observer(
 						</HStack>
 					}
 				/>
-				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 					<DataGrid
 						config={{
 							entity: "Translation",
@@ -345,32 +322,30 @@ export const StaticTranslationListPage = observer(
 							leftInputs,
 							emptyMessage: "등록된 정적 번역이 없습니다.",
 						}}
-						rows={rows}
-						totalCount={totalCount}
-						isLoading={isLoading}
-						state={gridState}
-					/>
+							rows={rows}
+							totalCount={totalCount}
+							state={gridState}
+							isLoading={isLoading}
+						/>
 				</Surface>
 
-				<Modal
-					isOpen={formModal.isOpen}
-					onClose={handleCloseFormModal}
-					size="2xl"
-				>
-					<ModalContent>
+				<Modal state={formModal}>
+					<Modal.Backdrop><Modal.Container size="lg"><Modal.Dialog>
 						<form onSubmit={handleSubmitForm}>
-							<ModalHeader className="flex flex-col gap-1">
+							<Modal.Header className="flex flex-col gap-1">
 								{t(isEditMode ? "번역 수정" : "번역 등록")}
-							</ModalHeader>
-							<ModalBody>
+							</Modal.Header>
+							<Modal.Body>
 								<VStack gap="block">
-									<Select
-										label="언어"
-										value={form.languageCode}
-										isDisabled={isEditMode}
-										onChange={handleLanguageChange}
-										options={STATIC_TRANSLATION_LANGUAGE_OPTIONS}
-									/>
+										<Select
+											label="언어"
+											value={form.languageCode}
+											isDisabled={isEditMode}
+											onChange={(value) =>
+												handleLanguageChange(String(value ?? ""))
+											}
+											options={STATIC_TRANSLATION_LANGUAGE_OPTIONS}
+										/>
 									<Input
 										label="번역 키"
 										value={form.key}
@@ -382,7 +357,7 @@ export const StaticTranslationListPage = observer(
 										value={form.category}
 										onValueChange={handleCategoryChange}
 									/>
-									<Textarea
+									<TextArea
 										label="번역문"
 										value={form.text}
 										minRows={4}
@@ -395,8 +370,8 @@ export const StaticTranslationListPage = observer(
 										{t("번역 완료")}
 									</Switch>
 								</VStack>
-							</ModalBody>
-							<ModalFooter>
+							</Modal.Body>
+							<Modal.Footer>
 								<Button variant="light" onPress={handleCloseFormModal}>
 									취소
 								</Button>
@@ -404,13 +379,12 @@ export const StaticTranslationListPage = observer(
 									color="primary"
 									type="submit"
 									isDisabled={isFormInvalid}
-									isLoading={isMutating}
 								>
 									{isEditMode ? "수정" : "등록"}
 								</Button>
-							</ModalFooter>
+							</Modal.Footer>
 						</form>
-					</ModalContent>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
 
 				<ConfirmModal
@@ -424,7 +398,7 @@ export const StaticTranslationListPage = observer(
 								<strong>{translationToDelete?.key}</strong>{" "}
 								{t("번역을 삭제하시겠습니까?")}
 							</p>
-							<p className="mt-2 text-sm text-default-400">
+							<p className="mt-2 text-sm text-muted">
 								{translationToDelete
 									? getStaticTranslationLanguageLabel(
 											translationToDelete.languageCode,

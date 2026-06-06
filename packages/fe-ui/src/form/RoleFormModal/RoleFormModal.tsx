@@ -3,15 +3,9 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Input } from "../../control/Input/Input";
-import {
-	Button,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	Textarea,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Modal, useOverlayState } from "@heroui/react";
+import { TextArea } from "../../control/TextArea/TextArea";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 
@@ -182,13 +176,13 @@ export const RoleFormModal = observer(
 		/**
 		 * description 입력 핸들러
 		 */
-		const handleDescriptionChange = (
-			e: React.ChangeEvent<HTMLInputElement>,
-		) => {
-			setFormData((prev) => ({
-				...prev,
-				description: e.target.value,
-			}));
+			const handleDescriptionChange = (
+				value: string | number,
+			) => {
+				setFormData((prev) => ({
+					...prev,
+					description: String(value),
+				}));
 			// 에러 제거
 			if (errors.description) {
 				setErrors((prev) => ({ ...prev, description: "" }));
@@ -203,25 +197,28 @@ export const RoleFormModal = observer(
 		/**
 		 * 제출 버튼 텍스트
 		 */
-		const submitButtonText = mode === "create" ? "저장" : "수정";
+			const submitButtonText = mode === "create" ? "저장" : "수정";
+			const modalState = useOverlayState({
+				isOpen,
+				onOpenChange: (open) => {
+					if (!open) {
+						onClose();
+					}
+				},
+			});
 
-		return (
-			<Modal
-				isOpen={isOpen}
-				onClose={onClose}
-				size="md"
-				scrollBehavior="inside"
-			>
-				<ModalContent>
-					<ModalHeader>{modalTitle}</ModalHeader>
-					<ModalBody>
+			return (
+				<Modal state={modalState}>
+					<Modal.Backdrop><Modal.Container size="md" scroll="inside"><Modal.Dialog>
+					<Modal.Header>{modalTitle}</Modal.Header>
+					<Modal.Body>
 						<VStack gap={4}>
 							{/* 역할 식별자 */}
 							<Input
 								label="역할 식별자"
-								placeholder="MANAGER"
-								value={formData.name}
-								onChange={handleNameChange}
+									placeholder="MANAGER"
+									value={formData.name}
+									onValueChange={handleNameChange}
 								isDisabled={loading || mode === "edit"}
 								isRequired={mode === "create"}
 								isInvalid={!!errors.name}
@@ -236,9 +233,9 @@ export const RoleFormModal = observer(
 							{/* 표시명 */}
 							<Input
 								label="표시명"
-								placeholder="매니저"
-								value={formData.displayName}
-								onChange={handleDisplayNameChange}
+									placeholder="매니저"
+									value={formData.displayName}
+									onValueChange={handleDisplayNameChange}
 								isDisabled={loading}
 								isRequired
 								isInvalid={!!errors.displayName}
@@ -246,11 +243,11 @@ export const RoleFormModal = observer(
 							/>
 
 							{/* 설명 */}
-							<Textarea
+							<TextArea
 								label="설명"
-								placeholder="역할에 대한 설명을 입력하세요"
-								value={formData.description || ""}
-								onChange={handleDescriptionChange}
+									placeholder="역할에 대한 설명을 입력하세요"
+									value={formData.description || ""}
+									onValueChange={handleDescriptionChange}
 								isDisabled={loading}
 								isInvalid={!!errors.description}
 								errorMessage={errors.description}
@@ -258,8 +255,8 @@ export const RoleFormModal = observer(
 								maxRows={4}
 							/>
 						</VStack>
-					</ModalBody>
-					<ModalFooter>
+					</Modal.Body>
+					<Modal.Footer>
 						<HStack gap={8} justifyContent="end">
 							<Button variant="flat" onPress={onClose} isDisabled={loading}>
 								취소
@@ -272,8 +269,8 @@ export const RoleFormModal = observer(
 								{submitButtonText}
 							</Button>
 						</HStack>
-					</ModalFooter>
-				</ModalContent>
+					</Modal.Footer>
+				</Modal.Dialog></Modal.Container></Modal.Backdrop>
 			</Modal>
 		);
 	},

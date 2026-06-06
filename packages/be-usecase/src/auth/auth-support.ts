@@ -3,6 +3,7 @@ export * from "./build-session-id";
 export * from "./decode-access-token";
 export * from "./decode-oidc-state-context";
 export * from "./default-oidc-client-id";
+export * from "./extract-bearer-token";
 export * from "./get-oidc-client-id-candidates";
 export * from "./get-ordered-tenant-space-ids";
 export * from "./mobile-native-client-id";

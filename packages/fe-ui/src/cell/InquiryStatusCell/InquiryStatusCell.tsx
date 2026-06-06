@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 import { useT } from "../../i18n";
 
 /** 문의 상태값 (Prisma Enum 값과 동일) */
@@ -60,7 +60,7 @@ export const InquiryStatusCell = observer(function InquiryStatusCell({
 	const t = useT();
 
 	if (!value) {
-		return <span className="text-default-400">-</span>;
+		return <span className="text-muted">-</span>;
 	}
 
 	const config = STATUS_CONFIG[value];

@@ -8,14 +8,16 @@ import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import { Description as HeroDescription } from "heroui-native/description";
-import { FieldError as HeroFieldError } from "heroui-native/field-error";
-import { Label as HeroLabel } from "heroui-native/label";
-import { TextField as HeroTextField } from "heroui-native/text-field";
+import { Description as HeroDescription } from "../Description";
+import { descriptionClassNames } from "../Description";
+import { FieldError as HeroFieldError } from "../FieldError";
+import { fieldErrorClassNames } from "../FieldError";
+import { Label as HeroLabel } from "../Label";
 import {
   TextArea as HeroTextArea,
   textAreaClassNames,
 } from "heroui-native/text-area";
+import { TextField as HeroTextField } from "heroui-native/text-field";
 type HeroTextAreaProps = ComponentPropsWithoutRef<typeof HeroTextArea>;
 interface TextareaFieldProps {
   description?: ReactNode;

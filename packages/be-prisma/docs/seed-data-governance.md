@@ -326,11 +326,11 @@ core-api chart sync
      - db:data:migrate
   -> core-api rollout
 
-idp-api chart sync
+core-api chart sync
   -> PreSync migration Job
      - prisma migrate deploy
      - db:data:migrate
-  -> idp-api rollout
+  -> core-api rollout
 ```
 
 즉, DB 반영 책임은 앱 `Deployment` 본체가 아니라
@@ -345,7 +345,7 @@ idp-api chart sync
 
 이 방식의 한계:
 
-- `core-api`, `idp-api`가 같은 DB를 쓰므로 두 앱이 동시에 sync되면
+- `core-api`, `core-api`가 같은 DB를 쓰므로 두 앱이 동시에 sync되면
   migration Job도 각각 뜰 수 있습니다.
 - v1에서는 이를 "중복 실행 가능하지만 안전하게 설계"하는 쪽으로 처리합니다.
 - 장기적으로는 별도 `db-migrator` chart/application으로 분리하는 것이 더 깔끔할 수 있습니다.

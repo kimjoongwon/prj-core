@@ -11,6 +11,7 @@ import {
 } from "./auth-oidc.support";
 import {
 	decodeAccessToken,
+	extractBearerToken,
 	resolveClientIdFromSessionId,
 	toProtocolClientConfig,
 } from "./auth-support";
@@ -29,24 +30,27 @@ export class LogoutWithCookieUseCase
 	) {}
 
 	async execute(command: LogoutWithCookieCommand): Promise<boolean> {
-		if (command.accessToken) {
+		const accessToken =
+			command.accessTokenCookie ??
+			extractBearerToken(command.authorizationHeader);
+		if (accessToken) {
 			const clientId = resolveClientIdFromSessionId(command.sessionId);
 			const client = await resolveOidcClient(this.oidcClientService, clientId, {
 				requireActive: false,
 				requireAuthShell: false,
 			});
 			await this.oidcClient.revokeToken(
-				command.accessToken,
+				accessToken,
 				toProtocolClientConfig(client),
 			);
 
 			try {
-				const payload = decodeAccessToken(command.accessToken);
+				const payload = decodeAccessToken(accessToken);
 				const expSeconds = (payload as { exp?: number }).exp ?? 0;
 				const remainingSeconds = expSeconds - Math.floor(Date.now() / 1000);
 				if (remainingSeconds > 0) {
 					await this.tokenStorageService.addToBlacklist(
-						command.accessToken,
+						accessToken,
 						remainingSeconds,
 					);
 				}

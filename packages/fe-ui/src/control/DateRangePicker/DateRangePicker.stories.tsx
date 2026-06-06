@@ -2,9 +2,9 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { makeAutoObservable } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import type { DateRangePickerProps } from "../../design-system/primitives";
 
 import { DateRangePicker } from "./DateRangePicker";
+import type { DateRangePickerProps } from "./DateRangePicker";
 import { DateRangePicker as DateRangePickerWithMobx } from "./index";
 
 const meta: Meta<typeof DateRangePicker> = {

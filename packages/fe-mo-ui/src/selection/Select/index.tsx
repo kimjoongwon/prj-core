@@ -14,7 +14,7 @@ import {
   useSelect,
   useSelectAnimation,
   useSelectItem,
-} from "heroui-native/select";
+} from "heroui-native";
 import { Text } from "../../data-display/Text";
 type HeroSelectProps = ComponentPropsWithoutRef<typeof HeroSelect>;
 type HeroSelectCloseProps = ComponentPropsWithoutRef<typeof HeroSelect.Close>;

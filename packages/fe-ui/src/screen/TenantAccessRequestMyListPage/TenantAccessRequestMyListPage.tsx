@@ -3,16 +3,9 @@
 import type { TenantAccessRequestDto } from "@cocrepo/api/core/tenant-access-requests";
 import { Plus, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Skeleton,
-	Table,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Skeleton } from "../../feedback/Skeleton/Skeleton";
+import { Table } from "@heroui/react";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { PageSurface } from "../../surface/PageSurface";
@@ -91,55 +84,59 @@ export const TenantAccessRequestMyListPage = observer(
 							{isLoading ? (
 								<Skeleton className="h-48 rounded-lg" />
 							) : (
-								<Table aria-label="내 테넌트 접근 신청 목록" removeWrapper>
-									<TableHeader>
-										<TableColumn>신청</TableColumn>
-										<TableColumn>상태</TableColumn>
-										<TableColumn>사유</TableColumn>
-										<TableColumn>신청일</TableColumn>
-										<TableColumn align="end">작업</TableColumn>
-									</TableHeader>
-									<TableBody emptyContent="신청 내역이 없습니다.">
+								<Table aria-label="내 테넌트 접근 신청 목록">
+									<Table.Content>
+					<Table.Header>
+										<Table.Column>신청</Table.Column>
+										<Table.Column>상태</Table.Column>
+										<Table.Column>사유</Table.Column>
+										<Table.Column>신청일</Table.Column>
+										<Table.Column className="text-right">작업</Table.Column>
+									</Table.Header>
+									<Table.Body>
 										{requestRows.map((request) => (
-											<TableRow key={request.id}>
-												<TableCell>
+											<Table.Row key={request.id}>
+												<Table.Cell>
 													<TenantAccessRequestSummary
 														spaceName={getSpaceName(request)}
 														roleName={getRoleName(request)}
 													/>
-												</TableCell>
-												<TableCell>
+												</Table.Cell>
+												<Table.Cell>
 													<TenantAccessRequestStatusBadge
 														status={request.status}
 													/>
-												</TableCell>
-												<TableCell>
-													<span className="line-clamp-2 max-w-[280px] text-sm text-default-600">
+												</Table.Cell>
+												<Table.Cell>
+													<span className="line-clamp-2 max-w-[280px] text-sm text-muted">
 														{request.reason || "-"}
 													</span>
-												</TableCell>
-												<TableCell>{formatDate(request.createdAt)}</TableCell>
-												<TableCell>
+												</Table.Cell>
+												<Table.Cell>{formatDate(request.createdAt)}</Table.Cell>
+												<Table.Cell>
 													<div className="flex justify-end">
 														<Button
 															size="sm"
 															variant="flat"
-															color="danger"
-															startContent={<X className="size-4" />}
-															isDisabled={request.status !== "PENDING"}
-															isLoading={cancelingRequestId === request.id}
-															onPress={() =>
+																color="danger"
+																startContent={<X className="size-4" />}
+																isDisabled={
+																	request.status !== "PENDING" ||
+																	cancelingRequestId === request.id
+																}
+																onPress={() =>
 																onClickCancelRequestButton(request.id)
 															}
 														>
 															취소
 														</Button>
 													</div>
-												</TableCell>
-											</TableRow>
+												</Table.Cell>
+											</Table.Row>
 										))}
-									</TableBody>
-								</Table>
+									</Table.Body>
+				</Table.Content>
+			</Table>
 							)}
 						</VStack>
 					</SectionSurface>

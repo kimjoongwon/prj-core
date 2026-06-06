@@ -3,7 +3,7 @@
 import { Clock, Hash, MessageSquare, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Card, CardBody } from "../../design-system/primitives";
+import { Card } from "@heroui/react";
 
 export interface InquiryInfoCardProps {
 	/** 문의 번호 */
@@ -65,53 +65,53 @@ export const InquiryInfoCard = observer(
 		const sentimentInfo = sentiment ? sentimentConfig[sentiment.type] : null;
 
 		return (
-			<Card className={`bg-content1 ${className}`} shadow="sm">
-				<CardBody className="gap-3 p-4">
+			<Card className={`bg-surface ${className}`}>
+				<Card.Content className="gap-3 p-4">
 					{/* 헤더 */}
 					<div className="flex items-start justify-between">
-						<h3 className="text-sm font-semibold text-default-500">
+						<h3 className="text-sm font-semibold text-muted">
 							📋 문의 정보
 						</h3>
 					</div>
 
 					{/* 문의 번호 */}
 					<div className="flex items-center gap-2">
-						<Hash className="size-4 text-default-400" />
-						<span className="text-sm text-default-600">문의번호:</span>
-						<span className="font-mono text-sm font-medium text-default-800">
+						<Hash className="size-4 text-muted" />
+						<span className="text-sm text-muted">문의번호:</span>
+						<span className="font-mono text-sm font-medium text-foreground">
 							{inquiryNumber}
 						</span>
 					</div>
 
 					{/* 제목 */}
 					<div>
-						<span className="text-sm text-default-600">제목: </span>
-						<span className="font-semibold text-default-800">{title}</span>
+						<span className="text-sm text-muted">제목: </span>
+						<span className="font-semibold text-foreground">{title}</span>
 					</div>
 
 					{/* 채널 */}
 					<div className="flex items-center gap-2">
 						{channelIcon || (
-							<MessageSquare className="size-4 text-default-400" />
+							<MessageSquare className="size-4 text-muted" />
 						)}
-						<span className="text-sm text-default-600">채널:</span>
-						<span className="text-sm text-default-800">{channel}</span>
+						<span className="text-sm text-muted">채널:</span>
+						<span className="text-sm text-foreground">{channel}</span>
 					</div>
 
 					{/* 접수일 */}
 					<div className="flex items-center gap-2">
-						<Clock className="size-4 text-default-400" />
-						<span className="text-sm text-default-600">접수일:</span>
-						<span className="text-sm text-default-800">{createdAt}</span>
+						<Clock className="size-4 text-muted" />
+						<span className="text-sm text-muted">접수일:</span>
+						<span className="text-sm text-foreground">{createdAt}</span>
 					</div>
 
 					{/* 감정 분석 */}
 					{sentiment && sentimentInfo && (
-						<div className="flex items-center gap-2 rounded-lg bg-content2 p-2">
+						<div className="flex items-center gap-2 rounded-lg bg-surface-secondary p-2">
 							<span className="text-sm">💡 감정 분석:</span>
 							<span className="text-lg">{sentimentInfo.emoji}</span>
 							<span className="text-sm font-medium">{sentiment.label}</span>
-							<span className="text-xs text-default-400">
+							<span className="text-xs text-muted">
 								(신뢰도 {sentiment.confidence}%)
 							</span>
 						</div>
@@ -122,12 +122,12 @@ export const InquiryInfoCard = observer(
 						<div className="flex items-center gap-2">
 							<User className="size-4 text-success" />
 							<span className="text-sm text-success">🟢 온라인:</span>
-							<span className="text-sm text-default-800">
+							<span className="text-sm text-foreground">
 								{onlineParticipants.join(", ")}
 							</span>
 						</div>
 					)}
-				</CardBody>
+				</Card.Content>
 			</Card>
 		);
 	},

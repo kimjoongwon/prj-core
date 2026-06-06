@@ -1,6 +1,6 @@
+import { Tabs as HeroTabs } from "@heroui/react";
 import type { Option } from "@cocrepo/type";
 import type { Key } from "react";
-import { Tabs as HeroUITabs, Tab } from "../../design-system/primitives";
 
 export interface TabsProps {
 	/** 탭 옵션 목록 */
@@ -34,10 +34,14 @@ export const Tabs = (props: TabsProps) => {
 	const { options, selectedKey, onSelectionChange } = props;
 
 	return (
-		<HeroUITabs selectedKey={selectedKey} onSelectionChange={onSelectionChange}>
+		<HeroTabs selectedKey={selectedKey} onSelectionChange={onSelectionChange}>
+			<HeroTabs.List>
 			{options?.map((item) => (
-				<Tab key={item.value} title={item.text} value={item.value} />
+				<HeroTabs.Tab key={item.value} id={item.value}>
+					{item.text}
+				</HeroTabs.Tab>
 			))}
-		</HeroUITabs>
+			</HeroTabs.List>
+		</HeroTabs>
 	);
 };

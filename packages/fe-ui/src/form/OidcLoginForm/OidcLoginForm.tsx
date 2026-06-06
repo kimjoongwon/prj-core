@@ -3,7 +3,7 @@
 import type { OidcClientLoginUi } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { Button, Checkbox, Input, Link } from "../../control";
-import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
+import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
 import { useT } from "../../i18n";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
@@ -165,7 +165,7 @@ export const OidcLoginForm = observer(
 				{brandLabel && (
 					<div className="mb-4 flex justify-center">
 						<span
-							className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
+							className="rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-semibold text-accent"
 							style={
 								brandColor
 									? { borderColor: brandColor, color: brandColor }
@@ -216,14 +216,14 @@ export const OidcLoginForm = observer(
 											<Link
 												key={`${action.type}:${action.label}`}
 												href={action.href}
-												className="font-medium text-primary"
+												className="font-medium text-accent"
 											>
 												{t(action.label)}
 											</Link>
 										) : (
 											<span
 												key={`${action.type}:${action.label}`}
-												className="text-default-500"
+												className="text-muted"
 											>
 												{t(action.label)}
 											</span>
@@ -258,13 +258,13 @@ export const OidcLoginForm = observer(
 					/>
 
 					<div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-						<Checkbox path="remember" state={state} size="sm">
+						<Checkbox path="remember" state={state}>
 							{t("로그인 상태 유지")}
 						</Checkbox>
 
 						<Link
 							href={forgotPasswordHref}
-							className="text-sm text-default-500 hover:text-primary"
+							className="text-sm text-muted hover:text-accent"
 						>
 							{t("비밀번호를 잊으셨나요?")}
 						</Link>
@@ -282,16 +282,16 @@ export const OidcLoginForm = observer(
 				</form>
 
 				<div className="mt-6 flex flex-col items-center gap-2 text-center">
-					<div className="text-sm text-default-500">
+					<div className="text-sm text-muted">
 						{t("계정이 없으신가요?")}{" "}
-						<Link href={signUpHref} className="font-medium text-primary">
+						<Link href={signUpHref} className="font-medium text-accent">
 							{t("회원가입")}
 						</Link>
 					</div>
 					<button
 						type="button"
 						data-action="abort-interaction"
-						className="text-sm text-default-400 transition-colors hover:text-default-500"
+						className="text-sm text-muted transition-colors hover:text-muted"
 					>
 						{t("취소하고 돌아가기")}
 					</button>

@@ -17,6 +17,10 @@ class EnvironmentVariablesValidator {
 	AUTH_JWT_SALT_ROUNDS!: string;
 }
 
+function normalizeJwtDuration(value: string): string | number {
+	return /^\d+$/.test(value) ? Number(value) : value;
+}
+
 export default registerAs<AuthConfig>("auth", () => {
 	ValidationUtil.validateConfig(process.env, EnvironmentVariablesValidator);
 
@@ -32,8 +36,8 @@ export default registerAs<AuthConfig>("auth", () => {
 
 	return {
 		secret: process.env.AUTH_JWT_SECRET,
-		refresh: process.env.AUTH_JWT_TOKEN_REFRESH_IN,
-		expires: process.env.AUTH_JWT_TOKEN_EXPIRES_IN,
+		refresh: normalizeJwtDuration(process.env.AUTH_JWT_TOKEN_REFRESH_IN),
+		expires: normalizeJwtDuration(process.env.AUTH_JWT_TOKEN_EXPIRES_IN),
 		bcryptSaltOrRound: Number(process.env.AUTH_JWT_SALT_ROUNDS),
 	};
 });

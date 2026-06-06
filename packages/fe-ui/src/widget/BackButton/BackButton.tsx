@@ -1,5 +1,5 @@
 import { ChevronLeft } from "lucide-react";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 
 export interface BackButtonProps {
 	/** 뒤로가기 클릭 핸들러 */

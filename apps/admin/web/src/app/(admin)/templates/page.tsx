@@ -6,7 +6,7 @@ import {
 	useToggleTemplateStatus,
 } from "@cocrepo/api/core/templates";
 import { TemplateListPage } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -54,16 +54,12 @@ export default observer(function TemplatesPageRoute() {
 					await queryClient.invalidateQueries({
 						queryKey: getGetTemplatesQueryKey(),
 					});
-					addToast({
-						title: "상태 변경 완료",
+					toast.success("상태 변경 완료", {
 						description: "템플릿 활성 상태가 변경되었습니다.",
-						color: "success",
 					});
 				} catch (error) {
-					addToast({
-						title: "상태 변경 실패",
+					toast.danger("상태 변경 실패", {
 						description: "템플릿 상태 변경 중 오류가 발생했습니다.",
-						color: "danger",
 					});
 					throw error;
 				}

@@ -67,7 +67,7 @@ This reference preserves the detailed implementation instructions that previousl
 | 복잡한 이벤트 핸들링 | ✅ | LoginForm (폼 제출, 유효성 검사) |
 | Page가 여러 Widget/section/table을 업무 단위로 조합해야 하는 경우 | ✅ | CourseManagementConsole, InquiryConsole |
 | 순수 UI 조합만 필요 | ❌ | fe-widget-agent 사용 |
-| 기본 UI 요소 | ❌ | `fe-display-agent` 또는 `fe-control-agent` 사용 |
+| 기본 UI 요소 | ❌ | `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 `fe-control-agent` 사용 |
 | 전체 페이지 구성 | ❌ | fe-route-agent 사용 |
 
 ---
@@ -441,7 +441,7 @@ Pure UI → Widget → Feature → Page
 | 에이전트 | 관계 |
 |----------|------|
 | orch-delivery | owner spec과 Feature owner spec 기반 구현 |
-| fe-display-agent | Feature가 사용할 Display UI 컴포넌트 생성 |
+| fe-data-display-agent / fe-feedback-agent / fe-overlay-agent | Feature가 사용할 표시, 상태, overlay UI 컴포넌트 생성 |
 | **fe-widget-agent** | Feature가 사용할 Widget 컴포넌트 생성 |
 | **fe-store-agent** | Feature가 연결할 Store 생성 |
 

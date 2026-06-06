@@ -10,7 +10,7 @@ import {
   bottomSheetClassNames,
   useBottomSheet,
   useBottomSheetAnimation,
-} from "heroui-native/bottom-sheet";
+} from "heroui-native";
 import { Text } from "../../data-display/Text";
 type HeroBottomSheetProps = ComponentPropsWithoutRef<typeof HeroBottomSheet>;
 type HeroBottomSheetContentProps = ComponentPropsWithoutRef<

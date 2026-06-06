@@ -1,6 +1,6 @@
+import { SpaceAggregateRoot } from "@cocrepo/aggregate";
 import { SpaceContext } from "@cocrepo/context";
 import { SpacesRepository } from "@cocrepo/repository";
-import { SpaceAggregateRoot } from "@cocrepo/aggregate";
 import { SpaceCommandHandlers, SpaceQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";

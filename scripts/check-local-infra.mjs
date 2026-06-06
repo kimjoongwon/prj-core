@@ -19,10 +19,6 @@ const SERVICE_CONFIG = {
     label: "core-api",
     envPath: "apps/core/api/.env",
   },
-  "idp-api": {
-    label: "idp-api",
-    envPath: "apps/idp/api/.env",
-  },
 };
 
 function isTruthy(value) {
@@ -135,7 +131,7 @@ function probeTcp(host, port, timeoutMs = DEFAULT_TIMEOUT_MS) {
 
 function printUsageAndExit() {
   console.error(
-    "Usage: node scripts/check-local-infra.mjs [core-api] [idp-api]",
+    "Usage: node scripts/check-local-infra.mjs [core-api]",
   );
   process.exit(1);
 }

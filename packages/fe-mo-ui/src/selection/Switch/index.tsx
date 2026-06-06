@@ -12,7 +12,7 @@ import {
   Switch as HeroSwitch,
   switchClassNames,
   useSwitch,
-} from "heroui-native/switch";
+} from "heroui-native";
 import { getTextContent, Text } from "../../data-display/Text";
 type HeroSwitchProps = ComponentPropsWithoutRef<typeof HeroSwitch>;
 export interface PureSwitchProps extends Omit<

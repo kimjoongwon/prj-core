@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { Textarea } from "./Textarea";
+import { TextArea } from "./TextArea";
 
-const meta: Meta<typeof Textarea> = {
-	title: "Inputs/Textarea",
-	component: Textarea,
+const meta: Meta<typeof TextArea> = {
+	title: "Inputs/TextArea",
+	component: TextArea,
 	parameters: {
 		layout: "centered",
 	},
@@ -22,7 +22,7 @@ export const Default: Story = {
 	},
 	render: (args) => {
 		const [value, setValue] = useState("");
-		return <Textarea {...args} value={value} onChange={setValue} />;
+		return <TextArea {...args} value={value} onChange={setValue} />;
 	},
 };
 
@@ -32,6 +32,6 @@ export const WithInitialValue: Story = {
 	},
 	render: (args) => {
 		const [value, setValue] = useState("This is a default description.");
-		return <Textarea {...args} value={value} onChange={setValue} />;
+		return <TextArea {...args} value={value} onChange={setValue} />;
 	},
 };

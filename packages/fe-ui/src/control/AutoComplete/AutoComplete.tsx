@@ -1,5 +1,10 @@
-import type { AutocompleteProps } from "../../design-system/primitives";
-import { Autocomplete, AutocompleteItem } from "../../design-system/primitives";
+import {
+	Autocomplete as HeroAutocomplete,
+	Label,
+	ListBox,
+} from "@heroui/react";
+import type { ReactNode } from "react";
+import type { Key } from "react-aria-components";
 
 type AutoCompleteItem = {
 	/** 표시 텍스트 */
@@ -10,52 +15,57 @@ type AutoCompleteItem = {
 	key?: string;
 };
 
-export interface AutoCompleteProps
-	extends Omit<
-		AutocompleteProps<AutoCompleteItem>,
-		"children" | "onSelectionChange"
-	> {
-	/** 선택 변경 핸들러 */
+export interface AutoCompleteProps {
+	items?: AutoCompleteItem[];
+	defaultItems?: AutoCompleteItem[];
+	label?: ReactNode;
+	placeholder?: ReactNode;
+	isDisabled?: boolean;
+	isInvalid?: boolean;
+	isRequired?: boolean;
+	className?: string;
 	onSelectionChange?: (key: string | number | null) => void;
 }
 
 /**
  * AutoComplete 컴포넌트
  * 검색과 자동완성 기능이 있는 입력 컴포넌트입니다.
- *
- * @example
- * ```tsx
- * const items = [
- *   { key: "1", label: "서울" },
- *   { key: "2", label: "부산" },
- *   { key: "3", label: "대구" },
- * ];
- *
- * <AutoComplete
- *   label="도시 선택"
- *   defaultItems={items}
- *   onSelectionChange={(key) => setSelectedCity(key)}
- * />
- * ```
  */
 export const AutoComplete = (props: AutoCompleteProps) => {
 	const {
 		defaultItems = [],
+		items,
 		label = "label",
 		onSelectionChange,
+		placeholder,
 		...rest
 	} = props;
+	const collectionItems = items ?? defaultItems;
+
+	const handleSelectionChange = (key: Key | null) => {
+		onSelectionChange?.(key == null ? null : String(key));
+	};
 
 	return (
-		<Autocomplete
+		<HeroAutocomplete
 			{...rest}
-			label={label}
-			defaultItems={defaultItems}
-			onSelectionChange={onSelectionChange}
+			items={collectionItems as never}
+			onSelectionChange={handleSelectionChange}
 		>
-			{(item) => (
-				<AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>
-			)}
-		</Autocomplete>
+			{label ? <Label>{label}</Label> : null}
+			<HeroAutocomplete.Trigger>
+				<HeroAutocomplete.Value>{placeholder}</HeroAutocomplete.Value>
+				<HeroAutocomplete.Indicator />
+			</HeroAutocomplete.Trigger>
+			<HeroAutocomplete.Popover>
+				<ListBox items={collectionItems as never}>
+					{(item: AutoCompleteItem) => (
+						<ListBox.Item key={item.key} id={item.key} textValue={item.label}>
+							{item.label}
+						</ListBox.Item>
+					)}
+				</ListBox>
+			</HeroAutocomplete.Popover>
+		</HeroAutocomplete>
 	);
 };

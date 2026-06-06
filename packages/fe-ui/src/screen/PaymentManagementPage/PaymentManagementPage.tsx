@@ -3,7 +3,7 @@
 import { PageSurface, VStack } from "@cocrepo/ui";
 import { RefreshCw } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 import type {
 	PaymentManagementConsoleProps,
 	PaymentManagementPayment,
@@ -38,7 +38,7 @@ export const PaymentManagementPage = observer(
 						) : null
 					}
 				/>
-				<PageSurface className="rounded-2xl border-divider/80 bg-content1/50 p-5">
+				<PageSurface className="rounded-2xl border-border/80 bg-surface/50 p-5">
 					<PaymentManagementConsole {...consoleProps} />
 				</PageSurface>
 			</VStack>

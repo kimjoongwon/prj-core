@@ -21,7 +21,7 @@
 | `onClickBackButton` | 목록으로 돌아가기 |
 | `onChangeSpaceSelection` | Space 선택 변경 |
 | `onChangeRoleSelection` | Role 선택 변경 |
-| `onChangeReasonTextarea` | 신청 사유 변경 |
+| `onChangeReasonTextArea` | 신청 사유 변경 |
 | `onClickSubmitButton` | 신청 제출 |
 
 ## 화면 구성

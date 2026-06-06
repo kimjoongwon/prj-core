@@ -9,7 +9,7 @@ import {
   Avatar as HeroAvatar,
   avatarClassNames,
   useAvatar,
-} from "heroui-native/avatar";
+} from "heroui-native";
 import { getTextContent, Text } from "../Text";
 type HeroAvatarProps = ComponentPropsWithoutRef<typeof HeroAvatar>;
 type HeroAvatarFallbackProps = ComponentPropsWithoutRef<

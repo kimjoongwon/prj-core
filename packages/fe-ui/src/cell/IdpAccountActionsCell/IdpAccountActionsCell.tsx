@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { Button } from "../../control/Button/Button";
-import { Link as HeroLink } from "../../design-system/primitives";
+import { Link as HeroLink } from "../../control/Link/Link";
 
 export interface IdpAccountActionsCellProps {
 	/** 계정 ID */
@@ -30,7 +30,7 @@ export const IdpAccountActionsCell = observer(function IdpAccountActionsCell({
 			) : null}
 			<Button
 				as={HeroLink}
-				href={`/accounts/${accountId}`}
+				href={`/settings/auth/accounts/${accountId}`}
 				size="sm"
 				variant="light"
 			>

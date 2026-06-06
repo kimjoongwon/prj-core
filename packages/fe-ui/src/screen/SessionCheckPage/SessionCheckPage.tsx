@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Spinner } from "../../design-system/primitives";
+import { Spinner } from "@heroui/react";
 import { DetailPage, DetailPageSurface, DetailSectionCard } from "../../detail";
 import { useT } from "../../i18n";
 import { PageTitleBar } from "../../widget";
@@ -28,7 +28,7 @@ export const SessionCheckPage = observer(
 					<DetailSectionCard>
 						<div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center">
 							<Spinner size="lg" />
-							<p className="text-sm text-default-500">{t(message)}</p>
+							<p className="text-sm text-muted">{t(message)}</p>
 						</div>
 					</DetailSectionCard>
 				</DetailPageSurface>

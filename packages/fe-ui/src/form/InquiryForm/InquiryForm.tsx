@@ -7,26 +7,11 @@ import type {
 } from "@cocrepo/enum";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import {
-	type Assignee,
-	AssigneeSelect,
-} from "../../control/AssigneeSelect/AssigneeSelect";
-import {
-	CustomerSearchInput,
-	type CustomerSearchResult,
-} from "../../control/CustomerSearchInput/CustomerSearchInput";
-import { InquiryCategorySelect } from "../../control/InquiryCategorySelect/InquiryCategorySelect";
-import { InquiryChannelSelect } from "../../control/InquiryChannelSelect/InquiryChannelSelect";
-import { InquiryPrioritySelect } from "../../control/InquiryPrioritySelect/InquiryPrioritySelect";
-import { Textarea } from "../../control/Textarea/Textarea";
-import {
-	Button,
-	Card,
-	CardBody,
-	Divider,
-	Input,
-	Spacer,
-} from "../../design-system/primitives";
+import { Select } from "../../control/Select/Select";
+import { TextArea } from "../../control/TextArea/TextArea";
+import { Button } from "../../control/Button/Button";
+import { Card, Separator } from "@heroui/react";
+import { Input } from "../../control/Input/Input";
 import { AIClassificationSuggestion } from "../../widget/AIClassificationSuggestion/AIClassificationSuggestion";
 
 export interface CustomerInfo {
@@ -38,6 +23,28 @@ export interface CustomerInfo {
 	email?: string;
 	/** 전화번호 */
 	phone?: string;
+}
+
+export interface InquiryFormCustomerSearchResult {
+	/** 고객 ID */
+	id: string;
+	/** 고객명 */
+	name: string;
+	/** 이메일 */
+	email?: string;
+	/** 연락처 */
+	phone?: string;
+	/** 표시용 라벨 */
+	label: string;
+	/** 설명 (부가 정보) */
+	description?: string;
+}
+
+export interface InquiryFormAssignee {
+	/** 사용자 ID */
+	id: string;
+	/** 사용자명 */
+	name: string;
 }
 
 export interface AIFormSuggestion {
@@ -55,15 +62,30 @@ export interface AIFormSuggestion {
 	suggestedTags?: string[];
 }
 
+export interface InquiryFormOption {
+	value: string;
+	label: string;
+}
+
+export interface InquiryFormOptions {
+	category: InquiryFormOption[];
+	channel: InquiryFormOption[];
+	priority: InquiryFormOption[];
+}
+
 export interface InquiryFormProps {
 	/** 폼 제출 핸들러 */
 	onSubmit: (data: InquiryFormData) => void;
+	/** 백엔드 폼 bootstrap에서 내려온 선택 옵션 */
+	options: InquiryFormOptions;
 	/** 내용 변경 핸들러 (AI 분류 트리거용) */
 	onContentChange?: (content: string) => void;
 	/** 고객 검색 핸들러 */
-	onSearchCustomer?: (keyword: string) => Promise<CustomerSearchResult[]>;
+	onSearchCustomer?: (
+		keyword: string,
+	) => Promise<InquiryFormCustomerSearchResult[]>;
 	/** 담당자 목록 */
-	assignees?: Assignee[];
+	assignees?: InquiryFormAssignee[];
 	/** 제출 중 여부 */
 	isSubmitting?: boolean;
 	/** AI 분류 제안 */
@@ -109,6 +131,7 @@ const REQUIRED_MESSAGE = "필수 항목입니다";
  * ```tsx
  * <InquiryForm
  *   onSubmit={handleSubmit}
+ *   options={bootstrap.options}
  *   onContentChange={handleContentChange}
  *   onSearchCustomer={searchCustomers}
  *   aiSuggestion={aiSuggestion}
@@ -119,6 +142,7 @@ const REQUIRED_MESSAGE = "필수 항목입니다";
 export const InquiryForm = observer(
 	({
 		onSubmit,
+		options,
 		onContentChange,
 		onSearchCustomer,
 		assignees,
@@ -134,8 +158,9 @@ export const InquiryForm = observer(
 		const [customerId, setCustomerId] = useState(
 			initialValues?.customerId ?? "",
 		);
+		const [customerKeyword, setCustomerKeyword] = useState("");
 		const [_customerInfo, setCustomerInfo] =
-			useState<CustomerSearchResult | null>(null);
+			useState<InquiryFormCustomerSearchResult | null>(null);
 		const [title, setTitle] = useState(initialValues?.title ?? "");
 		const [content, setContent] = useState(initialValues?.content ?? "");
 		const [category, setCategory] = useState<InquiryCategory | null>(
@@ -152,12 +177,19 @@ export const InquiryForm = observer(
 		);
 
 		// 검색 결과 상태
-		const [searchResults, setSearchResults] = useState<CustomerSearchResult[]>(
-			[],
-		);
+		const [searchResults, setSearchResults] = useState<
+			InquiryFormCustomerSearchResult[]
+		>([]);
 
 		// 에러 상태
 		const [errors, setErrors] = useState<Record<string, string>>({});
+		const assigneeOptions = [
+			{ value: "", text: "미배정" },
+			...(assignees ?? []).map((assignee) => ({
+				value: assignee.id,
+				text: assignee.name,
+			})),
+		];
 
 		const validateForm = (): boolean => {
 			const newErrors: Record<string, string> = {};
@@ -207,16 +239,31 @@ export const InquiryForm = observer(
 		};
 
 		const handleCustomerSearch = async (keyword: string) => {
-			if (onSearchCustomer) {
-				const results = await onSearchCustomer(keyword);
-				setSearchResults(results);
+			setCustomerKeyword(keyword);
+
+			if (!keyword.trim()) {
+				setCustomerId("");
+				setCustomerInfo(null);
+				setSearchResults([]);
+				return;
 			}
+
+			if (!onSearchCustomer) {
+				return;
+			}
+
+			const results = await onSearchCustomer(keyword);
+			setSearchResults(results);
 		};
 
-		const handleCustomerSelect = (customer: CustomerSearchResult | null) => {
+		const handleCustomerSelect = (
+			customer: InquiryFormCustomerSearchResult | null,
+		) => {
 			if (customer) {
 				setCustomerId(customer.id);
+				setCustomerKeyword(customer.label);
 				setCustomerInfo(customer);
+				setSearchResults([]);
 			}
 		};
 
@@ -234,6 +281,7 @@ export const InquiryForm = observer(
 
 		const handleReset = () => {
 			setCustomerId("");
+			setCustomerKeyword("");
 			setCustomerInfo(null);
 			setTitle("");
 			setContent("");
@@ -245,21 +293,48 @@ export const InquiryForm = observer(
 		};
 
 		return (
-			<Card className={className} shadow="sm">
-				<CardBody className="gap-4 p-6">
+			<Card className={className}>
+				<Card.Content className="gap-4 p-6">
 					{/* 고객 선택 */}
-					<CustomerSearchInput
-						label="고객"
-						placeholder="고객명, 이메일, 전화번호로 검색"
-						items={searchResults}
-						onInputChange={handleCustomerSearch}
-						onSelectionChange={handleCustomerSelect}
-						isRequired
-						errorMessage={errors.customerId}
-						isInvalid={!!errors.customerId}
-					/>
+					<div className="space-y-2">
+						<Input
+							label="고객"
+							labelPlacement="outside"
+							placeholder="고객명, 이메일, 전화번호로 검색"
+							value={customerKeyword}
+							onValueChange={(value) => {
+								void handleCustomerSearch(value);
+							}}
+							isRequired
+							errorMessage={errors.customerId}
+							isInvalid={!!errors.customerId}
+						/>
+						{searchResults.length > 0 && (
+							<div className="max-h-56 space-y-1 overflow-y-auto rounded-xl border border-border p-2">
+								{searchResults.map((customer) => (
+									<button
+										key={customer.id}
+										type="button"
+										onClick={() => handleCustomerSelect(customer)}
+										className="w-full rounded-lg px-3 py-2 text-left transition-colors hover:bg-default"
+									>
+										<div className="text-sm font-medium">
+											{customer.label}
+										</div>
+										<div className="text-xs text-muted">
+											{customer.description ||
+												[customer.email, customer.phone]
+													.filter(Boolean)
+													.join(" | ") ||
+												customer.id}
+										</div>
+									</button>
+								))}
+							</div>
+						)}
+					</div>
 
-					<Divider />
+					<Separator />
 
 					{/* 제목 */}
 					<Input
@@ -274,7 +349,7 @@ export const InquiryForm = observer(
 					/>
 
 					{/* 내용 */}
-					<Textarea
+					<TextArea
 						label="내용"
 						labelPlacement="outside"
 						placeholder="문의 내용을 상세히 입력하세요"
@@ -304,59 +379,56 @@ export const InquiryForm = observer(
 						/>
 					)}
 
-					<Divider />
+					<Separator />
 
 					{/* 분류 정보 */}
 					<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-						<div>
-							<InquiryCategorySelect
-								label="카테고리"
-								value={category ?? undefined}
-								onChange={(v) => setCategory(v)}
-								isRequired
-							/>
-							{errors.category && (
-								<span className="text-xs text-danger">{errors.category}</span>
-							)}
-						</div>
+						<Select
+							label="카테고리"
+							placeholder="카테고리를 선택하세요"
+							options={options.category}
+							value={category ?? undefined}
+							onValueChange={(value) => setCategory(value as InquiryCategory)}
+							isRequired
+							isInvalid={!!errors.category}
+							errorMessage={errors.category}
+						/>
 
-						<div>
-							<InquiryChannelSelect
-								label="채널"
-								value={channel ?? undefined}
-								onChange={(v) => setChannel(v)}
-								isRequired
-							/>
-							{errors.channel && (
-								<span className="text-xs text-danger">{errors.channel}</span>
-							)}
-						</div>
+						<Select
+							label="채널"
+							placeholder="채널을 선택하세요"
+							options={options.channel}
+							value={channel ?? undefined}
+							onValueChange={(value) => setChannel(value as InquiryChannel)}
+							isRequired
+							isInvalid={!!errors.channel}
+							errorMessage={errors.channel}
+						/>
 
-						<div>
-							<InquiryPrioritySelect
-								label="우선순위"
-								value={priority ?? undefined}
-								onChange={(v) => setPriority(v)}
-								isRequired
-							/>
-							{errors.priority && (
-								<span className="text-xs text-danger">{errors.priority}</span>
-							)}
-						</div>
+						<Select
+							label="우선순위"
+							placeholder="우선순위를 선택하세요"
+							options={options.priority}
+							value={priority ?? undefined}
+							onValueChange={(value) => setPriority(value as InquiryPriority)}
+							isRequired
+							isInvalid={!!errors.priority}
+							errorMessage={errors.priority}
+						/>
 
 						{assignees && (
-							<AssigneeSelect
+							<Select
 								label="담당자"
 								value={assigneeId}
-								onChange={setAssigneeId}
-								assignees={assignees}
+								onValueChange={setAssigneeId}
+								options={assigneeOptions}
 							/>
 						)}
 					</div>
 
-					<Spacer y={2} />
+					<div className="h-2" />
 
-					<Divider />
+					<Separator />
 
 					{/* 제출 버튼 */}
 					<div className="flex justify-end gap-2">
@@ -375,7 +447,7 @@ export const InquiryForm = observer(
 							문의 접수
 						</Button>
 					</div>
-				</CardBody>
+				</Card.Content>
 			</Card>
 		);
 	},

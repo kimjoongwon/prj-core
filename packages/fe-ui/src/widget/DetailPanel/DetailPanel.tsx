@@ -3,7 +3,8 @@
 import { ArrowDownRight, ArrowUpRight, FileText } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Chip, Divider } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Separator } from "@heroui/react";
 import { useT } from "../../i18n";
 
 /** 연결 관계 정의 */
@@ -100,7 +101,7 @@ export const DetailPanel = observer(
 		if (!item) {
 			return (
 				<div
-					className={`flex h-full flex-col items-center justify-center p-4 text-center text-default-400 ${className}`}
+					className={`flex h-full flex-col items-center justify-center p-4 text-center text-muted ${className}`}
 				>
 					<FileText className="mb-2 size-8" />
 					<p className="text-sm">{t(emptyMessage)}</p>
@@ -132,8 +133,8 @@ export const DetailPanel = observer(
 							</div>
 						)}
 						<div className="flex-1">
-							<h3 className="font-semibold text-default-800">{item.name}</h3>
-							<p className="text-xs text-default-500">{item.id}</p>
+							<h3 className="font-semibold text-foreground">{item.name}</h3>
+							<p className="text-xs text-muted">{item.id}</p>
 						</div>
 					</div>
 					<div className="flex flex-wrap gap-1">
@@ -168,24 +169,24 @@ export const DetailPanel = observer(
 				{/* 설명 */}
 				{item.description && (
 					<div>
-						<h4 className="mb-1 text-xs font-semibold text-default-500">
+						<h4 className="mb-1 text-xs font-semibold text-muted">
 							{t("설명")}
 						</h4>
-						<p className="text-sm text-default-700">{item.description}</p>
+						<p className="text-sm text-foreground">{item.description}</p>
 					</div>
 				)}
 
 				{/* 메타데이터 */}
 				{item.metadata && Object.keys(item.metadata).length > 0 && (
 					<div>
-						<h4 className="mb-1 text-xs font-semibold text-default-500">
+						<h4 className="mb-1 text-xs font-semibold text-muted">
 							{t("메타데이터")}
 						</h4>
-						<div className="space-y-1 rounded-md bg-content2 p-2">
+						<div className="space-y-1 rounded-md bg-surface-secondary p-2">
 							{Object.entries(item.metadata).map(([key, value]) => (
 								<div key={key} className="flex justify-between text-xs">
-									<span className="text-default-500">{key}</span>
-									<span className="font-mono text-default-700">
+									<span className="text-muted">{key}</span>
+									<span className="font-mono text-foreground">
 										{String(value)}
 									</span>
 								</div>
@@ -194,12 +195,12 @@ export const DetailPanel = observer(
 					</div>
 				)}
 
-				<Divider />
+				<Separator />
 
 				{/* 들어오는 연결 */}
 				{item.incomingConnections && item.incomingConnections.length > 0 && (
 					<div>
-						<h4 className="mb-2 flex items-center gap-1 text-xs font-semibold text-default-500">
+						<h4 className="mb-2 flex items-center gap-1 text-xs font-semibold text-muted">
 							<ArrowDownRight className="size-3" />
 							{t("들어오는 연결")} ({item.incomingConnections.length})
 						</h4>
@@ -219,7 +220,7 @@ export const DetailPanel = observer(
 				{/* 나가는 연결 */}
 				{item.outgoingConnections && item.outgoingConnections.length > 0 && (
 					<div>
-						<h4 className="mb-2 flex items-center gap-1 text-xs font-semibold text-default-500">
+						<h4 className="mb-2 flex items-center gap-1 text-xs font-semibold text-muted">
 							<ArrowUpRight className="size-3" />
 							{t("나가는 연결")} ({item.outgoingConnections.length})
 						</h4>
@@ -253,7 +254,7 @@ const ConnectionButton = observer(
 			<button
 				type="button"
 				onClick={onClick}
-				className="flex w-full items-center gap-2 rounded-md bg-content2 p-2 text-left transition-colors hover:bg-content3"
+				className="flex w-full items-center gap-2 rounded-md bg-surface-secondary p-2 text-left transition-colors hover:bg-surface-tertiary"
 			>
 				{connection.icon && (
 					<div
@@ -264,7 +265,7 @@ const ConnectionButton = observer(
 					</div>
 				)}
 				<div className="min-w-0 flex-1">
-					<p className="truncate text-sm font-medium text-default-800">
+					<p className="truncate text-sm font-medium text-foreground">
 						{connection.itemName}
 					</p>
 					<div className="flex items-center gap-1">
@@ -274,7 +275,7 @@ const ConnectionButton = observer(
 								style={{ backgroundColor: connection.typeColor }}
 							/>
 						)}
-						<span className="text-xs text-default-500">
+						<span className="text-xs text-muted">
 							{direction === "incoming" ? "← " : "→ "}
 							{connection.typeLabel}
 						</span>

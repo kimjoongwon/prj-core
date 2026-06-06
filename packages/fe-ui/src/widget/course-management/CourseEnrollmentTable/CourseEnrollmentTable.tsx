@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Chip } from "../../../design-system/primitives";
+import { Chip } from "../../../data-display/Chip/Chip";
 import { CourseTableShell } from "../CourseTableShell";
 import type { CourseManagementEnrollment } from "../types";
 
@@ -29,23 +29,23 @@ export const CourseEnrollmentTable = observer(
 				}
 			>
 				{enrollments.map((enrollment) => (
-					<tr key={enrollment.id} className="border-divider/70 border-b">
+					<tr key={enrollment.id} className="border-border/70 border-b">
 						<td className="px-3 py-4 font-medium text-foreground">
 							{enrollment.studentName}
 						</td>
-						<td className="px-3 py-4 text-default-600">
+						<td className="px-3 py-4 text-muted">
 							{enrollment.courseName}
 						</td>
-						<td className="px-3 py-4 text-default-700">
+						<td className="px-3 py-4 text-foreground">
 							{enrollment.offeringName}
 						</td>
-						<td className="px-3 py-4 text-default-700">
+						<td className="px-3 py-4 text-foreground">
 							{enrollment.paymentLabel}
 						</td>
-						<td className="px-3 py-4 text-default-600">
+						<td className="px-3 py-4 text-muted">
 							{enrollment.validityLabel}
 						</td>
-						<td className="px-3 py-4 text-default-600">
+						<td className="px-3 py-4 text-muted">
 							{enrollment.reservationSummary}
 						</td>
 						<td className="px-3 py-4">

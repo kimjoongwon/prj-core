@@ -35,7 +35,7 @@
 | 대상 | Planning Spec | Source 파일 | 역할 | 재사용/신규 | 갱신 여부 | 담당 `agent_type` | 비고 |
 |------|---------------|-------------|------|-------------|-----------|-------------------|------|
 | `/community` visual owner | `packages/fe-mo-ui/src/screen/CommunityScreen/CommunityScreen.spec.md` | `packages/fe-mo-ui/src/screen/CommunityScreen/CommunityScreen.tsx` | 커뮤니티 화면 visual/props/state rendering 계약 | new | build 시 신규 작성 | `fe-screen-agent` | 실행 순서와 backend 전체 계약은 service spec이 소유 |
-| 게시글 카드 | none | `packages/fe-mo-ui/src/data-display/CommunityPostCard/index.tsx` | feed 반복 게시글 카드 | new | spec 없음 | `fe-display-agent` | component story/test는 builder가 함께 작성 |
+| 게시글 카드 | none | `packages/fe-mo-ui/src/data-display/CommunityPostCard/index.tsx` | feed 반복 게시글 카드 | new | spec 없음 | `fe-data-display-agent` | component story/test는 builder가 함께 작성 |
 
 ### 디자인 정렬
 
@@ -100,7 +100,7 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 | screen root | `VStack` | vertical/stretch | `section` | IntroCard, FeedState, FeedList | reuse | `@cocrepo/mo-ui` rhythm | `fe-screen-agent` | raw `gap-*` 남발 금지 |
 | intro card | `VStack` + `HStack` | vertical + header row | `block`, `inline` | title, description, write action | reuse | `@cocrepo/mo-ui` rhythm | `fe-screen-agent` | title/action row는 compact |
 | feed list | `VStack` | vertical/stretch | `block` | `CommunityPostCard[]` | reuse | `@cocrepo/mo-ui` rhythm | `fe-screen-agent` | list row 사이 간격은 카드 rhythm |
-| post card | `VStack` + `HStack` | vertical + meta row | `dense`, `block` | author/time/chip/title/body | reuse | `@cocrepo/mo-ui` rhythm | `fe-display-agent` | text preview는 3줄 이하 |
+| post card | `VStack` + `HStack` | vertical + meta row | `dense`, `block` | author/time/chip/title/body | reuse | `@cocrepo/mo-ui` rhythm | `fe-data-display-agent` | text preview는 3줄 이하 |
 | composer sheet | `VStack` | vertical/stretch | `block` | title field, text field, actions | reuse | `BottomSheet`, `Text`, `TextInput`, `Button` | `fe-screen-agent` | controlled field는 route-local state를 props로 받음 |
 | route tab | n/a | tab layout | n/a | community tab icon/label | modify | `apps/mobile/src/app/(tabs)/_layout.tsx` | `fe-route-layout-agent` | icon은 기존 `users` 재사용 |
 
@@ -112,13 +112,13 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 | tab | `Tabs.Screen name="community"` | Route/Layout | modify | `apps/mobile/src/app/(tabs)/_layout.tsx` | title `"커뮤니티"`, tabBarLabel `"커뮤니티"`, icon `users` | `fe-route-layout-agent` | `fe-route-agent` |
 | screen | `CommunityScreen` | Screen | new | `packages/fe-mo-ui/src/screen/CommunityScreen/CommunityScreen.tsx` | `status`, `posts`, `isRefreshing`, `isComposerOpen`, handlers | `fe-screen-agent` | `fe-route-agent` |
 | intro | `Card` + `Button` | Layout/Action | reuse | `@cocrepo/mo-ui` | title, description, `onPressWrite` | none | `fe-screen-agent` |
-| feed state | `StatusFeedback` | Feedback | reuse | `packages/fe-mo-ui/src/feedback/StatusFeedback` | loading/empty/error, retry/write action | `fe-display-agent` | `fe-screen-agent` |
-| post card | `CommunityPostCard` | DataDisplay | new | `packages/fe-mo-ui/src/data-display/CommunityPostCard/index.tsx` | `title`, `text`, `authorName`, `createdAtLabel`, `isPinned`, `isMine` | `fe-display-agent` | `fe-screen-agent` |
-| composer | `BottomSheet` | Feedback/Layout | reuse | `packages/fe-mo-ui/src/layout/BottomSheet` | open/close, title/description | `fe-display-agent` | `fe-screen-agent` |
+| feed state | `StatusFeedback` | Feedback | reuse | `packages/fe-mo-ui/src/feedback/StatusFeedback` | loading/empty/error, retry/write action | `fe-feedback-agent` | `fe-screen-agent` |
+| post card | `CommunityPostCard` | DataDisplay | new | `packages/fe-mo-ui/src/data-display/CommunityPostCard/index.tsx` | `title`, `text`, `authorName`, `createdAtLabel`, `isPinned`, `isMine` | `fe-data-display-agent` | `fe-screen-agent` |
+| composer | `BottomSheet` | Overlay/Layout | reuse | `packages/fe-mo-ui/src/layout/BottomSheet` | open/close, title/description | `fe-overlay-agent` | `fe-screen-agent` |
 | composer title | `TextInput` + `Text` label | Input composition | screen-local | `packages/fe-mo-ui/src/screen/CommunityScreen/CommunityScreen.tsx` | title value/change/error | `fe-screen-agent` | `fe-screen-agent` |
 | composer body | `TextInput(multiline)` + `Text` label | Input composition | screen-local | same | body value/change/error | `fe-screen-agent` | `fe-screen-agent` |
-| composer action | `ScreenActionBar` | Layout/Action | reuse | `packages/fe-mo-ui/src/layout/ScreenActionBar` | primary submit, secondary cancel, loading label | `fe-display-agent` | `fe-screen-agent` |
-| text | `Text` | DataDisplay | reuse | `packages/fe-mo-ui/src/data-display/Text` | all user-facing copy | `fe-display-agent` | all mobile builders |
+| composer action | `ScreenActionBar` | Layout/Action | reuse | `packages/fe-mo-ui/src/layout/ScreenActionBar` | primary submit, secondary cancel, loading label | `fe-layout-agent` | `fe-screen-agent` |
+| text | `Text` | DataDisplay | reuse | `packages/fe-mo-ui/src/data-display/Text` | all user-facing copy | `fe-data-display-agent` | all mobile builders |
 
 ### 기반 계약
 
@@ -135,7 +135,7 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 | 필요 | Utility | 범주 | 재사용/신규 | 소스/대상 | 입력/출력 | 런타임 제약 | 소스 담당 `agent_type` | 소비 `agent_type` | 검증 `agent_type` |
 |------|---------|------|-------------|-----------|-----------|-------------|-------------------------|-------------------|-------------------|
 | 작성 시각 표시 | `formatCommunityCreatedAtLabel` | route-local formatter | new | `apps/mobile/src/app/(tabs)/community.tsx` | ISO date -> `"12분 전"` 또는 날짜 | locale/timezone mismatch 주의 | `fe-route-agent` | `fe-route-agent` | `qa-mo-testing` |
-| 본문 preview | none | component-local | none | `CommunityPostCard` props에서 `numberOfLines` 처리 | string -> visual clipping | RN Text line clamp | `fe-display-agent` | `fe-screen-agent` | `qa-mo-testing` |
+| 본문 preview | none | component-local | none | `CommunityPostCard` props에서 `numberOfLines` 처리 | string -> visual clipping | RN Text line clamp | `fe-data-display-agent` | `fe-screen-agent` | `qa-mo-testing` |
 
 #### Type 인벤토리
 
@@ -143,7 +143,7 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 |------|------|------|-------------|-----------|------|-------------------------|---------------------------|-------------------|
 | API 응답 | `CommunityPostDto` | backend/generated | new | `packages/be-dto/src/community/community-post.dto.ts`, generated `@cocrepo/api` model | id, title, text, authorName, createdAt, isMine, isPinned | `be-dto-builder` | `fe-route-agent` | `qa-be-testing`, `qa-mo-testing` |
 | 작성 payload | `CreateCommunityPostPayloadDto` | backend/generated | new | `packages/be-dto/src/community/create-community-post.dto.ts` | title?, text | `be-dto-builder` | `fe-route-agent` | `qa-be-testing`, `qa-mo-testing` |
-| screen item | `CommunityPostCardItem` | UI-local | new | `packages/fe-mo-ui/src/data-display/CommunityPostCard/index.tsx` | id, title, text, authorName, createdAtLabel, isMine, isPinned | `fe-display-agent` | `fe-screen-agent` | `qa-mo-testing` |
+| screen item | `CommunityPostCardItem` | UI-local | new | `packages/fe-mo-ui/src/data-display/CommunityPostCard/index.tsx` | id, title, text, authorName, createdAtLabel, isMine, isPinned | `fe-data-display-agent` | `fe-screen-agent` | `qa-mo-testing` |
 
 #### Store / State 인벤토리
 
@@ -158,14 +158,14 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 
 | 대상 | Story 파일 | 필수 상태/Variant | Fixture/데이터 | 작성 담당 `agent_type` | 검증 담당 `agent_type` | 비고 |
 |------|------------|-------------------|----------------|-------------------------|-------------------------|------|
-| `CommunityPostCard` | `packages/fe-mo-ui/src/data-display/CommunityPostCard/CommunityPostCard.stories.tsx` | default, pinned, mine, long text | 운영 안내/회원 후기 fixture | `fe-display-agent` | `qa-mo-testing` | repeated feed item |
+| `CommunityPostCard` | `packages/fe-mo-ui/src/data-display/CommunityPostCard/CommunityPostCard.stories.tsx` | default, pinned, mine, long text | 운영 안내/회원 후기 fixture | `fe-data-display-agent` | `qa-mo-testing` | repeated feed item |
 | `CommunityScreen` | `packages/fe-mo-ui/src/screen/CommunityScreen/CommunityScreen.stories.tsx` | ready, loading, empty, error, composer open, submit pending | posts fixture + handler mocks | `fe-screen-agent` | `qa-mo-testing` | mobile visual owner |
 
 #### Unit Test 인벤토리
 
 | 대상 | Test 파일 | 검증 관점 | 주요 케이스 | 작성 담당 `agent_type` | 검증 담당 `agent_type` | 비고 |
 |------|-----------|-----------|-------------|-------------------------|-------------------------|------|
-| `CommunityPostCard` | `packages/fe-mo-ui/src/data-display/CommunityPostCard/CommunityPostCard.test.tsx` | text wrapping, status chip, author/time | pinned/mine/long text | `fe-display-agent` | `qa-mo-testing` | 문자열은 `Text` primitive로 감싸야 함 |
+| `CommunityPostCard` | `packages/fe-mo-ui/src/data-display/CommunityPostCard/CommunityPostCard.test.tsx` | text wrapping, status chip, author/time | pinned/mine/long text | `fe-data-display-agent` | `qa-mo-testing` | 문자열은 `Text` primitive로 감싸야 함 |
 | `CommunityScreen` | `packages/fe-mo-ui/src/screen/CommunityScreen/CommunityScreen.test.tsx` | 상태별 렌더링과 action event | ready, empty write, error retry, composer submit/cancel | `fe-screen-agent` | `qa-mo-testing` | screen은 API/router 직접 import 금지 |
 | `/community` route | `apps/mobile/src/route-tests/community.test.tsx` | Orval hook 매핑, mutation payload, invalidate | feed render, create success, error retry | `fe-route-agent` | `qa-mo-testing` | route-local state와 navigation만 검증 |
 
@@ -244,12 +244,12 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 | Backend | DTO/query/common schema | new | `be-dto-builder`, `be-query-dto-builder`, `common-schema-builder` | Swagger schema가 Orval 모델 생성 가능 |
 | Backend | Content repository/service/usecase/controller/module | new/modify | backend builders | `/api/v1/community/posts` list/create 동작 |
 | Codegen | `@cocrepo/api` Orval generated hooks | new generated | main Codex 또는 `fe-route-agent` | `useGetCommunityPosts`, `useCreateCommunityPost` 사용 가능 |
-| Mobile UI | `CommunityPostCard` | new | `fe-display-agent` | story/test 포함 |
+| Mobile UI | `CommunityPostCard` | new | `fe-data-display-agent` | story/test 포함 |
 | Mobile Screen | `CommunityScreen` + planning spec | new | `fe-screen-agent` | ready/loading/empty/error/composer 상태 |
 | Mobile Route | tab + route file + route test | new/modify | `fe-route-agent`, `fe-route-layout-agent` | `/community` 탭 진입과 작성 mutation |
 | QA | backend/mobile unit + mobile E2E 계획 | new/modify | `qa-be-testing`, `qa-mo-testing`, `qa-mo-e2e-testing` | contract drift 없음 |
 
-### 에이전트 배정 매트릭스
+### Subagent 배정 매트릭스
 
 | step id | phase | 담당 `agent_type` | 입력 파일 | 출력 파일 | 수정 허용 파일 | 의존 step | 병렬 가능 여부 | 완료 조건 |
 |---------|-------|-------------------|-----------|-----------|----------------|-----------|----------------|-----------|
@@ -265,7 +265,7 @@ Legend: A=screen-local intro, B=reuse Feedback, C=new DataDisplay, D=screen-loca
 | B11 | backend/bootstrap | `be-bootstrap-integrator` | B10 | core API module imports | app module tree | B10 | no | module registered |
 | BQA | backend QA | `qa-be-testing` | B2-B11 | backend unit tests | backend test files | B11 | no | list/create tests pass |
 | CG | codegen | main Codex | running Swagger | `packages/fe-api/src/core/community/**` | generated API only | BQA | no | Orval hooks generated |
-| M1 | mobile data display | `fe-display-agent` | this spec, `DESIGN.md` | `CommunityPostCard` files | `packages/fe-mo-ui/src/data-display/CommunityPostCard/**`, barrel | none | yes | story/test included |
+| M1 | mobile data display | `fe-data-display-agent` | this spec, `DESIGN.md` | `CommunityPostCard` files | `packages/fe-mo-ui/src/data-display/CommunityPostCard/**`, barrel | none | yes | story/test included |
 | M2 | mobile screen | `fe-screen-agent` | this spec, M1 | `CommunityScreen` files + planning spec | `packages/fe-mo-ui/src/screen/CommunityScreen/**`, barrel | M1 | no | screen states and composer |
 | M3 | mobile route layout | `fe-route-layout-agent` | this spec | `(tabs)/_layout.tsx` | `apps/mobile/src/app/(tabs)/_layout.tsx` | M2 | no | community tab added |
 | M4 | mobile route | `fe-route-agent` | CG, M2, M3 | `(tabs)/community.tsx`, route test | mobile route + route-tests | CG, M3 | no | hooks/mutation/invalidate wired |
@@ -290,7 +290,7 @@ flowchart TD
   B11 --> BQA["BQA qa-be-testing"]
   BQA --> CG["CG Orval codegen"]
 
-  S --> M1["M1 fe-display-agent: CommunityPostCard"]
+  S --> M1["M1 fe-data-display-agent: CommunityPostCard"]
   M1 --> M2["M2 fe-screen-agent: CommunityScreen"]
   M2 --> M3["M3 fe-route-layout-agent: community tab"]
   CG --> M4["M4 fe-route-agent: route wiring"]

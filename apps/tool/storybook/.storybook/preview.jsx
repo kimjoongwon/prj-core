@@ -1,29 +1,5 @@
 import "../tailwind.css";
-import { buildOverviewManifest } from "../src/overview/manifest";
-import { PagePlanningDock } from "../src/planning/PagePlanningDock";
 import { withStorybookRuntime } from "../src/runtime/StorybookRuntimeProvider";
-
-const overviewManifest = buildOverviewManifest();
-
-const withPagePlanningDock = (Story, context) => {
-  const isPageStory = typeof context.title === "string" && context.title.startsWith("page/");
-  const inlinePlanning = context.parameters?.pagePlanning?.inline ?? true;
-  const codexEnabled = context.parameters?.pagePlanning?.codex?.enabled !== false;
-
-  if (context.viewMode !== "story" || !isPageStory || !inlinePlanning) {
-    return <Story />;
-  }
-
-  return (
-    <PagePlanningDock
-      codexEnabled={codexEnabled}
-      manifest={overviewManifest}
-      storyId={context.id ?? null}
-    >
-      <Story />
-    </PagePlanningDock>
-  );
-};
 
 /** @type { import('@storybook/nextjs-vite').Preview } */
 const preview = {
@@ -48,7 +24,6 @@ const preview = {
   },
   decorators: [
     withStorybookRuntime,
-    withPagePlanningDock,
   ],
   parameters: {
     nextjs: {
@@ -58,7 +33,7 @@ const preview = {
       storySort: {
         method: "alphabetical",
         includeNames: true,
-        order: ["overview", "cell", "control", "detail", "display", "feature", "form", "layout", "master", "page", "rhythm", "surface", "widget", "widget-heavy", "Auto"],
+	        order: ["cell", "control", "detail", "display", "feature", "form", "layout", "master", "page", "rhythm", "surface", "widget", "widget-heavy", "Auto"],
       },
     },
     backgrounds: {
@@ -85,7 +60,6 @@ const preview = {
     storybookRuntime: {
       requiresSpace: false,
     },
-    pagePlanningManifest: overviewManifest,
   },
 };
 

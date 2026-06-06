@@ -8,7 +8,7 @@
 |-----------|------|-----------------|
 | **Admin (Next.js)** | 프론트엔드 SPA + API 프록시 (rewrite) | `localhost:3000` |
 | **Server (NestJS)** | API 서버, OIDC Relying Party | `localhost:3006` |
-| **IDP (NestJS + oidc-provider)** | OIDC Provider, 토큰 발급/검증 | `localhost:3007` |
+| **IDP API (NestJS + oidc-provider)** | OIDC Provider, 토큰 발급/검증 | `localhost:3006` |
 | **Redis** | OIDC 세션/토큰 저장, 토큰 블랙리스트, Account 캐시 | `localhost:6379` |
 
 ### OIDC 클라이언트 설정

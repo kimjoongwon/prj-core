@@ -1,9 +1,9 @@
 "use client";
 
-import { Eye, EyeOff } from "lucide-react";
+import { Copy, Eye, EyeOff } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Button, Snippet } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 
 export interface SecretFieldProps {
 	/** 비밀 값 */
@@ -22,29 +22,36 @@ export const SecretField = observer(
 		const [isVisible, setIsVisible] = useState(false);
 
 		if (!value) {
-			return <span className="text-default-400">-</span>;
+			return <span className="text-muted">-</span>;
 		}
 
 		const maskedValue = maskChar.repeat(maskLength);
 
-		const handleToggleVisibility = () => {
-			setIsVisible((prev) => !prev);
-		};
+			const handleToggleVisibility = () => {
+				setIsVisible((prev) => !prev);
+			};
 
-		return (
-			<div className="flex items-center gap-2">
-				<Snippet
-					symbol=""
-					size="sm"
-					variant="flat"
-					codeString={value}
-					className="max-w-[300px]"
-				>
-					<span className="font-mono text-sm">
-						{isVisible ? value : maskedValue}
-					</span>
-				</Snippet>
-				<Button
+			const handleCopySecret = () => {
+				void navigator.clipboard.writeText(value);
+			};
+
+			return (
+				<div className="flex items-center gap-2">
+					<code className="max-w-[300px] rounded-lg bg-surface-secondary px-3 py-2">
+						<span className="font-mono text-sm">
+							{isVisible ? value : maskedValue}
+						</span>
+					</code>
+					<Button
+						isIconOnly
+						size="sm"
+						variant="light"
+						onPress={handleCopySecret}
+						aria-label="복사"
+					>
+						<Copy className="h-4 w-4" />
+					</Button>
+					<Button
 					isIconOnly
 					size="sm"
 					variant="light"

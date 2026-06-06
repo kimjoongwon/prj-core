@@ -13,7 +13,7 @@ import {
 	type TenantAccessRequestReviewDetail,
 	TenantAccessRequestReviewDetailPage,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -51,16 +51,10 @@ export default observer(function TenantAccessRequestReviewDetailPageRoute() {
 						queryClient,
 						tenantAccessRequestId,
 					);
-					addToast({
-						title: "접근 신청을 승인했습니다.",
-						color: "success",
-					});
+					toast.success("접근 신청을 승인했습니다.");
 				},
 				onError: () => {
-					addToast({
-						title: "접근 신청 승인에 실패했습니다.",
-						color: "danger",
-					});
+					toast.danger("접근 신청 승인에 실패했습니다.");
 				},
 			},
 		});
@@ -72,16 +66,10 @@ export default observer(function TenantAccessRequestReviewDetailPageRoute() {
 						queryClient,
 						tenantAccessRequestId,
 					);
-					addToast({
-						title: "접근 신청을 반려했습니다.",
-						color: "success",
-					});
+					toast.success("접근 신청을 반려했습니다.");
 				},
 				onError: () => {
-					addToast({
-						title: "접근 신청 반려에 실패했습니다.",
-						color: "danger",
-					});
+					toast.danger("접근 신청 반려에 실패했습니다.");
 				},
 			},
 		});
@@ -103,7 +91,7 @@ export default observer(function TenantAccessRequestReviewDetailPageRoute() {
 			onClickBackButton={() => {
 				router.push(ADMIN_PATHS.TENANT_ACCESS_REQUESTS as Route);
 			}}
-			onChangeReviewCommentTextarea={(reviewComment) => {
+			onChangeReviewCommentTextArea={(reviewComment) => {
 				reviewState.setReviewComment(reviewComment);
 			}}
 			onClickApproveButton={() => {

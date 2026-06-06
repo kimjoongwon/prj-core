@@ -65,21 +65,21 @@
 | 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
 | 페이지 헤더 | `PageTitleBar` | title="권한 등록", description="새로운 CASL 권한을 등록합니다." |
 | 액션 영역 | `Button` x2 | "목록으로" (ArrowLeft) + "등록" (Save, primary) |
-| 기본 정보 섹션 | `Section + PageTitleBar("기본 정보")` | 이름(Input, 필수), 설명(Textarea) |
-| CASL 정보 섹션 | `Section + PageTitleBar("CASL 정보")` | Subject(Select, 필수), Action(Select, 필수), Fields(Textarea), Conditions(Textarea), 거부 토글(Switch), 거부 사유(Textarea) |
+| 기본 정보 섹션 | `Section + PageTitleBar("기본 정보")` | 이름(Input, 필수), 설명(TextArea) |
+| CASL 정보 섹션 | `Section + PageTitleBar("CASL 정보")` | Subject(Select, 필수), Action(Select, 필수), Fields(TextArea), Conditions(TextArea), 거부 토글(Switch), 거부 사유(TextArea) |
 
 ## 폼 필드
 
 | 필드 | 컴포넌트 | 필수 | 유효성 검사 |
 |------|----------|:----:|------------|
 | name | Input | O | 빈 값 검사 |
-| description | Textarea | X | - |
+| description | TextArea | X | - |
 | subjectId | Select | O | 빈 값 검사 |
 | actionId | Select | O | 빈 값 검사 |
-| fields | Textarea | X | 쉼표 구분 파싱 |
-| conditions | Textarea | X | JSON 형식 검증 |
+| fields | TextArea | X | 쉼표 구분 파싱 |
+| conditions | TextArea | X | JSON 형식 검증 |
 | inverted | Switch | X | - |
-| reason | Textarea | X | inverted=true일 때만 활성화 |
+| reason | TextArea | X | inverted=true일 때만 활성화 |
 
 ## 페이지 상태
 

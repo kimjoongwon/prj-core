@@ -22,7 +22,7 @@ AbilityListPage
     - Input
     - Select x2
     - Select
-      - SelectItem x2
+      - ListBox.Item x2
     - Chip group
     - Button
   - Surface
@@ -47,7 +47,7 @@ AbilityListPage
 | `Input` | `@heroui/react` | 사용자 입력 컨트롤 |
 | `Search` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
 | `Select` | `@heroui/react` | 사용자 입력 컨트롤 |
-| `SelectItem` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `ListBox.Item` | `@heroui/react` | 사용자 입력 컨트롤 |
 | `DataGrid` | `@cocrepo/ui` | 목록/표 데이터 표시 |
 
 ## 구성 요소

@@ -17,7 +17,7 @@ import {
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { useDisclosure } from "../../design-system/primitives";
+import { useOverlayState } from "@heroui/react";
 
 const EMAIL_VERIFICATION_STATUS_OPTIONS = [
 	{ value: "PENDING", label: "대기" },
@@ -84,7 +84,7 @@ export const EmailVerificationListPage = observer(
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
 
-		const resendModal = useDisclosure();
+		const resendModal = useOverlayState();
 		const [verificationToResend, setVerificationToResend] =
 			useState<EmailVerificationDto | null>(null);
 		const rows = verifications ?? [];
@@ -93,12 +93,12 @@ export const EmailVerificationListPage = observer(
 			verification: EmailVerificationDto,
 		): void => {
 			setVerificationToResend(verification);
-			resendModal.onOpen();
+			resendModal.open();
 		};
 
 		const onCloseResendModal = (): void => {
 			setVerificationToResend(null);
-			resendModal.onClose();
+			resendModal.close();
 		};
 
 		const onClickConfirmResend = (): void => {
@@ -120,7 +120,7 @@ export const EmailVerificationListPage = observer(
 					title="이메일 인증"
 					description="회원가입 전 이메일 인증 요청과 발송 상태를 관리합니다."
 				/>
-				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 					<DataGrid
 						config={{
 							entity: "EmailVerification",
@@ -128,11 +128,11 @@ export const EmailVerificationListPage = observer(
 							leftInputs,
 							emptyMessage: "조회된 이메일 인증 요청이 없습니다.",
 						}}
-						rows={rows}
-						totalCount={totalCount}
-						isLoading={isLoading}
-						state={gridState}
-					/>
+							rows={rows}
+							totalCount={totalCount}
+							state={gridState}
+							isLoading={isLoading}
+						/>
 				</Surface>
 				<ConfirmModal
 					isOpen={resendModal.isOpen}
@@ -145,7 +145,7 @@ export const EmailVerificationListPage = observer(
 								<strong>{verificationToResend?.email}</strong> 주소로 인증
 								메일을 다시 발송하시겠습니까?
 							</p>
-							<p className="mt-2 text-sm text-default-400">
+							<p className="mt-2 text-sm text-muted">
 								재발송하면 기존 인증 링크는 새 링크로 교체됩니다.
 							</p>
 						</>

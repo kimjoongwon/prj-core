@@ -6,7 +6,7 @@ import {
 import {
   Separator as HeroSeparator,
   separatorClassNames,
-} from "heroui-native/separator";
+} from "heroui-native";
 type HeroSeparatorProps = ComponentPropsWithoutRef<typeof HeroSeparator>;
 export type SeparatorProps = HeroSeparatorProps & {};
 const SeparatorComponent = forwardRef<

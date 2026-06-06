@@ -2,7 +2,7 @@
 
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 
 export interface UserCreatePageProps {
 	onClickBackButton: () => void;
@@ -20,9 +20,9 @@ export const UserCreatePage = observer(
 					목록으로
 				</Button>
 
-				<div className="flex flex-col items-center justify-center gap-4 rounded-xl bg-content1 p-8">
+				<div className="flex flex-col items-center justify-center gap-4 rounded-xl bg-surface p-8">
 					<h1 className="text-2xl font-bold">회원 등록</h1>
-					<p className="text-default-500">이 기능은 구현 예정입니다.</p>
+					<p className="text-muted">이 기능은 구현 예정입니다.</p>
 				</div>
 			</div>
 		);

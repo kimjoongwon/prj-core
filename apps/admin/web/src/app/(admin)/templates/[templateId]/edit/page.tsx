@@ -11,7 +11,7 @@ import {
 	type TemplateFormData,
 	type VariableEditItem,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -77,18 +77,14 @@ const AdminTemplatesTemplateIdEditRoute = observer(() => {
 	const { mutate: updateTemplate, isPending } = useUpdateTemplate({
 		mutation: {
 			onSuccess: () => {
-				addToast({
-					title: "템플릿 수정 성공",
+				toast.success("템플릿 수정 성공", {
 					description: "템플릿이 성공적으로 수정되었습니다.",
-					color: "success",
 				});
 				router.push(`/templates/${templateId}` as Route);
 			},
 			onError: (error) => {
-				addToast({
-					title: "템플릿 수정 실패",
+				toast.danger("템플릿 수정 실패", {
 					description: error.message || "템플릿 수정 중 오류가 발생했습니다.",
-					color: "danger",
 				});
 			},
 		},

@@ -7,7 +7,7 @@ import {
 import {
   ListGroup as HeroListGroup,
   listGroupClassNames,
-} from "heroui-native/list-group";
+} from "heroui-native";
 import { Text } from "../../data-display/Text";
 type HeroListGroupProps = ComponentPropsWithoutRef<typeof HeroListGroup>;
 type HeroListGroupItemProps = ComponentPropsWithoutRef<

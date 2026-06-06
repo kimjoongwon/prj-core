@@ -1,5 +1,5 @@
-import { ServiceDocumentsRepository } from "@cocrepo/repository";
 import { ServiceDocumentAggregateRoot } from "@cocrepo/aggregate";
+import { ServiceDocumentsRepository } from "@cocrepo/repository";
 import {
 	ServiceDocumentCommandHandlers,
 	ServiceDocumentQueryHandlers,

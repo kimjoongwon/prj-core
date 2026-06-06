@@ -2,7 +2,7 @@
 
 import { HStack, Surface } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { Chip } from "../../../design-system/primitives";
+import { Chip } from "../../../data-display/Chip/Chip";
 import type {
 	CourseManagementSection,
 	CourseManagementSectionId,
@@ -33,8 +33,8 @@ const CourseSectionTabButton = observer(
 				className={[
 					"min-h-28 rounded-xl p-4 text-left transition-colors",
 					isActive
-						? "bg-primary/15 text-foreground"
-						: "text-default-600 hover:bg-content2/70",
+						? "bg-accent/15 text-foreground"
+						: "text-muted hover:bg-surface-secondary/70",
 				].join(" ")}
 			>
 				<HStack alignItems="center" justifyContent="between" fullWidth>
@@ -52,7 +52,7 @@ const CourseSectionTabButton = observer(
 export const CourseSectionTabs = observer(
 	({ activeSectionId, sections, onClickSection }: CourseSectionTabsProps) => {
 		return (
-			<Surface className="rounded-2xl border-divider/80 bg-content1/70 p-3">
+			<Surface className="rounded-2xl border-border/80 bg-surface/70 p-3">
 				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
 					{sections.map((section) => (
 						<CourseSectionTabButton

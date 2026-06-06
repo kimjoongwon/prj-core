@@ -12,7 +12,7 @@ import {
   Slider as HeroSlider,
   sliderClassNames,
   useSlider,
-} from "heroui-native/slider";
+} from "heroui-native";
 type HeroSliderProps = ComponentPropsWithoutRef<typeof HeroSlider>;
 export interface PureSliderProps extends Omit<HeroSliderProps, "children"> {
   children?: ReactNode;

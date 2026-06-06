@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 import { useT } from "../../i18n";
 
 interface TemplateTypeChipCellProps {
@@ -26,7 +26,7 @@ export const TemplateTypeChipCell = observer(function TemplateTypeChipCell({
 }: TemplateTypeChipCellProps) {
 	const t = useT();
 
-	if (!type) return <span className="text-default-400">-</span>;
+	if (!type) return <span className="text-muted">-</span>;
 
 	const config = TYPE_CONFIG[type] ?? {
 		label: type,

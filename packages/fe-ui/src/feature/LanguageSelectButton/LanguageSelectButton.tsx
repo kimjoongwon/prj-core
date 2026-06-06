@@ -3,14 +3,7 @@
 import { LanguageCode } from "@cocrepo/constant";
 import { Check, Globe2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	cn,
-	Dropdown,
-	DropdownItem,
-	DropdownMenu,
-	DropdownTrigger,
-} from "../../design-system/primitives";
+import { Dropdown, cn } from "@heroui/react";
 import { useT } from "../../i18n";
 
 export interface LanguageSelectButtonProps {
@@ -52,53 +45,45 @@ export const LanguageSelectButton = observer(function LanguageSelectButton({
 	};
 
 	return (
-		<Dropdown placement="bottom-end">
-			<DropdownTrigger>
-				<Button
-					variant="light"
-					size="sm"
-					radius={compact ? "lg" : "full"}
+		<Dropdown>
+				<Dropdown.Trigger
 					isDisabled={isDisabled}
 					aria-label={ariaLabel}
-					startContent={<Globe2 className="h-4 w-4" size={16} />}
 					className={cn(
+						"inline-flex items-center justify-center gap-2 transition-colors",
 						compact
 							? "h-10 min-w-0 rounded-2xl border border-slate-200/70 bg-white/72 px-3 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10"
-							: "border-slate-200/70 bg-white/80 text-slate-700 shadow-lg shadow-slate-900/5 backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-slate-950/75 dark:text-slate-100 dark:hover:bg-slate-950",
+							: "h-8 rounded-full border border-slate-200/70 bg-white/80 px-3 text-sm font-medium text-slate-700 shadow-lg shadow-slate-900/5 backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-slate-950/75 dark:text-slate-100 dark:hover:bg-slate-950",
 						className,
 					)}
 				>
+					<Globe2 className="h-4 w-4" size={16} />
 					{compact ? currentOption.shortLabel : t(currentOption.labelKey)}
-				</Button>
-			</DropdownTrigger>
-			<DropdownMenu
-				aria-label={ariaLabel}
-				variant="flat"
-				selectionMode="single"
-				selectedKeys={[value]}
-			>
-				{LANGUAGE_OPTIONS.map((option) => (
-					<DropdownItem
-						key={option.value}
-						textValue={t(option.labelKey)}
-						startContent={
-							option.value === value ? (
-								<Check className="h-4 w-4 text-primary" size={16} />
-							) : (
-								<span className="h-4 w-4" />
-							)
-						}
-						onPress={() => handleSelectLanguage(option.value)}
-					>
-						<span className="flex items-center justify-between gap-4">
-							<span>{t(option.labelKey)}</span>
-							<span className="text-xs font-semibold text-default-400">
-								{option.shortLabel}
+				</Dropdown.Trigger>
+			<Dropdown.Popover placement="bottom end">
+				<Dropdown.Menu aria-label={ariaLabel}>
+					{LANGUAGE_OPTIONS.map((option) => (
+						<Dropdown.Item
+							id={option.value}
+							key={option.value}
+							textValue={t(option.labelKey)}
+							onAction={() => handleSelectLanguage(option.value)}
+						>
+							<span className="flex items-center justify-between gap-4">
+								{option.value === value ? (
+									<Check className="h-4 w-4 text-accent" size={16} />
+								) : (
+									<span className="h-4 w-4" />
+								)}
+								<span>{t(option.labelKey)}</span>
+								<span className="text-xs font-semibold text-muted">
+									{option.shortLabel}
+								</span>
 							</span>
-						</span>
-					</DropdownItem>
-				))}
-			</DropdownMenu>
+						</Dropdown.Item>
+					))}
+				</Dropdown.Menu>
+			</Dropdown.Popover>
 		</Dropdown>
 	);
 });

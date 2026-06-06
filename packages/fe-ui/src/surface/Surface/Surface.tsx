@@ -3,11 +3,9 @@
 import { cva } from "class-variance-authority";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import {
-	elevation as elevationTokens,
-	type ElevationLevel,
-} from "../../design-system/theme/tokens";
 import { translateNode, useT } from "../../i18n";
+import { surfaceElevations } from "./Surface.elevation";
+import type { ElevationLevel } from "./SurfaceElevation.type";
 
 export type SurfacePadding = "none" | "sm" | "md" | "lg";
 export const DEFAULT_SURFACE_PADDING: SurfacePadding = "md";
@@ -28,15 +26,15 @@ export interface SurfaceProps {
 const surfaceVariants = cva("w-full rounded-xl", {
 	variants: {
 		elevation: {
-			flat: `${elevationTokens.flat.background} ${elevationTokens.flat.shadow}`.trim(),
+			flat: `${surfaceElevations.flat.background} ${surfaceElevations.flat.shadow}`.trim(),
 			raised:
-				`${elevationTokens.raised.background} ${elevationTokens.raised.shadow}`.trim(),
+				`${surfaceElevations.raised.background} ${surfaceElevations.raised.shadow}`.trim(),
 			elevated:
-				`${elevationTokens.elevated.background} ${elevationTokens.elevated.shadow} ${elevationTokens.elevated.border}`.trim(),
+				`${surfaceElevations.elevated.background} ${surfaceElevations.elevated.shadow} ${surfaceElevations.elevated.border}`.trim(),
 			floating:
-				`${elevationTokens.floating.background} ${elevationTokens.floating.shadow}`.trim(),
+				`${surfaceElevations.floating.background} ${surfaceElevations.floating.shadow}`.trim(),
 			overlay:
-				`${elevationTokens.overlay.background} ${elevationTokens.overlay.shadow}`.trim(),
+				`${surfaceElevations.overlay.background} ${surfaceElevations.overlay.shadow}`.trim(),
 		},
 		padding: {
 			none: "p-0",

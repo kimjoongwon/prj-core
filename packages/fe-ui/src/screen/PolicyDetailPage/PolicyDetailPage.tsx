@@ -10,17 +10,10 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Edit, Save, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Checkbox,
-	Chip,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	Spinner,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Checkbox } from "../../control/Checkbox/Checkbox";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Modal, Spinner } from "@heroui/react";
 
 export interface PolicyDetailPagePolicy {
 	id: string;
@@ -96,7 +89,7 @@ export const PolicyDetailPage = observer((props: PolicyDetailPageProps) => {
 					<DetailSectionCard>
 						<div className="flex items-center justify-center gap-2 p-8">
 							<Spinner size="sm" />
-							<span className="text-default-500">로딩 중...</span>
+							<span className="text-muted">로딩 중...</span>
 						</div>
 					</DetailSectionCard>
 				</DetailPageSurface>
@@ -117,7 +110,7 @@ export const PolicyDetailPage = observer((props: PolicyDetailPageProps) => {
 				<DetailPageSurface>
 					<DetailSectionCard>
 						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-default-500">정책을 찾을 수 없습니다.</p>
+							<p className="text-muted">정책을 찾을 수 없습니다.</p>
 							<Button variant="flat" onPress={props.onClickBackButton}>
 								목록으로
 							</Button>
@@ -230,7 +223,7 @@ export const PolicyDetailPage = observer((props: PolicyDetailPageProps) => {
 							{props.isLoadingAbilities ? (
 								<div className="flex items-center justify-center gap-2 p-8">
 									<Spinner size="sm" />
-									<span className="text-default-500">
+									<span className="text-muted">
 										Ability를 불러오는 중...
 									</span>
 								</div>
@@ -244,7 +237,7 @@ export const PolicyDetailPage = observer((props: PolicyDetailPageProps) => {
 										return (
 											<div
 												key={ability.id}
-												className="rounded-xl border border-divider bg-background/60 p-4"
+												className="rounded-xl border border-border bg-background/60 p-4"
 											>
 												<div className="flex items-start justify-between gap-4">
 													<div>
@@ -258,10 +251,10 @@ export const PolicyDetailPage = observer((props: PolicyDetailPageProps) => {
 																{isSelected ? "연결됨" : "미연결"}
 															</Chip>
 														</div>
-														<p className="mt-1 text-sm text-default-500">
+														<p className="mt-1 text-sm text-muted">
 															{getAbilityLabel(ability)}
 														</p>
-														<p className="mt-1 text-xs text-default-400">
+														<p className="mt-1 text-xs text-muted">
 															{ability.description || "설명 없음"}
 														</p>
 													</div>
@@ -288,10 +281,10 @@ export const PolicyDetailPage = observer((props: PolicyDetailPageProps) => {
 				isOpen={props.isDeleteModalOpen}
 				onOpenChange={props.onCloseDeleteModal}
 			>
-				<ModalContent>
-					<ModalHeader>정책 삭제</ModalHeader>
-					<ModalBody>이 정책을 삭제하시겠습니까?</ModalBody>
-					<ModalFooter>
+				<Modal.Backdrop><Modal.Container><Modal.Dialog>
+					<Modal.Header>정책 삭제</Modal.Header>
+					<Modal.Body>이 정책을 삭제하시겠습니까?</Modal.Body>
+					<Modal.Footer>
 						<Button variant="flat" onPress={props.onCloseDeleteModal}>
 							취소
 						</Button>
@@ -302,8 +295,8 @@ export const PolicyDetailPage = observer((props: PolicyDetailPageProps) => {
 						>
 							삭제
 						</Button>
-					</ModalFooter>
-				</ModalContent>
+					</Modal.Footer>
+				</Modal.Dialog></Modal.Container></Modal.Backdrop>
 			</Modal>
 		</DetailPage>
 	);
@@ -311,8 +304,8 @@ export const PolicyDetailPage = observer((props: PolicyDetailPageProps) => {
 
 function Info({ label, value }: { label: string; value: string }) {
 	return (
-		<div className="rounded-lg border border-divider bg-background/60 p-3">
-			<p className="text-xs text-default-500">{label}</p>
+		<div className="rounded-lg border border-border bg-background/60 p-3">
+			<p className="text-xs text-muted">{label}</p>
 			<p className="mt-1 break-all text-sm font-medium">{value}</p>
 		</div>
 	);

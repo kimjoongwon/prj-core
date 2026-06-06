@@ -9,7 +9,7 @@ import {
   SubMenu as HeroSubMenu,
   subMenuClassNames,
   useSubMenu,
-} from "heroui-native/sub-menu";
+} from "heroui-native";
 import { getTextContent, Text } from "../../data-display/Text";
 type HeroSubMenuProps = ComponentPropsWithoutRef<typeof HeroSubMenu>;
 type HeroSubMenuContentProps = ComponentPropsWithoutRef<

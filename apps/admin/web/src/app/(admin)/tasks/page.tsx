@@ -6,7 +6,7 @@ import {
 	useGetTasks,
 } from "@cocrepo/api/core/tasks";
 import { TaskListPage } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -53,19 +53,15 @@ export default observer(function TasksPageRoute() {
 					await queryClient.invalidateQueries({
 						queryKey: getGetTasksQueryKey(),
 					});
-					addToast({
-						title: "삭제 성공",
+					toast.success("삭제 성공", {
 						description: "태스크와 운동 detail이 삭제되었습니다.",
-						color: "success",
 					});
 				} catch (error) {
-					addToast({
-						title: "삭제 실패",
+					toast.danger("삭제 실패", {
 						description:
 							error instanceof Error
 								? error.message
 								: "삭제 중 오류가 발생했습니다. 루틴에서 사용 중인 태스크는 삭제할 수 없습니다.",
-						color: "danger",
 					});
 					throw error;
 				}

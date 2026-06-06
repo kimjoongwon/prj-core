@@ -9,6 +9,6 @@ export function toAbsoluteOidcUrl(
 		return redirectTo;
 	}
 	const oidcConfig = configService.get<OidcConfigLike>("oidc");
-	const issuer = oidcConfig?.issuer || "http://localhost:3007";
+	const issuer = oidcConfig?.issuer || "http://localhost:3000";
 	return `${issuer}${redirectTo}`;
 }

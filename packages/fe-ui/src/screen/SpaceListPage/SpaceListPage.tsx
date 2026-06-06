@@ -17,7 +17,7 @@ import {
 import { Building2 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -84,7 +84,7 @@ function SpacesPageFallback() {
 				title="공간 목록"
 				description="시스템에 등록된 공간과 시설 detail을 관리합니다."
 			/>
-			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+			<Surface className="h-32 rounded-2xl border-border/80 bg-surface/70">
 				{null}
 			</Surface>
 		</div>
@@ -140,7 +140,7 @@ export const SpaceListPage = observer(
 						</Button>
 					}
 				/>
-				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 					<DataGrid
 						config={{
 							entity: "Space",
@@ -150,7 +150,6 @@ export const SpaceListPage = observer(
 						}}
 						rows={filteredRows}
 						totalCount={totalCount}
-						isLoading={false}
 						state={gridState}
 					/>
 				</Surface>

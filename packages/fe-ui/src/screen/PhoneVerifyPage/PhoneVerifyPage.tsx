@@ -62,7 +62,7 @@ export const PhoneVerifyPage = observer(
 			<VStack fullWidth gap={8} className="p-4">
 				<VStack fullWidth gap={2}>
 					<h3 className="text-2xl font-bold">전화번호 인증</h3>
-					<span className="text-sm text-default-500">
+					<span className="text-sm text-muted">
 						회원가입을 위해 전화번호를 인증해주세요.
 					</span>
 				</VStack>

@@ -2,15 +2,12 @@
 
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Input,
-	Select,
-	SelectItem,
-	Spinner,
-	Switch,
-	Textarea,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input/Input";
+import { Select } from "../../control/Select/Select";
+import { Spinner, ListBox } from "@heroui/react";
+import { Switch } from "../../control/Switch/Switch";
+import { TextArea } from "../../control/TextArea/TextArea";
 import {
 	FormPage,
 	FormPageSurface,
@@ -93,7 +90,7 @@ export const AbilityFormPage = observer((props: AbilityFormPageProps) => {
 					<FormSectionCard>
 						<div className="flex items-center justify-center gap-2 p-8">
 							<Spinner size="sm" />
-							<span className="text-default-500">로딩 중...</span>
+							<span className="text-muted">로딩 중...</span>
 						</div>
 					</FormSectionCard>
 				</FormPageSurface>
@@ -114,7 +111,7 @@ export const AbilityFormPage = observer((props: AbilityFormPageProps) => {
 				<FormPageSurface>
 					<FormSectionCard>
 						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-default-500">권한을 찾을 수 없습니다.</p>
+							<p className="text-muted">권한을 찾을 수 없습니다.</p>
 							<Button variant="flat" onPress={props.onClickNotFoundBackButton}>
 								목록으로
 							</Button>
@@ -171,7 +168,7 @@ export const AbilityFormPage = observer((props: AbilityFormPageProps) => {
 										isEditMode ? "권한 이름은 수정할 수 없습니다." : undefined
 									}
 								/>
-								<Textarea
+								<TextArea
 									label="설명"
 									placeholder="권한에 대한 설명을 입력하세요"
 									value={props.form.description}
@@ -184,39 +181,45 @@ export const AbilityFormPage = observer((props: AbilityFormPageProps) => {
 					<FormSectionCard>
 						<FormSection top={<PageTitleBar level={2} title="CASL 정보" />}>
 							<div className="grid grid-cols-1 gap-4">
-								<Select
-									label="Subject"
-									placeholder="Subject를 선택하세요"
-									selectedKeys={
-										props.form.subjectId ? [props.form.subjectId] : []
-									}
-									onSelectionChange={(keys) => {
-										const selected = Array.from(keys)[0] as string;
-										props.onChange.onChangeSubjectId(selected || "");
-									}}
-									isRequired={!isEditMode}
-								>
-									{props.subjects.map((subject) => (
-										<SelectItem key={subject.id}>{subject.label}</SelectItem>
-									))}
-								</Select>
-								<Select
-									label="Action"
-									placeholder="Action을 선택하세요"
-									selectedKeys={
-										props.form.actionId ? [props.form.actionId] : []
-									}
-									onSelectionChange={(keys) => {
-										const selected = Array.from(keys)[0] as string;
-										props.onChange.onChangeActionId(selected || "");
-									}}
-									isRequired={!isEditMode}
-								>
-									{props.actions.map((action) => (
-										<SelectItem key={action.id}>{action.label}</SelectItem>
-									))}
-								</Select>
-								<Textarea
+									<Select
+										label="Subject"
+										placeholder="Subject를 선택하세요"
+										value={props.form.subjectId || null}
+										onChange={(value) => {
+											props.onChange.onChangeSubjectId(String(value ?? ""));
+										}}
+										isRequired={!isEditMode}
+									>
+										{props.subjects.map((subject) => (
+											<ListBox.Item
+												key={subject.id}
+												id={subject.id}
+												textValue={subject.label}
+											>
+												{subject.label}
+											</ListBox.Item>
+										))}
+									</Select>
+									<Select
+										label="Action"
+										placeholder="Action을 선택하세요"
+										value={props.form.actionId || null}
+										onChange={(value) => {
+											props.onChange.onChangeActionId(String(value ?? ""));
+										}}
+										isRequired={!isEditMode}
+									>
+										{props.actions.map((action) => (
+											<ListBox.Item
+												key={action.id}
+												id={action.id}
+												textValue={action.label}
+											>
+												{action.label}
+											</ListBox.Item>
+										))}
+									</Select>
+								<TextArea
 									label="Fields"
 									placeholder="쉼표로 구분하여 필드를 입력하세요. 예: name, email, phone (빈 값 = 전체 필드)"
 									value={props.form.fields}
@@ -224,7 +227,7 @@ export const AbilityFormPage = observer((props: AbilityFormPageProps) => {
 									minRows={2}
 									description="빈 값이면 전체 필드에 대한 권한입니다."
 								/>
-								<Textarea
+								<TextArea
 									label="Conditions (JSON)"
 									placeholder='{"userId": "{{ user.id }}"}'
 									value={props.form.conditions}
@@ -232,10 +235,10 @@ export const AbilityFormPage = observer((props: AbilityFormPageProps) => {
 									minRows={4}
 									description="ABAC 조건을 JSON 형식으로 입력하세요."
 								/>
-								<div className="flex items-center justify-between rounded-lg border border-divider p-4">
+								<div className="flex items-center justify-between rounded-lg border border-border p-4">
 									<div>
 										<p className="font-medium">거부 권한 (cannot)</p>
-										<p className="text-sm text-default-500">
+										<p className="text-sm text-muted">
 											활성화 시 권한을 거부합니다.
 										</p>
 									</div>
@@ -245,7 +248,7 @@ export const AbilityFormPage = observer((props: AbilityFormPageProps) => {
 									/>
 								</div>
 								{props.form.inverted ? (
-									<Textarea
+									<TextArea
 										label="거부 사유"
 										placeholder="권한을 거부하는 이유를 입력하세요"
 										value={props.form.reason}

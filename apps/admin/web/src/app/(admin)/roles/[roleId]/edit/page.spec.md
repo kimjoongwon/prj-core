@@ -72,7 +72,7 @@
 |------|------|------|:----:|:---------:|-------------|
 | name | 역할 식별자 | Input | - | X (isReadOnly, isDisabled) | - |
 | displayName | 표시명 | Input | X | O | 최대 50자 |
-| description | 설명 | Textarea | X | O | 최대 200자, minRows=3 |
+| description | 설명 | TextArea | X | O | 최대 200자, minRows=3 |
 
 ## 페이지 상태
 

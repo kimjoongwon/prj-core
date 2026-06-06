@@ -10,7 +10,7 @@ import {
 	useToggleTemplateStatus,
 } from "@cocrepo/api/core/templates";
 import { type PreviewResult, TemplateDetailPage } from "@cocrepo/ui";
-import { addToast, useDisclosure } from "@cocrepo/ui";
+import { toast, useOverlayState } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -36,9 +36,9 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 	const { templateId } = useParams<TemplateDetailPageParams>();
 	const router = useRouter();
 	const queryClient = useQueryClient();
-	const deleteModal = useDisclosure();
-	const previewModal = useDisclosure();
-	const sendTestModal = useDisclosure();
+	const deleteModal = useOverlayState();
+	const previewModal = useOverlayState();
+	const sendTestModal = useOverlayState();
 
 	const { data: response, isLoading } = useGetTemplate(templateId);
 	const template = response?.data as TemplateWithVariables | undefined;
@@ -62,19 +62,15 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 			{ templateId },
 			{
 				onSuccess: () => {
-					addToast({
-						title: "삭제 성공",
+					toast.success("삭제 성공", {
 						description: "템플릿이 삭제되었습니다.",
-						color: "success",
 					});
-					deleteModal.onClose();
+					deleteModal.close();
 					router.push("/templates" as Route);
 				},
 				onError: (error) => {
-					addToast({
-						title: "삭제 실패",
+					toast.danger("삭제 실패", {
 						description: error.message || "삭제 중 오류가 발생했습니다.",
-						color: "danger",
 					});
 				},
 			},
@@ -86,20 +82,16 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 			{ templateId },
 			{
 				onSuccess: () => {
-					addToast({
-						title: "상태 변경 성공",
+					toast.success("상태 변경 성공", {
 						description: "템플릿 상태가 변경되었습니다.",
-						color: "success",
 					});
 					queryClient.invalidateQueries({
 						queryKey: getGetTemplateQueryKey(templateId),
 					});
 				},
 				onError: (error) => {
-					addToast({
-						title: "상태 변경 실패",
+					toast.danger("상태 변경 실패", {
 						description: error.message || "상태 변경 중 오류가 발생했습니다.",
-						color: "danger",
 					});
 				},
 			},
@@ -168,14 +160,14 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 			isTogglePending={isToggling}
 			onClickBackButton={onClickBackButton}
 			onClickEditButton={onClickEditButton}
-			onClickDeleteButton={deleteModal.onOpen}
+			onClickDeleteButton={deleteModal.open}
 			onClickDeleteConfirmButton={onClickDeleteConfirmButton}
-			onClickDeleteCancelButton={deleteModal.onClose}
+			onClickDeleteCancelButton={deleteModal.close}
 			onClickToggleButton={onClickToggleButton}
-			onClickPreviewButton={previewModal.onOpen}
-			onClickPreviewCloseButton={previewModal.onClose}
-			onClickSendTestButton={sendTestModal.onOpen}
-			onClickSendTestCloseButton={sendTestModal.onClose}
+			onClickPreviewButton={previewModal.open}
+			onClickPreviewCloseButton={previewModal.close}
+			onClickSendTestButton={sendTestModal.open}
+			onClickSendTestCloseButton={sendTestModal.close}
 			onSubmitPreviewTemplate={onSubmitPreviewTemplate}
 			onSubmitSendTestTemplate={onSubmitSendTestTemplate}
 		/>

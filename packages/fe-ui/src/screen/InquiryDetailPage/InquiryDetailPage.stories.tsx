@@ -9,7 +9,24 @@ const defaultArgs = {
 	bootstrap: {
 		aiSchemas: [],
 		fieldMeta: {},
-		options: {},
+		options: {
+			category: [
+				{ label: "일반", value: "GENERAL" },
+				{ label: "배송", value: "DELIVERY" },
+			],
+			channel: [
+				{ label: "웹", value: "WEB" },
+				{ label: "이메일", value: "EMAIL" },
+			],
+			priority: [
+				{ label: "낮음", value: "LOW" },
+				{ label: "높음", value: "HIGH" },
+			],
+			status: [
+				{ label: "신규", value: "NEW" },
+				{ label: "열림", value: "OPEN" },
+			],
+		},
 		ui: { readOnlyPaths: [], hiddenPaths: [], disabledPaths: [] },
 	},
 	deleteModalOpen: false,

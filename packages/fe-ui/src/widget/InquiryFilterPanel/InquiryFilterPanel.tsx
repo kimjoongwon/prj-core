@@ -5,7 +5,9 @@ import { RotateCcw, Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { DateRangePicker } from "../../control/DateRangePicker/DateRangePicker";
 import { Select } from "../../control/Select/Select";
-import { Button, Card, CardBody, Input } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Card } from "@heroui/react";
+import { Input } from "../../control/Input/Input";
 
 export interface InquiryFilterValue {
 	/** 상태 필터 */
@@ -92,8 +94,11 @@ export const InquiryFilterPanel = observer(
 		};
 
 		const handleSelectChange = (field: keyof InquiryFilterValue) => {
-			return (selectedValue: string) => {
-				handleFieldChange(field, selectedValue || undefined);
+			return (selectedValue: string | number | null) => {
+				handleFieldChange(
+					field,
+					selectedValue == null ? undefined : String(selectedValue) || undefined,
+				);
 			};
 		};
 
@@ -112,17 +117,17 @@ export const InquiryFilterPanel = observer(
 		);
 
 		return (
-			<Card className={`bg-content1 ${className}`} shadow="sm">
-				<CardBody className="gap-4 p-4">
+			<Card className={`bg-surface ${className}`}>
+				<Card.Content className="gap-4 p-4">
 					{/* 검색 */}
 					<Input
 						placeholder={searchPlaceholder}
 						size="sm"
 						value={value.search || ""}
 						onValueChange={(v) => handleFieldChange("search", v || undefined)}
-						startContent={<Search className="size-4 text-default-400" />}
+						startContent={<Search className="size-4 text-muted" />}
 						classNames={{
-							input: "bg-content2",
+							input: "bg-surface-secondary",
 						}}
 					/>
 
@@ -194,7 +199,7 @@ export const InquiryFilterPanel = observer(
 							{resetLabel}
 						</Button>
 					</div>
-				</CardBody>
+				</Card.Content>
 			</Card>
 		);
 	},

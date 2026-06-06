@@ -10,7 +10,7 @@ import {
   dialogClassNames,
   useDialog,
   useDialogAnimation,
-} from "heroui-native/dialog";
+} from "heroui-native";
 import { Text } from "../../data-display/Text";
 type HeroDialogProps = ComponentPropsWithoutRef<typeof HeroDialog>;
 type HeroDialogContentProps = ComponentPropsWithoutRef<

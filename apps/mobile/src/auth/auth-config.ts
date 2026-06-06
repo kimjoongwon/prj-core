@@ -1,8 +1,5 @@
 import { Platform } from "react-native";
 
-const DEFAULT_IDP_API_BASE_URL =
-	Platform.OS === "android" ? "http://10.0.2.2:3007" : "http://localhost:3007";
-
 const DEFAULT_CORE_API_BASE_URL =
 	Platform.OS === "android" ? "http://10.0.2.2:3006" : "http://localhost:3006";
 
@@ -48,11 +45,13 @@ export const MOBILE_AUTH = {
 		"CORE_API_URL",
 		"CORE_API_INTERNAL_URL",
 	]),
-	idpApiBaseUrl: resolveMobileBaseUrl(DEFAULT_IDP_API_BASE_URL, [
-		"EXPO_PUBLIC_IDP_API_URL",
-		"EXPO_PUBLIC_IDP_API_INTERNAL_URL",
-		"IDP_API_URL",
-		"IDP_API_INTERNAL_URL",
+	idpApiBaseUrl: resolveMobileBaseUrl(DEFAULT_CORE_API_BASE_URL, [
+		"EXPO_PUBLIC_AUTH_API_BASE_URL",
+		"EXPO_PUBLIC_CORE_API_URL",
+		"EXPO_PUBLIC_CORE_API_INTERNAL_URL",
+		"EXPO_PUBLIC_CORE_API_BASE_URL",
+		"CORE_API_URL",
+		"CORE_API_INTERNAL_URL",
 	]),
 	loginClientId: "user-mobile",
 	authenticatedHomePath: "/",

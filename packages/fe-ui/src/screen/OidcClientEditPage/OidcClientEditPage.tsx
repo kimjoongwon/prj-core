@@ -17,7 +17,7 @@ import {
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 
 export interface OidcClientEditPageFormState {
 	name: string;
@@ -201,7 +201,7 @@ export const OidcClientEditPage = observer(
 					<FormPageSurface>
 						<FormSectionCard>
 							<div className="flex items-center justify-center p-8">
-								<span className="text-default-500">로딩 중...</span>
+								<span className="text-muted">로딩 중...</span>
 							</div>
 						</FormSectionCard>
 					</FormPageSurface>
@@ -225,7 +225,7 @@ export const OidcClientEditPage = observer(
 					<FormPageSurface>
 						<FormSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">
+								<p className="text-muted">
 									클라이언트를 찾을 수 없습니다.
 								</p>
 								<Button variant="flat" onPress={onClickListButton}>

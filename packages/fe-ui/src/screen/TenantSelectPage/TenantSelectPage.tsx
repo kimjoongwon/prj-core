@@ -2,16 +2,8 @@
 
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import {
-	Button,
-	Listbox,
-	ListboxItem,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { ListBox, Modal, useOverlayState } from "@heroui/react";
 
 /** 테넌트 정보 */
 interface Tenant {
@@ -47,6 +39,7 @@ export interface TenantSelectPageProps {
 export const TenantSelectPage = observer(
 	({ tenants, onSelect }: TenantSelectPageProps) => {
 		const [selectedTenant, setSelectedTenant] = useState("");
+		const modalState = useOverlayState({ isOpen: true });
 
 		const handleSelect = () => {
 			if (!selectedTenant) {
@@ -57,11 +50,11 @@ export const TenantSelectPage = observer(
 		};
 
 		return (
-			<Modal isOpen={true} size="lg">
-				<ModalContent>
-					<ModalHeader>그라운드 선택</ModalHeader>
-					<ModalBody>
-						<Listbox
+			<Modal state={modalState}>
+				<Modal.Backdrop><Modal.Container size="lg"><Modal.Dialog>
+					<Modal.Header>그라운드 선택</Modal.Header>
+					<Modal.Body>
+						<ListBox
 							aria-label="그라운드 선택"
 							selectionMode="single"
 							selectedKeys={
@@ -71,12 +64,18 @@ export const TenantSelectPage = observer(
 								const selected = Array.from(keys)[0] as string;
 								setSelectedTenant(selected);
 							}}
-						>
-							{tenants.map((tenant) => (
-								<ListboxItem key={tenant.id}>{tenant.name}</ListboxItem>
-							))}
-						</Listbox>
-						<ModalFooter>
+							>
+								{tenants.map((tenant) => (
+									<ListBox.Item
+										key={tenant.id}
+										id={tenant.id}
+										textValue={tenant.name}
+									>
+										{tenant.name}
+									</ListBox.Item>
+								))}
+							</ListBox>
+						<Modal.Footer>
 							<Button
 								color="primary"
 								size="md"
@@ -85,9 +84,9 @@ export const TenantSelectPage = observer(
 							>
 								선택
 							</Button>
-						</ModalFooter>
-					</ModalBody>
-				</ModalContent>
+						</Modal.Footer>
+					</Modal.Body>
+				</Modal.Dialog></Modal.Container></Modal.Backdrop>
 			</Modal>
 		);
 	},

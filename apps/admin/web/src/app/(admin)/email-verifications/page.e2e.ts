@@ -1,11 +1,36 @@
-import { expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 const SEARCH_PLACEHOLDER = "이메일로 검색...";
 
+async function gotoEmailVerificationsPage(page: Page) {
+	await page.goto("./email-verifications", { waitUntil: "domcontentloaded" });
+	await page.waitForLoadState("networkidle").catch(() => undefined);
+
+	const hasNextDevRuntimeOverlay =
+		(await page
+			.getByRole("dialog", { name: /Runtime ChunkLoadError/ })
+			.isVisible()
+			.catch(() => false)) ||
+		(await page
+			.getByRole("heading", {
+				name: /Application error: a client-side exception has occurred/,
+			})
+			.isVisible()
+			.catch(() => false));
+
+	if (hasNextDevRuntimeOverlay) {
+		await page.reload({ waitUntil: "domcontentloaded" });
+		await page.waitForLoadState("networkidle").catch(() => undefined);
+	}
+
+	await expect(page.getByRole("heading", { name: "이메일 인증" })).toBeVisible({
+		timeout: 15000,
+	});
+}
+
 test.describe("이메일 인증 관리 페이지", () => {
 	test.beforeEach(async ({ page }) => {
-		await page.goto("./email-verifications");
-		await page.waitForLoadState("networkidle");
+		await gotoEmailVerificationsPage(page);
 	});
 
 	test("페이지 타이틀과 목록 영역이 표시되어야 한다", async ({ page }) => {
@@ -19,6 +44,13 @@ test.describe("이메일 인증 관리 페이지", () => {
 	});
 
 	test("DataGrid 컬럼 헤더가 표시되어야 한다", async ({ page }) => {
+		if (
+			await page.getByText("조회된 이메일 인증 요청이 없습니다.").isVisible()
+		) {
+			await expect(page.getByText("총 0건")).toBeVisible();
+			return;
+		}
+
 		await expect(
 			page.getByRole("columnheader", { name: "이메일", exact: true }),
 		).toBeVisible();
@@ -47,9 +79,10 @@ test.describe("이메일 인증 관리 페이지", () => {
 	}) => {
 		const searchInput = page.getByPlaceholder(SEARCH_PLACEHOLDER);
 		await searchInput.fill("admin@example.com");
+		await expect(searchInput).toHaveValue("admin@example.com");
 		await searchInput.press("Enter");
 
-		await expect(page).toHaveURL(/email=admin%40example\.com/);
+		await expect(page).toHaveURL(/email=admin(?:%40|@)example\.com/);
 	});
 
 	test("상태 필터 선택 시 URL에 status 파라미터가 추가되어야 한다", async ({

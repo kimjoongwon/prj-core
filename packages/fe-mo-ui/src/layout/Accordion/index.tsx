@@ -11,7 +11,7 @@ import {
   accordionClassNames,
   useAccordion,
   useAccordionItem,
-} from "heroui-native/accordion";
+} from "heroui-native";
 import { getTextContent, Text } from "../../data-display/Text";
 type HeroAccordionProps = ComponentPropsWithoutRef<typeof HeroAccordion>;
 type HeroAccordionItemProps = ComponentPropsWithoutRef<

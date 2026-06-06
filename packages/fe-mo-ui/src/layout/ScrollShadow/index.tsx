@@ -6,7 +6,7 @@ import {
 import {
   ScrollShadow as HeroScrollShadow,
   scrollShadowClassNames,
-} from "heroui-native/scroll-shadow";
+} from "heroui-native";
 type HeroScrollShadowProps = ComponentPropsWithoutRef<typeof HeroScrollShadow>;
 export type ScrollShadowProps = HeroScrollShadowProps & {};
 const ScrollShadowComponent = forwardRef<

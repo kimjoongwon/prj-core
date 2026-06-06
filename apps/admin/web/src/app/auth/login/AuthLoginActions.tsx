@@ -20,7 +20,7 @@ export const AuthLoginActions = observer(function AuthLoginActions() {
 					onChange={(languageCode) => {
 						localeStore.setLanguageCode(languageCode);
 					}}
-					className="border-divider bg-content1/80 text-foreground shadow-sm backdrop-blur-md hover:bg-content1"
+					className="border-border bg-surface/80 text-foreground shadow-sm backdrop-blur-md hover:bg-surface"
 				/>
 			)}
 			<ThemeToggleButton />

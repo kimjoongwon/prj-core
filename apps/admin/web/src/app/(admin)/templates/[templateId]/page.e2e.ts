@@ -1,3 +1,4 @@
+import { getAdminSpaceRequestHeaders } from "@cocrepo/e2e";
 import { expect, test } from "@playwright/test";
 
 function buildUniqueTemplateCode() {
@@ -6,7 +7,7 @@ function buildUniqueTemplateCode() {
 
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const SPACE_HEADERS = { "x-space-id": SYSTEM_SPACE_ID };
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_SPACE_ID);
 
 test.describe("메시지 템플릿 상세 페이지", () => {
 	// ── E2E-001: 활성 상태 토글 ──
@@ -19,7 +20,7 @@ test.describe("메시지 템플릿 상세 페이지", () => {
 			const createResp = await page.request.post(
 				"http://localhost:3000/api/v1/templates",
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						type: "SMS",
 						code: TEST_CODE,
@@ -49,7 +50,7 @@ test.describe("메시지 템플릿 상세 페이지", () => {
 					resp.url().includes("/toggle-status") &&
 					resp.request().method() === "PATCH",
 			);
-			await toggle.click();
+			await toggle.press("Space");
 			const toggleResp = await toggleResponse;
 
 			// Then: 200 OK 응답 확인
@@ -58,7 +59,7 @@ test.describe("메시지 템플릿 상세 페이지", () => {
 			// Cleanup: 템플릿 삭제
 			await page.request.delete(
 				`http://localhost:3000/api/v1/templates/${templateId}`,
-				{ headers: SPACE_HEADERS },
+				{ headers: getSpaceHeaders() },
 			);
 		});
 	});

@@ -14,7 +14,7 @@ import {
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { Spinner } from "../../design-system/primitives";
+import { Spinner } from "@heroui/react";
 
 export interface GroundEditPageProps {
 	groundName?: string;
@@ -73,7 +73,7 @@ export const GroundEditPage = observer(
 						<FormSectionCard>
 							<div className="flex items-center justify-center gap-2 p-8">
 								<Spinner size="sm" />
-								<span className="text-default-500">{t("로딩 중...")}</span>
+								<span className="text-muted">{t("로딩 중...")}</span>
 							</div>
 						</FormSectionCard>
 					</FormPageSurface>
@@ -94,7 +94,7 @@ export const GroundEditPage = observer(
 					<FormPageSurface>
 						<FormSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">
+								<p className="text-muted">
 									{t("시설 detail을 찾을 수 없습니다.")}
 								</p>
 								<Button variant="flat" onPress={onClickCancelButton}>
@@ -178,13 +178,15 @@ export const GroundEditPage = observer(
 									isDisabled
 									description="사업자등록번호는 수정할 수 없습니다."
 								/>
-								<Select
-									label="콘텐츠 언어"
-									placeholder="운영 리소스 작성 언어를 선택하세요"
-									value={contentLanguageCode}
-									onChange={onChangeContentLanguageSelect}
-									options={CONTENT_LANGUAGE_OPTIONS.map((language) => ({
-										value: language.code,
+									<Select
+										label="콘텐츠 언어"
+										placeholder="운영 리소스 작성 언어를 선택하세요"
+										value={contentLanguageCode}
+										onChange={(value) =>
+											onChangeContentLanguageSelect(String(value ?? ""))
+										}
+										options={CONTENT_LANGUAGE_OPTIONS.map((language) => ({
+											value: language.code,
 										label: language.label,
 									}))}
 									isRequired

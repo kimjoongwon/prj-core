@@ -6,7 +6,7 @@ import {
 import {
   CloseButton as HeroCloseButton,
   closeButtonClassNames,
-} from "heroui-native/close-button";
+} from "heroui-native";
 type HeroCloseButtonProps = ComponentPropsWithoutRef<typeof HeroCloseButton>;
 export type CloseButtonProps = HeroCloseButtonProps & {};
 const CloseButtonComponent = forwardRef<

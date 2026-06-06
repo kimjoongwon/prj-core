@@ -11,7 +11,7 @@ import {
 	useGetTimelineById,
 } from "@cocrepo/api/core/timelines";
 import { TimelineDetailPage } from "@cocrepo/ui";
-import { addToast, useDisclosure } from "@cocrepo/ui";
+import { toast, useOverlayState } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -98,8 +98,8 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 		deleteSessionTargetId: "",
 		deleteSessionTargetName: "",
 	}));
-	const deleteTimelineModal = useDisclosure();
-	const deleteSessionModal = useDisclosure();
+	const deleteTimelineModal = useOverlayState();
+	const deleteSessionModal = useOverlayState();
 	const { data: timelineResponse } = useGetTimelineById(timelineId);
 	const timeline = timelineResponse?.data as TimelineDto | undefined;
 	const { data: sessionsResponse, refetch: refetchSessions } = useGetSessions(
@@ -120,29 +120,25 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 	const onClickEditButton = () => {
 		router.push(`/timelines/${timelineId}/edit` as Route);
 	};
-	const onClickDeleteTimelineButton = () => deleteTimelineModal.onOpen();
+	const onClickDeleteTimelineButton = () => deleteTimelineModal.open();
 	const onClickDeleteTimelineConfirmButton = () => {
 		deleteTimeline(
 			{ timelineId },
 			{
 				onSuccess: () => {
-					addToast({
-						title: "삭제 성공",
+					toast.success("삭제 성공", {
 						description: "타임라인이 삭제되었습니다.",
-						color: "success",
 					});
-					deleteTimelineModal.onClose();
+					deleteTimelineModal.close();
 					queryClient.invalidateQueries({
 						queryKey: getGetTimelinesQueryKey(),
 					});
 					router.push("/timelines" as Route);
 				},
 				onError: () => {
-					addToast({
-						title: "삭제 실패",
+					toast.danger("삭제 실패", {
 						description:
 							"타임라인 삭제 중 오류가 발생했습니다. 세션이 있는 타임라인은 삭제할 수 없습니다.",
-						color: "danger",
 					});
 				},
 			},
@@ -163,7 +159,7 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 		const session = sessions.find((item) => item.id === sessionId);
 		state.deleteSessionTargetId = sessionId;
 		state.deleteSessionTargetName = session?.name ?? "";
-		deleteSessionModal.onOpen();
+		deleteSessionModal.open();
 	};
 	const onClickDeleteSessionConfirmButton = () => {
 		if (!state.deleteSessionTargetId) return;
@@ -171,12 +167,8 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 			{ timelineId, sessionId: state.deleteSessionTargetId },
 			{
 				onSuccess: () => {
-					addToast({
-						title: "삭제 성공",
-						description: "세션이 삭제되었습니다.",
-						color: "success",
-					});
-					deleteSessionModal.onClose();
+					toast.success("삭제 성공", { description: "세션이 삭제되었습니다." });
+					deleteSessionModal.close();
 					state.deleteSessionTargetId = "";
 					state.deleteSessionTargetName = "";
 					queryClient.invalidateQueries({
@@ -185,11 +177,9 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 					refetchSessions();
 				},
 				onError: () => {
-					addToast({
-						title: "삭제 실패",
+					toast.danger("삭제 실패", {
 						description:
 							"세션 삭제 중 오류가 발생했습니다. 프로그램이 연결된 세션은 삭제할 수 없습니다.",
-						color: "danger",
 					});
 				},
 			},
@@ -231,13 +221,13 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 			onClickEditButton={onClickEditButton}
 			onClickDeleteTimelineButton={onClickDeleteTimelineButton}
 			onClickDeleteTimelineConfirmButton={onClickDeleteTimelineConfirmButton}
-			onClickDeleteTimelineCancelButton={deleteTimelineModal.onClose}
+			onClickDeleteTimelineCancelButton={deleteTimelineModal.close}
 			onClickCreateSessionButton={onClickCreateSessionButton}
 			onClickSessionNameButton={onClickSessionNameButton}
 			onClickCreateProgramButton={onClickCreateProgramButton}
 			onClickDeleteSessionButton={onClickDeleteSessionButton}
 			onClickDeleteSessionConfirmButton={onClickDeleteSessionConfirmButton}
-			onClickDeleteSessionCancelButton={deleteSessionModal.onClose}
+			onClickDeleteSessionCancelButton={deleteSessionModal.close}
 		/>
 	);
 });

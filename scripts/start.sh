@@ -63,19 +63,15 @@ ensure_shared_local_env() {
 
   export ADMIN_WEB_URL="${ADMIN_WEB_URL:-http://localhost:${ADMIN_WEB_PORT:-3000}}"
   export CORE_API_URL="${CORE_API_URL:-http://localhost:${CORE_API_PORT:-3006}}"
-  export IDP_API_URL="${IDP_API_URL:-http://localhost:${IDP_API_PORT:-3007}}"
-  export IDP_WEB_URL="${IDP_WEB_URL:-http://localhost:${IDP_WEB_PORT:-3008}}"
   export STORYBOOK_URL="${STORYBOOK_URL:-http://localhost:${STORYBOOK_PORT:-6006}}"
 
   export CORE_API_INTERNAL_URL="${CORE_API_INTERNAL_URL:-$CORE_API_URL}"
-  export IDP_API_INTERNAL_URL="${IDP_API_INTERNAL_URL:-$IDP_API_URL}"
-  export NEXT_PUBLIC_IDP_CLIENT_URL="${NEXT_PUBLIC_IDP_CLIENT_URL:-$IDP_WEB_URL}"
   export NEXT_PUBLIC_WS_URL="${NEXT_PUBLIC_WS_URL:-ws://localhost:${CORE_API_PORT:-3006}}"
-  export OIDC_ISSUER="${OIDC_ISSUER:-$IDP_API_URL}"
-  export OIDC_JWKS_URI="${OIDC_JWKS_URI:-${IDP_API_URL}/oidc/jwks}"
+  export OIDC_ISSUER="${OIDC_ISSUER:-$ADMIN_WEB_URL}"
+  export OIDC_JWKS_URI="${OIDC_JWKS_URI:-${ADMIN_WEB_URL}/oidc/jwks}"
   export OIDC_ADMIN_BASE_URL="${OIDC_ADMIN_BASE_URL:-$ADMIN_WEB_URL}"
+  export OIDC_INTERACTION_BASE_URL="${OIDC_INTERACTION_BASE_URL:-${ADMIN_WEB_URL}/admin}"
   export OIDC_STORYBOOK_BASE_URL="${OIDC_STORYBOOK_BASE_URL:-$STORYBOOK_URL}"
-  export IDP_CLIENT_URL="${IDP_CLIENT_URL:-$IDP_WEB_URL}"
 }
 
 ensure_shared_local_env
@@ -147,10 +143,8 @@ else
   echo -e "  ${CYAN}1${RESET})  core-api        ${DIM}백엔드 서버${RESET}"
   echo -e "  ${CYAN}2${RESET})  admin-web       ${DIM}어드민 프론트엔드${RESET}"
   echo -e "  ${CYAN}3${RESET})  proposal-web    ${DIM}퍼블릭 제안 랜딩${RESET}"
-  echo -e "  ${CYAN}4${RESET})  idp-api         ${DIM}인증 서버 (백엔드)${RESET}"
-  echo -e "  ${CYAN}5${RESET})  idp-web         ${DIM}인증 서버 (프론트엔드)${RESET}"
-  echo -e "  ${CYAN}6${RESET})  tool-storybook  ${DIM}스토리북${RESET}"
-  echo -e "  ${CYAN}7${RESET})  mobile          ${DIM}Expo 모바일 앱${RESET}"
+  echo -e "  ${CYAN}4${RESET})  tool-storybook  ${DIM}스토리북${RESET}"
+  echo -e "  ${CYAN}5${RESET})  mobile          ${DIM}Expo 모바일 앱${RESET}"
   echo ""
   echo -e "  ${DIM}복수 선택 가능 (예: 1 2 7)${RESET}"
   echo ""
@@ -169,7 +163,6 @@ FILTERS=""
 SERVICES=""
 HAS_FRONTEND="false"
 HAS_BACKEND="false"
-HAS_IDP="false"
 HAS_MOBILE="false"
 MOBILE_TARGET=""
 MOBILE_RUNTIME=""
@@ -182,15 +175,12 @@ get_port() {
     core-api)        echo "${CORE_API_PORT:-3006}" ;;
     admin-web)       echo "${ADMIN_WEB_PORT:-3000}" ;;
     proposal-web)    echo "${PROPOSAL_WEB_PORT:-3011}" ;;
-    idp-api)         echo "${IDP_API_PORT:-3007}" ;;
-    idp-web)         echo "${IDP_WEB_PORT:-3008}" ;;
     tool-storybook)  echo "${STORYBOOK_PORT:-6006}" ;;
     mobile)          echo "${MOBILE_PORT:-8081}" ;;
   esac
 }
 
 CORE_API_PORT_VALUE=$(get_port core-api)
-IDP_API_PORT_VALUE=$(get_port idp-api)
 MOBILE_PORT_VALUE=$(get_port mobile)
 
 ensure_mobile_service() {
@@ -322,16 +312,10 @@ for choice in $choices; do
     3|proposal-web|start:proposal-web)
       FILTERS="$FILTERS --filter=proposal-web"; SERVICES="$SERVICES proposal-web"
       ;;
-    4|idp-api|start:idp-api)
-      FILTERS="$FILTERS --filter=idp-api"; SERVICES="$SERVICES idp-api"; HAS_IDP="true"
-      ;;
-    5|idp-web|start:idp-web)
-      FILTERS="$FILTERS --filter=idp-web"; SERVICES="$SERVICES idp-web"; HAS_FRONTEND="true"
-      ;;
-    6|tool-storybook|start:tool-storybook)
+    4|tool-storybook|start:tool-storybook)
       FILTERS="$FILTERS --filter=tool-storybook"; SERVICES="$SERVICES tool-storybook"
       ;;
-    7|mobile|start:mobile)
+    5|mobile|start:mobile)
       set_mobile_target prompt
       set_mobile_runtime prompt
       ;;
@@ -357,15 +341,15 @@ done
 ensure_mobile_target
 ensure_mobile_runtime
 
-# 프론트엔드(admin/idp-web) 선택 시 codegen 질문
+# 프론트엔드(admin) 선택 시 codegen 질문
 CODEGEN_ENV=""
 CODEGEN_TARGET=""
 if [[ "$HAS_FRONTEND" == "true" && "$INTERACTIVE" == "true" ]]; then
   echo ""
   echo -e "${BOLD}📦 API 코드젠 대상${RESET}"
-  echo -e "  ${CYAN}1${RESET})  전체         ${DIM}Server + IDP${RESET}"
+  echo -e "  ${CYAN}1${RESET})  전체         ${DIM}Core + IDP spec${RESET}"
   echo -e "  ${CYAN}2${RESET})  Server만     ${DIM}백엔드 서버 (port ${CORE_API_PORT_VALUE})${RESET}"
-  echo -e "  ${CYAN}3${RESET})  IDP만        ${DIM}인증 서버 (port ${IDP_API_PORT_VALUE})${RESET}"
+  echo -e "  ${CYAN}3${RESET})  IDP spec만   ${DIM}백엔드 서버 (port ${CORE_API_PORT_VALUE})${RESET}"
   echo -e "  ${CYAN}4${RESET})  건너뛰기     ${DIM}코드젠 실행 안 함${RESET}"
   echo ""
   if ! prompt_read codegen_target_choice "${BOLD}번호 선택: ${RESET}"; then
@@ -410,11 +394,11 @@ if [[ "$CODEGEN_ENV" == "local" ]]; then
     HAS_BACKEND="true"
     echo -e "\n${YELLOW}⚠️  local 코드젠은 서버가 필요합니다. core-api를 자동으로 포함합니다.${RESET}"
   fi
-  if [[ ("$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "idp") && "$HAS_IDP" != "true" ]]; then
-    FILTERS="$FILTERS --filter=idp-api"
-    SERVICES="$SERVICES idp-api"
-    HAS_IDP="true"
-    echo -e "${YELLOW}⚠️  local 코드젠은 IDP 서버가 필요합니다. idp-api를 자동으로 포함합니다.${RESET}"
+  if [[ ("$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "idp") && "$HAS_BACKEND" != "true" ]]; then
+    FILTERS="$FILTERS --filter=core-api"
+    SERVICES="$SERVICES core-api"
+    HAS_BACKEND="true"
+    echo -e "${YELLOW}⚠️  local IDP spec 코드젠은 core-api를 자동으로 포함합니다.${RESET}"
   fi
 fi
 
@@ -439,10 +423,6 @@ run_local_infra_preflight() {
 
   if [[ "$HAS_BACKEND" == "true" ]]; then
     services+=("core-api")
-  fi
-
-  if [[ "$HAS_IDP" == "true" ]]; then
-    services+=("idp-api")
   fi
 
   if [[ ${#services[@]} -eq 0 ]]; then
@@ -490,8 +470,6 @@ pre_cleanup_service_processes() {
       core-api) pattern="turbo start:dev .*--filter=core-api|pnpm(\\.cjs)? --filter=core-api start:dev|apps/core/api/.+nest\\.js build --webpack --webpackPath webpack\\.config\\.js --watch|/apps/core/api/dist/main.js" ;;
       admin-web) pattern="turbo start:dev .*--filter=admin-web|pnpm(\\.cjs)? --filter=admin-web start:dev|apps/admin/web" ;;
       proposal-web) pattern="turbo start:dev .*--filter=proposal-web|pnpm(\\.cjs)? --filter=proposal-web start:dev|apps/proposal/web" ;;
-      idp-api) pattern="turbo start:dev .*--filter=idp-api|pnpm(\\.cjs)? --filter=idp-api start:dev|apps/idp/api/.+nest\\.js build --webpack --webpackPath webpack\\.config\\.js --watch|/apps/idp/api/dist/main.js" ;;
-      idp-web) pattern="turbo start:dev .*--filter=idp-web|pnpm(\\.cjs)? --filter=idp-web start:dev|apps/idp/web" ;;
       tool-storybook) pattern="turbo start:dev .*--filter=tool-storybook|pnpm(\\.cjs)? --filter=tool-storybook start:dev|apps/tool/storybook|STORYBOOK_REQUIRE_AUTH=true storybook dev|storybook dev -p" ;;
       mobile) pattern="mobile-app@1.0.0 start|pnpm --filter=mobile-app exec expo start|expo start .*--port ${MOBILE_PORT_VALUE}" ;;
     esac
@@ -662,11 +640,11 @@ if [[ "$CODEGEN_ENV" == "local" ]]; then
 
   # IDP health check
   if [[ "$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "idp" ]]; then
-    echo -e "${DIM}IDP(${IDP_API_PORT_VALUE}) 시작 대기 중...${RESET}"
-    until curl -s -o /dev/null -w "%{http_code}" "http://localhost:${IDP_API_PORT_VALUE}/api-json" 2>/dev/null | grep -q "200"; do
+    echo -e "${DIM}IDP spec(${CORE_API_PORT_VALUE}) 시작 대기 중...${RESET}"
+    until curl -s -o /dev/null -w "%{http_code}" "http://localhost:${CORE_API_PORT_VALUE}/idp-api-json" 2>/dev/null | grep -q "200"; do
       sleep 2
     done
-    echo -e "${GREEN}✅ IDP 준비 완료${RESET}"
+    echo -e "${GREEN}✅ IDP spec 준비 완료${RESET}"
   fi
 
   echo -e "${GREEN}▶ API 코드젠 실행...${RESET}"

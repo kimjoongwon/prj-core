@@ -9,7 +9,7 @@ import {
 	type TemplateFormData,
 	type VariableEditItem,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -32,10 +32,8 @@ const AdminTemplatesNewRoute = observer(() => {
 	const { mutate: createTemplate, isPending } = useCreateTemplate({
 		mutation: {
 			onSuccess: (response) => {
-				addToast({
-					title: "템플릿 등록 성공",
+				toast.success("템플릿 등록 성공", {
 					description: "템플릿이 성공적으로 등록되었습니다.",
-					color: "success",
 				});
 				const templateId = response?.data?.id;
 				if (templateId) {
@@ -43,10 +41,8 @@ const AdminTemplatesNewRoute = observer(() => {
 				}
 			},
 			onError: (error) => {
-				addToast({
-					title: "템플릿 등록 실패",
+				toast.danger("템플릿 등록 실패", {
 					description: error.message || "템플릿 등록 중 오류가 발생했습니다.",
-					color: "danger",
 				});
 			},
 		},

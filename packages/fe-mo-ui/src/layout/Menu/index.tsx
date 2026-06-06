@@ -10,7 +10,7 @@ import {
   useMenu,
   useMenuAnimation,
   useMenuItem,
-} from "heroui-native/menu";
+} from "heroui-native";
 import { getTextContent, Text } from "../../data-display/Text";
 type HeroMenuProps = ComponentPropsWithoutRef<typeof HeroMenu>;
 type HeroMenuContentProps = ComponentPropsWithoutRef<typeof HeroMenu.Content>;

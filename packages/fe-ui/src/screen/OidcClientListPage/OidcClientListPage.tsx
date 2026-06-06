@@ -17,7 +17,7 @@ import {
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 
 /**
  * 좌측 입력 정의 (검색)
@@ -82,7 +82,7 @@ export const OidcClientListPage = observer(
 						</Button>
 					}
 				/>
-				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 					<DataGrid
 						config={{
 							entity: "OidcClient",
@@ -90,11 +90,11 @@ export const OidcClientListPage = observer(
 							leftInputs,
 							emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
 						}}
-						rows={oidcClientRows}
-						totalCount={totalCount}
-						isLoading={isLoading}
-						state={gridState}
-					/>
+							rows={oidcClientRows}
+							totalCount={totalCount}
+							state={gridState}
+							isLoading={isLoading}
+						/>
 				</Surface>
 			</VStack>
 		);

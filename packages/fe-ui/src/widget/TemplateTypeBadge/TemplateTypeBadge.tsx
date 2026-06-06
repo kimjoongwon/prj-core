@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 
 type TemplateType = "EMAIL" | "SMS" | "PUSH";
 

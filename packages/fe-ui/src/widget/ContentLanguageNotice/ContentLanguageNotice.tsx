@@ -2,7 +2,7 @@
 
 import { Languages } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 import { useT } from "../../i18n";
 
 export type ContentLanguageCode = "ko_KR" | "en_US" | "zh_CN" | "ja_JP";
@@ -47,8 +47,8 @@ export const ContentLanguageNotice = observer(
 		const label = languageCode ? LANGUAGE_LABELS[languageCode] : t("미설정");
 
 		return (
-			<div className="flex flex-wrap items-center gap-2 rounded-lg border border-divider bg-content2/50 px-3 py-2 text-sm text-default-600">
-				<Languages className="h-4 w-4 text-default-500" />
+			<div className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-surface-secondary/50 px-3 py-2 text-sm text-muted">
+				<Languages className="h-4 w-4 text-muted" />
 				<span>{t("현재 Space 콘텐츠 언어")}</span>
 				<Chip
 					size="sm"

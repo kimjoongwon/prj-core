@@ -17,7 +17,7 @@ import {
 	type RoleDetailPagePolicyAssignment,
 	type RoleDetailPageRole,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -58,10 +58,8 @@ const AdminRolesRoleDetailRoute = observer(() => {
 		mutation: {
 			onSuccess: () => {
 				setIsDeleteModalOpen(false);
-				addToast({
-					title: "역할 삭제 성공",
+				toast.success("역할 삭제 성공", {
 					description: "역할이 삭제되었습니다.",
-					color: "success",
 				});
 				router.push("/roles" as Route);
 			},
@@ -77,10 +75,8 @@ const AdminRolesRoleDetailRoute = observer(() => {
 					queryClient.invalidateQueries({
 						queryKey: getGetRolePoliciesQueryKey(roleId),
 					});
-					addToast({
-						title: "정책 할당 저장",
+					toast.success("정책 할당 저장", {
 						description: "역할 정책 할당이 저장되었습니다.",
-						color: "success",
 					});
 				},
 			},

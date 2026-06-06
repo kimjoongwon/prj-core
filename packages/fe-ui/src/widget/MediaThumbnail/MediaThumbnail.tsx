@@ -1,7 +1,7 @@
 "use client";
 
 import { ImageIcon, PlayCircle } from "lucide-react";
-import { cn } from "../../design-system/primitives";
+import { cn } from "@heroui/react";
 
 export interface MediaThumbnailProps {
 	imageUrl?: string | null;
@@ -20,7 +20,7 @@ export function MediaThumbnail({
 		return (
 			<div
 				className={cn(
-					"relative overflow-hidden rounded-xl bg-content2",
+					"relative overflow-hidden rounded-xl bg-surface-secondary",
 					className,
 				)}
 			>
@@ -38,7 +38,7 @@ export function MediaThumbnail({
 		return (
 			<div
 				className={cn(
-					"relative overflow-hidden rounded-xl bg-content2",
+					"relative overflow-hidden rounded-xl bg-surface-secondary",
 					className,
 				)}
 			>
@@ -60,7 +60,7 @@ export function MediaThumbnail({
 	return (
 		<div
 			className={cn(
-				"flex items-center justify-center rounded-xl border border-dashed border-default-300 bg-content2 text-default-400",
+				"flex items-center justify-center rounded-xl border border-dashed border-border bg-surface-secondary text-muted",
 				className,
 			)}
 		>

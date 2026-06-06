@@ -17,7 +17,7 @@ import {
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type Key, useEffect } from "react";
-import { Tab, Tabs } from "../../design-system/primitives";
+import { Tabs } from "@heroui/react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -158,27 +158,25 @@ const SubjectGroupFilterTabs = observer(
 
 		return (
 			<VStack gap="block">
-				<Tabs
-					aria-label={t("대상 유형 필터")}
-					selectedKey={selectedKey}
-					onSelectionChange={handleSelectionChange}
-					variant="bordered"
-					color="primary"
-					radius="full"
-					classNames={{
-						tabList: "flex-wrap",
-						tab: "h-9",
-					}}
-				>
-					{subjectGroupFilters.map((filter) => (
-						<Tab key={filter.key} title={t(filter.label)} />
-					))}
-				</Tabs>
-				<div className="rounded-lg border border-divider bg-content2/40 p-4">
+					<Tabs
+						aria-label={t("대상 유형 필터")}
+						selectedKey={selectedKey}
+						onSelectionChange={handleSelectionChange}
+						variant="secondary"
+					>
+						<Tabs.List>
+						{subjectGroupFilters.map((filter) => (
+							<Tabs.Tab key={filter.key} id={filter.key}>
+								{t(filter.label)}
+							</Tabs.Tab>
+						))}
+						</Tabs.List>
+					</Tabs>
+				<div className="rounded-lg border border-border bg-surface-secondary/40 p-4">
 					<div className="text-sm font-semibold text-foreground">
 						{t(selectedFilter.label)} {t("대상")}
 					</div>
-					<p className="mt-1 text-sm text-default-600">
+					<p className="mt-1 text-sm text-muted">
 						{t(selectedFilter.description)}
 					</p>
 				</div>
@@ -223,7 +221,7 @@ export const SubjectListPage = observer(
 					title="권한 대상 목록"
 					description="역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다."
 				/>
-				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 					<VStack gap="section">
 						<SubjectGroupFilterTabs
 							selectedGroup={queryStates.group}
@@ -239,7 +237,6 @@ export const SubjectListPage = observer(
 							}}
 							rows={visibleSubjects}
 							totalCount={totalCount}
-							isLoading={false}
 							state={gridState}
 						/>
 					</VStack>
@@ -256,7 +253,7 @@ const SubjectsPageFallback = observer(function SubjectsPageFallback() {
 				title="권한 대상 목록"
 				description="역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다."
 			/>
-			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+			<Surface className="h-32 rounded-2xl border-border/80 bg-surface/70">
 				{null}
 			</Surface>
 		</div>

@@ -12,7 +12,7 @@ import {
 } from "@cocrepo/api/core/timelines";
 import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
 import { TimelineSessionDetailPage } from "@cocrepo/ui";
-import { addToast, useDisclosure } from "@cocrepo/ui";
+import { toast, useOverlayState } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -85,8 +85,8 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 		deleteProgramTargetId: "",
 		deleteProgramTargetName: "",
 	}));
-	const deleteSessionModal = useDisclosure();
-	const deleteProgramModal = useDisclosure();
+	const deleteSessionModal = useOverlayState();
+	const deleteProgramModal = useOverlayState();
 	const { data: sessionResponse } = useGetSessionById(timelineId, sessionId);
 	const session = sessionResponse?.data as SessionDto | undefined;
 	const { data: programsResponse, refetch: refetchPrograms } = useGetPrograms(
@@ -118,29 +118,23 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 	const onClickEditButton = () => {
 		router.push(`/timelines/${timelineId}/sessions/${sessionId}/edit` as Route);
 	};
-	const onClickDeleteSessionButton = () => deleteSessionModal.onOpen();
+	const onClickDeleteSessionButton = () => deleteSessionModal.open();
 	const onClickDeleteSessionConfirmButton = () => {
 		deleteSession(
 			{ timelineId, sessionId },
 			{
 				onSuccess: () => {
-					addToast({
-						title: "삭제 성공",
-						description: "세션이 삭제되었습니다.",
-						color: "success",
-					});
-					deleteSessionModal.onClose();
+					toast.success("삭제 성공", { description: "세션이 삭제되었습니다." });
+					deleteSessionModal.close();
 					queryClient.invalidateQueries({
 						queryKey: getGetSessionsQueryKey(timelineId),
 					});
 					router.push(`/timelines/${timelineId}` as Route);
 				},
 				onError: () => {
-					addToast({
-						title: "삭제 실패",
+					toast.danger("삭제 실패", {
 						description:
 							"세션 삭제 중 오류가 발생했습니다. 프로그램이 연결된 세션은 삭제할 수 없습니다.",
-						color: "danger",
 					});
 				},
 			},
@@ -160,7 +154,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 		const program = programs.find((item) => item.id === programId);
 		state.deleteProgramTargetId = programId;
 		state.deleteProgramTargetName = program?.name ?? "";
-		deleteProgramModal.onOpen();
+		deleteProgramModal.open();
 	};
 	const onClickDeleteProgramConfirmButton = () => {
 		if (!state.deleteProgramTargetId) return;
@@ -168,12 +162,10 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 			{ timelineId, sessionId, programId: state.deleteProgramTargetId },
 			{
 				onSuccess: () => {
-					addToast({
-						title: "삭제 성공",
+					toast.success("삭제 성공", {
 						description: "프로그램이 삭제되었습니다.",
-						color: "success",
 					});
-					deleteProgramModal.onClose();
+					deleteProgramModal.close();
 					state.deleteProgramTargetId = "";
 					state.deleteProgramTargetName = "";
 					queryClient.invalidateQueries({
@@ -182,10 +174,8 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 					refetchPrograms();
 				},
 				onError: () => {
-					addToast({
-						title: "삭제 실패",
+					toast.danger("삭제 실패", {
 						description: "프로그램 삭제 중 오류가 발생했습니다.",
-						color: "danger",
 					});
 				},
 			},
@@ -247,12 +237,12 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 			onClickEditButton={onClickEditButton}
 			onClickDeleteSessionButton={onClickDeleteSessionButton}
 			onClickDeleteSessionConfirmButton={onClickDeleteSessionConfirmButton}
-			onClickDeleteSessionCancelButton={deleteSessionModal.onClose}
+			onClickDeleteSessionCancelButton={deleteSessionModal.close}
 			onClickCreateProgramButton={onClickCreateProgramButton}
 			onClickEditProgramButton={onClickEditProgramButton}
 			onClickDeleteProgramButton={onClickDeleteProgramButton}
 			onClickDeleteProgramConfirmButton={onClickDeleteProgramConfirmButton}
-			onClickDeleteProgramCancelButton={deleteProgramModal.onClose}
+			onClickDeleteProgramCancelButton={deleteProgramModal.close}
 		/>
 	);
 });

@@ -1,18 +1,9 @@
 "use client";
 
+import { Avatar, Dropdown, cn } from "@heroui/react";
 import { ChevronDown, LogOut } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Avatar,
-	Button,
-	cn,
-	Dropdown,
-	DropdownItem,
-	DropdownMenu,
-	DropdownSection,
-	DropdownTrigger,
-} from "../../design-system/primitives";
-import type { HeaderBarProps } from "../../display/layout/type";
+import type { HeaderBarProps } from "../../layout/Layout/type";
 import { useT } from "../../i18n";
 
 /**
@@ -54,74 +45,85 @@ export const HeaderBar = observer(function HeaderBar({
 		(renderUserMenu ? (
 			renderUserMenu({ userInfo, onLogout })
 		) : (
-			<Dropdown placement="bottom-end">
-				<DropdownTrigger>
-					<Button
-						variant="light"
-						className="h-11 rounded-2xl border border-divider bg-content1/80 px-2 pr-3 text-foreground shadow-sm backdrop-blur-md hover:bg-content2"
-						aria-label={t("사용자 메뉴")}
-					>
+			<Dropdown>
+				<Dropdown.Trigger
+					aria-label={t("사용자 메뉴")}
+					className="inline-flex h-11 items-center gap-2 rounded-2xl border border-border bg-surface/80 px-2 pr-3 text-foreground shadow-sm backdrop-blur-md hover:bg-surface-secondary"
+				>
 						<Avatar
 							size="sm"
-							src={userInfo.avatarUrl}
-							name={userInfo.name}
-							showFallback
 							className="h-8 w-8 bg-foreground text-background"
-						/>
+						>
+							{userInfo.avatarUrl ? (
+								<Avatar.Image src={userInfo.avatarUrl} alt={userInfo.name} />
+							) : null}
+							<Avatar.Fallback>{userInfo.name.slice(0, 1)}</Avatar.Fallback>
+						</Avatar>
 						<div className="hidden flex-col items-start sm:flex">
 							<span className="text-sm font-semibold text-foreground">
 								{userInfo.name}
 							</span>
 							{userInfo.role && (
-								<span className="text-xs text-default-500">
+								<span className="text-xs text-muted">
 									{userInfo.role}
 								</span>
 							)}
 						</div>
-						<ChevronDown className="hidden h-4 w-4 text-default-400 sm:block" />
-					</Button>
-				</DropdownTrigger>
-				<DropdownMenu aria-label={t("사용자 메뉴")} variant="flat">
-					<DropdownSection showDivider>
-						<DropdownItem
-							key="identity"
-							description={userInfo.role}
+						<ChevronDown className="hidden h-4 w-4 text-muted sm:block" />
+				</Dropdown.Trigger>
+				<Dropdown.Popover placement="bottom end">
+					<Dropdown.Menu
+						aria-label={t("사용자 메뉴")}
+						onAction={(key) => {
+							if (key === "logout") handleLogout();
+						}}
+					>
+					<Dropdown.Section className="border-b border-border pb-2">
+						<Dropdown.Item
+							id="identity"
 							textValue={`${userInfo.name} ${userInfo.role ?? ""}`}
 						>
-							{userInfo.name}
-						</DropdownItem>
-					</DropdownSection>
-					<DropdownSection>
-						<DropdownItem
-							key="logout"
-							color="danger"
-							startContent={
-								<LogOut className="h-4 w-4 text-danger" size={16} />
-							}
-							onPress={handleLogout}
+							<div className="flex flex-col">
+								<span>{userInfo.name}</span>
+								{userInfo.role ? (
+									<span className="text-xs text-muted">
+										{userInfo.role}
+									</span>
+								) : null}
+							</div>
+						</Dropdown.Item>
+					</Dropdown.Section>
+					<Dropdown.Section>
+						<Dropdown.Item
+							id="logout"
+							className="text-danger"
 						>
-							{t("로그아웃")}
-						</DropdownItem>
-					</DropdownSection>
-				</DropdownMenu>
+							<span className="flex items-center gap-2">
+								<LogOut className="h-4 w-4 text-danger" size={16} />
+								{t("로그아웃")}
+							</span>
+						</Dropdown.Item>
+					</Dropdown.Section>
+					</Dropdown.Menu>
+				</Dropdown.Popover>
 			</Dropdown>
 		));
 
 	return (
 		<header
 			className={cn(
-				"relative z-30 border-b border-divider bg-background/82 backdrop-blur-2xl",
+				"relative z-30 border-b border-border bg-background/82 backdrop-blur-2xl",
 				className,
 			)}
 		>
-			<div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+			<div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
 			<div className="flex h-16 items-center justify-between gap-4 px-4 md:h-[72px] md:px-6">
 				<div className="flex min-w-0 items-center gap-3 md:gap-4">
 					{leadingContent}
 					{context && (
 						<>
 							{leadingContent && (
-								<div className="hidden h-8 w-px bg-divider md:block" />
+								<div className="hidden h-8 w-px bg-border md:block" />
 							)}
 							<div className="hidden min-w-0 items-center gap-3 md:flex">
 								{context}

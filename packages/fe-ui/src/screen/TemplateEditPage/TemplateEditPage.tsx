@@ -10,7 +10,8 @@ import {
 	type VariableEditItem,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { Button, Spinner } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Spinner } from "@heroui/react";
 
 export interface TemplateEditPageProps {
 	templateName?: string;
@@ -49,7 +50,7 @@ export const TemplateEditPage = observer(
 						<FormSectionCard>
 							<div className="flex items-center justify-center gap-2 p-8">
 								<Spinner size="sm" />
-								<span className="text-default-500">로딩 중...</span>
+								<span className="text-muted">로딩 중...</span>
 							</div>
 						</FormSectionCard>
 					</FormPageSurface>
@@ -70,7 +71,7 @@ export const TemplateEditPage = observer(
 					<FormPageSurface>
 						<FormSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">템플릿을 찾을 수 없습니다.</p>
+								<p className="text-muted">템플릿을 찾을 수 없습니다.</p>
 								<Button variant="flat" onPress={onClickCancelButton}>
 									목록으로
 								</Button>

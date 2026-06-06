@@ -16,7 +16,7 @@ import {
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 
 export interface RoleListPageQueryStates extends DataGridQueryStates {
 	take: number;
@@ -40,7 +40,7 @@ const RolesPageFallback = observer(() => {
 				title="역할 목록"
 				description="시스템에 등록된 역할을 관리합니다."
 			/>
-			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+			<Surface className="h-32 rounded-2xl border-border/80 bg-surface/70">
 				{null}
 			</Surface>
 		</div>
@@ -95,7 +95,7 @@ export const RoleListPage = observer(
 					</div>
 					<div className="space-y-3">
 						<PageTitleBar level={2} title="역할 목록 데이터" />
-						<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+						<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 							<DataGrid
 								config={{
 									entity: "Role",
@@ -104,7 +104,6 @@ export const RoleListPage = observer(
 								}}
 								rows={roleRows}
 								totalCount={totalCount}
-								isLoading={false}
 								state={gridState}
 							/>
 						</Surface>

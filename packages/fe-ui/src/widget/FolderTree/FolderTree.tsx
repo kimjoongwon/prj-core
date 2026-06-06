@@ -10,7 +10,8 @@ import {
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Button, cn, Spinner } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { cn, Spinner } from "@heroui/react";
 import { useT } from "../../i18n";
 
 export interface FolderTreeItem {
@@ -164,7 +165,7 @@ const FolderTreeNodeItem = observer(
 						className={cn(
 							"flex h-8 w-8 items-center justify-center rounded-md text-foreground/50 transition-colors",
 							hasChildren
-								? "hover:bg-default-100 hover:text-foreground"
+								? "hover:bg-default hover:text-foreground"
 								: "cursor-default opacity-40",
 						)}
 						aria-label={
@@ -196,8 +197,8 @@ const FolderTreeNodeItem = observer(
 						className={cn(
 							"flex min-w-0 flex-1 items-center gap-2 rounded-lg px-2 py-2 text-left text-sm transition-colors",
 							isSelected
-								? "bg-primary/10 font-medium text-primary"
-								: "text-foreground/70 hover:bg-default-100 hover:text-foreground",
+								? "bg-accent/10 font-medium text-accent"
+								: "text-foreground/70 hover:bg-default hover:text-foreground",
 						)}
 					>
 						{hasChildren && isExpanded ? (
@@ -328,14 +329,14 @@ export const FolderTree = observer(
 		return (
 			<div
 				className={cn(
-					"flex h-full min-h-[320px] flex-col bg-content1/40",
+					"flex h-full min-h-[320px] flex-col bg-surface/40",
 					className,
 				)}
 			>
-				<div className="flex items-center justify-between border-b border-divider px-4 py-3">
+				<div className="flex items-center justify-between border-b border-border px-4 py-3">
 					<div>
 						<p className="text-sm font-semibold text-foreground">{t("폴더")}</p>
-						<p className="text-xs text-default-500">{t("에셋 탐색 기준")}</p>
+						<p className="text-xs text-muted">{t("에셋 탐색 기준")}</p>
 					</div>
 					<div className="flex items-center gap-1">
 						{showRenameButton ? (
@@ -392,8 +393,8 @@ export const FolderTree = observer(
 								className={cn(
 									"flex items-center gap-2 rounded-lg px-2 py-2 text-left text-sm transition-colors",
 									selectedFolderId === null
-										? "bg-primary/10 font-medium text-primary"
-										: "text-foreground/70 hover:bg-default-100 hover:text-foreground",
+										? "bg-accent/10 font-medium text-accent"
+										: "text-foreground/70 hover:bg-default hover:text-foreground",
 								)}
 							>
 								<FolderOpen className="h-4 w-4 shrink-0" />
@@ -401,7 +402,7 @@ export const FolderTree = observer(
 							</button>
 
 							{treeNodes.length === 0 ? (
-								<div className="rounded-lg border border-dashed border-divider px-3 py-6 text-center text-sm text-default-500">
+								<div className="rounded-lg border border-dashed border-border px-3 py-6 text-center text-sm text-muted">
 									{t("등록된 폴더가 없습니다.")}
 								</div>
 							) : (

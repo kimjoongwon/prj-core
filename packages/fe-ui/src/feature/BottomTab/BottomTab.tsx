@@ -3,7 +3,8 @@
 import { useNavigationStore } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import { cn, Tab, Tabs } from "../../design-system/primitives";
+import { cn } from "@heroui/react";
+import { Tabs } from "@heroui/react";
 
 export interface BottomTabProps {
 	/** 탭 선택 시 콜백 (SubMenuList 표시 여부 결정용) */
@@ -58,34 +59,28 @@ export const BottomTab = observer(
 		return (
 			<nav
 				className={cn(
-					"fixed bottom-0 left-0 right-0 z-50 border-t border-divider bg-content1 md:hidden",
+					"fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-surface md:hidden",
 					className,
 				)}
 			>
-				<Tabs
-					aria-label="네비게이션 탭"
-					selectedKey={selectedNavItemId}
-					onSelectionChange={handleSelectionChange}
-					variant="light"
-					classNames={{
-						base: "w-full",
-						tabList:
-							"w-full grid grid-cols-5 gap-0 p-0 bg-transparent rounded-none",
-						cursor: "bg-transparent",
-						tab: "h-16 px-2",
-						tabContent: "group-data-[selected=true]:text-primary",
-					}}
-				>
-					{displayItems.map((navItem) => (
-						<Tab
-							key={navItem.id}
-							title={
-								<div className="flex flex-col items-center gap-1">
-									{navItem.icon && (
-										<span
+					<Tabs
+						aria-label="네비게이션 탭"
+						selectedKey={selectedNavItemId}
+						onSelectionChange={handleSelectionChange}
+						className="w-full"
+					>
+						<Tabs.List className="grid w-full grid-cols-5 gap-0 p-0">
+						{displayItems.map((navItem) => (
+							<Tabs.Tab
+								key={navItem.id}
+								id={navItem.id}
+							>
+									<div className="flex flex-col items-center gap-1">
+										{navItem.icon && (
+											<span
 											className={cn(
 												"transition-colors",
-												navItem.active ? "text-primary" : "text-foreground/60",
+												navItem.active ? "text-accent" : "text-foreground/60",
 											)}
 										>
 											<AppIcon
@@ -99,17 +94,17 @@ export const BottomTab = observer(
 										className={cn(
 											"text-xs transition-colors",
 											navItem.active
-												? "font-medium text-primary"
+												? "font-medium text-accent"
 												: "text-foreground/60",
 										)}
-									>
-										{navItem.label}
-									</span>
-								</div>
-							}
-						/>
-					))}
-				</Tabs>
+										>
+											{navItem.label}
+										</span>
+									</div>
+							</Tabs.Tab>
+						))}
+						</Tabs.List>
+					</Tabs>
 			</nav>
 		);
 	},

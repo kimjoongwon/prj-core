@@ -9,7 +9,7 @@ import {
   tagGroupClassNames,
   useTagGroup,
   useTagGroupItem,
-} from "heroui-native/tag-group";
+} from "heroui-native";
 import { getTextContent, Text } from "../Text";
 type HeroTagGroupProps = ComponentPropsWithoutRef<typeof HeroTagGroup>;
 type HeroTagGroupItemProps = ComponentPropsWithoutRef<typeof HeroTagGroup.Item>;

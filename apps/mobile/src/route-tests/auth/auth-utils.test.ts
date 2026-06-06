@@ -26,10 +26,10 @@ describe("mobile auth utils", () => {
 		jest.restoreAllMocks();
 	});
 
-	it("Android 환경변수 localhost IDP API URL을 에뮬레이터 host로 보정해야 한다", () => {
-		const originalIdpApiUrl = process.env.EXPO_PUBLIC_IDP_API_URL;
+	it("Android 환경변수 localhost auth API URL을 에뮬레이터 host로 보정해야 한다", () => {
+		const originalAuthApiUrl = process.env.EXPO_PUBLIC_AUTH_API_BASE_URL;
 		jest.replaceProperty(Platform, "OS", "android");
-		process.env.EXPO_PUBLIC_IDP_API_URL = "http://localhost:3007";
+		process.env.EXPO_PUBLIC_AUTH_API_BASE_URL = "http://localhost:3006";
 
 		try {
 			const loginUrl = buildAuthLoginUrl({
@@ -38,13 +38,13 @@ describe("mobile auth utils", () => {
 			});
 
 			expect(loginUrl).toBe(
-				"http://10.0.2.2:3007/api/v1/auth/native/login",
+				"http://10.0.2.2:3006/api/v1/auth/native/login",
 			);
 		} finally {
-			if (originalIdpApiUrl === undefined) {
-				delete process.env.EXPO_PUBLIC_IDP_API_URL;
+			if (originalAuthApiUrl === undefined) {
+				delete process.env.EXPO_PUBLIC_AUTH_API_BASE_URL;
 			} else {
-				process.env.EXPO_PUBLIC_IDP_API_URL = originalIdpApiUrl;
+				process.env.EXPO_PUBLIC_AUTH_API_BASE_URL = originalAuthApiUrl;
 			}
 		}
 	});
@@ -71,13 +71,13 @@ describe("mobile auth utils", () => {
 
 		try {
 			const result = await requestNativeLogin({
-				apiBaseUrl: "http://localhost:3007",
+				apiBaseUrl: "http://localhost:3006",
 				email: "user@example.com",
 				password: "password123",
 			});
 
 			expect(fetchMock).toHaveBeenCalledWith(
-				"http://localhost:3007/api/v1/auth/native/login",
+				"http://localhost:3006/api/v1/auth/native/login",
 				expect.objectContaining({
 					body: JSON.stringify({
 						email: "user@example.com",
@@ -112,13 +112,13 @@ describe("mobile auth utils", () => {
 
 		try {
 			const result = await requestNativeTokenRefresh({
-				apiBaseUrl: "http://localhost:3007",
+				apiBaseUrl: "http://localhost:3006",
 				refreshToken: "native-refresh-token",
 				sessionId: "user-mobile.session-1",
 			});
 
 			expect(fetchMock).toHaveBeenCalledWith(
-				"http://localhost:3007/api/v1/auth/native/token/refresh",
+				"http://localhost:3006/api/v1/auth/native/token/refresh",
 				expect.objectContaining({
 					body: JSON.stringify({
 						sessionId: "user-mobile.session-1",

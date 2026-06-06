@@ -3,16 +3,10 @@
 import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";
-import {
-	Card,
-	CardBody,
-	CardHeader,
-	ScrollShadow,
-	Spacer,
-} from "../../design-system/primitives";
-import { MessageStatus } from "../../display/feedback/MessageStatus/MessageStatus";
-import { TypingIndicator } from "../../display/feedback/TypingIndicator/TypingIndicator";
-import { WebSocketConnectionStatus } from "../../display/feedback/WebSocketConnectionStatus/WebSocketConnectionStatus";
+import { Card, ScrollShadow } from "@heroui/react";
+import { MessageStatus } from "../../feedback/MessageStatus/MessageStatus";
+import { TypingIndicator } from "../../feedback/TypingIndicator/TypingIndicator";
+import { WebSocketConnectionStatus } from "../../feedback/WebSocketConnectionStatus/WebSocketConnectionStatus";
 import { InquiryReplyForm } from "../../form/InquiryReplyForm";
 
 export interface RealtimeChatPanelProps {
@@ -65,7 +59,7 @@ const MessageBubble = observer(
 		if (isSystem) {
 			return (
 				<div className="flex justify-center">
-					<span className="rounded-full bg-default-100 px-3 py-1 text-xs text-default-500">
+					<span className="rounded-full bg-default px-3 py-1 text-xs text-muted">
 						{message.content}
 					</span>
 				</div>
@@ -79,22 +73,22 @@ const MessageBubble = observer(
 				<div
 					className={`max-w-[70%] rounded-2xl px-4 py-2 ${
 						isCurrentUser
-							? "bg-primary text-primary-foreground"
+							? "bg-accent text-accent-foreground"
 							: isAI
-								? "bg-secondary-100 text-secondary-700"
-								: "bg-content2 text-default-800"
+								? "bg-default text-accent"
+								: "bg-surface-secondary text-foreground"
 					}`}
 				>
 					{/* 발신자 표시 (다른 사용자 메시지) */}
 					{!isCurrentUser && !isAI && (
-						<span className="mb-1 block text-xs font-medium text-default-500">
+						<span className="mb-1 block text-xs font-medium text-muted">
 							{message.senderId}
 						</span>
 					)}
 
 					{/* AI 표시 */}
 					{isAI && (
-						<span className="mb-1 block text-xs font-medium text-secondary-500">
+						<span className="mb-1 block text-xs font-medium text-accent">
 							🤖 AI 어시스턴트
 						</span>
 					)}
@@ -184,20 +178,20 @@ export const RealtimeChatPanel = observer(
 		};
 
 		return (
-			<Card className={`flex h-full flex-col ${className}`} shadow="sm">
+			<Card className={`flex h-full flex-col ${className}`}>
 				{/* 헤더: 연결 상태 */}
-				<CardHeader className="flex items-center justify-between px-4 py-2">
-					<span className="text-sm font-medium text-default-600">
+				<Card.Header className="flex items-center justify-between px-4 py-2">
+					<span className="text-sm font-medium text-muted">
 						실시간 채팅
 					</span>
 					<WebSocketConnectionStatus
 						status={isWebSocketConnected ? "connected" : "disconnected"}
 						onReconnect={onReconnect}
 					/>
-				</CardHeader>
+				</Card.Header>
 
 				{/* 메시지 목록 */}
-				<CardBody className="flex-1 overflow-hidden p-0">
+				<Card.Content className="flex-1 overflow-hidden p-0">
 					<ScrollShadow ref={scrollRef} className="flex-1 px-4 py-2">
 						<div className="flex flex-col gap-3">
 							{currentMessages.map((message) => (
@@ -212,12 +206,12 @@ export const RealtimeChatPanel = observer(
 							<TypingIndicator userNames={currentTypingUserNames} />
 						</div>
 					)}
-				</CardBody>
+				</Card.Content>
 
-				<Spacer y={2} />
+				<div className="h-2" />
 
 				{/* 메시지 입력 폼 */}
-				<div className="border-t border-divider p-4">
+				<div className="border-t border-border p-4">
 					<InquiryReplyForm
 						onSubmit={handleSendMessage}
 						onTypingStart={handleTypingStart}

@@ -131,11 +131,11 @@ export const ExpandableCell = ({
 						)}
 					</div>
 				) : expandable && !canExpand ? (
-					<div className="mr-3 flex h-7 w-7 items-center justify-center text-primary">
+					<div className="mr-3 flex h-7 w-7 items-center justify-center text-accent">
 						<DocumentIcon className="h-5 w-5" />
 					</div>
 				) : !expandable ? (
-					<div className="mr-3 flex h-7 w-7 items-center justify-center text-primary">
+					<div className="mr-3 flex h-7 w-7 items-center justify-center text-accent">
 						<DocumentIcon className="h-5 w-5" />
 					</div>
 				) : null}

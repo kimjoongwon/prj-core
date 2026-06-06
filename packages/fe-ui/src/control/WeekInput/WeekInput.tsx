@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 import { useT } from "../../i18n";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
@@ -65,7 +65,7 @@ export const WeekInput = observer(function WeekInput(props: WeekInputProps) {
 
 	return (
 		<VStack className="space-y-2" {...rest}>
-			<span className="text-sm text-default-500">{t("반복 요일")}</span>
+			<span className="text-sm text-muted">{t("반복 요일")}</span>
 			<HStack className="space-x-2">
 				{dayOptions.map((day) => {
 					return (

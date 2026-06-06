@@ -1,15 +1,8 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import {
-	Chip,
-	Table,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-} from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Table } from "@heroui/react";
 
 /** 템플릿 변수 정보 */
 export interface TemplateVariable {
@@ -56,11 +49,11 @@ export const VariableReadTable = observer(
 					);
 				case "description":
 					return (
-						variable.description ?? <span className="text-default-400">-</span>
+						variable.description ?? <span className="text-muted">-</span>
 					);
 				case "defaultValue":
 					return (
-						variable.defaultValue ?? <span className="text-default-400">-</span>
+						variable.defaultValue ?? <span className="text-muted">-</span>
 					);
 				case "isRequired":
 					return variable.isRequired ? (
@@ -78,23 +71,25 @@ export const VariableReadTable = observer(
 		};
 
 		return (
-			<Table aria-label="변수 목록" removeWrapper isStriped>
-				<TableHeader>
+			<Table aria-label="변수 목록">
+				<Table.Content>
+					<Table.Header>
 					{COLUMNS.map((column) => (
-						<TableColumn key={column.key}>{column.label}</TableColumn>
+						<Table.Column key={column.key}>{column.label}</Table.Column>
 					))}
-				</TableHeader>
-				<TableBody items={variables} emptyContent="정의된 변수가 없습니다.">
+				</Table.Header>
+				<Table.Body items={variables}>
 					{(variable) => (
-						<TableRow key={variable.id}>
+						<Table.Row key={variable.id}>
 							{(columnKey) => (
-								<TableCell>
-									{renderCell(variable, columnKey as string)}
-								</TableCell>
+								<Table.Cell>
+										{renderCell(variable, columnKey as unknown as string)}
+								</Table.Cell>
 							)}
-						</TableRow>
+						</Table.Row>
 					)}
-				</TableBody>
+				</Table.Body>
+				</Table.Content>
 			</Table>
 		);
 	},

@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Chip, type ChipProps } from "../../../design-system/primitives";
+import { Chip, type ChipProps } from "../../../data-display/Chip/Chip";
 
 export type TenantAccessRequestStatus =
 	| "PENDING"

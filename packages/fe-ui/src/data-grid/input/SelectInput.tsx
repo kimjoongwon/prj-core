@@ -2,11 +2,8 @@
 
 import type { DataGridState, InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import {
-	Select,
-	SelectItem,
-	type Selection,
-} from "../../design-system/primitives";
+import { Select } from "../../control/Select/Select";
+import { ListBox } from "@heroui/react";
 import { useT } from "../../i18n";
 
 interface SelectInputProps {
@@ -24,12 +21,8 @@ export const SelectInput = observer(({ config, state }: SelectInputProps) => {
 	const options = config.props?.options ?? [];
 	const isClearable = config.props?.isClearable === true;
 
-	const handleSelectionChange = (keys: Selection) => {
-		if (keys === "all") {
-			return;
-		}
-
-		const selected = Array.from(keys)[0]?.toString() ?? "";
+	const handleChange = (selectedValue: string | number | null) => {
+		const selected = selectedValue == null ? "" : String(selectedValue);
 		void state.query.setValues({
 			[queryKey]: selected || null,
 			skip: 0,
@@ -52,8 +45,8 @@ export const SelectInput = observer(({ config, state }: SelectInputProps) => {
 						? t(config.label)
 						: undefined
 			}
-			selectedKeys={value ? [value] : []}
-			onSelectionChange={handleSelectionChange}
+			value={value || null}
+			onChange={handleChange}
 			isClearable={isClearable}
 			onClear={isClearable ? handleClear : undefined}
 			classNames={{
@@ -63,7 +56,9 @@ export const SelectInput = observer(({ config, state }: SelectInputProps) => {
 			aria-label={config.label ? t(config.label) : config.id}
 		>
 			{options.map((opt) => (
-				<SelectItem key={opt.value}>{t(opt.label)}</SelectItem>
+				<ListBox.Item key={opt.value} id={opt.value} textValue={opt.label}>
+					{t(opt.label)}
+				</ListBox.Item>
 			))}
 		</Select>
 	);

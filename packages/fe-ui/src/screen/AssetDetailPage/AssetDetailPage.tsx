@@ -15,14 +15,11 @@ import {
 import { ArrowLeft, FolderInput, Maximize2, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import {
-	Button,
-	Chip,
-	Input,
-	Select,
-	SelectItem,
-	Spinner,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Input } from "../../control/Input/Input";
+import { Select } from "../../control/Select/Select";
+import { Spinner, ListBox } from "@heroui/react";
 
 export interface AssetDetailPageFolder {
 	id: string;
@@ -170,7 +167,7 @@ export const AssetDetailPage = observer(
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">에셋을 찾을 수 없습니다.</p>
+								<p className="text-muted">에셋을 찾을 수 없습니다.</p>
 								<Button variant="flat" onPress={onClickBackButton}>
 									목록으로
 								</Button>
@@ -256,7 +253,7 @@ export const AssetDetailPage = observer(
 										className="min-h-[420px]"
 									/>
 								</div>
-								<div className="rounded-[1.5rem] border border-divider/70 bg-[linear-gradient(160deg,rgba(255,255,255,0.95),rgba(248,250,252,0.92))] p-5 shadow-sm">
+								<div className="rounded-[1.5rem] border border-border/70 bg-[linear-gradient(160deg,rgba(255,255,255,0.95),rgba(248,250,252,0.92))] p-5 shadow-sm">
 									<div className="flex flex-wrap gap-2">
 										<Chip
 											size="sm"
@@ -284,39 +281,39 @@ export const AssetDetailPage = observer(
 										<p className="text-lg font-semibold text-foreground">
 											{asset.originalName}
 										</p>
-										<p className="text-sm leading-6 text-default-500">
+										<p className="text-sm leading-6 text-muted">
 											{previewUrl
 												? "브라우저 안에서 바로 검토하고, 필요하면 원본 파일을 새 탭으로 열 수 있습니다."
 												: "업로드가 완료되지 않았거나 브라우저가 인라인 렌더링을 지원하지 않는 형식이면 안내 카드로 폴백됩니다."}
 										</p>
 									</div>
 									<div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-1">
-										<div className="rounded-2xl bg-default-50/80 px-4 py-3">
-											<p className="text-xs font-medium uppercase tracking-[0.12em] text-default-400">
+										<div className="rounded-2xl bg-default/80 px-4 py-3">
+											<p className="text-xs font-medium uppercase tracking-[0.12em] text-muted">
 												MIME Type
 											</p>
 											<p className="mt-2 break-all font-mono text-sm text-foreground">
 												{asset.mimeType}
 											</p>
 										</div>
-										<div className="rounded-2xl bg-default-50/80 px-4 py-3">
-											<p className="text-xs font-medium uppercase tracking-[0.12em] text-default-400">
+										<div className="rounded-2xl bg-default/80 px-4 py-3">
+											<p className="text-xs font-medium uppercase tracking-[0.12em] text-muted">
 												파일 크기
 											</p>
 											<p className="mt-2 text-sm font-semibold text-foreground">
 												{formatBytes(asset.sizeBytes)}
 											</p>
 										</div>
-										<div className="rounded-2xl bg-default-50/80 px-4 py-3">
-											<p className="text-xs font-medium uppercase tracking-[0.12em] text-default-400">
+										<div className="rounded-2xl bg-default/80 px-4 py-3">
+											<p className="text-xs font-medium uppercase tracking-[0.12em] text-muted">
 												현재 폴더
 											</p>
 											<p className="mt-2 break-all font-mono text-sm text-foreground">
 												{asset.folderId}
 											</p>
 										</div>
-										<div className="rounded-2xl bg-default-50/80 px-4 py-3">
-											<p className="text-xs font-medium uppercase tracking-[0.12em] text-default-400">
+										<div className="rounded-2xl bg-default/80 px-4 py-3">
+											<p className="text-xs font-medium uppercase tracking-[0.12em] text-muted">
 												등록일
 											</p>
 											<div className="mt-2 text-sm">
@@ -331,35 +328,35 @@ export const AssetDetailPage = observer(
 							<DetailSection top={<PageTitleBar level={2} title="기본 정보" />}>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<p className="text-sm text-default-500">파일명</p>
+										<p className="text-sm text-muted">파일명</p>
 										<p className="mt-1 font-medium">{asset.originalName}</p>
 									</div>
 									<div>
-										<p className="text-sm text-default-500">에셋 ID</p>
+										<p className="text-sm text-muted">에셋 ID</p>
 										<p className="mt-1 font-mono text-sm">{asset.id}</p>
 									</div>
 									<div>
-										<p className="text-sm text-default-500">타입</p>
+										<p className="text-sm text-muted">타입</p>
 										<p className="mt-1">{getKindLabel(asset.kind)}</p>
 									</div>
 									<div>
-										<p className="text-sm text-default-500">상태</p>
+										<p className="text-sm text-muted">상태</p>
 										<p className="mt-1">{getStatusLabel(asset.status)}</p>
 									</div>
 									<div>
-										<p className="text-sm text-default-500">MIME 타입</p>
+										<p className="text-sm text-muted">MIME 타입</p>
 										<p className="mt-1 font-mono text-sm">{asset.mimeType}</p>
 									</div>
 									<div>
-										<p className="text-sm text-default-500">크기</p>
+										<p className="text-sm text-muted">크기</p>
 										<p className="mt-1">{formatBytes(asset.sizeBytes)}</p>
 									</div>
 									<div>
-										<p className="text-sm text-default-500">현재 폴더 ID</p>
+										<p className="text-sm text-muted">현재 폴더 ID</p>
 										<p className="mt-1 font-mono text-sm">{asset.folderId}</p>
 									</div>
 									<div>
-										<p className="text-sm text-default-500">등록일</p>
+										<p className="text-sm text-muted">등록일</p>
 										<div className="mt-1">
 											<DateTimeCell value={asset.createdAt} />
 										</div>
@@ -370,27 +367,28 @@ export const AssetDetailPage = observer(
 						<DetailSectionCard>
 							<DetailSection top={<PageTitleBar level={2} title="폴더 이동" />}>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
-									<Select
-										label="이동 대상 폴더"
-										placeholder="폴더를 선택하세요"
-										selectedKeys={
-											targetFolderId && folderIds.has(targetFolderId)
-												? [targetFolderId]
-												: []
-										}
-										isInvalid={Boolean(targetFolderError)}
-										errorMessage={targetFolderError}
-										onSelectionChange={(keys) => {
-											const firstKey = Array.from(keys)[0];
-											onChangeTargetFolderSelection(
-												firstKey ? String(firstKey) : "",
-											);
-										}}
-									>
-										{folders.map((folder) => (
-											<SelectItem key={folder.id} textValue={folder.name}>
-												{folder.name}
-											</SelectItem>
+										<Select
+											label="이동 대상 폴더"
+											placeholder="폴더를 선택하세요"
+											value={
+												targetFolderId && folderIds.has(targetFolderId)
+													? targetFolderId
+													: null
+											}
+											isInvalid={Boolean(targetFolderError)}
+											errorMessage={targetFolderError}
+											onChange={(value) => {
+												onChangeTargetFolderSelection(String(value ?? ""));
+											}}
+										>
+											{folders.map((folder) => (
+												<ListBox.Item
+													key={folder.id}
+													id={folder.id}
+													textValue={folder.name}
+												>
+													{folder.name}
+												</ListBox.Item>
 										))}
 									</Select>
 									<div className="flex items-end">

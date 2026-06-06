@@ -10,19 +10,12 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Edit, Save, ShieldCheck, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Checkbox,
-	Chip,
-	Input,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	Spinner,
-	Switch,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Checkbox } from "../../control/Checkbox/Checkbox";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Input } from "../../control/Input/Input";
+import { Modal, Spinner, useOverlayState } from "@heroui/react";
+import { Switch } from "../../control/Switch/Switch";
 
 export interface RoleDetailPageRole {
 	id: string;
@@ -123,10 +116,26 @@ export const RoleDetailPage = observer(
 		onTogglePolicy,
 		onChangePolicyAssignmentActive,
 		onChangePolicyAssignmentPriority,
-		onClickOpenSavePoliciesModal,
-		onClickConfirmSavePoliciesButton,
-	}: RoleDetailPageProps) => {
-		const selectedSet = new Set(selectedPolicyIds);
+			onClickOpenSavePoliciesModal,
+			onClickConfirmSavePoliciesButton,
+		}: RoleDetailPageProps) => {
+			const deleteModalState = useOverlayState({
+				isOpen: isDeleteModalOpen,
+				onOpenChange: (open) => {
+					if (!open) {
+						onCloseDeleteModal?.();
+					}
+				},
+			});
+			const savePoliciesModalState = useOverlayState({
+				isOpen: isSavePoliciesModalOpen,
+				onOpenChange: (open) => {
+					if (!open) {
+						onClickCancelEditPoliciesButton?.();
+					}
+				},
+			});
+			const selectedSet = new Set(selectedPolicyIds);
 		const assignedSet = new Set(assignedPolicyIds);
 		const selectedAssignmentMap = new Map(
 			selectedPolicyAssignments.map((assignment) => [
@@ -155,7 +164,7 @@ export const RoleDetailPage = observer(
 						<DetailSectionCard>
 							<div className="flex items-center justify-center gap-2 p-8">
 								<Spinner size="sm" />
-								<span className="text-default-500">로딩 중...</span>
+								<span className="text-muted">로딩 중...</span>
 							</div>
 						</DetailSectionCard>
 					</DetailPageSurface>
@@ -176,7 +185,7 @@ export const RoleDetailPage = observer(
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">역할을 찾을 수 없습니다.</p>
+								<p className="text-muted">역할을 찾을 수 없습니다.</p>
 								<Button variant="flat" onPress={onClickBackButton}>
 									목록으로
 								</Button>
@@ -292,7 +301,7 @@ export const RoleDetailPage = observer(
 								{isLoadingPolicies ? (
 									<div className="flex items-center justify-center gap-2 p-8">
 										<Spinner size="sm" />
-										<span className="text-default-500">
+										<span className="text-muted">
 											정책을 불러오는 중...
 										</span>
 									</div>
@@ -320,7 +329,7 @@ export const RoleDetailPage = observer(
 												return (
 													<div
 														key={policy.id}
-														className="rounded-xl border border-divider bg-background/60 p-4"
+														className="rounded-xl border border-border bg-background/60 p-4"
 													>
 														<div className="flex items-start justify-between gap-4">
 															<div className="min-w-0">
@@ -352,10 +361,10 @@ export const RoleDetailPage = observer(
 																		{policy.isSystem ? "시스템" : "공간"}
 																	</Chip>
 																</div>
-																<p className="mt-1 text-sm text-default-500">
+																<p className="mt-1 text-sm text-muted">
 																	{policy.description || policy.name}
 																</p>
-																<p className="mt-2 text-xs text-default-400">
+																<p className="mt-2 text-xs text-muted">
 																	우선순위 {assignment?.priority ?? 0} · Ability{" "}
 																	{policy.abilityCount ?? 0}개
 																</p>
@@ -402,7 +411,7 @@ export const RoleDetailPage = observer(
 												);
 											})
 										) : (
-											<div className="rounded-xl border border-divider bg-background/60 p-6 text-center text-sm text-default-500">
+											<div className="rounded-xl border border-border bg-background/60 p-6 text-center text-sm text-muted">
 												사용 가능한 정책이 없습니다.
 											</div>
 										)}
@@ -413,11 +422,11 @@ export const RoleDetailPage = observer(
 					</VStack>
 				</DetailPageSurface>
 
-				<Modal isOpen={isDeleteModalOpen} onOpenChange={onCloseDeleteModal}>
-					<ModalContent>
-						<ModalHeader>역할 삭제</ModalHeader>
-						<ModalBody>이 역할을 삭제하시겠습니까?</ModalBody>
-						<ModalFooter>
+				<Modal state={deleteModalState}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>역할 삭제</Modal.Header>
+						<Modal.Body>이 역할을 삭제하시겠습니까?</Modal.Body>
+						<Modal.Footer>
 							<Button variant="flat" onPress={onCloseDeleteModal}>
 								취소
 							</Button>
@@ -428,20 +437,17 @@ export const RoleDetailPage = observer(
 							>
 								삭제
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
 
-				<Modal
-					isOpen={isSavePoliciesModalOpen}
-					onOpenChange={onClickCancelEditPoliciesButton}
-				>
-					<ModalContent>
-						<ModalHeader>정책 할당 저장</ModalHeader>
-						<ModalBody>
+				<Modal state={savePoliciesModalState}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>정책 할당 저장</Modal.Header>
+						<Modal.Body>
 							추가 {addedCount}개, 해제 {removedCount}개 변경을 저장합니다.
-						</ModalBody>
-						<ModalFooter>
+						</Modal.Body>
+						<Modal.Footer>
 							<Button variant="flat" onPress={onClickCancelEditPoliciesButton}>
 								취소
 							</Button>
@@ -452,8 +458,8 @@ export const RoleDetailPage = observer(
 							>
 								저장
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
 			</DetailPage>
 		);
@@ -462,8 +468,8 @@ export const RoleDetailPage = observer(
 
 function Info({ label, value }: { label: string; value: string }) {
 	return (
-		<div className="rounded-lg border border-divider bg-background/60 p-3">
-			<p className="text-xs text-default-500">{label}</p>
+		<div className="rounded-lg border border-border bg-background/60 p-3">
+			<p className="text-xs text-muted">{label}</p>
 			<p className="mt-1 break-all text-sm font-medium">{value}</p>
 		</div>
 	);

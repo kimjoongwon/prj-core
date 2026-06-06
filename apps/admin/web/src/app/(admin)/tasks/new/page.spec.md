@@ -49,7 +49,7 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 | name | Input | 필수, 1-100자 | 운동 이름 (예: "바벨 스쿼트", "푸시업") |
 | duration | DurationInput | 필수, 1초 이상 | 지속시간 - 분/초 분리 입력 UI, 내부적으로 초 단위 저장 |
 | count | NumberInput | 필수, 최소 1 | 반복 횟수 (예: 10회) |
-| description | Textarea | 선택, 최대 500자 | 운동 설명, 수행 방법 등 |
+| description | TextArea | 선택, 최대 500자 | 운동 설명, 수행 방법 등 |
 
 **DurationInput UI 상세:**
 - 분(min) 숫자 입력 + 초(sec) 숫자 입력을 나란히 배치

@@ -3,7 +3,7 @@
 import { useNavigationStore } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import { cn } from "../../design-system/primitives";
+import { cn } from "@heroui/react";
 
 /**
  * SubNav Feature 컴포넌트
@@ -29,7 +29,7 @@ export const SubNav = observer(() => {
 	}
 
 	return (
-		<nav className="border-divider flex items-center gap-1 border-t bg-background/50 px-6 py-2">
+		<nav className="border-border flex items-center gap-1 border-t bg-background/50 px-6 py-2">
 			{subNavItems.map((item) => (
 				<button
 					key={item.id}
@@ -38,8 +38,8 @@ export const SubNav = observer(() => {
 					className={cn(
 						"flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
 						item.active
-							? "bg-default-200 text-foreground"
-							: "text-foreground/60 hover:bg-default-100 hover:text-foreground",
+							? "bg-default text-foreground"
+							: "text-foreground/60 hover:bg-default hover:text-foreground",
 					)}
 				>
 					{item.icon && (

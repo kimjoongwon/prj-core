@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 import { Page } from "../../layout/Page";
 import { PageTitleBar } from "../../widget/PageTitleBar";
 import { SectionSurface } from "../SectionSurface";
@@ -20,7 +20,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		children: (
-			<div className="text-default-600 text-sm">
+			<div className="text-muted text-sm">
 				페이지 본문이 올라가는 raised 표면입니다.
 			</div>
 		),
@@ -45,7 +45,7 @@ export const WithPageLayout: Story = {
 			<PageSurface>
 				<div className="flex flex-col gap-4">
 					<SectionSurface>
-						<div className="text-default-600 text-sm">
+						<div className="text-muted text-sm">
 							Page 아래에서 시각적 페이지 표면으로 사용합니다.
 						</div>
 					</SectionSurface>

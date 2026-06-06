@@ -37,7 +37,7 @@ export const ByteCounter = observer(
 		const messageCount = Math.max(1, Math.ceil(byteLength / bytesPerMessage));
 		const isExceeded = messageCount > 1;
 
-		const colorClass = isExceeded ? "text-warning" : "text-default-500";
+		const colorClass = isExceeded ? "text-warning" : "text-muted";
 
 		return (
 			<span className={`text-sm ${colorClass}`}>

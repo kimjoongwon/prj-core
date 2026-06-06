@@ -2,7 +2,8 @@ import type { Response } from "express";
 
 export class RefreshTokenWithIdpCommand {
 	constructor(
-		readonly refreshToken: string,
+		readonly refreshTokenCookie: string | undefined,
+		readonly refreshTokenHeader: string | undefined,
 		readonly sessionId: string | undefined,
 		readonly res: Response,
 	) {}

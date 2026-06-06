@@ -2,7 +2,7 @@
 
 import { Copy, Download, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button, Image } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 
 export interface ImageCardProps {
 	/** 이미지 소스 URL */
@@ -60,15 +60,14 @@ export const ImageCard = observer(
 
 		return (
 			<div
-				className={`group relative rounded-xl overflow-hidden bg-content2 border border-divider ${className ?? ""}`}
+				className={`group relative rounded-xl overflow-hidden bg-surface-secondary border border-border ${className ?? ""}`}
 			>
 				<div className={aspectRatioClasses[aspectRatio]}>
-					<Image
-						src={src}
-						alt={filename}
-						className="w-full h-full object-cover"
-						removeWrapper
-					/>
+						<img
+							src={src}
+							alt={filename}
+							className="w-full h-full object-cover"
+						/>
 				</div>
 
 				{hasActions && (

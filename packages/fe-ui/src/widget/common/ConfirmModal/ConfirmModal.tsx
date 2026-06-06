@@ -4,13 +4,7 @@ import { AlertTriangle, Info, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { Button } from "../../../control/Button/Button";
-import {
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-} from "../../../design-system/primitives";
+import { Modal, useOverlayState } from "@heroui/react";
 import { translateNode, useT } from "../../../i18n";
 import { HStack } from "../../../rhythm/HStack/HStack";
 import { VStack } from "../../../rhythm/VStack/VStack";
@@ -60,8 +54,8 @@ const renderIcon = (iconType: ConfirmModalProps["iconType"]) => {
 			);
 		case "info":
 			return (
-				<div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-					<Info className="h-6 w-6 text-primary" />
+				<div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/10">
+					<Info className="h-6 w-6 text-accent" />
 				</div>
 			);
 		default:
@@ -120,20 +114,28 @@ export const ConfirmModal = observer(
 	}: ConfirmModalProps) => {
 		const t = useT();
 		const icon = renderIcon(iconType);
+		const modalState = useOverlayState({
+			isOpen,
+			onOpenChange: (open) => {
+				if (!open) {
+					onClose();
+				}
+			},
+		});
 
 		return (
-			<Modal isOpen={isOpen} onClose={onClose} size="sm">
-				<ModalContent>
-					<ModalHeader className="flex flex-col gap-1">{t(title)}</ModalHeader>
-					<ModalBody>
+			<Modal state={modalState}>
+				<Modal.Backdrop><Modal.Container size="sm"><Modal.Dialog>
+					<Modal.Header className="flex flex-col gap-1">{t(title)}</Modal.Header>
+					<Modal.Body>
 						<VStack gap={4} alignItems="center">
 							{icon}
-							<div className="text-center text-default-600">
+							<div className="text-center text-muted">
 								{translateNode(message, t)}
 							</div>
 						</VStack>
-					</ModalBody>
-					<ModalFooter>
+					</Modal.Body>
+					<Modal.Footer>
 						<HStack gap={8} justifyContent="end" fullWidth>
 							<Button variant="flat" onPress={onClose} isDisabled={loading}>
 								{cancelText}
@@ -146,8 +148,8 @@ export const ConfirmModal = observer(
 								{confirmText}
 							</Button>
 						</HStack>
-					</ModalFooter>
-				</ModalContent>
+					</Modal.Footer>
+				</Modal.Dialog></Modal.Container></Modal.Backdrop>
 			</Modal>
 		);
 	},

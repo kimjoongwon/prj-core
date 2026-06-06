@@ -50,7 +50,7 @@ export const PasswordInputPage = observer(
 			<VStack fullWidth gap={8} className="p-4">
 				<VStack fullWidth gap={2}>
 					<h3 className="text-2xl font-bold">비밀번호 설정</h3>
-					<span className="text-sm text-default-500">
+					<span className="text-sm text-muted">
 						사용하실 비밀번호를 입력해주세요.
 					</span>
 				</VStack>

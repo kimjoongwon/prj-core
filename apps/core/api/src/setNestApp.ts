@@ -8,13 +8,42 @@ import {
 } from "@cocrepo/be-common";
 import { I18nTranslationService, TokenStorageService } from "@cocrepo/service";
 import {
+	type ArgumentsHost,
+	Catch,
 	ClassSerializerInterceptor,
+	type HttpServer,
 	type INestApplication,
+	Logger,
 	ValidationPipe,
 } from "@nestjs/common";
-import { HttpAdapterHost, Reflector } from "@nestjs/core";
+import { BaseExceptionFilter, HttpAdapterHost, Reflector } from "@nestjs/core";
 import cookieParser from "cookie-parser";
 import { ClsService } from "nestjs-cls";
+
+@Catch()
+class IdpAllExceptionsFilter extends BaseExceptionFilter {
+	private readonly logger = new Logger(IdpAllExceptionsFilter.name);
+
+	constructor(
+		applicationRef: HttpServer,
+		private readonly innerFilter: AllExceptionsFilter,
+	) {
+		super(applicationRef);
+	}
+
+	catch(exception: unknown, host: ArgumentsHost) {
+		const response = host.switchToHttp().getResponse();
+
+		if (response.headersSent) {
+			this.logger.debug(
+				"Headers already sent, skipping exception filter response",
+			);
+			return;
+		}
+
+		return this.innerFilter.catch(exception, host);
+	}
+}
 
 export function setNestApp<T extends INestApplication>(app: T): void {
 	const httpAdapterHost = app.get(HttpAdapterHost);
@@ -26,8 +55,15 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	// =================================================================
 	// Global Exception Filters (모든 예외를 일관되게 처리)
 	// =================================================================
+	const allExceptionsFilter = new AllExceptionsFilter(
+		httpAdapterHost.httpAdapter,
+		translationService,
+	);
 	app.useGlobalFilters(
-		new AllExceptionsFilter(httpAdapterHost.httpAdapter, translationService),
+		new IdpAllExceptionsFilter(
+			httpAdapterHost.httpAdapter,
+			allExceptionsFilter,
+		),
 	);
 
 	// =================================================================

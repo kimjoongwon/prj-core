@@ -9,7 +9,9 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button, Input, Textarea } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input/Input";
+import { TextArea } from "../../control/TextArea/TextArea";
 
 export interface RoleEditPageProps {
 	roleName?: string;
@@ -22,7 +24,7 @@ export interface RoleEditPageProps {
 	isNotFound: boolean;
 	isSubmitPending: boolean;
 	onChangeDisplayNameInput: (value: string) => void;
-	onChangeDescriptionTextarea: (value: string) => void;
+	onChangeDescriptionTextArea: (value: string) => void;
 	onClickBackButton: () => void;
 	onClickListButton: () => void;
 	onClickSubmitButton: () => void;
@@ -40,7 +42,7 @@ export const RoleEditPage = observer(
 		isNotFound,
 		isSubmitPending,
 		onChangeDisplayNameInput,
-		onChangeDescriptionTextarea,
+		onChangeDescriptionTextArea,
 		onClickBackButton,
 		onClickListButton,
 		onClickSubmitButton,
@@ -53,7 +55,7 @@ export const RoleEditPage = observer(
 					<FormPageSurface>
 						<FormSectionCard>
 							<div className="flex items-center justify-center p-8">
-								<span className="text-default-500">로딩 중...</span>
+								<span className="text-muted">로딩 중...</span>
 							</div>
 						</FormSectionCard>
 					</FormPageSurface>
@@ -74,7 +76,7 @@ export const RoleEditPage = observer(
 					<FormPageSurface>
 						<FormSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">역할을 찾을 수 없습니다.</p>
+								<p className="text-muted">역할을 찾을 수 없습니다.</p>
 								<Button variant="flat" onPress={onClickListButton}>
 									목록으로
 								</Button>
@@ -98,7 +100,7 @@ export const RoleEditPage = observer(
 					<FormPageSurface>
 						<FormSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">
+								<p className="text-muted">
 									시스템 역할은 수정할 수 없습니다.
 								</p>
 								<Button variant="flat" onPress={onClickBackButton}>
@@ -150,11 +152,11 @@ export const RoleEditPage = observer(
 									maxLength={50}
 									description="사용자에게 보여질 역할 이름입니다."
 								/>
-								<Textarea
+								<TextArea
 									label="설명"
 									placeholder="역할에 대한 설명을 입력하세요."
 									value={description}
-									onValueChange={onChangeDescriptionTextarea}
+									onValueChange={onChangeDescriptionTextArea}
 									maxLength={200}
 									minRows={3}
 								/>

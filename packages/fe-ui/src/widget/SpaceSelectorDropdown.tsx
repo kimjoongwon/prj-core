@@ -2,13 +2,8 @@
 
 import { Building2, Check, ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Dropdown,
-	DropdownItem,
-	DropdownMenu,
-	DropdownTrigger,
-} from "../design-system/primitives";
+import { Button } from "../control/Button/Button";
+import { Dropdown } from "@heroui/react";
 
 /**
  * Space 정보 인터페이스
@@ -55,7 +50,7 @@ export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 }: SpaceSelectorDropdownProps) {
 	const buttonLabel = currentSpaceName ?? "Space 확인 중";
 	const buttonClasses =
-		"h-11 gap-2 rounded-2xl border border-divider bg-content1/80 px-3 text-foreground shadow-sm backdrop-blur-md hover:bg-content2";
+		"h-11 gap-2 rounded-2xl border border-border bg-surface/80 px-3 text-foreground shadow-sm backdrop-blur-md hover:bg-surface-secondary";
 
 	if (spaces.length === 0) {
 		return (
@@ -64,10 +59,10 @@ export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 				isDisabled
 				className={buttonClasses}
 				startContent={
-					<Building2 className="h-4 w-4 text-default-400" size={16} />
+					<Building2 className="h-4 w-4 text-muted" size={16} />
 				}
 			>
-				<span className="max-w-32 truncate text-sm text-default-500">
+				<span className="max-w-32 truncate text-sm text-muted">
 					{buttonLabel}
 				</span>
 			</Button>
@@ -75,53 +70,44 @@ export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 	}
 
 	return (
-		<Dropdown placement="bottom-end">
-			<DropdownTrigger>
-				<Button
-					variant="light"
-					className={buttonClasses}
-					startContent={
-						<Building2 className="h-4 w-4 text-default-500" size={16} />
-					}
-					endContent={
-						<ChevronDown className="h-4 w-4 text-default-400" size={16} />
-					}
+		<Dropdown>
+			<Dropdown.Trigger className={buttonClasses}>
+				<Building2 className="h-4 w-4 text-muted" size={16} />
+				<span className="max-w-32 truncate text-sm text-foreground">
+					{buttonLabel}
+				</span>
+				<ChevronDown className="h-4 w-4 text-muted" size={16} />
+			</Dropdown.Trigger>
+			<Dropdown.Popover placement="bottom end">
+				<Dropdown.Menu
+					aria-label="Space 선택"
+					onAction={(key) => {
+						const selectedSpace = spaces.find((s) => s.spaceId === key);
+						if (selectedSpace && selectedSpace.spaceId !== currentSpaceId) {
+							onSpaceSelect(selectedSpace);
+						}
+					}}
 				>
-					<span className="max-w-32 truncate text-sm text-foreground">
-						{buttonLabel}
-					</span>
-				</Button>
-			</DropdownTrigger>
-			<DropdownMenu
-				aria-label="Space 선택"
-				selectionMode="single"
-				selectedKeys={currentSpaceId ? new Set([currentSpaceId]) : new Set()}
-				onSelectionChange={(keys) => {
-					const selectedKey = Array.from(keys)[0] as string;
-					const selectedSpace = spaces.find((s) => s.spaceId === selectedKey);
-					if (selectedSpace && selectedSpace.spaceId !== currentSpaceId) {
-						onSpaceSelect(selectedSpace);
-					}
-				}}
-			>
-				{spaces.map((space) => (
-					<DropdownItem
-						key={space.spaceId}
-						startContent={
-							space.spaceId === currentSpaceId ? (
-								<Check className="w-4 h-4 text-primary" size={16} />
-							) : (
-								<Building2 className="w-4 h-4 text-default-400" size={16} />
-							)
-						}
-						className={
-							space.spaceId === currentSpaceId ? "text-primary" : undefined
-						}
-					>
-						{space.groundName}
-					</DropdownItem>
-				))}
-			</DropdownMenu>
+					{spaces.map((space) => (
+						<Dropdown.Item
+							id={space.spaceId}
+							key={space.spaceId}
+							className={
+								space.spaceId === currentSpaceId ? "text-accent" : undefined
+							}
+						>
+							<span className="flex items-center gap-2">
+								{space.spaceId === currentSpaceId ? (
+									<Check className="w-4 h-4 text-accent" size={16} />
+								) : (
+									<Building2 className="w-4 h-4 text-muted" size={16} />
+								)}
+								{space.groundName}
+							</span>
+						</Dropdown.Item>
+					))}
+				</Dropdown.Menu>
+			</Dropdown.Popover>
 		</Dropdown>
 	);
 });

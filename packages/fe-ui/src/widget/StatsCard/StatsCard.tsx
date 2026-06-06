@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Card, CardBody } from "../../design-system/primitives";
+import { Card } from "@heroui/react";
 
 export interface StatsCardProps {
 	/** 통계 제목 */
@@ -28,12 +28,12 @@ export interface StatsCardProps {
 
 const colorStyles = {
 	default: {
-		icon: "text-default-500",
+		icon: "text-muted",
 		value: "text-foreground",
 	},
 	primary: {
-		icon: "text-primary",
-		value: "text-primary",
+		icon: "text-accent",
+		value: "text-accent",
 	},
 	success: {
 		icon: "text-success",
@@ -78,21 +78,21 @@ export const StatsCard = observer(
 
 		return (
 			<Card
-				isPressable={!!onPress}
-				onPress={onPress}
-				className={`bg-content1 ${className}`}
-				shadow="sm"
+				role={onPress ? "button" : undefined}
+				tabIndex={onPress ? 0 : undefined}
+				onClick={onPress}
+				className={`bg-surface ${onPress ? "cursor-pointer" : ""} ${className}`}
 			>
-				<CardBody className="flex flex-row items-center gap-4 p-4">
+				<Card.Content className="flex flex-row items-center gap-4 p-4">
 					{icon && (
 						<div
-							className={`flex size-10 items-center justify-center rounded-lg bg-content2 ${styles.icon}`}
+							className={`flex size-10 items-center justify-center rounded-lg bg-surface-secondary ${styles.icon}`}
 						>
 							{icon}
 						</div>
 					)}
 					<div className="flex flex-1 flex-col">
-						<span className="text-sm text-default-500">{title}</span>
+						<span className="text-sm text-muted">{title}</span>
 						<div className="flex items-baseline gap-2">
 							<span className={`text-2xl font-bold ${styles.value}`}>
 								{typeof value === "number" ? value.toLocaleString() : value}
@@ -109,10 +109,10 @@ export const StatsCard = observer(
 							)}
 						</div>
 						{description && (
-							<span className="text-xs text-default-400">{description}</span>
+							<span className="text-xs text-muted">{description}</span>
 						)}
 					</div>
-				</CardBody>
+				</Card.Content>
 			</Card>
 		);
 	},

@@ -1,3 +1,4 @@
+import { PolicyAggregateRoot } from "@cocrepo/aggregate";
 import {
 	AbilitiesRepository,
 	PoliciesRepository,
@@ -5,7 +6,6 @@ import {
 	RolePoliciesRepository,
 	UserPoliciesRepository,
 } from "@cocrepo/repository";
-import { PolicyAggregateRoot } from "@cocrepo/aggregate";
 import { SpaceContext } from "@cocrepo/service";
 import { PolicyCommandHandlers, PolicyQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";

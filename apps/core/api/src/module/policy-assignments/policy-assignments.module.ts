@@ -1,3 +1,4 @@
+import { PolicyAssignmentAggregateRoot } from "@cocrepo/aggregate";
 import {
 	PoliciesRepository,
 	RolePoliciesRepository,
@@ -5,7 +6,6 @@ import {
 	UserPoliciesRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
-import { PolicyAssignmentAggregateRoot } from "@cocrepo/aggregate";
 import { SpaceContext } from "@cocrepo/service";
 import {
 	PolicyAssignmentCommandHandlers,

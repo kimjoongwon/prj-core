@@ -7,7 +7,7 @@ import {
   Surface as HeroSurface,
   surfaceClassNames,
   useSurface,
-} from "heroui-native/surface";
+} from "heroui-native";
 type HeroSurfaceProps = ComponentPropsWithoutRef<typeof HeroSurface>;
 export type SurfaceProps = HeroSurfaceProps & {};
 const SurfaceComponent = forwardRef<

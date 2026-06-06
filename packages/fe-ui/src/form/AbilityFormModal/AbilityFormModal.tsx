@@ -1,23 +1,13 @@
 "use client";
 
+import { CheckboxGroup, Header, ListBox, Modal, useOverlayState } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
+import { Button } from "../../control/Button/Button";
 import { Checkbox } from "../../control/Checkbox/Checkbox";
 import { Input } from "../../control/Input/Input";
 import { RadioGroup } from "../../control/RadioGroup/RadioGroup";
-import {
-	Button,
-	CheckboxGroup,
-	Checkbox as HeroCheckbox,
-	Select as HeroSelect,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	SelectItem,
-	SelectSection,
-} from "../../design-system/primitives";
+import { Select as HeroSelect } from "../../control/Select/Select";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { ConditionEditor } from "../../widget/ability/ConditionEditor";
@@ -216,8 +206,8 @@ export const AbilityFormModal = observer(
 		/**
 		 * Subject 변경 핸들러
 		 */
-		const handleSubjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-			const subjectId = e.target.value;
+		const handleSubjectChange = (value: string | number | null) => {
+			const subjectId = String(value ?? "");
 			const selected = subjects.find((s) => s.id === subjectId);
 			setFormData((prev) => ({
 				...prev,
@@ -235,8 +225,8 @@ export const AbilityFormModal = observer(
 		/**
 		 * Action 변경 핸들러
 		 */
-		const handleActionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-			const actionId = e.target.value;
+		const handleActionChange = (value: string | number | null) => {
+			const actionId = String(value ?? "");
 			const selected = actions.find((a) => a.id === actionId);
 			setFormData((prev) => ({
 				...prev,
@@ -317,18 +307,21 @@ export const AbilityFormModal = observer(
 		/**
 		 * 제출 버튼 텍스트
 		 */
-		const submitButtonText = mode === "create" ? "저장" : "수정";
+			const submitButtonText = mode === "create" ? "저장" : "수정";
+			const modalState = useOverlayState({
+				isOpen,
+				onOpenChange: (open) => {
+					if (!open) {
+						onClose();
+					}
+				},
+			});
 
-		return (
-			<Modal
-				isOpen={isOpen}
-				onClose={onClose}
-				size="2xl"
-				scrollBehavior="inside"
-			>
-				<ModalContent>
-					<ModalHeader>{modalTitle}</ModalHeader>
-					<ModalBody>
+			return (
+				<Modal state={modalState}>
+					<Modal.Backdrop><Modal.Container size="lg" scroll="inside"><Modal.Dialog>
+					<Modal.Header>{modalTitle}</Modal.Header>
+					<Modal.Body>
 						<VStack gap={4}>
 							{/* 규칙 이름 */}
 							<Input
@@ -345,68 +338,62 @@ export const AbilityFormModal = observer(
 							/>
 
 							{/* Subject 선택 (그룹별 분류) */}
-							<HeroSelect
-								label="Subject"
-								placeholder="Subject를 선택하세요"
-								selectedKeys={formData.subjectId ? [formData.subjectId] : []}
-								onChange={handleSubjectChange}
-								isDisabled={loading}
-								isRequired
+								<HeroSelect
+									label="Subject"
+									placeholder="Subject를 선택하세요"
+									value={formData.subjectId || null}
+									onChange={handleSubjectChange}
+									isDisabled={loading}
+									isRequired
 								isInvalid={!!errors.subjectId}
 								errorMessage={errors.subjectId}
 								variant="bordered"
 							>
 								{Object.entries(groupedSubjects).map(([group, items]) => (
-									<SelectSection
-										key={group}
-										title={group}
-										classNames={{
-											heading:
-												"text-xs font-semibold text-default-500 uppercase",
-										}}
-									>
+									<ListBox.Section key={group}>
+										<Header className="text-xs font-semibold text-muted uppercase">
+											{group}
+										</Header>
 										{items.map((subject) => (
-											<SelectItem
+											<ListBox.Item
 												key={subject.id}
+												id={subject.id}
 												textValue={subject.displayName || subject.name}
 											>
 												{subject.displayName || subject.name}
-											</SelectItem>
+											</ListBox.Item>
 										))}
-									</SelectSection>
+									</ListBox.Section>
 								))}
 							</HeroSelect>
 
 							{/* Action 선택 (그룹별 분류) */}
-							<HeroSelect
-								label="Action"
-								placeholder="Action을 선택하세요"
-								selectedKeys={formData.actionId ? [formData.actionId] : []}
-								onChange={handleActionChange}
-								isDisabled={loading}
-								isRequired
+								<HeroSelect
+									label="Action"
+									placeholder="Action을 선택하세요"
+									value={formData.actionId || null}
+									onChange={handleActionChange}
+									isDisabled={loading}
+									isRequired
 								isInvalid={!!errors.actionId}
 								errorMessage={errors.actionId}
 								variant="bordered"
 							>
 								{Object.entries(groupedActions).map(([group, items]) => (
-									<SelectSection
-										key={group}
-										title={ACTION_GROUP_LABELS[group] || group}
-										classNames={{
-											heading:
-												"text-xs font-semibold text-default-500 uppercase",
-										}}
-									>
+									<ListBox.Section key={group}>
+										<Header className="text-xs font-semibold text-muted uppercase">
+											{ACTION_GROUP_LABELS[group] || group}
+										</Header>
 										{items.map((action) => (
-											<SelectItem
+											<ListBox.Item
 												key={action.id}
+												id={action.id}
 												textValue={action.displayName || action.name}
 											>
 												{action.displayName || action.name}
-											</SelectItem>
+											</ListBox.Item>
 										))}
-									</SelectSection>
+									</ListBox.Section>
 								))}
 							</HeroSelect>
 
@@ -445,19 +432,16 @@ export const AbilityFormModal = observer(
 									<span className="text-sm font-medium text-foreground">
 										대상 필드
 									</span>
-									<CheckboxGroup
-										value={formData.fields}
-										onValueChange={handleFieldsChange}
-										isDisabled={loading}
-										orientation="horizontal"
-										classNames={{
-											wrapper: "flex-wrap gap-3",
-										}}
-									>
+										<CheckboxGroup
+											value={formData.fields}
+											onChange={handleFieldsChange}
+											isDisabled={loading}
+											className="flex-wrap gap-3"
+										>
 										{subjectFields.map((field) => (
-											<HeroCheckbox key={field} value={field}>
+											<Checkbox key={field} value={field}>
 												{field}
-											</HeroCheckbox>
+											</Checkbox>
 										))}
 									</CheckboxGroup>
 								</VStack>
@@ -502,8 +486,8 @@ export const AbilityFormModal = observer(
 								</Checkbox>
 							</HStack>
 						</VStack>
-					</ModalBody>
-					<ModalFooter>
+					</Modal.Body>
+					<Modal.Footer>
 						<HStack gap={8} justifyContent="end">
 							<Button variant="flat" onPress={onClose} isDisabled={loading}>
 								취소
@@ -516,8 +500,8 @@ export const AbilityFormModal = observer(
 								{submitButtonText}
 							</Button>
 						</HStack>
-					</ModalFooter>
-				</ModalContent>
+					</Modal.Footer>
+				</Modal.Dialog></Modal.Container></Modal.Backdrop>
 			</Modal>
 		);
 	},

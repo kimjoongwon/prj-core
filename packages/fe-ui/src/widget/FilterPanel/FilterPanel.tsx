@@ -3,12 +3,10 @@
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import {
-	Button,
-	Checkbox,
-	CheckboxGroup,
-	Input,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Checkbox } from "../../control/Checkbox/Checkbox";
+import { CheckboxGroup } from "@heroui/react";
+import { Input } from "../../control/Input/Input";
 
 /** 필터 그룹 정의 */
 export interface FilterGroup {
@@ -150,7 +148,7 @@ export const FilterPanel = observer(
 				{/* 검색 */}
 				{showSearch && (
 					<div>
-						<h3 className="mb-2 text-sm font-semibold text-default-700">
+						<h3 className="mb-2 text-sm font-semibold text-foreground">
 							검색
 						</h3>
 						<Input
@@ -158,9 +156,9 @@ export const FilterPanel = observer(
 							size="sm"
 							value={filter.searchQuery}
 							onValueChange={handleSearchChange}
-							startContent={<Search className="size-4 text-default-400" />}
+							startContent={<Search className="size-4 text-muted" />}
 							classNames={{
-								input: "bg-content2",
+								input: "bg-surface-secondary",
 							}}
 						/>
 					</div>
@@ -169,7 +167,7 @@ export const FilterPanel = observer(
 				{/* 그룹 필터 */}
 				{groups.length > 0 && (
 					<div>
-						<h3 className="mb-2 text-sm font-semibold text-default-700">
+						<h3 className="mb-2 text-sm font-semibold text-foreground">
 							{groupsTitle}
 						</h3>
 						<div className="flex flex-col gap-2">
@@ -186,12 +184,11 @@ export const FilterPanel = observer(
 								return (
 									<Checkbox
 										key={group.label}
-										size="sm"
 										isSelected={isAllSelected}
 										isIndeterminate={isPartialSelected}
 										onValueChange={() => handleGroupChange(group.values)}
 										classNames={{
-											label: "text-sm text-default-600",
+											content: "text-sm text-muted",
 										}}
 									>
 										{group.label}
@@ -205,23 +202,20 @@ export const FilterPanel = observer(
 				{/* 옵션 필터 */}
 				{options.length > 0 && (
 					<div>
-						<h3 className="mb-2 text-sm font-semibold text-default-700">
+						<h3 className="mb-2 text-sm font-semibold text-foreground">
 							{optionsTitle}
 						</h3>
-						<CheckboxGroup
-							size="sm"
-							value={filter.selectedOptions}
-							onValueChange={handleOptionsChange}
-							classNames={{
-								wrapper: "gap-1",
-							}}
-						>
+							<CheckboxGroup
+								value={filter.selectedOptions}
+								onChange={handleOptionsChange}
+								className="gap-1"
+							>
 							{options.map((option) => (
 								<Checkbox
 									key={option.value}
 									value={option.value}
 									classNames={{
-										label: "text-sm text-default-600",
+										content: "text-sm text-muted",
 									}}
 								>
 									{option.label}

@@ -65,7 +65,9 @@ test.describe("로그인 페이지 테스트", () => {
 		await routeAuthenticatedAdminShellApis(page);
 		await page.goto("auth/login");
 
-		await expect(page.getByLabel("이메일")).toHaveValue(LOCAL_ADMIN_LOGIN_EMAIL);
+		await expect(page.getByLabel("이메일")).toHaveValue(
+			LOCAL_ADMIN_LOGIN_EMAIL,
+		);
 		await expect(page.getByLabel("비밀번호")).toHaveValue(
 			LOCAL_ADMIN_LOGIN_PASSWORD,
 		);

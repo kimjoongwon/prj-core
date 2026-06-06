@@ -1,4 +1,4 @@
-import type { ChipProps } from "../../design-system/primitives";
+import type { ChipProps } from "../../data-display/Chip/Chip";
 
 export interface PaymentManagementQueryState {
 	isLoading: boolean;

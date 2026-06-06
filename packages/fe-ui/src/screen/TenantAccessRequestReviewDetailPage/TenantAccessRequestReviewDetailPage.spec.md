@@ -20,7 +20,7 @@
 | `isRejecting` | 반려 mutation 상태 |
 | `canApprove` | UI 승인 버튼 활성화 조건 |
 | `onClickBackButton` | 목록 이동 |
-| `onChangeReviewCommentTextarea` | 코멘트 변경 |
+| `onChangeReviewCommentTextArea` | 코멘트 변경 |
 | `onClickApproveButton` | 승인 요청 |
 | `onClickRejectButton` | 반려 요청 |
 

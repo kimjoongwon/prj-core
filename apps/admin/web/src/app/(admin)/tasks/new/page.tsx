@@ -2,7 +2,7 @@
 
 import { useCreateTask } from "@cocrepo/api/core/tasks";
 import { TaskCreatePage, useT } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -48,10 +48,8 @@ const AdminTasksNewRoute = observer(() => {
 	const { mutate: createTask, isPending } = useCreateTask({
 		mutation: {
 			onSuccess: (response) => {
-				addToast({
-					title: t("태스크 등록 성공"),
+				toast.success(t("태스크 등록 성공"), {
 					description: t("태스크와 운동 detail이 성공적으로 등록되었습니다."),
-					color: "success",
 				});
 				const taskId = response?.data?.id;
 				if (taskId) {
@@ -59,11 +57,9 @@ const AdminTasksNewRoute = observer(() => {
 				}
 			},
 			onError: (error) => {
-				addToast({
-					title: t("태스크 등록 실패"),
+				toast.danger(t("태스크 등록 실패"), {
 					description:
 						error.message || t("태스크 등록 중 오류가 발생했습니다."),
-					color: "danger",
 				});
 			},
 		},
@@ -93,7 +89,7 @@ const AdminTasksNewRoute = observer(() => {
 		delete state.errors.count;
 	};
 
-	const onChangeDescriptionTextarea = (value: string) => {
+	const onChangeDescriptionTextArea = (value: string) => {
 		state.description = value;
 	};
 
@@ -160,7 +156,7 @@ const AdminTasksNewRoute = observer(() => {
 			onChangeDurationMinInput={onChangeDurationMinInput}
 			onChangeDurationSecInput={onChangeDurationSecInput}
 			onChangeCountInput={onChangeCountInput}
-			onChangeDescriptionTextarea={onChangeDescriptionTextarea}
+			onChangeDescriptionTextArea={onChangeDescriptionTextArea}
 			onChangeImageFileIdInput={onChangeImageFileIdInput}
 			onChangeVideoFileIdInput={onChangeVideoFileIdInput}
 			onOpenImagePicker={() => {

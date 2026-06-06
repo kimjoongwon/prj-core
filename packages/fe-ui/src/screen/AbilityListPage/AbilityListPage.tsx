@@ -20,16 +20,12 @@ import {
 	SlidersHorizontal,
 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import type { Key } from "react";
 import { useEffect } from "react";
-import {
-	Button,
-	Chip,
-	Input,
-	Select,
-	SelectItem,
-	Spinner,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Input } from "../../control/Input/Input";
+import { Select } from "../../control/Select/Select";
+import { Spinner, ListBox } from "@heroui/react";
 import { VStack } from "../../rhythm";
 import { Surface } from "../../surface";
 import { PageTitleBar, StatsCard } from "../../widget";
@@ -114,21 +110,21 @@ const AbilityListPageFallback = observer(() => {
 	return (
 		<div className="space-y-5">
 			<Surface
-				className="rounded-2xl border-divider/80 bg-content1/70"
+				className="rounded-2xl border-border/80 bg-surface/70"
 				padding="lg"
 			>
 				<div className="flex items-center justify-center gap-2">
 					<Spinner size="sm" />
-					<span className="text-default-500">로딩 중...</span>
+					<span className="text-muted">로딩 중...</span>
 				</div>
 			</Surface>
 			<Surface
-				className="rounded-2xl border-divider/80 bg-content1/70"
+				className="rounded-2xl border-border/80 bg-surface/70"
 				padding="lg"
 			>
 				<div className="flex items-center justify-center gap-2">
 					<Spinner size="sm" />
-					<span className="text-default-500">로딩 중...</span>
+					<span className="text-muted">로딩 중...</span>
 				</div>
 			</Surface>
 		</div>
@@ -180,29 +176,14 @@ export const AbilityListPage = observer(
 		const handleSearchClear = () => {
 			onChangeSearchTerm("");
 		};
-		const handleSubjectSelectionChange = (keys: "all" | Set<Key>) => {
-			if (keys === "all") {
-				return;
-			}
-
-			const selected = Array.from(keys)[0];
-			onChangeSubjectId(typeof selected === "string" ? selected : "");
+		const handleSubjectSelectionChange = (value: string | number | null) => {
+			onChangeSubjectId(typeof value === "string" ? value : "");
 		};
-		const handleActionSelectionChange = (keys: "all" | Set<Key>) => {
-			if (keys === "all") {
-				return;
-			}
-
-			const selected = Array.from(keys)[0];
-			onChangeActionId(typeof selected === "string" ? selected : "");
+		const handleActionSelectionChange = (value: string | number | null) => {
+			onChangeActionId(typeof value === "string" ? value : "");
 		};
-		const handleInvertedSelectionChange = (keys: "all" | Set<Key>) => {
-			if (keys === "all") {
-				return;
-			}
-
-			const selected = Array.from(keys)[0];
-			onChangeInverted(typeof selected === "string" ? selected : "");
+		const handleInvertedSelectionChange = (value: string | number | null) => {
+			onChangeInverted(typeof value === "string" ? value : "");
 		};
 
 		if (isLoading) {
@@ -227,7 +208,7 @@ export const AbilityListPage = observer(
 				<VStack gap="section">
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
 						<StatsCard
-							className="h-full border border-primary/10 bg-primary/5"
+							className="h-full border border-accent/10 bg-accent/5"
 							color="primary"
 							description={`허용 ${summary.allow.toLocaleString()}건`}
 							icon={<ListChecks className="size-5" />}
@@ -259,8 +240,8 @@ export const AbilityListPage = observer(
 							value={summary.conditional + summary.fieldScoped}
 						/>
 					</div>
-					<Surface className="rounded-2xl border-divider/80 bg-content1/70">
-						<div className="mb-5 border-b border-divider/80 pb-4">
+					<Surface className="rounded-2xl border-border/80 bg-surface/70">
+						<div className="mb-5 border-b border-border/80 pb-4">
 							<PageTitleBar
 								level={2}
 								title="찾기와 좁히기"
@@ -273,54 +254,70 @@ export const AbilityListPage = observer(
 								placeholder="권한, 대상, 행동 검색"
 								value={filters.searchTerm}
 								onValueChange={onChangeSearchTerm}
-								startContent={<Search className="h-4 w-4 text-default-400" />}
+								startContent={<Search className="h-4 w-4 text-muted" />}
 								isClearable
 								onClear={handleSearchClear}
 							/>
-							<Select
-								aria-label="대상 선택"
-								placeholder="대상(Subject)"
-								selectedKeys={
-									filters.selectedSubjectId &&
-									subjectOptionIds.has(filters.selectedSubjectId)
-										? [filters.selectedSubjectId]
-										: []
-								}
-								onSelectionChange={handleSubjectSelectionChange}
-							>
-								{subjects.map((subject) => (
-									<SelectItem key={subject.id}>{subject.label}</SelectItem>
-								))}
-							</Select>
-							<Select
-								aria-label="행동 선택"
-								placeholder="행동(Action)"
-								selectedKeys={
-									filters.selectedActionId &&
-									actionOptionIds.has(filters.selectedActionId)
-										? [filters.selectedActionId]
-										: []
-								}
-								onSelectionChange={handleActionSelectionChange}
-							>
-								{actions.map((action) => (
-									<SelectItem key={action.id}>{action.label}</SelectItem>
-								))}
-							</Select>
-							<Select
-								aria-label="규칙 유형 선택"
-								placeholder="규칙 유형"
-								selectedKeys={
-									filters.selectedInverted === "true" ||
-									filters.selectedInverted === "false"
-										? [filters.selectedInverted]
-										: []
-								}
-								onSelectionChange={handleInvertedSelectionChange}
-							>
-								<SelectItem key="false">허용</SelectItem>
-								<SelectItem key="true">거부</SelectItem>
-							</Select>
+								<Select
+									aria-label="대상 선택"
+									placeholder="대상(Subject)"
+									value={
+										filters.selectedSubjectId &&
+										subjectOptionIds.has(filters.selectedSubjectId)
+											? filters.selectedSubjectId
+											: null
+									}
+									onChange={handleSubjectSelectionChange}
+								>
+									{subjects.map((subject) => (
+										<ListBox.Item
+											key={subject.id}
+											id={subject.id}
+											textValue={subject.label}
+										>
+											{subject.label}
+										</ListBox.Item>
+									))}
+								</Select>
+								<Select
+									aria-label="행동 선택"
+									placeholder="행동(Action)"
+									value={
+										filters.selectedActionId &&
+										actionOptionIds.has(filters.selectedActionId)
+											? filters.selectedActionId
+											: null
+									}
+									onChange={handleActionSelectionChange}
+								>
+									{actions.map((action) => (
+										<ListBox.Item
+											key={action.id}
+											id={action.id}
+											textValue={action.label}
+										>
+											{action.label}
+										</ListBox.Item>
+									))}
+								</Select>
+								<Select
+									aria-label="규칙 유형 선택"
+									placeholder="규칙 유형"
+									value={
+										filters.selectedInverted === "true" ||
+										filters.selectedInverted === "false"
+											? filters.selectedInverted
+											: null
+									}
+									onChange={handleInvertedSelectionChange}
+								>
+									<ListBox.Item key="false" id="false" textValue="허용">
+										허용
+									</ListBox.Item>
+									<ListBox.Item key="true" id="true" textValue="거부">
+										거부
+									</ListBox.Item>
+								</Select>
 						</div>
 						<div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
 							<div className="flex min-h-8 flex-wrap items-center gap-2">
@@ -351,7 +348,7 @@ export const AbilityListPage = observer(
 									</Chip>
 								) : null}
 								{!activeFilters ? (
-									<span className="text-sm text-default-500">
+									<span className="text-sm text-muted">
 										적용된 필터가 없습니다.
 									</span>
 								) : null}
@@ -368,8 +365,8 @@ export const AbilityListPage = observer(
 						</div>
 					</Surface>
 
-					<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
-						<div className="mb-4 border-b border-divider/80 pb-4">
+					<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
+						<div className="mb-4 border-b border-border/80 pb-4">
 							<PageTitleBar
 								level={2}
 								title="권한 규칙"
@@ -388,7 +385,6 @@ export const AbilityListPage = observer(
 							}}
 							rows={abilityRows}
 							totalCount={totalCount}
-							isLoading={false}
 							state={gridState}
 						/>
 					</Surface>

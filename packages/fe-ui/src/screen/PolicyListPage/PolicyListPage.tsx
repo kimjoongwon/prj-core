@@ -4,17 +4,9 @@ import type { PolicyResponseDto } from "@cocrepo/api/core/policies";
 import { PageTitleBar, Surface, VStack } from "@cocrepo/ui";
 import { Edit, Eye, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Chip,
-	Spinner,
-	Table,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Spinner, Table } from "@heroui/react";
 
 export interface PolicyListPageProps {
 	policies?: PolicyResponseDto[];
@@ -58,25 +50,26 @@ export const PolicyListPage = observer(
 					}
 				/>
 				<VStack gap="section">
-					<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+					<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 						{isLoading ? (
 							<div className="flex items-center justify-center gap-2 p-8">
 								<Spinner size="sm" />
-								<span className="text-default-500">정책을 불러오는 중...</span>
+								<span className="text-muted">정책을 불러오는 중...</span>
 							</div>
 						) : (
-							<Table aria-label="정책 목록" removeWrapper>
-								<TableHeader>
-									<TableColumn>정책</TableColumn>
-									<TableColumn>유형</TableColumn>
-									<TableColumn>Ability</TableColumn>
-									<TableColumn>생성일</TableColumn>
-									<TableColumn>작업</TableColumn>
-								</TableHeader>
-								<TableBody emptyContent="등록된 정책이 없습니다.">
+							<Table aria-label="정책 목록">
+								<Table.Content>
+					<Table.Header>
+									<Table.Column>정책</Table.Column>
+									<Table.Column>유형</Table.Column>
+									<Table.Column>Ability</Table.Column>
+									<Table.Column>생성일</Table.Column>
+									<Table.Column>작업</Table.Column>
+								</Table.Header>
+								<Table.Body>
 									{policyRows.map((policy) => (
-										<TableRow key={policy.id}>
-											<TableCell>
+										<Table.Row key={policy.id}>
+											<Table.Cell>
 												<button
 													className="text-left"
 													type="button"
@@ -85,27 +78,27 @@ export const PolicyListPage = observer(
 													<p className="font-semibold">
 														{getPolicyLabel(policy)}
 													</p>
-													<p className="text-xs text-default-500">
+													<p className="text-xs text-muted">
 														{policy.description || policy.name}
 													</p>
 												</button>
-											</TableCell>
-											<TableCell>
+											</Table.Cell>
+											<Table.Cell>
 												<Chip size="sm" variant="flat">
 													{policy.isSystem ? "시스템" : "공간"}
 												</Chip>
-											</TableCell>
-											<TableCell>
+											</Table.Cell>
+											<Table.Cell>
 												{policy.policyAbilities?.length ?? 0}
-											</TableCell>
-											<TableCell>
+											</Table.Cell>
+											<Table.Cell>
 												{policy.createdAt
 													? new Date(policy.createdAt).toLocaleDateString(
 															"ko-KR",
 														)
 													: "-"}
-											</TableCell>
-											<TableCell>
+											</Table.Cell>
+											<Table.Cell>
 												<div className="flex gap-1">
 													<Button
 														isIconOnly
@@ -136,14 +129,15 @@ export const PolicyListPage = observer(
 														<Trash2 className="h-4 w-4" />
 													</Button>
 												</div>
-											</TableCell>
-										</TableRow>
+											</Table.Cell>
+										</Table.Row>
 									))}
-								</TableBody>
-							</Table>
+								</Table.Body>
+				</Table.Content>
+			</Table>
 						)}
 					</Surface>
-					<p className="text-xs text-default-500">총 {totalCount}개 정책</p>
+					<p className="text-xs text-muted">총 {totalCount}개 정책</p>
 				</VStack>
 			</div>
 		);

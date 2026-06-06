@@ -94,9 +94,9 @@
 |--------|------|
 | onClickBackButton | `/abilities` 목록 페이지로 router.push |
 | onClickEditButton | `/abilities/${abilityId}/edit` 수정 페이지로 router.push |
-| deleteModal.onOpen | 삭제 확인 모달 표시 |
+| deleteModal.open | 삭제 확인 모달 표시 |
 | onClickDeleteConfirm | deleteAbility 뮤테이션 실행 → 성공 시 목록으로 이동 |
-| deleteModal.onClose | 삭제 모달 닫기 |
+| deleteModal.close | 삭제 모달 닫기 |
 
 ## E2E 검증 메모
 

@@ -1,5 +1,5 @@
 import { MessageCircle } from "lucide-react";
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 
 interface InquiryUnreadCellProps {
 	/** 읽지 않은 메시지 수 */
@@ -19,7 +19,7 @@ interface InquiryUnreadCellProps {
 export const InquiryUnreadCell = ({ count }: InquiryUnreadCellProps) => {
 	// 0이거나 null/undefined면 표시하지 않음
 	if (!count || count <= 0) {
-		return <span className="text-default-400">-</span>;
+		return <span className="text-muted">-</span>;
 	}
 
 	return (

@@ -3,12 +3,9 @@
 import { BookOpen, FileText, Paperclip, Send, Sparkles, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useRef, useState } from "react";
-import {
-	Button,
-	Divider,
-	Textarea,
-	Tooltip,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Separator, Tooltip } from "@heroui/react";
+import { TextArea } from "../../control/TextArea/TextArea";
 
 export interface Attachment {
 	/** 파일 ID */
@@ -166,7 +163,7 @@ export const InquiryReplyForm = observer(
 		return (
 			<div className={`flex flex-col gap-3 ${className}`}>
 				{/* 텍스트 영역 */}
-				<Textarea
+				<TextArea
 					placeholder={placeholder}
 					value={currentContent}
 					onValueChange={handleContentChange}
@@ -187,11 +184,11 @@ export const InquiryReplyForm = observer(
 						{selectedFiles.map((file, index) => (
 							<div
 								key={`new-${index}`}
-								className="flex items-center gap-1 rounded-lg bg-content2 px-2 py-1"
+								className="flex items-center gap-1 rounded-lg bg-surface-secondary px-2 py-1"
 							>
-								<FileText className="size-4 text-default-500" />
-								<span className="text-xs text-default-700">{file.name}</span>
-								<span className="text-xs text-default-400">
+								<FileText className="size-4 text-muted" />
+								<span className="text-xs text-foreground">{file.name}</span>
+								<span className="text-xs text-muted">
 									({formatFileSize(file.size)})
 								</span>
 								<Button
@@ -210,13 +207,13 @@ export const InquiryReplyForm = observer(
 						{attachments?.map((attachment) => (
 							<div
 								key={attachment.id}
-								className="flex items-center gap-1 rounded-lg bg-content2 px-2 py-1"
+								className="flex items-center gap-1 rounded-lg bg-surface-secondary px-2 py-1"
 							>
-								<FileText className="size-4 text-default-500" />
-								<span className="text-xs text-default-700">
+								<FileText className="size-4 text-muted" />
+								<span className="text-xs text-foreground">
 									{attachment.name}
 								</span>
-								<span className="text-xs text-default-400">
+								<span className="text-xs text-muted">
 									({formatFileSize(attachment.size)})
 								</span>
 								{onRemoveAttachment && (
@@ -235,7 +232,7 @@ export const InquiryReplyForm = observer(
 					</div>
 				)}
 
-				<Divider />
+				<Separator />
 
 				{/* 액션 버튼 */}
 				<div className="flex items-center justify-between">
@@ -249,68 +246,80 @@ export const InquiryReplyForm = observer(
 							onChange={handleFileSelect}
 							className="hidden"
 						/>
-						<Tooltip content="파일 첨부">
-							<Button
-								isIconOnly
-								size="sm"
+							<Tooltip>
+								<Tooltip.Trigger>
+								<Button
+									isIconOnly
+									size="sm"
 								variant="flat"
 								onClick={() => fileInputRef.current?.click()}
 								isDisabled={isLoading}
-							>
-								<Paperclip className="size-4" />
-							</Button>
-						</Tooltip>
+								>
+									<Paperclip className="size-4" />
+								</Button>
+								</Tooltip.Trigger>
+								<Tooltip.Content>파일 첨부</Tooltip.Content>
+							</Tooltip>
 
 						{/* AI 초안 생성 */}
 						{onGenerateDraft && (
-							<Tooltip content="AI 초안 생성">
-								<Button
-									size="sm"
-									variant="flat"
+								<Tooltip>
+									<Tooltip.Trigger>
+									<Button
+										size="sm"
+										variant="flat"
 									color="secondary"
 									startContent={<Sparkles className="size-4" />}
 									onClick={onGenerateDraft}
 									isLoading={isGeneratingDraft}
-								>
-									AI 초안
-								</Button>
-							</Tooltip>
-						)}
+									>
+										AI 초안
+									</Button>
+									</Tooltip.Trigger>
+									<Tooltip.Content>AI 초안 생성</Tooltip.Content>
+								</Tooltip>
+							)}
 
 						{/* 지식베이스 검색 */}
 						{onSearchKnowledge && (
-							<Tooltip content="지식베이스 검색">
-								<Button
-									size="sm"
-									variant="flat"
+								<Tooltip>
+									<Tooltip.Trigger>
+									<Button
+										size="sm"
+										variant="flat"
 									color="primary"
 									startContent={<BookOpen className="size-4" />}
 									onClick={onSearchKnowledge}
 									isDisabled={isLoading}
-								>
-									지식베이스
-								</Button>
-							</Tooltip>
-						)}
+									>
+										지식베이스
+									</Button>
+									</Tooltip.Trigger>
+									<Tooltip.Content>지식베이스 검색</Tooltip.Content>
+								</Tooltip>
+							)}
 					</div>
 
 					{/* 오른쪽: 전송 버튼 */}
-					<Tooltip content="Ctrl+Enter로 전송">
-						<Button
-							size="sm"
-							color="primary"
+						<Tooltip>
+							<Tooltip.Trigger>
+							<Button
+								size="sm"
+								color="primary"
 							startContent={<Send className="size-4" />}
 							onClick={handleSubmit}
 							isDisabled={!canSubmit || isLoading}
 							isLoading={isSending}
-						>
-							전송
-						</Button>
-					</Tooltip>
+							>
+								전송
+							</Button>
+							</Tooltip.Trigger>
+							<Tooltip.Content>Ctrl+Enter로 전송</Tooltip.Content>
+						</Tooltip>
 				</div>
 
 				{/* 힌트 */}
-				<span className="text-xs text-default-400">
+				<span className="text-xs text-muted">
 					Ctrl + Enter로 빠르게 전송할 수 있습니다
 				</span>
 			</div>

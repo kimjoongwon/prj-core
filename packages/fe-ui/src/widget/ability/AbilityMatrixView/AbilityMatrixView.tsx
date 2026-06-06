@@ -2,20 +2,12 @@
 
 import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Chip,
-	Spinner,
-	Table,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-} from "../../../design-system/primitives";
+import { Chip } from "../../../data-display/Chip/Chip";
+import { Spinner, Table } from "@heroui/react";
 import {
 	VisibilityCell,
 	type VisibilityStatus,
-} from "../../../display/permission/VisibilityCell";
+} from "../../../permission/VisibilityCell";
 import { HStack } from "../../../rhythm/HStack/HStack";
 import { VStack } from "../../../rhythm/VStack/VStack";
 
@@ -192,16 +184,17 @@ export const AbilityMatrixView = observer(
 		return (
 			<VStack gap={4} fullWidth>
 				{/* 헤더: Subject 이름 */}
-				<HStack alignItems="center" gap={2}>
-					<span className="text-lg font-semibold">
-						{subjectDisplayName ?? subjectName}
-					</span>
-					<span className="text-default-400 text-sm">({subjectName})</span>
-				</HStack>
+					<HStack alignItems="center" gap={2}>
+						<span className="text-lg font-semibold">
+							{subjectDisplayName ?? subjectName}
+						</span>
+						<span className="text-muted text-sm">({subjectName})</span>
+						{loading ? <Spinner size="sm" /> : null}
+					</HStack>
 
 				{/* 범례 */}
 				<HStack gap={4} alignItems="center">
-					<span className="text-sm text-default-500">범례:</span>
+					<span className="text-sm text-muted">범례:</span>
 					{legendItems.map((item) => (
 						<Chip
 							key={item.status}
@@ -218,59 +211,51 @@ export const AbilityMatrixView = observer(
 				{/* 매트릭스 테이블 */}
 				<Table
 					aria-label={`${subjectDisplayName ?? subjectName} 권한 매트릭스`}
-					classNames={{
-						wrapper: "min-h-[200px]",
-						th: "text-center",
-						td: "text-center",
-					}}
-					isStriped
 				>
-					<TableHeader>
-						<TableColumn
+					<Table.Content>
+					<Table.Header>
+						<Table.Column
 							key="field"
-							className="sticky left-0 bg-content1 z-10 min-w-[120px]"
+							className="sticky left-0 bg-surface z-10 min-w-[120px]"
 						>
 							필드명
-						</TableColumn>
+						</Table.Column>
 						{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 						{
 							roles.map((role) => (
-								<TableColumn key={role.id} className="min-w-[100px]">
+								<Table.Column key={role.id} className="min-w-[100px]">
 									<VStack gap={1} alignItems="center">
 										<span className="font-medium">
 											{getRoleDisplayName(role)}
 										</span>
-										<span className="text-xs text-default-400">
+										<span className="text-xs text-muted">
 											({role.name})
 										</span>
 									</VStack>
-								</TableColumn>
+								</Table.Column>
 							)) as any
 						}
-					</TableHeader>
-					<TableBody
-						emptyContent={loading ? " " : "필드 정보가 없습니다."}
-						isLoading={loading}
-						loadingContent={<Spinner label="로딩 중..." />}
+					</Table.Header>
+					<Table.Body
 					>
 						{fields.map((field) => (
-							<TableRow key={field.name}>
-								<TableCell className="sticky left-0 bg-content1 z-10 font-medium">
+							<Table.Row key={field.name}>
+								<Table.Cell className="sticky left-0 bg-surface z-10 font-medium">
 									<VStack gap={1} alignItems="start">
 										<span>{getFieldDisplayName(field)}</span>
 										{field.displayName && (
-											<span className="text-xs text-default-400">
+											<span className="text-xs text-muted">
 												({field.name})
 											</span>
 										)}
 									</VStack>
-								</TableCell>
+								</Table.Cell>
 								{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 								{
 									roles.map((role) => {
 										const status = getCellStatus(field.name, role.name);
 										return (
-											<TableCell key={`${field.name}-${role.name}`}>
+											<Table.Cell key={`${field.name}-${role.name}`}>
 												<HStack justifyContent="center">
 													<VisibilityCell
 														status={status}
@@ -286,14 +271,15 @@ export const AbilityMatrixView = observer(
 														}
 													/>
 												</HStack>
-											</TableCell>
+											</Table.Cell>
 										);
 									}) as any
 								}
-							</TableRow>
+							</Table.Row>
 						))}
-					</TableBody>
-				</Table>
+					</Table.Body>
+				</Table.Content>
+			</Table>
 			</VStack>
 		);
 	},

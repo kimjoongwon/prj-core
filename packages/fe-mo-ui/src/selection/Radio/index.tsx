@@ -8,7 +8,7 @@ import {
   Radio as HeroRadio,
   radioClassNames,
   useRadio,
-} from "heroui-native/radio";
+} from "heroui-native";
 import { getTextContent, Text } from "../../data-display/Text";
 type HeroRadioProps = ComponentPropsWithoutRef<typeof HeroRadio>;
 export type RadioProps = HeroRadioProps & {};

@@ -7,7 +7,7 @@ import {
 	useGetTaskRoutines,
 } from "@cocrepo/api/core/tasks";
 import { TaskExerciseDetailPage } from "@cocrepo/ui";
-import { addToast, useDisclosure } from "@cocrepo/ui";
+import { toast, useOverlayState } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -19,7 +19,7 @@ type TaskExerciseDetailPageParams = {
 const AdminTasksTaskIdExerciseRoute = observer(() => {
 	const { taskId } = useParams<TaskExerciseDetailPageParams>();
 	const router = useRouter();
-	const deleteModal = useDisclosure();
+	const deleteModal = useOverlayState();
 
 	const { data: response, isLoading } = useGetTaskExercise(taskId);
 	const exercise = response?.data as ExerciseDto | undefined;
@@ -40,21 +40,17 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 			{ taskId },
 			{
 				onSuccess: () => {
-					addToast({
-						title: "태스크 삭제 성공",
+					toast.success("태스크 삭제 성공", {
 						description: "태스크와 운동 detail이 삭제되었습니다.",
-						color: "success",
 					});
-					deleteModal.onClose();
+					deleteModal.close();
 					router.push("/tasks" as Route);
 				},
 				onError: (error) => {
-					addToast({
-						title: "태스크 삭제 실패",
+					toast.danger("태스크 삭제 실패", {
 						description:
 							error.message ||
 							"삭제 중 오류가 발생했습니다. 루틴에서 사용 중인 태스크는 삭제할 수 없습니다.",
-						color: "danger",
 					});
 				},
 			},
@@ -93,9 +89,9 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 			isDeletePending={isDeleting}
 			onClickBackButton={onClickBackButton}
 			onClickEditButton={onClickEditButton}
-			onClickDeleteButton={deleteModal.onOpen}
+			onClickDeleteButton={deleteModal.open}
 			onClickDeleteConfirmButton={onClickDeleteConfirmButton}
-			onClickDeleteCancelButton={deleteModal.onClose}
+			onClickDeleteCancelButton={deleteModal.close}
 		/>
 	);
 });

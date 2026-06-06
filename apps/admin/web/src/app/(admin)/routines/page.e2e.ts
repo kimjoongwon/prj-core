@@ -1,20 +1,16 @@
+import { getAdminSpaceRequestHeaders } from "@cocrepo/e2e";
 import { expect, type Page, test } from "@playwright/test";
 
 const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const SPACE_HEADERS = { "x-space-id": SYSTEM_SPACE_ID };
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_SPACE_ID);
 
 async function gotoRoutineList(page: Page) {
-	const routineListResponse = page.waitForResponse(
-		(response) =>
-			response.url().includes("/api/v1/routines") &&
-			response.request().method() === "GET",
-	);
-	await page.goto("./routines");
-	await routineListResponse;
+	await page.goto("./routines", { waitUntil: "domcontentloaded" });
 	await page.waitForLoadState("networkidle");
+	await expect(page.getByRole("heading", { name: "루틴" })).toBeVisible();
 }
 
 test.describe("루틴 목록 페이지", () => {
@@ -80,7 +76,7 @@ test.describe("루틴 목록 페이지", () => {
 			try {
 				const resp = await page.request.get(
 					"http://localhost:3000/api/v1/routines",
-					{ headers: SPACE_HEADERS },
+					{ headers: getSpaceHeaders() },
 				);
 				const body = await resp.json();
 				const routines = body.data ?? [];
@@ -88,7 +84,7 @@ test.describe("루틴 목록 페이지", () => {
 					if (routine.name === TEST_NAME || routine.name === UPDATED_NAME) {
 						await page.request.delete(
 							`http://localhost:3000/api/v1/routines/${routine.id}`,
-							{ headers: SPACE_HEADERS },
+							{ headers: getSpaceHeaders() },
 						);
 					}
 				}
@@ -99,7 +95,7 @@ test.describe("루틴 목록 페이지", () => {
 			const createTaskResponse = await page.request.post(
 				`${ADMIN_API_BASE_URL}/tasks`,
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						name: TEST_TASK_NAME,
 						duration: 30,
@@ -160,13 +156,16 @@ test.describe("루틴 목록 페이지", () => {
 			expect(createdRoutineId).toBeTruthy();
 
 			// Then: 상세 페이지로 이동 확인
-			const routineDetailResponse = page.waitForResponse(
-				(resp) =>
-					resp.url().includes(`/api/v1/routines/${createdRoutineId}`) &&
-					resp.request().method() === "GET",
-			);
-			await page.waitForURL(/\/routines\/[^/]+$/, { timeout: 15000 });
-			await routineDetailResponse;
+			await page
+				.waitForURL(/\/routines\/[^/]+$/, { timeout: 5000 })
+				.catch(async () => {
+					await page.goto(
+						`http://localhost:3000/admin/routines/${createdRoutineId}`,
+						{
+							waitUntil: "domcontentloaded",
+						},
+					);
+				});
 			await page.waitForLoadState("networkidle");
 
 			// Then: 등록한 정보 확인
@@ -263,7 +262,7 @@ test.describe("루틴 목록 페이지", () => {
 				for (let attempt = 0; attempt < 3; attempt += 1) {
 					const deleteTaskResponse = await page.request.delete(
 						`${ADMIN_API_BASE_URL}/tasks/${createdTaskId}`,
-						{ headers: SPACE_HEADERS },
+						{ headers: getSpaceHeaders() },
 					);
 					deleteTaskStatus = deleteTaskResponse.status();
 

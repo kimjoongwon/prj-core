@@ -1,16 +1,9 @@
 "use client";
 
 import { FileText, ImageIcon, Link2Off, PlayCircle } from "lucide-react";
-import {
-	Button,
-	Chip,
-	cn,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Chip } from "../../data-display/Chip/Chip";
+import { cn, Modal, useOverlayState } from "@heroui/react";
 
 export interface AssetPreviewAsset {
 	id: string;
@@ -191,9 +184,9 @@ function AssetPreviewFallback({
 	mode: AssetPreviewMode;
 }) {
 	return (
-		<div className="flex min-h-[300px] w-full items-center justify-center rounded-[1.25rem] border border-dashed border-divider/70 bg-white/65 p-6 text-center shadow-inner shadow-slate-900/5">
+		<div className="flex min-h-[300px] w-full items-center justify-center rounded-[1.25rem] border border-dashed border-border/70 bg-white/65 p-6 text-center shadow-inner shadow-slate-900/5">
 			<div className="max-w-sm space-y-4">
-				<div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-default-100 text-default-500">
+				<div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-default text-muted">
 					{mode === "unsupported" ? (
 						<FileText className="h-8 w-8" />
 					) : mode === "unavailable" && asset.kind === "VIDEO" ? (
@@ -210,7 +203,7 @@ function AssetPreviewFallback({
 							? "이 형식은 인라인 미리보기를 지원하지 않습니다."
 							: "지금은 인라인 미리보기를 열 수 없습니다."}
 					</p>
-					<p className="text-sm leading-6 text-default-500">
+					<p className="text-sm leading-6 text-muted">
 						{getAssetPreviewStatusMessage(asset, mode)}
 					</p>
 				</div>
@@ -272,7 +265,7 @@ export function AssetPreview({
 	return (
 		<div
 			className={cn(
-				"overflow-hidden rounded-[1.75rem] border border-divider/70 bg-content1 shadow-[0_28px_80px_-40px_rgba(15,23,42,0.45)]",
+				"overflow-hidden rounded-[1.75rem] border border-border/70 bg-surface shadow-[0_28px_80px_-40px_rgba(15,23,42,0.45)]",
 				className,
 			)}
 		>
@@ -294,17 +287,17 @@ export function AssetPreview({
 				</div>
 			</div>
 			{showInfo ? (
-				<div className="border-t border-divider/60 bg-content1/90 px-4 py-4 sm:px-6">
+				<div className="border-t border-border/60 bg-surface/90 px-4 py-4 sm:px-6">
 					<div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
 						<div className="min-w-0">
 							<p className="truncate text-base font-semibold text-foreground">
 								{asset.originalName}
 							</p>
-							<p className="mt-1 text-sm text-default-500">{asset.mimeType}</p>
+							<p className="mt-1 text-sm text-muted">{asset.mimeType}</p>
 						</div>
-						<div className="flex flex-wrap items-center gap-2 text-xs font-medium text-default-500">
+						<div className="flex flex-wrap items-center gap-2 text-xs font-medium text-muted">
 							<span>{formatAssetPreviewBytes(asset.sizeBytes)}</span>
-							<span className="text-default-300">/</span>
+							<span className="text-muted">/</span>
 							<span>{getAssetPreviewStatusMessage(asset, previewMode)}</span>
 						</div>
 					</div>
@@ -320,13 +313,21 @@ export function AssetPreviewDialog({
 	onClose,
 }: AssetPreviewDialogProps) {
 	const previewUrl = asset ? getAssetPreviewUrl(asset) : null;
+	const modalState = useOverlayState({
+		isOpen,
+		onOpenChange: (open) => {
+			if (!open) {
+				onClose();
+			}
+		},
+	});
 
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} size="5xl" scrollBehavior="inside">
-			<ModalContent>
-				<ModalHeader>{asset?.originalName ?? "에셋 보기"}</ModalHeader>
-				<ModalBody>{asset ? <AssetPreview asset={asset} /> : null}</ModalBody>
-				<ModalFooter>
+		<Modal state={modalState}>
+			<Modal.Backdrop><Modal.Container size="full" scroll="inside"><Modal.Dialog>
+				<Modal.Header>{asset?.originalName ?? "에셋 보기"}</Modal.Header>
+				<Modal.Body>{asset ? <AssetPreview asset={asset} /> : null}</Modal.Body>
+				<Modal.Footer>
 					{previewUrl ? (
 						<Button
 							color="primary"
@@ -341,8 +342,8 @@ export function AssetPreviewDialog({
 					<Button variant="flat" onPress={onClose}>
 						닫기
 					</Button>
-				</ModalFooter>
-			</ModalContent>
+				</Modal.Footer>
+			</Modal.Dialog></Modal.Container></Modal.Backdrop>
 		</Modal>
 	);
 }

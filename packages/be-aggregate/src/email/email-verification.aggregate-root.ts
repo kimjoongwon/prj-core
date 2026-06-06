@@ -258,9 +258,9 @@ export class EmailVerificationAggregateRoot {
 
 	private buildConfirmUrl(rawToken: string): string {
 		const baseUrl =
-			process.env.IDP_API_PUBLIC_URL ||
+			process.env.CORE_API_PUBLIC_URL ||
 			process.env.OIDC_ISSUER ||
-			`http://localhost:${process.env.APP_PORT || 3007}`;
+			"http://localhost:3000";
 		return `${baseUrl.replace(/\/$/, "")}/api/v1/auth/email-verifications/${rawToken}/confirm`;
 	}
 }

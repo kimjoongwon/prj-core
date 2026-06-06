@@ -109,11 +109,11 @@ Screen Owner
 
 | 영역 | 컴포넌트 | 계층 | 재사용/신규 | 소스/대상 | Props/이벤트 | 소스 담당 `agent_type` | 소비/Wiring `agent_type` |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| B. 본문 shell | `ScreenFrame` | Layout primitive | reuse | `packages/fe-mo-ui/src/layout/ScreenFrame/index.tsx` | `edges`, `className`, `contentClassName` | `fe-display-agent` | `fe-screen-agent` |
+| B. 본문 shell | `ScreenFrame` | Layout primitive | reuse | `packages/fe-mo-ui/src/layout/ScreenFrame/index.tsx` | `edges`, `className`, `contentClassName` | `fe-layout-agent` | `fe-screen-agent` |
 | C. 화면 제목 | screen-local header copy | Screen block | modify | `MyReservationsScreen.tsx` | title, description | `fe-screen-agent` | `fe-screen-agent` |
 | D. 예약 카드 반복 | screen-local card block | Screen block | modify | `MyReservationsScreen.tsx` | `MyReservationCardItem` fields | `fe-screen-agent` | `fe-screen-agent` |
-| D-1. 날짜/상태 cue | `Icon` | Data display | reuse | `packages/fe-mo-ui/src/icon` | `calendarCheck`, `badgeCheck`, tone | `fe-display-agent` | `fe-screen-agent` |
-| E. 상태 feedback | `StatusFeedback` | Feedback | reuse | `packages/fe-mo-ui/src/feedback/StatusFeedback/index.tsx` | `status`, title, description, primary action | `fe-display-agent` | `fe-screen-agent` |
+| D-1. 날짜/상태 cue | `Icon` | Data display | reuse | `packages/fe-mo-ui/src/icon` | `calendarCheck`, `badgeCheck`, tone | `fe-data-display-agent` | `fe-screen-agent` |
+| E. 상태 feedback | `StatusFeedback` | Feedback | reuse | `packages/fe-mo-ui/src/feedback/StatusFeedback/index.tsx` | `status`, title, description, primary action | `fe-feedback-agent` | `fe-screen-agent` |
 
 ## State Rendering Contract
 
@@ -164,7 +164,7 @@ Screen Owner
 | --- | --- | --- | --- |
 | `MyReservationCardItem` 표시 필드가 부족함 | screen이 필요한 텍스트/상태를 props로 받을 수 없음 | `fe-route-agent` | route display model을 갱신하고 route delivery spec에 반영한다. |
 | 예약 카드가 다른 화면에서도 필요 | screen-local JSX가 재사용 component가 됨 | `fe-widget-agent` | 별도 widget 파일로 분리하고 story/test를 함께 작성한다. |
-| loading/error/empty 표현이 공통 feedback으로 부족 | reusable feedback 수정 필요 | `fe-display-agent` | `StatusFeedback` 계약을 먼저 갱신한다. |
+| loading/error/empty 표현이 공통 feedback으로 부족 | reusable feedback 수정 필요 | `fe-feedback-agent` | `StatusFeedback` 계약을 먼저 갱신한다. |
 | story/unit test가 화면 계약과 불일치 | planning spec과 구현이 어긋남 | `fe-screen-agent` / `qa-mo-testing` | source, story, unit test를 같은 화면 계약으로 맞춘다. |
 
 ## 변경 이력

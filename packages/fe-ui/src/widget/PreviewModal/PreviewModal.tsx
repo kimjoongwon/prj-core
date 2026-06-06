@@ -2,16 +2,9 @@
 
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import {
-	Button,
-	Chip,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	Spinner,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { VariableInputForm } from "../../form/VariableInputForm";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
@@ -151,18 +144,21 @@ export const PreviewModal = observer(
 			}
 		};
 
-		const isLoading = previewState === "loading";
+			const isLoading = previewState === "loading";
+			const modalState = useOverlayState({
+				isOpen,
+				onOpenChange: (open) => {
+					if (!open) {
+						onClose();
+					}
+				},
+			});
 
-		return (
-			<Modal
-				isOpen={isOpen}
-				onClose={onClose}
-				size="3xl"
-				scrollBehavior="inside"
-			>
-				<ModalContent>
-					<ModalHeader>템플릿 미리보기</ModalHeader>
-					<ModalBody>
+			return (
+				<Modal state={modalState}>
+					<Modal.Backdrop><Modal.Container size="lg" scroll="inside"><Modal.Dialog>
+					<Modal.Header>템플릿 미리보기</Modal.Header>
+					<Modal.Body>
 						<VStack gap={6}>
 							{/* 변수 입력 영역 */}
 							<VStack gap={2}>
@@ -180,7 +176,6 @@ export const PreviewModal = observer(
 							<Button
 								color="primary"
 								onPress={handlePreview}
-								isLoading={isLoading}
 								isDisabled={isLoading}
 								fullWidth
 							>
@@ -248,13 +243,13 @@ export const PreviewModal = observer(
 								</VStack>
 							)}
 						</VStack>
-					</ModalBody>
-					<ModalFooter>
+					</Modal.Body>
+					<Modal.Footer>
 						<Button variant="flat" onPress={onClose}>
 							닫기
 						</Button>
-					</ModalFooter>
-				</ModalContent>
+					</Modal.Footer>
+				</Modal.Dialog></Modal.Container></Modal.Backdrop>
 			</Modal>
 		);
 	},
@@ -281,12 +276,12 @@ const EmailPreviewResult = observer(
 				</span>
 				{subject && (
 					<VStack gap={1}>
-						<span className="text-xs text-default-500">제목</span>
+						<span className="text-xs text-muted">제목</span>
 						<span className="text-sm text-foreground">{subject}</span>
 					</VStack>
 				)}
 				<VStack gap={1}>
-					<span className="text-xs text-default-500">본문</span>
+					<span className="text-xs text-muted">본문</span>
 					<HtmlContentRenderer html={content} />
 				</VStack>
 			</VStack>
@@ -312,7 +307,7 @@ const SmsPreviewResult = observer(({ content }: SmsPreviewResultProps) => {
 				</span>
 				<ByteCounter text={content} />
 			</HStack>
-			<div className="rounded-lg border border-divider bg-content2 p-4">
+			<div className="rounded-lg border border-border bg-surface-secondary p-4">
 				<p className="text-sm text-foreground whitespace-pre-wrap">{content}</p>
 			</div>
 		</VStack>
@@ -336,14 +331,14 @@ const PushPreviewResult = observer(
 				<span className="text-sm font-semibold text-foreground">
 					미리보기 결과
 				</span>
-				<div className="rounded-lg border border-divider bg-content2 p-4">
+				<div className="rounded-lg border border-border bg-surface-secondary p-4">
 					<VStack gap={2}>
 						{subject && (
 							<span className="text-sm font-semibold text-foreground">
 								{subject}
 							</span>
 						)}
-						<p className="text-sm text-default-600 whitespace-pre-wrap">
+						<p className="text-sm text-muted whitespace-pre-wrap">
 							{content}
 						</p>
 					</VStack>

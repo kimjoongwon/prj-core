@@ -1,17 +1,9 @@
 "use client";
 
+import { Checkbox as HeroCheckbox } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import type React from "react";
-import {
-	Checkbox as NextUICheckbox,
-	type CheckboxProps as NextUICheckboxProps,
-} from "../../design-system/primitives";
 import { translateNode, useT } from "../../i18n";
-
-export interface CheckboxProps extends Omit<NextUICheckboxProps, "onChange"> {
-	/** 체크 상태 변경 핸들러 */
-	onChange?: (checked: boolean) => void;
-}
+import type { CheckboxProps } from "./Checkbox.props";
 
 /**
  * Checkbox 컴포넌트
@@ -32,15 +24,27 @@ export interface CheckboxProps extends Omit<NextUICheckboxProps, "onChange"> {
  */
 export const Checkbox = observer((props: CheckboxProps) => {
 	const t = useT();
-	const { onChange, size = "lg", ...rest } = props;
+	const { children, classNames, onChange, onValueChange, ...rest } = props;
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		onChange?.(e.target.checked);
+	const handleChange = (isSelected: boolean) => {
+		onChange?.(isSelected);
+		onValueChange?.(isSelected);
 	};
 
 	return (
-		<NextUICheckbox {...rest} onChange={handleChange} size={size}>
-			<span className="font-bold">{translateNode(props.children, t)}</span>
-		</NextUICheckbox>
+		<HeroCheckbox
+			{...rest}
+			className={classNames?.base ?? rest.className}
+			onChange={handleChange}
+		>
+			<HeroCheckbox.Control className={classNames?.control}>
+				<HeroCheckbox.Indicator className={classNames?.indicator} />
+			</HeroCheckbox.Control>
+			{children ? (
+				<HeroCheckbox.Content className={classNames?.content ?? "font-bold"}>
+					{translateNode(children, t)}
+				</HeroCheckbox.Content>
+			) : null}
+		</HeroCheckbox>
 	);
 });

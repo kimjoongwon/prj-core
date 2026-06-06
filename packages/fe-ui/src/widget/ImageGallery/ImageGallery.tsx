@@ -2,7 +2,7 @@
 
 import { Download, RefreshCw } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 import { ImageCard } from "../ImageCard";
 
 export interface GalleryImage {
@@ -85,7 +85,7 @@ export const ImageGallery = observer(
 					<div>
 						<h3 className="text-lg font-semibold">{title}</h3>
 						{subtitle && (
-							<p className="text-sm text-default-500 truncate max-w-md">
+							<p className="text-sm text-muted truncate max-w-md">
 								{subtitle}
 							</p>
 						)}

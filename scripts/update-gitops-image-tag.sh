@@ -78,12 +78,12 @@ case "${DEPLOY_ENV,,}" in
 esac
 
 case "${APP_NAME}" in
-  idp-api|idp-web|core-api|admin-web|proposal-web|spring-api)
+  core-api|admin-web|proposal-web|spring-api)
     VALUES_REL_PATH="helm/applications/${APP_NAME}/values-prod.yaml"
     APP_YAML_KEY="${APP_NAME}"
     ;;
   *)
-    fail "Unsupported app '${APP_NAME}'. Allowed: idp-api, idp-web, core-api, admin-web, proposal-web, spring-api"
+    fail "Unsupported app '${APP_NAME}'. Allowed: core-api, admin-web, proposal-web, spring-api"
     ;;
 esac
 

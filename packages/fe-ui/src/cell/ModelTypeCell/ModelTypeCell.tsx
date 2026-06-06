@@ -1,4 +1,4 @@
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 
 /**
  * 모델 타입별 컬러 설정

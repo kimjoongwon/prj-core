@@ -1,5 +1,5 @@
-import { TranslationsRepository } from "@cocrepo/repository";
 import { TranslationCatalogAggregateRoot } from "@cocrepo/aggregate";
+import { TranslationsRepository } from "@cocrepo/repository";
 import { TranslationQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";

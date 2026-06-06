@@ -4,7 +4,7 @@ const ROUTE_READY_TIMEOUT = 20_000;
 
 function getAbilitiesHeading(page: Page) {
 	return page.getByRole("heading", {
-		name: "권한 목록",
+		name: "권한 정의",
 		exact: true,
 		level: 1,
 	});
@@ -23,11 +23,7 @@ test.describe("권한 상세 페이지", () => {
 		await gotoAbilitiesPage(page);
 
 		// When: 첫 번째 목록 행을 클릭
-		const firstRow = page
-			.locator('[role="rowgroup"]')
-			.nth(1)
-			.getByRole("row")
-			.first();
+		const firstRow = page.getByRole("grid").getByRole("row").nth(1);
 		await expect(firstRow).toBeVisible({
 			timeout: ROUTE_READY_TIMEOUT,
 		});

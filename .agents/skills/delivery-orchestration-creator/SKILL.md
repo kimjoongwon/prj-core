@@ -1,6 +1,6 @@
 ---
 name: "delivery-orchestration-creator"
-description: "`orch-delivery` agent_type이 질문 기획 → 서비스 Spec → 승인 → 라우트 Spec → 구현 → QA 흐름을 수행할 때 사용합니다. 이 creator skill은 얇은 agent TOML에서 분리한 상세 workflow, 구현 규칙, 검증 계약을 담습니다."
+description: "`orch-delivery` agent_type이 질문 기획 → 서비스 Spec → 승인 → Route/Page Spec → Screen/Feature Spec → 구현 → QA 흐름을 수행할 때 사용합니다. 이 creator skill은 얇은 agent TOML에서 분리한 상세 workflow, 구현 규칙, 검증 계약을 담습니다."
 ---
 
 # delivery-orchestration-creator
@@ -12,8 +12,9 @@ description: "`orch-delivery` agent_type이 질문 기획 → 서비스 Spec →
 1. `.codex/agents/orch-delivery.toml`에서 사용자 요청, 승인된 spec, ownership boundary를 확인합니다.
 2. source 변경 전에 `references/agent-instructions.md`를 읽습니다. 이 파일에는 creator의 상세 구현 규칙이 있습니다.
 3. 배정된 대상에 관련된 섹션만 적용합니다. 플랫폼 인식 FE creator는 파일 경로로 대상 플랫폼을 먼저 판단한 뒤 Web 또는 React Native 규칙을 적용합니다.
-4. agent ownership boundary 안에서만 작업합니다. 필요한 파일이나 순서가 다른 role 소유라면 중단하고 최종 보고에 handoff 필요성을 요약합니다.
-5. 가능한 경우 spec 또는 상세 지시가 요구한 검증을 실행한 뒤 결과와 남은 위험을 요약합니다.
+4. subagent 실행 전 service/route/page spec의 `산출물 시뮬레이션 / 인계 계약`에 예상 산출물, 생성/수정 예정 경로, 소비 step, 검증 기준이 있는지 확인합니다.
+5. subagent ownership boundary 안에서만 작업합니다. 필요한 파일이나 순서가 다른 subagent 소유라면 중단하고 최종 보고에 handoff 필요성을 요약합니다.
+6. 가능한 경우 spec 또는 상세 지시가 요구한 검증을 실행한 뒤 결과와 남은 위험을 요약합니다.
 
 ## References
 

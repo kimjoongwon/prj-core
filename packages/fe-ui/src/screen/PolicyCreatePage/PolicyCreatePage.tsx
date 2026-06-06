@@ -10,13 +10,11 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Checkbox,
-	Input,
-	Switch,
-	Textarea,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Checkbox } from "../../control/Checkbox/Checkbox";
+import { Input } from "../../control/Input/Input";
+import { Switch } from "../../control/Switch/Switch";
+import { TextArea } from "../../control/TextArea/TextArea";
 
 export interface PolicyCreatePageAbilityOption {
 	id: string;
@@ -121,7 +119,7 @@ export const PolicyFormBody = observer(
 									value={form.displayName}
 									onValueChange={onChange.onChangeDisplayName}
 								/>
-								<Textarea
+								<TextArea
 									className="md:col-span-2"
 									label="설명"
 									placeholder="정책 설명을 입력하세요"
@@ -153,12 +151,12 @@ export const PolicyFormBody = observer(
 									abilities.map((ability) => (
 										<div
 											key={ability.id}
-											className="rounded-xl border border-divider bg-background/60 p-4"
+											className="rounded-xl border border-border bg-background/60 p-4"
 										>
 											<div className="flex items-start justify-between gap-4">
 												<div>
 													<p className="font-semibold">{ability.label}</p>
-													<p className="mt-1 text-sm text-default-500">
+													<p className="mt-1 text-sm text-muted">
 														{ability.description || "설명 없음"}
 													</p>
 												</div>
@@ -172,7 +170,7 @@ export const PolicyFormBody = observer(
 										</div>
 									))
 								) : (
-									<div className="rounded-xl border border-divider bg-background/60 p-6 text-center text-sm text-default-500">
+									<div className="rounded-xl border border-border bg-background/60 p-6 text-center text-sm text-muted">
 										선택 가능한 Ability가 없습니다.
 									</div>
 								)}

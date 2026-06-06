@@ -140,8 +140,6 @@ resolve_target() {
     1|core-api) echo "core-api" ;;
     2|admin-web) echo "admin-web" ;;
     3|proposal-web) echo "proposal-web" ;;
-    4|idp-api) echo "idp-api" ;;
-    5|idp-web) echo "idp-web" ;;
     *) return 1 ;;
   esac
 }
@@ -152,8 +150,6 @@ get_dockerfile() {
     core-api) echo "devops/Dockerfile.core-api" ;;
     admin-web) echo "devops/Dockerfile.admin-web" ;;
     proposal-web) echo "devops/Dockerfile.proposal-web" ;;
-    idp-api) echo "devops/Dockerfile.idp-api" ;;
-    idp-web) echo "devops/Dockerfile.idp-web" ;;
     *) return 1 ;;
   esac
 }
@@ -164,8 +160,6 @@ get_image_name() {
     core-api) echo "core-api" ;;
     admin-web) echo "admin-web" ;;
     proposal-web) echo "proposal-web" ;;
-    idp-api) echo "idp-api" ;;
-    idp-web) echo "idp-web" ;;
     *) return 1 ;;
   esac
 }
@@ -176,8 +170,6 @@ get_health_port() {
     core-api) echo "3006" ;;
     admin-web) echo "3000" ;;
     proposal-web) echo "3011" ;;
-    idp-api) echo "3007" ;;
-    idp-web) echo "3008" ;;
     *) return 1 ;;
   esac
 }
@@ -188,8 +180,6 @@ get_health_path() {
     core-api) echo "/api-json" ;;
     admin-web) echo "/admin/auth/login" ;;
     proposal-web) echo "/proposal" ;;
-    idp-api) echo "/api-json" ;;
-    idp-web) echo "/auth/login" ;;
     *) return 1 ;;
   esac
 }
@@ -281,6 +271,10 @@ set_run_env_args() {
       RUN_ENV_ARGS+=("-e" "SMTP_SECURE=${SMTP_SECURE:-false}")
       RUN_ENV_ARGS+=("-e" "SMTP_HOST=${SMTP_HOST:-localhost}")
       RUN_ENV_ARGS+=("-e" "SMTP_SENDER=${SMTP_SENDER:-noreply@example.com}")
+      RUN_ENV_ARGS+=("-e" "OIDC_ISSUER=${OIDC_ISSUER:-http://localhost:3000}")
+      RUN_ENV_ARGS+=("-e" "OIDC_ADMIN_BASE_URL=${OIDC_ADMIN_BASE_URL:-http://localhost:3000}")
+      RUN_ENV_ARGS+=("-e" "OIDC_INTERACTION_BASE_URL=${OIDC_INTERACTION_BASE_URL:-http://localhost:3000/admin}")
+      RUN_ENV_ARGS+=("-e" "OIDC_COOKIE_SECRET=${OIDC_COOKIE_SECRET:-container-local-oidc-cookie-secret}")
       RUN_ENV_ARGS+=("-e" "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-dummy-access-key}")
       RUN_ENV_ARGS+=("-e" "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-dummy-secret-key}")
       RUN_ENV_ARGS+=("-e" "AWS_REGION=${AWS_REGION:-ap-northeast-2}")
@@ -298,31 +292,6 @@ set_run_env_args() {
     proposal-web)
       RUN_ENV_ARGS+=("-e" "NODE_ENV=${NODE_ENV:-production}")
       RUN_ENV_ARGS+=("-e" "PORT=${PORT:-3011}")
-      RUN_ENV_ARGS+=("-e" "HOSTNAME=${HOSTNAME:-0.0.0.0}")
-      ;;
-    idp-api)
-      RUN_ENV_ARGS+=("-e" "NODE_ENV=${NODE_ENV:-production}")
-      RUN_ENV_ARGS+=("-e" "APP_NAME=${APP_NAME:-idp-api}")
-      RUN_ENV_ARGS+=("-e" "APP_PORT=${APP_PORT:-3007}")
-      RUN_ENV_ARGS+=("-e" "AUTH_JWT_SECRET=${AUTH_JWT_SECRET:-container-local-secret}")
-      RUN_ENV_ARGS+=("-e" "AUTH_JWT_TOKEN_EXPIRES_IN=${AUTH_JWT_TOKEN_EXPIRES_IN:-1h}")
-      RUN_ENV_ARGS+=("-e" "AUTH_JWT_TOKEN_REFRESH_IN=${AUTH_JWT_TOKEN_REFRESH_IN:-7d}")
-      RUN_ENV_ARGS+=("-e" "AUTH_JWT_SALT_ROUNDS=${AUTH_JWT_SALT_ROUNDS:-10}")
-      RUN_ENV_ARGS+=("-e" "SMTP_USERNAME=${SMTP_USERNAME:-noreply}")
-      RUN_ENV_ARGS+=("-e" "SMTP_PASSWORD=${SMTP_PASSWORD:-noreply}")
-      RUN_ENV_ARGS+=("-e" "SMTP_PORT=${SMTP_PORT:-1025}")
-      RUN_ENV_ARGS+=("-e" "SMTP_SECURE=${SMTP_SECURE:-false}")
-      RUN_ENV_ARGS+=("-e" "SMTP_HOST=${SMTP_HOST:-localhost}")
-      RUN_ENV_ARGS+=("-e" "SMTP_SENDER=${SMTP_SENDER:-noreply@example.com}")
-      RUN_ENV_ARGS+=("-e" "CORS_ENABLED=${CORS_ENABLED:-true}")
-      RUN_ENV_ARGS+=("-e" "DATABASE_URL=${DATABASE_URL:-postgresql://postgres:postgres@localhost:5432/postgres?schema=public}")
-      RUN_ENV_ARGS+=("-e" "DIRECT_URL=${DIRECT_URL:-postgresql://postgres:postgres@localhost:5432/postgres?schema=public}")
-      RUN_ENV_ARGS+=("-e" "REDIS_HOST=${REDIS_HOST:-127.0.0.1}")
-      RUN_ENV_ARGS+=("-e" "REDIS_PORT=${REDIS_PORT:-6379}")
-      ;;
-    idp-web)
-      RUN_ENV_ARGS+=("-e" "NODE_ENV=${NODE_ENV:-production}")
-      RUN_ENV_ARGS+=("-e" "PORT=${PORT:-3008}")
       RUN_ENV_ARGS+=("-e" "HOSTNAME=${HOSTNAME:-0.0.0.0}")
       ;;
     *)
@@ -460,8 +429,6 @@ if [[ ${#ARGS[@]} -eq 0 ]]; then
   echo -e "  ${CYAN}1${RESET}) core-api  ${DIM}core-api${RESET}"
   echo -e "  ${CYAN}2${RESET}) admin-web ${DIM}admin-web${RESET}"
   echo -e "  ${CYAN}3${RESET}) proposal-web ${DIM}proposal-web${RESET}"
-  echo -e "  ${CYAN}4${RESET}) idp-api   ${DIM}idp-api${RESET}"
-  echo -e "  ${CYAN}5${RESET}) idp-web   ${DIM}idp-web${RESET}"
   echo ""
   echo -e "  ${DIM}복수 선택 가능 (예: 1 2)${RESET}"
   echo ""

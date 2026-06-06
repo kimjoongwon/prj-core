@@ -92,7 +92,7 @@ export const oidcClientActionsColumn = createActionsColumn<OidcClientDto>({
 	cell: ({ row }) => (
 		<RowActionsCell
 			id={row.original.id}
-			basePath="/oidc-clients"
+			basePath="/settings/auth/oidc-clients"
 			showView
 			showEdit={false}
 			showDelete={false}
@@ -167,7 +167,7 @@ export function buildOidcClientTableColumns<
 			cell: ({ row }) => (
 				<RowActionsCell
 					id={row.original.id}
-					basePath="/oidc-clients"
+					basePath="/settings/auth/oidc-clients"
 					showView
 					showEdit={false}
 					showDelete={false}

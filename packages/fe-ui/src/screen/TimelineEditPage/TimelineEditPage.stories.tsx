@@ -7,7 +7,7 @@ const defaultArgs = {
 	isSubmitDisabled: false,
 	isSubmitPending: false,
 	nameError: "샘플 name error 1",
-	onChangeDescriptionTextarea: (..._args: never[]) => undefined,
+	onChangeDescriptionTextArea: (..._args: never[]) => undefined,
 	onChangeNameInput: (..._args: never[]) => undefined,
 	onClickCancelButton: (..._args: never[]) => undefined,
 	onClickSubmitButton: (..._args: never[]) => undefined,

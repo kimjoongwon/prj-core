@@ -66,7 +66,7 @@ InquiryDetailPage
 | `AiForm` | `@cocrepo/ui` | 입력 폼 또는 AI 입력 흐름 구성 |
 | `Input` | `@heroui/react` | 사용자 입력 컨트롤 |
 | `Select` | `@heroui/react` | 사용자 입력 컨트롤 |
-| `SelectItem` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `ListBox.Item` | `@heroui/react` | 사용자 입력 컨트롤 |
 | `RealtimeChatPanel` | `@cocrepo/ui` | 상태/정보를 카드 또는 표시 단위로 표현 |
 | `SLATracker` | `@cocrepo/ui` | 상태/정보를 카드 또는 표시 단위로 표현 |
 | `ConfirmModal` | `@cocrepo/ui` | 확인 또는 보조 작업 오버레이 |

@@ -3,8 +3,8 @@ import {
 	customInstance,
 	setApiNativeRefreshHandler,
 } from "@cocrepo/api/core/client";
-import { setIdpNativeRefreshHandler } from "@cocrepo/api/idp/client";
 import { nativeRefreshToken, useVerifyToken } from "@cocrepo/api/idp/auth";
+import { setIdpNativeRefreshHandler } from "@cocrepo/api/idp/client";
 import { DEFAULT_LANGUAGE } from "@cocrepo/constant";
 
 import { useStore } from "@cocrepo/store";
@@ -16,7 +16,6 @@ import {
 	useQuery,
 } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
-import { useRouter } from "next/navigation";
 import { NuqsAdapter as NuqsNextAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode, useEffect } from "react";
 import { useAbilities } from "@/hooks";
@@ -73,12 +72,7 @@ function getQueryClient() {
 export const Providers = observer(function Providers({
 	children,
 }: ProvidersProps) {
-	const router = useRouter();
 	const queryClient = getQueryClient();
-
-	const handleNavigate = (path: string) => {
-		router.push(path as never);
-	};
 
 	return (
 		<QueryClientProvider client={queryClient}>
@@ -87,9 +81,7 @@ export const Providers = observer(function Providers({
 					<NativeAuthBridge>
 						<I18nCatalogBootstrapper>
 							<AbilityStoreBootstrapper>
-								<DesignSystemProvider navigate={handleNavigate}>
-									{children}
-								</DesignSystemProvider>
+								<DesignSystemProvider>{children}</DesignSystemProvider>
 							</AbilityStoreBootstrapper>
 						</I18nCatalogBootstrapper>
 					</NativeAuthBridge>

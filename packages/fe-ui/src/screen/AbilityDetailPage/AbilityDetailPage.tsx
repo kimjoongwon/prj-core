@@ -1,18 +1,11 @@
 "use client";
 
+import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { ArrowLeft, Edit, Key, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	Spinner,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Chip } from "../../data-display";
 import { DetailPage, DetailPageSurface, DetailSectionCard } from "../../detail";
-import { Chip } from "../../display";
 import { VStack } from "../../rhythm";
 import { PageTitleBar } from "../../widget";
 
@@ -66,7 +59,7 @@ export const AbilityDetailPage = observer((props: AbilityDetailPageProps) => {
 					<DetailSectionCard>
 						<div className="flex items-center justify-center gap-2 p-8">
 							<Spinner size="sm" />
-							<span className="text-default-500">로딩 중...</span>
+							<span className="text-muted">로딩 중...</span>
 						</div>
 					</DetailSectionCard>
 				</DetailPageSurface>
@@ -87,7 +80,7 @@ export const AbilityDetailPage = observer((props: AbilityDetailPageProps) => {
 				<DetailPageSurface>
 					<DetailSectionCard>
 						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-default-500">권한을 찾을 수 없습니다.</p>
+							<p className="text-muted">권한을 찾을 수 없습니다.</p>
 							<Button variant="flat" onPress={props.onClickBackButton}>
 								목록으로
 							</Button>
@@ -99,6 +92,14 @@ export const AbilityDetailPage = observer((props: AbilityDetailPageProps) => {
 	}
 
 	const { ability } = props;
+	const deleteModalState = useOverlayState({
+		isOpen: props.isDeleteModalOpen,
+		onOpenChange: (open) => {
+			if (!open) {
+				props.onCloseDeleteModal();
+			}
+		},
+	});
 
 	return (
 		<DetailPage
@@ -140,11 +141,11 @@ export const AbilityDetailPage = observer((props: AbilityDetailPageProps) => {
 						<h3 className="mb-4 text-lg font-semibold">기본 정보</h3>
 						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 							<div>
-								<label className="text-sm text-default-500">권한 이름</label>
+								<label className="text-sm text-muted">권한 이름</label>
 								<p className="mt-1 font-mono">{ability.name}</p>
 							</div>
 							<div>
-								<label className="text-sm text-default-500">유형</label>
+								<label className="text-sm text-muted">유형</label>
 								<div className="mt-1">
 									<Chip
 										size="sm"
@@ -157,13 +158,13 @@ export const AbilityDetailPage = observer((props: AbilityDetailPageProps) => {
 							</div>
 							{ability.description ? (
 								<div className="md:col-span-2">
-									<label className="text-sm text-default-500">설명</label>
+									<label className="text-sm text-muted">설명</label>
 									<p className="mt-1">{ability.description}</p>
 								</div>
 							) : null}
 							{ability.inverted && ability.reason ? (
 								<div className="md:col-span-2">
-									<label className="text-sm text-default-500">거부 사유</label>
+									<label className="text-sm text-muted">거부 사유</label>
 									<p className="mt-1 text-danger">{ability.reason}</p>
 								</div>
 							) : null}
@@ -173,15 +174,15 @@ export const AbilityDetailPage = observer((props: AbilityDetailPageProps) => {
 						<h3 className="mb-4 text-lg font-semibold">CASL 정보</h3>
 						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 							<div>
-								<label className="text-sm text-default-500">Subject</label>
+								<label className="text-sm text-muted">Subject</label>
 								<p className="mt-1">{ability.subjectLabel || "-"}</p>
 							</div>
 							<div>
-								<label className="text-sm text-default-500">Action</label>
+								<label className="text-sm text-muted">Action</label>
 								<p className="mt-1">{ability.actionLabel || "-"}</p>
 							</div>
 							<div className="md:col-span-2">
-								<label className="text-sm text-default-500">Fields</label>
+								<label className="text-sm text-muted">Fields</label>
 								<div className="mt-1">
 									{ability.fields.length === 0 ? (
 										<Chip size="sm" variant="flat">
@@ -204,10 +205,10 @@ export const AbilityDetailPage = observer((props: AbilityDetailPageProps) => {
 							</div>
 							{ability.conditions ? (
 								<div className="md:col-span-2">
-									<label className="text-sm text-default-500">
+									<label className="text-sm text-muted">
 										Conditions (JSON)
 									</label>
-									<pre className="mt-1 overflow-x-auto rounded-lg bg-content2 p-4 text-xs">
+									<pre className="mt-1 overflow-x-auto rounded-lg bg-surface-secondary p-4 text-xs">
 										{JSON.stringify(ability.conditions, null, 2)}
 									</pre>
 								</div>
@@ -218,14 +219,14 @@ export const AbilityDetailPage = observer((props: AbilityDetailPageProps) => {
 						<h3 className="mb-4 text-lg font-semibold">메타 정보</h3>
 						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 							<div>
-								<label className="text-sm text-default-500">생성일</label>
+								<label className="text-sm text-muted">생성일</label>
 								<p className="mt-1">
 									{new Date(ability.createdAt).toLocaleString("ko-KR")}
 								</p>
 							</div>
 							{ability.updatedAt ? (
 								<div>
-									<label className="text-sm text-default-500">수정일</label>
+									<label className="text-sm text-muted">수정일</label>
 									<p className="mt-1">
 										{new Date(ability.updatedAt).toLocaleString("ko-KR")}
 									</p>
@@ -236,36 +237,37 @@ export const AbilityDetailPage = observer((props: AbilityDetailPageProps) => {
 				</VStack>
 			</DetailPageSurface>
 
-			<Modal
-				isOpen={props.isDeleteModalOpen}
-				onClose={props.onCloseDeleteModal}
-			>
-				<ModalContent>
-					<ModalHeader className="flex items-center gap-2">
-						<Key className="h-5 w-5 text-danger" />
-						권한 삭제
-					</ModalHeader>
-					<ModalBody>
-						<p>
-							<strong>{ability.name}</strong>권한을 삭제하시겠습니까?
-						</p>
-						<p className="mt-2 text-sm text-default-500">
-							이 작업은 되돌릴 수 없습니다.
-						</p>
-					</ModalBody>
-					<ModalFooter>
-						<Button variant="flat" onPress={props.onCloseDeleteModal}>
-							취소
-						</Button>
-						<Button
-							color="danger"
-							onPress={props.onClickDeleteConfirm}
-							isLoading={props.isDeleting}
-						>
-							삭제
-						</Button>
-					</ModalFooter>
-				</ModalContent>
+			<Modal state={deleteModalState}>
+				<Modal.Backdrop>
+					<Modal.Container>
+						<Modal.Dialog>
+							<Modal.Header className="flex items-center gap-2">
+								<Key className="h-5 w-5 text-danger" />
+								권한 삭제
+							</Modal.Header>
+							<Modal.Body>
+								<p>
+									<strong>{ability.name}</strong>권한을 삭제하시겠습니까?
+								</p>
+								<p className="mt-2 text-sm text-muted">
+									이 작업은 되돌릴 수 없습니다.
+								</p>
+							</Modal.Body>
+							<Modal.Footer>
+								<Button variant="flat" onPress={props.onCloseDeleteModal}>
+									취소
+								</Button>
+								<Button
+									color="danger"
+									onPress={props.onClickDeleteConfirm}
+									isLoading={props.isDeleting}
+								>
+									삭제
+								</Button>
+							</Modal.Footer>
+						</Modal.Dialog>
+					</Modal.Container>
+				</Modal.Backdrop>
 			</Modal>
 		</DetailPage>
 	);

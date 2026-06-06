@@ -17,15 +17,8 @@ import {
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import {
-	Button,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	useDisclosure,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Modal, useOverlayState } from "@heroui/react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -75,7 +68,7 @@ function TasksPageFallback() {
 				title="태스크 목록"
 				description="시스템에 등록된 태스크와 운동 detail을 관리합니다."
 			/>
-			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+			<Surface className="h-32 rounded-2xl border-border/80 bg-surface/70">
 				{null}
 			</Surface>
 		</div>
@@ -104,14 +97,14 @@ export const TaskListPage = observer(
 		}, [gridState, queryStates, setQueryStates]);
 		const taskRows = tasks ?? [];
 		const [deleteTarget, setDeleteTarget] = useState<TaskDto | null>(null);
-		const deleteModal = useDisclosure();
+		const deleteModal = useOverlayState();
 		const onClickDeleteButton = (taskId: string) => {
 			const targetTask = taskRows.find((task) => task.id === taskId);
 			if (!targetTask) {
 				return;
 			}
 			setDeleteTarget(targetTask);
-			deleteModal.onOpen();
+			deleteModal.open();
 		};
 		const columns = buildTaskTableColumns<TaskDto>({
 			onClickTaskName,
@@ -137,7 +130,7 @@ export const TaskListPage = observer(
 						</Button>
 					}
 				/>
-				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 					<DataGrid
 						config={{
 							entity: "Task",
@@ -147,14 +140,13 @@ export const TaskListPage = observer(
 						}}
 						rows={taskRows}
 						totalCount={totalCount}
-						isLoading={false}
 						state={gridState}
 					/>
 				</Surface>
-				<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
-					<ModalContent>
-						<ModalHeader>{t("태스크 삭제")}</ModalHeader>
-						<ModalBody>
+			<Modal state={deleteModal}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>{t("태스크 삭제")}</Modal.Header>
+						<Modal.Body>
 							<p>
 								<strong>{deleteTarget?.exercise.name}</strong>{" "}
 								{t("운동 detail이 포함된 태스크를 삭제하시겠습니까?")}
@@ -162,11 +154,11 @@ export const TaskListPage = observer(
 							<p className="mt-2 text-sm text-danger">
 								{t("루틴에서 사용 중인 태스크는 삭제할 수 없습니다.")}
 							</p>
-						</ModalBody>
-						<ModalFooter>
+						</Modal.Body>
+						<Modal.Footer>
 							<Button
 								variant="flat"
-								onPress={deleteModal.onClose}
+								onPress={deleteModal.close}
 								isDisabled={isDeleting}
 							>
 								{t("취소")}
@@ -178,16 +170,15 @@ export const TaskListPage = observer(
 										return;
 									}
 									void onDeleteTask(deleteTarget.id).then(() => {
-										deleteModal.onClose();
+										deleteModal.close();
 										setDeleteTarget(null);
 									});
 								}}
-								isLoading={isDeleting}
 							>
 								{t("삭제")}
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
 			</div>
 		);

@@ -2,52 +2,40 @@ import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import {
-	ListboxSelect as BaseListboxSelect,
-	type ListboxSelectProps as BaseListboxSelectProps,
-	ListboxWrapper,
-} from "./ListboxSelect";
+import { ListBoxSelect as BaseListBoxSelect } from "./ListBoxSelect";
+import type {
+	ListBoxSelectProps as BaseListBoxSelectProps,
+	ListBoxSelectValue,
+} from "./ListBoxSelect.props";
 
-export interface ListboxSelectProps<T>
+export interface ListBoxSelectProps<T>
 	extends MobxProps<T>,
-		Omit<
-			BaseListboxSelectProps<T>,
-			"defaultSelectedKeys" | "onSelectionChange"
-		> {}
+		Omit<BaseListBoxSelectProps, "value" | "defaultValue" | "onChange"> {}
 
-export const ListboxSelect = observer(
-	<T extends object>(props: ListboxSelectProps<T>) => {
+export const ListBoxSelect = observer(
+	<T extends object>(props: ListBoxSelectProps<T>) => {
 		const { state, path, selectionMode = "multiple", options, ...rest } = props;
 
-		const value = tools.get(state, path);
-		const defaultSelectedKeys = new Set([value]);
+		const value = tools.get(state, path) as ListBoxSelectValue;
 
-		const formField = useFormField<any, any>({
-			value: defaultSelectedKeys,
+		const formField = useFormField<T, ListBoxSelectValue>({
+			value,
 			state,
 			path,
 		});
 
-		const handleSelectionChange: BaseListboxSelectProps<T>["onSelectionChange"] =
-			(selection: any) => {
-				const selectedKeys = Array.from(selection);
-				if (selectionMode === "single") {
-					formField.setValue(selectedKeys[0]);
-					return;
-				}
-				formField.setValue(selectedKeys);
-			};
+		const handleChange = (nextValue: ListBoxSelectValue) => {
+			formField.setValue(nextValue);
+		};
 
 		return (
-			<BaseListboxSelect
+			<BaseListBoxSelect
 				{...rest}
 				options={options}
 				selectionMode={selectionMode}
-				defaultSelectedKeys={formField.state.value}
-				onSelectionChange={handleSelectionChange}
+				value={formField.state.value}
+				onChange={handleChange}
 			/>
 		);
 	},
 );
-
-export { ListboxWrapper };

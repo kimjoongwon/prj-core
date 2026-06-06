@@ -1,5 +1,6 @@
 import { User } from "lucide-react";
-import { Avatar, Chip } from "../../design-system/primitives";
+import { Avatar } from "@heroui/react";
+import { Chip } from "../../data-display/Chip/Chip";
 
 interface InquiryAssigneeCellProps {
 	/** 담당자 이름 */
@@ -39,16 +40,14 @@ export const InquiryAssigneeCell = ({
 	return (
 		<div className="flex w-full items-center justify-center gap-2">
 			<Avatar
-				name={name}
-				src={avatarUrl ?? undefined}
 				size="sm"
-				classNames={{
-					base: "bg-primary/10",
-					icon: "text-primary",
-				}}
-				showFallback
-				fallback={<User className="h-3 w-3" />}
-			/>
+				className="bg-accent/10 text-accent"
+			>
+				{avatarUrl ? <Avatar.Image src={avatarUrl} alt={name} /> : null}
+				<Avatar.Fallback>
+					<User className="h-3 w-3" />
+				</Avatar.Fallback>
+			</Avatar>
 			<span className="text-sm">{name}</span>
 			{onlineCount !== null && onlineCount !== undefined && onlineCount > 0 && (
 				<Chip size="sm" variant="flat" color="success" className="text-xs">

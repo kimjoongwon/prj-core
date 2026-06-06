@@ -2,7 +2,7 @@
 
 import { useCreateSpace } from "@cocrepo/api/core/spaces";
 import { SpaceCreatePage } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -23,10 +23,8 @@ const AdminSpacesNewRoute = observer(() => {
 	const { mutate: createSpace, isPending } = useCreateSpace({
 		mutation: {
 			onSuccess: (response) => {
-				addToast({
-					title: "공간 등록 성공",
+				toast.success("공간 등록 성공", {
 					description: "공간과 시설 detail이 성공적으로 등록되었습니다.",
-					color: "success",
 				});
 				const spaceId = response?.data?.id;
 				if (spaceId) {
@@ -36,10 +34,8 @@ const AdminSpacesNewRoute = observer(() => {
 				router.push("/spaces" as Route);
 			},
 			onError: (error) => {
-				addToast({
-					title: "공간 등록 실패",
+				toast.danger("공간 등록 실패", {
 					description: error.message || "공간 등록 중 오류가 발생했습니다.",
-					color: "danger",
 				});
 			},
 		},

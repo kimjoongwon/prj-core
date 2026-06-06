@@ -3,7 +3,7 @@
 import { HStack, Surface, VStack } from "@cocrepo/ui";
 import { AlertCircle, Database, RefreshCw } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Spinner } from "../../../design-system/primitives";
+import { Spinner } from "@heroui/react";
 
 export type CourseTableStatePanelStatus =
 	| "loading"
@@ -55,9 +55,9 @@ export const CourseTableStatePanel = observer(
 		const isError = status === "error";
 
 		return (
-			<Surface className="rounded-2xl border-divider/80 bg-content1/70 p-5">
+			<Surface className="rounded-2xl border-border/80 bg-surface/70 p-5">
 				<HStack gap="block" alignItems="center">
-					<div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-default-100 text-default-600">
+					<div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-default text-muted">
 						{isLoading ? <Spinner size="sm" /> : null}
 						{isRefreshing ? <RefreshCw className="size-4" /> : null}
 						{isError ? <AlertCircle className="size-4 text-danger" /> : null}
@@ -67,7 +67,7 @@ export const CourseTableStatePanel = observer(
 					</div>
 					<VStack gap="dense">
 						<p className="font-medium text-foreground">{stateText.title}</p>
-						<p className="text-default-600 text-sm">{stateText.description}</p>
+						<p className="text-muted text-sm">{stateText.description}</p>
 					</VStack>
 				</HStack>
 			</Surface>

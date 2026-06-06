@@ -2,7 +2,8 @@
 
 import { Filter, Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button, Input } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input/Input";
 import { useT } from "../../i18n";
 
 export interface SearchFilterBarProps {
@@ -69,10 +70,10 @@ export const SearchFilterBar = observer(
 					value={searchValue}
 					onValueChange={onSearchChange}
 					onKeyDown={handleKeyDown}
-					startContent={<Search className="size-4 text-default-400" />}
+					startContent={<Search className="size-4 text-muted" />}
 					classNames={{
 						base: "flex-1",
-						inputWrapper: "bg-content2",
+						inputWrapper: "bg-surface-secondary",
 					}}
 				/>
 				{showFilterButton && onFilterToggle && (
@@ -85,7 +86,7 @@ export const SearchFilterBar = observer(
 					>
 						{t("필터")}
 						{filterCount > 0 && (
-							<span className="ml-1 rounded-full bg-primary-foreground/20 px-1.5 text-xs">
+							<span className="ml-1 rounded-full bg-accent-foreground/20 px-1.5 text-xs">
 								{filterCount}
 							</span>
 						)}

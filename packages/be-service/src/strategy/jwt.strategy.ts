@@ -35,9 +35,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 	) {
 		const oidcConfig = config.get<OidcServerConfig>("oidc");
 		const authConfig = config.get<AuthConfig>("auth");
-		const oidcIssuer = oidcConfig?.issuer || "http://localhost:3007";
+		const oidcIssuer = oidcConfig?.issuer || "http://localhost:3000";
 		const jwksSecretProvider = jwksRsa.passportJwtSecret({
-			jwksUri: oidcConfig?.jwksUri || "http://localhost:3007/oidc/jwks",
+			jwksUri: oidcConfig?.jwksUri || "http://localhost:3000/oidc/jwks",
 			cache: true,
 			cacheMaxAge: 600000, // 10분
 			rateLimit: true,

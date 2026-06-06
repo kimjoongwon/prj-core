@@ -16,7 +16,7 @@ import {
 	type PolicyDetailPageAbility,
 	type PolicyDetailPagePolicy,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -42,10 +42,8 @@ export default observer(function PolicyDetailPageRoute() {
 	const { mutate: deletePolicy, isPending: isDeleting } = useDeletePolicy({
 		mutation: {
 			onSuccess: () => {
-				addToast({
-					title: "정책 삭제 성공",
+				toast.success("정책 삭제 성공", {
 					description: "정책이 삭제되었습니다.",
-					color: "success",
 				});
 				router.push("/policies" as Route);
 			},
@@ -55,10 +53,8 @@ export default observer(function PolicyDetailPageRoute() {
 		useSyncPolicyAbilities({
 			mutation: {
 				onSuccess: () => {
-					addToast({
-						title: "Ability 저장 성공",
+					toast.success("Ability 저장 성공", {
 						description: "정책 Ability 할당이 저장되었습니다.",
-						color: "success",
 					});
 					setIsEditingAbilities(false);
 					setHasChanges(false);

@@ -14,13 +14,11 @@ import {
 	useT,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Chip,
-	Input,
-	Spinner,
-	Textarea,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Input } from "../../control/Input/Input";
+import { Spinner } from "@heroui/react";
+import { TextArea } from "../../control/TextArea/TextArea";
 
 export interface ExerciseMediaAsset extends AssetBrowserAsset {}
 
@@ -58,7 +56,7 @@ export interface TaskExerciseEditPageProps {
 	onChangeDurationMinInput: (value: string) => void;
 	onChangeDurationSecInput: (value: string) => void;
 	onChangeCountInput: (value: string) => void;
-	onChangeDescriptionTextarea: (value: string) => void;
+	onChangeDescriptionTextArea: (value: string) => void;
 	onChangeImageFileIdInput: (value: string) => void;
 	onChangeVideoFileIdInput: (value: string) => void;
 	onOpenImagePicker: () => void;
@@ -89,11 +87,11 @@ const ExerciseMediaField = observer(function ExerciseMediaField({
 	const t = useT();
 	const isImage = selectedAsset?.mimeType?.startsWith("image/");
 	return (
-		<div className="rounded-2xl border border-default-200 bg-content1 p-4">
+		<div className="rounded-2xl border border-border bg-surface p-4">
 			<div className="mb-3 flex items-start justify-between gap-3">
 				<div>
 					<p className="font-medium">{t(label)}</p>
-					<p className="mt-1 text-sm text-default-500">{t(description)}</p>
+					<p className="mt-1 text-sm text-muted">{t(description)}</p>
 				</div>
 				<div className="flex gap-2">
 					<Button size="sm" variant="flat" onPress={onOpenPicker}>
@@ -120,14 +118,14 @@ const ExerciseMediaField = observer(function ExerciseMediaField({
 					/>
 					<div className="space-y-1 text-sm">
 						<p className="font-medium">{selectedAsset.originalName}</p>
-						<p className="text-default-500">{selectedAsset.mimeType}</p>
-						<p className="break-all font-mono text-xs text-default-400">
+						<p className="text-muted">{selectedAsset.mimeType}</p>
+						<p className="break-all font-mono text-xs text-muted">
 							{selectedAsset.id}
 						</p>
 					</div>
 				</div>
 			) : (
-				<div className="rounded-xl border border-dashed border-default-300 px-4 py-6 text-sm text-default-500">
+				<div className="rounded-xl border border-dashed border-border px-4 py-6 text-sm text-muted">
 					{t(placeholder)}
 				</div>
 			)}
@@ -160,7 +158,7 @@ export const TaskExerciseEditPage = observer(
 		onChangeDurationMinInput,
 		onChangeDurationSecInput,
 		onChangeCountInput,
-		onChangeDescriptionTextarea,
+		onChangeDescriptionTextArea,
 		onChangeImageFileIdInput,
 		onChangeVideoFileIdInput,
 		onOpenImagePicker,
@@ -183,7 +181,7 @@ export const TaskExerciseEditPage = observer(
 						<FormSectionCard>
 							<div className="flex items-center justify-center gap-2 p-8">
 								<Spinner size="sm" />
-								<span className="text-default-500">{t("로딩 중...")}</span>
+								<span className="text-muted">{t("로딩 중...")}</span>
 							</div>
 						</FormSectionCard>
 					</FormPageSurface>
@@ -204,7 +202,7 @@ export const TaskExerciseEditPage = observer(
 					<FormPageSurface>
 						<FormSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">
+								<p className="text-muted">
 									{t("운동 detail을 찾을 수 없습니다.")}
 								</p>
 								<Button variant="flat" onPress={onClickCancelButton}>
@@ -265,7 +263,7 @@ export const TaskExerciseEditPage = observer(
 									errorMessage={errors.name ? t(errors.name) : undefined}
 								/>
 								<div>
-									<label className="mb-1 block text-sm font-medium text-default-700">
+									<label className="mb-1 block text-sm font-medium text-foreground">
 										{t("지속시간")} <span className="text-danger">*</span>
 									</label>
 									<div className="flex items-center gap-2">
@@ -276,7 +274,7 @@ export const TaskExerciseEditPage = observer(
 											onValueChange={onChangeDurationMinInput}
 											min={0}
 											endContent={
-												<span className="text-sm text-default-400">
+												<span className="text-sm text-muted">
 													{t("분")}
 												</span>
 											}
@@ -290,7 +288,7 @@ export const TaskExerciseEditPage = observer(
 											min={0}
 											max={59}
 											endContent={
-												<span className="text-sm text-default-400">
+												<span className="text-sm text-muted">
 													{t("초")}
 												</span>
 											}
@@ -314,14 +312,14 @@ export const TaskExerciseEditPage = observer(
 									isInvalid={Boolean(errors.count)}
 									errorMessage={errors.count ? t(errors.count) : undefined}
 									endContent={
-										<span className="text-sm text-default-400">{t("회")}</span>
+										<span className="text-sm text-muted">{t("회")}</span>
 									}
 								/>
-								<Textarea
+								<TextArea
 									label={t("설명")}
 									placeholder={t("운동 설명, 수행 방법 등을 입력하세요 (선택)")}
 									value={description}
-									onValueChange={onChangeDescriptionTextarea}
+									onValueChange={onChangeDescriptionTextArea}
 									maxLength={500}
 									minRows={3}
 								/>
@@ -347,9 +345,9 @@ export const TaskExerciseEditPage = observer(
 										onClickClearVideoAssetButton();
 									}}
 								/>
-								<div className="rounded-lg bg-content2 p-3 text-sm text-default-600">
+								<div className="rounded-lg bg-surface-secondary p-3 text-sm text-muted">
 									<div className="flex items-center gap-2">
-										<span className="font-medium text-default-700">
+										<span className="font-medium text-foreground">
 											{t("스케줄 가능 상태")}
 										</span>
 										<Chip

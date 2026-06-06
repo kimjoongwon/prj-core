@@ -1,22 +1,17 @@
 "use client";
 
+import { Avatar, Card, ListBox } from "@heroui/react";
 import { Plus, Search, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Autocomplete,
-	AutocompleteItem,
-	Avatar,
-	Button,
-	Card,
-	CardBody,
-	Chip,
-} from "../../../design-system/primitives";
-import { Text } from "../../../display/data-display/Text/Text";
+import { Button } from "../../../control/Button/Button";
+import { Input } from "../../../control/Input/Input";
+import { Chip } from "../../../data-display/Chip/Chip";
+import { Typography } from "../../../data-display/Typography";
 import { AbilityFormModal } from "../../../form/AbilityFormModal";
 import { HStack } from "../../../rhythm/HStack/HStack";
 import { VStack } from "../../../rhythm/VStack/VStack";
 import { AbilityRuleList } from "../../../widget/ability/AbilityRuleList";
-import type { UserAbilityManagerProps } from "./type";
+import type { AbilityUser, UserAbilityManagerProps } from "./type";
 import { useUserAbilityManager } from "./useUserAbilityManager";
 
 /**
@@ -95,57 +90,66 @@ export const UserAbilityManager = observer(
 
 		return (
 			<Card className="w-full">
-				<CardBody>
+				<Card.Content>
 					<VStack gap={6} fullWidth>
 						{/* 헤더 */}
 						<HStack alignItems="center" justifyContent="between" fullWidth>
-							<Text variant="title">사용자 예외 권한 관리</Text>
+							<Typography type="h4" weight="normal">
+								사용자 예외 권한 관리
+							</Typography>
 						</HStack>
 
 						{/* 사용자 검색 영역 */}
-						<Autocomplete
-							label="사용자 검색"
-							placeholder="이름 또는 이메일로 검색..."
-							startContent={<Search className="h-4 w-4 text-default-400" />}
-							inputValue={searchQuery}
-							onInputChange={handleSearchQueryChange}
-							isLoading={isSearching}
-							items={searchResults}
-							onSelectionChange={(key) => {
-								if (key) {
-									const user = searchResults.find((u) => u.id === key);
-									if (user) {
-										handleUserSelect(user);
-									}
-								}
-							}}
-							classNames={{
-								base: "w-full",
-							}}
-						>
-							{(user) => (
-								<AutocompleteItem key={user.id} textValue={user.name}>
-									<HStack alignItems="center" gap={8}>
-										<Avatar
-											size="sm"
-											name={user.name}
-											className="flex-shrink-0"
-										/>
-										<VStack gap={0}>
-											<span className="text-sm font-medium">{user.name}</span>
-											<span className="text-xs text-default-500">
-												{user.email}
-											</span>
-										</VStack>
-										{user.roleDisplayName && (
-											<Chip size="sm" variant="flat" className="ml-auto">
-												{user.roleDisplayName}
-											</Chip>
-										)}
-									</HStack>
-								</AutocompleteItem>
-							)}
-						</Autocomplete>
+						<VStack gap={2} fullWidth>
+							<Input
+								label="사용자 검색"
+								placeholder="이름 또는 이메일로 검색..."
+								startContent={<Search className="h-4 w-4 text-muted" />}
+								value={searchQuery}
+								onValueChange={handleSearchQueryChange}
+								isDisabled={isSearching}
+								className="w-full"
+							/>
+							{searchResults.length > 0 ? (
+								<ListBox<AbilityUser>
+									aria-label="사용자 검색 결과"
+									items={searchResults}
+									selectionMode="single"
+									selectedKeys={selectedUser ? new Set([selectedUser.id]) : new Set()}
+									onSelectionChange={(keys) => {
+										const key = Array.from(keys)[0];
+										if (key) {
+											const user = searchResults.find((item) => item.id === key);
+											if (user) {
+												handleUserSelect(user);
+											}
+										}
+									}}
+									className="w-full"
+								>
+									{(user: AbilityUser) => (
+										<ListBox.Item key={user.id} id={user.id} textValue={user.name}>
+											<HStack alignItems="center" gap={8}>
+												<Avatar size="sm" className="flex-shrink-0">
+													<Avatar.Fallback>{user.name.slice(0, 1)}</Avatar.Fallback>
+												</Avatar>
+												<VStack gap={0}>
+													<span className="text-sm font-medium">{user.name}</span>
+													<span className="text-xs text-muted">
+														{user.email}
+													</span>
+												</VStack>
+												{user.roleDisplayName && (
+													<Chip size="sm" variant="flat" className="ml-auto">
+														{user.roleDisplayName}
+													</Chip>
+												)}
+											</HStack>
+										</ListBox.Item>
+									)}
+								</ListBox>
+							) : null}
+						</VStack>
 
 						{/* 선택된 사용자 정보 및 권한 목록 */}
 						{selectedUser ? (
@@ -153,11 +157,11 @@ export const UserAbilityManager = observer(
 								{/* 선택된 사용자 정보 */}
 								<HStack alignItems="center" justifyContent="between" fullWidth>
 									<HStack alignItems="center" gap={12}>
-										<Avatar
-											size="md"
-											name={selectedUser.name}
-											icon={<User className="h-5 w-5" />}
-										/>
+										<Avatar size="md">
+											<Avatar.Fallback>
+												<User className="h-5 w-5" />
+											</Avatar.Fallback>
+										</Avatar>
 										<VStack gap={0}>
 											<HStack alignItems="center" gap={8}>
 												<span className="text-base font-semibold">
@@ -169,7 +173,7 @@ export const UserAbilityManager = observer(
 													</Chip>
 												)}
 											</HStack>
-											<span className="text-sm text-default-500">
+											<span className="text-sm text-muted">
 												{selectedUser.email}
 											</span>
 										</VStack>
@@ -185,16 +189,18 @@ export const UserAbilityManager = observer(
 								</HStack>
 
 								{/* 구분선 */}
-								<div className="h-px w-full bg-divider" />
+								<div className="h-px w-full bg-border" />
 
 								{/* 에러 메시지 */}
 								{state.error && (
-									<Text className="text-danger">{state.error}</Text>
+									<Typography type="body-sm" className="text-danger font-medium">
+										{state.error}
+									</Typography>
 								)}
 
 								{/* 예외 권한 목록 */}
 								<VStack gap={2} fullWidth>
-									<span className="text-sm font-medium text-default-600">
+									<span className="text-sm font-medium text-muted">
 										예외 권한 목록 (Role 기본 권한을 덮어씀)
 									</span>
 									<AbilityRuleList
@@ -214,14 +220,14 @@ export const UserAbilityManager = observer(
 								gap={4}
 								className="py-12"
 							>
-								<User className="h-12 w-12 text-default-300" />
-								<Text className="text-default-500">
+								<User className="h-12 w-12 text-muted" />
+								<Typography.Paragraph color="muted">
 									사용자를 검색하여 선택해주세요
-								</Text>
+								</Typography.Paragraph>
 							</VStack>
 						)}
 					</VStack>
-				</CardBody>
+				</Card.Content>
 
 				{/* Ability 추가/수정 모달 */}
 				<AbilityFormModal

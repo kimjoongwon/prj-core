@@ -3,7 +3,7 @@
 import { Loader2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Progress } from "../../design-system/primitives";
+import { ProgressBar } from "@heroui/react";
 
 export type ProgressStatus = "queued" | "processing" | "completed" | "error";
 
@@ -59,7 +59,7 @@ export const ProgressPanel = observer(
 	({
 		state,
 		statusLabels = defaultStatusLabels,
-		loadingIcon = <Loader2 className="w-5 h-5 text-primary animate-spin" />,
+		loadingIcon = <Loader2 className="w-5 h-5 text-accent animate-spin" />,
 		hideOnComplete = true,
 		className = "",
 	}: ProgressPanelProps) => {
@@ -72,22 +72,22 @@ export const ProgressPanel = observer(
 
 		return (
 			<div
-				className={`p-4 rounded-xl bg-content1 border border-divider ${className}`}
+				className={`p-4 rounded-xl bg-surface border border-border ${className}`}
 			>
 				<div className="flex items-center gap-3 mb-3">
 					{!isError && loadingIcon}
 					<span
-						className={`text-sm font-medium ${isError ? "text-danger" : "text-default-700"}`}
+						className={`text-sm font-medium ${isError ? "text-danger" : "text-foreground"}`}
 					>
 						{statusLabels[state.status]}
 					</span>
 				</div>
 
 				{!isError && (
-					<Progress
-						value={progress}
-						color="primary"
-						size="sm"
+						<ProgressBar
+							value={progress}
+							color="accent"
+							size="sm"
 						className="mb-2"
 						aria-label="진행률"
 					/>
@@ -98,7 +98,7 @@ export const ProgressPanel = observer(
 				)}
 
 				{state.currentStep && (
-					<p className="text-xs text-default-400">
+					<p className="text-xs text-muted">
 						현재 단계: {state.currentStep}
 					</p>
 				)}

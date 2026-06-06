@@ -54,6 +54,13 @@ const defaultArgs = {
 		slaBreached: 1,
 		total: 12,
 	},
+	statusOptions: [
+		{ label: "신규", value: "NEW" },
+		{ label: "진행중", value: "IN_PROGRESS" },
+		{ label: "고객대기", value: "WAITING_CUSTOMER" },
+		{ label: "해결", value: "RESOLVED" },
+		{ label: "종료", value: "CLOSED" },
+	],
 	totalCount: 12,
 };
 

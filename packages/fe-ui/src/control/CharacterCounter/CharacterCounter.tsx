@@ -23,7 +23,7 @@ export function CharacterCounter({
 
 	const colorClass = getColorClass();
 	const combinedClassName =
-		`text-right text-sm text-default-500 ${colorClass} ${className || ""}`.trim();
+		`text-right text-sm text-muted ${colorClass} ${className || ""}`.trim();
 
 	return (
 		<span className={combinedClassName}>

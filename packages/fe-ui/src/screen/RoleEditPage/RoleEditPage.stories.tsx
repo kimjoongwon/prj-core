@@ -9,7 +9,7 @@ const defaultArgs = {
 	isNotFound: false,
 	isSubmitPending: false,
 	isSystemRole: false,
-	onChangeDescriptionTextarea: (..._args: never[]) => undefined,
+	onChangeDescriptionTextArea: (..._args: never[]) => undefined,
 	onChangeDisplayNameInput: (..._args: never[]) => undefined,
 	onClickBackButton: (..._args: never[]) => undefined,
 	onClickListButton: (..._args: never[]) => undefined,

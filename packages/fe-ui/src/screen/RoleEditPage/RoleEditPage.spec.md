@@ -20,7 +20,7 @@ RoleEditPage
     - VStack
       - FormSectionCard
         - Input x2
-        - Textarea
+        - TextArea
         - Button x2
 ```
 
@@ -36,7 +36,7 @@ RoleEditPage
 | `ArrowLeft` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
 | `VStack` | `@cocrepo/ui` | 화면 조합 요소 |
 | `Input` | `@heroui/react` | 사용자 입력 컨트롤 |
-| `Textarea` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `TextArea` | `@heroui/react` | 사용자 입력 컨트롤 |
 | `Save` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
 
 ## 공개 계약

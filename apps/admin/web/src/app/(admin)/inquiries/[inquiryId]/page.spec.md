@@ -214,7 +214,7 @@
 │       ├── StatusSelect
 │       ├── PrioritySelect
 │       ├── CategorySelect
-│       ├── AssigneeSelect
+│       ├── Assignee Select
 │       └── TagInput
 ├── QuickEditSection
 │   ├── AiForm (mode=UPDATE)
@@ -235,7 +235,7 @@
 │   │   └── MessageItem[] (sender, content, timestamp, status)
 │   └── TypingIndicator
 ├── InquiryReplyForm
-│   ├── ReplyTextarea
+│   ├── ReplyTextArea
 │   ├── AIActions
 │   │   ├── GenerateDraftButton
 │   │   └── KnowledgeBaseButton

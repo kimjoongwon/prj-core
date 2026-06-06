@@ -110,7 +110,7 @@ export const AuthAuditLogListPage = observer(
 						/>
 					</div>
 				)}
-				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 					<DataGrid
 						config={{
 							entity: "AuthAuditLog",
@@ -118,11 +118,11 @@ export const AuthAuditLogListPage = observer(
 							leftInputs,
 							emptyMessage: "조회된 감사 로그가 없습니다.",
 						}}
-						rows={logRows}
-						totalCount={totalCount}
-						isLoading={isLoading}
-						state={gridState}
-					/>
+							rows={logRows}
+							totalCount={totalCount}
+							state={gridState}
+							isLoading={isLoading}
+						/>
 				</Surface>
 			</VStack>
 		);

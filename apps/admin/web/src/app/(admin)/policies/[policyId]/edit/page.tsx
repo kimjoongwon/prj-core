@@ -15,7 +15,7 @@ import {
 	type PolicyCreatePageAbilityOption,
 	PolicyEditPage,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -53,10 +53,8 @@ export default observer(function PolicyEditPageRoute() {
 							queryClient.invalidateQueries({
 								queryKey: getGetPolicyByIdQueryKey(policyId),
 							});
-							addToast({
-								title: "정책 수정 성공",
+							toast.success("정책 수정 성공", {
 								description: "정책이 수정되었습니다.",
-								color: "success",
 							});
 							router.push(`/policies/${policyId}` as Route);
 						},
@@ -64,11 +62,7 @@ export default observer(function PolicyEditPageRoute() {
 				);
 			},
 			onError: (error) => {
-				addToast({
-					title: "정책 수정 실패",
-					description: error.message,
-					color: "danger",
-				});
+				toast.danger("정책 수정 실패", { description: error.message });
 			},
 		},
 	});

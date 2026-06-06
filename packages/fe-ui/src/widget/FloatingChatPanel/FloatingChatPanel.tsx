@@ -11,12 +11,9 @@ import {
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
-import {
-	Button,
-	ScrollShadow,
-	Spinner,
-	Textarea,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { ScrollShadow, Spinner } from "@heroui/react";
+import { TextArea } from "../../control/TextArea/TextArea";
 
 export interface ChatMessage {
 	/** 역할 (user 또는 assistant) */
@@ -228,7 +225,7 @@ export const FloatingChatPanel = observer(
 
 		return (
 			<div
-				className="fixed z-50 flex flex-col overflow-hidden rounded-xl border border-divider bg-content1 shadow-2xl transition-all duration-300"
+				className="fixed z-50 flex flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-2xl transition-all duration-300"
 				style={getPanelStyle()}
 			>
 				{/* 리사이즈 핸들 (normal 모드에서만) */}
@@ -237,22 +234,22 @@ export const FloatingChatPanel = observer(
 						ref={resizeRef}
 						onMouseDown={handleResizeStart}
 						aria-hidden="true"
-						className="absolute -top-1 left-0 right-0 h-2 cursor-ns-resize hover:bg-primary/20"
+						className="absolute -top-1 left-0 right-0 h-2 cursor-ns-resize hover:bg-accent/20"
 					/>
 				)}
 
 				{/* 헤더 */}
-				<div className="flex items-center justify-between border-b border-divider bg-content2 px-4 py-3">
+				<div className="flex items-center justify-between border-b border-border bg-surface-secondary px-4 py-3">
 					<div className="flex items-center gap-2">
-						<div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
+						<div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-default">
 							<Bot className="size-4 text-white" />
 						</div>
 						<div>
-							<h3 className="text-sm font-semibold text-default-800">
+							<h3 className="text-sm font-semibold text-foreground">
 								{title}
 							</h3>
 							{panelSize !== "minimized" && (
-								<p className="text-xs text-default-500">{subtitle}</p>
+								<p className="text-xs text-muted">{subtitle}</p>
 							)}
 						</div>
 					</div>
@@ -263,7 +260,7 @@ export const FloatingChatPanel = observer(
 								variant="light"
 								isIconOnly
 								onPress={handleClear}
-								className="text-default-500 hover:text-danger"
+								className="text-muted hover:text-danger"
 							>
 								<Trash2 className="size-4" />
 							</Button>
@@ -273,7 +270,7 @@ export const FloatingChatPanel = observer(
 							variant="light"
 							isIconOnly
 							onPress={toggleMinimize}
-							className="text-default-500"
+							className="text-muted"
 						>
 							<Minus className="size-4" />
 						</Button>
@@ -282,7 +279,7 @@ export const FloatingChatPanel = observer(
 							variant="light"
 							isIconOnly
 							onPress={toggleSize}
-							className="text-default-500"
+							className="text-muted"
 						>
 							{panelSize === "maximized" ? (
 								<Minimize2 className="size-4" />
@@ -295,7 +292,7 @@ export const FloatingChatPanel = observer(
 							variant="light"
 							isIconOnly
 							onPress={onClose}
-							className="text-default-500 hover:text-danger"
+							className="text-muted hover:text-danger"
 						>
 							<X className="size-4" />
 						</Button>
@@ -310,19 +307,19 @@ export const FloatingChatPanel = observer(
 							{messages.length === 0 ? (
 								<div className="flex h-full flex-col">
 									<div className="mb-6 text-center">
-										<div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-secondary/20">
-											<Bot className="size-6 text-primary" />
+										<div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-accent/20 to-default/20">
+											<Bot className="size-6 text-accent" />
 										</div>
-										<h4 className="mb-1 font-medium text-default-700">
+										<h4 className="mb-1 font-medium text-foreground">
 											{emptyTitle}
 										</h4>
-										<p className="text-sm text-default-500">
+										<p className="text-sm text-muted">
 											{emptyDescription}
 										</p>
 									</div>
 
 									<div className="space-y-2">
-										<p className="text-xs font-medium text-default-500">
+										<p className="text-xs font-medium text-muted">
 											추천 질문
 										</p>
 										{exampleQuestions.map((question, index) => (
@@ -330,7 +327,7 @@ export const FloatingChatPanel = observer(
 												key={index}
 												type="button"
 												onClick={() => setInput(question)}
-												className="block w-full rounded-lg border border-divider bg-content2 p-3 text-left text-sm text-default-700 transition-all hover:border-primary hover:bg-content3"
+												className="block w-full rounded-lg border border-border bg-surface-secondary p-3 text-left text-sm text-foreground transition-all hover:border-accent hover:bg-surface-tertiary"
 											>
 												{question}
 											</button>
@@ -344,12 +341,12 @@ export const FloatingChatPanel = observer(
 									))}
 									{isLoading && (
 										<div className="flex items-start gap-3">
-											<div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
+											<div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-default">
 												<Bot className="size-4 text-white" />
 											</div>
-											<div className="flex items-center gap-2 rounded-lg bg-content2 px-4 py-3">
+											<div className="flex items-center gap-2 rounded-lg bg-surface-secondary px-4 py-3">
 												<Spinner size="sm" />
-												<span className="text-sm text-default-500">
+												<span className="text-sm text-muted">
 													분석 중...
 												</span>
 											</div>
@@ -361,9 +358,9 @@ export const FloatingChatPanel = observer(
 						</ScrollShadow>
 
 						{/* 입력 영역 */}
-						<div className="border-t border-divider bg-content2 p-4">
+						<div className="border-t border-border bg-surface-secondary p-4">
 							<div className="flex items-end gap-2">
-								<Textarea
+								<TextArea
 									placeholder={inputPlaceholder}
 									size="sm"
 									minRows={1}
@@ -373,7 +370,7 @@ export const FloatingChatPanel = observer(
 									onKeyDown={handleKeyDown}
 									disabled={isLoading}
 									classNames={{
-										inputWrapper: "bg-content1 border-divider min-h-10",
+										inputWrapper: "bg-surface border-border min-h-10",
 										input: "text-sm",
 									}}
 								/>
@@ -387,7 +384,7 @@ export const FloatingChatPanel = observer(
 									<Send className="size-4" />
 								</Button>
 							</div>
-							<p className="mt-2 text-xs text-default-400">
+							<p className="mt-2 text-xs text-muted">
 								Enter로 전송 • Shift+Enter로 줄바꿈
 							</p>
 						</div>
@@ -411,9 +408,9 @@ const MessageBubble = observer(({ message }: MessageBubbleProps) => {
 	if (isUser) {
 		return (
 			<div className="flex justify-end">
-				<div className="max-w-[85%] rounded-2xl rounded-br-md bg-primary px-4 py-3 text-white">
+				<div className="max-w-[85%] rounded-2xl rounded-br-md bg-accent px-4 py-3 text-white">
 					<p className="whitespace-pre-wrap text-sm">{message.content}</p>
-					<p className="mt-1 text-right text-xs text-primary-200">
+					<p className="mt-1 text-right text-xs text-accent">
 						{message.timestamp.toLocaleTimeString("ko-KR", {
 							hour: "2-digit",
 							minute: "2-digit",
@@ -426,14 +423,14 @@ const MessageBubble = observer(({ message }: MessageBubbleProps) => {
 
 	return (
 		<div className="flex items-start gap-3">
-			<div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
+			<div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-default">
 				<Bot className="size-4 text-white" />
 			</div>
-			<div className="max-w-[85%] rounded-2xl rounded-tl-md bg-content2 px-4 py-3">
-				<p className="whitespace-pre-wrap text-sm text-default-800">
+			<div className="max-w-[85%] rounded-2xl rounded-tl-md bg-surface-secondary px-4 py-3">
+				<p className="whitespace-pre-wrap text-sm text-foreground">
 					{message.content}
 				</p>
-				<p className="mt-1 text-xs text-default-400">
+				<p className="mt-1 text-xs text-muted">
 					{message.timestamp.toLocaleTimeString("ko-KR", {
 						hour: "2-digit",
 						minute: "2-digit",

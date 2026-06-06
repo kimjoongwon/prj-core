@@ -3,13 +3,8 @@
 import type { InputConfig } from "@cocrepo/type";
 import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Dropdown,
-	DropdownItem,
-	DropdownMenu,
-	DropdownTrigger,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Dropdown } from "@heroui/react";
 import { useT } from "../../i18n";
 
 interface DropdownInputProps {
@@ -22,15 +17,15 @@ export const DropdownInput = observer(({ config }: DropdownInputProps) => {
 
 	return (
 		<Dropdown>
-			<DropdownTrigger>
+			<Dropdown.Trigger>
 				<Button
 					variant={config.props?.variant ?? "flat"}
 					endContent={<ChevronDown size={16} />}
 				>
 					{config.label ? t(config.label) : null}
 				</Button>
-			</DropdownTrigger>
-			<DropdownMenu
+			</Dropdown.Trigger>
+			<Dropdown.Menu
 				aria-label={config.label ? t(config.label) : config.id}
 				onAction={(key) => {
 					const item = items.find((i) => i.key === key);
@@ -38,9 +33,9 @@ export const DropdownInput = observer(({ config }: DropdownInputProps) => {
 				}}
 			>
 				{items.map((item) => (
-					<DropdownItem key={item.key}>{t(item.label)}</DropdownItem>
+					<Dropdown.Item key={item.key}>{t(item.label)}</Dropdown.Item>
 				))}
-			</DropdownMenu>
+			</Dropdown.Menu>
 		</Dropdown>
 	);
 });

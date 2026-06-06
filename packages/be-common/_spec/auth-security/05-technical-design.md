@@ -34,7 +34,7 @@ function validatePasswordPolicy(password: string): PasswordPolicyResult {
 
 ### 로그인 검증 로직 (InteractionService 강화)
 
-**위치**: `apps/idp/api/src/module/interaction/interaction.service.ts`
+**위치**: `apps/core/api/src/module/interaction/interaction.service.ts`
 
 ```
 validateUser(email, password, ipAddress, userAgent, clientId):
@@ -120,7 +120,7 @@ logoutWithCookie(accessToken, res):
 
 ### 비밀번호 재설정 로직
 
-**위치**: `apps/idp/api/src/module/password-reset/password-reset.service.ts`
+**위치**: `apps/core/api/src/module/password-reset/password-reset.service.ts`
 
 ```
 requestReset(email):
@@ -139,7 +139,7 @@ requestReset(email):
 
   4. 이메일 발송
      EmailService.sendPasswordResetEmail(email, rawToken)
-     → 링크: {IDP_CLIENT_URL}/reset-password/{rawToken}
+     → 링크: {OIDC_INTERACTION_BASE_URL}/auth/reset-password/{rawToken}
 
   return true
 
@@ -531,11 +531,11 @@ describe("SessionCard", () => {
 | 파일 | 변경 |
 |------|------|
 | `packages/be-prisma/schema/identity/user.prisma` | User 확장 + AuthAuditLog 추가 |
-| `apps/idp/api/src/module/oidc/direct-user.repository.ts` | 잠금 관리 메서드 추가 |
-| `apps/idp/api/src/module/interaction/interaction.service.ts` | 로그인 검증 강화 |
-| `apps/idp/api/src/module/interaction/interaction.controller.ts` | 에러 응답 포맷 변경 |
+| `apps/core/api/src/module/oidc/direct-user.repository.ts` | 잠금 관리 메서드 추가 |
+| `apps/core/api/src/module/interaction/interaction.service.ts` | 로그인 검증 강화 |
+| `apps/core/api/src/module/interaction/interaction.controller.ts` | 에러 응답 포맷 변경 |
 | `packages/be-usecase/src/auth/logout-with-cookie.usecase.ts` | logoutWithCookie 강화 |
-| `apps/idp/web/src/app/interaction/[uid]/_components/LoginForm.tsx` | 잠금 UI, 남은 시도, 링크 |
+| `apps/admin/web/src/app/auth/(flow)/interaction/[uid]/page.tsx` | 잠금 UI, 남은 시도, 링크 |
 
 ### Phase 2
 
@@ -544,9 +544,9 @@ describe("SessionCard", () => {
 | `packages/be-prisma/schema/identity/user.prisma` | PasswordHistory 추가 |
 | `packages/be-common/src/utils/password-policy.ts` | 신규 |
 | `packages/be-service/src/email/email.service.ts` | 신규 |
-| `apps/idp/api/src/module/password-reset/` | 신규 모듈 |
-| `apps/idp/web/src/app/forgot-password/` | 신규 페이지 |
-| `apps/idp/web/src/app/reset-password/[token]/` | 신규 페이지 |
+| `apps/core/api/src/module/password-reset/` | 신규 모듈 |
+| `apps/admin/web/src/app/auth/(flow)/forgot-password/` | 신규 페이지 |
+| `apps/admin/web/src/app/auth/(flow)/reset-password/[token]/` | 신규 페이지 |
 | `packages/fe-ui/src/widget/PasswordStrengthIndicator/` | 신규 |
 | `apps/admin/web/src/app/(admin)/my-account/change-password/` | 신규 페이지 |
 

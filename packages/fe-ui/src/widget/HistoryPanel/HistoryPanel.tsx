@@ -3,7 +3,8 @@
 import { Clock, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Button, Image, ScrollShadow } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { ScrollShadow } from "@heroui/react";
 
 export interface HistoryItem {
 	/** 고유 식별자 */
@@ -104,7 +105,7 @@ export const HistoryPanel = observer(
 	}: HistoryPanelProps<T>) => {
 		if (items.length === 0) {
 			return (
-				<div className={`text-center py-8 text-default-400 ${className ?? ""}`}>
+				<div className={`text-center py-8 text-muted ${className ?? ""}`}>
 					{emptyIcon ?? <Clock className="w-8 h-8 mx-auto mb-2 opacity-50" />}
 					<p className="text-sm">{emptyMessage}</p>
 				</div>
@@ -114,7 +115,7 @@ export const HistoryPanel = observer(
 		return (
 			<div className={`flex flex-col h-full ${className ?? ""}`}>
 				<div className="flex items-center justify-between mb-3">
-					<h3 className="text-sm font-semibold text-default-700">
+					<h3 className="text-sm font-semibold text-foreground">
 						{title} ({items.length})
 					</h3>
 					{onClearAll && items.length > 0 && (
@@ -140,26 +141,25 @@ export const HistoryPanel = observer(
 									key={item.id}
 									className={`
                     group relative flex gap-3 p-2 rounded-lg cursor-pointer transition-colors text-left w-full
-                    ${isSelected ? "bg-primary/10 border border-primary/30" : "hover:bg-content2"}
+                    ${isSelected ? "bg-accent/10 border border-accent/30" : "hover:bg-surface-secondary"}
                   `}
 									onClick={() => onSelect(item)}
 								>
 									{/* 썸네일 */}
-									<div className="w-12 h-12 rounded-lg overflow-hidden bg-content2 flex-shrink-0">
+									<div className="w-12 h-12 rounded-lg overflow-hidden bg-surface-secondary flex-shrink-0">
 										{item.thumbnailUrl && (
-											<Image
-												src={item.thumbnailUrl}
-												alt={item.title}
-												className="w-full h-full object-cover"
-												removeWrapper
-											/>
+												<img
+													src={item.thumbnailUrl}
+													alt={item.title}
+													className="w-full h-full object-cover"
+												/>
 										)}
 									</div>
 
 									{/* 정보 */}
 									<div className="flex-1 min-w-0">
 										<p className="text-sm truncate">{item.title}</p>
-										<p className="text-xs text-default-400">
+										<p className="text-xs text-muted">
 											{formatTime(item.createdAt)}
 											{item.badge && ` · ${item.badge}`}
 										</p>

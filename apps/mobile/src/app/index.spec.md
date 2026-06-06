@@ -288,9 +288,9 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 | route container | `/profile` route | Route | modify | `apps/mobile/src/app/(tabs)/profile.tsx` | auth/space/logout/navigation props | `fe-route-agent` | `fe-route-agent` |
 | screen owner | `MyPageScreen` | Screen | new | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.tsx` | `displayName`, `currentSpaceName`, `quickActions: QuickActionListItem[]`, `onPressLogout` | `fe-screen-agent` | `fe-route-agent` |
 | quick action widget | `QuickActionList` | Widget | new | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx` | `items`, `onPress`, disabled row behavior | `fe-widget-agent` | `fe-screen-agent` |
-| layout primitives | `ScreenFrame`, `Card`, `ListGroup` | Layout/DataDisplay | reuse | `@cocrepo/mo-ui` existing layout exports | body shell, section cards, widget rows | `fe-display-agent` | `fe-widget-agent`, `fe-screen-agent` |
+| layout primitives | `ScreenFrame`, `Card`, `ListGroup` | Layout/DataDisplay | reuse | `@cocrepo/mo-ui` existing layout exports | body shell, section cards, widget rows | `fe-layout-agent` | `fe-widget-agent`, `fe-screen-agent` |
 | rhythm primitives | `VStack`, `HStack` | Layout/Rhythm | reuse | `packages/fe-mo-ui/src/rhythm` | semantic gap: `section`, `block`, `inline`, `dense`, `flush` | `fe-screen-agent`, `fe-widget-agent` | `fe-route-agent` |
-| status primitive | `Chip` | DataDisplay | reuse | `packages/fe-mo-ui/src/data-display/Chip` | login state chip | `fe-display-agent` | `fe-screen-agent` |
+| status primitive | `Chip` | DataDisplay | reuse | `packages/fe-mo-ui/src/data-display/Chip` | login state chip | `fe-data-display-agent` | `fe-screen-agent` |
 | action primitive | `Button` | Action | reuse | `packages/fe-mo-ui/src/action/Button` | logout button | `fe-control-agent` | `fe-screen-agent` |
 | route icon primitive | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | bottom tab `userRound` | none | `fe-route-layout-agent` |
 | screen icon primitive | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | `userRound`, `mapPin`, action icons, `logOut` | none | `fe-screen-agent` |
@@ -323,7 +323,7 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 |------|-------------|-------------|------------|------------|-------------|-----------|-------------------------|---------------------------|---------|
 | account summary | none | none | none | none | none | no backend change, use existing auth/session store fallback | none | none | none |
 | current space | none | none | none | none | none | no backend change, use `mobileApiScopeStore.groundName` | none | none | none |
-| logout | `POST /api/v1/auth/native/logout` | `nativeLogout` | existing `AuthController.nativeLogout` | existing `NativeLogoutPayloadDto` | reuse | `apps/idp/api/src/module/auth/auth.controller.ts`, `packages/be-dto/src/auth/native-auth.dto.ts` | `be-controller-builder`, `be-dto-builder` | `fe-route-agent` | existing `requestNativeLogout`, no codegen |
+| logout | `POST /api/v1/auth/native/logout` | `nativeLogout` | existing `AuthController.nativeLogout` | existing `NativeLogoutPayloadDto` | reuse | `apps/core/api/src/module/auth/auth.controller.ts`, `packages/be-dto/src/auth/native-auth.dto.ts` | `be-controller-builder`, `be-dto-builder` | `fe-route-agent` | existing `requestNativeLogout`, no codegen |
 | reservations quick action | none | none | none | none | none | route navigation to existing `/reservations` only | none | `fe-route-agent` | none |
 
 #### UseCase 인벤토리
@@ -366,7 +366,7 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 - `apps/mobile/src/app/(tabs)/_layout.tsx`
 - route unit test, 필요 시 `apps/mobile/src/route-tests/index.test.tsx` 또는 profile 전용 route test
 
-### 에이전트 배정 매트릭스
+### Subagent 배정 매트릭스
 
 | step id | phase | agent_type | input files | output files | editable files | depends on | parallel | completion |
 |---------|-------|------------|-------------|--------------|----------------|------------|----------|------------|
@@ -490,7 +490,7 @@ Skipped phases:
 
 ## Backend Native Auth Handoff
 
-- `apps/idp/api/src/module/auth/auth.controller.ts`는 기존 web OIDC `GET /login`, `GET /callback`, cookie refresh/logout을 유지하고, mobile 전용 `POST /api/v1/auth/native/login`, `POST /api/v1/auth/native/token/refresh`, `POST /api/v1/auth/native/logout`을 추가한다.
+- `apps/core/api/src/module/auth/auth.controller.ts`는 기존 web OIDC `GET /login`, `GET /callback`, cookie refresh/logout을 유지하고, mobile 전용 `POST /api/v1/auth/native/login`, `POST /api/v1/auth/native/token/refresh`, `POST /api/v1/auth/native/logout`을 제공한다.
 - credential 검증은 interaction login의 계정 잠금, 실패 횟수, audit 정책을 재사용한다. 후속 정리에서는 `InteractionLoginService`를 mobile/web 공용 credential login service로 승격한다.
 - native access token은 `issuer=<oidc issuer>/native`, `aud=user-mobile`, `client_id=user-mobile`로 web OIDC RS256 token과 구분한다.
 - core/idp `JwtStrategy`는 cookie token은 RS256만 허용하고, Authorization Bearer token은 RS256 또는 native HS256 token을 검증한다.

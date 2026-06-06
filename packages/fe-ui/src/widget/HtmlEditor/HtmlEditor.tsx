@@ -8,7 +8,7 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import { Spinner } from "../../design-system/primitives";
+import { Spinner } from "@heroui/react";
 
 type Ckeditor5Module = typeof import("ckeditor5");
 type CkeditorKoTranslationModule =
@@ -154,7 +154,7 @@ export const HtmlEditor = observer(
 		if (!editorModules) {
 			return (
 				<div
-					className={`flex items-center justify-center rounded-lg border border-divider bg-content1 text-default-500 ${className ?? ""}`}
+					className={`flex items-center justify-center rounded-lg border border-border bg-surface text-muted ${className ?? ""}`}
 					style={{ minHeight }}
 				>
 					<div className="flex items-center gap-3 text-sm">
@@ -242,7 +242,7 @@ export const HtmlEditor = observer(
 						{label}
 					</p>
 					{description ? (
-						<p key="description" className="mt-1 text-xs text-default-500">
+						<p key="description" className="mt-1 text-xs text-muted">
 							{description}
 						</p>
 					) : null}

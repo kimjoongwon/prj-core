@@ -25,7 +25,7 @@ ActionListPage
 | 컴포넌트 | 출처 | 사용 위치 |
 | --- | --- | --- |
 | `Button` | `@heroui/react` | 주요 액션 실행 |
-| `Select`, `SelectItem` | `@heroui/react` | 액션 그룹 필터 |
+| `Select`, `ListBox.Item` | `@heroui/react` | 액션 그룹 필터 |
 | `KeyRound`, `Layers3`, `Plus`, `ShieldCheck` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
 | `ActionGroupFilterSelect` | `현재 파일` | 액션 그룹 선택과 선택된 그룹 설명 표시 |
 | `ActionsPageFallback` | `현재 파일` | 로딩/대기 상태 표시 |

@@ -19,7 +19,7 @@ test.describe("CourseOffering 목록 페이지", () => {
 		).toBeVisible();
 		await expect(page.getByText("강남점 2026 상반기 6개월반")).toBeVisible();
 		await expect(
-			page.getByRole("button", { name: "월수금 19:00" }),
+			page.getByRole("button", { name: "월수금 19:00" }).first(),
 		).toBeVisible();
 	});
 });

@@ -3,21 +3,9 @@
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { DateTimeCell } from "../../cell";
-import {
-	Button,
-	Chip,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	Table,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Modal, Table, useOverlayState } from "@heroui/react";
 import {
 	DetailPage,
 	DetailPageSurface,
@@ -91,10 +79,27 @@ export const TimelineDetailPage = observer(
 		onClickSessionNameButton,
 		onClickCreateProgramButton,
 		onClickDeleteSessionButton,
-		onClickDeleteSessionConfirmButton,
-		onClickDeleteSessionCancelButton,
-	}: TimelineDetailPageProps) => {
-		return (
+			onClickDeleteSessionConfirmButton,
+			onClickDeleteSessionCancelButton,
+		}: TimelineDetailPageProps) => {
+			const deleteTimelineModalState = useOverlayState({
+				isOpen: isDeleteTimelineModalOpen,
+				onOpenChange: (open) => {
+					if (!open) {
+						onClickDeleteTimelineCancelButton();
+					}
+				},
+			});
+			const deleteSessionModalState = useOverlayState({
+				isOpen: isDeleteSessionModalOpen,
+				onOpenChange: (open) => {
+					if (!open) {
+						onClickDeleteSessionCancelButton();
+					}
+				},
+			});
+
+			return (
 			<DetailPage
 				top={
 					<PageTitleBar
@@ -127,17 +132,17 @@ export const TimelineDetailPage = observer(
 							<DetailSection top={<PageTitleBar level={2} title="기본 정보" />}>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<label className="text-sm text-default-500">
+										<label className="text-sm text-muted">
 											타임라인명
 										</label>
 										<p className="mt-1">{timeline?.name ?? "-"}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">설명</label>
+										<label className="text-sm text-muted">설명</label>
 										<p className="mt-1">{timeline?.description || "-"}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">등록일</label>
+										<label className="text-sm text-muted">등록일</label>
 										<div className="mt-1">
 											{timeline?.createdAt ? (
 												<DateTimeCell value={timeline.createdAt} />
@@ -169,53 +174,53 @@ export const TimelineDetailPage = observer(
 								}
 							>
 								<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
-									<div className="rounded-lg bg-content2 p-3">
-										<p className="text-xs text-default-500">전체 세션</p>
+									<div className="rounded-lg bg-surface-secondary p-3">
+										<p className="text-xs text-muted">전체 세션</p>
 										<p className="mt-1 text-lg font-semibold">
 											{totalSessions}개
 										</p>
 									</div>
-									<div className="rounded-lg bg-content2 p-3">
-										<p className="text-xs text-default-500">연결된 세션</p>
+									<div className="rounded-lg bg-surface-secondary p-3">
+										<p className="text-xs text-muted">연결된 세션</p>
 										<p className="mt-1 text-lg font-semibold text-success">
 											{connectedSessions}개
 										</p>
 									</div>
-									<div className="rounded-lg bg-content2 p-3">
-										<p className="text-xs text-default-500">미연결 세션</p>
+									<div className="rounded-lg bg-surface-secondary p-3">
+										<p className="text-xs text-muted">미연결 세션</p>
 										<p className="mt-1 text-lg font-semibold text-warning">
 											{unconnectedSessions}개
 										</p>
 									</div>
 								</div>
 								<Table aria-label="세션 목록">
-									<TableHeader>
-										<TableColumn>세션명</TableColumn>
-										<TableColumn align="center">유형</TableColumn>
-										<TableColumn align="center">프로그램</TableColumn>
-										<TableColumn align="center">연결 상태</TableColumn>
-										<TableColumn>시작 일시</TableColumn>
-										<TableColumn align="center">반복 요일</TableColumn>
-										<TableColumn align="center">반복 주기</TableColumn>
-										<TableColumn>등록일</TableColumn>
-										<TableColumn align="center">액션</TableColumn>
-									</TableHeader>
-									<TableBody
+									<Table.Content>
+					<Table.Header>
+										<Table.Column>세션명</Table.Column>
+										<Table.Column className="text-center">유형</Table.Column>
+										<Table.Column className="text-center">프로그램</Table.Column>
+										<Table.Column className="text-center">연결 상태</Table.Column>
+										<Table.Column>시작 일시</Table.Column>
+										<Table.Column className="text-center">반복 요일</Table.Column>
+										<Table.Column className="text-center">반복 주기</Table.Column>
+										<Table.Column>등록일</Table.Column>
+										<Table.Column className="text-center">액션</Table.Column>
+									</Table.Header>
+									<Table.Body
 										items={sessions}
-										emptyContent="등록된 세션이 없습니다."
 									>
 										{(session) => (
-											<TableRow key={session.id}>
-												<TableCell>
+											<Table.Row key={session.id}>
+												<Table.Cell>
 													<button
 														type="button"
-														className="text-left text-primary hover:underline"
+														className="text-left text-accent hover:underline"
 														onClick={() => onClickSessionNameButton(session.id)}
 													>
 														{session.name}
 													</button>
-												</TableCell>
-												<TableCell>
+												</Table.Cell>
+												<Table.Cell>
 													<Chip
 														color={session.typeColor}
 														variant="flat"
@@ -223,9 +228,9 @@ export const TimelineDetailPage = observer(
 													>
 														{session.typeLabel}
 													</Chip>
-												</TableCell>
-												<TableCell>{session.programCount}개</TableCell>
-												<TableCell>
+												</Table.Cell>
+												<Table.Cell>{session.programCount}개</Table.Cell>
+												<Table.Cell>
 													{session.isConnected ? (
 														<Chip color="success" variant="flat" size="sm">
 															연결됨
@@ -235,20 +240,20 @@ export const TimelineDetailPage = observer(
 															미연결
 														</Chip>
 													)}
-												</TableCell>
-												<TableCell>
+												</Table.Cell>
+												<Table.Cell>
 													{session.startDateTime ? (
 														<DateTimeCell value={session.startDateTime} />
 													) : (
 														"-"
 													)}
-												</TableCell>
-												<TableCell>{session.recurringDayLabel}</TableCell>
-												<TableCell>{session.repeatCycleLabel}</TableCell>
-												<TableCell>
+												</Table.Cell>
+												<Table.Cell>{session.recurringDayLabel}</Table.Cell>
+												<Table.Cell>{session.repeatCycleLabel}</Table.Cell>
+												<Table.Cell>
 													<DateTimeCell value={session.createdAt} />
-												</TableCell>
-												<TableCell>
+												</Table.Cell>
+												<Table.Cell>
 													<div className="flex justify-center gap-1">
 														<Button
 															size="sm"
@@ -271,30 +276,28 @@ export const TimelineDetailPage = observer(
 															<Trash2 className="h-4 w-4" />
 														</Button>
 													</div>
-												</TableCell>
-											</TableRow>
+												</Table.Cell>
+											</Table.Row>
 										)}
-									</TableBody>
-								</Table>
+									</Table.Body>
+				</Table.Content>
+			</Table>
 							</DetailSection>
 						</DetailSectionCard>
 					</VStack>
 				</DetailPageSurface>
-				<Modal
-					isOpen={isDeleteTimelineModalOpen}
-					onClose={onClickDeleteTimelineCancelButton}
-				>
-					<ModalContent>
-						<ModalHeader>타임라인 삭제</ModalHeader>
-						<ModalBody>
+				<Modal state={deleteTimelineModalState}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>타임라인 삭제</Modal.Header>
+						<Modal.Body>
 							<p>
 								<strong>{timeline?.name}</strong>타임라인을 삭제하시겠습니까?
 							</p>
 							<p className="mt-2 text-sm text-danger">
 								세션이 있는 타임라인은 삭제할 수 없습니다.
 							</p>
-						</ModalBody>
-						<ModalFooter>
+						</Modal.Body>
+						<Modal.Footer>
 							<Button
 								variant="flat"
 								onPress={onClickDeleteTimelineCancelButton}
@@ -305,20 +308,16 @@ export const TimelineDetailPage = observer(
 							<Button
 								color="danger"
 								onPress={onClickDeleteTimelineConfirmButton}
-								isLoading={isDeleteTimelinePending}
 							>
 								삭제
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
-				<Modal
-					isOpen={isDeleteSessionModalOpen}
-					onClose={onClickDeleteSessionCancelButton}
-				>
-					<ModalContent>
-						<ModalHeader>세션 삭제</ModalHeader>
-						<ModalBody>
+				<Modal state={deleteSessionModalState}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>세션 삭제</Modal.Header>
+						<Modal.Body>
 							<p>
 								<strong>{deleteSessionTargetName}</strong>세션을
 								삭제하시겠습니까?
@@ -326,8 +325,8 @@ export const TimelineDetailPage = observer(
 							<p className="mt-2 text-sm text-danger">
 								프로그램이 연결된 세션은 삭제할 수 없습니다.
 							</p>
-						</ModalBody>
-						<ModalFooter>
+						</Modal.Body>
+						<Modal.Footer>
 							<Button
 								variant="flat"
 								onPress={onClickDeleteSessionCancelButton}
@@ -338,12 +337,11 @@ export const TimelineDetailPage = observer(
 							<Button
 								color="danger"
 								onPress={onClickDeleteSessionConfirmButton}
-								isLoading={isDeleteSessionPending}
 							>
 								삭제
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
 			</DetailPage>
 		);

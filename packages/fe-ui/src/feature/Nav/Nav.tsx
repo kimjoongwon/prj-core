@@ -3,7 +3,7 @@
 import { useNavigationStore } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import { cn, NavbarItem } from "../../design-system/primitives";
+import { cn } from "@heroui/react";
 import { useT } from "../../i18n";
 
 /**
@@ -27,24 +27,24 @@ export const Nav = observer(() => {
 	return (
 		<nav className="flex items-center gap-1">
 			{navigationStore.items.map((item) => (
-				<NavbarItem key={item.id}>
-					<button
-						type="button"
-						onClick={() => handleClickNavItem(item.id)}
+					<div key={item.id}>
+						<button
+							type="button"
+							onClick={() => handleClickNavItem(item.id)}
 						className={cn(
 							"flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
 							item.active
-								? "bg-primary text-primary-foreground"
-								: "text-foreground/70 hover:bg-default-100 hover:text-foreground",
+								? "bg-accent text-accent-foreground"
+								: "text-foreground/70 hover:bg-default hover:text-foreground",
 						)}
 					>
 						{item.icon && (
 							<AppIcon name={item.icon} className="h-4 w-4" size={16} />
 						)}
-						<span>{t(item.label)}</span>
-					</button>
-				</NavbarItem>
-			))}
+							<span>{t(item.label)}</span>
+						</button>
+					</div>
+				))}
 		</nav>
 	);
 });

@@ -1,4 +1,4 @@
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 
 /**
  * AI 제공자 타입

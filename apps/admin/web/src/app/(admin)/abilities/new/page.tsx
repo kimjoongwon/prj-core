@@ -7,7 +7,7 @@ import {
 import { useGetActions } from "@cocrepo/api/core/actions";
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
 import { AbilityFormPage } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -33,10 +33,8 @@ export default observer(function AbilityNewPage() {
 	const { mutate: createAbility, isPending } = useCreateAbility({
 		mutation: {
 			onSuccess: (response) => {
-				addToast({
-					title: "권한 등록 성공",
+				toast.success("권한 등록 성공", {
 					description: "권한이 성공적으로 등록되었습니다.",
-					color: "success",
 				});
 				const abilityId = response?.data?.id;
 				if (abilityId) {
@@ -44,10 +42,8 @@ export default observer(function AbilityNewPage() {
 				}
 			},
 			onError: (error) => {
-				addToast({
-					title: "권한 등록 실패",
+				toast.danger("권한 등록 실패", {
 					description: error.message || "권한 등록 중 오류가 발생했습니다.",
-					color: "danger",
 				});
 			},
 		},
@@ -55,29 +51,17 @@ export default observer(function AbilityNewPage() {
 
 	const onClickCreateButton = () => {
 		if (!state.name.trim()) {
-			addToast({
-				title: "입력 오류",
-				description: "권한 이름을 입력해주세요.",
-				color: "danger",
-			});
+			toast.danger("입력 오류", { description: "권한 이름을 입력해주세요." });
 			return;
 		}
 
 		if (!state.subjectId) {
-			addToast({
-				title: "입력 오류",
-				description: "Subject를 선택해주세요.",
-				color: "danger",
-			});
+			toast.danger("입력 오류", { description: "Subject를 선택해주세요." });
 			return;
 		}
 
 		if (!state.actionId) {
-			addToast({
-				title: "입력 오류",
-				description: "Action을 선택해주세요.",
-				color: "danger",
-			});
+			toast.danger("입력 오류", { description: "Action을 선택해주세요." });
 			return;
 		}
 
@@ -91,10 +75,8 @@ export default observer(function AbilityNewPage() {
 			try {
 				conditionsObject = JSON.parse(state.conditions);
 			} catch {
-				addToast({
-					title: "입력 오류",
+				toast.danger("입력 오류", {
 					description: "Conditions는 유효한 JSON 형식이어야 합니다.",
-					color: "danger",
 				});
 				return;
 			}

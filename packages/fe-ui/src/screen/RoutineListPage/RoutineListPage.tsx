@@ -16,15 +16,8 @@ import {
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import {
-	Button,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	useDisclosure,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Modal, useOverlayState } from "@heroui/react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -74,7 +67,7 @@ function RoutinesPageFallback() {
 				title="루틴"
 				description="운동 루틴(커리큘럼)을 관리합니다."
 			/>
-			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+			<Surface className="h-32 rounded-2xl border-border/80 bg-surface/70">
 				{null}
 			</Surface>
 		</div>
@@ -102,7 +95,7 @@ export const RoutineListPage = observer(
 		}, [gridState, queryStates, setQueryStates]);
 		const routineRows = routines ?? [];
 		const [deleteTarget, setDeleteTarget] = useState<RoutineDto | null>(null);
-		const deleteModal = useDisclosure();
+		const deleteModal = useOverlayState();
 		const onClickDeleteButton = (routineId: string) => {
 			const targetRoutine = routineRows.find(
 				(routine) => routine.id === routineId,
@@ -111,7 +104,7 @@ export const RoutineListPage = observer(
 				return;
 			}
 			setDeleteTarget(targetRoutine);
-			deleteModal.onOpen();
+			deleteModal.open();
 		};
 		const columns = buildRoutineTableColumns<RoutineDto>({
 			onClickRoutineName,
@@ -137,7 +130,7 @@ export const RoutineListPage = observer(
 						</Button>
 					}
 				/>
-				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 					<DataGrid
 						config={{
 							entity: "Routine",
@@ -147,25 +140,24 @@ export const RoutineListPage = observer(
 						}}
 						rows={routineRows}
 						totalCount={totalCount}
-						isLoading={false}
 						state={gridState}
 					/>
 				</Surface>
-				<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
-					<ModalContent>
-						<ModalHeader>루틴 삭제</ModalHeader>
-						<ModalBody>
+			<Modal state={deleteModal}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>루틴 삭제</Modal.Header>
+						<Modal.Body>
 							<p>
 								<strong>{deleteTarget?.name}</strong> 루틴을 삭제하시겠습니까?
 							</p>
 							<p className="mt-2 text-sm text-danger">
 								프로그램에서 사용 중인 루틴은 삭제할 수 없습니다.
 							</p>
-						</ModalBody>
-						<ModalFooter>
+						</Modal.Body>
+						<Modal.Footer>
 							<Button
 								variant="flat"
-								onPress={deleteModal.onClose}
+								onPress={deleteModal.close}
 								isDisabled={isDeleting}
 							>
 								취소
@@ -177,16 +169,15 @@ export const RoutineListPage = observer(
 										return;
 									}
 									void onDeleteRoutine(deleteTarget.id).then(() => {
-										deleteModal.onClose();
+										deleteModal.close();
 										setDeleteTarget(null);
 									});
 								}}
-								isLoading={isDeleting}
 							>
 								삭제
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
 			</div>
 		);

@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import type { ElevationLevel } from "../../design-system/theme/tokens";
 import {
 	DEFAULT_SURFACE_PADDING,
 	Surface,
+	type ElevationLevel,
 	type SurfacePadding,
 } from "../../surface/Surface";
 

@@ -14,7 +14,7 @@ import {
   useTabs,
   useTabsMeasurements,
   useTabsTrigger,
-} from "heroui-native/tabs";
+} from "heroui-native";
 type HeroTabsProps = ComponentPropsWithoutRef<typeof HeroTabs>;
 export interface TabsOption {
   isDisabled?: boolean;

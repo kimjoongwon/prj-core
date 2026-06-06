@@ -11,7 +11,8 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Pencil } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Badge, Button, Spinner } from "../../design-system/primitives";
+import { Badge, Spinner } from "@heroui/react";
+import { Button } from "../../control/Button/Button";
 
 export interface GroundDetailPageGround {
 	name: string;
@@ -71,7 +72,7 @@ export const GroundDetailPage = observer(
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">
+								<p className="text-muted">
 									시설 detail을 찾을 수 없습니다.
 								</p>
 								<Button
@@ -113,54 +114,54 @@ export const GroundDetailPage = observer(
 							<DetailSection top={<PageTitleBar level={2} title="기본 정보" />}>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<label className="text-sm text-default-500">시설명</label>
+										<label className="text-sm text-muted">시설명</label>
 										<p className="mt-1 font-medium">{ground.name}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">라벨</label>
+										<label className="text-sm text-muted">라벨</label>
 										<div className="mt-1">
 											{ground.label ? (
-												<Badge color="secondary" variant="flat">
+													<Badge color="accent" variant="soft">
 													{ground.label}
 												</Badge>
 											) : (
-												<span className="text-default-400">-</span>
+												<span className="text-muted">-</span>
 											)}
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">주소</label>
+										<label className="text-sm text-muted">주소</label>
 										<p className="mt-1">{ground.address}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">전화번호</label>
+										<label className="text-sm text-muted">전화번호</label>
 										<p className="mt-1">{ground.phone}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">이메일</label>
+										<label className="text-sm text-muted">이메일</label>
 										<div className="mt-1">
 											<a
 												href={`mailto:${ground.email}`}
-												className="text-primary hover:underline"
+												className="text-accent hover:underline"
 											>
 												{ground.email}
 											</a>
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">
+										<label className="text-sm text-muted">
 											사업자등록번호
 										</label>
 										<p className="mt-1 font-mono">{ground.businessNo}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">등록일</label>
+										<label className="text-sm text-muted">등록일</label>
 										<div className="mt-1">
 											<DateTimeCell value={ground.createdAt} />
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">수정일</label>
+										<label className="text-sm text-muted">수정일</label>
 										<div className="mt-1">
 											<DateTimeCell value={ground.updatedAt ?? "-"} />
 										</div>
@@ -173,7 +174,7 @@ export const GroundDetailPage = observer(
 								top={<PageTitleBar level={2} title="연결된 Space" />}
 							>
 								<div>
-									<label className="text-sm text-default-500">Space ID</label>
+									<label className="text-sm text-muted">Space ID</label>
 									<p className="mt-1 font-mono text-sm">{spaceId}</p>
 								</div>
 							</DetailSection>

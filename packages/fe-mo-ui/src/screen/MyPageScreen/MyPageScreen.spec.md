@@ -105,15 +105,15 @@ Rhythm: root `VStack` vertical gap=section, card inner `VStack` gap=block, horiz
 |------|-----------|------|-------------|-----------|--------------|-------------------------|---------------------------|
 | route header | `CustomHeader` | Navigation/Layout | reuse | `packages/fe-mo-ui/src/navigation/CustomHeader` via `(tabs)/_layout.tsx` | title `"마이"`, subtitle `currentSpaceName` | `fe-control-agent` | `fe-route-layout-agent` |
 | screen shell | `MyPageScreen` | Screen | new | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.tsx` | all props above | `fe-screen-agent` | `fe-route-agent` |
-| screen shell | `ScreenFrame` | Layout | reuse | `packages/fe-mo-ui/src/layout/ScreenFrame` | body safe-area, scroll content | `fe-display-agent` | `fe-screen-agent` |
-| A/B | `Card` | Layout | reuse | `packages/fe-mo-ui/src/layout/Card` | `bg-surface`, `border-border`, `rounded-lg`, `p-4` | `fe-display-agent` | `fe-screen-agent` |
+| screen shell | `ScreenFrame` | Layout | reuse | `packages/fe-mo-ui/src/layout/ScreenFrame` | body safe-area, scroll content | `fe-layout-agent` | `fe-screen-agent` |
+| A/B | `Card` | Layout | reuse | `packages/fe-mo-ui/src/layout/Card` | `bg-surface`, `border-border`, `rounded-lg`, `p-4` | `fe-layout-agent` | `fe-screen-agent` |
 | A | `AccountSummary` section | DataDisplay / screen-local | new | `MyPageScreen.tsx` internal section, no package export | `displayName`, `accountDescription`, `isAuthenticated` | `fe-screen-agent` | `fe-screen-agent` |
 | A | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | `userRound` | none | `fe-screen-agent` |
-| A | `Chip` | DataDisplay | reuse | `packages/fe-mo-ui/src/data-display/Chip` | status label | `fe-display-agent` | `fe-screen-agent` |
+| A | `Chip` | DataDisplay | reuse | `packages/fe-mo-ui/src/data-display/Chip` | status label | `fe-data-display-agent` | `fe-screen-agent` |
 | B | `CurrentSpace` section | DataDisplay / screen-local | new | `MyPageScreen.tsx` internal section, no package export | `currentSpaceName` | `fe-screen-agent` | `fe-screen-agent` |
 | B | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | `mapPin` | none | `fe-screen-agent` |
 | C | `QuickActionList` | Widget | new | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx` | `items: QuickActionListItem[]` | `fe-widget-agent` | `fe-screen-agent` |
-| C | `ListGroup` | Layout | reuse | `packages/fe-mo-ui/src/layout/ListGroup` | rows, suffix chevron | `fe-display-agent` | `fe-widget-agent` |
+| C | `ListGroup` | Layout | reuse | `packages/fe-mo-ui/src/layout/ListGroup` | rows, suffix chevron | `fe-layout-agent` | `fe-widget-agent` |
 | C | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | action row icons | none | `fe-widget-agent` |
 | D | `Button` | Action | reuse | `packages/fe-mo-ui/src/action/Button` | `onPressLogout`, `isLogoutPending` | `fe-control-agent` | `fe-screen-agent` |
 | D | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | `logOut` | none | `fe-screen-agent` |
@@ -153,7 +153,7 @@ Rendering rules:
 |------|-------------|-------------|------------|------------|-------------|-----------|-------------------------|---------------------------|---------|
 | account summary read | none | none | none | none | none | no backend change, route uses existing auth/session store fallback | none | none | none |
 | current space read | none | none | none | none | none | no backend change, route uses existing `mobileApiScopeStore.groundName` | none | none | none |
-| logout | `POST /api/v1/auth/native/logout` | `nativeLogout` | existing `AuthController.nativeLogout` | existing `NativeLogoutPayloadDto` | reuse | `apps/idp/api/src/module/auth/auth.controller.ts`, `packages/be-dto/src/auth/native-auth.dto.ts` | `be-controller-builder`, `be-dto-builder` | `fe-route-agent` | existing `requestNativeLogout`, no codegen |
+| logout | `POST /api/v1/auth/native/logout` | `nativeLogout` | existing `AuthController.nativeLogout` | existing `NativeLogoutPayloadDto` | reuse | `apps/core/api/src/module/auth/auth.controller.ts`, `packages/be-dto/src/auth/native-auth.dto.ts` | `be-controller-builder`, `be-dto-builder` | `fe-route-agent` | existing `requestNativeLogout`, no codegen |
 | quick action navigation | none | none | none | none | none | route-only navigation to existing/future routes | none | `fe-route-agent` | none |
 
 ### UseCase 인벤토리

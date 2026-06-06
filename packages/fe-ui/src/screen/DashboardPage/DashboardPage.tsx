@@ -38,7 +38,7 @@ function DashboardPageContent() {
 					{dashboardCards.map((card) => (
 						<DetailSectionCard key={card.label}>
 							<div className="p-6">
-								<h2 className="text-sm font-medium text-default-500">
+								<h2 className="text-sm font-medium text-muted">
 									{t(card.label)}
 								</h2>
 								<p className="mt-2 text-3xl font-bold">{card.value}</p>

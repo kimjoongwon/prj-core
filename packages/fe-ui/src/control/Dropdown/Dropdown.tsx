@@ -1,30 +1,82 @@
-import type React from "react";
 import {
-	DropdownItem,
-	DropdownMenu,
-	DropdownTrigger,
 	Dropdown as HeroUIDropdown,
-	type DropdownItemProps as HeroUIDropdownItemProps,
-	type DropdownProps as HeroUIDropdownProps,
-} from "../../design-system/primitives";
+	cn,
+} from "@heroui/react";
+import {
+	isValidElement,
+	type ComponentProps,
+	type Key,
+	type ReactNode,
+} from "react";
 
-export interface DropdownItemProps
-	extends Omit<HeroUIDropdownItemProps, "children"> {
+export interface DropdownEntryProps
+	extends Omit<ComponentProps<typeof HeroUIDropdown.Item>, "children"> {
 	/** 아이템 고유 키 */
 	key: string;
 	/** 표시 텍스트 */
 	label: string;
+	/** 보조 설명 */
+	description?: string;
+	color?: "default" | "danger";
+	startContent?: ReactNode;
+	endContent?: ReactNode;
 }
 
 export interface DropdownProps
-	extends Omit<HeroUIDropdownProps, "children" | "trigger"> {
+	extends Omit<ComponentProps<typeof HeroUIDropdown>, "children" | "trigger"> {
 	/** 드롭다운을 여는 트리거 요소 */
-	trigger: React.ReactNode;
+	trigger: ReactNode;
 	/** 드롭다운 메뉴 아이템 목록 */
-	dropdownItems: DropdownItemProps[];
+	dropdownItems: DropdownEntryProps[];
 	/** 아이템 선택 핸들러 */
 	onAction?: (key: string) => void;
+	placement?: ComponentProps<typeof HeroUIDropdown.Popover>["placement"];
 }
+
+interface DropdownTriggerElementProps {
+	children?: ReactNode;
+	className?: string;
+	isIconOnly?: boolean;
+	size?: string;
+	variant?: string;
+}
+
+const getTriggerElement = (trigger: ReactNode) => {
+	if (!isValidElement<DropdownTriggerElementProps>(trigger)) {
+		return {
+			className: undefined,
+			content: trigger,
+			isIconOnly: false,
+			size: undefined,
+			variant: undefined,
+		};
+	}
+
+	if (typeof trigger.type === "string" && trigger.type !== "button") {
+		return {
+			className: undefined,
+			content: trigger,
+			isIconOnly: false,
+			size: undefined,
+			variant: undefined,
+		};
+	}
+
+	return {
+		className: trigger.props.className,
+		content: trigger.props.children ?? trigger,
+		isIconOnly: trigger.props.isIconOnly,
+		size: trigger.props.size,
+		variant: trigger.props.variant,
+	};
+};
+
+const getTriggerVariantClassName = (variant?: string) => {
+	if (variant === "light") return "button--ghost";
+	if (variant === "bordered") return "button--outline";
+	if (variant === "flat" || variant === "faded") return "button--tertiary";
+	return "button--primary";
+};
 
 /**
  * Dropdown 컴포넌트
@@ -45,26 +97,65 @@ export interface DropdownProps
  * ```
  */
 const DropdownComponent = (props: DropdownProps) => {
-	const { trigger, dropdownItems, onAction, ...dropdownProps } = props;
+	const { trigger, dropdownItems, onAction, placement, ...dropdownProps } = props;
+	const triggerElement = getTriggerElement(trigger);
 
-	const handleAction = (key: React.Key) => {
+	const handleAction = (key: Key) => {
 		onAction?.(String(key));
 	};
 
 	return (
 		<HeroUIDropdown {...dropdownProps}>
-			<DropdownTrigger>{trigger}</DropdownTrigger>
-			<DropdownMenu
-				aria-label="Dropdown menu"
-				onAction={handleAction}
-				variant="flat"
+			<HeroUIDropdown.Trigger
+				className={cn(
+					"button",
+					triggerElement.size ? `button--${triggerElement.size}` : "button--md",
+					getTriggerVariantClassName(triggerElement.variant),
+					triggerElement.isIconOnly && "aspect-square p-0",
+					triggerElement.className,
+				)}
 			>
-				{dropdownItems.map(({ key, label, ...itemProps }) => (
-					<DropdownItem key={key} {...itemProps}>
-						{label}
-					</DropdownItem>
-				))}
-			</DropdownMenu>
+				{triggerElement.content}
+			</HeroUIDropdown.Trigger>
+			<HeroUIDropdown.Popover placement={placement}>
+				<HeroUIDropdown.Menu
+					aria-label="Dropdown menu"
+					onAction={handleAction}
+				>
+					{dropdownItems.map(
+						({
+							key,
+							label,
+							description,
+							color,
+							className,
+							endContent,
+							startContent,
+							...itemProps
+						}) => (
+							<HeroUIDropdown.Item
+								key={key}
+								id={key}
+								{...itemProps}
+								className={cn(color === "danger" && "text-danger", className)}
+							>
+								<div className="flex items-center gap-2">
+									{startContent}
+									<div className="flex flex-col">
+										<span>{label}</span>
+										{description ? (
+											<span className="text-xs text-muted">
+												{description}
+											</span>
+										) : null}
+									</div>
+									{endContent}
+								</div>
+							</HeroUIDropdown.Item>
+						),
+					)}
+				</HeroUIDropdown.Menu>
+			</HeroUIDropdown.Popover>
 		</HeroUIDropdown>
 	);
 };

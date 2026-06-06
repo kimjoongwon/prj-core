@@ -51,16 +51,16 @@ export const PaymentTableStatePanel = observer(
 			status === "loading" || status === "refreshing" ? " animate-spin" : "";
 
 		return (
-			<SectionSurface className="rounded-2xl border-divider/80 bg-content1/70 p-8">
+			<SectionSurface className="rounded-2xl border-border/80 bg-surface/70 p-8">
 				<VStack alignItems="center" gap="block" className="text-center">
-					<span className="flex size-12 items-center justify-center rounded-xl bg-primary/15 text-primary">
+					<span className="flex size-12 items-center justify-center rounded-xl bg-accent/15 text-accent">
 						<Icon className={`size-6${animateClass}`} />
 					</span>
 					<VStack gap="dense">
 						<strong className="text-lg font-semibold text-foreground">
 							{copy.title}
 						</strong>
-						<p className="text-sm text-default-600">{copy.description}</p>
+						<p className="text-sm text-muted">{copy.description}</p>
 					</VStack>
 				</VStack>
 			</SectionSurface>

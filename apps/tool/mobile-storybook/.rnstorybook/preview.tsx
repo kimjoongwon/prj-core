@@ -1,4 +1,6 @@
 import type { Preview } from "@storybook/react-native";
+import { setLoginRedirectUrl } from "@cocrepo/api/core/client";
+import { setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
 import type { HeroUINativeConfig } from "@cocrepo/mo-ui";
 import {
 	DesignSystemProvider,
@@ -16,6 +18,10 @@ const STORYBOOK_CANVAS_WIDTH = Dimensions.get("window").width;
 const STORYBOOK_TOAST_CONTENT_CLASS_NAME = "flex-1";
 const STORYBOOK_TOAST_TOP_INSET = 72;
 const STORYBOOK_TOAST_BOTTOM_INSET = 168;
+const DISABLED_AUTH_REDIRECT_URL = "#mobile-storybook-auth-disabled";
+
+setLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
+setIdpLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
 
 const GESTURE_ROOT_STYLE = {
 	alignSelf: "stretch",

@@ -15,7 +15,7 @@ interface ParentCategoryCellProps {
  */
 export const ParentCategoryCell = ({ parentName }: ParentCategoryCellProps) => {
 	if (!parentName) {
-		return <p className="text-default-400">-</p>;
+		return <p className="text-muted">-</p>;
 	}
 
 	return <p>{parentName}</p>;

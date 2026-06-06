@@ -20,7 +20,7 @@ import {
 import { Activity, Trash2 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 
 /**
  * 좌측 입력 정의 (모델 타입 필터 + accountId 검색)
@@ -147,7 +147,7 @@ export const OidcSessionListPage = observer(
 				{stats && (
 					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
 						<StatsCard
-							className="h-full border border-primary/10 bg-primary/5"
+							className="h-full border border-accent/10 bg-accent/5"
 							icon={<Activity className="size-5" />}
 							title="전체"
 							value={stats.totalCount ?? 0}
@@ -157,7 +157,7 @@ export const OidcSessionListPage = observer(
 						{Object.entries(byModelType).map(([type, count]) => (
 							<StatsCard
 								key={type}
-								className="h-full border border-default-200 bg-content1/80"
+								className="h-full border border-border bg-surface/80"
 								title={type}
 								value={count}
 								description="모델 타입별 활성 건수"
@@ -165,7 +165,7 @@ export const OidcSessionListPage = observer(
 						))}
 					</div>
 				)}
-				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 					<DataGrid
 						config={{
 							entity: "OidcSession",
@@ -173,11 +173,11 @@ export const OidcSessionListPage = observer(
 							leftInputs,
 							emptyMessage: "등록된 OIDC 세션/토큰이 없습니다.",
 						}}
-						rows={sessionRows}
-						totalCount={totalCount}
-						isLoading={isLoading}
-						state={gridState}
-					/>
+							rows={sessionRows}
+							totalCount={totalCount}
+							state={gridState}
+							isLoading={isLoading}
+						/>
 				</Surface>
 				<ConfirmModal
 					isOpen={isGrantRevokeModalOpen}
@@ -194,7 +194,7 @@ export const OidcSessionListPage = observer(
 								이 Grant에 연결된 모든 세션 및 토큰을 일괄 폐기하시겠습니까?
 							</p>
 							{revokeGrantId && (
-								<p className="mt-2 rounded-lg bg-default-100 p-2 font-mono text-sm">
+								<p className="mt-2 rounded-lg bg-default p-2 font-mono text-sm">
 									Grant ID: {revokeGrantId}
 								</p>
 							)}

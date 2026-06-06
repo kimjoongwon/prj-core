@@ -2,7 +2,8 @@
 
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button, Link } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Link } from "../../control/Link/Link";
 import { useT } from "../../i18n";
 
 export interface RowActionsCellProps {

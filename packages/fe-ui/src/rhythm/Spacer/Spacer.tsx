@@ -1,5 +1,5 @@
 import type React from "react";
-import { cn } from "../../design-system/primitives";
+import { cn } from "@heroui/react";
 import {
 	isRhythmPreset,
 	type RhythmPreset,
@@ -51,9 +51,9 @@ function resolveSpacerAxisClass(
  * ```tsx
  * // 세로 간격 (기본)
  * <VStack>
- *   <Text>위쪽</Text>
+ *   <Typography.Paragraph>위쪽</Typography.Paragraph>
  *   <Spacer size="section" />
- *   <Text>아래쪽</Text>
+ *   <Typography.Paragraph>아래쪽</Typography.Paragraph>
  * </VStack>
  *
  * // 가로 간격

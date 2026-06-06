@@ -123,13 +123,15 @@ export const SpaceCreatePage = observer(
 										isInvalid={Boolean(errors.businessNo)}
 										errorMessage={errors.businessNo}
 									/>
-									<Select
-										label="콘텐츠 언어"
-										placeholder="운영 리소스 작성 언어를 선택하세요"
-										value={contentLanguageCode}
-										onChange={onChangeContentLanguageSelect}
-										options={CONTENT_LANGUAGE_OPTIONS.map((language) => ({
-											value: language.code,
+										<Select
+											label="콘텐츠 언어"
+											placeholder="운영 리소스 작성 언어를 선택하세요"
+											value={contentLanguageCode}
+											onChange={(value) =>
+												onChangeContentLanguageSelect(String(value ?? ""))
+											}
+											options={CONTENT_LANGUAGE_OPTIONS.map((language) => ({
+												value: language.code,
 											label: language.label,
 										}))}
 										isRequired

@@ -58,7 +58,7 @@ AssetDetailPage
 | `DateTimeCell` | `@cocrepo/ui` | 상태/정보를 카드 또는 표시 단위로 표현 |
 | `DetailSection` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
 | `Select` | `@heroui/react` | 사용자 입력 컨트롤 |
-| `SelectItem` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `ListBox.Item` | `@heroui/react` | 사용자 입력 컨트롤 |
 | `FolderInput` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
 | `Input` | `@heroui/react` | 사용자 입력 컨트롤 |
 | `AssetPreviewDialog` | `@cocrepo/ui` | 확인 또는 보조 작업 오버레이 |

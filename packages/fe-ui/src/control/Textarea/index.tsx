@@ -5,27 +5,27 @@ import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import {
-	Textarea as BaseTextarea,
-	type TextareaProps as BaseTextareaProps,
-} from "./Textarea";
+	TextArea as BaseTextArea,
+	type TextAreaProps as BaseTextAreaProps,
+} from "./TextArea";
 
-type BoundTextareaProps<T> = MobxProps<T> &
-	Omit<BaseTextareaProps, "value" | "onChange">;
+type BoundTextAreaProps<T> = MobxProps<T> &
+	Omit<BaseTextAreaProps, "value" | "onChange">;
 
-export type TextareaProps<T = object> =
-	| BoundTextareaProps<T>
-	| BaseTextareaProps;
+export type TextAreaProps<T = object> =
+	| BoundTextAreaProps<T>
+	| BaseTextAreaProps;
 
-function isBoundTextareaProps<T>(
-	props: TextareaProps<T>,
-): props is BoundTextareaProps<T> {
+function isBoundTextAreaProps<T>(
+	props: TextAreaProps<T>,
+): props is BoundTextAreaProps<T> {
 	return "state" in props && "path" in props;
 }
 
-export const Textarea = observer(
-	<T extends object>(props: TextareaProps<T>) => {
-		if (!isBoundTextareaProps(props)) {
-			return <BaseTextarea {...props} />;
+export const TextArea = observer(
+	<T extends object>(props: TextAreaProps<T>) => {
+		if (!isBoundTextAreaProps(props)) {
+			return <BaseTextArea {...props} />;
 		}
 
 		const { state, path, ...rest } = props;
@@ -39,7 +39,7 @@ export const Textarea = observer(
 		};
 
 		return (
-			<BaseTextarea
+			<BaseTextArea
 				{...rest}
 				value={formField.state.value as string}
 				onChange={handleChange}
@@ -49,4 +49,4 @@ export const Textarea = observer(
 );
 
 // Re-export types for backwards compatibility
-export type { BaseTextareaProps as PureTextareaProps };
+export type { BaseTextAreaProps as PureTextAreaProps };

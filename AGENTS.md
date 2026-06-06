@@ -34,7 +34,6 @@
 | `admin/web` | 관리자 프론트엔드 (Next.js) | 3000 |
 | `core/api` | 코어 API 서버 (NestJS) | 4000 |
 | `idp/api` | IDP API 서버 | 4008 |
-| `idp/web` | IDP 프론트엔드 | 3008 |
 | `idp-server` | OIDC 서버 (oidc-provider) | 4009 |
 | `server` | 메인 API 서버 (NestJS) | 4001 |
 | `proposal/web` | 제안서 프론트엔드 | 3001 |
@@ -80,26 +79,18 @@
 ## Claude Code 작업 원칙
 
 - **AskUserQuestion 도구로 요구사항이나 선택지가 애매할 때 질문** - 추측하지 않고 사용자에게 확인
-- **Task 도구로 적절한 에이전트를 활용하여 작업 수행** - 단순 작업보다 전문 에이전트 활용 우선
-- **프론트엔드 E2E 테스트 작성/수정/안정화 요청은 기본적으로 `qa-fe-e2e-testing` role의 `agent`를 우선 사용**
+- **Task 도구로 적절한 subagent를 활용하여 작업 수행** - 단순 작업보다 전문 subagent 활용 우선
+- **프론트엔드 E2E 테스트 작성/수정/안정화 요청은 기본적으로 `qa-fe-e2e-testing` subagent를 우선 사용**
 - **기존 프론트엔드 E2E 테스트를 단순 실행만 하는 요청은 메인 Codex가 직접 실행할 수 있음**
-- **브라우저를 띄운 headed 실행 요청도 단순 실행 범주로 간주하되, 테스트 수정이 필요해지면 `qa-fe-e2e-testing` role의 `agent`로 전환**
+- **브라우저를 띄운 headed 실행 요청도 단순 실행 범주로 간주하되, 테스트 수정이 필요해지면 `qa-fe-e2e-testing` subagent로 전환**
 - **페이지별 E2E 테스트 코드는 각 route와 함께 관리되는 route-local 형태로 작성**
 - **Codex가 페이지 기능을 구현, 수정, 삭제할 때는 관련 E2E 테스트도 같은 작업에서 최신 상태로 함께 갱신**
-
-## Codex 용어 규칙
-
-- **`.codex/config.toml`에 정의된 항목은 `role`로 부릅니다**
-- **에이전트 생성 도구로 생성되는 실행 주체는 `agent`로 부릅니다**
-- **에이전트 생성 도구 호출 시 사용하는 파라미터명은 `agent_type`으로 표기합니다**
-- **`subagent`, `서브에이전트` 같은 비공식 용어는 사용하지 않습니다**
-- **설명 시에는 `role`, `agent`, `agent_type`을 구분해서 사용합니다**
 
 ## Codex orchestration execution
 
 - `orch-delivery`는 승인된 spec 기준으로 직렬/병렬 실행 순서만 배정합니다.
-- 실행 agent는 peer role을 직접 호출하거나 다른 role 책임 파일을 임의 수정하지 않습니다.
-- 실행 결과와 남은 이슈는 각 agent의 최종 보고와 변경 diff, 테스트 결과를 사람이 검증합니다.
+- 실행 subagent는 peer subagent를 직접 호출하거나 다른 subagent 책임 파일을 임의 수정하지 않습니다.
+- 실행 결과와 남은 이슈는 각 subagent의 최종 보고와 변경 diff, 테스트 결과를 사람이 검증합니다.
 
 ## 프론트엔드 개발 규칙
 
@@ -797,17 +788,17 @@ packages/common-type/src/
 
 **서비스 Delivery Spec**
 - service: `docs/services/**/*.delivery.spec.md`
-- 담당 role: `orch-delivery`
-- 포함: 서비스 목표, 사용자/권한, 도메인 모델/생명주기, 사용자 여정, 필요한 모든 web/mobile route 목록, backend/API/foundation 계약, `DESIGN.md` 기반 서비스 디자인 방향, 생성된 route spec 목록, 에이전트 배정 매트릭스, 실행 그래프, QA/승인 기준, 승인 로그
+- 담당 subagent: `orch-delivery`
+- 포함: 서비스 목표, 사용자/권한, 도메인 모델/생명주기, 사용자 여정, 필요한 모든 web/mobile route 목록, backend/API/foundation 계약, `DESIGN.md` 기반 서비스 디자인 방향, 생성된 route spec 목록, subagent 배정 매트릭스, 실행 그래프, QA/승인 기준, 승인 로그
 - `orch-delivery`는 Codex 질문 도구를 반복 사용해 서비스 목표, 사용자/운영자 journey, 권한, 도메인 모델, API, web/mobile 필요 페이지, 디자인 방향, QA 기준을 확정한 뒤 service delivery spec을 작성합니다.
-- service delivery spec 승인 전에는 route/page spec 생성, agent 실행, QA role 실행을 하지 않습니다.
+- service delivery spec 승인 전에는 route/page spec 생성, subagent 실행, QA subagent 실행을 하지 않습니다.
 
 **생성된 Route Delivery Spec**
 - web route: `apps/*/web/src/app/**/page.spec.md`
 - mobile route: `apps/mobile/src/app/**/index.spec.md`
-- 담당 role: `orch-delivery`
+- 담당 subagent: `orch-delivery`
 - 성격: 승인된 service delivery spec에서 파생된 page/route 실행 slice
-- 포함: 상위 service spec, 화면 계약, route wiring, component inventory, route-local hook/state, story/test/E2E, 해당 route가 소비하는 backend/API/foundation slice, route-level 에이전트 배정 매트릭스, 실행 그래프, 공유 파일 잠금, 승인 로그
+- 포함: 상위 service spec, 화면 계약, route wiring, component inventory, route-local hook/state, story/test/E2E, 해당 route가 소비하는 backend/API/foundation slice, route-level subagent 배정 매트릭스, 실행 그래프, 공유 파일 잠금, 승인 로그
 - backend/API/foundation의 최상위 설계와 build order는 service delivery spec이 소유하고 route spec은 관련 slice만 참조합니다.
 
 **Screen / Feature Planning Spec**
@@ -816,21 +807,21 @@ packages/common-type/src/
 - mobile screen: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].spec.md`
 - mobile feature: `packages/fe-mo-ui/src/feature/**/[FeatureName].spec.md`
 - 포함: 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약
-- 제외: 에이전트 배정 매트릭스, 실행 그래프, backend build order, foundation 세부 실행표, approval gate
+- 제외: subagent 배정 매트릭스, 실행 그래프, backend build order, foundation 세부 실행표, approval gate
 
 **공통 금지**
 - `*.stories.spec.md`, `*.test.spec.md`, `*.e2e.spec.md`, `layout.spec.md`, `_client.spec.md`, `_prefetch.spec.md`, barrel `index.spec.md`, `type.spec.md`, hook/toolkit/store/dto/service/repository/controller/entity/vo spec은 신규 작성 금지입니다.
 - `app.spec.md`, `package.spec.md`, `tsconfig.spec.md`, `*.toml.spec.md`, `*.json.spec.md`, `*.css.spec.md`, `*.html.spec.md`, `Dockerfile.*.spec.md`, `Jenkinsfile.*.spec.md`는 신규 생성하지 않습니다.
 - non-source 문서는 `*.context.md`, `*.guide.md`, `*.ops.md`, `*.notes.md`, `*.template.md`, `README.md`를 사용합니다.
-- TOML 설정/role 파일의 보조 문서인 `*.toml.guide.md`는 생성하지 않습니다.
-- agent/role 설명과 실행 guardrail은 해당 `.toml`의 `developer_instructions` 또는 인덱스 `README.md`에 반영하고, 상세 구현 절차는 `.agents/skills/*-creator` skill에 둡니다.
+- TOML 설정/subagent 파일의 보조 문서인 `*.toml.guide.md`는 생성하지 않습니다.
+- subagent 설명과 실행 guardrail은 해당 `.toml`의 `developer_instructions` 또는 인덱스 `README.md`에 반영하고, 상세 구현 절차는 `.agents/skills/*-creator` skill에 둡니다.
 
 **기존 코드 수정 완료 조건 (Critical):**
 - 서비스 전체 설계, backend/API/foundation, route 목록, 권한, journey, 디자인 방향을 변경하면 대응 service delivery spec의 관련 섹션과 `승인 / 실행 로그`를 갱신합니다.
 - route/page 코드나 route wiring을 변경하면 대응 generated route delivery spec의 `## 딜리버리`와 `## 변경 이력` 또는 `승인 / 실행 로그`를 갱신하고, 상위 service spec에도 영향 요약을 남깁니다.
 - Screen/Feature source를 변경하면 대응 planning spec의 visual/props/story-test 계약과 `## 변경 이력`을 갱신합니다.
 - hook/toolkit/type/store/backend/leaf 파일에는 별도 spec을 만들지 않고 service delivery spec의 inventory row와 필요한 route delivery spec의 slice row로 기록합니다.
-- 이 정책의 실행 guardrail은 `AGENTS.md`, `.codex/config.toml`, 각 role TOML의 내장 지시문에 유지하고, 기술별 상세 구현 절차는 `.agents/skills/*-creator` skill에 유지합니다.
+- 이 정책의 실행 guardrail은 `AGENTS.md`, `.codex/config.toml`, 각 subagent TOML의 내장 지시문에 유지하고, 기술별 상세 구현 절차는 `.agents/skills/*-creator` skill에 유지합니다.
 - spec 본문, 섹션명, 표 헤더, 승인 질문은 한글로 작성합니다. `agent_type`, `operationId`, `codegen`, 패키지명, 파일 경로, enum 값, 명령어처럼 고정된 기술 식별자만 원문을 유지합니다.
 
 #### 기획서 파일 구조
@@ -908,7 +899,7 @@ packages/fe-mo-ui/src/feature/[FeatureName]/
 | **서비스 단위 설계** | 권한, journey, backend/API/foundation, web/mobile route를 한 spec에서 먼저 합의 |
 | **발견성** | 서비스 spec은 `docs/services`, route slice는 코드 파일 옆에서 확인 |
 | **동기화** | service spec 변경 이력과 route spec 실행 이력을 함께 관리 |
-| **실행 일관성** | 승인된 service spec이 전체 실행 기준을 소유하고 route spec은 leaf agent 실행 범위를 제한 |
+| **실행 일관성** | 승인된 service spec이 전체 실행 기준을 소유하고 route spec은 leaf subagent 실행 범위를 제한 |
 | **기획 보존** | Screen/Feature planning spec으로 화면 의도를 보존 |
 
 ## 백엔드 개발 규칙
@@ -1225,7 +1216,7 @@ Route delivery spec은 승인된 service spec에서 생성된 page/route 실행 
 - `orch-delivery`는 Codex 질문 도구를 반복 사용해 서비스 목표, 사용자/운영자 journey, 권한, 도메인 모델, API, web/mobile 필요 페이지, 디자인 방향, QA 기준을 확정합니다.
 - 서비스 delivery spec은 서비스 목표, 권한, 도메인 생명주기, 사용자 여정, 필요한 모든 페이지/route, backend/API/foundation, 상태, UI 전략, 테스트, 담당 `agent_type`, 실행 순서를 모두 명시합니다.
 - 서비스 delivery spec의 기본 위치는 `docs/services/{service-name}.delivery.spec.md`입니다.
-- 서비스 delivery spec 승인 전에는 route/page spec 생성, agent 실행, QA role 실행을 하지 않습니다.
+- 서비스 delivery spec 승인 전에는 route/page spec 생성, subagent 실행, QA subagent 실행을 하지 않습니다.
 - 승인 후 `필수 페이지 / 라우트`와 `생성된 라우트 Spec` 기준으로 모든 필요한 `page.spec.md` 또는 `index.spec.md`를 생성/갱신합니다.
 - route delivery spec에는 `상위 서비스 Spec`을 기록하고, 해당 route의 화면 계약, route wiring, component inventory, route-local hook/state, E2E, backend/API/foundation slice만 명시합니다.
 - Screen/Feature planning spec은 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 명시합니다.
@@ -1236,8 +1227,8 @@ Route delivery spec은 승인된 service spec에서 생성된 page/route 실행 
 - 렌더링 계약은 component inventory 표로 작성해 `Feature`/`Widget`/`Input`/`Action`/`DataDisplay`/`Layout` 등 계층, 재사용/신규 여부, 대상 파일, 담당 `agent_type`을 드러냅니다.
 - component inventory의 `agent_type`은 소스를 만들거나 수정하는 소스 담당 `agent_type`과 화면에 조립하는 소비/Wiring `agent_type`을 분리합니다.
 - Storybook/Test 계약은 `Storybook 인벤토리`와 `Unit Test 인벤토리`로 작성하고, 필수 상태/variant와 검증 케이스를 먼저 정합니다.
-- 신규/수정 UI component의 story/test 작성은 기본적으로 해당 UI agent `agent_type`이 같은 작업에서 담당하고, QA role은 누락/실패/contract drift를 검증합니다.
-- PC/Web은 `packages/fe-ui/src/**` component 소스 담당 agent가 story/test를 담당하고, Mobile은 `packages/fe-mo-ui/src/**` component 소스 담당 agent가 story/test를 담당합니다.
+- 신규/수정 UI component의 story/test 작성은 기본적으로 해당 UI `agent_type` subagent가 같은 작업에서 담당하고, QA subagent는 누락/실패/contract drift를 검증합니다.
+- PC/Web은 `packages/fe-ui/src/**` component 소스 담당 subagent가 story/test를 담당하고, Mobile은 `packages/fe-mo-ui/src/**` component 소스 담당 subagent가 story/test를 담당합니다.
 - route `page.tsx`, Expo route file, `layout.tsx`, `_layout.tsx`, Store, backend-only step은 Storybook 대상이 아니며 필요한 unit/E2E 검증만 spec에 기록합니다.
 - thin re-export나 barrel-only 변경처럼 story/test가 불필요하면 spec의 비고에 불필요 사유를 남깁니다.
 - backend/API 계약은 `Prisma / Database`, `Prisma Annotation`, `Common Schema`, `Entity / VO`, `DTO / Query DTO`, `Repository`, `Service`, `Command/Query`, `Event`, `UseCase / Handler / EventHandler / Saga`, `Client / Gateway`, `엔드포인트`, `Module / Bootstrap`, `Seed`, `Codegen / API Client` 인벤토리를 구조별로 작성합니다.
@@ -1246,7 +1237,7 @@ Route delivery spec은 승인된 service spec에서 생성된 page/route 실행 
 - reusable hook은 `fe-hook-agent`, shared toolkit은 `common-toolkit-builder`, shared type은 `common-type-builder`, shared store는 `fe-store-agent`가 소스 담당입니다.
 - route-local hook/util/type/state는 Web/Mobile 모두 generated route delivery spec의 `fe-route-agent` slice로 기록하고 별도 spec을 만들지 않습니다.
 - endpoint row는 controller endpoint, operationId, DTO/schema, Orval hook/codegen 영향을 보여주고, application/service/repository row는 어떤 workflow/capability/persistence method가 쓰이는지 보여줍니다.
-- common schema row는 `common-schema-builder`, DTO row는 `be-dto-builder`/`be-query-dto-builder`, facade/gateway row는 `be-facade-builder`/`be-gateway-builder`처럼 실제 소스 담당 role이 보이도록 분리합니다.
+- common schema row는 `common-schema-builder`, DTO row는 `be-dto-builder`/`be-query-dto-builder`, facade/gateway row는 `be-facade-builder`/`be-gateway-builder`처럼 실제 소스 담당 subagent가 보이도록 분리합니다.
 - `orch-delivery`는 승인된 service delivery spec과 연결된 route delivery spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
 - 병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
 - `실행 그래프`는 Mermaid `시각 실행 흐름`, `병렬 그룹 표`, `단계 순서 표`를 함께 작성해 직렬 순서와 병렬 그룹을 시각적으로 보여줍니다.
@@ -1261,12 +1252,12 @@ Route delivery spec은 승인된 service spec에서 생성된 page/route 실행 
 백엔드: prisma → annotation → common schema → entity/vo/dto/query-dto → repository → service → command/query/event → usecase → controller/module/bootstrap → seed
 Codegen: pnpm --filter=@cocrepo/api codegen, API 변경 시
 기반: common-type-builder/common-toolkit-builder/fe-hook-agent/fe-store-agent, 필요한 경우
-Web: 생성된 route spec → planning spec 참조 → 필요한 leaf agent → fe-screen-agent → fe-route-layout-agent(필요 시) → fe-route-agent
-Mobile: 생성된 route spec → planning spec 참조 → 필요한 leaf agent → fe-widget-agent/fe-feature-agent(필요 시) → fe-screen-agent → fe-route-layout-agent(필요 시) → fe-route-agent
+Web: 생성된 route spec → planning spec 참조 → 필요한 leaf subagent → fe-screen-agent → fe-route-layout-agent(필요 시) → fe-route-agent
+Mobile: 생성된 route spec → planning spec 참조 → 필요한 leaf subagent → fe-widget-agent/fe-feature-agent(필요 시) → fe-screen-agent → fe-route-layout-agent(필요 시) → fe-route-agent
 QA: qa-be-testing/e2e → qa-fe-testing/e2e → qa-mo-testing/e2e
 ```
 
-> 화살표는 의존성 순서를 의미합니다. 독립 작업은 service delivery spec과 생성된 route delivery spec의 `에이전트 배정 매트릭스`에서만 병렬화할 수 있습니다.
+> 화살표는 의존성 순서를 의미합니다. 독립 작업은 service delivery spec과 생성된 route delivery spec의 `subagent 배정 매트릭스`에서만 병렬화할 수 있습니다.
 
 #### Spec 위치
 
@@ -1336,7 +1327,7 @@ packages/fe-ui/src/feature/[FeatureName]/
 
 #### 메뉴 업데이트
 
-목록 페이지(List)나 신규 navigation entry가 필요한 경우 service delivery spec의 `필수 페이지 / 라우트`와 `에이전트 배정 매트릭스`에 먼저 기록하고, 해당 generated route delivery spec에도 `fe-menu-agent` slice를 명시합니다.
+목록 페이지(List)나 신규 navigation entry가 필요한 경우 service delivery spec의 `필수 페이지 / 라우트`와 `subagent 배정 매트릭스`에 먼저 기록하고, 해당 generated route delivery spec에도 `fe-menu-agent` slice를 명시합니다.
 
 ```
 spec web phase
@@ -1359,32 +1350,34 @@ spec web phase
 
 #### 오케스트레이터 (orch-*)
 
-| Agent | 역할 |
-|-------|------|
+| Subagent | 역할 |
+|----------|------|
 | orch-delivery | 기획 질문 → 서비스 Spec → 승인 → 라우트 Spec → 구현 → QA를 단일 흐름으로 소유하는 서비스 delivery 오케스트레이터 |
 
 #### 기획 보조 Skill
 
 | Skill | 역할 |
-|-------|------|
+|----------|------|
 | /design-analyze (Skill) | Figma 디자인 분석 및 컴포넌트 매핑 (Figma 있을 때) |
 | /route-design (Skill) | 백엔드 엔티티 기반 라우팅 경로 설계 |
 
 #### 프론트엔드 (fe-*)
 
-Web과 Mobile 구현 role은 `fe-*agent`로 통합합니다. dual-platform role 문서는 `Platform Routing`, `Common`, `React Web`, `React Native` 섹션을 유지합니다. `agent_type`은 대상 경로가 `packages/fe-ui`/`apps/*/web`이면 `Common` + `React Web`, `packages/fe-mo-ui`/`apps/mobile`이면 `Common` + `React Native`만 실행 규칙으로 적용합니다. 대상과 다른 플랫폼 섹션은 참고만 하고 금지/허용/출력 규칙으로 적용하지 않습니다.
+Web과 Mobile 구현 subagent는 `fe-*agent`로 통합합니다. dual-platform subagent 문서는 `Platform Routing`, `Common`, `React Web`, `React Native` 섹션을 유지합니다. `agent_type`은 대상 경로가 `packages/fe-ui`/`apps/*/web`이면 `Common` + `React Web`, `packages/fe-mo-ui`/`apps/mobile`이면 `Common` + `React Native`만 실행 규칙으로 적용합니다. 대상과 다른 플랫폼 섹션은 참고만 하고 금지/허용/출력 규칙으로 적용하지 않습니다.
 
-React Web only role은 `Platform Routing`에 React Native target이 범위 밖임을 명시합니다. Shared role은 공용 hook/store 계약만 다루며 UI runtime별 세부 규칙은 소비 owner agent의 플랫폼 섹션을 따릅니다.
+React Web only subagent는 `Platform Routing`에 React Native target이 범위 밖임을 명시합니다. Shared subagent는 공용 hook/store 계약만 다루며 UI runtime별 세부 규칙은 소비 owner subagent의 플랫폼 섹션을 따릅니다.
 
-| Agent | 역할 |
-|-------|------|
-| fe-display-agent | Web display 및 Mobile data-display/feedback/surface/layout primitive 생성 |
+| Subagent | 역할 |
+|----------|------|
+| fe-data-display-agent | Web/Mobile data-display primitive 생성 |
+| fe-feedback-agent | Web/Mobile feedback/status primitive 생성 |
+| fe-overlay-agent | Web/Mobile overlay/dialog/popover/tooltip primitive 생성 |
 | fe-cell-agent | DataGrid/Table용 Cell 컴포넌트 생성 (계층별) |
 | fe-columns-agent | DataGrid column 선언과 cell boundary 정리 |
 | fe-control-agent | Web control 및 Mobile action/input/selection/navigation 컴포넌트 생성 |
 | fe-widget-agent | Web/Mobile 재사용 가능한 작은 UI 조각 Widget 컴포넌트 생성 |
 | fe-feature-agent | Web/Mobile 비즈니스 기능 Feature 컴포넌트 생성 |
-| fe-layout-agent | Web Layout 컴포넌트 설계 및 생성 |
+| fe-layout-agent | Web/Mobile layout primitive 설계 및 생성 |
 | fe-data-grid-agent | DataGrid 렌더러, input, state contract 정리 |
 | fe-form-agent | 생성/수정 입력 화면용 reusable form layer 생성 |
 | fe-hook-agent | web/mobile 공통 React hook 생성 (`@cocrepo/hook`) |
@@ -1396,8 +1389,8 @@ React Web only role은 `Platform Routing`에 React Native target이 범위 밖�
 
 #### 백엔드 (be-*)
 
-| Agent | 역할 |
-|-------|------|
+| Subagent | 역할 |
+|----------|------|
 | be-prisma-builder | Prisma 스키마 생성 및 유형 분류 |
 | common-schema-builder | 프론트엔드와 백엔드에서 공유하는 검증 스키마 생성 |
 | common-toolkit-builder | 공용 `@cocrepo/toolkit` utility 생성 |
@@ -1422,8 +1415,8 @@ React Web only role은 `Platform Routing`에 React Native target이 범위 밖�
 
 #### 품질/테스트 (qa-*)
 
-| Agent | 역할 |
-|-------|------|
+| Subagent | 역할 |
+|----------|------|
 | qa-be-testing | Jest 기반 백엔드 및 공용 패키지 테스트 코드 작성 |
 | qa-fe-testing | Vitest 기반 프론트엔드 패키지 테스트 코드 작성 |
 | qa-be-e2e-testing | Jest+Supertest 기반 백엔드 E2E 테스트 작성 |
@@ -1437,34 +1430,34 @@ React Web only role은 `Platform Routing`에 React Native target이 범위 밖�
 
 #### 인프라 (etc-*)
 
-| Agent | 역할 |
-|-------|------|
+| Subagent | 역할 |
+|----------|------|
 | etc-jenkinsfile-builder | Jenkins CI/CD 파이프라인 파일 생성 |
 
 #### 개발 도구 (dev-*)
 
-| Agent | 역할 |
-|-------|------|
+| Subagent | 역할 |
+|----------|------|
 | dev-service-starter | 개발 서비스 시작 (admin, server, storybook 등) |
 
 각 Agent의 상세 역할은 `.codex/agents/` 디렉토리를 참고하세요.
 
-### 에이전트 실행 규칙 (Critical)
+### Subagent 실행 규칙 (Critical)
 
-**에이전트 호출 시 반드시 아래 규칙을 따릅니다.**
+**subagent 호출 시 반드시 아래 규칙을 따릅니다.**
 
 #### 1. 시작/종료 선언 (필수)
 
 **시작 시 출력:**
 ```
-🚀 [에이전트명] 에이전트 시작
+🚀 [subagent명] subagent 시작
 📋 작업: [작업 내용 요약]
 📂 대상: [대상 파일/폴더]
 ```
 
 **종료 시 출력:**
 ```
-✅ [에이전트명] 에이전트 완료
+✅ [subagent명] subagent 완료
 📁 생성/수정된 파일:
    - [파일 경로 1]
    - [파일 경로 2]
@@ -1472,13 +1465,13 @@ React Web only role은 `Platform Routing`에 React Native target이 범위 밖�
 
 **실패 시 출력:**
 ```
-❌ [에이전트명] 에이전트 실패
+❌ [subagent명] subagent 실패
 ⚠️ 원인: [실패 원인]
 ```
 
 #### 2. Spec 실행 로그 업데이트 (필수)
 
-spec에 실행 로그 섹션이 있으면 agent 실행 결과를 기록합니다:
+spec에 실행 로그 섹션이 있으면 subagent 실행 결과를 기록합니다:
 
 ```markdown
 ## Execution Log
@@ -1486,24 +1479,24 @@ spec에 실행 로그 섹션이 있으면 agent 실행 결과를 기록합니다
   - 생성/수정: `파일경로`
 ```
 
-#### 3. 에이전트 미호출 시 명시
+#### 3. Subagent 미호출 시 명시
 
-에이전트를 호출하지 않고 직접 작업할 경우 반드시 선언:
+subagent를 호출하지 않고 직접 작업할 경우 반드시 선언:
 ```
-⚡ 직접 작업 (에이전트 미사용)
+⚡ 직접 작업 (subagent 미사용)
 📋 작업: [작업 내용]
 ```
 
 #### 예시
 
 ```
-🚀 be-prisma-builder 에이전트 시작
+🚀 be-prisma-builder subagent 시작
 📋 작업: User 모델 Prisma 스키마 생성
 📂 대상: packages/be-prisma/schema/user.prisma
 
-[... 에이전트 작업 ...]
+[... subagent 작업 ...]
 
-✅ be-prisma-builder 에이전트 완료
+✅ be-prisma-builder subagent 완료
 📁 생성/수정된 파일:
    - packages/be-prisma/schema/user.prisma
    - packages/be-prisma/schema/enums.prisma

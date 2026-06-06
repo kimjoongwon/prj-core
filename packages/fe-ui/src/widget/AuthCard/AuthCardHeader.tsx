@@ -9,7 +9,7 @@ export interface AuthCardHeaderProps {
 	icon?: ReactNode;
 	/** 아이콘 영역 SVG path (간편 사용) */
 	iconPath?: string;
-	/** 아이콘 그라데이션 색상 (기본: from-primary to-secondary) */
+	/** 아이콘 그라데이션 색상 (기본: from-accent to-default) */
 	iconGradient?: string;
 	/** 제목 */
 	title: string;
@@ -32,7 +32,7 @@ export const AuthCardHeader = observer(
 	({
 		icon,
 		iconPath,
-		iconGradient = "from-primary to-secondary",
+		iconGradient = "from-accent to-default",
 		title,
 		titleClassName,
 		subtitle,

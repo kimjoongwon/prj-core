@@ -20,7 +20,7 @@ import {
 import { KeyRound, Layers3, Plus, ShieldCheck } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type Key, type ReactNode, useEffect } from "react";
-import { Tab, Tabs } from "../../design-system/primitives";
+import { Tabs } from "@heroui/react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -180,7 +180,7 @@ export const ActionListPage = observer(
 					}
 				/>
 				<ActionContextPanel />
-				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 					<VStack gap="section">
 						<ActionGroupFilterTabs
 							selectedGroup={queryStates.group}
@@ -196,7 +196,6 @@ export const ActionListPage = observer(
 							}}
 							rows={visibleActions}
 							totalCount={totalCount}
-							isLoading={false}
 							state={gridState}
 						/>
 					</VStack>
@@ -208,14 +207,14 @@ export const ActionListPage = observer(
 
 const ActionContextPanel = observer(() => {
 	return (
-		<Surface className="rounded-2xl border-divider/80 bg-content1/70">
+		<Surface className="rounded-2xl border-border/80 bg-surface/70">
 			<VStack gap="block">
 				<PageTitleBar
 					level={2}
 					title="권한 액션 카탈로그"
 					description="액션은 권한 규칙이 사용자의 동작을 판단할 때 참조하는 기준입니다."
 				/>
-				<div className="grid divide-y divide-divider/80 overflow-hidden rounded-xl border border-divider/80 bg-content2/30 md:grid-cols-3 md:divide-x md:divide-y-0 md:divide-divider/80">
+				<div className="grid divide-y divide-border/80 overflow-hidden rounded-xl border border-border/80 bg-surface-secondary/30 md:grid-cols-3 md:divide-x md:divide-y-0 md:divide-border/80">
 					<ActionContextItem
 						icon={<KeyRound className="h-5 w-5" />}
 						title="동작 단위"
@@ -251,16 +250,16 @@ const ActionContextItem = observer(
 			<HStack
 				gap="block"
 				alignItems="start"
-				className="border-divider/80 p-4 md:border-b-0"
+				className="border-border/80 p-4 md:border-b-0"
 			>
-				<span className="rounded-lg bg-primary/10 p-2 text-primary">
+				<span className="rounded-lg bg-accent/10 p-2 text-accent">
 					{icon}
 				</span>
 				<VStack gap="dense">
 					<span className="text-sm font-semibold text-foreground">
 						{t(title)}
 					</span>
-					<span className="text-sm text-default-600">{t(description)}</span>
+					<span className="text-sm text-muted">{t(description)}</span>
 				</VStack>
 			</HStack>
 		);
@@ -283,27 +282,25 @@ const ActionGroupFilterTabs = observer(
 
 		return (
 			<VStack gap="block">
-				<Tabs
-					aria-label={t("권한 액션 그룹 필터")}
-					selectedKey={selectedKey}
-					onSelectionChange={handleSelectionChange}
-					variant="bordered"
-					color="primary"
-					radius="full"
-					classNames={{
-						tabList: "flex-wrap",
-						tab: "h-9",
-					}}
-				>
-					{actionGroupFilters.map((filter) => (
-						<Tab key={filter.key} title={t(filter.label)} />
-					))}
-				</Tabs>
-				<div className="rounded-lg border border-divider bg-content2/40 p-4">
+					<Tabs
+						aria-label={t("권한 액션 그룹 필터")}
+						selectedKey={selectedKey}
+						onSelectionChange={handleSelectionChange}
+						variant="secondary"
+					>
+						<Tabs.List>
+						{actionGroupFilters.map((filter) => (
+							<Tabs.Tab key={filter.key} id={filter.key}>
+								{t(filter.label)}
+							</Tabs.Tab>
+						))}
+						</Tabs.List>
+					</Tabs>
+				<div className="rounded-lg border border-border bg-surface-secondary/40 p-4">
 					<div className="text-sm font-semibold text-foreground">
 						{t(selectedFilter.label)} {t("액션")}
 					</div>
-					<p className="mt-1 text-sm text-default-600">
+					<p className="mt-1 text-sm text-muted">
 						{t(selectedFilter.description)}
 					</p>
 				</div>
@@ -319,7 +316,7 @@ const ActionsPageFallback = observer(() => {
 				title="권한 액션 목록"
 				description="역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다."
 			/>
-			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+			<Surface className="h-32 rounded-2xl border-border/80 bg-surface/70">
 				{null}
 			</Surface>
 		</VStack>

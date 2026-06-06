@@ -6,17 +6,17 @@ import Axios, {
 	type InternalAxiosRequestConfig,
 } from "axios";
 
-const DEFAULT_IDP_API_SERVER_BASE_URL =
+const DEFAULT_AUTH_SERVER_BASE_URL =
 	(typeof process !== "undefined"
-		? process.env.IDP_API_INTERNAL_URL
-		: undefined) ?? "http://localhost:3007";
+		? process.env.CORE_API_INTERNAL_URL
+		: undefined) ?? "http://localhost:3006";
 
 function resolveServerBaseUrl(url?: string) {
 	if (typeof window !== "undefined" || !url?.startsWith("/")) {
 		return undefined;
 	}
 
-	return DEFAULT_IDP_API_SERVER_BASE_URL;
+	return DEFAULT_AUTH_SERVER_BASE_URL;
 }
 
 // IDP용 Axios 인스턴스

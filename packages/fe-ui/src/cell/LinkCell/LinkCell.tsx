@@ -1,4 +1,4 @@
-import { Link, type LinkProps } from "../../design-system/primitives";
+import { Link, type LinkProps } from "../../control/Link/Link";
 
 interface LinkCellViewProps extends LinkProps {
 	/** 링크 텍스트 */

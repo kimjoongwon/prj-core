@@ -74,7 +74,7 @@ export default observer(function ActionNewPageRoute() {
 			onChangeDisplayNameInput={(value) => {
 				state.displayName = value;
 			}}
-			onChangeDescriptionTextarea={(value) => {
+			onChangeDescriptionTextArea={(value) => {
 				state.description = value;
 			}}
 			onChangeGroupSelection={(value) => {

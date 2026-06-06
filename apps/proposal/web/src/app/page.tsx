@@ -1,14 +1,7 @@
 "use client";
 
-import {
-	Button,
-	Card,
-	CardBody,
-	CardHeader,
-	Chip,
-	Container,
-	Divider,
-} from "@cocrepo/ui";
+import { Button, Chip, Container } from "@cocrepo/ui";
+import { Card, Separator } from "@heroui/react";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -235,7 +228,6 @@ function renderNavigationButton(item: ProposalPageData["navigation"][number]) {
 	return (
 		<Button
 			key={item.id}
-			radius="full"
 			size="sm"
 			variant="flat"
 			onPress={SECTION_ACTIONS[item.id]}
@@ -260,7 +252,6 @@ function ThemeToggle({
 
 	return (
 		<Button
-			radius="full"
 			size="sm"
 			variant="flat"
 			onPress={onToggleTheme}
@@ -283,14 +274,14 @@ function renderMetricCard(item: ProposalMetric) {
 	return (
 		<motion.div key={item.label} variants={ITEM_VARIANTS}>
 			<Card className={SURFACE_CARD_CLASS}>
-				<CardBody className="gap-4 p-6 md:p-7">
+				<Card.Content className="gap-4 p-6 md:p-7">
 					<p className="text-sm font-semibold text-slate-900 dark:text-white">
 						{item.label}
 					</p>
 					<p className="text-sm leading-6 text-slate-600 dark:text-white/60">
 						{item.description}
 					</p>
-				</CardBody>
+				</Card.Content>
 			</Card>
 		</motion.div>
 	);
@@ -302,7 +293,7 @@ function renderNarrativeCard(item: ProposalNarrativeCard) {
 	return (
 		<motion.div key={item.title} variants={ITEM_VARIANTS}>
 			<Card className={SURFACE_CARD_ELEVATED_CLASS}>
-				<CardHeader className="items-start gap-4 pb-0">
+				<Card.Header className="items-start gap-4 pb-0">
 					<div className={PANEL_ICON_CLASS}>
 						<Icon className="h-5 w-5" />
 					</div>
@@ -311,10 +302,10 @@ function renderNarrativeCard(item: ProposalNarrativeCard) {
 							{item.title}
 						</h3>
 					</div>
-				</CardHeader>
-				<CardBody className={`pt-4 text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
+				</Card.Header>
+				<Card.Content className={`pt-4 text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
 					{item.description}
-				</CardBody>
+				</Card.Content>
 			</Card>
 		</motion.div>
 	);
@@ -338,10 +329,9 @@ function renderProcessCard(step: ProposalProcessStep) {
 	return (
 		<motion.div key={step.step} variants={ITEM_VARIANTS}>
 			<Card className={SURFACE_CARD_CLASS}>
-				<CardHeader className="items-start justify-between gap-4">
+				<Card.Header className="items-start justify-between gap-4">
 					<div className="space-y-3">
 						<Chip
-							radius="full"
 							variant="flat"
 							color="primary"
 							className="text-[11px] uppercase tracking-[0.24em]"
@@ -355,11 +345,11 @@ function renderProcessCard(step: ProposalProcessStep) {
 					<div className={PANEL_ICON_CLASS}>
 						<Icon className="h-5 w-5" />
 					</div>
-				</CardHeader>
-				<CardBody className={`gap-6 text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
+				</Card.Header>
+				<Card.Content className={`gap-6 text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
 					<p>{step.description}</p>
 					<ul className="space-y-2">{step.outputs.map(renderProcessOutput)}</ul>
-				</CardBody>
+				</Card.Content>
 			</Card>
 		</motion.div>
 	);
@@ -393,7 +383,7 @@ function renderResumeFactCard(item: ProposalResumeFact) {
 	return (
 		<motion.div key={item.label} variants={ITEM_VARIANTS}>
 			<Card className={SURFACE_CARD_ELEVATED_CLASS}>
-				<CardBody className="gap-3 p-6">
+				<Card.Content className="gap-3 p-6">
 					<p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-primary-700 dark:text-primary-300">
 						{item.label}
 					</p>
@@ -403,7 +393,7 @@ function renderResumeFactCard(item: ProposalResumeFact) {
 					<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
 						{item.description}
 					</p>
-				</CardBody>
+				</Card.Content>
 			</Card>
 		</motion.div>
 	);
@@ -414,7 +404,6 @@ function renderToolChip(tool: string) {
 		<Chip
 			key={tool}
 			variant="flat"
-			radius="full"
 			className="border border-slate-200/80 bg-slate-50/90 text-slate-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/78"
 		>
 			{tool}
@@ -431,12 +420,12 @@ function renderCareerCard(entry: ProposalCareerEntry) {
 			variants={ITEM_VARIANTS}
 		>
 			<Card className={SURFACE_CARD_CLASS}>
-				<CardHeader
+				<Card.Header
 					className={`flex-col items-start gap-5 border-b ${PANEL_DIVIDER_CLASS}`}
 				>
 					<div className="flex w-full items-start justify-between gap-4">
 						<div className="space-y-3">
-							<Chip radius="full" variant="flat" color="secondary">
+							<Chip variant="flat" color="secondary">
 								{entry.period}
 							</Chip>
 							<div className="space-y-2">
@@ -455,8 +444,8 @@ function renderCareerCard(entry: ProposalCareerEntry) {
 							<Icon className="h-5 w-5" />
 						</div>
 					</div>
-				</CardHeader>
-				<CardBody className="gap-6 p-6 md:p-7">
+				</Card.Header>
+				<Card.Content className="gap-6 p-6 md:p-7">
 					<p className={`text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
 						{entry.description}
 					</p>
@@ -466,7 +455,7 @@ function renderCareerCard(entry: ProposalCareerEntry) {
 					<div className="flex flex-row flex-wrap gap-2">
 						{entry.tools.map(renderToolChip)}
 					</div>
-				</CardBody>
+				</Card.Content>
 			</Card>
 		</motion.div>
 	);
@@ -478,7 +467,7 @@ function renderPortfolioCard(item: ProposalPortfolioItem) {
 	return (
 		<motion.div key={item.title} variants={ITEM_VARIANTS}>
 			<Card className={SURFACE_CARD_CLASS}>
-				<CardHeader className="items-start gap-4 pb-0">
+				<Card.Header className="items-start gap-4 pb-0">
 					<div className={PANEL_ICON_CLASS}>
 						<Icon className="h-5 w-5" />
 					</div>
@@ -490,13 +479,13 @@ function renderPortfolioCard(item: ProposalPortfolioItem) {
 							{item.description}
 						</p>
 					</div>
-				</CardHeader>
-				<CardBody className="gap-5 pt-5">
+				</Card.Header>
+				<Card.Content className="gap-5 pt-5">
 					<ul className="space-y-3">{item.highlights.map(renderCareerLine)}</ul>
 					<div className="flex flex-row flex-wrap gap-2">
 						{item.tools.map(renderToolChip)}
 					</div>
-				</CardBody>
+				</Card.Content>
 			</Card>
 		</motion.div>
 	);
@@ -506,8 +495,8 @@ function renderStackCard(group: ProposalStackGroup) {
 	return (
 		<motion.div key={group.title} variants={ITEM_VARIANTS}>
 			<Card className={SURFACE_CARD_ELEVATED_CLASS}>
-				<CardHeader className="flex-col items-start gap-3">
-					<Chip radius="full" variant="flat" color="secondary">
+				<Card.Header className="flex-col items-start gap-3">
+					<Chip variant="flat" color="secondary">
 						{group.title}
 					</Chip>
 					<div className="space-y-2">
@@ -518,10 +507,10 @@ function renderStackCard(group: ProposalStackGroup) {
 							{group.description}
 						</p>
 					</div>
-				</CardHeader>
-				<CardBody className="flex flex-row flex-wrap gap-2 pt-0">
+				</Card.Header>
+				<Card.Content className="flex flex-row flex-wrap gap-2 pt-0">
 					{group.tools.map(renderToolChip)}
-				</CardBody>
+				</Card.Content>
 			</Card>
 		</motion.div>
 	);
@@ -600,7 +589,6 @@ function HeroSection({
 		>
 			<div className="space-y-12">
 				<Chip
-					radius="full"
 					variant="flat"
 					color="primary"
 					className="border border-primary/20 bg-primary/10 px-3 py-5 text-[11px] font-semibold tracking-[0.32em] text-primary-700 dark:text-primary-200"
@@ -618,7 +606,6 @@ function HeroSection({
 				<div className="flex flex-wrap gap-5">
 					<Button
 						size="lg"
-						radius="full"
 						color="primary"
 						endContent={<ArrowRight className="h-4 w-4" />}
 						onPress={primaryAction}
@@ -627,7 +614,6 @@ function HeroSection({
 					</Button>
 					<Button
 						size="lg"
-						radius="full"
 						variant="flat"
 						onPress={secondaryAction}
 						className="border border-slate-200 bg-white px-6 text-slate-900 shadow-sm hover:bg-slate-50 dark:border-white/12 dark:bg-white/6 dark:text-white dark:hover:bg-white/10"
@@ -635,7 +621,7 @@ function HeroSection({
 						{hero.secondaryAction.label}
 					</Button>
 				</div>
-				<Divider className="bg-slate-200/80 dark:bg-white/10" />
+				<Separator className="bg-slate-200/80 dark:bg-white/10" />
 				<motion.div
 					className="grid gap-6 md:grid-cols-4"
 					initial="hidden"
@@ -647,10 +633,10 @@ function HeroSection({
 			</div>
 			<motion.div initial="hidden" animate="show" variants={GRID_VARIANTS}>
 				<Card className="overflow-hidden border border-slate-200/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(255,255,255,0.82))] shadow-[0_40px_120px_rgba(148,163,184,0.2)] dark:border-white/10 dark:bg-[linear-gradient(160deg,rgba(255,255,255,0.09),rgba(255,255,255,0.02))] dark:shadow-[0_40px_120px_rgba(0,0,0,0.34)]">
-					<CardHeader
+					<Card.Header
 						className={`flex-col items-start gap-3 border-b bg-slate-950/[0.02] dark:bg-black/18 ${PANEL_DIVIDER_CLASS}`}
 					>
-						<Chip radius="full" variant="flat" color="secondary">
+						<Chip variant="flat" color="secondary">
 							Execution board
 						</Chip>
 						<div className="space-y-2">
@@ -662,10 +648,10 @@ function HeroSection({
 								맞춥니다.
 							</p>
 						</div>
-					</CardHeader>
-					<CardBody className="gap-6 p-6 md:p-8">
+					</Card.Header>
+					<Card.Content className="gap-6 p-6 md:p-8">
 						{previewSteps.map(renderProcessCard)}
-					</CardBody>
+					</Card.Content>
 				</Card>
 			</motion.div>
 		</motion.section>
@@ -796,34 +782,34 @@ export default observer(function ProposalPage() {
 							</motion.div>
 							<div className="grid gap-6 md:grid-cols-2">
 								<Card className="border border-danger/20 bg-danger/5 shadow-none">
-									<CardHeader className="flex-col items-start gap-3">
-										<Chip radius="full" variant="flat" color="danger">
+									<Card.Header className="flex-col items-start gap-3">
+										<Chip variant="flat" color="danger">
 											줄이는 비용
 										</Chip>
 										<h3 className="text-xl font-semibold text-slate-900 dark:text-white">
 											없애도 되는 레이어
 										</h3>
-									</CardHeader>
-									<CardBody>
+									</Card.Header>
+									<Card.Content>
 										<ul className="space-y-4">
 											{pageData.costModel.removed.map(renderCostLine)}
 										</ul>
-									</CardBody>
+									</Card.Content>
 								</Card>
 								<Card className="border border-success/20 bg-success/5 shadow-none">
-									<CardHeader className="flex-col items-start gap-3">
-										<Chip radius="full" variant="flat" color="success">
+									<Card.Header className="flex-col items-start gap-3">
+										<Chip variant="flat" color="success">
 											남겨야 하는 비용
 										</Chip>
 										<h3 className="text-xl font-semibold text-slate-900 dark:text-white">
 											사람이 붙잡아야 하는 레이어
 										</h3>
-									</CardHeader>
-									<CardBody>
+									</Card.Header>
+									<Card.Content>
 										<ul className="space-y-4">
 											{pageData.costModel.focused.map(renderCostLine)}
 										</ul>
-									</CardBody>
+									</Card.Content>
 								</Card>
 							</div>
 						</LandingSection>
@@ -859,9 +845,9 @@ export default observer(function ProposalPage() {
 								{pageData.projectFits.map(renderNarrativeCard)}
 							</motion.div>
 							<Card className="border border-slate-200/80 bg-gradient-to-br from-white via-slate-50 to-primary/5 shadow-[0_30px_90px_rgba(148,163,184,0.18)] dark:border-white/10 dark:bg-gradient-to-br dark:from-white/10 dark:via-white/[0.05] dark:to-transparent dark:shadow-[0_30px_90px_rgba(0,0,0,0.35)]">
-								<CardBody className="gap-7 p-6 md:p-9">
+								<Card.Content className="gap-7 p-6 md:p-9">
 									<div className="space-y-4">
-										<Chip radius="full" variant="flat" color="primary">
+										<Chip variant="flat" color="primary">
 											Closing note
 										</Chip>
 										<h3 className="font-display text-3xl font-semibold text-slate-950 md:text-4xl dark:text-white">
@@ -874,7 +860,7 @@ export default observer(function ProposalPage() {
 									<ul className="grid gap-4 md:grid-cols-3">
 										{pageData.closing.bullets.map(renderClosingBullet)}
 									</ul>
-								</CardBody>
+								</Card.Content>
 							</Card>
 						</LandingSection>
 						<LandingSection
@@ -912,10 +898,10 @@ export default observer(function ProposalPage() {
 									{pageData.career.credentials.map(renderResumeFactCard)}
 								</motion.div>
 								<Card className="border border-slate-200/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(248,250,252,0.88))] shadow-[0_24px_80px_rgba(148,163,184,0.16)] dark:border-white/10 dark:bg-[linear-gradient(160deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] dark:shadow-none">
-									<CardHeader
+									<Card.Header
 										className={`flex-col items-start gap-3 border-b ${PANEL_DIVIDER_CLASS}`}
 									>
-										<Chip radius="full" variant="flat" color="primary">
+										<Chip variant="flat" color="primary">
 											Resume note
 										</Chip>
 										<div className="space-y-2">
@@ -926,17 +912,17 @@ export default observer(function ProposalPage() {
 												{pageData.career.statement.description}
 											</p>
 										</div>
-									</CardHeader>
-									<CardBody>
+									</Card.Header>
+									<Card.Content>
 										<ul className="space-y-4">
 											{pageData.career.statement.bullets.map(renderCareerLine)}
 										</ul>
-									</CardBody>
+									</Card.Content>
 								</Card>
 							</div>
 							<div className="space-y-6">
 								<div className="space-y-3">
-									<Chip radius="full" variant="flat" color="secondary">
+									<Chip variant="flat" color="secondary">
 										Portfolio
 									</Chip>
 									<h3 className="font-display text-2xl font-semibold text-slate-950 dark:text-white">

@@ -5,15 +5,8 @@ import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import Link from "next/link";
 import { DateTimeCell } from "../../cell";
-import {
-	Button,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	Spinner,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import {
 	DetailPage,
 	DetailPageSurface,
@@ -81,10 +74,19 @@ export const TimelineSessionProgramDetailPage = observer(
 		isDeletePending,
 		onClickEditButton,
 		onClickDeleteButton,
-		onClickDeleteConfirmButton,
-		onClickDeleteCancelButton,
-	}: TimelineSessionProgramDetailPageProps) => {
-		if (isLoading) {
+			onClickDeleteConfirmButton,
+			onClickDeleteCancelButton,
+		}: TimelineSessionProgramDetailPageProps) => {
+			const deleteModalState = useOverlayState({
+				isOpen: isDeleteModalOpen,
+				onOpenChange: (open) => {
+					if (!open) {
+						onClickDeleteCancelButton();
+					}
+				},
+			});
+
+			if (isLoading) {
 			return (
 				<DetailPage
 					top={<PageTitleBar title="프로그램 상세" description="로딩 중..." />}
@@ -112,7 +114,7 @@ export const TimelineSessionProgramDetailPage = observer(
 				>
 					<DetailPageSurface>
 						<DetailSectionCard>
-							<div className="flex items-center justify-center p-8 text-default-500">
+							<div className="flex items-center justify-center p-8 text-muted">
 								프로그램을 찾을 수 없습니다.
 							</div>
 						</DetailSectionCard>
@@ -154,18 +156,18 @@ export const TimelineSessionProgramDetailPage = observer(
 						<DetailSection top={<PageTitleBar level={2} title="기본 정보" />}>
 							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 								<div>
-									<label className="text-sm text-default-500">
+									<label className="text-sm text-muted">
 										프로그램 이름
 									</label>
 									<p className="mt-1">{program.name ?? "-"}</p>
 								</div>
 								<div>
-									<label className="text-sm text-default-500">루틴</label>
+									<label className="text-sm text-muted">루틴</label>
 									<div className="mt-1">
 										{program.routineHref && program.routineName ? (
 											<Link
 												href={program.routineHref}
-												className="text-primary hover:underline"
+												className="text-accent hover:underline"
 											>
 												{program.routineName}
 											</Link>
@@ -175,31 +177,31 @@ export const TimelineSessionProgramDetailPage = observer(
 									</div>
 								</div>
 								<div>
-									<label className="text-sm text-default-500">강사</label>
+									<label className="text-sm text-muted">강사</label>
 									<p className="mt-1">{program.instructorLabel ?? "-"}</p>
 								</div>
 								<div>
-									<label className="text-sm text-default-500">정원</label>
+									<label className="text-sm text-muted">정원</label>
 									<p className="mt-1">{program.capacityLabel ?? "-"}</p>
 								</div>
 								<div>
-									<label className="text-sm text-default-500">난이도</label>
+									<label className="text-sm text-muted">난이도</label>
 									<p className="mt-1">{program.levelLabel ?? "-"}</p>
 								</div>
 								<div>
-									<label className="text-sm text-default-500">운동 수</label>
+									<label className="text-sm text-muted">운동 수</label>
 									<p className="mt-1">
 										{program.activityCountLabel ??
 											`${program.executionPlan.length}개`}
 									</p>
 								</div>
 								<div>
-									<label className="text-sm text-default-500">세션</label>
+									<label className="text-sm text-muted">세션</label>
 									<div className="mt-1">
 										{program.sessionHref && program.sessionName ? (
 											<Link
 												href={program.sessionHref}
-												className="text-primary hover:underline"
+												className="text-accent hover:underline"
 											>
 												{program.sessionName}
 											</Link>
@@ -209,7 +211,7 @@ export const TimelineSessionProgramDetailPage = observer(
 									</div>
 								</div>
 								<div>
-									<label className="text-sm text-default-500">등록일</label>
+									<label className="text-sm text-muted">등록일</label>
 									<div className="mt-1">
 										{program.createdAt ? (
 											<DateTimeCell value={program.createdAt} />
@@ -224,7 +226,7 @@ export const TimelineSessionProgramDetailPage = observer(
 					<DetailSectionCard>
 						<DetailSection top={<PageTitleBar level={2} title="실행 운동" />}>
 							{program.executionPlan.length === 0 ? (
-								<p className="text-default-500 text-sm">
+								<p className="text-muted text-sm">
 									저장된 실행 운동 계획이 없습니다.
 								</p>
 							) : (
@@ -232,43 +234,43 @@ export const TimelineSessionProgramDetailPage = observer(
 									{program.executionPlan.map((activity) => (
 										<div
 											key={activity.id}
-											className="rounded-lg bg-content2 p-4"
+											className="rounded-lg bg-surface-secondary p-4"
 										>
 											<div className="flex items-start justify-between gap-3">
 												<div>
-													<p className="text-sm text-default-500">
+													<p className="text-sm text-muted">
 														{activity.order}번 운동
 													</p>
 													<p className="font-semibold">
 														{activity.exerciseName}
 													</p>
 												</div>
-												<p className="text-default-500 text-sm">
+												<p className="text-muted text-sm">
 													Task {activity.taskId.slice(-6)}
 												</p>
 											</div>
 											<div className="mt-3 grid grid-cols-2 gap-3 text-sm">
 												<div>
-													<label className="text-default-500">반복</label>
+													<label className="text-muted">반복</label>
 													<p className="mt-1">{activity.repetitions}회</p>
 												</div>
 												<div>
-													<label className="text-default-500">휴식</label>
+													<label className="text-muted">휴식</label>
 													<p className="mt-1">{activity.restTime}초</p>
 												</div>
 												<div>
-													<label className="text-default-500">기본 시간</label>
+													<label className="text-muted">기본 시간</label>
 													<p className="mt-1">
 														{formatExerciseDuration(activity.exerciseDuration)}
 													</p>
 												</div>
 												<div>
-													<label className="text-default-500">기본 횟수</label>
+													<label className="text-muted">기본 횟수</label>
 													<p className="mt-1">{activity.exerciseCount}회</p>
 												</div>
 											</div>
 											<div className="mt-3 text-sm">
-												<label className="text-default-500">설명</label>
+												<label className="text-muted">설명</label>
 												<p className="mt-1">
 													{activity.exerciseDescription ||
 														activity.notes ||
@@ -277,14 +279,14 @@ export const TimelineSessionProgramDetailPage = observer(
 											</div>
 											<div className="mt-3 grid grid-cols-1 gap-2 text-sm">
 												<div>
-													<label className="text-default-500">
+													<label className="text-muted">
 														이미지 자산
 													</label>
 													<div className="mt-1">
 														{activity.imageFileId && activity.imageAssetHref ? (
 															<Link
 																href={activity.imageAssetHref}
-																className="font-mono text-primary text-sm hover:underline"
+																className="font-mono text-accent text-sm hover:underline"
 															>
 																{activity.imageFileId}
 															</Link>
@@ -294,12 +296,12 @@ export const TimelineSessionProgramDetailPage = observer(
 													</div>
 												</div>
 												<div>
-													<label className="text-default-500">영상 자산</label>
+													<label className="text-muted">영상 자산</label>
 													<div className="mt-1">
 														{activity.videoFileId && activity.videoAssetHref ? (
 															<Link
 																href={activity.videoAssetHref}
-																className="font-mono text-primary text-sm hover:underline"
+																className="font-mono text-accent text-sm hover:underline"
 															>
 																{activity.videoFileId}
 															</Link>
@@ -316,15 +318,15 @@ export const TimelineSessionProgramDetailPage = observer(
 						</DetailSection>
 					</DetailSectionCard>
 				</DetailPageSurface>
-				<Modal isOpen={isDeleteModalOpen} onClose={onClickDeleteCancelButton}>
-					<ModalContent>
-						<ModalHeader>프로그램 삭제</ModalHeader>
-						<ModalBody>
+				<Modal state={deleteModalState}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>프로그램 삭제</Modal.Header>
+						<Modal.Body>
 							<p>
 								<strong>{program.name}</strong>프로그램을 삭제하시겠습니까?
 							</p>
-						</ModalBody>
-						<ModalFooter>
+						</Modal.Body>
+						<Modal.Footer>
 							<Button
 								variant="flat"
 								onPress={onClickDeleteCancelButton}
@@ -339,8 +341,8 @@ export const TimelineSessionProgramDetailPage = observer(
 							>
 								삭제
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
 			</DetailPage>
 		);

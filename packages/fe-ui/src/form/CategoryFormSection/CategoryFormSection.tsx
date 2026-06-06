@@ -1,12 +1,9 @@
 "use client";
 
+import { ListBox } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import {
-	Input,
-	Select,
-	SelectItem,
-	type SharedSelection,
-} from "../../design-system/primitives";
+import { Input } from "../../control/Input/Input";
+import { Select } from "../../control/Select/Select";
 
 export interface CategoryOption {
 	id: string;
@@ -54,9 +51,8 @@ export const CategoryFormSection = observer(
 			onChangeField("name", value);
 		};
 
-		const handleChangeParentId = (keys: SharedSelection) => {
-			if (keys === "all") return;
-			const selectedKey = String(Array.from(keys)[0] ?? "");
+		const handleChangeParentId = (value: string | number | null) => {
+			const selectedKey = String(value ?? "");
 			onChangeField("parentId", selectedKey);
 		};
 
@@ -77,20 +73,20 @@ export const CategoryFormSection = observer(
 							: "식별자는 수정할 수 없습니다"
 					}
 				/>
-				<Select
-					label="상위 카테고리"
-					placeholder="상위 카테고리 선택"
-					selectedKeys={
-						values.parentId ? new Set([values.parentId]) : new Set()
-					}
-					onSelectionChange={handleChangeParentId}
-					isInvalid={!!errors?.parentId}
-					errorMessage={errors?.parentId}
-					description="선택하지 않으면 최상위 카테고리로 생성됩니다"
-				>
-					{categoryOptions.map((option) => (
-						<SelectItem key={option.id}>{option.name}</SelectItem>
-					))}
+					<Select
+						label="상위 카테고리"
+						placeholder="상위 카테고리 선택"
+						value={values.parentId || null}
+						onChange={handleChangeParentId}
+						isInvalid={!!errors?.parentId}
+						errorMessage={errors?.parentId}
+						description="선택하지 않으면 최상위 카테고리로 생성됩니다"
+					>
+						{categoryOptions.map((option) => (
+							<ListBox.Item key={option.id} id={option.id} textValue={option.name}>
+								{option.name}
+							</ListBox.Item>
+						))}
 				</Select>
 			</div>
 		);

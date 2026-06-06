@@ -53,14 +53,14 @@ export const InquiryChannelCell = observer(function InquiryChannelCell({
 	const t = useT();
 
 	if (!value) {
-		return <span className="text-default-400">-</span>;
+		return <span className="text-muted">-</span>;
 	}
 
 	const config = CHANNEL_CONFIG[value];
 
 	return (
 		<div className="flex w-full items-center justify-center gap-1.5">
-			<span className="text-default-500">{config.icon}</span>
+			<span className="text-muted">{config.icon}</span>
 			<span className="text-sm">{t(config.label)}</span>
 		</div>
 	);

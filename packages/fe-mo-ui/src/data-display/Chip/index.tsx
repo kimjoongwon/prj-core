@@ -3,7 +3,7 @@ import {
   type ComponentPropsWithoutRef,
   type ComponentRef,
 } from "react";
-import { Chip as HeroChip, chipClassNames, useChip } from "heroui-native/chip";
+import { Chip as HeroChip, chipClassNames, useChip } from "heroui-native";
 import { getTextContent, Text } from "../Text";
 type HeroChipProps = ComponentPropsWithoutRef<typeof HeroChip>;
 export type ChipProps = HeroChipProps & {};

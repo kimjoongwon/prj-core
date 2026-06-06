@@ -12,7 +12,7 @@ import {
   Checkbox as HeroCheckbox,
   checkboxClassNames,
   useCheckbox,
-} from "heroui-native/checkbox";
+} from "heroui-native";
 import { getTextContent, Text } from "../../data-display/Text";
 import { joinClassNames } from "../../rhythm/class-name";
 type HeroCheckboxProps = ComponentPropsWithoutRef<typeof HeroCheckbox>;

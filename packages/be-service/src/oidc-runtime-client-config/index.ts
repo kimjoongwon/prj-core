@@ -40,15 +40,6 @@ const RUNTIME_MANAGED_OIDC_CLIENT_ENV_CONFIG: Record<
 		defaultReturnToEnv: "OIDC_STORYBOOK_DEFAULT_RETURN_TO",
 		defaultReturnToPath: "/",
 	},
-	"idp-web": {
-		baseUrlEnv: "IDP_CLIENT_URL",
-		redirectUriEnv: "OIDC_IDP_WEB_REDIRECT_URI",
-		redirectUriPath: "/api/v1/auth/callback?clientId=idp-web",
-		loginUrlEnv: "OIDC_IDP_WEB_LOGIN_URL",
-		loginUrlPath: "/auth/login",
-		defaultReturnToEnv: "OIDC_IDP_WEB_DEFAULT_RETURN_TO",
-		defaultReturnToPath: "/dashboard",
-	},
 	"user-mobile": {
 		redirectUriEnv: "OIDC_USER_MOBILE_REDIRECT_URI",
 	},

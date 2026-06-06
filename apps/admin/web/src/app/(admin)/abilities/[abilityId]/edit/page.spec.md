@@ -64,21 +64,21 @@
 |------|----------|------|
 | 페이지 래퍼 | `페이지 헤더 영역` | title="권한 수정", description="권한 정보를 수정합니다." |
 | 액션 영역 | `Button` x2 | "취소" (ArrowLeft) + "저장" (Save, primary) |
-| 기본 정보 섹션 | `섹션 영역` | 이름(Input, 읽기 전용), 설명(Textarea) |
-| CASL 정보 섹션 | `섹션 영역` | Subject(Select), Action(Select), Fields(Textarea), Conditions(Textarea), 거부 토글(Switch), 거부 사유(Textarea) |
+| 기본 정보 섹션 | `섹션 영역` | 이름(Input, 읽기 전용), 설명(TextArea) |
+| CASL 정보 섹션 | `섹션 영역` | Subject(Select), Action(Select), Fields(TextArea), Conditions(TextArea), 거부 토글(Switch), 거부 사유(TextArea) |
 
 ## 폼 필드
 
 | 필드 | 컴포넌트 | 필수 | 읽기 전용 | 설명 |
 |------|----------|:----:|:---------:|------|
 | name | Input | - | O | "권한 이름은 수정할 수 없습니다." |
-| description | Textarea | X | X | 설명 수정 |
+| description | TextArea | X | X | 설명 수정 |
 | subjectId | Select | X | X | Subject 변경 |
 | actionId | Select | X | X | Action 변경 |
-| fields | Textarea | X | X | 쉼표 구분 필드 |
-| conditions | Textarea | X | X | JSON 형식 조건 |
+| fields | TextArea | X | X | 쉼표 구분 필드 |
+| conditions | TextArea | X | X | JSON 형식 조건 |
 | inverted | Switch | X | X | 거부 여부 토글 |
-| reason | Textarea | X | X | inverted=true일 때만 활성화 |
+| reason | TextArea | X | X | inverted=true일 때만 활성화 |
 
 ## 페이지 상태
 

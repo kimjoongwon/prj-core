@@ -2,10 +2,8 @@ import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import {
-	Switch as BaseSwitch,
-	type SwitchProps as BaseSwitchProps,
-} from "./Switch";
+import { Switch as BaseSwitch } from "./Switch";
+import type { SwitchProps as BaseSwitchProps } from "./Switch.props";
 
 export interface SwitchProps<T>
 	extends MobxProps<T>,
@@ -16,7 +14,7 @@ export const Switch = observer(<T extends object>(props: SwitchProps<T>) => {
 
 	const initialValue = tools.get(state, path, false) as boolean;
 
-	const formField = useFormField({ value: initialValue, state, path });
+	const formField = useFormField<T, boolean>({ value: initialValue, state, path });
 
 	const handleValueChange = (isSelected: boolean) => {
 		formField.setValue(isSelected);
@@ -30,6 +28,3 @@ export const Switch = observer(<T extends object>(props: SwitchProps<T>) => {
 		/>
 	);
 });
-
-// Re-export types for backwards compatibility
-export type { BaseSwitchProps as PureSwitchProps };

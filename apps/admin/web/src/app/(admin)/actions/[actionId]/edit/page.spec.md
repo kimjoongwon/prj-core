@@ -71,7 +71,7 @@
 |------|----------|:----:|:---------:|------|
 | name | Input | - | O | 읽기 전용 + isDisabled |
 | displayName | Input | X | X | maxLength=100 |
-| description | Textarea | X | X | maxLength=200 |
+| description | TextArea | X | X | maxLength=200 |
 | group | Select | X | X | 옵션: crud, visibility, workflow, bulk |
 | order | Input (number) | X | X | 정렬 순서 |
 

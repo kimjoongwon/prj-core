@@ -2,7 +2,9 @@
 
 import { ArrowLeft, Check, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button, Skeleton, Textarea } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Skeleton } from "../../feedback/Skeleton/Skeleton";
+import { TextArea } from "../../control/TextArea/TextArea";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { PageSurface } from "../../surface/PageSurface";
@@ -37,7 +39,7 @@ export interface TenantAccessRequestReviewDetailPageProps {
 	isRejecting: boolean;
 	canApprove: boolean;
 	onClickBackButton: () => void;
-	onChangeReviewCommentTextarea: (reviewComment: string) => void;
+	onChangeReviewCommentTextArea: (reviewComment: string) => void;
 	onClickApproveButton: () => void;
 	onClickRejectButton: () => void;
 }
@@ -62,10 +64,10 @@ function DetailItem({
 }) {
 	return (
 		<VStack gap={1}>
-			<span className="text-xs font-medium uppercase text-default-400">
+			<span className="text-xs font-medium uppercase text-muted">
 				{label}
 			</span>
-			<span className="text-sm text-default-800">{value || "-"}</span>
+			<span className="text-sm text-foreground">{value || "-"}</span>
 		</VStack>
 	);
 }
@@ -79,7 +81,7 @@ export const TenantAccessRequestReviewDetailPage = observer(
 		isRejecting,
 		canApprove,
 		onClickBackButton,
-		onChangeReviewCommentTextarea,
+		onChangeReviewCommentTextArea,
 		onClickApproveButton,
 		onClickRejectButton,
 	}: TenantAccessRequestReviewDetailPageProps) => (
@@ -138,18 +140,18 @@ export const TenantAccessRequestReviewDetailPage = observer(
 						<SectionSurface>
 							<VStack gap={4}>
 								<PageTitleBar level={2} title="검토" />
-								<Textarea
+								<TextArea
 									label="검토 코멘트"
 									labelPlacement="outside"
 									placeholder="승인 또는 반려 사유를 입력하세요."
 									value={reviewComment}
-									onValueChange={onChangeReviewCommentTextarea}
+									onValueChange={onChangeReviewCommentTextArea}
 									maxLength={1000}
 									isDisabled={request.status !== "PENDING"}
 									description={`${reviewComment.length} / 1000`}
 								/>
 								{request.status !== "PENDING" ? (
-									<div className="rounded-lg border border-divider bg-content2/40 p-4">
+									<div className="rounded-lg border border-border bg-surface-secondary/40 p-4">
 										<DetailItem label="처리자" value={request.reviewerName} />
 										<div className="mt-3">
 											<DetailItem

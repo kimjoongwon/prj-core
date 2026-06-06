@@ -2,13 +2,9 @@
 
 import { Check, Sparkles, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Card,
-	CardBody,
-	Chip,
-	Progress,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Card, ProgressBar } from "@heroui/react";
+import { Chip } from "../../data-display/Chip/Chip";
 
 export interface AIClassificationResult {
 	/** 추천 카테고리 코드 */
@@ -93,16 +89,13 @@ export const AIClassificationSuggestion = observer(
 		const confidenceColor = confidenceColors[confidenceLevel];
 
 		return (
-			<Card
-				className={`bg-gradient-to-r from-primary-50 to-secondary-50 ${className}`}
-				shadow="sm"
-			>
-				<CardBody className="gap-3 p-4">
+			<Card className={`bg-gradient-to-r from-accent-soft to-default ${className}`}>
+				<Card.Content className="gap-3 p-4">
 					{/* 헤더 */}
 					<div className="flex items-center justify-between">
 						<div className="flex items-center gap-2">
-							<Sparkles className="size-5 text-primary" />
-							<h3 className="text-sm font-semibold text-default-700">
+							<Sparkles className="size-5 text-accent" />
+							<h3 className="text-sm font-semibold text-foreground">
 								AI 분류 제안
 							</h3>
 						</div>
@@ -112,7 +105,7 @@ export const AIClassificationSuggestion = observer(
 					</div>
 
 					{/* 신뢰도 프로그레스 바 */}
-					<Progress
+					<ProgressBar
 						aria-label="AI 신뢰도"
 						value={result.confidence}
 						color={confidenceColor}
@@ -123,14 +116,14 @@ export const AIClassificationSuggestion = observer(
 					{/* 추천 내용 */}
 					<div className="flex flex-col gap-2 rounded-lg bg-white/50 p-3">
 						<div className="flex items-center gap-2">
-							<span className="text-xs text-default-500">카테고리:</span>
+							<span className="text-xs text-muted">카테고리:</span>
 							<Chip size="sm" variant="flat" color="primary">
 								{result.categoryName}
 							</Chip>
 						</div>
 
 						<div className="flex items-center gap-2">
-							<span className="text-xs text-default-500">우선순위:</span>
+							<span className="text-xs text-muted">우선순위:</span>
 							<Chip
 								size="sm"
 								variant="flat"
@@ -142,7 +135,7 @@ export const AIClassificationSuggestion = observer(
 
 						{result.suggestedTags && result.suggestedTags.length > 0 && (
 							<div className="flex items-center gap-2">
-								<span className="text-xs text-default-500">추천 태그:</span>
+								<span className="text-xs text-muted">추천 태그:</span>
 								<div className="flex flex-wrap gap-1">
 									{result.suggestedTags.map((tag) => (
 										<Chip key={tag} size="sm" variant="dot" color="primary">
@@ -177,7 +170,7 @@ export const AIClassificationSuggestion = observer(
 							적용
 						</Button>
 					</div>
-				</CardBody>
+				</Card.Content>
 			</Card>
 		);
 	},

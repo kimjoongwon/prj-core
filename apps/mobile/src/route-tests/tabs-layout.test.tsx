@@ -40,6 +40,7 @@ jest.mock("@cocrepo/mo-ui", () => {
       isOpen
         ? React.createElement(Text, null, `space-sheet:${spaces.length}`)
         : null,
+    useThemeColor: () => ["#006fee", "#71717a", "#18181b", "#27272a"],
   };
 });
 
@@ -61,10 +62,6 @@ jest.mock("@cocrepo/api/idp/auth", () => ({
 
 jest.mock("@/auth/auth-config", () => ({
   getIdpApiBaseUrl: () => "http://localhost:3207",
-}));
-
-jest.mock("heroui-native", () => ({
-  useThemeColor: () => ["#006fee", "#71717a", "#18181b", "#27272a"],
 }));
 
 jest.mock("expo-router", () => {

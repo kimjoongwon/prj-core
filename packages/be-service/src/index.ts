@@ -3,6 +3,7 @@ export { AuthContext, SpaceContext } from "@cocrepo/context";
 
 // I18n
 export { I18nModule, I18nTranslationService } from "./i18n";
+export * from "./idp";
 
 // Strategy
 export { JwtStrategy } from "./strategy";
@@ -36,6 +37,7 @@ export {
 	isRuntimeManagedOidcClientId,
 	RUNTIME_MANAGED_OIDC_CLIENT_IDS,
 } from "./oidc-runtime-client-config";
+export * from "./oidc";
 export { DatabaseConnectionException } from "./prisma/database-connection.exception";
 export { createPrismaClient } from "./prisma/prisma.factory";
 export { PrismaService } from "./prisma/prisma.service";

@@ -9,7 +9,9 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button, Input, Textarea } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input/Input";
+import { TextArea } from "../../control/TextArea/TextArea";
 
 export interface RoleCreatePageProps {
 	name: string;
@@ -20,7 +22,7 @@ export interface RoleCreatePageProps {
 	isSubmitPending: boolean;
 	onChangeNameInput: (value: string) => void;
 	onChangeDisplayNameInput: (value: string) => void;
-	onChangeDescriptionTextarea: (value: string) => void;
+	onChangeDescriptionTextArea: (value: string) => void;
 	onClickBackButton: () => void;
 	onClickSubmitButton: () => void;
 }
@@ -35,7 +37,7 @@ export const RoleCreatePage = observer(
 		isSubmitPending,
 		onChangeNameInput,
 		onChangeDisplayNameInput,
-		onChangeDescriptionTextarea,
+		onChangeDescriptionTextArea,
 		onClickBackButton,
 		onClickSubmitButton,
 	}: RoleCreatePageProps) => {
@@ -59,8 +61,8 @@ export const RoleCreatePage = observer(
 			>
 				<FormPageSurface>
 					<VStack gap={4}>
-						<div className="rounded-xl bg-primary-50 p-4 dark:bg-primary-900/20">
-							<p className="text-sm text-primary-700 dark:text-primary-400">
+						<div className="rounded-xl bg-accent-soft p-4 dark:bg-accent/20">
+							<p className="text-sm text-accent dark:text-accent">
 								<strong>참고:</strong> 역할 식별자는 대문자로 시작하고,
 								대문자/숫자/밑줄만 사용할 수 있습니다. 등록 후에는 권한 설정
 								페이지에서 상세 권한을 관리할 수 있습니다.
@@ -89,11 +91,11 @@ export const RoleCreatePage = observer(
 									maxLength={50}
 									description="사용자에게 보여질 역할 이름입니다."
 								/>
-								<Textarea
+								<TextArea
 									label="설명"
 									placeholder="역할에 대한 설명을 입력하세요."
 									value={description}
-									onValueChange={onChangeDescriptionTextarea}
+									onValueChange={onChangeDescriptionTextArea}
 									maxLength={200}
 									minRows={3}
 								/>

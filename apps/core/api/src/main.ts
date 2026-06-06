@@ -7,7 +7,40 @@ import {
 	SwaggerModule,
 } from "@nestjs/swagger";
 import { Logger } from "nestjs-pino";
+import { AbilitiesModule } from "./module/abilities";
+import { ActionsModule } from "./module/actions";
 import { AppModule } from "./module/app.module";
+import { AssetsModule } from "./module/assets";
+import { AuthModule } from "./module/auth";
+import { CommunityModule } from "./module/community";
+import { CoursesModule } from "./module/courses";
+import { EmailVerificationsModule } from "./module/email-verification";
+import { FoldersModule } from "./module/folders";
+import { I18nCatalogModule } from "./module/i18n";
+import { IdpAccountsModule } from "./module/idp-accounts";
+import { IdpDashboardModule } from "./module/idp-dashboard";
+import { InquiriesModule } from "./module/inquiries";
+import { InteractionModule } from "./module/interaction";
+import { OidcModule } from "./module/oidc";
+import { OidcClientsModule } from "./module/oidc-client";
+import { OidcSessionsModule } from "./module/oidc-session";
+import { PasswordResetModule } from "./module/password-reset";
+import { PaymentsModule } from "./module/payments";
+import { PoliciesModule } from "./module/policies";
+import { PolicyAssignmentsModule } from "./module/policy-assignments";
+import { ReservationsModule } from "./module/reservations";
+import { RolesModule } from "./module/roles";
+import { RoutinesModule } from "./module/routines";
+import { SecurityPolicyModule } from "./module/security-policy";
+import { ServiceDocumentsModule } from "./module/service-documents";
+import { SpacesModule } from "./module/spaces";
+import { SubjectsModule } from "./module/subjects";
+import { TasksModule } from "./module/tasks";
+import { TemplatesModule } from "./module/templates";
+import { TenantAccessRequestsModule } from "./module/tenant-access-requests";
+import { TimelinesModule } from "./module/timelines";
+import { TranslationsModule } from "./module/translations";
+import { UsersModule } from "./module/users";
 import { setNestApp } from "./setNestApp";
 
 /**
@@ -86,11 +119,11 @@ const SWAGGER_SPACE_SELECTOR_JS = `
       loadBtn.disabled = true;
 
       Promise.all([
-        origFetch((window.__IDP_SERVER_URL || 'http://localhost:3007') + '/api/v1/auth/my-spaces', {
+        origFetch((window.__IDP_SERVER_URL || 'http://localhost:3000') + '/api/v1/auth/my-spaces', {
           credentials: 'include',
           headers: { 'Authorization': 'Bearer ' + token }
         }).then(function(r) { return r.json(); }),
-        origFetch((window.__IDP_SERVER_URL || 'http://localhost:3007') + '/api/v1/auth/current-space', {
+        origFetch((window.__IDP_SERVER_URL || 'http://localhost:3000') + '/api/v1/auth/current-space', {
           credentials: 'include',
           headers: { 'Authorization': 'Bearer ' + token }
         }).then(function(r) { return r.json(); })
@@ -132,7 +165,7 @@ const SWAGGER_SPACE_SELECTOR_JS = `
       }
 
       select.disabled = true;
-      origFetch((window.__IDP_SERVER_URL || 'http://localhost:3007') + '/api/v1/auth/current-space', {
+      origFetch((window.__IDP_SERVER_URL || 'http://localhost:3000') + '/api/v1/auth/current-space', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -186,6 +219,45 @@ const SWAGGER_SPACE_SELECTOR_JS = `
 })();
 `;
 
+const CORE_SWAGGER_MODULES = [
+	SpacesModule,
+	UsersModule,
+	ActionsModule,
+	AssetsModule,
+	SubjectsModule,
+	AbilitiesModule,
+	RolesModule,
+	I18nCatalogModule,
+	CommunityModule,
+	PaymentsModule,
+	PoliciesModule,
+	PolicyAssignmentsModule,
+	FoldersModule,
+	TemplatesModule,
+	ServiceDocumentsModule,
+	TranslationsModule,
+	CoursesModule,
+	TimelinesModule,
+	TasksModule,
+	RoutinesModule,
+	InquiriesModule,
+	TenantAccessRequestsModule,
+	ReservationsModule,
+];
+
+const IDP_SWAGGER_MODULES = [
+	AuthModule,
+	OidcModule,
+	InteractionModule,
+	PasswordResetModule,
+	OidcClientsModule,
+	OidcSessionsModule,
+	SecurityPolicyModule,
+	IdpAccountsModule,
+	IdpDashboardModule,
+	EmailVerificationsModule,
+];
+
 interface HotModule {
 	hot?: {
 		accept(): void;
@@ -235,13 +307,47 @@ async function bootstrap() {
 	// =================================================================
 	// 5. API 문서 설정 (Swagger)
 	// =================================================================
-	const oidcIssuer = process.env.OIDC_ISSUER || "http://localhost:3007";
+	const oidcIssuer = process.env.OIDC_ISSUER || "http://localhost:3000";
 
-	const config = new DocumentBuilder()
+	const coreConfig = new DocumentBuilder()
 		.setTitle(process.env.APP_NAME || "Onora")
 		.setVersion("1.0.0")
 		.setDescription(
 			"API 문서입니다. 대부분의 엔드포인트는 인증이 필요합니다.\n\n" +
+				"**인증 방법:**\n" +
+				"1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인\n" +
+				"2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송",
+		)
+		.addCookieAuth(Token.ACCESS, {
+			type: "apiKey",
+			in: "cookie",
+			name: Token.ACCESS,
+			description: "JWT Access Token (HttpOnly 쿠키로 자동 전송)",
+		})
+		.addOAuth2({
+			type: "oauth2",
+			description: "OIDC Authorization Code + PKCE 인증",
+			flows: {
+				authorizationCode: {
+					authorizationUrl: `${oidcIssuer}/oidc/auth`,
+					tokenUrl: `${oidcIssuer}/oidc/token`,
+					scopes: {
+						openid: "OpenID Connect 기본 인증",
+						profile: "프로필 정보 (이름)",
+						email: "이메일 주소",
+						roles: "역할 및 Space 정보",
+					},
+				},
+			},
+		})
+		.build();
+
+	const idpConfig = new DocumentBuilder()
+		.setTitle("OIDC Identity Provider")
+		.setVersion("1.0.0")
+		.setDescription(
+			"OpenID Connect Identity Provider API\n\n" +
+				"OIDC 인증 및 IDP 관리 API를 제공합니다.\n\n" +
 				"**인증 방법:**\n" +
 				"1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인\n" +
 				"2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송",
@@ -275,7 +381,14 @@ async function bootstrap() {
 			methodKey, // API 작업 ID를 메소드명으로 설정
 	};
 
-	const document = SwaggerModule.createDocument(app, config, options);
+	const document = SwaggerModule.createDocument(app, coreConfig, {
+		...options,
+		include: CORE_SWAGGER_MODULES,
+	});
+	const idpDocument = SwaggerModule.createDocument(app, idpConfig, {
+		...options,
+		include: IDP_SWAGGER_MODULES,
+	});
 
 	const port = process.env.APP_PORT || 3006;
 
@@ -292,6 +405,18 @@ async function bootstrap() {
 		customJsStr: `window.__IDP_SERVER_URL = '${oidcIssuer}';\n${SWAGGER_SPACE_SELECTOR_JS}`,
 	});
 
+	SwaggerModule.setup("idp-api", app, idpDocument, {
+		swaggerOptions: {
+			persistAuthorization: true,
+			oauth2RedirectUrl: `${oidcIssuer}/api/oauth2-redirect.html`,
+			initOAuth: {
+				clientId: "swagger-web",
+				scopes: ["openid", "profile", "email", "roles"],
+				usePkceWithAuthorizationCodeGrant: true,
+			},
+		},
+	});
+
 	// =================================================================
 	// 6. 서버 시작 및 로깅
 	// =================================================================
@@ -302,6 +427,11 @@ async function bootstrap() {
 	logger.log(`📱 환경: ${process.env.NODE_ENV}`);
 	logger.log(`🐳 Docker: ${process.env.DOCKER_ENV === "true" ? "Yes" : "No"}`);
 	logger.log(`📊 API 문서: http://localhost:${port}/api`);
+	logger.log(`🔐 IDP API 문서: http://localhost:${port}/idp-api`);
+	logger.log(`🔐 IDP API Spec: http://localhost:${port}/idp-api-json`);
+	logger.log(
+		`🔑 OIDC Discovery: http://localhost:${port}/oidc/.well-known/openid-configuration`,
+	);
 	if (enableNestDevtools) {
 		const devtoolsPort =
 			Number.parseInt(process.env.CORE_API_NEST_DEVTOOLS_PORT ?? "8000", 10) ||

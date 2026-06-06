@@ -35,7 +35,7 @@ import {
 	TemplateActiveToggleCell,
 	UserRoleCell,
 } from "../../cell";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 import {
 	buildColumns,
 	buildColumnsWithDefaultCreatedAt,
@@ -360,7 +360,7 @@ export function buildSubjectTableColumns<
 					<span className="font-medium text-foreground">
 						{getSubjectDisplayLabel(row.original)}
 					</span>
-					<span className="text-xs text-default-500">
+					<span className="text-xs text-muted">
 						{getSubjectGroupLabel(row.original.group)} 권한 대상
 					</span>
 				</div>
@@ -666,7 +666,7 @@ export function buildTimelineTableColumns<
 				cell: ({ getValue, row }) => (
 					<Link
 						href={`/timelines/${row.original.id}` as Route}
-						className="text-primary hover:underline"
+						className="text-accent hover:underline"
 						onClick={(event: MouseEvent<HTMLAnchorElement>) => {
 							event.stopPropagation();
 						}}
@@ -886,7 +886,7 @@ export function buildAssetTableColumns<
 					) : (
 						<LinkCell
 							href={`/assets/${row.original.id}`}
-							className="text-primary hover:underline"
+							className="text-accent hover:underline"
 							value={row.original.originalName}
 						/>
 					),
@@ -943,13 +943,13 @@ export function buildAssetTableColumns<
 										{isSelected ? "선택됨" : "선택"}
 									</Button>
 								) : null}
-								<Button
-									size="sm"
-									color="danger"
-									variant="flat"
-									isLoading={isRemoving}
-									onPress={() => onClickDeleteAssetButton(row.original.id)}
-								>
+									<Button
+										size="sm"
+										color="danger"
+										variant="flat"
+										isDisabled={isRemoving}
+										onPress={() => onClickDeleteAssetButton(row.original.id)}
+									>
 									삭제
 								</Button>
 							</div>
@@ -968,13 +968,13 @@ export function buildAssetTableColumns<
 									보기
 								</Button>
 							) : null}
-							<Button
-								size="sm"
-								variant="flat"
-								color="danger"
-								isLoading={isRemoving}
-								onPress={() => onClickDeleteAssetButton(row.original.id)}
-							>
+								<Button
+									size="sm"
+									variant="flat"
+									color="danger"
+									isDisabled={isRemoving}
+									onPress={() => onClickDeleteAssetButton(row.original.id)}
+								>
 								삭제
 							</Button>
 						</div>

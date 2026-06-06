@@ -95,9 +95,9 @@
 | type | RadioGroup | O | EMAIL/SMS/PUSH 중 택1 (기본값: EMAIL) |
 | code | Input | O | 영문 대문자+언더스코어 (`/^[A-Z][A-Z0-9_]*$/`) |
 | name | Input | O | 빈 값 불가 |
-| description | Textarea | X | - |
+| description | TextArea | X | - |
 | subject | Input | EMAIL/PUSH일 때 O | PUSH는 50자 이하 |
-| content | Textarea | O | PUSH는 200자 이하 |
+| content | TextArea | O | PUSH는 200자 이하 |
 | variables | VariableEditTable | X | 변수 추가/수정/삭제 |
 
 ## 변수 편집

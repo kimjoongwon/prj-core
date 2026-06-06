@@ -25,21 +25,9 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Input,
-	Select,
-	SelectItem,
-	type Selection,
-} from "../../design-system/primitives";
-
-const getSelectedValue = (keys: Selection): string => {
-	if (keys === "all") {
-		return "";
-	}
-
-	const selectedKey = keys.values().next().value;
-	return selectedKey ? String(selectedKey) : "";
-};
+import { Input } from "../../control/Input/Input";
+import { Select } from "../../control/Select/Select";
+import { ListBox } from "@heroui/react";
 
 export interface InquiryEditPageBootstrap {
 	fieldMeta: Record<string, AiFormFieldMeta>;
@@ -159,49 +147,55 @@ export const InquiryEditPage = observer(
 										<Select
 											label="카테고리"
 											placeholder="카테고리 선택"
-											selectedKeys={
+											value={
 												formState.category &&
 												categoryOptionValues.has(formState.category)
-													? [formState.category]
-													: []
+													? formState.category
+													: null
 											}
-											onSelectionChange={(keys) => {
-												const selectedValue = getSelectedValue(keys);
+											onChange={(selectedValue) => {
 												if (selectedValue) {
 													onChangeCategorySelection(
-														selectedValue as InquiryCategory,
+														String(selectedValue) as InquiryCategory,
 													);
 												}
 											}}
 										>
 											{categoryOptions.map((option) => (
-												<SelectItem key={option.value}>
+												<ListBox.Item
+													key={option.value}
+													id={option.value}
+													textValue={option.label}
+												>
 													{option.label}
-												</SelectItem>
+												</ListBox.Item>
 											))}
 										</Select>
 										<Select
 											label="우선순위"
 											placeholder="우선순위 선택"
-											selectedKeys={
+											value={
 												formState.priority &&
 												priorityOptionValues.has(formState.priority)
-													? [formState.priority]
-													: []
+													? formState.priority
+													: null
 											}
-											onSelectionChange={(keys) => {
-												const selectedValue = getSelectedValue(keys);
+											onChange={(selectedValue) => {
 												if (selectedValue) {
 													onChangePrioritySelection(
-														selectedValue as InquiryPriority,
+														String(selectedValue) as InquiryPriority,
 													);
 												}
 											}}
 										>
 											{priorityOptions.map((option) => (
-												<SelectItem key={option.value}>
+												<ListBox.Item
+													key={option.value}
+													id={option.value}
+													textValue={option.label}
+												>
 													{option.label}
-												</SelectItem>
+												</ListBox.Item>
 											))}
 										</Select>
 									</div>

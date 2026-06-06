@@ -69,7 +69,7 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 			>
 				<DetailPageSurface>
 					<DetailSectionCard>
-						<div className="flex min-h-[260px] items-center justify-center text-sm text-default-500">
+						<div className="flex min-h-[260px] items-center justify-center text-sm text-muted">
 							{t("화면 접근 권한을 확인하는 중입니다.")}
 						</div>
 					</DetailSectionCard>
@@ -113,7 +113,7 @@ export const AdminPageAccessGate = observer(function AdminPageAccessGate({
 							<p className="text-base font-semibold">
 								{t("이 화면은 현재 선택한 Space 권한으로 열 수 없습니다.")}
 							</p>
-							<p className="max-w-xl text-sm text-default-500">
+							<p className="max-w-xl text-sm text-muted">
 								{isScopeAccessible
 									? t(
 											"메뉴 노출 권한이 있어도 화면 접근 권한이 따로 꺼져 있으면 URL 직접 접근은 막힙니다. 역할 상세의 화면 접근 섹션에서 해당 페이지를 켜면 다시 열 수 있습니다.",

@@ -69,7 +69,7 @@
 |------|------|------|:----:|-------------|
 | name | 역할 식별자 | Input | O | 필수, `^[A-Z][A-Z0-9_]*$`, 최대 50자 |
 | displayName | 표시명 | Input | X | 최대 50자 |
-| description | 설명 | Textarea | X | 최대 200자, minRows=3 |
+| description | 설명 | TextArea | X | 최대 200자, minRows=3 |
 
 ## 페이지 상태
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Chip } from "../../../design-system/primitives";
+import { Chip } from "../../../data-display/Chip/Chip";
 import { CourseTableShell } from "../CourseTableShell";
 import type { CourseManagementPass } from "../types";
 
@@ -28,15 +28,15 @@ export const CoursePassTable = observer(({ passes }: CoursePassTableProps) => {
 			}
 		>
 			{passes.map((pass) => (
-				<tr key={pass.id} className="border-divider/70 border-b">
+				<tr key={pass.id} className="border-border/70 border-b">
 					<td className="px-3 py-4 font-medium text-foreground">
 						{pass.holderName}
 					</td>
-					<td className="px-3 py-4 text-default-600">{pass.courseName}</td>
-					<td className="px-3 py-4 text-default-700">{pass.passLabel}</td>
-					<td className="px-3 py-4 text-default-600">{pass.issuedAtLabel}</td>
-					<td className="px-3 py-4 text-default-600">{pass.expiresAtLabel}</td>
-					<td className="px-3 py-4 text-default-600">
+					<td className="px-3 py-4 text-muted">{pass.courseName}</td>
+					<td className="px-3 py-4 text-foreground">{pass.passLabel}</td>
+					<td className="px-3 py-4 text-muted">{pass.issuedAtLabel}</td>
+					<td className="px-3 py-4 text-muted">{pass.expiresAtLabel}</td>
+					<td className="px-3 py-4 text-muted">
 						{pass.remainingReservationLabel}
 					</td>
 					<td className="px-3 py-4">

@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Switch } from "../../design-system/primitives";
+import { Switch } from "../../control/Switch/Switch";
 
 interface TemplateActiveToggleCellProps {
 	/** 활성 여부 */

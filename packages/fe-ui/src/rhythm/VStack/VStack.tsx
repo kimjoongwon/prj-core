@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 import { Children, type ReactNode } from "react";
-import { cn } from "../../design-system/primitives";
+import { cn } from "@heroui/react";
 import {
 	type RhythmValue,
 	resolveRhythmValue,
@@ -66,7 +66,7 @@ const vStackVariants = cva("flex flex-col", {
  * // 넉넉한 빈 상태 리듬
  * <VStack gap="roomy" alignItems="center" justifyContent="center" fullWidth>
  *   <Logo />
- *   <Text>환영합니다</Text>
+ *   <Typography.Paragraph>환영합니다</Typography.Paragraph>
  * </VStack>
  * ```
  */

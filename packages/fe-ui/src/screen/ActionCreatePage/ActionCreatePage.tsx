@@ -8,13 +8,11 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Input,
-	Select,
-	SelectItem,
-	Textarea,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input/Input";
+import { Select } from "../../control/Select/Select";
+import { TextArea } from "../../control/TextArea/TextArea";
+import { ListBox } from "@heroui/react";
 
 export interface ActionCreatePageFormState {
 	name: string;
@@ -41,7 +39,7 @@ export interface ActionCreatePageProps {
 	onClickBackButton: () => void;
 	onChangeNameInput: (value: string) => void;
 	onChangeDisplayNameInput: (value: string) => void;
-	onChangeDescriptionTextarea: (value: string) => void;
+	onChangeDescriptionTextArea: (value: string) => void;
 	onChangeGroupSelection: (value: string) => void;
 	onChangeOrderInput: (value: string) => void;
 	onSubmit: (form: ActionCreatePageForm) => void;
@@ -65,7 +63,7 @@ export const ActionCreatePage = observer(
 		onClickBackButton,
 		onChangeNameInput,
 		onChangeDisplayNameInput,
-		onChangeDescriptionTextarea,
+		onChangeDescriptionTextArea,
 		onChangeGroupSelection,
 		onChangeOrderInput,
 		onSubmit,
@@ -100,8 +98,8 @@ export const ActionCreatePage = observer(
 			>
 				<FormPageSurface>
 					<VStack gap={4}>
-						<div className="rounded-xl bg-primary-50 p-4 dark:bg-primary-900/20">
-							<p className="text-sm text-primary-700 dark:text-primary-400">
+						<div className="rounded-xl bg-accent-soft p-4 dark:bg-accent/20">
+							<p className="text-sm text-accent dark:text-accent">
 								<strong>참고:</strong> 행위 식별자는 소문자로 시작하고,
 								소문자/숫자/콜론/밑줄만 사용할 수 있습니다. (예:
 								read:masked:email)
@@ -127,33 +125,36 @@ export const ActionCreatePage = observer(
 									maxLength={100}
 									description="사용자에게 보여질 Action 이름입니다."
 								/>
-								<Textarea
+								<TextArea
 									label="설명"
 									placeholder="Action에 대한 설명을 입력하세요."
 									value={formState.description}
-									onValueChange={onChangeDescriptionTextarea}
+									onValueChange={onChangeDescriptionTextArea}
 									maxLength={200}
 									minRows={3}
 								/>
-								<Select
-									label="분류"
-									placeholder="분류를 선택하세요"
-									selectedKeys={
-										formState.group && GROUP_OPTION_VALUES.has(formState.group)
-											? [formState.group]
-											: []
-									}
-									onSelectionChange={(keys) => {
-										const selectedKey = Array.from(keys)[0];
-										onChangeGroupSelection(
-											selectedKey ? String(selectedKey) : "",
-										);
-									}}
-								>
-									{groupOptions.map((option) => (
-										<SelectItem key={option.value}>{option.label}</SelectItem>
-									))}
-								</Select>
+									<Select
+										label="분류"
+										placeholder="분류를 선택하세요"
+										value={
+											formState.group && GROUP_OPTION_VALUES.has(formState.group)
+												? formState.group
+												: null
+										}
+										onChange={(value) => {
+											onChangeGroupSelection(String(value ?? ""));
+										}}
+									>
+										{groupOptions.map((option) => (
+											<ListBox.Item
+												key={option.value}
+												id={option.value}
+												textValue={option.label}
+											>
+												{option.label}
+											</ListBox.Item>
+										))}
+									</Select>
 								<Input
 									label="정렬 순서"
 									type="number"

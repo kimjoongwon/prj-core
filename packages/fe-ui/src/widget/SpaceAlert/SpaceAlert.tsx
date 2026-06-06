@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { Button } from "../../control/Button/Button";
-import { Text } from "../../display/data-display/Text/Text";
+import { Typography } from "../../data-display/Typography";
 
 export interface SpaceAlertProps {
 	/** Alert 제목 */
@@ -61,13 +61,16 @@ export const SpaceAlert = observer(function SpaceAlert({
 						</svg>
 					</div>
 
-					<Text variant="h4" className="text-center font-bold">
+					<Typography.Heading
+						level={4}
+						className="text-center font-bold"
+					>
 						{title}
-					</Text>
+					</Typography.Heading>
 
-					<Text variant="body1" className="text-center text-default-600">
+					<Typography.Paragraph className="text-center text-muted">
 						{message}
-					</Text>
+					</Typography.Paragraph>
 
 					<div className="flex gap-3 mt-2">
 						{onDismiss && (

@@ -21,7 +21,7 @@ TaskExerciseEditPage
       - FormSection
         - PageTitleBar
         - Input x4
-        - Textarea
+        - TextArea
         - ExerciseMediaField x2
         - Chip
   - AssetBrowser
@@ -40,7 +40,7 @@ TaskExerciseEditPage
 | `Spinner` | `@heroui/react` | 로딩/대기 상태 표시 |
 | `FormSection` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
 | `Input` | `@heroui/react` | 사용자 입력 컨트롤 |
-| `Textarea` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `TextArea` | `@heroui/react` | 사용자 입력 컨트롤 |
 | `ExerciseMediaField` | `현재 파일` | 페이지 내부 보조 컴포넌트 |
 | `Chip` | `@heroui/react` | 상태/정보를 카드 또는 표시 단위로 표현 |
 | `AssetBrowser` | `@cocrepo/ui` | 화면 조합 요소 |

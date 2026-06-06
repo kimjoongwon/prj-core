@@ -1,12 +1,12 @@
 "use client";
 
 import type { OidcClientLoginUi } from "@cocrepo/type";
+import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { FormEvent, MouseEvent } from "react";
 import { useEffect, useState } from "react";
 import { Button } from "../../control";
-import { Spinner } from "../../design-system/primitives";
-import { AlertBanner } from "../../display";
+import { AlertBanner } from "../../feedback";
 import {
 	OidcConsentPanel,
 	type OidcConsentPanelState,
@@ -39,6 +39,7 @@ export interface OidcInteractionPageProps {
 	onSubmitLoginForm: () => void | Promise<void>;
 	onAbortInteraction: () => void | Promise<void>;
 	forgotPasswordHref?: string;
+	signUpHref?: string;
 	onConfirmConsent: () => void | Promise<void>;
 	onClickRecoveryButton?: () => void;
 }
@@ -119,7 +120,7 @@ export const OidcInteractionPage = observer(
 							<p className="font-medium text-foreground">
 								{t("로그인 화면을 준비하고 있어요")}
 							</p>
-							<p className="text-sm text-default-500">
+							<p className="text-sm text-muted">
 								{t("잠시 후 안전한 인증 화면으로 이동합니다.")}
 							</p>
 						</div>
@@ -192,6 +193,7 @@ export const OidcInteractionPage = observer(
 						client={props.state.client ?? null}
 						isDev={props.state.isDev}
 						forgotPasswordHref={props.forgotPasswordHref}
+						signUpHref={props.signUpHref}
 					/>
 				</div>
 			</>

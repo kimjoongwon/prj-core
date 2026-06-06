@@ -95,9 +95,9 @@ export const DefaultCell = observer(function DefaultCell({
 					"block",
 					size === "xs" ? "text-xs" : "text-sm",
 					isEmptyValue
-						? "text-default-400"
+						? "text-muted"
 						: tone === "muted"
-							? "text-default-500"
+							? "text-muted"
 							: "text-foreground",
 					mono && "font-mono",
 					tabular && "tabular-nums",

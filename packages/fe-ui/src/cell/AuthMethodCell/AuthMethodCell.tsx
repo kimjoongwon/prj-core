@@ -1,4 +1,4 @@
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 
 interface AuthMethodCellProps {
 	/** 토큰 엔드포인트 인증 방식 */

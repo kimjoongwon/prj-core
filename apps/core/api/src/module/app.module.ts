@@ -30,13 +30,22 @@ import { ThrottlerGuard } from "@nestjs/throttler";
 import { AbilitiesModule } from "./abilities";
 import { ActionsModule } from "./actions";
 import { AssetsModule } from "./assets";
+import { AuthModule } from "./auth";
 import { CommunityModule } from "./community";
 import { CoursesModule } from "./courses";
+import { EmailVerificationsModule } from "./email-verification";
 // Global modules
 import { FoldersModule } from "./folders";
 import { globalModules } from "./global.module";
 import { I18nCatalogModule } from "./i18n";
+import { IdpAccountsModule } from "./idp-accounts";
+import { IdpDashboardModule } from "./idp-dashboard";
 import { InquiriesModule } from "./inquiries";
+import { InteractionModule } from "./interaction";
+import { OidcModule } from "./oidc";
+import { OidcClientsModule } from "./oidc-client";
+import { OidcSessionsModule } from "./oidc-session";
+import { PasswordResetModule } from "./password-reset";
 import { PaymentsModule } from "./payments";
 import { PoliciesModule } from "./policies";
 import { PolicyAssignmentsModule } from "./policy-assignments";
@@ -45,6 +54,7 @@ import { RedisModule } from "./redis.module";
 import { ReservationsModule } from "./reservations";
 import { RolesModule } from "./roles";
 import { RoutinesModule } from "./routines";
+import { SecurityPolicyModule } from "./security-policy";
 import { ServiceDocumentsModule } from "./service-documents";
 import { SpacesModule } from "./spaces";
 import { SubjectsModule } from "./subjects";
@@ -103,6 +113,16 @@ const devtoolsImports = enableNestDevtools
 		InquiriesModule,
 		TenantAccessRequestsModule,
 		ReservationsModule,
+		AuthModule,
+		OidcModule,
+		InteractionModule,
+		PasswordResetModule,
+		OidcClientsModule,
+		OidcSessionsModule,
+		SecurityPolicyModule,
+		IdpAccountsModule,
+		IdpDashboardModule,
+		EmailVerificationsModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/be-controller-builder.md
 		RouterModule.register([
@@ -204,6 +224,34 @@ const devtoolsImports = enableNestDevtools
 								path: "reservations",
 								module: ReservationsModule,
 							},
+							{
+								path: "auth",
+								module: AuthModule,
+							},
+							{
+								path: "oidc-clients",
+								module: OidcClientsModule,
+							},
+							{
+								path: "oidc-sessions",
+								module: OidcSessionsModule,
+							},
+							{
+								path: "idp/security-policy",
+								module: SecurityPolicyModule,
+							},
+							{
+								path: "idp/accounts",
+								module: IdpAccountsModule,
+							},
+							{
+								path: "idp/dashboard",
+								module: IdpDashboardModule,
+							},
+							{
+								path: "idp/email-verifications",
+								module: EmailVerificationsModule,
+							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],
 					},
@@ -244,6 +292,6 @@ export class AppModule implements OnModuleInit {
 	configure(consumer: MiddlewareConsumer) {
 		consumer
 			.apply(AuthMiddleware, RequestContextMiddleware, LoggerMiddleware)
-			.forRoutes("*");
+			.forRoutes("api/v1/*path");
 	}
 }

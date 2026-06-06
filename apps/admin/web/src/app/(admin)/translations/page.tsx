@@ -17,7 +17,7 @@ import {
 	type StaticTranslationListPageQueryStates,
 	useT,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
@@ -61,16 +61,12 @@ export default observer(function TranslationsPageRoute() {
 		try {
 			await createMutation.mutateAsync({ data: form });
 			await invalidateTranslationsQuery();
-			addToast({
-				title: t("번역 등록 완료"),
+			toast.success(t("번역 등록 완료"), {
 				description: t("정적 번역 key-value가 등록되었습니다."),
-				color: "success",
 			});
 		} catch (error) {
-			addToast({
-				title: t("번역 등록 실패"),
+			toast.danger(t("번역 등록 실패"), {
 				description: t("정적 번역 등록 중 오류가 발생했습니다."),
-				color: "danger",
 			});
 			throw error;
 		}
@@ -86,16 +82,12 @@ export default observer(function TranslationsPageRoute() {
 				data: form,
 			});
 			await invalidateTranslationsQuery();
-			addToast({
-				title: t("번역 수정 완료"),
+			toast.success(t("번역 수정 완료"), {
 				description: t("정적 번역 key-value가 수정되었습니다."),
-				color: "success",
 			});
 		} catch (error) {
-			addToast({
-				title: t("번역 수정 실패"),
+			toast.danger(t("번역 수정 실패"), {
 				description: t("정적 번역 수정 중 오류가 발생했습니다."),
-				color: "danger",
 			});
 			throw error;
 		}
@@ -105,16 +97,12 @@ export default observer(function TranslationsPageRoute() {
 		try {
 			await deleteMutation.mutateAsync({ translationId });
 			await invalidateTranslationsQuery();
-			addToast({
-				title: t("번역 삭제 완료"),
+			toast.success(t("번역 삭제 완료"), {
 				description: t("정적 번역 key-value가 삭제되었습니다."),
-				color: "success",
 			});
 		} catch (error) {
-			addToast({
-				title: t("번역 삭제 실패"),
+			toast.danger(t("번역 삭제 실패"), {
 				description: t("정적 번역 삭제 중 오류가 발생했습니다."),
-				color: "danger",
 			});
 			throw error;
 		}
@@ -124,16 +112,12 @@ export default observer(function TranslationsPageRoute() {
 		try {
 			await invalidateAllMutation.mutateAsync();
 			await invalidateTranslationsQuery();
-			addToast({
-				title: t("전체 캐시 갱신 완료"),
+			toast.success(t("전체 캐시 갱신 완료"), {
 				description: t("전체 번역 캐시가 갱신되었습니다."),
-				color: "success",
 			});
 		} catch (error) {
-			addToast({
-				title: t("전체 캐시 갱신 실패"),
+			toast.danger(t("전체 캐시 갱신 실패"), {
 				description: t("전체 번역 캐시 갱신 중 오류가 발생했습니다."),
-				color: "danger",
 			});
 			throw error;
 		}
@@ -145,8 +129,7 @@ export default observer(function TranslationsPageRoute() {
 		try {
 			await invalidateLanguageMutation.mutateAsync({ languageCode });
 			await invalidateTranslationsQuery();
-			addToast({
-				title: t("언어 캐시 갱신 완료"),
+			toast.success(t("언어 캐시 갱신 완료"), {
 				description: t(
 					"{{languageCode}} 번역 캐시가 갱신되었습니다.",
 					undefined,
@@ -154,13 +137,10 @@ export default observer(function TranslationsPageRoute() {
 						languageCode,
 					},
 				),
-				color: "success",
 			});
 		} catch (error) {
-			addToast({
-				title: t("언어 캐시 갱신 실패"),
+			toast.danger(t("언어 캐시 갱신 실패"), {
 				description: t("언어별 번역 캐시 갱신 중 오류가 발생했습니다."),
-				color: "danger",
 			});
 			throw error;
 		}

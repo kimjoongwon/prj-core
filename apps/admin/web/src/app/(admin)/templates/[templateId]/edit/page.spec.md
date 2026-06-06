@@ -93,9 +93,9 @@
 | type | RadioGroup | O | X (읽기 전용) | - |
 | code | Input | O | X (읽기 전용) | - |
 | name | Input | O | O | 빈 값 불가 |
-| description | Textarea | X | O | - |
+| description | TextArea | X | O | - |
 | subject | Input | EMAIL/PUSH일 때 O | O | PUSH는 50자 이하 |
-| content | Textarea | O | O | PUSH는 200자 이하 |
+| content | TextArea | O | O | PUSH는 200자 이하 |
 | variables | VariableEditTable | X | O | 추가/수정/삭제 |
 
 ## 변수 편집 (전체 교체 방식)

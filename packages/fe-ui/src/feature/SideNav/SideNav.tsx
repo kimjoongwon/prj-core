@@ -57,7 +57,7 @@ export const SideNav = observer(({ width = 240, className }: SideNavProps) => {
 	/**
 	 * 단독 아이템 선택 핸들러 (하위 아이템이 없는 경우)
 	 */
-	const handleSelectItem = (id: string) => {
+	const handleSelectTreeItem = (id: string) => {
 		navigationStore.selectNavItem(id);
 	};
 
@@ -73,7 +73,7 @@ export const SideNav = observer(({ width = 240, className }: SideNavProps) => {
 			items={navigationStore.items}
 			expandedKeys={expandedKeys}
 			onToggle={handleToggle}
-			onSelectItem={handleSelectItem}
+			onSelectTreeItem={handleSelectTreeItem}
 			onSelectSubItem={handleSelectSubItem}
 			width={width}
 			className={className}

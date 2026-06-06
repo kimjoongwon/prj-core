@@ -5,7 +5,7 @@ import {
 	useGetAbilityById,
 } from "@cocrepo/api/core/abilities";
 import { AbilityDetailPage } from "@cocrepo/ui";
-import { useDisclosure } from "@cocrepo/ui";
+import { useOverlayState } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -13,7 +13,7 @@ import { useParams, useRouter } from "next/navigation";
 export default observer(function AbilityDetailPageRoute() {
 	const abilityId = useParams().abilityId as string;
 	const router = useRouter();
-	const deleteModal = useDisclosure();
+	const deleteModal = useOverlayState();
 
 	const { data: response, isLoading } = useGetAbilityById(abilityId);
 	const ability = response?.data;
@@ -21,7 +21,7 @@ export default observer(function AbilityDetailPageRoute() {
 	const { mutate: deleteAbility, isPending: isDeleting } = useDeleteAbility({
 		mutation: {
 			onSuccess: () => {
-				deleteModal.onClose();
+				deleteModal.close();
 				router.push("/abilities" as Route);
 			},
 		},
@@ -67,8 +67,8 @@ export default observer(function AbilityDetailPageRoute() {
 			onClickEditButton={() => {
 				router.push(`/abilities/${abilityId}/edit` as Route);
 			}}
-			onOpenDeleteModal={deleteModal.onOpen}
-			onCloseDeleteModal={deleteModal.onClose}
+			onOpenDeleteModal={deleteModal.open}
+			onCloseDeleteModal={deleteModal.close}
 			onClickDeleteConfirm={() => {
 				deleteAbility({ id: abilityId });
 			}}

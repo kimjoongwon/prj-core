@@ -21,14 +21,14 @@ AbilityFormPage
         - FormSection
           - PageTitleBar
           - Input
-          - Textarea
+          - TextArea
       - FormSectionCard
         - FormSection
           - PageTitleBar
           - Select x2
-          - Textarea x2
+          - TextArea x2
           - Switch
-          - Textarea (조건부)
+          - TextArea (조건부)
 ```
 
 ## 사용 컴포넌트
@@ -46,9 +46,9 @@ AbilityFormPage
 | `VStack` | `../../rhythm` | 화면 조합 요소 |
 | `FormSection` | `../../form` | 콘텐츠 그룹과 elevation 구성 |
 | `Input` | `@heroui/react` | 사용자 입력 컨트롤 |
-| `Textarea` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `TextArea` | `@heroui/react` | 사용자 입력 컨트롤 |
 | `Select` | `@heroui/react` | 사용자 입력 컨트롤 |
-| `SelectItem` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `ListBox.Item` | `@heroui/react` | 사용자 입력 컨트롤 |
 | `Switch` | `@heroui/react` | 사용자 입력 컨트롤 |
 
 ## 구성 요소

@@ -34,11 +34,11 @@ SubjectDetailPage
 | `Box` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
 | `Spinner` | `@heroui/react` | 로딩/대기 상태 표시 |
 | `Table` | `@heroui/react` | 목록/표 데이터 표시 |
-| `TableHeader` | `@heroui/react` | 목록/표 데이터 표시 |
-| `TableColumn` | `@heroui/react` | 목록/표 데이터 표시 |
-| `TableBody` | `@heroui/react` | 목록/표 데이터 표시 |
-| `TableRow` | `@heroui/react` | 목록/표 데이터 표시 |
-| `TableCell` | `@heroui/react` | 목록/표 데이터 표시 |
+| `Table.Header` | `@heroui/react` | 목록/표 데이터 표시 |
+| `Table.Column` | `@heroui/react` | 목록/표 데이터 표시 |
+| `Table.Body` | `@heroui/react` | 목록/표 데이터 표시 |
+| `Table.Row` | `@heroui/react` | 목록/표 데이터 표시 |
+| `Table.Cell` | `@heroui/react` | 목록/표 데이터 표시 |
 | `DetailPage` | `@cocrepo/ui` | 페이지 외곽 레이아웃 구성 |
 | `DetailPageSurface` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
 | `Button` | `@heroui/react` | 사용자 액션 실행 |

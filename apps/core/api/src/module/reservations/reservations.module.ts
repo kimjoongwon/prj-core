@@ -3,7 +3,6 @@ import {
 	PaymentAggregateRoot,
 	ReservationAggregateRoot,
 } from "@cocrepo/aggregate";
-import {} from "@cocrepo/aggregate";
 import {
 	CoursesRepository,
 	PaymentsRepository,

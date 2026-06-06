@@ -28,7 +28,7 @@ export const AuthErrorPage = observer(
 					<div className="rounded-lg border border-danger/30 bg-danger/10 p-4">
 						<p className="text-sm font-medium text-danger">{t(error)}</p>
 						{errorDescription ? (
-							<p className="mt-2 text-sm text-default-500">
+							<p className="mt-2 text-sm text-muted">
 								{t(errorDescription)}
 							</p>
 						) : null}

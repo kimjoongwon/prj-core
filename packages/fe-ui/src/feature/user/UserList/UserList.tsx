@@ -25,7 +25,8 @@ import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { Button, Pagination } from "../../../design-system/primitives";
+import { Button } from "../../../control/Button/Button";
+import { Pagination } from "../../../control/Pagination/Pagination";
 import { UserSearchWidget, UserTableWidget } from "../../../widget/user";
 
 /**
@@ -179,7 +180,6 @@ export const UserList = observer(
 							state.search = v;
 						}}
 						onSearch={handleSearch}
-						isLoading={state.isLoading}
 					/>
 					{onNewClick && (
 						<Button
@@ -202,7 +202,6 @@ export const UserList = observer(
 				{/* 회원 테이블 */}
 				<UserTableWidget
 					users={state.users}
-					isLoading={state.isLoading}
 					onRowClick={handleRowClick}
 					onEditClick={handleEditClick}
 					onDeleteClick={handleDeleteClick}

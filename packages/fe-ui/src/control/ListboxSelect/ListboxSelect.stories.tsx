@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ListboxSelect } from "./ListboxSelect";
+import { ListBoxSelect } from "./ListBoxSelect";
 
-const meta: Meta<typeof ListboxSelect> = {
-	title: "Inputs/ListboxSelect",
-	component: ListboxSelect,
+const meta: Meta<typeof ListBoxSelect> = {
+	title: "Inputs/ListBoxSelect",
+	component: ListBoxSelect,
 	args: {
 		"aria-label": "샘플 리스트박스 선택",
 	},
@@ -25,18 +25,18 @@ const options = [
 
 export const Default: Story = {
 	args: {
-		title: "Select an option",
-		options,
-		selectionMode: "single",
-		defaultSelectedKeys: ["1"],
-	},
-};
+			title: "Select an option",
+			options,
+			selectionMode: "single",
+			defaultValue: "1",
+		},
+	};
 
 export const MultiSelect: Story = {
 	args: {
-		title: "Select multiple options",
-		options,
-		selectionMode: "multiple",
-		defaultSelectedKeys: ["1", "3"],
-	},
-};
+			title: "Select multiple options",
+			options,
+			selectionMode: "multiple",
+			defaultValue: ["1", "3"],
+		},
+	};

@@ -4,8 +4,8 @@ import type { NavItem } from "@cocrepo/store";
 import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import { cn } from "../../design-system/primitives";
-import type { SidePanelProps } from "../../display/layout/type";
+import { cn } from "@heroui/react";
+import type { SidePanelProps } from "../../layout/Layout/type";
 
 interface SubMenuItemProps {
 	item: NavItem;
@@ -33,8 +33,8 @@ const SubMenuItem = observer(function SubMenuItem({
 					? "rounded-lg px-2.5 py-1.5 text-[13px] leading-5"
 					: "rounded-2xl px-3 py-2.5 text-sm",
 				isSelected
-					? "bg-primary/10 font-semibold text-primary"
-					: "text-default-600 hover:bg-content2 hover:text-foreground",
+					? "bg-accent/10 font-semibold text-accent"
+					: "text-muted hover:bg-surface-secondary hover:text-foreground",
 			)}
 			onClick={handleClick}
 		>
@@ -106,8 +106,8 @@ const NavItemComponent = observer(function NavItemComponent({
 									: "shadow-[0_22px_46px_-28px_rgba(15,23,42,0.7)]",
 							)
 						: isActiveBranch
-							? "bg-content2 text-foreground"
-							: "bg-transparent text-default-600 hover:bg-content2 hover:text-foreground",
+							? "bg-surface-secondary text-foreground"
+							: "bg-transparent text-muted hover:bg-surface-secondary hover:text-foreground",
 				)}
 				onClick={handleClick}
 			>
@@ -121,8 +121,8 @@ const NavItemComponent = observer(function NavItemComponent({
 							isSelected
 								? "border-background/15 bg-background/10 text-background"
 								: isActiveBranch
-									? "border-primary/20 bg-primary/10 text-primary"
-									: "border-divider bg-content1/80 text-default-500 group-hover:text-foreground",
+									? "border-accent/20 bg-accent/10 text-accent"
+									: "border-border bg-surface/80 text-muted group-hover:text-foreground",
 						)}
 					>
 						{renderItemIcon ? (
@@ -157,8 +157,8 @@ const NavItemComponent = observer(function NavItemComponent({
 								isSelected
 									? "text-background/70"
 									: isActiveBranch
-										? "text-default-500"
-										: "text-default-500",
+										? "text-muted"
+										: "text-muted",
 							)}
 						>
 							{description}
@@ -174,8 +174,8 @@ const NavItemComponent = observer(function NavItemComponent({
 							isSelected
 								? "text-background/70"
 								: isActiveBranch
-									? "text-default-500"
-									: "text-default-400",
+									? "text-muted"
+									: "text-muted",
 							visualExpanded ? "rotate-180" : "",
 						)}
 					/>
@@ -185,7 +185,7 @@ const NavItemComponent = observer(function NavItemComponent({
 			{visualExpanded && (
 				<div
 					className={cn(
-						"border-l border-divider",
+						"border-l border-border",
 						density === "compact"
 							? "ml-4 space-y-1 pl-3"
 							: "ml-5 space-y-1.5 pl-4",
@@ -228,13 +228,13 @@ export const SidePanel = observer(function SidePanel({
 		logo || logoDescription ? (
 			<div
 				className={cn(
-					"border-b border-divider",
+					"border-b border-border",
 					density === "compact" ? "px-3 pb-3 pt-3" : "px-4 pb-4 pt-5",
 				)}
 			>
 				<div
 					className={cn(
-						"border border-divider bg-content2/82",
+						"border border-border bg-surface-secondary/82",
 						density === "compact" ? "rounded-2xl p-3" : "rounded-[24px] p-4",
 					)}
 				>
@@ -242,7 +242,7 @@ export const SidePanel = observer(function SidePanel({
 					{logoDescription && (
 						<p
 							className={cn(
-								"text-default-600",
+								"text-muted",
 								density === "compact"
 									? "mt-2 text-xs leading-5"
 									: "mt-3 text-sm leading-6",
@@ -265,7 +265,7 @@ export const SidePanel = observer(function SidePanel({
 		>
 			<div
 				className={cn(
-					"flex min-h-0 flex-1 flex-col overflow-hidden border border-divider bg-content1/84 backdrop-blur-xl",
+					"flex min-h-0 flex-1 flex-col overflow-hidden border border-border bg-surface/84 backdrop-blur-xl",
 					density === "compact"
 						? "rounded-[20px] shadow-[0_18px_52px_-44px_rgba(15,23,42,0.58)]"
 						: "rounded-[30px] shadow-[0_28px_80px_-56px_rgba(15,23,42,0.55)]",
@@ -307,7 +307,7 @@ export const SidePanel = observer(function SidePanel({
 				{footer && (
 					<div
 						className={cn(
-							"border-t border-divider",
+							"border-t border-border",
 							density === "compact" ? "px-3 py-2" : "px-4 py-3",
 						)}
 					>

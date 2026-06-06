@@ -36,7 +36,7 @@ const getRelativeTime = (expiresAt: Date): string => {
  */
 export const ExpiryCell = ({ expiresAt }: ExpiryCellProps) => {
 	if (!expiresAt) {
-		return <p className="text-default-400">-</p>;
+		return <p className="text-muted">-</p>;
 	}
 
 	const date = typeof expiresAt === "string" ? new Date(expiresAt) : expiresAt;

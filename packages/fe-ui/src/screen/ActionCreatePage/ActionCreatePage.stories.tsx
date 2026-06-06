@@ -10,7 +10,7 @@ const defaultArgs = {
 		order: 1,
 	},
 	isSubmitting: false,
-	onChangeDescriptionTextarea: (..._args: never[]) => undefined,
+	onChangeDescriptionTextArea: (..._args: never[]) => undefined,
 	onChangeDisplayNameInput: (..._args: never[]) => undefined,
 	onChangeGroupSelection: (..._args: never[]) => undefined,
 	onChangeNameInput: (..._args: never[]) => undefined,

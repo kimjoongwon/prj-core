@@ -28,8 +28,8 @@ export interface OidcAuthorizationRequestOptions {
 }
 
 const DEFAULT_OIDC_CONFIG: OidcServerConfig = {
-	issuer: "http://localhost:3007",
-	jwksUri: "http://localhost:3007/oidc/jwks",
+	issuer: "http://localhost:3000",
+	jwksUri: "http://localhost:3000/oidc/jwks",
 };
 
 @Injectable()

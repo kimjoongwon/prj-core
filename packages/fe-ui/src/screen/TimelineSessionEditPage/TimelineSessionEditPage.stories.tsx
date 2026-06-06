@@ -10,7 +10,7 @@ const defaultArgs = {
 	isSubmitPending: false,
 	onChangeCycleTypeSelect: (..._args: never[]) => undefined,
 	onChangeDayOfWeekSelect: (..._args: never[]) => undefined,
-	onChangeDescriptionTextarea: (..._args: never[]) => undefined,
+	onChangeDescriptionTextArea: (..._args: never[]) => undefined,
 	onChangeEndDateTimeInput: (..._args: never[]) => undefined,
 	onChangeNameInput: (..._args: never[]) => undefined,
 	onChangeStartDateTimeInput: (..._args: never[]) => undefined,

@@ -2,6 +2,7 @@ import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
+import type { Key } from "react-aria-components";
 import {
 	Select as BaseSelect,
 	type SelectProps as BaseSelectProps,
@@ -24,8 +25,8 @@ export const Select = observer(<T extends object>(props: SelectProps<T>) => {
 
 	const formField = useFormField({ value, state, path });
 
-	const handleChange = (value: string) => {
-		formField.setValue(value);
+	const handleChange = (value: Key | null) => {
+		formField.setValue(value == null ? "" : String(value));
 	};
 
 	return (

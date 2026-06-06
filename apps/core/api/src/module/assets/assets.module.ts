@@ -1,5 +1,5 @@
-import { AssetsRepository, FoldersRepository } from "@cocrepo/repository";
 import { AssetAggregateRoot } from "@cocrepo/aggregate";
+import { AssetsRepository, FoldersRepository } from "@cocrepo/repository";
 import {
 	AuthContext,
 	ObjectStorageService,

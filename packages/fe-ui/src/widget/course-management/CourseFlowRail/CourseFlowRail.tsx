@@ -3,7 +3,7 @@
 import { HStack, Surface, VStack } from "@cocrepo/ui";
 import { CalendarDays, CheckCircle2, CreditCard, Ticket } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Chip } from "../../../design-system/primitives";
+import { Chip } from "../../../data-display/Chip/Chip";
 
 const courseFlowItems = [
 	{
@@ -30,7 +30,7 @@ const courseFlowItems = [
 
 export const CourseFlowRail = observer(() => {
 	return (
-		<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+		<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
 				{courseFlowItems.map((item, index) => {
 					const Icon = item.icon;
@@ -38,10 +38,10 @@ export const CourseFlowRail = observer(() => {
 					return (
 						<div
 							key={item.title}
-							className="min-h-32 border-divider/70 border-b p-5 md:border-r xl:border-b-0"
+							className="min-h-32 border-border/70 border-b p-5 md:border-r xl:border-b-0"
 						>
 							<HStack alignItems="center" gap="inline">
-								<span className="flex size-9 items-center justify-center rounded-lg bg-primary/15 text-primary">
+								<span className="flex size-9 items-center justify-center rounded-lg bg-accent/15 text-accent">
 									<Icon className="size-4" />
 								</span>
 								<Chip size="sm" variant="flat" color="primary">
@@ -52,7 +52,7 @@ export const CourseFlowRail = observer(() => {
 								<h3 className="text-base font-semibold text-foreground">
 									{item.title}
 								</h3>
-								<p className="text-sm text-default-600">{item.body}</p>
+								<p className="text-sm text-muted">{item.body}</p>
 							</VStack>
 						</div>
 					);

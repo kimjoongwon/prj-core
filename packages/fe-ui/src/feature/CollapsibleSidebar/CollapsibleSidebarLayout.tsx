@@ -1,7 +1,7 @@
 import type { AppIconName } from "@cocrepo/type";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 import { VStack } from "../../rhythm/VStack/VStack";
 
 interface ParentMenuInfo {
@@ -48,7 +48,7 @@ export const CollapsibleSidebar = (props: CollapsibleSidebarProps) => {
 			}`}
 		>
 			<div
-				className={`flex items-center bg-content2/50 p-3 ${
+				className={`flex items-center bg-surface-secondary/50 p-3 ${
 					isCollapsed ? "justify-center" : "justify-between"
 				}`}
 			>
@@ -58,7 +58,7 @@ export const CollapsibleSidebar = (props: CollapsibleSidebarProps) => {
 							<div className="flex-shrink-0">
 								<AppIcon
 									name={parentMenuInfo.icon}
-									className="h-4 w-4 text-primary"
+									className="h-4 w-4 text-accent"
 									size={16}
 								/>
 							</div>
@@ -76,7 +76,7 @@ export const CollapsibleSidebar = (props: CollapsibleSidebarProps) => {
 					variant="ghost"
 					size="sm"
 					onPress={onToggle}
-					className="flex-shrink-0 text-default-500 hover:text-default-700"
+					className="flex-shrink-0 text-muted hover:text-foreground"
 					aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
 				>
 					{isCollapsed ? (

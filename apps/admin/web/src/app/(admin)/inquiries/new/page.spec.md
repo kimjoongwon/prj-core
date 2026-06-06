@@ -197,16 +197,17 @@
 │   └── AIClassificationSuggestion
 ├── CustomerSearchForm
 │   ├── TabSwitcher (기존/신규)
-│   ├── CustomerSearchInput
+│   ├── SearchInput
+│   ├── SearchResultList
 │   ├── CustomerInfoFields
 │   └── SelectedCustomerCard
 ├── InquiryContentForm
-│   ├── ContentTextarea
+│   ├── ContentTextArea
 │   └── AttachmentUploader
 ├── InquirySettingsForm
-│   ├── AssigneeSelect
+│   ├── Assignee Select
 │   ├── TagInput
-│   └── NotesTextarea
+│   └── NotesTextArea
 └── FormActions
     ├── CancelButton
     ├── SaveDraftButton
@@ -244,11 +245,12 @@
 | 컴포넌트 | 위치 | 설명 |
 |----------|------|------|
 | AiForm | feature/ | 스키마 선택 + 패치 적용 UI |
-| CustomerSearchInput | ui/ | 고객 검색 입력 |
+| SearchInput | ui/ | 고객 검색 입력 |
+| SearchResultList | ui/ | 고객 검색 결과 목록 |
 | SelectedCustomerCard | ui/ | 선택된 고객 정보 카드 |
 | AttachmentUploader | ui/ | 파일 업로드 컴포넌트 |
 | TagInput | ui/inputs/ | 태그 입력 필드 |
-| NotesTextarea | ui/inputs/ | 비고 입력 필드 |
+| NotesTextArea | ui/inputs/ | 비고 입력 필드 |
 
 ### L9: Widget 컴포넌트
 
@@ -408,7 +410,7 @@
 | 2026-02-27 | 접수 페이지 E2E 테스트 추가 (`page.e2e.ts`) 및 구현 체크리스트 동기화 | codex |
 | 2026-02-28 | InquiryStore 의존 제거, 페이지 로컬 state 기준으로 L10/L11 갱신 | codex |
 | 2026-03-01 | Create Form Bootstrap + AiForm(`POST /form/ai-fill`) 기반으로 페이지 구조 전환, `_prefetch.ts` 추가 | codex |
-| 2026-03-01 | 폼 입력 컴포넌트를 HeroUI(Input/Select/Textarea) 기반으로 정리하고 고객 검색을 페이지 로컬 결과 리스트 선택 방식으로 조정 | codex |
+| 2026-03-01 | 폼 입력 컴포넌트를 HeroUI(Input/Select/TextArea) 기반으로 정리하고 고객 검색을 페이지 로컬 결과 리스트 선택 방식으로 조정 | codex |
 | 2026-03-01 | AiForm을 실제 입력 폼과 동일 위계로 분리하고 바깥 섹션 영역 래퍼를 제거해 Card 단일 표면 구조로 정리 | codex |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |
 | 2026-03-03 | Page/PageTitleBar + Section/PageTitleBar 기반 배치 명시 | codex |

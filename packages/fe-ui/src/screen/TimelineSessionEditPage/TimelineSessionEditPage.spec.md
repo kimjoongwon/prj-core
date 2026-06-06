@@ -23,7 +23,7 @@ TimelineSessionEditPage
           - VStack
             - Input
             - Select
-            - Textarea
+            - TextArea
       - FormSectionCard
         - FormSection
           - PageTitleBar
@@ -47,8 +47,8 @@ TimelineSessionEditPage
 | `FormSection` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
 | `Input` | `@heroui/react` | 사용자 입력 컨트롤 |
 | `Select` | `@heroui/react` | 사용자 입력 컨트롤 |
-| `SelectItem` | `@heroui/react` | 사용자 입력 컨트롤 |
-| `Textarea` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `ListBox.Item` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `TextArea` | `@heroui/react` | 사용자 입력 컨트롤 |
 
 ## 공개 계약
 

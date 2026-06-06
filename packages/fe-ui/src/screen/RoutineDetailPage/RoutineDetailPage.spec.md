@@ -25,10 +25,10 @@ RoutineDetailPage
         - DetailSection
           - PageTitleBar
   - Modal
-    - ModalContent
-      - ModalHeader
-      - ModalBody
-      - ModalFooter
+    - Modal overlay content
+      - Modal.Header
+      - Modal.Body
+      - Modal.Footer
         - Button x2
 ```
 
@@ -51,10 +51,10 @@ RoutineDetailPage
 | `DateTimeCell` | `@cocrepo/ui` | 상태/정보를 카드 또는 표시 단위로 표현 |
 | `MediaThumbnail` | `@cocrepo/ui` | 화면 조합 요소 |
 | `Modal` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalContent` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalHeader` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalBody` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalFooter` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal overlay content` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Header` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Body` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Footer` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
 
 ## 공개 계약
 

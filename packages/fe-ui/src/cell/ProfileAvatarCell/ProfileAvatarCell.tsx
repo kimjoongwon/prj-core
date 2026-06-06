@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Avatar } from "../../design-system/primitives";
+import { Avatar } from "@heroui/react";
 
 export interface ProfileAvatarCellProps {
 	/** 이름 */
@@ -24,18 +24,15 @@ export const ProfileAvatarCell = ({
 	return (
 		<div className="flex items-center gap-3">
 			<Avatar
-				name={name ?? undefined}
-				src={src ?? undefined}
 				size="sm"
-				icon={icon}
-				classNames={{
-					base: "bg-primary/10",
-					icon: "text-primary",
-				}}
-			/>
+				className="bg-accent/10 text-accent"
+			>
+				{src ? <Avatar.Image src={src} alt={name ?? ""} /> : null}
+				<Avatar.Fallback>{icon ?? name?.slice(0, 1)}</Avatar.Fallback>
+			</Avatar>
 			<div>
 				<p className="font-medium">{name || "-"}</p>
-				{subtitle && <p className="text-xs text-default-400">{subtitle}</p>}
+				{subtitle && <p className="text-xs text-muted">{subtitle}</p>}
 			</div>
 		</div>
 	);

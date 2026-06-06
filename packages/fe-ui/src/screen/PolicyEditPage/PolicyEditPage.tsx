@@ -3,7 +3,8 @@
 import { FormPage, PageTitleBar } from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button, Spinner } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Spinner } from "@heroui/react";
 import {
 	type PolicyCreatePageAbilityOption,
 	type PolicyCreatePageChangeHandlers,
@@ -41,9 +42,9 @@ export const PolicyEditPage = observer((props: PolicyEditPageProps) => {
 					/>
 				}
 			>
-				<div className="flex items-center justify-center gap-2 rounded-2xl border border-divider bg-content1/70 p-8">
+				<div className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-surface/70 p-8">
 					<Spinner size="sm" />
-					<span className="text-default-500">로딩 중...</span>
+					<span className="text-muted">로딩 중...</span>
 				</div>
 			</FormPage>
 		);
@@ -59,8 +60,8 @@ export const PolicyEditPage = observer((props: PolicyEditPageProps) => {
 					/>
 				}
 			>
-				<div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-divider bg-content1/70 p-8">
-					<p className="text-default-500">정책을 찾을 수 없습니다.</p>
+				<div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-border bg-surface/70 p-8">
+					<p className="text-muted">정책을 찾을 수 없습니다.</p>
 					<Button variant="flat" onPress={props.onClickBackButton}>
 						목록으로
 					</Button>

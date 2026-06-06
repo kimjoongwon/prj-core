@@ -1,4 +1,3 @@
-import "./pagePlanningAddon.jsx";
 import { addons } from "storybook/manager-api";
 import { create } from "storybook/theming";
 
@@ -35,6 +34,5 @@ addons.setConfig({
     showRoots: true
   },
   panelPosition: "right",
-  selectedPanel: "plate/page-planning/panel",
   addonPanelInRight: true
 });

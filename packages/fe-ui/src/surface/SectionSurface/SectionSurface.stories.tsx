@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 import { Section } from "../../layout/Section";
 import { PageTitleBar } from "../../widget/PageTitleBar";
 import { SectionSurface } from "./SectionSurface";
@@ -19,7 +19,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		children: (
-			<div className="text-default-600 text-sm">기본 섹션 표면입니다.</div>
+			<div className="text-muted text-sm">기본 섹션 표면입니다.</div>
 		),
 	},
 };
@@ -43,11 +43,11 @@ export const Titled: Story = {
 			>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					<div>
-						<p className="text-default-500 text-sm">이름</p>
+						<p className="text-muted text-sm">이름</p>
 						<p className="mt-1 font-medium">홍길동</p>
 					</div>
 					<div>
-						<p className="text-default-500 text-sm">이메일</p>
+						<p className="text-muted text-sm">이메일</p>
 						<p className="mt-1 font-medium">hong@example.com</p>
 					</div>
 				</div>

@@ -6,7 +6,7 @@
  *
  * clientId 표준 명명 규칙:
  * - 신규/정비 대상 first-party 클라이언트는 `{realm}-{surface}` 패턴을 사용합니다.
- * - 예: `admin-web`, `storybook-web`, `idp-web`, `user-mobile`, `swagger-web`
+ * - 예: `admin-web`, `storybook-web`, `user-mobile`, `swagger-web`
  */
 
 /**
@@ -82,24 +82,7 @@ const oidcStorybookLoginUrl =
 const oidcStorybookDefaultReturnTo =
 	process.env.OIDC_STORYBOOK_DEFAULT_RETURN_TO ||
 	resolveOidcSeedUrl(oidcStorybookBaseUrl, "/");
-const oidcIdpClientUrl = process.env.IDP_CLIENT_URL || "http://localhost:3008";
-const oidcIdpWebClientSecret =
-	process.env.OIDC_IDP_WEB_CLIENT_SECRET ||
-	"idp-web-secret-change-in-production";
-const oidcIdpWebRedirectUri =
-	process.env.OIDC_IDP_WEB_REDIRECT_URI ||
-	resolveOidcSeedUrl(
-		oidcIdpClientUrl,
-		"/api/v1/auth/callback?clientId=idp-web",
-	);
-const oidcIdpWebLoginUrl =
-	process.env.OIDC_IDP_WEB_LOGIN_URL ||
-	resolveOidcSeedUrl(oidcIdpClientUrl, "/auth/login");
-const oidcIdpWebDefaultReturnTo =
-	process.env.OIDC_IDP_WEB_DEFAULT_RETURN_TO ||
-	resolveOidcSeedUrl(oidcIdpClientUrl, "/dashboard");
-const oidcIssuer =
-	process.env.OIDC_ISSUER || oidcIdpClientUrl || "http://localhost:3007";
+const oidcIssuer = process.env.OIDC_ISSUER || oidcAdminBaseUrl;
 const oidcSwaggerRedirectUri =
 	process.env.OIDC_SWAGGER_REDIRECT_URI ||
 	resolveOidcSeedUrl(oidcIssuer, "/api/oauth2-redirect.html");
@@ -186,33 +169,6 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		tosUri: null,
 	},
 	{
-		clientId: "idp-web",
-		clientSecret: oidcIdpWebClientSecret,
-		name: "IDP Web",
-		redirectUris: [oidcIdpWebRedirectUri],
-		loginUrl: oidcIdpWebLoginUrl,
-		defaultReturnTo: oidcIdpWebDefaultReturnTo,
-		grantTypes: ["authorization_code", "refresh_token"],
-		responseTypes: ["code"],
-		tokenEndpointAuthMethod: "client_secret_post",
-		scope: "openid profile email roles",
-		isActive: true,
-		isFirstParty: true,
-		skipConsent: true,
-		loginUi: {
-			variant: "branded",
-			headline: "IDP Console 로그인",
-			description: "IDP 설정과 계정 관리를 위해 Onora 계정으로 로그인하세요.",
-			brandLabel: "IDP Web",
-			brandColor: "#7c3aed",
-			showIntroPanel: true,
-			mobileFullScreen: false,
-		},
-		logoUri: null,
-		policyUri: null,
-		tosUri: null,
-	},
-	{
 		clientId: "swagger-web",
 		clientSecret: null,
 		name: "PRJ Core Swagger UI",
@@ -241,6 +197,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
  */
 export const legacyOidcClientIds = [
 	"storybook",
+	"idp-web",
 	"prj-core-mobile",
 	"prj-core-swagger",
 ] as const;

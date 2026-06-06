@@ -36,14 +36,14 @@ export const PaymentScopeRail = observer(() => {
 				return (
 					<SectionSurface
 						key={step.label}
-						className="rounded-2xl border-divider/80 bg-content1/70 p-5"
+						className="rounded-2xl border-border/80 bg-surface/70 p-5"
 					>
 						<VStack gap="block">
 							<HStack alignItems="center" gap="inline">
-								<span className="flex size-8 items-center justify-center rounded-lg bg-primary/15 text-primary">
+								<span className="flex size-8 items-center justify-center rounded-lg bg-accent/15 text-accent">
 									<Icon className="size-4" />
 								</span>
-								<span className="text-xs font-semibold text-default-500">
+								<span className="text-xs font-semibold text-muted">
 									{`${index + 1}`.padStart(2, "0")}
 								</span>
 							</HStack>
@@ -51,7 +51,7 @@ export const PaymentScopeRail = observer(() => {
 								<strong className="text-base font-semibold text-foreground">
 									{step.label}
 								</strong>
-								<p className="text-sm text-default-600">{step.description}</p>
+								<p className="text-sm text-muted">{step.description}</p>
 							</VStack>
 						</VStack>
 					</SectionSurface>

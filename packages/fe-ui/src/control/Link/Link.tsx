@@ -1,13 +1,11 @@
 "use client";
 
+import { Link as HeroLink } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import {
-	Link as HeroUiLink,
-	type LinkProps as HeroUiLinkProps,
-} from "../../design-system/primitives";
+import type { ComponentProps, ReactNode } from "react";
 import { translateNode, useT } from "../../i18n";
 
-export type LinkProps = HeroUiLinkProps;
+export type LinkProps = ComponentProps<typeof HeroLink>;
 
 /**
  * Link 컴포넌트
@@ -16,5 +14,9 @@ export type LinkProps = HeroUiLinkProps;
 export const Link = observer((props: LinkProps) => {
 	const t = useT();
 
-	return <HeroUiLink {...props}>{translateNode(props.children, t)}</HeroUiLink>;
+	return (
+		<HeroLink {...props}>
+			{translateNode(props.children as ReactNode, t)}
+		</HeroLink>
+	);
 });

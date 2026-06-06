@@ -84,7 +84,7 @@
 | exerciseName | 읽기 전용 | - | 선택된 운동명 |
 | repetitions | NumberInput | 최소 1 | 반복 횟수, 기존 값으로 초기화 |
 | restTime | NumberInput | 최소 0 | 휴식 시간(초), 기존 값으로 초기화 |
-| notes | Textarea | 선택, 최대 200자 | 메모, 기존 값으로 초기화 |
+| notes | TextArea | 선택, 최대 200자 | 메모, 기존 값으로 초기화 |
 
 ## 페이지 상태
 

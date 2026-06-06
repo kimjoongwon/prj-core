@@ -46,7 +46,7 @@ TimelineSessionProgramCreatePage
 | `Input` | `@heroui/react` | 사용자 입력 컨트롤 |
 | `Chip` | `@heroui/react` | 상태/정보를 카드 또는 표시 단위로 표현 |
 | `Select` | `@heroui/react` | 사용자 입력 컨트롤 |
-| `SelectItem` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `ListBox.Item` | `@heroui/react` | 사용자 입력 컨트롤 |
 | `ProgramPickerModal` | `@cocrepo/ui` | 확인 또는 보조 작업 오버레이 |
 
 ## 공개 계약

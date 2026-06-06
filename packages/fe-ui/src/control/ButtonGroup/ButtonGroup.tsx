@@ -1,44 +1,59 @@
-import type { ButtonProps, LinkProps } from "../../design-system/primitives";
-import { Link } from "../../design-system/primitives";
+"use client";
 
-export interface GroupButton extends ButtonProps {
-	href?: LinkProps["href"];
-}
+import { ButtonGroup as HeroButtonGroup, cn } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import type { ButtonGroupProps } from "./ButtonGroup.props";
+import { renderButtonGroupButton } from "./button-group-button.render";
 
-export interface ButtonGroupProps {
-	leftButtons?: GroupButton[];
-	rightButtons?: GroupButton[];
-}
+export const ButtonGroup = observer((props: ButtonGroupProps) => {
+	const {
+		id,
+		leftButtons = [],
+		rightButtons = [],
+		...buttonGroupProps
+	} = props;
+	const hasLeftButtons = leftButtons.length > 0;
+	const hasRightButtons = rightButtons.length > 0;
+	const baseAriaLabel =
+		typeof buttonGroupProps["aria-label"] === "string"
+			? buttonGroupProps["aria-label"]
+			: "Button group";
 
-import { v4 } from "uuid";
-import { Button } from "../Button/Button";
-
-export const ButtonGroup = (props: ButtonGroupProps) => {
-	const { leftButtons, rightButtons } = props;
-	const renderButton = (props: GroupButton) => {
-		const { children, href } = props;
-
-		if (href) {
-			return (
-				<Link key={v4()} href={href}>
-					<Button color="primary" {...props}>
-						{children}
-					</Button>
-				</Link>
-			);
-		}
-
-		return (
-			<Button key={v4()} {...props} size="sm">
-				{children}
-			</Button>
-		);
-	};
+	if (!hasLeftButtons && !hasRightButtons) {
+		return null;
+	}
 
 	return (
-		<div className="flex flex-1 justify-between">
-			<div>{leftButtons?.map(renderButton)}</div>
-			<div>{rightButtons?.map(renderButton)}</div>
+		<div
+			className={cn(
+				"flex w-full flex-1 items-center gap-3",
+				hasLeftButtons && hasRightButtons && "justify-between",
+				hasLeftButtons && !hasRightButtons && "justify-start",
+				!hasLeftButtons && hasRightButtons && "justify-end",
+			)}
+		>
+			{hasLeftButtons ? (
+				<HeroButtonGroup
+					{...buttonGroupProps}
+					id={hasRightButtons && id ? `${id}-left` : id}
+					aria-label={
+						hasRightButtons ? `${baseAriaLabel} left` : baseAriaLabel
+					}
+				>
+					{leftButtons.map(renderButtonGroupButton)}
+				</HeroButtonGroup>
+			) : null}
+			{hasRightButtons ? (
+				<HeroButtonGroup
+					{...buttonGroupProps}
+					id={hasLeftButtons && id ? `${id}-right` : id}
+					aria-label={
+						hasLeftButtons ? `${baseAriaLabel} right` : baseAriaLabel
+					}
+				>
+					{rightButtons.map(renderButtonGroupButton)}
+				</HeroButtonGroup>
+			) : null}
 		</div>
 	);
-};
+});

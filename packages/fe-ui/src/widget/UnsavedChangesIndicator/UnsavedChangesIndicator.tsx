@@ -1,4 +1,5 @@
-import { Button, Card, CardBody } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Card } from "@heroui/react";
 
 export interface UnsavedChangesIndicatorProps {
 	/** 표시 여부 */
@@ -35,9 +36,9 @@ export const UnsavedChangesIndicator = ({
 
 	return (
 		<div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 transform">
-			<Card className="border border-primary-200 bg-primary-50 shadow-lg">
-				<CardBody className="flex flex-row items-center gap-4 px-4 py-3">
-					<span className="text-primary">
+			<Card className="border border-accent bg-accent-soft shadow-lg">
+				<Card.Content className="flex flex-row items-center gap-4 px-4 py-3">
+					<span className="text-accent">
 						저장되지 않은 변경사항이 있습니다
 					</span>
 					<div className="flex gap-2">
@@ -58,7 +59,7 @@ export const UnsavedChangesIndicator = ({
 							<span>{isSaving ? "저장 중..." : "저장"}</span>
 						</Button>
 					</div>
-				</CardBody>
+				</Card.Content>
 			</Card>
 		</div>
 	);

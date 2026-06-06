@@ -3,8 +3,8 @@
 import type { PasswordRule } from "@cocrepo/constant";
 import { observer } from "mobx-react-lite";
 import { Button, Input, Link } from "../../control";
-import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
-import { PasswordStrengthIndicator } from "../../display/feedback/PasswordStrengthIndicator/PasswordStrengthIndicator";
+import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
+import { PasswordStrengthIndicator } from "../../feedback/PasswordStrengthIndicator/PasswordStrengthIndicator";
 import { useT } from "../../i18n";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
@@ -60,8 +60,8 @@ export const ResetPasswordForm = observer(
 				{/* 로딩 중 */}
 				{step === "validating" && (
 					<div className="text-center py-8">
-						<div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-						<p className="text-default-500">
+						<div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+						<p className="text-muted">
 							{t("링크를 확인하고 있습니다...")}
 						</p>
 					</div>
@@ -88,7 +88,7 @@ export const ResetPasswordForm = observer(
 						<h2 className="text-lg font-semibold mb-2">
 							{tokenError ? t(tokenError) : t("링크가 만료되었습니다")}
 						</h2>
-						<p className="text-default-500 text-sm mb-6">
+						<p className="text-muted text-sm mb-6">
 							{t(
 								"비밀번호 재설정 링크는 30분간 유효하며, 1회만 사용할 수 있습니다.",
 							)}
@@ -126,7 +126,7 @@ export const ResetPasswordForm = observer(
 						<h2 className="text-lg font-semibold mb-2">
 							{t("비밀번호가 변경되었습니다")}
 						</h2>
-						<p className="text-default-500 text-sm mb-6">
+						<p className="text-muted text-sm mb-6">
 							{t("보안을 위해 모든 기기에서 로그아웃되었습니다.")}
 							<br />
 							{t("새 비밀번호로 다시 로그인해주세요.")}
@@ -209,7 +209,7 @@ export const ResetPasswordForm = observer(
 					<div className="mt-6 text-center">
 						<Link
 							href={loginHref}
-							className="text-default-400 hover:text-default-500 text-sm"
+							className="text-muted hover:text-muted text-sm"
 						>
 							{t("로그인으로 돌아가기")}
 						</Link>

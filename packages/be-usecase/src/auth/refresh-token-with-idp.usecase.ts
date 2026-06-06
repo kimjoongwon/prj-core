@@ -32,7 +32,9 @@ export class RefreshTokenWithIdpUseCase
 	async execute(
 		command: RefreshTokenWithIdpCommand,
 	): Promise<TokenRefreshResponseDto> {
-		if (!command.refreshToken) {
+		const refreshToken =
+			command.refreshTokenCookie || command.refreshTokenHeader;
+		if (!refreshToken) {
 			throw new UnauthorizedException("리프레시 토큰이 존재하지 않습니다");
 		}
 
@@ -42,7 +44,7 @@ export class RefreshTokenWithIdpUseCase
 			requireAuthShell: false,
 		});
 		const tokenResponse = await this.oidcClient.refreshTokens(
-			command.refreshToken,
+			refreshToken,
 			toProtocolClientConfig(client),
 		);
 		const payload = decodeAccessToken(tokenResponse.access_token);
@@ -53,8 +55,7 @@ export class RefreshTokenWithIdpUseCase
 		}
 
 		if (command.sessionId) {
-			const newRefreshToken =
-				tokenResponse.refresh_token || command.refreshToken;
+			const newRefreshToken = tokenResponse.refresh_token || refreshToken;
 			await this.tokenStorageService.updateSession(
 				payload.sub,
 				command.sessionId,
@@ -76,7 +77,7 @@ export class RefreshTokenWithIdpUseCase
 		const now = Date.now();
 		return {
 			accessToken: tokenResponse.access_token,
-			refreshToken: tokenResponse.refresh_token || command.refreshToken,
+			refreshToken: tokenResponse.refresh_token || refreshToken,
 			accessTokenExpiresAt: now + tokenResponse.expires_in * 1000,
 			refreshTokenExpiresAt: now + 30 * 24 * 60 * 60 * 1000,
 			user: plainToInstance(UserDto, user),

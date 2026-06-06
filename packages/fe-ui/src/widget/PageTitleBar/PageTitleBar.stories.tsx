@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 import { PageTitleBar } from "./PageTitleBar";
 
 const meta: Meta<typeof PageTitleBar> = {

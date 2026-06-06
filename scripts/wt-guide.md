@@ -256,8 +256,6 @@ pnpm wt:finish AUTH-21 --strategy auto
     "map": {
       "ADMIN_WEB_PORT": 3000,
       "CORE_API_PORT": 3006,
-      "IDP_API_PORT": 3007,
-      "IDP_WEB_PORT": 3008,
       "STORYBOOK_PORT": 6006
     }
   },

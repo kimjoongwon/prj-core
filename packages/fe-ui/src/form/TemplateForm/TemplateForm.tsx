@@ -1,12 +1,9 @@
 "use client";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Input,
-	Radio,
-	RadioGroup,
-	Textarea,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input/Input";
+import { RadioGroup } from "../../control/RadioGroup/RadioGroup";
+import { TextArea } from "../../control/TextArea/TextArea";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { TemplateContentEditor } from "../../widget/TemplateContentEditor/TemplateContentEditor";
 import { TemplateTypeBadge } from "../../widget/TemplateTypeBadge/TemplateTypeBadge";
@@ -122,7 +119,7 @@ export const TemplateForm = observer(
 					<div className="space-y-6">
 						{isEdit ? (
 							<div className="flex flex-col gap-1.5">
-								<span className="text-sm text-default-500">유형</span>
+								<span className="text-sm text-muted">유형</span>
 								<TemplateTypeBadge type={formData.type} />
 							</div>
 						) : (
@@ -135,18 +132,19 @@ export const TemplateForm = observer(
 										type: value as TemplateFormData["type"],
 									})
 								}
-								isRequired
-								isInvalid={!!errors?.type}
-								errorMessage={errors?.type}
-							>
-								<Radio value="EMAIL">이메일</Radio>
-								<Radio value="SMS">SMS</Radio>
-								<Radio value="PUSH">푸시</Radio>
-							</RadioGroup>
-						)}
+									isRequired
+									isInvalid={!!errors?.type}
+									errorMessage={errors?.type}
+									options={[
+										{ text: "이메일", value: "EMAIL" },
+										{ text: "SMS", value: "SMS" },
+										{ text: "푸시", value: "PUSH" },
+									]}
+								/>
+							)}
 						{isEdit ? (
 							<div className="flex flex-col gap-1.5">
-								<span className="text-sm text-default-500">코드</span>
+								<span className="text-sm text-muted">코드</span>
 								<p className="text-foreground">{formData.code}</p>
 							</div>
 						) : (
@@ -179,7 +177,7 @@ export const TemplateForm = observer(
 							isInvalid={!!errors?.name}
 							errorMessage={errors?.name}
 						/>
-						<Textarea
+						<TextArea
 							label="설명"
 							placeholder="템플릿 용도를 설명해주세요"
 							value={formData.description}
@@ -236,7 +234,7 @@ export const TemplateForm = observer(
 					<Button variant="flat" onPress={onCancel} isDisabled={isSubmitting}>
 						취소
 					</Button>
-					<Button color="primary" onPress={onSubmit} isLoading={isSubmitting}>
+					<Button color="primary" onPress={onSubmit}>
 						{isEdit ? "저장" : "등록"}
 					</Button>
 				</div>

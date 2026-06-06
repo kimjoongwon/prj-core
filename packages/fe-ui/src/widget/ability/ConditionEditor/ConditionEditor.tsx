@@ -3,8 +3,9 @@
 import { AlertCircle, Info } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Textarea } from "../../../control/Textarea/Textarea";
-import { Chip, cn, Tooltip } from "../../../design-system/primitives";
+import { TextArea } from "../../../control/TextArea/TextArea";
+import { Chip } from "../../../data-display/Chip/Chip";
+import { cn, Tooltip } from "@heroui/react";
 import { HStack } from "../../../rhythm/HStack/HStack";
 import { VStack } from "../../../rhythm/VStack/VStack";
 
@@ -129,25 +130,26 @@ export const ConditionEditor = observer(
 			<VStack gap={2} className={cn("w-full", className)}>
 				{/* 라벨 */}
 				<HStack alignItems="center" gap={4}>
-					<span className="text-sm font-medium text-foreground">{label}</span>
-					{subjectFields && subjectFields.length > 0 && (
-						<Tooltip
-							content={
-								<VStack gap={1} className="p-2">
-									<span className="text-xs font-medium">사용 가능한 필드:</span>
-									<span className="text-xs text-default-500">
-										{subjectFields.join(", ")}
-									</span>
-								</VStack>
-							}
-						>
-							<Info className="h-4 w-4 cursor-help text-default-400" />
-						</Tooltip>
-					)}
+						<span className="text-sm font-medium text-foreground">{label}</span>
+						{subjectFields && subjectFields.length > 0 && (
+							<Tooltip>
+								<Tooltip.Trigger>
+									<Info className="h-4 w-4 cursor-help text-muted" />
+								</Tooltip.Trigger>
+								<Tooltip.Content>
+									<VStack gap={1} className="p-2">
+										<span className="text-xs font-medium">사용 가능한 필드:</span>
+										<span className="text-xs text-muted">
+											{subjectFields.join(", ")}
+										</span>
+									</VStack>
+								</Tooltip.Content>
+							</Tooltip>
+						)}
 				</HStack>
 
-				{/* JSON 에디터 (Textarea) */}
-				<Textarea
+				{/* JSON 에디터 (TextArea) */}
+				<TextArea
 					value={textValue}
 					onChange={handleChange}
 					placeholder={`{\n  "departmentId": "hr-department-id"\n}`}
@@ -157,10 +159,10 @@ export const ConditionEditor = observer(
 					isInvalid={!!displayError}
 					classNames={{
 						input: "font-mono text-sm",
-						inputWrapper: cn(
-							"bg-content2 border border-divider",
-							displayError && "border-danger",
-						),
+							inputWrapper: cn(
+								"bg-surface-secondary border border-border",
+								displayError && "border-danger",
+							) ?? "",
 					}}
 				/>
 
@@ -175,23 +177,26 @@ export const ConditionEditor = observer(
 				{/* 템플릿 변수 버튼 */}
 				<VStack gap={1}>
 					<HStack alignItems="center" gap={4}>
-						<Info className="h-3 w-3 text-default-400" />
-						<span className="text-xs text-default-500">템플릿 변수:</span>
+						<Info className="h-3 w-3 text-muted" />
+						<span className="text-xs text-muted">템플릿 변수:</span>
 					</HStack>
-					<HStack gap={4} className="flex-wrap">
-						{TEMPLATE_VARIABLES.map((variable) => (
-							<Tooltip key={variable.key} content={variable.label}>
-								<Chip
-									size="sm"
-									variant="flat"
-									className="cursor-pointer hover:bg-default-200"
+						<HStack gap={4} className="flex-wrap">
+							{TEMPLATE_VARIABLES.map((variable) => (
+								<Tooltip key={variable.key}>
+									<Tooltip.Trigger>
+									<Chip
+										size="sm"
+										variant="flat"
+									className="cursor-pointer hover:bg-default"
 									isDisabled={isDisabled}
 									onClick={() => handleInsertVariable(variable.key)}
-								>
-									{variable.key}
-								</Chip>
-							</Tooltip>
-						))}
+									>
+										{variable.key}
+									</Chip>
+									</Tooltip.Trigger>
+									<Tooltip.Content>{variable.label}</Tooltip.Content>
+								</Tooltip>
+							))}
 					</HStack>
 				</VStack>
 			</VStack>

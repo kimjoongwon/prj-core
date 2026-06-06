@@ -10,7 +10,7 @@ import {
   popoverClassNames,
   usePopover,
   usePopoverAnimation,
-} from "heroui-native/popover";
+} from "heroui-native";
 import { Text } from "../../data-display/Text";
 type HeroPopoverProps = ComponentPropsWithoutRef<typeof HeroPopover>;
 type HeroPopoverContentProps = ComponentPropsWithoutRef<

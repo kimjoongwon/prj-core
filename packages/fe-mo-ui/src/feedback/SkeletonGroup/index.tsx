@@ -2,7 +2,7 @@ import { type ComponentPropsWithoutRef } from "react";
 import {
   SkeletonGroup as HeroSkeletonGroup,
   skeletonGroupClassNames,
-} from "heroui-native/skeleton-group";
+} from "heroui-native";
 type HeroSkeletonGroupProps = ComponentPropsWithoutRef<
   typeof HeroSkeletonGroup
 >;

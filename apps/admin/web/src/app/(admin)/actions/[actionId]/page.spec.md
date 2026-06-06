@@ -107,9 +107,9 @@
 |--------|------|
 | onClickBackButton | `/actions` 목록 페이지로 router.push |
 | onClickEditButton | `/actions/${actionId}/edit` 수정 페이지로 router.push |
-| deleteModal.onOpen | 삭제 확인 모달 표시 |
+| deleteModal.open | 삭제 확인 모달 표시 |
 | onClickDeleteConfirm | deleteAction 뮤테이션 실행 → 성공 시 모달 닫기 + 목록 이동 |
-| deleteModal.onClose | 삭제 모달 닫기 |
+| deleteModal.close | 삭제 모달 닫기 |
 
 ## group 색상 매핑
 

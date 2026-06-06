@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "@heroui/styles";
-@import "../../../../../packages/fe-ui/src/design-system/tailwind-theme.css";
 @import "ckeditor5/ckeditor5.css";
 @source "../../../../../packages/fe-ui/src/**/*.{js,ts,jsx,tsx}";
 @custom-variant dark (&:is(.dark *));

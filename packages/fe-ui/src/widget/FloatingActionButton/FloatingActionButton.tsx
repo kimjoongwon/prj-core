@@ -2,7 +2,8 @@
 
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Button, Tooltip } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Tooltip } from "@heroui/react";
 
 export interface FloatingActionButtonProps {
 	/** 클릭 핸들러 */
@@ -70,7 +71,7 @@ export const FloatingActionButton = observer(
 		const button = (
 			<Button
 				onPress={onPress}
-				className={`group relative size-14 min-w-0 rounded-full bg-gradient-to-br from-primary to-secondary p-0 shadow-lg transition-all hover:scale-105 hover:shadow-xl ${className ?? ""}`}
+				className={`group relative size-14 min-w-0 rounded-full bg-gradient-to-br from-accent to-default p-0 shadow-lg transition-all hover:scale-105 hover:shadow-xl ${className ?? ""}`}
 			>
 				{/* 아이콘 */}
 				<div className="relative">
@@ -93,25 +94,26 @@ export const FloatingActionButton = observer(
 
 				{/* 펄스 애니메이션 */}
 				{showPulse && (
-					<span className="absolute inset-0 animate-ping rounded-full bg-primary opacity-20" />
+					<span className="absolute inset-0 animate-ping rounded-full bg-accent opacity-20" />
 				)}
 			</Button>
 		);
 
 		return (
 			<div className={`fixed z-40 ${positionClasses[position]}`}>
-				{tooltip ? (
-					<Tooltip content={tooltip} placement="left">
-						{button}
-					</Tooltip>
-				) : (
+					{tooltip ? (
+						<Tooltip>
+							<Tooltip.Trigger>{button}</Tooltip.Trigger>
+							<Tooltip.Content placement="left">{tooltip}</Tooltip.Content>
+						</Tooltip>
+					) : (
 					button
 				)}
 
 				{/* 키보드 단축키 힌트 */}
 				{shortcutHint && (
 					<div className="mt-2 text-center">
-						<span className="rounded bg-content2 px-1.5 py-0.5 text-xs text-default-500">
+						<span className="rounded bg-surface-secondary px-1.5 py-0.5 text-xs text-muted">
 							{shortcutHint}
 						</span>
 					</div>

@@ -336,7 +336,6 @@ pnpm install
 
 ```bash
 cp apps/core/api/.env.example apps/core/api/.env
-cp apps/idp/api/.env.example apps/idp/api/.env
 cp packages/be-prisma/.env.example packages/be-prisma/.env
 ```
 
@@ -361,10 +360,10 @@ pnpm start
 pnpm start:core-api        # Core API (http://localhost:3006)
 pnpm start:admin-web       # Admin 웹앱 (http://localhost:3000)
 pnpm start:proposal-web    # Proposal 웹앱 (http://localhost:3011/proposal)
-pnpm start:idp-api         # IDP API (http://localhost:3007)
-pnpm start:idp-web         # IDP 웹앱 (http://localhost:3008)
 pnpm start:tool-storybook  # Storybook (http://localhost:6006)
 ```
+
+> Auth/IDP/OIDC endpoint는 `core-api`에서 함께 제공합니다.
 
 ## 🔧 환경 설정
 
@@ -380,7 +379,6 @@ pnpm start:tool-storybook  # Storybook (http://localhost:6006)
 ### 예제 파일
 
 - `apps/core/api/.env.example`
-- `apps/idp/api/.env.example`
 - `packages/be-prisma/.env.example`
 - 프로젝트별 env 키 표: [docs/env-reference.md](./docs/env-reference.md)
 

@@ -12,16 +12,9 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Chip,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	Spinner,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Modal, Spinner, useOverlayState } from "@heroui/react";
 
 export interface RoutineDetailPageActivity {
 	id: string;
@@ -78,10 +71,19 @@ export const RoutineDetailPage = observer(
 		onClickEditButton,
 		onClickRetryButton,
 		onClickOpenDeleteModal,
-		onCloseDeleteModal,
-		onClickDeleteConfirm,
-	}: RoutineDetailPageProps) => {
-		if (isLoading) {
+			onCloseDeleteModal,
+			onClickDeleteConfirm,
+		}: RoutineDetailPageProps) => {
+			const deleteModalState = useOverlayState({
+				isOpen: isDeleteModalOpen,
+				onOpenChange: (open) => {
+					if (!open) {
+						onCloseDeleteModal();
+					}
+				},
+			});
+
+			if (isLoading) {
 			return (
 				<DetailPage
 					top={<PageTitleBar title="루틴 상세" description="로딩 중..." />}
@@ -110,7 +112,7 @@ export const RoutineDetailPage = observer(
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">{errorTitle}</p>
+								<p className="text-muted">{errorTitle}</p>
 								<div className="flex gap-2">
 									{showRetryButton ? (
 										<Button variant="flat" onPress={onClickRetryButton}>
@@ -145,7 +147,7 @@ export const RoutineDetailPage = observer(
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">루틴을 찾을 수 없습니다.</p>
+								<p className="text-muted">루틴을 찾을 수 없습니다.</p>
 								<Button
 									variant="flat"
 									startContent={<ArrowLeft className="size-4" />}
@@ -210,19 +212,19 @@ export const RoutineDetailPage = observer(
 							<DetailSection top={<PageTitleBar level={2} title="기본 정보" />}>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<label className="text-sm text-default-500">루틴명</label>
+										<label className="text-sm text-muted">루틴명</label>
 										<p className="mt-1 font-medium">{routine.name}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">라벨</label>
+										<label className="text-sm text-muted">라벨</label>
 										<p className="mt-1">{routine.label}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">운동 수</label>
+										<label className="text-sm text-muted">운동 수</label>
 										<p className="mt-1">{activities.length}개</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">
+										<label className="text-sm text-muted">
 											연결 상태
 										</label>
 										<div className="mt-1">
@@ -242,13 +244,13 @@ export const RoutineDetailPage = observer(
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">등록일</label>
+										<label className="text-sm text-muted">등록일</label>
 										<div className="mt-1">
 											<DateTimeCell value={routine.createdAt} />
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">수정일</label>
+										<label className="text-sm text-muted">수정일</label>
 										<div className="mt-1">
 											<DateTimeCell value={routine.updatedAt} />
 										</div>
@@ -259,20 +261,20 @@ export const RoutineDetailPage = observer(
 						<DetailSectionCard>
 							<DetailSection top={<PageTitleBar level={2} title="연결 요약" />}>
 								<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-									<div className="rounded-lg bg-content2 p-3">
-										<p className="text-xs text-default-500">전체 활동</p>
+									<div className="rounded-lg bg-surface-secondary p-3">
+										<p className="text-xs text-muted">전체 활동</p>
 										<p className="mt-1 text-lg font-semibold">
 											{activities.length}개
 										</p>
 									</div>
-									<div className="rounded-lg bg-content2 p-3">
-										<p className="text-xs text-default-500">연결 정상</p>
+									<div className="rounded-lg bg-surface-secondary p-3">
+										<p className="text-xs text-muted">연결 정상</p>
 										<p className="mt-1 text-lg font-semibold text-success">
 											{resolvedActivities}개
 										</p>
 									</div>
-									<div className="rounded-lg bg-content2 p-3">
-										<p className="text-xs text-default-500">사용 중 프로그램</p>
+									<div className="rounded-lg bg-surface-secondary p-3">
+										<p className="text-xs text-muted">사용 중 프로그램</p>
 										<p className="mt-1 text-lg font-semibold">
 											{programs.length}개
 										</p>
@@ -283,7 +285,7 @@ export const RoutineDetailPage = observer(
 						<DetailSectionCard>
 							<DetailSection top={<PageTitleBar level={2} title="운동 구성" />}>
 								{activities.length === 0 ? (
-									<p className="text-sm text-default-500">
+									<p className="text-sm text-muted">
 										등록된 활동이 없습니다.
 									</p>
 								) : (
@@ -293,11 +295,11 @@ export const RoutineDetailPage = observer(
 											return (
 												<div
 													key={activity.id}
-													className="rounded-2xl border border-default-200 bg-content1 p-4"
+													className="rounded-2xl border border-border bg-surface p-4"
 												>
 													<div className="flex flex-col gap-4 md:flex-row">
 														<div className="flex items-start gap-3 md:w-48 md:flex-col md:items-center">
-															<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+															<div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
 																{index + 1}
 															</div>
 															<MediaThumbnail
@@ -319,7 +321,7 @@ export const RoutineDetailPage = observer(
 																	<p className="font-medium">
 																		{activity.exerciseName ?? "알 수 없는 운동"}
 																	</p>
-																	<p className="mt-1 text-sm text-default-500">
+																	<p className="mt-1 text-sm text-muted">
 																		루틴 순서 {activity.order}
 																	</p>
 																</div>
@@ -331,7 +333,7 @@ export const RoutineDetailPage = observer(
 																	{isResolved ? "정상" : "확인필요"}
 																</Chip>
 															</div>
-															<div className="mt-3 flex flex-wrap gap-4 text-sm text-default-500">
+															<div className="mt-3 flex flex-wrap gap-4 text-sm text-muted">
 																<span>반복 횟수: {activity.repetitions}회</span>
 																<span>
 																	휴식 시간:{" "}
@@ -341,7 +343,7 @@ export const RoutineDetailPage = observer(
 																</span>
 															</div>
 															{activity.notes ? (
-																<p className="mt-2 text-sm text-default-400">
+																<p className="mt-2 text-sm text-muted">
 																	메모: {activity.notes}
 																</p>
 															) : null}
@@ -359,7 +361,7 @@ export const RoutineDetailPage = observer(
 								top={<PageTitleBar level={2} title="사용 중인 프로그램" />}
 							>
 								{programs.length === 0 ? (
-									<p className="text-sm text-default-500">
+									<p className="text-sm text-muted">
 										현재 이 루틴을 사용하는 프로그램이 없습니다.
 									</p>
 								) : (
@@ -367,7 +369,7 @@ export const RoutineDetailPage = observer(
 										{programs.map((program) => (
 											<div
 												key={program.id}
-												className="flex items-center justify-between rounded-lg bg-content2 p-3"
+												className="flex items-center justify-between rounded-lg bg-surface-secondary p-3"
 											>
 												<p className="font-medium">{program.name}</p>
 											</div>
@@ -378,10 +380,10 @@ export const RoutineDetailPage = observer(
 						</DetailSectionCard>
 					</VStack>
 				</DetailPageSurface>
-				<Modal isOpen={isDeleteModalOpen} onClose={onCloseDeleteModal}>
-					<ModalContent>
-						<ModalHeader>루틴 삭제</ModalHeader>
-						<ModalBody>
+				<Modal state={deleteModalState}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>루틴 삭제</Modal.Header>
+						<Modal.Body>
 							<p>
 								<strong>{routine.name}</strong> 루틴을 삭제하시겠습니까?
 							</p>
@@ -393,8 +395,8 @@ export const RoutineDetailPage = observer(
 							<p className="mt-2 text-sm text-danger">
 								이 작업은 되돌릴 수 없습니다.
 							</p>
-						</ModalBody>
-						<ModalFooter>
+						</Modal.Body>
+						<Modal.Footer>
 							<Button
 								variant="flat"
 								onPress={onCloseDeleteModal}
@@ -409,8 +411,8 @@ export const RoutineDetailPage = observer(
 							>
 								삭제
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
 			</DetailPage>
 		);

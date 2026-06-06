@@ -35,16 +35,16 @@ test.describe("Action 목록 페이지", () => {
 			// Then: 시스템 기본 Action 확인 (rowheader로 정확한 식별자 매칭)
 			const grid = page.getByRole("grid");
 			await expect(
-				grid.getByRole("rowheader", { name: "create", exact: true }),
+				grid.getByRole("gridcell", { name: "create", exact: true }),
 			).toBeVisible();
 			await expect(
-				grid.getByRole("rowheader", { name: "read", exact: true }),
+				grid.getByRole("gridcell", { name: "read", exact: true }),
 			).toBeVisible();
 			await expect(
-				grid.getByRole("rowheader", { name: "update", exact: true }),
+				grid.getByRole("gridcell", { name: "update", exact: true }),
 			).toBeVisible();
 			await expect(
-				grid.getByRole("rowheader", { name: "delete", exact: true }),
+				grid.getByRole("gridcell", { name: "delete", exact: true }),
 			).toBeVisible();
 		});
 
@@ -144,10 +144,10 @@ test.describe("Action 목록 페이지", () => {
 
 			const grid = page.getByRole("grid");
 			await expect(
-				grid.getByRole("rowheader", { name: "read:masked:email" }),
+				grid.getByRole("gridcell", { name: "read:masked:email" }),
 			).toBeVisible();
 			await expect(
-				grid.getByRole("rowheader", { name: "create", exact: true }),
+				grid.getByRole("gridcell", { name: "create", exact: true }),
 			).toHaveCount(0);
 		});
 	});
@@ -165,10 +165,10 @@ test.describe("Action 목록 페이지", () => {
 
 			const grid = page.getByRole("grid");
 			await expect(
-				grid.getByRole("rowheader", { name: "approve", exact: true }),
+				grid.getByRole("gridcell", { name: "approve", exact: true }),
 			).toBeVisible();
 			await expect(
-				grid.getByRole("rowheader", { name: "create", exact: true }),
+				grid.getByRole("gridcell", { name: "create", exact: true }),
 			).toHaveCount(0);
 		});
 
@@ -179,16 +179,12 @@ test.describe("Action 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			const grid = page.getByRole("grid");
-			const createRow = grid.getByRole("row").filter({
-				has: grid.getByRole("rowheader", {
-					name: "create",
-					exact: true,
-				}),
-			});
+			const createRow = grid.getByRole("row", { name: /create 생성 CRUD/ });
 			await expect(createRow).toBeVisible();
-			await createRow.getByRole("button", { name: "상세" }).click();
-
-			await expect(page).toHaveURL(/\/admin\/actions\/[^/]+$/);
+			await Promise.all([
+				page.waitForURL(/\/admin\/actions\/[^/]+$/, { timeout: 30000 }),
+				createRow.getByRole("button", { name: "상세" }).click(),
+			]);
 		});
 	});
 

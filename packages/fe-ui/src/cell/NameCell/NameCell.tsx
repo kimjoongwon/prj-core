@@ -19,7 +19,7 @@ export const NameCell = ({
 		return (
 			<button
 				type="button"
-				className="cursor-pointer text-left text-primary hover:underline"
+				className="cursor-pointer text-left text-accent hover:underline"
 				onClick={onPress}
 			>
 				{content}

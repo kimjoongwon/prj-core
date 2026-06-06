@@ -2,13 +2,11 @@
 
 import { ArrowLeft, Send } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Select,
-	SelectItem,
-	Skeleton,
-	Textarea,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Select } from "../../control/Select/Select";
+import { Skeleton } from "../../feedback/Skeleton/Skeleton";
+import { TextArea } from "../../control/TextArea/TextArea";
+import { ListBox } from "@heroui/react";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { PageSurface } from "../../surface/PageSurface";
@@ -36,7 +34,7 @@ export interface TenantAccessRequestCreatePageProps {
 	onClickBackButton: () => void;
 	onChangeSpaceSelection: (spaceId: string) => void;
 	onChangeRoleSelection: (roleId: string) => void;
-	onChangeReasonTextarea: (reason: string) => void;
+	onChangeReasonTextArea: (reason: string) => void;
 	onClickSubmitButton: () => void;
 }
 
@@ -50,7 +48,7 @@ export const TenantAccessRequestCreatePage = observer(
 		onClickBackButton,
 		onChangeSpaceSelection,
 		onChangeRoleSelection,
-		onChangeReasonTextarea,
+		onChangeReasonTextArea,
 		onClickSubmitButton,
 	}: TenantAccessRequestCreatePageProps) => (
 		<VStack gap={5}>
@@ -79,63 +77,67 @@ export const TenantAccessRequestCreatePage = observer(
 								description="승인자는 선택한 역할을 변경하지 않고 승인 또는 반려합니다."
 							/>
 							<div className="grid gap-4 md:grid-cols-2">
-								<Select
-									label="Space"
-									labelPlacement="outside"
-									placeholder="Space 선택"
-									selectedKeys={form.spaceId ? [form.spaceId] : []}
-									onSelectionChange={(keys) => {
-										const selected = Array.from(keys)[0];
-										onChangeSpaceSelection(selected ? String(selected) : "");
-									}}
-									isRequired
-								>
-									{spaceOptions.map((option) => (
-										<SelectItem key={option.value} textValue={option.label}>
-											<div className="flex flex-col">
-												<span>{option.label}</span>
+									<Select
+										label="Space"
+										labelPlacement="outside"
+										placeholder="Space 선택"
+										value={form.spaceId || null}
+										onChange={(value) => {
+											onChangeSpaceSelection(String(value ?? ""));
+										}}
+										isRequired
+									>
+										{spaceOptions.map((option) => (
+											<ListBox.Item
+												key={option.value}
+												id={option.value}
+												textValue={option.label}
+											>
+												<div className="flex flex-col">
+													<span>{option.label}</span>
 												{option.description ? (
-													<span className="text-xs text-default-500">
+													<span className="text-xs text-muted">
 														{option.description}
 													</span>
 												) : null}
 											</div>
-										</SelectItem>
+										</ListBox.Item>
 									))}
 								</Select>
-								<Select
-									label="희망 역할"
-									labelPlacement="outside"
-									placeholder="Role 선택"
-									selectedKeys={
-										form.requestedRoleId ? [form.requestedRoleId] : []
-									}
-									onSelectionChange={(keys) => {
-										const selected = Array.from(keys)[0];
-										onChangeRoleSelection(selected ? String(selected) : "");
-									}}
-									isRequired
-								>
-									{roleOptions.map((option) => (
-										<SelectItem key={option.value} textValue={option.label}>
-											<div className="flex flex-col">
+									<Select
+										label="희망 역할"
+										labelPlacement="outside"
+										placeholder="Role 선택"
+										value={form.requestedRoleId || null}
+										onChange={(value) => {
+											onChangeRoleSelection(String(value ?? ""));
+										}}
+										isRequired
+									>
+										{roleOptions.map((option) => (
+											<ListBox.Item
+												key={option.value}
+												id={option.value}
+												textValue={option.label}
+											>
+												<div className="flex flex-col">
 												<span>{option.label}</span>
 												{option.description ? (
-													<span className="text-xs text-default-500">
+													<span className="text-xs text-muted">
 														{option.description}
 													</span>
 												) : null}
 											</div>
-										</SelectItem>
+										</ListBox.Item>
 									))}
 								</Select>
 							</div>
-							<Textarea
+							<TextArea
 								label="신청 사유"
 								labelPlacement="outside"
 								placeholder="권한이 필요한 업무 목적을 입력하세요."
 								value={form.reason}
-								onValueChange={onChangeReasonTextarea}
+								onValueChange={onChangeReasonTextArea}
 								maxLength={1000}
 								description={`${form.reason.length} / 1000`}
 							/>

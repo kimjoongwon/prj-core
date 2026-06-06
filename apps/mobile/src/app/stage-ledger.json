@@ -14,7 +14,7 @@
       "expected_files": [
         "apps/mobile/src/app/index.spec.md",
         "apps/mobile/src/app/app.context.md",
-        "apps/idp/api/src/module/auth/auth.controller.ts",
+        "apps/core/api/src/module/auth/auth.controller.ts",
         "packages/be-usecase/src/auth/logout-native-mobile-session.usecase.ts",
         "packages/be-dto/src/auth/native-auth.dto.ts",
         "packages/be-service/src/auth/token-storage.service.ts",
@@ -31,8 +31,8 @@
         "pnpm --filter=@cocrepo/dto build",
         "pnpm --filter=@cocrepo/service build",
         "pnpm --filter=@cocrepo/usecase build",
-        "pnpm --filter=idp-api type-check",
-        "pnpm --filter=idp-api test -- --runTestsByPath src/module/auth/auth.controller.spec.ts",
+        "pnpm --filter=core-api type-check",
+        "pnpm --filter=core-api test -- --runTestsByPath src/module/auth/auth.controller.spec.ts",
         "pnpm --filter=mobile-app type-check",
         "pnpm --filter=mobile-app test -- --runTestsByPath src/route-tests/auth/login.test.tsx src/route-tests/auth/auth-utils.test.ts src/route-tests/auth/AuthSessionGate.test.tsx src/route-tests/_layout.test.tsx"
       ],

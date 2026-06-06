@@ -3,7 +3,7 @@
 > 생성일: 2026-06-01
 > 서비스: 모바일 커뮤니티
 > 식별자: `mobile-community`
-> 담당 role: `orch-delivery`
+> 담당 subagent: `orch-delivery`
 > 상태: 기존 route spec 기준 문서 보완
 
 ## 서비스 목표
@@ -52,7 +52,7 @@
 | Prisma/Entity | content/community post model | service spec 기준 확인 | backend content files | `be-prisma-builder`, `be-entity-builder` | backend tests |
 | DTO/API | feed 조회, post 작성 DTO와 operationId | service spec 기준 확인 | `@cocrepo/dto`, core controller | `be-dto-builder`, `be-controller-builder` | Swagger/Orval |
 | UseCase | 조회/작성 workflow | service spec 기준 확인 | `@cocrepo/usecase`, `@cocrepo/command` | `be-command-builder`, `be-usecase-builder` | unit/type |
-| Mobile UI | screen/card/composer | service spec 기준 확인 | `packages/fe-mo-ui` | `fe-screen-agent`, `fe-display-agent` | unit/story |
+| Mobile UI | screen/card/composer | service spec 기준 확인 | `packages/fe-mo-ui` | `fe-screen-agent`, `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, `fe-layout-agent` | unit/story |
 | Route | Orval hook wiring, composer state | service spec 기준 확인 | `apps/mobile/src/app/(tabs)/community.tsx` | `fe-route-agent` | mobile route test |
 
 ## DESIGN.md 기반 디자인 방향
@@ -65,7 +65,7 @@
 |------------|--------|------------|------|-----------|---------------------|-------------------|------|
 | `apps/mobile/src/app/community/index.spec.md` | mobile | `apps/mobile/src/app/(tabs)/community.tsx` | `/community` 실행 slice | 갱신 | 이 문서 | `orch-delivery` | 기존 route spec을 service 체계에 연결 |
 
-## 에이전트 배정 매트릭스
+## Subagent 배정 매트릭스
 
 | step id | phase | 담당 `agent_type` | 입력 파일 | 출력 파일 | 수정 허용 파일 | 의존 step | parallel | 완료 조건 |
 |---------|-------|-------------------|-----------|-----------|----------------|-----------|----------|-----------|

@@ -26,22 +26,10 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Input,
-	Select,
-	SelectItem,
-	type Selection,
-	Textarea,
-} from "../../design-system/primitives";
-
-const getSelectedValue = (keys: Selection): string => {
-	if (keys === "all") {
-		return "";
-	}
-
-	const selectedKey = keys.values().next().value;
-	return selectedKey ? String(selectedKey) : "";
-};
+import { Input } from "../../control/Input/Input";
+import { Select } from "../../control/Select/Select";
+import { TextArea } from "../../control/TextArea/TextArea";
+import { ListBox } from "@heroui/react";
 
 export interface InquiryCreatePageCustomerSearchResult {
 	id: string;
@@ -89,7 +77,7 @@ export interface InquiryCreatePageProps {
 	onSearchCustomer: (keyword: string) => void;
 	onSelectCustomer: (customer: InquiryCreatePageCustomerSearchResult) => void;
 	onChangeTitleInput: (value: string) => void;
-	onChangeContentTextarea: (value: string) => void;
+	onChangeContentTextArea: (value: string) => void;
 	onChangeCategorySelection: (value: InquiryCategory) => void;
 	onChangeChannelSelection: (value: InquiryChannel) => void;
 	onChangePrioritySelection: (value: InquiryPriority) => void;
@@ -116,7 +104,7 @@ export const InquiryCreatePage = observer(
 		onSearchCustomer,
 		onSelectCustomer,
 		onChangeTitleInput,
-		onChangeContentTextarea,
+		onChangeContentTextArea,
 		onChangeCategorySelection,
 		onChangeChannelSelection,
 		onChangePrioritySelection,
@@ -204,7 +192,7 @@ export const InquiryCreatePage = observer(
 												errorMessage={formState.errors.customerId}
 											/>
 											{formState.searchResults.length > 0 && (
-												<div className="max-h-56 space-y-1 overflow-y-auto rounded-xl border border-divider p-2">
+												<div className="max-h-56 space-y-1 overflow-y-auto rounded-xl border border-border p-2">
 													{formState.searchResults.map((customer) => (
 														<button
 															key={customer.id}
@@ -212,12 +200,12 @@ export const InquiryCreatePage = observer(
 															onClick={() => {
 																onSelectCustomer(customer);
 															}}
-															className="w-full rounded-lg px-3 py-2 text-left transition-colors hover:bg-default-100"
+															className="w-full rounded-lg px-3 py-2 text-left transition-colors hover:bg-default"
 														>
 															<div className="text-sm font-medium">
 																{customer.label}
 															</div>
-															<div className="text-xs text-default-500">
+															<div className="text-xs text-muted">
 																{customer.description || customer.id}
 															</div>
 														</button>
@@ -225,7 +213,7 @@ export const InquiryCreatePage = observer(
 												</div>
 											)}
 											{formState.customerId && (
-												<div className="text-xs text-default-500">
+												<div className="text-xs text-muted">
 													선택된 고객 ID: {formState.customerId}
 												</div>
 											)}
@@ -244,12 +232,12 @@ export const InquiryCreatePage = observer(
 										/>
 									)}
 									{!isHidden("content") && (
-										<Textarea
+										<TextArea
 											label="문의 내용"
 											labelPlacement="outside"
 											placeholder="문의 내용을 입력하세요"
 											value={formState.content}
-											onValueChange={onChangeContentTextarea}
+											onValueChange={onChangeContentTextArea}
 											minRows={6}
 											isRequired
 											isInvalid={Boolean(formState.errors.content)}
@@ -262,17 +250,16 @@ export const InquiryCreatePage = observer(
 												<Select
 													label="카테고리"
 													placeholder="카테고리 선택"
-													selectedKeys={
+													value={
 														formState.category &&
 														categoryOptionValues.has(formState.category)
-															? [formState.category]
-															: []
+															? formState.category
+															: null
 													}
-													onSelectionChange={(keys) => {
-														const selectedValue = getSelectedValue(keys);
+													onChange={(selectedValue) => {
 														if (selectedValue) {
 															onChangeCategorySelection(
-																selectedValue as InquiryCategory,
+																String(selectedValue) as InquiryCategory,
 															);
 														}
 													}}
@@ -281,9 +268,13 @@ export const InquiryCreatePage = observer(
 													errorMessage={formState.errors.category}
 												>
 													{categoryOptions.map((option) => (
-														<SelectItem key={option.value}>
+														<ListBox.Item
+															key={option.value}
+															id={option.value}
+															textValue={option.text}
+														>
 															{option.text}
-														</SelectItem>
+														</ListBox.Item>
 													))}
 												</Select>
 											</div>
@@ -293,17 +284,16 @@ export const InquiryCreatePage = observer(
 												<Select
 													label="채널"
 													placeholder="채널 선택"
-													selectedKeys={
+													value={
 														formState.channel &&
 														channelOptionValues.has(formState.channel)
-															? [formState.channel]
-															: []
+															? formState.channel
+															: null
 													}
-													onSelectionChange={(keys) => {
-														const selectedValue = getSelectedValue(keys);
+													onChange={(selectedValue) => {
 														if (selectedValue) {
 															onChangeChannelSelection(
-																selectedValue as InquiryChannel,
+																String(selectedValue) as InquiryChannel,
 															);
 														}
 													}}
@@ -312,9 +302,13 @@ export const InquiryCreatePage = observer(
 													errorMessage={formState.errors.channel}
 												>
 													{channelOptions.map((option) => (
-														<SelectItem key={option.value}>
+														<ListBox.Item
+															key={option.value}
+															id={option.value}
+															textValue={option.text}
+														>
 															{option.text}
-														</SelectItem>
+														</ListBox.Item>
 													))}
 												</Select>
 											</div>
@@ -324,17 +318,16 @@ export const InquiryCreatePage = observer(
 												<Select
 													label="우선순위"
 													placeholder="우선순위 선택"
-													selectedKeys={
+													value={
 														formState.priority &&
 														priorityOptionValues.has(formState.priority)
-															? [formState.priority]
-															: []
+															? formState.priority
+															: null
 													}
-													onSelectionChange={(keys) => {
-														const selectedValue = getSelectedValue(keys);
+													onChange={(selectedValue) => {
 														if (selectedValue) {
 															onChangePrioritySelection(
-																selectedValue as InquiryPriority,
+																String(selectedValue) as InquiryPriority,
 															);
 														}
 													}}
@@ -343,9 +336,13 @@ export const InquiryCreatePage = observer(
 													errorMessage={formState.errors.priority}
 												>
 													{priorityOptions.map((option) => (
-														<SelectItem key={option.value}>
+														<ListBox.Item
+															key={option.value}
+															id={option.value}
+															textValue={option.text}
+														>
 															{option.text}
-														</SelectItem>
+														</ListBox.Item>
 													))}
 												</Select>
 											</div>

@@ -26,18 +26,18 @@ export const CourseMetricGrid = observer(
 					return (
 						<Surface
 							key={metric.label}
-							className="rounded-2xl border-divider/80 bg-content1/70 p-5"
+							className="rounded-2xl border-border/80 bg-surface/70 p-5"
 						>
 							<HStack alignItems="center" justifyContent="between" fullWidth>
 								<VStack gap="dense">
-									<span className="text-sm text-default-500">
+									<span className="text-sm text-muted">
 										{metric.label}
 									</span>
 									<strong className="text-2xl font-semibold text-foreground">
 										{metric.value}
 									</strong>
 								</VStack>
-								<span className="flex size-10 items-center justify-center rounded-lg bg-secondary/15 text-secondary">
+								<span className="flex size-10 items-center justify-center rounded-lg bg-default/15 text-accent">
 									<Icon className="size-5" />
 								</span>
 							</HStack>

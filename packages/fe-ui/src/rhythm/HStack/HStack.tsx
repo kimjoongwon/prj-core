@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 import { Children, type ReactNode } from "react";
-import { cn } from "../../design-system/primitives";
+import { cn } from "@heroui/react";
 import {
 	isRhythmPreset,
 	type RhythmValue,

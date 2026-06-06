@@ -4,7 +4,7 @@ import type { DataGridState, InputConfig } from "@cocrepo/type";
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { type KeyboardEvent, useEffect, useState } from "react";
-import { Input } from "../../design-system/primitives";
+import { Input } from "../../control/Input/Input";
 import { useT } from "../../i18n";
 
 interface SearchInputProps {
@@ -59,7 +59,7 @@ export const SearchInput = observer(({ config, state }: SearchInputProps) => {
 			value={inputValue}
 			onValueChange={handleValueChange}
 			onKeyDown={handleKeyDown}
-			startContent={<Search size={16} className="text-default-400" />}
+			startContent={<Search size={16} className="text-muted" />}
 			classNames={{
 				base: "max-w-xs",
 				inputWrapper: "h-10",

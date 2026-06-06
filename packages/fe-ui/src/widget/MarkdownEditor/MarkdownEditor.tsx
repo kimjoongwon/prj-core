@@ -17,7 +17,8 @@ import {
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { useRef } from "react";
-import { Button, Tooltip } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Tooltip } from "@heroui/react";
 
 interface ToolbarItem {
 	icon?: React.ComponentType<{ className?: string }>;
@@ -198,27 +199,30 @@ export const MarkdownEditor = observer(
 		return (
 			<div className={`flex h-full flex-col ${className ?? ""}`}>
 				{/* 툴바 */}
-				<div className="flex flex-wrap items-center gap-1 border-b border-divider bg-content2 p-2">
+				<div className="flex flex-wrap items-center gap-1 border-b border-border bg-surface-secondary p-2">
 					{allToolbarItems.map((item, index) =>
 						item.type === "divider" ? (
-							<div key={index} className="mx-1 h-6 w-px bg-divider" />
+							<div key={index} className="mx-1 h-6 w-px bg-border" />
 						) : (
-							<Tooltip key={index} content={item.label}>
-								<Button
-									size="sm"
-									variant="light"
+								<Tooltip key={index}>
+									<Tooltip.Trigger>
+									<Button
+										size="sm"
+										variant="light"
 									isIconOnly
 									onPress={item.action}
 									className="size-8 min-w-8"
-								>
-									{item.icon && <item.icon className="size-4" />}
-								</Button>
-							</Tooltip>
+									>
+										{item.icon && <item.icon className="size-4" />}
+									</Button>
+									</Tooltip.Trigger>
+									<Tooltip.Content>{item.label}</Tooltip.Content>
+								</Tooltip>
 						),
 					)}
 					{extraActions && (
 						<>
-							<div className="mx-1 h-6 w-px bg-divider" />
+							<div className="mx-1 h-6 w-px bg-border" />
 							{extraActions}
 						</>
 					)}
@@ -230,7 +234,7 @@ export const MarkdownEditor = observer(
 					value={value}
 					onChange={(e) => onChange(e.target.value)}
 					placeholder={placeholder}
-					className="flex-1 resize-none bg-content1 p-4 font-mono text-sm text-default-800 outline-none placeholder:text-default-400"
+					className="flex-1 resize-none bg-surface p-4 font-mono text-sm text-foreground outline-none placeholder:text-muted"
 					spellCheck={false}
 				/>
 			</div>

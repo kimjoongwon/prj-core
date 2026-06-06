@@ -3,18 +3,9 @@
 import { Edit2, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Switch } from "../../../control/Switch/Switch";
-import {
-	Button,
-	Chip,
-	Spinner,
-	Table,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-	Tooltip,
-} from "../../../design-system/primitives";
+import { Button } from "../../../control/Button/Button";
+import { Chip } from "../../../data-display/Chip/Chip";
+import { Spinner, Table, Tooltip } from "@heroui/react";
 import { HStack } from "../../../rhythm/HStack/HStack";
 import { VStack } from "../../../rhythm/VStack/VStack";
 
@@ -135,11 +126,12 @@ export const AbilityRuleList = observer(
 
 		return (
 			<VStack gap={4}>
-				{/* 상단 액션 바 */}
-				{onAddRule && (
-					<HStack justifyContent="end">
-						<Button
-							color="primary"
+					{/* 상단 액션 바 */}
+					{onAddRule && (
+						<HStack justifyContent="end" alignItems="center">
+							{loading ? <Spinner size="sm" /> : null}
+							<Button
+								color="primary"
 							startContent={<Plus className="h-4 w-4" />}
 							onPress={onAddRule}
 						>
@@ -151,45 +143,40 @@ export const AbilityRuleList = observer(
 				{/* 규칙 테이블 */}
 				<Table
 					aria-label="Ability 규칙 목록"
-					classNames={{
-						wrapper: "min-h-[200px]",
-					}}
 				>
-					<TableHeader>
-						<TableColumn key="priority" width={50}>
+					<Table.Content>
+					<Table.Header>
+						<Table.Column key="priority" width={50}>
 							#
-						</TableColumn>
-						<TableColumn key="name" width={120}>
+						</Table.Column>
+						<Table.Column key="name" width={120}>
 							이름
-						</TableColumn>
-						<TableColumn key="subject" width={150}>
+						</Table.Column>
+						<Table.Column key="subject" width={150}>
 							Subject
-						</TableColumn>
-						<TableColumn key="action" width={180}>
+						</Table.Column>
+						<Table.Column key="action" width={180}>
 							Action
-						</TableColumn>
-						<TableColumn key="conditions" width={80}>
+						</Table.Column>
+						<Table.Column key="conditions" width={80}>
 							조건
-						</TableColumn>
-						<TableColumn key="status" width={80}>
+						</Table.Column>
+						<Table.Column key="status" width={80}>
 							상태
-						</TableColumn>
-						<TableColumn key="actions" width={100}>
+						</Table.Column>
+						<Table.Column key="actions" width={100}>
 							작업
-						</TableColumn>
-					</TableHeader>
-					<TableBody
-						emptyContent={loading ? " " : "등록된 규칙이 없습니다."}
-						isLoading={loading}
-						loadingContent={<Spinner label="로딩 중..." />}
+						</Table.Column>
+					</Table.Header>
+					<Table.Body
 					>
 						{rules.map((rule) => (
-							<TableRow
+							<Table.Row
 								key={rule.id}
 								className={rule.inverted ? "bg-danger/10" : undefined}
 							>
-								<TableCell>{rule.priority}</TableCell>
-								<TableCell>
+								<Table.Cell>{rule.priority}</Table.Cell>
+								<Table.Cell>
 									<HStack alignItems="center" gap={2}>
 										{rule.inverted && (
 											<Chip color="danger" size="sm" variant="flat">
@@ -198,55 +185,60 @@ export const AbilityRuleList = observer(
 										)}
 										<span className="truncate">{rule.name || "-"}</span>
 									</HStack>
-								</TableCell>
-								<TableCell>
-									<Tooltip content={rule.subjectName} placement="top">
-										<span className="truncate cursor-default">
-											{formatSubject(rule)}
-										</span>
-									</Tooltip>
-								</TableCell>
-								<TableCell>
-									<Tooltip
-										content={
-											rule.fields.length > 0
-												? `${rule.actionName} (필드: ${rule.fields.join(", ")})`
-												: rule.actionName
-										}
-										placement="top"
-									>
-										<span className="truncate cursor-default">
-											{formatAction(rule)}
-										</span>
-									</Tooltip>
-								</TableCell>
-								<TableCell>
-									{rule.conditions &&
-									Object.keys(rule.conditions).length > 0 ? (
-										<Tooltip
-											content={
-												<pre className="text-xs">
-													{JSON.stringify(rule.conditions, null, 2)}
-												</pre>
-											}
-											placement="top"
-										>
-											<Chip
-												color="secondary"
-												size="sm"
-												variant="flat"
-												className="cursor-pointer"
-											>
-												{formatConditions(rule)}
-											</Chip>
+									</Table.Cell>
+									<Table.Cell>
+										<Tooltip>
+											<Tooltip.Trigger>
+											<span className="truncate cursor-default">
+												{formatSubject(rule)}
+											</span>
+											</Tooltip.Trigger>
+											<Tooltip.Content placement="top">
+												{rule.subjectName}
+											</Tooltip.Content>
 										</Tooltip>
-									) : (
-										<span className="text-default-400">
+									</Table.Cell>
+									<Table.Cell>
+										<Tooltip>
+											<Tooltip.Trigger>
+											<span className="truncate cursor-default">
+												{formatAction(rule)}
+											</span>
+											</Tooltip.Trigger>
+											<Tooltip.Content placement="top">
+												{rule.fields.length > 0
+													? `${rule.actionName} (필드: ${rule.fields.join(", ")})`
+													: rule.actionName}
+											</Tooltip.Content>
+										</Tooltip>
+									</Table.Cell>
+								<Table.Cell>
+										{rule.conditions &&
+										Object.keys(rule.conditions).length > 0 ? (
+											<Tooltip>
+												<Tooltip.Trigger>
+												<Chip
+													color="secondary"
+													size="sm"
+													variant="flat"
+													className="cursor-pointer"
+												>
+													{formatConditions(rule)}
+												</Chip>
+												</Tooltip.Trigger>
+												<Tooltip.Content placement="top">
+													<pre className="text-xs">
+														{JSON.stringify(rule.conditions, null, 2)}
+													</pre>
+												</Tooltip.Content>
+											</Tooltip>
+										) : (
+										<span className="text-muted">
 											{formatConditions(rule)}
 										</span>
 									)}
-								</TableCell>
-								<TableCell>
+								</Table.Cell>
+								<Table.Cell>
 									<Switch
 										size="sm"
 										value={rule.isActive}
@@ -254,40 +246,47 @@ export const AbilityRuleList = observer(
 											handleToggleActive(rule.id, rule.isActive)
 										}
 									/>
-								</TableCell>
-								<TableCell>
-									<HStack gap={1}>
-										{onEditRule && (
-											<Tooltip content="수정">
-												<Button
-													isIconOnly
-													size="sm"
+								</Table.Cell>
+									<Table.Cell>
+										<HStack gap={1}>
+											{onEditRule && (
+												<Tooltip>
+													<Tooltip.Trigger>
+													<Button
+														isIconOnly
+														size="sm"
 													variant="light"
 													onPress={() => onEditRule(rule)}
-												>
-													<Edit2 className="h-4 w-4" />
-												</Button>
-											</Tooltip>
-										)}
-										{onDeleteRule && (
-											<Tooltip content="삭제" color="danger">
-												<Button
-													isIconOnly
-													size="sm"
+													>
+														<Edit2 className="h-4 w-4" />
+													</Button>
+													</Tooltip.Trigger>
+													<Tooltip.Content>수정</Tooltip.Content>
+												</Tooltip>
+											)}
+											{onDeleteRule && (
+												<Tooltip>
+													<Tooltip.Trigger>
+													<Button
+														isIconOnly
+														size="sm"
 													variant="light"
 													color="danger"
 													onPress={() => onDeleteRule(rule.id)}
-												>
-													<Trash2 className="h-4 w-4" />
-												</Button>
-											</Tooltip>
-										)}
+													>
+														<Trash2 className="h-4 w-4" />
+													</Button>
+													</Tooltip.Trigger>
+													<Tooltip.Content>삭제</Tooltip.Content>
+												</Tooltip>
+											)}
 									</HStack>
-								</TableCell>
-							</TableRow>
+								</Table.Cell>
+							</Table.Row>
 						))}
-					</TableBody>
-				</Table>
+					</Table.Body>
+				</Table.Content>
+			</Table>
 			</VStack>
 		);
 	},

@@ -12,7 +12,7 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import { ToastProvider } from "../primitives";
+import { ToastProvider } from "@heroui/react";
 import { defaultThemeConfig, type ThemeConfig } from "../theme/heroui.config";
 
 const THEME_STORAGE_KEY = "heroui-theme";
@@ -60,6 +60,7 @@ function applyThemeToDocument(theme: ResolvedTheme) {
 	const root = document.documentElement;
 	root.classList.remove("light", "dark", "system");
 	root.classList.add(theme);
+	root.dataset.theme = theme;
 	root.style.colorScheme = theme;
 }
 
@@ -78,10 +79,6 @@ export interface DesignSystemProviderProps {
 	 * 테마 설정 (기본값: light 테마)
 	 */
 	themeConfig?: Partial<ThemeConfig>;
-	/**
-	 * @deprecated HeroUI v3에서는 Provider 기반 라우터 주입을 사용하지 않습니다.
-	 */
-	navigate?: (path: string) => void;
 }
 
 /**

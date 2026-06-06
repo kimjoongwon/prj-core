@@ -20,15 +20,11 @@ import {
 	ShieldCheck,
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Chip,
-	Divider,
-	Select,
-	SelectItem,
-	type Selection,
-	Switch,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Separator, ListBox } from "@heroui/react";
+import { Select } from "../../control/Select/Select";
+import { Switch } from "../../control/Switch/Switch";
 
 /** 모달 액션 타입 */
 export type AccountDetailPageModalAction =
@@ -102,15 +98,6 @@ export interface AccountDetailPageProps {
 	onClickConfirmModal: () => void;
 }
 
-const getSelectedValue = (keys: Selection): string => {
-	if (keys === "all") {
-		return "";
-	}
-
-	const selected = Array.from(keys)[0];
-	return selected ? String(selected) : "";
-};
-
 /**
  * IDP 계정 상세 pure screen입니다.
  */
@@ -149,11 +136,11 @@ export const AccountDetailPage = observer(
 			!accessGrantForm.spaceId ||
 			!accessGrantForm.roleId ||
 			isAccessGrantFormLoading;
-		const handleAccessGrantSpaceSelectionChange = (keys: Selection) => {
-			onChangeAccessGrantSpace(getSelectedValue(keys));
+		const handleAccessGrantSpaceChange = (value: string | number | null) => {
+			onChangeAccessGrantSpace(String(value ?? ""));
 		};
-		const handleAccessGrantRoleSelectionChange = (keys: Selection) => {
-			onChangeAccessGrantRole(getSelectedValue(keys));
+		const handleAccessGrantRoleChange = (value: string | number | null) => {
+			onChangeAccessGrantRole(String(value ?? ""));
 		};
 
 		// 모달 설정
@@ -175,7 +162,7 @@ export const AccountDetailPage = observer(
 						<p>
 							<strong>{account?.name}</strong> 계정의 잠금을 해제하시겠습니까?
 						</p>
-						<p className="text-sm text-default-400 mt-2">
+						<p className="text-sm text-muted mt-2">
 							잠금이 해제되면 다시 로그인할 수 있습니다.
 						</p>
 					</>
@@ -234,7 +221,7 @@ export const AccountDetailPage = observer(
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex items-center justify-center p-8">
-								<span className="text-default-500">로딩 중...</span>
+								<span className="text-muted">로딩 중...</span>
 							</div>
 						</DetailSectionCard>
 					</DetailPageSurface>
@@ -256,7 +243,7 @@ export const AccountDetailPage = observer(
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">계정을 찾을 수 없습니다.</p>
+								<p className="text-muted">계정을 찾을 수 없습니다.</p>
 								<Button variant="flat" onPress={onClickBackButton}>
 									목록으로
 								</Button>
@@ -291,15 +278,15 @@ export const AccountDetailPage = observer(
 							<DetailSection top={<PageTitleBar level={2} title="보안 정보" />}>
 								<dl className="grid grid-cols-1 gap-6 md:grid-cols-2">
 									<div>
-										<dt className="text-sm text-default-500 mb-1">이름</dt>
+										<dt className="text-sm text-muted mb-1">이름</dt>
 										<dd className="font-medium">{account.name}</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">이메일</dt>
+										<dt className="text-sm text-muted mb-1">이메일</dt>
 										<dd className="font-medium">{account.email}</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">활성 상태</dt>
+										<dt className="text-sm text-muted mb-1">활성 상태</dt>
 										<dd>
 											<div className="flex items-center gap-2">
 												<Switch
@@ -319,7 +306,7 @@ export const AccountDetailPage = observer(
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">잠금 상태</dt>
+										<dt className="text-sm text-muted mb-1">잠금 상태</dt>
 										<dd>
 											<div className="flex items-center gap-2">
 												<Chip
@@ -353,7 +340,7 @@ export const AccountDetailPage = observer(
 												)}
 											</div>
 											{account.lockedUntil && !account.isPermanentlyLocked && (
-												<p className="text-xs text-default-400 mt-1">
+												<p className="text-xs text-muted mt-1">
 													해제 예정:{" "}
 													<DateTimeCell value={account.lockedUntil} />
 												</p>
@@ -361,13 +348,13 @@ export const AccountDetailPage = observer(
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											로그인 실패 횟수
 										</dt>
 										<dd>
 											<div className="flex items-center gap-2">
 												<span
-													className={`font-mono text-lg ${account.failedLoginAttempts > 0 ? "text-warning" : "text-default-600"}`}
+													className={`font-mono text-lg ${account.failedLoginAttempts > 0 ? "text-warning" : "text-muted"}`}
 												>
 													{account.failedLoginAttempts}
 												</span>
@@ -386,7 +373,7 @@ export const AccountDetailPage = observer(
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											비밀번호 변경 필요
 										</dt>
 										<dd>
@@ -402,19 +389,19 @@ export const AccountDetailPage = observer(
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											마지막 로그인 시간
 										</dt>
 										<dd>
 											{account.lastLoginAt ? (
 												<DateTimeCell value={account.lastLoginAt} />
 											) : (
-												<span className="text-default-400">-</span>
+												<span className="text-muted">-</span>
 											)}
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											마지막 로그인 IP
 										</dt>
 										<dd className="font-mono text-sm">
@@ -422,7 +409,7 @@ export const AccountDetailPage = observer(
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">가입일</dt>
+										<dt className="text-sm text-muted mb-1">가입일</dt>
 										<dd>
 											<DateTimeCell value={account.createdAt} />
 										</dd>
@@ -432,7 +419,7 @@ export const AccountDetailPage = observer(
 						</DetailSectionCard>
 						<DetailSectionCard>
 							<DetailSection top={<PageTitleBar level={2} title="관리 액션" />}>
-								<Divider className="mb-4" />
+								<Separator className="mb-4" />
 								<div className="flex flex-wrap gap-3">
 									<Button
 										variant="flat"
@@ -472,9 +459,9 @@ export const AccountDetailPage = observer(
 									/>
 								}
 							>
-								<Divider className="mb-4" />
+								<Separator className="mb-4" />
 								{account.accessGrants.length > 0 ? (
-									<div className="divide-y divide-divider">
+									<div className="divide-y divide-border">
 										{account.accessGrants.map((grant) => (
 											<div
 												key={grant.tenantId}
@@ -484,7 +471,7 @@ export const AccountDetailPage = observer(
 													<p className="truncate font-medium">
 														{grant.spaceName}
 													</p>
-													<p className="truncate text-xs text-default-500">
+													<p className="truncate text-xs text-muted">
 														{grant.spaceLabel ?? grant.spaceId}
 													</p>
 												</div>
@@ -493,67 +480,71 @@ export const AccountDetailPage = observer(
 														{grant.roleDisplayName ?? grant.roleName}
 													</Chip>
 												</div>
-												<div className="text-sm text-default-500">
+												<div className="text-sm text-muted">
 													<DateTimeCell value={grant.grantedAt} />
 												</div>
 											</div>
 										))}
 									</div>
 								) : (
-									<p className="py-3 text-sm text-default-500">
+									<p className="py-3 text-sm text-muted">
 										부여된 접근 권한이 없습니다.
 									</p>
 								)}
-								<Divider className="my-4" />
+								<Separator className="my-4" />
 								<div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
-									<Select
-										label="Space"
-										labelPlacement="outside"
-										placeholder="Space 선택"
-										selectedKeys={
-											accessGrantForm.spaceId ? [accessGrantForm.spaceId] : []
-										}
-										isDisabled={
-											isAccessGrantFormLoading || spaceOptions.length === 0
-										}
-										onSelectionChange={handleAccessGrantSpaceSelectionChange}
-									>
-										{spaceOptions.map((option) => (
-											<SelectItem key={option.value} textValue={option.label}>
-												<div className="flex flex-col">
-													<span>{option.label}</span>
+										<Select
+											label="Space"
+											labelPlacement="outside"
+											placeholder="Space 선택"
+											value={accessGrantForm.spaceId || null}
+											isDisabled={
+												isAccessGrantFormLoading || spaceOptions.length === 0
+											}
+											onChange={handleAccessGrantSpaceChange}
+										>
+											{spaceOptions.map((option) => (
+												<ListBox.Item
+													key={option.value}
+													id={option.value}
+													textValue={option.label}
+												>
+													<div className="flex flex-col">
+														<span>{option.label}</span>
 													{option.description ? (
-														<span className="text-xs text-default-500">
+														<span className="text-xs text-muted">
 															{option.description}
 														</span>
 													) : null}
 												</div>
-											</SelectItem>
+											</ListBox.Item>
 										))}
 									</Select>
-									<Select
-										label="Role"
-										labelPlacement="outside"
-										placeholder="Role 선택"
-										selectedKeys={
-											accessGrantForm.roleId ? [accessGrantForm.roleId] : []
-										}
-										isDisabled={
-											isAccessGrantFormLoading || roleOptions.length === 0
-										}
-										onSelectionChange={handleAccessGrantRoleSelectionChange}
-									>
-										{roleOptions.map((option) => (
-											<SelectItem key={option.value} textValue={option.label}>
-												<div className="flex flex-col">
+										<Select
+											label="Role"
+											labelPlacement="outside"
+											placeholder="Role 선택"
+											value={accessGrantForm.roleId || null}
+											isDisabled={
+												isAccessGrantFormLoading || roleOptions.length === 0
+											}
+											onChange={handleAccessGrantRoleChange}
+										>
+											{roleOptions.map((option) => (
+												<ListBox.Item
+													key={option.value}
+													id={option.value}
+													textValue={option.label}
+												>
+													<div className="flex flex-col">
 													<span>{option.label}</span>
 													{option.description ? (
-														<span className="text-xs text-default-500">
+														<span className="text-xs text-muted">
 															{option.description}
 														</span>
 													) : null}
 												</div>
-											</SelectItem>
+											</ListBox.Item>
 										))}
 									</Select>
 									<Button

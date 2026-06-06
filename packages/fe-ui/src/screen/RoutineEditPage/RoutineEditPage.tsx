@@ -12,14 +12,7 @@ import {
 	useT,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import {
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	Spinner,
-} from "../../design-system/primitives";
+import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import type {
 	RoutineActivityFormItem,
 	RoutineTaskCandidate,
@@ -89,6 +82,14 @@ export const RoutineEditPage = observer(
 		onClickConfirmEmptyActivitiesWarningButton,
 	}: RoutineEditPageProps) => {
 		const t = useT();
+		const emptyActivitiesWarningState = useOverlayState({
+			isOpen: isEmptyActivitiesWarningOpen,
+			onOpenChange: (open) => {
+				if (!open) {
+					onCloseEmptyActivitiesWarningModal();
+				}
+			},
+		});
 
 		if (isLoading) {
 			return (
@@ -99,7 +100,7 @@ export const RoutineEditPage = observer(
 						<FormSectionCard>
 							<div className="flex items-center justify-center gap-2 p-8">
 								<Spinner size="sm" />
-								<span className="text-default-500">{t("로딩 중...")}</span>
+								<span className="text-muted">{t("로딩 중...")}</span>
 							</div>
 						</FormSectionCard>
 					</FormPageSurface>
@@ -120,7 +121,7 @@ export const RoutineEditPage = observer(
 					<FormPageSurface>
 						<FormSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">
+								<p className="text-muted">
 									{t("루틴을 찾을 수 없습니다.")}
 								</p>
 								<Button variant="flat" onPress={onClickCancelButton}>
@@ -213,16 +214,13 @@ export const RoutineEditPage = observer(
 						onReorderActivities={onReorderActivities}
 					/>
 				</FormPageSurface>
-				<Modal
-					isOpen={isEmptyActivitiesWarningOpen}
-					onClose={onCloseEmptyActivitiesWarningModal}
-				>
-					<ModalContent>
-						<ModalHeader>{t("활동 없이 저장")}</ModalHeader>
-						<ModalBody>
+				<Modal state={emptyActivitiesWarningState}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>{t("활동 없이 저장")}</Modal.Header>
+						<Modal.Body>
 							<p>{t("활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?")}</p>
-						</ModalBody>
-						<ModalFooter>
+						</Modal.Body>
+						<Modal.Footer>
 							<Button
 								variant="flat"
 								onPress={onCloseEmptyActivitiesWarningModal}
@@ -237,8 +235,8 @@ export const RoutineEditPage = observer(
 							>
 								{t("저장 진행")}
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
 			</FormPage>
 		);

@@ -12,8 +12,7 @@
     "REDIS_PASSWORD",
     "STORYBOOK_DISABLE_CHROMATIC",
     "STORYBOOK_REQUIRE_AUTH",
-    "STORYBOOK_CORE_API_TARGET",
-    "STORYBOOK_IDP_API_TARGET"
+    "STORYBOOK_CORE_API_TARGET"
   ],
   "tasks": {
     // === 기본 태스크 ===
@@ -100,12 +99,6 @@
       "dependsOn": ["^build"],
       "inputs": ["src/**", "tsconfig.json", "tsconfig.build.json", "package.json", "nest-cli.json"],
       "outputs": ["dist/**"],
-      "cache": true
-    },
-    "idp-web#build": {
-      "dependsOn": ["^build"],
-      "inputs": ["src/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],
-      "outputs": [".next/**", "!.next/cache/**"],
       "cache": true
     },
     "tool-storybook#build": {

@@ -154,7 +154,7 @@
 
 ## 특이사항
 
-- `useDisclosure`로 3개 모달 상태 관리 (deleteModal, previewModal, sendTestModal)
+- `useOverlayState`로 3개 모달 상태 관리 (deleteModal, previewModal, sendTestModal)
 - 캐시 무효화: `getGetTemplateQueryKey(templateId)` 사용
 - FULL_ACCESS 권한 필요
 - `TemplateContentViewer`, `VariableReadTable`는 내용만 렌더링하며 Surface는 페이지가 `PageSurface`, `SectionSurface`로 제공

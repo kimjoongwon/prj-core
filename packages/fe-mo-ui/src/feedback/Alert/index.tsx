@@ -8,7 +8,7 @@ import {
   Alert as HeroAlert,
   alertClassNames,
   useAlert,
-} from "heroui-native/alert";
+} from "heroui-native";
 import { Text, type TextProps } from "../../data-display/Text";
 type HeroAlertProps = ComponentPropsWithoutRef<typeof HeroAlert>;
 type HeroAlertDescriptionProps = ComponentPropsWithoutRef<

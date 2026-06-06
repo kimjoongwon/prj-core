@@ -2,7 +2,7 @@
 
 import { useNavigationStore } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
-import { cn } from "../../design-system/primitives";
+import { cn } from "@heroui/react";
 import { VStack } from "../../rhythm/VStack/VStack";
 
 export interface SubMenuListProps {
@@ -43,7 +43,7 @@ export const SubMenuList = observer(
 		return (
 			<div
 				className={cn(
-					"fixed inset-0 z-40 bg-content1 pt-16 md:hidden",
+					"fixed inset-0 z-40 bg-surface pt-16 md:hidden",
 					className,
 				)}
 			>
@@ -56,8 +56,8 @@ export const SubMenuList = observer(
 							className={cn(
 								"flex w-full items-center rounded-lg px-4 py-3 text-left transition-colors",
 								subNavItem.active
-									? "bg-primary/10 font-medium text-primary"
-									: "text-foreground/70 hover:bg-default-100 hover:text-foreground",
+									? "bg-accent/10 font-medium text-accent"
+									: "text-foreground/70 hover:bg-default hover:text-foreground",
 							)}
 						>
 							<span>{subNavItem.label}</span>

@@ -56,8 +56,8 @@ const statCards: StatCardConfig[] = [
 		label: "활성 세션",
 		key: "activeSessionCount",
 		icon: <Activity className="h-5 w-5" />,
-		color: "text-primary",
-		bgColor: "bg-primary/10",
+		color: "text-accent",
+		bgColor: "bg-accent/10",
 	},
 	{
 		label: "오늘 성공",
@@ -91,8 +91,8 @@ const statCards: StatCardConfig[] = [
 		label: "활성 클라이언트",
 		key: "activeClientCount",
 		icon: <KeyRound className="h-5 w-5" />,
-		color: "text-secondary",
-		bgColor: "bg-secondary/10",
+		color: "text-accent",
+		bgColor: "bg-default/10",
 	},
 ];
 
@@ -147,14 +147,14 @@ export const IdentityDashboardPage = observer(
 							>
 								<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
 									{statCards.map((card) => (
-										<div key={card.key} className="rounded-xl bg-content2 p-4">
+										<div key={card.key} className="rounded-xl bg-surface-secondary p-4">
 											<div
 												className={`flex h-10 w-10 items-center justify-center rounded-lg ${card.bgColor} ${card.color}`}
 											>
 												{card.icon}
 											</div>
 											<div>
-												<p className="text-sm text-default-500">
+												<p className="text-sm text-muted">
 													{t(card.label)}
 												</p>
 												<p className={`text-2xl font-bold ${card.color}`}>
@@ -171,7 +171,7 @@ export const IdentityDashboardPage = observer(
 								top={<PageTitleBar level={2} title="최근 7일 로그인 추이" />}
 							>
 								{trendItems.length === 0 ? (
-									<p className="py-8 text-center text-default-400">
+									<p className="py-8 text-center text-muted">
 										{t("로그인 추이 데이터가 없습니다.")}
 									</p>
 								) : (
@@ -179,13 +179,13 @@ export const IdentityDashboardPage = observer(
 										<div className="flex items-center gap-4">
 											<div className="flex items-center gap-1.5">
 												<div className="h-3 w-3 rounded-sm bg-success" />
-												<span className="text-sm text-default-500">
+												<span className="text-sm text-muted">
 													{t("성공")}
 												</span>
 											</div>
 											<div className="flex items-center gap-1.5">
 												<div className="h-3 w-3 rounded-sm bg-danger" />
-												<span className="text-sm text-default-500">
+												<span className="text-sm text-muted">
 													{t("실패")}
 												</span>
 											</div>
@@ -216,7 +216,7 @@ export const IdentityDashboardPage = observer(
 																height: "100%",
 															}}
 														>
-															<span className="mb-1 text-xs text-default-400">
+															<span className="mb-1 text-xs text-muted">
 																{item.successCount}
 															</span>
 															<div
@@ -235,7 +235,7 @@ export const IdentityDashboardPage = observer(
 																height: "100%",
 															}}
 														>
-															<span className="mb-1 text-xs text-default-400">
+															<span className="mb-1 text-xs text-muted">
 																{item.failureCount}
 															</span>
 															<div
@@ -249,7 +249,7 @@ export const IdentityDashboardPage = observer(
 															/>
 														</div>
 													</div>
-													<span className="mt-1 text-xs text-default-500">
+													<span className="mt-1 text-xs text-muted">
 														{formatShortDate(item.date)}
 													</span>
 												</div>

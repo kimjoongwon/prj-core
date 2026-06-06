@@ -4,15 +4,10 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import type { PropsWithChildren } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const setLoginRedirectUrlMock = vi.fn();
-const setIdpLoginRedirectUrlMock = vi.fn();
 const setApiPersistStoreMock = vi.fn();
 const setIdpPersistStoreMock = vi.fn();
-const useVerifyTokenMock = vi.fn();
-const useGetMySpacesMock = vi.fn();
-const useGetCurrentSpaceMock = vi.fn();
-const useSetCurrentSpaceMock = vi.fn();
-const customInstanceMock = vi.fn();
+const setLoginRedirectUrlMock = vi.fn();
+const setIdpLoginRedirectUrlMock = vi.fn();
 
 vi.mock("@cocrepo/ui", () => ({
 	DesignSystemProvider: ({ children }: PropsWithChildren) => children,
@@ -23,7 +18,6 @@ vi.mock("nuqs/adapters/react", () => ({
 }));
 
 vi.mock("../../../../../packages/fe-api/src/core/client", () => ({
-	customInstance: (...args: unknown[]) => customInstanceMock(...args),
 	setApiPersistStore: (...args: unknown[]) => setApiPersistStoreMock(...args),
 	setLoginRedirectUrl: (...args: unknown[]) => setLoginRedirectUrlMock(...args),
 }));
@@ -34,16 +28,8 @@ vi.mock("../../../../../packages/fe-api/src/idp/client", () => ({
 	setIdpPersistStore: (...args: unknown[]) => setIdpPersistStoreMock(...args),
 }));
 
-vi.mock("../../../../../packages/fe-api/src/idp/auth", () => ({
-	useGetMySpaces: (...args: unknown[]) => useGetMySpacesMock(...args),
-	useGetCurrentSpace: (...args: unknown[]) => useGetCurrentSpaceMock(...args),
-	useSetCurrentSpace: (...args: unknown[]) => useSetCurrentSpaceMock(...args),
-	useVerifyToken: (...args: unknown[]) => useVerifyTokenMock(...args),
-}));
-
-async function loadProvider(requireAuth: boolean) {
+async function loadProvider() {
 	vi.resetModules();
-	vi.stubGlobal("__STORYBOOK_REQUIRE_AUTH__", requireAuth);
 	return import("./StorybookRuntimeProvider");
 }
 
@@ -67,38 +53,10 @@ function createStorageMock() {
 beforeEach(() => {
 	vi.stubGlobal("localStorage", createStorageMock());
 	vi.stubGlobal("sessionStorage", createStorageMock());
-	customInstanceMock.mockReset();
 	setApiPersistStoreMock.mockReset();
 	setIdpPersistStoreMock.mockReset();
 	setLoginRedirectUrlMock.mockReset();
 	setIdpLoginRedirectUrlMock.mockReset();
-	useVerifyTokenMock.mockReset();
-	useGetMySpacesMock.mockReset();
-	useGetCurrentSpaceMock.mockReset();
-	useSetCurrentSpaceMock.mockReset();
-
-	customInstanceMock.mockResolvedValue({ data: [] });
-	useVerifyTokenMock.mockReturnValue({
-		data: undefined,
-		error: null,
-		isError: false,
-		isLoading: false,
-	});
-	useGetMySpacesMock.mockReturnValue({
-		data: undefined,
-		error: null,
-		isError: false,
-		isLoading: false,
-	});
-	useGetCurrentSpaceMock.mockReturnValue({
-		data: undefined,
-		error: null,
-		isError: false,
-		isLoading: false,
-	});
-	useSetCurrentSpaceMock.mockReturnValue({
-		mutate: vi.fn(),
-	});
 	localStorage.clear();
 	sessionStorage.clear();
 });
@@ -108,14 +66,14 @@ afterEach(() => {
 });
 
 describe("StorybookRuntimeProvider", () => {
-	it("sets Storybook login redirect URLs using the top-level story location", async () => {
+	it("keeps API auth failures inside Storybook instead of redirecting to login", async () => {
 		window.history.replaceState(
 			{},
 			"",
 			"/iframe.html?id=features-button--primary&viewMode=story",
 		);
 
-		const { StorybookRuntimeProvider } = await loadProvider(false);
+		const { StorybookRuntimeProvider } = await loadProvider();
 
 		render(
 			<StorybookRuntimeProvider
@@ -131,12 +89,14 @@ describe("StorybookRuntimeProvider", () => {
 		);
 
 		await waitFor(() => {
-			expect(setLoginRedirectUrlMock).toHaveBeenCalledWith(
-				"/__storybook_auth/login?returnTo=%2Fiframe.html%3Fid%3Dfeatures-button--primary%26viewMode%3Dstory",
-			);
+			expect(setApiPersistStoreMock).toHaveBeenCalled();
 		});
+		expect(setIdpPersistStoreMock).toHaveBeenCalled();
+		expect(setLoginRedirectUrlMock).toHaveBeenCalledWith(
+			"#storybook-auth-disabled",
+		);
 		expect(setIdpLoginRedirectUrlMock).toHaveBeenCalledWith(
-			"/__storybook_auth/login?returnTo=%2Fiframe.html%3Fid%3Dfeatures-button--primary%26viewMode%3Dstory",
+			"#storybook-auth-disabled",
 		);
 		expect(screen.getByText("Story content")).toBeTruthy();
 	}, 15000);
@@ -144,7 +104,7 @@ describe("StorybookRuntimeProvider", () => {
 	it("renders the static admin space fallback when live auth is disabled", async () => {
 		window.history.replaceState({}, "", "/iframe.html?id=admin-card--default");
 
-		const { StorybookRuntimeProvider } = await loadProvider(false);
+		const { StorybookRuntimeProvider } = await loadProvider();
 
 		render(
 			<StorybookRuntimeProvider
@@ -187,7 +147,7 @@ describe("StorybookRuntimeProvider", () => {
 			"/iframe.html?id=page-spacelistpage--default&viewMode=story",
 		);
 
-		const { withStorybookRuntime } = await loadProvider(false);
+		const { withStorybookRuntime } = await loadProvider();
 
 		render(
 			withStorybookRuntime(() => <div>Toolbar realm story</div>, {

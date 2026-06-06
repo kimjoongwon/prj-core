@@ -3,8 +3,8 @@
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { Select } from "../../../control/Select/Select";
-import { Card, CardBody, CardHeader } from "../../../design-system/primitives";
-import { Text } from "../../../display/data-display/Text/Text";
+import { Card } from "@heroui/react";
+import { Typography } from "../../../data-display/Typography";
 import { AbilityFormModal } from "../../../form/AbilityFormModal";
 import { HStack } from "../../../rhythm/HStack/HStack";
 import { VStack } from "../../../rhythm/VStack/VStack";
@@ -96,31 +96,37 @@ export const RoleAbilityManager = observer(
 
 		return (
 			<Card className="w-full">
-				<CardHeader>
+				<Card.Header>
 					<HStack
 						justifyContent="between"
 						alignItems="center"
 						className="w-full"
 					>
-						<Text variant="title">Role 권한 관리 (ABAC)</Text>
+						<Typography type="h4" weight="normal">
+							Role 권한 관리 (ABAC)
+						</Typography>
 					</HStack>
-				</CardHeader>
-				<CardBody>
+				</Card.Header>
+				<Card.Content>
 					<VStack gap={4}>
 						{/* Role 선택 영역 */}
 						<HStack alignItems="end" gap={4}>
-							<Select
-								label="역할 선택"
-								placeholder="역할을 선택하세요"
-								options={roleOptions}
-								value={selectedRoleId ?? ""}
-								onChange={handleRoleChange}
-								className="w-64"
-							/>
+								<Select
+									label="역할 선택"
+									placeholder="역할을 선택하세요"
+									options={roleOptions}
+									value={selectedRoleId ?? ""}
+									onChange={(value) => handleRoleChange(String(value ?? ""))}
+									className="w-64"
+								/>
 						</HStack>
 
 						{/* 에러 메시지 */}
-						{state.error && <Text className="text-danger">{state.error}</Text>}
+						{state.error && (
+							<Typography type="body-sm" className="text-danger font-medium">
+								{state.error}
+							</Typography>
+						)}
 
 						{/* Ability 목록 */}
 						{selectedRoleId ? (
@@ -133,12 +139,12 @@ export const RoleAbilityManager = observer(
 								onToggleActive={handleToggleActive}
 							/>
 						) : (
-							<Text className="text-default-500">
+							<Typography.Paragraph color="muted">
 								역할을 선택하면 권한 목록이 표시됩니다.
-							</Text>
+							</Typography.Paragraph>
 						)}
 					</VStack>
-				</CardBody>
+				</Card.Content>
 
 				{/* Ability 추가/수정 모달 */}
 				<AbilityFormModal

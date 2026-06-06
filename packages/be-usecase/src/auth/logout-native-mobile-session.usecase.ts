@@ -3,7 +3,7 @@ import { TokenStorageService } from "@cocrepo/service";
 import { NativeRefreshToken, SessionId } from "@cocrepo/vo";
 import { Logger, UnauthorizedException } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { decodeAccessToken } from "./auth-support";
+import { decodeAccessToken, extractBearerToken } from "./auth-support";
 
 @CommandHandler(LogoutNativeMobileSessionCommand)
 export class LogoutNativeMobileSessionUseCase
@@ -35,9 +35,10 @@ export class LogoutNativeMobileSessionUseCase
 			throw new UnauthorizedException("리프레시 토큰이 유효하지 않습니다");
 		}
 
-		if (command.accessToken) {
+		const accessToken = extractBearerToken(command.authorizationHeader);
+		if (accessToken) {
 			try {
-				const payload = decodeAccessToken(command.accessToken);
+				const payload = decodeAccessToken(accessToken);
 				if (lookup && payload.sub !== lookup.userId) {
 					throw new UnauthorizedException(
 						"세션 사용자와 토큰 사용자가 다릅니다",
@@ -48,7 +49,7 @@ export class LogoutNativeMobileSessionUseCase
 				const remainingSeconds = expSeconds - Math.floor(Date.now() / 1000);
 				if (remainingSeconds > 0) {
 					await this.tokenStorageService.addToBlacklist(
-						command.accessToken,
+						accessToken,
 						remainingSeconds,
 					);
 				}

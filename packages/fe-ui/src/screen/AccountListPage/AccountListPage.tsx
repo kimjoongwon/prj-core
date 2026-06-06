@@ -17,7 +17,7 @@ import {
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { useDisclosure } from "../../design-system/primitives";
+import { useOverlayState } from "@heroui/react";
 
 /**
  * 좌측 입력 정의 (검색)
@@ -69,19 +69,19 @@ export const AccountListPage = observer(
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
-		const unlockModal = useDisclosure();
+		const unlockModal = useOverlayState();
 		const [accountToUnlock, setAccountToUnlock] =
 			useState<IdpAccountDto | null>(null);
 		const accountRows = accounts ?? [];
 
 		const onClickOpenUnlockModal = (account: IdpAccountDto) => {
 			setAccountToUnlock(account);
-			unlockModal.onOpen();
+			unlockModal.open();
 		};
 
 		const onCloseUnlockModal = () => {
 			setAccountToUnlock(null);
-			unlockModal.onClose();
+			unlockModal.close();
 		};
 
 		const onClickConfirmUnlock = () => {
@@ -103,7 +103,7 @@ export const AccountListPage = observer(
 					title="계정 관리"
 					description="IDP 계정의 보안 상태를 관리합니다."
 				/>
-				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 					<DataGrid
 						config={{
 							entity: "IdpAccount",
@@ -111,11 +111,11 @@ export const AccountListPage = observer(
 							leftInputs,
 							emptyMessage: "등록된 계정이 없습니다.",
 						}}
-						rows={accountRows}
-						totalCount={totalCount}
-						isLoading={isLoading}
-						state={gridState}
-					/>
+							rows={accountRows}
+							totalCount={totalCount}
+							state={gridState}
+							isLoading={isLoading}
+						/>
 				</Surface>
 				<ConfirmModal
 					isOpen={unlockModal.isOpen}
@@ -130,7 +130,7 @@ export const AccountListPage = observer(
 								</strong>
 								&nbsp;계정의 잠금을 해제하시겠습니까?
 							</p>
-							<p className="mt-2 text-sm text-default-400">
+							<p className="mt-2 text-sm text-muted">
 								연속 로그인 실패로 누적된 잠금 상태와 실패 횟수가 함께
 								초기화됩니다.
 							</p>

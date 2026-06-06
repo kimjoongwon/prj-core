@@ -30,13 +30,13 @@ TimelineSessionDetailPage
           - PageTitleBar
             - Button
           - Table
-            - TableHeader
-            - TableBody
+            - Table.Header
+            - Table.Body
   - Modal x2
-    - ModalContent
-      - ModalHeader
-      - ModalBody
-      - ModalFooter
+    - Modal overlay content
+      - Modal.Header
+      - Modal.Body
+      - Modal.Footer
         - Button x2
 ```
 
@@ -58,16 +58,16 @@ TimelineSessionDetailPage
 | `Link` | `next/link` | 사용자 액션 실행 |
 | `Plus` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
 | `Table` | `@heroui/react` | 목록/표 데이터 표시 |
-| `TableHeader` | `@heroui/react` | 목록/표 데이터 표시 |
-| `TableColumn` | `@heroui/react` | 목록/표 데이터 표시 |
-| `TableBody` | `@heroui/react` | 목록/표 데이터 표시 |
-| `TableRow` | `@heroui/react` | 목록/표 데이터 표시 |
-| `TableCell` | `@heroui/react` | 목록/표 데이터 표시 |
+| `Table.Header` | `@heroui/react` | 목록/표 데이터 표시 |
+| `Table.Column` | `@heroui/react` | 목록/표 데이터 표시 |
+| `Table.Body` | `@heroui/react` | 목록/표 데이터 표시 |
+| `Table.Row` | `@heroui/react` | 목록/표 데이터 표시 |
+| `Table.Cell` | `@heroui/react` | 목록/표 데이터 표시 |
 | `Modal` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalContent` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalHeader` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalBody` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalFooter` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal overlay content` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Header` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Body` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Footer` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
 
 ## 공개 계약
 

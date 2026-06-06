@@ -11,7 +11,7 @@ import {
 	type TimelineSessionPageDayOfWeek,
 	type TimelineSessionPageSessionType,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -58,7 +58,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 		state.errors = {};
 	};
 
-	const onChangeDescriptionTextarea = (value: string) => {
+	const onChangeDescriptionTextArea = (value: string) => {
 		state.description = value;
 	};
 
@@ -138,11 +138,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 			},
 			{
 				onSuccess: (response) => {
-					addToast({
-						title: "등록 성공",
-						description: "세션이 등록되었습니다.",
-						color: "success",
-					});
+					toast.success("등록 성공", { description: "세션이 등록되었습니다." });
 					const newId = response.data?.id;
 					router.push(
 						(newId
@@ -151,10 +147,8 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 					);
 				},
 				onError: () => {
-					addToast({
-						title: "등록 실패",
+					toast.danger("등록 실패", {
 						description: "세션 등록 중 오류가 발생했습니다.",
-						color: "danger",
 					});
 				},
 			},
@@ -179,7 +173,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 			isSubmitDisabled={!state.name.trim()}
 			onChangeNameInput={onChangeNameInput}
 			onChangeTypeSelect={onChangeTypeSelect}
-			onChangeDescriptionTextarea={onChangeDescriptionTextarea}
+			onChangeDescriptionTextArea={onChangeDescriptionTextArea}
 			onChangeStartDateTimeInput={onChangeStartDateTimeInput}
 			onChangeEndDateTimeInput={onChangeEndDateTimeInput}
 			onChangeDayOfWeekSelect={onChangeDayOfWeekSelect}

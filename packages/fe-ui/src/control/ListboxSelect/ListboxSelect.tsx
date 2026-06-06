@@ -1,74 +1,82 @@
-import type { ReactNode } from "react";
-import type { ListboxProps as HeroListboxProps } from "../../design-system/primitives";
-import {
-	Listbox as HeroListbox,
-	ListboxItem,
-} from "../../design-system/primitives";
+import { ListBox as HeroListBox } from "@heroui/react";
+import type { Key, Selection } from "react-aria-components";
+import { ListBoxWrapper } from "./ListBoxWrapper";
+import type {
+	ListBoxSelectProps,
+	ListBoxSelectValue,
+} from "./ListBoxSelect.props";
 
-export type ListboxSelectProps<_T> = Omit<
-	HeroListboxProps,
-	"state" | "children"
-> & {
-	title?: string;
-	options?:
-		| {
-				text: string;
-				value: any;
-		  }[]
-		| undefined;
+const toSelectionSet = (
+	value: ListBoxSelectValue | undefined,
+): Set<Key> | undefined => {
+	if (value === undefined) {
+		return undefined;
+	}
+
+	if (value == null) {
+		return new Set();
+	}
+
+	return new Set(Array.isArray(value) ? value : [value]);
 };
 
-export const ListboxSelect = <T extends object>(
-	props: ListboxSelectProps<T>,
-) => {
+export const ListBoxSelect = (props: ListBoxSelectProps) => {
 	const {
+		className,
+		defaultValue,
 		options = [],
 		selectionMode = "multiple",
 		title,
-		defaultSelectedKeys,
-		onSelectionChange,
-		...rest
+		value,
+		onChange,
+		"aria-label": ariaLabel,
 	} = props;
 
-	const handleSelectionChange: ListboxSelectProps<T>["onSelectionChange"] = (
-		selection: any,
-	) => {
-		return selection;
+	const handleSelectionChange = (selection: Selection) => {
+		if (selection === "all") {
+			const allValues = options.map((option) => option.value);
+			onChange?.(selectionMode === "single" ? (allValues[0] ?? null) : allValues);
+			return;
+		}
+
+		const selectedValues = Array.from(selection);
+		onChange?.(
+			selectionMode === "single"
+				? (selectedValues[0] ?? null)
+				: selectedValues,
+		);
 	};
 
 	return (
-		<ListboxWrapper>
+		<ListBoxWrapper>
 			{title && (
 				<div className="mb-3">
 					<h6 className="text-base font-bold font-semibold">{title}</h6>
 				</div>
-			)}
-			<HeroListbox
-				{...rest}
-				className="w-full"
-				selectionMode={selectionMode}
-				items={options}
-				variant="flat"
-				classNames={{
-					list: "max-h-[300px] overflow-scroll",
+				)}
+				<HeroListBox
+					aria-label={ariaLabel ?? title ?? "선택"}
+					className={className ?? "w-full"}
+					selectionMode={selectionMode}
+					items={options}
+					variant="default"
+					selectedKeys={toSelectionSet(value)}
+					defaultSelectedKeys={toSelectionSet(defaultValue)}
+					onSelectionChange={handleSelectionChange}
+				>
+					{(item) => {
+						return (
+							<HeroListBox.Item
+								className="w-full"
+								key={item.value}
+								id={item.value}
+								textValue={item.text}
+							>
+								{item.text}
+							</HeroListBox.Item>
+						);
 				}}
-				defaultSelectedKeys={defaultSelectedKeys}
-				onSelectionChange={onSelectionChange || handleSelectionChange}
-			>
-				{(item) => {
-					return (
-						<ListboxItem className="w-full" key={item.value}>
-							{item.text}
-						</ListboxItem>
-					);
-				}}
-			</HeroListbox>
-		</ListboxWrapper>
+			</HeroListBox>
+			</ListBoxWrapper>
 	);
 };
-
-export const ListboxWrapper = ({ children }: { children: ReactNode }) => (
-	<div className="w-full rounded-small border-default-200 border-small px-2 py-2 dark:border-default-100">
-		{children}
-	</div>
-);

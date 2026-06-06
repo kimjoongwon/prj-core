@@ -10,15 +10,12 @@ import type {
 } from "@cocrepo/type";
 import { RefreshCw, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { RedirectUriListInput } from "../../control/RedirectUriListInput/RedirectUriListInput";
-import {
-	Button,
-	Checkbox,
-	CheckboxGroup,
-	Input,
-	Select,
-	SelectItem,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Checkbox } from "../../control/Checkbox/Checkbox";
+import { CheckboxGroup, FieldError, Label, ListBox } from "@heroui/react";
+import { Input } from "../../control/Input/Input";
+import { Select } from "../../control/Select/Select";
+import { StringListInput } from "../../control/StringListInput/StringListInput";
 import { VStack } from "../../rhythm/VStack/VStack";
 
 export const OIDC_CLIENT_LOGIN_UI_VARIANT_OPTIONS: Array<{
@@ -265,7 +262,6 @@ export const OidcClientForm = observer(
 								<Checkbox
 									isSelected={state.isPublic}
 									onValueChange={handleTogglePublic}
-									size="sm"
 								>
 									Public 클라이언트 (Secret 없음)
 								</Checkbox>
@@ -277,60 +273,69 @@ export const OidcClientForm = observer(
 				<section>
 					<div className="space-y-6 p-6">
 						<h3 className="text-lg font-semibold">인증 설정</h3>
-						<Select
-							label="인증 방식"
-							selectedKeys={
-								AUTH_METHOD_OPTIONS.some(
-									(option) => option.value === state.tokenEndpointAuthMethod,
-								)
-									? [state.tokenEndpointAuthMethod]
-									: []
-							}
-							onSelectionChange={(keys) => {
-								const selected = Array.from(keys)[0] as string;
-								if (selected) {
-									state.tokenEndpointAuthMethod = selected;
+							<Select
+								label="인증 방식"
+								value={
+									AUTH_METHOD_OPTIONS.some(
+										(option) => option.value === state.tokenEndpointAuthMethod,
+									)
+										? state.tokenEndpointAuthMethod
+										: null
 								}
-							}}
-							isDisabled={!isEdit && isPublic}
+								onChange={(value) => {
+									if (value != null) {
+										state.tokenEndpointAuthMethod = String(value);
+									}
+								}}
+								isDisabled={!isEdit && isPublic}
 							isRequired
-						>
-							{AUTH_METHOD_OPTIONS.map((opt) => (
-								<SelectItem key={opt.value}>{opt.label}</SelectItem>
-							))}
-						</Select>
-						<CheckboxGroup
-							label="Grant Types"
-							value={state.grantTypes}
-							onValueChange={(v) => {
-								state.grantTypes = v;
-							}}
-							isInvalid={!!state.errors.grantTypes}
-							errorMessage={state.errors.grantTypes}
-							isRequired
-						>
-							{GRANT_TYPE_OPTIONS.map((opt) => (
-								<Checkbox key={opt.value} value={opt.value}>
-									{opt.label}
-								</Checkbox>
-							))}
-						</CheckboxGroup>
-						<CheckboxGroup
-							label="Response Types"
-							value={state.responseTypes}
-							onValueChange={(v) => {
-								state.responseTypes = v;
-							}}
-							isInvalid={!!state.errors.responseTypes}
-							errorMessage={state.errors.responseTypes}
-							isRequired
-						>
-							{RESPONSE_TYPE_OPTIONS.map((opt) => (
-								<Checkbox key={opt.value} value={opt.value}>
-									{opt.label}
-								</Checkbox>
-							))}
-						</CheckboxGroup>
+							>
+								{AUTH_METHOD_OPTIONS.map((opt) => (
+									<ListBox.Item
+										key={opt.value}
+										id={opt.value}
+										textValue={opt.label}
+									>
+										{opt.label}
+									</ListBox.Item>
+								))}
+							</Select>
+							<CheckboxGroup
+								value={state.grantTypes}
+								onChange={(v: string[]) => {
+									state.grantTypes = v;
+								}}
+								isInvalid={!!state.errors.grantTypes}
+								isRequired
+							>
+								<Label>Grant Types</Label>
+								{GRANT_TYPE_OPTIONS.map((opt) => (
+									<Checkbox key={opt.value} value={opt.value}>
+										{opt.label}
+									</Checkbox>
+								))}
+								{state.errors.grantTypes ? (
+									<FieldError>{state.errors.grantTypes}</FieldError>
+								) : null}
+							</CheckboxGroup>
+							<CheckboxGroup
+								value={state.responseTypes}
+								onChange={(v: string[]) => {
+									state.responseTypes = v;
+								}}
+								isInvalid={!!state.errors.responseTypes}
+								isRequired
+							>
+								<Label>Response Types</Label>
+								{RESPONSE_TYPE_OPTIONS.map((opt) => (
+									<Checkbox key={opt.value} value={opt.value}>
+										{opt.label}
+									</Checkbox>
+								))}
+								{state.errors.responseTypes ? (
+									<FieldError>{state.errors.responseTypes}</FieldError>
+								) : null}
+							</CheckboxGroup>
 						<Input
 							label="스코프"
 							placeholder="openid profile email"
@@ -342,28 +347,26 @@ export const OidcClientForm = observer(
 							description="공백으로 구분하여 입력합니다."
 						/>
 						<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-							<div className="rounded-xl border border-divider p-4">
+							<div className="rounded-xl border border-border p-4">
 								<Checkbox
 									isSelected={state.isFirstParty}
 									onValueChange={handleToggleFirstParty}
-									size="sm"
 								>
 									First-party 클라이언트
 								</Checkbox>
-								<p className="mt-2 text-xs leading-5 text-default-500">
+								<p className="mt-2 text-xs leading-5 text-muted">
 									플랫폼이 소유하거나 신뢰하는 클라이언트로 표시합니다.
 								</p>
 							</div>
-							<div className="rounded-xl border border-divider p-4">
+							<div className="rounded-xl border border-border p-4">
 								<Checkbox
 									isDisabled={!state.isFirstParty}
 									isSelected={state.isFirstParty && state.skipConsent}
 									onValueChange={handleToggleSkipConsent}
-									size="sm"
 								>
 									권한 동의 화면 생략
 								</Checkbox>
-								<p className="mt-2 text-xs leading-5 text-default-500">
+								<p className="mt-2 text-xs leading-5 text-muted">
 									First-party에서만 사용할 수 있으며, prompt=consent 요청은 항상
 									동의 화면을 표시합니다.
 								</p>
@@ -378,12 +381,15 @@ export const OidcClientForm = observer(
 						{state.errors.redirectUris && (
 							<p className="text-sm text-danger">{state.errors.redirectUris}</p>
 						)}
-						<RedirectUriListInput
+						<StringListInput
 							value={state.redirectUris}
 							onChange={(uris) => {
 								state.redirectUris = uris;
 							}}
 							errors={state.redirectUriErrors}
+							placeholder="https://example.com/callback"
+							addLabel="URI 추가"
+							removeLabel="URI 삭제"
 						/>
 					</div>
 				</section>
@@ -414,7 +420,7 @@ export const OidcClientForm = observer(
 					<div className="space-y-6 p-6">
 						<div>
 							<h3 className="text-lg font-semibold">로그인 화면 설정</h3>
-							<p className="mt-1 text-sm text-default-500">
+							<p className="mt-1 text-sm text-muted">
 								IDP Web 로그인 폼은 공통 컴포넌트를 사용하고, 여기서는 client별
 								표현만 덮어씁니다.
 							</p>
@@ -422,29 +428,33 @@ export const OidcClientForm = observer(
 						<Checkbox
 							isSelected={!state.useCustomLoginUi}
 							onValueChange={handleToggleCommonLoginUi}
-							size="sm"
 						>
 							공통 로그인 사용
 						</Checkbox>
 
 						{state.useCustomLoginUi && (
 							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-								<Select
-									label="화면 Variant"
-									selectedKeys={[state.loginUiVariant]}
-									onSelectionChange={(keys) => {
-										const selected = Array.from(keys)[0] as
-											| OidcClientLoginUiVariant
-											| undefined;
-										if (selected) {
-											state.loginUiVariant = selected;
-										}
-									}}
-								>
-									{OIDC_CLIENT_LOGIN_UI_VARIANT_OPTIONS.map((opt) => (
-										<SelectItem key={opt.value}>{opt.label}</SelectItem>
-									))}
-								</Select>
+									<Select
+										label="화면 Variant"
+										value={state.loginUiVariant}
+										onChange={(value) => {
+											if (value != null) {
+												state.loginUiVariant = String(
+													value,
+												) as OidcClientLoginUiVariant;
+											}
+										}}
+									>
+										{OIDC_CLIENT_LOGIN_UI_VARIANT_OPTIONS.map((opt) => (
+											<ListBox.Item
+												key={opt.value}
+												id={opt.value}
+												textValue={opt.label}
+											>
+												{opt.label}
+											</ListBox.Item>
+										))}
+									</Select>
 								<Input
 									label="브랜드 라벨"
 									placeholder="Onora Mobile"
@@ -485,14 +495,12 @@ export const OidcClientForm = observer(
 								<Checkbox
 									isSelected={state.loginUiShowIntroPanel}
 									onValueChange={handleToggleLoginUiIntroPanel}
-									size="sm"
 								>
 									데스크톱 소개 영역 표시
 								</Checkbox>
 								<Checkbox
 									isSelected={state.loginUiMobileFullScreen}
 									onValueChange={handleToggleLoginUiMobileFullScreen}
-									size="sm"
 								>
 									모바일에서 로그인 카드 우선 표시
 								</Checkbox>

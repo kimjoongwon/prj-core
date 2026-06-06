@@ -31,12 +31,12 @@ AccountDetailPage
       - DetailSectionCard
         - DetailSection
           - PageTitleBar
-          - Divider
+          - Separator
           - Button x3
       - DetailSectionCard
         - DetailSection
           - PageTitleBar
-          - Divider
+          - Separator
           - Chip
           - DateTimeCell
           - Select x2
@@ -62,9 +62,9 @@ AccountDetailPage
 | `LockOpen` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
 | `DateTimeCell` | `@cocrepo/ui` | 상태/정보를 카드 또는 표시 단위로 표현 |
 | `RotateCcw` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
-| `Divider` | `@heroui/react` | 화면 조합 요소 |
+| `Separator` | `@heroui/react` | 화면 조합 요소 |
 | `Select` | `@heroui/react` | Space/Role 선택 |
-| `SelectItem` | `@heroui/react` | Space/Role 옵션 표시 |
+| `ListBox.Item` | `@heroui/react` | Space/Role 옵션 표시 |
 | `KeyRound` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
 | `LogOut` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
 | `ShieldCheck` | `lucide-react` | 접근 권한 부여 액션을 시각화 |

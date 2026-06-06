@@ -10,7 +10,9 @@ import {
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Button, Chip, Spinner, Tooltip } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Spinner, Tooltip } from "@heroui/react";
 
 export type ConnectionStatus = "connected" | "disconnected" | "checking";
 
@@ -176,7 +178,7 @@ export const StatusBanner = observer(
 									{isConnected ? "Online" : "Offline"}
 								</Chip>
 							</div>
-							<div className="flex items-center gap-2 text-sm text-default-500 mt-1">
+							<div className="flex items-center gap-2 text-sm text-muted mt-1">
 								{serviceUrl && (
 									<>
 										<Server className="w-3 h-3" />
@@ -184,7 +186,7 @@ export const StatusBanner = observer(
 									</>
 								)}
 								{lastChecked && (
-									<span className="text-default-400">
+									<span className="text-muted">
 										(마지막 확인: {formatLastChecked()})
 									</span>
 								)}
@@ -194,31 +196,37 @@ export const StatusBanner = observer(
 
 					{/* 우측: 추가 정보 및 액션 */}
 					<div className="flex items-center gap-2 flex-wrap">
-						{/* 추가 상태 정보 */}
-						{statusInfos.map((info) => (
-							<Tooltip key={info.label} content={info.tooltip || info.label}>
-								<Chip size="sm" variant="flat" startContent={info.icon}>
-									{info.label}: {info.value}
-								</Chip>
-							</Tooltip>
-						))}
+							{/* 추가 상태 정보 */}
+							{statusInfos.map((info) => (
+								<Tooltip key={info.label}>
+									<Tooltip.Trigger>
+									<Chip size="sm" variant="flat" startContent={info.icon}>
+										{info.label}: {info.value}
+									</Chip>
+									</Tooltip.Trigger>
+									<Tooltip.Content>{info.tooltip || info.label}</Tooltip.Content>
+								</Tooltip>
+							))}
 
-						{/* 새로고침 버튼 */}
-						{onRefresh && (
-							<Tooltip content="상태 새로고침">
-								<Button
-									isIconOnly
-									size="sm"
+							{/* 새로고침 버튼 */}
+							{onRefresh && (
+								<Tooltip>
+									<Tooltip.Trigger>
+									<Button
+										isIconOnly
+										size="sm"
 									variant="flat"
 									onPress={onRefresh}
 									isDisabled={isRefreshing || isProcessing}
 								>
 									<RefreshCw
 										className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`}
-									/>
-								</Button>
-							</Tooltip>
-						)}
+										/>
+									</Button>
+									</Tooltip.Trigger>
+									<Tooltip.Content>상태 새로고침</Tooltip.Content>
+								</Tooltip>
+							)}
 
 						{/* 액션 버튼들 */}
 						{visibleActions.map((action) => (
@@ -248,7 +256,7 @@ export const StatusBanner = observer(
 					<div
 						className={`mt-3 pt-3 border-t ${isConnected ? "border-success/20" : "border-danger/20"}`}
 					>
-						<p className="text-sm text-default-500">{message}</p>
+						<p className="text-sm text-muted">{message}</p>
 					</div>
 				)}
 			</div>

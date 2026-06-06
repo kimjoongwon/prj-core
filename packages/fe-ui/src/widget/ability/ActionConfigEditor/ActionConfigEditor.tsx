@@ -3,7 +3,7 @@ import { type ActionConfigDto } from "@cocrepo/api/core/actions";
 import { observer } from "mobx-react-lite";
 import { Input } from "../../../control/Input/Input";
 import { Select } from "../../../control/Select/Select";
-import { Card, CardBody, cn } from "../../../design-system/primitives";
+import { Card, cn } from "@heroui/react";
 import { HStack } from "../../../rhythm/HStack/HStack";
 import { VStack } from "../../../rhythm/VStack/VStack";
 
@@ -198,10 +198,10 @@ export const ActionConfigEditor = observer(
 		// configType이 null인 경우
 		if (configType === null) {
 			return (
-				<Card className="bg-content2">
-					<CardBody>
-						<p className="text-center text-default-500">설정 없음</p>
-					</CardBody>
+				<Card className="bg-surface-secondary">
+					<Card.Content>
+						<p className="text-center text-muted">설정 없음</p>
+					</Card.Content>
 				</Card>
 			);
 		}
@@ -212,17 +212,19 @@ export const ActionConfigEditor = observer(
 			const preview = getMaskingPreview();
 
 			return (
-				<Card className="bg-content2">
-					<CardBody>
+				<Card className="bg-surface-secondary">
+					<Card.Content>
 						<VStack gap={4}>
 							{/* 프리셋 선택 */}
-							<Select
-								label="마스킹 프리셋"
-								placeholder="프리셋을 선택하세요"
-								options={MASKING_PRESET_OPTIONS}
-								value={maskingConfig?.preset || ""}
-								onChange={(value) => handleMaskingChange("preset", value)}
-							/>
+									<Select
+										label="마스킹 프리셋"
+										placeholder="프리셋을 선택하세요"
+										options={MASKING_PRESET_OPTIONS}
+										value={maskingConfig?.preset || ""}
+										onChange={(value) =>
+											handleMaskingChange("preset", String(value ?? ""))
+										}
+									/>
 
 							{/* 커스텀 패턴 입력 (프리셋이 없을 때만) */}
 							{!maskingConfig?.preset && (
@@ -249,26 +251,26 @@ export const ActionConfigEditor = observer(
 							{/* 미리보기 */}
 							{previewValue && (
 								<VStack gap={2}>
-									<p className="text-sm font-medium text-default-600">
+									<p className="text-sm font-medium text-muted">
 										미리보기
 									</p>
 									<HStack
 										gap={8}
 										alignItems="center"
-										className={cn("rounded-lg bg-content3 px-4 py-3")}
+										className={cn("rounded-lg bg-surface-tertiary px-4 py-3")}
 									>
 										<VStack gap={1}>
-											<span className="text-xs text-default-400">원본</span>
-											<span className="font-mono text-sm text-default-700">
+											<span className="text-xs text-muted">원본</span>
+											<span className="font-mono text-sm text-foreground">
 												{previewValue}
 											</span>
 										</VStack>
-										<span className="text-default-400">→</span>
+										<span className="text-muted">→</span>
 										<VStack gap={1}>
-											<span className="text-xs text-default-400">
+											<span className="text-xs text-muted">
 												마스킹 결과
 											</span>
-											<span className="font-mono text-sm text-primary">
+											<span className="font-mono text-sm text-accent">
 												{preview}
 											</span>
 										</VStack>
@@ -276,7 +278,7 @@ export const ActionConfigEditor = observer(
 								</VStack>
 							)}
 						</VStack>
-					</CardBody>
+					</Card.Content>
 				</Card>
 			);
 		}
@@ -286,17 +288,17 @@ export const ActionConfigEditor = observer(
 			const formatConfig = isFormatConfig(config) ? config : null;
 
 			return (
-				<Card className="bg-content2">
-					<CardBody>
+				<Card className="bg-surface-secondary">
+					<Card.Content>
 						<VStack gap={4}>
 							{/* 포맷 패턴 선택 */}
-							<Select
-								label="포맷 패턴 예시"
-								placeholder="예시를 선택하거나 직접 입력"
-								options={FORMAT_PATTERN_EXAMPLES}
-								value={formatConfig?.pattern || ""}
-								onChange={(value) => handleFormatChange(value)}
-							/>
+									<Select
+										label="포맷 패턴 예시"
+										placeholder="예시를 선택하거나 직접 입력"
+										options={FORMAT_PATTERN_EXAMPLES}
+										value={formatConfig?.pattern || ""}
+										onChange={(value) => handleFormatChange(String(value ?? ""))}
+									/>
 
 							{/* 커스텀 패턴 입력 */}
 							<Input
@@ -310,21 +312,21 @@ export const ActionConfigEditor = observer(
 							{/* 미리보기 */}
 							{previewValue && formatConfig?.pattern && (
 								<VStack gap={2}>
-									<p className="text-sm font-medium text-default-600">
+									<p className="text-sm font-medium text-muted">
 										미리보기
 									</p>
-									<div className={cn("rounded-lg bg-content3 px-4 py-3")}>
+									<div className={cn("rounded-lg bg-surface-tertiary px-4 py-3")}>
 										<HStack gap={8} alignItems="center">
 											<VStack gap={1}>
-												<span className="text-xs text-default-400">원본</span>
-												<span className="font-mono text-sm text-default-700">
+												<span className="text-xs text-muted">원본</span>
+												<span className="font-mono text-sm text-foreground">
 													{previewValue}
 												</span>
 											</VStack>
-											<span className="text-default-400">→</span>
+											<span className="text-muted">→</span>
 											<VStack gap={1}>
-												<span className="text-xs text-default-400">패턴</span>
-												<span className="font-mono text-sm text-primary">
+												<span className="text-xs text-muted">패턴</span>
+												<span className="font-mono text-sm text-accent">
 													{formatConfig.pattern}
 												</span>
 											</VStack>
@@ -333,7 +335,7 @@ export const ActionConfigEditor = observer(
 								</VStack>
 							)}
 						</VStack>
-					</CardBody>
+					</Card.Content>
 				</Card>
 			);
 		}
@@ -368,38 +370,40 @@ export const ActionConfigEditor = observer(
 			const preview = getTransformPreview();
 
 			return (
-				<Card className="bg-content2">
-					<CardBody>
+				<Card className="bg-surface-secondary">
+					<Card.Content>
 						<VStack gap={4}>
 							{/* 변환 규칙 선택 */}
-							<Select
-								label="변환 규칙"
-								placeholder="변환 규칙을 선택하세요"
-								options={TRANSFORM_RULE_OPTIONS}
-								value={transformConfig?.rule || ""}
-								onChange={(value) => handleTransformChange(value)}
-							/>
+									<Select
+										label="변환 규칙"
+										placeholder="변환 규칙을 선택하세요"
+										options={TRANSFORM_RULE_OPTIONS}
+										value={transformConfig?.rule || ""}
+										onChange={(value) =>
+											handleTransformChange(String(value ?? ""))
+										}
+									/>
 
 							{/* 미리보기 */}
 							{previewValue && preview && (
 								<VStack gap={2}>
-									<p className="text-sm font-medium text-default-600">
+									<p className="text-sm font-medium text-muted">
 										미리보기
 									</p>
-									<div className={cn("rounded-lg bg-content3 px-4 py-3")}>
+									<div className={cn("rounded-lg bg-surface-tertiary px-4 py-3")}>
 										<HStack gap={8} alignItems="center">
 											<VStack gap={1}>
-												<span className="text-xs text-default-400">원본</span>
-												<span className="font-mono text-sm text-default-700">
+												<span className="text-xs text-muted">원본</span>
+												<span className="font-mono text-sm text-foreground">
 													{previewValue}
 												</span>
 											</VStack>
-											<span className="text-default-400">→</span>
+											<span className="text-muted">→</span>
 											<VStack gap={1}>
-												<span className="text-xs text-default-400">
+												<span className="text-xs text-muted">
 													변환 결과
 												</span>
-												<span className="font-mono text-sm text-primary">
+												<span className="font-mono text-sm text-accent">
 													{preview}
 												</span>
 											</VStack>
@@ -408,7 +412,7 @@ export const ActionConfigEditor = observer(
 								</VStack>
 							)}
 						</VStack>
-					</CardBody>
+					</Card.Content>
 				</Card>
 			);
 		}

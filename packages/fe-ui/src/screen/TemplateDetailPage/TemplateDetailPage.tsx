@@ -18,16 +18,9 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	Spinner,
-	Switch,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Modal, Spinner, useOverlayState } from "@heroui/react";
+import { Switch } from "../../control/Switch/Switch";
 
 export interface TemplateDetailPageTemplate {
 	id: string;
@@ -101,10 +94,19 @@ export const TemplateDetailPage = observer(
 		onClickPreviewCloseButton,
 		onClickSendTestButton,
 		onClickSendTestCloseButton,
-		onSubmitPreviewTemplate,
-		onSubmitSendTestTemplate,
-	}: TemplateDetailPageProps) => {
-		if (isLoading) {
+			onSubmitPreviewTemplate,
+			onSubmitSendTestTemplate,
+		}: TemplateDetailPageProps) => {
+			const deleteModalState = useOverlayState({
+				isOpen: isDeleteModalOpen,
+				onOpenChange: (open) => {
+					if (!open) {
+						onClickDeleteCancelButton();
+					}
+				},
+			});
+
+			if (isLoading) {
 			return (
 				<DetailPage
 					top={<PageTitleBar title="템플릿 상세" description="로딩 중..." />}
@@ -133,7 +135,7 @@ export const TemplateDetailPage = observer(
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">템플릿을 찾을 수 없습니다.</p>
+								<p className="text-muted">템플릿을 찾을 수 없습니다.</p>
 								<Button
 									variant="flat"
 									startContent={<ArrowLeft className="size-4" />}
@@ -174,25 +176,25 @@ export const TemplateDetailPage = observer(
 							<DetailSection top={<PageTitleBar level={2} title="기본 정보" />}>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<label className="text-sm text-default-500">코드</label>
+										<label className="text-sm text-muted">코드</label>
 										<p className="mt-1 font-mono">{template.code}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">이름</label>
+										<label className="text-sm text-muted">이름</label>
 										<p className="mt-1">{template.name}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">유형</label>
+										<label className="text-sm text-muted">유형</label>
 										<div className="mt-1">
 											<TemplateTypeBadge type={template.type} />
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">설명</label>
+										<label className="text-sm text-muted">설명</label>
 										<p className="mt-1">{template.description || "-"}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">
+										<label className="text-sm text-muted">
 											활성 상태
 										</label>
 										<div className="mt-1">
@@ -207,13 +209,13 @@ export const TemplateDetailPage = observer(
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">생성일</label>
+										<label className="text-sm text-muted">생성일</label>
 										<div className="mt-1">
 											<DateTimeCell value={template.createdAt} />
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">수정일</label>
+										<label className="text-sm text-muted">수정일</label>
 										<div className="mt-1">
 											<DateTimeCell value={template.updatedAt || "-"} />
 										</div>
@@ -236,25 +238,25 @@ export const TemplateDetailPage = observer(
 									<VariableReadTable variables={template.variables} />
 								) : (
 									<div className="p-6 text-center">
-										<p className="text-default-500">등록된 변수가 없습니다.</p>
+										<p className="text-muted">등록된 변수가 없습니다.</p>
 									</div>
 								)}
 							</DetailSection>
 						</DetailSectionCard>
 					</VStack>
 				</DetailPageSurface>
-				<Modal isOpen={isDeleteModalOpen} onClose={onClickDeleteCancelButton}>
-					<ModalContent>
-						<ModalHeader>템플릿 삭제</ModalHeader>
-						<ModalBody>
+				<Modal state={deleteModalState}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>템플릿 삭제</Modal.Header>
+						<Modal.Body>
 							<p>
 								<strong>{template.name}</strong>템플릿을 삭제하시겠습니까?
 							</p>
 							<p className="mt-2 text-sm text-danger">
 								이 작업은 되돌릴 수 없습니다.
 							</p>
-						</ModalBody>
-						<ModalFooter>
+						</Modal.Body>
+						<Modal.Footer>
 							<Button
 								variant="flat"
 								onPress={onClickDeleteCancelButton}
@@ -265,12 +267,11 @@ export const TemplateDetailPage = observer(
 							<Button
 								color="danger"
 								onPress={onClickDeleteConfirmButton}
-								isLoading={isDeletePending}
 							>
 								삭제
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
 				<PreviewModal
 					isOpen={isPreviewModalOpen}

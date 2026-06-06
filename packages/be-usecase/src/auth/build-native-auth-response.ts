@@ -38,7 +38,7 @@ export async function buildNativeAuthResponse(params: {
 			algorithm: "HS256",
 			audience: MOBILE_NATIVE_CLIENT_ID,
 			expiresIn: authConfig.expires as SignOptions["expiresIn"],
-			issuer: `${oidcConfig?.issuer || "http://localhost:3007"}${NATIVE_TOKEN_ISSUER_SUFFIX}`,
+			issuer: `${oidcConfig?.issuer || "http://localhost:3000"}${NATIVE_TOKEN_ISSUER_SUFFIX}`,
 			subject: params.user.id,
 		},
 	);

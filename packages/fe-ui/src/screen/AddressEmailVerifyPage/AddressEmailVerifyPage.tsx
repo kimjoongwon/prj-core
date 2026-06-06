@@ -64,7 +64,7 @@ export const AddressEmailVerifyPage = observer(
 			<VStack fullWidth gap={8} className="p-4">
 				<VStack fullWidth gap={2}>
 					<h3 className="text-2xl font-bold">추가 정보 입력</h3>
-					<span className="text-sm text-default-500">
+					<span className="text-sm text-muted">
 						주소와 이메일 정보를 입력하고 인증해주세요.
 					</span>
 				</VStack>

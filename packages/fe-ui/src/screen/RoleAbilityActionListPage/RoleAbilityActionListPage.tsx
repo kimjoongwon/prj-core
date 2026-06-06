@@ -7,7 +7,7 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 
 export interface RoleAbilityActionListPageProps {
 	abilityId: string;
@@ -39,10 +39,10 @@ export const RoleAbilityActionListPage = observer(
 			>
 				<DetailPageSurface>
 					<DetailSectionCard>
-						<p className="text-default-500">
+						<p className="text-muted">
 							권한 ID: <code className="font-mono">{abilityId}</code>
 						</p>
-						<p className="mt-4 text-default-400">
+						<p className="mt-4 text-muted">
 							Action 관리 기능은 추후 구현 예정입니다.
 						</p>
 					</DetailSectionCard>

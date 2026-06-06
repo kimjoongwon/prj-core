@@ -2,7 +2,7 @@
 
 import { VStack } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { Divider } from "../../../design-system/primitives";
+import { Separator } from "@heroui/react";
 import type {
 	PaymentManagementMetric,
 	PaymentManagementPayment,
@@ -81,7 +81,7 @@ export const PaymentManagementConsole = observer(
 			<VStack gap="section" fullWidth>
 				<PaymentScopeRail />
 				<PaymentMetricGrid metrics={metrics} />
-				<Divider className="bg-divider/60" />
+				<Separator className="bg-border/60" />
 				{isRefreshing ? <PaymentTableStatePanel status="refreshing" /> : null}
 				{blockingStateStatus ? (
 					<PaymentTableStatePanel status={blockingStateStatus} />

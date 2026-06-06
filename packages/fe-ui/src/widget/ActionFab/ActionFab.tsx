@@ -3,8 +3,8 @@
 import { X, Zap } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import { Button } from "../../design-system/primitives";
-import type { ActionFabProps } from "../../display/layout/type";
+import { Button } from "../../control/Button/Button";
+import type { ActionFabProps } from "../../layout/Layout/type";
 
 export const ActionFab = observer(function ActionFab({
 	isOpen,
@@ -37,7 +37,7 @@ export const ActionFab = observer(function ActionFab({
 							transitionDelay: isOpen ? `${index * 50}ms` : "0ms",
 						}}
 					>
-						<span className="rounded-lg bg-content1 px-3 py-1.5 font-medium text-foreground text-sm shadow-md">
+						<span className="rounded-lg bg-surface px-3 py-1.5 font-medium text-foreground text-sm shadow-md">
 							{action.label}
 						</span>
 
@@ -52,7 +52,7 @@ export const ActionFab = observer(function ActionFab({
 						>
 							<AppIcon
 								name={action.icon}
-								className="text-primary-foreground"
+								className="text-accent-foreground"
 								size={20}
 							/>
 						</Button>
@@ -82,12 +82,12 @@ export const ActionFab = observer(function ActionFab({
 			>
 				{isOpen ? (
 					<X
-						className="text-primary-foreground transition-transform duration-200 rotate-90"
+						className="text-accent-foreground transition-transform duration-200 rotate-90"
 						size={24}
 					/>
 				) : (
 					<Zap
-						className="text-primary-foreground transition-transform duration-200 rotate-0"
+						className="text-accent-foreground transition-transform duration-200 rotate-0"
 						size={24}
 					/>
 				)}

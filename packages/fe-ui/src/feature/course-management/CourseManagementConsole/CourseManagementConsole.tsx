@@ -3,7 +3,7 @@
 import { VStack } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Divider } from "../../../design-system/primitives";
+import { Separator } from "@heroui/react";
 import type {
 	CourseManagementCourse,
 	CourseManagementEnrollment,
@@ -186,7 +186,7 @@ export const CourseManagementConsole = observer(
 					sections={sections}
 					onClickSection={onClickSection}
 				/>
-				<Divider className="bg-divider/60" />
+				<Separator className="bg-border/60" />
 				{isRefreshing ? (
 					<CourseTableStatePanel
 						status="refreshing"

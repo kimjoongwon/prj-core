@@ -116,6 +116,20 @@ export const ADMIN_PATHS = {
 	TENANT_ACCESS_REQUESTS_DETAIL:
 		"/tenant-access-requests/[tenantAccessRequestId]",
 
+	// 인증 설정
+	SETTINGS_AUTH: "/settings/auth",
+	SETTINGS_AUTH_ACCOUNTS: "/settings/auth/accounts",
+	SETTINGS_AUTH_ACCOUNT_DETAIL: "/settings/auth/accounts/[userId]",
+	SETTINGS_AUTH_OIDC_CLIENTS: "/settings/auth/oidc-clients",
+	SETTINGS_AUTH_OIDC_CLIENTS_NEW: "/settings/auth/oidc-clients/new",
+	SETTINGS_AUTH_OIDC_CLIENT_DETAIL:
+		"/settings/auth/oidc-clients/[oidcClientId]",
+	SETTINGS_AUTH_OIDC_CLIENT_EDIT:
+		"/settings/auth/oidc-clients/[oidcClientId]/edit",
+	SETTINGS_AUTH_OIDC_SESSIONS: "/settings/auth/oidc-sessions",
+	SETTINGS_AUTH_AUDIT_LOGS: "/settings/auth/audit-logs",
+	SETTINGS_AUTH_SECURITY_POLICY: "/settings/auth/security-policy",
+
 	// 인증
 	AUTH_LOGIN: "/auth/login",
 } as const;
@@ -146,6 +160,7 @@ export const ADMIN_SUBJECTS = {
 	MENU_INQUIRIES: "menu:inquiries",
 	MENU_TENANT_ACCESS_REQUESTS: "menu:tenant-access-requests",
 	MENU_TRANSLATIONS: "menu:translations",
+	MENU_SETTINGS_AUTH: "menu:settings-auth",
 
 	// 2depth - 회원
 	MENU_USERS_LIST: "menu:users:list",
@@ -193,6 +208,14 @@ export const ADMIN_SUBJECTS = {
 
 	// 2depth - 문의 관리
 	MENU_INQUIRIES_LIST: "menu:inquiries:list",
+
+	// 2depth - 인증 설정
+	MENU_SETTINGS_AUTH_DASHBOARD: "menu:settings-auth:dashboard",
+	MENU_SETTINGS_AUTH_ACCOUNTS: "menu:settings-auth:accounts",
+	MENU_SETTINGS_AUTH_OIDC_CLIENTS: "menu:settings-auth:oidc-clients",
+	MENU_SETTINGS_AUTH_OIDC_SESSIONS: "menu:settings-auth:oidc-sessions",
+	MENU_SETTINGS_AUTH_AUDIT_LOGS: "menu:settings-auth:audit-logs",
+	MENU_SETTINGS_AUTH_SECURITY_POLICY: "menu:settings-auth:security-policy",
 } as const;
 
 const ADMIN_NAV_SCOPE_KIND_BY_ID: Partial<Record<string, ScreenScopeKind>> = {
@@ -229,6 +252,13 @@ const ADMIN_NAV_SCOPE_KIND_BY_ID: Partial<Record<string, ScreenScopeKind>> = {
 	"abilities-list": "global-full-access-only",
 	"actions-list": "global-full-access-only",
 	"subjects-list": "global-full-access-only",
+	"settings-auth": "global-full-access-only",
+	"settings-auth-dashboard": "global-full-access-only",
+	"settings-auth-accounts": "tenant-user",
+	"settings-auth-oidc-clients": "global-full-access-only",
+	"settings-auth-oidc-sessions": "global-full-access-only",
+	"settings-auth-audit-logs": "tenant-user",
+	"settings-auth-security-policy": "global-full-access-only",
 };
 
 function applyAdminNavScopeKinds(navItems: NavItemConfig[]): NavItemConfig[] {

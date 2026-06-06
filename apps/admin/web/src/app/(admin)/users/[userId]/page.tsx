@@ -17,7 +17,7 @@ import {
 	type UserDetailPagePolicyAssignment,
 	type UserDetailPageUser,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -61,10 +61,8 @@ export default observer(function UserDetailPageRoute() {
 					queryClient.invalidateQueries({
 						queryKey: getGetUserPoliciesQueryKey(userId),
 					});
-					addToast({
-						title: "정책 할당 저장",
+					toast.success("정책 할당 저장", {
 						description: "사용자 정책 할당이 저장되었습니다.",
-						color: "success",
 					});
 				},
 			},

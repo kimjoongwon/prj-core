@@ -1,5 +1,5 @@
 import { AlertTriangle, Clock } from "lucide-react";
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 
 /** SLA 상태 */
 export type SLAStatus = "ok" | "warning" | "breach";
@@ -88,12 +88,12 @@ export const InquirySLACell = ({
 	// 정상 상태
 	if (remainingMinutes !== null && remainingMinutes !== undefined) {
 		return (
-			<div className="flex w-full items-center justify-center gap-1 text-sm text-default-500">
+			<div className="flex w-full items-center justify-center gap-1 text-sm text-muted">
 				<Clock className="h-3.5 w-3.5" />
 				<span>{formatRemainingTime(remainingMinutes)}</span>
 			</div>
 		);
 	}
 
-	return <span className="text-default-400">-</span>;
+	return <span className="text-muted">-</span>;
 };

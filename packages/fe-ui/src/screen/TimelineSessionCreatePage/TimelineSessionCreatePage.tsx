@@ -1,19 +1,6 @@
 "use client";
 
-import {
-	FormPage,
-	FormPageSurface,
-	ContentLanguageNotice,
-	PageTitleBar,
-	FormSection,
-	FormSectionCard,
-	VStack,
-	Button,
-	Input,
-	Select,
-	Textarea,
-	useT,
-} from "@cocrepo/ui";
+import { FormPage, FormPageSurface, ContentLanguageNotice, PageTitleBar, FormSection, FormSectionCard, VStack, Button, Input, Select, TextArea, useT } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 
 export type TimelineSessionPageSessionType =
@@ -78,7 +65,7 @@ export interface TimelineSessionCreatePageProps {
 	isSubmitDisabled: boolean;
 	onChangeNameInput: (value: string) => void;
 	onChangeTypeSelect: (value: string) => void;
-	onChangeDescriptionTextarea: (value: string) => void;
+	onChangeDescriptionTextArea: (value: string) => void;
 	onChangeStartDateTimeInput: (value: string) => void;
 	onChangeEndDateTimeInput: (value: string) => void;
 	onChangeDayOfWeekSelect: (value: string) => void;
@@ -103,7 +90,7 @@ export const TimelineSessionCreatePage = observer(
 		isSubmitDisabled,
 		onChangeNameInput,
 		onChangeTypeSelect,
-		onChangeDescriptionTextarea,
+		onChangeDescriptionTextArea,
 		onChangeStartDateTimeInput,
 		onChangeEndDateTimeInput,
 		onChangeDayOfWeekSelect,
@@ -148,19 +135,19 @@ export const TimelineSessionCreatePage = observer(
 									<Select
 										label="세션 유형"
 										value={type}
-										onChange={onChangeTypeSelect}
+										onChange={(value) => onChangeTypeSelect(String(value ?? ""))}
 										options={SESSION_TYPE_OPTIONS}
 										isRequired
 									/>
-									<p className="text-sm text-default-500">
+									<p className="text-sm text-muted">
 										{t(SESSION_TYPE_DESCRIPTIONS[type])}
 									</p>
-									<Textarea
+									<TextArea
 										label="설명"
 										labelPlacement="outside"
 										placeholder="세션에 대한 부가 설명을 입력하세요."
 										value={description}
-										onValueChange={onChangeDescriptionTextarea}
+										onValueChange={onChangeDescriptionTextArea}
 										maxLength={500}
 										description={`${description.length} / 500`}
 									/>
@@ -209,22 +196,26 @@ export const TimelineSessionCreatePage = observer(
 									{type === "RECURRING" ? (
 										<>
 											<div className="flex gap-4">
-												<Select
-													label="반복 요일"
-													value={recurringDayOfWeek ?? undefined}
-													onChange={onChangeDayOfWeekSelect}
-													options={DAY_OF_WEEK_OPTIONS}
-													isRequired
+													<Select
+														label="반복 요일"
+														value={recurringDayOfWeek ?? undefined}
+														onChange={(value) =>
+															onChangeDayOfWeekSelect(String(value ?? ""))
+														}
+														options={DAY_OF_WEEK_OPTIONS}
+														isRequired
 													isInvalid={!!errors.recurringDayOfWeek}
 													errorMessage={errors.recurringDayOfWeek}
 													className="flex-1"
 												/>
-												<Select
-													label="반복 주기"
-													value={repeatCycleType || undefined}
-													onChange={onChangeCycleTypeSelect}
-													options={CYCLE_TYPE_OPTIONS}
-													isRequired
+													<Select
+														label="반복 주기"
+														value={repeatCycleType || undefined}
+														onChange={(value) =>
+															onChangeCycleTypeSelect(String(value ?? ""))
+														}
+														options={CYCLE_TYPE_OPTIONS}
+														isRequired
 													isInvalid={!!errors.repeatCycleType}
 													errorMessage={errors.repeatCycleType}
 													className="flex-1"

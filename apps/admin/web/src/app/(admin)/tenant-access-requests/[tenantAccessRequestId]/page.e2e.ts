@@ -22,8 +22,13 @@ test.describe("Admin 접근 신청 상세 페이지", () => {
 		).toBeVisible();
 		await expect(page.getByText("조회", { exact: true })).toBeVisible();
 		await expect(page.getByText("업무 확인 권한이 필요합니다.")).toBeVisible();
-		await expect(page.getByRole("button", { name: "승인" })).toBeEnabled();
-		await expect(page.getByRole("button", { name: "반려" })).toBeEnabled();
+		const main = page.getByRole("main");
+		await expect(
+			main.getByRole("button", { name: "승인", exact: true }),
+		).toBeEnabled();
+		await expect(
+			main.getByRole("button", { name: "반려", exact: true }),
+		).toBeEnabled();
 	});
 
 	test("승인 버튼을 누르면 approve API를 호출해야 한다", async ({ page }) => {
@@ -37,7 +42,10 @@ test.describe("Admin 접근 신청 상세 페이지", () => {
 		await page.goto(`./tenant-access-requests/${REQUEST_ID}`);
 		await page.waitForLoadState("networkidle");
 		await page.getByLabel("검토 코멘트").fill("요건 확인 완료");
-		await page.getByRole("button", { name: "승인" }).click();
+		await page
+			.getByRole("main")
+			.getByRole("button", { name: "승인", exact: true })
+			.click();
 
 		await expect
 			.poll(() => approveBody)
@@ -57,7 +65,10 @@ test.describe("Admin 접근 신청 상세 페이지", () => {
 		await page.goto(`./tenant-access-requests/${REQUEST_ID}`);
 		await page.waitForLoadState("networkidle");
 		await page.getByLabel("검토 코멘트").fill("권한 범위 재확인 필요");
-		await page.getByRole("button", { name: "반려" }).click();
+		await page
+			.getByRole("main")
+			.getByRole("button", { name: "반려", exact: true })
+			.click();
 
 		await expect
 			.poll(() => rejectBody)

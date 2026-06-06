@@ -2,12 +2,10 @@
 
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
-import {
-	Button,
-	Input,
-	Select,
-	SelectItem,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input/Input";
+import { Select } from "../../control/Select/Select";
+import { ListBox } from "@heroui/react";
 
 export interface RoleOption {
 	id: string;
@@ -167,23 +165,28 @@ export const UserFormWidget = observer(
 							isDisabled={isSubmitting}
 						/>
 
-						<Select
-							label="역할"
-							placeholder="역할을 선택하세요"
-							selectedKeys={state.roleId ? [state.roleId] : []}
-							onSelectionChange={(keys) => {
-								const selectedKey = Array.from(keys)[0] as string;
-								state.roleId = selectedKey || "";
-							}}
-							isRequired
-							isInvalid={!!state.errors.roleId}
+							<Select
+								label="역할"
+								placeholder="역할을 선택하세요"
+								value={state.roleId || null}
+								onChange={(value) => {
+									state.roleId = String(value ?? "");
+								}}
+								isRequired
+								isInvalid={!!state.errors.roleId}
 							errorMessage={state.errors.roleId}
 							isDisabled={isSubmitting}
-						>
-							{roles.map((role) => (
-								<SelectItem key={role.id}>{role.displayName}</SelectItem>
-							))}
-						</Select>
+							>
+								{roles.map((role) => (
+									<ListBox.Item
+										key={role.id}
+										id={role.id}
+										textValue={role.displayName}
+									>
+										{role.displayName}
+									</ListBox.Item>
+								))}
+							</Select>
 					</>
 				)}
 

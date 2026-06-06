@@ -1,12 +1,16 @@
 "use client";
 
 import { cloneDeep } from "@cocrepo/toolkit";
-import { observer } from "mobx-react-lite";
-import type React from "react";
 import {
-	Select as NextSelect,
-	SelectItem,
-} from "../../design-system/primitives";
+	Description,
+	FieldError,
+	Label,
+	ListBox,
+	Select as HeroSelect,
+} from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import type { ComponentProps, ReactNode } from "react";
+import type { Key } from "react-aria-components";
 import { useT } from "../../i18n";
 
 type SelectOption = {
@@ -15,139 +19,138 @@ type SelectOption = {
 	label?: string;
 };
 
-// SelectProps 인터페이스를 독립적으로 정의 (NextUI 제네릭 제거)
-export interface SelectProps {
+export interface SelectProps<T extends object = object>
+	extends Omit<
+		ComponentProps<typeof HeroSelect<T>>,
+		| "children"
+		| "defaultItems"
+		| "items"
+		| "onChange"
+		| "placeholder"
+		| "value"
+		| "variant"
+	> {
 	/** 선택 옵션 목록 */
 	options?: SelectOption[];
 	/** 선택된 값 */
-	value?: string;
+	value?: Key | null;
 	/** 값 변경 핸들러 */
-	onChange?: (value: string) => void;
+	onChange?: (value: Key | null) => void;
+	onValueChange?: (value: string) => void;
 	/** 크기 */
 	size?: "sm" | "md" | "lg";
 	/** 변형 */
-	variant?: "flat" | "bordered" | "underlined" | "faded";
+	variant?: "flat" | "bordered" | "underlined" | "faded" | "primary" | "secondary";
 	/** 라벨 */
-	label?: string;
+	label?: ReactNode;
+	labelPlacement?: string;
 	/** 플레이스홀더 */
-	placeholder?: string;
-	/** 비활성화 여부 */
-	isDisabled?: boolean;
-	/** 에러 여부 */
-	isInvalid?: boolean;
+	placeholder?: ReactNode;
 	/** 에러 메시지 */
-	errorMessage?: string;
+	errorMessage?: ReactNode;
 	/** 설명 */
-	description?: React.ReactNode;
-	/** 추가 클래스 */
-	className?: string;
-	/** 필수 여부 */
-	isRequired?: boolean;
-	/** 읽기 전용 */
-	isReadOnly?: boolean;
-	/** 선택된 키 */
-	selectedKeys?: string[];
-	/** 기타 NextUI props */
-	[key: string]: unknown;
+	description?: ReactNode;
+	defaultItems?: Iterable<T>;
+	items?: Iterable<T>;
+	children?: ReactNode | ((item: T) => ReactNode);
+	classNames?: Record<string, string>;
+	isClearable?: boolean;
+	onClear?: () => void;
 }
 
 /**
  * Select 컴포넌트
  * HeroUI Select의 래퍼로, Option 배열 기반으로 동작합니다.
- *
- * @example
- * ```tsx
- * const options = [
- *   { value: "male", text: "남성" },
- *   { value: "female", text: "여성" },
- * ];
- *
- * <Select
- *   label="성별"
- *   options={options}
- *   value={gender}
- *   onChange={setGender}
- * />
- * ```
  */
-export const Select = observer((props: SelectProps) => {
+export const Select = observer(function Select<T extends object = object>(
+	props: SelectProps<T>,
+) {
 	const t = useT();
 	const {
-		options = [],
-		value,
-		onChange,
-		size,
-		variant = "bordered",
-		label,
-		placeholder,
-		isDisabled,
-		isInvalid,
-		errorMessage,
-		className,
-		isRequired,
-		isReadOnly,
-		selectedKeys: selectedKeysProp,
+		children,
+		classNames,
+		defaultItems,
 		description,
+		errorMessage,
+		isClearable: _isClearable,
+		items,
+		label,
+		labelPlacement: _labelPlacement,
+		onChange,
+		onClear: _onClear,
+		onValueChange,
+		options = [],
+		placeholder,
+		size: _size,
+		value,
+		variant = "bordered",
 		"aria-label": ariaLabelProp,
 		...rest
 	} = props;
 
 	const _options = cloneDeep(options);
-	const optionKeys = new Set(_options.map((option) => String(option.value)));
-	const normalizedSelectedKeys = selectedKeysProp
-		?.map((selectedKey) => String(selectedKey))
-		.filter((selectedKey) => optionKeys.has(selectedKey));
-	const selectedKeys =
-		normalizedSelectedKeys && normalizedSelectedKeys.length > 0
-			? normalizedSelectedKeys
-			: value && optionKeys.has(String(value))
-				? [String(value)]
-				: undefined;
 	const ariaLabel =
 		typeof ariaLabelProp === "string"
 			? t(ariaLabelProp)
-			: label
+			: typeof label === "string"
 				? t(label)
-				: placeholder
+				: typeof placeholder === "string"
 					? t(placeholder)
 					: t("선택");
 
-	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		onChange?.(e.target.value);
+	const handleChange = (key: Key | null) => {
+		const stringValue = key == null ? "" : String(key);
+		onValueChange?.(stringValue);
+		onChange?.(key);
 	};
 
 	return (
-		<NextSelect
-			size={size}
-			variant={variant}
-			label={label ? t(label) : undefined}
-			placeholder={placeholder ? t(placeholder) : undefined}
-			isDisabled={isDisabled}
-			isInvalid={isInvalid}
-			errorMessage={errorMessage ? t(errorMessage) : undefined}
-			description={
-				typeof description === "string" ? t(description) : description
-			}
-			className={className}
-			isRequired={isRequired}
-			disallowEmptySelection={isReadOnly}
-			onChange={handleChange}
-			selectedKeys={selectedKeys}
-			aria-label={ariaLabel}
+		<HeroSelect<T>
 			{...rest}
+			className={classNames?.base ?? rest.className}
+			items={items ?? defaultItems}
+			value={value as Key | null | undefined}
+			onChange={handleChange}
+			aria-label={ariaLabel}
+			variant={variant === "primary" || variant === "secondary" ? variant : undefined}
 		>
-			{_options.map((option) => {
-				return (
-					<SelectItem
-						key={String(option.value)}
-						textValue={String(option.text ?? option.label ?? option.value)}
-					>
-						{typeof (option.text ?? option.label) === "string"
-							? t((option.text ?? option.label) as string)
-							: String(option.value)}
-					</SelectItem>
-				);
-			})}
-		</NextSelect>
+			{label ? (
+				<Label>{typeof label === "string" ? t(label) : label}</Label>
+			) : null}
+			<HeroSelect.Trigger className={classNames?.trigger}>
+				<HeroSelect.Value className={classNames?.value}>
+					{typeof placeholder === "string" ? t(placeholder) : placeholder}
+				</HeroSelect.Value>
+				<HeroSelect.Indicator className={classNames?.indicator} />
+			</HeroSelect.Trigger>
+			<HeroSelect.Popover className={classNames?.popover}>
+				<ListBox<T> className={classNames?.listbox}>
+					{children
+						? (children as ReactNode)
+						: _options.map((option) => (
+								<ListBox.Item
+									key={String(option.value)}
+									id={String(option.value)}
+									textValue={String(option.text ?? option.label ?? option.value)}
+								>
+									{typeof (option.text ?? option.label) === "string"
+										? t((option.text ?? option.label) as string)
+										: String(option.value)}
+									<ListBox.ItemIndicator />
+								</ListBox.Item>
+							))}
+				</ListBox>
+			</HeroSelect.Popover>
+			{description ? (
+				<Description>
+					{typeof description === "string" ? t(description) : description}
+				</Description>
+			) : null}
+			{errorMessage ? (
+				<FieldError>
+					{typeof errorMessage === "string" ? t(errorMessage) : errorMessage}
+				</FieldError>
+			) : null}
+		</HeroSelect>
 	);
 });

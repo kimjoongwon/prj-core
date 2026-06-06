@@ -4,7 +4,7 @@ import { ArrowRight, ShieldCheck, TriangleAlert } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { FormEvent } from "react";
 import { Button } from "../../control/Button/Button";
-import { Text } from "../../display/data-display/Text/Text";
+import { Typography } from "../../data-display/Typography";
 import { LoginForm, type LoginFormState } from "../../form/LoginForm/LoginForm";
 import { useT } from "../../i18n";
 import { HStack } from "../../rhythm/HStack/HStack";
@@ -87,7 +87,7 @@ export const LoginPage = observer(
 				onSubmit={onSubmitLoginPage}
 			>
 				<Surface
-					className="overflow-hidden rounded-2xl border border-divider bg-content1 shadow-lg shadow-default-100/10"
+					className="overflow-hidden rounded-2xl border border-border bg-surface shadow-lg shadow-default-100/10"
 					padding="none"
 				>
 					<VStack fullWidth gap="section" className="p-6 sm:p-7">
@@ -96,56 +96,57 @@ export const LoginPage = observer(
 								key="badge"
 								alignItems="center"
 								gap="inline"
-								className="w-fit rounded-full border border-divider bg-content2 px-3 py-1 text-default-600"
+								className="w-fit rounded-full border border-border bg-surface-secondary px-3 py-1 text-muted"
 							>
 								<ShieldCheck
 									key="icon"
 									aria-hidden
-									className="size-4 text-primary"
+									className="size-4 text-accent"
 								/>
-								<Text
+								<Typography
 									key="text"
-									as="span"
-									variant="caption"
+									type="body-xs"
+									weight="medium"
 									className="font-medium !text-foreground opacity-70"
 								>
 									안전한 운영 세션
-								</Text>
+								</Typography>
 							</HStack>
-							<Text
+							<Typography.Heading
 								key="title"
-								as="h2"
-								variant="h3"
+								level={3}
 								className="leading-tight"
 							>
 								{t(title)}
-							</Text>
-							<Text
+							</Typography.Heading>
+							<Typography.Paragraph
 								key="caption"
-								variant="subtitle2"
+								color="muted"
+								size="sm"
 								className="leading-6 !text-foreground opacity-70"
 							>
 								{t(caption)}
-							</Text>
+							</Typography.Paragraph>
 						</VStack>
 
 						<HStack
 							key="session-hint"
 							alignItems="center"
 							gap="block"
-							className="rounded-2xl border border-divider bg-content2/60 p-3 text-left"
+							className="rounded-2xl border border-border bg-surface-secondary/60 p-3 text-left"
 						>
 							<span
 								key="indicator"
 								className="size-2 shrink-0 rounded-full bg-success"
 							/>
-							<Text
+							<Typography.Paragraph
 								key="text"
-								variant="caption"
+								color="muted"
+								size="xs"
 								className="leading-5 !text-foreground opacity-75"
 							>
 								로그인 후 선택된 지점 scope로 관리자 API를 호출합니다.
-							</Text>
+							</Typography.Paragraph>
 						</HStack>
 
 						<LoginForm key="form" state={state.loginForm} />
@@ -163,23 +164,23 @@ export const LoginPage = observer(
 											aria-hidden
 											className="size-4 shrink-0"
 										/>
-										<Text
+										<Typography
 											key="text"
-											as="span"
-											variant="error"
-											className="leading-5"
+											type="body-sm"
+											className="text-danger font-medium leading-5"
 										>
 											{t(state.errorMessage)}
-										</Text>
+										</Typography>
 									</HStack>
 								</div>
 							) : (
-								<Text
-									variant="caption"
+								<Typography.Paragraph
+									color="muted"
+									size="xs"
 									className="leading-5 !text-foreground opacity-70"
 								>
 									입력한 계정으로 운영 콘솔 접근 권한을 확인합니다.
-								</Text>
+								</Typography.Paragraph>
 							)}
 						</div>
 

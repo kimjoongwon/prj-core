@@ -21,7 +21,7 @@ export const PaymentTableShell = observer(
 		children,
 	}: PaymentTableShellProps) => {
 		return (
-			<SectionSurface className="rounded-2xl border-divider/80 bg-content1/70 p-5">
+			<SectionSurface className="rounded-2xl border-border/80 bg-surface/70 p-5">
 				<VStack gap="block">
 					<HStack
 						alignItems="start"
@@ -31,7 +31,7 @@ export const PaymentTableShell = observer(
 					>
 						<VStack gap="dense">
 							<h2 className="text-xl font-semibold text-foreground">{title}</h2>
-							<p className="text-sm text-default-600">{description}</p>
+							<p className="text-sm text-muted">{description}</p>
 						</VStack>
 					</HStack>
 					<div className="overflow-x-auto">
@@ -41,7 +41,7 @@ export const PaymentTableShell = observer(
 								minWidthClassName,
 							].join(" ")}
 						>
-							<thead className="border-divider border-b text-default-500">
+							<thead className="border-border border-b text-muted">
 								{header}
 							</thead>
 							<tbody>{children}</tbody>

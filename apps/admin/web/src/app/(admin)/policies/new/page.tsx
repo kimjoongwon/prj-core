@@ -12,7 +12,7 @@ import {
 	PolicyCreatePage,
 	type PolicyCreatePageAbilityOption,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -35,10 +35,8 @@ export default observer(function PolicyCreatePageRoute() {
 			onSuccess: (response) => {
 				const createdPolicy = response.data;
 				if (!createdPolicy) {
-					addToast({
-						title: "정책 등록 실패",
+					toast.danger("정책 등록 실패", {
 						description: "생성된 정책 정보를 확인할 수 없습니다.",
-						color: "danger",
 					});
 					return;
 				}
@@ -61,11 +59,7 @@ export default observer(function PolicyCreatePageRoute() {
 				);
 			},
 			onError: (error) => {
-				addToast({
-					title: "정책 등록 실패",
-					description: error.message,
-					color: "danger",
-				});
+				toast.danger("정책 등록 실패", { description: error.message });
 			},
 		},
 	});
@@ -76,11 +70,7 @@ export default observer(function PolicyCreatePageRoute() {
 
 	const onClickSubmitButton = () => {
 		if (!state.name.trim()) {
-			addToast({
-				title: "입력 오류",
-				description: "정책 이름을 입력해주세요.",
-				color: "danger",
-			});
+			toast.danger("입력 오류", { description: "정책 이름을 입력해주세요." });
 			return;
 		}
 		createPolicy({
@@ -140,9 +130,5 @@ function mapAbilityOption(
 }
 
 function showCreateSuccessToast() {
-	addToast({
-		title: "정책 등록 성공",
-		description: "정책이 생성되었습니다.",
-		color: "success",
-	});
+	toast.success("정책 등록 성공", { description: "정책이 생성되었습니다." });
 }

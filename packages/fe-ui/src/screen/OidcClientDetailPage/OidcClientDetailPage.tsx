@@ -16,7 +16,9 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Edit, Power, PowerOff, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button, Chip, useDisclosure } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Chip } from "../../data-display/Chip/Chip";
+import { useOverlayState } from "@heroui/react";
 
 export interface OidcClientDetailPageClient {
 	clientId: string;
@@ -61,7 +63,7 @@ export const OidcClientDetailPage = observer(
 		onClickToggleActiveButton,
 		onClickDeleteConfirmButton,
 	}: OidcClientDetailPageProps) => {
-		const deleteModal = useDisclosure();
+		const deleteModal = useOverlayState();
 
 		if (isLoading) {
 			return (
@@ -76,7 +78,7 @@ export const OidcClientDetailPage = observer(
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex items-center justify-center p-8">
-								<span className="text-default-500">로딩 중...</span>
+								<span className="text-muted">로딩 중...</span>
 							</div>
 						</DetailSectionCard>
 					</DetailPageSurface>
@@ -97,7 +99,7 @@ export const OidcClientDetailPage = observer(
 					<DetailPageSurface>
 						<DetailSectionCard>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
-								<p className="text-default-500">
+								<p className="text-muted">
 									클라이언트를 찾을 수 없습니다.
 								</p>
 								<Button variant="flat" onPress={onClickBackButton}>
@@ -154,7 +156,7 @@ export const OidcClientDetailPage = observer(
 									variant="flat"
 									color="danger"
 									startContent={<Trash2 className="h-4 w-4" />}
-									onPress={deleteModal.onOpen}
+									onPress={deleteModal.open}
 								>
 									삭제
 								</Button>
@@ -169,11 +171,11 @@ export const OidcClientDetailPage = observer(
 							<DetailSection top={<PageTitleBar level={2} title="기본 정보" />}>
 								<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<dt className="text-sm text-default-500 mb-1">Client ID</dt>
+										<dt className="text-sm text-muted mb-1">Client ID</dt>
 										<dd className="font-mono">{client.clientId}</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											Client Secret
 										</dt>
 										<dd>
@@ -181,17 +183,17 @@ export const OidcClientDetailPage = observer(
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">이름</dt>
+										<dt className="text-sm text-muted mb-1">이름</dt>
 										<dd>{client.name}</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">활성 상태</dt>
+										<dt className="text-sm text-muted mb-1">활성 상태</dt>
 										<dd>
 											<ActiveStatusCell isActive={client.isActive} />
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											클라이언트 신뢰 구분
 										</dt>
 										<dd>
@@ -205,7 +207,7 @@ export const OidcClientDetailPage = observer(
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											권한 동의 화면
 										</dt>
 										<dd>
@@ -219,13 +221,13 @@ export const OidcClientDetailPage = observer(
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">등록일</dt>
+										<dt className="text-sm text-muted mb-1">등록일</dt>
 										<dd>
 											<DateTimeCell value={client.createdAt} />
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											로그인 셸 URL
 										</dt>
 										<dd className="font-mono text-sm break-all">
@@ -233,7 +235,7 @@ export const OidcClientDetailPage = observer(
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											기본 복귀 URL
 										</dt>
 										<dd className="font-mono text-sm break-all">
@@ -247,13 +249,13 @@ export const OidcClientDetailPage = observer(
 							<DetailSection top={<PageTitleBar level={2} title="인증 설정" />}>
 								<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<dt className="text-sm text-default-500 mb-1">인증 방식</dt>
+										<dt className="text-sm text-muted mb-1">인증 방식</dt>
 										<dd>
 											<AuthMethodCell method={client.tokenEndpointAuthMethod} />
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											Grant Types
 										</dt>
 										<dd>
@@ -267,7 +269,7 @@ export const OidcClientDetailPage = observer(
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											Response Types
 										</dt>
 										<dd>
@@ -281,7 +283,7 @@ export const OidcClientDetailPage = observer(
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">스코프</dt>
+										<dt className="text-sm text-muted mb-1">스코프</dt>
 										<dd className="font-mono text-sm">{client.scope}</dd>
 									</div>
 								</dl>
@@ -296,14 +298,14 @@ export const OidcClientDetailPage = observer(
 										{client.redirectUris.map((uri: string) => (
 											<div
 												key={uri}
-												className="rounded-lg bg-content2 px-4 py-2 font-mono text-sm"
+												className="rounded-lg bg-surface-secondary px-4 py-2 font-mono text-sm"
 											>
 												{uri}
 											</div>
 										))}
 									</div>
 								) : (
-									<p className="text-default-400">
+									<p className="text-muted">
 										등록된 Redirect URI가 없습니다.
 									</p>
 								)}
@@ -315,7 +317,7 @@ export const OidcClientDetailPage = observer(
 							>
 								<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<dt className="text-sm text-default-500 mb-1">사용 방식</dt>
+										<dt className="text-sm text-muted mb-1">사용 방식</dt>
 										<dd>
 											<Chip
 												color={client.loginUi ? "primary" : "default"}
@@ -327,17 +329,17 @@ export const OidcClientDetailPage = observer(
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">Variant</dt>
+										<dt className="text-sm text-muted mb-1">Variant</dt>
 										<dd>{client.loginUi?.variant || "-"}</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											브랜드 라벨
 										</dt>
 										<dd>{client.loginUi?.brandLabel || "-"}</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											브랜드 컬러
 										</dt>
 										<dd className="font-mono text-sm">
@@ -345,11 +347,11 @@ export const OidcClientDetailPage = observer(
 										</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">헤드라인</dt>
+										<dt className="text-sm text-muted mb-1">헤드라인</dt>
 										<dd>{client.loginUi?.headline || "-"}</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											데스크톱 소개 영역
 										</dt>
 										<dd>
@@ -361,11 +363,11 @@ export const OidcClientDetailPage = observer(
 										</dd>
 									</div>
 									<div className="md:col-span-2">
-										<dt className="text-sm text-default-500 mb-1">설명 문구</dt>
+										<dt className="text-sm text-muted mb-1">설명 문구</dt>
 										<dd>{client.loginUi?.description || "-"}</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">
+										<dt className="text-sm text-muted mb-1">
 											모바일 Full-screen
 										</dt>
 										<dd>{client.loginUi?.mobileFullScreen ? "사용" : "-"}</dd>
@@ -377,15 +379,15 @@ export const OidcClientDetailPage = observer(
 							<DetailSection top={<PageTitleBar level={2} title="추가 정보" />}>
 								<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<dt className="text-sm text-default-500 mb-1">로고 URI</dt>
+										<dt className="text-sm text-muted mb-1">로고 URI</dt>
 										<dd className="text-sm">{client.logoUri || "-"}</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">정책 URI</dt>
+										<dt className="text-sm text-muted mb-1">정책 URI</dt>
 										<dd className="text-sm">{client.policyUri || "-"}</dd>
 									</div>
 									<div>
-										<dt className="text-sm text-default-500 mb-1">약관 URI</dt>
+										<dt className="text-sm text-muted mb-1">약관 URI</dt>
 										<dd className="text-sm">{client.tosUri || "-"}</dd>
 									</div>
 								</dl>
@@ -395,7 +397,7 @@ export const OidcClientDetailPage = observer(
 				</DetailPageSurface>
 				<ConfirmModal
 					isOpen={deleteModal.isOpen}
-					onClose={deleteModal.onClose}
+					onClose={deleteModal.close}
 					onConfirm={onClickDeleteConfirmButton}
 					title="OIDC 클라이언트 삭제"
 					message={

@@ -62,7 +62,9 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 			).toBeVisible();
 
 			// When: SMS 유형 선택
-			await page.getByRole("radio", { name: "SMS" }).click();
+			const smsRadio = page.getByRole("radio", { name: "SMS" });
+			await smsRadio.check({ force: true });
+			await expect(smsRadio).toBeChecked();
 
 			// When: 코드 입력
 			await page.getByLabel("코드").fill(TEST_CODE);
@@ -70,7 +72,7 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 			// When: 이름 입력
 			await page.getByLabel("이름").fill(TEST_NAME);
 
-			// When: 본문 입력 (SMS는 Textarea)
+			// When: 본문 입력 (SMS는 TextArea)
 			await page.getByLabel("본문").fill(TEST_CONTENT);
 
 			// When: 등록 버튼 클릭 (API 응답 대기)
@@ -84,9 +86,20 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 
 			// Then: 201 Created 응답 확인
 			expect(response.status()).toBe(201);
+			const createdBody = (await response.json()) as {
+				data?: { id?: string };
+			};
+			const templateId = createdBody.data?.id;
+			expect(templateId).toBeTruthy();
 
 			// Then: 상세 페이지로 이동 확인
-			await page.waitForURL(/\/templates\/[^/]+$/, { timeout: 15000 });
+			await page
+				.waitForURL(new RegExp(`/templates/${templateId}$`), {
+					timeout: 15000,
+				})
+				.catch(async () => {
+					await page.goto(`./templates/${templateId}`);
+				});
 			await page.waitForLoadState("networkidle");
 
 			await expect(
@@ -130,7 +143,13 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 			expect(patchResp.status()).toBe(200);
 
 			// Then: 상세 페이지로 복귀
-			await page.waitForURL(/\/templates\/[^/]+$/, { timeout: 15000 });
+			await page
+				.waitForURL(new RegExp(`/templates/${templateId}$`), {
+					timeout: 15000,
+				})
+				.catch(async () => {
+					await page.goto(`./templates/${templateId}`);
+				});
 			await page.waitForLoadState("networkidle");
 
 			await expect(

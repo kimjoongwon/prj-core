@@ -7,6 +7,7 @@ import type {
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
+import { Modal, useOverlayState } from "@heroui/react";
 import { Upload } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
@@ -14,15 +15,7 @@ import { buildAssetTableColumns } from "../../columns";
 import { Button } from "../../control/Button/Button";
 import { Input } from "../../control/Input/Input";
 import { DataGrid, DataGridStateModel } from "../../data-grid";
-import {
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	useDisclosure,
-} from "../../design-system/primitives";
-import { EmptyState } from "../../display";
+import { EmptyState } from "../../feedback";
 import { useT } from "../../i18n";
 import { Surface } from "../../surface";
 import { AssetPreviewDialog } from "../../widget/AssetPreview";
@@ -132,10 +125,10 @@ const assetsLayoutClassName =
 	"grid min-h-[520px] grid-cols-1 gap-5 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-6";
 
 const assetsSidebarPanelClassName =
-	"overflow-hidden rounded-[1.25rem] border border-divider/70 bg-default-50/70 shadow-sm";
+	"overflow-hidden rounded-[1.25rem] border border-border/70 bg-default/70 shadow-sm";
 
 const assetsGridPanelClassName =
-	"min-w-0 rounded-[1.25rem] border border-divider/70 bg-content1/85 px-4 py-4 shadow-sm sm:px-5 sm:py-5";
+	"min-w-0 rounded-[1.25rem] border border-border/70 bg-surface/85 px-4 py-4 shadow-sm sm:px-5 sm:py-5";
 
 const getAssetEmptyMessage = (
 	folders: FolderTreeItem[],
@@ -213,7 +206,6 @@ function AssetsGridFallback({
 					}}
 					rows={[]}
 					totalCount={0}
-					isLoading={true}
 					state={gridState}
 				/>
 			</div>
@@ -223,7 +215,7 @@ function AssetsGridFallback({
 
 function AssetsSpaceEmptyState() {
 	return (
-		<div className="rounded-[1.25rem] border border-dashed border-divider/70 bg-default-50/60 p-8 md:p-10">
+		<div className="rounded-[1.25rem] border border-dashed border-border/70 bg-default/60 p-8 md:p-10">
 			<EmptyState
 				title="Space를 선택하면 에셋을 조회할 수 있습니다"
 				description="상단 Space 선택기를 통해 관리하려는 공간을 먼저 선택해주세요."
@@ -271,9 +263,17 @@ export const AssetBrowser = observer(
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const fileInputRef = useRef<HTMLInputElement | null>(null);
-		const createFolderModal = useDisclosure();
-		const renameFolderModal = useDisclosure();
-		const deleteFolderModal = useDisclosure();
+		const createFolderModal = useOverlayState();
+		const renameFolderModal = useOverlayState();
+		const deleteFolderModal = useOverlayState();
+		const browserModalState = useOverlayState({
+			isOpen,
+			onOpenChange: (open) => {
+				if (!open) {
+					onClose?.();
+				}
+			},
+		});
 		const selectedFolderId =
 			typeof queryStates.folderId === "string" && queryStates.folderId
 				? queryStates.folderId
@@ -314,7 +314,7 @@ export const AssetBrowser = observer(
 				return;
 			}
 
-			createFolderModal.onClose();
+			createFolderModal.close();
 			onResetCreateFolderForm();
 		};
 
@@ -323,7 +323,7 @@ export const AssetBrowser = observer(
 				return;
 			}
 
-			renameFolderModal.onClose();
+			renameFolderModal.close();
 			onResetRenameFolderForm();
 		};
 
@@ -332,26 +332,26 @@ export const AssetBrowser = observer(
 				return;
 			}
 
-			deleteFolderModal.onClose();
+			deleteFolderModal.close();
 			setActiveFolder(null);
 		};
 
 		const onClickCreateFolderButton = () => {
 			setUploadRequirementMessage(null);
 			onResetCreateFolderForm();
-			createFolderModal.onOpen();
+			createFolderModal.open();
 		};
 
 		const onClickRenameFolderButton = (folder: FolderTreeItem) => {
 			setActiveFolder(folder);
 			setRenameFolderName(folder.name);
 			setRenameFolderNameError(null);
-			renameFolderModal.onOpen();
+			renameFolderModal.open();
 		};
 
 		const onClickDeleteFolderButton = (folder: FolderTreeItem) => {
 			setActiveFolder(folder);
-			deleteFolderModal.onOpen();
+			deleteFolderModal.open();
 		};
 
 		const onClickCreateFolderSubmitButton = async () => {
@@ -366,7 +366,7 @@ export const AssetBrowser = observer(
 					name: trimmedFolderName,
 					...(selectedFolderId ? { parentFolderId: selectedFolderId } : {}),
 				});
-				createFolderModal.onClose();
+				createFolderModal.close();
 				onResetCreateFolderForm();
 			} catch {
 				return;
@@ -389,7 +389,7 @@ export const AssetBrowser = observer(
 					folderId: activeFolder.id,
 					name: trimmedFolderName,
 				});
-				renameFolderModal.onClose();
+				renameFolderModal.close();
 				onResetRenameFolderForm();
 			} catch {
 				return;
@@ -403,7 +403,7 @@ export const AssetBrowser = observer(
 
 			try {
 				await onDeleteFolder(activeFolder.id);
-				deleteFolderModal.onClose();
+				deleteFolderModal.close();
 				setActiveFolder(null);
 				void setQueryStates({
 					folderId: activeFolder.parentFolderId ?? "",
@@ -474,7 +474,7 @@ export const AssetBrowser = observer(
 
 		const browserContent = (
 			<>
-				<Surface className="overflow-hidden rounded-[1.75rem] border-divider/80 bg-content1/75">
+				<Surface className="overflow-hidden rounded-[1.75rem] border-border/80 bg-surface/75">
 					{!isStoreReady ? (
 						<AssetsGridFallback
 							queryStates={queryStates}
@@ -497,7 +497,6 @@ export const AssetBrowser = observer(
 									onCreate={onClickCreateFolderButton}
 									onRename={onClickRenameFolderButton}
 									onDelete={onClickDeleteFolderButton}
-									isLoading={isLoading}
 									className="bg-transparent"
 								/>
 							</div>
@@ -509,11 +508,11 @@ export const AssetBrowser = observer(
 										leftInputs: visibleLeftInputs,
 										emptyMessage,
 									}}
-									rows={assets}
-									totalCount={totalCount}
-									isLoading={isLoading}
-									state={gridState}
-								/>
+										rows={assets}
+										totalCount={totalCount}
+										state={gridState}
+										isLoading={isLoading}
+									/>
 							</div>
 						</div>
 					)}
@@ -537,138 +536,135 @@ export const AssetBrowser = observer(
 
 		const overlayModals = (
 			<>
-				<Modal
-					isOpen={createFolderModal.isOpen}
-					onClose={onCloseCreateFolderModal}
-					size="md"
-				>
-					<ModalContent>
-						<ModalHeader>{t("폴더 생성")}</ModalHeader>
-						<ModalBody>
-							<div className="flex flex-col gap-3">
-								<p className="text-sm text-default-500">
-									{selectedFolderId
-										? t("현재 선택한 폴더 아래에 새 폴더를 생성합니다.")
-										: t("루트 폴더에 새 폴더를 생성합니다.")}
-								</p>
-								<Input
-									label="폴더명"
-									placeholder="새 폴더명을 입력하세요"
-									value={newFolderName}
-									onValueChange={(value: string) => {
-										setNewFolderName(value);
-										setNewFolderNameError(null);
-									}}
-									isRequired
-									autoFocus
-									isInvalid={Boolean(newFolderNameError)}
-									errorMessage={newFolderNameError ?? undefined}
-								/>
-							</div>
-						</ModalBody>
-						<ModalFooter>
-							<Button
-								variant="flat"
-								onPress={onCloseCreateFolderModal}
-								isDisabled={isCreatingFolder}
-							>
-								취소
-							</Button>
-							<Button
-								color="primary"
-								onPress={onClickCreateFolderSubmitButton}
-								isLoading={isCreatingFolder}
-								isDisabled={!newFolderName.trim()}
-							>
-								생성
-							</Button>
-						</ModalFooter>
-					</ModalContent>
-				</Modal>
-
-				<Modal
-					isOpen={renameFolderModal.isOpen}
-					onClose={onCloseRenameFolderModal}
-					size="md"
-				>
-					<ModalContent>
-						<ModalHeader>{t("폴더 이름 변경")}</ModalHeader>
-						<ModalBody>
-							<Input
-								label="폴더명"
-								placeholder="변경할 폴더명을 입력하세요"
-								value={renameFolderName}
-								onValueChange={(value: string) => {
-									setRenameFolderName(value);
-									setRenameFolderNameError(null);
-								}}
-								isRequired
-								autoFocus
-								isInvalid={Boolean(renameFolderNameError)}
-								errorMessage={renameFolderNameError ?? undefined}
-							/>
-						</ModalBody>
-						<ModalFooter>
-							<Button
-								variant="flat"
-								onPress={onCloseRenameFolderModal}
-								isDisabled={isUpdatingFolder}
-							>
-								취소
-							</Button>
-							<Button
-								color="primary"
-								onPress={onClickRenameFolderSubmitButton}
-								isLoading={isUpdatingFolder}
-								isDisabled={!renameFolderName.trim()}
-							>
-								저장
-							</Button>
-						</ModalFooter>
-					</ModalContent>
-				</Modal>
-
-				<Modal
-					isOpen={deleteFolderModal.isOpen}
-					onClose={onCloseDeleteFolderModal}
-					size="md"
-				>
-					<ModalContent>
-						<ModalHeader>{t("폴더 삭제")}</ModalHeader>
-						<ModalBody>
-							<div className="space-y-2">
-								<p className="text-sm text-default-700">
-									{t("선택한 폴더를 삭제하시겠습니까?")}
-								</p>
-								<p className="text-sm text-default-500">
-									{t(
-										"하위 폴더와 에셋이 있는 경우 서버 정책에 따라 삭제가 거부될 수 있습니다.",
-									)}
-								</p>
-								{activeFolder ? (
-									<div className="rounded-lg bg-default-100 px-3 py-2 text-sm font-medium">
-										{activeFolder.name}
+				<Modal state={createFolderModal}>
+					<Modal.Backdrop>
+						<Modal.Container size="md">
+							<Modal.Dialog>
+								<Modal.Header>{t("폴더 생성")}</Modal.Header>
+								<Modal.Body>
+									<div className="flex flex-col gap-3">
+										<p className="text-sm text-muted">
+											{selectedFolderId
+												? t("현재 선택한 폴더 아래에 새 폴더를 생성합니다.")
+												: t("루트 폴더에 새 폴더를 생성합니다.")}
+										</p>
+										<Input
+											label="폴더명"
+											placeholder="새 폴더명을 입력하세요"
+											value={newFolderName}
+											onValueChange={(value: string) => {
+												setNewFolderName(value);
+												setNewFolderNameError(null);
+											}}
+											isRequired
+											autoFocus
+											isInvalid={Boolean(newFolderNameError)}
+											errorMessage={newFolderNameError ?? undefined}
+										/>
 									</div>
-								) : null}
-							</div>
-						</ModalBody>
-						<ModalFooter>
-							<Button
-								variant="flat"
-								onPress={onCloseDeleteFolderModal}
-								isDisabled={isRemovingFolder}
-							>
-								취소
-							</Button>
-							<Button
-								color="danger"
-								onPress={onClickDeleteFolderConfirmButton}
-								isLoading={isRemovingFolder}
-							>
-								삭제
-							</Button>
-						</ModalFooter>
-					</ModalContent>
+								</Modal.Body>
+								<Modal.Footer>
+									<Button
+										variant="flat"
+										onPress={onCloseCreateFolderModal}
+										isDisabled={isCreatingFolder}
+									>
+										취소
+									</Button>
+									<Button
+										color="primary"
+										onPress={onClickCreateFolderSubmitButton}
+										isDisabled={!newFolderName.trim()}
+									>
+										생성
+									</Button>
+								</Modal.Footer>
+							</Modal.Dialog>
+						</Modal.Container>
+					</Modal.Backdrop>
+				</Modal>
+
+				<Modal state={renameFolderModal}>
+					<Modal.Backdrop>
+						<Modal.Container size="md">
+							<Modal.Dialog>
+								<Modal.Header>{t("폴더 이름 변경")}</Modal.Header>
+								<Modal.Body>
+									<Input
+										label="폴더명"
+										placeholder="변경할 폴더명을 입력하세요"
+										value={renameFolderName}
+										onValueChange={(value: string) => {
+											setRenameFolderName(value);
+											setRenameFolderNameError(null);
+										}}
+										isRequired
+										autoFocus
+										isInvalid={Boolean(renameFolderNameError)}
+										errorMessage={renameFolderNameError ?? undefined}
+									/>
+								</Modal.Body>
+								<Modal.Footer>
+									<Button
+										variant="flat"
+										onPress={onCloseRenameFolderModal}
+										isDisabled={isUpdatingFolder}
+									>
+										취소
+									</Button>
+									<Button
+										color="primary"
+										onPress={onClickRenameFolderSubmitButton}
+										isDisabled={!renameFolderName.trim()}
+									>
+										저장
+									</Button>
+								</Modal.Footer>
+							</Modal.Dialog>
+						</Modal.Container>
+					</Modal.Backdrop>
+				</Modal>
+
+				<Modal state={deleteFolderModal}>
+					<Modal.Backdrop>
+						<Modal.Container size="md">
+							<Modal.Dialog>
+								<Modal.Header>{t("폴더 삭제")}</Modal.Header>
+								<Modal.Body>
+									<div className="space-y-2">
+										<p className="text-sm text-foreground">
+											{t("선택한 폴더를 삭제하시겠습니까?")}
+										</p>
+										<p className="text-sm text-muted">
+											{t(
+												"하위 폴더와 에셋이 있는 경우 서버 정책에 따라 삭제가 거부될 수 있습니다.",
+											)}
+										</p>
+										{activeFolder ? (
+											<div className="rounded-lg bg-default px-3 py-2 text-sm font-medium">
+												{activeFolder.name}
+											</div>
+										) : null}
+									</div>
+								</Modal.Body>
+								<Modal.Footer>
+									<Button
+										variant="flat"
+										onPress={onCloseDeleteFolderModal}
+										isDisabled={isRemovingFolder}
+									>
+										취소
+									</Button>
+									<Button
+										color="danger"
+										onPress={onClickDeleteFolderConfirmButton}
+									>
+										삭제
+									</Button>
+								</Modal.Footer>
+							</Modal.Dialog>
+						</Modal.Container>
+					</Modal.Backdrop>
 				</Modal>
 			</>
 		);
@@ -680,7 +676,6 @@ export const AssetBrowser = observer(
 					color="primary"
 					startContent={<Upload className="h-4 w-4" />}
 					onPress={onClickUploadButton}
-					isLoading={isUploadingAsset}
 					isDisabled={isUploadActionDisabled({
 						isStoreReady,
 						hasSelectedSpace,
@@ -690,7 +685,7 @@ export const AssetBrowser = observer(
 					{t("업로드")}
 				</Button>
 				{uploadRequirementMessage ? (
-					<output className="max-w-56 text-right text-xs text-default-500">
+					<output className="max-w-56 text-right text-xs text-muted">
 						{t(uploadRequirementMessage)}
 					</output>
 				) : null}
@@ -700,25 +695,23 @@ export const AssetBrowser = observer(
 		if (presentation === "modal") {
 			return (
 				<>
-					<Modal
-						isOpen={isOpen}
-						onClose={onClose}
-						size="5xl"
-						scrollBehavior="inside"
-						classNames={{
-							base: "max-w-[min(96vw,1200px)]",
-						}}
-					>
-						<ModalContent>
-							<ModalHeader className="flex-col items-stretch gap-0">
-								<PageTitleBar
-									title={title}
-									description={description}
-									actions={uploadAction}
-								/>
-							</ModalHeader>
-							<ModalBody className="pt-0 pb-6">{browserContent}</ModalBody>
-						</ModalContent>
+					<Modal state={browserModalState}>
+						<Modal.Backdrop>
+							<Modal.Container size="full" scroll="inside">
+								<Modal.Dialog>
+									<Modal.Header className="flex-col items-stretch gap-0">
+										<PageTitleBar
+											title={title}
+											description={description}
+											actions={uploadAction}
+										/>
+									</Modal.Header>
+									<Modal.Body className="pt-0 pb-6">
+										{browserContent}
+									</Modal.Body>
+								</Modal.Dialog>
+							</Modal.Container>
+						</Modal.Backdrop>
 					</Modal>
 					{overlayModals}
 				</>

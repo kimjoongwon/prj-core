@@ -95,7 +95,7 @@ Course 계열 admin 화면의 pure screen 컴포넌트입니다. route thin cont
 | ../../feature/course-management | CourseManagementConsole feature |
 | ../../widget | PageTitleBar |
 | ../../rhythm | VStack |
-| ../../design-system/primitives | Button |
+| ../../design-system | Button |
 | lucide-react | action icon |
 | mobx-react-lite | observer wrapper |
 

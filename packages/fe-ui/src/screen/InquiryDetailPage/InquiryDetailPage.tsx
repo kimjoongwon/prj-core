@@ -34,60 +34,10 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Input,
-	Select,
-	SelectItem,
-	type Selection,
-} from "../../design-system/primitives";
+import { Input } from "../../control/Input/Input";
+import { Select } from "../../control/Select/Select";
+import { ListBox } from "@heroui/react";
 import type { WebSocketStatus } from "./hooks/useInquiryWebSocket";
-
-const statusOptions = [
-	{ value: "NEW", text: "신규" },
-	{ value: "OPEN", text: "열림" },
-	{ value: "IN_PROGRESS", text: "진행중" },
-	{ value: "WAITING_CUSTOMER", text: "고객대기" },
-	{ value: "RESOLVED", text: "해결" },
-	{ value: "CLOSED", text: "종료" },
-	{ value: "ESCALATED", text: "에스컬레이션" },
-];
-
-const priorityOptions = [
-	{ value: "URGENT", text: "긴급" },
-	{ value: "HIGH", text: "높음" },
-	{ value: "NORMAL", text: "보통" },
-	{ value: "LOW", text: "낮음" },
-];
-
-const categoryOptions = [
-	{ value: "GENERAL", text: "일반" },
-	{ value: "DELIVERY", text: "배송" },
-	{ value: "PAYMENT", text: "결제" },
-	{ value: "REFUND", text: "환불" },
-	{ value: "PRODUCT", text: "상품" },
-	{ value: "ACCOUNT", text: "계정" },
-	{ value: "TECHNICAL", text: "기술" },
-	{ value: "COMPLAINT", text: "불만" },
-	{ value: "OTHER", text: "기타" },
-];
-
-const CHANNEL_LABELS: Record<string, string> = {
-	WEB: "웹",
-	EMAIL: "이메일",
-	CHAT: "채팅",
-	SMS: "SMS",
-	PHONE: "전화",
-	WALK_IN: "방문",
-};
-
-const getSelectedValue = (keys: Selection): string => {
-	if (keys === "all") {
-		return "";
-	}
-
-	const selectedKey = keys.values().next().value;
-	return selectedKey ? String(selectedKey) : "";
-};
 
 const toMinutes = (start: string, end: string) => {
 	return Math.max(
@@ -268,6 +218,28 @@ export const InquiryDetailPage = observer(
 				: inquiry?.sentiment?.sentiment === "NEGATIVE"
 					? "negative"
 					: "neutral";
+		const statusOptions = (bootstrap?.options.status ?? []).map((option) => ({
+			value: String(option.value ?? ""),
+			text: option.label,
+		}));
+		const priorityOptions = (bootstrap?.options.priority ?? []).map(
+			(option) => ({
+				value: String(option.value ?? ""),
+				text: option.label,
+			}),
+		);
+		const categoryOptions = (bootstrap?.options.category ?? []).map(
+			(option) => ({
+				value: String(option.value ?? ""),
+				text: option.label,
+			}),
+		);
+		const channelLabel =
+			(bootstrap?.options.channel ?? []).find(
+				(option) => String(option.value ?? "") === (inquiry?.channel ?? ""),
+			)?.label ??
+			inquiry?.channel ??
+			"-";
 
 		return (
 			<InquiryWebSocketProvider
@@ -320,11 +292,7 @@ export const InquiryDetailPage = observer(
 										<InquiryInfoCard
 											inquiryNumber={inquiry?.inquiryNumber ?? inquiryId}
 											title={inquiry?.title ?? "문의 정보 로딩 중"}
-											channel={
-												CHANNEL_LABELS[inquiry?.channel ?? ""] ??
-												inquiry?.channel ??
-												"-"
-											}
+											channel={channelLabel}
 											createdAt={createdAt}
 											sentiment={{
 												type: sentimentType,
@@ -410,49 +378,55 @@ export const InquiryDetailPage = observer(
 												<Select
 													label="카테고리"
 													placeholder="카테고리 선택"
-													selectedKeys={
+													value={
 														metaFormState.category &&
 														editCategoryOptionValues.has(metaFormState.category)
-															? [metaFormState.category]
-															: []
+															? metaFormState.category
+															: null
 													}
-													onSelectionChange={(keys) => {
-														const selectedValue = getSelectedValue(keys);
+													onChange={(selectedValue) => {
 														if (selectedValue) {
 															onChangeMetaCategorySelection(
-																selectedValue as InquiryCategory,
+																String(selectedValue) as InquiryCategory,
 															);
 														}
 													}}
 												>
 													{editCategoryOptions.map((option) => (
-														<SelectItem key={option.value}>
+														<ListBox.Item
+															key={option.value}
+															id={option.value}
+															textValue={option.label}
+														>
 															{option.label}
-														</SelectItem>
+														</ListBox.Item>
 													))}
 												</Select>
 												<Select
 													label="우선순위"
 													placeholder="우선순위 선택"
-													selectedKeys={
+													value={
 														metaFormState.priority &&
 														editPriorityOptionValues.has(metaFormState.priority)
-															? [metaFormState.priority]
-															: []
+															? metaFormState.priority
+															: null
 													}
-													onSelectionChange={(keys) => {
-														const selectedValue = getSelectedValue(keys);
+													onChange={(selectedValue) => {
 														if (selectedValue) {
 															onChangeMetaPrioritySelection(
-																selectedValue as InquiryPriority,
+																String(selectedValue) as InquiryPriority,
 															);
 														}
 													}}
 												>
 													{editPriorityOptions.map((option) => (
-														<SelectItem key={option.value}>
+														<ListBox.Item
+															key={option.value}
+															id={option.value}
+															textValue={option.label}
+														>
 															{option.label}
-														</SelectItem>
+														</ListBox.Item>
 													))}
 												</Select>
 											</HStack>

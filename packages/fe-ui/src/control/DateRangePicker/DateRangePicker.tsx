@@ -1,25 +1,28 @@
-import type { DateRangePickerProps as HeroUiDateRangePickerProps } from "../../design-system/primitives";
-import { DateRangePicker as HeroUiDateRangePicker } from "../../design-system/primitives";
+import { DateRangePicker as HeroUiDateRangePicker } from "@heroui/react";
 
-export interface DateRangePickerProps
-	extends Omit<HeroUiDateRangePickerProps, "value" | "onChange"> {
-	value?: any;
-	onChange?: (value: any) => void;
+type DateRangePickerChangeHandler = {
+	bivarianceHack(value: unknown): void;
+}["bivarianceHack"];
+
+export interface DateRangePickerProps {
+	value?: unknown;
+	onChange?: DateRangePickerChangeHandler;
+	[key: string]: unknown;
 }
 
 export const DateRangePicker = (props: DateRangePickerProps) => {
 	const { value, onChange, ...rest } = props;
 
-	const handleDateChange: HeroUiDateRangePickerProps["onChange"] = (value) => {
+	const handleDateChange = (value: unknown) => {
 		onChange?.(value);
 	};
 
 	return (
-		<HeroUiDateRangePicker
-			{...rest}
-			hideTimeZone
-			value={value}
-			onChange={handleDateChange}
-		/>
+			<HeroUiDateRangePicker
+				{...(rest as object)}
+				hideTimeZone
+				value={value as never}
+				onChange={handleDateChange as never}
+			/>
 	);
 };

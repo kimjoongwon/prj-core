@@ -2,10 +2,8 @@ import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import {
-	Checkbox as BaseCheckbox,
-	type CheckboxProps as BaseCheckboxProps,
-} from "./Checkbox";
+import { Checkbox as BaseCheckbox } from "./Checkbox";
+import type { CheckboxProps as BaseCheckboxProps } from "./Checkbox.props";
 
 export interface CheckboxProps<T>
 	extends MobxProps<T>,
@@ -15,7 +13,7 @@ export const Checkbox = observer(
 	<T extends object>(props: CheckboxProps<T>) => {
 		const { path, state, ...rest } = props;
 
-		const formField = useFormField({
+		const formField = useFormField<T, boolean>({
 			value: tools.get(state, path, false) as boolean,
 			state,
 			path,
@@ -34,6 +32,3 @@ export const Checkbox = observer(
 		);
 	},
 );
-
-// Re-export types for backwards compatibility
-export type { BaseCheckboxProps as PureCheckboxProps };

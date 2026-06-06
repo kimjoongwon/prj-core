@@ -8,8 +8,8 @@ import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import { Description as HeroDescription } from "heroui-native/description";
-import { FieldError as HeroFieldError } from "heroui-native/field-error";
+import { Description as HeroDescription } from "heroui-native";
+import { FieldError as HeroFieldError } from "heroui-native";
 import {
   InputOTP as HeroInputOTP,
   REGEXP_ONLY_CHARS,
@@ -17,9 +17,9 @@ import {
   REGEXP_ONLY_DIGITS_AND_CHARS,
   inputOTPClassNames,
   useInputOTP,
-} from "heroui-native/input-otp";
-import { Label as HeroLabel } from "heroui-native/label";
-import { TextField as HeroTextField } from "heroui-native/text-field";
+} from "heroui-native";
+import { Label as HeroLabel } from "heroui-native";
+import { TextField as HeroTextField } from "heroui-native";
 type HeroInputOTPProps = ComponentPropsWithoutRef<typeof HeroInputOTP>;
 interface InputOTPFieldProps {
   description?: ReactNode;

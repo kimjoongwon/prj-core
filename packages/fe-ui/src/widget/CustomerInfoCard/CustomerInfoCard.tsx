@@ -2,7 +2,7 @@
 
 import { Calendar, Mail, Phone, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Card, CardBody } from "../../design-system/primitives";
+import { Card } from "@heroui/react";
 
 export interface CustomerInfoCardProps {
 	/** 고객 이름 */
@@ -44,50 +44,50 @@ export const CustomerInfoCard = observer(
 		className = "",
 	}: CustomerInfoCardProps) => {
 		return (
-			<Card className={`bg-content1 ${className}`} shadow="sm">
-				<CardBody className="gap-3 p-4">
+			<Card className={`bg-surface ${className}`}>
+				<Card.Content className="gap-3 p-4">
 					{/* 헤더 */}
-					<h3 className="text-sm font-semibold text-default-500">
+					<h3 className="text-sm font-semibold text-muted">
 						📞 고객 정보
 					</h3>
 
 					{/* 고객 이름 */}
 					<div className="flex items-center gap-2">
-						<User className="size-4 text-default-400" />
-						<span className="font-semibold text-default-800">{name}</span>
+						<User className="size-4 text-muted" />
+						<span className="font-semibold text-foreground">{name}</span>
 						{email && (
-							<span className="text-sm text-default-500">({email})</span>
+							<span className="text-sm text-muted">({email})</span>
 						)}
 					</div>
 
 					{/* 연락처 */}
 					{phone && (
 						<div className="flex items-center gap-2">
-							<Phone className="size-4 text-default-400" />
-							<span className="text-sm text-default-800">{phone}</span>
+							<Phone className="size-4 text-muted" />
+							<span className="text-sm text-foreground">{phone}</span>
 						</div>
 					)}
 
 					{/* 가입일 */}
 					{joinedAt && (
 						<div className="flex items-center gap-2">
-							<Calendar className="size-4 text-default-400" />
-							<span className="text-sm text-default-600">가입일:</span>
-							<span className="text-sm text-default-800">{joinedAt}</span>
+							<Calendar className="size-4 text-muted" />
+							<span className="text-sm text-muted">가입일:</span>
+							<span className="text-sm text-foreground">{joinedAt}</span>
 						</div>
 					)}
 
 					{/* 문의 이력 */}
 					{(inquiryCount !== undefined || inquiryCount !== 0) && (
 						<div className="flex items-center gap-2">
-							<Mail className="size-4 text-default-400" />
-							<span className="text-sm text-default-600">📋 문의 이력:</span>
-							<span className="text-sm font-medium text-default-800">
+							<Mail className="size-4 text-muted" />
+							<span className="text-sm text-muted">📋 문의 이력:</span>
+							<span className="text-sm font-medium text-foreground">
 								{inquiryCount}건
 							</span>
 						</div>
 					)}
-				</CardBody>
+				</Card.Content>
 			</Card>
 		);
 	},

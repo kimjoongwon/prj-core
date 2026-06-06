@@ -14,21 +14,9 @@ import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import Link from "next/link";
 import type { MouseEvent } from "react";
-import {
-	Button,
-	Chip,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	Table,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Modal, Table, useOverlayState } from "@heroui/react";
 
 export interface TimelineSessionDetailPageSession {
 	name?: string | null;
@@ -102,11 +90,28 @@ export const TimelineSessionDetailPage = observer(
 		onClickDeleteSessionCancelButton,
 		onClickCreateProgramButton,
 		onClickEditProgramButton,
-		onClickDeleteProgramButton,
-		onClickDeleteProgramConfirmButton,
-		onClickDeleteProgramCancelButton,
-	}: TimelineSessionDetailPageProps) => {
-		return (
+			onClickDeleteProgramButton,
+			onClickDeleteProgramConfirmButton,
+			onClickDeleteProgramCancelButton,
+		}: TimelineSessionDetailPageProps) => {
+			const deleteSessionModalState = useOverlayState({
+				isOpen: isDeleteSessionModalOpen,
+				onOpenChange: (open) => {
+					if (!open) {
+						onClickDeleteSessionCancelButton();
+					}
+				},
+			});
+			const deleteProgramModalState = useOverlayState({
+				isOpen: isDeleteProgramModalOpen,
+				onOpenChange: (open) => {
+					if (!open) {
+						onClickDeleteProgramCancelButton();
+					}
+				},
+			});
+
+			return (
 			<DetailPage
 				top={
 					<PageTitleBar
@@ -140,11 +145,11 @@ export const TimelineSessionDetailPage = observer(
 							<DetailSection top={<PageTitleBar level={2} title="기본 정보" />}>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<label className="text-sm text-default-500">세션명</label>
+										<label className="text-sm text-muted">세션명</label>
 										<p className="mt-1">{session?.name ?? "-"}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">유형</label>
+										<label className="text-sm text-muted">유형</label>
 										<div className="mt-1">
 											{session?.typeLabel && session.typeColor ? (
 												<Chip
@@ -162,7 +167,7 @@ export const TimelineSessionDetailPage = observer(
 									{session?.type === "RECURRING" ? (
 										<>
 											<div>
-												<label className="text-sm text-default-500">
+												<label className="text-sm text-muted">
 													반복 요일
 												</label>
 												<p className="mt-1">
@@ -170,7 +175,7 @@ export const TimelineSessionDetailPage = observer(
 												</p>
 											</div>
 											<div>
-												<label className="text-sm text-default-500">
+												<label className="text-sm text-muted">
 													반복 주기
 												</label>
 												<p className="mt-1">
@@ -181,7 +186,7 @@ export const TimelineSessionDetailPage = observer(
 									) : null}
 									{session?.startDateTime ? (
 										<div>
-											<label className="text-sm text-default-500">
+											<label className="text-sm text-muted">
 												시작 일시
 											</label>
 											<div className="mt-1">
@@ -191,7 +196,7 @@ export const TimelineSessionDetailPage = observer(
 									) : null}
 									{session?.endDateTime ? (
 										<div>
-											<label className="text-sm text-default-500">
+											<label className="text-sm text-muted">
 												종료 일시
 											</label>
 											<div className="mt-1">
@@ -200,16 +205,16 @@ export const TimelineSessionDetailPage = observer(
 										</div>
 									) : null}
 									<div>
-										<label className="text-sm text-default-500">설명</label>
+										<label className="text-sm text-muted">설명</label>
 										<p className="mt-1">{session?.description || "-"}</p>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">타임라인</label>
+										<label className="text-sm text-muted">타임라인</label>
 										<div className="mt-1">
 											{session?.timelineHref && session.timelineName ? (
 												<Link
 													href={session.timelineHref}
-													className="text-primary hover:underline"
+													className="text-accent hover:underline"
 												>
 													{session.timelineName}
 												</Link>
@@ -219,7 +224,7 @@ export const TimelineSessionDetailPage = observer(
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-default-500">등록일</label>
+										<label className="text-sm text-muted">등록일</label>
 										<div className="mt-1">
 											{session?.createdAt ? (
 												<DateTimeCell value={session.createdAt} />
@@ -251,59 +256,59 @@ export const TimelineSessionDetailPage = observer(
 								}
 							>
 								<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
-									<div className="rounded-lg bg-content2 p-3">
-										<p className="text-xs text-default-500">전체 프로그램</p>
+									<div className="rounded-lg bg-surface-secondary p-3">
+										<p className="text-xs text-muted">전체 프로그램</p>
 										<p className="mt-1 text-lg font-semibold">
 											{totalPrograms}개
 										</p>
 									</div>
-									<div className="rounded-lg bg-content2 p-3">
-										<p className="text-xs text-default-500">강사 연결 정상</p>
+									<div className="rounded-lg bg-surface-secondary p-3">
+										<p className="text-xs text-muted">강사 연결 정상</p>
 										<p className="mt-1 text-lg font-semibold text-success">
 											{resolvedPrograms}개
 										</p>
 									</div>
-									<div className="rounded-lg bg-content2 p-3">
-										<p className="text-xs text-default-500">확인 필요</p>
+									<div className="rounded-lg bg-surface-secondary p-3">
+										<p className="text-xs text-muted">확인 필요</p>
 										<p className="mt-1 text-lg font-semibold text-warning">
 											{unresolvedPrograms}개
 										</p>
 									</div>
 								</div>
 								<Table aria-label="프로그램 목록">
-									<TableHeader>
-										<TableColumn>프로그램명</TableColumn>
-										<TableColumn>루틴명</TableColumn>
-										<TableColumn align="center">운동 수</TableColumn>
-										<TableColumn>대표 운동</TableColumn>
-										<TableColumn>강사</TableColumn>
-										<TableColumn align="center">연결 상태</TableColumn>
-										<TableColumn align="center">정원</TableColumn>
-										<TableColumn>난이도</TableColumn>
-										<TableColumn align="center">액션</TableColumn>
-									</TableHeader>
-									<TableBody
+									<Table.Content>
+					<Table.Header>
+										<Table.Column>프로그램명</Table.Column>
+										<Table.Column>루틴명</Table.Column>
+										<Table.Column className="text-center">운동 수</Table.Column>
+										<Table.Column>대표 운동</Table.Column>
+										<Table.Column>강사</Table.Column>
+										<Table.Column className="text-center">연결 상태</Table.Column>
+										<Table.Column className="text-center">정원</Table.Column>
+										<Table.Column>난이도</Table.Column>
+										<Table.Column className="text-center">액션</Table.Column>
+									</Table.Header>
+									<Table.Body
 										items={programs}
-										emptyContent="등록된 프로그램이 없습니다. 프로그램을 등록해 주세요."
 									>
 										{(program) => (
-											<TableRow key={program.id}>
-												<TableCell>
+											<Table.Row key={program.id}>
+												<Table.Cell>
 													<Link
 														href={program.href}
-														className="text-left text-primary hover:underline"
+														className="text-left text-accent hover:underline"
 														onClick={(event: MouseEvent<HTMLAnchorElement>) => {
 															event.stopPropagation();
 														}}
 													>
 														{program.name}
 													</Link>
-												</TableCell>
-												<TableCell>{program.routineName}</TableCell>
-												<TableCell>{program.activityCountLabel}</TableCell>
-												<TableCell>{program.previewText}</TableCell>
-												<TableCell>{program.instructorName}</TableCell>
-												<TableCell>
+												</Table.Cell>
+												<Table.Cell>{program.routineName}</Table.Cell>
+												<Table.Cell>{program.activityCountLabel}</Table.Cell>
+												<Table.Cell>{program.previewText}</Table.Cell>
+												<Table.Cell>{program.instructorName}</Table.Cell>
+												<Table.Cell>
 													{program.isConnectionResolved ? (
 														<Chip color="success" variant="flat" size="sm">
 															정상
@@ -313,10 +318,10 @@ export const TimelineSessionDetailPage = observer(
 															확인필요
 														</Chip>
 													)}
-												</TableCell>
-												<TableCell>{program.capacityLabel}</TableCell>
-												<TableCell>{program.levelLabel}</TableCell>
-												<TableCell>
+												</Table.Cell>
+												<Table.Cell>{program.capacityLabel}</Table.Cell>
+												<Table.Cell>{program.levelLabel}</Table.Cell>
+												<Table.Cell>
 													<div className="flex justify-center gap-1">
 														<Button
 															size="sm"
@@ -340,30 +345,28 @@ export const TimelineSessionDetailPage = observer(
 															<Trash2 className="h-4 w-4" />
 														</Button>
 													</div>
-												</TableCell>
-											</TableRow>
+												</Table.Cell>
+											</Table.Row>
 										)}
-									</TableBody>
-								</Table>
+									</Table.Body>
+				</Table.Content>
+			</Table>
 							</DetailSection>
 						</DetailSectionCard>
 					</VStack>
 				</DetailPageSurface>
-				<Modal
-					isOpen={isDeleteSessionModalOpen}
-					onClose={onClickDeleteSessionCancelButton}
-				>
-					<ModalContent>
-						<ModalHeader>세션 삭제</ModalHeader>
-						<ModalBody>
+				<Modal state={deleteSessionModalState}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>세션 삭제</Modal.Header>
+						<Modal.Body>
 							<p>
 								<strong>{session?.name}</strong>세션을 삭제하시겠습니까?
 							</p>
 							<p className="mt-2 text-sm text-danger">
 								프로그램이 연결된 세션은 삭제할 수 없습니다.
 							</p>
-						</ModalBody>
-						<ModalFooter>
+						</Modal.Body>
+						<Modal.Footer>
 							<Button
 								variant="flat"
 								onPress={onClickDeleteSessionCancelButton}
@@ -374,26 +377,22 @@ export const TimelineSessionDetailPage = observer(
 							<Button
 								color="danger"
 								onPress={onClickDeleteSessionConfirmButton}
-								isLoading={isDeleteSessionPending}
 							>
 								삭제
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
-				<Modal
-					isOpen={isDeleteProgramModalOpen}
-					onClose={onClickDeleteProgramCancelButton}
-				>
-					<ModalContent>
-						<ModalHeader>프로그램 삭제</ModalHeader>
-						<ModalBody>
+				<Modal state={deleteProgramModalState}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>프로그램 삭제</Modal.Header>
+						<Modal.Body>
 							<p>
 								<strong>{deleteProgramTargetName}</strong>프로그램을
 								삭제하시겠습니까?
 							</p>
-						</ModalBody>
-						<ModalFooter>
+						</Modal.Body>
+						<Modal.Footer>
 							<Button
 								variant="flat"
 								onPress={onClickDeleteProgramCancelButton}
@@ -404,12 +403,11 @@ export const TimelineSessionDetailPage = observer(
 							<Button
 								color="danger"
 								onPress={onClickDeleteProgramConfirmButton}
-								isLoading={isDeleteProgramPending}
 							>
 								삭제
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
 			</DetailPage>
 		);

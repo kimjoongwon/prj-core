@@ -79,7 +79,6 @@ const chromiumLaunchOptions = {
 const shouldUseLocalRuntime = e2eEnvironment === "local";
 const reuseExistingServer = shouldUseLocalRuntime && !process.env.CI;
 const includesAdminTarget = e2eTarget === "admin" || e2eTarget === "all";
-const includesIdpTarget = e2eTarget === "idp" || e2eTarget === "all";
 const includesStorybookTarget =
 	e2eTarget === "storybook" || e2eTarget === "all";
 
@@ -112,19 +111,9 @@ const adminBaseUrl = resolveBaseUrl({
 	localDefault: "http://localhost:3000/admin/",
 	required: e2eEnvironment === "prod" && includesAdminTarget,
 });
-const idpBaseUrl = resolveBaseUrl({
-	envKey: "E2E_IDP_BASE_URL",
-	localDefault: "http://localhost:3008/",
-	required: e2eEnvironment === "prod" && includesIdpTarget,
-});
 const coreApiBaseUrl = resolveBaseUrl({
 	envKey: "E2E_CORE_API_BASE_URL",
 	localDefault: "http://localhost:3006/",
-	required: false,
-});
-const idpApiBaseUrl = resolveBaseUrl({
-	envKey: "E2E_IDP_API_BASE_URL",
-	localDefault: "http://localhost:3007/",
 	required: false,
 });
 const storybookBaseUrl = resolveBaseUrl({
@@ -134,9 +123,7 @@ const storybookBaseUrl = resolveBaseUrl({
 });
 
 process.env.E2E_ADMIN_BASE_URL = adminBaseUrl;
-process.env.E2E_IDP_BASE_URL = idpBaseUrl;
 process.env.E2E_CORE_API_BASE_URL = coreApiBaseUrl;
-process.env.E2E_IDP_API_BASE_URL = idpApiBaseUrl;
 process.env.E2E_STORYBOOK_BASE_URL = storybookBaseUrl;
 
 const adminAuthStorageStatePath = path.join(
@@ -146,22 +133,12 @@ const adminAuthStorageStatePath = path.join(
 	"admin.json",
 );
 
-function buildApiStartCommand(
-	filter: "core-api" | "idp-api",
-) {
+function buildApiStartCommand(filter: "core-api") {
 	return [
 		"bash -lc",
 		`'export SMTP_SECURE=\${SMTP_SECURE:-false}; pnpm --filter=${filter} start:dev'`,
 	].join(" ");
 }
-
-const idpApiServer = {
-	command: buildApiStartCommand("idp-api"),
-	url: new URL("/api/password-policy", idpApiBaseUrl).toString(),
-	reuseExistingServer,
-	timeout: 120000,
-	cwd: "../../..",
-};
 
 const coreApiServer = {
 	command: buildApiStartCommand("core-api"),
@@ -172,16 +149,9 @@ const coreApiServer = {
 };
 
 const adminWebServer = {
-	command: "pnpm start:admin-web",
+	command:
+		"pnpm --filter=admin-web exec next dev --webpack -p \"${ADMIN_WEB_PORT:-3000}\"",
 	url: new URL("/admin/auth/login", adminBaseUrl).toString(),
-	reuseExistingServer,
-	timeout: 120000,
-	cwd: "../../..",
-};
-
-const idpWebServer = {
-	command: "pnpm --filter=idp-web dev",
-	url: new URL("/", idpBaseUrl).toString(),
 	reuseExistingServer,
 	timeout: 120000,
 	cwd: "../../..",
@@ -197,22 +167,16 @@ const storybookServer = {
 
 function getWebServers() {
 	if (e2eTarget === "admin") {
-		return [coreApiServer, idpApiServer, adminWebServer, idpWebServer];
-	}
-
-	if (e2eTarget === "idp") {
-		return [coreApiServer, idpApiServer, idpWebServer];
+		return [coreApiServer, adminWebServer];
 	}
 
 	if (e2eTarget === "storybook") {
-		return [idpApiServer, idpWebServer, storybookServer];
+		return [coreApiServer, adminWebServer, storybookServer];
 	}
 
 	return [
 		coreApiServer,
-		idpApiServer,
 		adminWebServer,
-		idpWebServer,
 		storybookServer,
 	];
 }
@@ -222,11 +186,9 @@ function getWebServers() {
  *
  * 테스트 파일은 각 페이지 코드 옆에 *.e2e.ts 로 위치합니다:
  *   apps/admin/web/src/app/(admin)/templates/page.e2e.ts
- *   apps/idp/web/src/app/(console)/accounts/page.e2e.ts
  *
  * 앱별 테스트 실행:
  *   pnpm --filter=test-e2e test:admin
- *   pnpm --filter=test-e2e test:idp
  *
  * @see https://playwright.dev/docs/test-configuration
  */
@@ -296,24 +258,6 @@ export default defineConfig({
         baseURL: adminBaseUrl,
         launchOptions: chromiumLaunchOptions,
         storageState: adminAuthStorageStatePath,
-      },
-    },
-
-    // ── IDP (Identity Provider) ──
-    {
-      name: "idp-chromium",
-      testMatch: "**/apps/idp/web/src/**/*.e2e.ts",
-      use: {
-        ...devices["Desktop Chrome"],
-        baseURL: idpBaseUrl,
-      },
-    },
-    {
-      name: "idp-mobile",
-      testMatch: "**/apps/idp/web/src/**/*.e2e.ts",
-      use: {
-        ...devices["Pixel 5"],
-        baseURL: idpBaseUrl,
       },
     },
 

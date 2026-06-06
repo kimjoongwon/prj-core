@@ -5,6 +5,7 @@ import type {
 	DataGridQueryStates,
 	DataGridSetQueryStates,
 	InputConfig,
+	SelectOption,
 } from "@cocrepo/type";
 import {
 	buildInquiryTableColumns,
@@ -19,32 +20,25 @@ import {
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 
-const leftInputs: InputConfig[] = [
-	{
-		type: "search",
-		id: "search",
-		placeholder: "제목 또는 고객 ID로 검색",
-	},
-	{
-		type: "select",
-		id: "inquiryStatus",
-		label: "상태",
-		placeholder: "전체 상태",
-		props: {
-			options: [
-				{ label: "신규", value: "NEW" },
-				{ label: "처리 중", value: "IN_PROGRESS" },
-				{ label: "고객 대기", value: "WAITING_CUSTOMER" },
-				{ label: "해결됨", value: "RESOLVED" },
-				{ label: "종료됨", value: "CLOSED" },
-			],
-		},
-	},
-];
+const searchInput: InputConfig = {
+	type: "search",
+	id: "search",
+	placeholder: "제목 또는 고객 ID로 검색",
+};
 
-export const adminInquiriesPageQueryInputs = [...leftInputs];
+const statusInput: InputConfig = {
+	type: "select",
+	id: "inquiryStatus",
+	label: "상태",
+	placeholder: "전체 상태",
+	props: {
+		options: [],
+	},
+};
+
+export const adminInquiriesPageQueryInputs = [searchInput, statusInput];
 
 export interface InquiryListPageQueryStates extends DataGridQueryStates {
 	take: number;
@@ -58,6 +52,7 @@ export interface InquiryListPageProps {
 	inquiries?: InquiryDto[];
 	totalCount: number;
 	stats: InquiryStats;
+	statusOptions: SelectOption[];
 	activeStatus?: string;
 	isLoading: boolean;
 	queryStates: InquiryListPageQueryStates;
@@ -70,7 +65,7 @@ export interface InquiryListPageProps {
 function InquiriesPageShellFallback() {
 	return (
 		<div className="space-y-5">
-			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+			<Surface className="h-32 rounded-2xl border-border/80 bg-surface/70">
 				{null}
 			</Surface>
 		</div>
@@ -82,6 +77,7 @@ export const InquiryListPage = observer(
 		inquiries,
 		totalCount,
 		stats,
+		statusOptions,
 		activeStatus,
 		isLoading,
 		queryStates,
@@ -99,6 +95,16 @@ export const InquiryListPage = observer(
 		}, [gridState, queryStates, setQueryStates]);
 		const inquiryRows = inquiries ?? [];
 		const columns = buildInquiryTableColumns<InquiryDto>();
+		const leftInputs: InputConfig[] = [
+			searchInput,
+			{
+				...statusInput,
+				props: {
+					...statusInput.props,
+					options: statusOptions,
+				},
+			},
+		];
 
 		if (isLoading) {
 			return <InquiriesPageShellFallback />;
@@ -120,8 +126,8 @@ export const InquiryListPage = observer(
 					}
 				/>
 				<VStack gap={4}>
-					<Surface className="rounded-2xl border-divider/80 bg-content1/70">
-						<div className="mb-4 border-b border-divider/80 pb-4">
+					<Surface className="rounded-2xl border-border/80 bg-surface/70">
+						<div className="mb-4 border-b border-border/80 pb-4">
 							<PageTitleBar level={2} title="문의 현황" />
 						</div>
 						<InquiryStatsCards
@@ -130,8 +136,8 @@ export const InquiryListPage = observer(
 							onStatusClick={onClickStatusFilter}
 						/>
 					</Surface>
-					<Surface className="rounded-2xl border-divider/80 bg-content1/70">
-						<div className="mb-4 border-b border-divider/80 pb-4">
+					<Surface className="rounded-2xl border-border/80 bg-surface/70">
+						<div className="mb-4 border-b border-border/80 pb-4">
 							<PageTitleBar level={2} title="문의 목록" />
 						</div>
 						<DataGrid
@@ -146,7 +152,6 @@ export const InquiryListPage = observer(
 							}}
 							rows={inquiryRows}
 							totalCount={totalCount}
-							isLoading={false}
 							state={gridState}
 						/>
 					</Surface>

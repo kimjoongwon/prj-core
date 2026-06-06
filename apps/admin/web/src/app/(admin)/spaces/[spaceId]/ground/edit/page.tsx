@@ -6,7 +6,7 @@ import {
 	useUpdateSpaceGround,
 } from "@cocrepo/api/core/spaces";
 import { GroundEditPage } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -50,19 +50,15 @@ const AdminSpacesSpaceIdGroundEditRoute = observer(() => {
 	const { mutate: updateSpaceGround, isPending } = useUpdateSpaceGround({
 		mutation: {
 			onSuccess: () => {
-				addToast({
-					title: "시설 정보 수정 성공",
+				toast.success("시설 정보 수정 성공", {
 					description: "시설 detail이 성공적으로 수정되었습니다.",
-					color: "success",
 				});
 				router.push(`/spaces/${spaceId}/ground` as Route);
 			},
 			onError: (error) => {
-				addToast({
-					title: "시설 정보 수정 실패",
+				toast.danger("시설 정보 수정 실패", {
 					description:
 						error.message || "시설 detail 수정 중 오류가 발생했습니다.",
-					color: "danger",
 				});
 			},
 		},

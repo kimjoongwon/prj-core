@@ -9,7 +9,7 @@ import {
 
 export interface MultiSelectProps<T>
 	extends MobxProps<T>,
-		Omit<BaseMultiSelectProps<T>, "selectedKeys" | "onChange"> {}
+		Omit<BaseMultiSelectProps<T>, "value" | "onChange"> {}
 
 export const MultiSelect = observer(
 	<T extends object>(props: MultiSelectProps<T>) => {
@@ -18,15 +18,14 @@ export const MultiSelect = observer(
 		const value = (tools.get(state, path) as string[]) || [];
 		const formField = useFormField({ value, state, path });
 
-		const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-			const newValue = e.target.value?.split(",") || [];
-			formField.setValue(newValue);
+		const handleChange = (nextValue: Array<string | number>) => {
+			formField.setValue(nextValue.map((value) => String(value)));
 		};
 
 		return (
 			<MultiSelectComponent
 				{...rest}
-				selectedKeys={new Set(formField.state.value as any)}
+				value={formField.state.value as string[]}
 				onChange={handleChange}
 			/>
 		);

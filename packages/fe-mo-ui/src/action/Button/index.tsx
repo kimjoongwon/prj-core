@@ -7,7 +7,7 @@ import {
   Button as HeroButton,
   buttonClassNames,
   useButton,
-} from "heroui-native/button";
+} from "heroui-native";
 import { getTextContent, Text } from "../../data-display/Text";
 type HeroButtonProps = ComponentPropsWithoutRef<typeof HeroButton>;
 export type ButtonProps = HeroButtonProps & {};

@@ -1,4 +1,4 @@
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 
 interface InquiryOnlineCellProps {
 	/** 온라인 참여자 수 */
@@ -21,14 +21,14 @@ export const InquiryOnlineCell = ({ count }: InquiryOnlineCellProps) => {
 	return (
 		<div className="flex w-full items-center justify-center gap-1.5">
 			<span
-				className={`h-2 w-2 rounded-full ${hasOnline ? "bg-success" : "bg-default-300"}`}
+				className={`h-2 w-2 rounded-full ${hasOnline ? "bg-success" : "bg-default"}`}
 			/>
 			{hasOnline ? (
 				<Chip size="sm" variant="flat" color="success" className="text-xs">
 					{count}
 				</Chip>
 			) : (
-				<span className="text-xs text-default-400">0</span>
+				<span className="text-xs text-muted">0</span>
 			)}
 		</div>
 	);

@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Text } from "../../display/data-display/Text/Text";
+import { Typography } from "../../data-display/Typography";
 import { translateNode, useT } from "../../i18n";
 
 export interface PageTitleBarProps {
@@ -30,26 +30,26 @@ export const PageTitleBar = observer(function PageTitleBar({
 	className,
 }: PageTitleBarProps) {
 	const t = useT();
-	const headingTag = level === 2 ? "h2" : "h1";
-	const headingVariant = level === 2 ? "h4" : "h2";
-	const descriptionVariant = level === 2 ? "subtitle2" : "subtitle1";
 
 	return (
 		<div
 			className={`flex items-start justify-between gap-4${className ? ` ${className}` : ""}`}
 		>
 			<div className="min-w-0 flex-1">
-				<Text
-					as={headingTag}
+				<Typography.Heading
 					className={level === 2 ? "font-semibold" : undefined}
-					variant={headingVariant}
+					level={level === 2 ? 2 : 1}
 				>
 					{translateNode(title, t)}
-				</Text>
+				</Typography.Heading>
 				{description && (
-					<Text as="p" className="mt-1" variant={descriptionVariant}>
+					<Typography.Paragraph
+						className="mt-1"
+						color="muted"
+						size={level === 2 ? "sm" : "base"}
+					>
 						{translateNode(description, t)}
-					</Text>
+					</Typography.Paragraph>
 				)}
 			</div>
 			{actions && <div className="shrink-0">{actions}</div>}

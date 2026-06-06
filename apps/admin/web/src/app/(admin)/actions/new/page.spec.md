@@ -70,7 +70,7 @@
 |------|----------|:----:|------------|
 | name | Input | O | 필수, 패턴: `^[a-z][a-z0-9:_]*$` |
 | displayName | Input | X | maxLength=100 |
-| description | Textarea | X | maxLength=200 |
+| description | TextArea | X | maxLength=200 |
 | group | Select | X | 옵션: crud, visibility, workflow, bulk |
 | order | Input (number) | X | 숫자 |
 

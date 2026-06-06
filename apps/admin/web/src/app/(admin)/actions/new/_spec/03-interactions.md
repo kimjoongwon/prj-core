@@ -21,7 +21,7 @@
 |----|------|--------|------|------|
 | ROL-L5-ACT-072 | name 입력 | 이름 Input 입력 | 값 업데이트 | - |
 | ROL-L5-ACT-073 | displayName 입력 | 표시명 Input 입력 | 값 업데이트 | - |
-| ROL-L5-ACT-074 | description 입력 | 설명 Textarea 입력 | 값 업데이트 | - |
+| ROL-L5-ACT-074 | description 입력 | 설명 TextArea 입력 | 값 업데이트 | - |
 | ROL-L5-ACT-075 | group 선택 | 그룹 Select 변경 | 선택값 업데이트 | - |
 | ROL-L5-ACT-076 | order 입력 | 정렬 순서 NumberInput 변경 | 값 업데이트 | - |
 | ROL-L5-ACT-077 | isSystem 토글 | 시스템 여부 Switch 토글 | 값 업데이트 | - |

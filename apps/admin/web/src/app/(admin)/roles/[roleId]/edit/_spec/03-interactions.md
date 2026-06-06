@@ -20,7 +20,7 @@
 | ID | 액션 | 트리거 | 결과 | 조건 |
 |----|------|--------|------|------|
 | ROL-L5-ACT-029 | displayName 수정 | 표시명 Input 변경 | 값 업데이트 | - |
-| ROL-L5-ACT-030 | description 수정 | 설명 Textarea 변경 | 값 업데이트 | - |
+| ROL-L5-ACT-030 | description 수정 | 설명 TextArea 변경 | 값 업데이트 | - |
 | ROL-L5-ACT-031 | categoryId 변경 | 카테고리 Select 변경 | 선택값 업데이트 | - |
 | ROL-L5-ACT-032 | groupId 변경 | 그룹 Select 변경 | 선택값 업데이트 | - |
 | ROL-L5-ACT-033 | 저장 버튼 클릭 | 저장 버튼 클릭 | PATCH /api/v1/roles/:id 호출 | - |

@@ -50,7 +50,7 @@ export const InquirySentimentCell = ({
 	score,
 }: InquirySentimentCellProps) => {
 	if (!value) {
-		return <span className="text-default-400">-</span>;
+		return <span className="text-muted">-</span>;
 	}
 
 	const config = SENTIMENT_CONFIG[value];
@@ -65,13 +65,13 @@ export const InquirySentimentCell = ({
 						? "text-danger"
 						: value === "POSITIVE"
 							? "text-success"
-							: "text-default-500"
+							: "text-muted"
 				}
 			>
 				{config.icon}
 			</span>
 			{displayScore !== null && (
-				<span className="text-xs text-default-400">{displayScore}%</span>
+				<span className="text-xs text-muted">{displayScore}%</span>
 			)}
 		</div>
 	);

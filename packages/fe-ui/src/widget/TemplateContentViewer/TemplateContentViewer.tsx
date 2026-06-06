@@ -65,12 +65,12 @@ const EmailContent = observer(({ subject, content }: EmailContentProps) => {
 		<div className="flex flex-col gap-4">
 			{subject !== null && (
 				<div className="flex flex-col gap-1">
-					<span className="text-sm text-default-500">제목</span>
+					<span className="text-sm text-muted">제목</span>
 					<span className="text-base">{subject}</span>
 				</div>
 			)}
 			<div className="flex flex-col gap-1">
-				<span className="text-sm text-default-500">본문</span>
+				<span className="text-sm text-muted">본문</span>
 				<HtmlContentRenderer html={content} />
 			</div>
 		</div>
@@ -88,8 +88,8 @@ const SmsContent = observer(({ content }: SmsContentProps) => {
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex flex-col gap-1">
-				<span className="text-sm text-default-500">본문</span>
-				<div className="whitespace-pre-wrap rounded-lg bg-content2 p-4 font-mono text-sm">
+				<span className="text-sm text-muted">본문</span>
+				<div className="whitespace-pre-wrap rounded-lg bg-surface-secondary p-4 font-mono text-sm">
 					{content}
 				</div>
 				<ByteCounter text={content} />
@@ -115,28 +115,28 @@ const PushContent = observer(({ subject, content }: PushContentProps) => {
 			{subject !== null && (
 				<div className="flex flex-col gap-1">
 					<div className="flex items-center justify-between">
-						<span className="text-sm text-default-500">제목</span>
+						<span className="text-sm text-muted">제목</span>
 						<span
-							className={`text-xs ${subjectLength > PUSH_SUBJECT_MAX_LENGTH ? "text-danger" : "text-default-400"}`}
+							className={`text-xs ${subjectLength > PUSH_SUBJECT_MAX_LENGTH ? "text-danger" : "text-muted"}`}
 						>
 							{subjectLength}/{PUSH_SUBJECT_MAX_LENGTH}자
 						</span>
 					</div>
-					<div className="whitespace-pre-wrap rounded-lg bg-content2 p-4 font-mono text-sm">
+					<div className="whitespace-pre-wrap rounded-lg bg-surface-secondary p-4 font-mono text-sm">
 						{subject}
 					</div>
 				</div>
 			)}
 			<div className="flex flex-col gap-1">
 				<div className="flex items-center justify-between">
-					<span className="text-sm text-default-500">본문</span>
+					<span className="text-sm text-muted">본문</span>
 					<span
-						className={`text-xs ${contentLength > PUSH_CONTENT_MAX_LENGTH ? "text-danger" : "text-default-400"}`}
+						className={`text-xs ${contentLength > PUSH_CONTENT_MAX_LENGTH ? "text-danger" : "text-muted"}`}
 					>
 						{contentLength}/{PUSH_CONTENT_MAX_LENGTH}자
 					</span>
 				</div>
-				<div className="whitespace-pre-wrap rounded-lg bg-content2 p-4 font-mono text-sm">
+				<div className="whitespace-pre-wrap rounded-lg bg-surface-secondary p-4 font-mono text-sm">
 					{content}
 				</div>
 			</div>

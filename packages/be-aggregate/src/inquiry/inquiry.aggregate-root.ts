@@ -4,7 +4,7 @@ import {
 	InquiryChannel,
 	InquiryPriority,
 	InquirySource,
-	type InquiryStatus,
+	InquiryStatus,
 	type MessageContentType,
 	type Prisma,
 	type SenderType,
@@ -30,6 +30,7 @@ import type { InquiryFormSchema } from "./inquiry-form-schema";
 import type { InquiryFormUiPaths } from "./inquiry-form-ui-paths";
 import { INQUIRY_PRIORITY_LABELS } from "./inquiry-priority-labels";
 import { INQUIRY_SOURCE_LABELS } from "./inquiry-source-labels";
+import { INQUIRY_STATUS_LABELS } from "./inquiry-status-labels";
 import type { InquiryStats } from "./inquiry-stats";
 import type { SentimentAnalysisResult } from "./sentiment-analysis-result";
 import { VALID_STATUS_TRANSITIONS } from "./valid-status-transitions";
@@ -111,6 +112,7 @@ export class InquiryAggregateRoot {
 				content: "",
 				channel: InquiryChannel.WEB,
 				source: InquirySource.ONLINE,
+				status: InquiryStatus.NEW,
 			},
 			options: this.buildFormOptions(),
 			ui: this.buildUiPaths("CREATE"),
@@ -134,6 +136,7 @@ export class InquiryAggregateRoot {
 				content: "",
 				channel: inquiry.channel,
 				source: inquiry.source ?? InquirySource.ONLINE,
+				status: inquiry.status,
 			},
 			options: this.buildFormOptions(),
 			ui: this.buildUiPaths("UPDATE"),
@@ -578,6 +581,10 @@ export class InquiryAggregateRoot {
 			source: Object.values(InquirySource).map((value) => ({
 				value,
 				label: INQUIRY_SOURCE_LABELS[value],
+			})),
+			status: Object.values(InquiryStatus).map((value) => ({
+				value,
+				label: INQUIRY_STATUS_LABELS[value],
 			})),
 		};
 	}

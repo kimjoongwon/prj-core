@@ -1,10 +1,10 @@
-import type { ElevationLevel } from "../../design-system/theme/tokens";
 import {
 	DEFAULT_SURFACE_PADDING,
 	Surface,
+	type ElevationLevel,
 	type SurfacePadding,
 	type SurfaceProps,
-} from "../Surface/Surface";
+} from "../Surface";
 
 export interface SectionSurfaceProps
 	extends Pick<SurfaceProps, "children" | "className"> {

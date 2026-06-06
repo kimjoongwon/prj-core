@@ -63,7 +63,7 @@ This reference preserves the detailed implementation instructions that previousl
 | 기존 Cell을 재활용하여 새로운 Cell을 만들 때 | ✅ | Widget/Feature Cell 조합 |
 | 값을 포맷팅/표시만 하는 단순 Cell | ✅ | Pure UI Cell |
 | 비즈니스 로직이 포함된 Cell | ✅ | Feature Cell |
-| Cell이 아닌 일반 UI 컴포넌트 | ❌ | `fe-display-agent` 사용 |
+| Cell이 아닌 일반 UI 컴포넌트 | ❌ | `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 `fe-control-agent` 사용 |
 | 폼 입력 컴포넌트 | ❌ | `fe-control-agent` 사용 |
 
 ---
@@ -445,7 +445,7 @@ ls packages/fe-ui/src/cell/
 | 관계 | 에이전트 | 설명 |
 |------|---------|------|
 | **선행** | orch-delivery | Cell 계약은 owner spec 또는 관련 Screen/Feature spec에 정의 |
-| **관련** | fe-display-agent | 일반 display UI 컴포넌트 (Cell 외) |
+| **관련** | fe-data-display-agent / fe-feedback-agent / fe-overlay-agent | 일반 표시, 상태, overlay UI 컴포넌트 (Cell 외) |
 | **후행** | fe-route-agent | 목록 페이지에서 Cell 사용 |
 
 ---

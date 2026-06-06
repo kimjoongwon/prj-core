@@ -33,7 +33,7 @@
 | 이벤트 | 핸들러 | 결과 |
 |--------|--------|------|
 | 목록 클릭 | `onClickBackButton` | 승인 목록으로 이동 |
-| 코멘트 입력 | `onChangeReviewCommentTextarea` | route-local 상태 갱신 |
+| 코멘트 입력 | `onChangeReviewCommentTextArea` | route-local 상태 갱신 |
 | 승인 클릭 | `onClickApproveButton` | approve mutation 실행 |
 | 반려 클릭 | `onClickRejectButton` | reject mutation 실행 |
 

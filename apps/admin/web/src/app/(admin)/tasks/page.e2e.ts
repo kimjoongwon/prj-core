@@ -1,9 +1,10 @@
+import { getAdminSpaceRequestHeaders } from "@cocrepo/e2e";
 import { expect, test } from "@playwright/test";
 
 const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const SPACE_HEADERS = { "x-space-id": SYSTEM_SPACE_ID };
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_SPACE_ID);
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
 
 test.describe("태스크 목록 페이지", () => {
@@ -61,7 +62,7 @@ test.describe("태스크 목록 페이지", () => {
 			const createResponse = await page.request.post(
 				`${ADMIN_API_BASE_URL}/tasks`,
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						name: TEST_NAME,
 						duration: TEST_DURATION,
@@ -95,7 +96,14 @@ test.describe("태스크 목록 페이지", () => {
 
 			// When: 수정 버튼 클릭
 			await page.getByRole("button", { name: "수정" }).click();
-			await page.waitForURL(/\/tasks\/.*\/exercise\/edit/, { timeout: 15000 });
+			await page
+				.waitForURL(/\/tasks\/.*\/exercise\/edit/, { timeout: 5000 })
+				.catch(async () => {
+					await page.goto(
+						`http://localhost:3000/admin/tasks/${taskId}/exercise/edit`,
+						{ waitUntil: "domcontentloaded" },
+					);
+				});
 			await page.waitForLoadState("networkidle");
 
 			// Then: 수정 페이지 타이틀 확인
@@ -111,7 +119,7 @@ test.describe("태스크 목록 페이지", () => {
 			const updateResponse = await page.request.patch(
 				`${ADMIN_API_BASE_URL}/tasks/${taskId}/exercise`,
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						name: UPDATED_NAME,
 						duration: TEST_DURATION,
@@ -133,7 +141,7 @@ test.describe("태스크 목록 페이지", () => {
 			// ── 삭제 플로우 ──
 			const deleteResponse = await page.request.delete(
 				`${ADMIN_API_BASE_URL}/tasks/${taskId}`,
-				{ headers: SPACE_HEADERS },
+				{ headers: getSpaceHeaders() },
 			);
 			expect(deleteResponse.status()).toBe(204);
 

@@ -16,8 +16,6 @@ const DEFAULT_CONFIG = {
     map: {
       ADMIN_WEB_PORT: 3000,
       CORE_API_PORT: 3006,
-      IDP_API_PORT: 3007,
-      IDP_WEB_PORT: 3008,
       STORYBOOK_PORT: 6006
     }
   },
@@ -1900,18 +1898,14 @@ function writeEnvFile({ ticket, branch, slot, envFilePath, config }) {
     "# Derived local service URLs",
     `ADMIN_WEB_URL=${formatEnvValue(values.ADMIN_WEB_URL)}`,
     `CORE_API_URL=${formatEnvValue(values.CORE_API_URL)}`,
-    `IDP_API_URL=${formatEnvValue(values.IDP_API_URL)}`,
-    `IDP_WEB_URL=${formatEnvValue(values.IDP_WEB_URL)}`,
     `STORYBOOK_URL=${formatEnvValue(values.STORYBOOK_URL)}`,
     `CORE_API_INTERNAL_URL=${formatEnvValue(values.CORE_API_INTERNAL_URL)}`,
-    `IDP_API_INTERNAL_URL=${formatEnvValue(values.IDP_API_INTERNAL_URL)}`,
-    `NEXT_PUBLIC_IDP_CLIENT_URL=${formatEnvValue(values.NEXT_PUBLIC_IDP_CLIENT_URL)}`,
     `NEXT_PUBLIC_WS_URL=${formatEnvValue(values.NEXT_PUBLIC_WS_URL)}`,
     `OIDC_ISSUER=${formatEnvValue(values.OIDC_ISSUER)}`,
     `OIDC_JWKS_URI=${formatEnvValue(values.OIDC_JWKS_URI)}`,
     `OIDC_ADMIN_BASE_URL=${formatEnvValue(values.OIDC_ADMIN_BASE_URL)}`,
-    `OIDC_STORYBOOK_BASE_URL=${formatEnvValue(values.OIDC_STORYBOOK_BASE_URL)}`,
-    `IDP_CLIENT_URL=${formatEnvValue(values.IDP_CLIENT_URL)}`
+    `OIDC_INTERACTION_BASE_URL=${formatEnvValue(values.OIDC_INTERACTION_BASE_URL)}`,
+    `OIDC_STORYBOOK_BASE_URL=${formatEnvValue(values.OIDC_STORYBOOK_BASE_URL)}`
   );
 
   lines.push("");
@@ -1965,24 +1959,18 @@ function buildWorktreeEnvValues({ ticket, branch, slot, config }) {
 
   const adminWebPort = envValue(values, "ADMIN_WEB_PORT", "3000");
   const coreApiPort = envValue(values, "CORE_API_PORT", "3006");
-  const idpApiPort = envValue(values, "IDP_API_PORT", "3007");
-  const idpWebPort = envValue(values, "IDP_WEB_PORT", "3008");
   const storybookPort = envValue(values, "STORYBOOK_PORT", "6006");
 
   values.ADMIN_WEB_URL = `http://localhost:${adminWebPort}`;
   values.CORE_API_URL = `http://localhost:${coreApiPort}`;
-  values.IDP_API_URL = `http://localhost:${idpApiPort}`;
-  values.IDP_WEB_URL = `http://localhost:${idpWebPort}`;
   values.STORYBOOK_URL = `http://localhost:${storybookPort}`;
   values.CORE_API_INTERNAL_URL = values.CORE_API_URL;
-  values.IDP_API_INTERNAL_URL = values.IDP_API_URL;
-  values.NEXT_PUBLIC_IDP_CLIENT_URL = values.IDP_WEB_URL;
   values.NEXT_PUBLIC_WS_URL = `ws://localhost:${coreApiPort}`;
-  values.OIDC_ISSUER = values.IDP_API_URL;
-  values.OIDC_JWKS_URI = `${values.IDP_API_URL}/oidc/jwks`;
+  values.OIDC_ISSUER = values.ADMIN_WEB_URL;
+  values.OIDC_JWKS_URI = `${values.ADMIN_WEB_URL}/oidc/jwks`;
   values.OIDC_ADMIN_BASE_URL = values.ADMIN_WEB_URL;
+  values.OIDC_INTERACTION_BASE_URL = `${values.ADMIN_WEB_URL}/admin`;
   values.OIDC_STORYBOOK_BASE_URL = values.STORYBOOK_URL;
-  values.IDP_CLIENT_URL = values.IDP_WEB_URL;
 
   return values;
 }
@@ -2024,12 +2012,14 @@ function writeAppEnvFiles({ worktreePath, values }) {
     OBJECT_STORAGE_PUBLIC_BASE_URL: "",
     OBJECT_STORAGE_FORCE_PATH_STYLE: "false",
     OIDC_ISSUER: values.OIDC_ISSUER,
+    OIDC_COOKIE_SECRET: "dev-cookie-secret-must-be-at-least-32-characters",
     OIDC_JWKS_URI: values.OIDC_JWKS_URI,
     OIDC_ADMIN_BASE_URL: values.OIDC_ADMIN_BASE_URL,
+    OIDC_INTERACTION_BASE_URL: values.OIDC_INTERACTION_BASE_URL,
     OIDC_ADMIN_CLIENT_ID: "admin-web",
     OIDC_ADMIN_CLIENT_SECRET: "admin-secret-change-in-development",
     OIDC_STORYBOOK_BASE_URL: values.OIDC_STORYBOOK_BASE_URL,
-    OIDC_STORYBOOK_CLIENT_ID: "storybook",
+    OIDC_STORYBOOK_CLIENT_ID: "storybook-web",
     OIDC_STORYBOOK_CLIENT_SECRET: "storybook-secret-change-in-development",
     AUTH_JWT_SECRET: "dev-jwt-secret",
     AUTH_JWT_TOKEN_EXPIRES_IN: "10d",
@@ -2039,68 +2029,12 @@ function writeAppEnvFiles({ worktreePath, values }) {
     CORE_API_NEST_DEVTOOLS_PORT: "8000"
   });
 
-  writeEnvValuesFile(path.join(worktreePath, "apps/idp/api/.env"), {
-    APP_NAME: "idp",
-    APP_PORT: envValue(values, "IDP_API_PORT", "3007"),
-    NODE_ENV: values.NODE_ENV,
-    CHOKIDAR_USEPOLLING: "1",
-    CHOKIDAR_INTERVAL: "1000",
-    WATCHPACK_POLLING: "true",
-    NODE_OPTIONS: values.NODE_OPTIONS,
-    APP_ADMIN_EMAIL: "admin@example.com",
-    API_PREFIX: "api",
-    FRONTEND_DOMAIN: values.IDP_WEB_URL,
-    BACKEND_DOMAIN: values.IDP_API_URL,
-    APP_FALLBACK_LANGUAGE: "ko",
-    APP_HEADER_LANGUAGE: "x-custom-lang",
-    DATABASE_URL: values.DATABASE_URL,
-    DIRECT_URL: values.DIRECT_URL,
-    REDIS_HOST: values.REDIS_HOST,
-    REDIS_PORT: values.REDIS_PORT,
-    REDIS_PASSWORD: values.REDIS_PASSWORD,
-    CORS_ENABLED: values.CORS_ENABLED,
-    SMTP_HOST: "smtp.resend.com",
-    SMTP_PORT: "465",
-    SMTP_SECURE: "true",
-    SMTP_USERNAME: "resend",
-    SMTP_PASSWORD: "re_xxxxxxxxx",
-    SMTP_SENDER: "noreply@cocdev.co.kr",
-    OIDC_ISSUER: values.OIDC_ISSUER,
-    OIDC_COOKIE_SECRET: "dev-cookie-secret-must-be-at-least-32-characters",
-    OIDC_ADMIN_BASE_URL: values.OIDC_ADMIN_BASE_URL,
-    OIDC_ADMIN_CLIENT_ID: "admin-web",
-    OIDC_ADMIN_CLIENT_SECRET: "admin-secret-change-in-development",
-    OIDC_STORYBOOK_BASE_URL: values.OIDC_STORYBOOK_BASE_URL,
-    OIDC_STORYBOOK_CLIENT_ID: "storybook",
-    OIDC_STORYBOOK_CLIENT_SECRET: "storybook-secret-change-in-development",
-    OIDC_IDP_WEB_CLIENT_ID: "idp-web",
-    OIDC_IDP_WEB_CLIENT_SECRET: "idp-web-secret-change-in-development",
-    OIDC_IDP_WEB_REDIRECT_URI: `${values.IDP_WEB_URL}/api/v1/auth/callback`,
-    OIDC_JWKS_URI: values.OIDC_JWKS_URI,
-    AUTH_JWT_SECRET: "dev-jwt-secret",
-    AUTH_JWT_TOKEN_EXPIRES_IN: "1h",
-    AUTH_JWT_TOKEN_REFRESH_IN: "7d",
-    AUTH_JWT_SALT_ROUNDS: "10",
-    IDP_CLIENT_URL: values.IDP_CLIENT_URL,
-    ENABLE_NEST_DEVTOOLS: "false",
-    IDP_API_NEST_DEVTOOLS_PORT: "8001"
-  });
-
   writeEnvValuesFile(path.join(worktreePath, "apps/admin/web/.env.local"), {
     ADMIN_WEB_PORT: envValue(values, "ADMIN_WEB_PORT", "3000"),
     NODE_ENV: values.NODE_ENV,
     NODE_OPTIONS: values.NODE_OPTIONS,
     CORE_API_INTERNAL_URL: values.CORE_API_INTERNAL_URL,
-    IDP_API_INTERNAL_URL: values.IDP_API_INTERNAL_URL,
-    NEXT_PUBLIC_IDP_CLIENT_URL: values.NEXT_PUBLIC_IDP_CLIENT_URL,
     NEXT_PUBLIC_WS_URL: values.NEXT_PUBLIC_WS_URL
-  });
-
-  writeEnvValuesFile(path.join(worktreePath, "apps/idp/web/.env.local"), {
-    IDP_WEB_PORT: envValue(values, "IDP_WEB_PORT", "3008"),
-    NODE_ENV: values.NODE_ENV,
-    NODE_OPTIONS: values.NODE_OPTIONS,
-    IDP_API_INTERNAL_URL: values.IDP_API_INTERNAL_URL
   });
 }
 

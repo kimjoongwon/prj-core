@@ -1,4 +1,4 @@
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 
 interface GrantTypeCellProps {
 	/** Grant Type 목록 */

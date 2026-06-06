@@ -1,9 +1,9 @@
 # Mobile OIDC Flow Guide
 
 > Updated: 2026-05-11
-> Scope: `apps/mobile`, `apps/idp/api`, `packages/be-usecase`, `packages/fe-api`
+> Scope: `apps/mobile`, `apps/core/api`, `packages/be-usecase`, `packages/fe-api`
 
-이 문서는 모바일 앱의 OIDC 로그인 흐름을 실제 코드 기준으로 설명합니다. 모바일 앱은 Expo Router 화면 안에서 IDP Web 로그인 화면을 `WebView`로 열고, native custom scheme callback을 앱 내부 route로 변환한 뒤, IDP API의 `mobile-json` 응답으로 token과 Space scope를 구성합니다.
+이 문서는 모바일 앱의 OIDC 로그인 흐름을 실제 코드 기준으로 설명합니다. 모바일 앱은 Expo Router 화면 안에서 admin auth interaction 화면을 `WebView`로 열고, native custom scheme callback을 앱 내부 route로 변환한 뒤, core API auth endpoint의 `mobile-json` 응답으로 token과 Space scope를 구성합니다.
 
 ## 한 줄 요약
 
@@ -14,7 +14,7 @@ flowchart TD
   Status -->|유효| Home["/(tabs) 홈"]
   Status -->|없음| Login["/auth/login"]
   Login --> WebView["WebView 로그인"]
-  WebView --> Interaction["IDP Web interaction"]
+  WebView --> Interaction["Admin auth interaction"]
   Interaction --> NativeCallback["Native callback scheme"]
   NativeCallback --> CallbackRoute["/auth/callback"]
   CallbackRoute --> Exchange["mobile-json callback exchange"]
@@ -30,11 +30,11 @@ Mermaid가 렌더되지 않는 viewer에서는 아래 텍스트 흐름을 기준
   -> AuthSessionGate
     -> 세션 유효: /(tabs) 홈
     -> 세션 없음: /auth/login
-      -> WebView: IDP /api/v1/auth/login?clientId=user-mobile
-      -> IDP Web interaction
+      -> WebView: Core auth /api/v1/auth/login?clientId=user-mobile
+      -> Admin auth interaction
       -> kr.co.cocdev.onoramobile://auth/callback
       -> Expo Router /auth/callback
-      -> IDP /api/v1/auth/callback?responseMode=mobile-json
+      -> Core auth /api/v1/auth/callback?responseMode=mobile-json
       -> mobileApiScopeStore token 저장
       -> verify-token + my-spaces + current-space
       -> /(tabs) 홈
@@ -44,7 +44,7 @@ Mermaid가 렌더되지 않는 viewer에서는 아래 텍스트 흐름을 기준
 
 | 영역 | 파일 | 역할 |
 |------|------|------|
-| 모바일 인증 설정 | `apps/mobile/src/auth/auth-config.ts` | IDP/Core API base URL, `user-mobile`, login/callback path, 보호 route 목록 |
+| 모바일 인증 설정 | `apps/mobile/src/auth/auth-config.ts` | Auth/Core API base URL, `user-mobile`, login/callback path, 보호 route 목록 |
 | 루트 셸 | `apps/mobile/src/app/_layout.tsx` | `QueryClientProvider`, design system, `AuthSessionGate`, API client bootstrap |
 | 세션 게이트 | `apps/mobile/src/auth/AuthSessionGate.tsx` | 앱 최초 route 진입 전 세션 확인, 로그인/홈 redirect, splash hide |
 | 로그인 route | `apps/mobile/src/app/auth/login.tsx` | full-screen WebView 로그인 컨테이너, callback scheme interception |
@@ -52,7 +52,7 @@ Mermaid가 렌더되지 않는 viewer에서는 아래 텍스트 흐름을 기준
 | auth utility | `apps/mobile/src/auth/_utils/auth.ts` | login URL 생성, callback URL 판별, `mobile-json` callback exchange |
 | mobile API scope | `apps/mobile/src/auth/mobile-api-scope.ts` | access/refresh token, token expiry, Space 목록/current Space 보관 |
 | mobile auth store | `apps/mobile/src/auth/auth-store.ts` | `verifySession()`, `logout()`, 인증 상태 관리 |
-| IDP auth controller | `apps/idp/api/src/module/auth/auth.controller.ts` | `/api/v1/auth/login`, `/api/v1/auth/callback`, token/space/logout endpoint |
+| Auth controller | `apps/core/api/src/module/auth/auth.controller.ts` | `/api/v1/auth/login`, `/api/v1/auth/callback`, token/space/logout endpoint |
 | auth use cases | `packages/be-usecase/src/auth/*.usecase.ts` | OIDC state/PKCE, token exchange, cookie/session 생성, verify/refresh/logout |
 | Orval Axios clients | `packages/fe-api/src/libs/customAxios.ts`, `packages/fe-api/src/libs/customIdpAxios.ts` | Bearer token, refresh token, `x-space-id` header 주입 |
 
@@ -86,11 +86,11 @@ Mermaid가 렌더되지 않는 viewer에서는 아래 텍스트 흐름을 기준
 
 | 대상 | 기본 iOS/local | 기본 Android emulator | 주요 env |
 |------|----------------|------------------------|----------|
-| IDP API | `http://localhost:3007` | `http://10.0.2.2:3007` | `EXPO_PUBLIC_IDP_API_URL`, `EXPO_PUBLIC_IDP_API_INTERNAL_URL`, `IDP_API_URL`, `IDP_API_INTERNAL_URL` |
+| Auth/Core API | `http://localhost:3006` | `http://10.0.2.2:3006` | `EXPO_PUBLIC_AUTH_API_BASE_URL`, `EXPO_PUBLIC_CORE_API_URL`, `EXPO_PUBLIC_CORE_API_INTERNAL_URL`, `CORE_API_URL`, `CORE_API_INTERNAL_URL` |
 | Core API | `http://localhost:3006` | `http://10.0.2.2:3006` | `EXPO_PUBLIC_CORE_API_URL`, `EXPO_PUBLIC_CORE_API_INTERNAL_URL`, `EXPO_PUBLIC_CORE_API_BASE_URL`, `CORE_API_URL`, `CORE_API_INTERNAL_URL` |
 | native redirect | `kr.co.cocdev.onoramobile://auth/callback` | same | 서버 reference-data override: `OIDC_USER_MOBILE_REDIRECT_URI` |
 
-Android emulator 안의 `localhost`는 emulator 자신을 가리키므로, 모바일 코드는 IDP/Core API URL의 `localhost` 또는 `127.0.0.1`을 `10.0.2.2`로 보정합니다.
+Android emulator 안의 `localhost`는 emulator 자신을 가리키므로, 모바일 코드는 Auth/Core API URL의 `localhost` 또는 `127.0.0.1`을 `10.0.2.2`로 보정합니다.
 
 ## 정상 로그인 상세
 
@@ -111,7 +111,7 @@ sequenceDiagram
   App->>WV: full-screen WebView mount
   WV->>IDP: auth login 요청 clientId user-mobile
   IDP-->>WV: OIDC interaction 화면
-  WV->>IDP: IDP Web login submit
+  WV->>IDP: Admin auth login submit
   IDP-->>WV: native callback scheme
   WV->>App: callback navigation 가로채기
   App->>IDP: callback exchange responseMode mobile-json
@@ -147,7 +147,7 @@ Mobile App
     -> /auth/login
       -> WebView
         -> IDP API: /api/v1/auth/login?clientId=user-mobile
-        -> IDP Web interaction
+        -> Admin auth interaction
         -> native callback scheme
       -> /auth/callback
         -> IDP API: /api/v1/auth/callback?responseMode=mobile-json
@@ -182,12 +182,12 @@ Mobile App
 
 ### 3. WebView login route
 
-`/auth/login`은 native form을 렌더링하지 않습니다. 로그인 UI와 문구는 IDP Web interaction 화면이 소유하고, 모바일 route는 full-screen WebView shell만 제공합니다.
+`/auth/login`은 native form을 렌더링하지 않습니다. 로그인 UI와 문구는 admin auth interaction 화면이 소유하고, 모바일 route는 full-screen WebView shell만 제공합니다.
 
 생성되는 login URL의 형태:
 
 ```txt
-{IDP_API_BASE_URL}/api/v1/auth/login
+{AUTH_API_BASE_URL}/api/v1/auth/login
   ?clientId=user-mobile
   &returnTo=kr.co.cocdev.onoramobile://auth/callback?returnTo=/
 ```
@@ -207,9 +207,9 @@ WebView는 다음 drift를 감지하면 현재 navigation을 막고 `user-mobile
 
 | 감지 대상 | 막는 이유 |
 |-----------|----------|
-| `/auth/login` | IDP Web shell route로 잘못 이동하는 경우 방지 |
+| `/auth/login` | admin auth shell route로 잘못 이동하는 경우 방지 |
 | `/api/v1/auth/login`인데 `clientId !== user-mobile` | 다른 client flow 혼입 방지 |
-| `/oidc/auth`인데 `client_id !== user-mobile` | `idp-web` 등 web client authorization으로 drift 방지 |
+| `/oidc/auth`인데 `client_id !== user-mobile` | `admin-web` 등 web client authorization으로 drift 방지 |
 | Android에서 `localhost` redirect | `10.0.2.2`로 보정해 host dev server 연결 유지 |
 
 ### 5. Native callback interception
@@ -233,14 +233,14 @@ kr.co.cocdev.onoramobile://auth/callback?code=...&state=...&returnTo=...
 `/auth/callback`은 `apps/mobile/src/auth/_utils/auth.ts`의 `exchangeAuthCallback()`을 통해 IDP API callback endpoint를 직접 호출합니다.
 
 ```txt
-GET {IDP_API_BASE_URL}/api/v1/auth/callback
+GET {AUTH_API_BASE_URL}/api/v1/auth/callback
   ?clientId=user-mobile
   &code=...
   &state=...
   &responseMode=mobile-json
 ```
 
-서버의 `apps/idp/api/src/module/auth/auth.controller.ts`는 다음 조건을 만족하면 redirect 대신 JSON을 반환합니다.
+서버의 `apps/core/api/src/module/auth/auth.controller.ts`는 다음 조건을 만족하면 redirect 대신 JSON을 반환합니다.
 
 ```ts
 clientId === "user-mobile" &&
@@ -361,7 +361,7 @@ GET /api/v1/auth/login
 | `code` 또는 `state` 없음 | `returnTo`만 있으면 기존 session 검증을 시도하고, 없으면 invalid 처리 |
 | callback exchange 실패 | 기존 native session이 유효하면 홈으로 복귀, 아니면 실패 상태 표시 |
 | callback 성공 후 `verify-token` 실패 | 홈으로 이동하지 않고 "앱에서 세션을 확인하지 못했습니다" 메시지 표시 |
-| IDP Web returnTo(`/dashboard` 등)가 섞임 | 모바일 route whitelist 기준으로 `/`로 정규화 |
+| Admin Web returnTo(`/admin/dashboard` 등)가 섞임 | 모바일 route whitelist 기준으로 `/`로 정규화 |
 | 로그아웃 | IDP logout 호출 후 `mobileApiScopeStore.clear()`, `/auth/login`으로 이동 |
 
 ## 로그아웃 흐름
@@ -418,4 +418,4 @@ pnpm --filter mobile-app type-check
 - callback URL에 `responseMode=mobile-json`이 포함되는지 확인합니다.
 - callback 성공 후 token 저장만으로 끝내지 말고 `verify-token`, `my-spaces`, `current-space`까지 통과하는지 확인합니다.
 - 보호 route 추가 시 `AUTHENTICATED_ROUTE_PATHS`에 route를 추가하고 AuthSessionGate test를 갱신합니다.
-- 로그인 route가 `idp-web` client로 drift하지 않는지 WebView navigation test를 유지합니다.
+- 로그인 route가 `admin-web` client로 drift하지 않는지 WebView navigation test를 유지합니다.

@@ -6,7 +6,7 @@ import {
 	useUpdateTimeline,
 } from "@cocrepo/api/core/timelines";
 import { TimelineEditPage } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -54,7 +54,7 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 		delete state.errors.name;
 	};
 
-	const onChangeDescriptionTextarea = (value: string) => {
+	const onChangeDescriptionTextArea = (value: string) => {
 		state.description = value;
 		delete state.errors.description;
 	};
@@ -87,10 +87,8 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 			},
 			{
 				onSuccess: () => {
-					addToast({
-						title: "수정 성공",
+					toast.success("수정 성공", {
 						description: "타임라인이 수정되었습니다.",
-						color: "success",
 					});
 					queryClient.invalidateQueries({
 						queryKey: getGetTimelineByIdQueryKey(timelineId),
@@ -98,10 +96,8 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 					router.push(`/timelines/${timelineId}` as Route);
 				},
 				onError: () => {
-					addToast({
-						title: "수정 실패",
+					toast.danger("수정 실패", {
 						description: "타임라인 수정 중 오류가 발생했습니다.",
-						color: "danger",
 					});
 				},
 			},
@@ -125,7 +121,7 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 			isSubmitPending={isPending}
 			isSubmitDisabled={isSubmitDisabled}
 			onChangeNameInput={onChangeNameInput}
-			onChangeDescriptionTextarea={onChangeDescriptionTextarea}
+			onChangeDescriptionTextArea={onChangeDescriptionTextArea}
 			onClickCancelButton={onClickCancelButton}
 			onClickSubmitButton={onClickSubmitButton}
 		/>

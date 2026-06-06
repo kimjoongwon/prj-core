@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Chip } from "../../../design-system/primitives";
+import { Chip } from "../../../data-display/Chip/Chip";
 import { CourseTableShell } from "../CourseTableShell";
 import type { CourseManagementCourse } from "../types";
 
@@ -27,14 +27,14 @@ export const CourseTable = observer(({ courses }: CourseTableProps) => {
 			}
 		>
 			{courses.map((course) => (
-				<tr key={course.id} className="border-divider/70 border-b">
+				<tr key={course.id} className="border-border/70 border-b">
 					<td className="px-3 py-4 font-medium text-foreground">
 						{course.name}
 					</td>
-					<td className="px-3 py-4 text-default-600">{course.description}</td>
-					<td className="px-3 py-4 text-default-700">{course.durationLabel}</td>
-					<td className="px-3 py-4 text-default-700">{course.priceLabel}</td>
-					<td className="px-3 py-4 text-default-600">
+					<td className="px-3 py-4 text-muted">{course.description}</td>
+					<td className="px-3 py-4 text-foreground">{course.durationLabel}</td>
+					<td className="px-3 py-4 text-foreground">{course.priceLabel}</td>
+					<td className="px-3 py-4 text-muted">
 						{course.activeOfferingCount}개 반 · {course.activeEnrollmentCount}명
 					</td>
 					<td className="px-3 py-4">

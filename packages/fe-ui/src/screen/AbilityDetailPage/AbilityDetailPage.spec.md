@@ -23,11 +23,11 @@ AbilityDetailPage
         - Chip (조건부)
       - DetailSectionCard
   - Modal
-    - ModalContent
-      - ModalHeader
+    - Modal overlay content
+      - Modal.Header
         - Key
-      - ModalBody
-      - ModalFooter
+      - Modal.Body
+      - Modal.Footer
         - Button x2
 ```
 
@@ -47,11 +47,11 @@ AbilityDetailPage
 | `VStack` | `../../rhythm` | 화면 조합 요소 |
 | `Chip` | `../../display` | 상태/정보를 카드 또는 표시 단위로 표현 |
 | `Modal` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalContent` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalHeader` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal overlay content` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Header` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
 | `Key` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
-| `ModalBody` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalFooter` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Body` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Footer` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
 
 ## 구성 요소
 

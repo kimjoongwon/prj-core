@@ -1,7 +1,8 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Input, Textarea } from "../../design-system/primitives";
+import { Input } from "../../control/Input/Input";
+import { TextArea } from "../../control/TextArea/TextArea";
 import { ByteCounter } from "../ByteCounter";
 import { HtmlEditor } from "../HtmlEditor";
 
@@ -36,8 +37,8 @@ const PUSH_CONTENT_MAX_LENGTH = 200;
  * 등록/수정 폼에서 유형에 따라 동적으로 콘텐츠 입력 필드를 렌더링합니다.
  *
  * - EMAIL: 제목 Input + HtmlEditor
- * - SMS: 본문 Textarea + ByteCounter (제목 숨김)
- * - PUSH: 제목 Input (50자) + 본문 Textarea (200자) + 글자 수 표시
+ * - SMS: 본문 TextArea + ByteCounter (제목 숨김)
+ * - PUSH: 제목 Input (50자) + 본문 TextArea (200자) + 글자 수 표시
  *
  * @example
  * ```tsx
@@ -142,7 +143,7 @@ const SmsEditor = observer(
 	({ content, onContentChange, errors }: SmsEditorProps) => {
 		return (
 			<div className="flex flex-col gap-4">
-				<Textarea
+				<TextArea
 					label="본문"
 					isRequired
 					value={content}
@@ -195,7 +196,7 @@ const PushEditor = observer(
 						</span>
 					}
 				/>
-				<Textarea
+				<TextArea
 					label="본문"
 					isRequired
 					maxLength={PUSH_CONTENT_MAX_LENGTH}

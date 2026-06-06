@@ -37,6 +37,16 @@ export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
 	"apps/admin/web/src/app/(admin)/routines/[routineId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/routines/new/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/routines/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/settings/auth/accounts/[userId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/settings/auth/accounts/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/settings/auth/audit-logs/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/settings/auth/oidc-clients/[oidcClientId]/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/settings/auth/oidc-clients/[oidcClientId]/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/settings/auth/oidc-clients/new/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/settings/auth/oidc-clients/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/settings/auth/oidc-sessions/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/settings/auth/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/settings/auth/security-policy/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/spaces/[spaceId]/ground/edit/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/spaces/[spaceId]/ground/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/spaces/new/route.meta.ts",
@@ -316,6 +326,51 @@ export const GENERATED_ADMIN_NAV_ITEMS: NavItemConfig[] = [
 				"label": "Payment",
 				"path": "/payments",
 				"subject": "menu:payments:list"
+			}
+		]
+	},
+	{
+		"id": "settings-auth",
+		"label": "인증 설정",
+		"icon": "KeyRound",
+		"path": "/settings/auth",
+		"subject": "menu:settings-auth",
+		"children": [
+			{
+				"id": "settings-auth-dashboard",
+				"label": "인증 대시보드",
+				"path": "/settings/auth",
+				"subject": "menu:settings-auth:dashboard"
+			},
+			{
+				"id": "settings-auth-accounts",
+				"label": "계정",
+				"path": "/settings/auth/accounts",
+				"subject": "menu:settings-auth:accounts"
+			},
+			{
+				"id": "settings-auth-oidc-clients",
+				"label": "OIDC 클라이언트",
+				"path": "/settings/auth/oidc-clients",
+				"subject": "menu:settings-auth:oidc-clients"
+			},
+			{
+				"id": "settings-auth-oidc-sessions",
+				"label": "OIDC 세션",
+				"path": "/settings/auth/oidc-sessions",
+				"subject": "menu:settings-auth:oidc-sessions"
+			},
+			{
+				"id": "settings-auth-audit-logs",
+				"label": "인증 감사 로그",
+				"path": "/settings/auth/audit-logs",
+				"subject": "menu:settings-auth:audit-logs"
+			},
+			{
+				"id": "settings-auth-security-policy",
+				"label": "보안 정책",
+				"path": "/settings/auth/security-policy",
+				"subject": "menu:settings-auth:security-policy"
 			}
 		]
 	}
@@ -946,5 +1001,105 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 		"subject": "page:payments:list",
 		"description": "Course와 Product 등 여러 서비스의 Space-scoped 결제 원장을 관리합니다.",
 		"menuLeafId": "payments-list"
+	},
+	{
+		"groupId": "settings-auth",
+		"groupLabel": "인증 설정",
+		"pageId": "settings-auth:dashboard",
+		"pageLabel": "인증 대시보드",
+		"pathPattern": "/settings/auth",
+		"subject": "page:settings-auth:dashboard",
+		"description": "인증 운영 현황과 OIDC 관리 지표를 확인합니다.",
+		"menuLeafId": "settings-auth-dashboard"
+	},
+	{
+		"groupId": "settings-auth",
+		"groupLabel": "인증 설정",
+		"pageId": "settings-auth:accounts",
+		"pageLabel": "계정",
+		"pathPattern": "/settings/auth/accounts",
+		"subject": "page:settings-auth:accounts",
+		"description": "인증 계정 상태와 잠금 정보를 관리합니다.",
+		"menuLeafId": "settings-auth-accounts"
+	},
+	{
+		"groupId": "settings-auth",
+		"groupLabel": "인증 설정",
+		"pageId": "settings-auth:accounts:detail",
+		"pageLabel": "계정 상세",
+		"pathPattern": "/settings/auth/accounts/[userId]",
+		"subject": "page:settings-auth:accounts:detail",
+		"description": "인증 계정 상세와 접근 권한을 확인합니다.",
+		"menuLeafId": "settings-auth-accounts"
+	},
+	{
+		"groupId": "settings-auth",
+		"groupLabel": "인증 설정",
+		"pageId": "settings-auth:oidc-clients",
+		"pageLabel": "OIDC 클라이언트",
+		"pathPattern": "/settings/auth/oidc-clients",
+		"subject": "page:settings-auth:oidc-clients",
+		"description": "OIDC 클라이언트 등록과 redirect 설정을 관리합니다.",
+		"menuLeafId": "settings-auth-oidc-clients"
+	},
+	{
+		"groupId": "settings-auth",
+		"groupLabel": "인증 설정",
+		"pageId": "settings-auth:oidc-clients:new",
+		"pageLabel": "OIDC 클라이언트 등록",
+		"pathPattern": "/settings/auth/oidc-clients/new",
+		"subject": "page:settings-auth:oidc-clients:new",
+		"description": "새 OIDC 클라이언트를 등록합니다.",
+		"menuLeafId": "settings-auth-oidc-clients"
+	},
+	{
+		"groupId": "settings-auth",
+		"groupLabel": "인증 설정",
+		"pageId": "settings-auth:oidc-clients:detail",
+		"pageLabel": "OIDC 클라이언트 상세",
+		"pathPattern": "/settings/auth/oidc-clients/[oidcClientId]",
+		"subject": "page:settings-auth:oidc-clients:detail",
+		"description": "OIDC 클라이언트 상세 설정을 확인합니다.",
+		"menuLeafId": "settings-auth-oidc-clients"
+	},
+	{
+		"groupId": "settings-auth",
+		"groupLabel": "인증 설정",
+		"pageId": "settings-auth:oidc-clients:edit",
+		"pageLabel": "OIDC 클라이언트 수정",
+		"pathPattern": "/settings/auth/oidc-clients/[oidcClientId]/edit",
+		"subject": "page:settings-auth:oidc-clients:edit",
+		"description": "OIDC 클라이언트 설정을 수정합니다.",
+		"menuLeafId": "settings-auth-oidc-clients"
+	},
+	{
+		"groupId": "settings-auth",
+		"groupLabel": "인증 설정",
+		"pageId": "settings-auth:oidc-sessions",
+		"pageLabel": "OIDC 세션",
+		"pathPattern": "/settings/auth/oidc-sessions",
+		"subject": "page:settings-auth:oidc-sessions",
+		"description": "OIDC 세션 상태와 만료 정보를 확인합니다.",
+		"menuLeafId": "settings-auth-oidc-sessions"
+	},
+	{
+		"groupId": "settings-auth",
+		"groupLabel": "인증 설정",
+		"pageId": "settings-auth:audit-logs",
+		"pageLabel": "인증 감사 로그",
+		"pathPattern": "/settings/auth/audit-logs",
+		"subject": "page:settings-auth:audit-logs",
+		"description": "인증 이벤트와 감사 로그를 조회합니다.",
+		"menuLeafId": "settings-auth-audit-logs"
+	},
+	{
+		"groupId": "settings-auth",
+		"groupLabel": "인증 설정",
+		"pageId": "settings-auth:security-policy",
+		"pageLabel": "보안 정책",
+		"pathPattern": "/settings/auth/security-policy",
+		"subject": "page:settings-auth:security-policy",
+		"description": "로그인 잠금과 비밀번호 정책을 관리합니다.",
+		"menuLeafId": "settings-auth-security-policy"
 	}
 ];

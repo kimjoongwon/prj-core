@@ -4,16 +4,8 @@ import { Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Input } from "../../control/Input/Input";
 import { Switch } from "../../control/Switch/Switch";
-import {
-	Button,
-	Table,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-	Tooltip,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Table, Tooltip } from "@heroui/react";
 import { VStack } from "../../rhythm/VStack/VStack";
 
 /** 변수 편집 항목 */
@@ -145,40 +137,40 @@ export const VariableEditTable = observer(
 				</Button>
 			);
 
-			if (isUsed) {
-				return (
-					<Tooltip
-						content="본문에서 사용 중인 변수입니다"
-						color="warning"
-						placement="top"
-					>
-						{deleteButton}
-					</Tooltip>
-				);
-			}
+				if (isUsed) {
+					return (
+						<Tooltip>
+							<Tooltip.Trigger>{deleteButton}</Tooltip.Trigger>
+							<Tooltip.Content placement="top">
+								본문에서 사용 중인 변수입니다
+							</Tooltip.Content>
+						</Tooltip>
+					);
+				}
 
 			return deleteButton;
 		};
 
 		return (
 			<VStack gap={3}>
-				<Table aria-label="변수 편집 테이블" removeWrapper>
-					<TableHeader>
+				<Table aria-label="변수 편집 테이블">
+					<Table.Content>
+					<Table.Header>
 						{COLUMNS.map((column) => (
-							<TableColumn key={column.key} width={column.width}>
+							<Table.Column key={column.key} width={column.width}>
 								{column.label}
-							</TableColumn>
+							</Table.Column>
 						))}
-					</TableHeader>
-					<TableBody emptyContent="정의된 변수가 없습니다. 아래 버튼으로 추가하세요.">
+					</Table.Header>
+					<Table.Body>
 						{variables.map((variable, index) => {
 							const nameError = getError(index, "name");
 							const descriptionError = getError(index, "description");
 							const defaultValueError = getError(index, "defaultValue");
 
 							return (
-								<TableRow key={variable.id ?? `new-${index}`}>
-									<TableCell>
+								<Table.Row key={variable.id ?? `new-${index}`}>
+									<Table.Cell>
 										<Input
 											size="sm"
 											placeholder="변수명"
@@ -190,8 +182,8 @@ export const VariableEditTable = observer(
 											errorMessage={nameError}
 											pattern={VARIABLE_NAME_PATTERN.source}
 										/>
-									</TableCell>
-									<TableCell>
+									</Table.Cell>
+									<Table.Cell>
 										<Input
 											size="sm"
 											placeholder="설명"
@@ -202,8 +194,8 @@ export const VariableEditTable = observer(
 											isInvalid={!!descriptionError}
 											errorMessage={descriptionError}
 										/>
-									</TableCell>
-									<TableCell>
+									</Table.Cell>
+									<Table.Cell>
 										<Input
 											size="sm"
 											placeholder="기본값"
@@ -214,8 +206,8 @@ export const VariableEditTable = observer(
 											isInvalid={!!defaultValueError}
 											errorMessage={defaultValueError}
 										/>
-									</TableCell>
-									<TableCell>
+									</Table.Cell>
+									<Table.Cell>
 										<Switch
 											size="sm"
 											value={variable.isRequired}
@@ -223,13 +215,14 @@ export const VariableEditTable = observer(
 												handleFieldChange(index, "isRequired", isSelected)
 											}
 										/>
-									</TableCell>
-									<TableCell>{renderDeleteButton(variable, index)}</TableCell>
-								</TableRow>
+									</Table.Cell>
+									<Table.Cell>{renderDeleteButton(variable, index)}</Table.Cell>
+								</Table.Row>
 							);
 						})}
-					</TableBody>
-				</Table>
+					</Table.Body>
+				</Table.Content>
+			</Table>
 
 				<Button
 					variant="light"

@@ -20,7 +20,7 @@
 | ID | 액션 | 트리거 | 결과 | 조건 |
 |----|------|--------|------|------|
 | ROL-L5-ACT-049 | name 입력 | 이름 Input 입력 | 값 업데이트 | - |
-| ROL-L5-ACT-050 | description 입력 | 설명 Textarea 입력 | 값 업데이트 | - |
+| ROL-L5-ACT-050 | description 입력 | 설명 TextArea 입력 | 값 업데이트 | - |
 | ROL-L5-ACT-051 | Subject 선택 | Subject Select(검색 가능) 변경 | 선택값 업데이트 + DMMF 필드 자동 조회 | - |
 | ROL-L5-ACT-052 | Action 선택 | Action Select(검색 가능) 변경 | 선택값 업데이트 | - |
 | ROL-L5-ACT-053 | fields 선택 | 필드 TagInput에서 항목 추가/제거 | fields 배열 업데이트 | Subject가 entity 그룹인 경우만 활성화 |

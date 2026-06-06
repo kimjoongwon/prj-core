@@ -245,7 +245,7 @@ export default observer(function InquiriesNewPageRoute() {
 			onChangeTitleInput={(value) => {
 				state.title = value;
 			}}
-			onChangeContentTextarea={(value) => {
+			onChangeContentTextArea={(value) => {
 				state.content = value;
 			}}
 			onChangeCategorySelection={(value) => {

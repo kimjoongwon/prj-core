@@ -93,7 +93,7 @@ Activity 카드 목록 (순서 변경 가능):
 | exerciseName | 읽기 전용 | - | 선택된 운동명 표시 |
 | repetitions | NumberInput | 최소 1 | 반복 횟수 (세트 수), 기본 1 |
 | restTime | NumberInput | 최소 0 | 다음 운동까지 휴식 시간(초), 기본 0 |
-| notes | Textarea | 선택, 최대 200자 | 특별 지시사항 (예: "천천히 내리기") |
+| notes | TextArea | 선택, 최대 200자 | 특별 지시사항 (예: "천천히 내리기") |
 
 **Activity 카드 액션:**
 - 드래그 핸들: 순서 변경 (drag & drop)

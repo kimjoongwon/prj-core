@@ -13,7 +13,7 @@ import {
   radioGroupClassNames,
   useRadioGroup,
   useRadioGroupItem,
-} from "heroui-native/radio-group";
+} from "heroui-native";
 import { getTextContent, Text } from "../../data-display/Text";
 import { Radio } from "../Radio";
 type HeroRadioGroupProps = ComponentPropsWithoutRef<typeof HeroRadioGroup>;

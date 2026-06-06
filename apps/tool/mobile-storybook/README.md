@@ -2,6 +2,8 @@
 
 Expo 기반 `@cocrepo/mo-ui` 온디바이스 Storybook입니다.
 
+이 Storybook은 앱의 `AuthSessionGate`를 사용하지 않으며, API 401 응답이 발생해도 로그인 화면으로 리다이렉트하지 않도록 redirect target을 Storybook 전용 disabled URL로 고정합니다.
+
 ## 실행
 
 ```bash

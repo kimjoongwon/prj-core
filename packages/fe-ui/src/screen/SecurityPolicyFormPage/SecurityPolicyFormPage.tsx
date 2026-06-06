@@ -10,7 +10,9 @@ import {
 } from "@cocrepo/ui";
 import { Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button, Input, Switch } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input/Input";
+import { Switch } from "../../control/Switch/Switch";
 
 /** 숫자 필드 키 타입 */
 type NumberField =
@@ -127,7 +129,7 @@ export const SecurityPolicyFormPage = observer(
 										>
 											<div>
 												<p className="text-sm font-medium">대문자 필수</p>
-												<p className="text-xs text-default-400">
+												<p className="text-xs text-muted">
 													영문 대문자(A-Z)를 1자 이상 포함해야 합니다
 												</p>
 											</div>
@@ -140,7 +142,7 @@ export const SecurityPolicyFormPage = observer(
 										>
 											<div>
 												<p className="text-sm font-medium">소문자 필수</p>
-												<p className="text-xs text-default-400">
+												<p className="text-xs text-muted">
 													영문 소문자(a-z)를 1자 이상 포함해야 합니다
 												</p>
 											</div>
@@ -153,7 +155,7 @@ export const SecurityPolicyFormPage = observer(
 										>
 											<div>
 												<p className="text-sm font-medium">숫자 필수</p>
-												<p className="text-xs text-default-400">
+												<p className="text-xs text-muted">
 													숫자(0-9)를 1자 이상 포함해야 합니다
 												</p>
 											</div>
@@ -166,7 +168,7 @@ export const SecurityPolicyFormPage = observer(
 										>
 											<div>
 												<p className="text-sm font-medium">특수문자 필수</p>
-												<p className="text-xs text-default-400">
+												<p className="text-xs text-muted">
 													특수문자(!@#$%^&* 등)를 1자 이상 포함해야 합니다
 												</p>
 											</div>

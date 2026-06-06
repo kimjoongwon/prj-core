@@ -18,16 +18,9 @@ import { FileX } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { Pagination } from "../control/Pagination/Pagination";
-import {
-	Table as HeroTable,
-	type Selection,
-	Skeleton,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-} from "../design-system/primitives";
+import { Table as HeroTable, Table } from "@heroui/react";
+import type { Selection } from "react-aria-components";
+import { Skeleton } from "../feedback/Skeleton/Skeleton";
 import { translateNode, useT } from "../i18n";
 import { InputRenderer } from "./InputRenderer";
 
@@ -45,40 +38,19 @@ const DATA_GRID_DEFAULT_PAGE_SIZE = 20;
 const DATA_GRID_EMPTY_MESSAGE = "데이터가 없습니다.";
 const DATA_GRID_SKELETON_ROWS = [0, 1, 2, 3, 4];
 
-function getColumnAlign<T extends object>(column: ColumnDef<T, unknown>) {
+function getColumnAlignClassName<T extends object>(column: ColumnDef<T, unknown>) {
 	const align = column.meta?.align ?? "left";
 	if (align === "left") {
-		return "start";
+		return undefined;
 	}
 	if (align === "right") {
-		return "end";
+		return "text-right";
 	}
-	return align;
+	return "text-center";
 }
 
 function getHeaderLabel<T extends object>(header: Header<T, unknown>) {
 	return flexRender(header.column.columnDef.header, header.getContext());
-}
-
-function resolveClassNameValue(className: unknown) {
-	if (Array.isArray(className)) {
-		return className.filter(Boolean).join(" ");
-	}
-	if (typeof className === "string") {
-		return className;
-	}
-	return undefined;
-}
-
-function mergeWrapperClassName(className: unknown) {
-	return [
-		"bg-transparent",
-		"p-0",
-		"shadow-none",
-		resolveClassNameValue(className),
-	]
-		.filter(Boolean)
-		.join(" ");
 }
 
 function toColumnDef<TData, TValue = unknown>(
@@ -281,7 +253,7 @@ export const DataGrid = observer(
 
 				{isLoading ? (
 					<div className="space-y-3">
-						<div className="flex gap-4 p-4 bg-content2 rounded-lg">
+						<div className="flex gap-4 p-4 bg-surface-secondary rounded-lg">
 							<Skeleton className="w-8 h-4 rounded" />
 							<Skeleton className="w-32 h-4 rounded" />
 							<Skeleton className="w-48 h-4 rounded" />
@@ -291,7 +263,7 @@ export const DataGrid = observer(
 						{DATA_GRID_SKELETON_ROWS.map((index) => (
 							<div
 								key={index}
-								className="flex gap-4 p-4 bg-content1 rounded-lg"
+								className="flex gap-4 p-4 bg-surface rounded-lg"
 							>
 								<Skeleton className="w-8 h-4 rounded" />
 								<Skeleton className="w-32 h-4 rounded" />
@@ -302,64 +274,70 @@ export const DataGrid = observer(
 						))}
 					</div>
 				) : rows.length === 0 ? (
-					<div className="flex flex-col items-center justify-center py-16 text-default-400">
+					<div className="flex flex-col items-center justify-center py-16 text-muted">
 						<FileX size={48} className="mb-4" />
 						<p className="text-lg">
 							{t(config.emptyMessage ?? DATA_GRID_EMPTY_MESSAGE)}
 						</p>
 					</div>
 				) : (
-					<div className="relative">
-						<HeroTable
-							aria-label={t("데이터 테이블")}
-							classNames={{
-								tr: config.onRowClick
-									? "cursor-pointer hover:bg-content2"
-									: undefined,
-								wrapper: mergeWrapperClassName(undefined),
-							}}
-							onRowAction={config.onRowClick ? handleRowAction : undefined}
-							onSelectionChange={handleSelectionChange}
-							selectedKeys={selectedTableKeys}
-							selectionMode={selectionMode}
-						>
-							<TableHeader>
-								{headers.map((header) => {
-									const align = getColumnAlign(header.column.columnDef);
+						<div className="relative">
+							<HeroTable
+								aria-label={t("데이터 테이블")}
+							>
+								<Table.Content
+									onRowAction={config.onRowClick ? handleRowAction : undefined}
+									onSelectionChange={handleSelectionChange}
+									selectedKeys={selectedTableKeys}
+									selectionMode={selectionMode}
+								>
+								<Table.Header>
+									{headers.map((header) => {
+										const alignClassName = getColumnAlignClassName(
+											header.column.columnDef,
+										);
 
-									return (
-										<TableColumn
-											key={header.id}
-											colSpan={header.colSpan}
-											align={align}
-										>
-											{header.isPlaceholder
-												? null
+										return (
+											<Table.Column
+												key={header.id}
+												className={alignClassName}
+											>
+												{header.isPlaceholder
+													? null
 												: translateNode(getHeaderLabel(header), t)}
-										</TableColumn>
+										</Table.Column>
 									);
 								})}
-							</TableHeader>
-							<TableBody emptyContent={t(DATA_GRID_EMPTY_MESSAGE)}>
+							</Table.Header>
+							<Table.Body>
 								{tableRows.map((row) => (
-									<TableRow key={row.id}>
+									<Table.Row
+										key={row.id}
+										className={config.onRowClick ? "cursor-pointer" : undefined}
+										onClick={
+											config.onRowClick
+												? () => handleRowAction(row.id)
+												: undefined
+										}
+									>
 										{row.getVisibleCells().map((cell) => (
-											<TableCell key={cell.id}>
+											<Table.Cell key={cell.id}>
 												{flexRender(
 													cell.column.columnDef.cell,
 													cell.getContext(),
 												)}
-											</TableCell>
+											</Table.Cell>
 										))}
-									</TableRow>
-								))}
-							</TableBody>
-						</HeroTable>
-					</div>
-				)}
+										</Table.Row>
+									))}
+								</Table.Body>
+								</Table.Content>
+							</HeroTable>
+						</div>
+					)}
 
 				<div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 py-4">
-					<span className="text-sm text-default-500">
+					<span className="text-sm text-muted">
 						{t("총")} {totalCount.toLocaleString()}
 						{t("건")}
 					</span>
@@ -375,14 +353,14 @@ export const DataGrid = observer(
 
 				{shouldRenderActionBar && (
 					<div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
-						<div className="flex items-center gap-4 px-6 py-3 bg-content2 rounded-full shadow-lg border border-divider">
+						<div className="flex items-center gap-4 px-6 py-3 bg-surface-secondary rounded-full shadow-lg border border-border">
 							{actionBarConfig?.showCount !== false && (
-								<span className="text-sm font-medium text-default-700">
+								<span className="text-sm font-medium text-foreground">
 									{selectedCount}
 									{t("개 선택됨")}
 								</span>
 							)}
-							<div className="w-px h-6 bg-divider" />
+							<div className="w-px h-6 bg-border" />
 							<div className="flex items-center gap-2">
 								{actionBarConfig?.actions?.map((action) => (
 									<InputRenderer

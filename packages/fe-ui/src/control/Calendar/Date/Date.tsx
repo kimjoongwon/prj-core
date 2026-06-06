@@ -1,8 +1,8 @@
 "use client";
 
 import { getDate } from "@cocrepo/toolkit";
+import { Card } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { Card, CardBody } from "../../../design-system/primitives";
 import { useT } from "../../../i18n";
 
 export interface DateProps {
@@ -26,12 +26,10 @@ export const Date = observer(function Date(props: DateProps) {
 
 	return (
 		<Card
-			isPressable={isPressable}
-			shadow="sm"
-			radius="sm"
-			isHoverable
+			role={isPressable ? "button" : undefined}
+			tabIndex={isPressable ? 0 : undefined}
 			onClick={() => onDateClick?.(value)}
-			className={`${className} relative h-20`}
+			className={`${className} relative h-20 shadow-sm ${isPressable ? "cursor-pointer" : ""}`}
 		>
 			{selected && (
 				<div className="absolute top-1 left-1 rounded-full bg-green-500 p-0.5">
@@ -68,11 +66,11 @@ export const Date = observer(function Date(props: DateProps) {
 				`,
 				}}
 			/>
-			<CardBody className="text-right">
+			<Card.Content className="text-right">
 				<span className={!isPressable ? "text-gray-400" : ""}>
 					{t("{{date}}일", undefined, { date })}
 				</span>
-			</CardBody>
+			</Card.Content>
 		</Card>
 	);
 });

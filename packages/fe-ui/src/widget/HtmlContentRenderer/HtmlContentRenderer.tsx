@@ -29,7 +29,7 @@ export const HtmlContentRenderer = observer(
 
 		return (
 			<div
-				className="border border-divider rounded-lg overflow-hidden"
+				className="border border-border rounded-lg overflow-hidden"
 				style={{ maxHeight }}
 			>
 				<iframe

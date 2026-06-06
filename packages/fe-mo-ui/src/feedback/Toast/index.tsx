@@ -9,7 +9,7 @@ import {
   ToastProvider,
   toastClassNames,
   useToast,
-} from "heroui-native/toast";
+} from "heroui-native";
 import { Text } from "../../data-display/Text";
 type HeroToastProps = ComponentPropsWithoutRef<typeof HeroToast>;
 type HeroToastDescriptionProps = ComponentPropsWithoutRef<

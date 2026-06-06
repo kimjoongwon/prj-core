@@ -1,10 +1,11 @@
+import { getAdminSpaceRequestHeaders, loginToConsole } from "@cocrepo/e2e";
 import { expect, type Locator, type Page, test } from "@playwright/test";
 
 const API_BASE_URL = "http://localhost:3000/api/v1";
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const SPACE_HEADERS = { "x-space-id": SYSTEM_SPACE_ID };
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_SPACE_ID);
 
 interface IdOnlyDto {
 	id: string;
@@ -49,7 +50,7 @@ async function ensureAdminCurrentSpace(page: Page) {
 	const response = await page.request.post(
 		`${API_BASE_URL}/auth/current-space`,
 		{
-			headers: SPACE_HEADERS,
+			headers: getSpaceHeaders(),
 			data: { spaceId: SYSTEM_SPACE_ID },
 		},
 	);
@@ -64,7 +65,7 @@ async function waitForRoutineToBeSelectable(page: Page, routineId: string) {
 		.poll(
 			async () => {
 				const response = await page.request.get(`${API_BASE_URL}/routines`, {
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					params: {
 						take: 50,
 						skip: 0,
@@ -89,7 +90,7 @@ async function waitForRoutineToBeSelectable(page: Page, routineId: string) {
 async function getFirstInstructor(page: Page) {
 	const usersResponse = await page.request.get(
 		`${API_BASE_URL}/users?take=20&skip=0&status=active&roles=MANAGE&roles=FULL_ACCESS`,
-		{ headers: SPACE_HEADERS },
+		{ headers: getSpaceHeaders() },
 	);
 	test.skip(
 		usersResponse.status() !== 200,
@@ -105,7 +106,7 @@ async function getFirstInstructor(page: Page) {
 
 async function getFirstUnschedulableRoutine(page: Page) {
 	const response = await page.request.get(`${API_BASE_URL}/routines`, {
-		headers: SPACE_HEADERS,
+		headers: getSpaceHeaders(),
 		params: {
 			take: 50,
 			skip: 0,
@@ -134,10 +135,20 @@ function waitForRoutineOptions(page: Page) {
 }
 
 async function openRoutinePicker(page: Page) {
-	const routineDialog = page.getByRole("dialog", { name: "루틴 선택" });
+	const routineDialog = page
+		.getByRole("dialog")
+		.filter({ has: page.getByLabel("루틴 검색") })
+		.first();
 	for (let attempt = 0; attempt < 3; attempt += 1) {
+		if (await routineDialog.isVisible().catch(() => false)) {
+			return routineDialog;
+		}
+
 		const routineOptionsResponse = waitForRoutineOptions(page);
 		await page.getByRole("button", { name: "루틴 선택" }).click();
+		await routineDialog
+			.waitFor({ state: "visible", timeout: 5000 })
+			.catch(() => undefined);
 		await routineOptionsResponse;
 		if (await routineDialog.isVisible().catch(() => false)) {
 			return routineDialog;
@@ -163,7 +174,7 @@ async function waitForProgramSnapshot(
 			async () => {
 				const response = await page.request.get(
 					`${API_BASE_URL}/timelines/${params.timelineId}/sessions/${params.sessionId}/programs/${params.programId}`,
-					{ headers: SPACE_HEADERS },
+					{ headers: getSpaceHeaders() },
 				);
 				if (!response.ok()) {
 					return false;
@@ -246,10 +257,11 @@ async function selectInstructorInDialog({
 	instructor: UserDto;
 }) {
 	await page.getByRole("button", { name: "강사 선택" }).click();
-	const instructorSelectDialog = page.getByRole("dialog", {
-		name: "강사 선택",
-	});
-	await expect(instructorSelectDialog).toBeVisible();
+	const instructorSelectDialog = page
+		.getByRole("dialog")
+		.filter({ has: page.getByLabel("강사 검색") })
+		.first();
+	await expect(instructorSelectDialog).toBeVisible({ timeout: 10000 });
 	await instructorSelectDialog.getByLabel("강사 검색").fill(instructor.name);
 	await instructorSelectDialog
 		.getByRole("button", {
@@ -282,12 +294,13 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 
 		try {
 			// Given: API로 타임라인/세션/루틴/강사 데이터를 준비한다
+			await loginToConsole(page);
 			await ensureAdminCurrentSpace(page);
 
 			const createTimelineResponse = await page.request.post(
 				`${API_BASE_URL}/timelines`,
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						name: timelineName,
 						description: "프로그램 E2E 테스트용 타임라인",
@@ -304,7 +317,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createSessionResponse = await page.request.post(
 				`${API_BASE_URL}/timelines/${timelineId}/sessions`,
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						name: sessionName,
 						type: "ONE_TIME",
@@ -323,7 +336,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createTaskResponse = await page.request.post(
 				`${API_BASE_URL}/tasks`,
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						name: exerciseTaskName,
 						duration: 60,
@@ -343,7 +356,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createRoutineOneResponse = await page.request.post(
 				`${API_BASE_URL}/routines`,
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						name: routineOneName,
 						label: `E2E-A-${uniqueSuffix}`,
@@ -367,7 +380,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createRoutineTwoResponse = await page.request.post(
 				`${API_BASE_URL}/routines`,
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						name: routineTwoName,
 						label: `E2E-B-${uniqueSuffix}`,
@@ -528,7 +541,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 				await page.request
 					.delete(
 						`${API_BASE_URL}/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`,
-						{ headers: SPACE_HEADERS },
+						{ headers: getSpaceHeaders() },
 					)
 					.catch(() => undefined);
 			}
@@ -537,7 +550,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 				await page.request
 					.delete(
 						`${API_BASE_URL}/timelines/${timelineId}/sessions/${sessionId}`,
-						{ headers: SPACE_HEADERS },
+						{ headers: getSpaceHeaders() },
 					)
 					.catch(() => undefined);
 			}
@@ -545,7 +558,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			if (timelineId) {
 				await page.request
 					.delete(`${API_BASE_URL}/timelines/${timelineId}`, {
-						headers: SPACE_HEADERS,
+						headers: getSpaceHeaders(),
 					})
 					.catch(() => undefined);
 			}
@@ -553,7 +566,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			if (routineOneId) {
 				await page.request
 					.delete(`${API_BASE_URL}/routines/${routineOneId}`, {
-						headers: SPACE_HEADERS,
+						headers: getSpaceHeaders(),
 					})
 					.catch(() => undefined);
 			}
@@ -561,7 +574,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			if (routineTwoId) {
 				await page.request
 					.delete(`${API_BASE_URL}/routines/${routineTwoId}`, {
-						headers: SPACE_HEADERS,
+						headers: getSpaceHeaders(),
 					})
 					.catch(() => undefined);
 			}
@@ -569,7 +582,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			if (createdExerciseTaskId) {
 				await page.request
 					.delete(`${API_BASE_URL}/tasks/${createdExerciseTaskId}`, {
-						headers: SPACE_HEADERS,
+						headers: getSpaceHeaders(),
 					})
 					.catch(() => undefined);
 			}
@@ -588,6 +601,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 		let sessionId: string | undefined;
 
 		try {
+			await loginToConsole(page);
 			await ensureAdminCurrentSpace(page);
 			const unschedulableRoutine = await getFirstUnschedulableRoutine(page);
 			if (!unschedulableRoutine) {
@@ -602,7 +616,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createTimelineResponse = await page.request.post(
 				`${API_BASE_URL}/timelines`,
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						name: timelineName,
 						description: "영상 누락 루틴 차단 E2E 테스트용 타임라인",
@@ -618,7 +632,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createSessionResponse = await page.request.post(
 				`${API_BASE_URL}/timelines/${timelineId}/sessions`,
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						name: sessionName,
 						type: "ONE_TIME",
@@ -663,7 +677,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 				await page.request
 					.delete(
 						`${API_BASE_URL}/timelines/${timelineId}/sessions/${sessionId}`,
-						{ headers: SPACE_HEADERS },
+						{ headers: getSpaceHeaders() },
 					)
 					.catch(() => undefined);
 			}
@@ -671,7 +685,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			if (timelineId) {
 				await page.request
 					.delete(`${API_BASE_URL}/timelines/${timelineId}`, {
-						headers: SPACE_HEADERS,
+						headers: getSpaceHeaders(),
 					})
 					.catch(() => undefined);
 			}

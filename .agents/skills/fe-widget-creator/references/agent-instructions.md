@@ -66,7 +66,7 @@ This reference preserves the detailed implementation instructions that previousl
 | 여러 Feature/Page에서 재사용할 UI | ✅ | UserCard, StatCard, FilterPanel |
 | Page/Feature가 table, metric grid, flow rail, section tabs, summary panel을 직접 품으려는 경우 | ✅ | CourseTable, CourseMetricGrid, CourseFlowRail |
 | Store/API 연결이 필요한 경우 | ❌ | fe-feature-agent 사용 |
-| 단일 기본 UI 요소 | ❌ | `fe-display-agent` 사용 |
+| 단일 기본 UI 요소 | ❌ | `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 `fe-control-agent` 사용 |
 | 폼 입력 컴포넌트 | ❌ | `fe-control-agent` 사용 |
 
 ---
@@ -146,7 +146,7 @@ fe-widget-agent는 Page/Feature 파일이 비대해지는 것을 막는 1차 분
 ### 4.1 필요한 Pure UI 확인
 
 ```markdown
-Widget 개발 시 필요한 Pure UI가 없으면 **먼저 `fe-display-agent` 또는 `fe-control-agent`에 생성 요청**
+Widget 개발 시 필요한 Pure UI가 없으면 **먼저 `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 `fe-control-agent`에 생성 요청**
 ```
 
 Page/Feature 비대화 해소용 Widget은 다음 순서로 진행합니다.
@@ -270,7 +270,7 @@ export type { StatusBadgeProps } from "./StatusBadge";
 - [ ] 기존 Widget 재사용 가능 여부 판단 및 결과 기록
 - [ ] 기능 부족 시 기존 Widget 업그레이드로 처리 (신규 복제 금지)
 - [ ] `packages/fe-ui/src/widget/[Name]/` 에 생성
-- [ ] 필요한 Pure UI가 없으면 `fe-display-agent` 또는 `fe-control-agent`에 요청
+- [ ] 필요한 Pure UI가 없으면 `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 `fe-control-agent`에 요청
 - [ ] 단일 책임 원칙 확인
 - [ ] table/card/tabs/flow rail/metric grid 같은 visual block을 Page/Feature에서 분리한 경우 owner spec의 조합 표 갱신 확인
 - [ ] API/router/store/search params를 직접 읽지 않음
@@ -299,7 +299,7 @@ Pure UI → Widget → Feature → Page
 | 에이전트 | 관계 |
 |----------|------|
 | orch-delivery | owner spec 또는 관련 fe-ui Screen/Feature spec의 Widget Contract 섹션 기반 구현 |
-| **fe-display-agent** | Widget이 사용할 Display UI 컴포넌트 생성 |
+| **fe-data-display-agent / fe-feedback-agent / fe-overlay-agent** | Widget이 사용할 표시, 상태, overlay UI 컴포넌트 생성 |
 | fe-control-agent | Widget에서 사용할 Control 컴포넌트 생성 |
 
 ### 후행 에이전트

@@ -2,7 +2,7 @@ import { type ComponentPropsWithoutRef } from "react";
 import {
   Skeleton as HeroSkeleton,
   skeletonClassNames,
-} from "heroui-native/skeleton";
+} from "heroui-native";
 type HeroSkeletonProps = ComponentPropsWithoutRef<typeof HeroSkeleton>;
 export type SkeletonProps = HeroSkeletonProps & {};
 const SkeletonComponent = (props: SkeletonProps) => <HeroSkeleton {...props} />;

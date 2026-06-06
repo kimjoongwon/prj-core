@@ -6,7 +6,7 @@ import {
 import {
   Spinner as HeroSpinner,
   spinnerClassNames,
-} from "heroui-native/spinner";
+} from "heroui-native";
 type HeroSpinnerProps = ComponentPropsWithoutRef<typeof HeroSpinner>;
 export type SpinnerProps = HeroSpinnerProps & {};
 const SpinnerComponent = forwardRef<

@@ -1,17 +1,6 @@
 "use client";
 
-import {
-	FormPage,
-	FormPageSurface,
-	ContentLanguageNotice,
-	PageTitleBar,
-	FormSection,
-	FormSectionCard,
-	VStack,
-	Button,
-	Input,
-	Textarea,
-} from "@cocrepo/ui";
+import { FormPage, FormPageSurface, ContentLanguageNotice, PageTitleBar, FormSection, FormSectionCard, VStack, Button, Input, TextArea } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 
 export interface TimelineCreatePageProps {
@@ -23,7 +12,7 @@ export interface TimelineCreatePageProps {
 	isSubmitPending: boolean;
 	isSubmitDisabled: boolean;
 	onChangeNameInput: (value: string) => void;
-	onChangeDescriptionTextarea: (value: string) => void;
+	onChangeDescriptionTextArea: (value: string) => void;
 	onClickCancelButton: () => void;
 	onClickSubmitButton: () => void;
 }
@@ -38,7 +27,7 @@ export const TimelineCreatePage = observer(
 		isSubmitPending,
 		isSubmitDisabled,
 		onChangeNameInput,
-		onChangeDescriptionTextarea,
+		onChangeDescriptionTextArea,
 		onClickCancelButton,
 		onClickSubmitButton,
 	}: TimelineCreatePageProps) => {
@@ -73,12 +62,12 @@ export const TimelineCreatePage = observer(
 									isInvalid={Boolean(nameError)}
 									errorMessage={nameError}
 								/>
-								<Textarea
+								<TextArea
 									label="설명"
 									labelPlacement="outside"
 									placeholder="타임라인에 대한 부가 설명을 입력하세요."
 									value={description}
-									onValueChange={onChangeDescriptionTextarea}
+									onValueChange={onChangeDescriptionTextArea}
 									maxLength={500}
 									description={`${description.length} / 500`}
 									isInvalid={Boolean(descriptionError)}

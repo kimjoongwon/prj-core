@@ -13,12 +13,12 @@ const serverEnvironments = {
 };
 
 const idpEnvironments = {
-  development: "http://localhost:3007/api-json",
-  local: "http://localhost:3007/api-json",
-  stg: "https://idp-stg.cocdev.co.kr/api-json",
-  staging: "https://idp-stg.cocdev.co.kr/api-json",
-  prod: "https://idp.cocdev.co.kr/api-json",
-  production: "https://idp.cocdev.co.kr/api-json",
+  development: "http://localhost:3006/idp-api-json",
+  local: "http://localhost:3006/idp-api-json",
+  stg: "https://stg.cocdev.co.kr/idp-api-json",
+  staging: "https://stg.cocdev.co.kr/idp-api-json",
+  prod: "https://cocdev.co.kr/idp-api-json",
+  production: "https://cocdev.co.kr/idp-api-json",
 };
 
 /**
@@ -63,10 +63,7 @@ async function isServerRunning(url, timeout = 2000) {
  */
 async function resolveApiUrl(envMap, label) {
   const orvalEnv = process.env.ORVAL_ENV;
-  const explicitUrl =
-    label === "Server"
-      ? process.env.CORE_API_INTERNAL_URL
-      : process.env.IDP_API_INTERNAL_URL;
+  const explicitUrl = process.env.CORE_API_INTERNAL_URL;
 
   // 명시적 환경 지정 시 바로 해당 URL 사용
   if (orvalEnv) {
@@ -79,7 +76,8 @@ async function resolveApiUrl(envMap, label) {
   }
 
   if (explicitUrl) {
-    const apiJsonUrl = `${explicitUrl.replace(/\/$/, "")}/api-json`;
+    const specPath = label === "Server" ? "api-json" : "idp-api-json";
+    const apiJsonUrl = `${explicitUrl.replace(/\/$/, "")}/${specPath}`;
     console.log(`🎯 [${label}] runtime env → ${apiJsonUrl}`);
     return apiJsonUrl;
   }
@@ -175,7 +173,7 @@ async function createConfig() {
       },
     },
 
-    // ─── IDP API (port 3007) ───
+    // ─── IDP/Auth API spec from core-api ───
     idp: {
       input: {
         target: idpApiUrl,

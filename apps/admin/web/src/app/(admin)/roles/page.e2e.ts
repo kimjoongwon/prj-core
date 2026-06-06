@@ -1,9 +1,22 @@
-import { expect, test } from "@playwright/test";
+import { getAdminSpaceRequestHeaders } from "@cocrepo/e2e";
+import { expect, type Page, test } from "@playwright/test";
 
 const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const SPACE_HEADERS = { "x-space-id": SYSTEM_SPACE_ID };
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_SPACE_ID);
+const roleListHeading = (page: Page) =>
+	page.getByRole("heading", { name: "역할 목록", exact: true });
+
+const gotoRoleListPage = async (page: Page) => {
+	await page.goto("./roles", { waitUntil: "domcontentloaded" });
+	try {
+		await expect(roleListHeading(page)).toBeVisible({ timeout: 15000 });
+	} catch {
+		await page.reload({ waitUntil: "domcontentloaded" });
+		await expect(roleListHeading(page)).toBeVisible({ timeout: 20000 });
+	}
+};
 
 test.describe("역할 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
@@ -11,13 +24,10 @@ test.describe("역할 목록 페이지", () => {
 	test.describe("[E2E-001] 목록 렌더링", () => {
 		test("역할 목록 페이지가 정상 렌더링되어야 한다", async ({ page }) => {
 			// Given: 역할 목록 페이지 진입
-			await page.goto("./roles");
-			await page.waitForLoadState("networkidle");
+			await gotoRoleListPage(page);
 
 			// Then: 타이틀과 설명 확인
-			await expect(
-				page.getByRole("heading", { name: "역할 목록", exact: true }),
-			).toBeVisible();
+			await expect(roleListHeading(page)).toBeVisible();
 			await expect(
 				page.getByText("시스템에 등록된 역할을 관리합니다."),
 			).toBeVisible();
@@ -25,8 +35,7 @@ test.describe("역할 목록 페이지", () => {
 
 		test("시드 데이터의 시스템 역할이 표시되어야 한다", async ({ page }) => {
 			// Given: 역할 목록 페이지 진입
-			await page.goto("./roles");
-			await page.waitForLoadState("networkidle");
+			await gotoRoleListPage(page);
 
 			// Then: 시스템 역할 3종 확인 (exact: true로 info 텍스트의 부분 매칭 방지)
 			await expect(
@@ -38,8 +47,7 @@ test.describe("역할 목록 페이지", () => {
 
 		test("역할 추가 버튼이 표시되어야 한다", async ({ page }) => {
 			// Given: 역할 목록 페이지 진입
-			await page.goto("./roles");
-			await page.waitForLoadState("networkidle");
+			await gotoRoleListPage(page);
 
 			// Then: 역할 추가 버튼 확인
 			await expect(
@@ -62,7 +70,7 @@ test.describe("역할 목록 페이지", () => {
 			const createResponse = await page.request.post(
 				`${ADMIN_API_BASE_URL}/roles`,
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						name: TEST_ROLE_NAME,
 						displayName: INITIAL_DISPLAY_NAME,
@@ -79,13 +87,10 @@ test.describe("역할 목록 페이지", () => {
 			expect(roleId).toBeTruthy();
 
 			// When: 역할 목록 페이지로 이동
-			await page.goto("./roles");
-			await page.waitForLoadState("networkidle");
+			await gotoRoleListPage(page);
 
 			// Then: 역할 목록 확인
-			await expect(
-				page.getByRole("heading", { name: "역할 목록", exact: true }),
-			).toBeVisible({ timeout: 10000 });
+			await expect(roleListHeading(page)).toBeVisible({ timeout: 10000 });
 
 			// Then: 새로 등록된 역할이 목록에 표시됨
 			const createdRoleRow = page
@@ -95,7 +100,11 @@ test.describe("역할 목록 페이지", () => {
 			await expect(createdRoleRow).toBeVisible();
 
 			// When: 새로 등록된 역할 행의 상세 버튼 클릭
-			await createdRoleRow.getByRole("button", { name: "상세" }).click();
+			const detailAction = createdRoleRow
+				.getByRole("link", { name: "상세" })
+				.or(createdRoleRow.getByRole("button", { name: "상세" }))
+				.first();
+			await detailAction.click();
 			await page.waitForLoadState("networkidle");
 
 			// Then: 상세 페이지 확인
@@ -125,7 +134,7 @@ test.describe("역할 목록 페이지", () => {
 			const updateResponse = await page.request.patch(
 				`${ADMIN_API_BASE_URL}/roles/${roleId}`,
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						displayName: UPDATED_DISPLAY_NAME,
 					},
@@ -174,8 +183,7 @@ test.describe("역할 목록 페이지", () => {
 			page,
 		}) => {
 			// Given: 역할 목록 페이지
-			await page.goto("./roles");
-			await page.waitForLoadState("networkidle");
+			await gotoRoleListPage(page);
 
 			// Then: 시스템 뱃지 확인 (시스템 역할 3개에 대해)
 			const systemChips = page.getByText("시스템", { exact: true });
@@ -190,8 +198,7 @@ test.describe("역할 목록 페이지", () => {
 
 		test("역할 추가 버튼이 숨겨져야 한다", async ({ page }) => {
 			// Given: MANAGE 사용자로 역할 목록 진입
-			await page.goto("./roles");
-			await page.waitForLoadState("networkidle");
+			await gotoRoleListPage(page);
 
 			// Then: 역할 추가 버튼 숨김
 			await expect(

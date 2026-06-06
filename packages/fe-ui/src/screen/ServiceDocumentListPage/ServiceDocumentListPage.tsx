@@ -16,23 +16,13 @@ import {
 	X,
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Button,
-	Checkbox,
-	Chip,
-	Input,
-	Select,
-	SelectItem,
-	type Selection,
-	Spinner,
-	Table,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-	Textarea,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Checkbox } from "../../control/Checkbox/Checkbox";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Input } from "../../control/Input/Input";
+import { Select } from "../../control/Select/Select";
+import { Spinner, Table, ListBox } from "@heroui/react";
+import { TextArea } from "../../control/TextArea/TextArea";
 import { Page } from "../../layout/Page/Page";
 import { HStack, VStack } from "../../rhythm";
 import { PageSurface } from "../../surface/PageSurface";
@@ -153,11 +143,6 @@ const STATUS_FILTER_OPTIONS = [
 	...STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
 ];
 
-function getSelectionValue(keys: Selection): string {
-	if (keys === "all") return "";
-	return String(Array.from(keys)[0] ?? "");
-}
-
 function getKindLabel(kind: ServiceDocumentKindValue): string {
 	return KIND_OPTIONS.find((option) => option.value === kind)?.label ?? kind;
 }
@@ -256,58 +241,68 @@ export const ServiceDocumentListPage = observer(
 											value={queryStates.search}
 											onValueChange={onChangeSearchInput}
 										/>
-										<Select
-											key="kind-filter"
-											label="문서 종류"
-											selectedKeys={[getFilterSelectedKey(queryStates.kind)]}
-											onSelectionChange={(keys) =>
-												onChangeKindFilter(
-													normalizeFilterValue(getSelectionValue(keys)),
-												)
-											}
-											items={KIND_FILTER_OPTIONS}
-										>
-											{(option) => (
-												<SelectItem key={option.value}>
-													{option.label}
-												</SelectItem>
-											)}
+											<Select
+												key="kind-filter"
+												label="문서 종류"
+												value={getFilterSelectedKey(queryStates.kind)}
+												onChange={(value) =>
+													onChangeKindFilter(
+														normalizeFilterValue(String(value ?? "")),
+													)
+												}
+												items={KIND_FILTER_OPTIONS}
+											>
+												{(option) => (
+													<ListBox.Item
+														key={option.value}
+														id={option.value}
+														textValue={option.label}
+													>
+														{option.label}
+													</ListBox.Item>
+												)}
 										</Select>
-										<Select
-											key="platform-filter"
-											label="플랫폼"
-											selectedKeys={[
-												getFilterSelectedKey(queryStates.platform),
-											]}
-											onSelectionChange={(keys) =>
-												onChangePlatformFilter(
-													normalizeFilterValue(getSelectionValue(keys)),
-												)
-											}
-											items={PLATFORM_FILTER_OPTIONS}
-										>
-											{(option) => (
-												<SelectItem key={option.value}>
-													{option.label}
-												</SelectItem>
-											)}
+											<Select
+												key="platform-filter"
+												label="플랫폼"
+												value={getFilterSelectedKey(queryStates.platform)}
+												onChange={(value) =>
+													onChangePlatformFilter(
+														normalizeFilterValue(String(value ?? "")),
+													)
+												}
+												items={PLATFORM_FILTER_OPTIONS}
+											>
+												{(option) => (
+													<ListBox.Item
+														key={option.value}
+														id={option.value}
+														textValue={option.label}
+													>
+														{option.label}
+													</ListBox.Item>
+												)}
 										</Select>
-										<Select
-											key="status-filter"
-											label="상태"
-											selectedKeys={[getFilterSelectedKey(queryStates.status)]}
-											onSelectionChange={(keys) =>
-												onChangeStatusFilter(
-													normalizeFilterValue(getSelectionValue(keys)),
-												)
-											}
-											items={STATUS_FILTER_OPTIONS}
-										>
-											{(option) => (
-												<SelectItem key={option.value}>
-													{option.label}
-												</SelectItem>
-											)}
+											<Select
+												key="status-filter"
+												label="상태"
+												value={getFilterSelectedKey(queryStates.status)}
+												onChange={(value) =>
+													onChangeStatusFilter(
+														normalizeFilterValue(String(value ?? "")),
+													)
+												}
+												items={STATUS_FILTER_OPTIONS}
+											>
+												{(option) => (
+													<ListBox.Item
+														key={option.value}
+														id={option.value}
+														textValue={option.label}
+													>
+														{option.label}
+													</ListBox.Item>
+												)}
 										</Select>
 									</div>
 									<Input
@@ -337,7 +332,7 @@ export const ServiceDocumentListPage = observer(
 											</p>
 											<p
 												key="documents-summary-count"
-												className="text-xs text-default-500"
+												className="text-xs text-muted"
 											>
 												총 {totalCount.toLocaleString("ko-KR")}개
 											</p>
@@ -349,25 +344,19 @@ export const ServiceDocumentListPage = observer(
 									<Table
 										key="documents-table"
 										aria-label="서비스 문서 목록"
-										removeWrapper
-										classNames={{ th: "bg-content2/60" }}
 									>
-										<TableHeader>
-											<TableColumn key="document">문서</TableColumn>
-											<TableColumn key="platform">플랫폼</TableColumn>
-											<TableColumn key="status">상태</TableColumn>
-											<TableColumn key="version">버전</TableColumn>
-											<TableColumn key="publishedAt">게시일</TableColumn>
-											<TableColumn key="actions" align="end">
+										<Table.Content>
+					<Table.Header>
+											<Table.Column key="document">문서</Table.Column>
+											<Table.Column key="platform">플랫폼</Table.Column>
+											<Table.Column key="status">상태</Table.Column>
+											<Table.Column key="version">버전</Table.Column>
+											<Table.Column key="publishedAt">게시일</Table.Column>
+											<Table.Column key="actions" className="text-right">
 												액션
-											</TableColumn>
-										</TableHeader>
-										<TableBody
-											emptyContent={
-												isLoading
-													? "문서를 불러오는 중입니다."
-													: "등록된 문서가 없습니다."
-											}
+											</Table.Column>
+										</Table.Header>
+										<Table.Body
 											items={rows}
 										>
 											{(document) => {
@@ -376,13 +365,13 @@ export const ServiceDocumentListPage = observer(
 												const canPublish = document.status !== "PUBLISHED";
 
 												return (
-													<TableRow key={document.id}>
-														<TableCell>
+													<Table.Row key={document.id}>
+														<Table.Cell>
 															<VStack gap="dense">
 																<HStack gap="dense" alignItems="center">
 																	<FileText
 																		key="document-icon"
-																		className="h-4 w-4 text-primary"
+																		className="h-4 w-4 text-accent"
 																	/>
 																	<span
 																		key="document-title"
@@ -391,16 +380,16 @@ export const ServiceDocumentListPage = observer(
 																		{document.title}
 																	</span>
 																</HStack>
-																<span className="text-xs text-default-500">
+																<span className="text-xs text-muted">
 																	{getKindLabel(document.kind)} ·{" "}
 																	{document.locale}
 																</span>
 															</VStack>
-														</TableCell>
-														<TableCell>
+														</Table.Cell>
+														<Table.Cell>
 															{getPlatformLabel(document.platform)}
-														</TableCell>
-														<TableCell>
+														</Table.Cell>
+														<Table.Cell>
 															<Chip
 																color={status.color}
 																size="sm"
@@ -408,12 +397,12 @@ export const ServiceDocumentListPage = observer(
 															>
 																{status.label}
 															</Chip>
-														</TableCell>
-														<TableCell>{document.version}</TableCell>
-														<TableCell>
+														</Table.Cell>
+														<Table.Cell>{document.version}</Table.Cell>
+														<Table.Cell>
 															{formatDate(document.publishedAt)}
-														</TableCell>
-														<TableCell>
+														</Table.Cell>
+														<Table.Cell>
 															<HStack gap="dense" justifyContent="end">
 																<Button
 																	key="edit"
@@ -466,12 +455,13 @@ export const ServiceDocumentListPage = observer(
 																	<Trash2 className="h-4 w-4" />
 																</Button>
 															</HStack>
-														</TableCell>
-													</TableRow>
+														</Table.Cell>
+													</Table.Row>
 												);
 											}}
-										</TableBody>
-									</Table>
+										</Table.Body>
+				</Table.Content>
+			</Table>
 								</VStack>
 							</SectionSurface>
 						</VStack>
@@ -493,7 +483,7 @@ export const ServiceDocumentListPage = observer(
 										</p>
 										<p
 											key="form-title-description"
-											className="text-xs text-default-500"
+											className="text-xs text-muted"
 										>
 											{editingDocumentId
 												? "초안 문서만 수정할 수 있습니다."
@@ -503,11 +493,12 @@ export const ServiceDocumentListPage = observer(
 									<Button
 										key="close-form"
 										isIconOnly
-										size="sm"
-										variant="light"
-										aria-label="작성 취소"
-										onPress={onClickCancelFormButton}
-									>
+											size="sm"
+											variant="light"
+											aria-label="작성 취소"
+											isDisabled={isSubmitting}
+											onPress={onClickCancelFormButton}
+										>
 										<X className="h-4 w-4" />
 									</Button>
 								</HStack>
@@ -516,38 +507,54 @@ export const ServiceDocumentListPage = observer(
 									key="form-fields"
 									className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-1"
 								>
-									<Select
-										key="draft-kind"
-										label="문서 종류"
-										isDisabled={isEditing}
-										selectedKeys={[draft.kind]}
-										onSelectionChange={(keys) =>
-											onChangeDraftField(
-												"kind",
-												getSelectionValue(keys) as ServiceDocumentKindValue,
-											)
-										}
-									>
-										{KIND_OPTIONS.map((option) => (
-											<SelectItem key={option.value}>{option.label}</SelectItem>
-										))}
-									</Select>
-									<Select
-										key="draft-platform"
-										label="플랫폼"
-										isDisabled={isEditing}
-										selectedKeys={[draft.platform]}
-										onSelectionChange={(keys) =>
-											onChangeDraftField(
-												"platform",
-												getSelectionValue(keys) as ServiceDocumentPlatformValue,
-											)
-										}
-									>
-										{PLATFORM_OPTIONS.map((option) => (
-											<SelectItem key={option.value}>{option.label}</SelectItem>
-										))}
-									</Select>
+										<Select
+											key="draft-kind"
+											label="문서 종류"
+											isDisabled={isEditing}
+											value={draft.kind}
+											onChange={(value) => {
+												if (value != null) {
+													onChangeDraftField(
+														"kind",
+														String(value) as ServiceDocumentKindValue,
+													);
+												}
+											}}
+										>
+											{KIND_OPTIONS.map((option) => (
+												<ListBox.Item
+													key={option.value}
+													id={option.value}
+													textValue={option.label}
+												>
+													{option.label}
+												</ListBox.Item>
+											))}
+										</Select>
+										<Select
+											key="draft-platform"
+											label="플랫폼"
+											isDisabled={isEditing}
+											value={draft.platform}
+											onChange={(value) => {
+												if (value != null) {
+													onChangeDraftField(
+														"platform",
+														String(value) as ServiceDocumentPlatformValue,
+													);
+												}
+											}}
+										>
+											{PLATFORM_OPTIONS.map((option) => (
+												<ListBox.Item
+													key={option.value}
+													id={option.value}
+													textValue={option.label}
+												>
+													{option.label}
+												</ListBox.Item>
+											))}
+										</Select>
 									<Input
 										key="draft-locale"
 										label="로케일"
@@ -585,21 +592,29 @@ export const ServiceDocumentListPage = observer(
 											onChangeDraftField("summary", value)
 										}
 									/>
-									<Select
-										key="draft-format"
-										label="본문 형식"
-										selectedKeys={[draft.format]}
-										onSelectionChange={(keys) =>
-											onChangeDraftField(
-												"format",
-												getSelectionValue(keys) as ServiceDocumentFormatValue,
-											)
-										}
-									>
-										{FORMAT_OPTIONS.map((option) => (
-											<SelectItem key={option.value}>{option.label}</SelectItem>
-										))}
-									</Select>
+										<Select
+											key="draft-format"
+											label="본문 형식"
+											value={draft.format}
+											onChange={(value) => {
+												if (value != null) {
+													onChangeDraftField(
+														"format",
+														String(value) as ServiceDocumentFormatValue,
+													);
+												}
+											}}
+										>
+											{FORMAT_OPTIONS.map((option) => (
+												<ListBox.Item
+													key={option.value}
+													id={option.value}
+													textValue={option.label}
+												>
+													{option.label}
+												</ListBox.Item>
+											))}
+										</Select>
 									<Input
 										key="draft-display-order"
 										label="정렬 순서"
@@ -637,7 +652,7 @@ export const ServiceDocumentListPage = observer(
 										onChange={onChangeContentEditor}
 									/>
 								) : (
-									<Textarea
+									<TextArea
 										key="plain-content-editor"
 										label="본문"
 										minRows={12}
@@ -647,19 +662,20 @@ export const ServiceDocumentListPage = observer(
 								)}
 								<HStack key="form-actions" justifyContent="end" gap="inline">
 									<Button
-										key="cancel"
-										variant="flat"
-										onPress={onClickCancelFormButton}
-									>
+											key="cancel"
+											variant="flat"
+											isDisabled={isSubmitting}
+											onPress={onClickCancelFormButton}
+										>
 										취소
 									</Button>
 									<Button
-										key="submit"
-										color="primary"
-										isLoading={isSubmitting}
-										startContent={<Save className="h-4 w-4" />}
-										onPress={onClickSubmitButton}
-									>
+											key="submit"
+											color="primary"
+											startContent={<Save className="h-4 w-4" />}
+											isDisabled={isSubmitting}
+											onPress={onClickSubmitButton}
+										>
 										{isEditing ? "수정 저장" : "초안 저장"}
 									</Button>
 								</HStack>

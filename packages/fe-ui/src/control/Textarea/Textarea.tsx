@@ -1,64 +1,107 @@
 "use client";
 
+import {
+	Description,
+	FieldError,
+	Label,
+	TextArea as HeroTextArea,
+	TextField,
+	cn,
+} from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type React from "react";
-import type { TextAreaProps } from "../../design-system/primitives";
-import { Textarea as BaseTextarea } from "../../design-system/primitives";
+import type { ComponentProps, ReactNode } from "react";
 import { useT } from "../../i18n";
 
-export interface TextareaProps
-	extends Omit<TextAreaProps, "onChange" | "value"> {
+export interface TextAreaProps
+	extends Omit<
+		ComponentProps<typeof HeroTextArea>,
+		"children" | "onChange" | "value" | "variant"
+	> {
 	/** 입력값 */
 	value?: string;
 	/** 값 변경 핸들러 */
 	onChange?: (value: string) => void;
+	onValueChange?: (value: string) => void;
+	label?: ReactNode;
+	labelPlacement?: string;
+	description?: ReactNode;
+	errorMessage?: ReactNode;
+	isInvalid?: boolean;
+	isDisabled?: boolean;
+	isReadOnly?: boolean;
+	isRequired?: boolean;
+	size?: "sm" | "md" | "lg";
+	minRows?: number;
+	maxRows?: number;
+	classNames?: Record<string, string>;
+	variant?: "flat" | "bordered" | "underlined" | "faded" | "primary" | "secondary";
 }
 
 /**
- * Textarea 컴포넌트
+ * TextArea 컴포넌트
  * 여러 줄 텍스트 입력 컴포넌트입니다.
- *
- * @example
- * ```tsx
- * <Textarea
- *   label="메모"
- *   value={memo}
- *   onChange={setMemo}
- *   placeholder="내용을 입력하세요"
- *   minRows={3}
- *   maxRows={6}
- * />
- * ```
  */
-export const Textarea = observer((props: TextareaProps) => {
+export const TextArea = observer((props: TextAreaProps) => {
 	const t = useT();
-	const { onChange, value, ...rest } = props;
+	const {
+		classNames,
+		description,
+		errorMessage,
+		isDisabled,
+		isInvalid,
+		isReadOnly,
+		isRequired,
+		label,
+		labelPlacement: _labelPlacement,
+		maxRows: _maxRows,
+		minRows: _minRows,
+		onChange,
+		onValueChange,
+		size: _size,
+		value,
+		variant,
+		...rest
+	} = props;
 
-	const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		onChange?.(e.target.value);
+	const handleOnChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+		onChange?.(event.target.value);
+		onValueChange?.(event.target.value);
 	};
 
 	return (
-		<BaseTextarea
-			{...rest}
-			label={typeof rest.label === "string" ? t(rest.label) : rest.label}
-			placeholder={
-				typeof rest.placeholder === "string"
-					? t(rest.placeholder)
-					: rest.placeholder
-			}
-			description={
-				typeof rest.description === "string"
-					? t(rest.description)
-					: rest.description
-			}
-			errorMessage={
-				typeof rest.errorMessage === "string"
-					? t(rest.errorMessage)
-					: rest.errorMessage
-			}
-			value={value}
-			onChange={handleOnChange}
-		/>
+		<TextField
+			isDisabled={isDisabled}
+			isInvalid={isInvalid}
+			isReadOnly={isReadOnly}
+			isRequired={isRequired}
+			variant={variant === "primary" || variant === "secondary" ? variant : undefined}
+		>
+			{label ? (
+				<Label>{typeof label === "string" ? t(label) : label}</Label>
+			) : null}
+			<HeroTextArea
+				{...rest}
+				className={cn(rest.className, classNames?.input)}
+				placeholder={
+					typeof rest.placeholder === "string"
+						? t(rest.placeholder)
+						: rest.placeholder
+				}
+				value={value}
+				onChange={handleOnChange}
+				variant={variant === "primary" || variant === "secondary" ? variant : undefined}
+			/>
+			{description ? (
+				<Description>
+					{typeof description === "string" ? t(description) : description}
+				</Description>
+			) : null}
+			{errorMessage ? (
+				<FieldError>
+					{typeof errorMessage === "string" ? t(errorMessage) : errorMessage}
+				</FieldError>
+			) : null}
+		</TextField>
 	);
 });

@@ -16,7 +16,7 @@ import {
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -55,7 +55,7 @@ function TemplatesPageFallback() {
 				title="메시지 템플릿"
 				description="시스템에 등록된 메시지 템플릿을 관리합니다."
 			/>
-			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+			<Surface className="h-32 rounded-2xl border-border/80 bg-surface/70">
 				{null}
 			</Surface>
 		</div>
@@ -105,7 +105,7 @@ export const TemplateListPage = observer(
 						</Button>
 					}
 				/>
-				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 					<DataGrid
 						config={{
 							entity: "Template",
@@ -115,7 +115,6 @@ export const TemplateListPage = observer(
 						}}
 						rows={templateRows}
 						totalCount={totalCount}
-						isLoading={false}
 						state={gridState}
 					/>
 				</Surface>

@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { Button } from "../../control";
-import { Spinner } from "../../design-system/primitives";
+import { Spinner } from "@heroui/react";
 import { useT } from "../../i18n";
 import { VStack } from "../../rhythm";
 import { Surface } from "../../surface";
@@ -19,10 +19,10 @@ export const LoginRedirectPage = observer(
 
 		if (isRedirecting) {
 			return (
-				<Surface className="rounded-2xl border-divider/80 bg-content1/80 p-8">
+				<Surface className="rounded-2xl border-border/80 bg-surface/80 p-8">
 					<VStack fullWidth gap="section" className="items-center text-center">
 						<Spinner size="lg" />
-						<p className="text-default-500">
+						<p className="text-muted">
 							{t("로그인 페이지로 이동 중...")}
 						</p>
 					</VStack>
@@ -31,7 +31,7 @@ export const LoginRedirectPage = observer(
 		}
 
 		return (
-			<Surface className="rounded-2xl border-divider/80 bg-content1/80 p-8">
+			<Surface className="rounded-2xl border-border/80 bg-surface/80 p-8">
 				<VStack fullWidth gap="roomy" className="items-center">
 					<VStack fullWidth gap="inline" className="text-center">
 						<h3 className="text-2xl font-bold">{t("로그인 실패")}</h3>

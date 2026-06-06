@@ -1,9 +1,8 @@
 "use client";
 
 import { KeyRound, Mail } from "lucide-react";
-import { runInAction } from "mobx";
 import { observer } from "mobx-react-lite";
-import { Input } from "../../control/Input";
+import { TextField } from "../../control/TextField";
 import { VStack } from "../../rhythm/VStack/VStack";
 
 export interface LoginFormState {
@@ -14,18 +13,6 @@ export interface LoginFormState {
 export interface LoginFormProps {
 	/** 로그인 상태 객체 (필드명은 화면 계약에 따라 달라질 수 있으며, 이 구현은 email/password 예시를 사용) */
 	state: LoginFormState;
-}
-
-function setEmail(state: LoginFormState, email: string | number) {
-	runInAction(() => {
-		state.email = String(email);
-	});
-}
-
-function setPassword(state: LoginFormState, password: string | number) {
-	runInAction(() => {
-		state.password = String(password);
-	});
 }
 
 /**
@@ -40,55 +27,48 @@ function setPassword(state: LoginFormState, password: string | number) {
  * ```
  */
 export const LoginForm = observer(({ state }: LoginFormProps) => {
-	const handleChangeEmailInput = (email: string | number) => {
-		setEmail(state, email);
-	};
-	const handleChangePasswordInput = (password: string | number) => {
-		setPassword(state, password);
-	};
-
 	return (
 		<VStack fullWidth gap="section" justifyContent="center">
-			<Input
+			<TextField
 				key="email"
 				autoComplete="email"
+				className="w-full text-left"
 				inputMode="email"
-				variant="bordered"
+				path="email"
 				type="email"
 				placeholder="admin@plate.com"
 				label="이메일"
-				className="text-left"
 				classNames={{
 					input: "text-base",
-					inputWrapper:
-						"h-12 rounded-xl border border-divider bg-background/70 px-4 shadow-sm",
+					inputGroup:
+						"h-12 w-full rounded-xl border border-border bg-background/70 shadow-sm",
 					label: "text-sm font-semibold text-foreground",
+					prefix: "text-muted",
 				}}
 				startContent={
-					<Mail aria-hidden className="size-4 text-default-400" />
+					<Mail aria-hidden className="size-4 text-muted" />
 				}
-				value={state.email}
-				onChange={handleChangeEmailInput}
+				state={state}
 			/>
-			<Input
+			<TextField
 				key="password"
 				autoComplete="current-password"
-				variant="bordered"
+				className="w-full text-left"
+				path="password"
 				type="password"
 				placeholder="비밀번호를 입력하세요"
 				label="비밀번호"
-				className="text-left"
 				classNames={{
 					input: "text-base",
-					inputWrapper:
-						"h-12 rounded-xl border border-divider bg-background/70 px-4 shadow-sm",
+					inputGroup:
+						"h-12 w-full rounded-xl border border-border bg-background/70 shadow-sm",
 					label: "text-sm font-semibold text-foreground",
+					prefix: "text-muted",
 				}}
 				startContent={
-					<KeyRound aria-hidden className="size-4 text-default-400" />
+					<KeyRound aria-hidden className="size-4 text-muted" />
 				}
-				value={state.password}
-				onChange={handleChangePasswordInput}
+				state={state}
 			/>
 		</VStack>
 	);

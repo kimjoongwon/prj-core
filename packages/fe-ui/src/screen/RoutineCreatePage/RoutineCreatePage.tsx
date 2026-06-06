@@ -16,15 +16,8 @@ import {
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { ComponentProps } from "react";
-import {
-	Chip,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	Spinner,
-} from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Modal, Spinner, useOverlayState } from "@heroui/react";
 
 export interface RoutineActivityFormItem {
 	taskId: string;
@@ -111,7 +104,7 @@ const CandidateTaskCard = observer(function CandidateTaskCard({
 	const t = useT();
 
 	return (
-		<div className="rounded-2xl border border-default-200 bg-content1 p-3">
+		<div className="rounded-2xl border border-border bg-surface p-3">
 			<div className="flex gap-3">
 				<RoutineMediaThumbnail
 					title={task.exerciseName}
@@ -123,7 +116,7 @@ const CandidateTaskCard = observer(function CandidateTaskCard({
 					<div className="flex items-start justify-between gap-2">
 						<div className="min-w-0">
 							<p className="line-clamp-2 font-medium">{task.exerciseName}</p>
-							<p className="mt-1 text-xs text-default-500">
+							<p className="mt-1 text-xs text-muted">
 								{t("기본 반복")} {task.exerciseCount}
 								{t("회")}
 							</p>
@@ -172,10 +165,10 @@ const ActivityCard = observer(function ActivityCard({
 	const t = useT();
 
 	return (
-		<div className="rounded-2xl border border-default-200 bg-content1 p-4">
+		<div className="rounded-2xl border border-border bg-surface p-4">
 			<div className="flex flex-col gap-4 md:flex-row">
 				<div className="flex items-start gap-3 md:w-44 md:flex-col md:items-center">
-					<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+					<div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
 						{index + 1}
 					</div>
 					<DragHandle {...dragHandle} className="mt-1" />
@@ -190,7 +183,7 @@ const ActivityCard = observer(function ActivityCard({
 					<div className="mb-3 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
 						<div>
 							<p className="font-medium">{activity.exerciseName}</p>
-							<p className="mt-1 text-sm text-default-500">
+							<p className="mt-1 text-sm text-muted">
 								{t("드래그해서 루틴 순서를 조정할 수 있습니다.")}
 							</p>
 						</div>
@@ -288,11 +281,11 @@ export const RoutineActivitySection = observer(function RoutineActivitySection({
 						onValueChange={onChangeExerciseQueryInput}
 						description="현재 Space + 상위 Space 운동 중 비디오가 연결된 운동만 후보로 표시합니다."
 					/>
-					<div className="rounded-2xl border border-default-200 p-4">
+					<div className="rounded-2xl border border-border p-4">
 						<div className="mb-3 flex items-center justify-between gap-3">
 							<div>
 								<p className="font-medium">{t("후보 운동")}</p>
-								<p className="text-sm text-default-500">
+								<p className="text-sm text-muted">
 									{t(
 										"이미지는 썸네일, 비디오는 편성 가능 여부 기준으로 사용합니다.",
 									)}
@@ -300,12 +293,12 @@ export const RoutineActivitySection = observer(function RoutineActivitySection({
 							</div>
 						</div>
 						{isTasksLoading ? (
-							<div className="flex items-center gap-2 text-sm text-default-500">
+							<div className="flex items-center gap-2 text-sm text-muted">
 								<Spinner size="sm" />
 								<span>{t("운동 목록을 불러오는 중...")}</span>
 							</div>
 						) : candidateTasks.length === 0 ? (
-							<p className="text-sm text-default-500">
+							<p className="text-sm text-muted">
 								{t("조건에 맞는 스케줄 가능 운동이 없습니다.")}
 							</p>
 						) : (
@@ -320,11 +313,11 @@ export const RoutineActivitySection = observer(function RoutineActivitySection({
 							</div>
 						)}
 					</div>
-					<div className="rounded-2xl border border-default-200 p-4">
+					<div className="rounded-2xl border border-border p-4">
 						<div className="mb-3 flex items-center justify-between gap-3">
 							<div>
 								<p className="font-medium">{t("추가된 활동")}</p>
-								<p className="text-sm text-default-500">
+								<p className="text-sm text-muted">
 									{t("드래그로 순서를 바꾸면 저장 순서에도 그대로 반영됩니다.")}
 								</p>
 							</div>
@@ -337,7 +330,7 @@ export const RoutineActivitySection = observer(function RoutineActivitySection({
 							<p className="mb-3 text-sm text-danger">{activitiesError}</p>
 						) : null}
 						{activities.length === 0 ? (
-							<p className="text-sm text-default-500">
+							<p className="text-sm text-muted">
 								{t("아직 추가된 활동이 없습니다.")}
 							</p>
 						) : (
@@ -393,6 +386,14 @@ export const RoutineCreatePage = observer(
 		onClickConfirmEmptyActivitiesWarningButton,
 	}: RoutineCreatePageProps) => {
 		const t = useT();
+		const emptyActivitiesWarningState = useOverlayState({
+			isOpen: isEmptyActivitiesWarningOpen,
+			onOpenChange: (open) => {
+				if (!open) {
+					onCloseEmptyActivitiesWarningModal();
+				}
+			},
+		});
 		const pageActions = (
 			<div className="flex gap-2">
 				<Button
@@ -465,16 +466,13 @@ export const RoutineCreatePage = observer(
 						onReorderActivities={onReorderActivities}
 					/>
 				</FormPageSurface>
-				<Modal
-					isOpen={isEmptyActivitiesWarningOpen}
-					onClose={onCloseEmptyActivitiesWarningModal}
-				>
-					<ModalContent>
-						<ModalHeader>{t("활동 없이 저장")}</ModalHeader>
-						<ModalBody>
+				<Modal state={emptyActivitiesWarningState}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>{t("활동 없이 저장")}</Modal.Header>
+						<Modal.Body>
 							<p>{t("활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?")}</p>
-						</ModalBody>
-						<ModalFooter>
+						</Modal.Body>
+						<Modal.Footer>
 							<Button
 								variant="flat"
 								onPress={onCloseEmptyActivitiesWarningModal}
@@ -489,8 +487,8 @@ export const RoutineCreatePage = observer(
 							>
 								{t("저장 진행")}
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
 			</FormPage>
 		);

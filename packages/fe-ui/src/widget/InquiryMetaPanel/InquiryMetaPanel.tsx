@@ -5,13 +5,10 @@ import { Plus, Tag } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { Select } from "../../control/Select/Select";
-import {
-	Button,
-	Card,
-	CardBody,
-	Chip,
-	Input,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Card } from "@heroui/react";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Input } from "../../control/Input/Input";
 
 export interface InquiryMetaPanelProps {
 	/** 문의 상태 */
@@ -142,24 +139,24 @@ export const InquiryMetaPanel = observer(
 		};
 
 		return (
-			<Card className={`bg-content1 ${className}`} shadow="sm">
-				<CardBody className="gap-4 p-4">
+			<Card className={`bg-surface ${className}`}>
+				<Card.Content className="gap-4 p-4">
 					{/* 헤더 */}
-					<h3 className="text-sm font-semibold text-default-500">
+					<h3 className="text-sm font-semibold text-muted">
 						🏷️ 메타 정보
 					</h3>
 
 					{/* 상태 */}
 					<div className="flex flex-col gap-1">
-						<label className="text-xs text-default-500">상태</label>
+						<label className="text-xs text-muted">상태</label>
 						{isEditable ? (
-							<Select
-								size="sm"
-								variant="bordered"
-								options={statusOptions}
-								value={status}
-								onChange={onStatusChange}
-							/>
+								<Select
+									size="sm"
+									variant="bordered"
+									options={statusOptions}
+									value={status}
+									onChange={(value) => onStatusChange(String(value ?? ""))}
+								/>
 						) : (
 							<Chip size="sm" variant="flat">
 								{getStatusLabel()}
@@ -169,15 +166,15 @@ export const InquiryMetaPanel = observer(
 
 					{/* 우선순위 */}
 					<div className="flex flex-col gap-1">
-						<label className="text-xs text-default-500">우선순위</label>
+						<label className="text-xs text-muted">우선순위</label>
 						{isEditable ? (
-							<Select
-								size="sm"
-								variant="bordered"
-								options={priorityOptions}
-								value={priority}
-								onChange={onPriorityChange}
-							/>
+								<Select
+									size="sm"
+									variant="bordered"
+									options={priorityOptions}
+									value={priority}
+									onChange={(value) => onPriorityChange(String(value ?? ""))}
+								/>
 						) : (
 							<Chip
 								size="sm"
@@ -191,15 +188,15 @@ export const InquiryMetaPanel = observer(
 
 					{/* 카테고리 */}
 					<div className="flex flex-col gap-1">
-						<label className="text-xs text-default-500">카테고리</label>
+						<label className="text-xs text-muted">카테고리</label>
 						{isEditable ? (
-							<Select
-								size="sm"
-								variant="bordered"
-								options={categoryOptions}
-								value={category}
-								onChange={onCategoryChange}
-							/>
+								<Select
+									size="sm"
+									variant="bordered"
+									options={categoryOptions}
+									value={category}
+									onChange={(value) => onCategoryChange(String(value ?? ""))}
+								/>
 						) : (
 							<Chip size="sm" variant="flat" color="primary">
 								{getCategoryLabel()}
@@ -209,18 +206,18 @@ export const InquiryMetaPanel = observer(
 
 					{/* 담당자 */}
 					<div className="flex flex-col gap-1">
-						<label className="text-xs text-default-500">담당자</label>
+						<label className="text-xs text-muted">담당자</label>
 						{isEditable ? (
-							<Select
-								size="sm"
-								variant="bordered"
-								options={assigneeOptions}
-								value={assigneeId || ""}
-								onChange={onAssigneeChange}
-								placeholder="담당자 선택"
-							/>
+								<Select
+									size="sm"
+									variant="bordered"
+									options={assigneeOptions}
+									value={assigneeId || ""}
+									onChange={(value) => onAssigneeChange(String(value ?? ""))}
+									placeholder="담당자 선택"
+								/>
 						) : (
-							<span className="text-sm text-default-800">
+							<span className="text-sm text-foreground">
 								{assigneeName || "미배정"}
 							</span>
 						)}
@@ -228,7 +225,7 @@ export const InquiryMetaPanel = observer(
 
 					{/* 태그 */}
 					<div className="flex flex-col gap-2">
-						<label className="text-xs text-default-500">태그</label>
+						<label className="text-xs text-muted">태그</label>
 						<div className="flex flex-wrap gap-1">
 							{tags.map((tag) => (
 								<Chip
@@ -274,14 +271,14 @@ export const InquiryMetaPanel = observer(
 										setIsAddingTag(false);
 									}
 								}}
-								startContent={<Tag className="size-3 text-default-400" />}
+								startContent={<Tag className="size-3 text-muted" />}
 								classNames={{
 									input: "text-sm",
 								}}
 							/>
 						)}
 					</div>
-				</CardBody>
+				</Card.Content>
 			</Card>
 		);
 	},

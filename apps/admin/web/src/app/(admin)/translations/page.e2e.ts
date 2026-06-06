@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("/translations", () => {
 	test("정적 번역 관리 페이지가 정상 렌더링되어야 한다", async ({ page }) => {
-		await page.goto("/translations");
+		await page.goto("./translations");
 
 		await expect(
 			page.getByRole("heading", { name: "정적 번역" }),

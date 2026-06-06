@@ -1,13 +1,12 @@
 "use client";
 
 import {
-	getSubjectFields,
 	type SubjectDto,
 	type SubjectFieldDto,
 	useGetSubjectById,
+	useGetSubjectFields,
 } from "@cocrepo/api/core/subjects";
 import { SubjectDetailPage } from "@cocrepo/ui";
-import { useQuery } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -18,11 +17,12 @@ export default observer(function SubjectDetailPageRoute() {
 	const { data: response, isLoading } = useGetSubjectById(subjectId);
 	const subject = response?.data as SubjectDto | undefined;
 	const shouldLoadFields = subject?.group === "entity";
-	const { data: fieldsResponse, isLoading: isFieldsLoading } = useQuery({
-		queryKey: ["subject-fields", subjectId],
-		queryFn: () => getSubjectFields(subjectId),
-		enabled: shouldLoadFields,
-	});
+	const { data: fieldsResponse, isLoading: isFieldsLoading } =
+		useGetSubjectFields(subjectId, {
+			query: {
+				enabled: shouldLoadFields,
+			},
+		});
 
 	return (
 		<SubjectDetailPage

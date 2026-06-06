@@ -21,7 +21,7 @@
 |----|------|--------|------|------|
 | ROL-L5-ACT-022 | name 입력 | 역할 식별자 Input 입력 | 실시간 유효성 검사 (영문 대문자 + 언더스코어) | - |
 | ROL-L5-ACT-023 | displayName 입력 | 표시명 Input 입력 | 값 업데이트 | - |
-| ROL-L5-ACT-024 | description 입력 | 설명 Textarea 입력 | 값 업데이트 | - |
+| ROL-L5-ACT-024 | description 입력 | 설명 TextArea 입력 | 값 업데이트 | - |
 | ROL-L5-ACT-025 | categoryId 선택 | 카테고리 Select 변경 | 선택값 업데이트 | - |
 | ROL-L5-ACT-026 | groupId 선택 | 그룹 Select 변경 | 선택값 업데이트 | - |
 | ROL-L5-ACT-027 | 등록 버튼 클릭 | 등록 버튼 클릭 | 유효성 검사 후 POST /api/v1/roles 호출 | name 필수 |

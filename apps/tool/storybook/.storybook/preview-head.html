@@ -1,55 +1,15 @@
-<style>
-  html[data-plate-auth-pending="true"] body {
-    visibility: hidden !important;
-  }
-</style>
 <script>
   (() => {
-    const LOGIN_PATH = "/__storybook_auth/login";
-    const SESSION_PATH = "/__storybook_auth/session";
-    const html = document.documentElement;
+    const root = document.documentElement;
+    root.classList.remove("light", "system");
+    root.classList.add("dark");
+    root.dataset.theme = "dark";
+    root.style.colorScheme = "dark";
 
-    if (window.location.pathname.startsWith("/__storybook_auth/")) {
-      return;
+    try {
+      window.localStorage.setItem("heroui-theme", "dark");
+    } catch {
+      // Ignore storage failures in sandboxed or privacy-restricted previews.
     }
-
-    const redirectToLogin = () => {
-      const loginUrl = new URL(LOGIN_PATH, window.location.origin);
-      const returnTo =
-        window.top && window.top !== window
-          ? window.top.location.href
-          : window.location.href;
-      loginUrl.searchParams.set("returnTo", returnTo);
-
-      if (window.top) {
-        window.top.location.replace(loginUrl.toString());
-        return;
-      }
-
-      window.location.replace(loginUrl.toString());
-    };
-
-    html.setAttribute("data-plate-auth-pending", "true");
-    fetch(SESSION_PATH, {
-      credentials: "include",
-      cache: "no-store",
-    })
-      .then(async (response) => {
-        if (response.status === 404) {
-          html.removeAttribute("data-plate-auth-pending");
-          return;
-        }
-
-        const payload = await response.json().catch(() => null);
-        if (response.ok && payload?.authenticated) {
-          html.removeAttribute("data-plate-auth-pending");
-          return;
-        }
-
-        redirectToLogin();
-      })
-      .catch(() => {
-        html.removeAttribute("data-plate-auth-pending");
-      });
   })();
 </script>

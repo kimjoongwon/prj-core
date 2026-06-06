@@ -2,17 +2,9 @@
 import { type UserDto } from "@cocrepo/api/core/users";
 import { Eye, Pencil, Trash2, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Avatar,
-	Button,
-	Chip,
-	Table,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-} from "../../../design-system/primitives";
+import { Avatar, Spinner, Table } from "@heroui/react";
+import { Button } from "../../../control/Button/Button";
+import { Chip } from "../../../data-display/Chip/Chip";
 
 /**
  * 회원 상태 타입
@@ -96,58 +88,58 @@ export const UserTableWidget = observer(
 		onRowClick,
 		onEditClick,
 		onDeleteClick,
-	}: UserTableWidgetProps) => {
-		return (
+		}: UserTableWidgetProps) => {
+			if (isLoading) {
+				return (
+					<div className="flex min-h-40 items-center justify-center">
+						<Spinner size="sm" />
+					</div>
+				);
+			}
+
+			return (
 			<Table
 				aria-label="회원 목록"
-				classNames={{
-					wrapper: "bg-content1 shadow-sm",
-				}}
 			>
-				<TableHeader>
-					<TableColumn>회원정보</TableColumn>
-					<TableColumn>전화번호</TableColumn>
-					<TableColumn>역할</TableColumn>
-					<TableColumn>가입일</TableColumn>
-					<TableColumn align="center">상태</TableColumn>
-					<TableColumn align="center">작업</TableColumn>
-				</TableHeader>
-				<TableBody
+				<Table.Content>
+					<Table.Header>
+					<Table.Column>회원정보</Table.Column>
+					<Table.Column>전화번호</Table.Column>
+					<Table.Column>역할</Table.Column>
+					<Table.Column>가입일</Table.Column>
+					<Table.Column className="text-center">상태</Table.Column>
+					<Table.Column className="text-center">작업</Table.Column>
+				</Table.Header>
+				<Table.Body
 					items={users ?? []}
-					isLoading={isLoading}
-					emptyContent="등록된 회원이 없습니다."
 				>
 					{(user) => {
 						const statusInfo = getStatusInfo(user);
 						const role = user.tenants?.[0]?.role;
 
 						return (
-							<TableRow
+							<Table.Row
 								key={user.id}
-								className="cursor-pointer hover:bg-default-100"
+								className="cursor-pointer hover:bg-default"
 								onClick={() => onRowClick?.(user)}
 							>
-								<TableCell>
+								<Table.Cell>
 									<div className="flex items-center gap-3">
-										<Avatar
-											name={user.name}
-											size="sm"
-											icon={<User className="h-4 w-4" />}
-											classNames={{
-												base: "bg-primary/10",
-												icon: "text-primary",
-											}}
-										/>
+										<Avatar size="sm" className="bg-accent/10 text-accent">
+											<Avatar.Fallback>
+												<User className="h-4 w-4" />
+											</Avatar.Fallback>
+										</Avatar>
 										<div>
 											<p className="font-medium">{user.name}</p>
-											<p className="text-xs text-default-400">{user.email}</p>
+											<p className="text-xs text-muted">{user.email}</p>
 										</div>
 									</div>
-								</TableCell>
-								<TableCell>
-									<span className="text-default-600">{user.phone}</span>
-								</TableCell>
-								<TableCell>
+								</Table.Cell>
+								<Table.Cell>
+									<span className="text-muted">{user.phone}</span>
+								</Table.Cell>
+								<Table.Cell>
 									{role ? (
 										<Chip
 											size="sm"
@@ -157,22 +149,22 @@ export const UserTableWidget = observer(
 											{role.displayName || role.name}
 										</Chip>
 									) : (
-										<span className="text-default-400">-</span>
+										<span className="text-muted">-</span>
 									)}
-								</TableCell>
-								<TableCell>
-									<span className="text-default-600">
+								</Table.Cell>
+								<Table.Cell>
+									<span className="text-muted">
 										{formatDate(user.createdAt)}
 									</span>
-								</TableCell>
-								<TableCell>
+								</Table.Cell>
+								<Table.Cell>
 									<div className="flex justify-center">
 										<Chip size="sm" color={statusInfo.color} variant="flat">
 											{statusInfo.label}
 										</Chip>
 									</div>
-								</TableCell>
-								<TableCell>
+								</Table.Cell>
+								<Table.Cell>
 									{/* biome-ignore lint/a11y/noStaticElementInteractions: 이벤트 전파 방지용 래퍼 */}
 									{/* biome-ignore lint/a11y/useKeyWithClickEvents: 이벤트 전파 방지용 래퍼 */}
 									<div
@@ -208,11 +200,12 @@ export const UserTableWidget = observer(
 											<Trash2 className="h-4 w-4" />
 										</Button>
 									</div>
-								</TableCell>
-							</TableRow>
+								</Table.Cell>
+							</Table.Row>
 						);
 					}}
-				</TableBody>
+				</Table.Body>
+				</Table.Content>
 			</Table>
 		);
 	},

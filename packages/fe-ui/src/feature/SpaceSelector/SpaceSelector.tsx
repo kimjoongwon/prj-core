@@ -3,14 +3,8 @@
 import { usePersistStore } from "@cocrepo/store";
 import { Building2, Check, ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	Avatar,
-	Button,
-	Dropdown,
-	DropdownItem,
-	DropdownMenu,
-	DropdownTrigger,
-} from "../../design-system/primitives";
+import { Avatar, Dropdown } from "@heroui/react";
+import { Button } from "../../control/Button/Button";
 
 export interface SpaceSelectorProps {
 	/** Space 변경 시 콜백 (서버에 현재 Space를 반영한 뒤 상태를 갱신) */
@@ -57,13 +51,16 @@ export const SpaceSelector = observer(
 		// Space가 하나뿐이면 드롭다운 없이 표시
 		if (spaces.length <= 1) {
 			return (
-				<div className="flex items-center gap-2 rounded-lg border border-default-200 bg-default-50 px-3 py-2">
+				<div className="flex items-center gap-2 rounded-lg border border-border bg-default px-3 py-2">
 					<Avatar
-						icon={<Building2 className="h-4 w-4" size={16} />}
-						className="h-6 w-6 bg-primary-100 text-primary"
+						className="h-6 w-6 bg-accent-soft text-accent"
 						size="sm"
-					/>
-					<span className="text-sm font-medium text-default-700">
+					>
+						<Avatar.Fallback>
+							<Building2 className="h-4 w-4" size={16} />
+						</Avatar.Fallback>
+					</Avatar>
+					<span className="text-sm font-medium text-foreground">
 						{currentSpace.name}
 					</span>
 				</div>
@@ -71,58 +68,61 @@ export const SpaceSelector = observer(
 		}
 
 		return (
-			<Dropdown placement="bottom-end">
-				<DropdownTrigger>
+			<Dropdown>
+				<Dropdown.Trigger>
 					<Button
 						variant="flat"
 						isDisabled={!canChangeSpace}
-						className="h-auto min-h-0 gap-2 bg-default-100 px-3 py-2 hover:bg-default-200"
+						className="h-auto min-h-0 gap-2 bg-default px-3 py-2 hover:bg-default"
 					>
 						<Avatar
-							icon={<Building2 className="h-4 w-4" size={16} />}
-							className="h-6 w-6 bg-primary-100 text-primary"
+							className="h-6 w-6 bg-accent-soft text-accent"
 							size="sm"
-						/>
-						<span className="text-sm font-medium text-default-700">
+						>
+							<Avatar.Fallback>
+								<Building2 className="h-4 w-4" size={16} />
+							</Avatar.Fallback>
+						</Avatar>
+						<span className="text-sm font-medium text-foreground">
 							{currentSpace.name}
 						</span>
-						<ChevronDown className="h-4 w-4 text-default-400" size={16} />
+						<ChevronDown className="h-4 w-4 text-muted" size={16} />
 					</Button>
-				</DropdownTrigger>
-				<DropdownMenu
-					aria-label="Space 선택"
-					variant="flat"
-					selectionMode="single"
-					selectedKeys={new Set([currentSpace.id])}
-					className="min-w-[200px]"
-				>
-					{spaces.map((space) => (
-						<DropdownItem
-							key={space.spaceId}
-							isDisabled={!canChangeSpace}
-							startContent={
-								<Avatar
-									icon={<Building2 className="h-4 w-4" size={16} />}
-									className="h-6 w-6 bg-default-100 text-default-600"
-									size="sm"
-								/>
-							}
-							endContent={
-								space.spaceId === currentSpace.id ? (
-									<Check className="h-4 w-4 text-primary" size={16} />
-								) : null
-							}
-							className={
-								space.spaceId === currentSpace.id
-									? "bg-primary-50 text-primary"
-									: ""
-							}
-							onPress={() => handleSelectSpace(space.spaceId, space.groundName)}
-						>
-							<span className="font-medium">{space.groundName}</span>
-						</DropdownItem>
-					))}
-				</DropdownMenu>
+				</Dropdown.Trigger>
+				<Dropdown.Popover placement="bottom end">
+					<Dropdown.Menu aria-label="Space 선택" className="min-w-[200px]">
+						{spaces.map((space) => (
+							<Dropdown.Item
+								id={space.spaceId}
+								key={space.spaceId}
+								isDisabled={!canChangeSpace}
+								className={
+									space.spaceId === currentSpace.id
+										? "bg-accent-soft text-accent"
+										: ""
+								}
+								onAction={() =>
+									handleSelectSpace(space.spaceId, space.groundName)
+								}
+							>
+								<span className="flex items-center gap-2">
+									<Avatar
+										className="h-6 w-6 bg-default text-muted"
+										size="sm"
+									>
+										<Avatar.Fallback>
+											<Building2 className="h-4 w-4" size={16} />
+										</Avatar.Fallback>
+									</Avatar>
+									<span className="font-medium">{space.groundName}</span>
+									{space.spaceId === currentSpace.id ? (
+										<Check className="h-4 w-4 text-accent" size={16} />
+									) : null}
+								</span>
+							</Dropdown.Item>
+						))}
+					</Dropdown.Menu>
+				</Dropdown.Popover>
 			</Dropdown>
 		);
 	},

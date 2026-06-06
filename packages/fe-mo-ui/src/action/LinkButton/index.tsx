@@ -6,8 +6,8 @@ import {
 import {
   LinkButton as HeroLinkButton,
   linkButtonClassNames,
-} from "heroui-native/link-button";
-import { buttonClassNames } from "heroui-native/button";
+} from "heroui-native";
+import { buttonClassNames } from "heroui-native";
 import { getTextContent, Text } from "../../data-display/Text";
 type HeroLinkButtonProps = ComponentPropsWithoutRef<typeof HeroLinkButton>;
 export type LinkButtonProps = HeroLinkButtonProps & {};

@@ -15,7 +15,7 @@ import {
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 
 const LEVEL_OPTIONS = [
 	{ value: "", label: "없음" },
@@ -182,8 +182,8 @@ export const TimelineSessionProgramCreatePage = observer(
 										강사 선택
 									</Button>
 								</div>
-								<div className="rounded-lg bg-content2 p-3 text-sm text-default-600">
-									<p className="font-medium text-default-700">
+								<div className="rounded-lg bg-surface-secondary p-3 text-sm text-muted">
+									<p className="font-medium text-foreground">
 										{t("연결 요약")}
 									</p>
 									<p className="mt-1">
@@ -193,9 +193,9 @@ export const TimelineSessionProgramCreatePage = observer(
 										{t("강사")}: {instructorName || "-"}
 									</p>
 								</div>
-								<div className="rounded-lg border border-default-200 p-3">
+								<div className="rounded-lg border border-border p-3">
 									<div className="flex items-center justify-between gap-3">
-										<p className="font-medium text-default-700">
+										<p className="font-medium text-foreground">
 											{t("실행 운동 preview")}
 										</p>
 										<Chip
@@ -208,7 +208,7 @@ export const TimelineSessionProgramCreatePage = observer(
 										</Chip>
 									</div>
 									{routinePreview.length === 0 ? (
-										<p className="mt-2 text-sm text-default-500">
+										<p className="mt-2 text-sm text-muted">
 											{t("선택한 루틴에 등록된 운동이 없습니다.")}
 										</p>
 									) : (
@@ -216,7 +216,7 @@ export const TimelineSessionProgramCreatePage = observer(
 											{routinePreview.map((activity, index) => (
 												<div
 													key={`${activity.id}:${index}`}
-													className="rounded-md bg-content2 px-3 py-2"
+													className="rounded-md bg-surface-secondary px-3 py-2"
 												>
 													<div className="flex items-center justify-between gap-3">
 														<p className="font-medium">
@@ -232,13 +232,13 @@ export const TimelineSessionProgramCreatePage = observer(
 															{activity.isSchedulable ? t("가능") : t("불가")}
 														</Chip>
 													</div>
-													<p className="mt-1 text-default-500 text-sm">
+													<p className="mt-1 text-muted text-sm">
 														{t("반복")} {activity.repetitions}
 														{t("회")} · {t("휴식")} {activity.restTime}
 														{t("초")}
 													</p>
 													{activity.notes ? (
-														<p className="mt-1 text-default-500 text-xs">
+														<p className="mt-1 text-muted text-xs">
 															{activity.notes}
 														</p>
 													) : null}
@@ -266,12 +266,12 @@ export const TimelineSessionProgramCreatePage = observer(
 									errorMessage={errors.capacity}
 									min={1}
 								/>
-								<Select
-									label="난이도"
-									value={selectedLevel}
-									onChange={onChangeLevelSelect}
-									options={LEVEL_OPTIONS}
-								/>
+									<Select
+										label="난이도"
+										value={selectedLevel}
+										onChange={(value) => onChangeLevelSelect(String(value ?? ""))}
+										options={LEVEL_OPTIONS}
+									/>
 								<div className="flex justify-end">
 									<Button
 										color="primary"

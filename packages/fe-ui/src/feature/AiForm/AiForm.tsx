@@ -1,19 +1,14 @@
 "use client";
 
+import { Card, ListBox } from "@heroui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import {
-	Button,
-	Card,
-	CardBody,
-	Chip,
-	Input,
-	Select,
-	SelectItem,
-	type SharedSelection,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Input } from "../../control/Input/Input";
+import { Select } from "../../control/Select/Select";
+import { Chip } from "../../data-display/Chip/Chip";
 import type {
 	AiFormFieldMeta,
 	AiFormPatch,
@@ -200,12 +195,12 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 		}
 	}
 
-	const handleSchemaSelectionChange = (keys: SharedSelection) => {
-		if (keys === "all") {
+	const handleSchemaSelectionChange = (value: string | number | null) => {
+		if (value == null) {
 			return;
 		}
 
-		const schemaKey = Array.from(keys)[0] as string | undefined;
+		const schemaKey = String(value);
 		if (!schemaKey) {
 			return;
 		}
@@ -293,18 +288,15 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 		}
 	};
 
-	const selectedSchemaKeys = selectedSchemaKey
-		? new Set<string>([selectedSchemaKey])
-		: new Set<string>();
 	const isFillDisabled =
 		disabled || isLoading || !selectedSchema || selectedPaths.length === 0;
 
 	return (
-		<Card shadow="sm" className="border border-divider bg-content1">
-			<CardBody className="gap-2 p-2.5">
+		<Card className="border border-border bg-surface shadow-sm">
+			<Card.Content className="gap-2 p-2.5">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-1.5">
-						<Sparkles className="size-3.5 text-primary" />
+						<Sparkles className="size-3.5 text-accent" />
 						<h3 className="text-xs font-semibold">지능형 채움</h3>
 					</div>
 					<Chip size="sm" variant="flat" color="primary">
@@ -314,19 +306,23 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 
 				<div className="flex flex-col gap-2 md:flex-row md:items-center">
 					<Select
-						aria-label="AI 스키마"
-						size="sm"
-						placeholder="AI 스키마 선택"
-						selectedKeys={selectedSchemaKeys}
-						onSelectionChange={handleSchemaSelectionChange}
-						isDisabled={disabled || aiSchemas.length === 0}
-						className="flex-1"
-					>
-						{aiSchemas.map((schema) => (
-							<SelectItem key={schema.key} textValue={schema.label}>
-								{schema.label}
-							</SelectItem>
-						))}
+							aria-label="AI 스키마"
+							size="sm"
+							placeholder="AI 스키마 선택"
+							value={selectedSchemaKey || null}
+							onChange={handleSchemaSelectionChange}
+							isDisabled={disabled || aiSchemas.length === 0}
+							className="flex-1"
+						>
+							{aiSchemas.map((schema) => (
+								<ListBox.Item
+									key={schema.key}
+									id={schema.key}
+									textValue={schema.label}
+								>
+									{schema.label}
+								</ListBox.Item>
+							))}
 					</Select>
 
 					<div className="flex items-center gap-1.5">
@@ -370,7 +366,7 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 							transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
 							className="overflow-hidden"
 						>
-							<div className="rounded-md border border-divider p-2">
+							<div className="rounded-md border border-border p-2">
 								<Input
 									aria-label="추가 요청사항"
 									size="sm"
@@ -379,9 +375,9 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 									onValueChange={setUserPrompt}
 									isDisabled={disabled || isLoading}
 								/>
-								<div className="mt-2 max-h-32 overflow-y-auto rounded-md border border-divider p-2">
+								<div className="mt-2 max-h-32 overflow-y-auto rounded-md border border-border p-2">
 									{fieldItems.length === 0 ? (
-										<p className="text-xs text-default-500">
+										<p className="text-xs text-muted">
 											선택 가능한 필드가 없습니다.
 										</p>
 									) : (
@@ -440,7 +436,7 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 										</div>
 									)}
 								</div>
-								<p className="mt-1 text-[11px] text-default-500">
+								<p className="mt-1 text-[11px] text-muted">
 									선택 {selectedPaths.length}/{selectablePaths.length}
 								</p>
 							</div>
@@ -451,11 +447,11 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 				{errorMessage && <p className="text-xs text-danger">{errorMessage}</p>}
 
 				{lastAppliedCount > 0 && (
-					<p className="text-[11px] text-default-500">
+					<p className="text-[11px] text-muted">
 						적용 완료: {lastAppliedCount}개 필드
 					</p>
 				)}
-			</CardBody>
+			</Card.Content>
 		</Card>
 	);
 };

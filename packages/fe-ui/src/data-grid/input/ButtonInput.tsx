@@ -2,7 +2,7 @@
 
 import type { InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
 import { useT } from "../../i18n";
 
 interface ButtonInputProps {

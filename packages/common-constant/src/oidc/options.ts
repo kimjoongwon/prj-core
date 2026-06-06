@@ -27,7 +27,6 @@ export const RESPONSE_TYPE_OPTIONS = [
 export const OIDC_RUNTIME_MANAGED_CLIENT_IDS = [
 	"admin-web",
 	"storybook-web",
-	"idp-web",
 	"user-mobile",
 	"swagger-web",
 ] as const;

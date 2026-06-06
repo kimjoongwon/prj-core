@@ -1,4 +1,4 @@
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 import { NameCell } from "../NameCell/NameCell";
 
 export interface RoleNameCellProps {

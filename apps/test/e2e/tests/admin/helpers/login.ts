@@ -1,14 +1,29 @@
 import type { Page } from "@playwright/test";
-import { runOidcLoginFlow } from "@cocrepo/e2e";
 
 /** 시드 데이터 기준 System Space (플랫폼 운영본부) */
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
 const SYSTEM_GROUND_NAME = "플랫폼 운영본부";
 const ADMIN_DASHBOARD_PATH = "/admin/dashboard";
+const ADMIN_LOGIN_PATH = "/admin/auth/login";
+const ADMIN_LOGIN_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
+const ADMIN_LOGIN_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
 const ADMIN_PERSIST_KEY = "admin-persist";
 const ADMIN_PERSIST_READY_TIMEOUT = 15_000;
 const ROUTE_PREWARM_TIMEOUT = 10_000;
+const ADMIN_API_BASE_URL =
+	process.env.E2E_CORE_API_BASE_URL ??
+	new URL(
+		process.env.E2E_ADMIN_BASE_URL ?? "http://localhost:3000/admin/",
+	).origin;
+const CURRENT_SPACE_URL = new URL(
+	"/api/v1/auth/current-space",
+	ADMIN_API_BASE_URL,
+).toString();
+const NATIVE_LOGIN_URL = new URL(
+	"/api/v1/auth/native/login",
+	ADMIN_API_BASE_URL,
+).toString();
 
 const ADMIN_PREWARM_PATHS = [
 	ADMIN_DASHBOARD_PATH,
@@ -33,8 +48,19 @@ type AdminPersistSnapshot = {
 		spaceId: string;
 		groundName: string;
 	}>;
+	accessToken: string | null;
+	refreshToken: string | null;
+	sessionId: string | null;
 	accessTokenExpiresAt: number | null;
 	refreshTokenExpiresAt: number | null;
+};
+
+type NativeAuthSession = {
+	accessToken: string;
+	refreshToken: string;
+	sessionId: string;
+	accessTokenExpiresAt: number;
+	refreshTokenExpiresAt: number;
 };
 
 function buildAdminPersistSnapshot(
@@ -45,6 +71,9 @@ function buildAdminPersistSnapshot(
 		spaceId: nextSpace.spaceId,
 		groundName: nextSpace.groundName,
 		spaces: [nextSpace],
+		accessToken: null,
+		refreshToken: null,
+		sessionId: null,
 		accessTokenExpiresAt: null,
 		refreshTokenExpiresAt: null,
 	};
@@ -71,6 +100,11 @@ function buildAdminPersistSnapshot(
 			spaceId: nextSpace.spaceId,
 			groundName: nextSpace.groundName,
 			spaces: hasSystemSpace ? spaces : [nextSpace, ...spaces],
+			accessToken:
+				typeof parsed.accessToken === "string" ? parsed.accessToken : null,
+			refreshToken:
+				typeof parsed.refreshToken === "string" ? parsed.refreshToken : null,
+			sessionId: typeof parsed.sessionId === "string" ? parsed.sessionId : null,
 			accessTokenExpiresAt:
 				typeof parsed.accessTokenExpiresAt === "number"
 					? parsed.accessTokenExpiresAt
@@ -108,6 +142,9 @@ export async function seedAdminPersist(
 				spaceId: nextSpaceValue.spaceId,
 				groundName: nextSpaceValue.groundName,
 				spaces: [nextSpaceValue],
+				accessToken: null,
+				refreshToken: null,
+				sessionId: null,
 				accessTokenExpiresAt: null,
 				refreshTokenExpiresAt: null,
 			};
@@ -134,6 +171,16 @@ export async function seedAdminPersist(
 						spaceId: nextSpaceValue.spaceId,
 						groundName: nextSpaceValue.groundName,
 						spaces: hasSystemSpace ? spaces : [nextSpaceValue, ...spaces],
+						accessToken:
+							typeof parsed?.accessToken === "string"
+								? parsed.accessToken
+								: null,
+						refreshToken:
+							typeof parsed?.refreshToken === "string"
+								? parsed.refreshToken
+								: null,
+						sessionId:
+							typeof parsed?.sessionId === "string" ? parsed.sessionId : null,
 						accessTokenExpiresAt:
 							typeof parsed?.accessTokenExpiresAt === "number"
 								? parsed.accessTokenExpiresAt
@@ -191,36 +238,24 @@ export async function readAdminPersist(page: Page) {
 }
 
 /**
- * Admin 앱에 OIDC 로그인 플로우를 수행합니다.
+ * Admin 앱에 native 로그인 플로우를 수행합니다.
  *
- * 1. /api/v1/auth/login → IDP /interaction/[uid]
- * 2. 시드 데이터의 FULL_ACCESS 계정으로 로그인
- * 3. OIDC 동의 화면에서 "허용" 클릭
+ * 1. /admin/auth/login에서 시드 데이터의 FULL_ACCESS 계정으로 로그인
+ * 2. native access/refresh token을 admin-persist에 저장
+ * 3. current-space API로 System Space 선택 가능 여부를 확인
  * 4. Admin 대시보드로 리다이렉트
- * 5. current-space API로 System Space 선택 가능 여부를 확인하고 PersistStore를 맞춤
+ * 5. PersistStore의 Space 정보를 보정하되 native token은 유지
  */
 export async function loginToAdmin(page: Page) {
-	const isAdminUrl = (url: URL) =>
-		url.pathname.startsWith("/admin") &&
-		!url.pathname.includes("/auth/login");
-
-	await runOidcLoginFlow(page, {
-		startPath: "/api/v1/auth/login?clientId=admin-web",
-		finalUrl: isAdminUrl,
-		retryAttempts: 5,
-		retryDelayMs: 1000,
-		allowDirectRedirect: true,
-	});
-
-	// Next.js 앱은 후속 fetch로 networkidle이 길게 유지될 수 있어 DOM 준비만 대기합니다.
-	await page.waitForLoadState("domcontentloaded");
-
-	const currentSpaceResponse = await page.request.post(
-		"http://localhost:3000/api/v1/auth/current-space",
-		{
-			data: { spaceId: SYSTEM_SPACE_ID },
+	await page.goto(ADMIN_LOGIN_PATH, { waitUntil: "domcontentloaded" });
+	const session = await requestNativeLogin(page);
+	await writeAdminNativeSession(page, session);
+	const currentSpaceResponse = await page.request.post(CURRENT_SPACE_URL, {
+		data: { spaceId: SYSTEM_SPACE_ID },
+		headers: {
+			Authorization: `Bearer ${session.accessToken}`,
 		},
-	);
+	});
 	if (!currentSpaceResponse.ok()) {
 		throw new Error("현재 Space 검증 API 호출에 실패했습니다.");
 	}
@@ -242,6 +277,60 @@ export async function loginToAdmin(page: Page) {
 		spaceId: SYSTEM_SPACE_ID,
 		groundName: currentSpaceName,
 	});
+	await page.goto(ADMIN_DASHBOARD_PATH, { waitUntil: "domcontentloaded" });
+}
+
+async function requestNativeLogin(page: Page): Promise<NativeAuthSession> {
+	const response = await page.request.post(NATIVE_LOGIN_URL, {
+		data: {
+			email: ADMIN_LOGIN_EMAIL,
+			password: ADMIN_LOGIN_PASSWORD,
+		},
+	});
+	if (!response.ok()) {
+		throw new Error(`native 로그인 API 호출에 실패했습니다: ${response.status()}`);
+	}
+
+	const payload = (await response.json()) as { data?: Partial<NativeAuthSession> };
+	const session = payload.data;
+	if (
+		typeof session?.accessToken !== "string" ||
+		typeof session.refreshToken !== "string" ||
+		typeof session.sessionId !== "string" ||
+		typeof session.accessTokenExpiresAt !== "number" ||
+		typeof session.refreshTokenExpiresAt !== "number"
+	) {
+		throw new Error("native 로그인 응답이 올바르지 않습니다.");
+	}
+
+	return {
+		accessToken: session.accessToken,
+		refreshToken: session.refreshToken,
+		sessionId: session.sessionId,
+		accessTokenExpiresAt: session.accessTokenExpiresAt,
+		refreshTokenExpiresAt: session.refreshTokenExpiresAt,
+	};
+}
+
+async function writeAdminNativeSession(page: Page, session: NativeAuthSession) {
+	await page.evaluate(
+		({ storageKey, nativeSession }) => {
+			const raw = window.localStorage.getItem(storageKey);
+			const current = raw ? JSON.parse(raw) : {};
+			window.localStorage.setItem(
+				storageKey,
+				JSON.stringify({
+					...current,
+					accessToken: nativeSession.accessToken,
+					refreshToken: nativeSession.refreshToken,
+					sessionId: nativeSession.sessionId,
+					accessTokenExpiresAt: nativeSession.accessTokenExpiresAt,
+					refreshTokenExpiresAt: nativeSession.refreshTokenExpiresAt,
+				}),
+			);
+		},
+		{ storageKey: ADMIN_PERSIST_KEY, nativeSession: session },
+	);
 }
 
 /**

@@ -26,7 +26,7 @@ InquiryCreatePage
           - PageTitleBar
           - VStack
             - Input x2
-            - Textarea (조건부)
+            - TextArea (조건부)
             - Select x3
             - Button x2
 ```
@@ -45,9 +45,9 @@ InquiryCreatePage
 | `FormSection` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
 | `AiForm` | `@cocrepo/ui` | 입력 폼 또는 AI 입력 흐름 구성 |
 | `Input` | `@heroui/react` | 사용자 입력 컨트롤 |
-| `Textarea` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `TextArea` | `@heroui/react` | 사용자 입력 컨트롤 |
 | `Select` | `@heroui/react` | 사용자 입력 컨트롤 |
-| `SelectItem` | `@heroui/react` | 사용자 입력 컨트롤 |
+| `ListBox.Item` | `@heroui/react` | 사용자 입력 컨트롤 |
 
 ## 공개 계약
 

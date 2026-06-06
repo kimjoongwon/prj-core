@@ -1,4 +1,4 @@
-import { Chip } from "../../design-system/primitives";
+import { Chip } from "../../data-display/Chip/Chip";
 
 interface Role {
 	name?: string;
@@ -56,7 +56,7 @@ const getRoleColor = (
 export const RoleChipCell = ({ role }: RoleChipCellProps) => {
 	const roleLabel = getRoleLabel(role);
 	if (!roleLabel) {
-		return <span className="text-default-400">-</span>;
+		return <span className="text-muted">-</span>;
 	}
 
 	return (

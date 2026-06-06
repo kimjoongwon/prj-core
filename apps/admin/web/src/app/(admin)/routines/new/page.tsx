@@ -15,7 +15,7 @@ import {
 	RoutineCreatePage,
 	type RoutineTaskCandidate,
 } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueries } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -93,10 +93,8 @@ const AdminRoutinesNewRoute = observer(() => {
 	const { mutate: createRoutine, isPending } = useCreateRoutine({
 		mutation: {
 			onSuccess: (response) => {
-				addToast({
-					title: "루틴 등록 성공",
+				toast.success("루틴 등록 성공", {
 					description: "루틴이 성공적으로 등록되었습니다.",
-					color: "success",
 				});
 				const routineId = response?.data?.id;
 				if (routineId) {
@@ -104,10 +102,8 @@ const AdminRoutinesNewRoute = observer(() => {
 				}
 			},
 			onError: (error) => {
-				addToast({
-					title: "루틴 등록 실패",
+				toast.danger("루틴 등록 실패", {
 					description: error.message || "루틴 등록 중 오류가 발생했습니다.",
-					color: "danger",
 				});
 			},
 		},
@@ -181,18 +177,14 @@ const AdminRoutinesNewRoute = observer(() => {
 			onClickAddActivityButton={(taskId) => {
 				const task = tasks.find((item) => item.id === taskId);
 				if (!task?.exercise?.videoFileId) {
-					addToast({
-						title: "편성 불가 운동",
+					toast.warning("편성 불가 운동", {
 						description: "영상이 등록된 운동만 루틴에 추가할 수 있습니다.",
-						color: "warning",
 					});
 					return;
 				}
 				if (state.activities.some((activity) => activity.taskId === task.id)) {
-					addToast({
-						title: "중복 운동",
+					toast.warning("중복 운동", {
 						description: "이미 추가된 운동입니다.",
-						color: "warning",
 					});
 					return;
 				}

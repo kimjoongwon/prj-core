@@ -65,7 +65,7 @@ const defaultArgs = {
 	isSchedulable: false,
 	isSubmitPending: false,
 	onChangeCountInput: (..._args: never[]) => undefined,
-	onChangeDescriptionTextarea: (..._args: never[]) => undefined,
+	onChangeDescriptionTextArea: (..._args: never[]) => undefined,
 	onChangeDurationMinInput: (..._args: never[]) => undefined,
 	onChangeDurationSecInput: (..._args: never[]) => undefined,
 	onChangeImageFileIdInput: (..._args: never[]) => undefined,

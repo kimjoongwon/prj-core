@@ -1,29 +1,14 @@
 "use client";
 
-import { observer } from "mobx-react-lite";
 import {
-	RadioGroup as NextUIRadioGroup,
-	type RadioGroupProps as NextUIRadioGroupProps,
+	FieldError,
+	Label,
 	Radio,
-} from "../../design-system/primitives";
+	RadioGroup as HeroRadioGroup,
+} from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import { translateNode, useT } from "../../i18n";
-
-export interface RadioOption {
-	/** 표시 텍스트 */
-	text: string;
-	/** 옵션 값 */
-	value: any;
-}
-
-export interface RadioGroupProps
-	extends Omit<NextUIRadioGroupProps, "onValueChange" | "value"> {
-	/** 라디오 옵션 목록 */
-	options?: RadioOption[];
-	/** 선택된 값 */
-	value?: string;
-	/** 값 변경 핸들러 */
-	onValueChange?: (value: string) => void;
-}
+import type { RadioGroupProps } from "./RadioGroup.props";
 
 /**
  * RadioGroup 컴포넌트
@@ -49,8 +34,8 @@ export const RadioGroup = observer(function RadioGroup(props: RadioGroupProps) {
 	const t = useT();
 	const {
 		options = [
-			{
-				text: "test",
+				{
+					text: "test",
 				value: "test",
 			},
 			{
@@ -58,23 +43,37 @@ export const RadioGroup = observer(function RadioGroup(props: RadioGroupProps) {
 				value: "test2",
 			},
 		],
+		label,
+		children,
 		value,
 		onValueChange,
+		onChange,
+		errorMessage,
 		...rest
 	} = props;
 
-	return (
-		<NextUIRadioGroup
-			{...rest}
-			label={translateNode(rest.label, t)}
-			value={value}
-			onValueChange={onValueChange}
-		>
-			{options.map((option) => (
-				<Radio key={option.value} value={option.value}>
-					{t(option.text)}
-				</Radio>
-			))}
-		</NextUIRadioGroup>
-	);
-});
+	const handleChange = (value: string) => {
+		onChange?.(value);
+		onValueChange?.(value);
+		};
+
+		return (
+			<HeroRadioGroup {...rest} value={value} onChange={handleChange}>
+				{label ? <Label>{translateNode(label, t)}</Label> : null}
+				{children ??
+					options.map((option) => (
+						<Radio key={option.value} value={String(option.value)}>
+							<Radio.Control>
+								<Radio.Indicator />
+							</Radio.Control>
+							<Radio.Content>{t(option.text)}</Radio.Content>
+						</Radio>
+					))}
+				{errorMessage ? (
+					<FieldError>{translateNode(errorMessage, t)}</FieldError>
+				) : null}
+			</HeroRadioGroup>
+		);
+	});
+
+export type { RadioGroupProps, RadioOption } from "./RadioGroup.props";

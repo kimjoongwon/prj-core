@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { Button, Input, Link } from "../../control";
-import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
+import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
 import { useT } from "../../i18n";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
@@ -59,7 +59,7 @@ export const ForgotPasswordForm = observer(
 							<h2 className="text-lg font-semibold mb-2">
 								{t("이메일을 확인하세요")}
 							</h2>
-							<p className="text-default-500 text-sm mb-6">
+							<p className="text-muted text-sm mb-6">
 								<span className="font-medium text-foreground">
 									{state.email}
 								</span>
@@ -115,7 +115,7 @@ export const ForgotPasswordForm = observer(
 				<div className="mt-6 text-center">
 					<Link
 						href={loginHref}
-						className="text-default-400 hover:text-default-500 text-sm"
+						className="text-muted hover:text-muted text-sm"
 					>
 						{t("로그인으로 돌아가기")}
 					</Link>

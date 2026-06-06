@@ -17,10 +17,10 @@ RoutineListPage
 - Surface
   - DataGrid
 - Modal
-  - ModalContent
-    - ModalHeader
-    - ModalBody
-    - ModalFooter
+  - Modal overlay content
+    - Modal.Header
+    - Modal.Body
+    - Modal.Footer
       - Button x2
 ```
 
@@ -35,10 +35,10 @@ RoutineListPage
 | `Plus` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
 | `DataGrid` | `@cocrepo/ui` | 목록/표 데이터 표시 |
 | `Modal` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalContent` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalHeader` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalBody` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
-| `ModalFooter` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal overlay content` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Header` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Body` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
+| `Modal.Footer` | `@heroui/react` | 확인 또는 보조 작업 오버레이 |
 
 ## 공개 계약
 

@@ -2,7 +2,7 @@
 
 import { useCreateTimeline } from "@cocrepo/api/core/timelines";
 import { TimelineCreatePage } from "@cocrepo/ui";
-import { addToast } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -28,7 +28,7 @@ const AdminTimelinesNewRoute = observer(() => {
 		delete state.errors.name;
 	};
 
-	const onChangeDescriptionTextarea = (value: string) => {
+	const onChangeDescriptionTextArea = (value: string) => {
 		state.description = value;
 		delete state.errors.description;
 	};
@@ -60,10 +60,8 @@ const AdminTimelinesNewRoute = observer(() => {
 			},
 			{
 				onSuccess: (response) => {
-					addToast({
-						title: "등록 성공",
+					toast.success("등록 성공", {
 						description: "타임라인이 등록되었습니다.",
-						color: "success",
 					});
 					const newId = response.data?.id;
 					if (newId) {
@@ -73,11 +71,9 @@ const AdminTimelinesNewRoute = observer(() => {
 					router.push("/timelines" as Route);
 				},
 				onError: () => {
-					addToast({
-						title: "등록 실패",
+					toast.danger("등록 실패", {
 						description:
 							"타임라인 등록 중 오류가 발생했습니다. 이름이 중복되지 않았는지 확인해주세요.",
-						color: "danger",
 					});
 				},
 			},
@@ -94,7 +90,7 @@ const AdminTimelinesNewRoute = observer(() => {
 			isSubmitPending={isPending}
 			isSubmitDisabled={!state.name.trim()}
 			onChangeNameInput={onChangeNameInput}
-			onChangeDescriptionTextarea={onChangeDescriptionTextarea}
+			onChangeDescriptionTextArea={onChangeDescriptionTextArea}
 			onClickCancelButton={onClickCancelButton}
 			onClickSubmitButton={onClickSubmitButton}
 		/>

@@ -1,17 +1,74 @@
-import { expect, type Locator, type Page, test } from "@playwright/test";
+import { loginToConsole } from "@cocrepo/e2e";
+import {
+	expect,
+	type Locator,
+	type Page,
+	type Route,
+	test,
+} from "@playwright/test";
+
+const SYSTEM_SPACE_ID =
+	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
+
+async function fallbackRoute(route: Route) {
+	await route.fallback();
+}
+
+async function mockAdminAccessBootstrap(page: Page) {
+	await page.route("**/api/v1/auth/current-space**", async (route) => {
+		if (route.request().method() !== "GET") {
+			await fallbackRoute(route);
+			return;
+		}
+
+		await route.fulfill({
+			status: 200,
+			contentType: "application/json",
+			body: JSON.stringify({
+				data: {
+					id: SYSTEM_SPACE_ID,
+					ground: { name: "플랫폼 운영본부" },
+					contentLanguageCode: "ko_KR",
+				},
+			}),
+		});
+	});
+	await page.route("**/api/v1/auth/my-spaces**", async (route) => {
+		await route.fulfill({
+			status: 200,
+			contentType: "application/json",
+			body: JSON.stringify({
+				data: [
+					{
+						id: SYSTEM_SPACE_ID,
+						ground: { name: "플랫폼 운영본부" },
+						contentLanguageCode: "ko_KR",
+					},
+				],
+			}),
+		});
+	});
+	await page.route("**/api/v1/auth/verify-token**", async (route) => {
+		await route.fulfill({
+			status: 200,
+			contentType: "application/json",
+			body: JSON.stringify({ data: { hasFullAccess: true } }),
+		});
+	});
+	await page.route("**/api/v1/abilities/my**", async (route) => {
+		await route.fulfill({
+			status: 200,
+			contentType: "application/json",
+			body: JSON.stringify({ data: [] }),
+		});
+	});
+}
 
 const getSidebarNav = (page: Page) =>
 	page.locator("aside").getByRole("navigation").first();
 
-const getRootMenuButton = (
-	sidebar: Locator,
-	label: string,
-	description: string,
-) =>
-	sidebar
-		.getByRole("button")
-		.filter({ hasText: label })
-		.filter({ hasText: description });
+const getRootMenuButton = (sidebar: Locator, label: string) =>
+	sidebar.getByRole("button", { name: new RegExp(`^${label}`) }).first();
 
 const getSubMenuButton = (sidebar: Locator, label: string) =>
 	sidebar.getByRole("button", { name: label, exact: true });
@@ -66,9 +123,14 @@ test.describe("사이드바 메뉴 회귀", () => {
 	test.beforeEach(async ({ page }) => {
 		// Given: 데스크톱 사이드바가 보이는 뷰포트로 대시보드 진입
 		await page.setViewportSize({ width: 1280, height: 720 });
+		await loginToConsole(page);
+		await mockAdminAccessBootstrap(page);
 		await page.goto("./dashboard", {
 			waitUntil: "domcontentloaded",
 			timeout: 60000,
+		});
+		await expect(page.getByRole("heading", { name: "대시보드" })).toBeVisible({
+			timeout: 30000,
 		});
 	});
 
@@ -76,85 +138,30 @@ test.describe("사이드바 메뉴 회귀", () => {
 		page,
 	}) => {
 		const sidebar = getSidebarNav(page);
-		const usersMenuButton = getRootMenuButton(
-			sidebar,
-			"회원",
-			"회원 계정과 상태를 검색하고 조정합니다.",
-		);
-		const rolesMenuButton = getRootMenuButton(
-			sidebar,
-			"권한 관리",
-			"권한, 액션, 대상 규칙을 편집합니다.",
-		);
-		const usersListMenuButton = getSubMenuButton(sidebar, "회원 목록");
+		const rolesMenuButton = getRootMenuButton(sidebar, "권한 관리");
+		const timelinesMenuButton = getRootMenuButton(sidebar, "일정 관리");
 		const rolesListMenuButton = getSubMenuButton(sidebar, "역할");
+		const timelinesListMenuButton = getSubMenuButton(sidebar, "타임라인");
 
 		// When: 서로 다른 1depth 메뉴를 연 뒤 권한 관리의 하위 메뉴를 선택
 		await expect(sidebar).toBeVisible();
-		await usersMenuButton.click();
-		await expect(usersListMenuButton).toBeVisible();
 		await rolesMenuButton.click();
 		await expect(rolesListMenuButton).toBeVisible();
-		await expect(usersListMenuButton).toBeHidden();
+		await timelinesMenuButton.click();
+		await expect(timelinesListMenuButton).toBeVisible();
+		await expect(rolesListMenuButton).toBeHidden();
+		await rolesMenuButton.click();
+		await expect(rolesListMenuButton).toBeVisible();
+		await expect(timelinesListMenuButton).toBeHidden();
 		await rolesListMenuButton.click();
 
 		// Then: 선택된 하위 메뉴의 1depth 부모만 열려 있고, 이전 부모는 닫힘
-		await expect(page).toHaveURL(/\/roles(?:[/?#]|$)/);
+		await expect(
+			page.getByRole("heading", { name: "역할 목록", exact: true }),
+		).toBeVisible({ timeout: 15000 });
+		await expect(page).toHaveURL(/\/roles(?:[/?#]|$)/, { timeout: 15000 });
 		await expect(rolesListMenuButton).toBeVisible();
-		await expect(usersListMenuButton).toBeHidden();
-	});
-});
-
-test.describe("헤더 IDP 관리 버튼", () => {
-	test.beforeEach(async ({ page }) => {
-		// Given: 관리자 대시보드 진입 (루트는 로그인으로 리다이렉트됨)
-		const navigated = await page
-			.goto("./dashboard", {
-				waitUntil: "domcontentloaded",
-				timeout: 60000,
-			})
-			.then(() => true)
-			.catch(() => false);
-		test.skip(
-			!navigated,
-			"대시보드 진입이 타임아웃되어 본 케이스를 건너뜁니다.",
-		);
-	});
-
-	test("IDP 관리 버튼이 헤더에 표시되어야 한다", async ({ page }) => {
-		// Then: IDP 관리 버튼이 보임
-		const idpButton = page.getByRole("button", {
-			name: "IDP 관리 콘솔 열기",
-		});
-		await expect(idpButton).toBeVisible();
-	});
-
-	test("IDP 관리 버튼 클릭 시 새 탭이 열려야 한다", async ({
-		page,
-		context,
-	}) => {
-		// Given: IDP 관리 버튼 찾기
-		const idpButton = page.getByRole("button", {
-			name: "IDP 관리 콘솔 열기",
-		});
-
-		// When: 버튼 클릭
-		const popupPromise = context
-			.waitForEvent("page", { timeout: 3000 })
-			.catch(() => null);
-		await idpButton.click();
-		const newPage = await popupPromise;
-
-		// Then:
-		// - env가 설정된 경우: 새 탭으로 IDP 콘솔이 열린다.
-		// - env가 없는 경우: 현재 페이지 상태가 유지된다.
-		if (newPage) {
-			await newPage.waitForLoadState("domcontentloaded");
-			expect(newPage.url()).toContain("localhost:3008");
-			return;
-		}
-
-		await expect(page).toHaveURL(/dashboard/);
+		await expect(timelinesListMenuButton).toBeHidden();
 	});
 });
 

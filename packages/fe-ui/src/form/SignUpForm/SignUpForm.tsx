@@ -1,8 +1,8 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Button, Input, Link, Select, Textarea } from "../../control";
-import { AlertBanner } from "../../display/feedback/AlertBanner/AlertBanner";
+import { Button, Input, Link, Select, TextArea } from "../../control";
+import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
 import { useT } from "../../i18n";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
@@ -121,7 +121,7 @@ export const SignUpForm = observer(
 							<h2 className="mb-2 text-lg font-semibold">
 								{t("인증 메일을 확인하세요")}
 							</h2>
-							<p className="mb-6 text-sm leading-6 text-default-500">
+							<p className="mb-6 text-sm leading-6 text-muted">
 								<span className="font-medium text-foreground">
 									{state.submittedEmail}
 								</span>
@@ -173,12 +173,12 @@ export const SignUpForm = observer(
 
 						<Select
 							label="가입 Space"
-							placeholder="가입할 Space 선택"
-							options={spaceOptions}
-							value={state.spaceId}
-							onChange={onChangeSpaceId}
-							isRequired
-							isDisabled={
+								placeholder="가입할 Space 선택"
+								options={spaceOptions}
+								value={state.spaceId}
+								onChange={(value) => onChangeSpaceId(String(value ?? ""))}
+								isRequired
+								isDisabled={
 								state.isSubmitting ||
 								isSpacesLoading ||
 								spaceOptions.length === 0
@@ -221,7 +221,7 @@ export const SignUpForm = observer(
 							isInvalid={Boolean(state.fieldErrors.phone)}
 							errorMessage={state.fieldErrors.phone}
 						/>
-						<Textarea
+						<TextArea
 							label="주소"
 							placeholder="주소를 입력하세요"
 							value={state.address}
@@ -270,11 +270,11 @@ export const SignUpForm = observer(
 					</div>
 				)}
 
-				<div className="mt-6 flex flex-col items-center gap-2 text-center text-sm text-default-500">
+				<div className="mt-6 flex flex-col items-center gap-2 text-center text-sm text-muted">
 					<span>{t("이미 계정이 있으신가요?")}</span>
 					<Link
 						href={loginHref}
-						className="text-default-400 hover:text-default-500"
+						className="text-muted hover:text-muted"
 					>
 						{t("로그인으로 돌아가기")}
 					</Link>

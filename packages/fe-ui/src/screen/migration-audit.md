@@ -1,7 +1,7 @@
 # Page Migration Audit
 
 > 생성일: 2026-03-26
-> 기준 경로: apps/admin/web/src/app, apps/idp/web/src/app
+> 기준 경로: apps/admin/web/src/app
 
 ## 목적
 
@@ -37,4 +37,4 @@
 - 2026-03-29: IDP console pure screen에서 API/navigation/react-query import를 제거해 pure screen runtime 위반을 46개(admin 영역만 남음)까지 축소
 - 2026-03-29: admin 목록 페이지(`assets`, `inquiries`, `roles`, `routines`, `spaces`, `tasks`, `templates`, `timelines`)를 pure screen + thin route container 구조로 재정의해 pure screen runtime 위반을 37개까지 축소
 - 2026-03-30: roles/routines/actions/inquiries/idp 상세·등록·수정 route가 runtime을 소유하고 `packages/fe-ui/src/screen`는 pure props contract만 유지하도록 재정렬
-- 2026-03-30: `rg 'useRouter|useParams|useLocalObservable|useQueryClient|addToast|useGet…' packages/fe-ui/src/screen --glob '*.tsx'` 기준 pure screen runtime 위반 0건 확인
+- 2026-03-30: `rg 'useRouter|useParams|useLocalObservable|useQueryClient|toast|useGet…' packages/fe-ui/src/screen --glob '*.tsx'` 기준 pure screen runtime 위반 0건 확인

@@ -1,19 +1,16 @@
+import { DatePicker as HeroUiDatePicker } from "@heroui/react";
 import type {
 	CalendarDate,
 	CalendarDateTime,
 	ZonedDateTime,
 } from "@internationalized/date";
-import {
-	DatePicker as HeroUiDatePicker,
-	type DatePickerProps as HeroUiDatePickerProps,
-} from "../../design-system/primitives";
 
-export interface DatePickerProps
-	extends Omit<HeroUiDatePickerProps, "value" | "onChange"> {
+export interface DatePickerProps {
 	/** 선택된 날짜 값 */
 	value?: CalendarDate | CalendarDateTime | ZonedDateTime;
 	/** 날짜 변경 핸들러 (ISO 문자열 반환) */
 	onChange?: (value: string) => void;
+	[key: string]: unknown;
 }
 
 /**
@@ -43,11 +40,11 @@ export const DatePicker = (props: DatePickerProps) => {
 	};
 
 	return (
-		<HeroUiDatePicker
-			{...rest}
-			hideTimeZone
-			value={value}
-			onChange={handleDateChange}
-		/>
-	);
-};
+			<HeroUiDatePicker
+				{...(rest as object)}
+				hideTimeZone
+				value={value as never}
+				onChange={handleDateChange as never}
+			/>
+		);
+	};

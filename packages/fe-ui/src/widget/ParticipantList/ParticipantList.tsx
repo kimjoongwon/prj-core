@@ -1,7 +1,8 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Card, CardBody, Chip } from "../../design-system/primitives";
+import { Card } from "@heroui/react";
+import { Chip } from "../../data-display/Chip/Chip";
 
 export interface Participant {
 	/** 참여자 ID */
@@ -60,11 +61,11 @@ export const ParticipantList = observer(
 		const typingParticipants = participants.filter((p) => p.isTyping);
 
 		return (
-			<Card className={`bg-content1 ${className}`} shadow="sm">
-				<CardBody className="gap-3 p-4">
+			<Card className={`bg-surface ${className}`}>
+				<Card.Content className="gap-3 p-4">
 					{/* 헤더 */}
 					<div className="flex items-center justify-between">
-						<h3 className="text-sm font-semibold text-default-500">
+						<h3 className="text-sm font-semibold text-muted">
 							👥 참여자 ({participants.length})
 						</h3>
 						{onlineParticipants.length > 0 && (
@@ -102,14 +103,14 @@ export const ParticipantList = observer(
 
 					{/* 타이핑 표시 */}
 					{typingParticipants.length > 0 && (
-						<div className="rounded-lg bg-primary-50 p-2">
-							<span className="text-xs text-primary-600">
+						<div className="rounded-lg bg-accent-soft p-2">
+							<span className="text-xs text-accent">
 								🔵 {typingParticipants.map((p) => p.name).join(", ")}님이 타이핑
 								중입니다...
 							</span>
 						</div>
 					)}
-				</CardBody>
+				</Card.Content>
 			</Card>
 		);
 	},
@@ -129,17 +130,17 @@ const ParticipantItem = observer(
 			<button
 				type="button"
 				onClick={onClick}
-				className="flex w-full items-center gap-2 rounded-lg p-2 text-left transition-colors hover:bg-content2"
+				className="flex w-full items-center gap-2 rounded-lg p-2 text-left transition-colors hover:bg-surface-secondary"
 			>
 				{/* 온라인 상태 표시 */}
 				<span
 					className={`size-2 rounded-full ${
-						participant.isOnline ? "bg-success" : "bg-default-300"
+						participant.isOnline ? "bg-success" : "bg-default"
 					}`}
 				/>
 
 				{/* 이름 */}
-				<span className="flex-1 text-sm text-default-800">
+				<span className="flex-1 text-sm text-foreground">
 					{participant.name}
 				</span>
 
@@ -150,7 +151,7 @@ const ParticipantItem = observer(
 
 				{/* 타이핑 중 */}
 				{participant.isTyping && (
-					<span className="text-xs text-primary-500">작성 중...</span>
+					<span className="text-xs text-accent">작성 중...</span>
 				)}
 			</button>
 		);

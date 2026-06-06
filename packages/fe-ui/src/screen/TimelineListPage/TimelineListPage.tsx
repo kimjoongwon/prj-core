@@ -16,15 +16,8 @@ import {
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import {
-	Button,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	useDisclosure,
-} from "../../design-system/primitives";
+import { Button } from "../../control/Button/Button";
+import { Modal, useOverlayState } from "@heroui/react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -61,7 +54,7 @@ function TimelinesPageFallback() {
 				title="타임라인"
 				description="학기/시즌 단위 타임라인을 관리합니다."
 			/>
-			<Surface className="h-32 rounded-2xl border-divider/80 bg-content1/70">
+			<Surface className="h-32 rounded-2xl border-border/80 bg-surface/70">
 				{null}
 			</Surface>
 		</div>
@@ -88,7 +81,7 @@ export const TimelineListPage = observer(
 		}, [gridState, queryStates, setQueryStates]);
 		const timelineRows = timelines ?? [];
 		const [deleteTarget, setDeleteTarget] = useState<TimelineDto | null>(null);
-		const deleteModal = useDisclosure();
+		const deleteModal = useOverlayState();
 		const onClickDeleteIcon = (timelineId: string) => {
 			const targetTimeline = timelineRows.find(
 				(timeline) => timeline.id === timelineId,
@@ -97,7 +90,7 @@ export const TimelineListPage = observer(
 				return;
 			}
 			setDeleteTarget(targetTimeline);
-			deleteModal.onOpen();
+			deleteModal.open();
 		};
 		const columns = buildTimelineTableColumns<TimelineDto>({
 			onClickDeleteButton: onClickDeleteIcon,
@@ -122,7 +115,7 @@ export const TimelineListPage = observer(
 						</Button>
 					}
 				/>
-				<Surface className="overflow-hidden rounded-2xl border-divider/80 bg-content1/70">
+				<Surface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
 					<DataGrid
 						config={{
 							entity: "Timeline",
@@ -132,14 +125,13 @@ export const TimelineListPage = observer(
 						}}
 						rows={timelineRows}
 						totalCount={totalCount}
-						isLoading={false}
 						state={gridState}
 					/>
 				</Surface>
-				<Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
-					<ModalContent>
-						<ModalHeader>타임라인 삭제</ModalHeader>
-						<ModalBody>
+			<Modal state={deleteModal}>
+					<Modal.Backdrop><Modal.Container><Modal.Dialog>
+						<Modal.Header>타임라인 삭제</Modal.Header>
+						<Modal.Body>
 							<p>
 								<strong>{deleteTarget?.name}</strong> 타임라인을
 								삭제하시겠습니까?
@@ -147,11 +139,11 @@ export const TimelineListPage = observer(
 							<p className="mt-2 text-sm text-danger">
 								세션이 있는 타임라인은 삭제할 수 없습니다.
 							</p>
-						</ModalBody>
-						<ModalFooter>
+						</Modal.Body>
+						<Modal.Footer>
 							<Button
 								variant="flat"
-								onPress={deleteModal.onClose}
+								onPress={deleteModal.close}
 								isDisabled={isDeleting}
 							>
 								취소
@@ -163,16 +155,15 @@ export const TimelineListPage = observer(
 										return;
 									}
 									void onDeleteTimeline(deleteTarget.id).then(() => {
-										deleteModal.onClose();
+										deleteModal.close();
 										setDeleteTarget(null);
 									});
 								}}
-								isLoading={isDeleting}
 							>
 								삭제
 							</Button>
-						</ModalFooter>
-					</ModalContent>
+						</Modal.Footer>
+					</Modal.Dialog></Modal.Container></Modal.Backdrop>
 				</Modal>
 			</div>
 		);

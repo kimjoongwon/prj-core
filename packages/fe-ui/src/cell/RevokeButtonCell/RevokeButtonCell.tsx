@@ -4,11 +4,7 @@ import { Ban } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { Button } from "../../control/Button/Button";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "../../design-system/primitives";
+import { Popover } from "@heroui/react";
 import { useT } from "../../i18n";
 
 interface RevokeButtonCellProps {
@@ -37,8 +33,8 @@ export const RevokeButtonCell = observer(function RevokeButtonCell({
 	};
 
 	return (
-		<Popover isOpen={isOpen} onOpenChange={setIsOpen} placement="left">
-			<PopoverTrigger>
+		<Popover isOpen={isOpen} onOpenChange={setIsOpen}>
+			<Popover.Trigger>
 				<Button
 					size="sm"
 					color="danger"
@@ -48,8 +44,8 @@ export const RevokeButtonCell = observer(function RevokeButtonCell({
 				>
 					폐기
 				</Button>
-			</PopoverTrigger>
-			<PopoverContent>
+			</Popover.Trigger>
+			<Popover.Content placement="left">
 				<div className="space-y-3 p-2">
 					<p className="text-sm">{t(confirmMessage)}</p>
 					<div className="flex justify-end gap-2">
@@ -66,7 +62,7 @@ export const RevokeButtonCell = observer(function RevokeButtonCell({
 						</Button>
 					</div>
 				</div>
-			</PopoverContent>
+			</Popover.Content>
 		</Popover>
 	);
 });

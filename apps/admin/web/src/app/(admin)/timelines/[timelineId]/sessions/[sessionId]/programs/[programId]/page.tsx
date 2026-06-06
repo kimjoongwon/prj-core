@@ -7,7 +7,7 @@ import {
 	useGetProgramById,
 } from "@cocrepo/api/core/timelines";
 import { TimelineSessionProgramDetailPage } from "@cocrepo/ui";
-import { addToast, useDisclosure } from "@cocrepo/ui";
+import { toast, useOverlayState } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -26,7 +26,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 			useParams<ProgramDetailPageParams>();
 		const router = useRouter();
 		const queryClient = useQueryClient();
-		const deleteModal = useDisclosure();
+		const deleteModal = useOverlayState();
 
 		const { data: response, isLoading } = useGetProgramById(
 			timelineId,
@@ -48,12 +48,10 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 				{ timelineId, sessionId, programId },
 				{
 					onSuccess: () => {
-						addToast({
-							title: "삭제 성공",
+						toast.success("삭제 성공", {
 							description: "프로그램이 삭제되었습니다.",
-							color: "success",
 						});
-						deleteModal.onClose();
+						deleteModal.close();
 						queryClient.invalidateQueries({
 							queryKey: getGetProgramsQueryKey(timelineId, sessionId),
 						});
@@ -62,10 +60,8 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 						);
 					},
 					onError: () => {
-						addToast({
-							title: "삭제 실패",
+						toast.danger("삭제 실패", {
 							description: "프로그램 삭제 중 오류가 발생했습니다.",
-							color: "danger",
 						});
 					},
 				},
@@ -132,9 +128,9 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 				isDeleteModalOpen={deleteModal.isOpen}
 				isDeletePending={isDeleting}
 				onClickEditButton={onClickEditButton}
-				onClickDeleteButton={deleteModal.onOpen}
+				onClickDeleteButton={deleteModal.open}
 				onClickDeleteConfirmButton={onClickDeleteConfirmButton}
-				onClickDeleteCancelButton={deleteModal.onClose}
+				onClickDeleteCancelButton={deleteModal.close}
 			/>
 		);
 	});

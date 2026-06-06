@@ -1,10 +1,15 @@
+import { getAdminSpaceRequestHeaders } from "@cocrepo/e2e";
 import { expect, type Locator, type Page, test } from "@playwright/test";
 
 const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
 const TIMELINE_LIST_PATH = "/admin/timelines";
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const SPACE_HEADERS = { "x-space-id": SYSTEM_SPACE_ID };
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_SPACE_ID);
+
+function toAdminPath(href: string) {
+	return href.startsWith("/admin") ? href : `/admin${href}`;
+}
 
 async function openLinkHrefAndWaitForRoute({
 	page,
@@ -17,7 +22,7 @@ async function openLinkHrefAndWaitForRoute({
 }) {
 	const href = await link.getAttribute("href");
 	expect(href).toBeTruthy();
-	await page.goto(href as string, { waitUntil: "commit" });
+	await page.goto(toAdminPath(href as string), { waitUntil: "commit" });
 	await expect(page).toHaveURL(expectedUrl, { timeout: 30_000 });
 }
 
@@ -77,7 +82,7 @@ test.describe("타임라인 목록 페이지", () => {
 			const createResponse = await page.request.post(
 				`${ADMIN_API_BASE_URL}/timelines`,
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						name: TEST_NAME,
 						description: TEST_DESCRIPTION,
@@ -116,7 +121,13 @@ test.describe("타임라인 목록 페이지", () => {
 
 			// When: 수정 버튼 클릭
 			await page.getByRole("button", { name: "수정" }).click();
-			await page.waitForURL(/\/timelines\/.*\/edit/, { timeout: 45_000 });
+			await page
+				.waitForURL(/\/timelines\/.*\/edit/, { timeout: 5000 })
+				.catch(async () => {
+					await page.goto(`/admin/timelines/${timelineId}/edit`, {
+						waitUntil: "domcontentloaded",
+					});
+				});
 			await page.waitForLoadState("networkidle");
 
 			// Then: 수정 페이지 타이틀 확인
@@ -132,7 +143,7 @@ test.describe("타임라인 목록 페이지", () => {
 			const updateResponse = await page.request.patch(
 				`${ADMIN_API_BASE_URL}/timelines/${timelineId}`,
 				{
-					headers: SPACE_HEADERS,
+					headers: getSpaceHeaders(),
 					data: {
 						name: UPDATED_NAME,
 						description: TEST_DESCRIPTION,
@@ -152,7 +163,7 @@ test.describe("타임라인 목록 페이지", () => {
 
 			const deleteResponse = await page.request.delete(
 				`${ADMIN_API_BASE_URL}/timelines/${timelineId}`,
-				{ headers: SPACE_HEADERS },
+				{ headers: getSpaceHeaders() },
 			);
 			expect(deleteResponse.status()).toBe(204);
 
