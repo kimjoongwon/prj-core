@@ -740,6 +740,34 @@ packages/common-type/src/
 └── user-stats.ts     # 사용자 통계 타입
 ```
 
+### 함수 JSDoc 규칙 (Critical)
+
+**직접 작성하는 모든 함수에는 JSDoc을 작성합니다.**
+
+규칙:
+- `function`, arrow function, class method, hook, mapper, parser, normalizer, event handler 등 직접 작성한 함수에는 JSDoc을 둡니다.
+- JSDoc에는 함수가 수행하는 책임, 주요 파라미터 의미, 반환값 의미를 간결하게 적습니다.
+- boolean flag, 외부 시스템 값, ID, state path처럼 오해하기 쉬운 인자는 `@param`으로 원천과 의미를 명시합니다.
+- 반환값이 단순하지 않거나 실패/예외 가능성이 있으면 `@returns`와 `@throws`를 작성합니다.
+- 컴포넌트 파일의 exported component 함수도 JSDoc으로 역할과 주요 props 계약을 설명합니다.
+- `*.stories.tsx`, `*.test.ts(x)`, generated 파일은 예외로 허용합니다.
+
+```typescript
+/**
+ * 관리자 메뉴 항목 중 현재 경로와 일치하는 항목을 찾습니다.
+ *
+ * @param items - 탐색할 관리자 메뉴 항목 목록
+ * @param pathname - Next.js router에서 전달된 현재 경로
+ * @returns 현재 경로와 일치하는 메뉴 항목, 없으면 undefined
+ */
+export function findActiveAdminMenuItem(
+  items: NavItemConfig[],
+  pathname: string,
+) {
+  return items.find((item) => item.href === pathname);
+}
+```
+
 ### Source File 단일 책임 규칙 (Critical)
 
 **source file 하나는 하나의 책임 요소만 소유합니다.**
