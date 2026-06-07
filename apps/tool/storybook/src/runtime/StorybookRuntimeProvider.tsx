@@ -13,7 +13,7 @@ import {
 	TokenStore,
 	usePersistStore,
 } from "@cocrepo/store";
-import { DesignSystemProvider } from "@cocrepo/ui";
+import { DesignSystemProvider, useDesignSystemTheme } from "@cocrepo/ui";
 import { isServer, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { NuqsAdapter as NuqsReactAdapter } from "nuqs/adapters/react";
@@ -34,9 +34,12 @@ import {
 	setIdpLoginRedirectUrl,
 	setIdpPersistStore,
 } from "../../../../../packages/fe-api/src/idp/client";
+import { StorybookCanvasSurface } from "./StorybookCanvasSurface";
+import type { StorybookCanvasSurfaceProps } from "./StorybookCanvasSurface.props";
 
 type StorybookRealm = "none" | "admin" | "idp";
 type StorybookRealmGlobal = StorybookRealm | "auto";
+type StorybookTheme = "light" | "dark" | "system";
 type StoryRender = () => ReactNode;
 
 interface StorybookRuntimeParameter {
@@ -51,8 +54,10 @@ interface StorybookContextLike {
 	title?: string;
 	globals?: {
 		storybookRealm?: StorybookRealmGlobal;
+		storybookTheme?: StorybookTheme;
 	};
 	parameters?: {
+		layout?: StorybookCanvasSurfaceProps["layout"];
 		storybookRuntime?: StorybookRuntimeParameter;
 	};
 }
@@ -67,6 +72,10 @@ interface StorybookRuntimeConfig {
 interface SpaceOption {
 	spaceId: string;
 	groundName: string;
+}
+
+interface StorybookThemeSyncProps {
+	theme: StorybookTheme;
 }
 
 const DEFAULT_STALE_TIME_MS = 60 * 1000;
@@ -232,12 +241,38 @@ function createStorybookRootStore(runtime: StorybookRuntimeConfig): RootStore {
 	return rootStore;
 }
 
+function isStorybookTheme(theme: unknown): theme is StorybookTheme {
+	return theme === "light" || theme === "dark" || theme === "system";
+}
+
+function getStorybookTheme(context: StorybookContextLike): StorybookTheme {
+	return isStorybookTheme(context.globals?.storybookTheme)
+		? context.globals.storybookTheme
+		: "system";
+}
+
 function useRootStore(): RootStore {
 	const store = useContext(RootStoreContext);
 	if (!store) {
 		throw new Error("StorybookRuntimeProvider requires RootStoreContext.");
 	}
 	return store;
+}
+
+function StorybookThemeSync({ theme }: StorybookThemeSyncProps) {
+	const { setTheme } = useDesignSystemTheme();
+	const appliedThemeRef = useRef<StorybookTheme | null>(null);
+
+	useEffect(() => {
+		if (appliedThemeRef.current === theme) {
+			return;
+		}
+
+		appliedThemeRef.current = theme;
+		setTheme(theme);
+	}, [setTheme, theme]);
+
+	return null;
 }
 
 const AdminSpaceBar = observer(function AdminSpaceBar() {
@@ -376,11 +411,15 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 
 export function StorybookRuntimeProvider({
 	children,
+	layout,
 	runtime,
 	storyId,
+	theme = "system",
 }: PropsWithChildren<{
+	layout?: StorybookCanvasSurfaceProps["layout"];
 	runtime: StorybookRuntimeConfig;
 	storyId: string;
+	theme?: StorybookTheme;
 }>) {
 	const queryClient = getQueryClient();
 	const storeRef = useRef<RootStore | null>(null);
@@ -421,10 +460,13 @@ export function StorybookRuntimeProvider({
 		<QueryClientProvider client={queryClient}>
 			<NuqsReactAdapter>
 				<RootStoreContext.Provider value={storeRef.current}>
-					<DesignSystemProvider>
-						<StorybookRuntimeBootstrap runtime={runtime} storyId={storyId}>
-							{children}
-						</StorybookRuntimeBootstrap>
+					<DesignSystemProvider themeConfig={{ defaultTheme: theme }}>
+						<StorybookThemeSync theme={theme} />
+						<StorybookCanvasSurface layout={layout}>
+							<StorybookRuntimeBootstrap runtime={runtime} storyId={storyId}>
+								{children}
+							</StorybookRuntimeBootstrap>
+						</StorybookCanvasSurface>
 					</DesignSystemProvider>
 				</RootStoreContext.Provider>
 			</NuqsReactAdapter>
@@ -437,13 +479,16 @@ export function withStorybookRuntime(
 	context: StorybookContextLike,
 ) {
 	const runtime = resolveRuntimeConfig(context);
-	const providerKey = `${context.id}:${runtime.realm}:${runtime.currentPath}:${runtime.requiresSpace}:${runtime.spaceId ?? "default"}`;
+	const theme = getStorybookTheme(context);
+	const providerKey = `${context.id}:${runtime.realm}:${runtime.currentPath}:${runtime.requiresSpace}:${runtime.spaceId ?? "default"}:${theme}`;
 
 	return (
 		<StorybookRuntimeProvider
 			key={providerKey}
+			layout={context.parameters?.layout}
 			runtime={runtime}
 			storyId={context.id}
+			theme={theme}
 		>
 			<Story />
 		</StorybookRuntimeProvider>

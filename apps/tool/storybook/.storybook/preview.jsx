@@ -18,9 +18,23 @@ const preview = {
         ],
       },
     },
+    storybookTheme: {
+      name: "Theme",
+      description: "Preview stories with the app light or dark theme.",
+      toolbar: {
+        icon: "circlehollow",
+        dynamicTitle: true,
+        items: [
+          { value: "system", title: "Theme: System" },
+          { value: "dark", title: "Theme: Dark" },
+          { value: "light", title: "Theme: Light" },
+        ],
+      },
+    },
   },
   initialGlobals: {
     storybookRealm: "auto",
+    storybookTheme: "system",
   },
   decorators: [
     withStorybookRuntime,
@@ -35,14 +49,6 @@ const preview = {
         includeNames: true,
 	        order: ["cell", "control", "detail", "display", "feature", "form", "layout", "master", "page", "rhythm", "surface", "widget", "widget-heavy", "Auto"],
       },
-    },
-    backgrounds: {
-      default: "plate-dark",
-      values: [
-        { name: "plate-dark", value: "#0E1116" },
-        { name: "plate-surface", value: "#141925" },
-        { name: "plate-soft", value: "#1D2435" },
-      ],
     },
     controls: {
       matchers: {

@@ -11,6 +11,9 @@ const setIdpLoginRedirectUrlMock = vi.fn();
 
 vi.mock("@cocrepo/ui", () => ({
 	DesignSystemProvider: ({ children }: PropsWithChildren) => children,
+	useDesignSystemTheme: () => ({
+		setTheme: vi.fn(),
+	}),
 }));
 
 vi.mock("nuqs/adapters/react", () => ({
@@ -165,5 +168,33 @@ describe("StorybookRuntimeProvider", () => {
 		});
 		expect(screen.getByLabelText("Space")).toBeTruthy();
 		expect(screen.getByText("Toolbar realm story")).toBeTruthy();
+	}, 15000);
+
+	it("wraps stories in the theme-aware canvas surface", async () => {
+		window.history.replaceState(
+			{},
+			"",
+			"/iframe.html?id=features-button--primary&viewMode=story",
+		);
+
+		const { withStorybookRuntime } = await loadProvider();
+
+		const { container } = render(
+			withStorybookRuntime(() => <div>Themed story content</div>, {
+				id: "features-button--primary",
+				title: "features/Button",
+				parameters: {
+					layout: "fullscreen",
+				},
+			}),
+		);
+
+		const surface = container.querySelector("[data-storybook-canvas-surface]");
+
+		expect(surface).toBeTruthy();
+		expect(surface?.getAttribute("class")).toContain("bg-background");
+		expect(surface?.getAttribute("class")).toContain("text-foreground");
+		expect(surface?.getAttribute("data-storybook-layout")).toBe("fullscreen");
+		expect(screen.getByText("Themed story content")).toBeTruthy();
 	}, 15000);
 });
