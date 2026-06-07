@@ -59,15 +59,17 @@ export const 커스텀스타일: Story = {
 export const 여러요소: Story = {
 	args: {
 		className: "gap-4 p-4 bg-gray-50 rounded-lg",
-		children: (
+		children: "",
+	},
+	render: (args) => (
+		<Container {...args}>
 			<>
 				<div className="rounded bg-blue-200 p-2">아이템 1</div>
 				<div className="rounded bg-green-200 p-2">아이템 2</div>
 				<div className="rounded bg-yellow-200 p-2">아이템 3</div>
 			</>
-		),
-	},
-	render: (args) => <Container {...args} />,
+		</Container>
+	),
 	parameters: {
 		docs: {
 			description: {
@@ -80,7 +82,10 @@ export const 여러요소: Story = {
 export const 반응형: Story = {
 	args: {
 		className: "w-full max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg",
-		children: (
+		children: "",
+	},
+	render: (args) => (
+		<Container {...args}>
 			<>
 				<h2 className="mb-4 font-bold text-xl">카드 제목</h2>
 				<p className="mb-4 text-gray-600">
@@ -93,9 +98,8 @@ export const 반응형: Story = {
 					액션 버튼
 				</button>
 			</>
-		),
-	},
-	render: (args) => <Container {...args} />,
+		</Container>
+	),
 	parameters: {
 		docs: {
 			description: {
@@ -108,7 +112,10 @@ export const 반응형: Story = {
 export const 폼레이아웃: Story = {
 	args: {
 		className: "gap-4 p-6 max-w-sm bg-white border rounded-lg shadow",
-		children: (
+		children: "",
+	},
+	render: (args) => (
+		<Container {...args}>
 			<>
 				<h3 className="font-semibold text-lg">연락처 폼</h3>
 				<input
@@ -133,9 +140,8 @@ export const 폼레이아웃: Story = {
 					메시지 보내기
 				</button>
 			</>
-		),
-	},
-	render: (args) => <Container {...args} />,
+		</Container>
+	),
 	parameters: {
 		docs: {
 			description: {

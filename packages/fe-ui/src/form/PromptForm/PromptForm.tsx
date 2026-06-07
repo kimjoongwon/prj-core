@@ -3,8 +3,8 @@
 import { Sparkles } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Button } from "../../control/Button/Button";
-import { TextArea } from "../../control/TextArea/TextArea";
+import { Button } from "../../action/Button/Button";
+import { TextArea } from "../../input/TextArea/TextArea";
 
 export interface PromptFormProps {
 	/** 메인 프롬프트 값 */

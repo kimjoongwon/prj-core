@@ -2,7 +2,7 @@
 
 import type { DataGridState, InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import { Select } from "../../control/Select/Select";
+import { Select } from "../../selection/Select/Select";
 import { ListBox } from "@heroui/react";
 import { useT } from "../../i18n";
 

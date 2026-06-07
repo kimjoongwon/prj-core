@@ -14,7 +14,7 @@ import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import Link from "next/link";
 import type { MouseEvent } from "react";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Modal, Table, useOverlayState } from "@heroui/react";
 

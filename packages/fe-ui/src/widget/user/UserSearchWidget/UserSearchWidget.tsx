@@ -2,7 +2,7 @@
 
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Input } from "../../../control/Input/Input";
+import { Input } from "../../../input/Input/Input";
 
 /**
  * 회원 검색 위젯 Props

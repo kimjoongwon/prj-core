@@ -1,5 +1,6 @@
 export { Alert } from "./Alert";
 export * from "./AlertBanner";
+export * from "./CharacterCounter/CharacterCounter";
 export * from "./EmptyState";
 export * from "./InfoMessage/InfoMessage";
 export * from "./Message/Message";

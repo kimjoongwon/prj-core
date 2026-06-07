@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { VariableInputForm } from "../../form/VariableInputForm";

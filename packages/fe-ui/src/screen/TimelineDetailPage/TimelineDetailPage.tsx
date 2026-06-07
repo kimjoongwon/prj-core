@@ -3,7 +3,7 @@
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { DateTimeCell } from "../../cell";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Modal, Table, useOverlayState } from "@heroui/react";
 import {

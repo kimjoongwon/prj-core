@@ -65,13 +65,16 @@ spark_model_roles = [
   "be-query-dto-builder",
   "be-vo-builder",
   "etc-jenkinsfile-builder",
-  "fe-control-agent",
+  "fe-action-agent",
   "fe-data-display-agent",
   "fe-feedback-agent",
   "fe-hook-agent",
+  "fe-input-agent",
   "fe-layout-agent",
+  "fe-navigation-agent",
   "fe-overlay-agent",
   "fe-route-agent",
+  "fe-selection-agent",
   "fe-widget-agent",
   "qa-be-testing",
   "qa-fe-testing",
@@ -120,13 +123,16 @@ medium_roles = [
   "be-query-dto-builder",
   "be-vo-builder",
   "etc-jenkinsfile-builder",
-  "fe-control-agent",
+  "fe-action-agent",
   "fe-data-display-agent",
   "fe-feedback-agent",
   "fe-hook-agent",
+  "fe-input-agent",
   "fe-layout-agent",
+  "fe-navigation-agent",
   "fe-overlay-agent",
   "fe-route-agent",
+  "fe-selection-agent",
   "fe-widget-agent",
   "qa-be-testing",
   "qa-fe-testing",
@@ -324,7 +330,10 @@ implementation = [
   "fe-data-display-agent",
   "fe-feedback-agent",
   "fe-overlay-agent",
-  "fe-control-agent",
+  "fe-action-agent",
+  "fe-input-agent",
+  "fe-selection-agent",
+  "fe-navigation-agent",
   "common-schema-builder",
   "be-dto-builder",
   "be-controller-builder",
@@ -448,9 +457,21 @@ config_file = "agents/fe-columns-agent.toml"
 description = "Web/Mobile reusable Feature composition을 생성하고 정리하는 전문가"
 config_file = "agents/fe-feature-agent.toml"
 
-[agents.fe-control-agent]
-description = "Web control과 React Native action/input/selection/navigation 컴포넌트를 생성하고 정리하는 전문가"
-config_file = "agents/fe-control-agent.toml"
+[agents.fe-action-agent]
+description = "Web/Mobile action primitive를 생성하고 정리하는 전문가"
+config_file = "agents/fe-action-agent.toml"
+
+[agents.fe-input-agent]
+description = "Web/Mobile input primitive를 생성하고 정리하는 전문가"
+config_file = "agents/fe-input-agent.toml"
+
+[agents.fe-selection-agent]
+description = "Web/Mobile selection primitive를 생성하고 정리하는 전문가"
+config_file = "agents/fe-selection-agent.toml"
+
+[agents.fe-navigation-agent]
+description = "Web/Mobile navigation primitive를 생성하고 정리하는 전문가"
+config_file = "agents/fe-navigation-agent.toml"
 
 [agents.fe-layout-agent]
 description = "Web/Mobile layout primitive를 설계하고 생성하는 전문가"

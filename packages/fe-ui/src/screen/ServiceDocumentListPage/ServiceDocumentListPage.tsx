@@ -16,13 +16,13 @@ import {
 	X,
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
-import { Checkbox } from "../../control/Checkbox/Checkbox";
+import { Button } from "../../action/Button/Button";
+import { Checkbox } from "../../selection/Checkbox/Checkbox";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Input } from "../../control/Input/Input";
-import { Select } from "../../control/Select/Select";
+import { Input } from "../../input/Input/Input";
+import { Select } from "../../selection/Select/Select";
 import { Spinner, Table, ListBox } from "@heroui/react";
-import { TextArea } from "../../control/TextArea/TextArea";
+import { TextArea } from "../../input/TextArea/TextArea";
 import { Page } from "../../layout/Page/Page";
 import { HStack, VStack } from "../../rhythm";
 import { PageSurface } from "../../surface/PageSurface";

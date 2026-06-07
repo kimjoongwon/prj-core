@@ -26,9 +26,9 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Input } from "../../control/Input/Input";
-import { Select } from "../../control/Select/Select";
-import { TextArea } from "../../control/TextArea/TextArea";
+import { Input } from "../../input/Input/Input";
+import { Select } from "../../selection/Select/Select";
+import { TextArea } from "../../input/TextArea/TextArea";
 import { ListBox } from "@heroui/react";
 
 export interface InquiryCreatePageCustomerSearchResult {

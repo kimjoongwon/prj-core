@@ -4,11 +4,11 @@ import type { Option } from "@cocrepo/type";
 import { Plus, Tag } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Select } from "../../control/Select/Select";
-import { Button } from "../../control/Button/Button";
+import { Select } from "../../selection/Select/Select";
+import { Button } from "../../action/Button/Button";
 import { Card } from "@heroui/react";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Input } from "../../control/Input/Input";
+import { Input } from "../../input/Input/Input";
 
 export interface InquiryMetaPanelProps {
 	/** 문의 상태 */

@@ -5,7 +5,7 @@ import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import Link from "next/link";
 import { DateTimeCell } from "../../cell";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import {
 	DetailPage,

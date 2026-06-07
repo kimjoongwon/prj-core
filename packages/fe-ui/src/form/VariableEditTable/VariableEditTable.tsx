@@ -2,9 +2,9 @@
 
 import { Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Input } from "../../control/Input/Input";
-import { Switch } from "../../control/Switch/Switch";
-import { Button } from "../../control/Button/Button";
+import { Input } from "../../input/Input/Input";
+import { Switch } from "../../selection/Switch/Switch";
+import { Button } from "../../action/Button/Button";
 import { Table, Tooltip } from "@heroui/react";
 import { VStack } from "../../rhythm/VStack/VStack";
 

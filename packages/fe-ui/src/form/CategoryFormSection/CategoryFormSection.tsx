@@ -2,8 +2,8 @@
 
 import { ListBox } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { Input } from "../../control/Input/Input";
-import { Select } from "../../control/Select/Select";
+import { Input } from "../../input/Input/Input";
+import { Select } from "../../selection/Select/Select";
 
 export interface CategoryOption {
 	id: string;

@@ -9,9 +9,9 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
-import { Input } from "../../control/Input/Input";
-import { TextArea } from "../../control/TextArea/TextArea";
+import { Button } from "../../action/Button/Button";
+import { Input } from "../../input/Input/Input";
+import { TextArea } from "../../input/TextArea/TextArea";
 
 export interface RoleCreatePageProps {
 	name: string;

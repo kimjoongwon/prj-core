@@ -18,9 +18,9 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Modal, Spinner, useOverlayState } from "@heroui/react";
-import { Switch } from "../../control/Switch/Switch";
+import { Switch } from "../../selection/Switch/Switch";
 
 export interface TemplateDetailPageTemplate {
 	id: string;

@@ -2,8 +2,8 @@
 
 import { Edit2, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Switch } from "../../../control/Switch/Switch";
-import { Button } from "../../../control/Button/Button";
+import { Switch } from "../../../selection/Switch/Switch";
+import { Button } from "../../../action/Button/Button";
 import { Chip } from "../../../data-display/Chip/Chip";
 import { Spinner, Table, Tooltip } from "@heroui/react";
 import { HStack } from "../../../rhythm/HStack/HStack";

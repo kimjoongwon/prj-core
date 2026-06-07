@@ -3,8 +3,8 @@ import { Avatar as HeroUIAvatar } from "@heroui/react";
 import {
 	Dropdown,
 	type DropdownEntryProps,
-} from "../../control/Dropdown/Dropdown";
-import { Button } from "../../control/Button/Button";
+} from "../../overlay/Dropdown/Dropdown";
+import { Button } from "../../action/Button/Button";
 import { Chip } from "../Chip/Chip";
 
 interface AvatarProps {

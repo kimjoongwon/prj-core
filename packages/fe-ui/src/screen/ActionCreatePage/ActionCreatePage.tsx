@@ -8,10 +8,10 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
-import { Input } from "../../control/Input/Input";
-import { Select } from "../../control/Select/Select";
-import { TextArea } from "../../control/TextArea/TextArea";
+import { Button } from "../../action/Button/Button";
+import { Input } from "../../input/Input/Input";
+import { Select } from "../../selection/Select/Select";
+import { TextArea } from "../../input/TextArea/TextArea";
 import { ListBox } from "@heroui/react";
 
 export interface ActionCreatePageFormState {

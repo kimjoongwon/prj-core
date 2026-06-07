@@ -105,7 +105,7 @@ consent:
 | `Spinner` | `@heroui/react` | 로딩/대기 상태 표시 |
 | `AuthCardHeader` | `../../widget` | 상태/정보를 카드 또는 표시 단위로 표현 |
 | `AlertBanner` | `../../display` | 상태/정보를 카드 또는 표시 단위로 표현 |
-| `Button` | `../../control` | 사용자 액션 실행 |
+| `Button` | `../../action` | 사용자 액션 실행 |
 | `OidcConsentPanel` | `../../form` | 상태/정보를 카드 또는 표시 단위로 표현 |
 | `OidcLoginForm` | `../../form` | 입력 폼 또는 AI 입력 흐름 구성 |
 

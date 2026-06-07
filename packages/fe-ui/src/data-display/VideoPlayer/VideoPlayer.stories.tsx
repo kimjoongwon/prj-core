@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { VideoPlayer } from "./VideoPlayer";
 
 const meta: Meta<typeof VideoPlayer> = {

@@ -68,7 +68,7 @@ export const Loaded: Story = {
 
 export const TextSkeletons: Story = {
 	render: () => (
-		<div className="max-w-sm space-y-3">
+		<div className="w-64 max-w-sm space-y-3">
 			<Skeleton className="h-4 w-3/4 rounded-lg" />
 			<Skeleton className="h-4 w-full rounded-lg" />
 			<Skeleton className="h-4 w-2/3 rounded-lg" />

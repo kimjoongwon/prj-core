@@ -4,7 +4,7 @@ import { usePersistStore } from "@cocrepo/store";
 import { Building2, Check, ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Avatar, Dropdown } from "@heroui/react";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 
 export interface SpaceSelectorProps {
 	/** Space 변경 시 콜백 (서버에 현재 Space를 반영한 뒤 상태를 갱신) */

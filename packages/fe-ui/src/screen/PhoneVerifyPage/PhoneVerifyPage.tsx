@@ -1,8 +1,8 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
-import { Input } from "../../control/Input";
+import { Button } from "../../action/Button/Button";
+import { Input } from "../../input/Input";
 import { VStack } from "../../rhythm/VStack/VStack";
 
 export interface PhoneVerifyPageState {

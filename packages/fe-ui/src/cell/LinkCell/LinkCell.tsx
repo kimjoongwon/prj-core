@@ -1,4 +1,4 @@
-import { Link, type LinkProps } from "../../control/Link/Link";
+import { Link, type LinkProps } from "../../navigation/Link/Link";
 
 interface LinkCellViewProps extends LinkProps {
 	/** 링크 텍스트 */

@@ -5,7 +5,7 @@ import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { FormEvent, MouseEvent } from "react";
 import { useEffect, useState } from "react";
-import { Button } from "../../control";
+import { Button } from "../../action";
 import { AlertBanner } from "../../feedback";
 import {
 	OidcConsentPanel,

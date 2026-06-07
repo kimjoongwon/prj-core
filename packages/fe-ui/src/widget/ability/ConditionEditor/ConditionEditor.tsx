@@ -3,7 +3,7 @@
 import { AlertCircle, Info } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { TextArea } from "../../../control/TextArea/TextArea";
+import { TextArea } from "../../../input/TextArea/TextArea";
 import { Chip } from "../../../data-display/Chip/Chip";
 import { cn, Tooltip } from "@heroui/react";
 import { HStack } from "../../../rhythm/HStack/HStack";

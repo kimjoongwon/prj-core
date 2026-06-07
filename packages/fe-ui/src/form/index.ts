@@ -1,6 +1,7 @@
 export * from "./AbilityFormModal";
 export * from "./CategoryFormSection";
 export * from "./ForgotPasswordForm";
+export { Form } from "./Form";
 export * from "./FormPage";
 export * from "./FormPageSurface";
 export * from "./FormSection";

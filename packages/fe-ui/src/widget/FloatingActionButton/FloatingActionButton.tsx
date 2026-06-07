@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Tooltip } from "@heroui/react";
 
 export interface FloatingActionButtonProps {

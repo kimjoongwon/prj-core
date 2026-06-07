@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Select } from "../../../control/Select/Select";
+import { Select } from "../../../selection/Select/Select";
 import { Card } from "@heroui/react";
 import { Typography } from "../../../data-display/Typography";
 import { AbilityFormModal } from "../../../form/AbilityFormModal";

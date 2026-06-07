@@ -25,7 +25,7 @@ LoginRedirectPage
 | `Surface` | `../../surface` | 콘텐츠 그룹과 elevation 구성 |
 | `VStack` | `../../rhythm` | 화면 조합 요소 |
 | `Spinner` | `@heroui/react` | 로딩/대기 상태 표시 |
-| `Button` | `../../control` | 사용자 액션 실행 |
+| `Button` | `../../action` | 사용자 액션 실행 |
 
 ## 구성 요소
 

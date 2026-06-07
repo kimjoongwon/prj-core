@@ -34,8 +34,8 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Input } from "../../control/Input/Input";
-import { Select } from "../../control/Select/Select";
+import { Input } from "../../input/Input/Input";
+import { Select } from "../../selection/Select/Select";
 import { ListBox } from "@heroui/react";
 import type { WebSocketStatus } from "./hooks/useInquiryWebSocket";
 

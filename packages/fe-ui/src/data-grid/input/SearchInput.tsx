@@ -4,7 +4,7 @@ import type { DataGridState, InputConfig } from "@cocrepo/type";
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { type KeyboardEvent, useEffect, useState } from "react";
-import { Input } from "../../control/Input/Input";
+import { Input } from "../../input/Input/Input";
 import { useT } from "../../i18n";
 
 interface SearchInputProps {

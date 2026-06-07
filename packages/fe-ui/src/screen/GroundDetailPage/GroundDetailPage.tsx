@@ -12,7 +12,7 @@ import {
 import { ArrowLeft, Pencil } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Badge, Spinner } from "@heroui/react";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 
 export interface GroundDetailPageGround {
 	name: string;

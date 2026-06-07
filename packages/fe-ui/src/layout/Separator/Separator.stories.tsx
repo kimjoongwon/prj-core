@@ -33,6 +33,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
+		className: "h-0.5 w-48 bg-divider",
 		orientation: "horizontal",
 	},
 	parameters: {
@@ -47,12 +48,12 @@ export const Default: Story = {
 export const Variants: Story = {
 	render: () => (
 		<div className="flex flex-col items-start gap-3">
-			<Separator />
-			<Separator orientation="vertical" className="h-12" />
+			<Separator className="h-0.5 w-48 bg-divider" />
+			<Separator orientation="vertical" className="h-12 w-1 bg-divider" />
 			<Separator
 				orientation="horizontal"
 				variant="secondary"
-				className="w-48"
+				className="h-0.5 w-48 bg-divider"
 			/>
 		</div>
 	),
@@ -66,7 +67,7 @@ export const Variants: Story = {
 export const Vertical: Story = {
 	args: {
 		orientation: "vertical",
-		className: "h-12",
+		className: "h-12 w-1 bg-divider",
 	},
 	parameters: {
 		docs: {
@@ -83,7 +84,7 @@ export const Dashed: Story = {
 	args: {
 		orientation: "horizontal",
 		variant: "secondary",
-		className: "w-48",
+		className: "w-48 border-divider border-t-2 border-dashed bg-transparent",
 	},
 	parameters: {
 		docs: {
@@ -99,7 +100,7 @@ export const Composition: Story = {
 	args: {
 		orientation: "horizontal",
 		variant: "default",
-		className: "w-48",
+		className: "h-0.5 w-48 bg-divider",
 	},
 	parameters: {
 		docs: {

@@ -3,10 +3,10 @@
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Button } from "../../control/Button/Button";
-import { Checkbox } from "../../control/Checkbox/Checkbox";
+import { Button } from "../../action/Button/Button";
+import { Checkbox } from "../../selection/Checkbox/Checkbox";
 import { CheckboxGroup } from "@heroui/react";
-import { Input } from "../../control/Input/Input";
+import { Input } from "../../input/Input/Input";
 
 /** 필터 그룹 정의 */
 export interface FilterGroup {

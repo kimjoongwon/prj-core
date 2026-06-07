@@ -3,8 +3,8 @@
 import { AlertCircle, CheckCircle, Send } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Button } from "../../control/Button/Button";
-import { Input } from "../../control/Input/Input";
+import { Button } from "../../action/Button/Button";
+import { Input } from "../../input/Input/Input";
 import { Modal, useOverlayState } from "@heroui/react";
 import { VariableInputForm } from "../../form/VariableInputForm/VariableInputForm";
 import type { TemplateVariable } from "../VariableReadTable/VariableReadTable";

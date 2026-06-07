@@ -3,8 +3,8 @@
 import { Avatar, Card, ListBox } from "@heroui/react";
 import { Plus, Search, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../../control/Button/Button";
-import { Input } from "../../../control/Input/Input";
+import { Button } from "../../../action/Button/Button";
+import { Input } from "../../../input/Input/Input";
 import { Chip } from "../../../data-display/Chip/Chip";
 import { Typography } from "../../../data-display/Typography";
 import { AbilityFormModal } from "../../../form/AbilityFormModal";

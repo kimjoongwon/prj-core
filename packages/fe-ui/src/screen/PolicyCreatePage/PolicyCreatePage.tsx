@@ -10,11 +10,11 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
-import { Checkbox } from "../../control/Checkbox/Checkbox";
-import { Input } from "../../control/Input/Input";
-import { Switch } from "../../control/Switch/Switch";
-import { TextArea } from "../../control/TextArea/TextArea";
+import { Button } from "../../action/Button/Button";
+import { Checkbox } from "../../selection/Checkbox/Checkbox";
+import { Input } from "../../input/Input/Input";
+import { Switch } from "../../selection/Switch/Switch";
+import { TextArea } from "../../input/TextArea/TextArea";
 
 export interface PolicyCreatePageAbilityOption {
 	id: string;

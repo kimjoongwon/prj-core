@@ -16,7 +16,7 @@ import {
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Modal, useOverlayState } from "@heroui/react";
 
 const leftInputs: InputConfig[] = [

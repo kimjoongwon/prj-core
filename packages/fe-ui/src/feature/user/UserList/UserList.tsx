@@ -25,8 +25,8 @@ import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { Button } from "../../../control/Button/Button";
-import { Pagination } from "../../../control/Pagination/Pagination";
+import { Button } from "../../../action/Button/Button";
+import { Pagination } from "../../../navigation/Pagination/Pagination";
 import { UserSearchWidget, UserTableWidget } from "../../../widget/user";
 
 /**

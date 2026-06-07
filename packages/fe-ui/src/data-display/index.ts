@@ -4,6 +4,7 @@ export { Badge, type BadgeProps } from "./Badge";
 export { Card, type CardProps } from "./Card";
 export * from "./Chip/Chip";
 export * from "./CircularImage/CircularImage";
+export { ColorSwatch } from "./ColorSwatch";
 export * from "./Copyright/Copyright";
 export * from "./DraggableSortableList";
 export * from "./FeeTable/FeeTable";

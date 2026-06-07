@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { TagGroup } from "./TagGroup";
 
 const meta: Meta<typeof TagGroup> = {
-	title: "Collections/TagGroup",
+	title: "collection/TagGroup",
 	component: TagGroup,
 	parameters: {
 		layout: "centered",

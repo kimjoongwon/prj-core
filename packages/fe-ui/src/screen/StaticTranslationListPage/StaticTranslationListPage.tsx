@@ -11,7 +11,7 @@ import { Languages, Plus, RefreshCcw } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type FormEvent, useEffect, useState } from "react";
 import { Modal, useOverlayState } from "@heroui/react";
-import { Switch } from "../../control/Switch/Switch";
+import { Switch } from "../../selection/Switch/Switch";
 import { ConfirmModal } from "../../widget/common/ConfirmModal";
 
 export type StaticTranslationLanguageCode =

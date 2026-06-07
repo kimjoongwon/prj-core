@@ -7,11 +7,11 @@ import type {
 } from "@cocrepo/enum";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Select } from "../../control/Select/Select";
-import { TextArea } from "../../control/TextArea/TextArea";
-import { Button } from "../../control/Button/Button";
+import { Select } from "../../selection/Select/Select";
+import { TextArea } from "../../input/TextArea/TextArea";
+import { Button } from "../../action/Button/Button";
 import { Card, Separator } from "@heroui/react";
-import { Input } from "../../control/Input/Input";
+import { Input } from "../../input/Input/Input";
 import { AIClassificationSuggestion } from "../../widget/AIClassificationSuggestion/AIClassificationSuggestion";
 
 export interface CustomerInfo {

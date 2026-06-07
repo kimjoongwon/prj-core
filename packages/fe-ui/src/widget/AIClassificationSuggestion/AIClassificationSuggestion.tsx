@@ -2,7 +2,7 @@
 
 import { Check, Sparkles, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Card, ProgressBar } from "@heroui/react";
 import { Chip } from "../../data-display/Chip/Chip";
 

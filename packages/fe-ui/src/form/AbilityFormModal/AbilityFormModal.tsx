@@ -3,11 +3,11 @@
 import { CheckboxGroup, Header, ListBox, Modal, useOverlayState } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Button } from "../../control/Button/Button";
-import { Checkbox } from "../../control/Checkbox/Checkbox";
-import { Input } from "../../control/Input/Input";
-import { RadioGroup } from "../../control/RadioGroup/RadioGroup";
-import { Select as HeroSelect } from "../../control/Select/Select";
+import { Button } from "../../action/Button/Button";
+import { Checkbox } from "../../selection/Checkbox/Checkbox";
+import { Input } from "../../input/Input/Input";
+import { RadioGroup } from "../../selection/RadioGroup/RadioGroup";
+import { Select as HeroSelect } from "../../selection/Select/Select";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { ConditionEditor } from "../../widget/ability/ConditionEditor";

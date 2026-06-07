@@ -19,7 +19,7 @@ subagent TOML은 얇은 실행 contract만 소유합니다. 상세 작업 지시
 |-------|--------|------|------|
 | `gpt-5.5` | `xhigh` | `orch-delivery`, `be-prisma-builder`, `be-database-expert`, `be-usecase-builder`, `common-schema-builder`, `qa-type-checker` | 서비스 설계, 데이터 모델, workflow orchestration, 공통 검증 계약, 타입 실패 원인 분석 |
 | `gpt-5.4` | `high` | `be-aggregate-builder`, `be-bootstrap-integrator`, `be-client-builder`, `be-controller-builder`, `be-module-builder`, `be-repository-builder`, `be-service-builder`, `common-toolkit-builder`, `common-type-builder`, `fe-data-grid-agent`, `fe-feature-agent`, `fe-form-agent`, `fe-menu-agent`, `fe-route-layout-agent`, `fe-screen-agent`, `fe-store-agent`, `qa-be-e2e-testing`, `qa-fe-e2e-testing`, `qa-mo-e2e-testing` | cross-layer 구현, 상태/화면 설계, E2E 검증처럼 되돌림 비용이 있는 작업 |
-| `gpt-5.3-codex-spark` | `medium` | `be-command-builder`, `be-dmmf-parser-builder`, `be-dto-builder`, `be-entity-builder`, `be-event-builder`, `be-query-dto-builder`, `be-vo-builder`, `etc-jenkinsfile-builder`, `fe-control-agent`, `fe-data-display-agent`, `fe-feedback-agent`, `fe-hook-agent`, `fe-layout-agent`, `fe-overlay-agent`, `fe-route-agent`, `fe-widget-agent`, `qa-be-testing`, `qa-fe-testing`, `qa-mo-testing` | 계약/컴포넌트/단위 테스트처럼 범위가 비교적 명확한 일반 구현 |
+| `gpt-5.3-codex-spark` | `medium` | `be-command-builder`, `be-dmmf-parser-builder`, `be-dto-builder`, `be-entity-builder`, `be-event-builder`, `be-query-dto-builder`, `be-vo-builder`, `etc-jenkinsfile-builder`, `fe-action-agent`, `fe-data-display-agent`, `fe-feedback-agent`, `fe-hook-agent`, `fe-input-agent`, `fe-layout-agent`, `fe-navigation-agent`, `fe-overlay-agent`, `fe-route-agent`, `fe-selection-agent`, `fe-widget-agent`, `qa-be-testing`, `qa-fe-testing`, `qa-mo-testing` | 계약/컴포넌트/단위 테스트처럼 범위가 비교적 명확한 일반 구현 |
 | `gpt-5.3-codex-spark` | `low` | `be-prisma-annotator`, `be-seed-maker`, `dev-service-starter`, `fe-cell-agent`, `fe-columns-agent` | 주석, 시드, 서비스 시작, 셀/컬럼 같은 기계적이고 반복적인 작업 |
 
 ## 서비스 Delivery Spec 운영
@@ -184,7 +184,10 @@ Web과 Mobile 구현 subagent는 `fe-*agent` 하나로 통합합니다. 각 dual
 - [fe-data-display-agent.toml](./fe-data-display-agent.toml): Web/Mobile data-display primitive subagent
 - [fe-feedback-agent.toml](./fe-feedback-agent.toml): Web/Mobile feedback/status primitive subagent
 - [fe-overlay-agent.toml](./fe-overlay-agent.toml): Web/Mobile overlay/dialog/popover/tooltip primitive subagent
-- [fe-control-agent.toml](./fe-control-agent.toml): Web control과 RN action/input/selection/navigation subagent
+- [fe-action-agent.toml](./fe-action-agent.toml): Web/Mobile action primitive subagent
+- [fe-input-agent.toml](./fe-input-agent.toml): Web/Mobile input primitive subagent
+- [fe-selection-agent.toml](./fe-selection-agent.toml): Web/Mobile selection primitive subagent
+- [fe-navigation-agent.toml](./fe-navigation-agent.toml): Web/Mobile navigation primitive subagent
 - [fe-cell-agent.toml](./fe-cell-agent.toml): DataGrid/Table Cell subagent
 - [fe-columns-agent.toml](./fe-columns-agent.toml): columns/DataGrid boundary subagent
 - [fe-widget-agent.toml](./fe-widget-agent.toml): Web/Mobile Widget subagent

@@ -3,7 +3,7 @@ import { type UserDto } from "@cocrepo/api/core/users";
 import { Eye, Pencil, Trash2, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Avatar, Spinner, Table } from "@heroui/react";
-import { Button } from "../../../control/Button/Button";
+import { Button } from "../../../action/Button/Button";
 import { Chip } from "../../../data-display/Chip/Chip";
 
 /**

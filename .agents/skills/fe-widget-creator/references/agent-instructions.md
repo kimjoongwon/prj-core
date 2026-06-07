@@ -47,7 +47,7 @@ This reference preserves the detailed implementation instructions that previousl
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
 - PC/Web UI 후보는 `@cocrepo/ui` export만 보지 말고 upstream `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
-- 기존 display/control/layout/cell/data-grid 또는 `@heroui/react` component로 표현 가능한 UI를 Widget 안에서 raw `div`/`button`/`input`/`table` + className 조합으로 재구현하지 않습니다.
+- 기존 data-display/action/input/selection/navigation/layout/cell/data-grid 또는 `@heroui/react` component로 표현 가능한 UI를 Widget 안에서 raw `div`/`button`/`input`/`table` + className 조합으로 재구현하지 않습니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
@@ -66,8 +66,8 @@ This reference preserves the detailed implementation instructions that previousl
 | 여러 Feature/Page에서 재사용할 UI | ✅ | UserCard, StatCard, FilterPanel |
 | Page/Feature가 table, metric grid, flow rail, section tabs, summary panel을 직접 품으려는 경우 | ✅ | CourseTable, CourseMetricGrid, CourseFlowRail |
 | Store/API 연결이 필요한 경우 | ❌ | fe-feature-agent 사용 |
-| 단일 기본 UI 요소 | ❌ | `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 `fe-control-agent` 사용 |
-| 폼 입력 컴포넌트 | ❌ | `fe-control-agent` 사용 |
+| 단일 기본 UI 요소 | ❌ | `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 관련 leaf agent 사용 |
+| 폼 입력 컴포넌트 | ❌ | `fe-input-agent` 또는 `fe-selection-agent` 사용 |
 
 ---
 
@@ -146,7 +146,7 @@ fe-widget-agent는 Page/Feature 파일이 비대해지는 것을 막는 1차 분
 ### 4.1 필요한 Pure UI 확인
 
 ```markdown
-Widget 개발 시 필요한 Pure UI가 없으면 **먼저 `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 `fe-control-agent`에 생성 요청**
+Widget 개발 시 필요한 Pure UI가 없으면 **먼저 `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 관련 leaf agent에 생성 요청**
 ```
 
 Page/Feature 비대화 해소용 Widget은 다음 순서로 진행합니다.
@@ -270,7 +270,7 @@ export type { StatusBadgeProps } from "./StatusBadge";
 - [ ] 기존 Widget 재사용 가능 여부 판단 및 결과 기록
 - [ ] 기능 부족 시 기존 Widget 업그레이드로 처리 (신규 복제 금지)
 - [ ] `packages/fe-ui/src/widget/[Name]/` 에 생성
-- [ ] 필요한 Pure UI가 없으면 `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 `fe-control-agent`에 요청
+- [ ] 필요한 Pure UI가 없으면 `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 관련 leaf agent에 요청
 - [ ] 단일 책임 원칙 확인
 - [ ] table/card/tabs/flow rail/metric grid 같은 visual block을 Page/Feature에서 분리한 경우 owner spec의 조합 표 갱신 확인
 - [ ] API/router/store/search params를 직접 읽지 않음
@@ -300,7 +300,7 @@ Pure UI → Widget → Feature → Page
 |----------|------|
 | orch-delivery | owner spec 또는 관련 fe-ui Screen/Feature spec의 Widget Contract 섹션 기반 구현 |
 | **fe-data-display-agent / fe-feedback-agent / fe-overlay-agent** | Widget이 사용할 표시, 상태, overlay UI 컴포넌트 생성 |
-| fe-control-agent | Widget에서 사용할 Control 컴포넌트 생성 |
+| fe-action-agent / fe-input-agent / fe-selection-agent / fe-navigation-agent | Widget에서 사용할 leaf primitive 생성 |
 
 ### 후행 에이전트
 

@@ -68,7 +68,7 @@ This reference preserves shared implementation instructions for display-area pri
 | HeroUI에 없는 커스텀 UI가 필요할 때 |    ✅     | 프로젝트 전용 스타일 컴포넌트     |
 | 비즈니스 로직이 포함된 컴포넌트     |    ❌     | fe-feature-agent 사용              |
 | 여러 UI를 조합한 복합 컴포넌트      |    ❌     | fe-widget-agent 사용               |
-| 폼 입력 컴포넌트                    |    ❌     | `fe-control-agent` 사용 |
+| 폼 입력 컴포넌트                    |    ❌     | `fe-input-agent` 또는 `fe-selection-agent` 사용 |
 
 ---
 
@@ -352,7 +352,7 @@ Pure UI → Widget → Feature → Page
 
 | subagent                   | 관계                              |
 | -------------------------- | --------------------------------- |
-| fe-control-agent | 폼 입력/조작 컴포넌트 담당 (역할 분리) |
+| fe-action-agent / fe-input-agent / fe-selection-agent / fe-navigation-agent | action/input/selection/navigation leaf primitive 담당 |
 
 ---
 
@@ -451,7 +451,7 @@ export const StatusChipCell = ({ status, removedAt }: StatusChipCellProps) => {
 | 위치                  | className 사용 |
 | --------------------- | :------------: |
 | `src/display/`      |    ✅ 허용     |
-| `src/control/`  |    ✅ 허용     |
+| `src/{action,input,selection,navigation}/`  |    ✅ 허용     |
 | `src/widget/`  |    ❌ 금지     |
 | `src/feature/` |    ❌ 금지     |
 | `src/screen/`    |    ❌ 금지     |

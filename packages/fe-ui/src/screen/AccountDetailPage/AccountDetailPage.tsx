@@ -20,11 +20,11 @@ import {
 	ShieldCheck,
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Separator, ListBox } from "@heroui/react";
-import { Select } from "../../control/Select/Select";
-import { Switch } from "../../control/Switch/Switch";
+import { Select } from "../../selection/Select/Select";
+import { Switch } from "../../selection/Switch/Switch";
 
 /** 모달 액션 타입 */
 export type AccountDetailPageModalAction =

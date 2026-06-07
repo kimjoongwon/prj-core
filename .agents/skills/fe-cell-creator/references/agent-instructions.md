@@ -45,7 +45,7 @@ This reference preserves the detailed implementation instructions that previousl
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
 - Cell 후보는 `@cocrepo/ui` export만 보지 말고 upstream `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
-- 기존 cell/display/control 또는 `@heroui/react` component로 표현 가능한 cell UI를 raw `div`/`span`/`button` + className 조합으로 재구현하지 않습니다.
+- 기존 cell/data-display/action/input/selection/navigation 또는 `@heroui/react` component로 표현 가능한 cell UI를 raw `div`/`span`/`button` + className 조합으로 재구현하지 않습니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
@@ -63,8 +63,8 @@ This reference preserves the detailed implementation instructions that previousl
 | 기존 Cell을 재활용하여 새로운 Cell을 만들 때 | ✅ | Widget/Feature Cell 조합 |
 | 값을 포맷팅/표시만 하는 단순 Cell | ✅ | Pure UI Cell |
 | 비즈니스 로직이 포함된 Cell | ✅ | Feature Cell |
-| Cell이 아닌 일반 UI 컴포넌트 | ❌ | `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 `fe-control-agent` 사용 |
-| 폼 입력 컴포넌트 | ❌ | `fe-control-agent` 사용 |
+| Cell이 아닌 일반 UI 컴포넌트 | ❌ | `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 관련 leaf agent 사용 |
+| 폼 입력 컴포넌트 | ❌ | `fe-input-agent` 또는 `fe-selection-agent` 사용 |
 
 ---
 

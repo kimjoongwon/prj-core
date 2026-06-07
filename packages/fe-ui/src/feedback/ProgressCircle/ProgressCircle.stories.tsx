@@ -29,6 +29,12 @@ const meta = {
 			control: "number",
 			description: "현재 값 (0~100)",
 		},
+		children: {
+			table: {
+				disable: true,
+			},
+			control: false,
+		},
 	},
 } satisfies Meta<typeof ProgressCircle>;
 
@@ -41,14 +47,37 @@ export const Default: Story = {
 		color: "accent",
 		size: "md",
 	},
+	render: (args) => (
+		<ProgressCircle {...args}>
+			<ProgressCircle.Track>
+				<ProgressCircle.TrackCircle />
+				<ProgressCircle.FillCircle />
+			</ProgressCircle.Track>
+		</ProgressCircle>
+	),
 };
 
 export const States: Story = {
 	render: () => (
 		<div className="flex items-center gap-6">
-			<ProgressCircle value={20} color="accent" size="sm" />
-			<ProgressCircle value={65} color="success" size="md" />
-			<ProgressCircle isIndeterminate={true} color="warning" size="lg" />
+			<ProgressCircle value={20} color="accent" size="sm">
+				<ProgressCircle.Track>
+					<ProgressCircle.TrackCircle />
+					<ProgressCircle.FillCircle />
+				</ProgressCircle.Track>
+			</ProgressCircle>
+			<ProgressCircle value={65} color="success" size="md">
+				<ProgressCircle.Track>
+					<ProgressCircle.TrackCircle />
+					<ProgressCircle.FillCircle />
+				</ProgressCircle.Track>
+			</ProgressCircle>
+			<ProgressCircle isIndeterminate={true} color="warning" size="lg">
+				<ProgressCircle.Track>
+					<ProgressCircle.TrackCircle />
+					<ProgressCircle.FillCircle />
+				</ProgressCircle.Track>
+			</ProgressCircle>
 		</div>
 	),
 };

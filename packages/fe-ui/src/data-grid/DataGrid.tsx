@@ -17,7 +17,7 @@ import {
 import { FileX } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Pagination } from "../control/Pagination/Pagination";
+import { Pagination } from "../navigation/Pagination/Pagination";
 import { Table as HeroTable, Table } from "@heroui/react";
 import type { Selection } from "react-aria-components";
 import { Skeleton } from "../feedback/Skeleton/Skeleton";

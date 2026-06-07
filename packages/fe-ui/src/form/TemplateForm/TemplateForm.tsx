@@ -1,9 +1,9 @@
 "use client";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
-import { Input } from "../../control/Input/Input";
-import { RadioGroup } from "../../control/RadioGroup/RadioGroup";
-import { TextArea } from "../../control/TextArea/TextArea";
+import { Button } from "../../action/Button/Button";
+import { Input } from "../../input/Input/Input";
+import { RadioGroup } from "../../selection/RadioGroup/RadioGroup";
+import { TextArea } from "../../input/TextArea/TextArea";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { TemplateContentEditor } from "../../widget/TemplateContentEditor/TemplateContentEditor";
 import { TemplateTypeBadge } from "../../widget/TemplateTypeBadge/TemplateTypeBadge";

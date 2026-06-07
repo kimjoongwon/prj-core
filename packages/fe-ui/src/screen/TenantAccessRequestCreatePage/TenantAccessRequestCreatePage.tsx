@@ -2,10 +2,10 @@
 
 import { ArrowLeft, Send } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
-import { Select } from "../../control/Select/Select";
+import { Button } from "../../action/Button/Button";
+import { Select } from "../../selection/Select/Select";
 import { Skeleton } from "../../feedback/Skeleton/Skeleton";
-import { TextArea } from "../../control/TextArea/TextArea";
+import { TextArea } from "../../input/TextArea/TextArea";
 import { ListBox } from "@heroui/react";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";

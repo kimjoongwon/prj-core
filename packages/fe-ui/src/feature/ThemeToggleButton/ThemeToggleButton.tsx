@@ -3,7 +3,7 @@
 import { Moon, Sun } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { useDesignSystemTheme } from "../../design-system/provider";
 import { useT } from "../../i18n";
 

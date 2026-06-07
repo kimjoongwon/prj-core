@@ -43,9 +43,9 @@ This reference preserves the detailed implementation instructions that previousl
 ### 재사용 우선 점검 (필수)
 
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
-- form/control 후보는 `@cocrepo/ui` export만 보지 말고 upstream `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
+- form/action/input/selection/navigation 후보는 `@cocrepo/ui` export만 보지 말고 upstream `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
-- 기존 form/control 또는 `@heroui/react` input/control로 표현 가능한 UI를 Form 안에서 raw `input`/`select`/`textarea`/`button` + className 조합으로 재구현하지 않습니다.
+- 기존 form/action/input/selection/navigation 또는 `@heroui/react` input/control로 표현 가능한 UI를 Form 안에서 raw `input`/`select`/`textarea`/`button` + className 조합으로 재구현하지 않습니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
@@ -75,13 +75,13 @@ This reference preserves the detailed implementation instructions that previousl
 ### 필수 규칙
 
 - API 호출/라우터 이동이 필요한 로직은 page 또는 feature가 담당하고, form 계층은 입력 UI 조합 책임만 가집니다.
-- form은 반드시 `packages/fe-ui/src/control`의 control component만 사용합니다.
+- form은 반드시 `packages/fe-ui/src/action`, `src/input`, `src/selection`, `src/navigation`의 leaf primitive만 사용합니다.
   - raw HeroUI `Input`, `Button`, `Checkbox`, `Link` 등을 form 안에서 직접 사용하는 패턴은 금지합니다.
-- 필요한 control이 `packages/fe-ui/src/control`에 없으면 form을 계속 만들지 말고,
-  먼저 `fe-control-agent` 규칙에 맞는 control을 생성/정리합니다.
+- 필요한 leaf primitive가 해당 계층에 없으면 form을 계속 만들지 말고,
+  먼저 `fe-action-agent`, `fe-input-agent`, `fe-selection-agent`, `fe-navigation-agent` 중 맞는 owner 규칙에 따라 생성/정리합니다.
 - form은 field state를 내부에서 선언하지 않습니다.
   - 금지 예: `useState`, `useReducer`, `useLocalObservable`로 form 입력값을 직접 소유
-  - 허용: page/feature가 page MobX class 내부에 선언한 `state` slice를 props로 받아 `control`에 전달
+  - 허용: page/feature가 page MobX class 내부에 선언한 `state` slice를 props로 받아 leaf primitive에 전달
 - form이 받는 `state`는 form slice만 의미합니다.
   - 예: `loginForm`, `forgotPasswordForm`, `resetPasswordForm`
   - page root state(`loginPage`, `resetPasswordPage`) 설계는 `fe-route-agent` 책임입니다.

@@ -3,7 +3,7 @@
 import { FormPage, PageTitleBar } from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Spinner } from "@heroui/react";
 import {
 	type PolicyCreatePageAbilityOption,

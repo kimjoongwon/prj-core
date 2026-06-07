@@ -10,12 +10,12 @@ import type {
 } from "@cocrepo/type";
 import { RefreshCw, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
-import { Checkbox } from "../../control/Checkbox/Checkbox";
+import { Button } from "../../action/Button/Button";
+import { Checkbox } from "../../selection/Checkbox/Checkbox";
 import { CheckboxGroup, FieldError, Label, ListBox } from "@heroui/react";
-import { Input } from "../../control/Input/Input";
-import { Select } from "../../control/Select/Select";
-import { StringListInput } from "../../control/StringListInput/StringListInput";
+import { Input } from "../../input/Input/Input";
+import { Select } from "../../selection/Select/Select";
+import { StringListInput } from "../../input/StringListInput/StringListInput";
 import { VStack } from "../../rhythm/VStack/VStack";
 
 export const OIDC_CLIENT_LOGIN_UI_VARIANT_OPTIONS: Array<{

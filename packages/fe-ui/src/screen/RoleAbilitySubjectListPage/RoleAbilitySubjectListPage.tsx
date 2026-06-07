@@ -7,7 +7,7 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 
 export interface RoleAbilitySubjectListPageProps {
 	abilityId: string;

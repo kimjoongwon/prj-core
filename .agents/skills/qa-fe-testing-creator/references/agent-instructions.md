@@ -452,7 +452,7 @@ describe("Button 스냅샷", () => {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| fe-data-display-agent / fe-feedback-agent / fe-overlay-agent / fe-control-agent | 테스트 대상 | UI 컴포넌트 구현 완료 후 |
+| fe-data-display-agent / fe-feedback-agent / fe-overlay-agent / fe-action-agent / fe-input-agent / fe-selection-agent / fe-navigation-agent | 테스트 대상 | UI 컴포넌트 구현 완료 후 |
 | fe-widget-agent | 테스트 대상 | Widget 구현 완료 후 |
 | fe-feature-agent | 테스트 대상 | Feature 구현 완료 후 |
 | fe-store-agent | 테스트 대상 | Store 구현 완료 후 |

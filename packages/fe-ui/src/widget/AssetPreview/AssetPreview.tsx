@@ -1,7 +1,7 @@
 "use client";
 
 import { FileText, ImageIcon, Link2Off, PlayCircle } from "lucide-react";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
 import { cn, Modal, useOverlayState } from "@heroui/react";
 

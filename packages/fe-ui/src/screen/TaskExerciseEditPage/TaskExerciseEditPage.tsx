@@ -14,11 +14,11 @@ import {
 	useT,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Input } from "../../control/Input/Input";
+import { Input } from "../../input/Input/Input";
 import { Spinner } from "@heroui/react";
-import { TextArea } from "../../control/TextArea/TextArea";
+import { TextArea } from "../../input/TextArea/TextArea";
 
 export interface ExerciseMediaAsset extends AssetBrowserAsset {}
 

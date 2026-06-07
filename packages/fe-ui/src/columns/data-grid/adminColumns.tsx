@@ -35,7 +35,7 @@ import {
 	TemplateActiveToggleCell,
 	UserRoleCell,
 } from "../../cell";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import {
 	buildColumns,
 	buildColumnsWithDefaultCreatedAt,

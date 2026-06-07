@@ -3,7 +3,7 @@
 import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { ArrowLeft, Edit, Key, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display";
 import { DetailPage, DetailPageSurface, DetailSectionCard } from "../../detail";
 import { VStack } from "../../rhythm";

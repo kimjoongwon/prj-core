@@ -2,9 +2,9 @@
 
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Button } from "../../control/Button/Button";
-import { Input } from "../../control/Input/Input";
-import { Select } from "../../control/Select/Select";
+import { Button } from "../../action/Button/Button";
+import { Input } from "../../input/Input/Input";
+import { Select } from "../../selection/Select/Select";
 import { ListBox } from "@heroui/react";
 
 export interface RoleOption {

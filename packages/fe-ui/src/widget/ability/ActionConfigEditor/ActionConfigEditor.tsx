@@ -1,8 +1,8 @@
 "use client";
 import { type ActionConfigDto } from "@cocrepo/api/core/actions";
 import { observer } from "mobx-react-lite";
-import { Input } from "../../../control/Input/Input";
-import { Select } from "../../../control/Select/Select";
+import { Input } from "../../../input/Input/Input";
+import { Select } from "../../../selection/Select/Select";
 import { Card, cn } from "@heroui/react";
 import { HStack } from "../../../rhythm/HStack/HStack";
 import { VStack } from "../../../rhythm/VStack/VStack";

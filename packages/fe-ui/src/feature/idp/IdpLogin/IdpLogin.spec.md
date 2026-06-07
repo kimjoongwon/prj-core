@@ -54,7 +54,7 @@ feature 로컬 state는 `IdpLoginFeatureState` MobX class 하나가 소유합니
 | 2026-04-22 | form 내부 상태를 제거한 계약에 맞춰 feature가 `OidcLoginFormState`를 소유하고 submit/abort handler를 연결하도록 정리 | codex |
 | 2026-03-28 | OIDC 클라이언트 표시 필드명을 name으로 정리하고 관련 계약을 동기화 | codex |
 | 2026-03-13 | API 의존을 root barrel에서 `@cocrepo/api/idp/interaction`, `@cocrepo/api/idp-model/loginErrorDto` subpath로 전환 | codex |
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
+| 2026-03-06 | 폴더 네이밍을 단수형(feature/action/input/selection/navigation/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
 | 2026-03-03 | 누락된 sidecar spec 신규 생성 | codex |

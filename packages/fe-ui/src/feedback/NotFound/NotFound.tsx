@@ -3,7 +3,7 @@
 import { Card } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type React from "react";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Typography } from "../../data-display/Typography";
 import { translateNode, useT } from "../../i18n";
 import { Container } from "../../layout/Container/Container";

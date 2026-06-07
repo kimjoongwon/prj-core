@@ -2,7 +2,7 @@
 
 import { Copy, Download, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 
 export interface ImageCardProps {
 	/** 이미지 소스 URL */

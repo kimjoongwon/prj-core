@@ -2,7 +2,9 @@
 
 import type { PasswordRule } from "@cocrepo/constant";
 import { observer } from "mobx-react-lite";
-import { Button, Input, Link } from "../../control";
+import { Button } from "../../action";
+import { Input } from "../../input";
+import { Link } from "../../navigation";
 import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
 import { PasswordStrengthIndicator } from "../../feedback/PasswordStrengthIndicator/PasswordStrengthIndicator";
 import { useT } from "../../i18n";

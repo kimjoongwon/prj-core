@@ -1,8 +1,8 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Input } from "../../control/Input/Input";
-import { TextArea } from "../../control/TextArea/TextArea";
+import { Input } from "../../input/Input/Input";
+import { TextArea } from "../../input/TextArea/TextArea";
 import { ByteCounter } from "../ByteCounter";
 import { HtmlEditor } from "../HtmlEditor";
 

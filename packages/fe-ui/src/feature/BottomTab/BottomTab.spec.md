@@ -50,7 +50,7 @@
 |------|------|--------|
 | 2026-03-11 | BottomTab 아이콘 렌더링을 `AppIcon` registry로 교체해 `icons[...]` 네임스페이스 import를 제거 | codex |
 | 2026-03-06 | 규칙 위반 정리: useMemo/useCallback/useIsMounted 제거 및 observer/이벤트 네이밍 규칙 반영 | codex |
-| 2026-03-06 | 폴더 네이밍을 단수형(feature/control/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
+| 2026-03-06 | 폴더 네이밍을 단수형(feature/action/input/selection/navigation/layout/hook/style/type/util/widget/cell)으로 통일 | codex |
 | 2026-03-06 | Lucide 아이콘 렌더링을 파일 내부 helper로 내장하고 utils 의존을 제거 | codex |
 | 2026-03-06 | src 레이어 상향에 맞춰 util/hook 상대 import 깊이를 보정 | codex |
 | 2026-03-06 | src/components 레이어를 제거하고 경로를 src/* 기준으로 상향 | codex |

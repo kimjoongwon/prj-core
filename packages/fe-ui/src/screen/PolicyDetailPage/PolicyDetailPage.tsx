@@ -10,8 +10,8 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Edit, Save, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
-import { Checkbox } from "../../control/Checkbox/Checkbox";
+import { Button } from "../../action/Button/Button";
+import { Checkbox } from "../../selection/Checkbox/Checkbox";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Modal, Spinner } from "@heroui/react";
 

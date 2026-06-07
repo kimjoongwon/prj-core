@@ -73,7 +73,7 @@ Service Delivery Spec
 - service delivery spec은 서비스 첫 화면을 상세 wireframe으로 반복하지 않습니다. 서비스 수준의 주요 상태와 route/page 및 Screen/Feature spec 참조표만 포함합니다.
 - `신규 컴포넌트별 출력물` 표는 `컴포넌트`, `생성 폴더`, `재사용 검토`, `재활용 컴포넌트`, `신규 조합 의존`, `이름 기준`, `출력물`, `필수 상태` 컬럼을 필수로 가집니다.
 - 신규 컴포넌트명은 app/route 전용 이름보다 UI 역할 또는 재사용 가능한 도메인 역할을 우선합니다. app명, route명, 특정 기능명에 강하게 묶이는 이름은 피하고, 필요한 경우 `이름 기준`에 이유를 남깁니다.
-- 신규 컴포넌트 생성 전 기존 `packages/fe-ui`의 screen/feature/widget/control/display/surface/rhythm 재사용 가능성을 검토하고, 그대로 재사용하지 않는 이유를 `재사용 검토`에 남깁니다.
+- 신규 컴포넌트 생성 전 기존 `packages/fe-ui`의 screen/feature/widget/action/input/selection/navigation/data-display/surface/rhythm 재사용 가능성을 검토하고, 그대로 재사용하지 않는 이유를 `재사용 검토`에 남깁니다.
 - route/page delivery spec은 route shell, route-local 상태, Screen/Feature 조합 관계를 Markdown으로 그립니다. reusable UI의 상세 props/event와 상태별 렌더링은 Screen/Feature planning spec을 참조합니다.
 - Screen/Feature planning spec은 desktop/tablet/mobile 또는 해당 플랫폼 breakpoint, loading/empty/error/permission/long text 상태, 하위 컴포넌트 조합, props/event 흐름, 상태별 렌더링을 Markdown 출력물로 기록합니다.
 - 재사용 검토, 생성 폴더, 재활용 컴포넌트, 신규 조합 의존, 이름 기준, 출력물, 필수 상태 중 하나라도 없는 신규 UI 산출물은 approval gate를 통과할 수 없습니다. 이 경우 route/page spec 생성이나 agent 호출 전에 service spec, route/page spec, Screen/Feature planning spec 중 소유 owner를 보강합니다.

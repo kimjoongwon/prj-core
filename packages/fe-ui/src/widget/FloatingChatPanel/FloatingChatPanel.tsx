@@ -11,9 +11,9 @@ import {
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { ScrollShadow, Spinner } from "@heroui/react";
-import { TextArea } from "../../control/TextArea/TextArea";
+import { TextArea } from "../../input/TextArea/TextArea";
 
 export interface ChatMessage {
 	/** 역할 (user 또는 assistant) */

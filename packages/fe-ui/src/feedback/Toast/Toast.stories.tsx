@@ -41,7 +41,49 @@ const ToastPreview = ({
 		};
 	}, [description, title, variant]);
 
-	return <Toast.Provider placement="top" />;
+	return (
+		<div className="min-w-64 rounded-md border border-divider bg-content1 px-4 py-3 text-foreground">
+			<p className="font-medium text-sm">{title}</p>
+			{description ? (
+				<p className="text-default-500 text-xs">{description}</p>
+			) : null}
+			<Toast.Provider placement="top" />
+		</div>
+	);
+};
+
+const ToastCompositionPreview = () => {
+	useEffect(() => {
+		Toast.toast.clear();
+		Toast.toast("커스텀 토스트 렌더러", {
+			description: "Toast.Provider children render prop을 사용합니다.",
+			timeout: 10000,
+			variant: "accent",
+		});
+
+		return () => {
+			Toast.toast.clear();
+		};
+	}, []);
+
+	return (
+		<div className="min-w-64 rounded-md border border-divider bg-content1 px-4 py-3 text-foreground">
+			<p className="font-medium text-sm">커스텀 토스트 렌더러</p>
+			<p className="text-default-500 text-xs">children render prop composition</p>
+			<Toast.Provider
+				placement="bottom end"
+				children={({ toast }) => (
+					<Toast toast={toast}>
+						<Toast.Content>
+							<Toast.Title>{toast.content.title}</Toast.Title>
+							<Toast.Description>{toast.content.description}</Toast.Description>
+						</Toast.Content>
+						<Toast.CloseButton />
+					</Toast>
+				)}
+			/>
+		</div>
+	);
 };
 
 export const Default: Story = {
@@ -84,18 +126,5 @@ export const Variants: Story = {
 };
 
 export const Composition: Story = {
-	render: () => (
-		<Toast.Provider
-			placement="bottom end"
-			children={({ toast }) => (
-				<Toast toast={toast}>
-					<Toast.Content>
-						<Toast.Title>{toast.content.title}</Toast.Title>
-						<Toast.Description>{toast.content.description}</Toast.Description>
-					</Toast.Content>
-					<Toast.CloseButton />
-				</Toast>
-			)}
-		/>
-	),
+	render: () => <ToastCompositionPreview />,
 };

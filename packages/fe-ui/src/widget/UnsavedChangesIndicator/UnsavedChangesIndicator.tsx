@@ -1,4 +1,4 @@
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Card } from "@heroui/react";
 
 export interface UnsavedChangesIndicatorProps {

@@ -15,10 +15,10 @@ import {
 import { ArrowLeft, FolderInput, Maximize2, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Input } from "../../control/Input/Input";
-import { Select } from "../../control/Select/Select";
+import { Input } from "../../input/Input/Input";
+import { Select } from "../../selection/Select/Select";
 import { Spinner, ListBox } from "@heroui/react";
 
 export interface AssetDetailPageFolder {

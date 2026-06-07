@@ -7,9 +7,9 @@ import {
 	FormSectionCard,
 } from "../../form";
 import { VStack } from "../../rhythm";
-import { Button } from "../../control/Button/Button";
-import { Input } from "../../control/Input";
-import { TextArea } from "../../control/TextArea";
+import { Button } from "../../action/Button/Button";
+import { Input } from "../../input/Input";
+import { TextArea } from "../../input/TextArea";
 import { ContentLanguageNotice, PageTitleBar } from "../../widget";
 import { observer } from "mobx-react-lite";
 

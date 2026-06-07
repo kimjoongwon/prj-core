@@ -2,7 +2,7 @@
 
 import { KeyRound, Mail } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { TextField } from "../../control/TextField";
+import { TextField } from "../../input/TextField";
 import { VStack } from "../../rhythm/VStack/VStack";
 
 export interface LoginFormState {

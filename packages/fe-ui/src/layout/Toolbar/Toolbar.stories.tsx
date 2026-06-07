@@ -1,126 +1,110 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import type { ToolbarProps } from "./Toolbar";
+import { Bold, Italic, Redo2, Save, Underline, Undo2 } from "lucide-react";
+import { Button, ButtonGroup } from "../../action";
+import { ToggleButton, ToggleButtonGroup } from "../../selection";
+import { Separator } from "../Separator";
 import { Toolbar } from "./Toolbar";
 
 const meta = {
-	title: "Layouts/Toolbar",
+	title: "layout/Toolbar",
 	component: Toolbar,
 	parameters: {
 		layout: "centered",
 		docs: {
 			description: {
-				component: "HeroUI Toolbar의 레이아웃 래퍼입니다.",
+				component:
+					"HeroUI Toolbar 문서와 같은 compound composition 래퍼입니다.",
 			},
 		},
 	},
 	tags: ["autodocs"],
+	argTypes: {
+		children: {
+			table: {
+				disable: true,
+			},
+			control: false,
+		},
+		orientation: {
+			control: "select",
+			options: ["horizontal", "vertical"],
+		},
+		isAttached: {
+			control: "boolean",
+		},
+	},
 } satisfies Meta<typeof Toolbar>;
 
 export default meta;
-
 type Story = StoryObj<typeof meta>;
 
-const items = (
+const iconSize = 16;
+
+const toolbarItems = (
 	<>
-		<button type="button" className="rounded-md border px-3 py-1">
-			저장
-		</button>
-		<button type="button" className="rounded-md border px-3 py-1">
-			초기화
-		</button>
-		<button type="button" className="rounded-md border px-3 py-1">
-			삭제
-		</button>
+		<ToggleButtonGroup
+			aria-label="텍스트 서식"
+			defaultSelectedKeys={["bold"]}
+			size="sm"
+		>
+			<ToggleButton id="bold" aria-label="굵게">
+				<Bold size={iconSize} />
+			</ToggleButton>
+			<ToggleButton id="italic" aria-label="기울임">
+				<Italic size={iconSize} />
+			</ToggleButton>
+			<ToggleButton id="underline" aria-label="밑줄">
+				<Underline size={iconSize} />
+			</ToggleButton>
+		</ToggleButtonGroup>
+		<Separator />
+		<ButtonGroup aria-label="문서 작업" size="sm" variant="ghost">
+			<Button isIconOnly aria-label="실행 취소">
+				<Undo2 size={iconSize} />
+			</Button>
+			<Button isIconOnly aria-label="다시 실행">
+				<Redo2 size={iconSize} />
+			</Button>
+			<Button isIconOnly aria-label="저장">
+				<Save size={iconSize} />
+			</Button>
+		</ButtonGroup>
 	</>
 );
 
-const renderDefaultToolbar = (args: ToolbarProps) => (
-	<Toolbar {...args}>{items}</Toolbar>
+const renderToolbar = (args: Story["args"]) => (
+	<Toolbar {...args}>{toolbarItems}</Toolbar>
 );
 
-export const Default: Story = {
-	render: renderDefaultToolbar,
+export const Horizontal: Story = {
 	args: {
+		"aria-label": "편집 도구",
 		orientation: "horizontal",
 	},
-	parameters: {
-		docs: {
-			description: {
-				story: "기본 가로 툴바입니다.",
-			},
-		},
-	},
+	render: renderToolbar,
 };
-
-export const Variants: Story = {
-	render: () => (
-		<div className="flex flex-col gap-3">
-			<DividerSection title="가로" />
-			<Toolbar {...{ orientation: "horizontal" }}>{items}</Toolbar>
-			<DividerSection title="세로" />
-			<Toolbar {...{ orientation: "vertical" }}>{items}</Toolbar>
-			<DividerSection title="붙임" />
-			<Toolbar {...{ orientation: "horizontal", isAttached: true }}>
-				{items}
-			</Toolbar>
-		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story: "대표 토글 조합을 한 번에 확인합니다.",
-			},
-		},
-	},
-};
-
-const DividerSection = ({ title }: { title: string }) => (
-	<div className="text-xs text-default-400 font-medium">{title}</div>
-);
-
-export const Horizontal: Story = Default;
 
 export const Vertical: Story = {
-	render: renderDefaultToolbar,
 	args: {
+		"aria-label": "편집 도구",
 		orientation: "vertical",
 	},
-	parameters: {
-		docs: {
-			description: {
-				story: "세로 정렬 툴바 구성입니다.",
-			},
-		},
-	},
+	render: renderToolbar,
 };
 
 export const Attached: Story = {
-	render: renderDefaultToolbar,
 	args: {
-		orientation: "horizontal",
+		"aria-label": "편집 도구",
 		isAttached: true,
+		orientation: "horizontal",
 	},
-	parameters: {
-		docs: {
-			description: {
-				story: "버튼이 붙은 형태로 렌더링합니다.",
-			},
-		},
-	},
+	render: renderToolbar,
 };
 
 export const Composition: Story = {
-	render: (args) => <Toolbar.Root {...args}>{items}</Toolbar.Root>,
 	args: {
+		"aria-label": "편집 도구",
 		orientation: "horizontal",
 	},
-	parameters: {
-		docs: {
-			description: {
-				story: "HeroUI Compound API의 Toolbar.Root 사용 예시입니다.",
-			},
-		},
-	},
+	render: (args) => <Toolbar.Root {...args}>{toolbarItems}</Toolbar.Root>,
 };
-
-export const RootOnly: Story = Composition;

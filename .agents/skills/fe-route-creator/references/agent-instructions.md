@@ -96,7 +96,7 @@ This reference preserves the detailed implementation instructions that previousl
 
 `Display/Control/Layout -> Widget -> Feature -> Page -> App Route Container`
 
-- `packages/fe-ui/src/display`, `src/control`, `src/layout`, `src/widget`, `src/feature`는 재사용 UI 레이어
+- `packages/fe-ui/src/data-display`, `src/action`, `src/input`, `src/selection`, `src/navigation`, `src/layout`, `src/widget`, `src/feature`는 재사용 UI 레이어
 - `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`는 screen-level pure composition 레이어의 기준 경로
 - `apps/*/src/app/**/page.tsx`는 thin app route container 레이어
 - `layout.tsx`는 route skeleton owner

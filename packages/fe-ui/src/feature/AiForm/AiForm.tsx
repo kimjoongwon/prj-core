@@ -5,9 +5,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Button } from "../../control/Button/Button";
-import { Input } from "../../control/Input/Input";
-import { Select } from "../../control/Select/Select";
+import { Button } from "../../action/Button/Button";
+import { Input } from "../../input/Input/Input";
+import { Select } from "../../selection/Select/Select";
 import { Chip } from "../../data-display/Chip/Chip";
 import type {
 	AiFormFieldMeta,

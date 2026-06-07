@@ -3,7 +3,7 @@
 import { X, Zap } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import type { ActionFabProps } from "../../layout/Layout/type";
 
 export const ActionFab = observer(function ActionFab({

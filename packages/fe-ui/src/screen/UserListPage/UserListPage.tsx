@@ -19,7 +19,7 @@ import { Search, UserCheck, UserMinus, Users } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ComponentType, useEffect } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Input } from "../../control/Input/Input";
+import { Input } from "../../input/Input/Input";
 import { Spinner } from "@heroui/react";
 
 export interface UserListPageStats {

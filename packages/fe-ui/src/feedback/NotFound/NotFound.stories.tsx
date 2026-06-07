@@ -33,9 +33,17 @@ const meta = {
 		},
 		icon: {
 			description: "Custom icon to display instead of default 404",
+			table: {
+				disable: true,
+			},
+			control: false,
 		},
 		actions: {
 			description: "Custom action buttons to replace default buttons",
+			table: {
+				disable: true,
+			},
+			control: false,
 		},
 	},
 } satisfies Meta<typeof NotFound>;
@@ -76,8 +84,13 @@ export const WithCustomIcon: Story = {
 	args: {
 		title: "Oops! Something went wrong",
 		description: "We couldn't find what you're looking for.",
-		icon: <div className="mb-4 text-6xl text-blue-500">🔍</div>,
 	},
+	render: (args) => (
+		<NotFound
+			{...args}
+			icon={<div className="mb-4 text-6xl text-blue-500">🔍</div>}
+		/>
+	),
 	parameters: {
 		docs: {
 			description: {
@@ -91,23 +104,28 @@ export const WithCustomActions: Story = {
 	args: {
 		title: "Access Denied",
 		description: "You don't have permission to access this resource.",
-		actions: (
-			<div className="flex w-full flex-col gap-3">
-				<button
-					type="button"
-					className="rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-				>
-					Contact Support
-				</button>
-				<button
-					type="button"
-					className="rounded-lg border border-gray-300 px-4 py-2 hover:bg-gray-50"
-				>
-					View Documentation
-				</button>
-			</div>
-		),
 	},
+	render: (args) => (
+		<NotFound
+			{...args}
+			actions={
+				<div className="flex w-full flex-col gap-3">
+					<button
+						type="button"
+						className="rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+					>
+						Contact Support
+					</button>
+					<button
+						type="button"
+						className="rounded-lg border border-gray-300 px-4 py-2 hover:bg-gray-50"
+					>
+						View Documentation
+					</button>
+				</div>
+			}
+		/>
+	),
 	parameters: {
 		docs: {
 			description: {
@@ -123,8 +141,10 @@ export const Minimal: Story = {
 		description: "Page not found",
 		homeButtonText: "Home",
 		backButtonText: "Back",
-		icon: <div className="text-6xl text-gray-400">⚠️</div>,
 	},
+	render: (args) => (
+		<NotFound {...args} icon={<div className="text-6xl text-gray-400">⚠️</div>} />
+	),
 	parameters: {
 		docs: {
 			description: {
@@ -141,8 +161,13 @@ export const ServerError: Story = {
 			"Something went wrong on our end. Please try again later or contact support if the problem persists.",
 		homeButtonText: "Return Home",
 		backButtonText: "Try Again",
-		icon: <div className="font-bold text-8xl text-red-400">500</div>,
 	},
+	render: (args) => (
+		<NotFound
+			{...args}
+			icon={<div className="font-bold text-8xl text-red-400">500</div>}
+		/>
+	),
 	parameters: {
 		docs: {
 			description: {
@@ -160,8 +185,13 @@ export const MaintenanceMode: Story = {
 			"We're currently performing scheduled maintenance. Please check back in a few hours.",
 		homeButtonText: "Check Status Page",
 		backButtonText: "Notify Me",
-		icon: <div className="mb-4 text-6xl text-yellow-500">🔧</div>,
 	},
+	render: (args) => (
+		<NotFound
+			{...args}
+			icon={<div className="mb-4 text-6xl text-yellow-500">🔧</div>}
+		/>
+	),
 	parameters: {
 		docs: {
 			description: {

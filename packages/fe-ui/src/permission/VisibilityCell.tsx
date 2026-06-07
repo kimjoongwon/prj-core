@@ -3,7 +3,7 @@
 import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Button } from "../control/Button/Button";
+import { Button } from "../action/Button/Button";
 import { Chip } from "../data-display/Chip/Chip";
 import { Popover, Tooltip } from "@heroui/react";
 import { type Translate, useT } from "../i18n";

@@ -17,7 +17,7 @@ import {
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 
 export interface OidcClientEditPageFormState {
 	name: string;

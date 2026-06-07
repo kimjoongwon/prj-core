@@ -1,8 +1,8 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
-import { Link as HeroLink } from "../../control/Link/Link";
+import { Button } from "../../action/Button/Button";
+import { Link as HeroLink } from "../../navigation/Link/Link";
 
 export interface IdpAccountActionsCellProps {
 	/** 계정 ID */

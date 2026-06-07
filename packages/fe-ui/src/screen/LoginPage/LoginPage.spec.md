@@ -120,7 +120,7 @@ LOGIN-SCREEN-ROUGH-NARROW
 | LOGIN-SCREEN-COMP-TYPOGRAPHY | `Typography` | `../../display/data-display/Typography` | badge/title/caption/hint/error text | 사용자 노출 텍스트 렌더링 | `fe-screen-agent` |
 | LOGIN-SCREEN-COMP-RHYTHM | `VStack`, `HStack` | `../../rhythm/**` | semantic rhythm | `section`, `block`, `inline` 등 preset | `fe-screen-agent` |
 | LOGIN-SCREEN-COMP-FORM | `LoginForm` | `../../form/LoginForm/LoginForm` | email/password input stack | `state.loginForm`만 전달 | `fe-screen-agent` |
-| LOGIN-SCREEN-COMP-CTA | `Button` | `../../control/Button/Button` | login submit action | type submit, loading, disabled, full-width | `fe-screen-agent` |
+| LOGIN-SCREEN-COMP-CTA | `Button` | `../../action/Button/Button` | login submit action | type submit, loading, disabled, full-width | `fe-screen-agent` |
 | LOGIN-SCREEN-COMP-ICON | lucide icons | `lucide-react` | badge/error/CTA visual affordance | aria-hidden decorative icons | `fe-screen-agent` |
 
 ## 상태별 렌더링

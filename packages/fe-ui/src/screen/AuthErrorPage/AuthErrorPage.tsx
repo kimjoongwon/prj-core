@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control";
+import { Button } from "../../action";
 import { useT } from "../../i18n";
 import { AuthCard, AuthCardHeader } from "../../widget";
 

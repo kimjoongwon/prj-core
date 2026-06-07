@@ -4,7 +4,7 @@ import type { PolicyResponseDto } from "@cocrepo/api/core/policies";
 import { PageTitleBar, Surface, VStack } from "@cocrepo/ui";
 import { Edit, Eye, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Spinner, Table } from "@heroui/react";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Input } from "../../control/Input/Input";
+import { Input } from "../../input/Input/Input";
 
 export interface GroupFormValues {
 	name: string;

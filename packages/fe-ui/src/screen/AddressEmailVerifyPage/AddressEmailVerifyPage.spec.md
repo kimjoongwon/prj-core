@@ -26,8 +26,8 @@ AddressEmailVerifyPage
 | 컴포넌트 | 출처 | 사용 위치 |
 | --- | --- | --- |
 | `VStack` | `../../rhythm/VStack/VStack` | 화면 조합 요소 |
-| `Input` | `../../control/Input` | 사용자 입력 컨트롤 |
-| `Button` | `../../control/Button/Button` | 사용자 액션 실행 |
+| `Input` | `../../input/Input` | 사용자 입력 컨트롤 |
+| `Button` | `../../action/Button/Button` | 사용자 액션 실행 |
 
 ## 구성 요소
 

@@ -3,7 +3,7 @@
 import type { TenantAccessRequestDto } from "@cocrepo/api/core/tenant-access-requests";
 import { Eye } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Skeleton } from "../../feedback/Skeleton/Skeleton";
 import { Table } from "@heroui/react";

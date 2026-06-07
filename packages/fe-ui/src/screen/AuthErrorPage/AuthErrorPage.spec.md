@@ -23,7 +23,7 @@ AuthErrorPage
 | --- | --- | --- |
 | `AuthCard` | `../../widget` | 상태/정보를 카드 또는 표시 단위로 표현 |
 | `AuthCardHeader` | `../../widget` | 상태/정보를 카드 또는 표시 단위로 표현 |
-| `Button` | `../../control` | 사용자 액션 실행 |
+| `Button` | `../../action` | 사용자 액션 실행 |
 
 ## 구성 요소
 

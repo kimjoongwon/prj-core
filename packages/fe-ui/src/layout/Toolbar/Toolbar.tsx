@@ -4,21 +4,13 @@ import { Toolbar as HeroToolbar } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ComponentProps } from "react";
 
-export type ToolbarProps = ComponentProps<typeof HeroToolbar.Root>;
+export type ToolbarProps = ComponentProps<typeof HeroToolbar>;
 
-const ToolbarRoot = observer((props: ToolbarProps) => {
-	return <HeroToolbar.Root {...props} />;
-});
-
-const ToolbarComponent = observer((props: ToolbarProps) => {
+const ToolbarBase = (props: ToolbarProps) => {
 	return <HeroToolbar {...props} />;
-});
-
-export const Toolbar = Object.assign(ToolbarComponent, {
-	Root: ToolbarRoot,
-}) as unknown as typeof ToolbarComponent & {
-	Root: typeof ToolbarRoot;
 };
 
-Toolbar.displayName = "Toolbar";
-Toolbar.Root.displayName = "Toolbar.Root";
+export const Toolbar = Object.assign(
+	observer(ToolbarBase),
+	HeroToolbar,
+) as unknown as typeof HeroToolbar;

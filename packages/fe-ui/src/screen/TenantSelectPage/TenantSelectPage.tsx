@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { ListBox, Modal, useOverlayState } from "@heroui/react";
 
 /** 테넌트 정보 */

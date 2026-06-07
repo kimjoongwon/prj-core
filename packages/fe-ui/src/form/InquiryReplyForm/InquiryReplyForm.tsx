@@ -3,9 +3,9 @@
 import { BookOpen, FileText, Paperclip, Send, Sparkles, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useRef, useState } from "react";
-import { Button } from "../../control/Button/Button";
+import { Button } from "../../action/Button/Button";
 import { Separator, Tooltip } from "@heroui/react";
-import { TextArea } from "../../control/TextArea/TextArea";
+import { TextArea } from "../../input/TextArea/TextArea";
 
 export interface Attachment {
 	/** 파일 ID */

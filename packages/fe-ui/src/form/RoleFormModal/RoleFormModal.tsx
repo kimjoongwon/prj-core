@@ -2,10 +2,10 @@
 
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Input } from "../../control/Input/Input";
-import { Button } from "../../control/Button/Button";
+import { Input } from "../../input/Input/Input";
+import { Button } from "../../action/Button/Button";
 import { Modal, useOverlayState } from "@heroui/react";
-import { TextArea } from "../../control/TextArea/TextArea";
+import { TextArea } from "../../input/TextArea/TextArea";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 
