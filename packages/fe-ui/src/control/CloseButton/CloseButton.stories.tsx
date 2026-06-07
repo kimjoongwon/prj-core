@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { CloseButton } from "./CloseButton";
 
 const meta: Meta<typeof CloseButton> = {
-	title: "Controls/CloseButton",
+	title: "control/CloseButton",
 	component: CloseButton,
 	tags: ["autodocs"],
 };

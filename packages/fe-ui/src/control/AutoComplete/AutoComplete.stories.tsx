@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { AutoComplete } from "./AutoComplete";
 
 const meta = {
-	title: "Inputs/AutoComplete",
+	title: "control/AutoComplete",
 	component: AutoComplete,
 	parameters: {
 		layout: "centered",
@@ -37,33 +37,6 @@ const meta = {
 		isInvalid: {
 			control: "boolean",
 			description: "유효성 검사 실패 상태",
-		},
-		size: {
-			control: "select",
-			options: ["sm", "md", "lg"],
-			description: "컴포넌트 크기",
-		},
-		variant: {
-			control: "select",
-			options: ["flat", "bordered", "faded", "underlined"],
-			description: "시각적 변형",
-		},
-		color: {
-			control: "select",
-			options: [
-				"default",
-				"primary",
-				"secondary",
-				"success",
-				"warning",
-				"danger",
-			],
-			description: "색상 테마",
-		},
-		radius: {
-			control: "select",
-			options: ["none", "sm", "md", "lg", "full"],
-			description: "모서리 둥근 정도",
 		},
 	},
 } satisfies Meta<typeof AutoComplete>;

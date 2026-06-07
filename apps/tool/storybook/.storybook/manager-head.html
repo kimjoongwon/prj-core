@@ -9,18 +9,6 @@
 </style>
 <script>
   (() => {
-    const root = document.documentElement;
-    root.classList.remove("light", "system");
-    root.classList.add("dark");
-    root.dataset.theme = "dark";
-    root.style.colorScheme = "dark";
-
-    try {
-      window.localStorage.setItem("heroui-theme", "dark");
-    } catch {
-      // Ignore storage failures in sandboxed or privacy-restricted managers.
-    }
-
     const normalizeTitle = () => {
       const currentTitle = document.title || "";
       const normalizedTitle = currentTitle

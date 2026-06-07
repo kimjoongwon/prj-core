@@ -4,6 +4,6 @@ export interface ThemeConfig {
 }
 
 export const defaultThemeConfig: ThemeConfig = {
-	defaultTheme: "dark",
+	defaultTheme: "system",
 	disableBaseline: false,
 };

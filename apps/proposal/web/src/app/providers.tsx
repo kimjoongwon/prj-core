@@ -1,6 +1,6 @@
 "use client";
 
-import { App } from "@cocrepo/ui";
+import { App, DesignSystemProvider } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 
@@ -11,5 +11,9 @@ interface ProvidersProps {
 export const Providers = observer(function Providers({
 	children,
 }: ProvidersProps) {
-	return <App>{children}</App>;
+	return (
+		<DesignSystemProvider>
+			<App>{children}</App>
+		</DesignSystemProvider>
+	);
 });

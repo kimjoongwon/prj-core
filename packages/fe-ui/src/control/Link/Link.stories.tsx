@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Link } from "./Link";
 
 const meta = {
-	title: "Controls/Link",
+	title: "control/Link",
 	component: Link,
 	parameters: {
 		layout: "centered",
@@ -24,7 +24,7 @@ export const External: Story = {
 	args: {
 		children: "문서 열기",
 		href: "https://heroui.com",
-		isExternal: true,
-		showAnchorIcon: true,
+		rel: "noreferrer",
+		target: "_blank",
 	},
 };

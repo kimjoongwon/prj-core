@@ -3,7 +3,7 @@ import { useState } from "react";
 import { StringListInput } from "./StringListInput";
 
 const meta = {
-	title: "Inputs/StringListInput",
+	title: "control/StringListInput",
 	component: StringListInput,
 	parameters: {
 		layout: "centered",

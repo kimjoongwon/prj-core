@@ -3,7 +3,7 @@ import { ButtonGroup } from "./ButtonGroup";
 import type { ButtonGroupItem } from "./ButtonGroupItem.props";
 
 const meta = {
-	title: "Inputs/ButtonGroup",
+	title: "control/ButtonGroup",
 	component: ButtonGroup,
 	parameters: {
 		layout: "centered",

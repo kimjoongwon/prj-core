@@ -4,16 +4,16 @@
 	"type": "module",
 	"main": "index.js",
 	"scripts": {
-		"build": "STORYBOOK_DISABLE_CHROMATIC=${STORYBOOK_DISABLE_CHROMATIC:-true} STORYBOOK_DISABLE_VITEST_ADDON=${STORYBOOK_DISABLE_VITEST_ADDON:-true} storybook build && node ./scripts/fix-static-subpath.mjs",
+		"build": "storybook build",
 		"ensure:browsers": "node ../../../scripts/ensure-playwright-browsers.mjs chromium",
 		"test": "PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/../../test/e2e/browsers} pnpm run ensure:browsers && PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/../../test/e2e/browsers} vitest --config vitest.config.js --passWithNoTests",
 		"test:ui": "PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/../../test/e2e/browsers} pnpm run ensure:browsers && PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/../../test/e2e/browsers} vitest --ui",
 		"test:run": "PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/../../test/e2e/browsers} pnpm run ensure:browsers && PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/../../test/e2e/browsers} vitest run",
 		"test:watch": "PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/../../test/e2e/browsers} pnpm run ensure:browsers && PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/../../test/e2e/browsers} vitest watch",
 		"format": "biome format --write .",
-		"type-check": "tsc --noEmit",
+		"type-check": "tsc --noEmit --incremental false",
 		"start:dev": "storybook dev -p ${STORYBOOK_PORT:-6006}",
-		"build-storybook": "STORYBOOK_DISABLE_CHROMATIC=${STORYBOOK_DISABLE_CHROMATIC:-true} STORYBOOK_DISABLE_VITEST_ADDON=${STORYBOOK_DISABLE_VITEST_ADDON:-true} storybook build && node ./scripts/fix-static-subpath.mjs"
+		"build-storybook": "storybook build"
 	},
 	"license": "ISC",
 	"dependencies": {

@@ -1,27 +1,27 @@
+"use client";
+
 /**
  * DesignSystemProvider
  *
- * HeroUI v3 스타일과 토스트 루트를 함께 제공하며 테마 설정을 중앙에서 관리합니다.
- * 앱에서는 이 Provider를 최상위에 배치하면 됩니다.
+ * HeroUI v3 테마는 root의 light/dark class를 기준으로 동작합니다.
+ * Web 앱에서는 HeroUI 공식 권장 방식인 next-themes가 class, storage,
+ * system preference, hydration 전 테마 적용을 담당합니다.
  */
 
-import {
-	createContext,
-	type ReactNode,
-	useContext,
-	useEffect,
-	useState,
-} from "react";
 import { ToastProvider } from "@heroui/react";
+import {
+	ThemeProvider as NextThemesProvider,
+	useTheme as useNextTheme,
+} from "next-themes";
+import type { ReactNode } from "react";
 import { defaultThemeConfig, type ThemeConfig } from "../theme/heroui.config";
 
 const THEME_STORAGE_KEY = "heroui-theme";
-const SYSTEM_THEME_MEDIA_QUERY = "(prefers-color-scheme: dark)";
 
 type ThemeName = ThemeConfig["defaultTheme"];
 type ResolvedTheme = Exclude<ThemeName, "system">;
 
-interface DesignSystemThemeContextValue {
+export interface DesignSystemThemeContextValue {
 	theme: ThemeName;
 	resolvedTheme: ResolvedTheme;
 	setTheme: (theme: ThemeName) => void;
@@ -31,72 +31,27 @@ interface DesignSystemThemeContextValue {
 	isSystem: boolean;
 }
 
-const DesignSystemThemeContext =
-	createContext<DesignSystemThemeContextValue | null>(null);
-
-function isThemeName(theme: string | null): theme is ThemeName {
-	return theme === "light" || theme === "dark" || theme === "system";
-}
-
-function resolveTheme(theme: ThemeName): ResolvedTheme {
-	if (theme === "system") {
-		if (typeof window !== "undefined") {
-			return window.matchMedia(SYSTEM_THEME_MEDIA_QUERY).matches
-				? "dark"
-				: "light";
-		}
-
-		return "light";
-	}
-
-	return theme;
-}
-
-function applyThemeToDocument(theme: ResolvedTheme) {
-	if (typeof document === "undefined") {
-		return;
-	}
-
-	const root = document.documentElement;
-	root.classList.remove("light", "dark", "system");
-	root.classList.add(theme);
-	root.dataset.theme = theme;
-	root.style.colorScheme = theme;
-}
-
-function readStoredTheme(): ThemeName | null {
-	if (typeof window === "undefined") {
-		return null;
-	}
-
-	const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-	return isThemeName(storedTheme) ? storedTheme : null;
-}
-
 export interface DesignSystemProviderProps {
 	children: ReactNode;
-	/**
-	 * 테마 설정 (기본값: light 테마)
-	 */
 	themeConfig?: Partial<ThemeConfig>;
 }
 
-/**
- * 디자인 시스템 Provider
- *
- * @example
- * ```tsx
- * import { DesignSystemProvider } from '@cocrepo/ui';
- *
- * function App() {
- *   return (
- *     <DesignSystemProvider>
- *       <YourApp />
- *     </DesignSystemProvider>
- *   );
- * }
- * ```
- */
+function isThemeName(theme: string | undefined): theme is ThemeName {
+	return theme === "light" || theme === "dark" || theme === "system";
+}
+
+function isResolvedTheme(theme: string | undefined): theme is ResolvedTheme {
+	return theme === "light" || theme === "dark";
+}
+
+function getThemeName(theme: string | undefined): ThemeName {
+	return isThemeName(theme) ? theme : defaultThemeConfig.defaultTheme;
+}
+
+function getResolvedTheme(theme: string | undefined): ResolvedTheme {
+	return isResolvedTheme(theme) ? theme : "light";
+}
+
 export function DesignSystemProvider({
 	children,
 	themeConfig,
@@ -105,100 +60,40 @@ export function DesignSystemProvider({
 		...defaultThemeConfig,
 		...themeConfig,
 	};
-	const [theme, setThemeState] = useState<ThemeName>(config.defaultTheme);
-	const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(
-		resolveTheme(config.defaultTheme),
-	);
-
-	const setTheme = (nextTheme: ThemeName) => {
-		setThemeState(nextTheme);
-
-		if (typeof window === "undefined") {
-			setResolvedTheme(nextTheme === "dark" ? "dark" : "light");
-			return;
-		}
-
-		window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
-
-		const nextResolvedTheme = resolveTheme(nextTheme);
-		setResolvedTheme(nextResolvedTheme);
-		applyThemeToDocument(nextResolvedTheme);
-	};
-
-	useEffect(() => {
-		const storedTheme = readStoredTheme();
-		const nextTheme = storedTheme ?? config.defaultTheme;
-		const nextResolvedTheme = resolveTheme(nextTheme);
-
-		setThemeState(nextTheme);
-		setResolvedTheme(nextResolvedTheme);
-		applyThemeToDocument(nextResolvedTheme);
-	}, [config.defaultTheme]);
-
-	useEffect(() => {
-		if (typeof window === "undefined") {
-			return;
-		}
-
-		const mediaQuery = window.matchMedia(SYSTEM_THEME_MEDIA_QUERY);
-		const handleChange = () => {
-			if (theme !== "system") {
-				return;
-			}
-
-			const nextResolvedTheme = mediaQuery.matches ? "dark" : "light";
-			setResolvedTheme(nextResolvedTheme);
-			applyThemeToDocument(nextResolvedTheme);
-		};
-
-		handleChange();
-		mediaQuery.addEventListener("change", handleChange);
-
-		return () => {
-			mediaQuery.removeEventListener("change", handleChange);
-		};
-	}, [theme]);
-
-	const value: DesignSystemThemeContextValue = {
-		theme,
-		resolvedTheme,
-		setTheme,
-		toggleTheme: () => setTheme(resolvedTheme === "dark" ? "light" : "dark"),
-		isDark: resolvedTheme === "dark",
-		isLight: resolvedTheme === "light",
-		isSystem: theme === "system",
-	};
 
 	return (
-		<DesignSystemThemeContext.Provider value={value}>
+		<NextThemesProvider
+			attribute="class"
+			defaultTheme={config.defaultTheme}
+			disableTransitionOnChange
+			enableSystem
+			storageKey={THEME_STORAGE_KEY}
+		>
 			<ToastProvider />
 			{children}
-		</DesignSystemThemeContext.Provider>
+		</NextThemesProvider>
 	);
 }
 
-/**
- * 현재 테마를 가져오는 훅
- *
- * @example
- * ```tsx
- * const { theme, setTheme } = useDesignSystemTheme();
- * ```
- */
-export function useDesignSystemTheme() {
-	const context = useContext(DesignSystemThemeContext);
+export function useDesignSystemTheme(): DesignSystemThemeContextValue {
+	const { resolvedTheme, setTheme, theme } = useNextTheme();
+	const activeTheme = getThemeName(theme);
+	const activeResolvedTheme = getResolvedTheme(
+		resolvedTheme ?? (activeTheme === "system" ? undefined : activeTheme),
+	);
 
-	if (context) {
-		return context;
-	}
+	const setDesignSystemTheme = (nextTheme: ThemeName) => {
+		setTheme(nextTheme);
+	};
 
 	return {
-		theme: defaultThemeConfig.defaultTheme,
-		resolvedTheme: resolveTheme(defaultThemeConfig.defaultTheme),
-		setTheme: () => {},
-		toggleTheme: () => {},
-		isDark: false,
-		isLight: true,
-		isSystem: defaultThemeConfig.defaultTheme === "system",
+		theme: activeTheme,
+		resolvedTheme: activeResolvedTheme,
+		setTheme: setDesignSystemTheme,
+		toggleTheme: () =>
+			setTheme(activeResolvedTheme === "dark" ? "light" : "dark"),
+		isDark: activeResolvedTheme === "dark",
+		isLight: activeResolvedTheme === "light",
+		isSystem: activeTheme === "system",
 	};
 }

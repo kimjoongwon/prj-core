@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Chip, Container } from "@cocrepo/ui";
+import { Button, Chip, Container, useDesignSystemTheme } from "@cocrepo/ui";
 import { Card, Separator } from "@heroui/react";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
@@ -55,7 +55,6 @@ interface LandingSectionProps extends SectionHeadingProps {
 
 type ThemeMode = "light" | "dark";
 
-const THEME_STORAGE_KEY = "heroui-theme";
 const VIEWPORT = { once: true, amount: 0.2 };
 
 const SECTION_VARIANTS = {
@@ -127,38 +126,6 @@ const ICONS: Record<ProposalIconKey, LucideIcon> = {
 	database: Database,
 	refresh: RefreshCcw,
 };
-
-function resolvePreferredTheme(): ThemeMode {
-	if (typeof window === "undefined") {
-		return "light";
-	}
-
-	const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-
-	if (storedTheme === "light" || storedTheme === "dark") {
-		return storedTheme;
-	}
-
-	if (storedTheme === "system") {
-		return window.matchMedia("(prefers-color-scheme: dark)").matches
-			? "dark"
-			: "light";
-	}
-
-	return window.matchMedia("(prefers-color-scheme: dark)").matches
-		? "dark"
-		: "light";
-}
-
-function applyTheme(theme: ThemeMode) {
-	if (typeof document === "undefined") {
-		return;
-	}
-
-	document.documentElement.classList.remove("light", "dark", "system");
-	document.documentElement.classList.add(theme);
-	document.documentElement.style.colorScheme = theme;
-}
 
 function scrollToSection(sectionId: SectionId) {
 	if (typeof document === "undefined") {
@@ -660,46 +627,16 @@ function HeroSection({
 
 export default observer(function ProposalPage() {
 	const pageData = proposalPageData;
-	const [theme, setTheme] = useState<ThemeMode>("light");
+	const { resolvedTheme, toggleTheme } = useDesignSystemTheme();
 	const [isThemeReady, setIsThemeReady] = useState(false);
+	const theme = isThemeReady ? resolvedTheme : "light";
 
 	useEffect(() => {
-		const nextTheme = resolvePreferredTheme();
-		const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
-		applyTheme(nextTheme);
-		setTheme(nextTheme);
 		setIsThemeReady(true);
-
-		const onChangeSystemThemeMediaQuery = (event: MediaQueryListEvent) => {
-			const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-
-			if (
-				storedTheme === "light" ||
-				storedTheme === "dark" ||
-				storedTheme === "system"
-			) {
-				return;
-			}
-
-			const systemTheme = event.matches ? "dark" : "light";
-			applyTheme(systemTheme);
-			setTheme(systemTheme);
-		};
-
-		mediaQuery.addEventListener("change", onChangeSystemThemeMediaQuery);
-
-		return () => {
-			mediaQuery.removeEventListener("change", onChangeSystemThemeMediaQuery);
-		};
 	}, []);
 
 	const onClickThemeToggleButton = () => {
-		const nextTheme = theme === "dark" ? "light" : "dark";
-
-		window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
-		applyTheme(nextTheme);
-		setTheme(nextTheme);
+		toggleTheme();
 		setIsThemeReady(true);
 	};
 

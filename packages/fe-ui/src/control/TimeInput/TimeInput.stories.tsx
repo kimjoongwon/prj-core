@@ -3,7 +3,7 @@ import { useState } from "react";
 import { TimeInput } from "./TimeInput";
 
 const meta: Meta<typeof TimeInput> = {
-	title: "Inputs/TimeInput",
+	title: "control/TimeInput",
 	component: TimeInput,
 	parameters: {
 		layout: "centered",

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FileUploader, type FileDto } from "./FileUploader";
 
 const meta: Meta<typeof FileUploader> = {
-	title: "Inputs/FileUploader",
+	title: "control/FileUploader",
 	component: FileUploader,
 	parameters: {
 		layout: "centered",

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { TextField } from "./TextField";
 
 const meta: Meta<typeof TextField> = {
-	title: "Inputs/TextField",
+	title: "control/TextField",
 	component: TextField,
 	parameters: {
 		layout: "centered",

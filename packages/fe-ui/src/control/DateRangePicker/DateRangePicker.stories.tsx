@@ -8,7 +8,7 @@ import type { DateRangePickerProps } from "./DateRangePicker";
 import { DateRangePicker as DateRangePickerWithMobx } from "./index";
 
 const meta: Meta<typeof DateRangePicker> = {
-	title: "Inputs/DateRangePicker",
+	title: "control/DateRangePicker",
 	component: DateRangePicker,
 	args: {
 		"aria-label": "날짜 범위 선택기",

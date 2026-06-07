@@ -9,6 +9,8 @@
     }
   },
   "include": [
+    "../../../packages/fe-mo-ui/src/**/*.stories.ts",
+    "../../../packages/fe-mo-ui/src/**/*.stories.tsx",
     "**/*.ts",
     "**/*.tsx"
   ],

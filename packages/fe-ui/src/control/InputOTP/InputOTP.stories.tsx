@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { InputOTP } from "./InputOTP";
 
 const meta: Meta<typeof InputOTP> = {
-	title: "Controls/InputOTP",
+	title: "control/InputOTP",
 	component: InputOTP,
 	tags: ["autodocs"],
 };

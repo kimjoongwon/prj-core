@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Tabs } from "./Tabs";
 
 const meta: Meta<typeof Tabs> = {
-	title: "Inputs/Tabs",
+	title: "control/Tabs",
 	component: Tabs,
 	parameters: {
 		layout: "centered",

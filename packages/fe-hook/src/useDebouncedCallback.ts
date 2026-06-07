@@ -12,7 +12,7 @@ export function useDebouncedCallback<T extends (...args: never[]) => unknown>(
 	callback: T,
 	delay: number,
 ): (...args: Parameters<T>) => void {
-	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const callbackRef = useRef(callback);
 
 	// 콜백 참조 업데이트

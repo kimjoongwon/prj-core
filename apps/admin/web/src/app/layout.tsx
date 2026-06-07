@@ -8,27 +8,6 @@ export const metadata: Metadata = {
 	description: "Admin Dashboard",
 };
 
-const initialThemeScript = `
-(function () {
-	try {
-		var storedTheme = window.localStorage.getItem("heroui-theme");
-		var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-		var theme = storedTheme === "light" || storedTheme === "dark"
-			? storedTheme
-			: storedTheme === "system"
-				? prefersDark ? "dark" : "light"
-				: "dark";
-		var root = document.documentElement;
-		root.classList.remove("light", "dark", "system");
-		root.classList.add(theme);
-		root.style.colorScheme = theme;
-	} catch {
-		document.documentElement.classList.add("dark");
-		document.documentElement.style.colorScheme = "dark";
-	}
-})();
-`;
-
 /**
  * 루트 레이아웃
  * App은 children만 받으며 순수하게 body를 감쌉니다.
@@ -46,7 +25,6 @@ export default function RootLayout({
 	return (
 		<html lang="ko" suppressHydrationWarning>
 			<head>
-				<script dangerouslySetInnerHTML={{ __html: initialThemeScript }} />
 				<link
 					rel="stylesheet"
 					href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"

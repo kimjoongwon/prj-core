@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ChipSelect } from "./ChipSelect";
 
 const meta = {
-	title: "Inputs/ChipSelect",
+	title: "control/ChipSelect",
 	component: ChipSelect,
 	parameters: {
 		layout: "centered",

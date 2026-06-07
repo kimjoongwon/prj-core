@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ListBoxSelect } from "./ListBoxSelect";
 
 const meta: Meta<typeof ListBoxSelect> = {
-	title: "Inputs/ListBoxSelect",
+	title: "control/ListBoxSelect",
 	component: ListBoxSelect,
 	args: {
 		"aria-label": "샘플 리스트박스 선택",

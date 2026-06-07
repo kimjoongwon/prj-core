@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { RangeCalendar } from "./RangeCalendar";
 
 const meta: Meta<typeof RangeCalendar> = {
-	title: "Controls/RangeCalendar",
+	title: "control/RangeCalendar",
 	component: RangeCalendar,
 	tags: ["autodocs"],
 };

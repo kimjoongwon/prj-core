@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { NumberField } from "./NumberField";
 
 const meta: Meta<typeof NumberField> = {
-	title: "Controls/NumberField",
+	title: "control/NumberField",
 	component: NumberField,
 	tags: ["autodocs"],
 };

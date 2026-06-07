@@ -3,7 +3,7 @@ import { useState } from "react";
 import { RadioGroup } from "./RadioGroup";
 
 const meta: Meta<typeof RadioGroup> = {
-	title: "Inputs/RadioGroup",
+	title: "control/RadioGroup",
 	component: RadioGroup,
 	parameters: {
 		layout: "centered",

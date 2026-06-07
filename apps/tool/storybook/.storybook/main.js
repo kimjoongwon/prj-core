@@ -1,4 +1,7 @@
 import { dirname, join } from "node:path";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
 
 /**
  * This function is used to resolve the absolute path of a package.
@@ -30,6 +33,7 @@ const config = {
     const { default: react } = await import("@vitejs/plugin-react-swc");
 
     config.plugins = config.plugins || [];
+
     if (configType === "PRODUCTION") {
       config.base = "./";
     }

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Checkbox } from "./Checkbox";
 
 const meta = {
-	title: "Inputs/Checkbox",
+	title: "control/Checkbox",
 	component: Checkbox,
 	parameters: {
 		layout: "centered",
@@ -24,23 +24,6 @@ const meta = {
 		isInvalid: {
 			control: "boolean",
 			description: "유효성 검사 실패 상태",
-		},
-		color: {
-			control: "select",
-			options: [
-				"default",
-				"primary",
-				"secondary",
-				"success",
-				"warning",
-				"danger",
-			],
-			description: "체크박스 색상 테마",
-		},
-		radius: {
-			control: "select",
-			options: ["none", "sm", "md", "lg", "full"],
-			description: "체크박스 모서리 둥근 정도",
 		},
 	},
 } satisfies Meta<typeof Checkbox>;
@@ -80,22 +63,6 @@ export const 오류상태: Story = {
 		children: "오류 상태 체크박스",
 		isInvalid: true,
 	},
-};
-
-export const 다양한색상: Story = {
-	args: {
-		children: "색상 예시",
-	},
-	render: () => (
-		<div className="flex flex-col gap-4">
-			<Checkbox color="default">기본</Checkbox>
-			<Checkbox color="primary">주요</Checkbox>
-			<Checkbox color="secondary">보조</Checkbox>
-			<Checkbox color="success">성공</Checkbox>
-			<Checkbox color="warning">경고</Checkbox>
-			<Checkbox color="danger">위험</Checkbox>
-		</div>
-	),
 };
 
 export const 다양한상태: Story = {

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Select } from "./Select";
 
 const meta = {
-	title: "Inputs/Select",
+	title: "control/Select",
 	component: Select,
 	parameters: {
 		layout: "centered",
@@ -43,18 +43,6 @@ const meta = {
 			control: "select",
 			options: ["flat", "bordered", "faded", "underlined"],
 			description: "Visual variant of the select",
-		},
-		color: {
-			control: "select",
-			options: [
-				"default",
-				"primary",
-				"secondary",
-				"success",
-				"warning",
-				"danger",
-			],
-			description: "Color theme of the select",
 		},
 	},
 } satisfies Meta<typeof Select>;

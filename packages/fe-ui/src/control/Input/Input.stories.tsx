@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Input } from "./Input";
 
 const meta: Meta<typeof Input> = {
-	title: "Inputs/Input",
+	title: "control/Input",
 	component: Input,
 	parameters: {
 		layout: "centered",

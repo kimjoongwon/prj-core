@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ColorField } from "./ColorField";
 
 const meta: Meta<typeof ColorField> = {
-	title: "Controls/ColorField",
+	title: "control/ColorField",
 	component: ColorField,
 	tags: ["autodocs"],
 };

@@ -3,7 +3,7 @@ import { parseColor } from "@heroui/react";
 import { ColorSlider } from "./ColorSlider";
 
 const meta: Meta = {
-	title: "Controls/ColorSlider",
+	title: "control/ColorSlider",
 	component: ColorSlider,
 	tags: ["autodocs"],
 };

@@ -112,6 +112,7 @@
     "@react-aria/ssr": "^3.9.10",
     "ckeditor5": "^48.0.1",
     "frappe-gantt": "^1.2.2",
-    "mermaid": "^11.12.3"
+    "mermaid": "^11.12.3",
+    "next-themes": "catalog:"
   }
 }

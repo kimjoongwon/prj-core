@@ -3,7 +3,7 @@ import { useState } from "react";
 import { type RecurringDayOfTheWeek, WeekInput } from "./WeekInput";
 
 const meta: Meta<typeof WeekInput> = {
-	title: "Inputs/WeekInput",
+	title: "control/WeekInput",
 	component: WeekInput,
 	parameters: {
 		layout: "centered",
