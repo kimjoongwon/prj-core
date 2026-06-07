@@ -42,6 +42,7 @@
     "db:data:migrate:prod": "pnpm reference:prepare && cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD tsx data-migrate.ts",
     "db:seed": "pnpm db:bootstrap",
     "db:seed:stg": "pnpm db:bootstrap:stg",
+    "db:e2e:reset": "pnpm reference:prepare && tsx ./scripts/reset-e2e-database.ts",
     "clean": "rm -rf dist && rm -rf node_modules",
     "test": "vitest --passWithNoTests",
     "test:ui": "vitest --ui"

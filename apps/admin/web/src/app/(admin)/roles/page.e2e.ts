@@ -1,7 +1,10 @@
 import { getAdminSpaceRequestHeaders } from "@cocrepo/e2e";
 import { expect, type Page, test } from "@playwright/test";
 
-const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
+const ADMIN_API_BASE_URL = new URL(
+	"/api/v1",
+	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
+).toString();
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
 const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_SPACE_ID);
@@ -58,7 +61,7 @@ test.describe("역할 목록 페이지", () => {
 
 	// ── E2E-002: 역할 등록 플로우 ──
 
-	test.describe("[E2E-002] 역할 등록 플로우", () => {
+	test.describe("[E2E-002] 역할 등록 플로우 @real", () => {
 		test("역할 등록 → 상세 → 수정 → 삭제 전체 플로우", async ({ page }) => {
 			// 고유한 역할 이름 사용 (타임스탬프로 충돌 방지)
 			const uniqueSuffix = `${Date.now()}`.slice(-6);
@@ -143,7 +146,7 @@ test.describe("역할 목록 페이지", () => {
 			expect(updateResponse.status()).toBe(200);
 
 			// Then: 상세 페이지로 이동하여 최신 데이터 확인
-			await page.goto(`http://localhost:3000/admin/roles/${roleId}`);
+			await page.goto(`./roles/${roleId}`, { waitUntil: "domcontentloaded" });
 			await page.waitForLoadState("networkidle");
 			await expect(
 				page.getByRole("heading", { name: "역할 상세" }),

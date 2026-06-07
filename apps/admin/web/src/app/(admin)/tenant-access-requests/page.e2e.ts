@@ -1,11 +1,14 @@
+import { mockAdminShell } from "@cocrepo/e2e";
 import { expect, type Page, test } from "@playwright/test";
 
 const REQUEST_ID = "11111111-1111-4111-8111-111111111111";
 const SPACE_ID = "33333333-3333-4333-8333-333333333333";
 
-test.describe("Admin 접근 승인 목록 페이지", () => {
+test.describe("Admin 접근 승인 목록 페이지 @mock", () => {
 	test.beforeEach(async ({ page }) => {
-		await mockAdminShell(page);
+		await mockAdminShell(page, {
+			spaceId: SPACE_ID,
+		});
 		await mockReviewList(page);
 	});
 
@@ -38,76 +41,6 @@ test.describe("Admin 접근 승인 목록 페이지", () => {
 		);
 	});
 });
-
-async function mockAdminShell(page: Page) {
-	await page.addInitScript(
-		({ spaceId }) => {
-			window.localStorage.setItem(
-				"admin-persist",
-				JSON.stringify({
-					spaceId,
-					groundName: "플랫폼 운영본부",
-					spaces: [{ spaceId, groundName: "플랫폼 운영본부" }],
-					accessTokenExpiresAt: Date.now() + 60 * 60 * 1000,
-					refreshTokenExpiresAt: Date.now() + 2 * 60 * 60 * 1000,
-				}),
-			);
-		},
-		{ spaceId: SPACE_ID },
-	);
-	await page.route("**/api/v1/auth/verify-token", async (route) => {
-		await route.fulfill({
-			status: 200,
-			contentType: "application/json",
-			body: JSON.stringify({
-				data: {
-					valid: true,
-					hasFullAccess: true,
-				},
-			}),
-		});
-	});
-	await page.route("**/api/v1/auth/current-space", async (route) => {
-		await route.fulfill({
-			status: 200,
-			contentType: "application/json",
-			body: JSON.stringify({
-				data: {
-					id: SPACE_ID,
-					ground: {
-						name: "플랫폼 운영본부",
-					},
-				},
-			}),
-		});
-	});
-	await page.route("**/api/v1/auth/my-spaces", async (route) => {
-		await route.fulfill({
-			status: 200,
-			contentType: "application/json",
-			body: JSON.stringify({
-				data: [
-					{
-						id: SPACE_ID,
-						ground: {
-							name: "플랫폼 운영본부",
-						},
-					},
-				],
-			}),
-		});
-	});
-	await page.route("**/api/v1/abilities**", async (route) => {
-		await route.fulfill({
-			status: 200,
-			contentType: "application/json",
-			body: JSON.stringify({
-				data: [],
-				meta: { total: 0 },
-			}),
-		});
-	});
-}
 
 async function mockReviewList(page: Page) {
 	await page.route("**/api/v1/tenant-access-requests**", async (route) => {

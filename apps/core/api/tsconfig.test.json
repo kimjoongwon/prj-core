@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "types": ["jest", "node"],
+    "types": ["jest", "node", "multer"],
     "moduleResolution": "Node16",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -14,6 +14,6 @@
       "@cocrepo/utils": ["../packages/shared-utils/src"],
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.test.ts"],
+  "include": ["src/**/*.ts", "src/**/*.test.ts", "test/**/*.ts"],
   "exclude": ["dist/**/*", "node_modules/**/*", "prisma/seed.ts"]
 }

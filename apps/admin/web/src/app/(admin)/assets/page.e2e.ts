@@ -1,14 +1,11 @@
-import { getAdminSpaceRequestHeaders, loginToConsole } from "@cocrepo/e2e";
-import { expect, type Page, type Route, test } from "@playwright/test";
-
-function capturePageErrors(page: Page) {
-	const pageErrors: string[] = [];
-	page.on("pageerror", (error) => {
-		pageErrors.push(error.message);
-	});
-
-	return pageErrors;
-}
+import {
+	capturePageErrors,
+	expectSpaceHeader,
+	getAdminSpaceRequestHeaders,
+	loginToConsole,
+	mockAdminShell,
+} from "@cocrepo/e2e";
+import { expect, test } from "@playwright/test";
 
 function onlyUnexpectedPageErrors(pageErrors: string[]) {
 	return pageErrors.filter(
@@ -22,13 +19,11 @@ function onlyUnexpectedPageErrors(pageErrors: string[]) {
 const SYSTEM_SPACE_ID = (
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3"
 ).toLowerCase();
+const ADMIN_API_BASE_URL = new URL(
+	"/api/v1/",
+	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
+).toString();
 const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_SPACE_ID);
-
-const expectSpaceHeader = (route: Route) => {
-	const spaceHeader = route.request().headers()["x-space-id"];
-	expect(spaceHeader, "x-space-id 헤더가 누락되었습니다").toBeTruthy();
-	expect(spaceHeader?.toLowerCase()).toBe(SYSTEM_SPACE_ID);
-};
 
 type FolderListResponse = {
 	data?: Array<{
@@ -49,9 +44,9 @@ type AssetMutationResponse = {
 };
 
 test.describe("에셋 목록 페이지", () => {
-	test.describe("[E2E-001] 목록 렌더링", () => {
+	test.describe("[E2E-001] 목록 렌더링 @mock", () => {
 		test("에셋 목록 페이지가 정상 렌더링되어야 한다", async ({ page }) => {
-			await loginToConsole(page);
+			await mockAdminShell(page);
 			const pageErrors = capturePageErrors(page);
 
 			// Given: 에셋 목록/폴더 API 모킹
@@ -91,11 +86,11 @@ test.describe("에셋 목록 페이지", () => {
 		});
 	});
 
-	test.describe("[E2E-002] 목록 → 상세 이동", () => {
+	test.describe("[E2E-002] 목록 → 상세 이동 @mock", () => {
 		test("목록에서 에셋 클릭 시 상세 페이지로 이동할 수 있어야 한다", async ({
 			page,
 		}) => {
-			await loginToConsole(page);
+			await mockAdminShell(page);
 			const pageErrors = capturePageErrors(page);
 			const MOCK_ASSET_ID = "11111111-1111-1111-1111-111111111111";
 			const TEST_NAME = "e2e-asset-list-to-detail.png";
@@ -186,7 +181,7 @@ test.describe("에셋 목록 페이지", () => {
 		});
 	});
 
-	test.describe("[E2E-003] 실업로드 회귀", () => {
+	test.describe("[E2E-003] 실업로드 회귀 @real", () => {
 		test("한글 파일명의 실제 multipart 업로드가 201로 완료되고 목록에서 바로 조회되어야 한다", async ({
 			page,
 		}) => {
@@ -197,7 +192,7 @@ test.describe("에셋 목록 페이지", () => {
 
 			try {
 				const foldersResponse = await page.request.get(
-					"http://localhost:3000/api/v1/folders",
+					new URL("folders", ADMIN_API_BASE_URL).toString(),
 					{
 						headers: getSpaceHeaders(),
 					},
@@ -215,7 +210,7 @@ test.describe("에셋 목록 페이지", () => {
 				).toBeTruthy();
 
 				const uploadResponse = await page.request.post(
-					"http://localhost:3000/api/v1/assets",
+					new URL("assets", ADMIN_API_BASE_URL).toString(),
 					{
 						headers: getSpaceHeaders(),
 						multipart: {
@@ -249,7 +244,7 @@ test.describe("에셋 목록 페이지", () => {
 			} finally {
 				if (uploadedAssetId) {
 					await page.request.delete(
-						`http://localhost:3000/api/v1/assets/${uploadedAssetId}`,
+						new URL(`assets/${uploadedAssetId}`, ADMIN_API_BASE_URL).toString(),
 						{
 							headers: getSpaceHeaders(),
 						},

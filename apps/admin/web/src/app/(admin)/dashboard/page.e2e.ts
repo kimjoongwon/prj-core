@@ -1,68 +1,5 @@
-import { loginToConsole } from "@cocrepo/e2e";
-import {
-	expect,
-	type Locator,
-	type Page,
-	type Route,
-	test,
-} from "@playwright/test";
-
-const SYSTEM_SPACE_ID =
-	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-
-async function fallbackRoute(route: Route) {
-	await route.fallback();
-}
-
-async function mockAdminAccessBootstrap(page: Page) {
-	await page.route("**/api/v1/auth/current-space**", async (route) => {
-		if (route.request().method() !== "GET") {
-			await fallbackRoute(route);
-			return;
-		}
-
-		await route.fulfill({
-			status: 200,
-			contentType: "application/json",
-			body: JSON.stringify({
-				data: {
-					id: SYSTEM_SPACE_ID,
-					ground: { name: "플랫폼 운영본부" },
-					contentLanguageCode: "ko_KR",
-				},
-			}),
-		});
-	});
-	await page.route("**/api/v1/auth/my-spaces**", async (route) => {
-		await route.fulfill({
-			status: 200,
-			contentType: "application/json",
-			body: JSON.stringify({
-				data: [
-					{
-						id: SYSTEM_SPACE_ID,
-						ground: { name: "플랫폼 운영본부" },
-						contentLanguageCode: "ko_KR",
-					},
-				],
-			}),
-		});
-	});
-	await page.route("**/api/v1/auth/verify-token**", async (route) => {
-		await route.fulfill({
-			status: 200,
-			contentType: "application/json",
-			body: JSON.stringify({ data: { hasFullAccess: true } }),
-		});
-	});
-	await page.route("**/api/v1/abilities/my**", async (route) => {
-		await route.fulfill({
-			status: 200,
-			contentType: "application/json",
-			body: JSON.stringify({ data: [] }),
-		});
-	});
-}
+import { mockAdminShell } from "@cocrepo/e2e";
+import { expect, type Locator, type Page, test } from "@playwright/test";
 
 const getSidebarNav = (page: Page) =>
 	page.locator("aside").getByRole("navigation").first();
@@ -119,12 +56,11 @@ test.describe("반응형 레이아웃 테스트", () => {
 	});
 });
 
-test.describe("사이드바 메뉴 회귀", () => {
+test.describe("사이드바 메뉴 회귀 @mock", () => {
 	test.beforeEach(async ({ page }) => {
 		// Given: 데스크톱 사이드바가 보이는 뷰포트로 대시보드 진입
 		await page.setViewportSize({ width: 1280, height: 720 });
-		await loginToConsole(page);
-		await mockAdminAccessBootstrap(page);
+		await mockAdminShell(page);
 		await page.goto("./dashboard", {
 			waitUntil: "domcontentloaded",
 			timeout: 60000,
@@ -165,7 +101,7 @@ test.describe("사이드바 메뉴 회귀", () => {
 	});
 });
 
-test.describe("SSR hydration 회귀", () => {
+test.describe("SSR hydration 회귀 @real", () => {
 	test("로그인 후 대시보드 진입 시 hydration recoverable error가 없어야 한다", async ({
 		page,
 	}) => {

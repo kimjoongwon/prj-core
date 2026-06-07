@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { mockPaymentManagementApi } from "./payment-management.e2e-fixtures";
 
-test.describe("Payment 목록 페이지", () => {
+test.describe("Payment 목록 페이지 @mock", () => {
 	test.beforeEach(async ({ page }) => {
 		await mockPaymentManagementApi(page);
 		await page.goto("./payments");
@@ -23,7 +23,7 @@ test.describe("Payment 목록 페이지", () => {
 	});
 });
 
-test.describe("Payment 목록 페이지 empty state", () => {
+test.describe("Payment 목록 페이지 empty state @mock", () => {
 	test("Payment API 결과가 비어 있으면 empty state가 표시되어야 한다", async ({
 		page,
 	}) => {

@@ -71,6 +71,7 @@ if (!globalWithPlaywrightResolver.__cocrepoPlaywrightResolvePatched) {
 const { defineConfig, devices } = configRequire("@playwright/test") as typeof import("@playwright/test");
 
 const e2eEnvironment = process.env.E2E_ENV;
+const e2eMode = process.env.E2E_MODE ?? "real";
 const skipAdminSetup = process.env.SKIP_ADMIN_SETUP === "1";
 const e2eTarget = process.env.E2E_TARGET ?? "all";
 const chromiumLaunchOptions = {
@@ -81,6 +82,7 @@ const reuseExistingServer = shouldUseLocalRuntime && !process.env.CI;
 const includesAdminTarget = e2eTarget === "admin" || e2eTarget === "all";
 const includesStorybookTarget =
 	e2eTarget === "storybook" || e2eTarget === "all";
+const shouldUseAdminSetup = !skipAdminSetup && e2eMode !== "mock";
 
 function ensureTrailingSlash(url: string) {
 	return url.endsWith("/") ? url : `${url}/`;
@@ -126,6 +128,8 @@ process.env.E2E_ADMIN_BASE_URL = adminBaseUrl;
 process.env.E2E_CORE_API_BASE_URL = coreApiBaseUrl;
 process.env.E2E_STORYBOOK_BASE_URL = storybookBaseUrl;
 
+const coreApiInternalUrl = coreApiBaseUrl.replace(/\/$/, "");
+
 const adminAuthStorageStatePath = path.join(
 	__dirname,
 	"tests/admin/helpers/.auth",
@@ -133,24 +137,32 @@ const adminAuthStorageStatePath = path.join(
 	"admin.json",
 );
 
-function buildApiStartCommand(filter: "core-api") {
+function buildApiStartCommand(
+	filter: "core-api",
+	script: "start:dev" | "start:e2e",
+) {
 	return [
 		"bash -lc",
-		`'export SMTP_SECURE=\${SMTP_SECURE:-false}; pnpm --filter=${filter} start:dev'`,
+		`'export SMTP_SECURE=\${SMTP_SECURE:-false}; pnpm --filter=${filter} ${script}'`,
 	].join(" ");
 }
 
-const coreApiServer = {
-	command: buildApiStartCommand("core-api"),
-	url: new URL("/api-json", coreApiBaseUrl).toString(),
-	reuseExistingServer,
-	timeout: 120000,
-	cwd: "../../..",
-};
+function createCoreApiServer(script: "start:dev" | "start:e2e") {
+	return {
+		command: buildApiStartCommand("core-api", script),
+		url: new URL("/api-json", coreApiBaseUrl).toString(),
+		reuseExistingServer,
+		timeout: 120000,
+		cwd: "../../..",
+	};
+}
+
+const coreApiServer = createCoreApiServer("start:dev");
+const seededCoreApiServer = createCoreApiServer("start:e2e");
 
 const adminWebServer = {
 	command:
-		"pnpm --filter=admin-web exec next dev --webpack -p \"${ADMIN_WEB_PORT:-3000}\"",
+		`CORE_API_INTERNAL_URL="${coreApiInternalUrl}" pnpm --filter=admin-web exec next dev --webpack -p "\${ADMIN_WEB_PORT:-3000}"`,
 	url: new URL("/admin/auth/login", adminBaseUrl).toString(),
 	reuseExistingServer,
 	timeout: 120000,
@@ -167,7 +179,11 @@ const storybookServer = {
 
 function getWebServers() {
 	if (e2eTarget === "admin") {
-		return [coreApiServer, adminWebServer];
+		if (e2eMode === "mock") {
+			return [adminWebServer];
+		}
+
+		return [seededCoreApiServer, adminWebServer];
 	}
 
 	if (e2eTarget === "storybook") {
@@ -222,7 +238,7 @@ export default defineConfig({
   // 앱별 프로젝트 설정
   projects: [
     // ── Admin Auth Setup ──
-    ...(!skipAdminSetup
+    ...(shouldUseAdminSetup
       ? [
           {
             name: "admin-setup",
@@ -239,9 +255,20 @@ export default defineConfig({
 
     // ── Admin ──
     {
-      name: "admin-chromium",
+      name: "admin-mock-chromium",
       testMatch: "**/apps/admin/web/src/**/*.e2e.ts",
-      dependencies: skipAdminSetup ? [] : ["admin-setup"],
+      grep: /@mock/,
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: adminBaseUrl,
+        launchOptions: chromiumLaunchOptions,
+      },
+    },
+    {
+      name: "admin-real-chromium",
+      testMatch: "**/apps/admin/web/src/**/*.e2e.ts",
+      grep: /@real/,
+      dependencies: shouldUseAdminSetup ? ["admin-setup"] : [],
       use: {
         ...devices["Desktop Chrome"],
         baseURL: adminBaseUrl,
@@ -252,12 +279,11 @@ export default defineConfig({
     {
       name: "admin-mobile",
       testMatch: "**/apps/admin/web/src/**/*.e2e.ts",
-      dependencies: skipAdminSetup ? [] : ["admin-setup"],
+      grep: /@mock/,
       use: {
         ...devices["Pixel 5"],
         baseURL: adminBaseUrl,
         launchOptions: chromiumLaunchOptions,
-        storageState: adminAuthStorageStatePath,
       },
     },
 

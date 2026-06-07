@@ -8,8 +8,17 @@ Admin/통합 인증 콘솔/Storybook E2E 테스트는 Playwright 워크스페이
 ## 실행
 
 ```bash
-# Admin 로컬 데스크톱
+# Admin mocked route E2E (기본)
 pnpm --filter=test-e2e test:admin
+pnpm --filter=test-e2e test:admin:mock
+
+# Admin real backend/DB critical E2E
+E2E_DATABASE_URL=postgresql://cocrepo:devpassword@localhost:5432/plate_e2e?schema=public \
+pnpm --filter=test-e2e test:admin:real
+
+# Core API real DB E2E
+E2E_DATABASE_URL=postgresql://cocrepo:devpassword@localhost:5432/plate_e2e?schema=public \
+pnpm --filter=test-e2e test:api:e2e
 
 # Admin 운영 데스크톱
 E2E_ADMIN_BASE_URL=https://admin.example.com/admin/ \
@@ -36,12 +45,31 @@ pnpm --filter=test-e2e test:storybook:prod
 
 - `E2E_ENV=local`: 기본값. local base URL과 local webServer 전략을 사용합니다.
 - `E2E_ENV=prod`: 운영 base URL만 사용하고 local webServer는 띄우지 않습니다.
+- `E2E_MODE=mock`: Admin Web만 띄우고 `@mock` 태그가 붙은 route-local mock 테스트를 실행합니다.
+- `E2E_MODE=real`: seeded test DB로 Core API와 Admin Web을 함께 띄우고 `@real` 태그가 붙은 critical full-stack 테스트를 실행합니다.
+
+## Seeded real DB 정책
+
+- `test:admin:real`과 `test:api:e2e`는 실행 전에 `@cocrepo/prisma db:e2e:reset`을 호출합니다.
+- `db:e2e:reset`은 현재 Prisma schema를 `db push --force-reset`으로 반영한 뒤 `PRISMA_SEED_PROFILE=e2e` seed를 실행합니다.
+- `E2E_DATABASE_URL` 또는 `TEST_DATABASE_URL`은 DB 이름에 `e2e` 또는 `test`를 포함해야 합니다.
+- 이름 규칙을 만족하지 않는 DB는 reset을 거부합니다. 정말 일회성 disposable DB라면 `ALLOW_E2E_DB_RESET=1`을 명시합니다.
+- seeded real DB 계약은 `admin@plate.com`, System Space, `admin-web` OIDC client, 핵심 role seed 존재를 검증합니다.
+
+## Admin mock/real 태그 정책
+
+- `@mock`: `@cocrepo/e2e`의 `mockAdminShell`, `mockApi` 또는 route-local mock으로 API 응답을 고정한 테스트입니다.
+- `@real`: 실제 backend/DB가 필요한 로그인, OIDC/auth flow, 대표 CRUD, 업로드 같은 critical flow입니다.
+- 새 Admin page E2E는 기본적으로 `@mock`으로 작성하고, API/DB 계약 검증은 `core-api` E2E 또는 소수 `@real` 테스트에 둡니다.
+- `@mock` 테스트는 local DB seed 상태에 의존하지 않아야 합니다.
 
 운영 실행 시 주요 환경 변수:
 
 - `E2E_ADMIN_BASE_URL`: 예) `https://example.com/admin/`
 - `E2E_STORYBOOK_BASE_URL`: 예) `https://storybook.example.com/`
 - `E2E_CORE_API_BASE_URL`: 필요 시 Core API readiness URL 오버라이드
+- `E2E_DATABASE_URL`: real/API E2E reset과 Core API 실행에 사용할 테스트 DB URL
+- `E2E_DIRECT_URL`: 필요 시 Prisma direct URL 오버라이드
 
 참고:
 
@@ -65,6 +93,16 @@ pnpm --filter=test-e2e test:storybook:prod
 - Admin native 로그인 화면 진입
 - 시드 관리자 계정 입력
 - System Space current-space 검증 및 admin-persist 보정
+
+### `mockAdminShell(page, options)`
+
+- Admin shell이 요구하는 token/space/ability API를 route mock으로 고정합니다.
+- mocked route E2E에서 `loginToConsole` 대신 사용합니다.
+
+### `mockApi(page, handlers)`
+
+- method/path/query/status/json/request assertion을 선언형 handler로 등록합니다.
+- route-local fixture에서 반복되는 `page.route()` boilerplate를 줄일 때 사용합니다.
 
 ### `runOidcLoginFlow(page, options)`
 

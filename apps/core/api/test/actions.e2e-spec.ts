@@ -1,3 +1,4 @@
+import { RoleCategoryName } from "@cocrepo/enum";
 import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
@@ -24,7 +25,9 @@ describe("Actions API E2E 테스트", () => {
 		await app.init();
 
 		try {
-			const auth = await getTestAuth(app);
+			const auth = await getTestAuth(app, {
+				roleCategoryName: RoleCategoryName.WORKSPACE,
+			});
 			jwtToken = auth.jwtToken;
 			spaceId = auth.spaceId;
 		} catch (error) {

@@ -1,7 +1,8 @@
-import { INestApplication, ValidationPipe } from "@nestjs/common";
+import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
+import { setNestApp } from "../src/setNestApp";
 import { getTestAuth, TestJwtStrategy } from "./helpers/test-auth.helper";
 import { GuardTestController } from "./mock-controllers/tenant-injection-test.controller";
 
@@ -25,14 +26,7 @@ describe("Role 시스템 E2E 테스트", () => {
 		}).compile();
 
 		app = moduleFixture.createNestApplication();
-
-		app.useGlobalPipes(
-			new ValidationPipe({
-				transform: true,
-				whitelist: true,
-			}),
-		);
-
+		setNestApp(app);
 		await app.init();
 
 		// TestJwtStrategy + JwtService로 인증 토큰 생성
@@ -67,7 +61,7 @@ describe("Role 시스템 E2E 테스트", () => {
 				return;
 			}
 
-			const roles = response.body?.data;
+			const roles = response.body?.data ?? response.body;
 			expect(Array.isArray(roles)).toBe(true);
 
 			const roleNames = roles.map((r: any) => r.name);
@@ -86,7 +80,7 @@ describe("Role 시스템 E2E 테스트", () => {
 
 			if (response.status !== 200) return;
 
-			const roles = response.body?.data;
+			const roles = response.body?.data ?? response.body;
 			const roleNames = roles.map((r: any) => r.name);
 			expect(roleNames).not.toContain("SUPER_ADMIN");
 			expect(roleNames).not.toContain("ADMIN");
@@ -103,7 +97,7 @@ describe("Role 시스템 E2E 테스트", () => {
 
 			if (response.status !== 200) return;
 
-			const roles = response.body?.data;
+			const roles = response.body?.data ?? response.body;
 			const fullAccess = roles.find((r: any) => r.name === "FULL_ACCESS");
 			const manage = roles.find((r: any) => r.name === "MANAGE");
 			const view = roles.find((r: any) => r.name === "VIEW");
@@ -131,8 +125,7 @@ describe("Role 시스템 E2E 테스트", () => {
 				.set("Authorization", `Bearer ${jwtToken}`);
 			// x-space-id 헤더 없음
 
-			// SpaceAccessGuard가 전역으로 등록되어 있으면 400, 아니면 RolesGuard가 첫 번째 tenant 사용
-			expect([200, 400]).toContain(response.status);
+			expect(response.status).toBe(400);
 
 			if (response.status === 400) {
 				expect(response.body?.message).toContain("x-space-id");

@@ -52,6 +52,7 @@ interface StorybookRuntimeParameter {
 interface StorybookContextLike {
 	id: string;
 	title?: string;
+	viewMode?: StorybookCanvasSurfaceProps["viewMode"];
 	globals?: {
 		storybookRealm?: StorybookRealmGlobal;
 		storybookTheme?: StorybookTheme;
@@ -415,11 +416,13 @@ export function StorybookRuntimeProvider({
 	runtime,
 	storyId,
 	theme = "system",
+	viewMode = "story",
 }: PropsWithChildren<{
 	layout?: StorybookCanvasSurfaceProps["layout"];
 	runtime: StorybookRuntimeConfig;
 	storyId: string;
 	theme?: StorybookTheme;
+	viewMode?: StorybookCanvasSurfaceProps["viewMode"];
 }>) {
 	const queryClient = getQueryClient();
 	const storeRef = useRef<RootStore | null>(null);
@@ -462,7 +465,7 @@ export function StorybookRuntimeProvider({
 				<RootStoreContext.Provider value={storeRef.current}>
 					<DesignSystemProvider themeConfig={{ defaultTheme: theme }}>
 						<StorybookThemeSync theme={theme} />
-						<StorybookCanvasSurface layout={layout}>
+						<StorybookCanvasSurface layout={layout} viewMode={viewMode}>
 							<StorybookRuntimeBootstrap runtime={runtime} storyId={storyId}>
 								{children}
 							</StorybookRuntimeBootstrap>
@@ -480,7 +483,8 @@ export function withStorybookRuntime(
 ) {
 	const runtime = resolveRuntimeConfig(context);
 	const theme = getStorybookTheme(context);
-	const providerKey = `${context.id}:${runtime.realm}:${runtime.currentPath}:${runtime.requiresSpace}:${runtime.spaceId ?? "default"}:${theme}`;
+	const viewMode = context.viewMode === "docs" ? "docs" : "story";
+	const providerKey = `${context.id}:${runtime.realm}:${runtime.currentPath}:${runtime.requiresSpace}:${runtime.spaceId ?? "default"}:${theme}:${viewMode}`;
 
 	return (
 		<StorybookRuntimeProvider
@@ -489,6 +493,7 @@ export function withStorybookRuntime(
 			runtime={runtime}
 			storyId={context.id}
 			theme={theme}
+			viewMode={viewMode}
 		>
 			<Story />
 		</StorybookRuntimeProvider>

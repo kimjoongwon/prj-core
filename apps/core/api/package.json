@@ -7,6 +7,7 @@
     "build": "nest build",
     "start": "nest start",
     "start:dev": "set -a; [ -f .env ] && . ./.env; set +a; APP_PORT=${CORE_API_PORT:-${APP_PORT:-3006}} nest build --webpack --webpackPath webpack.config.js --watch",
+    "start:e2e": "node ./scripts/start-e2e.mjs",
     "start:debug": "set -a; [ -f .env ] && . ./.env; set +a; APP_PORT=${CORE_API_PORT:-${APP_PORT:-3006}} nest build --webpack --webpackPath webpack.config.js --watch",
     "start:prod": "node dist/main",
     "type-check": "tsc --noEmit",

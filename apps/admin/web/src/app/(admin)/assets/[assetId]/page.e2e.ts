@@ -1,6 +1,11 @@
+import { mockAdminShell } from "@cocrepo/e2e";
 import { expect, test } from "@playwright/test";
 
-test.describe("에셋 상세 페이지", () => {
+test.describe("에셋 상세 페이지 @mock", () => {
+	test.beforeEach(async ({ page }) => {
+		await mockAdminShell(page);
+	});
+
 	test.describe("[E2E-001] 상세 렌더링", () => {
 		test("에셋 상세 페이지가 정상 렌더링되어야 한다", async ({ page }) => {
 			const MOCK_ASSET_ID = "22222222-2222-2222-2222-222222222222";

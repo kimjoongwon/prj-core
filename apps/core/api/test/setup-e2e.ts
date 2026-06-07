@@ -5,6 +5,19 @@ import * as dotenv from "dotenv";
 // 로컬 테스트는 앱 디렉터리의 .env만 사용합니다.
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
+const e2eDatabaseUrl =
+	process.env.E2E_DATABASE_URL ?? process.env.TEST_DATABASE_URL;
+const e2eDirectUrl =
+	process.env.E2E_DIRECT_URL ?? process.env.TEST_DIRECT_URL ?? e2eDatabaseUrl;
+
+if (e2eDatabaseUrl) {
+	process.env.DATABASE_URL = e2eDatabaseUrl;
+}
+
+if (e2eDirectUrl) {
+	process.env.DIRECT_URL = e2eDirectUrl;
+}
+
 // Jest global setup for E2E tests
 beforeAll(() => {
 	// 테스트 환경 설정 (기존 환경 변수 유지, 필요한 것만 오버라이드)

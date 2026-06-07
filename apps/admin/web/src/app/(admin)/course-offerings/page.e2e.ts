@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { mockCourseManagementApi } from "../courses/course-management.e2e-fixtures";
 
-test.describe("CourseOffering 목록 페이지", () => {
+test.describe("CourseOffering 목록 페이지 @mock", () => {
 	test.beforeEach(async ({ page }) => {
 		await mockCourseManagementApi(page);
 		await page.goto("./course-offerings");

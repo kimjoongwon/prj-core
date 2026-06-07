@@ -5,6 +5,7 @@ import {
 	type INestApplication,
 	UnauthorizedException,
 } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { PassportStrategy } from "@nestjs/passport";
 import type { Request } from "express";
@@ -60,25 +61,56 @@ export class TestJwtStrategy extends PassportStrategy(Strategy) {
 	}
 }
 
+export interface TestAuthOptions {
+	roleCategoryName?: string | { name: string };
+	roleName?: string;
+	spaceId?: string;
+	userEmail?: string;
+}
+
 /**
  * 테스트용 인증 정보를 설정합니다.
  *
  * DB에서 시드 사용자를 조회하고 JWT 토큰을 생성합니다.
  */
-export async function getTestAuth(app: INestApplication): Promise<{
+export async function getTestAuth(
+	app: INestApplication,
+	options: TestAuthOptions = {},
+): Promise<{
 	jwtToken: string;
 	spaceId: string;
 	userId: string;
 }> {
 	const prisma = app.get(PRISMA_SERVICE_TOKEN);
 	const jwtService = app.get(JwtService);
+	const configService = app.get(ConfigService);
+	const testUserEmail =
+		options.userEmail ?? process.env.E2E_API_AUTH_EMAIL ?? "admin@plate.com";
+	const roleName =
+		options.roleName ??
+		(options.roleCategoryName || options.spaceId ? undefined : "FULL_ACCESS");
+	const roleCategoryName =
+		typeof options.roleCategoryName === "string"
+			? options.roleCategoryName
+			: options.roleCategoryName?.name;
+	const oidcConfig = configService.get<{ issuer?: string }>("oidc");
+	const issuer = oidcConfig?.issuer ?? process.env.OIDC_ISSUER;
 
 	// 시드 사용자 조회
 	const user = await prisma.user.findFirst({
-		where: { email: "plate@gmail.com" },
+		where: { email: testUserEmail },
 		include: {
 			tenants: {
 				include: {
+					role: {
+						include: {
+							classification: {
+								include: {
+									category: true,
+								},
+							},
+						},
+					},
 					space: true,
 				},
 			},
@@ -87,7 +119,7 @@ export async function getTestAuth(app: INestApplication): Promise<{
 
 	if (!user) {
 		throw new Error(
-			"테스트 사용자(plate@gmail.com)를 찾을 수 없습니다. 시드 데이터를 확인하세요.",
+			`테스트 사용자(${testUserEmail})를 찾을 수 없습니다. 시드 데이터를 확인하세요.`,
 		);
 	}
 
@@ -97,13 +129,40 @@ export async function getTestAuth(app: INestApplication): Promise<{
 		);
 	}
 
+	const tenant = user.tenants.find((candidate: any) => {
+		if (options.spaceId && candidate.spaceId !== options.spaceId) {
+			return false;
+		}
+		if (
+			roleName &&
+			candidate.role?.name !== roleName
+		) {
+			return false;
+		}
+		if (
+			roleCategoryName &&
+			candidate.role?.classification?.category?.name !== roleCategoryName
+		) {
+			return false;
+		}
+		return true;
+	});
+
+	if (!tenant) {
+		throw new Error(
+			`테스트 사용자(${testUserEmail})에게 조건에 맞는 테넌트가 없습니다. 조건=${JSON.stringify(options)}`,
+		);
+	}
+
 	// HS256 JWT 토큰 생성 (TestJwtStrategy가 검증 가능)
-	const token = jwtService.sign({ sub: user.id });
-	const spaceId = user.tenants[0].spaceId;
+	const token = jwtService.sign(
+		{ sub: user.id },
+		issuer ? { issuer } : undefined,
+	);
 
 	return {
 		jwtToken: token,
-		spaceId,
+		spaceId: tenant.spaceId,
 		userId: user.id,
 	};
 }

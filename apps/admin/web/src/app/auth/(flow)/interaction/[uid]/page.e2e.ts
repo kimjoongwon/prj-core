@@ -29,7 +29,7 @@ const assertLoginFailureHandled = async (page: Page) => {
 	}).toPass({ timeout: 10000 });
 };
 
-test.describe("OIDC 로그인 인터랙션", () => {
+test.describe("OIDC 로그인 인터랙션 @real", () => {
 	test.describe("로그인 폼 렌더링", () => {
 		test("로그인 폼이 정상 렌더링되어야 한다", async ({ page }) => {
 			// Given: OIDC 플로우를 통해 로그인 폼 진입
@@ -113,7 +113,7 @@ test.describe("OIDC 로그인 인터랙션", () => {
 	});
 });
 
-test.describe("OIDC 로그인 플로우", () => {
+test.describe("OIDC 로그인 플로우 @real", () => {
 	test.describe("로그인 성공", () => {
 		test("올바른 계정으로 로그인 시 동의 화면으로 이동해야 한다", async ({
 			page,
@@ -296,7 +296,7 @@ test.describe("OIDC 로그인 플로우", () => {
 	});
 });
 
-test.describe("OIDC 동의 화면", () => {
+test.describe("OIDC 동의 화면 @real", () => {
 	test.describe("동의 화면 렌더링", () => {
 		test("동의 화면에 클라이언트명과 요청 권한이 표시되어야 한다", async ({
 			page,

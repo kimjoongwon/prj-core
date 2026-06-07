@@ -1,8 +1,5 @@
-import { loginToConsole } from "@cocrepo/e2e";
-import { expect, type Page, type Route, test } from "@playwright/test";
-
-const SYSTEM_SPACE_ID =
-	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
+import { mockAdminShell } from "@cocrepo/e2e";
+import { expect, type Page, test } from "@playwright/test";
 
 const serviceDocumentListResponse = {
 	httpStatus: 200,
@@ -57,66 +54,11 @@ async function fulfillServiceDocumentList(page: Page) {
 	});
 }
 
-async function fallbackRoute(route: Route) {
-	await route.fallback();
-}
-
-async function mockAdminAccessBootstrap(page: Page) {
-	await page.route("**/api/v1/auth/current-space**", async (route) => {
-		if (route.request().method() !== "GET") {
-			await fallbackRoute(route);
-			return;
-		}
-
-		await route.fulfill({
-			status: 200,
-			contentType: "application/json",
-			body: JSON.stringify({
-				data: {
-					id: SYSTEM_SPACE_ID,
-					ground: { name: "플랫폼 운영본부" },
-					contentLanguageCode: "ko_KR",
-				},
-			}),
-		});
-	});
-	await page.route("**/api/v1/auth/my-spaces**", async (route) => {
-		await route.fulfill({
-			status: 200,
-			contentType: "application/json",
-			body: JSON.stringify({
-				data: [
-					{
-						id: SYSTEM_SPACE_ID,
-						ground: { name: "플랫폼 운영본부" },
-						contentLanguageCode: "ko_KR",
-					},
-				],
-			}),
-		});
-	});
-	await page.route("**/api/v1/auth/verify-token**", async (route) => {
-		await route.fulfill({
-			status: 200,
-			contentType: "application/json",
-			body: JSON.stringify({ data: { hasFullAccess: true } }),
-		});
-	});
-	await page.route("**/api/v1/abilities/my**", async (route) => {
-		await route.fulfill({
-			status: 200,
-			contentType: "application/json",
-			body: JSON.stringify({ data: [] }),
-		});
-	});
-}
-
-test.describe("약관 관리 페이지", () => {
+test.describe("약관 관리 페이지 @mock", () => {
 	test("[E2E-001] 목록과 초안 작성 패널이 렌더링되어야 한다", async ({
 		page,
 	}) => {
-		await loginToConsole(page);
-		await mockAdminAccessBootstrap(page);
+		await mockAdminShell(page);
 		await fulfillServiceDocumentList(page);
 
 		await page.goto("./terms");
@@ -135,8 +77,7 @@ test.describe("약관 관리 페이지", () => {
 	}) => {
 		let createCalled = false;
 
-		await loginToConsole(page);
-		await mockAdminAccessBootstrap(page);
+		await mockAdminShell(page);
 		await fulfillServiceDocumentList(page);
 		await page.route("**/api/v1/service-documents", async (route) => {
 			if (route.request().method() === "POST") {

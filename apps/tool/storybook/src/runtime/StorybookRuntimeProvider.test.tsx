@@ -197,4 +197,33 @@ describe("StorybookRuntimeProvider", () => {
 		expect(surface?.getAttribute("data-storybook-layout")).toBe("fullscreen");
 		expect(screen.getByText("Themed story content")).toBeTruthy();
 	}, 15000);
+
+	it("keeps docs preview surfaces content-sized", async () => {
+		window.history.replaceState(
+			{},
+			"",
+			"/iframe.html?id=control-button--docs&viewMode=docs",
+		);
+
+		const { withStorybookRuntime } = await loadProvider();
+
+		const { container } = render(
+			withStorybookRuntime(() => <div>Docs story content</div>, {
+				id: "control-button--docs",
+				title: "action/Button",
+				viewMode: "docs",
+				parameters: {
+					layout: "centered",
+				},
+			}),
+		);
+
+		const surface = container.querySelector("[data-storybook-canvas-surface]");
+
+		expect(surface).toBeTruthy();
+		expect(surface?.getAttribute("class")).toContain("inline-flex");
+		expect(surface?.getAttribute("class")).not.toContain("min-h-screen");
+		expect(surface?.getAttribute("data-storybook-view-mode")).toBe("docs");
+		expect(screen.getByText("Docs story content")).toBeTruthy();
+	}, 15000);
 });

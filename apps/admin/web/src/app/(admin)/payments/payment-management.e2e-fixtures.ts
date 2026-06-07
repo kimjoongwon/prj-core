@@ -1,3 +1,4 @@
+import { mockAdminShell } from "@cocrepo/e2e";
 import type { Page } from "@playwright/test";
 
 const spaceId = "space-gangnam";
@@ -118,64 +119,9 @@ export const mockPaymentManagementApi = async (
 	page: Page,
 	options: MockPaymentManagementApiOptions = {},
 ) => {
-	await page.addInitScript(
-		({ selectedSpaceId }) => {
-			window.localStorage.setItem(
-				"admin-persist",
-				JSON.stringify({
-					spaceId: selectedSpaceId,
-					groundName: "강남점",
-					spaces: [{ spaceId: selectedSpaceId, groundName: "강남점" }],
-					accessTokenExpiresAt: Date.now() + 60 * 60 * 1000,
-					refreshTokenExpiresAt: Date.now() + 2 * 60 * 60 * 1000,
-				}),
-			);
-		},
-		{ selectedSpaceId: spaceId },
-	);
-	await page.route("**/api/v1/auth/verify-token**", async (route) => {
-		await route.fulfill({
-			json: {
-				data: {
-					valid: true,
-					hasFullAccess: true,
-				},
-			},
-		});
-	});
-	await page.route("**/api/v1/auth/current-space**", async (route) => {
-		await route.fulfill({
-			json: {
-				data: {
-					id: spaceId,
-					ground: {
-						name: "강남점",
-					},
-				},
-			},
-		});
-	});
-	await page.route("**/api/v1/auth/my-spaces**", async (route) => {
-		await route.fulfill({
-			json: {
-				data: [
-					{
-						id: spaceId,
-						ground: {
-							name: "강남점",
-						},
-					},
-				],
-			},
-		});
-	});
-	await page.route("**/api/v1/abilities**", async (route) => {
-		await route.fulfill({
-			json: {
-				data: [],
-				meta: { total: 0 },
-			},
-		});
+	await mockAdminShell(page, {
+		spaceId,
+		groundName: "강남점",
 	});
 	await page.route("**/api/v1/payments**", async (route) => {
 		const payments = options.empty ? [] : [payment];

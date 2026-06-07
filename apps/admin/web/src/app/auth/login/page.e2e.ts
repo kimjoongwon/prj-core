@@ -45,7 +45,7 @@ const routeAuthenticatedAdminShellApis = async (page: Page) => {
 	});
 };
 
-test.describe("로그인 페이지 테스트", () => {
+test.describe("로그인 페이지 테스트 @real", () => {
 	test("로그인 페이지 진입 시 native 로그인 폼이 표시되어야 한다", async ({
 		page,
 	}) => {

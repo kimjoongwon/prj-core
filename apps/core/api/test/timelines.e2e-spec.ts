@@ -36,6 +36,7 @@ describe("Timelines API (E2E)", () => {
 
 	// 테스트 중 생성된 리소스 ID를 추적하여 정리
 	const createdTimelineIds: string[] = [];
+	const createdRoutineIds: string[] = [];
 
 	beforeAll(async () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -109,6 +110,17 @@ describe("Timelines API (E2E)", () => {
 						.set("x-space-id", spaceId);
 				} catch {
 					// 이미 삭제되었거나 존재하지 않으면 무시
+				}
+			}
+
+			for (const routineId of createdRoutineIds) {
+				try {
+					await request(app.getHttpServer())
+						.delete(`/api/v1/routines/${routineId}`)
+						.set("Authorization", `Bearer ${jwtToken}`)
+						.set("x-space-id", spaceId);
+				} catch {
+					// 이미 삭제되었거나 프로그램에서 사용 중이면 무시
 				}
 			}
 		}
@@ -363,19 +375,22 @@ describe("Timelines API (E2E)", () => {
 				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId)
 					return;
 
-				// Routine 목록에서 첫 번째 루틴 조회
-				const routinesRes = await request(app.getHttpServer())
-					.get("/api/v1/routines")
-					.query({ skip: 0, take: 1 })
+				const routineCreateDto = {
+					name: `프로그램용 루틴 ${Date.now()}`,
+					label: "프로그램 등록 테스트 루틴",
+					spaceId,
+					creatorId: userId,
+				};
+
+				const routineCreateResponse = await request(app.getHttpServer())
+					.post("/api/v1/routines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-space-id", spaceId)
+					.send(routineCreateDto);
 
-				if (routinesRes.body.data?.length === 0) {
-					console.warn("루틴 데이터가 없어 프로그램 등록 테스트를 건너뜁니다.");
-					return;
-				}
-
-				testRoutineId = routinesRes.body.data[0].id;
+				expect(routineCreateResponse.status).toBe(201);
+				testRoutineId = routineCreateResponse.body.data.id;
+				createdRoutineIds.push(testRoutineId);
 				testInstructorId = userId; // 현재 테스트 사용자를 강사로 사용
 
 				const createDto = {

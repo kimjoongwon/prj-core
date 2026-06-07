@@ -1,7 +1,8 @@
-import { INestApplication, ValidationPipe } from "@nestjs/common";
+import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
+import { setNestApp } from "../src/setNestApp";
 import { getTestAuth, TestJwtStrategy } from "./helpers/test-auth.helper";
 import { GuardTestController } from "./mock-controllers/tenant-injection-test.controller";
 
@@ -18,14 +19,7 @@ describe("Guards E2E 테스트", () => {
 		}).compile();
 
 		app = moduleFixture.createNestApplication();
-
-		app.useGlobalPipes(
-			new ValidationPipe({
-				transform: true,
-				whitelist: true,
-			}),
-		);
-
+		setNestApp(app);
 		await app.init();
 
 		// TestJwtStrategy + JwtService로 인증 토큰 생성
