@@ -7,7 +7,7 @@ import { Button } from "../../action/Button";
 import {
   ReservationCheckoutSummary,
   type ReservationCheckoutSummaryItem,
-} from "../../data-display/ReservationCheckoutSummary";
+} from "../../widget/ReservationCheckoutSummary";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
 import { Icon } from "../../icon";
 import { Card } from "../../layout/Card";

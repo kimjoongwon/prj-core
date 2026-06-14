@@ -3,14 +3,22 @@ import {
   type ComponentPropsWithoutRef,
   type ComponentRef,
 } from "react";
-import { Description as HeroDescription } from "../Description";
-import { descriptionClassNames } from "../Description";
-import { FieldError as HeroFieldError } from "../FieldError";
-import { fieldErrorClassNames } from "../FieldError";
-import { InputGroup as HeroInputGroup } from "../InputGroup";
-import { inputGroupClassNames } from "../InputGroup";
-import { Label as HeroLabel } from "../Label";
-import { labelClassNames } from "../Label";
+import {
+  Description as HeroDescription,
+  descriptionClassNames,
+} from "heroui-native/description";
+import {
+  FieldError as HeroFieldError,
+  fieldErrorClassNames,
+} from "heroui-native/field-error";
+import {
+  InputGroup as HeroInputGroup,
+  inputGroupClassNames,
+} from "heroui-native/input-group";
+import {
+  Label as HeroLabel,
+  labelClassNames,
+} from "heroui-native/label";
 import {
   TextField as HeroTextField,
   textFieldClassNames,
@@ -48,11 +56,6 @@ export const TextField = Object.assign(TextFieldComponent, {
   Label: typeof HeroLabel;
   Textarea: typeof Textarea;
 };
-
-export const Label = HeroLabel;
-export const Description = HeroDescription;
-export const FieldError = HeroFieldError;
-export const InputGroup = HeroInputGroup;
 
 export {
   descriptionClassNames,

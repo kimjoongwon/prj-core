@@ -5,7 +5,7 @@ import {
   ReservationHomeScreen,
   type ReservationHomeScreenProps,
 } from "./ReservationHomeScreen";
-import type { BookingClassFeedItem } from "../../data-display/BookingClassCard";
+import type { BookingClassFeedItem } from "../../widget/BookingClassCard";
 
 jest.mock("react-native-safe-area-context", () => ({
   SafeAreaListener: ({ children }: { children: ReactNode }) => children,

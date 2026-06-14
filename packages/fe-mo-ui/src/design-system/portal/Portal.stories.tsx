@@ -5,7 +5,7 @@ import { Portal } from "./Portal";
 import { PortalHost } from "./PortalHost";
 
 const meta = {
-  title: "design-system/Portal",
+  title: "design-system/portal",
   component: Portal,
   parameters: {
     layout: "centered",

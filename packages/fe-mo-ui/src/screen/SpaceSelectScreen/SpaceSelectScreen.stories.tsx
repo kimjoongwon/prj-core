@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import type { SpaceListItemInfo } from "../../data-display/SpaceListItem";
+import type { SpaceListItemInfo } from "../../widget/SpaceListItem";
 import { SpaceSelectScreen } from "./SpaceSelectScreen";
 
 const spaces: SpaceListItemInfo[] = [

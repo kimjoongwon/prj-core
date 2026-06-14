@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
+import { Description, FieldError, Label } from "heroui-native";
 import { View } from "react-native";
-import { Description } from "../../input/Description";
-import { FieldError } from "../../input/FieldError";
-import { Label } from "../../input/Label";
 import { Text } from "../../data-display/Text";
 import { ControlField } from "./index";
 

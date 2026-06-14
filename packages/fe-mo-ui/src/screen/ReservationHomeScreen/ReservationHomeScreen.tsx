@@ -12,8 +12,8 @@ import { tv } from "tailwind-variants";
 import {
   BookingClassCard,
   type BookingClassFeedItem,
-} from "../../data-display/BookingClassCard";
-import { BookingPolicySheet } from "../../feedback/BookingPolicySheet";
+} from "../../widget/BookingClassCard";
+import { BookingPolicySheet } from "../../feature/BookingPolicySheet";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
 import { Icon } from "../../icon";
 import { ScreenFrame } from "../../layout/ScreenFrame";

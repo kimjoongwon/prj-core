@@ -1,8 +1,10 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 import ProfileTabRoute from "@/app/(tabs)/profile";
 import { mobileAuthStore } from "@/auth/auth-store";
+import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
 import { runInAction } from "mobx";
 
+const mockPush = jest.fn();
 const mockReplace = jest.fn();
 
 jest.mock("@cocrepo/mo-ui", () => {
@@ -11,34 +13,60 @@ jest.mock("@cocrepo/mo-ui", () => {
 		jest.requireActual<typeof import("react-native")>("react-native");
 
 	return {
-		Button: ({ children, onPress }: any) =>
+		MyPageScreen: ({
+			currentSpaceName,
+			isAuthenticated,
+			onPressLogout,
+			quickActions,
+		}: any) =>
 			React.createElement(
-				Pressable,
-				{ onPress },
-				typeof children === "string"
-					? React.createElement(Text, null, children)
-					: children,
+				View,
+				{ accessibilityLabel: "my-page-screen" },
+				React.createElement(
+					Text,
+					null,
+					isAuthenticated ? "로그인됨" : "확인 필요",
+				),
+				React.createElement(Text, null, currentSpaceName),
+				quickActions.map((item: any) =>
+					React.createElement(
+						Pressable,
+						{
+							disabled: item.disabled,
+							key: item.id,
+							onPress: item.onPress,
+						},
+						React.createElement(Text, null, item.label),
+					),
+				),
+				React.createElement(
+					Pressable,
+					{ onPress: onPressLogout },
+					React.createElement(Text, null, "로그아웃"),
+				),
 			),
-		Icon: ({ name }: any) => React.createElement(Text, null, `icon:${name}`),
-		ScreenFrame: ({ children }: any) =>
-			React.createElement(View, { accessibilityLabel: "screen-frame" }, children),
-		Text: ({ children }: any) => React.createElement(Text, null, children),
 	};
 });
 
 jest.mock("expo-router", () => ({
 	useRouter: () => ({
+		push: mockPush,
 		replace: mockReplace,
 	}),
 }));
 
 describe("mobile profile tab route", () => {
 	beforeEach(() => {
+		mockPush.mockReset();
 		mockReplace.mockReset();
 		runInAction(() => {
 			mobileAuthStore.authStatus = "authenticated";
 			mobileAuthStore.isAuthenticated = true;
 			mobileAuthStore.isVerifying = false;
+			mobileApiScopeStore.setSpaceInfo({
+				groundName: "광화문 스튜디오",
+				spaceId: "space-1",
+			});
 		});
 		jest.spyOn(mobileAuthStore, "logout").mockResolvedValue(undefined);
 	});
@@ -47,13 +75,23 @@ describe("mobile profile tab route", () => {
 		jest.restoreAllMocks();
 	});
 
-	it("내 정보 탭에 로그아웃 버튼을 제공해야 한다", () => {
+	it("마이 페이지 screen에 인증 상태와 현재 지점, 빠른 이동을 전달해야 한다", () => {
 		render(<ProfileTabRoute />);
 
-		expect(screen.getByText("내 정보")).toBeTruthy();
-		expect(screen.getByText("로그인 상태")).toBeTruthy();
 		expect(screen.getByText("로그인됨")).toBeTruthy();
+		expect(screen.getByText("광화문 스튜디오")).toBeTruthy();
+		expect(screen.getByText("내 예약")).toBeTruthy();
+		expect(screen.getByText("결제/수강권")).toBeTruthy();
+		expect(screen.getByText("알림/설정")).toBeTruthy();
 		expect(screen.getByText("로그아웃")).toBeTruthy();
+	});
+
+	it("내 예약 빠른 이동을 누르면 예약 탭으로 이동해야 한다", () => {
+		render(<ProfileTabRoute />);
+
+		fireEvent.press(screen.getByText("내 예약"));
+
+		expect(mockPush).toHaveBeenCalledWith("/reservations");
 	});
 
 	it("로그아웃 버튼을 누르면 세션을 종료하고 로그인 화면으로 이동해야 한다", async () => {

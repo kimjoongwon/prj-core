@@ -1,61 +1,66 @@
-import { Button, Icon, ScreenFrame, Text } from "@cocrepo/mo-ui";
+import { MyPageScreen, type QuickActionListItem } from "@cocrepo/mo-ui";
 import type { Href } from "expo-router";
 import { useRouter } from "expo-router";
 import { observer } from "mobx-react-lite";
-import { ScrollView, View } from "react-native";
 import { mobileAuthStore } from "@/auth/auth-store";
-import { mainTabClassNames } from "@/tabs/main-tab-class-names";
-
-const classNames = mainTabClassNames();
+import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
 
 const ProfileTabRoute = observer(() => {
 	const router = useRouter();
 
+	/**
+	 * 내 예약 빠른 이동 행을 눌렀을 때 예약 탭으로 이동합니다.
+	 *
+	 * @returns 예약 탭 이동 side effect
+	 */
+	const onPressMyReservationsAction = () => {
+		router.push("/reservations" as Href);
+	};
+
+	const quickActions: QuickActionListItem[] = [
+		{
+			description: "예약 확정과 대기 상태를 확인합니다.",
+			iconName: "calendarCheck",
+			id: "reservations",
+			label: "내 예약",
+			onPress: onPressMyReservationsAction,
+		},
+		{
+			description: "결제 내역과 수강권 관리는 곧 연결됩니다.",
+			disabled: true,
+			iconName: "ticketCheck",
+			id: "payments",
+			label: "결제/수강권",
+		},
+		{
+			description: "예약 알림과 앱 설정 관리는 다음 단계에서 제공합니다.",
+			disabled: true,
+			iconName: "info",
+			id: "settings",
+			label: "알림/설정",
+		},
+	];
+
+	/**
+	 * 로그아웃 버튼을 눌렀을 때 native session을 정리하고 로그인 화면으로 이동합니다.
+	 *
+	 * @returns 로그아웃 후 login route 이동 side effect
+	 */
 	const onPressLogoutButton = async () => {
 		await mobileAuthStore.logout();
 		router.replace("/auth/login" as Href);
 	};
 
 	return (
-		<ScreenFrame
-			className={classNames.screenFrame()}
-			contentClassName={classNames.root()}
-			edges={["right", "left"]}
-		>
-			<ScrollView
-				contentContainerClassName={classNames.contentContainer()}
-				showsVerticalScrollIndicator={false}
-			>
-				<View className={classNames.tabContent()}>
-					<View className={classNames.profileCard()}>
-						<Text className={classNames.sectionTitle()}>내 정보</Text>
-						<Text className={classNames.sectionDescription()}>
-							오노라 예약 알림과 계정 상태를 관리합니다.
-						</Text>
-						<View className={classNames.sessionRow()}>
-							<View className={classNames.sessionLabelRow()}>
-								<Icon name="shieldCheck" size="xs" tone="success" />
-								<Text className={classNames.sessionLabel()}>로그인 상태</Text>
-							</View>
-							<Text className={classNames.sessionValue()}>
-								{mobileAuthStore.isAuthenticated ? "로그인됨" : "확인 필요"}
-							</Text>
-						</View>
-						<Button
-							className="rounded-lg"
-							isDisabled={mobileAuthStore.isVerifying}
-							onPress={onPressLogoutButton}
-							variant="danger-soft"
-						>
-							<View className={classNames.buttonContent()}>
-								<Icon name="logOut" size="sm" tone="danger" />
-								<Text className={classNames.dangerButtonText()}>로그아웃</Text>
-							</View>
-						</Button>
-					</View>
-				</View>
-			</ScrollView>
-		</ScreenFrame>
+		<MyPageScreen
+			accountDescription="오노라 예약 알림과 계정 상태를 관리합니다."
+			currentSpaceName={mobileApiScopeStore.groundName ?? "지점 선택 필요"}
+			displayName="회원"
+			isAuthenticated={mobileAuthStore.isAuthenticated}
+			isLogoutPending={mobileAuthStore.isVerifying}
+			onPressLogout={onPressLogoutButton}
+			quickActions={quickActions}
+		/>
 	);
 });
 

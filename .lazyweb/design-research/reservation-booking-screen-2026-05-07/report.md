@@ -153,7 +153,7 @@ FitOn의 완료 화면처럼 예약 완료 후 이메일 발송, 캘린더 추�
 ## Design Direction
 
 - **Mobile-first**: 회원용 예약 화면은 모바일 우선. 데스크톱은 관리/운영 화면에 더 적합합니다.
-- **Dark HeroUI 적용 시**: 페이지 전체는 `PageSurface` 안에서 "오늘의 예약 가능 수업"을 섹션화하고, 카드 내부는 과도한 장식보다 상태 배지와 CTA 대비를 우선합니다.
+- **Dark HeroUI 적용 시**: 페이지 전체는 `ScreenSurface` 안에서 "오늘의 예약 가능 수업"을 섹션화하고, 카드 내부는 과도한 장식보다 상태 배지와 CTA 대비를 우선합니다.
 - **권장 컴포넌트**: `DateStrip`, `ClassSessionCard`, `SlotPickerSheet`, `BookingPolicySheet`, `BookingConfirmationPanel`, `PassBalanceBadge`, `WaitlistButton`.
 - **추천 상태값**: `AVAILABLE`, `FEW_LEFT`, `FULL`, `WAITLIST_OPEN`, `BOOKING_CLOSED`, `RESERVED`, `CANCELED`.
 

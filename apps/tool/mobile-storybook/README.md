@@ -11,6 +11,7 @@ pnpm start:mobile-storybook
 pnpm ios:mobile-storybook
 pnpm android:mobile-storybook
 pnpm web:mobile-storybook
+pnpm start -- mobile-storybook:web
 ```
 
 각 실행 스크립트는 8083 포트로 Expo Metro를 띄우고, 시작 전에 `.rnstorybook/storybook.requires.ts`를 자동 생성합니다. 스토리 목록만 갱신하려면 아래 명령을 사용합니다.

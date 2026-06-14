@@ -19,15 +19,13 @@ function AuthLoginPage() {
 	});
 
 	return (
-		<>
-			<LoginScreen
-				state={state}
-				title="관리자 로그인"
-				caption="예약, 결제, 권한 상태를 이어서 확인하세요."
-				onSubmitLoginForm={onSubmitLoginForm}
-				isLoading={isLoading}
-			/>
-		</>
+		<LoginScreen
+			state={state}
+			title="관리자 로그인"
+			caption="예약, 결제, 권한 상태를 이어서 확인하세요."
+			onSubmitLoginForm={onSubmitLoginForm}
+			isLoading={isLoading}
+		/>
 	);
 }
 

@@ -125,6 +125,28 @@ const preview: Preview = {
 			},
 		},
 		layout: "padded",
+		options: {
+			storySort: {
+				includeNames: true,
+				method: "alphabetical",
+				order: [
+					"action",
+					"data-display",
+					"feedback",
+					"input",
+					"selection",
+					"navigation",
+					"layout",
+					"rhythm",
+					"surface",
+					"design-system",
+					"widget",
+					"feature",
+					"screen",
+					"Auto",
+				],
+			},
+		},
 	},
 };
 

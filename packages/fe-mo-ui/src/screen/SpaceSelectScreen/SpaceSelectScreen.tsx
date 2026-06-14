@@ -5,9 +5,9 @@ import { tv } from "tailwind-variants";
 import { Button } from "../../action/Button";
 import { Icon } from "../../icon";
 import { ScreenFrame } from "../../layout/ScreenFrame";
-import { SpaceSelectionList } from "../../selection/SpaceSelectionList";
+import { SpaceSelectionList } from "../../widget/SpaceSelectionList";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
-import type { SpaceListItemInfo } from "../../data-display/SpaceListItem";
+import type { SpaceListItemInfo } from "../../widget/SpaceListItem";
 
 export type SpaceSelectScreenStatus = "loading" | "ready" | "empty" | "error";
 

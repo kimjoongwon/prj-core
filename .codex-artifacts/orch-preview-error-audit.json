@@ -101,62 +101,62 @@
           "status": "generated"
         },
         {
-          "displayName": "AuthErrorPage",
-          "sourcePath": "packages/fe-ui/src/screen/AuthErrorPage/AuthErrorPage.tsx",
+          "displayName": "AuthErrorScreen",
+          "sourcePath": "packages/fe-ui/src/screen/AuthErrorScreen/AuthErrorScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "GroundDetailPage",
-          "sourcePath": "packages/fe-ui/src/screen/GroundDetailPage/GroundDetailPage.tsx",
+          "displayName": "GroundDetailScreen",
+          "sourcePath": "packages/fe-ui/src/screen/GroundDetailScreen/GroundDetailScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "LoginPage",
-          "sourcePath": "packages/fe-ui/src/screen/LoginPage/LoginPage.tsx",
+          "displayName": "LoginScreen",
+          "sourcePath": "packages/fe-ui/src/screen/LoginScreen/LoginScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "LoginRedirectPage",
-          "sourcePath": "packages/fe-ui/src/screen/LoginRedirectPage/LoginRedirectPage.tsx",
+          "displayName": "LoginRedirectScreen",
+          "sourcePath": "packages/fe-ui/src/screen/LoginRedirectScreen/LoginRedirectScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "RoleAbilityActionListPage",
-          "sourcePath": "packages/fe-ui/src/screen/RoleAbilityActionListPage/RoleAbilityActionListPage.tsx",
+          "displayName": "RoleAbilityActionListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/RoleAbilityActionListScreen/RoleAbilityActionListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "RoleAbilitySubjectListPage",
-          "sourcePath": "packages/fe-ui/src/screen/RoleAbilitySubjectListPage/RoleAbilitySubjectListPage.tsx",
+          "displayName": "RoleAbilitySubjectListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/RoleAbilitySubjectListScreen/RoleAbilitySubjectListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "SessionCheckPage",
-          "sourcePath": "packages/fe-ui/src/screen/SessionCheckPage/SessionCheckPage.tsx",
+          "displayName": "SessionCheckScreen",
+          "sourcePath": "packages/fe-ui/src/screen/SessionCheckScreen/SessionCheckScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "TaskExerciseDetailPage",
-          "sourcePath": "packages/fe-ui/src/screen/TaskExerciseDetailPage/TaskExerciseDetailPage.tsx",
+          "displayName": "TaskExerciseDetailScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TaskExerciseDetailScreen/TaskExerciseDetailScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "TimelineDetailPage",
-          "sourcePath": "packages/fe-ui/src/screen/TimelineDetailPage/TimelineDetailPage.tsx",
+          "displayName": "TimelineDetailScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TimelineDetailScreen/TimelineDetailScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "TimelineSessionDetailPage",
-          "sourcePath": "packages/fe-ui/src/screen/TimelineSessionDetailPage/TimelineSessionDetailPage.tsx",
+          "displayName": "TimelineSessionDetailScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TimelineSessionDetailScreen/TimelineSessionDetailScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
@@ -233,74 +233,74 @@
       "count": 12,
       "items": [
         {
-          "displayName": "AccountListPage",
-          "sourcePath": "packages/fe-ui/src/screen/AccountListPage/AccountListPage.tsx",
+          "displayName": "AccountListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/AccountListScreen/AccountListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "AuthAuditLogListPage",
-          "sourcePath": "packages/fe-ui/src/screen/AuthAuditLogListPage/AuthAuditLogListPage.tsx",
+          "displayName": "AuthAuditLogListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/AuthAuditLogListScreen/AuthAuditLogListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "EmailVerificationListPage",
-          "sourcePath": "packages/fe-ui/src/screen/EmailVerificationListPage/EmailVerificationListPage.tsx",
+          "displayName": "EmailVerificationListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/EmailVerificationListScreen/EmailVerificationListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "InquiryListPage",
-          "sourcePath": "packages/fe-ui/src/screen/InquiryListPage/InquiryListPage.tsx",
+          "displayName": "InquiryListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/InquiryListScreen/InquiryListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "OidcClientListPage",
-          "sourcePath": "packages/fe-ui/src/screen/OidcClientListPage/OidcClientListPage.tsx",
+          "displayName": "OidcClientListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/OidcClientListScreen/OidcClientListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "OidcSessionListPage",
-          "sourcePath": "packages/fe-ui/src/screen/OidcSessionListPage/OidcSessionListPage.tsx",
+          "displayName": "OidcSessionListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/OidcSessionListScreen/OidcSessionListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "RoleListPage",
-          "sourcePath": "packages/fe-ui/src/screen/RoleListPage/RoleListPage.tsx",
+          "displayName": "RoleListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/RoleListScreen/RoleListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "RoutineListPage",
-          "sourcePath": "packages/fe-ui/src/screen/RoutineListPage/RoutineListPage.tsx",
+          "displayName": "RoutineListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/RoutineListScreen/RoutineListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "StaticTranslationListPage",
-          "sourcePath": "packages/fe-ui/src/screen/StaticTranslationListPage/StaticTranslationListPage.tsx",
+          "displayName": "StaticTranslationListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/StaticTranslationListScreen/StaticTranslationListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "TaskListPage",
-          "sourcePath": "packages/fe-ui/src/screen/TaskListPage/TaskListPage.tsx",
+          "displayName": "TaskListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TaskListScreen/TaskListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "TemplateListPage",
-          "sourcePath": "packages/fe-ui/src/screen/TemplateListPage/TemplateListPage.tsx",
+          "displayName": "TemplateListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TemplateListScreen/TemplateListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "TimelineListPage",
-          "sourcePath": "packages/fe-ui/src/screen/TimelineListPage/TimelineListPage.tsx",
+          "displayName": "TimelineListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TimelineListScreen/TimelineListScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -359,32 +359,32 @@
           "status": "generated"
         },
         {
-          "displayName": "CourseManagementPage",
-          "sourcePath": "packages/fe-ui/src/screen/CourseManagementPage/CourseManagementPage.tsx",
+          "displayName": "CourseManagementScreen",
+          "sourcePath": "packages/fe-ui/src/screen/CourseManagementScreen/CourseManagementScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "TemplateCreatePage",
-          "sourcePath": "packages/fe-ui/src/screen/TemplateCreatePage/TemplateCreatePage.tsx",
+          "displayName": "TemplateCreateScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TemplateCreateScreen/TemplateCreateScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "TemplateDetailPage",
-          "sourcePath": "packages/fe-ui/src/screen/TemplateDetailPage/TemplateDetailPage.tsx",
+          "displayName": "TemplateDetailScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TemplateDetailScreen/TemplateDetailScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "TenantAccessRequestCreatePage",
-          "sourcePath": "packages/fe-ui/src/screen/TenantAccessRequestCreatePage/TenantAccessRequestCreatePage.tsx",
+          "displayName": "TenantAccessRequestCreateScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TenantAccessRequestCreateScreen/TenantAccessRequestCreateScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "TimelineSessionProgramDetailPage",
-          "sourcePath": "packages/fe-ui/src/screen/TimelineSessionProgramDetailPage/TimelineSessionProgramDetailPage.tsx",
+          "displayName": "TimelineSessionProgramDetailScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TimelineSessionProgramDetailScreen/TimelineSessionProgramDetailScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -413,8 +413,8 @@
           "status": "generated"
         },
         {
-          "displayName": "TemplateEditPage",
-          "sourcePath": "packages/fe-ui/src/screen/TemplateEditPage/TemplateEditPage.tsx",
+          "displayName": "TemplateEditScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TemplateEditScreen/TemplateEditScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
@@ -461,26 +461,26 @@
       "count": 4,
       "items": [
         {
-          "displayName": "AbilityDetailPage",
-          "sourcePath": "packages/fe-ui/src/screen/AbilityDetailPage/AbilityDetailPage.tsx",
+          "displayName": "AbilityDetailScreen",
+          "sourcePath": "packages/fe-ui/src/screen/AbilityDetailScreen/AbilityDetailScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "AbilityFormPage",
-          "sourcePath": "packages/fe-ui/src/screen/AbilityFormPage/AbilityFormPage.tsx",
+          "displayName": "AbilityFormScreen",
+          "sourcePath": "packages/fe-ui/src/screen/AbilityFormScreen/AbilityFormScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "ActionCreatePage",
-          "sourcePath": "packages/fe-ui/src/screen/ActionCreatePage/ActionCreatePage.tsx",
+          "displayName": "ActionCreateScreen",
+          "sourcePath": "packages/fe-ui/src/screen/ActionCreateScreen/ActionCreateScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "OidcClientEditPage",
-          "sourcePath": "packages/fe-ui/src/screen/OidcClientEditPage/OidcClientEditPage.tsx",
+          "displayName": "OidcClientEditScreen",
+          "sourcePath": "packages/fe-ui/src/screen/OidcClientEditScreen/OidcClientEditScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -522,19 +522,19 @@
       "items": [
         {
           "displayName": "RoutineActivitySection",
-          "sourcePath": "packages/fe-ui/src/screen/RoutineCreatePage/RoutineCreatePage.tsx",
+          "sourcePath": "packages/fe-ui/src/screen/RoutineCreateScreen/RoutineCreateScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "RoutineCreatePage",
-          "sourcePath": "packages/fe-ui/src/screen/RoutineCreatePage/RoutineCreatePage.tsx",
+          "displayName": "RoutineCreateScreen",
+          "sourcePath": "packages/fe-ui/src/screen/RoutineCreateScreen/RoutineCreateScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "RoutineEditPage",
-          "sourcePath": "packages/fe-ui/src/screen/RoutineEditPage/RoutineEditPage.tsx",
+          "displayName": "RoutineEditScreen",
+          "sourcePath": "packages/fe-ui/src/screen/RoutineEditScreen/RoutineEditScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -545,20 +545,20 @@
       "count": 3,
       "items": [
         {
-          "displayName": "AssetListPage",
-          "sourcePath": "packages/fe-ui/src/screen/AssetListPage/AssetListPage.tsx",
+          "displayName": "AssetListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/AssetListScreen/AssetListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "TaskCreatePage",
-          "sourcePath": "packages/fe-ui/src/screen/TaskCreatePage/TaskCreatePage.tsx",
+          "displayName": "TaskCreateScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TaskCreateScreen/TaskCreateScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "TaskExerciseEditPage",
-          "sourcePath": "packages/fe-ui/src/screen/TaskExerciseEditPage/TaskExerciseEditPage.tsx",
+          "displayName": "TaskExerciseEditScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TaskExerciseEditScreen/TaskExerciseEditScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -617,8 +617,8 @@
       "count": 2,
       "items": [
         {
-          "displayName": "ActionListPage",
-          "sourcePath": "packages/fe-ui/src/screen/ActionListPage/ActionListPage.tsx",
+          "displayName": "ActionListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/ActionListScreen/ActionListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
@@ -659,8 +659,8 @@
           "status": "generated"
         },
         {
-          "displayName": "OidcClientCreatePage",
-          "sourcePath": "packages/fe-ui/src/screen/OidcClientCreatePage/OidcClientCreatePage.tsx",
+          "displayName": "OidcClientCreateScreen",
+          "sourcePath": "packages/fe-ui/src/screen/OidcClientCreateScreen/OidcClientCreateScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -677,8 +677,8 @@
           "status": "generated"
         },
         {
-          "displayName": "OidcClientDetailPage",
-          "sourcePath": "packages/fe-ui/src/screen/OidcClientDetailPage/OidcClientDetailPage.tsx",
+          "displayName": "OidcClientDetailScreen",
+          "sourcePath": "packages/fe-ui/src/screen/OidcClientDetailScreen/OidcClientDetailScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -695,8 +695,8 @@
           "status": "generated"
         },
         {
-          "displayName": "SignUpPage",
-          "sourcePath": "packages/fe-ui/src/screen/SignUpPage/SignUpPage.tsx",
+          "displayName": "SignUpScreen",
+          "sourcePath": "packages/fe-ui/src/screen/SignUpScreen/SignUpScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -761,14 +761,14 @@
       "count": 2,
       "items": [
         {
-          "displayName": "RoleDetailPage",
-          "sourcePath": "packages/fe-ui/src/screen/RoleDetailPage/RoleDetailPage.tsx",
+          "displayName": "RoleDetailScreen",
+          "sourcePath": "packages/fe-ui/src/screen/RoleDetailScreen/RoleDetailScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "UserDetailPage",
-          "sourcePath": "packages/fe-ui/src/screen/UserDetailPage/UserDetailPage.tsx",
+          "displayName": "UserDetailScreen",
+          "sourcePath": "packages/fe-ui/src/screen/UserDetailScreen/UserDetailScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -815,14 +815,14 @@
       "count": 2,
       "items": [
         {
-          "displayName": "TenantAccessRequestMyListPage",
-          "sourcePath": "packages/fe-ui/src/screen/TenantAccessRequestMyListPage/TenantAccessRequestMyListPage.tsx",
+          "displayName": "TenantAccessRequestMyListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TenantAccessRequestMyListScreen/TenantAccessRequestMyListScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "TenantAccessRequestReviewListPage",
-          "sourcePath": "packages/fe-ui/src/screen/TenantAccessRequestReviewListPage/TenantAccessRequestReviewListPage.tsx",
+          "displayName": "TenantAccessRequestReviewListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TenantAccessRequestReviewListScreen/TenantAccessRequestReviewListScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -851,14 +851,14 @@
       "count": 2,
       "items": [
         {
-          "displayName": "TimelineSessionProgramCreatePage",
-          "sourcePath": "packages/fe-ui/src/screen/TimelineSessionProgramCreatePage/TimelineSessionProgramCreatePage.tsx",
+          "displayName": "TimelineSessionProgramCreateScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TimelineSessionProgramCreateScreen/TimelineSessionProgramCreateScreen.tsx",
           "category": "screen",
           "status": "generated"
         },
         {
-          "displayName": "TimelineSessionProgramEditPage",
-          "sourcePath": "packages/fe-ui/src/screen/TimelineSessionProgramEditPage/TimelineSessionProgramEditPage.tsx",
+          "displayName": "TimelineSessionProgramEditScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TimelineSessionProgramEditScreen/TimelineSessionProgramEditScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1013,8 +1013,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "OidcInteractionPage",
-          "sourcePath": "packages/fe-ui/src/screen/OidcInteractionPage/OidcInteractionPage.tsx",
+          "displayName": "OidcInteractionScreen",
+          "sourcePath": "packages/fe-ui/src/screen/OidcInteractionScreen/OidcInteractionScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1025,8 +1025,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "ResetPasswordPage",
-          "sourcePath": "packages/fe-ui/src/screen/ResetPasswordPage/ResetPasswordPage.tsx",
+          "displayName": "ResetPasswordScreen",
+          "sourcePath": "packages/fe-ui/src/screen/ResetPasswordScreen/ResetPasswordScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1037,8 +1037,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "InquiryEditPage",
-          "sourcePath": "packages/fe-ui/src/screen/InquiryEditPage/InquiryEditPage.tsx",
+          "displayName": "InquiryEditScreen",
+          "sourcePath": "packages/fe-ui/src/screen/InquiryEditScreen/InquiryEditScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1049,8 +1049,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "InquiryCreatePage",
-          "sourcePath": "packages/fe-ui/src/screen/InquiryCreatePage/InquiryCreatePage.tsx",
+          "displayName": "InquiryCreateScreen",
+          "sourcePath": "packages/fe-ui/src/screen/InquiryCreateScreen/InquiryCreateScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1061,8 +1061,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "ForgotPasswordPage",
-          "sourcePath": "packages/fe-ui/src/screen/ForgotPasswordPage/ForgotPasswordPage.tsx",
+          "displayName": "ForgotPasswordScreen",
+          "sourcePath": "packages/fe-ui/src/screen/ForgotPasswordScreen/ForgotPasswordScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1097,8 +1097,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "UserListPage",
-          "sourcePath": "packages/fe-ui/src/screen/UserListPage/UserListPage.tsx",
+          "displayName": "UserListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/UserListScreen/UserListScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1109,8 +1109,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "PaymentManagementPage",
-          "sourcePath": "packages/fe-ui/src/screen/PaymentManagementPage/PaymentManagementPage.tsx",
+          "displayName": "PaymentManagementScreen",
+          "sourcePath": "packages/fe-ui/src/screen/PaymentManagementScreen/PaymentManagementScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1229,8 +1229,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "AssetDetailPage",
-          "sourcePath": "packages/fe-ui/src/screen/AssetDetailPage/AssetDetailPage.tsx",
+          "displayName": "AssetDetailScreen",
+          "sourcePath": "packages/fe-ui/src/screen/AssetDetailScreen/AssetDetailScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1241,8 +1241,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "GroundsSelectPage",
-          "sourcePath": "packages/fe-ui/src/screen/GroundsSelectPage/GroundsSelectPage.tsx",
+          "displayName": "GroundsSelectScreen",
+          "sourcePath": "packages/fe-ui/src/screen/GroundsSelectScreen/GroundsSelectScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1325,8 +1325,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "InquiryDetailPage",
-          "sourcePath": "packages/fe-ui/src/screen/InquiryDetailPage/InquiryDetailPage.tsx",
+          "displayName": "InquiryDetailScreen",
+          "sourcePath": "packages/fe-ui/src/screen/InquiryDetailScreen/InquiryDetailScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1385,8 +1385,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "PolicyListPage",
-          "sourcePath": "packages/fe-ui/src/screen/PolicyListPage/PolicyListPage.tsx",
+          "displayName": "PolicyListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/PolicyListScreen/PolicyListScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1421,8 +1421,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "SpaceListPage",
-          "sourcePath": "packages/fe-ui/src/screen/SpaceListPage/SpaceListPage.tsx",
+          "displayName": "SpaceListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/SpaceListScreen/SpaceListScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1457,8 +1457,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "SubjectListPage",
-          "sourcePath": "packages/fe-ui/src/screen/SubjectListPage/SubjectListPage.tsx",
+          "displayName": "SubjectListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/SubjectListScreen/SubjectListScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1469,8 +1469,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "AbilityListPage",
-          "sourcePath": "packages/fe-ui/src/screen/AbilityListPage/AbilityListPage.tsx",
+          "displayName": "AbilityListScreen",
+          "sourcePath": "packages/fe-ui/src/screen/AbilityListScreen/AbilityListScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -1493,8 +1493,8 @@
       "count": 1,
       "items": [
         {
-          "displayName": "TenantSelectPage",
-          "sourcePath": "packages/fe-ui/src/screen/TenantSelectPage/TenantSelectPage.tsx",
+          "displayName": "TenantSelectScreen",
+          "sourcePath": "packages/fe-ui/src/screen/TenantSelectScreen/TenantSelectScreen.tsx",
           "category": "screen",
           "status": "generated"
         }
@@ -2841,9 +2841,9 @@
     },
     {
       "index": 238,
-      "sourcePath": "packages/fe-ui/src/screen/AbilityDetailPage/AbilityDetailPage.tsx",
-      "displayName": "AbilityDetailPage",
-      "previewKey": "screen.AbilityDetailPage.AbilityDetailPage.AbilityDetailPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/AbilityDetailScreen/AbilityDetailScreen.tsx",
+      "displayName": "AbilityDetailScreen",
+      "previewKey": "screen.AbilityDetailScreen.AbilityDetailScreen.AbilityDetailScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FAbilityDetailPage%2FAbilityDetailPage.tsx%23AbilityDetailPage",
@@ -2859,9 +2859,9 @@
     },
     {
       "index": 239,
-      "sourcePath": "packages/fe-ui/src/screen/AbilityFormPage/AbilityFormPage.tsx",
-      "displayName": "AbilityFormPage",
-      "previewKey": "screen.AbilityFormPage.AbilityFormPage.AbilityFormPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/AbilityFormScreen/AbilityFormScreen.tsx",
+      "displayName": "AbilityFormScreen",
+      "previewKey": "screen.AbilityFormScreen.AbilityFormScreen.AbilityFormScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FAbilityFormPage%2FAbilityFormPage.tsx%23AbilityFormPage",
@@ -2877,9 +2877,9 @@
     },
     {
       "index": 240,
-      "sourcePath": "packages/fe-ui/src/screen/AbilityListPage/AbilityListPage.tsx",
-      "displayName": "AbilityListPage",
-      "previewKey": "screen.AbilityListPage.AbilityListPage.AbilityListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/AbilityListScreen/AbilityListScreen.tsx",
+      "displayName": "AbilityListScreen",
+      "previewKey": "screen.AbilityListScreen.AbilityListScreen.AbilityListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FAbilityListPage%2FAbilityListPage.tsx%23AbilityListPage",
@@ -2895,9 +2895,9 @@
     },
     {
       "index": 242,
-      "sourcePath": "packages/fe-ui/src/screen/AccountListPage/AccountListPage.tsx",
-      "displayName": "AccountListPage",
-      "previewKey": "screen.AccountListPage.AccountListPage.AccountListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/AccountListScreen/AccountListScreen.tsx",
+      "displayName": "AccountListScreen",
+      "previewKey": "screen.AccountListScreen.AccountListScreen.AccountListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FAccountListPage%2FAccountListPage.tsx%23AccountListPage",
@@ -2913,9 +2913,9 @@
     },
     {
       "index": 243,
-      "sourcePath": "packages/fe-ui/src/screen/ActionCreatePage/ActionCreatePage.tsx",
-      "displayName": "ActionCreatePage",
-      "previewKey": "screen.ActionCreatePage.ActionCreatePage.ActionCreatePagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/ActionCreateScreen/ActionCreateScreen.tsx",
+      "displayName": "ActionCreateScreen",
+      "previewKey": "screen.ActionCreateScreen.ActionCreateScreen.ActionCreateScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FActionCreatePage%2FActionCreatePage.tsx%23ActionCreatePage",
@@ -2931,9 +2931,9 @@
     },
     {
       "index": 246,
-      "sourcePath": "packages/fe-ui/src/screen/ActionListPage/ActionListPage.tsx",
-      "displayName": "ActionListPage",
-      "previewKey": "screen.ActionListPage.ActionListPage.ActionListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/ActionListScreen/ActionListScreen.tsx",
+      "displayName": "ActionListScreen",
+      "previewKey": "screen.ActionListScreen.ActionListScreen.ActionListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FActionListPage%2FActionListPage.tsx%23ActionListPage",
@@ -2949,9 +2949,9 @@
     },
     {
       "index": 248,
-      "sourcePath": "packages/fe-ui/src/screen/AssetDetailPage/AssetDetailPage.tsx",
-      "displayName": "AssetDetailPage",
-      "previewKey": "screen.AssetDetailPage.AssetDetailPage.AssetDetailPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/AssetDetailScreen/AssetDetailScreen.tsx",
+      "displayName": "AssetDetailScreen",
+      "previewKey": "screen.AssetDetailScreen.AssetDetailScreen.AssetDetailScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FAssetDetailPage%2FAssetDetailPage.tsx%23AssetDetailPage",
@@ -2967,9 +2967,9 @@
     },
     {
       "index": 249,
-      "sourcePath": "packages/fe-ui/src/screen/AssetListPage/AssetListPage.tsx",
-      "displayName": "AssetListPage",
-      "previewKey": "screen.AssetListPage.AssetListPage.AssetListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/AssetListScreen/AssetListScreen.tsx",
+      "displayName": "AssetListScreen",
+      "previewKey": "screen.AssetListScreen.AssetListScreen.AssetListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FAssetListPage%2FAssetListPage.tsx%23AssetListPage",
@@ -2985,9 +2985,9 @@
     },
     {
       "index": 250,
-      "sourcePath": "packages/fe-ui/src/screen/AuthAuditLogListPage/AuthAuditLogListPage.tsx",
-      "displayName": "AuthAuditLogListPage",
-      "previewKey": "screen.AuthAuditLogListPage.AuthAuditLogListPage.AuthAuditLogListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/AuthAuditLogListScreen/AuthAuditLogListScreen.tsx",
+      "displayName": "AuthAuditLogListScreen",
+      "previewKey": "screen.AuthAuditLogListScreen.AuthAuditLogListScreen.AuthAuditLogListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FAuthAuditLogListPage%2FAuthAuditLogListPage.tsx%23AuthAuditLogListPage",
@@ -3003,9 +3003,9 @@
     },
     {
       "index": 251,
-      "sourcePath": "packages/fe-ui/src/screen/AuthErrorPage/AuthErrorPage.tsx",
-      "displayName": "AuthErrorPage",
-      "previewKey": "screen.AuthErrorPage.AuthErrorPage.AuthErrorPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/AuthErrorScreen/AuthErrorScreen.tsx",
+      "displayName": "AuthErrorScreen",
+      "previewKey": "screen.AuthErrorScreen.AuthErrorScreen.AuthErrorScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FAuthErrorPage%2FAuthErrorPage.tsx%23AuthErrorPage",
@@ -3041,9 +3041,9 @@
     },
     {
       "index": 253,
-      "sourcePath": "packages/fe-ui/src/screen/CourseManagementPage/CourseManagementPage.tsx",
-      "displayName": "CourseManagementPage",
-      "previewKey": "screen.CourseManagementPage.CourseManagementPage.CourseManagementPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/CourseManagementScreen/CourseManagementScreen.tsx",
+      "displayName": "CourseManagementScreen",
+      "previewKey": "screen.CourseManagementScreen.CourseManagementScreen.CourseManagementScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FCourseManagementPage%2FCourseManagementPage.tsx%23CourseManagementPage",
@@ -3059,9 +3059,9 @@
     },
     {
       "index": 254,
-      "sourcePath": "packages/fe-ui/src/screen/EmailVerificationListPage/EmailVerificationListPage.tsx",
-      "displayName": "EmailVerificationListPage",
-      "previewKey": "screen.EmailVerificationListPage.EmailVerificationListPage.EmailVerificationListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/EmailVerificationListScreen/EmailVerificationListScreen.tsx",
+      "displayName": "EmailVerificationListScreen",
+      "previewKey": "screen.EmailVerificationListScreen.EmailVerificationListScreen.EmailVerificationListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FEmailVerificationListPage%2FEmailVerificationListPage.tsx%23EmailVerificationListPage",
@@ -3077,9 +3077,9 @@
     },
     {
       "index": 255,
-      "sourcePath": "packages/fe-ui/src/screen/ForgotPasswordPage/ForgotPasswordPage.tsx",
-      "displayName": "ForgotPasswordPage",
-      "previewKey": "screen.ForgotPasswordPage.ForgotPasswordPage.ForgotPasswordPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/ForgotPasswordScreen/ForgotPasswordScreen.tsx",
+      "displayName": "ForgotPasswordScreen",
+      "previewKey": "screen.ForgotPasswordScreen.ForgotPasswordScreen.ForgotPasswordScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FForgotPasswordPage%2FForgotPasswordPage.tsx%23ForgotPasswordPage",
@@ -3095,9 +3095,9 @@
     },
     {
       "index": 256,
-      "sourcePath": "packages/fe-ui/src/screen/GroundDetailPage/GroundDetailPage.tsx",
-      "displayName": "GroundDetailPage",
-      "previewKey": "screen.GroundDetailPage.GroundDetailPage.GroundDetailPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/GroundDetailScreen/GroundDetailScreen.tsx",
+      "displayName": "GroundDetailScreen",
+      "previewKey": "screen.GroundDetailScreen.GroundDetailScreen.GroundDetailScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FGroundDetailPage%2FGroundDetailPage.tsx%23GroundDetailPage",
@@ -3113,9 +3113,9 @@
     },
     {
       "index": 258,
-      "sourcePath": "packages/fe-ui/src/screen/GroundsSelectPage/GroundsSelectPage.tsx",
-      "displayName": "GroundsSelectPage",
-      "previewKey": "screen.GroundsSelectPage.GroundsSelectPage.GroundsSelectPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/GroundsSelectScreen/GroundsSelectScreen.tsx",
+      "displayName": "GroundsSelectScreen",
+      "previewKey": "screen.GroundsSelectScreen.GroundsSelectScreen.GroundsSelectScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FGroundsSelectPage%2FGroundsSelectPage.tsx%23GroundsSelectPage",
@@ -3126,14 +3126,14 @@
       "consoleErrors": [
         "error: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
         "error: Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template).",
-        "error: %o\n\n%s TypeError: grounds.map is not a function\n    at http://localhost:3010/_next/static/chunks/packages_fe-ui_src_screen_1_i36i4._.js:6349:47\n    at observer.observerComponent.useObserver (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2189:24)\n    at http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2123:28\n    at trackDerivedFunction (http://localhost:3010/_next/static/chunks/0hv7_mobx_dist_mobx_esm_0kwcc1o.js:1997:24)\n    at Reaction.track (http://localhost:3010/_next/static/chunks/0hv7_mobx_dist_mobx_esm_0kwcc1o.js:2563:22)\n    at useObserver (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2121:18)\n    at GroundsSelectPage (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2187:357)\n    at Object.react_stack_bottom_frame (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:15037:24)\n    at renderWithHooks (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:4620:24)\n    at updateFunctionComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:6081:21)\n    at updateSimpleMemoComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:5944:16)\n    at updateMemoComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:5919:302)\n    at beginWork (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:6778:24)\n    at runWithFiberInDEV (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:965:74)\n    at performUnitOfWork (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9555:97)\n    at workLoopSync (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9449:40)\n    at renderRootSync (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9433:13)\n    at performWorkOnRoot (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9098:47)\n    at performWorkOnRootViaSchedulerTask (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:10255:9)\n    at MessagePort.performWorkUntilDeadline (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_1d-e0yl._.js:2647:64) The above error occurred in the <GroundsSelectPage> component. It was handled by the <PreviewErrorBoundary> error boundary."
+        "error: %o\n\n%s TypeError: grounds.map is not a function\n    at http://localhost:3010/_next/static/chunks/packages_fe-ui_src_screen_1_i36i4._.js:6349:47\n    at observer.observerComponent.useObserver (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2189:24)\n    at http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2123:28\n    at trackDerivedFunction (http://localhost:3010/_next/static/chunks/0hv7_mobx_dist_mobx_esm_0kwcc1o.js:1997:24)\n    at Reaction.track (http://localhost:3010/_next/static/chunks/0hv7_mobx_dist_mobx_esm_0kwcc1o.js:2563:22)\n    at useObserver (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2121:18)\n    at GroundsSelectScreen (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2187:357)\n    at Object.react_stack_bottom_frame (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:15037:24)\n    at renderWithHooks (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:4620:24)\n    at updateFunctionComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:6081:21)\n    at updateSimpleMemoComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:5944:16)\n    at updateMemoComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:5919:302)\n    at beginWork (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:6778:24)\n    at runWithFiberInDEV (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:965:74)\n    at performUnitOfWork (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9555:97)\n    at workLoopSync (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9449:40)\n    at renderRootSync (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9433:13)\n    at performWorkOnRoot (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9098:47)\n    at performWorkOnRootViaSchedulerTask (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:10255:9)\n    at MessagePort.performWorkUntilDeadline (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_1d-e0yl._.js:2647:64) The above error occurred in the <GroundsSelectScreen> component. It was handled by the <PreviewErrorBoundary> error boundary."
       ]
     },
     {
       "index": 260,
-      "sourcePath": "packages/fe-ui/src/screen/InquiryCreatePage/InquiryCreatePage.tsx",
-      "displayName": "InquiryCreatePage",
-      "previewKey": "screen.InquiryCreatePage.InquiryCreatePage.InquiryCreatePagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/InquiryCreateScreen/InquiryCreateScreen.tsx",
+      "displayName": "InquiryCreateScreen",
+      "previewKey": "screen.InquiryCreateScreen.InquiryCreateScreen.InquiryCreateScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FInquiryCreatePage%2FInquiryCreatePage.tsx%23InquiryCreatePage",
@@ -3149,9 +3149,9 @@
     },
     {
       "index": 261,
-      "sourcePath": "packages/fe-ui/src/screen/InquiryDetailPage/InquiryDetailPage.tsx",
-      "displayName": "InquiryDetailPage",
-      "previewKey": "screen.InquiryDetailPage.InquiryDetailPage.InquiryDetailPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/InquiryDetailScreen/InquiryDetailScreen.tsx",
+      "displayName": "InquiryDetailScreen",
+      "previewKey": "screen.InquiryDetailScreen.InquiryDetailScreen.InquiryDetailScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FInquiryDetailPage%2FInquiryDetailPage.tsx%23InquiryDetailPage",
@@ -3167,9 +3167,9 @@
     },
     {
       "index": 262,
-      "sourcePath": "packages/fe-ui/src/screen/InquiryEditPage/InquiryEditPage.tsx",
-      "displayName": "InquiryEditPage",
-      "previewKey": "screen.InquiryEditPage.InquiryEditPage.InquiryEditPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/InquiryEditScreen/InquiryEditScreen.tsx",
+      "displayName": "InquiryEditScreen",
+      "previewKey": "screen.InquiryEditScreen.InquiryEditScreen.InquiryEditScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FInquiryEditPage%2FInquiryEditPage.tsx%23InquiryEditPage",
@@ -3185,9 +3185,9 @@
     },
     {
       "index": 263,
-      "sourcePath": "packages/fe-ui/src/screen/InquiryListPage/InquiryListPage.tsx",
-      "displayName": "InquiryListPage",
-      "previewKey": "screen.InquiryListPage.InquiryListPage.InquiryListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/InquiryListScreen/InquiryListScreen.tsx",
+      "displayName": "InquiryListScreen",
+      "previewKey": "screen.InquiryListScreen.InquiryListScreen.InquiryListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FInquiryListPage%2FInquiryListPage.tsx%23InquiryListPage",
@@ -3204,9 +3204,9 @@
     },
     {
       "index": 264,
-      "sourcePath": "packages/fe-ui/src/screen/LoginPage/LoginPage.tsx",
-      "displayName": "LoginPage",
-      "previewKey": "screen.LoginPage.LoginPage.LoginPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/LoginScreen/LoginScreen.tsx",
+      "displayName": "LoginScreen",
+      "previewKey": "screen.LoginScreen.LoginScreen.LoginScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FLoginPage%2FLoginPage.tsx%23LoginPage",
@@ -3222,9 +3222,9 @@
     },
     {
       "index": 265,
-      "sourcePath": "packages/fe-ui/src/screen/LoginRedirectPage/LoginRedirectPage.tsx",
-      "displayName": "LoginRedirectPage",
-      "previewKey": "screen.LoginRedirectPage.LoginRedirectPage.LoginRedirectPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/LoginRedirectScreen/LoginRedirectScreen.tsx",
+      "displayName": "LoginRedirectScreen",
+      "previewKey": "screen.LoginRedirectScreen.LoginRedirectScreen.LoginRedirectScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FLoginRedirectPage%2FLoginRedirectPage.tsx%23LoginRedirectPage",
@@ -3240,9 +3240,9 @@
     },
     {
       "index": 266,
-      "sourcePath": "packages/fe-ui/src/screen/OidcClientCreatePage/OidcClientCreatePage.tsx",
-      "displayName": "OidcClientCreatePage",
-      "previewKey": "screen.OidcClientCreatePage.OidcClientCreatePage.OidcClientCreatePagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/OidcClientCreateScreen/OidcClientCreateScreen.tsx",
+      "displayName": "OidcClientCreateScreen",
+      "previewKey": "screen.OidcClientCreateScreen.OidcClientCreateScreen.OidcClientCreateScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FOidcClientCreatePage%2FOidcClientCreatePage.tsx%23OidcClientCreatePage",
@@ -3258,9 +3258,9 @@
     },
     {
       "index": 267,
-      "sourcePath": "packages/fe-ui/src/screen/OidcClientDetailPage/OidcClientDetailPage.tsx",
-      "displayName": "OidcClientDetailPage",
-      "previewKey": "screen.OidcClientDetailPage.OidcClientDetailPage.OidcClientDetailPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/OidcClientDetailScreen/OidcClientDetailScreen.tsx",
+      "displayName": "OidcClientDetailScreen",
+      "previewKey": "screen.OidcClientDetailScreen.OidcClientDetailScreen.OidcClientDetailScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FOidcClientDetailPage%2FOidcClientDetailPage.tsx%23OidcClientDetailPage",
@@ -3276,9 +3276,9 @@
     },
     {
       "index": 268,
-      "sourcePath": "packages/fe-ui/src/screen/OidcClientEditPage/OidcClientEditPage.tsx",
-      "displayName": "OidcClientEditPage",
-      "previewKey": "screen.OidcClientEditPage.OidcClientEditPage.OidcClientEditPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/OidcClientEditScreen/OidcClientEditScreen.tsx",
+      "displayName": "OidcClientEditScreen",
+      "previewKey": "screen.OidcClientEditScreen.OidcClientEditScreen.OidcClientEditScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FOidcClientEditPage%2FOidcClientEditPage.tsx%23OidcClientEditPage",
@@ -3294,9 +3294,9 @@
     },
     {
       "index": 269,
-      "sourcePath": "packages/fe-ui/src/screen/OidcClientListPage/OidcClientListPage.tsx",
-      "displayName": "OidcClientListPage",
-      "previewKey": "screen.OidcClientListPage.OidcClientListPage.OidcClientListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/OidcClientListScreen/OidcClientListScreen.tsx",
+      "displayName": "OidcClientListScreen",
+      "previewKey": "screen.OidcClientListScreen.OidcClientListScreen.OidcClientListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FOidcClientListPage%2FOidcClientListPage.tsx%23OidcClientListPage",
@@ -3312,9 +3312,9 @@
     },
     {
       "index": 270,
-      "sourcePath": "packages/fe-ui/src/screen/OidcInteractionPage/OidcInteractionPage.tsx",
-      "displayName": "OidcInteractionPage",
-      "previewKey": "screen.OidcInteractionPage.OidcInteractionPage.OidcInteractionPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/OidcInteractionScreen/OidcInteractionScreen.tsx",
+      "displayName": "OidcInteractionScreen",
+      "previewKey": "screen.OidcInteractionScreen.OidcInteractionScreen.OidcInteractionScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FOidcInteractionPage%2FOidcInteractionPage.tsx%23OidcInteractionPage",
@@ -3330,9 +3330,9 @@
     },
     {
       "index": 271,
-      "sourcePath": "packages/fe-ui/src/screen/OidcSessionListPage/OidcSessionListPage.tsx",
-      "displayName": "OidcSessionListPage",
-      "previewKey": "screen.OidcSessionListPage.OidcSessionListPage.OidcSessionListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/OidcSessionListScreen/OidcSessionListScreen.tsx",
+      "displayName": "OidcSessionListScreen",
+      "previewKey": "screen.OidcSessionListScreen.OidcSessionListScreen.OidcSessionListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FOidcSessionListPage%2FOidcSessionListPage.tsx%23OidcSessionListPage",
@@ -3348,9 +3348,9 @@
     },
     {
       "index": 273,
-      "sourcePath": "packages/fe-ui/src/screen/PaymentManagementPage/PaymentManagementPage.tsx",
-      "displayName": "PaymentManagementPage",
-      "previewKey": "screen.PaymentManagementPage.PaymentManagementPage.PaymentManagementPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/PaymentManagementScreen/PaymentManagementScreen.tsx",
+      "displayName": "PaymentManagementScreen",
+      "previewKey": "screen.PaymentManagementScreen.PaymentManagementScreen.PaymentManagementScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FPaymentManagementPage%2FPaymentManagementPage.tsx%23PaymentManagementPage",
@@ -3366,9 +3366,9 @@
     },
     {
       "index": 279,
-      "sourcePath": "packages/fe-ui/src/screen/PolicyListPage/PolicyListPage.tsx",
-      "displayName": "PolicyListPage",
-      "previewKey": "screen.PolicyListPage.PolicyListPage.PolicyListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/PolicyListScreen/PolicyListScreen.tsx",
+      "displayName": "PolicyListScreen",
+      "previewKey": "screen.PolicyListScreen.PolicyListScreen.PolicyListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FPolicyListPage%2FPolicyListPage.tsx%23PolicyListPage",
@@ -3384,9 +3384,9 @@
     },
     {
       "index": 280,
-      "sourcePath": "packages/fe-ui/src/screen/ResetPasswordPage/ResetPasswordPage.tsx",
-      "displayName": "ResetPasswordPage",
-      "previewKey": "screen.ResetPasswordPage.ResetPasswordPage.ResetPasswordPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/ResetPasswordScreen/ResetPasswordScreen.tsx",
+      "displayName": "ResetPasswordScreen",
+      "previewKey": "screen.ResetPasswordScreen.ResetPasswordScreen.ResetPasswordScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FResetPasswordPage%2FResetPasswordPage.tsx%23ResetPasswordPage",
@@ -3402,9 +3402,9 @@
     },
     {
       "index": 281,
-      "sourcePath": "packages/fe-ui/src/screen/RoleAbilityActionListPage/RoleAbilityActionListPage.tsx",
-      "displayName": "RoleAbilityActionListPage",
-      "previewKey": "screen.RoleAbilityActionListPage.RoleAbilityActionListPage.RoleAbilityActionListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/RoleAbilityActionListScreen/RoleAbilityActionListScreen.tsx",
+      "displayName": "RoleAbilityActionListScreen",
+      "previewKey": "screen.RoleAbilityActionListScreen.RoleAbilityActionListScreen.RoleAbilityActionListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FRoleAbilityActionListPage%2FRoleAbilityActionListPage.tsx%23RoleAbilityActionListPage",
@@ -3420,9 +3420,9 @@
     },
     {
       "index": 282,
-      "sourcePath": "packages/fe-ui/src/screen/RoleAbilitySubjectListPage/RoleAbilitySubjectListPage.tsx",
-      "displayName": "RoleAbilitySubjectListPage",
-      "previewKey": "screen.RoleAbilitySubjectListPage.RoleAbilitySubjectListPage.RoleAbilitySubjectListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/RoleAbilitySubjectListScreen/RoleAbilitySubjectListScreen.tsx",
+      "displayName": "RoleAbilitySubjectListScreen",
+      "previewKey": "screen.RoleAbilitySubjectListScreen.RoleAbilitySubjectListScreen.RoleAbilitySubjectListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FRoleAbilitySubjectListPage%2FRoleAbilitySubjectListPage.tsx%23RoleAbilitySubjectListPage",
@@ -3438,9 +3438,9 @@
     },
     {
       "index": 284,
-      "sourcePath": "packages/fe-ui/src/screen/RoleDetailPage/RoleDetailPage.tsx",
-      "displayName": "RoleDetailPage",
-      "previewKey": "screen.RoleDetailPage.RoleDetailPage.RoleDetailPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/RoleDetailScreen/RoleDetailScreen.tsx",
+      "displayName": "RoleDetailScreen",
+      "previewKey": "screen.RoleDetailScreen.RoleDetailScreen.RoleDetailScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FRoleDetailPage%2FRoleDetailPage.tsx%23RoleDetailPage",
@@ -3456,9 +3456,9 @@
     },
     {
       "index": 286,
-      "sourcePath": "packages/fe-ui/src/screen/RoleListPage/RoleListPage.tsx",
-      "displayName": "RoleListPage",
-      "previewKey": "screen.RoleListPage.RoleListPage.RoleListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/RoleListScreen/RoleListScreen.tsx",
+      "displayName": "RoleListScreen",
+      "previewKey": "screen.RoleListScreen.RoleListScreen.RoleListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FRoleListPage%2FRoleListPage.tsx%23RoleListPage",
@@ -3474,9 +3474,9 @@
     },
     {
       "index": 287,
-      "sourcePath": "packages/fe-ui/src/screen/RoutineCreatePage/RoutineCreatePage.tsx",
+      "sourcePath": "packages/fe-ui/src/screen/RoutineCreateScreen/RoutineCreateScreen.tsx",
       "displayName": "RoutineActivitySection",
-      "previewKey": "screen.RoutineCreatePage.RoutineCreatePage.RoutineActivitySectionPreview",
+      "previewKey": "screen.RoutineCreateScreen.RoutineCreateScreen.RoutineActivitySectionPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FRoutineCreatePage%2FRoutineCreatePage.tsx%23RoutineActivitySection",
@@ -3492,9 +3492,9 @@
     },
     {
       "index": 288,
-      "sourcePath": "packages/fe-ui/src/screen/RoutineCreatePage/RoutineCreatePage.tsx",
-      "displayName": "RoutineCreatePage",
-      "previewKey": "screen.RoutineCreatePage.RoutineCreatePage.RoutineCreatePagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/RoutineCreateScreen/RoutineCreateScreen.tsx",
+      "displayName": "RoutineCreateScreen",
+      "previewKey": "screen.RoutineCreateScreen.RoutineCreateScreen.RoutineCreateScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FRoutineCreatePage%2FRoutineCreatePage.tsx%23RoutineCreatePage",
@@ -3511,9 +3511,9 @@
     },
     {
       "index": 290,
-      "sourcePath": "packages/fe-ui/src/screen/RoutineEditPage/RoutineEditPage.tsx",
-      "displayName": "RoutineEditPage",
-      "previewKey": "screen.RoutineEditPage.RoutineEditPage.RoutineEditPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/RoutineEditScreen/RoutineEditScreen.tsx",
+      "displayName": "RoutineEditScreen",
+      "previewKey": "screen.RoutineEditScreen.RoutineEditScreen.RoutineEditScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FRoutineEditPage%2FRoutineEditPage.tsx%23RoutineEditPage",
@@ -3530,9 +3530,9 @@
     },
     {
       "index": 291,
-      "sourcePath": "packages/fe-ui/src/screen/RoutineListPage/RoutineListPage.tsx",
-      "displayName": "RoutineListPage",
-      "previewKey": "screen.RoutineListPage.RoutineListPage.RoutineListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/RoutineListScreen/RoutineListScreen.tsx",
+      "displayName": "RoutineListScreen",
+      "previewKey": "screen.RoutineListScreen.RoutineListScreen.RoutineListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FRoutineListPage%2FRoutineListPage.tsx%23RoutineListPage",
@@ -3548,9 +3548,9 @@
     },
     {
       "index": 294,
-      "sourcePath": "packages/fe-ui/src/screen/SessionCheckPage/SessionCheckPage.tsx",
-      "displayName": "SessionCheckPage",
-      "previewKey": "screen.SessionCheckPage.SessionCheckPage.SessionCheckPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/SessionCheckScreen/SessionCheckScreen.tsx",
+      "displayName": "SessionCheckScreen",
+      "previewKey": "screen.SessionCheckScreen.SessionCheckScreen.SessionCheckScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FSessionCheckPage%2FSessionCheckPage.tsx%23SessionCheckPage",
@@ -3566,9 +3566,9 @@
     },
     {
       "index": 295,
-      "sourcePath": "packages/fe-ui/src/screen/SignUpPage/SignUpPage.tsx",
-      "displayName": "SignUpPage",
-      "previewKey": "screen.SignUpPage.SignUpPage.SignUpPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/SignUpScreen/SignUpScreen.tsx",
+      "displayName": "SignUpScreen",
+      "previewKey": "screen.SignUpScreen.SignUpScreen.SignUpScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FSignUpPage%2FSignUpPage.tsx%23SignUpPage",
@@ -3584,9 +3584,9 @@
     },
     {
       "index": 297,
-      "sourcePath": "packages/fe-ui/src/screen/SpaceListPage/SpaceListPage.tsx",
-      "displayName": "SpaceListPage",
-      "previewKey": "screen.SpaceListPage.SpaceListPage.SpaceListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/SpaceListScreen/SpaceListScreen.tsx",
+      "displayName": "SpaceListScreen",
+      "previewKey": "screen.SpaceListScreen.SpaceListScreen.SpaceListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FSpaceListPage%2FSpaceListPage.tsx%23SpaceListPage",
@@ -3602,9 +3602,9 @@
     },
     {
       "index": 298,
-      "sourcePath": "packages/fe-ui/src/screen/StaticTranslationListPage/StaticTranslationListPage.tsx",
-      "displayName": "StaticTranslationListPage",
-      "previewKey": "screen.StaticTranslationListPage.StaticTranslationListPage.StaticTranslationListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/StaticTranslationListScreen/StaticTranslationListScreen.tsx",
+      "displayName": "StaticTranslationListScreen",
+      "previewKey": "screen.StaticTranslationListScreen.StaticTranslationListScreen.StaticTranslationListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FStaticTranslationListPage%2FStaticTranslationListPage.tsx%23StaticTranslationListPage",
@@ -3620,9 +3620,9 @@
     },
     {
       "index": 300,
-      "sourcePath": "packages/fe-ui/src/screen/SubjectListPage/SubjectListPage.tsx",
-      "displayName": "SubjectListPage",
-      "previewKey": "screen.SubjectListPage.SubjectListPage.SubjectListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/SubjectListScreen/SubjectListScreen.tsx",
+      "displayName": "SubjectListScreen",
+      "previewKey": "screen.SubjectListScreen.SubjectListScreen.SubjectListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FSubjectListPage%2FSubjectListPage.tsx%23SubjectListPage",
@@ -3638,9 +3638,9 @@
     },
     {
       "index": 301,
-      "sourcePath": "packages/fe-ui/src/screen/TaskCreatePage/TaskCreatePage.tsx",
-      "displayName": "TaskCreatePage",
-      "previewKey": "screen.TaskCreatePage.TaskCreatePage.TaskCreatePagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TaskCreateScreen/TaskCreateScreen.tsx",
+      "displayName": "TaskCreateScreen",
+      "previewKey": "screen.TaskCreateScreen.TaskCreateScreen.TaskCreateScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTaskCreatePage%2FTaskCreatePage.tsx%23TaskCreatePage",
@@ -3656,9 +3656,9 @@
     },
     {
       "index": 302,
-      "sourcePath": "packages/fe-ui/src/screen/TaskExerciseDetailPage/TaskExerciseDetailPage.tsx",
-      "displayName": "TaskExerciseDetailPage",
-      "previewKey": "screen.TaskExerciseDetailPage.TaskExerciseDetailPage.TaskExerciseDetailPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TaskExerciseDetailScreen/TaskExerciseDetailScreen.tsx",
+      "displayName": "TaskExerciseDetailScreen",
+      "previewKey": "screen.TaskExerciseDetailScreen.TaskExerciseDetailScreen.TaskExerciseDetailScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTaskExerciseDetailPage%2FTaskExerciseDetailPage.tsx%23TaskExerciseDetailPage",
@@ -3674,9 +3674,9 @@
     },
     {
       "index": 303,
-      "sourcePath": "packages/fe-ui/src/screen/TaskExerciseEditPage/TaskExerciseEditPage.tsx",
-      "displayName": "TaskExerciseEditPage",
-      "previewKey": "screen.TaskExerciseEditPage.TaskExerciseEditPage.TaskExerciseEditPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TaskExerciseEditScreen/TaskExerciseEditScreen.tsx",
+      "displayName": "TaskExerciseEditScreen",
+      "previewKey": "screen.TaskExerciseEditScreen.TaskExerciseEditScreen.TaskExerciseEditScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTaskExerciseEditPage%2FTaskExerciseEditPage.tsx%23TaskExerciseEditPage",
@@ -3692,9 +3692,9 @@
     },
     {
       "index": 304,
-      "sourcePath": "packages/fe-ui/src/screen/TaskListPage/TaskListPage.tsx",
-      "displayName": "TaskListPage",
-      "previewKey": "screen.TaskListPage.TaskListPage.TaskListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TaskListScreen/TaskListScreen.tsx",
+      "displayName": "TaskListScreen",
+      "previewKey": "screen.TaskListScreen.TaskListScreen.TaskListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTaskListPage%2FTaskListPage.tsx%23TaskListPage",
@@ -3710,9 +3710,9 @@
     },
     {
       "index": 305,
-      "sourcePath": "packages/fe-ui/src/screen/TemplateCreatePage/TemplateCreatePage.tsx",
-      "displayName": "TemplateCreatePage",
-      "previewKey": "screen.TemplateCreatePage.TemplateCreatePage.TemplateCreatePagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TemplateCreateScreen/TemplateCreateScreen.tsx",
+      "displayName": "TemplateCreateScreen",
+      "previewKey": "screen.TemplateCreateScreen.TemplateCreateScreen.TemplateCreateScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTemplateCreatePage%2FTemplateCreatePage.tsx%23TemplateCreatePage",
@@ -3730,9 +3730,9 @@
     },
     {
       "index": 306,
-      "sourcePath": "packages/fe-ui/src/screen/TemplateDetailPage/TemplateDetailPage.tsx",
-      "displayName": "TemplateDetailPage",
-      "previewKey": "screen.TemplateDetailPage.TemplateDetailPage.TemplateDetailPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TemplateDetailScreen/TemplateDetailScreen.tsx",
+      "displayName": "TemplateDetailScreen",
+      "previewKey": "screen.TemplateDetailScreen.TemplateDetailScreen.TemplateDetailScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTemplateDetailPage%2FTemplateDetailPage.tsx%23TemplateDetailPage",
@@ -3748,9 +3748,9 @@
     },
     {
       "index": 307,
-      "sourcePath": "packages/fe-ui/src/screen/TemplateEditPage/TemplateEditPage.tsx",
-      "displayName": "TemplateEditPage",
-      "previewKey": "screen.TemplateEditPage.TemplateEditPage.TemplateEditPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TemplateEditScreen/TemplateEditScreen.tsx",
+      "displayName": "TemplateEditScreen",
+      "previewKey": "screen.TemplateEditScreen.TemplateEditScreen.TemplateEditScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTemplateEditPage%2FTemplateEditPage.tsx%23TemplateEditPage",
@@ -3766,9 +3766,9 @@
     },
     {
       "index": 308,
-      "sourcePath": "packages/fe-ui/src/screen/TemplateListPage/TemplateListPage.tsx",
-      "displayName": "TemplateListPage",
-      "previewKey": "screen.TemplateListPage.TemplateListPage.TemplateListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TemplateListScreen/TemplateListScreen.tsx",
+      "displayName": "TemplateListScreen",
+      "previewKey": "screen.TemplateListScreen.TemplateListScreen.TemplateListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTemplateListPage%2FTemplateListPage.tsx%23TemplateListPage",
@@ -3784,9 +3784,9 @@
     },
     {
       "index": 309,
-      "sourcePath": "packages/fe-ui/src/screen/TenantAccessRequestCreatePage/TenantAccessRequestCreatePage.tsx",
-      "displayName": "TenantAccessRequestCreatePage",
-      "previewKey": "screen.TenantAccessRequestCreatePage.TenantAccessRequestCreatePage.TenantAccessRequestCreatePagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TenantAccessRequestCreateScreen/TenantAccessRequestCreateScreen.tsx",
+      "displayName": "TenantAccessRequestCreateScreen",
+      "previewKey": "screen.TenantAccessRequestCreateScreen.TenantAccessRequestCreateScreen.TenantAccessRequestCreateScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTenantAccessRequestCreatePage%2FTenantAccessRequestCreatePage.tsx%23TenantAccessRequestCreatePage",
@@ -3802,9 +3802,9 @@
     },
     {
       "index": 310,
-      "sourcePath": "packages/fe-ui/src/screen/TenantAccessRequestMyListPage/TenantAccessRequestMyListPage.tsx",
-      "displayName": "TenantAccessRequestMyListPage",
-      "previewKey": "screen.TenantAccessRequestMyListPage.TenantAccessRequestMyListPage.TenantAccessRequestMyListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TenantAccessRequestMyListScreen/TenantAccessRequestMyListScreen.tsx",
+      "displayName": "TenantAccessRequestMyListScreen",
+      "previewKey": "screen.TenantAccessRequestMyListScreen.TenantAccessRequestMyListScreen.TenantAccessRequestMyListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTenantAccessRequestMyListPage%2FTenantAccessRequestMyListPage.tsx%23TenantAccessRequestMyListPage",
@@ -3820,9 +3820,9 @@
     },
     {
       "index": 312,
-      "sourcePath": "packages/fe-ui/src/screen/TenantAccessRequestReviewListPage/TenantAccessRequestReviewListPage.tsx",
-      "displayName": "TenantAccessRequestReviewListPage",
-      "previewKey": "screen.TenantAccessRequestReviewListPage.TenantAccessRequestReviewListPage.TenantAccessRequestReviewListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TenantAccessRequestReviewListScreen/TenantAccessRequestReviewListScreen.tsx",
+      "displayName": "TenantAccessRequestReviewListScreen",
+      "previewKey": "screen.TenantAccessRequestReviewListScreen.TenantAccessRequestReviewListScreen.TenantAccessRequestReviewListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTenantAccessRequestReviewListPage%2FTenantAccessRequestReviewListPage.tsx%23TenantAccessRequestReviewListPage",
@@ -3838,9 +3838,9 @@
     },
     {
       "index": 313,
-      "sourcePath": "packages/fe-ui/src/screen/TenantSelectPage/TenantSelectPage.tsx",
-      "displayName": "TenantSelectPage",
-      "previewKey": "screen.TenantSelectPage.TenantSelectPage.TenantSelectPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TenantSelectScreen/TenantSelectScreen.tsx",
+      "displayName": "TenantSelectScreen",
+      "previewKey": "screen.TenantSelectScreen.TenantSelectScreen.TenantSelectScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTenantSelectPage%2FTenantSelectPage.tsx%23TenantSelectPage",
@@ -3851,14 +3851,14 @@
       "consoleErrors": [
         "error: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
         "error: Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template).",
-        "error: %o\n\n%s TypeError: tenants.map is not a function\n    at http://localhost:3010/_next/static/chunks/packages_fe-ui_src_screen_1_i36i4._.js:23654:47\n    at observer.observerComponent.useObserver (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2189:24)\n    at http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2123:28\n    at trackDerivedFunction (http://localhost:3010/_next/static/chunks/0hv7_mobx_dist_mobx_esm_0kwcc1o.js:1997:24)\n    at Reaction.track (http://localhost:3010/_next/static/chunks/0hv7_mobx_dist_mobx_esm_0kwcc1o.js:2563:22)\n    at useObserver (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2121:18)\n    at TenantSelectPage (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2187:357)\n    at Object.react_stack_bottom_frame (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:15037:24)\n    at renderWithHooks (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:4620:24)\n    at updateFunctionComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:6081:21)\n    at updateSimpleMemoComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:5944:16)\n    at updateMemoComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:5919:302)\n    at beginWork (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:6778:24)\n    at runWithFiberInDEV (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:965:74)\n    at performUnitOfWork (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9555:97)\n    at workLoopSync (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9449:40)\n    at renderRootSync (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9433:13)\n    at performWorkOnRoot (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9098:47)\n    at performWorkOnRootViaSchedulerTask (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:10255:9)\n    at MessagePort.performWorkUntilDeadline (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_1d-e0yl._.js:2647:64) The above error occurred in the <TenantSelectPage> component. It was handled by the <PreviewErrorBoundary> error boundary."
+        "error: %o\n\n%s TypeError: tenants.map is not a function\n    at http://localhost:3010/_next/static/chunks/packages_fe-ui_src_screen_1_i36i4._.js:23654:47\n    at observer.observerComponent.useObserver (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2189:24)\n    at http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2123:28\n    at trackDerivedFunction (http://localhost:3010/_next/static/chunks/0hv7_mobx_dist_mobx_esm_0kwcc1o.js:1997:24)\n    at Reaction.track (http://localhost:3010/_next/static/chunks/0hv7_mobx_dist_mobx_esm_0kwcc1o.js:2563:22)\n    at useObserver (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2121:18)\n    at TenantSelectScreen (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2187:357)\n    at Object.react_stack_bottom_frame (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:15037:24)\n    at renderWithHooks (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:4620:24)\n    at updateFunctionComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:6081:21)\n    at updateSimpleMemoComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:5944:16)\n    at updateMemoComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:5919:302)\n    at beginWork (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:6778:24)\n    at runWithFiberInDEV (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:965:74)\n    at performUnitOfWork (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9555:97)\n    at workLoopSync (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9449:40)\n    at renderRootSync (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9433:13)\n    at performWorkOnRoot (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9098:47)\n    at performWorkOnRootViaSchedulerTask (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:10255:9)\n    at MessagePort.performWorkUntilDeadline (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_1d-e0yl._.js:2647:64) The above error occurred in the <TenantSelectScreen> component. It was handled by the <PreviewErrorBoundary> error boundary."
       ]
     },
     {
       "index": 315,
-      "sourcePath": "packages/fe-ui/src/screen/TimelineDetailPage/TimelineDetailPage.tsx",
-      "displayName": "TimelineDetailPage",
-      "previewKey": "screen.TimelineDetailPage.TimelineDetailPage.TimelineDetailPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TimelineDetailScreen/TimelineDetailScreen.tsx",
+      "displayName": "TimelineDetailScreen",
+      "previewKey": "screen.TimelineDetailScreen.TimelineDetailScreen.TimelineDetailScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTimelineDetailPage%2FTimelineDetailPage.tsx%23TimelineDetailPage",
@@ -3874,9 +3874,9 @@
     },
     {
       "index": 317,
-      "sourcePath": "packages/fe-ui/src/screen/TimelineListPage/TimelineListPage.tsx",
-      "displayName": "TimelineListPage",
-      "previewKey": "screen.TimelineListPage.TimelineListPage.TimelineListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TimelineListScreen/TimelineListScreen.tsx",
+      "displayName": "TimelineListScreen",
+      "previewKey": "screen.TimelineListScreen.TimelineListScreen.TimelineListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTimelineListPage%2FTimelineListPage.tsx%23TimelineListPage",
@@ -3892,9 +3892,9 @@
     },
     {
       "index": 319,
-      "sourcePath": "packages/fe-ui/src/screen/TimelineSessionDetailPage/TimelineSessionDetailPage.tsx",
-      "displayName": "TimelineSessionDetailPage",
-      "previewKey": "screen.TimelineSessionDetailPage.TimelineSessionDetailPage.TimelineSessionDetailPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TimelineSessionDetailScreen/TimelineSessionDetailScreen.tsx",
+      "displayName": "TimelineSessionDetailScreen",
+      "previewKey": "screen.TimelineSessionDetailScreen.TimelineSessionDetailScreen.TimelineSessionDetailScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTimelineSessionDetailPage%2FTimelineSessionDetailPage.tsx%23TimelineSessionDetailPage",
@@ -3910,9 +3910,9 @@
     },
     {
       "index": 321,
-      "sourcePath": "packages/fe-ui/src/screen/TimelineSessionProgramCreatePage/TimelineSessionProgramCreatePage.tsx",
-      "displayName": "TimelineSessionProgramCreatePage",
-      "previewKey": "screen.TimelineSessionProgramCreatePage.TimelineSessionProgramCreatePage.TimelineSessionProgramCreatePagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TimelineSessionProgramCreateScreen/TimelineSessionProgramCreateScreen.tsx",
+      "displayName": "TimelineSessionProgramCreateScreen",
+      "previewKey": "screen.TimelineSessionProgramCreateScreen.TimelineSessionProgramCreateScreen.TimelineSessionProgramCreateScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTimelineSessionProgramCreatePage%2FTimelineSessionProgramCreatePage.tsx%23TimelineSessionProgramCreatePage",
@@ -3928,9 +3928,9 @@
     },
     {
       "index": 322,
-      "sourcePath": "packages/fe-ui/src/screen/TimelineSessionProgramDetailPage/TimelineSessionProgramDetailPage.tsx",
-      "displayName": "TimelineSessionProgramDetailPage",
-      "previewKey": "screen.TimelineSessionProgramDetailPage.TimelineSessionProgramDetailPage.TimelineSessionProgramDetailPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TimelineSessionProgramDetailScreen/TimelineSessionProgramDetailScreen.tsx",
+      "displayName": "TimelineSessionProgramDetailScreen",
+      "previewKey": "screen.TimelineSessionProgramDetailScreen.TimelineSessionProgramDetailScreen.TimelineSessionProgramDetailScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTimelineSessionProgramDetailPage%2FTimelineSessionProgramDetailPage.tsx%23TimelineSessionProgramDetailPage",
@@ -3946,9 +3946,9 @@
     },
     {
       "index": 323,
-      "sourcePath": "packages/fe-ui/src/screen/TimelineSessionProgramEditPage/TimelineSessionProgramEditPage.tsx",
-      "displayName": "TimelineSessionProgramEditPage",
-      "previewKey": "screen.TimelineSessionProgramEditPage.TimelineSessionProgramEditPage.TimelineSessionProgramEditPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TimelineSessionProgramEditScreen/TimelineSessionProgramEditScreen.tsx",
+      "displayName": "TimelineSessionProgramEditScreen",
+      "previewKey": "screen.TimelineSessionProgramEditScreen.TimelineSessionProgramEditScreen.TimelineSessionProgramEditScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTimelineSessionProgramEditPage%2FTimelineSessionProgramEditPage.tsx%23TimelineSessionProgramEditPage",
@@ -3964,9 +3964,9 @@
     },
     {
       "index": 325,
-      "sourcePath": "packages/fe-ui/src/screen/UserDetailPage/UserDetailPage.tsx",
-      "displayName": "UserDetailPage",
-      "previewKey": "screen.UserDetailPage.UserDetailPage.UserDetailPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/UserDetailScreen/UserDetailScreen.tsx",
+      "displayName": "UserDetailScreen",
+      "previewKey": "screen.UserDetailScreen.UserDetailScreen.UserDetailScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FUserDetailPage%2FUserDetailPage.tsx%23UserDetailPage",
@@ -3982,9 +3982,9 @@
     },
     {
       "index": 327,
-      "sourcePath": "packages/fe-ui/src/screen/UserListPage/UserListPage.tsx",
-      "displayName": "UserListPage",
-      "previewKey": "screen.UserListPage.UserListPage.UserListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/UserListScreen/UserListScreen.tsx",
+      "displayName": "UserListScreen",
+      "previewKey": "screen.UserListScreen.UserListScreen.UserListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FUserListPage%2FUserListPage.tsx%23UserListPage",
@@ -3995,7 +3995,7 @@
       "consoleErrors": [
         "error: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
         "error: Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template).",
-        "error: %o\n\n%s TypeError: Cannot read properties of undefined (reading 'toLocaleString')\n    at http://localhost:3010/_next/static/chunks/packages_fe-ui_src_screen_1_i36i4._.js:28377:65\n    at observer.observerComponent.useObserver (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2189:24)\n    at http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2123:28\n    at trackDerivedFunction (http://localhost:3010/_next/static/chunks/0hv7_mobx_dist_mobx_esm_0kwcc1o.js:1997:24)\n    at Reaction.track (http://localhost:3010/_next/static/chunks/0hv7_mobx_dist_mobx_esm_0kwcc1o.js:2563:22)\n    at useObserver (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2121:18)\n    at UserListPage (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2187:357)\n    at Object.react_stack_bottom_frame (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:15037:24)\n    at renderWithHooks (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:4620:24)\n    at updateFunctionComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:6081:21)\n    at updateSimpleMemoComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:5944:16)\n    at updateMemoComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:5919:302)\n    at beginWork (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:6778:24)\n    at runWithFiberInDEV (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:965:74)\n    at performUnitOfWork (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9555:97)\n    at workLoopSync (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9449:40)\n    at renderRootSync (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9433:13)\n    at performWorkOnRoot (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9098:47)\n    at performWorkOnRootViaSchedulerTask (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:10255:9)\n    at MessagePort.performWorkUntilDeadline (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_1d-e0yl._.js:2647:64) The above error occurred in the <UserListPage> component. It was handled by the <PreviewErrorBoundary> error boundary."
+        "error: %o\n\n%s TypeError: Cannot read properties of undefined (reading 'toLocaleString')\n    at http://localhost:3010/_next/static/chunks/packages_fe-ui_src_screen_1_i36i4._.js:28377:65\n    at observer.observerComponent.useObserver (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2189:24)\n    at http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2123:28\n    at trackDerivedFunction (http://localhost:3010/_next/static/chunks/0hv7_mobx_dist_mobx_esm_0kwcc1o.js:1997:24)\n    at Reaction.track (http://localhost:3010/_next/static/chunks/0hv7_mobx_dist_mobx_esm_0kwcc1o.js:2563:22)\n    at useObserver (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2121:18)\n    at UserListScreen (http://localhost:3010/_next/static/chunks/node_modules__pnpm_1xuxuej._.js:2187:357)\n    at Object.react_stack_bottom_frame (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:15037:24)\n    at renderWithHooks (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:4620:24)\n    at updateFunctionComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:6081:21)\n    at updateSimpleMemoComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:5944:16)\n    at updateMemoComponent (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:5919:302)\n    at beginWork (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:6778:24)\n    at runWithFiberInDEV (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:965:74)\n    at performUnitOfWork (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9555:97)\n    at workLoopSync (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9449:40)\n    at renderRootSync (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9433:13)\n    at performWorkOnRoot (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:9098:47)\n    at performWorkOnRootViaSchedulerTask (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_react-dom_0xwrhg7._.js:10255:9)\n    at MessagePort.performWorkUntilDeadline (http://localhost:3010/_next/static/chunks/1pfy_next_dist_compiled_1d-e0yl._.js:2647:64) The above error occurred in the <UserListScreen> component. It was handled by the <PreviewErrorBoundary> error boundary."
       ]
     },
     {
@@ -5133,9 +5133,9 @@
     },
     {
       "index": 245,
-      "sourcePath": "packages/fe-ui/src/screen/ActionEditPage/ActionEditPage.tsx",
-      "displayName": "ActionEditPage",
-      "previewKey": "screen.ActionEditPage.ActionEditPage.ActionEditPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/ActionEditScreen/ActionEditScreen.tsx",
+      "displayName": "ActionEditScreen",
+      "previewKey": "screen.ActionEditScreen.ActionEditScreen.ActionEditScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FActionEditPage%2FActionEditPage.tsx%23ActionEditPage",
@@ -5147,9 +5147,9 @@
     },
     {
       "index": 285,
-      "sourcePath": "packages/fe-ui/src/screen/RoleEditPage/RoleEditPage.tsx",
-      "displayName": "RoleEditPage",
-      "previewKey": "screen.RoleEditPage.RoleEditPage.RoleEditPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/RoleEditScreen/RoleEditScreen.tsx",
+      "displayName": "RoleEditScreen",
+      "previewKey": "screen.RoleEditScreen.RoleEditScreen.RoleEditScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FRoleEditPage%2FRoleEditPage.tsx%23RoleEditPage",
@@ -5159,9 +5159,9 @@
     },
     {
       "index": 292,
-      "sourcePath": "packages/fe-ui/src/screen/SecurityPolicyFormPage/SecurityPolicyFormPage.tsx",
-      "displayName": "SecurityPolicyFormPage",
-      "previewKey": "screen.SecurityPolicyFormPage.SecurityPolicyFormPage.SecurityPolicyFormPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/SecurityPolicyFormScreen/SecurityPolicyFormScreen.tsx",
+      "displayName": "SecurityPolicyFormScreen",
+      "previewKey": "screen.SecurityPolicyFormScreen.SecurityPolicyFormScreen.SecurityPolicyFormScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FSecurityPolicyFormPage%2FSecurityPolicyFormPage.tsx%23SecurityPolicyFormPage",
@@ -5175,9 +5175,9 @@
     },
     {
       "index": 293,
-      "sourcePath": "packages/fe-ui/src/screen/ServiceDocumentListPage/ServiceDocumentListPage.tsx",
-      "displayName": "ServiceDocumentListPage",
-      "previewKey": "screen.ServiceDocumentListPage.ServiceDocumentListPage.ServiceDocumentListPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/ServiceDocumentListScreen/ServiceDocumentListScreen.tsx",
+      "displayName": "ServiceDocumentListScreen",
+      "previewKey": "screen.ServiceDocumentListScreen.ServiceDocumentListScreen.ServiceDocumentListScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FServiceDocumentListPage%2FServiceDocumentListPage.tsx%23ServiceDocumentListPage",
@@ -5188,9 +5188,9 @@
     },
     {
       "index": 311,
-      "sourcePath": "packages/fe-ui/src/screen/TenantAccessRequestReviewDetailPage/TenantAccessRequestReviewDetailPage.tsx",
-      "displayName": "TenantAccessRequestReviewDetailPage",
-      "previewKey": "screen.TenantAccessRequestReviewDetailPage.TenantAccessRequestReviewDetailPage.TenantAccessRequestReviewDetailPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TenantAccessRequestReviewDetailScreen/TenantAccessRequestReviewDetailScreen.tsx",
+      "displayName": "TenantAccessRequestReviewDetailScreen",
+      "previewKey": "screen.TenantAccessRequestReviewDetailScreen.TenantAccessRequestReviewDetailScreen.TenantAccessRequestReviewDetailScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTenantAccessRequestReviewDetailPage%2FTenantAccessRequestReviewDetailPage.tsx%23TenantAccessRequestReviewDetailPage",
@@ -5200,9 +5200,9 @@
     },
     {
       "index": 314,
-      "sourcePath": "packages/fe-ui/src/screen/TimelineCreatePage/TimelineCreatePage.tsx",
-      "displayName": "TimelineCreatePage",
-      "previewKey": "screen.TimelineCreatePage.TimelineCreatePage.TimelineCreatePagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TimelineCreateScreen/TimelineCreateScreen.tsx",
+      "displayName": "TimelineCreateScreen",
+      "previewKey": "screen.TimelineCreateScreen.TimelineCreateScreen.TimelineCreateScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTimelineCreatePage%2FTimelineCreatePage.tsx%23TimelineCreatePage",
@@ -5212,9 +5212,9 @@
     },
     {
       "index": 316,
-      "sourcePath": "packages/fe-ui/src/screen/TimelineEditPage/TimelineEditPage.tsx",
-      "displayName": "TimelineEditPage",
-      "previewKey": "screen.TimelineEditPage.TimelineEditPage.TimelineEditPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TimelineEditScreen/TimelineEditScreen.tsx",
+      "displayName": "TimelineEditScreen",
+      "previewKey": "screen.TimelineEditScreen.TimelineEditScreen.TimelineEditScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTimelineEditPage%2FTimelineEditPage.tsx%23TimelineEditPage",
@@ -5224,9 +5224,9 @@
     },
     {
       "index": 318,
-      "sourcePath": "packages/fe-ui/src/screen/TimelineSessionCreatePage/TimelineSessionCreatePage.tsx",
-      "displayName": "TimelineSessionCreatePage",
-      "previewKey": "screen.TimelineSessionCreatePage.TimelineSessionCreatePage.TimelineSessionCreatePagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TimelineSessionCreateScreen/TimelineSessionCreateScreen.tsx",
+      "displayName": "TimelineSessionCreateScreen",
+      "previewKey": "screen.TimelineSessionCreateScreen.TimelineSessionCreateScreen.TimelineSessionCreateScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTimelineSessionCreatePage%2FTimelineSessionCreatePage.tsx%23TimelineSessionCreatePage",
@@ -5236,9 +5236,9 @@
     },
     {
       "index": 320,
-      "sourcePath": "packages/fe-ui/src/screen/TimelineSessionEditPage/TimelineSessionEditPage.tsx",
-      "displayName": "TimelineSessionEditPage",
-      "previewKey": "screen.TimelineSessionEditPage.TimelineSessionEditPage.TimelineSessionEditPagePreview",
+      "sourcePath": "packages/fe-ui/src/screen/TimelineSessionEditScreen/TimelineSessionEditScreen.tsx",
+      "displayName": "TimelineSessionEditScreen",
+      "previewKey": "screen.TimelineSessionEditScreen.TimelineSessionEditScreen.TimelineSessionEditScreenPreview",
       "status": "generated",
       "category": "screen",
       "url": "http://localhost:3010/?category=screen&preview=generated&selected=packages%2Ffe-ui%2Fsrc%2Fscreen%2FTimelineSessionEditPage%2FTimelineSessionEditPage.tsx%23TimelineSessionEditPage",

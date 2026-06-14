@@ -9,4 +9,6 @@ export * from "./layout";
 export * from "./rhythm";
 export * from "./surface";
 export * from "./design-system";
+export * from "./widget";
+export * from "./feature";
 export * from "./screen";

@@ -133,6 +133,7 @@ else
     echo -e "  ${DIM}예: pnpm start -- core-api admin-web${RESET}"
     echo -e "  ${DIM}예: START_CHOICES=\"1 6\" pnpm start${RESET}"
     echo -e "  ${DIM}예: START_CHOICES=\"mobile mobile:ios mobile:go\" pnpm start${RESET}"
+    echo -e "  ${DIM}예: pnpm start -- mobile-storybook:web${RESET}"
     exit 1
   fi
 
@@ -145,8 +146,9 @@ else
   echo -e "  ${CYAN}3${RESET})  proposal-web    ${DIM}퍼블릭 제안 랜딩${RESET}"
   echo -e "  ${CYAN}4${RESET})  tool-storybook  ${DIM}스토리북${RESET}"
   echo -e "  ${CYAN}5${RESET})  mobile          ${DIM}Expo 모바일 앱${RESET}"
+  echo -e "  ${CYAN}6${RESET})  mobile-storybook ${DIM}Expo 모바일 Storybook${RESET}"
   echo ""
-  echo -e "  ${DIM}복수 선택 가능 (예: 1 2 7)${RESET}"
+  echo -e "  ${DIM}복수 선택 가능 (예: 1 2 6)${RESET}"
   echo ""
   if ! prompt_read choices "${BOLD}번호 선택: ${RESET}"; then
     echo -e "\n${YELLOW}입력이 취소되었습니다.${RESET}"
@@ -164,9 +166,12 @@ SERVICES=""
 HAS_FRONTEND="false"
 HAS_BACKEND="false"
 HAS_MOBILE="false"
+HAS_MOBILE_STORYBOOK="false"
 MOBILE_TARGET=""
 MOBILE_RUNTIME=""
+MOBILE_STORYBOOK_TARGET=""
 TURBO_PID=""
+MOBILE_PID=""
 MOBILE_DEVTOOLS_PID=""
 
 # 서비스별 포트 조회
@@ -177,11 +182,13 @@ get_port() {
     proposal-web)    echo "${PROPOSAL_WEB_PORT:-3011}" ;;
     tool-storybook)  echo "${STORYBOOK_PORT:-6006}" ;;
     mobile)          echo "${MOBILE_PORT:-8081}" ;;
+    mobile-storybook) echo "${MOBILE_STORYBOOK_PORT:-8083}" ;;
   esac
 }
 
 CORE_API_PORT_VALUE=$(get_port core-api)
 MOBILE_PORT_VALUE=$(get_port mobile)
+MOBILE_STORYBOOK_PORT_VALUE=$(get_port mobile-storybook)
 
 ensure_mobile_service() {
   HAS_MOBILE="true"
@@ -236,6 +243,39 @@ resolve_mobile_runtime_label() {
   case $1 in
     local) echo "local build" ;;
     go) echo "Expo Go" ;;
+  esac
+}
+
+ensure_mobile_storybook_service() {
+  HAS_MOBILE_STORYBOOK="true"
+  if [[ " $SERVICES " != *" mobile-storybook "* ]]; then
+    SERVICES="$SERVICES mobile-storybook"
+  fi
+}
+
+set_mobile_storybook_target() {
+  local next_target=$1
+
+  ensure_mobile_storybook_service
+
+  if [[ -n "$MOBILE_STORYBOOK_TARGET" && "$MOBILE_STORYBOOK_TARGET" != "$next_target" && "$MOBILE_STORYBOOK_TARGET" != "prompt" && "$next_target" != "prompt" ]]; then
+    echo -e "${YELLOW}모바일 Storybook 실행 대상이 중복 지정되었습니다: ${MOBILE_STORYBOOK_TARGET}, ${next_target}${RESET}"
+    exit 1
+  fi
+
+  if [[ "$next_target" != "prompt" ]]; then
+    MOBILE_STORYBOOK_TARGET="$next_target"
+  elif [[ -z "$MOBILE_STORYBOOK_TARGET" ]]; then
+    MOBILE_STORYBOOK_TARGET="prompt"
+  fi
+}
+
+resolve_mobile_storybook_target_label() {
+  case $1 in
+    web) echo "Web" ;;
+    ios) echo "iOS" ;;
+    android) echo "AOS" ;;
+    metro) echo "Metro" ;;
   esac
 }
 
@@ -301,6 +341,40 @@ ensure_mobile_runtime() {
   fi
 }
 
+ensure_mobile_storybook_target() {
+  if [[ "$HAS_MOBILE_STORYBOOK" != "true" ]]; then
+    return
+  fi
+
+  if [[ -n "$MOBILE_STORYBOOK_TARGET" && "$MOBILE_STORYBOOK_TARGET" != "prompt" ]]; then
+    return
+  fi
+
+  if [[ "$INTERACTIVE" == "true" ]]; then
+    echo ""
+    echo -e "${BOLD}📚 모바일 Storybook 실행 대상${RESET}"
+    echo -e "  ${CYAN}1${RESET})  Web          ${DIM}브라우저로 실행${RESET}"
+    echo -e "  ${CYAN}2${RESET})  iOS          ${DIM}iOS 시뮬레이터 실행${RESET}"
+    echo -e "  ${CYAN}3${RESET})  AOS          ${DIM}Android 에뮬레이터 실행${RESET}"
+    echo -e "  ${CYAN}4${RESET})  Metro        ${DIM}QR/dev menu만 실행${RESET}"
+    echo ""
+    if ! prompt_read mobile_storybook_target_choice "${BOLD}번호 선택: ${RESET}"; then
+      echo -e "\n${YELLOW}입력이 취소되었습니다.${RESET}"
+      exit 1
+    fi
+
+    case $mobile_storybook_target_choice in
+      1|"") MOBILE_STORYBOOK_TARGET="web" ;;
+      2) MOBILE_STORYBOOK_TARGET="ios" ;;
+      3) MOBILE_STORYBOOK_TARGET="android" ;;
+      4) MOBILE_STORYBOOK_TARGET="metro" ;;
+      *) echo -e "${YELLOW}잘못된 번호: ${mobile_storybook_target_choice}${RESET}"; exit 1 ;;
+    esac
+  else
+    MOBILE_STORYBOOK_TARGET="web"
+  fi
+}
+
 for choice in $choices; do
   case $choice in
     1|core-api|start:core-api)
@@ -319,6 +393,9 @@ for choice in $choices; do
       set_mobile_target prompt
       set_mobile_runtime prompt
       ;;
+    6|mobile-storybook|tool-mobile-storybook|start:mobile-storybook)
+      set_mobile_storybook_target prompt
+      ;;
     ios:mobile|mobile:ios|start:mobile:ios)
       set_mobile_target ios
       ;;
@@ -334,12 +411,25 @@ for choice in $choices; do
     go:mobile|mobile:go|expo-go:mobile|mobile:expo-go|start:mobile:go)
       set_mobile_runtime go
       ;;
+    web:mobile-storybook|mobile-storybook:web|tool-mobile-storybook:web|start:mobile-storybook:web)
+      set_mobile_storybook_target web
+      ;;
+    ios:mobile-storybook|mobile-storybook:ios|tool-mobile-storybook:ios|start:mobile-storybook:ios)
+      set_mobile_storybook_target ios
+      ;;
+    android:mobile-storybook|aos:mobile-storybook|mobile-storybook:android|mobile-storybook:aos|tool-mobile-storybook:android|start:mobile-storybook:android)
+      set_mobile_storybook_target android
+      ;;
+    metro:mobile-storybook|mobile-storybook:metro|tool-mobile-storybook:metro|start:mobile-storybook:metro)
+      set_mobile_storybook_target metro
+      ;;
     *) echo -e "${YELLOW}잘못된 번호: ${choice}${RESET}"; exit 1 ;;
   esac
 done
 
 ensure_mobile_target
 ensure_mobile_runtime
+ensure_mobile_storybook_target
 
 # 프론트엔드(admin) 선택 시 codegen 질문
 CODEGEN_ENV=""
@@ -442,6 +532,10 @@ cleanup() {
     kill "$MOBILE_DEVTOOLS_PID" 2>/dev/null || true
   fi
 
+  if [[ -n "$MOBILE_PID" ]]; then
+    kill "$MOBILE_PID" 2>/dev/null || true
+  fi
+
   if [[ -n "$TURBO_PID" ]]; then
     kill "$TURBO_PID" 2>/dev/null || true
   fi
@@ -472,6 +566,7 @@ pre_cleanup_service_processes() {
       proposal-web) pattern="turbo start:dev .*--filter=proposal-web|pnpm(\\.cjs)? --filter=proposal-web start:dev|apps/proposal/web" ;;
       tool-storybook) pattern="turbo start:dev .*--filter=tool-storybook|pnpm(\\.cjs)? --filter=tool-storybook start:dev|apps/tool/storybook|STORYBOOK_REQUIRE_AUTH=true storybook dev|storybook dev -p" ;;
       mobile) pattern="mobile-app@1.0.0 start|pnpm --filter=mobile-app exec expo start|expo start .*--port ${MOBILE_PORT_VALUE}" ;;
+      mobile-storybook) pattern="tool-mobile-storybook@1.0.0|pnpm(\\.cjs)? --filter=tool-mobile-storybook|apps/tool/mobile-storybook|expo start .*--port ${MOBILE_STORYBOOK_PORT_VALUE}" ;;
     esac
 
     if [[ -n "$pattern" ]]; then
@@ -528,6 +623,10 @@ if [[ "$HAS_MOBILE" == "true" ]]; then
     echo -e "${DIM}local build는 development build(custom native app)가 기기에 설치되어 있어야 합니다.${RESET}"
   fi
   echo -e "${DIM}모바일 앱 연결 후 React Native DevTools를 자동으로 엽니다.${RESET}\n"
+fi
+
+if [[ "$HAS_MOBILE_STORYBOOK" == "true" ]]; then
+  echo -e "${DIM}모바일 Storybook 실행 대상: $(resolve_mobile_storybook_target_label "$MOBILE_STORYBOOK_TARGET") / Metro port ${MOBILE_STORYBOOK_PORT_VALUE}${RESET}\n"
 fi
 
 has_turbo_services() {
@@ -625,6 +724,48 @@ run_mobile() {
   "${mobile_args[@]}"
 }
 
+run_mobile_background() {
+  if [[ "$HAS_MOBILE" != "true" ]]; then
+    return
+  fi
+
+  run_mobile &
+  MOBILE_PID=$!
+}
+
+run_mobile_storybook() {
+  if [[ "$HAS_MOBILE_STORYBOOK" != "true" ]]; then
+    return
+  fi
+
+  local storybook_script="web"
+
+  case $MOBILE_STORYBOOK_TARGET in
+    web) storybook_script="web" ;;
+    ios) storybook_script="ios" ;;
+    android) storybook_script="android" ;;
+    metro) storybook_script="start:dev" ;;
+  esac
+
+  pnpm --filter=tool-mobile-storybook run "$storybook_script"
+}
+
+has_local_persistent_services() {
+  [[ "$HAS_MOBILE" == "true" || "$HAS_MOBILE_STORYBOOK" == "true" ]]
+}
+
+run_local_persistent_services() {
+  if [[ "$HAS_MOBILE" == "true" && "$HAS_MOBILE_STORYBOOK" == "true" ]]; then
+    run_mobile_background
+    run_mobile_storybook
+    wait "$MOBILE_PID" 2>/dev/null || true
+  elif [[ "$HAS_MOBILE" == "true" ]]; then
+    run_mobile
+  elif [[ "$HAS_MOBILE_STORYBOOK" == "true" ]]; then
+    run_mobile_storybook
+  fi
+}
+
 if [[ "$CODEGEN_ENV" == "local" ]]; then
   # local: 서버 먼저 띄우고 → health check → codegen → turbo에 join
   run_turbo_background
@@ -652,8 +793,8 @@ if [[ "$CODEGEN_ENV" == "local" ]]; then
   eval $CODEGEN_CMD
   echo -e "${GREEN}✅ API 코드젠 완료${RESET}"
 
-  if [[ "$HAS_MOBILE" == "true" ]]; then
-    run_mobile
+  if has_local_persistent_services; then
+    run_local_persistent_services
   fi
 
   wait_for_turbo
@@ -665,24 +806,24 @@ elif [[ -n "$CODEGEN_ENV" ]]; then
   eval $CODEGEN_CMD
   echo -e "${GREEN}✅ API 코드젠 완료${RESET}\n"
 
-  if [[ "$HAS_MOBILE" == "true" && has_turbo_services ]]; then
+  if has_local_persistent_services && has_turbo_services; then
     run_turbo_background
-    run_mobile
+    run_local_persistent_services
     wait_for_turbo
-  elif [[ "$HAS_MOBILE" == "true" ]]; then
-    run_mobile
+  elif has_local_persistent_services; then
+    run_local_persistent_services
   else
     run_turbo_foreground
   fi
 
 else
   # 건너뛰기 또는 프론트엔드 미선택
-  if [[ "$HAS_MOBILE" == "true" && has_turbo_services ]]; then
+  if has_local_persistent_services && has_turbo_services; then
     run_turbo_background
-    run_mobile
+    run_local_persistent_services
     wait_for_turbo
-  elif [[ "$HAS_MOBILE" == "true" ]]; then
-    run_mobile
+  elif has_local_persistent_services; then
+    run_local_persistent_services
   else
     run_turbo_foreground
   fi
