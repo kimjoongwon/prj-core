@@ -17,16 +17,16 @@
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/abilities/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/abilities/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
-- `page.tsx`는 데이터 조회/필터 상태/라우팅만 담당하고 시각 조합은 `AbilityListPage`가 소유합니다.
+- `page.tsx`는 데이터 조회/필터 상태/라우팅만 담당하고 시각 조합은 `AbilityListScreen`가 소유합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `pure screen + thin route container`
 - page role: `collection`
 - reusable target: `data-grid`
-- screen component path: `packages/fe-ui/src/screen/AbilityListPage/AbilityListPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/AbilityListScreen/AbilityListScreen.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -36,8 +36,8 @@
 |------|-----------|------|
 | 페이지 헤더 | `PageTitleBar` + 등록 버튼 | `권한 정의` 제목과 등록 이동 액션 |
 | 요약 카드 | `StatsCard` x4 | 전체, 표시 중, 거부 규칙, 조건/필드 제한 현황 |
-| 필터 패널 | `Surface` + search input + select 묶음 + active filter chip | 클라이언트 필터링 조건. 검색 input은 `aria-label="권한 이름 검색"` 접근성 이름을 제공해야 하며, HeroUI Select trigger에는 `대상(Subject)`, `행동(Action)`, `규칙 유형` placeholder 텍스트가 렌더링되어야 한다. |
-| 목록 패널 | `Surface` + `DataGrid` | 규칙, 대상, 행동, 적용 범위, 조건, 등록일 기준 권한 목록과 상세 이동 |
+| 필터 패널 | `SectionSurface` + search input + select 묶음 + active filter chip | 클라이언트 필터링 조건. 검색 input은 `aria-label="권한 이름 검색"` 접근성 이름을 제공해야 하며, HeroUI Select trigger에는 `대상(Subject)`, `행동(Action)`, `규칙 유형` placeholder 텍스트가 렌더링되어야 한다. |
+| 목록 패널 | `SectionSurface` + `DataGrid` | 규칙, 대상, 행동, 적용 범위, 조건, 등록일 기준 권한 목록과 상세 이동 |
 
 ## API 호출
 
@@ -75,9 +75,9 @@
 | 2026-04-28 | page role을 `collection`으로 갱신 | codex |
 | 2026-04-28 | DataGrid 공식 재사용 타깃을 `data-grid`로 갱신 | codex |
 | 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
-| 2026-03-29 | `AbilityListPage`가 `DataGrid` 기반 테이블 조합을 사용하도록 정착된 상태에 맞춰 reusable target을 `data-grid`로 보정 | codex |
-| 2026-03-26 | `AbilityListPage` pure screen와 thin route container 구조로 전환하고 screen component path를 반영 | codex |
+| 2026-03-29 | `AbilityListScreen`가 `DataGrid` 기반 테이블 조합을 사용하도록 정착된 상태에 맞춰 reusable target을 `data-grid`로 보정 | codex |
+| 2026-03-26 | `AbilityListScreen` pure screen와 thin route container 구조로 전환하고 screen component path를 반영 | codex |
 | 2026-03-23 | 필터 Select 검증 기준을 접근성 role name이 아닌 HeroUI trigger placeholder 텍스트로 명시 | codex |
 | 2026-03-23 | 검색 input이 자동화/스크린리더에서 일관되게 식별되도록 `aria-label="권한 이름 검색"` 계약을 추가 | codex |
-| 2026-03-22 | 필터/목록 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
+| 2026-03-22 | 필터/목록 wrapper를 범용 `SectionSurface` 기준으로 문서화 | codex |
 | 2026-03-21 | route-layout / page-builder 계약에 맞춰 권한 목록을 `layout.tsx` + content-only `page.tsx` 구조로 재정의 | codex |

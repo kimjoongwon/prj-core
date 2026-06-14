@@ -4,8 +4,6 @@ import { observer } from "mobx-react-lite";
 import { Input } from "../../../input/Input/Input";
 import { Select } from "../../../selection/Select/Select";
 import { Card, cn } from "@heroui/react";
-import { HStack } from "../../../rhythm/HStack/HStack";
-import { VStack } from "../../../rhythm/VStack/VStack";
 
 /**
  * 마스킹 프리셋 옵션
@@ -214,7 +212,7 @@ export const ActionConfigEditor = observer(
 			return (
 				<Card className="bg-surface-secondary">
 					<Card.Content>
-						<VStack gap={4}>
+						<div>
 							{/* 프리셋 선택 */}
 									<Select
 										label="마스킹 프리셋"
@@ -250,34 +248,34 @@ export const ActionConfigEditor = observer(
 
 							{/* 미리보기 */}
 							{previewValue && (
-								<VStack gap={2}>
-									<p className="text-sm font-medium text-muted">
+								<div className="flex flex-col">
+									<p className="flex flex-col gap-4 items-center text-sm font-medium text-muted">
 										미리보기
 									</p>
-									<HStack
-										gap={8}
-										alignItems="center"
-										className={cn("rounded-lg bg-surface-tertiary px-4 py-3")}
+									<div
+
+
+									 className={cn("flex", "rounded-lg bg-surface-tertiary px-4 py-3")}
 									>
-										<VStack gap={1}>
+										<div className="flex flex-col">
 											<span className="text-xs text-muted">원본</span>
 											<span className="font-mono text-sm text-foreground">
 												{previewValue}
 											</span>
-										</VStack>
+										</div>
 										<span className="text-muted">→</span>
-										<VStack gap={1}>
+										<div className="flex flex-col">
 											<span className="text-xs text-muted">
 												마스킹 결과
 											</span>
 											<span className="font-mono text-sm text-accent">
 												{preview}
 											</span>
-										</VStack>
-									</HStack>
-								</VStack>
+										</div>
+									</div>
+								</div>
 							)}
-						</VStack>
+						</div>
 					</Card.Content>
 				</Card>
 			);
@@ -290,7 +288,7 @@ export const ActionConfigEditor = observer(
 			return (
 				<Card className="bg-surface-secondary">
 					<Card.Content>
-						<VStack gap={4}>
+						<div className="flex flex-col">
 							{/* 포맷 패턴 선택 */}
 									<Select
 										label="포맷 패턴 예시"
@@ -311,30 +309,30 @@ export const ActionConfigEditor = observer(
 
 							{/* 미리보기 */}
 							{previewValue && formatConfig?.pattern && (
-								<VStack gap={2}>
+								<div className="flex flex-col">
 									<p className="text-sm font-medium text-muted">
 										미리보기
 									</p>
 									<div className={cn("rounded-lg bg-surface-tertiary px-4 py-3")}>
-										<HStack gap={8} alignItems="center">
-											<VStack gap={1}>
+										<div className="flex">
+											<div className="flex flex-col">
 												<span className="text-xs text-muted">원본</span>
 												<span className="font-mono text-sm text-foreground">
 													{previewValue}
 												</span>
-											</VStack>
+											</div>
 											<span className="text-muted">→</span>
-											<VStack gap={1}>
+											<div className="flex flex-col">
 												<span className="text-xs text-muted">패턴</span>
 												<span className="font-mono text-sm text-accent">
 													{formatConfig.pattern}
 												</span>
-											</VStack>
-										</HStack>
+											</div>
+										</div>
 									</div>
-								</VStack>
+								</div>
 							)}
-						</VStack>
+						</div>
 					</Card.Content>
 				</Card>
 			);
@@ -372,7 +370,7 @@ export const ActionConfigEditor = observer(
 			return (
 				<Card className="bg-surface-secondary">
 					<Card.Content>
-						<VStack gap={4}>
+						<div className="flex flex-col">
 							{/* 변환 규칙 선택 */}
 									<Select
 										label="변환 규칙"
@@ -386,32 +384,32 @@ export const ActionConfigEditor = observer(
 
 							{/* 미리보기 */}
 							{previewValue && preview && (
-								<VStack gap={2}>
+								<div className="flex flex-col">
 									<p className="text-sm font-medium text-muted">
 										미리보기
 									</p>
 									<div className={cn("rounded-lg bg-surface-tertiary px-4 py-3")}>
-										<HStack gap={8} alignItems="center">
-											<VStack gap={1}>
+										<div className="flex">
+											<div className="flex flex-col">
 												<span className="text-xs text-muted">원본</span>
 												<span className="font-mono text-sm text-foreground">
 													{previewValue}
 												</span>
-											</VStack>
+											</div>
 											<span className="text-muted">→</span>
-											<VStack gap={1}>
+											<div className="flex flex-col gap-1">
 												<span className="text-xs text-muted">
 													변환 결과
 												</span>
 												<span className="font-mono text-sm text-accent">
 													{preview}
 												</span>
-											</VStack>
-										</HStack>
+											</div>
+										</div>
 									</div>
-								</VStack>
+								</div>
 							)}
-						</VStack>
+						</div>
 					</Card.Content>
 				</Card>
 			);

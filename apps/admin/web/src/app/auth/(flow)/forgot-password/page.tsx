@@ -1,7 +1,7 @@
 "use client";
 
 import { useRequestPasswordReset } from "@cocrepo/api/idp/password-reset";
-import { ForgotPasswordPage } from "@cocrepo/ui";
+import { ForgotPasswordScreen } from "@cocrepo/ui";
 import {
 	type IReactionDisposer,
 	makeAutoObservable,
@@ -82,10 +82,12 @@ const ForgotPasswordRoutePage = observer(() => {
 	};
 
 	return (
-		<ForgotPasswordPage
-			state={forgotPasswordPage}
-			onSubmitForgotPasswordForm={onSubmitForgotPasswordForm}
-		/>
+		<>
+			<ForgotPasswordScreen
+				state={forgotPasswordPage}
+				onSubmitForgotPasswordForm={onSubmitForgotPasswordForm}
+			/>
+		</>
 	);
 });
 

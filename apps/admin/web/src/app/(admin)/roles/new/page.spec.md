@@ -96,7 +96,7 @@
 ## 런타임 책임
 
 - `page.tsx`가 `useCreateRole`, `useRouter`, `useLocalObservable`를 직접 소유합니다.
-- `@cocrepo/ui`의 `RoleCreatePage`는 props-only pure screen로 사용합니다.
+- `@cocrepo/ui`의 `RoleCreateScreen`는 props-only pure screen로 사용합니다.
 
 ## 폼 상태 관리
 
@@ -112,15 +112,15 @@
 - [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
 
 
-## Surface / Elevation
+## SectionSurface / Elevation
 
 | 항목 | 결정 |
 |------|------|
-| PageSurface owner | 참조 route layout의 `layout.tsx` skeleton |
-| PageSurface 역할 | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다. |
+| ScreenSurface owner | page/screen content owner |
+| ScreenSurface 역할 | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다. |
 | SectionSurface 대상 | 본문 섹션, 폼, 표, 로딩/빈 상태 블록 |
 | SectionSurface padding | 기본 패딩 |
-| 예외 | 없음. surface skeleton은 참조 route layout이 소유하고 `page.tsx`는 내부 콘텐츠만 채웁니다. |
+| 예외 | 없음. `layout.tsx`는 `Page` 구조만 소유하고 surface는 page/screen content owner가 명시합니다. |
 
 ## Consumed Layout Contract
 
@@ -129,7 +129,7 @@
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/roles/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/roles/new/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
 - `page.tsx`는 입력, 검증, 생성/수정 폼 흐름만 담당합니다.
 
@@ -149,9 +149,9 @@
 | 2026-03-30 | 역할 등록의 mutation/router/local state를 route page로 이동하고 `@cocrepo/ui` page를 pure contract로 분리 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
-| 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |
-| 2026-03-15 | Surface ownership/elevation 규칙과 PageSurface/SectionSurface 적용 기준을 문서화 | codex |
-| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
+| 2026-03-15 | SectionSurface ownership과 elevation 결정을 문서화 | codex |
+| 2026-03-15 | SectionSurface ownership/elevation 규칙과 ScreenSurface/SectionSurface 적용 기준을 문서화 | codex |
+| 2026-03-15 | SectionSurface owner와 elevation 규칙을 문서화 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

@@ -6,18 +6,18 @@ import {
 } from "@cocrepo/api/idp/oidc-clients";
 import type { OidcClientLoginUi } from "@cocrepo/type";
 import {
-	OidcClientEditPage,
-	type OidcClientEditPageFormState,
+	OidcClientEditScreen,
+	type OidcClientEditScreenFormState,
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default observer(function OidcClientEditPageRoute() {
+export default observer(function OidcClientEditScreenRoute() {
 	const oidcClientId = useParams<{ oidcClientId: string }>().oidcClientId;
 	const router = useRouter();
-	const state = useLocalObservable<OidcClientEditPageFormState>(() => ({
+	const state = useLocalObservable<OidcClientEditScreenFormState>(() => ({
 		clientId: "",
 		name: "",
 		clientSecret: "",
@@ -91,45 +91,47 @@ export default observer(function OidcClientEditPageRoute() {
 	});
 
 	return (
-		<OidcClientEditPage
-			client={
-				client
-					? {
-							oidcClientId,
-							clientId: client.clientId,
-							name: client.name,
-							clientSecret: client.clientSecret,
-							tokenEndpointAuthMethod: client.tokenEndpointAuthMethod,
-							grantTypes: client.grantTypes,
-							responseTypes: client.responseTypes,
-							scope: client.scope,
-							isFirstParty: client.isFirstParty,
-							skipConsent: client.skipConsent,
-							redirectUris: client.redirectUris,
-							loginUrl: client.loginUrl,
-							defaultReturnTo: client.defaultReturnTo,
-							logoUri: client.logoUri,
-							policyUri: client.policyUri,
-							tosUri: client.tosUri,
-							loginUi: client.loginUi as OidcClientLoginUi | null | undefined,
-						}
-					: undefined
-			}
-			formState={state}
-			isLoading={isLoading}
-			isSubmitting={isPending}
-			onClickBackButton={() => {
-				router.push(`/settings/auth/oidc-clients/${oidcClientId}` as Route);
-			}}
-			onClickListButton={() => {
-				router.push("/settings/auth/oidc-clients" as Route);
-			}}
-			onSubmit={(input) => {
-				updateClient({
-					oidcClientId,
-					data: input,
-				});
-			}}
-		/>
+		<>
+			<OidcClientEditScreen
+				client={
+					client
+						? {
+								oidcClientId,
+								clientId: client.clientId,
+								name: client.name,
+								clientSecret: client.clientSecret,
+								tokenEndpointAuthMethod: client.tokenEndpointAuthMethod,
+								grantTypes: client.grantTypes,
+								responseTypes: client.responseTypes,
+								scope: client.scope,
+								isFirstParty: client.isFirstParty,
+								skipConsent: client.skipConsent,
+								redirectUris: client.redirectUris,
+								loginUrl: client.loginUrl,
+								defaultReturnTo: client.defaultReturnTo,
+								logoUri: client.logoUri,
+								policyUri: client.policyUri,
+								tosUri: client.tosUri,
+								loginUi: client.loginUi as OidcClientLoginUi | null | undefined,
+							}
+						: undefined
+				}
+				formState={state}
+				isLoading={isLoading}
+				isSubmitting={isPending}
+				onClickBackButton={() => {
+					router.push(`/settings/auth/oidc-clients/${oidcClientId}` as Route);
+				}}
+				onClickListButton={() => {
+					router.push("/settings/auth/oidc-clients" as Route);
+				}}
+				onSubmit={(input) => {
+					updateClient({
+						oidcClientId,
+						data: input,
+					});
+				}}
+			/>
+		</>
 	);
 });

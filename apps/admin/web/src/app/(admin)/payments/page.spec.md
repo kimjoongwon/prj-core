@@ -14,13 +14,13 @@
 
 - 기본 패턴: `pure screen + thin route container`
 - page role: `collection`
-- reusable target: `PaymentManagementPage`
-- screen component path: `packages/fe-ui/src/screen/PaymentManagementPage/PaymentManagementPage.tsx`
+- reusable target: `PaymentScreen`
+- screen component path: `packages/fe-ui/src/screen/PaymentScreen/PaymentScreen.tsx`
 - route는 Orval Payment API 응답 변환, query state 전달, 새로고침 이벤트를 소유합니다.
 
 ## API 호출
 
-route는 `usePaymentManagementPageData`를 통해 Orval 생성 Payment hook을 호출하고, API 응답을 `PaymentManagementPage` 표시 row와 query state로 변환합니다.
+route는 `usePaymentData`를 통해 Orval 생성 Payment hook을 호출하고, API 응답을 `PaymentScreen` 표시 row와 query state로 변환합니다.
 
 | 시점            | API                    | Orval hook       | 설명                                                                   | 상태      |
 | --------------- | ---------------------- | ---------------- | ---------------------------------------------------------------------- | --------- |

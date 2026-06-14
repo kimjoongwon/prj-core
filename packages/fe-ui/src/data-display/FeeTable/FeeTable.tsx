@@ -1,5 +1,3 @@
-import { HStack } from "../../rhythm/HStack/HStack";
-import { VStack } from "../../rhythm/VStack/VStack";
 import { Typography } from "../Typography";
 
 export interface FeeItem {
@@ -37,29 +35,31 @@ export interface FeeTableProps {
  */
 export const FeeTable = ({ items, total, className }: FeeTableProps) => {
 	return (
-		<VStack gap={2} className={className}>
+		<div
+			className={["flex flex-col gap-2", className].filter(Boolean).join(" ")}
+		>
 			{items.map((item, index) => (
-				<HStack key={index} justifyContent="between" fullWidth>
-					<Typography.Paragraph size="sm">
+				<div key={index} className="flex w-full justify-between">
+					<Typography.Paragraph>
 						{item.day}: {item.time}
 					</Typography.Paragraph>
-					<Typography.Paragraph size="sm">${item.fee}</Typography.Paragraph>
-				</HStack>
+					<Typography.Paragraph>${item.fee}</Typography.Paragraph>
+				</div>
 			))}
 
 			{total !== undefined && (
 				<>
 					<div className="my-2 border-t border-border" />
-					<HStack justifyContent="between" fullWidth>
+					<div className="flex w-full justify-between">
 						<Typography.Paragraph size="sm" className="font-bold">
 							Total:
 						</Typography.Paragraph>
 						<Typography.Paragraph size="sm" className="font-bold">
 							${total}
 						</Typography.Paragraph>
-					</HStack>
+					</div>
 				</>
 			)}
-		</VStack>
+		</div>
 	);
 };

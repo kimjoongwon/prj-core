@@ -6,7 +6,7 @@ import {
 } from "@cocrepo/api/core/abilities";
 import { useGetActions } from "@cocrepo/api/core/actions";
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
-import { AbilityListPage } from "@cocrepo/ui";
+import { AbilityListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -130,48 +130,50 @@ export default observer(function AbilitiesPage() {
 	}));
 
 	return (
-		<AbilityListPage
-			abilities={paginatedAbilities}
-			totalCount={filteredAbilities.length}
-			summary={summary}
-			subjects={subjects}
-			actions={actions}
-			filters={{
-				searchTerm: queryStates.search,
-				selectedSubjectId: queryStates.subjectId,
-				selectedActionId: queryStates.actionId,
-				selectedInverted: queryStates.inverted,
-			}}
-			isLoading={isAbilitiesLoading || isSubjectsLoading || isActionsLoading}
-			queryStates={queryStates}
-			setQueryStates={setQueryStates}
-			onChangeSearchTerm={(value) => {
-				void setQueryStates({ search: value, skip: 0 });
-			}}
-			onChangeSubjectId={(value) => {
-				void setQueryStates({ subjectId: value, skip: 0 });
-			}}
-			onChangeActionId={(value) => {
-				void setQueryStates({ actionId: value, skip: 0 });
-			}}
-			onChangeInverted={(value) => {
-				void setQueryStates({ inverted: value, skip: 0 });
-			}}
-			onClickResetFiltersButton={() => {
-				void setQueryStates({
-					search: "",
-					subjectId: "",
-					actionId: "",
-					inverted: "",
-					skip: 0,
-				});
-			}}
-			onClickAbilityRow={(abilityId) => {
-				router.push(`/abilities/${abilityId}` as Route);
-			}}
-			onClickCreateButton={() => {
-				router.push("/abilities/new" as Route);
-			}}
-		/>
+		<>
+			<AbilityListScreen
+				abilities={paginatedAbilities}
+				totalCount={filteredAbilities.length}
+				summary={summary}
+				subjects={subjects}
+				actions={actions}
+				filters={{
+					searchTerm: queryStates.search,
+					selectedSubjectId: queryStates.subjectId,
+					selectedActionId: queryStates.actionId,
+					selectedInverted: queryStates.inverted,
+				}}
+				isLoading={isAbilitiesLoading || isSubjectsLoading || isActionsLoading}
+				queryStates={queryStates}
+				setQueryStates={setQueryStates}
+				onChangeSearchTerm={(value) => {
+					void setQueryStates({ search: value, skip: 0 });
+				}}
+				onChangeSubjectId={(value) => {
+					void setQueryStates({ subjectId: value, skip: 0 });
+				}}
+				onChangeActionId={(value) => {
+					void setQueryStates({ actionId: value, skip: 0 });
+				}}
+				onChangeInverted={(value) => {
+					void setQueryStates({ inverted: value, skip: 0 });
+				}}
+				onClickResetFiltersButton={() => {
+					void setQueryStates({
+						search: "",
+						subjectId: "",
+						actionId: "",
+						inverted: "",
+						skip: 0,
+					});
+				}}
+				onClickAbilityRow={(abilityId) => {
+					router.push(`/abilities/${abilityId}` as Route);
+				}}
+				onClickCreateButton={() => {
+					router.push("/abilities/new" as Route);
+				}}
+			/>
+		</>
 	);
 });

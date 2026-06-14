@@ -111,15 +111,15 @@
 | 답변 작성 | InquiryReplyForm | `packages/fe-ui/src/feature/InquiryReplyForm/index.spec.md` |
 | SLA 추적 | SLATracker | `packages/fe-ui/src/widget/SLATracker/index.spec.md` |
 
-## Surface / Elevation
+## SectionSurface / Elevation
 
 | 항목 | 결정 |
 |------|------|
-| PageSurface owner | 참조 route layout의 `layout.tsx` skeleton |
-| PageSurface 역할 | 문의 상세 본문 전체를 raised 레이어로 묶고 실시간 채팅/메타 편집 블록을 동일 배경 위에 정렬 |
+| ScreenSurface owner | page/screen content owner |
+| ScreenSurface 역할 | 문의 상세 본문 전체를 raised 레이어로 묶고 실시간 채팅/메타 편집 블록을 동일 배경 위에 정렬 |
 | SectionSurface 대상 | 상단 정보 블록, 고객/참여자 블록, AI 메타 추천, 메타 수정, 실시간 채팅, SLA 추적 |
 | SectionSurface padding | 기본 패딩 유지 |
-| 예외 | 없음. surface skeleton은 참조 route layout이 소유하고 `page.tsx`는 내부 콘텐츠만 채웁니다. |
+| 예외 | 없음. `layout.tsx`는 `Page` 구조만 소유하고 surface는 page/screen content owner가 명시합니다. |
 
 ## 페이지 상태
 
@@ -452,7 +452,7 @@
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/inquiries/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
 - `page.tsx`는 상세 조회/읽기 전용 본문만 담당합니다.
 
@@ -463,18 +463,18 @@
 - reusable target: `detail/view`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
-- route는 조회/실시간 메시지/참여자 동기화, WebSocket 연결 관리, 메타 mutation, 삭제 modal state, 라우팅을 소유하고 `InquiryDetailPage`에는 정규화된 props를 주입합니다.
+- route는 조회/실시간 메시지/참여자 동기화, WebSocket 연결 관리, 메타 mutation, 삭제 modal state, 라우팅을 소유하고 `InquiryDetailScreen`에는 정규화된 props를 주입합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-03-30 | 실시간/WebSocket/mutation/delete modal state를 route container로 이동하고 `InquiryDetailPage`를 pure screen props contract로 재정의 | codex |
+| 2026-03-30 | 실시간/WebSocket/mutation/delete modal state를 route container로 이동하고 `InquiryDetailScreen`를 pure screen props contract로 재정의 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
-| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
-| 2026-03-15 | 문의 상세 spec에 `PageSurface`/`SectionSurface` ownership과 elevation 결정을 명시 | codex |
+| 2026-03-15 | SectionSurface owner와 elevation 규칙을 문서화 | codex |
+| 2026-03-15 | 문의 상세 spec에 `ScreenSurface`/`SectionSurface` ownership과 elevation 결정을 명시 | codex |
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
 | 2026-02-25 | 초기 생성 | orch-requirement |
 | 2026-02-26 | 실시간 채팅 UI 추가 (WebSocket 연결 상태, 타이핑 표시, 참여자 목록) | orch-requirement |

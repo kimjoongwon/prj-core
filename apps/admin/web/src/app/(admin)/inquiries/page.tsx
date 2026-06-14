@@ -7,7 +7,7 @@ import {
 	useGetInquiryStats,
 } from "@cocrepo/api/core/inquiries";
 import { ADMIN_PATHS } from "@cocrepo/constant";
-import { InquiryListPage } from "@cocrepo/ui";
+import { InquiryListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -51,46 +51,48 @@ export default observer(function InquiriesPageRoute() {
 			: undefined;
 
 	return (
-		<InquiryListPage
-			inquiries={inquiriesResponse?.data}
-			totalCount={inquiriesResponse?.meta?.total ?? 0}
-			stats={{
-				total: statsResponse?.data?.total ?? 0,
-				newCount: statsResponse?.data?.new ?? 0,
-				inProgress: statsResponse?.data?.inProgress ?? 0,
-				resolved: statsResponse?.data?.resolved ?? 0,
-				slaBreached: statsResponse?.data?.slaBreached ?? 0,
-			}}
-			statusOptions={statusOptions}
-			activeStatus={activeStatus}
-			isLoading={
-				isLoadingInquiries || isLoadingStats || isLoadingFilterBootstrap
-			}
-			queryStates={queryStates}
-			setQueryStates={setQueryStates}
-			onClickNewInquiry={() => {
-				router.push(ADMIN_PATHS.INQUIRIES_NEW as Route);
-			}}
-			onClickInquiryRow={(inquiryId) => {
-				router.push(
-					ADMIN_PATHS.INQUIRIES_DETAIL.replace(
-						"[inquiryId]",
-						inquiryId,
-					) as Route,
-				);
-			}}
-			onClickStatusFilter={(status) => {
-				const inquiryStatus =
-					typeof status === "string" &&
-					statusOptions.some((option) => option.value === status)
-						? status
-						: null;
-				void setQueryStates({
-					inquiryStatus,
-					skip: 0,
-				});
-			}}
-		/>
+		<>
+			<InquiryListScreen
+				inquiries={inquiriesResponse?.data}
+				totalCount={inquiriesResponse?.meta?.total ?? 0}
+				stats={{
+					total: statsResponse?.data?.total ?? 0,
+					newCount: statsResponse?.data?.new ?? 0,
+					inProgress: statsResponse?.data?.inProgress ?? 0,
+					resolved: statsResponse?.data?.resolved ?? 0,
+					slaBreached: statsResponse?.data?.slaBreached ?? 0,
+				}}
+				statusOptions={statusOptions}
+				activeStatus={activeStatus}
+				isLoading={
+					isLoadingInquiries || isLoadingStats || isLoadingFilterBootstrap
+				}
+				queryStates={queryStates}
+				setQueryStates={setQueryStates}
+				onClickNewInquiry={() => {
+					router.push(ADMIN_PATHS.INQUIRIES_NEW as Route);
+				}}
+				onClickInquiryRow={(inquiryId) => {
+					router.push(
+						ADMIN_PATHS.INQUIRIES_DETAIL.replace(
+							"[inquiryId]",
+							inquiryId,
+						) as Route,
+					);
+				}}
+				onClickStatusFilter={(status) => {
+					const inquiryStatus =
+						typeof status === "string" &&
+						statusOptions.some((option) => option.value === status)
+							? status
+							: null;
+					void setQueryStates({
+						inquiryStatus,
+						skip: 0,
+					});
+				}}
+			/>
+		</>
 	);
 });
 

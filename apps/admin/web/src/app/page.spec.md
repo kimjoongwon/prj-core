@@ -34,8 +34,9 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 헤더 | `DetailPage` + `PageTitleBar` | 세션 확인 중 안내 |
-| 로딩 본문 | `DetailSectionCard` + `Spinner` | 세션 검증 중 로딩 표시 |
+| route surface | `ScreenSurface` | route page가 page-level surface를 소유 |
+| screen rhythm/header | `VStack` + `PageTitleBar` | 세션 확인 중 안내 |
+| 로딩 본문 | `SectionSurface` + `Spinner` | screen이 세션 검증 중 로딩 표시 |
 
 ## 페이지 상태
 
@@ -60,7 +61,7 @@
 ## 특이사항
 
 - `page.tsx` 단일 CSR 파일에서 세션 유효성을 확인합니다.
-- 루트 리다이렉트 페이지도 `detail/view` shell 안에서 최소 로딩 본문을 렌더링합니다.
+- 루트 리다이렉트 페이지도 route `ScreenSurface`와 screen `SectionSurface` 안에서 최소 로딩 본문을 렌더링합니다.
 - 검증 완료 전에는 최소 로딩 화면만 렌더링합니다.
 - `_client.tsx` 없이 page 파일에서 직접 리다이렉트 흐름을 처리합니다.
 
@@ -76,7 +77,7 @@
 | 참조 layout spec | `apps/admin/web/src/app/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
 - `page.tsx`는 루트 진입 판별과 리다이렉트용 콘텐츠만 담당합니다.
 
@@ -85,7 +86,7 @@
 - 기본 패턴: `pure screen + thin route container`
 - page role: `detail`
 - reusable target: `detail/view`
-- screen component path: `packages/fe-ui/src/screen/SessionCheckPage/SessionCheckPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/SessionCheckScreen/SessionCheckScreen.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -93,9 +94,10 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-26 | `SessionCheckPage` 경로를 page 폴더 기반 sidecar 구조에 맞게 갱신 | codex |
-| 2026-03-25 | `SessionCheckPage`로 시각 구성을 page 레이어로 이동하고 route page를 thin container로 정리 | codex |
-| 2026-03-22 | 루트 리다이렉트 로딩 상태를 `DetailPage`/`DetailSectionCard` 기반 detail/view shell로 정리 | codex |
+| 2026-03-26 | `SessionCheckScreen` 경로를 page 폴더 기반 sidecar 구조에 맞게 갱신 | codex |
+| 2026-03-25 | `SessionCheckScreen`로 시각 구성을 page 레이어로 이동하고 route page를 thin container로 정리 | codex |
+| 2026-06-13 | detail alias를 제거하고 route `ScreenSurface`, screen `VStack`/`SectionSurface` 구조로 정리 | codex |
+| 2026-03-22 | 루트 리다이렉트 로딩 상태를 detail/view shell로 정리 | codex |
 | 2026-03-21 | 루트 진입 page를 `_client.tsx` 없는 단일 CSR 리다이렉트로 정리하고 계약을 detail/view 기준으로 보정 | codex |
 | 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |

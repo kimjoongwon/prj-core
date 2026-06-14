@@ -17,9 +17,9 @@
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/users/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/users/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
-- `page.tsx`는 page-local `PageTitleBar`, 통계 카드, 디렉터리 헤더, `Surface` 안의 `DataGrid`만 렌더링합니다.
+- `page.tsx`는 page-local `PageTitleBar`, 통계 카드, 디렉터리 헤더, `SectionSurface` 안의 `DataGrid`만 렌더링합니다.
 
 ## Rendering Decision
 
@@ -38,7 +38,7 @@
 | 페이지 헤더 | `PageTitleBar` | 이용자 목록 안내 |
 | 통계 블록 | `StatsCard` x3 | 전체/활성/비활성 이용자 요약 |
 | 디렉터리 헤더 | page-local header + `Chip` | 총 인원과 설명 텍스트 |
-| 목록 영역 | `Surface` + `DataGrid` | 검색 입력과 이용자 목록 |
+| 목록 영역 | `SectionSurface` + `DataGrid` | 검색 입력과 이용자 목록 |
 
 ## API 호출
 
@@ -77,6 +77,6 @@
 | 2026-04-16 | admin 사용자 목록 Space 전환 시 이전 space의 임시 데이터 표시를 막기 위해 placeholderData 제거 | codex |
 | 2026-04-16 | admin 사용자 목록 `useGetUsers` 쿼리 키에 spaceId를 포함해 space 변경 시 재조회되도록 캐시 분리 적용 | codex |
 | 2026-03-23 | route가 nuqs를 직접 import해 URL state를 소유하도록 정리 | codex |
-| 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
+| 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `SectionSurface` 기준으로 문서화 | codex |
 | 2026-03-21 | 이용자 목록을 `data-grid` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
 | 2026-03-21 | 이용자 목록 spec을 generic route layout + content-only page 구조로 재작성 | codex |

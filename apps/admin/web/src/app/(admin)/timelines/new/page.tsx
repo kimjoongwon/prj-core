@@ -1,7 +1,7 @@
 "use client";
 
 import { useCreateTimeline } from "@cocrepo/api/core/timelines";
-import { TimelineCreatePage } from "@cocrepo/ui";
+import { TimelineCreateScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -81,19 +81,21 @@ const AdminTimelinesNewRoute = observer(() => {
 	};
 
 	return (
-		<TimelineCreatePage
-			name={state.name}
-			description={state.description}
-			contentLanguageCode={persistStore.contentLanguageCode}
-			nameError={state.errors.name}
-			descriptionError={state.errors.description}
-			isSubmitPending={isPending}
-			isSubmitDisabled={!state.name.trim()}
-			onChangeNameInput={onChangeNameInput}
-			onChangeDescriptionTextArea={onChangeDescriptionTextArea}
-			onClickCancelButton={onClickCancelButton}
-			onClickSubmitButton={onClickSubmitButton}
-		/>
+		<>
+			<TimelineCreateScreen
+				name={state.name}
+				description={state.description}
+				contentLanguageCode={persistStore.contentLanguageCode}
+				nameError={state.errors.name}
+				descriptionError={state.errors.description}
+				isSubmitPending={isPending}
+				isSubmitDisabled={!state.name.trim()}
+				onChangeNameInput={onChangeNameInput}
+				onChangeDescriptionTextArea={onChangeDescriptionTextArea}
+				onClickCancelButton={onClickCancelButton}
+				onClickSubmitButton={onClickSubmitButton}
+			/>
+		</>
 	);
 });
 

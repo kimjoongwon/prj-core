@@ -11,7 +11,7 @@ import {
 	useGetUserById,
 	useGetUsers,
 } from "@cocrepo/api/core/users";
-import { TimelineSessionProgramEditPage } from "@cocrepo/ui";
+import { TimelineSessionProgramEditScreen } from "@cocrepo/ui";
 import { toast, useOverlayState } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -259,64 +259,68 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 		};
 
 		return (
-			<TimelineSessionProgramEditPage
-				descriptionText={[program?.name, program?.session?.name]
-					.filter(Boolean)
-					.join(" · ")}
-				contentLanguageCode={persistStore.contentLanguageCode}
-				name={state.name}
-				routineName={selectedRoutine?.name ?? ""}
-				instructorName={selectedInstructor?.name ?? program?.instructorId ?? ""}
-				capacity={state.capacity}
-				level={state.level}
-				errors={state.errors}
-				routineQuery={state.routineQuery}
-				instructorQuery={state.instructorQuery}
-				routineOptions={routineOptions.map((routine) => ({
-					id: routine.id,
-					name: routine.name,
-					subtitle: `라벨: ${routine.label ?? "-"} · 활동 ${
-						routine.activities?.length ?? 0
-					}개 · ${
-						routine.activities?.some(
-							(activity) => !activity.task?.exercise?.videoFileId,
-						)
-							? "영상 누락"
-							: "스케줄 가능"
-					}`,
-				}))}
-				instructorOptions={instructorOptions.map((instructor) => ({
-					id: instructor.id,
-					name: instructor.name,
-					subtitle: `이메일: ${instructor.email ?? "-"}`,
-				}))}
-				routinePreview={routinePreview}
-				hasUnschedulableRoutine={hasUnschedulableRoutine}
-				isRoutinePickerOpen={routinePickerModal.isOpen}
-				isInstructorPickerOpen={instructorPickerModal.isOpen}
-				isSubmitPending={isPending}
-				isSubmitDisabled={
-					!hasChanged ||
-					!state.name.trim() ||
-					!state.routineId.trim() ||
-					!state.instructorId.trim() ||
-					!state.capacity ||
-					hasUnschedulableRoutine
-				}
-				onChangeNameInput={onChangeNameInput}
-				onChangeCapacityInput={onChangeCapacityInput}
-				onChangeLevelSelect={onChangeLevelSelect}
-				onChangeRoutineQueryInput={onChangeRoutineQueryInput}
-				onChangeInstructorQueryInput={onChangeInstructorQueryInput}
-				onSelectRoutineOption={onSelectRoutineOption}
-				onSelectInstructorOption={onSelectInstructorOption}
-				onClickOpenRoutinePickerButton={routinePickerModal.open}
-				onClickCloseRoutinePickerButton={routinePickerModal.close}
-				onClickOpenInstructorPickerButton={instructorPickerModal.open}
-				onClickCloseInstructorPickerButton={instructorPickerModal.close}
-				onClickCancelButton={onClickCancelButton}
-				onClickSubmitButton={onClickSubmitButton}
-			/>
+			<>
+				<TimelineSessionProgramEditScreen
+					descriptionText={[program?.name, program?.session?.name]
+						.filter(Boolean)
+						.join(" · ")}
+					contentLanguageCode={persistStore.contentLanguageCode}
+					name={state.name}
+					routineName={selectedRoutine?.name ?? ""}
+					instructorName={
+						selectedInstructor?.name ?? program?.instructorId ?? ""
+					}
+					capacity={state.capacity}
+					level={state.level}
+					errors={state.errors}
+					routineQuery={state.routineQuery}
+					instructorQuery={state.instructorQuery}
+					routineOptions={routineOptions.map((routine) => ({
+						id: routine.id,
+						name: routine.name,
+						subtitle: `라벨: ${routine.label ?? "-"} · 활동 ${
+							routine.activities?.length ?? 0
+						}개 · ${
+							routine.activities?.some(
+								(activity) => !activity.task?.exercise?.videoFileId,
+							)
+								? "영상 누락"
+								: "스케줄 가능"
+						}`,
+					}))}
+					instructorOptions={instructorOptions.map((instructor) => ({
+						id: instructor.id,
+						name: instructor.name,
+						subtitle: `이메일: ${instructor.email ?? "-"}`,
+					}))}
+					routinePreview={routinePreview}
+					hasUnschedulableRoutine={hasUnschedulableRoutine}
+					isRoutinePickerOpen={routinePickerModal.isOpen}
+					isInstructorPickerOpen={instructorPickerModal.isOpen}
+					isSubmitPending={isPending}
+					isSubmitDisabled={
+						!hasChanged ||
+						!state.name.trim() ||
+						!state.routineId.trim() ||
+						!state.instructorId.trim() ||
+						!state.capacity ||
+						hasUnschedulableRoutine
+					}
+					onChangeNameInput={onChangeNameInput}
+					onChangeCapacityInput={onChangeCapacityInput}
+					onChangeLevelSelect={onChangeLevelSelect}
+					onChangeRoutineQueryInput={onChangeRoutineQueryInput}
+					onChangeInstructorQueryInput={onChangeInstructorQueryInput}
+					onSelectRoutineOption={onSelectRoutineOption}
+					onSelectInstructorOption={onSelectInstructorOption}
+					onClickOpenRoutinePickerButton={routinePickerModal.open}
+					onClickCloseRoutinePickerButton={routinePickerModal.close}
+					onClickOpenInstructorPickerButton={instructorPickerModal.open}
+					onClickCloseInstructorPickerButton={instructorPickerModal.close}
+					onClickCancelButton={onClickCancelButton}
+					onClickSubmitButton={onClickSubmitButton}
+				/>
+			</>
 		);
 	});
 

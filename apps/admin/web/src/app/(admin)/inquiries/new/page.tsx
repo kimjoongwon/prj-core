@@ -12,10 +12,10 @@ import { getUsers } from "@cocrepo/api/core/users";
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import type { AiFormOptionItem, AiFormPatch } from "@cocrepo/type";
 import {
-	InquiryCreatePage,
-	type InquiryCreatePageCustomerSearchResult,
-	type InquiryCreatePageFormState,
-	type InquiryCreatePageOption,
+	InquiryCreateScreen,
+	type InquiryCreateScreenCustomerSearchResult,
+	type InquiryCreateScreenFormState,
+	type InquiryCreateScreenOption,
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -54,7 +54,7 @@ const normalizeAiFormOptions = (
 
 const mapSelectOptions = (
 	items?: AiFormOptionItem[],
-): InquiryCreatePageOption[] =>
+): InquiryCreateScreenOption[] =>
 	(items ?? []).map((item) => ({
 		value: String(item.value ?? ""),
 		text: item.label,
@@ -69,7 +69,7 @@ export default observer(function InquiriesNewPageRoute() {
 	const bootstrapOptions = normalizeAiFormOptions(bootstrap?.options);
 
 	const state = useLocalObservable<
-		InquiryCreatePageFormState & {
+		InquiryCreateScreenFormState & {
 			initialized: boolean;
 			isSubmitting: boolean;
 			initFromBootstrap: () => void;
@@ -85,7 +85,7 @@ export default observer(function InquiriesNewPageRoute() {
 		category: "GENERAL" as InquiryCategory,
 		channel: "WEB" as InquiryChannel,
 		priority: "NORMAL" as InquiryPriority,
-		searchResults: [] as InquiryCreatePageCustomerSearchResult[],
+		searchResults: [] as InquiryCreateScreenCustomerSearchResult[],
 		errors: {} as Record<string, string>,
 		initFromBootstrap() {
 			if (!bootstrap || this.initialized) {
@@ -211,74 +211,76 @@ export default observer(function InquiriesNewPageRoute() {
 	};
 
 	return (
-		<InquiryCreatePage
-			formState={state}
-			bootstrap={
-				bootstrap
-					? {
-							fieldMeta: bootstrap.fieldMeta,
-							aiSchemas: bootstrap.aiSchemas,
-							ui: bootstrap.ui,
-							options: bootstrapOptions,
-						}
-					: undefined
-			}
-			categoryOptions={mapSelectOptions(bootstrapOptions.category)}
-			channelOptions={mapSelectOptions(bootstrapOptions.channel)}
-			priorityOptions={mapSelectOptions(bootstrapOptions.priority)}
-			isLoading={isLoading}
-			isSubmitting={state.isSubmitting || createInquiryMutation.isPending}
-			onClickBackButton={() => {
-				router.push(ADMIN_PATHS.INQUIRIES as Route);
-			}}
-			onChangeCustomerKeyword={(value) => {
-				state.customerKeyword = value;
-			}}
-			onSearchCustomer={(keyword) => {
-				void onSearchCustomer(keyword);
-			}}
-			onSelectCustomer={(customer) => {
-				state.customerId = customer.id;
-				state.customerKeyword = customer.label;
-				state.searchResults = [];
-			}}
-			onChangeTitleInput={(value) => {
-				state.title = value;
-			}}
-			onChangeContentTextArea={(value) => {
-				state.content = value;
-			}}
-			onChangeCategorySelection={(value) => {
-				state.category = value;
-			}}
-			onChangeChannelSelection={(value) => {
-				state.channel = value;
-			}}
-			onChangePrioritySelection={(value) => {
-				state.priority = value;
-			}}
-			onFillAiForm={async (input) => {
-				const result = await fillMutation.mutateAsync({
-					data: {
-						mode: "CREATE",
-						schemaKey: input.schemaKey,
-						selectedPaths: input.selectedPaths,
-						currentObject: input.currentObject,
-						userPrompt: input.userPrompt,
-					},
-				});
-				return result?.data ?? { patches: [] };
-			}}
-			onApplyAiPatch={onApplyAiPatch}
-			onRevalidateAiForm={() => {
-				state.validate();
-			}}
-			onClickCancelButton={() => {
-				router.push(ADMIN_PATHS.INQUIRIES as Route);
-			}}
-			onClickSubmitButton={() => {
-				void onClickSubmitButton();
-			}}
-		/>
+		<>
+			<InquiryCreateScreen
+				formState={state}
+				bootstrap={
+					bootstrap
+						? {
+								fieldMeta: bootstrap.fieldMeta,
+								aiSchemas: bootstrap.aiSchemas,
+								ui: bootstrap.ui,
+								options: bootstrapOptions,
+							}
+						: undefined
+				}
+				categoryOptions={mapSelectOptions(bootstrapOptions.category)}
+				channelOptions={mapSelectOptions(bootstrapOptions.channel)}
+				priorityOptions={mapSelectOptions(bootstrapOptions.priority)}
+				isLoading={isLoading}
+				isSubmitting={state.isSubmitting || createInquiryMutation.isPending}
+				onClickBackButton={() => {
+					router.push(ADMIN_PATHS.INQUIRIES as Route);
+				}}
+				onChangeCustomerKeyword={(value) => {
+					state.customerKeyword = value;
+				}}
+				onSearchCustomer={(keyword) => {
+					void onSearchCustomer(keyword);
+				}}
+				onSelectCustomer={(customer) => {
+					state.customerId = customer.id;
+					state.customerKeyword = customer.label;
+					state.searchResults = [];
+				}}
+				onChangeTitleInput={(value) => {
+					state.title = value;
+				}}
+				onChangeContentTextArea={(value) => {
+					state.content = value;
+				}}
+				onChangeCategorySelection={(value) => {
+					state.category = value;
+				}}
+				onChangeChannelSelection={(value) => {
+					state.channel = value;
+				}}
+				onChangePrioritySelection={(value) => {
+					state.priority = value;
+				}}
+				onFillAiForm={async (input) => {
+					const result = await fillMutation.mutateAsync({
+						data: {
+							mode: "CREATE",
+							schemaKey: input.schemaKey,
+							selectedPaths: input.selectedPaths,
+							currentObject: input.currentObject,
+							userPrompt: input.userPrompt,
+						},
+					});
+					return result?.data ?? { patches: [] };
+				}}
+				onApplyAiPatch={onApplyAiPatch}
+				onRevalidateAiForm={() => {
+					state.validate();
+				}}
+				onClickCancelButton={() => {
+					router.push(ADMIN_PATHS.INQUIRIES as Route);
+				}}
+				onClickSubmitButton={() => {
+					void onClickSubmitButton();
+				}}
+			/>
+		</>
 	);
 });

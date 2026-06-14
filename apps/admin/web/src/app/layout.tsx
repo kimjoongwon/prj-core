@@ -1,4 +1,12 @@
-import { App } from "@cocrepo/ui";
+import {
+	AccessGate,
+	App,
+	FloatingAction,
+	MobileBottomNavigation,
+	MobileMenu,
+	SideNavigation,
+	TopBar,
+} from "@cocrepo/ui";
 import type { Metadata } from "next";
 import { Providers } from "./providers";
 import "./globals.css";
@@ -8,14 +16,15 @@ export const metadata: Metadata = {
 	description: "Admin Dashboard",
 };
 
+export const dynamic = "force-dynamic";
+
 /**
  * 루트 레이아웃
- * App은 children만 받으며 순수하게 body를 감쌉니다.
+ * App은 root의 header/footer/aside/main 구조 슬롯을 소유합니다.
  *
  * 계층 구조:
- * - App (app/layout.tsx) - children만, body 래퍼
- *     - Page (app/(admin)/layout.tsx) - header, leftAside, rightAside, footer
- *         - Section (하위 layout.tsx들) - top, left, right, bottom
+ * - App (app/layout.tsx) - body wrapper
+ *     - app/layout.tsx - route shell 직접 조립
  */
 export default function RootLayout({
 	children,
@@ -32,7 +41,18 @@ export default function RootLayout({
 			</head>
 			<body className="bg-background text-foreground">
 				<Providers>
-					<App>{children}</App>
+					<App
+						header={<TopBar />}
+						leftAside={<SideNavigation />}
+						main={<AccessGate contents={children} />}
+						footer={
+							<>
+								<MobileMenu />
+								<FloatingAction />
+								<MobileBottomNavigation />
+							</>
+						}
+					/>
 				</Providers>
 			</body>
 		</html>

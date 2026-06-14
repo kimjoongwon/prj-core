@@ -10,7 +10,7 @@ import {
 	useGetSessions,
 	useGetTimelineById,
 } from "@cocrepo/api/core/timelines";
-import { TimelineDetailPage } from "@cocrepo/ui";
+import { TimelineDetailScreen } from "@cocrepo/ui";
 import { toast, useOverlayState } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -72,7 +72,7 @@ const getCycleLabel = (cycle?: string | null) => {
 	}
 };
 
-type TimelineDetailPageParams = {
+type TimelineDetailScreenParams = {
 	timelineId: string;
 };
 
@@ -91,7 +91,7 @@ const getProgramCount = (session: SessionDto) => {
 };
 
 const AdminTimelinesTimelineIdRoute = observer(() => {
-	const { timelineId } = useParams<TimelineDetailPageParams>();
+	const { timelineId } = useParams<TimelineDetailScreenParams>();
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const state = useLocalObservable(() => ({
@@ -187,48 +187,52 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 	};
 
 	return (
-		<TimelineDetailPage
-			title={timeline?.name ?? "타임라인 상세"}
-			timeline={
-				timeline
-					? {
-							name: timeline.name,
-							description: timeline.description,
-							createdAt: timeline.createdAt,
-						}
-					: undefined
-			}
-			sessions={sessions.map((session) => ({
-				id: session.id,
-				name: session.name,
-				typeLabel: getSessionTypeLabel(session.type),
-				typeColor: getSessionTypeColor(session.type),
-				programCount: getProgramCount(session),
-				isConnected: getProgramCount(session) > 0,
-				startDateTime: session.startDateTime,
-				recurringDayLabel: getDayLabel(session.recurringDayOfWeek ?? undefined),
-				repeatCycleLabel: getCycleLabel(session.repeatCycleType ?? undefined),
-				createdAt: session.createdAt,
-			}))}
-			totalSessions={totalSessions}
-			connectedSessions={connectedSessions}
-			unconnectedSessions={unconnectedSessions}
-			isDeleteTimelineModalOpen={deleteTimelineModal.isOpen}
-			isDeleteSessionModalOpen={deleteSessionModal.isOpen}
-			deleteSessionTargetName={state.deleteSessionTargetName}
-			isDeleteTimelinePending={isDeletingTimeline}
-			isDeleteSessionPending={isDeletingSession}
-			onClickEditButton={onClickEditButton}
-			onClickDeleteTimelineButton={onClickDeleteTimelineButton}
-			onClickDeleteTimelineConfirmButton={onClickDeleteTimelineConfirmButton}
-			onClickDeleteTimelineCancelButton={deleteTimelineModal.close}
-			onClickCreateSessionButton={onClickCreateSessionButton}
-			onClickSessionNameButton={onClickSessionNameButton}
-			onClickCreateProgramButton={onClickCreateProgramButton}
-			onClickDeleteSessionButton={onClickDeleteSessionButton}
-			onClickDeleteSessionConfirmButton={onClickDeleteSessionConfirmButton}
-			onClickDeleteSessionCancelButton={deleteSessionModal.close}
-		/>
+		<>
+			<TimelineDetailScreen
+				title={timeline?.name ?? "타임라인 상세"}
+				timeline={
+					timeline
+						? {
+								name: timeline.name,
+								description: timeline.description,
+								createdAt: timeline.createdAt,
+							}
+						: undefined
+				}
+				sessions={sessions.map((session) => ({
+					id: session.id,
+					name: session.name,
+					typeLabel: getSessionTypeLabel(session.type),
+					typeColor: getSessionTypeColor(session.type),
+					programCount: getProgramCount(session),
+					isConnected: getProgramCount(session) > 0,
+					startDateTime: session.startDateTime,
+					recurringDayLabel: getDayLabel(
+						session.recurringDayOfWeek ?? undefined,
+					),
+					repeatCycleLabel: getCycleLabel(session.repeatCycleType ?? undefined),
+					createdAt: session.createdAt,
+				}))}
+				totalSessions={totalSessions}
+				connectedSessions={connectedSessions}
+				unconnectedSessions={unconnectedSessions}
+				isDeleteTimelineModalOpen={deleteTimelineModal.isOpen}
+				isDeleteSessionModalOpen={deleteSessionModal.isOpen}
+				deleteSessionTargetName={state.deleteSessionTargetName}
+				isDeleteTimelinePending={isDeletingTimeline}
+				isDeleteSessionPending={isDeletingSession}
+				onClickEditButton={onClickEditButton}
+				onClickDeleteTimelineButton={onClickDeleteTimelineButton}
+				onClickDeleteTimelineConfirmButton={onClickDeleteTimelineConfirmButton}
+				onClickDeleteTimelineCancelButton={deleteTimelineModal.close}
+				onClickCreateSessionButton={onClickCreateSessionButton}
+				onClickSessionNameButton={onClickSessionNameButton}
+				onClickCreateProgramButton={onClickCreateProgramButton}
+				onClickDeleteSessionButton={onClickDeleteSessionButton}
+				onClickDeleteSessionConfirmButton={onClickDeleteSessionConfirmButton}
+				onClickDeleteSessionCancelButton={deleteSessionModal.close}
+			/>
+		</>
 	);
 });
 

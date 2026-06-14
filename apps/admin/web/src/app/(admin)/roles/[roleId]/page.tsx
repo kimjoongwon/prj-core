@@ -12,10 +12,10 @@ import {
 } from "@cocrepo/api/core/policy-assignments";
 import { useDeleteRole, useGetRoleById } from "@cocrepo/api/core/roles";
 import {
-	RoleDetailPage,
-	type RoleDetailPagePolicy,
-	type RoleDetailPagePolicyAssignment,
-	type RoleDetailPageRole,
+	RoleDetailScreen,
+	type RoleDetailScreenPolicy,
+	type RoleDetailScreenPolicyAssignment,
+	type RoleDetailScreenRole,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -32,11 +32,11 @@ const AdminRolesRoleDetailRoute = observer(() => {
 	const [isSavePoliciesModalOpen, setIsSavePoliciesModalOpen] = useState(false);
 	const [isEditingPolicies, setIsEditingPolicies] = useState(false);
 	const [selectedPolicyAssignments, setSelectedPolicyAssignments] = useState<
-		RoleDetailPagePolicyAssignment[]
+		RoleDetailScreenPolicyAssignment[]
 	>([]);
 	const [hasChanges, setHasChanges] = useState(false);
 	const { data: response, isLoading } = useGetRoleById(roleId);
-	const role = response?.data as RoleDetailPageRole | undefined;
+	const role = response?.data as RoleDetailScreenRole | undefined;
 	const { data: policiesResponse, isLoading: isLoadingPolicies } =
 		useGetPolicies();
 	const { data: rolePoliciesResponse, isLoading: isLoadingRolePolicies } =
@@ -151,46 +151,48 @@ const AdminRolesRoleDetailRoute = observer(() => {
 	};
 
 	return (
-		<RoleDetailPage
-			role={role}
-			policies={policies}
-			assignedPolicyIds={assignedPolicyIds}
-			selectedPolicyIds={activeSelectedPolicyIds}
-			policyAssignments={policyAssignments}
-			selectedPolicyAssignments={activePolicyAssignments}
-			isLoading={isLoading}
-			isLoadingPolicies={isLoadingPolicies || isLoadingRolePolicies}
-			isEditingPolicies={isEditingPolicies}
-			hasChanges={hasChanges}
-			isDeleteModalOpen={isDeleteModalOpen}
-			isSavePoliciesModalOpen={isSavePoliciesModalOpen}
-			isDeleting={isDeleting}
-			isSavingPolicies={isSavingPolicies}
-			onClickBackButton={onClickBackButton}
-			onClickEditButton={onClickEditButton}
-			onClickOpenDeleteModal={() => {
-				setIsDeleteModalOpen(true);
-			}}
-			onCloseDeleteModal={() => {
-				setIsDeleteModalOpen(false);
-			}}
-			onClickDeleteConfirm={() => {
-				deleteRole({ id: roleId });
-			}}
-			onClickEditPoliciesButton={onClickEditPoliciesButton}
-			onClickCancelEditPoliciesButton={onClickCancelEditPoliciesButton}
-			onTogglePolicy={onTogglePolicy}
-			onChangePolicyAssignmentActive={onChangePolicyAssignmentActive}
-			onChangePolicyAssignmentPriority={onChangePolicyAssignmentPriority}
-			onClickOpenSavePoliciesModal={() => {
-				setIsSavePoliciesModalOpen(true);
-			}}
-			onClickConfirmSavePoliciesButton={onClickConfirmSavePoliciesButton}
-		/>
+		<>
+			<RoleDetailScreen
+				role={role}
+				policies={policies}
+				assignedPolicyIds={assignedPolicyIds}
+				selectedPolicyIds={activeSelectedPolicyIds}
+				policyAssignments={policyAssignments}
+				selectedPolicyAssignments={activePolicyAssignments}
+				isLoading={isLoading}
+				isLoadingPolicies={isLoadingPolicies || isLoadingRolePolicies}
+				isEditingPolicies={isEditingPolicies}
+				hasChanges={hasChanges}
+				isDeleteModalOpen={isDeleteModalOpen}
+				isSavePoliciesModalOpen={isSavePoliciesModalOpen}
+				isDeleting={isDeleting}
+				isSavingPolicies={isSavingPolicies}
+				onClickBackButton={onClickBackButton}
+				onClickEditButton={onClickEditButton}
+				onClickOpenDeleteModal={() => {
+					setIsDeleteModalOpen(true);
+				}}
+				onCloseDeleteModal={() => {
+					setIsDeleteModalOpen(false);
+				}}
+				onClickDeleteConfirm={() => {
+					deleteRole({ id: roleId });
+				}}
+				onClickEditPoliciesButton={onClickEditPoliciesButton}
+				onClickCancelEditPoliciesButton={onClickCancelEditPoliciesButton}
+				onTogglePolicy={onTogglePolicy}
+				onChangePolicyAssignmentActive={onChangePolicyAssignmentActive}
+				onChangePolicyAssignmentPriority={onChangePolicyAssignmentPriority}
+				onClickOpenSavePoliciesModal={() => {
+					setIsSavePoliciesModalOpen(true);
+				}}
+				onClickConfirmSavePoliciesButton={onClickConfirmSavePoliciesButton}
+			/>
+		</>
 	);
 });
 
-function mapPolicy(policy: PolicyResponseDto): RoleDetailPagePolicy {
+function mapPolicy(policy: PolicyResponseDto): RoleDetailScreenPolicy {
 	return {
 		id: policy.id,
 		name: policy.name,
@@ -203,7 +205,7 @@ function mapPolicy(policy: PolicyResponseDto): RoleDetailPagePolicy {
 
 function mapPolicyAssignment(
 	assignment: PolicyAssignmentResponseDto,
-): RoleDetailPagePolicyAssignment {
+): RoleDetailScreenPolicyAssignment {
 	return {
 		policyId: assignment.policyId,
 		isActive: assignment.isActive,

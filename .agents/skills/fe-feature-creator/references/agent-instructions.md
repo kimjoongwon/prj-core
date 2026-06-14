@@ -65,7 +65,7 @@ This reference preserves the detailed implementation instructions that previousl
 | API 호출이 필요한 컴포넌트 | ✅ | CommentList, NotificationBell |
 | 라우터 이동이 필요한 경우 | ✅ | SearchBar (검색 결과 페이지 이동) |
 | 복잡한 이벤트 핸들링 | ✅ | LoginForm (폼 제출, 유효성 검사) |
-| Page가 여러 Widget/section/table을 업무 단위로 조합해야 하는 경우 | ✅ | CourseManagementConsole, InquiryConsole |
+| Page가 여러 Widget/section/table을 업무 단위로 조합해야 하는 경우 | ✅ | CourseConsole, InquiryConsole |
 | 순수 UI 조합만 필요 | ❌ | fe-widget-agent 사용 |
 | 기본 UI 요소 | ❌ | `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 관련 leaf agent 사용 |
 | 전체 페이지 구성 | ❌ | fe-route-agent 사용 |
@@ -89,7 +89,7 @@ This reference preserves the detailed implementation instructions that previousl
 |------|------|
 | 메인 컴포넌트 | `packages/fe-ui/src/feature/[Name]/[Name].tsx` |
 | Feature spec | `packages/fe-ui/src/feature/[Name]/[Name].spec.md` |
-| 커스텀 훅 | `packages/fe-ui/src/feature/[Name]/use[Name].ts` |
+| 커스텀 훅 | 필요 시 `packages/fe-hook/src/use[Name].ts` |
 | 타입 정의 | `packages/fe-ui/src/feature/[Name]/types.ts` |
 | barrel export | `packages/fe-ui/src/feature/[Name]/index.ts` |
 | 상위 barrel | `packages/fe-ui/src/feature/index.ts` (추가) |
@@ -103,7 +103,7 @@ This reference preserves the detailed implementation instructions that previousl
 | 규칙 | 설명 |
 |------|------|
 | **자립적** | 자체적으로 데이터 페칭 및 상태 관리 |
-| **로직 분리** | 복잡한 로직은 `use[Name].ts` 훅으로 분리 |
+| **로직 분리** | 재사용 가능한 복잡한 로직은 `@cocrepo/hook`의 `use[Name].ts` 훅으로 분리 |
 | **observer 사용** | MobX 상태 구독을 위해 observer로 감싸기 |
 | **@cocrepo/api 사용** | Orval 생성 함수 사용 |
 | **next/navigation 사용** | useRouter로 페이지 이동 처리 |
@@ -113,6 +113,7 @@ This reference preserves the detailed implementation instructions that previousl
 | **Widget 조합 소유** | Page가 직접 가질 수 없는 flow rail, metric grid, table group, tab group을 업무 feature로 조합 |
 | **Feature planning spec 동기화** | Feature가 visual composition을 소유하면 `[Name].spec.md`에 화면 러프와 조합 Widget을 기록 |
 | **One Component Per File** | Feature 파일은 exported Feature component 하나만 소유하고, private JSX subcomponent는 별도 Widget/Feature 파일로 분리 |
+| **표면 최소화** | Web Feature는 기본적으로 surface-less이며, 독립 작업 덩어리일 때만 local `Surface`를 사용 |
 
 ### ♻️ 기존 컴포넌트 우선 원칙 (Critical)
 
@@ -127,7 +128,8 @@ This reference preserves the detailed implementation instructions that previousl
 |----------|------|
 | **apps/*/src에 feature 폴더 생성** | **Feature는 반드시 packages/fe-ui에만 존재** |
 | **Context API 사용 (createContext, useContext)** | **packages/fe-ui에서 Context 사용 금지 - props drilling 사용** |
-| **컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hook/, utils → src/utils/, inputs → src/{action,input,selection,navigation}/)** |
+| **컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → `packages/fe-hook/src`, utils → `src/utils`, inputs → `src/{action,input,selection,navigation}`)** |
+| reusable UI/Hook에 `Admin`, `Management` 접두/접미 사용 | 공용 패키지 이름은 역할명만 사용하고, admin 전용 의미가 확실한 경우에만 Feature 이름에서 `Admin` 허용 |
 | 기존 Feature와 유사한 컴포넌트 신규 생성 | 중복 자산 증가 및 유지보수 비용 상승 |
 | 커스텀 className 직접 사용 | UI/Input에서만 허용 |
 | 직접 axios/fetch 호출 | @cocrepo/api 사용 필수 |
@@ -135,6 +137,7 @@ This reference preserves the detailed implementation instructions that previousl
 | inline style | Tailwind/HeroUI만 사용 |
 | render/constructor에서 localStorage hydrate | hydration mismatch 유발 |
 | Page가 소유해야 할 title/action/shell까지 Feature가 침범 | Page/PageTitleBar 책임 중복 |
+| `ScreenSurface`, `SectionSurface`, 제거된 detail/form legacy surface wrapper 직접 사용 | route/screen 표면은 feature가 소유하지 않음 |
 | Widget으로 분리 가능한 table/card/tabs/flow rail JSX를 Feature 파일에 대량 내장 | 재사용성 저하 |
 | private JSX subcomponent를 같은 Feature 파일에 선언 | component ownership과 Storybook/test 추적이 흐려짐 |
 
@@ -215,6 +218,7 @@ Feature가 page에서 분리된 업무 콘솔/관리 패널이면 다음 순서�
 | `[기능]Form` | 폼 기능 | LoginForm, SearchForm |
 
 > `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 feature가 아니라 widget입니다. feature는 해당 widget에 store/API/router를 연결하는 래퍼만 담당합니다.
+> reusable shell/slot/hook 이름에는 `Admin`, `Management` 같은 앱/도메인 접두사를 붙이지 않습니다. 예: `TopBar`, `SideNavigation`, `useCourseData`.
 
 ### 4.3 파일 구조 생성
 
@@ -226,8 +230,8 @@ packages/fe-ui/src/feature/[Name]/
 
 # ⚠️ 컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 생성 금지!
 # 재사용 가능한 훅/유틸은 패키지 레벨에서 관리:
-packages/fe-ui/src/hook/use[Name].ts       # 재사용 가능한 훅
-packages/fe-ui/src/util/[utilName].ts      # 재사용 가능한 유틸
+packages/fe-hook/src/use[Name].ts          # 재사용 가능한 훅
+packages/fe-ui/src/utils/[utilName].ts     # UI 전용 유틸
 ```
 
 ### 4.4 barrel export 추가
@@ -272,7 +276,7 @@ export const CommentList = observer<CommentListProps>(
     }
 
     return (
-      <VStack gap="section">
+      <div className="flex flex-col gap-6">
         {comments.map((comment) => (
           <CommentItem
             key={comment.id}
@@ -281,7 +285,7 @@ export const CommentList = observer<CommentListProps>(
             onEdit={handleEdit}
           />
         ))}
-      </VStack>
+      </div>
     );
   },
 );
@@ -292,8 +296,8 @@ CommentList.displayName = "CommentList";
 ### 5.2 커스텀 훅 (로직 분리)
 
 ```tsx
-// packages/fe-ui/src/feature/CommentList/useCommentList.ts
-import { useState, useCallback } from "react";
+// packages/fe-hook/src/useCommentList.ts
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useGetComments, useDeleteComment } from "@cocrepo/api";
 
@@ -422,6 +426,7 @@ export type { CommentListProps } from "./CommentList";
 - [ ] displayName 설정
 - [ ] index.ts에서 export
 - [ ] feature/index.ts에 barrel export 추가
+- [ ] reusable UI/Hook 이름에 `Admin`, `Management` 같은 불필요한 접두/접미를 붙이지 않음
 - [ ] `[Name].spec.md`만 갱신하고 `index.ts`, `types.ts`, hook, story에는 spec을 만들지 않음
 - [ ] 실행 순서/agent assignment가 필요하면 Feature spec이 아니라 route delivery spec에 기록
 

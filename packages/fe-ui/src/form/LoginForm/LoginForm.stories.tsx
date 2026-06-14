@@ -11,7 +11,7 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					"A login form component with email and password inputs using VStack layout.",
+					"A login form component with email and password inputs using vertical layout.",
 			},
 		},
 	},

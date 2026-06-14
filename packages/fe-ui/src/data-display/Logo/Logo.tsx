@@ -1,6 +1,5 @@
 import { Button } from "../../action/Button/Button";
 import { cn } from "@heroui/react";
-import { HStack } from "../../rhythm/HStack/HStack";
 
 export interface LogoProps {
 	/** 클릭 핸들러 (보통 홈으로 이동) */
@@ -27,7 +26,7 @@ export const Logo = (props: LogoProps) => {
 	const { className, onClick } = props;
 
 	return (
-		<HStack className="items-center">
+		<div className="flex items-center">
 			<Button
 				variant="light"
 				className={cn(className, "p-0 font-bold text-2xl")}
@@ -35,6 +34,6 @@ export const Logo = (props: LogoProps) => {
 			>
 				오노라
 			</Button>
-		</HStack>
+		</div>
 	);
 };

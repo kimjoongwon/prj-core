@@ -4,7 +4,6 @@ import { Button } from "../../action/Button/Button";
 import { Input } from "../../input/Input/Input";
 import { RadioGroup } from "../../selection/RadioGroup/RadioGroup";
 import { TextArea } from "../../input/TextArea/TextArea";
-import { VStack } from "../../rhythm/VStack/VStack";
 import { TemplateContentEditor } from "../../widget/TemplateContentEditor/TemplateContentEditor";
 import { TemplateTypeBadge } from "../../widget/TemplateTypeBadge/TemplateTypeBadge";
 import {
@@ -106,7 +105,7 @@ export const TemplateForm = observer(
 		};
 
 		return (
-			<VStack gap={4}>
+			<div className="flex flex-col gap-4">
 				{/* 기본 정보 섹션 */}
 				<section>
 					<div className="flex items-start justify-between gap-3">
@@ -238,7 +237,7 @@ export const TemplateForm = observer(
 						{isEdit ? "저장" : "등록"}
 					</Button>
 				</div>
-			</VStack>
+			</div>
 		);
 	},
 );

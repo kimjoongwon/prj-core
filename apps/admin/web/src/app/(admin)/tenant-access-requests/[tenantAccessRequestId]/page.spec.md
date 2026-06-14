@@ -16,7 +16,7 @@
 |------|----|
 | route path | `/tenant-access-requests/[tenantAccessRequestId]` |
 | route page | `apps/admin/web/src/app/(admin)/tenant-access-requests/[tenantAccessRequestId]/page.tsx` |
-| pure screen component | `TenantAccessRequestReviewDetailPage` |
+| pure screen component | `TenantAccessRequestReviewDetailScreen` |
 | route param | `tenantAccessRequestId` |
 | route meta | `route.meta.ts` |
 

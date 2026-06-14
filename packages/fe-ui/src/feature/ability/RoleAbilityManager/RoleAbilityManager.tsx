@@ -6,8 +6,6 @@ import { Select } from "../../../selection/Select/Select";
 import { Card } from "@heroui/react";
 import { Typography } from "../../../data-display/Typography";
 import { AbilityFormModal } from "../../../form/AbilityFormModal";
-import { HStack } from "../../../rhythm/HStack/HStack";
-import { VStack } from "../../../rhythm/VStack/VStack";
 import { AbilityRuleList } from "../../../widget/ability/AbilityRuleList";
 import type { RoleAbilityManagerProps } from "./type";
 import { useRoleAbilityManager } from "./useRoleAbilityManager";
@@ -97,20 +95,20 @@ export const RoleAbilityManager = observer(
 		return (
 			<Card className="w-full">
 				<Card.Header>
-					<HStack
-						justifyContent="between"
-						alignItems="center"
-						className="w-full"
+					<div
+
+
+					 className="flex items-center justify-between w-full"
 					>
 						<Typography type="h4" weight="normal">
 							Role 권한 관리 (ABAC)
 						</Typography>
-					</HStack>
+					</div>
 				</Card.Header>
 				<Card.Content>
-					<VStack gap={4}>
+					<div className="flex flex-col gap-4">
 						{/* Role 선택 영역 */}
-						<HStack alignItems="end" gap={4}>
+						<div className="flex gap-4 items-end">
 								<Select
 									label="역할 선택"
 									placeholder="역할을 선택하세요"
@@ -119,7 +117,7 @@ export const RoleAbilityManager = observer(
 									onChange={(value) => handleRoleChange(String(value ?? ""))}
 									className="w-64"
 								/>
-						</HStack>
+						</div>
 
 						{/* 에러 메시지 */}
 						{state.error && (
@@ -143,7 +141,7 @@ export const RoleAbilityManager = observer(
 								역할을 선택하면 권한 목록이 표시됩니다.
 							</Typography.Paragraph>
 						)}
-					</VStack>
+					</div>
 				</Card.Content>
 
 				{/* Ability 추가/수정 모달 */}

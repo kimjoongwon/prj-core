@@ -107,15 +107,15 @@
 - [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
 
 
-## Surface / Elevation
+## SectionSurface / Elevation
 
 | 항목 | 결정 |
 |------|------|
-| PageSurface owner | 참조 route layout의 `layout.tsx` skeleton |
-| PageSurface 역할 | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다. |
+| ScreenSurface owner | page/screen content owner |
+| ScreenSurface 역할 | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다. |
 | SectionSurface 대상 | 본문 섹션, 폼, 표, 로딩/빈 상태 블록 |
 | SectionSurface padding | 기본 패딩 |
-| 예외 | 없음. surface skeleton은 참조 route layout이 소유하고 `page.tsx`는 내부 콘텐츠만 채웁니다. |
+| 예외 | 없음. `layout.tsx`는 `Page` 구조만 소유하고 surface는 page/screen content owner가 명시합니다. |
 
 ## Consumed Layout Contract
 
@@ -124,16 +124,16 @@
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/abilities/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/abilities/[abilityId]/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
-- `page.tsx`는 상세 조회/삭제/라우팅만 담당하고 시각 조합은 `AbilityDetailPage`가 소유합니다.
+- `page.tsx`는 상세 조회/삭제/라우팅만 담당하고 시각 조합은 `AbilityDetailScreen`가 소유합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `pure screen + thin route container`
 - page role: `detail`
 - reusable target: `detail/view`
-- screen component path: `packages/fe-ui/src/screen/AbilityDetailPage/AbilityDetailPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/AbilityDetailScreen/AbilityDetailScreen.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 
@@ -142,13 +142,13 @@
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-03-28 | 목록→상세 E2E 기준을 `상세` 버튼 클릭에서 첫 행 클릭으로 현재 DataGrid 계약에 맞게 조정 | codex |
-| 2026-03-26 | `AbilityDetailPage` pure screen와 thin route container 구조로 전환하고 screen component path를 반영 | codex |
+| 2026-03-26 | `AbilityDetailScreen` pure screen와 thin route container 구조로 전환하고 screen component path를 반영 | codex |
 | 2026-03-23 | 목록→상세 전환 E2E가 고정 시드 권한명 대신 첫 행 `상세` 액션을 사용하도록 검증 기준 보강 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
-| 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |
-| 2026-03-15 | Surface ownership/elevation 규칙과 PageSurface/SectionSurface 적용 기준을 문서화 | codex |
-| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
+| 2026-03-15 | SectionSurface ownership과 elevation 결정을 문서화 | codex |
+| 2026-03-15 | SectionSurface ownership/elevation 규칙과 ScreenSurface/SectionSurface 적용 기준을 문서화 | codex |
+| 2026-03-15 | SectionSurface owner와 elevation 규칙을 문서화 | codex |
 | 2026-03-14 | Playwright E2E가 목록 진입/상세 전환을 `networkidle` 대신 heading 가시성과 URL 전환으로 확인하도록 안정화 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 섹션 추가 | req-reverse-engineer |

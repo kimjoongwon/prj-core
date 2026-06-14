@@ -6,7 +6,6 @@ import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
 import { Accordion, cn } from "@heroui/react";
 import { useT } from "../../i18n";
-import { VStack } from "../../rhythm/VStack/VStack";
 
 type NavTreeItem = NavItem & {};
 
@@ -42,7 +41,7 @@ export const NavTreePanel = observer(
 				)}
 				style={{ width: `${width}px` }}
 			>
-				<VStack className="flex-1 overflow-y-auto p-3" gap={1}>
+				<div className="flex flex-col gap-1 flex-1 overflow-y-auto p-3">
 					{standaloneItems.map((item) => (
 						<button
 							key={item.id}
@@ -123,7 +122,7 @@ export const NavTreePanel = observer(
 								})}
 							</Accordion>
 						)}
-				</VStack>
+				</div>
 			</nav>
 		);
 	},

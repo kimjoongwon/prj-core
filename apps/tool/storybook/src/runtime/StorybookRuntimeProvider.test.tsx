@@ -147,15 +147,15 @@ describe("StorybookRuntimeProvider", () => {
 		window.history.replaceState(
 			{},
 			"",
-			"/iframe.html?id=page-spacelistpage--default&viewMode=story",
+			"/iframe.html?id=screen-spacelistscreen--default&viewMode=story",
 		);
 
 		const { withStorybookRuntime } = await loadProvider();
 
 		render(
 			withStorybookRuntime(() => <div>Toolbar realm story</div>, {
-				id: "page-spacelistpage--default",
-				title: "page/SpaceListPage",
+				id: "screen-spacelistscreen--default",
+				title: "screen/SpaceListScreen",
 				globals: {
 					storybookRealm: "admin",
 				},

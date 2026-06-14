@@ -18,11 +18,11 @@ import {
 	useToggleIdpAccountActive,
 } from "@cocrepo/api/idp/idp-accounts";
 import {
-	AccountDetailPage,
-	type AccountDetailPageAccessGrantForm,
-	type AccountDetailPageAccount,
-	type AccountDetailPageModalAction,
-	type AccountDetailPageOption,
+	AccountDetailScreen,
+	type AccountDetailScreenAccessGrantForm,
+	type AccountDetailScreenAccount,
+	type AccountDetailScreenModalAction,
+	type AccountDetailScreenOption,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -30,14 +30,14 @@ import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default observer(function AccountDetailPageRoute() {
+export default observer(function AccountDetailScreenRoute() {
 	const userId = useParams<{ userId: string }>().userId;
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const [modalAction, setModalAction] =
-		useState<AccountDetailPageModalAction>(null);
+		useState<AccountDetailScreenModalAction>(null);
 	const [accessGrantForm, setAccessGrantForm] =
-		useState<AccountDetailPageAccessGrantForm>({
+		useState<AccountDetailScreenAccessGrantForm>({
 			spaceId: "",
 			roleId: "",
 		});
@@ -106,74 +106,76 @@ export default observer(function AccountDetailPageRoute() {
 		});
 
 	return (
-		<AccountDetailPage
-			account={account ? mapAccountDetail(account) : undefined}
-			isLoading={isLoading}
-			accessGrantForm={accessGrantForm}
-			spaceOptions={spaceOptions}
-			roleOptions={roleOptions}
-			isAccessGrantFormLoading={isAccessGrantFormLoading}
-			isGrantingAccess={isGrantingAccess}
-			isToggling={isToggling}
-			isResetting={isResetting}
-			isUnlocking={isUnlocking}
-			isForceResetting={isForceResetting}
-			isInvalidating={isInvalidating}
-			modalAction={modalAction}
-			onClickBackButton={() => {
-				router.push("/settings/auth/accounts" as Route);
-			}}
-			onClickToggleActiveButton={() => {
-				toggleActive({ userId });
-			}}
-			onClickResetFailedAttemptsButton={() => {
-				resetFailedAttempts({ userId });
-			}}
-			onChangeAccessGrantSpace={(spaceId) => {
-				setAccessGrantForm((current) => ({ ...current, spaceId }));
-			}}
-			onChangeAccessGrantRole={(roleId) => {
-				setAccessGrantForm((current) => ({ ...current, roleId }));
-			}}
-			onClickGrantAccessButton={() => {
-				grantAccess({
-					userId,
-					data: accessGrantForm,
-				});
-			}}
-			onClickOpenUnlockModal={() => {
-				setModalAction("unlock");
-			}}
-			onClickOpenForceResetPasswordModal={() => {
-				setModalAction("forceResetPassword");
-			}}
-			onClickOpenInvalidateSessionsModal={() => {
-				setModalAction("invalidateSessions");
-			}}
-			onCloseModal={() => {
-				setModalAction(null);
-			}}
-			onClickConfirmModal={() => {
-				switch (modalAction) {
-					case "unlock":
-						unlockAccount({ userId });
-						break;
-					case "forceResetPassword":
-						forceResetPassword({ userId });
-						break;
-					case "invalidateSessions":
-						invalidateSessions({ userId });
-						break;
-				}
-				setModalAction(null);
-			}}
-		/>
+		<>
+			<AccountDetailScreen
+				account={account ? mapAccountDetail(account) : undefined}
+				isLoading={isLoading}
+				accessGrantForm={accessGrantForm}
+				spaceOptions={spaceOptions}
+				roleOptions={roleOptions}
+				isAccessGrantFormLoading={isAccessGrantFormLoading}
+				isGrantingAccess={isGrantingAccess}
+				isToggling={isToggling}
+				isResetting={isResetting}
+				isUnlocking={isUnlocking}
+				isForceResetting={isForceResetting}
+				isInvalidating={isInvalidating}
+				modalAction={modalAction}
+				onClickBackButton={() => {
+					router.push("/settings/auth/accounts" as Route);
+				}}
+				onClickToggleActiveButton={() => {
+					toggleActive({ userId });
+				}}
+				onClickResetFailedAttemptsButton={() => {
+					resetFailedAttempts({ userId });
+				}}
+				onChangeAccessGrantSpace={(spaceId) => {
+					setAccessGrantForm((current) => ({ ...current, spaceId }));
+				}}
+				onChangeAccessGrantRole={(roleId) => {
+					setAccessGrantForm((current) => ({ ...current, roleId }));
+				}}
+				onClickGrantAccessButton={() => {
+					grantAccess({
+						userId,
+						data: accessGrantForm,
+					});
+				}}
+				onClickOpenUnlockModal={() => {
+					setModalAction("unlock");
+				}}
+				onClickOpenForceResetPasswordModal={() => {
+					setModalAction("forceResetPassword");
+				}}
+				onClickOpenInvalidateSessionsModal={() => {
+					setModalAction("invalidateSessions");
+				}}
+				onCloseModal={() => {
+					setModalAction(null);
+				}}
+				onClickConfirmModal={() => {
+					switch (modalAction) {
+						case "unlock":
+							unlockAccount({ userId });
+							break;
+						case "forceResetPassword":
+							forceResetPassword({ userId });
+							break;
+						case "invalidateSessions":
+							invalidateSessions({ userId });
+							break;
+					}
+					setModalAction(null);
+				}}
+			/>
+		</>
 	);
 });
 
 function mapAccountDetail(
 	account: IdpAccountDetailDto,
-): AccountDetailPageAccount {
+): AccountDetailScreenAccount {
 	return {
 		id: account.id,
 		name: account.name,
@@ -203,7 +205,7 @@ function mapAccountDetail(
 function mapOptions(
 	bootstrap: IdpAccountAccessGrantFormBootstrapDto | undefined,
 	path: "spaceId" | "roleId",
-): AccountDetailPageOption[] {
+): AccountDetailScreenOption[] {
 	return (bootstrap?.options[path] ?? []).map(
 		(option: IdpAccountAccessGrantFormOptionItemDto) => ({
 			value: option.value,

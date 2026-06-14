@@ -92,7 +92,7 @@
 - route container가 `useParams`, `useRouter`, `useGetTaskExercise`, `useUpdateTaskExercise`, `useLocalObservable`을 소유합니다.
 - route container가 `useTaskExerciseAssetBrowser()`를 통해 image/video picker slot과 공통 `AssetBrowser` bindings를 소유합니다.
 - route container가 duration 분/초 변환, 스케줄 가능 상태 계산, 저장 성공/실패 toast와 상세 페이지 이동을 처리합니다.
-- `TaskExerciseEditPage`는 입력값/에러/CTA handler만 렌더링합니다.
+- `TaskExerciseEditScreen`는 입력값/에러/CTA handler만 렌더링합니다.
 
 ## 이벤트 핸들러
 
@@ -101,9 +101,9 @@
 | "취소" 버튼 클릭 | `/tasks/{taskId}/exercise` 상세 페이지로 이동 (변경 사항 버림) |
 | "저장" 버튼 클릭 | 폼 유효성 검사 → `updateExercise` 호출 → 성공 시 상세 이동 |
 | 이미지 삭제 버튼 클릭 | `imageFileId = null` 설정 (저장 시 서버에 null 전송) |
-| 이미지 picker 열기/업로드 | 공통 `AssetBrowser` modal과 `useAdminAssetBrowser()`가 선택/업로드/폴더 CRUD를 처리 |
+| 이미지 picker 열기/업로드 | 공통 `AssetBrowser` modal과 `useAssetBrowser()`가 선택/업로드/폴더 CRUD를 처리 |
 | 영상 삭제 버튼 클릭 | `videoFileId = null` 설정 |
-| 영상 picker 열기/업로드 | 공통 `AssetBrowser` modal과 `useAdminAssetBrowser()`가 선택/업로드/폴더 CRUD를 처리 |
+| 영상 picker 열기/업로드 | 공통 `AssetBrowser` modal과 `useAssetBrowser()`가 선택/업로드/폴더 CRUD를 처리 |
 
 ## 비즈니스 규칙
 
@@ -117,15 +117,15 @@
 - [ ] hooks/useHandlers.ts (저장, 파일업로드, 미디어삭제 핸들러)
 
 
-## Surface / Elevation
+## SectionSurface / Elevation
 
 | 항목 | 결정 |
 |------|------|
-| PageSurface owner | 참조 route layout의 `layout.tsx` skeleton |
-| PageSurface 역할 | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다. |
+| ScreenSurface owner | page/screen content owner |
+| ScreenSurface 역할 | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다. |
 | SectionSurface 대상 | 본문 섹션, 폼, 표, 로딩/빈 상태 블록 |
 | SectionSurface padding | 기본 패딩 |
-| 예외 | 없음. surface skeleton은 참조 route layout이 소유하고 `page.tsx`는 내부 콘텐츠만 채웁니다. |
+| 예외 | 없음. `layout.tsx`는 `Page` 구조만 소유하고 surface는 page/screen content owner가 명시합니다. |
 
 ## Consumed Layout Contract
 
@@ -134,7 +134,7 @@
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/tasks/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/tasks/[taskId]/exercise/edit/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
 - `page.tsx`는 입력, 검증, 생성/수정 폼 흐름만 담당합니다.
 
@@ -157,9 +157,9 @@
 | 2026-03-30 | 조회/저장/local state 책임을 route container로 명시하고 pure screen props 위임 구조를 문서화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
-| 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |
-| 2026-03-15 | Surface ownership/elevation 규칙과 PageSurface/SectionSurface 적용 기준을 문서화 | codex |
-| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
+| 2026-03-15 | SectionSurface ownership과 elevation 결정을 문서화 | codex |
+| 2026-03-15 | SectionSurface ownership/elevation 규칙과 ScreenSurface/SectionSurface 적용 기준을 문서화 | codex |
+| 2026-03-15 | SectionSurface owner와 elevation 규칙을 문서화 | codex |
 | 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-02-19 | 초기 생성 | req-screen-planner |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

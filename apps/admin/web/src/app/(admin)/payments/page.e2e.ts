@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { mockPaymentManagementApi } from "./payment-management.e2e-fixtures";
+import { mockPaymentApi } from "./payment.e2e-fixtures";
 
 test.describe("Payment 목록 페이지 @mock", () => {
 	test.beforeEach(async ({ page }) => {
-		await mockPaymentManagementApi(page);
+		await mockPaymentApi(page);
 		await page.goto("./payments");
 		await page.waitForLoadState("networkidle");
 	});
@@ -27,7 +27,7 @@ test.describe("Payment 목록 페이지 empty state @mock", () => {
 	test("Payment API 결과가 비어 있으면 empty state가 표시되어야 한다", async ({
 		page,
 	}) => {
-		await mockPaymentManagementApi(page, { empty: true });
+		await mockPaymentApi(page, { empty: true });
 		await page.goto("./payments");
 		await page.waitForLoadState("networkidle");
 

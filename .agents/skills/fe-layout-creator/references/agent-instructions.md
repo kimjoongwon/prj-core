@@ -56,7 +56,7 @@ This reference preserves the detailed implementation instructions that previousl
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
 - Layout 후보는 `@cocrepo/ui` export만 보지 말고 upstream `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
-- 기존 `Page`, `Section`, `Surface`, rhythm/layout primitive 또는 `@heroui/react` component로 표현 가능한 구조를 raw `div` + className scaffold로 재구현하지 않습니다.
+- 기존 `Page`, layout primitive 또는 `@heroui/react` component로 표현 가능한 구조를 raw `div` + className scaffold로 재구현하지 않습니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
@@ -89,7 +89,7 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
 | Layout 타입 | O | `Layout` |
 | 기존 owner contract | O | route `page.spec.md` 또는 관련 Screen/Feature spec의 Layout Contract |
 | 사용 시나리오 | O | 어떤 route skeleton에서 어떤 슬롯이 필요한지 |
-| 관련 surface 규칙 | △ | `PageSurface`, `SectionSurface`, `Surface`와의 조합 제약 |
+| 관련 surface 규칙 | △ | `ScreenSurface`, `SectionSurface`와의 조합 제약 |
 
 ### 출력
 
@@ -107,7 +107,8 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
 - `Layout`은 전역/세그먼트 셸의 큰 구조 슬롯을 제공합니다.
 - `Layout`은 flat primitive이며 내부에 `layout/Layout` 같은 중첩 폴더를 만들지 않습니다.
 - `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 widget 계층이며 이 subagent 범위가 아닙니다.
-- `PageSurface`, `SectionSurface`, `Surface`는 별도 surface 계층이며, 이 subagent는 구조 primitive가 그들과 자연스럽게 조합되도록 돕습니다.
+- `ScreenSurface`, `SectionSurface`, `Surface`는 별도 surface 계층이며, 이 subagent는 구조 primitive가 screen/feature/widget surface ownership과 자연스럽게 조합되도록 돕습니다.
+- Layout primitive는 `Surface`나 제거된 detail/form legacy surface wrapper를 직접 사용하지 않습니다.
 
 ---
 
@@ -120,8 +121,8 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
    - 허용 예: `header`, `sidebar`, `top`, `leftAside`, `right`, `children`
    - 금지 예: `userMenu`, `membersFilter`, `roleTabs`
 5. 경로/도메인/특정 메뉴 라벨 같은 route 지식을 Layout primitive에 하드코딩하지 않습니다.
-6. `Page`, `Section`은 배치를 담당하고, surface/elevation은 자동 생성하지 않습니다.
-7. `Page`/`Section`을 대체하는 임시 scaffold 계열을 새로 만들지 않습니다.
+6. `App`과 `Page`는 배치를 담당하고, surface/elevation은 자동 생성하지 않습니다.
+7. `Page`를 대체하는 임시 scaffold 계열을 새로 만들지 않습니다.
 8. `packages/fe-ui/src/layout` 아래에는 layout primitive source/export만 둡니다.
 9. `packages/fe-ui/src/layout` 또는 `packages/fe-mo-ui/src/layout` 아래에 불필요한 중첩 카테고리를 만들지 않습니다.
 
@@ -131,18 +132,17 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
 
 ### 5.1 계층
 
-`App > Layout > Page > Section`
+`App(header/footer/leftAside/rightAside/main) > Page(children) > Screen`
 
-- `App`: 최상위 셸 래퍼
+- `App`: `header`, `footer`, `leftAside`, `rightAside`, `main` 구조 슬롯을 받는 최상위 root app structure owner
 - `Layout`: 서비스/세그먼트 공통 셸
-- `Page`: 페이지 단위 구조
-- `Section`: 페이지 내부 구역 구조
+- `Page`: `children`만 받는 페이지 콘텐츠 boundary. `App`의 슬롯 props를 위임하거나 재사용하지 않습니다.
 
 ### 5.2 구조와 표면의 분리
 
-- `Page`, `Section`은 위치와 슬롯만 정의합니다.
-- `PageSurface`, `SectionSurface`, `Surface`는 별도 surface 계층입니다.
-- route 수준에서 어떤 surface를 어디에 둘지는 owner spec과 `fe-route-layout-agent`가 결정합니다.
+- `App`/`Page`는 위치와 슬롯만 정의합니다.
+- `ScreenSurface`, `SectionSurface`는 screen 계층 surface입니다.
+- feature/widget local panel은 `Surface`로 제한합니다.
 
 ### 5.3 서버 호환
 

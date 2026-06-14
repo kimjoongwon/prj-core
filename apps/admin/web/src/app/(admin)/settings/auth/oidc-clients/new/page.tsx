@@ -1,7 +1,7 @@
 "use client";
 
 import { useCreateOidcClient } from "@cocrepo/api/idp/oidc-clients";
-import { OidcClientCreatePage, type OidcClientFormState } from "@cocrepo/ui";
+import { OidcClientCreateScreen, type OidcClientFormState } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -45,15 +45,17 @@ export default observer(function OidcClientNewPageRoute() {
 	});
 
 	return (
-		<OidcClientCreatePage
-			formState={state}
-			isSubmitting={isPending}
-			onClickBackButton={() => {
-				router.push("/settings/auth/oidc-clients" as Route);
-			}}
-			onSubmit={(input) => {
-				createClient({ data: input });
-			}}
-		/>
+		<>
+			<OidcClientCreateScreen
+				formState={state}
+				isSubmitting={isPending}
+				onClickBackButton={() => {
+					router.push("/settings/auth/oidc-clients" as Route);
+				}}
+				onSubmit={(input) => {
+					createClient({ data: input });
+				}}
+			/>
+		</>
 	);
 });

@@ -5,19 +5,19 @@ import {
 	useGetSpaceGround,
 	useUpdateSpaceGround,
 } from "@cocrepo/api/core/spaces";
-import { GroundEditPage } from "@cocrepo/ui";
+import { GroundEditScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-type GroundEditPageParams = {
+type GroundEditScreenParams = {
 	spaceId: string;
 };
 
 const AdminSpacesSpaceIdGroundEditRoute = observer(() => {
-	const { spaceId } = useParams<GroundEditPageParams>();
+	const { spaceId } = useParams<GroundEditScreenParams>();
 	const router = useRouter();
 	const state = useLocalObservable(() => ({
 		name: "",
@@ -141,28 +141,30 @@ const AdminSpacesSpaceIdGroundEditRoute = observer(() => {
 	};
 
 	return (
-		<GroundEditPage
-			groundName={ground?.name}
-			name={state.name}
-			label={state.label}
-			address={state.address}
-			phone={state.phone}
-			email={state.email}
-			businessNo={state.businessNo}
-			contentLanguageCode={state.contentLanguageCode}
-			errors={state.errors}
-			isLoading={isLoading}
-			isNotFound={!isLoading && !ground}
-			isSubmitPending={isPending}
-			onChangeNameInput={onChangeNameInput}
-			onChangeLabelInput={onChangeLabelInput}
-			onChangeAddressInput={onChangeAddressInput}
-			onChangePhoneInput={onChangePhoneInput}
-			onChangeEmailInput={onChangeEmailInput}
-			onChangeContentLanguageSelect={onChangeContentLanguageSelect}
-			onClickCancelButton={onClickCancelButton}
-			onClickSaveButton={onClickSaveButton}
-		/>
+		<>
+			<GroundEditScreen
+				groundName={ground?.name}
+				name={state.name}
+				label={state.label}
+				address={state.address}
+				phone={state.phone}
+				email={state.email}
+				businessNo={state.businessNo}
+				contentLanguageCode={state.contentLanguageCode}
+				errors={state.errors}
+				isLoading={isLoading}
+				isNotFound={!isLoading && !ground}
+				isSubmitPending={isPending}
+				onChangeNameInput={onChangeNameInput}
+				onChangeLabelInput={onChangeLabelInput}
+				onChangeAddressInput={onChangeAddressInput}
+				onChangePhoneInput={onChangePhoneInput}
+				onChangeEmailInput={onChangeEmailInput}
+				onChangeContentLanguageSelect={onChangeContentLanguageSelect}
+				onClickCancelButton={onClickCancelButton}
+				onClickSaveButton={onClickSaveButton}
+			/>
+		</>
 	);
 });
 

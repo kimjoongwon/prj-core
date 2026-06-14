@@ -5,22 +5,22 @@ import {
 	useGetTaskExercise,
 	useUpdateTaskExercise,
 } from "@cocrepo/api/core/tasks";
-import { TaskExerciseEditPage, useT } from "@cocrepo/ui";
+import { TaskExerciseEditScreen, useT } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { usePersistStore } from "@/stores/AppStoreProvider";
-import { useTaskExerciseAssetBrowser } from "../../../hooks/useTaskExerciseAssetBrowser";
+import { useTaskExerciseAssetBrowser } from "@cocrepo/hook";
 
-type TaskExerciseEditPageParams = {
+type TaskExerciseEditScreenParams = {
 	taskId: string;
 };
 
 const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 	const t = useT();
-	const { taskId } = useParams<TaskExerciseEditPageParams>();
+	const { taskId } = useParams<TaskExerciseEditScreenParams>();
 	const router = useRouter();
 	const persistStore = usePersistStore();
 	const state = useLocalObservable(() => ({
@@ -160,50 +160,52 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 	};
 
 	return (
-		<TaskExerciseEditPage
-			exerciseName={exercise?.name}
-			name={state.name}
-			durationMin={state.durationMin}
-			durationSec={state.durationSec}
-			count={state.count}
-			description={state.description}
-			contentLanguageCode={persistStore.contentLanguageCode}
-			selectedImageAsset={selectedImageAsset}
-			selectedVideoAsset={selectedVideoAsset}
-			assetBrowserProps={assetBrowser}
-			assetBrowserTitle={assetBrowserTitle}
-			assetBrowserDescription={assetBrowserDescription}
-			assetBrowserSelectedAssetId={selectedAssetId}
-			isAssetBrowserOpen={activeAssetSlot !== null}
-			errors={state.errors}
-			isSchedulable={state.videoFileId.trim().length > 0}
-			isLoading={isLoading}
-			isNotFound={!isLoading && !exercise}
-			isSubmitPending={isPending}
-			onChangeNameInput={onChangeNameInput}
-			onChangeDurationMinInput={onChangeDurationMinInput}
-			onChangeDurationSecInput={onChangeDurationSecInput}
-			onChangeCountInput={onChangeCountInput}
-			onChangeDescriptionTextArea={onChangeDescriptionTextArea}
-			onChangeImageFileIdInput={onChangeImageFileIdInput}
-			onChangeVideoFileIdInput={onChangeVideoFileIdInput}
-			onOpenImagePicker={() => {
-				onOpenAssetBrowser("image");
-			}}
-			onOpenVideoPicker={() => {
-				onOpenAssetBrowser("video");
-			}}
-			onCloseAssetBrowser={onCloseAssetBrowser}
-			onSelectAssetFromBrowser={onSelectAsset}
-			onClickClearImageAssetButton={() => {
-				state.imageFileId = "";
-			}}
-			onClickClearVideoAssetButton={() => {
-				state.videoFileId = "";
-			}}
-			onClickCancelButton={onClickCancelButton}
-			onClickSaveButton={onClickSaveButton}
-		/>
+		<>
+			<TaskExerciseEditScreen
+				exerciseName={exercise?.name}
+				name={state.name}
+				durationMin={state.durationMin}
+				durationSec={state.durationSec}
+				count={state.count}
+				description={state.description}
+				contentLanguageCode={persistStore.contentLanguageCode}
+				selectedImageAsset={selectedImageAsset}
+				selectedVideoAsset={selectedVideoAsset}
+				assetBrowserProps={assetBrowser}
+				assetBrowserTitle={assetBrowserTitle}
+				assetBrowserDescription={assetBrowserDescription}
+				assetBrowserSelectedAssetId={selectedAssetId}
+				isAssetBrowserOpen={activeAssetSlot !== null}
+				errors={state.errors}
+				isSchedulable={state.videoFileId.trim().length > 0}
+				isLoading={isLoading}
+				isNotFound={!isLoading && !exercise}
+				isSubmitPending={isPending}
+				onChangeNameInput={onChangeNameInput}
+				onChangeDurationMinInput={onChangeDurationMinInput}
+				onChangeDurationSecInput={onChangeDurationSecInput}
+				onChangeCountInput={onChangeCountInput}
+				onChangeDescriptionTextArea={onChangeDescriptionTextArea}
+				onChangeImageFileIdInput={onChangeImageFileIdInput}
+				onChangeVideoFileIdInput={onChangeVideoFileIdInput}
+				onOpenImagePicker={() => {
+					onOpenAssetBrowser("image");
+				}}
+				onOpenVideoPicker={() => {
+					onOpenAssetBrowser("video");
+				}}
+				onCloseAssetBrowser={onCloseAssetBrowser}
+				onSelectAssetFromBrowser={onSelectAsset}
+				onClickClearImageAssetButton={() => {
+					state.imageFileId = "";
+				}}
+				onClickClearVideoAssetButton={() => {
+					state.videoFileId = "";
+				}}
+				onClickCancelButton={onClickCancelButton}
+				onClickSaveButton={onClickSaveButton}
+			/>
+		</>
 	);
 });
 

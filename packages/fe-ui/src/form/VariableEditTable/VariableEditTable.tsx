@@ -6,7 +6,6 @@ import { Input } from "../../input/Input/Input";
 import { Switch } from "../../selection/Switch/Switch";
 import { Button } from "../../action/Button/Button";
 import { Table, Tooltip } from "@heroui/react";
-import { VStack } from "../../rhythm/VStack/VStack";
 
 /** 변수 편집 항목 */
 export interface VariableEditItem {
@@ -152,7 +151,7 @@ export const VariableEditTable = observer(
 		};
 
 		return (
-			<VStack gap={3}>
+			<div className="flex flex-col gap-3">
 				<Table aria-label="변수 편집 테이블">
 					<Table.Content>
 					<Table.Header>
@@ -232,7 +231,7 @@ export const VariableEditTable = observer(
 				>
 					변수 추가
 				</Button>
-			</VStack>
+			</div>
 		);
 	},
 );

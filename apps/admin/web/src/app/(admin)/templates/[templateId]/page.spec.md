@@ -14,7 +14,7 @@
 │ 템플릿 상세                                                       │
 │ WELCOME_EMAIL · 회원가입 환영 이메일                              │
 ├─────────────────────────────────────────────────────────────────┤
-│ PageSurface                                                    │
+│ ScreenSurface                                                    │
 │ ┌─────────────────────────────────────────────────────────────┐ │
 │ │ SectionSurface  기본 정보                                  │ │
 │                                                                   │
@@ -65,7 +65,7 @@
 |------|----------|------|
 | 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
 | 페이지 헤더 | `PageTitleBar` | title="템플릿 상세", description=동적, actions에 `TemplateActions` |
-| 본문 표면 | `PageSurface` | 상세 본문 전체를 raised 표면으로 감싸고 모달과 분리 |
+| 본문 표면 | `ScreenSurface` | 상세 본문 전체를 raised 표면으로 감싸고 모달과 분리 |
 | 기본 정보 | `SectionSurface` > `Section + PageTitleBar(title="기본 정보")` | 2컬럼 Grid 레이아웃 |
 | 콘텐츠 | `SectionSurface` > `Section + PageTitleBar(title="콘텐츠")` | `TemplateContentViewer` |
 | 변수 목록 | `SectionSurface` > `Section + PageTitleBar(title="변수 목록")` | `VariableReadTable` 또는 빈 안내 |
@@ -73,11 +73,11 @@
 | 미리보기 모달 | `PreviewModal` | 변수 입력 + 미리보기 결과 |
 | 발송 테스트 모달 | `SendTestModal` | 수신자 + 변수 입력 + 발송 결과 |
 
-## Surface / Elevation
+## SectionSurface / Elevation
 
 | 항목 | 결정 |
 |------|------|
-| `PageSurface` owner | 참조 route layout의 `layout.tsx` skeleton |
+| `ScreenSurface` owner | 참조 route layout의 `layout.tsx` skeleton |
 | `SectionSurface` 대상 블록 | 기본 정보, 콘텐츠, 변수 목록, 로딩/데이터 없음 상태 |
 | SectionSurface padding | 기본 패딩 유지 |
 | flat 예외 여부와 근거 | flat 예외 없음. 상세 정보는 독립된 읽기 블록으로 elevation 위계가 필요 |
@@ -157,7 +157,7 @@
 - `useOverlayState`로 3개 모달 상태 관리 (deleteModal, previewModal, sendTestModal)
 - 캐시 무효화: `getGetTemplateQueryKey(templateId)` 사용
 - FULL_ACCESS 권한 필요
-- `TemplateContentViewer`, `VariableReadTable`는 내용만 렌더링하며 Surface는 페이지가 `PageSurface`, `SectionSurface`로 제공
+- `TemplateContentViewer`, `VariableReadTable`는 내용만 렌더링하며 SectionSurface는 페이지가 `ScreenSurface`, `SectionSurface`로 제공
 
 ## 구현 체크리스트
 
@@ -170,7 +170,7 @@
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/templates/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/templates/[templateId]/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
 - `page.tsx`는 상세 조회/읽기 전용 본문만 담당합니다.
 
@@ -188,7 +188,7 @@
 |------|------|--------|
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
-| 2026-03-15 | 상세 본문과 상태 분기를 `PageSurface` 및 `SectionSurface` ownership 기준으로 정리 | codex |
+| 2026-03-15 | 상세 본문과 상태 분기를 `ScreenSurface` 및 `SectionSurface` ownership 기준으로 정리 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

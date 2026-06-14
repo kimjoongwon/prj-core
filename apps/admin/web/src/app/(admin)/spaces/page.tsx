@@ -2,7 +2,7 @@
 
 import { LanguageCode } from "@cocrepo/api/core/model";
 import { useGetSpaces } from "@cocrepo/api/core/spaces";
-import { SpaceListPage } from "@cocrepo/ui";
+import { SpaceListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -29,18 +29,20 @@ export default observer(function SpacesPageRoute() {
 	});
 
 	return (
-		<SpaceListPage
-			spaces={response?.data}
-			totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
-			isLoading={isLoading}
-			queryStates={queryStates}
-			setQueryStates={setQueryStates}
-			onClickCreateButton={() => {
-				router.push("/spaces/new" as Route);
-			}}
-			onClickSpaceGroundName={(spaceId) => {
-				router.push(`/spaces/${spaceId}/ground` as Route);
-			}}
-		/>
+		<>
+			<SpaceListScreen
+				spaces={response?.data}
+				totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
+				isLoading={isLoading}
+				queryStates={queryStates}
+				setQueryStates={setQueryStates}
+				onClickCreateButton={() => {
+					router.push("/spaces/new" as Route);
+				}}
+				onClickSpaceGroundName={(spaceId) => {
+					router.push(`/spaces/${spaceId}/ground` as Route);
+				}}
+			/>
+		</>
 	);
 });

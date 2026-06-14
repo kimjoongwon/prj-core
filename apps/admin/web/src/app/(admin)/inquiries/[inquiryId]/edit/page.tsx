@@ -9,7 +9,10 @@ import {
 } from "@cocrepo/api/core/inquiries";
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import type { AiFormOptionItem, AiFormPatch } from "@cocrepo/type";
-import { InquiryEditPage, type InquiryEditPageFormState } from "@cocrepo/ui";
+import {
+	InquiryEditScreen,
+	type InquiryEditScreenFormState,
+} from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -43,7 +46,7 @@ const normalizeAiFormOptions = (
 	);
 };
 
-export default observer(function InquiryEditPageRoute() {
+export default observer(function InquiryEditScreenRoute() {
 	const inquiryId = useParams<{ inquiryId: string }>().inquiryId;
 	const router = useRouter();
 	const { data: bootstrapResponse } = useGetUpdateInquiryForm(inquiryId);
@@ -61,7 +64,7 @@ export default observer(function InquiryEditPageRoute() {
 	}));
 
 	const state = useLocalObservable<
-		InquiryEditPageFormState & {
+		InquiryEditScreenFormState & {
 			initialized: boolean;
 			initFromBootstrap: () => void;
 		}
@@ -139,63 +142,65 @@ export default observer(function InquiryEditPageRoute() {
 	};
 
 	return (
-		<InquiryEditPage
-			formState={state}
-			bootstrap={
-				bootstrap
-					? {
-							fieldMeta: bootstrap.fieldMeta,
-							aiSchemas: bootstrap.aiSchemas,
-							ui: bootstrap.ui,
-							options: bootstrapOptions,
-						}
-					: undefined
-			}
-			categoryOptions={categoryOptions}
-			priorityOptions={priorityOptions}
-			isSubmitting={updateMutation.isPending}
-			onClickBackButton={() => {
-				router.push(
-					ADMIN_PATHS.INQUIRIES_DETAIL.replace(
-						"[inquiryId]",
-						inquiryId,
-					) as Route,
-				);
-			}}
-			onFillAiForm={async (input) => {
-				const result = await fillMutation.mutateAsync({
-					data: {
-						mode: "UPDATE",
-						schemaKey: input.schemaKey,
-						selectedPaths: input.selectedPaths,
-						currentObject: input.currentObject,
-						userPrompt: input.userPrompt,
-					},
-				});
-				return result?.data ?? { patches: [] };
-			}}
-			onApplyAiPatch={onApplyAiPatch}
-			onChangeTitleInput={(value) => {
-				state.title = value;
-				state.error = "";
-			}}
-			onChangeCategorySelection={(value) => {
-				state.category = value;
-			}}
-			onChangePrioritySelection={(value) => {
-				state.priority = value;
-			}}
-			onClickCancelButton={() => {
-				router.push(
-					ADMIN_PATHS.INQUIRIES_DETAIL.replace(
-						"[inquiryId]",
-						inquiryId,
-					) as Route,
-				);
-			}}
-			onClickSubmitButton={() => {
-				void onClickSubmitButton();
-			}}
-		/>
+		<>
+			<InquiryEditScreen
+				formState={state}
+				bootstrap={
+					bootstrap
+						? {
+								fieldMeta: bootstrap.fieldMeta,
+								aiSchemas: bootstrap.aiSchemas,
+								ui: bootstrap.ui,
+								options: bootstrapOptions,
+							}
+						: undefined
+				}
+				categoryOptions={categoryOptions}
+				priorityOptions={priorityOptions}
+				isSubmitting={updateMutation.isPending}
+				onClickBackButton={() => {
+					router.push(
+						ADMIN_PATHS.INQUIRIES_DETAIL.replace(
+							"[inquiryId]",
+							inquiryId,
+						) as Route,
+					);
+				}}
+				onFillAiForm={async (input) => {
+					const result = await fillMutation.mutateAsync({
+						data: {
+							mode: "UPDATE",
+							schemaKey: input.schemaKey,
+							selectedPaths: input.selectedPaths,
+							currentObject: input.currentObject,
+							userPrompt: input.userPrompt,
+						},
+					});
+					return result?.data ?? { patches: [] };
+				}}
+				onApplyAiPatch={onApplyAiPatch}
+				onChangeTitleInput={(value) => {
+					state.title = value;
+					state.error = "";
+				}}
+				onChangeCategorySelection={(value) => {
+					state.category = value;
+				}}
+				onChangePrioritySelection={(value) => {
+					state.priority = value;
+				}}
+				onClickCancelButton={() => {
+					router.push(
+						ADMIN_PATHS.INQUIRIES_DETAIL.replace(
+							"[inquiryId]",
+							inquiryId,
+						) as Route,
+					);
+				}}
+				onClickSubmitButton={() => {
+					void onClickSubmitButton();
+				}}
+			/>
+		</>
 	);
 });

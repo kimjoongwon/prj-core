@@ -13,8 +13,8 @@ import {
 import {
 	type StaticTranslationForm,
 	type StaticTranslationLanguageCode,
-	StaticTranslationListPage,
-	type StaticTranslationListPageQueryStates,
+	StaticTranslationListScreen,
+	type StaticTranslationListScreenQueryStates,
 	useT,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
@@ -147,24 +147,26 @@ export default observer(function TranslationsPageRoute() {
 	}
 
 	return (
-		<StaticTranslationListPage
-			translations={response?.data}
-			totalCount={response?.meta?.total ?? 0}
-			isLoading={isLoading || isFetching}
-			isMutating={isMutating}
-			queryStates={queryStates}
-			setQueryStates={setQueryStates}
-			onCreateTranslation={onCreateTranslation}
-			onUpdateTranslation={onUpdateTranslation}
-			onDeleteTranslation={onDeleteTranslation}
-			onInvalidateAllTranslationCache={onInvalidateAllTranslationCache}
-			onInvalidateTranslationCache={onInvalidateTranslationCache}
-		/>
+		<>
+			<StaticTranslationListScreen
+				translations={response?.data}
+				totalCount={response?.meta?.total ?? 0}
+				isLoading={isLoading || isFetching}
+				isMutating={isMutating}
+				queryStates={queryStates}
+				setQueryStates={setQueryStates}
+				onCreateTranslation={onCreateTranslation}
+				onUpdateTranslation={onUpdateTranslation}
+				onDeleteTranslation={onDeleteTranslation}
+				onInvalidateAllTranslationCache={onInvalidateAllTranslationCache}
+				onInvalidateTranslationCache={onInvalidateTranslationCache}
+			/>
+		</>
 	);
 });
 
 function getTranslationsParams(
-	queryStates: StaticTranslationListPageQueryStates,
+	queryStates: StaticTranslationListScreenQueryStates,
 ): GetTranslationsParams {
 	const take = queryStates.take > 0 ? queryStates.take : 20;
 

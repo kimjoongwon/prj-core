@@ -15,7 +15,7 @@
 - 기본 패턴: `pure screen + thin route container`
 - page role: `collection`
 - reusable target: `data-grid`
-- screen component path: `packages/fe-ui/src/screen/TemplateListPage/TemplateListPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/TemplateListScreen/TemplateListScreen.tsx`
 - route는 `useGetTemplates`, `useToggleTemplateStatus`, `nuqs` query state, `router`를 소유합니다.
 
 ## API 호출
@@ -43,6 +43,6 @@
 | 2026-04-28 | DataGrid 공식 재사용 타깃을 `data-grid`로 갱신 | codex |
 | 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
 | 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-03-29 | `TemplateListPage` pure screen와 thin route container 구조로 전환하고 조회/토글/라우팅을 route로 이동 | codex |
-| 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
+| 2026-03-29 | `TemplateListScreen` pure screen와 thin route container 구조로 전환하고 조회/토글/라우팅을 route로 이동 | codex |
+| 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `SectionSurface` 기준으로 문서화 | codex |
 | 2026-03-21 | 템플릿 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

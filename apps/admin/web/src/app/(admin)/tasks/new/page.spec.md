@@ -121,13 +121,13 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 | "저장" 버튼 클릭 | 폼 유효성 검사 → `createExercise` 호출 → 성공 시 상세 이동 |
 | 이미지 picker 열기 | `useTaskExerciseAssetBrowser()`가 image slot + 공통 `AssetBrowser` bindings를 준비 |
 | 영상 picker 열기 | `useTaskExerciseAssetBrowser()`가 video slot + 공통 `AssetBrowser` bindings를 준비 |
-| 에셋 선택/업로드/삭제 | 공통 `useAdminAssetBrowser()`가 mutation/query state/caching을 처리하고 선택 결과를 `imageFileId`/`videoFileId`에 반영 |
+| 에셋 선택/업로드/삭제 | 공통 `useAssetBrowser()`가 mutation/query state/caching을 처리하고 선택 결과를 `imageFileId`/`videoFileId`에 반영 |
 
 ## 런타임 책임
 
 - `page.tsx`가 `useCreateTask`, `useRouter`, `useLocalObservable`를 직접 소유합니다.
 - `page.tsx`가 `useTaskExerciseAssetBrowser()`를 통해 image/video picker 상태와 공통 `AssetBrowser` bindings를 소유합니다.
-- `@cocrepo/ui`의 `TaskCreatePage`는 props-only pure screen로 사용합니다.
+- `@cocrepo/ui`의 `TaskCreateScreen`는 props-only pure screen로 사용합니다.
 
 ## 비즈니스 규칙
 
@@ -142,15 +142,15 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 - [ ] hooks/useHandlers.ts (저장, 파일업로드 핸들러)
 
 
-## Surface / Elevation
+## SectionSurface / Elevation
 
 | 항목 | 결정 |
 |------|------|
-| PageSurface owner | 참조 route layout의 `layout.tsx` skeleton |
-| PageSurface 역할 | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다. |
+| ScreenSurface owner | page/screen content owner |
+| ScreenSurface 역할 | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다. |
 | SectionSurface 대상 | 본문 섹션, 폼, 표, 로딩/빈 상태 블록 |
 | SectionSurface padding | 기본 패딩 |
-| 예외 | 없음. surface skeleton은 참조 route layout이 소유하고 `page.tsx`는 내부 콘텐츠만 채웁니다. |
+| 예외 | 없음. `layout.tsx`는 `Page` 구조만 소유하고 surface는 page/screen content owner가 명시합니다. |
 
 ## Consumed Layout Contract
 
@@ -159,7 +159,7 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/tasks/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/tasks/new/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
 - `page.tsx`는 입력, 검증, 생성/수정 폼 흐름만 담당합니다.
 
@@ -182,9 +182,9 @@ UI에서는 Exercise 폼 입력만 필요합니다.
 | 2026-03-30 | 태스크 등록의 mutation/router/local state를 route page로 이동하고 `@cocrepo/ui` page를 pure contract로 분리 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
-| 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |
-| 2026-03-15 | Surface ownership/elevation 규칙과 PageSurface/SectionSurface 적용 기준을 문서화 | codex |
-| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
+| 2026-03-15 | SectionSurface ownership과 elevation 결정을 문서화 | codex |
+| 2026-03-15 | SectionSurface ownership/elevation 규칙과 ScreenSurface/SectionSurface 적용 기준을 문서화 | codex |
+| 2026-03-15 | SectionSurface owner와 elevation 규칙을 문서화 | codex |
 | 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-02-19 | 초기 생성 | req-screen-planner |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

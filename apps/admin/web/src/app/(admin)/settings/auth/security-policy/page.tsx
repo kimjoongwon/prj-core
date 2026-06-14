@@ -7,8 +7,8 @@ import {
 	useUpdateSecurityPolicy,
 } from "@cocrepo/api/idp/security-policy";
 import {
-	SecurityPolicyFormPage,
-	type SecurityPolicyFormPageFormState,
+	SecurityPolicyFormScreen,
+	type SecurityPolicyFormScreenFormState,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 export default observer(function SecurityPolicyPageRoute() {
 	const queryClient = useQueryClient();
 	const [isSaveSuccess, setIsSaveSuccess] = useState(false);
-	const state = useLocalObservable<SecurityPolicyFormPageFormState>(() => ({
+	const state = useLocalObservable<SecurityPolicyFormScreenFormState>(() => ({
 		passwordMinLength: 8,
 		passwordRequireUppercase: false,
 		passwordRequireLowercase: false,
@@ -78,30 +78,32 @@ export default observer(function SecurityPolicyPageRoute() {
 	}, [isSaveSuccess]);
 
 	return (
-		<SecurityPolicyFormPage
-			formState={state}
-			isSaving={isPending}
-			isSaveSuccess={isSaveSuccess}
-			onChangeNumberField={(field, value) => {
-				const num = Number(value);
-				if (!Number.isNaN(num)) {
-					state[field] = num;
-				}
-			}}
-			onChangeBooleanField={(field, value) => {
-				state[field] = value;
-			}}
-			onSubmit={() => {
-				updatePolicy({
-					data: mapUpdateSecurityPolicyInput(state),
-				});
-			}}
-		/>
+		<>
+			<SecurityPolicyFormScreen
+				formState={state}
+				isSaving={isPending}
+				isSaveSuccess={isSaveSuccess}
+				onChangeNumberField={(field, value) => {
+					const num = Number(value);
+					if (!Number.isNaN(num)) {
+						state[field] = num;
+					}
+				}}
+				onChangeBooleanField={(field, value) => {
+					state[field] = value;
+				}}
+				onSubmit={() => {
+					updatePolicy({
+						data: mapUpdateSecurityPolicyInput(state),
+					});
+				}}
+			/>
+		</>
 	);
 });
 
 function mapUpdateSecurityPolicyInput(
-	input: SecurityPolicyFormPageFormState,
+	input: SecurityPolicyFormScreenFormState,
 ): UpdateSecurityPolicyMutationBody {
 	return {
 		passwordMinLength: input.passwordMinLength,

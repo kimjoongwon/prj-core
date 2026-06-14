@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { mockCourseManagementApi } from "../courses/course-management.e2e-fixtures";
+import { mockCourseApi } from "../courses/course.e2e-fixtures";
 
 test.describe("CoursePass 목록 페이지 @mock", () => {
 	test.beforeEach(async ({ page }) => {
-		await mockCourseManagementApi(page);
+		await mockCourseApi(page);
 		await page.goto("./course-passes");
 		await page.waitForLoadState("networkidle");
 	});

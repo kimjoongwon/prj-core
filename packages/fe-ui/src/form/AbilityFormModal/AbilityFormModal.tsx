@@ -8,8 +8,6 @@ import { Checkbox } from "../../selection/Checkbox/Checkbox";
 import { Input } from "../../input/Input/Input";
 import { RadioGroup } from "../../selection/RadioGroup/RadioGroup";
 import { Select as HeroSelect } from "../../selection/Select/Select";
-import { HStack } from "../../rhythm/HStack/HStack";
-import { VStack } from "../../rhythm/VStack/VStack";
 import { ConditionEditor } from "../../widget/ability/ConditionEditor";
 
 /**
@@ -322,7 +320,7 @@ export const AbilityFormModal = observer(
 					<Modal.Backdrop><Modal.Container size="lg" scroll="inside"><Modal.Dialog>
 					<Modal.Header>{modalTitle}</Modal.Header>
 					<Modal.Body>
-						<VStack gap={4}>
+						<div className="flex flex-col gap-4">
 							{/* 규칙 이름 */}
 							<Input
 								label="규칙 이름"
@@ -428,7 +426,7 @@ export const AbilityFormModal = observer(
 
 							{/* 대상 필드 선택 (subjectFields가 있을 때만 표시) */}
 							{subjectFields.length > 0 && (
-								<VStack gap={2}>
+								<div className="flex flex-col gap-2">
 									<span className="text-sm font-medium text-foreground">
 										대상 필드
 									</span>
@@ -444,7 +442,7 @@ export const AbilityFormModal = observer(
 											</Checkbox>
 										))}
 									</CheckboxGroup>
-								</VStack>
+								</div>
 							)}
 
 							{/* 조건 편집기 */}
@@ -471,7 +469,7 @@ export const AbilityFormModal = observer(
 							/>
 
 							{/* 활성화 상태 */}
-							<HStack gap={4}>
+							<div>
 								<Checkbox
 									isSelected={formData.isActive}
 									onChange={(checked) =>
@@ -484,11 +482,11 @@ export const AbilityFormModal = observer(
 								>
 									활성화
 								</Checkbox>
-							</HStack>
-						</VStack>
+							</div>
+						</div>
 					</Modal.Body>
 					<Modal.Footer>
-						<HStack gap={8} justifyContent="end">
+						<div className="flex gap-8 justify-end">
 							<Button variant="flat" onPress={onClose} isDisabled={loading}>
 								취소
 							</Button>
@@ -499,7 +497,7 @@ export const AbilityFormModal = observer(
 							>
 								{submitButtonText}
 							</Button>
-						</HStack>
+						</div>
 					</Modal.Footer>
 				</Modal.Dialog></Modal.Container></Modal.Backdrop>
 			</Modal>

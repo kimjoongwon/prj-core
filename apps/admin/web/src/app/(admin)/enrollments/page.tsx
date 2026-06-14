@@ -1,14 +1,14 @@
 "use client";
 
-import { CourseManagementPage } from "@cocrepo/ui";
+import { CourseScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import { useCourseManagementPageData } from "../hooks/useCourseManagementPageData";
+import { useCourseData } from "@cocrepo/hook";
 
 export default observer(function EnrollmentsPageRoute() {
 	const router = useRouter();
-	const courseManagementPageData = useCourseManagementPageData();
+	const courseData = useCourseData();
 	const onClickSectionTab = (href: string) => {
 		router.push(href as Route);
 	};
@@ -17,16 +17,18 @@ export default observer(function EnrollmentsPageRoute() {
 	};
 
 	return (
-		<CourseManagementPage
-			activeSectionId="enrollments"
-			sections={courseManagementPageData.sections}
-			queryState={courseManagementPageData.queryState}
-			courses={courseManagementPageData.courses}
-			offerings={courseManagementPageData.offerings}
-			enrollments={courseManagementPageData.enrollments}
-			passes={courseManagementPageData.passes}
-			onClickSection={onClickSectionTab}
-			onClickTimeline={onClickTimelineButton}
-		/>
+		<>
+			<CourseScreen
+				activeSectionId="enrollments"
+				sections={courseData.sections}
+				queryState={courseData.queryState}
+				courses={courseData.courses}
+				offerings={courseData.offerings}
+				enrollments={courseData.enrollments}
+				passes={courseData.passes}
+				onClickSection={onClickSectionTab}
+				onClickTimeline={onClickTimelineButton}
+			/>
+		</>
 	);
 });

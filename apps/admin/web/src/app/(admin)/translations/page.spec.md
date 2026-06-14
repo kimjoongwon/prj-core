@@ -16,7 +16,7 @@
 - 기본 패턴: `pure screen + thin route container`
 - page role: `collection`
 - reusable target: `data-grid`
-- screen component path: `packages/fe-ui/src/screen/StaticTranslationListPage/StaticTranslationListPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/StaticTranslationListScreen/StaticTranslationListScreen.tsx`
 - route는 Orval translation hooks, nuqs query state, mutation toast, React Query invalidate를 소유합니다.
 
 ## API 호출

@@ -14,14 +14,14 @@
 
 - 기본 패턴: `page.tsx` 단일 CSR
 - API: `useGetPolicies`, `useDeletePolicy`
-- reusable target: `packages/fe-ui/src/screen/PolicyListPage/PolicyListPage.tsx`
+- reusable target: `packages/fe-ui/src/screen/PolicyListScreen/PolicyListScreen.tsx`
 
-## Surface / Elevation
+## SectionSurface / Elevation
 
 | 항목 | 결정 |
 |------|------|
-| PageSurface owner | 상위 admin layout skeleton |
-| 본문 | `PolicyListPage` 내부 `Surface`로 목록 테이블을 감쌈 |
+| ScreenSurface owner | page/screen content owner |
+| 본문 | `PolicyListScreen` 내부 `SectionSurface`로 목록 테이블을 감쌈 |
 
 ## 이벤트 핸들러
 

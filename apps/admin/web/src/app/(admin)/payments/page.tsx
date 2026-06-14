@@ -1,21 +1,23 @@
 "use client";
 
-import { PaymentManagementPage } from "@cocrepo/ui";
+import { PaymentScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { usePaymentManagementPageData } from "../hooks/usePaymentManagementPageData";
+import { usePaymentData } from "@cocrepo/hook";
 
 export default observer(function PaymentsPageRoute() {
-	const paymentManagementPageData = usePaymentManagementPageData();
+	const paymentData = usePaymentData();
 	const onClickRefreshButton = () => {
-		void paymentManagementPageData.refetch();
+		void paymentData.refetch();
 	};
 
 	return (
-		<PaymentManagementPage
-			payments={paymentManagementPageData.payments}
-			summary={paymentManagementPageData.summary}
-			queryState={paymentManagementPageData.queryState}
-			onClickRefresh={onClickRefreshButton}
-		/>
+		<>
+			<PaymentScreen
+				payments={paymentData.payments}
+				summary={paymentData.summary}
+				queryState={paymentData.queryState}
+				onClickRefresh={onClickRefreshButton}
+			/>
+		</>
 	);
 });

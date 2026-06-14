@@ -1,482 +1,870 @@
+import { withScreenSurface } from "./withScreenSurface";
+import { AbilityDetailScreen as AbilityDetailScreenBase } from "./AbilityDetailScreen/AbilityDetailScreen";
+import { AbilityFormScreen as AbilityFormScreenBase } from "./AbilityFormScreen/AbilityFormScreen";
+import { AbilityListScreen as AbilityListScreenBase } from "./AbilityListScreen/AbilityListScreen";
+import { AccountDetailScreen as AccountDetailScreenBase } from "./AccountDetailScreen/AccountDetailScreen";
+import { AccountListScreen as AccountListScreenBase } from "./AccountListScreen/AccountListScreen";
+import { ActionCreateScreen as ActionCreateScreenBase } from "./ActionCreateScreen/ActionCreateScreen";
+import { ActionDetailScreen as ActionDetailScreenBase } from "./ActionDetailScreen/ActionDetailScreen";
+import { ActionEditScreen as ActionEditScreenBase } from "./ActionEditScreen/ActionEditScreen";
+import { ActionListScreen as ActionListScreenBase } from "./ActionListScreen/ActionListScreen";
+import { AccessDeniedScreen as AccessDeniedScreenBase } from "./AccessDeniedScreen/AccessDeniedScreen";
+import { AddressEmailVerifyScreen as AddressEmailVerifyScreenBase } from "./AddressEmailVerifyScreen/AddressEmailVerifyScreen";
+import { AssetDetailScreen as AssetDetailScreenBase } from "./AssetDetailScreen/AssetDetailScreen";
+import { AssetListScreen as AssetListScreenBase } from "./AssetListScreen/AssetListScreen";
+import { AuthAuditLogListScreen as AuthAuditLogListScreenBase } from "./AuthAuditLogListScreen/AuthAuditLogListScreen";
+import { AuthErrorScreen as AuthErrorScreenBase } from "./AuthErrorScreen/AuthErrorScreen";
+import { CourseScreen as CourseScreenBase } from "./CourseScreen/CourseScreen";
+import { DashboardScreen as DashboardScreenBase } from "./DashboardScreen/DashboardScreen";
+import { EmailVerificationListScreen as EmailVerificationListScreenBase } from "./EmailVerificationListScreen/EmailVerificationListScreen";
+import { ForgotPasswordScreen as ForgotPasswordScreenBase } from "./ForgotPasswordScreen/ForgotPasswordScreen";
+import { GroundDetailScreen as GroundDetailScreenBase } from "./GroundDetailScreen/GroundDetailScreen";
+import { GroundEditScreen as GroundEditScreenBase } from "./GroundEditScreen/GroundEditScreen";
+import { GroundsSelectScreen as GroundsSelectScreenBase } from "./GroundsSelectScreen/GroundsSelectScreen";
+import { IdentityDashboardScreen as IdentityDashboardScreenBase } from "./IdentityDashboardScreen/IdentityDashboardScreen";
+import { InquiryCreateScreen as InquiryCreateScreenBase } from "./InquiryCreateScreen/InquiryCreateScreen";
+import { InquiryDetailScreen as InquiryDetailScreenBase } from "./InquiryDetailScreen/InquiryDetailScreen";
+import { InquiryEditScreen as InquiryEditScreenBase } from "./InquiryEditScreen/InquiryEditScreen";
+import { InquiryListScreen as InquiryListScreenBase } from "./InquiryListScreen/InquiryListScreen";
+import { LoginScreen as LoginScreenBase } from "./LoginScreen";
+import { LoginRedirectScreen as LoginRedirectScreenBase } from "./LoginRedirectScreen/LoginRedirectScreen";
+import { OidcClientCreateScreen as OidcClientCreateScreenBase } from "./OidcClientCreateScreen/OidcClientCreateScreen";
+import { OidcClientDetailScreen as OidcClientDetailScreenBase } from "./OidcClientDetailScreen/OidcClientDetailScreen";
+import { OidcClientEditScreen as OidcClientEditScreenBase } from "./OidcClientEditScreen/OidcClientEditScreen";
+import { OidcClientListScreen as OidcClientListScreenBase } from "./OidcClientListScreen/OidcClientListScreen";
+import { OidcInteractionScreen as OidcInteractionScreenBase } from "./OidcInteractionScreen/OidcInteractionScreen";
+import { OidcSessionListScreen as OidcSessionListScreenBase } from "./OidcSessionListScreen/OidcSessionListScreen";
+import { PasswordInputScreen as PasswordInputScreenBase } from "./PasswordInputScreen/PasswordInputScreen";
+import { PaymentScreen as PaymentScreenBase } from "./PaymentScreen/PaymentScreen";
+import { PhoneVerifyScreen as PhoneVerifyScreenBase } from "./PhoneVerifyScreen/PhoneVerifyScreen";
+import { PolicyCreateScreen as PolicyCreateScreenBase } from "./PolicyCreateScreen/PolicyCreateScreen";
+import { PolicyDetailScreen as PolicyDetailScreenBase } from "./PolicyDetailScreen/PolicyDetailScreen";
+import { PolicyEditScreen as PolicyEditScreenBase } from "./PolicyEditScreen/PolicyEditScreen";
+import { PolicyListScreen as PolicyListScreenBase } from "./PolicyListScreen/PolicyListScreen";
+import { ResetPasswordScreen as ResetPasswordScreenBase } from "./ResetPasswordScreen/ResetPasswordScreen";
+import { RoleAbilityActionListScreen as RoleAbilityActionListScreenBase } from "./RoleAbilityActionListScreen/RoleAbilityActionListScreen";
+import { RoleAbilitySubjectListScreen as RoleAbilitySubjectListScreenBase } from "./RoleAbilitySubjectListScreen/RoleAbilitySubjectListScreen";
+import { RoleCreateScreen as RoleCreateScreenBase } from "./RoleCreateScreen/RoleCreateScreen";
+import { RoleDetailScreen as RoleDetailScreenBase } from "./RoleDetailScreen/RoleDetailScreen";
+import { RoleEditScreen as RoleEditScreenBase } from "./RoleEditScreen/RoleEditScreen";
+import { RoleListScreen as RoleListScreenBase } from "./RoleListScreen/RoleListScreen";
+import { RoutineCreateScreen as RoutineCreateScreenBase } from "./RoutineCreateScreen/RoutineCreateScreen";
+import { RoutineDetailScreen as RoutineDetailScreenBase } from "./RoutineDetailScreen/RoutineDetailScreen";
+import { RoutineEditScreen as RoutineEditScreenBase } from "./RoutineEditScreen/RoutineEditScreen";
+import { RoutineListScreen as RoutineListScreenBase } from "./RoutineListScreen/RoutineListScreen";
+import { SecurityPolicyFormScreen as SecurityPolicyFormScreenBase } from "./SecurityPolicyFormScreen/SecurityPolicyFormScreen";
+import { ServiceDocumentListScreen as ServiceDocumentListScreenBase } from "./ServiceDocumentListScreen/ServiceDocumentListScreen";
+import { SessionCheckScreen as SessionCheckScreenBase } from "./SessionCheckScreen/SessionCheckScreen";
+import { SignUpScreen as SignUpScreenBase } from "./SignUpScreen/SignUpScreen";
+import { SpaceCreateScreen as SpaceCreateScreenBase } from "./SpaceCreateScreen/SpaceCreateScreen";
+import { SpaceListScreen as SpaceListScreenBase } from "./SpaceListScreen/SpaceListScreen";
+import { StaticTranslationListScreen as StaticTranslationListScreenBase } from "./StaticTranslationListScreen/StaticTranslationListScreen";
+import { SubjectDetailScreen as SubjectDetailScreenBase } from "./SubjectDetailScreen/SubjectDetailScreen";
+import { SubjectListScreen as SubjectListScreenBase } from "./SubjectListScreen/SubjectListScreen";
+import { TaskCreateScreen as TaskCreateScreenBase } from "./TaskCreateScreen/TaskCreateScreen";
+import { TaskExerciseDetailScreen as TaskExerciseDetailScreenBase } from "./TaskExerciseDetailScreen/TaskExerciseDetailScreen";
+import { TaskExerciseEditScreen as TaskExerciseEditScreenBase } from "./TaskExerciseEditScreen/TaskExerciseEditScreen";
+import { TaskListScreen as TaskListScreenBase } from "./TaskListScreen/TaskListScreen";
+import { TemplateCreateScreen as TemplateCreateScreenBase } from "./TemplateCreateScreen/TemplateCreateScreen";
+import { TemplateDetailScreen as TemplateDetailScreenBase } from "./TemplateDetailScreen/TemplateDetailScreen";
+import { TemplateEditScreen as TemplateEditScreenBase } from "./TemplateEditScreen/TemplateEditScreen";
+import { TemplateListScreen as TemplateListScreenBase } from "./TemplateListScreen/TemplateListScreen";
+import { TenantAccessRequestCreateScreen as TenantAccessRequestCreateScreenBase } from "./TenantAccessRequestCreateScreen/TenantAccessRequestCreateScreen";
+import { TenantAccessRequestMyListScreen as TenantAccessRequestMyListScreenBase } from "./TenantAccessRequestMyListScreen/TenantAccessRequestMyListScreen";
+import { TenantAccessRequestReviewDetailScreen as TenantAccessRequestReviewDetailScreenBase } from "./TenantAccessRequestReviewDetailScreen/TenantAccessRequestReviewDetailScreen";
+import { TenantAccessRequestReviewListScreen as TenantAccessRequestReviewListScreenBase } from "./TenantAccessRequestReviewListScreen/TenantAccessRequestReviewListScreen";
+import { TenantSelectScreen as TenantSelectScreenBase } from "./TenantSelectScreen/TenantSelectScreen";
+import { TimelineCreateScreen as TimelineCreateScreenBase } from "./TimelineCreateScreen/TimelineCreateScreen";
+import { TimelineDetailScreen as TimelineDetailScreenBase } from "./TimelineDetailScreen/TimelineDetailScreen";
+import { TimelineEditScreen as TimelineEditScreenBase } from "./TimelineEditScreen/TimelineEditScreen";
+import { TimelineListScreen as TimelineListScreenBase } from "./TimelineListScreen/TimelineListScreen";
+import { TimelineSessionCreateScreen as TimelineSessionCreateScreenBase } from "./TimelineSessionCreateScreen/TimelineSessionCreateScreen";
+import { TimelineSessionDetailScreen as TimelineSessionDetailScreenBase } from "./TimelineSessionDetailScreen/TimelineSessionDetailScreen";
+import { TimelineSessionEditScreen as TimelineSessionEditScreenBase } from "./TimelineSessionEditScreen/TimelineSessionEditScreen";
+import { TimelineSessionProgramCreateScreen as TimelineSessionProgramCreateScreenBase } from "./TimelineSessionProgramCreateScreen/TimelineSessionProgramCreateScreen";
+import { TimelineSessionProgramDetailScreen as TimelineSessionProgramDetailScreenBase } from "./TimelineSessionProgramDetailScreen/TimelineSessionProgramDetailScreen";
+import { TimelineSessionProgramEditScreen as TimelineSessionProgramEditScreenBase } from "./TimelineSessionProgramEditScreen/TimelineSessionProgramEditScreen";
+import { UserCreateScreen as UserCreateScreenBase } from "./UserCreateScreen/UserCreateScreen";
+import { UserDetailScreen as UserDetailScreenBase } from "./UserDetailScreen/UserDetailScreen";
+import { UserEditScreen as UserEditScreenBase } from "./UserEditScreen/UserEditScreen";
+import { UserListScreen as UserListScreenBase } from "./UserListScreen/UserListScreen";
+
 export type {
-	AbilityDetailPageAbility,
-	AbilityDetailPageProps,
-} from "./AbilityDetailPage/AbilityDetailPage";
-export { AbilityDetailPage } from "./AbilityDetailPage/AbilityDetailPage";
+	AbilityDetailScreenAbility,
+	AbilityDetailScreenProps,
+} from "./AbilityDetailScreen/AbilityDetailScreen";
+
 export type {
-	AbilityFormPageChangeHandlers,
-	AbilityFormPageForm,
-	AbilityFormPageOption,
-	AbilityFormPageProps,
-} from "./AbilityFormPage/AbilityFormPage";
-export { AbilityFormPage } from "./AbilityFormPage/AbilityFormPage";
+	AbilityFormScreenChangeHandlers,
+	AbilityFormScreenForm,
+	AbilityFormScreenOption,
+	AbilityFormScreenProps,
+} from "./AbilityFormScreen/AbilityFormScreen";
+
 export type {
-	AbilityListPageFilters,
-	AbilityListPageOption,
-	AbilityListPageProps,
-	AbilityListPageQueryStates,
-	AbilityListPageSetQueryStates,
-} from "./AbilityListPage/AbilityListPage";
-export { AbilityListPage } from "./AbilityListPage/AbilityListPage";
+	AbilityListScreenFilters,
+	AbilityListScreenOption,
+	AbilityListScreenProps,
+	AbilityListScreenQueryStates,
+	AbilityListScreenSetQueryStates,
+} from "./AbilityListScreen/AbilityListScreen";
+
 export type {
-	AccountDetailPageAccessGrant,
-	AccountDetailPageAccessGrantForm,
-	AccountDetailPageAccount,
-	AccountDetailPageModalAction,
-	AccountDetailPageOption,
-	AccountDetailPageProps,
-} from "./AccountDetailPage/AccountDetailPage";
-export { AccountDetailPage } from "./AccountDetailPage/AccountDetailPage";
+	AccountDetailScreenAccessGrant,
+	AccountDetailScreenAccessGrantForm,
+	AccountDetailScreenAccount,
+	AccountDetailScreenModalAction,
+	AccountDetailScreenOption,
+	AccountDetailScreenProps,
+} from "./AccountDetailScreen/AccountDetailScreen";
+
 export type {
-	AccountListPageProps,
-	AccountListPageQueryStates,
-	AccountListPageSetQueryStates,
-} from "./AccountListPage/AccountListPage";
-export {
-	AccountListPage,
-	idpConsoleAccountsPageQueryInputs,
-} from "./AccountListPage/AccountListPage";
+	AccountListScreenProps,
+	AccountListScreenQueryStates,
+	AccountListScreenSetQueryStates,
+} from "./AccountListScreen/AccountListScreen";
+export { idpConsoleAccountsPageQueryInputs } from "./AccountListScreen/AccountListScreen";
 export type {
-	ActionCreatePageForm,
-	ActionCreatePageFormState,
-	ActionCreatePageProps,
-} from "./ActionCreatePage/ActionCreatePage";
-export { ActionCreatePage } from "./ActionCreatePage/ActionCreatePage";
+	ActionCreateScreenForm,
+	ActionCreateScreenFormState,
+	ActionCreateScreenProps,
+} from "./ActionCreateScreen/ActionCreateScreen";
+
 export type {
-	ActionDetailPageAction,
-	ActionDetailPageProps,
-} from "./ActionDetailPage/ActionDetailPage";
-export { ActionDetailPage } from "./ActionDetailPage/ActionDetailPage";
+	ActionDetailScreenAction,
+	ActionDetailScreenProps,
+} from "./ActionDetailScreen/ActionDetailScreen";
+
 export type {
-	ActionEditPageAction,
-	ActionEditPageForm,
-	ActionEditPageFormState,
-	ActionEditPageProps,
-} from "./ActionEditPage/ActionEditPage";
-export { ActionEditPage } from "./ActionEditPage/ActionEditPage";
+	ActionEditScreenAction,
+	ActionEditScreenForm,
+	ActionEditScreenFormState,
+	ActionEditScreenProps,
+} from "./ActionEditScreen/ActionEditScreen";
+
 export type {
-	ActionListPageProps,
-	ActionListPageQueryStates,
-	ActionListPageSetQueryStates,
-} from "./ActionListPage/ActionListPage";
-export {
-	ActionListPage,
-	adminActionsPageQueryInputs,
-} from "./ActionListPage/ActionListPage";
+	ActionListScreenProps,
+	ActionListScreenQueryStates,
+	ActionListScreenSetQueryStates,
+} from "./ActionListScreen/ActionListScreen";
+export { adminActionsPageQueryInputs } from "./ActionListScreen/ActionListScreen";
+export type { AccessDeniedScreenProps } from "./AccessDeniedScreen/AccessDeniedScreen";
+
 export type {
-	AddressEmailVerifyPageProps,
-	AddressEmailVerifyPageState,
-} from "./AddressEmailVerifyPage/AddressEmailVerifyPage";
-export { AddressEmailVerifyPage } from "./AddressEmailVerifyPage/AddressEmailVerifyPage";
+	AddressEmailVerifyScreenProps,
+	AddressEmailVerifyScreenState,
+} from "./AddressEmailVerifyScreen/AddressEmailVerifyScreen";
+
 export type {
-	AssetDetailPageAsset,
-	AssetDetailPageFolder,
-	AssetDetailPageProps,
-} from "./AssetDetailPage/AssetDetailPage";
-export { AssetDetailPage } from "./AssetDetailPage/AssetDetailPage";
+	AssetDetailScreenAsset,
+	AssetDetailScreenFolder,
+	AssetDetailScreenProps,
+} from "./AssetDetailScreen/AssetDetailScreen";
+
 export type {
-	AssetListPageProps,
-	AssetListPageQueryStates,
-	AssetListPageSetQueryStates,
-} from "./AssetListPage/AssetListPage";
-export {
-	AssetListPage,
-	adminAssetsPageQueryInputs,
-} from "./AssetListPage/AssetListPage";
+	AssetListScreenProps,
+	AssetListScreenQueryStates,
+	AssetListScreenSetQueryStates,
+} from "./AssetListScreen/AssetListScreen";
+export { adminAssetsPageQueryInputs } from "./AssetListScreen/AssetListScreen";
 export type {
-	AuthAuditLogListPageProps,
-	AuthAuditLogListPageQueryStates,
-	AuthAuditLogListPageSetQueryStates,
-	AuthAuditLogListPageStats,
-} from "./AuthAuditLogListPage/AuthAuditLogListPage";
-export {
-	AuthAuditLogListPage,
-	idpConsoleAuthAuditLogsPageQueryInputs,
-} from "./AuthAuditLogListPage/AuthAuditLogListPage";
-export type { AuthErrorPageProps } from "./AuthErrorPage/AuthErrorPage";
-export { AuthErrorPage } from "./AuthErrorPage/AuthErrorPage";
+	AuthAuditLogListScreenProps,
+	AuthAuditLogListScreenQueryStates,
+	AuthAuditLogListScreenSetQueryStates,
+	AuthAuditLogListScreenStats,
+} from "./AuthAuditLogListScreen/AuthAuditLogListScreen";
+export { idpConsoleAuthAuditLogsPageQueryInputs } from "./AuthAuditLogListScreen/AuthAuditLogListScreen";
+export type { AuthErrorScreenProps } from "./AuthErrorScreen/AuthErrorScreen";
+
 export type {
-	CourseManagementCourse,
-	CourseManagementEnrollment,
-	CourseManagementOffering,
-	CourseManagementPageProps,
-	CourseManagementPass,
-	CourseManagementQueryState,
-	CourseManagementSection,
-	CourseManagementSectionId,
-} from "./CourseManagementPage/CourseManagementPage";
-export { CourseManagementPage } from "./CourseManagementPage/CourseManagementPage";
-export { DashboardPage } from "./DashboardPage/DashboardPage";
+	CourseRow,
+	CourseEnrollmentRow,
+	CourseOfferingRow,
+	CourseScreenProps,
+	CoursePassRow,
+	CourseQueryState,
+	CourseSection,
+	CourseSectionId,
+} from "./CourseScreen/CourseScreen";
+
 export type {
-	EmailVerificationListPageProps,
-	EmailVerificationListPageQueryStates,
-	EmailVerificationListPageSetQueryStates,
-} from "./EmailVerificationListPage/EmailVerificationListPage";
-export {
-	adminEmailVerificationsPageQueryInputs,
-	EmailVerificationListPage,
-} from "./EmailVerificationListPage/EmailVerificationListPage";
-export type { ForgotPasswordPageProps } from "./ForgotPasswordPage/ForgotPasswordPage";
-export { ForgotPasswordPage } from "./ForgotPasswordPage/ForgotPasswordPage";
+	EmailVerificationListScreenProps,
+	EmailVerificationListScreenQueryStates,
+	EmailVerificationListScreenSetQueryStates,
+} from "./EmailVerificationListScreen/EmailVerificationListScreen";
+export { adminEmailVerificationsPageQueryInputs } from "./EmailVerificationListScreen/EmailVerificationListScreen";
+export type { ForgotPasswordScreenProps } from "./ForgotPasswordScreen/ForgotPasswordScreen";
+
 export type {
-	GroundDetailPageGround,
-	GroundDetailPageProps,
-} from "./GroundDetailPage/GroundDetailPage";
-export { GroundDetailPage } from "./GroundDetailPage/GroundDetailPage";
-export type { GroundEditPageProps } from "./GroundEditPage/GroundEditPage";
-export { GroundEditPage } from "./GroundEditPage/GroundEditPage";
-export type { GroundsSelectPageProps } from "./GroundsSelectPage/GroundsSelectPage";
-export { GroundsSelectPage } from "./GroundsSelectPage/GroundsSelectPage";
+	GroundDetailScreenGround,
+	GroundDetailScreenProps,
+} from "./GroundDetailScreen/GroundDetailScreen";
+
+export type { GroundEditScreenProps } from "./GroundEditScreen/GroundEditScreen";
+
+export type { GroundsSelectScreenProps } from "./GroundsSelectScreen/GroundsSelectScreen";
+
 export type {
-	IdentityDashboardPageProps,
-	IdentityDashboardPageStats,
-	IdentityDashboardPageTrendItem,
-} from "./IdentityDashboardPage/IdentityDashboardPage";
-export { IdentityDashboardPage } from "./IdentityDashboardPage/IdentityDashboardPage";
+	IdentityDashboardScreenProps,
+	IdentityDashboardScreenStats,
+	IdentityDashboardScreenTrendItem,
+} from "./IdentityDashboardScreen/IdentityDashboardScreen";
+
 export type {
-	InquiryCreatePageBootstrap,
-	InquiryCreatePageCustomerSearchResult,
-	InquiryCreatePageFormState,
-	InquiryCreatePageOption,
-	InquiryCreatePageProps,
-} from "./InquiryCreatePage/InquiryCreatePage";
-export { InquiryCreatePage } from "./InquiryCreatePage/InquiryCreatePage";
+	InquiryCreateScreenBootstrap,
+	InquiryCreateScreenCustomerSearchResult,
+	InquiryCreateScreenFormState,
+	InquiryCreateScreenOption,
+	InquiryCreateScreenProps,
+} from "./InquiryCreateScreen/InquiryCreateScreen";
+
 export type {
-	UseInquiryWebSocketOptions as UseInquiryDetailWebSocketOptions,
-	UseInquiryWebSocketReturn as UseInquiryDetailWebSocketReturn,
-	WebSocketStatus as InquiryDetailWebSocketStatus,
-} from "./InquiryDetailPage/hooks/useInquiryWebSocket";
-export { useInquiryWebSocket as useInquiryDetailWebSocket } from "./InquiryDetailPage/hooks/useInquiryWebSocket";
+	InquiryDetailScreenAssigneeOption,
+	InquiryDetailScreenBootstrap,
+	InquiryDetailScreenInquiry,
+	InquiryDetailScreenMetaFormState,
+	InquiryDetailScreenOption,
+	InquiryDetailScreenParticipantListItem,
+	InquiryDetailScreenProps,
+	InquiryDetailScreenRealtimeState,
+} from "./InquiryDetailScreen/InquiryDetailScreen";
+
 export type {
-	InquiryDetailPageAssigneeOption,
-	InquiryDetailPageBootstrap,
-	InquiryDetailPageInquiry,
-	InquiryDetailPageMetaFormState,
-	InquiryDetailPageOption,
-	InquiryDetailPageParticipantListItem,
-	InquiryDetailPageProps,
-	InquiryDetailPageRealtimeState,
-} from "./InquiryDetailPage/InquiryDetailPage";
-export { InquiryDetailPage } from "./InquiryDetailPage/InquiryDetailPage";
+	InquiryEditScreenBootstrap,
+	InquiryEditScreenFormState,
+	InquiryEditScreenOption,
+	InquiryEditScreenProps,
+} from "./InquiryEditScreen/InquiryEditScreen";
+
 export type {
-	InquiryEditPageBootstrap,
-	InquiryEditPageFormState,
-	InquiryEditPageOption,
-	InquiryEditPageProps,
-} from "./InquiryEditPage/InquiryEditPage";
-export { InquiryEditPage } from "./InquiryEditPage/InquiryEditPage";
+	InquiryListScreenProps,
+	InquiryListScreenQueryStates,
+	InquiryListScreenSetQueryStates,
+} from "./InquiryListScreen/InquiryListScreen";
+export { adminInquiriesPageQueryInputs } from "./InquiryListScreen/InquiryListScreen";
+export type { LoginScreenProps, LoginScreenState } from "./LoginScreen";
+
+export type { LoginRedirectScreenProps } from "./LoginRedirectScreen/LoginRedirectScreen";
+
 export type {
-	InquiryListPageProps,
-	InquiryListPageQueryStates,
-	InquiryListPageSetQueryStates,
-} from "./InquiryListPage/InquiryListPage";
-export {
-	adminInquiriesPageQueryInputs,
-	InquiryListPage,
-} from "./InquiryListPage/InquiryListPage";
-export type { LoginPageProps, LoginPageState } from "./LoginPage";
-export { LoginPage } from "./LoginPage";
-export type { LoginRedirectPageProps } from "./LoginRedirectPage/LoginRedirectPage";
-export { LoginRedirectPage } from "./LoginRedirectPage/LoginRedirectPage";
+	OidcClientCreateScreenProps,
+	OidcClientCreateScreenSubmitInput,
+} from "./OidcClientCreateScreen/OidcClientCreateScreen";
+
 export type {
-	OidcClientCreatePageProps,
-	OidcClientCreatePageSubmitInput,
-} from "./OidcClientCreatePage/OidcClientCreatePage";
-export { OidcClientCreatePage } from "./OidcClientCreatePage/OidcClientCreatePage";
+	OidcClientDetailScreenClient,
+	OidcClientDetailScreenProps,
+} from "./OidcClientDetailScreen/OidcClientDetailScreen";
+
 export type {
-	OidcClientDetailPageClient,
-	OidcClientDetailPageProps,
-} from "./OidcClientDetailPage/OidcClientDetailPage";
-export { OidcClientDetailPage } from "./OidcClientDetailPage/OidcClientDetailPage";
+	OidcClientEditScreenClient,
+	OidcClientEditScreenFormState,
+	OidcClientEditScreenProps,
+	OidcClientEditScreenSubmitInput,
+} from "./OidcClientEditScreen/OidcClientEditScreen";
+
 export type {
-	OidcClientEditPageClient,
-	OidcClientEditPageFormState,
-	OidcClientEditPageProps,
-	OidcClientEditPageSubmitInput,
-} from "./OidcClientEditPage/OidcClientEditPage";
-export { OidcClientEditPage } from "./OidcClientEditPage/OidcClientEditPage";
-export type {
-	OidcClientListPageProps,
-	OidcClientListPageQueryStates,
-	OidcClientListPageSetQueryStates,
-} from "./OidcClientListPage/OidcClientListPage";
-export {
-	idpConsoleOidcClientsPageQueryInputs,
-	OidcClientListPage,
-} from "./OidcClientListPage/OidcClientListPage";
+	OidcClientListScreenProps,
+	OidcClientListScreenQueryStates,
+	OidcClientListScreenSetQueryStates,
+} from "./OidcClientListScreen/OidcClientListScreen";
+export { idpConsoleOidcClientsPageQueryInputs } from "./OidcClientListScreen/OidcClientListScreen";
 export type {
 	IdpInteractionClientInfo,
-	OidcInteractionPageProps,
-} from "./OidcInteractionPage/OidcInteractionPage";
-export { OidcInteractionPage } from "./OidcInteractionPage/OidcInteractionPage";
+	OidcInteractionScreenProps,
+} from "./OidcInteractionScreen/OidcInteractionScreen";
+
 export type {
-	OidcSessionListPageProps,
-	OidcSessionListPageQueryStates,
-	OidcSessionListPageSetQueryStates,
-	OidcSessionListPageStats,
-} from "./OidcSessionListPage/OidcSessionListPage";
-export {
-	idpConsoleOidcSessionsPageQueryInputs,
-	OidcSessionListPage,
-} from "./OidcSessionListPage/OidcSessionListPage";
+	OidcSessionListScreenProps,
+	OidcSessionListScreenQueryStates,
+	OidcSessionListScreenSetQueryStates,
+	OidcSessionListScreenStats,
+} from "./OidcSessionListScreen/OidcSessionListScreen";
+export { idpConsoleOidcSessionsPageQueryInputs } from "./OidcSessionListScreen/OidcSessionListScreen";
 export type {
-	PasswordInputPageProps,
-	PasswordInputPageState,
-} from "./PasswordInputPage/PasswordInputPage";
-export { PasswordInputPage } from "./PasswordInputPage/PasswordInputPage";
+	PasswordInputScreenProps,
+	PasswordInputScreenState,
+} from "./PasswordInputScreen/PasswordInputScreen";
+
 export type {
-	PaymentManagementPageProps,
-	PaymentManagementPayment,
-	PaymentManagementQueryState,
-	PaymentManagementSummary,
-} from "./PaymentManagementPage/PaymentManagementPage";
-export { PaymentManagementPage } from "./PaymentManagementPage/PaymentManagementPage";
+	PaymentScreenProps,
+	PaymentRow,
+	PaymentQueryState,
+	PaymentSummary,
+} from "./PaymentScreen/PaymentScreen";
+
 export type {
-	PhoneVerifyPageProps,
-	PhoneVerifyPageState,
-} from "./PhoneVerifyPage/PhoneVerifyPage";
-export { PhoneVerifyPage } from "./PhoneVerifyPage/PhoneVerifyPage";
+	PhoneVerifyScreenProps,
+	PhoneVerifyScreenState,
+} from "./PhoneVerifyScreen/PhoneVerifyScreen";
+
 export type {
-	PolicyCreatePageAbilityOption,
-	PolicyCreatePageChangeHandlers,
-	PolicyCreatePageForm,
-	PolicyCreatePageProps,
-} from "./PolicyCreatePage/PolicyCreatePage";
-export { PolicyCreatePage } from "./PolicyCreatePage/PolicyCreatePage";
+	PolicyCreateScreenAbilityOption,
+	PolicyCreateScreenChangeHandlers,
+	PolicyCreateScreenForm,
+	PolicyCreateScreenProps,
+} from "./PolicyCreateScreen/PolicyCreateScreen";
+
 export type {
-	PolicyDetailPageAbility,
-	PolicyDetailPagePolicy,
-	PolicyDetailPageProps,
-} from "./PolicyDetailPage/PolicyDetailPage";
-export { PolicyDetailPage } from "./PolicyDetailPage/PolicyDetailPage";
+	PolicyDetailScreenAbility,
+	PolicyDetailScreenPolicy,
+	PolicyDetailScreenProps,
+} from "./PolicyDetailScreen/PolicyDetailScreen";
+
 export type {
-	PolicyEditPagePolicy,
-	PolicyEditPageProps,
-} from "./PolicyEditPage/PolicyEditPage";
-export { PolicyEditPage } from "./PolicyEditPage/PolicyEditPage";
-export type { PolicyListPageProps } from "./PolicyListPage/PolicyListPage";
-export { PolicyListPage } from "./PolicyListPage/PolicyListPage";
-export type { ResetPasswordPageProps } from "./ResetPasswordPage/ResetPasswordPage";
-export { ResetPasswordPage } from "./ResetPasswordPage/ResetPasswordPage";
-export type { RoleAbilityActionListPageProps } from "./RoleAbilityActionListPage/RoleAbilityActionListPage";
-export { RoleAbilityActionListPage } from "./RoleAbilityActionListPage/RoleAbilityActionListPage";
-export type { RoleAbilitySubjectListPageProps } from "./RoleAbilitySubjectListPage/RoleAbilitySubjectListPage";
-export { RoleAbilitySubjectListPage } from "./RoleAbilitySubjectListPage/RoleAbilitySubjectListPage";
-export type { RoleCreatePageProps } from "./RoleCreatePage/RoleCreatePage";
-export { RoleCreatePage } from "./RoleCreatePage/RoleCreatePage";
+	PolicyEditScreenPolicy,
+	PolicyEditScreenProps,
+} from "./PolicyEditScreen/PolicyEditScreen";
+
+export type { PolicyListScreenProps } from "./PolicyListScreen/PolicyListScreen";
+
+export type { ResetPasswordScreenProps } from "./ResetPasswordScreen/ResetPasswordScreen";
+
+export type { RoleAbilityActionListScreenProps } from "./RoleAbilityActionListScreen/RoleAbilityActionListScreen";
+
+export type { RoleAbilitySubjectListScreenProps } from "./RoleAbilitySubjectListScreen/RoleAbilitySubjectListScreen";
+
+export type { RoleCreateScreenProps } from "./RoleCreateScreen/RoleCreateScreen";
+
 export type {
-	RoleDetailPagePolicy,
-	RoleDetailPagePolicyAssignment,
-	RoleDetailPageProps,
-	RoleDetailPageRole,
-} from "./RoleDetailPage/RoleDetailPage";
-export { RoleDetailPage } from "./RoleDetailPage/RoleDetailPage";
-export type { RoleEditPageProps } from "./RoleEditPage/RoleEditPage";
-export { RoleEditPage } from "./RoleEditPage/RoleEditPage";
+	RoleDetailScreenPolicy,
+	RoleDetailScreenPolicyAssignment,
+	RoleDetailScreenProps,
+	RoleDetailScreenRole,
+} from "./RoleDetailScreen/RoleDetailScreen";
+
+export type { RoleEditScreenProps } from "./RoleEditScreen/RoleEditScreen";
+
 export type {
-	RoleListPageProps,
-	RoleListPageQueryStates,
-	RoleListPageSetQueryStates,
-} from "./RoleListPage/RoleListPage";
-export { RoleListPage } from "./RoleListPage/RoleListPage";
+	RoleListScreenProps,
+	RoleListScreenQueryStates,
+	RoleListScreenSetQueryStates,
+} from "./RoleListScreen/RoleListScreen";
+
 export type {
 	RoutineActivityFormItem,
-	RoutineCreatePageProps,
+	RoutineCreateScreenProps,
 	RoutineTaskCandidate,
-} from "./RoutineCreatePage/RoutineCreatePage";
-export { RoutineCreatePage } from "./RoutineCreatePage/RoutineCreatePage";
+} from "./RoutineCreateScreen/RoutineCreateScreen";
+
 export type {
-	RoutineDetailPageActivity,
-	RoutineDetailPageProgram,
-	RoutineDetailPageProps,
-	RoutineDetailPageRoutine,
-} from "./RoutineDetailPage/RoutineDetailPage";
-export { RoutineDetailPage } from "./RoutineDetailPage/RoutineDetailPage";
-export type { RoutineEditPageProps } from "./RoutineEditPage/RoutineEditPage";
-export { RoutineEditPage } from "./RoutineEditPage/RoutineEditPage";
+	RoutineDetailScreenActivity,
+	RoutineDetailScreenProgram,
+	RoutineDetailScreenProps,
+	RoutineDetailScreenRoutine,
+} from "./RoutineDetailScreen/RoutineDetailScreen";
+
+export type { RoutineEditScreenProps } from "./RoutineEditScreen/RoutineEditScreen";
+
 export type {
-	RoutineListPageProps,
-	RoutineListPageQueryStates,
-	RoutineListPageSetQueryStates,
-} from "./RoutineListPage/RoutineListPage";
-export {
-	adminRoutinesPageQueryInputs,
-	RoutineListPage,
-} from "./RoutineListPage/RoutineListPage";
+	RoutineListScreenProps,
+	RoutineListScreenQueryStates,
+	RoutineListScreenSetQueryStates,
+} from "./RoutineListScreen/RoutineListScreen";
+export { adminRoutinesPageQueryInputs } from "./RoutineListScreen/RoutineListScreen";
 export type {
-	SecurityPolicyFormPageFormState,
-	SecurityPolicyFormPagePolicy,
-	SecurityPolicyFormPageProps,
-	SecurityPolicyFormPageSubmitInput,
-} from "./SecurityPolicyFormPage/SecurityPolicyFormPage";
-export { SecurityPolicyFormPage } from "./SecurityPolicyFormPage/SecurityPolicyFormPage";
+	SecurityPolicyFormScreenFormState,
+	SecurityPolicyFormScreenPolicy,
+	SecurityPolicyFormScreenProps,
+	SecurityPolicyFormScreenSubmitInput,
+} from "./SecurityPolicyFormScreen/SecurityPolicyFormScreen";
+
 export type {
 	ServiceDocumentFormDraft,
 	ServiceDocumentFormMode,
-	ServiceDocumentListPageProps,
-	ServiceDocumentListPageQueryStates,
-	ServiceDocumentListPageSetQueryStates,
-} from "./ServiceDocumentListPage/ServiceDocumentListPage";
-export { ServiceDocumentListPage } from "./ServiceDocumentListPage/ServiceDocumentListPage";
-export type { SessionCheckPageProps } from "./SessionCheckPage/SessionCheckPage";
-export { SessionCheckPage } from "./SessionCheckPage/SessionCheckPage";
+	ServiceDocumentListScreenProps,
+	ServiceDocumentListScreenQueryStates,
+	ServiceDocumentListScreenSetQueryStates,
+} from "./ServiceDocumentListScreen/ServiceDocumentListScreen";
+
+export type { SessionCheckScreenProps } from "./SessionCheckScreen/SessionCheckScreen";
+
 export type {
-	SignUpPageProps,
-	SignUpPageState,
-} from "./SignUpPage/SignUpPage";
-export { SignUpPage } from "./SignUpPage/SignUpPage";
-export type { SpaceCreatePageProps } from "./SpaceCreatePage/SpaceCreatePage";
-export { SpaceCreatePage } from "./SpaceCreatePage/SpaceCreatePage";
+	SignUpScreenProps,
+	SignUpScreenState,
+} from "./SignUpScreen/SignUpScreen";
+
+export type { SpaceCreateScreenProps } from "./SpaceCreateScreen/SpaceCreateScreen";
+
 export type {
-	SpaceListPageProps,
-	SpaceListPageQueryStates,
-	SpaceListPageSetQueryStates,
-} from "./SpaceListPage/SpaceListPage";
-export {
-	adminSpacesPageQueryInputs,
-	SpaceListPage,
-} from "./SpaceListPage/SpaceListPage";
+	SpaceListScreenProps,
+	SpaceListScreenQueryStates,
+	SpaceListScreenSetQueryStates,
+} from "./SpaceListScreen/SpaceListScreen";
+export { adminSpacesPageQueryInputs } from "./SpaceListScreen/SpaceListScreen";
 export type {
 	StaticTranslationForm,
 	StaticTranslationLanguageCode,
-	StaticTranslationListPageProps,
-	StaticTranslationListPageQueryStates,
-	StaticTranslationListPageSetQueryStates,
-} from "./StaticTranslationListPage/StaticTranslationListPage";
-export {
-	adminStaticTranslationsPageQueryInputs,
-	StaticTranslationListPage,
-} from "./StaticTranslationListPage/StaticTranslationListPage";
+	StaticTranslationListScreenProps,
+	StaticTranslationListScreenQueryStates,
+	StaticTranslationListScreenSetQueryStates,
+} from "./StaticTranslationListScreen/StaticTranslationListScreen";
+export { adminStaticTranslationsPageQueryInputs } from "./StaticTranslationListScreen/StaticTranslationListScreen";
 export type {
-	SubjectDetailPageField,
-	SubjectDetailPageProps,
-	SubjectDetailPageSubject,
-} from "./SubjectDetailPage/SubjectDetailPage";
-export { SubjectDetailPage } from "./SubjectDetailPage/SubjectDetailPage";
+	SubjectDetailScreenField,
+	SubjectDetailScreenProps,
+	SubjectDetailScreenSubject,
+} from "./SubjectDetailScreen/SubjectDetailScreen";
+
 export type {
-	SubjectListPageProps,
-	SubjectListPageQueryStates,
-	SubjectListPageSetQueryStates,
-} from "./SubjectListPage/SubjectListPage";
-export {
-	adminSubjectsPageQueryInputs,
-	SubjectListPage,
-} from "./SubjectListPage/SubjectListPage";
-export type { TaskCreatePageProps } from "./TaskCreatePage/TaskCreatePage";
-export { TaskCreatePage } from "./TaskCreatePage/TaskCreatePage";
+	SubjectListScreenProps,
+	SubjectListScreenQueryStates,
+	SubjectListScreenSetQueryStates,
+} from "./SubjectListScreen/SubjectListScreen";
+export { adminSubjectsPageQueryInputs } from "./SubjectListScreen/SubjectListScreen";
+export type { TaskCreateScreenProps } from "./TaskCreateScreen/TaskCreateScreen";
+
 export type {
-	TaskExerciseDetailPageExercise,
-	TaskExerciseDetailPageProps,
-	TaskExerciseDetailPageRoutine,
-} from "./TaskExerciseDetailPage/TaskExerciseDetailPage";
-export { TaskExerciseDetailPage } from "./TaskExerciseDetailPage/TaskExerciseDetailPage";
-export type { TaskExerciseEditPageProps } from "./TaskExerciseEditPage/TaskExerciseEditPage";
-export { TaskExerciseEditPage } from "./TaskExerciseEditPage/TaskExerciseEditPage";
+	TaskExerciseDetailScreenExercise,
+	TaskExerciseDetailScreenProps,
+	TaskExerciseDetailScreenRoutine,
+} from "./TaskExerciseDetailScreen/TaskExerciseDetailScreen";
+
+export type { TaskExerciseEditScreenProps } from "./TaskExerciseEditScreen/TaskExerciseEditScreen";
+
 export type {
-	TaskListPageProps,
-	TaskListPageQueryStates,
-	TaskListPageSetQueryStates,
-} from "./TaskListPage/TaskListPage";
-export {
-	adminTasksPageQueryInputs,
-	TaskListPage,
-} from "./TaskListPage/TaskListPage";
-export type { TemplateCreatePageProps } from "./TemplateCreatePage/TemplateCreatePage";
-export { TemplateCreatePage } from "./TemplateCreatePage/TemplateCreatePage";
+	TaskListScreenProps,
+	TaskListScreenQueryStates,
+	TaskListScreenSetQueryStates,
+} from "./TaskListScreen/TaskListScreen";
+export { adminTasksPageQueryInputs } from "./TaskListScreen/TaskListScreen";
+export type { TemplateCreateScreenProps } from "./TemplateCreateScreen/TemplateCreateScreen";
+
 export type {
-	TemplateDetailPageProps,
-	TemplateDetailPageSendTestResult,
-	TemplateDetailPageTemplate,
-} from "./TemplateDetailPage/TemplateDetailPage";
-export { TemplateDetailPage } from "./TemplateDetailPage/TemplateDetailPage";
-export type { TemplateEditPageProps } from "./TemplateEditPage/TemplateEditPage";
-export { TemplateEditPage } from "./TemplateEditPage/TemplateEditPage";
+	TemplateDetailScreenProps,
+	TemplateDetailScreenSendTestResult,
+	TemplateDetailScreenTemplate,
+} from "./TemplateDetailScreen/TemplateDetailScreen";
+
+export type { TemplateEditScreenProps } from "./TemplateEditScreen/TemplateEditScreen";
+
 export type {
-	TemplateListPageProps,
-	TemplateListPageQueryStates,
-	TemplateListPageSetQueryStates,
-} from "./TemplateListPage/TemplateListPage";
-export {
-	adminTemplatesPageQueryInputs,
-	TemplateListPage,
-} from "./TemplateListPage/TemplateListPage";
+	TemplateListScreenProps,
+	TemplateListScreenQueryStates,
+	TemplateListScreenSetQueryStates,
+} from "./TemplateListScreen/TemplateListScreen";
+export { adminTemplatesPageQueryInputs } from "./TemplateListScreen/TemplateListScreen";
 export type {
 	TenantAccessRequestCreateForm,
 	TenantAccessRequestCreateOption,
-	TenantAccessRequestCreatePageProps,
-} from "./TenantAccessRequestCreatePage/TenantAccessRequestCreatePage";
-export { TenantAccessRequestCreatePage } from "./TenantAccessRequestCreatePage/TenantAccessRequestCreatePage";
-export type { TenantAccessRequestMyListPageProps } from "./TenantAccessRequestMyListPage/TenantAccessRequestMyListPage";
-export { TenantAccessRequestMyListPage } from "./TenantAccessRequestMyListPage/TenantAccessRequestMyListPage";
+	TenantAccessRequestCreateScreenProps,
+} from "./TenantAccessRequestCreateScreen/TenantAccessRequestCreateScreen";
+
+export type { TenantAccessRequestMyListScreenProps } from "./TenantAccessRequestMyListScreen/TenantAccessRequestMyListScreen";
+
 export type {
 	TenantAccessRequestReviewDetail,
-	TenantAccessRequestReviewDetailPageProps,
-} from "./TenantAccessRequestReviewDetailPage/TenantAccessRequestReviewDetailPage";
-export { TenantAccessRequestReviewDetailPage } from "./TenantAccessRequestReviewDetailPage/TenantAccessRequestReviewDetailPage";
-export type { TenantAccessRequestReviewListPageProps } from "./TenantAccessRequestReviewListPage/TenantAccessRequestReviewListPage";
-export { TenantAccessRequestReviewListPage } from "./TenantAccessRequestReviewListPage/TenantAccessRequestReviewListPage";
-export { TenantSelectPage } from "./TenantSelectPage/TenantSelectPage";
-export type { TimelineCreatePageProps } from "./TimelineCreatePage/TimelineCreatePage";
-export { TimelineCreatePage } from "./TimelineCreatePage/TimelineCreatePage";
+	TenantAccessRequestReviewDetailScreenProps,
+} from "./TenantAccessRequestReviewDetailScreen/TenantAccessRequestReviewDetailScreen";
+
+export type { TenantAccessRequestReviewListScreenProps } from "./TenantAccessRequestReviewListScreen/TenantAccessRequestReviewListScreen";
+
+export type { TimelineCreateScreenProps } from "./TimelineCreateScreen/TimelineCreateScreen";
+
 export type {
-	TimelineDetailPageProps,
-	TimelineDetailPageSessionRow,
-	TimelineDetailPageTimeline,
-} from "./TimelineDetailPage/TimelineDetailPage";
-export { TimelineDetailPage } from "./TimelineDetailPage/TimelineDetailPage";
-export type { TimelineEditPageProps } from "./TimelineEditPage/TimelineEditPage";
-export { TimelineEditPage } from "./TimelineEditPage/TimelineEditPage";
+	TimelineDetailScreenProps,
+	TimelineDetailScreenSessionRow,
+	TimelineDetailScreenTimeline,
+} from "./TimelineDetailScreen/TimelineDetailScreen";
+
+export type { TimelineEditScreenProps } from "./TimelineEditScreen/TimelineEditScreen";
+
 export type {
-	TimelineListPageProps,
-	TimelineListPageQueryStates,
-	TimelineListPageSetQueryStates,
-} from "./TimelineListPage/TimelineListPage";
-export {
-	adminTimelinesPageQueryInputs,
-	TimelineListPage,
-} from "./TimelineListPage/TimelineListPage";
+	TimelineListScreenProps,
+	TimelineListScreenQueryStates,
+	TimelineListScreenSetQueryStates,
+} from "./TimelineListScreen/TimelineListScreen";
+export { adminTimelinesPageQueryInputs } from "./TimelineListScreen/TimelineListScreen";
 export type {
-	TimelineSessionCreatePageProps,
-	TimelineSessionPageCycleType,
-	TimelineSessionPageDayOfWeek,
-	TimelineSessionPageSessionType,
-} from "./TimelineSessionCreatePage/TimelineSessionCreatePage";
-export { TimelineSessionCreatePage } from "./TimelineSessionCreatePage/TimelineSessionCreatePage";
+	TimelineSessionCreateScreenProps,
+	TimelineSessionScreenCycleType,
+	TimelineSessionScreenDayOfWeek,
+	TimelineSessionScreenSessionType,
+} from "./TimelineSessionCreateScreen/TimelineSessionCreateScreen";
+
 export type {
-	TimelineSessionDetailPageProgramRow,
-	TimelineSessionDetailPageProps,
-	TimelineSessionDetailPageSession,
-} from "./TimelineSessionDetailPage/TimelineSessionDetailPage";
-export { TimelineSessionDetailPage } from "./TimelineSessionDetailPage/TimelineSessionDetailPage";
-export type { TimelineSessionEditPageProps } from "./TimelineSessionEditPage/TimelineSessionEditPage";
-export { TimelineSessionEditPage } from "./TimelineSessionEditPage/TimelineSessionEditPage";
+	TimelineSessionDetailScreenProgramRow,
+	TimelineSessionDetailScreenProps,
+	TimelineSessionDetailScreenSession,
+} from "./TimelineSessionDetailScreen/TimelineSessionDetailScreen";
+
+export type { TimelineSessionEditScreenProps } from "./TimelineSessionEditScreen/TimelineSessionEditScreen";
+
 export type {
-	TimelineSessionProgramCreatePageProps,
+	TimelineSessionProgramCreateScreenProps,
 	TimelineSessionProgramPickerOption,
 	TimelineSessionProgramRoutinePreviewItem,
-} from "./TimelineSessionProgramCreatePage/TimelineSessionProgramCreatePage";
-export { TimelineSessionProgramCreatePage } from "./TimelineSessionProgramCreatePage/TimelineSessionProgramCreatePage";
+} from "./TimelineSessionProgramCreateScreen/TimelineSessionProgramCreateScreen";
+
 export type {
-	TimelineSessionProgramDetailPageData,
-	TimelineSessionProgramDetailPageExecutionItem,
-	TimelineSessionProgramDetailPageProps,
-} from "./TimelineSessionProgramDetailPage/TimelineSessionProgramDetailPage";
-export { TimelineSessionProgramDetailPage } from "./TimelineSessionProgramDetailPage/TimelineSessionProgramDetailPage";
-export type { TimelineSessionProgramEditPageProps } from "./TimelineSessionProgramEditPage/TimelineSessionProgramEditPage";
-export { TimelineSessionProgramEditPage } from "./TimelineSessionProgramEditPage/TimelineSessionProgramEditPage";
-export { UserCreatePage } from "./UserCreatePage/UserCreatePage";
+	TimelineSessionProgramDetailScreenData,
+	TimelineSessionProgramDetailScreenExecutionItem,
+	TimelineSessionProgramDetailScreenProps,
+} from "./TimelineSessionProgramDetailScreen/TimelineSessionProgramDetailScreen";
+
+export type { TimelineSessionProgramEditScreenProps } from "./TimelineSessionProgramEditScreen/TimelineSessionProgramEditScreen";
+
 export type {
-	UserDetailPagePolicy,
-	UserDetailPagePolicyAssignment,
-	UserDetailPageProps,
-	UserDetailPageUser,
-} from "./UserDetailPage/UserDetailPage";
-export { UserDetailPage } from "./UserDetailPage/UserDetailPage";
-export { UserEditPage } from "./UserEditPage/UserEditPage";
+	UserDetailScreenPolicy,
+	UserDetailScreenPolicyAssignment,
+	UserDetailScreenProps,
+	UserDetailScreenUser,
+} from "./UserDetailScreen/UserDetailScreen";
+
 export type {
-	UserListPageProps,
-	UserListPageQueryStates,
-	UserListPageSetQueryStates,
-	UserListPageStats,
-} from "./UserListPage/UserListPage";
-export { UserListPage } from "./UserListPage/UserListPage";
+	UserListScreenProps,
+	UserListScreenQueryStates,
+	UserListScreenSetQueryStates,
+	UserListScreenStats,
+} from "./UserListScreen/UserListScreen";
+
+export const AbilityDetailScreen = withScreenSurface(
+	AbilityDetailScreenBase,
+	"AbilityDetailScreen",
+);
+export const AbilityFormScreen = withScreenSurface(
+	AbilityFormScreenBase,
+	"AbilityFormScreen",
+);
+export const AbilityListScreen = withScreenSurface(
+	AbilityListScreenBase,
+	"AbilityListScreen",
+);
+export const AccountDetailScreen = withScreenSurface(
+	AccountDetailScreenBase,
+	"AccountDetailScreen",
+);
+export const AccountListScreen = withScreenSurface(
+	AccountListScreenBase,
+	"AccountListScreen",
+);
+export const ActionCreateScreen = withScreenSurface(
+	ActionCreateScreenBase,
+	"ActionCreateScreen",
+);
+export const ActionDetailScreen = withScreenSurface(
+	ActionDetailScreenBase,
+	"ActionDetailScreen",
+);
+export const ActionEditScreen = withScreenSurface(
+	ActionEditScreenBase,
+	"ActionEditScreen",
+);
+export const ActionListScreen = withScreenSurface(
+	ActionListScreenBase,
+	"ActionListScreen",
+);
+export const AccessDeniedScreen = withScreenSurface(
+	AccessDeniedScreenBase,
+	"AccessDeniedScreen",
+);
+export const AddressEmailVerifyScreen = withScreenSurface(
+	AddressEmailVerifyScreenBase,
+	"AddressEmailVerifyScreen",
+);
+export const AssetDetailScreen = withScreenSurface(
+	AssetDetailScreenBase,
+	"AssetDetailScreen",
+);
+export const AssetListScreen = withScreenSurface(
+	AssetListScreenBase,
+	"AssetListScreen",
+);
+export const AuthAuditLogListScreen = withScreenSurface(
+	AuthAuditLogListScreenBase,
+	"AuthAuditLogListScreen",
+);
+export const AuthErrorScreen = withScreenSurface(
+	AuthErrorScreenBase,
+	"AuthErrorScreen",
+);
+export const CourseScreen = withScreenSurface(
+	CourseScreenBase,
+	"CourseScreen",
+);
+export const DashboardScreen = withScreenSurface(
+	DashboardScreenBase,
+	"DashboardScreen",
+);
+export const EmailVerificationListScreen = withScreenSurface(
+	EmailVerificationListScreenBase,
+	"EmailVerificationListScreen",
+);
+export const ForgotPasswordScreen = withScreenSurface(
+	ForgotPasswordScreenBase,
+	"ForgotPasswordScreen",
+);
+export const GroundDetailScreen = withScreenSurface(
+	GroundDetailScreenBase,
+	"GroundDetailScreen",
+);
+export const GroundEditScreen = withScreenSurface(
+	GroundEditScreenBase,
+	"GroundEditScreen",
+);
+export const GroundsSelectScreen = withScreenSurface(
+	GroundsSelectScreenBase,
+	"GroundsSelectScreen",
+);
+export const IdentityDashboardScreen = withScreenSurface(
+	IdentityDashboardScreenBase,
+	"IdentityDashboardScreen",
+);
+export const InquiryCreateScreen = withScreenSurface(
+	InquiryCreateScreenBase,
+	"InquiryCreateScreen",
+);
+export const InquiryDetailScreen = withScreenSurface(
+	InquiryDetailScreenBase,
+	"InquiryDetailScreen",
+);
+export const InquiryEditScreen = withScreenSurface(
+	InquiryEditScreenBase,
+	"InquiryEditScreen",
+);
+export const InquiryListScreen = withScreenSurface(
+	InquiryListScreenBase,
+	"InquiryListScreen",
+);
+export const LoginScreen = withScreenSurface(LoginScreenBase, "LoginScreen");
+export const LoginRedirectScreen = withScreenSurface(
+	LoginRedirectScreenBase,
+	"LoginRedirectScreen",
+);
+export const OidcClientCreateScreen = withScreenSurface(
+	OidcClientCreateScreenBase,
+	"OidcClientCreateScreen",
+);
+export const OidcClientDetailScreen = withScreenSurface(
+	OidcClientDetailScreenBase,
+	"OidcClientDetailScreen",
+);
+export const OidcClientEditScreen = withScreenSurface(
+	OidcClientEditScreenBase,
+	"OidcClientEditScreen",
+);
+export const OidcClientListScreen = withScreenSurface(
+	OidcClientListScreenBase,
+	"OidcClientListScreen",
+);
+export const OidcInteractionScreen = withScreenSurface(
+	OidcInteractionScreenBase,
+	"OidcInteractionScreen",
+);
+export const OidcSessionListScreen = withScreenSurface(
+	OidcSessionListScreenBase,
+	"OidcSessionListScreen",
+);
+export const PasswordInputScreen = withScreenSurface(
+	PasswordInputScreenBase,
+	"PasswordInputScreen",
+);
+export const PaymentScreen = withScreenSurface(
+	PaymentScreenBase,
+	"PaymentScreen",
+);
+export const PhoneVerifyScreen = withScreenSurface(
+	PhoneVerifyScreenBase,
+	"PhoneVerifyScreen",
+);
+export const PolicyCreateScreen = withScreenSurface(
+	PolicyCreateScreenBase,
+	"PolicyCreateScreen",
+);
+export const PolicyDetailScreen = withScreenSurface(
+	PolicyDetailScreenBase,
+	"PolicyDetailScreen",
+);
+export const PolicyEditScreen = withScreenSurface(
+	PolicyEditScreenBase,
+	"PolicyEditScreen",
+);
+export const PolicyListScreen = withScreenSurface(
+	PolicyListScreenBase,
+	"PolicyListScreen",
+);
+export const ResetPasswordScreen = withScreenSurface(
+	ResetPasswordScreenBase,
+	"ResetPasswordScreen",
+);
+export const RoleAbilityActionListScreen = withScreenSurface(
+	RoleAbilityActionListScreenBase,
+	"RoleAbilityActionListScreen",
+);
+export const RoleAbilitySubjectListScreen = withScreenSurface(
+	RoleAbilitySubjectListScreenBase,
+	"RoleAbilitySubjectListScreen",
+);
+export const RoleCreateScreen = withScreenSurface(
+	RoleCreateScreenBase,
+	"RoleCreateScreen",
+);
+export const RoleDetailScreen = withScreenSurface(
+	RoleDetailScreenBase,
+	"RoleDetailScreen",
+);
+export const RoleEditScreen = withScreenSurface(
+	RoleEditScreenBase,
+	"RoleEditScreen",
+);
+export const RoleListScreen = withScreenSurface(
+	RoleListScreenBase,
+	"RoleListScreen",
+);
+export const RoutineCreateScreen = withScreenSurface(
+	RoutineCreateScreenBase,
+	"RoutineCreateScreen",
+);
+export const RoutineDetailScreen = withScreenSurface(
+	RoutineDetailScreenBase,
+	"RoutineDetailScreen",
+);
+export const RoutineEditScreen = withScreenSurface(
+	RoutineEditScreenBase,
+	"RoutineEditScreen",
+);
+export const RoutineListScreen = withScreenSurface(
+	RoutineListScreenBase,
+	"RoutineListScreen",
+);
+export const SecurityPolicyFormScreen = withScreenSurface(
+	SecurityPolicyFormScreenBase,
+	"SecurityPolicyFormScreen",
+);
+export const ServiceDocumentListScreen = withScreenSurface(
+	ServiceDocumentListScreenBase,
+	"ServiceDocumentListScreen",
+);
+export const SessionCheckScreen = withScreenSurface(
+	SessionCheckScreenBase,
+	"SessionCheckScreen",
+);
+export const SignUpScreen = withScreenSurface(SignUpScreenBase, "SignUpScreen");
+export const SpaceCreateScreen = withScreenSurface(
+	SpaceCreateScreenBase,
+	"SpaceCreateScreen",
+);
+export const SpaceListScreen = withScreenSurface(
+	SpaceListScreenBase,
+	"SpaceListScreen",
+);
+export const StaticTranslationListScreen = withScreenSurface(
+	StaticTranslationListScreenBase,
+	"StaticTranslationListScreen",
+);
+export const SubjectDetailScreen = withScreenSurface(
+	SubjectDetailScreenBase,
+	"SubjectDetailScreen",
+);
+export const SubjectListScreen = withScreenSurface(
+	SubjectListScreenBase,
+	"SubjectListScreen",
+);
+export const TaskCreateScreen = withScreenSurface(
+	TaskCreateScreenBase,
+	"TaskCreateScreen",
+);
+export const TaskExerciseDetailScreen = withScreenSurface(
+	TaskExerciseDetailScreenBase,
+	"TaskExerciseDetailScreen",
+);
+export const TaskExerciseEditScreen = withScreenSurface(
+	TaskExerciseEditScreenBase,
+	"TaskExerciseEditScreen",
+);
+export const TaskListScreen = withScreenSurface(
+	TaskListScreenBase,
+	"TaskListScreen",
+);
+export const TemplateCreateScreen = withScreenSurface(
+	TemplateCreateScreenBase,
+	"TemplateCreateScreen",
+);
+export const TemplateDetailScreen = withScreenSurface(
+	TemplateDetailScreenBase,
+	"TemplateDetailScreen",
+);
+export const TemplateEditScreen = withScreenSurface(
+	TemplateEditScreenBase,
+	"TemplateEditScreen",
+);
+export const TemplateListScreen = withScreenSurface(
+	TemplateListScreenBase,
+	"TemplateListScreen",
+);
+export const TenantAccessRequestCreateScreen = withScreenSurface(
+	TenantAccessRequestCreateScreenBase,
+	"TenantAccessRequestCreateScreen",
+);
+export const TenantAccessRequestMyListScreen = withScreenSurface(
+	TenantAccessRequestMyListScreenBase,
+	"TenantAccessRequestMyListScreen",
+);
+export const TenantAccessRequestReviewDetailScreen = withScreenSurface(
+	TenantAccessRequestReviewDetailScreenBase,
+	"TenantAccessRequestReviewDetailScreen",
+);
+export const TenantAccessRequestReviewListScreen = withScreenSurface(
+	TenantAccessRequestReviewListScreenBase,
+	"TenantAccessRequestReviewListScreen",
+);
+export const TenantSelectScreen = withScreenSurface(
+	TenantSelectScreenBase,
+	"TenantSelectScreen",
+);
+export const TimelineCreateScreen = withScreenSurface(
+	TimelineCreateScreenBase,
+	"TimelineCreateScreen",
+);
+export const TimelineDetailScreen = withScreenSurface(
+	TimelineDetailScreenBase,
+	"TimelineDetailScreen",
+);
+export const TimelineEditScreen = withScreenSurface(
+	TimelineEditScreenBase,
+	"TimelineEditScreen",
+);
+export const TimelineListScreen = withScreenSurface(
+	TimelineListScreenBase,
+	"TimelineListScreen",
+);
+export const TimelineSessionCreateScreen = withScreenSurface(
+	TimelineSessionCreateScreenBase,
+	"TimelineSessionCreateScreen",
+);
+export const TimelineSessionDetailScreen = withScreenSurface(
+	TimelineSessionDetailScreenBase,
+	"TimelineSessionDetailScreen",
+);
+export const TimelineSessionEditScreen = withScreenSurface(
+	TimelineSessionEditScreenBase,
+	"TimelineSessionEditScreen",
+);
+export const TimelineSessionProgramCreateScreen = withScreenSurface(
+	TimelineSessionProgramCreateScreenBase,
+	"TimelineSessionProgramCreateScreen",
+);
+export const TimelineSessionProgramDetailScreen = withScreenSurface(
+	TimelineSessionProgramDetailScreenBase,
+	"TimelineSessionProgramDetailScreen",
+);
+export const TimelineSessionProgramEditScreen = withScreenSurface(
+	TimelineSessionProgramEditScreenBase,
+	"TimelineSessionProgramEditScreen",
+);
+export const UserCreateScreen = withScreenSurface(
+	UserCreateScreenBase,
+	"UserCreateScreen",
+);
+export const UserDetailScreen = withScreenSurface(
+	UserDetailScreenBase,
+	"UserDetailScreen",
+);
+export const UserEditScreen = withScreenSurface(
+	UserEditScreenBase,
+	"UserEditScreen",
+);
+export const UserListScreen = withScreenSurface(
+	UserListScreenBase,
+	"UserListScreen",
+);

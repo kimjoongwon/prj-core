@@ -508,11 +508,11 @@ export const AssetBrowser = observer(
 										leftInputs: visibleLeftInputs,
 										emptyMessage,
 									}}
-										rows={assets}
-										totalCount={totalCount}
-										state={gridState}
-										isLoading={isLoading}
-									/>
+									rows={assets}
+									totalCount={totalCount}
+									state={gridState}
+									isLoading={isLoading}
+								/>
 							</div>
 						</div>
 					)}

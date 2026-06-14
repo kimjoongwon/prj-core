@@ -14,13 +14,13 @@
 
 - 기본 패턴: `pure screen + thin route container`
 - page role: `collection`
-- reusable target: `CourseManagementPage`
-- screen component path: `packages/fe-ui/src/screen/CourseManagementPage/CourseManagementPage.tsx`
+- reusable target: `CourseScreen`
+- screen component path: `packages/fe-ui/src/screen/CourseScreen/CourseScreen.tsx`
 - route는 현재 섹션(`courses`) 선택, Orval Course API 응답 변환, query state 전달, section routing, Timeline routing을 소유합니다.
 
 ## API 호출
 
-현재 route는 `useCourseManagementPageData`를 통해 Orval 생성 Course hook을 호출하고, API 응답을 `CourseManagementPage` 표시 row와 query state로 변환합니다.
+현재 route는 `useCourseData`를 통해 Orval 생성 Course hook을 호출하고, API 응답을 `CourseScreen` 표시 row와 query state로 변환합니다.
 
 | 시점 | API | Orval hook | 설명 | 상태 |
 |------|-----|------------|------|------|
@@ -35,7 +35,7 @@
 | Stage 2 target | `COURSE-S2-BE-001` ~ `COURSE-S2-BE-004` |
 | Stage 3 target | `COURSE-S3-API-001`, `COURSE-S3-FE-001` |
 
-route는 `useGetCourses`의 `isLoading`/`isFetching`/`isError` 상태를 `queryState`로 전달합니다. `CourseManagementConsole`은 loading/refreshing/error/empty 상태를 표 영역에 렌더링하고, API response는 Course display row로 변환해 전달합니다.
+route는 `useGetCourses`의 `isLoading`/`isFetching`/`isError` 상태를 `queryState`로 전달합니다. `CourseConsole`은 loading/refreshing/error/empty 상태를 표 영역에 렌더링하고, API response는 Course display row로 변환해 전달합니다.
 
 ## 이벤트 핸들러
 
@@ -50,4 +50,4 @@ route는 `useGetCourses`의 `isLoading`/`isFetching`/`isError` 상태를 `queryS
 |------|------|--------|
 | 2026-05-09 | Course route를 Orval API 연동 및 query state 렌더링 완료 상태로 갱신 | codex |
 | 2026-05-09 | Stage 1 re-entry로 Course backend/API/Orval 계약과 Stage 2/3 필요 상태 기록 | orch-requirement |
-| 2026-05-09 | Course 목록 route scaffold와 CourseManagementPage 연결 추가 | codex |
+| 2026-05-09 | Course 목록 route scaffold와 CourseScreen 연결 추가 | codex |

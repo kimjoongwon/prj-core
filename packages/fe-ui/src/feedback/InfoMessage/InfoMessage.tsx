@@ -1,7 +1,6 @@
 import { cva } from "class-variance-authority";
 import type { ReactNode } from "react";
 import { Typography } from "../../data-display/Typography";
-import { HStack } from "../../rhythm/HStack/HStack";
 
 export interface InfoMessageProps {
 	/** 메시지 본문 */
@@ -92,12 +91,12 @@ export const InfoMessage = ({
 
 	return (
 		<div className={infoMessageVariants({ variant, className })}>
-			<HStack gap={8} alignItems="center">
+			<div className="flex gap-8 items-center">
 				<div className={iconVariants({ variant })}>{displayIcon}</div>
 				<Typography.Paragraph className={textVariants({ variant })} size="sm">
 					{message}
 				</Typography.Paragraph>
-			</HStack>
+			</div>
 		</div>
 	);
 };

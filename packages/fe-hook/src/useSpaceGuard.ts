@@ -5,6 +5,7 @@ import type {
 	UseSpaceGuardOptions,
 	UseSpaceGuardReturn,
 } from "@cocrepo/type";
+import { usePersistStore } from "@cocrepo/store";
 import { useEffect, useState } from "react";
 
 export type { UseSpaceGuardOptions, UseSpaceGuardReturn } from "@cocrepo/type";
@@ -16,7 +17,7 @@ export type { UseSpaceGuardOptions, UseSpaceGuardReturn } from "@cocrepo/type";
  *
  * @example
  * ```tsx
- * // apps/admin/src/hooks/useSpaceGuard.ts
+ * // packages/fe-hook/src/useSpaceGuard.ts
  * import { createUseSpaceGuard } from "@cocrepo/hook";
  * import { usePersistStore } from "../stores";
  *
@@ -80,3 +81,8 @@ export function createUseSpaceGuard<
 		};
 	};
 }
+
+export const useSpaceGuard = createUseSpaceGuard({
+	usePersistStore,
+	selectSpacePath: "/select-space",
+});

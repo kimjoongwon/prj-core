@@ -9,15 +9,15 @@ import {
 	useSyncPolicyAbilities,
 } from "@cocrepo/api/core/policies";
 import {
-	PolicyCreatePage,
-	type PolicyCreatePageAbilityOption,
+	PolicyCreateScreen,
+	type PolicyCreateScreenAbilityOption,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 
-export default observer(function PolicyCreatePageRoute() {
+export default observer(function PolicyCreateScreenRoute() {
 	const router = useRouter();
 	const state = useLocalObservable(() => ({
 		name: "",
@@ -90,34 +90,36 @@ export default observer(function PolicyCreatePageRoute() {
 	};
 
 	return (
-		<PolicyCreatePage
-			form={state}
-			abilities={abilities}
-			isSubmitting={isPending || isSyncingAbilities}
-			onClickBackButton={onClickBackButton}
-			onClickSubmitButton={onClickSubmitButton}
-			onChange={{
-				onChangeName: (value) => {
-					state.name = value;
-				},
-				onChangeDisplayName: (value) => {
-					state.displayName = value;
-				},
-				onChangeDescription: (value) => {
-					state.description = value;
-				},
-				onChangeIsSystem: (value) => {
-					state.isSystem = value;
-				},
-				onToggleAbility,
-			}}
-		/>
+		<>
+			<PolicyCreateScreen
+				form={state}
+				abilities={abilities}
+				isSubmitting={isPending || isSyncingAbilities}
+				onClickBackButton={onClickBackButton}
+				onClickSubmitButton={onClickSubmitButton}
+				onChange={{
+					onChangeName: (value) => {
+						state.name = value;
+					},
+					onChangeDisplayName: (value) => {
+						state.displayName = value;
+					},
+					onChangeDescription: (value) => {
+						state.description = value;
+					},
+					onChangeIsSystem: (value) => {
+						state.isSystem = value;
+					},
+					onToggleAbility,
+				}}
+			/>
+		</>
 	);
 });
 
 function mapAbilityOption(
 	ability: AbilityResponseDto,
-): PolicyCreatePageAbilityOption {
+): PolicyCreateScreenAbilityOption {
 	const subject =
 		ability.subject?.displayName || ability.subject?.name || "Subject";
 	const action =

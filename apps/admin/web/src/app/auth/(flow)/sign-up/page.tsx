@@ -9,7 +9,7 @@ import {
 import { REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import {
 	type SignUpFormField,
-	SignUpPage,
+	SignUpScreen,
 	type SignUpSpaceOption,
 } from "@cocrepo/ui";
 import type { AxiosError } from "axios";
@@ -288,21 +288,23 @@ const SignUpRoutePage = observer(() => {
 	};
 
 	return (
-		<SignUpPage
-			state={signUpRoutePage}
-			spaceOptions={spaceOptions}
-			isSpacesLoading={spacesQuery.isLoading}
-			isSpacesError={spacesQuery.isError}
-			onSubmitSignUpForm={onSubmitSignUpForm}
-			onChangeSpaceId={onChangeSpaceId}
-			onChangeEmail={onChangeEmail}
-			onChangePassword={onChangePassword}
-			onChangeConfirmPassword={onChangeConfirmPassword}
-			onChangeName={onChangeName}
-			onChangePhone={onChangePhone}
-			onChangeAddress={onChangeAddress}
-			onClickUseAnotherEmailButton={onClickUseAnotherEmailButton}
-		/>
+		<>
+			<SignUpScreen
+				state={signUpRoutePage}
+				spaceOptions={spaceOptions}
+				isSpacesLoading={spacesQuery.isLoading}
+				isSpacesError={spacesQuery.isError}
+				onSubmitSignUpForm={onSubmitSignUpForm}
+				onChangeSpaceId={onChangeSpaceId}
+				onChangeEmail={onChangeEmail}
+				onChangePassword={onChangePassword}
+				onChangeConfirmPassword={onChangeConfirmPassword}
+				onChangeName={onChangeName}
+				onChangePhone={onChangePhone}
+				onChangeAddress={onChangeAddress}
+				onClickUseAnotherEmailButton={onClickUseAnotherEmailButton}
+			/>
+		</>
 	);
 });
 

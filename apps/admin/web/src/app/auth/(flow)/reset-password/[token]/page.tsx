@@ -8,7 +8,7 @@ import {
 	useValidateResetToken,
 } from "@cocrepo/api/idp/password-reset";
 import { PASSWORD_RULES, type PasswordRule } from "@cocrepo/constant";
-import { ResetPasswordPage } from "@cocrepo/ui";
+import { ResetPasswordScreen } from "@cocrepo/ui";
 import type { AxiosError } from "axios";
 import {
 	type IReactionDisposer,
@@ -20,7 +20,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 
-type ResetPasswordPageParams = {
+type ResetPasswordScreenParams = {
 	token: string;
 };
 
@@ -202,7 +202,7 @@ class ResetPasswordRoutePageState {
 }
 
 const ResetPasswordRoutePage = observer(function ResetPasswordRoutePage() {
-	const { token } = useParams<ResetPasswordPageParams>();
+	const { token } = useParams<ResetPasswordScreenParams>();
 	const resetPasswordPage = useLocalObservable(
 		() => new ResetPasswordRoutePageState(),
 	);
@@ -241,10 +241,12 @@ const ResetPasswordRoutePage = observer(function ResetPasswordRoutePage() {
 	};
 
 	return (
-		<ResetPasswordPage
-			state={resetPasswordPage}
-			onSubmitResetPasswordForm={onSubmitResetPasswordForm}
-		/>
+		<>
+			<ResetPasswordScreen
+				state={resetPasswordPage}
+				onSubmitResetPasswordForm={onSubmitResetPasswordForm}
+			/>
+		</>
 	);
 });
 

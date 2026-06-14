@@ -6,10 +6,10 @@ import {
 	useGetTimelineById,
 } from "@cocrepo/api/core/timelines";
 import {
-	TimelineSessionCreatePage,
-	type TimelineSessionPageCycleType,
-	type TimelineSessionPageDayOfWeek,
-	type TimelineSessionPageSessionType,
+	TimelineSessionCreateScreen,
+	type TimelineSessionScreenCycleType,
+	type TimelineSessionScreenDayOfWeek,
+	type TimelineSessionScreenSessionType,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -27,12 +27,12 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 	const persistStore = usePersistStore();
 	const state = useLocalObservable(() => ({
 		name: "",
-		type: "ONE_TIME" as TimelineSessionPageSessionType,
+		type: "ONE_TIME" as TimelineSessionScreenSessionType,
 		description: "",
 		startDateTime: "",
 		endDateTime: "",
-		recurringDayOfWeek: null as TimelineSessionPageDayOfWeek | null,
-		repeatCycleType: "" as TimelineSessionPageCycleType | "",
+		recurringDayOfWeek: null as TimelineSessionScreenDayOfWeek | null,
+		repeatCycleType: "" as TimelineSessionScreenCycleType | "",
 		errors: {} as Record<string, string>,
 	}));
 
@@ -50,7 +50,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 	};
 
 	const onChangeTypeSelect = (value: string) => {
-		state.type = value as TimelineSessionPageSessionType;
+		state.type = value as TimelineSessionScreenSessionType;
 		state.startDateTime = "";
 		state.endDateTime = "";
 		state.recurringDayOfWeek = null;
@@ -78,7 +78,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 	};
 
 	const onChangeCycleTypeSelect = (value: string) => {
-		state.repeatCycleType = value as TimelineSessionPageCycleType;
+		state.repeatCycleType = value as TimelineSessionScreenCycleType;
 		delete state.errors.repeatCycleType;
 	};
 
@@ -156,31 +156,33 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 	};
 
 	return (
-		<TimelineSessionCreatePage
-			descriptionText={
-				timeline?.name ? `${timeline.name}에 세션을 등록합니다.` : undefined
-			}
-			contentLanguageCode={persistStore.contentLanguageCode}
-			name={state.name}
-			type={state.type}
-			description={state.description}
-			startDateTime={state.startDateTime}
-			endDateTime={state.endDateTime}
-			recurringDayOfWeek={state.recurringDayOfWeek}
-			repeatCycleType={state.repeatCycleType}
-			errors={state.errors}
-			isSubmitPending={isPending}
-			isSubmitDisabled={!state.name.trim()}
-			onChangeNameInput={onChangeNameInput}
-			onChangeTypeSelect={onChangeTypeSelect}
-			onChangeDescriptionTextArea={onChangeDescriptionTextArea}
-			onChangeStartDateTimeInput={onChangeStartDateTimeInput}
-			onChangeEndDateTimeInput={onChangeEndDateTimeInput}
-			onChangeDayOfWeekSelect={onChangeDayOfWeekSelect}
-			onChangeCycleTypeSelect={onChangeCycleTypeSelect}
-			onClickCancelButton={onClickCancelButton}
-			onClickSubmitButton={onClickSubmitButton}
-		/>
+		<>
+			<TimelineSessionCreateScreen
+				descriptionText={
+					timeline?.name ? `${timeline.name}에 세션을 등록합니다.` : undefined
+				}
+				contentLanguageCode={persistStore.contentLanguageCode}
+				name={state.name}
+				type={state.type}
+				description={state.description}
+				startDateTime={state.startDateTime}
+				endDateTime={state.endDateTime}
+				recurringDayOfWeek={state.recurringDayOfWeek}
+				repeatCycleType={state.repeatCycleType}
+				errors={state.errors}
+				isSubmitPending={isPending}
+				isSubmitDisabled={!state.name.trim()}
+				onChangeNameInput={onChangeNameInput}
+				onChangeTypeSelect={onChangeTypeSelect}
+				onChangeDescriptionTextArea={onChangeDescriptionTextArea}
+				onChangeStartDateTimeInput={onChangeStartDateTimeInput}
+				onChangeEndDateTimeInput={onChangeEndDateTimeInput}
+				onChangeDayOfWeekSelect={onChangeDayOfWeekSelect}
+				onChangeCycleTypeSelect={onChangeCycleTypeSelect}
+				onClickCancelButton={onClickCancelButton}
+				onClickSubmitButton={onClickSubmitButton}
+			/>
+		</>
 	);
 });
 

@@ -109,15 +109,15 @@
 
 - AiForm과 각 입력 묶음은 `Section + PageTitleBar` 표면을 사용해 서로 구분한다.
 
-## Surface / Elevation
+## SectionSurface / Elevation
 
 | 항목 | 결정 |
 |------|------|
-| PageSurface owner | 참조 route layout의 `layout.tsx` skeleton |
-| PageSurface 역할 | 문의 접수 본문 전체를 raised 레이어로 묶음 |
+| ScreenSurface owner | page/screen content owner |
+| ScreenSurface 역할 | 문의 접수 본문 전체를 raised 레이어로 묶음 |
 | SectionSurface 대상 | `AiForm` 추천 블록, 문의 입력 블록 |
 | SectionSurface padding | 기본 패딩 유지 |
-| 예외 | 없음. surface skeleton은 참조 route layout이 소유하고 `page.tsx`는 내부 콘텐츠만 채웁니다. |
+| 예외 | 없음. `layout.tsx`는 `Page` 구조만 소유하고 surface는 page/screen content owner가 명시합니다. |
 
 ## 페이지 상태
 
@@ -379,7 +379,7 @@
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/inquiries/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/inquiries/new/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
 - `page.tsx`는 입력, 검증, 생성/수정 폼 흐름만 담당합니다.
 
@@ -390,18 +390,18 @@
 - reusable target: `form`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
-- route는 create bootstrap, 고객 검색, AI fill, create mutation, 라우팅을 소유하고 `InquiryCreatePage`에는 props로 주입합니다.
+- route는 create bootstrap, 고객 검색, AI fill, create mutation, 라우팅을 소유하고 `InquiryCreateScreen`에는 props로 주입합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-03-30 | create bootstrap/고객 검색/AI fill/mutation/라우팅을 route container가 소유하고 `InquiryCreatePage`는 pure screen로 소비하도록 반영 | codex |
+| 2026-03-30 | create bootstrap/고객 검색/AI fill/mutation/라우팅을 route container가 소유하고 `InquiryCreateScreen`는 pure screen로 소비하도록 반영 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
-| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
-| 2026-03-15 | 문의 접수 spec에 `PageSurface`/`SectionSurface` ownership과 elevation 결정을 명시 | codex |
+| 2026-03-15 | SectionSurface owner와 elevation 규칙을 문서화 | codex |
+| 2026-03-15 | 문의 접수 spec에 `ScreenSurface`/`SectionSurface` ownership과 elevation 결정을 명시 | codex |
 | 2026-03-06 | feature 디렉토리를 features로 이관하고 경로 표기를 동기화 | codex |
 | 2026-02-25 | 초기 생성 | orch-requirement |
 | 2026-02-26 | AI 자동 분류 제안 기능 추가 | orch-screen-planner |

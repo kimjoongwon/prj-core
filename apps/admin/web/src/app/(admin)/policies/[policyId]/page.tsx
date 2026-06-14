@@ -12,9 +12,9 @@ import {
 	useSyncPolicyAbilities,
 } from "@cocrepo/api/core/policies";
 import {
-	PolicyDetailPage,
-	type PolicyDetailPageAbility,
-	type PolicyDetailPagePolicy,
+	PolicyDetailScreen,
+	type PolicyDetailScreenAbility,
+	type PolicyDetailScreenPolicy,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -23,7 +23,7 @@ import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default observer(function PolicyDetailPageRoute() {
+export default observer(function PolicyDetailScreenRoute() {
 	const { policyId } = useParams<{ policyId: string }>();
 	const router = useRouter();
 	const queryClient = useQueryClient();
@@ -101,37 +101,39 @@ export default observer(function PolicyDetailPageRoute() {
 	};
 
 	return (
-		<PolicyDetailPage
-			policy={policy ? mapPolicy(policy) : undefined}
-			abilities={abilities}
-			selectedAbilityIds={activeSelectedAbilityIds}
-			isLoading={isLoading}
-			isLoadingAbilities={isLoadingAbilities}
-			isEditingAbilities={isEditingAbilities}
-			hasChanges={hasChanges}
-			isDeleteModalOpen={isDeleteModalOpen}
-			isDeleting={isDeleting}
-			isSavingAbilities={isSavingAbilities}
-			onClickBackButton={onClickBackButton}
-			onClickEditButton={onClickEditButton}
-			onClickOpenDeleteModal={() => {
-				setIsDeleteModalOpen(true);
-			}}
-			onCloseDeleteModal={() => {
-				setIsDeleteModalOpen(false);
-			}}
-			onClickDeleteConfirm={() => {
-				deletePolicy({ policyId });
-			}}
-			onClickEditAbilitiesButton={onClickEditAbilitiesButton}
-			onClickCancelEditAbilitiesButton={onClickCancelEditAbilitiesButton}
-			onToggleAbility={onToggleAbility}
-			onClickSaveAbilitiesButton={onClickSaveAbilitiesButton}
-		/>
+		<>
+			<PolicyDetailScreen
+				policy={policy ? mapPolicy(policy) : undefined}
+				abilities={abilities}
+				selectedAbilityIds={activeSelectedAbilityIds}
+				isLoading={isLoading}
+				isLoadingAbilities={isLoadingAbilities}
+				isEditingAbilities={isEditingAbilities}
+				hasChanges={hasChanges}
+				isDeleteModalOpen={isDeleteModalOpen}
+				isDeleting={isDeleting}
+				isSavingAbilities={isSavingAbilities}
+				onClickBackButton={onClickBackButton}
+				onClickEditButton={onClickEditButton}
+				onClickOpenDeleteModal={() => {
+					setIsDeleteModalOpen(true);
+				}}
+				onCloseDeleteModal={() => {
+					setIsDeleteModalOpen(false);
+				}}
+				onClickDeleteConfirm={() => {
+					deletePolicy({ policyId });
+				}}
+				onClickEditAbilitiesButton={onClickEditAbilitiesButton}
+				onClickCancelEditAbilitiesButton={onClickCancelEditAbilitiesButton}
+				onToggleAbility={onToggleAbility}
+				onClickSaveAbilitiesButton={onClickSaveAbilitiesButton}
+			/>
+		</>
 	);
 });
 
-function mapAbility(ability: AbilityResponseDto): PolicyDetailPageAbility {
+function mapAbility(ability: AbilityResponseDto): PolicyDetailScreenAbility {
 	return {
 		id: ability.id,
 		name: ability.name,
@@ -141,7 +143,7 @@ function mapAbility(ability: AbilityResponseDto): PolicyDetailPageAbility {
 	};
 }
 
-function mapPolicy(policy: PolicyResponseDto): PolicyDetailPagePolicy {
+function mapPolicy(policy: PolicyResponseDto): PolicyDetailScreenPolicy {
 	return {
 		id: policy.id,
 		spaceId: policy.spaceId,

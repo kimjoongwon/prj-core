@@ -15,8 +15,8 @@
 - 기본 패턴: `pure screen + thin route container`
 - page role: `collection`
 - reusable target: `data-grid`
-- screen component path: `packages/fe-ui/src/screen/AssetListPage/AssetListPage.tsx`
-- route는 공통 `useAdminAssetBrowser()` hook을 통해 persist store hydrate/Space 선택 gate, query state, assets/folders 조회, folder/asset mutation을 소유합니다.
+- screen component path: `packages/fe-ui/src/screen/AssetListScreen/AssetListScreen.tsx`
+- route는 공통 `useAssetBrowser()` hook을 통해 persist store hydrate/Space 선택 gate, query state, assets/folders 조회, folder/asset mutation을 소유합니다.
 
 ## API 호출
 
@@ -48,7 +48,7 @@
 | 2026-04-28 | page role을 `collection`으로 갱신 | codex |
 | 2026-04-28 | DataGrid 공식 재사용 타깃을 `data-grid`로 갱신 | codex |
 | 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-04-01 | `/assets` route의 조회/변경 책임을 `useAdminAssetBrowser` 공통 hook으로 통합하고 UI는 `AssetBrowser` feature 재사용으로 전환 | codex |
-| 2026-03-29 | `AssetListPage` pure screen와 thin route container 구조로 전환하고 persist store/API/query state 책임을 route로 이동 | codex |
-| 2026-03-26 | 브라우저 wrapper의 zero-padding 예시를 제거하고 기본 `Surface` 여백 기준으로 정정 | codex |
+| 2026-04-01 | `/assets` route의 조회/변경 책임을 `useAssetBrowser` 공통 hook으로 통합하고 UI는 `AssetBrowser` feature 재사용으로 전환 | codex |
+| 2026-03-29 | `AssetListScreen` pure screen와 thin route container 구조로 전환하고 persist store/API/query state 책임을 route로 이동 | codex |
+| 2026-03-26 | 브라우저 wrapper의 zero-padding 예시를 제거하고 기본 `SectionSurface` 여백 기준으로 정정 | codex |
 | 2026-03-21 | 에셋 관리 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

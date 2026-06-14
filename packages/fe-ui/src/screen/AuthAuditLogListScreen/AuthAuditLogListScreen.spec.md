@@ -1,0 +1,63 @@
+# AuthAuditLogListScreen ui 기획서
+
+> 생성일: 2026-03-26
+> 타입: ui
+> 위치: packages/fe-ui/src/screen/AuthAuditLogListScreen/AuthAuditLogListScreen.tsx
+
+## 역할
+
+로그인 감사 로그 목록 화면의 pure screen 컴포넌트입니다.
+조회, query state, 통계 fetch는 route thin container가 소유하고 이 파일은 stats 카드와 grid 조합만 담당합니다.
+
+## 디자인 스케치
+
+```text
+AuthAuditLogListScreen
+- VStack
+  - PageTitleBar
+  - StatsCard x3
+  - SectionSurface
+    - DataGrid
+```
+
+## 사용 컴포넌트
+
+| 컴포넌트 | 출처 | 사용 위치 |
+| --- | --- | --- |
+| `VStack` | `@cocrepo/ui` | 화면 조합 요소 |
+| `PageTitleBar` | `@cocrepo/ui` | 상단 제목, 설명, 주요 액션 표시 |
+| `StatsCard` | `@cocrepo/ui` | 상태/정보를 카드 또는 표시 단위로 표현 |
+| `CheckCircle` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `XCircle` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `Lock` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |
+| `SectionSurface` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
+| `DataGrid` | `@cocrepo/ui` | 목록/표 데이터 표시 |
+
+## 공개 계약
+
+| 항목 | 설명 |
+|------|------|
+| AuthAuditLogListScreenProps.logs | AuthAuditLogDto[] optional row 계약 |
+| AuthAuditLogListScreenStats | 감사 로그 통계 계약 |
+| AuthAuditLogListScreenProps | pure screen 입력 계약 |
+| idpConsoleAuthAuditLogsPageQueryInputs | route와 page가 공유하는 query input 정의 |
+| AuthAuditLogListScreen | 공개 계약 요소 |
+
+## 의존성
+
+| 모듈 | 용도 |
+|------|------|
+| @cocrepo/api | DTO row contract type source |
+| @cocrepo/type | 기능 구현 의존성 |
+| @cocrepo/ui | 기능 구현 의존성 |
+| lucide-react | 기능 구현 의존성 |
+| mobx-react-lite | 기능 구현 의존성 |
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-04-28 | 목록 row 계약을 Page 전용 view model 대신 Orval DTO optional props로 정리 | codex |
+| 2026-04-24 | 목록 검색과 페이지네이션 검색 조건 계약을 명시적으로 정리 | codex |
+| 2026-03-29 | 감사 로그 목록 화면의 조회/통계/검색 조건 책임 경계 정리 | codex |
+| 2026-03-26 | 초기 화면 기획 수립 | codex |

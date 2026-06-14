@@ -153,111 +153,117 @@ HeroUI 공식 문서(https://heroui.com) 스타일을 따릅니다.
   ```
 
 #### 간격 규칙
-- 신규 web 조합에서는 `@cocrepo/ui`의 `VStack`/`HStack`/`Spacer` semantic rhythm preset 우선
+- 신규 web 조합에서 `VStack`/`HStack`/`Spacer`는 `packages/fe-ui/src/screen`에서만 사용합니다.
 - 신규 mobile 조합에서는 `@cocrepo/mo-ui`의 `VStack`/`HStack` semantic rhythm preset 우선
 - 페이지 큰 블록: `gap="page"`
 - 섹션 내부 기본 리듬: `gap="section"`
 - 제목/본문/작은 블록: `gap="block"`
 - 버튼 행/짧은 수평 그룹: `gap="inline"`
 - 메타데이터/촘촘한 그룹: `gap="dense"`
-- raw `gap-*`, `space-y-*`, `space-x-*`는 legacy 유지나 CSS grid 같은 예외에서만 사용
+- route `page.tsx`, `layout.tsx`, feature, widget, form, detail 내부 정렬은 `div` + Tailwind flex/grid/gap class로 처리합니다.
 - 컴포넌트 내부 padding: `p-4` ~ `p-6`
 
-### Surface/엘리베이션 시스템 (Critical)
+### Layout / Surface / Rhythm 계층 (Critical)
 
-**페이지 콘텐츠는 반드시 Surface 컴포넌트로 감싸야 합니다.**
+**web 화면 계층은 `root app/layout.tsx = App(header/footer/leftAside/rightAside/main) + shell 직접 조립`, `page.tsx = route wiring`, `Page = children-only content boundary`, `screen = ScreenSurface + SectionSurface + rhythm`, `feature/widget = local Surface`로 고정합니다.**
 
-#### 엘리베이션 레벨
+#### 구조 계층
 
-| 레벨 | 이름 | Shadow | Background | 용도 |
-|------|------|--------|------------|------|
-| 0 | `flat` | none | bg-background | 페이지 배경 |
-| 1 | `raised` | sm | bg-content1 | 페이지 섹션 (PageSurface 기본) |
-| 2 | `elevated` | md | bg-content1 + border | 카드, DataGrid (SectionSurface 기본) |
-| 3 | `floating` | lg | bg-content2 | 드롭다운, 팝오버 |
-| 4 | `overlay` | xl | bg-content2 | 모달, 다이얼로그 |
+- web root `app/layout.tsx`는 `Providers > App(header/leftAside/main/footer)` 형태로 root app structure와 공통 shell을 직접 소유합니다.
+- `Providers`는 auth refresh, i18n, ability, Space bootstrap/guard, navigation scope checker 같은 전역 side effect를 소유합니다.
+- `App`은 root 구조 슬롯(`header`, `footer`, `leftAside`, `rightAside`, `main`)을 받습니다.
+- `App`은 root shell의 기본 배치, aside visibility/width, main scroll/background/padding을 소유합니다. `app/layout.tsx`에서 slot을 Tailwind wrapper로 감싸지 않습니다.
+- `Page`는 `children`만 받는 페이지 콘텐츠 boundary이며, `App`의 슬롯 시스템을 재사용하지 않습니다.
+- admin web route group/domain/auth `layout.tsx`는 만들지 않습니다. 필요한 shell은 root `app/layout.tsx`에서 package UI/feature로 직접 조립합니다.
+- `RouteFrame`처럼 pathname으로 route shell을 고르는 package feature를 만들지 않습니다.
+- app route 아래 `_layout`, `_components`, `components`, `hooks` 폴더를 만들지 않습니다.
+- React hook은 `packages/fe-hook`, React component는 `packages/fe-ui`에 둡니다.
+- `layout.tsx`에서 `ScreenSurface`, `SectionSurface`, `Surface`, `VStack`, `HStack`, `Spacer`를 import/use하지 않습니다.
+- `Section`, `FormSection`, `DetailSection`, `FormPage`, `DetailPage` 같은 별도 section/page wrapper는 만들거나 export하지 않습니다.
+- reusable UI/Hook 이름에는 `Admin`, `Management` 같은 불필요한 도메인 접두사를 붙이지 않습니다. `Admin` 의미가 반드시 필요하면 `packages/fe-ui/src/feature`의 app-specific feature로만 허용합니다.
 
-#### Surface 컴포넌트
+#### Surface 계층
 
-| 컴포넌트 | 용도 | 기본 elevation |
-|----------|------|----------------|
-| `Surface` | 기본 Surface | elevated |
-| `PageSurface` | 페이지 래퍼 (title, actions) | raised |
-| `SectionSurface` | 섹션 래퍼 (collapsible) | elevated |
+| 컴포넌트 | owner | 기본 variant | 용도 |
+|----------|-------|--------------|------|
+| `ScreenSurface` | `packages/fe-ui/src/screen` public screen boundary | `default` | screen outer 작업 영역 |
+| `SectionSurface` | `packages/fe-ui/src/screen` screen component | `secondary` | screen 안의 주요 작업 섹션 |
+| `Surface` | feature/widget | `tertiary` | 독립 local panel, table shell, console block |
+
+- `Surface`는 `@heroui/react`의 `Surface`를 wrapping하는 public primitive입니다.
+- `elevation`, `padding`, `SurfacePadding`, `ElevationLevel`, `Surface.elevation.ts` 기반 스타일 시스템을 다시 만들지 않습니다.
+- `ScreenSurface`와 `SectionSurface`는 screen 계층 전용 semantic wrapper입니다.
+- route `page.tsx` / route-local `_client.tsx`는 `ScreenSurface`, `SectionSurface`, `Surface`, rhythm primitive를 직접 import/use하지 않습니다.
+- screen implementation은 `SectionSurface`와 rhythm을 직접 소유하고, public screen export는 `ScreenSurface`를 소유합니다.
+- feature/widget은 local panel이 필요할 때만 `Surface`를 사용합니다. `ScreenSurface`/`SectionSurface`와 rhythm primitive는 사용하지 않습니다.
+- 반복 row/item/metric item은 기본적으로 `Surface` 반복 중첩 대신 border/divider/background/spacing으로 구분합니다.
+- modal, popover, drawer 같은 overlay는 overlay primitive가 자체 surface를 소유합니다.
 
 #### 사용 예시
 
 ```tsx
-import { Button } from "@heroui/react";
-import { Page, PageSurface, PageTitleBar, SectionSurface } from "@cocrepo/ui";
+// apps/admin/web/src/app/layout.tsx
+import { AccessGate, App, SideNavigation, TopBar } from "@cocrepo/ui";
 
-// 목록 페이지
-<Page
-  top={
-    <PageTitleBar
-      title="회원 목록"
-      description="시스템에 등록된 회원을 관리합니다."
-      actions={<Button>회원 등록</Button>}
-    />
-  }
->
-  <PageSurface>
+export default function RootLayout({ children }) {
+  return (
+    <Providers>
+      <App
+        header={<TopBar />}
+        leftAside={<SideNavigation />}
+        main={<AccessGate contents={children} />}
+      />
+    </Providers>
+  );
+}
+```
+
+```tsx
+// apps/admin/web/src/app/(admin)/courses/page.tsx
+import { useCourseData } from "@cocrepo/hook";
+import { CourseScreen } from "@cocrepo/ui";
+
+export default function CoursesPageRoute() {
+  const data = useCourseData();
+
+  return <CourseScreen {...data} activeSectionId="courses" />;
+}
+```
+
+```tsx
+// packages/fe-ui/src/screen/CourseScreen/CourseScreen.tsx
+import { PageTitleBar, SectionSurface, VStack } from "@cocrepo/ui";
+
+export const CourseScreen = () => (
+  <VStack gap="section">
+    <PageTitleBar title="수강 관리" />
     <SectionSurface>
-      <DataGrid ... />
+      <CourseConsole />
     </SectionSurface>
-  </PageSurface>
-</Page>
+  </VStack>
+);
 ```
 
-#### 중첩 규칙
+```tsx
+// packages/fe-ui/src/widget/course/CourseTableShell.tsx
+import { Surface } from "@cocrepo/ui";
 
-- 최대 2단계 중첩: `PageSurface` > `SectionSurface`
-- 내부 Surface는 외부보다 높은 elevation 사용
-- 동일 elevation 중첩 금지
-
-#### PageSurface 사용 위치 규칙
-
-**PageSurface는 Page 컴포넌트에서만 사용합니다. Layout에서 사용 금지!**
-
-**중요:** `Layout`, `Page`, `Section`, `DataGrid`의 슬롯에 검색/필터/액션 컴포넌트를 배치해도 배경이나 elevation은 자동 생성되지 않습니다. 화면에서 시각적 묶음이 필요하면 호출부에서 `PageSurface`, `SectionSurface` owner를 명시해야 합니다.
-
-```typescript
-// ❌ 금지 - Layout에서 PageSurface 사용
-// users/layout.tsx
-function UsersLayout({ children }) {
-  return (
-    <PageSurface title="회원 목록">  {/* Layout에서 사용 금지 */}
-      {children}
-    </PageSurface>
-  );
-}
-
-// ✅ 올바른 예시 - Page에서 PageSurface 사용
-// users/page.tsx (또는 _client.tsx)
-function UsersPage() {
-  return (
-    <Page
-      top={
-        <PageTitleBar
-          title="회원 목록"
-          description="시스템에 등록된 회원을 관리합니다."
-          actions={<Button>회원 등록</Button>}
-        />
-      }
-    >
-      <PageSurface>
-        <SectionSurface>...</SectionSurface>
-      </PageSurface>
-    </Page>
-  );
-}
+export const CourseTableShell = ({ children }) => (
+  <Surface className="p-5">
+    {children}
+  </Surface>
+);
 ```
 
-**이유:**
-- Layout과 Page 모두에서 PageSurface를 사용하면 타이틀이 중복됨
-- Layout은 구조적 래핑만 담당 (인증 체크, 공통 Provider 등)
-- 페이지별 title, description, actions는 각 Page 컴포넌트에서 처리
-- 하위 페이지(상세/수정/등록)가 다른 타이틀을 가질 때 유연하게 대응 가능
+#### Ownership 규칙
+
+- root `app/layout.tsx`: `App`, provider 진입점, 공통 shell 조립을 소유합니다. Slot에는 component만 전달하고 스타일 wrapper를 만들지 않습니다.
+- `Providers`: 전역 bootstrap/effect와 전역 overlay를 소유합니다.
+- route group/domain/auth `layout.tsx`: 만들지 않습니다. `Page`, surface, rhythm, shell 조립을 분산하지 않습니다.
+- `page.tsx` / route-local `_client.tsx`: API/state/router wiring만 소유합니다.
+- `screen`: `ScreenSurface`, `SectionSurface`, `VStack`/`HStack`/`Spacer` rhythm을 소유합니다.
+- `feature`: store/API/action wiring, shell slot에 들어가는 feature, local `Surface` panel만 소유합니다.
+- `widget`: 재사용 UI 조합과 local `Surface` panel만 소유합니다.
 
 ### 페이지 개발 규칙 (Critical)
 
@@ -266,15 +272,15 @@ function UsersPage() {
 ```
 기본 CSR 패턴
 apps/admin/web/src/app/[route]/
-├── page.tsx          # 클라이언트 컴포넌트 ("use client" + useQuery/useInfiniteQuery)
-└── hooks/            # 통합 훅 (필요 시)
+├── page.tsx          # 클라이언트 컴포넌트 ("use client" + Orval hook wiring)
+└── page.spec.md      # route/screen mapping contract
 
 SSR 예외 패턴
 apps/admin/web/src/app/[route]/
 ├── page.tsx          # 서버 컴포넌트 (Prefetch + HydrationBoundary)
 ├── _client.tsx       # 클라이언트 컴포넌트
 ├── _prefetch.ts      # Prefetch 설정
-└── hooks/            # 통합 훅 (필요 시)
+└── page.spec.md      # SSR 예외 승인 근거 포함
 ```
 
 | 파일 | 역할 |
@@ -282,6 +288,8 @@ apps/admin/web/src/app/[route]/
 | `page.tsx` | 기본값은 클라이언트 컴포넌트이며 Orval `useQuery`/`useInfiniteQuery` 훅으로 UI를 렌더링 |
 | `_client.tsx` | SSR 예외 페이지 또는 복잡한 분리 시에만 사용 |
 | `_prefetch.ts` | SSR 예외 페이지에서만 Orval 생성 `prefetchGetXXXQuery` 함수 사용 |
+
+route-local `hooks/`, `_components/`, `components` 폴더는 만들지 않습니다. 재사용 가능한 hook은 `packages/fe-hook/src`, React 컴포넌트는 `packages/fe-ui/src`에서 소유합니다.
 
 **판별 기준**
 - 기본값은 CSR입니다.
@@ -507,22 +515,21 @@ export const QuickActionList = () => <QuickActionRow />;
 
 | 컴포넌트 유형 | 올바른 위치 | 금지 위치 |
 |--------------|-------------|-----------|
-| Pure UI | `packages/fe-ui/src/components/ui/` | ❌ `apps/*/src/components/ui/` |
-| Widget | `packages/fe-ui/src/components/widget/` | ❌ `apps/*/src/components/widget/` |
-| **Feature** | `packages/fe-ui/src/components/feature/` | ❌ `apps/*/src/components/features/` |
-| Input | `packages/fe-ui/src/components/inputs/` | ❌ `apps/*/src/components/inputs/` |
-| Layout | `packages/fe-ui/src/components/layout/` | ❌ `apps/*/src/components/layout/` |
-| Cell | `packages/fe-ui/src/components/cell/` | ❌ `apps/*/src/components/cell/` |
+| Pure UI | `packages/fe-ui/src/{action,input,selection,data-display,feedback,overlay,navigation}/` | ❌ `apps/*/src/components/**` |
+| Widget | `packages/fe-ui/src/widget/` | ❌ `apps/*/src/components/widget/` |
+| **Feature** | `packages/fe-ui/src/feature/` | ❌ `apps/*/src/components/feature/` |
+| Layout | `packages/fe-ui/src/layout/` | ❌ `apps/*/src/components/layout/` |
+| Cell | `packages/fe-ui/src/cell/` | ❌ `apps/*/src/components/cell/` |
+| Hook | `packages/fe-hook/src/` | ❌ `apps/*/src/app/**/hooks`, `apps/*/src/hooks` |
 
 **앱(`apps/*`)에서 허용되는 것:**
 - `app/` - Next.js App Router 페이지
 - `stores/` - 앱별 Store 설정/주입 (공용 Store wiring 전용)
-- `hooks/` - 앱 전용 훅 (페이지 핸들러 등)
 - `providers/` - 앱 전용 Provider
 
 **페이지 단위 상태 규칙 (Critical):**
 - 단일 페이지/단일 라우트 도메인에서만 사용하는 상태는 `packages/fe-store`에 만들지 않습니다.
-- 이런 상태는 해당 페이지(`app/.../_client.tsx`, `hooks/`)의 로컬 state(`useState`/`useLocalObservable`)로 처리합니다.
+- 이런 상태는 해당 페이지(`app/.../page.tsx`, route-local `_client.tsx`)의 로컬 state(`useState`/`useLocalObservable`)로 처리하거나, 재사용 hook이면 `packages/fe-hook`으로 승격합니다.
 - `packages/fe-store`는 여러 도메인/여러 페이지에서 재사용되는 공용 상태만 포함합니다.
 
 ```typescript
@@ -826,7 +833,7 @@ export function findActiveAdminMenuItem(
 - mobile route: `apps/mobile/src/app/**/index.spec.md`
 - 담당 subagent: `orch-delivery`
 - 성격: 승인된 service delivery spec에서 파생된 page/route 실행 slice
-- 포함: 상위 service spec, 화면 계약, route wiring, component inventory, route-local hook/state, story/test/E2E, 해당 route가 소비하는 backend/API/foundation slice, route-level subagent 배정 매트릭스, 실행 그래프, 공유 파일 잠금, 승인 로그
+- 포함: 상위 service spec, 화면 계약, route wiring, component inventory, route-consumed hook/state, story/test/E2E, 해당 route가 소비하는 backend/API/foundation slice, route-level subagent 배정 매트릭스, 실행 그래프, 공유 파일 잠금, 승인 로그
 - backend/API/foundation의 최상위 설계와 build order는 service delivery spec이 소유하고 route spec은 관련 slice만 참조합니다.
 
 **Screen / Feature Planning Spec**
@@ -1246,7 +1253,7 @@ Route delivery spec은 승인된 service spec에서 생성된 page/route 실행 
 - 서비스 delivery spec의 기본 위치는 `docs/services/{service-name}.delivery.spec.md`입니다.
 - 서비스 delivery spec 승인 전에는 route/page spec 생성, subagent 실행, QA subagent 실행을 하지 않습니다.
 - 승인 후 `필수 페이지 / 라우트`와 `생성된 라우트 Spec` 기준으로 모든 필요한 `page.spec.md` 또는 `index.spec.md`를 생성/갱신합니다.
-- route delivery spec에는 `상위 서비스 Spec`을 기록하고, 해당 route의 화면 계약, route wiring, component inventory, route-local hook/state, E2E, backend/API/foundation slice만 명시합니다.
+- route delivery spec에는 `상위 서비스 Spec`을 기록하고, 해당 route의 화면 계약, route wiring, component inventory, route-consumed hook/state, E2E, backend/API/foundation slice만 명시합니다.
 - Screen/Feature planning spec은 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 명시합니다.
 - service spec에는 `DESIGN.md` 기반 서비스 전체 디자인 방향을 작성하고, 각 route spec에는 `디자인 정렬`, `화면 러프`, `리듬 / 레이아웃 계약`을 작성합니다.
 - 화면 러프는 component명이 없는 `시각 스냅샷`과 component/계층을 표시하는 `주석 와이어프레임`을 함께 작성합니다.
@@ -1263,7 +1270,7 @@ Route delivery spec은 승인된 service spec에서 생성된 page/route 실행 
 - foundation 계약은 `Hook`, `Toolkit`, `Type`, `Store / State` 인벤토리를 구조별로 작성합니다.
 - 각 backend inventory row는 재사용/수정/신규 여부, 대상 파일, 소스 담당 `agent_type`, 호출/Wiring 소비 `agent_type`, 관련 route spec을 드러내야 합니다.
 - reusable hook은 `fe-hook-agent`, shared toolkit은 `common-toolkit-builder`, shared type은 `common-type-builder`, shared store는 `fe-store-agent`가 소스 담당입니다.
-- route-local hook/util/type/state는 Web/Mobile 모두 generated route delivery spec의 `fe-route-agent` slice로 기록하고 별도 spec을 만들지 않습니다.
+- app route 아래 hook 파일은 만들지 않습니다. reusable 또는 테스트 대상 hook/helper는 `packages/fe-hook/src`에서 `fe-hook-agent`가 소유하고, 단순 inline route state/wiring만 generated route delivery spec의 `fe-route-agent` slice로 기록합니다.
 - endpoint row는 controller endpoint, operationId, DTO/schema, Orval hook/codegen 영향을 보여주고, application/service/repository row는 어떤 workflow/capability/persistence method가 쓰이는지 보여줍니다.
 - common schema row는 `common-schema-builder`, DTO row는 `be-dto-builder`/`be-query-dto-builder`, facade/gateway row는 `be-facade-builder`/`be-gateway-builder`처럼 실제 소스 담당 subagent가 보이도록 분리합니다.
 - `orch-delivery`는 승인된 service delivery spec과 연결된 route delivery spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.

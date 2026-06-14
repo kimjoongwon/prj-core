@@ -5,7 +5,6 @@ import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Logo } from "../../data-display/Logo/Logo";
 import { Typography } from "../../data-display/Typography";
-import { VStack } from "../../rhythm/VStack/VStack";
 
 export interface SplashScreenProps {
 	/** 메인 타이틀 @default "앱을 준비하고 있습니다" */
@@ -52,14 +51,14 @@ export const SplashScreen = observer(function SplashScreen({
 			{/* 메인 카드 */}
 			<Card className="relative z-10 mx-4 w-full max-w-md border-none shadow-2xl">
 				<Card.Content className="p-8">
-					<VStack className="items-center space-y-6">
+					<div className="flex flex-col items-center space-y-6">
 						{/* 로고 */}
 						<div className="animate-pulse">
 							<Logo className="text-3xl" />
 						</div>
 
 						{/* 타이틀과 서브타이틀 */}
-						<VStack className="items-center space-y-2 text-center">
+						<div className="flex flex-col items-center space-y-2 text-center">
 							<Typography.Heading level={4} className="text-foreground">
 								{title}
 							</Typography.Heading>
@@ -70,7 +69,7 @@ export const SplashScreen = observer(function SplashScreen({
 							>
 								{subtitle}
 							</Typography.Paragraph>
-						</VStack>
+						</div>
 
 						{/* 프로그레스 바 */}
 						{showProgress && (
@@ -108,7 +107,7 @@ export const SplashScreen = observer(function SplashScreen({
 						>
 							시스템을 초기화하는 중...
 						</Typography.Paragraph>
-					</VStack>
+					</div>
 				</Card.Content>
 			</Card>
 

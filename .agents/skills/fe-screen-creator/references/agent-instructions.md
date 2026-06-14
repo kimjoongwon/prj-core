@@ -72,6 +72,8 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
 3. screen component 내부에서 직접 API/라우팅/스토어/runtime context를 읽지 않음
    - 금지 예: Orval hooks, React Query hooks, `useRouter`, `useSearchParams`, `redirect`, `cookies`, `headers`, MobX store 직접 참조
 4. screen component는 `widget`, `feature`, `collection`, `detail`, `form`, `layout`, `rhythm`, `display`, `control` 등 하위 재사용 계층만 조합
+   - screen 구현은 `SectionSurface`와 `VStack`/`HStack`/`Spacer` rhythm을 소유합니다.
+   - screen public export boundary는 `ScreenSurface`를 소유합니다.
    - page 파일 안에 flow rail, metric grid, tab group, table, form section 같은 lower-layer JSX 컴포넌트를 직접 정의하면 실패 처리
    - 새 lower-layer 책임이 필요하면 해당 `feature`/`widget`/`form` 계층 파일로 먼저 분리하고 page는 import해서 조합
    - page 파일의 top-level JSX component 선언은 exported Screen component 1개만 허용
@@ -79,22 +81,24 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
    - 순수 계산 helper는 JSX를 반환하지 않는 경우에만 허용하며, helper가 2개 이상 필요하면 feature/widget로 승격을 재검토
    - One Component Per File 규칙을 따라 page 파일은 exported Screen component 하나만 소유합니다.
 5. `packages/fe-ui/src/screen` 아래에는 단순 namespace depth를 만들지 않음
-   - 금지 예: `src/screen/admin/MemberListPage.tsx`, `src/screen/idp/LoginPage.tsx`
-   - 허용 예: `src/screen/MemberListPage/MemberListPage.tsx`
+   - 금지 예: `src/screen/admin/MemberListScreen.tsx`, `src/screen/idp/LoginScreen.tsx`
+   - 허용 예: `src/screen/MemberListScreen/MemberListScreen.tsx`
 6. `packages/fe-ui/src/screen`의 screen component와 planning spec은 반드시 동일 이름 폴더에 함께 둠
-   - 허용 예: `src/screen/AddressEmailVerifyPage/AddressEmailVerifyPage.tsx`
-   - 허용 예: `src/screen/AddressEmailVerifyPage/AddressEmailVerifyPage.spec.md`
-   - 허용 예: `src/screen/AddressEmailVerifyPage/AddressEmailVerifyPage.stories.tsx`
-   - 금지 예: `src/screen/AddressEmailVerifyPage.tsx`
-   - 금지 예: `src/screen/AddressEmailVerifyPage.spec.md`
+   - 허용 예: `src/screen/AddressEmailVerifyScreen/AddressEmailVerifyScreen.tsx`
+   - 허용 예: `src/screen/AddressEmailVerifyScreen/AddressEmailVerifyScreen.spec.md`
+   - 허용 예: `src/screen/AddressEmailVerifyScreen/AddressEmailVerifyScreen.stories.tsx`
+   - 금지 예: `src/screen/AddressEmailVerifyScreen.tsx`
+   - 금지 예: `src/screen/AddressEmailVerifyScreen.spec.md`
 7. screen component props의 이벤트 이름은 `on[Event][UI]` 패턴 강제
 8. screen component가 route shell primitive를 직접 소유하지 않음
-   - 금지 예: route `Page`, `PageSurface`, `Section`, `SectionSurface` 책임 침범
+   - 금지 예: route `Page`, `Surface` 책임 침범
+   - 신규 screen implementation에서 `Surface`, 제거된 detail/form legacy surface wrapper 사용 금지
+   - `ScreenSurface`는 `packages/fe-ui/src/screen/index.ts`의 public screen export boundary에서만 적용
 9. screen component export는 named export만 허용
-   - 허용 예: `export const MembersListPage = observer(() => { ... })`
-   - 허용 예: `export const MembersListPage = observer((props: MembersListPageProps) => { ... })`
-   - 금지 예: `export default MembersListPage`
-   - 금지 예: `export const MembersListPage = MembersListPageClient;`
+   - 허용 예: `export const MembersListScreen = observer(() => { ... })`
+   - 허용 예: `export const MembersListScreen = observer((props: MembersListScreenProps) => { ... })`
+   - 금지 예: `export default MembersListScreen`
+   - 금지 예: `export const MembersListScreen = MembersListScreenClient;`
 10. `observer(function Name() { ... })` 패턴 금지
    - screen component는 반드시 `export const [ScreenName] = observer(() => { ... })` 또는 props를 받는 `observer((props) => { ... })` 형태로 선언
 11. `*Client`, `*Inner`, `*Base` 같은 trivial pass-through wrapper 금지
@@ -106,12 +110,12 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
    - planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, backend build order, foundation 세부 실행표, approval gate를 쓰지 않습니다.
 13. `packages/fe-ui/src/screen/index.ts` export 동기화 필수
 14. screen 이름은 semantic app-facing 이름을 우선 사용
-   - 기본 CRUD 어휘: `ListPage`, `DetailPage`, `CreatePage`, `EditPage`
-   - create/edit route가 같은 pure screen를 공유하면 `FormPage`를 허용
-   - 선택/검증/상호작용 화면은 `SessionCheckPage`, `TenantSelectPage`, `OidcInteractionPage` 같은 task 이름을 유지
+   - 기본 CRUD 어휘: `ListScreen`, `DetailScreen`, `CreateScreen`, `EditScreen`
+   - create/edit route가 같은 pure screen를 공유하면 `FormScreen`을 허용
+   - 선택/검증/상호작용 화면은 `SessionCheckScreen`, `TenantSelectScreen`, `OidcInteractionScreen` 같은 task 이름을 유지
    - 충돌 시 가장 작은 domain qualifier만 추가
    - 금지 예: `AdminAssetsAssetIdPage`, `IdpConsoleOidcClientsOidcClientIdPage`
-   - 허용 예: `AssetDetailPage`, `OidcClientDetailPage`, `RoleAbilityActionListPage`
+   - 허용 예: `AssetDetailScreen`, `OidcClientDetailScreen`, `RoleAbilityActionListScreen`
 
 ---
 
@@ -131,6 +135,8 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
 - 여러 feature/widget/form/collection/detail 조합
 - props 기반 분기 렌더링
 - 사용자 상호작용 이벤트를 props handler에 위임
+- public screen export boundary는 `ScreenSurface`로 screen outer 표면을 제공하고, screen implementation은 주요 섹션 표면을 `SectionSurface`로 선택
+- 내부 반복 item, 정보 row, 상태 박스는 추가 elevation 없이 border/divider/background/spacing으로 구분
 
 ### 1.3 screen component의 비책임
 
@@ -140,6 +146,7 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
 - store 생성/조회
 - 서버 cookie/header 접근
 - app-specific environment 분기
+- `Surface` primitive 또는 제거된 detail/form legacy surface wrapper 신규 사용
 
 ### 1.4 state contract 경계
 
@@ -181,20 +188,20 @@ packages/fe-ui/src/screen/[ScreenName]/
 - screen component 선언은 아래 두 패턴만 허용합니다.
 
 ```tsx
-export const MembersListPage = observer(() => {
+export const MembersListScreen = observer(() => {
   return <div />;
 });
 ```
 
 ```tsx
-export const MembersListPage = observer((props: MembersListPageProps) => {
+export const MembersListScreen = observer((props: MembersListScreenProps) => {
   return <div />;
 });
 ```
 
-- `observer(function MembersListPage() { ... })` 패턴은 금지합니다.
-- `const MembersListPage = ...; export { MembersListPage };` 같은 우회 export보다 직접 `export const`를 우선합니다.
-- `MembersListPageClient`, `MembersListPageInner`처럼 최종 export 직전 wrapper 이름을 만드는 패턴을 금지합니다.
+- `observer(function MembersListScreen() { ... })` 패턴은 금지합니다.
+- `const MembersListScreen = ...; export { MembersListScreen };` 같은 우회 export보다 직접 `export const`를 우선합니다.
+- `MembersListScreenClient`, `MembersListScreenInner`처럼 최종 export 직전 wrapper 이름을 만드는 패턴을 금지합니다.
 
 ### 2.3 planning spec 문서 규칙
 
@@ -304,7 +311,7 @@ rg -n '^## 화면 러프|^### Desktop|^### Tablet|^### Mobile|```text' "${TARGET
 - page는 pure presentational contract 유지
 - 앱 라우트 data/handler는 page props로 받음
 - lower-layer 조합을 우선하고 page 내부에서 비재사용 책임을 만들지 않음
-- 신규 `VStack`/`HStack`/`Spacer` 호출은 semantic rhythm preset(`page`, `section`, `block`, `inline`, `dense`)을 우선 사용
+- 신규 `VStack`/`HStack`/`Spacer` 호출은 screen 내부에서만 허용하고 semantic rhythm preset(`page`, `section`, `block`, `inline`, `dense`)을 우선 사용
 - 완료 기준은 `규칙 위반 0 + export 동기화 + Screen component spec 동기화`
 
 ---
@@ -312,26 +319,31 @@ rg -n '^## 화면 러프|^### Desktop|^### Tablet|^### Mobile|```text' "${TARGET
 ### 8. Pure Screen 표준 패턴
 
 ```tsx
-export interface MembersListPageProps {
+export interface MembersListScreenProps {
   members: Array<{ id: string; name: string }>;
   isEmpty: boolean;
   onClickCreateButton: () => void;
 }
 
-export function MembersListPage({
+export const MembersListScreen = observer(({
   members,
   isEmpty,
   onClickCreateButton,
-}: MembersListPageProps) {
+}: MembersListScreenProps) => {
   return (
-    <VStack gap="page">
-      <MembersSummaryWidget count={members.length} />
-      <MembersTableFeature members={members} />
-      {isEmpty ? <EmptyState /> : null}
-      <Button onPress={onClickCreateButton}>생성</Button>
+    <VStack gap="section">
+      <PageTitleBar
+        title="회원 목록"
+        actions={<Button onPress={onClickCreateButton}>생성</Button>}
+      />
+      <SectionSurface>
+        <MembersSummaryWidget count={members.length} />
+        <MembersTableFeature members={members} />
+        {isEmpty ? <EmptyState /> : null}
+      </SectionSurface>
     </VStack>
   );
-}
+});
 ```
 
 page가 직접 API 훅이나 router를 읽어야 할 것 같다면 구현하지 말고 아래 형식으로 차단합니다.

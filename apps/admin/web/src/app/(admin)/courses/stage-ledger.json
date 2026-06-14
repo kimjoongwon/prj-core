@@ -325,9 +325,9 @@
         "apps/admin/web/src/app/(admin)/course-offerings/page.tsx",
         "apps/admin/web/src/app/(admin)/enrollments/page.tsx",
         "apps/admin/web/src/app/(admin)/course-passes/page.tsx",
-        "apps/admin/web/src/app/(admin)/hooks/useCourseManagementPageData.ts",
-        "packages/fe-ui/src/feature/course-management/CourseManagementConsole/CourseManagementConsole.tsx",
-        "packages/fe-ui/src/widget/course-management/CourseTableStatePanel/CourseTableStatePanel.tsx"
+        "packages/fe-hook/src/useCourseData.ts",
+        "packages/fe-ui/src/feature/course/CourseConsole/CourseConsole.tsx",
+        "packages/fe-ui/src/widget/course/CourseTableStatePanel/CourseTableStatePanel.tsx"
       ],
       "verification": [
         "pnpm --filter=admin-web type-check"
@@ -349,7 +349,7 @@
       ],
       "expected_files": [
         "apps/admin/web/src/app/(admin)/courses/page.e2e.ts",
-        "apps/admin/web/src/app/(admin)/courses/course-management.e2e-fixtures.ts",
+        "apps/admin/web/src/app/(admin)/courses/course.e2e-fixtures.ts",
         "apps/admin/web/src/app/(admin)/course-offerings/page.e2e.ts",
         "apps/admin/web/src/app/(admin)/enrollments/page.e2e.ts",
         "apps/admin/web/src/app/(admin)/course-passes/page.e2e.ts"
@@ -367,8 +367,8 @@
   },
   "currentFrontendState": {
     "status": "api_integrated",
-    "reason": "Routes use Orval Course hooks through useCourseManagementPageData and render query state through CourseManagementConsole; E2E mocks remain only at the test boundary.",
+    "reason": "Routes use Orval Course hooks through useCourseData and render query state through CourseConsole; E2E mocks remain only at the test boundary.",
     "mockDataFile": null,
-    "apiHookFile": "apps/admin/web/src/app/(admin)/hooks/useCourseManagementPageData.ts"
+    "apiHookFile": "packages/fe-hook/src/useCourseData.ts"
   }
 }

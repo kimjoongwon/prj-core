@@ -1,33 +1,49 @@
-import {
-	DEFAULT_SURFACE_PADDING,
-	Surface,
-	type ElevationLevel,
-	type SurfacePadding,
-	type SurfaceProps,
-} from "../Surface";
+import type { ReactNode } from "react";
+import { Surface, type SurfaceProps } from "../Surface";
 
-export interface SectionSurfaceProps
-	extends Pick<SurfaceProps, "children" | "className"> {
-	/** 섹션 표면 엘리베이션 */
-	elevation?: ElevationLevel;
-	/** 섹션 표면 패딩 */
-	padding?: SurfacePadding;
-}
+export type SectionSurfaceProps = SurfaceProps & {
+	/** 섹션 상단 슬롯 */
+	top?: ReactNode;
+	/** 섹션 하단 슬롯 */
+	bottom?: ReactNode;
+	/** 섹션 좌측 슬롯 */
+	left?: ReactNode;
+	/** 섹션 우측 슬롯 */
+	right?: ReactNode;
+};
 
 /**
  * SectionSurface 컴포넌트
- * 섹션 콘텐츠가 올라갈 elevated 표면만 제공합니다.
- * 구조 배치와 제목 슬롯은 `Section`, `PageTitleBar`가 계속 담당합니다.
+ * screen component가 소유하는 주요 섹션 표면을 제공합니다.
+ * 제목/보조 슬롯 배치는 SectionSurface가 직접 담당합니다.
  */
 export const SectionSurface = ({
 	children,
 	className,
-	elevation = "elevated",
-	padding = DEFAULT_SURFACE_PADDING,
+	variant = "secondary",
+	top,
+	bottom,
+	left,
+	right,
+	...props
 }: SectionSurfaceProps) => {
+	const hasSectionSlots = Boolean(top || bottom || left || right);
+
 	return (
-		<Surface className={className} elevation={elevation} padding={padding}>
-			{children}
+		<Surface className={className} variant={variant} {...props}>
+			{hasSectionSlots ? (
+				<div className="flex w-full flex-col gap-4">
+					{top && <div>{top}</div>}
+					<div className="flex w-full gap-4">
+						{left && <div>{left}</div>}
+						{children && <div className="min-w-0 flex-1">{children}</div>}
+						{right && <div>{right}</div>}
+					</div>
+					{bottom && <div>{bottom}</div>}
+				</div>
+			) : (
+				children
+			)}
 		</Surface>
 	);
 };

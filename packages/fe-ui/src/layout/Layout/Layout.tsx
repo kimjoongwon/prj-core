@@ -6,7 +6,7 @@ import type { LayoutProps } from "./type";
 
 /**
  * Layout
- * - App > Layout > Page > Section 위계에서 Layout 영역을 담당합니다.
+ * - App > Layout > Page 위계에서 Layout 영역을 담당합니다.
  * - Header/Sidebar/Mobile UI는 슬롯으로 주입받아 배치만 수행합니다.
  */
 export const Layout = observer(function Layout({

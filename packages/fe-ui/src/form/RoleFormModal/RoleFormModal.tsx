@@ -6,8 +6,6 @@ import { Input } from "../../input/Input/Input";
 import { Button } from "../../action/Button/Button";
 import { Modal, useOverlayState } from "@heroui/react";
 import { TextArea } from "../../input/TextArea/TextArea";
-import { HStack } from "../../rhythm/HStack/HStack";
-import { VStack } from "../../rhythm/VStack/VStack";
 
 /**
  * 역할 폼 데이터 타입
@@ -212,7 +210,7 @@ export const RoleFormModal = observer(
 					<Modal.Backdrop><Modal.Container size="md" scroll="inside"><Modal.Dialog>
 					<Modal.Header>{modalTitle}</Modal.Header>
 					<Modal.Body>
-						<VStack gap={4}>
+						<div className="flex flex-col gap-4">
 							{/* 역할 식별자 */}
 							<Input
 								label="역할 식별자"
@@ -254,10 +252,10 @@ export const RoleFormModal = observer(
 								minRows={2}
 								maxRows={4}
 							/>
-						</VStack>
+						</div>
 					</Modal.Body>
 					<Modal.Footer>
-						<HStack gap={8} justifyContent="end">
+						<div className="flex gap-8 justify-end">
 							<Button variant="flat" onPress={onClose} isDisabled={loading}>
 								취소
 							</Button>
@@ -268,7 +266,7 @@ export const RoleFormModal = observer(
 							>
 								{submitButtonText}
 							</Button>
-						</HStack>
+						</div>
 					</Modal.Footer>
 				</Modal.Dialog></Modal.Container></Modal.Backdrop>
 			</Modal>

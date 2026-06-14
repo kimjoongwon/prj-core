@@ -3,6 +3,5 @@ export * from "./App";
 export * from "./Container/Container";
 export * from "./Layout";
 export * from "./Page";
-export * from "./Section";
 export * from "./Separator";
 export * from "./Toolbar";

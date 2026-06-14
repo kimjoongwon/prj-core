@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { mockCourseManagementApi } from "./course-management.e2e-fixtures";
+import { mockCourseApi } from "./course.e2e-fixtures";
 
 test.describe("Course 목록 페이지 @mock", () => {
 	test.beforeEach(async ({ page }) => {
-		await mockCourseManagementApi(page);
+		await mockCourseApi(page);
 		await page.goto("./courses");
 		await page.waitForLoadState("networkidle");
 	});
@@ -38,7 +38,7 @@ test.describe("Course 목록 페이지 empty state @mock", () => {
 	test("Course API 결과가 비어 있으면 empty state가 표시되어야 한다", async ({
 		page,
 	}) => {
-		await mockCourseManagementApi(page, { empty: true });
+		await mockCourseApi(page, { empty: true });
 		await page.goto("./courses");
 		await page.waitForLoadState("networkidle");
 

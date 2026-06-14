@@ -16,7 +16,7 @@
 - 기본 패턴: `page.tsx` 단일 CSR
 - page role: `detail`
 - API: `useGetRoleById`, `useDeleteRole`, `useGetPolicies`, `useGetRolePolicies`, `useSyncRolePolicies`
-- reusable target: `packages/fe-ui/src/screen/RoleDetailPage/RoleDetailPage.tsx`
+- reusable target: `packages/fe-ui/src/screen/RoleDetailScreen/RoleDetailScreen.tsx`
 
 ## API 호출
 
@@ -41,12 +41,12 @@
 | `onClickConfirmSavePoliciesButton` | `useSyncRolePolicies` 호출 |
 | `onClickDeleteConfirm` | `useDeleteRole` 호출 후 `/roles` 이동 |
 
-## Surface / Elevation
+## SectionSurface / Elevation
 
 | 항목 | 결정 |
 |------|------|
-| PageSurface owner | 상위 roles layout skeleton |
-| 본문 | `RoleDetailPage`가 `DetailPageSurface > DetailSectionCard`로 상세 영역 구성 |
+| ScreenSurface owner | page/screen content owner |
+| 본문 | `RoleDetailScreen`가 `ScreenSurface > SectionSurface`로 상세 영역 구성 |
 
 ## 변경 이력
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCreateSpace } from "@cocrepo/api/core/spaces";
-import { SpaceCreatePage } from "@cocrepo/ui";
+import { SpaceCreateScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -129,26 +129,28 @@ const AdminSpacesNewRoute = observer(() => {
 	};
 
 	return (
-		<SpaceCreatePage
-			name={state.name}
-			label={state.label}
-			address={state.address}
-			phone={state.phone}
-			email={state.email}
-			businessNo={state.businessNo}
-			contentLanguageCode={state.contentLanguageCode}
-			errors={state.errors}
-			isSubmitPending={isPending}
-			onChangeNameInput={onChangeNameInput}
-			onChangeLabelInput={onChangeLabelInput}
-			onChangeAddressInput={onChangeAddressInput}
-			onChangePhoneInput={onChangePhoneInput}
-			onChangeEmailInput={onChangeEmailInput}
-			onChangeBusinessNoInput={onChangeBusinessNoInput}
-			onChangeContentLanguageSelect={onChangeContentLanguageSelect}
-			onClickCancelButton={onClickCancelButton}
-			onClickSaveButton={onClickSaveButton}
-		/>
+		<>
+			<SpaceCreateScreen
+				name={state.name}
+				label={state.label}
+				address={state.address}
+				phone={state.phone}
+				email={state.email}
+				businessNo={state.businessNo}
+				contentLanguageCode={state.contentLanguageCode}
+				errors={state.errors}
+				isSubmitPending={isPending}
+				onChangeNameInput={onChangeNameInput}
+				onChangeLabelInput={onChangeLabelInput}
+				onChangeAddressInput={onChangeAddressInput}
+				onChangePhoneInput={onChangePhoneInput}
+				onChangeEmailInput={onChangeEmailInput}
+				onChangeBusinessNoInput={onChangeBusinessNoInput}
+				onChangeContentLanguageSelect={onChangeContentLanguageSelect}
+				onClickCancelButton={onClickCancelButton}
+				onClickSaveButton={onClickSaveButton}
+			/>
+		</>
 	);
 });
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useGetActions } from "@cocrepo/api/core/actions";
-import { ActionListPage } from "@cocrepo/ui";
+import { ActionListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -24,13 +24,15 @@ export default observer(function ActionsPageRoute() {
 	};
 
 	return (
-		<ActionListPage
-			actions={response?.data}
-			isLoading={isLoading}
-			queryStates={queryStates}
-			setQueryStates={setQueryStates}
-			onClickCreateButton={onClickCreateButton}
-			onClickActionRow={onClickActionRow}
-		/>
+		<>
+			<ActionListScreen
+				actions={response?.data}
+				isLoading={isLoading}
+				queryStates={queryStates}
+				setQueryStates={setQueryStates}
+				onClickCreateButton={onClickCreateButton}
+				onClickActionRow={onClickActionRow}
+			/>
+		</>
 	);
 });

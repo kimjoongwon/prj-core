@@ -6,8 +6,6 @@ import { Switch } from "../../../selection/Switch/Switch";
 import { Button } from "../../../action/Button/Button";
 import { Chip } from "../../../data-display/Chip/Chip";
 import { Spinner, Table, Tooltip } from "@heroui/react";
-import { HStack } from "../../../rhythm/HStack/HStack";
-import { VStack } from "../../../rhythm/VStack/VStack";
 
 /**
  * Ability 규칙 타입
@@ -125,19 +123,19 @@ export const AbilityRuleList = observer(
 		};
 
 		return (
-			<VStack gap={4}>
+			<div className="flex flex-col gap-4">
 					{/* 상단 액션 바 */}
 					{onAddRule && (
-						<HStack justifyContent="end" alignItems="center">
+						<div>
 							{loading ? <Spinner size="sm" /> : null}
 							<Button
 								color="primary"
-							startContent={<Plus className="h-4 w-4" />}
+							startContent={<Plus className="flex gap-2 items-center justify-end h-4 w-4" />}
 							onPress={onAddRule}
 						>
 							규칙 추가
 						</Button>
-					</HStack>
+					</div>
 				)}
 
 				{/* 규칙 테이블 */}
@@ -177,14 +175,14 @@ export const AbilityRuleList = observer(
 							>
 								<Table.Cell>{rule.priority}</Table.Cell>
 								<Table.Cell>
-									<HStack alignItems="center" gap={2}>
+									<div className="flex">
 										{rule.inverted && (
 											<Chip color="danger" size="sm" variant="flat">
 												거부
 											</Chip>
 										)}
 										<span className="truncate">{rule.name || "-"}</span>
-									</HStack>
+									</div>
 									</Table.Cell>
 									<Table.Cell>
 										<Tooltip>
@@ -248,7 +246,7 @@ export const AbilityRuleList = observer(
 									/>
 								</Table.Cell>
 									<Table.Cell>
-										<HStack gap={1}>
+										<div className="flex gap-1">
 											{onEditRule && (
 												<Tooltip>
 													<Tooltip.Trigger>
@@ -280,14 +278,14 @@ export const AbilityRuleList = observer(
 													<Tooltip.Content>삭제</Tooltip.Content>
 												</Tooltip>
 											)}
-									</HStack>
+									</div>
 								</Table.Cell>
 							</Table.Row>
 						))}
 					</Table.Body>
 				</Table.Content>
 			</Table>
-			</VStack>
+			</div>
 		);
 	},
 );

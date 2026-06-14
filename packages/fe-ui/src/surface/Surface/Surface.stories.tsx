@@ -2,62 +2,107 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../../action/Button/Button";
 import { Surface } from "./Surface";
 
-const meta: Meta<typeof Surface> = {
+const meta = {
 	title: "Surface/Surface",
 	component: Surface,
 	parameters: {
 		layout: "padded",
 	},
 	tags: ["autodocs"],
-};
+	args: {
+		children: null,
+	},
+} satisfies Meta<typeof Surface>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const FeaturePanel: Story = {
 	args: {
 		children: (
-			<div className="flex flex-col gap-3">
-				<h3 className="font-semibold text-lg">기본 Surface</h3>
-				<p className="text-muted text-sm">
-					콘텐츠가 올라가는 기본 표면입니다.
-				</p>
+			<div className="flex flex-col gap-4">
+				<div className="flex items-start justify-between gap-4">
+					<div className="min-w-0">
+						<p className="text-sm font-semibold">정산 요약</p>
+						<p className="mt-1 text-sm text-muted">
+							feature/widget 내부에서 독립 패널이 필요할 때 쓰는 표면입니다.
+						</p>
+					</div>
+					<Button size="sm" variant="flat">
+						내보내기
+					</Button>
+				</div>
+				<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+					<div className="rounded-lg border border-border bg-background/60 p-4">
+						<p className="text-xs text-muted">결제</p>
+						<p className="mt-2 text-xl font-semibold">128건</p>
+					</div>
+					<div className="rounded-lg border border-border bg-background/60 p-4">
+						<p className="text-xs text-muted">매출</p>
+						<p className="mt-2 text-xl font-semibold">₩8,240,000</p>
+					</div>
+					<div className="rounded-lg border border-border bg-background/60 p-4">
+						<p className="text-xs text-muted">환불</p>
+						<p className="mt-2 text-xl font-semibold">3건</p>
+					</div>
+				</div>
 			</div>
 		),
 	},
 };
 
-export const Raised: Story = {
-	args: {
-		elevation: "raised",
-		children: (
-			<div className="flex items-center justify-between gap-4">
+export const Variants: Story = {
+	render: () => (
+		<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+			<Surface variant="default">
+				<p className="text-sm font-semibold">default</p>
+				<p className="mt-1 text-sm text-muted">ScreenSurface의 기본 variant</p>
+			</Surface>
+			<Surface variant="secondary">
+				<p className="text-sm font-semibold">secondary</p>
+				<p className="mt-1 text-sm text-muted">SectionSurface의 기본 variant</p>
+			</Surface>
+			<Surface variant="tertiary">
+				<p className="text-sm font-semibold">tertiary</p>
+				<p className="mt-1 text-sm text-muted">Surface의 기본 variant</p>
+			</Surface>
+			<Surface variant="transparent">
+				<p className="text-sm font-semibold">transparent</p>
+				<p className="mt-1 text-sm text-muted">배경을 얇게 비우는 표면</p>
+			</Surface>
+		</div>
+	),
+};
+
+export const TableShell: Story = {
+	render: () => (
+		<Surface className="overflow-hidden p-0">
+			<div className="flex items-center justify-between border-border border-b px-5 py-4">
 				<div>
-					<h3 className="font-semibold text-lg">Raised</h3>
-					<p className="text-muted text-sm">
-						페이지 단위 배경에 사용하는 표면입니다.
-					</p>
+					<p className="text-sm font-semibold">최근 결제</p>
+					<p className="mt-1 text-xs text-muted">widget local table shell</p>
 				</div>
 				<Button size="sm" variant="flat">
-					액션
+					필터
 				</Button>
 			</div>
-		),
-	},
-};
-
-export const NoPadding: Story = {
-	args: {
-		padding: "none",
-		children: (
-			<div className="overflow-hidden rounded-xl">
-				<div className="border-b border-border px-6 py-4 font-medium">
-					패딩 없음
+			<div className="divide-y divide-border">
+				<div className="grid grid-cols-3 gap-4 px-5 py-3 text-sm">
+					<span>김하나</span>
+					<span className="text-muted">카드 결제</span>
+					<span className="text-right font-medium">₩120,000</span>
 				</div>
-				<div className="px-6 py-4 text-muted text-sm">
-					DataGrid처럼 내부 컴포넌트가 자체 패딩을 가지는 경우에 사용합니다.
+				<div className="grid grid-cols-3 gap-4 px-5 py-3 text-sm">
+					<span>박도윤</span>
+					<span className="text-muted">계좌 이체</span>
+					<span className="text-right font-medium">₩86,000</span>
+				</div>
+				<div className="grid grid-cols-3 gap-4 px-5 py-3 text-sm">
+					<span>이서연</span>
+					<span className="text-muted">카드 결제</span>
+					<span className="text-right font-medium">₩42,000</span>
 				</div>
 			</div>
-		),
-	},
+		</Surface>
+	),
 };

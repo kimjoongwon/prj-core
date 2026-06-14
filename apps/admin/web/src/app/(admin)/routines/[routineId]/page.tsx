@@ -10,7 +10,7 @@ import {
 	useDeleteRoutine,
 	useGetRoutine,
 } from "@cocrepo/api/core/routines";
-import { RoutineDetailPage } from "@cocrepo/ui";
+import { RoutineDetailScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
@@ -96,54 +96,56 @@ const AdminRoutinesDetailRoute = observer(() => {
 	const { mutate: deleteRoutine, isPending: isDeleting } = useDeleteRoutine();
 
 	return (
-		<RoutineDetailPage
-			routine={mappedRoutine}
-			isLoading={isLoading}
-			errorTitle={errorTitle}
-			errorDescription={errorDescription}
-			showRetryButton={Boolean(error && !isNotFound)}
-			isDeleteModalOpen={isDeleteModalOpen}
-			isDeleting={isDeleting}
-			onClickBackButton={() => {
-				router.push("/routines" as Route);
-			}}
-			onClickEditButton={() => {
-				router.push(`/routines/${routineId}/edit` as Route);
-			}}
-			onClickRetryButton={() => {
-				void refetch();
-			}}
-			onClickOpenDeleteModal={() => {
-				setIsDeleteModalOpen(true);
-			}}
-			onCloseDeleteModal={() => {
-				setIsDeleteModalOpen(false);
-			}}
-			onClickDeleteConfirm={() => {
-				deleteRoutine(
-					{ routineId },
-					{
-						onSuccess: () => {
-							toast.success("삭제 성공", {
-								description: "루틴이 삭제되었습니다.",
-							});
-							setIsDeleteModalOpen(false);
-							queryClient.invalidateQueries({
-								queryKey: getGetRoutinesQueryKey(),
-							});
-							router.push("/routines" as Route);
+		<>
+			<RoutineDetailScreen
+				routine={mappedRoutine}
+				isLoading={isLoading}
+				errorTitle={errorTitle}
+				errorDescription={errorDescription}
+				showRetryButton={Boolean(error && !isNotFound)}
+				isDeleteModalOpen={isDeleteModalOpen}
+				isDeleting={isDeleting}
+				onClickBackButton={() => {
+					router.push("/routines" as Route);
+				}}
+				onClickEditButton={() => {
+					router.push(`/routines/${routineId}/edit` as Route);
+				}}
+				onClickRetryButton={() => {
+					void refetch();
+				}}
+				onClickOpenDeleteModal={() => {
+					setIsDeleteModalOpen(true);
+				}}
+				onCloseDeleteModal={() => {
+					setIsDeleteModalOpen(false);
+				}}
+				onClickDeleteConfirm={() => {
+					deleteRoutine(
+						{ routineId },
+						{
+							onSuccess: () => {
+								toast.success("삭제 성공", {
+									description: "루틴이 삭제되었습니다.",
+								});
+								setIsDeleteModalOpen(false);
+								queryClient.invalidateQueries({
+									queryKey: getGetRoutinesQueryKey(),
+								});
+								router.push("/routines" as Route);
+							},
+							onError: (mutationError) => {
+								toast.danger("삭제 실패", {
+									description:
+										mutationError.message ||
+										"삭제 중 오류가 발생했습니다. 프로그램에서 사용 중인 루틴은 삭제할 수 없습니다.",
+								});
+							},
 						},
-						onError: (mutationError) => {
-							toast.danger("삭제 실패", {
-								description:
-									mutationError.message ||
-									"삭제 중 오류가 발생했습니다. 프로그램에서 사용 중인 루틴은 삭제할 수 없습니다.",
-							});
-						},
-					},
-				);
-			}}
-		/>
+					);
+				}}
+			/>
+		</>
 	);
 });
 

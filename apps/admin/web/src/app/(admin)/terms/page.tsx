@@ -16,8 +16,8 @@ import {
 import {
 	type ServiceDocumentFormDraft,
 	type ServiceDocumentFormMode,
-	ServiceDocumentListPage,
-	type ServiceDocumentListPageQueryStates,
+	ServiceDocumentListScreen,
+	type ServiceDocumentListScreenQueryStates,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -205,35 +205,37 @@ export default observer(function TermsPageRoute() {
 	};
 
 	return (
-		<ServiceDocumentListPage
-			documents={response?.data}
-			totalCount={response?.meta?.total ?? 0}
-			isLoading={isLoading}
-			isSubmitting={isSubmitting}
-			queryStates={queryStates}
-			setQueryStates={setQueryStates}
-			formMode={formMode}
-			draft={draft}
-			editingDocumentId={editingDocumentId}
-			onChangeSearchInput={onChangeSearchInput}
-			onChangeKindFilter={onChangeKindFilter}
-			onChangePlatformFilter={onChangePlatformFilter}
-			onChangeStatusFilter={onChangeStatusFilter}
-			onChangeLocaleFilter={onChangeLocaleFilter}
-			onChangeDraftField={onChangeDraftField}
-			onClickNewButton={onClickNewButton}
-			onClickCancelFormButton={onClickCancelFormButton}
-			onClickSubmitButton={onClickSubmitButton}
-			onClickEditButton={onClickEditButton}
-			onClickPublishButton={onClickPublishButton}
-			onClickArchiveButton={onClickArchiveButton}
-			onClickDeleteButton={onClickDeleteButton}
-		/>
+		<>
+			<ServiceDocumentListScreen
+				documents={response?.data}
+				totalCount={response?.meta?.total ?? 0}
+				isLoading={isLoading}
+				isSubmitting={isSubmitting}
+				queryStates={queryStates}
+				setQueryStates={setQueryStates}
+				formMode={formMode}
+				draft={draft}
+				editingDocumentId={editingDocumentId}
+				onChangeSearchInput={onChangeSearchInput}
+				onChangeKindFilter={onChangeKindFilter}
+				onChangePlatformFilter={onChangePlatformFilter}
+				onChangeStatusFilter={onChangeStatusFilter}
+				onChangeLocaleFilter={onChangeLocaleFilter}
+				onChangeDraftField={onChangeDraftField}
+				onClickNewButton={onClickNewButton}
+				onClickCancelFormButton={onClickCancelFormButton}
+				onClickSubmitButton={onClickSubmitButton}
+				onClickEditButton={onClickEditButton}
+				onClickPublishButton={onClickPublishButton}
+				onClickArchiveButton={onClickArchiveButton}
+				onClickDeleteButton={onClickDeleteButton}
+			/>
+		</>
 	);
 });
 
 function getServiceDocumentsParams(
-	queryStates: ServiceDocumentListPageQueryStates,
+	queryStates: ServiceDocumentListScreenQueryStates,
 ): GetServiceDocumentsParams {
 	return {
 		take: queryStates.take,

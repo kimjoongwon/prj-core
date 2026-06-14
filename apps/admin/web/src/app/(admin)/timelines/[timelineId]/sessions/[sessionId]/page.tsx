@@ -11,7 +11,7 @@ import {
 	useGetSessionById,
 } from "@cocrepo/api/core/timelines";
 import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
-import { TimelineSessionDetailPage } from "@cocrepo/ui";
+import { TimelineSessionDetailScreen } from "@cocrepo/ui";
 import { toast, useOverlayState } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -190,60 +190,64 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 			: "-";
 
 	return (
-		<TimelineSessionDetailPage
-			title={session?.name ?? "세션 상세"}
-			descriptionText={session?.timeline?.name}
-			session={
-				session
-					? {
-							name: session.name,
-							type: session.type,
-							typeLabel: getSessionTypeLabel(session.type),
-							typeColor: getSessionTypeColor(session.type),
-							recurringDayLabel: getDayLabel(
-								session.recurringDayOfWeek ?? null,
-							),
-							repeatCycleLabel: getCycleLabel(session.repeatCycleType ?? null),
-							startDateTime: session.startDateTime,
-							endDateTime: session.endDateTime,
-							description: session.description,
-							timelineName: session.timeline?.name,
-							timelineHref: `/timelines/${timelineId}` as Route,
-							createdAt: session.createdAt,
-						}
-					: undefined
-			}
-			programs={programs.map((program) => ({
-				id: program.id,
-				href: `/timelines/${timelineId}/sessions/${sessionId}/programs/${program.id}` as Route,
-				name: program.name,
-				routineName:
-					program.routineNameSnapshot ?? program.routine?.name ?? "-",
-				activityCountLabel: `${program.activityCount ?? 0}개`,
-				previewText: getProgramPreviewText(program),
-				instructorName: getInstructorName(program.instructorId),
-				isConnectionResolved: isConnectionResolved(program),
-				capacityLabel: `${program.capacity}명`,
-				levelLabel: program.level ?? "-",
-			}))}
-			totalPrograms={totalPrograms}
-			resolvedPrograms={resolvedPrograms}
-			unresolvedPrograms={unresolvedPrograms}
-			isDeleteSessionModalOpen={deleteSessionModal.isOpen}
-			isDeleteProgramModalOpen={deleteProgramModal.isOpen}
-			deleteProgramTargetName={state.deleteProgramTargetName}
-			isDeleteSessionPending={isDeletingSession}
-			isDeleteProgramPending={isDeletingProgram}
-			onClickEditButton={onClickEditButton}
-			onClickDeleteSessionButton={onClickDeleteSessionButton}
-			onClickDeleteSessionConfirmButton={onClickDeleteSessionConfirmButton}
-			onClickDeleteSessionCancelButton={deleteSessionModal.close}
-			onClickCreateProgramButton={onClickCreateProgramButton}
-			onClickEditProgramButton={onClickEditProgramButton}
-			onClickDeleteProgramButton={onClickDeleteProgramButton}
-			onClickDeleteProgramConfirmButton={onClickDeleteProgramConfirmButton}
-			onClickDeleteProgramCancelButton={deleteProgramModal.close}
-		/>
+		<>
+			<TimelineSessionDetailScreen
+				title={session?.name ?? "세션 상세"}
+				descriptionText={session?.timeline?.name}
+				session={
+					session
+						? {
+								name: session.name,
+								type: session.type,
+								typeLabel: getSessionTypeLabel(session.type),
+								typeColor: getSessionTypeColor(session.type),
+								recurringDayLabel: getDayLabel(
+									session.recurringDayOfWeek ?? null,
+								),
+								repeatCycleLabel: getCycleLabel(
+									session.repeatCycleType ?? null,
+								),
+								startDateTime: session.startDateTime,
+								endDateTime: session.endDateTime,
+								description: session.description,
+								timelineName: session.timeline?.name,
+								timelineHref: `/timelines/${timelineId}` as Route,
+								createdAt: session.createdAt,
+							}
+						: undefined
+				}
+				programs={programs.map((program) => ({
+					id: program.id,
+					href: `/timelines/${timelineId}/sessions/${sessionId}/programs/${program.id}` as Route,
+					name: program.name,
+					routineName:
+						program.routineNameSnapshot ?? program.routine?.name ?? "-",
+					activityCountLabel: `${program.activityCount ?? 0}개`,
+					previewText: getProgramPreviewText(program),
+					instructorName: getInstructorName(program.instructorId),
+					isConnectionResolved: isConnectionResolved(program),
+					capacityLabel: `${program.capacity}명`,
+					levelLabel: program.level ?? "-",
+				}))}
+				totalPrograms={totalPrograms}
+				resolvedPrograms={resolvedPrograms}
+				unresolvedPrograms={unresolvedPrograms}
+				isDeleteSessionModalOpen={deleteSessionModal.isOpen}
+				isDeleteProgramModalOpen={deleteProgramModal.isOpen}
+				deleteProgramTargetName={state.deleteProgramTargetName}
+				isDeleteSessionPending={isDeletingSession}
+				isDeleteProgramPending={isDeletingProgram}
+				onClickEditButton={onClickEditButton}
+				onClickDeleteSessionButton={onClickDeleteSessionButton}
+				onClickDeleteSessionConfirmButton={onClickDeleteSessionConfirmButton}
+				onClickDeleteSessionCancelButton={deleteSessionModal.close}
+				onClickCreateProgramButton={onClickCreateProgramButton}
+				onClickEditProgramButton={onClickEditProgramButton}
+				onClickDeleteProgramButton={onClickDeleteProgramButton}
+				onClickDeleteProgramConfirmButton={onClickDeleteProgramConfirmButton}
+				onClickDeleteProgramCancelButton={deleteProgramModal.close}
+			/>
+		</>
 	);
 });
 

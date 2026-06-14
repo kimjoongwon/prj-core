@@ -3,6 +3,7 @@
 import { DEFAULT_LANGUAGE, type LanguageCode } from "@cocrepo/constant";
 import { observer } from "mobx-react-lite";
 import {
+	Children,
 	cloneElement,
 	createContext,
 	isValidElement,
@@ -67,7 +68,7 @@ export function translateNode(node: ReactNode, t: Translate): ReactNode {
 	}
 
 	if (Array.isArray(node)) {
-		return node.map((child) => translateNode(child, t));
+		return Children.map(node, (child) => translateNode(child, t));
 	}
 
 	if (isValidElement<{ children?: ReactNode }>(node)) {

@@ -1,0 +1,158 @@
+"use client";
+
+import { SectionSurface, PageTitleBar, VStack } from "@cocrepo/ui";
+import { ArrowLeft, Save } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { Button } from "../../action/Button/Button";
+import { Input } from "../../input/Input/Input";
+import { TextArea } from "../../input/TextArea/TextArea";
+export interface RoleEditScreenProps {
+	roleName?: string;
+	roleDisplayName?: string;
+	isSystemRole: boolean;
+	displayName: string;
+	description: string;
+	displayNameError?: string;
+	isLoading: boolean;
+	isNotFound: boolean;
+	isSubmitPending: boolean;
+	onChangeDisplayNameInput: (value: string) => void;
+	onChangeDescriptionTextArea: (value: string) => void;
+	onClickBackButton: () => void;
+	onClickListButton: () => void;
+	onClickSubmitButton: () => void;
+}
+export const RoleEditScreen = observer(
+	({
+		roleName,
+		roleDisplayName,
+		isSystemRole,
+		displayName,
+		description,
+		displayNameError,
+		isLoading,
+		isNotFound,
+		isSubmitPending,
+		onChangeDisplayNameInput,
+		onChangeDescriptionTextArea,
+		onClickBackButton,
+		onClickListButton,
+		onClickSubmitButton,
+	}: RoleEditScreenProps) => {
+		if (isLoading) {
+			return (
+				<VStack gap="section" fullWidth>
+					<PageTitleBar title="역할 수정" description="로딩 중..." />
+
+					<SectionSurface>
+						<div className="flex items-center justify-center p-8">
+							<span className="text-muted">로딩 중...</span>
+						</div>
+					</SectionSurface>
+				</VStack>
+			);
+		}
+		if (isNotFound) {
+			return (
+				<VStack gap="section" fullWidth>
+					<PageTitleBar
+						title="역할 수정"
+						description="역할을 찾을 수 없습니다."
+					/>
+
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-muted">역할을 찾을 수 없습니다.</p>
+							<Button variant="flat" onPress={onClickListButton}>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</VStack>
+			);
+		}
+		if (isSystemRole) {
+			return (
+				<VStack gap="section" fullWidth>
+					<PageTitleBar
+						title="역할 수정"
+						description="시스템 역할은 수정할 수 없습니다."
+					/>
+
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-muted">시스템 역할은 수정할 수 없습니다.</p>
+							<Button variant="flat" onPress={onClickBackButton}>
+								상세로 돌아가기
+							</Button>
+						</div>
+					</SectionSurface>
+				</VStack>
+			);
+		}
+		return (
+			<VStack gap="section" fullWidth>
+				<PageTitleBar
+					title="역할 수정"
+					description={`${roleDisplayName || roleName || ""} 역할을 수정합니다.`}
+					actions={
+						<Button
+							variant="light"
+							startContent={<ArrowLeft className="h-4 w-4" />}
+							onPress={onClickBackButton}
+						>
+							상세로 돌아가기
+						</Button>
+					}
+				/>
+
+				<SectionSurface>
+					<VStack gap={4}>
+						<SectionSurface>
+							<div className="space-y-6">
+								<Input
+									label="역할 식별자"
+									value={roleName}
+									isReadOnly
+									isDisabled
+									description="역할 식별자는 수정할 수 없습니다."
+								/>
+								<Input
+									label="표시명"
+									placeholder="사용자 정의 역할"
+									value={displayName}
+									onValueChange={onChangeDisplayNameInput}
+									isInvalid={Boolean(displayNameError)}
+									errorMessage={displayNameError}
+									maxLength={50}
+									description="사용자에게 보여질 역할 이름입니다."
+								/>
+								<TextArea
+									label="설명"
+									placeholder="역할에 대한 설명을 입력하세요."
+									value={description}
+									onValueChange={onChangeDescriptionTextArea}
+									maxLength={200}
+									minRows={3}
+								/>
+								<div className="flex justify-end gap-2 pt-4">
+									<Button variant="flat" onPress={onClickBackButton}>
+										취소
+									</Button>
+									<Button
+										color="primary"
+										startContent={<Save className="h-4 w-4" />}
+										onPress={onClickSubmitButton}
+										isLoading={isSubmitPending}
+									>
+										저장
+									</Button>
+								</div>
+							</div>
+						</SectionSurface>
+					</VStack>
+				</SectionSurface>
+			</VStack>
+		);
+	},
+);

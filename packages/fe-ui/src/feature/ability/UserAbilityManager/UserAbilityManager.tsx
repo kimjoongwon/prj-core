@@ -8,8 +8,6 @@ import { Input } from "../../../input/Input/Input";
 import { Chip } from "../../../data-display/Chip/Chip";
 import { Typography } from "../../../data-display/Typography";
 import { AbilityFormModal } from "../../../form/AbilityFormModal";
-import { HStack } from "../../../rhythm/HStack/HStack";
-import { VStack } from "../../../rhythm/VStack/VStack";
 import { AbilityRuleList } from "../../../widget/ability/AbilityRuleList";
 import type { AbilityUser, UserAbilityManagerProps } from "./type";
 import { useUserAbilityManager } from "./useUserAbilityManager";
@@ -91,20 +89,20 @@ export const UserAbilityManager = observer(
 		return (
 			<Card className="w-full">
 				<Card.Content>
-					<VStack gap={6} fullWidth>
+					<div>
 						{/* 헤더 */}
-						<HStack alignItems="center" justifyContent="between" fullWidth>
+						<div className="flex">
 							<Typography type="h4" weight="normal">
 								사용자 예외 권한 관리
 							</Typography>
-						</HStack>
+						</div>
 
 						{/* 사용자 검색 영역 */}
-						<VStack gap={2} fullWidth>
+						<div className="flex flex-col">
 							<Input
 								label="사용자 검색"
 								placeholder="이름 또는 이메일로 검색..."
-								startContent={<Search className="h-4 w-4 text-muted" />}
+								startContent={<Search className="flex flex-col w-full gap-6 items-center justify-between h-4 w-4 text-muted" />}
 								value={searchQuery}
 								onValueChange={handleSearchQueryChange}
 								isDisabled={isSearching}
@@ -129,41 +127,41 @@ export const UserAbilityManager = observer(
 								>
 									{(user: AbilityUser) => (
 										<ListBox.Item key={user.id} id={user.id} textValue={user.name}>
-											<HStack alignItems="center" gap={8}>
+											<div className="flex">
 												<Avatar size="sm" className="flex-shrink-0">
 													<Avatar.Fallback>{user.name.slice(0, 1)}</Avatar.Fallback>
 												</Avatar>
-												<VStack gap={0}>
+												<div className="flex flex-col">
 													<span className="text-sm font-medium">{user.name}</span>
 													<span className="text-xs text-muted">
 														{user.email}
 													</span>
-												</VStack>
+												</div>
 												{user.roleDisplayName && (
 													<Chip size="sm" variant="flat" className="ml-auto">
 														{user.roleDisplayName}
 													</Chip>
 												)}
-											</HStack>
+											</div>
 										</ListBox.Item>
 									)}
 								</ListBox>
 							) : null}
-						</VStack>
+						</div>
 
 						{/* 선택된 사용자 정보 및 권한 목록 */}
 						{selectedUser ? (
-							<VStack gap={4} fullWidth>
+							<div className="flex flex-col">
 								{/* 선택된 사용자 정보 */}
-								<HStack alignItems="center" justifyContent="between" fullWidth>
-									<HStack alignItems="center" gap={12}>
+								<div className="flex">
+									<div className="flex">
 										<Avatar size="md">
 											<Avatar.Fallback>
 												<User className="h-5 w-5" />
 											</Avatar.Fallback>
 										</Avatar>
-										<VStack gap={0}>
-											<HStack alignItems="center" gap={8}>
+										<div className="flex flex-col">
+											<div className="flex">
 												<span className="text-base font-semibold">
 													{selectedUser.name}
 												</span>
@@ -172,12 +170,12 @@ export const UserAbilityManager = observer(
 														{selectedUser.roleDisplayName}
 													</Chip>
 												)}
-											</HStack>
+											</div>
 											<span className="text-sm text-muted">
 												{selectedUser.email}
 											</span>
-										</VStack>
-									</HStack>
+										</div>
+									</div>
 
 									<Button
 										color="primary"
@@ -186,7 +184,7 @@ export const UserAbilityManager = observer(
 									>
 										예외 추가
 									</Button>
-								</HStack>
+								</div>
 
 								{/* 구분선 */}
 								<div className="h-px w-full bg-border" />
@@ -199,7 +197,7 @@ export const UserAbilityManager = observer(
 								)}
 
 								{/* 예외 권한 목록 */}
-								<VStack gap={2} fullWidth>
+								<div className="flex flex-col">
 									<span className="text-sm font-medium text-muted">
 										예외 권한 목록 (Role 기본 권한을 덮어씀)
 									</span>
@@ -210,23 +208,23 @@ export const UserAbilityManager = observer(
 										onDeleteRule={handleDeleteAbility}
 										onToggleActive={handleToggleActive}
 									/>
-								</VStack>
-							</VStack>
+								</div>
+							</div>
 						) : (
 							/* 사용자 미선택 안내 */
-							<VStack
-								alignItems="center"
-								justifyContent="center"
-								gap={4}
-								className="py-12"
+							<div
+
+
+
+							 className="flex flex-col gap-4 items-center justify-center py-12"
 							>
 								<User className="h-12 w-12 text-muted" />
 								<Typography.Paragraph color="muted">
 									사용자를 검색하여 선택해주세요
 								</Typography.Paragraph>
-							</VStack>
+							</div>
 						)}
-					</VStack>
+					</div>
 				</Card.Content>
 
 				{/* Ability 추가/수정 모달 */}

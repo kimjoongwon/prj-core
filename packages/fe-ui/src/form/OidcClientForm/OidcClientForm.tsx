@@ -16,7 +16,6 @@ import { CheckboxGroup, FieldError, Label, ListBox } from "@heroui/react";
 import { Input } from "../../input/Input/Input";
 import { Select } from "../../selection/Select/Select";
 import { StringListInput } from "../../input/StringListInput/StringListInput";
-import { VStack } from "../../rhythm/VStack/VStack";
 
 export const OIDC_CLIENT_LOGIN_UI_VARIANT_OPTIONS: Array<{
 	label: string;
@@ -184,7 +183,7 @@ export const OidcClientForm = observer(
 		};
 
 		return (
-			<VStack gap={4}>
+			<div className="flex flex-col gap-4">
 				{/* 기본 정보 */}
 				<section>
 					<div className="space-y-6 p-6">
@@ -552,7 +551,7 @@ export const OidcClientForm = observer(
 						{isEdit ? "저장" : "등록"}
 					</Button>
 				</div>
-			</VStack>
+			</div>
 		);
 	},
 );

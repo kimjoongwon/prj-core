@@ -6,8 +6,6 @@ import type { ReactNode } from "react";
 import { Button } from "../../../action/Button/Button";
 import { Modal, useOverlayState } from "@heroui/react";
 import { translateNode, useT } from "../../../i18n";
-import { HStack } from "../../../rhythm/HStack/HStack";
-import { VStack } from "../../../rhythm/VStack/VStack";
 
 /**
  * ConfirmModal Props
@@ -128,15 +126,15 @@ export const ConfirmModal = observer(
 				<Modal.Backdrop><Modal.Container size="sm"><Modal.Dialog>
 					<Modal.Header className="flex flex-col gap-1">{t(title)}</Modal.Header>
 					<Modal.Body>
-						<VStack gap={4} alignItems="center">
+						<div className="flex flex-col gap-4 items-center">
 							{icon}
 							<div className="text-center text-muted">
 								{translateNode(message, t)}
 							</div>
-						</VStack>
+						</div>
 					</Modal.Body>
 					<Modal.Footer>
-						<HStack gap={8} justifyContent="end" fullWidth>
+						<div className="flex w-full gap-8 justify-end">
 							<Button variant="flat" onPress={onClose} isDisabled={loading}>
 								{cancelText}
 							</Button>
@@ -147,7 +145,7 @@ export const ConfirmModal = observer(
 							>
 								{confirmText}
 							</Button>
-						</HStack>
+						</div>
 					</Modal.Footer>
 				</Modal.Dialog></Modal.Container></Modal.Backdrop>
 			</Modal>

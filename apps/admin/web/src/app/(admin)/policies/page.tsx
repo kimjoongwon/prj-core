@@ -1,7 +1,7 @@
 "use client";
 
 import { useDeletePolicy, useGetPolicies } from "@cocrepo/api/core/policies";
-import { PolicyListPage } from "@cocrepo/ui";
+import { PolicyListScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -37,14 +37,16 @@ export default observer(function PoliciesPageRoute() {
 	};
 
 	return (
-		<PolicyListPage
-			policies={response?.data}
-			totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
-			isLoading={isLoading}
-			onClickCreateButton={onClickCreateButton}
-			onClickPolicyRow={onClickPolicyRow}
-			onClickEditPolicyButton={onClickEditPolicyButton}
-			onClickDeletePolicyButton={onClickDeletePolicyButton}
-		/>
+		<>
+			<PolicyListScreen
+				policies={response?.data}
+				totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
+				isLoading={isLoading}
+				onClickCreateButton={onClickCreateButton}
+				onClickPolicyRow={onClickPolicyRow}
+				onClickEditPolicyButton={onClickEditPolicyButton}
+				onClickDeletePolicyButton={onClickDeletePolicyButton}
+			/>
+		</>
 	);
 });

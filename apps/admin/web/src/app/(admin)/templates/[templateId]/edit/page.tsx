@@ -7,7 +7,7 @@ import {
 	useUpdateTemplate,
 } from "@cocrepo/api/core/templates";
 import {
-	TemplateEditPage,
+	TemplateEditScreen,
 	type TemplateFormData,
 	type VariableEditItem,
 } from "@cocrepo/ui";
@@ -29,12 +29,12 @@ type TemplateWithVariables = TemplateDto & {
 	variables?: TemplateVariableLike[];
 };
 
-type TemplateEditPageParams = {
+type TemplateEditScreenParams = {
 	templateId: string;
 };
 
 const AdminTemplatesTemplateIdEditRoute = observer(() => {
-	const { templateId } = useParams<TemplateEditPageParams>();
+	const { templateId } = useParams<TemplateEditScreenParams>();
 	const router = useRouter();
 	const state = useLocalObservable(() => ({
 		formData: {
@@ -153,19 +153,21 @@ const AdminTemplatesTemplateIdEditRoute = observer(() => {
 	};
 
 	return (
-		<TemplateEditPage
-			templateName={template?.name}
-			formData={state.formData}
-			variables={state.variables}
-			errors={state.errors}
-			isLoading={isLoading}
-			isNotFound={!isLoading && !template}
-			isSubmitting={isPending}
-			onFormDataChange={onFormDataChange}
-			onVariablesChange={onVariablesChange}
-			onSubmitForm={onSubmitForm}
-			onClickCancelButton={onClickCancelButton}
-		/>
+		<>
+			<TemplateEditScreen
+				templateName={template?.name}
+				formData={state.formData}
+				variables={state.variables}
+				errors={state.errors}
+				isLoading={isLoading}
+				isNotFound={!isLoading && !template}
+				isSubmitting={isPending}
+				onFormDataChange={onFormDataChange}
+				onVariablesChange={onVariablesChange}
+				onSubmitForm={onSubmitForm}
+				onClickCancelButton={onClickCancelButton}
+			/>
+		</>
 	);
 });
 

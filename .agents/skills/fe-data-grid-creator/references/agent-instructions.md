@@ -61,7 +61,9 @@ This reference preserves the detailed implementation instructions that previousl
 - query/selection 상태는 `DataGridStateModel`, `DataGridQueryStateModel`, `DataGridSelectionStateModel` 계약을 기준으로 다룹니다.
 - 검색/필터/버튼/드롭다운 입력은 `InputRenderer.tsx`와 `data-grid/input/**` 하위 컴포넌트로 확장합니다.
 - `display/data-display`는 일반 display primitive만 담당하고, DataGrid/Table 구현을 다시 만들지 않습니다.
-- page/feature 호출부는 `DataGrid`를 감싸는 `Surface` owner를 직접 결정합니다. DataGrid가 page-level surface를 암묵적으로 만들지 않습니다.
+- screen은 `DataGrid`를 감싸는 `SectionSurface` owner를 직접 결정합니다. DataGrid가 page-level surface를 암묵적으로 만들지 않습니다.
+- feature/widget table shell에서 local panel이 필요하면 `Surface`만 사용합니다.
+- 신규 DataGrid 호출부에서 제거된 detail/form legacy surface wrapper로 table shell을 만들지 않습니다.
 
 ### 출력 경로
 

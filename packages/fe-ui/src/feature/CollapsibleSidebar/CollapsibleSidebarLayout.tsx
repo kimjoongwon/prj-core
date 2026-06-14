@@ -2,7 +2,6 @@ import type { AppIconName } from "@cocrepo/type";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AppIcon } from "../../design-system/icon/AppIcon";
 import { Button } from "../../action/Button/Button";
-import { VStack } from "../../rhythm/VStack/VStack";
 
 interface ParentMenuInfo {
 	name: string;
@@ -94,7 +93,7 @@ export const CollapsibleSidebar = (props: CollapsibleSidebarProps) => {
 			)}
 
 			<div className="flex-1 overflow-y-auto p-3">
-				<VStack className="gap-1">{children}</VStack>
+				<div className="flex flex-col gap-1">{children}</div>
 			</div>
 		</div>
 	);

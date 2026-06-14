@@ -5,7 +5,7 @@ import {
 	useGetTimelineById,
 	useUpdateTimeline,
 } from "@cocrepo/api/core/timelines";
-import { TimelineEditPage } from "@cocrepo/ui";
+import { TimelineEditScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -15,12 +15,12 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { usePersistStore } from "@/stores/AppStoreProvider";
 
-type TimelineEditPageParams = {
+type TimelineEditScreenParams = {
 	timelineId: string;
 };
 
 const AdminTimelinesTimelineIdEditRoute = observer(() => {
-	const { timelineId } = useParams<TimelineEditPageParams>();
+	const { timelineId } = useParams<TimelineEditScreenParams>();
 	const router = useRouter();
 	const persistStore = usePersistStore();
 	const queryClient = useQueryClient();
@@ -111,20 +111,22 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 			state.description === (timeline?.description ?? ""));
 
 	return (
-		<TimelineEditPage
-			timelineName={timeline?.name}
-			name={state.name}
-			description={state.description}
-			contentLanguageCode={persistStore.contentLanguageCode}
-			nameError={state.errors.name}
-			descriptionError={state.errors.description}
-			isSubmitPending={isPending}
-			isSubmitDisabled={isSubmitDisabled}
-			onChangeNameInput={onChangeNameInput}
-			onChangeDescriptionTextArea={onChangeDescriptionTextArea}
-			onClickCancelButton={onClickCancelButton}
-			onClickSubmitButton={onClickSubmitButton}
-		/>
+		<>
+			<TimelineEditScreen
+				timelineName={timeline?.name}
+				name={state.name}
+				description={state.description}
+				contentLanguageCode={persistStore.contentLanguageCode}
+				nameError={state.errors.name}
+				descriptionError={state.errors.description}
+				isSubmitPending={isPending}
+				isSubmitDisabled={isSubmitDisabled}
+				onChangeNameInput={onChangeNameInput}
+				onChangeDescriptionTextArea={onChangeDescriptionTextArea}
+				onClickCancelButton={onClickCancelButton}
+				onClickSubmitButton={onClickSubmitButton}
+			/>
+		</>
 	);
 });
 

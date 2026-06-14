@@ -6,12 +6,12 @@ import {
 	useGetSubjectById,
 	useGetSubjectFields,
 } from "@cocrepo/api/core/subjects";
-import { SubjectDetailPage } from "@cocrepo/ui";
+import { SubjectDetailScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 
-export default observer(function SubjectDetailPageRoute() {
+export default observer(function SubjectDetailScreenRoute() {
 	const subjectId = useParams<{ subjectId: string }>().subjectId;
 	const router = useRouter();
 	const { data: response, isLoading } = useGetSubjectById(subjectId);
@@ -25,35 +25,37 @@ export default observer(function SubjectDetailPageRoute() {
 		});
 
 	return (
-		<SubjectDetailPage
-			subject={
-				subject
-					? {
-							name: subject.name,
-							displayName: subject.displayName,
-							icon: subject.icon,
-							group: subject.group,
-							order: subject.order,
-							isSystem: subject.isSystem,
-							createdAt: subject.createdAt,
-							updatedAt: subject.updatedAt,
-						}
-					: undefined
-			}
-			subjectFields={(
-				(fieldsResponse?.data as SubjectFieldDto[] | undefined) ?? []
-			).map((field) => ({
-				name: field.name,
-				displayName: field.displayName,
-				type: field.type,
-				isRequired: field.isRequired,
-				isRelation: field.isRelation,
-			}))}
-			isLoading={isLoading}
-			isFieldsLoading={shouldLoadFields ? isFieldsLoading : false}
-			onClickBackButton={() => {
-				router.push("/subjects" as Route);
-			}}
-		/>
+		<>
+			<SubjectDetailScreen
+				subject={
+					subject
+						? {
+								name: subject.name,
+								displayName: subject.displayName,
+								icon: subject.icon,
+								group: subject.group,
+								order: subject.order,
+								isSystem: subject.isSystem,
+								createdAt: subject.createdAt,
+								updatedAt: subject.updatedAt,
+							}
+						: undefined
+				}
+				subjectFields={(
+					(fieldsResponse?.data as SubjectFieldDto[] | undefined) ?? []
+				).map((field) => ({
+					name: field.name,
+					displayName: field.displayName,
+					type: field.type,
+					isRequired: field.isRequired,
+					isRelation: field.isRelation,
+				}))}
+				isLoading={isLoading}
+				isFieldsLoading={shouldLoadFields ? isFieldsLoading : false}
+				onClickBackButton={() => {
+					router.push("/subjects" as Route);
+				}}
+			/>
+		</>
 	);
 });

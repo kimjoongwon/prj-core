@@ -8,8 +8,6 @@ import {
 	VisibilityCell,
 	type VisibilityStatus,
 } from "../../../permission/VisibilityCell";
-import { HStack } from "../../../rhythm/HStack/HStack";
-import { VStack } from "../../../rhythm/VStack/VStack";
 
 /**
  * 매트릭스 셀 타입
@@ -182,18 +180,18 @@ export const AbilityMatrixView = observer(
 		};
 
 		return (
-			<VStack gap={4} fullWidth>
+			<div>
 				{/* 헤더: Subject 이름 */}
-					<HStack alignItems="center" gap={2}>
-						<span className="text-lg font-semibold">
+					<div className="flex">
+						<span className="flex flex-col w-full gap-4 items-center text-lg font-semibold">
 							{subjectDisplayName ?? subjectName}
 						</span>
 						<span className="text-muted text-sm">({subjectName})</span>
 						{loading ? <Spinner size="sm" /> : null}
-					</HStack>
+					</div>
 
 				{/* 범례 */}
-				<HStack gap={4} alignItems="center">
+				<div className="flex">
 					<span className="text-sm text-muted">범례:</span>
 					{legendItems.map((item) => (
 						<Chip
@@ -206,7 +204,7 @@ export const AbilityMatrixView = observer(
 							{item.label}
 						</Chip>
 					))}
-				</HStack>
+				</div>
 
 				{/* 매트릭스 테이블 */}
 				<Table
@@ -224,14 +222,14 @@ export const AbilityMatrixView = observer(
 						{
 							roles.map((role) => (
 								<Table.Column key={role.id} className="min-w-[100px]">
-									<VStack gap={1} alignItems="center">
+									<div className="flex flex-col">
 										<span className="font-medium">
 											{getRoleDisplayName(role)}
 										</span>
 										<span className="text-xs text-muted">
 											({role.name})
 										</span>
-									</VStack>
+									</div>
 								</Table.Column>
 							)) as any
 						}
@@ -241,14 +239,14 @@ export const AbilityMatrixView = observer(
 						{fields.map((field) => (
 							<Table.Row key={field.name}>
 								<Table.Cell className="sticky left-0 bg-surface z-10 font-medium">
-									<VStack gap={1} alignItems="start">
+									<div className="flex flex-col gap-1 items-start">
 										<span>{getFieldDisplayName(field)}</span>
 										{field.displayName && (
 											<span className="text-xs text-muted">
 												({field.name})
 											</span>
 										)}
-									</VStack>
+									</div>
 								</Table.Cell>
 								{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 								{
@@ -256,7 +254,7 @@ export const AbilityMatrixView = observer(
 										const status = getCellStatus(field.name, role.name);
 										return (
 											<Table.Cell key={`${field.name}-${role.name}`}>
-												<HStack justifyContent="center">
+												<div className="flex justify-center">
 													<VisibilityCell
 														status={status}
 														fieldName={getFieldDisplayName(field)}
@@ -270,7 +268,7 @@ export const AbilityMatrixView = observer(
 															)
 														}
 													/>
-												</HStack>
+												</div>
 											</Table.Cell>
 										);
 									}) as any
@@ -280,7 +278,7 @@ export const AbilityMatrixView = observer(
 					</Table.Body>
 				</Table.Content>
 			</Table>
-			</VStack>
+			</div>
 		);
 	},
 );

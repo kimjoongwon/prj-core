@@ -17,16 +17,16 @@
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/subjects/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/subjects/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
-- `page.tsx`는 대상 조회, `group` query state, 상세 라우팅만 담당하고 시각 조합은 `SubjectListPage`가 소유합니다.
+- `page.tsx`는 대상 조회, `group` query state, 상세 라우팅만 담당하고 시각 조합은 `SubjectListScreen`가 소유합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `pure screen + thin route container`
 - page role: `collection`
 - reusable target: `data-grid`
-- screen component path: `packages/fe-ui/src/screen/SubjectListPage/SubjectListPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/SubjectListScreen/SubjectListScreen.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 - route는 `useGetSubjects({ group })`, `nuqs` `useQueryStates()`, 상세 이동 핸들러를 소유하고 pure screen에 props를 주입합니다.
@@ -37,7 +37,7 @@
 |------|-----------|------|
 | 페이지 헤더 | `PageTitleBar` | 권한 대상 목록 안내 |
 | 유형 필터 | `Tabs` + 설명 패널 | 전체/공통/데이터/메뉴/화면/기능/화면 요소 기준 필터와 역할 설명 |
-| 목록 영역 | `Surface` + `DataGrid` | 대상명 검색, 대상/유형/설명 표시, 목록 표시, 행 클릭 상세 이동 |
+| 목록 영역 | `SectionSurface` + `DataGrid` | 대상명 검색, 대상/유형/설명 표시, 목록 표시, 행 클릭 상세 이동 |
 
 ## API 호출
 
@@ -73,7 +73,7 @@
 | 2026-04-28 | DataGrid 공식 재사용 타깃을 `data-grid`로 갱신 | codex |
 | 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
 | 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-03-29 | `SubjectListPage` pure screen와 thin route container 구조로 전환하고 screen component path를 반영 | codex |
-| 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `Surface` 기준으로 문서화 | codex |
+| 2026-03-29 | `SubjectListScreen` pure screen와 thin route container 구조로 전환하고 screen component path를 반영 | codex |
+| 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `SectionSurface` 기준으로 문서화 | codex |
 | 2026-03-21 | Subject 목록을 `data-grid` 재사용 타깃으로 분류하고 page role 계약을 추가 | codex |
 | 2026-03-21 | Subject 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

@@ -1,6 +1,6 @@
 "use client";
 
-import { RoleAbilityActionListPage } from "@cocrepo/ui";
+import { RoleAbilityActionListScreen } from "@cocrepo/ui";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 
@@ -18,9 +18,11 @@ export default function AdminRolesRoleIdAbilitiesAbilityIdActionsRoute() {
 	};
 
 	return (
-		<RoleAbilityActionListPage
-			abilityId={abilityId}
-			onClickBackButton={onClickBackButton}
-		/>
+		<>
+			<RoleAbilityActionListScreen
+				abilityId={abilityId}
+				onClickBackButton={onClickBackButton}
+			/>
+		</>
 	);
 }

@@ -10,8 +10,8 @@ import {
 	useRevokeOidcSessionsByGrant,
 } from "@cocrepo/api/idp/oidc-sessions";
 import {
-	OidcSessionListPage,
-	type OidcSessionListPageStats,
+	OidcSessionListScreen,
+	type OidcSessionListScreenStats,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -66,56 +66,58 @@ export default observer(function OidcSessionsPageRoute() {
 		});
 
 	return (
-		<OidcSessionListPage
-			sessions={response?.data}
-			totalCount={response?.meta?.totalCount ?? 0}
-			isLoading={isLoading}
-			queryStates={queryStates}
-			setQueryStates={setQueryStates}
-			stats={
-				statsResponse?.data
-					? mapOidcSessionStats(statsResponse.data)
-					: undefined
-			}
-			revokeGrantId={revokeGrantId}
-			isGrantRevokeModalOpen={isGrantRevokeModalOpen}
-			isRevokeAllModalOpen={isRevokeAllModalOpen}
-			isRevokingByGrant={isRevokingByGrant}
-			isRevokingAll={isRevokingAll}
-			onRevokeSession={(key) => {
-				revokeSession({ key });
-			}}
-			onOpenGrantRevokeModal={(grantId) => {
-				setRevokeGrantId(grantId);
-				setIsGrantRevokeModalOpen(true);
-			}}
-			onCloseGrantRevokeModal={() => {
-				setIsGrantRevokeModalOpen(false);
-				setRevokeGrantId(null);
-			}}
-			onConfirmRevokeByGrant={(grantId) => {
-				revokeByGrant({ grantId });
-				setIsGrantRevokeModalOpen(false);
-				setRevokeGrantId(null);
-			}}
-			onOpenRevokeAllModal={() => {
-				setIsRevokeAllModalOpen(true);
-			}}
-			onCloseRevokeAllModal={() => {
-				setIsRevokeAllModalOpen(false);
-			}}
-			onConfirmRevokeAll={() => {
-				revokeAll();
-				setIsRevokeAllModalOpen(false);
-			}}
-		/>
+		<>
+			<OidcSessionListScreen
+				sessions={response?.data}
+				totalCount={response?.meta?.totalCount ?? 0}
+				isLoading={isLoading}
+				queryStates={queryStates}
+				setQueryStates={setQueryStates}
+				stats={
+					statsResponse?.data
+						? mapOidcSessionStats(statsResponse.data)
+						: undefined
+				}
+				revokeGrantId={revokeGrantId}
+				isGrantRevokeModalOpen={isGrantRevokeModalOpen}
+				isRevokeAllModalOpen={isRevokeAllModalOpen}
+				isRevokingByGrant={isRevokingByGrant}
+				isRevokingAll={isRevokingAll}
+				onRevokeSession={(key) => {
+					revokeSession({ key });
+				}}
+				onOpenGrantRevokeModal={(grantId) => {
+					setRevokeGrantId(grantId);
+					setIsGrantRevokeModalOpen(true);
+				}}
+				onCloseGrantRevokeModal={() => {
+					setIsGrantRevokeModalOpen(false);
+					setRevokeGrantId(null);
+				}}
+				onConfirmRevokeByGrant={(grantId) => {
+					revokeByGrant({ grantId });
+					setIsGrantRevokeModalOpen(false);
+					setRevokeGrantId(null);
+				}}
+				onOpenRevokeAllModal={() => {
+					setIsRevokeAllModalOpen(true);
+				}}
+				onCloseRevokeAllModal={() => {
+					setIsRevokeAllModalOpen(false);
+				}}
+				onConfirmRevokeAll={() => {
+					revokeAll();
+					setIsRevokeAllModalOpen(false);
+				}}
+			/>
+		</>
 	);
 });
 
 function mapOidcSessionStats(stats: {
 	totalCount: number;
 	byModelType: Record<string, number>;
-}): OidcSessionListPageStats {
+}): OidcSessionListScreenStats {
 	return {
 		totalCount: stats.totalCount,
 		byModelType: stats.byModelType ?? {},

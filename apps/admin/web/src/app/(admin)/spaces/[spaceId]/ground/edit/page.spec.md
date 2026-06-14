@@ -103,37 +103,37 @@
 ### Fetch 전략
 
 - 별도 `_prefetch.ts`는 없습니다.
-- `GroundEditPage` 내부에서 `useGetSpaceGround(spaceId)`로 초기값을 로드합니다.
+- `GroundEditScreen` 내부에서 `useGetSpaceGround(spaceId)`로 초기값을 로드합니다.
 
 ## 런타임 책임
 
 - route container가 `useParams`, `useRouter`, `useGetSpaceGround`, `useUpdateSpaceGround`, `useLocalObservable`을 소유합니다.
 - route container가 조회 결과를 pure screen props로 매핑하고 저장 성공/실패 toast와 상세 페이지 이동을 처리합니다.
-- `GroundEditPage`는 입력값/에러/CTA handler만 렌더링합니다.
+- `GroundEditScreen`는 입력값/에러/CTA handler만 렌더링합니다.
 
 ## 컴포넌트 구성
 
 ```
 apps/admin/web/.../spaces/[spaceId]/ground/edit/page.tsx
-└── GroundEditPage (@cocrepo/ui export)
-    └── GroundEditPageClient
+└── GroundEditScreen (@cocrepo/ui export)
+    └── GroundEditScreenClient
         ├── PageTitleBar ("시설 정보 수정")
-        ├── FormSectionCard
-        │   └── FormSection ("기본 정보")
+        ├── SectionSurface
+        │   └── Section ("기본 정보")
         │       └── name / label / address / phone / email / businessNo(default) 입력
         └── Button 영역 ("취소", "저장")
 ```
 
 
-## Surface / Elevation
+## SectionSurface / Elevation
 
 | 항목 | 결정 |
 |------|------|
-| PageSurface owner | 참조 route layout의 `layout.tsx` skeleton |
-| PageSurface 역할 | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다. |
+| ScreenSurface owner | page/screen content owner |
+| ScreenSurface 역할 | 페이지 헤더 아래 본문 전체를 raised surface로 묶습니다. |
 | SectionSurface 대상 | 본문 섹션, 폼, 표, 로딩/빈 상태 블록 |
 | SectionSurface padding | 기본 패딩 |
-| 예외 | 없음. surface skeleton은 참조 route layout이 소유하고 `page.tsx`는 내부 콘텐츠만 채웁니다. |
+| 예외 | 없음. `layout.tsx`는 `Page` 구조만 소유하고 surface는 page/screen content owner가 명시합니다. |
 
 ## Consumed Layout Contract
 
@@ -142,7 +142,7 @@ apps/admin/web/.../spaces/[spaceId]/ground/edit/page.tsx
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/spaces/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/spaces/[spaceId]/ground/edit/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
 - `page.tsx`는 입력, 검증, 생성/수정 폼 흐름만 담당합니다.
 
@@ -163,9 +163,9 @@ apps/admin/web/.../spaces/[spaceId]/ground/edit/page.tsx
 | 2026-03-30 | 조회/저장/local state 책임을 route container로 명시하고 pure screen props 위임 구조를 문서화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
-| 2026-03-15 | Surface ownership과 elevation 결정을 문서화 | codex |
-| 2026-03-15 | Surface ownership/elevation 규칙과 PageSurface/SectionSurface 적용 기준을 문서화 | codex |
-| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
+| 2026-03-15 | SectionSurface ownership과 elevation 결정을 문서화 | codex |
+| 2026-03-15 | SectionSurface ownership/elevation 규칙과 ScreenSurface/SectionSurface 적용 기준을 문서화 | codex |
+| 2026-03-15 | SectionSurface owner와 elevation 규칙을 문서화 | codex |
 | 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
 | 2026-02-19 | 초기 생성 | req-screen-planner |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

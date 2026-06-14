@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 import { TextArea } from "../../../input/TextArea/TextArea";
 import { Chip } from "../../../data-display/Chip/Chip";
 import { cn, Tooltip } from "@heroui/react";
-import { HStack } from "../../../rhythm/HStack/HStack";
-import { VStack } from "../../../rhythm/VStack/VStack";
 
 /**
  * 허용된 템플릿 변수 목록
@@ -127,26 +125,26 @@ export const ConditionEditor = observer(
 		const displayError = error ?? internalError;
 
 		return (
-			<VStack gap={2} className={cn("w-full", className)}>
+			<div className={cn("w-full", className)}>
 				{/* 라벨 */}
-				<HStack alignItems="center" gap={4}>
-						<span className="text-sm font-medium text-foreground">{label}</span>
+				<div className="flex">
+						<span className="flex flex-col gap-2 items-center text-sm font-medium text-foreground">{label}</span>
 						{subjectFields && subjectFields.length > 0 && (
 							<Tooltip>
 								<Tooltip.Trigger>
 									<Info className="h-4 w-4 cursor-help text-muted" />
 								</Tooltip.Trigger>
 								<Tooltip.Content>
-									<VStack gap={1} className="p-2">
+									<div className="flex flex-col p-2">
 										<span className="text-xs font-medium">사용 가능한 필드:</span>
 										<span className="text-xs text-muted">
 											{subjectFields.join(", ")}
 										</span>
-									</VStack>
+									</div>
 								</Tooltip.Content>
 							</Tooltip>
 						)}
-				</HStack>
+				</div>
 
 				{/* JSON 에디터 (TextArea) */}
 				<TextArea
@@ -168,19 +166,19 @@ export const ConditionEditor = observer(
 
 				{/* 에러 메시지 */}
 				{displayError && (
-					<HStack alignItems="center" gap={4}>
+					<div className="flex">
 						<AlertCircle className="h-4 w-4 text-danger" />
 						<span className="text-xs text-danger">{displayError}</span>
-					</HStack>
+					</div>
 				)}
 
 				{/* 템플릿 변수 버튼 */}
-				<VStack gap={1}>
-					<HStack alignItems="center" gap={4}>
-						<Info className="h-3 w-3 text-muted" />
+				<div className="flex flex-col gap-1">
+					<div>
+						<Info className="flex gap-4 items-center h-3 w-3 text-muted" />
 						<span className="text-xs text-muted">템플릿 변수:</span>
-					</HStack>
-						<HStack gap={4} className="flex-wrap">
+					</div>
+						<div className="flex gap-4 flex-wrap">
 							{TEMPLATE_VARIABLES.map((variable) => (
 								<Tooltip key={variable.key}>
 									<Tooltip.Trigger>
@@ -197,9 +195,9 @@ export const ConditionEditor = observer(
 									<Tooltip.Content>{variable.label}</Tooltip.Content>
 								</Tooltip>
 							))}
-					</HStack>
-				</VStack>
-			</VStack>
+					</div>
+				</div>
+			</div>
 		);
 	},
 );

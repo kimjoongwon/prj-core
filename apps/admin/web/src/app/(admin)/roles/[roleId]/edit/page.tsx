@@ -5,7 +5,7 @@ import {
 	useGetRoleById,
 	useUpdateRole,
 } from "@cocrepo/api/core/roles";
-import { RoleEditPage } from "@cocrepo/ui";
+import { RoleEditScreen } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -20,12 +20,12 @@ interface RoleEditFormState {
 	isInitialized: boolean;
 }
 
-type RoleEditPageParams = {
+type RoleEditScreenParams = {
 	roleId: string;
 };
 
 const AdminRolesRoleIdEditRoute = observer(() => {
-	const { roleId } = useParams<RoleEditPageParams>();
+	const { roleId } = useParams<RoleEditScreenParams>();
 	const router = useRouter();
 	const { data: response, isLoading } = useGetRoleById(roleId);
 	const role = response?.data;
@@ -97,22 +97,24 @@ const AdminRolesRoleIdEditRoute = observer(() => {
 	};
 
 	return (
-		<RoleEditPage
-			roleName={role?.name}
-			roleDisplayName={role?.displayName}
-			isSystemRole={Boolean(role?.isSystem)}
-			displayName={state.displayName}
-			description={state.description}
-			displayNameError={state.errors.displayName}
-			isLoading={isLoading}
-			isNotFound={!isLoading && !role}
-			isSubmitPending={isPending}
-			onChangeDisplayNameInput={onChangeDisplayNameInput}
-			onChangeDescriptionTextArea={onChangeDescriptionTextArea}
-			onClickBackButton={onClickBackButton}
-			onClickListButton={onClickListButton}
-			onClickSubmitButton={onClickSubmitButton}
-		/>
+		<>
+			<RoleEditScreen
+				roleName={role?.name}
+				roleDisplayName={role?.displayName}
+				isSystemRole={Boolean(role?.isSystem)}
+				displayName={state.displayName}
+				description={state.description}
+				displayNameError={state.errors.displayName}
+				isLoading={isLoading}
+				isNotFound={!isLoading && !role}
+				isSubmitPending={isPending}
+				onChangeDisplayNameInput={onChangeDisplayNameInput}
+				onChangeDescriptionTextArea={onChangeDescriptionTextArea}
+				onClickBackButton={onClickBackButton}
+				onClickListButton={onClickListButton}
+				onClickSubmitButton={onClickSubmitButton}
+			/>
+		</>
 	);
 });
 

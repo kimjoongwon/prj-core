@@ -77,10 +77,13 @@ This reference preserves the detailed implementation instructions that previousl
 3. 신규/수정 화면에서 필요한 시각 screen이 없으면 먼저 `fe-screen-agent` 범위의 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`를 생성/수정 대상으로 잡음
    - `fe-route-agent`가 pure screen owner를 직접 생성/수정하는 흐름은 금지
 4. 작업 시작 전에 반드시 sibling `page.spec.md`를 읽고 route/page contract를 확인
-5. route-level `App`, `Layout`, `Page`, `PageSurface`, `Section`, `SectionSurface`를 app route page에서 새로 만들지 않음
+5. route-level `App`, `Layout`, `Page` 구조와 surface/rhythm은 app route page에서 새로 만들지 않음
+   - `ScreenSurface`와 `SectionSurface`는 screen 계층 owner입니다.
+   - `ScreenSurface`, `SectionSurface`, `Surface`, `VStack`, `HStack`, `Spacer`, 제거된 detail/form legacy surface wrapper는 app route page에서 직접 import/use 금지
 6. 앱 라우트에서 로컬 시각 컴포넌트 import 금지
    - 금지 예: `./_components/*`, `../components/*`
-   - 허용: hooks, utils, types
+   - hook은 `@cocrepo/hook`, component는 `@cocrepo/ui`에서 import
+   - app-local `hooks`, `_components`, `components` 폴더 생성 금지
 7. 개발자 승인 없이 `_client.tsx`, `_prefetch.ts`, `HydrationBoundary`, `dehydrate`, 서버 `QueryClient` prefetch 패턴 사용 금지
 8. 모든 `"use client"` route page/container 컴포넌트에서 `useMemo`, `useCallback` 사용 금지
 9. route page/container에서 선언하는 핸들러 이름은 `on[Event][UI]` 패턴 강제
@@ -99,7 +102,7 @@ This reference preserves the detailed implementation instructions that previousl
 - `packages/fe-ui/src/data-display`, `src/action`, `src/input`, `src/selection`, `src/navigation`, `src/layout`, `src/widget`, `src/feature`는 재사용 UI 레이어
 - `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`는 screen-level pure composition 레이어의 기준 경로
 - `apps/*/src/app/**/page.tsx`는 thin app route container 레이어
-- `layout.tsx`는 route skeleton owner
+- root `app/layout.tsx`의 `App`은 `header`, `footer`, `leftAside`, `rightAside`, `main` root 구조 슬롯 owner이고, package UI/feature를 직접 조립해 route 공통 화면 틀을 소유합니다.
 
 ### 1.2 소유권 경계
 
@@ -108,11 +111,15 @@ This reference preserves the detailed implementation instructions that previousl
 | `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` | screen-level visual composition, page props contract |
 | `apps/*/src/app/**/page.tsx` | pure screen component import/use, API 조회, redirect, router/search params 해석, handler wiring, page props 조립 |
 | `apps/*/src/app/**/route.meta.ts` | admin route catalog가 소비하는 page/menu subject, label, route metadata contract |
-| `apps/*/src/app/**/layout.tsx` | route shell, page surface, section surface, slot topology |
+| root `apps/*/src/app/layout.tsx` | `Providers > App(main)` 진입점 |
+| route group/domain/auth `apps/*/src/app/**/layout.tsx` | 기본 생성 금지. shell은 root `app/layout.tsx`로 흡수 |
 
 ### 1.3 route layout과의 경계
 
-- `layout.tsx`는 `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface`를 조립합니다.
+- web 공통 화면 틀은 root `app/layout.tsx`가 직접 소유합니다.
+- route group/domain/auth `layout.tsx`는 기본 생성하지 않고, pathname selector feature도 만들지 않습니다.
+- app route page 또는 route-local client boundary는 screen component에 props만 전달합니다.
+- `ScreenSurface`, `SectionSurface`, `Surface`, rhythm primitive, 제거된 detail/form legacy surface wrapper는 route page/container에서 직접 사용하지 않습니다.
 - `page.tsx`는 해당 skeleton의 `children` 또는 slot 위치에 마운트되는 thin container입니다.
 - screen visual tree는 `@cocrepo/ui` screen component가 소유합니다.
 - route page가 route-level layout primitive를 다시 만들면 실패입니다.
@@ -138,9 +145,9 @@ This reference preserves the detailed implementation instructions that previousl
 - `fe-route-agent`는 thin route container에서 API hook, route/search param, mutation, invalidation, local state, handler wiring을 함께 담당합니다.
 - shared Store 생성이 필요한 경우에만 route delivery spec의 `기반 계약`와 `에이전트 배정 매트릭스`에 `fe-store-agent` step을 별도로 기록합니다.
 - route page 는 pure screen 에 page slice 만 전달합니다.
-  - 예: `<LoginPage state={state.loginPage} />`
+  - 예: `<LoginScreen state={state.loginPage} />`
 - server data 는 MobX state 로 복제하지 않고 별도 props 로 전달합니다.
-  - 예: `<UserListPage state={state.userListPage} users={response?.data ?? []} />`
+  - 예: `<UserListScreen state={state.userListPage} users={response?.data ?? []} />`
 - route/page 가 form 을 사용하는 경우 submit/click 이벤트 소유권도 함께 확인합니다.
   - child form 에 이벤트 handler props 를 직접 내리는 예외가 필요하면 route `page.spec.md`에 근거를 남깁니다.
 
@@ -152,15 +159,15 @@ This reference preserves the detailed implementation instructions that previousl
 
 ```
 apps/<app>/src/app/<route>/
-├── layout.tsx
 ├── page.tsx
 ├── page.spec.md
 ├── route.meta.ts (필요 시)
 ├── @slot/.../page.tsx
 ├── @slot/.../page.spec.md
-├── hooks/ (필요 시)
 └── utils/ (필요 시)
 ```
+
+route-local `hooks/`, `_components/`, `components` 폴더는 만들지 않습니다. 재사용 hook은 `packages/fe-hook`, component는 `packages/fe-ui`에 둡니다.
 
 ### 2.2 app route `page.tsx` 기본 패턴
 
@@ -223,8 +230,9 @@ apps/<app>/src/app/<route>/
 
 - `apps/*/src/components/**`에 새 UI/Feature 생성
 - 라우트 내부 로컬 시각 컴포넌트 의존 (`_components`, `components`)
+- 라우트 내부 로컬 hooks 폴더 생성 (`hooks`)
 - page 파일에서 route-level layout primitive 직접 import
-  - 금지 예: `Page`, `PageSurface`, `Section`, `SectionSurface`
+  - 금지 예: `App`, `Layout`, `Page`, `ScreenSurface`, `SectionSurface`, `Surface`, `VStack`, `HStack`, `Spacer`, 제거된 detail/form legacy surface wrapper
 - route page에서 화면용 raw wrapper를 ad-hoc하게 새로 만드는 행위
 
 ---
@@ -289,7 +297,7 @@ echo "$TARGET_FILES" | xargs rg -n '(^|\\s)const\\s+handle[A-Z][A-Za-z0-9_]*\\s*
 echo "$TARGET_FILES" | xargs rg -n 'from\\s+"\\.{1,2}/|from\\s+"\\.{2,}/' | rg '/_components/|/components/'
 
 # 6) route skeleton primitive 재도입 금지
-echo "$TARGET_FILES" | xargs rg -n 'from\\s+"@cocrepo/ui".*\\b(Page|PageSurface|Section|SectionSurface)\\b'
+echo "$TARGET_FILES" | xargs rg -n 'from\\s+"@cocrepo/ui".*\\b(App|Layout|Page|ScreenSurface|SectionSurface|Surface|VStack|HStack|Spacer)\\b'
 ```
 
 ---
@@ -351,9 +359,11 @@ echo "$TARGET_FILES" | xargs rg -n 'from\\s+"@cocrepo/ui".*\\b(Page|PageSurface|
 ```tsx
 "use client";
 
-import { MembersListPage } from "@cocrepo/ui";
+import { MembersListScreen } from "@cocrepo/ui";
+import { observer } from "mobx-react-lite";
+import { useRouter } from "next/navigation";
 
-const MembersListPageContainer = observer(() => {
+const MembersListScreenContainer = observer(() => {
   const router = useRouter();
   const { data, isLoading } = useGetMembers();
 
@@ -362,7 +372,7 @@ const MembersListPageContainer = observer(() => {
   };
 
   return (
-    <MembersListPage
+    <MembersListScreen
       members={data?.items ?? []}
       isLoading={isLoading}
       onClickCreateButton={onClickCreateButton}
@@ -370,7 +380,7 @@ const MembersListPageContainer = observer(() => {
   );
 });
 
-export default MembersListPageContainer;
+export default MembersListScreenContainer;
 ```
 
 page spec의 route/page mapping이 없거나 pure screen component 없이 route page가 시각 구성을 직접 소유하고 있으면 아래 형식으로 질문 후 진행합니다.
@@ -424,7 +434,7 @@ navigation/API/state/native bridge wiring을 구현하는 role입니다.
 - `apps/mobile/src/app/**/*.tsx`
 - 필요 시 `+not-found.tsx`, modal route screen 파일
 - 대응 route owner spec `apps/mobile/src/app/**/index.spec.md`
-- route-local hooks / API wiring / native bridge wiring
+- route-consumed hook inventory / API wiring / native bridge wiring
 
 ---
 

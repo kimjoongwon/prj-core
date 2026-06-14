@@ -41,9 +41,9 @@
 
 | 영역 | 컴포넌트 | 설명 |
 |------|----------|------|
-| 페이지 헤더 | `DetailPage` + `PageTitleBar` | "대시보드" + "관리자 대시보드에 오신 것을 환영합니다." |
-| 상세 surface | `DetailPageSurface` | detail/view 공통 surface를 소비 |
-| 위젯 그리드 | `DetailSectionCard` (grid) | 4컬럼 반응형 그리드 (md:2, lg:4) |
+| route surface | `ScreenSurface` | route page가 page-level surface를 소유 |
+| screen rhythm/header | `VStack` + `PageTitleBar` | "대시보드" + "관리자 대시보드에 오신 것을 환영합니다." |
+| screen section | `SectionSurface` (grid) | 4컬럼 반응형 그리드 (md:2, lg:4) |
 
 ## 위젯 카드 (스텁)
 
@@ -75,7 +75,7 @@
 ## 특이사항
 
 - `"use client"` 컴포넌트 (observer 래핑)
-- `detail/view`의 `DetailPage`, `DetailPageSurface`, `DetailSectionCard` 조합을 사용합니다.
+- route page는 `ScreenSurface`, screen은 `VStack`, `PageTitleBar`, `SectionSurface` 조합을 사용합니다.
 - 위젯은 모두 스텁 상태 (값이 "-")
 - 프리페칭 없음, 서버 컴포넌트 래퍼 없음
 - E2E에서 로그인 후 콘솔에 hydration recoverable error가 없어야 한다
@@ -84,7 +84,7 @@
 
 - [x] page.tsx (클라이언트 컴포넌트, observer 래핑, 단일 CSR)
 - [x] 로그인 후 hydration recoverable error 회귀 테스트
-- [x] 페이지 헤더 영역 적용 (`DetailPage` + `PageTitleBar`)
+- [x] 페이지 헤더 영역 적용 (`VStack` + `PageTitleBar`)
 - [ ] 대시보드 위젯 데이터 연동 (미구현)
 
 ## Consumed Layout Contract
@@ -94,9 +94,9 @@
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/dashboard/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
-- `page.tsx`는 `detail/view`의 detail shell 안에서 대시보드 읽기 전용 본문만 담당합니다.
+- `page.tsx`는 `ScreenSurface` wrapper와 screen props wiring만 담당합니다.
 
 ## Rendering Decision
 
@@ -110,7 +110,8 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-03-22 | 관리자 대시보드를 `DetailPage`/`DetailPageSurface`/`DetailSectionCard` 조합으로 정리하고 spec 설명을 동기화 | codex |
+| 2026-06-13 | detail alias를 제거하고 route `ScreenSurface`, screen `VStack`/`SectionSurface` 구조로 정리 | codex |
+| 2026-03-22 | 관리자 대시보드를 detail surface 조합으로 정리하고 spec 설명을 동기화 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
 | 2026-03-14 | 로그인 후 대시보드 진입 시 hydration recoverable error가 없어야 한다는 E2E 회귀 조건 추가 | codex |

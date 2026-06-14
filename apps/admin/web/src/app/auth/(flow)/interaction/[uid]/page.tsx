@@ -7,7 +7,7 @@ import {
 	useSubmitLogin,
 } from "@cocrepo/api/idp/interaction";
 import type { OidcClientLoginUi } from "@cocrepo/type";
-import { type LoginErrorResponse, OidcInteractionPage } from "@cocrepo/ui";
+import { type LoginErrorResponse, OidcInteractionScreen } from "@cocrepo/ui";
 import type { AxiosError } from "axios";
 import {
 	type IReactionDisposer,
@@ -311,54 +311,62 @@ const InteractionPage = observer(() => {
 
 	if (isLoading) {
 		return (
-			<OidcInteractionPage
-				state={oidcInteractionPage}
-				onClickRecoveryButton={onClickRecoveryButton}
-				onAbortInteraction={onAbortInteraction}
-				onSubmitLoginForm={onSubmitLoginForm}
-				forgotPasswordHref={OIDC_FORGOT_PASSWORD_PATH}
-				signUpHref={OIDC_SIGN_UP_PATH}
-				onConfirmConsent={onConfirmConsent}
-			/>
+			<>
+				<OidcInteractionScreen
+					state={oidcInteractionPage}
+					onClickRecoveryButton={onClickRecoveryButton}
+					onAbortInteraction={onAbortInteraction}
+					onSubmitLoginForm={onSubmitLoginForm}
+					forgotPasswordHref={OIDC_FORGOT_PASSWORD_PATH}
+					signUpHref={OIDC_SIGN_UP_PATH}
+					onConfirmConsent={onConfirmConsent}
+				/>
+			</>
 		);
 	}
 
 	if (error || !data) {
 		return (
-			<OidcInteractionPage
-				state={oidcInteractionPage}
-				onClickRecoveryButton={onClickRecoveryButton}
-				onAbortInteraction={onAbortInteraction}
-				onSubmitLoginForm={onSubmitLoginForm}
-				forgotPasswordHref={OIDC_FORGOT_PASSWORD_PATH}
-				signUpHref={OIDC_SIGN_UP_PATH}
-				onConfirmConsent={onConfirmConsent}
-			/>
+			<>
+				<OidcInteractionScreen
+					state={oidcInteractionPage}
+					onClickRecoveryButton={onClickRecoveryButton}
+					onAbortInteraction={onAbortInteraction}
+					onSubmitLoginForm={onSubmitLoginForm}
+					forgotPasswordHref={OIDC_FORGOT_PASSWORD_PATH}
+					signUpHref={OIDC_SIGN_UP_PATH}
+					onConfirmConsent={onConfirmConsent}
+				/>
+			</>
 		);
 	}
 
 	if (data.type === "consent") {
 		return (
-			<OidcInteractionPage
-				state={oidcInteractionPage}
-				onConfirmConsent={onConfirmConsent}
-				onAbortInteraction={onAbortInteraction}
-				onSubmitLoginForm={onSubmitLoginForm}
-				forgotPasswordHref={OIDC_FORGOT_PASSWORD_PATH}
-				signUpHref={OIDC_SIGN_UP_PATH}
-			/>
+			<>
+				<OidcInteractionScreen
+					state={oidcInteractionPage}
+					onConfirmConsent={onConfirmConsent}
+					onAbortInteraction={onAbortInteraction}
+					onSubmitLoginForm={onSubmitLoginForm}
+					forgotPasswordHref={OIDC_FORGOT_PASSWORD_PATH}
+					signUpHref={OIDC_SIGN_UP_PATH}
+				/>
+			</>
 		);
 	}
 
 	return (
-		<OidcInteractionPage
-			state={oidcInteractionPage}
-			onSubmitLoginForm={onSubmitLoginForm}
-			onAbortInteraction={onAbortInteraction}
-			onConfirmConsent={onConfirmConsent}
-			forgotPasswordHref={OIDC_FORGOT_PASSWORD_PATH}
-			signUpHref={OIDC_SIGN_UP_PATH}
-		/>
+		<>
+			<OidcInteractionScreen
+				state={oidcInteractionPage}
+				onSubmitLoginForm={onSubmitLoginForm}
+				onAbortInteraction={onAbortInteraction}
+				onConfirmConsent={onConfirmConsent}
+				forgotPasswordHref={OIDC_FORGOT_PASSWORD_PATH}
+				signUpHref={OIDC_SIGN_UP_PATH}
+			/>
+		</>
 	);
 });
 

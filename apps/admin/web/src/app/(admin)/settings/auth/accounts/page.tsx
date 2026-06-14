@@ -6,7 +6,7 @@ import {
 	getGetIdpAccountsQueryKey,
 	useGetIdpAccounts,
 } from "@cocrepo/api/idp/idp-accounts";
-import { AccountListPage } from "@cocrepo/ui";
+import { AccountListScreen } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
@@ -38,16 +38,18 @@ export default observer(function AccountsPageRoute() {
 	});
 
 	return (
-		<AccountListPage
-			accounts={response?.data}
-			totalCount={response?.meta?.totalCount ?? 0}
-			isLoading={isLoading}
-			isUnlocking={isUnlocking}
-			queryStates={queryStates}
-			setQueryStates={setQueryStates}
-			onConfirmUnlockAccount={(userId) => {
-				unlockAccount({ userId });
-			}}
-		/>
+		<>
+			<AccountListScreen
+				accounts={response?.data}
+				totalCount={response?.meta?.totalCount ?? 0}
+				isLoading={isLoading}
+				isUnlocking={isUnlocking}
+				queryStates={queryStates}
+				setQueryStates={setQueryStates}
+				onConfirmUnlockAccount={(userId) => {
+					unlockAccount({ userId });
+				}}
+			/>
+		</>
 	);
 });

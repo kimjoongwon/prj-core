@@ -6,18 +6,18 @@ import {
 	useGetTaskExercise,
 	useGetTaskRoutines,
 } from "@cocrepo/api/core/tasks";
-import { TaskExerciseDetailPage } from "@cocrepo/ui";
+import { TaskExerciseDetailScreen } from "@cocrepo/ui";
 import { toast, useOverlayState } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 
-type TaskExerciseDetailPageParams = {
+type TaskExerciseDetailScreenParams = {
 	taskId: string;
 };
 
 const AdminTasksTaskIdExerciseRoute = observer(() => {
-	const { taskId } = useParams<TaskExerciseDetailPageParams>();
+	const { taskId } = useParams<TaskExerciseDetailScreenParams>();
 	const router = useRouter();
 	const deleteModal = useOverlayState();
 
@@ -58,41 +58,43 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 	};
 
 	return (
-		<TaskExerciseDetailPage
-			taskId={taskId}
-			exercise={
-				exercise
-					? {
-							name: exercise.name,
-							duration: exercise.duration,
-							count: exercise.count,
-							description: exercise.description,
-							imageFileId: exercise.imageFileId,
-							imageAssetHref: exercise.imageFileId
-								? (`/assets/${exercise.imageFileId}` as Route)
-								: undefined,
-							videoFileId: exercise.videoFileId,
-							videoAssetHref: exercise.videoFileId
-								? (`/assets/${exercise.videoFileId}` as Route)
-								: undefined,
-							createdAt: exercise.createdAt,
-							updatedAt: exercise.updatedAt,
-							spaceId: exercise.task?.spaceId,
-						}
-					: undefined
-			}
-			routines={routines}
-			isSchedulable={Boolean(exercise?.videoFileId)}
-			isLoading={isLoading}
-			isNotFound={!isLoading && !exercise}
-			isDeleteModalOpen={deleteModal.isOpen}
-			isDeletePending={isDeleting}
-			onClickBackButton={onClickBackButton}
-			onClickEditButton={onClickEditButton}
-			onClickDeleteButton={deleteModal.open}
-			onClickDeleteConfirmButton={onClickDeleteConfirmButton}
-			onClickDeleteCancelButton={deleteModal.close}
-		/>
+		<>
+			<TaskExerciseDetailScreen
+				taskId={taskId}
+				exercise={
+					exercise
+						? {
+								name: exercise.name,
+								duration: exercise.duration,
+								count: exercise.count,
+								description: exercise.description,
+								imageFileId: exercise.imageFileId,
+								imageAssetHref: exercise.imageFileId
+									? (`/assets/${exercise.imageFileId}` as Route)
+									: undefined,
+								videoFileId: exercise.videoFileId,
+								videoAssetHref: exercise.videoFileId
+									? (`/assets/${exercise.videoFileId}` as Route)
+									: undefined,
+								createdAt: exercise.createdAt,
+								updatedAt: exercise.updatedAt,
+								spaceId: exercise.task?.spaceId,
+							}
+						: undefined
+				}
+				routines={routines}
+				isSchedulable={Boolean(exercise?.videoFileId)}
+				isLoading={isLoading}
+				isNotFound={!isLoading && !exercise}
+				isDeleteModalOpen={deleteModal.isOpen}
+				isDeletePending={isDeleting}
+				onClickBackButton={onClickBackButton}
+				onClickEditButton={onClickEditButton}
+				onClickDeleteButton={deleteModal.open}
+				onClickDeleteConfirmButton={onClickDeleteConfirmButton}
+				onClickDeleteCancelButton={deleteModal.close}
+			/>
+		</>
 	);
 });
 

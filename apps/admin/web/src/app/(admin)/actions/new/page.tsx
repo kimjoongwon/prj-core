@@ -1,14 +1,17 @@
 "use client";
 
 import { useCreateAction } from "@cocrepo/api/core/actions";
-import { ActionCreatePage, type ActionCreatePageFormState } from "@cocrepo/ui";
+import {
+	ActionCreateScreen,
+	type ActionCreateScreenFormState,
+} from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 
 export default observer(function ActionNewPageRoute() {
 	const router = useRouter();
-	const state = useLocalObservable<ActionCreatePageFormState>(() => ({
+	const state = useLocalObservable<ActionCreateScreenFormState>(() => ({
 		name: "",
 		displayName: "",
 		description: "",
@@ -61,31 +64,33 @@ export default observer(function ActionNewPageRoute() {
 	};
 
 	return (
-		<ActionCreatePage
-			formState={state}
-			isSubmitting={isPending}
-			onClickBackButton={() => {
-				router.push("/actions" as Route);
-			}}
-			onChangeNameInput={(value) => {
-				state.name = value.toLowerCase();
-				state.errors.name = "";
-			}}
-			onChangeDisplayNameInput={(value) => {
-				state.displayName = value;
-			}}
-			onChangeDescriptionTextArea={(value) => {
-				state.description = value;
-			}}
-			onChangeGroupSelection={(value) => {
-				state.group = value;
-			}}
-			onChangeOrderInput={(value) => {
-				state.order = Number(value) || 0;
-			}}
-			onSubmit={() => {
-				onSubmit();
-			}}
-		/>
+		<>
+			<ActionCreateScreen
+				formState={state}
+				isSubmitting={isPending}
+				onClickBackButton={() => {
+					router.push("/actions" as Route);
+				}}
+				onChangeNameInput={(value) => {
+					state.name = value.toLowerCase();
+					state.errors.name = "";
+				}}
+				onChangeDisplayNameInput={(value) => {
+					state.displayName = value;
+				}}
+				onChangeDescriptionTextArea={(value) => {
+					state.description = value;
+				}}
+				onChangeGroupSelection={(value) => {
+					state.group = value;
+				}}
+				onChangeOrderInput={(value) => {
+					state.order = Number(value) || 0;
+				}}
+				onSubmit={() => {
+					onSubmit();
+				}}
+			/>
+		</>
 	);
 });

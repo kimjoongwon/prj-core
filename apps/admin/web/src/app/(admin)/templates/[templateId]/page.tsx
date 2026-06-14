@@ -9,7 +9,7 @@ import {
 	useSendTestTemplate,
 	useToggleTemplateStatus,
 } from "@cocrepo/api/core/templates";
-import { type PreviewResult, TemplateDetailPage } from "@cocrepo/ui";
+import { type PreviewResult, TemplateDetailScreen } from "@cocrepo/ui";
 import { toast, useOverlayState } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -28,12 +28,12 @@ type TemplateWithVariables = TemplateDto & {
 	variables?: TemplateVariableLike[];
 };
 
-type TemplateDetailPageParams = {
+type TemplateDetailScreenParams = {
 	templateId: string;
 };
 
 const AdminTemplatesTemplateIdRoute = observer(() => {
-	const { templateId } = useParams<TemplateDetailPageParams>();
+	const { templateId } = useParams<TemplateDetailScreenParams>();
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const deleteModal = useOverlayState();
@@ -126,51 +126,53 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 	};
 
 	return (
-		<TemplateDetailPage
-			templateId={templateId}
-			template={
-				template
-					? {
-							id: template.id,
-							code: template.code,
-							name: template.name,
-							type: template.type,
-							description: template.description,
-							isActive: template.isActive,
-							subject: template.subject,
-							content: template.content,
-							variables: (template.variables ?? []).map((variable) => ({
-								id: variable.id,
-								name: variable.name,
-								description: variable.description ?? null,
-								defaultValue: variable.defaultValue ?? null,
-								isRequired: variable.isRequired ?? false,
-							})),
-							createdAt: template.createdAt,
-							updatedAt: template.updatedAt,
-						}
-					: undefined
-			}
-			isLoading={isLoading}
-			isNotFound={!isLoading && !template}
-			isDeleteModalOpen={deleteModal.isOpen}
-			isPreviewModalOpen={previewModal.isOpen}
-			isSendTestModalOpen={sendTestModal.isOpen}
-			isDeletePending={isDeleting}
-			isTogglePending={isToggling}
-			onClickBackButton={onClickBackButton}
-			onClickEditButton={onClickEditButton}
-			onClickDeleteButton={deleteModal.open}
-			onClickDeleteConfirmButton={onClickDeleteConfirmButton}
-			onClickDeleteCancelButton={deleteModal.close}
-			onClickToggleButton={onClickToggleButton}
-			onClickPreviewButton={previewModal.open}
-			onClickPreviewCloseButton={previewModal.close}
-			onClickSendTestButton={sendTestModal.open}
-			onClickSendTestCloseButton={sendTestModal.close}
-			onSubmitPreviewTemplate={onSubmitPreviewTemplate}
-			onSubmitSendTestTemplate={onSubmitSendTestTemplate}
-		/>
+		<>
+			<TemplateDetailScreen
+				templateId={templateId}
+				template={
+					template
+						? {
+								id: template.id,
+								code: template.code,
+								name: template.name,
+								type: template.type,
+								description: template.description,
+								isActive: template.isActive,
+								subject: template.subject,
+								content: template.content,
+								variables: (template.variables ?? []).map((variable) => ({
+									id: variable.id,
+									name: variable.name,
+									description: variable.description ?? null,
+									defaultValue: variable.defaultValue ?? null,
+									isRequired: variable.isRequired ?? false,
+								})),
+								createdAt: template.createdAt,
+								updatedAt: template.updatedAt,
+							}
+						: undefined
+				}
+				isLoading={isLoading}
+				isNotFound={!isLoading && !template}
+				isDeleteModalOpen={deleteModal.isOpen}
+				isPreviewModalOpen={previewModal.isOpen}
+				isSendTestModalOpen={sendTestModal.isOpen}
+				isDeletePending={isDeleting}
+				isTogglePending={isToggling}
+				onClickBackButton={onClickBackButton}
+				onClickEditButton={onClickEditButton}
+				onClickDeleteButton={deleteModal.open}
+				onClickDeleteConfirmButton={onClickDeleteConfirmButton}
+				onClickDeleteCancelButton={deleteModal.close}
+				onClickToggleButton={onClickToggleButton}
+				onClickPreviewButton={previewModal.open}
+				onClickPreviewCloseButton={previewModal.close}
+				onClickSendTestButton={sendTestModal.open}
+				onClickSendTestCloseButton={sendTestModal.close}
+				onSubmitPreviewTemplate={onSubmitPreviewTemplate}
+				onSubmitSendTestTemplate={onSubmitSendTestTemplate}
+			/>
+		</>
 	);
 });
 

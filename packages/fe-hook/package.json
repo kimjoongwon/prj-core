@@ -36,8 +36,15 @@
   "author": "kimjoongwon",
   "license": "ISC",
   "dependencies": {
+    "@cocrepo/api": "workspace:*",
+    "@cocrepo/constant": "workspace:*",
+    "@cocrepo/store": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
-    "@cocrepo/type": "workspace:*"
+    "@cocrepo/type": "workspace:*",
+    "@heroui/react": "catalog:",
+    "@tanstack/react-query": "catalog:",
+    "next": "^16.1.0",
+    "nuqs": "catalog:"
   },
   "devDependencies": {
     "react": "catalog:",

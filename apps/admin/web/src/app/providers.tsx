@@ -5,10 +5,15 @@ import {
 } from "@cocrepo/api/core/client";
 import { nativeRefreshToken, useVerifyToken } from "@cocrepo/api/idp/auth";
 import { setIdpNativeRefreshHandler } from "@cocrepo/api/idp/client";
-import { DEFAULT_LANGUAGE } from "@cocrepo/constant";
+import { DEFAULT_LANGUAGE, isScopeKindAccessible } from "@cocrepo/constant";
+import {
+	useAbilityBootstrap,
+	useSpaceBootstrapFromApi,
+	useSpaceGuard,
+} from "@cocrepo/hook";
 
-import { useStore } from "@cocrepo/store";
-import { DesignSystemProvider, I18nProvider } from "@cocrepo/ui";
+import { useNavigationStore, useStore } from "@cocrepo/store";
+import { DesignSystemProvider, I18nProvider, SpaceAlert } from "@cocrepo/ui";
 import {
 	isServer,
 	QueryClient,
@@ -18,7 +23,6 @@ import {
 import { observer } from "mobx-react-lite";
 import { NuqsAdapter as NuqsNextAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode, useEffect } from "react";
-import { useAbilities } from "@/hooks";
 import { AppStoreProvider, usePersistStore } from "@/stores";
 import { resolveAbilityBootstrapRules } from "./ability-bootstrap";
 
@@ -81,7 +85,13 @@ export const Providers = observer(function Providers({
 					<NativeAuthBridge>
 						<I18nCatalogBootstrapper>
 							<AbilityStoreBootstrapper>
-								<DesignSystemProvider>{children}</DesignSystemProvider>
+								<DesignSystemProvider>
+									<SpaceBootstrapper>
+										<NavigationScopeBootstrapper>
+											<SpaceGuardOverlay>{children}</SpaceGuardOverlay>
+										</NavigationScopeBootstrapper>
+									</SpaceBootstrapper>
+								</DesignSystemProvider>
 							</AbilityStoreBootstrapper>
 						</I18nCatalogBootstrapper>
 					</NativeAuthBridge>
@@ -173,7 +183,7 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 		isLoading,
 		isError,
 		isDisabled: isAbilitiesDisabled,
-	} = useAbilities();
+	} = useAbilityBootstrap();
 	const persistStore = usePersistStore();
 	const store = useStore();
 	const abilityStore = store.abilityStore;
@@ -221,4 +231,71 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 	]);
 
 	return children;
+});
+
+/**
+ * API에서 Space 목록과 현재 Space 정보를 부트스트랩합니다.
+ */
+const SpaceBootstrapper = observer(function SpaceBootstrapper({
+	children,
+}: {
+	children: ReactNode;
+}) {
+	useSpaceBootstrapFromApi();
+
+	return children;
+});
+
+/**
+ * 현재 tenant 권한 기준을 navigation store의 scope checker에 연결합니다.
+ */
+const NavigationScopeBootstrapper = observer(
+	function NavigationScopeBootstrapper({ children }: { children: ReactNode }) {
+		const persistStore = usePersistStore();
+		const navigationStore = useNavigationStore();
+		const shouldVerifyCurrentTenant =
+			persistStore.isHydrated && persistStore.isSpaceSelectionResolved;
+		const { data: verifyTokenResponse } = useVerifyToken({
+			query: {
+				enabled: shouldVerifyCurrentTenant,
+				queryKey: ["/api/v1/auth/verify-token", persistStore.spaceId],
+				retry: false,
+				refetchOnWindowFocus: false,
+			},
+		});
+		const hasFullAccessInCurrentTenant =
+			verifyTokenResponse?.data?.hasFullAccess === true;
+
+		useEffect(() => {
+			navigationStore.setScopeChecker((scopeKind) =>
+				isScopeKindAccessible(scopeKind, hasFullAccessInCurrentTenant),
+			);
+
+			return () => {
+				navigationStore.setScopeChecker(null);
+			};
+		}, [hasFullAccessInCurrentTenant, navigationStore]);
+
+		return children;
+	},
+);
+
+/**
+ * Space 선택이 필요한 전역 상태를 감지해 overlay alert를 렌더링합니다.
+ */
+const SpaceGuardOverlay = observer(function SpaceGuardOverlay({
+	children,
+}: {
+	children: ReactNode;
+}) {
+	const { showAlert, handleConfirm, handleDismiss } = useSpaceGuard();
+
+	return (
+		<>
+			{children}
+			{showAlert ? (
+				<SpaceAlert onConfirm={handleConfirm} onDismiss={handleDismiss} />
+			) : null}
+		</>
+	);
 });

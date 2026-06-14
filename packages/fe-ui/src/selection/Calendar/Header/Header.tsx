@@ -3,7 +3,6 @@
 import { observer } from "mobx-react-lite";
 import { Button } from "../../../action/Button/Button";
 import { useT } from "../../../i18n";
-import { HStack } from "../../../rhythm/HStack/HStack";
 
 interface HeaderProps {
 	year: number;
@@ -17,7 +16,7 @@ export const Header = observer(function Header(props: HeaderProps) {
 
 	return (
 		<div className="flex justify-between">
-			<HStack className="items-center justify-between">
+			<div className="flex items-center justify-between">
 				<Button
 					size="sm"
 					variant="light"
@@ -34,7 +33,7 @@ export const Header = observer(function Header(props: HeaderProps) {
 					onPress={onNextMonth}
 					endContent={<div>next</div>}
 				/>
-			</HStack>
+			</div>
 		</div>
 	);
 });

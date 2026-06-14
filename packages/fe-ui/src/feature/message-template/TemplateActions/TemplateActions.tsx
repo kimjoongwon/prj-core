@@ -3,7 +3,6 @@
 import { Eye, Pencil, Send, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../../action/Button/Button";
-import { HStack } from "../../../rhythm/HStack/HStack";
 
 export interface TemplateActionsProps {
 	/** 템플릿 ID */
@@ -52,7 +51,7 @@ export const TemplateActions = observer(
 		onSendTest,
 	}: TemplateActionsProps) => {
 		return (
-			<HStack gap={2} alignItems="center">
+			<div className="flex gap-2 items-center">
 				{/* 미리보기 */}
 				<Button
 					size="sm"
@@ -94,7 +93,7 @@ export const TemplateActions = observer(
 				>
 					삭제
 				</Button>
-			</HStack>
+			</div>
 		);
 	},
 );

@@ -1,11 +1,15 @@
 "use client";
 
-import { AssetListPage } from "@cocrepo/ui";
+import { AssetListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { useAdminAssetBrowser } from "../hooks/useAdminAssetBrowser";
+import { useAssetBrowser } from "@cocrepo/hook";
 
 export default observer(function AssetsPageRoute() {
-	const assetBrowser = useAdminAssetBrowser();
+	const assetBrowser = useAssetBrowser();
 
-	return <AssetListPage {...assetBrowser} />;
+	return (
+		<>
+			<AssetListScreen {...assetBrowser} />
+		</>
+	);
 });

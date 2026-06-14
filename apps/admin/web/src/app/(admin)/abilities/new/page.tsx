@@ -6,7 +6,7 @@ import {
 } from "@cocrepo/api/core/abilities";
 import { useGetActions } from "@cocrepo/api/core/actions";
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
-import { AbilityFormPage } from "@cocrepo/ui";
+import { AbilityFormScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -99,62 +99,64 @@ export default observer(function AbilityNewPage() {
 	};
 
 	return (
-		<AbilityFormPage
-			status={isSubjectsLoading || isActionsLoading ? "loading" : "ready"}
-			mode="create"
-			title="권한 등록"
-			description="새로운 CASL 권한을 등록합니다."
-			backButtonLabel="목록으로"
-			submitButtonLabel="등록"
-			isSubmitting={isPending}
-			form={{
-				name: state.name,
-				description: state.description,
-				subjectId: state.subjectId,
-				actionId: state.actionId,
-				fields: state.fields,
-				conditions: state.conditions,
-				inverted: state.inverted,
-				reason: state.reason,
-			}}
-			subjects={(subjectsResponse?.data ?? []).map((subject) => ({
-				id: subject.id,
-				label: `${subject.displayName || subject.name}${subject.group ? ` (${subject.group})` : ""}`,
-			}))}
-			actions={(actionsResponse?.data ?? []).map((action) => ({
-				id: action.id,
-				label: `${action.displayName || action.name}${action.group ? ` (${action.group})` : ""}`,
-			}))}
-			onClickBackButton={() => {
-				router.push("/abilities" as Route);
-			}}
-			onClickSubmitButton={onClickCreateButton}
-			onChange={{
-				onChangeName: (value) => {
-					state.name = value;
-				},
-				onChangeDescription: (value) => {
-					state.description = value;
-				},
-				onChangeSubjectId: (value) => {
-					state.subjectId = value;
-				},
-				onChangeActionId: (value) => {
-					state.actionId = value;
-				},
-				onChangeFields: (value) => {
-					state.fields = value;
-				},
-				onChangeConditions: (value) => {
-					state.conditions = value;
-				},
-				onChangeInverted: (value) => {
-					state.inverted = value;
-				},
-				onChangeReason: (value) => {
-					state.reason = value;
-				},
-			}}
-		/>
+		<>
+			<AbilityFormScreen
+				status={isSubjectsLoading || isActionsLoading ? "loading" : "ready"}
+				mode="create"
+				title="권한 등록"
+				description="새로운 CASL 권한을 등록합니다."
+				backButtonLabel="목록으로"
+				submitButtonLabel="등록"
+				isSubmitting={isPending}
+				form={{
+					name: state.name,
+					description: state.description,
+					subjectId: state.subjectId,
+					actionId: state.actionId,
+					fields: state.fields,
+					conditions: state.conditions,
+					inverted: state.inverted,
+					reason: state.reason,
+				}}
+				subjects={(subjectsResponse?.data ?? []).map((subject) => ({
+					id: subject.id,
+					label: `${subject.displayName || subject.name}${subject.group ? ` (${subject.group})` : ""}`,
+				}))}
+				actions={(actionsResponse?.data ?? []).map((action) => ({
+					id: action.id,
+					label: `${action.displayName || action.name}${action.group ? ` (${action.group})` : ""}`,
+				}))}
+				onClickBackButton={() => {
+					router.push("/abilities" as Route);
+				}}
+				onClickSubmitButton={onClickCreateButton}
+				onChange={{
+					onChangeName: (value) => {
+						state.name = value;
+					},
+					onChangeDescription: (value) => {
+						state.description = value;
+					},
+					onChangeSubjectId: (value) => {
+						state.subjectId = value;
+					},
+					onChangeActionId: (value) => {
+						state.actionId = value;
+					},
+					onChangeFields: (value) => {
+						state.fields = value;
+					},
+					onChangeConditions: (value) => {
+						state.conditions = value;
+					},
+					onChangeInverted: (value) => {
+						state.inverted = value;
+					},
+					onChangeReason: (value) => {
+						state.reason = value;
+					},
+				}}
+			/>
+		</>
 	);
 });

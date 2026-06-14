@@ -3,7 +3,6 @@
 import { KeyRound, Mail } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { TextField } from "../../input/TextField";
-import { VStack } from "../../rhythm/VStack/VStack";
 
 export interface LoginFormState {
 	email: string;
@@ -28,7 +27,7 @@ export interface LoginFormProps {
  */
 export const LoginForm = observer(({ state }: LoginFormProps) => {
 	return (
-		<VStack fullWidth gap="section" justifyContent="center">
+		<div className="flex flex-col w-full gap-6 justify-center">
 			<TextField
 				key="email"
 				autoComplete="email"
@@ -70,6 +69,6 @@ export const LoginForm = observer(({ state }: LoginFormProps) => {
 				}
 				state={state}
 			/>
-		</VStack>
+		</div>
 	);
 });

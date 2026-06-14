@@ -6,7 +6,6 @@ export * from "./columns";
 export * from "./data-display";
 export * from "./data-grid";
 export * from "./design-system";
-export * from "./detail";
 export * from "./feature";
 export * from "./feedback";
 export * from "./form";

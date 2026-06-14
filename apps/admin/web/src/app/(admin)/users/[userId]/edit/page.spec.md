@@ -17,7 +17,7 @@
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/users/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/users/[userId]/edit/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
 - `page.tsx`는 page-local 뒤로가기 버튼과 placeholder 수정 콘텐츠만 렌더링합니다.
 

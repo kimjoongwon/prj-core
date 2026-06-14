@@ -103,7 +103,7 @@ Admin은 스캔성과 반복 작업 효율이 중요합니다.
 - 기본 구조는 `상태 요약 -> 필터/액션 -> 목록/테이블 -> 보조 정보` 순서를 우선합니다.
 - 테이블 중심 화면은 카드 여러 개보다 table, filter, summary 조합을 우선합니다.
 - create/update 화면은 form group을 명확히 나누고, primary action은 하단 또는 상단 action area에 일관되게 둡니다.
-- PageSurface와 SectionSurface는 필요한 곳에만 사용합니다. 모든 작은 요소를 카드로 감싸지 않습니다.
+- ScreenSurface와 SectionSurface는 필요한 곳에만 사용합니다. 모든 작은 요소를 카드로 감싸지 않습니다.
 
 ### Mobile
 
@@ -149,7 +149,7 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 | 계층 | 역할 | 사용처 | 표현 |
 |------|------|--------|------|
 | Page background | 전체 바탕 | app page, screen | `canvas` |
-| PageSurface | 화면의 주 내용 묶음 | Admin page body | 부드러운 surface, 낮은 shadow |
+| ScreenSurface | 화면의 주 내용 묶음 | Admin page body | 부드러운 surface, 낮은 shadow |
 | SectionSurface | 독립 섹션 | table wrapper, form section | border 또는 약한 elevation |
 | Card | 반복 정보 단위 | mobile reservation card, summary card | 12~16px radius |
 | Floating | 임시 조작 | popover, dropdown, bottom sheet | 더 높은 surface와 명확한 z-index |
@@ -158,7 +158,7 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 ### Surface Rules
 
 - 같은 elevation의 surface를 중첩하지 않습니다.
-- PageSurface는 Page가 소유하고, Layout에서 남용하지 않습니다.
+- ScreenSurface는 Page가 소유하고, Layout에서 남용하지 않습니다.
 - 테이블은 surface 안에 넣되, 각 row를 카드처럼 과하게 분리하지 않습니다.
 - Mobile card는 정보가 한 덩어리로 읽힐 때만 사용합니다.
 - shadow는 낮고 조용해야 합니다. 깊이를 만들기 위해 강한 그림자를 반복하지 않습니다.

@@ -58,15 +58,15 @@
       "required": true,
       "source_spec": [
         "apps/admin/web/src/app/(admin)/payments/page.spec.md",
-        "packages/fe-ui/src/screen/PaymentManagementPage/PaymentManagementPage.spec.md",
-        "packages/fe-ui/src/feature/payment-management/PaymentManagementConsole/PaymentManagementConsole.spec.md"
+        "packages/fe-ui/src/screen/PaymentScreen/PaymentScreen.spec.md",
+        "packages/fe-ui/src/feature/payment/PaymentConsole/PaymentConsole.spec.md"
       ],
       "expected_files": [
         "apps/admin/web/src/app/(admin)/payments/page.tsx",
-        "apps/admin/web/src/app/(admin)/hooks/usePaymentManagementPageData.ts",
-        "packages/fe-ui/src/screen/PaymentManagementPage/PaymentManagementPage.tsx",
-        "packages/fe-ui/src/feature/payment-management/PaymentManagementConsole/PaymentManagementConsole.tsx",
-        "packages/fe-ui/src/widget/payment-management"
+        "packages/fe-hook/src/usePaymentData.ts",
+        "packages/fe-ui/src/screen/PaymentScreen/PaymentScreen.tsx",
+        "packages/fe-ui/src/feature/payment/PaymentConsole/PaymentConsole.tsx",
+        "packages/fe-ui/src/widget/payment"
       ],
       "verification": [
         "pnpm --filter=@cocrepo/api codegen:server",

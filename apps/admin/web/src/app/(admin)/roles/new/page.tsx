@@ -1,7 +1,7 @@
 "use client";
 
 import { type CreateRoleDto, useCreateRole } from "@cocrepo/api/core/roles";
-import { RoleCreatePage } from "@cocrepo/ui";
+import { RoleCreateScreen } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -96,19 +96,21 @@ const AdminRolesNewRoute = observer(() => {
 	};
 
 	return (
-		<RoleCreatePage
-			name={state.name}
-			displayName={state.displayName}
-			description={state.description}
-			nameError={state.errors.name}
-			displayNameError={state.errors.displayName}
-			isSubmitPending={isPending}
-			onChangeNameInput={onChangeNameInput}
-			onChangeDisplayNameInput={onChangeDisplayNameInput}
-			onChangeDescriptionTextArea={onChangeDescriptionTextArea}
-			onClickBackButton={onClickBackButton}
-			onClickSubmitButton={onClickSubmitButton}
-		/>
+		<>
+			<RoleCreateScreen
+				name={state.name}
+				displayName={state.displayName}
+				description={state.description}
+				nameError={state.errors.name}
+				displayNameError={state.errors.displayName}
+				isSubmitPending={isPending}
+				onChangeNameInput={onChangeNameInput}
+				onChangeDisplayNameInput={onChangeDisplayNameInput}
+				onChangeDescriptionTextArea={onChangeDescriptionTextArea}
+				onClickBackButton={onClickBackButton}
+				onClickSubmitButton={onClickSubmitButton}
+			/>
+		</>
 	);
 });
 

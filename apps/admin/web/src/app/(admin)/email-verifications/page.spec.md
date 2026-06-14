@@ -18,16 +18,16 @@
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/email-verifications/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
-- `page.tsx`는 query state, Orval 목록 조회, 재발송 mutation만 담당하고 시각 조합은 `EmailVerificationListPage`가 소유합니다.
+- `page.tsx`는 query state, Orval 목록 조회, 재발송 mutation만 담당하고 시각 조합은 `EmailVerificationListScreen`가 소유합니다.
 
 ## Rendering Decision
 
 - 기본 패턴: `pure screen + thin route container`
 - page role: `collection`
 - reusable target: `data-grid`
-- screen component path: `packages/fe-ui/src/screen/EmailVerificationListPage/EmailVerificationListPage.tsx`
+- screen component path: `packages/fe-ui/src/screen/EmailVerificationListScreen/EmailVerificationListScreen.tsx`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
 - page-level `SuspenseQuery`는 사용하지 않고 `useGetEmailVerifications`의 `isLoading`/`isFetching`으로 목록 상태를 제어합니다.

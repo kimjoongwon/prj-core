@@ -47,14 +47,14 @@ This reference preserves the detailed implementation instructions that previousl
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
 - PC/Web shell 후보는 `@cocrepo/ui` export만 보지 말고 upstream `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
-- `Page`, `Layout`, `Surface`, `Tabs`, `Dropdown`, `Modal`, `Drawer` 등으로 표현 가능한 shell UI를 raw `div`/`button` + className 조합으로 재구현하지 않습니다.
+- `Page`, `Layout`, `Tabs`, `Dropdown`, `Modal`, `Drawer` 등으로 표현 가능한 shell UI를 raw `div`/`button` + className 조합으로 재구현하지 않습니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
 ### FE Route Layout Agent
 
-Next.js App Router의 `apps/**/layout.tsx`를 생성/수정하는 전용 에이전트입니다.
-이 에이전트는 서버 `layout.tsx`에서 route 단위 화면 뼈대를 구성하고, 필요 시 named slot topology(`@detail`, `@aside`, `@modal` 등)까지 함께 소유합니다.
+Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology를 생성/수정하는 전용 에이전트입니다.
+이 에이전트는 root 서버 `layout.tsx`에서 `App`/provider 진입점과 공통 shell을 package UI/feature로 직접 조립합니다.
 
 ---
 
@@ -62,24 +62,24 @@ Next.js App Router의 `apps/**/layout.tsx`를 생성/수정하는 전용 에이�
 
 다음 항목 하나라도 위반하면 완료로 보고하지 않습니다.
 
-1. 기본 출력은 서버 `layout.tsx`입니다. 개발자 승인 없이 `"use client"`를 붙이지 않습니다.
+1. 기본 출력은 root 서버 `layout.tsx`입니다. 개발자 승인 없이 `"use client"`를 붙이지 않습니다.
 2. 작업 시작 전에 반드시 같은 route의 `page.spec.md`, 상위 route 코드, 메뉴/route contract을 읽습니다.
-3. route skeleton은 `layout.tsx`에서 조립합니다.
-   - `App`: 최상위 셸
-   - `Layout`: 서비스/세그먼트 셸
-   - `Page`: 페이지 단위 배치
-   - `PageSurface`: 페이지 단위 표면
-   - `Section`: 페이지 내부 배치
-   - `SectionSurface`: 섹션 단위 표면
-   - `Surface`: `Section top/bottom/left/right` 같은 slot 수준 표면
-4. `page.tsx`는 layout이 정의한 skeleton 안의 콘텐츠만 담당합니다. route-level `Page`/`PageSurface`/`Section` 조합을 다시 만들게 두지 않습니다.
-5. `layout.tsx`는 page 데이터 fetch와 페이지 이벤트 바인딩을 직접 수행하지 않습니다. 필요한 client 로직은 feature/widget을 slot에 배치해 해결합니다.
-6. route skeleton을 구현하기 위해 로컬 ad-hoc layout primitive를 만들지 않습니다. 부족한 primitive가 있으면 `fe-layout-agent`가 먼저 보강해야 합니다.
-7. 코드 수정 시 `page.spec.md`를 함께 갱신하고 `## 변경 이력`을 남깁니다.
-8. route shell의 `Layout` primitive는 `packages/fe-ui/src/display/layout/Layout.tsx`를 사용합니다.
-9. route shell의 `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 `packages/fe-ui/src/widget/[Name]/`에서 소비합니다.
-10. `packages/fe-ui/src/display/layout` 아래에 임의 하위 디렉터리를 만들거나, `packages/fe-ui/src/widget` 아래에 layout 전용 하위 카테고리를 새로 만들지 않습니다.
-11. feature/widget이 1개 이상 묶이는 콘텐츠-level 시각 wrapper는 route skeleton이 아니라 `@cocrepo/ui`의 범용 `Surface`가 기본입니다.
+3. web route skeleton은 root `app/layout.tsx`의 `App` 슬롯 안에서 직접 조립합니다.
+   - `App`: 최상위 root structure owner
+   - root `app/layout.tsx`: `TopBar`, `SideNavigation`, `AccessGate`, mobile navigation/action feature를 직접 조립
+   - route group/domain/auth `layout.tsx`: 기본 생성 금지
+   - `RouteFrame`처럼 pathname으로 shell을 고르는 package feature 생성 금지
+4. route layout은 surface/rhythm을 소유하지 않고 구조/slot topology만 소유합니다.
+   - route layout에서 `ScreenSurface`/`SectionSurface`/`Surface` 사용 금지
+   - route layout에서 `VStack`/`HStack`/`Spacer` 사용 금지
+   - screen 계층이 `ScreenSurface`와 `SectionSurface`를 소유합니다.
+5. `page.tsx`는 root layout shell 안에서 콘텐츠 wiring만 담당합니다. route-level `App`/`Page`/`Layout`/surface/rhythm은 다시 만들게 두지 않습니다.
+6. `layout.tsx`는 page 데이터 fetch와 페이지 이벤트 바인딩을 직접 수행하지 않습니다. 필요한 client 로직은 feature/widget을 slot에 배치해 해결합니다.
+7. route skeleton을 구현하기 위해 로컬 ad-hoc layout primitive를 만들지 않습니다. 부족한 primitive가 있으면 `fe-layout-agent`가 먼저 보강해야 합니다.
+8. 코드 수정 시 `page.spec.md`를 함께 갱신하고 `## 변경 이력`을 남깁니다.
+9. route shell primitive는 `packages/fe-ui/src/layout`과 `packages/fe-ui/src/feature`의 명시적 shell/action/navigation feature에서 소비합니다.
+10. route shell의 `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 `packages/fe-ui/src/widget/[Name]/`에서 소비하고 store/API wiring은 `packages/fe-ui/src/feature`가 소유합니다.
+11. `packages/fe-ui/src/display/layout` 아래에 임의 하위 디렉터리를 만들거나, `packages/fe-ui/src/widget` 아래에 layout 전용 하위 카테고리를 새로 만들지 않습니다.
 12. named slot은 기본값이 아니라 예외 패턴입니다. 아래 경우에만 사용합니다.
    - 목록 유지 + detail/inspector 독립 전환
    - deep-link 가능한 modal/drawer
@@ -98,8 +98,9 @@ Next.js App Router의 `apps/**/layout.tsx`를 생성/수정하는 전용 에이�
 
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
-| `apps/**/layout.tsx` 신규 작성 | O | route skeleton 생성 |
-| 기존 `layout.tsx`를 서버 skeleton 규칙에 맞게 정리 | O | route shell 재구성 |
+| root `apps/**/layout.tsx` 신규/수정 | O | `App` + provider 진입점 + 공통 shell 직접 조립 |
+| route group/domain/auth `layout.tsx` 신규 작성 | X | shell은 root `app/layout.tsx`에 집중 |
+| 기존 route group/domain/auth `layout.tsx` 정리 | O | 제거하거나 root `app/layout.tsx`로 흡수 |
 | named slot(`@detail`, `@modal`) topology 설계/구현 | O | 병렬 영역과 fallback 파일 구성 |
 | 탭/서브네비게이션이 있는 route layout 구현 | O | 메뉴 contract 소비 |
 | 페이지별 `page.tsx` 콘텐츠 구현 | X | `fe-route-agent` 사용 |
@@ -117,7 +118,7 @@ Next.js App Router의 `apps/**/layout.tsx`를 생성/수정하는 전용 에이�
 | route `page.spec.md` | O | route skeleton과 child page 콘텐츠 계약 |
 | slot topology 요구사항 | △ | named slot 필요 시 key/fallback/url mapping |
 | 메뉴/탭 spec | △ | 탭/서브네비게이션 route일 때 |
-| 재사용 Layout primitive spec | △ | `Page`, `Section` 등 사용 기준 |
+| 재사용 Layout primitive spec | △ | `Page` 등 사용 기준 |
 
 ### 출력
 
@@ -133,46 +134,37 @@ Next.js App Router의 `apps/**/layout.tsx`를 생성/수정하는 전용 에이�
 
 ### 3.1 서버 skeleton ownership
 
-route `layout.tsx`는 화면 전체 뼈대를 서버에서 구성합니다.
+web root `app/layout.tsx`는 앱 전체 뼈대와 공통 shell을 서버 파일 안에서 직접 선언합니다.
 
 예시 개념:
 
 ```tsx
-<Page
-  top={
-    <Section top={<Surface>...</Surface>}>
-      ...
-    </Section>
-  }
->
-  <PageSurface>
-    <SectionSurface>
-      {children}
-    </SectionSurface>
-  </PageSurface>
-</Page>
+<App header={<TopBar />} leftAside={<SideNavigation />} main={<AccessGate contents={children} />} />
 ```
 
-- `Page`는 페이지 전체 배치를 결정합니다.
-- `PageSurface`는 페이지 단위 표면 디자인을 결정합니다.
-- `Section`은 페이지 내부 영역의 배치를 결정합니다.
-- `SectionSurface`는 해당 `Section` 배치의 표면을 표현합니다.
-- `Surface`는 `Section top/bottom/left/right` 같은 세부 slot의 표면을 표현합니다.
-- route-level skeleton 아래에서 feature/widget 묶음을 감싸는 card/table/detail wrapper는 기본적으로 범용 `Surface`가 담당합니다.
+- `App`은 root 구조 슬롯 owner이며 `header`, `footer`, `leftAside`, `rightAside`, `main` props를 받습니다.
+- `App`은 root shell의 기본 배치, aside visibility/width, main scroll/background/padding을 소유합니다. root `app/layout.tsx`에서 slot을 Tailwind wrapper로 감싸지 않습니다.
+- `Providers`는 auth refresh, i18n, ability, Space bootstrap/guard, navigation scope checker 같은 전역 side effect와 overlay를 소유합니다.
+- `Page`는 `children`만 받는 콘텐츠 boundary이며 root App 슬롯을 재사용하지 않습니다.
+- route group/domain/auth layout은 만들지 않고, root `app/layout.tsx`가 package UI/feature로 shell을 직접 조립합니다.
+- `RouteFrame`처럼 pathname으로 route shell을 선택하는 중간 feature를 만들지 않습니다.
+- route layout은 surface/elevation/rhythm을 결정하지 않습니다.
+- route-level skeleton 아래의 시각 표면은 screen 계층이 `ScreenSurface`와 `SectionSurface`로 소유합니다.
 
 ### 3.2 `page.tsx`와의 경계
 
-- `layout.tsx`는 skeleton owner입니다.
-- `page.tsx`는 `children` 위치에 마운트되는 콘텐츠 owner입니다.
-- route 전체 title/header/tab/aside/surface 블록은 `page.spec.md`에 있으면 `layout.tsx`에서 소유합니다.
+- root `app/layout.tsx`는 `Providers > App(header/leftAside/main/footer)` owner입니다.
+- `page.tsx`는 root layout shell의 `children`으로 들어갑니다.
+- route 전체 shell/header/aside/mobile action 구조는 root `app/layout.tsx`가 package UI/feature를 직접 조립해 소유합니다.
+- screen/page surface topology는 screen 계층에서 소유합니다.
 - `page.tsx`는 목록, 폼, 상세, 액션, API 연동 같은 콘텐츠 로직만 구현합니다.
-- `page.tsx`가 콘텐츠-level raw bordered container를 직접 만들지 않도록 child contract에서 `Surface` 사용 원칙을 명시합니다.
+- `page.tsx`가 콘텐츠-level raw bordered container를 직접 만들지 않도록 child contract에서 screen `ScreenSurface`/`SectionSurface` 사용 원칙을 명시합니다.
 
 ### 3.3 서버/클라이언트 경계
 
-- `layout.tsx`는 서버 파일로 유지합니다.
-- 경로 기반 활성 탭, client-only 네비게이션, 인터랙티브 필터 바는 client feature/widget을 slot에 배치해 해결합니다.
-- route skeleton 자체를 client 컴포넌트로 승격하지 않습니다.
+- root `layout.tsx`는 서버 파일로 유지합니다.
+- 경로 기반 활성 탭, client-only 네비게이션, 인터랙티브 필터 바는 root layout이 client feature/widget을 slot에 배치해 해결합니다.
+- pathname 기반 shell selector feature를 만들지 않습니다.
 
 ### 3.4 Parallel Routes / Slots
 
@@ -196,17 +188,16 @@ export default function UsersLayout({
   modal: React.ReactNode;
 }) {
   return (
-    <Page rightAside={detail}>
-      <PageSurface>
-        <SectionSurface>
-          <Section>{children}</Section>
-        </SectionSurface>
-      </PageSurface>
+    <>
+      {children}
+      {detail}
       {modal}
-    </Page>
+    </>
   );
 }
 ```
+
+slot에 aside/header/footer 같은 구조가 필요하면 route layout에서 `Page` 슬롯을 되살리지 말고, `@cocrepo/ui` package feature로 명시적 slot frame을 만든 뒤 root `app/layout.tsx`에서 직접 소비합니다.
 
 ---
 
@@ -226,8 +217,8 @@ export default function UsersLayout({
 
 각 섹션에는 최소 아래가 기록되어야 합니다.
 
-- 어떤 수준에서 `App`, `Layout`, `Page`, `Section`을 사용하는지
-- `PageSurface`, `SectionSurface`, `Surface`의 owner와 위치
+- 어떤 수준에서 `App`, `Layout`, `Page`를 사용하는지
+- screen 계층이 `ScreenSurface`, `SectionSurface`를 소유하는지
 - `children`과 named slot이 어디에 마운트되는지
 - 각 slot의 key, owner file, fallback file, URL 매핑
 - soft/hard navigation에서 slot이 어떻게 유지/복구되는지
@@ -240,7 +231,7 @@ export default function UsersLayout({
 1. route 폴더와 상위 layout 체인을 스캔합니다.
 2. route `page.spec.md`를 읽고 skeleton ownership과 child content contract를 확정합니다.
 3. named slot이 필요한 케이스인지 먼저 판정하고, 불필요하면 `children` 단일 구조를 유지합니다.
-4. 기존 `layout.tsx`가 있으면 App/Layout/Page/Surface/slot 소유권 충돌을 정리합니다.
+4. 기존 route group/domain/auth `layout.tsx`가 있으면 App/Page/surface/rhythm/shell 소유권을 root `app/layout.tsx`로 흡수하고 제거합니다.
 5. slot을 쓰는 경우 각 `@slot/default.tsx` fallback을 먼저 정의합니다.
 6. 필요한 재사용 primitive가 없으면 즉시 `fe-layout-agent` 필요성을 보고하고 무리하게 로컬 구현하지 않습니다.
 7. 서버 `layout.tsx`에서 skeleton과 slot prop wiring을 조립합니다.
@@ -259,13 +250,14 @@ rg -n '^## Server Skeleton$|^## Page Composition$|^## Surface Ownership$|^## Slo
 rg -n '^"use client";$' [Route경로]/layout.tsx
 
 # 3) route skeleton primitive 사용 여부 확인
-rg -n '\bPage\b|\bPageSurface\b|\bSection\b|\bSectionSurface\b|\bSurface\b' [Route경로]/layout.tsx
+rg -n '\bScreenSurface\b|\bSectionSurface\b|\bSurface\b|\bVStack\b|\bHStack\b|\bSpacer\b' [Route경로]/layout.tsx
+find apps/*/web/src/app -type d -name _layout -print
 
 # 4) named slot fallback 누락 확인
 find [Route경로] -maxdepth 1 -type d -name '@*' | while read slot; do test -f "$slot/default.tsx" || echo "MISSING $slot/default.tsx"; done
 
 # 5) page.tsx / @slot page가 route-level skeleton을 다시 만들지 않는지 확인
-find [Route경로] -type f \( -name 'page.tsx' -o -name '_client.tsx' \) -print | xargs rg -n 'from\s+"@cocrepo/ui".*\b(App|Layout|Page|PageSurface|Section|SectionSurface|Surface)\b'
+find [Route경로] -type f \( -name 'page.tsx' -o -name '_client.tsx' \) -print | xargs rg -n 'from\s+"@cocrepo/ui".*\b(App|Layout|Page|ScreenSurface|SectionSurface|Surface|VStack|HStack|Spacer)\b'
 ```
 
 - `#1`은 모든 섹션이 보여야 통과입니다.
@@ -283,7 +275,7 @@ find [Route경로] -type f \( -name 'page.tsx' -o -name '_client.tsx' \) -print 
 1. 읽은 route `page.spec.md` 목록
 2. 상위 layout에서 상속받은 shell과 현재 route가 추가한 skeleton
 3. slot topology와 각 `default.tsx` fallback 반영 내역
-4. `Page` / `PageSurface` / `Section` / `SectionSurface` / `Surface` 반영 내역
+4. `Page` / screen `ScreenSurface` / `SectionSurface` ownership 반영 내역
 5. `page.tsx` / `@slot/**/page.tsx`와의 경계 정리 결과
 6. 실행한 검증 명령과 결과
 
@@ -365,7 +357,7 @@ Expo Router native runtime 기준의 `apps/mobile/src/app/**/_layout.tsx`를 구
 
 ### Don't
 
-- `apps/*/web`, `page.tsx`, web layout spec, `PageSurface` 같은 웹 규칙을 가져오지 않습니다.
+- `apps/*/web`, `page.tsx`, web layout spec, `ScreenSurface` 같은 웹 규칙을 가져오지 않습니다.
 - 데이터 fetch, API mutation, screen 본문 UI 를 `_layout.tsx`에 넣지 않습니다.
 - 브라우저 URL tab/split-view 규칙을 복제하지 않습니다.
 - Expo Web, react-native-web, browser DOM target을 `_layout.tsx` 책임에 포함하지 않습니다.

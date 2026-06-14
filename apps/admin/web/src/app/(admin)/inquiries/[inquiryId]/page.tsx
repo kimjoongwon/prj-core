@@ -17,6 +17,7 @@ import {
 	useUpdateInquiryStatus,
 } from "@cocrepo/api/core/inquiries";
 import { ADMIN_PATHS } from "@cocrepo/constant";
+import { useInquiryDetailWebSocket } from "@cocrepo/hook";
 import type {
 	AiFormOptionItem,
 	AiFormPatch,
@@ -24,9 +25,8 @@ import type {
 	InquiryParticipant,
 } from "@cocrepo/type";
 import {
-	InquiryDetailPage,
-	type InquiryDetailPageMetaFormState,
-	useInquiryDetailWebSocket,
+	InquiryDetailScreen,
+	type InquiryDetailScreenMetaFormState,
 } from "@cocrepo/ui";
 import { observable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -104,7 +104,7 @@ const mapParticipantToStore = (
 	};
 };
 
-export default observer(function InquiryDetailPageRoute() {
+export default observer(function InquiryDetailScreenRoute() {
 	const inquiryId = useParams<{ inquiryId: string }>().inquiryId;
 	const router = useRouter();
 	const deleteModalState = useStateLike(false);
@@ -207,7 +207,7 @@ export default observer(function InquiryDetailPageRoute() {
 		},
 	}));
 	const metaState = useLocalObservable<
-		InquiryDetailPageMetaFormState & {
+		InquiryDetailScreenMetaFormState & {
 			initialized: boolean;
 			setFromBootstrap: () => void;
 		}
@@ -336,232 +336,237 @@ export default observer(function InquiryDetailPageRoute() {
 	};
 
 	return (
-		<InquiryDetailPage
-			inquiryId={inquiryId}
-			inquiry={
-				inquiry
-					? {
-							id: inquiry.id,
-							inquiryNumber: inquiry.inquiryNumber,
-							title: inquiry.title,
-							channel: inquiry.channel,
-							status: inquiry.status,
-							priority: inquiry.priority,
-							category: inquiry.category,
-							assigneeId: inquiry.assigneeId,
-							customerId: inquiry.customerId,
-							createdAt: inquiry.createdAt,
-							firstResponseAt: inquiry.firstResponseAt,
-							resolvedAt: inquiry.resolvedAt,
-							slaResponseDue: inquiry.slaResponseDue,
-							slaResolveDue: inquiry.slaResolveDue,
-							isSlaResponseBreached: inquiry.isSlaResponseBreached,
-							isSlaResolveBreached: inquiry.isSlaResolveBreached,
-							sentiment: inquiry.sentiment
-								? {
-										sentiment: inquiry.sentiment.sentiment,
-										confidence: inquiry.sentiment.confidence,
-									}
-								: null,
-						}
-					: undefined
-			}
-			bootstrap={
-				updateFormBootstrap
-					? {
-							fieldMeta: updateFormBootstrap.fieldMeta,
-							aiSchemas: updateFormBootstrap.aiSchemas,
-							ui: updateFormBootstrap.ui,
-							options: updateFormOptions,
-						}
-					: undefined
-			}
-			metaFormState={metaState}
-			editCategoryOptions={(updateFormOptions.category ?? []).map((item) => ({
-				value: String(item.value ?? ""),
-				label: item.label,
-			}))}
-			editPriorityOptions={(updateFormOptions.priority ?? []).map((item) => ({
-				value: String(item.value ?? ""),
-				label: item.label,
-			}))}
-			realtimeState={{
-				messages:
-					inquiryState.messages.length > 0 ? inquiryState.messages : messages,
-				typingUserNames: Array.from(inquiryState.typingUsers.keys()),
-				isWebSocketConnected: inquiryState.isWebSocketConnected,
-				isTyping: inquiryState.isTyping,
-				isGeneratingDraft: inquiryState.isGeneratingDraft,
-			}}
-			participantListItems={participantListItems}
-			onlineParticipantNames={inquiryState.participants
-				.filter((participant) => participant.isOnline)
-				.map((participant) => participant.userId)}
-			assigneeOptions={assigneeOptions}
-			deleteModalOpen={deleteModalState.value}
-			isDeleting={deleteInquiryMutation.isPending}
-			isUpdatingMeta={updateInquiryMutation.isPending}
-			isFillingMeta={fillMetaMutation.isPending}
-			webSocketStatus={ws.status}
-			onClickBackButton={() => {
-				router.push(ADMIN_PATHS.INQUIRIES as Route);
-			}}
-			onClickEditButton={() => {
-				router.push(
-					ADMIN_PATHS.INQUIRIES_EDIT.replace("[inquiryId]", inquiryId) as Route,
-				);
-			}}
-			onOpenDeleteModal={() => {
-				deleteModalState.value = true;
-			}}
-			onCloseDeleteModal={() => {
-				deleteModalState.value = false;
-			}}
-			onConfirmDelete={() => {
-				void (async () => {
-					await deleteInquiryMutation.mutateAsync({ inquiryId });
-					deleteModalState.value = false;
+		<>
+			<InquiryDetailScreen
+				inquiryId={inquiryId}
+				inquiry={
+					inquiry
+						? {
+								id: inquiry.id,
+								inquiryNumber: inquiry.inquiryNumber,
+								title: inquiry.title,
+								channel: inquiry.channel,
+								status: inquiry.status,
+								priority: inquiry.priority,
+								category: inquiry.category,
+								assigneeId: inquiry.assigneeId,
+								customerId: inquiry.customerId,
+								createdAt: inquiry.createdAt,
+								firstResponseAt: inquiry.firstResponseAt,
+								resolvedAt: inquiry.resolvedAt,
+								slaResponseDue: inquiry.slaResponseDue,
+								slaResolveDue: inquiry.slaResolveDue,
+								isSlaResponseBreached: inquiry.isSlaResponseBreached,
+								isSlaResolveBreached: inquiry.isSlaResolveBreached,
+								sentiment: inquiry.sentiment
+									? {
+											sentiment: inquiry.sentiment.sentiment,
+											confidence: inquiry.sentiment.confidence,
+										}
+									: null,
+							}
+						: undefined
+				}
+				bootstrap={
+					updateFormBootstrap
+						? {
+								fieldMeta: updateFormBootstrap.fieldMeta,
+								aiSchemas: updateFormBootstrap.aiSchemas,
+								ui: updateFormBootstrap.ui,
+								options: updateFormOptions,
+							}
+						: undefined
+				}
+				metaFormState={metaState}
+				editCategoryOptions={(updateFormOptions.category ?? []).map((item) => ({
+					value: String(item.value ?? ""),
+					label: item.label,
+				}))}
+				editPriorityOptions={(updateFormOptions.priority ?? []).map((item) => ({
+					value: String(item.value ?? ""),
+					label: item.label,
+				}))}
+				realtimeState={{
+					messages:
+						inquiryState.messages.length > 0 ? inquiryState.messages : messages,
+					typingUserNames: Array.from(inquiryState.typingUsers.keys()),
+					isWebSocketConnected: inquiryState.isWebSocketConnected,
+					isTyping: inquiryState.isTyping,
+					isGeneratingDraft: inquiryState.isGeneratingDraft,
+				}}
+				participantListItems={participantListItems}
+				onlineParticipantNames={inquiryState.participants
+					.filter((participant) => participant.isOnline)
+					.map((participant) => participant.userId)}
+				assigneeOptions={assigneeOptions}
+				deleteModalOpen={deleteModalState.value}
+				isDeleting={deleteInquiryMutation.isPending}
+				isUpdatingMeta={updateInquiryMutation.isPending}
+				isFillingMeta={fillMetaMutation.isPending}
+				webSocketStatus={ws.status}
+				onClickBackButton={() => {
 					router.push(ADMIN_PATHS.INQUIRIES as Route);
-				})();
-			}}
-			onChangeStatus={(status) => {
-				void updateStatusMutation.mutateAsync({
-					inquiryId,
-					data: {
-						status: status as
-							| "NEW"
-							| "OPEN"
-							| "IN_PROGRESS"
-							| "WAITING_CUSTOMER"
-							| "RESOLVED"
-							| "CLOSED"
-							| "ESCALATED",
-					},
-				});
-			}}
-			onChangePriority={(priority) => {
-				void updatePriorityMutation.mutateAsync({
-					inquiryId,
-					data: {
-						priority: priority as "LOW" | "NORMAL" | "HIGH" | "URGENT",
-					},
-				});
-			}}
-			onChangeCategory={(category) => {
-				void updateInquiryMutation.mutateAsync({
-					inquiryId,
-					data: {
-						category: category as
-							| "GENERAL"
-							| "DELIVERY"
-							| "PAYMENT"
-							| "REFUND"
-							| "PRODUCT"
-							| "ACCOUNT"
-							| "TECHNICAL"
-							| "COMPLAINT"
-							| "OTHER",
-					},
-				});
-			}}
-			onChangeAssignee={(assigneeId) => {
-				void assignMutation.mutateAsync({
-					inquiryId,
-					data: { assigneeId },
-				});
-			}}
-			onTagAdd={(_tag) => {}}
-			onTagRemove={(_tag) => {}}
-			onFillMetaAiForm={async (input) => {
-				const result = await fillMetaMutation.mutateAsync({
-					data: {
-						mode: "UPDATE",
-						schemaKey: input.schemaKey,
-						selectedPaths: input.selectedPaths,
-						currentObject: input.currentObject,
-						userPrompt: input.userPrompt,
-					},
-				});
-				return result?.data ?? { patches: [] };
-			}}
-			onApplyMetaAiPatch={onApplyMetaAiPatch}
-			onChangeMetaTitleInput={(value) => {
-				metaState.title = value;
-				metaState.error = "";
-			}}
-			onChangeMetaCategorySelection={(value) => {
-				metaState.category = value;
-			}}
-			onChangeMetaPrioritySelection={(value) => {
-				metaState.priority = value;
-			}}
-			onClickSaveMetaButton={() => {
-				void (async () => {
-					if (!metaState.title.trim()) {
-						metaState.error = "문의 제목을 입력해주세요.";
-						return;
-					}
-					metaState.error = "";
-					await updateInquiryMutation.mutateAsync({
+				}}
+				onClickEditButton={() => {
+					router.push(
+						ADMIN_PATHS.INQUIRIES_EDIT.replace(
+							"[inquiryId]",
+							inquiryId,
+						) as Route,
+					);
+				}}
+				onOpenDeleteModal={() => {
+					deleteModalState.value = true;
+				}}
+				onCloseDeleteModal={() => {
+					deleteModalState.value = false;
+				}}
+				onConfirmDelete={() => {
+					void (async () => {
+						await deleteInquiryMutation.mutateAsync({ inquiryId });
+						deleteModalState.value = false;
+						router.push(ADMIN_PATHS.INQUIRIES as Route);
+					})();
+				}}
+				onChangeStatus={(status) => {
+					void updateStatusMutation.mutateAsync({
 						inquiryId,
 						data: {
-							title: metaState.title.trim(),
-							category: metaState.category,
-							priority: metaState.priority,
+							status: status as
+								| "NEW"
+								| "OPEN"
+								| "IN_PROGRESS"
+								| "WAITING_CUSTOMER"
+								| "RESOLVED"
+								| "CLOSED"
+								| "ESCALATED",
 						},
 					});
-				})();
-			}}
-			onClickReconnectButton={() => {
-				ws.reconnect();
-			}}
-			onSendInquiryMessage={(content, attachments) => {
-				ws.sendMessage(content, attachments);
-			}}
-			onSendTypingStatus={(isTyping) => {
-				ws.sendTypingStatus(isTyping);
-			}}
-			onTypingStart={() => {
-				inquiryState.startTyping();
-				ws.sendTypingStatus(true);
-			}}
-			onTypingStop={() => {
-				inquiryState.stopTyping();
-				ws.sendTypingStatus(false);
-			}}
-			onClickGenerateDraftButton={() => {
-				void (async () => {
-					inquiryState.setGeneratingDraft(true);
-					try {
-						const result = await fillDraftMutation.mutateAsync({
+				}}
+				onChangePriority={(priority) => {
+					void updatePriorityMutation.mutateAsync({
+						inquiryId,
+						data: {
+							priority: priority as "LOW" | "NORMAL" | "HIGH" | "URGENT",
+						},
+					});
+				}}
+				onChangeCategory={(category) => {
+					void updateInquiryMutation.mutateAsync({
+						inquiryId,
+						data: {
+							category: category as
+								| "GENERAL"
+								| "DELIVERY"
+								| "PAYMENT"
+								| "REFUND"
+								| "PRODUCT"
+								| "ACCOUNT"
+								| "TECHNICAL"
+								| "COMPLAINT"
+								| "OTHER",
+						},
+					});
+				}}
+				onChangeAssignee={(assigneeId) => {
+					void assignMutation.mutateAsync({
+						inquiryId,
+						data: { assigneeId },
+					});
+				}}
+				onTagAdd={(_tag) => {}}
+				onTagRemove={(_tag) => {}}
+				onFillMetaAiForm={async (input) => {
+					const result = await fillMetaMutation.mutateAsync({
+						data: {
+							mode: "UPDATE",
+							schemaKey: input.schemaKey,
+							selectedPaths: input.selectedPaths,
+							currentObject: input.currentObject,
+							userPrompt: input.userPrompt,
+						},
+					});
+					return result?.data ?? { patches: [] };
+				}}
+				onApplyMetaAiPatch={onApplyMetaAiPatch}
+				onChangeMetaTitleInput={(value) => {
+					metaState.title = value;
+					metaState.error = "";
+				}}
+				onChangeMetaCategorySelection={(value) => {
+					metaState.category = value;
+				}}
+				onChangeMetaPrioritySelection={(value) => {
+					metaState.priority = value;
+				}}
+				onClickSaveMetaButton={() => {
+					void (async () => {
+						if (!metaState.title.trim()) {
+							metaState.error = "문의 제목을 입력해주세요.";
+							return;
+						}
+						metaState.error = "";
+						await updateInquiryMutation.mutateAsync({
+							inquiryId,
 							data: {
-								mode: "CREATE",
-								schemaKey: "inquiry-intake-basic",
-								selectedPaths: ["content"],
-								currentObject: {
-									title: `문의 ${inquiryId}`,
-									content: inquiryState.replyContent,
-									category: "GENERAL",
-									priority: "NORMAL",
-								},
+								title: metaState.title.trim(),
+								category: metaState.category,
+								priority: metaState.priority,
 							},
 						});
-						const patches = result?.data?.patches ?? [];
-						const contentPatch = patches.find(
-							(patch) => patch.path === "content",
-						);
-						if (typeof contentPatch?.value === "string") {
-							inquiryState.setReplyContent(contentPatch.value);
+					})();
+				}}
+				onClickReconnectButton={() => {
+					ws.reconnect();
+				}}
+				onSendInquiryMessage={(content, attachments) => {
+					ws.sendMessage(content, attachments);
+				}}
+				onSendTypingStatus={(isTyping) => {
+					ws.sendTypingStatus(isTyping);
+				}}
+				onTypingStart={() => {
+					inquiryState.startTyping();
+					ws.sendTypingStatus(true);
+				}}
+				onTypingStop={() => {
+					inquiryState.stopTyping();
+					ws.sendTypingStatus(false);
+				}}
+				onClickGenerateDraftButton={() => {
+					void (async () => {
+						inquiryState.setGeneratingDraft(true);
+						try {
+							const result = await fillDraftMutation.mutateAsync({
+								data: {
+									mode: "CREATE",
+									schemaKey: "inquiry-intake-basic",
+									selectedPaths: ["content"],
+									currentObject: {
+										title: `문의 ${inquiryId}`,
+										content: inquiryState.replyContent,
+										category: "GENERAL",
+										priority: "NORMAL",
+									},
+								},
+							});
+							const patches = result?.data?.patches ?? [];
+							const contentPatch = patches.find(
+								(patch) => patch.path === "content",
+							);
+							if (typeof contentPatch?.value === "string") {
+								inquiryState.setReplyContent(contentPatch.value);
+							}
+						} finally {
+							inquiryState.setGeneratingDraft(false);
 						}
-					} finally {
-						inquiryState.setGeneratingDraft(false);
-					}
-				})();
-			}}
-			onClickSearchKnowledgeButton={() => {
-				inquiryState.openKnowledgeBaseModal();
-			}}
-		/>
+					})();
+				}}
+				onClickSearchKnowledgeButton={() => {
+					inquiryState.openKnowledgeBaseModal();
+				}}
+			/>
+		</>
 	);
 });
 

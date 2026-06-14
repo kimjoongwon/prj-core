@@ -12,8 +12,8 @@ import {
 	useUpdatePolicy,
 } from "@cocrepo/api/core/policies";
 import {
-	type PolicyCreatePageAbilityOption,
-	PolicyEditPage,
+	type PolicyCreateScreenAbilityOption,
+	PolicyEditScreen,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -22,7 +22,7 @@ import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default observer(function PolicyEditPageRoute() {
+export default observer(function PolicyEditScreenRoute() {
 	const { policyId } = useParams<{ policyId: string }>();
 	const router = useRouter();
 	const queryClient = useQueryClient();
@@ -102,35 +102,37 @@ export default observer(function PolicyEditPageRoute() {
 	};
 
 	return (
-		<PolicyEditPage
-			status={isLoading ? "loading" : policy ? "ready" : "not_found"}
-			form={state}
-			abilities={abilities}
-			isSubmitting={isPending || isSyncingAbilities}
-			onClickBackButton={onClickBackButton}
-			onClickSubmitButton={onClickSubmitButton}
-			onChange={{
-				onChangeName: (value) => {
-					state.name = value;
-				},
-				onChangeDisplayName: (value) => {
-					state.displayName = value;
-				},
-				onChangeDescription: (value) => {
-					state.description = value;
-				},
-				onChangeIsSystem: (value) => {
-					state.isSystem = value;
-				},
-				onToggleAbility,
-			}}
-		/>
+		<>
+			<PolicyEditScreen
+				status={isLoading ? "loading" : policy ? "ready" : "not_found"}
+				form={state}
+				abilities={abilities}
+				isSubmitting={isPending || isSyncingAbilities}
+				onClickBackButton={onClickBackButton}
+				onClickSubmitButton={onClickSubmitButton}
+				onChange={{
+					onChangeName: (value) => {
+						state.name = value;
+					},
+					onChangeDisplayName: (value) => {
+						state.displayName = value;
+					},
+					onChangeDescription: (value) => {
+						state.description = value;
+					},
+					onChangeIsSystem: (value) => {
+						state.isSystem = value;
+					},
+					onToggleAbility,
+				}}
+			/>
+		</>
 	);
 });
 
 function mapAbilityOption(
 	ability: AbilityResponseDto,
-): PolicyCreatePageAbilityOption {
+): PolicyCreateScreenAbilityOption {
 	const subject =
 		ability.subject?.displayName || ability.subject?.name || "Subject";
 	const action =

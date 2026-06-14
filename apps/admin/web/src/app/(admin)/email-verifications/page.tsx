@@ -6,7 +6,7 @@ import {
 	useGetEmailVerifications,
 	useResendEmailVerification,
 } from "@cocrepo/api/idp/email-verifications";
-import { EmailVerificationListPage } from "@cocrepo/ui";
+import { EmailVerificationListScreen } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
@@ -44,16 +44,18 @@ export default observer(function EmailVerificationsPageRoute() {
 		});
 
 	return (
-		<EmailVerificationListPage
-			verifications={response?.data}
-			totalCount={response?.meta?.totalCount ?? 0}
-			isLoading={isLoading || isFetching}
-			isResending={isResending}
-			queryStates={queryStates}
-			setQueryStates={setQueryStates}
-			onConfirmResendEmailVerification={(emailVerificationId) => {
-				resendEmailVerification({ emailVerificationId });
-			}}
-		/>
+		<>
+			<EmailVerificationListScreen
+				verifications={response?.data}
+				totalCount={response?.meta?.totalCount ?? 0}
+				isLoading={isLoading || isFetching}
+				isResending={isResending}
+				queryStates={queryStates}
+				setQueryStates={setQueryStates}
+				onConfirmResendEmailVerification={(emailVerificationId) => {
+					resendEmailVerification({ emailVerificationId });
+				}}
+			/>
+		</>
 	);
 });

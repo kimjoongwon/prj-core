@@ -509,22 +509,16 @@ const userTabs: TabConfig[] = [
 ];
 ```
 
-### route layout 소비 예시
+### root app slot 소비 예시
 
 ```tsx
-// app/(admin)/users/layout.tsx
+// app/layout.tsx
 // written by fe-route-layout-agent
-import { Page, PageSurface, Section, SectionSurface, PageTabs } from "@cocrepo/ui";
+import { App, PageTabs } from "@cocrepo/ui";
 
-export default function UsersLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <Page top={<PageTabs tabs={userTabs} />}>
-      <PageSurface>
-        <SectionSurface>
-          <Section>{children}</Section>
-        </SectionSurface>
-      </PageSurface>
-    </Page>
+    <App header={<PageTabs tabs={userTabs} />} main={children} />
   );
 }
 ```

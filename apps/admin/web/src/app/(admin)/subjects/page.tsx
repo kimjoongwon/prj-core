@@ -1,7 +1,7 @@
 "use client";
 
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
-import { SubjectListPage } from "@cocrepo/ui";
+import { SubjectListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -23,12 +23,14 @@ export default observer(function SubjectsPageRoute() {
 	};
 
 	return (
-		<SubjectListPage
-			subjects={response?.data}
-			isLoading={isLoading}
-			queryStates={queryStates}
-			setQueryStates={setQueryStates}
-			onClickSubject={onClickSubjectRow}
-		/>
+		<>
+			<SubjectListScreen
+				subjects={response?.data}
+				isLoading={isLoading}
+				queryStates={queryStates}
+				setQueryStates={setQueryStates}
+				onClickSubject={onClickSubjectRow}
+			/>
+		</>
 	);
 });

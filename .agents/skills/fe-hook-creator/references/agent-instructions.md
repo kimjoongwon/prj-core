@@ -31,10 +31,12 @@ This reference preserves the detailed implementation instructions that previousl
 - 소스 담당가 다른 파일이나 다른 플랫폼 target이 필요하면 직접 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 - Storybook/Test 책임은 source를 소유한 agent가 함께 갱신하고, route/layout/store/backend-only step은 route delivery spec의 검증 계약을 따릅니다.
 
-### Shared Runtime Boundary
+### Hook Runtime Boundary
 
-- 공용 hook/store는 React Web과 React Native에서 모두 소비될 수 있으므로 UI runtime import를 추가하지 않습니다.
-- route-local hook/util/type/state는 Web/Mobile 모두 `fe-route-agent`가 처리하고 별도 spec을 만들지 않습니다.
+- `packages/fe-hook`은 app route와 package feature/screen이 소비하는 reusable hook을 소유합니다.
+- app route 아래 `hooks/` 폴더를 만들지 않습니다. route에서 반복되거나 테스트 대상이 되는 hook/helper는 `packages/fe-hook/src`로 올립니다.
+- hook은 UI runtime 컴포넌트를 import하지 않습니다. router, native bridge, window/document 같은 runtime 값은 가능한 한 adapter/value로 주입받습니다.
+- route page 안의 단순 일회성 state/wiring은 `fe-route-agent`가 page 파일 안에서 직접 처리할 수 있지만, 별도 hook 파일로 분리하는 순간 `fe-hook-agent` 소유입니다.
 
 ## 재사용 우선 점검 (필수)
 
@@ -44,21 +46,22 @@ This reference preserves the detailed implementation instructions that previousl
 
 # FE Hook Agent
 
-`fe-hook-agent`는 `packages/fe-hook` / `@cocrepo/hook`의 web/mobile 공통 React hook을 소유하는 role입니다.
+`fe-hook-agent`는 `packages/fe-hook` / `@cocrepo/hook`의 React hook을 소유하는 role입니다.
 
 ## 책임
 
-- reusable React hook을 생성하거나 정리합니다.
-- hook은 app-specific API/router/native runtime을 직접 소유하지 않고 값을 주입받아 재사용 가능하게 설계합니다.
+- reusable React hook과 app route에서 추출된 hook/helper를 생성하거나 정리합니다.
+- hook은 React component를 렌더링하지 않고, app-specific router/native runtime은 가능한 adapter로 주입받아 재사용 가능하게 설계합니다.
 - shared hook이 사용하는 public type은 `@cocrepo/type`, 순수 helper는 `@cocrepo/toolkit`을 우선 사용합니다.
 - 신규/수정 hook은 export와 unit test를 함께 정리합니다.
 
 ## 비책임
 
-- route-local hook은 Web/Mobile 모두 `fe-route-agent` 책임입니다.
+- route page 내부에 머무는 단순 inline state/wiring은 `fe-route-agent` 책임입니다.
+- React 컴포넌트, screen, feature, widget 구현은 각 UI owner agent 책임입니다.
 - pure utility는 `common-toolkit-builder` 책임입니다.
 - shared type/interface는 `common-type-builder` 책임입니다.
-- Orval API hook을 감싸서 별도 API client를 만드는 패턴은 지양하고, route/feature에서 Orval hook을 직접 wiring합니다.
+- Orval API hook을 단순 재노출하는 별도 API client wrapper는 지양합니다. 여러 route가 같은 display contract로 소비하거나 테스트 가능한 상태/helper 묶음이 필요할 때만 hook으로 추출합니다.
 
 ## Spec 정책
 

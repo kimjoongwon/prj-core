@@ -2,7 +2,7 @@
 
 import { useGetUsers } from "@cocrepo/api/core/users";
 import { useDebouncedCallback } from "@cocrepo/hook";
-import { UserListPage } from "@cocrepo/ui";
+import { UserListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import {
 	parseAsInteger,
@@ -48,31 +48,33 @@ function UsersPageContent() {
 	const { data: response, isLoading } = useGetUsers(usersParams);
 
 	return (
-		<UserListPage
-			users={response?.data}
-			totalCount={response?.meta?.total ?? 0}
-			stats={
-				response?.stats
-					? {
-							total: response.stats.total ?? 0,
-							active: response.stats.active ?? 0,
-							inactive: response.stats.inactive ?? 0,
-						}
-					: undefined
-			}
-			isLoading={isLoading}
-			searchValue={searchValue}
-			onChangeSearchValue={(value) => {
-				setSearchValue(value);
-				debouncedSetQuery(value);
-			}}
-			onClearSearch={() => {
-				setSearchValue("");
-				void setSearchQuery(null);
-			}}
-			queryStates={queryStates}
-			setQueryStates={setQueryStates}
-		/>
+		<>
+			<UserListScreen
+				users={response?.data}
+				totalCount={response?.meta?.total ?? 0}
+				stats={
+					response?.stats
+						? {
+								total: response.stats.total ?? 0,
+								active: response.stats.active ?? 0,
+								inactive: response.stats.inactive ?? 0,
+							}
+						: undefined
+				}
+				isLoading={isLoading}
+				searchValue={searchValue}
+				onChangeSearchValue={(value) => {
+					setSearchValue(value);
+					debouncedSetQuery(value);
+				}}
+				onClearSearch={() => {
+					setSearchValue("");
+					void setSearchQuery(null);
+				}}
+				queryStates={queryStates}
+				setQueryStates={setQueryStates}
+			/>
+		</>
 	);
 }
 

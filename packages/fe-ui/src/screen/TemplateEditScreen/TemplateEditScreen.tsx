@@ -1,0 +1,101 @@
+"use client";
+
+import {
+	SectionSurface,
+	PageTitleBar,
+	TemplateForm,
+	type TemplateFormData,
+	type VariableEditItem,
+	VStack,
+} from "@cocrepo/ui";
+import { observer } from "mobx-react-lite";
+import { Button } from "../../action/Button/Button";
+import { Spinner } from "@heroui/react";
+export interface TemplateEditScreenProps {
+	templateName?: string;
+	formData: TemplateFormData;
+	variables: VariableEditItem[];
+	errors: Record<string, string>;
+	isLoading: boolean;
+	isNotFound: boolean;
+	isSubmitting: boolean;
+	onFormDataChange: (data: Partial<TemplateFormData>) => void;
+	onVariablesChange: (variables: VariableEditItem[]) => void;
+	onSubmitForm: () => void;
+	onClickCancelButton: () => void;
+}
+export const TemplateEditScreen = observer(
+	({
+		templateName,
+		formData,
+		variables,
+		errors,
+		isLoading,
+		isNotFound,
+		isSubmitting,
+		onFormDataChange,
+		onVariablesChange,
+		onSubmitForm,
+		onClickCancelButton,
+	}: TemplateEditScreenProps) => {
+		if (isLoading) {
+			return (
+				<VStack gap="section" fullWidth>
+					<PageTitleBar title="템플릿 수정" description="로딩 중..." />
+
+					<SectionSurface>
+						<div className="flex items-center justify-center gap-2 p-8">
+							<Spinner size="sm" />
+							<span className="text-muted">로딩 중...</span>
+						</div>
+					</SectionSurface>
+				</VStack>
+			);
+		}
+		if (isNotFound) {
+			return (
+				<VStack gap="section" fullWidth>
+					<PageTitleBar
+						title="템플릿 수정"
+						description="템플릿을 찾을 수 없습니다."
+					/>
+
+					<SectionSurface>
+						<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<p className="text-muted">템플릿을 찾을 수 없습니다.</p>
+							<Button variant="flat" onPress={onClickCancelButton}>
+								목록으로
+							</Button>
+						</div>
+					</SectionSurface>
+				</VStack>
+			);
+		}
+		return (
+			<VStack gap="section" fullWidth>
+				<PageTitleBar
+					title="템플릿 수정"
+					description={
+						templateName
+							? `${templateName} 템플릿을 수정합니다.`
+							: "템플릿을 수정합니다."
+					}
+				/>
+
+				<SectionSurface>
+					<TemplateForm
+						mode="edit"
+						formData={formData}
+						variables={variables}
+						onFormDataChange={onFormDataChange}
+						onVariablesChange={onVariablesChange}
+						onSubmit={onSubmitForm}
+						onCancel={onClickCancelButton}
+						isSubmitting={isSubmitting}
+						errors={errors}
+					/>
+				</SectionSurface>
+			</VStack>
+		);
+	},
+);

@@ -14,7 +14,7 @@
 
 - 기본 패턴: `page.tsx` 단일 CSR
 - API: `useGetPolicyById`, `useDeletePolicy`, `useSyncPolicyAbilities`, `useGetAbilities`
-- reusable target: `packages/fe-ui/src/screen/PolicyDetailPage/PolicyDetailPage.tsx`
+- reusable target: `packages/fe-ui/src/screen/PolicyDetailScreen/PolicyDetailScreen.tsx`
 
 ## 이벤트 핸들러
 

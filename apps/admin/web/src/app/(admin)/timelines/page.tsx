@@ -5,7 +5,7 @@ import {
 	useDeleteTimeline,
 	useGetTimelines,
 } from "@cocrepo/api/core/timelines";
-import { TimelineListPage } from "@cocrepo/ui";
+import { TimelineListScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
@@ -32,34 +32,36 @@ export default observer(function TimelinesPageRoute() {
 	const deleteMutation = useDeleteTimeline();
 
 	return (
-		<TimelineListPage
-			timelines={response?.data}
-			totalCount={response?.meta?.total ?? 0}
-			isLoading={isLoading}
-			isDeleting={deleteMutation.isPending}
-			queryStates={queryStates}
-			setQueryStates={setQueryStates}
-			onClickCreateButton={() => {
-				router.push("/timelines/new" as Route);
-			}}
-			onDeleteTimeline={async (timelineId) => {
-				try {
-					await deleteMutation.mutateAsync({ timelineId });
-					await queryClient.invalidateQueries({
-						queryKey: getGetTimelinesQueryKey(),
-					});
-					toast.success("삭제 성공", {
-						description: "타임라인이 삭제되었습니다.",
-					});
-				} catch (error) {
-					toast.danger("삭제 실패", {
-						description:
-							"타임라인 삭제 중 오류가 발생했습니다. 세션이 있는 타임라인은 삭제할 수 없습니다.",
-					});
-					throw error;
-				}
-			}}
-		/>
+		<>
+			<TimelineListScreen
+				timelines={response?.data}
+				totalCount={response?.meta?.total ?? 0}
+				isLoading={isLoading}
+				isDeleting={deleteMutation.isPending}
+				queryStates={queryStates}
+				setQueryStates={setQueryStates}
+				onClickCreateButton={() => {
+					router.push("/timelines/new" as Route);
+				}}
+				onDeleteTimeline={async (timelineId) => {
+					try {
+						await deleteMutation.mutateAsync({ timelineId });
+						await queryClient.invalidateQueries({
+							queryKey: getGetTimelinesQueryKey(),
+						});
+						toast.success("삭제 성공", {
+							description: "타임라인이 삭제되었습니다.",
+						});
+					} catch (error) {
+						toast.danger("삭제 실패", {
+							description:
+								"타임라인 삭제 중 오류가 발생했습니다. 세션이 있는 타임라인은 삭제할 수 없습니다.",
+						});
+						throw error;
+					}
+				}}
+			/>
+		</>
 	);
 });
 

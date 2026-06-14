@@ -12,10 +12,10 @@ import {
 } from "@cocrepo/api/core/policy-assignments";
 import { useGetUserById } from "@cocrepo/api/core/users";
 import {
-	UserDetailPage,
-	type UserDetailPagePolicy,
-	type UserDetailPagePolicyAssignment,
-	type UserDetailPageUser,
+	UserDetailScreen,
+	type UserDetailScreenPolicy,
+	type UserDetailScreenPolicyAssignment,
+	type UserDetailScreenUser,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -24,17 +24,17 @@ import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default observer(function UserDetailPageRoute() {
+export default observer(function UserDetailScreenRoute() {
 	const { userId } = useParams<{ userId: string }>();
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const [isEditingPolicies, setIsEditingPolicies] = useState(false);
 	const [selectedPolicyAssignments, setSelectedPolicyAssignments] = useState<
-		UserDetailPagePolicyAssignment[]
+		UserDetailScreenPolicyAssignment[]
 	>([]);
 	const [hasChanges, setHasChanges] = useState(false);
 	const { data: userResponse, isLoading } = useGetUserById(userId);
-	const user = userResponse?.data as UserDetailPageUser | undefined;
+	const user = userResponse?.data as UserDetailScreenUser | undefined;
 	const { data: policiesResponse, isLoading: isLoadingPolicies } =
 		useGetPolicies();
 	const { data: userPoliciesResponse, isLoading: isLoadingUserPolicies } =
@@ -132,31 +132,33 @@ export default observer(function UserDetailPageRoute() {
 	};
 
 	return (
-		<UserDetailPage
-			userId={userId}
-			user={user}
-			policies={policies}
-			assignedPolicyIds={assignedPolicyIds}
-			selectedPolicyIds={activeSelectedPolicyIds}
-			policyAssignments={policyAssignments}
-			selectedPolicyAssignments={activePolicyAssignments}
-			isLoading={isLoading}
-			isLoadingPolicies={isLoadingPolicies || isLoadingUserPolicies}
-			isEditingPolicies={isEditingPolicies}
-			hasChanges={hasChanges}
-			isSavingPolicies={isSavingPolicies}
-			onClickBackButton={onClickBackButton}
-			onClickEditPoliciesButton={onClickEditPoliciesButton}
-			onClickCancelEditPoliciesButton={onClickCancelEditPoliciesButton}
-			onTogglePolicy={onTogglePolicy}
-			onChangePolicyAssignmentActive={onChangePolicyAssignmentActive}
-			onChangePolicyAssignmentPriority={onChangePolicyAssignmentPriority}
-			onClickSavePoliciesButton={onClickSavePoliciesButton}
-		/>
+		<>
+			<UserDetailScreen
+				userId={userId}
+				user={user}
+				policies={policies}
+				assignedPolicyIds={assignedPolicyIds}
+				selectedPolicyIds={activeSelectedPolicyIds}
+				policyAssignments={policyAssignments}
+				selectedPolicyAssignments={activePolicyAssignments}
+				isLoading={isLoading}
+				isLoadingPolicies={isLoadingPolicies || isLoadingUserPolicies}
+				isEditingPolicies={isEditingPolicies}
+				hasChanges={hasChanges}
+				isSavingPolicies={isSavingPolicies}
+				onClickBackButton={onClickBackButton}
+				onClickEditPoliciesButton={onClickEditPoliciesButton}
+				onClickCancelEditPoliciesButton={onClickCancelEditPoliciesButton}
+				onTogglePolicy={onTogglePolicy}
+				onChangePolicyAssignmentActive={onChangePolicyAssignmentActive}
+				onChangePolicyAssignmentPriority={onChangePolicyAssignmentPriority}
+				onClickSavePoliciesButton={onClickSavePoliciesButton}
+			/>
+		</>
 	);
 });
 
-function mapPolicy(policy: PolicyResponseDto): UserDetailPagePolicy {
+function mapPolicy(policy: PolicyResponseDto): UserDetailScreenPolicy {
 	return {
 		id: policy.id,
 		name: policy.name,
@@ -169,7 +171,7 @@ function mapPolicy(policy: PolicyResponseDto): UserDetailPagePolicy {
 
 function mapPolicyAssignment(
 	assignment: PolicyAssignmentResponseDto,
-): UserDetailPagePolicyAssignment {
+): UserDetailScreenPolicyAssignment {
 	return {
 		policyId: assignment.policyId,
 		isActive: assignment.isActive,

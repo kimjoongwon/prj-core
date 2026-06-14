@@ -102,9 +102,10 @@ This reference preserves the detailed implementation instructions that previousl
 | **Pure UI 유지** | 상태/API 호출 금지, props로만 동작 |
 | **displayName 설정** | 디버깅을 위해 필수 |
 | **라이브러리 타입 기반** | extends/Omit/Pick 활용 |
-| **rhythm 컴포넌트 사용** | HStack, VStack 등으로 배치 |
+| **rhythm 컴포넌트 사용** | Widget에서는 사용 금지. `div` + Tailwind flex/grid로 배치 |
 | **Page/Feature 비대화 방지** | Page/Feature에 들어갈 뻔한 반복 시각 블록을 Widget으로 추출 |
 | **One Component Per File** | Widget 파일은 exported Widget component 하나만 소유하고, private JSX subcomponent는 별도 Widget/leaf 파일로 분리 |
+| **surface-less 기본값** | Widget은 기본적으로 표면을 소유하지 않고 route page surface 또는 feature local panel 안에 배치 |
 
 ### ♻️ 기존 컴포넌트 우선 원칙 (Critical)
 
@@ -119,13 +120,14 @@ This reference preserves the detailed implementation instructions that previousl
 |----------|------|
 | 커스텀 className 직접 사용 | UI/Input에서만 허용 |
 | **Context API 사용 (createContext, useContext)** | **packages/fe-ui에서 Context 사용 금지 - props drilling 사용** |
-| **컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hooks/, utils → src/utils/)** |
+| **컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → `packages/fe-hook/src`, utils → `src/utils`)** |
 | 기존 Widget과 유사한 컴포넌트 신규 생성 | 중복 자산 증가 및 재사용성 저하 |
 | Store 접근 | Feature 계층의 역할 |
 | API 호출 | Feature 계층의 역할 |
 | Text를 Button/Chip children으로 | 테마 깨짐 발생 |
 | observer와 memo 함께 사용 | observer가 내부적으로 memo 처리 |
-| route/page title, PageSurface, route navigation 직접 소유 | Page/route shell 책임 |
+| route/page title, ScreenSurface, SectionSurface, route navigation 직접 소유 | screen/route shell 책임 |
+| 제거된 detail/form legacy surface wrapper 직접 사용 | 제거된 legacy wrapper |
 | Feature state, URL state, API response fetching 직접 소유 | Feature 또는 route container 책임 |
 | private JSX subcomponent를 같은 Widget 파일에 선언 | component ownership과 Storybook/test 추적이 흐려짐 |
 
@@ -136,6 +138,8 @@ fe-widget-agent는 Page/Feature 파일이 비대해지는 것을 막는 1차 분
 - table, tab group, metric grid, flow rail, status summary, read-only detail block, repeated card/list block은 Widget 후보로 봅니다.
 - fe-route-agent나 fe-feature-agent가 `ui-composition-gap`을 보고하면 해당 visual block을 Widget으로 먼저 분리합니다.
 - Widget은 props로 받은 값과 callback만 사용하고, API/router/store/search params를 읽지 않습니다.
+- Widget이 독립 panel/table shell로 쓰여 표면이 꼭 필요하면 local `Surface`를 사용하고, 그 사유를 owner spec의 lower-layer 조합 표에 남깁니다.
+- 반복 item, metric item, info row는 `Surface`를 반복 적용하지 않고 border/divider/background/spacing으로만 구분합니다.
 - Widget 전용 spec은 신규 생성하지 않습니다. 계약은 nearest route `page.spec.md` 또는 Feature/Page owner spec의 lower-layer 조합 표에 기록합니다.
 - 신규 Widget을 만들 때는 `packages/fe-ui/src/widget/index.ts`와 필요한 domain barrel을 함께 동기화합니다.
 
@@ -176,8 +180,8 @@ packages/fe-ui/src/widget/[Name]/
 
 # ⚠️ 컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성 금지!
 # 재사용 가능한 훅/유틸은 패키지 레벨에서 관리:
-packages/fe-ui/src/hook/use[Name].ts       # 재사용 가능한 훅
-packages/fe-ui/src/util/[utilName].ts      # 재사용 가능한 유틸
+packages/fe-hook/src/use[Name].ts          # 재사용 가능한 훅
+packages/fe-ui/src/utils/[utilName].ts     # UI 전용 유틸
 ```
 
 ### 4.4 barrel export 추가
@@ -242,17 +246,17 @@ export const StatusBadge = ({ status, label, ...rest }: StatusBadgeProps) => {
 ### 5.3 레이아웃 컴포넌트 활용
 
 ```tsx
-// ✅ 올바른 패턴 - 레이아웃 컴포넌트 사용
+// ✅ 올바른 패턴 - widget 내부는 div + Tailwind 사용
+<div className="flex items-center gap-2">
+  <Avatar />
+  <Text>{name}</Text>
+</div>
+
+// ❌ 금지 - screen rhythm primitive 사용
 <HStack gap="inline" alignItems="center">
   <Avatar />
   <Text>{name}</Text>
 </HStack>
-
-// ❌ 금지 - className으로 레이아웃 제어
-<div className="flex items-center gap-2">
-  <Avatar />
-  <span className="ml-2">{name}</span>
-</div>
 ```
 
 ### 5.4 index.ts
@@ -353,7 +357,7 @@ SpaceDropdown                 → SpaceSelector (PersistStore 연결)
 - **data-display**: Avatar, Chip, Icon, Text, User 등
 - **inputs**: Button, Input, Checkbox, Select 등
 - **feedback**: Message, Skeleton, Placeholder 등
-- **structure/rhythm**: Container, HStack, VStack, Spacer 등
+- **structure/rhythm**: Widget 내부는 `div` + Tailwind flex/grid, route 구조는 `Page`, screen surface/rhythm은 `ScreenSurface`/`SectionSurface`/`VStack` 계층이 소유
 
 ### memo 사용 규칙
 

@@ -14,7 +14,7 @@
 │ 템플릿 등록                                                       │
 │ 새로운 메시지 템플릿을 등록합니다.                                 │
 ├─────────────────────────────────────────────────────────────────┤
-│ PageSurface                                                        │
+│ ScreenSurface                                                        │
 │ ┌───────────────────────────────────────────────────────────────┐ │
 │ │ SectionSurface                                                │ │
 │ │ TemplateForm (mode="create")                                  │ │
@@ -76,14 +76,14 @@
 |------|----------|------|
 | 페이지 래퍼 | `Page` | 페이지 콘텐츠 구조 배치 |
 | 페이지 헤더 | `PageTitleBar` | title="템플릿 등록", description="새로운 메시지 템플릿을 등록합니다." |
-| 본문 표면 | `PageSurface` | 등록 폼 전체를 layout 배경에서 분리하는 raised 표면 |
+| 본문 표면 | `ScreenSurface` | 등록 폼 전체를 layout 배경에서 분리하는 raised 표면 |
 | 폼 블록 | `SectionSurface` > `TemplateForm` (mode="create") | 등록 폼을 elevated 표면 위에서 렌더링 |
 
-## Surface / Elevation
+## SectionSurface / Elevation
 
 | 항목 | 결정 |
 |------|------|
-| `PageSurface` owner | 참조 route layout의 `layout.tsx` skeleton |
+| `ScreenSurface` owner | 참조 route layout의 `layout.tsx` skeleton |
 | `SectionSurface` 대상 블록 | `TemplateForm` 전체 |
 | SectionSurface padding | 기본 패딩 유지 |
 | flat 예외 여부와 근거 | flat 예외 없음. 등록 폼은 단일 작업 블록이므로 page 배경과 분리된 표면이 필요 |
@@ -137,7 +137,7 @@
 ## 런타임 책임
 
 - `page.tsx`가 `useCreateTemplate`, `useRouter`, `useLocalObservable`를 직접 소유합니다.
-- `@cocrepo/ui`의 `TemplateCreatePage`는 props-only pure screen로 사용합니다.
+- `@cocrepo/ui`의 `TemplateCreateScreen`는 props-only pure screen로 사용합니다.
 
 ## 유효성 검증 규칙
 
@@ -157,7 +157,7 @@
 - 프리페칭 없음 (등록은 데이터 로드 불필요)
 - 성공 시 응답의 `response.data.id`로 상세 페이지 이동
 - `TemplateForm`은 `@cocrepo/ui` 공통 컴포넌트 (등록/수정 공유)
-- `TemplateForm`은 입력 블록을 렌더링하지만 Surface를 소유하지 않으므로 페이지에서 `PageSurface`, `SectionSurface`를 제공
+- `TemplateForm`은 입력 블록을 렌더링하지만 SectionSurface를 소유하지 않으므로 페이지에서 `ScreenSurface`, `SectionSurface`를 제공
 
 ## 구현 체크리스트
 
@@ -170,7 +170,7 @@
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/templates/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/templates/new/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
 - `page.tsx`는 입력, 검증, 생성/수정 폼 흐름만 담당합니다.
 
@@ -190,7 +190,7 @@
 | 2026-03-30 | 템플릿 등록의 mutation/router/local state를 route page로 이동하고 `@cocrepo/ui` page를 pure contract로 분리 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
-| 2026-03-15 | 등록 페이지 본문을 `PageSurface > SectionSurface`로 감싸 폼 Surface ownership을 명시 | codex |
+| 2026-03-15 | 등록 페이지 본문을 `ScreenSurface > SectionSurface`로 감싸 폼 SectionSurface ownership을 명시 | codex |
 | 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
 | 2026-02-19 | 디자인 목업 추가 | req-reverse-engineer |
 | 2026-03-03 | Scaffold 제거 및 페이지 헤더 영역/섹션 영역 용어 정리 | codex |

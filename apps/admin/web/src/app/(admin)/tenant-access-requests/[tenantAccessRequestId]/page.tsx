@@ -11,7 +11,7 @@ import {
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import {
 	type TenantAccessRequestReviewDetail,
-	TenantAccessRequestReviewDetailPage,
+	TenantAccessRequestReviewDetailScreen,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -20,7 +20,7 @@ import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default observer(function TenantAccessRequestReviewDetailPageRoute() {
+export default observer(function TenantAccessRequestReviewDetailScreenRoute() {
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const tenantAccessRequestId = useParams<{ tenantAccessRequestId: string }>()
@@ -81,32 +81,34 @@ export default observer(function TenantAccessRequestReviewDetailPageRoute() {
 	}, [request, reviewState]);
 
 	return (
-		<TenantAccessRequestReviewDetailPage
-			request={request ? mapReviewDetail(request) : undefined}
-			reviewComment={reviewState.reviewComment}
-			isLoading={isLoading}
-			isApproving={isApproving}
-			isRejecting={isRejecting}
-			canApprove={true}
-			onClickBackButton={() => {
-				router.push(ADMIN_PATHS.TENANT_ACCESS_REQUESTS as Route);
-			}}
-			onChangeReviewCommentTextArea={(reviewComment) => {
-				reviewState.setReviewComment(reviewComment);
-			}}
-			onClickApproveButton={() => {
-				approveRequest({
-					tenantAccessRequestId,
-					data: { reviewComment: reviewState.reviewComment || null },
-				});
-			}}
-			onClickRejectButton={() => {
-				rejectRequest({
-					tenantAccessRequestId,
-					data: { reviewComment: reviewState.reviewComment || null },
-				});
-			}}
-		/>
+		<>
+			<TenantAccessRequestReviewDetailScreen
+				request={request ? mapReviewDetail(request) : undefined}
+				reviewComment={reviewState.reviewComment}
+				isLoading={isLoading}
+				isApproving={isApproving}
+				isRejecting={isRejecting}
+				canApprove={true}
+				onClickBackButton={() => {
+					router.push(ADMIN_PATHS.TENANT_ACCESS_REQUESTS as Route);
+				}}
+				onChangeReviewCommentTextArea={(reviewComment) => {
+					reviewState.setReviewComment(reviewComment);
+				}}
+				onClickApproveButton={() => {
+					approveRequest({
+						tenantAccessRequestId,
+						data: { reviewComment: reviewState.reviewComment || null },
+					});
+				}}
+				onClickRejectButton={() => {
+					rejectRequest({
+						tenantAccessRequestId,
+						data: { reviewComment: reviewState.reviewComment || null },
+					});
+				}}
+			/>
+		</>
 	);
 });
 

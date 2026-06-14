@@ -12,7 +12,7 @@ import {
 import { type TaskDto, useGetTasks } from "@cocrepo/api/core/tasks";
 import {
 	type RoutineActivityFormItem,
-	RoutineCreatePage,
+	RoutineCreateScreen,
 	type RoutineTaskCandidate,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
@@ -150,92 +150,96 @@ const AdminRoutinesNewRoute = observer(() => {
 	};
 
 	return (
-		<RoutineCreatePage
-			name={state.name}
-			label={state.label}
-			contentLanguageCode={persistStore.contentLanguageCode}
-			exerciseQuery={state.exerciseQuery}
-			activities={activities}
-			candidateTasks={candidateTasks}
-			nameError={state.errors.name}
-			labelError={state.errors.label}
-			activitiesError={state.errors.activities}
-			isTasksLoading={isTasksLoading}
-			isSubmitting={isPending}
-			isEmptyActivitiesWarningOpen={isEmptyActivitiesWarningOpen}
-			onChangeNameInput={(value) => {
-				state.name = value;
-				delete state.errors.name;
-			}}
-			onChangeLabelInput={(value) => {
-				state.label = value;
-				delete state.errors.label;
-			}}
-			onChangeExerciseQueryInput={(value) => {
-				state.exerciseQuery = value;
-			}}
-			onClickAddActivityButton={(taskId) => {
-				const task = tasks.find((item) => item.id === taskId);
-				if (!task?.exercise?.videoFileId) {
-					toast.warning("편성 불가 운동", {
-						description: "영상이 등록된 운동만 루틴에 추가할 수 있습니다.",
+		<>
+			<RoutineCreateScreen
+				name={state.name}
+				label={state.label}
+				contentLanguageCode={persistStore.contentLanguageCode}
+				exerciseQuery={state.exerciseQuery}
+				activities={activities}
+				candidateTasks={candidateTasks}
+				nameError={state.errors.name}
+				labelError={state.errors.label}
+				activitiesError={state.errors.activities}
+				isTasksLoading={isTasksLoading}
+				isSubmitting={isPending}
+				isEmptyActivitiesWarningOpen={isEmptyActivitiesWarningOpen}
+				onChangeNameInput={(value) => {
+					state.name = value;
+					delete state.errors.name;
+				}}
+				onChangeLabelInput={(value) => {
+					state.label = value;
+					delete state.errors.label;
+				}}
+				onChangeExerciseQueryInput={(value) => {
+					state.exerciseQuery = value;
+				}}
+				onClickAddActivityButton={(taskId) => {
+					const task = tasks.find((item) => item.id === taskId);
+					if (!task?.exercise?.videoFileId) {
+						toast.warning("편성 불가 운동", {
+							description: "영상이 등록된 운동만 루틴에 추가할 수 있습니다.",
+						});
+						return;
+					}
+					if (
+						state.activities.some((activity) => activity.taskId === task.id)
+					) {
+						toast.warning("중복 운동", {
+							description: "이미 추가된 운동입니다.",
+						});
+						return;
+					}
+					state.activities.push({
+						taskId: task.id,
+						exerciseName: task.exercise.name,
+						isSchedulable: true,
+						imageFileId: task.exercise.imageFileId,
+						videoFileId: task.exercise.videoFileId,
+						repetitions: String(task.exercise.count || 1),
+						restTime: "0",
+						notes: "",
 					});
-					return;
-				}
-				if (state.activities.some((activity) => activity.taskId === task.id)) {
-					toast.warning("중복 운동", {
-						description: "이미 추가된 운동입니다.",
-					});
-					return;
-				}
-				state.activities.push({
-					taskId: task.id,
-					exerciseName: task.exercise.name,
-					isSchedulable: true,
-					imageFileId: task.exercise.imageFileId,
-					videoFileId: task.exercise.videoFileId,
-					repetitions: String(task.exercise.count || 1),
-					restTime: "0",
-					notes: "",
-				});
-				delete state.errors.activities;
-			}}
-			onChangeActivityInput={(taskId, field, value) => {
-				const activity = state.activities.find(
-					(item) => item.taskId === taskId,
-				);
-				if (!activity) {
-					return;
-				}
-				activity[field] = value;
-			}}
-			onClickRemoveActivityButton={(taskId) => {
-				state.activities = state.activities.filter(
-					(activity) => activity.taskId !== taskId,
-				);
-				delete state.errors.activities;
-			}}
-			onReorderActivities={(fromIndex, toIndex) => {
-				const nextActivities = state.activities.slice();
-				const [movedActivity] = nextActivities.splice(fromIndex, 1);
-				if (!movedActivity) {
-					return;
-				}
-				nextActivities.splice(toIndex, 0, movedActivity);
-				state.activities = nextActivities;
-			}}
-			onClickCancelButton={() => {
-				router.push("/routines" as Route);
-			}}
-			onClickSaveButton={onClickSaveButton}
-			onCloseEmptyActivitiesWarningModal={() => {
-				setIsEmptyActivitiesWarningOpen(false);
-			}}
-			onClickConfirmEmptyActivitiesWarningButton={() => {
-				setIsEmptyActivitiesWarningOpen(false);
-				submitRoutine();
-			}}
-		/>
+					delete state.errors.activities;
+				}}
+				onChangeActivityInput={(taskId, field, value) => {
+					const activity = state.activities.find(
+						(item) => item.taskId === taskId,
+					);
+					if (!activity) {
+						return;
+					}
+					activity[field] = value;
+				}}
+				onClickRemoveActivityButton={(taskId) => {
+					state.activities = state.activities.filter(
+						(activity) => activity.taskId !== taskId,
+					);
+					delete state.errors.activities;
+				}}
+				onReorderActivities={(fromIndex, toIndex) => {
+					const nextActivities = state.activities.slice();
+					const [movedActivity] = nextActivities.splice(fromIndex, 1);
+					if (!movedActivity) {
+						return;
+					}
+					nextActivities.splice(toIndex, 0, movedActivity);
+					state.activities = nextActivities;
+				}}
+				onClickCancelButton={() => {
+					router.push("/routines" as Route);
+				}}
+				onClickSaveButton={onClickSaveButton}
+				onCloseEmptyActivitiesWarningModal={() => {
+					setIsEmptyActivitiesWarningOpen(false);
+				}}
+				onClickConfirmEmptyActivitiesWarningButton={() => {
+					setIsEmptyActivitiesWarningOpen(false);
+					submitRoutine();
+				}}
+			/>
+		</>
 	);
 });
 

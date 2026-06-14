@@ -19,15 +19,15 @@ Create/Update Form Bootstrap 계약을 사용해 초기 폼을 렌더링하며, 
 | 수정 폼 | Input + Select | 제목/카테고리/우선순위 수정 |
 | 액션 | Button 그룹 | 취소/저장 |
 
-## Surface / Elevation
+## SectionSurface / Elevation
 
 | 항목 | 결정 |
 |------|------|
-| PageSurface owner | 참조 route layout의 `layout.tsx` skeleton |
-| PageSurface 역할 | 수정 페이지 본문 전체를 raised 레이어로 묶음 |
+| ScreenSurface owner | page/screen content owner |
+| ScreenSurface 역할 | 수정 페이지 본문 전체를 raised 레이어로 묶음 |
 | SectionSurface 대상 | AI 추천 블록, 수정 입력 블록 |
 | SectionSurface padding | 기본 패딩 유지 |
-| 예외 | 없음. surface skeleton은 참조 route layout이 소유하고 `page.tsx`는 내부 콘텐츠만 채웁니다. |
+| 예외 | 없음. `layout.tsx`는 `Page` 구조만 소유하고 surface는 page/screen content owner가 명시합니다. |
 
 ## 데이터 흐름
 
@@ -68,7 +68,7 @@ Create/Update Form Bootstrap 계약을 사용해 초기 폼을 렌더링하며, 
 | 참조 layout spec | `apps/admin/web/src/app/(admin)/inquiries/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/edit/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page` |
 
 - `page.tsx`는 입력, 검증, 생성/수정 폼 흐름만 담당합니다.
 
@@ -79,18 +79,18 @@ Create/Update Form Bootstrap 계약을 사용해 초기 폼을 렌더링하며, 
 - reusable target: `form`
 - SSR/prefetch 예외 승인 여부: 없음
 - 추가 예외 파일: 없음 (`_client.tsx`, `_prefetch.ts` 미사용)
-- route는 update bootstrap, AI fill, 저장 mutation, 라우팅을 소유하고 `InquiryEditPage`에는 props로 주입합니다.
+- route는 update bootstrap, AI fill, 저장 mutation, 라우팅을 소유하고 `InquiryEditScreen`에는 props로 주입합니다.
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-03-30 | update bootstrap/AI fill/저장 mutation/라우팅을 route container가 소유하고 `InquiryEditPage`는 pure screen로 소비하도록 반영 | codex |
+| 2026-03-30 | update bootstrap/AI fill/저장 mutation/라우팅을 route container가 소유하고 `InquiryEditScreen`는 pure screen로 소비하도록 반영 | codex |
 | 2026-03-21 | page.tsx 단일 CSR 계약과 현재 surface/rendering decision 기준으로 stale 예외 문구를 정리 | codex |
 | 2026-03-21 | fe-route-agent 계약에 맞춰 consumed layout / rendering decision 섹션을 보강 | codex |
-| 2026-03-15 | Surface owner와 elevation 규칙을 문서화 | codex |
-| 2026-03-15 | 문의 수정 spec에 `PageSurface`/`SectionSurface` ownership과 elevation 결정을 명시 | codex |
+| 2026-03-15 | SectionSurface owner와 elevation 규칙을 문서화 | codex |
+| 2026-03-15 | 문의 수정 spec에 `ScreenSurface`/`SectionSurface` ownership과 elevation 결정을 명시 | codex |
 | 2026-03-01 | 초기 생성 (문의 수정 페이지 + AiForm UPDATE 흐름) | codex |
 | 2026-03-01 | 수정 폼 입력을 HeroUI Select 기반으로 정리해 Form-state 전용 입력 컴포넌트 의존 제거 | codex |
 | 2026-03-01 | AiForm을 수정 입력 폼과 동일 위계로 분리하고 바깥 섹션 영역 래퍼를 제거해 Card 단일 표면 구조로 정리 | codex |

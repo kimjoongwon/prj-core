@@ -1,7 +1,7 @@
 "use client";
 
 import { useGetRoles } from "@cocrepo/api/core/roles";
-import { RoleListPage } from "@cocrepo/ui";
+import { RoleListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -16,15 +16,17 @@ export default observer(function RolesPageRoute() {
 	const { data: response, isLoading } = useGetRoles();
 
 	return (
-		<RoleListPage
-			roles={response?.data}
-			totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
-			isLoading={isLoading}
-			queryStates={queryStates}
-			setQueryStates={setQueryStates}
-			onClickCreateButton={() => {
-				router.push("/roles/new" as Route);
-			}}
-		/>
+		<>
+			<RoleListScreen
+				roles={response?.data}
+				totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
+				isLoading={isLoading}
+				queryStates={queryStates}
+				setQueryStates={setQueryStates}
+				onClickCreateButton={() => {
+					router.push("/roles/new" as Route);
+				}}
+			/>
+		</>
 	);
 });

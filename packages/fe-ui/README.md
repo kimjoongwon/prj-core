@@ -22,7 +22,7 @@ Entry points are organized under `src/`:
 Domain sub-groups under `feature` and `widget` are allowed when they improve discoverability, for example `src/feature/idp/*` or `src/widget/ability/*`.
 
 `src/screen` uses folder-based sidecars. Keep each screen in `src/screen/[ScreenName]/`.
-Prefer semantic screen names such as `AssetListPage`, `RoleDetailPage`, `SecurityPolicyFormPage`.
+Prefer semantic screen names such as `AssetListScreen`, `RoleDetailScreen`, `SecurityPolicyFormScreen`.
 Avoid route-mirror names such as `AdminAssetsAssetIdPage` or `IdpConsoleOidcClientsOidcClientIdPage`.
 
 ## Installation
@@ -55,7 +55,7 @@ export function Example() {
 - Control: `Button`, `Input`, `Select`, `Tabs`, `Textarea`, `Pagination`
 - Display: `DataGrid`, `NotFound`, `EmptyState`, `Message`, `Skeleton`
 - Form: `LoginForm`, `ForgotPasswordForm`, `ResetPasswordForm`, `OidcClientForm`
-- Page: app-facing page UI such as `AssetListPage`, `AssetDetailPage`, `AccountListPage`
+- Page: app-facing page UI such as `AssetListScreen`, `AssetDetailScreen`, `AccountListScreen`
 
 ## Storybook
 

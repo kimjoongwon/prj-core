@@ -6,8 +6,6 @@ import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { VariableInputForm } from "../../form/VariableInputForm";
-import { HStack } from "../../rhythm/HStack/HStack";
-import { VStack } from "../../rhythm/VStack/VStack";
 import { ByteCounter } from "../ByteCounter";
 import { HtmlContentRenderer } from "../HtmlContentRenderer";
 import type { TemplateVariable } from "../VariableReadTable";
@@ -159,10 +157,10 @@ export const PreviewModal = observer(
 					<Modal.Backdrop><Modal.Container size="lg" scroll="inside"><Modal.Dialog>
 					<Modal.Header>템플릿 미리보기</Modal.Header>
 					<Modal.Body>
-						<VStack gap={6}>
+						<div>
 							{/* 변수 입력 영역 */}
-							<VStack gap={2}>
-								<span className="text-sm font-semibold text-foreground">
+							<div className="flex flex-col">
+								<span className="flex flex-col w-full gap-6 items-center justify-center text-sm font-semibold text-foreground">
 									변수 입력
 								</span>
 								<VariableInputForm
@@ -170,14 +168,14 @@ export const PreviewModal = observer(
 									values={variableValues}
 									onChange={setVariableValues}
 								/>
-							</VStack>
+							</div>
 
 							{/* 미리보기 실행 버튼 */}
 							<Button
 								color="primary"
 								onPress={handlePreview}
 								isDisabled={isLoading}
-								fullWidth
+
 							>
 								미리보기 실행
 							</Button>
@@ -189,21 +187,21 @@ export const PreviewModal = observer(
 
 							{/* 로딩 스피너 */}
 							{isLoading && (
-								<HStack justifyContent="center">
+								<div className="flex">
 									<Spinner size="lg" />
-								</HStack>
+								</div>
 							)}
 
 							{/* 렌더링 결과 영역 */}
 							{previewState === "success" && previewResult && (
-								<VStack gap={4}>
+								<div className="flex flex-col">
 									{/* 미치환 변수 경고 */}
 									{previewResult.unresolvedVariables.length > 0 && (
-										<VStack gap={2}>
+										<div className="flex flex-col">
 											<span className="text-sm font-semibold text-warning">
 												미치환 변수
 											</span>
-											<HStack gap={2}>
+											<div className="flex">
 												{previewResult.unresolvedVariables.map(
 													(variableName) => (
 														<Chip
@@ -216,8 +214,8 @@ export const PreviewModal = observer(
 														</Chip>
 													),
 												)}
-											</HStack>
-										</VStack>
+											</div>
+										</div>
 									)}
 
 									{/* EMAIL 유형 결과 */}
@@ -240,9 +238,9 @@ export const PreviewModal = observer(
 											content={previewResult.content}
 										/>
 									)}
-								</VStack>
+								</div>
 							)}
-						</VStack>
+						</div>
 					</Modal.Body>
 					<Modal.Footer>
 						<Button variant="flat" onPress={onClose}>
@@ -270,21 +268,21 @@ interface EmailPreviewResultProps {
 const EmailPreviewResult = observer(
 	({ subject, content }: EmailPreviewResultProps) => {
 		return (
-			<VStack gap={3}>
+			<div className="flex flex-col">
 				<span className="text-sm font-semibold text-foreground">
 					미리보기 결과
 				</span>
 				{subject && (
-					<VStack gap={1}>
+					<div className="flex flex-col">
 						<span className="text-xs text-muted">제목</span>
 						<span className="text-sm text-foreground">{subject}</span>
-					</VStack>
+					</div>
 				)}
-				<VStack gap={1}>
+				<div className="flex flex-col">
 					<span className="text-xs text-muted">본문</span>
 					<HtmlContentRenderer html={content} />
-				</VStack>
-			</VStack>
+				</div>
+			</div>
 		);
 	},
 );
@@ -300,17 +298,17 @@ interface SmsPreviewResultProps {
  */
 const SmsPreviewResult = observer(({ content }: SmsPreviewResultProps) => {
 	return (
-		<VStack gap={3}>
-			<HStack justifyContent="between" alignItems="center">
+		<div className="flex flex-col">
+			<div className="flex">
 				<span className="text-sm font-semibold text-foreground">
 					미리보기 결과
 				</span>
 				<ByteCounter text={content} />
-			</HStack>
+			</div>
 			<div className="rounded-lg border border-border bg-surface-secondary p-4">
 				<p className="text-sm text-foreground whitespace-pre-wrap">{content}</p>
 			</div>
-		</VStack>
+		</div>
 	);
 });
 
@@ -327,12 +325,12 @@ interface PushPreviewResultProps {
 const PushPreviewResult = observer(
 	({ subject, content }: PushPreviewResultProps) => {
 		return (
-			<VStack gap={3}>
+			<div className="flex flex-col gap-3">
 				<span className="text-sm font-semibold text-foreground">
 					미리보기 결과
 				</span>
 				<div className="rounded-lg border border-border bg-surface-secondary p-4">
-					<VStack gap={2}>
+					<div className="flex flex-col gap-2">
 						{subject && (
 							<span className="text-sm font-semibold text-foreground">
 								{subject}
@@ -341,9 +339,9 @@ const PushPreviewResult = observer(
 						<p className="text-sm text-muted whitespace-pre-wrap">
 							{content}
 						</p>
-					</VStack>
+					</div>
 				</div>
-			</VStack>
+			</div>
 		);
 	},
 );

@@ -5,7 +5,7 @@ import {
 	useCreateTemplate,
 } from "@cocrepo/api/core/templates";
 import {
-	TemplateCreatePage,
+	TemplateCreateScreen,
 	type TemplateFormData,
 	type VariableEditItem,
 } from "@cocrepo/ui";
@@ -121,16 +121,18 @@ const AdminTemplatesNewRoute = observer(() => {
 	};
 
 	return (
-		<TemplateCreatePage
-			formData={state.formData}
-			variables={state.variables}
-			errors={state.errors}
-			isSubmitting={isPending}
-			onFormDataChange={onFormDataChange}
-			onVariablesChange={onVariablesChange}
-			onSubmitForm={onSubmitForm}
-			onClickCancelButton={onClickCancelButton}
-		/>
+		<>
+			<TemplateCreateScreen
+				formData={state.formData}
+				variables={state.variables}
+				errors={state.errors}
+				isSubmitting={isPending}
+				onFormDataChange={onFormDataChange}
+				onVariablesChange={onVariablesChange}
+				onSubmitForm={onSubmitForm}
+				onClickCancelButton={onClickCancelButton}
+			/>
+		</>
 	);
 });
 

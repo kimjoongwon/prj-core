@@ -7,8 +7,6 @@ import { Button } from "../../action/Button/Button";
 import { Typography } from "../../data-display/Typography";
 import { translateNode, useT } from "../../i18n";
 import { Container } from "../../layout/Container/Container";
-import { Spacer } from "../../rhythm/Spacer/Spacer";
-import { VStack } from "../../rhythm/VStack/VStack";
 
 export interface NotFoundProps {
 	/**
@@ -85,22 +83,22 @@ export const NotFound = observer(function NotFound({
 		<Container className="flex min-h-screen items-center justify-center">
 			<Card className="w-full max-w-md">
 				<Card.Content className="p-8 text-center">
-					<VStack className="items-center gap-6">
+					<div className="flex flex-col items-center gap-6">
 						{icon || defaultIcon}
 
-						<VStack className="items-center gap-2">
+						<div className="flex flex-col items-center gap-2">
 							<Typography.Heading level={2}>{t(title)}</Typography.Heading>
 							<Typography.Paragraph className="text-center">
 								{t(description)}
 							</Typography.Paragraph>
-						</VStack>
+						</div>
 
-						<Spacer size={8} />
+						<div className="block h-8" />
 
 						{actions ? (
 							translateNode(actions, t)
 						) : (
-							<VStack className="w-full gap-3">
+							<div className="flex flex-col w-full gap-3">
 								<Button
 									color="primary"
 									variant="solid"
@@ -120,9 +118,9 @@ export const NotFound = observer(function NotFound({
 								>
 									{t(backButtonText)}
 								</Button>
-							</VStack>
+							</div>
 						)}
-					</VStack>
+					</div>
 				</Card.Content>
 			</Card>
 		</Container>

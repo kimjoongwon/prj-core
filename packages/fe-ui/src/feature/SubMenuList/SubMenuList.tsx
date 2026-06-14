@@ -3,7 +3,6 @@
 import { useNavigationStore } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
 import { cn } from "@heroui/react";
-import { VStack } from "../../rhythm/VStack/VStack";
 
 export interface SubMenuListProps {
 	/** 하위 아이템 클릭 시 콜백 */
@@ -47,7 +46,7 @@ export const SubMenuList = observer(
 					className,
 				)}
 			>
-				<VStack className="h-full overflow-y-auto p-4" gap={2}>
+				<div className="flex flex-col gap-2 h-full overflow-y-auto p-4">
 					{subNavItems.map((subNavItem) => (
 						<button
 							key={subNavItem.id}
@@ -63,7 +62,7 @@ export const SubMenuList = observer(
 							<span>{subNavItem.label}</span>
 						</button>
 					))}
-				</VStack>
+				</div>
 			</div>
 		);
 	},

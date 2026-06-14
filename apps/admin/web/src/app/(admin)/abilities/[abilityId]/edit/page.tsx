@@ -7,7 +7,7 @@ import {
 } from "@cocrepo/api/core/abilities";
 import { useGetActions } from "@cocrepo/api/core/actions";
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
-import { AbilityFormPage } from "@cocrepo/ui";
+import { AbilityFormScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -108,86 +108,92 @@ export default observer(function AbilityEditPage() {
 
 	if (isLoading || isSubjectsLoading || isActionsLoading) {
 		return (
-			<AbilityFormPage
-				status="loading"
-				mode="edit"
-				title="권한 수정"
-				description="권한 정보를 수정합니다."
-			/>
+			<>
+				<AbilityFormScreen
+					status="loading"
+					mode="edit"
+					title="권한 수정"
+					description="권한 정보를 수정합니다."
+				/>
+			</>
 		);
 	}
 
 	if (!ability) {
 		return (
-			<AbilityFormPage
-				status="not_found"
-				mode="edit"
-				title="권한 수정"
-				description="권한 정보를 수정합니다."
-				onClickNotFoundBackButton={() => {
-					router.push("/abilities" as Route);
-				}}
-			/>
+			<>
+				<AbilityFormScreen
+					status="not_found"
+					mode="edit"
+					title="권한 수정"
+					description="권한 정보를 수정합니다."
+					onClickNotFoundBackButton={() => {
+						router.push("/abilities" as Route);
+					}}
+				/>
+			</>
 		);
 	}
 
 	return (
-		<AbilityFormPage
-			status="ready"
-			mode="edit"
-			title="권한 수정"
-			description="권한 정보를 수정합니다."
-			backButtonLabel="취소"
-			submitButtonLabel="저장"
-			isSubmitting={isPending}
-			form={{
-				name: state.name,
-				description: state.description,
-				subjectId: state.subjectId,
-				actionId: state.actionId,
-				fields: state.fields,
-				conditions: state.conditions,
-				inverted: state.inverted,
-				reason: state.reason,
-			}}
-			subjects={(subjectsResponse?.data ?? []).map((subject) => ({
-				id: subject.id,
-				label: `${subject.displayName || subject.name}${subject.group ? ` (${subject.group})` : ""}`,
-			}))}
-			actions={(actionsResponse?.data ?? []).map((action) => ({
-				id: action.id,
-				label: `${action.displayName || action.name}${action.group ? ` (${action.group})` : ""}`,
-			}))}
-			onClickBackButton={() => {
-				router.push(`/abilities/${abilityId}` as Route);
-			}}
-			onClickSubmitButton={onClickSaveButton}
-			onChange={{
-				onChangeName: (value) => {
-					state.name = value;
-				},
-				onChangeDescription: (value) => {
-					state.description = value;
-				},
-				onChangeSubjectId: (value) => {
-					state.subjectId = value;
-				},
-				onChangeActionId: (value) => {
-					state.actionId = value;
-				},
-				onChangeFields: (value) => {
-					state.fields = value;
-				},
-				onChangeConditions: (value) => {
-					state.conditions = value;
-				},
-				onChangeInverted: (value) => {
-					state.inverted = value;
-				},
-				onChangeReason: (value) => {
-					state.reason = value;
-				},
-			}}
-		/>
+		<>
+			<AbilityFormScreen
+				status="ready"
+				mode="edit"
+				title="권한 수정"
+				description="권한 정보를 수정합니다."
+				backButtonLabel="취소"
+				submitButtonLabel="저장"
+				isSubmitting={isPending}
+				form={{
+					name: state.name,
+					description: state.description,
+					subjectId: state.subjectId,
+					actionId: state.actionId,
+					fields: state.fields,
+					conditions: state.conditions,
+					inverted: state.inverted,
+					reason: state.reason,
+				}}
+				subjects={(subjectsResponse?.data ?? []).map((subject) => ({
+					id: subject.id,
+					label: `${subject.displayName || subject.name}${subject.group ? ` (${subject.group})` : ""}`,
+				}))}
+				actions={(actionsResponse?.data ?? []).map((action) => ({
+					id: action.id,
+					label: `${action.displayName || action.name}${action.group ? ` (${action.group})` : ""}`,
+				}))}
+				onClickBackButton={() => {
+					router.push(`/abilities/${abilityId}` as Route);
+				}}
+				onClickSubmitButton={onClickSaveButton}
+				onChange={{
+					onChangeName: (value) => {
+						state.name = value;
+					},
+					onChangeDescription: (value) => {
+						state.description = value;
+					},
+					onChangeSubjectId: (value) => {
+						state.subjectId = value;
+					},
+					onChangeActionId: (value) => {
+						state.actionId = value;
+					},
+					onChangeFields: (value) => {
+						state.fields = value;
+					},
+					onChangeConditions: (value) => {
+						state.conditions = value;
+					},
+					onChangeInverted: (value) => {
+						state.inverted = value;
+					},
+					onChangeReason: (value) => {
+						state.reason = value;
+					},
+				}}
+			/>
+		</>
 	);
 });

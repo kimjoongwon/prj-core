@@ -5,8 +5,8 @@ import {
 	useGetAuthAuditLogs,
 } from "@cocrepo/api/idp/auth";
 import {
-	AuthAuditLogListPage,
-	type AuthAuditLogListPageStats,
+	AuthAuditLogListScreen,
+	type AuthAuditLogListScreenStats,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
@@ -25,16 +25,18 @@ export default observer(function AuthAuditLogsPageRoute() {
 	const { data: statsResponse } = useGetAuthAuditLogStats();
 
 	return (
-		<AuthAuditLogListPage
-			logs={response?.data}
-			totalCount={response?.meta?.totalCount ?? 0}
-			isLoading={isLoading}
-			queryStates={queryStates}
-			setQueryStates={setQueryStates}
-			stats={
-				statsResponse?.data ? mapAuditLogStats(statsResponse.data) : undefined
-			}
-		/>
+		<>
+			<AuthAuditLogListScreen
+				logs={response?.data}
+				totalCount={response?.meta?.totalCount ?? 0}
+				isLoading={isLoading}
+				queryStates={queryStates}
+				setQueryStates={setQueryStates}
+				stats={
+					statsResponse?.data ? mapAuditLogStats(statsResponse.data) : undefined
+				}
+			/>
+		</>
 	);
 });
 
@@ -43,7 +45,7 @@ function mapAuditLogStats(stats: {
 	todayFailureCount: number;
 	todayLockedCount: number;
 	totalCount: number;
-}): AuthAuditLogListPageStats {
+}): AuthAuditLogListScreenStats {
 	return {
 		todaySuccessCount: stats.todaySuccessCount,
 		todayFailureCount: stats.todayFailureCount,

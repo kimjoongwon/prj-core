@@ -7,29 +7,33 @@ import {
 	useGetIdpLoginTrend,
 } from "@cocrepo/api/idp/idp-dashboard";
 import {
-	IdentityDashboardPage,
-	type IdentityDashboardPageStats,
-	type IdentityDashboardPageTrendItem,
+	IdentityDashboardScreen,
+	type IdentityDashboardScreenStats,
+	type IdentityDashboardScreenTrendItem,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 
-export default observer(function DashboardPageRoute() {
+export default observer(function DashboardScreenRoute() {
 	const { data: statsResponse } = useGetIdpDashboardStats();
 	const { data: trendResponse } = useGetIdpLoginTrend();
 
 	return (
-		<IdentityDashboardPage
-			stats={
-				statsResponse?.data ? mapDashboardStats(statsResponse.data) : undefined
-			}
-			trendItems={(trendResponse?.data ?? []).map(mapDashboardTrend)}
-		/>
+		<>
+			<IdentityDashboardScreen
+				stats={
+					statsResponse?.data
+						? mapDashboardStats(statsResponse.data)
+						: undefined
+				}
+				trendItems={(trendResponse?.data ?? []).map(mapDashboardTrend)}
+			/>
+		</>
 	);
 });
 
 function mapDashboardStats(
 	stats: DashboardStatsDto,
-): IdentityDashboardPageStats {
+): IdentityDashboardScreenStats {
 	return {
 		activeSessionCount: stats.activeSessionCount,
 		todaySuccessCount: stats.todaySuccessCount,
@@ -42,7 +46,7 @@ function mapDashboardStats(
 
 function mapDashboardTrend(
 	item: LoginTrendItemDto,
-): IdentityDashboardPageTrendItem {
+): IdentityDashboardScreenTrendItem {
 	return {
 		date: item.date,
 		successCount: item.successCount,

@@ -63,7 +63,7 @@ This reference preserves shared implementation instructions for display-area pri
 | 상황                                | 사용 여부 | 설명                              |
 | ----------------------------------- | :-------: | --------------------------------- |
 | 새로운 기본 UI 요소가 필요할 때     |    ✅     | Button, Card, Badge, Avatar 등    |
-| 구조/리듬 primitive가 필요할 때    |    ✅     | VStack, HStack, Container, Spacer |
+| 구조/리듬 primitive가 필요할 때    |    ✅     | screen에서는 VStack/HStack/Spacer, 그 외에는 div + Tailwind |
 | 데이터 표시용 컴포넌트가 필요할 때  |    ✅     | Text, Icon, Skeleton              |
 | HeroUI에 없는 커스텀 UI가 필요할 때 |    ✅     | 프로젝트 전용 스타일 컴포넌트     |
 | 비즈니스 로직이 포함된 컴포넌트     |    ❌     | fe-feature-agent 사용              |
@@ -119,7 +119,7 @@ This reference preserves shared implementation instructions for display-area pri
 | -------------------------------------------------- | ----------------------------------------------------------------- |
 | `useState`, `useReducer` 사용                      | 상태 관리는 상위 계층에서                                         |
 | **Context API 사용 (createContext, useContext)**   | **packages/fe-ui에서 Context 사용 금지 - props drilling 사용**       |
-| **컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → src/hooks/, utils → src/utils/)** |
+| **컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → `packages/fe-hook/src`, utils → `src/utils`)** |
 | 기존 UI와 유사한 컴포넌트 신규 생성               | 중복 자산 증가 및 API/디자인 불일치 유발                          |
 | API 호출, Side Effect                              | Pure Component 원칙 위반                                          |
 | 비즈니스 로직 포함                                 | Feature 계층의 역할                                               |
@@ -165,8 +165,8 @@ packages/fe-ui/src/display/[ComponentName]/
 
 # ⚠️ 컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성 금지!
 # 재사용 가능한 훅/유틸은 패키지 레벨에서 관리:
-packages/fe-ui/src/hook/use[Name].ts       # 재사용 가능한 훅
-packages/fe-ui/src/util/[utilName].ts      # 재사용 가능한 유틸
+packages/fe-hook/src/use[Name].ts          # 재사용 가능한 훅
+packages/fe-ui/src/utils/[utilName].ts     # UI 전용 유틸
 ```
 
 ### 4.4 barrel export 추가
@@ -486,27 +486,25 @@ export function useAdminLayout() {}
 - `src/rhythm/VStack/VStack.tsx`
 - `src/rhythm/HStack/HStack.tsx`
 - `src/layout/Page/Page.tsx`
-- `src/layout/Section/Section.tsx`
 - `packages/fe-ui/src/widget/PageTitleBar/PageTitleBar.tsx`
 - `packages/fe-ui/src/display/data-display/Avatar/Avatar.tsx`
 
 ### 페이지 구조 재사용 기준
 
-**페이지 셸과 헤더는 `Page`, `Section`, `PageTitleBar`를 재사용하고, 표현 레이어가 필요하면 기존 `surface/PageSurface`, `surface/SectionSurface`를 사용합니다. Surface는 `Page`/`Section`을 대체하지 않습니다.**
+**Web 페이지 셸과 헤더는 `Page`, `PageTitleBar`를 재사용하고, screen 표현 레이어는 `surface/ScreenSurface`와 `surface/SectionSurface`를 사용합니다. feature/widget local panel은 `surface/Surface`만 사용하고 제거된 detail/form legacy surface wrapper는 신규 web 호출부에서 사용하지 않습니다.**
 
 #### 컴포넌트 위치
 
 ```
 packages/fe-ui/src/
 ├── layout/
-│   ├── Page/
-│   └── Section/
+│   └── Page/
 ├── rhythm/
 │   ├── VStack/
 │   ├── HStack/
 │   └── Spacer/
 ├── surface/
-│   ├── PageSurface/
+│   ├── ScreenSurface/
 │   └── SectionSurface/
 ├── display/layout/
 │   ├── Layout.tsx
@@ -526,13 +524,12 @@ packages/fe-ui/src/
 | 컴포넌트 | 역할 |
 |----------|------|
 | `Page` | 페이지 shell 슬롯 (`top`, `leftAside`, `rightAside`, `bottom`) |
-| `Section` | 페이지 내부 구역 분할 |
 | `PageTitleBar` | title, description, actions 헤더 |
-| `VStack`, `HStack`, `Spacer` | 정렬/간격 rhythm primitive |
+| `VStack`, `HStack`, `Spacer` | screen 전용 정렬/간격 rhythm primitive |
 
 > **Note**: 새로운 display 컴포넌트는 페이지 래퍼나 헤더 패널을 다시 발명하지 말고 위 컴포넌트와 함께 조합되도록 설계하세요.
 > **Note**: `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 display가 아니라 widget입니다.
-> **Note**: 새로운 stack/spacer 조합은 raw numeric gap보다 `page`, `section`, `block`, `inline`, `dense` 같은 semantic rhythm preset을 우선 사용합니다.
+> **Note**: 새로운 stack/spacer 조합은 screen에서만 사용하고, raw numeric gap보다 `page`, `section`, `block`, `inline`, `dense` 같은 semantic rhythm preset을 우선 사용합니다.
 
 ### 출력 형식
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { useGetCurrentSpace, useGetMySpaces } from "@cocrepo/api/idp/auth";
+import { usePersistStore } from "@cocrepo/store";
 import type {
 	SpaceBootstrapSpaceLike,
 	UseSpaceBootstrapOptions,
@@ -86,4 +88,31 @@ export function useSpaceBootstrap<
 		isSpaceBootstrapReady:
 			isHydrated && spaceStore.isSpaceSelectionResolved === true,
 	};
+}
+
+/**
+ * 현재 앱 Store와 Space API를 연결해 Space 선택 상태를 bootstrap합니다.
+ */
+export function useSpaceBootstrapFromApi() {
+	const persistStore = usePersistStore();
+	const isHydrated = persistStore.isHydrated === true;
+	const { data: mySpacesResponse } = useGetMySpaces({
+		query: {
+			enabled: isHydrated,
+		},
+	});
+	const { data: currentSpaceResponse, isFetched: isCurrentSpaceFetched } =
+		useGetCurrentSpace({
+			query: {
+				enabled: isHydrated,
+			},
+		});
+
+	return useSpaceBootstrap({
+		spaceStore: persistStore,
+		isHydrated,
+		spaces: mySpacesResponse?.data,
+		currentSpace: currentSpaceResponse?.data ?? null,
+		isCurrentSpaceFetched,
+	});
 }

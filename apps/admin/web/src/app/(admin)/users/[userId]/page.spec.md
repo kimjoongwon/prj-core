@@ -15,7 +15,7 @@
 - 기본 패턴: `page.tsx` 단일 CSR
 - page role: `detail`
 - API: `useGetUserById`, `useGetPolicies`, `useGetUserPolicies`, `useSyncUserPolicies`
-- reusable target: `packages/fe-ui/src/screen/UserDetailPage/UserDetailPage.tsx`
+- reusable target: `packages/fe-ui/src/screen/UserDetailScreen/UserDetailScreen.tsx`
 
 ## API 호출
 
@@ -37,12 +37,12 @@
 | `onChangePolicyAssignmentPriority` | 로컬 UserPolicy 우선순위 변경 |
 | `onClickSavePoliciesButton` | `useSyncUserPolicies` 호출 |
 
-## Surface / Elevation
+## SectionSurface / Elevation
 
 | 항목 | 결정 |
 |------|------|
-| PageSurface owner | 상위 users layout skeleton |
-| 본문 | `UserDetailPage`가 `DetailPageSurface > DetailSectionCard`로 기본 정보와 정책 할당 영역 구성 |
+| ScreenSurface owner | page/screen content owner |
+| 본문 | `UserDetailScreen`가 `ScreenSurface > SectionSurface`로 기본 정보와 정책 할당 영역 구성 |
 
 ## 변경 이력
 

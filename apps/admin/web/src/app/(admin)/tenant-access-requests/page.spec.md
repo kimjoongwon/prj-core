@@ -16,7 +16,7 @@
 |------|----|
 | route path | `/tenant-access-requests` |
 | route page | `apps/admin/web/src/app/(admin)/tenant-access-requests/page.tsx` |
-| pure screen component | `TenantAccessRequestReviewListPage` |
+| pure screen component | `TenantAccessRequestReviewListScreen` |
 | route meta | `route.meta.ts` |
 | SSR/prefetch 예외 | 없음 |
 

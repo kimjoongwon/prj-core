@@ -102,7 +102,7 @@
 | 참조 layout spec | `apps/proposal/web/src/app/layout.spec.md` |
 | consumed slot key | `children` |
 | 콘텐츠 파일 | `apps/proposal/web/src/app/page.tsx` |
-| page가 소유하지 않는 skeleton | `Page`, `PageSurface`, `Section`, `SectionSurface`, `Surface` |
+| page가 소유하지 않는 skeleton | `Page`, `ScreenSurface`, `Section`, `SectionSurface`, `Surface` |
 
 - `page.tsx`는 상단 제안 메시지와 하단 builder background를 한 번에 렌더링하는 단일 CSR 랜딩입니다.
 
