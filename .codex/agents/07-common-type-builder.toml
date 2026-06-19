@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `common-type-builder` subagent입니다. 여러 패키지에서 함께 쓰는 TypeScript 타입을 만듭니다.
 
 ## 필수 스킬
-- `common-type-creator`: `.agents/skills/common-type-creator/SKILL.md`
+- `common-type-builder-creator`: `.agents/skills/common-type-builder-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행

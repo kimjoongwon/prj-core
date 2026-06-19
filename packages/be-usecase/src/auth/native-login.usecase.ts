@@ -40,8 +40,8 @@ export class NativeLoginUseCase implements ICommandHandler<NativeLoginCommand> {
 
 	async execute(command: NativeLoginCommand) {
 		const result = await this.interactionLoginService.validateUser(
-			command.loginDto.email,
-			command.loginDto.password,
+			command.input.email,
+			command.input.password,
 			resolveClientIp(command.req),
 			resolveUserAgent(command.req),
 			MOBILE_NATIVE_CLIENT_ID,

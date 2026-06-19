@@ -1,8 +1,7 @@
-import type { SyncRolePoliciesDto } from "@cocrepo/dto";
-
+import type { SyncRolePoliciesCommandInput } from "./sync-role-policies.input";
 export class SyncRolePoliciesCommand {
 	constructor(
 		readonly roleId: string,
-		readonly rolePolicies: SyncRolePoliciesDto["rolePolicies"],
+		readonly input: SyncRolePoliciesCommandInput,
 	) {}
 }

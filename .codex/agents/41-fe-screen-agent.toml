@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-screen-agent` subagent입니다. page가 보여줄 실제 화면 Screen을 만듭니다.
 
 ## 필수 스킬
-- `fe-screen-creator`: `.agents/skills/fe-screen-creator/SKILL.md`
+- `fe-screen-agent-creator`: `.agents/skills/fe-screen-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

@@ -1,6 +1,6 @@
 # CQRS / UseCase Migration Runbook
 
-이 문서는 CQRS / UseCase 전환의 backend reference runbook이다. 신규 실행 기준은 `docs/services/**/*.delivery.spec.md`의 service delivery spec이며, 이 문서는 backend 구조와 legacy 제거 기준을 보조한다. 실행 agent는 승인된 service delivery spec과 생성된 route delivery spec의 phase, ownership, lock, QA gate 안에서만 작업하고, 누락된 계약은 임의 구현하지 않고 최종 보고에 남긴다.
+이 문서는 CQRS / UseCase 전환의 backend reference runbook이다. 신규 실행 기준은 `docs/services/**/*.delivery.spec.md`의 service delivery spec이며, 이 문서는 backend 구조와 legacy 제거 기준을 보조한다. 실행 agent는 승인된 service delivery spec과 생성된 route delivery spec의 phase, ownership, lock, 검증 gate 안에서만 작업하고, 누락된 계약은 임의 구현하지 않고 최종 보고에 남긴다.
 
 ## 용어
 
@@ -77,9 +77,9 @@ NaverMapClient / KakaoMapClient
 Backend value source rule:
 
 - Controller, UseCase handler, Service, Repository, Client에서 여러 출처 값을 조합할 때는 값의 원천이 드러나야 한다.
-- `command.params.timelineId`, `context.userId`, `entity.id`, `input.address`, `config.apiKey`처럼 source path를 유지한다.
-- 반복이 길면 `const params = command.params`, `const context = this.context.requireContext()`처럼 출처명 alias까지만 사용한다.
-- `const { timelineId } = command.params`처럼 원천이 사라지는 destructuring은 짧고 단일 출처인 지역 코드에서만 제한적으로 사용한다.
+- `command.input.timelineId`, `context.userId`, `entity.id`, `input.address`, `config.apiKey`처럼 source path를 유지한다.
+- 반복이 길면 `const input = command.input`, `const context = this.context.requireContext()`처럼 출처명 alias까지만 사용한다.
+- `const { timelineId } = command.input`처럼 원천이 사라지는 destructuring은 짧고 단일 출처인 지역 코드에서만 제한적으로 사용한다.
 - Service/Repository input object, external API params/body/header, response mapping은 어떤 값이 command/query, context, entity, config, repository row 중 어디서 왔는지 코드에서 바로 보여야 한다.
 
 ## Package Rename Matrix
@@ -144,7 +144,7 @@ CQRS / UseCase 전환 작업도 별도 전환 전용 role 없이 `.codex/agents/
 
 | role | 책임 파일 | 책임 |
 |---|---|---|
-| `orch-delivery` | `docs/backend/cqrs-usecase-migration.md` | runbook, execution graph, lock, QA gate 갱신 |
+| `orch-delivery` | `docs/backend/cqrs-usecase-migration.md` | runbook, execution graph, lock, 검증 gate 갱신 |
 | `orch-delivery` | package.json, tsconfig, barrel, import path | package rename, dependency, export, legacy package 제거 |
 | `be-command-builder` | `packages/be-command/src/**`, app-local `*.cqrs.ts` message source | Command/Query message package 이동/생성 |
 | `be-event-builder` | `packages/be-event/src/**` | Event message package 이동/생성 |
@@ -196,7 +196,7 @@ export abstract class AbstractAggregateRootEntity<DTO = unknown, O = never>
 
 ## Reservation Pilot Scope
 
-Reservation pilot의 목적은 package rename, aggregate root 전환, UseCase handler, controller bus entrypoint, module wiring, QA gate를 한 번에 검증하는 것이다.
+Reservation pilot의 목적은 package rename, aggregate root 전환, UseCase handler, controller bus entrypoint, module wiring, 검증 gate를 한 번에 검증하는 것이다.
 
 Pilot 이전 핵심 파일:
 
@@ -258,7 +258,7 @@ flowchart TD
   P8 --> P9["9. Controller CommandBus/QueryBus"]
   P9 --> P10["10. Module CqrsModule/provider wiring"]
   P10 --> P11["11. Facade/package legacy removal"]
-  P11 --> P12["12. QA gate and legacy scan"]
+  P11 --> P12["12. 검증 gate and legacy scan"]
 ```
 
 | phase | owner role | input | required output | blocked if |
@@ -275,7 +275,7 @@ flowchart TD
 | 9. Controller bus entrypoint | `be-controller-builder` | current controller, `@cocrepo/command` messages | constructor has only `CommandBus` and `QueryBus`, methods execute command/query | handler command/query contract is missing |
 | 10. Module wiring | `be-module-builder` | provider arrays, service/repository/client providers | `CqrsModule` import, providers include handler/event/saga arrays | package rename or handler export missing |
 | 11. Legacy removal | `orch-delivery` | pilot migrated imports | Reservation facade removed, legacy package refs removed from pilot path | any active import still uses legacy package |
-| 12. QA gate | QA role | migrated pilot | type-check/test/legacy scans pass | any required check fails |
+| 12. owner 검증 gate | owner agents | migrated pilot | type-check/test/legacy scans pass | any required check fails |
 
 Execution rules:
 
@@ -324,7 +324,7 @@ rg -n "(Facade|ApplicationService|Gateway)" apps/core/api/src/module apps/core/a
 
 Core API 남은 migration 목록:
 
-| phase | domain / legacy provider | current files | target output | QA gate |
+| phase | domain / legacy provider | current files | target output | 검증 gate |
 |---|---|---|---|---|
 | core-0 | post-pilot baseline | `apps/core/api/package.json`, `apps/core/api/src/module/**`, `apps/core/api/test/**` | Reservation 완료 상태 보존, core legacy import 목록 확정 | `rg "@cocrepo/facade|@cocrepo/app|@cocrepo/gateway" apps/core/api` 결과를 final report에 첨부 |
 | core-1 | `AbilityApplicationService` | `apps/core/api/src/module/abilities/**`, `packages/be-app/src/ability.application-service.ts` | ability command/query usecase, controller bus entrypoint, module `CqrsModule` wiring | `rg "@cocrepo/app|AbilityApplicationService" apps/core/api/src/module/abilities packages/be-usecase packages/be-app/src`에서 migrated path legacy 없음 |
@@ -333,11 +333,11 @@ Core API 남은 migration 목록:
 | core-4 | content/workflow facades: `AssetFacade`, `FolderFacade`, `ServiceDocumentFacade`, `TaskFacade`, `InquiryFacade`, `TimelineFacade` | `apps/core/api/src/module/{assets,folders,service-documents,tasks,inquiries,timelines}/**`, matching facade files, `apps/core/api/test/exercises.e2e-spec.ts` | asset/document/task/inquiry/timeline usecase handlers, controller bus entrypoint, module wiring, E2E provider update | `pnpm --filter core-api test -- exercises.e2e-spec.ts` plus migrated domain legacy scan |
 | core-5 | space/access/commercial facades: `SpaceFacade`, `UserFacade`, `TenantAccessRequestFacade`, `CourseFacade`, `PaymentFacade`, `PolicyFacade`, `PolicyAssignmentFacade` | `apps/core/api/src/module/{spaces,users,tenant-access-requests,courses,payments,policies,policy-assignments}/**`, matching facade files, `apps/core/api/test/grounds.e2e-spec.ts` | cross-domain usecase handlers with explicit service/repository boundaries, no facade orchestration | `pnpm --filter core-api test -- grounds.e2e-spec.ts` plus migrated domain legacy scan |
 | core-6 | core package/test cleanup | `apps/core/api/package.json`, `apps/core/api/test/jest-e2e.json`, `packages/be-app/src/index.ts`, `packages/be-facade/src/index.ts` | remove `@cocrepo/app` and `@cocrepo/facade` from core-api deps/mappers after all core imports are gone | `rg "@cocrepo/facade|@cocrepo/app|@cocrepo/gateway" apps/core/api` has no result |
-| core-7 | core QA gate | all core migrated files | type-check, unit/e2e smoke, operationId/DTO contract retained | `pnpm --filter @cocrepo/usecase type-check`; `pnpm --filter core-api type-check`; `pnpm --filter core-api test --passWithNoTests` |
+| core-7 | core 검증 gate | all core migrated files | type-check, unit/e2e smoke, operationId/DTO contract retained | `pnpm --filter @cocrepo/usecase type-check`; `pnpm --filter core-api type-check`; `pnpm --filter core-api test --passWithNoTests` |
 
 IDP API 남은 migration 목록:
 
-| phase | domain / legacy provider | current files | target output | QA gate |
+| phase | domain / legacy provider | current files | target output | 검증 gate |
 |---|---|---|---|---|
 | idp-0 | post-pilot baseline | `apps/core/api/package.json`, `apps/core/api/jest.config.js`, `apps/core/api/src/module/**` | idp legacy import 목록 확정, auth external boundary lock 설정 | `rg "@cocrepo/facade|@cocrepo/app|@cocrepo/gateway" apps/core/api` 결과를 final report에 첨부 |
 | idp-1 | `AuthApplicationService`, `OidcGateway` | `apps/core/api/src/module/auth/**`, `packages/be-app/src/auth.application-service.ts`, `packages/be-gateway/src/oidc.gateway.ts` | auth command/query usecases, `OidcGateway -> @cocrepo/client` protocol Client, controller bus entrypoint, module `CqrsModule` wiring | `rg "@cocrepo/app|@cocrepo/gateway|AuthApplicationService|OidcGateway" apps/core/api/src/module/auth packages/be-usecase packages/be-client packages/be-app/src packages/be-gateway/src`에서 migrated path legacy 없음 |
@@ -345,7 +345,7 @@ IDP API 남은 migration 목록:
 | idp-3 | OIDC admin/session facades: `OidcClientFacade`, `OidcSessionFacade`, `TranslationFacade` | `apps/core/api/src/module/{oidc-client,oidc-session,i18n-catalog}/**`, matching facade files | oidc client/session/i18n query/command usecases, no facade export | migrated domain legacy scan plus `pnpm --filter core-api type-check` |
 | idp-4 | local app facades: `InteractionFacade`, `OidcFacade`, `PasswordResetFacade` | `apps/core/api/src/module/{interaction,oidc,password-reset}/**/*.facade.ts`, matching controllers/modules | local facade workflow moved to usecase handlers; app-local facade files removed or renamed out of facade pattern | `rg "Facade|ApplicationService" apps/core/api/src/module/{interaction,oidc,password-reset}` has no controller/module provider result |
 | idp-5 | idp package/test cleanup | `apps/core/api/package.json`, `apps/core/api/jest.config.js`, `packages/be-app/src/index.ts`, `packages/be-gateway/src/index.ts`, `packages/be-facade/src/index.ts` | remove `@cocrepo/app`, `@cocrepo/gateway`, `@cocrepo/facade` deps and Jest mappers after all idp imports are gone | `rg "@cocrepo/facade|@cocrepo/app|@cocrepo/gateway" apps/core/api` has no result |
-| idp-6 | idp QA gate | all idp migrated files | type-check, auth controller tests, operationId/DTO contract retained | `pnpm --filter @cocrepo/usecase type-check`; `pnpm --filter @cocrepo/client type-check`; `pnpm --filter core-api type-check`; `pnpm --filter core-api test --passWithNoTests` |
+| idp-6 | idp 검증 gate | all idp migrated files | type-check, auth controller tests, operationId/DTO contract retained | `pnpm --filter @cocrepo/usecase type-check`; `pnpm --filter @cocrepo/client type-check`; `pnpm --filter core-api type-check`; `pnpm --filter core-api test --passWithNoTests` |
 
 Post-pilot app execution graph:
 
@@ -358,13 +358,13 @@ flowchart TD
   CP3 --> CP4["core-4 content/workflow facades"]
   CP4 --> CP5["core-5 space/access/commercial facades"]
   CP5 --> CP6["core-6 core cleanup"]
-  CP6 --> CP7["core-7 core QA gate"]
+  CP6 --> CP7["core-7 core 검증 gate"]
   B0 --> IP1["idp-1 auth app/gateway"]
   IP1 --> IP2["idp-2 idp admin/read facades"]
   IP2 --> IP3["idp-3 oidc admin/session facades"]
   IP3 --> IP4["idp-4 local app facades"]
   IP4 --> IP5["idp-5 idp cleanup"]
-  IP5 --> IP6["idp-6 idp QA gate"]
+  IP5 --> IP6["idp-6 idp 검증 gate"]
   CP7 --> F["final legacy removal gate"]
   IP6 --> F
 ```
@@ -375,7 +375,7 @@ Post-pilot execution rules:
 - 같은 package barrel(`packages/be-usecase/src/index.ts`, `packages/be-facade/src/index.ts`, `packages/be-app/src/index.ts`, `packages/be-gateway/src/index.ts`, `packages/be-client/src/index.ts`)을 수정하는 phase는 병렬 실행하지 않는다.
 - package dependency cleanup은 app별 import scan이 0이 된 뒤에만 수행한다.
 - `@cocrepo/facade` 제거는 domain별 controller/module/usecase migration이 끝난 뒤 matching facade export와 file을 제거하는 방식으로 진행한다.
-- WebSocket 같은 Nest protocol adapter class의 `Gateway` suffix는 `@cocrepo/gateway` legacy package와 구분한다. 예를 들어 `InquiriesGateway`는 external Client migration 대상이 아니라 protocol adapter QA 확인 대상이다.
+- WebSocket 같은 Nest protocol adapter class의 `Gateway` suffix는 `@cocrepo/gateway` legacy package와 구분한다. 예를 들어 `InquiriesGateway`는 external Client migration 대상이 아니라 protocol adapter 검증 확인 대상이다.
 
 ## File Ownership / Lock
 
@@ -412,14 +412,14 @@ Post-pilot execution rules:
 | `apps/core/api/src/module/reservations/reservations.module.ts` | `be-module-builder` | false | module provider wiring |
 | `apps/core/api/src/module/**/*.controller.ts` | `be-controller-builder` | domain별 독립 시 true | controller bus entrypoint |
 | `apps/core/api/src/module/**/*.module.ts` | `be-module-builder` | domain별 독립 시 true | `CqrsModule` and provider wiring |
-| `apps/core/api/package.json`, `apps/core/api/test/**` | `orch-delivery`, `qa-be-e2e-testing` | false | dependency/test mapper cleanup and E2E provider update |
+| `apps/core/api/package.json`, `apps/core/api/test/**` | `orch-delivery`, `be-bootstrap-integrator`, `be-controller-builder` | false | dependency/test mapper cleanup and E2E provider update |
 | `apps/core/api/src/module/**/*.controller.ts` | `be-controller-builder` | domain별 독립 시 true | controller bus entrypoint |
 | `apps/core/api/src/module/**/*.module.ts` | `be-module-builder` | domain별 독립 시 true | `CqrsModule` and provider wiring |
 | `apps/core/api/src/module/**/*.facade.ts` | `be-usecase-builder`, `be-controller-builder` | domain별 독립 시 true | app-local facade workflow extraction/removal |
-| `apps/core/api/package.json`, `apps/core/api/jest.config.js` | `orch-delivery`, `qa-be-testing` | false | dependency/test mapper cleanup |
+| `apps/core/api/package.json`, `apps/core/api/jest.config.js` | `orch-delivery`, `be-bootstrap-integrator` | false | dependency/test mapper cleanup |
 | `packages/be-client/src/**` | `be-client-builder` | domain별 독립 시 true | provider별 Client 파일 |
 
-## QA Gate
+## 검증 Gate
 
 Reservation pilot acceptance gate:
 
@@ -440,10 +440,10 @@ pnpm --filter core-api type-check
 pnpm --filter @cocrepo/service test -- reservation.service.spec.ts
 ```
 
-QA 해석:
+검증 해석:
 
 - `@cocrepo/command`, `@cocrepo/event`, `@cocrepo/usecase` package 생성 전에는 해당 filter가 실패하는 것이 정상이다.
-- phase 1 완료 후 `pnpm --filter @cocrepo/command type-check`, `pnpm --filter @cocrepo/event type-check`, `pnpm --filter @cocrepo/usecase type-check`가 실패하면 QA failure이다.
+- phase 1 완료 후 `pnpm --filter @cocrepo/command type-check`, `pnpm --filter @cocrepo/event type-check`, `pnpm --filter @cocrepo/usecase type-check`가 실패하면 검증 failure이다.
 - Reservation pilot 완료 후 첫 번째와 두 번째 `rg`는 결과가 없어야 한다.
 - Reservation pilot 완료 후 controller에서 `@cocrepo/usecase` message를 import하면 실패이다.
 - Reservation pilot 완료 후 app-local `*.cqrs.ts`나 `packages/be-usecase/src/**/*.command.ts`, `packages/be-usecase/src/**/*.query.ts`가 남으면 실패이다.
@@ -474,7 +474,7 @@ pnpm --filter core-api type-check
 pnpm --filter core-api test --passWithNoTests
 ```
 
-Core QA 해석:
+Core 검증 해석:
 
 - core-1부터 core-5까지는 migrated domain path의 `rg` 결과가 없어야 한다.
 - core-6 완료 후 첫 번째 `rg`는 결과가 없어야 한다.
@@ -492,7 +492,7 @@ pnpm --filter core-api type-check
 pnpm --filter core-api test --passWithNoTests
 ```
 
-IDP QA 해석:
+IDP 검증 해석:
 
 - idp-1 완료 후 auth path와 `packages/be-gateway/src/oidc.gateway.ts`에는 `AuthApplicationService`와 `OidcGateway` active usage가 없어야 한다.
 - idp-2부터 idp-4까지는 migrated domain path의 facade direct injection이 없어야 한다.
@@ -518,7 +518,7 @@ pnpm --filter core-api type-check
 pnpm --filter core-api type-check
 ```
 
-Final QA 해석:
+Final 검증 해석:
 
 - 첫 번째 `rg`는 결과가 없어야 한다.
 - Controller가 `@cocrepo/usecase`에서 Command/Query를 import하면 실패이다.
@@ -529,7 +529,7 @@ Final QA 해석:
 
 ## Legacy 제거 기준
 
-Reservation pilot과 core-api/core-api phase QA 통과 후 다음 조건을 모두 만족하면 legacy 제거를 완료로 본다.
+Reservation pilot과 core-api/core-api phase 검증 통과 후 다음 조건을 모두 만족하면 legacy 제거를 완료로 본다.
 
 - `rg "@cocrepo/facade|@cocrepo/app|@cocrepo/gateway" apps packages` 결과가 없다.
 - `rg "packages/be-facade|packages/be-app|packages/be-gateway" .` 결과가 docs의 migration history 또는 git metadata 외에 없다.

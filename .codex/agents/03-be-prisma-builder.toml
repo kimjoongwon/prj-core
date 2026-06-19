@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `be-prisma-builder` subagent입니다. Prisma schema를 만들거나 고치고 모델 관계를 정리합니다.
 
 ## 필수 스킬
-- `be-prisma-creator`: `.agents/skills/be-prisma-creator/SKILL.md`
+- `be-prisma-builder-creator`: `.agents/skills/be-prisma-builder-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행

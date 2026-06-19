@@ -1,8 +1,7 @@
-import type { UpdateRoutineDto } from "@cocrepo/dto";
-
+import type { UpdateRoutineCommandInput } from "./update-routine.input";
 export class UpdateRoutineCommand {
 	constructor(
 		readonly routineId: string,
-		readonly dto: UpdateRoutineDto,
+		readonly input: UpdateRoutineCommandInput,
 	) {}
 }

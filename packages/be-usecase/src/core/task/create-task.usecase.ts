@@ -8,7 +8,7 @@ export class CreateTaskUseCase implements ICommandHandler<CreateTaskCommand> {
 
 	execute(command: CreateTaskCommand): Promise<unknown> {
 		return this.taskService.createTaskWithExercise(
-			command.dto,
+			command.input,
 			command.spaceId,
 			command.creatorId,
 		);

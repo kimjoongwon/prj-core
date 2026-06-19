@@ -1,8 +1,7 @@
-import type { UpdateRoleDto } from "@cocrepo/dto";
-
+import type { UpdateRoleCommandInput } from "./update-role.input";
 export class UpdateRoleCommand {
 	constructor(
 		readonly roleId: string,
-		readonly dto: UpdateRoleDto,
+		readonly input: UpdateRoleCommandInput,
 	) {}
 }

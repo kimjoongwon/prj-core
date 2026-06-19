@@ -1,8 +1,7 @@
-import type { NativeLogoutPayloadDto } from "@cocrepo/dto";
-
+import type { LogoutNativeMobileSessionCommandInput } from "./logout-native-mobile-session.input";
 export class LogoutNativeMobileSessionCommand {
 	constructor(
-		readonly dto: NativeLogoutPayloadDto,
+		readonly input: LogoutNativeMobileSessionCommandInput,
 		readonly authorizationHeader?: string,
 	) {}
 }

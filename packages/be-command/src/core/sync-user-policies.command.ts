@@ -1,8 +1,7 @@
-import type { SyncUserPoliciesDto } from "@cocrepo/dto";
-
+import type { SyncUserPoliciesCommandInput } from "./sync-user-policies.input";
 export class SyncUserPoliciesCommand {
 	constructor(
 		readonly userId: string,
-		readonly userPolicies: SyncUserPoliciesDto["userPolicies"],
+		readonly input: SyncUserPoliciesCommandInput,
 	) {}
 }

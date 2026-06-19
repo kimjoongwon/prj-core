@@ -1,5 +1,4 @@
-import type { CreateRoleDto } from "@cocrepo/dto";
-
+import type { CreateRoleCommandInput } from "./create-role.input";
 export class CreateRoleCommand {
-	constructor(readonly dto: CreateRoleDto) {}
+	constructor(readonly input: CreateRoleCommandInput) {}
 }

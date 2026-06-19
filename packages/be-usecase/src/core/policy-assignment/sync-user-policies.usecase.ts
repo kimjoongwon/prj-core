@@ -13,7 +13,7 @@ export class SyncUserPoliciesUseCase
 	execute(command: SyncUserPoliciesCommand): Promise<unknown> {
 		return this.policyAssignmentService.syncUserPolicies(
 			command.userId,
-			command.userPolicies,
+			command.input.userPolicies,
 		);
 	}
 }

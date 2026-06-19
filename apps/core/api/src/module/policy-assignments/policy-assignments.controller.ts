@@ -92,7 +92,7 @@ export class PolicyAssignmentsController {
 		@Body() dto: SyncRolePoliciesDto,
 	) {
 		return this.commandBus.execute(
-			new SyncRolePoliciesCommand(roleId, dto.rolePolicies),
+			new SyncRolePoliciesCommand(roleId, { rolePolicies: dto.rolePolicies }),
 		);
 	}
 
@@ -147,7 +147,7 @@ export class PolicyAssignmentsController {
 		@Body() dto: SyncUserPoliciesDto,
 	) {
 		return this.commandBus.execute(
-			new SyncUserPoliciesCommand(userId, dto.userPolicies),
+			new SyncUserPoliciesCommand(userId, { userPolicies: dto.userPolicies }),
 		);
 	}
 }

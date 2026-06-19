@@ -1,8 +1,7 @@
-import type { CreateSessionDto } from "@cocrepo/dto";
-
+import type { CreateSessionCommandInput } from "./create-session.input";
 export class CreateSessionCommand {
 	constructor(
 		readonly timelineId: string,
-		readonly dto: CreateSessionDto,
+		readonly input: CreateSessionCommandInput,
 	) {}
 }

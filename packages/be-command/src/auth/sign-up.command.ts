@@ -1,5 +1,4 @@
-import type { SignUpPayloadDto } from "@cocrepo/dto";
-
+import type { SignUpCommandInput } from "./sign-up.input";
 export class SignUpCommand {
-	constructor(readonly signUpDto: SignUpPayloadDto) {}
+	constructor(readonly input: SignUpCommandInput) {}
 }

@@ -11,7 +11,7 @@ export class UpdateTaskExerciseUseCase
 	execute(command: UpdateTaskExerciseCommand): Promise<unknown> {
 		return this.taskService.updateTaskExercise(
 			command.taskId,
-			command.dto,
+			command.input,
 			command.spaceId,
 		);
 	}

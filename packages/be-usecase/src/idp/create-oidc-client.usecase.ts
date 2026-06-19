@@ -15,24 +15,24 @@ export class CreateOidcClientUseCase
 	) {}
 
 	async execute(command: CreateOidcClientCommand): Promise<unknown> {
-		const dto = command.dto;
+		const input = command.input;
 		const client = await this.oidcClientService.create({
-			clientId: dto.clientId,
-			clientSecret: dto.clientSecret,
-			name: dto.name,
-			redirectUris: dto.redirectUris,
-			loginUrl: dto.loginUrl,
-			defaultReturnTo: dto.defaultReturnTo,
-			grantTypes: dto.grantTypes,
-			responseTypes: dto.responseTypes,
-			tokenEndpointAuthMethod: dto.tokenEndpointAuthMethod,
-			scope: dto.scope,
-			isFirstParty: dto.isFirstParty,
-			skipConsent: dto.skipConsent,
-			loginUi: dto.loginUi,
-			logoUri: dto.logoUri,
-			policyUri: dto.policyUri,
-			tosUri: dto.tosUri,
+			clientId: input.clientId,
+			clientSecret: input.clientSecret,
+			name: input.name,
+			redirectUris: input.redirectUris,
+			loginUrl: input.loginUrl,
+			defaultReturnTo: input.defaultReturnTo,
+			grantTypes: input.grantTypes,
+			responseTypes: input.responseTypes,
+			tokenEndpointAuthMethod: input.tokenEndpointAuthMethod,
+			scope: input.scope,
+			isFirstParty: input.isFirstParty,
+			skipConsent: input.skipConsent,
+			loginUi: input.loginUi,
+			logoUri: input.logoUri,
+			policyUri: input.policyUri,
+			tosUri: input.tosUri,
 		});
 		await this.oidcProviderService.reload();
 		return client;

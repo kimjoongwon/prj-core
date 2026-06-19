@@ -18,26 +18,26 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
 	) {}
 
 	async execute(command: SignUpCommand) {
-		const signUpDto = command.signUpDto;
-		const email = Email.create(signUpDto.email);
-		const phone = Phone.create(signUpDto.phone ?? "");
+		const input = command.input;
+		const email = Email.create(input.email);
+		const phone = Phone.create(input.phone ?? "");
 		const existingUser = await this.usersService.findUserForAuth(email.value);
 		if (existingUser) {
 			throw new BadRequestException("EMAIL_ALREADY_EXISTS");
 		}
-		await getSignUpSpaceOrThrow(this.spacesService, signUpDto.spaceId);
+		await getSignUpSpaceOrThrow(this.spacesService, input.spaceId);
 
-		const plainPassword = PlainPassword.create(signUpDto.password);
+		const plainPassword = PlainPassword.create(input.password);
 		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
 
 		return this.emailVerificationService.requestVerification({
-			name: signUpDto.name,
+			name: input.name,
 			email: email.value,
 			phone: phone.normalized,
-			address: signUpDto.address,
-			spaceId: signUpDto.spaceId,
+			address: input.address,
+			spaceId: input.spaceId,
 			passwordHash: hashedPassword.value,
-			nickname: signUpDto.nickname || signUpDto.name,
+			nickname: input.nickname || input.name,
 		});
 	}
 }

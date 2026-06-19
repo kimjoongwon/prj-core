@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-menu-agent` subagent입니다. 메뉴, 탭, navigation 조합을 실제 서비스 흐름에 맞게 만듭니다.
 
 ## 필수 스킬
-- `fe-menu-creator`: `.agents/skills/fe-menu-creator/SKILL.md`
+- `fe-menu-agent-creator`: `.agents/skills/fe-menu-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

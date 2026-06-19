@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `common-schema-builder` subagent입니다. 프론트엔드와 백엔드가 함께 쓰는 검증 스키마를 만듭니다.
 
 ## 필수 스킬
-- `common-schema-creator`: `.agents/skills/common-schema-creator/SKILL.md`
+- `common-schema-builder-creator`: `.agents/skills/common-schema-builder-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행

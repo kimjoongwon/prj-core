@@ -1,9 +1,8 @@
-import type { UpdateExerciseDto } from "@cocrepo/dto";
-
+import type { UpdateTaskExerciseCommandInput } from "./update-task-exercise.input";
 export class UpdateTaskExerciseCommand {
 	constructor(
 		readonly taskId: string,
-		readonly dto: UpdateExerciseDto,
+		readonly input: UpdateTaskExerciseCommandInput,
 		readonly spaceId: string,
 	) {}
 }

@@ -11,6 +11,6 @@ export class CreateTranslationUseCase
 	) {}
 
 	execute(command: CreateTranslationCommand): Promise<unknown> {
-		return this.translationCatalogService.create(command.dto);
+		return this.translationCatalogService.create(command.input);
 	}
 }

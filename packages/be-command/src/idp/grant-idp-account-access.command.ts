@@ -1,8 +1,7 @@
-import type { GrantIdpAccountAccessDto } from "@cocrepo/dto";
-
+import type { GrantIdpAccountAccessCommandInput } from "./grant-idp-account-access.input";
 export class GrantIdpAccountAccessCommand {
 	constructor(
 		readonly userId: string,
-		readonly dto: GrantIdpAccountAccessDto,
+		readonly input: GrantIdpAccountAccessCommandInput,
 	) {}
 }

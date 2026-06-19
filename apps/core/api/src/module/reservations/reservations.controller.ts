@@ -108,18 +108,7 @@ export class ReservationsController {
 	@ApiResponseEntity(ReservationCheckoutResultDto, HttpStatus.CREATED)
 	@ResponseMessage("예약 결제 생성 성공")
 	createCheckout(@Body() dto: CreateReservationCheckoutDto) {
-		return this.commandBus.execute(
-			new CreateReservationCheckoutCommand({
-				courseOfferingId: dto.courseOfferingId,
-				idempotencyKey: dto.idempotencyKey,
-				memo: dto.memo,
-				occurrenceStartAt: dto.occurrenceStartAt,
-				paymentMethod: dto.paymentMethod,
-				programId: dto.programId,
-				sessionId: dto.sessionId,
-				timelineId: dto.timelineId,
-			}),
-		);
+		return this.commandBus.execute(new CreateReservationCheckoutCommand(dto));
 	}
 
 	@Post()
@@ -136,17 +125,7 @@ export class ReservationsController {
 	@ApiResponseEntity(ReservationDto, HttpStatus.CREATED)
 	@ResponseMessage("예약 생성 성공")
 	createReservation(@Body() dto: CreateReservationDto) {
-		return this.commandBus.execute(
-			new CreateReservationCommand({
-				coursePassId: dto.coursePassId,
-				idempotencyKey: dto.idempotencyKey,
-				memo: dto.memo,
-				occurrenceStartAt: dto.occurrenceStartAt,
-				programId: dto.programId,
-				sessionId: dto.sessionId,
-				timelineId: dto.timelineId,
-			}),
-		);
+		return this.commandBus.execute(new CreateReservationCommand(dto));
 	}
 
 	@Get("me")

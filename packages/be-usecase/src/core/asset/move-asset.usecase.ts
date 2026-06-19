@@ -7,6 +7,6 @@ export class MoveAssetUseCase implements ICommandHandler<MoveAssetCommand> {
 	constructor(private readonly assetService: AssetAggregateRoot) {}
 
 	execute(command: MoveAssetCommand): Promise<unknown> {
-		return this.assetService.moveAsset(command.assetId, command.dto);
+		return this.assetService.moveAsset(command.assetId, command.input);
 	}
 }

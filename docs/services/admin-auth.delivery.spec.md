@@ -69,7 +69,7 @@ Admin web을 단일 인증 콘솔로 두고 native login을 기본 로그인으�
 |--------|-------------------|------|------------------|-----------|
 | AUTH-FE-ROUTE | `fe-route-agent` | admin auth/settings route와 auth public flow 유지 | `apps/admin/web/src/app/**`, route-local specs/tests | admin web build에서 auth/settings/public auth routes가 유지된다. |
 | AUTH-FE-CODEGEN | `fe-route-agent` | `@cocrepo/api` idp namespace는 유지하고 spec source만 core `/idp-api-json`으로 변경 | `packages/fe-api/**` | codegen source가 `idp-api` app URL을 참조하지 않는다. |
-| AUTH-FE-E2E | `qa-fe-e2e-testing` | OIDC/native login E2E target을 core backend로 변경 | `apps/test/e2e/**`, `packages/fe-e2e/**` | 별도 idp-api webServer 없이 core-api readiness로 테스트된다. |
+| AUTH-FE-E2E | `fe-route-agent` | OIDC/native login E2E target을 core backend로 변경 | `apps/test/e2e/**`, `packages/fe-e2e/**` | 별도 idp-api webServer 없이 core-api readiness로 테스트된다. |
 
 ## App / Deployment Cleanup
 
@@ -92,9 +92,9 @@ flowchart TD
   B4["AUTH-B4 service/client/usecase package extraction if needed"]
   F1["AUTH-F1 fe-route-agent admin/codegen target update"]
   D1["AUTH-D1 orch-delivery deployment cleanup"]
-  Q1["AUTH-Q1 qa-type-checker static/type guard"]
-  Q2["AUTH-Q2 qa-be-testing core-api tests"]
-  Q3["AUTH-Q3 qa-fe-e2e-testing oidc/admin flow"]
+  V1["AUTH-V1 orch-delivery static/type guard"]
+  V2["AUTH-V2 backend owners core-api tests"]
+  V3["AUTH-V3 fe-route-agent oidc/admin flow"]
 
   S0 --> B1
   S0 --> B2
@@ -105,9 +105,9 @@ flowchart TD
   B3 --> F1
   F1 --> D1
   B4 --> D1
-  D1 --> Q1
-  Q1 --> Q2
-  Q1 --> Q3
+  D1 --> V1
+  V1 --> V2
+  V1 --> V3
 ```
 
 ## 에이전트 배정 매트릭스
@@ -121,9 +121,9 @@ flowchart TD
 | AUTH-B4-PACKAGES | backend | `be-usecase-builder`, `be-service-builder`, `be-client-builder`, `be-aggregate-builder`, `be-repository-builder` | app-local helper scan | package owner extraction or validated reuse | `packages/be-*`, approved provider wiring | `AUTH-B3-BOOTSTRAP` | true | CQRS/package boundary guard 통과 |
 | AUTH-F1-FRONTEND | frontend | `fe-route-agent` | admin web, Orval config | single console/codegen source update | `apps/admin/web/**`, `packages/fe-api/**` | `AUTH-B3-BOOTSTRAP` | true | admin build and idp spec source point to core |
 | AUTH-D1-CLEANUP | deployment | `orch-delivery` | workspace/devops/script refs | idp-api target removal | root config, scripts, devops, docs | `AUTH-B4-PACKAGES`, `AUTH-F1-FRONTEND` | false | no active `idp-api` target remains |
-| AUTH-Q1-STATIC | qa | `qa-type-checker` | changed files | static guard result | none unless fixing guard failures | `AUTH-D1-CLEANUP` | false | forbidden active refs absent |
-| AUTH-Q2-BE | qa | `qa-be-testing`, `qa-be-e2e-testing` | core-api modules | type/test/e2e result | backend tests if needed | `AUTH-Q1-STATIC` | false | core-api type/test pass or blocked reason |
-| AUTH-Q3-FE | qa | `qa-fe-testing`, `qa-fe-e2e-testing` | admin/codegen/e2e | build/e2e result | frontend tests if needed | `AUTH-Q1-STATIC` | false | admin-web build pass or blocked reason |
+| AUTH-V1-STATIC | verification | `orch-delivery` | changed files | static guard result | none unless fixing guard failures | `AUTH-D1-CLEANUP` | false | forbidden active refs absent |
+| AUTH-V2-BE | verification | backend owner agents | core-api modules | type/test/e2e result | backend tests if needed | `AUTH-V1-STATIC` | false | core-api type/test pass or blocked reason |
+| AUTH-V3-FE | verification | `fe-route-agent` | admin/codegen/e2e | build/e2e result | frontend tests if needed | `AUTH-V1-STATIC` | false | admin-web build pass or blocked reason |
 
 ## 정적 검증 / 금지 grep
 
@@ -134,15 +134,15 @@ flowchart TD
 | AUTH-STATIC-IDP-APP | removed app refs | `rg "apps/idp/api|idp-api|IDP_API|localhost:4008|localhost:3007|apps/idp/web|idp-web"` | legacy allowlist 외 active app/deploy/codegen ref 없음 |
 | AUTH-STATIC-SPEC | spec 기준 일치 | `rg -n "backend 물리 통합|/idp-api-json|be-bootstrap-integrator|apps/idp/api" docs/services/admin-auth.delivery.spec.md` | 통합 기준과 제거 대상이 문서에 남아 있음 |
 
-## QA / 승인 기준
+## 검증 / 승인 기준
 
 | row id | 영역 | 명령/검증 | 기준 |
 |--------|------|-----------|------|
-| AUTH-QA-CORE-TYPE | core-api type | `pnpm --filter=core-api type-check` | type 오류 없음 |
-| AUTH-QA-CORE-TEST | core-api test | `pnpm --filter=core-api test --passWithNoTests` | moved IDP module tests 포함 통과 |
-| AUTH-QA-ADMIN-BUILD | admin web build | `pnpm --filter=admin-web build` | auth/settings/public auth routes build 성공 |
-| AUTH-QA-CODEGEN | IDP spec source | `pnpm --filter=@cocrepo/api codegen` 필요 시 | IDP namespace 유지, source는 core `/idp-api-json` |
-| AUTH-QA-OIDC | protocol smoke | `/oidc/auth` -> `/admin/auth/interaction/[uid]` -> callback | core-api runtime에서 protocol path 유지 |
+| AUTH-VERIFY-CORE-TYPE | core-api type | `pnpm --filter=core-api type-check` | type 오류 없음 |
+| AUTH-VERIFY-CORE-TEST | core-api test | `pnpm --filter=core-api test --passWithNoTests` | moved IDP module tests 포함 통과 |
+| AUTH-VERIFY-ADMIN-BUILD | admin web build | `pnpm --filter=admin-web build` | auth/settings/public auth routes build 성공 |
+| AUTH-VERIFY-CODEGEN | IDP spec source | `pnpm --filter=@cocrepo/api codegen` 필요 시 | IDP namespace 유지, source는 core `/idp-api-json` |
+| AUTH-VERIFY-OIDC | protocol smoke | `/oidc/auth` -> `/admin/auth/interaction/[uid]` -> callback | core-api runtime에서 protocol path 유지 |
 
 ## 승인 / 실행 로그
 

@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-route-layout-agent` subagent입니다. Next.js layout과 Expo _layout의 공통 틀을 만듭니다.
 
 ## 필수 스킬
-- `fe-route-layout-creator`: `.agents/skills/fe-route-layout-creator/SKILL.md`
+- `fe-route-layout-agent-creator`: `.agents/skills/fe-route-layout-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

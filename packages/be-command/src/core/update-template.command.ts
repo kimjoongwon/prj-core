@@ -1,8 +1,7 @@
-import type { UpdateTemplateDto } from "@cocrepo/dto";
-
+import type { UpdateTemplateCommandInput } from "./update-template.input";
 export class UpdateTemplateCommand {
 	constructor(
 		readonly templateId: string,
-		readonly dto: UpdateTemplateDto,
+		readonly input: UpdateTemplateCommandInput,
 	) {}
 }

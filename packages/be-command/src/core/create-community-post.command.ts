@@ -1,5 +1,4 @@
-import type { CreateCommunityPostPayloadDto } from "@cocrepo/dto";
-
+import type { CreateCommunityPostCommandInput } from "./create-community-post.input";
 export class CreateCommunityPostCommand {
-	constructor(readonly dto: CreateCommunityPostPayloadDto) {}
+	constructor(readonly input: CreateCommunityPostCommandInput) {}
 }

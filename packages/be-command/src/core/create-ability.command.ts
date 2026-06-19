@@ -1,5 +1,5 @@
-import type { Prisma } from "@cocrepo/prisma";
+import type { CreateAbilityCommandInput } from "./create-ability.input";
 
 export class CreateAbilityCommand {
-	constructor(readonly data: Prisma.AbilityUncheckedCreateInput) {}
+	constructor(readonly input: CreateAbilityCommandInput) {}
 }

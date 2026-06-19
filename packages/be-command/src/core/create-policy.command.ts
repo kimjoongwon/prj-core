@@ -1,5 +1,4 @@
-import type { CreatePolicyDto } from "@cocrepo/dto";
-
+import type { CreatePolicyCommandInput } from "./create-policy.input";
 export class CreatePolicyCommand {
-	constructor(readonly dto: CreatePolicyDto) {}
+	constructor(readonly input: CreatePolicyCommandInput) {}
 }

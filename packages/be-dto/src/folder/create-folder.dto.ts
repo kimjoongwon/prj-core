@@ -1,5 +1,4 @@
 import { StringField, UUIDFieldOptional } from "@cocrepo/decorator";
-import { Folder } from "@cocrepo/entity";
 
 /**
  * 폴더 생성 DTO
@@ -18,14 +17,4 @@ export class CreateFolderDto {
 		message: "폴더명에 특수문자를 사용할 수 없습니다",
 	})
 	name!: string;
-
-	/**
-	 * DTO -> Entity 변환
-	 */
-	toEntity(): Folder {
-		const folder = new Folder();
-		folder.parentFolderId = this.parentFolderId ?? null;
-		folder.name = this.name.trim();
-		return folder;
-	}
 }

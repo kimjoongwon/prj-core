@@ -1,9 +1,9 @@
-import type { NativeLoginPayloadDto } from "@cocrepo/dto";
+import type { NativeLoginCommandInput } from "./native-login.input";
 import type { Request } from "express";
 
 export class NativeLoginCommand {
 	constructor(
-		readonly loginDto: NativeLoginPayloadDto,
+		readonly input: NativeLoginCommandInput,
 		readonly req: Request,
 	) {}
 }

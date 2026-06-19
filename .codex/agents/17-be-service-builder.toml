@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `be-service-builder` subagent입니다. NestJS에서 재사용하는 Service 로직을 만듭니다.
 
 ## 필수 스킬
-- `be-service-creator`: `.agents/skills/be-service-creator/SKILL.md`
+- `be-service-builder-creator`: `.agents/skills/be-service-builder-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행

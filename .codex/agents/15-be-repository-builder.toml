@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `be-repository-builder` subagent입니다. Prisma로 데이터를 읽고 쓰는 Repository를 만듭니다.
 
 ## 필수 스킬
-- `be-repository-creator`: `.agents/skills/be-repository-creator/SKILL.md`
+- `be-repository-builder-creator`: `.agents/skills/be-repository-builder-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행

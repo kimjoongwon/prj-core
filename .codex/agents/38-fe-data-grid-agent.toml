@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-data-grid-agent` subagent입니다. DataGrid 렌더링과 입력 상태 계약을 정리합니다.
 
 ## 필수 스킬
-- `fe-data-grid-creator`: `.agents/skills/fe-data-grid-creator/SKILL.md`
+- `fe-data-grid-agent-creator`: `.agents/skills/fe-data-grid-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

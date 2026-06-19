@@ -7,7 +7,6 @@ import {
 	UUIDField,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
-import { User } from "@cocrepo/entity";
 import { Transform } from "class-transformer";
 
 /**
@@ -55,16 +54,4 @@ export class CreateUserMemberDto {
 		Array.isArray(value) ? value : value ? [value] : [],
 	)
 	groupIds?: string[];
-
-	/**
-	 * DTO → Entity 변환
-	 */
-	toEntity(): User {
-		const user = new User();
-		user.email = this.email;
-		user.name = this.name;
-		user.phone = this.phone;
-		user.password = this.password;
-		return user;
-	}
 }

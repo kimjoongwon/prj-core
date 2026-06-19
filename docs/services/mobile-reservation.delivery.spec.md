@@ -13,7 +13,7 @@
 | 항목 | 내용 |
 |------|------|
 | 사용자 목표 | 로그인 후 지점 선택, 수업 탐색, 예약/결제, 내 예약 확인, 계정/로그아웃을 모바일에서 완료한다. |
-| 운영 목표 | 인증, space scope, 예약 feed, checkout, profile route가 같은 service-level route 목록과 QA 기준을 따른다. |
+| 운영 목표 | 인증, space scope, 예약 feed, checkout, profile route가 같은 service-level route 목록과 검증 기준을 따른다. |
 | 대상 app/domain/platform | `apps/mobile`, reservation/payment/profile/auth, Expo Router |
 | 성공 기준 | 핵심 route가 auth/session/space 상태를 공유하고 route-local state와 shared screen 계약이 분리된다. |
 | 범위 제외 | admin web 예약 운영 화면, 신규 결제 provider, 신규 push notification |
@@ -81,8 +81,7 @@
 |---------|-------|-------------------|-----------|-----------|----------------|-----------|----------|-----------|
 | MOBILE-RESERVATION-AUTH | mobile | `fe-route-agent` | 이 문서, route spec | auth wiring | `apps/mobile/src/auth/**` | 승인 | false | session restore/login/logout tests |
 | MOBILE-RESERVATION-SCREENS | mobile | `fe-screen-agent` | 이 문서, screen specs | shared screens | `packages/fe-mo-ui/src/screen/**` | 승인 | true | screen unit/story 통과 |
-| MOBILE-RESERVATION-ROUTES | mobile | `fe-route-agent` | 이 문서, route specs | route wiring | `apps/mobile/src/app/**` | auth/screens | false | route tests 통과 |
-| MOBILE-RESERVATION-QA | qa | `qa-mo-testing` | 테스트 로그 | QA report | route/screen tests | routes | false | mobile test 통과 |
+| MOBILE-RESERVATION-ROUTES | mobile | `fe-route-agent` | 이 문서, route specs | route wiring, route tests | `apps/mobile/src/app/**` | auth/screens | false | route tests 통과 |
 
 ## 실행 그래프
 
@@ -90,17 +89,17 @@
 flowchart TD
   A["MOBILE-RESERVATION-AUTH fe-route-agent"] --> R["MOBILE-RESERVATION-ROUTES fe-route-agent"]
   S["MOBILE-RESERVATION-SCREENS fe-screen-agent"] --> R
-  R --> Q["MOBILE-RESERVATION-QA qa-mo-testing"]
+  R --> V["MOBILE-RESERVATION-VERIFY owner tests"]
 ```
 
-## QA / 승인 기준
+## 검증 / 승인 기준
 
 | 영역 | 명령/검증 | 기준 |
 |------|-----------|------|
 | Mobile route unit | `pnpm --filter=mobile-app test` | auth, tabs, home, reservations, profile route tests pass |
 | Mobile UI unit | `pnpm --filter=@cocrepo/mo-ui test` | shared screen states pass |
 | Type check | `pnpm --filter=mobile-app type-check` | 타입 오류 없음 |
-| E2E | `qa-mo-e2e-testing` 판단 | native device/simulator 준비 시 launch/login/reservation smoke |
+| E2E | `fe-route-agent` 판단/작성 | native device/simulator 준비 시 launch/login/reservation smoke |
 
 ## 승인 / 실행 로그
 

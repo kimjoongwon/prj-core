@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-feedback-agent` subagent입니다. 알림, 에러, 빈 상태처럼 사용자 피드백 UI를 만듭니다.
 
 ## 필수 스킬
-- `fe-feedback-creator`: `.agents/skills/fe-feedback-creator/SKILL.md`
+- `fe-feedback-agent-creator`: `.agents/skills/fe-feedback-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

@@ -14,19 +14,19 @@ export class CreateReservationCheckoutUseCase
 
 	async execute(command: CreateReservationCheckoutCommand): Promise<unknown> {
 		const context = this.context.requireContext();
-		const params = command.params;
+		const input = command.input;
 
 		return this.reservationService.checkout({
 			spaceId: context.spaceId,
 			userId: context.userId,
-			courseOfferingId: params.courseOfferingId,
-			idempotencyKey: params.idempotencyKey,
-			memo: params.memo ?? null,
-			occurrenceStartAt: params.occurrenceStartAt,
-			paymentMethod: params.paymentMethod,
-			programId: params.programId,
-			sessionId: params.sessionId,
-			timelineId: params.timelineId,
+			courseOfferingId: input.courseOfferingId,
+			idempotencyKey: input.idempotencyKey,
+			memo: input.memo ?? null,
+			occurrenceStartAt: input.occurrenceStartAt,
+			paymentMethod: input.paymentMethod,
+			programId: input.programId,
+			sessionId: input.sessionId,
+			timelineId: input.timelineId,
 		});
 	}
 }

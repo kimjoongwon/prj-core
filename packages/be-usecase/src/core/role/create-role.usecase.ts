@@ -7,6 +7,6 @@ export class CreateRoleUseCase implements ICommandHandler<CreateRoleCommand> {
 	constructor(private readonly rolesService: RoleAggregateRoot) {}
 
 	execute(command: CreateRoleCommand): Promise<unknown> {
-		return this.rolesService.create(command.dto);
+		return this.rolesService.create(command.input);
 	}
 }

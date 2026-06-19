@@ -136,18 +136,7 @@ export class AbilitiesController {
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.CREATED)
 	@ResponseMessage("권한 정의 생성 성공")
 	async createAbility(@Body() dto: CreateAbilityDto): Promise<Ability> {
-		const data = {
-			actionId: dto.actionId,
-			subjectId: dto.subjectId,
-			fields: dto.fields ?? [],
-			conditions: dto.conditions ?? null,
-			inverted: dto.inverted ?? false,
-			reason: dto.reason ?? null,
-			name: dto.name ?? "Unnamed Ability", // name is now required
-			description: dto.description ?? null,
-		};
-
-		return this.commandBus.execute(new CreateAbilityCommand(data));
+		return this.commandBus.execute(new CreateAbilityCommand(dto));
 	}
 
 	/**
@@ -183,18 +172,7 @@ export class AbilitiesController {
 		@Param("id", ParseUUIDPipe) id: string,
 		@Body() dto: UpdateAbilityDto,
 	): Promise<Ability> {
-		const data = {
-			...(dto.actionId !== undefined && { actionId: dto.actionId }),
-			...(dto.subjectId !== undefined && { subjectId: dto.subjectId }),
-			...(dto.fields !== undefined && { fields: dto.fields }),
-			...(dto.conditions !== undefined && { conditions: dto.conditions }),
-			...(dto.inverted !== undefined && { inverted: dto.inverted }),
-			...(dto.reason !== undefined && { reason: dto.reason }),
-			...(dto.name !== undefined && { name: dto.name }),
-			...(dto.description !== undefined && { description: dto.description }),
-		};
-
-		return this.commandBus.execute(new UpdateAbilityCommand(id, data));
+		return this.commandBus.execute(new UpdateAbilityCommand(id, dto));
 	}
 
 	/**

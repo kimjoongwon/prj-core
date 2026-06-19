@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `be-dmmf-parser-builder` subagent입니다. Prisma DMMF를 읽어 필요한 메타데이터를 꺼내는 유틸을 만듭니다.
 
 ## 필수 스킬
-- `be-dmmf-parser-creator`: `.agents/skills/be-dmmf-parser-creator/SKILL.md`
+- `be-dmmf-parser-builder-creator`: `.agents/skills/be-dmmf-parser-builder-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행

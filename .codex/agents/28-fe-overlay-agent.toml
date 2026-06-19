@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-overlay-agent` subagent입니다. 모달, 팝오버, 툴팁 같은 떠 있는 UI를 만듭니다.
 
 ## 필수 스킬
-- `fe-overlay-creator`: `.agents/skills/fe-overlay-creator/SKILL.md`
+- `fe-overlay-agent-creator`: `.agents/skills/fe-overlay-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

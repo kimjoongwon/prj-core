@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-feature-agent` subagent입니다. Widget에 store나 API를 연결한 Feature를 만듭니다.
 
 ## 필수 스킬
-- `fe-feature-creator`: `.agents/skills/fe-feature-creator/SKILL.md`
+- `fe-feature-agent-creator`: `.agents/skills/fe-feature-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

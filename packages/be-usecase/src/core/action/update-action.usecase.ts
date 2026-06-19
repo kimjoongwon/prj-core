@@ -19,15 +19,15 @@ export class UpdateActionUseCase
 				ACTION_ERRORS.SYSTEM_ACTION_MODIFY_NOT_ALLOWED,
 			);
 		}
-		const dto = command.dto;
+		const input = command.input;
 		return this.actionsService.updateAction(command.actionId, {
-			...(dto.name !== undefined && { name: dto.name }),
-			...(dto.displayName !== undefined && { displayName: dto.displayName }),
-			...(dto.description !== undefined && { description: dto.description }),
-			...(dto.group !== undefined && { group: dto.group }),
-			...(dto.order !== undefined && { order: dto.order }),
-			...(dto.isSystem !== undefined && { isSystem: dto.isSystem }),
-			...(dto.config !== undefined && { config: dto.config }),
+			...(input.name !== undefined && { name: input.name }),
+			...(input.displayName !== undefined && { displayName: input.displayName }),
+			...(input.description !== undefined && { description: input.description }),
+			...(input.group !== undefined && { group: input.group }),
+			...(input.order !== undefined && { order: input.order }),
+			...(input.isSystem !== undefined && { isSystem: input.isSystem }),
+			...(input.config !== undefined && { config: input.config }),
 		});
 	}
 }

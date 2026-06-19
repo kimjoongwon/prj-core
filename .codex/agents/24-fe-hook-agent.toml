@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-hook-agent` subagent입니다. web/mobile에서 함께 쓰는 React hook을 만듭니다.
 
 ## 필수 스킬
-- `fe-hook-creator`: `.agents/skills/fe-hook-creator/SKILL.md`
+- `fe-hook-agent-creator`: `.agents/skills/fe-hook-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

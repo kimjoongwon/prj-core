@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-navigation-agent` subagent입니다. 탭, 링크, 이동 메뉴 같은 navigation UI를 만듭니다.
 
 ## 필수 스킬
-- `fe-navigation-creator`: `.agents/skills/fe-navigation-creator/SKILL.md`
+- `fe-navigation-agent-creator`: `.agents/skills/fe-navigation-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

@@ -1,8 +1,7 @@
-import type { CreateExerciseDto } from "@cocrepo/dto";
-
+import type { CreateTaskCommandInput } from "./create-task.input";
 export class CreateTaskCommand {
 	constructor(
-		readonly dto: CreateExerciseDto,
+		readonly input: CreateTaskCommandInput,
 		readonly spaceId: string,
 		readonly creatorId: string,
 	) {}

@@ -14,7 +14,7 @@ export class ApproveTenantAccessRequestUseCase
 		return this.tenantAccessRequestService.approve({
 			tenantAccessRequestId: command.tenantAccessRequestId,
 			reviewerId: command.reviewerId,
-			reviewComment: command.dto.reviewComment,
+			reviewComment: command.input.reviewComment,
 		});
 	}
 }

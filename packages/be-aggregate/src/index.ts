@@ -1,4 +1,6 @@
 export { AbilityAggregateRoot } from "./ability/ability.aggregate-root";
+export type { CreateAbilityInput } from "./ability/create-ability.input";
+export type { UpdateAbilityInput } from "./ability/update-ability.input";
 export { ActionAggregateRoot } from "./action/action.aggregate-root";
 export { AssetAggregateRoot } from "./asset/asset.aggregate-root";
 export type { AuditLogStats } from "./auth/audit-log-stats";
@@ -17,6 +19,8 @@ export { EmailVerificationAggregateRoot } from "./email/email-verification.aggre
 export type { EmailVerificationCreateInput } from "./email/email-verification-create-input";
 export type { EmailVerificationRequestResult } from "./email/email-verification-request-result";
 export { FolderAggregateRoot } from "./folder/folder.aggregate-root";
+export type { CreateFolderInput } from "./folder/create-folder.input";
+export type { UpdateFolderInput } from "./folder/update-folder.input";
 export type { DashboardStats } from "./idp/dashboard-stats";
 export { IdpAccountAggregateRoot } from "./idp/idp-account.aggregate-root";
 export type { IdpAccountInfo } from "./idp/idp-account.info";

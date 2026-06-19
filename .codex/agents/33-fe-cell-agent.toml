@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-cell-agent` subagent입니다. DataGrid와 Table에서 쓰는 Cell 컴포넌트를 만듭니다.
 
 ## 필수 스킬
-- `fe-cell-creator`: `.agents/skills/fe-cell-creator/SKILL.md`
+- `fe-cell-agent-creator`: `.agents/skills/fe-cell-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

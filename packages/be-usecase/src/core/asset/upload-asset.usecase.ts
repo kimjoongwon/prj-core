@@ -8,7 +8,7 @@ export class UploadAssetUseCase implements ICommandHandler<UploadAssetCommand> {
 
 	execute(command: UploadAssetCommand): Promise<unknown> {
 		return this.assetService.uploadAsset(
-			command.dto,
+			command.input,
 			command.file,
 			command.creatorId,
 		);

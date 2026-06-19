@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-action-agent` subagent입니다. 버튼과 액션 영역처럼 사용자가 실행하는 UI를 만듭니다.
 
 ## 필수 스킬
-- `fe-action-creator`: `.agents/skills/fe-action-creator/SKILL.md`
+- `fe-action-agent-creator`: `.agents/skills/fe-action-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

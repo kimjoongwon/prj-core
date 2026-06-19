@@ -7,6 +7,6 @@ export class CreateSpaceUseCase implements ICommandHandler<CreateSpaceCommand> {
 	constructor(private readonly spaceService: SpaceAggregateRoot) {}
 
 	execute(command: CreateSpaceCommand): Promise<unknown> {
-		return this.spaceService.createSpaceWithGround(command.dto);
+		return this.spaceService.createSpaceWithGround(command.input);
 	}
 }

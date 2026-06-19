@@ -21,11 +21,11 @@ flowchart TD
   Codegen --> Mobile["mobile phase"]
   Backend --> Web
   Backend --> Mobile
-  Web --> QA["QA phase"]
-  Mobile --> QA
-  Backend --> QA
+  Web --> OwnerVerify["owner 검증: type/test/e2e"]
+  Mobile --> OwnerVerify
+  Backend --> OwnerVerify
 
-  QA --> HumanReview["사람 검증: 최종 보고 / diff / 테스트"]
+  OwnerVerify --> HumanReview["사람 검증: 최종 보고 / diff / 테스트"]
   HumanReview --> Decision{"후속 작업 필요?"}
   Decision -->|spec 갱신| ServiceSpec
   Decision -->|phase 재실행| RouteSpecs
@@ -46,9 +46,9 @@ flowchart TD
 - 생성된 route/page spec 목록
 - subagent 배정 매트릭스
 - 산출물 시뮬레이션 / 인계 계약
-- backend부터 frontend/mobile/QA까지의 실행 그래프
+- backend부터 frontend/mobile/owner 검증까지의 실행 그래프
 - 공유 파일 잠금
-- QA/승인 기준
+- 검증/승인 기준
 - 차단/재실행 규칙
 - 승인/실행 로그
 
@@ -72,25 +72,26 @@ flowchart TD
 |------|------|
 | Storybook 계약 작성 | `orch-delivery`가 spec의 `Storybook / 테스트 계약`에 작성 |
 | Storybook story 파일 작성 | `fe-storybook-agent` |
-| unit test 계약 작성 | `orch-delivery`가 spec의 테스트 인벤토리에 작성 |
-| unit test 파일 작성 | component source를 소유한 subagent |
-| 누락/실패/회귀 검증 | `qa-fe-testing`, `qa-mo-testing`, E2E subagent |
+| unit/E2E 계약 작성 | `orch-delivery`가 spec의 테스트 인벤토리에 작성 |
+| unit/E2E 파일 작성 | 해당 source, route, API 산출물을 소유한 subagent |
+| 1차 검증 | 테스트를 작성한 owner subagent |
 
 UI subagent가 신규/수정 UI component를 만들면 같은 step에서 unit test를 함께 작성하거나 갱신합니다.
+route, route layout, backend API 산출물을 만드는 subagent도 자기 범위의 E2E 또는 route-local 테스트를 함께 작성하거나 갱신합니다.
 Storybook 스토리가 필요하면 소스 step 다음에 `fe-storybook-agent` step을 둡니다.
-QA subagent는 subagent 산출물을 재검증하고, 누락된 Storybook story 또는 unit test는 최종 보고에 사람이 확인할 수 있는 이슈로 남깁니다.
+테스트 실패가 다른 ownership에서 발생하면 직접 고치지 않고 실패 로그와 필요한 owner를 최종 보고에 남깁니다.
 
 PC/Web과 Mobile 모두 같은 방식입니다.
 
 - PC/Web: `packages/fe-ui/src/**` component 소스 담당 subagent가 unit test를 작성하고, `fe-storybook-agent`가 Storybook story를 작성합니다.
 - Mobile: `packages/fe-mo-ui/src/**` component 소스 담당 subagent가 unit test를 작성하고, `fe-storybook-agent`가 Storybook story를 작성합니다.
-- route container, route layout, Store, backend-only step은 Storybook 대상이 아니며 unit/E2E 검증만 spec에 남깁니다.
+- route container, route layout, Store, backend-only step은 Storybook 대상이 아니며 해당 owner의 unit/E2E 검증만 spec에 남깁니다.
 
 ## Delivery Subagent
 
 | subagent | 책임 |
 |------|------|
-| `orch-delivery` | 기획 질문 → 서비스 Spec → 승인 → Route/Page Spec → Screen/Feature Spec → 구현 → QA를 단일 흐름으로 소유 |
+| `orch-delivery` | 기획 질문 → 서비스 Spec → 승인 → Route/Page Spec → Screen/Feature Spec → 구현 → owner 검증을 단일 흐름으로 소유 |
 
 `orch-delivery`는 승인된 서비스 딜리버리 스펙과 연결된 route/page 딜리버리 스펙에 없는 subagent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
 
@@ -187,9 +188,9 @@ flowchart TD
   MoWidget --> MobileRoute
   MoFeature --> MobileRoute
 
-  WebRoute --> QA["QA / type-check"]
-  MobileRoute --> QA
-  런타임 --> QA
+  WebRoute --> Verify["owner type/test/e2e"]
+  MobileRoute --> Verify
+  런타임 --> Verify
 ```
 
 그래프와 함께 `병렬 그룹 표`를 두어 병렬 step, 병렬 가능 사유, 공유 파일 잠금, 합류 step을 명시합니다.
@@ -200,7 +201,7 @@ flowchart TD
 
 | 인벤토리 | 주 담당 subagent | 소비 예시 |
 |----------|--------------|----------|
-| `Prisma / Database 인벤토리` | `be-prisma-builder` | `be-repository-builder`, `common-schema-builder`, QA |
+| `Prisma / Database 인벤토리` | `be-prisma-builder` | `be-repository-builder`, `common-schema-builder`, owner test |
 | `Prisma Annotation 인벤토리` | `be-prisma-annotator` | Swagger/관리 UI 표시 계약 |
 | `Common Schema 인벤토리` | `common-schema-builder` | `be-dto-builder`, `fe-route-agent` |
 | `Entity / VO 인벤토리` | `be-entity-builder`, `be-vo-builder` | `be-service-builder`, `be-usecase-builder` |
@@ -209,9 +210,9 @@ flowchart TD
 | `Service 인벤토리` | `be-service-builder` | `be-usecase-builder`, `be-facade-builder`, `be-controller-builder` |
 | `UseCase 인벤토리` | `be-usecase-builder` | `be-controller-builder` |
 | `Facade / Gateway 인벤토리` | `be-facade-builder`, `be-gateway-builder` | `be-controller-builder`, `be-service-builder` |
-| `엔드포인트 인벤토리` | `be-controller-builder` | `fe-route-agent`, `qa-*-testing` |
+| `엔드포인트 인벤토리` | `be-controller-builder` | `fe-route-agent`, owner E2E |
 | `Module / Bootstrap 인벤토리` | `be-module-builder`, `be-bootstrap-integrator` | 앱 부트스트랩 |
-| `Seed 인벤토리` | `be-seed-maker` | QA, local dev |
+| `Seed 인벤토리` | `be-seed-maker` | owner tests, local dev |
 | `Codegen / API Client 인벤토리` | command step | `fe-route-agent` |
 
 각 행는 `재사용/신규`, `소스/대상`, 소스 담당 `agent_type`, 소비 `agent_type`을 포함해야 하며, 누락된 backend element는 builder가 추측해 만들지 않습니다.
@@ -230,7 +231,7 @@ flowchart TD
   C --> MOD["be-module-builder"]
   MOD --> BOOT["be-bootstrap-integrator"]
   BOOT --> SEED["be-seed-maker"]
-  SEED --> QA["qa-be-testing / qa-be-e2e-testing"]
+  SEED --> Verify["owner scoped unit/E2E 검증"]
 ```
 
 ## 기반 Phase
@@ -272,7 +273,7 @@ flowchart TD
   Page --> RouteLayout["fe-route-layout-agent, 필요 시"]
   RouteLayout --> Route["fe-route-agent"]
   Page --> Route
-  Route --> QA["qa-fe-testing / qa-fe-e2e-testing"]
+  Route --> Verify["owner scoped unit/E2E 검증"]
 ```
 
 ## Mobile Phase
@@ -300,7 +301,7 @@ flowchart TD
   Screen --> Layout["fe-route-layout-agent, 필요 시"]
   Layout --> Route["fe-route-agent"]
   Screen --> Route
-  Route --> QA["qa-mo-testing / qa-mo-e2e-testing"]
+  Route --> Verify["owner scoped unit/E2E 검증"]
 ```
 
 ## 실행 결과 검증
@@ -318,7 +319,7 @@ flowchart TD
 - 생성된 route/page 딜리버리 스펙 없이 route/page leaf subagent를 실행하지 않습니다.
 - 산출물 시뮬레이션 / 인계 계약 없이 직렬 다음 subagent를 실행하지 않습니다.
 - 병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
-- 테스트 전략 전용 intermediate subagent 없이 QA subagent가 spec 기준으로 테스트를 구현합니다.
+- 테스트 전략 전용 intermediate subagent 없이 산출물 owner subagent가 spec 기준으로 자기 범위 테스트를 구현합니다.
 - 서비스 딜리버리 스펙이 상위 실행 기준이며, 별도 Delivery Plan 문서는 만들지 않습니다.
 - Screen/Feature 기획 스펙에는 `subagent 배정 매트릭스`, `실행 그래프`, 백엔드 build order, 기반 세부 실행표를 쓰지 않습니다.
 
@@ -326,8 +327,8 @@ flowchart TD
 
 | 시나리오 | spec 판단 기준 |
 |----------|-------------------------|
-| 신규 도메인 + web 화면 | backend phase를 Prisma부터 controller/module까지 포함하고, API 변경이면 codegen 후 web leaf/page/route/QA step을 배치합니다. |
-| 기존 API 변경 + web 화면 | 변경 endpoint와 Orval hook 영향을 필수 요소에 기록하고, backend/codegen/web route wiring/QA step만 포함합니다. |
-| mobile route 추가 | mobile screen/leaf/route/native wiring/QA step을 우선 배치하고, API 계약 gap이 있으면 backend/codegen step을 선행시킵니다. |
-| web/mobile 동시 화면 추가 | backend와 codegen은 한 번만 실행하고, web phase와 mobile phase는 파일 ownership이 분리된 step만 병렬 허용한 뒤 QA에서 합류합니다. |
+| 신규 도메인 + web 화면 | backend phase를 Prisma부터 controller/module까지 포함하고, API 변경이면 codegen 후 web leaf/page/route와 각 owner 검증 step을 배치합니다. |
+| 기존 API 변경 + web 화면 | 변경 endpoint와 Orval hook 영향을 필수 요소에 기록하고, backend/codegen/web route wiring과 owner 검증 step만 포함합니다. |
+| mobile route 추가 | mobile screen/leaf/route/native wiring과 owner 검증 step을 우선 배치하고, API 계약 gap이 있으면 backend/codegen step을 선행시킵니다. |
+| web/mobile 동시 화면 추가 | backend와 codegen은 한 번만 실행하고, web phase와 mobile phase는 파일 ownership이 분리된 step만 병렬 허용한 뒤 owner 검증 결과에서 합류합니다. |
 | shared hook/toolkit/type/store 변경 | 서비스 딜리버리 스펙의 백엔드/API/기반 계약에 행과 step을 추가하고, 필요한 생성 route/page spec에는 slice로 연결합니다. |

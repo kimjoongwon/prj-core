@@ -1,8 +1,7 @@
-import type { CreateProgramDto } from "@cocrepo/dto";
-
+import type { CreateProgramCommandInput } from "./create-program.input";
 export class CreateProgramCommand {
 	constructor(
 		readonly sessionId: string,
-		readonly dto: CreateProgramDto,
+		readonly input: CreateProgramCommandInput,
 	) {}
 }

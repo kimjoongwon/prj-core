@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `be-prisma-annotator` subagent입니다. Prisma schema에 한글 표시 이름 주석을 붙입니다.
 
 ## 필수 스킬
-- `be-prisma-annotation-creator`: `.agents/skills/be-prisma-annotation-creator/SKILL.md`
+- `be-prisma-annotator-creator`: `.agents/skills/be-prisma-annotator-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행

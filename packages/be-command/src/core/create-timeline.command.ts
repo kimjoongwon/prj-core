@@ -1,5 +1,4 @@
-import type { CreateTimelineDto } from "@cocrepo/dto";
-
+import type { CreateTimelineCommandInput } from "./create-timeline.input";
 export class CreateTimelineCommand {
-	constructor(readonly dto: CreateTimelineDto) {}
+	constructor(readonly input: CreateTimelineCommandInput) {}
 }

@@ -1,8 +1,7 @@
-import type { UpdateFolderDto } from "@cocrepo/dto";
-
+import type { UpdateFolderCommandInput } from "./update-folder.input";
 export class UpdateFolderCommand {
 	constructor(
 		readonly folderId: string,
-		readonly dto: UpdateFolderDto,
+		readonly input: UpdateFolderCommandInput,
 	) {}
 }

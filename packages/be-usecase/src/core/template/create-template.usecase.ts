@@ -9,6 +9,6 @@ export class CreateTemplateUseCase
 	constructor(private readonly templateService: TemplateService) {}
 
 	execute(command: CreateTemplateCommand): Promise<unknown> {
-		return this.templateService.create(command.dto);
+		return this.templateService.create(command.input);
 	}
 }

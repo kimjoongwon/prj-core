@@ -1,8 +1,7 @@
-import type { CreateInquiryDto } from "@cocrepo/dto";
-
+import type { CreateInquiryCommandInput } from "./create-inquiry.input";
 export class CreateInquiryCommand {
 	constructor(
-		readonly dto: CreateInquiryDto,
+		readonly input: CreateInquiryCommandInput,
 		readonly spaceId: string,
 		readonly actorUserId: string,
 	) {}

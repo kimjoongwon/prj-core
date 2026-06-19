@@ -9,6 +9,6 @@ export class UpdateFolderUseCase
 	constructor(private readonly folderService: FolderAggregateRoot) {}
 
 	execute(command: UpdateFolderCommand): Promise<unknown> {
-		return this.folderService.updateFolder(command.folderId, command.dto);
+		return this.folderService.updateFolder(command.folderId, command.input);
 	}
 }

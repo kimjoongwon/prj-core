@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-form-agent` subagent입니다. 생성/수정 화면에서 쓰는 form 조합을 만듭니다.
 
 ## 필수 스킬
-- `fe-form-creator`: `.agents/skills/fe-form-creator/SKILL.md`
+- `fe-form-agent-creator`: `.agents/skills/fe-form-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

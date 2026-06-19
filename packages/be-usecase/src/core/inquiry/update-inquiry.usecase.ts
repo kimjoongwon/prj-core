@@ -9,6 +9,6 @@ export class UpdateInquiryUseCase
 	constructor(private readonly inquiryService: InquiryAggregateRoot) {}
 
 	execute(command: UpdateInquiryCommand): Promise<unknown> {
-		return this.inquiryService.update(command.inquiryId, command.data);
+		return this.inquiryService.update(command.inquiryId, command.input);
 	}
 }

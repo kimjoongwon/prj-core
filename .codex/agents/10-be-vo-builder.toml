@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `be-vo-builder` subagent입니다. 작은 도메인 값을 안전하게 다루는 Value Object를 만듭니다.
 
 ## 필수 스킬
-- `be-vo-creator`: `.agents/skills/be-vo-creator/SKILL.md`
+- `be-vo-builder-creator`: `.agents/skills/be-vo-builder-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행

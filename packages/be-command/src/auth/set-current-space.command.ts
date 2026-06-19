@@ -1,5 +1,4 @@
-import type { SetCurrentSpaceDto } from "@cocrepo/dto";
-
+import type { SetCurrentSpaceCommandInput } from "./set-current-space.input";
 export class SetCurrentSpaceCommand {
-	constructor(readonly dto: SetCurrentSpaceDto) {}
+	constructor(readonly input: SetCurrentSpaceCommandInput) {}
 }

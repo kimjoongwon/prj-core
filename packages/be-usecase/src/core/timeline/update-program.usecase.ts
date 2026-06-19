@@ -13,11 +13,11 @@ export class UpdateProgramUseCase
 			command.sessionId,
 			command.programId,
 			{
-				name: command.dto.name,
-				routineId: command.dto.routineId,
-				instructorId: command.dto.instructorId,
-				capacity: command.dto.capacity,
-				level: command.dto.level,
+				name: command.input.name,
+				routineId: command.input.routineId,
+				instructorId: command.input.instructorId,
+				capacity: command.input.capacity,
+				level: command.input.level,
 			},
 		);
 	}

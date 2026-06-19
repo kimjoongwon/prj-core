@@ -71,8 +71,7 @@
 |---------|-------|-------------------|-----------|-----------|----------------|-----------|----------|-----------|
 | MOBILE-COMMUNITY-BE | backend | backend roles | 이 문서, route spec | API/foundation | backend owner files | 승인 | false | feed/create API contract 준비 |
 | MOBILE-COMMUNITY-UI | mobile | `fe-screen-agent` | 이 문서, screen spec | screen/card UI | `packages/fe-mo-ui/**` | backend contract | true | UI 상태 준비 |
-| MOBILE-COMMUNITY-ROUTE | mobile | `fe-route-agent` | 이 문서, route spec | route wiring | `apps/mobile/src/app/**` | API/UI | false | route test 통과 |
-| MOBILE-COMMUNITY-QA | qa | `qa-mo-testing` | 테스트 로그 | QA report | test files | route | false | mobile tests 통과 |
+| MOBILE-COMMUNITY-ROUTE | mobile | `fe-route-agent` | 이 문서, route spec | route wiring, route tests | `apps/mobile/src/app/**` | API/UI | false | route test 통과 |
 
 ## 실행 그래프
 
@@ -80,17 +79,17 @@
 flowchart TD
   B["MOBILE-COMMUNITY-BE backend roles"] --> R["MOBILE-COMMUNITY-ROUTE fe-route-agent"]
   U["MOBILE-COMMUNITY-UI fe-screen-agent"] --> R
-  R --> Q["MOBILE-COMMUNITY-QA qa-mo-testing"]
+  R --> V["MOBILE-COMMUNITY-VERIFY owner tests"]
 ```
 
-## QA / 승인 기준
+## 검증 / 승인 기준
 
 | 영역 | 명령/검증 | 기준 |
 |------|-----------|------|
 | Backend/API | backend unit/type/codegen | operationId와 generated hooks 안정 |
 | Mobile UI | `pnpm --filter=@cocrepo/mo-ui test` | Community UI 상태별 렌더링 |
 | Mobile app | `pnpm --filter=mobile-app test` | `/community` route wiring |
-| E2E | `qa-mo-e2e-testing` 판단 | seed/mock 준비 후 tab 진입 + 작성 흐름 |
+| E2E | `fe-route-agent` 판단/작성 | seed/mock 준비 후 tab 진입 + 작성 흐름 |
 
 ## 승인 / 실행 로그
 

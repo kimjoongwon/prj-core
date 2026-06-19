@@ -29,8 +29,8 @@ export class SubmitInteractionLoginUseCase
 		const ipAddress = this.getClientIp(command.req);
 		const userAgent = command.req.headers["user-agent"];
 		const result = await this.interactionLoginService.validateUser(
-			command.loginDto.email,
-			command.loginDto.password,
+			command.input.email,
+			command.input.password,
 			ipAddress,
 			Array.isArray(userAgent) ? userAgent[0] : userAgent,
 		);
@@ -50,7 +50,7 @@ export class SubmitInteractionLoginUseCase
 			command.req,
 			command.res,
 			result.userId!,
-			command.loginDto.remember || false,
+			command.input.remember || false,
 		);
 
 		return {

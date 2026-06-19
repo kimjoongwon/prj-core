@@ -1,5 +1,4 @@
-import type { CreateOidcClientDto } from "@cocrepo/dto";
-
+import type { CreateOidcClientCommandInput } from "./create-oidc-client.input";
 export class CreateOidcClientCommand {
-	constructor(readonly dto: CreateOidcClientDto) {}
+	constructor(readonly input: CreateOidcClientCommandInput) {}
 }

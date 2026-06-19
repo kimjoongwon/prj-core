@@ -1,8 +1,7 @@
-import type { UploadAssetDto } from "@cocrepo/dto";
-
+import type { UploadAssetCommandInput } from "./upload-asset.input";
 export class UploadAssetCommand {
 	constructor(
-		readonly dto: UploadAssetDto,
+		readonly input: UploadAssetCommandInput,
 		readonly file: Express.Multer.File | undefined,
 		readonly creatorId: string,
 	) {}

@@ -9,15 +9,15 @@ export class CreateActionUseCase
 	constructor(private readonly actionsService: ActionAggregateRoot) {}
 
 	execute(command: CreateActionCommand): Promise<unknown> {
-		const dto = command.dto;
+		const input = command.input;
 		return this.actionsService.createAction({
-			name: dto.name,
-			displayName: dto.displayName,
-			description: dto.description,
-			group: dto.group,
-			order: dto.order,
-			isSystem: dto.isSystem,
-			config: dto.config,
+			name: input.name,
+			displayName: input.displayName,
+			description: input.description,
+			group: input.group,
+			order: input.order,
+			isSystem: input.isSystem,
+			config: input.config,
 		});
 	}
 }

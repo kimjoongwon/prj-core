@@ -21,7 +21,7 @@ export class UpdateTimelineUseCase
 		}
 		return this.timelinesService.updateTimelineForSpace(
 			command.timelineId,
-			command.dto,
+			command.input,
 			spaceId,
 		);
 	}

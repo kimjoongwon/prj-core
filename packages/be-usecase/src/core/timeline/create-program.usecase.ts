@@ -10,11 +10,11 @@ export class CreateProgramUseCase
 
 	execute(command: CreateProgramCommand): Promise<unknown> {
 		return this.timelinesService.createProgramInSession(command.sessionId, {
-			name: command.dto.name,
-			routineId: command.dto.routineId,
-			instructorId: command.dto.instructorId,
-			capacity: command.dto.capacity,
-			level: command.dto.level ?? null,
+			name: command.input.name,
+			routineId: command.input.routineId,
+			instructorId: command.input.instructorId,
+			capacity: command.input.capacity,
+			level: command.input.level ?? null,
 		});
 	}
 }

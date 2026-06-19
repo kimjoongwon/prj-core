@@ -1,5 +1,4 @@
-import type { CreateRoutineDto } from "@cocrepo/dto";
-
+import type { CreateRoutineCommandInput } from "./create-routine.input";
 export class CreateRoutineCommand {
-	constructor(readonly dto: CreateRoutineDto) {}
+	constructor(readonly input: CreateRoutineCommandInput) {}
 }

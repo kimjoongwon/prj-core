@@ -1,8 +1,8 @@
-import type { Prisma } from "@cocrepo/prisma";
+import type { UpdateAbilityCommandInput } from "./update-ability.input";
 
 export class UpdateAbilityCommand {
 	constructor(
 		readonly abilityId: string,
-		readonly data: Prisma.AbilityUncheckedUpdateInput,
+		readonly input: UpdateAbilityCommandInput,
 	) {}
 }

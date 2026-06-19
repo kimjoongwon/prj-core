@@ -1,8 +1,8 @@
-import type { Prisma } from "@cocrepo/prisma";
+import type { UpdateInquiryCommandInput } from "./update-inquiry.input";
 
 export class UpdateInquiryCommand {
 	constructor(
 		readonly inquiryId: string,
-		readonly data: Prisma.InquiryUncheckedUpdateInput,
+		readonly input: UpdateInquiryCommandInput,
 	) {}
 }

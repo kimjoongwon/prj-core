@@ -1,5 +1,4 @@
-import type { CreateActionDto } from "@cocrepo/dto";
-
+import type { CreateActionCommandInput } from "./create-action.input";
 export class CreateActionCommand {
-	constructor(readonly dto: CreateActionDto) {}
+	constructor(readonly input: CreateActionCommandInput) {}
 }

@@ -27,7 +27,7 @@ export class CreateCommunityPostUseCase
 		const post = await this.contentService.createCommunityPost({
 			spaceId,
 			userId,
-			dto: command.dto,
+			dto: command.input,
 		});
 		return {
 			authorName: post.creator?.name ?? "회원",

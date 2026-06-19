@@ -1,8 +1,7 @@
-import type { UpdateActionDto } from "@cocrepo/dto";
-
+import type { UpdateActionCommandInput } from "./update-action.input";
 export class UpdateActionCommand {
 	constructor(
 		readonly actionId: string,
-		readonly dto: UpdateActionDto,
+		readonly input: UpdateActionCommandInput,
 	) {}
 }

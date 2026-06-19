@@ -11,7 +11,7 @@ export class CreateSessionUseCase
 	execute(command: CreateSessionCommand): Promise<unknown> {
 		return this.timelinesService.createSessionInTimeline(
 			command.timelineId,
-			command.dto,
+			command.input,
 		);
 	}
 }

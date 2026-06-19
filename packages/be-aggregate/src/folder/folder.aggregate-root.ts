@@ -1,5 +1,5 @@
 import { SpaceContext } from "@cocrepo/context";
-import { CreateFolderDto, FolderQueryDto, UpdateFolderDto } from "@cocrepo/dto";
+import { FolderQueryDto } from "@cocrepo/dto";
 import { Folder } from "@cocrepo/entity";
 import type { Prisma } from "@cocrepo/prisma";
 import { FoldersRepository } from "@cocrepo/repository";
@@ -10,6 +10,8 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
+import type { CreateFolderInput } from "./create-folder.input";
+import type { UpdateFolderInput } from "./update-folder.input";
 
 @Injectable()
 export class FolderAggregateRoot {
@@ -47,9 +49,14 @@ export class FolderAggregateRoot {
 		};
 	}
 
-	async createFolder(dto: CreateFolderDto, creatorId: string): Promise<Folder> {
+	async createFolder(
+		input: CreateFolderInput,
+		creatorId: string,
+	): Promise<Folder> {
 		const spaceId = this.getRequiredSpaceId();
-		const folder = dto.toEntity();
+		const folder = new Folder();
+		folder.parentFolderId = input.parentFolderId ?? null;
+		folder.name = input.name.trim();
 
 		if (!folder.name) {
 			throw new BadRequestException("폴더명을 입력해주세요");
@@ -103,7 +110,10 @@ export class FolderAggregateRoot {
 		});
 	}
 
-	async updateFolder(folderId: string, dto: UpdateFolderDto): Promise<Folder> {
+	async updateFolder(
+		folderId: string,
+		input: UpdateFolderInput,
+	): Promise<Folder> {
 		const spaceId = this.getRequiredSpaceId();
 		const allFolders = (
 			await this.foldersRepository.findBySpaceId(spaceId)
@@ -115,14 +125,14 @@ export class FolderAggregateRoot {
 		}
 
 		const nextName =
-			dto.name !== undefined ? dto.name.trim() : currentFolder.name;
+			input.name !== undefined ? input.name.trim() : currentFolder.name;
 		if (!nextName) {
 			throw new BadRequestException("폴더명을 입력해주세요");
 		}
 
 		const nextParentFolderId =
-			dto.parentFolderId !== undefined
-				? (dto.parentFolderId ?? null)
+			input.parentFolderId !== undefined
+				? (input.parentFolderId ?? null)
 				: currentFolder.parentFolderId;
 
 		if (nextParentFolderId === currentFolder.id) {

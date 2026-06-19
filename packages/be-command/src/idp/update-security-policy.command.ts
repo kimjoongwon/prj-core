@@ -1,5 +1,4 @@
-import type { UpdateSecurityPolicyDto } from "@cocrepo/dto";
-
+import type { UpdateSecurityPolicyCommandInput } from "./update-security-policy.input";
 export class UpdateSecurityPolicyCommand {
-	constructor(readonly dto: UpdateSecurityPolicyDto) {}
+	constructor(readonly input: UpdateSecurityPolicyCommandInput) {}
 }

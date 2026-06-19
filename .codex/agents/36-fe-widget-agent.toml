@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-widget-agent` subagent입니다. 비즈니스 로직 없이 재사용 가능한 UI 조합인 Widget을 만듭니다.
 
 ## 필수 스킬
-- `fe-widget-creator`: `.agents/skills/fe-widget-creator/SKILL.md`
+- `fe-widget-agent-creator`: `.agents/skills/fe-widget-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

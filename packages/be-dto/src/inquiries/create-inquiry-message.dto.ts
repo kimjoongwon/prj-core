@@ -3,11 +3,7 @@ import {
 	StringField,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
-import {
-	type InquiryMessage,
-	MessageContentType,
-	SenderType,
-} from "@cocrepo/prisma";
+import { MessageContentType, SenderType } from "@cocrepo/prisma";
 
 /**
  * 문의 메시지 생성 DTO
@@ -39,23 +35,4 @@ export class CreateInquiryMessageDto {
 		description: "클라이언트 메시지 ID (중복 방지용)",
 	})
 	clientMessageId?: string;
-
-	/**
-	 * DTO → Entity 변환
-	 */
-	toEntity(
-		inquiryId: string,
-		threadId: string,
-		senderId?: string,
-	): Partial<InquiryMessage> {
-		return {
-			inquiryId,
-			threadId,
-			content: this.content,
-			contentType: this.contentType ?? MessageContentType.TEXT,
-			senderType: this.senderType ?? SenderType.USER,
-			senderId,
-			clientMessageId: this.clientMessageId,
-		};
-	}
 }

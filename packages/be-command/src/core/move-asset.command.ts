@@ -1,8 +1,7 @@
-import type { MoveAssetDto } from "@cocrepo/dto";
-
+import type { MoveAssetCommandInput } from "./move-asset.input";
 export class MoveAssetCommand {
 	constructor(
 		readonly assetId: string,
-		readonly dto: MoveAssetDto,
+		readonly input: MoveAssetCommandInput,
 	) {}
 }

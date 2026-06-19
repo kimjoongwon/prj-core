@@ -30,9 +30,9 @@ export class RefreshNativeMobileSessionUseCase
 		let sessionId: SessionId;
 		let presentedRefreshToken: NativeRefreshToken;
 		try {
-			sessionId = SessionId.fromString(command.dto.sessionId);
+			sessionId = SessionId.fromString(command.input.sessionId);
 			presentedRefreshToken = NativeRefreshToken.create(
-				command.dto.refreshToken,
+				command.input.refreshToken,
 			);
 		} catch {
 			throw new UnauthorizedException("리프레시 토큰이 유효하지 않습니다");

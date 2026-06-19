@@ -1,5 +1,4 @@
-import type { CreateTemplateDto } from "@cocrepo/dto";
-
+import type { CreateTemplateCommandInput } from "./create-template.input";
 export class CreateTemplateCommand {
-	constructor(readonly dto: CreateTemplateDto) {}
+	constructor(readonly input: CreateTemplateCommandInput) {}
 }

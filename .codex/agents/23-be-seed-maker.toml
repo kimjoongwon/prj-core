@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `be-seed-maker` subagent입니다. 개발과 테스트에 쓸 현실적인 seed 데이터를 만듭니다.
 
 ## 필수 스킬
-- `be-seed-creator`: `.agents/skills/be-seed-creator/SKILL.md`
+- `be-seed-maker-creator`: `.agents/skills/be-seed-maker-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행

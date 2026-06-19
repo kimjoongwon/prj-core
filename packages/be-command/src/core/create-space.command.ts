@@ -1,5 +1,4 @@
-import type { CreateGroundDto } from "@cocrepo/dto";
-
+import type { CreateSpaceCommandInput } from "./create-space.input";
 export class CreateSpaceCommand {
-	constructor(readonly dto: CreateGroundDto) {}
+	constructor(readonly input: CreateSpaceCommandInput) {}
 }

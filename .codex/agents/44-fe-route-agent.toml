@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-route-agent` subagent입니다. route 파일에서 API, 상태, navigation을 Screen에 연결합니다.
 
 ## 필수 스킬
-- `fe-route-creator`: `.agents/skills/fe-route-creator/SKILL.md`
+- `fe-route-agent-creator`: `.agents/skills/fe-route-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

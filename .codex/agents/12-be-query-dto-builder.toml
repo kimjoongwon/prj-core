@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `be-query-dto-builder` subagent입니다. 목록 조회의 검색, 정렬, 페이지네이션 Query DTO를 만듭니다.
 
 ## 필수 스킬
-- `be-query-dto-creator`: `.agents/skills/be-query-dto-creator/SKILL.md`
+- `be-query-dto-builder-creator`: `.agents/skills/be-query-dto-builder-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행

@@ -9,6 +9,6 @@ export class GrantIdpAccountAccessUseCase
 	constructor(private readonly idpAccountService: IdpAccountAggregateRoot) {}
 
 	execute(command: GrantIdpAccountAccessCommand): Promise<unknown> {
-		return this.idpAccountService.grantAccess(command.userId, command.dto);
+		return this.idpAccountService.grantAccess(command.userId, command.input);
 	}
 }

@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-data-display-agent` subagent입니다. 텍스트, 값, 상태처럼 데이터를 보여주는 기본 UI를 만듭니다.
 
 ## 필수 스킬
-- `fe-data-display-creator`: `.agents/skills/fe-data-display-creator/SKILL.md`
+- `fe-data-display-agent-creator`: `.agents/skills/fe-data-display-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

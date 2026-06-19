@@ -16,19 +16,19 @@ export class CreateReservationUseCase
 
 	async execute(command: CreateReservationCommand): Promise<unknown> {
 		const context = this.context.requireContext();
-		const params = command.params;
+		const input = command.input;
 
 		const createResult = await this.reservationService.createWithResult({
 			spaceId: context.spaceId,
 			userId: context.userId,
 			input: {
-				coursePassId: params.coursePassId,
-				idempotencyKey: params.idempotencyKey,
-				memo: params.memo ?? null,
-				occurrenceStartAt: params.occurrenceStartAt,
-				programId: params.programId,
-				sessionId: params.sessionId,
-				timelineId: params.timelineId,
+				coursePassId: input.coursePassId,
+				idempotencyKey: input.idempotencyKey,
+				memo: input.memo ?? null,
+				occurrenceStartAt: input.occurrenceStartAt,
+				programId: input.programId,
+				sessionId: input.sessionId,
+				timelineId: input.timelineId,
 			},
 		});
 
@@ -38,9 +38,9 @@ export class CreateReservationUseCase
 					reservationId: createResult.reservation.id,
 					spaceId: context.spaceId,
 					userId: context.userId,
-					programId: params.programId,
-					sessionId: params.sessionId,
-					timelineId: params.timelineId,
+					programId: input.programId,
+					sessionId: input.sessionId,
+					timelineId: input.timelineId,
 					occurredAt: new Date(),
 				}),
 			);

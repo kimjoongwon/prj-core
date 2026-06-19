@@ -1,5 +1,4 @@
-import type { CreateTranslationDto } from "@cocrepo/dto";
-
+import type { CreateTranslationCommandInput } from "./create-translation.input";
 export class CreateTranslationCommand {
-	constructor(readonly dto: CreateTranslationDto) {}
+	constructor(readonly input: CreateTranslationCommandInput) {}
 }

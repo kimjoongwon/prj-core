@@ -1,5 +1,5 @@
-import type { CreateReservationCheckoutCommandParams } from "./create-reservation-checkout-command-params";
+import type { CreateReservationCheckoutCommandInput } from "./create-reservation-checkout.input";
 
 export class CreateReservationCheckoutCommand {
-	constructor(readonly params: CreateReservationCheckoutCommandParams) {}
+	constructor(readonly input: CreateReservationCheckoutCommandInput) {}
 }

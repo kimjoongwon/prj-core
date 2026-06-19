@@ -29,6 +29,10 @@
 - subagent는 승인된 범위와 자신의 ownership 안에서만 작업합니다.
 - subagent는 peer subagent를 직접 호출하거나 다른 subagent 책임 파일을 임의 수정하지 않습니다.
 - 새로 만들기 전에 기존 코드, spec, 테스트, 생성 산출물을 먼저 재사용합니다.
+- 각 subagent는 자신이 생성하거나 수정한 산출물의 단위 테스트, E2E 테스트, 정적 검증을 1차 소유합니다.
+- 테스트 작성/갱신과 실행 가능한 범위 검증은 해당 산출물 완료 조건에 포함합니다.
+- 테스트 코드 작성이나 정적 검증만 대신 수행하는 별도 검증 전담 subagent를 두지 않습니다.
+- 검증 실패가 다른 ownership에서 발생하면 직접 고치지 않고 해당 owner subagent로 인계합니다.
 - 승인된 spec, subagent TOML, creator skill이 충돌하면 승인된 spec, subagent TOML, creator skill 순서로 따릅니다.
 - 최종 보고에는 생성/수정/삭제한 작업물 경로, 작업물별 내용 요약, 다음 subagent를 반드시 적습니다.
 - 다음 subagent가 있으면 `next subagent: <agent_type>`과 함께 소비해야 할 산출물 경로와 handoff key를 적습니다.
@@ -59,6 +63,9 @@
 ## 검증 원칙
 
 - 코드 변경에는 관련 테스트 작성 또는 갱신을 함께 검토합니다.
+- 단위 테스트와 E2E 테스트는 기본적으로 해당 소스나 route를 변경한 owner subagent가 작성하고 1차 검증합니다.
+- 타입 체크, 코드 생성, lint, 금지 grep 같은 정적 검증도 변경 owner subagent가 가능한 범위에서 실행합니다.
+- 검증 실패가 owner 범위 밖이면 실패 로그와 필요한 owner를 최종 보고에 남깁니다.
 - 테스트 설명은 사용자가 이해할 수 있는 언어로 작성하고, Given-When-Then 흐름을 따릅니다.
 - 실행 가능한 검증은 작업 범위에 맞게 수행합니다.
 - 검증을 실행하지 못했거나 일부만 실행했다면 최종 보고에 이유와 남은 위험을 명시합니다.

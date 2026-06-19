@@ -9,6 +9,6 @@ export class UpdateRoutineUseCase
 	constructor(private readonly routinesService: RoutineAggregateRoot) {}
 
 	execute(command: UpdateRoutineCommand): Promise<unknown> {
-		return this.routinesService.updateRoutine(command.routineId, command.dto);
+		return this.routinesService.updateRoutine(command.routineId, command.input);
 	}
 }

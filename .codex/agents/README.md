@@ -20,15 +20,27 @@ subagent TOML은 얇은 실행 계약만 소유합니다. 상세 작업 지시�
 - `name`과 spec의 `agent_type` 값은 번호를 붙이지 않고 기존 계약명을 유지합니다.
 - 번호는 색인과 파일 정렬을 위한 값이며 실행 중 보고할 `next subagent` 값이 아닙니다.
 
+## Skill 이름 규칙
+
+- 각 subagent의 필수 skill 이름과 디렉터리는 `<subagent-name>-creator` 형식을 사용합니다.
+- 예: `fe-screen-agent`의 skill은 `fe-screen-agent-creator`, `be-controller-builder`의 skill은 `be-controller-builder-creator`입니다.
+- subagent 이름 앞부분을 바꾸거나 줄인 별칭 skill을 만들지 않습니다.
+
+## 테스트 소유권 규칙
+
+- 단위 테스트와 E2E 테스트는 기본적으로 해당 소스, route, API 산출물을 생성하거나 수정한 owner subagent가 함께 작성하고 1차 검증합니다.
+- 별도 검증 전담 subagent는 두지 않습니다. 테스트와 타입 체크는 작업 owner의 완료 조건입니다.
+- spec의 테스트 행에는 작성 `agent_type`, 1차 검증 `agent_type`, 테스트 파일, 통과 기준을 적고 두 `agent_type`은 기본적으로 같은 owner를 사용합니다.
+
 ## 모델 티어 운영
 
 현재 로컬 Codex 사용 가능 모델 기준으로 `gpt-5.5`, `gpt-5.4`, `gpt-5.3-codex-spark`를 함께 사용합니다. 되돌림 비용이 큰 판단은 `gpt-5.5`, 복합 구현은 `gpt-5.4`, leaf 구현과 반복 생성은 `gpt-5.3-codex-spark`가 담당합니다.
 
 | 모델 | 추론 강도 | Subagent | 기준 |
 |-------|--------|------|------|
-| `gpt-5.5` | `xhigh` | `orch-delivery`, `be-prisma-builder`, `be-database-expert`, `be-usecase-builder`, `common-schema-builder`, `qa-type-checker` | 서비스 설계, 데이터 모델, workflow 조율, 공통 검증 계약, 타입 실패 원인 분석 |
-| `gpt-5.4` | `high` | `be-aggregate-builder`, `be-bootstrap-integrator`, `be-client-builder`, `be-controller-builder`, `be-module-builder`, `be-repository-builder`, `be-service-builder`, `common-toolkit-builder`, `common-type-builder`, `fe-data-grid-agent`, `fe-feature-agent`, `fe-form-agent`, `fe-menu-agent`, `fe-route-layout-agent`, `fe-screen-agent`, `fe-store-agent`, `qa-be-e2e-testing`, `qa-fe-e2e-testing`, `qa-mo-e2e-testing` | 교차 레이어 구현, 상태/화면 설계, E2E 검증처럼 되돌림 비용이 있는 작업 |
-| `gpt-5.3-codex-spark` | `medium` | `be-command-builder`, `be-dmmf-parser-builder`, `be-dto-builder`, `be-entity-builder`, `be-event-builder`, `be-query-dto-builder`, `be-vo-builder`, `etc-jenkinsfile-builder`, `fe-action-agent`, `fe-data-display-agent`, `fe-feedback-agent`, `fe-hook-agent`, `fe-input-agent`, `fe-layout-agent`, `fe-navigation-agent`, `fe-overlay-agent`, `fe-route-agent`, `fe-selection-agent`, `fe-storybook-agent`, `fe-widget-agent`, `qa-be-testing`, `qa-fe-testing`, `qa-mo-testing` | 계약/컴포넌트/Storybook/단위 테스트처럼 범위가 비교적 명확한 일반 구현 |
+| `gpt-5.5` | `xhigh` | `orch-delivery`, `be-prisma-builder`, `be-database-expert`, `be-usecase-builder`, `common-schema-builder` | 서비스 설계, 데이터 모델, workflow 조율, 공통 검증 계약 |
+| `gpt-5.4` | `high` | `be-aggregate-builder`, `be-bootstrap-integrator`, `be-client-builder`, `be-controller-builder`, `be-module-builder`, `be-repository-builder`, `be-service-builder`, `common-toolkit-builder`, `common-type-builder`, `fe-data-grid-agent`, `fe-feature-agent`, `fe-form-agent`, `fe-menu-agent`, `fe-route-layout-agent`, `fe-screen-agent`, `fe-store-agent` | 교차 레이어 구현, 상태/화면 설계, 되돌림 비용이 있는 작업 |
+| `gpt-5.3-codex-spark` | `medium` | `be-command-builder`, `be-dmmf-parser-builder`, `be-dto-builder`, `be-entity-builder`, `be-event-builder`, `be-query-dto-builder`, `be-vo-builder`, `etc-jenkinsfile-builder`, `fe-action-agent`, `fe-data-display-agent`, `fe-feedback-agent`, `fe-hook-agent`, `fe-input-agent`, `fe-layout-agent`, `fe-navigation-agent`, `fe-overlay-agent`, `fe-route-agent`, `fe-selection-agent`, `fe-storybook-agent`, `fe-widget-agent` | 계약/컴포넌트/Storybook처럼 범위가 비교적 명확한 일반 구현 |
 | `gpt-5.3-codex-spark` | `low` | `be-prisma-annotator`, `be-seed-maker`, `dev-service-starter`, `fe-cell-agent`, `fe-columns-agent` | 주석, 시드, 서비스 시작, 셀/컬럼 같은 기계적이고 반복적인 작업 |
 
 ## 계약 담당
@@ -36,12 +48,12 @@ subagent TOML은 얇은 실행 계약만 소유합니다. 상세 작업 지시�
 - 공통 subagent 실행, 보고, 차단 계약은 루트 `AGENTS.md`가 소유합니다.
 - 각 subagent TOML은 정체성, 필수 skill, 기준 문서, 소유 범위, 플랫폼/도메인 라우팅만 소유합니다.
 - 상세 구현 절차와 기술별 규칙은 각 `.agents/skills/*-creator/SKILL.md`와 해당 `references/agent-instructions.md`가 소유합니다.
-- 서비스 딜리버리 spec, route/page spec, Screen/Feature 기획 스펙의 생성/실행 규칙은 `01-orch-delivery.toml`과 `delivery-orchestration-creator` skill이 소유합니다.
+- 서비스 딜리버리 spec, route/page spec, Screen/Feature 기획 스펙의 생성/실행 규칙은 `01-orch-delivery.toml`과 `orch-delivery-creator` skill이 소유합니다.
 - 이 README는 active subagent 색인과 모델 티어 기준만 소유하며 실행 규칙을 복제하지 않습니다.
 
 ## 기획 / 오케스트레이션
 
-- [01-orch-delivery.toml](./01-orch-delivery.toml): 서비스 아이디어를 질문으로 정리하고 spec, 작업 순서, QA까지 계획합니다.
+- [01-orch-delivery.toml](./01-orch-delivery.toml): 서비스 아이디어를 질문으로 정리하고 spec, 작업 순서, 검증 기준까지 계획합니다.
 
 ## 백엔드 / Prisma
 
@@ -92,17 +104,7 @@ subagent TOML은 얇은 실행 계약만 소유합니다. 상세 작업 지시�
 - [43-fe-route-layout-agent.toml](./43-fe-route-layout-agent.toml): Next.js layout과 Expo _layout의 공통 틀을 만듭니다.
 - [44-fe-route-agent.toml](./44-fe-route-agent.toml): route 파일에서 API, 상태, navigation을 Screen에 연결합니다.
 
-## QA / 검증
-
-- [45-qa-type-checker.toml](./45-qa-type-checker.toml): TypeScript 타입 오류를 원인부터 찾아 고칩니다.
-- [46-qa-be-testing.toml](./46-qa-be-testing.toml): 백엔드와 공용 패키지의 단위 테스트를 만듭니다.
-- [47-qa-be-e2e-testing.toml](./47-qa-be-e2e-testing.toml): 백엔드 API 흐름을 검증하는 E2E 테스트를 만듭니다.
-- [48-qa-fe-testing.toml](./48-qa-fe-testing.toml): 프론트엔드 컴포넌트와 hook의 단위 테스트를 만듭니다.
-- [49-qa-fe-e2e-testing.toml](./49-qa-fe-e2e-testing.toml): 브라우저에서 실제 사용자 흐름을 검증하는 E2E 테스트를 만듭니다.
-- [50-qa-mo-testing.toml](./50-qa-mo-testing.toml): 모바일 컴포넌트와 hook의 단위 테스트를 만듭니다.
-- [51-qa-mo-e2e-testing.toml](./51-qa-mo-e2e-testing.toml): 모바일 앱의 실제 사용자 흐름을 검증하는 E2E 테스트를 만듭니다.
-
 ## 공용 / 운영 보조
 
-- [52-dev-service-starter.toml](./52-dev-service-starter.toml): 개발 서버와 필요한 로컬 서비스를 시작합니다.
-- [53-etc-jenkinsfile-builder.toml](./53-etc-jenkinsfile-builder.toml): Jenkins CI/CD 파이프라인 파일을 만듭니다.
+- [45-dev-service-starter.toml](./45-dev-service-starter.toml): 개발 서버와 필요한 로컬 서비스를 시작합니다.
+- [46-etc-jenkinsfile-builder.toml](./46-etc-jenkinsfile-builder.toml): Jenkins CI/CD 파이프라인 파일을 만듭니다.

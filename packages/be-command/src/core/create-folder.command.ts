@@ -1,8 +1,7 @@
-import type { CreateFolderDto } from "@cocrepo/dto";
-
+import type { CreateFolderCommandInput } from "./create-folder.input";
 export class CreateFolderCommand {
 	constructor(
-		readonly dto: CreateFolderDto,
+		readonly input: CreateFolderCommandInput,
 		readonly creatorId: string,
 	) {}
 }

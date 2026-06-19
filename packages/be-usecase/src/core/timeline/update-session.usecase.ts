@@ -12,7 +12,7 @@ export class UpdateSessionUseCase
 		return this.timelinesService.updateSessionInTimeline(
 			command.timelineId,
 			command.sessionId,
-			command.dto,
+			command.input,
 		);
 	}
 }

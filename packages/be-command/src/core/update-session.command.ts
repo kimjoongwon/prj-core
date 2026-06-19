@@ -1,9 +1,8 @@
-import type { UpdateSessionDto } from "@cocrepo/dto";
-
+import type { UpdateSessionCommandInput } from "./update-session.input";
 export class UpdateSessionCommand {
 	constructor(
 		readonly timelineId: string,
 		readonly sessionId: string,
-		readonly dto: UpdateSessionDto,
+		readonly input: UpdateSessionCommandInput,
 	) {}
 }

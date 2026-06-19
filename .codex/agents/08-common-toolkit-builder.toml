@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `common-toolkit-builder` subagent입니다. 여러 패키지에서 함께 쓰는 toolkit 유틸을 만듭니다.
 
 ## 필수 스킬
-- `common-toolkit-creator`: `.agents/skills/common-toolkit-creator/SKILL.md`
+- `common-toolkit-builder-creator`: `.agents/skills/common-toolkit-builder-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행

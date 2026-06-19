@@ -13,7 +13,7 @@ export class UpdateTranslationUseCase
 	execute(command: UpdateTranslationCommand): Promise<unknown> {
 		return this.translationCatalogService.update(
 			command.translationId,
-			command.dto,
+			command.input,
 		);
 	}
 }

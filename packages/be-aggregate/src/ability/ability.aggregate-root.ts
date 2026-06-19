@@ -1,6 +1,5 @@
 import { ABILITY_ERRORS } from "@cocrepo/constant";
 import { Ability, RolePolicy, UserPolicy } from "@cocrepo/entity";
-import type { Prisma } from "@cocrepo/prisma";
 import {
 	AbilitiesRepository,
 	PolicyAbilitiesRepository,
@@ -9,7 +8,13 @@ import {
 } from "@cocrepo/repository";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
+import {
+	toAbilityCreateData,
+	toAbilityUpdateData,
+} from "./ability-persistence.mapper";
 import type { AbilityWithAssignment } from "./ability-with-assignment";
+import type { CreateAbilityInput } from "./create-ability.input";
+import type { UpdateAbilityInput } from "./update-ability.input";
 
 /**
  * Ability 서비스 (CASL ABAC 기반)
@@ -90,20 +95,18 @@ export class AbilityAggregateRoot {
 	/**
 	 * 권한 정의 생성
 	 *
-	 * @param data - Ability 생성 데이터 (재사용 가능한 권한 정의)
+	 * @param input - Ability 생성 데이터 (재사용 가능한 권한 정의)
 	 * @returns 생성된 Ability
 	 * @description 권한 정의만 생성합니다. Role/User에 할당하려면 Policy에 포함한 뒤 Policy를 할당하세요.
 	 */
-	async createAbility(
-		data: Prisma.AbilityUncheckedCreateInput,
-	): Promise<Ability> {
+	async createAbility(input: CreateAbilityInput): Promise<Ability> {
 		this.logger.debug(
-			`권한 정의 생성: name=${data.name}, subjectId=${data.subjectId}, actionId=${data.actionId}`,
+			`권한 정의 생성: name=${input.name}, subjectId=${input.subjectId}, actionId=${input.actionId}`,
 		);
 
-		// 유효성 검증
-		this.validateAbilityData(data);
+		this.validateAbilityData(input);
 
+		const data = toAbilityCreateData(input);
 		return this.abilitiesRepository.create(data);
 	}
 
@@ -111,16 +114,14 @@ export class AbilityAggregateRoot {
 	 * 권한 정의 수정
 	 *
 	 * @param id - Ability ID
-	 * @param data - 수정 데이터
+	 * @param input - 수정 데이터
 	 * @returns 수정된 Ability
 	 * @description Ability 정의만 수정합니다. RolePolicy/UserPolicy 메타데이터(isActive, priority)는 변경되지 않습니다.
 	 */
-	async updateAbility(
-		id: string,
-		data: Prisma.AbilityUncheckedUpdateInput,
-	): Promise<Ability> {
+	async updateAbility(id: string, input: UpdateAbilityInput): Promise<Ability> {
 		this.logger.debug(`권한 정의 수정: id=${id.slice(-8)}`);
 
+		const data = toAbilityUpdateData(input);
 		return this.abilitiesRepository.updateById(id, data);
 	}
 
@@ -150,7 +151,7 @@ export class AbilityAggregateRoot {
 	/**
 	 * Ability 데이터 유효성 검증
 	 */
-	private validateAbilityData(data: Prisma.AbilityUncheckedCreateInput): void {
+	private validateAbilityData(data: CreateAbilityInput): void {
 		// actionId, subjectId, name 필수
 		if (!data.actionId || !data.subjectId || !data.name) {
 			throw new BadRequestException(ABILITY_ERRORS.INVALID_DATA);

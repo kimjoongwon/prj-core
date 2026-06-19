@@ -1,9 +1,8 @@
-import type { ReviewTenantAccessRequestDto } from "@cocrepo/dto";
-
+import type { ApproveTenantAccessRequestCommandInput } from "./approve-tenant-access-request.input";
 export class ApproveTenantAccessRequestCommand {
 	constructor(
 		readonly tenantAccessRequestId: string,
 		readonly reviewerId: string,
-		readonly dto: ReviewTenantAccessRequestDto,
+		readonly input: ApproveTenantAccessRequestCommandInput,
 	) {}
 }

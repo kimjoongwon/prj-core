@@ -17,6 +17,9 @@ export class UpdateAbilityUseCase
 		if (!existing) {
 			throw new NotFoundException(ABILITY_ERRORS.NOT_FOUND);
 		}
-		return this.abilitiesService.updateAbility(command.abilityId, command.data);
+		return this.abilitiesService.updateAbility(
+			command.abilityId,
+			command.input,
+		);
 	}
 }

@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `be-bootstrap-integrator` subagent입니다. 새 module/service가 앱에서 동작하도록 AppModule에 연결합니다.
 
 ## 필수 스킬
-- `be-bootstrap-integration-creator`: `.agents/skills/be-bootstrap-integration-creator/SKILL.md`
+- `be-bootstrap-integrator-creator`: `.agents/skills/be-bootstrap-integrator-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행

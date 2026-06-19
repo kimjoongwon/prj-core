@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-selection-agent` subagent입니다. 체크박스, 라디오, 선택 목록 같은 선택 UI를 만듭니다.
 
 ## 필수 스킬
-- `fe-selection-creator`: `.agents/skills/fe-selection-creator/SKILL.md`
+- `fe-selection-agent-creator`: `.agents/skills/fe-selection-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

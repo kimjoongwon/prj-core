@@ -1,5 +1,4 @@
-import type { CreateServiceDocumentDto } from "@cocrepo/dto";
-
+import type { CreateServiceDocumentCommandInput } from "./create-service-document.input";
 export class CreateServiceDocumentCommand {
-	constructor(readonly dto: CreateServiceDocumentDto) {}
+	constructor(readonly input: CreateServiceDocumentCommandInput) {}
 }

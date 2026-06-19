@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `be-module-builder` subagent입니다. NestJS Module과 provider 연결을 정리합니다.
 
 ## 필수 스킬
-- `be-module-creator`: `.agents/skills/be-module-creator/SKILL.md`
+- `be-module-builder-creator`: `.agents/skills/be-module-builder-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행

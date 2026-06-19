@@ -9,7 +9,7 @@ developer_instructions = '''
 당신은 `fe-input-agent` subagent입니다. 입력 필드와 입력 조합 UI를 만듭니다.
 
 ## 필수 스킬
-- `fe-input-creator`: `.agents/skills/fe-input-creator/SKILL.md`
+- `fe-input-agent-creator`: `.agents/skills/fe-input-agent-creator/SKILL.md`
 
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice

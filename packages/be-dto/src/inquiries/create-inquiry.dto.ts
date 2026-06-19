@@ -6,7 +6,6 @@ import {
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import {
-	type Inquiry,
 	InquiryCategory,
 	InquiryChannel,
 	InquiryPriority,
@@ -58,26 +57,4 @@ export class CreateInquiryDto {
 		description: "문의 내용 (첫 메시지)",
 	})
 	content?: string;
-
-	/**
-	 * DTO → Entity 변환
-	 */
-	toEntity(): Partial<Inquiry> {
-		const entity: Partial<Inquiry> = {
-			title: this.title,
-			category: this.category,
-			channel: this.channel,
-			source: this.source ?? InquirySource.ONLINE,
-			priority: this.priority ?? InquiryPriority.NORMAL,
-		};
-
-		if (this.customerId) {
-			entity.customerId = this.customerId;
-		}
-		if (this.assigneeId) {
-			entity.assigneeId = this.assigneeId;
-		}
-
-		return entity;
-	}
 }

@@ -1,5 +1,4 @@
-import type { NativeTokenRefreshPayloadDto } from "@cocrepo/dto";
-
+import type { RefreshNativeMobileSessionCommandInput } from "./refresh-native-mobile-session.input";
 export class RefreshNativeMobileSessionCommand {
-	constructor(readonly dto: NativeTokenRefreshPayloadDto) {}
+	constructor(readonly input: RefreshNativeMobileSessionCommandInput) {}
 }
