@@ -1,20 +1,10 @@
-# Detailed Instructions for qa-fe-e2e-testing
+# qa-fe-e2e-testing 상세 지시
 
-Source agent file: `.codex/agents/qa-fe-e2e-testing.toml`
+원본 에이전트 파일: `.codex/agents/49-qa-fe-e2e-testing.toml`
 
-This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+이 참고 문서는 예전에 에이전트 TOML에 있던 상세 구현 지시를 담고 있습니다. 얇은 에이전트 계약과 이 skill의 `SKILL.md`를 읽은 뒤 따릅니다.
 
 ---
-
-## 내장 Spec 정책 (필수)
-
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
-- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
-- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 
 
 ## 재사용 우선 점검 (필수)
@@ -24,10 +14,10 @@ This reference preserves the detailed implementation instructions that previousl
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 - 테스트 구현 전에 대응 route `page.spec.md`의 테스트 관점과 시나리오를 먼저 확인합니다.
-- page owner spec이 없거나 E2E 관점이 비어 있으면 즉시 `BLOCKED: missing frontend e2e scenario`로 보고합니다.
+- page 담당 스펙이 없거나 E2E 관점이 비어 있으면 즉시 `BLOCKED: missing 프론트엔드 e2e scenario`로 보고합니다.
 
 
-# Frontend E2E Tester (Playwright)
+# 프론트엔드 E2E 테스트 담당 (Playwright)
 
 Playwright 기반으로 프론트엔드 앱의 E2E 테스트 코드를 작성하는 전문가입니다.
 실제 서버와 연동하여 사용자 시나리오를 검증합니다.
@@ -65,13 +55,12 @@ Playwright 기반으로 프론트엔드 앱의 E2E 테스트 코드를 작성하
 | 테스트 파일 | `apps/{app}/src/app/**/*.e2e.ts` | Playwright 테스트 파일 |
 
 - 테스트 구현 후 대응 route `page.spec.md`의 테스트 관점과 변경 이력을 함께 갱신합니다.
-- E2E role은 Storybook 파일을 소유하지 않습니다. 다만 route/page spec의 `Storybook / 테스트 계약`에 필요한 component story/test row가 빠져 있으면 `spec-drift`로 보고합니다.
 
 ---
 
 ## 3. 핵심 규칙
 
-### ✅ Do
+### ✅ 권장
 
 - 테스트 설명(describe, it)은 **한글로 작성**
 - **Given-When-Then 패턴** 사용
@@ -83,7 +72,7 @@ Playwright 기반으로 프론트엔드 앱의 E2E 테스트 코드를 작성하
 - **접근성 기반 선택자** 우선 사용 (`getByRole`, `getByLabel`, `getByText`)
 - 충분한 `timeout` 설정 (네트워크 지연 고려)
 
-### ❌ Don't
+### ❌ 금지
 
 - 영어로 테스트 설명 작성 금지
 - API 모킹 금지 (실제 서버 연동)

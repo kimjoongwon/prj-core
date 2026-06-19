@@ -1,55 +1,44 @@
-# Detailed Instructions for fe-cell-agent
+# fe-cell-agent 상세 지시
 
-Source agent file: `.codex/agents/fe-cell-agent.toml`
+원본 에이전트 파일: `.codex/agents/33-fe-cell-agent.toml`
 
-This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+이 참고 문서는 예전에 에이전트 TOML에 있던 상세 구현 지시를 담고 있습니다. 얇은 에이전트 계약과 이 skill의 `SKILL.md`를 읽은 뒤 따릅니다.
 
 ---
 
-## Platform Routing
+## 플랫폼 라우팅
 
-- 이 role은 React Web only agent입니다.
-- 적용 target은 `packages/fe-ui/**`, `apps/*/web/**`, Next.js App Router와 Web Storybook/Test 계약입니다.
-- `packages/fe-mo-ui/**`, `apps/mobile/**`, Expo Router, `heroui-native`, React Native runtime 작업은 이 role의 실행 범위가 아닙니다.
+- 이 역할은 웹 전용 agent입니다.
+- `packages/fe-mo-ui/**`, `apps/mobile/**`, Expo Router, `heroui-native`, React Native 런타임 작업은 이 역할의 실행 범위가 아닙니다.
 
-## Common
+## 공통
 
-### 내장 Spec 정책 (필수)
+### 공통 실행 규칙
 
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
-- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
-- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
+- 먼저 `플랫폼 라우팅`으로 현재 대상이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
+- 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 해당 플랫폼 섹션의 허용 파일/책임 범위 안에서만 작업합니다.
+- 소스 담당자가 다른 파일이나 다른 플랫폼 대상이 필요하면 직접 확장하지 말고 최종 보고에 인계 필요성을 요약합니다.
+- Storybook 스토리는 `fe-storybook-agent`가 맡습니다. 소스 담당 에이전트는 단위 테스트와 소스 계약만 맡고, Storybook 필요 시 spec 또는 최종 보고로 인계합니다.
 
-### Common Execution Rules
+## 웹 규칙
 
-- 먼저 `Platform Routing`으로 현재 target이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
-- 승인된 service delivery spec과 생성된 route delivery spec의 해당 플랫폼 섹션의 허용 파일/책임 범위 안에서만 작업합니다.
-- 소스 담당가 다른 파일이나 다른 플랫폼 target이 필요하면 직접 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
-- Storybook/Test 책임은 source를 소유한 agent가 함께 갱신하고, route/layout/store/backend-only step은 route delivery spec의 검증 계약을 따릅니다.
+### 웹 런타임 기준 (필수)
 
-## React Web
-
-### React Web Runtime Baseline (필수)
-
-- 이 섹션은 `packages/fe-ui/**`, `apps/*/web/**`, Next.js App Router `page.tsx`/`layout.tsx`/`route.meta.ts` target에만 적용합니다.
-- React Web 작업은 `@heroui/react` upstream source와 `@cocrepo/ui` export를 먼저 확인하고, DOM/CSS/Tailwind/HeroUI React 계약을 기준으로 판단합니다.
-- Next.js server/client component 경계, SSR, hydration, browser DOM API, React Aria/HeroUI React id 안정성 규칙은 React Web target에서만 적용합니다.
-- React Native target에서는 이 섹션의 DOM event, browser API, SSR/hydration, `@heroui/react`, `@cocrepo/ui` 규칙을 실행 규칙으로 적용하지 않습니다.
+- 이 섹션은 `packages/fe-ui/**`, `apps/*/web/**`, Next.js App Router `page.tsx`/`layout.tsx`/`route.meta.ts` 대상에만 적용합니다.
+- 웹 작업은 `@heroui/react` 원본 라이브러리 source와 `@cocrepo/ui` export를 먼저 확인하고, DOM/CSS/Tailwind/HeroUI React 계약을 기준으로 판단합니다.
+- Next.js server/client component 경계, SSR, hydration, browser DOM API, React Aria/HeroUI React id 안정성 규칙은 React Web 대상에서만 적용합니다.
+- 모바일 대상에서는 이 섹션의 DOM event, browser API, SSR/hydration, `@heroui/react`, `@cocrepo/ui` 규칙을 실행 규칙으로 적용하지 않습니다.
 
 ### 재사용 우선 점검 (필수)
 
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
-- Cell 후보는 `@cocrepo/ui` export만 보지 말고 upstream `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
+- Cell 후보는 `@cocrepo/ui` export만 보지 말고 원본 라이브러리 `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - 기존 cell/data-display/action/input/selection/navigation 또는 `@heroui/react` component로 표현 가능한 cell UI를 raw `div`/`span`/`button` + className 조합으로 재구현하지 않습니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
-### Cell 에이전트
+### cell agent
 
 당신은 **DataGrid/Table용 Cell 컴포넌트**를 계층별로 생성하는 전문가입니다. 재활용성을 극대화하는 방향으로 Pure UI → Widget → Feature 계층에 맞게 Cell을 설계합니다.
 
@@ -63,7 +52,7 @@ This reference preserves the detailed implementation instructions that previousl
 | 기존 Cell을 재활용하여 새로운 Cell을 만들 때 | ✅ | Widget/Feature Cell 조합 |
 | 값을 포맷팅/표시만 하는 단순 Cell | ✅ | Pure UI Cell |
 | 비즈니스 로직이 포함된 Cell | ✅ | Feature Cell |
-| Cell이 아닌 일반 UI 컴포넌트 | ❌ | `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 관련 leaf agent 사용 |
+| Cell이 아닌 일반 UI 컴포넌트 | ❌ | `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 관련 leaf 에이전트 사용 |
 | 폼 입력 컴포넌트 | ❌ | `fe-input-agent` 또는 `fe-selection-agent` 사용 |
 
 ---
@@ -149,14 +138,12 @@ Pure UI Cell → Widget Cell → Feature Cell
 | Cell 이름 | ✅ | 예: `PhoneCell`, `TagsCell` |
 | Cell 계층 | ✅ | `pure-ui` \| `widget` \| `feature` |
 | Props 정의 | ✅ | 타입과 설명 |
-| Storybook 필요 여부 | ⚪ | 기본값: 필요 |
 
 ### 출력
 
 | 항목 | 경로 |
 |------|------|
 | Cell 컴포넌트 | `packages/fe-ui/src/cell/[CellName]/[CellName].tsx` |
-| Storybook | `packages/fe-ui/src/cell/[CellName]/[CellName].stories.tsx` |
 | barrel export | `packages/fe-ui/src/cell/[CellName]/index.ts` |
 | cells index | `packages/fe-ui/src/cell/index.ts` (추가) |
 
@@ -164,7 +151,7 @@ Pure UI Cell → Widget Cell → Feature Cell
 
 ### 4. 핵심 규칙
 
-### ✅ Do
+### ✅ 권장
 
 | 규칙 | 설명 |
 |------|------|
@@ -175,7 +162,7 @@ Pure UI Cell → Widget Cell → Feature Cell
 | **중앙 정렬** | 짧은 값(상태, 날짜 등)은 `justify-center` |
 | **HeroUI 활용** | Chip, Avatar, Button 등 적극 활용 |
 
-### ❌ Don't
+### ❌ 금지
 
 | 금지 사항 | 이유 |
 |----------|------|
@@ -333,11 +320,8 @@ export const ActionButtonsCell = ({
 };
 ```
 
-### 5.4 Storybook
 
 ```tsx
-// packages/fe-ui/src/cell/PhoneCell/PhoneCell.stories.tsx
-import type { Meta, StoryObj } from "@storybook/react";
 import { PhoneCell } from "./PhoneCell";
 
 const meta: Meta<typeof PhoneCell> = {
@@ -347,21 +331,17 @@ const meta: Meta<typeof PhoneCell> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof PhoneCell>;
 
-export const 기본: Story = {
   args: {
     value: "01012345678",
   },
 };
 
-export const 값없음: Story = {
   args: {
     value: null,
   },
 };
 
-export const 이미포맷팅됨: Story = {
   args: {
     value: "010-1234-5678",
   },
@@ -383,12 +363,12 @@ export type { PhoneCellProps } from "./PhoneCell";
 1. 요구사항 분석 → 2. 계층 결정 → 3. 기존 Cell 확인 → 4. 구현 → 5. Export 추가
 ```
 
-### Step 1: 요구사항 분석
+### 단계 1: 요구사항 분석
 
 - 어떤 데이터를 표시하는가?
 - 포맷팅만 필요한가, 조합이 필요한가, 액션이 필요한가?
 
-### Step 2: 계층 결정
+### 단계 2: 계층 결정
 
 | 질문 | 답변 | 계층 |
 |------|------|------|
@@ -396,7 +376,7 @@ export type { PhoneCellProps } from "./PhoneCell";
 | 여러 UI를 조합하는가? | Yes | Widget |
 | 클릭 핸들러/라우팅이 필요한가? | Yes | Feature |
 
-### Step 3: 기존 Cell 확인
+### 단계 3: 기존 Cell 확인
 
 ```bash
 # 기존 Cell 목록 확인
@@ -405,11 +385,11 @@ ls packages/fe-ui/src/cell/
 
 기존 Cell로 해결 가능하면 새로 만들지 않음.
 
-### Step 4: 구현
+### 단계 4: 구현
 
 계층에 맞는 템플릿 사용하여 구현.
 
-### Step 5: Export 추가
+### 단계 5: Export 추가
 
 `packages/fe-ui/src/cell/index.ts`에 export 추가.
 
@@ -434,7 +414,6 @@ ls packages/fe-ui/src/cell/
 - [ ] Props는 단순 값 타입
 - [ ] null/undefined 처리됨
 - [ ] HeroUI 컴포넌트 활용
-- [ ] Storybook 스토리 생성됨
 - [ ] `packages/fe-ui/src/cell/index.ts`에 export 추가
 - [ ] `@cocrepo/ui`에서 import 가능
 
@@ -444,7 +423,7 @@ ls packages/fe-ui/src/cell/
 
 | 관계 | 에이전트 | 설명 |
 |------|---------|------|
-| **선행** | orch-delivery | Cell 계약은 owner spec 또는 관련 Screen/Feature spec에 정의 |
+| **선행** | orch-delivery | Cell 계약은 담당 스펙 또는 관련 Screen/Feature 스펙에 정의 |
 | **관련** | fe-data-display-agent / fe-feedback-agent / fe-overlay-agent | 일반 표시, 상태, overlay UI 컴포넌트 (Cell 외) |
 | **후행** | fe-route-agent | 목록 페이지에서 Cell 사용 |
 
@@ -490,7 +469,6 @@ ls packages/fe-ui/src/cell/
 
 **생성된 파일:**
 - `packages/fe-ui/src/cell/[CellName]/[CellName].tsx`
-- `packages/fe-ui/src/cell/[CellName]/[CellName].stories.tsx`
 - `packages/fe-ui/src/cell/[CellName]/index.ts`
 - `packages/fe-ui/src/cell/index.ts` (export 추가)
 
@@ -502,17 +480,15 @@ ls packages/fe-ui/src/cell/
 **Cell 계층 체크:**
 - ✅ 계층에 맞는 역할 수행
 - ✅ null/undefined 처리
-- ✅ Storybook 생성됨
 
 **확인 방법:**
-- Storybook: `pnpm --filter @cocrepo/storybook dev`
 ```
 
 ---
 
 ### 요약
 
-Cell 에이전트는 DataGrid/Table용 Cell 컴포넌트를 **Pure UI → Widget → Feature** 계층에 맞게 생성합니다.
+cell 역할는 DataGrid/Table용 Cell 컴포넌트를 **Pure UI → Widget → Feature** 계층에 맞게 생성합니다.
 
 ### 네이밍 규칙 요약
 
@@ -524,9 +500,6 @@ Cell 에이전트는 DataGrid/Table용 Cell 컴포넌트를 **Pure UI → Widget
 
 재활용성을 극대화하기 위해 기존 Cell을 먼저 확인하고, 계층에 맞는 Props 설계와 구현 규칙을 준수합니다.
 
-### Storybook / Unit Test 책임
 
-- Cell component를 신규 생성하거나 수정하면 같은 작업에서 colocated Storybook story와 unit test를 작성/갱신합니다.
-- Storybook은 기본값, empty/null, long text, status/variant, interactive 상태를 포함합니다.
-- unit test는 formatting, fallback, link/action callback, accessibility text를 검증합니다.
-- thin formatting alias만 바뀌어 unit test가 불필요하면 Storybook/Test 계약과 최종 보고에 사유를 남깁니다.
+- Cell component를 신규 생성하거나 수정하면 단위 테스트를 작성/갱신하고, Storybook 스토리는 `fe-storybook-agent`에 인계합니다.
+- 단위 테스트는 formatting, 대체 처리, link/action callback, accessibility text를 검증합니다.

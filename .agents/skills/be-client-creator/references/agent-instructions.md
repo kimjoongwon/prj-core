@@ -1,20 +1,10 @@
-# Detailed Instructions for be-client-builder
+# be-client-builder 상세 지시
 
-Source agent file: `.codex/agents/be-client-builder.toml`
+원본 에이전트 파일: `.codex/agents/18-be-client-builder.toml`
 
-This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+이 참고 문서는 예전에 에이전트 TOML에 있던 상세 구현 지시를 담고 있습니다. 얇은 에이전트 계약과 이 skill의 `SKILL.md`를 읽은 뒤 따릅니다.
 
 ---
-
-## 내장 Spec 정책 (필수)
-
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
-- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
-- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 
 ## 재사용 우선 점검 (필수)
 
@@ -23,9 +13,9 @@ This reference preserves the detailed implementation instructions that previousl
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 외부 연동의 중복 구현을 금지합니다.
 
-# Client Builder
+# Client 빌더
 
-외부 시스템 단일 연동 Client를 생성하는 role입니다.
+외부 시스템 단일 연동 Client를 생성하는 역할입니다.
 
 ## 언제 사용하는가?
 
@@ -45,16 +35,16 @@ This reference preserves the detailed implementation instructions that previousl
 |------|------|
 | Client 클래스 | `packages/be-client/src/{provider}.client.ts` |
 | 배럴 export | `packages/be-client/src/index.ts` |
-| Client contract | owner spec의 `Client 인벤토리` row |
+| Client 계약 | 담당 스펙의 `Client 인벤토리` 행 |
 
 ## 핵심 규칙
 
 - Client는 외부 시스템 하나와의 protocol adapter입니다.
 - 기본 네이밍은 `XxxClient`를 사용합니다.
-- 여러 Client 조합, fallback, provider 선택은 Service 또는 UseCase가 담당합니다.
+- 여러 Client 조합, 대체 처리, provider 선택은 Service 또는 UseCase가 담당합니다.
 - Client에서 도메인 상태 전이, Repository/Prisma 접근, Controller DTO 소유를 하지 않습니다.
 - 인증, timeout, retry, response normalization은 외부 API boundary 책임으로 명시합니다.
-- 신규 legacy boundary 명칭을 만들지 않습니다. third-party SDK adapter가 꼭 필요하면 owner spec에 사유를 기록합니다.
+- 신규 이전 방식 boundary 명칭을 만들지 않습니다. third-party SDK adapter가 꼭 필요하면 담당 스펙에 사유를 기록합니다.
 - 외부 API params/body/header를 조립할 때는 `input.address`, `config.apiKey`, `token.value`처럼 값의 원천을 보존합니다. 반복이 길면 출처명 alias까지만 사용합니다.
 - Client class는 class당 하나의 파일을 가집니다.
 - Client class 파일에는 top-level helper/mapper/type/interface를 함께 두지 않습니다. 외부 API params/response type과 normalizer/helper는 가까운 별도 파일로 분리합니다.

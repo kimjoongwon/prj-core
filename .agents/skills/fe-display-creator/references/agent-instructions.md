@@ -1,58 +1,47 @@
-# Shared Display-Area Primitive Instructions
+# Display 영역 primitive 공통 지시
 
-Source subagent files: `.codex/agents/fe-data-display-agent.toml`, `.codex/agents/fe-feedback-agent.toml`, `.codex/agents/fe-overlay-agent.toml`
+원본 하위 에이전트 파일: `.codex/agents/26-fe-data-display-agent.toml`, `.codex/agents/27-fe-feedback-agent.toml`, `.codex/agents/28-fe-overlay-agent.toml`
 
-This reference preserves shared implementation instructions for display-area primitive subagents. Follow it after reading the assigned thin subagent contract and creator skill.
+이 참고 문서는 display 영역 primitive 하위 에이전트가 함께 쓰는 구현 지시를 담고 있습니다. 배정된 얇은 하위 에이전트 계약과 creator skill을 읽은 뒤 따릅니다.
 
 ---
 
-## Platform Routing
+## 플랫폼 라우팅
 
-- 이 subagent는 대상 파일 경로를 기준으로 플랫폼을 먼저 결정합니다.
-- React Web target: `packages/fe-ui/**`, `apps/*/web/**` -> `Common` + `React Web` 섹션만 실행 규칙으로 적용합니다.
-- React Native target: `packages/fe-mo-ui/**`, `apps/mobile/**` -> `Common` + `React Native` 섹션만 실행 규칙으로 적용합니다.
+- 이 하위 에이전트는 대상 파일 경로를 기준으로 플랫폼을 먼저 결정합니다.
+- 웹 대상: `packages/fe-ui/**`, `apps/*/web/**` → `공통` + `웹 규칙` 섹션만 실행 규칙으로 적용합니다.
+- 모바일 대상: `packages/fe-mo-ui/**`, `apps/mobile/**` → `공통` + `모바일 규칙` 섹션만 실행 규칙으로 적용합니다.
 - 대상과 다른 플랫폼 섹션은 참고 자료로만 읽고, 금지/허용/출력 규칙을 실행 규칙으로 적용하지 않습니다.
-- 하나의 delivery가 Web과 React Native를 모두 수정해야 하면 route delivery spec의 step을 플랫폼별로 나누고 각 target에 맞는 섹션만 적용합니다.
+- 하나의 delivery가 Web과 React Native를 모두 수정해야 하면 라우트 딜리버리 스펙의 단계를 플랫폼별로 나누고 각 대상에 맞는 섹션만 적용합니다.
 
-## Common
+## 공통
 
-### 내장 Spec 정책 (필수)
+### 공통 실행 규칙
 
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 subagent 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
-- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `subagent 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
-- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/subagent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
+- 먼저 `플랫폼 라우팅`으로 현재 대상이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
+- 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 해당 플랫폼 섹션의 허용 파일/책임 범위 안에서만 작업합니다.
+- 소스 담당자가 다른 파일이나 다른 플랫폼 대상이 필요하면 직접 확장하지 말고 최종 보고에 인계 필요성을 요약합니다.
 
-### Common Execution Rules
+## 웹 규칙
 
-- 먼저 `Platform Routing`으로 현재 target이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
-- 승인된 service delivery spec과 생성된 route delivery spec의 해당 플랫폼 섹션의 허용 파일/책임 범위 안에서만 작업합니다.
-- 소스 담당가 다른 파일이나 다른 플랫폼 target이 필요하면 직접 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
-- Storybook/Test 책임은 source를 소유한 subagent가 함께 갱신하고, route/layout/store/backend-only step은 route delivery spec의 검증 계약을 따릅니다.
+### 웹 런타임 기준 (필수)
 
-## React Web
-
-### React Web Runtime Baseline (필수)
-
-- 이 섹션은 `packages/fe-ui/**`, `apps/*/web/**`, Next.js App Router `page.tsx`/`layout.tsx`/`route.meta.ts` target에만 적용합니다.
-- React Web 작업은 `@heroui/react` upstream source와 `@cocrepo/ui` export를 먼저 확인하고, DOM/CSS/Tailwind/HeroUI React 계약을 기준으로 판단합니다.
-- Next.js server/client component 경계, SSR, hydration, browser DOM API, React Aria/HeroUI React id 안정성 규칙은 React Web target에서만 적용합니다.
-- React Native target에서는 이 섹션의 DOM event, browser API, SSR/hydration, `@heroui/react`, `@cocrepo/ui` 규칙을 실행 규칙으로 적용하지 않습니다.
+- 이 섹션은 `packages/fe-ui/**`, `apps/*/web/**`, Next.js App Router `page.tsx`/`layout.tsx`/`route.meta.ts` 대상에만 적용합니다.
+- 웹 작업은 `@heroui/react` 원본 라이브러리 source와 `@cocrepo/ui` export를 먼저 확인하고, DOM/CSS/Tailwind/HeroUI React 계약을 기준으로 판단합니다.
+- Next.js server/client component 경계, SSR, hydration, browser DOM API, React Aria/HeroUI React id 안정성 규칙은 React Web 대상에서만 적용합니다.
+- 모바일 대상에서는 이 섹션의 DOM event, browser API, SSR/hydration, `@heroui/react`, `@cocrepo/ui` 규칙을 실행 규칙으로 적용하지 않습니다.
 
 ### 재사용 우선 점검 (필수)
 
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
-- Display 후보는 `@cocrepo/ui` export만 보지 말고 upstream `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
+- Display 후보는 `@cocrepo/ui` export만 보지 말고 원본 라이브러리 `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - `@heroui/react`에 존재하지만 `@cocrepo/ui`에 아직 없는 display component는 custom 구현이 아니라 thin wrapper/re-export/alias 추가 대상으로 구현합니다.
 - `Button`, `Card`, `Chip`, `Avatar`, `Badge`, `Skeleton`, `Progress`, `Spinner`, `Tooltip`, `Table`, `Tabs` 등으로 표현 가능한 UI를 raw `div`/`span`/`button`/`table` + className 조합으로 재구현하지 않습니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
-### Display 컴포넌트 subagent
+### Display 컴포넌트 하위 에이전트
 
 당신은 **Display UI 컴포넌트**를 현재 `packages/fe-ui/src/display/` 레이어에 생성하는 전문가입니다. 상태 없는(stateless) 순수 디자인 컴포넌트만 만듭니다.
 
@@ -80,14 +69,12 @@ This reference preserves shared implementation instructions for display-area pri
 | ------------------- | :--: | -------------------- |
 | 컴포넌트명          |  ✅  | 생성할 컴포넌트 이름 |
 | Props 정의          |  ✅  | 타입과 설명          |
-| Storybook 필요 여부 |  ⚪  | 기본값: 필요         |
 
 ### 출력
 
 | 항목          | 경로                                                      |
 | ------------- | --------------------------------------------------------- |
 | 메인 컴포넌트 | `packages/fe-ui/src/display/[Name]/[Name].tsx`         |
-| Storybook     | `packages/fe-ui/src/display/[Name]/[Name].stories.tsx` |
 | barrel export | `packages/fe-ui/src/display/[Name]/index.ts`           |
 | 상위 barrel   | `packages/fe-ui/src/display/index.ts` (추가)           |
 
@@ -95,14 +82,13 @@ This reference preserves shared implementation instructions for display-area pri
 
 ### 3. 핵심 규칙
 
-### ✅ Do
+### ✅ 권장
 
 | 규칙                     | 설명                                         |
 | ------------------------ | -------------------------------------------- |
 | **HeroUI 우선 확인**     | 구현 전에 HeroUI에 동일/비슷한 컴포넌트 확인 |
 | **Pure Component**       | 오직 Props를 받아 렌더링만                   |
 | **이벤트는 콜백으로**    | onClick, onChange 등은 Props로 받음          |
-| **Storybook 필수**       | 다양한 variants 표현                         |
 | **CVA 스타일링**         | 타입 안전한 variant 관리                     |
 | **라이브러리 타입 기반** | HeroUI 래핑 시 기존 타입 상속/확장           |
 
@@ -113,7 +99,7 @@ This reference preserves shared implementation instructions for display-area pri
 3. 기능이 부족하면 **기존 UI 컴포넌트를 업그레이드**합니다.
 4. 이름만 다른 중복 UI 컴포넌트 생성은 금지합니다.
 
-### ❌ Don't
+### ❌ 금지
 
 | 금지 사항                                          | 이유                                                              |
 | -------------------------------------------------- | ----------------------------------------------------------------- |
@@ -150,7 +136,6 @@ HeroUI 문서를 확인하여 동일/비슷한 컴포넌트가 있는지 검사:
 - prop1: type (설명)
 - prop2?: type (optional, 설명)
 
-**Storybook:** 필요 | 불필요
 **경로:** packages/fe-ui/src/display/[ComponentName]/[ComponentName].tsx
 ---
 ```
@@ -160,7 +145,6 @@ HeroUI 문서를 확인하여 동일/비슷한 컴포넌트가 있는지 검사:
 ```
 packages/fe-ui/src/display/[ComponentName]/
 ├── [ComponentName].tsx         # 메인 컴포넌트
-├── [ComponentName].stories.tsx # Storybook
 └── index.ts                    # barrel export
 
 # ⚠️ 컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성 금지!
@@ -267,10 +251,8 @@ export interface AvatarProps extends Pick<
 }
 ```
 
-### 5.4 Storybook
 
 ```tsx
-import type { Meta, StoryObj } from "@storybook/react";
 import { [ComponentName] } from "./[ComponentName]";
 
 const meta: Meta<typeof [ComponentName]> = {
@@ -280,15 +262,12 @@ const meta: Meta<typeof [ComponentName]> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof [ComponentName]>;
 
-export const Default: Story = {
   args: {
     children: "Example",
   },
 };
 
-export const Variant: Story = {
   args: {
     children: "Variant Example",
     className: "bg-blue-500 text-white",
@@ -311,20 +290,19 @@ export type { [ComponentName]Props } from "./[ComponentName]";
 - [ ] 기존 UI 컴포넌트 검색 완료 (`rg --files packages/fe-ui/src/display`)
 - [ ] 기존 컴포넌트 재사용 가능 여부 판단 및 결과 기록
 - [ ] 기능 부족 시 기존 UI 컴포넌트 업그레이드로 처리
-- [ ] 허용 owner spec에 반영
+- [ ] 허용 담당 스펙에 반영
 - [ ] 내부 상태(useState 등) 없음
 - [ ] Side Effect 없음
 - [ ] 이벤트는 콜백으로만 처리
 - [ ] 라이브러리 타입 기반 Props 설계 (extends/Omit/Pick)
 - [ ] CVA로 variant 정의
-- [ ] Storybook 스토리 생성됨 (최소 2개 variant)
 - [ ] Props 인터페이스 export
 - [ ] index.ts에서 export
 - [ ] ui/index.ts에 barrel export 추가
 
 ---
 
-### 7. 연관 subagent
+### 7. 연관 하위 에이전트
 
 ### 컴포넌트 계층 구조
 
@@ -333,24 +311,24 @@ Pure UI → Widget → Feature → Page
 (최소 단위)   (UI 조합)   (비즈니스 로직)   (화면)
 ```
 
-### 선행 subagent
+### 선행 하위 에이전트
 
-| subagent                | 관계                                  |
+| 하위 에이전트                | 관계                                  |
 | ----------------------- | ------------------------------------- |
 | /design-analyze (Skill) | Figma 분석 후 필요한 UI 컴포넌트 식별 |
-| orch-delivery | owner spec에서 필요한 display UI 요소 도출 |
+| orch-delivery | 담당 스펙에서 필요한 display UI 요소 도출 |
 
-### 후행 subagent
+### 후행 하위 에이전트
 
-| subagent              | 관계                                      |
+| 하위 에이전트              | 관계                                      |
 | --------------------- | ----------------------------------------- |
 | **fe-widget-agent** | 생성된 UI 컴포넌트를 조합하여 Widget 생성 |
 | fe-feature-agent    | Widget과 함께 Feature 컴포넌트에서 사용   |
 | fe-route-agent       | 최종 Page에서 활용                        |
 
-### 관련 subagent
+### 관련 하위 에이전트
 
-| subagent                   | 관계                              |
+| 하위 에이전트                   | 관계                              |
 | -------------------------- | --------------------------------- |
 | fe-action-agent / fe-input-agent / fe-selection-agent / fe-navigation-agent | action/input/selection/navigation leaf primitive 담당 |
 
@@ -364,7 +342,7 @@ Pure UI → Widget → Feature → Page
 packages/fe-ui/src/display/
 ```
 
-> **주의**: widget, feature, layout shell, page 컴포넌트는 이 subagent의 담당이 아닙니다.
+> **주의**: widget, feature, layout shell, page 컴포넌트는 이 하위 에이전트의 담당이 아닙니다.
 
 ---
 
@@ -491,7 +469,7 @@ export function useAdminLayout() {}
 
 ### 페이지 구조 재사용 기준
 
-**Web 페이지 셸과 헤더는 `Page`, `PageTitleBar`를 재사용하고, screen 표현 레이어는 `surface/ScreenSurface`와 `surface/SectionSurface`를 사용합니다. feature/widget local panel은 `surface/Surface`만 사용하고 제거된 detail/form legacy surface wrapper는 신규 web 호출부에서 사용하지 않습니다.**
+**Web 페이지 셸과 헤더는 `Page`, `PageTitleBar`를 재사용하고, screen 표현 레이어는 `surface/ScreenSurface`와 `surface/SectionSurface`를 사용합니다. feature/widget local panel은 `surface/Surface`만 사용하고 제거된 detail/form 이전 방식 surface wrapper는 신규 웹 호출부에서 사용하지 않습니다.**
 
 #### 컴포넌트 위치
 
@@ -529,7 +507,7 @@ packages/fe-ui/src/
 
 > **Note**: 새로운 display 컴포넌트는 페이지 래퍼나 헤더 패널을 다시 발명하지 말고 위 컴포넌트와 함께 조합되도록 설계하세요.
 > **Note**: `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 display가 아니라 widget입니다.
-> **Note**: 새로운 stack/spacer 조합은 screen에서만 사용하고, raw numeric gap보다 `page`, `section`, `block`, `inline`, `dense` 같은 semantic rhythm preset을 우선 사용합니다.
+> **Note**: 새로운 stack/spacer 조합은 screen에서만 사용하고, raw numeric gap보다 `page`, `섹션`, `block`, `inline`, `dense` 같은 semantic rhythm preset을 우선 사용합니다.
 
 ### 출력 형식
 
@@ -541,7 +519,6 @@ packages/fe-ui/src/
 **생성된 파일:**
 
 - `packages/fe-ui/src/display/[ComponentName]/[ComponentName].tsx`
-- `packages/fe-ui/src/display/[ComponentName]/[ComponentName].stories.tsx`
 - `packages/fe-ui/src/display/[ComponentName]/index.ts`
 - `packages/fe-ui/src/display/index.ts` (barrel export 추가)
 
@@ -556,50 +533,45 @@ packages/fe-ui/src/
 - ✅ 내부 상태 없음
 - ✅ Side Effect 없음
 - ✅ 이벤트는 콜백으로만 처리
-- ✅ Storybook 스토리 생성됨
 
 **확인 방법:**
 
-- Storybook: `pnpm --filter @cocrepo/storybook dev`
 ```
 
-### Storybook / Unit Test 책임
 
-- Display component를 신규 생성하거나 수정하면 같은 작업에서 colocated Storybook story와 unit test를 작성/갱신합니다.
-- Storybook은 기본 상태와 주요 variant/size/tone/long text 상태를 포함합니다.
-- unit test는 렌더링, 접근성 role/text, formatting/variant branch를 검증합니다.
-- thin re-export만 바뀌어 unit test가 불필요하면 Storybook/Test 계약과 최종 보고에 사유를 남깁니다.
+- Display component를 신규 생성하거나 수정하면 단위 테스트를 작성/갱신하고, Storybook 스토리는 `fe-storybook-agent`에 인계합니다.
+- 단위 테스트는 렌더링, 접근성 역할/text, formatting/variant 분기를 검증합니다.
 
 ---
-## React Native
+## 모바일 규칙
 
-### React Native Runtime Baseline (필수)
+### 모바일 런타임 기준 (필수)
 
-- 이 섹션은 `packages/fe-mo-ui/**`, `apps/mobile/**`, Expo Router route/`_layout.tsx` target에만 적용합니다.
+- 이 섹션은 `packages/fe-mo-ui/**`, `apps/mobile/**`, Expo Router route/`_layout.tsx` 대상에만 적용합니다.
 - 작업 전에 `https://heroui.com/llms-patterns.txt`를 열어 HeroUI Native Composition/Styling/Provider/Portal 패턴을 확인합니다.
-- React Native 작업은 `heroui-native/*` upstream source와 `@cocrepo/mo-ui` export를 먼저 확인하고, native callback/gesture/portal/provider 계약을 기준으로 판단합니다.
+- 모바일 작업은 `heroui-native/*` 원본 라이브러리 source와 `@cocrepo/mo-ui` export를 먼저 확인하고, native callback/gesture/portal/provider 계약을 기준으로 판단합니다.
 - 사용자 노출 텍스트는 `@cocrepo/mo-ui`의 `Text` primitive를 사용합니다. `react-native`의 `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 구현 내부에서만 허용합니다.
 - compound/action primitive가 문자열 children을 받으면 wrapper 내부에서 `Text`로 정규화하고 HeroUI Native에 raw string children을 그대로 넘기지 않습니다.
 - HeroUI Native compound wrapper는 return-only re-export로 끝내지 않고, `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` 같은 의미 있는 props와 dot-slot escape hatch를 함께 유지합니다.
 - StyleSheet 금지: 신규/수정 UI는 `StyleSheet`/`StyleSheet.create` 대신 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용합니다.
-- DOM 금지: DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, browser-only fallback, react-native-web 대응 코드를 React Native target에 넣지 않습니다.
-- React Web target에서는 이 섹션의 `heroui-native`, `@cocrepo/mo-ui`, Expo/native runtime 규칙을 실행 규칙으로 적용하지 않습니다.
+- DOM 금지: DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, browser-only 대체 처리, react-native-web 대응 코드를 React Native 대상에 넣지 않습니다.
+- 웹 대상에서는 이 섹션의 `heroui-native`, `@cocrepo/mo-ui`, Expo/native 런타임 규칙을 실행 규칙으로 적용하지 않습니다.
 
-### Mobile Data Display Scope
+### 모바일 Data Display 범위
 
 ### 재사용 우선 점검 (필수)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/data-display`, `surface`, `design-system/provider`, `layout`을 먼저 검색합니다.
 - 신규 추가 전에 `heroui-native/*` re-export 만으로 해결 가능한지 먼저 판단합니다.
-- upstream 후보는 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source까지 확인합니다.
-- thin wrapper 로 충분하면 RN 전용 커스텀 구현을 만들지 않습니다.
+- 원본 라이브러리 후보는 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source까지 확인합니다.
+- thin wrapper로 충분하면 RN 전용 커스텀 구현을 만들지 않습니다.
 - 동일 책임의 중복 wrapper 를 금지합니다.
 - `Card`, `Surface`, `Avatar`, `Chip`, `ListGroup`, `Separator`, `ScrollShadow` 등으로 표현 가능한 표시/컨테이너 UI를 raw `View`/`Text` + `tv` 조합으로 재구현하지 않습니다.
 - 기존 data-display/surface/layout leaf가 80% 이상 맞으면 새 컴포넌트를 만들지 말고 기존 leaf를 확장하고 호출부를 함께 맞춥니다.
 
-### Mobile Data Display Subagent
+### 모바일 Data Display 하위 에이전트
 
-React Native / Expo Native 기준의 data-display component contract 를 `packages/fe-mo-ui`에 생성하거나 정리하는 전문가입니다.
+React Native / Expo Native 기준의 data-display 컴포넌트 계약을 `packages/fe-mo-ui`에 생성하거나 정리하는 전문가입니다.
 
 ### 범위
 
@@ -623,71 +595,69 @@ React Native / Expo Native 기준의 data-display component contract 를 `packag
 - `packages/fe-mo-ui/src/layout/SubMenu/**`
 - `packages/fe-mo-ui/src/design-system/portal/**`
 
-Feedback leaf 는 `fe-feedback-agent`, Menu/SubMenu leaf 는 `fe-menu-agent`,
-screen-level visual composition 은 `fe-screen-agent`가 소유합니다.
+Feedback leaf는 `fe-feedback-agent`, Menu/SubMenu leaf는 `fe-menu-agent`,
+screen-level 시각 composition 은 `fe-screen-agent`가 소유합니다.
 
 ### 핵심 원칙
 
 - 기본 구현은 `heroui-native/*` 계약 재노출입니다.
-- upstream HeroUI Native에 존재하지만 `@cocrepo/mo-ui`에 아직 없는 data-display/surface/layout/provider 계열은 custom component가 아니라 thin re-export/alias 추가 대상으로 구현합니다.
-- custom data-display 구현은 upstream과 기존 leaf가 책임을 커버하지 못하는 경우에만 허용하며, 보고에 배제한 후보와 이유를 적습니다.
-- `data-display`는 값/상태를 보여주는 표시 primitive 를 소유합니다.
+- 원본 라이브러리 HeroUI Native에 존재하지만 `@cocrepo/mo-ui`에 아직 없는 data-display/surface/layout/provider 계열은 custom component가 아니라 thin re-export/alias 추가 대상으로 구현합니다.
+- custom data-display 구현은 원본 라이브러리과 기존 leaf가 책임을 커버하지 못하는 경우에만 허용하며, 보고에 배제한 후보와 이유를 적습니다.
+- `data-display`는 값/상태를 보여주는 표시 primitive를 소유합니다.
 - `surface`와 `design-system/provider`는 data-display 계열 primitive 와 함께 다룹니다.
-- `design-system/portal`은 overlay primitive contract 이므로 `fe-overlay-agent`가 소유합니다.
+- `design-system/portal`은 overlay primitive 계약 이므로 `fe-overlay-agent`가 소유합니다.
 - `DesignSystemProvider`는 `heroui-native/provider`를 프로젝트 이름으로 재노출하는 형태를 우선합니다.
-- `Surface`는 theme/elevation 정책을 담은 앱 로직이 아니라 upstream 공개 계약 재정리에 집중합니다.
+- `Surface`는 theme/elevation 정책을 담은 앱 로직이 아니라 원본 라이브러리 공개 계약 재정리에 집중합니다.
 - 스타일이 필요한 경우 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용하고 `StyleSheet`/`StyleSheet.create`는 만들지 않습니다.
 - `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
 - 웹 DOM, `@heroui/react`, Tailwind DOM class, CVA 전제는 금지합니다.
-- Expo Web/react-native-web 호환 분기나 web-only fallback을 추가하지 않습니다.
+- Expo Web/react-native-web 호환 분기나 web-only 대체 처리를 추가하지 않습니다.
 - leaf 폴더 안에는 기본적으로 `index.ts`만 둡니다.
-- Spec 정책상 모바일 UI leaf에는 planning spec을 만들지 않습니다.
+- Spec 정책상 모바일 UI leaf에는 기획 스펙을 만들지 않습니다.
 
 ### Do
 
-- upstream 공개 타입을 `export type *` 또는 별칭으로 함께 재노출합니다.
+- 원본 라이브러리 공개 타입을 `export type *` 또는 별칭으로 함께 재노출합니다.
 - 상위 barrel 을 같이 갱신합니다.
-- `apps/mobile/src/app/_layout.tsx` 소비 관점과 충돌하지 않게 provider contract 를 유지합니다.
-- 단순 section/card/surface/summary frame은 먼저 `Card`/`Surface`/`ListGroup` 조합으로 해결합니다.
+- `apps/mobile/src/app/_layout.tsx` 소비 관점과 충돌하지 않게 provider 계약을 유지합니다.
+- 단순 섹션/card/surface/summary frame은 먼저 `Card`/`Surface`/`ListGroup` 조합으로 해결합니다.
 
-### Don't
+### 금지
 
 - `packages/fe-ui/**`나 웹 `display/layout` 규칙을 그대로 복사하지 않습니다.
-- feedback/overlay/menu ownership 을 이 subagent 안에 섞지 않습니다.
-- route/screen/store ownership 을 이 subagent 안에 섞지 않습니다.
+- 피드백/overlay/menu ownership을 이 하위 에이전트 안에 섞지 않습니다.
+- route/screen/store ownership을 이 하위 에이전트 안에 섞지 않습니다.
 
 ### 보고 포맷
 
 - 수정 leaf 경로
-- 사용한 upstream `heroui-native/*` 모듈
+- 사용한 원본 라이브러리 `heroui-native/*` 모듈
 - 재사용한 기존 component 또는 신규 구현이 필요한 이유
 - 포함한 추가 공개 타입/별칭
 - 함께 갱신한 배럴 경로
 
-### Storybook / Unit Test 책임
 
-- Data-display/surface/layout component를 신규 생성하거나 수정하면 같은 작업에서 mobile Storybook story와 unit test를 작성/갱신합니다.
-- Storybook은 ready, empty, long text, selected/disabled, tone/elevation/spacing variant를 포함합니다.
-- unit test는 rendering, fallback, formatting, variant branch, interaction이 있으면 callback guard를 검증합니다.
-- thin re-export/alias만 바뀌어 unit test가 불필요하면 owner spec과 최종 보고에 사유를 남깁니다.
+- Data-display/surface/layout component를 신규 생성하거나 수정하면 모바일 단위 테스트를 작성/갱신하고, Storybook 스토리는 `fe-storybook-agent`에 인계합니다.
+- 단위 테스트는 rendering, 대체 처리, formatting, variant 분기, interaction이 있으면 callback guard를 검증합니다.
+- thin re-export/alias만 바뀌어 단위 테스트가 불필요하면 담당 스펙과 최종 보고에 사유를 남깁니다.
 
 ---
 
-### Mobile Feedback Scope
+### 모바일 Feedback 범위
 
 ### 재사용 우선 점검 (필수)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/feedback`, overlay 관련 `layout` leaf, `design-system/portal`을 먼저 검색합니다.
 - 신규 추가 전에 `heroui-native/*` re-export 만으로 해결 가능한지 먼저 판단합니다.
-- upstream 후보는 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source까지 확인합니다.
-- thin wrapper 로 충분하면 RN 전용 커스텀 구현을 만들지 않습니다.
+- 원본 라이브러리 후보는 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source까지 확인합니다.
+- thin wrapper로 충분하면 RN 전용 커스텀 구현을 만들지 않습니다.
 - 동일 책임의 중복 wrapper 를 금지합니다.
-- `Alert`, `Toast`, `Spinner`, `Skeleton`, `BottomSheet`, `Dialog`, `Popover` 및 기존 `StatusFeedback`으로 표현 가능한 feedback UI를 raw `View`/`Text`/`Pressable` + `tv` 조합으로 재구현하지 않습니다.
-- 기존 feedback/overlay leaf가 80% 이상 맞으면 새 컴포넌트를 만들지 말고 기존 leaf를 확장하고 호출부를 함께 맞춥니다.
+- `Alert`, `Toast`, `Spinner`, `Skeleton`, `BottomSheet`, `Dialog`, `Popover` 및 기존 `StatusFeedback`으로 표현 가능한 피드백 UI를 raw `View`/`Text`/`Pressable` + `tv` 조합으로 재구현하지 않습니다.
+- 기존 피드백/overlay leaf가 80% 이상 맞으면 새 컴포넌트를 만들지 말고 기존 leaf를 확장하고 호출부를 함께 맞춥니다.
 
-### Mobile Feedback Subagent
+### 모바일 Feedback 하위 에이전트
 
-React Native / Expo Native 기준의 feedback/status/overlay feedback component contract 를 `packages/fe-mo-ui`에 생성하거나 정리하는 전문가입니다.
+React Native / Expo Native 기준의 피드백/status/overlay 피드백 컴포넌트 계약을 `packages/fe-mo-ui`에 생성하거나 정리하는 전문가입니다.
 
 ### 범위
 
@@ -705,46 +675,44 @@ React Native / Expo Native 기준의 feedback/status/overlay feedback component 
 - `packages/fe-mo-ui/src/layout/Menu/**`
 - `packages/fe-mo-ui/src/layout/SubMenu/**`
 
-Data-display/surface/provider leaf 는 `fe-data-display-agent`, feedback leaf 는 `fe-feedback-agent`, overlay/portal leaf 는 `fe-overlay-agent`, Menu/SubMenu leaf 는 `fe-menu-agent`가 소유합니다.
+Data-display/surface/provider leaf는 `fe-data-display-agent`, feedback leaf는 `fe-feedback-agent`, overlay/portal leaf는 `fe-overlay-agent`, Menu/SubMenu leaf는 `fe-menu-agent`가 소유합니다.
 
 ### 핵심 원칙
 
 - 기본 구현은 `heroui-native/*` 계약 재노출입니다.
-- upstream HeroUI Native에 존재하지만 `@cocrepo/mo-ui`에 아직 없는 feedback/overlay 계열은 custom feedback이 아니라 thin re-export/alias 추가 대상으로 구현합니다.
-- custom feedback 구현은 upstream과 기존 leaf가 책임을 커버하지 못하는 경우에만 허용하며, 보고에 배제한 후보와 이유를 적습니다.
-- `feedback`은 사용자에게 상태, 진행, 경고, 일시적 메시지를 전달하는 primitive 를 소유합니다.
-- overlay feedback 은 Portal/gesture/presentation contract 를 유지하되 route/screen state ownership 을 포함하지 않습니다.
+- 원본 라이브러리 HeroUI Native에 존재하지만 `@cocrepo/mo-ui`에 아직 없는 피드백/overlay 계열은 custom 피드백이 아니라 thin re-export/alias 추가 대상으로 구현합니다.
+- custom 피드백 구현은 원본 라이브러리과 기존 leaf가 책임을 커버하지 못하는 경우에만 허용하며, 보고에 배제한 후보와 이유를 적습니다.
+- `Feedback`은 사용자에게 상태, 진행, 경고, 일시적 메시지를 전달하는 primitive를 소유합니다.
+- overlay 피드백은 Portal/gesture/presentation 계약을 유지하되 route/screen 상태 ownership을 포함하지 않습니다.
 - 스타일이 필요한 경우 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용하고 `StyleSheet`/`StyleSheet.create`는 만들지 않습니다.
 - `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
 - 웹 DOM, `@heroui/react`, Tailwind DOM class, CVA 전제는 금지합니다.
-- Expo Web/react-native-web 호환 분기나 web-only fallback을 추가하지 않습니다.
+- Expo Web/react-native-web 호환 분기나 web-only 대체 처리를 추가하지 않습니다.
 - leaf 폴더 안에는 기본적으로 `index.ts`만 둡니다.
-- Spec 정책상 모바일 UI leaf에는 planning spec을 만들지 않습니다.
+- Spec 정책상 모바일 UI leaf에는 기획 스펙을 만들지 않습니다.
 
 ### Do
 
-- upstream 공개 타입을 `export type *` 또는 별칭으로 함께 재노출합니다.
+- 원본 라이브러리 공개 타입을 `export type *` 또는 별칭으로 함께 재노출합니다.
 - 상위 barrel 을 같이 갱신합니다.
-- Portal 의존이 있는 overlay leaf 는 `design-system/portal` wrapper와 충돌하지 않게 유지하고, Provider 의존은 `DesignSystemProvider`와 충돌하지 않게 유지합니다.
-- action이 포함된 feedback은 raw `Pressable` 대신 `Button`/`LinkButton` 같은 action primitive를 조합합니다.
+- Portal 의존이 있는 overlay leaf는 `design-system/portal` wrapper와 충돌하지 않게 유지하고, Provider 의존은 `DesignSystemProvider`와 충돌하지 않게 유지합니다.
+- action이 포함된 피드백은 raw `Pressable` 대신 `Button`/`LinkButton` 같은 action primitive를 조합합니다.
 
-### Don't
+### 금지
 
-- data-display/surface/provider ownership 을 이 subagent 안에 섞지 않습니다.
+- data-display/surface/provider ownership을 이 하위 에이전트 안에 섞지 않습니다.
 - 메뉴 시스템 leaf 를 함께 수정하지 않습니다.
-- route/screen/store ownership 을 이 subagent 안에 섞지 않습니다.
+- route/screen/store ownership을 이 하위 에이전트 안에 섞지 않습니다.
 
 ### 보고 포맷
 
 - 수정 leaf 경로
-- 사용한 upstream `heroui-native/*` 모듈
+- 사용한 원본 라이브러리 `heroui-native/*` 모듈
 - 재사용한 기존 component 또는 신규 구현이 필요한 이유
 - 포함한 추가 공개 타입/별칭
 - 함께 갱신한 배럴 경로
 
-### Storybook / Unit Test 책임
 
-- Feedback/overlay component를 신규 생성하거나 수정하면 같은 작업에서 mobile Storybook story와 unit test를 작성/갱신합니다.
-- Storybook은 success/error/warning/loading, open/closed, action/no-action, long text 상태를 포함합니다.
-- unit test는 state rendering, action callback, dismiss/close callback, disabled/loading branch를 검증합니다.
-- thin re-export/alias만 바뀌어 unit test가 불필요하면 owner spec과 최종 보고에 사유를 남깁니다.
+- Feedback/overlay component를 신규 생성하거나 수정하면 모바일 단위 테스트를 작성/갱신하고, Storybook 스토리는 `fe-storybook-agent`에 인계합니다.
+- 단위 테스트는 상태 rendering, action callback, dismiss/close callback, disabled/loading 분기를 검증합니다.
+- thin re-export/alias만 바뀌어 단위 테스트가 불필요하면 담당 스펙과 최종 보고에 사유를 남깁니다.

@@ -1,51 +1,41 @@
-# Detailed Instructions for fe-menu-agent
+# fe-menu-agent 상세 지시
 
-Source agent file: `.codex/agents/fe-menu-agent.toml`
+원본 에이전트 파일: `.codex/agents/40-fe-menu-agent.toml`
 
-This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+이 참고 문서는 예전에 에이전트 TOML에 있던 상세 구현 지시를 담고 있습니다. 얇은 에이전트 계약과 이 skill의 `SKILL.md`를 읽은 뒤 따릅니다.
 
 ---
 
-## Platform Routing
+## 플랫폼 라우팅
 
-- 이 role은 대상 파일 경로를 기준으로 플랫폼을 먼저 결정합니다.
-- React Web target: `packages/fe-ui/**`, `apps/*/web/**` -> `Common` + `React Web` 섹션만 실행 규칙으로 적용합니다.
-- React Native target: `packages/fe-mo-ui/**`, `apps/mobile/**` -> `Common` + `React Native` 섹션만 실행 규칙으로 적용합니다.
+- 이 역할은 대상 파일 경로를 기준으로 플랫폼을 먼저 결정합니다.
+- 웹 대상: `packages/fe-ui/**`, `apps/*/web/**` → `공통` + `웹 규칙` 섹션만 실행 규칙으로 적용합니다.
+- 모바일 대상: `packages/fe-mo-ui/**`, `apps/mobile/**` → `공통` + `모바일 규칙` 섹션만 실행 규칙으로 적용합니다.
 - 대상과 다른 플랫폼 섹션은 참고 자료로만 읽고, 금지/허용/출력 규칙을 실행 규칙으로 적용하지 않습니다.
-- 하나의 delivery가 Web과 React Native를 모두 수정해야 하면 route delivery spec의 step을 플랫폼별로 나누고 각 target에 맞는 섹션만 적용합니다.
+- 하나의 delivery가 Web과 React Native를 모두 수정해야 하면 라우트 딜리버리 스펙의 단계를 플랫폼별로 나누고 각 대상에 맞는 섹션만 적용합니다.
 
-## Common
+## 공통
 
-### 내장 Spec 정책 (필수)
+### 공통 실행 규칙
 
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
-- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
-- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
+- 먼저 `플랫폼 라우팅`으로 현재 대상이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
+- 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 해당 플랫폼 섹션의 허용 파일/책임 범위 안에서만 작업합니다.
+- 소스 담당자가 다른 파일이나 다른 플랫폼 대상이 필요하면 직접 확장하지 말고 최종 보고에 인계 필요성을 요약합니다.
+- Storybook 스토리는 `fe-storybook-agent`가 맡습니다. 소스 담당 에이전트는 단위 테스트와 소스 계약만 맡고, Storybook 필요 시 spec 또는 최종 보고로 인계합니다.
 
-### Common Execution Rules
+## 웹 규칙
 
-- 먼저 `Platform Routing`으로 현재 target이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
-- 승인된 service delivery spec과 생성된 route delivery spec의 해당 플랫폼 섹션의 허용 파일/책임 범위 안에서만 작업합니다.
-- 소스 담당가 다른 파일이나 다른 플랫폼 target이 필요하면 직접 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
-- Storybook/Test 책임은 source를 소유한 agent가 함께 갱신하고, route/layout/store/backend-only step은 route delivery spec의 검증 계약을 따릅니다.
+### 웹 런타임 기준 (필수)
 
-## React Web
-
-### React Web Runtime Baseline (필수)
-
-- 이 섹션은 `packages/fe-ui/**`, `apps/*/web/**`, Next.js App Router `page.tsx`/`layout.tsx`/`route.meta.ts` target에만 적용합니다.
-- React Web 작업은 `@heroui/react` upstream source와 `@cocrepo/ui` export를 먼저 확인하고, DOM/CSS/Tailwind/HeroUI React 계약을 기준으로 판단합니다.
-- Next.js server/client component 경계, SSR, hydration, browser DOM API, React Aria/HeroUI React id 안정성 규칙은 React Web target에서만 적용합니다.
-- React Native target에서는 이 섹션의 DOM event, browser API, SSR/hydration, `@heroui/react`, `@cocrepo/ui` 규칙을 실행 규칙으로 적용하지 않습니다.
+- 이 섹션은 `packages/fe-ui/**`, `apps/*/web/**`, Next.js App Router `page.tsx`/`layout.tsx`/`route.meta.ts` 대상에만 적용합니다.
+- 웹 작업은 `@heroui/react` 원본 라이브러리 source와 `@cocrepo/ui` export를 먼저 확인하고, DOM/CSS/Tailwind/HeroUI React 계약을 기준으로 판단합니다.
+- Next.js server/client component 경계, SSR, hydration, browser DOM API, React Aria/HeroUI React id 안정성 규칙은 React Web 대상에서만 적용합니다.
+- 모바일 대상에서는 이 섹션의 DOM event, browser API, SSR/hydration, `@heroui/react`, `@cocrepo/ui` 규칙을 실행 규칙으로 적용하지 않습니다.
 
 ### 재사용 우선 점검 (필수)
 
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
-- Menu/navigation 후보는 `@cocrepo/ui` export만 보지 말고 upstream `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
+- Menu/navigation 후보는 `@cocrepo/ui` export만 보지 말고 원본 라이브러리 `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - `Tabs`, `Dropdown`, `Menu`, `Breadcrumbs`, `Button`, `Link` 등으로 표현 가능한 메뉴/탭/액션 UI를 raw `div`/`button`/`a` + className 조합으로 재구현하지 않습니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
@@ -53,7 +43,7 @@ This reference preserves the detailed implementation instructions that previousl
 
 ### 메뉴 에이전트
 
-Admin/Dashboard 앱의 **메뉴 시스템 컴포넌트**(Sidebar, BottomTab, FAB, Tabs)와 메뉴 contract를 생성합니다.
+Admin/Dashboard 앱의 **메뉴 시스템 컴포넌트**(Sidebar, BottomTab, FAB, Tabs)와 메뉴 계약을 생성합니다.
 실제 `apps/**/layout.tsx` 파일 작성은 `fe-route-layout-agent` 책임이며, 이 에이전트는 route layout이 소비할 메뉴/탭 구성과 재사용 메뉴 UI를 제공합니다.
 
 ---
@@ -152,7 +142,6 @@ Admin/Dashboard 앱의 **메뉴 시스템 컴포넌트**(Sidebar, BottomTab, FAB
 |------|------|------|
 | `/{domain}` | 전체 (기본값) | /users |
 | `/{domain}/{status}` | 상태별 필터 | /users/active |
-| `/{domain}/{parent}/{status}` | 중첩 상태 | /notifications/history/sms |
 
 ### pathParam 방식의 장점
 
@@ -171,7 +160,7 @@ app/(admin)/
 │   │   └── page.tsx                → /{domain}/{status}
 │   ├── {action}/
 │   │   └── page.tsx                → /{domain}/{action}
-│   └── layout.tsx                  → route skeleton + 탭 contract 소비 (`fe-route-layout-agent`)
+│   └── layout.tsx                  → route skeleton + 탭 계약 소비 (`fe-route-layout-agent`)
 ```
 
 ---
@@ -255,11 +244,11 @@ app/(admin)/
 ```prisma
 model User {
   status  UserStatus   // ← enum → 탭
-  role    Role @relation(...)  // ← relation → 중첩
+  역할    Role @relation(...)  // ← relation → 중첩
 }
 
 // /users/active    ← status enum 값
-// /users/:id/role  ← role relation 탐색
+// /users/:id/역할  ← 역할 relation 탐색
 ```
 
 ### 도메인별 메뉴 구조 예시
@@ -490,7 +479,7 @@ const showFab = visibleActions.length > 0;
 
 ### 8. 3depth 탭 구현 패턴
 
-### route layout에서 탭 contract 소비
+### route layout에서 탭 계약 소비
 
 3depth 탭은 route skeleton 안에서 렌더링합니다.
 다만 **실제 `layout.tsx` 파일 작성 책임은 `fe-route-layout-agent`** 에 있고, `fe-menu-agent`는 탭 데이터 구조와 `PageTabs` 같은 메뉴 컴포넌트를 제공합니다.
@@ -525,7 +514,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ### 책임 분리
 
-- `fe-menu-agent`: 메뉴 트리, 탭 contract, `PageTabs`/`BottomTab`/`SideNav`/`QuickActionFAB` 같은 feature와 route shell이 소비할 메뉴 widget 조합 규칙
+- `fe-menu-agent`: 메뉴 트리, 탭 계약, `PageTabs`/`BottomTab`/`SideNav`/`QuickActionFAB` 같은 feature와 route shell이 소비할 메뉴 widget 조합 규칙
 - `fe-route-layout-agent`: 실제 `layout.tsx` 파일에서 skeleton 조립
 - `fe-route-agent`: route skeleton 안의 실제 페이지 콘텐츠 구현
 
@@ -533,7 +522,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 1. 3depth 탭은 route `layout.tsx` skeleton 안에서 한 번만 렌더링합니다.
 2. `page.tsx`가 동일 탭을 다시 렌더링하면 안 됩니다.
-3. title/description/actions가 layout skeleton에 포함될지 page 콘텐츠에 남을지는 owner spec 계약을 따릅니다.
+3. title/description/actions가 layout skeleton에 포함될지 page 콘텐츠에 남을지는 담당 스펙 계약을 따릅니다.
 4. 활성 탭 판단이 client 상태를 필요로 하면 `PageTabs` 내부 feature/widget이 담당하고, route `layout.tsx` 자체는 서버 파일로 유지합니다.
 
 ---
@@ -700,9 +689,6 @@ const SideNav = observer(() => {
 
 **3depth (발송 내역):**
 - `/notifications/history` - 전체
-- `/notifications/history/sms` - SMS
-- `/notifications/history/email` - 이메일
-- `/notifications/history/push` - 푸시
 
 ---
 
@@ -921,45 +907,42 @@ const SideNav = observer(() => {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| orch-delivery | 선행 | 메뉴 경로/권한과 화면 경로 구조가 포함된 owner spec 참조 |
+| orch-delivery | 선행 | 메뉴 경로/권한과 화면 경로 구조가 포함된 담당 스펙 참조 |
 | fe-feature-agent | 관련 | 메뉴에 연결되는 Feature 컴포넌트 참조 |
 
-### Storybook / Unit Test 책임
 
-- Menu component를 신규 생성하거나 수정하면 같은 작업에서 Storybook story와 unit test를 작성/갱신합니다.
-- Storybook은 default, nested, selected, disabled, permission-hidden 상태를 포함합니다.
-- unit test는 item rendering, selected state, disabled guard, click/keyboard callback을 검증합니다.
-- route catalog만 바뀌는 경우에는 Storybook/Test 계약과 최종 보고에 불필요 사유를 남깁니다.
+- Menu component를 신규 생성하거나 수정하면 단위 테스트를 작성/갱신하고, Storybook 스토리는 `fe-storybook-agent`에 인계합니다.
+- 단위 테스트는 item rendering, selected 상태, disabled guard, click/keyboard callback을 검증합니다.
 
 ---
-## React Native
+## 모바일 규칙
 
-### React Native Runtime Baseline (필수)
+### 모바일 런타임 기준 (필수)
 
-- 이 섹션은 `packages/fe-mo-ui/**`, `apps/mobile/**`, Expo Router route/`_layout.tsx` target에만 적용합니다.
+- 이 섹션은 `packages/fe-mo-ui/**`, `apps/mobile/**`, Expo Router route/`_layout.tsx` 대상에만 적용합니다.
 - 작업 전에 `https://heroui.com/llms-patterns.txt`를 열어 HeroUI Native Composition/Styling/Provider/Portal 패턴을 확인합니다.
-- React Native 작업은 `heroui-native/*` upstream source와 `@cocrepo/mo-ui` export를 먼저 확인하고, native callback/gesture/portal/provider 계약을 기준으로 판단합니다.
+- 모바일 작업은 `heroui-native/*` 원본 라이브러리 source와 `@cocrepo/mo-ui` export를 먼저 확인하고, native callback/gesture/portal/provider 계약을 기준으로 판단합니다.
 - 사용자 노출 텍스트는 `@cocrepo/mo-ui`의 `Text` primitive를 사용합니다. `react-native`의 `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 구현 내부에서만 허용합니다.
 - compound/action primitive가 문자열 children을 받으면 wrapper 내부에서 `Text`로 정규화하고 HeroUI Native에 raw string children을 그대로 넘기지 않습니다.
 - HeroUI Native compound wrapper는 return-only re-export로 끝내지 않고, `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` 같은 의미 있는 props와 dot-slot escape hatch를 함께 유지합니다.
 - StyleSheet 금지: 신규/수정 UI는 `StyleSheet`/`StyleSheet.create` 대신 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용합니다.
-- DOM 금지: DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, browser-only fallback, react-native-web 대응 코드를 React Native target에 넣지 않습니다.
-- React Web target에서는 이 섹션의 `heroui-native`, `@cocrepo/mo-ui`, Expo/native runtime 규칙을 실행 규칙으로 적용하지 않습니다.
+- DOM 금지: DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, browser-only 대체 처리, react-native-web 대응 코드를 React Native 대상에 넣지 않습니다.
+- 웹 대상에서는 이 섹션의 `heroui-native`, `@cocrepo/mo-ui`, Expo/native 런타임 규칙을 실행 규칙으로 적용하지 않습니다.
 
-### Mobile Scope
+### 모바일 범위
 
 ### 재사용 우선 점검 (필수)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/layout/Menu`, `packages/fe-mo-ui/src/layout/SubMenu`, `apps/mobile`를 먼저 검색합니다.
 - 신규 추가 전에 `heroui-native/menu`, `heroui-native/sub-menu` 재노출로 해결 가능한지 먼저 판단합니다.
-- upstream 후보는 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source까지 확인합니다.
+- 원본 라이브러리 후보는 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source까지 확인합니다.
 - 동일 책임의 중복 메뉴 wrapper 를 금지합니다.
 - `Menu`, `SubMenu`로 표현 가능한 메뉴 UI를 raw `View`/`Text`/`Pressable` 목록이나 popover 조합으로 재구현하지 않습니다.
 - 기존 menu leaf가 80% 이상 맞으면 새 컴포넌트를 만들지 말고 기존 leaf를 확장하고 호출부를 함께 맞춥니다.
 
-### Mobile Menu Agent
+### 모바일 menu agent
 
-React Native / Expo Native 기준의 메뉴 primitive contract 를 `packages/fe-mo-ui/src/layout/Menu/**`, `packages/fe-mo-ui/src/layout/SubMenu/**`에 생성하거나 정리하는 전문가입니다.
+React Native / Expo Native 기준의 메뉴 primitive 계약을 `packages/fe-mo-ui/src/layout/Menu/**`, `packages/fe-mo-ui/src/layout/SubMenu/**`에 생성하거나 정리하는 전문가입니다.
 
 ### 범위
 
@@ -969,12 +952,12 @@ React Native / Expo Native 기준의 메뉴 primitive contract 를 `packages/fe-
 
 ### 핵심 원칙
 
-- 이 role 은 웹용 sidebar/path/menu contract 가 아니라 RN menu primitive 공개 계약을 다룹니다.
-- Expo Web/react-native-web 메뉴 contract는 지원 대상으로 추가하지 않습니다.
+- 이 역할 은 웹용 sidebar/path/menu 계약 가 아니라 RN menu primitive 공개 계약을 다룹니다.
+- Expo Web/react-native-web 메뉴 계약은 지원 대상으로 추가하지 않습니다.
 - Next.js App Router, route path 설계, 탭 URL 정책, admin menu constant 는 범위 밖입니다.
 - 기본 구현은 `heroui-native/menu`, `heroui-native/sub-menu` thin re-export 입니다.
-- upstream HeroUI Native에 존재하지만 `@cocrepo/mo-ui`에 아직 없는 menu 계열은 custom menu가 아니라 thin re-export/alias 추가 대상으로 구현합니다.
-- custom menu 구현은 upstream `heroui-native/*`와 기존 `@cocrepo/mo-ui` menu leaf가 명확히 감당하지 못하는 경우에만 허용합니다.
+- 원본 라이브러리 HeroUI Native에 존재하지만 `@cocrepo/mo-ui`에 아직 없는 menu 계열은 custom menu가 아니라 thin re-export/alias 추가 대상으로 구현합니다.
+- custom menu 구현은 원본 라이브러리 `heroui-native/*`와 기존 `@cocrepo/mo-ui` menu leaf가 명확히 감당하지 못하는 경우에만 허용합니다.
 - expo-router 소비자는 가능하지만, route ownership 은 `apps/mobile` 쪽에서 가져갑니다.
 - 스타일이 필요한 경우 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용하고 `StyleSheet`/`StyleSheet.create`는 만들지 않습니다.
 - `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
@@ -986,23 +969,21 @@ React Native / Expo Native 기준의 메뉴 primitive contract 를 `packages/fe-
 - `layout/index.ts`와 공개 export 를 함께 갱신합니다.
 - Menu/SubMenu 가 현재 thin wrapper 레이어라는 점을 유지합니다.
 
-### Don't
+### 금지
 
-- `packages/fe-ui/**` 메뉴 규칙이나 웹 route contract 를 복사하지 않습니다.
-- `BottomTab`, `FAB`, `Sidebar` 같은 higher-level navigation shell 을 이 role 안에 섞지 않습니다.
+- `packages/fe-ui/**` 메뉴 규칙이나 웹 route 계약을 복사하지 않습니다.
+- `BottomTab`, `FAB`, `Sidebar` 같은 higher-level navigation shell 을 이 역할 안에 섞지 않습니다.
 - `Accordion`, `Card`, `Dialog` 등 비메뉴 layout leaf 를 함께 소유하지 않습니다.
 
 ### 보고 포맷
 
 - 수정한 메뉴 leaf 경로
-- 사용한 upstream `heroui-native/*` 모듈
+- 사용한 원본 라이브러리 `heroui-native/*` 모듈
 - 재사용한 기존 menu leaf 또는 신규 구현이 필요한 이유
 - 변경한 공개 타입/별칭
 - 함께 갱신한 layout 배럴 경로
 
-### Storybook / Unit Test 책임
 
-- Menu/SubMenu component를 신규 생성하거나 수정하면 같은 작업에서 mobile Storybook story와 unit test를 작성/갱신합니다.
-- Storybook은 default, nested, selected, disabled, long label 상태를 포함합니다.
-- unit test는 item rendering, selected state, disabled guard, press callback을 검증합니다.
-- thin re-export/alias만 바뀌어 unit test가 불필요하면 owner spec과 최종 보고에 사유를 남깁니다.
+- Menu/SubMenu component를 신규 생성하거나 수정하면 모바일 단위 테스트를 작성/갱신하고, Storybook 스토리는 `fe-storybook-agent`에 인계합니다.
+- 단위 테스트는 item rendering, selected 상태, disabled guard, press callback을 검증합니다.
+- thin re-export/alias만 바뀌어 단위 테스트가 불필요하면 담당 스펙과 최종 보고에 사유를 남깁니다.

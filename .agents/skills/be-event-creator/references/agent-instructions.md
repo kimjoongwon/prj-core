@@ -1,20 +1,20 @@
-# Detailed Instructions for be-event-builder
+# be-event-builder 상세 지시
 
-Source agent file: `.codex/agents/be-event-builder.toml`
+원본 에이전트 파일: `.codex/agents/14-be-event-builder.toml`
 
-This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+이 참고 문서는 예전에 에이전트 TOML에 있던 상세 구현 지시를 담고 있습니다. 얇은 에이전트 계약과 이 skill의 `SKILL.md`를 읽은 뒤 따릅니다.
 
 ---
 
-# Event Builder
+# Event 빌더
 
-Nest CQRS Event message contract를 `@cocrepo/event`에 생성하는 role입니다. EventHandler와 Saga 구현은 `be-usecase-builder`가 소유합니다.
+Nest CQRS Event message 계약을 `@cocrepo/event`에 생성하는 역할입니다. EventHandler와 Saga 구현은 `be-usecase-builder`가 소유합니다.
 
 ## 언제 사용하는가?
 
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
-| 이미 발생한 도메인/application event contract 생성 | ✅ 사용 | `ReservationCreatedEvent` 같은 event message |
+| 이미 발생한 도메인/application event 계약 생성 | ✅ 사용 | `ReservationCreatedEvent` 같은 event message |
 | Event package barrel export 정리 | ✅ 사용 | domain barrel + package barrel |
 | EventHandler 구현 | ❌ 미사용 | `be-usecase-builder` 사용 |
 | Saga 구현 | ❌ 미사용 | `be-usecase-builder` 사용 |
@@ -38,7 +38,7 @@ Nest CQRS Event message contract를 `@cocrepo/event`에 생성하는 role입니�
 - Event payload는 `readonly params` 단일 객체를 기본으로 합니다.
 - Event class는 class당 하나의 파일을 가집니다.
 - Event class 파일에는 params/interface/type/helper를 함께 두지 않습니다. Event params는 별도 `{name}.params.ts` 파일로 분리합니다.
-- Event contract package는 Nest provider를 export하지 않습니다.
+- Event 계약 package는 Nest provider를 export하지 않습니다.
 - EventHandler에서 CommandBus를 호출해야 하는 흐름이면 EventHandler가 아니라 Saga로 분리해야 합니다.
 
 ## 템플릿

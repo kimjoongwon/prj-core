@@ -1,20 +1,10 @@
-# Detailed Instructions for be-seed-maker
+# be-seed-maker 상세 지시
 
-Source agent file: `.codex/agents/be-seed-maker.toml`
+원본 에이전트 파일: `.codex/agents/23-be-seed-maker.toml`
 
-This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+이 참고 문서는 예전에 에이전트 TOML에 있던 상세 구현 지시를 담고 있습니다. 얇은 에이전트 계약과 이 skill의 `SKILL.md`를 읽은 뒤 따릅니다.
 
 ---
-
-## 내장 Spec 정책 (필수)
-
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
-- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
-- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 
 
 ## 재사용 우선 점검 (필수)
@@ -50,13 +40,13 @@ Prisma 스키마에 맞는 현실적인 시드 데이터를 생성하는 전문�
 | | 도메인 컨텍스트 | 비즈니스 도메인 특성 (피트니스, 예약 등) |
 | **출력** | seed-data.ts | 시드 데이터 인터페이스 및 데이터 |
 | | seed.ts 업데이트 | 시드 실행 로직 (필요시) |
-| | reference-data definitions | `packages/be-prisma/src/reference-data/definitions/**/*.ts` 기준/권한/번역 seed contract |
+| | reference-data definitions | `packages/be-prisma/src/reference-data/definitions/**/*.ts` 기준/권한/번역 seed 계약 |
 
 ---
 
 ## 3. 핵심 규칙
 
-### ✅ Do
+### ✅ 권장
 
 1. **현실 세계와 연결된 데이터**
    ```typescript
@@ -85,12 +75,12 @@ Prisma 스키마에 맞는 현실적인 시드 데이터를 생성하는 전문�
    - CRUD 테스트용 데이터
    - 엣지 케이스 데이터
 
-6. **Reference-data contract 정합성**
-   - `packages/be-prisma/src/reference-data/definitions/**/*.ts`는 앱 기준 데이터, 권한 seed, legacy prune 대상을 소유합니다.
-   - 공유 catalog에서 제거된 menu/page subject는 현재 seed set에 다시 포함하지 않고 legacy prune 대상에만 둡니다.
-   - reference-data 변경 시 인접 `*.test.ts`가 current catalog 포함/legacy catalog 제외 관점을 검증해야 합니다.
+6. **Reference-data 계약 정합성**
+   - `packages/be-prisma/src/reference-data/definitions/**/*.ts`는 앱 기준 데이터, 권한 seed, 이전 방식 prune 대상을 소유합니다.
+   - 공유 catalog에서 제거된 menu/page subject는 현재 seed set에 다시 포함하지 않고 이전 방식 prune 대상에만 둡니다.
+   - reference-data 변경 시 인접 `*.test.ts`가 current catalog 포함/이전 방식 catalog 제외 관점을 검증해야 합니다.
 
-### ❌ Don't
+### ❌ 금지
 
 1. **추상적인 데이터 금지**
    ```typescript
@@ -166,7 +156,7 @@ export interface TaskSeedData {
   exercises: Array<{
     code: string;
     name: string;
-    target: string;
+    대상: string;
   }>;
 }
 
@@ -219,8 +209,8 @@ export const taskSeedData: TaskSeedData[] = [
     name: "체지방 감량 스타터",
     description: "입문 회원용 4주 프로그램",
     exercises: [
-      { code: "EXERCISE_AIR_SQUAT", name: "에어 스쿼트", target: "하체" },
-      { code: "EXERCISE_PUSH_UP", name: "푸시업", target: "상체" },
+      { code: "EXERCISE_AIR_SQUAT", name: "에어 스쿼트", 대상: "하체" },
+      { code: "EXERCISE_PUSH_UP", name: "푸시업", 대상: "상체" },
     ],
   },
   {
@@ -228,7 +218,7 @@ export const taskSeedData: TaskSeedData[] = [
     name: "모빌리티 리셋",
     description: "회복과 가동성 향상 프로그램",
     exercises: [
-      { code: "EXERCISE_WORLD_GREATEST_STRETCH", name: "월드 그레이티스트 스트레치", target: "전신" },
+      { code: "EXERCISE_WORLD_GREATEST_STRETCH", name: "월드 그레이티스트 스트레치", 대상: "전신" },
     ],
   },
 ];
@@ -362,7 +352,7 @@ export const userAgreementMapping = [
 packages/be-prisma/seed-data.ts  - 시드 데이터 정의
 packages/be-prisma/seed.ts       - 시드 실행 로직
 packages/be-prisma/src/reference-data/definitions/**/*.ts - 기준 데이터/권한 seed 정의
-packages/be-prisma/src/reference-data/definitions/**/*.test.ts - reference-data contract 테스트
+packages/be-prisma/src/reference-data/definitions/**/*.test.ts - reference-data 계약 테스트
 ```
 
 ### 권장 데이터 수량

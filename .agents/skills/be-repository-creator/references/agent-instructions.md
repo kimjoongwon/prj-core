@@ -1,20 +1,10 @@
-# Detailed Instructions for be-repository-builder
+# be-repository-builder 상세 지시
 
-Source agent file: `.codex/agents/be-repository-builder.toml`
+원본 에이전트 파일: `.codex/agents/15-be-repository-builder.toml`
 
-This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+이 참고 문서는 예전에 에이전트 TOML에 있던 상세 구현 지시를 담고 있습니다. 얇은 에이전트 계약과 이 skill의 `SKILL.md`를 읽은 뒤 따릅니다.
 
 ---
-
-## 내장 Spec 정책 (필수)
-
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
-- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
-- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 
 
 ## 재사용 우선 점검 (필수)
@@ -24,7 +14,7 @@ This reference preserves the detailed implementation instructions that previousl
 - 동일 책임의 중복 Repository를 금지합니다.
 
 
-# Repository Builder
+# Repository 빌더
 
 Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에이전트는 **`@schema-owner: true`가 붙은 대표 모델에 대해서만** Repository를 생성합니다.
 
@@ -48,10 +38,10 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에�
 |------|------|------|
 | **입력** | Entity 클래스 | `@cocrepo/entity`의 대표 모델 |
 | | Prisma schema 모델 | `@schema-owner: true`가 붙은 모델 |
-| | Repository 인벤토리 | owner spec의 `백엔드 / API 계약` 아래 repository row |
+| | Repository 인벤토리 | 담당 스펙의 `백엔드 / API 계약` 아래 repository 행 |
 | | 필요한 쿼리 패턴 | CRUD, include 조회, 집계, exists 등 |
 | **출력** | Repository 클래스 | `packages/be-repository/src/{schema-owner}.repository.ts` |
-| | Repository contract | owner spec의 `Repository 인벤토리` row |
+| | Repository 계약 | 담당 스펙의 `Repository 인벤토리` 행 |
 | | index.ts 업데이트 | export 추가 |
 
 ---
@@ -61,8 +51,8 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에�
 ### 1. Repository는 schema-owner만 만든다
 
 - 스키마 주석에 `@schema-owner: true`가 붙은 모델만 독립 Repository 생성 대상입니다.
-- owner spec의 `Repository 인벤토리`에 명시된 영속성 필요/모델/메서드만 생성/수정하고, row의 `재사용/신규`, `소스/대상`, 소스 담당 `agent_type`, 소비 `agent_type` 계약을 벗어나지 않습니다.
-- Repository row가 없거나 schema-owner가 불명확하면 구현하지 말고 `contract-gap`으로 보고합니다.
+- 담당 스펙의 `Repository 인벤토리`에 명시된 영속성 필요/모델/메서드만 생성/수정하고, 행의 `재사용/신규`, `소스/대상`, 소스 담당 `agent_type`, 소비 `agent_type` 계약을 벗어나지 않습니다.
+- Repository 행이 없거나 schema-owner가 불명확하면 구현하지 말고 `계약-gap`으로 보고합니다.
 - `CHILD`, `DETAIL`, `JOIN` 모델이더라도 별도 marker가 없으면 독립 Repository를 만들지 않습니다.
 - 하위 모델 접근은 부모 schema-owner Repository 안의 include/where/query 메서드로 처리합니다.
 - persistence mapping과 query input 조립 시 `input.xxx`, `entity.id`, `row.field`처럼 값의 원천을 보존합니다. 여러 source가 섞이면 deep destructuring으로 bare variable을 남기지 않습니다.
@@ -124,7 +114,7 @@ async updateById(id: string, data: Prisma.UserUncheckedUpdateInput): Promise<Use
 
 ## 구현 원칙
 
-### ✅ Do
+### ✅ 권장
 
 ```typescript
 await this.txHost.tx.user.findUnique(...)
@@ -137,7 +127,7 @@ countBySpaceId(spaceId: string)
 return result ? plainToInstance(User, result) : null;
 ```
 
-### ❌ Don't
+### ❌ 금지
 
 ```typescript
 // 비대표 모델 독립 Repository 금지
@@ -169,7 +159,7 @@ interface CreateUserParams {}
 ### 2단계: 기존 Repository 확인
 
 - 기존 `{SchemaOwner}sRepository`가 있으면 우선 그 파일에 메서드를 추가합니다.
-- 없으면 새 Repository를 생성하고 Repository Contract는 route `page.spec.md` 또는 owner spec에 기록합니다.
+- 없으면 새 Repository를 생성하고 Repository 계약은 route `page.spec.md` 또는 담당 스펙에 기록합니다.
 
 ### 3단계: 하위 모델 접근 설계
 
@@ -179,7 +169,7 @@ interface CreateUserParams {}
 ### 4단계: index.ts / spec 동기화
 
 - `packages/be-repository/src/index.ts` export를 갱신합니다.
-- 별도 repository spec은 만들지 않고 owner spec 또는 route `page.spec.md`의 Repository Contract를 갱신합니다.
+- 별도 repository spec은 만들지 않고 담당 스펙 또는 route `page.spec.md`의 Repository 계약을 갱신합니다.
 
 ---
 
@@ -214,4 +204,4 @@ export class UsersRepository {
 - 비대표 모델 독립 Repository를 만들지 않았는가?
 - 메서드명이 데이터 설명 중심인가?
 - Prisma 타입을 직접 사용했는가?
-- index.ts와 Repository Contract를 함께 갱신했는가?
+- index.ts와 Repository 계약을 함께 갱신했는가?

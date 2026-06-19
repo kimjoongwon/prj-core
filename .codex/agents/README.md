@@ -1,6 +1,6 @@
-# Codex Subagent Index
+# Codex 하위 에이전트 색인
 
-이 문서는 `.codex/agents/**/*.toml`의 active subagent 인덱스입니다.
+이 문서는 `.codex/agents/**/*.toml`의 활성 subagent 인덱스입니다.
 
 원문 우선순위:
 
@@ -9,210 +9,97 @@
 3. 이 인덱스
 
 `*.toml.guide.md` 보조 문서는 생성하지 않습니다.
-subagent TOML은 얇은 실행 contract만 소유합니다. 상세 작업 지시는 repo-scoped skill인 `.agents/skills/*-creator/SKILL.md`와 해당 skill의 `references/agent-instructions.md`에 둡니다.
+subagent TOML은 얇은 실행 계약만 소유합니다. 상세 작업 지시는 repo 범위 skill인 `.agents/skills/*-creator/SKILL.md`와 해당 skill의 `references/agent-instructions.md`에 둡니다.
 
-## Model Tier 운영
+## 번호 규칙
 
-현재 로컬 Codex availability 기준으로 `gpt-5.5`, `gpt-5.4`, `gpt-5.3-codex-spark`를 함께 사용합니다. 되돌림 비용이 큰 판단은 `gpt-5.5`, 복합 구현은 `gpt-5.4`, leaf 구현과 반복 생성은 `gpt-5.3-codex-spark`가 담당합니다.
+- subagent TOML 파일명은 `NN-agent-type.toml` 형식으로 정렬 순서를 드러냅니다.
+- `name`, `[agents.<agent_type>]`, spec의 `agent_type` 값은 번호를 붙이지 않고 기존 계약명을 유지합니다.
+- 번호는 색인과 파일 정렬을 위한 값이며 실행 중 보고할 `next subagent` 값이 아닙니다.
 
-| Model | Effort | Subagent | 기준 |
+## 모델 티어 운영
+
+현재 로컬 Codex 사용 가능 모델 기준으로 `gpt-5.5`, `gpt-5.4`, `gpt-5.3-codex-spark`를 함께 사용합니다. 되돌림 비용이 큰 판단은 `gpt-5.5`, 복합 구현은 `gpt-5.4`, leaf 구현과 반복 생성은 `gpt-5.3-codex-spark`가 담당합니다.
+
+| 모델 | 추론 강도 | Subagent | 기준 |
 |-------|--------|------|------|
-| `gpt-5.5` | `xhigh` | `orch-delivery`, `be-prisma-builder`, `be-database-expert`, `be-usecase-builder`, `common-schema-builder`, `qa-type-checker` | 서비스 설계, 데이터 모델, workflow orchestration, 공통 검증 계약, 타입 실패 원인 분석 |
-| `gpt-5.4` | `high` | `be-aggregate-builder`, `be-bootstrap-integrator`, `be-client-builder`, `be-controller-builder`, `be-module-builder`, `be-repository-builder`, `be-service-builder`, `common-toolkit-builder`, `common-type-builder`, `fe-data-grid-agent`, `fe-feature-agent`, `fe-form-agent`, `fe-menu-agent`, `fe-route-layout-agent`, `fe-screen-agent`, `fe-store-agent`, `qa-be-e2e-testing`, `qa-fe-e2e-testing`, `qa-mo-e2e-testing` | cross-layer 구현, 상태/화면 설계, E2E 검증처럼 되돌림 비용이 있는 작업 |
-| `gpt-5.3-codex-spark` | `medium` | `be-command-builder`, `be-dmmf-parser-builder`, `be-dto-builder`, `be-entity-builder`, `be-event-builder`, `be-query-dto-builder`, `be-vo-builder`, `etc-jenkinsfile-builder`, `fe-action-agent`, `fe-data-display-agent`, `fe-feedback-agent`, `fe-hook-agent`, `fe-input-agent`, `fe-layout-agent`, `fe-navigation-agent`, `fe-overlay-agent`, `fe-route-agent`, `fe-selection-agent`, `fe-widget-agent`, `qa-be-testing`, `qa-fe-testing`, `qa-mo-testing` | 계약/컴포넌트/단위 테스트처럼 범위가 비교적 명확한 일반 구현 |
+| `gpt-5.5` | `xhigh` | `orch-delivery`, `be-prisma-builder`, `be-database-expert`, `be-usecase-builder`, `common-schema-builder`, `qa-type-checker` | 서비스 설계, 데이터 모델, workflow 조율, 공통 검증 계약, 타입 실패 원인 분석 |
+| `gpt-5.4` | `high` | `be-aggregate-builder`, `be-bootstrap-integrator`, `be-client-builder`, `be-controller-builder`, `be-module-builder`, `be-repository-builder`, `be-service-builder`, `common-toolkit-builder`, `common-type-builder`, `fe-data-grid-agent`, `fe-feature-agent`, `fe-form-agent`, `fe-menu-agent`, `fe-route-layout-agent`, `fe-screen-agent`, `fe-store-agent`, `qa-be-e2e-testing`, `qa-fe-e2e-testing`, `qa-mo-e2e-testing` | 교차 레이어 구현, 상태/화면 설계, E2E 검증처럼 되돌림 비용이 있는 작업 |
+| `gpt-5.3-codex-spark` | `medium` | `be-command-builder`, `be-dmmf-parser-builder`, `be-dto-builder`, `be-entity-builder`, `be-event-builder`, `be-query-dto-builder`, `be-vo-builder`, `etc-jenkinsfile-builder`, `fe-action-agent`, `fe-data-display-agent`, `fe-feedback-agent`, `fe-hook-agent`, `fe-input-agent`, `fe-layout-agent`, `fe-navigation-agent`, `fe-overlay-agent`, `fe-route-agent`, `fe-selection-agent`, `fe-storybook-agent`, `fe-widget-agent`, `qa-be-testing`, `qa-fe-testing`, `qa-mo-testing` | 계약/컴포넌트/Storybook/단위 테스트처럼 범위가 비교적 명확한 일반 구현 |
 | `gpt-5.3-codex-spark` | `low` | `be-prisma-annotator`, `be-seed-maker`, `dev-service-starter`, `fe-cell-agent`, `fe-columns-agent` | 주석, 시드, 서비스 시작, 셀/컬럼 같은 기계적이고 반복적인 작업 |
 
-## 서비스 Delivery Spec 운영
+## 계약 담당
 
-모든 orchestration은 service delivery spec에서 시작합니다.
+- 공통 subagent 실행, 보고, 차단 계약은 루트 `AGENTS.md`가 소유합니다.
+- 각 subagent TOML은 정체성, 필수 skill, 기준 문서, 소유 범위, 플랫폼/도메인 라우팅만 소유합니다.
+- 상세 구현 절차와 기술별 규칙은 각 `.agents/skills/*-creator/SKILL.md`와 해당 `references/agent-instructions.md`가 소유합니다.
+- 서비스 딜리버리 spec, route/page spec, Screen/Feature 기획 스펙의 생성/실행 규칙은 `01-orch-delivery.toml`과 `delivery-orchestration-creator` skill이 소유합니다.
+- 이 README는 active subagent 색인과 모델 티어 기준만 소유하며 실행 규칙을 복제하지 않습니다.
 
-- 담당 subagent: [orch-delivery.toml](./orch-delivery.toml)
-- service spec: `docs/services/**/*.delivery.spec.md`
-- generated route spec: web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`
+## 기획 / 오케스트레이션
 
-`orch-delivery` 하나가 **기획 질문 → 서비스 Spec → 승인 → 라우트 Spec → 구현 → QA**를 소유합니다.
-별도 Delivery Plan 문서는 만들지 않고, 실행 계약은 승인된 service delivery spec과 여기서 생성된 route delivery spec 실행 slice에 둡니다.
-service delivery spec은 서비스 목표, 사용자/권한, 도메인 모델, 모든 web/mobile route 목록, backend/API/foundation 계약, `DESIGN.md` 기반 디자인 방향, 담당 `agent_type`, 실행 순서, QA 기준을 소유합니다.
-route delivery spec은 service spec에서 파생된 page/route 실행 slice이며 화면 계약, route wiring, component inventory, route-local hook/state, E2E, 해당 route가 소비하는 backend/API/foundation slice만 소유합니다.
-`orch-delivery`는 승인된 service delivery spec과 연결된 route delivery spec에 없는 agent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
+- [01-orch-delivery.toml](./01-orch-delivery.toml): 서비스 아이디어를 질문으로 정리하고 spec, 작업 순서, QA까지 계획합니다.
 
-Screen/Feature spec은 planning spec입니다. 목표, 화면 러프, props/event, rendering/rhythm, 하위 조합, 상태별 렌더링, story/unit test 계약만 소유하고 실행 그래프나 backend/foundation build order를 소유하지 않습니다.
+## 백엔드 / Prisma
 
-모든 source target은 단일 책임 파일 규칙을 따릅니다. class/function/type/interface/enum은 파일별 하나만 소유하고, class 파일 안에 top-level props/interface/type/helper/mapper를 함께 두지 않습니다. Props/Params/Input/Result/Options/helper/mapper/parser/normalizer/constant는 같은 owner 폴더의 별도 파일로 지정합니다.
+- [02-be-database-expert.toml](./02-be-database-expert.toml): PostgreSQL/Prisma 데이터 구조를 설계하고 성능과 제약 조건을 점검합니다.
+- [03-be-prisma-builder.toml](./03-be-prisma-builder.toml): Prisma schema를 만들거나 고치고 모델 관계를 정리합니다.
+- [04-be-prisma-annotator.toml](./04-be-prisma-annotator.toml): Prisma schema에 한글 표시 이름 주석을 붙입니다.
+- [05-be-dmmf-parser-builder.toml](./05-be-dmmf-parser-builder.toml): Prisma DMMF를 읽어 필요한 메타데이터를 꺼내는 유틸을 만듭니다.
+- [06-common-schema-builder.toml](./06-common-schema-builder.toml): 프론트엔드와 백엔드가 함께 쓰는 검증 스키마를 만듭니다.
+- [07-common-type-builder.toml](./07-common-type-builder.toml): 여러 패키지에서 함께 쓰는 TypeScript 타입을 만듭니다.
+- [08-common-toolkit-builder.toml](./08-common-toolkit-builder.toml): 여러 패키지에서 함께 쓰는 toolkit 유틸을 만듭니다.
+- [09-be-entity-builder.toml](./09-be-entity-builder.toml): 도메인 규칙을 담는 Entity 클래스를 만듭니다.
+- [10-be-vo-builder.toml](./10-be-vo-builder.toml): 작은 도메인 값을 안전하게 다루는 Value Object를 만듭니다.
+- [11-be-dto-builder.toml](./11-be-dto-builder.toml): API 요청과 응답에 쓰는 DTO 클래스를 만듭니다.
+- [12-be-query-dto-builder.toml](./12-be-query-dto-builder.toml): 목록 조회의 검색, 정렬, 페이지네이션 Query DTO를 만듭니다.
+- [13-be-command-builder.toml](./13-be-command-builder.toml): CQRS Command와 Query 메시지 클래스를 만듭니다.
+- [14-be-event-builder.toml](./14-be-event-builder.toml): CQRS Event 메시지 클래스를 만듭니다.
+- [15-be-repository-builder.toml](./15-be-repository-builder.toml): Prisma로 데이터를 읽고 쓰는 Repository를 만듭니다.
+- [16-be-aggregate-builder.toml](./16-be-aggregate-builder.toml): 도메인별 Aggregate Root 서비스를 만듭니다.
+- [17-be-service-builder.toml](./17-be-service-builder.toml): NestJS에서 재사용하는 Service 로직을 만듭니다.
+- [18-be-client-builder.toml](./18-be-client-builder.toml): 외부 시스템과 통신하는 Client를 만듭니다.
+- [19-be-usecase-builder.toml](./19-be-usecase-builder.toml): Command/Query를 실제로 처리하는 UseCase handler를 만듭니다.
+- [20-be-controller-builder.toml](./20-be-controller-builder.toml): NestJS REST API Controller를 만듭니다.
+- [21-be-module-builder.toml](./21-be-module-builder.toml): NestJS Module과 provider 연결을 정리합니다.
+- [22-be-bootstrap-integrator.toml](./22-be-bootstrap-integrator.toml): 새 module/service가 앱에서 동작하도록 AppModule에 연결합니다.
+- [23-be-seed-maker.toml](./23-be-seed-maker.toml): 개발과 테스트에 쓸 현실적인 seed 데이터를 만듭니다.
 
-service delivery spec 필수 섹션:
+## 프론트엔드
 
-- `## 서비스 목표`
-- `## 사용자 / 역할 / 권한`
-- `## 도메인 모델 / 생명주기`
-- `## 사용자 여정`
-- `## 필수 페이지 / 라우트`
-- `## 백엔드 / API / 기반 계약`
-- `## DESIGN.md 기반 디자인 방향`
-- `## 생성된 라우트 Spec`
-- `## subagent 배정 매트릭스`
-- `## 실행 그래프`
-- `## QA / 승인 기준`
-- `## 승인 / 실행 로그`
-
-generated route delivery spec의 `## 딜리버리` 필수 하위 섹션:
-
-- `### 상위 서비스 Spec`
-- `### 목표`
-- `### 기획 Spec 참조`
-- `### 디자인 정렬`
-- `### 화면 러프`
-- `### 리듬 / 레이아웃 계약`
-- `### 컴포넌트 인벤토리`
-- `### 기반 Slice`
-  - `#### Hook 인벤토리`
-  - `#### Toolkit 인벤토리`
-  - `#### Type 인벤토리`
-  - `#### Store / State 인벤토리`
-- `### Storybook / 테스트 계약`
-  - `#### Storybook 인벤토리`
-  - `#### Unit Test 인벤토리`
-- `### 백엔드 / API Slice`
-  - `#### Prisma / Database 인벤토리`
-  - `#### Prisma Annotation 인벤토리`
-  - `#### Common Schema 인벤토리`
-  - `#### Entity / VO 인벤토리`
-  - `#### DTO / Query DTO 인벤토리`
-  - `#### Repository 인벤토리`
-  - `#### Service 인벤토리`
-  - `#### UseCase 인벤토리` (`@cocrepo/command` message와 `@cocrepo/usecase` handler를 분리 기록하고, command/query/handler class당 하나의 source file을 target으로 지정)
-  - `#### Client 인벤토리`
-  - `#### 엔드포인트 인벤토리`
-  - `#### Module / Bootstrap 인벤토리`
-  - `#### Seed 인벤토리`
-  - `#### Codegen / API Client 인벤토리`
-- `### 필수 요소`
-- `### subagent 배정 매트릭스`
-- `### 실행 그래프`
-  - `#### 시각 실행 흐름`
-  - `#### 병렬 그룹 표`
-  - `#### 단계 순서 표`
-  - `#### 표준 Phase 순서`
-- `### 공유 파일 잠금`
-- `### QA / 승인 기준`
-- `### 차단 / 재실행 규칙`
-- `### 승인 / 실행 로그`
-
-병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
-
-구현 대상의 service delivery spec을 먼저 작성하거나 갱신한 뒤, Codex 질문 도구로 사용자의 진행 승인을 받습니다.
-승인 전에는 route/page spec 생성, subagent 실행, QA subagent 실행을 하지 않습니다.
-
-Storybook/Test 소유권:
-
-- PC/Web은 `packages/fe-ui/src/**` component source를 소유한 subagent가 story/test를 함께 작성합니다.
-- Mobile은 `packages/fe-mo-ui/src/**` component source를 소유한 subagent가 story/test를 함께 작성합니다.
-- Mobile subagent는 작업 전에 `https://heroui.com/llms-patterns.txt`를 열어 HeroUI Native Composition/Styling/Provider/Portal 패턴을 확인합니다.
-- Mobile의 사용자 노출 텍스트는 `@cocrepo/mo-ui` `Text` primitive를 사용합니다. `react-native` `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 구현 내부에서만 허용합니다.
-- Mobile compound/action primitive가 문자열 children을 받으면 wrapper 내부에서 `Text`로 정규화합니다. `Switch`, `Checkbox`, `RadioGroup.Item`, `Button`, `Chip` 등이 HeroUI Native에 raw string children을 그대로 넘기면 안 됩니다.
-- Mobile HeroUI Native compound wrapper는 return-only re-export로 끝내지 않습니다. field 계열은 upstream `TextField`, `Label`, `Description`, `FieldError`, `InputGroup` composition을 먼저 사용하고, `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` 같은 의미 있는 props와 dot-slot escape hatch를 함께 유지합니다.
-- route `page.tsx`, Expo route file, `layout.tsx`, `_layout.tsx`, Store, backend-only step은 Storybook 대상이 아니며 필요한 unit/E2E 검증만 route delivery spec에 적습니다.
-- QA subagent는 story/test 누락, 실패, contract drift를 검증합니다.
-
-## Spec 범위
-
-Service delivery spec:
-
-- 서비스 전체 설계: `docs/services/{service-name}.delivery.spec.md`
-
-Generated route delivery spec:
-
-- Next.js route page: `apps/*/web/src/app/**/page.tsx` → 같은 route 폴더의 `page.spec.md`
-- Expo Router native route screen: `apps/mobile/src/app/**/index.tsx` → 같은 route 폴더의 `index.spec.md`
-
-Planning spec:
-
-- fe-ui Screen component: `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` → 같은 폴더의 `[ScreenName].spec.md`
-- fe-ui Feature component: `packages/fe-ui/src/feature/**/[FeatureName].tsx` → 같은 component owner 위치의 `[FeatureName].spec.md`
-- fe-mo-ui Screen component: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx` → 같은 폴더의 `[ScreenName].spec.md`
-- fe-mo-ui Feature component: `packages/fe-mo-ui/src/feature/**/[FeatureName].tsx` → 같은 component owner 위치의 `[FeatureName].spec.md`
-
-그 외 backend entity/dto/service/repository/controller/module/app/facade/integration/vo/prisma/schema, store/hook/toolkit/type/barrel/config/script/test/e2e/layout, Next.js `layout.tsx`, Expo Router `_layout.tsx`, web/mobile leaf 계층에는 spec을 만들지 않습니다.
-
-상세 정책은 별도 `*.toml.guide.md`로 분리하지 않습니다. 실행 guardrail은 이 README, `.codex/config.toml`, 각 subagent TOML에 두고, 구현 절차와 기술별 상세 규칙은 `.agents/skills/*-creator` skill에 유지합니다.
-
-## 실행 결과 검증
-
-- 실행 subagent는 peer subagent를 직접 호출하거나 다른 subagent 책임 파일을 임의 수정하지 않습니다.
-- `orch-delivery`는 승인된 spec 기준으로 직렬/병렬 실행 순서만 배정합니다.
-- 실행 결과와 남은 이슈는 각 subagent의 최종 보고, 변경 diff, 테스트 결과를 사람이 검증합니다.
-
-## Planning / Orchestration
-
-- [orch-delivery.toml](./orch-delivery.toml): spec 작성, 승인 질문, backend/frontend/mobile/QA 실행을 모두 소유하는 subagent
-
-## Backend / Prisma
-
-- [be-database-expert.toml](./be-database-expert.toml): PostgreSQL/Prisma 데이터베이스 설계 및 최적화 subagent
-- [be-prisma-builder.toml](./be-prisma-builder.toml): Prisma 스키마 생성 subagent
-- [be-prisma-annotator.toml](./be-prisma-annotator.toml): Prisma 스키마 `@displayName` 주석 subagent
-- [be-dmmf-parser-builder.toml](./be-dmmf-parser-builder.toml): Prisma DMMF 파싱 유틸리티 subagent
-- [common-schema-builder.toml](./common-schema-builder.toml): 프론트엔드/백엔드 공용 검증 스키마 subagent
-- [common-toolkit-builder.toml](./common-toolkit-builder.toml): 공용 `@cocrepo/toolkit` utility subagent
-- [common-type-builder.toml](./common-type-builder.toml): 공용 `@cocrepo/type` type contract subagent
-- [be-entity-builder.toml](./be-entity-builder.toml): 도메인 Entity subagent
-- [be-vo-builder.toml](./be-vo-builder.toml): Value Object subagent
-- [be-dto-builder.toml](./be-dto-builder.toml): Request/Response DTO subagent
-- [be-query-dto-builder.toml](./be-query-dto-builder.toml): PrismaQueryDto 기반 Query DTO subagent
-- [be-repository-builder.toml](./be-repository-builder.toml): Prisma 기반 Repository subagent
-- [be-aggregate-builder.toml](./be-aggregate-builder.toml): Aggregate root service provider subagent
-- [be-service-builder.toml](./be-service-builder.toml): NestJS Service subagent
-- [be-command-builder.toml](./be-command-builder.toml): Nest CQRS Command/Query message contract subagent
-- [be-event-builder.toml](./be-event-builder.toml): Nest CQRS Event message contract subagent
-- [be-usecase-builder.toml](./be-usecase-builder.toml): Nest CQRS UseCase handler subagent
-- [be-client-builder.toml](./be-client-builder.toml): 외부 시스템 단일 연동 Client subagent
-- [be-controller-builder.toml](./be-controller-builder.toml): NestJS REST Controller subagent
-- [be-module-builder.toml](./be-module-builder.toml): NestJS Module/Router wiring subagent
-- [be-bootstrap-integrator.toml](./be-bootstrap-integrator.toml): AppModule bootstrap subagent
-- [be-seed-maker.toml](./be-seed-maker.toml): seed/reference-data subagent
-
-## Frontend
-
-Web과 Mobile 구현 subagent는 `fe-*agent` 하나로 통합합니다. 각 dual-platform subagent TOML은 플랫폼 판별 guardrail만 유지하고, 상세 `Common`, `React Web`, `React Native` 섹션은 대응 `.agents/skills/*-creator/references/agent-instructions.md`에 유지합니다.
-
-- 대상 파일이 `packages/fe-ui/**`, `apps/*/web/**`이면 subagent는 `Common`과 `React Web` 섹션만 실행 규칙으로 적용합니다.
-- 대상 파일이 `packages/fe-mo-ui/**`, `apps/mobile/**`이면 subagent는 `Common`과 `React Native` 섹션만 실행 규칙으로 적용합니다.
-- 대상과 다른 플랫폼 섹션은 참고 자료로만 읽고 금지/허용/출력 규칙을 적용하지 않습니다.
-- React Web only subagent는 `Platform Routing`에 명시하고 React Native target을 범위 밖으로 둡니다.
-- Shared subagent는 공용 hook/store 계약만 다루며 UI runtime별 세부 규칙은 소비 owner subagent의 플랫폼 섹션을 따릅니다.
-
-- [fe-data-display-agent.toml](./fe-data-display-agent.toml): Web/Mobile data-display primitive subagent
-- [fe-feedback-agent.toml](./fe-feedback-agent.toml): Web/Mobile feedback/status primitive subagent
-- [fe-overlay-agent.toml](./fe-overlay-agent.toml): Web/Mobile overlay/dialog/popover/tooltip primitive subagent
-- [fe-action-agent.toml](./fe-action-agent.toml): Web/Mobile action primitive subagent
-- [fe-input-agent.toml](./fe-input-agent.toml): Web/Mobile input primitive subagent
-- [fe-selection-agent.toml](./fe-selection-agent.toml): Web/Mobile selection primitive subagent
-- [fe-navigation-agent.toml](./fe-navigation-agent.toml): Web/Mobile navigation primitive subagent
-- [fe-cell-agent.toml](./fe-cell-agent.toml): DataGrid/Table Cell subagent
-- [fe-columns-agent.toml](./fe-columns-agent.toml): columns/DataGrid boundary subagent
-- [fe-widget-agent.toml](./fe-widget-agent.toml): Web/Mobile Widget subagent
-- [fe-layout-agent.toml](./fe-layout-agent.toml): reusable Web/Mobile layout primitive subagent
-- [fe-feature-agent.toml](./fe-feature-agent.toml): Web/Mobile Feature subagent
-- [fe-data-grid-agent.toml](./fe-data-grid-agent.toml): DataGrid renderer/input/state contract subagent
-- [fe-form-agent.toml](./fe-form-agent.toml): create/update form layer subagent
-- [fe-hook-agent.toml](./fe-hook-agent.toml): web/mobile 공통 React hook subagent
-- [fe-menu-agent.toml](./fe-menu-agent.toml): Web/Mobile menu, tab, navigation composition subagent
-- [fe-store-agent.toml](./fe-store-agent.toml): shared MobX Store subagent
-- [fe-screen-agent.toml](./fe-screen-agent.toml): Web/Mobile screen visual owner subagent
-- [fe-route-layout-agent.toml](./fe-route-layout-agent.toml): Next.js layout and Expo Router `_layout.tsx` shell subagent
-- [fe-route-agent.toml](./fe-route-agent.toml): Next.js/Expo route API/state/navigation thin container subagent
+- [24-fe-hook-agent.toml](./24-fe-hook-agent.toml): web/mobile에서 함께 쓰는 React hook을 만듭니다.
+- [25-fe-store-agent.toml](./25-fe-store-agent.toml): 여러 화면에서 함께 쓰는 MobX store를 만듭니다.
+- [26-fe-data-display-agent.toml](./26-fe-data-display-agent.toml): 텍스트, 값, 상태처럼 데이터를 보여주는 UI primitive를 만듭니다.
+- [27-fe-feedback-agent.toml](./27-fe-feedback-agent.toml): 알림, 에러, 빈 상태처럼 사용자 피드백 UI를 만듭니다.
+- [28-fe-overlay-agent.toml](./28-fe-overlay-agent.toml): 모달, 팝오버, 툴팁 같은 떠 있는 UI를 만듭니다.
+- [29-fe-action-agent.toml](./29-fe-action-agent.toml): 버튼과 액션 영역처럼 사용자가 실행하는 UI를 만듭니다.
+- [30-fe-input-agent.toml](./30-fe-input-agent.toml): 입력 필드와 입력 조합 UI를 만듭니다.
+- [31-fe-selection-agent.toml](./31-fe-selection-agent.toml): 체크박스, 라디오, 선택 목록 같은 선택 UI를 만듭니다.
+- [32-fe-navigation-agent.toml](./32-fe-navigation-agent.toml): 탭, 링크, 이동 메뉴 같은 navigation UI를 만듭니다.
+- [33-fe-cell-agent.toml](./33-fe-cell-agent.toml): DataGrid와 Table에서 쓰는 Cell 컴포넌트를 만듭니다.
+- [34-fe-columns-agent.toml](./34-fe-columns-agent.toml): DataGrid column 정의와 cell 연결을 정리합니다.
+- [35-fe-layout-agent.toml](./35-fe-layout-agent.toml): 화면 배치를 돕는 재사용 layout primitive를 만듭니다.
+- [36-fe-widget-agent.toml](./36-fe-widget-agent.toml): 비즈니스 로직 없이 재사용 가능한 UI 조합인 Widget을 만듭니다.
+- [37-fe-feature-agent.toml](./37-fe-feature-agent.toml): Widget에 store나 API를 연결한 Feature를 만듭니다.
+- [38-fe-data-grid-agent.toml](./38-fe-data-grid-agent.toml): DataGrid 렌더링과 입력 상태 계약을 정리합니다.
+- [39-fe-form-agent.toml](./39-fe-form-agent.toml): 생성/수정 화면에서 쓰는 form 조합을 만듭니다.
+- [40-fe-menu-agent.toml](./40-fe-menu-agent.toml): 메뉴, 탭, navigation 조합을 실제 서비스 흐름에 맞게 만듭니다.
+- [41-fe-screen-agent.toml](./41-fe-screen-agent.toml): page가 보여줄 실제 화면 Screen을 만듭니다.
+- [42-fe-storybook-agent.toml](./42-fe-storybook-agent.toml): 웹/모바일 UI 컴포넌트의 Storybook 스토리를 만들고 정리합니다.
+- [43-fe-route-layout-agent.toml](./43-fe-route-layout-agent.toml): Next.js layout과 Expo _layout의 공통 틀을 만듭니다.
+- [44-fe-route-agent.toml](./44-fe-route-agent.toml): route 파일에서 API, 상태, navigation을 Screen에 연결합니다.
 
 ## QA / 검증
 
-- [qa-type-checker.toml](./qa-type-checker.toml): TypeScript type error 해결 subagent
-- [qa-be-testing.toml](./qa-be-testing.toml): Jest backend/common unit test subagent
-- [qa-be-e2e-testing.toml](./qa-be-e2e-testing.toml): Jest + Supertest backend E2E subagent
-- [qa-fe-testing.toml](./qa-fe-testing.toml): Vitest frontend unit test subagent
-- [qa-fe-e2e-testing.toml](./qa-fe-e2e-testing.toml): Playwright frontend E2E subagent
-- [qa-mo-testing.toml](./qa-mo-testing.toml): Jest + React Native Testing Library mobile unit test subagent
-- [qa-mo-e2e-testing.toml](./qa-mo-e2e-testing.toml): Detox mobile E2E subagent
+- [45-qa-type-checker.toml](./45-qa-type-checker.toml): TypeScript 타입 오류를 원인부터 찾아 고칩니다.
+- [46-qa-be-testing.toml](./46-qa-be-testing.toml): 백엔드와 공용 패키지의 단위 테스트를 만듭니다.
+- [47-qa-be-e2e-testing.toml](./47-qa-be-e2e-testing.toml): 백엔드 API 흐름을 검증하는 E2E 테스트를 만듭니다.
+- [48-qa-fe-testing.toml](./48-qa-fe-testing.toml): 프론트엔드 컴포넌트와 hook의 단위 테스트를 만듭니다.
+- [49-qa-fe-e2e-testing.toml](./49-qa-fe-e2e-testing.toml): 브라우저에서 실제 사용자 흐름을 검증하는 E2E 테스트를 만듭니다.
+- [50-qa-mo-testing.toml](./50-qa-mo-testing.toml): 모바일 컴포넌트와 hook의 단위 테스트를 만듭니다.
+- [51-qa-mo-e2e-testing.toml](./51-qa-mo-e2e-testing.toml): 모바일 앱의 실제 사용자 흐름을 검증하는 E2E 테스트를 만듭니다.
 
 ## 공용 / 운영 보조
 
-- [dev-service-starter.toml](./dev-service-starter.toml): 개발 서비스 시작 subagent
-- [etc-jenkinsfile-builder.toml](./etc-jenkinsfile-builder.toml): Jenkins pipeline subagent
+- [52-dev-service-starter.toml](./52-dev-service-starter.toml): 개발 서버와 필요한 로컬 서비스를 시작합니다.
+- [53-etc-jenkinsfile-builder.toml](./53-etc-jenkinsfile-builder.toml): Jenkins CI/CD 파이프라인 파일을 만듭니다.

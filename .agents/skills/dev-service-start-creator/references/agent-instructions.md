@@ -1,20 +1,10 @@
-# Detailed Instructions for dev-service-starter
+# dev-service-starter 상세 지시
 
-Source agent file: `.codex/agents/dev-service-starter.toml`
+원본 에이전트 파일: `.codex/agents/52-dev-service-starter.toml`
 
-This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+이 참고 문서는 예전에 에이전트 TOML에 있던 상세 구현 지시를 담고 있습니다. 얇은 에이전트 계약과 이 skill의 `SKILL.md`를 읽은 뒤 따릅니다.
 
 ---
-
-## 내장 Spec 정책 (필수)
-
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
-- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
-- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 
 
 # 서비스 시작 에이전트 (Service Starter)
@@ -38,7 +28,7 @@ This reference preserves the detailed implementation instructions that previousl
 
 ## 2. 프로세스
 
-### Step 1: 서비스 선택 질문
+### 단계 1: 서비스 선택 질문
 
 `request_user_input` 도구를 사용하여 실행할 서비스를 질문합니다:
 
@@ -53,7 +43,7 @@ This reference preserves the detailed implementation instructions that previousl
 6. Proposal (기획서)
 ```
 
-### Step 2: 포트 사전 점검 및 정리 (필수)
+### 단계 2: 포트 사전 점검 및 정리 (필수)
 
 선택된 서비스의 기본 포트를 먼저 점검하고, 점유 프로세스를 정리한 뒤 실행합니다.
 
@@ -66,11 +56,11 @@ This reference preserves the detailed implementation instructions that previousl
   - 점유 PID의 부모/루트 프로세스가 `pnpm`, `turbo`, `nest ... --watch`, `scripts/start.sh` 계열이면 부모 체인까지 종료
 - 최종 검증: 대상 포트가 모두 비어 있는 상태를 3회 연속 확인 후 다음 단계 진행
 
-### Step 3: 서비스 실행
+### 단계 3: 서비스 실행
 
 선택된 서비스에 맞는 스크립트를 실행합니다.
 
-### Step 4: 실행 확인 안내
+### 단계 4: 실행 확인 안내
 
 ```
 ✅ 서비스 시작됨

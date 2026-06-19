@@ -1,20 +1,10 @@
-# Detailed Instructions for be-controller-builder
+# be-controller-builder 상세 지시
 
-Source agent file: `.codex/agents/be-controller-builder.toml`
+원본 에이전트 파일: `.codex/agents/20-be-controller-builder.toml`
 
-This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+이 참고 문서는 예전에 에이전트 TOML에 있던 상세 구현 지시를 담고 있습니다. 얇은 에이전트 계약과 이 skill의 `SKILL.md`를 읽은 뒤 따릅니다.
 
 ---
-
-## 내장 Spec 정책 (필수)
-
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
-- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
-- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 
 
 ## 재사용 우선 점검 (필수)
@@ -29,7 +19,7 @@ This reference preserves the detailed implementation instructions that previousl
 
 NestJS REST Controller를 생성하는 전문가
 
-## When to use
+## 사용 시점
 
 - 상황: 사용 여부: 설명
 - REST API 엔드포인트 생성: ✅ 사용: Controller 생성
@@ -39,38 +29,38 @@ NestJS REST Controller를 생성하는 전문가
 - 데이터 접근 로직: ❌ 미사용: repository-builder 사용
 ---
 
-## What you need
+## 필요한 입력
 
 | 항목 | 설명 |
 |------|------|
-| 엔드포인트 인벤토리 | owner spec의 `백엔드 / API 계약` 아래 endpoint row |
+| 엔드포인트 인벤토리 | 담당 스펙의 `백엔드 / API 계약` 아래 endpoint 행 |
 | CommandBus / QueryBus | `@nestjs/cqrs`의 UseCase 실행 진입점 |
 | Command / Query | `@cocrepo/command`의 request intent 객체 |
 | DTO 클래스 | `@cocrepo/dto` |
 | API 요구사항 | 엔드포인트 정의 |
 | Module 경계 | aggregate root 기준 module 이름 |
 
-## What you produce
+## 만드는 산출물
 
 | Controller 클래스 | `apps/core/api/src/module/{aggregate-root}/{resource}.controller.ts` |
-| | API contract | route `page.spec.md`의 API Contract 섹션 |
+| | API 계약 | route `page.spec.md`의 API 계약 섹션 |
 | | Module 파일 | `apps/core/api/src/module/{aggregate-root}/{aggregate-root}.module.ts` |
-| | Module contract | owner spec 또는 route `page.spec.md`의 Module/Wiring Contract |
+| | Module 계약 | 담당 스펙 또는 route `page.spec.md`의 Module/Wiring 계약 |
 | | app.module.ts 업데이트 | 라우팅 등록 |
 
-## How to use
+## 사용 방법
 
-### Core Rules
+### 핵심 규칙
 
 - 기본 원칙: Controller는 `CommandBus` 또는 `QueryBus`만 진입점으로 사용한다.
 - 각 endpoint는 write면 Command, read면 Query를 생성해서 bus로 실행한다.
 - Command/Query는 `@cocrepo/command`에서 import한다.
-- owner spec의 `엔드포인트 인벤토리`에 명시된 endpoint만 생성/수정하고, row의 `재사용/신규`, `소스/대상`, 소스 담당 `agent_type`, 소비/Wiring `agent_type`, `codegen` 계약을 벗어나지 않는다.
-- endpoint가 실행할 Command/Query와 UseCase handler는 owner spec의 각 inventory row와 일치해야 한다. 누락되면 구현하지 말고 `contract-gap`으로 보고한다.
+- 담당 스펙의 `엔드포인트 인벤토리`에 명시된 endpoint만 생성/수정하고, 행의 `재사용/신규`, `소스/대상`, 소스 담당 `agent_type`, 소비/Wiring `agent_type`, `codegen` 계약을 벗어나지 않는다.
+- endpoint가 실행할 Command/Query와 UseCase handler는 담당 스펙의 각 인벤토리 행과 일치해야 한다. 누락되면 구현하지 말고 `계약-gap`으로 보고한다.
 - Controller가 Service, Repository, Client, UseCase handler를 직접 주입하지 않는다.
-- 유즈케이스 workflow orchestration(다수 service 조합, 조건 분기, 외부 연동 포함)은 UseCase handler로 이동한다.
+- 유즈케이스 작업 흐름 조율(다수 service 조합, 조건 분기, 외부 연동 포함)은 UseCase handler로 이동한다.
 - 응답 조립/read model shaping은 Query UseCase로 이동한다.
-- DTO, route param, user context, header 값을 Command/Query로 매핑할 때는 값의 원천이 보이도록 `body.xxx`, `params.xxx`, `user.id`, `spaceId` 같은 source path 또는 출처명 alias를 유지한다.
+- DTO, route param, user context, header 값을 Command/Query로 매핑할 때는 값의 원천이 보이도록 `body.xxx`, `params.xxx`, `user.id`, `spaceId` 같은 소스 경로 또는 출처명 alias를 유지한다.
 - Controller class는 class당 하나의 파일을 가집니다.
 - Controller class 파일에는 top-level helper/mapper/type/interface를 함께 두지 않습니다. request mapping helper/type은 가까운 별도 파일로 분리합니다.
 
@@ -115,15 +105,15 @@ Create/Update 화면에서 폼을 즉시 렌더링할 수 있도록 Controller�
 - `hidden > readOnly > disabled` 우선순위를 문서화합니다.
 - AI fill endpoint는 서버에서 `fillable`/권한을 재검증합니다.
 
-### Process
+### 처리 흐름
 
 1. 도메인의 Create/Update 화면을 식별합니다.
 2. 초기 렌더링에 필요한 폼 메타(`defaultObject`, `options`, `ui`, `fieldMeta`, `aiSchemas`)를 정의합니다.
 3. `GET /form/create`, `GET /:id/form/update` 엔드포인트를 설계/구현합니다.
 4. 필요 시 `POST /form/ai-fill` endpoint를 추가하고 patch 응답 계약을 맞춥니다.
-5. Swagger와 route `page.spec.md`의 API Contract 섹션에 응답 구조를 명시합니다.
+5. Swagger와 route `page.spec.md`의 API 계약 섹션에 응답 구조를 명시합니다.
 
-## Guidelines
+## 작성 기준
 
 - [ ] `@ApiTags()` 데코레이터 추가
 - [ ] **`@Controller()` 빈 값으로 사용 (경로 지정 금지! RouterModule에서 관리)**
@@ -141,7 +131,7 @@ Create/Update 화면에서 폼을 즉시 렌더링할 수 있도록 Controller�
 - [ ] **Entity 직접 반환** (plainToInstance 사용 금지, DtoTransformInterceptor가 자동 변환)
 - [ ] **private 헬퍼 메서드 없음** (메서드 내 직접 작성)
 - [ ] 페이지 단위 controller는 query/bootstrap/BFF 용도일 때만 허용하고 write 진입점의 기본 단위로 사용하지 않음
-- [ ] workflow 경로에서는 Controller -> CommandBus/QueryBus -> UseCase -> Service -> Repository 흐름 유지
+- [ ] 작업 흐름 경로에서는 Controller → CommandBus/QueryBus → UseCase → Service → Repository 흐름 유지
 - [ ] 한 controller 클래스에서 bus 외 dependency를 주입하지 않는지 확인
 - [ ] module 폴더는 aggregate root 기준으로 유지 (`spaces`, `tasks`)
 - [ ] `ground`, `exercise` 같은 child resource는 top-level module 예시로 만들지 않음
@@ -149,7 +139,7 @@ Create/Update 화면에서 폼을 즉시 렌더링할 수 있도록 Controller�
 - [ ] `state path` 기반 옵션/경로 규칙 검증
 - [ ] `POST /form/ai-fill` 시 fillable/권한 서버 검증
 - [ ] Module 파일 생성
-- [ ] route `page.spec.md` 또는 owner spec의 API/Module contract 동시 갱신
+- [ ] route `page.spec.md` 또는 담당 스펙의 API/Module 계약 동시 갱신
 - [ ] `app.module.ts`에 Module import
 - [ ] RouterModule에 경로 등록
 

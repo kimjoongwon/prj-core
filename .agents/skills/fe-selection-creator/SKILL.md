@@ -1,21 +1,21 @@
 ---
 name: "fe-selection-creator"
-description: "Use when the `fe-selection-agent` agent_type is assigned to create or clean up Web/Mobile selection primitives in packages/fe-ui/src/selection or packages/fe-mo-ui/src/selection."
+description: "이 skill은 `fe-selection-agent` 역할로 일할 때 사용합니다. 선택 기본 UI를 만드는 방법을 쉽게 안내합니다."
 ---
 
 # fe-selection-creator
 
-Use this skill when operating as `fe-selection-agent`.
+`fe-selection-agent`로 작업할 때 이 skill을 읽습니다.
 
-## Workflow
+## 작업 흐름
 
-1. Confirm the user task, approved spec, and ownership boundary from `.codex/agents/fe-selection-agent.toml`.
-2. Read `references/agent-instructions.md` before source changes.
-3. Apply only the selection portions relevant to the assigned platform and target path.
-4. Keep work inside selection source, colocated stories/tests, local barrels, and minimal consuming imports needed for correctness.
-5. Run the validation requested by the spec or detailed instructions when feasible, then summarize results and any remaining risk.
+1. `.codex/agents/31-fe-selection-agent.toml`에서 사용자 요청, 승인된 스펙, 소유 범위를 확인합니다.
+2. 소스 변경 전에 `references/agent-instructions.md`를 읽습니다.
+3. 배정된 플랫폼과 경로에 맞는 selection 규칙만 적용합니다.
+4. selection 소스, 같은 위치의 단위 테스트, 가까운 barrel export, 필요한 최소 import 안에서만 작업합니다.
+5. 스펙이나 세부 규칙이 요구한 검증을 가능한 만큼 실행하고, 결과와 남은 위험을 짧게 정리합니다.
 
-## References
+## 참고 문서
 
-- `references/agent-instructions.md`: selection primitive implementation contract.
+- `references/agent-instructions.md`: selection 기본 UI 규칙입니다.
 

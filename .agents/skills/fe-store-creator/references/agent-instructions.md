@@ -1,40 +1,30 @@
-# Detailed Instructions for fe-store-agent
+# fe-store-agent 상세 지시
 
-Source agent file: `.codex/agents/fe-store-agent.toml`
+원본 에이전트 파일: `.codex/agents/25-fe-store-agent.toml`
 
-This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+이 참고 문서는 예전에 에이전트 TOML에 있던 상세 구현 지시를 담고 있습니다. 얇은 에이전트 계약과 이 skill의 `SKILL.md`를 읽은 뒤 따릅니다.
 
 ---
 
-## Platform Routing
+## 플랫폼 라우팅
 
-- 이 role은 Shared agent입니다.
-- Web/Mobile 양쪽에서 소비할 수 있는 공용 계약만 다루며, UI runtime별 시각 규칙은 소비 owner agent의 `React Web` 또는 `React Native` 섹션을 따릅니다.
-- `@heroui/react`, `heroui-native`, DOM, Expo/native UI 구현 세부 규칙은 이 role의 실행 범위가 아닙니다.
+- 이 역할은 공용 agent입니다.
+- 웹/모바일 양쪽에서 소비할 수 있는 공용 계약만 다루며, UI 런타임별 시각 규칙은 소비 소유 에이전트의 `웹 규칙` 또는 `모바일 규칙` 섹션을 따릅니다.
+- `@heroui/react`, `heroui-native`, DOM, Expo/native UI 구현 세부 규칙은 이 역할의 실행 범위가 아닙니다.
 
-## Common
+## 공통
 
-### 내장 Spec 정책 (필수)
+### 공통 실행 규칙
 
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
-- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
-- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
+- 먼저 `플랫폼 라우팅`으로 현재 대상이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
+- 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 해당 플랫폼 섹션의 허용 파일/책임 범위 안에서만 작업합니다.
+- 소스 담당자가 다른 파일이나 다른 플랫폼 대상이 필요하면 직접 확장하지 말고 최종 보고에 인계 필요성을 요약합니다.
+- Storybook 스토리는 `fe-storybook-agent`가 맡습니다. 소스 담당 에이전트는 단위 테스트와 소스 계약만 맡고, Storybook 필요 시 spec 또는 최종 보고로 인계합니다.
 
-### Common Execution Rules
+### Shared 런타임 Boundary
 
-- 먼저 `Platform Routing`으로 현재 target이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
-- 승인된 service delivery spec과 생성된 route delivery spec의 해당 플랫폼 섹션의 허용 파일/책임 범위 안에서만 작업합니다.
-- 소스 담당가 다른 파일이나 다른 플랫폼 target이 필요하면 직접 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
-- Storybook/Test 책임은 source를 소유한 agent가 함께 갱신하고, route/layout/store/backend-only step은 route delivery spec의 검증 계약을 따릅니다.
-
-### Shared Runtime Boundary
-
-- 공용 hook/store는 React Web과 React Native에서 모두 소비될 수 있으므로 UI runtime import를 추가하지 않습니다.
-- route-local hook/util/type/state는 Web/Mobile 모두 `fe-route-agent`가 처리하고 별도 spec을 만들지 않습니다.
+- 공용 hook/store는 React Web과 React Native에서 모두 소비될 수 있으므로 UI 런타임 import를 추가하지 않습니다.
+- route-local hook/util/type/상태는 웹/모바일 모두 `fe-route-agent`가 처리하고 별도 spec을 만들지 않습니다.
 
 ## 재사용 우선 점검 (필수)
 
@@ -57,7 +47,7 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 | 앱 전체에서 접근해야 하는 설정 | ✅ | TokenStore, PersistStore |
 | 복잡한 상태 머신 | ✅ | 멀티스텝 프로세스 |
 | 도메인 모델 (데이터 구조) | ✅ | NavItem, User, Company |
-| 페이지 레벨 상태 | ❌ | 페이지 로컬 state(`useState`/`useLocalObservable`) 사용 |
+| 페이지 레벨 상태 | ❌ | 페이지 로컬 상태(`useState`/`useLocalObservable`) 사용 |
 | 컴포넌트 로컬 상태 | ❌ | useLocalObservable 사용 |
 | API 캐싱 | ❌ | React Query 사용 |
 
@@ -84,13 +74,13 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 | useStore hook | `packages/fe-store/src/stores/useStore.ts` (추가) |
 | RootStore 등록 | `packages/fe-store/src/stores/rootStore.ts` (수정) |
 | barrel export | `packages/fe-store/src/stores/index.ts` (추가) |
-| 페이지 전용 상태 | `apps/*/src/app/**/_client.tsx`, `apps/*/src/app/**/hooks/` (로컬 state로 구현) |
+| 페이지 전용 상태 | `apps/*/src/app/**/_client.tsx`, `apps/*/src/app/**/hooks/` (로컬 상태로 구현) |
 
 ---
 
 ## 3. 핵심 규칙
 
-### ✅ Do
+### ✅ 권장
 
 | 규칙 | 설명 |
 |------|------|
@@ -101,11 +91,11 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 | **상태 변경만 담당** | API 호출은 외부에서 수행 후 결과 전달 |
 | **computed는 동기적** | getter는 순수 함수로 작성 |
 
-### ❌ Don't
+### ❌ 금지
 
 | 금지 사항 | 이유 |
 |----------|------|
-| 페이지 레벨 Store 생성 | 페이지 로컬 state가 원칙 |
+| 페이지 레벨 Store 생성 | 페이지 로컬 상태가 원칙 |
 | Store에서 직접 API 호출 | 상태 관리와 데이터 페칭 분리 |
 | 앱 종속적 하드코딩 | 공용 패키지 재사용성 |
 | 비동기 computed | computed는 동기적이어야 함 |
@@ -130,7 +120,7 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 | 독립형 Store | 다른 Store와 상호작용 불필요 |
 | 설정 주입형 Store | 앱별 설정이 필요한 경우 |
 
-> 생성 전 게이트: 단일 페이지에서만 쓰이는 상태라면 Store를 만들지 않고 페이지 로컬 state로 구현합니다.
+> 생성 전 게이트: 단일 페이지에서만 쓰이는 상태라면 Store를 만들지 않고 페이지 로컬 상태로 구현합니다.
 
 ### 4.3 파일 구조
 
@@ -499,9 +489,7 @@ useEffect(() => {
 - useStore hooks: `packages/fe-store/src/stores/useStore.ts`
 - Export: `packages/fe-store/src/stores/index.ts`
 
-## Storybook / Unit Test 책임
 
-- Store는 Storybook 대상이 아닙니다.
-- shared Store를 신규 생성하거나 수정하면 같은 작업에서 store unit test를 작성/갱신합니다.
-- Store가 UI state branch를 새로 만들면 owner spec의 `Unit Test 인벤토리`에 store test row를 기록하고, consuming component story/test row는 해당 component 소스 담당 agent가 담당하도록 분리합니다.
-- route-local state는 `fe-store-agent`가 아니라 `fe-route-agent`의 route-local implementation 또는 해당 route QA test로 검증합니다.
+- shared Store를 신규 생성하거나 수정하면 같은 작업에서 store 단위 테스트를 작성/갱신합니다.
+- Store가 UI 상태 분기를 새로 만들면 담당 스펙의 `단위 테스트 인벤토리`에 store test 행을 기록하고, consuming component 단위 테스트 행은 해당 component 소스 담당 agent가 담당하도록 분리합니다.
+- route-local 상태는 `fe-store-agent`가 아니라 `fe-route-agent`의 route-local implementation 또는 해당 route QA test로 검증합니다.

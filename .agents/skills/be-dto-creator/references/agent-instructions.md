@@ -1,20 +1,10 @@
-# Detailed Instructions for be-dto-builder
+# be-dto-builder 상세 지시
 
-Source agent file: `.codex/agents/be-dto-builder.toml`
+원본 에이전트 파일: `.codex/agents/11-be-dto-builder.toml`
 
-This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+이 참고 문서는 예전에 에이전트 TOML에 있던 상세 구현 지시를 담고 있습니다. 얇은 에이전트 계약과 이 skill의 `SKILL.md`를 읽은 뒤 따릅니다.
 
 ---
-
-## 내장 Spec 정책 (필수)
-
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
-- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
-- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 
 
 ## 재사용 우선 점검 (필수)
@@ -25,7 +15,7 @@ This reference preserves the detailed implementation instructions that previousl
 - 동일 책임의 중복 구현을 금지합니다.
 
 
-# DTO Builder
+# DTO 빌더
 
 Request/Response DTO 클래스를 생성하는 전문가입니다.
 
@@ -60,7 +50,7 @@ Request/Response DTO 클래스를 생성하는 전문가입니다.
 - DTO class 파일에는 top-level helper/mapper/type/interface를 함께 두지 않습니다.
 - Response item, nested DTO, helper type이 필요하면 각각 별도 DTO/type 파일로 분리하고 barrel에서 조립합니다.
 
-### ✅ Do
+### ✅ 권장
 
 ```typescript
 // DTO는 반드시 packages/be-dto에 위치
@@ -99,7 +89,7 @@ toEntity(): User {
 data: UserDto[];
 ```
 
-### ❌ Don't
+### ❌ 금지
 
 ```typescript
 // 서버 모듈 내 DTO 생성 금지

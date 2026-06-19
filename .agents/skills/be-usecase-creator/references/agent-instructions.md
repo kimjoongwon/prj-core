@@ -1,20 +1,10 @@
-# Detailed Instructions for be-usecase-builder
+# be-usecase-builder 상세 지시
 
-Source agent file: `.codex/agents/be-usecase-builder.toml`
+원본 에이전트 파일: `.codex/agents/19-be-usecase-builder.toml`
 
-This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+이 참고 문서는 예전에 에이전트 TOML에 있던 상세 구현 지시를 담고 있습니다. 얇은 에이전트 계약과 이 skill의 `SKILL.md`를 읽은 뒤 따릅니다.
 
 ---
-
-## 내장 Spec 정책 (필수)
-
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
-- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
-- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 
 ## 재사용 우선 점검 (필수)
 
@@ -25,7 +15,7 @@ This reference preserves the detailed implementation instructions that previousl
 
 # UseCase Builder
 
-Nest CQRS 기반 UseCase handler를 생성하는 role입니다. Command/Query message는 `@cocrepo/command`가 소유하고, 이 role은 그 message를 실행하는 handler만 소유합니다.
+Nest CQRS 기반 UseCase handler를 생성하는 역할입니다. Command/Query message는 `@cocrepo/command`가 소유하고, 이 역할은 그 message를 실행하는 handler만 소유합니다.
 
 ## 언제 사용하는가?
 
@@ -33,10 +23,10 @@ Nest CQRS 기반 UseCase handler를 생성하는 role입니다. Command/Query me
 |------|----------|------|
 | Controller가 호출할 write 유즈케이스 | ✅ 사용 | Command + `@CommandHandler` |
 | Controller가 호출할 read 유즈케이스 | ✅ 사용 | Query + `@QueryHandler` |
-| 여러 Service/Client 조합 workflow | ✅ 사용 | UseCase handler orchestration |
-| 단일 Aggregate Root write flow | ✅ 사용 | handler -> `@cocrepo/aggregate` aggregate root service |
+| 여러 Service/Client 조합 작업 흐름 | ✅ 사용 | UseCase handler 조율 |
+| 단일 Aggregate Root write flow | ✅ 사용 | handler → `@cocrepo/aggregate` aggregate root service |
 | Event 후속 side effect | ✅ 사용 | `@EventsHandler` 기반 EventHandler |
-| Event -> Command orchestration | ✅ 사용 | `@Saga` 기반 Saga |
+| Event → Command 조율 | ✅ 사용 | `@Saga` 기반 Saga |
 | Command/Query message 생성 | ❌ 미사용 | `be-command-builder` 사용 |
 | Event message 생성 | ❌ 미사용 | `be-event-builder` 사용 |
 | 외부 시스템 protocol wrapper | ❌ 미사용 | `be-client-builder` 사용 |
@@ -53,7 +43,7 @@ Nest CQRS 기반 UseCase handler를 생성하는 role입니다. Command/Query me
 | EventHandler | `packages/be-usecase/src/{domain}/{name}.event-handler.ts` 또는 `packages/be-usecase/src/{namespace}/{domain}/{name}.event-handler.ts` |
 | Saga | `packages/be-usecase/src/{domain}/{name}.saga.ts` 또는 `packages/be-usecase/src/{namespace}/{domain}/{name}.saga.ts` |
 | Handler array / barrel | `packages/be-usecase/src/{domain}/index.ts`, `packages/be-usecase/src/{namespace}/{domain}/index.ts`, `packages/be-usecase/src/index.ts` |
-| UseCase contract | owner spec의 `UseCase 인벤토리` row |
+| UseCase 계약 | 담당 스펙의 `UseCase 인벤토리` 행 |
 
 ## 핵심 규칙
 
@@ -68,20 +58,20 @@ Nest CQRS 기반 UseCase handler를 생성하는 role입니다. Command/Query me
 - handler class 파일에는 top-level type/helper/mapper를 함께 두지 않습니다.
 - handler 한 개에서만 쓰는 input/result/mapper도 `{handler}.input.ts`, `{handler}.result.ts`, `{handler}.mapper.ts`처럼 별도 파일로 분리합니다.
 - 둘 이상의 handler가 공유하는 context/mapper/helper는 `{domain}.context.ts`, `{domain}.mapper.ts`, `{domain}.support.ts`처럼 별도 파일로 분리합니다.
-- domain을 넘는 shared type은 `@cocrepo/type`, pure runtime utility는 `@cocrepo/toolkit`에 둡니다.
+- domain을 넘는 shared type은 `@cocrepo/type`, pure 런타임 utility는 `@cocrepo/toolkit`에 둡니다.
 - pagination처럼 여러 usecase domain이 공유하는 계약/빌더를 `packages/be-usecase/src/common`에 만들지 않습니다.
 - Handler class 이름은 `{Verb}{Domain}UseCase` 형태를 기본으로 합니다.
-- Handler는 application/usecase layer입니다. workflow orchestration을 수행하고 도메인 규칙은 `@cocrepo/aggregate` AggregateRootService 또는 AggregateRootEntity에 위임합니다.
+- Handler는 application/usecase layer입니다. 작업 흐름 조율을 수행하고 도메인 규칙은 `@cocrepo/aggregate` AggregateRootService 또는 AggregateRootEntity에 위임합니다.
 - CommandHandler는 transaction-critical 흐름만 직접 의존합니다. 실패해도 원 command 성공을 막지 않아야 하는 후속 작업은 EventBus로 분리합니다.
 - EventHandler는 email, audit, notification, cache invalidation, external notification 같은 side effect를 담당합니다.
 - EventHandler 안에서 CommandBus를 주입하거나 execute하지 않습니다. Event 이후 다른 UseCase/Command를 실행해야 하면 Saga로 분리합니다.
-- Saga는 Event -> Command 변환만 담당하고 도메인 service를 직접 조합하지 않습니다.
-- Handler에서 Prisma/Repository를 직접 호출하지 않습니다. 예외가 필요한 read projection은 owner spec에 명시하고 repository query method를 통해 호출합니다.
+- Saga는 Event → Command 변환만 담당하고 도메인 service를 직접 조합하지 않습니다.
+- Handler에서 Prisma/Repository를 직접 호출하지 않습니다. 예외가 필요한 read projection은 담당 스펙에 명시하고 repository query method를 통해 호출합니다.
 - Handler에서 DTO를 domain service로 그대로 넘기지 않습니다. command/query field를 service input으로 변환합니다.
 - 여러 출처의 값을 조합해 service input을 만들 때는 `command.params.xxx`, `context.userId`, `entity.id`처럼 값의 원천을 보존합니다. 반복이 길면 `const params = command.params`처럼 출처명 alias까지만 사용하고 deep destructuring으로 bare variable을 남발하지 않습니다.
 - `@CommandHandler` / `@QueryHandler` decorator를 사용합니다.
 - handler array는 module builder가 providers에 등록할 수 있게 export합니다.
-- legacy app/boundary/external 명칭을 신규로 만들지 않습니다.
+- 이전 방식 app/boundary/external 명칭을 신규로 만들지 않습니다.
 - Controller는 UseCase handler를 직접 주입하지 않고 `CommandBus`/`QueryBus`로 실행합니다.
 
 ## 템플릿
@@ -126,11 +116,11 @@ export * from "./confirm-reservation.usecase";
 - [ ] handler class 파일에 top-level type/helper/mapper가 남아 있지 않음
 - [ ] provider array와 barrel export가 domain `index.ts`에서만 조립됨
 - [ ] `@CommandHandler` 또는 `@QueryHandler` 적용
-- [ ] Event 후속 side effect는 `@EventsHandler`, Event -> Command 흐름은 `@Saga`로 분리
+- [ ] Event 후속 side effect는 `@EventsHandler`, Event → Command 흐름은 `@Saga`로 분리
 - [ ] EventHandler 안에서 CommandBus를 호출하지 않음
-- [ ] Handler가 Service/Client orchestration만 수행하는지 확인
+- [ ] Handler가 Service/Client 조율만 수행하는지 확인
 - [ ] Prisma 직접 호출 없음
 - [ ] DTO를 Service로 그대로 전달하지 않음
-- [ ] 여러 input source를 조합할 때 source path 또는 출처명 alias를 유지함
+- [ ] 여러 input source를 조합할 때 소스 경로 또는 출처명 alias를 유지함
 - [ ] handler array와 barrel export 추가
 - [ ] Module provider 등록은 `be-module-builder` 책임으로 남김

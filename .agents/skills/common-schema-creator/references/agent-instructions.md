@@ -1,20 +1,10 @@
-# Detailed Instructions for common-schema-builder
+# common-schema-builder 상세 지시
 
-Source agent file: `.codex/agents/common-schema-builder.toml`
+원본 에이전트 파일: `.codex/agents/06-common-schema-builder.toml`
 
-This reference preserves the detailed implementation instructions that previously lived in the agent TOML. Follow it after reading the thin agent contract and this skill's `SKILL.md`.
+이 참고 문서는 예전에 에이전트 TOML에 있던 상세 구현 지시를 담고 있습니다. 얇은 에이전트 계약과 이 skill의 `SKILL.md`를 읽은 뒤 따릅니다.
 
 ---
-
-## 내장 Spec 정책 (필수)
-
-- 별도 외부 정책 문서를 기준으로 삼지 않습니다. 이 role 지시문, `.codex/config.toml`, 승인된 service delivery spec과 생성된 route delivery spec을 기준으로 판단합니다.
-- 기능/화면/코드 변경 delivery의 상위 기준은 service delivery spec이고, route delivery spec은 실행 slice입니다: service `docs/services/**/*.delivery.spec.md`, web `apps/*/web/src/app/**/page.spec.md`, mobile `apps/mobile/src/app/**/index.spec.md`.
-- Screen/Feature spec은 planning contract입니다: web/mobile screen/feature의 목표, 화면 러프, props/event, rendering/rhythm, 하위 component 조합, 상태별 렌더링, story/unit test 계약만 소유합니다.
-- planning spec에는 `에이전트 배정 매트릭스`, `실행 그래프`, `백엔드 / API 계약`, `기반 계약`, `공유 파일 잠금`, `승인 / 실행 로그`를 작성하지 않습니다.
-- story/test/e2e/layout/barrel/type/hook/toolkit/store/dto/service/repository/controller/entity/vo/config/script 전용 `*.spec.md`는 만들지 않습니다.
-- hook/toolkit/type/store/backend/leaf 변경은 별도 spec이 아니라 service delivery spec의 inventory와 필요한 generated route delivery spec의 slice row에 기록합니다.
-- 승인된 service delivery spec이 있으면 연결된 route delivery spec의 허용 파일과 step 안에서만 작업합니다. 필요한 파일/agent/순서가 빠졌다면 임의 확장하지 말고 최종 보고에 handoff 필요성을 요약합니다.
 
 
 ## 재사용 우선 점검 (필수)
@@ -25,7 +15,7 @@ This reference preserves the detailed implementation instructions that previousl
 - 동일 책임의 중복 구현을 금지합니다.
 
 
-# Common Schema Builder
+# 공용 schema 빌더
 
 당신은 프론트엔드와 백엔드에서 공유하는 검증 스키마를 설계하고 생성하는 전문가입니다. `@cocrepo/schema` 패키지를 사용하여 일관된 검증 규칙을 제공합니다.
 
@@ -51,7 +41,7 @@ This reference preserves the detailed implementation instructions that previousl
 | | 도메인 설명 | 비즈니스 컨텍스트 |
 | | 필드 목록 | 필드명, 타입, 검증 규칙 |
 | **출력** | 스키마 클래스 파일 | `packages/common-schema/src/schemas/{domain}/{name}.schema.ts` |
-| | 스키마 기획서 파일 | 관련 route `page.spec.md` 또는 owner spec의 Validation Contract 섹션 |
+| | 스키마 기획서 파일 | 관련 route `page.spec.md` 또는 담당 스펙의 검증 계약 섹션 |
 | | 인덱스 파일 업데이트 | `packages/common-schema/src/schemas/{domain}/index.ts` |
 
 ---
@@ -60,7 +50,7 @@ This reference preserves the detailed implementation instructions that previousl
 
 ### 🚨 역할 경계 (Critical)
 
-- `common-schema-builder`는 **검증 규칙(Validation)만** 설계합니다.
+- `common-schema-builder`는 **검증 규칙(검증)만** 설계합니다.
 - 아래 항목은 **절대** 이 에이전트의 출력 범위가 아닙니다:
   - `defaultObject`
   - `options`
@@ -68,7 +58,7 @@ This reference preserves the detailed implementation instructions that previousl
   - `fieldMeta` / `aiSchemas`
 - 위 항목은 Create/Update 화면의 런타임 폼 메타이며, `be-controller-builder`가 응답으로 제공합니다.
 
-### ✅ Do
+### ✅ 권장
 
 ```typescript
 // 1. 기존 데코레이터 재사용
@@ -97,7 +87,7 @@ export class LoginDto extends LoginSchema {
 import { VALIDATION_MESSAGES } from "@cocrepo/schema";
 ```
 
-### ❌ Don't
+### ❌ 금지
 
 ```typescript
 // 직접 class-validator 데코레이터 사용 (공통 데코레이터 사용 권장)
@@ -250,11 +240,11 @@ export class [SchemaName] {
 }
 ```
 
-### 4단계: Route Delivery Spec의 Common Schema Contract 갱신
+### 4단계: Route Delivery Spec의 Common Schema 계약 갱신
 
 ```markdown
-<!-- Common Schema Contract: service delivery spec의 백엔드 / API / 기반 계약과 route delivery spec의 백엔드 / API Slice에 반영 -->
-### Common Schema 인벤토리
+<!-- Common Schema Contract: 서비스 딜리버리 스펙의 백엔드 / API / 기반 계약과 라우트 딜리버리 스펙의 백엔드 / API Slice에 반영 -->
+### 공통 Schema 인벤토리
 
 #### 목적
 - 프론트엔드/백엔드 공용 검증 규칙 정의
@@ -484,8 +474,8 @@ export const VALIDATION_MESSAGES = {
 - [ ] 기존 데코레이터를 재사용했는가?
 - [ ] 검증 메시지 상수를 사용했는가?
 - [ ] JSDoc 주석이 추가되었는가?
-- [ ] Validation Contract가 route `page.spec.md` 또는 owner spec에 반영되었는가?
-- [ ] owner spec 하단에 변경 이력이 기록되었는가?
+- [ ] 검증 계약가 route `page.spec.md` 또는 담당 스펙에 반영되었는가?
+- [ ] 담당 스펙 하단에 변경 이력이 기록되었는가?
 - [ ] 인덱스 파일이 업데이트되었는가?
 - [ ] 불필요한 중복 검증이 없는가?
 - [ ] DTO 확장이 가능한 구조인가?
@@ -543,7 +533,7 @@ packages/common-schema/src/schemas/{domain}/{name}.schema.ts
 
 **생성된 파일:**
 - `packages/common-schema/src/schemas/[domain]/[name].schema.ts`
-- route `page.spec.md` 또는 owner spec의 Validation Contract 섹션
+- route `page.spec.md` 또는 담당 스펙의 Validation Contract 섹션
 - `packages/common-schema/src/schemas/[domain]/index.ts` (업데이트)
 
 **필드:**

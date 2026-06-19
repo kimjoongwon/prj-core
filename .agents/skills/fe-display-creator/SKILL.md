@@ -1,20 +1,20 @@
 ---
 name: "fe-display-creator"
-description: "Shared legacy Web/Mobile primitive reference for split display-area creator skills. Prefer `fe-data-display-creator`, `fe-feedback-creator`, or `fe-overlay-creator` for new subagent assignments."
+description: "이전 방식 display-area 기준을 확인할 때 사용합니다. 새 기본 UI 작업은 data-display, feedback, overlay skill을 우선 사용합니다."
 ---
 
 # fe-display-creator
 
-Use this skill only as a shared reference for split display-area creator workflows, or when a task explicitly asks for this legacy workflow.
+이 skill은 display 영역의 이전 공통 규칙을 확인할 때만 사용합니다. 새 작업은 data-display, feedback, overlay skill을 우선 사용합니다.
 
-## Workflow
+## 작업 흐름
 
-1. Confirm the user task, approved spec, and ownership boundary from the assigned split subagent TOML.
-2. Read `references/agent-instructions.md` before source changes; it contains the detailed implementation rules for this creator.
-3. Apply only the sections relevant to the assigned target. For platform-aware FE creators, choose the target platform from file paths before applying Web or React Native rules.
-4. Keep work inside the subsubagent ownership boundary. If another subagent owns the needed file or sequence, stop and summarize the handoff need in the final report.
-5. Run the validation requested by the spec or detailed instructions when feasible, then summarize results and any remaining risk.
+1. 사용자 요청, 승인된 스펙, 소유 범위를 확인합니다.
+2. 소스 변경 전에 `references/agent-instructions.md`를 읽습니다. 자세한 작업 규칙은 그 파일에 있습니다.
+3. 배정된 대상에 맞는 섹션만 적용합니다. 프론트엔드 작업은 파일 경로로 Web/React Native 대상을 먼저 구분합니다.
+4. 맡은 범위 안에서만 작업합니다. 다른 하위 에이전트의 파일이나 순서가 필요하면 멈추고 인계가 필요하다고 보고합니다.
+5. 스펙이나 세부 규칙이 요구한 검증을 가능한 만큼 실행하고, 결과와 남은 위험을 짧게 정리합니다.
 
-## References
+## 참고 문서
 
-- `references/agent-instructions.md`: detailed workflow and implementation contract migrated from the original subagent TOML.
+- `references/agent-instructions.md`: 실제 작업 순서와 세부 규칙입니다.

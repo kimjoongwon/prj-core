@@ -1,21 +1,21 @@
 ---
-name: "delivery-orchestration-creator"
-description: "`orch-delivery` agent_type이 질문 기획 → 서비스 Spec → 승인 → Route/Page Spec → Screen/Feature Spec → 구현 → QA 흐름을 수행할 때 사용합니다. 이 creator skill은 얇은 agent TOML에서 분리한 상세 workflow, 구현 규칙, 검증 계약을 담습니다."
+name: "delivery-조율-creator"
+description: "이 skill은 `orch-delivery` 역할로 일할 때 사용합니다. 서비스 기획, spec 작성, 하위 에이전트 실행 순서를 잡는 방법을 쉽게 안내합니다."
 ---
 
-# delivery-orchestration-creator
+# delivery-조율-creator
 
-`orch-delivery`로 동작하거나 사용자가 이 creator workflow를 명시적으로 요청할 때 이 skill을 사용합니다.
+`orch-delivery`로 서비스 기획과 작업 계획을 할 때 이 skill을 읽습니다.
 
-## Workflow
+## 작업 흐름
 
-1. `.codex/agents/orch-delivery.toml`에서 사용자 요청, 승인된 spec, ownership boundary를 확인합니다.
-2. source 변경 전에 `references/agent-instructions.md`를 읽습니다. 이 파일에는 creator의 상세 구현 규칙이 있습니다.
-3. 배정된 대상에 관련된 섹션만 적용합니다. 플랫폼 인식 FE creator는 파일 경로로 대상 플랫폼을 먼저 판단한 뒤 Web 또는 React Native 규칙을 적용합니다.
-4. subagent 실행 전 service/route/page spec의 `산출물 시뮬레이션 / 인계 계약`에 예상 산출물, 생성/수정 예정 경로, 소비 step, 검증 기준이 있는지 확인합니다.
-5. subagent ownership boundary 안에서만 작업합니다. 필요한 파일이나 순서가 다른 subagent 소유라면 중단하고 최종 보고에 handoff 필요성을 요약합니다.
-6. 가능한 경우 spec 또는 상세 지시가 요구한 검증을 실행한 뒤 결과와 남은 위험을 요약합니다.
+1. `.codex/agents/01-orch-delivery.toml`에서 사용자 요청, 승인된 스펙, 맡은 범위를 확인합니다.
+2. 변경 전에 `references/agent-instructions.md`를 읽습니다. 서비스 스펙, route/page 스펙, 인계 규칙이 그 파일에 있습니다.
+3. 이번 작업에 필요한 조율 규칙만 적용합니다. 실제 구현 규칙은 배정된 하위 에이전트 skill이 맡습니다.
+4. 하위 에이전트 실행 전 spec의 `산출물 시뮬레이션 / 인계 계약`에 예상 결과, 파일 경로, 다음 단계, 검증 기준이 있는지 확인합니다.
+5. 공통 보고와 차단 규칙은 루트 `AGENTS.md`를 따릅니다. 이 skill은 단계 id, spec 행 id, 재실행 필요 여부를 추가로 확인합니다.
+6. 가능한 검증을 실행하고 결과와 남은 위험을 짧게 정리합니다.
 
-## References
+## 참고 문서
 
-- `references/agent-instructions.md`: 원래 agent TOML에서 옮긴 상세 workflow와 구현 계약입니다.
+- `references/agent-instructions.md`: 서비스 스펙, route/page 스펙, 승인, 인계, 실행 조율 규칙입니다.
