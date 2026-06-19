@@ -2,19 +2,22 @@
 
 이 문서는 `.codex/agents/**/*.toml`의 활성 subagent 인덱스입니다.
 
-원문 우선순위:
+참조 우선순위:
 
-1. [.codex/config.toml](../config.toml)
-2. 각 `**/*.toml`
-3. 이 인덱스
+1. 각 `NN-*.toml`
+2. 루트 `AGENTS.md`
+3. 각 agent가 요구하는 `.agents/skills/*-creator/SKILL.md`
+4. 이 인덱스
 
 `*.toml.guide.md` 보조 문서는 생성하지 않습니다.
 subagent TOML은 얇은 실행 계약만 소유합니다. 상세 작업 지시는 repo 범위 skill인 `.agents/skills/*-creator/SKILL.md`와 해당 skill의 `references/agent-instructions.md`에 둡니다.
+[.codex/config.toml](../config.toml)은 subagent 등록표를 소유하지 않고, 문서화된 전역 subagent 설정만 둡니다.
 
 ## 번호 규칙
 
 - subagent TOML 파일명은 `NN-agent-type.toml` 형식으로 정렬 순서를 드러냅니다.
-- `name`, `[agents.<agent_type>]`, spec의 `agent_type` 값은 번호를 붙이지 않고 기존 계약명을 유지합니다.
+- Codex가 사용하는 agent 식별자는 각 TOML의 `name` 값입니다.
+- `name`과 spec의 `agent_type` 값은 번호를 붙이지 않고 기존 계약명을 유지합니다.
 - 번호는 색인과 파일 정렬을 위한 값이며 실행 중 보고할 `next subagent` 값이 아닙니다.
 
 ## 모델 티어 운영
