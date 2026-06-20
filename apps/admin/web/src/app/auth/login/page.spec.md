@@ -134,11 +134,11 @@ Route page, route layout, route actions는 Storybook 대상이 아니다. Reusab
 
 | row id | 필요 | Method/Path | operationId | 재사용/신규 | route 소비 파일 | 소비/Wiring `agent_type` | 검증 `agent_type` | 비고 |
 |--------|------|-------------|-------------|-------------|-----------------|---------------------------|---------------------|------|
-| LOGIN-API-NATIVE-LOGIN | login submit | `POST /api/v1/auth/native/login` | `nativeLogin` | reuse/verify | `packages/fe-hook/src/useAuthLogin.ts` | `fe-route-agent` | `qa-fe-testing`, `qa-fe-e2e-testing` | `useNativeLogin` hook 소비 |
+| LOGIN-API-NATIVE-LOGIN | login submit | `POST /api/v1/auth/login` | `nativeLogin` | reuse/verify | `packages/fe-hook/src/useAuthLogin.ts` | `fe-route-agent` | `qa-fe-testing`, `qa-fe-e2e-testing` | `useNativeLogin` hook 소비 |
 | LOGIN-API-REFRESH | token refresh | `POST /api/v1/auth/native/token/refresh` | `nativeRefreshToken` | reuse/verify | `apps/admin/web/src/app/providers.tsx` | `fe-route-agent` | `qa-fe-testing`, `qa-type-checker` | provider refresh bridge 소비 |
 | LOGIN-API-LOGOUT | logout | `POST /api/v1/auth/native/logout` | `nativeLogout` | reuse/verify | `TopBar` auth wiring | `fe-route-agent` | `qa-fe-testing`, `qa-fe-e2e-testing` | header logout flow 소비 |
 | LOGIN-API-VERIFY | token verify | `GET /api/v1/auth/verify-token` | `verifyToken` | reuse/verify | `apps/admin/web/src/app/providers.tsx` | `fe-route-agent` | `qa-fe-testing`, `qa-type-checker` | ability bootstrap 소비 |
-| LOGIN-API-OIDC | OIDC login protocol | `GET /api/v1/auth/login` | `login` | reuse/out-of-route-flow | none | none | none | `/auth/login` native form은 이 endpoint로 redirect하지 않음 |
+| LOGIN-API-OIDC | OIDC login protocol | `GET /api/v1/auth/oidc/login` | `login` | reuse/out-of-route-flow | none | none | none | `/auth/login` native form은 이 endpoint로 redirect하지 않음 |
 
 ### 필수 요소
 

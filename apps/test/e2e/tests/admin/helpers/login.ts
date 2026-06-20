@@ -21,7 +21,7 @@ const CURRENT_SPACE_URL = new URL(
 	ADMIN_API_BASE_URL,
 ).toString();
 const NATIVE_LOGIN_URL = new URL(
-	"/api/v1/auth/native/login",
+	"/api/v1/auth/login",
 	ADMIN_API_BASE_URL,
 ).toString();
 

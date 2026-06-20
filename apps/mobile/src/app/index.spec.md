@@ -79,7 +79,7 @@
 | `cancelMyReservation` | `useCancelMyReservation` | `PATCH /api/v1/reservations/me/:reservationId/cancel` | future 목록/상세 취소 |
 | `getReservationCheckoutBootstrap` | `useGetReservationCheckoutBootstrap` | `GET /api/v1/reservations/checkout/bootstrap` | `/payments/checkout` 과정/가격/결제수단 bootstrap |
 | `createReservationCheckout` | `useCreateReservationCheckout` | `POST /api/v1/reservations/checkout` | `/payments/checkout` 결제 원장 + 수강권 + 예약 확정 |
-| `nativeLogin` | generated mutation | `POST /api/v1/auth/native/login` | `/auth/login` first-party native 로그인 |
+| `nativeLogin` | generated mutation | `POST /api/v1/auth/login` | `/auth/login` first-party native 로그인 |
 | `nativeRefreshToken` | generated mutation 또는 axios native refresh handler | `POST /api/v1/auth/native/token/refresh` | mobile access token 401 refresh |
 | `nativeLogout` | generated mutation 또는 auth store request | `POST /api/v1/auth/native/logout` | `/profile` 로그아웃 |
 | `getMySpaces` | `useGetMySpaces` | `GET /api/v1/auth/my-spaces` | `/select-space` 지점 선택 + 홈 헤더 지점 변경 |
@@ -468,7 +468,7 @@ Skipped phases:
 - Metro resolver는 Expo HMR runtime의 `pretty-format` import를 CJS entry로 고정해 dev bundle에서 MJS default wrapper mismatch가 발생하지 않게 한다.
 - 인증 상태면 홈(`/`)으로, 비인증 상태면 `/auth/login?returnTo=/`로 보낸다.
 - `/auth/login`은 시스템 브라우저, WebView, `/oidc/auth`, `/interaction/:uid`, `/api/v1/auth/callback`, `responseMode=mobile-json`을 사용하지 않는다.
-- `/auth/login`은 앱 내부 native email/password form에서 `POST /api/v1/auth/native/login`을 호출하고 `accessToken`, `refreshToken`, `sessionId`, 만료 시각을 받는다.
+- `/auth/login`은 앱 내부 native email/password form에서 `POST /api/v1/auth/login`을 호출하고 `accessToken`, `refreshToken`, `sessionId`, 만료 시각을 받는다.
 - mobile token은 `mobileApiScopeStore` memory store와 `expo-secure-store`에 저장하며, 앱 시작 시 SecureStore에서 복원한다.
 - mobile axios 401 refresh는 web cookie refresh endpoint가 아니라 `POST /api/v1/auth/native/token/refresh`를 사용한다.
 - `/profile` 로그아웃은 `POST /api/v1/auth/native/logout` 후 memory store와 SecureStore를 삭제한다.
@@ -478,7 +478,7 @@ Skipped phases:
 
 ## Backend Native Auth Handoff
 
-- `apps/core/api/src/module/auth/auth.controller.ts`는 기존 web OIDC `GET /login`, `GET /callback`, cookie refresh/logout을 유지하고, mobile 전용 `POST /api/v1/auth/native/login`, `POST /api/v1/auth/native/token/refresh`, `POST /api/v1/auth/native/logout`을 제공한다.
+- `apps/core/api/src/module/auth/auth.controller.ts`는 OIDC `GET /api/v1/auth/oidc/login`, `GET /api/v1/auth/callback`, cookie refresh/logout을 유지하고, first-party `POST /api/v1/auth/login`, mobile token `POST /api/v1/auth/native/token/refresh`, `POST /api/v1/auth/native/logout`을 제공한다.
 - credential 검증은 interaction login의 계정 잠금, 실패 횟수, audit 정책을 재사용한다. 후속 정리에서는 `InteractionLoginService`를 mobile/web 공용 credential login service로 승격한다.
 - native access token은 `issuer=<oidc issuer>/native`, `aud=user-mobile`, `client_id=user-mobile`로 web OIDC RS256 token과 구분한다.
 - core/idp `JwtStrategy`는 cookie token은 RS256만 허용하고, Authorization Bearer token은 RS256 또는 native HS256 token을 검증한다.

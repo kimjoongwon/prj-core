@@ -34,7 +34,7 @@ sequenceDiagram
 
     Note over U,DB: 1단계: 로그인 시작
     U->>A: 로그인 버튼 클릭
-    A->>S: GET /api/v1/auth/login (Next.js rewrite 프록시)
+    A->>S: GET /api/v1/auth/oidc/login (Next.js rewrite 프록시)
     S->>R: OIDC state 저장 (Redis, TTL 10분)
     S->>S: Authorization URL 조립 (scope: openid profile email roles)
     S-->>U: 302 Redirect → IDP /oidc/auth
@@ -73,7 +73,7 @@ sequenceDiagram
 
 | 단계 | 파일 | 핵심 로직 |
 |------|------|----------|
-| 로그인 시작 | `apps/admin/web/src/app/auth/login/page.tsx` | `/api/v1/auth/login`으로 이동 |
+| 로그인 시작 | `apps/admin/web/src/app/auth/login/page.tsx` | `/api/v1/auth/oidc/login`으로 이동 |
 | Authorization URL 생성 | `packages/be-usecase/src/auth/get-auth-login-redirect.usecase.ts` | `GetAuthLoginRedirectUseCase` - scope: `openid profile email roles` |
 | State 저장 (Redis) | `packages/be-service/src/auth/token-storage.service.ts:140-143` | `saveOidcState()` - TTL 10분, 일회용 |
 | IDP 리다이렉트 | `packages/be-controller/src/auth/auth.controller.ts` | `login()` - Authorization URL로 redirect |
@@ -404,7 +404,7 @@ graph TB
         RD[(Redis)]
     end
 
-    LP -->|"1. /api/v1/auth/login"| RW
+    LP -->|"1. /api/v1/auth/oidc/login"| RW
     RW -->|"프록시"| AC
     AC -->|"2. Redirect"| OPS
     OPS -->|"3. Interaction"| IC

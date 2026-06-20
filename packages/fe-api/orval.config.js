@@ -3,7 +3,7 @@
 
 const http = require("node:http");
 
-const serverEnvironments = {
+const apiSpecEnvironments = {
   development: "http://localhost:3006/api-json",
   local: "http://localhost:3006/api-json",
   stg: "https://stg.cocdev.co.kr/api-json",
@@ -12,14 +12,44 @@ const serverEnvironments = {
   production: "https://cocdev.co.kr/api-json",
 };
 
-const idpEnvironments = {
-  development: "http://localhost:3006/idp-api-json",
-  local: "http://localhost:3006/idp-api-json",
-  stg: "https://stg.cocdev.co.kr/idp-api-json",
-  staging: "https://stg.cocdev.co.kr/idp-api-json",
-  prod: "https://cocdev.co.kr/idp-api-json",
-  production: "https://cocdev.co.kr/idp-api-json",
-};
+const coreTags = [
+  "ABILITIES",
+  "ACTIONS",
+  "ASSETS",
+  "COMMUNITY",
+  "COURSES",
+  "FOLDERS",
+  "I18N",
+  "INQUIRIES",
+  "PAYMENTS",
+  "POLICIES",
+  "POLICY_ASSIGNMENTS",
+  "RESERVATIONS",
+  "ROLES",
+  "ROUTINES",
+  "SERVICE_DOCUMENTS",
+  "SPACES",
+  "SUBJECTS",
+  "TASKS",
+  "TEMPLATES",
+  "TENANT_ACCESS_REQUESTS",
+  "TIMELINES",
+  "TRANSLATIONS",
+  "USERS",
+];
+
+const idpTags = [
+  "AUTH",
+  "EMAIL_VERIFICATIONS",
+  "I18N",
+  "IDP_ACCOUNTS",
+  "IDP_DASHBOARD",
+  "Interaction",
+  "OIDC_CLIENTS",
+  "OIDC_SESSIONS",
+  "Password Reset",
+  "SECURITY_POLICY",
+];
 
 /**
  * localhost 서버가 실행 중인지 확인
@@ -76,8 +106,7 @@ async function resolveApiUrl(envMap, label) {
   }
 
   if (explicitUrl) {
-    const specPath = label === "Server" ? "api-json" : "idp-api-json";
-    const apiJsonUrl = `${explicitUrl.replace(/\/$/, "")}/${specPath}`;
+    const apiJsonUrl = `${explicitUrl.replace(/\/$/, "")}/api-json`;
     console.log(`🎯 [${label}] runtime env → ${apiJsonUrl}`);
     return apiJsonUrl;
   }
@@ -96,14 +125,9 @@ async function resolveApiUrl(envMap, label) {
   return envMap.staging;
 }
 
-/** Server API URL 결정 */
+/** Swagger spec URL 결정 */
 async function getApiUrl() {
-  return resolveApiUrl(serverEnvironments, "Server");
-}
-
-/** IDP API URL 결정 */
-async function getIdpApiUrl() {
-  return resolveApiUrl(idpEnvironments, "IDP");
+  return resolveApiUrl(apiSpecEnvironments, "Swagger");
 }
 
 /** 공통 React Query 훅 생성 옵션 */
@@ -126,22 +150,23 @@ const queryOptions = {
 
 // 비동기 설정 래퍼
 async function createConfig() {
-  const [apiUrl, idpApiUrl] = await Promise.all([
-    getApiUrl(),
-    getIdpApiUrl(),
-  ]);
+  const apiUrl = await getApiUrl();
+  const idpApiUrl = apiUrl;
 
   console.log(`🚀 Orval 설정 로드됨`);
-  console.log(`   Server API: ${apiUrl}`);
-  console.log(`   IDP API:    ${idpApiUrl}`);
+  console.log(`   Swagger Spec: ${apiUrl}`);
 
   return {
-    // ─── Server API (port 3006) ───
+    // ─── Core client from unified Swagger spec ───
     store: {
       // 환경에 따른 OpenAPI 스펙 URL
       input: {
         target: apiUrl,
         validation: false, // Swagger 스키마 검증 비활성화
+        filters: {
+          mode: "include",
+          tags: coreTags,
+        },
       },
 
       output: {
@@ -173,11 +198,15 @@ async function createConfig() {
       },
     },
 
-    // ─── IDP/Auth API spec from core-api ───
+    // ─── IDP/Auth client from unified Swagger spec ───
     idp: {
       input: {
         target: idpApiUrl,
         validation: false,
+        filters: {
+          mode: "include",
+          tags: idpTags,
+        },
       },
 
       output: {

@@ -402,7 +402,7 @@ export const OidcClientForm = observer(
 							onValueChange={(v) => {
 								state.loginUrl = v;
 							}}
-							description="`/api/v1/auth/login?clientId=...` 흐름에서 인증 실패 시 복귀할 로그인 화면입니다."
+							description="`/api/v1/auth/oidc/login?clientId=...` 흐름에서 인증 실패 시 복귀할 로그인 화면입니다."
 						/>
 						<Input
 							label="기본 복귀 URL"

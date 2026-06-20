@@ -7,7 +7,8 @@ import {
 import { REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import { AuthController } from "@cocrepo/controller";
 import { IS_PUBLIC_KEY, SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
-import { BadRequestException } from "@nestjs/common";
+import { BadRequestException, RequestMethod } from "@nestjs/common";
+import { METHOD_METADATA, PATH_METADATA } from "@nestjs/common/constants";
 import type { CommandBus, QueryBus } from "@nestjs/cqrs";
 
 describe("AuthController", () => {
@@ -81,6 +82,20 @@ describe("AuthController", () => {
 		expect(commandBus.execute).not.toHaveBeenCalled();
 	});
 
+	it("OIDC login redirect endpoint는 oidc 경로로 구분되어야 한다", () => {
+		const descriptor = Object.getOwnPropertyDescriptor(
+			AuthController.prototype,
+			"login",
+		);
+
+		expect(Reflect.getMetadata(PATH_METADATA, descriptor?.value)).toBe(
+			"oidc/login",
+		);
+		expect(Reflect.getMetadata(METHOD_METADATA, descriptor?.value)).toBe(
+			RequestMethod.GET,
+		);
+	});
+
 	it("refreshToken은 CommandBus로 refresh workflow를 실행한다", async () => {
 		commandBus.execute.mockResolvedValue({ accessToken: "next-access-token" });
 
@@ -131,6 +146,10 @@ describe("AuthController", () => {
 			"nativeLogin",
 		);
 
+		expect(Reflect.getMetadata(PATH_METADATA, descriptor?.value)).toBe("login");
+		expect(Reflect.getMetadata(METHOD_METADATA, descriptor?.value)).toBe(
+			RequestMethod.POST,
+		);
 		expect(Reflect.getMetadata(IS_PUBLIC_KEY, descriptor?.value)).toBe(true);
 		expect(Reflect.getMetadata(SKIP_SPACE_CHECK_KEY, descriptor?.value)).toBe(
 			true,

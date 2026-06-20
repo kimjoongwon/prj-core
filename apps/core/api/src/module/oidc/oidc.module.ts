@@ -5,11 +5,10 @@ import {
 	OidcRuntimeClientsRepository,
 } from "@cocrepo/repository";
 import {
-	AccountService as ServiceAccountService,
-	IDP_OIDC_PROVIDER_SERVICE,
-	OidcConfigurationService as ServiceOidcConfigurationService,
-	OidcProviderService as ServiceOidcProviderService,
-	RedisOidcAdapterFactory as ServiceRedisOidcAdapterFactory,
+	AccountService,
+	OidcConfigurationService,
+	OidcProviderService,
+	RedisOidcAdapterFactory,
 } from "@cocrepo/service";
 import { OidcUseCaseProviders } from "@cocrepo/usecase";
 import { Module, type OnModuleInit } from "@nestjs/common";
@@ -20,23 +19,19 @@ import { CqrsModule } from "@nestjs/cqrs";
 	controllers: [OidcController],
 	providers: [
 		// OIDC Core
-		ServiceOidcProviderService,
-		{
-			provide: IDP_OIDC_PROVIDER_SERVICE,
-			useExisting: ServiceOidcProviderService,
-		},
-		ServiceOidcConfigurationService,
-		ServiceAccountService,
+		OidcProviderService,
+		OidcConfigurationService,
+		AccountService,
 		...OidcUseCaseProviders,
 
 		// Data Access (DirectPrismaProvider로 CLS 프록시 우회 - onModuleInit에서도 안전하게 동작)
 		OidcDirectPrismaProvider,
-		ServiceRedisOidcAdapterFactory,
+		RedisOidcAdapterFactory,
 		OidcRuntimeClientsRepository,
 		OidcDirectUsersRepository,
 	],
 	exports: [
-		ServiceOidcProviderService,
+		OidcProviderService,
 		OidcDirectPrismaProvider,
 		OidcDirectUsersRepository,
 		OidcRuntimeClientsRepository,
@@ -44,7 +39,7 @@ import { CqrsModule } from "@nestjs/cqrs";
 })
 export class OidcModule implements OnModuleInit {
 	constructor(
-		private readonly oidcProviderService: ServiceOidcProviderService,
+		private readonly oidcProviderService: OidcProviderService,
 		private readonly directPrismaProvider: OidcDirectPrismaProvider,
 	) {}
 

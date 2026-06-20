@@ -1,16 +1,11 @@
 import { ExecutePasswordResetCommand } from "@cocrepo/command";
-import { Inject } from "@nestjs/common";
 import { CommandHandler } from "@nestjs/cqrs";
-import {
-	IDP_PASSWORD_RESET_SERVICE,
-	type PasswordResetPort,
-} from "@cocrepo/service";
+import { PasswordResetService } from "@cocrepo/service";
 
 @CommandHandler(ExecutePasswordResetCommand)
 export class ExecutePasswordResetUseCase {
 	constructor(
-		@Inject(IDP_PASSWORD_RESET_SERVICE)
-		private readonly passwordResetService: PasswordResetPort,
+		private readonly passwordResetService: PasswordResetService,
 	) {}
 
 	execute(command: ExecutePasswordResetCommand) {

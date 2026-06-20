@@ -32,12 +32,12 @@ test.describe("로그인 페이지 테스트 @real", () => {
 
 		const loginRequestPromise = page.waitForRequest(
 			(request) =>
-				request.url().endsWith("/api/v1/auth/native/login") &&
+				request.url().endsWith("/api/v1/auth/login") &&
 				request.method() === "POST",
 		);
 		const loginResponsePromise = page.waitForResponse(
 			(response) =>
-				response.url().endsWith("/api/v1/auth/native/login") &&
+				response.url().endsWith("/api/v1/auth/login") &&
 				response.status() === 200,
 		);
 

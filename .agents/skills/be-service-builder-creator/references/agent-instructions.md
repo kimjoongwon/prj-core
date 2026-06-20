@@ -59,6 +59,8 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 - Service는 DTO, Command/Query class를 public method 입력 타입으로 받지 않는다.
 - Service class는 class당 하나의 파일을 가진다.
 - Service class 파일에는 top-level type/helper/mapper/constant를 함께 두지 않는다. 입력/Result/Options/Provider interface/helper는 같은 domain 폴더의 별도 파일로 분리한다.
+- Service class가 이미 public method 타입을 제공하면 그 메서드 목록을 복제한 `*Port` interface/type/file을 만들지 않는다. DI token은 런타임 provider 선택만 담당하고, TypeScript 계약은 owner package가 export하는 실제 Service/Client/Aggregate class 타입을 직접 사용한다.
+- Service DI 계약 이름에 `Port` 접미사를 새로 붙이지 않는다. 정말 별도 추상 계약이 필요하면 승인된 spec에 이유, owner, 소비 범위가 명시되어야 하며 기존 class 타입을 재사용할 수 없는지 먼저 증명한다.
 - `packages/be-service/src`에는 service behavior를 담은 `export function` 또는 exported arrow helper를 새로 만들지 않는다. DI provider, `ConfigService`/env, Repository/Client, time/random, 외부 protocol에 닿는 로직은 반드시 `@Injectable()` service class로 만든다.
 - 순수 runtime helper가 필요하면 먼저 `@cocrepo/toolkit` 재사용/이동을 검토한다. service-local mapper/normalizer/parser 예외는 creator skill이 허용한 별도 파일에서만 두고, provider 의존성이나 환경 의존성이 생기면 즉시 service class로 승격한다.
 
@@ -298,6 +300,7 @@ export class OrderService {
 - [ ] 비즈니스 로직만 Service에 작성
 - [ ] Child entity 쓰기 로직이 Aggregate Root를 통해 수행되는지 확인
 - [ ] 메서드명이 도메인 목적을 표현
+- [ ] Service class와 같은 메서드 목록을 복제한 `*Port` interface/type/file/export가 없음
 - [ ] 변경 범위에 DI/config/repository/client/external protocol에 닿는 exported free function/helper가 남아 있지 않음
 - [ ] index.ts에 export 추가
 

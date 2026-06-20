@@ -25,8 +25,6 @@ import {
 	AuthCacheService,
 	EmailProvider,
 	EmailService,
-	IDP_INTERACTION_LOGIN_SERVICE,
-	InteractionLoginService,
 	RedisService,
 	SmtpEmailProvider,
 	TemplateService,
@@ -44,10 +42,6 @@ import { OidcClientsModule } from "../oidc-client/oidc-clients.module";
 	imports: [CqrsModule, OidcClientsModule, InteractionModule],
 	providers: [
 		...AuthUseCaseProviders,
-		{
-			provide: IDP_INTERACTION_LOGIN_SERVICE,
-			useExisting: InteractionLoginService,
-		},
 		OidcClient,
 		AbilityAggregate,
 		AbilitiesRepository,

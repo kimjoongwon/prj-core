@@ -437,9 +437,9 @@ CODEGEN_TARGET=""
 if [[ "$HAS_FRONTEND" == "true" && "$INTERACTIVE" == "true" ]]; then
   echo ""
   echo -e "${BOLD}📦 API 코드젠 대상${RESET}"
-  echo -e "  ${CYAN}1${RESET})  전체         ${DIM}Core + IDP spec${RESET}"
+  echo -e "  ${CYAN}1${RESET})  전체         ${DIM}Core + IDP 클라이언트${RESET}"
   echo -e "  ${CYAN}2${RESET})  Server만     ${DIM}백엔드 서버 (port ${CORE_API_PORT_VALUE})${RESET}"
-  echo -e "  ${CYAN}3${RESET})  IDP spec만   ${DIM}백엔드 서버 (port ${CORE_API_PORT_VALUE})${RESET}"
+  echo -e "  ${CYAN}3${RESET})  IDP만        ${DIM}백엔드 서버 (port ${CORE_API_PORT_VALUE})${RESET}"
   echo -e "  ${CYAN}4${RESET})  건너뛰기     ${DIM}코드젠 실행 안 함${RESET}"
   echo ""
   if ! prompt_read codegen_target_choice "${BOLD}번호 선택: ${RESET}"; then
@@ -488,7 +488,7 @@ if [[ "$CODEGEN_ENV" == "local" ]]; then
     FILTERS="$FILTERS --filter=core-api"
     SERVICES="$SERVICES core-api"
     HAS_BACKEND="true"
-    echo -e "${YELLOW}⚠️  local IDP spec 코드젠은 core-api를 자동으로 포함합니다.${RESET}"
+    echo -e "${YELLOW}⚠️  local IDP 코드젠은 core-api를 자동으로 포함합니다.${RESET}"
   fi
 fi
 
@@ -779,13 +779,13 @@ if [[ "$CODEGEN_ENV" == "local" ]]; then
     echo -e "${GREEN}✅ Server 준비 완료${RESET}"
   fi
 
-  # IDP health check
+  # IDP 코드젠도 통합 Swagger spec을 사용합니다.
   if [[ "$CODEGEN_TARGET" == "all" || "$CODEGEN_TARGET" == "idp" ]]; then
-    echo -e "${DIM}IDP spec(${CORE_API_PORT_VALUE}) 시작 대기 중...${RESET}"
-    until curl -s -o /dev/null -w "%{http_code}" "http://localhost:${CORE_API_PORT_VALUE}/idp-api-json" 2>/dev/null | grep -q "200"; do
+    echo -e "${DIM}Swagger spec(${CORE_API_PORT_VALUE}) 시작 대기 중...${RESET}"
+    until curl -s -o /dev/null -w "%{http_code}" "http://localhost:${CORE_API_PORT_VALUE}/api-json" 2>/dev/null | grep -q "200"; do
       sleep 2
     done
-    echo -e "${GREEN}✅ IDP spec 준비 완료${RESET}"
+    echo -e "${GREEN}✅ Swagger spec 준비 완료${RESET}"
   fi
 
   echo -e "${GREEN}▶ API 코드젠 실행...${RESET}"

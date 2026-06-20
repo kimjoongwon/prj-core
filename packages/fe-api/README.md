@@ -90,6 +90,7 @@ function UserList() {
 - **생성 방식**: Orval 산출물을 직접 사용, 후처리 스크립트 없음
 - **배럴 정책**: 태그 경로는 훅/함수와 최소 DTO/enum만 노출, 전체 모델은 재export하지 않음
 - **환경별 API URL**: `ORVAL_ENV` 또는 localhost 자동 감지 기반 선택
+- **Spec source**: `core`와 `idp` 출력 모두 단일 `/api-json`을 읽고 태그 필터로 생성 범위를 나눔
 - **지원 환경**: `development`, `local`, `staging`, `production`
 - **에러 처리**: 지원되지 않는 환경 입력 시 자동 종료 및 가이드 메시지 표시
 

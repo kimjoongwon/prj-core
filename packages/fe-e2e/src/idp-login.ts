@@ -44,7 +44,8 @@ const DEFAULT_API_BASE_URL =
 	process.env.E2E_CORE_API_BASE_URL ??
 	new URL(DEFAULT_CONSOLE_BASE_URL).origin;
 const LOGIN_PATH =
-	process.env.E2E_IDP_LOGIN_PATH ?? "/api/v1/auth/login?clientId=admin-web";
+	process.env.E2E_IDP_LOGIN_PATH ??
+	"/api/v1/auth/oidc/login?clientId=admin-web";
 const DASHBOARD_PATH =
 	process.env.E2E_IDP_DASHBOARD_PATH ?? "/settings/auth";
 const AUTH_LOGIN_PATH =
@@ -90,7 +91,7 @@ const oidcLoginUrl = new URL(
 function buildApiUrl(path: string) {
 	return `${apiBaseUrl}${ensureLeadingSlash(path)}`;
 }
-const nativeLoginApiUrl = buildApiUrl("/api/v1/auth/native/login");
+const nativeLoginApiUrl = buildApiUrl("/api/v1/auth/login");
 const CONSENT_TIMEOUT_MS = 30000;
 const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
 const DEFAULT_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";

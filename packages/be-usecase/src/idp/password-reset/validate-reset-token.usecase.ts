@@ -1,16 +1,11 @@
 import { ValidateResetTokenQuery } from "@cocrepo/command";
-import { Inject } from "@nestjs/common";
 import { QueryHandler } from "@nestjs/cqrs";
-import {
-	IDP_PASSWORD_RESET_SERVICE,
-	type PasswordResetPort,
-} from "@cocrepo/service";
+import { PasswordResetService } from "@cocrepo/service";
 
 @QueryHandler(ValidateResetTokenQuery)
 export class ValidateResetTokenUseCase {
 	constructor(
-		@Inject(IDP_PASSWORD_RESET_SERVICE)
-		private readonly passwordResetService: PasswordResetPort,
+		private readonly passwordResetService: PasswordResetService,
 	) {}
 
 	execute(query: ValidateResetTokenQuery) {

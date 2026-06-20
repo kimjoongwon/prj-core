@@ -272,7 +272,7 @@ export const buildNativeLoginEndpoint = (
 	options: PrimitiveAuthParams = {},
 ): string =>
 	buildEndpoint(
-		"/api/v1/auth/native/login",
+		"/api/v1/auth/login",
 		buildApiBaseUrl(options.apiBaseUrl),
 	);
 
@@ -283,7 +283,7 @@ export const buildAuthLoginUrl = (
 export const requestNativeLogin = (
 	input: NativeLoginInput,
 ): Promise<MobileAuthSession> =>
-	requestNativeAuth<MobileAuthSession>("/api/v1/auth/native/login", {
+	requestNativeAuth<MobileAuthSession>("/api/v1/auth/login", {
 		email: input.email,
 		password: input.password,
 	}, input);

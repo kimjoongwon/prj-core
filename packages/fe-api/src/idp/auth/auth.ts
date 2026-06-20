@@ -78,19 +78,19 @@ export const login = (
 	signal?: AbortSignal,
 ) => {
 	return customIdpInstance<void>(
-		{ url: `/api/v1/auth/login`, method: "GET", params, signal },
+		{ url: `/api/v1/auth/oidc/login`, method: "GET", params, signal },
 		options,
 	);
 };
 
 export const getLoginQueryKey = (params?: LoginParams) => {
-	return [`/api/v1/auth/login`, ...(params ? [params] : [])] as const;
+	return [`/api/v1/auth/oidc/login`, ...(params ? [params] : [])] as const;
 };
 
 export const getLoginInfiniteQueryKey = (params?: LoginParams) => {
 	return [
 		"infinite",
-		`/api/v1/auth/login`,
+		`/api/v1/auth/oidc/login`,
 		...(params ? [params] : []),
 	] as const;
 };
@@ -996,7 +996,7 @@ export const nativeLogin = (
 ) => {
 	return customIdpInstance<NativeLogin200AllOf>(
 		{
-			url: `/api/v1/auth/native/login`,
+			url: `/api/v1/auth/login`,
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			data: nativeLoginPayloadDto,

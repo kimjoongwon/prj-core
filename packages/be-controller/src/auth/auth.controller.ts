@@ -86,7 +86,7 @@ export class AuthController {
 	) {}
 
 	@Public()
-	@Get("login")
+	@Get("oidc/login")
 	@ApiOperation({
 		operationId: "login",
 		summary: "OIDC 로그인 리다이렉트",
@@ -153,7 +153,7 @@ export class AuthController {
 	@Public()
 	@SkipSpaceCheck()
 	@HttpCode(HttpStatus.OK)
-	@Post("native/login")
+	@Post("login")
 	@ApiOperation({
 		operationId: "nativeLogin",
 		summary: "first-party native 로그인",

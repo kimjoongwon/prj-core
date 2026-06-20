@@ -76,11 +76,6 @@ const nextConfig: NextConfig = {
 					basePath: false,
 				},
 				{
-					source: "/idp-api-json",
-					destination: `${coreApiInternalUrl}/idp-api-json`,
-					basePath: false,
-				},
-				{
 					source: "/api/v1/auth/:path*",
 					destination: `${coreApiInternalUrl}/api/v1/auth/:path*`,
 					basePath: false,

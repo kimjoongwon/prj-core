@@ -219,7 +219,7 @@ const SWAGGER_SPACE_SELECTOR_JS = `
 })();
 `;
 
-const CORE_SWAGGER_MODULES = [
+const SWAGGER_MODULES = [
 	SpacesModule,
 	UsersModule,
 	ActionsModule,
@@ -243,9 +243,6 @@ const CORE_SWAGGER_MODULES = [
 	InquiriesModule,
 	TenantAccessRequestsModule,
 	ReservationsModule,
-];
-
-const IDP_SWAGGER_MODULES = [
 	AuthModule,
 	OidcModule,
 	InteractionModule,
@@ -309,45 +306,11 @@ async function bootstrap() {
 	// =================================================================
 	const oidcIssuer = process.env.OIDC_ISSUER || "http://localhost:3000";
 
-	const coreConfig = new DocumentBuilder()
+	const swaggerConfig = new DocumentBuilder()
 		.setTitle(process.env.APP_NAME || "Onora")
 		.setVersion("1.0.0")
 		.setDescription(
-			"API 문서입니다. 대부분의 엔드포인트는 인증이 필요합니다.\n\n" +
-				"**인증 방법:**\n" +
-				"1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인\n" +
-				"2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송",
-		)
-		.addCookieAuth(Token.ACCESS, {
-			type: "apiKey",
-			in: "cookie",
-			name: Token.ACCESS,
-			description: "JWT Access Token (HttpOnly 쿠키로 자동 전송)",
-		})
-		.addOAuth2({
-			type: "oauth2",
-			description: "OIDC Authorization Code + PKCE 인증",
-			flows: {
-				authorizationCode: {
-					authorizationUrl: `${oidcIssuer}/oidc/auth`,
-					tokenUrl: `${oidcIssuer}/oidc/token`,
-					scopes: {
-						openid: "OpenID Connect 기본 인증",
-						profile: "프로필 정보 (이름)",
-						email: "이메일 주소",
-						roles: "역할 및 Space 정보",
-					},
-				},
-			},
-		})
-		.build();
-
-	const idpConfig = new DocumentBuilder()
-		.setTitle("OIDC Identity Provider")
-		.setVersion("1.0.0")
-		.setDescription(
-			"OpenID Connect Identity Provider API\n\n" +
-				"OIDC 인증 및 IDP 관리 API를 제공합니다.\n\n" +
+			"API 문서입니다. Core API와 IDP 관리 API를 함께 제공합니다. 대부분의 엔드포인트는 인증이 필요합니다.\n\n" +
 				"**인증 방법:**\n" +
 				"1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인\n" +
 				"2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송",
@@ -381,13 +344,9 @@ async function bootstrap() {
 			methodKey, // API 작업 ID를 메소드명으로 설정
 	};
 
-	const document = SwaggerModule.createDocument(app, coreConfig, {
+	const document = SwaggerModule.createDocument(app, swaggerConfig, {
 		...options,
-		include: CORE_SWAGGER_MODULES,
-	});
-	const idpDocument = SwaggerModule.createDocument(app, idpConfig, {
-		...options,
-		include: IDP_SWAGGER_MODULES,
+		include: SWAGGER_MODULES,
 	});
 
 	const port = process.env.APP_PORT || 3006;
@@ -405,18 +364,6 @@ async function bootstrap() {
 		customJsStr: `window.__IDP_SERVER_URL = '${oidcIssuer}';\n${SWAGGER_SPACE_SELECTOR_JS}`,
 	});
 
-	SwaggerModule.setup("idp-api", app, idpDocument, {
-		swaggerOptions: {
-			persistAuthorization: true,
-			oauth2RedirectUrl: `${oidcIssuer}/api/oauth2-redirect.html`,
-			initOAuth: {
-				clientId: "swagger-web",
-				scopes: ["openid", "profile", "email", "roles"],
-				usePkceWithAuthorizationCodeGrant: true,
-			},
-		},
-	});
-
 	// =================================================================
 	// 6. 서버 시작 및 로깅
 	// =================================================================
@@ -427,8 +374,7 @@ async function bootstrap() {
 	logger.log(`📱 환경: ${process.env.NODE_ENV}`);
 	logger.log(`🐳 Docker: ${process.env.DOCKER_ENV === "true" ? "Yes" : "No"}`);
 	logger.log(`📊 API 문서: http://localhost:${port}/api`);
-	logger.log(`🔐 IDP API 문서: http://localhost:${port}/idp-api`);
-	logger.log(`🔐 IDP API Spec: http://localhost:${port}/idp-api-json`);
+	logger.log(`📊 API Spec: http://localhost:${port}/api-json`);
 	logger.log(
 		`🔑 OIDC Discovery: http://localhost:${port}/oidc/.well-known/openid-configuration`,
 	);

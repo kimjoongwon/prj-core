@@ -2,19 +2,13 @@ import { NativeLoginCommand } from "@cocrepo/command";
 import { MOBILE_NATIVE_CLIENT_ID } from "@cocrepo/constant";
 import {
 	AuthCacheService,
-	IDP_INTERACTION_LOGIN_SERVICE,
-	type InteractionLoginPort,
+	InteractionLoginService,
 	TokenStorageService,
 	UserService,
 } from "@cocrepo/service";
 import { resolveHttpClientIp, resolveHttpUserAgent } from "@cocrepo/toolkit";
 import { NativeRefreshToken, SessionId } from "@cocrepo/vo";
-import {
-	HttpException,
-	HttpStatus,
-	Inject,
-	UnauthorizedException,
-} from "@nestjs/common";
+import { HttpException, HttpStatus, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { CommandHandler } from "@nestjs/cqrs";
 import { JwtService } from "@nestjs/jwt";
@@ -29,8 +23,7 @@ export class NativeLoginUseCase {
 		private readonly authCacheService: AuthCacheService,
 		private readonly jwtService: JwtService,
 		private readonly configService: ConfigService,
-		@Inject(IDP_INTERACTION_LOGIN_SERVICE)
-		private readonly interactionLoginService: InteractionLoginPort,
+		private readonly interactionLoginService: InteractionLoginService,
 	) {}
 
 	async execute(command: NativeLoginCommand) {

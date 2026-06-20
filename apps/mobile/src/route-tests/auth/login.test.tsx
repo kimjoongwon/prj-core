@@ -154,12 +154,11 @@ describe("mobile auth login route", () => {
 	});
 
 	it("Android localhost 보정 유틸은 유지해야 한다", () => {
-		const redirectedUrl =
-			"http://localhost:3006/api/v1/auth/native/login";
+		const redirectedUrl = "http://localhost:3006/api/v1/auth/login";
 
 		expect(
 			authUtils.rewriteLocalhostUrlForAndroidEmulator(redirectedUrl, "android"),
-		).toBe("http://10.0.2.2:3006/api/v1/auth/native/login");
+		).toBe("http://10.0.2.2:3006/api/v1/auth/login");
 		expect(
 			authUtils.rewriteLocalhostUrlForAndroidEmulator(redirectedUrl, "ios"),
 		).toBe(redirectedUrl);

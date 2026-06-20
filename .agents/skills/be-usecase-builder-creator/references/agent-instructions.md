@@ -73,6 +73,8 @@ Nest CQRS 기반 UseCase handler를 생성하는 역할입니다. Command/Query 
 - Query handler는 behaviorful Query DTO나 Query params를 read filter 입력으로 취급할 수 있습니다. Query DTO 자체의 필터 메서드는 `be-query-dto-builder`가 소유합니다.
 - Command input이 Aggregate/Service/Client input과 구조적으로 호환되면 그대로 위임할 수 있습니다. 여러 출처 조합, field rename, policy 보정이 필요할 때만 별도 mapper/input 파일에서 target input으로 변환합니다.
 - Handler에서 Prisma create/update input을 만들지 않습니다. persistence 입력 변환은 Aggregate/Repository owner가 수행합니다.
+- `@Inject(TOKEN)`로 Service/Client/Aggregate provider를 주입하더라도 생성자 파라미터 타입은 `@cocrepo/service`, `@cocrepo/client`, `@cocrepo/aggregate`가 export하는 실제 class 타입을 사용합니다.
+- UseCase에서 Service/Client/Aggregate class의 메서드 목록을 복제한 `*Port` interface/type을 import하거나 새로 만들지 않습니다. DI token은 런타임 provider 선택만 담당하며, 타입 별칭으로 계약을 다시 선언하지 않습니다.
 - 여러 출처의 값을 조합해 target input을 만들 때는 `command.input.xxx`, `context.userId`, `entity.id`처럼 값의 원천을 보존합니다. 반복이 길면 `const input = command.input`처럼 출처명 alias까지만 사용하고 deep destructuring으로 bare variable을 남발하지 않습니다.
 - `@CommandHandler` / `@QueryHandler` decorator를 사용합니다.
 - handler array는 module builder가 providers에 등록할 수 있게 export합니다.
@@ -127,6 +129,7 @@ export * from "./confirm-reservation.usecase";
 - [ ] Prisma 직접 호출 없음
 - [ ] DTO import 없음
 - [ ] Command input을 Aggregate/Service/Client input으로 그대로 위임하거나 필요한 경우에만 별도 mapper/input 파일에서 변환함
+- [ ] `@Inject(TOKEN)` 생성자 파라미터 타입이 중복 `*Port` 계약이 아니라 owner package의 실제 Service/Client/Aggregate class 타입인지 확인
 - [ ] 여러 input source를 조합할 때 소스 경로 또는 출처명 alias를 유지함
 - [ ] 변경 범위에 DI/config/request/external protocol에 닿는 exported free function/helper가 남아 있지 않음
 - [ ] handler array와 barrel export 추가

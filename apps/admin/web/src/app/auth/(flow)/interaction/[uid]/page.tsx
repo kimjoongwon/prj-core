@@ -23,7 +23,8 @@ type InteractionPageParams = {
 	uid: string;
 };
 
-const OIDC_ADMIN_LOGIN_START_PATH = "/api/v1/auth/login?clientId=admin-web";
+const OIDC_ADMIN_LOGIN_START_PATH =
+	"/api/v1/auth/oidc/login?clientId=admin-web";
 const OIDC_FORGOT_PASSWORD_PATH = "/admin/auth/forgot-password";
 const OIDC_SIGN_UP_PATH = "/admin/auth/sign-up";
 

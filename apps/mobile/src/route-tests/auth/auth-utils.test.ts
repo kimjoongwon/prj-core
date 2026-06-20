@@ -38,7 +38,7 @@ describe("mobile auth utils", () => {
 			});
 
 			expect(loginUrl).toBe(
-				"http://10.0.2.2:3006/api/v1/auth/native/login",
+				"http://10.0.2.2:3006/api/v1/auth/login",
 			);
 		} finally {
 			if (originalAuthApiUrl === undefined) {
@@ -77,7 +77,7 @@ describe("mobile auth utils", () => {
 			});
 
 			expect(fetchMock).toHaveBeenCalledWith(
-				"http://localhost:3006/api/v1/auth/native/login",
+				"http://localhost:3006/api/v1/auth/login",
 				expect.objectContaining({
 					body: JSON.stringify({
 						email: "user@example.com",

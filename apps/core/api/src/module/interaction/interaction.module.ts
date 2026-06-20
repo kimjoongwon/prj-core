@@ -1,9 +1,8 @@
 import { InteractionController } from "@cocrepo/controller";
 import {
-	IDP_INTERACTION_LOGIN_SERVICE,
+	InteractionLoginService,
 	InteractionService,
 	OidcRedirectUrlService,
-	InteractionLoginService as ServiceInteractionLoginService,
 } from "@cocrepo/service";
 import { InteractionUseCaseProviders } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
@@ -15,14 +14,10 @@ import { OidcModule } from "../oidc/oidc.module";
 	controllers: [InteractionController],
 	providers: [
 		...InteractionUseCaseProviders,
-		ServiceInteractionLoginService,
+		InteractionLoginService,
 		InteractionService,
 		OidcRedirectUrlService,
-		{
-			provide: IDP_INTERACTION_LOGIN_SERVICE,
-			useExisting: ServiceInteractionLoginService,
-		},
 	],
-	exports: [ServiceInteractionLoginService],
+	exports: [InteractionLoginService],
 })
 export class InteractionModule {}

@@ -1,12 +1,10 @@
 import { SubmitInteractionLoginCommand } from "@cocrepo/command";
 import {
-	IDP_INTERACTION_LOGIN_SERVICE,
-	type InteractionLoginPort,
+	InteractionLoginService,
 	InteractionService,
 	OidcRedirectUrlService,
 } from "@cocrepo/service";
 import { resolveHttpClientIp, resolveHttpUserAgent } from "@cocrepo/toolkit";
-import { Inject } from "@nestjs/common";
 import { CommandHandler } from "@nestjs/cqrs";
 import { buildInteractionLoginErrorResponse } from "./interaction-login-error.response";
 
@@ -14,8 +12,7 @@ import { buildInteractionLoginErrorResponse } from "./interaction-login-error.re
 export class SubmitInteractionLoginUseCase {
 	constructor(
 		private readonly interactionService: InteractionService,
-		@Inject(IDP_INTERACTION_LOGIN_SERVICE)
-		private readonly interactionLoginService: InteractionLoginPort,
+		private readonly interactionLoginService: InteractionLoginService,
 		private readonly oidcRedirectUrlService: OidcRedirectUrlService,
 	) {}
 

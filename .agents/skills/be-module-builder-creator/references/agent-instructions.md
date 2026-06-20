@@ -44,6 +44,8 @@ aggregate root 기준 NestJS Module과 Router wiring을 생성하는 전문가�
 - `@cocrepo/command`는 message 계약 package이므로 module provider에 등록하지 않는다.
 - `@cocrepo/event`는 message 계약 package이므로 module provider에 등록하지 않는다.
 - Service, Repository, Client provider는 handler/service dependency 기준으로 등록한다.
+- import 이름 충돌이 실제로 없으면 `ServiceXxx`, `RepositoryXxx`, `ClientXxx`, `UseCaseXxx`, `AggregateXxx`처럼 package 역할 prefix를 붙인 alias를 만들지 않는다.
+- Module providers, exports, `useExisting`, constructor 타입은 owner package가 export한 class 이름을 그대로 사용한다. alias가 꼭 필요하면 같은 파일 안의 동일 이름 충돌과 그 충돌 대상이 코드에서 확인되어야 한다.
 - 이전 방식 app/boundary/external provider를 신규로 등록하지 않는다.
 - top-level route는 aggregate root plural만 허용
 - 1:1 detail child는 singular nested route 사용
@@ -61,6 +63,7 @@ aggregate root 기준 NestJS Module과 Router wiring을 생성하는 전문가�
 - [ ] module 배럴이 Controller를 re-export하지 않는지 확인
 - [ ] module imports에 `CqrsModule`이 필요한지 확인
 - [ ] module providers가 UseCase handler와 필요한 Aggregate/Service/Client/Repository provider를 연결하는지 확인
+- [ ] provider/import 이름에 불필요한 package prefix alias가 없는지 확인
 - [ ] Command/Query message를 provider로 등록하지 않았는지 확인
 - [ ] Event message를 provider로 등록하지 않았는지 확인
 - [ ] 외부 연동이 있으면 `Client → Service/UseCase` provider가 등록됐는지 확인

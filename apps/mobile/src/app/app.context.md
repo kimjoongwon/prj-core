@@ -61,7 +61,7 @@
 - 인증 상태면 홈(`/`)으로, 비인증 상태면 `/auth/login`으로 route를 먼저 보낸다.
 - 목표 route 화면의 layout이 확인된 뒤에만 `SplashScreen.hideAsync()`로 native splash view를 끈다.
 - `/auth/login`은 Chrome/Safari, WebView, OIDC Authorization Code redirect를 사용하지 않고 native email/password form을 렌더링한다.
-- `/auth/login`은 `POST /api/v1/auth/native/login`으로 `accessToken`, `refreshToken`, `sessionId`를 받고 memory store와 SecureStore에 저장한다.
+- `/auth/login`은 `POST /api/v1/auth/login`으로 `accessToken`, `refreshToken`, `sessionId`를 받고 memory store와 SecureStore에 저장한다.
 - 앱 시작 시 SecureStore의 native session을 복원하고 `verify-token`, `my-spaces`, `current-space`로 인증 context를 재구성한다.
 - 401 refresh는 web cookie refresh가 아니라 `POST /api/v1/auth/native/token/refresh`를 사용하고 refresh token을 rotation한다.
 - `내 정보` 탭 로그아웃은 `POST /api/v1/auth/native/logout` 후 memory store와 SecureStore를 삭제한다.

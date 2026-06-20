@@ -30,7 +30,7 @@ Mermaid가 렌더되지 않는 viewer에서는 아래 텍스트 흐름을 기준
   -> AuthSessionGate
     -> 세션 유효: /(tabs) 홈
     -> 세션 없음: /auth/login
-      -> WebView: Core auth /api/v1/auth/login?clientId=user-mobile
+      -> WebView: Core auth /api/v1/auth/oidc/login?clientId=user-mobile
       -> Admin auth interaction
       -> kr.co.cocdev.onoramobile://auth/callback
       -> Expo Router /auth/callback
@@ -52,7 +52,7 @@ Mermaid가 렌더되지 않는 viewer에서는 아래 텍스트 흐름을 기준
 | auth utility | `apps/mobile/src/auth/_utils/auth.ts` | login URL 생성, callback URL 판별, `mobile-json` callback exchange |
 | mobile API scope | `apps/mobile/src/auth/mobile-api-scope.ts` | access/refresh token, token expiry, Space 목록/current Space 보관 |
 | mobile auth store | `apps/mobile/src/auth/auth-store.ts` | `verifySession()`, `logout()`, 인증 상태 관리 |
-| Auth controller | `packages/be-controller/src/auth/auth.controller.ts` | `/api/v1/auth/login`, `/api/v1/auth/callback`, token/space/logout endpoint |
+| Auth controller | `packages/be-controller/src/auth/auth.controller.ts` | `/api/v1/auth/oidc/login`, `/api/v1/auth/callback`, token/space/logout endpoint |
 | Auth module wiring | `apps/core/api/src/module/auth/auth.module.ts` | `@cocrepo/controller`의 `AuthController`를 core-api module에 연결 |
 | auth use cases | `packages/be-usecase/src/auth/*.usecase.ts` | OIDC state/PKCE, token exchange, cookie/session 생성, verify/refresh/logout |
 | Orval Axios clients | `packages/fe-api/src/libs/customAxios.ts`, `packages/fe-api/src/libs/customIdpAxios.ts` | Bearer token, refresh token, `x-space-id` header 주입 |
@@ -130,7 +130,7 @@ sequenceDiagram
 | 2 | `AuthSessionGate` | `GET /api/v1/auth/verify-token`으로 기존 세션을 확인합니다. |
 | 3 | `AuthSessionGate` | 세션이 없으면 `/auth/login`으로 이동합니다. |
 | 4 | `/auth/login` | full-screen WebView를 mount합니다. |
-| 5 | WebView | `GET /api/v1/auth/login?clientId=user-mobile&returnTo=native-callback`을 로드합니다. |
+| 5 | WebView | `GET /api/v1/auth/oidc/login?clientId=user-mobile&returnTo=native-callback`을 로드합니다. |
 | 6 | IDP | `/oidc/auth` 또는 `/interaction/[uid]`로 로그인 interaction을 진행합니다. |
 | 7 | IDP | 로그인 성공 후 `kr.co.cocdev.onoramobile://auth/callback?code=...&state=...`로 이동합니다. |
 | 8 | WebView shell | custom scheme navigation을 가로채고 Expo Router `/auth/callback`으로 변환합니다. |
@@ -147,7 +147,7 @@ Mobile App
     -> IDP API: verify-token
     -> /auth/login
       -> WebView
-        -> IDP API: /api/v1/auth/login?clientId=user-mobile
+        -> IDP API: /api/v1/auth/oidc/login?clientId=user-mobile
         -> Admin auth interaction
         -> native callback scheme
       -> /auth/callback
@@ -188,7 +188,7 @@ Mobile App
 생성되는 login URL의 형태:
 
 ```txt
-{AUTH_API_BASE_URL}/api/v1/auth/login
+{AUTH_API_BASE_URL}/api/v1/auth/oidc/login
   ?clientId=user-mobile
   &returnTo=kr.co.cocdev.onoramobile://auth/callback?returnTo=/
 ```
@@ -209,7 +209,7 @@ WebView는 다음 drift를 감지하면 현재 navigation을 막고 `user-mobile
 | 감지 대상 | 막는 이유 |
 |-----------|----------|
 | `/auth/login` | admin auth shell route로 잘못 이동하는 경우 방지 |
-| `/api/v1/auth/login`인데 `clientId !== user-mobile` | 다른 client flow 혼입 방지 |
+| `/api/v1/auth/oidc/login`인데 `clientId !== user-mobile` | 다른 client flow 혼입 방지 |
 | `/oidc/auth`인데 `client_id !== user-mobile` | `admin-web` 등 web client authorization으로 drift 방지 |
 | Android에서 `localhost` redirect | `10.0.2.2`로 보정해 host dev server 연결 유지 |
 
@@ -310,7 +310,7 @@ mobileAuthStore.verifySession() === true
 
 ```mermaid
 flowchart TD
-  Login["GET /api/v1/auth/login"] --> AuthUrl["getAuthorizationUrl"]
+  Login["GET /api/v1/auth/oidc/login"] --> AuthUrl["getAuthorizationUrl"]
   AuthUrl --> Client["resolveOidcClient user-mobile"]
   Client --> Request["createAuthorizationRequest"]
   Request --> State["Redis state / code_verifier 저장"]
@@ -330,7 +330,7 @@ flowchart TD
 ```
 
 ```text
-GET /api/v1/auth/login
+GET /api/v1/auth/oidc/login
   -> GetAuthLoginRedirectUseCase
   -> resolveOidcClient("user-mobile")
   -> OidcClient.createAuthorizationRequest()
