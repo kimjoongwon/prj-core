@@ -3,9 +3,24 @@ import LoginScreen from "@/app/auth/login";
 import * as authUtils from "@/auth/_utils/auth";
 import { mobileAuthStore } from "@/auth/auth-store";
 import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import type { ReactNode } from "react";
+import type { PressableProps } from "react-native";
 
 const mockReplace = jest.fn();
 const mockUseLocalSearchParams = jest.fn();
+
+interface MockButtonProps extends PressableProps {
+	children?: ReactNode;
+	isDisabled?: boolean;
+}
+
+interface MockIconProps {
+	name: string;
+}
+
+interface MockScreenFrameProps {
+	children?: ReactNode;
+}
 
 jest.mock("expo-secure-store", () => ({
 	deleteItemAsync: jest.fn(),
@@ -19,7 +34,7 @@ jest.mock("@cocrepo/mo-ui", () => {
 		jest.requireActual<typeof import("react-native")>("react-native");
 
 	return {
-		Button: ({ children, onPress, isDisabled, ...props }: any) =>
+		Button: ({ children, onPress, isDisabled, ...props }: MockButtonProps) =>
 			React.createElement(
 				Pressable,
 				{
@@ -32,9 +47,9 @@ jest.mock("@cocrepo/mo-ui", () => {
 					? React.createElement(MockText, null, children)
 					: children,
 			),
-		Icon: ({ name }: any) =>
+		Icon: ({ name }: MockIconProps) =>
 			React.createElement(MockText, null, `icon:${name}`),
-		ScreenFrame: ({ children }: any) =>
+		ScreenFrame: ({ children }: MockScreenFrameProps) =>
 			React.createElement(
 				View,
 				{ accessibilityLabel: "screen-frame" },

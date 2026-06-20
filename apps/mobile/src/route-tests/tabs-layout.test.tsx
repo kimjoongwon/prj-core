@@ -1,6 +1,49 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import MainTabsLayout from "@/app/(tabs)/_layout";
 import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import type { ReactElement, ReactNode } from "react";
+
+interface CustomHeaderProps {
+  onPressSubtitle?: () => void;
+  subtitle?: string;
+  title?: string;
+}
+
+interface SpaceSelectionSheetProps {
+  isOpen?: boolean;
+  spaces?: unknown[];
+}
+
+interface MockTabsScreenOptions {
+  title?: string;
+  tabBarIcon?: (props: {
+    color: string;
+    focused: boolean;
+    size: number;
+  }) => ReactNode;
+  tabBarButton?: (props: {
+    accessibilityLabel: string;
+    accessibilityRole: "button";
+    children: ReactNode;
+    onPress: () => void;
+  }) => ReactElement;
+}
+
+interface MockTabsProps {
+  children?: ReactNode;
+  screenOptions?: {
+    headerShown?: boolean;
+    header?: (props: {
+      options: { title?: string };
+      route: { name: string };
+    }) => ReactNode;
+  };
+}
+
+interface MockTabsScreenProps {
+  name: string;
+  options: MockTabsScreenOptions;
+}
 
 jest.mock("@cocrepo/mo-ui", () => {
   const React = jest.requireActual<typeof import("react")>("react");
@@ -22,7 +65,7 @@ jest.mock("@cocrepo/mo-ui", () => {
         null,
         `animated-icon:${name}:${focused ? "focused" : "rest"}:${animationKey ?? "none"}`,
       ),
-    CustomHeader: ({ onPressSubtitle, subtitle, title }: any) =>
+    CustomHeader: ({ onPressSubtitle, subtitle, title }: CustomHeaderProps) =>
       React.createElement(View, null, [
         React.createElement(Text, { key: "title" }, `header:${title}`),
         React.createElement(
@@ -36,7 +79,7 @@ jest.mock("@cocrepo/mo-ui", () => {
           React.createElement(Text, null, `subtitle:${subtitle}`),
         ),
       ]),
-    SpaceSelectionSheet: ({ isOpen, spaces = [] }: any) =>
+    SpaceSelectionSheet: ({ isOpen, spaces = [] }: SpaceSelectionSheetProps) =>
       isOpen
         ? React.createElement(Text, null, `space-sheet:${spaces.length}`)
         : null,
@@ -69,7 +112,7 @@ jest.mock("expo-router", () => {
   const { Pressable, Text, View } =
     jest.requireActual<typeof import("react-native")>("react-native");
 
-  function MockTabs({ children, screenOptions }: any) {
+  function MockTabs({ children, screenOptions }: MockTabsProps) {
     return React.createElement(
       View,
       {
@@ -94,7 +137,7 @@ jest.mock("expo-router", () => {
     );
   }
 
-  function MockTabsScreen({ name, options }: any) {
+  function MockTabsScreen({ name, options }: MockTabsScreenProps) {
     const icon =
       typeof options.tabBarIcon === "function"
         ? options.tabBarIcon({

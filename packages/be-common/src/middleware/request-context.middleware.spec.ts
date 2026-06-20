@@ -1,5 +1,6 @@
 import { CONTEXT_KEYS, REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import type { NextFunction, Request, Response } from "express";
+import type { ClsService } from "nestjs-cls";
 
 // parseAcceptLanguage 함수 mock
 jest.mock("@cocrepo/toolkit", () => ({
@@ -15,7 +16,7 @@ describe("RequestContextMiddleware", () => {
 	let mockRes: Partial<Response>;
 	let mockNext: jest.MockedFunction<NextFunction>;
 
-	const createMockUser = (overrides: any = {}) => ({
+	const createMockUser = (overrides: Record<string, unknown> = {}) => ({
 		id: "user-1",
 		email: "test@example.com",
 		tenants: [
@@ -42,7 +43,7 @@ describe("RequestContextMiddleware", () => {
 		};
 
 		// RequestContextMiddleware는 더 이상 SpacesRepository, RedisService를 주입받지 않음
-		middleware = new RequestContextMiddleware(mockCls as any);
+		middleware = new RequestContextMiddleware(mockCls as unknown as ClsService);
 
 		mockRes = {};
 		mockNext = jest.fn();
@@ -56,7 +57,10 @@ describe("RequestContextMiddleware", () => {
 		describe("인증되지 않은 요청", () => {
 			it("user가 없으면 AUTH_USER/USER_ID를 undefined로 설정하고 next()를 호출해야 한다", async () => {
 				// Given
-				mockReq = { headers: {}, user: undefined } as any;
+				mockReq = {
+					headers: {},
+					user: undefined,
+				} as unknown as Partial<Request>;
 
 				// When
 				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
@@ -81,7 +85,7 @@ describe("RequestContextMiddleware", () => {
 				mockReq = {
 					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "space-001" },
 					user,
-				} as any;
+				} as unknown as Partial<Request>;
 
 				// When
 				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
@@ -102,7 +106,7 @@ describe("RequestContextMiddleware", () => {
 				mockReq = {
 					headers: { "x-language": "ko_KR" },
 					user: undefined,
-				} as any;
+				} as unknown as Partial<Request>;
 
 				// When
 				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
@@ -122,7 +126,7 @@ describe("RequestContextMiddleware", () => {
 				mockReq = {
 					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "space-001" },
 					user,
-				} as any;
+				} as unknown as Partial<Request>;
 
 				// When
 				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
@@ -156,7 +160,7 @@ describe("RequestContextMiddleware", () => {
 				mockReq = {
 					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "space-001" },
 					user,
-				} as any;
+				} as unknown as Partial<Request>;
 
 				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
 
@@ -180,7 +184,7 @@ describe("RequestContextMiddleware", () => {
 				mockReq = {
 					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "space-001" },
 					user,
-				} as any;
+				} as unknown as Partial<Request>;
 
 				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
 
@@ -193,7 +197,7 @@ describe("RequestContextMiddleware", () => {
 			it("x-space-id가 없으면 SPACE_ID를 undefined로 설정해야 한다", async () => {
 				// Given
 				const user = createMockUser();
-				mockReq = { headers: {}, user } as any;
+				mockReq = { headers: {}, user } as unknown as Partial<Request>;
 
 				// When
 				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
@@ -211,7 +215,7 @@ describe("RequestContextMiddleware", () => {
 				mockReq = {
 					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "non-existent-space" },
 					user,
-				} as any;
+				} as unknown as Partial<Request>;
 
 				// When
 				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
@@ -233,7 +237,7 @@ describe("RequestContextMiddleware", () => {
 				mockReq = {
 					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "space-001" },
 					user: createMockUser(),
-				} as any;
+				} as unknown as Partial<Request>;
 
 				// When
 				await middleware.use(mockReq as Request, mockRes as Response, mockNext);

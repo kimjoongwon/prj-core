@@ -1,6 +1,6 @@
 export * from "./Checkbox";
-export * from "./DateStrip";
 export * from "./ControlField";
+export * from "./DateStrip";
 export * from "./Radio";
 export * from "./RadioGroup";
 export * from "./Select";

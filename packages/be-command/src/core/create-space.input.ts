@@ -1,5 +1,7 @@
+import type { LanguageCode } from "@cocrepo/prisma";
+
 export interface CreateSpaceCommandInput {
-	contentLanguageCode: any;
+	contentLanguageCode: LanguageCode;
 	name: string;
 	spaceId: string;
 	label: string;

@@ -1,9 +1,9 @@
-import type { ConfigService } from "@nestjs/config";
-import type { Request, Response } from "express";
 import type {
 	OidcRuntimeClientData,
 	OidcRuntimeClientsRepository,
 } from "@cocrepo/repository";
+import type { ConfigService } from "@nestjs/config";
+import type { Request, Response } from "express";
 import type { OidcProviderService } from "../oidc/oidc-provider.service";
 import type { Grant, OidcProviderInstance } from "../oidc/types";
 import { InteractionService } from "./interaction.service";

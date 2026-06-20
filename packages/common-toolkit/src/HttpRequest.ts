@@ -19,7 +19,9 @@ export function resolveHttpClientIp(request: HttpRequestLike): string {
 		}
 	}
 
-	return request.ip || request.socket?.remoteAddress || UNKNOWN_HTTP_CLIENT_VALUE;
+	return (
+		request.ip || request.socket?.remoteAddress || UNKNOWN_HTTP_CLIENT_VALUE
+	);
 }
 
 export function resolveHttpUserAgent(request: HttpRequestLike): string {

@@ -1,9 +1,9 @@
-import { SpaceContext } from "@cocrepo/context";
 import {
 	GetUserDetailForSpaceQuery,
 	GetUsersBySpaceQuery,
 } from "@cocrepo/command";
 import { USER_ERRORS } from "@cocrepo/constant";
+import { SpaceContext } from "@cocrepo/context";
 import {
 	ApiAuth,
 	ApiErrors,

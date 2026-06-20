@@ -1,8 +1,5 @@
-import {
-	AuthContext,
-	SpaceContext,
-} from "@cocrepo/context";
 import { TaskAggregate } from "@cocrepo/aggregate";
+import { AuthContext, SpaceContext } from "@cocrepo/context";
 import { TasksController } from "@cocrepo/controller";
 import { TasksRepository } from "@cocrepo/repository";
 import { TaskCommandHandlers, TaskQueryHandlers } from "@cocrepo/usecase";

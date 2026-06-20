@@ -18,72 +18,75 @@ import type { MyPageScreenProps } from "./MyPageScreen.props";
  * @returns 모바일 마이 페이지 visual composition
  */
 export const MyPageScreen = observer(function MyPageScreen({
-  accountDescription,
-  currentSpaceName,
-  displayName,
-  isAuthenticated,
-  isLogoutPending = false,
-  onPressLogout,
-  quickActions,
+	accountDescription,
+	currentSpaceName,
+	displayName,
+	isAuthenticated,
+	isLogoutPending = false,
+	onPressLogout,
+	quickActions,
 }: MyPageScreenProps) {
-  const classNames = myPageScreenClassNames();
+	const classNames = myPageScreenClassNames();
 
-  return (
-    <ScreenFrame className={classNames.screenFrame()} edges={["right", "left"]}>
-      <ScrollView
-        contentContainerClassName={classNames.contentContainer()}
-        showsVerticalScrollIndicator={false}
-      >
-        <VStack gap="section">
-          <Card className={classNames.card()}>
-            <VStack gap="block">
-              <HStack alignItems="center" gap="inline">
-                <Icon name="userRound" size="lg" tone="accent" />
-                <View className={classNames.accountTitleBlock()}>
-                  <Text className={classNames.accountName()} numberOfLines={1}>
-                    {displayName}
-                  </Text>
-                  <Text className={classNames.accountDescription()}>
-                    {accountDescription}
-                  </Text>
-                </View>
-                <Chip color={isAuthenticated ? "success" : "warning"} variant="soft">
-                  {isAuthenticated ? "로그인됨" : "확인 필요"}
-                </Chip>
-              </HStack>
-            </VStack>
-          </Card>
-          <Card className={classNames.card()}>
-            <HStack alignItems="center" gap="inline">
-              <Icon name="mapPin" size="md" tone="accent" />
-              <View className={classNames.accountTitleBlock()}>
-                <Text className={classNames.spaceLabel()}>현재 지점</Text>
-                <Text className={classNames.spaceName()} numberOfLines={2}>
-                  {currentSpaceName}
-                </Text>
-              </View>
-            </HStack>
-          </Card>
-          <VStack gap="dense">
-            <Text className={classNames.sectionLabel()}>빠른 이동</Text>
-            <QuickActionList items={quickActions} />
-          </VStack>
-          <Button
-            isDisabled={isLogoutPending}
-            onPress={onPressLogout}
-            variant="danger-soft"
-          >
-            <View className={classNames.logoutContent()}>
-              <Icon name="logOut" size="sm" tone="danger" />
-              <Text className={classNames.dangerButtonText()}>
-                {isLogoutPending ? "로그아웃 중" : "로그아웃"}
-              </Text>
-            </View>
-          </Button>
-        </VStack>
-      </ScrollView>
-    </ScreenFrame>
-  );
+	return (
+		<ScreenFrame className={classNames.screenFrame()} edges={["right", "left"]}>
+			<ScrollView
+				contentContainerClassName={classNames.contentContainer()}
+				showsVerticalScrollIndicator={false}
+			>
+				<VStack gap="section">
+					<Card className={classNames.card()}>
+						<VStack gap="block">
+							<HStack alignItems="center" gap="inline">
+								<Icon name="userRound" size="lg" tone="accent" />
+								<View className={classNames.accountTitleBlock()}>
+									<Text className={classNames.accountName()} numberOfLines={1}>
+										{displayName}
+									</Text>
+									<Text className={classNames.accountDescription()}>
+										{accountDescription}
+									</Text>
+								</View>
+								<Chip
+									color={isAuthenticated ? "success" : "warning"}
+									variant="soft"
+								>
+									{isAuthenticated ? "로그인됨" : "확인 필요"}
+								</Chip>
+							</HStack>
+						</VStack>
+					</Card>
+					<Card className={classNames.card()}>
+						<HStack alignItems="center" gap="inline">
+							<Icon name="mapPin" size="md" tone="accent" />
+							<View className={classNames.accountTitleBlock()}>
+								<Text className={classNames.spaceLabel()}>현재 지점</Text>
+								<Text className={classNames.spaceName()} numberOfLines={2}>
+									{currentSpaceName}
+								</Text>
+							</View>
+						</HStack>
+					</Card>
+					<VStack gap="dense">
+						<Text className={classNames.sectionLabel()}>빠른 이동</Text>
+						<QuickActionList items={quickActions} />
+					</VStack>
+					<Button
+						isDisabled={isLogoutPending}
+						onPress={onPressLogout}
+						variant="danger-soft"
+					>
+						<View className={classNames.logoutContent()}>
+							<Icon name="logOut" size="sm" tone="danger" />
+							<Text className={classNames.dangerButtonText()}>
+								{isLogoutPending ? "로그아웃 중" : "로그아웃"}
+							</Text>
+						</View>
+					</Button>
+				</VStack>
+			</ScrollView>
+		</ScreenFrame>
+	);
 });
 
 MyPageScreen.displayName = "MyPageScreen";

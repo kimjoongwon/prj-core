@@ -17,7 +17,7 @@ import {
 /**
  * API 응답 엔티티 데코레이터 옵션
  */
-export interface ApiResponseEntityOptions<TDto = any> {
+export interface ApiResponseEntityOptions<TDto = unknown> {
 	/** 배열 응답 여부 */
 	isArray?: boolean;
 	/** Set-Cookie 헤더 포함 여부 */

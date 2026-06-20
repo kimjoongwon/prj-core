@@ -34,7 +34,9 @@ describe("BookingPolicySheet", () => {
 		expect(onChangeMemo).toHaveBeenCalledWith("매트 가까이 배정");
 		expect(onConfirm).toHaveBeenCalledWith(item, "허리 부상 주의");
 		expect(screen.getByText("09:00 · Morning Pilates")).toBeTruthy();
-		expect(screen.getByText("시작 12시간 전까지 취소할 수 있습니다.")).toBeTruthy();
+		expect(
+			screen.getByText("시작 12시간 전까지 취소할 수 있습니다."),
+		).toBeTruthy();
 	});
 
 	it("로딩 중에는 확인 버튼을 비활성화해야 한다", () => {

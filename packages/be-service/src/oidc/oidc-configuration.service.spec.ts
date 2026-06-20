@@ -1,6 +1,6 @@
+import { OidcRuntimeClientsRepository } from "@cocrepo/repository";
 import { ConfigService } from "@nestjs/config";
 import { AccountService } from "./account.service";
-import { OidcRuntimeClientsRepository } from "@cocrepo/repository";
 import { OidcConfigurationService } from "./oidc-configuration.service";
 import { RedisOidcAdapterFactory } from "./redis-oidc-adapter.factory";
 

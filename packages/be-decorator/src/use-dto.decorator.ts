@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 /**
  * 인스턴스화 가능한 클래스를 나타내는 제네릭 생성자 타입
  * @template T - 생성자가 생성하는 인스턴스의 타입
- * @template Arguments - 생성자 인자 타입 배열 (기본값: any[])
+ * @template Arguments - 생성자 인자 타입 배열 (기본값: unknown[])
  *
  * @example
  * class UserDto { constructor(name: string) {} }

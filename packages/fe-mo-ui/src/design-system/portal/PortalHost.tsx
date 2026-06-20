@@ -1,12 +1,12 @@
-import { type ComponentPropsWithoutRef } from "react";
 import { PortalHost as HeroPortalHost } from "heroui-native/portal";
+import { type ComponentPropsWithoutRef } from "react";
 
 export type PortalHostProps = ComponentPropsWithoutRef<
-  typeof HeroPortalHost
+	typeof HeroPortalHost
 > & {};
 
 export const PortalHost = (props: PortalHostProps) => (
-  <HeroPortalHost {...props} />
+	<HeroPortalHost {...props} />
 );
 
 PortalHost.displayName = "PortalHost";

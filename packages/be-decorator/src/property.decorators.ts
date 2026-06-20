@@ -4,6 +4,11 @@ import { plainToClass } from "class-transformer";
 import type { ClassConstructor } from "class-transformer/types/interfaces";
 import { validateSync } from "class-validator";
 
+type EnumClassLike = {
+	prototype?: unknown;
+	values?: () => Array<{ code?: string }>;
+};
+
 export class ValidationUtil {
 	static validateConfig<T extends object>(
 		config: Record<string, unknown>,
@@ -74,20 +79,20 @@ export function ApiEnumProperty<TEnum>(
 	getEnum: () => TEnum,
 	options: ApiPropertyOptions & { each?: boolean } = {},
 ): PropertyDecorator {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const enumValue = getEnum() as any;
+	const enumValue = getEnum() as unknown;
 
 	// Prisma 7: enums are plain objects, extract values for Swagger
 	// ts-jenum: class-based enums need special handling
 	// Prisma 6 & native TS enums: already in correct format
-	let enumForSwagger: Record<string, unknown> | string[] = enumValue;
+	let enumForSwagger: Record<string, unknown> | string[] = [];
 
 	// Check if it's a class constructor (ts-jenum)
-	if (typeof enumValue === "function" && enumValue.prototype) {
+	if (typeof enumValue === "function" && "prototype" in enumValue) {
+		const enumClass = enumValue as EnumClassLike;
 		// ts-jenum class: call static values() method if available
-		if (typeof enumValue.values === "function") {
+		if (typeof enumClass.values === "function") {
 			// ts-jenum values()는 인스턴스 배열을 반환하므로 code 값(문자열)만 추출
-			const instances = enumValue.values() as Array<{ code?: string }>;
+			const instances = enumClass.values();
 			enumForSwagger = instances
 				.map((instance) => instance.code)
 				.filter((code): code is string => typeof code === "string");
@@ -102,6 +107,8 @@ export function ApiEnumProperty<TEnum>(
 		if (values.length > 0 && values.every((v) => typeof v === "string")) {
 			// It's a Prisma 7 enum - use the values array
 			enumForSwagger = values as string[];
+		} else {
+			enumForSwagger = enumValue as Record<string, unknown>;
 		}
 	}
 

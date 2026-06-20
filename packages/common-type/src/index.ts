@@ -5,11 +5,12 @@
 /**
  * 인스턴스화 가능한 클래스를 나타내는 제네릭 생성자 타입
  * @template T - 생성자가 생성하는 인스턴스의 타입
- * @template Arguments - 생성자 인자 타입 배열 (기본값: any[])
+ * @template Arguments - 생성자 인자 타입 배열 (기본값: unknown[])
  */
-export type Constructor<T = any, Arguments extends unknown[] = any[]> = new (
-	...arguments_: Arguments
-) => T;
+export type Constructor<
+	T = unknown,
+	Arguments extends unknown[] = unknown[],
+> = new (...arguments_: Arguments) => T;
 
 /**
  * 모든 엔티티가 가지는 공통 필드 인터페이스
@@ -74,10 +75,10 @@ export type Leaves<T, D extends number = 10> = [D] extends [never]
 
 export type Option = {
 	text: string;
-	value: any;
+	value: string | number;
 };
 
-export interface MobxProps<T = any> {
+export interface MobxProps<T = unknown> {
 	path: Paths<T, 4>;
 	state: T;
 }
@@ -99,12 +100,12 @@ export type PathTuple<T> = readonly [
 export type ValueSplitter<TValue, TPaths extends readonly string[]> = (
 	value: TValue,
 	paths: TPaths,
-) => Record<string, any>;
+) => Record<string, unknown>;
 
 // ValueAggregator function type - aggregates multiple path values into a single value
 // Multiple State Path Values → UI Component Value
 export type ValueAggregator<TValue, TPaths extends readonly string[]> = (
-	values: Record<string, any>,
+	values: Record<string, unknown>,
 	paths: TPaths,
 ) => TValue;
 
@@ -162,10 +163,6 @@ export type {
 	TwitterConfig,
 } from "./config.types";
 // ============================================
-// HTTP request-like 계약 타입
-// ============================================
-export type { HttpRequestLike } from "./http-request-like";
-// ============================================
 // Hook 계약 타입
 // ============================================
 export type {
@@ -188,6 +185,10 @@ export type {
 	UseSpaceGuardOptions,
 	UseSpaceGuardReturn,
 } from "./hook-contracts";
+// ============================================
+// HTTP request-like 계약 타입
+// ============================================
+export type { HttpRequestLike } from "./http-request-like";
 // ============================================
 // 아이콘 관련 타입
 // ============================================

@@ -1,12 +1,10 @@
 import { HandleOidcCommand } from "@cocrepo/command";
-import { CommandHandler } from "@nestjs/cqrs";
 import { OidcProviderService } from "@cocrepo/service";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(HandleOidcCommand)
 export class HandleOidcUseCase {
-	constructor(
-		private readonly oidcProviderService: OidcProviderService,
-	) {}
+	constructor(private readonly oidcProviderService: OidcProviderService) {}
 
 	async execute(command: HandleOidcCommand): Promise<void> {
 		const provider = this.oidcProviderService.getProvider();

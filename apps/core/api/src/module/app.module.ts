@@ -1,20 +1,17 @@
 // NestJS core imports
 
-// be-common imports
-import {
-	AuthContext,
-	SpaceContext,
-} from "@cocrepo/context";
 import {
 	AuthMiddleware,
 	DtoTransformInterceptor,
+	JwtStrategy,
 	LoggerMiddleware,
 	RequestContextMiddleware,
 	ResponseEntityInterceptor,
 	SpaceAccessGuard,
 	SpaceScopeInterceptor,
-	JwtStrategy,
 } from "@cocrepo/be-common";
+// be-common imports
+import { AuthContext, SpaceContext } from "@cocrepo/context";
 import {
 	AuthCacheService,
 	I18nModule,

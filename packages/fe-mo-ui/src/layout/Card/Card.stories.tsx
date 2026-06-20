@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
-import { Text } from "../../data-display/Text";
 import { Button } from "../../action/Button";
+import { Text } from "../../data-display/Text";
 import { Separator } from "../Separator";
 import { Card } from "./index";
 
 const meta = {
-  title: "layout/Card",
-  component: Card,
-  parameters: {
-    layout: "fullscreen",
-  },
+	title: "layout/Card",
+	component: Card,
+	parameters: {
+		layout: "fullscreen",
+	},
 } satisfies Meta<typeof Card>;
 
 export default meta;
@@ -18,29 +18,29 @@ export default meta;
 type Story = StoryObj;
 
 export const Default: Story = {
-  render: () => (
-    <ScrollView contentContainerClassName="gap-3 px-4 py-5">
-      <View className="gap-2">
-        <Text className="text-lg font-extrabold text-foreground">Card</Text>
-        <Text className="text-sm leading-5 text-muted">
-          반복 목록, 결제 요약, 상태 패널처럼 독립적인 묶음에 사용합니다.
-        </Text>
-      </View>
-      <Card className="gap-3 border border-border">
-        <Card.Title>Card title</Card.Title>
-        <Card.Description>
-          화면의 독립적인 정보 그룹과 액션을 묶습니다.
-        </Card.Description>
-        <Separator />
-        <View className="flex-row flex-wrap gap-2">
-          <Button size="sm" variant="secondary">
-            보조
-          </Button>
-          <Button size="sm" variant="primary">
-            주요
-          </Button>
-        </View>
-      </Card>
-    </ScrollView>
-  ),
+	render: () => (
+		<ScrollView contentContainerClassName="gap-3 px-4 py-5">
+			<View className="gap-2">
+				<Text className="text-lg font-extrabold text-foreground">Card</Text>
+				<Text className="text-sm leading-5 text-muted">
+					반복 목록, 결제 요약, 상태 패널처럼 독립적인 묶음에 사용합니다.
+				</Text>
+			</View>
+			<Card className="gap-3 border border-border">
+				<Card.Title>Card title</Card.Title>
+				<Card.Description>
+					화면의 독립적인 정보 그룹과 액션을 묶습니다.
+				</Card.Description>
+				<Separator />
+				<View className="flex-row flex-wrap gap-2">
+					<Button size="sm" variant="secondary">
+						보조
+					</Button>
+					<Button size="sm" variant="primary">
+						주요
+					</Button>
+				</View>
+			</Card>
+		</ScrollView>
+	),
 };

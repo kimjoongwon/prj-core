@@ -1,16 +1,18 @@
+import type { Prisma } from "@cocrepo/prisma";
+
 export interface UpdateOidcClientCommandInput {
 	name?: string;
 	skipConsent?: boolean;
 	clientSecret?: string;
-	redirectUris?: any[];
+	redirectUris?: string[];
 	loginUrl?: string;
 	defaultReturnTo?: string;
-	grantTypes?: any[];
-	responseTypes?: any[];
+	grantTypes?: string[];
+	responseTypes?: string[];
 	tokenEndpointAuthMethod?: string;
 	scope?: string;
 	isFirstParty?: boolean;
-	loginUi?: any;
+	loginUi?: Prisma.JsonValue | null;
 	logoUri?: string;
 	policyUri?: string;
 	tosUri?: string;

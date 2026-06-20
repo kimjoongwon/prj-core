@@ -8,6 +8,19 @@ const mockReplace = jest.fn();
 const mockUseGetMySpaces = jest.fn();
 const mockUseLocalSearchParams = jest.fn();
 
+interface SelectableSpaceItem {
+  id: string;
+  name?: string;
+  address?: string | null;
+}
+
+interface SpaceSelectScreenProps {
+  onPressRetry?: () => void;
+  onSelectSpace?: (space: SelectableSpaceItem) => void;
+  spaces?: SelectableSpaceItem[];
+  status?: string;
+}
+
 jest.mock("expo-secure-store", () => ({
   deleteItemAsync: jest.fn(),
   getItemAsync: jest.fn(async () => null),
@@ -46,7 +59,7 @@ jest.mock("@cocrepo/mo-ui", () => {
       onSelectSpace,
       spaces = [],
       status,
-    }: any) =>
+    }: SpaceSelectScreenProps) =>
       React.createElement(View, null, [
         React.createElement(Text, { key: "status" }, `status:${status}`),
         React.createElement(
@@ -59,7 +72,7 @@ jest.mock("@cocrepo/mo-ui", () => {
           },
           React.createElement(Text, null, "retry"),
         ),
-        ...spaces.map((space: any) =>
+        ...spaces.map((space) =>
           React.createElement(
             Pressable,
             {

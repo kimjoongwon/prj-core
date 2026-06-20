@@ -1,7 +1,7 @@
 import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { ToggleActiveOidcClientCommand } from "@cocrepo/command";
-import { CommandHandler } from "@nestjs/cqrs";
 import { OidcProviderService } from "@cocrepo/service";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(ToggleActiveOidcClientCommand)
 export class ToggleOidcClientActiveUseCase {

@@ -68,14 +68,10 @@ export class GuardTestController {
 	@UseGuards(RoleCategoryGuard)
 	@RoleCategories([RoleCategoryName.PUBLIC])
 	async testRoleCategoryPublic() {
-		return new ResponseEntity(
-			HttpStatus.OK,
-			"공개 카테고리 권한 테스트 성공",
-			{
-				message: "공개 카테고리 권한으로 접근 성공",
-				categoryRequired: ["공개"],
-			},
-		);
+		return new ResponseEntity(HttpStatus.OK, "공개 카테고리 권한 테스트 성공", {
+			message: "공개 카테고리 권한으로 접근 성공",
+			categoryRequired: ["공개"],
+		});
 	}
 
 	// ==================== RoleGroupGuard 테스트 ====================

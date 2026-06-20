@@ -1,10 +1,10 @@
 export type { DashboardStats } from "./dashboard-stats";
-export type { IdpAccountAccessGrantFormBootstrap } from "./idp-account-access-grant-form.bootstrap";
-export type { IdpAccountAccessGrantFormOptionItem } from "./idp-account-access-grant-form-option.item";
-export type { IdpAccountAccessGrantInfo } from "./idp-account-access-grant.info";
-export type { IdpAccountDetailInfo } from "./idp-account-detail.info";
 export { IdpAccountAggregate } from "./idp-account.aggregate";
 export type { IdpAccountInfo } from "./idp-account.info";
+export type { IdpAccountAccessGrantInfo } from "./idp-account-access-grant.info";
+export type { IdpAccountAccessGrantFormBootstrap } from "./idp-account-access-grant-form.bootstrap";
+export type { IdpAccountAccessGrantFormOptionItem } from "./idp-account-access-grant-form-option.item";
+export type { IdpAccountDetailInfo } from "./idp-account-detail.info";
 export { IdpDashboardAggregate } from "./idp-dashboard.aggregate";
 export type { LoginTrendItem } from "./login-trend.item";
 export { OidcClientAggregate } from "./oidc-client.aggregate";

@@ -19,7 +19,7 @@ describe("DtoTransformInterceptor", () => {
 	});
 
 	const createExecutionContext = (
-		handler: (...args: any[]) => any,
+		handler: (...args: unknown[]) => unknown,
 	): ExecutionContext =>
 		({
 			getHandler: () => handler,

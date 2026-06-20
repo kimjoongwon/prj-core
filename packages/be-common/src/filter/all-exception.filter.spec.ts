@@ -1,6 +1,8 @@
+import type { I18nTranslationService } from "@cocrepo/service";
 import {
 	type ArgumentsHost,
 	HttpException,
+	type HttpServer,
 	HttpStatus,
 	InternalServerErrorException,
 	Logger,
@@ -26,7 +28,7 @@ describe("AllExceptionsFilter", () => {
 
 	const createMockArgumentsHost = (
 		request: Partial<{ url: string; method: string }> = {},
-		response: any = {},
+		response: unknown = {},
 	): ArgumentsHost => {
 		return {
 			switchToHttp: () => ({
@@ -39,10 +41,10 @@ describe("AllExceptionsFilter", () => {
 			}),
 			getArgs: () => [],
 			getArgByIndex: () => ({}),
-			switchToRpc: () => ({}) as any,
-			switchToWs: () => ({}) as any,
-			getType: () => "http" as any,
-		} as ArgumentsHost;
+			switchToRpc: () => ({}),
+			switchToWs: () => ({}),
+			getType: () => "http",
+		} as unknown as ArgumentsHost;
 	};
 
 	beforeEach(async () => {
@@ -52,15 +54,15 @@ describe("AllExceptionsFilter", () => {
 				getRequestUrl: jest.fn(),
 				isHeadersSent: jest.fn().mockReturnValue(false),
 			},
-		} as any;
+		} as unknown as HttpAdapterHost;
 
 		const mockTranslationService = {
 			translate: jest.fn().mockImplementation((key: string) => key),
 		};
 
 		filter = new AllExceptionsFilter(
-			mockHttpAdapterHost.httpAdapter as any,
-			mockTranslationService as any,
+			mockHttpAdapterHost.httpAdapter as unknown as HttpServer,
+			mockTranslationService as unknown as I18nTranslationService,
 		);
 
 		// Logger.error 모킹
@@ -186,7 +188,7 @@ describe("AllExceptionsFilter", () => {
 			// Given
 			const exception = {
 				message: "Unknown error",
-			} as any;
+			};
 			const host = createMockArgumentsHost({ url: "/api/test" }, {});
 
 			// When

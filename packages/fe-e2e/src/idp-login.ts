@@ -1,8 +1,8 @@
 import {
+	type E2EPageLike,
 	navigateToOidcLoginForm,
 	submitOidcCredentials,
 	waitForOidcConsentForm,
-	type E2EPageLike,
 } from "./oidc-login";
 
 interface ApiResponseLike {
@@ -41,15 +41,12 @@ interface NativeAuthSession {
 const DEFAULT_CONSOLE_BASE_URL =
 	process.env.E2E_ADMIN_BASE_URL ?? "http://localhost:3000/admin";
 const DEFAULT_API_BASE_URL =
-	process.env.E2E_CORE_API_BASE_URL ??
-	new URL(DEFAULT_CONSOLE_BASE_URL).origin;
+	process.env.E2E_CORE_API_BASE_URL ?? new URL(DEFAULT_CONSOLE_BASE_URL).origin;
 const LOGIN_PATH =
 	process.env.E2E_IDP_LOGIN_PATH ??
 	"/api/v1/auth/oidc/login?clientId=admin-web";
-const DASHBOARD_PATH =
-	process.env.E2E_IDP_DASHBOARD_PATH ?? "/settings/auth";
-const AUTH_LOGIN_PATH =
-	process.env.E2E_ADMIN_AUTH_LOGIN_PATH ?? "/auth/login";
+const DASHBOARD_PATH = process.env.E2E_IDP_DASHBOARD_PATH ?? "/settings/auth";
+const AUTH_LOGIN_PATH = process.env.E2E_ADMIN_AUTH_LOGIN_PATH ?? "/auth/login";
 
 function trimTrailingSlash(value: string) {
 	return value.endsWith("/") ? value.slice(0, -1) : value;
@@ -59,10 +56,7 @@ function ensureLeadingSlash(path: string) {
 	return path.startsWith("/") ? path : `/${path}`;
 }
 
-function buildPathWithQuery(
-	path: string,
-	query: Record<string, string>,
-) {
+function buildPathWithQuery(path: string, query: Record<string, string>) {
 	const [rawPath, rawSearch = ""] = path.split("?");
 	const params = new URLSearchParams(rawSearch);
 	for (const [key, value] of Object.entries(query)) {
@@ -227,10 +221,9 @@ async function waitForConsentOrFirstPartyRedirect(
 		const chunkTimeout = Math.min(remaining, 1000);
 		const [consentResult, redirectResult] = await Promise.allSettled([
 			waitForOidcConsentForm(page, { timeoutMs: chunkTimeout }),
-			page.waitForURL(
-				(url) => url.pathname.endsWith(normalizedDashboardPath),
-				{ timeout: chunkTimeout },
-			),
+			page.waitForURL((url) => url.pathname.endsWith(normalizedDashboardPath), {
+				timeout: chunkTimeout,
+			}),
 		]);
 
 		if (consentResult.status === "fulfilled") {
@@ -242,7 +235,9 @@ async function waitForConsentOrFirstPartyRedirect(
 		}
 	}
 
-	throw new Error("OIDC consent or first-party redirect did not complete in time.");
+	throw new Error(
+		"OIDC consent or first-party redirect did not complete in time.",
+	);
 }
 
 async function requestNativeLogin(

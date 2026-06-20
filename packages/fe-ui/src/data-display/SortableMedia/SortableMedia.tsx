@@ -6,9 +6,15 @@ import { Play, X } from "lucide-react";
 import { useState } from "react";
 import { VideoPlayer } from "../VideoPlayer/VideoPlayer";
 
+export interface SortableMediaItem {
+	id: string;
+	url?: string;
+	mimeType?: string;
+}
+
 export interface SortableMediaProps {
 	/** 미디어 객체 (id, url, mimeType 포함) */
-	media: Partial<any>; // TODO: Replace with proper FileDto type when available
+	media: SortableMediaItem;
 	/** 삭제 핸들러 */
 	onRemove: (id: string) => void;
 }

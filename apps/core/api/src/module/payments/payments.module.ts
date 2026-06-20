@@ -1,5 +1,5 @@
-import { SpaceContext } from "@cocrepo/context";
 import { PaymentAggregate } from "@cocrepo/aggregate";
+import { SpaceContext } from "@cocrepo/context";
 import { PaymentsController } from "@cocrepo/controller";
 import { PaymentsRepository } from "@cocrepo/repository";
 import { PaymentCommandHandlers, PaymentQueryHandlers } from "@cocrepo/usecase";

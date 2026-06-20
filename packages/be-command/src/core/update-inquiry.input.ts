@@ -1,8 +1,14 @@
+import type {
+	InquiryCategory,
+	InquiryPriority,
+	InquiryStatus,
+} from "@cocrepo/prisma";
+
 export interface UpdateInquiryCommandInput {
 	title?: string;
-	category?: any;
-	status?: any;
-	priority?: any;
+	category?: InquiryCategory;
+	status?: InquiryStatus;
+	priority?: InquiryPriority;
 	assigneeId?: string;
 	isRealtimeChat?: boolean;
 }

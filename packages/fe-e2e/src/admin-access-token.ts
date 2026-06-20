@@ -34,7 +34,10 @@ function findAdminPersistAccessToken(storageState: StorageState) {
 		}
 
 		const parsed = JSON.parse(persistEntry.value) as AdminPersistSnapshot;
-		if (typeof parsed.accessToken === "string" && parsed.accessToken.length > 0) {
+		if (
+			typeof parsed.accessToken === "string" &&
+			parsed.accessToken.length > 0
+		) {
 			return parsed.accessToken;
 		}
 	}

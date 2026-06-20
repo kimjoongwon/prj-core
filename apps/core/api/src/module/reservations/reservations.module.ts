@@ -1,12 +1,9 @@
 import {
-	AuthContext,
-	SpaceContext,
-} from "@cocrepo/context";
-import {
 	CourseAggregate,
 	PaymentAggregate,
 	ReservationAggregate,
 } from "@cocrepo/aggregate";
+import { AuthContext, SpaceContext } from "@cocrepo/context";
 import { ReservationsController } from "@cocrepo/controller";
 import {
 	CoursesRepository,

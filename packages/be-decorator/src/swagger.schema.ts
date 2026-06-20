@@ -1,6 +1,3 @@
-// eslint-disable-next-line max-len
-/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-argument */
-
 import { castArray, mapValues } from "@cocrepo/toolkit";
 import { applyDecorators, type Type, UseInterceptors } from "@nestjs/common";
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
@@ -17,6 +14,11 @@ import type {
 
 // Many type from lodash - T | readonly T[]
 type Many<T> = T | readonly T[];
+
+interface RouteArgumentMetadata {
+	index: number;
+	data?: string;
+}
 
 export interface IApiFile {
 	name: string;
@@ -51,15 +53,18 @@ function explore(instance: object, propertyKey: string | symbol) {
 			ROUTE_ARGS_METADATA,
 			instance.constructor,
 			propertyKey,
-		) || {};
+		) ?? {};
 
 	const parametersWithType = mapValues(
-		reverseObjectKeys(routeArgsMetadata),
-		(param: any) => ({
-			type: types[param.index],
-			name: param.data,
-			required: true,
-		}),
+		reverseObjectKeys(routeArgsMetadata as Record<string, unknown>),
+		(param: unknown) => {
+			const routeArgument = param as RouteArgumentMetadata;
+			return {
+				type: types[routeArgument.index],
+				name: routeArgument.data,
+				required: true,
+			};
+		},
 	);
 
 	for (const [key, value] of Object.entries(parametersWithType)) {

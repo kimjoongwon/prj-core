@@ -24,7 +24,7 @@ export const TimeInput = observer(
 		return (
 			<TimeInputPrimitive.TimeInput
 				{...rest}
-				value={formField.state.value as any}
+				value={formField.state.value}
 				onChange={handleChange}
 			/>
 		);

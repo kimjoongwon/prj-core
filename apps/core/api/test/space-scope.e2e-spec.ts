@@ -1,31 +1,32 @@
-import { JwtStrategy } from "@cocrepo/be-common";
-import { SpaceContext } from "@cocrepo/context";
 import { TaskAggregate } from "@cocrepo/aggregate";
+import { JwtStrategy } from "@cocrepo/be-common";
+import { PRISMA_SERVICE_TOKEN, SYSTEM_ROLES } from "@cocrepo/constant";
+import { SpaceContext } from "@cocrepo/context";
+import { SpaceScope } from "@cocrepo/dto";
+import { SpaceCategoryName } from "@cocrepo/enum";
 import {
-	PRISMA_SERVICE_TOKEN,
-	SYSTEM_ROLES } from "@cocrepo/constant";
-import { UsersRepository,
+	SpacesRepository,
 	TasksRepository,
-	SpacesRepository } from "@cocrepo/repository";
+	UsersRepository,
+} from "@cocrepo/repository";
 import {
 	AuthCacheService,
 	TokenStorageService,
 	UserService,
 } from "@cocrepo/service";
-import { SpaceScope } from "@cocrepo/dto";
-import { SpaceCategoryName } from "@cocrepo/enum";
 import {
 	Controller,
 	Get,
 	HttpStatus,
+	INestApplication,
+	Injectable,
 	Query,
 	UnauthorizedException,
 } from "@nestjs/common";
-import { Test, TestingModule } from "@nestjs/testing";
 import { JwtService } from "@nestjs/jwt";
 import { PassportStrategy } from "@nestjs/passport";
+import { Test, TestingModule } from "@nestjs/testing";
 import { ExtractJwt, Strategy } from "passport-jwt";
-import { INestApplication, Injectable } from "@nestjs/common";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
 import { setNestApp } from "../src/setNestApp";
@@ -142,9 +143,7 @@ describe("Space Scope API (E2E)", () => {
 			usersRepoCalls.push({ type: "findManyBySpaceIds", ...params });
 			return { users: [], totalCount: 0 };
 		},
-		countStatsBySpaceIds: async (
-			params?: Record<string, unknown>,
-		) => {
+		countStatsBySpaceIds: async (params?: Record<string, unknown>) => {
 			usersRepoCalls.push({ type: "countStatsBySpaceIds", ...(params ?? {}) });
 			return {
 				total: 0,

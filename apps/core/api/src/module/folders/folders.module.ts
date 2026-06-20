@@ -1,8 +1,5 @@
-import {
-	AuthContext,
-	SpaceContext,
-} from "@cocrepo/context";
 import { FolderAggregate } from "@cocrepo/aggregate";
+import { AuthContext, SpaceContext } from "@cocrepo/context";
 import { FoldersController } from "@cocrepo/controller";
 import { FoldersRepository } from "@cocrepo/repository";
 import { FolderCommandHandlers, FolderQueryHandlers } from "@cocrepo/usecase";

@@ -2,10 +2,7 @@ import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { OidcClient } from "@cocrepo/client";
 import { LogoutWithCookieCommand } from "@cocrepo/command";
 import { Token } from "@cocrepo/constant";
-import {
-	TokenService,
-	TokenStorageService,
-} from "@cocrepo/service";
+import { TokenService, TokenStorageService } from "@cocrepo/service";
 import { Logger } from "@nestjs/common";
 import { CommandHandler } from "@nestjs/cqrs";
 import { clearOidcProviderCookies } from "./clear-oidc-provider-cookies";

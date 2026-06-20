@@ -13,9 +13,8 @@ const ADMIN_PERSIST_READY_TIMEOUT = 15_000;
 const ROUTE_PREWARM_TIMEOUT = 10_000;
 const ADMIN_API_BASE_URL =
 	process.env.E2E_CORE_API_BASE_URL ??
-	new URL(
-		process.env.E2E_ADMIN_BASE_URL ?? "http://localhost:3000/admin/",
-	).origin;
+	new URL(process.env.E2E_ADMIN_BASE_URL ?? "http://localhost:3000/admin/")
+		.origin;
 const CURRENT_SPACE_URL = new URL(
 	"/api/v1/auth/current-space",
 	ADMIN_API_BASE_URL,
@@ -154,11 +153,15 @@ export async function seedAdminPersist(
 				const spaces: Array<{ spaceId: string; groundName: string }> =
 					Array.isArray(parsed?.spaces)
 						? parsed.spaces.filter(
-								(space: unknown): space is { spaceId: string; groundName: string } =>
+								(
+									space: unknown,
+								): space is { spaceId: string; groundName: string } =>
 									typeof space === "object" &&
 									space !== null &&
-									typeof (space as { spaceId?: unknown }).spaceId === "string" &&
-									typeof (space as { groundName?: unknown }).groundName === "string",
+									typeof (space as { spaceId?: unknown }).spaceId ===
+										"string" &&
+									typeof (space as { groundName?: unknown }).groundName ===
+										"string",
 							)
 						: [];
 				const hasSystemSpace = spaces.some(
@@ -288,10 +291,14 @@ async function requestNativeLogin(page: Page): Promise<NativeAuthSession> {
 		},
 	});
 	if (!response.ok()) {
-		throw new Error(`native 로그인 API 호출에 실패했습니다: ${response.status()}`);
+		throw new Error(
+			`native 로그인 API 호출에 실패했습니다: ${response.status()}`,
+		);
 	}
 
-	const payload = (await response.json()) as { data?: Partial<NativeAuthSession> };
+	const payload = (await response.json()) as {
+		data?: Partial<NativeAuthSession>;
+	};
 	const session = payload.data;
 	if (
 		typeof session?.accessToken !== "string" ||

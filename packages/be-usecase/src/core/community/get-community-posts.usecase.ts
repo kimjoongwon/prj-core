@@ -1,10 +1,7 @@
-import {
-	AuthContext,
-	SpaceContext,
-} from "@cocrepo/context";
 import { ContentAggregate } from "@cocrepo/aggregate";
 import { GetCommunityPostsQuery } from "@cocrepo/command";
 import { COMMON_ERRORS } from "@cocrepo/constant";
+import { AuthContext, SpaceContext } from "@cocrepo/context";
 import { buildOffsetPaginationMeta } from "@cocrepo/toolkit";
 import { UnauthorizedException } from "@nestjs/common";
 import { QueryHandler } from "@nestjs/cqrs";

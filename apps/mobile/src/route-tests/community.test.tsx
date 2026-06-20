@@ -6,6 +6,32 @@ const mockInvalidateQueries = jest.fn();
 const mockUseGetCommunityPosts = jest.fn();
 const mockUseCreateCommunityPost = jest.fn();
 
+interface CommunityComposerState {
+	isSubmitting?: boolean;
+	text: string;
+	textError?: string | null;
+	title: string;
+}
+
+interface CommunityPostItem {
+	id: string;
+	authorName?: string;
+	text?: string;
+	title?: string;
+}
+
+interface CommunityScreenProps {
+	composer: CommunityComposerState;
+	errorDescription?: string;
+	onChangeComposerText?: (value: string) => void;
+	onChangeComposerTitle?: (value: string) => void;
+	onPressRetry?: () => void;
+	onPressSubmitComposer?: () => void;
+	onPressWrite?: () => void;
+	posts?: CommunityPostItem[];
+	status?: string;
+}
+
 jest.mock("@tanstack/react-query", () => ({
 	useQueryClient: () => ({
 		invalidateQueries: mockInvalidateQueries,
@@ -42,7 +68,7 @@ jest.mock("@cocrepo/mo-ui", () => {
 			onPressWrite,
 			posts = [],
 			status,
-		}: any) => {
+		}: CommunityScreenProps) => {
 			const renderStatus = () => {
 				if (status === "loading") {
 					return React.createElement(Text, { key: "loading" }, "loading");
@@ -68,7 +94,7 @@ jest.mock("@cocrepo/mo-ui", () => {
 					return React.createElement(Text, { key: "empty" }, "empty");
 				}
 
-				return posts.map((post: any) =>
+				return posts.map((post) =>
 					React.createElement(View, { key: post.id }, [
 						React.createElement(Text, { key: "author" }, post.authorName),
 						React.createElement(Text, { key: "title" }, post.title),
@@ -126,11 +152,11 @@ describe("mobile community tab route", () => {
 	beforeEach(() => {
 		mockInvalidateQueries.mockReset();
 		mobileApiScopeStore.clear();
-		mobileApiScopeStore.setSpace({
-			id: "space-1",
+		mobileApiScopeStore.setSpaceInfo({
+			spaceId: "space-1",
+			groundName: "강남점",
 			contentLanguageCode: "ko_KR",
-			ground: { name: "강남점" },
-		} as any);
+		});
 		mockUseGetCommunityPosts.mockReturnValue({
 			data: {
 				data: [

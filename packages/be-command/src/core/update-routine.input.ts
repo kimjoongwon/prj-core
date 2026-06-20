@@ -1,5 +1,7 @@
+import type { CreateRoutineActivityInput } from "./create-routine.input";
+
 export interface UpdateRoutineCommandInput {
-	activities?: any[];
+	activities?: CreateRoutineActivityInput[];
 	name?: string;
 	label?: string;
 }

@@ -1,5 +1,5 @@
-import { SpaceContext } from "@cocrepo/context";
 import { CourseAggregate } from "@cocrepo/aggregate";
+import { SpaceContext } from "@cocrepo/context";
 import { CoursesController } from "@cocrepo/controller";
 import {
 	CoursesRepository,

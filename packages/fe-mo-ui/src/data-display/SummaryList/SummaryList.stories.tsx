@@ -4,11 +4,11 @@ import { Text } from "../Text";
 import { SummaryList } from "./index";
 
 const meta = {
-  title: "data-display/SummaryList",
-  component: SummaryList,
-  parameters: {
-    layout: "fullscreen",
-  },
+	title: "data-display/SummaryList",
+	component: SummaryList,
+	parameters: {
+		layout: "fullscreen",
+	},
 } satisfies Meta<typeof SummaryList>;
 
 export default meta;
@@ -16,29 +16,29 @@ export default meta;
 type Story = StoryObj;
 
 export const Default: Story = {
-  render: () => (
-    <ScrollView contentContainerClassName="gap-3 px-4 py-5">
-      <View className="gap-2">
-        <Text className="text-lg font-extrabold text-foreground">
-          SummaryList
-        </Text>
-        <Text className="text-sm leading-5 text-muted">
-          제출 전에 사용자가 입력한 정보를 점검합니다.
-        </Text>
-      </View>
-      <SummaryList
-        items={[
-          { label: "이름", value: "김온유" },
-          { label: "연락처", value: "010-1234-5678" },
-          {
-            helperText: "필수 메모가 아직 입력되지 않았습니다.",
-            label: "요청 사항",
-            placeholder: "미입력",
-            state: "warning",
-          },
-        ]}
-        title="예약자 정보"
-      />
-    </ScrollView>
-  ),
+	render: () => (
+		<ScrollView contentContainerClassName="gap-3 px-4 py-5">
+			<View className="gap-2">
+				<Text className="text-lg font-extrabold text-foreground">
+					SummaryList
+				</Text>
+				<Text className="text-sm leading-5 text-muted">
+					제출 전에 사용자가 입력한 정보를 점검합니다.
+				</Text>
+			</View>
+			<SummaryList
+				items={[
+					{ label: "이름", value: "김온유" },
+					{ label: "연락처", value: "010-1234-5678" },
+					{
+						helperText: "필수 메모가 아직 입력되지 않았습니다.",
+						label: "요청 사항",
+						placeholder: "미입력",
+						state: "warning",
+					},
+				]}
+				title="예약자 정보"
+			/>
+		</ScrollView>
+	),
 };

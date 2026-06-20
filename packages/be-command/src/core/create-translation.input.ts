@@ -1,5 +1,7 @@
+import type { LanguageCode } from "@cocrepo/prisma";
+
 export interface CreateTranslationCommandInput {
-	languageCode: any;
+	languageCode: LanguageCode;
 	key: string;
 	text: string;
 	category: string;

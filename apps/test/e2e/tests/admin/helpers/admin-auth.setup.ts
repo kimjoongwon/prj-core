@@ -1,5 +1,5 @@
-import path from "node:path";
 import { mkdirSync, writeFileSync } from "node:fs";
+import path from "node:path";
 import { test as setup } from "@playwright/test";
 import { loginToAdmin, prewarmAdminRoutes, readAdminPersist } from "./login";
 

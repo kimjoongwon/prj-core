@@ -6,7 +6,7 @@ import { isEmpty } from "es-toolkit/compat";
  * buildPath('/user/:id/posts/:postId', { id: '123', postId: '456' })
  * // → '/user/123/posts/456'
  */
-function buildPath(template: string, params: Record<string, any>): string {
+function buildPath(template: string, params: Record<string, unknown>): string {
 	return template.replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, (match, key) => {
 		const value = params[key];
 		if (value === undefined || value === null) {
@@ -18,7 +18,7 @@ function buildPath(template: string, params: Record<string, any>): string {
 
 export function getUrlWithParamsAndQueryString(
 	url: string,
-	params: object = {},
+	params: Record<string, unknown> = {},
 	queryString?: string,
 ) {
 	let pathWithParams = "";

@@ -4,6 +4,22 @@ import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
 
 const mockUseGetMyReservations = jest.fn();
 
+interface ReservationListItem {
+  id: string;
+  dateLabel?: string;
+  title?: string;
+  statusLabel?: string;
+  metaLabel?: string;
+  memo?: string | null;
+}
+
+interface MyReservationsScreenProps {
+  errorDescription?: string;
+  items?: ReservationListItem[];
+  onPressRetry?: () => void;
+  status?: string;
+}
+
 jest.mock("@cocrepo/api/core/reservations", () => ({
   useGetMyReservations: (...args: unknown[]) =>
     mockUseGetMyReservations(...args),
@@ -24,7 +40,7 @@ jest.mock("@cocrepo/mo-ui", () => {
       items = [],
       onPressRetry,
       status,
-    }: any) => {
+    }: MyReservationsScreenProps) => {
       const renderStatus = () => {
         if (status === "loading") {
           return React.createElement(
@@ -71,7 +87,7 @@ jest.mock("@cocrepo/mo-ui", () => {
           ]);
         }
 
-        return items.map((item: any) =>
+        return items.map((item) =>
           React.createElement(View, { key: item.id }, [
             React.createElement(Text, { key: "date" }, item.dateLabel),
             React.createElement(Text, { key: "title" }, item.title),
@@ -100,11 +116,11 @@ jest.mock("@cocrepo/mo-ui", () => {
 describe("mobile reservations tab route", () => {
   beforeEach(() => {
     mobileApiScopeStore.clear();
-    mobileApiScopeStore.setSpace({
-      id: "space-1",
+    mobileApiScopeStore.setSpaceInfo({
+      spaceId: "space-1",
+      groundName: "강남점",
       contentLanguageCode: "ko_KR",
-      ground: { name: "강남점" },
-    } as any);
+    });
     mockUseGetMyReservations.mockReturnValue({
       data: {
         data: [

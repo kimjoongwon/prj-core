@@ -1,6 +1,6 @@
-import { SpaceContext } from "@cocrepo/context";
 import { InquiryAggregate } from "@cocrepo/aggregate";
 import { GetInquiryByIdQuery } from "@cocrepo/command";
+import { SpaceContext } from "@cocrepo/context";
 import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetInquiryByIdQuery)

@@ -34,7 +34,7 @@ const mockSessionStorage = {
 };
 
 const defineGlobal = (key: string, value: unknown) => {
-	Object.defineProperty(global, key, {
+	Object.defineProperty(globalThis, key, {
 		value,
 		configurable: true,
 		writable: true,
@@ -59,11 +59,11 @@ describe("BrowserUtil", () => {
 
 	afterEach(() => {
 		// Clean up mocks
-		delete (global as any).document;
-		delete (global as any).window;
-		delete (global as any).navigator;
-		delete (global as any).localStorage;
-		delete (global as any).sessionStorage;
+		Reflect.deleteProperty(globalThis, "document");
+		Reflect.deleteProperty(globalThis, "window");
+		Reflect.deleteProperty(globalThis, "navigator");
+		Reflect.deleteProperty(globalThis, "localStorage");
+		Reflect.deleteProperty(globalThis, "sessionStorage");
 	});
 
 	describe("navigateTo", () => {
@@ -90,7 +90,7 @@ describe("BrowserUtil", () => {
 		});
 
 		it("window가 없으면 경고를 출력해야 한다", () => {
-			delete (global as any).window;
+			Reflect.deleteProperty(globalThis, "window");
 			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 			navigateTo("/new-page");
@@ -111,7 +111,7 @@ describe("BrowserUtil", () => {
 		});
 
 		it("window가 없으면 경고를 출력해야 한다", () => {
-			delete (global as any).window;
+			Reflect.deleteProperty(globalThis, "window");
 			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 			reload();
@@ -140,7 +140,7 @@ describe("BrowserUtil", () => {
 		});
 
 		it("window가 없으면 null을 반환해야 한다", () => {
-			delete (global as any).window;
+			Reflect.deleteProperty(globalThis, "window");
 			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 			const result = getCurrentUrl();
@@ -181,7 +181,7 @@ describe("BrowserUtil", () => {
 		});
 
 		it("navigator가 없으면 null을 반환해야 한다", () => {
-			delete (global as any).navigator;
+			Reflect.deleteProperty(globalThis, "navigator");
 			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 			const result = getUserAgent();

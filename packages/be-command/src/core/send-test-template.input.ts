@@ -1,4 +1,4 @@
 export interface SendTestTemplateCommandInput {
 	recipient: string;
-	variables: any;
+	variables: Record<string, unknown>;
 }

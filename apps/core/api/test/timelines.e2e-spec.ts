@@ -268,9 +268,7 @@ describe("Timelines API (E2E)", () => {
 					startDateTime: new Date(
 						Date.now() + 1000 * 60 * 60 * 24,
 					).toISOString(), // 내일
-					endDateTime: new Date(
-						Date.now() + 1000 * 60 * 60 * 25,
-					).toISOString(), // 내일 + 1시간
+					endDateTime: new Date(Date.now() + 1000 * 60 * 60 * 25).toISOString(), // 내일 + 1시간
 					repeatCycleType: null,
 					recurringDayOfWeek: null,
 				};
@@ -322,14 +320,11 @@ describe("Timelines API (E2E)", () => {
 		describe("GET /api/v1/timelines/:timelineId/sessions/:sessionId", () => {
 			it("ID로 세션 상세를 조회할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId)
-					return;
+				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
-					.get(
-						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}`,
-					)
+					.get(`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
 					.set("x-space-id", spaceId);
 
@@ -344,8 +339,7 @@ describe("Timelines API (E2E)", () => {
 		describe("PATCH /api/v1/timelines/:timelineId/sessions/:sessionId", () => {
 			it("세션의 name을 수정할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId)
-					return;
+				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId) return;
 
 				const updateDto = {
 					name: "수정된 세션명",
@@ -372,8 +366,7 @@ describe("Timelines API (E2E)", () => {
 		describe("POST /api/v1/timelines/:timelineId/sessions/:sessionId/programs", () => {
 			it("세션에 프로그램을 등록할 수 있어야 한다 (루틴/강사 조회 후 등록)", async () => {
 				// Given: 등록을 위해 기존 Routine ID와 Instructor(User) ID가 필요
-				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId)
-					return;
+				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId) return;
 
 				const routineCreateDto = {
 					name: `프로그램용 루틴 ${Date.now()}`,
@@ -426,8 +419,7 @@ describe("Timelines API (E2E)", () => {
 		describe("GET /api/v1/timelines/:timelineId/sessions/:sessionId/programs", () => {
 			it("세션의 프로그램 목록을 조회할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId)
-					return;
+				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
@@ -522,8 +514,7 @@ describe("Timelines API (E2E)", () => {
 		describe("DELETE /api/v1/timelines/:timelineId/sessions/:sessionId", () => {
 			it("세션을 삭제하면 204 No Content를 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId)
-					return;
+				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId) return;
 
 				// When
 				const deleteResponse = await request(app.getHttpServer())
@@ -539,9 +530,7 @@ describe("Timelines API (E2E)", () => {
 
 				// 삭제 후 조회 시 404 반환 확인
 				const getResponse = await request(app.getHttpServer())
-					.get(
-						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}`,
-					)
+					.get(`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
 					.set("x-space-id", spaceId);
 

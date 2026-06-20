@@ -11,7 +11,9 @@ process.env.NODE_PATH = [
 	.join(path.delimiter);
 Module._initPaths();
 
-const { withStorybook } = require("@storybook/react-native/metro/withStorybook");
+const {
+	withStorybook,
+} = require("@storybook/react-native/metro/withStorybook");
 const { withUniwindConfig } = require("uniwind/metro");
 
 const config = getDefaultConfig(__dirname);
@@ -29,9 +31,7 @@ const forcedModules = new Map(
 		"react-native-gesture-handler": resolveFromStorybook(
 			"react-native-gesture-handler",
 		),
-		"react-native-reanimated": resolveFromStorybook(
-			"react-native-reanimated",
-		),
+		"react-native-reanimated": resolveFromStorybook("react-native-reanimated"),
 		"react-native-safe-area-context": resolveFromStorybook(
 			"react-native-safe-area-context",
 		),

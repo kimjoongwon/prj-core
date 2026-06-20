@@ -168,7 +168,10 @@ export class InteractionService {
 	 * 동의(Consent) 처리
 	 * Grant를 생성/업데이트하고 oidc-provider에 결과를 전달합니다.
 	 */
-	async processConsent(req: Request, res: Response): Promise<InteractionResult> {
+	async processConsent(
+		req: Request,
+		res: Response,
+	): Promise<InteractionResult> {
 		const provider = this.oidcProviderService.getProvider();
 		const interaction = await provider.interactionDetails(req, res);
 
@@ -219,7 +222,10 @@ export class InteractionService {
 	 * Interaction 중단 처리
 	 * access_denied 에러와 함께 클라이언트로 리다이렉트합니다.
 	 */
-	async abortInteraction(req: Request, res: Response): Promise<InteractionResult> {
+	async abortInteraction(
+		req: Request,
+		res: Response,
+	): Promise<InteractionResult> {
 		const provider = this.oidcProviderService.getProvider();
 		const result = {
 			error: "access_denied",

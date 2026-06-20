@@ -263,7 +263,8 @@ const ADMIN_NAV_SCOPE_KIND_BY_ID: Partial<Record<string, ScreenScopeKind>> = {
 
 function applyAdminNavScopeKinds(navItems: NavItemConfig[]): NavItemConfig[] {
 	return navItems.map((navItem) => {
-		const scopeKind = ADMIN_NAV_SCOPE_KIND_BY_ID[navItem.id] ?? navItem.scopeKind;
+		const scopeKind =
+			ADMIN_NAV_SCOPE_KIND_BY_ID[navItem.id] ?? navItem.scopeKind;
 		const children = navItem.children
 			? applyAdminNavScopeKinds(navItem.children)
 			: undefined;

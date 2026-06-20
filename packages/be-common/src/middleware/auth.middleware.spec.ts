@@ -2,6 +2,11 @@ import type { NextFunction, Request, Response } from "express";
 import * as passport from "passport";
 import { AuthMiddleware } from "./auth.middleware";
 
+type PassportAuthenticateCallback = (
+	error: Error | null,
+	user: Express.User | false | null,
+) => void;
+
 jest.mock("passport", () => ({
 	authenticate: jest.fn(),
 }));
@@ -48,7 +53,11 @@ describe("AuthMiddleware", () => {
 			// Given
 			const mockUser = { id: "user-1", email: "test@example.com" };
 			(passport.authenticate as jest.Mock).mockImplementation(
-				(_strategy: string, _options: any, callback: Function) => {
+				(
+					_strategy: string,
+					_options: unknown,
+					callback: PassportAuthenticateCallback,
+				) => {
 					return () => callback(null, mockUser);
 				},
 			);
@@ -64,7 +73,11 @@ describe("AuthMiddleware", () => {
 		it("사용자가 없으면 request.user를 설정하지 않아야 한다", () => {
 			// Given
 			(passport.authenticate as jest.Mock).mockImplementation(
-				(_strategy: string, _options: any, callback: Function) => {
+				(
+					_strategy: string,
+					_options: unknown,
+					callback: PassportAuthenticateCallback,
+				) => {
 					return () => callback(null, null);
 				},
 			);
@@ -81,7 +94,11 @@ describe("AuthMiddleware", () => {
 			// Given
 			const error = new Error("JWT 검증 실패");
 			(passport.authenticate as jest.Mock).mockImplementation(
-				(_strategy: string, _options: any, callback: Function) => {
+				(
+					_strategy: string,
+					_options: unknown,
+					callback: PassportAuthenticateCallback,
+				) => {
 					return () => callback(error, null);
 				},
 			);
@@ -97,7 +114,11 @@ describe("AuthMiddleware", () => {
 		it("user가 false(passport 실패 관례)이면 request.user를 설정하지 않아야 한다", () => {
 			// Given
 			(passport.authenticate as jest.Mock).mockImplementation(
-				(_strategy: string, _options: any, callback: Function) => {
+				(
+					_strategy: string,
+					_options: unknown,
+					callback: PassportAuthenticateCallback,
+				) => {
 					return () => callback(null, false);
 				},
 			);

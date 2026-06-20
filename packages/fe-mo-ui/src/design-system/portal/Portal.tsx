@@ -1,5 +1,5 @@
-import { type ComponentPropsWithoutRef } from "react";
 import { Portal as HeroPortal } from "heroui-native/portal";
+import { type ComponentPropsWithoutRef } from "react";
 
 export type PortalProps = ComponentPropsWithoutRef<typeof HeroPortal> & {};
 

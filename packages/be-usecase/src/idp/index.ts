@@ -1,7 +1,4 @@
-import {
-	IdpAdminCommandHandlers,
-	IdpAdminQueryHandlers,
-} from "./admin";
+import { IdpAdminCommandHandlers, IdpAdminQueryHandlers } from "./admin";
 import {
 	InteractionCommandHandlers,
 	InteractionQueryHandlers,

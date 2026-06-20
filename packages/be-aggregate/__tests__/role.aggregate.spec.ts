@@ -1,4 +1,5 @@
 import { SYSTEM_ROLES } from "@cocrepo/constant";
+import type { Role } from "@cocrepo/entity";
 import { RolesRepository } from "@cocrepo/repository";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
@@ -41,7 +42,7 @@ describe("RoleAggregate", () => {
 		it("ID로 역할을 조회해야 한다", async () => {
 			// Given
 			const roleId = "role-test-id";
-			mockRepository.findById.mockResolvedValue(mockRole as any);
+			mockRepository.findById.mockResolvedValue(mockRole as unknown as Role);
 
 			// When
 			const result = await service.getById(roleId);
@@ -67,7 +68,7 @@ describe("RoleAggregate", () => {
 	describe("getDefaultUserRole", () => {
 		it("기본 VIEW 역할을 조회해야 한다", async () => {
 			// Given
-			mockRepository.findByName.mockResolvedValue(mockRole as any);
+			mockRepository.findByName.mockResolvedValue(mockRole as unknown as Role);
 
 			// When
 			const result = await service.getDefaultUserRole();
@@ -97,7 +98,7 @@ describe("RoleAggregate", () => {
 				mockRole,
 				{ ...mockRole, id: "role-2", name: SYSTEM_ROLES.MANAGE },
 			];
-			mockRepository.findAll.mockResolvedValue(mockRoles as any);
+			mockRepository.findAll.mockResolvedValue(mockRoles as unknown as Role[]);
 
 			// When
 			const result = await service.getAll();

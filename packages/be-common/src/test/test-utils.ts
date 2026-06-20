@@ -1,6 +1,7 @@
 import type { UserDto } from "@cocrepo/dto";
 import { User } from "@cocrepo/entity";
 import { PrismaService } from "@cocrepo/service";
+import type { Provider, Type } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { Test, TestingModule } from "@nestjs/testing";
@@ -88,7 +89,7 @@ export const createTestUserDto = (
 						name: "Test Ground",
 					},
 				},
-			} as any,
+			},
 		],
 		...overrides,
 	} as UserDto;
@@ -120,7 +121,7 @@ export const createTestUserEntity = (overrides: Partial<User> = {}): User => {
 						name: "Test Ground",
 					},
 				},
-			} as any,
+			},
 		],
 		...overrides,
 	});
@@ -212,8 +213,8 @@ export const createMockResponse = (
 };
 
 export const setupTestModule = async (
-	providers: any[],
-	overrides: Record<string, any> = {},
+	providers: Provider[],
+	overrides: Record<string, unknown> = {},
 ): Promise<TestingModule> => {
 	const module: TestingModule = await Test.createTestingModule({
 		providers: [
@@ -246,9 +247,9 @@ export const setupTestModule = async (
 };
 
 export const setupTestController = async (
-	controller: any,
-	providers: any[] = [],
-	overrides: Record<string, any> = {},
+	controller: Type<unknown>,
+	providers: Provider[] = [],
+	overrides: Record<string, unknown> = {},
 ): Promise<TestingModule> => {
 	const module: TestingModule = await Test.createTestingModule({
 		controllers: [controller],
@@ -282,11 +283,11 @@ export const setupTestController = async (
 };
 
 export const expectToThrowAsync = async (
-	fn: () => Promise<any>,
-	errorClass?: any,
+	fn: () => Promise<unknown>,
+	errorClass?: new (...arguments_: unknown[]) => Error,
 	errorMessage?: string | RegExp,
 ): Promise<void> => {
-	let error: any;
+	let error: unknown;
 	try {
 		await fn();
 	} catch (e) {
@@ -298,10 +299,11 @@ export const expectToThrowAsync = async (
 		expect(error).toBeInstanceOf(errorClass);
 	}
 	if (errorMessage) {
+		const message = error instanceof Error ? error.message : String(error);
 		if (typeof errorMessage === "string") {
-			expect(error.message).toBe(errorMessage);
+			expect(message).toBe(errorMessage);
 		} else {
-			expect(error.message).toMatch(errorMessage);
+			expect(message).toMatch(errorMessage);
 		}
 	}
 };

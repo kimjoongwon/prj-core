@@ -3,6 +3,7 @@
 import { Spinner, Table } from "@heroui/react";
 import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import type { ReactNode } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
 import {
 	VisibilityCell,
@@ -73,7 +74,7 @@ export interface AbilityMatrixViewProps {
  */
 const legendItems: Array<{
 	status: VisibilityStatus;
-	icon: React.ReactNode;
+	icon: ReactNode;
 	color: "success" | "warning" | "danger";
 	label: string;
 }> = [
@@ -218,7 +219,6 @@ export const AbilityMatrixView = observer(
 							>
 								필드명
 							</Table.Column>
-							{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 							{
 								roles.map((role) => (
 									<Table.Column key={role.id} className="min-w-[100px]">
@@ -229,7 +229,7 @@ export const AbilityMatrixView = observer(
 											<span className="text-xs text-muted">({role.name})</span>
 										</div>
 									</Table.Column>
-								)) as any
+								)) as ReactNode[]
 							}
 						</Table.Header>
 						<Table.Body>
@@ -245,7 +245,6 @@ export const AbilityMatrixView = observer(
 											)}
 										</div>
 									</Table.Cell>
-									{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 									{
 										roles.map((role) => {
 											const status = getCellStatus(field.name, role.name);
@@ -268,7 +267,7 @@ export const AbilityMatrixView = observer(
 													</div>
 												</Table.Cell>
 											);
-										}) as any
+										}) as ReactNode[]
 									}
 								</Table.Row>
 							))}

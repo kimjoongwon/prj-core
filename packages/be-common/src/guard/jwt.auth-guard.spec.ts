@@ -35,7 +35,7 @@ describe("JwtAuthGuard", () => {
 			method: string;
 			authorization: string;
 			cookies: Record<string, string>;
-			user: any;
+			user: unknown;
 		}> = {},
 	): ExecutionContext => {
 		const request = {
@@ -66,7 +66,7 @@ describe("JwtAuthGuard", () => {
 			get: jest.fn(),
 			getAllAndOverride: jest.fn(),
 			getAllAndMerge: jest.fn(),
-		} as any;
+		} as unknown as jest.Mocked<Reflector>;
 
 		mockTokenStorageService = {
 			isBlacklisted: jest.fn(),
@@ -74,7 +74,7 @@ describe("JwtAuthGuard", () => {
 			validateRefreshToken: jest.fn(),
 			deleteRefreshToken: jest.fn(),
 			addToBlacklist: jest.fn(),
-		} as any;
+		} as unknown as jest.Mocked<TokenStorageService>;
 
 		mockClsService = {
 			get: jest.fn(),

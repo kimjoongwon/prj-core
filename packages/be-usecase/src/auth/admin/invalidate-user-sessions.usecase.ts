@@ -1,8 +1,5 @@
 import { InvalidateUserSessionsCommand } from "@cocrepo/command";
-import {
-	AuthCacheService,
-	TokenStorageService,
-} from "@cocrepo/service";
+import { AuthCacheService, TokenStorageService } from "@cocrepo/service";
 import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(InvalidateUserSessionsCommand)

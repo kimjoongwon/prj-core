@@ -36,16 +36,16 @@ function createHttp() {
 	};
 
 	return {
-		req: ({
+		req: {
 			headers: {
 				"x-forwarded-for": "198.51.100.7",
 				"user-agent": "browser/1.0",
 			},
 			socket: {},
-		} satisfies RequestDouble) as unknown as Request,
-		res: ({
+		} satisfies RequestDouble as unknown as Request,
+		res: {
 			cookie: jest.fn(),
-		} satisfies ResponseDouble) as unknown as Response,
+		} satisfies ResponseDouble as unknown as Response,
 	};
 }
 

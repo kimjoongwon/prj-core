@@ -1,9 +1,16 @@
+import type {
+	InquiryCategory,
+	InquiryChannel,
+	InquiryPriority,
+	InquirySource,
+} from "@cocrepo/prisma";
+
 export interface CreateInquiryCommandInput {
 	title: string;
-	category: any;
-	channel: any;
-	source?: any;
-	priority?: any;
+	category: InquiryCategory;
+	channel: InquiryChannel;
+	source?: InquirySource;
+	priority?: InquiryPriority;
 	customerId?: string;
 	assigneeId?: string;
 	content?: string;

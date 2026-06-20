@@ -1,3 +1,5 @@
+import type { PaymentMethod } from "@cocrepo/prisma";
+
 export interface CreateReservationCheckoutCommandInput {
 	courseOfferingId: string;
 	timelineId: string;
@@ -5,6 +7,6 @@ export interface CreateReservationCheckoutCommandInput {
 	programId: string;
 	occurrenceStartAt: Date;
 	idempotencyKey: string;
-	paymentMethod: any;
+	paymentMethod: PaymentMethod;
 	memo?: string | null;
 }

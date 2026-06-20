@@ -1,6 +1,6 @@
-import { SpaceContext } from "@cocrepo/context";
 import { InquiryAggregate } from "@cocrepo/aggregate";
 import { GetInquiryUpdateFormBootstrapQuery } from "@cocrepo/command";
+import { SpaceContext } from "@cocrepo/context";
 import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetInquiryUpdateFormBootstrapQuery)

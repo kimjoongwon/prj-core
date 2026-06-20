@@ -1,5 +1,5 @@
-import { type ReactNode } from "react";
 import { render, screen } from "@testing-library/react-native";
+import { type ReactNode } from "react";
 import { DesignSystemProvider } from "../../design-system/provider";
 import { CommunityPostCard } from "./index";
 

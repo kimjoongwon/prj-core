@@ -29,7 +29,7 @@ describe("RoleGroupGuard", () => {
 		} as unknown as ExecutionContext;
 	};
 
-	const createMockUser = (overrides: any = {}) => ({
+	const createMockUser = (overrides: Record<string, unknown> = {}) => ({
 		id: "user-test-id",
 		email: "test@example.com",
 		tenants: [
@@ -51,7 +51,7 @@ describe("RoleGroupGuard", () => {
 		...overrides,
 	});
 
-	const createMockTenant = (overrides: any = {}) => ({
+	const createMockTenant = (overrides: Record<string, unknown> = {}) => ({
 		id: "tenant-1",
 		spaceId: "space-001",
 		role: {
@@ -72,7 +72,7 @@ describe("RoleGroupGuard", () => {
 			get: jest.fn(),
 			getAllAndOverride: jest.fn(),
 			getAllAndMerge: jest.fn(),
-		} as any;
+		} as unknown as jest.Mocked<Reflector>;
 
 		mockClsService = {
 			get: jest.fn(),

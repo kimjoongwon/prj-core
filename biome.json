@@ -35,6 +35,7 @@
 		"rules": {
 			"recommended": true,
 			"suspicious": {
+				"noExplicitAny": "error",
 				"noShadowRestrictedNames": "off",
 				"noRedeclare": "off",
 				"noTemplateCurlyInString": "off"

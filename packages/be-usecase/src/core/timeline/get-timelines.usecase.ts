@@ -1,7 +1,7 @@
-import { SpaceContext } from "@cocrepo/context";
 import { TimelineAggregate } from "@cocrepo/aggregate";
 import { GetTimelinesQuery } from "@cocrepo/command";
 import { TIMELINE_ERRORS } from "@cocrepo/constant";
+import { SpaceContext } from "@cocrepo/context";
 import { buildOffsetStatsPaginatedResponse } from "@cocrepo/toolkit";
 import { UnauthorizedException } from "@nestjs/common";
 import { QueryHandler } from "@nestjs/cqrs";

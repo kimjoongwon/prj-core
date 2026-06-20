@@ -88,7 +88,7 @@ export class AuthContext {
 		return !!this.userDto;
 	}
 
-	 /** 인증 필수 */
+	/** 인증 필수 */
 	assertAuthenticated(): void {
 		if (!this.userDto) {
 			throw new UnauthorizedException("인증이 필요합니다.");

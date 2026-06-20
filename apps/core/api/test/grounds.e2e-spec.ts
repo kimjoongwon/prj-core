@@ -1,16 +1,11 @@
-import { JwtStrategy } from "@cocrepo/be-common";
 import { SpaceAggregate } from "@cocrepo/aggregate";
-import {
-	PRISMA_SERVICE_TOKEN,
-	SYSTEM_ROLES } from "@cocrepo/constant";
-import {
-	AuthCacheService,
-	TokenStorageService,
-} from "@cocrepo/service";
+import { JwtStrategy } from "@cocrepo/be-common";
+import { PRISMA_SERVICE_TOKEN, SYSTEM_ROLES } from "@cocrepo/constant";
+import { AuthCacheService, TokenStorageService } from "@cocrepo/service";
 import { INestApplication, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { Test, TestingModule } from "@nestjs/testing";
 import { PassportStrategy } from "@nestjs/passport";
+import { Test, TestingModule } from "@nestjs/testing";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
@@ -118,18 +113,20 @@ describe("Spaces API (E2E)", () => {
 			],
 			total: 1,
 		});
-		spaceServiceMock.getGroundBySpaceId.mockImplementation(async (spaceId: string) => ({
-			id: GROUND_ID,
-			spaceId,
-			name: "Main ground",
-			label: null,
-			address: "Seoul",
-			phone: "02-1234-5678",
-			email: "ground@example.com",
-			businessNo: "1234567890",
-			logoImageFileId: null,
-			imageFileId: null,
-		}));
+		spaceServiceMock.getGroundBySpaceId.mockImplementation(
+			async (spaceId: string) => ({
+				id: GROUND_ID,
+				spaceId,
+				name: "Main ground",
+				label: null,
+				address: "Seoul",
+				phone: "02-1234-5678",
+				email: "ground@example.com",
+				businessNo: "1234567890",
+				logoImageFileId: null,
+				imageFileId: null,
+			}),
+		);
 		spaceServiceMock.createSpaceWithGround.mockResolvedValue({
 			id: SPACE_RESULT_ID,
 			name: "Created space",
@@ -196,7 +193,9 @@ describe("Spaces API (E2E)", () => {
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
 		expect(response.body.data.spaceId).toBe(SPACE_VIEW_ID);
-		expect(spaceServiceMock.getGroundBySpaceId).toHaveBeenCalledWith(SPACE_VIEW_ID);
+		expect(spaceServiceMock.getGroundBySpaceId).toHaveBeenCalledWith(
+			SPACE_VIEW_ID,
+		);
 	});
 
 	it("비 FULL_ACCESS tenant는 다른 space ground 조회 시 403을 반환해야 한다", async () => {
@@ -246,7 +245,9 @@ describe("Spaces API (E2E)", () => {
 		expect(response.status).toBe(201);
 		expect(response.body.httpStatus).toBe(201);
 		expect(response.body.data.id).toBe(SPACE_RESULT_ID);
-		expect(spaceServiceMock.createSpaceWithGround).toHaveBeenCalledWith(createDto);
+		expect(spaceServiceMock.createSpaceWithGround).toHaveBeenCalledWith(
+			createDto,
+		);
 	});
 
 	it("현재 접근 가능한 space의 ground는 수정할 수 있어야 한다", async () => {

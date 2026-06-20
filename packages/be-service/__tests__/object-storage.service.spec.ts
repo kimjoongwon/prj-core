@@ -79,7 +79,9 @@ describe("S3CompatibleStorageService", () => {
 		}).compile();
 
 		service = module.get<ObjectStorageService>(ObjectStorageService);
-		(service as any).client = { send: mockSend };
+		Object.defineProperty(service, "client", {
+			value: { send: mockSend },
+		});
 	});
 
 	async function createService(
@@ -106,7 +108,9 @@ describe("S3CompatibleStorageService", () => {
 
 		const createdService =
 			module.get<ObjectStorageService>(ObjectStorageService);
-		(createdService as any).client = { send: mockSend };
+		Object.defineProperty(createdService, "client", {
+			value: { send: mockSend },
+		});
 		return createdService;
 	}
 

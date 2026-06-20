@@ -1,5 +1,3 @@
-import { JwtStrategy } from "@cocrepo/be-common";
-import { SpaceContext } from "@cocrepo/context";
 import {
 	AbilityAggregate,
 	AuthAuditLogAggregate,
@@ -7,7 +5,9 @@ import {
 	RoleAggregate,
 	SpaceAggregate,
 } from "@cocrepo/aggregate";
+import { JwtStrategy } from "@cocrepo/be-common";
 import { OidcClient } from "@cocrepo/client";
+import { SpaceContext } from "@cocrepo/context";
 import { AuthController } from "@cocrepo/controller";
 import {
 	AbilitiesRepository,

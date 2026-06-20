@@ -1,5 +1,5 @@
-import { SpaceContext } from "@cocrepo/context";
 import { PolicyAggregate } from "@cocrepo/aggregate";
+import { SpaceContext } from "@cocrepo/context";
 import { PoliciesController } from "@cocrepo/controller";
 import {
 	AbilitiesRepository,

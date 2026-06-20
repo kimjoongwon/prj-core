@@ -1,7 +1,7 @@
-import { SpaceContext } from "@cocrepo/context";
 import { CourseAggregate } from "@cocrepo/aggregate";
 import { GetCourseOfferingsQuery } from "@cocrepo/command";
 import { COMMON_ERRORS } from "@cocrepo/constant";
+import { SpaceContext } from "@cocrepo/context";
 import { buildOffsetStatsPaginatedResponse } from "@cocrepo/toolkit";
 import { UnauthorizedException } from "@nestjs/common";
 import { QueryHandler } from "@nestjs/cqrs";

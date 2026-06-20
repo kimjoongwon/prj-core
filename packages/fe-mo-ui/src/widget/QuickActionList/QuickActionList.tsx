@@ -2,8 +2,8 @@ import { observer } from "mobx-react-lite";
 import { View } from "react-native";
 import { Text } from "../../data-display/Text";
 import { ListGroup } from "../../layout/ListGroup";
-import type { QuickActionListProps } from "./QuickActionList.props";
 import { quickActionListClassNames } from "./QuickActionList.class-names";
+import type { QuickActionListProps } from "./QuickActionList.props";
 import { renderQuickActionListItem } from "./renderQuickActionListItem";
 
 /**
@@ -13,26 +13,26 @@ import { renderQuickActionListItem } from "./renderQuickActionListItem";
  * @returns 터치 가능한 빠른 이동 목록
  */
 export const QuickActionList = observer(function QuickActionList({
-  items,
-  ...rest
+	items,
+	...rest
 }: QuickActionListProps) {
-  const classNames = quickActionListClassNames();
+	const classNames = quickActionListClassNames();
 
-  if (items.length === 0) {
-    return (
-      <View {...rest} className={classNames.empty()}>
-        <Text className={classNames.emptyText()}>
-          사용할 수 있는 빠른 이동이 없습니다.
-        </Text>
-      </View>
-    );
-  }
+	if (items.length === 0) {
+		return (
+			<View {...rest} className={classNames.empty()}>
+				<Text className={classNames.emptyText()}>
+					사용할 수 있는 빠른 이동이 없습니다.
+				</Text>
+			</View>
+		);
+	}
 
-  return (
-    <ListGroup {...rest} className={classNames.list()}>
-      {items.map(renderQuickActionListItem)}
-    </ListGroup>
-  );
+	return (
+		<ListGroup {...rest} className={classNames.list()}>
+			{items.map(renderQuickActionListItem)}
+		</ListGroup>
+	);
 });
 
 QuickActionList.displayName = "QuickActionList";

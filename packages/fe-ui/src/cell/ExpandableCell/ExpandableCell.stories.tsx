@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 import { useState } from "react";
 import { ExpandableCell } from "./ExpandableCell";
 
@@ -37,7 +38,9 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const ExpandableCellWithState = (props: any) => {
+const ExpandableCellWithState = (
+	props: ComponentProps<typeof ExpandableCell>,
+) => {
 	const [isExpanded, setIsExpanded] = useState(props.isExpanded || false);
 
 	return (

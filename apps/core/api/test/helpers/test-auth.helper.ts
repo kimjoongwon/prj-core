@@ -1,8 +1,9 @@
 import { CONTEXT_KEYS, PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
+import type { PrismaService } from "@cocrepo/service";
 import {
+	type INestApplication,
 	Inject,
 	Injectable,
-	type INestApplication,
 	UnauthorizedException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
@@ -11,6 +12,18 @@ import { PassportStrategy } from "@nestjs/passport";
 import type { Request } from "express";
 import { ClsService } from "nestjs-cls";
 import { ExtractJwt, Strategy } from "passport-jwt";
+
+interface TestAuthTenant {
+	spaceId: string;
+	role?: {
+		name?: string | null;
+		classification?: {
+			category?: {
+				name?: string | null;
+			} | null;
+		} | null;
+	} | null;
+}
 
 /**
  * 테스트 전용 JWT Strategy (HS256)
@@ -24,7 +37,7 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 @Injectable()
 export class TestJwtStrategy extends PassportStrategy(Strategy) {
 	constructor(
-		@Inject(PRISMA_SERVICE_TOKEN) private readonly prisma: any,
+		@Inject(PRISMA_SERVICE_TOKEN) private readonly prisma: PrismaService,
 		cls: ClsService,
 	) {
 		super({
@@ -81,7 +94,7 @@ export async function getTestAuth(
 	spaceId: string;
 	userId: string;
 }> {
-	const prisma = app.get(PRISMA_SERVICE_TOKEN);
+	const prisma = app.get<PrismaService>(PRISMA_SERVICE_TOKEN);
 	const jwtService = app.get(JwtService);
 	const configService = app.get(ConfigService);
 	const testUserEmail =
@@ -129,14 +142,12 @@ export async function getTestAuth(
 		);
 	}
 
-	const tenant = user.tenants.find((candidate: any) => {
+	const tenants = user.tenants as TestAuthTenant[];
+	const tenant = tenants.find((candidate) => {
 		if (options.spaceId && candidate.spaceId !== options.spaceId) {
 			return false;
 		}
-		if (
-			roleName &&
-			candidate.role?.name !== roleName
-		) {
+		if (roleName && candidate.role?.name !== roleName) {
 			return false;
 		}
 		if (

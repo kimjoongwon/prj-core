@@ -5,6 +5,16 @@ import { type DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 import { AuthCacheService } from "../src/auth/auth-cache.service";
 import { UserService } from "../src/user/user.service";
 
+type UserWithRelations = NonNullable<
+	Awaited<ReturnType<UsersRepository["findByIdWithTenantsAndProfiles"]>>
+>;
+type UsersBySpaceResult = Awaited<
+	ReturnType<UsersRepository["findManyBySpaceIds"]>
+>;
+type UserStatsResult = Awaited<
+	ReturnType<UsersRepository["countStatsBySpaceIds"]>
+>;
+
 describe("UserService", () => {
 	let service: UserService;
 	let mockRepository: DeepMockProxy<UsersRepository>;
@@ -86,7 +96,7 @@ describe("UserService", () => {
 			// Given
 			const userId = "user-test-id";
 			mockRepository.findByIdWithTenantsAndProfiles.mockResolvedValue(
-				mockUser as any,
+				mockUser as unknown as UserWithRelations,
 			);
 
 			// When
@@ -187,10 +197,14 @@ describe("UserService", () => {
 				isSystemSpace: jest.fn(),
 			} as unknown as SpaceContext;
 			mockRepository.findManyBySpaceIds.mockResolvedValue(
-				repositoryResult as any,
+				repositoryResult as unknown as UsersBySpaceResult,
 			);
-			mockRepository.countStatsBySpaceIds.mockResolvedValue(statsResult as any);
-			(service as any).spaceCtx = mockSpaceContext;
+			mockRepository.countStatsBySpaceIds.mockResolvedValue(
+				statsResult as UserStatsResult,
+			);
+			Object.defineProperty(service, "spaceCtx", {
+				value: mockSpaceContext,
+			});
 
 			const result = await service.getUsersBySpace(input);
 
@@ -254,10 +268,14 @@ describe("UserService", () => {
 				isSystemSpace: jest.fn(),
 			} as unknown as SpaceContext;
 			mockRepository.findManyBySpaceIds.mockResolvedValue(
-				repositoryResult as any,
+				repositoryResult as unknown as UsersBySpaceResult,
 			);
-			mockRepository.countStatsBySpaceIds.mockResolvedValue(statsResult as any);
-			(service as any).spaceCtx = mockSpaceContext;
+			mockRepository.countStatsBySpaceIds.mockResolvedValue(
+				statsResult as UserStatsResult,
+			);
+			Object.defineProperty(service, "spaceCtx", {
+				value: mockSpaceContext,
+			});
 
 			const result = await service.getUsersBySpace(input);
 
@@ -313,10 +331,14 @@ describe("UserService", () => {
 				isSystemSpace: jest.fn(),
 			} as unknown as SpaceContext;
 			mockRepository.findManyBySpaceIds.mockResolvedValue(
-				repositoryResult as any,
+				repositoryResult as unknown as UsersBySpaceResult,
 			);
-			mockRepository.countStatsBySpaceIds.mockResolvedValue(statsResult as any);
-			(service as any).spaceCtx = mockSpaceContext;
+			mockRepository.countStatsBySpaceIds.mockResolvedValue(
+				statsResult as UserStatsResult,
+			);
+			Object.defineProperty(service, "spaceCtx", {
+				value: mockSpaceContext,
+			});
 
 			const result = await service.getUsersBySpace(input);
 

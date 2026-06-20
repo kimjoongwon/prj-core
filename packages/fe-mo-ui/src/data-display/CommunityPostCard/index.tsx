@@ -1,11 +1,11 @@
+import { observer } from "mobx-react-lite";
 import { type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
-import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
-import { Chip } from "../Chip";
-import { Text } from "../Text";
 import { Icon } from "../../icon";
 import { HStack, VStack } from "../../rhythm";
+import { Chip } from "../Chip";
+import { Text } from "../Text";
 
 export interface CommunityPostCardProps extends Omit<ViewProps, "children"> {
 	authorName: ReactNode;
@@ -77,7 +77,8 @@ CommunityPostCard.displayName = "CommunityPostCard";
 
 const communityPostCardClassNames = tv({
 	slots: {
-		author: "max-w-[128px] text-[13px] font-extrabold leading-5 text-foreground",
+		author:
+			"max-w-[128px] text-[13px] font-extrabold leading-5 text-foreground",
 		createdAt: "text-xs leading-4 text-muted",
 		dot: "text-xs leading-4 text-muted",
 		root: "rounded-xl border border-border bg-surface p-4",

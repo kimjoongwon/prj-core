@@ -1,8 +1,5 @@
-import {
-	AuthContext,
-	SpaceContext,
-} from "@cocrepo/context";
 import { RoutineAggregate } from "@cocrepo/aggregate";
+import { AuthContext, SpaceContext } from "@cocrepo/context";
 import { RoutinesController } from "@cocrepo/controller";
 import { RoutinesRepository, TasksRepository } from "@cocrepo/repository";
 import { RoutineCommandHandlers, RoutineQueryHandlers } from "@cocrepo/usecase";

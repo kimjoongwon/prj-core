@@ -4,51 +4,51 @@
 const http = require("node:http");
 
 const apiSpecEnvironments = {
-  development: "http://localhost:3006/api-json",
-  local: "http://localhost:3006/api-json",
-  stg: "https://stg.cocdev.co.kr/api-json",
-  staging: "https://stg.cocdev.co.kr/api-json",
-  prod: "https://cocdev.co.kr/api-json",
-  production: "https://cocdev.co.kr/api-json",
+	development: "http://localhost:3006/api-json",
+	local: "http://localhost:3006/api-json",
+	stg: "https://stg.cocdev.co.kr/api-json",
+	staging: "https://stg.cocdev.co.kr/api-json",
+	prod: "https://cocdev.co.kr/api-json",
+	production: "https://cocdev.co.kr/api-json",
 };
 
 const coreTags = [
-  "ABILITIES",
-  "ACTIONS",
-  "ASSETS",
-  "COMMUNITY",
-  "COURSES",
-  "FOLDERS",
-  "I18N",
-  "INQUIRIES",
-  "PAYMENTS",
-  "POLICIES",
-  "POLICY_ASSIGNMENTS",
-  "RESERVATIONS",
-  "ROLES",
-  "ROUTINES",
-  "SERVICE_DOCUMENTS",
-  "SPACES",
-  "SUBJECTS",
-  "TASKS",
-  "TEMPLATES",
-  "TENANT_ACCESS_REQUESTS",
-  "TIMELINES",
-  "TRANSLATIONS",
-  "USERS",
+	"ABILITIES",
+	"ACTIONS",
+	"ASSETS",
+	"COMMUNITY",
+	"COURSES",
+	"FOLDERS",
+	"I18N",
+	"INQUIRIES",
+	"PAYMENTS",
+	"POLICIES",
+	"POLICY_ASSIGNMENTS",
+	"RESERVATIONS",
+	"ROLES",
+	"ROUTINES",
+	"SERVICE_DOCUMENTS",
+	"SPACES",
+	"SUBJECTS",
+	"TASKS",
+	"TEMPLATES",
+	"TENANT_ACCESS_REQUESTS",
+	"TIMELINES",
+	"TRANSLATIONS",
+	"USERS",
 ];
 
 const idpTags = [
-  "AUTH",
-  "EMAIL_VERIFICATIONS",
-  "I18N",
-  "IDP_ACCOUNTS",
-  "IDP_DASHBOARD",
-  "Interaction",
-  "OIDC_CLIENTS",
-  "OIDC_SESSIONS",
-  "Password Reset",
-  "SECURITY_POLICY",
+	"AUTH",
+	"EMAIL_VERIFICATIONS",
+	"I18N",
+	"IDP_ACCOUNTS",
+	"IDP_DASHBOARD",
+	"Interaction",
+	"OIDC_CLIENTS",
+	"OIDC_SESSIONS",
+	"Password Reset",
+	"SECURITY_POLICY",
 ];
 
 /**
@@ -58,28 +58,28 @@ const idpTags = [
  * @returns {Promise<boolean>}
  */
 async function isServerRunning(url, timeout = 2000) {
-  return new Promise((resolve) => {
-    const urlObj = new URL(url);
-    const options = {
-      hostname: urlObj.hostname,
-      port: urlObj.port,
-      path: urlObj.pathname,
-      method: "HEAD",
-      timeout: timeout,
-    };
+	return new Promise((resolve) => {
+		const urlObj = new URL(url);
+		const options = {
+			hostname: urlObj.hostname,
+			port: urlObj.port,
+			path: urlObj.pathname,
+			method: "HEAD",
+			timeout: timeout,
+		};
 
-    const req = http.request(options, (res) => {
-      resolve(res.statusCode >= 200 && res.statusCode < 500);
-    });
+		const req = http.request(options, (res) => {
+			resolve(res.statusCode >= 200 && res.statusCode < 500);
+		});
 
-    req.on("error", () => resolve(false));
-    req.on("timeout", () => {
-      req.destroy();
-      resolve(false);
-    });
+		req.on("error", () => resolve(false));
+		req.on("timeout", () => {
+			req.destroy();
+			resolve(false);
+		});
 
-    req.end();
-  });
+		req.end();
+	});
 }
 
 /**
@@ -92,141 +92,145 @@ async function isServerRunning(url, timeout = 2000) {
  * @param {string} label - 로깅용 라벨 (예: "Server", "IDP")
  */
 async function resolveApiUrl(envMap, label) {
-  const orvalEnv = process.env.ORVAL_ENV;
-  const explicitUrl = process.env.CORE_API_INTERNAL_URL;
+	const orvalEnv = process.env.ORVAL_ENV;
+	const explicitUrl = process.env.CORE_API_INTERNAL_URL;
 
-  // 명시적 환경 지정 시 바로 해당 URL 사용
-  if (orvalEnv) {
-    const url = envMap[orvalEnv];
-    if (!url) {
-      throw new Error(`알 수 없는 ORVAL_ENV: ${orvalEnv} (local|stg|prod)`);
-    }
-    console.log(`🎯 [${label}] ORVAL_ENV=${orvalEnv} → ${url}`);
-    return url;
-  }
+	// 명시적 환경 지정 시 바로 해당 URL 사용
+	if (orvalEnv) {
+		const url = envMap[orvalEnv];
+		if (!url) {
+			throw new Error(`알 수 없는 ORVAL_ENV: ${orvalEnv} (local|stg|prod)`);
+		}
+		console.log(`🎯 [${label}] ORVAL_ENV=${orvalEnv} → ${url}`);
+		return url;
+	}
 
-  if (explicitUrl) {
-    const apiJsonUrl = `${explicitUrl.replace(/\/$/, "")}/api-json`;
-    console.log(`🎯 [${label}] runtime env → ${apiJsonUrl}`);
-    return apiJsonUrl;
-  }
+	if (explicitUrl) {
+		const apiJsonUrl = `${explicitUrl.replace(/\/$/, "")}/api-json`;
+		console.log(`🎯 [${label}] runtime env → ${apiJsonUrl}`);
+		return apiJsonUrl;
+	}
 
-  // ORVAL_ENV 미지정: localhost 자동 감지
-  const localhostUrl = envMap.development;
-  const isLocalRunning = await isServerRunning(localhostUrl);
+	// ORVAL_ENV 미지정: localhost 자동 감지
+	const localhostUrl = envMap.development;
+	const isLocalRunning = await isServerRunning(localhostUrl);
 
-  if (isLocalRunning) {
-    console.log(`✅ [${label}] ${new URL(localhostUrl).host} 서버가 실행 중입니다.`);
-    return localhostUrl;
-  }
+	if (isLocalRunning) {
+		console.log(
+			`✅ [${label}] ${new URL(localhostUrl).host} 서버가 실행 중입니다.`,
+		);
+		return localhostUrl;
+	}
 
-  console.log(`⚠️  [${label}] ${new URL(localhostUrl).host} 서버가 실행되지 않았습니다.`);
-  console.log(`🔄 [${label}] Fallback: staging 서버를 사용합니다.`);
-  return envMap.staging;
+	console.log(
+		`⚠️  [${label}] ${new URL(localhostUrl).host} 서버가 실행되지 않았습니다.`,
+	);
+	console.log(`🔄 [${label}] Fallback: staging 서버를 사용합니다.`);
+	return envMap.staging;
 }
 
 /** Swagger spec URL 결정 */
 async function getApiUrl() {
-  return resolveApiUrl(apiSpecEnvironments, "Swagger");
+	return resolveApiUrl(apiSpecEnvironments, "Swagger");
 }
 
 /** 공통 React Query 훅 생성 옵션 */
 const queryOptions = {
-  // 기본 useQuery 훅 생성 활성화
-  useQuery: true,
+	// 기본 useQuery 훅 생성 활성화
+	useQuery: true,
 
-  // 무한 스크롤용 useInfiniteQuery 비활성화
-  useInfinite: false,
+	// 무한 스크롤용 useInfiniteQuery 비활성화
+	useInfinite: false,
 
-  // page-level 기본 패턴은 아니지만 예외 route/국소 boundary에서 사용할 suspense 훅도 함께 생성
-  useSuspenseQuery: true,
+	// page-level 기본 패턴은 아니지만 예외 route/국소 boundary에서 사용할 suspense 훅도 함께 생성
+	useSuspenseQuery: true,
 
-  // 무한 스크롤은 현재 기본 패턴이 아니지만 예외 surface 호환을 위해 생성 허용
-  useSuspenseInfiniteQuery: true,
+	// 무한 스크롤은 현재 기본 패턴이 아니지만 예외 surface 호환을 위해 생성 허용
+	useSuspenseInfiniteQuery: true,
 
-  // SSR 예외 페이지를 위해 prefetch 함수는 유지
-  usePrefetch: true,
+	// SSR 예외 페이지를 위해 prefetch 함수는 유지
+	usePrefetch: true,
 };
 
 // 비동기 설정 래퍼
 async function createConfig() {
-  const apiUrl = await getApiUrl();
-  const idpApiUrl = apiUrl;
+	const apiUrl = await getApiUrl();
+	const idpApiUrl = apiUrl;
 
-  console.log(`🚀 Orval 설정 로드됨`);
-  console.log(`   Swagger Spec: ${apiUrl}`);
+	console.log(`🚀 Orval 설정 로드됨`);
+	console.log(`   Swagger Spec: ${apiUrl}`);
 
-  return {
-    // ─── Core client from unified Swagger spec ───
-    store: {
-      // 환경에 따른 OpenAPI 스펙 URL
-      input: {
-        target: apiUrl,
-        validation: false, // Swagger 스키마 검증 비활성화
-        filters: {
-          mode: "include",
-          tags: coreTags,
-        },
-      },
+	return {
+		// ─── Core client from unified Swagger spec ───
+		store: {
+			// 환경에 따른 OpenAPI 스펙 URL
+			input: {
+				target: apiUrl,
+				validation: false, // Swagger 스키마 검증 비활성화
+				filters: {
+					mode: "include",
+					tags: coreTags,
+				},
+			},
 
-      output: {
-        // 생성된 API 클라이언트 코드의 출력 위치
-        target: "src/core/index.ts",
+			output: {
+				// 생성된 API 클라이언트 코드의 출력 위치
+				target: "src/core/index.ts",
 
-        // 타입 스키마 모델들의 출력 디렉토리
-        schemas: "src/core/model",
+				// 타입 스키마 모델들의 출력 디렉토리
+				schemas: "src/core/model",
 
-        // React Query를 사용한 클라이언트 생성
-        client: "react-query",
+				// React Query를 사용한 클라이언트 생성
+				client: "react-query",
 
-        // OpenAPI 태그별로 파일 분할하여 직접 생성
-        // 후처리 스크립트 없이 생성 결과를 그대로 사용합니다.
-        mode: "tags-split",
+				// OpenAPI 태그별로 파일 분할하여 직접 생성
+				// 후처리 스크립트 없이 생성 결과를 그대로 사용합니다.
+				mode: "tags-split",
 
-        override: {
-          // 커스텀 Axios 인스턴스 사용 설정
-          mutator: {
-            // 커스텀 Axios 설정 파일 경로
-            path: "./src/libs/customAxios.ts",
-            // 사용할 Axios 인스턴스 함수명
-            name: "customInstance",
-          },
+				override: {
+					// 커스텀 Axios 인스턴스 사용 설정
+					mutator: {
+						// 커스텀 Axios 설정 파일 경로
+						path: "./src/libs/customAxios.ts",
+						// 사용할 Axios 인스턴스 함수명
+						name: "customInstance",
+					},
 
-          // React Query 훅 생성 옵션
-          query: queryOptions,
-        },
-      },
-    },
+					// React Query 훅 생성 옵션
+					query: queryOptions,
+				},
+			},
+		},
 
-    // ─── IDP/Auth client from unified Swagger spec ───
-    idp: {
-      input: {
-        target: idpApiUrl,
-        validation: false,
-        filters: {
-          mode: "include",
-          tags: idpTags,
-        },
-      },
+		// ─── IDP/Auth client from unified Swagger spec ───
+		idp: {
+			input: {
+				target: idpApiUrl,
+				validation: false,
+				filters: {
+					mode: "include",
+					tags: idpTags,
+				},
+			},
 
-      output: {
-        target: "src/idp/index.ts",
-        schemas: "src/idp/model",
-        client: "react-query",
-        // OpenAPI 태그별로 파일 분할하여 직접 생성
-        // 후처리 스크립트 없이 생성 결과를 그대로 사용합니다.
-        mode: "tags-split",
+			output: {
+				target: "src/idp/index.ts",
+				schemas: "src/idp/model",
+				client: "react-query",
+				// OpenAPI 태그별로 파일 분할하여 직접 생성
+				// 후처리 스크립트 없이 생성 결과를 그대로 사용합니다.
+				mode: "tags-split",
 
-        override: {
-          mutator: {
-            path: "./src/libs/customIdpAxios.ts",
-            name: "customIdpInstance",
-          },
-          query: queryOptions,
-        },
-      },
-    },
-  };
+				override: {
+					mutator: {
+						path: "./src/libs/customIdpAxios.ts",
+						name: "customIdpInstance",
+					},
+					query: queryOptions,
+				},
+			},
+		},
+	};
 }
 
 // orval은 Promise를 반환하는 설정 함수를 지원합니다

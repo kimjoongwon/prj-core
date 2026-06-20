@@ -7,6 +7,20 @@ import { runInAction } from "mobx";
 const mockPush = jest.fn();
 const mockReplace = jest.fn();
 
+interface ProfileQuickAction {
+	disabled?: boolean;
+	id: string;
+	label?: string;
+	onPress?: () => void;
+}
+
+interface MyPageScreenProps {
+	currentSpaceName?: string;
+	isAuthenticated?: boolean;
+	onPressLogout?: () => void;
+	quickActions: ProfileQuickAction[];
+}
+
 jest.mock("@cocrepo/mo-ui", () => {
 	const React = jest.requireActual<typeof import("react")>("react");
 	const { Pressable, Text, View } =
@@ -18,7 +32,7 @@ jest.mock("@cocrepo/mo-ui", () => {
 			isAuthenticated,
 			onPressLogout,
 			quickActions,
-		}: any) =>
+		}: MyPageScreenProps) =>
 			React.createElement(
 				View,
 				{ accessibilityLabel: "my-page-screen" },
@@ -28,7 +42,7 @@ jest.mock("@cocrepo/mo-ui", () => {
 					isAuthenticated ? "로그인됨" : "확인 필요",
 				),
 				React.createElement(Text, null, currentSpaceName),
-				quickActions.map((item: any) =>
+				quickActions.map((item) =>
 					React.createElement(
 						Pressable,
 						{

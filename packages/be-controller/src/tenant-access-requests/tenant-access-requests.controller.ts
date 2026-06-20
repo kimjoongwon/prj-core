@@ -1,4 +1,3 @@
-import { AuthContext } from "@cocrepo/context";
 import {
 	ApproveTenantAccessRequestCommand,
 	GetTenantAccessRequestForReviewQuery,
@@ -6,6 +5,7 @@ import {
 	RejectTenantAccessRequestCommand,
 } from "@cocrepo/command";
 import { USER_ERRORS } from "@cocrepo/constant";
+import { AuthContext } from "@cocrepo/context";
 import {
 	ApiAuth,
 	ApiErrors,

@@ -10,7 +10,7 @@ import {
 	type RecurringDayOfTheWeek,
 } from "./WeekInput";
 
-export interface WeekInputProps<T = any>
+export interface WeekInputProps<T extends object = Record<string, unknown>>
 	extends MobxProps<T>,
 		Omit<BaseWeekInputProps, "value" | "onChange"> {}
 

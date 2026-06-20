@@ -1,8 +1,5 @@
-import {
-	AuthContext,
-	SpaceContext,
-} from "@cocrepo/context";
 import { InquiryAggregate } from "@cocrepo/aggregate";
+import { AuthContext, SpaceContext } from "@cocrepo/context";
 import { InquiriesController } from "@cocrepo/controller";
 import { InquiriesRepository } from "@cocrepo/repository";
 import { InquiryCommandHandlers, InquiryQueryHandlers } from "@cocrepo/usecase";

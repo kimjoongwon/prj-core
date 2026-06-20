@@ -1,3 +1,5 @@
+import type { ProgramDto, TimelineDto } from "@cocrepo/dto";
+
 export interface UpdateSessionCommandInput {
 	type?: string;
 	repeatCycleType?: string;
@@ -7,8 +9,8 @@ export interface UpdateSessionCommandInput {
 	timelineId?: string;
 	name?: string;
 	description?: string;
-	programs?: any[];
-	timeline?: any;
+	programs?: ProgramDto[];
+	timeline?: TimelineDto;
 	id?: string;
 	createdAt?: Date;
 	updatedAt?: Date;

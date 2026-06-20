@@ -1,12 +1,8 @@
-import type { Decorator, Preview } from "@storybook/react-native";
 import { setLoginRedirectUrl } from "@cocrepo/api/core/client";
 import { setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
 import type { HeroUINativeConfig } from "@cocrepo/mo-ui";
-import {
-	DesignSystemProvider,
-	PortalHost,
-	ScreenFrame,
-} from "@cocrepo/mo-ui";
+import { DesignSystemProvider, PortalHost, ScreenFrame } from "@cocrepo/mo-ui";
+import type { Decorator, Preview } from "@storybook/react-native";
 import type { ReactNode } from "react";
 import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -78,7 +74,9 @@ const withMobileRuntime: Decorator = (Story, context) => {
 							backgroundColor={canvasBackground}
 							edges={["left", "right"]}
 						>
-							<View className={getStoryLayoutClassName(context.parameters.layout)}>
+							<View
+								className={getStoryLayoutClassName(context.parameters.layout)}
+							>
 								<Story />
 							</View>
 						</ScreenFrame>

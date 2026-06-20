@@ -8,9 +8,6 @@ import { OidcModule } from "../oidc/oidc.module";
 @Module({
 	imports: [CqrsModule, OidcModule, EmailModule],
 	controllers: [PasswordResetController],
-	providers: [
-		...PasswordResetUseCaseProviders,
-		PasswordResetService,
-	],
+	providers: [...PasswordResetUseCaseProviders, PasswordResetService],
 })
 export class PasswordResetModule {}

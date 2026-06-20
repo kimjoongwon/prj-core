@@ -18,56 +18,56 @@ const { RunScriptWebpackPlugin } = require("run-script-webpack-plugin");
 
 const packagesDir = path.resolve(__dirname, "../../packages");
 const watchPackages = [
-  "be-common",
-  "constant",
-  "decorator",
-  "dto",
-  "entity",
-  "enum",
-  "prisma",
-  "repository",
-  "service",
-  "toolkit",
-  "vo",
+	"be-common",
+	"constant",
+	"decorator",
+	"dto",
+	"entity",
+	"enum",
+	"prisma",
+	"repository",
+	"service",
+	"toolkit",
+	"vo",
 ];
 
 class WatchPackagesPlugin {
-  apply(compiler) {
-    compiler.hooks.afterCompile.tap("WatchPackagesPlugin", (compilation) => {
-      for (const pkg of watchPackages) {
-        const distDir = path.resolve(packagesDir, pkg, "dist");
-        if (fs.existsSync(distDir)) {
-          compilation.contextDependencies.add(distDir);
-        }
-      }
-    });
-  }
+	apply(compiler) {
+		compiler.hooks.afterCompile.tap("WatchPackagesPlugin", (compilation) => {
+			for (const pkg of watchPackages) {
+				const distDir = path.resolve(packagesDir, pkg, "dist");
+				if (fs.existsSync(distDir)) {
+					compilation.contextDependencies.add(distDir);
+				}
+			}
+		});
+	}
 }
 
 module.exports = (options, webpack) => ({
-  ...options,
-  entry: ["webpack/hot/poll?100", options.entry],
-  externals: [
-    ({ request }, callback) => {
-      // 번들에 포함: @cocrepo workspace 패키지, HMR 클라이언트
-      if (request === "webpack/hot/poll?100" || /^@cocrepo\//.test(request)) {
-        return callback();
-      }
-      // 번들에 포함: 상대/절대 경로 import (번들된 @cocrepo 패키지 내부 파일)
-      if (request.startsWith(".") || request.startsWith("/")) {
-        return callback();
-      }
-      // external 처리: npm 패키지, Node.js 내장 모듈 등 모든 bare specifier
-      return callback(null, `commonjs ${request}`);
-    },
-  ],
-  plugins: [
-    ...options.plugins,
-    new webpack.HotModuleReplacementPlugin(),
-    new RunScriptWebpackPlugin({
-      name: options.output.filename,
-      autoRestart: false,
-    }),
-    new WatchPackagesPlugin(),
-  ],
+	...options,
+	entry: ["webpack/hot/poll?100", options.entry],
+	externals: [
+		({ request }, callback) => {
+			// 번들에 포함: @cocrepo workspace 패키지, HMR 클라이언트
+			if (request === "webpack/hot/poll?100" || /^@cocrepo\//.test(request)) {
+				return callback();
+			}
+			// 번들에 포함: 상대/절대 경로 import (번들된 @cocrepo 패키지 내부 파일)
+			if (request.startsWith(".") || request.startsWith("/")) {
+				return callback();
+			}
+			// external 처리: npm 패키지, Node.js 내장 모듈 등 모든 bare specifier
+			return callback(null, `commonjs ${request}`);
+		},
+	],
+	plugins: [
+		...options.plugins,
+		new webpack.HotModuleReplacementPlugin(),
+		new RunScriptWebpackPlugin({
+			name: options.output.filename,
+			autoRestart: false,
+		}),
+		new WatchPackagesPlugin(),
+	],
 });

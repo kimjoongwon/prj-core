@@ -435,7 +435,7 @@ describe("MaskingService", () => {
 			};
 
 			// When
-			const result = service.applyMasking(null as any, config);
+			const result = service.applyMasking(null as unknown as string, config);
 
 			// Then
 			expect(result).toBe("");
@@ -449,7 +449,10 @@ describe("MaskingService", () => {
 			};
 
 			// When
-			const result = service.applyMasking(undefined as any, config);
+			const result = service.applyMasking(
+				undefined as unknown as string,
+				config,
+			);
 
 			// Then
 			expect(result).toBe("");
@@ -603,9 +606,12 @@ describe("MaskingService", () => {
 			]);
 
 			// When
-			const nullResult = service.maskFields(null as any, fieldsToMask);
+			const nullResult = service.maskFields(
+				null as unknown as Record<string, unknown>,
+				fieldsToMask,
+			);
 			const undefinedResult = service.maskFields(
-				undefined as any,
+				undefined as unknown as Record<string, unknown>,
 				fieldsToMask,
 			);
 
@@ -641,7 +647,7 @@ describe("MaskingService", () => {
 
 		it("빈 배열은 빈 배열을 반환해야 한다", () => {
 			// Given
-			const users: any[] = [];
+			const users: Record<string, unknown>[] = [];
 			const fieldsToMask = new Map<string, ActionConfig>([
 				["name", { type: "masking", preset: MASKING_PRESETS.NAME }],
 			]);
@@ -661,7 +667,10 @@ describe("MaskingService", () => {
 			]);
 
 			// When
-			const result = service.maskFieldsArray(notArray as any, fieldsToMask);
+			const result = service.maskFieldsArray(
+				notArray as unknown as Record<string, unknown>[],
+				fieldsToMask,
+			);
 
 			// Then
 			expect(result).toBe("not-an-array");

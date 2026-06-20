@@ -1,10 +1,24 @@
-import { INestApplication } from "@nestjs/common";
+import type { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
 import { setNestApp } from "../src/setNestApp";
 import { getTestAuth, TestJwtStrategy } from "./helpers/test-auth.helper";
 import { GuardTestController } from "./mock-controllers/tenant-injection-test.controller";
+
+interface RoleListItem {
+	name?: string;
+	displayName?: string;
+}
+
+function getRoleList(body: unknown): RoleListItem[] {
+	const payload =
+		typeof body === "object" && body !== null && "data" in body
+			? (body as { data?: unknown }).data
+			: body;
+
+	return Array.isArray(payload) ? (payload as RoleListItem[]) : [];
+}
 
 /**
  * Role 시스템 전용 E2E 테스트
@@ -61,10 +75,10 @@ describe("Role 시스템 E2E 테스트", () => {
 				return;
 			}
 
-			const roles = response.body?.data ?? response.body;
+			const roles = getRoleList(response.body);
 			expect(Array.isArray(roles)).toBe(true);
 
-			const roleNames = roles.map((r: any) => r.name);
+			const roleNames = roles.map((role) => role.name);
 			expect(roleNames).toContain("FULL_ACCESS");
 			expect(roleNames).toContain("MANAGE");
 			expect(roleNames).toContain("VIEW");
@@ -80,8 +94,8 @@ describe("Role 시스템 E2E 테스트", () => {
 
 			if (response.status !== 200) return;
 
-			const roles = response.body?.data ?? response.body;
-			const roleNames = roles.map((r: any) => r.name);
+			const roles = getRoleList(response.body);
+			const roleNames = roles.map((role) => role.name);
 			expect(roleNames).not.toContain("SUPER_ADMIN");
 			expect(roleNames).not.toContain("ADMIN");
 			expect(roleNames).not.toContain("USER");
@@ -97,10 +111,10 @@ describe("Role 시스템 E2E 테스트", () => {
 
 			if (response.status !== 200) return;
 
-			const roles = response.body?.data ?? response.body;
-			const fullAccess = roles.find((r: any) => r.name === "FULL_ACCESS");
-			const manage = roles.find((r: any) => r.name === "MANAGE");
-			const view = roles.find((r: any) => r.name === "VIEW");
+			const roles = getRoleList(response.body);
+			const fullAccess = roles.find((role) => role.name === "FULL_ACCESS");
+			const manage = roles.find((role) => role.name === "MANAGE");
+			const view = roles.find((role) => role.name === "VIEW");
 
 			if (fullAccess?.displayName) {
 				expect(fullAccess.displayName).toBe("전체 접근");
@@ -224,15 +238,17 @@ describe("Role 시스템 E2E 테스트", () => {
 		});
 
 		it("인증 없이 Guard 보호 엔드포인트 접근 시 401을 반환해야 한다", async () => {
-			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-guards/roles/full-access");
+			const response = await request(app.getHttpServer()).get(
+				"/api/v1/test-guards/roles/full-access",
+			);
 
 			expect(response.status).toBe(401);
 		});
 
 		it("인증 없이 복합 Guard 엔드포인트 접근 시 401을 반환해야 한다", async () => {
-			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-guards/combined/workspace-category-and-role");
+			const response = await request(app.getHttpServer()).get(
+				"/api/v1/test-guards/combined/workspace-category-and-role",
+			);
 
 			expect(response.status).toBe(401);
 		});

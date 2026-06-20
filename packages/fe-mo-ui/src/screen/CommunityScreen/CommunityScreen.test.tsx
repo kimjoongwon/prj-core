@@ -1,10 +1,7 @@
-import { type ReactNode } from "react";
 import { fireEvent, render, screen } from "@testing-library/react-native";
+import { type ReactNode } from "react";
 import { DesignSystemProvider } from "../../design-system/provider";
-import {
-	CommunityScreen,
-	type CommunityScreenProps,
-} from "./CommunityScreen";
+import { CommunityScreen, type CommunityScreenProps } from "./CommunityScreen";
 
 jest.mock("react-native-safe-area-context", () => ({
 	SafeAreaListener: ({ children }: { children: ReactNode }) => children,
@@ -17,9 +14,8 @@ jest.mock("react-native-safe-area-context", () => ({
 }));
 
 jest.mock("heroui-native", () => {
-	const actual = jest.requireActual<typeof import("heroui-native")>(
-		"heroui-native",
-	);
+	const actual =
+		jest.requireActual<typeof import("heroui-native")>("heroui-native");
 	const React = jest.requireActual<typeof import("react")>("react");
 	const { Pressable, Text, View } =
 		jest.requireActual<typeof import("react-native")>("react-native");

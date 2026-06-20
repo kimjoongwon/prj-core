@@ -15,7 +15,8 @@ function createUseCase(callback = jest.fn().mockResolvedValue(undefined)) {
 
 describe("HandleOidcUseCase", () => {
 	it("Given /oidc URL When 실행하면 Then provider callback에 /oidc prefix 제거 후 위임한다", async () => {
-		const { callback, oidcProviderService, provider, useCase } = createUseCase();
+		const { callback, oidcProviderService, provider, useCase } =
+			createUseCase();
 		const req = {
 			url: "/oidc/auth?client_id=admin-web",
 		} as unknown as Request;

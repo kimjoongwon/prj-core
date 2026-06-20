@@ -1,4 +1,4 @@
-import { closestCenter, DndContext } from "@dnd-kit/core";
+import { closestCenter, DndContext, type DragEndEvent } from "@dnd-kit/core";
 import {
 	arrayMove,
 	SortableContext,
@@ -43,8 +43,12 @@ const Template: Story = {
 	render: (_args) => {
 		const [items, setItems] = useState(mediaItems);
 
-		const handleDragEnd = (event: any) => {
+		const handleDragEnd = (event: DragEndEvent) => {
 			const { active, over } = event;
+			if (!over) {
+				return;
+			}
+
 			if (active.id !== over.id) {
 				setItems((items) => {
 					const oldIndex = items.findIndex((item) => item.id === active.id);

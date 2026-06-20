@@ -1,10 +1,7 @@
-import {
-	AuthContext,
-	SpaceContext,
-} from "@cocrepo/context";
 import { ContentAggregate } from "@cocrepo/aggregate";
 import { CreateCommunityPostCommand } from "@cocrepo/command";
 import { COMMON_ERRORS } from "@cocrepo/constant";
+import { AuthContext, SpaceContext } from "@cocrepo/context";
 import { UnauthorizedException } from "@nestjs/common";
 import { CommandHandler } from "@nestjs/cqrs";
 

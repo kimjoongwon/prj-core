@@ -1,3 +1,5 @@
+import type { Prisma } from "@cocrepo/prisma";
+
 export interface UpdateActionCommandInput {
 	name?: string;
 	displayName?: string;
@@ -5,5 +7,5 @@ export interface UpdateActionCommandInput {
 	group?: string;
 	order?: number;
 	isSystem?: boolean;
-	config?: any;
+	config?: Prisma.JsonValue | null;
 }

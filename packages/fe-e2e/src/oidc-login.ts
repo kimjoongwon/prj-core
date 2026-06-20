@@ -1,7 +1,10 @@
 type UrlMatcher = string | RegExp | ((url: URL) => boolean);
 
 interface Actionable {
-	waitFor(options?: { state?: "visible" | "hidden"; timeout?: number }): Promise<void>;
+	waitFor(options?: {
+		state?: "visible" | "hidden";
+		timeout?: number;
+	}): Promise<void>;
 	click(): Promise<void>;
 }
 
@@ -106,7 +109,9 @@ export async function navigateToOidcLoginForm(
 		}
 	}
 
-	throw new Error("OIDC login did not render a login or consent screen in time.");
+	throw new Error(
+		"OIDC login did not render a login or consent screen in time.",
+	);
 }
 
 export async function submitOidcCredentials(

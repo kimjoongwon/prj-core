@@ -1,6 +1,6 @@
-import { SpaceContext } from "@cocrepo/context";
 import { InquiryAggregate } from "@cocrepo/aggregate";
 import { ListInquiriesQuery } from "@cocrepo/command";
+import { SpaceContext } from "@cocrepo/context";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
 import { QueryHandler } from "@nestjs/cqrs";
 

@@ -10,6 +10,8 @@ import {
 	DatePicker as DatePickerComponent,
 } from "./DatePicker";
 
+type DatePickerFieldValue = BaseDatePickerProps["value"];
+
 export interface DatePickerProps<T>
 	extends MobxProps<T>,
 		Omit<BaseDatePickerProps, "value" | "onChange"> {}
@@ -28,7 +30,7 @@ export const DatePicker = observer(
 
 		const defaultParsedValue = parseAbsoluteToLocal(isoString);
 
-		const formField = useFormField<T, any>({
+		const formField = useFormField<T, DatePickerFieldValue>({
 			value: defaultParsedValue,
 			state,
 			path,

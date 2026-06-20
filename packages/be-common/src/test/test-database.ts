@@ -15,7 +15,10 @@ export class TestDatabase {
 		process.env.DATABASE_URL = "file:./test.db";
 
 		// Prisma 7 requires options object
-		this.prisma = new PrismaClient({} as any);
+		const prismaOptions = {} as unknown as ConstructorParameters<
+			typeof PrismaClient
+		>[0];
+		this.prisma = new PrismaClient(prismaOptions);
 	}
 
 	public static getInstance(): TestDatabase {

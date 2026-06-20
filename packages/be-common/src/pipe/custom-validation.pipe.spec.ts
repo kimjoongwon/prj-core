@@ -9,7 +9,7 @@ class TestContentDto {
 	name?: string;
 
 	@IsOptional()
-	content?: any;
+	content?: unknown;
 }
 
 // 테스트용 DTO 클래스 (유효성 검사용)
@@ -20,6 +20,11 @@ class TestValidationDto {
 	@IsEmail()
 	email: string;
 }
+
+type TestContentResult = TestContentDto;
+type NestedContentResult = TestContentDto & {
+	content: { items: unknown[] };
+};
 
 describe("CustomValidationPipe", () => {
 	let pipe: CustomValidationPipe;
@@ -48,7 +53,10 @@ describe("CustomValidationPipe", () => {
 			};
 
 			// When
-			const result = await pipe.transform(value, contentMetadata);
+			const result = (await pipe.transform(
+				value,
+				contentMetadata,
+			)) as TestContentResult;
 
 			// Then
 			expect(result.content).toEqual(contentObject);
@@ -59,7 +67,10 @@ describe("CustomValidationPipe", () => {
 			const value = { name: "test" };
 
 			// When
-			const result = await pipe.transform(value, contentMetadata);
+			const result = (await pipe.transform(
+				value,
+				contentMetadata,
+			)) as TestContentResult;
 
 			// Then
 			expect(result.content).toBeUndefined();
@@ -82,7 +93,10 @@ describe("CustomValidationPipe", () => {
 			};
 
 			// When
-			const result = await pipe.transform(value, contentMetadata);
+			const result = (await pipe.transform(
+				value,
+				contentMetadata,
+			)) as NestedContentResult;
 
 			// Then
 			expect(result.content).toEqual(nestedContent);
@@ -97,7 +111,10 @@ describe("CustomValidationPipe", () => {
 			};
 
 			// When
-			const result = await pipe.transform(value, contentMetadata);
+			const result = (await pipe.transform(
+				value,
+				contentMetadata,
+			)) as TestContentResult;
 
 			// Then
 			expect(result.name).toBe("test");
@@ -123,7 +140,10 @@ describe("CustomValidationPipe", () => {
 			};
 
 			// When
-			const result = await pipe.transform(value, contentMetadata);
+			const result = (await pipe.transform(
+				value,
+				contentMetadata,
+			)) as TestContentResult;
 
 			// Then - 빈 문자열은 falsy이므로 content 처리 로직을 건너뜀
 			expect(result.content).toBe("");
@@ -200,7 +220,10 @@ describe("CustomValidationPipe", () => {
 			};
 
 			// When
-			const result = await pipe.transform(value, dtoMetadata);
+			const result = (await pipe.transform(
+				value,
+				dtoMetadata,
+			)) as TestValidationDto;
 
 			// Then
 			expect(result).toBeInstanceOf(TestValidationDto);

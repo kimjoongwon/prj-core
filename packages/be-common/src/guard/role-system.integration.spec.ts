@@ -8,6 +8,16 @@ import { RoleCategoryGuard } from "./role-category.guard";
 import { RoleGroupGuard } from "./role-group.guard";
 import { RolesGuard } from "./roles.guard";
 
+interface MockRoleCategory {
+	name: string;
+	parent?: { name: string };
+	children?: MockRoleCategory[];
+}
+
+interface MockRoleAssociation {
+	group: { name: string };
+}
+
 /**
  * Role 시스템 통합 테스트
  * - 상수/Enum 값 정합성 검증
@@ -130,8 +140,8 @@ describe("Role 시스템 통합 테스트", () => {
 
 		const createMockUser = (
 			roleName: string,
-			category?: any,
-			associations?: any[],
+			category?: MockRoleCategory,
+			associations?: MockRoleAssociation[],
 		) => ({
 			id: "user-test-id",
 			email: "test@example.com",
@@ -150,8 +160,8 @@ describe("Role 시스템 통합 테스트", () => {
 
 		const createMockTenant = (
 			roleName: string,
-			category?: any,
-			associations?: any[],
+			category?: MockRoleCategory,
+			associations?: MockRoleAssociation[],
 		) => ({
 			id: "tenant-1",
 			spaceId: "space-001",
@@ -162,7 +172,11 @@ describe("Role 시스템 통합 테스트", () => {
 			},
 		});
 
-		const setupCls = (user: any, tenant: any, spaceId = "space-001") => {
+		const setupCls = (
+			user: unknown,
+			tenant: unknown,
+			spaceId = "space-001",
+		) => {
 			mockClsService.get.mockImplementation((key: string) => {
 				if (key === CONTEXT_KEYS.AUTH_USER) return user;
 				if (key === CONTEXT_KEYS.TENANT) return tenant;
@@ -176,7 +190,7 @@ describe("Role 시스템 통합 테스트", () => {
 				get: jest.fn(),
 				getAllAndOverride: jest.fn(),
 				getAllAndMerge: jest.fn(),
-			} as any;
+			} as unknown as jest.Mocked<Reflector>;
 
 			mockClsService = {
 				get: jest.fn(),

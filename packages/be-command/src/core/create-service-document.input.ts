@@ -1,11 +1,17 @@
+import type {
+	ServiceDocumentFormat,
+	ServiceDocumentKind,
+	ServiceDocumentPlatform,
+} from "@cocrepo/prisma";
+
 export interface CreateServiceDocumentCommandInput {
-	kind: any;
-	platform?: any;
+	kind: ServiceDocumentKind;
+	platform?: ServiceDocumentPlatform;
 	locale?: string;
 	title: string;
 	summary?: string;
 	content: string;
-	format?: any;
+	format?: ServiceDocumentFormat;
 	version: string;
 	isRequired?: boolean;
 	displayOrder?: number;

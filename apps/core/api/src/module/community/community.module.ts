@@ -1,8 +1,5 @@
-import {
-	AuthContext,
-	SpaceContext,
-} from "@cocrepo/context";
 import { ContentAggregate } from "@cocrepo/aggregate";
+import { AuthContext, SpaceContext } from "@cocrepo/context";
 import { CommunityController } from "@cocrepo/controller";
 import { ContentsRepository } from "@cocrepo/repository";
 import {

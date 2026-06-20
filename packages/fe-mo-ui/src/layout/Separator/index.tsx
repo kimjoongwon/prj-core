@@ -1,21 +1,19 @@
+import { Separator as HeroSeparator, separatorClassNames } from "heroui-native";
 import {
-  forwardRef,
-  type ComponentPropsWithoutRef,
-  type ComponentRef,
+	type ComponentPropsWithoutRef,
+	type ComponentRef,
+	forwardRef,
 } from "react";
-import {
-  Separator as HeroSeparator,
-  separatorClassNames,
-} from "heroui-native";
+
 type HeroSeparatorProps = ComponentPropsWithoutRef<typeof HeroSeparator>;
 export type SeparatorProps = HeroSeparatorProps & {};
 const SeparatorComponent = forwardRef<
-  ComponentRef<typeof HeroSeparator>,
-  SeparatorProps
+	ComponentRef<typeof HeroSeparator>,
+	SeparatorProps
 >((props, ref) => <HeroSeparator {...props} ref={ref} />);
 SeparatorComponent.displayName = "Separator";
 export const Separator = Object.assign(
-  SeparatorComponent,
-  HeroSeparator,
+	SeparatorComponent,
+	HeroSeparator,
 ) as typeof HeroSeparator;
 export { separatorClassNames };

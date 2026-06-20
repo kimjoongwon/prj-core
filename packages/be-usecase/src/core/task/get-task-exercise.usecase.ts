@@ -7,9 +7,7 @@ export class GetTaskExerciseUseCase {
 	constructor(private readonly taskService: TaskAggregate) {}
 
 	execute(query: GetTaskExerciseQuery): Promise<unknown> {
-		const currentSpaceScope = "CURRENT" as NonNullable<
-			typeof query.spaceScope
-		>;
+		const currentSpaceScope = "CURRENT" as NonNullable<typeof query.spaceScope>;
 		return this.taskService.getExerciseByTaskId(
 			query.taskId,
 			query.spaceId,

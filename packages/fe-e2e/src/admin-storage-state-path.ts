@@ -9,7 +9,12 @@ function getStorageStateCandidates() {
 	return [
 		explicitPath,
 		path.resolve(cwd, "tests/admin/helpers/.auth", env, "admin.json"),
-		path.resolve(cwd, "apps/test/e2e/tests/admin/helpers/.auth", env, "admin.json"),
+		path.resolve(
+			cwd,
+			"apps/test/e2e/tests/admin/helpers/.auth",
+			env,
+			"admin.json",
+		),
 		path.resolve(cwd, "tests/admin/helpers/.auth/admin.json"),
 		path.resolve(cwd, "apps/test/e2e/tests/admin/helpers/.auth/admin.json"),
 	].filter((candidate): candidate is string => Boolean(candidate));

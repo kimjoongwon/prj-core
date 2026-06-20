@@ -1,5 +1,5 @@
-import { AuthContext } from "@cocrepo/context";
 import { TenantAccessRequestAggregate } from "@cocrepo/aggregate";
+import { AuthContext } from "@cocrepo/context";
 import { TenantAccessRequestsController } from "@cocrepo/controller";
 import {
 	TenantAccessRequestsRepository,

@@ -11,6 +11,73 @@ const mockGetGetMyReservationsQueryKey = jest.fn();
 const mockInvalidateQueries = jest.fn();
 const mockPush = jest.fn();
 
+interface ReservationListItem {
+  id: string;
+  dateLabel?: string;
+  title?: string;
+  statusLabel?: string;
+  metaLabel?: string;
+  memo?: string | null;
+}
+
+interface DateOptionItem {
+  value: string;
+  dateLabel?: string;
+}
+
+interface FilterOptionItem {
+  value: string;
+  label?: string;
+}
+
+interface BookingCardItem {
+  id: string;
+  timeLabel?: string;
+  programName?: string;
+  sessionName?: string;
+  statusLabel?: string;
+  ctaLabel?: string;
+  [key: string]: unknown;
+}
+
+interface ReservationPolicySheet {
+  confirmLabel?: string;
+  isLoading?: boolean;
+  isOpen?: boolean;
+  item?: BookingCardItem;
+  memoValue?: string;
+  onChangeMemo?: (value: string) => void;
+  onConfirm?: (item: BookingCardItem, memoValue?: string) => void;
+}
+
+interface MyReservationsScreenProps {
+  errorDescription?: string;
+  items?: ReservationListItem[];
+  onPressRetry?: () => void;
+  status?: string;
+}
+
+interface ReservationHomeScreenProps {
+  cardItems?: BookingCardItem[];
+  dateOptions?: DateOptionItem[];
+  feedErrorDescription?: string;
+  feedStatus?: string;
+  filterOptions?: FilterOptionItem[];
+  onPressBookingCta?: (item: BookingCardItem) => void;
+  onPressFilter?: (value: string) => void;
+  onPressRetry?: () => void;
+  onSelectDate?: (value: string, option: DateOptionItem) => void;
+  policySheet?: ReservationPolicySheet;
+  reservationErrorDescription?: string;
+  reservationSuccessDescription?: string;
+}
+
+interface MutationLifecycleOptions {
+  mutation?: {
+    onSuccess?: (data: unknown, variables: unknown, context: unknown) => void;
+  };
+}
+
 jest.mock("@tanstack/react-query", () => ({
   useQueryClient: () => ({
     invalidateQueries: mockInvalidateQueries,
@@ -45,12 +112,12 @@ jest.mock("@cocrepo/mo-ui", () => {
   const { Pressable, Text, TextInput, View } =
     jest.requireActual<typeof import("react-native")>("react-native");
 
-  const renderText = (value: any, key?: string) => {
+  const renderText = (value: unknown, key?: string) => {
     if (value === undefined || value === null || value === false) {
       return null;
     }
 
-    return React.createElement(Text, key ? { key } : null, value);
+    return React.createElement(Text, key ? { key } : null, String(value));
   };
 
   return {
@@ -59,7 +126,7 @@ jest.mock("@cocrepo/mo-ui", () => {
       items = [],
       onPressRetry,
       status,
-    }: any) => {
+    }: MyReservationsScreenProps) => {
       const renderStatus = () => {
         if (status === "loading") {
           return renderText("내 예약을 불러오는 중", "loading");
@@ -98,7 +165,7 @@ jest.mock("@cocrepo/mo-ui", () => {
           ]);
         }
 
-        return items.map((item: any) =>
+        return items.map((item) =>
           React.createElement(View, { key: item.id }, [
             renderText(item.dateLabel, "date"),
             renderText(item.title, "title"),
@@ -127,10 +194,10 @@ jest.mock("@cocrepo/mo-ui", () => {
       policySheet,
       reservationErrorDescription,
       reservationSuccessDescription,
-    }: any) =>
+    }: ReservationHomeScreenProps) =>
       React.createElement(View, null, [
         renderText("오늘의 수업", "heading"),
-        ...dateOptions.map((option: any) =>
+        ...dateOptions.map((option) =>
           React.createElement(
             Pressable,
             {
@@ -142,7 +209,7 @@ jest.mock("@cocrepo/mo-ui", () => {
             React.createElement(Text, null, option.dateLabel),
           ),
         ),
-        ...filterOptions.map((option: any) =>
+        ...filterOptions.map((option) =>
           React.createElement(
             Pressable,
             {
@@ -188,7 +255,7 @@ jest.mock("@cocrepo/mo-ui", () => {
               ),
             ])
           : null,
-        ...cardItems.map((item: any) =>
+        ...cardItems.map((item) =>
           React.createElement(View, { key: item.id }, [
             renderText(item.timeLabel, "time"),
             renderText(item.programName, "program"),
@@ -224,11 +291,11 @@ jest.mock("@cocrepo/mo-ui", () => {
                   accessibilityRole: "button",
                   disabled: policySheet.isLoading,
                   key: "confirm",
-                  onPress: () =>
-                    policySheet.onConfirm?.(
-                      policySheet.item,
-                      policySheet.memoValue,
-                    ),
+	                  onPress: () =>
+	                    policySheet.onConfirm?.(
+	                      policySheet.item!,
+	                      policySheet.memoValue,
+	                    ),
                 },
                 React.createElement(Text, null, policySheet.confirmLabel),
               ),
@@ -330,16 +397,16 @@ const createReservation = (overrides: Record<string, unknown> = {}) => ({
 let bookingFeedQuery = createQuery([createFeedItem()]);
 let myReservationsQuery = createQuery([createReservation()]);
 let createMutationState: Record<string, unknown>;
-let createReservationOptions: any;
+let createReservationOptions: MutationLifecycleOptions | undefined;
 
 describe("mobile reservation booking routes", () => {
   beforeEach(() => {
     mobileApiScopeStore.clear();
-    mobileApiScopeStore.setSpace({
-      id: "space-1",
+    mobileApiScopeStore.setSpaceInfo({
+      spaceId: "space-1",
+      groundName: "강남점",
       contentLanguageCode: "ko_KR",
-      ground: { name: "강남점" },
-    } as any);
+    });
     bookingFeedQuery = createQuery([
       createFeedItem(),
       createFeedItem({
@@ -360,7 +427,7 @@ describe("mobile reservation booking routes", () => {
       isError: false,
       isPending: false,
       isSuccess: false,
-      mutate: jest.fn((payload) => {
+      mutate: jest.fn((payload: unknown) => {
         createMutationState.isSuccess = true;
         createReservationOptions?.mutation?.onSuccess?.(
           { data: createReservation() },
@@ -374,10 +441,12 @@ describe("mobile reservation booking routes", () => {
 
     mockUseGetReservationBookingFeed.mockImplementation(() => bookingFeedQuery);
     mockUseGetMyReservations.mockImplementation(() => myReservationsQuery);
-    mockUseCreateReservation.mockImplementation((options) => {
+    mockUseCreateReservation.mockImplementation(
+      (options: MutationLifecycleOptions) => {
       createReservationOptions = options;
       return createMutationState;
-    });
+      },
+    );
     mockGetGetReservationBookingFeedQueryKey.mockReturnValue([
       "/api/v1/reservations/booking-feed",
     ]);

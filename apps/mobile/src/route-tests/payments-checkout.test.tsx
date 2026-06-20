@@ -9,6 +9,48 @@ const mockGetGetMyReservationsQueryKey = jest.fn();
 const mockInvalidateQueries = jest.fn();
 const mockReplace = jest.fn();
 
+interface CheckoutSummaryItem {
+  label?: string;
+  value?: string;
+}
+
+interface CheckoutCourseOption {
+  id: string;
+  title?: string;
+}
+
+interface CheckoutMethodOption {
+  value: string;
+  label?: string;
+}
+
+interface CheckoutProgressStep {
+  id: string;
+  label?: string;
+}
+
+interface ReservationPaymentCheckoutScreenProps {
+  amountLabel?: string;
+  courseOptions?: CheckoutCourseOption[];
+  currencyLabel?: string;
+  errorDescription?: string;
+  methodOptions?: CheckoutMethodOption[];
+  onPressReservations?: () => void;
+  onPressSubmit?: () => void;
+  onSelectCourseOption?: (id: string) => void;
+  onSelectPaymentMethod?: (value: string) => void;
+  progressSteps?: CheckoutProgressStep[];
+  status?: string;
+  submitLabel?: string;
+  summaryItems?: CheckoutSummaryItem[];
+}
+
+interface MutationLifecycleOptions {
+  mutation?: {
+    onSuccess?: (data: unknown, variables: unknown, context: unknown) => void;
+  };
+}
+
 let mockParams: Record<string, string> = {
   occurrenceStartAt: "2026-06-01T10:00:00.000Z",
   programId: "program-1",
@@ -53,12 +95,12 @@ jest.mock("@cocrepo/mo-ui", () => {
   const { Pressable, Text, View } =
     jest.requireActual<typeof import("react-native")>("react-native");
 
-  const renderText = (value: any, key?: string) => {
+  const renderText = (value: unknown, key?: string) => {
     if (value === undefined || value === null || value === false) {
       return null;
     }
 
-    return React.createElement(Text, key ? { key } : null, value);
+    return React.createElement(Text, key ? { key } : null, String(value));
   };
 
   return {
@@ -76,17 +118,17 @@ jest.mock("@cocrepo/mo-ui", () => {
       status,
       submitLabel,
       summaryItems = [],
-    }: any) =>
+    }: ReservationPaymentCheckoutScreenProps) =>
       React.createElement(View, null, [
         renderText("결제 후 예약", "heading"),
         renderText(status, "status"),
-        ...summaryItems.map((item: any, index: number) =>
+        ...summaryItems.map((item, index) =>
           React.createElement(View, { key: `summary-${index}` }, [
             renderText(item.label, "label"),
             renderText(item.value, "value"),
           ]),
         ),
-        ...courseOptions.map((item: any) =>
+        ...courseOptions.map((item) =>
           React.createElement(
             Pressable,
             {
@@ -98,7 +140,7 @@ jest.mock("@cocrepo/mo-ui", () => {
             React.createElement(Text, null, item.title),
           ),
         ),
-        ...methodOptions.map((item: any) =>
+        ...methodOptions.map((item) =>
           React.createElement(
             Pressable,
             {
@@ -110,7 +152,7 @@ jest.mock("@cocrepo/mo-ui", () => {
             React.createElement(Text, null, item.label),
           ),
         ),
-        ...progressSteps.map((item: any) =>
+        ...progressSteps.map((item) =>
           renderText(item.label, `progress-${item.id}`),
         ),
         renderText(amountLabel, "amount"),
@@ -199,15 +241,15 @@ const createCheckoutResponse = () => ({
 describe("mobile reservation payment checkout route", () => {
   let bootstrapQuery: Record<string, unknown>;
   let checkoutMutation: Record<string, unknown>;
-  let checkoutOptions: any;
+  let checkoutOptions: MutationLifecycleOptions | undefined;
 
   beforeEach(() => {
     mobileApiScopeStore.clear();
-    mobileApiScopeStore.setSpace({
-      id: "space-1",
+    mobileApiScopeStore.setSpaceInfo({
+      spaceId: "space-1",
+      groundName: "강남점",
       contentLanguageCode: "ko_KR",
-      ground: { name: "강남점" },
-    } as any);
+    });
     mockParams = {
       occurrenceStartAt: "2026-06-01T10:00:00.000Z",
       programId: "program-1",
@@ -230,7 +272,7 @@ describe("mobile reservation payment checkout route", () => {
       isError: false,
       isPending: false,
       isSuccess: false,
-      mutate: jest.fn((payload) => {
+      mutate: jest.fn((payload: unknown) => {
         checkoutOptions?.mutation?.onSuccess?.(
           createCheckoutResponse(),
           payload,
@@ -240,10 +282,12 @@ describe("mobile reservation payment checkout route", () => {
     };
     checkoutOptions = undefined;
     mockUseGetReservationCheckoutBootstrap.mockReturnValue(bootstrapQuery);
-    mockUseCreateReservationCheckout.mockImplementation((options) => {
+    mockUseCreateReservationCheckout.mockImplementation(
+      (options: MutationLifecycleOptions) => {
       checkoutOptions = options;
       return checkoutMutation;
-    });
+      },
+    );
     mockGetGetReservationBookingFeedQueryKey.mockReturnValue([
       "/api/v1/reservations/booking-feed",
     ]);

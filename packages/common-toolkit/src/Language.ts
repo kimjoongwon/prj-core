@@ -33,16 +33,14 @@ export function parseAcceptLanguage(header?: string): LanguageCode {
 	// 지원되는 첫 번째 언어 찾기
 	for (const { code } of languages) {
 		const [requestedLanguage] = code.split("_");
-		const matched = supportedLanguages.find(
-			(lang: LanguageCode) => {
-				const [supportedLanguage] = lang.split("_");
-				return (
-					lang.toLowerCase() === code.toLowerCase() ||
-					(requestedLanguage !== undefined &&
-						supportedLanguage === requestedLanguage)
-				);
-			},
-		);
+		const matched = supportedLanguages.find((lang: LanguageCode) => {
+			const [supportedLanguage] = lang.split("_");
+			return (
+				lang.toLowerCase() === code.toLowerCase() ||
+				(requestedLanguage !== undefined &&
+					supportedLanguage === requestedLanguage)
+			);
+		});
 		if (matched) return matched as LanguageCode;
 	}
 

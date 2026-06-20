@@ -2,13 +2,11 @@
  * Router 인터페이스 - Next.js AppRouter 호환
  *
  * Next.js AppRouterInstance와 호환되도록 설계되었습니다.
- * push/replace는 any 타입을 허용하여 Next.js의 제네릭 라우터와 호환됩니다.
+ * push/replace는 typed router와 호환되도록 입력 타입을 어댑터 경계에서만 열어 둡니다.
  */
 export interface Router {
-	// biome-ignore lint/suspicious/noExplicitAny: Next.js AppRouterInstance의 제네릭 타입과 호환을 위해 any 사용
-	push: (path: any, options?: any) => void | Promise<void>;
-	// biome-ignore lint/suspicious/noExplicitAny: Next.js AppRouterInstance의 제네릭 타입과 호환을 위해 any 사용
-	replace: (path: any, options?: any) => void | Promise<void>;
+	push(path: unknown, options?: unknown): void | Promise<void>;
+	replace(path: unknown, options?: unknown): void | Promise<void>;
 	back: () => void;
 	forward?: () => void;
 	refresh?: () => void;

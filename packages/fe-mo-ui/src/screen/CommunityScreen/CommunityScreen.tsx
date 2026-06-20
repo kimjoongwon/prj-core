@@ -1,3 +1,4 @@
+import { observer } from "mobx-react-lite";
 import { type ReactNode } from "react";
 import {
 	KeyboardAvoidingView,
@@ -7,7 +8,6 @@ import {
 	View,
 	type ViewProps,
 } from "react-native";
-import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
 import { Button } from "../../action/Button";
 import { CommunityPostCard } from "../../data-display/CommunityPostCard";

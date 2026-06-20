@@ -30,7 +30,8 @@ process.env.NODE_PATH = [workspaceNodeModulesPath, existingNodePath]
 const configRequire = Module.createRequire(__filename);
 const playwrightTestEntry = configRequire.resolve("@playwright/test");
 const playwrightTestRequire = Module.createRequire(playwrightTestEntry);
-const playwrightTestShimEntry = playwrightTestRequire.resolve("playwright/test");
+const playwrightTestShimEntry =
+	playwrightTestRequire.resolve("playwright/test");
 const playwrightEntry = playwrightTestRequire.resolve("playwright");
 const moduleWithResolver = Module as typeof Module & {
 	_resolveFilename: (
@@ -68,7 +69,9 @@ if (!globalWithPlaywrightResolver.__cocrepoPlaywrightResolvePatched) {
 	globalWithPlaywrightResolver.__cocrepoPlaywrightResolvePatched = true;
 }
 
-const { defineConfig, devices } = configRequire("@playwright/test") as typeof import("@playwright/test");
+const { defineConfig, devices } = configRequire(
+	"@playwright/test",
+) as typeof import("@playwright/test");
 
 const e2eEnvironment = process.env.E2E_ENV;
 const skipAdminSetup = process.env.SKIP_ADMIN_SETUP === "1";
@@ -160,8 +163,7 @@ const coreApiServer = createCoreApiServer("start:dev");
 const seededCoreApiServer = createCoreApiServer("start:e2e");
 
 const adminWebServer = {
-	command:
-		`CORE_API_INTERNAL_URL="${coreApiInternalUrl}" pnpm --filter=admin-web exec next dev --webpack -p "\${ADMIN_WEB_PORT:-3000}"`,
+	command: `CORE_API_INTERNAL_URL="${coreApiInternalUrl}" pnpm --filter=admin-web exec next dev --webpack -p "\${ADMIN_WEB_PORT:-3000}"`,
 	url: new URL("/admin/auth/login", adminBaseUrl).toString(),
 	reuseExistingServer,
 	timeout: 120000,
@@ -185,11 +187,7 @@ function getWebServers() {
 		return [coreApiServer, adminWebServer, storybookServer];
 	}
 
-	return [
-		seededCoreApiServer,
-		adminWebServer,
-		storybookServer,
-	];
+	return [seededCoreApiServer, adminWebServer, storybookServer];
 }
 
 /**
@@ -204,77 +202,75 @@ function getWebServers() {
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  // 모노레포 루트에서 *.e2e.ts 파일 탐색
-  testDir: path.join(__dirname, "../../.."),
-  testMatch: "**/*.e2e.ts",
-  testIgnore: ["**/node_modules/**", "**/dist/**", "**/out/**"],
+	// 모노레포 루트에서 *.e2e.ts 파일 탐색
+	testDir: path.join(__dirname, "../../.."),
+	testMatch: "**/*.e2e.ts",
+	testIgnore: ["**/node_modules/**", "**/dist/**", "**/out/**"],
 
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : 3,
+	fullyParallel: true,
+	forbidOnly: !!process.env.CI,
+	retries: process.env.CI ? 2 : 0,
+	workers: process.env.CI ? 1 : 3,
 
-  reporter: [
-    ["html", { outputFolder: "playwright-report" }],
-    ["list"],
-  ],
+	reporter: [["html", { outputFolder: "playwright-report" }], ["list"]],
 
-  // 글로벌 설정 (baseURL은 프로젝트별로 설정)
-  use: {
-    screenshot: "only-on-failure",
-    video: "on-first-retry",
-    trace: "on-first-retry",
-    actionTimeout: 10000,
-    navigationTimeout: 60000,
-  },
+	// 글로벌 설정 (baseURL은 프로젝트별로 설정)
+	use: {
+		screenshot: "only-on-failure",
+		video: "on-first-retry",
+		trace: "on-first-retry",
+		actionTimeout: 10000,
+		navigationTimeout: 60000,
+	},
 
-  timeout: 90000,
+	timeout: 90000,
 
-  // 앱별 프로젝트 설정
-  projects: [
-    // ── Admin Auth Setup ──
-    ...(shouldUseAdminSetup
-      ? [
-          {
-            name: "admin-setup",
-            // setup 파일은 apps/test/e2e에 계속 존재
-            testMatch: "**/apps/test/e2e/tests/admin/helpers/*.setup.ts",
-            use: {
-              ...devices["Desktop Chrome"],
-              baseURL: adminBaseUrl,
-              launchOptions: chromiumLaunchOptions,
-            },
-          },
-        ]
-      : []),
+	// 앱별 프로젝트 설정
+	projects: [
+		// ── Admin Auth Setup ──
+		...(shouldUseAdminSetup
+			? [
+					{
+						name: "admin-setup",
+						// setup 파일은 apps/test/e2e에 계속 존재
+						testMatch: "**/apps/test/e2e/tests/admin/helpers/*.setup.ts",
+						use: {
+							...devices["Desktop Chrome"],
+							baseURL: adminBaseUrl,
+							launchOptions: chromiumLaunchOptions,
+						},
+					},
+				]
+			: []),
 
-    // ── Admin ──
-    {
-      name: "admin-chromium",
-      testMatch: "**/apps/admin/web/src/**/*.e2e.ts",
-      dependencies: shouldUseAdminSetup ? ["admin-setup"] : [],
-      use: {
-        ...devices["Desktop Chrome"],
-        baseURL: adminBaseUrl,
-        launchOptions: chromiumLaunchOptions,
-        storageState: adminAuthStorageStatePath,
-      },
-    },
+		// ── Admin ──
+		{
+			name: "admin-chromium",
+			testMatch: "**/apps/admin/web/src/**/*.e2e.ts",
+			dependencies: shouldUseAdminSetup ? ["admin-setup"] : [],
+			use: {
+				...devices["Desktop Chrome"],
+				baseURL: adminBaseUrl,
+				launchOptions: chromiumLaunchOptions,
+				storageState: adminAuthStorageStatePath,
+			},
+		},
 
-    // ── Storybook ──
-    {
-      name: "storybook-chromium",
-      testMatch: "**/apps/tool/storybook/**/*.e2e.ts",
-      use: {
-        ...devices["Desktop Chrome"],
-        baseURL: storybookBaseUrl,
-        launchOptions: chromiumLaunchOptions,
-      },
-    },
-  ],
+		// ── Storybook ──
+		{
+			name: "storybook-chromium",
+			testMatch: "**/apps/tool/storybook/**/*.e2e.ts",
+			use: {
+				...devices["Desktop Chrome"],
+				baseURL: storybookBaseUrl,
+				launchOptions: chromiumLaunchOptions,
+			},
+		},
+	],
 
-  // 개발 서버 설정 (SKIP_WEBSERVER=1 로 비활성화)
-  webServer: process.env.SKIP_WEBSERVER || !shouldUseLocalRuntime
-    ? undefined
-    : getWebServers(),
+	// 개발 서버 설정 (SKIP_WEBSERVER=1 로 비활성화)
+	webServer:
+		process.env.SKIP_WEBSERVER || !shouldUseLocalRuntime
+			? undefined
+			: getWebServers(),
 });

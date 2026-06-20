@@ -60,7 +60,10 @@ function validateString(filePath, value, fieldName) {
 
 function validateOrder(filePath, value, fieldName) {
 	if (!Number.isInteger(value) || value < 1) {
-		fail(filePath, `${fieldName} must be an integer greater than or equal to 1.`);
+		fail(
+			filePath,
+			`${fieldName} must be an integer greater than or equal to 1.`,
+		);
 	}
 }
 
@@ -143,7 +146,9 @@ function loadRouteMeta(filePath) {
 }
 
 export function validateRouteMetaCoverage(routeMetaFiles, pageFiles) {
-	const routeMetaDirs = new Set(routeMetaFiles.map((filePath) => path.dirname(filePath)));
+	const routeMetaDirs = new Set(
+		routeMetaFiles.map((filePath) => path.dirname(filePath)),
+	);
 	const pageDirs = new Set(pageFiles.map((filePath) => path.dirname(filePath)));
 
 	const missingRouteMetaDirs = [...pageDirs]
@@ -165,13 +170,18 @@ export function validateRouteMetaCoverage(routeMetaFiles, pageFiles) {
 		problems.push(`orphan route.meta.ts: ${orphanRouteMetaDirs.join(", ")}`);
 	}
 
-	throw new Error(`[admin-route-meta] coverage check failed: ${problems.join(" | ")}`);
+	throw new Error(
+		`[admin-route-meta] coverage check failed: ${problems.join(" | ")}`,
+	);
 }
 
 function recordUniqueOrder(filePath, orderMap, order, fieldName, idValue) {
 	const existing = orderMap.get(order);
 	if (existing) {
-		fail(filePath, `duplicate ${fieldName} detected: ${order} already used by ${existing}`);
+		fail(
+			filePath,
+			`duplicate ${fieldName} detected: ${order} already used by ${existing}`,
+		);
 	}
 	orderMap.set(order, idValue);
 }
@@ -221,7 +231,10 @@ export function buildRouteCatalog(routeMetaFiles) {
 
 		if (!routeMeta.navItem.parent) {
 			if (singleNavMap.has(routeMeta.navItem.id)) {
-				fail(filePath, `duplicate top-level nav id detected: ${routeMeta.navItem.id}`);
+				fail(
+					filePath,
+					`duplicate top-level nav id detected: ${routeMeta.navItem.id}`,
+				);
 			}
 			recordUniqueOrder(
 				filePath,

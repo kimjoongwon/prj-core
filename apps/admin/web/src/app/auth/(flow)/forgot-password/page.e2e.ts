@@ -88,5 +88,4 @@ test.describe("비밀번호 찾기", () => {
 			await expect(page.getByText("로그인으로 돌아가기")).toBeVisible();
 		});
 	});
-
 });

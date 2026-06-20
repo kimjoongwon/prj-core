@@ -1,17 +1,12 @@
-import { JwtStrategy } from "@cocrepo/be-common";
 import { TaskAggregate } from "@cocrepo/aggregate";
-import {
-	PRISMA_SERVICE_TOKEN,
-	SYSTEM_ROLES } from "@cocrepo/constant";
+import { JwtStrategy } from "@cocrepo/be-common";
+import { PRISMA_SERVICE_TOKEN, SYSTEM_ROLES } from "@cocrepo/constant";
 import { SpaceScope } from "@cocrepo/dto";
-import {
-	AuthCacheService,
-	TokenStorageService,
-} from "@cocrepo/service";
+import { AuthCacheService, TokenStorageService } from "@cocrepo/service";
 import { INestApplication, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { Test, TestingModule } from "@nestjs/testing";
 import { PassportStrategy } from "@nestjs/passport";
+import { Test, TestingModule } from "@nestjs/testing";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";

@@ -9,6 +9,9 @@ import {
 	type AutoCompleteProps as BaseAutoCompleteProps,
 } from "./AutoComplete";
 
+type AutoCompleteItem = NonNullable<BaseAutoCompleteProps["defaultItems"]>[number];
+type AutoCompleteFieldValue = AutoCompleteItem | string | number | null;
+
 export interface AutoCompleteProps<T>
 	extends MobxProps<T>,
 		Omit<BaseAutoCompleteProps, "onSelectionChange"> {}
@@ -17,11 +20,12 @@ export const AutoComplete = observer(
 	<T extends object>(props: AutoCompleteProps<T>) => {
 		const { defaultItems = [], state, path, ...rest } = props;
 
-		const value = defaultItems
-			? [...defaultItems]?.find((item) => item.key === tools.get(state, path))
+		const value: AutoCompleteFieldValue = defaultItems
+			? ([...defaultItems].find((item) => item.key === tools.get(state, path)) ??
+				"")
 			: "";
 
-		const formField = useFormField<any, any>({
+		const formField = useFormField<T, AutoCompleteFieldValue>({
 			value,
 			state,
 			path,

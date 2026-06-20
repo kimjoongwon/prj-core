@@ -1,7 +1,7 @@
 import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { UpdateOidcClientCommand } from "@cocrepo/command";
-import { CommandHandler } from "@nestjs/cqrs";
 import { OidcProviderService } from "@cocrepo/service";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(UpdateOidcClientCommand)
 export class UpdateOidcClientUseCase {

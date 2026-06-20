@@ -1,21 +1,19 @@
+import { Spinner as HeroSpinner, spinnerClassNames } from "heroui-native";
 import {
-  forwardRef,
-  type ComponentPropsWithoutRef,
-  type ComponentRef,
+	type ComponentPropsWithoutRef,
+	type ComponentRef,
+	forwardRef,
 } from "react";
-import {
-  Spinner as HeroSpinner,
-  spinnerClassNames,
-} from "heroui-native";
+
 type HeroSpinnerProps = ComponentPropsWithoutRef<typeof HeroSpinner>;
 export type SpinnerProps = HeroSpinnerProps & {};
 const SpinnerComponent = forwardRef<
-  ComponentRef<typeof HeroSpinner>,
-  SpinnerProps
+	ComponentRef<typeof HeroSpinner>,
+	SpinnerProps
 >((props, ref) => <HeroSpinner {...props} ref={ref} />);
 SpinnerComponent.displayName = "Spinner";
 export const Spinner = Object.assign(
-  SpinnerComponent,
-  HeroSpinner,
+	SpinnerComponent,
+	HeroSpinner,
 ) as typeof HeroSpinner;
 export { spinnerClassNames };

@@ -1,7 +1,3 @@
-import {
-	AuthContext,
-	SpaceContext,
-} from "@cocrepo/context";
 import { RolesGuard } from "@cocrepo/be-common";
 import {
 	CreateTaskCommand,
@@ -12,6 +8,7 @@ import {
 	UpdateTaskExerciseCommand,
 } from "@cocrepo/command";
 import { SYSTEM_ROLES, USER_ERRORS } from "@cocrepo/constant";
+import { AuthContext, SpaceContext } from "@cocrepo/context";
 import {
 	ApiAuth,
 	ApiErrors,

@@ -17,6 +17,8 @@ import { map } from "rxjs/operators";
 import { transformToDto } from "../util/dto-transform.util";
 import { isWrappedResponse } from "../util/response.util";
 
+type DtoConstructor = new (...arguments_: unknown[]) => unknown;
+
 /**
  * Entity를 자동으로 DTO로 변환하는 Interceptor
  *
@@ -39,7 +41,7 @@ export class DtoTransformInterceptor implements NestInterceptor {
 
 	constructor(private readonly reflector: Reflector) {}
 
-	intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+	intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
 		const handler = context.getHandler();
 
 		// @SkipDtoTransform 데코레이터가 있으면 변환 스킵
@@ -81,7 +83,7 @@ export class DtoTransformInterceptor implements NestInterceptor {
 	 */
 	private transformValue(
 		value: unknown,
-		dtoClass: any,
+		dtoClass: DtoConstructor,
 		isArray: boolean,
 		excludeFields: string[],
 	): unknown {
@@ -121,7 +123,7 @@ export class DtoTransformInterceptor implements NestInterceptor {
 	 */
 	private transformData(
 		data: unknown,
-		dtoClass: any,
+		dtoClass: DtoConstructor,
 		isArray: boolean,
 		excludeFields: string[],
 	): unknown {

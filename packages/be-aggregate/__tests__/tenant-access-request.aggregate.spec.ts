@@ -6,6 +6,7 @@ jest.mock("@nestjs-cls/transactional", () => ({
 }));
 
 import { SYSTEM_ROLES } from "@cocrepo/constant";
+import type { Tenant, TenantAccessRequest } from "@cocrepo/entity";
 import {
 	TenantAccessRequestsRepository,
 	TenantsRepository,
@@ -59,7 +60,7 @@ describe("TenantAccessRequestAggregate", () => {
 		);
 		tenantsRepository.upsertByUserIdAndSpaceId.mockResolvedValue({
 			id: "tenant-applied-id",
-		} as any);
+		} as unknown as Tenant);
 		repository.updateById.mockResolvedValue(
 			buildRequest({ status: "APPROVED" }),
 		);
@@ -182,7 +183,7 @@ describe("TenantAccessRequestAggregate", () => {
 		);
 		tenantsRepository.upsertByUserIdAndSpaceId.mockResolvedValue({
 			id: "tenant-applied-id",
-		} as any);
+		} as unknown as Tenant);
 		repository.updateById.mockResolvedValue(
 			buildRequest({ status: "APPROVED" }),
 		);
@@ -199,7 +200,9 @@ describe("TenantAccessRequestAggregate", () => {
 		});
 	});
 
-	function buildRequest(overrides: Record<string, unknown> = {}) {
+	function buildRequest(
+		overrides: Record<string, unknown> = {},
+	): TenantAccessRequest {
 		return {
 			id: requestId,
 			requesterId,
@@ -218,8 +221,12 @@ describe("TenantAccessRequestAggregate", () => {
 				displayName: "VIEW",
 			},
 			...overrides,
-		} as any;
+		} as unknown as TenantAccessRequest;
 	}
+
+	type ReviewerWithTenants = NonNullable<
+		Awaited<ReturnType<UsersRepository["findByIdWithTenantsAndProfiles"]>>
+	>;
 
 	function buildReviewer(params: { roleName: string; spaceId: string }) {
 		return {
@@ -233,6 +240,6 @@ describe("TenantAccessRequestAggregate", () => {
 					},
 				},
 			],
-		} as any;
+		} as unknown as ReviewerWithTenants;
 	}
 });
