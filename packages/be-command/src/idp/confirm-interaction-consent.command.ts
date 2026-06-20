@@ -1,8 +1,8 @@
-import type { KoaLikeRequest, KoaLikeResponse } from "./interaction.types";
+import type { Request, Response } from "express";
 
 export class ConfirmInteractionConsentCommand {
 	constructor(
-		readonly req: KoaLikeRequest,
-		readonly res: KoaLikeResponse,
+		readonly req: Request,
+		readonly res: Response,
 	) {}
 }

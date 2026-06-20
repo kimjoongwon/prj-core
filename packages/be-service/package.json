@@ -70,6 +70,7 @@
     "@nestjs/testing": "^11.1.6",
     "@prisma/adapter-pg": "^7.0.0",
     "@types/bcrypt": "^5.0.2",
+    "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
     "@types/node": "catalog:",
     "@types/oidc-provider": "^8.5.2",

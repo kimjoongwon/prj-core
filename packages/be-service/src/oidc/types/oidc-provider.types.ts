@@ -6,28 +6,6 @@
  */
 
 // =================================================================
-// Express ↔ Koa 호환 타입
-// =================================================================
-
-interface ExpressRequest {
-	method: string;
-	url: string;
-	header(name: string): string | undefined;
-	[key: string]: unknown;
-}
-
-interface ExpressResponse {
-	status: number;
-	redirect: (url: string) => void;
-	render: (view: string, data?: Record<string, unknown>) => string | undefined;
-	body?: unknown;
-	[key: string]: unknown;
-}
-
-export type KoaLikeRequest = ExpressRequest & { [key: string]: unknown };
-export type KoaLikeResponse = ExpressResponse & { [key: string]: unknown };
-
-// =================================================================
 // Account 관련 타입
 // =================================================================
 

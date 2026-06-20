@@ -4,7 +4,6 @@ import { InteractionService } from "@cocrepo/service";
 import { Inject } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { CommandHandler } from "@nestjs/cqrs";
-import type { Request } from "express";
 import {
 	IDP_INTERACTION_LOGIN_SERVICE,
 	type InteractionLoginPort,
@@ -61,7 +60,7 @@ export class SubmitInteractionLoginUseCase {
 		};
 	}
 
-	private getClientIp(req: Request): string {
+	private getClientIp(req: SubmitInteractionLoginCommand["req"]): string {
 		const forwarded = req.headers["x-forwarded-for"];
 		if (typeof forwarded === "string") {
 			return forwarded.split(",")[0].trim();

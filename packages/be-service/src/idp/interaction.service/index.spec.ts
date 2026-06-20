@@ -1,4 +1,5 @@
 import type { ConfigService } from "@nestjs/config";
+import type { Request, Response } from "express";
 import type { OidcClientData } from "../../oidc/oidc-client.data";
 import type {
 	OidcClientRepository,
@@ -6,8 +7,6 @@ import type {
 import type { OidcProviderService } from "../../oidc/oidc-provider.service";
 import type {
 	Grant,
-	KoaLikeRequest,
-	KoaLikeResponse,
 	OidcProviderInstance,
 } from "../../oidc/types";
 import { InteractionService } from ".";
@@ -17,12 +16,12 @@ describe("InteractionService", () => {
 		method: "POST",
 		url: "/api/interaction/uid/login",
 		header: jest.fn(),
-	} as unknown as KoaLikeRequest;
+	} as unknown as Request;
 	const res = {
 		status: 200,
 		redirect: jest.fn(),
 		render: jest.fn(),
-	} as unknown as KoaLikeResponse;
+	} as unknown as Response;
 
 	const buildClient = (
 		overrides: Partial<OidcClientData> = {},

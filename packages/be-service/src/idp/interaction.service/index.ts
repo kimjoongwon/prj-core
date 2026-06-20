@@ -1,13 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import type { Request, Response } from "express";
 import { OidcClientRepository } from "../../oidc/oidc-client.repository";
 import type { OidcConfig } from "../../oidc/oidc-config";
 import { OidcProviderService } from "../../oidc/oidc-provider.service";
 import type {
 	Grant,
 	Interaction,
-	KoaLikeRequest,
-	KoaLikeResponse,
 	OidcClientInfo,
 	OidcProviderInstance,
 	RawOidcProviderClient,
@@ -35,8 +34,8 @@ export class InteractionService {
 	 * Interaction 상세 정보 조회
 	 */
 	async getInteractionDetails(
-		req: KoaLikeRequest,
-		res: KoaLikeResponse,
+		req: Request,
+		res: Response,
 	): Promise<Interaction> {
 		const provider = this.oidcProviderService.getProvider();
 		return provider.interactionDetails(req, res);
@@ -80,8 +79,8 @@ export class InteractionService {
 	 * 인증 성공 후 oidc-provider에 결과를 전달합니다.
 	 */
 	async completeLogin(
-		req: KoaLikeRequest,
-		res: KoaLikeResponse,
+		req: Request,
+		res: Response,
 		accountId: string,
 		remember: boolean,
 	): Promise<InteractionResult> {
@@ -169,10 +168,7 @@ export class InteractionService {
 	 * 동의(Consent) 처리
 	 * Grant를 생성/업데이트하고 oidc-provider에 결과를 전달합니다.
 	 */
-	async processConsent(
-		req: KoaLikeRequest,
-		res: KoaLikeResponse,
-	): Promise<InteractionResult> {
+	async processConsent(req: Request, res: Response): Promise<InteractionResult> {
 		const provider = this.oidcProviderService.getProvider();
 		const interaction = await provider.interactionDetails(req, res);
 
@@ -223,10 +219,7 @@ export class InteractionService {
 	 * Interaction 중단 처리
 	 * access_denied 에러와 함께 클라이언트로 리다이렉트합니다.
 	 */
-	async abortInteraction(
-		req: KoaLikeRequest,
-		res: KoaLikeResponse,
-	): Promise<InteractionResult> {
+	async abortInteraction(req: Request, res: Response): Promise<InteractionResult> {
 		const provider = this.oidcProviderService.getProvider();
 		const result = {
 			error: "access_denied",

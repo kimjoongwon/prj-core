@@ -13,7 +13,6 @@ import {
 	LoginSuccessDto,
 	OidcLoginPayloadDto,
 } from "@cocrepo/dto";
-import type { KoaLikeRequest, KoaLikeResponse } from "@cocrepo/service";
 import {
 	Body,
 	Controller,
@@ -71,13 +70,14 @@ export class InteractionController {
 		type: InteractionDataDto,
 	})
 	@Get(":uid")
-	async getInteraction(@Param("uid") uid: string, @Res() res: Response) {
+	async getInteraction(
+		@Param("uid") uid: string,
+		@Req() req: Request,
+		@Res() res: Response,
+	) {
 		try {
-			const req = res.req as unknown as KoaLikeRequest;
-			const koaRes = res as unknown as KoaLikeResponse;
-
 			const interaction = await this.queryBus.execute(
-				new GetInteractionQuery(uid, req, koaRes),
+				new GetInteractionQuery(uid, req, res),
 			);
 
 			return res.json(interaction);
@@ -139,13 +139,14 @@ export class InteractionController {
 	})
 	@HttpCode(HttpStatus.OK)
 	@Post(":uid/confirm")
-	async confirmConsent(@Param("uid") _uid: string, @Res() res: Response) {
+	async confirmConsent(
+		@Param("uid") _uid: string,
+		@Req() req: Request,
+		@Res() res: Response,
+	) {
 		try {
-			const req = res.req as unknown as KoaLikeRequest;
-			const koaRes = res as unknown as KoaLikeResponse;
-
 			const consentResult = await this.commandBus.execute(
-				new ConfirmInteractionConsentCommand(req, koaRes),
+				new ConfirmInteractionConsentCommand(req, res),
 			);
 
 			return res.json({ redirectTo: consentResult.redirectTo });
@@ -170,13 +171,14 @@ export class InteractionController {
 	})
 	@HttpCode(HttpStatus.OK)
 	@Post(":uid/abort")
-	async abortInteraction(@Param("uid") _uid: string, @Res() res: Response) {
+	async abortInteraction(
+		@Param("uid") _uid: string,
+		@Req() req: Request,
+		@Res() res: Response,
+	) {
 		try {
-			const req = res.req as unknown as KoaLikeRequest;
-			const koaRes = res as unknown as KoaLikeResponse;
-
 			const abortResult = await this.commandBus.execute(
-				new AbortInteractionCommand(req, koaRes),
+				new AbortInteractionCommand(req, res),
 			);
 
 			return res.json({ redirectTo: abortResult.redirectTo });
