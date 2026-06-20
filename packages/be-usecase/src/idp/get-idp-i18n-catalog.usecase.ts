@@ -1,4 +1,4 @@
-import { TranslationCatalogAggregateRoot } from "@cocrepo/aggregate";
+import { TranslationCatalogAggregate } from "@cocrepo/aggregate";
 import { GetIdpI18nCatalogQuery } from "@cocrepo/command";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
@@ -7,7 +7,7 @@ export class GetIdpI18nCatalogUseCase
 	implements IQueryHandler<GetIdpI18nCatalogQuery>
 {
 	constructor(
-		private readonly translationCatalogService: TranslationCatalogAggregateRoot,
+		private readonly translationCatalogService: TranslationCatalogAggregate,
 	) {}
 
 	execute(query: GetIdpI18nCatalogQuery) {

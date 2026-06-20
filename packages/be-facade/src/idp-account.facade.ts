@@ -1,4 +1,4 @@
-import { IdpAccountAggregateRoot, IdpAccountInfo } from "@cocrepo/aggregate";
+import { IdpAccountAggregate, IdpAccountInfo } from "@cocrepo/aggregate";
 import {
 	GrantIdpAccountAccessDto,
 	PageMetaDto,
@@ -8,7 +8,7 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class IdpAccountFacade {
-	constructor(private readonly idpAccountService: IdpAccountAggregateRoot) {}
+	constructor(private readonly idpAccountService: IdpAccountAggregate) {}
 
 	getMany(query: QueryIdpAccountDto): Promise<{
 		data: IdpAccountInfo[];

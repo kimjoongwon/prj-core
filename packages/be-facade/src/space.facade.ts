@@ -1,4 +1,4 @@
-import { SpaceAggregateRoot } from "@cocrepo/aggregate";
+import { SpaceAggregate } from "@cocrepo/aggregate";
 import type { CreateGroundDto, UpdateGroundDto } from "@cocrepo/dto";
 import { Ground, Space } from "@cocrepo/entity";
 import type { LanguageCode } from "@cocrepo/prisma";
@@ -10,7 +10,7 @@ import { Injectable, Logger } from "@nestjs/common";
 export class SpaceFacade {
 	private readonly logger = new Logger(SpaceFacade.name);
 
-	constructor(private readonly spaceService: SpaceAggregateRoot) {}
+	constructor(private readonly spaceService: SpaceAggregate) {}
 
 	listSpaces(params?: {
 		spaceIds?: string[];

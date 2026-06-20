@@ -1,4 +1,4 @@
-import { SecurityPolicyAggregateRoot } from "@cocrepo/aggregate";
+import { SecurityPolicyAggregate } from "@cocrepo/aggregate";
 import { UpdateSecurityPolicyDto } from "@cocrepo/dto";
 import { SecurityPolicy } from "@cocrepo/entity";
 import { Injectable } from "@nestjs/common";
@@ -6,7 +6,7 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class SecurityPolicyFacade {
 	constructor(
-		private readonly securityPolicyService: SecurityPolicyAggregateRoot,
+		private readonly securityPolicyService: SecurityPolicyAggregate,
 	) {}
 
 	getDefault(): Promise<SecurityPolicy> {

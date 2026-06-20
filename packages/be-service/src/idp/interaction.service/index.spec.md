@@ -2,7 +2,7 @@
 
 ## 목적
 
-OIDC interaction 흐름에서 provider 접근을 캡슐화하고, controller/facade가 사용하는 interaction 조회와 완료 처리를 제공합니다.
+OIDC interaction 흐름에서 provider 접근을 캡슐화하고, controller/usecase가 사용하는 interaction 조회와 완료 처리를 제공합니다.
 
 ## 책임
 

@@ -1,4 +1,4 @@
-import { FolderAggregateRoot } from "@cocrepo/aggregate";
+import { FolderAggregate } from "@cocrepo/aggregate";
 import { CreateFolderDto, FolderQueryDto, UpdateFolderDto } from "@cocrepo/dto";
 import { Folder } from "@cocrepo/entity";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
@@ -7,13 +7,13 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class FolderFacade {
-	constructor(private readonly folderService: FolderAggregateRoot) {}
+	constructor(private readonly folderService: FolderAggregate) {}
 
 	async getFolders(
 		query: FolderQueryDto,
 	): Promise<
 		OffsetPaginatedResponse<
-			Awaited<ReturnType<FolderAggregateRoot["getFolders"]>>["data"]
+			Awaited<ReturnType<FolderAggregate["getFolders"]>>["data"]
 		>
 	> {
 		const folderResult = await this.folderService.getFolders(query);

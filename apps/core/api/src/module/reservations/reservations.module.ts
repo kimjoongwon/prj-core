@@ -1,7 +1,7 @@
 import {
-	CourseAggregateRoot,
-	PaymentAggregateRoot,
-	ReservationAggregateRoot,
+	CourseAggregate,
+	PaymentAggregate,
+	ReservationAggregate,
 } from "@cocrepo/aggregate";
 import {
 	CoursesRepository,
@@ -14,15 +14,15 @@ import { AuthContext, SpaceContext } from "@cocrepo/service";
 import { ReservationUseCaseProviders } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { ReservationsController } from "./reservations.controller";
+import { ReservationsController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],
 	controllers: [ReservationsController],
 	providers: [
-		ReservationAggregateRoot,
-		CourseAggregateRoot,
-		PaymentAggregateRoot,
+		ReservationAggregate,
+		CourseAggregate,
+		PaymentAggregate,
 		CoursesRepository,
 		PaymentsRepository,
 		ReservationsRepository,

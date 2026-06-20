@@ -1,4 +1,4 @@
-import { ServiceDocumentAggregateRoot } from "@cocrepo/aggregate";
+import { ServiceDocumentAggregate } from "@cocrepo/aggregate";
 import {
 	CreateServiceDocumentDto,
 	QueryServiceDocumentDto,
@@ -12,7 +12,7 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class ServiceDocumentFacade {
 	constructor(
-		private readonly serviceDocumentService: ServiceDocumentAggregateRoot,
+		private readonly serviceDocumentService: ServiceDocumentAggregate,
 	) {}
 
 	async getServiceDocuments(

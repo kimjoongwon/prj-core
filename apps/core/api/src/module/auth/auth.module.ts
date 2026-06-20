@@ -1,9 +1,9 @@
 import {
-	AbilityAggregateRoot,
-	AuthAuditLogAggregateRoot,
-	EmailVerificationAggregateRoot,
-	RoleAggregateRoot,
-	SpaceAggregateRoot,
+	AbilityAggregate,
+	AuthAuditLogAggregate,
+	EmailVerificationAggregate,
+	RoleAggregate,
+	SpaceAggregate,
 } from "@cocrepo/aggregate";
 import { OidcClient } from "@cocrepo/client";
 import {
@@ -40,7 +40,7 @@ import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { InteractionModule } from "../interaction/interaction.module";
 import { OidcClientsModule } from "../oidc-client/oidc-clients.module";
-import { AuthController } from "./auth.controller";
+import { AuthController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule, OidcClientsModule, InteractionModule],
@@ -51,7 +51,7 @@ import { AuthController } from "./auth.controller";
 			useExisting: InteractionLoginService,
 		},
 		OidcClient,
-		AbilityAggregateRoot,
+		AbilityAggregate,
 		AbilitiesRepository,
 		PolicyAbilitiesRepository,
 		RolePoliciesRepository,
@@ -62,15 +62,15 @@ import { AuthController } from "./auth.controller";
 		JwtStrategy,
 		UserService,
 		UsersRepository,
-		RoleAggregateRoot,
+		RoleAggregate,
 		RolesRepository,
-		SpaceAggregateRoot,
+		SpaceAggregate,
 		SpacesRepository,
 		SpaceContext,
-		AuthAuditLogAggregateRoot,
+		AuthAuditLogAggregate,
 		AuthAuditLogsRepository,
 		AuthCacheService,
-		EmailVerificationAggregateRoot,
+		EmailVerificationAggregate,
 		EmailVerificationsRepository,
 		SmtpEmailProvider,
 		TemplateService,

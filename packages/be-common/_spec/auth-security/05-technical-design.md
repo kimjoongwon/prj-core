@@ -192,7 +192,7 @@ executeReset(rawToken, newPassword):
 
 ### 세션 조회 로직
 
-**위치**: `packages/be-usecase/src/auth/refresh-token-with-idp.usecase.ts` 또는 `packages/be-gateway/src/oidc.gateway.ts`
+**위치**: `packages/be-usecase/src/auth/refresh-token-with-idp.usecase.ts`, 외부 OIDC 호출은 `packages/be-client/src/oidc.client.ts`
 
 ```
 getMySession(userId, currentAccessToken):
@@ -533,7 +533,7 @@ describe("SessionCard", () => {
 | `packages/be-prisma/schema/identity/user.prisma` | User 확장 + AuthAuditLog 추가 |
 | `apps/core/api/src/module/oidc/direct-user.repository.ts` | 잠금 관리 메서드 추가 |
 | `apps/core/api/src/module/interaction/interaction.service.ts` | 로그인 검증 강화 |
-| `apps/core/api/src/module/interaction/interaction.controller.ts` | 에러 응답 포맷 변경 |
+| `packages/be-controller/src/interaction/interaction.controller.ts` | 에러 응답 포맷 변경 |
 | `packages/be-usecase/src/auth/logout-with-cookie.usecase.ts` | logoutWithCookie 강화 |
 | `apps/admin/web/src/app/auth/(flow)/interaction/[uid]/page.tsx` | 잠금 UI, 남은 시도, 링크 |
 
@@ -554,7 +554,7 @@ describe("SessionCard", () => {
 
 | 파일 | 변경 |
 |------|------|
-| `apps/core/api/src/module/auth/auth.controller.ts` | 세션/감사로그/관리 API 추가 |
+| `packages/be-controller/src/auth/auth.controller.ts` | 세션/감사로그/관리 API 추가 |
 | `packages/fe-ui/src/widget/SessionCard/` | 신규 |
 | `packages/fe-ui/src/widget/SecurityInfoPanel/` | 신규 |
 | `packages/fe-ui/src/cell/AuditResultBadge/` | 신규 |

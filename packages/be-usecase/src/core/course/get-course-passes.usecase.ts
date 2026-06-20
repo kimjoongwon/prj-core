@@ -1,4 +1,4 @@
-import { CourseAggregateRoot } from "@cocrepo/aggregate";
+import { CourseAggregate } from "@cocrepo/aggregate";
 import { GetCoursePassesQuery } from "@cocrepo/command";
 import { COMMON_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/service";
@@ -11,7 +11,7 @@ export class GetCoursePassesUseCase
 	implements IQueryHandler<GetCoursePassesQuery>
 {
 	constructor(
-		private readonly courseService: CourseAggregateRoot,
+		private readonly courseService: CourseAggregate,
 		private readonly spaceContext: SpaceContext,
 	) {}
 

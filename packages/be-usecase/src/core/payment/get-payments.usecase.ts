@@ -1,4 +1,4 @@
-import { PaymentAggregateRoot } from "@cocrepo/aggregate";
+import { PaymentAggregate } from "@cocrepo/aggregate";
 import { GetPaymentsQuery } from "@cocrepo/command";
 import { COMMON_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/service";
@@ -9,7 +9,7 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 @QueryHandler(GetPaymentsQuery)
 export class GetPaymentsUseCase implements IQueryHandler<GetPaymentsQuery> {
 	constructor(
-		private readonly paymentService: PaymentAggregateRoot,
+		private readonly paymentService: PaymentAggregate,
 		private readonly spaceContext: SpaceContext,
 	) {}
 

@@ -49,7 +49,7 @@ Service Delivery Spec
 - `정적 검증 / 금지 grep` 표는 `검증 항목`, `명령`, `검증 agent_type`, `통과 기준` 컬럼을 필수로 가집니다.
 - 작성 `agent_type`과 1차 `검증 agent_type`은 기본적으로 해당 소스, route, API 산출물 owner와 같습니다.
 - 테스트 코드 작성, E2E 작성, 타입 체크만 대신 수행하는 별도 검증 전담 `agent_type`은 두지 않습니다.
-- `테스트 검증 agent 표`에는 각 테스트 그룹을 확인하는 owner `agent_type`, 입력 파일, 산출물, 재실행 조건을 기록합니다.
+- `owner 검증 표`에는 각 테스트 그룹을 확인하는 owner `agent_type`, 입력 파일, 산출물, 재실행 조건을 기록합니다.
 - 신규 UI 산출물에 대한 테스트 행이 없거나 검증 agent_type이 비어 있으면 승인 단계를 통과할 수 없습니다.
 
 ## 산출물 시뮬레이션 / 인계 정책 (필수)
@@ -170,7 +170,7 @@ route/page에서 reusable Screen/Feature를 새로 만들거나 수정하면 해
 ## 산출물 시뮬레이션 / 인계 계약
 ## 에이전트 배정 매트릭스
 ## 실행 그래프
-## 테스트 인벤토리 / 검증 에이전트
+## 테스트 인벤토리 / owner 검증
 ## 검증 / 승인 기준
 ```
 
@@ -237,7 +237,7 @@ Prisma model, Entity, VO, Command/Query, Event, UseCase가 필요한 경우 여�
 - Command / Query Message
 - Event Message
 - UseCase / Handler / EventHandler / Saga
-- Client / Gateway
+- Client
 - Controller Endpoint / operationId / Swagger
 - Module / Bootstrap
 - Seed
@@ -353,14 +353,14 @@ Screen/Feature 기획 스펙은 matrix를 소유하지 않고 route/page 스펙�
 | 순서 | 단계 id | 단계 | `agent_type` | 직렬/병렬 | 의존 단계 | 입력 산출물 행 | 산출물 행 | 완료 조건 |
 |------|---------|-------|--------------|-----------|-----------|------------------|------------|-----------|
 
-### 테스트 인벤토리 / 검증 에이전트
+### 테스트 인벤토리 / owner 검증
 
 구현 전에 어떤 테스트가 어떤 위험을 막는지, 누가 작성하고 누가 검증하는지를 표로 정리합니다.
 
 - `단위 테스트 인벤토리`: scanner, registry, component, feature, route-local util/상태, bridge 단위 테스트를 기록합니다.
 - `E2E 테스트 인벤토리`: 사용자 journey, 빈 상태/오류/복구, query 딥링크, 긴 문장/narrow viewport 같은 브라우저 검증을 기록합니다.
 - `정적 검증 / 금지 grep`: Storybook owner 위반, observer 패턴, `useMemo`/`useCallback` 금지, scope 금지, unsafe exec 금지를 기록합니다.
-- `테스트 검증 agent 표`: 산출물 owner와 필요한 경우 `orch-delivery` spec guard가 어떤 행을 최종 확인하는지 기록합니다.
+- `owner 검증 표`: 산출물 owner와 필요한 경우 `orch-delivery` spec guard가 어떤 행을 최종 확인하는지 기록합니다.
 - 테스트 행이 없는 신규 UI 산출물은 검증 기준을 승인할 수 없습니다.
 
 ### 검증 / 승인 기준
@@ -395,7 +395,7 @@ Screen/Feature 기획 스펙은 matrix를 소유하지 않고 route/page 스펙�
 ### 실행 그래프
 ### 공유 파일 잠금
 ### 산출물 시뮬레이션 / 인계 계약
-### 테스트 인벤토리 / 검증 에이전트
+### 테스트 인벤토리 / owner 검증
 ### 검증 / 승인 기준
 ```
 
@@ -410,7 +410,7 @@ Screen/Feature 기획 스펙은 matrix를 소유하지 않고 route/page 스펙�
 - route-local hook/util/type/상태는 웹/모바일 모두 `fe-route-agent` 행으로 기록하고 별도 spec을 만들지 않습니다.
 - route `page.tsx`, Expo route file, `layout.tsx`, `_layout.tsx`, Store, 백엔드-only 단계는 Storybook 대상이 아니며 필요한 unit/E2E 검증만 spec에 기록합니다.
 - Storybook 스토리가 필요한 UI 소스 변경은 `fe-storybook-agent` 단계를 별도로 두고, 소스 담당 에이전트의 다음 단계로 연결합니다.
-- route/page 스펙의 `테스트 인벤토리 / 검증 에이전트`는 서비스 스펙의 테스트 행 중 해당 route 범위가 직접 작성/실행할 테스트만 참조/기록하고, 작성/검증 agent_type을 비워두지 않습니다.
+- route/page 스펙의 `테스트 인벤토리 / owner 검증`은 서비스 스펙의 테스트 행 중 해당 route 범위가 직접 작성/실행할 테스트만 참조/기록하고, 작성/검증 agent_type을 비워두지 않습니다.
 - route/page의 unit/E2E 테스트 작성과 1차 검증은 기본적으로 route, route layout, screen, feature, backend API 산출물 owner가 맡습니다.
 - route/page 스펙의 `산출물 시뮬레이션 / 인계 계약`에는 route 범위 내부에서 생성/수정할 route file, route-local hook/상태/util, Screen/Feature 기획 스펙, Storybook 스토리, 단위 테스트/E2E, 소비 API/generated hook 경로를 기록합니다.
 - route/page leaf 하위 에이전트는 이 계약에 있는 경로만 수정하고, 다음 하위 에이전트는 이 계약 행과 `AGENTS.md` 기준 완료 보고를 함께 기준으로 산출물을 찾습니다.

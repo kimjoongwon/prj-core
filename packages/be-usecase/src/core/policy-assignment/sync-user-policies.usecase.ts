@@ -1,4 +1,4 @@
-import { PolicyAssignmentAggregateRoot } from "@cocrepo/aggregate";
+import { PolicyAssignmentAggregate } from "@cocrepo/aggregate";
 import { SyncUserPoliciesCommand } from "@cocrepo/command";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
@@ -7,7 +7,7 @@ export class SyncUserPoliciesUseCase
 	implements ICommandHandler<SyncUserPoliciesCommand>
 {
 	constructor(
-		private readonly policyAssignmentService: PolicyAssignmentAggregateRoot,
+		private readonly policyAssignmentService: PolicyAssignmentAggregate,
 	) {}
 
 	execute(command: SyncUserPoliciesCommand): Promise<unknown> {

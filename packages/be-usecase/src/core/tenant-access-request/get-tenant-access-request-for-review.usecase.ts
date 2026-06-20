@@ -1,4 +1,4 @@
-import { TenantAccessRequestAggregateRoot } from "@cocrepo/aggregate";
+import { TenantAccessRequestAggregate } from "@cocrepo/aggregate";
 import { GetTenantAccessRequestForReviewQuery } from "@cocrepo/command";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
@@ -7,7 +7,7 @@ export class GetTenantAccessRequestForReviewUseCase
 	implements IQueryHandler<GetTenantAccessRequestForReviewQuery>
 {
 	constructor(
-		private readonly tenantAccessRequestService: TenantAccessRequestAggregateRoot,
+		private readonly tenantAccessRequestService: TenantAccessRequestAggregate,
 	) {}
 
 	execute(query: GetTenantAccessRequestForReviewQuery): Promise<unknown> {

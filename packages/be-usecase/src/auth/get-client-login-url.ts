@@ -1,10 +1,10 @@
-import { OidcClientAggregateRoot } from "@cocrepo/aggregate";
+import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { applyRuntimeManagedOidcClientConfig } from "@cocrepo/service";
 import { BadRequestException, NotFoundException } from "@nestjs/common";
 import { getOidcClientIdCandidates } from "./get-oidc-client-id-candidates";
 
 export async function getClientLoginUrl(
-	oidcClientService: OidcClientAggregateRoot,
+	oidcClientService: OidcClientAggregate,
 	clientId: string,
 ): Promise<string | null> {
 	const lookupCandidates = getOidcClientIdCandidates(clientId);

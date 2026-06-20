@@ -1,11 +1,11 @@
-import { OidcClientAggregateRoot } from "@cocrepo/aggregate";
+import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { applyRuntimeManagedOidcClientConfig } from "@cocrepo/service";
 import { BadRequestException, NotFoundException } from "@nestjs/common";
 import { getOidcClientIdCandidates } from "./get-oidc-client-id-candidates";
 import type { ResolvedOidcClient } from "./resolved-oidc-client";
 
 export async function resolveOidcClient(
-	oidcClientService: OidcClientAggregateRoot,
+	oidcClientService: OidcClientAggregate,
 	clientId: string,
 	options?: {
 		requireActive?: boolean;
@@ -16,9 +16,9 @@ export async function resolveOidcClient(
 	let lastNotFoundError: NotFoundException | undefined;
 	let client:
 		| Awaited<
-				ReturnType<OidcClientAggregateRoot["getAuthShellClientByClientId"]>
+				ReturnType<OidcClientAggregate["getAuthShellClientByClientId"]>
 		  >
-		| Awaited<ReturnType<OidcClientAggregateRoot["getByClientId"]>>
+		| Awaited<ReturnType<OidcClientAggregate["getByClientId"]>>
 		| undefined;
 
 	for (const lookupClientId of lookupCandidates) {

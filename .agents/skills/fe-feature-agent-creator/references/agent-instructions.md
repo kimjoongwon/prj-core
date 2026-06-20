@@ -130,7 +130,7 @@
 | `ScreenSurface`, `SectionSurface`, 제거된 detail/form 이전 방식 surface wrapper 직접 사용 | route/screen 표면은 feature가 소유하지 않음 |
 | Widget으로 분리 가능한 table/card/tabs/flow rail JSX를 Feature 파일에 대량 내장 | 재사용성 저하 |
 
-> ⚠️ **Critical**: Feature 컴포넌트는 **절대로** `apps/admin/src/feature/`, `apps/*/src/feature/` 등 앱 폴더에 생성하지 않습니다. 모든 Feature는 `packages/fe-ui/src/feature/`에서만 생성하여 재사용성을 보장합니다.
+> ⚠️ **Critical**: Feature 컴포넌트는 **절대로** 앱 내부 `src/feature/` 폴더에 생성하지 않습니다. 모든 Feature는 `packages/fe-ui/src/feature/`에서만 생성하여 재사용성을 보장합니다.
 
 ### Page Fatigue 방지 규칙 (Critical)
 

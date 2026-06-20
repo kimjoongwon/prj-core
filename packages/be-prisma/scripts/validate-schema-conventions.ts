@@ -332,7 +332,7 @@ function main(): void {
 		const schemaOwnerModels = getMarkedModels(text, "schema-owner");
 		const aggregateRootModels = getMarkedModels(text, "aggregate-root");
 		const expectedSchemaOwner = schemaOwnerByFile[file];
-		const expectedAggregateRoot = aggregateRootByFile[file];
+		const expectedAggregate = aggregateRootByFile[file];
 
 		if (file !== baseFile && (generatorCount > 0 || datasourceCount > 0)) {
 			errors.push(
@@ -379,14 +379,14 @@ function main(): void {
 		}
 		if (
 			file !== baseFile &&
-			!expectedAggregateRoot &&
+			!expectedAggregate &&
 			aggregateRootModels.length > 0
 		) {
 			errors.push(`[${file}] must not declare @aggregate-root: true`);
 		}
 		if (
 			file !== baseFile &&
-			expectedAggregateRoot &&
+			expectedAggregate &&
 			aggregateRootModels.length !== 1
 		) {
 			errors.push(
@@ -395,12 +395,12 @@ function main(): void {
 		}
 		if (
 			file !== baseFile &&
-			expectedAggregateRoot &&
+			expectedAggregate &&
 			aggregateRootModels.length === 1 &&
-			aggregateRootModels[0] !== expectedAggregateRoot
+			aggregateRootModels[0] !== expectedAggregate
 		) {
 			errors.push(
-				`[${file}] aggregate-root marker must be on ${expectedAggregateRoot} but found ${aggregateRootModels[0]}`,
+				`[${file}] aggregate-root marker must be on ${expectedAggregate} but found ${aggregateRootModels[0]}`,
 			);
 		}
 		if (

@@ -1,4 +1,4 @@
-import { AssetAggregateRoot } from "@cocrepo/aggregate";
+import { AssetAggregate } from "@cocrepo/aggregate";
 import { AssetQueryDto, MoveAssetDto, UploadAssetDto } from "@cocrepo/dto";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
 import type { OffsetPaginatedResponse } from "@cocrepo/type";
@@ -6,13 +6,13 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class AssetFacade {
-	constructor(private readonly assetService: AssetAggregateRoot) {}
+	constructor(private readonly assetService: AssetAggregate) {}
 
 	async getAssets(
 		query: AssetQueryDto,
 	): Promise<
 		OffsetPaginatedResponse<
-			Awaited<ReturnType<AssetAggregateRoot["getAssets"]>>["data"]
+			Awaited<ReturnType<AssetAggregate["getAssets"]>>["data"]
 		>
 	> {
 		const assetResult = await this.assetService.getAssets(query);

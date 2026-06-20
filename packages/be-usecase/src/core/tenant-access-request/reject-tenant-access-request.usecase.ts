@@ -1,4 +1,4 @@
-import { TenantAccessRequestAggregateRoot } from "@cocrepo/aggregate";
+import { TenantAccessRequestAggregate } from "@cocrepo/aggregate";
 import { RejectTenantAccessRequestCommand } from "@cocrepo/command";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
@@ -7,7 +7,7 @@ export class RejectTenantAccessRequestUseCase
 	implements ICommandHandler<RejectTenantAccessRequestCommand>
 {
 	constructor(
-		private readonly tenantAccessRequestService: TenantAccessRequestAggregateRoot,
+		private readonly tenantAccessRequestService: TenantAccessRequestAggregate,
 	) {}
 
 	execute(command: RejectTenantAccessRequestCommand): Promise<unknown> {

@@ -1,4 +1,4 @@
-import { InquiryAggregateRoot } from "@cocrepo/aggregate";
+import { InquiryAggregate } from "@cocrepo/aggregate";
 import { ListInquiriesQuery } from "@cocrepo/command";
 import { SpaceContext } from "@cocrepo/service";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
@@ -7,7 +7,7 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 @QueryHandler(ListInquiriesQuery)
 export class ListInquiriesUseCase implements IQueryHandler<ListInquiriesQuery> {
 	constructor(
-		private readonly inquiryService: InquiryAggregateRoot,
+		private readonly inquiryService: InquiryAggregate,
 		private readonly spaceContext: SpaceContext,
 	) {}
 

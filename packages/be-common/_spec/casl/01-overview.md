@@ -126,8 +126,8 @@ VIEW (조회)
 | Decorator | `packages/be-decorator/src/role-categories.decorator.ts` | @RoleCategories 데코레이터 |
 | Decorator | `packages/be-decorator/src/role-groups.decorator.ts` | @RoleGroups 데코레이터 |
 | Decorator | `packages/be-decorator/src/skip-space-check.decorator.ts` | @SkipSpaceCheck 데코레이터 |
-| Controller | `apps/server/src/module/role/roles.controller.ts` | 역할 CRUD API |
-| Controller | `apps/server/src/module/ability/abilities.controller.ts` | Ability API |
+| Controller | `packages/be-controller/src/roles/roles.controller.ts` | 역할 CRUD API |
+| Controller | `packages/be-controller/src/abilities/abilities.controller.ts` | Ability API |
 | DTO | `packages/be-dto/src/ability.dto.ts` | AbilityDto, AbilitySummaryDto |
 | DTO | `packages/be-dto/src/abilities/` | CreateAbilityDto, AbilityResponseDto |
 | DTO | `packages/be-dto/src/policies/` | CreatePolicyDto, UpdatePolicyDto, PolicyResponseDto |

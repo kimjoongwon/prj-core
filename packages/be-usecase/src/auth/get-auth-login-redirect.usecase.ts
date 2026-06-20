@@ -1,4 +1,4 @@
-import { OidcClientAggregateRoot } from "@cocrepo/aggregate";
+import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { OidcClient } from "@cocrepo/client";
 import { GetAuthLoginRedirectCommand } from "@cocrepo/command";
 import { TokenStorageService } from "@cocrepo/service";
@@ -11,7 +11,7 @@ export class GetAuthLoginRedirectUseCase
 	implements ICommandHandler<GetAuthLoginRedirectCommand>
 {
 	constructor(
-		private readonly oidcClientService: OidcClientAggregateRoot,
+		private readonly oidcClientService: OidcClientAggregate,
 		private readonly oidcClient: OidcClient,
 		private readonly tokenStorageService: TokenStorageService,
 	) {}

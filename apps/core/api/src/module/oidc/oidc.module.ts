@@ -13,7 +13,7 @@ import {
 } from "@cocrepo/usecase";
 import { Module, type OnModuleInit } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { OidcController } from "./oidc.controller";
+import { OidcController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],

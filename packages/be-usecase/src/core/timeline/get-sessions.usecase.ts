@@ -1,11 +1,11 @@
-import { TimelineAggregateRoot } from "@cocrepo/aggregate";
+import { TimelineAggregate } from "@cocrepo/aggregate";
 import { GetSessionsQuery } from "@cocrepo/command";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetSessionsQuery)
 export class GetSessionsUseCase implements IQueryHandler<GetSessionsQuery> {
-	constructor(private readonly timelinesService: TimelineAggregateRoot) {}
+	constructor(private readonly timelinesService: TimelineAggregate) {}
 
 	async execute(query: GetSessionsQuery): Promise<unknown> {
 		const skip = query.query.skip ?? 0;

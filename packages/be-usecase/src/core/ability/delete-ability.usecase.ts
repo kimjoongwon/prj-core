@@ -1,4 +1,4 @@
-import { AbilityAggregateRoot } from "@cocrepo/aggregate";
+import { AbilityAggregate } from "@cocrepo/aggregate";
 import { DeleteAbilityCommand } from "@cocrepo/command";
 import { ABILITY_ERRORS } from "@cocrepo/constant";
 import { NotFoundException } from "@nestjs/common";
@@ -8,7 +8,7 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 export class DeleteAbilityUseCase
 	implements ICommandHandler<DeleteAbilityCommand>
 {
-	constructor(private readonly abilitiesService: AbilityAggregateRoot) {}
+	constructor(private readonly abilitiesService: AbilityAggregate) {}
 
 	async execute(command: DeleteAbilityCommand): Promise<unknown> {
 		const existing = await this.abilitiesService.getAbilityById(

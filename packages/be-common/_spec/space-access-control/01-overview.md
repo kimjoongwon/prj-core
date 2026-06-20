@@ -172,7 +172,7 @@ AXIOS_INSTANCE.interceptors.request.use((config) => {
 | Decorator | `packages/be-decorator/src/public-route.decorator.ts` | @PublicRoute |
 | Constant | `packages/common-constant/src/context/context-keys.constant.ts` | CLS 키 상수 |
 | Util | `packages/be-common/src/util/permission.util.ts` | canAccessAllSpaces, isRootSpaceCategory |
-| Setup | `apps/server/src/setNestApp.ts` | 글로벌 Guard/Interceptor 등록 |
+| Setup | `apps/core/api/src/setNestApp.ts` | 글로벌 Guard/Interceptor 등록 |
 | FE API | `packages/fe-api/src/libs/customAxios.ts` | x-space-id 헤더 자동 추가 |
 | FE Store | `packages/fe-store/src/stores/persistStore.ts` | spaceId 보관 |
 

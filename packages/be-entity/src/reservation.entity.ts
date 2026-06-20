@@ -2,7 +2,7 @@ import {
 	type Reservation as ReservationEntity,
 	ReservationStatus,
 } from "@cocrepo/prisma";
-import { AbstractAggregateRootEntity } from "./abstract-aggregate-root.entity";
+import { AbstractAggregateEntity } from "./abstract-aggregate.entity";
 import type { CoursePass } from "./course-pass.entity";
 import type { Program } from "./program.entity";
 import type { Session } from "./session.entity";
@@ -11,7 +11,7 @@ import type { Timeline } from "./timeline.entity";
 import type { User } from "./user.entity";
 
 export class Reservation
-	extends AbstractAggregateRootEntity
+	extends AbstractAggregateEntity
 	implements ReservationEntity
 {
 	spaceId!: string;

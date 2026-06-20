@@ -1,4 +1,4 @@
-import { OidcClientAggregateRoot } from "@cocrepo/aggregate";
+import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { OidcClientsRepository } from "@cocrepo/repository";
 import { OidcProviderService } from "@cocrepo/service";
 import {
@@ -8,20 +8,20 @@ import {
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { OidcModule } from "../oidc/oidc.module";
-import { OidcClientsController } from "./oidc-clients.controller";
+import { OidcClientsController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule, OidcModule],
 	controllers: [OidcClientsController],
 	providers: [
 		...OidcClientUseCaseProviders,
-		OidcClientAggregateRoot,
+		OidcClientAggregate,
 		OidcClientsRepository,
 		{
 			provide: IDP_OIDC_PROVIDER_SERVICE,
 			useExisting: OidcProviderService,
 		},
 	],
-	exports: [OidcClientAggregateRoot],
+	exports: [OidcClientAggregate],
 })
 export class OidcClientsModule {}

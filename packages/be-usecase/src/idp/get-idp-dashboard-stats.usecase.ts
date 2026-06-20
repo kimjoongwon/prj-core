@@ -1,4 +1,4 @@
-import { IdpDashboardAggregateRoot } from "@cocrepo/aggregate";
+import { IdpDashboardAggregate } from "@cocrepo/aggregate";
 import { GetIdpDashboardStatsQuery } from "@cocrepo/command";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
@@ -7,7 +7,7 @@ export class GetIdpDashboardStatsUseCase
 	implements IQueryHandler<GetIdpDashboardStatsQuery>
 {
 	constructor(
-		private readonly idpDashboardService: IdpDashboardAggregateRoot,
+		private readonly idpDashboardService: IdpDashboardAggregate,
 	) {}
 
 	execute(): Promise<unknown> {

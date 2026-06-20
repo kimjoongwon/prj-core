@@ -1,4 +1,4 @@
-import { TaskAggregateRoot } from "@cocrepo/aggregate";
+import { TaskAggregate } from "@cocrepo/aggregate";
 import {
 	PRISMA_SERVICE_TOKEN,
 	SYSTEM_ROLES } from "@cocrepo/constant";
@@ -101,7 +101,7 @@ describe("Tasks API (E2E)", () => {
 			.useValue({
 				invalidate: async () => {},
 			})
-			.overrideProvider(TaskAggregateRoot)
+			.overrideProvider(TaskAggregate)
 			.useValue(taskServiceMock)
 			.compile();
 

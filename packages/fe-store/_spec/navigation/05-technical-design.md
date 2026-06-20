@@ -222,7 +222,7 @@ packages/common-constant/src/routing/admin-menu.ts
 
 ```typescript
 // 앱에서 Store 생성 및 주입 예시
-// apps/admin/src/providers/StoreProvider.tsx
+// apps/admin/web/src/stores/AppStoreProvider.tsx
 
 const rootStore = new RootStore();
 

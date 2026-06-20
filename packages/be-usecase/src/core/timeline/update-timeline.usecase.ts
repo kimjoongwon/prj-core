@@ -1,4 +1,4 @@
-import { TimelineAggregateRoot } from "@cocrepo/aggregate";
+import { TimelineAggregate } from "@cocrepo/aggregate";
 import { UpdateTimelineCommand } from "@cocrepo/command";
 import { TIMELINE_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/service";
@@ -10,7 +10,7 @@ export class UpdateTimelineUseCase
 	implements ICommandHandler<UpdateTimelineCommand>
 {
 	constructor(
-		private readonly timelinesService: TimelineAggregateRoot,
+		private readonly timelinesService: TimelineAggregate,
 		private readonly spaceContext: SpaceContext,
 	) {}
 

@@ -50,7 +50,7 @@
 | 영역 | 계약 | 재사용/수정 | 파일/대상 | 담당 `agent_type` | 검증 |
 |------|------|-------------|-----------|-------------------|------|
 | Prisma/Entity | content/community post model | service spec 기준 확인 | backend content files | `be-prisma-builder`, `be-entity-builder` | backend tests |
-| DTO/API | feed 조회, post 작성 DTO와 operationId | service spec 기준 확인 | `@cocrepo/dto`, core controller | `be-dto-builder`, `be-controller-builder` | Swagger/Orval |
+| DTO/API | feed 조회, post 작성 DTO와 operationId | service spec 기준 확인 | `@cocrepo/dto`, `@cocrepo/controller` | `be-dto-builder`, `be-controller-builder` | Swagger/Orval |
 | UseCase | 조회/작성 workflow | service spec 기준 확인 | `@cocrepo/usecase`, `@cocrepo/command` | `be-command-builder`, `be-usecase-builder` | unit/type |
 | Mobile UI | screen/card/composer | service spec 기준 확인 | `packages/fe-mo-ui` | `fe-screen-agent`, `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, `fe-layout-agent` | unit/story |
 | Route | Orval hook wiring, composer state | service spec 기준 확인 | `apps/mobile/src/app/(tabs)/community.tsx` | `fe-route-agent` | mobile route test |

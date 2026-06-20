@@ -1,4 +1,4 @@
-import { SpaceAggregateRoot } from "@cocrepo/aggregate";
+import { SpaceAggregate } from "@cocrepo/aggregate";
 import { GetSpaceGroundQuery } from "@cocrepo/command";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
@@ -6,7 +6,7 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 export class GetSpaceGroundUseCase
 	implements IQueryHandler<GetSpaceGroundQuery>
 {
-	constructor(private readonly spaceService: SpaceAggregateRoot) {}
+	constructor(private readonly spaceService: SpaceAggregate) {}
 
 	execute(query: GetSpaceGroundQuery): Promise<unknown> {
 		return this.spaceService.getGroundBySpaceId(query.spaceId);

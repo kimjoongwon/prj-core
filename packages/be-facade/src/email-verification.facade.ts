@@ -1,11 +1,11 @@
-import { EmailVerificationAggregateRoot } from "@cocrepo/aggregate";
+import { EmailVerificationAggregate } from "@cocrepo/aggregate";
 import { PageMetaDto, QueryEmailVerificationDto } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class EmailVerificationFacade {
 	constructor(
-		private readonly emailVerificationService: EmailVerificationAggregateRoot,
+		private readonly emailVerificationService: EmailVerificationAggregate,
 	) {}
 
 	getMany(query: QueryEmailVerificationDto) {

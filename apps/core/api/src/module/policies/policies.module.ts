@@ -1,4 +1,4 @@
-import { PolicyAggregateRoot } from "@cocrepo/aggregate";
+import { PolicyAggregate } from "@cocrepo/aggregate";
 import {
 	AbilitiesRepository,
 	PoliciesRepository,
@@ -10,13 +10,13 @@ import { SpaceContext } from "@cocrepo/service";
 import { PolicyCommandHandlers, PolicyQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { PoliciesController } from "./policies.controller";
+import { PoliciesController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],
 	controllers: [PoliciesController],
 	providers: [
-		PolicyAggregateRoot,
+		PolicyAggregate,
 		PoliciesRepository,
 		PolicyAbilitiesRepository,
 		AbilitiesRepository,

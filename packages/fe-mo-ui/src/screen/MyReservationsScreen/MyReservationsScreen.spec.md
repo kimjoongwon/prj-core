@@ -133,7 +133,7 @@ Screen Owner
 | `/reservations` route delivery | `apps/mobile/src/app/index.spec.md` | `orch-delivery` | `MyReservationsScreen`을 planning reference로 소비한다. | route 실행 순서와 API 변경 여부를 소유한다. |
 | `/reservations` route source | `apps/mobile/src/app/(tabs)/reservations.tsx` | `fe-route-agent` | `items`, `status`, `errorDescription`, `onPressRetry` props만 전달한다. | Orval hook과 DTO mapping은 screen에 노출하지 않는다. |
 | API client | `useGetMyReservations` | `fe-route-agent` | screen은 API client를 import하지 않는다. | API 변경 시 route delivery spec의 foundation/API 표에 반영한다. |
-| E2E | mobile route flow | `qa-mo-e2e-testing` | screen spec은 E2E 흐름을 소유하지 않는다. | route delivery spec의 QA 항목에서 관리한다. |
+| E2E | mobile route flow | `fe-route-agent` | screen spec은 E2E 흐름을 소유하지 않는다. | route delivery spec의 owner 검증 항목에서 관리한다. |
 
 ## Storybook / Test Contract
 
@@ -141,13 +141,13 @@ Screen Owner
 
 | 대상 | Story 파일 | 필수 상태/Variant | Fixture/데이터 | 작성 담당 `agent_type` | 검증 담당 `agent_type` | 비고 |
 | --- | --- | --- | --- | --- | --- | --- |
-| `MyReservationsScreen` | `MyReservationsScreen.stories.tsx` | ready, loading, empty, error, long text | 예약 확정, 대기, memo 있음/없음, 긴 지점/수업명 | `fe-screen-agent` | `qa-mo-testing` | route/API mocking 없이 props fixture로 표현한다. |
+| `MyReservationsScreen` | `MyReservationsScreen.stories.tsx` | ready, loading, empty, error, long text | 예약 확정, 대기, memo 있음/없음, 긴 지점/수업명 | `fe-screen-agent` | `fe-screen-agent` | route/API mocking 없이 props fixture로 표현한다. |
 
 ### Unit Test
 
 | 대상 | Test 파일 | 검증 관점 | 주요 케이스 | 작성 담당 `agent_type` | 검증 담당 `agent_type` | 비고 |
 | --- | --- | --- | --- | --- | --- | --- |
-| `MyReservationsScreen` | `MyReservationsScreen.test.tsx` | 상태 분기, 카드 필드, retry 위임 | ready card, loading, empty retry, error retry, optional memo/meta | `fe-screen-agent` | `qa-mo-testing` | API hook mocking 없이 props 기반으로 검증한다. |
+| `MyReservationsScreen` | `MyReservationsScreen.test.tsx` | 상태 분기, 카드 필드, retry 위임 | ready card, loading, empty retry, error retry, optional memo/meta | `fe-screen-agent` | `fe-screen-agent` | API hook mocking 없이 props 기반으로 검증한다. |
 
 ## Planning QA
 
@@ -165,7 +165,7 @@ Screen Owner
 | `MyReservationCardItem` 표시 필드가 부족함 | screen이 필요한 텍스트/상태를 props로 받을 수 없음 | `fe-route-agent` | route display model을 갱신하고 route delivery spec에 반영한다. |
 | 예약 카드가 다른 화면에서도 필요 | screen-local JSX가 재사용 component가 됨 | `fe-widget-agent` | 별도 widget 파일로 분리하고 story/test를 함께 작성한다. |
 | loading/error/empty 표현이 공통 feedback으로 부족 | reusable feedback 수정 필요 | `fe-feedback-agent` | `StatusFeedback` 계약을 먼저 갱신한다. |
-| story/unit test가 화면 계약과 불일치 | planning spec과 구현이 어긋남 | `fe-screen-agent` / `qa-mo-testing` | source, story, unit test를 같은 화면 계약으로 맞춘다. |
+| story/unit test가 화면 계약과 불일치 | planning spec과 구현이 어긋남 | `fe-screen-agent` | source, story, unit test를 같은 화면 계약으로 맞춘다. |
 
 ## 변경 이력
 

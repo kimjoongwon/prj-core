@@ -3,7 +3,7 @@
 // Entities
 export * from "./ability.entity";
 export * from "./abstract.entity";
-export * from "./abstract-aggregate-root.entity";
+export * from "./abstract-aggregate.entity";
 export * from "./action.entity";
 export * from "./activity.entity";
 // Inquiry Domain Entities

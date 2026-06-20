@@ -1,4 +1,4 @@
-import { TimelineAggregateRoot } from "@cocrepo/aggregate";
+import { TimelineAggregate } from "@cocrepo/aggregate";
 import { GetTimelineByIdQuery } from "@cocrepo/command";
 import { TIMELINE_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/service";
@@ -10,7 +10,7 @@ export class GetTimelineByIdUseCase
 	implements IQueryHandler<GetTimelineByIdQuery>
 {
 	constructor(
-		private readonly timelinesService: TimelineAggregateRoot,
+		private readonly timelinesService: TimelineAggregate,
 		private readonly spaceContext: SpaceContext,
 	) {}
 

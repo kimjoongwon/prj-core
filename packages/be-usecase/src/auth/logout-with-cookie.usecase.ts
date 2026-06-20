@@ -1,4 +1,4 @@
-import { OidcClientAggregateRoot } from "@cocrepo/aggregate";
+import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { OidcClient } from "@cocrepo/client";
 import { LogoutWithCookieCommand } from "@cocrepo/command";
 import { Token } from "@cocrepo/constant";
@@ -23,7 +23,7 @@ export class LogoutWithCookieUseCase
 	private readonly logger = new Logger(LogoutWithCookieUseCase.name);
 
 	constructor(
-		private readonly oidcClientService: OidcClientAggregateRoot,
+		private readonly oidcClientService: OidcClientAggregate,
 		private readonly oidcClient: OidcClient,
 		private readonly tokenStorageService: TokenStorageService,
 		private readonly tokenService: TokenService,

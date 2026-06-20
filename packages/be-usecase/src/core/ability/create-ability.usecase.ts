@@ -1,4 +1,4 @@
-import { AbilityAggregateRoot } from "@cocrepo/aggregate";
+import { AbilityAggregate } from "@cocrepo/aggregate";
 import { CreateAbilityCommand } from "@cocrepo/command";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
@@ -6,7 +6,7 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 export class CreateAbilityUseCase
 	implements ICommandHandler<CreateAbilityCommand>
 {
-	constructor(private readonly abilitiesService: AbilityAggregateRoot) {}
+	constructor(private readonly abilitiesService: AbilityAggregate) {}
 
 	execute(command: CreateAbilityCommand): Promise<unknown> {
 		return this.abilitiesService.createAbility(command.input);

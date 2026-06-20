@@ -1,5 +1,5 @@
 import {
-	AuthAuditLogAggregateRoot,
+	AuthAuditLogAggregate,
 	type GetAuditLogsResult,
 } from "@cocrepo/aggregate";
 import { GetAuthAuditLogsQuery } from "@cocrepo/command";
@@ -11,7 +11,7 @@ export class GetAuthAuditLogsUseCase
 	implements IQueryHandler<GetAuthAuditLogsQuery>
 {
 	constructor(
-		private readonly authAuditLogService: AuthAuditLogAggregateRoot,
+		private readonly authAuditLogService: AuthAuditLogAggregate,
 	) {}
 
 	async execute(query: GetAuthAuditLogsQuery): Promise<{

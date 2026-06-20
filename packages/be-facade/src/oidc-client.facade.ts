@@ -1,4 +1,4 @@
-import { OidcClientAggregateRoot } from "@cocrepo/aggregate";
+import { OidcClientAggregate } from "@cocrepo/aggregate";
 import {
 	CreateOidcClientDto,
 	PageMetaDto,
@@ -10,7 +10,7 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class OidcClientFacade {
-	constructor(private readonly oidcClientService: OidcClientAggregateRoot) {}
+	constructor(private readonly oidcClientService: OidcClientAggregate) {}
 
 	getMany(query: QueryOidcClientDto): Promise<{
 		data: OidcClient[];

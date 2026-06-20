@@ -46,7 +46,7 @@
 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` 기준의 웹 screen 시각 owner를 생성/수정하는 전용 역할입니다.
 
 이 역할이 만드는 screen은 앱 라우트가 아닙니다.
-`apps/admin/web`, `apps/idp/web`의 `page.tsx`에서 데이터를 받고, 핸들러를 주입받아,
+`apps/admin/web`, `apps/mobile`의 route/page에서 데이터를 받고, 핸들러를 주입받아,
 widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 screen-level 시각 구성을 담당합니다.
 `src/screen`의 이름은 route segment를 직렬화하지 않고, semantic app-facing screen 이름을 우선 사용합니다.
 

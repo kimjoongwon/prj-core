@@ -68,6 +68,9 @@ flowchart TD
 
 ## Storybook / Test 소유권
 
+공통 테스트 소유권과 별도 검증 전담 subagent 금지 규칙은 루트 `AGENTS.md`가 소유합니다.
+이 문서는 service/route spec에 어떤 표와 단계가 필요한지만 설명합니다.
+
 | 책임 | 담당 |
 |------|------|
 | Storybook 계약 작성 | `orch-delivery`가 spec의 `Storybook / 테스트 계약`에 작성 |
@@ -141,7 +144,7 @@ flowchart TD
   Backend --> VO
   Backend --> DTO
   Backend --> QueryDto
-  Entity --> 런타임["repository → service → app/facade/gateway → controller/module"]
+  Entity --> 런타임["repository → aggregate/service/client → usecase → controller package → app module"]
   VO --> 런타임
   DTO --> 런타임
   QueryDto --> 런타임
@@ -157,7 +160,10 @@ flowchart TD
     Feedback["fe-feedback-agent"]
     Overlay["fe-overlay-agent"]
     Layout["fe-layout-agent"]
-    Control["fe-control-agent"]
+    Action["fe-action-agent"]
+    Input["fe-input-agent"]
+    Selection["fe-selection-agent"]
+    Navigation["fe-navigation-agent"]
     Widget["fe-widget-agent"]
     Feature["fe-feature-agent"]
   end
@@ -165,26 +171,38 @@ flowchart TD
   Types --> Feedback
   Types --> Overlay
   Types --> Layout
-  Toolkit --> Control
+  Toolkit --> Action
+  Toolkit --> Input
+  Toolkit --> Selection
+  Toolkit --> Navigation
   Hook --> Widget
   Store --> Feature
   DataDisplay --> WebRoute["fe-screen-agent → fe-route-agent"]
   Feedback --> WebRoute
   Overlay --> WebRoute
   Layout --> WebRoute
-  Control --> WebRoute
+  Action --> WebRoute
+  Input --> WebRoute
+  Selection --> WebRoute
+  Navigation --> WebRoute
   Widget --> WebRoute
   Feature --> WebRoute
 
   subgraph MobileParallel["parallel: mobile leaf subagent"]
-    Action["fe-control-agent"]
+    MoAction["fe-action-agent"]
+    MoInput["fe-input-agent"]
+    MoSelection["fe-selection-agent"]
     MoWidget["fe-widget-agent"]
     MoFeature["fe-feature-agent"]
   end
-  Types --> Action
+  Types --> MoAction
+  Types --> MoInput
+  Types --> MoSelection
   Toolkit --> MoWidget
   Hook --> MoFeature
-  Action --> MobileRoute["fe-screen-agent → fe-route-agent"]
+  MoAction --> MobileRoute["fe-screen-agent → fe-route-agent"]
+  MoInput --> MobileRoute
+  MoSelection --> MobileRoute
   MoWidget --> MobileRoute
   MoFeature --> MobileRoute
 
@@ -206,10 +224,11 @@ flowchart TD
 | `Common Schema 인벤토리` | `common-schema-builder` | `be-dto-builder`, `fe-route-agent` |
 | `Entity / VO 인벤토리` | `be-entity-builder`, `be-vo-builder` | `be-service-builder`, `be-usecase-builder` |
 | `DTO / Query DTO 인벤토리` | `be-dto-builder`, `be-query-dto-builder` | `be-controller-builder`, codegen |
-| `Repository 인벤토리` | `be-repository-builder` | `be-service-builder` |
-| `Service 인벤토리` | `be-service-builder` | `be-usecase-builder`, `be-facade-builder`, `be-controller-builder` |
+| `Repository 인벤토리` | `be-repository-builder` | `be-aggregate-builder`, `be-service-builder`, read projection usecase |
+| `Aggregate 인벤토리` | `be-aggregate-builder` | `be-usecase-builder`, owner tests |
+| `Service 인벤토리` | `be-service-builder` | `be-usecase-builder` |
+| `Client 인벤토리` | `be-client-builder` | `be-usecase-builder`, `be-service-builder` |
 | `UseCase 인벤토리` | `be-usecase-builder` | `be-controller-builder` |
-| `Facade / Gateway 인벤토리` | `be-facade-builder`, `be-gateway-builder` | `be-controller-builder`, `be-service-builder` |
 | `엔드포인트 인벤토리` | `be-controller-builder` | `fe-route-agent`, owner E2E |
 | `Module / Bootstrap 인벤토리` | `be-module-builder`, `be-bootstrap-integrator` | 앱 부트스트랩 |
 | `Seed 인벤토리` | `be-seed-maker` | owner tests, local dev |
@@ -224,10 +243,11 @@ flowchart TD
   PA --> S["common-schema-builder"]
   S --> M["be-entity / be-vo / be-dto / be-query-dto"]
   M --> R["be-repository-builder"]
+  R --> AG["be-aggregate-builder"]
   R --> SV["be-service-builder"]
-  SV --> UC["be-usecase-builder"]
-  UC --> F["be-facade-builder / be-gateway-builder"]
-  F --> C["be-controller-builder"]
+  AG --> UC["be-usecase-builder"]
+  SV --> UC
+  UC --> C["be-controller-builder"]
   C --> MOD["be-module-builder"]
   MOD --> BOOT["be-bootstrap-integrator"]
   BOOT --> SEED["be-seed-maker"]
@@ -259,7 +279,10 @@ flowchart TD
   Leaf --> DataDisplay["fe-data-display-agent"]
   Leaf --> Feedback["fe-feedback-agent"]
   Leaf --> Overlay["fe-overlay-agent"]
-  Leaf --> Control["fe-control-agent"]
+  Leaf --> Action["fe-action-agent"]
+  Leaf --> Input["fe-input-agent"]
+  Leaf --> Selection["fe-selection-agent"]
+  Leaf --> Navigation["fe-navigation-agent"]
   Leaf --> Cell["fe-cell-agent"]
   Leaf --> Columns["fe-columns-agent"]
   Leaf --> Widget["fe-widget-agent"]
@@ -284,10 +307,10 @@ flowchart TD
   Planning --> Leaf{"mobile leaf UI step 필요?"}
   Spec --> Foundation["foundation step, 필요 시"]
   Foundation --> Leaf
-  Leaf --> Action["fe-control-agent"]
-  Leaf --> Input["fe-control-agent"]
-  Leaf --> Selection["fe-control-agent"]
-  Leaf --> Navigation["fe-control-agent"]
+  Leaf --> Action["fe-action-agent"]
+  Leaf --> Input["fe-input-agent"]
+  Leaf --> Selection["fe-selection-agent"]
+  Leaf --> Navigation["fe-navigation-agent"]
   Leaf --> DataDisplay["fe-data-display-agent"]
   Leaf --> Feedback["fe-feedback-agent"]
   Leaf --> Overlay["fe-overlay-agent"]

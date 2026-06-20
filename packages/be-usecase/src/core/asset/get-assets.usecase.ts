@@ -1,11 +1,11 @@
-import { AssetAggregateRoot } from "@cocrepo/aggregate";
+import { AssetAggregate } from "@cocrepo/aggregate";
 import { GetAssetsQuery } from "@cocrepo/command";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetAssetsQuery)
 export class GetAssetsUseCase implements IQueryHandler<GetAssetsQuery> {
-	constructor(private readonly assetService: AssetAggregateRoot) {}
+	constructor(private readonly assetService: AssetAggregate) {}
 
 	async execute(query: GetAssetsQuery): Promise<unknown> {
 		const assetResult = await this.assetService.getAssets(query.query);

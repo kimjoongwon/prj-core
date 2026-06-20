@@ -1,8 +1,8 @@
 import {
-	EmailVerificationAggregateRoot,
-	OidcClientAggregateRoot,
-	RoleAggregateRoot,
-	SpaceAggregateRoot,
+	EmailVerificationAggregate,
+	OidcClientAggregate,
+	RoleAggregate,
+	SpaceAggregate,
 } from "@cocrepo/aggregate";
 import { ConfirmEmailVerificationCommand } from "@cocrepo/command";
 import { UserService } from "@cocrepo/service";
@@ -21,11 +21,11 @@ export class ConfirmEmailVerificationUseCase
 	private readonly logger = new Logger(ConfirmEmailVerificationUseCase.name);
 
 	constructor(
-		private readonly emailVerificationService: EmailVerificationAggregateRoot,
+		private readonly emailVerificationService: EmailVerificationAggregate,
 		private readonly usersService: UserService,
-		private readonly rolesService: RoleAggregateRoot,
-		private readonly spacesService: SpaceAggregateRoot,
-		private readonly oidcClientService: OidcClientAggregateRoot,
+		private readonly rolesService: RoleAggregate,
+		private readonly spacesService: SpaceAggregate,
+		private readonly oidcClientService: OidcClientAggregate,
 	) {}
 
 	async execute(command: ConfirmEmailVerificationCommand) {

@@ -28,9 +28,8 @@ subagent TOML은 얇은 실행 계약만 소유합니다. 상세 작업 지시�
 
 ## 테스트 소유권 규칙
 
-- 단위 테스트와 E2E 테스트는 기본적으로 해당 소스, route, API 산출물을 생성하거나 수정한 owner subagent가 함께 작성하고 1차 검증합니다.
-- 별도 검증 전담 subagent는 두지 않습니다. 테스트와 타입 체크는 작업 owner의 완료 조건입니다.
-- spec의 테스트 행에는 작성 `agent_type`, 1차 검증 `agent_type`, 테스트 파일, 통과 기준을 적고 두 `agent_type`은 기본적으로 같은 owner를 사용합니다.
+- 공통 테스트 소유권 규칙은 루트 [AGENTS.md](../../AGENTS.md)가 소유합니다.
+- 이 README는 active subagent 색인만 소유하며 테스트 정책을 복제하지 않습니다.
 
 ## 모델 티어 운영
 

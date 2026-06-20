@@ -3,7 +3,7 @@ import { AuthCacheService, SpaceContext, UserService } from "@cocrepo/service";
 import { UserCommandHandlers, UserQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { UsersController } from "./users.controller";
+import { UsersController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],

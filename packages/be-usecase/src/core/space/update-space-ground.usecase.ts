@@ -1,4 +1,4 @@
-import { SpaceAggregateRoot } from "@cocrepo/aggregate";
+import { SpaceAggregate } from "@cocrepo/aggregate";
 import { UpdateSpaceGroundCommand } from "@cocrepo/command";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
@@ -6,7 +6,7 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 export class UpdateSpaceGroundUseCase
 	implements ICommandHandler<UpdateSpaceGroundCommand>
 {
-	constructor(private readonly spaceService: SpaceAggregateRoot) {}
+	constructor(private readonly spaceService: SpaceAggregate) {}
 
 	execute(command: UpdateSpaceGroundCommand): Promise<unknown> {
 		return this.spaceService.updateGroundBySpaceId(

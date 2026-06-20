@@ -1,4 +1,4 @@
-import { OidcClientAggregateRoot } from "@cocrepo/aggregate";
+import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { OidcClient } from "@cocrepo/client";
 import { UserDto } from "@cocrepo/dto";
 import {
@@ -25,7 +25,7 @@ export async function handleOidcCallback(params: {
 	req: Request;
 	res: Response;
 	tokenStorageService: TokenStorageService;
-	oidcClientService: OidcClientAggregateRoot;
+	oidcClientService: OidcClientAggregate;
 	oidcClient: OidcClient;
 	usersService: UserService;
 	authCacheService: AuthCacheService;

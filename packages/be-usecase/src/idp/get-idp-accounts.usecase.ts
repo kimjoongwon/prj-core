@@ -1,4 +1,4 @@
-import { IdpAccountAggregateRoot } from "@cocrepo/aggregate";
+import { IdpAccountAggregate } from "@cocrepo/aggregate";
 import { GetIdpAccountsQuery } from "@cocrepo/command";
 import { PageMetaDto } from "@cocrepo/dto";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
@@ -7,7 +7,7 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 export class GetIdpAccountsUseCase
 	implements IQueryHandler<GetIdpAccountsQuery>
 {
-	constructor(private readonly idpAccountService: IdpAccountAggregateRoot) {}
+	constructor(private readonly idpAccountService: IdpAccountAggregate) {}
 
 	async execute(query: GetIdpAccountsQuery): Promise<unknown> {
 		const skip = query.query.skip ?? 0;

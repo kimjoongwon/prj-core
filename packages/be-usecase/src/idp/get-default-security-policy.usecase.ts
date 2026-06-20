@@ -1,4 +1,4 @@
-import { SecurityPolicyAggregateRoot } from "@cocrepo/aggregate";
+import { SecurityPolicyAggregate } from "@cocrepo/aggregate";
 import { GetSecurityPolicyQuery } from "@cocrepo/command";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
@@ -7,7 +7,7 @@ export class GetDefaultSecurityPolicyUseCase
 	implements IQueryHandler<GetSecurityPolicyQuery>
 {
 	constructor(
-		private readonly securityPolicyService: SecurityPolicyAggregateRoot,
+		private readonly securityPolicyService: SecurityPolicyAggregate,
 	) {}
 
 	execute(): Promise<unknown> {

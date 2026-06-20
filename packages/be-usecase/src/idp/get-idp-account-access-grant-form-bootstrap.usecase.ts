@@ -1,4 +1,4 @@
-import { IdpAccountAggregateRoot } from "@cocrepo/aggregate";
+import { IdpAccountAggregate } from "@cocrepo/aggregate";
 import { GetIdpAccountAccessGrantFormQuery } from "@cocrepo/command";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
@@ -6,7 +6,7 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 export class GetIdpAccountAccessGrantFormBootstrapUseCase
 	implements IQueryHandler<GetIdpAccountAccessGrantFormQuery>
 {
-	constructor(private readonly idpAccountService: IdpAccountAggregateRoot) {}
+	constructor(private readonly idpAccountService: IdpAccountAggregate) {}
 
 	execute(query: GetIdpAccountAccessGrantFormQuery): Promise<unknown> {
 		return this.idpAccountService.getAccessGrantFormBootstrap(query.userId);

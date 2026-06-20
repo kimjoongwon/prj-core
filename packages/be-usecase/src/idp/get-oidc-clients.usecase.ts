@@ -1,4 +1,4 @@
-import { OidcClientAggregateRoot } from "@cocrepo/aggregate";
+import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { GetOidcClientsQuery } from "@cocrepo/command";
 import { PageMetaDto } from "@cocrepo/dto";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
@@ -7,7 +7,7 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 export class GetOidcClientsUseCase
 	implements IQueryHandler<GetOidcClientsQuery>
 {
-	constructor(private readonly oidcClientService: OidcClientAggregateRoot) {}
+	constructor(private readonly oidcClientService: OidcClientAggregate) {}
 
 	async execute(query: GetOidcClientsQuery): Promise<unknown> {
 		const skip = query.query.skip ?? 0;

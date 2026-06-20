@@ -73,20 +73,20 @@ sequenceDiagram
 
 | 단계 | 파일 | 핵심 로직 |
 |------|------|----------|
-| 로그인 시작 | `apps/admin/src/app/auth/login/hooks/useAuthLoginPage.tsx:28` | `window.location.href = "/api/v1/auth/login"` |
+| 로그인 시작 | `apps/admin/web/src/app/auth/login/page.tsx` | `/api/v1/auth/login`으로 이동 |
 | Authorization URL 생성 | `packages/be-usecase/src/auth/get-auth-login-redirect.usecase.ts` | `GetAuthLoginRedirectUseCase` - scope: `openid profile email roles` |
 | State 저장 (Redis) | `packages/be-service/src/auth/token-storage.service.ts:140-143` | `saveOidcState()` - TTL 10분, 일회용 |
-| IDP 리다이렉트 | `apps/server/src/module/auth/auth.controller.ts:64-67` | `login()` - Authorization URL로 redirect |
-| Interaction 화면 | `apps/idp/src/module/interaction/interaction.controller.ts:58-93` | `getInteraction()` - prompt에 따라 login/consent 분기 |
-| 사용자 인증 | `apps/idp/src/module/interaction/interaction.service.ts:67-94` | `validateUser()` - bcrypt 비밀번호 검증 |
-| 로그인 완료 | `apps/idp/src/module/interaction/interaction.service.ts:100-116` | `completeLogin()` - interactionResult 호출 |
-| 동의 처리 | `apps/idp/src/module/interaction/interaction.service.ts:122-169` | `processConsent()` - Grant 생성/업데이트 |
-| Claims 조회 | `apps/idp/src/module/oidc/account.service.ts:48-64` | `findAccount()` - Redis 캐시 활용 |
-| Claims 빌드 | `apps/idp/src/module/oidc/account.service.ts:107-140` | `buildFullClaims()` - 전체 claims 빌드 후 캐시 |
-| Claims 필터 | `apps/idp/src/module/oidc/account.service.ts:145-173` | `filterClaimsByScope()` - scope별 claims 필터링 |
-| Callback 처리 | `apps/server/src/module/auth/auth.controller.ts:78-100` | `handleCallback()` - 에러 처리 + 쿠키 설정 + 리다이렉트 |
+| IDP 리다이렉트 | `packages/be-controller/src/auth/auth.controller.ts` | `login()` - Authorization URL로 redirect |
+| Interaction 화면 | `packages/be-controller/src/interaction/interaction.controller.ts` | prompt에 따라 login/consent 분기 |
+| 사용자 인증 | `packages/be-service/src/idp/interaction.service/index.ts` | bcrypt 비밀번호 검증 |
+| 로그인 완료 | `packages/be-service/src/idp/interaction.service/index.ts` | interactionResult 호출 |
+| 동의 처리 | `packages/be-service/src/idp/interaction.service/index.ts` | Grant 생성/업데이트 |
+| Claims 조회 | `packages/be-service/src/oidc/account.service/index.ts` | Redis 캐시 활용 |
+| Claims 빌드 | `packages/be-service/src/oidc/account.service/index.ts` | 전체 claims 빌드 후 캐시 |
+| Claims 필터 | `packages/be-service/src/oidc/account.service/index.ts` | scope별 claims 필터링 |
+| Callback 처리 | `packages/be-controller/src/auth/auth.controller.ts` | `handleCallback()` - 에러 처리 + 쿠키 설정 + 리다이렉트 |
 | State 검증 + 토큰 교환 | `packages/be-usecase/src/auth/handle-oidc-callback.usecase.ts` | `HandleOidcCallbackUseCase` - state 검증 → code 교환 → 쿠키 설정 |
-| IDP 토큰 교환 | `packages/be-gateway/src/oidc.gateway.ts` | `exchangeCodeForTokens()` - IDP token endpoint 호출 |
+| IDP 토큰 교환 | `packages/be-client/src/oidc.client.ts` | `exchangeCodeForTokens()` - IDP token endpoint 호출 |
 
 ---
 
@@ -205,8 +205,8 @@ sequenceDiagram
 | 구성 요소 | 파일 | 핵심 로직 |
 |-----------|------|----------|
 | 401 인터셉터 | `packages/fe-api/src/libs/customAxios.ts:63-124` | 토큰 갱신 + 큐 패턴 + PersistStore 업데이트 |
-| Refresh 엔드포인트 | `apps/server/src/module/auth/auth.controller.ts:102-124` | 쿠키에서 refreshToken 추출 |
-| IDP 토큰 갱신 | `packages/be-gateway/src/oidc.gateway.ts` | `refreshTokens()` |
+| Refresh 엔드포인트 | `packages/be-controller/src/auth/auth.controller.ts` | 쿠키에서 refreshToken 추출 |
+| IDP 토큰 갱신 | `packages/be-client/src/oidc.client.ts` | `refreshTokens()` |
 
 ---
 
@@ -245,8 +245,8 @@ sequenceDiagram
 | 구성 요소 | 파일 | 핵심 로직 |
 |-----------|------|----------|
 | 프론트엔드 로그아웃 | `packages/fe-store/src/stores/authStore.ts:27-42` | `logout(logoutApi?)` - API 호출 후 리다이렉트 |
-| 로그아웃 컨트롤러 | `apps/server/src/module/auth/auth.controller.ts:163-184` | 쿠키에서 accessToken 추출 |
-| IDP 토큰 폐기 | `packages/be-gateway/src/oidc.gateway.ts` | `revokeToken()` - revocation endpoint 호출 |
+| 로그아웃 컨트롤러 | `packages/be-controller/src/auth/auth.controller.ts` | 쿠키에서 accessToken 추출 |
+| IDP 토큰 폐기 | `packages/be-client/src/oidc.client.ts` | `revokeToken()` - revocation endpoint 호출 |
 | 쿠키 삭제 | `packages/be-usecase/src/auth/logout-with-cookie.usecase.ts` | `LogoutWithCookieUseCase` |
 | 토큰 쿠키 관리 | `packages/be-service/src/auth/token.service.ts:64-75` | `clearTokenCookies()` |
 
@@ -275,7 +275,7 @@ sequenceDiagram
 
 ## 6. 토큰 TTL 정리
 
-IDP에서 설정하는 토큰 수명 (`apps/idp/src/module/oidc/oidc-configuration.service.ts:122-132`):
+IDP에서 설정하는 토큰 수명 (`packages/be-service/src/oidc/oidc-configuration.service/index.ts`):
 
 | 토큰 유형 | TTL | 설명 |
 |-----------|-----|------|
@@ -309,7 +309,7 @@ IDP의 `AccountService`가 scope에 따라 반환하는 claims.
 
 ### Claims 정의 (`OidcConfigurationService`)
 
-`apps/idp/src/module/oidc/oidc-configuration.service.ts:77-83`:
+`packages/be-service/src/oidc/oidc-configuration.service/index.ts`:
 
 ```typescript
 claims: {
@@ -436,27 +436,28 @@ graph TB
 
 ---
 
-## 9. IDP 모듈 구조
+## 9. IDP/OIDC 모듈 구조
 
-IDP의 OIDC 모듈은 책임별로 분리되어 있습니다:
+OIDC 관련 코드는 controller package, core-api module wiring, service/usecase/client 패키지로 책임이 분리되어 있습니다:
 
 ```
-apps/idp/src/module/
-├── oidc/
-│   ├── types/
-│   │   ├── index.ts                       # 타입 re-export
-│   │   └── oidc-provider.types.ts         # oidc-provider 라이브러리 타입 정의
-│   ├── oidc-provider.service.ts           # Provider 생명주기 관리 (초기화, 이벤트)
-│   ├── oidc-configuration.service.ts      # 설정 빌드 (clients, claims, TTL, PKCE, renderError)
-│   ├── account.service.ts                 # 사용자 계정 조회 + Redis 캐시 + Claims 빌드
-│   ├── direct-user.repository.ts          # IDP 전용 사용자 DB 조회 (Tenant-free)
-│   ├── oidc.adapter.ts                    # Redis 기반 OIDC Adapter (세션/토큰/Grant 저장)
-│   ├── oidc-client.repository.ts          # OIDC 클라이언트 DB 조회
-│   ├── oidc.controller.ts                 # oidc-provider 미들웨어 라우팅
-│   └── oidc.module.ts                     # 모듈 정의
-└── interaction/
-    ├── interaction.controller.ts           # HTTP 라우팅 + 뷰 렌더링
-    └── interaction.service.ts             # 로그인/동의/취소 비즈니스 로직
+packages/be-controller/src/
+├── oidc/oidc.controller.ts                # oidc-provider HTTP routing
+└── interaction/interaction.controller.ts  # Interaction HTTP routing
+
+apps/core/api/src/module/
+├── oidc/oidc.module.ts                    # provider/module wiring
+└── interaction/interaction.module.ts      # provider/module wiring
+
+packages/be-service/src/oidc/
+├── oidc-configuration.service/index.ts    # 설정 빌드
+├── account.service/index.ts               # 사용자 계정 조회 + Redis 캐시 + Claims 빌드
+├── direct-user.repository.ts              # IDP 전용 사용자 DB 조회
+├── oidc.adapter.ts                        # Redis 기반 OIDC Adapter
+└── oidc-client.repository.ts              # OIDC 클라이언트 DB 조회
+
+packages/be-service/src/idp/
+└── interaction.service/index.ts           # 로그인/동의/취소 비즈니스 로직
 ```
 
 | 서비스 | 역할 |
@@ -473,31 +474,27 @@ apps/idp/src/module/
 
 ## 10. 관련 파일 경로 참조
 
-### IDP (Identity Provider)
+### IDP / OIDC
 
 | 파일 | 역할 |
 |------|------|
-| `apps/idp/src/config/oidc.config.ts` | OIDC Provider 설정 (issuer, cookie, JWKS) |
-| `apps/idp/src/module/oidc/oidc-provider.service.ts` | OIDC Provider 생명주기 관리 (초기화, 이벤트) |
-| `apps/idp/src/module/oidc/oidc-configuration.service.ts` | OIDC Provider 설정 빌드 (clients, claims, TTL, PKCE, resourceIndicators) |
-| `apps/idp/src/module/oidc/account.service.ts` | 사용자 계정 조회 + Redis 캐시 + Claims 매핑 |
-| `apps/idp/src/module/oidc/direct-user.repository.ts` | IDP 전용 사용자 DB 조회 (Tenant-free, Global PrismaClient) |
-| `apps/idp/src/module/oidc/oidc.adapter.ts` | Redis 기반 OIDC Adapter (세션/토큰/Grant 저장) |
-| `apps/idp/src/module/oidc/oidc-client.repository.ts` | OIDC 클라이언트 DB 조회 |
-| `apps/idp/src/module/oidc/oidc.controller.ts` | oidc-provider 미들웨어 라우팅 (모든 /oidc/* 엔드포인트 위임) |
-| `apps/idp/src/module/oidc/types/oidc-provider.types.ts` | oidc-provider 타입 정의 |
-| `apps/idp/src/module/interaction/interaction.controller.ts` | Interaction HTTP 라우팅 + 뷰 렌더링 |
-| `apps/idp/src/module/interaction/interaction.service.ts` | 로그인/동의/취소 비즈니스 로직 |
-| `apps/idp/src/views/login.ejs` | 로그인 폼 템플릿 |
-| `apps/idp/src/views/consent.ejs` | 동의 화면 템플릿 |
-| `apps/idp/src/views/error.ejs` | 에러 페이지 템플릿 |
+| `apps/core/api/src/config/oidc.config.ts` | OIDC Provider 설정 (issuer, cookie, JWKS) |
+| `packages/be-service/src/oidc/oidc-configuration.service/index.ts` | OIDC Provider 설정 빌드 (clients, claims, TTL, PKCE, resourceIndicators) |
+| `packages/be-service/src/oidc/account.service/index.ts` | 사용자 계정 조회 + Redis 캐시 + Claims 매핑 |
+| `packages/be-service/src/oidc/direct-user.repository.ts` | IDP 전용 사용자 DB 조회 (Tenant-free, Global PrismaClient) |
+| `packages/be-service/src/oidc/oidc.adapter.ts` | Redis 기반 OIDC Adapter (세션/토큰/Grant 저장) |
+| `packages/be-service/src/oidc/oidc-client.repository.ts` | OIDC 클라이언트 DB 조회 |
+| `packages/be-controller/src/oidc/oidc.controller.ts` | oidc-provider 미들웨어 라우팅 (모든 /oidc/* 엔드포인트 위임) |
+| `packages/be-controller/src/interaction/interaction.controller.ts` | Interaction HTTP 라우팅 |
+| `packages/be-service/src/idp/interaction.service/index.ts` | 로그인/동의/취소 비즈니스 로직 |
 
-### Server (API)
+### Core API
 
 | 파일 | 역할 |
 |------|------|
-| `apps/server/src/config/oidc.config.ts` | Server측 OIDC 설정 (issuer, jwksUri, clientId/Secret, redirectUri) |
-| `apps/server/src/module/auth/auth.controller.ts` | 인증 엔드포인트 (login, callback, refresh, sign-up, verify-token, logout) |
+| `apps/core/api/src/config/oidc.config.ts` | Core API OIDC 설정 (issuer, jwksUri, clientId/Secret, redirectUri) |
+| `packages/be-controller/src/auth/auth.controller.ts` | 인증 엔드포인트 (login, callback, refresh, sign-up, verify-token, logout) |
+| `apps/core/api/src/module/auth/auth.module.ts` | Auth controller와 provider wiring |
 
 ### 공용 패키지
 
@@ -513,7 +510,7 @@ apps/idp/src/module/
 
 | 파일 | 역할 |
 |------|------|
-| `apps/admin/src/app/auth/login/hooks/useAuthLoginPage.tsx` | 로그인 페이지 훅 (OIDC 리다이렉트) |
-| `apps/admin/next.config.ts` | API 프록시 설정 (rewrite: `/api/v1/*` → Server) |
+| `apps/admin/web/src/app/auth/login/page.tsx` | 로그인 페이지 (OIDC 리다이렉트) |
+| `apps/admin/web/next.config.ts` | API 프록시 설정 (rewrite: `/api/v1/*` → Core API) |
 | `packages/fe-api/src/libs/customAxios.ts` | Axios 인터셉터 (401 토큰 갱신, x-space-id 헤더, PersistStore 업데이트) |
 | `packages/fe-store/src/stores/authStore.ts` | 인증 상태 관리 Store (로그아웃 처리) |

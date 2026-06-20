@@ -1,4 +1,4 @@
-import { PaymentAggregateRoot } from "@cocrepo/aggregate";
+import { PaymentAggregate } from "@cocrepo/aggregate";
 import { COMMON_ERRORS } from "@cocrepo/constant";
 import type { QueryPaymentDto } from "@cocrepo/dto";
 import { SpaceContext } from "@cocrepo/service";
@@ -9,7 +9,7 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 @Injectable()
 export class PaymentFacade {
 	constructor(
-		private readonly paymentService: PaymentAggregateRoot,
+		private readonly paymentService: PaymentAggregate,
 		private readonly spaceContext: SpaceContext,
 	) {}
 
@@ -17,7 +17,7 @@ export class PaymentFacade {
 		query: QueryPaymentDto,
 	): Promise<
 		OffsetStatsPaginatedResponse<
-			Awaited<ReturnType<PaymentAggregateRoot["findPayments"]>>["payments"]
+			Awaited<ReturnType<PaymentAggregate["findPayments"]>>["payments"]
 		>
 	> {
 		this.requireSpaceId();

@@ -15,7 +15,7 @@ Admin web을 단일 인증 콘솔로 두고 native login을 기본 로그인으�
 |------|------|
 | 사용자 목표 | 관리자가 `/auth/login`에서 native login으로 로그인하고 admin console의 인증 설정과 protected resource를 한 origin에서 사용한다. |
 | 운영 목표 | `apps/admin/web` + `apps/core/api`만 active web/backend target으로 두고, `apps/idp/web`과 `apps/idp/api` app target은 제거한다. |
-| 대상 app/domain/platform | `apps/admin/web`, `apps/core/api`, `packages/be-command`, `packages/be-usecase`, `packages/be-aggregate`, `packages/be-repository`, `packages/be-service`, `packages/be-client`, `packages/fe-api` |
+| 대상 app/domain/platform | `apps/admin/web`, `apps/core/api`, `packages/be-controller`, `packages/be-command`, `packages/be-usecase`, `packages/be-aggregate`, `packages/be-repository`, `packages/be-service`, `packages/be-client`, `packages/fe-api` |
 | 성공 기준 | native login, OIDC protocol, interaction, password reset, IDP admin settings API가 `core/api`에서 동작하고 Swagger/codegen IDP spec은 `/idp-api-json`으로 분리된다. |
 | 범위 포함 | `idp/api` module의 `core/api` 물리 이동, AppModule/RouterModule/bootstrap/Swagger 통합, deployment/codegen/e2e/script target 정리, CQRS guard 검증 |
 | 범위 제외 | OIDC protocol path 변경, generated `@cocrepo/api` idp namespace rename, backend 서버 논리 계층 우회, 하위호환 shim 유지 |
@@ -27,8 +27,8 @@ Admin web을 단일 인증 콘솔로 두고 native login을 기본 로그인으�
 | row id | 결정 | 실행 기준 |
 |--------|------|-----------|
 | AUTH-MERGE-WEB | `apps/admin/web`이 단일 first-party web client다. | IDP 콘솔 화면은 `/admin/settings/auth/*`, 공개 auth flow는 `/admin/auth/*`에 둔다. |
-| AUTH-MERGE-BE | `apps/idp/api`는 제거 대상이다. | IDP controller/module/runtime은 `apps/core/api/src/module/**`로 이동한다. |
-| AUTH-MERGE-CQRS | CQRS 경계를 유지한다. | Controller -> `CommandBus`/`QueryBus` -> `@cocrepo/command` -> `@cocrepo/usecase` -> Aggregate/Service/Repository/Client. |
+| AUTH-MERGE-BE | `apps/idp/api`는 제거 대상이다. | IDP/Auth/OIDC Controller는 `packages/be-controller`, module/runtime은 `apps/core/api/src/module/**`가 소유한다. |
+| AUTH-MERGE-CQRS | CQRS 경계를 유지한다. | `@cocrepo/controller` Controller -> `CommandBus`/`QueryBus` -> `@cocrepo/command` -> `@cocrepo/usecase` -> Aggregate/Service/Client. |
 | AUTH-MERGE-SWAGGER | core spec과 idp spec을 분리한다. | core API Swagger는 `/api-json`, IDP/codegen Swagger는 `/idp-api-json`을 사용한다. |
 | AUTH-MERGE-DEPLOY | 별도 idp app target을 제거한다. | root script, turbo, workspace, Dockerfile, Jenkinsfile, E2E server target에서 `idp-api`를 제거한다. |
 
@@ -49,13 +49,13 @@ Admin web을 단일 인증 콘솔로 두고 native login을 기본 로그인으�
 |--------|-------------|------|-----------|-----------|----------------|
 | AUTH-ACTOR-ADMIN | 관리자 | admin web 운영 콘솔 접속 | native login, current space 조회/선택, protected core API 호출, auth settings 관리 | 외부 origin `returnTo`, 만료 token 재사용 | `/auth/login`, `/admin/settings/auth/*`, `/api/v1/auth/*` |
 | AUTH-ACTOR-OIDC-CLIENT | 외부 OIDC client | Authorization Code + PKCE flow | `/oidc/auth` redirect, interaction completion, callback return | protocol path 변경, inactive legacy client 사용 | `/oidc/*`, `/api/interaction/*`, `/admin/auth/interaction/[uid]` |
-| AUTH-ACTOR-CORE | Core API | 단일 backend runtime | auth/idp/oidc controller bus entrypoint 제공, Swagger spec 분리 | controller 직접 repository/service 접근, app-local CQRS 파일 추가 | `apps/core/api/src/module/**` |
+| AUTH-ACTOR-CORE | Core API | 단일 backend runtime | auth/idp/oidc controller bus entrypoint 제공, Swagger spec 분리 | controller 직접 repository/service 접근, app-local CQRS 파일 추가 | `packages/be-controller/src/**`, `apps/core/api/src/module/**` |
 
 ## Backend 역할 분배
 
 | row id | 담당 `agent_type` | 책임 | 허용 파일/패키지 | 완료 조건 |
 |--------|-------------------|------|------------------|-----------|
-| AUTH-BE-CONTROLLER | `be-controller-builder` | `idp/api` controller를 `core/api` module로 이동하고 Bus 호출만 유지 | `apps/core/api/src/module/**/**/*.controller.ts` | constructor에 `CommandBus`/`QueryBus` 외 business dependency가 없다. |
+| AUTH-BE-CONTROLLER | `be-controller-builder` | IDP/Auth/OIDC Controller를 `@cocrepo/controller` 패키지에서 유지하고 Bus 호출만 사용 | `packages/be-controller/src/**` | constructor에 `CommandBus`/`QueryBus` 외 business dependency가 없다. |
 | AUTH-BE-MODULE | `be-module-builder` | IDP/Auth/OIDC modules와 RouterModule path 등록 | `apps/core/api/src/module/**/**/*.module.ts`, `apps/core/api/src/module/app.module.ts` | public endpoint path가 유지되고 provider wiring이 끊기지 않는다. |
 | AUTH-BE-USECASE | `be-usecase-builder` | workflow logic이 app-local에 남으면 `@cocrepo/usecase` handler로 이동 | `packages/be-usecase/src/**`, `packages/be-command/src/**` | handler는 Aggregate/Service/Client를 통해 동작하고 controller logic이 없다. |
 | AUTH-BE-SERVICE | `be-service-builder` | OIDC runtime, password reset support, interaction helper 등 aggregate가 아닌 지원 서비스를 정리 | `packages/be-service/src/**`, approved module provider wiring | service는 protocol/helper 책임만 갖고 aggregate root 로직을 소유하지 않는다. |
@@ -86,7 +86,7 @@ Admin web을 단일 인증 콘솔로 두고 native login을 기본 로그인으�
 ```mermaid
 flowchart TD
   S0["AUTH-S0 orch-delivery spec update"]
-  B1["AUTH-B1 be-controller-builder move controllers"]
+  B1["AUTH-B1 be-controller-builder package controllers"]
   B2["AUTH-B2 be-module-builder module/router wiring"]
   B3["AUTH-B3 be-bootstrap-integrator bootstrap/swagger/config"]
   B4["AUTH-B4 service/client/usecase package extraction if needed"]
@@ -115,7 +115,7 @@ flowchart TD
 | step id | phase | 담당 `agent_type` | 입력 파일 | 출력 파일 | 수정 허용 파일 | 의존 step | parallel | 완료 조건 |
 |---------|-------|-------------------|-----------|-----------|----------------|-----------|----------|-----------|
 | AUTH-S0-SPEC | planning | `orch-delivery` | 사용자 승인 계획, 현재 repo | 통합 인증 콘솔 + backend 물리 통합 spec | `docs/services/admin-auth.delivery.spec.md` | none | false | backend 통합과 cleanup 대상이 spec에 명시됨 |
-| AUTH-B1-CONTROLLERS | backend | `be-controller-builder` | `apps/idp/api/src/module/**` | core module controller 이동 | `apps/core/api/src/module/**` | `AUTH-S0-SPEC` | true | controller CQRS guard 통과 |
+| AUTH-B1-CONTROLLERS | backend | `be-controller-builder` | `apps/idp/api/src/module/**`, 기존 controller package | controller package 정렬 | `packages/be-controller/src/**` | `AUTH-S0-SPEC` | true | controller CQRS guard 통과 |
 | AUTH-B2-MODULES | backend | `be-module-builder` | copied modules, core AppModule | module/provider/router registration | `apps/core/api/src/module/**` | `AUTH-B1-CONTROLLERS` | false | public path 유지 |
 | AUTH-B3-BOOTSTRAP | backend | `be-bootstrap-integrator` | idp/core bootstrap/config/swagger | unified core bootstrap | `apps/core/api/src/main.ts`, `apps/core/api/src/setNestApp.ts`, `apps/core/api/src/config/**` | `AUTH-B2-MODULES` | false | `/api-json`, `/idp-api-json` 분리 |
 | AUTH-B4-PACKAGES | backend | `be-usecase-builder`, `be-service-builder`, `be-client-builder`, `be-aggregate-builder`, `be-repository-builder` | app-local helper scan | package owner extraction or validated reuse | `packages/be-*`, approved provider wiring | `AUTH-B3-BOOTSTRAP` | true | CQRS/package boundary guard 통과 |
@@ -129,10 +129,10 @@ flowchart TD
 
 | row id | 검증 항목 | 명령 | 통과 기준 |
 |--------|-----------|------|-----------|
-| AUTH-STATIC-CONTROLLER | controller CQRS guard | `rg "constructor\\(.*Service|Repository|Prisma" apps/core/api/src/module/**/**/*.controller.ts` | controller가 Service/Repository/Prisma를 직접 주입하지 않음 |
-| AUTH-STATIC-FACADE | app/facade/gateway 우회 금지 | `rg "@cocrepo/(facade|app|gateway)" apps/core/api/src/module` | active core module에 우회 package import 없음 |
+| AUTH-STATIC-CONTROLLER | controller CQRS guard | `rg "constructor\\(.*Service|Repository|Prisma" packages/be-controller/src -g "*.controller.ts"` | controller가 Service/Repository/Prisma를 직접 주입하지 않음 |
+| AUTH-STATIC-FACADE | app/facade/gateway 우회 금지 | `rg "@cocrepo/(facade|app|gateway)" apps/core/api/src/module packages/be-controller packages/be-usecase` | active backend entrypoint/usecase에 우회 package import 없음 |
 | AUTH-STATIC-IDP-APP | removed app refs | `rg "apps/idp/api|idp-api|IDP_API|localhost:4008|localhost:3007|apps/idp/web|idp-web"` | legacy allowlist 외 active app/deploy/codegen ref 없음 |
-| AUTH-STATIC-SPEC | spec 기준 일치 | `rg -n "backend 물리 통합|/idp-api-json|be-bootstrap-integrator|apps/idp/api" docs/services/admin-auth.delivery.spec.md` | 통합 기준과 제거 대상이 문서에 남아 있음 |
+| AUTH-STATIC-SPEC | spec 기준 일치 | `rg -n "backend 물리 통합|/idp-api-json|be-bootstrap-integrator|packages/be-controller|apps/idp/api" docs/services/admin-auth.delivery.spec.md` | 통합 기준, controller package, 제거 대상이 문서에 남아 있음 |
 
 ## 검증 / 승인 기준
 

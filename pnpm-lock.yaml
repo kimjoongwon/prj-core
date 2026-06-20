@@ -237,7 +237,7 @@ importers:
         version: 3.1.0(@react-spectrum/provider@3.11.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(tailwindcss@4.2.4)
       '@heroui/styles':
         specifier: 'catalog:'
-        version: 3.1.0(tailwind-merge@3.5.0)(tailwindcss@4.2.4)
+        version: 3.1.0(tailwind-merge@3.4.0)(tailwindcss@4.2.4)
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.83.0(react@19.2.5)
@@ -323,6 +323,9 @@ importers:
       '@cocrepo/constant':
         specifier: workspace:*
         version: link:../../../packages/common-constant
+      '@cocrepo/controller':
+        specifier: workspace:*
+        version: link:../../../packages/be-controller
       '@cocrepo/decorator':
         specifier: workspace:^0.1.0
         version: link:../../../packages/be-decorator
@@ -569,7 +572,7 @@ importers:
         version: 30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3))
       jest-mock-extended:
         specifier: ^4.0.0
-        version: 4.0.0(@jest/globals@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 4.0.0(@jest/globals@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2)))(typescript@5.9.3)
       prisma:
         specifier: 'catalog:'
         version: 7.1.0(@types/react@19.2.14)(magicast@0.3.5)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(typescript@5.9.3)
@@ -584,7 +587,7 @@ importers:
         version: 7.1.4
       ts-jest:
         specifier: ^29.4.1
-        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2)))(typescript@5.9.3)
       ts-loader:
         specifier: ^9.5.4
         version: 9.5.4(typescript@5.9.3)(webpack@5.103.0(@swc/core@1.15.7(@swc/helpers@0.5.18))(esbuild@0.27.2))
@@ -1254,6 +1257,85 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(reflect-metadata@0.2.2)(rxjs@7.8.2)
 
+  packages/be-controller:
+    dependencies:
+      '@cocrepo/be-common':
+        specifier: workspace:*
+        version: link:../be-common
+      '@cocrepo/command':
+        specifier: workspace:*
+        version: link:../be-command
+      '@cocrepo/constant':
+        specifier: workspace:*
+        version: link:../common-constant
+      '@cocrepo/context':
+        specifier: workspace:*
+        version: link:../be-context
+      '@cocrepo/decorator':
+        specifier: workspace:*
+        version: link:../be-decorator
+      '@cocrepo/dto':
+        specifier: workspace:*
+        version: link:../be-dto
+      '@cocrepo/entity':
+        specifier: workspace:*
+        version: link:../be-entity
+      '@cocrepo/enum':
+        specifier: workspace:*
+        version: link:../common-enum
+      '@cocrepo/prisma':
+        specifier: workspace:*
+        version: link:../be-prisma
+      '@cocrepo/service':
+        specifier: workspace:*
+        version: link:../be-service
+    devDependencies:
+      '@cocrepo/tsconfig':
+        specifier: workspace:*
+        version: link:../common-tsconfig
+      '@nestjs/common':
+        specifier: ^11.1.6
+        version: 11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/cqrs':
+        specifier: ^11.0.3
+        version: 11.0.3(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/platform-express':
+        specifier: ^11.1.6
+        version: 11.1.10(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)
+      '@nestjs/swagger':
+        specifier: ^11.2.0
+        version: 11.2.3(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)
+      '@types/express':
+        specifier: ^5.0.3
+        version: 5.0.6
+      '@types/jest':
+        specifier: ^30.0.0
+        version: 30.0.0
+      '@types/multer':
+        specifier: ^2.0.0
+        version: 2.0.0
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.10.4
+      express:
+        specifier: ^5.1.0
+        version: 5.2.1
+      jest:
+        specifier: ^30.1.3
+        version: 30.3.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3))
+      multer:
+        specifier: ^2.0.2
+        version: 2.0.2
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+      ts-jest:
+        specifier: ^29.4.1
+        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.3.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3)))(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
   packages/be-decorator:
     dependencies:
       '@cocrepo/constant':
@@ -1457,13 +1539,13 @@ importers:
         version: 30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3))
       jest-mock-extended:
         specifier: ^4.0.0
-        version: 4.0.0(@jest/globals@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 4.0.0(@jest/globals@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2)))(typescript@5.9.3)
       nestjs-cls:
         specifier: ^6.1.0
         version: 6.1.0(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       ts-jest:
         specifier: ^29.4.1
-        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2)))(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -1493,7 +1575,7 @@ importers:
         version: 30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3))
       ts-jest:
         specifier: ^29.4.1
-        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2)))(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -1627,7 +1709,7 @@ importers:
         version: 6.1.0(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       ts-jest:
         specifier: ^29.4.0
-        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2)))(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -1733,7 +1815,7 @@ importers:
         version: 30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3))
       jest-mock-extended:
         specifier: ^4.0.0
-        version: 4.0.0(@jest/globals@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 4.0.0(@jest/globals@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2)))(typescript@5.9.3)
       nestjs-cls:
         specifier: ^6.1.0
         version: 6.1.0(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -1751,7 +1833,7 @@ importers:
         version: 8.16.3
       ts-jest:
         specifier: ^29.4.1
-        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2)))(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -1857,7 +1939,7 @@ importers:
         version: 1.12.33
       ts-jest:
         specifier: ^29.4.1
-        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2)))(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -1988,12 +2070,33 @@ importers:
 
   packages/fe-hook:
     dependencies:
+      '@cocrepo/api':
+        specifier: workspace:*
+        version: link:../fe-api
+      '@cocrepo/constant':
+        specifier: workspace:*
+        version: link:../common-constant
+      '@cocrepo/store':
+        specifier: workspace:*
+        version: link:../fe-store
       '@cocrepo/toolkit':
         specifier: workspace:*
         version: link:../common-toolkit
       '@cocrepo/type':
         specifier: workspace:*
         version: link:../common-type
+      '@heroui/react':
+        specifier: 'catalog:'
+        version: 3.1.0(@react-spectrum/provider@3.11.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(tailwindcss@4.2.4)
+      '@tanstack/react-query':
+        specifier: 'catalog:'
+        version: 5.83.0(react@19.2.5)
+      next:
+        specifier: ^16.1.0
+        version: 16.1.0(@babel/core@7.28.5)(@playwright/test@1.57.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      nuqs:
+        specifier: 'catalog:'
+        version: 2.8.6(@tanstack/react-router@1.143.11(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(next@16.1.0(@babel/core@7.28.5)(@playwright/test@1.57.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-router-dom@7.11.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-router@7.11.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react@19.2.5)
     devDependencies:
       '@types/react':
         specifier: 'catalog:'
@@ -28003,7 +28106,7 @@ snapshots:
       slash: 3.0.0
       stack-utils: 2.0.6
 
-  jest-mock-extended@4.0.0(@jest/globals@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3)))(typescript@5.9.3):
+  jest-mock-extended@4.0.0(@jest/globals@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2)))(typescript@5.9.3):
     dependencies:
       '@jest/globals': 30.3.0
       jest: 30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3))
@@ -32892,7 +32995,7 @@ snapshots:
     dependencies:
       typescript: 5.9.3
 
-  ts-jest@29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3)))(typescript@5.9.3):
+  ts-jest@29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2)))(typescript@5.9.3):
     dependencies:
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0

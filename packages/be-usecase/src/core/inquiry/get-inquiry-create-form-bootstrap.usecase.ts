@@ -1,4 +1,4 @@
-import { InquiryAggregateRoot } from "@cocrepo/aggregate";
+import { InquiryAggregate } from "@cocrepo/aggregate";
 import { GetInquiryCreateFormBootstrapQuery } from "@cocrepo/command";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
@@ -6,7 +6,7 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 export class GetInquiryCreateFormBootstrapUseCase
 	implements IQueryHandler<GetInquiryCreateFormBootstrapQuery>
 {
-	constructor(private readonly inquiryService: InquiryAggregateRoot) {}
+	constructor(private readonly inquiryService: InquiryAggregate) {}
 
 	execute(): Promise<unknown> {
 		return this.inquiryService.getCreateFormBootstrap();

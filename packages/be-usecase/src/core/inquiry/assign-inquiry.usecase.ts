@@ -1,4 +1,4 @@
-import { InquiryAggregateRoot } from "@cocrepo/aggregate";
+import { InquiryAggregate } from "@cocrepo/aggregate";
 import { AssignInquiryCommand } from "@cocrepo/command";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
@@ -6,7 +6,7 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 export class AssignInquiryUseCase
 	implements ICommandHandler<AssignInquiryCommand>
 {
-	constructor(private readonly inquiryService: InquiryAggregateRoot) {}
+	constructor(private readonly inquiryService: InquiryAggregate) {}
 
 	execute(command: AssignInquiryCommand): Promise<unknown> {
 		return this.inquiryService.assignTo(command.inquiryId, command.assigneeId);

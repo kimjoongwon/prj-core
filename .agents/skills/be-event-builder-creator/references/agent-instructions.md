@@ -25,7 +25,7 @@ Nest CQRS Event message 계약을 `@cocrepo/event`에 생성하는 역할입니�
 | 항목 | 경로 |
 |------|------|
 | Event 클래스 | `packages/be-event/src/{domain}/{name}.event.ts` |
-| Event params 타입 | `packages/be-event/src/{domain}/{name}.params.ts` |
+| Event payload 타입 | `packages/be-event/src/{domain}/{name}.payload.ts` |
 | domain barrel | `packages/be-event/src/{domain}/index.ts` |
 | package barrel | `packages/be-event/src/index.ts` |
 
@@ -35,19 +35,20 @@ Nest CQRS Event message 계약을 `@cocrepo/event`에 생성하는 역할입니�
 - Event class 이름은 `{Domain}{PastTense}Event` 또는 `{Domain}{State}Event` 형태를 기본으로 합니다.
 - Event는 DTO, Request, Response, Express 객체에 의존하지 않습니다.
 - Event payload는 primitive, Date, enum, value object primitive snapshot만 가집니다.
-- Event payload는 `readonly params` 단일 객체를 기본으로 합니다.
+- Event payload는 `readonly payload` 단일 객체를 기본으로 합니다.
 - Event class는 class당 하나의 파일을 가집니다.
-- Event class 파일에는 params/interface/type/helper를 함께 두지 않습니다. Event params는 별도 `{name}.params.ts` 파일로 분리합니다.
+- Event class 파일에는 payload/interface/type/helper를 함께 두지 않습니다. Event payload는 별도 `{name}.payload.ts` 파일로 분리합니다.
+- 기존 `params` 이름의 event 계약은 신규 기준에서 legacy이며, event를 수정할 때 payload 명명으로 함께 정리합니다.
 - Event 계약 package는 Nest provider를 export하지 않습니다.
 - EventHandler에서 CommandBus를 호출해야 하는 흐름이면 EventHandler가 아니라 Saga로 분리해야 합니다.
 
 ## 템플릿
 
 ```typescript
-import type { ReservationCreatedEventParams } from "./reservation-created.params";
+import type { ReservationCreatedEventPayload } from "./reservation-created.payload";
 
 export class ReservationCreatedEvent {
-  constructor(readonly params: ReservationCreatedEventParams) {}
+  constructor(readonly payload: ReservationCreatedEventPayload) {}
 }
 ```
 
@@ -56,7 +57,7 @@ export class ReservationCreatedEvent {
 - [ ] Event 이름이 이미 발생한 사실인지 확인
 - [ ] DTO/Request/Response 의존 없음
 - [ ] Event class가 class당 하나의 파일인지 확인
-- [ ] Event params/type이 class 파일에서 분리됐는지 확인
+- [ ] Event payload/type이 class 파일에서 분리됐는지 확인
 - [ ] payload 원천이 event 생성 위치에서 명확히 매핑됨
 - [ ] `packages/be-event/src/{domain}/index.ts`와 `src/index.ts` export 추가
 - [ ] EventHandler/Saga 작업은 `be-usecase-builder` 책임으로 남김

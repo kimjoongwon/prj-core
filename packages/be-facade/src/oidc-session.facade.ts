@@ -1,10 +1,10 @@
-import { OidcRedisSession, OidcSessionAggregateRoot } from "@cocrepo/aggregate";
+import { OidcRedisSession, OidcSessionAggregate } from "@cocrepo/aggregate";
 import { PageMetaDto, QueryOidcSessionDto } from "@cocrepo/dto";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class OidcSessionFacade {
-	constructor(private readonly oidcSessionService: OidcSessionAggregateRoot) {}
+	constructor(private readonly oidcSessionService: OidcSessionAggregate) {}
 
 	getMany(query: QueryOidcSessionDto): Promise<{
 		data: OidcRedisSession[];

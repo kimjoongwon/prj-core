@@ -1,4 +1,4 @@
-import { EmailVerificationAggregateRoot } from "@cocrepo/aggregate";
+import { EmailVerificationAggregate } from "@cocrepo/aggregate";
 import { GetEmailVerificationsQuery } from "@cocrepo/command";
 import { PageMetaDto } from "@cocrepo/dto";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
@@ -8,7 +8,7 @@ export class GetEmailVerificationsUseCase
 	implements IQueryHandler<GetEmailVerificationsQuery>
 {
 	constructor(
-		private readonly emailVerificationService: EmailVerificationAggregateRoot,
+		private readonly emailVerificationService: EmailVerificationAggregate,
 	) {}
 
 	async execute(query: GetEmailVerificationsQuery): Promise<unknown> {

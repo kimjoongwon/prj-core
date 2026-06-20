@@ -140,22 +140,22 @@ LOGIN-SCREEN-ROUGH-NARROW
 
 | row id | 대상 | Story 파일 | 필수 상태/Variant | Fixture/데이터 | 작성 담당 `agent_type` | 검증 담당 `agent_type` | 통과 기준 |
 |--------|------|------------|-------------------|----------------|-------------------------|-------------------------|-----------|
-| LOGIN-SCREEN-STORY-PAGE | `LoginScreen` | `packages/fe-ui/src/screen/LoginScreen/LoginScreen.stories.tsx` | ready, loading, server error, long content, narrow viewport | observable `LoginScreenState`, Korean caption/error | `fe-screen-agent` | `qa-fe-testing` | 모든 상태가 screen rough와 rhythm contract를 만족 |
-| LOGIN-SCREEN-STORY-FORM | `LoginForm` | `packages/fe-ui/src/form/LoginForm/LoginForm.stories.tsx` | empty, with values, long values | observable `LoginFormState` | `fe-screen-agent` | `qa-fe-testing` | form field stack이 `LOGIN-SCREEN-COMP-FORM` 계약을 만족 |
+| LOGIN-SCREEN-STORY-PAGE | `LoginScreen` | `packages/fe-ui/src/screen/LoginScreen/LoginScreen.stories.tsx` | ready, loading, server error, long content, narrow viewport | observable `LoginScreenState`, Korean caption/error | `fe-screen-agent` | `fe-screen-agent` | 모든 상태가 screen rough와 rhythm contract를 만족 |
+| LOGIN-SCREEN-STORY-FORM | `LoginForm` | `packages/fe-ui/src/form/LoginForm/LoginForm.stories.tsx` | empty, with values, long values | observable `LoginFormState` | `fe-screen-agent` | `fe-screen-agent` | form field stack이 `LOGIN-SCREEN-COMP-FORM` 계약을 만족 |
 
 ### Unit Test 계약
 
 | row id | 테스트 대상 | 검증 항목 | 테스트 파일 | mock/stub | 작성 agent_type | 검증 agent_type | 통과 기준 |
 |--------|-------------|-----------|-------------|-----------|------------------|------------------|-----------|
-| LOGIN-SCREEN-UNIT-PAGE | `LoginScreen` | title/caption/fields/button render, submit delegation, loading guard, error feedback | `packages/fe-ui/src/screen/LoginScreen/LoginScreen.test.tsx` | observable state, submit spy | `fe-screen-agent` | `qa-fe-testing` | `LOGIN-SCREEN-PROPS-*`, `LOGIN-SCREEN-STATE-*` 통과 |
-| LOGIN-SCREEN-UNIT-FORM | `LoginForm` | email/password field render and bound state update | `packages/fe-ui/src/form/LoginForm/LoginForm.test.tsx` | observable form state | `fe-screen-agent` | `qa-fe-testing` | `LOGIN-SCREEN-COMP-FORM` 통과 |
+| LOGIN-SCREEN-UNIT-PAGE | `LoginScreen` | title/caption/fields/button render, submit delegation, loading guard, error feedback | `packages/fe-ui/src/screen/LoginScreen/LoginScreen.test.tsx` | observable state, submit spy | `fe-screen-agent` | `fe-screen-agent` | `LOGIN-SCREEN-PROPS-*`, `LOGIN-SCREEN-STATE-*` 통과 |
+| LOGIN-SCREEN-UNIT-FORM | `LoginForm` | email/password field render and bound state update | `packages/fe-ui/src/form/LoginForm/LoginForm.test.tsx` | observable form state | `fe-screen-agent` | `fe-screen-agent` | `LOGIN-SCREEN-COMP-FORM` 통과 |
 
 ### 정적 검증 / 금지 grep
 
 | row id | 검증 항목 | 명령 | 검증 agent_type | 통과 기준 |
 |--------|-----------|------|------------------|-----------|
 | LOGIN-SCREEN-STATIC-SECTIONS | planning spec 필수 섹션 | `rg -n "^(## 목표|## 화면 러프|## Props / Event 계약|## 상태별 렌더링|## Storybook / Test Contract)" packages/fe-ui/src/screen/LoginScreen/LoginScreen.spec.md` | `orch-delivery` | Screen planning owner 섹션 존재 |
-| LOGIN-SCREEN-STATIC-MEMO | 수동 memo 금지 | `rg -n "useMemo|useCallback" packages/fe-ui/src/screen/LoginScreen packages/fe-ui/src/form/LoginForm` | `qa-type-checker` | 허가되지 않은 수동 memo 없음 |
+| LOGIN-SCREEN-STATIC-MEMO | 수동 memo 금지 | `rg -n "useMemo|useCallback" packages/fe-ui/src/screen/LoginScreen packages/fe-ui/src/form/LoginForm` | `fe-screen-agent` | 허가되지 않은 수동 memo 없음 |
 
 ## 변경 이력
 

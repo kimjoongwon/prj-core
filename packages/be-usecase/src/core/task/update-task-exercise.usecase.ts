@@ -1,4 +1,4 @@
-import { TaskAggregateRoot } from "@cocrepo/aggregate";
+import { TaskAggregate } from "@cocrepo/aggregate";
 import { UpdateTaskExerciseCommand } from "@cocrepo/command";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
@@ -6,7 +6,7 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 export class UpdateTaskExerciseUseCase
 	implements ICommandHandler<UpdateTaskExerciseCommand>
 {
-	constructor(private readonly taskService: TaskAggregateRoot) {}
+	constructor(private readonly taskService: TaskAggregate) {}
 
 	execute(command: UpdateTaskExerciseCommand): Promise<unknown> {
 		return this.taskService.updateTaskExercise(

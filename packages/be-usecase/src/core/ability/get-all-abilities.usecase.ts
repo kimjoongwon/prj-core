@@ -1,4 +1,4 @@
-import { AbilityAggregateRoot } from "@cocrepo/aggregate";
+import { AbilityAggregate } from "@cocrepo/aggregate";
 import { GetAllAbilitiesQuery } from "@cocrepo/command";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
@@ -6,7 +6,7 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 export class GetAllAbilitiesUseCase
 	implements IQueryHandler<GetAllAbilitiesQuery>
 {
-	constructor(private readonly abilitiesService: AbilityAggregateRoot) {}
+	constructor(private readonly abilitiesService: AbilityAggregate) {}
 
 	execute(): Promise<unknown> {
 		return this.abilitiesService.getAllAbilities();

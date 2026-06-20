@@ -216,13 +216,26 @@ RUN npm install -g pnpm
 
 # 의존성 파일 복사
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/be-aggregate/package.json ./packages/be-aggregate/
+COPY packages/be-client/package.json ./packages/be-client/
+COPY packages/be-command/package.json ./packages/be-command/
+COPY packages/be-common/package.json ./packages/be-common/
+COPY packages/be-context/package.json ./packages/be-context/
+COPY packages/be-controller/package.json ./packages/be-controller/
+COPY packages/be-decorator/package.json ./packages/be-decorator/
 COPY packages/be-prisma/package.json ./packages/be-prisma/
 COPY packages/be-dto/package.json ./packages/be-dto/
 COPY packages/be-entity/package.json ./packages/be-entity/
+COPY packages/be-event/package.json ./packages/be-event/
 COPY packages/be-repository/package.json ./packages/be-repository/
 COPY packages/be-service/package.json ./packages/be-service/
 COPY packages/be-usecase/package.json ./packages/be-usecase/
-COPY packages/be-gateway/package.json ./packages/be-gateway/
+COPY packages/be-vo/package.json ./packages/be-vo/
+COPY packages/common-constant/package.json ./packages/common-constant/
+COPY packages/common-enum/package.json ./packages/common-enum/
+COPY packages/common-toolkit/package.json ./packages/common-toolkit/
+COPY packages/common-tsconfig/package.json ./packages/common-tsconfig/
+COPY packages/common-type/package.json ./packages/common-type/
 COPY apps/core/api/package.json ./apps/core/api/
 
 # 의존성 설치
@@ -235,7 +248,7 @@ COPY . .
 RUN pnpm --filter=@cocrepo/prisma generate
 
 # 빌드
-RUN pnpm --filter=server build
+RUN pnpm --filter=core-api build
 
 # Production stage
 FROM node:20-alpine AS runner
@@ -247,7 +260,26 @@ RUN npm install -g pnpm
 
 # 프로덕션 의존성만 설치
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/be-aggregate/package.json ./packages/be-aggregate/
+COPY packages/be-client/package.json ./packages/be-client/
+COPY packages/be-command/package.json ./packages/be-command/
+COPY packages/be-common/package.json ./packages/be-common/
+COPY packages/be-context/package.json ./packages/be-context/
+COPY packages/be-controller/package.json ./packages/be-controller/
+COPY packages/be-decorator/package.json ./packages/be-decorator/
 COPY packages/be-prisma/package.json ./packages/be-prisma/
+COPY packages/be-dto/package.json ./packages/be-dto/
+COPY packages/be-entity/package.json ./packages/be-entity/
+COPY packages/be-event/package.json ./packages/be-event/
+COPY packages/be-repository/package.json ./packages/be-repository/
+COPY packages/be-service/package.json ./packages/be-service/
+COPY packages/be-usecase/package.json ./packages/be-usecase/
+COPY packages/be-vo/package.json ./packages/be-vo/
+COPY packages/common-constant/package.json ./packages/common-constant/
+COPY packages/common-enum/package.json ./packages/common-enum/
+COPY packages/common-toolkit/package.json ./packages/common-toolkit/
+COPY packages/common-tsconfig/package.json ./packages/common-tsconfig/
+COPY packages/common-type/package.json ./packages/common-type/
 COPY apps/core/api/package.json ./apps/core/api/
 
 RUN pnpm install --frozen-lockfile --prod

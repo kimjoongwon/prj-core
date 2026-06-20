@@ -1,4 +1,4 @@
-import { TimelineAggregateRoot } from "@cocrepo/aggregate";
+import { TimelineAggregate } from "@cocrepo/aggregate";
 import { GetProgramByIdQuery } from "@cocrepo/command";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
@@ -6,7 +6,7 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 export class GetProgramByIdUseCase
 	implements IQueryHandler<GetProgramByIdQuery>
 {
-	constructor(private readonly timelinesService: TimelineAggregateRoot) {}
+	constructor(private readonly timelinesService: TimelineAggregate) {}
 
 	execute(query: GetProgramByIdQuery): Promise<unknown> {
 		return this.timelinesService.findProgramInSession(

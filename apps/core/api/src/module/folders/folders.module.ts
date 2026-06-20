@@ -1,16 +1,16 @@
-import { FolderAggregateRoot } from "@cocrepo/aggregate";
+import { FolderAggregate } from "@cocrepo/aggregate";
 import { FoldersRepository } from "@cocrepo/repository";
 import { AuthContext, SpaceContext } from "@cocrepo/service";
 import { FolderCommandHandlers, FolderQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { FoldersController } from "./folders.controller";
+import { FoldersController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],
 	controllers: [FoldersController],
 	providers: [
-		FolderAggregateRoot,
+		FolderAggregate,
 		FoldersRepository,
 		AuthContext,
 		SpaceContext,

@@ -1,4 +1,4 @@
-import { AbilityAggregateRoot } from "@cocrepo/aggregate";
+import { AbilityAggregate } from "@cocrepo/aggregate";
 import { GetMyAbilitiesQuery } from "@cocrepo/command";
 import { CONTEXT_KEYS, USER_ERRORS } from "@cocrepo/constant";
 import { type UserDto } from "@cocrepo/dto";
@@ -13,7 +13,7 @@ export class GetMyAbilitiesUseCase
 	private readonly logger = new Logger(GetMyAbilitiesUseCase.name);
 
 	constructor(
-		private readonly abilitiesService: AbilityAggregateRoot,
+		private readonly abilitiesService: AbilityAggregate,
 		private readonly cls: ClsService,
 	) {}
 

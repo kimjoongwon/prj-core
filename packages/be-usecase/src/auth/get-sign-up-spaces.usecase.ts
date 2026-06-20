@@ -1,4 +1,4 @@
-import { SpaceAggregateRoot } from "@cocrepo/aggregate";
+import { SpaceAggregate } from "@cocrepo/aggregate";
 import { GetSignUpSpacesQuery } from "@cocrepo/command";
 import { SpaceDto } from "@cocrepo/dto";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
@@ -9,7 +9,7 @@ import { PLATFORM_GROUND_NAME, SYSTEM_SPACE_ID } from "./auth-support";
 export class GetSignUpSpacesUseCase
 	implements IQueryHandler<GetSignUpSpacesQuery>
 {
-	constructor(private readonly spacesService: SpaceAggregateRoot) {}
+	constructor(private readonly spacesService: SpaceAggregate) {}
 
 	async execute(): Promise<SpaceDto[]> {
 		const spaceList = await this.spacesService.listSpaces();

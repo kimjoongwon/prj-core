@@ -1,4 +1,4 @@
-import { ActionAggregateRoot } from "@cocrepo/aggregate";
+import { ActionAggregate } from "@cocrepo/aggregate";
 import { ACTION_ERRORS } from "@cocrepo/constant";
 import { CreateActionDto, UpdateActionDto } from "@cocrepo/dto";
 import { Action } from "@cocrepo/entity";
@@ -6,7 +6,7 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 
 @Injectable()
 export class ActionFacade {
-	constructor(private readonly actionsService: ActionAggregateRoot) {}
+	constructor(private readonly actionsService: ActionAggregate) {}
 
 	getAllActions(): Promise<Action[]> {
 		return this.getActions();

@@ -34,7 +34,7 @@ Nest CQRS Command/Query message 계약을 `@cocrepo/command`에 생성하는 역
 |------|------|
 | Command 클래스 | `packages/be-command/src/{domain}/{name}.command.ts` |
 | Query 클래스 | `packages/be-command/src/{domain}/{name}.query.ts` |
-| Command 입력/Query 보조/Result 타입 | `packages/be-command/src/{domain}/{name}.input.ts`, `{name}-query-params.ts`, `{name}.result.ts` |
+| Command 입력/Query/Result 보조 타입 | `packages/be-command/src/{domain}/{name}.input.ts`, 필요한 경우 `{name}.result.ts` 또는 read 전용 보조 타입 |
 | domain barrel | `packages/be-command/src/{domain}/index.ts` |
 | package barrel | `packages/be-command/src/index.ts` |
 | Command 계약 | 담당 스펙의 `Command / Query 인벤토리` 행 |
@@ -46,11 +46,12 @@ Nest CQRS Command/Query message 계약을 `@cocrepo/command`에 생성하는 역
 - `apps/*/api/src/module/**/*.cqrs.ts` 또는 app-local CQRS message 파일을 만들지 않습니다.
 - Command/Query class는 class당 하나의 파일을 가집니다.
 - 같은 파일에 여러 Command/Query class를 선언하지 않습니다.
-- Command 입력/Query 보조/Result/interface/type 계약은 Command/Query class 파일 내부에 선언하지 않고 별도 파일로 분리합니다.
+- Command 입력/Result/interface/type 계약은 Command/Query class 파일 내부에 선언하지 않고 별도 파일로 분리합니다.
 - Command/Query는 request intent와 routing context만 담는 immutable input입니다.
 - Command/Query는 Service, Repository, Client, ConfigService 같은 dependency를 갖지 않습니다.
 - write Command는 DTO class, Prisma create/update input, repository params, persistence DTO를 import하지 않습니다. Controller의 body DTO와 구조적으로 호환되는 `*CommandInput` 타입을 command package 안에 별도로 선언합니다.
 - read Query는 현재 프로젝트의 behaviorful Query DTO를 import할 수 있습니다. `toPrismaWhere()`, `toPrismaOrderBy()`, `toPageMetaDto()` 같은 read filter 메서드는 Query DTO owner가 소유합니다.
+- read Query는 behaviorful Query DTO를 그대로 받는 흐름을 기본으로 합니다. 별도 query params 파일은 DTO를 쓸 수 없는 read 전용 보조 계약이 필요할 때만 만듭니다.
 - write Command payload 파일은 `{name}.input.ts`, 타입명은 `{Verb}{Domain}CommandInput`, 생성자 속성명은 `readonly input`을 사용합니다.
 - route/user/header처럼 routing context는 `xId`, `actorId`, `spaceId` 같은 명시적 생성자 인자로 둡니다. body payload 이름으로 `params`나 `dto`를 쓰지 않습니다.
 - Controller가 단일 body DTO만 전달하는 write intent는 `new XxxCommand(dto)`처럼 넘길 수 있게 Command input 타입을 설계합니다. route/user/header 등 여러 출처를 합칠 때만 `{ ...body, routeId, actorId }` 같은 얇은 조합 객체를 사용합니다.
@@ -80,7 +81,7 @@ export class GetReservationQuery {
 - [ ] `rg "\\.cqrs|\\.command|\\.query"`로 기존 message 위치를 확인
 - [ ] Command/Query class가 `packages/be-command`에만 생성됐는지 확인
 - [ ] Command/Query class가 class당 하나의 파일로 분리됐는지 확인
-- [ ] Command 입력/Query 보조/Result/interface/type 계약이 class 파일에서 분리됐는지 확인
+- [ ] Command 입력/Result/interface/type 계약이 class 파일에서 분리됐는지 확인
 - [ ] write Command가 DTO class, Prisma input, Repository params를 import하지 않는지 확인
 - [ ] read Query가 DTO를 import한다면 Query DTO owner의 behaviorful Query DTO인지 확인
 - [ ] `packages/be-command/src/{domain}/index.ts`와 `src/index.ts` export 추가

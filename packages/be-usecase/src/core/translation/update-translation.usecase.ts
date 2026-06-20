@@ -1,4 +1,4 @@
-import { TranslationCatalogAggregateRoot } from "@cocrepo/aggregate";
+import { TranslationCatalogAggregate } from "@cocrepo/aggregate";
 import { UpdateTranslationCommand } from "@cocrepo/command";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
@@ -7,7 +7,7 @@ export class UpdateTranslationUseCase
 	implements ICommandHandler<UpdateTranslationCommand>
 {
 	constructor(
-		private readonly translationCatalogService: TranslationCatalogAggregateRoot,
+		private readonly translationCatalogService: TranslationCatalogAggregate,
 	) {}
 
 	execute(command: UpdateTranslationCommand): Promise<unknown> {

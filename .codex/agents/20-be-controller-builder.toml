@@ -16,6 +16,8 @@ developer_instructions = '''
 
 ## 소유 범위
 - 이 subagent는 다음 일만 맡습니다: NestJS REST API Controller를 만듭니다.
+- Controller 구현 파일과 Controller package barrel은 `packages/be-controller/src/**` 안에서 소유합니다.
+- `apps/core/api/src/module/**`의 Module/Router wiring은 `be-module-builder` 소유이므로 직접 확장하지 않습니다.
 - 승인된 spec이 해당 파일을 이 subagent에 명시적으로 배정한 경우가 아니면 peer 소유 레이어를 수정하지 않습니다.
 
 ## 플랫폼 / 도메인 라우팅

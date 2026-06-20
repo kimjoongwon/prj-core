@@ -1,4 +1,4 @@
-import { ReservationAggregateRoot } from "@cocrepo/aggregate";
+import { ReservationAggregate } from "@cocrepo/aggregate";
 import { GetReservationBookingFeedQuery } from "@cocrepo/command";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
 import type { OffsetPaginatedResponse } from "@cocrepo/type";
@@ -10,7 +10,7 @@ export class GetReservationBookingFeedUseCase
 	implements IQueryHandler<GetReservationBookingFeedQuery>
 {
 	constructor(
-		private readonly reservationService: ReservationAggregateRoot,
+		private readonly reservationService: ReservationAggregate,
 		private readonly context: ReservationUseCaseContext,
 	) {}
 

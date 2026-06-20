@@ -103,7 +103,7 @@ Rhythm: root `VStack` vertical gap=section, card inner `VStack` gap=block, horiz
 
 | 영역 | 컴포넌트 | 계층 | 재사용/신규 | 소스/대상 | Props/이벤트 | 소스 담당 `agent_type` | 소비/Wiring `agent_type` |
 |------|-----------|------|-------------|-----------|--------------|-------------------------|---------------------------|
-| route header | `CustomHeader` | Navigation/Layout | reuse | `packages/fe-mo-ui/src/navigation/CustomHeader` via `(tabs)/_layout.tsx` | title `"마이"`, subtitle `currentSpaceName` | `fe-control-agent` | `fe-route-layout-agent` |
+| route header | `CustomHeader` | Navigation/Layout | reuse | `packages/fe-mo-ui/src/navigation/CustomHeader` via `(tabs)/_layout.tsx` | title `"마이"`, subtitle `currentSpaceName` | `fe-navigation-agent` | `fe-route-layout-agent` |
 | screen shell | `MyPageScreen` | Screen | new | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.tsx` | all props above | `fe-screen-agent` | `fe-route-agent` |
 | screen shell | `ScreenFrame` | Layout | reuse | `packages/fe-mo-ui/src/layout/ScreenFrame` | body safe-area, scroll content | `fe-layout-agent` | `fe-screen-agent` |
 | A/B | `Card` | Layout | reuse | `packages/fe-mo-ui/src/layout/Card` | `bg-surface`, `border-border`, `rounded-lg`, `p-4` | `fe-layout-agent` | `fe-screen-agent` |
@@ -115,7 +115,7 @@ Rhythm: root `VStack` vertical gap=section, card inner `VStack` gap=block, horiz
 | C | `QuickActionList` | Widget | new | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx` | `items: QuickActionListItem[]` | `fe-widget-agent` | `fe-screen-agent` |
 | C | `ListGroup` | Layout | reuse | `packages/fe-mo-ui/src/layout/ListGroup` | rows, suffix chevron | `fe-layout-agent` | `fe-widget-agent` |
 | C | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | action row icons | none | `fe-widget-agent` |
-| D | `Button` | Action | reuse | `packages/fe-mo-ui/src/action/Button` | `onPressLogout`, `isLogoutPending` | `fe-control-agent` | `fe-screen-agent` |
+| D | `Button` | Action | reuse | `packages/fe-mo-ui/src/action/Button` | `onPressLogout`, `isLogoutPending` | `fe-action-agent` | `fe-screen-agent` |
 | D | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | `logOut` | none | `fe-screen-agent` |
 | none | Input component | Input | none | no text input in this screen | none | none | none |
 | none | Feature package component | Feature | none | no cross-screen interaction feature in this route | route injects props directly | none | none |
@@ -126,15 +126,15 @@ Rhythm: root `VStack` vertical gap=section, card inner `VStack` gap=block, horiz
 
 | 대상 | Story 파일 | 필수 상태/Variant | Fixture/데이터 | 작성 담당 `agent_type` | 검증 담당 `agent_type` | 비고 |
 |------|------------|-------------------|----------------|-------------------------|-------------------------|------|
-| `QuickActionList` | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.stories.tsx` | ready, disabled row, long label | 예약/결제/알림 quick action items | `fe-widget-agent` | `qa-mo-testing` | screen이 소비하는 Widget story |
-| `MyPageScreen` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.stories.tsx` | authenticated ready, no current space, logout pending, long display name | auth/current-space props, `QuickActionListItem[]` | `fe-screen-agent` | `qa-mo-testing` | screen visual owner story |
+| `QuickActionList` | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.stories.tsx` | ready, disabled row, long label | 예약/결제/알림 quick action items | `fe-widget-agent` | `fe-widget-agent` | screen이 소비하는 Widget story |
+| `MyPageScreen` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.stories.tsx` | authenticated ready, no current space, logout pending, long display name | auth/current-space props, `QuickActionListItem[]` | `fe-screen-agent` | `fe-screen-agent` | screen visual owner story |
 
 ### Unit Test 인벤토리
 
 | 대상 | Test 파일 | 검증 관점 | 주요 케이스 | 작성 담당 `agent_type` | 검증 담당 `agent_type` | 비고 |
 |------|-----------|-----------|-------------|-------------------------|-------------------------|------|
-| `QuickActionList` | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.test.tsx` | row rendering, press event, disabled guard | enabled row press, disabled row no-op, long label rendering | `fe-widget-agent` | `qa-mo-testing` | Widget builder가 component와 함께 작성 |
-| `MyPageScreen` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.test.tsx` | props rendering, quick action composition, logout event | account summary, current space, quick actions, logout pending | `fe-screen-agent` | `qa-mo-testing` | Screen builder가 screen과 함께 작성 |
+| `QuickActionList` | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.test.tsx` | row rendering, press event, disabled guard | enabled row press, disabled row no-op, long label rendering | `fe-widget-agent` | `fe-widget-agent` | Widget builder가 component와 함께 작성 |
+| `MyPageScreen` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.test.tsx` | props rendering, quick action composition, logout event | account summary, current space, quick actions, logout pending | `fe-screen-agent` | `fe-screen-agent` | Screen builder가 screen과 함께 작성 |
 
 Rendering rules:
 
@@ -153,7 +153,7 @@ Rendering rules:
 |------|-------------|-------------|------------|------------|-------------|-----------|-------------------------|---------------------------|---------|
 | account summary read | none | none | none | none | none | no backend change, route uses existing auth/session store fallback | none | none | none |
 | current space read | none | none | none | none | none | no backend change, route uses existing `mobileApiScopeStore.groundName` | none | none | none |
-| logout | `POST /api/v1/auth/native/logout` | `nativeLogout` | existing `AuthController.nativeLogout` | existing `NativeLogoutPayloadDto` | reuse | `apps/core/api/src/module/auth/auth.controller.ts`, `packages/be-dto/src/auth/native-auth.dto.ts` | `be-controller-builder`, `be-dto-builder` | `fe-route-agent` | existing `requestNativeLogout`, no codegen |
+| logout | `POST /api/v1/auth/native/logout` | `nativeLogout` | existing `AuthController.nativeLogout` | existing `NativeLogoutPayloadDto` | reuse | `packages/be-controller/src/auth/auth.controller.ts`, `packages/be-dto/src/auth/native-auth.dto.ts` | `be-controller-builder`, `be-dto-builder` | `fe-route-agent` | existing `requestNativeLogout`, no codegen |
 | quick action navigation | none | none | none | none | none | route-only navigation to existing/future routes | none | `fe-route-agent` | none |
 
 ### UseCase 인벤토리

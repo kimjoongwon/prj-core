@@ -52,7 +52,8 @@ Mermaid가 렌더되지 않는 viewer에서는 아래 텍스트 흐름을 기준
 | auth utility | `apps/mobile/src/auth/_utils/auth.ts` | login URL 생성, callback URL 판별, `mobile-json` callback exchange |
 | mobile API scope | `apps/mobile/src/auth/mobile-api-scope.ts` | access/refresh token, token expiry, Space 목록/current Space 보관 |
 | mobile auth store | `apps/mobile/src/auth/auth-store.ts` | `verifySession()`, `logout()`, 인증 상태 관리 |
-| Auth controller | `apps/core/api/src/module/auth/auth.controller.ts` | `/api/v1/auth/login`, `/api/v1/auth/callback`, token/space/logout endpoint |
+| Auth controller | `packages/be-controller/src/auth/auth.controller.ts` | `/api/v1/auth/login`, `/api/v1/auth/callback`, token/space/logout endpoint |
+| Auth module wiring | `apps/core/api/src/module/auth/auth.module.ts` | `@cocrepo/controller`의 `AuthController`를 core-api module에 연결 |
 | auth use cases | `packages/be-usecase/src/auth/*.usecase.ts` | OIDC state/PKCE, token exchange, cookie/session 생성, verify/refresh/logout |
 | Orval Axios clients | `packages/fe-api/src/libs/customAxios.ts`, `packages/fe-api/src/libs/customIdpAxios.ts` | Bearer token, refresh token, `x-space-id` header 주입 |
 
@@ -240,7 +241,7 @@ GET {AUTH_API_BASE_URL}/api/v1/auth/callback
   &responseMode=mobile-json
 ```
 
-서버의 `apps/core/api/src/module/auth/auth.controller.ts`는 다음 조건을 만족하면 redirect 대신 JSON을 반환합니다.
+서버의 `packages/be-controller/src/auth/auth.controller.ts`는 다음 조건을 만족하면 redirect 대신 JSON을 반환합니다.
 
 ```ts
 clientId === "user-mobile" &&

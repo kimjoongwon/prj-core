@@ -1,4 +1,4 @@
-import { ServiceDocumentAggregateRoot } from "@cocrepo/aggregate";
+import { ServiceDocumentAggregate } from "@cocrepo/aggregate";
 import { CreateServiceDocumentCommand } from "@cocrepo/command";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
@@ -7,7 +7,7 @@ export class CreateServiceDocumentUseCase
 	implements ICommandHandler<CreateServiceDocumentCommand>
 {
 	constructor(
-		private readonly serviceDocumentService: ServiceDocumentAggregateRoot,
+		private readonly serviceDocumentService: ServiceDocumentAggregate,
 	) {}
 
 	execute(command: CreateServiceDocumentCommand): Promise<unknown> {

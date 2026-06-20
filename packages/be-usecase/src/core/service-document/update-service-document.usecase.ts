@@ -1,4 +1,4 @@
-import { ServiceDocumentAggregateRoot } from "@cocrepo/aggregate";
+import { ServiceDocumentAggregate } from "@cocrepo/aggregate";
 import { UpdateServiceDocumentCommand } from "@cocrepo/command";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
@@ -7,7 +7,7 @@ export class UpdateServiceDocumentUseCase
 	implements ICommandHandler<UpdateServiceDocumentCommand>
 {
 	constructor(
-		private readonly serviceDocumentService: ServiceDocumentAggregateRoot,
+		private readonly serviceDocumentService: ServiceDocumentAggregate,
 	) {}
 
 	execute(command: UpdateServiceDocumentCommand): Promise<unknown> {

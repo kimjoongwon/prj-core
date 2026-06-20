@@ -1,4 +1,4 @@
-import { TimelineAggregateRoot } from "@cocrepo/aggregate";
+import { TimelineAggregate } from "@cocrepo/aggregate";
 import { TIMELINE_ERRORS } from "@cocrepo/constant";
 import {
 	CreateProgramDto,
@@ -25,7 +25,7 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 @Injectable()
 export class TimelineFacade {
 	constructor(
-		private readonly timelinesService: TimelineAggregateRoot,
+		private readonly timelinesService: TimelineAggregate,
 		private readonly authContext: AuthContext,
 		private readonly spaceContext: SpaceContext,
 	) {}
@@ -34,7 +34,7 @@ export class TimelineFacade {
 		query: QueryTimelineDto,
 	): Promise<
 		OffsetStatsPaginatedResponse<
-			Awaited<ReturnType<TimelineAggregateRoot["findTimelines"]>>["timelines"]
+			Awaited<ReturnType<TimelineAggregate["findTimelines"]>>["timelines"]
 		>
 	> {
 		const spaceId = this.spaceContext.spaceId;
@@ -113,7 +113,7 @@ export class TimelineFacade {
 	): Promise<
 		OffsetPaginatedResponse<
 			Awaited<
-				ReturnType<TimelineAggregateRoot["findSessionsInTimeline"]>
+				ReturnType<TimelineAggregate["findSessionsInTimeline"]>
 			>["sessions"]
 		>
 	> {
@@ -164,7 +164,7 @@ export class TimelineFacade {
 	): Promise<
 		OffsetPaginatedResponse<
 			Awaited<
-				ReturnType<TimelineAggregateRoot["findProgramsInSession"]>
+				ReturnType<TimelineAggregate["findProgramsInSession"]>
 			>["programs"]
 		>
 	> {

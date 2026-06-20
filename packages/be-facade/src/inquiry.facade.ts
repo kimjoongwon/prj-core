@@ -1,7 +1,7 @@
 import {
 	type FillInquiryFormInput,
 	type FillInquiryFormResult,
-	InquiryAggregateRoot,
+	InquiryAggregate,
 	type InquiryCreateUpdateFormBootstrap,
 	type InquiryStats,
 } from "@cocrepo/aggregate";
@@ -18,13 +18,13 @@ export class InquiryFacade {
 	private readonly logger = new Logger(InquiryFacade.name);
 
 	constructor(
-		private readonly inquiryService: InquiryAggregateRoot,
+		private readonly inquiryService: InquiryAggregate,
 		private readonly spaceContext: SpaceContext,
 	) {}
 
 	async listInquiries(params: {
-		where: Parameters<InquiryAggregateRoot["list"]>[0]["where"];
-		orderBy: Parameters<InquiryAggregateRoot["list"]>[0]["orderBy"];
+		where: Parameters<InquiryAggregate["list"]>[0]["where"];
+		orderBy: Parameters<InquiryAggregate["list"]>[0]["orderBy"];
 		skip?: number;
 		take?: number;
 	}): Promise<OffsetPaginatedResponse<Inquiry[]>> {
@@ -95,7 +95,7 @@ export class InquiryFacade {
 
 	updateInquiry(
 		inquiryId: string,
-		data: Parameters<InquiryAggregateRoot["update"]>[1],
+		data: Parameters<InquiryAggregate["update"]>[1],
 	): Promise<Inquiry> {
 		return this.inquiryService.update(inquiryId, data);
 	}

@@ -1,4 +1,4 @@
-import { TenantAccessRequestAggregateRoot } from "@cocrepo/aggregate";
+import { TenantAccessRequestAggregate } from "@cocrepo/aggregate";
 import type { ReviewTenantAccessRequestDto } from "@cocrepo/dto";
 import type { TenantAccessRequest } from "@cocrepo/entity";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
@@ -7,16 +7,16 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class TenantAccessRequestFacade {
 	constructor(
-		private readonly tenantAccessRequestService: TenantAccessRequestAggregateRoot,
+		private readonly tenantAccessRequestService: TenantAccessRequestAggregate,
 	) {}
 
 	async listForReview(params: {
 		reviewerId: string;
 		where: Parameters<
-			TenantAccessRequestAggregateRoot["listForReview"]
+			TenantAccessRequestAggregate["listForReview"]
 		>[0]["where"];
 		orderBy: Parameters<
-			TenantAccessRequestAggregateRoot["listForReview"]
+			TenantAccessRequestAggregate["listForReview"]
 		>[0]["orderBy"];
 		skip?: number;
 		take?: number;

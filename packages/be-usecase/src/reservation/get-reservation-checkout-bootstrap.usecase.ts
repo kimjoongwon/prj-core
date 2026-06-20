@@ -1,4 +1,4 @@
-import { ReservationAggregateRoot } from "@cocrepo/aggregate";
+import { ReservationAggregate } from "@cocrepo/aggregate";
 import { GetReservationCheckoutBootstrapQuery } from "@cocrepo/command";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { ReservationUseCaseContext } from "./reservation-context";
@@ -8,7 +8,7 @@ export class GetReservationCheckoutBootstrapUseCase
 	implements IQueryHandler<GetReservationCheckoutBootstrapQuery>
 {
 	constructor(
-		private readonly reservationService: ReservationAggregateRoot,
+		private readonly reservationService: ReservationAggregate,
 		private readonly context: ReservationUseCaseContext,
 	) {}
 

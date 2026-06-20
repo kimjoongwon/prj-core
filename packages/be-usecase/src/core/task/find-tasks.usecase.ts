@@ -1,4 +1,4 @@
-import { TaskAggregateRoot } from "@cocrepo/aggregate";
+import { TaskAggregate } from "@cocrepo/aggregate";
 import { FindTasksQuery } from "@cocrepo/command";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
 import { Logger } from "@nestjs/common";
@@ -8,7 +8,7 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 export class FindTasksUseCase implements IQueryHandler<FindTasksQuery> {
 	private readonly logger = new Logger(FindTasksUseCase.name);
 
-	constructor(private readonly taskService: TaskAggregateRoot) {}
+	constructor(private readonly taskService: TaskAggregate) {}
 
 	async execute(query: FindTasksQuery): Promise<unknown> {
 		this.logger.debug("Task 목록 조회");

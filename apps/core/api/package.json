@@ -28,6 +28,7 @@
     "@cocrepo/client": "workspace:*",
     "@cocrepo/command": "workspace:*",
     "@cocrepo/constant": "workspace:*",
+    "@cocrepo/controller": "workspace:*",
     "@cocrepo/decorator": "workspace:^0.1.0",
     "@cocrepo/dto": "workspace:^0.1.0",
     "@cocrepo/entity": "workspace:*",

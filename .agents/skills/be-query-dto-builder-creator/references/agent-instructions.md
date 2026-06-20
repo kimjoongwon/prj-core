@@ -103,9 +103,9 @@ QueryDto (packages/be-dto/src/query/query.dto.ts)
 
 ### Query DTO 설계 원칙 (Critical)
 
-**Query DTO는 순수한 검색/필터 파라미터 컨테이너입니다.**
+**Query DTO는 목록 조회의 검색/필터 계약과 read filter helper를 함께 소유합니다.**
 
-Query DTO의 역할은 **"어떤 조건으로 데이터를 찾을 것인가"**만 정의합니다.
+Query DTO의 역할은 **"어떤 조건으로 데이터를 찾을 것인가"**를 정의하고, 필요한 경우 그 조건을 Prisma read filter로 변환하는 것입니다.
 
 #### Query DTO에 포함되어야 하는 것
 

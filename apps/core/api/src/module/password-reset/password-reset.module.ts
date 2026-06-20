@@ -6,7 +6,7 @@ import {
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { OidcModule } from "../oidc/oidc.module";
-import { PasswordResetController } from "./password-reset.controller";
+import { PasswordResetController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule, OidcModule, EmailModule],

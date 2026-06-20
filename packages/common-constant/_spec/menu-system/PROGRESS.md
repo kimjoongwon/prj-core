@@ -51,8 +51,8 @@
 - `packages/fe-ui/src/feature/SubNav/SubNav.tsx`
 
 ### 앱
-- `apps/admin/src/stores/AppStoreProvider.tsx`
-- `apps/admin/src/app/(admin)/layout.tsx`
+- `apps/admin/web/src/stores/AppStoreProvider.tsx`
+- `apps/admin/web/src/app/layout.tsx`
 
 ---
 

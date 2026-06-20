@@ -1,4 +1,4 @@
-import { AssetAggregateRoot } from "@cocrepo/aggregate";
+import { AssetAggregate } from "@cocrepo/aggregate";
 import { AssetsRepository, FoldersRepository } from "@cocrepo/repository";
 import {
 	AuthContext,
@@ -9,13 +9,13 @@ import {
 import { AssetCommandHandlers, AssetQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { AssetsController } from "./assets.controller";
+import { AssetsController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],
 	controllers: [AssetsController],
 	providers: [
-		AssetAggregateRoot,
+		AssetAggregate,
 		S3CompatibleStorageService,
 		{
 			provide: ObjectStorageService,

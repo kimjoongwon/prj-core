@@ -1,4 +1,4 @@
-import { TimelineAggregateRoot } from "@cocrepo/aggregate";
+import { TimelineAggregate } from "@cocrepo/aggregate";
 import { GetTimelinesQuery } from "@cocrepo/command";
 import { TIMELINE_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/service";
@@ -9,7 +9,7 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 @QueryHandler(GetTimelinesQuery)
 export class GetTimelinesUseCase implements IQueryHandler<GetTimelinesQuery> {
 	constructor(
-		private readonly timelinesService: TimelineAggregateRoot,
+		private readonly timelinesService: TimelineAggregate,
 		private readonly spaceContext: SpaceContext,
 	) {}
 

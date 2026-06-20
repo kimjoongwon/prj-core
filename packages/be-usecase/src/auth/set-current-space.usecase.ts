@@ -1,4 +1,4 @@
-import { SpaceAggregateRoot } from "@cocrepo/aggregate";
+import { SpaceAggregate } from "@cocrepo/aggregate";
 import { SetCurrentSpaceCommand } from "@cocrepo/command";
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { SpaceDto, UserDto } from "@cocrepo/dto";
@@ -13,7 +13,7 @@ export class SetCurrentSpaceUseCase
 {
 	constructor(
 		private readonly cls: ClsService,
-		private readonly spacesService: SpaceAggregateRoot,
+		private readonly spacesService: SpaceAggregate,
 	) {}
 
 	async execute(command: SetCurrentSpaceCommand): Promise<SpaceDto> {

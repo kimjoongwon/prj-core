@@ -1,4 +1,4 @@
-import { TaskAggregateRoot } from "@cocrepo/aggregate";
+import { TaskAggregate } from "@cocrepo/aggregate";
 import {
 	PRISMA_SERVICE_TOKEN,
 	SYSTEM_ROLES } from "@cocrepo/constant";
@@ -91,7 +91,7 @@ class SpaceScopeTestController {
 	constructor(
 		private readonly spaceContext: SpaceContext,
 		private readonly userService: UserService,
-		private readonly taskService: TaskAggregateRoot,
+		private readonly taskService: TaskAggregate,
 	) {}
 
 	@Get("context")
@@ -198,7 +198,7 @@ describe("Space Scope API (E2E)", () => {
 			providers: [
 				SpaceContext,
 				UserService,
-				TaskAggregateRoot,
+				TaskAggregate,
 				{
 					provide: AuthCacheService,
 					useValue: {

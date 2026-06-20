@@ -1,4 +1,4 @@
-import { PolicyAssignmentAggregateRoot } from "@cocrepo/aggregate";
+import { PolicyAssignmentAggregate } from "@cocrepo/aggregate";
 import {
 	PoliciesRepository,
 	RolePoliciesRepository,
@@ -13,13 +13,13 @@ import {
 } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { PolicyAssignmentsController } from "./policy-assignments.controller";
+import { PolicyAssignmentsController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],
 	controllers: [PolicyAssignmentsController],
 	providers: [
-		PolicyAssignmentAggregateRoot,
+		PolicyAssignmentAggregate,
 		PoliciesRepository,
 		RolePoliciesRepository,
 		UserPoliciesRepository,

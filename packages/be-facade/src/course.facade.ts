@@ -1,4 +1,4 @@
-import { CourseAggregateRoot } from "@cocrepo/aggregate";
+import { CourseAggregate } from "@cocrepo/aggregate";
 import { COMMON_ERRORS } from "@cocrepo/constant";
 import type {
 	QueryCourseDto,
@@ -14,7 +14,7 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 @Injectable()
 export class CourseFacade {
 	constructor(
-		private readonly courseService: CourseAggregateRoot,
+		private readonly courseService: CourseAggregate,
 		private readonly spaceContext: SpaceContext,
 	) {}
 
@@ -22,7 +22,7 @@ export class CourseFacade {
 		query: QueryCourseDto,
 	): Promise<
 		OffsetStatsPaginatedResponse<
-			Awaited<ReturnType<CourseAggregateRoot["findCourses"]>>["courses"]
+			Awaited<ReturnType<CourseAggregate["findCourses"]>>["courses"]
 		>
 	> {
 		this.requireSpaceId();
@@ -50,7 +50,7 @@ export class CourseFacade {
 	): Promise<
 		OffsetStatsPaginatedResponse<
 			Awaited<
-				ReturnType<CourseAggregateRoot["findCourseOfferings"]>
+				ReturnType<CourseAggregate["findCourseOfferings"]>
 			>["courseOfferings"]
 		>
 	> {
@@ -82,7 +82,7 @@ export class CourseFacade {
 		query: QueryEnrollmentDto,
 	): Promise<
 		OffsetStatsPaginatedResponse<
-			Awaited<ReturnType<CourseAggregateRoot["findEnrollments"]>>["enrollments"]
+			Awaited<ReturnType<CourseAggregate["findEnrollments"]>>["enrollments"]
 		>
 	> {
 		this.requireSpaceId();
@@ -115,7 +115,7 @@ export class CourseFacade {
 	): Promise<
 		OffsetStatsPaginatedResponse<
 			Awaited<
-				ReturnType<CourseAggregateRoot["findCoursePasses"]>
+				ReturnType<CourseAggregate["findCoursePasses"]>
 			>["coursePasses"]
 		>
 	> {

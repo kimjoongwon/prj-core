@@ -1,4 +1,4 @@
-import { OidcClientAggregateRoot } from "@cocrepo/aggregate";
+import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { OidcClient } from "@cocrepo/client";
 import { RefreshTokenWithIdpCommand } from "@cocrepo/command";
 import { TokenRefreshResponseDto, UserDto } from "@cocrepo/dto";
@@ -22,7 +22,7 @@ export class RefreshTokenWithIdpUseCase
 	implements ICommandHandler<RefreshTokenWithIdpCommand>
 {
 	constructor(
-		private readonly oidcClientService: OidcClientAggregateRoot,
+		private readonly oidcClientService: OidcClientAggregate,
 		private readonly oidcClient: OidcClient,
 		private readonly usersService: UserService,
 		private readonly tokenStorageService: TokenStorageService,

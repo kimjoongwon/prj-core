@@ -1,4 +1,4 @@
-import { TenantAccessRequestAggregateRoot } from "@cocrepo/aggregate";
+import { TenantAccessRequestAggregate } from "@cocrepo/aggregate";
 import {
 	TenantAccessRequestsRepository,
 	TenantsRepository,
@@ -11,13 +11,13 @@ import {
 } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { TenantAccessRequestsController } from "./tenant-access-requests.controller";
+import { TenantAccessRequestsController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],
 	controllers: [TenantAccessRequestsController],
 	providers: [
-		TenantAccessRequestAggregateRoot,
+		TenantAccessRequestAggregate,
 		TenantAccessRequestsRepository,
 		TenantsRepository,
 		UsersRepository,

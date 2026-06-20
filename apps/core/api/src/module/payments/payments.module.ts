@@ -1,16 +1,16 @@
-import { PaymentAggregateRoot } from "@cocrepo/aggregate";
+import { PaymentAggregate } from "@cocrepo/aggregate";
 import { PaymentsRepository } from "@cocrepo/repository";
 import { SpaceContext } from "@cocrepo/service";
 import { PaymentCommandHandlers, PaymentQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { PaymentsController } from "./payments.controller";
+import { PaymentsController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],
 	controllers: [PaymentsController],
 	providers: [
-		PaymentAggregateRoot,
+		PaymentAggregate,
 		PaymentsRepository,
 		SpaceContext,
 		...PaymentCommandHandlers,

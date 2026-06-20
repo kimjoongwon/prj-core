@@ -1,4 +1,4 @@
-import { FolderAggregateRoot } from "@cocrepo/aggregate";
+import { FolderAggregate } from "@cocrepo/aggregate";
 import { UpdateFolderCommand } from "@cocrepo/command";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
@@ -6,7 +6,7 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 export class UpdateFolderUseCase
 	implements ICommandHandler<UpdateFolderCommand>
 {
-	constructor(private readonly folderService: FolderAggregateRoot) {}
+	constructor(private readonly folderService: FolderAggregate) {}
 
 	execute(command: UpdateFolderCommand): Promise<unknown> {
 		return this.folderService.updateFolder(command.folderId, command.input);

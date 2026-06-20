@@ -1,4 +1,4 @@
-import { AuthAuditLogAggregateRoot } from "@cocrepo/aggregate";
+import { AuthAuditLogAggregate } from "@cocrepo/aggregate";
 import { GetAuthAuditLogStatsQuery } from "@cocrepo/command";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
@@ -7,7 +7,7 @@ export class GetAuthAuditLogStatsUseCase
 	implements IQueryHandler<GetAuthAuditLogStatsQuery>
 {
 	constructor(
-		private readonly authAuditLogService: AuthAuditLogAggregateRoot,
+		private readonly authAuditLogService: AuthAuditLogAggregate,
 	) {}
 
 	execute() {

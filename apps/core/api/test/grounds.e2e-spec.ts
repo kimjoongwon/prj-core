@@ -1,4 +1,4 @@
-import { SpaceAggregateRoot } from "@cocrepo/aggregate";
+import { SpaceAggregate } from "@cocrepo/aggregate";
 import {
 	PRISMA_SERVICE_TOKEN,
 	SYSTEM_ROLES } from "@cocrepo/constant";
@@ -97,7 +97,7 @@ describe("Spaces API (E2E)", () => {
 			.useValue({
 				invalidate: async () => {},
 			})
-			.overrideProvider(SpaceAggregateRoot)
+			.overrideProvider(SpaceAggregate)
 			.useValue(spaceServiceMock)
 			.compile();
 

@@ -8,7 +8,7 @@ import { REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import { IS_PUBLIC_KEY, SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
 import { BadRequestException } from "@nestjs/common";
 import type { CommandBus, QueryBus } from "@nestjs/cqrs";
-import { AuthController } from "./auth.controller";
+import { AuthController } from "@cocrepo/controller";
 
 describe("AuthController", () => {
 	let controller: AuthController;

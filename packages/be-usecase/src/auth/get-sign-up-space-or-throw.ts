@@ -1,10 +1,10 @@
-import { SpaceAggregateRoot } from "@cocrepo/aggregate";
+import { SpaceAggregate } from "@cocrepo/aggregate";
 import { BadRequestException, NotFoundException } from "@nestjs/common";
 import { PLATFORM_GROUND_NAME } from "./platform-ground-name";
 import { SYSTEM_SPACE_ID } from "./system-space-id";
 
 export async function getSignUpSpaceOrThrow(
-	spacesService: SpaceAggregateRoot,
+	spacesService: SpaceAggregate,
 	spaceId: string,
 ): Promise<{ id: string }> {
 	const space = await spacesService.getById(spaceId);

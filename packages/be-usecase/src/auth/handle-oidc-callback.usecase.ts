@@ -1,4 +1,4 @@
-import { OidcClientAggregateRoot } from "@cocrepo/aggregate";
+import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { OidcClient } from "@cocrepo/client";
 import { HandleOidcCallbackCommand } from "@cocrepo/command";
 import { AUTH_ERRORS } from "@cocrepo/constant";
@@ -21,7 +21,7 @@ export class HandleOidcCallbackUseCase
 	implements ICommandHandler<HandleOidcCallbackCommand>
 {
 	constructor(
-		private readonly oidcClientService: OidcClientAggregateRoot,
+		private readonly oidcClientService: OidcClientAggregate,
 		private readonly oidcClient: OidcClient,
 		private readonly tokenStorageService: TokenStorageService,
 		private readonly authCacheService: AuthCacheService,

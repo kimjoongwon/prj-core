@@ -1,4 +1,4 @@
-import { ContentAggregateRoot } from "@cocrepo/aggregate";
+import { ContentAggregate } from "@cocrepo/aggregate";
 import { GetCommunityPostsQuery } from "@cocrepo/command";
 import { COMMON_ERRORS } from "@cocrepo/constant";
 import { CommunityPostDto } from "@cocrepo/dto";
@@ -12,7 +12,7 @@ export class GetCommunityPostsUseCase
 	implements IQueryHandler<GetCommunityPostsQuery>
 {
 	constructor(
-		private readonly contentService: ContentAggregateRoot,
+		private readonly contentService: ContentAggregate,
 		private readonly authContext: AuthContext,
 		private readonly spaceContext: SpaceContext,
 	) {}
@@ -46,7 +46,7 @@ export class GetCommunityPostsUseCase
 
 	private toCommunityPostDto(
 		record: Awaited<
-			ReturnType<ContentAggregateRoot["listCommunityPosts"]>
+			ReturnType<ContentAggregate["listCommunityPosts"]>
 		>["items"][number],
 	): CommunityPostDto {
 		return {

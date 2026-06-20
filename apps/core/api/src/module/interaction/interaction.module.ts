@@ -10,7 +10,7 @@ import {
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { OidcModule } from "../oidc/oidc.module";
-import { InteractionController } from "./interaction.controller";
+import { InteractionController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule, OidcModule],

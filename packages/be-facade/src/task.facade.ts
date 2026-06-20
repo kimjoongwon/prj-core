@@ -1,4 +1,4 @@
-import { TaskAggregateRoot } from "@cocrepo/aggregate";
+import { TaskAggregate } from "@cocrepo/aggregate";
 import type {
 	CreateExerciseDto,
 	SpaceScope,
@@ -15,7 +15,7 @@ import { Injectable, Logger } from "@nestjs/common";
 export class TaskFacade {
 	private readonly logger = new Logger(TaskFacade.name);
 
-	constructor(private readonly taskService: TaskAggregateRoot) {}
+	constructor(private readonly taskService: TaskAggregate) {}
 
 	findTasks(params: {
 		spaceId: string;

@@ -1,4 +1,4 @@
-import { TranslationCatalogAggregateRoot } from "@cocrepo/aggregate";
+import { TranslationCatalogAggregate } from "@cocrepo/aggregate";
 import {
 	CreateTranslationDto,
 	GetTranslationsDto,
@@ -13,7 +13,7 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class TranslationFacade {
 	constructor(
-		private readonly translationCatalogService: TranslationCatalogAggregateRoot,
+		private readonly translationCatalogService: TranslationCatalogAggregate,
 	) {}
 
 	async getTranslations(

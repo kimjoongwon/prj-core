@@ -1,6 +1,6 @@
 import {
-	EmailVerificationAggregateRoot,
-	SpaceAggregateRoot,
+	EmailVerificationAggregate,
+	SpaceAggregate,
 } from "@cocrepo/aggregate";
 import { SignUpCommand } from "@cocrepo/command";
 import { UserService } from "@cocrepo/service";
@@ -13,8 +13,8 @@ import { getSignUpSpaceOrThrow } from "./auth-account.support";
 export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
 	constructor(
 		private readonly usersService: UserService,
-		private readonly spacesService: SpaceAggregateRoot,
-		private readonly emailVerificationService: EmailVerificationAggregateRoot,
+		private readonly spacesService: SpaceAggregate,
+		private readonly emailVerificationService: EmailVerificationAggregate,
 	) {}
 
 	async execute(command: SignUpCommand) {

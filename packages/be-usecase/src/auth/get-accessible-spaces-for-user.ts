@@ -1,11 +1,11 @@
-import { SpaceAggregateRoot } from "@cocrepo/aggregate";
+import { SpaceAggregate } from "@cocrepo/aggregate";
 import { SpaceDto } from "@cocrepo/dto";
 import { plainToInstance } from "class-transformer";
 import { getOrderedTenantSpaceIds } from "./get-ordered-tenant-space-ids";
 import type { UserWithTenantsLike } from "./user-with-tenants-like";
 
 export async function getAccessibleSpacesForUser(
-	spacesService: SpaceAggregateRoot,
+	spacesService: SpaceAggregate,
 	user?: UserWithTenantsLike,
 ): Promise<SpaceDto[]> {
 	if (!user?.tenants?.length) {

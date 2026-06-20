@@ -17,7 +17,7 @@ aggregate root 기준 NestJS Module과 Router wiring을 생성하는 전문가�
 |------|----------|------|
 | 신규 aggregate root module 생성 | ✅ 사용 | `apps/core/api/src/module/{root}` 생성 |
 | 기존 module을 plural root 기준으로 재편 | ✅ 사용 | 폴더/배럴/RouterModule 정렬 |
-| Controller provider wiring 정리 | ✅ 사용 | `CqrsModule`, UseCase handler, Service, Repository, Client provider 정렬 |
+| Controller provider wiring 정리 | ✅ 사용 | `@cocrepo/controller` import, `CqrsModule`, UseCase handler, Service, Repository, Client provider 정렬 |
 | Controller 구현 자체 생성 | ❌ 보조 역할 | `be-controller-builder`와 협업 |
 | Service/Repository 구현 | ❌ 미사용 | 각각 전용 builder 사용 |
 
@@ -34,6 +34,8 @@ aggregate root 기준 NestJS Module과 Router wiring을 생성하는 전문가�
 ## 핵심 규칙
 
 - module 폴더명은 aggregate root plural 기준 (`spaces`, `tasks`, `inquiries`)
+- Controller 구현은 `packages/be-controller`가 소유한다. module 파일은 Controller class를 `@cocrepo/controller`에서 import한다.
+- module 폴더의 `index.ts`는 module/provider 같은 app wiring 산출물만 export하고 Controller를 re-export하지 않는다.
 - child resource 전용 top-level module 금지 (`grounds`, `exercises` 금지)
 - CQRS endpoint가 있는 module은 `CqrsModule`을 import한다.
 - Controller는 `CommandBus`/`QueryBus`만 사용하도록 provider wiring을 정렬한다.
@@ -55,8 +57,10 @@ aggregate root 기준 NestJS Module과 Router wiring을 생성하는 전문가�
 ## 체크리스트
 
 - [ ] module 폴더가 aggregate root plural 기준인지 확인
+- [ ] Controller import가 `@cocrepo/controller` 기준인지 확인
+- [ ] module 배럴이 Controller를 re-export하지 않는지 확인
 - [ ] module imports에 `CqrsModule`이 필요한지 확인
-- [ ] module providers가 `UseCase → Service → Repository` 흐름인지 확인
+- [ ] module providers가 UseCase handler와 필요한 Aggregate/Service/Client/Repository provider를 연결하는지 확인
 - [ ] Command/Query message를 provider로 등록하지 않았는지 확인
 - [ ] Event message를 provider로 등록하지 않았는지 확인
 - [ ] 외부 연동이 있으면 `Client → Service/UseCase` provider가 등록됐는지 확인

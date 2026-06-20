@@ -108,13 +108,18 @@
 ## 모듈 구조
 
 ```
-apps/server/src/module/
-├── role/
-│   ├── roles.module.ts
+apps/core/api/src/module/
+├── roles/
+│   └── roles.module.ts
+│
+└── abilities/
+    └── abilities.module.ts
+
+packages/be-controller/src/
+├── roles/
 │   └── roles.controller.ts
 │
-└── ability/
-    ├── abilities.module.ts
+└── abilities/
     └── abilities.controller.ts       # Ability CRUD
 
 packages/

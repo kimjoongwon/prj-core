@@ -1,4 +1,4 @@
-import { SpaceAggregateRoot } from "@cocrepo/aggregate";
+import { SpaceAggregate } from "@cocrepo/aggregate";
 import { GetCurrentSpaceQuery } from "@cocrepo/command";
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { SpaceDto, UserDto } from "@cocrepo/dto";
@@ -12,7 +12,7 @@ export class GetCurrentSpaceUseCase
 {
 	constructor(
 		private readonly cls: ClsService,
-		private readonly spacesService: SpaceAggregateRoot,
+		private readonly spacesService: SpaceAggregate,
 	) {}
 
 	execute(query: GetCurrentSpaceQuery): Promise<SpaceDto | null> {

@@ -1,4 +1,4 @@
-import { EmailVerificationAggregateRoot } from "@cocrepo/aggregate";
+import { EmailVerificationAggregate } from "@cocrepo/aggregate";
 import { ResendEmailVerificationCommand } from "@cocrepo/command";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
@@ -7,7 +7,7 @@ export class ResendEmailVerificationUseCase
 	implements ICommandHandler<ResendEmailVerificationCommand>
 {
 	constructor(
-		private readonly emailVerificationService: EmailVerificationAggregateRoot,
+		private readonly emailVerificationService: EmailVerificationAggregate,
 	) {}
 
 	execute(command: ResendEmailVerificationCommand): Promise<unknown> {

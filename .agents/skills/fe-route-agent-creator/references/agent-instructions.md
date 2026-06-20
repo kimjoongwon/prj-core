@@ -43,7 +43,7 @@
 
 ### FE route 역할
 
-`apps/admin/web/src/app/**/page.tsx`, `apps/idp/web/src/app/**/page.tsx`, `@slot/**/page.tsx`,
+`apps/admin/web/src/app/**/page.tsx`, `apps/mobile/src/app/**/page.tsx`, `@slot/**/page.tsx`,
 그리고 같은 route 세그먼트의 `route.meta.ts`를 담당하는
 앱 라우트 컨테이너 전용 에이전트입니다.
 

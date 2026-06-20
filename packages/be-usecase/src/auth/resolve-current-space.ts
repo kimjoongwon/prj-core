@@ -1,11 +1,11 @@
-import { SpaceAggregateRoot } from "@cocrepo/aggregate";
+import { SpaceAggregate } from "@cocrepo/aggregate";
 import { SpaceDto } from "@cocrepo/dto";
 import { getAccessibleSpacesForUser } from "./get-accessible-spaces-for-user";
 import { getDefaultSpaceId } from "./get-default-space-id";
 import type { UserWithTenantsLike } from "./user-with-tenants-like";
 
 export async function resolveCurrentSpace(
-	spacesService: SpaceAggregateRoot,
+	spacesService: SpaceAggregate,
 	user: UserWithTenantsLike | undefined,
 	requestedSpaceId: string | undefined,
 ): Promise<SpaceDto | null> {

@@ -1,4 +1,4 @@
-import { RoutineAggregateRoot } from "@cocrepo/aggregate";
+import { RoutineAggregate } from "@cocrepo/aggregate";
 import {
 	CreateRoutineDto,
 	GetRoutinesQueryDto,
@@ -14,7 +14,7 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 @Injectable()
 export class RoutineFacade {
 	constructor(
-		private readonly routinesService: RoutineAggregateRoot,
+		private readonly routinesService: RoutineAggregate,
 		private readonly authContext: AuthContext,
 	) {}
 

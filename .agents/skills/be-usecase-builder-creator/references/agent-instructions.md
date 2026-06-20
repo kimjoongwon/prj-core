@@ -56,7 +56,7 @@ Nest CQRS 기반 UseCase handler를 생성하는 역할입니다. Command/Query 
 - `packages/be-usecase/src/core/{domain}/`처럼 provider array 단위의 bounded context 폴더로 묶습니다.
 - handler provider array와 barrel export는 domain `index.ts`에서만 조립합니다. `*.usecase.ts`, `*.event-handler.ts`, `*.saga.ts` 파일에서 provider array를 export하지 않습니다.
 - handler class 파일에는 top-level type/helper/mapper를 함께 두지 않습니다.
-- handler 한 개에서만 쓰는 input/result/mapper도 `{handler}.input.ts`, `{handler}.result.ts`, `{handler}.mapper.ts`처럼 별도 파일로 분리합니다.
+- handler 한 개에서만 쓰더라도 여러 출처 조합, field rename, policy 보정, 복잡한 result shaping이 있으면 `{handler}.input.ts`, `{handler}.result.ts`, `{handler}.mapper.ts`처럼 별도 파일로 분리합니다.
 - 둘 이상의 handler가 공유하는 context/mapper/helper는 `{domain}.context.ts`, `{domain}.mapper.ts`, `{domain}.support.ts`처럼 별도 파일로 분리합니다.
 - domain을 넘는 shared type은 `@cocrepo/type`, pure 런타임 utility는 `@cocrepo/toolkit`에 둡니다.
 - pagination처럼 여러 usecase domain이 공유하는 계약/빌더를 `packages/be-usecase/src/common`에 만들지 않습니다.
@@ -69,9 +69,9 @@ Nest CQRS 기반 UseCase handler를 생성하는 역할입니다. Command/Query 
 - Handler에서 Prisma/Repository를 직접 호출하지 않습니다. 예외가 필요한 read projection은 담당 스펙에 명시하고 repository query method를 통해 호출합니다.
 - Handler에서 DTO를 import하거나 domain service로 넘기지 않습니다. write Command의 `input`을 application/usecase 입력으로 취급합니다.
 - Query handler는 behaviorful Query DTO나 Query params를 read filter 입력으로 취급할 수 있습니다. Query DTO 자체의 필터 메서드는 `be-query-dto-builder`가 소유합니다.
-- Command input이 Aggregate/Service/Client input과 구조적으로 호환되면 그대로 위임할 수 있습니다. 여러 출처 조합, field rename, policy 보정이 필요할 때만 별도 mapper/input 파일에서 service input으로 변환합니다.
+- Command input이 Aggregate/Service/Client input과 구조적으로 호환되면 그대로 위임할 수 있습니다. 여러 출처 조합, field rename, policy 보정이 필요할 때만 별도 mapper/input 파일에서 target input으로 변환합니다.
 - Handler에서 Prisma create/update input을 만들지 않습니다. persistence 입력 변환은 Aggregate/Repository owner가 수행합니다.
-- 여러 출처의 값을 조합해 service input을 만들 때는 `command.input.xxx`, `context.userId`, `entity.id`처럼 값의 원천을 보존합니다. 반복이 길면 `const input = command.input`처럼 출처명 alias까지만 사용하고 deep destructuring으로 bare variable을 남발하지 않습니다.
+- 여러 출처의 값을 조합해 target input을 만들 때는 `command.input.xxx`, `context.userId`, `entity.id`처럼 값의 원천을 보존합니다. 반복이 길면 `const input = command.input`처럼 출처명 alias까지만 사용하고 deep destructuring으로 bare variable을 남발하지 않습니다.
 - `@CommandHandler` / `@QueryHandler` decorator를 사용합니다.
 - handler array는 module builder가 providers에 등록할 수 있게 export합니다.
 - 이전 방식 app/boundary/external 명칭을 신규로 만들지 않습니다.
@@ -121,10 +121,10 @@ export * from "./confirm-reservation.usecase";
 - [ ] `@CommandHandler` 또는 `@QueryHandler` 적용
 - [ ] Event 후속 side effect는 `@EventsHandler`, Event → Command 흐름은 `@Saga`로 분리
 - [ ] EventHandler 안에서 CommandBus를 호출하지 않음
-- [ ] Handler가 Service/Client 조율만 수행하는지 확인
+- [ ] Handler가 workflow 조율만 수행하고 도메인 규칙은 Aggregate/Service/Client로 위임하는지 확인
 - [ ] Prisma 직접 호출 없음
 - [ ] DTO import 없음
-- [ ] Command input을 Aggregate/Service/Client input으로 그대로 위임하거나 별도 mapper/input 파일에서 변환함
+- [ ] Command input을 Aggregate/Service/Client input으로 그대로 위임하거나 필요한 경우에만 별도 mapper/input 파일에서 변환함
 - [ ] 여러 input source를 조합할 때 소스 경로 또는 출처명 alias를 유지함
 - [ ] handler array와 barrel export 추가
 - [ ] Module provider 등록은 `be-module-builder` 책임으로 남김

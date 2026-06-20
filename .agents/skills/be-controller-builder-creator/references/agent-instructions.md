@@ -23,7 +23,7 @@ NestJS REST Controller를 생성하는 전문가
 
 - 상황: 사용 여부: 설명
 - REST API 엔드포인트 생성: ✅ 사용: Controller 생성
-- DTO 검증 및 변환: ✅ 사용: Request DTO 처리
+- DTO 검증 및 전달: ✅ 사용: Request DTO를 Command/Query에 연결
 - CQRS Command/Query 실행: ✅ 사용: `CommandBus` / `QueryBus` 호출
 - 비즈니스 로직 구현: ❌ 미사용: service-builder, be-usecase-builder 사용
 - 데이터 접근 로직: ❌ 미사용: repository-builder 사용
@@ -42,17 +42,20 @@ NestJS REST Controller를 생성하는 전문가
 
 ## 만드는 산출물
 
-| Controller 클래스 | `apps/core/api/src/module/{aggregate-root}/{resource}.controller.ts` |
-| | API 계약 | route `page.spec.md`의 API 계약 섹션 |
-| | Module 파일 | `apps/core/api/src/module/{aggregate-root}/{aggregate-root}.module.ts` |
-| | Module 계약 | 담당 스펙 또는 route `page.spec.md`의 Module/Wiring 계약 |
-| | app.module.ts 업데이트 | 라우팅 등록 |
+| 항목 | 경로 |
+|------|------|
+| Controller 클래스 | `packages/be-controller/src/{aggregate-root}/{resource}.controller.ts` |
+| Controller 도메인 배럴 | `packages/be-controller/src/{aggregate-root}/index.ts` |
+| Controller 패키지 배럴 | `packages/be-controller/src/index.ts` |
+| API 계약 | route `page.spec.md`의 API 계약 섹션 |
 
 ## 사용 방법
 
 ### 핵심 규칙
 
 - 기본 원칙: Controller는 `CommandBus` 또는 `QueryBus`만 진입점으로 사용한다.
+- Controller 구현 파일은 `@cocrepo/controller` 패키지의 `packages/be-controller/src/{aggregate-root}` 아래에 둔다.
+- `apps/core/api/src/module` 아래에는 Controller 구현 파일을 만들지 않는다. 앱 module은 `@cocrepo/controller`에서 Controller class를 import한다.
 - 각 endpoint는 write면 Command, read면 Query를 생성해서 bus로 실행한다.
 - Command/Query는 `@cocrepo/command`에서 import한다.
 - 담당 스펙의 `엔드포인트 인벤토리`에 명시된 endpoint만 생성/수정하고, 행의 `재사용/신규`, `소스/대상`, 소스 담당 `agent_type`, 소비/Wiring `agent_type`, `codegen` 계약을 벗어나지 않는다.
@@ -132,22 +135,21 @@ Create/Update 화면에서 폼을 즉시 렌더링할 수 있도록 Controller�
 - [ ] write Command body payload가 Command에서 `input`으로 읽히는지 확인
 - [ ] 여러 출처를 합칠 때만 얇은 조합 객체를 만들고 default/persistence 변환을 Controller에 두지 않음
 - [ ] 각 endpoint의 primary entrypoint가 하나인지 확인 (`CommandBus` 또는 `QueryBus`)
-- [ ] Logger 초기화
+- [ ] 로깅이 필요한 protocol 분기나 예외 처리만 Logger 초기화
 - [ ] 각 메서드에 `@HttpCode(HttpStatus.OK)` 추가
 - [ ] 각 메서드에 `@ApiResponseEntity()` 추가
-- [ ] **Entity 직접 반환** (plainToInstance 사용 금지, DtoTransformInterceptor가 자동 변환)
+- [ ] Controller에서 `plainToInstance` 같은 응답 변환을 직접 수행하지 않음
 - [ ] **private 헬퍼 메서드 없음** (메서드 내 직접 작성)
 - [ ] 페이지 단위 controller는 query/bootstrap/BFF 용도일 때만 허용하고 write 진입점의 기본 단위로 사용하지 않음
-- [ ] 작업 흐름 경로에서는 Controller → CommandBus/QueryBus → UseCase → Service → Repository 흐름 유지
+- [ ] 작업 흐름 경로에서는 Controller → CommandBus/QueryBus → UseCase → Aggregate/Service/Client 흐름 유지
 - [ ] 한 controller 클래스에서 bus 외 dependency를 주입하지 않는지 확인
-- [ ] module 폴더는 aggregate root 기준으로 유지 (`spaces`, `tasks`)
+- [ ] Controller 패키지의 domain 폴더는 aggregate root 기준으로 유지 (`spaces`, `tasks`)
 - [ ] `ground`, `exercise` 같은 child resource는 top-level module 예시로 만들지 않음
 - [ ] Create/Update용 Form Bootstrap 응답 계약 (`defaultObject/options/ui/fieldMeta/aiSchemas`) 적용
 - [ ] `state path` 기반 옵션/경로 규칙 검증
 - [ ] `POST /form/ai-fill` 시 fillable/권한 서버 검증
-- [ ] Module 파일 생성
+- [ ] 필요한 경우 `be-module-builder`에 app module wiring 인계
 - [ ] route `page.spec.md` 또는 담당 스펙의 API/Module 계약 동시 갱신
-- [ ] `app.module.ts`에 Module import
-- [ ] RouterModule에 경로 등록
+- [ ] Controller package barrel export 갱신
 
 ---

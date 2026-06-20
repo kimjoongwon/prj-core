@@ -1,12 +1,12 @@
-import { RoleAggregateRoot, SpaceAggregateRoot } from "@cocrepo/aggregate";
+import { RoleAggregate, SpaceAggregate } from "@cocrepo/aggregate";
 import { UserService } from "@cocrepo/service";
 import { BadRequestException, Logger } from "@nestjs/common";
 import { getSignUpSpaceOrThrow } from "./get-sign-up-space-or-throw";
 
 export async function createUserForVerifiedSignUp(params: {
 	usersService: UserService;
-	rolesService: RoleAggregateRoot;
-	spacesService: SpaceAggregateRoot;
+	rolesService: RoleAggregate;
+	spacesService: SpaceAggregate;
 	logger: Logger;
 	name: string;
 	nickname?: string;

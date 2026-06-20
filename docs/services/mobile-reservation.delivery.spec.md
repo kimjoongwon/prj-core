@@ -58,7 +58,7 @@
 
 | 영역 | 계약 | 재사용/수정 | 파일/대상 | 담당 `agent_type` | 검증 |
 |------|------|-------------|-----------|-------------------|------|
-| Auth | native login/restore/refresh/logout | 재사용 | `apps/core/api/src/module/auth`, `apps/mobile/src/auth` | `be-controller-builder`, `fe-route-agent` | mobile auth tests |
+| Auth | native login/restore/refresh/logout | 재사용 | `packages/be-controller/src/auth`, `apps/core/api/src/module/auth`, `apps/mobile/src/auth` | `be-controller-builder`, `be-module-builder`, `fe-route-agent` | mobile auth tests |
 | Space | my-spaces/current-space | 재사용 | auth API + mobile scope store | `be-usecase-builder`, `fe-store-agent` | route tests |
 | Reservation | booking feed, create reservation, my reservations | 재사용/수정 | reservation backend + Orval | backend roles, `fe-route-agent` | mobile app tests |
 | Payment | checkout bootstrap/submit | 재사용/수정 | payment backend + route | backend roles, `fe-route-agent` | checkout tests |

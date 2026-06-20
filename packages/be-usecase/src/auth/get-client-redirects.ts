@@ -1,8 +1,8 @@
-import { OidcClientAggregateRoot } from "@cocrepo/aggregate";
+import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { resolveOidcClient } from "./resolve-oidc-client";
 
 export async function getClientRedirects(
-	oidcClientService: OidcClientAggregateRoot,
+	oidcClientService: OidcClientAggregate,
 	clientId: string,
 ): Promise<{
 	loginUrl: string | null;

@@ -1,4 +1,4 @@
-import { RoutineAggregateRoot } from "@cocrepo/aggregate";
+import { RoutineAggregate } from "@cocrepo/aggregate";
 import { DeleteRoutineCommand } from "@cocrepo/command";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
@@ -6,7 +6,7 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 export class DeleteRoutineUseCase
 	implements ICommandHandler<DeleteRoutineCommand>
 {
-	constructor(private readonly routinesService: RoutineAggregateRoot) {}
+	constructor(private readonly routinesService: RoutineAggregate) {}
 
 	execute(command: DeleteRoutineCommand): Promise<void> {
 		return this.routinesService.removeRoutine(command.routineId);

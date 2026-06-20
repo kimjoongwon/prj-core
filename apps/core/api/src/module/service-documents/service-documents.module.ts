@@ -1,4 +1,4 @@
-import { ServiceDocumentAggregateRoot } from "@cocrepo/aggregate";
+import { ServiceDocumentAggregate } from "@cocrepo/aggregate";
 import { ServiceDocumentsRepository } from "@cocrepo/repository";
 import {
 	ServiceDocumentCommandHandlers,
@@ -6,13 +6,13 @@ import {
 } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { ServiceDocumentsController } from "./service-documents.controller";
+import { ServiceDocumentsController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],
 	controllers: [ServiceDocumentsController],
 	providers: [
-		ServiceDocumentAggregateRoot,
+		ServiceDocumentAggregate,
 		ServiceDocumentsRepository,
 		...ServiceDocumentCommandHandlers,
 		...ServiceDocumentQueryHandlers,

@@ -1,4 +1,4 @@
-import { ContentAggregateRoot } from "@cocrepo/aggregate";
+import { ContentAggregate } from "@cocrepo/aggregate";
 import { CreateCommunityPostCommand } from "@cocrepo/command";
 import { COMMON_ERRORS } from "@cocrepo/constant";
 import { AuthContext, SpaceContext } from "@cocrepo/service";
@@ -10,7 +10,7 @@ export class CreateCommunityPostUseCase
 	implements ICommandHandler<CreateCommunityPostCommand>
 {
 	constructor(
-		private readonly contentService: ContentAggregateRoot,
+		private readonly contentService: ContentAggregate,
 		private readonly authContext: AuthContext,
 		private readonly spaceContext: SpaceContext,
 	) {}

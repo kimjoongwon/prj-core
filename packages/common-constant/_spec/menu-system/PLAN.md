@@ -674,9 +674,9 @@ describe('메뉴 시스템 통합', () => {
 
 | 파일 | 역할 |
 |------|------|
-| `apps/admin/src/stores/AppStoreProvider.tsx` | Store Provider 설정 |
-| `apps/admin/src/app/(admin)/layout.tsx` | 레이아웃 래퍼 |
-| `apps/admin/src/hooks/useAdminLayout.ts` | 레이아웃 훅 |
+| `apps/admin/web/src/stores/AppStoreProvider.tsx` | Store Provider 설정 |
+| `apps/admin/web/src/app/layout.tsx` | 레이아웃 래퍼 |
+| `apps/admin/web/src/app/providers.tsx` | 앱 Provider 조립 |
 
 ---
 

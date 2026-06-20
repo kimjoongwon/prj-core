@@ -1,10 +1,10 @@
-import { IdpDashboardAggregateRoot } from "@cocrepo/aggregate";
+import { IdpDashboardAggregate } from "@cocrepo/aggregate";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class IdpDashboardFacade {
 	constructor(
-		private readonly idpDashboardService: IdpDashboardAggregateRoot,
+		private readonly idpDashboardService: IdpDashboardAggregate,
 	) {}
 
 	getStats() {
