@@ -5,325 +5,325 @@
 import type { Path } from "nestjs-i18n";
 /* prettier-ignore */
 export type I18nTranslations = {
-    "common": {
-        "success": string;
-        "created": string;
-        "updated": string;
-        "deleted": string;
-        "notFound": string;
-        "list": {
-            "success": string;
-        };
-        "read": {
-            "success": string;
-        };
-        "create": {
-            "success": string;
-        };
-        "update": {
-            "success": string;
-        };
-        "delete": {
-            "success": string;
-        };
-        "auth": {
-            "login": {
-                "success": string;
-            };
-            "logout": {
-                "success": string;
-            };
-            "register": {
-                "success": string;
-            };
-            "refresh": {
-                "success": string;
-            };
-            "renew": {
-                "success": string;
-            };
-            "validate": {
-                "success": string;
-            };
-        };
-        "user": {
-            "list": {
-                "success": string;
-            };
-            "read": {
-                "success": string;
-            };
-            "create": {
-                "success": string;
-            };
-            "update": {
-                "success": string;
-            };
-            "delete": {
-                "success": string;
-            };
-        };
-        "role": {
-            "list": {
-                "success": string;
-            };
-            "read": {
-                "success": string;
-            };
-            "create": {
-                "success": string;
-            };
-            "update": {
-                "success": string;
-            };
-            "delete": {
-                "success": string;
-            };
-        };
-        "grant": {
-            "batchAssign": {
-                "success": string;
-            };
-            "byRole": {
-                "success": string;
-            };
-        };
-        "ability": {
-            "my": {
-                "success": string;
-            };
-            "byRole": {
-                "success": string;
-            };
-            "byUser": {
-                "success": string;
-            };
-            "read": {
-                "success": string;
-            };
-            "create": {
-                "success": string;
-            };
-            "update": {
-                "success": string;
-            };
-            "delete": {
-                "success": string;
-            };
-        };
-        "action": {
-            "list": {
-                "success": string;
-            };
-            "read": {
-                "success": string;
-            };
-            "create": {
-                "success": string;
-            };
-            "update": {
-                "success": string;
-            };
-            "delete": {
-                "success": string;
-            };
-        };
-        "subject": {
-            "list": {
-                "success": string;
-            };
-            "fields": {
-                "success": string;
-            };
-            "read": {
-                "success": string;
-            };
-        };
-        "ground": {
-            "list": {
-                "success": string;
-            };
-            "mySpace": {
-                "success": string;
-            };
-        };
-    };
-    "error": {
-        "prisma": {
-            "P2002": string;
-            "P2025": string;
-            "P2003": string;
-            "P2016": string;
-            "P2001": string;
-            "P2014": string;
-            "P2015": string;
-            "P2018": string;
-            "P2019": string;
-            "P2021": string;
-            "P2022": string;
-        };
-        "auth": {
-            "unauthorized": string;
-            "forbidden": string;
-            "invalidToken": string;
-            "expiredToken": string;
-            "invalidCredentials": string;
-            "userNotFound": string;
-            "duplicateEmail": string;
-            "sessionExpired": string;
-        };
-        "server": {
-            "internal": string;
-            "badRequest": string;
-            "notImplemented": string;
-            "timeout": string;
-        };
-    };
-    "menu": {
-        "dashboard": string;
-        "users": {
-            "title": string;
-            "list": string;
-            "grades": string;
-            "withdrawn": string;
-        };
-        "reservations": {
-            "title": string;
-            "today": string;
-            "list": string;
-            "calendar": string;
-            "stats": string;
-        };
-        "notifications": {
-            "title": string;
-            "send": string;
-            "history": string;
-            "templates": string;
-            "settings": string;
-        };
-        "inquiries": {
-            "title": string;
-            "list": string;
-            "direct": string;
-            "answered": string;
-            "faq": string;
-        };
-        "contents": {
-            "title": string;
-            "notices": string;
-            "banners": string;
-            "events": string;
-            "terms": string;
-        };
-        "templates": {
-            "title": string;
-            "sms": string;
-            "email": string;
-            "push": string;
-            "html": string;
-        };
-        "timelines": {
-            "title": string;
-            "list": string;
-        };
-        "sessions": {
-            "title": string;
-            "list": string;
-        };
-        "programs": {
-            "title": string;
-            "list": string;
-        };
-        "routines": {
-            "title": string;
-            "list": string;
-        };
-        "grounds": {
-            "title": string;
-            "info": string;
-            "programs": string;
-            "equipment": string;
-        };
-        "admins": {
-            "title": string;
-            "list": string;
-            "invitations": string;
-        };
-        "roles": {
-            "title": string;
-        };
-        "tabs": {
-            "all": string;
-            "active": string;
-            "dormant": string;
-            "pendingWithdrawal": string;
-            "pending": string;
-            "confirmed": string;
-            "cancelled": string;
-            "completed": string;
-            "ongoing": string;
-            "upcoming": string;
-            "ended": string;
-            "oneTime": string;
-            "recurring": string;
-            "past": string;
-            "full": string;
-            "available": string;
-            "exercise": string;
-            "inactive": string;
-            "expired": string;
-            "archived": string;
-        };
-        "fab": {
-            "todayReservation": string;
-            "quickReservation": string;
-            "userSearch": string;
-        };
-    };
-    "role": {
-        "FULL_ACCESS": {
-            "name": string;
-            "description": string;
-        };
-        "MANAGE": {
-            "name": string;
-            "description": string;
-        };
-        "VIEW": {
-            "name": string;
-            "description": string;
-        };
-        "category": {
-            "SHARED": string;
-            "WORKSPACE": string;
-            "PUBLIC": string;
-            "PROJECT": string;
-            "TECHNICAL": string;
-            "RESTRICTED": string;
-        };
-    };
-    "validation": {
-        "required": string;
-        "stringType": string;
-        "numberType": string;
-        "booleanType": string;
-        "arrayType": string;
-        "objectType": string;
-        "emailFormat": string;
-        "minLength": string;
-        "maxLength": string;
-        "min": string;
-        "max": string;
-        "pattern": string;
-        "enum": string;
-        "unique": string;
-        "url": string;
-        "uuid": string;
-        "date": string;
-        "positiveNumber": string;
-        "negativeNumber": string;
-        "integer": string;
-    };
+	common: {
+		success: string;
+		created: string;
+		updated: string;
+		deleted: string;
+		notFound: string;
+		list: {
+			success: string;
+		};
+		read: {
+			success: string;
+		};
+		create: {
+			success: string;
+		};
+		update: {
+			success: string;
+		};
+		delete: {
+			success: string;
+		};
+		auth: {
+			login: {
+				success: string;
+			};
+			logout: {
+				success: string;
+			};
+			register: {
+				success: string;
+			};
+			refresh: {
+				success: string;
+			};
+			renew: {
+				success: string;
+			};
+			validate: {
+				success: string;
+			};
+		};
+		user: {
+			list: {
+				success: string;
+			};
+			read: {
+				success: string;
+			};
+			create: {
+				success: string;
+			};
+			update: {
+				success: string;
+			};
+			delete: {
+				success: string;
+			};
+		};
+		role: {
+			list: {
+				success: string;
+			};
+			read: {
+				success: string;
+			};
+			create: {
+				success: string;
+			};
+			update: {
+				success: string;
+			};
+			delete: {
+				success: string;
+			};
+		};
+		grant: {
+			batchAssign: {
+				success: string;
+			};
+			byRole: {
+				success: string;
+			};
+		};
+		ability: {
+			my: {
+				success: string;
+			};
+			byRole: {
+				success: string;
+			};
+			byUser: {
+				success: string;
+			};
+			read: {
+				success: string;
+			};
+			create: {
+				success: string;
+			};
+			update: {
+				success: string;
+			};
+			delete: {
+				success: string;
+			};
+		};
+		action: {
+			list: {
+				success: string;
+			};
+			read: {
+				success: string;
+			};
+			create: {
+				success: string;
+			};
+			update: {
+				success: string;
+			};
+			delete: {
+				success: string;
+			};
+		};
+		subject: {
+			list: {
+				success: string;
+			};
+			fields: {
+				success: string;
+			};
+			read: {
+				success: string;
+			};
+		};
+		ground: {
+			list: {
+				success: string;
+			};
+			mySpace: {
+				success: string;
+			};
+		};
+	};
+	error: {
+		prisma: {
+			P2002: string;
+			P2025: string;
+			P2003: string;
+			P2016: string;
+			P2001: string;
+			P2014: string;
+			P2015: string;
+			P2018: string;
+			P2019: string;
+			P2021: string;
+			P2022: string;
+		};
+		auth: {
+			unauthorized: string;
+			forbidden: string;
+			invalidToken: string;
+			expiredToken: string;
+			invalidCredentials: string;
+			userNotFound: string;
+			duplicateEmail: string;
+			sessionExpired: string;
+		};
+		server: {
+			internal: string;
+			badRequest: string;
+			notImplemented: string;
+			timeout: string;
+		};
+	};
+	menu: {
+		dashboard: string;
+		users: {
+			title: string;
+			list: string;
+			grades: string;
+			withdrawn: string;
+		};
+		reservations: {
+			title: string;
+			today: string;
+			list: string;
+			calendar: string;
+			stats: string;
+		};
+		notifications: {
+			title: string;
+			send: string;
+			history: string;
+			templates: string;
+			settings: string;
+		};
+		inquiries: {
+			title: string;
+			list: string;
+			direct: string;
+			answered: string;
+			faq: string;
+		};
+		contents: {
+			title: string;
+			notices: string;
+			banners: string;
+			events: string;
+			terms: string;
+		};
+		templates: {
+			title: string;
+			sms: string;
+			email: string;
+			push: string;
+			html: string;
+		};
+		timelines: {
+			title: string;
+			list: string;
+		};
+		sessions: {
+			title: string;
+			list: string;
+		};
+		programs: {
+			title: string;
+			list: string;
+		};
+		routines: {
+			title: string;
+			list: string;
+		};
+		grounds: {
+			title: string;
+			info: string;
+			programs: string;
+			equipment: string;
+		};
+		admins: {
+			title: string;
+			list: string;
+			invitations: string;
+		};
+		roles: {
+			title: string;
+		};
+		tabs: {
+			all: string;
+			active: string;
+			dormant: string;
+			pendingWithdrawal: string;
+			pending: string;
+			confirmed: string;
+			cancelled: string;
+			completed: string;
+			ongoing: string;
+			upcoming: string;
+			ended: string;
+			oneTime: string;
+			recurring: string;
+			past: string;
+			full: string;
+			available: string;
+			exercise: string;
+			inactive: string;
+			expired: string;
+			archived: string;
+		};
+		fab: {
+			todayReservation: string;
+			quickReservation: string;
+			userSearch: string;
+		};
+	};
+	role: {
+		FULL_ACCESS: {
+			name: string;
+			description: string;
+		};
+		MANAGE: {
+			name: string;
+			description: string;
+		};
+		VIEW: {
+			name: string;
+			description: string;
+		};
+		category: {
+			SHARED: string;
+			WORKSPACE: string;
+			PUBLIC: string;
+			PROJECT: string;
+			TECHNICAL: string;
+			RESTRICTED: string;
+		};
+	};
+	validation: {
+		required: string;
+		stringType: string;
+		numberType: string;
+		booleanType: string;
+		arrayType: string;
+		objectType: string;
+		emailFormat: string;
+		minLength: string;
+		maxLength: string;
+		min: string;
+		max: string;
+		pattern: string;
+		enum: string;
+		unique: string;
+		url: string;
+		uuid: string;
+		date: string;
+		positiveNumber: string;
+		negativeNumber: string;
+		integer: string;
+	};
 };
 /* prettier-ignore */
 export type I18nPath = Path<I18nTranslations>;

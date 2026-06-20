@@ -1,11 +1,17 @@
 "use client";
 
-import { CheckboxGroup, Header, ListBox, Modal, useOverlayState } from "@heroui/react";
+import {
+	CheckboxGroup,
+	Header,
+	ListBox,
+	Modal,
+	useOverlayState,
+} from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Button } from "../../action/Button/Button";
-import { Checkbox } from "../../selection/Checkbox/Checkbox";
 import { Input } from "../../input/Input/Input";
+import { Checkbox } from "../../selection/Checkbox/Checkbox";
 import { RadioGroup } from "../../selection/RadioGroup/RadioGroup";
 import { Select as HeroSelect } from "../../selection/Select/Select";
 import { ConditionEditor } from "../../widget/ability/ConditionEditor";
@@ -305,201 +311,205 @@ export const AbilityFormModal = observer(
 		/**
 		 * 제출 버튼 텍스트
 		 */
-			const submitButtonText = mode === "create" ? "저장" : "수정";
-			const modalState = useOverlayState({
-				isOpen,
-				onOpenChange: (open) => {
-					if (!open) {
-						onClose();
-					}
-				},
-			});
+		const submitButtonText = mode === "create" ? "저장" : "수정";
+		const modalState = useOverlayState({
+			isOpen,
+			onOpenChange: (open) => {
+				if (!open) {
+					onClose();
+				}
+			},
+		});
 
-			return (
-				<Modal state={modalState}>
-					<Modal.Backdrop><Modal.Container size="lg" scroll="inside"><Modal.Dialog>
-					<Modal.Header>{modalTitle}</Modal.Header>
-					<Modal.Body>
-						<div className="flex flex-col gap-4">
-							{/* 규칙 이름 */}
-							<Input
-								label="규칙 이름"
-								placeholder="규칙을 식별할 수 있는 이름을 입력하세요"
-								value={formData.name || ""}
-								onChange={(value) =>
-									setFormData((prev) => ({
-										...prev,
-										name: String(value),
-									}))
-								}
-								isDisabled={loading}
-							/>
+		return (
+			<Modal state={modalState}>
+				<Modal.Backdrop>
+					<Modal.Container size="lg" scroll="inside">
+						<Modal.Dialog>
+							<Modal.Header>{modalTitle}</Modal.Header>
+							<Modal.Body>
+								<div className="flex flex-col gap-4">
+									{/* 규칙 이름 */}
+									<Input
+										label="규칙 이름"
+										placeholder="규칙을 식별할 수 있는 이름을 입력하세요"
+										value={formData.name || ""}
+										onChange={(value) =>
+											setFormData((prev) => ({
+												...prev,
+												name: String(value),
+											}))
+										}
+										isDisabled={loading}
+									/>
 
-							{/* Subject 선택 (그룹별 분류) */}
-								<HeroSelect
-									label="Subject"
-									placeholder="Subject를 선택하세요"
-									value={formData.subjectId || null}
-									onChange={handleSubjectChange}
-									isDisabled={loading}
-									isRequired
-								isInvalid={!!errors.subjectId}
-								errorMessage={errors.subjectId}
-								variant="bordered"
-							>
-								{Object.entries(groupedSubjects).map(([group, items]) => (
-									<ListBox.Section key={group}>
-										<Header className="text-xs font-semibold text-muted uppercase">
-											{group}
-										</Header>
-										{items.map((subject) => (
-											<ListBox.Item
-												key={subject.id}
-												id={subject.id}
-												textValue={subject.displayName || subject.name}
-											>
-												{subject.displayName || subject.name}
-											</ListBox.Item>
+									{/* Subject 선택 (그룹별 분류) */}
+									<HeroSelect
+										label="Subject"
+										placeholder="Subject를 선택하세요"
+										value={formData.subjectId || null}
+										onChange={handleSubjectChange}
+										isDisabled={loading}
+										isRequired
+										isInvalid={!!errors.subjectId}
+										errorMessage={errors.subjectId}
+										variant="bordered"
+									>
+										{Object.entries(groupedSubjects).map(([group, items]) => (
+											<ListBox.Section key={group}>
+												<Header className="text-xs font-semibold text-muted uppercase">
+													{group}
+												</Header>
+												{items.map((subject) => (
+													<ListBox.Item
+														key={subject.id}
+														id={subject.id}
+														textValue={subject.displayName || subject.name}
+													>
+														{subject.displayName || subject.name}
+													</ListBox.Item>
+												))}
+											</ListBox.Section>
 										))}
-									</ListBox.Section>
-								))}
-							</HeroSelect>
+									</HeroSelect>
 
-							{/* Action 선택 (그룹별 분류) */}
-								<HeroSelect
-									label="Action"
-									placeholder="Action을 선택하세요"
-									value={formData.actionId || null}
-									onChange={handleActionChange}
-									isDisabled={loading}
-									isRequired
-								isInvalid={!!errors.actionId}
-								errorMessage={errors.actionId}
-								variant="bordered"
-							>
-								{Object.entries(groupedActions).map(([group, items]) => (
-									<ListBox.Section key={group}>
-										<Header className="text-xs font-semibold text-muted uppercase">
-											{ACTION_GROUP_LABELS[group] || group}
-										</Header>
-										{items.map((action) => (
-											<ListBox.Item
-												key={action.id}
-												id={action.id}
-												textValue={action.displayName || action.name}
-											>
-												{action.displayName || action.name}
-											</ListBox.Item>
+									{/* Action 선택 (그룹별 분류) */}
+									<HeroSelect
+										label="Action"
+										placeholder="Action을 선택하세요"
+										value={formData.actionId || null}
+										onChange={handleActionChange}
+										isDisabled={loading}
+										isRequired
+										isInvalid={!!errors.actionId}
+										errorMessage={errors.actionId}
+										variant="bordered"
+									>
+										{Object.entries(groupedActions).map(([group, items]) => (
+											<ListBox.Section key={group}>
+												<Header className="text-xs font-semibold text-muted uppercase">
+													{ACTION_GROUP_LABELS[group] || group}
+												</Header>
+												{items.map((action) => (
+													<ListBox.Item
+														key={action.id}
+														id={action.id}
+														textValue={action.displayName || action.name}
+													>
+														{action.displayName || action.name}
+													</ListBox.Item>
+												))}
+											</ListBox.Section>
 										))}
-									</ListBox.Section>
-								))}
-							</HeroSelect>
+									</HeroSelect>
 
-							{/* Type 선택 (허용/거부) */}
-							<RadioGroup
-								label="Type"
-								orientation="horizontal"
-								value={formData.inverted ? "cannot" : "can"}
-								onValueChange={handleTypeChange}
-								isDisabled={loading}
-								options={[
-									{ text: "허용 (can)", value: "can" },
-									{ text: "거부 (cannot)", value: "cannot" },
-								]}
-							/>
+									{/* Type 선택 (허용/거부) */}
+									<RadioGroup
+										label="Type"
+										orientation="horizontal"
+										value={formData.inverted ? "cannot" : "can"}
+										onValueChange={handleTypeChange}
+										isDisabled={loading}
+										options={[
+											{ text: "허용 (can)", value: "can" },
+											{ text: "거부 (cannot)", value: "cannot" },
+										]}
+									/>
 
-							{/* 거부 사유 (inverted가 true일 때만 표시) */}
-							{formData.inverted && (
-								<Input
-									label="거부 사유"
-									placeholder="거부 사유를 입력하세요"
-									value={formData.reason || ""}
-									onChange={(value) =>
-										setFormData((prev) => ({
-											...prev,
-											reason: String(value),
-										}))
-									}
-									isDisabled={loading}
-								/>
-							)}
-
-							{/* 대상 필드 선택 (subjectFields가 있을 때만 표시) */}
-							{subjectFields.length > 0 && (
-								<div className="flex flex-col gap-2">
-									<span className="text-sm font-medium text-foreground">
-										대상 필드
-									</span>
-										<CheckboxGroup
-											value={formData.fields}
-											onChange={handleFieldsChange}
+									{/* 거부 사유 (inverted가 true일 때만 표시) */}
+									{formData.inverted && (
+										<Input
+											label="거부 사유"
+											placeholder="거부 사유를 입력하세요"
+											value={formData.reason || ""}
+											onChange={(value) =>
+												setFormData((prev) => ({
+													...prev,
+													reason: String(value),
+												}))
+											}
 											isDisabled={loading}
-											className="flex-wrap gap-3"
+										/>
+									)}
+
+									{/* 대상 필드 선택 (subjectFields가 있을 때만 표시) */}
+									{subjectFields.length > 0 && (
+										<div className="flex flex-col gap-2">
+											<span className="text-sm font-medium text-foreground">
+												대상 필드
+											</span>
+											<CheckboxGroup
+												value={formData.fields}
+												onChange={handleFieldsChange}
+												isDisabled={loading}
+												className="flex-wrap gap-3"
+											>
+												{subjectFields.map((field) => (
+													<Checkbox key={field} value={field}>
+														{field}
+													</Checkbox>
+												))}
+											</CheckboxGroup>
+										</div>
+									)}
+
+									{/* 조건 편집기 */}
+									<ConditionEditor
+										value={formData.conditions || null}
+										onChange={handleConditionsChange}
+										subjectFields={subjectFields}
+										isDisabled={loading}
+									/>
+
+									{/* 우선순위 */}
+									<Input
+										type="number"
+										label="우선순위"
+										placeholder="우선순위 (숫자가 높을수록 먼저 평가)"
+										value={formData.priority}
+										onChange={(value) =>
+											setFormData((prev) => ({
+												...prev,
+												priority: Number(value),
+											}))
+										}
+										isDisabled={loading}
+									/>
+
+									{/* 활성화 상태 */}
+									<div>
+										<Checkbox
+											isSelected={formData.isActive}
+											onChange={(checked) =>
+												setFormData((prev) => ({
+													...prev,
+													isActive: checked,
+												}))
+											}
+											isDisabled={loading}
 										>
-										{subjectFields.map((field) => (
-											<Checkbox key={field} value={field}>
-												{field}
-											</Checkbox>
-										))}
-									</CheckboxGroup>
+											활성화
+										</Checkbox>
+									</div>
 								</div>
-							)}
-
-							{/* 조건 편집기 */}
-							<ConditionEditor
-								value={formData.conditions || null}
-								onChange={handleConditionsChange}
-								subjectFields={subjectFields}
-								isDisabled={loading}
-							/>
-
-							{/* 우선순위 */}
-							<Input
-								type="number"
-								label="우선순위"
-								placeholder="우선순위 (숫자가 높을수록 먼저 평가)"
-								value={formData.priority}
-								onChange={(value) =>
-									setFormData((prev) => ({
-										...prev,
-										priority: Number(value),
-									}))
-								}
-								isDisabled={loading}
-							/>
-
-							{/* 활성화 상태 */}
-							<div>
-								<Checkbox
-									isSelected={formData.isActive}
-									onChange={(checked) =>
-										setFormData((prev) => ({
-											...prev,
-											isActive: checked,
-										}))
-									}
-									isDisabled={loading}
-								>
-									활성화
-								</Checkbox>
-							</div>
-						</div>
-					</Modal.Body>
-					<Modal.Footer>
-						<div className="flex gap-8 justify-end">
-							<Button variant="flat" onPress={onClose} isDisabled={loading}>
-								취소
-							</Button>
-							<Button
-								color="primary"
-								onPress={handleSubmit}
-								isLoading={loading}
-							>
-								{submitButtonText}
-							</Button>
-						</div>
-					</Modal.Footer>
-				</Modal.Dialog></Modal.Container></Modal.Backdrop>
+							</Modal.Body>
+							<Modal.Footer>
+								<div className="flex gap-8 justify-end">
+									<Button variant="flat" onPress={onClose} isDisabled={loading}>
+										취소
+									</Button>
+									<Button
+										color="primary"
+										onPress={handleSubmit}
+										isLoading={loading}
+									>
+										{submitButtonText}
+									</Button>
+								</div>
+							</Modal.Footer>
+						</Modal.Dialog>
+					</Modal.Container>
+				</Modal.Backdrop>
 			</Modal>
 		);
 	},

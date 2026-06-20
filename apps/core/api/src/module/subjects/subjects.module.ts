@@ -1,9 +1,9 @@
 import { SubjectAggregate } from "@cocrepo/aggregate";
+import { SubjectsController } from "@cocrepo/controller";
 import { SubjectsRepository } from "@cocrepo/repository";
 import { SubjectCommandHandlers, SubjectQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { SubjectsController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],

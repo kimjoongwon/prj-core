@@ -11,14 +11,14 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { EmailVerificationDto } from './emailVerificationDto';
-import type { PageMetaDto } from './pageMetaDto';
+import type { EmailVerificationDto } from "./emailVerificationDto";
+import type { PageMetaDto } from "./pageMetaDto";
 
 export type GetEmailVerifications200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: EmailVerificationDto[];
-  meta?: PageMetaDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: EmailVerificationDto[];
+	meta?: PageMetaDto;
 };

@@ -1,10 +1,7 @@
+import { cn, Dropdown as HeroUIDropdown } from "@heroui/react";
 import {
-	Dropdown as HeroUIDropdown,
-	cn,
-} from "@heroui/react";
-import {
-	isValidElement,
 	type ComponentProps,
+	isValidElement,
 	type Key,
 	type ReactNode,
 } from "react";
@@ -97,7 +94,8 @@ const getTriggerVariantClassName = (variant?: string) => {
  * ```
  */
 const DropdownComponent = (props: DropdownProps) => {
-	const { trigger, dropdownItems, onAction, placement, ...dropdownProps } = props;
+	const { trigger, dropdownItems, onAction, placement, ...dropdownProps } =
+		props;
 	const triggerElement = getTriggerElement(trigger);
 
 	const handleAction = (key: Key) => {
@@ -118,10 +116,7 @@ const DropdownComponent = (props: DropdownProps) => {
 				{triggerElement.content}
 			</HeroUIDropdown.Trigger>
 			<HeroUIDropdown.Popover placement={placement}>
-				<HeroUIDropdown.Menu
-					aria-label="Dropdown menu"
-					onAction={handleAction}
-				>
+				<HeroUIDropdown.Menu aria-label="Dropdown menu" onAction={handleAction}>
 					{dropdownItems.map(
 						({
 							key,
@@ -144,9 +139,7 @@ const DropdownComponent = (props: DropdownProps) => {
 									<div className="flex flex-col">
 										<span>{label}</span>
 										{description ? (
-											<span className="text-xs text-muted">
-												{description}
-											</span>
+											<span className="text-xs text-muted">{description}</span>
 										) : null}
 									</div>
 									{endContent}

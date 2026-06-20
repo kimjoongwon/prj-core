@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { Input, ListBox } from "@heroui/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import { ComboBox } from "./ComboBox";
 
 const meta: Meta<typeof ComboBox> = {

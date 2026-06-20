@@ -1,7 +1,7 @@
 export {
 	CONTENT_LANGUAGE_OPTIONS,
-	ContentLanguageNotice,
-	toContentLanguageCode,
 	type ContentLanguageCode,
+	ContentLanguageNotice,
 	type ContentLanguageNoticeProps,
+	toContentLanguageCode,
 } from "./ContentLanguageNotice";

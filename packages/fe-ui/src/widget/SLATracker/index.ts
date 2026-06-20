@@ -1,2 +1,2 @@
+export type { SLAMetric, SLATrackerProps } from "./SLATracker";
 export { SLATracker } from "./SLATracker";
-export type { SLATrackerProps, SLAMetric } from "./SLATracker";

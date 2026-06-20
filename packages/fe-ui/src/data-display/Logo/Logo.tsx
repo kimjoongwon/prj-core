@@ -1,5 +1,5 @@
-import { Button } from "../../action/Button/Button";
 import { cn } from "@heroui/react";
+import { Button } from "../../action/Button/Button";
 
 export interface LogoProps {
 	/** 클릭 핸들러 (보통 홈으로 이동) */

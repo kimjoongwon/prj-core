@@ -245,7 +245,10 @@ function selectTimelineSeedsByGround() {
 
 	for (const timeline of timelineSeedData) {
 		const current = result.get(timeline.groundName);
-		if (!current || priority[timeline.seasonTag] < priority[current.seasonTag]) {
+		if (
+			!current ||
+			priority[timeline.seasonTag] < priority[current.seasonTag]
+		) {
 			result.set(timeline.groundName, timeline);
 		}
 	}
@@ -336,7 +339,9 @@ export async function createMobileReservationDemoData(
 
 	const timelineSeeds = selectTimelineSeedsByGround();
 	const timelineIds = timelineSeeds.map((timeline) => timeline.id);
-	const userEmails = [...new Set(userGroundMapping.map((mapping) => mapping.userEmail))];
+	const userEmails = [
+		...new Set(userGroundMapping.map((mapping) => mapping.userEmail)),
+	];
 	const demoStart = createSeoulDate(DEMO_START_DAY, 0, 0);
 	const demoEnd = createSeoulDate(DEMO_END_DAY, 23, 59);
 	const passExpiresAt = addDays(demoEnd, 30);
@@ -351,12 +356,19 @@ export async function createMobileReservationDemoData(
 			where: { email: { in: userEmails } },
 			select: { id: true, email: true },
 		}),
-		prisma.user.findFirst({ select: { id: true }, where: { email: "admin@plate.com" } }),
+		prisma.user.findFirst({
+			select: { id: true },
+			where: { email: "admin@plate.com" },
+		}),
 	]);
 	if (!fallbackInstructor) {
-		throw new Error("모바일 예약 데모 seed에 필요한 admin@plate.com 사용자를 찾을 수 없습니다.");
+		throw new Error(
+			"모바일 예약 데모 seed에 필요한 admin@plate.com 사용자를 찾을 수 없습니다.",
+		);
 	}
-	const timelineById = new Map(timelines.map((timeline) => [timeline.id, timeline]));
+	const timelineById = new Map(
+		timelines.map((timeline) => [timeline.id, timeline]),
+	);
 	const userByEmail = new Map(users.map((user) => [user.email, user]));
 
 	let courseCount = 0;
@@ -509,7 +521,8 @@ export async function createMobileReservationDemoData(
 						instructorId: timeline.creatorId ?? fallbackInstructor.id,
 						capacity: slot.capacity,
 						name: `${slot.name} 프로그램`,
-						level: slot.level ?? (slot.code.includes("after") ? "중급" : "초급"),
+						level:
+							slot.level ?? (slot.code.includes("after") ? "중급" : "초급"),
 						routineNameSnapshot: routine.name,
 						routineLabelSnapshot: routine.label,
 					},
@@ -520,7 +533,8 @@ export async function createMobileReservationDemoData(
 						instructorId: timeline.creatorId ?? fallbackInstructor.id,
 						capacity: slot.capacity,
 						name: `${slot.name} 프로그램`,
-						level: slot.level ?? (slot.code.includes("after") ? "중급" : "초급"),
+						level:
+							slot.level ?? (slot.code.includes("after") ? "중급" : "초급"),
 						routineNameSnapshot: routine.name,
 						routineLabelSnapshot: routine.label,
 					},

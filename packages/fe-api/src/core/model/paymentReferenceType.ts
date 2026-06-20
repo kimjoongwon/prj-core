@@ -13,15 +13,15 @@
 /**
  * 참조 리소스 종류
  */
-export type PaymentReferenceType = typeof PaymentReferenceType[keyof typeof PaymentReferenceType];
-
+export type PaymentReferenceType =
+	(typeof PaymentReferenceType)[keyof typeof PaymentReferenceType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PaymentReferenceType = {
-  ENROLLMENT: 'ENROLLMENT',
-  COURSE_PASS: 'COURSE_PASS',
-  PRODUCT_ENTITLEMENT: 'PRODUCT_ENTITLEMENT',
-  SERVICE_USAGE: 'SERVICE_USAGE',
-  REFUND: 'REFUND',
-  CUSTOM: 'CUSTOM',
+	ENROLLMENT: "ENROLLMENT",
+	COURSE_PASS: "COURSE_PASS",
+	PRODUCT_ENTITLEMENT: "PRODUCT_ENTITLEMENT",
+	SERVICE_USAGE: "SERVICE_USAGE",
+	REFUND: "REFUND",
+	CUSTOM: "CUSTOM",
 } as const;

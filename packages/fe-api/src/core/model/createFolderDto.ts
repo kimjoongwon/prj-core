@@ -11,15 +11,15 @@
  */
 
 export interface CreateFolderDto {
-  /**
-   * 부모 폴더 ID (루트면 null)
-   * @nullable
-   */
-  parentFolderId?: string | null;
-  /**
-   * 폴더명
-   * @maxLength 100
-   * @pattern ^[^\\/:*?"<>|]+$
-   */
-  name: string;
+	/**
+	 * 부모 폴더 ID (루트면 null)
+	 * @nullable
+	 */
+	parentFolderId?: string | null;
+	/**
+	 * 폴더명
+	 * @maxLength 100
+	 * @pattern ^[^\\/:*?"<>|]+$
+	 */
+	name: string;
 }

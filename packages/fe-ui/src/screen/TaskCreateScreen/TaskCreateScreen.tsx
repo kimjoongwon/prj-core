@@ -5,9 +5,9 @@ import {
 	type AssetBrowserAsset,
 	type AssetBrowserProps,
 	ContentLanguageNotice,
-	SectionSurface,
 	MediaThumbnail,
 	PageTitleBar,
+	SectionSurface,
 	useT,
 	VStack,
 } from "@cocrepo/ui";

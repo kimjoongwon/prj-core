@@ -2,8 +2,8 @@
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { Input } from "../../input/Input/Input";
-import { RadioGroup } from "../../selection/RadioGroup/RadioGroup";
 import { TextArea } from "../../input/TextArea/TextArea";
+import { RadioGroup } from "../../selection/RadioGroup/RadioGroup";
 import { TemplateContentEditor } from "../../widget/TemplateContentEditor/TemplateContentEditor";
 import { TemplateTypeBadge } from "../../widget/TemplateTypeBadge/TemplateTypeBadge";
 import {
@@ -131,16 +131,16 @@ export const TemplateForm = observer(
 										type: value as TemplateFormData["type"],
 									})
 								}
-									isRequired
-									isInvalid={!!errors?.type}
-									errorMessage={errors?.type}
-									options={[
-										{ text: "이메일", value: "EMAIL" },
-										{ text: "SMS", value: "SMS" },
-										{ text: "푸시", value: "PUSH" },
-									]}
-								/>
-							)}
+								isRequired
+								isInvalid={!!errors?.type}
+								errorMessage={errors?.type}
+								options={[
+									{ text: "이메일", value: "EMAIL" },
+									{ text: "SMS", value: "SMS" },
+									{ text: "푸시", value: "PUSH" },
+								]}
+							/>
+						)}
 						{isEdit ? (
 							<div className="flex flex-col gap-1.5">
 								<span className="text-sm text-muted">코드</span>

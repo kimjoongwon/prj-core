@@ -1,9 +1,6 @@
-import {
-	CONTEXT_KEYS } from "@cocrepo/constant";
+import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { User } from "@cocrepo/entity";
-import { AuthCacheService,
-	UserService,
-} from "@cocrepo/service";
+import { AuthCacheService, UserService } from "@cocrepo/service";
 import type { AuthConfig } from "@cocrepo/type";
 import {
 	Global,

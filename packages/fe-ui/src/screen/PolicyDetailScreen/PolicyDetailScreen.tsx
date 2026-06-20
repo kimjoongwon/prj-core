@@ -1,12 +1,12 @@
 "use client";
 
-import { SectionSurface, PageTitleBar, VStack } from "@cocrepo/ui";
+import { PageTitleBar, SectionSurface, VStack } from "@cocrepo/ui";
+import { Modal, Spinner } from "@heroui/react";
 import { ArrowLeft, Edit, Save, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
-import { Checkbox } from "../../selection/Checkbox/Checkbox";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Modal, Spinner } from "@heroui/react";
+import { Checkbox } from "../../selection/Checkbox/Checkbox";
 export interface PolicyDetailScreenPolicy {
 	id: string;
 	spaceId?: string | null;

@@ -9,20 +9,21 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { SpaceScope } from './spaceScope';
-import type { LanguageCode } from './languageCode';
+
+import type { LanguageCode } from "./languageCode";
+import type { SpaceScope } from "./spaceScope";
 
 export type GetRoutinesParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-search?: string;
-spaceScope?: SpaceScope;
-contentLanguageCode?: LanguageCode;
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	search?: string;
+	spaceScope?: SpaceScope;
+	contentLanguageCode?: LanguageCode;
 };

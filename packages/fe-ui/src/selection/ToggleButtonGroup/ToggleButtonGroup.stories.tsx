@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { ToggleButton } from "@heroui/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import { ToggleButtonGroup } from "./ToggleButtonGroup";
 
 const meta: Meta<typeof ToggleButtonGroup> = {

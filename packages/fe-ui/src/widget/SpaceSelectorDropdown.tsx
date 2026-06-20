@@ -1,9 +1,9 @@
 "use client";
 
+import { Dropdown } from "@heroui/react";
 import { Building2, Check, ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../action/Button/Button";
-import { Dropdown } from "@heroui/react";
 
 /**
  * Space 정보 인터페이스
@@ -58,9 +58,7 @@ export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 				variant="light"
 				isDisabled
 				className={buttonClasses}
-				startContent={
-					<Building2 className="h-4 w-4 text-muted" size={16} />
-				}
+				startContent={<Building2 className="h-4 w-4 text-muted" size={16} />}
 			>
 				<span className="max-w-32 truncate text-sm text-muted">
 					{buttonLabel}

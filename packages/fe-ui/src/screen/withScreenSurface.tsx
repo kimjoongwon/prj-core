@@ -1,7 +1,7 @@
 "use client";
 
-import type { ComponentType } from "react";
 import { observer } from "mobx-react-lite";
+import type { ComponentType } from "react";
 import { ScreenSurface } from "../surface";
 
 /**

@@ -9,31 +9,31 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { PaymentMethod } from './paymentMethod';
+import type { PaymentMethod } from "./paymentMethod";
 
 export interface CreateReservationCheckoutDto {
-  /** 구매할 코스 개설 ID */
-  courseOfferingId: string;
-  /** 타임라인 ID */
-  timelineId: string;
-  /** 세션 ID */
-  sessionId: string;
-  /** 프로그램 ID */
-  programId: string;
-  /** 예약 회차 시작 시각 */
-  occurrenceStartAt: string;
-  /**
-   * checkout/예약 멱등성 키
-   * @minLength 8
-   * @maxLength 120
-   */
-  idempotencyKey: string;
-  /** placeholder 결제 수단 */
-  paymentMethod: PaymentMethod;
-  /**
-   * 예약 메모
-   * @maxLength 1000
-   * @nullable
-   */
-  memo?: string | null;
+	/** 구매할 코스 개설 ID */
+	courseOfferingId: string;
+	/** 타임라인 ID */
+	timelineId: string;
+	/** 세션 ID */
+	sessionId: string;
+	/** 프로그램 ID */
+	programId: string;
+	/** 예약 회차 시작 시각 */
+	occurrenceStartAt: string;
+	/**
+	 * checkout/예약 멱등성 키
+	 * @minLength 8
+	 * @maxLength 120
+	 */
+	idempotencyKey: string;
+	/** placeholder 결제 수단 */
+	paymentMethod: PaymentMethod;
+	/**
+	 * 예약 메모
+	 * @maxLength 1000
+	 * @nullable
+	 */
+	memo?: string | null;
 }

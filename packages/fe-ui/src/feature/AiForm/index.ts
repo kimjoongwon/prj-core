@@ -1,11 +1,11 @@
 export { AiForm } from "./AiForm";
-export type { AiFormProps } from "./type";
 export type {
 	AiFormFieldMeta,
 	AiFormFillRequest,
 	AiFormFillResponse,
 	AiFormOptionItem,
 	AiFormPatch,
+	AiFormProps,
 	AiFormSchema,
 	AiFormUiPaths,
 } from "./type";

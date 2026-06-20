@@ -24,7 +24,6 @@ const watchPackages = [
   "dto",
   "entity",
   "enum",
-  "facade",
   "prisma",
   "repository",
   "service",

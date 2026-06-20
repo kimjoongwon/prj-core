@@ -1,5 +1,6 @@
 "use client";
 
+import { Tooltip } from "@heroui/react";
 import {
 	Bold,
 	Code,
@@ -18,7 +19,6 @@ import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { useRef } from "react";
 import { Button } from "../../action/Button/Button";
-import { Tooltip } from "@heroui/react";
 
 interface ToolbarItem {
 	icon?: React.ComponentType<{ className?: string }>;
@@ -204,20 +204,20 @@ export const MarkdownEditor = observer(
 						item.type === "divider" ? (
 							<div key={index} className="mx-1 h-6 w-px bg-border" />
 						) : (
-								<Tooltip key={index}>
-									<Tooltip.Trigger>
+							<Tooltip key={index}>
+								<Tooltip.Trigger>
 									<Button
 										size="sm"
 										variant="light"
-									isIconOnly
-									onPress={item.action}
-									className="size-8 min-w-8"
+										isIconOnly
+										onPress={item.action}
+										className="size-8 min-w-8"
 									>
 										{item.icon && <item.icon className="size-4" />}
 									</Button>
-									</Tooltip.Trigger>
-									<Tooltip.Content>{item.label}</Tooltip.Content>
-								</Tooltip>
+								</Tooltip.Trigger>
+								<Tooltip.Content>{item.label}</Tooltip.Content>
+							</Tooltip>
 						),
 					)}
 					{extraActions && (

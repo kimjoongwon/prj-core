@@ -1,8 +1,8 @@
 "use client";
 
 import { useNavigationStore } from "@cocrepo/store";
-import { observer } from "mobx-react-lite";
 import { cn } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 
 export interface SubMenuListProps {
 	/** 하위 아이템 클릭 시 콜백 */

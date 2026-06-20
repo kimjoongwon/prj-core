@@ -7,20 +7,20 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
-	SectionSurface,
 	Button,
 	buildActionTableColumns,
 	DataGrid,
 	DataGridStateModel,
 	HStack,
 	PageTitleBar,
+	SectionSurface,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
+import { Tabs } from "@heroui/react";
 import { KeyRound, Layers3, Plus, ShieldCheck } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type Key, type ReactNode, useEffect } from "react";
-import { Tabs } from "@heroui/react";
 
 const leftInputs: InputConfig[] = [
 	{

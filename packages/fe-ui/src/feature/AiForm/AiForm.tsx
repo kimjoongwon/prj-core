@@ -6,9 +6,9 @@ import { ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Button } from "../../action/Button/Button";
+import { Chip } from "../../data-display/Chip/Chip";
 import { Input } from "../../input/Input/Input";
 import { Select } from "../../selection/Select/Select";
-import { Chip } from "../../data-display/Chip/Chip";
 import type {
 	AiFormFieldMeta,
 	AiFormPatch,
@@ -306,23 +306,23 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 
 				<div className="flex flex-col gap-2 md:flex-row md:items-center">
 					<Select
-							aria-label="AI 스키마"
-							size="sm"
-							placeholder="AI 스키마 선택"
-							value={selectedSchemaKey || null}
-							onChange={handleSchemaSelectionChange}
-							isDisabled={disabled || aiSchemas.length === 0}
-							className="flex-1"
-						>
-							{aiSchemas.map((schema) => (
-								<ListBox.Item
-									key={schema.key}
-									id={schema.key}
-									textValue={schema.label}
-								>
-									{schema.label}
-								</ListBox.Item>
-							))}
+						aria-label="AI 스키마"
+						size="sm"
+						placeholder="AI 스키마 선택"
+						value={selectedSchemaKey || null}
+						onChange={handleSchemaSelectionChange}
+						isDisabled={disabled || aiSchemas.length === 0}
+						className="flex-1"
+					>
+						{aiSchemas.map((schema) => (
+							<ListBox.Item
+								key={schema.key}
+								id={schema.key}
+								textValue={schema.label}
+							>
+								{schema.label}
+							</ListBox.Item>
+						))}
 					</Select>
 
 					<div className="flex items-center gap-1.5">

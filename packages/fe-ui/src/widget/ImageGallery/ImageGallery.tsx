@@ -85,9 +85,7 @@ export const ImageGallery = observer(
 					<div>
 						<h3 className="text-lg font-semibold">{title}</h3>
 						{subtitle && (
-							<p className="text-sm text-muted truncate max-w-md">
-								{subtitle}
-							</p>
+							<p className="text-sm text-muted truncate max-w-md">{subtitle}</p>
 						)}
 					</div>
 					<div className="flex gap-2">

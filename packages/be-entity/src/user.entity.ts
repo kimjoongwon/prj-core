@@ -1,10 +1,10 @@
+import { SpaceCategoryName } from "@cocrepo/enum";
 import type {
 	Profile,
 	Tenant,
 	UserAssociation,
 	User as UserEntityType,
 } from "@cocrepo/prisma";
-import { SpaceCategoryName } from "@cocrepo/enum";
 import { AbstractEntity } from "./abstract.entity";
 import type { AuthAuditLog } from "./auth-audit-log.entity";
 import type { PasswordHistory } from "./password-history.entity";

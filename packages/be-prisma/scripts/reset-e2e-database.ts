@@ -64,23 +64,23 @@ function assertSafeE2eDatabase(databaseUrl: string): void {
 	}
 }
 
-function runPrismaCommand(args: string[], databaseUrl: string, directUrl: string) {
-	const result = spawnSync(
-		"pnpm",
-		["exec", "prisma", ...args],
-		{
-			cwd: packageRoot,
-			env: {
-				...process.env,
-				...buildOidcAdminEnv(),
-				DATABASE_URL: databaseUrl,
-				DIRECT_URL: directUrl,
-				NODE_ENV: "test",
-				PRISMA_SEED_PROFILE: "e2e",
-			},
-			stdio: "inherit",
+function runPrismaCommand(
+	args: string[],
+	databaseUrl: string,
+	directUrl: string,
+) {
+	const result = spawnSync("pnpm", ["exec", "prisma", ...args], {
+		cwd: packageRoot,
+		env: {
+			...process.env,
+			...buildOidcAdminEnv(),
+			DATABASE_URL: databaseUrl,
+			DIRECT_URL: directUrl,
+			NODE_ENV: "test",
+			PRISMA_SEED_PROFILE: "e2e",
 		},
-	);
+		stdio: "inherit",
+	});
 
 	if (result.error) {
 		throw result.error;
@@ -104,7 +104,9 @@ if (!databaseUrl) {
 }
 
 if (!directUrl) {
-	throw new Error("E2E_DIRECT_URL, TEST_DIRECT_URL, or DIRECT_URL is required.");
+	throw new Error(
+		"E2E_DIRECT_URL, TEST_DIRECT_URL, or DIRECT_URL is required.",
+	);
 }
 
 assertSafeE2eDatabase(databaseUrl);

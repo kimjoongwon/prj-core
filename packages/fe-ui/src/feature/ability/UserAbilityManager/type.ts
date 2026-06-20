@@ -1,9 +1,9 @@
-import type { AbilityRule } from "../../../widget/ability/AbilityRuleList";
 import type {
 	AbilityFormData,
 	Action,
 	Subject,
 } from "../../../form/AbilityFormModal";
+import type { AbilityRule } from "../../../widget/ability/AbilityRuleList";
 
 /**
  * Ability 관리용 사용자 정보 타입

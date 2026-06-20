@@ -38,7 +38,7 @@
     "codegen:stg": "ORVAL_ENV=stg orval --config orval.config.js",
     "codegen:prod": "ORVAL_ENV=prod orval --config orval.config.js",
     "lint": "biome lint",
-    "format": "biome format --write .",
+    "format": "biome check --write .",
     "type-check": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"

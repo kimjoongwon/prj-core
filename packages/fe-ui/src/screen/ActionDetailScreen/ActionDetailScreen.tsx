@@ -1,11 +1,11 @@
 "use client";
 
-import { SectionSurface, PageTitleBar, VStack } from "@cocrepo/ui";
+import { PageTitleBar, SectionSurface, VStack } from "@cocrepo/ui";
+import { Modal, useOverlayState } from "@heroui/react";
 import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Modal, useOverlayState } from "@heroui/react";
 export interface ActionDetailScreenAction {
 	id: string;
 	name: string;

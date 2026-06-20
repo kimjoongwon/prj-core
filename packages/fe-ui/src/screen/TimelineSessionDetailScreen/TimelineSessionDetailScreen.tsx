@@ -2,10 +2,11 @@
 
 import {
 	DateTimeCell,
-	SectionSurface,
 	PageTitleBar,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
+import { Modal, Table, useOverlayState } from "@heroui/react";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -13,7 +14,6 @@ import Link from "next/link";
 import type { MouseEvent } from "react";
 import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Modal, Table, useOverlayState } from "@heroui/react";
 export interface TimelineSessionDetailScreenSession {
 	name?: string | null;
 	type?: string | null;

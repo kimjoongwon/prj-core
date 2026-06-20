@@ -14,7 +14,11 @@ import {
 	usePersistStore,
 } from "@cocrepo/store";
 import { DesignSystemProvider, useDesignSystemTheme } from "@cocrepo/ui";
-import { isServer, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+	isServer,
+	QueryClient,
+	QueryClientProvider,
+} from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { NuqsAdapter as NuqsReactAdapter } from "nuqs/adapters/react";
 import type { PropsWithChildren, ReactNode } from "react";
@@ -25,7 +29,10 @@ import {
 	BOTTOM_TAB_IDS,
 	IDP_NAV_ITEMS,
 } from "../../../../../packages/common-constant/src";
-import type { AbilityRule, NavigatorLike } from "../../../../../packages/common-type/src";
+import type {
+	AbilityRule,
+	NavigatorLike,
+} from "../../../../../packages/common-type/src";
 import {
 	setApiPersistStore,
 	setLoginRedirectUrl,
@@ -305,10 +312,7 @@ const AdminSpaceBar = observer(function AdminSpaceBar() {
 			<span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
 				Admin Realm
 			</span>
-			<label
-				className="text-sm text-muted"
-				htmlFor="storybook-space-select"
-			>
+			<label className="text-sm text-muted" htmlFor="storybook-space-select">
 				Space
 			</label>
 			<select
@@ -384,11 +388,10 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 					)
 				: undefined;
 			const requestedSpace = runtime.spaceId
-				? STATIC_ADMIN_SPACES.find(
-						(space) => space.spaceId === runtime.spaceId,
-					)
+				? STATIC_ADMIN_SPACES.find((space) => space.spaceId === runtime.spaceId)
 				: undefined;
-			const nextSpace = requestedSpace ?? persistedSpace ?? STATIC_ADMIN_SPACES[0];
+			const nextSpace =
+				requestedSpace ?? persistedSpace ?? STATIC_ADMIN_SPACES[0];
 
 			persistStore.setSpaces(STATIC_ADMIN_SPACES);
 			persistStore.setSpace(nextSpace.spaceId, nextSpace.groundName);

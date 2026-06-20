@@ -1,12 +1,12 @@
 "use client";
 
+import { Modal, useOverlayState } from "@heroui/react";
 import { AlertCircle, CheckCircle, Send } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { Button } from "../../action/Button/Button";
-import { Input } from "../../input/Input/Input";
-import { Modal, useOverlayState } from "@heroui/react";
 import { VariableInputForm } from "../../form/VariableInputForm/VariableInputForm";
+import { Input } from "../../input/Input/Input";
 import type { TemplateVariable } from "../VariableReadTable/VariableReadTable";
 
 /** 발송 테스트 유형 */
@@ -107,8 +107,8 @@ export const SendTestModal = observer(
 		const [status, setStatus] = useState<SendTestStatus>("idle");
 
 		const config = recipientConfig[type];
-			const isRecipientEmpty = recipient.trim() === "";
-			const isSendDisabled = isRecipientEmpty || status === "loading";
+		const isRecipientEmpty = recipient.trim() === "";
+		const isSendDisabled = isRecipientEmpty || status === "loading";
 
 		/** 모달이 열릴 때 상태 초기화 */
 		const handleOpenChange = (open: boolean) => {
@@ -120,12 +120,12 @@ export const SendTestModal = observer(
 			}
 			if (!open) {
 				onClose();
-				}
-			};
-			const modalState = useOverlayState({
-				isOpen,
-				onOpenChange: handleOpenChange,
-			});
+			}
+		};
+		const modalState = useOverlayState({
+			isOpen,
+			onOpenChange: handleOpenChange,
+		});
 
 		/** 발송 테스트 실행 */
 		const handleSendTest = async () => {
@@ -150,93 +150,101 @@ export const SendTestModal = observer(
 			}
 		};
 
-			return (
-				<Modal state={modalState}>
-					<Modal.Backdrop><Modal.Container size="lg"><Modal.Dialog>
-					<Modal.Header className="flex flex-col gap-1">테스트 발송</Modal.Header>
+		return (
+			<Modal state={modalState}>
+				<Modal.Backdrop>
+					<Modal.Container size="lg">
+						<Modal.Dialog>
+							<Modal.Header className="flex flex-col gap-1">
+								테스트 발송
+							</Modal.Header>
 
-					<Modal.Body>
-						<div className="flex flex-col gap-4">
-							{/* 수신자 입력 */}
-							<Input
-								label={config.label}
-								placeholder={config.placeholder}
-								value={recipient}
-								onValueChange={setRecipient}
-								isRequired
-								size="sm"
-								isDisabled={status === "loading"}
-							/>
-
-							{/* 변수 입력 폼 */}
-							{variables.length > 0 && (
-								<div className="flex flex-col gap-2">
-									<p className="text-sm font-semibold text-foreground">
-										변수 값
-									</p>
-									<VariableInputForm
-										variables={variables}
-										values={variableValues}
-										onChange={setVariableValues}
+							<Modal.Body>
+								<div className="flex flex-col gap-4">
+									{/* 수신자 입력 */}
+									<Input
+										label={config.label}
+										placeholder={config.placeholder}
+										value={recipient}
+										onValueChange={setRecipient}
+										isRequired
+										size="sm"
+										isDisabled={status === "loading"}
 									/>
-								</div>
-							)}
 
-							{/* 결과 표시 영역 */}
-							{result && (
-								<div
-									className={`flex items-start gap-3 rounded-lg p-3 ${
-										result.success
-											? "bg-success/10 border border-success/30"
-											: "bg-danger/10 border border-danger/30"
-									}`}
-								>
-									{result.success ? (
-										<CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-success" />
-									) : (
-										<AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-danger" />
+									{/* 변수 입력 폼 */}
+									{variables.length > 0 && (
+										<div className="flex flex-col gap-2">
+											<p className="text-sm font-semibold text-foreground">
+												변수 값
+											</p>
+											<VariableInputForm
+												variables={variables}
+												values={variableValues}
+												onChange={setVariableValues}
+											/>
+										</div>
 									)}
-									<div className="flex flex-col gap-1">
-										{result.success ? (
-											<>
-												<span className="text-sm font-medium text-success">
-													발송 성공
-												</span>
-												<span className="text-xs text-muted">
-													발송 시각: {formatSentAt(result.sentAt)}
-												</span>
-											</>
-										) : (
-											<span className="text-sm font-medium text-danger">
-												발송 실패: {result.errorMessage}
-											</span>
-										)}
-									</div>
-								</div>
-							)}
-						</div>
-					</Modal.Body>
 
-					<Modal.Footer>
-						<Button
-							variant="flat"
-							onPress={onClose}
-							isDisabled={status === "loading"}
-						>
-							닫기
-						</Button>
-						<Button
-							color="primary"
-							onPress={handleSendTest}
-							isDisabled={isSendDisabled}
-							startContent={
-								status !== "loading" ? <Send className="h-4 w-4" /> : undefined
-							}
-						>
-							발송
-						</Button>
-					</Modal.Footer>
-				</Modal.Dialog></Modal.Container></Modal.Backdrop>
+									{/* 결과 표시 영역 */}
+									{result && (
+										<div
+											className={`flex items-start gap-3 rounded-lg p-3 ${
+												result.success
+													? "bg-success/10 border border-success/30"
+													: "bg-danger/10 border border-danger/30"
+											}`}
+										>
+											{result.success ? (
+												<CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-success" />
+											) : (
+												<AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-danger" />
+											)}
+											<div className="flex flex-col gap-1">
+												{result.success ? (
+													<>
+														<span className="text-sm font-medium text-success">
+															발송 성공
+														</span>
+														<span className="text-xs text-muted">
+															발송 시각: {formatSentAt(result.sentAt)}
+														</span>
+													</>
+												) : (
+													<span className="text-sm font-medium text-danger">
+														발송 실패: {result.errorMessage}
+													</span>
+												)}
+											</div>
+										</div>
+									)}
+								</div>
+							</Modal.Body>
+
+							<Modal.Footer>
+								<Button
+									variant="flat"
+									onPress={onClose}
+									isDisabled={status === "loading"}
+								>
+									닫기
+								</Button>
+								<Button
+									color="primary"
+									onPress={handleSendTest}
+									isDisabled={isSendDisabled}
+									startContent={
+										status !== "loading" ? (
+											<Send className="h-4 w-4" />
+										) : undefined
+									}
+								>
+									발송
+								</Button>
+							</Modal.Footer>
+						</Modal.Dialog>
+					</Modal.Container>
+				</Modal.Backdrop>
 			</Modal>
 		);
 	},

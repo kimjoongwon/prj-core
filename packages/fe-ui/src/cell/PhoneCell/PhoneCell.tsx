@@ -18,10 +18,7 @@ const joinClassNames = (...values: Array<string | false | null | undefined>) =>
 export const PhoneCell = ({ value, className, title }: PhoneCellProps) => {
 	if (!value) {
 		return (
-			<span
-				className={joinClassNames("text-muted", className)}
-				title={title}
-			>
+			<span className={joinClassNames("text-muted", className)} title={title}>
 				-
 			</span>
 		);

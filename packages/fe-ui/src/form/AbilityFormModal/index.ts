@@ -1,6 +1,6 @@
 export {
-	AbilityFormModal,
 	type AbilityFormData,
+	AbilityFormModal,
 	type AbilityFormModalProps,
 	type Action,
 	type Subject,

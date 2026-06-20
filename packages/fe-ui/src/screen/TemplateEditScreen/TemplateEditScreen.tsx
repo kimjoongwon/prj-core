@@ -1,16 +1,16 @@
 "use client";
 
 import {
-	SectionSurface,
 	PageTitleBar,
+	SectionSurface,
 	TemplateForm,
 	type TemplateFormData,
 	type VariableEditItem,
 	VStack,
 } from "@cocrepo/ui";
+import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
-import { Spinner } from "@heroui/react";
 export interface TemplateEditScreenProps {
 	templateName?: string;
 	formData: TemplateFormData;

@@ -73,20 +73,24 @@ export const CategoryFormSection = observer(
 							: "식별자는 수정할 수 없습니다"
 					}
 				/>
-					<Select
-						label="상위 카테고리"
-						placeholder="상위 카테고리 선택"
-						value={values.parentId || null}
-						onChange={handleChangeParentId}
-						isInvalid={!!errors?.parentId}
-						errorMessage={errors?.parentId}
-						description="선택하지 않으면 최상위 카테고리로 생성됩니다"
-					>
-						{categoryOptions.map((option) => (
-							<ListBox.Item key={option.id} id={option.id} textValue={option.name}>
-								{option.name}
-							</ListBox.Item>
-						))}
+				<Select
+					label="상위 카테고리"
+					placeholder="상위 카테고리 선택"
+					value={values.parentId || null}
+					onChange={handleChangeParentId}
+					isInvalid={!!errors?.parentId}
+					errorMessage={errors?.parentId}
+					description="선택하지 않으면 최상위 카테고리로 생성됩니다"
+				>
+					{categoryOptions.map((option) => (
+						<ListBox.Item
+							key={option.id}
+							id={option.id}
+							textValue={option.name}
+						>
+							{option.name}
+						</ListBox.Item>
+					))}
 				</Select>
 			</div>
 		);

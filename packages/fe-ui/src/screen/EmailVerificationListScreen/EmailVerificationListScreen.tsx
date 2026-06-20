@@ -7,17 +7,17 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
-	SectionSurface,
 	buildEmailVerificationTableColumns,
 	ConfirmModal,
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
+import { useOverlayState } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { useOverlayState } from "@heroui/react";
 
 const EMAIL_VERIFICATION_STATUS_OPTIONS = [
 	{ value: "PENDING", label: "대기" },

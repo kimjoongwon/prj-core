@@ -7,7 +7,10 @@ interface TransformToDtoOptions {
 	excludeFields?: readonly string[];
 }
 
-const removeExcludedFields = <T>(value: T, excludeFields: readonly string[]): T => {
+const removeExcludedFields = <T>(
+	value: T,
+	excludeFields: readonly string[],
+): T => {
 	if (!value || typeof value !== "object" || excludeFields.length === 0) {
 		return value;
 	}

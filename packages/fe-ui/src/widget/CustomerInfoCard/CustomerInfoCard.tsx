@@ -1,8 +1,8 @@
 "use client";
 
+import { Card } from "@heroui/react";
 import { Calendar, Mail, Phone, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Card } from "@heroui/react";
 
 export interface CustomerInfoCardProps {
 	/** 고객 이름 */
@@ -47,17 +47,13 @@ export const CustomerInfoCard = observer(
 			<Card className={`bg-surface ${className}`}>
 				<Card.Content className="gap-3 p-4">
 					{/* 헤더 */}
-					<h3 className="text-sm font-semibold text-muted">
-						📞 고객 정보
-					</h3>
+					<h3 className="text-sm font-semibold text-muted">📞 고객 정보</h3>
 
 					{/* 고객 이름 */}
 					<div className="flex items-center gap-2">
 						<User className="size-4 text-muted" />
 						<span className="font-semibold text-foreground">{name}</span>
-						{email && (
-							<span className="text-sm text-muted">({email})</span>
-						)}
+						{email && <span className="text-sm text-muted">({email})</span>}
 					</div>
 
 					{/* 연락처 */}

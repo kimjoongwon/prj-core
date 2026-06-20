@@ -6,6 +6,7 @@ import {
 	SpaceAggregate,
 } from "@cocrepo/aggregate";
 import { OidcClient } from "@cocrepo/client";
+import { AuthController } from "@cocrepo/controller";
 import {
 	AbilitiesRepository,
 	AuthAuditLogsRepository,
@@ -40,7 +41,6 @@ import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { InteractionModule } from "../interaction/interaction.module";
 import { OidcClientsModule } from "../oidc-client/oidc-clients.module";
-import { AuthController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule, OidcClientsModule, InteractionModule],

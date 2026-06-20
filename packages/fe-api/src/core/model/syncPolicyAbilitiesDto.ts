@@ -11,6 +11,6 @@
  */
 
 export interface SyncPolicyAbilitiesDto {
-  /** Policy에 연결할 Ability ID 목록입니다. 전체 동기화 방식으로 반영됩니다. */
-  abilityIds: string[];
+	/** Policy에 연결할 Ability ID 목록입니다. 전체 동기화 방식으로 반영됩니다. */
+	abilityIds: string[];
 }

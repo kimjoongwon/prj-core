@@ -7,20 +7,20 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
-	SectionSurface,
 	buildUserListTableColumns,
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	SectionSurface,
 	StatsCard,
 	VStack,
 } from "@cocrepo/ui";
+import { Spinner } from "@heroui/react";
 import { Search, UserCheck, UserMinus, Users } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ComponentType, useEffect } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Input } from "../../input/Input/Input";
-import { Spinner } from "@heroui/react";
 
 export interface UserListScreenStats {
 	total: number;

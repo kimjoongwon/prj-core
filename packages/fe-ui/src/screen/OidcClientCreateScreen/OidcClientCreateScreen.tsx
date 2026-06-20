@@ -4,11 +4,11 @@ import type { OidcClientLoginUi } from "@cocrepo/type";
 import {
 	BackButton,
 	buildOidcClientLoginUi,
-	SectionSurface,
 	isValidOidcLoginUiBrandColor,
 	OidcClientForm,
 	type OidcClientFormState,
 	PageTitleBar,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";

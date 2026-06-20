@@ -1,5 +1,5 @@
-import { Button } from "../../action/Button/Button";
 import { Card } from "@heroui/react";
+import { Button } from "../../action/Button/Button";
 
 export interface UnsavedChangesIndicatorProps {
 	/** 표시 여부 */
@@ -38,9 +38,7 @@ export const UnsavedChangesIndicator = ({
 		<div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 transform">
 			<Card className="border border-accent bg-accent-soft shadow-lg">
 				<Card.Content className="flex flex-row items-center gap-4 px-4 py-3">
-					<span className="text-accent">
-						저장되지 않은 변경사항이 있습니다
-					</span>
+					<span className="text-accent">저장되지 않은 변경사항이 있습니다</span>
 					<div className="flex gap-2">
 						<Button
 							size="sm"

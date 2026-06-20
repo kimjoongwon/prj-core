@@ -17,16 +17,16 @@ import type {
 import {
 	AiForm,
 	Button,
-	SectionSurface,
 	PageTitleBar,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
+import { ListBox } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Input } from "../../input/Input/Input";
-import { Select } from "../../selection/Select/Select";
 import { TextArea } from "../../input/TextArea/TextArea";
-import { ListBox } from "@heroui/react";
+import { Select } from "../../selection/Select/Select";
 export interface InquiryCreateScreenCustomerSearchResult {
 	id: string;
 	name: string;

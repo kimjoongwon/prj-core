@@ -9,996 +9,1985 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
+
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	InfiniteData,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseQueryOptions,
+	UseQueryResult,
+	UseSuspenseInfiniteQueryOptions,
+	UseSuspenseInfiniteQueryResult,
+	UseSuspenseQueryOptions,
+	UseSuspenseQueryResult,
+} from "@tanstack/react-query";
 import {
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { ErrorType } from "../../libs/customAxios";
+
+import { customInstance } from "../../libs/customAxios";
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  InfiniteData,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
-
-import type {
-  GetCourseOfferings200AllOf,
-  GetCourseOfferingsParams,
-  GetCoursePasses200AllOf,
-  GetCoursePassesParams,
-  GetCourses200AllOf,
-  GetCoursesParams,
-  GetEnrollments200AllOf,
-  GetEnrollmentsParams
-} from '.././model';
-
-import { customInstance } from '../../libs/customAxios';
-import type { ErrorType } from '../../libs/customAxios';
-
+	GetCourseOfferings200AllOf,
+	GetCourseOfferingsParams,
+	GetCoursePasses200AllOf,
+	GetCoursePassesParams,
+	GetCourses200AllOf,
+	GetCoursesParams,
+	GetEnrollments200AllOf,
+	GetEnrollmentsParams,
+} from ".././model";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
 
 /**
  * 현재 Space 기준으로 코스 목록을 조회합니다. 검색, 상태 필터, 페이지네이션을 지원합니다.
  * @summary 코스 목록 조회
  */
 export const getCourses = (
-    params?: GetCoursesParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	params?: GetCoursesParams,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetCourses200AllOf>(
-      {url: `/api/v1/courses`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
+	return customInstance<GetCourses200AllOf>(
+		{ url: `/api/v1/courses`, method: "GET", params, signal },
+		options,
+	);
+};
 
+export const getGetCoursesQueryKey = (params?: GetCoursesParams) => {
+	return [`/api/v1/courses`, ...(params ? [params] : [])] as const;
+};
 
+export const getGetCoursesInfiniteQueryKey = (params?: GetCoursesParams) => {
+	return ["infinite", `/api/v1/courses`, ...(params ? [params] : [])] as const;
+};
 
-export const getGetCoursesQueryKey = (params?: GetCoursesParams,) => {
-    return [
-    `/api/v1/courses`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-export const getGetCoursesInfiniteQueryKey = (params?: GetCoursesParams,) => {
-    return [
-    'infinite', `/api/v1/courses`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetCoursesQueryOptions = <TData = Awaited<ReturnType<typeof getCourses>>, TError = ErrorType<void>>(params?: GetCoursesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCoursesQueryOptions = <
+	TData = Awaited<ReturnType<typeof getCourses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetCoursesQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCoursesQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourses>>> = ({
+		signal,
+	}) => getCourses(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getCourses>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourses>>> = ({ signal }) => getCourses(params, requestOptions, signal);
+export type GetCoursesQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCourses>>
+>;
+export type GetCoursesQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCoursesQueryResult = NonNullable<Awaited<ReturnType<typeof getCourses>>>
-export type GetCoursesQueryError = ErrorType<void>
-
-
-export function useGetCourses<TData = Awaited<ReturnType<typeof getCourses>>, TError = ErrorType<void>>(
- params: undefined |  GetCoursesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCourses>>,
-          TError,
-          Awaited<ReturnType<typeof getCourses>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCourses<TData = Awaited<ReturnType<typeof getCourses>>, TError = ErrorType<void>>(
- params?: GetCoursesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCourses>>,
-          TError,
-          Awaited<ReturnType<typeof getCourses>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCourses<TData = Awaited<ReturnType<typeof getCourses>>, TError = ErrorType<void>>(
- params?: GetCoursesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCourses<
+	TData = Awaited<ReturnType<typeof getCourses>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetCoursesParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getCourses>>,
+					TError,
+					Awaited<ReturnType<typeof getCourses>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCourses<
+	TData = Awaited<ReturnType<typeof getCourses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getCourses>>,
+					TError,
+					Awaited<ReturnType<typeof getCourses>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCourses<
+	TData = Awaited<ReturnType<typeof getCourses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 코스 목록 조회
  */
 
-export function useGetCourses<TData = Awaited<ReturnType<typeof getCourses>>, TError = ErrorType<void>>(
- params?: GetCoursesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetCourses<
+	TData = Awaited<ReturnType<typeof getCourses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCoursesQueryOptions(params, options);
 
-  const queryOptions = getGetCoursesQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 코스 목록 조회
  */
-export const prefetchGetCoursesQuery = async <TData = Awaited<ReturnType<typeof getCourses>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetCoursesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetCoursesQuery = async <
+	TData = Awaited<ReturnType<typeof getCourses>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetCoursesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetCoursesQueryOptions(params, options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetCoursesQueryOptions(params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetCoursesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCourses>>, TError = ErrorType<void>>(params?: GetCoursesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCoursesSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getCourses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCourses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetCoursesQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCoursesQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourses>>> = ({
+		signal,
+	}) => getCourses(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getCourses>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourses>>> = ({ signal }) => getCourses(params, requestOptions, signal);
+export type GetCoursesSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCourses>>
+>;
+export type GetCoursesSuspenseQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCoursesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getCourses>>>
-export type GetCoursesSuspenseQueryError = ErrorType<void>
-
-
-export function useGetCoursesSuspense<TData = Awaited<ReturnType<typeof getCourses>>, TError = ErrorType<void>>(
- params: undefined |  GetCoursesParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCoursesSuspense<TData = Awaited<ReturnType<typeof getCourses>>, TError = ErrorType<void>>(
- params?: GetCoursesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCoursesSuspense<TData = Awaited<ReturnType<typeof getCourses>>, TError = ErrorType<void>>(
- params?: GetCoursesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCoursesSuspense<
+	TData = Awaited<ReturnType<typeof getCourses>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetCoursesParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCourses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCoursesSuspense<
+	TData = Awaited<ReturnType<typeof getCourses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCourses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCoursesSuspense<
+	TData = Awaited<ReturnType<typeof getCourses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCourses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 코스 목록 조회
  */
 
-export function useGetCoursesSuspense<TData = Awaited<ReturnType<typeof getCourses>>, TError = ErrorType<void>>(
- params?: GetCoursesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetCoursesSuspense<
+	TData = Awaited<ReturnType<typeof getCourses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCourses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCoursesSuspenseQueryOptions(params, options);
 
-  const queryOptions = getGetCoursesSuspenseQueryOptions(params,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
-
-
-
-export const getGetCoursesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getCourses>>>, TError = ErrorType<void>>(params?: GetCoursesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCoursesSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getCourses>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCourses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetCoursesInfiniteQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCoursesInfiniteQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourses>>> = ({
+		signal,
+	}) => getCourses(params, requestOptions, signal);
 
-  
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getCourses>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourses>>> = ({ signal }) => getCourses(params, requestOptions, signal);
+export type GetCoursesSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCourses>>
+>;
+export type GetCoursesSuspenseInfiniteQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCoursesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getCourses>>>
-export type GetCoursesSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetCoursesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCourses>>>, TError = ErrorType<void>>(
- params: undefined |  GetCoursesParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCoursesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCourses>>>, TError = ErrorType<void>>(
- params?: GetCoursesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCoursesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCourses>>>, TError = ErrorType<void>>(
- params?: GetCoursesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCoursesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCourses>>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetCoursesParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCourses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCoursesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCourses>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCourses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCoursesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCourses>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCourses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 코스 목록 조회
  */
 
-export function useGetCoursesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCourses>>>, TError = ErrorType<void>>(
- params?: GetCoursesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetCoursesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCourses>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCourses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCoursesSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
 
-  const queryOptions = getGetCoursesSuspenseInfiniteQueryOptions(params,options)
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 코스 목록 조회
  */
-export const prefetchGetCoursesInfiniteQuery = async <TData = Awaited<ReturnType<typeof getCourses>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetCoursesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCourses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetCoursesInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getCourses>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetCoursesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCourses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetCoursesSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetCoursesSuspenseInfiniteQueryOptions(params,options)
-
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
+	return queryClient;
+};
 
 /**
  * 현재 Space 기준으로 실제 개설된 과정/반/기수 목록을 조회합니다.
  * @summary 코스 개설 목록 조회
  */
 export const getCourseOfferings = (
-    params?: GetCourseOfferingsParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	params?: GetCourseOfferingsParams,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetCourseOfferings200AllOf>(
-      {url: `/api/v1/courses/offerings`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
+	return customInstance<GetCourseOfferings200AllOf>(
+		{ url: `/api/v1/courses/offerings`, method: "GET", params, signal },
+		options,
+	);
+};
 
-
-
-export const getGetCourseOfferingsQueryKey = (params?: GetCourseOfferingsParams,) => {
-    return [
-    `/api/v1/courses/offerings`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-export const getGetCourseOfferingsInfiniteQueryKey = (params?: GetCourseOfferingsParams,) => {
-    return [
-    'infinite', `/api/v1/courses/offerings`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetCourseOfferingsQueryOptions = <TData = Awaited<ReturnType<typeof getCourseOfferings>>, TError = ErrorType<void>>(params?: GetCourseOfferingsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCourseOfferingsQueryKey = (
+	params?: GetCourseOfferingsParams,
 ) => {
+	return [`/api/v1/courses/offerings`, ...(params ? [params] : [])] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetCourseOfferingsQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourseOfferings>>> = ({ signal }) => getCourseOfferings(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCourseOfferingsQueryResult = NonNullable<Awaited<ReturnType<typeof getCourseOfferings>>>
-export type GetCourseOfferingsQueryError = ErrorType<void>
-
-
-export function useGetCourseOfferings<TData = Awaited<ReturnType<typeof getCourseOfferings>>, TError = ErrorType<void>>(
- params: undefined |  GetCourseOfferingsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCourseOfferings>>,
-          TError,
-          Awaited<ReturnType<typeof getCourseOfferings>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCourseOfferings<TData = Awaited<ReturnType<typeof getCourseOfferings>>, TError = ErrorType<void>>(
- params?: GetCourseOfferingsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCourseOfferings>>,
-          TError,
-          Awaited<ReturnType<typeof getCourseOfferings>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCourseOfferings<TData = Awaited<ReturnType<typeof getCourseOfferings>>, TError = ErrorType<void>>(
- params?: GetCourseOfferingsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 코스 개설 목록 조회
- */
-
-export function useGetCourseOfferings<TData = Awaited<ReturnType<typeof getCourseOfferings>>, TError = ErrorType<void>>(
- params?: GetCourseOfferingsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetCourseOfferingsQueryOptions(params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 코스 개설 목록 조회
- */
-export const prefetchGetCourseOfferingsQuery = async <TData = Awaited<ReturnType<typeof getCourseOfferings>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetCourseOfferingsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetCourseOfferingsQueryOptions(params,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetCourseOfferingsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCourseOfferings>>, TError = ErrorType<void>>(params?: GetCourseOfferingsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCourseOfferingsInfiniteQueryKey = (
+	params?: GetCourseOfferingsParams,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/courses/offerings`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetCourseOfferingsQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourseOfferings>>> = ({ signal }) => getCourseOfferings(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCourseOfferingsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getCourseOfferings>>>
-export type GetCourseOfferingsSuspenseQueryError = ErrorType<void>
-
-
-export function useGetCourseOfferingsSuspense<TData = Awaited<ReturnType<typeof getCourseOfferings>>, TError = ErrorType<void>>(
- params: undefined |  GetCourseOfferingsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCourseOfferingsSuspense<TData = Awaited<ReturnType<typeof getCourseOfferings>>, TError = ErrorType<void>>(
- params?: GetCourseOfferingsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCourseOfferingsSuspense<TData = Awaited<ReturnType<typeof getCourseOfferings>>, TError = ErrorType<void>>(
- params?: GetCourseOfferingsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 코스 개설 목록 조회
- */
-
-export function useGetCourseOfferingsSuspense<TData = Awaited<ReturnType<typeof getCourseOfferings>>, TError = ErrorType<void>>(
- params?: GetCourseOfferingsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetCourseOfferingsSuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getGetCourseOfferingsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getCourseOfferings>>>, TError = ErrorType<void>>(params?: GetCourseOfferingsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCourseOfferingsQueryOptions = <
+	TData = Awaited<ReturnType<typeof getCourseOfferings>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCourseOfferingsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetCourseOfferingsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCourseOfferingsInfiniteQueryKey(params);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getCourseOfferings>>
+	> = ({ signal }) => getCourseOfferings(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getCourseOfferings>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourseOfferings>>> = ({ signal }) => getCourseOfferings(params, requestOptions, signal);
+export type GetCourseOfferingsQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCourseOfferings>>
+>;
+export type GetCourseOfferingsQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCourseOfferingsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getCourseOfferings>>>
-export type GetCourseOfferingsSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetCourseOfferingsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCourseOfferings>>>, TError = ErrorType<void>>(
- params: undefined |  GetCourseOfferingsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCourseOfferingsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCourseOfferings>>>, TError = ErrorType<void>>(
- params?: GetCourseOfferingsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCourseOfferingsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCourseOfferings>>>, TError = ErrorType<void>>(
- params?: GetCourseOfferingsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCourseOfferings<
+	TData = Awaited<ReturnType<typeof getCourseOfferings>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetCourseOfferingsParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getCourseOfferings>>,
+					TError,
+					Awaited<ReturnType<typeof getCourseOfferings>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCourseOfferings<
+	TData = Awaited<ReturnType<typeof getCourseOfferings>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCourseOfferingsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getCourseOfferings>>,
+					TError,
+					Awaited<ReturnType<typeof getCourseOfferings>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCourseOfferings<
+	TData = Awaited<ReturnType<typeof getCourseOfferings>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCourseOfferingsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 코스 개설 목록 조회
  */
 
-export function useGetCourseOfferingsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCourseOfferings>>>, TError = ErrorType<void>>(
- params?: GetCourseOfferingsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetCourseOfferings<
+	TData = Awaited<ReturnType<typeof getCourseOfferings>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCourseOfferingsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCourseOfferingsQueryOptions(params, options);
 
-  const queryOptions = getGetCourseOfferingsSuspenseInfiniteQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 코스 개설 목록 조회
  */
-export const prefetchGetCourseOfferingsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getCourseOfferings>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetCourseOfferingsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCourseOfferings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetCourseOfferingsQuery = async <
+	TData = Awaited<ReturnType<typeof getCourseOfferings>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetCourseOfferingsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetCourseOfferingsQueryOptions(params, options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetCourseOfferingsSuspenseInfiniteQueryOptions(params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
+export const getGetCourseOfferingsSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getCourseOfferings>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCourseOfferingsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  return queryClient;
+	const queryKey =
+		queryOptions?.queryKey ?? getGetCourseOfferingsQueryKey(params);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getCourseOfferings>>
+	> = ({ signal }) => getCourseOfferings(params, requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getCourseOfferings>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetCourseOfferingsSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCourseOfferings>>
+>;
+export type GetCourseOfferingsSuspenseQueryError = ErrorType<void>;
+
+export function useGetCourseOfferingsSuspense<
+	TData = Awaited<ReturnType<typeof getCourseOfferings>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetCourseOfferingsParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCourseOfferingsSuspense<
+	TData = Awaited<ReturnType<typeof getCourseOfferings>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCourseOfferingsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCourseOfferingsSuspense<
+	TData = Awaited<ReturnType<typeof getCourseOfferings>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCourseOfferingsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 코스 개설 목록 조회
+ */
+
+export function useGetCourseOfferingsSuspense<
+	TData = Awaited<ReturnType<typeof getCourseOfferings>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCourseOfferingsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCourseOfferingsSuspenseQueryOptions(
+		params,
+		options,
+	);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
 }
 
+export const getGetCourseOfferingsSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getCourseOfferings>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCourseOfferingsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey =
+		queryOptions?.queryKey ?? getGetCourseOfferingsInfiniteQueryKey(params);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getCourseOfferings>>
+	> = ({ signal }) => getCourseOfferings(params, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getCourseOfferings>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetCourseOfferingsSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCourseOfferings>>
+>;
+export type GetCourseOfferingsSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetCourseOfferingsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCourseOfferings>>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetCourseOfferingsParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCourseOfferingsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCourseOfferings>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCourseOfferingsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCourseOfferingsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCourseOfferings>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCourseOfferingsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 코스 개설 목록 조회
+ */
+
+export function useGetCourseOfferingsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCourseOfferings>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCourseOfferingsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCourseOfferingsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary 코스 개설 목록 조회
+ */
+export const prefetchGetCourseOfferingsInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getCourseOfferings>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetCourseOfferingsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCourseOfferings>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetCourseOfferingsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
 
 /**
  * 결제 후 생성되는 수강 등록 목록을 조회합니다.
  * @summary 수강 등록 목록 조회
  */
 export const getEnrollments = (
-    params?: GetEnrollmentsParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	params?: GetEnrollmentsParams,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetEnrollments200AllOf>(
-      {url: `/api/v1/courses/enrollments`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
+	return customInstance<GetEnrollments200AllOf>(
+		{ url: `/api/v1/courses/enrollments`, method: "GET", params, signal },
+		options,
+	);
+};
 
+export const getGetEnrollmentsQueryKey = (params?: GetEnrollmentsParams) => {
+	return [`/api/v1/courses/enrollments`, ...(params ? [params] : [])] as const;
+};
 
-
-export const getGetEnrollmentsQueryKey = (params?: GetEnrollmentsParams,) => {
-    return [
-    `/api/v1/courses/enrollments`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-export const getGetEnrollmentsInfiniteQueryKey = (params?: GetEnrollmentsParams,) => {
-    return [
-    'infinite', `/api/v1/courses/enrollments`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetEnrollmentsQueryOptions = <TData = Awaited<ReturnType<typeof getEnrollments>>, TError = ErrorType<void>>(params?: GetEnrollmentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetEnrollmentsInfiniteQueryKey = (
+	params?: GetEnrollmentsParams,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/courses/enrollments`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetEnrollmentsQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnrollments>>> = ({ signal }) => getEnrollments(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetEnrollmentsQueryResult = NonNullable<Awaited<ReturnType<typeof getEnrollments>>>
-export type GetEnrollmentsQueryError = ErrorType<void>
-
-
-export function useGetEnrollments<TData = Awaited<ReturnType<typeof getEnrollments>>, TError = ErrorType<void>>(
- params: undefined |  GetEnrollmentsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getEnrollments>>,
-          TError,
-          Awaited<ReturnType<typeof getEnrollments>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnrollments<TData = Awaited<ReturnType<typeof getEnrollments>>, TError = ErrorType<void>>(
- params?: GetEnrollmentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getEnrollments>>,
-          TError,
-          Awaited<ReturnType<typeof getEnrollments>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnrollments<TData = Awaited<ReturnType<typeof getEnrollments>>, TError = ErrorType<void>>(
- params?: GetEnrollmentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 수강 등록 목록 조회
- */
-
-export function useGetEnrollments<TData = Awaited<ReturnType<typeof getEnrollments>>, TError = ErrorType<void>>(
- params?: GetEnrollmentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetEnrollmentsQueryOptions(params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 수강 등록 목록 조회
- */
-export const prefetchGetEnrollmentsQuery = async <TData = Awaited<ReturnType<typeof getEnrollments>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetEnrollmentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetEnrollmentsQueryOptions(params,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetEnrollmentsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getEnrollments>>, TError = ErrorType<void>>(params?: GetEnrollmentsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetEnrollmentsQueryOptions = <
+	TData = Awaited<ReturnType<typeof getEnrollments>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEnrollmentsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetEnrollmentsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetEnrollmentsQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnrollments>>> = ({
+		signal,
+	}) => getEnrollments(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getEnrollments>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnrollments>>> = ({ signal }) => getEnrollments(params, requestOptions, signal);
+export type GetEnrollmentsQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getEnrollments>>
+>;
+export type GetEnrollmentsQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetEnrollmentsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getEnrollments>>>
-export type GetEnrollmentsSuspenseQueryError = ErrorType<void>
-
-
-export function useGetEnrollmentsSuspense<TData = Awaited<ReturnType<typeof getEnrollments>>, TError = ErrorType<void>>(
- params: undefined |  GetEnrollmentsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnrollmentsSuspense<TData = Awaited<ReturnType<typeof getEnrollments>>, TError = ErrorType<void>>(
- params?: GetEnrollmentsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnrollmentsSuspense<TData = Awaited<ReturnType<typeof getEnrollments>>, TError = ErrorType<void>>(
- params?: GetEnrollmentsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnrollments<
+	TData = Awaited<ReturnType<typeof getEnrollments>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetEnrollmentsParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getEnrollments>>,
+					TError,
+					Awaited<ReturnType<typeof getEnrollments>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetEnrollments<
+	TData = Awaited<ReturnType<typeof getEnrollments>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEnrollmentsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getEnrollments>>,
+					TError,
+					Awaited<ReturnType<typeof getEnrollments>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetEnrollments<
+	TData = Awaited<ReturnType<typeof getEnrollments>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEnrollmentsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 수강 등록 목록 조회
  */
 
-export function useGetEnrollmentsSuspense<TData = Awaited<ReturnType<typeof getEnrollments>>, TError = ErrorType<void>>(
- params?: GetEnrollmentsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetEnrollments<
+	TData = Awaited<ReturnType<typeof getEnrollments>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEnrollmentsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetEnrollmentsQueryOptions(params, options);
 
-  const queryOptions = getGetEnrollmentsSuspenseQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
+/**
+ * @summary 수강 등록 목록 조회
+ */
+export const prefetchGetEnrollmentsQuery = async <
+	TData = Awaited<ReturnType<typeof getEnrollments>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetEnrollmentsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetEnrollmentsQueryOptions(params, options);
 
+	await queryClient.prefetchQuery(queryOptions);
 
+	return queryClient;
+};
 
-export const getGetEnrollmentsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getEnrollments>>>, TError = ErrorType<void>>(params?: GetEnrollmentsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetEnrollmentsSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getEnrollments>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEnrollmentsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getEnrollments>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetEnrollmentsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetEnrollmentsInfiniteQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnrollments>>> = ({
+		signal,
+	}) => getEnrollments(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getEnrollments>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnrollments>>> = ({ signal }) => getEnrollments(params, requestOptions, signal);
+export type GetEnrollmentsSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getEnrollments>>
+>;
+export type GetEnrollmentsSuspenseQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetEnrollmentsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getEnrollments>>>
-export type GetEnrollmentsSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetEnrollmentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getEnrollments>>>, TError = ErrorType<void>>(
- params: undefined |  GetEnrollmentsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnrollmentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getEnrollments>>>, TError = ErrorType<void>>(
- params?: GetEnrollmentsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnrollmentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getEnrollments>>>, TError = ErrorType<void>>(
- params?: GetEnrollmentsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnrollmentsSuspense<
+	TData = Awaited<ReturnType<typeof getEnrollments>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetEnrollmentsParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getEnrollments>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetEnrollmentsSuspense<
+	TData = Awaited<ReturnType<typeof getEnrollments>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEnrollmentsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getEnrollments>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetEnrollmentsSuspense<
+	TData = Awaited<ReturnType<typeof getEnrollments>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEnrollmentsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getEnrollments>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 수강 등록 목록 조회
  */
 
-export function useGetEnrollmentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getEnrollments>>>, TError = ErrorType<void>>(
- params?: GetEnrollmentsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetEnrollmentsSuspense<
+	TData = Awaited<ReturnType<typeof getEnrollments>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEnrollmentsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getEnrollments>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetEnrollmentsSuspenseQueryOptions(params, options);
 
-  const queryOptions = getGetEnrollmentsSuspenseInfiniteQueryOptions(params,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
+	return query;
+}
 
-  return query;
+export const getGetEnrollmentsSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getEnrollments>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEnrollmentsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getEnrollments>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ?? getGetEnrollmentsInfiniteQueryKey(params);
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnrollments>>> = ({
+		signal,
+	}) => getEnrollments(params, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getEnrollments>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetEnrollmentsSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getEnrollments>>
+>;
+export type GetEnrollmentsSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetEnrollmentsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getEnrollments>>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetEnrollmentsParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getEnrollments>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetEnrollmentsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getEnrollments>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEnrollmentsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getEnrollments>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetEnrollmentsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getEnrollments>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEnrollmentsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getEnrollments>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 수강 등록 목록 조회
+ */
+
+export function useGetEnrollmentsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getEnrollments>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEnrollmentsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getEnrollments>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetEnrollmentsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
 }
 
 /**
  * @summary 수강 등록 목록 조회
  */
-export const prefetchGetEnrollmentsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getEnrollments>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetEnrollmentsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getEnrollments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetEnrollmentsInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getEnrollments>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetEnrollmentsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getEnrollments>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetEnrollmentsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetEnrollmentsSuspenseInfiniteQueryOptions(params,options)
-
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
+	return queryClient;
+};
 
 /**
  * 결제 성공 후 활성화되는 CoursePass 목록을 조회합니다.
  * @summary 수강권 목록 조회
  */
 export const getCoursePasses = (
-    params?: GetCoursePassesParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	params?: GetCoursePassesParams,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetCoursePasses200AllOf>(
-      {url: `/api/v1/courses/passes`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
+	return customInstance<GetCoursePasses200AllOf>(
+		{ url: `/api/v1/courses/passes`, method: "GET", params, signal },
+		options,
+	);
+};
 
+export const getGetCoursePassesQueryKey = (params?: GetCoursePassesParams) => {
+	return [`/api/v1/courses/passes`, ...(params ? [params] : [])] as const;
+};
 
-
-export const getGetCoursePassesQueryKey = (params?: GetCoursePassesParams,) => {
-    return [
-    `/api/v1/courses/passes`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-export const getGetCoursePassesInfiniteQueryKey = (params?: GetCoursePassesParams,) => {
-    return [
-    'infinite', `/api/v1/courses/passes`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetCoursePassesQueryOptions = <TData = Awaited<ReturnType<typeof getCoursePasses>>, TError = ErrorType<void>>(params?: GetCoursePassesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCoursePassesInfiniteQueryKey = (
+	params?: GetCoursePassesParams,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/courses/passes`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetCoursePassesQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoursePasses>>> = ({ signal }) => getCoursePasses(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCoursePassesQueryResult = NonNullable<Awaited<ReturnType<typeof getCoursePasses>>>
-export type GetCoursePassesQueryError = ErrorType<void>
-
-
-export function useGetCoursePasses<TData = Awaited<ReturnType<typeof getCoursePasses>>, TError = ErrorType<void>>(
- params: undefined |  GetCoursePassesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCoursePasses>>,
-          TError,
-          Awaited<ReturnType<typeof getCoursePasses>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCoursePasses<TData = Awaited<ReturnType<typeof getCoursePasses>>, TError = ErrorType<void>>(
- params?: GetCoursePassesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCoursePasses>>,
-          TError,
-          Awaited<ReturnType<typeof getCoursePasses>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCoursePasses<TData = Awaited<ReturnType<typeof getCoursePasses>>, TError = ErrorType<void>>(
- params?: GetCoursePassesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 수강권 목록 조회
- */
-
-export function useGetCoursePasses<TData = Awaited<ReturnType<typeof getCoursePasses>>, TError = ErrorType<void>>(
- params?: GetCoursePassesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetCoursePassesQueryOptions(params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 수강권 목록 조회
- */
-export const prefetchGetCoursePassesQuery = async <TData = Awaited<ReturnType<typeof getCoursePasses>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetCoursePassesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetCoursePassesQueryOptions(params,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetCoursePassesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCoursePasses>>, TError = ErrorType<void>>(params?: GetCoursePassesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCoursePassesQueryOptions = <
+	TData = Awaited<ReturnType<typeof getCoursePasses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursePassesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetCoursePassesQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCoursePassesQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoursePasses>>> = ({
+		signal,
+	}) => getCoursePasses(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getCoursePasses>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoursePasses>>> = ({ signal }) => getCoursePasses(params, requestOptions, signal);
+export type GetCoursePassesQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCoursePasses>>
+>;
+export type GetCoursePassesQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCoursePassesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getCoursePasses>>>
-export type GetCoursePassesSuspenseQueryError = ErrorType<void>
-
-
-export function useGetCoursePassesSuspense<TData = Awaited<ReturnType<typeof getCoursePasses>>, TError = ErrorType<void>>(
- params: undefined |  GetCoursePassesParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCoursePassesSuspense<TData = Awaited<ReturnType<typeof getCoursePasses>>, TError = ErrorType<void>>(
- params?: GetCoursePassesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCoursePassesSuspense<TData = Awaited<ReturnType<typeof getCoursePasses>>, TError = ErrorType<void>>(
- params?: GetCoursePassesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCoursePasses<
+	TData = Awaited<ReturnType<typeof getCoursePasses>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetCoursePassesParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getCoursePasses>>,
+					TError,
+					Awaited<ReturnType<typeof getCoursePasses>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCoursePasses<
+	TData = Awaited<ReturnType<typeof getCoursePasses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursePassesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getCoursePasses>>,
+					TError,
+					Awaited<ReturnType<typeof getCoursePasses>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCoursePasses<
+	TData = Awaited<ReturnType<typeof getCoursePasses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursePassesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 수강권 목록 조회
  */
 
-export function useGetCoursePassesSuspense<TData = Awaited<ReturnType<typeof getCoursePasses>>, TError = ErrorType<void>>(
- params?: GetCoursePassesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetCoursePasses<
+	TData = Awaited<ReturnType<typeof getCoursePasses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursePassesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCoursePassesQueryOptions(params, options);
 
-  const queryOptions = getGetCoursePassesSuspenseQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
+/**
+ * @summary 수강권 목록 조회
+ */
+export const prefetchGetCoursePassesQuery = async <
+	TData = Awaited<ReturnType<typeof getCoursePasses>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetCoursePassesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetCoursePassesQueryOptions(params, options);
 
+	await queryClient.prefetchQuery(queryOptions);
 
+	return queryClient;
+};
 
-export const getGetCoursePassesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getCoursePasses>>>, TError = ErrorType<void>>(params?: GetCoursePassesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCoursePassesSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getCoursePasses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursePassesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetCoursePassesQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCoursePassesInfiniteQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoursePasses>>> = ({
+		signal,
+	}) => getCoursePasses(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getCoursePasses>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoursePasses>>> = ({ signal }) => getCoursePasses(params, requestOptions, signal);
+export type GetCoursePassesSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCoursePasses>>
+>;
+export type GetCoursePassesSuspenseQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCoursePassesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getCoursePasses>>>
-export type GetCoursePassesSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetCoursePassesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCoursePasses>>>, TError = ErrorType<void>>(
- params: undefined |  GetCoursePassesParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCoursePassesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCoursePasses>>>, TError = ErrorType<void>>(
- params?: GetCoursePassesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCoursePassesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCoursePasses>>>, TError = ErrorType<void>>(
- params?: GetCoursePassesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCoursePassesSuspense<
+	TData = Awaited<ReturnType<typeof getCoursePasses>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetCoursePassesParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCoursePassesSuspense<
+	TData = Awaited<ReturnType<typeof getCoursePasses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursePassesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCoursePassesSuspense<
+	TData = Awaited<ReturnType<typeof getCoursePasses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursePassesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 수강권 목록 조회
  */
 
-export function useGetCoursePassesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCoursePasses>>>, TError = ErrorType<void>>(
- params?: GetCoursePassesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetCoursePassesSuspense<
+	TData = Awaited<ReturnType<typeof getCoursePasses>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursePassesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCoursePassesSuspenseQueryOptions(params, options);
 
-  const queryOptions = getGetCoursePassesSuspenseInfiniteQueryOptions(params,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
+	return query;
+}
 
-  return query;
+export const getGetCoursePassesSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getCoursePasses>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursePassesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ?? getGetCoursePassesInfiniteQueryKey(params);
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoursePasses>>> = ({
+		signal,
+	}) => getCoursePasses(params, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getCoursePasses>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetCoursePassesSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCoursePasses>>
+>;
+export type GetCoursePassesSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetCoursePassesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCoursePasses>>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetCoursePassesParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCoursePassesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCoursePasses>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursePassesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCoursePassesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCoursePasses>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursePassesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 수강권 목록 조회
+ */
+
+export function useGetCoursePassesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCoursePasses>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCoursePassesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCoursePassesSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
 }
 
 /**
  * @summary 수강권 목록 조회
  */
-export const prefetchGetCoursePassesInfiniteQuery = async <TData = Awaited<ReturnType<typeof getCoursePasses>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetCoursePassesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCoursePasses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetCoursePassesInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getCoursePasses>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetCoursePassesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCoursePasses>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetCoursePassesSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetCoursePassesSuspenseInfiniteQueryOptions(params,options)
-
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
+	return queryClient;
+};

@@ -13,15 +13,15 @@
 /**
  * 결제 대상 종류
  */
-export type PaymentSubjectType = typeof PaymentSubjectType[keyof typeof PaymentSubjectType];
-
+export type PaymentSubjectType =
+	(typeof PaymentSubjectType)[keyof typeof PaymentSubjectType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PaymentSubjectType = {
-  COURSE: 'COURSE',
-  COURSE_OFFERING: 'COURSE_OFFERING',
-  ENROLLMENT: 'ENROLLMENT',
-  COURSE_PASS: 'COURSE_PASS',
-  PRODUCT: 'PRODUCT',
-  CUSTOM: 'CUSTOM',
+	COURSE: "COURSE",
+	COURSE_OFFERING: "COURSE_OFFERING",
+	ENROLLMENT: "ENROLLMENT",
+	COURSE_PASS: "COURSE_PASS",
+	PRODUCT: "PRODUCT",
+	CUSTOM: "CUSTOM",
 } as const;

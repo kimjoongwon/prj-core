@@ -1,8 +1,8 @@
 "use client";
 
+import { usePaymentData } from "@cocrepo/hook";
 import { PaymentScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { usePaymentData } from "@cocrepo/hook";
 
 export default observer(function PaymentsPageRoute() {
 	const paymentData = usePaymentData();

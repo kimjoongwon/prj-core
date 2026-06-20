@@ -1,10 +1,10 @@
 "use client";
 
 import type { NavItem } from "@cocrepo/store";
+import { Accordion, cn } from "@heroui/react";
 import { ChevronRight } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import { Accordion, cn } from "@heroui/react";
 import { useT } from "../../i18n";
 
 type NavTreeItem = NavItem & {};
@@ -28,10 +28,10 @@ export const NavTreePanel = observer(
 		onSelectSubItem,
 		width = 240,
 		className,
-		}: NavTreePanelProps) => {
-			const t = useT();
-			const parentItems = items.filter((item) => item.hasChildren);
-			const standaloneItems = items.filter((item) => !item.hasChildren);
+	}: NavTreePanelProps) => {
+		const t = useT();
+		const parentItems = items.filter((item) => item.hasChildren);
+		const standaloneItems = items.filter((item) => !item.hasChildren);
 
 		return (
 			<nav
@@ -61,67 +61,67 @@ export const NavTreePanel = observer(
 						</button>
 					))}
 
-						{parentItems.length > 0 && (
-							<Accordion className="px-0">
-								{parentItems.map((item) => {
-									const isExpanded = expandedKeys.has(item.id);
+					{parentItems.length > 0 && (
+						<Accordion className="px-0">
+							{parentItems.map((item) => {
+								const isExpanded = expandedKeys.has(item.id);
 
-									return (
-										<Accordion.Item
-											key={item.id}
-											id={item.id}
-											isExpanded={isExpanded}
-											onExpandedChange={() => onToggle(item.id)}
-										>
-											<Accordion.Heading>
-												<Accordion.Trigger
+								return (
+									<Accordion.Item
+										key={item.id}
+										id={item.id}
+										isExpanded={isExpanded}
+										onExpandedChange={() => onToggle(item.id)}
+									>
+										<Accordion.Heading>
+											<Accordion.Trigger
+												className={cn(
+													"flex w-full flex-row-reverse items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors hover:bg-default",
+													item.active ? "text-accent" : "text-foreground/70",
+												)}
+											>
+												<ChevronRight
 													className={cn(
-														"flex w-full flex-row-reverse items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors hover:bg-default",
-														item.active ? "text-accent" : "text-foreground/70",
+														"h-4 w-4 text-foreground/40 transition-transform duration-200",
+														isExpanded && "rotate-90",
 													)}
-												>
-													<ChevronRight
+												/>
+												<span className="flex items-center gap-3">
+													{item.icon && (
+														<AppIcon
+															name={item.icon}
+															className="h-5 w-5"
+															size={20}
+														/>
+													)}
+													<span>{t(item.label)}</span>
+												</span>
+											</Accordion.Trigger>
+										</Accordion.Heading>
+										<Accordion.Panel className="pt-1 pb-0">
+											<div className="ml-3 flex flex-col gap-1">
+												{item.children.map((child) => (
+													<button
+														key={child.id}
+														type="button"
+														onClick={() => onSelectSubItem(child.id)}
 														className={cn(
-															"h-4 w-4 text-foreground/40 transition-transform duration-200",
-															isExpanded && "rotate-90",
+															"flex items-center rounded-md px-3 py-2 text-left text-sm transition-colors",
+															child.active
+																? "bg-accent/10 font-medium text-accent"
+																: "text-foreground/60 hover:bg-default hover:text-foreground",
 														)}
-													/>
-													<span className="flex items-center gap-3">
-														{item.icon && (
-															<AppIcon
-																name={item.icon}
-																className="h-5 w-5"
-																size={20}
-															/>
-														)}
-														<span>{t(item.label)}</span>
-													</span>
-												</Accordion.Trigger>
-											</Accordion.Heading>
-											<Accordion.Panel className="pt-1 pb-0">
-												<div className="ml-3 flex flex-col gap-1">
-													{item.children.map((child) => (
-														<button
-															key={child.id}
-															type="button"
-															onClick={() => onSelectSubItem(child.id)}
-															className={cn(
-																"flex items-center rounded-md px-3 py-2 text-left text-sm transition-colors",
-																child.active
-																	? "bg-accent/10 font-medium text-accent"
-																	: "text-foreground/60 hover:bg-default hover:text-foreground",
-															)}
-														>
-															{t(child.label)}
-														</button>
-													))}
-												</div>
-											</Accordion.Panel>
-										</Accordion.Item>
-									);
-								})}
-							</Accordion>
-						)}
+													>
+														{t(child.label)}
+													</button>
+												))}
+											</div>
+										</Accordion.Panel>
+									</Accordion.Item>
+								);
+							})}
+						</Accordion>
+					)}
 				</div>
 			</nav>
 		);

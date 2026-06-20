@@ -1,14 +1,14 @@
 "use client";
 
 import type { Option } from "@cocrepo/type";
+import { Card } from "@heroui/react";
 import { Plus, Tag } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Select } from "../../selection/Select/Select";
 import { Button } from "../../action/Button/Button";
-import { Card } from "@heroui/react";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Input } from "../../input/Input/Input";
+import { Select } from "../../selection/Select/Select";
 
 export interface InquiryMetaPanelProps {
 	/** 문의 상태 */
@@ -142,21 +142,19 @@ export const InquiryMetaPanel = observer(
 			<Card className={`bg-surface ${className}`}>
 				<Card.Content className="gap-4 p-4">
 					{/* 헤더 */}
-					<h3 className="text-sm font-semibold text-muted">
-						🏷️ 메타 정보
-					</h3>
+					<h3 className="text-sm font-semibold text-muted">🏷️ 메타 정보</h3>
 
 					{/* 상태 */}
 					<div className="flex flex-col gap-1">
 						<label className="text-xs text-muted">상태</label>
 						{isEditable ? (
-								<Select
-									size="sm"
-									variant="bordered"
-									options={statusOptions}
-									value={status}
-									onChange={(value) => onStatusChange(String(value ?? ""))}
-								/>
+							<Select
+								size="sm"
+								variant="bordered"
+								options={statusOptions}
+								value={status}
+								onChange={(value) => onStatusChange(String(value ?? ""))}
+							/>
 						) : (
 							<Chip size="sm" variant="flat">
 								{getStatusLabel()}
@@ -168,13 +166,13 @@ export const InquiryMetaPanel = observer(
 					<div className="flex flex-col gap-1">
 						<label className="text-xs text-muted">우선순위</label>
 						{isEditable ? (
-								<Select
-									size="sm"
-									variant="bordered"
-									options={priorityOptions}
-									value={priority}
-									onChange={(value) => onPriorityChange(String(value ?? ""))}
-								/>
+							<Select
+								size="sm"
+								variant="bordered"
+								options={priorityOptions}
+								value={priority}
+								onChange={(value) => onPriorityChange(String(value ?? ""))}
+							/>
 						) : (
 							<Chip
 								size="sm"
@@ -190,13 +188,13 @@ export const InquiryMetaPanel = observer(
 					<div className="flex flex-col gap-1">
 						<label className="text-xs text-muted">카테고리</label>
 						{isEditable ? (
-								<Select
-									size="sm"
-									variant="bordered"
-									options={categoryOptions}
-									value={category}
-									onChange={(value) => onCategoryChange(String(value ?? ""))}
-								/>
+							<Select
+								size="sm"
+								variant="bordered"
+								options={categoryOptions}
+								value={category}
+								onChange={(value) => onCategoryChange(String(value ?? ""))}
+							/>
 						) : (
 							<Chip size="sm" variant="flat" color="primary">
 								{getCategoryLabel()}
@@ -208,14 +206,14 @@ export const InquiryMetaPanel = observer(
 					<div className="flex flex-col gap-1">
 						<label className="text-xs text-muted">담당자</label>
 						{isEditable ? (
-								<Select
-									size="sm"
-									variant="bordered"
-									options={assigneeOptions}
-									value={assigneeId || ""}
-									onChange={(value) => onAssigneeChange(String(value ?? ""))}
-									placeholder="담당자 선택"
-								/>
+							<Select
+								size="sm"
+								variant="bordered"
+								options={assigneeOptions}
+								value={assigneeId || ""}
+								onChange={(value) => onAssigneeChange(String(value ?? ""))}
+								placeholder="담당자 선택"
+							/>
 						) : (
 							<span className="text-sm text-foreground">
 								{assigneeName || "미배정"}

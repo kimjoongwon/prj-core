@@ -1,3 +1,4 @@
+import { TemplatesController } from "@cocrepo/controller";
 import { TemplatesRepository } from "@cocrepo/repository";
 import { TemplateService } from "@cocrepo/service";
 import {
@@ -6,7 +7,6 @@ import {
 } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { TemplatesController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],

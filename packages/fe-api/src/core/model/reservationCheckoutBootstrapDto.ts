@@ -9,15 +9,16 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ReservationCheckoutContextDto } from './reservationCheckoutContextDto';
-import type { ReservationCheckoutOptionDto } from './reservationCheckoutOptionDto';
-import type { PaymentMethod } from './paymentMethod';
+
+import type { PaymentMethod } from "./paymentMethod";
+import type { ReservationCheckoutContextDto } from "./reservationCheckoutContextDto";
+import type { ReservationCheckoutOptionDto } from "./reservationCheckoutOptionDto";
 
 export interface ReservationCheckoutBootstrapDto {
-  /** 예약하려는 수업 컨텍스트 */
-  context: ReservationCheckoutContextDto;
-  /** 구매 가능한 과정 목록 */
-  options: ReservationCheckoutOptionDto[];
-  /** 지원 결제 수단 목록 */
-  paymentMethods: PaymentMethod[];
+	/** 예약하려는 수업 컨텍스트 */
+	context: ReservationCheckoutContextDto;
+	/** 구매 가능한 과정 목록 */
+	options: ReservationCheckoutOptionDto[];
+	/** 지원 결제 수단 목록 */
+	paymentMethods: PaymentMethod[];
 }

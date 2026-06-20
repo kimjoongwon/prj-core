@@ -2,11 +2,11 @@
 
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action";
+import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
+import { useT } from "../../i18n";
 import { Input, TextArea } from "../../input";
 import { Link } from "../../navigation";
 import { Select } from "../../selection";
-import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
-import { useT } from "../../i18n";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 
@@ -176,12 +176,12 @@ export const SignUpForm = observer(
 
 						<Select
 							label="가입 Space"
-								placeholder="가입할 Space 선택"
-								options={spaceOptions}
-								value={state.spaceId}
-								onChange={(value) => onChangeSpaceId(String(value ?? ""))}
-								isRequired
-								isDisabled={
+							placeholder="가입할 Space 선택"
+							options={spaceOptions}
+							value={state.spaceId}
+							onChange={(value) => onChangeSpaceId(String(value ?? ""))}
+							isRequired
+							isDisabled={
 								state.isSubmitting ||
 								isSpacesLoading ||
 								spaceOptions.length === 0
@@ -275,10 +275,7 @@ export const SignUpForm = observer(
 
 				<div className="mt-6 flex flex-col items-center gap-2 text-center text-sm text-muted">
 					<span>{t("이미 계정이 있으신가요?")}</span>
-					<Link
-						href={loginHref}
-						className="text-muted hover:text-muted"
-					>
+					<Link href={loginHref} className="text-muted hover:text-muted">
 						{t("로그인으로 돌아가기")}
 					</Link>
 				</div>

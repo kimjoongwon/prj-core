@@ -1,11 +1,11 @@
 "use client";
 
+import { Spinner, Table, Tooltip } from "@heroui/react";
 import { Edit2, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Switch } from "../../../selection/Switch/Switch";
 import { Button } from "../../../action/Button/Button";
 import { Chip } from "../../../data-display/Chip/Chip";
-import { Spinner, Table, Tooltip } from "@heroui/react";
+import { Switch } from "../../../selection/Switch/Switch";
 
 /**
  * Ability 규칙 타입
@@ -124,13 +124,15 @@ export const AbilityRuleList = observer(
 
 		return (
 			<div className="flex flex-col gap-4">
-					{/* 상단 액션 바 */}
-					{onAddRule && (
-						<div>
-							{loading ? <Spinner size="sm" /> : null}
-							<Button
-								color="primary"
-							startContent={<Plus className="flex gap-2 items-center justify-end h-4 w-4" />}
+				{/* 상단 액션 바 */}
+				{onAddRule && (
+					<div>
+						{loading ? <Spinner size="sm" /> : null}
+						<Button
+							color="primary"
+							startContent={
+								<Plus className="flex gap-2 items-center justify-end h-4 w-4" />
+							}
 							onPress={onAddRule}
 						>
 							규칙 추가
@@ -139,57 +141,54 @@ export const AbilityRuleList = observer(
 				)}
 
 				{/* 규칙 테이블 */}
-				<Table
-					aria-label="Ability 규칙 목록"
-				>
+				<Table aria-label="Ability 규칙 목록">
 					<Table.Content>
-					<Table.Header>
-						<Table.Column key="priority" width={50}>
-							#
-						</Table.Column>
-						<Table.Column key="name" width={120}>
-							이름
-						</Table.Column>
-						<Table.Column key="subject" width={150}>
-							Subject
-						</Table.Column>
-						<Table.Column key="action" width={180}>
-							Action
-						</Table.Column>
-						<Table.Column key="conditions" width={80}>
-							조건
-						</Table.Column>
-						<Table.Column key="status" width={80}>
-							상태
-						</Table.Column>
-						<Table.Column key="actions" width={100}>
-							작업
-						</Table.Column>
-					</Table.Header>
-					<Table.Body
-					>
-						{rules.map((rule) => (
-							<Table.Row
-								key={rule.id}
-								className={rule.inverted ? "bg-danger/10" : undefined}
-							>
-								<Table.Cell>{rule.priority}</Table.Cell>
-								<Table.Cell>
-									<div className="flex">
-										{rule.inverted && (
-											<Chip color="danger" size="sm" variant="flat">
-												거부
-											</Chip>
-										)}
-										<span className="truncate">{rule.name || "-"}</span>
-									</div>
+						<Table.Header>
+							<Table.Column key="priority" width={50}>
+								#
+							</Table.Column>
+							<Table.Column key="name" width={120}>
+								이름
+							</Table.Column>
+							<Table.Column key="subject" width={150}>
+								Subject
+							</Table.Column>
+							<Table.Column key="action" width={180}>
+								Action
+							</Table.Column>
+							<Table.Column key="conditions" width={80}>
+								조건
+							</Table.Column>
+							<Table.Column key="status" width={80}>
+								상태
+							</Table.Column>
+							<Table.Column key="actions" width={100}>
+								작업
+							</Table.Column>
+						</Table.Header>
+						<Table.Body>
+							{rules.map((rule) => (
+								<Table.Row
+									key={rule.id}
+									className={rule.inverted ? "bg-danger/10" : undefined}
+								>
+									<Table.Cell>{rule.priority}</Table.Cell>
+									<Table.Cell>
+										<div className="flex">
+											{rule.inverted && (
+												<Chip color="danger" size="sm" variant="flat">
+													거부
+												</Chip>
+											)}
+											<span className="truncate">{rule.name || "-"}</span>
+										</div>
 									</Table.Cell>
 									<Table.Cell>
 										<Tooltip>
 											<Tooltip.Trigger>
-											<span className="truncate cursor-default">
-												{formatSubject(rule)}
-											</span>
+												<span className="truncate cursor-default">
+													{formatSubject(rule)}
+												</span>
 											</Tooltip.Trigger>
 											<Tooltip.Content placement="top">
 												{rule.subjectName}
@@ -199,9 +198,9 @@ export const AbilityRuleList = observer(
 									<Table.Cell>
 										<Tooltip>
 											<Tooltip.Trigger>
-											<span className="truncate cursor-default">
-												{formatAction(rule)}
-											</span>
+												<span className="truncate cursor-default">
+													{formatAction(rule)}
+												</span>
 											</Tooltip.Trigger>
 											<Tooltip.Content placement="top">
 												{rule.fields.length > 0
@@ -210,19 +209,19 @@ export const AbilityRuleList = observer(
 											</Tooltip.Content>
 										</Tooltip>
 									</Table.Cell>
-								<Table.Cell>
+									<Table.Cell>
 										{rule.conditions &&
 										Object.keys(rule.conditions).length > 0 ? (
 											<Tooltip>
 												<Tooltip.Trigger>
-												<Chip
-													color="secondary"
-													size="sm"
-													variant="flat"
-													className="cursor-pointer"
-												>
-													{formatConditions(rule)}
-												</Chip>
+													<Chip
+														color="secondary"
+														size="sm"
+														variant="flat"
+														className="cursor-pointer"
+													>
+														{formatConditions(rule)}
+													</Chip>
 												</Tooltip.Trigger>
 												<Tooltip.Content placement="top">
 													<pre className="text-xs">
@@ -231,33 +230,33 @@ export const AbilityRuleList = observer(
 												</Tooltip.Content>
 											</Tooltip>
 										) : (
-										<span className="text-muted">
-											{formatConditions(rule)}
-										</span>
-									)}
-								</Table.Cell>
-								<Table.Cell>
-									<Switch
-										size="sm"
-										value={rule.isActive}
-										onValueChange={() =>
-											handleToggleActive(rule.id, rule.isActive)
-										}
-									/>
-								</Table.Cell>
+											<span className="text-muted">
+												{formatConditions(rule)}
+											</span>
+										)}
+									</Table.Cell>
+									<Table.Cell>
+										<Switch
+											size="sm"
+											value={rule.isActive}
+											onValueChange={() =>
+												handleToggleActive(rule.id, rule.isActive)
+											}
+										/>
+									</Table.Cell>
 									<Table.Cell>
 										<div className="flex gap-1">
 											{onEditRule && (
 												<Tooltip>
 													<Tooltip.Trigger>
-													<Button
-														isIconOnly
-														size="sm"
-													variant="light"
-													onPress={() => onEditRule(rule)}
-													>
-														<Edit2 className="h-4 w-4" />
-													</Button>
+														<Button
+															isIconOnly
+															size="sm"
+															variant="light"
+															onPress={() => onEditRule(rule)}
+														>
+															<Edit2 className="h-4 w-4" />
+														</Button>
 													</Tooltip.Trigger>
 													<Tooltip.Content>수정</Tooltip.Content>
 												</Tooltip>
@@ -265,26 +264,26 @@ export const AbilityRuleList = observer(
 											{onDeleteRule && (
 												<Tooltip>
 													<Tooltip.Trigger>
-													<Button
-														isIconOnly
-														size="sm"
-													variant="light"
-													color="danger"
-													onPress={() => onDeleteRule(rule.id)}
-													>
-														<Trash2 className="h-4 w-4" />
-													</Button>
+														<Button
+															isIconOnly
+															size="sm"
+															variant="light"
+															color="danger"
+															onPress={() => onDeleteRule(rule.id)}
+														>
+															<Trash2 className="h-4 w-4" />
+														</Button>
 													</Tooltip.Trigger>
 													<Tooltip.Content>삭제</Tooltip.Content>
 												</Tooltip>
 											)}
-									</div>
-								</Table.Cell>
-							</Table.Row>
-						))}
-					</Table.Body>
-				</Table.Content>
-			</Table>
+										</div>
+									</Table.Cell>
+								</Table.Row>
+							))}
+						</Table.Body>
+					</Table.Content>
+				</Table>
 			</div>
 		);
 	},

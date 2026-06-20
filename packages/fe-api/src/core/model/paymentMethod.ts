@@ -13,15 +13,14 @@
 /**
  * 결제 수단
  */
-export type PaymentMethod = typeof PaymentMethod[keyof typeof PaymentMethod];
-
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PaymentMethod = {
-  CARD: 'CARD',
-  VIRTUAL_ACCOUNT: 'VIRTUAL_ACCOUNT',
-  BANK_TRANSFER: 'BANK_TRANSFER',
-  CASH: 'CASH',
-  FREE: 'FREE',
-  EXTERNAL: 'EXTERNAL',
+	CARD: "CARD",
+	VIRTUAL_ACCOUNT: "VIRTUAL_ACCOUNT",
+	BANK_TRANSFER: "BANK_TRANSFER",
+	CASH: "CASH",
+	FREE: "FREE",
+	EXTERNAL: "EXTERNAL",
 } as const;

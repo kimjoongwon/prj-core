@@ -7,10 +7,10 @@ import type {
 import {
 	BackButton,
 	buildOidcClientLoginUi,
-	SectionSurface,
 	isValidOidcLoginUiBrandColor,
 	OidcClientForm,
 	PageTitleBar,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";

@@ -2,8 +2,8 @@ import { randomBytes } from "node:crypto";
 import { ValueObject } from "../../common/value-object.base";
 import { VoValidationError } from "../../errors/vo.error";
 import { OidcClientId } from "../../oidc/oidc-client-id.vo";
-import { SESSION_ID_SEPARATOR } from "./session-id-separator";
 import type { SessionIdProps } from "./session-id.props";
+import { SESSION_ID_SEPARATOR } from "./session-id-separator";
 
 export class SessionId extends ValueObject<SessionIdProps> {
 	private static readonly RAW_ID_REGEX = /^[a-f0-9]{32}$/;

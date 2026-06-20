@@ -1,5 +1,3 @@
-import { EmailService } from "../../email/email.service";
-import { RedisService } from "../../redis/redis.service";
 import {
 	Email,
 	HashedPassword,
@@ -8,14 +6,16 @@ import {
 } from "@cocrepo/vo";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { EmailService } from "../../email/email.service";
+import { DirectPrismaProvider } from "../../oidc/direct-prisma.provider";
+import { DirectUserRepository } from "../../oidc/direct-user.repository";
+import { RedisService } from "../../redis/redis.service";
 import {
 	MAX_PASSWORD_HISTORY,
 	RESET_TOKEN_PREFIX,
 	TOKEN_TTL_SECONDS,
 } from "../password-reset.constants";
 import type { TokenValidationResult } from "../token-validation-result";
-import { DirectPrismaProvider } from "../../oidc/direct-prisma.provider";
-import { DirectUserRepository } from "../../oidc/direct-user.repository";
 
 /**
  * 비밀번호 재설정 서비스

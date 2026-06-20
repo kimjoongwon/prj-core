@@ -10,9 +10,7 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 export class GetAuthAuditLogsUseCase
 	implements IQueryHandler<GetAuthAuditLogsQuery>
 {
-	constructor(
-		private readonly authAuditLogService: AuthAuditLogAggregate,
-	) {}
+	constructor(private readonly authAuditLogService: AuthAuditLogAggregate) {}
 
 	async execute(query: GetAuthAuditLogsQuery): Promise<{
 		data: GetAuditLogsResult["logs"];

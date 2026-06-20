@@ -16,15 +16,15 @@ import type {
 import {
 	AiForm,
 	Button,
-	SectionSurface,
 	PageTitleBar,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
+import { ListBox } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Input } from "../../input/Input/Input";
 import { Select } from "../../selection/Select/Select";
-import { ListBox } from "@heroui/react";
 export interface InquiryEditScreenBootstrap {
 	fieldMeta: Record<string, AiFormFieldMeta>;
 	aiSchemas: AiFormSchema[];

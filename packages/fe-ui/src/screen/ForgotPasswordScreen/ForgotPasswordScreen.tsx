@@ -1,7 +1,7 @@
 "use client";
 
-import type { FormEvent } from "react";
 import { observer } from "mobx-react-lite";
+import type { FormEvent } from "react";
 import {
 	ForgotPasswordForm,
 	type ForgotPasswordFormState,

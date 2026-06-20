@@ -69,7 +69,9 @@ const ToastCompositionPreview = () => {
 	return (
 		<div className="min-w-64 rounded-md border border-divider bg-content1 px-4 py-3 text-foreground">
 			<p className="font-medium text-sm">커스텀 토스트 렌더러</p>
-			<p className="text-default-500 text-xs">children render prop composition</p>
+			<p className="text-default-500 text-xs">
+				children render prop composition
+			</p>
 			<Toast.Provider
 				placement="bottom end"
 				children={({ toast }) => (

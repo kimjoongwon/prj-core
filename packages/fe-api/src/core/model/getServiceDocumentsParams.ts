@@ -9,42 +9,42 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ServiceDocumentKind } from './serviceDocumentKind';
-import type { ServiceDocumentPlatform } from './serviceDocumentPlatform';
-import type { ServiceDocumentStatus } from './serviceDocumentStatus';
+import type { ServiceDocumentKind } from "./serviceDocumentKind";
+import type { ServiceDocumentPlatform } from "./serviceDocumentPlatform";
+import type { ServiceDocumentStatus } from "./serviceDocumentStatus";
 
 export type GetServiceDocumentsParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * 제목, 요약, 버전 통합 검색
- */
-search?: string;
-/**
- * 문서 종류
- */
-kind?: ServiceDocumentKind;
-/**
- * 노출 플랫폼
- */
-platform?: ServiceDocumentPlatform;
-/**
- * 상태
- */
-status?: ServiceDocumentStatus;
-/**
- * 로케일
- */
-locale?: string;
-/**
- * 필수 동의 여부
- */
-isRequired?: boolean;
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * 제목, 요약, 버전 통합 검색
+	 */
+	search?: string;
+	/**
+	 * 문서 종류
+	 */
+	kind?: ServiceDocumentKind;
+	/**
+	 * 노출 플랫폼
+	 */
+	platform?: ServiceDocumentPlatform;
+	/**
+	 * 상태
+	 */
+	status?: ServiceDocumentStatus;
+	/**
+	 * 로케일
+	 */
+	locale?: string;
+	/**
+	 * 필수 동의 여부
+	 */
+	isRequired?: boolean;
 };

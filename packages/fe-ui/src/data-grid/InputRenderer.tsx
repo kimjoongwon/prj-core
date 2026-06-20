@@ -1,6 +1,6 @@
 "use client";
 
-import type { InputConfig, DataGridState } from "@cocrepo/type";
+import type { DataGridState, InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { ButtonInput, DropdownInput, SearchInput, SelectInput } from "./input";
 

@@ -3,11 +3,11 @@
 import type { OidcClientLoginUi } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action";
+import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
+import { useT } from "../../i18n";
 import { Input } from "../../input";
 import { Link } from "../../navigation";
 import { Checkbox } from "../../selection";
-import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
-import { useT } from "../../i18n";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 

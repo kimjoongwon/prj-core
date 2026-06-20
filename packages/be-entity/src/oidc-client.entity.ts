@@ -1,5 +1,5 @@
-import type { JsonValue } from "@cocrepo/type";
 import type { OidcClient as OidcClientEntity } from "@cocrepo/prisma";
+import type { JsonValue } from "@cocrepo/type";
 
 import { AbstractEntity } from "./abstract.entity";
 

@@ -1,4 +1,5 @@
 import { ContentAggregate } from "@cocrepo/aggregate";
+import { CommunityController } from "@cocrepo/controller";
 import { ContentsRepository } from "@cocrepo/repository";
 import { AuthContext, SpaceContext } from "@cocrepo/service";
 import {
@@ -7,7 +8,6 @@ import {
 } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { CommunityController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],

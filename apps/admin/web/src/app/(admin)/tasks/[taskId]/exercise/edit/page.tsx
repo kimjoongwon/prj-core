@@ -5,6 +5,7 @@ import {
 	useGetTaskExercise,
 	useUpdateTaskExercise,
 } from "@cocrepo/api/core/tasks";
+import { useTaskExerciseAssetBrowser } from "@cocrepo/hook";
 import { TaskExerciseEditScreen, useT } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -12,7 +13,6 @@ import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { usePersistStore } from "@/stores/AppStoreProvider";
-import { useTaskExerciseAssetBrowser } from "@cocrepo/hook";
 
 type TaskExerciseEditScreenParams = {
 	taskId: string;

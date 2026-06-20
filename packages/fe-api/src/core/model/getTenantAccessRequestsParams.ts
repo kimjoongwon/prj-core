@@ -9,44 +9,44 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { TenantAccessRequestStatus } from './tenantAccessRequestStatus';
+import type { TenantAccessRequestStatus } from "./tenantAccessRequestStatus";
 
 export type GetTenantAccessRequestsParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * 검색어 (신청자 이름/이메일, 시설명)
- */
-search?: string;
-/**
- * 신청 상태 필터
- */
-status?: TenantAccessRequestStatus;
-/**
- * Space ID 필터
- */
-spaceId?: string;
-/**
- * 신청자 ID 필터
- */
-requesterId?: string;
-/**
- * 신청일 시작 (ISO8601)
- */
-createdFrom?: string;
-/**
- * 신청일 종료 (ISO8601)
- */
-createdTo?: string;
-/**
- * 복합 정렬 (JSON:API 컨벤션). 예: ?sort=-createdAt&sort=status
- */
-sort?: string[];
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * 검색어 (신청자 이름/이메일, 시설명)
+	 */
+	search?: string;
+	/**
+	 * 신청 상태 필터
+	 */
+	status?: TenantAccessRequestStatus;
+	/**
+	 * Space ID 필터
+	 */
+	spaceId?: string;
+	/**
+	 * 신청자 ID 필터
+	 */
+	requesterId?: string;
+	/**
+	 * 신청일 시작 (ISO8601)
+	 */
+	createdFrom?: string;
+	/**
+	 * 신청일 종료 (ISO8601)
+	 */
+	createdTo?: string;
+	/**
+	 * 복합 정렬 (JSON:API 컨벤션). 예: ?sort=-createdAt&sort=status
+	 */
+	sort?: string[];
 };

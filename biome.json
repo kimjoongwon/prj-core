@@ -22,7 +22,6 @@
 			"./packages/be-dto/**/*.ts",
 			"./packages/be-entity/**/*.ts",
 			"./packages/be-event/**/*.ts",
-			"./packages/be-facade/**/*.ts",
 			"./packages/be-client/**/*.ts",
 			"./packages/be-command/**/*.ts",
 			"./packages/be-gateway/**/*.ts",
@@ -48,6 +47,13 @@
 		"enabled": true,
 		"indentStyle": "tab",
 		"indentWidth": 2
+	},
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
 	},
 	"linter": {
 		"enabled": true,

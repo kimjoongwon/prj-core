@@ -13,21 +13,21 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export type GetOidcSessionsParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * 모델 타입 필터 (AccessToken, RefreshToken, Session 등)
- */
-modelType?: string;
-/**
- * 계정 ID (accountId) 검색
- */
-accountId?: string;
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * 모델 타입 필터 (AccessToken, RefreshToken, Session 등)
+	 */
+	modelType?: string;
+	/**
+	 * 계정 ID (accountId) 검색
+	 */
+	accountId?: string;
 };

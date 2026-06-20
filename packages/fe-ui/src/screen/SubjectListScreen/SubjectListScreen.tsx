@@ -7,17 +7,17 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
-	SectionSurface,
 	buildSubjectTableColumns,
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	SectionSurface,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
+import { Tabs } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type Key, useEffect } from "react";
-import { Tabs } from "@heroui/react";
 
 const leftInputs: InputConfig[] = [
 	{

@@ -6,7 +6,10 @@ type SwitchClassNames = Partial<
 >;
 
 export interface SwitchProps
-	extends Omit<ComponentProps<typeof HeroSwitch.Root>, "children" | "onChange" | "value"> {
+	extends Omit<
+		ComponentProps<typeof HeroSwitch.Root>,
+		"children" | "onChange" | "value"
+	> {
 	children?: ReactNode;
 	value?: boolean;
 	onValueChange?: (isSelected: boolean) => void;

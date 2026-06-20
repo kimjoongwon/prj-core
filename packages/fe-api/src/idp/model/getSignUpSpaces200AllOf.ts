@@ -11,14 +11,15 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { SpaceDto } from './spaceDto';
-import type { GetSignUpSpaces200AllOfMeta } from './getSignUpSpaces200AllOfMeta';
+
+import type { GetSignUpSpaces200AllOfMeta } from "./getSignUpSpaces200AllOfMeta";
+import type { SpaceDto } from "./spaceDto";
 
 export type GetSignUpSpaces200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: SpaceDto[];
-  meta?: GetSignUpSpaces200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: SpaceDto[];
+	meta?: GetSignUpSpaces200AllOfMeta;
 };

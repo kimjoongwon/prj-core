@@ -1,8 +1,6 @@
-import {
-	CONTEXT_KEYS } from "@cocrepo/constant";
+import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { PUBLIC_ROUTE_KEY } from "@cocrepo/decorator";
-import { TokenStorageService,
-} from "@cocrepo/service";
+import { TokenStorageService } from "@cocrepo/service";
 import {
 	type CanActivate,
 	type ExecutionContext,
@@ -43,9 +41,7 @@ export class JwtAuthGuard implements CanActivate {
 		const request = context.switchToHttp().getRequest();
 
 		// Access Token 블랙리스트 확인 (JwtStrategy extractor가 CLS에 저장한 토큰)
-		const accessToken = this.cls.get<string | undefined>(
-			CONTEXT_KEYS.TOKEN,
-		);
+		const accessToken = this.cls.get<string | undefined>(CONTEXT_KEYS.TOKEN);
 		if (accessToken) {
 			const isBlacklisted =
 				await this.tokenStorageService.isBlacklisted(accessToken);

@@ -33,9 +33,7 @@ export interface VariableInputFormProps {
 export const VariableInputForm = observer(
 	({ variables, values, onChange }: VariableInputFormProps) => {
 		if (variables.length === 0) {
-			return (
-				<p className="text-sm text-muted">정의된 변수가 없습니다.</p>
-			);
+			return <p className="text-sm text-muted">정의된 변수가 없습니다.</p>;
 		}
 
 		const handleValueChange = (

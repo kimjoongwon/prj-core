@@ -1,10 +1,10 @@
 import { ListBox as HeroListBox } from "@heroui/react";
 import type { Key, Selection } from "react-aria-components";
-import { ListBoxWrapper } from "./ListBoxWrapper";
 import type {
 	ListBoxSelectProps,
 	ListBoxSelectValue,
 } from "./ListBoxSelect.props";
+import { ListBoxWrapper } from "./ListBoxWrapper";
 
 const toSelectionSet = (
 	value: ListBoxSelectValue | undefined,
@@ -35,15 +35,15 @@ export const ListBoxSelect = (props: ListBoxSelectProps) => {
 	const handleSelectionChange = (selection: Selection) => {
 		if (selection === "all") {
 			const allValues = options.map((option) => option.value);
-			onChange?.(selectionMode === "single" ? (allValues[0] ?? null) : allValues);
+			onChange?.(
+				selectionMode === "single" ? (allValues[0] ?? null) : allValues,
+			);
 			return;
 		}
 
 		const selectedValues = Array.from(selection);
 		onChange?.(
-			selectionMode === "single"
-				? (selectedValues[0] ?? null)
-				: selectedValues,
+			selectionMode === "single" ? (selectedValues[0] ?? null) : selectedValues,
 		);
 	};
 
@@ -53,30 +53,30 @@ export const ListBoxSelect = (props: ListBoxSelectProps) => {
 				<div className="mb-3">
 					<h6 className="text-base font-bold font-semibold">{title}</h6>
 				</div>
-				)}
-				<HeroListBox
-					aria-label={ariaLabel ?? title ?? "선택"}
-					className={className ?? "w-full"}
-					selectionMode={selectionMode}
-					items={options}
-					variant="default"
-					selectedKeys={toSelectionSet(value)}
-					defaultSelectedKeys={toSelectionSet(defaultValue)}
-					onSelectionChange={handleSelectionChange}
-				>
-					{(item) => {
-						return (
-							<HeroListBox.Item
-								className="w-full"
-								key={item.value}
-								id={item.value}
-								textValue={item.text}
-							>
-								{item.text}
-							</HeroListBox.Item>
-						);
+			)}
+			<HeroListBox
+				aria-label={ariaLabel ?? title ?? "선택"}
+				className={className ?? "w-full"}
+				selectionMode={selectionMode}
+				items={options}
+				variant="default"
+				selectedKeys={toSelectionSet(value)}
+				defaultSelectedKeys={toSelectionSet(defaultValue)}
+				onSelectionChange={handleSelectionChange}
+			>
+				{(item) => {
+					return (
+						<HeroListBox.Item
+							className="w-full"
+							key={item.value}
+							id={item.value}
+							textValue={item.text}
+						>
+							{item.text}
+						</HeroListBox.Item>
+					);
 				}}
 			</HeroListBox>
-			</ListBoxWrapper>
+		</ListBoxWrapper>
 	);
 };

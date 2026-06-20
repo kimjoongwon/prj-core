@@ -30,7 +30,6 @@ export function Enum(
 	options: EnumDecoratorOptions = {},
 ): PropertyDecorator {
 	const { required = true, each = false } = options;
-	const enumValues = Object.values(enumType);
 
 	const decorators: PropertyDecorator[] = [
 		IsEnum(enumType, {

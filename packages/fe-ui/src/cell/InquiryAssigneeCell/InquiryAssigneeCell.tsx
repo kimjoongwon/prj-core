@@ -1,5 +1,5 @@
-import { User } from "lucide-react";
 import { Avatar } from "@heroui/react";
+import { User } from "lucide-react";
 import { Chip } from "../../data-display/Chip/Chip";
 
 interface InquiryAssigneeCellProps {
@@ -39,10 +39,7 @@ export const InquiryAssigneeCell = ({
 
 	return (
 		<div className="flex w-full items-center justify-center gap-2">
-			<Avatar
-				size="sm"
-				className="bg-accent/10 text-accent"
-			>
+			<Avatar size="sm" className="bg-accent/10 text-accent">
 				{avatarUrl ? <Avatar.Image src={avatarUrl} alt={name} /> : null}
 				<Avatar.Fallback>
 					<User className="h-3 w-3" />

@@ -1,5 +1,6 @@
 "use client";
 
+import { Spinner, Tooltip } from "@heroui/react";
 import {
 	AlertCircle,
 	CheckCircle2,
@@ -12,7 +13,6 @@ import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Spinner, Tooltip } from "@heroui/react";
 
 export type ConnectionStatus = "connected" | "disconnected" | "checking";
 
@@ -196,37 +196,37 @@ export const StatusBanner = observer(
 
 					{/* 우측: 추가 정보 및 액션 */}
 					<div className="flex items-center gap-2 flex-wrap">
-							{/* 추가 상태 정보 */}
-							{statusInfos.map((info) => (
-								<Tooltip key={info.label}>
-									<Tooltip.Trigger>
+						{/* 추가 상태 정보 */}
+						{statusInfos.map((info) => (
+							<Tooltip key={info.label}>
+								<Tooltip.Trigger>
 									<Chip size="sm" variant="flat" startContent={info.icon}>
 										{info.label}: {info.value}
 									</Chip>
-									</Tooltip.Trigger>
-									<Tooltip.Content>{info.tooltip || info.label}</Tooltip.Content>
-								</Tooltip>
-							))}
+								</Tooltip.Trigger>
+								<Tooltip.Content>{info.tooltip || info.label}</Tooltip.Content>
+							</Tooltip>
+						))}
 
-							{/* 새로고침 버튼 */}
-							{onRefresh && (
-								<Tooltip>
-									<Tooltip.Trigger>
+						{/* 새로고침 버튼 */}
+						{onRefresh && (
+							<Tooltip>
+								<Tooltip.Trigger>
 									<Button
 										isIconOnly
 										size="sm"
-									variant="flat"
-									onPress={onRefresh}
-									isDisabled={isRefreshing || isProcessing}
-								>
-									<RefreshCw
-										className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`}
+										variant="flat"
+										onPress={onRefresh}
+										isDisabled={isRefreshing || isProcessing}
+									>
+										<RefreshCw
+											className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`}
 										/>
 									</Button>
-									</Tooltip.Trigger>
-									<Tooltip.Content>상태 새로고침</Tooltip.Content>
-								</Tooltip>
-							)}
+								</Tooltip.Trigger>
+								<Tooltip.Content>상태 새로고침</Tooltip.Content>
+							</Tooltip>
+						)}
 
 						{/* 액션 버튼들 */}
 						{visibleActions.map((action) => (

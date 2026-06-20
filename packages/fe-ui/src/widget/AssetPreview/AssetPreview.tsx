@@ -1,9 +1,9 @@
 "use client";
 
+import { cn, Modal, useOverlayState } from "@heroui/react";
 import { FileText, ImageIcon, Link2Off, PlayCircle } from "lucide-react";
 import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { cn, Modal, useOverlayState } from "@heroui/react";
 
 export interface AssetPreviewAsset {
 	id: string;
@@ -324,26 +324,32 @@ export function AssetPreviewDialog({
 
 	return (
 		<Modal state={modalState}>
-			<Modal.Backdrop><Modal.Container size="full" scroll="inside"><Modal.Dialog>
-				<Modal.Header>{asset?.originalName ?? "에셋 보기"}</Modal.Header>
-				<Modal.Body>{asset ? <AssetPreview asset={asset} /> : null}</Modal.Body>
-				<Modal.Footer>
-					{previewUrl ? (
-						<Button
-							color="primary"
-							variant="flat"
-							onPress={() => {
-								window.open(previewUrl, "_blank", "noopener,noreferrer");
-							}}
-						>
-							원본 열기
-						</Button>
-					) : null}
-					<Button variant="flat" onPress={onClose}>
-						닫기
-					</Button>
-				</Modal.Footer>
-			</Modal.Dialog></Modal.Container></Modal.Backdrop>
+			<Modal.Backdrop>
+				<Modal.Container size="full" scroll="inside">
+					<Modal.Dialog>
+						<Modal.Header>{asset?.originalName ?? "에셋 보기"}</Modal.Header>
+						<Modal.Body>
+							{asset ? <AssetPreview asset={asset} /> : null}
+						</Modal.Body>
+						<Modal.Footer>
+							{previewUrl ? (
+								<Button
+									color="primary"
+									variant="flat"
+									onPress={() => {
+										window.open(previewUrl, "_blank", "noopener,noreferrer");
+									}}
+								>
+									원본 열기
+								</Button>
+							) : null}
+							<Button variant="flat" onPress={onClose}>
+								닫기
+							</Button>
+						</Modal.Footer>
+					</Modal.Dialog>
+				</Modal.Container>
+			</Modal.Backdrop>
 		</Modal>
 	);
 }

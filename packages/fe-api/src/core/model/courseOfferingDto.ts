@@ -9,71 +9,72 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { TimelineProvisioningMode } from './timelineProvisioningMode';
-import type { CourseOfferingStatus } from './courseOfferingStatus';
-import type { CourseDto } from './courseDto';
-import type { SpaceDto } from './spaceDto';
-import type { TimelineDto } from './timelineDto';
-import type { EnrollmentDto } from './enrollmentDto';
-import type { CoursePassDto } from './coursePassDto';
+
+import type { CourseDto } from "./courseDto";
+import type { CourseOfferingStatus } from "./courseOfferingStatus";
+import type { CoursePassDto } from "./coursePassDto";
+import type { EnrollmentDto } from "./enrollmentDto";
+import type { SpaceDto } from "./spaceDto";
+import type { TimelineDto } from "./timelineDto";
+import type { TimelineProvisioningMode } from "./timelineProvisioningMode";
 
 export interface CourseOfferingDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** 코스 ID */
-  courseId: string;
-  /** 소속 Space ID */
-  spaceId: string;
-  /**
-   * 연결 Timeline ID
-   * @nullable
-   */
-  timelineId?: string | null;
-  /** 타임라인 준비 방식 */
-  timelineProvisioningMode: TimelineProvisioningMode;
-  /**
-   * 개설명
-   * @minLength 1
-   * @maxLength 120
-   */
-  name: string;
-  /** 개설 시작일 */
-  startsAt: string;
-  /** 개설 종료일 */
-  endsAt: string;
-  /**
-   * 모집 시작일
-   * @nullable
-   */
-  enrollmentStartsAt?: string | null;
-  /**
-   * 모집 종료일
-   * @nullable
-   */
-  enrollmentEndsAt?: string | null;
-  /**
-   * 정원
-   * @minimum 1
-   */
-  capacity: number;
-  /**
-   * 등록 인원 수
-   * @minimum 0
-   */
-  enrolledCount: number;
-  /** 개설 상태 */
-  status: CourseOfferingStatus;
-  /** 코스 정보 */
-  course?: CourseDto;
-  /** 소속 Space */
-  space?: SpaceDto;
-  /** 연결 Timeline */
-  timeline?: TimelineDto;
-  /** 수강 등록 목록 */
-  enrollments?: EnrollmentDto[];
-  /** 수강권 목록 */
-  passes?: CoursePassDto[];
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** 코스 ID */
+	courseId: string;
+	/** 소속 Space ID */
+	spaceId: string;
+	/**
+	 * 연결 Timeline ID
+	 * @nullable
+	 */
+	timelineId?: string | null;
+	/** 타임라인 준비 방식 */
+	timelineProvisioningMode: TimelineProvisioningMode;
+	/**
+	 * 개설명
+	 * @minLength 1
+	 * @maxLength 120
+	 */
+	name: string;
+	/** 개설 시작일 */
+	startsAt: string;
+	/** 개설 종료일 */
+	endsAt: string;
+	/**
+	 * 모집 시작일
+	 * @nullable
+	 */
+	enrollmentStartsAt?: string | null;
+	/**
+	 * 모집 종료일
+	 * @nullable
+	 */
+	enrollmentEndsAt?: string | null;
+	/**
+	 * 정원
+	 * @minimum 1
+	 */
+	capacity: number;
+	/**
+	 * 등록 인원 수
+	 * @minimum 0
+	 */
+	enrolledCount: number;
+	/** 개설 상태 */
+	status: CourseOfferingStatus;
+	/** 코스 정보 */
+	course?: CourseDto;
+	/** 소속 Space */
+	space?: SpaceDto;
+	/** 연결 Timeline */
+	timeline?: TimelineDto;
+	/** 수강 등록 목록 */
+	enrollments?: EnrollmentDto[];
+	/** 수강권 목록 */
+	passes?: CoursePassDto[];
 }

@@ -1,10 +1,10 @@
 "use client";
 
+import { ScrollShadow } from "@heroui/react";
 import { Clock, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { Button } from "../../action/Button/Button";
-import { ScrollShadow } from "@heroui/react";
 
 export interface HistoryItem {
 	/** 고유 식별자 */
@@ -148,11 +148,11 @@ export const HistoryPanel = observer(
 									{/* 썸네일 */}
 									<div className="w-12 h-12 rounded-lg overflow-hidden bg-surface-secondary flex-shrink-0">
 										{item.thumbnailUrl && (
-												<img
-													src={item.thumbnailUrl}
-													alt={item.title}
-													className="w-full h-full object-cover"
-												/>
+											<img
+												src={item.thumbnailUrl}
+												alt={item.title}
+												className="w-full h-full object-cover"
+											/>
 										)}
 									</div>
 

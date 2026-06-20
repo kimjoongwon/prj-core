@@ -1,8 +1,8 @@
 import { CONTEXT_KEYS, REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import { UserDto } from "@cocrepo/dto";
+import { parseAcceptLanguage } from "@cocrepo/toolkit";
 import { Injectable, type NestMiddleware } from "@nestjs/common";
 import type { NextFunction, Request, Response } from "express";
-import { parseAcceptLanguage } from "@cocrepo/toolkit";
 import { ClsService } from "nestjs-cls";
 import { AppLogger } from "../util/app-logger.util";
 import { resolveCurrentTenantForSpace } from "../util/permission.util";
@@ -61,7 +61,10 @@ export class RequestContextMiddleware implements NestMiddleware {
 		this.cls.set(CONTEXT_KEYS.LANGUAGE, language);
 
 		// Space ID 설정 (x-space-id 헤더)
-		const spaceId = this.readRequestHeader(request, REQUEST_HEADER_KEYS.SPACE_ID);
+		const spaceId = this.readRequestHeader(
+			request,
+			REQUEST_HEADER_KEYS.SPACE_ID,
+		);
 		this.cls.set(CONTEXT_KEYS.SPACE_ID, spaceId || undefined);
 
 		// Tenant 설정 (spaceId가 있는 경우)

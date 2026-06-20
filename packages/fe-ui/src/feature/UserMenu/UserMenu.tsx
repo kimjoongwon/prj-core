@@ -1,9 +1,9 @@
 "use client";
 
 import { useAuthStore, usePersistStore } from "@cocrepo/store";
+import { Avatar, Dropdown } from "@heroui/react";
 import { LogOut } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Avatar, Dropdown } from "@heroui/react";
 import { useT } from "../../i18n";
 
 /**

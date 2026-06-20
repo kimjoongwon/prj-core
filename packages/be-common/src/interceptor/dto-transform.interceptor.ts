@@ -14,7 +14,7 @@ import {
 import { Reflector } from "@nestjs/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { isEntity, transformToDto } from "../util/dto-transform.util";
+import { transformToDto } from "../util/dto-transform.util";
 import { isWrappedResponse } from "../util/response.util";
 
 /**

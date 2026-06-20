@@ -9,75 +9,76 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { PaymentStatus } from './paymentStatus';
-import type { PaymentMethod } from './paymentMethod';
-import type { PaymentSubjectType } from './paymentSubjectType';
-import type { PaymentReferenceType } from './paymentReferenceType';
+
+import type { PaymentMethod } from "./paymentMethod";
+import type { PaymentReferenceType } from "./paymentReferenceType";
+import type { PaymentStatus } from "./paymentStatus";
+import type { PaymentSubjectType } from "./paymentSubjectType";
 
 export type GetPaymentsParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * 결제명/제공자/대상 통합 검색
- */
-search?: string;
-/**
- * 스페이스 ID 필터
- */
-spaceId?: string;
-/**
- * 결제자 User ID 필터
- */
-payerUserId?: string;
-/**
- * 결제 상태 필터
- */
-status?: PaymentStatus;
-/**
- * 결제 수단 필터
- */
-method?: PaymentMethod;
-/**
- * 결제 제공자 필터
- */
-provider?: string;
-/**
- * 결제 제공자 주문 ID 필터
- */
-providerOrderId?: string;
-/**
- * 결제 대상 종류 필터
- */
-subjectType?: PaymentSubjectType;
-/**
- * 결제 대상 ID 필터
- */
-subjectId?: string;
-/**
- * 참조 리소스 종류 필터
- */
-referenceType?: PaymentReferenceType;
-/**
- * 참조 리소스 ID 필터
- */
-referenceId?: string;
-/**
- * 승인일 시작 필터
- */
-approvedFrom?: string;
-/**
- * 승인일 종료 필터
- */
-approvedUntil?: string;
-/**
- * 복합 정렬. 허용 필드: createdAt, approvedAt, totalAmount, status, title. 예: ?sort=-approvedAt&sort=title
- */
-sort?: string[];
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * 결제명/제공자/대상 통합 검색
+	 */
+	search?: string;
+	/**
+	 * 스페이스 ID 필터
+	 */
+	spaceId?: string;
+	/**
+	 * 결제자 User ID 필터
+	 */
+	payerUserId?: string;
+	/**
+	 * 결제 상태 필터
+	 */
+	status?: PaymentStatus;
+	/**
+	 * 결제 수단 필터
+	 */
+	method?: PaymentMethod;
+	/**
+	 * 결제 제공자 필터
+	 */
+	provider?: string;
+	/**
+	 * 결제 제공자 주문 ID 필터
+	 */
+	providerOrderId?: string;
+	/**
+	 * 결제 대상 종류 필터
+	 */
+	subjectType?: PaymentSubjectType;
+	/**
+	 * 결제 대상 ID 필터
+	 */
+	subjectId?: string;
+	/**
+	 * 참조 리소스 종류 필터
+	 */
+	referenceType?: PaymentReferenceType;
+	/**
+	 * 참조 리소스 ID 필터
+	 */
+	referenceId?: string;
+	/**
+	 * 승인일 시작 필터
+	 */
+	approvedFrom?: string;
+	/**
+	 * 승인일 종료 필터
+	 */
+	approvedUntil?: string;
+	/**
+	 * 복합 정렬. 허용 필드: createdAt, approvedAt, totalAmount, status, title. 예: ?sort=-approvedAt&sort=title
+	 */
+	sort?: string[];
 };

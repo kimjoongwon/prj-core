@@ -15,10 +15,7 @@ import {
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { CaslAbilityFactory } from "../casl/casl-ability.factory";
-import type {
-	IPolicyHandler,
-	PolicyHandler,
-} from "../casl/policy-handlers";
+import type { IPolicyHandler, PolicyHandler } from "../casl/policy-handlers";
 import type { AppAbility } from "../casl/types";
 
 /**

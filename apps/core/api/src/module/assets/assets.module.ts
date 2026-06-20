@@ -1,4 +1,5 @@
 import { AssetAggregate } from "@cocrepo/aggregate";
+import { AssetsController } from "@cocrepo/controller";
 import { AssetsRepository, FoldersRepository } from "@cocrepo/repository";
 import {
 	AuthContext,
@@ -9,7 +10,6 @@ import {
 import { AssetCommandHandlers, AssetQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { AssetsController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],

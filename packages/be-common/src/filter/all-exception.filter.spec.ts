@@ -6,7 +6,6 @@ import {
 	Logger,
 } from "@nestjs/common";
 import { BaseExceptionFilter, HttpAdapterHost } from "@nestjs/core";
-import { Test, TestingModule } from "@nestjs/testing";
 import { AllExceptionsFilter } from "./all-exception.filter";
 
 jest.mock("@cocrepo/service", () => {

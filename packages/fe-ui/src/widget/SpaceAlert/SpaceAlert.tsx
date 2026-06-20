@@ -61,10 +61,7 @@ export const SpaceAlert = observer(function SpaceAlert({
 						</svg>
 					</div>
 
-					<Typography.Heading
-						level={4}
-						className="text-center font-bold"
-					>
+					<Typography.Heading level={4} className="text-center font-bold">
 						{title}
 					</Typography.Heading>
 

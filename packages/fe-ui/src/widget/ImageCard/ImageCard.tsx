@@ -63,11 +63,11 @@ export const ImageCard = observer(
 				className={`group relative rounded-xl overflow-hidden bg-surface-secondary border border-border ${className ?? ""}`}
 			>
 				<div className={aspectRatioClasses[aspectRatio]}>
-						<img
-							src={src}
-							alt={filename}
-							className="w-full h-full object-cover"
-						/>
+					<img
+						src={src}
+						alt={filename}
+						className="w-full h-full object-cover"
+					/>
 				</div>
 
 				{hasActions && (

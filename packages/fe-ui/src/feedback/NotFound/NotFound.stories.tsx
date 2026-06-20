@@ -143,7 +143,10 @@ export const Minimal: Story = {
 		backButtonText: "Back",
 	},
 	render: (args) => (
-		<NotFound {...args} icon={<div className="text-6xl text-gray-400">⚠️</div>} />
+		<NotFound
+			{...args}
+			icon={<div className="text-6xl text-gray-400">⚠️</div>}
+		/>
 	),
 	parameters: {
 		docs: {

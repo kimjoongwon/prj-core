@@ -1,10 +1,10 @@
 "use client";
 
+import { Tooltip } from "@heroui/react";
 import { ExternalLink } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../../action/Button/Button";
 import { Chip } from "../../../data-display/Chip/Chip";
-import { Tooltip } from "@heroui/react";
 import { CourseTableShell } from "../CourseTableShell";
 import type { CourseOfferingRow } from "../types";
 
@@ -31,14 +31,14 @@ const CourseOfferingTimelineButton = observer(
 		return (
 			<Tooltip>
 				<Tooltip.Trigger>
-				<Button
-					size="sm"
-					variant="flat"
-					endContent={<ExternalLink className="size-3.5" />}
-					onPress={onClickCourseOfferingTimelineButton}
-				>
-					{offering.timelineName}
-				</Button>
+					<Button
+						size="sm"
+						variant="flat"
+						endContent={<ExternalLink className="size-3.5" />}
+						onPress={onClickCourseOfferingTimelineButton}
+					>
+						{offering.timelineName}
+					</Button>
 				</Tooltip.Trigger>
 				<Tooltip.Content>타임라인 관리로 이동</Tooltip.Content>
 			</Tooltip>
@@ -70,12 +70,8 @@ export const CourseOfferingTable = observer(
 						<td className="px-3 py-4 font-medium text-foreground">
 							{offering.name}
 						</td>
-						<td className="px-3 py-4 text-muted">
-							{offering.courseName}
-						</td>
-						<td className="px-3 py-4 text-foreground">
-							{offering.spaceLabel}
-						</td>
+						<td className="px-3 py-4 text-muted">{offering.courseName}</td>
+						<td className="px-3 py-4 text-foreground">{offering.spaceLabel}</td>
 						<td className="px-3 py-4 text-foreground">
 							{offering.periodLabel}
 						</td>

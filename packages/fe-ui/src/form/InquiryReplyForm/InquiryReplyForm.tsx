@@ -1,10 +1,10 @@
 "use client";
 
+import { Separator, Tooltip } from "@heroui/react";
 import { BookOpen, FileText, Paperclip, Send, Sparkles, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useRef, useState } from "react";
 import { Button } from "../../action/Button/Button";
-import { Separator, Tooltip } from "@heroui/react";
 import { TextArea } from "../../input/TextArea/TextArea";
 
 export interface Attachment {
@@ -246,76 +246,76 @@ export const InquiryReplyForm = observer(
 							onChange={handleFileSelect}
 							className="hidden"
 						/>
-							<Tooltip>
-								<Tooltip.Trigger>
+						<Tooltip>
+							<Tooltip.Trigger>
 								<Button
 									isIconOnly
 									size="sm"
-								variant="flat"
-								onClick={() => fileInputRef.current?.click()}
-								isDisabled={isLoading}
+									variant="flat"
+									onClick={() => fileInputRef.current?.click()}
+									isDisabled={isLoading}
 								>
 									<Paperclip className="size-4" />
 								</Button>
-								</Tooltip.Trigger>
-								<Tooltip.Content>파일 첨부</Tooltip.Content>
-							</Tooltip>
+							</Tooltip.Trigger>
+							<Tooltip.Content>파일 첨부</Tooltip.Content>
+						</Tooltip>
 
 						{/* AI 초안 생성 */}
 						{onGenerateDraft && (
-								<Tooltip>
-									<Tooltip.Trigger>
+							<Tooltip>
+								<Tooltip.Trigger>
 									<Button
 										size="sm"
 										variant="flat"
-									color="secondary"
-									startContent={<Sparkles className="size-4" />}
-									onClick={onGenerateDraft}
-									isLoading={isGeneratingDraft}
+										color="secondary"
+										startContent={<Sparkles className="size-4" />}
+										onClick={onGenerateDraft}
+										isLoading={isGeneratingDraft}
 									>
 										AI 초안
 									</Button>
-									</Tooltip.Trigger>
-									<Tooltip.Content>AI 초안 생성</Tooltip.Content>
-								</Tooltip>
-							)}
+								</Tooltip.Trigger>
+								<Tooltip.Content>AI 초안 생성</Tooltip.Content>
+							</Tooltip>
+						)}
 
 						{/* 지식베이스 검색 */}
 						{onSearchKnowledge && (
-								<Tooltip>
-									<Tooltip.Trigger>
+							<Tooltip>
+								<Tooltip.Trigger>
 									<Button
 										size="sm"
 										variant="flat"
-									color="primary"
-									startContent={<BookOpen className="size-4" />}
-									onClick={onSearchKnowledge}
-									isDisabled={isLoading}
+										color="primary"
+										startContent={<BookOpen className="size-4" />}
+										onClick={onSearchKnowledge}
+										isDisabled={isLoading}
 									>
 										지식베이스
 									</Button>
-									</Tooltip.Trigger>
-									<Tooltip.Content>지식베이스 검색</Tooltip.Content>
-								</Tooltip>
-							)}
+								</Tooltip.Trigger>
+								<Tooltip.Content>지식베이스 검색</Tooltip.Content>
+							</Tooltip>
+						)}
 					</div>
 
 					{/* 오른쪽: 전송 버튼 */}
-						<Tooltip>
-							<Tooltip.Trigger>
+					<Tooltip>
+						<Tooltip.Trigger>
 							<Button
 								size="sm"
 								color="primary"
-							startContent={<Send className="size-4" />}
-							onClick={handleSubmit}
-							isDisabled={!canSubmit || isLoading}
-							isLoading={isSending}
+								startContent={<Send className="size-4" />}
+								onClick={handleSubmit}
+								isDisabled={!canSubmit || isLoading}
+								isLoading={isSending}
 							>
 								전송
 							</Button>
-							</Tooltip.Trigger>
-							<Tooltip.Content>Ctrl+Enter로 전송</Tooltip.Content>
-						</Tooltip>
+						</Tooltip.Trigger>
+						<Tooltip.Content>Ctrl+Enter로 전송</Tooltip.Content>
+					</Tooltip>
 				</div>
 
 				{/* 힌트 */}

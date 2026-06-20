@@ -1,11 +1,11 @@
 "use client";
 
+import { Table, Tooltip } from "@heroui/react";
 import { Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Button } from "../../action/Button/Button";
 import { Input } from "../../input/Input/Input";
 import { Switch } from "../../selection/Switch/Switch";
-import { Button } from "../../action/Button/Button";
-import { Table, Tooltip } from "@heroui/react";
 
 /** 변수 편집 항목 */
 export interface VariableEditItem {
@@ -136,16 +136,16 @@ export const VariableEditTable = observer(
 				</Button>
 			);
 
-				if (isUsed) {
-					return (
-						<Tooltip>
-							<Tooltip.Trigger>{deleteButton}</Tooltip.Trigger>
-							<Tooltip.Content placement="top">
-								본문에서 사용 중인 변수입니다
-							</Tooltip.Content>
-						</Tooltip>
-					);
-				}
+			if (isUsed) {
+				return (
+					<Tooltip>
+						<Tooltip.Trigger>{deleteButton}</Tooltip.Trigger>
+						<Tooltip.Content placement="top">
+							본문에서 사용 중인 변수입니다
+						</Tooltip.Content>
+					</Tooltip>
+				);
+			}
 
 			return deleteButton;
 		};
@@ -154,74 +154,76 @@ export const VariableEditTable = observer(
 			<div className="flex flex-col gap-3">
 				<Table aria-label="변수 편집 테이블">
 					<Table.Content>
-					<Table.Header>
-						{COLUMNS.map((column) => (
-							<Table.Column key={column.key} width={column.width}>
-								{column.label}
-							</Table.Column>
-						))}
-					</Table.Header>
-					<Table.Body>
-						{variables.map((variable, index) => {
-							const nameError = getError(index, "name");
-							const descriptionError = getError(index, "description");
-							const defaultValueError = getError(index, "defaultValue");
+						<Table.Header>
+							{COLUMNS.map((column) => (
+								<Table.Column key={column.key} width={column.width}>
+									{column.label}
+								</Table.Column>
+							))}
+						</Table.Header>
+						<Table.Body>
+							{variables.map((variable, index) => {
+								const nameError = getError(index, "name");
+								const descriptionError = getError(index, "description");
+								const defaultValueError = getError(index, "defaultValue");
 
-							return (
-								<Table.Row key={variable.id ?? `new-${index}`}>
-									<Table.Cell>
-										<Input
-											size="sm"
-											placeholder="변수명"
-											value={variable.name}
-											onChange={(value) =>
-												handleFieldChange(index, "name", value)
-											}
-											isInvalid={!!nameError}
-											errorMessage={nameError}
-											pattern={VARIABLE_NAME_PATTERN.source}
-										/>
-									</Table.Cell>
-									<Table.Cell>
-										<Input
-											size="sm"
-											placeholder="설명"
-											value={variable.description}
-											onChange={(value) =>
-												handleFieldChange(index, "description", value)
-											}
-											isInvalid={!!descriptionError}
-											errorMessage={descriptionError}
-										/>
-									</Table.Cell>
-									<Table.Cell>
-										<Input
-											size="sm"
-											placeholder="기본값"
-											value={variable.defaultValue}
-											onChange={(value) =>
-												handleFieldChange(index, "defaultValue", value)
-											}
-											isInvalid={!!defaultValueError}
-											errorMessage={defaultValueError}
-										/>
-									</Table.Cell>
-									<Table.Cell>
-										<Switch
-											size="sm"
-											value={variable.isRequired}
-											onValueChange={(isSelected) =>
-												handleFieldChange(index, "isRequired", isSelected)
-											}
-										/>
-									</Table.Cell>
-									<Table.Cell>{renderDeleteButton(variable, index)}</Table.Cell>
-								</Table.Row>
-							);
-						})}
-					</Table.Body>
-				</Table.Content>
-			</Table>
+								return (
+									<Table.Row key={variable.id ?? `new-${index}`}>
+										<Table.Cell>
+											<Input
+												size="sm"
+												placeholder="변수명"
+												value={variable.name}
+												onChange={(value) =>
+													handleFieldChange(index, "name", value)
+												}
+												isInvalid={!!nameError}
+												errorMessage={nameError}
+												pattern={VARIABLE_NAME_PATTERN.source}
+											/>
+										</Table.Cell>
+										<Table.Cell>
+											<Input
+												size="sm"
+												placeholder="설명"
+												value={variable.description}
+												onChange={(value) =>
+													handleFieldChange(index, "description", value)
+												}
+												isInvalid={!!descriptionError}
+												errorMessage={descriptionError}
+											/>
+										</Table.Cell>
+										<Table.Cell>
+											<Input
+												size="sm"
+												placeholder="기본값"
+												value={variable.defaultValue}
+												onChange={(value) =>
+													handleFieldChange(index, "defaultValue", value)
+												}
+												isInvalid={!!defaultValueError}
+												errorMessage={defaultValueError}
+											/>
+										</Table.Cell>
+										<Table.Cell>
+											<Switch
+												size="sm"
+												value={variable.isRequired}
+												onValueChange={(isSelected) =>
+													handleFieldChange(index, "isRequired", isSelected)
+												}
+											/>
+										</Table.Cell>
+										<Table.Cell>
+											{renderDeleteButton(variable, index)}
+										</Table.Cell>
+									</Table.Row>
+								);
+							})}
+						</Table.Body>
+					</Table.Content>
+				</Table>
 
 				<Button
 					variant="light"

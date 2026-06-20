@@ -7,11 +7,11 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
-	SectionSurface,
 	buildOidcClientTableColumns,
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
 import { Plus } from "lucide-react";

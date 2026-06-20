@@ -3,10 +3,7 @@
 import { Surface } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../../data-display/Chip/Chip";
-import type {
-	CourseSection,
-	CourseSectionId,
-} from "../types";
+import type { CourseSection, CourseSectionId } from "../types";
 
 export interface CourseSectionTabsProps {
 	activeSectionId: CourseSectionId;

@@ -1,8 +1,8 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import type { ButtonProps } from "../../action/Button/Button";
+import { Button } from "../../action/Button/Button";
 
 export interface ActionButtonCellProps extends ButtonProps {
 	/** 버튼 정렬 */

@@ -1,16 +1,12 @@
-import { applyRuntimeManagedOidcClientConfig } from "../../oidc-runtime-client-config";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import type { OidcConfig } from "../oidc-config";
+import { applyRuntimeManagedOidcClientConfig } from "../../oidc-runtime-client-config";
 import { AccountService } from "../account.service";
 import { OidcClientRepository } from "../oidc-client.repository";
+import type { OidcConfig } from "../oidc-config";
 import { RedisOidcAdapterFactory } from "../redis-oidc-adapter.factory";
 import type { RuntimeOidcProviderClient } from "../runtime-oidc-provider-client";
-import type {
-	Grant,
-	OidcConfiguration,
-	OidcProviderContext,
-} from "../types";
+import type { Grant, OidcConfiguration, OidcProviderContext } from "../types";
 
 /**
  * OIDC Configuration Service

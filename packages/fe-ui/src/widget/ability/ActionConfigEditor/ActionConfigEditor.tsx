@@ -1,9 +1,9 @@
 "use client";
 import { type ActionConfigDto } from "@cocrepo/api/core/actions";
+import { Card, cn } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { Input } from "../../../input/Input/Input";
 import { Select } from "../../../selection/Select/Select";
-import { Card, cn } from "@heroui/react";
 
 /**
  * 마스킹 프리셋 옵션
@@ -214,15 +214,15 @@ export const ActionConfigEditor = observer(
 					<Card.Content>
 						<div>
 							{/* 프리셋 선택 */}
-									<Select
-										label="마스킹 프리셋"
-										placeholder="프리셋을 선택하세요"
-										options={MASKING_PRESET_OPTIONS}
-										value={maskingConfig?.preset || ""}
-										onChange={(value) =>
-											handleMaskingChange("preset", String(value ?? ""))
-										}
-									/>
+							<Select
+								label="마스킹 프리셋"
+								placeholder="프리셋을 선택하세요"
+								options={MASKING_PRESET_OPTIONS}
+								value={maskingConfig?.preset || ""}
+								onChange={(value) =>
+									handleMaskingChange("preset", String(value ?? ""))
+								}
+							/>
 
 							{/* 커스텀 패턴 입력 (프리셋이 없을 때만) */}
 							{!maskingConfig?.preset && (
@@ -253,9 +253,10 @@ export const ActionConfigEditor = observer(
 										미리보기
 									</p>
 									<div
-
-
-									 className={cn("flex", "rounded-lg bg-surface-tertiary px-4 py-3")}
+										className={cn(
+											"flex",
+											"rounded-lg bg-surface-tertiary px-4 py-3",
+										)}
 									>
 										<div className="flex flex-col">
 											<span className="text-xs text-muted">원본</span>
@@ -265,9 +266,7 @@ export const ActionConfigEditor = observer(
 										</div>
 										<span className="text-muted">→</span>
 										<div className="flex flex-col">
-											<span className="text-xs text-muted">
-												마스킹 결과
-											</span>
+											<span className="text-xs text-muted">마스킹 결과</span>
 											<span className="font-mono text-sm text-accent">
 												{preview}
 											</span>
@@ -290,13 +289,13 @@ export const ActionConfigEditor = observer(
 					<Card.Content>
 						<div className="flex flex-col">
 							{/* 포맷 패턴 선택 */}
-									<Select
-										label="포맷 패턴 예시"
-										placeholder="예시를 선택하거나 직접 입력"
-										options={FORMAT_PATTERN_EXAMPLES}
-										value={formatConfig?.pattern || ""}
-										onChange={(value) => handleFormatChange(String(value ?? ""))}
-									/>
+							<Select
+								label="포맷 패턴 예시"
+								placeholder="예시를 선택하거나 직접 입력"
+								options={FORMAT_PATTERN_EXAMPLES}
+								value={formatConfig?.pattern || ""}
+								onChange={(value) => handleFormatChange(String(value ?? ""))}
+							/>
 
 							{/* 커스텀 패턴 입력 */}
 							<Input
@@ -310,10 +309,10 @@ export const ActionConfigEditor = observer(
 							{/* 미리보기 */}
 							{previewValue && formatConfig?.pattern && (
 								<div className="flex flex-col">
-									<p className="text-sm font-medium text-muted">
-										미리보기
-									</p>
-									<div className={cn("rounded-lg bg-surface-tertiary px-4 py-3")}>
+									<p className="text-sm font-medium text-muted">미리보기</p>
+									<div
+										className={cn("rounded-lg bg-surface-tertiary px-4 py-3")}
+									>
 										<div className="flex">
 											<div className="flex flex-col">
 												<span className="text-xs text-muted">원본</span>
@@ -372,23 +371,21 @@ export const ActionConfigEditor = observer(
 					<Card.Content>
 						<div className="flex flex-col">
 							{/* 변환 규칙 선택 */}
-									<Select
-										label="변환 규칙"
-										placeholder="변환 규칙을 선택하세요"
-										options={TRANSFORM_RULE_OPTIONS}
-										value={transformConfig?.rule || ""}
-										onChange={(value) =>
-											handleTransformChange(String(value ?? ""))
-										}
-									/>
+							<Select
+								label="변환 규칙"
+								placeholder="변환 규칙을 선택하세요"
+								options={TRANSFORM_RULE_OPTIONS}
+								value={transformConfig?.rule || ""}
+								onChange={(value) => handleTransformChange(String(value ?? ""))}
+							/>
 
 							{/* 미리보기 */}
 							{previewValue && preview && (
 								<div className="flex flex-col">
-									<p className="text-sm font-medium text-muted">
-										미리보기
-									</p>
-									<div className={cn("rounded-lg bg-surface-tertiary px-4 py-3")}>
+									<p className="text-sm font-medium text-muted">미리보기</p>
+									<div
+										className={cn("rounded-lg bg-surface-tertiary px-4 py-3")}
+									>
 										<div className="flex">
 											<div className="flex flex-col">
 												<span className="text-xs text-muted">원본</span>
@@ -398,9 +395,7 @@ export const ActionConfigEditor = observer(
 											</div>
 											<span className="text-muted">→</span>
 											<div className="flex flex-col gap-1">
-												<span className="text-xs text-muted">
-													변환 결과
-												</span>
+												<span className="text-xs text-muted">변환 결과</span>
 												<span className="font-mono text-sm text-accent">
 													{preview}
 												</span>

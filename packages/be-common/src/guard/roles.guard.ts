@@ -9,8 +9,8 @@ import {
 	UnauthorizedException,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { ClsService } from "nestjs-cls";
 import { isEmpty } from "lodash";
+import { ClsService } from "nestjs-cls";
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -20,7 +20,10 @@ export class RolesGuard implements CanActivate {
 	) {}
 
 	canActivate(context: ExecutionContext): boolean {
-		const roles = this.reflector.get<SystemRoleName[]>(ROLES_KEY, context.getHandler());
+		const roles = this.reflector.get<SystemRoleName[]>(
+			ROLES_KEY,
+			context.getHandler(),
+		);
 
 		if (isEmpty(roles)) {
 			return true;

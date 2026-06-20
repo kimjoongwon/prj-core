@@ -24,7 +24,7 @@
   "scripts": {
     "start:dev": "tsc --build --watch",
     "build": "tsc --build",
-    "format": "biome format --write .",
+    "format": "biome check --write .",
     "type-check": "tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",

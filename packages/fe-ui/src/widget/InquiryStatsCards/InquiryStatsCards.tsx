@@ -1,7 +1,7 @@
 "use client";
 
-import { observer } from "mobx-react-lite";
 import { AlertTriangle, CheckCircle, Inbox, Loader2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
 import { StatsCard } from "../StatsCard";
 
 export interface InquiryStats {

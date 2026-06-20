@@ -1,5 +1,5 @@
-export { AIClassificationSuggestion } from "./AIClassificationSuggestion";
 export type {
-	AIClassificationSuggestionProps,
 	AIClassificationResult,
+	AIClassificationSuggestionProps,
 } from "./AIClassificationSuggestion";
+export { AIClassificationSuggestion } from "./AIClassificationSuggestion";

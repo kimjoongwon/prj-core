@@ -1,10 +1,10 @@
 import { Email, HashedPassword, PlainPassword } from "@cocrepo/vo";
 import { Injectable, Logger } from "@nestjs/common";
+import { DirectPrismaProvider } from "../oidc/direct-prisma.provider";
+import { DirectUserRepository } from "../oidc/direct-user.repository";
 import { POLICY_CACHE_TTL_MS } from "./interaction-login.constants";
 import type { LoginValidationResult } from "./login-validation-result";
 import type { SecurityPolicyCache } from "./security-policy-cache";
-import { DirectPrismaProvider } from "../oidc/direct-prisma.provider";
-import { DirectUserRepository } from "../oidc/direct-user.repository";
 
 /**
  * InteractionLoginService

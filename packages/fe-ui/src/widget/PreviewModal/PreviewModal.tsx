@@ -1,10 +1,10 @@
 "use client";
 
+import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { VariableInputForm } from "../../form/VariableInputForm";
 import { ByteCounter } from "../ByteCounter";
 import { HtmlContentRenderer } from "../HtmlContentRenderer";
@@ -142,112 +142,115 @@ export const PreviewModal = observer(
 			}
 		};
 
-			const isLoading = previewState === "loading";
-			const modalState = useOverlayState({
-				isOpen,
-				onOpenChange: (open) => {
-					if (!open) {
-						onClose();
-					}
-				},
-			});
+		const isLoading = previewState === "loading";
+		const modalState = useOverlayState({
+			isOpen,
+			onOpenChange: (open) => {
+				if (!open) {
+					onClose();
+				}
+			},
+		});
 
-			return (
-				<Modal state={modalState}>
-					<Modal.Backdrop><Modal.Container size="lg" scroll="inside"><Modal.Dialog>
-					<Modal.Header>템플릿 미리보기</Modal.Header>
-					<Modal.Body>
-						<div>
-							{/* 변수 입력 영역 */}
-							<div className="flex flex-col">
-								<span className="flex flex-col w-full gap-6 items-center justify-center text-sm font-semibold text-foreground">
-									변수 입력
-								</span>
-								<VariableInputForm
-									variables={variables}
-									values={variableValues}
-									onChange={setVariableValues}
-								/>
-							</div>
+		return (
+			<Modal state={modalState}>
+				<Modal.Backdrop>
+					<Modal.Container size="lg" scroll="inside">
+						<Modal.Dialog>
+							<Modal.Header>템플릿 미리보기</Modal.Header>
+							<Modal.Body>
+								<div>
+									{/* 변수 입력 영역 */}
+									<div className="flex flex-col">
+										<span className="flex flex-col w-full gap-6 items-center justify-center text-sm font-semibold text-foreground">
+											변수 입력
+										</span>
+										<VariableInputForm
+											variables={variables}
+											values={variableValues}
+											onChange={setVariableValues}
+										/>
+									</div>
 
-							{/* 미리보기 실행 버튼 */}
-							<Button
-								color="primary"
-								onPress={handlePreview}
-								isDisabled={isLoading}
+									{/* 미리보기 실행 버튼 */}
+									<Button
+										color="primary"
+										onPress={handlePreview}
+										isDisabled={isLoading}
+									>
+										미리보기 실행
+									</Button>
 
-							>
-								미리보기 실행
-							</Button>
+									{/* 에러 메시지 */}
+									{previewState === "error" && errorMessage && (
+										<p className="text-sm text-danger">{errorMessage}</p>
+									)}
 
-							{/* 에러 메시지 */}
-							{previewState === "error" && errorMessage && (
-								<p className="text-sm text-danger">{errorMessage}</p>
-							)}
-
-							{/* 로딩 스피너 */}
-							{isLoading && (
-								<div className="flex">
-									<Spinner size="lg" />
-								</div>
-							)}
-
-							{/* 렌더링 결과 영역 */}
-							{previewState === "success" && previewResult && (
-								<div className="flex flex-col">
-									{/* 미치환 변수 경고 */}
-									{previewResult.unresolvedVariables.length > 0 && (
-										<div className="flex flex-col">
-											<span className="text-sm font-semibold text-warning">
-												미치환 변수
-											</span>
-											<div className="flex">
-												{previewResult.unresolvedVariables.map(
-													(variableName) => (
-														<Chip
-															key={variableName}
-															color="warning"
-															size="sm"
-															variant="flat"
-														>
-															{variableName}
-														</Chip>
-													),
-												)}
-											</div>
+									{/* 로딩 스피너 */}
+									{isLoading && (
+										<div className="flex">
+											<Spinner size="lg" />
 										</div>
 									)}
 
-									{/* EMAIL 유형 결과 */}
-									{previewResult.type === "EMAIL" && (
-										<EmailPreviewResult
-											subject={previewResult.subject}
-											content={previewResult.content}
-										/>
-									)}
+									{/* 렌더링 결과 영역 */}
+									{previewState === "success" && previewResult && (
+										<div className="flex flex-col">
+											{/* 미치환 변수 경고 */}
+											{previewResult.unresolvedVariables.length > 0 && (
+												<div className="flex flex-col">
+													<span className="text-sm font-semibold text-warning">
+														미치환 변수
+													</span>
+													<div className="flex">
+														{previewResult.unresolvedVariables.map(
+															(variableName) => (
+																<Chip
+																	key={variableName}
+																	color="warning"
+																	size="sm"
+																	variant="flat"
+																>
+																	{variableName}
+																</Chip>
+															),
+														)}
+													</div>
+												</div>
+											)}
 
-									{/* SMS 유형 결과 */}
-									{previewResult.type === "SMS" && (
-										<SmsPreviewResult content={previewResult.content} />
-									)}
+											{/* EMAIL 유형 결과 */}
+											{previewResult.type === "EMAIL" && (
+												<EmailPreviewResult
+													subject={previewResult.subject}
+													content={previewResult.content}
+												/>
+											)}
 
-									{/* PUSH 유형 결과 */}
-									{previewResult.type === "PUSH" && (
-										<PushPreviewResult
-											subject={previewResult.subject}
-											content={previewResult.content}
-										/>
+											{/* SMS 유형 결과 */}
+											{previewResult.type === "SMS" && (
+												<SmsPreviewResult content={previewResult.content} />
+											)}
+
+											{/* PUSH 유형 결과 */}
+											{previewResult.type === "PUSH" && (
+												<PushPreviewResult
+													subject={previewResult.subject}
+													content={previewResult.content}
+												/>
+											)}
+										</div>
 									)}
 								</div>
-							)}
-						</div>
-					</Modal.Body>
-					<Modal.Footer>
-						<Button variant="flat" onPress={onClose}>
-							닫기
-						</Button>
-					</Modal.Footer>
-				</Modal.Dialog></Modal.Container></Modal.Backdrop>
+							</Modal.Body>
+							<Modal.Footer>
+								<Button variant="flat" onPress={onClose}>
+									닫기
+								</Button>
+							</Modal.Footer>
+						</Modal.Dialog>
+					</Modal.Container>
+				</Modal.Backdrop>
 			</Modal>
 		);
 	},
@@ -336,9 +339,7 @@ const PushPreviewResult = observer(
 								{subject}
 							</span>
 						)}
-						<p className="text-sm text-muted whitespace-pre-wrap">
-							{content}
-						</p>
+						<p className="text-sm text-muted whitespace-pre-wrap">{content}</p>
 					</div>
 				</div>
 			</div>

@@ -30,8 +30,8 @@ import type { InquiryFormSchema } from "./inquiry-form-schema";
 import type { InquiryFormUiPaths } from "./inquiry-form-ui-paths";
 import { INQUIRY_PRIORITY_LABELS } from "./inquiry-priority-labels";
 import { INQUIRY_SOURCE_LABELS } from "./inquiry-source-labels";
-import { INQUIRY_STATUS_LABELS } from "./inquiry-status-labels";
 import type { InquiryStats } from "./inquiry-stats";
+import { INQUIRY_STATUS_LABELS } from "./inquiry-status-labels";
 import type { SentimentAnalysisResult } from "./sentiment-analysis-result";
 import { VALID_STATUS_TRANSITIONS } from "./valid-status-transitions";
 

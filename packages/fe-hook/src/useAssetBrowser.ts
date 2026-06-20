@@ -14,11 +14,14 @@ import {
 	useUpdateFolder,
 	useUploadAsset,
 } from "@cocrepo/api/assets";
-import type { DataGridQueryStates, DataGridSetQueryStates } from "@cocrepo/type";
+import { usePersistStore } from "@cocrepo/store";
+import type {
+	DataGridQueryStates,
+	DataGridSetQueryStates,
+} from "@cocrepo/type";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
-import { usePersistStore } from "@cocrepo/store";
 
 export interface AssetBrowserFolder {
 	id: string;

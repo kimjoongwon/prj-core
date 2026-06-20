@@ -9,14 +9,14 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { BookingFeedItemDto } from './bookingFeedItemDto';
-import type { GetReservationBookingFeed200AllOfMeta } from './getReservationBookingFeed200AllOfMeta';
+import type { BookingFeedItemDto } from "./bookingFeedItemDto";
+import type { GetReservationBookingFeed200AllOfMeta } from "./getReservationBookingFeed200AllOfMeta";
 
 export type GetReservationBookingFeed200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: BookingFeedItemDto[];
-  meta?: GetReservationBookingFeed200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: BookingFeedItemDto[];
+	meta?: GetReservationBookingFeed200AllOfMeta;
 };

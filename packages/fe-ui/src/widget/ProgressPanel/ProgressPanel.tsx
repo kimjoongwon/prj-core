@@ -1,9 +1,9 @@
 "use client";
 
+import { ProgressBar } from "@heroui/react";
 import { Loader2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { ProgressBar } from "@heroui/react";
 
 export type ProgressStatus = "queued" | "processing" | "completed" | "error";
 
@@ -84,10 +84,10 @@ export const ProgressPanel = observer(
 				</div>
 
 				{!isError && (
-						<ProgressBar
-							value={progress}
-							color="accent"
-							size="sm"
+					<ProgressBar
+						value={progress}
+						color="accent"
+						size="sm"
 						className="mb-2"
 						aria-label="진행률"
 					/>
@@ -98,9 +98,7 @@ export const ProgressPanel = observer(
 				)}
 
 				{state.currentStep && (
-					<p className="text-xs text-muted">
-						현재 단계: {state.currentStep}
-					</p>
+					<p className="text-xs text-muted">현재 단계: {state.currentStep}</p>
 				)}
 			</div>
 		);

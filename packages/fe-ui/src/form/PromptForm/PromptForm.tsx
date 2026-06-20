@@ -132,9 +132,7 @@ export const PromptForm = observer(
 							}}
 						/>
 						{negativePromptHint && (
-							<p className="text-xs text-muted mt-1">
-								{negativePromptHint}
-							</p>
+							<p className="text-xs text-muted mt-1">{negativePromptHint}</p>
 						)}
 					</div>
 				)}

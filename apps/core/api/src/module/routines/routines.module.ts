@@ -1,10 +1,10 @@
 import { RoutineAggregate } from "@cocrepo/aggregate";
+import { RoutinesController } from "@cocrepo/controller";
 import { RoutinesRepository, TasksRepository } from "@cocrepo/repository";
 import { AuthContext, SpaceContext } from "@cocrepo/service";
 import { RoutineCommandHandlers, RoutineQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { RoutinesController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],

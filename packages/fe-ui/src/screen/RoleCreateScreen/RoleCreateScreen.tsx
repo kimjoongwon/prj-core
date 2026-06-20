@@ -1,6 +1,6 @@
 "use client";
 
-import { SectionSurface, PageTitleBar, VStack } from "@cocrepo/ui";
+import { PageTitleBar, SectionSurface, VStack } from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";

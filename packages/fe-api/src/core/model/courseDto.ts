@@ -9,66 +9,67 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { CourseStatus } from './courseStatus';
-import type { SpaceDto } from './spaceDto';
-import type { CourseOfferingDto } from './courseOfferingDto';
-import type { EnrollmentDto } from './enrollmentDto';
-import type { CoursePassDto } from './coursePassDto';
+
+import type { CourseOfferingDto } from "./courseOfferingDto";
+import type { CoursePassDto } from "./coursePassDto";
+import type { CourseStatus } from "./courseStatus";
+import type { EnrollmentDto } from "./enrollmentDto";
+import type { SpaceDto } from "./spaceDto";
 
 export interface CourseDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** 소속 Space ID */
-  spaceId: string;
-  /**
-   * 코스명
-   * @minLength 1
-   * @maxLength 120
-   */
-  name: string;
-  /**
-   * 코스 설명
-   * @maxLength 2000
-   * @nullable
-   */
-  description?: string | null;
-  /**
-   * 기본 수강 기간(개월)
-   * @minimum 1
-   */
-  durationMonths: number;
-  /**
-   * 기본 결제 금액
-   * @minimum 0
-   */
-  basePriceAmount: number;
-  /**
-   * 결제 통화 코드
-   * @minLength 3
-   * @maxLength 3
-   */
-  currency: string;
-  /** 코스 상태 */
-  status: CourseStatus;
-  /**
-   * 활성 개설 수
-   * @minimum 0
-   */
-  activeOfferingCount: number;
-  /**
-   * 활성 수강 등록 수
-   * @minimum 0
-   */
-  activeEnrollmentCount: number;
-  /** 소속 Space */
-  space?: SpaceDto;
-  /** 코스 개설 목록 */
-  offerings?: CourseOfferingDto[];
-  /** 수강 등록 목록 */
-  enrollments?: EnrollmentDto[];
-  /** 수강권 목록 */
-  passes?: CoursePassDto[];
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** 소속 Space ID */
+	spaceId: string;
+	/**
+	 * 코스명
+	 * @minLength 1
+	 * @maxLength 120
+	 */
+	name: string;
+	/**
+	 * 코스 설명
+	 * @maxLength 2000
+	 * @nullable
+	 */
+	description?: string | null;
+	/**
+	 * 기본 수강 기간(개월)
+	 * @minimum 1
+	 */
+	durationMonths: number;
+	/**
+	 * 기본 결제 금액
+	 * @minimum 0
+	 */
+	basePriceAmount: number;
+	/**
+	 * 결제 통화 코드
+	 * @minLength 3
+	 * @maxLength 3
+	 */
+	currency: string;
+	/** 코스 상태 */
+	status: CourseStatus;
+	/**
+	 * 활성 개설 수
+	 * @minimum 0
+	 */
+	activeOfferingCount: number;
+	/**
+	 * 활성 수강 등록 수
+	 * @minimum 0
+	 */
+	activeEnrollmentCount: number;
+	/** 소속 Space */
+	space?: SpaceDto;
+	/** 코스 개설 목록 */
+	offerings?: CourseOfferingDto[];
+	/** 수강 등록 목록 */
+	enrollments?: EnrollmentDto[];
+	/** 수강권 목록 */
+	passes?: CoursePassDto[];
 }

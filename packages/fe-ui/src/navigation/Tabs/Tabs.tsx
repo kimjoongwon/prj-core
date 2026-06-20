@@ -1,5 +1,5 @@
-import { Tabs as HeroTabs } from "@heroui/react";
 import type { Option } from "@cocrepo/type";
+import { Tabs as HeroTabs } from "@heroui/react";
 import type { Key } from "react";
 
 export interface TabsProps {
@@ -36,11 +36,11 @@ export const Tabs = (props: TabsProps) => {
 	return (
 		<HeroTabs selectedKey={selectedKey} onSelectionChange={onSelectionChange}>
 			<HeroTabs.List>
-			{options?.map((item) => (
-				<HeroTabs.Tab key={item.value} id={item.value}>
-					{item.text}
-				</HeroTabs.Tab>
-			))}
+				{options?.map((item) => (
+					<HeroTabs.Tab key={item.value} id={item.value}>
+						{item.text}
+					</HeroTabs.Tab>
+				))}
 			</HeroTabs.List>
 		</HeroTabs>
 	);

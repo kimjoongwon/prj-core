@@ -1,12 +1,12 @@
 "use client";
 
 import {
+	cn,
 	Description,
 	FieldError,
-	Label,
 	TextArea as HeroTextArea,
+	Label,
 	TextField,
-	cn,
 } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type React from "react";
@@ -35,7 +35,13 @@ export interface TextAreaProps
 	minRows?: number;
 	maxRows?: number;
 	classNames?: Record<string, string>;
-	variant?: "flat" | "bordered" | "underlined" | "faded" | "primary" | "secondary";
+	variant?:
+		| "flat"
+		| "bordered"
+		| "underlined"
+		| "faded"
+		| "primary"
+		| "secondary";
 }
 
 /**
@@ -75,7 +81,9 @@ export const TextArea = observer((props: TextAreaProps) => {
 			isInvalid={isInvalid}
 			isReadOnly={isReadOnly}
 			isRequired={isRequired}
-			variant={variant === "primary" || variant === "secondary" ? variant : undefined}
+			variant={
+				variant === "primary" || variant === "secondary" ? variant : undefined
+			}
 		>
 			{label ? (
 				<Label>{typeof label === "string" ? t(label) : label}</Label>
@@ -90,7 +98,9 @@ export const TextArea = observer((props: TextAreaProps) => {
 				}
 				value={value}
 				onChange={handleOnChange}
-				variant={variant === "primary" || variant === "secondary" ? variant : undefined}
+				variant={
+					variant === "primary" || variant === "secondary" ? variant : undefined
+				}
 			/>
 			{description ? (
 				<Description>

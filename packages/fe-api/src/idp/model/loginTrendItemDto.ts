@@ -13,10 +13,10 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface LoginTrendItemDto {
-  /** 날짜 (YYYY-MM-DD) */
-  date: string;
-  /** 성공 건수 */
-  successCount: number;
-  /** 실패 건수 */
-  failureCount: number;
+	/** 날짜 (YYYY-MM-DD) */
+	date: string;
+	/** 성공 건수 */
+	successCount: number;
+	/** 실패 건수 */
+	failureCount: number;
 }

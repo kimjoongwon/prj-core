@@ -32,12 +32,12 @@ export {
 	type PutObjectResult,
 	S3CompatibleStorageService,
 } from "./object-storage";
+export * from "./oidc";
 export {
 	applyRuntimeManagedOidcClientConfig,
 	isRuntimeManagedOidcClientId,
 	RUNTIME_MANAGED_OIDC_CLIENT_IDS,
 } from "./oidc-runtime-client-config";
-export * from "./oidc";
 export { DatabaseConnectionException } from "./prisma/database-connection.exception";
 export { createPrismaClient } from "./prisma/prisma.factory";
 export { PrismaService } from "./prisma/prisma.service";

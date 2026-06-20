@@ -15,9 +15,7 @@ export async function resolveOidcClient(
 	const lookupCandidates = getOidcClientIdCandidates(clientId);
 	let lastNotFoundError: NotFoundException | undefined;
 	let client:
-		| Awaited<
-				ReturnType<OidcClientAggregate["getAuthShellClientByClientId"]>
-		  >
+		| Awaited<ReturnType<OidcClientAggregate["getAuthShellClientByClientId"]>>
 		| Awaited<ReturnType<OidcClientAggregate["getByClientId"]>>
 		| undefined;
 

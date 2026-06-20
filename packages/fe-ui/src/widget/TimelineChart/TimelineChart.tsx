@@ -1,6 +1,6 @@
 "use client";
 
-// @ts-ignore frappe-gantt does not provide TypeScript declarations
+// @ts-expect-error frappe-gantt does not provide TypeScript declarations
 import Gantt from "frappe-gantt";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";

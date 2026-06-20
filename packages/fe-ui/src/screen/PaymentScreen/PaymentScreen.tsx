@@ -5,8 +5,8 @@ import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import type {
 	PaymentConsoleProps,
-	PaymentRow,
 	PaymentQueryState,
+	PaymentRow,
 	PaymentSummary,
 } from "../../feature/payment";
 import { PaymentConsole } from "../../feature/payment";
@@ -14,8 +14,7 @@ import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 import { PageTitleBar } from "../../widget";
 
-export interface PaymentScreenProps
-	extends PaymentConsoleProps {
+export interface PaymentScreenProps extends PaymentConsoleProps {
 	onClickRefresh?: () => void;
 }
 
@@ -49,8 +48,4 @@ export const PaymentScreen = observer(
 
 PaymentScreen.displayName = "PaymentScreen";
 
-export type {
-	PaymentRow,
-	PaymentQueryState,
-	PaymentSummary,
-};
+export type { PaymentRow, PaymentQueryState, PaymentSummary };

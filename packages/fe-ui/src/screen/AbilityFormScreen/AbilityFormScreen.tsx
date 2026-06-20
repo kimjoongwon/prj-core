@@ -1,15 +1,15 @@
 "use client";
 
+import { ListBox, Spinner } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { Input } from "../../input/Input/Input";
-import { Select } from "../../selection/Select/Select";
-import { Spinner, ListBox } from "@heroui/react";
-import { Switch } from "../../selection/Switch/Switch";
 import { TextArea } from "../../input/TextArea/TextArea";
-import { SectionSurface } from "../../surface";
 import { VStack } from "../../rhythm";
+import { Select } from "../../selection/Select/Select";
+import { Switch } from "../../selection/Switch/Switch";
+import { SectionSurface } from "../../surface";
 import { PageTitleBar } from "../../widget";
 export interface AbilityFormScreenOption {
 	id: string;

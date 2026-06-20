@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import { Avatar } from "@heroui/react";
+import type { ReactNode } from "react";
 
 export interface ProfileAvatarCellProps {
 	/** 이름 */
@@ -23,10 +23,7 @@ export const ProfileAvatarCell = ({
 }: ProfileAvatarCellProps) => {
 	return (
 		<div className="flex items-center gap-3">
-			<Avatar
-				size="sm"
-				className="bg-accent/10 text-accent"
-			>
+			<Avatar size="sm" className="bg-accent/10 text-accent">
 				{src ? <Avatar.Image src={src} alt={name ?? ""} /> : null}
 				<Avatar.Fallback>{icon ?? name?.slice(0, 1)}</Avatar.Fallback>
 			</Avatar>

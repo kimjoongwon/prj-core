@@ -1,10 +1,10 @@
 import { environment } from "@cocrepo/toolkit";
 import { Avatar as HeroUIAvatar } from "@heroui/react";
+import { Button } from "../../action/Button/Button";
 import {
 	Dropdown,
 	type DropdownEntryProps,
 } from "../../overlay/Dropdown/Dropdown";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../Chip/Chip";
 
 interface AvatarProps {
@@ -100,26 +100,26 @@ export const Avatar = (props: AvatarProps) => {
 		// Desktop: Show full user info with dropdown
 		return (
 			<Dropdown
-					dropdownItems={userMenuItems}
-					onAction={handleMenuAction}
-					placement="bottom end"
+				dropdownItems={userMenuItems}
+				onAction={handleMenuAction}
+				placement="bottom end"
 				trigger={
 					<Button
 						variant="light"
 						className="h-auto bg-transparent p-0 data-[hover=true]:bg-transparent"
 					>
-							<div className="flex cursor-pointer items-center gap-2">
-								<HeroUIAvatar size="sm">
-									<HeroUIAvatar.Image src="/moka.webp" alt="슈퍼매니저" />
-									<HeroUIAvatar.Fallback>슈</HeroUIAvatar.Fallback>
-								</HeroUIAvatar>
-								<div className="flex flex-col items-start">
-									<span className="text-sm font-medium text-foreground">
-										슈퍼매니저
-									</span>
-									<span className="text-xs text-muted">총괄</span>
-								</div>
+						<div className="flex cursor-pointer items-center gap-2">
+							<HeroUIAvatar size="sm">
+								<HeroUIAvatar.Image src="/moka.webp" alt="슈퍼매니저" />
+								<HeroUIAvatar.Fallback>슈</HeroUIAvatar.Fallback>
+							</HeroUIAvatar>
+							<div className="flex flex-col items-start">
+								<span className="text-sm font-medium text-foreground">
+									슈퍼매니저
+								</span>
+								<span className="text-xs text-muted">총괄</span>
 							</div>
+						</div>
 					</Button>
 				}
 			/>
@@ -128,19 +128,16 @@ export const Avatar = (props: AvatarProps) => {
 
 	return (
 		<Dropdown
-				dropdownItems={userMenuItems}
-				onAction={handleMenuAction}
-				placement="bottom end"
+			dropdownItems={userMenuItems}
+			onAction={handleMenuAction}
+			placement="bottom end"
 			trigger={
 				<Button
 					isIconOnly
 					variant="light"
 					className="bg-transparent data-[hover=true]:bg-transparent"
 				>
-					<HeroUIAvatar
-						size="sm"
-						className="cursor-pointer"
-					>
+					<HeroUIAvatar size="sm" className="cursor-pointer">
 						<HeroUIAvatar.Image src="/moka.webp" alt="슈퍼매니저" />
 						<HeroUIAvatar.Fallback>슈</HeroUIAvatar.Fallback>
 					</HeroUIAvatar>

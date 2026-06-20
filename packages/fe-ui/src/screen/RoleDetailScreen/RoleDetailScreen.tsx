@@ -1,13 +1,13 @@
 "use client";
 
-import { SectionSurface, PageTitleBar, VStack } from "@cocrepo/ui";
+import { PageTitleBar, SectionSurface, VStack } from "@cocrepo/ui";
+import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { ArrowLeft, Edit, Save, ShieldCheck, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
-import { Checkbox } from "../../selection/Checkbox/Checkbox";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Input } from "../../input/Input/Input";
-import { Modal, Spinner, useOverlayState } from "@heroui/react";
+import { Checkbox } from "../../selection/Checkbox/Checkbox";
 import { Switch } from "../../selection/Switch/Switch";
 export interface RoleDetailScreenRole {
 	id: string;

@@ -13,8 +13,8 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface NativeLogoutPayloadDto {
-  /** first-party native 세션 ID */
-  sessionId: string;
-  /** first-party native refresh token */
-  refreshToken?: string;
+	/** first-party native 세션 ID */
+	sessionId: string;
+	/** first-party native refresh token */
+	refreshToken?: string;
 }

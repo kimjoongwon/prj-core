@@ -9,8 +9,8 @@ import {
 	UnauthorizedException,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { ClsService } from "nestjs-cls";
 import { isEmpty } from "lodash";
+import { ClsService } from "nestjs-cls";
 
 @Injectable()
 export class RoleGroupGuard implements CanActivate {

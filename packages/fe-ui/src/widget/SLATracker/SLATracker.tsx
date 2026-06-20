@@ -1,8 +1,8 @@
 "use client";
 
+import { Card, ProgressBar } from "@heroui/react";
 import { AlertTriangle, CheckCircle, Clock } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Card, ProgressBar } from "@heroui/react";
 
 export interface SLAMetric {
 	/** 라벨 (예: 첫 응답, 해결) */
@@ -107,12 +107,12 @@ const SLAMetricItem = observer(({ metric }: SLAMetricItemProps) => {
 				aria-label={`${metric.label} 진행률`}
 				value={progress}
 				color={
-						metric.isBreached
-							? "danger"
-							: metric.isCompleted
-								? "success"
-								: "accent"
-					}
+					metric.isBreached
+						? "danger"
+						: metric.isCompleted
+							? "success"
+							: "accent"
+				}
 				size="sm"
 				className="h-2"
 			/>

@@ -9,13 +9,13 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ReservationCheckoutProgressStatus } from './reservationCheckoutProgressStatus';
+import type { ReservationCheckoutProgressStatus } from "./reservationCheckoutProgressStatus";
 
 export interface ReservationCheckoutProgressStepDto {
-  /** 단계 ID */
-  id: string;
-  /** 단계 라벨 */
-  label: string;
-  /** 단계 상태 */
-  status: ReservationCheckoutProgressStatus;
+	/** 단계 ID */
+	id: string;
+	/** 단계 라벨 */
+	label: string;
+	/** 단계 상태 */
+	status: ReservationCheckoutProgressStatus;
 }

@@ -6,7 +6,10 @@ type CheckboxClassNames = Partial<
 >;
 
 export interface CheckboxProps
-	extends Omit<ComponentProps<typeof HeroCheckbox.Root>, "children" | "onChange"> {
+	extends Omit<
+		ComponentProps<typeof HeroCheckbox.Root>,
+		"children" | "onChange"
+	> {
 	children?: ReactNode;
 	onChange?: (checked: boolean) => void;
 	onValueChange?: (checked: boolean) => void;

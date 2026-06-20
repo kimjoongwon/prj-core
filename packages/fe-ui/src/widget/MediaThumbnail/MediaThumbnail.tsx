@@ -1,7 +1,7 @@
 "use client";
 
-import { ImageIcon, PlayCircle } from "lucide-react";
 import { cn } from "@heroui/react";
+import { ImageIcon, PlayCircle } from "lucide-react";
 
 export interface MediaThumbnailProps {
 	imageUrl?: string | null;

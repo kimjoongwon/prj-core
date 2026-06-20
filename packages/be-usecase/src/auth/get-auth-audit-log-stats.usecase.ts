@@ -6,9 +6,7 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 export class GetAuthAuditLogStatsUseCase
 	implements IQueryHandler<GetAuthAuditLogStatsQuery>
 {
-	constructor(
-		private readonly authAuditLogService: AuthAuditLogAggregate,
-	) {}
+	constructor(private readonly authAuditLogService: AuthAuditLogAggregate) {}
 
 	execute() {
 		return this.authAuditLogService.getStats();

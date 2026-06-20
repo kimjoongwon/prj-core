@@ -7,18 +7,18 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
-	SectionSurface,
 	buildTaskTableColumns,
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	SectionSurface,
 	useT,
 } from "@cocrepo/ui";
+import { Modal, useOverlayState } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Button } from "../../action/Button/Button";
-import { Modal, useOverlayState } from "@heroui/react";
 
 const leftInputs: InputConfig[] = [
 	{

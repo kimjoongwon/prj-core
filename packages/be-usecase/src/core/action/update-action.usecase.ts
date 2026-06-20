@@ -22,8 +22,12 @@ export class UpdateActionUseCase
 		const input = command.input;
 		return this.actionsService.updateAction(command.actionId, {
 			...(input.name !== undefined && { name: input.name }),
-			...(input.displayName !== undefined && { displayName: input.displayName }),
-			...(input.description !== undefined && { description: input.description }),
+			...(input.displayName !== undefined && {
+				displayName: input.displayName,
+			}),
+			...(input.description !== undefined && {
+				description: input.description,
+			}),
 			...(input.group !== undefined && { group: input.group }),
 			...(input.order !== undefined && { order: input.order }),
 			...(input.isSystem !== undefined && { isSystem: input.isSystem }),

@@ -1,10 +1,10 @@
 "use client";
 
+import { Modal, useOverlayState } from "@heroui/react";
 import { AlertTriangle, Info, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { Button } from "../../../action/Button/Button";
-import { Modal, useOverlayState } from "@heroui/react";
 import { translateNode, useT } from "../../../i18n";
 
 /**
@@ -123,31 +123,37 @@ export const ConfirmModal = observer(
 
 		return (
 			<Modal state={modalState}>
-				<Modal.Backdrop><Modal.Container size="sm"><Modal.Dialog>
-					<Modal.Header className="flex flex-col gap-1">{t(title)}</Modal.Header>
-					<Modal.Body>
-						<div className="flex flex-col gap-4 items-center">
-							{icon}
-							<div className="text-center text-muted">
-								{translateNode(message, t)}
-							</div>
-						</div>
-					</Modal.Body>
-					<Modal.Footer>
-						<div className="flex w-full gap-8 justify-end">
-							<Button variant="flat" onPress={onClose} isDisabled={loading}>
-								{cancelText}
-							</Button>
-							<Button
-								color={confirmColor}
-								onPress={onConfirm}
-								isLoading={loading}
-							>
-								{confirmText}
-							</Button>
-						</div>
-					</Modal.Footer>
-				</Modal.Dialog></Modal.Container></Modal.Backdrop>
+				<Modal.Backdrop>
+					<Modal.Container size="sm">
+						<Modal.Dialog>
+							<Modal.Header className="flex flex-col gap-1">
+								{t(title)}
+							</Modal.Header>
+							<Modal.Body>
+								<div className="flex flex-col gap-4 items-center">
+									{icon}
+									<div className="text-center text-muted">
+										{translateNode(message, t)}
+									</div>
+								</div>
+							</Modal.Body>
+							<Modal.Footer>
+								<div className="flex w-full gap-8 justify-end">
+									<Button variant="flat" onPress={onClose} isDisabled={loading}>
+										{cancelText}
+									</Button>
+									<Button
+										color={confirmColor}
+										onPress={onConfirm}
+										isLoading={loading}
+									>
+										{confirmText}
+									</Button>
+								</div>
+							</Modal.Footer>
+						</Modal.Dialog>
+					</Modal.Container>
+				</Modal.Backdrop>
 			</Modal>
 		);
 	},

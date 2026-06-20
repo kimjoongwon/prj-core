@@ -3,9 +3,9 @@
 import type { PreviewResult, TemplateVariable } from "@cocrepo/ui";
 import {
 	DateTimeCell,
-	SectionSurface,
 	PageTitleBar,
 	PreviewModal,
+	SectionSurface,
 	SendTestModal,
 	TemplateActions,
 	TemplateContentViewer,
@@ -13,10 +13,10 @@ import {
 	VariableReadTable,
 	VStack,
 } from "@cocrepo/ui";
+import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
-import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { Switch } from "../../selection/Switch/Switch";
 export interface TemplateDetailScreenTemplate {
 	id: string;

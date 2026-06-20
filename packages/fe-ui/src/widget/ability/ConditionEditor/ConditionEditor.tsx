@@ -1,11 +1,11 @@
 "use client";
 
+import { cn, Tooltip } from "@heroui/react";
 import { AlertCircle, Info } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { TextArea } from "../../../input/TextArea/TextArea";
 import { Chip } from "../../../data-display/Chip/Chip";
-import { cn, Tooltip } from "@heroui/react";
+import { TextArea } from "../../../input/TextArea/TextArea";
 
 /**
  * 허용된 템플릿 변수 목록
@@ -128,22 +128,24 @@ export const ConditionEditor = observer(
 			<div className={cn("w-full", className)}>
 				{/* 라벨 */}
 				<div className="flex">
-						<span className="flex flex-col gap-2 items-center text-sm font-medium text-foreground">{label}</span>
-						{subjectFields && subjectFields.length > 0 && (
-							<Tooltip>
-								<Tooltip.Trigger>
-									<Info className="h-4 w-4 cursor-help text-muted" />
-								</Tooltip.Trigger>
-								<Tooltip.Content>
-									<div className="flex flex-col p-2">
-										<span className="text-xs font-medium">사용 가능한 필드:</span>
-										<span className="text-xs text-muted">
-											{subjectFields.join(", ")}
-										</span>
-									</div>
-								</Tooltip.Content>
-							</Tooltip>
-						)}
+					<span className="flex flex-col gap-2 items-center text-sm font-medium text-foreground">
+						{label}
+					</span>
+					{subjectFields && subjectFields.length > 0 && (
+						<Tooltip>
+							<Tooltip.Trigger>
+								<Info className="h-4 w-4 cursor-help text-muted" />
+							</Tooltip.Trigger>
+							<Tooltip.Content>
+								<div className="flex flex-col p-2">
+									<span className="text-xs font-medium">사용 가능한 필드:</span>
+									<span className="text-xs text-muted">
+										{subjectFields.join(", ")}
+									</span>
+								</div>
+							</Tooltip.Content>
+						</Tooltip>
+					)}
 				</div>
 
 				{/* JSON 에디터 (TextArea) */}
@@ -157,7 +159,8 @@ export const ConditionEditor = observer(
 					isInvalid={!!displayError}
 					classNames={{
 						input: "font-mono text-sm",
-							inputWrapper: cn(
+						inputWrapper:
+							cn(
 								"bg-surface-secondary border border-border",
 								displayError && "border-danger",
 							) ?? "",
@@ -178,23 +181,23 @@ export const ConditionEditor = observer(
 						<Info className="flex gap-4 items-center h-3 w-3 text-muted" />
 						<span className="text-xs text-muted">템플릿 변수:</span>
 					</div>
-						<div className="flex gap-4 flex-wrap">
-							{TEMPLATE_VARIABLES.map((variable) => (
-								<Tooltip key={variable.key}>
-									<Tooltip.Trigger>
+					<div className="flex gap-4 flex-wrap">
+						{TEMPLATE_VARIABLES.map((variable) => (
+							<Tooltip key={variable.key}>
+								<Tooltip.Trigger>
 									<Chip
 										size="sm"
 										variant="flat"
-									className="cursor-pointer hover:bg-default"
-									isDisabled={isDisabled}
-									onClick={() => handleInsertVariable(variable.key)}
+										className="cursor-pointer hover:bg-default"
+										isDisabled={isDisabled}
+										onClick={() => handleInsertVariable(variable.key)}
 									>
 										{variable.key}
 									</Chip>
-									</Tooltip.Trigger>
-									<Tooltip.Content>{variable.label}</Tooltip.Content>
-								</Tooltip>
-							))}
+								</Tooltip.Trigger>
+								<Tooltip.Content>{variable.label}</Tooltip.Content>
+							</Tooltip>
+						))}
 					</div>
 				</div>
 			</div>

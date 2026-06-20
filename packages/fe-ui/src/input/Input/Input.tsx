@@ -1,12 +1,12 @@
 "use client";
 
 import {
+	cn,
 	Description,
 	FieldError,
 	Input as HeroInput,
 	Label,
 	TextField,
-	cn,
 } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ChangeEventHandler, ComponentProps, ReactNode } from "react";
@@ -39,7 +39,13 @@ export interface InputProps
 	classNames?: Record<string, string>;
 	isClearable?: boolean;
 	onClear?: () => void;
-	variant?: "flat" | "bordered" | "underlined" | "faded" | "primary" | "secondary";
+	variant?:
+		| "flat"
+		| "bordered"
+		| "underlined"
+		| "faded"
+		| "primary"
+		| "secondary";
 }
 
 /**
@@ -101,7 +107,9 @@ export const Input = observer((props: InputProps) => {
 			isInvalid={isInvalid}
 			isReadOnly={isReadOnly}
 			isRequired={isRequired}
-			variant={variant === "primary" || variant === "secondary" ? variant : undefined}
+			variant={
+				variant === "primary" || variant === "secondary" ? variant : undefined
+			}
 		>
 			{label ? (
 				<Label>{typeof label === "string" ? t(label) : label}</Label>
@@ -121,7 +129,9 @@ export const Input = observer((props: InputProps) => {
 					onBlur={handleOnBlur}
 					value={String(value)}
 					variant={
-						variant === "primary" || variant === "secondary" ? variant : undefined
+						variant === "primary" || variant === "secondary"
+							? variant
+							: undefined
 					}
 				/>
 				{endContent}

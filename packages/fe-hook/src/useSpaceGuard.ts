@@ -1,11 +1,11 @@
 "use client";
 
+import { usePersistStore } from "@cocrepo/store";
 import type {
 	SpaceGuardPersistStoreLike,
 	UseSpaceGuardOptions,
 	UseSpaceGuardReturn,
 } from "@cocrepo/type";
-import { usePersistStore } from "@cocrepo/store";
 import { useEffect, useState } from "react";
 
 export type { UseSpaceGuardOptions, UseSpaceGuardReturn } from "@cocrepo/type";

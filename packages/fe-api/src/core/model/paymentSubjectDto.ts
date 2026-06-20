@@ -9,54 +9,54 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { PaymentSubjectType } from './paymentSubjectType';
+import type { PaymentSubjectType } from "./paymentSubjectType";
 
 export interface PaymentSubjectDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** 결제 ID */
-  paymentId: string;
-  /** 소속 Space ID */
-  spaceId: string;
-  /**
-   * 서비스 코드
-   * @maxLength 80
-   */
-  serviceCode: string;
-  /** 결제 대상 종류 */
-  subjectType: PaymentSubjectType;
-  /**
-   * 결제 대상 ID
-   * @maxLength 160
-   */
-  subjectId: string;
-  /**
-   * 결제 대상 표시명
-   * @maxLength 160
-   */
-  subjectLabel: string;
-  /**
-   * 수량
-   * @minimum 1
-   */
-  quantity: number;
-  /**
-   * 단가
-   * @minimum 0
-   */
-  unitAmount: number;
-  /**
-   * 합계 금액
-   * @minimum 0
-   */
-  totalAmount: number;
-  /**
-   * 통화 코드
-   * @minLength 3
-   * @maxLength 3
-   */
-  currency: string;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** 결제 ID */
+	paymentId: string;
+	/** 소속 Space ID */
+	spaceId: string;
+	/**
+	 * 서비스 코드
+	 * @maxLength 80
+	 */
+	serviceCode: string;
+	/** 결제 대상 종류 */
+	subjectType: PaymentSubjectType;
+	/**
+	 * 결제 대상 ID
+	 * @maxLength 160
+	 */
+	subjectId: string;
+	/**
+	 * 결제 대상 표시명
+	 * @maxLength 160
+	 */
+	subjectLabel: string;
+	/**
+	 * 수량
+	 * @minimum 1
+	 */
+	quantity: number;
+	/**
+	 * 단가
+	 * @minimum 0
+	 */
+	unitAmount: number;
+	/**
+	 * 합계 금액
+	 * @minimum 0
+	 */
+	totalAmount: number;
+	/**
+	 * 통화 코드
+	 * @minLength 3
+	 * @maxLength 3
+	 */
+	currency: string;
 }

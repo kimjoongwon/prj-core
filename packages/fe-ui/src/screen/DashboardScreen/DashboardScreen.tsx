@@ -1,8 +1,9 @@
 "use client";
 
-import { SectionSurface, PageTitleBar, VStack } from "@cocrepo/ui";
+import { PageTitleBar, SectionSurface, VStack } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
+
 const dashboardCards = [
 	{
 		label: "오늘 예약",

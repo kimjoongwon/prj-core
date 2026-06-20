@@ -2,8 +2,8 @@
 
 import { Check, ChevronRight, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { AppIcon } from "../../design-system/icon/AppIcon";
 import { Button } from "../../action/Button/Button";
+import { AppIcon } from "../../design-system/icon/AppIcon";
 import type { OverlayMenuProps } from "../../layout/Layout/type";
 
 export const OverlayMenu = observer(function OverlayMenu({
@@ -56,9 +56,7 @@ export const OverlayMenu = observer(function OverlayMenu({
 										<span className="flex h-6 w-6 flex-shrink-0 items-center justify-center">
 											<AppIcon
 												name={item.icon}
-												className={
-													isSelected ? "text-accent" : "text-muted"
-												}
+												className={isSelected ? "text-accent" : "text-muted"}
 												size={20}
 											/>
 										</span>

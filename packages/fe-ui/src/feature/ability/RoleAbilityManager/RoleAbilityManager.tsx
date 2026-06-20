@@ -1,11 +1,11 @@
 "use client";
 
+import { Card } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Select } from "../../../selection/Select/Select";
-import { Card } from "@heroui/react";
 import { Typography } from "../../../data-display/Typography";
 import { AbilityFormModal } from "../../../form/AbilityFormModal";
+import { Select } from "../../../selection/Select/Select";
 import { AbilityRuleList } from "../../../widget/ability/AbilityRuleList";
 import type { RoleAbilityManagerProps } from "./type";
 import { useRoleAbilityManager } from "./useRoleAbilityManager";
@@ -95,11 +95,7 @@ export const RoleAbilityManager = observer(
 		return (
 			<Card className="w-full">
 				<Card.Header>
-					<div
-
-
-					 className="flex items-center justify-between w-full"
-					>
+					<div className="flex items-center justify-between w-full">
 						<Typography type="h4" weight="normal">
 							Role 권한 관리 (ABAC)
 						</Typography>
@@ -109,14 +105,14 @@ export const RoleAbilityManager = observer(
 					<div className="flex flex-col gap-4">
 						{/* Role 선택 영역 */}
 						<div className="flex gap-4 items-end">
-								<Select
-									label="역할 선택"
-									placeholder="역할을 선택하세요"
-									options={roleOptions}
-									value={selectedRoleId ?? ""}
-									onChange={(value) => handleRoleChange(String(value ?? ""))}
-									className="w-64"
-								/>
+							<Select
+								label="역할 선택"
+								placeholder="역할을 선택하세요"
+								options={roleOptions}
+								value={selectedRoleId ?? ""}
+								onChange={(value) => handleRoleChange(String(value ?? ""))}
+								className="w-64"
+							/>
 						</div>
 
 						{/* 에러 메시지 */}

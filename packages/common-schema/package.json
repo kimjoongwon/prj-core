@@ -22,7 +22,7 @@
     "build": "tsc --build",
     "start:dev": "tsc --build --watch",
     "type-check": "tsc --noEmit",
-    "format": "biome format --write .",
+    "format": "biome check --write .",
     "clean": "rm -rf dist && rm -rf node_modules"
   },
   "dependencies": {

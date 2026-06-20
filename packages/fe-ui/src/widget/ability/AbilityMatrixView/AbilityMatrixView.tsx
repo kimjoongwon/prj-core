@@ -1,9 +1,9 @@
 "use client";
 
+import { Spinner, Table } from "@heroui/react";
 import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../../data-display/Chip/Chip";
-import { Spinner, Table } from "@heroui/react";
 import {
 	VisibilityCell,
 	type VisibilityStatus,
@@ -182,13 +182,13 @@ export const AbilityMatrixView = observer(
 		return (
 			<div>
 				{/* 헤더: Subject 이름 */}
-					<div className="flex">
-						<span className="flex flex-col w-full gap-4 items-center text-lg font-semibold">
-							{subjectDisplayName ?? subjectName}
-						</span>
-						<span className="text-muted text-sm">({subjectName})</span>
-						{loading ? <Spinner size="sm" /> : null}
-					</div>
+				<div className="flex">
+					<span className="flex flex-col w-full gap-4 items-center text-lg font-semibold">
+						{subjectDisplayName ?? subjectName}
+					</span>
+					<span className="text-muted text-sm">({subjectName})</span>
+					{loading ? <Spinner size="sm" /> : null}
+				</div>
 
 				{/* 범례 */}
 				<div className="flex">
@@ -211,73 +211,70 @@ export const AbilityMatrixView = observer(
 					aria-label={`${subjectDisplayName ?? subjectName} 권한 매트릭스`}
 				>
 					<Table.Content>
-					<Table.Header>
-						<Table.Column
-							key="field"
-							className="sticky left-0 bg-surface z-10 min-w-[120px]"
-						>
-							필드명
-						</Table.Column>
-						{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-						{
-							roles.map((role) => (
-								<Table.Column key={role.id} className="min-w-[100px]">
-									<div className="flex flex-col">
-										<span className="font-medium">
-											{getRoleDisplayName(role)}
-										</span>
-										<span className="text-xs text-muted">
-											({role.name})
-										</span>
-									</div>
-								</Table.Column>
-							)) as any
-						}
-					</Table.Header>
-					<Table.Body
-					>
-						{fields.map((field) => (
-							<Table.Row key={field.name}>
-								<Table.Cell className="sticky left-0 bg-surface z-10 font-medium">
-									<div className="flex flex-col gap-1 items-start">
-										<span>{getFieldDisplayName(field)}</span>
-										{field.displayName && (
-											<span className="text-xs text-muted">
-												({field.name})
+						<Table.Header>
+							<Table.Column
+								key="field"
+								className="sticky left-0 bg-surface z-10 min-w-[120px]"
+							>
+								필드명
+							</Table.Column>
+							{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+							{
+								roles.map((role) => (
+									<Table.Column key={role.id} className="min-w-[100px]">
+										<div className="flex flex-col">
+											<span className="font-medium">
+												{getRoleDisplayName(role)}
 											</span>
-										)}
-									</div>
-								</Table.Cell>
-								{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-								{
-									roles.map((role) => {
-										const status = getCellStatus(field.name, role.name);
-										return (
-											<Table.Cell key={`${field.name}-${role.name}`}>
-												<div className="flex justify-center">
-													<VisibilityCell
-														status={status}
-														fieldName={getFieldDisplayName(field)}
-														roleName={getRoleDisplayName(role)}
-														editable={editable}
-														onStatusChange={(newStatus) =>
-															handleCellStatusChange(
-																field.name,
-																role.name,
-																newStatus,
-															)
-														}
-													/>
-												</div>
-											</Table.Cell>
-										);
-									}) as any
-								}
-							</Table.Row>
-						))}
-					</Table.Body>
-				</Table.Content>
-			</Table>
+											<span className="text-xs text-muted">({role.name})</span>
+										</div>
+									</Table.Column>
+								)) as any
+							}
+						</Table.Header>
+						<Table.Body>
+							{fields.map((field) => (
+								<Table.Row key={field.name}>
+									<Table.Cell className="sticky left-0 bg-surface z-10 font-medium">
+										<div className="flex flex-col gap-1 items-start">
+											<span>{getFieldDisplayName(field)}</span>
+											{field.displayName && (
+												<span className="text-xs text-muted">
+													({field.name})
+												</span>
+											)}
+										</div>
+									</Table.Cell>
+									{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+									{
+										roles.map((role) => {
+											const status = getCellStatus(field.name, role.name);
+											return (
+												<Table.Cell key={`${field.name}-${role.name}`}>
+													<div className="flex justify-center">
+														<VisibilityCell
+															status={status}
+															fieldName={getFieldDisplayName(field)}
+															roleName={getRoleDisplayName(role)}
+															editable={editable}
+															onStatusChange={(newStatus) =>
+																handleCellStatusChange(
+																	field.name,
+																	role.name,
+																	newStatus,
+																)
+															}
+														/>
+													</div>
+												</Table.Cell>
+											);
+										}) as any
+									}
+								</Table.Row>
+							))}
+						</Table.Body>
+					</Table.Content>
+				</Table>
 			</div>
 		);
 	},

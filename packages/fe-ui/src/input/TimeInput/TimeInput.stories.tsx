@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { TimeField } from "@heroui/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
 import { TimeInput } from "./TimeInput";
 

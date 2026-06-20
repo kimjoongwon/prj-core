@@ -1,11 +1,11 @@
 import { RedisService } from "../redis/redis.service";
-import type { AdapterPayload, OidcAdapter } from "./types";
 import {
 	oidcAdapterGrantKey,
 	oidcAdapterKey,
 	oidcAdapterUidKey,
 	oidcAdapterUserCodeKey,
 } from "./oidc-adapter-key";
+import type { AdapterPayload, OidcAdapter } from "./types";
 
 /**
  * Redis Adapter for oidc-provider
@@ -68,7 +68,9 @@ export class RedisOidcAdapter implements OidcAdapter {
 	}
 
 	async find(id: string): Promise<AdapterPayload | undefined> {
-		const data = await this.redisService.get(oidcAdapterKey(this.modelType, id));
+		const data = await this.redisService.get(
+			oidcAdapterKey(this.modelType, id),
+		);
 		if (!data) return undefined;
 		return JSON.parse(data) as AdapterPayload;
 	}
@@ -104,9 +106,7 @@ export class RedisOidcAdapter implements OidcAdapter {
 				pipeline.del(oidcAdapterUidKey(this.modelType, payload.uid));
 			}
 			if (payload.userCode) {
-				pipeline.del(
-					oidcAdapterUserCodeKey(this.modelType, payload.userCode),
-				);
+				pipeline.del(oidcAdapterUserCodeKey(this.modelType, payload.userCode));
 			}
 			if (payload.grantId) {
 				pipeline.srem(oidcAdapterGrantKey(this.modelType, payload.grantId), id);

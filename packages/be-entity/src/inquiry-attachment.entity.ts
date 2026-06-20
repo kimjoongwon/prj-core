@@ -1,6 +1,6 @@
 import type {
-	InquiryAttachment as InquiryAttachmentEntity,
 	AttachmentFileType,
+	InquiryAttachment as InquiryAttachmentEntity,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { InquiryMessage } from "./inquiry-message.entity";
@@ -100,7 +100,7 @@ export class InquiryAttachment
 		const units = ["B", "KB", "MB", "GB"];
 		const k = 1024;
 		const i = Math.floor(Math.log(bytes) / Math.log(k));
-		const size = bytes / Math.pow(k, i);
+		const size = bytes / k ** i;
 
 		return `${size.toFixed(1)} ${units[i]}`;
 	}

@@ -1,10 +1,10 @@
 "use client";
 
+import { Modal, useOverlayState } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Input } from "../../input/Input/Input";
 import { Button } from "../../action/Button/Button";
-import { Modal, useOverlayState } from "@heroui/react";
+import { Input } from "../../input/Input/Input";
 import { TextArea } from "../../input/TextArea/TextArea";
 
 /**
@@ -174,13 +174,11 @@ export const RoleFormModal = observer(
 		/**
 		 * description 입력 핸들러
 		 */
-			const handleDescriptionChange = (
-				value: string | number,
-			) => {
-				setFormData((prev) => ({
-					...prev,
-					description: String(value),
-				}));
+		const handleDescriptionChange = (value: string | number) => {
+			setFormData((prev) => ({
+				...prev,
+				description: String(value),
+			}));
 			// 에러 제거
 			if (errors.description) {
 				setErrors((prev) => ({ ...prev, description: "" }));
@@ -195,80 +193,84 @@ export const RoleFormModal = observer(
 		/**
 		 * 제출 버튼 텍스트
 		 */
-			const submitButtonText = mode === "create" ? "저장" : "수정";
-			const modalState = useOverlayState({
-				isOpen,
-				onOpenChange: (open) => {
-					if (!open) {
-						onClose();
-					}
-				},
-			});
+		const submitButtonText = mode === "create" ? "저장" : "수정";
+		const modalState = useOverlayState({
+			isOpen,
+			onOpenChange: (open) => {
+				if (!open) {
+					onClose();
+				}
+			},
+		});
 
-			return (
-				<Modal state={modalState}>
-					<Modal.Backdrop><Modal.Container size="md" scroll="inside"><Modal.Dialog>
-					<Modal.Header>{modalTitle}</Modal.Header>
-					<Modal.Body>
-						<div className="flex flex-col gap-4">
-							{/* 역할 식별자 */}
-							<Input
-								label="역할 식별자"
-									placeholder="MANAGER"
-									value={formData.name}
-									onValueChange={handleNameChange}
-								isDisabled={loading || mode === "edit"}
-								isRequired={mode === "create"}
-								isInvalid={!!errors.name}
-								errorMessage={errors.name}
-								description={
-									mode === "create"
-										? "영문 대문자와 언더스코어만 사용 (예: TEAM_LEADER)"
-										: undefined
-								}
-							/>
+		return (
+			<Modal state={modalState}>
+				<Modal.Backdrop>
+					<Modal.Container size="md" scroll="inside">
+						<Modal.Dialog>
+							<Modal.Header>{modalTitle}</Modal.Header>
+							<Modal.Body>
+								<div className="flex flex-col gap-4">
+									{/* 역할 식별자 */}
+									<Input
+										label="역할 식별자"
+										placeholder="MANAGER"
+										value={formData.name}
+										onValueChange={handleNameChange}
+										isDisabled={loading || mode === "edit"}
+										isRequired={mode === "create"}
+										isInvalid={!!errors.name}
+										errorMessage={errors.name}
+										description={
+											mode === "create"
+												? "영문 대문자와 언더스코어만 사용 (예: TEAM_LEADER)"
+												: undefined
+										}
+									/>
 
-							{/* 표시명 */}
-							<Input
-								label="표시명"
-									placeholder="매니저"
-									value={formData.displayName}
-									onValueChange={handleDisplayNameChange}
-								isDisabled={loading}
-								isRequired
-								isInvalid={!!errors.displayName}
-								errorMessage={errors.displayName}
-							/>
+									{/* 표시명 */}
+									<Input
+										label="표시명"
+										placeholder="매니저"
+										value={formData.displayName}
+										onValueChange={handleDisplayNameChange}
+										isDisabled={loading}
+										isRequired
+										isInvalid={!!errors.displayName}
+										errorMessage={errors.displayName}
+									/>
 
-							{/* 설명 */}
-							<TextArea
-								label="설명"
-									placeholder="역할에 대한 설명을 입력하세요"
-									value={formData.description || ""}
-									onValueChange={handleDescriptionChange}
-								isDisabled={loading}
-								isInvalid={!!errors.description}
-								errorMessage={errors.description}
-								minRows={2}
-								maxRows={4}
-							/>
-						</div>
-					</Modal.Body>
-					<Modal.Footer>
-						<div className="flex gap-8 justify-end">
-							<Button variant="flat" onPress={onClose} isDisabled={loading}>
-								취소
-							</Button>
-							<Button
-								color="primary"
-								onPress={handleSubmit}
-								isLoading={loading}
-							>
-								{submitButtonText}
-							</Button>
-						</div>
-					</Modal.Footer>
-				</Modal.Dialog></Modal.Container></Modal.Backdrop>
+									{/* 설명 */}
+									<TextArea
+										label="설명"
+										placeholder="역할에 대한 설명을 입력하세요"
+										value={formData.description || ""}
+										onValueChange={handleDescriptionChange}
+										isDisabled={loading}
+										isInvalid={!!errors.description}
+										errorMessage={errors.description}
+										minRows={2}
+										maxRows={4}
+									/>
+								</div>
+							</Modal.Body>
+							<Modal.Footer>
+								<div className="flex gap-8 justify-end">
+									<Button variant="flat" onPress={onClose} isDisabled={loading}>
+										취소
+									</Button>
+									<Button
+										color="primary"
+										onPress={handleSubmit}
+										isLoading={loading}
+									>
+										{submitButtonText}
+									</Button>
+								</div>
+							</Modal.Footer>
+						</Modal.Dialog>
+					</Modal.Container>
+				</Modal.Backdrop>
 			</Modal>
 		);
 	},

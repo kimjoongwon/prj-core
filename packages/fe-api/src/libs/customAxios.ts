@@ -1,7 +1,7 @@
 import { REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import Axios, {
-	AxiosHeaders,
 	type AxiosError,
+	AxiosHeaders,
 	type AxiosRequestConfig,
 	type InternalAxiosRequestConfig,
 } from "axios";

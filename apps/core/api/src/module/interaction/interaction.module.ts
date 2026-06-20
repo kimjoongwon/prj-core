@@ -1,3 +1,4 @@
+import { InteractionController } from "@cocrepo/controller";
 import {
 	InteractionLoginService as ServiceInteractionLoginService,
 	InteractionService as ServiceInteractionService,
@@ -10,7 +11,6 @@ import {
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { OidcModule } from "../oidc/oidc.module";
-import { InteractionController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule, OidcModule],

@@ -19,7 +19,7 @@
     "schema:check": "tsx ./scripts/validate-schema-conventions.ts",
     "build": "rm -rf dist && pnpm run schema:check && tsc --build",
     "start:dev": "tsc --build --watch",
-    "format": "biome format --write .",
+    "format": "biome check --write .",
     "db:pull": "prisma db pull",
     "db:pull:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG prisma db pull",
     "db:pull:prod": "cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD prisma db pull",

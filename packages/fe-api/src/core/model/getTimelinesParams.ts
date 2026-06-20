@@ -9,25 +9,25 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { LanguageCode } from './languageCode';
+import type { LanguageCode } from "./languageCode";
 
 export type GetTimelinesParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * @nullable
- */
-timelineId?: string | null;
-/**
- * @nullable
- */
-search?: string | null;
-contentLanguageCode?: LanguageCode;
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * @nullable
+	 */
+	timelineId?: string | null;
+	/**
+	 * @nullable
+	 */
+	search?: string | null;
+	contentLanguageCode?: LanguageCode;
 };

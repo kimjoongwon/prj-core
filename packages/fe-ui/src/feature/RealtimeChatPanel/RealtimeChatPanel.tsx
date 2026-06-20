@@ -1,9 +1,9 @@
 "use client";
 
 import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";
+import { Card, ScrollShadow } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";
-import { Card, ScrollShadow } from "@heroui/react";
 import { MessageStatus } from "../../feedback/MessageStatus/MessageStatus";
 import { TypingIndicator } from "../../feedback/TypingIndicator/TypingIndicator";
 import { WebSocketConnectionStatus } from "../../feedback/WebSocketConnectionStatus/WebSocketConnectionStatus";
@@ -181,9 +181,7 @@ export const RealtimeChatPanel = observer(
 			<Card className={`flex h-full flex-col ${className}`}>
 				{/* 헤더: 연결 상태 */}
 				<Card.Header className="flex items-center justify-between px-4 py-2">
-					<span className="text-sm font-medium text-muted">
-						실시간 채팅
-					</span>
+					<span className="text-sm font-medium text-muted">실시간 채팅</span>
 					<WebSocketConnectionStatus
 						status={isWebSocketConnected ? "connected" : "disconnected"}
 						onReconnect={onReconnect}

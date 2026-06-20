@@ -11,35 +11,35 @@
  */
 
 export interface ReservationCheckoutOptionDto {
-  /** 코스 ID */
-  courseId: string;
-  /** 코스 개설 ID */
-  courseOfferingId: string;
-  /** 사용할 Timeline ID */
-  timelineId: string;
-  /** 코스명 */
-  courseName: string;
-  /** 개설명 */
-  courseOfferingName: string;
-  /**
-   * 수강 기간(개월)
-   * @minimum 1
-   */
-  durationMonths: number;
-  /**
-   * 결제 금액
-   * @minimum 0
-   */
-  priceAmount: number;
-  /**
-   * 통화 코드
-   * @minLength 3
-   * @maxLength 3
-   */
-  currency: string;
-  /**
-   * 예상 예약 가능 횟수
-   * @minimum 0
-   */
-  reservationLimit: number;
+	/** 코스 ID */
+	courseId: string;
+	/** 코스 개설 ID */
+	courseOfferingId: string;
+	/** 사용할 Timeline ID */
+	timelineId: string;
+	/** 코스명 */
+	courseName: string;
+	/** 개설명 */
+	courseOfferingName: string;
+	/**
+	 * 수강 기간(개월)
+	 * @minimum 1
+	 */
+	durationMonths: number;
+	/**
+	 * 결제 금액
+	 * @minimum 0
+	 */
+	priceAmount: number;
+	/**
+	 * 통화 코드
+	 * @minLength 3
+	 * @maxLength 3
+	 */
+	currency: string;
+	/**
+	 * 예상 예약 가능 횟수
+	 * @minimum 0
+	 */
+	reservationLimit: number;
 }

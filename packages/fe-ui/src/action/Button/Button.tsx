@@ -1,6 +1,6 @@
 "use client";
 
-import { Button as HeroButton, Link as HeroLink, cn } from "@heroui/react";
+import { cn, Button as HeroButton, Link as HeroLink } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ComponentProps, ElementType, ReactNode } from "react";
 import { translateNode, useT } from "../../i18n";

@@ -11,26 +11,26 @@
  */
 
 export interface CreateReservationDto {
-  /** 예약 권리를 소비하는 수강권 ID */
-  coursePassId: string;
-  /** 타임라인 ID */
-  timelineId: string;
-  /** 세션 ID */
-  sessionId: string;
-  /** 프로그램 ID */
-  programId: string;
-  /** 예약 발생 회차 시작 시각 */
-  occurrenceStartAt: string;
-  /**
-   * 멱등성 키
-   * @minLength 8
-   * @maxLength 120
-   */
-  idempotencyKey: string;
-  /**
-   * 예약 메모
-   * @maxLength 1000
-   * @nullable
-   */
-  memo?: string | null;
+	/** 예약 권리를 소비하는 수강권 ID */
+	coursePassId: string;
+	/** 타임라인 ID */
+	timelineId: string;
+	/** 세션 ID */
+	sessionId: string;
+	/** 프로그램 ID */
+	programId: string;
+	/** 예약 발생 회차 시작 시각 */
+	occurrenceStartAt: string;
+	/**
+	 * 멱등성 키
+	 * @minLength 8
+	 * @maxLength 120
+	 */
+	idempotencyKey: string;
+	/**
+	 * 예약 메모
+	 * @maxLength 1000
+	 * @nullable
+	 */
+	memo?: string | null;
 }

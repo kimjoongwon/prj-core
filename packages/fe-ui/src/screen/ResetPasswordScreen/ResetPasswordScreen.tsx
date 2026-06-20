@@ -1,8 +1,8 @@
 "use client";
 
 import type { PasswordRule } from "@cocrepo/constant";
-import type { FormEvent } from "react";
 import { observer } from "mobx-react-lite";
+import type { FormEvent } from "react";
 import {
 	ResetPasswordForm,
 	type ResetPasswordFormState,

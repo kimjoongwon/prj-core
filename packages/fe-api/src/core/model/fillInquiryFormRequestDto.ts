@@ -9,18 +9,19 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { FillInquiryFormRequestDtoMode } from './fillInquiryFormRequestDtoMode';
-import type { FillInquiryFormRequestDtoCurrentObject } from './fillInquiryFormRequestDtoCurrentObject';
+
+import type { FillInquiryFormRequestDtoCurrentObject } from "./fillInquiryFormRequestDtoCurrentObject";
+import type { FillInquiryFormRequestDtoMode } from "./fillInquiryFormRequestDtoMode";
 
 export interface FillInquiryFormRequestDto {
-  /** 폼 모드 */
-  mode: FillInquiryFormRequestDtoMode;
-  /** 선택한 AI 스키마 키 */
-  schemaKey: string;
-  /** 선택한 경로 목록 */
-  selectedPaths: string[];
-  /** 현재 폼 객체 */
-  currentObject: FillInquiryFormRequestDtoCurrentObject;
-  /** 추가 프롬프트 */
-  userPrompt?: string;
+	/** 폼 모드 */
+	mode: FillInquiryFormRequestDtoMode;
+	/** 선택한 AI 스키마 키 */
+	schemaKey: string;
+	/** 선택한 경로 목록 */
+	selectedPaths: string[];
+	/** 현재 폼 객체 */
+	currentObject: FillInquiryFormRequestDtoCurrentObject;
+	/** 추가 프롬프트 */
+	userPrompt?: string;
 }

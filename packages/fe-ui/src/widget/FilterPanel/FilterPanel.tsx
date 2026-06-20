@@ -1,12 +1,12 @@
 "use client";
 
+import { CheckboxGroup } from "@heroui/react";
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { Button } from "../../action/Button/Button";
-import { Checkbox } from "../../selection/Checkbox/Checkbox";
-import { CheckboxGroup } from "@heroui/react";
 import { Input } from "../../input/Input/Input";
+import { Checkbox } from "../../selection/Checkbox/Checkbox";
 
 /** 필터 그룹 정의 */
 export interface FilterGroup {
@@ -148,9 +148,7 @@ export const FilterPanel = observer(
 				{/* 검색 */}
 				{showSearch && (
 					<div>
-						<h3 className="mb-2 text-sm font-semibold text-foreground">
-							검색
-						</h3>
+						<h3 className="mb-2 text-sm font-semibold text-foreground">검색</h3>
 						<Input
 							placeholder={searchPlaceholder}
 							size="sm"
@@ -205,11 +203,11 @@ export const FilterPanel = observer(
 						<h3 className="mb-2 text-sm font-semibold text-foreground">
 							{optionsTitle}
 						</h3>
-							<CheckboxGroup
-								value={filter.selectedOptions}
-								onChange={handleOptionsChange}
-								className="gap-1"
-							>
+						<CheckboxGroup
+							value={filter.selectedOptions}
+							onChange={handleOptionsChange}
+							className="gap-1"
+						>
 							{options.map((option) => (
 								<Checkbox
 									key={option.value}

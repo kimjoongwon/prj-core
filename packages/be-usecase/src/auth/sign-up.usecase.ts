@@ -1,7 +1,4 @@
-import {
-	EmailVerificationAggregate,
-	SpaceAggregate,
-} from "@cocrepo/aggregate";
+import { EmailVerificationAggregate, SpaceAggregate } from "@cocrepo/aggregate";
 import { SignUpCommand } from "@cocrepo/command";
 import { UserService } from "@cocrepo/service";
 import { Email, HashedPassword, Phone, PlainPassword } from "@cocrepo/vo";

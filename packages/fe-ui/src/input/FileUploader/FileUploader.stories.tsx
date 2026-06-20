@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { FileUploader, type FileDto } from "./FileUploader";
+import { type FileDto, FileUploader } from "./FileUploader";
 
 const meta: Meta<typeof FileUploader> = {
 	title: "input/FileUploader",

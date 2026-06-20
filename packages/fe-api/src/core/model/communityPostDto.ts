@@ -11,25 +11,25 @@
  */
 
 export interface CommunityPostDto {
-  /** 커뮤니티 게시글 ID */
-  id: string;
-  /**
-   * 게시글 제목
-   * @maxLength 80
-   * @nullable
-   */
-  title?: string | null;
-  /**
-   * 게시글 본문
-   * @maxLength 1000
-   */
-  text: string;
-  /** 작성자 표시 이름 */
-  authorName: string;
-  /** 작성 시각 */
-  createdAt: string;
-  /** 현재 로그인 사용자가 작성한 글 여부 */
-  isMine: boolean;
-  /** 공지/고정 게시글 여부 */
-  isPinned: boolean;
+	/** 커뮤니티 게시글 ID */
+	id: string;
+	/**
+	 * 게시글 제목
+	 * @maxLength 80
+	 * @nullable
+	 */
+	title?: string | null;
+	/**
+	 * 게시글 본문
+	 * @maxLength 1000
+	 */
+	text: string;
+	/** 작성자 표시 이름 */
+	authorName: string;
+	/** 작성 시각 */
+	createdAt: string;
+	/** 현재 로그인 사용자가 작성한 글 여부 */
+	isMine: boolean;
+	/** 공지/고정 게시글 여부 */
+	isPinned: boolean;
 }

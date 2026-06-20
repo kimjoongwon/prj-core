@@ -15,4 +15,6 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 /**
  * 초기 폼 객체
  */
-export type IdpAccountAccessGrantFormBootstrapDtoDefaultObject = { [key: string]: unknown };
+export type IdpAccountAccessGrantFormBootstrapDtoDefaultObject = {
+	[key: string]: unknown;
+};

@@ -179,7 +179,7 @@
       "id": "COURSE-S2-BE-003",
       "stage": 2,
       "slice": "CourseBackendLogic",
-      "agent_type": "be-repository-builder, be-service-builder, be-facade-builder, be-usecase-builder",
+      "agent_type": "be-repository-builder, be-service-builder, be-usecase-builder",
       "required": true,
       "source_spec": [
         "apps/admin/web/src/app/(admin)/app.context.md"
@@ -191,7 +191,6 @@
         "packages/be-service/src/course/course.service.ts",
         "packages/be-service/src/reservation/reservation.service.ts",
         "packages/be-service/src/index.ts",
-        "packages/be-facade/src/course.facade.ts",
         "packages/be-usecase/src/reservation",
         "packages/be-usecase/src/core/get-courses.usecase.ts",
         "packages/be-usecase/src/core/index.ts",
@@ -244,7 +243,6 @@
         "packages/be-dto/src/reservations/reservation.dto.ts",
         "packages/be-repository/src/reservations.repository.ts",
         "packages/be-service/src/reservation/reservation.service.ts",
-        "packages/be-facade/src/reservation.facade.ts",
         "apps/core/api/src/module/reservations/reservations.module.ts",
         "apps/core/api/src/module/reservations/reservations.controller.ts",
         "packages/fe-api/src/core/reservations"

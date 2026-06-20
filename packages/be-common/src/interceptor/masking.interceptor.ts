@@ -176,9 +176,9 @@ export class MaskingInterceptor implements NestInterceptor {
 			`마스킹 규칙 적용: userId=${user.id}, subject=${subjectName}, fields=${Array.from(maskingRules.keys()).join(",")}`,
 		);
 
-		return next.handle().pipe(
-			map((data) => this.applyMaskingToResponse(data, maskingRules)),
-		);
+		return next
+			.handle()
+			.pipe(map((data) => this.applyMaskingToResponse(data, maskingRules)));
 	}
 
 	/**

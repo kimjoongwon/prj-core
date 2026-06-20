@@ -44,9 +44,7 @@ export const LoginForm = observer(({ state }: LoginFormProps) => {
 					label: "text-sm font-semibold text-foreground",
 					prefix: "text-muted",
 				}}
-				startContent={
-					<Mail aria-hidden className="size-4 text-muted" />
-				}
+				startContent={<Mail aria-hidden className="size-4 text-muted" />}
 				state={state}
 			/>
 			<TextField
@@ -64,9 +62,7 @@ export const LoginForm = observer(({ state }: LoginFormProps) => {
 					label: "text-sm font-semibold text-foreground",
 					prefix: "text-muted",
 				}}
-				startContent={
-					<KeyRound aria-hidden className="size-4 text-muted" />
-				}
+				startContent={<KeyRound aria-hidden className="size-4 text-muted" />}
 				state={state}
 			/>
 		</div>

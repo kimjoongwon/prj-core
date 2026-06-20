@@ -1,3 +1,4 @@
+import { OidcController } from "@cocrepo/controller";
 import {
 	AccountService as ServiceAccountService,
 	DirectPrismaProvider as ServiceDirectPrismaProvider,
@@ -13,7 +14,6 @@ import {
 } from "@cocrepo/usecase";
 import { Module, type OnModuleInit } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { OidcController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],

@@ -11,27 +11,27 @@
  */
 
 export interface ReservationCheckoutContextDto {
-  /** 피드 항목 ID */
-  feedItemId: string;
-  /** 타임라인 ID */
-  timelineId: string;
-  /** 세션 ID */
-  sessionId: string;
-  /** 프로그램 ID */
-  programId: string;
-  /** 예약 회차 시작 시각 */
-  occurrenceStartAt: string;
-  /** 예약 회차 종료 시각 */
-  occurrenceEndsAt: string;
-  /** 타임라인 이름 */
-  timelineName: string;
-  /** 세션 이름 */
-  sessionName: string;
-  /** 프로그램 이름 */
-  programName: string;
-  /**
-   * 코치 이름
-   * @nullable
-   */
-  coachName?: string | null;
+	/** 피드 항목 ID */
+	feedItemId: string;
+	/** 타임라인 ID */
+	timelineId: string;
+	/** 세션 ID */
+	sessionId: string;
+	/** 프로그램 ID */
+	programId: string;
+	/** 예약 회차 시작 시각 */
+	occurrenceStartAt: string;
+	/** 예약 회차 종료 시각 */
+	occurrenceEndsAt: string;
+	/** 타임라인 이름 */
+	timelineName: string;
+	/** 세션 이름 */
+	sessionName: string;
+	/** 프로그램 이름 */
+	programName: string;
+	/**
+	 * 코치 이름
+	 * @nullable
+	 */
+	coachName?: string | null;
 }

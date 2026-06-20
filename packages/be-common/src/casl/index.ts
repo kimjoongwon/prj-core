@@ -28,7 +28,11 @@
 
 // Factory
 export { CaslAbilityFactory } from "./casl-ability.factory";
-
+export type {
+	IPolicyHandler,
+	PolicyHandler,
+	PolicyHandlerCallback,
+} from "./policy-handlers";
 // Policy Handlers
 export {
 	AccessApiPolicy,
@@ -37,11 +41,6 @@ export {
 	CustomPolicy,
 	ManageEntityPolicy,
 } from "./policy-handlers";
-export type {
-	IPolicyHandler,
-	PolicyHandler,
-	PolicyHandlerCallback,
-} from "./policy-handlers";
 
 // Types
 export type {
@@ -49,8 +48,8 @@ export type {
 	ActionConfig,
 	ActionFormatConfig,
 	ActionMaskingConfig,
-	ActionTransformConfig,
 	Actions,
+	ActionTransformConfig,
 	AppAbility,
 	AppAbilityBuilder,
 	AppAbilityClass,

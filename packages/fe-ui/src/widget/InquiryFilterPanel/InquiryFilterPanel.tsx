@@ -1,13 +1,13 @@
 "use client";
 
 import type { Option } from "@cocrepo/type";
+import { Card } from "@heroui/react";
 import { RotateCcw, Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Button } from "../../action/Button/Button";
+import { Input } from "../../input/Input/Input";
 import { DateRangePicker } from "../../selection/DateRangePicker/DateRangePicker";
 import { Select } from "../../selection/Select/Select";
-import { Button } from "../../action/Button/Button";
-import { Card } from "@heroui/react";
-import { Input } from "../../input/Input/Input";
 
 export interface InquiryFilterValue {
 	/** 상태 필터 */
@@ -97,7 +97,9 @@ export const InquiryFilterPanel = observer(
 			return (selectedValue: string | number | null) => {
 				handleFieldChange(
 					field,
-					selectedValue == null ? undefined : String(selectedValue) || undefined,
+					selectedValue == null
+						? undefined
+						: String(selectedValue) || undefined,
 				);
 			};
 		};

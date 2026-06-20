@@ -13,10 +13,10 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface LoginRecoveryActionDto {
-  /** 액션 코드 */
-  type: string;
-  /** 사용자 표시 라벨 */
-  label: string;
-  /** 이동 경로 */
-  href?: string;
+	/** 액션 코드 */
+	type: string;
+	/** 사용자 표시 라벨 */
+	label: string;
+	/** 이동 경로 */
+	href?: string;
 }

@@ -1,10 +1,10 @@
 "use client";
 
 import type { NavItem } from "@cocrepo/store";
+import { cn } from "@heroui/react";
 import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import { cn } from "@heroui/react";
 import type { SidePanelProps } from "../../layout/Layout/type";
 
 interface SubMenuItemProps {

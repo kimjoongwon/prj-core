@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import {
 	Calendar as HeroCalendar,
 	DateField as HeroDateField,
 	DatePicker as HeroDatePicker,
 } from "@heroui/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import { DatePicker } from "./DatePicker";
 
 const meta: Meta<typeof DatePicker> = {
@@ -109,7 +109,9 @@ export const Default: Story = {
 					</HeroCalendar.Header>
 					<HeroCalendar.Grid>
 						<HeroCalendar.GridHeader>
-							{(day) => <HeroCalendar.HeaderCell>{day}</HeroCalendar.HeaderCell>}
+							{(day) => (
+								<HeroCalendar.HeaderCell>{day}</HeroCalendar.HeaderCell>
+							)}
 						</HeroCalendar.GridHeader>
 						<HeroCalendar.GridBody>
 							{(date) => (

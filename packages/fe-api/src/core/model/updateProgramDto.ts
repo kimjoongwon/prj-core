@@ -11,9 +11,9 @@
  */
 
 export interface UpdateProgramDto {
-  routineId?: string;
-  instructorId?: string;
-  capacity?: number;
-  name?: string;
-  level?: string;
+	routineId?: string;
+	instructorId?: string;
+	capacity?: number;
+	name?: string;
+	level?: string;
 }

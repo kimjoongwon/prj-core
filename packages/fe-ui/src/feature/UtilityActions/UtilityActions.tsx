@@ -19,9 +19,9 @@ export const UtilityActions = observer(function UtilityActions({
 }: UtilityActionsProps) {
 	const localeStore = useLocaleStore();
 
-	const onChangeLanguage = (languageCode: Parameters<
-		typeof localeStore.setLanguageCode
-	>[0]) => {
+	const onChangeLanguage = (
+		languageCode: Parameters<typeof localeStore.setLanguageCode>[0],
+	) => {
 		localeStore.setLanguageCode(languageCode);
 	};
 

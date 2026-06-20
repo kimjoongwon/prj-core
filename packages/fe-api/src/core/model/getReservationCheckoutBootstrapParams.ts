@@ -11,20 +11,20 @@
  */
 
 export type GetReservationCheckoutBootstrapParams = {
-/**
- * 타임라인 ID
- */
-timelineId: string;
-/**
- * 세션 ID
- */
-sessionId: string;
-/**
- * 프로그램 ID
- */
-programId: string;
-/**
- * 예약 회차 시작 시각
- */
-occurrenceStartAt: string;
+	/**
+	 * 타임라인 ID
+	 */
+	timelineId: string;
+	/**
+	 * 세션 ID
+	 */
+	sessionId: string;
+	/**
+	 * 프로그램 ID
+	 */
+	programId: string;
+	/**
+	 * 예약 회차 시작 시각
+	 */
+	occurrenceStartAt: string;
 };

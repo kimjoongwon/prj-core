@@ -13,10 +13,10 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface TokenValidationDto {
-  /** 토큰 유효 여부 */
-  valid: boolean;
-  /** 이메일 주소 */
-  email?: string;
-  /** 유효하지 않은 이유 */
-  reason?: string;
+	/** 토큰 유효 여부 */
+	valid: boolean;
+	/** 이메일 주소 */
+	email?: string;
+	/** 유효하지 않은 이유 */
+	reason?: string;
 }

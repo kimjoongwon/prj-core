@@ -6,8 +6,8 @@ import type {
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { AIAgentLog } from "./ai-agent-log.entity";
-import type { InquiryAttachment } from "./inquiry-attachment.entity";
 import type { Inquiry } from "./inquiry.entity";
+import type { InquiryAttachment } from "./inquiry-attachment.entity";
 import type { InquiryThread } from "./inquiry-thread.entity";
 import type { SentimentAnalysis } from "./sentiment-analysis.entity";
 import type { User } from "./user.entity";

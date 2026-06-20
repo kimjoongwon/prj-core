@@ -11,8 +11,8 @@
  */
 
 export type UploadAssetBody = {
-  /** 업로드 대상 폴더 ID */
-  folderId: string;
-  /** 업로드 파일 */
-  file: Blob;
+	/** 업로드 대상 폴더 ID */
+	folderId: string;
+	/** 업로드 파일 */
+	file: Blob;
 };

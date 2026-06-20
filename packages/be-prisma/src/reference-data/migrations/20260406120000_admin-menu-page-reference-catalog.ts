@@ -1,5 +1,5 @@
-import { Prisma } from "../../generated/client/client";
 import type { Action, Role, Subject } from "../../generated/client/client";
+import { Prisma } from "../../generated/client/client";
 import {
 	adminFullAccessAbilitySeedData,
 	adminMenuSubjectSeedData,
@@ -7,7 +7,7 @@ import {
 	legacyAdminMenuSubjectNames,
 	legacyAdminPageSubjectNames,
 } from "../definitions/admin-permissions";
-import type { ReferenceDataMigration, ReferenceDataDbClient } from "./types";
+import type { ReferenceDataDbClient, ReferenceDataMigration } from "./types";
 
 const CURRENT_ADMIN_SUBJECT_SEED_DATA = [
 	...adminMenuSubjectSeedData,

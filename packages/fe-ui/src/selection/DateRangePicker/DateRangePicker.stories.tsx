@@ -1,15 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import {
 	DateField as HeroDateField,
 	DateRangePicker as HeroDateRangePicker,
 	RangeCalendar as HeroRangeCalendar,
 } from "@heroui/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import { makeAutoObservable } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-
-import { DateRangePicker } from "./DateRangePicker";
 import type { DateRangePickerProps } from "./DateRangePicker";
+import { DateRangePicker } from "./DateRangePicker";
 import { DateRangePicker as DateRangePickerWithMobx } from "./index";
 
 const meta: Meta<typeof DateRangePicker> = {
@@ -67,7 +66,9 @@ const renderDateRangePickerChildren = () => (
 				</HeroRangeCalendar.Header>
 				<HeroRangeCalendar.Grid>
 					<HeroRangeCalendar.GridHeader>
-						{(day) => <HeroRangeCalendar.HeaderCell>{day}</HeroRangeCalendar.HeaderCell>}
+						{(day) => (
+							<HeroRangeCalendar.HeaderCell>{day}</HeroRangeCalendar.HeaderCell>
+						)}
 					</HeroRangeCalendar.GridHeader>
 					<HeroRangeCalendar.GridBody>
 						{(date) => (

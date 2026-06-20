@@ -1,4 +1,5 @@
 import { TimelineAggregate } from "@cocrepo/aggregate";
+import { TimelinesController } from "@cocrepo/controller";
 import { RoutinesRepository, TimelinesRepository } from "@cocrepo/repository";
 import { AuthContext, SpaceContext } from "@cocrepo/service";
 import {
@@ -7,7 +8,6 @@ import {
 } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { TimelinesController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],

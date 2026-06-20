@@ -5,11 +5,11 @@ import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import type {
 	CourseConsoleProps,
-	CourseRow,
 	CourseEnrollmentRow,
 	CourseOfferingRow,
 	CoursePassRow,
 	CourseQueryState,
+	CourseRow,
 	CourseSection,
 	CourseSectionId,
 } from "../../feature/course";
@@ -43,10 +43,7 @@ export const CourseScreen = observer(
 					}
 				/>
 				<SectionSurface>
-					<CourseConsole
-						{...consoleProps}
-						onClickTimeline={onClickTimeline}
-					/>
+					<CourseConsole {...consoleProps} onClickTimeline={onClickTimeline} />
 				</SectionSurface>
 			</VStack>
 		);

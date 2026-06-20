@@ -1,5 +1,5 @@
-export { VariableEditTable } from "./VariableEditTable";
 export type {
 	VariableEditItem,
 	VariableEditTableProps,
 } from "./VariableEditTable";
+export { VariableEditTable } from "./VariableEditTable";

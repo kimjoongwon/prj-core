@@ -1,10 +1,10 @@
 "use client";
 
 import type { DataGridState, InputConfig } from "@cocrepo/type";
-import { observer } from "mobx-react-lite";
-import { Select } from "../../selection/Select/Select";
 import { ListBox } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
+import { Select } from "../../selection/Select/Select";
 
 interface SelectInputProps {
 	config: InputConfig;

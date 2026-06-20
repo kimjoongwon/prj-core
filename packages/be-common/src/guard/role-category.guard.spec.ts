@@ -1,5 +1,4 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import { ROLE_CATEGORIES_KEY } from "@cocrepo/decorator";
 import { RoleCategoryName } from "@cocrepo/enum";
 import {
 	ExecutionContext,

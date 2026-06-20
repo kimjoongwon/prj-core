@@ -56,9 +56,7 @@ export const PaymentTable = observer(({ payments }: PaymentTableProps) => {
 							{payment.statusLabel}
 						</Chip>
 					</td>
-					<td className="px-3 py-4 text-muted">
-						{payment.approvedAtLabel}
-					</td>
+					<td className="px-3 py-4 text-muted">{payment.approvedAtLabel}</td>
 				</tr>
 			))}
 		</PaymentTableShell>

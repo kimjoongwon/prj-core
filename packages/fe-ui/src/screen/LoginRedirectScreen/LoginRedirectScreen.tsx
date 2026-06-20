@@ -1,11 +1,11 @@
 "use client";
 
-import { SectionSurface } from "../../surface";
+import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action";
-import { Spinner } from "@heroui/react";
 import { useT } from "../../i18n";
 import { VStack } from "../../rhythm";
+import { SectionSurface } from "../../surface";
 
 export interface LoginRedirectScreenProps {
 	errorMessage: string;

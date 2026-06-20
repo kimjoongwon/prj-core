@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { Button, Label } from "@heroui/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import { InputGroup } from "../../input/InputGroup/InputGroup";
 import { Form } from "./Form";
 

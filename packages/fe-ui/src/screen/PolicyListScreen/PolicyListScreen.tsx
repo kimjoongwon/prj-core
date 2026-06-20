@@ -1,12 +1,12 @@
 "use client";
 
 import type { PolicyResponseDto } from "@cocrepo/api/core/policies";
-import { SectionSurface, PageTitleBar, VStack } from "@cocrepo/ui";
+import { PageTitleBar, SectionSurface, VStack } from "@cocrepo/ui";
+import { Spinner, Table } from "@heroui/react";
 import { Edit, Eye, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Spinner, Table } from "@heroui/react";
 
 export interface PolicyListScreenProps {
 	policies?: PolicyResponseDto[];

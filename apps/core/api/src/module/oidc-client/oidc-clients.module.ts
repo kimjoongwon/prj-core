@@ -1,4 +1,5 @@
 import { OidcClientAggregate } from "@cocrepo/aggregate";
+import { OidcClientsController } from "@cocrepo/controller";
 import { OidcClientsRepository } from "@cocrepo/repository";
 import { OidcProviderService } from "@cocrepo/service";
 import {
@@ -8,7 +9,6 @@ import {
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { OidcModule } from "../oidc/oidc.module";
-import { OidcClientsController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule, OidcModule],

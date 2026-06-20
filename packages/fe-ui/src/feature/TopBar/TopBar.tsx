@@ -9,11 +9,11 @@ import {
 } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
+import { useT } from "../../i18n";
 import { HeaderBar } from "../../widget/HeaderBar";
 import { HeaderSpaceSelector } from "../HeaderSpaceSelector";
 import { LanguageSelectButton } from "../LanguageSelectButton";
 import { ThemeToggleButton } from "../ThemeToggleButton";
-import { useT } from "../../i18n";
 
 const userInfo = {
 	name: "관리자",
@@ -89,9 +89,11 @@ export const TopBar = observer(function TopBar() {
 		setCurrentSpaceMutate({ spaceId: space.spaceId });
 	};
 
-	const onChangeLanguage = (languageCode: Parameters<
-		NonNullable<typeof localeStore>["setLanguageCode"]
-	>[0]) => {
+	const onChangeLanguage = (
+		languageCode: Parameters<
+			NonNullable<typeof localeStore>["setLanguageCode"]
+		>[0],
+	) => {
 		localeStore?.setLanguageCode(languageCode);
 	};
 

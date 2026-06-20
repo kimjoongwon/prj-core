@@ -1,10 +1,10 @@
 "use client";
 
-import { Avatar, Dropdown, cn } from "@heroui/react";
+import { Avatar, cn, Dropdown } from "@heroui/react";
 import { ChevronDown, LogOut } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import type { HeaderBarProps } from "../../layout/Layout/type";
 import { useT } from "../../i18n";
+import type { HeaderBarProps } from "../../layout/Layout/type";
 
 /**
  * HeaderBar - 관리자 레이아웃 헤더 (v7.0)
@@ -50,26 +50,21 @@ export const HeaderBar = observer(function HeaderBar({
 					aria-label={t("사용자 메뉴")}
 					className="inline-flex h-11 items-center gap-2 rounded-2xl border border-border bg-surface/80 px-2 pr-3 text-foreground shadow-sm backdrop-blur-md hover:bg-surface-secondary"
 				>
-						<Avatar
-							size="sm"
-							className="h-8 w-8 bg-foreground text-background"
-						>
-							{userInfo.avatarUrl ? (
-								<Avatar.Image src={userInfo.avatarUrl} alt={userInfo.name} />
-							) : null}
-							<Avatar.Fallback>{userInfo.name.slice(0, 1)}</Avatar.Fallback>
-						</Avatar>
-						<div className="hidden flex-col items-start sm:flex">
-							<span className="text-sm font-semibold text-foreground">
-								{userInfo.name}
-							</span>
-							{userInfo.role && (
-								<span className="text-xs text-muted">
-									{userInfo.role}
-								</span>
-							)}
-						</div>
-						<ChevronDown className="hidden h-4 w-4 text-muted sm:block" />
+					<Avatar size="sm" className="h-8 w-8 bg-foreground text-background">
+						{userInfo.avatarUrl ? (
+							<Avatar.Image src={userInfo.avatarUrl} alt={userInfo.name} />
+						) : null}
+						<Avatar.Fallback>{userInfo.name.slice(0, 1)}</Avatar.Fallback>
+					</Avatar>
+					<div className="hidden flex-col items-start sm:flex">
+						<span className="text-sm font-semibold text-foreground">
+							{userInfo.name}
+						</span>
+						{userInfo.role && (
+							<span className="text-xs text-muted">{userInfo.role}</span>
+						)}
+					</div>
+					<ChevronDown className="hidden h-4 w-4 text-muted sm:block" />
 				</Dropdown.Trigger>
 				<Dropdown.Popover placement="bottom end">
 					<Dropdown.Menu
@@ -78,32 +73,27 @@ export const HeaderBar = observer(function HeaderBar({
 							if (key === "logout") handleLogout();
 						}}
 					>
-					<Dropdown.Section className="border-b border-border pb-2">
-						<Dropdown.Item
-							id="identity"
-							textValue={`${userInfo.name} ${userInfo.role ?? ""}`}
-						>
-							<div className="flex flex-col">
-								<span>{userInfo.name}</span>
-								{userInfo.role ? (
-									<span className="text-xs text-muted">
-										{userInfo.role}
-									</span>
-								) : null}
-							</div>
-						</Dropdown.Item>
-					</Dropdown.Section>
-					<Dropdown.Section>
-						<Dropdown.Item
-							id="logout"
-							className="text-danger"
-						>
-							<span className="flex items-center gap-2">
-								<LogOut className="h-4 w-4 text-danger" size={16} />
-								{t("로그아웃")}
-							</span>
-						</Dropdown.Item>
-					</Dropdown.Section>
+						<Dropdown.Section className="border-b border-border pb-2">
+							<Dropdown.Item
+								id="identity"
+								textValue={`${userInfo.name} ${userInfo.role ?? ""}`}
+							>
+								<div className="flex flex-col">
+									<span>{userInfo.name}</span>
+									{userInfo.role ? (
+										<span className="text-xs text-muted">{userInfo.role}</span>
+									) : null}
+								</div>
+							</Dropdown.Item>
+						</Dropdown.Section>
+						<Dropdown.Section>
+							<Dropdown.Item id="logout" className="text-danger">
+								<span className="flex items-center gap-2">
+									<LogOut className="h-4 w-4 text-danger" size={16} />
+									{t("로그아웃")}
+								</span>
+							</Dropdown.Item>
+						</Dropdown.Section>
 					</Dropdown.Menu>
 				</Dropdown.Popover>
 			</Dropdown>

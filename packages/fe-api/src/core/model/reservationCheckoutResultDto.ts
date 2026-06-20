@@ -9,24 +9,25 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { PaymentStatus } from './paymentStatus';
-import type { PaymentDto } from './paymentDto';
-import type { EnrollmentDto } from './enrollmentDto';
-import type { CoursePassDto } from './coursePassDto';
-import type { ReservationDto } from './reservationDto';
-import type { ReservationCheckoutProgressStepDto } from './reservationCheckoutProgressStepDto';
+
+import type { CoursePassDto } from "./coursePassDto";
+import type { EnrollmentDto } from "./enrollmentDto";
+import type { PaymentDto } from "./paymentDto";
+import type { PaymentStatus } from "./paymentStatus";
+import type { ReservationCheckoutProgressStepDto } from "./reservationCheckoutProgressStepDto";
+import type { ReservationDto } from "./reservationDto";
 
 export interface ReservationCheckoutResultDto {
-  /** checkout 결제 상태 */
-  status: PaymentStatus;
-  /** 생성된 결제 원장 */
-  payment: PaymentDto;
-  /** 활성화된 수강 등록 */
-  enrollment: EnrollmentDto;
-  /** 발급된 수강권 */
-  coursePass: CoursePassDto;
-  /** 확정 또는 대기 예약 */
-  reservation: ReservationDto;
-  /** 모바일 checkout 진행 상태 */
-  progressSteps: ReservationCheckoutProgressStepDto[];
+	/** checkout 결제 상태 */
+	status: PaymentStatus;
+	/** 생성된 결제 원장 */
+	payment: PaymentDto;
+	/** 활성화된 수강 등록 */
+	enrollment: EnrollmentDto;
+	/** 발급된 수강권 */
+	coursePass: CoursePassDto;
+	/** 확정 또는 대기 예약 */
+	reservation: ReservationDto;
+	/** 모바일 checkout 진행 상태 */
+	progressSteps: ReservationCheckoutProgressStepDto[];
 }

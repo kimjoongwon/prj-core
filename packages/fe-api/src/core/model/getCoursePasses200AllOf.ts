@@ -9,14 +9,14 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { CoursePassDto } from './coursePassDto';
-import type { GetCoursePasses200AllOfMeta } from './getCoursePasses200AllOfMeta';
+import type { CoursePassDto } from "./coursePassDto";
+import type { GetCoursePasses200AllOfMeta } from "./getCoursePasses200AllOfMeta";
 
 export type GetCoursePasses200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: CoursePassDto[];
-  meta?: GetCoursePasses200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: CoursePassDto[];
+	meta?: GetCoursePasses200AllOfMeta;
 };

@@ -1,8 +1,8 @@
 "use client";
 import { type UserDto } from "@cocrepo/api/core/users";
+import { Avatar, Spinner, Table } from "@heroui/react";
 import { Eye, Pencil, Trash2, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Avatar, Spinner, Table } from "@heroui/react";
 import { Button } from "../../../action/Button/Button";
 import { Chip } from "../../../data-display/Chip/Chip";
 
@@ -88,123 +88,119 @@ export const UserTableWidget = observer(
 		onRowClick,
 		onEditClick,
 		onDeleteClick,
-		}: UserTableWidgetProps) => {
-			if (isLoading) {
-				return (
-					<div className="flex min-h-40 items-center justify-center">
-						<Spinner size="sm" />
-					</div>
-				);
-			}
-
+	}: UserTableWidgetProps) => {
+		if (isLoading) {
 			return (
-			<Table
-				aria-label="회원 목록"
-			>
+				<div className="flex min-h-40 items-center justify-center">
+					<Spinner size="sm" />
+				</div>
+			);
+		}
+
+		return (
+			<Table aria-label="회원 목록">
 				<Table.Content>
 					<Table.Header>
-					<Table.Column>회원정보</Table.Column>
-					<Table.Column>전화번호</Table.Column>
-					<Table.Column>역할</Table.Column>
-					<Table.Column>가입일</Table.Column>
-					<Table.Column className="text-center">상태</Table.Column>
-					<Table.Column className="text-center">작업</Table.Column>
-				</Table.Header>
-				<Table.Body
-					items={users ?? []}
-				>
-					{(user) => {
-						const statusInfo = getStatusInfo(user);
-						const role = user.tenants?.[0]?.role;
+						<Table.Column>회원정보</Table.Column>
+						<Table.Column>전화번호</Table.Column>
+						<Table.Column>역할</Table.Column>
+						<Table.Column>가입일</Table.Column>
+						<Table.Column className="text-center">상태</Table.Column>
+						<Table.Column className="text-center">작업</Table.Column>
+					</Table.Header>
+					<Table.Body items={users ?? []}>
+						{(user) => {
+							const statusInfo = getStatusInfo(user);
+							const role = user.tenants?.[0]?.role;
 
-						return (
-							<Table.Row
-								key={user.id}
-								className="cursor-pointer hover:bg-default"
-								onClick={() => onRowClick?.(user)}
-							>
-								<Table.Cell>
-									<div className="flex items-center gap-3">
-										<Avatar size="sm" className="bg-accent/10 text-accent">
-											<Avatar.Fallback>
-												<User className="h-4 w-4" />
-											</Avatar.Fallback>
-										</Avatar>
-										<div>
-											<p className="font-medium">{user.name}</p>
-											<p className="text-xs text-muted">{user.email}</p>
+							return (
+								<Table.Row
+									key={user.id}
+									className="cursor-pointer hover:bg-default"
+									onClick={() => onRowClick?.(user)}
+								>
+									<Table.Cell>
+										<div className="flex items-center gap-3">
+											<Avatar size="sm" className="bg-accent/10 text-accent">
+												<Avatar.Fallback>
+													<User className="h-4 w-4" />
+												</Avatar.Fallback>
+											</Avatar>
+											<div>
+												<p className="font-medium">{user.name}</p>
+												<p className="text-xs text-muted">{user.email}</p>
+											</div>
 										</div>
-									</div>
-								</Table.Cell>
-								<Table.Cell>
-									<span className="text-muted">{user.phone}</span>
-								</Table.Cell>
-								<Table.Cell>
-									{role ? (
-										<Chip
-											size="sm"
-											color={getRoleColor(role.name)}
-											variant="flat"
+									</Table.Cell>
+									<Table.Cell>
+										<span className="text-muted">{user.phone}</span>
+									</Table.Cell>
+									<Table.Cell>
+										{role ? (
+											<Chip
+												size="sm"
+												color={getRoleColor(role.name)}
+												variant="flat"
+											>
+												{role.displayName || role.name}
+											</Chip>
+										) : (
+											<span className="text-muted">-</span>
+										)}
+									</Table.Cell>
+									<Table.Cell>
+										<span className="text-muted">
+											{formatDate(user.createdAt)}
+										</span>
+									</Table.Cell>
+									<Table.Cell>
+										<div className="flex justify-center">
+											<Chip size="sm" color={statusInfo.color} variant="flat">
+												{statusInfo.label}
+											</Chip>
+										</div>
+									</Table.Cell>
+									<Table.Cell>
+										{/* biome-ignore lint/a11y/noStaticElementInteractions: 이벤트 전파 방지용 래퍼 */}
+										{/* biome-ignore lint/a11y/useKeyWithClickEvents: 이벤트 전파 방지용 래퍼 */}
+										<div
+											className="flex justify-center gap-1"
+											onClick={(e) => e.stopPropagation()}
 										>
-											{role.displayName || role.name}
-										</Chip>
-									) : (
-										<span className="text-muted">-</span>
-									)}
-								</Table.Cell>
-								<Table.Cell>
-									<span className="text-muted">
-										{formatDate(user.createdAt)}
-									</span>
-								</Table.Cell>
-								<Table.Cell>
-									<div className="flex justify-center">
-										<Chip size="sm" color={statusInfo.color} variant="flat">
-											{statusInfo.label}
-										</Chip>
-									</div>
-								</Table.Cell>
-								<Table.Cell>
-									{/* biome-ignore lint/a11y/noStaticElementInteractions: 이벤트 전파 방지용 래퍼 */}
-									{/* biome-ignore lint/a11y/useKeyWithClickEvents: 이벤트 전파 방지용 래퍼 */}
-									<div
-										className="flex justify-center gap-1"
-										onClick={(e) => e.stopPropagation()}
-									>
-										<Button
-											size="sm"
-											variant="light"
-											isIconOnly
-											onPress={() => onRowClick?.(user)}
-											aria-label="상세 보기"
-										>
-											<Eye className="h-4 w-4" />
-										</Button>
-										<Button
-											size="sm"
-											variant="light"
-											isIconOnly
-											onPress={() => onEditClick?.(user)}
-											aria-label="수정"
-										>
-											<Pencil className="h-4 w-4" />
-										</Button>
-										<Button
-											size="sm"
-											variant="light"
-											color="danger"
-											isIconOnly
-											onPress={() => onDeleteClick?.(user)}
-											aria-label="삭제"
-										>
-											<Trash2 className="h-4 w-4" />
-										</Button>
-									</div>
-								</Table.Cell>
-							</Table.Row>
-						);
-					}}
-				</Table.Body>
+											<Button
+												size="sm"
+												variant="light"
+												isIconOnly
+												onPress={() => onRowClick?.(user)}
+												aria-label="상세 보기"
+											>
+												<Eye className="h-4 w-4" />
+											</Button>
+											<Button
+												size="sm"
+												variant="light"
+												isIconOnly
+												onPress={() => onEditClick?.(user)}
+												aria-label="수정"
+											>
+												<Pencil className="h-4 w-4" />
+											</Button>
+											<Button
+												size="sm"
+												variant="light"
+												color="danger"
+												isIconOnly
+												onPress={() => onDeleteClick?.(user)}
+												aria-label="삭제"
+											>
+												<Trash2 className="h-4 w-4" />
+											</Button>
+										</div>
+									</Table.Cell>
+								</Table.Row>
+							);
+						}}
+					</Table.Body>
 				</Table.Content>
 			</Table>
 		);

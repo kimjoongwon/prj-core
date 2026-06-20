@@ -1,9 +1,9 @@
 "use client";
 
+import { Tooltip } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { Button } from "../../action/Button/Button";
-import { Tooltip } from "@heroui/react";
 
 export interface FloatingActionButtonProps {
 	/** 클릭 핸들러 */
@@ -101,12 +101,12 @@ export const FloatingActionButton = observer(
 
 		return (
 			<div className={`fixed z-40 ${positionClasses[position]}`}>
-					{tooltip ? (
-						<Tooltip>
-							<Tooltip.Trigger>{button}</Tooltip.Trigger>
-							<Tooltip.Content placement="left">{tooltip}</Tooltip.Content>
-						</Tooltip>
-					) : (
+				{tooltip ? (
+					<Tooltip>
+						<Tooltip.Trigger>{button}</Tooltip.Trigger>
+						<Tooltip.Content placement="left">{tooltip}</Tooltip.Content>
+					</Tooltip>
+				) : (
 					button
 				)}
 

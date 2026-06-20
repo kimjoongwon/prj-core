@@ -1,7 +1,7 @@
 "use client";
 
-import { observer } from "mobx-react-lite";
 import { Card } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
 
 export interface Participant {

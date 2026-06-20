@@ -8,12 +8,12 @@ export * from "./CourseTable";
 export * from "./CourseTableShell";
 export * from "./CourseTableStatePanel";
 export type {
-	CourseRow,
 	CourseEnrollmentRow,
 	CourseMetric,
 	CourseOfferingRow,
 	CoursePassRow,
 	CourseQueryState,
+	CourseRow,
 	CourseSection,
 	CourseSectionId,
 } from "./types";

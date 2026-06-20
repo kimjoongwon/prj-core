@@ -2,16 +2,16 @@
 
 import {
 	DateTimeCell,
-	SectionSurface,
 	MediaThumbnail,
 	PageTitleBar,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
+import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Modal, Spinner, useOverlayState } from "@heroui/react";
 export interface RoutineDetailScreenActivity {
 	id: string;
 	order: number;

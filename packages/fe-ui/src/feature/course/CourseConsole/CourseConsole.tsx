@@ -1,15 +1,15 @@
 "use client";
 
+import { Separator } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Separator } from "@heroui/react";
 import type {
-	CourseRow,
 	CourseEnrollmentRow,
 	CourseMetric,
 	CourseOfferingRow,
 	CoursePassRow,
 	CourseQueryState,
+	CourseRow,
 	CourseSection,
 	CourseSectionId,
 } from "../../../widget/course";

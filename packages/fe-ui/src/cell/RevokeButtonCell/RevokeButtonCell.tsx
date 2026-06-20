@@ -1,10 +1,10 @@
 "use client";
 
+import { Popover } from "@heroui/react";
 import { Ban } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { Button } from "../../action/Button/Button";
-import { Popover } from "@heroui/react";
 import { useT } from "../../i18n";
 
 interface RevokeButtonCellProps {

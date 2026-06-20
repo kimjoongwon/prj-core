@@ -4,6 +4,7 @@ import type {
 	InquiryCategory,
 	InquiryPriority,
 } from "@cocrepo/api/core/inquiries";
+import type { WebSocketStatus } from "@cocrepo/hook";
 import type {
 	AiFormFieldMeta,
 	AiFormFillRequest,
@@ -15,7 +16,6 @@ import type {
 	InquiryMessage,
 } from "@cocrepo/type";
 import {
-	SectionSurface,
 	AiForm,
 	Button,
 	ConfirmModal,
@@ -27,15 +27,16 @@ import {
 	PageTitleBar,
 	ParticipantList,
 	RealtimeChatPanel,
+	SectionSurface,
 	SLATracker,
 	VStack,
 } from "@cocrepo/ui";
+import { ListBox } from "@heroui/react";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Input } from "../../input/Input/Input";
 import { Select } from "../../selection/Select/Select";
-import { ListBox } from "@heroui/react";
-import type { WebSocketStatus } from "@cocrepo/hook";
+
 const toMinutes = (start: string, end: string) => {
 	return Math.max(
 		0,

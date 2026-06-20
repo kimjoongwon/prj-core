@@ -33,18 +33,14 @@ export const CourseEnrollmentTable = observer(
 						<td className="px-3 py-4 font-medium text-foreground">
 							{enrollment.studentName}
 						</td>
-						<td className="px-3 py-4 text-muted">
-							{enrollment.courseName}
-						</td>
+						<td className="px-3 py-4 text-muted">{enrollment.courseName}</td>
 						<td className="px-3 py-4 text-foreground">
 							{enrollment.offeringName}
 						</td>
 						<td className="px-3 py-4 text-foreground">
 							{enrollment.paymentLabel}
 						</td>
-						<td className="px-3 py-4 text-muted">
-							{enrollment.validityLabel}
-						</td>
+						<td className="px-3 py-4 text-muted">{enrollment.validityLabel}</td>
 						<td className="px-3 py-4 text-muted">
 							{enrollment.reservationSummary}
 						</td>

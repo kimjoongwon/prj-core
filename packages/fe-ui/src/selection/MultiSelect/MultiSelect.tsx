@@ -14,7 +14,7 @@ export interface MultiSelectProps<_T>
 	extends Omit<
 		ComponentProps<typeof Select<object, "multiple">>,
 		"children" | "onChange" | "selectionMode" | "value"
-> {
+	> {
 	/** 선택 옵션 목록 ({ value, name } 형식) */
 	options?: MultiSelectOption[];
 	/** 선택된 값 목록 */
@@ -46,14 +46,7 @@ export interface MultiSelectProps<_T>
  * ```
  */
 export const MultiSelect = <T extends object>(props: MultiSelectProps<T>) => {
-	const {
-		label,
-		options = [],
-		value,
-		onChange,
-		placeholder,
-		...rest
-	} = props;
+	const { label, options = [], value, onChange, placeholder, ...rest } = props;
 	const ariaLabel =
 		rest["aria-label"] ??
 		(typeof label === "string"
@@ -89,7 +82,10 @@ export const MultiSelect = <T extends object>(props: MultiSelectProps<T>) => {
 				<ListBox>
 					{options.map((option) => {
 						const optionLabel =
-							option.name ?? option.label ?? option.text ?? String(option.value);
+							option.name ??
+							option.label ??
+							option.text ??
+							String(option.value);
 
 						return (
 							<ListBox.Item
@@ -101,7 +97,7 @@ export const MultiSelect = <T extends object>(props: MultiSelectProps<T>) => {
 								<ListBox.ItemIndicator />
 							</ListBox.Item>
 						);
-			})}
+					})}
 				</ListBox>
 			</Select.Popover>
 		</Select>

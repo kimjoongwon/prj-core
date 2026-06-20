@@ -13,7 +13,7 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export type LoginParams = {
-clientId: string;
-returnTo: string;
-prompt: string;
+	clientId: string;
+	returnTo: string;
+	prompt: string;
 };

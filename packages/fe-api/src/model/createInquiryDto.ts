@@ -11,8 +11,8 @@
  */
 import type { InquiryCategory } from "./inquiryCategory";
 import type { InquiryChannel } from "./inquiryChannel";
-import type { InquirySource } from "./inquirySource";
 import type { InquiryPriority } from "./inquiryPriority";
+import type { InquirySource } from "./inquirySource";
 
 export interface CreateInquiryDto {
 	/**

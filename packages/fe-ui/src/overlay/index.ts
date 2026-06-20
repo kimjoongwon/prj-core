@@ -1,8 +1,8 @@
 export type { AlertDialogProps } from "./AlertDialog";
 export { AlertDialog } from "./AlertDialog";
-export { Dropdown } from "./Dropdown/Dropdown";
 export type { DrawerProps } from "./Drawer";
 export { Drawer } from "./Drawer";
+export { Dropdown } from "./Dropdown/Dropdown";
 export type { ModalProps } from "./Modal";
 export { Modal } from "./Modal";
 export type { PopoverProps } from "./Popover";

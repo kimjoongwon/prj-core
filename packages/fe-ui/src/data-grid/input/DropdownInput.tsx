@@ -1,10 +1,10 @@
 "use client";
 
 import type { InputConfig } from "@cocrepo/type";
+import { Dropdown } from "@heroui/react";
 import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
-import { Dropdown } from "@heroui/react";
 import { useT } from "../../i18n";
 
 interface DropdownInputProps {

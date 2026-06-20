@@ -2,8 +2,8 @@
 
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import type { BottomNavProps } from "../../layout/Layout/type";
 import { useT } from "../../i18n";
+import type { BottomNavProps } from "../../layout/Layout/type";
 
 export const BottomNav = observer(function BottomNav({
 	items,
@@ -26,9 +26,7 @@ export const BottomNav = observer(function BottomNav({
 							key={item.id}
 							type="button"
 							className={`flex flex-1 flex-col items-center justify-center gap-1 transition-colors ${
-								isActive
-									? "text-accent"
-									: "text-muted hover:text-foreground"
+								isActive ? "text-accent" : "text-muted hover:text-foreground"
 							}`}
 							onClick={() => handleTabClick(item.id)}
 							aria-current={isActive ? "page" : undefined}

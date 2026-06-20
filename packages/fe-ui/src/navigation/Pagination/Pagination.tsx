@@ -33,7 +33,8 @@ export const Pagination = (props: PaginationProps) => {
 	} = props;
 
 	const safeLimit = limit > 0 ? limit : 20;
-	const total = totalProp ?? Math.max(1, Math.ceil((totalCount ?? 0) / safeLimit));
+	const total =
+		totalProp ?? Math.max(1, Math.ceil((totalCount ?? 0) / safeLimit));
 
 	const handlePrevious = () => {
 		onChange?.(Math.max(1, page - 1));

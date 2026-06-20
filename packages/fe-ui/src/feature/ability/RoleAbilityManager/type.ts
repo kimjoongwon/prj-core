@@ -1,9 +1,9 @@
-import type { AbilityRule } from "../../../widget/ability/AbilityRuleList";
 import type {
 	AbilityFormData,
 	Action,
 	Subject,
 } from "../../../form/AbilityFormModal";
+import type { AbilityRule } from "../../../widget/ability/AbilityRuleList";
 
 /**
  * Role 정보

@@ -1,9 +1,9 @@
 "use client";
 
 import { usePersistStore } from "@cocrepo/store";
+import { Avatar, Dropdown } from "@heroui/react";
 import { Building2, Check, ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Avatar, Dropdown } from "@heroui/react";
 import { Button } from "../../action/Button/Button";
 
 export interface SpaceSelectorProps {
@@ -52,10 +52,7 @@ export const SpaceSelector = observer(
 		if (spaces.length <= 1) {
 			return (
 				<div className="flex items-center gap-2 rounded-lg border border-border bg-default px-3 py-2">
-					<Avatar
-						className="h-6 w-6 bg-accent-soft text-accent"
-						size="sm"
-					>
+					<Avatar className="h-6 w-6 bg-accent-soft text-accent" size="sm">
 						<Avatar.Fallback>
 							<Building2 className="h-4 w-4" size={16} />
 						</Avatar.Fallback>
@@ -75,10 +72,7 @@ export const SpaceSelector = observer(
 						isDisabled={!canChangeSpace}
 						className="h-auto min-h-0 gap-2 bg-default px-3 py-2 hover:bg-default"
 					>
-						<Avatar
-							className="h-6 w-6 bg-accent-soft text-accent"
-							size="sm"
-						>
+						<Avatar className="h-6 w-6 bg-accent-soft text-accent" size="sm">
 							<Avatar.Fallback>
 								<Building2 className="h-4 w-4" size={16} />
 							</Avatar.Fallback>
@@ -106,10 +100,7 @@ export const SpaceSelector = observer(
 								}
 							>
 								<span className="flex items-center gap-2">
-									<Avatar
-										className="h-6 w-6 bg-default text-muted"
-										size="sm"
-									>
+									<Avatar className="h-6 w-6 bg-default text-muted" size="sm">
 										<Avatar.Fallback>
 											<Building2 className="h-4 w-4" size={16} />
 										</Avatar.Fallback>

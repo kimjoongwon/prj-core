@@ -10,7 +10,9 @@ export const TypographyProse = observer((props: TypographyProseProps) => {
 	const { children, ...rest } = props;
 
 	return (
-		<HeroTypography.Prose {...rest}>{translateNode(children, t)}</HeroTypography.Prose>
+		<HeroTypography.Prose {...rest}>
+			{translateNode(children, t)}
+		</HeroTypography.Prose>
 	);
 });
 

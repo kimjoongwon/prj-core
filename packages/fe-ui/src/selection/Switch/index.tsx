@@ -14,7 +14,11 @@ export const Switch = observer(<T extends object>(props: SwitchProps<T>) => {
 
 	const initialValue = tools.get(state, path, false) as boolean;
 
-	const formField = useFormField<T, boolean>({ value: initialValue, state, path });
+	const formField = useFormField<T, boolean>({
+		value: initialValue,
+		state,
+		path,
+	});
 
 	const handleValueChange = (isSelected: boolean) => {
 		formField.setValue(isSelected);

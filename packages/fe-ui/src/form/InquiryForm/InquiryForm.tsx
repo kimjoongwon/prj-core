@@ -5,13 +5,13 @@ import type {
 	InquiryChannel,
 	InquiryPriority,
 } from "@cocrepo/enum";
+import { Card, Separator } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Select } from "../../selection/Select/Select";
-import { TextArea } from "../../input/TextArea/TextArea";
 import { Button } from "../../action/Button/Button";
-import { Card, Separator } from "@heroui/react";
 import { Input } from "../../input/Input/Input";
+import { TextArea } from "../../input/TextArea/TextArea";
+import { Select } from "../../selection/Select/Select";
 import { AIClassificationSuggestion } from "../../widget/AIClassificationSuggestion/AIClassificationSuggestion";
 
 export interface CustomerInfo {
@@ -318,9 +318,7 @@ export const InquiryForm = observer(
 										onClick={() => handleCustomerSelect(customer)}
 										className="w-full rounded-lg px-3 py-2 text-left transition-colors hover:bg-default"
 									>
-										<div className="text-sm font-medium">
-											{customer.label}
-										</div>
+										<div className="text-sm font-medium">{customer.label}</div>
 										<div className="text-xs text-muted">
 											{customer.description ||
 												[customer.email, customer.phone]

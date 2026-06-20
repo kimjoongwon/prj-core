@@ -1,5 +1,6 @@
 "use client";
 
+import { Spinner } from "@heroui/react";
 import type { Editor, EditorConfig, EventInfo } from "ckeditor5";
 import { observer } from "mobx-react-lite";
 import {
@@ -8,7 +9,6 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import { Spinner } from "@heroui/react";
 
 type Ckeditor5Module = typeof import("ckeditor5");
 type CkeditorKoTranslationModule =

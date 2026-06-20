@@ -13,21 +13,21 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export type GetOidcClientsParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * Client ID 또는 이름 통합 검색
- */
-search?: string;
-/**
- * 활성 상태 필터
- */
-isActive?: boolean;
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * Client ID 또는 이름 통합 검색
+	 */
+	search?: string;
+	/**
+	 * 활성 상태 필터
+	 */
+	isActive?: boolean;
 };

@@ -4,9 +4,9 @@ import { cloneDeep } from "@cocrepo/toolkit";
 import {
 	Description,
 	FieldError,
+	Select as HeroSelect,
 	Label,
 	ListBox,
-	Select as HeroSelect,
 } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ComponentProps, ReactNode } from "react";
@@ -40,7 +40,13 @@ export interface SelectProps<T extends object = object>
 	/** 크기 */
 	size?: "sm" | "md" | "lg";
 	/** 변형 */
-	variant?: "flat" | "bordered" | "underlined" | "faded" | "primary" | "secondary";
+	variant?:
+		| "flat"
+		| "bordered"
+		| "underlined"
+		| "faded"
+		| "primary"
+		| "secondary";
 	/** 라벨 */
 	label?: ReactNode;
 	labelPlacement?: string;
@@ -112,7 +118,9 @@ export const Select = observer(function Select<T extends object = object>(
 			value={value as Key | null | undefined}
 			onChange={handleChange}
 			aria-label={ariaLabel}
-			variant={variant === "primary" || variant === "secondary" ? variant : undefined}
+			variant={
+				variant === "primary" || variant === "secondary" ? variant : undefined
+			}
 		>
 			{label ? (
 				<Label>{typeof label === "string" ? t(label) : label}</Label>
@@ -131,7 +139,9 @@ export const Select = observer(function Select<T extends object = object>(
 								<ListBox.Item
 									key={String(option.value)}
 									id={String(option.value)}
-									textValue={String(option.text ?? option.label ?? option.value)}
+									textValue={String(
+										option.text ?? option.label ?? option.value,
+									)}
 								>
 									{typeof (option.text ?? option.label) === "string"
 										? t((option.text ?? option.label) as string)

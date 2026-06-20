@@ -9,17 +9,17 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateTranslationDtoLanguageCode } from './createTranslationDtoLanguageCode';
+import type { CreateTranslationDtoLanguageCode } from "./createTranslationDtoLanguageCode";
 
 export interface CreateTranslationDto {
-  /** 언어 코드 */
-  languageCode: CreateTranslationDtoLanguageCode;
-  /** 번역 키 (예: 성공, 번역 목록 조회 성공) */
-  key: string;
-  /** 번역된 텍스트 */
-  text: string;
-  /** 카테고리 (common, error, validation, menu, role) */
-  category: string;
-  /** 번역 완료 여부 */
-  isTranslated: boolean;
+	/** 언어 코드 */
+	languageCode: CreateTranslationDtoLanguageCode;
+	/** 번역 키 (예: 성공, 번역 목록 조회 성공) */
+	key: string;
+	/** 번역된 텍스트 */
+	text: string;
+	/** 카테고리 (common, error, validation, menu, role) */
+	category: string;
+	/** 번역 완료 여부 */
+	isTranslated: boolean;
 }

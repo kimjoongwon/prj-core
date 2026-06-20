@@ -1,4 +1,4 @@
-import { Smile, Meh, Frown } from "lucide-react";
+import { Frown, Meh, Smile } from "lucide-react";
 
 /** 감정 분석값 (Prisma Enum 값과 동일) */
 export type SentimentTypeCode = "POSITIVE" | "NEUTRAL" | "NEGATIVE";

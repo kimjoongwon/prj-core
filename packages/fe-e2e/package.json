@@ -26,7 +26,7 @@
     "start:dev": "echo 'Development mode - no build needed'",
     "lint": "echo 'Linting skipped for now'",
     "lint:fix": "echo 'Linting skipped for now'",
-		"format": "biome format --write . --no-errors-on-unmatched",
+		"format": "biome check --write . --no-errors-on-unmatched",
     "type-check": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "clean": "rm -rf .turbo && rm -rf node_modules"

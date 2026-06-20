@@ -1,5 +1,5 @@
-import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { Email } from "@cocrepo/vo";
+import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import type { RenderedTemplateResult } from "../template";
 import { TemplateService } from "../template/template.service";
 import { EmailProvider } from "./email-provider";

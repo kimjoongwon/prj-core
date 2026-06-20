@@ -3,11 +3,11 @@
 import type { PasswordRule } from "@cocrepo/constant";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action";
-import { Input } from "../../input";
-import { Link } from "../../navigation";
 import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
 import { PasswordStrengthIndicator } from "../../feedback/PasswordStrengthIndicator/PasswordStrengthIndicator";
 import { useT } from "../../i18n";
+import { Input } from "../../input";
+import { Link } from "../../navigation";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 
@@ -63,9 +63,7 @@ export const ResetPasswordForm = observer(
 				{step === "validating" && (
 					<div className="text-center py-8">
 						<div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-						<p className="text-muted">
-							{t("링크를 확인하고 있습니다...")}
-						</p>
+						<p className="text-muted">{t("링크를 확인하고 있습니다...")}</p>
 					</div>
 				)}
 

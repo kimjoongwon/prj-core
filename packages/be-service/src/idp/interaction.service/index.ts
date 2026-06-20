@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import type { OidcConfig } from "../../oidc/oidc-config";
 import { OidcClientRepository } from "../../oidc/oidc-client.repository";
+import type { OidcConfig } from "../../oidc/oidc-config";
 import { OidcProviderService } from "../../oidc/oidc-provider.service";
-import type { InteractionResult } from "../interaction-result";
 import type {
 	Grant,
 	Interaction,
@@ -13,6 +12,7 @@ import type {
 	OidcProviderInstance,
 	RawOidcProviderClient,
 } from "../../oidc/types";
+import type { InteractionResult } from "../interaction-result";
 
 /**
  * Interaction Service

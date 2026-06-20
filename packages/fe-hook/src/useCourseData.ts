@@ -217,9 +217,7 @@ function toOffering(offering: CourseOfferingDto): CourseDataOffering {
 /**
  * Enrollment DTO를 Course row로 변환합니다.
  */
-function toEnrollment(
-	enrollment: EnrollmentDto,
-): CourseDataEnrollment {
+function toEnrollment(enrollment: EnrollmentDto): CourseDataEnrollment {
 	return {
 		id: enrollment.id,
 		studentName:
@@ -228,8 +226,7 @@ function toEnrollment(
 		offeringName:
 			enrollment.courseOffering?.name ?? enrollment.courseOfferingId,
 		paymentLabel:
-			paymentStatusLabels[enrollment.paymentStatus] ??
-			enrollment.paymentStatus,
+			paymentStatusLabels[enrollment.paymentStatus] ?? enrollment.paymentStatus,
 		validityLabel: getPeriodLabel(enrollment.validFrom, enrollment.validUntil),
 		reservationSummary: enrollment.coursePass
 			? `${enrollment.coursePass.reservationRemainingCount}회 가능`

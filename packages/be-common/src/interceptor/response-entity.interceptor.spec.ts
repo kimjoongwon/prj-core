@@ -1,8 +1,6 @@
-import {
-	RESPONSE_MESSAGE_METADATA } from "@cocrepo/decorator";
+import { RESPONSE_MESSAGE_METADATA } from "@cocrepo/decorator";
 import { ResponseEntity } from "@cocrepo/entity";
-import type { I18nTranslationService,
-} from "@cocrepo/service";
+import type { I18nTranslationService } from "@cocrepo/service";
 import {
 	type CallHandler,
 	type ExecutionContext,

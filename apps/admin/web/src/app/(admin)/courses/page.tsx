@@ -1,10 +1,10 @@
 "use client";
 
+import { useCourseData } from "@cocrepo/hook";
 import { CourseScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import { useCourseData } from "@cocrepo/hook";
 
 export default observer(function CoursesPageRoute() {
 	const router = useRouter();

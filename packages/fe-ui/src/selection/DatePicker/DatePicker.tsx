@@ -50,11 +50,11 @@ export const DatePicker = (props: DatePickerProps) => {
 	};
 
 	return (
-			<HeroUiDatePicker
-				{...(rest as object)}
-				hideTimeZone
-				value={value as never}
-				onChange={handleDateChange as never}
-			/>
-		);
-	};
+		<HeroUiDatePicker
+			{...(rest as object)}
+			hideTimeZone
+			value={value as never}
+			onChange={handleDateChange as never}
+		/>
+	);
+};

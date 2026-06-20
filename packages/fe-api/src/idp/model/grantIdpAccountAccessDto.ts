@@ -13,8 +13,8 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface GrantIdpAccountAccessDto {
-  /** 권한을 부여할 Space ID */
-  spaceId: string;
-  /** 부여할 Role ID */
-  roleId: string;
+	/** 권한을 부여할 Space ID */
+	spaceId: string;
+	/** 부여할 Role ID */
+	roleId: string;
 }

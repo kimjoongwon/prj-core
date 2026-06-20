@@ -30,9 +30,7 @@ export const PaymentMetricGrid = observer(
 						>
 							<div className="flex w-full items-center justify-between gap-4">
 								<div className="flex flex-col gap-1">
-									<span className="text-sm text-muted">
-										{metric.label}
-									</span>
+									<span className="text-sm text-muted">{metric.label}</span>
 									<strong className="text-2xl font-semibold text-foreground">
 										{metric.value}
 									</strong>

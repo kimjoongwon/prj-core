@@ -5,6 +5,7 @@ import type {
 	DataGridConfig,
 	DataGridState as DataGridControllerState,
 } from "@cocrepo/type";
+import { Table as HeroTable, Table } from "@heroui/react";
 import {
 	type ColumnDef,
 	type ExpandedState,
@@ -17,11 +18,10 @@ import {
 import { FileX } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Pagination } from "../navigation/Pagination/Pagination";
-import { Table as HeroTable, Table } from "@heroui/react";
 import type { Selection } from "react-aria-components";
 import { Skeleton } from "../feedback/Skeleton/Skeleton";
 import { translateNode, useT } from "../i18n";
+import { Pagination } from "../navigation/Pagination/Pagination";
 import { InputRenderer } from "./InputRenderer";
 
 export type Key = string | number;
@@ -38,7 +38,9 @@ const DATA_GRID_DEFAULT_PAGE_SIZE = 20;
 const DATA_GRID_EMPTY_MESSAGE = "데이터가 없습니다.";
 const DATA_GRID_SKELETON_ROWS = [0, 1, 2, 3, 4];
 
-function getColumnAlignClassName<T extends object>(column: ColumnDef<T, unknown>) {
+function getColumnAlignClassName<T extends object>(
+	column: ColumnDef<T, unknown>,
+) {
 	const align = column.meta?.align ?? "left";
 	if (align === "left") {
 		return undefined;
@@ -261,10 +263,7 @@ export const DataGrid = observer(
 							<Skeleton className="w-20 h-4 rounded" />
 						</div>
 						{DATA_GRID_SKELETON_ROWS.map((index) => (
-							<div
-								key={index}
-								className="flex gap-4 p-4 bg-surface rounded-lg"
-							>
+							<div key={index} className="flex gap-4 p-4 bg-surface rounded-lg">
 								<Skeleton className="w-8 h-4 rounded" />
 								<Skeleton className="w-32 h-4 rounded" />
 								<Skeleton className="w-48 h-4 rounded" />
@@ -281,16 +280,14 @@ export const DataGrid = observer(
 						</p>
 					</div>
 				) : (
-						<div className="relative">
-							<HeroTable
-								aria-label={t("데이터 테이블")}
+					<div className="relative">
+						<HeroTable aria-label={t("데이터 테이블")}>
+							<Table.Content
+								onRowAction={config.onRowClick ? handleRowAction : undefined}
+								onSelectionChange={handleSelectionChange}
+								selectedKeys={selectedTableKeys}
+								selectionMode={selectionMode}
 							>
-								<Table.Content
-									onRowAction={config.onRowClick ? handleRowAction : undefined}
-									onSelectionChange={handleSelectionChange}
-									selectedKeys={selectedTableKeys}
-									selectionMode={selectionMode}
-								>
 								<Table.Header>
 									{headers.map((header) => {
 										const alignClassName = getColumnAlignClassName(
@@ -298,43 +295,42 @@ export const DataGrid = observer(
 										);
 
 										return (
-											<Table.Column
-												key={header.id}
-												className={alignClassName}
-											>
+											<Table.Column key={header.id} className={alignClassName}>
 												{header.isPlaceholder
 													? null
-												: translateNode(getHeaderLabel(header), t)}
-										</Table.Column>
-									);
-								})}
-							</Table.Header>
-							<Table.Body>
-								{tableRows.map((row) => (
-									<Table.Row
-										key={row.id}
-										className={config.onRowClick ? "cursor-pointer" : undefined}
-										onClick={
-											config.onRowClick
-												? () => handleRowAction(row.id)
-												: undefined
-										}
-									>
-										{row.getVisibleCells().map((cell) => (
-											<Table.Cell key={cell.id}>
-												{flexRender(
-													cell.column.columnDef.cell,
-													cell.getContext(),
-												)}
-											</Table.Cell>
-										))}
+													: translateNode(getHeaderLabel(header), t)}
+											</Table.Column>
+										);
+									})}
+								</Table.Header>
+								<Table.Body>
+									{tableRows.map((row) => (
+										<Table.Row
+											key={row.id}
+											className={
+												config.onRowClick ? "cursor-pointer" : undefined
+											}
+											onClick={
+												config.onRowClick
+													? () => handleRowAction(row.id)
+													: undefined
+											}
+										>
+											{row.getVisibleCells().map((cell) => (
+												<Table.Cell key={cell.id}>
+													{flexRender(
+														cell.column.columnDef.cell,
+														cell.getContext(),
+													)}
+												</Table.Cell>
+											))}
 										</Table.Row>
 									))}
 								</Table.Body>
-								</Table.Content>
-							</HeroTable>
-						</div>
-					)}
+							</Table.Content>
+						</HeroTable>
+					</div>
+				)}
 
 				<div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 py-4">
 					<span className="text-sm text-muted">

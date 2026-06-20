@@ -3,8 +3,8 @@
 import { Filter, Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
-import { Input } from "../../input/Input/Input";
 import { useT } from "../../i18n";
+import { Input } from "../../input/Input/Input";
 
 export interface SearchFilterBarProps {
 	/** 검색어 값 */

@@ -1,15 +1,16 @@
 "use client";
 
-import { VStack } from "../../rhythm";
+import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import Link from "next/link";
-import { DateTimeCell } from "../../cell";
 import { Button } from "../../action/Button/Button";
-import { Modal, Spinner, useOverlayState } from "@heroui/react";
+import { DateTimeCell } from "../../cell";
+import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 import { PageTitleBar } from "../../widget";
+
 const formatExerciseDuration = (seconds: number) => {
 	const minutes = Math.floor(seconds / 60);
 	const remainSeconds = seconds % 60;

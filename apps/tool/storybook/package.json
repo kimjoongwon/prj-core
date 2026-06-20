@@ -10,7 +10,7 @@
 		"test:ui": "PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/../../test/e2e/browsers} pnpm run ensure:browsers && PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/../../test/e2e/browsers} vitest --ui",
 		"test:run": "PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/../../test/e2e/browsers} pnpm run ensure:browsers && PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/../../test/e2e/browsers} vitest run",
 		"test:watch": "PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/../../test/e2e/browsers} pnpm run ensure:browsers && PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/../../test/e2e/browsers} vitest watch",
-		"format": "biome format --write .",
+		"format": "biome check --write .",
 		"type-check": "tsc --noEmit --incremental false",
 		"start:dev": "storybook dev -p ${STORYBOOK_PORT:-6006}",
 		"build-storybook": "storybook build"

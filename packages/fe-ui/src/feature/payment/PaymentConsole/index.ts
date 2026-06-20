@@ -1,7 +1,7 @@
 export type {
 	PaymentConsoleProps,
-	PaymentRow,
 	PaymentQueryState,
+	PaymentRow,
 	PaymentSummary,
 } from "./PaymentConsole";
 export { PaymentConsole } from "./PaymentConsole";

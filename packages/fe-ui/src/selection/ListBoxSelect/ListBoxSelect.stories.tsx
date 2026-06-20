@@ -25,18 +25,18 @@ const options = [
 
 export const Default: Story = {
 	args: {
-			title: "Select an option",
-			options,
-			selectionMode: "single",
-			defaultValue: "1",
-		},
-	};
+		title: "Select an option",
+		options,
+		selectionMode: "single",
+		defaultValue: "1",
+	},
+};
 
 export const MultiSelect: Story = {
 	args: {
-			title: "Select multiple options",
-			options,
-			selectionMode: "multiple",
-			defaultValue: ["1", "3"],
-		},
-	};
+		title: "Select multiple options",
+		options,
+		selectionMode: "multiple",
+		defaultValue: ["1", "3"],
+	},
+};

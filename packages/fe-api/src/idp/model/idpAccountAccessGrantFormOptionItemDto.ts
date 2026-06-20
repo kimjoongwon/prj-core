@@ -13,10 +13,10 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
  */
 
 export interface IdpAccountAccessGrantFormOptionItemDto {
-  /** 옵션 값 */
-  value: string;
-  /** 옵션 라벨 */
-  label: string;
-  /** 보조 설명 */
-  description?: string;
+	/** 옵션 값 */
+	value: string;
+	/** 옵션 라벨 */
+	label: string;
+	/** 보조 설명 */
+	description?: string;
 }

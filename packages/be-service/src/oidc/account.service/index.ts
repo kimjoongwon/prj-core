@@ -1,5 +1,5 @@
-import { RedisService } from "../../redis/redis.service";
 import { Injectable, Logger } from "@nestjs/common";
+import { RedisService } from "../../redis/redis.service";
 import {
 	ACCOUNT_CACHE_PREFIX,
 	ACCOUNT_CACHE_TTL,

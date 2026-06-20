@@ -4,10 +4,10 @@ import { Avatar, Card, ListBox } from "@heroui/react";
 import { Plus, Search, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../../action/Button/Button";
-import { Input } from "../../../input/Input/Input";
 import { Chip } from "../../../data-display/Chip/Chip";
 import { Typography } from "../../../data-display/Typography";
 import { AbilityFormModal } from "../../../form/AbilityFormModal";
+import { Input } from "../../../input/Input/Input";
 import { AbilityRuleList } from "../../../widget/ability/AbilityRuleList";
 import type { AbilityUser, UserAbilityManagerProps } from "./type";
 import { useUserAbilityManager } from "./useUserAbilityManager";
@@ -102,7 +102,9 @@ export const UserAbilityManager = observer(
 							<Input
 								label="사용자 검색"
 								placeholder="이름 또는 이메일로 검색..."
-								startContent={<Search className="flex flex-col w-full gap-6 items-center justify-between h-4 w-4 text-muted" />}
+								startContent={
+									<Search className="flex flex-col w-full gap-6 items-center justify-between h-4 w-4 text-muted" />
+								}
 								value={searchQuery}
 								onValueChange={handleSearchQueryChange}
 								isDisabled={isSearching}
@@ -113,11 +115,15 @@ export const UserAbilityManager = observer(
 									aria-label="사용자 검색 결과"
 									items={searchResults}
 									selectionMode="single"
-									selectedKeys={selectedUser ? new Set([selectedUser.id]) : new Set()}
+									selectedKeys={
+										selectedUser ? new Set([selectedUser.id]) : new Set()
+									}
 									onSelectionChange={(keys) => {
 										const key = Array.from(keys)[0];
 										if (key) {
-											const user = searchResults.find((item) => item.id === key);
+											const user = searchResults.find(
+												(item) => item.id === key,
+											);
 											if (user) {
 												handleUserSelect(user);
 											}
@@ -126,13 +132,21 @@ export const UserAbilityManager = observer(
 									className="w-full"
 								>
 									{(user: AbilityUser) => (
-										<ListBox.Item key={user.id} id={user.id} textValue={user.name}>
+										<ListBox.Item
+											key={user.id}
+											id={user.id}
+											textValue={user.name}
+										>
 											<div className="flex">
 												<Avatar size="sm" className="flex-shrink-0">
-													<Avatar.Fallback>{user.name.slice(0, 1)}</Avatar.Fallback>
+													<Avatar.Fallback>
+														{user.name.slice(0, 1)}
+													</Avatar.Fallback>
 												</Avatar>
 												<div className="flex flex-col">
-													<span className="text-sm font-medium">{user.name}</span>
+													<span className="text-sm font-medium">
+														{user.name}
+													</span>
 													<span className="text-xs text-muted">
 														{user.email}
 													</span>
@@ -191,7 +205,10 @@ export const UserAbilityManager = observer(
 
 								{/* 에러 메시지 */}
 								{state.error && (
-									<Typography type="body-sm" className="text-danger font-medium">
+									<Typography
+										type="body-sm"
+										className="text-danger font-medium"
+									>
 										{state.error}
 									</Typography>
 								)}
@@ -212,12 +229,7 @@ export const UserAbilityManager = observer(
 							</div>
 						) : (
 							/* 사용자 미선택 안내 */
-							<div
-
-
-
-							 className="flex flex-col gap-4 items-center justify-center py-12"
-							>
+							<div className="flex flex-col gap-4 items-center justify-center py-12">
 								<User className="h-12 w-12 text-muted" />
 								<Typography.Paragraph color="muted">
 									사용자를 검색하여 선택해주세요

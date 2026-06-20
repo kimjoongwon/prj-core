@@ -6,9 +6,7 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 export class GetIdpDashboardStatsUseCase
 	implements IQueryHandler<GetIdpDashboardStatsQuery>
 {
-	constructor(
-		private readonly idpDashboardService: IdpDashboardAggregate,
-	) {}
+	constructor(private readonly idpDashboardService: IdpDashboardAggregate) {}
 
 	execute(): Promise<unknown> {
 		return this.idpDashboardService.getStats();

@@ -8,13 +8,13 @@ import type {
 	SelectOption,
 } from "@cocrepo/type";
 import {
-	SectionSurface,
 	buildInquiryTableColumns,
 	DataGrid,
 	DataGridStateModel,
 	type InquiryStats,
 	InquiryStatsCards,
 	PageTitleBar,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
 import { Plus } from "lucide-react";

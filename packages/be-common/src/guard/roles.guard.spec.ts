@@ -1,6 +1,10 @@
 import { CONTEXT_KEYS, SYSTEM_ROLES } from "@cocrepo/constant";
 import { ROLES_KEY } from "@cocrepo/decorator";
-import { ExecutionContext, ForbiddenException, UnauthorizedException } from "@nestjs/common";
+import {
+	ExecutionContext,
+	ForbiddenException,
+	UnauthorizedException,
+} from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { Test, TestingModule } from "@nestjs/testing";
 import { ClsService } from "nestjs-cls";
@@ -222,8 +226,16 @@ describe("RolesGuard", () => {
 				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MANAGE]);
 				const user = createMockUser({
 					tenants: [
-						{ id: "tenant-1", spaceId: "space-001", role: { name: SYSTEM_ROLES.VIEW } },
-						{ id: "tenant-2", spaceId: "space-002", role: { name: SYSTEM_ROLES.MANAGE } },
+						{
+							id: "tenant-1",
+							spaceId: "space-001",
+							role: { name: SYSTEM_ROLES.VIEW },
+						},
+						{
+							id: "tenant-2",
+							spaceId: "space-002",
+							role: { name: SYSTEM_ROLES.MANAGE },
+						},
 					],
 				});
 				const tenant = createMockTenant({
@@ -288,7 +300,10 @@ describe("RolesGuard", () => {
 
 			it("여러 역할 중 하나라도 일치하면 true를 반환해야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.VIEW]);
+				mockReflector.get.mockReturnValue([
+					SYSTEM_ROLES.MANAGE,
+					SYSTEM_ROLES.VIEW,
+				]);
 				const user = createMockUser();
 				const tenant = createMockTenant();
 				mockClsService.get.mockImplementation((key: string) => {
@@ -317,7 +332,9 @@ describe("RolesGuard", () => {
 						},
 					],
 				});
-				const tenant = createMockTenant({ role: { name: SYSTEM_ROLES.MANAGE } });
+				const tenant = createMockTenant({
+					role: { name: SYSTEM_ROLES.MANAGE },
+				});
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
 					if (key === CONTEXT_KEYS.TENANT) return tenant;
@@ -344,7 +361,9 @@ describe("RolesGuard", () => {
 						},
 					],
 				});
-				const tenant = createMockTenant({ role: { name: SYSTEM_ROLES.FULL_ACCESS } });
+				const tenant = createMockTenant({
+					role: { name: SYSTEM_ROLES.FULL_ACCESS },
+				});
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
 					if (key === CONTEXT_KEYS.TENANT) return tenant;

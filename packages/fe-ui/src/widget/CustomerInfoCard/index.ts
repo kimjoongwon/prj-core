@@ -1,2 +1,2 @@
-export { CustomerInfoCard } from "./CustomerInfoCard";
 export type { CustomerInfoCardProps } from "./CustomerInfoCard";
+export { CustomerInfoCard } from "./CustomerInfoCard";

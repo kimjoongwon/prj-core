@@ -1,6 +1,5 @@
 "use client";
 
-import { SectionSurface } from "../../surface";
 import { ArrowRight, ShieldCheck, TriangleAlert } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { FormEvent } from "react";
@@ -10,6 +9,7 @@ import { LoginForm, type LoginFormState } from "../../form/LoginForm/LoginForm";
 import { useT } from "../../i18n";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
+import { SectionSurface } from "../../surface";
 
 export interface LoginScreenState {
 	loginForm: LoginFormState;

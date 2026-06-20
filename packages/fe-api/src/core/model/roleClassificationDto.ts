@@ -9,17 +9,17 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { CategoryDto } from './categoryDto';
-import type { RoleDto } from './roleDto';
+import type { CategoryDto } from "./categoryDto";
+import type { RoleDto } from "./roleDto";
 
 export interface RoleClassificationDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  roleId: string;
-  categoryId: string;
-  category?: CategoryDto;
-  role?: RoleDto;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	roleId: string;
+	categoryId: string;
+	category?: CategoryDto;
+	role?: RoleDto;
 }

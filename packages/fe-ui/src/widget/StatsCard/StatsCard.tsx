@@ -1,8 +1,8 @@
 "use client";
 
+import { Card } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Card } from "@heroui/react";
 
 export interface StatsCardProps {
 	/** 통계 제목 */

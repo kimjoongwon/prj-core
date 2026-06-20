@@ -1,7 +1,7 @@
 import type {
-	Inquiry as InquiryEntity,
 	InquiryCategory,
 	InquiryChannel,
+	Inquiry as InquiryEntity,
 	InquiryPriority,
 	InquirySource,
 	InquiryStatus,

@@ -18,11 +18,11 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
 	};
 
 	return (
-			<HeroUiDateRangePicker
-				{...(rest as object)}
-				hideTimeZone
-				value={value as never}
-				onChange={handleDateChange as never}
-			/>
+		<HeroUiDateRangePicker
+			{...(rest as object)}
+			hideTimeZone
+			value={value as never}
+			onChange={handleDateChange as never}
+		/>
 	);
 };

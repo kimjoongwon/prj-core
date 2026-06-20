@@ -2,9 +2,9 @@
 
 import {
 	FieldError,
+	RadioGroup as HeroRadioGroup,
 	Label,
 	Radio,
-	RadioGroup as HeroRadioGroup,
 } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { translateNode, useT } from "../../i18n";
@@ -34,8 +34,8 @@ export const RadioGroup = observer(function RadioGroup(props: RadioGroupProps) {
 	const t = useT();
 	const {
 		options = [
-				{
-					text: "test",
+			{
+				text: "test",
 				value: "test",
 			},
 			{
@@ -55,25 +55,25 @@ export const RadioGroup = observer(function RadioGroup(props: RadioGroupProps) {
 	const handleChange = (value: string) => {
 		onChange?.(value);
 		onValueChange?.(value);
-		};
+	};
 
-		return (
-			<HeroRadioGroup {...rest} value={value} onChange={handleChange}>
-				{label ? <Label>{translateNode(label, t)}</Label> : null}
-				{children ??
-					options.map((option) => (
-						<Radio key={option.value} value={String(option.value)}>
-							<Radio.Control>
-								<Radio.Indicator />
-							</Radio.Control>
-							<Radio.Content>{t(option.text)}</Radio.Content>
-						</Radio>
-					))}
-				{errorMessage ? (
-					<FieldError>{translateNode(errorMessage, t)}</FieldError>
-				) : null}
-			</HeroRadioGroup>
-		);
-	});
+	return (
+		<HeroRadioGroup {...rest} value={value} onChange={handleChange}>
+			{label ? <Label>{translateNode(label, t)}</Label> : null}
+			{children ??
+				options.map((option) => (
+					<Radio key={option.value} value={String(option.value)}>
+						<Radio.Control>
+							<Radio.Indicator />
+						</Radio.Control>
+						<Radio.Content>{t(option.text)}</Radio.Content>
+					</Radio>
+				))}
+			{errorMessage ? (
+				<FieldError>{translateNode(errorMessage, t)}</FieldError>
+			) : null}
+		</HeroRadioGroup>
+	);
+});
 
 export type { RadioGroupProps, RadioOption } from "./RadioGroup.props";

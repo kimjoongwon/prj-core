@@ -1,9 +1,9 @@
 "use client";
 
 import { Surface } from "@cocrepo/ui";
+import { Spinner } from "@heroui/react";
 import { AlertCircle, Database, RefreshCw } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Spinner } from "@heroui/react";
 
 export type CourseTableStatePanelStatus =
 	| "loading"

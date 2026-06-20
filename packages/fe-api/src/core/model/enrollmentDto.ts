@@ -9,95 +9,96 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { PaymentStatus } from './paymentStatus';
-import type { EnrollmentStatus } from './enrollmentStatus';
-import type { UserDto } from './userDto';
-import type { CourseDto } from './courseDto';
-import type { CourseOfferingDto } from './courseOfferingDto';
-import type { PaymentDto } from './paymentDto';
-import type { TimelineDto } from './timelineDto';
-import type { CoursePassDto } from './coursePassDto';
+
+import type { CourseDto } from "./courseDto";
+import type { CourseOfferingDto } from "./courseOfferingDto";
+import type { CoursePassDto } from "./coursePassDto";
+import type { EnrollmentStatus } from "./enrollmentStatus";
+import type { PaymentDto } from "./paymentDto";
+import type { PaymentStatus } from "./paymentStatus";
+import type { TimelineDto } from "./timelineDto";
+import type { UserDto } from "./userDto";
 
 export interface EnrollmentDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** 수강 사용자 ID */
-  userId: string;
-  /** 코스 ID */
-  courseId: string;
-  /** 코스 개설 ID */
-  courseOfferingId: string;
-  /**
-   * 발급된 수강권 ID
-   * @nullable
-   */
-  coursePassId?: string | null;
-  /**
-   * 배정 Timeline ID
-   * @nullable
-   */
-  assignedTimelineId?: string | null;
-  /**
-   * 결제 ID
-   * @nullable
-   */
-  paymentId?: string | null;
-  /** 결제 상태 */
-  paymentStatus: PaymentStatus;
-  /**
-   * 결제 제공자
-   * @maxLength 80
-   * @nullable
-   */
-  paymentProvider?: string | null;
-  /**
-   * 외부 결제 식별자
-   * @maxLength 160
-   * @nullable
-   */
-  paymentExternalId?: string | null;
-  /**
-   * 결제 완료 시각
-   * @nullable
-   */
-  paidAt?: string | null;
-  /**
-   * 결제 금액
-   * @minimum 0
-   * @nullable
-   */
-  paidAmount?: number | null;
-  /**
-   * 결제 통화 코드
-   * @minLength 3
-   * @maxLength 3
-   */
-  currency: string;
-  /**
-   * 수강 유효 시작일
-   * @nullable
-   */
-  validFrom?: string | null;
-  /**
-   * 수강 유효 종료일
-   * @nullable
-   */
-  validUntil?: string | null;
-  /** 수강 등록 상태 */
-  status: EnrollmentStatus;
-  /** 수강 사용자 */
-  user?: UserDto;
-  /** 코스 정보 */
-  course?: CourseDto;
-  /** 코스 개설 정보 */
-  courseOffering?: CourseOfferingDto;
-  /** 결제 정보 */
-  payment?: PaymentDto;
-  /** 배정 Timeline */
-  assignedTimeline?: TimelineDto;
-  /** 발급된 수강권 */
-  coursePass?: CoursePassDto;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** 수강 사용자 ID */
+	userId: string;
+	/** 코스 ID */
+	courseId: string;
+	/** 코스 개설 ID */
+	courseOfferingId: string;
+	/**
+	 * 발급된 수강권 ID
+	 * @nullable
+	 */
+	coursePassId?: string | null;
+	/**
+	 * 배정 Timeline ID
+	 * @nullable
+	 */
+	assignedTimelineId?: string | null;
+	/**
+	 * 결제 ID
+	 * @nullable
+	 */
+	paymentId?: string | null;
+	/** 결제 상태 */
+	paymentStatus: PaymentStatus;
+	/**
+	 * 결제 제공자
+	 * @maxLength 80
+	 * @nullable
+	 */
+	paymentProvider?: string | null;
+	/**
+	 * 외부 결제 식별자
+	 * @maxLength 160
+	 * @nullable
+	 */
+	paymentExternalId?: string | null;
+	/**
+	 * 결제 완료 시각
+	 * @nullable
+	 */
+	paidAt?: string | null;
+	/**
+	 * 결제 금액
+	 * @minimum 0
+	 * @nullable
+	 */
+	paidAmount?: number | null;
+	/**
+	 * 결제 통화 코드
+	 * @minLength 3
+	 * @maxLength 3
+	 */
+	currency: string;
+	/**
+	 * 수강 유효 시작일
+	 * @nullable
+	 */
+	validFrom?: string | null;
+	/**
+	 * 수강 유효 종료일
+	 * @nullable
+	 */
+	validUntil?: string | null;
+	/** 수강 등록 상태 */
+	status: EnrollmentStatus;
+	/** 수강 사용자 */
+	user?: UserDto;
+	/** 코스 정보 */
+	course?: CourseDto;
+	/** 코스 개설 정보 */
+	courseOffering?: CourseOfferingDto;
+	/** 결제 정보 */
+	payment?: PaymentDto;
+	/** 배정 Timeline */
+	assignedTimeline?: TimelineDto;
+	/** 발급된 수강권 */
+	coursePass?: CoursePassDto;
 }

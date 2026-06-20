@@ -1,11 +1,11 @@
 "use client";
 
-import { observer } from "mobx-react-lite";
 import { Separator } from "@heroui/react";
+import { observer } from "mobx-react-lite";
 import type {
 	PaymentMetric,
-	PaymentRow,
 	PaymentQueryState,
+	PaymentRow,
 	PaymentSummary,
 } from "../../../widget/payment";
 import {
@@ -22,9 +22,7 @@ export interface PaymentConsoleProps {
 	queryState: PaymentQueryState;
 }
 
-const getPaymentMetrics = (
-	summary: PaymentSummary,
-): PaymentMetric[] => [
+const getPaymentMetrics = (summary: PaymentSummary): PaymentMetric[] => [
 	{
 		label: "결제 원장",
 		value: `${summary.totalPaymentCount}건`,
@@ -93,8 +91,4 @@ export const PaymentConsole = observer(
 
 PaymentConsole.displayName = "PaymentConsole";
 
-export type {
-	PaymentRow,
-	PaymentQueryState,
-	PaymentSummary,
-};
+export type { PaymentRow, PaymentQueryState, PaymentSummary };

@@ -59,11 +59,7 @@ describe("RequestContextMiddleware", () => {
 				mockReq = { headers: {}, user: undefined } as any;
 
 				// When
-				await middleware.use(
-					mockReq as Request,
-					mockRes as Response,
-					mockNext,
-				);
+				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
 
 				// Then
 				expect(mockCls.set).toHaveBeenCalledWith(
@@ -88,17 +84,10 @@ describe("RequestContextMiddleware", () => {
 				} as any;
 
 				// When
-				await middleware.use(
-					mockReq as Request,
-					mockRes as Response,
-					mockNext,
-				);
+				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
 
 				// Then
-				expect(mockCls.set).toHaveBeenCalledWith(
-					CONTEXT_KEYS.AUTH_USER,
-					user,
-				);
+				expect(mockCls.set).toHaveBeenCalledWith(CONTEXT_KEYS.AUTH_USER, user);
 				expect(mockCls.set).toHaveBeenCalledWith(
 					CONTEXT_KEYS.USER_ID,
 					"user-1",
@@ -116,11 +105,7 @@ describe("RequestContextMiddleware", () => {
 				} as any;
 
 				// When
-				await middleware.use(
-					mockReq as Request,
-					mockRes as Response,
-					mockNext,
-				);
+				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
 
 				// Then - parseAcceptLanguage 결과가 LANGUAGE에 설정됨
 				const languageCall = mockCls.set.mock.calls.find(
@@ -140,11 +125,7 @@ describe("RequestContextMiddleware", () => {
 				} as any;
 
 				// When
-				await middleware.use(
-					mockReq as Request,
-					mockRes as Response,
-					mockNext,
-				);
+				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
 
 				// Then
 				expect(mockCls.set).toHaveBeenCalledWith(
@@ -177,11 +158,7 @@ describe("RequestContextMiddleware", () => {
 					user,
 				} as any;
 
-				await middleware.use(
-					mockReq as Request,
-					mockRes as Response,
-					mockNext,
-				);
+				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
 
 				expect(mockCls.set).toHaveBeenCalledWith(
 					CONTEXT_KEYS.TENANT,
@@ -205,11 +182,7 @@ describe("RequestContextMiddleware", () => {
 					user,
 				} as any;
 
-				await middleware.use(
-					mockReq as Request,
-					mockRes as Response,
-					mockNext,
-				);
+				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
 
 				expect(mockCls.set).toHaveBeenCalledWith(
 					CONTEXT_KEYS.TENANT,
@@ -223,11 +196,7 @@ describe("RequestContextMiddleware", () => {
 				mockReq = { headers: {}, user } as any;
 
 				// When
-				await middleware.use(
-					mockReq as Request,
-					mockRes as Response,
-					mockNext,
-				);
+				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
 
 				// Then
 				expect(mockCls.set).toHaveBeenCalledWith(
@@ -245,11 +214,7 @@ describe("RequestContextMiddleware", () => {
 				} as any;
 
 				// When
-				await middleware.use(
-					mockReq as Request,
-					mockRes as Response,
-					mockNext,
-				);
+				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
 
 				// Then
 				expect(mockCls.set).toHaveBeenCalledWith(
@@ -271,11 +236,7 @@ describe("RequestContextMiddleware", () => {
 				} as any;
 
 				// When
-				await middleware.use(
-					mockReq as Request,
-					mockRes as Response,
-					mockNext,
-				);
+				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
 
 				// Then
 				expect(mockNext).toHaveBeenCalled();

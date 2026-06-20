@@ -8,14 +8,14 @@ import type {
 	OidcClientLoginUi,
 	OidcClientLoginUiVariant,
 } from "@cocrepo/type";
+import { CheckboxGroup, FieldError, Label, ListBox } from "@heroui/react";
 import { RefreshCw, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
-import { Checkbox } from "../../selection/Checkbox/Checkbox";
-import { CheckboxGroup, FieldError, Label, ListBox } from "@heroui/react";
 import { Input } from "../../input/Input/Input";
-import { Select } from "../../selection/Select/Select";
 import { StringListInput } from "../../input/StringListInput/StringListInput";
+import { Checkbox } from "../../selection/Checkbox/Checkbox";
+import { Select } from "../../selection/Select/Select";
 
 export const OIDC_CLIENT_LOGIN_UI_VARIANT_OPTIONS: Array<{
 	label: string;
@@ -272,69 +272,69 @@ export const OidcClientForm = observer(
 				<section>
 					<div className="space-y-6 p-6">
 						<h3 className="text-lg font-semibold">인증 설정</h3>
-							<Select
-								label="인증 방식"
-								value={
-									AUTH_METHOD_OPTIONS.some(
-										(option) => option.value === state.tokenEndpointAuthMethod,
-									)
-										? state.tokenEndpointAuthMethod
-										: null
+						<Select
+							label="인증 방식"
+							value={
+								AUTH_METHOD_OPTIONS.some(
+									(option) => option.value === state.tokenEndpointAuthMethod,
+								)
+									? state.tokenEndpointAuthMethod
+									: null
+							}
+							onChange={(value) => {
+								if (value != null) {
+									state.tokenEndpointAuthMethod = String(value);
 								}
-								onChange={(value) => {
-									if (value != null) {
-										state.tokenEndpointAuthMethod = String(value);
-									}
-								}}
-								isDisabled={!isEdit && isPublic}
+							}}
+							isDisabled={!isEdit && isPublic}
 							isRequired
-							>
-								{AUTH_METHOD_OPTIONS.map((opt) => (
-									<ListBox.Item
-										key={opt.value}
-										id={opt.value}
-										textValue={opt.label}
-									>
-										{opt.label}
-									</ListBox.Item>
-								))}
-							</Select>
-							<CheckboxGroup
-								value={state.grantTypes}
-								onChange={(v: string[]) => {
-									state.grantTypes = v;
-								}}
-								isInvalid={!!state.errors.grantTypes}
-								isRequired
-							>
-								<Label>Grant Types</Label>
-								{GRANT_TYPE_OPTIONS.map((opt) => (
-									<Checkbox key={opt.value} value={opt.value}>
-										{opt.label}
-									</Checkbox>
-								))}
-								{state.errors.grantTypes ? (
-									<FieldError>{state.errors.grantTypes}</FieldError>
-								) : null}
-							</CheckboxGroup>
-							<CheckboxGroup
-								value={state.responseTypes}
-								onChange={(v: string[]) => {
-									state.responseTypes = v;
-								}}
-								isInvalid={!!state.errors.responseTypes}
-								isRequired
-							>
-								<Label>Response Types</Label>
-								{RESPONSE_TYPE_OPTIONS.map((opt) => (
-									<Checkbox key={opt.value} value={opt.value}>
-										{opt.label}
-									</Checkbox>
-								))}
-								{state.errors.responseTypes ? (
-									<FieldError>{state.errors.responseTypes}</FieldError>
-								) : null}
-							</CheckboxGroup>
+						>
+							{AUTH_METHOD_OPTIONS.map((opt) => (
+								<ListBox.Item
+									key={opt.value}
+									id={opt.value}
+									textValue={opt.label}
+								>
+									{opt.label}
+								</ListBox.Item>
+							))}
+						</Select>
+						<CheckboxGroup
+							value={state.grantTypes}
+							onChange={(v: string[]) => {
+								state.grantTypes = v;
+							}}
+							isInvalid={!!state.errors.grantTypes}
+							isRequired
+						>
+							<Label>Grant Types</Label>
+							{GRANT_TYPE_OPTIONS.map((opt) => (
+								<Checkbox key={opt.value} value={opt.value}>
+									{opt.label}
+								</Checkbox>
+							))}
+							{state.errors.grantTypes ? (
+								<FieldError>{state.errors.grantTypes}</FieldError>
+							) : null}
+						</CheckboxGroup>
+						<CheckboxGroup
+							value={state.responseTypes}
+							onChange={(v: string[]) => {
+								state.responseTypes = v;
+							}}
+							isInvalid={!!state.errors.responseTypes}
+							isRequired
+						>
+							<Label>Response Types</Label>
+							{RESPONSE_TYPE_OPTIONS.map((opt) => (
+								<Checkbox key={opt.value} value={opt.value}>
+									{opt.label}
+								</Checkbox>
+							))}
+							{state.errors.responseTypes ? (
+								<FieldError>{state.errors.responseTypes}</FieldError>
+							) : null}
+						</CheckboxGroup>
 						<Input
 							label="스코프"
 							placeholder="openid profile email"
@@ -433,27 +433,27 @@ export const OidcClientForm = observer(
 
 						{state.useCustomLoginUi && (
 							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-									<Select
-										label="화면 Variant"
-										value={state.loginUiVariant}
-										onChange={(value) => {
-											if (value != null) {
-												state.loginUiVariant = String(
-													value,
-												) as OidcClientLoginUiVariant;
-											}
-										}}
-									>
-										{OIDC_CLIENT_LOGIN_UI_VARIANT_OPTIONS.map((opt) => (
-											<ListBox.Item
-												key={opt.value}
-												id={opt.value}
-												textValue={opt.label}
-											>
-												{opt.label}
-											</ListBox.Item>
-										))}
-									</Select>
+								<Select
+									label="화면 Variant"
+									value={state.loginUiVariant}
+									onChange={(value) => {
+										if (value != null) {
+											state.loginUiVariant = String(
+												value,
+											) as OidcClientLoginUiVariant;
+										}
+									}}
+								>
+									{OIDC_CLIENT_LOGIN_UI_VARIANT_OPTIONS.map((opt) => (
+										<ListBox.Item
+											key={opt.value}
+											id={opt.value}
+											textValue={opt.label}
+										>
+											{opt.label}
+										</ListBox.Item>
+									))}
+								</Select>
 								<Input
 									label="브랜드 라벨"
 									placeholder="Onora Mobile"

@@ -9,20 +9,21 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { LanguageCode } from './languageCode';
-import type { SpaceClassificationDto } from './spaceClassificationDto';
-import type { SpaceAssociationDto } from './spaceAssociationDto';
-import type { GroundDto } from './groundDto';
+
+import type { GroundDto } from "./groundDto";
+import type { LanguageCode } from "./languageCode";
+import type { SpaceAssociationDto } from "./spaceAssociationDto";
+import type { SpaceClassificationDto } from "./spaceClassificationDto";
 
 export interface SpaceDto {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** 이 Space에서 작성되는 운영 리소스의 콘텐츠 언어 */
-  contentLanguageCode: LanguageCode;
-  spaceClassification?: SpaceClassificationDto;
-  spaceAssociations?: SpaceAssociationDto[];
-  ground?: GroundDto;
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** 이 Space에서 작성되는 운영 리소스의 콘텐츠 언어 */
+	contentLanguageCode: LanguageCode;
+	spaceClassification?: SpaceClassificationDto;
+	spaceAssociations?: SpaceAssociationDto[];
+	ground?: GroundDto;
 }

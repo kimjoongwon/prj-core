@@ -1,6 +1,8 @@
 import type { ConfigService } from "@nestjs/config";
-import type { OidcClientData } from "../../oidc/oidc-client.repository";
-import type { OidcClientRepository } from "../../oidc/oidc-client.repository";
+import type {
+	OidcClientData,
+	OidcClientRepository,
+} from "../../oidc/oidc-client.repository";
 import type { OidcProviderService } from "../../oidc/oidc-provider.service";
 import type {
 	Grant,

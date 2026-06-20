@@ -1,9 +1,9 @@
 "use client";
 
+import { Card } from "@heroui/react";
 import { Clock, Hash, MessageSquare, User } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Card } from "@heroui/react";
 
 export interface InquiryInfoCardProps {
 	/** 문의 번호 */
@@ -69,9 +69,7 @@ export const InquiryInfoCard = observer(
 				<Card.Content className="gap-3 p-4">
 					{/* 헤더 */}
 					<div className="flex items-start justify-between">
-						<h3 className="text-sm font-semibold text-muted">
-							📋 문의 정보
-						</h3>
+						<h3 className="text-sm font-semibold text-muted">📋 문의 정보</h3>
 					</div>
 
 					{/* 문의 번호 */}
@@ -91,9 +89,7 @@ export const InquiryInfoCard = observer(
 
 					{/* 채널 */}
 					<div className="flex items-center gap-2">
-						{channelIcon || (
-							<MessageSquare className="size-4 text-muted" />
-						)}
+						{channelIcon || <MessageSquare className="size-4 text-muted" />}
 						<span className="text-sm text-muted">채널:</span>
 						<span className="text-sm text-foreground">{channel}</span>
 					</div>

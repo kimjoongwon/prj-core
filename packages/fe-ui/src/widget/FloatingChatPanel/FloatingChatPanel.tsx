@@ -1,5 +1,6 @@
 "use client";
 
+import { ScrollShadow, Spinner } from "@heroui/react";
 import {
 	Bot,
 	Maximize2,
@@ -12,7 +13,6 @@ import {
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../../action/Button/Button";
-import { ScrollShadow, Spinner } from "@heroui/react";
 import { TextArea } from "../../input/TextArea/TextArea";
 
 export interface ChatMessage {
@@ -245,9 +245,7 @@ export const FloatingChatPanel = observer(
 							<Bot className="size-4 text-white" />
 						</div>
 						<div>
-							<h3 className="text-sm font-semibold text-foreground">
-								{title}
-							</h3>
+							<h3 className="text-sm font-semibold text-foreground">{title}</h3>
 							{panelSize !== "minimized" && (
 								<p className="text-xs text-muted">{subtitle}</p>
 							)}
@@ -313,15 +311,11 @@ export const FloatingChatPanel = observer(
 										<h4 className="mb-1 font-medium text-foreground">
 											{emptyTitle}
 										</h4>
-										<p className="text-sm text-muted">
-											{emptyDescription}
-										</p>
+										<p className="text-sm text-muted">{emptyDescription}</p>
 									</div>
 
 									<div className="space-y-2">
-										<p className="text-xs font-medium text-muted">
-											추천 질문
-										</p>
+										<p className="text-xs font-medium text-muted">추천 질문</p>
 										{exampleQuestions.map((question, index) => (
 											<button
 												key={index}
@@ -346,9 +340,7 @@ export const FloatingChatPanel = observer(
 											</div>
 											<div className="flex items-center gap-2 rounded-lg bg-surface-secondary px-4 py-3">
 												<Spinner size="sm" />
-												<span className="text-sm text-muted">
-													분석 중...
-												</span>
+												<span className="text-sm text-muted">분석 중...</span>
 											</div>
 										</div>
 									)}

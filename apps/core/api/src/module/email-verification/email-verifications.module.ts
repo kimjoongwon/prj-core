@@ -1,4 +1,5 @@
 import { EmailVerificationAggregate } from "@cocrepo/aggregate";
+import { EmailVerificationsController } from "@cocrepo/controller";
 import {
 	EmailVerificationsRepository,
 	TemplatesRepository,
@@ -12,7 +13,6 @@ import {
 import { EmailVerificationUseCaseProviders } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { EmailVerificationsController } from "@cocrepo/controller";
 
 @Module({
 	imports: [CqrsModule],

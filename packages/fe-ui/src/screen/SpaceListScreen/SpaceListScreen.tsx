@@ -7,12 +7,12 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
-	SectionSurface,
 	buildSpaceTableColumns,
 	CONTENT_LANGUAGE_OPTIONS,
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	SectionSurface,
 } from "@cocrepo/ui";
 import { Building2 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";

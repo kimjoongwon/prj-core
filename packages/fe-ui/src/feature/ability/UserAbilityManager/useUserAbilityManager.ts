@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import type { AbilityRule } from "../../../widget/ability/AbilityRuleList";
 import type { AbilityFormData } from "../../../form/AbilityFormModal";
+import type { AbilityRule } from "../../../widget/ability/AbilityRuleList";
 import type { AbilityUser, FormMode, UserAbilityManagerProps } from "./type";
 
 type UseUserAbilityManagerParams = Pick<

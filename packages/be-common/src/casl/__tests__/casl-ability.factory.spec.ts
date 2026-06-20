@@ -55,7 +55,14 @@ describe("CaslAbilityFactory", () => {
 			spaceId: "space-1",
 			email: "u1@test.com",
 			name: "u1",
-			tenants: [{ id: "tenant-1", spaceId: "space-1", roleId: "role-1", role: { id: "role-1" } }],
+			tenants: [
+				{
+					id: "tenant-1",
+					spaceId: "space-1",
+					roleId: "role-1",
+					role: { id: "role-1" },
+				},
+			],
 		} as unknown as UserDto;
 
 		mockClsService.get.mockReturnValueOnce("space-1");
@@ -92,7 +99,14 @@ describe("CaslAbilityFactory", () => {
 			spaceId: "space-1",
 			email: "u1@test.com",
 			name: "u1",
-			tenants: [{ id: "tenant-1", spaceId: "space-1", roleId: "role-1", role: { id: "role-1" } }],
+			tenants: [
+				{
+					id: "tenant-1",
+					spaceId: "space-1",
+					roleId: "role-1",
+					role: { id: "role-1" },
+				},
+			],
 		} as unknown as UserDto;
 
 		mockClsService.get.mockReturnValueOnce("space-1");
@@ -145,7 +159,14 @@ describe("CaslAbilityFactory", () => {
 			spaceId: "space-1",
 			email: "u1@test.com",
 			name: "u1",
-			tenants: [{ id: "tenant-1", spaceId: "space-1", roleId: "role-1", role: { id: "role-1" } }],
+			tenants: [
+				{
+					id: "tenant-1",
+					spaceId: "space-1",
+					roleId: "role-1",
+					role: { id: "role-1" },
+				},
+			],
 		} as unknown as UserDto;
 
 		mockClsService.get.mockImplementation((key) =>
@@ -159,7 +180,7 @@ describe("CaslAbilityFactory", () => {
 		).not.toHaveBeenCalled();
 	});
 
-it("같은 spaceId에 중복 tenant가 있어도 첫 tenant의 roleId로 조회해야 한다", async () => {
+	it("같은 spaceId에 중복 tenant가 있어도 첫 tenant의 roleId로 조회해야 한다", async () => {
 		const user = {
 			id: "user-1",
 			spaceId: "space-1",

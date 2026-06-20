@@ -6,16 +6,16 @@ import {
 	AuthMethodCell,
 	ConfirmModal,
 	DateTimeCell,
-	SectionSurface,
 	PageTitleBar,
 	SecretField,
+	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
+import { useOverlayState } from "@heroui/react";
 import { ArrowLeft, Edit, Power, PowerOff, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { useOverlayState } from "@heroui/react";
 export interface OidcClientDetailScreenClient {
 	clientId: string;
 	clientSecret?: string | null;

@@ -9,27 +9,27 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { AbilityResponseDto } from './abilityResponseDto';
+import type { AbilityResponseDto } from "./abilityResponseDto";
 
 export interface PolicyAbilityResponseDto {
-  /** PolicyAbility ID (UUID) */
-  id: string;
-  /** Policy ID */
-  policyId: string;
-  /** Ability ID */
-  abilityId: string;
-  /** 생성 일시 */
-  createdAt: string;
-  /**
-   * 수정 일시
-   * @nullable
-   */
-  updatedAt?: string | null;
-  /**
-   * 삭제 일시
-   * @nullable
-   */
-  removedAt?: string | null;
-  /** 연결된 Ability 상세 정보 */
-  ability?: AbilityResponseDto;
+	/** PolicyAbility ID (UUID) */
+	id: string;
+	/** Policy ID */
+	policyId: string;
+	/** Ability ID */
+	abilityId: string;
+	/** 생성 일시 */
+	createdAt: string;
+	/**
+	 * 수정 일시
+	 * @nullable
+	 */
+	updatedAt?: string | null;
+	/**
+	 * 삭제 일시
+	 * @nullable
+	 */
+	removedAt?: string | null;
+	/** 연결된 Ability 상세 정보 */
+	ability?: AbilityResponseDto;
 }

@@ -7,7 +7,6 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
-	SectionSurface,
 	Button,
 	buildStaticTranslationTableColumns,
 	DataGrid,
@@ -16,15 +15,16 @@ import {
 	HStack,
 	Input,
 	PageTitleBar,
+	SectionSurface,
 	Select,
 	TextArea,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
+import { Modal, useOverlayState } from "@heroui/react";
 import { Languages, Plus, RefreshCcw } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type FormEvent, useEffect, useState } from "react";
-import { Modal, useOverlayState } from "@heroui/react";
 import { Switch } from "../../selection/Switch/Switch";
 import { ConfirmModal } from "../../widget/common/ConfirmModal";
 

@@ -63,11 +63,12 @@ HTTP request
 | `be-client-builder` | `packages/be-client/src/**` 외부 provider Client |
 | `be-repository-builder` | `packages/be-repository/src/**` persistence Repository |
 
-## Legacy 기준
+## 제거된 경계 기준
 
 - 신규 작업에서 `be-app-builder`, `be-facade-builder`, `be-gateway-builder` agent_type을 사용하지 않습니다.
 - 신규 app/runtime import에서 `@cocrepo/app`, `@cocrepo/facade`, `@cocrepo/gateway`를 사용하지 않습니다.
-- legacy facade/gateway package가 남아 있어도 active app, controller, usecase 경계로 새 의존을 추가하지 않습니다.
+- `@cocrepo/facade` 패키지는 제거된 runtime 경계입니다.
+- legacy gateway package가 남아 있어도 active app, controller, usecase 경계로 새 의존을 추가하지 않습니다.
 - legacy workflow가 필요하면 UseCase, Client, Service owner로 이동합니다.
 
 ## 검증 Gate

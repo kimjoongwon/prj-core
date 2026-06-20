@@ -11,56 +11,56 @@ OIDC 인증 및 IDP 관리 API를 제공합니다.
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { EmailVerificationStatus } from './emailVerificationStatus';
+import type { EmailVerificationStatus } from "./emailVerificationStatus";
 
 export interface EmailVerificationDto {
-  /** ID */
-  id: string;
-  /** 생성일 */
-  createdAt: string;
-  /**
-   * 수정일
-   * @nullable
-   */
-  updatedAt?: string | null;
-  /** 이메일 */
-  email: string;
-  /** 이름 */
-  name: string;
-  /** 상태 */
-  status: EmailVerificationStatus;
-  /** 만료 시각 */
-  expiresAt: string;
-  /**
-   * 인증 시각
-   * @nullable
-   */
-  verifiedAt?: string | null;
-  /**
-   * 마지막 발송 시각
-   * @nullable
-   */
-  lastSentAt?: string | null;
-  /**
-   * 발송 횟수
-   * @minimum 0
-   */
-  sendCount: number;
-  /**
-   * 마지막 발송 상태
-   * @nullable
-   */
-  lastSendStatus?: string | null;
-  /**
-   * 인증 완료 사용자 ID
-   * @nullable
-   */
-  verifiedUserId?: string | null;
-  /** 재발송 가능 여부 */
-  canResend: boolean;
-  /**
-   * 재발송 가능 시각
-   * @nullable
-   */
-  resendAvailableAt?: string | null;
+	/** ID */
+	id: string;
+	/** 생성일 */
+	createdAt: string;
+	/**
+	 * 수정일
+	 * @nullable
+	 */
+	updatedAt?: string | null;
+	/** 이메일 */
+	email: string;
+	/** 이름 */
+	name: string;
+	/** 상태 */
+	status: EmailVerificationStatus;
+	/** 만료 시각 */
+	expiresAt: string;
+	/**
+	 * 인증 시각
+	 * @nullable
+	 */
+	verifiedAt?: string | null;
+	/**
+	 * 마지막 발송 시각
+	 * @nullable
+	 */
+	lastSentAt?: string | null;
+	/**
+	 * 발송 횟수
+	 * @minimum 0
+	 */
+	sendCount: number;
+	/**
+	 * 마지막 발송 상태
+	 * @nullable
+	 */
+	lastSendStatus?: string | null;
+	/**
+	 * 인증 완료 사용자 ID
+	 * @nullable
+	 */
+	verifiedUserId?: string | null;
+	/** 재발송 가능 여부 */
+	canResend: boolean;
+	/**
+	 * 재발송 가능 시각
+	 * @nullable
+	 */
+	resendAvailableAt?: string | null;
 }

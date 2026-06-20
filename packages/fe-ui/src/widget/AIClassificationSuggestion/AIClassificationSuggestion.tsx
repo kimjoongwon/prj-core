@@ -1,9 +1,9 @@
 "use client";
 
+import { Card, ProgressBar } from "@heroui/react";
 import { Check, Sparkles, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
-import { Card, ProgressBar } from "@heroui/react";
 import { Chip } from "../../data-display/Chip/Chip";
 
 export interface AIClassificationResult {
@@ -89,7 +89,9 @@ export const AIClassificationSuggestion = observer(
 		const confidenceColor = confidenceColors[confidenceLevel];
 
 		return (
-			<Card className={`bg-gradient-to-r from-accent-soft to-default ${className}`}>
+			<Card
+				className={`bg-gradient-to-r from-accent-soft to-default ${className}`}
+			>
 				<Card.Content className="gap-3 p-4">
 					{/* 헤더 */}
 					<div className="flex items-center justify-between">

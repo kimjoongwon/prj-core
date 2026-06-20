@@ -1,7 +1,7 @@
 import {
+	type AxiosAdapter,
 	AxiosError,
 	AxiosHeaders,
-	type AxiosAdapter,
 	type InternalAxiosRequestConfig,
 } from "axios";
 import { afterEach, describe, expect, it, vi } from "vitest";

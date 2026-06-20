@@ -9,28 +9,28 @@
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ReservationStatus } from './reservationStatus';
+import type { ReservationStatus } from "./reservationStatus";
 
 export type GetMyReservationsParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * 조회 시작 시각
- */
-from?: string;
-/**
- * 조회 종료 시각
- */
-to?: string;
-/**
- * 예약 상태
- */
-status?: ReservationStatus;
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * 조회 시작 시각
+	 */
+	from?: string;
+	/**
+	 * 조회 종료 시각
+	 */
+	to?: string;
+	/**
+	 * 예약 상태
+	 */
+	status?: ReservationStatus;
 };

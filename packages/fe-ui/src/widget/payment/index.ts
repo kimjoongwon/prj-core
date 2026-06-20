@@ -5,7 +5,7 @@ export * from "./PaymentTableShell";
 export * from "./PaymentTableStatePanel";
 export type {
 	PaymentMetric,
-	PaymentRow,
 	PaymentQueryState,
+	PaymentRow,
 	PaymentSummary,
 } from "./types";

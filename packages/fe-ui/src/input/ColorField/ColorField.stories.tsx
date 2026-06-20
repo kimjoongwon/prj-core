@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { parseColor } from "@heroui/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import { ColorField } from "./ColorField";
 
 const meta: Meta<typeof ColorField> = {

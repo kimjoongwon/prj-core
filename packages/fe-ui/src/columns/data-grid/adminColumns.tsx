@@ -13,6 +13,7 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 import type { MouseEvent } from "react";
+import { Button } from "../../action/Button/Button";
 import {
 	ActionButtonCell,
 	BooleanCell,
@@ -35,7 +36,6 @@ import {
 	TemplateActiveToggleCell,
 	UserRoleCell,
 } from "../../cell";
-import { Button } from "../../action/Button/Button";
 import {
 	buildColumns,
 	buildColumnsWithDefaultCreatedAt,
@@ -943,13 +943,13 @@ export function buildAssetTableColumns<
 										{isSelected ? "선택됨" : "선택"}
 									</Button>
 								) : null}
-									<Button
-										size="sm"
-										color="danger"
-										variant="flat"
-										isDisabled={isRemoving}
-										onPress={() => onClickDeleteAssetButton(row.original.id)}
-									>
+								<Button
+									size="sm"
+									color="danger"
+									variant="flat"
+									isDisabled={isRemoving}
+									onPress={() => onClickDeleteAssetButton(row.original.id)}
+								>
 									삭제
 								</Button>
 							</div>
@@ -968,13 +968,13 @@ export function buildAssetTableColumns<
 									보기
 								</Button>
 							) : null}
-								<Button
-									size="sm"
-									variant="flat"
-									color="danger"
-									isDisabled={isRemoving}
-									onPress={() => onClickDeleteAssetButton(row.original.id)}
-								>
+							<Button
+								size="sm"
+								variant="flat"
+								color="danger"
+								isDisabled={isRemoving}
+								onPress={() => onClickDeleteAssetButton(row.original.id)}
+							>
 								삭제
 							</Button>
 						</div>

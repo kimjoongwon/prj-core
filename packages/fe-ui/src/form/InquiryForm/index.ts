@@ -1,9 +1,9 @@
-export { InquiryForm } from "./InquiryForm";
 export type {
-	InquiryFormProps,
-	InquiryFormData,
+	AIFormSuggestion,
+	CustomerInfo,
 	InquiryFormAssignee,
 	InquiryFormCustomerSearchResult,
-	CustomerInfo,
-	AIFormSuggestion,
+	InquiryFormData,
+	InquiryFormProps,
 } from "./InquiryForm";
+export { InquiryForm } from "./InquiryForm";

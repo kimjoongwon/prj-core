@@ -48,14 +48,18 @@ const fruitItems = (
 			<ListBox.ItemIndicator />
 			<div>
 				<div className="text-sm font-medium">바나나</div>
-				<div className="text-xs text-default-500">운동 전 간식으로 좋습니다.</div>
+				<div className="text-xs text-default-500">
+					운동 전 간식으로 좋습니다.
+				</div>
 			</div>
 		</ListBox.Item>
 		<ListBox.Item id="grape" textValue="포도" isDisabled>
 			<ListBox.ItemIndicator />
 			<div>
 				<div className="text-sm font-medium">포도</div>
-				<div className="text-xs text-default-500">오늘은 선택할 수 없습니다.</div>
+				<div className="text-xs text-default-500">
+					오늘은 선택할 수 없습니다.
+				</div>
 			</div>
 		</ListBox.Item>
 	</>

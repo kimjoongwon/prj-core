@@ -1,10 +1,9 @@
 "use client";
 
 import { useNavigationStore } from "@cocrepo/store";
+import { cn, Tabs } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
-import { cn } from "@heroui/react";
-import { Tabs } from "@heroui/react";
 
 export interface BottomTabProps {
 	/** 탭 선택 시 콜백 (SubMenuList 표시 여부 결정용) */
@@ -63,21 +62,18 @@ export const BottomTab = observer(
 					className,
 				)}
 			>
-					<Tabs
-						aria-label="네비게이션 탭"
-						selectedKey={selectedNavItemId}
-						onSelectionChange={handleSelectionChange}
-						className="w-full"
-					>
-						<Tabs.List className="grid w-full grid-cols-5 gap-0 p-0">
+				<Tabs
+					aria-label="네비게이션 탭"
+					selectedKey={selectedNavItemId}
+					onSelectionChange={handleSelectionChange}
+					className="w-full"
+				>
+					<Tabs.List className="grid w-full grid-cols-5 gap-0 p-0">
 						{displayItems.map((navItem) => (
-							<Tabs.Tab
-								key={navItem.id}
-								id={navItem.id}
-							>
-									<div className="flex flex-col items-center gap-1">
-										{navItem.icon && (
-											<span
+							<Tabs.Tab key={navItem.id} id={navItem.id}>
+								<div className="flex flex-col items-center gap-1">
+									{navItem.icon && (
+										<span
 											className={cn(
 												"transition-colors",
 												navItem.active ? "text-accent" : "text-foreground/60",
@@ -97,14 +93,14 @@ export const BottomTab = observer(
 												? "font-medium text-accent"
 												: "text-foreground/60",
 										)}
-										>
-											{navItem.label}
-										</span>
-									</div>
+									>
+										{navItem.label}
+									</span>
+								</div>
 							</Tabs.Tab>
 						))}
-						</Tabs.List>
-					</Tabs>
+					</Tabs.List>
+				</Tabs>
 			</nav>
 		);
 	},

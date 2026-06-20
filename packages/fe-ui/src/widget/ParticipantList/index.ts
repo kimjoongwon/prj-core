@@ -1,2 +1,2 @@
+export type { Participant, ParticipantListProps } from "./ParticipantList";
 export { ParticipantList } from "./ParticipantList";
-export type { ParticipantListProps, Participant } from "./ParticipantList";

@@ -27,31 +27,31 @@ export const SecretField = observer(
 
 		const maskedValue = maskChar.repeat(maskLength);
 
-			const handleToggleVisibility = () => {
-				setIsVisible((prev) => !prev);
-			};
+		const handleToggleVisibility = () => {
+			setIsVisible((prev) => !prev);
+		};
 
-			const handleCopySecret = () => {
-				void navigator.clipboard.writeText(value);
-			};
+		const handleCopySecret = () => {
+			void navigator.clipboard.writeText(value);
+		};
 
-			return (
-				<div className="flex items-center gap-2">
-					<code className="max-w-[300px] rounded-lg bg-surface-secondary px-3 py-2">
-						<span className="font-mono text-sm">
-							{isVisible ? value : maskedValue}
-						</span>
-					</code>
-					<Button
-						isIconOnly
-						size="sm"
-						variant="light"
-						onPress={handleCopySecret}
-						aria-label="복사"
-					>
-						<Copy className="h-4 w-4" />
-					</Button>
-					<Button
+		return (
+			<div className="flex items-center gap-2">
+				<code className="max-w-[300px] rounded-lg bg-surface-secondary px-3 py-2">
+					<span className="font-mono text-sm">
+						{isVisible ? value : maskedValue}
+					</span>
+				</code>
+				<Button
+					isIconOnly
+					size="sm"
+					variant="light"
+					onPress={handleCopySecret}
+					aria-label="복사"
+				>
+					<Copy className="h-4 w-4" />
+				</Button>
+				<Button
 					isIconOnly
 					size="sm"
 					variant="light"
