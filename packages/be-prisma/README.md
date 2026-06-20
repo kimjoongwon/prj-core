@@ -5,7 +5,7 @@ Prisma 스키마 및 데이터베이스 클라이언트를 제공하는 패키�
 > **중요**: 이 패키지는 리팩토링되어 **Prisma 전용** 패키지가 되었습니다.
 > DTO, Entity, Enum, Decorator는 별도 패키지로 분리되었습니다.
 >
-> **마이그레이션 가이드**: [docs/SCHEMA-REFACTORING.md](../../docs/SCHEMA-REFACTORING.md)
+> **스키마 변경 가이드**: [docs/schema-change-playbook.md](./docs/schema-change-playbook.md)
 
 ## 분리된 패키지
 

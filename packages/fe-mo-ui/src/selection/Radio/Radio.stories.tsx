@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
 import { Text } from "../../data-display/Text";
-import { Radio } from "./index";
+import { PureRadio as Radio } from "./index";
 
 const meta = {
   title: "selection/Radio",

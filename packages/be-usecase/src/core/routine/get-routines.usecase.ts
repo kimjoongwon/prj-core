@@ -2,10 +2,10 @@ import { RoutineAggregate } from "@cocrepo/aggregate";
 import { GetRoutinesQuery } from "@cocrepo/command";
 import { SpaceScope as SpaceScopeEnum } from "@cocrepo/dto";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetRoutinesQuery)
-export class GetRoutinesUseCase implements IQueryHandler<GetRoutinesQuery> {
+export class GetRoutinesUseCase {
 	constructor(private readonly routinesService: RoutineAggregate) {}
 
 	async execute(query: GetRoutinesQuery): Promise<unknown> {

@@ -8,7 +8,7 @@ import {
 	TokenStorageService,
 	UserService,
 } from "@cocrepo/service";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 import {
 	AuthCallbackResponse,
 	getClientRedirects,
@@ -17,9 +17,7 @@ import {
 import { buildLoginRedirectUrl } from "./auth-support";
 
 @CommandHandler(HandleOidcCallbackCommand)
-export class HandleOidcCallbackUseCase
-	implements ICommandHandler<HandleOidcCallbackCommand>
-{
+export class HandleOidcCallbackUseCase {
 	constructor(
 		private readonly oidcClientService: OidcClientAggregate,
 		private readonly oidcClient: OidcClient,

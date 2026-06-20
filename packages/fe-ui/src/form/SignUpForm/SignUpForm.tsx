@@ -6,7 +6,7 @@ import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
 import { useT } from "../../i18n";
 import { Input, TextArea } from "../../input";
 import { Link } from "../../navigation";
-import { Select } from "../../selection";
+import { Select } from "../../selection/Select/Select";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 

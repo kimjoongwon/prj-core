@@ -22,6 +22,7 @@
     "build": "tsc --build",
     "start:dev": "tsc --build --watch",
     "type-check": "tsc --noEmit",
+    "type-check:prod": "tsc --noEmit",
     "format": "biome check --write .",
     "clean": "rm -rf dist && rm -rf node_modules"
   },

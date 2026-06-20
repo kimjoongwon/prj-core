@@ -1,11 +1,9 @@
 import { InvalidateUserSessionsCommand } from "@cocrepo/command";
 import { AuthCacheService, TokenStorageService } from "@cocrepo/service";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(InvalidateUserSessionsCommand)
-export class InvalidateUserSessionsUseCase
-	implements ICommandHandler<InvalidateUserSessionsCommand>
-{
+export class InvalidateUserSessionsUseCase {
 	constructor(
 		private readonly tokenStorageService: TokenStorageService,
 		private readonly authCacheService: AuthCacheService,

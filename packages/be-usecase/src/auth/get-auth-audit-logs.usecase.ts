@@ -4,12 +4,10 @@ import {
 } from "@cocrepo/aggregate";
 import { GetAuthAuditLogsQuery } from "@cocrepo/command";
 import { PageMetaDto } from "@cocrepo/dto";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetAuthAuditLogsQuery)
-export class GetAuthAuditLogsUseCase
-	implements IQueryHandler<GetAuthAuditLogsQuery>
-{
+export class GetAuthAuditLogsUseCase {
 	constructor(private readonly authAuditLogService: AuthAuditLogAggregate) {}
 
 	async execute(query: GetAuthAuditLogsQuery): Promise<{

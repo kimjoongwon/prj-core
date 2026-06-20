@@ -1,7 +1,7 @@
 import { ConfigService } from "@nestjs/config";
 import { AccountService } from "../account.service";
-import { RedisOidcAdapterFactory } from "../oidc.adapter";
 import { OidcClientRepository } from "../oidc-client.repository";
+import { RedisOidcAdapterFactory } from "../redis-oidc-adapter.factory";
 import { OidcConfigurationService } from ".";
 
 describe("OidcConfigurationService", () => {

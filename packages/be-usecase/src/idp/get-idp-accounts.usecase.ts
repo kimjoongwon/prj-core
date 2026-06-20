@@ -1,12 +1,10 @@
 import { IdpAccountAggregate } from "@cocrepo/aggregate";
 import { GetIdpAccountsQuery } from "@cocrepo/command";
 import { PageMetaDto } from "@cocrepo/dto";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetIdpAccountsQuery)
-export class GetIdpAccountsUseCase
-	implements IQueryHandler<GetIdpAccountsQuery>
-{
+export class GetIdpAccountsUseCase {
 	constructor(private readonly idpAccountService: IdpAccountAggregate) {}
 
 	async execute(query: GetIdpAccountsQuery): Promise<unknown> {

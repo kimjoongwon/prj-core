@@ -1,13 +1,11 @@
 import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { ToggleActiveOidcClientCommand } from "@cocrepo/command";
 import { Inject } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 import { IDP_OIDC_PROVIDER_SERVICE, type OidcProviderPort } from "./idp.ports";
 
 @CommandHandler(ToggleActiveOidcClientCommand)
-export class ToggleOidcClientActiveUseCase
-	implements ICommandHandler<ToggleActiveOidcClientCommand>
-{
+export class ToggleOidcClientActiveUseCase {
 	constructor(
 		private readonly oidcClientService: OidcClientAggregate,
 		@Inject(IDP_OIDC_PROVIDER_SERVICE)

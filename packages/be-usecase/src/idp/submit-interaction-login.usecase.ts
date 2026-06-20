@@ -2,7 +2,7 @@ import { SubmitInteractionLoginCommand } from "@cocrepo/command";
 import { LoginErrorDto } from "@cocrepo/dto";
 import { Inject } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 import type { Request } from "express";
 import {
 	IDP_INTERACTION_LOGIN_SERVICE,
@@ -14,9 +14,7 @@ import {
 import { toAbsoluteOidcUrl } from "./idp-local.support";
 
 @CommandHandler(SubmitInteractionLoginCommand)
-export class SubmitInteractionLoginUseCase
-	implements ICommandHandler<SubmitInteractionLoginCommand>
-{
+export class SubmitInteractionLoginUseCase {
 	constructor(
 		@Inject(IDP_INTERACTION_SERVICE)
 		private readonly interactionService: InteractionPort,

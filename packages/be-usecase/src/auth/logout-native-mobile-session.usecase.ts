@@ -2,13 +2,11 @@ import { LogoutNativeMobileSessionCommand } from "@cocrepo/command";
 import { TokenStorageService } from "@cocrepo/service";
 import { NativeRefreshToken, SessionId } from "@cocrepo/vo";
 import { Logger, UnauthorizedException } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 import { decodeAccessToken, extractBearerToken } from "./auth-support";
 
 @CommandHandler(LogoutNativeMobileSessionCommand)
-export class LogoutNativeMobileSessionUseCase
-	implements ICommandHandler<LogoutNativeMobileSessionCommand>
-{
+export class LogoutNativeMobileSessionUseCase {
 	private readonly logger = new Logger(LogoutNativeMobileSessionUseCase.name);
 
 	constructor(private readonly tokenStorageService: TokenStorageService) {}

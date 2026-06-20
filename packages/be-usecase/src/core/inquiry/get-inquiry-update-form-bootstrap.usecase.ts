@@ -1,12 +1,10 @@
 import { InquiryAggregate } from "@cocrepo/aggregate";
 import { GetInquiryUpdateFormBootstrapQuery } from "@cocrepo/command";
 import { SpaceContext } from "@cocrepo/service";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetInquiryUpdateFormBootstrapQuery)
-export class GetInquiryUpdateFormBootstrapUseCase
-	implements IQueryHandler<GetInquiryUpdateFormBootstrapQuery>
-{
+export class GetInquiryUpdateFormBootstrapUseCase {
 	constructor(
 		private readonly inquiryService: InquiryAggregate,
 		private readonly spaceContext: SpaceContext,

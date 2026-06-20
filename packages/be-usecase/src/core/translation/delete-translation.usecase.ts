@@ -1,11 +1,9 @@
 import { TranslationCatalogAggregate } from "@cocrepo/aggregate";
 import { DeleteTranslationCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(DeleteTranslationCommand)
-export class DeleteTranslationUseCase
-	implements ICommandHandler<DeleteTranslationCommand>
-{
+export class DeleteTranslationUseCase {
 	constructor(
 		private readonly translationCatalogService: TranslationCatalogAggregate,
 	) {}

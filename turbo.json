@@ -31,6 +31,10 @@
       "dependsOn": ["^build"],
       "cache": false
     },
+    "type-check:prod": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
     "lint": {},
     "lint:fix": {},
     "format": {},

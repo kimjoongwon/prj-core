@@ -17,7 +17,10 @@ import { BookingPolicySheet } from "../../feature/BookingPolicySheet";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
 import { Icon } from "../../icon";
 import { ScreenFrame } from "../../layout/ScreenFrame";
-import { DateStrip, type DateStripOption } from "../../selection/DateStrip";
+import {
+  PureDateStrip as DateStrip,
+  type DateStripOption,
+} from "../../selection/DateStrip";
 export type ReservationHomeFilterValue =
   | "all"
   | "bookable"

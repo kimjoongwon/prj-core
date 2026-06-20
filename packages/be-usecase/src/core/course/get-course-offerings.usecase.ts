@@ -4,12 +4,10 @@ import { COMMON_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/service";
 import { buildOffsetStatsPaginatedResponse } from "@cocrepo/toolkit";
 import { UnauthorizedException } from "@nestjs/common";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetCourseOfferingsQuery)
-export class GetCourseOfferingsUseCase
-	implements IQueryHandler<GetCourseOfferingsQuery>
-{
+export class GetCourseOfferingsUseCase {
 	constructor(
 		private readonly courseService: CourseAggregate,
 		private readonly spaceContext: SpaceContext,

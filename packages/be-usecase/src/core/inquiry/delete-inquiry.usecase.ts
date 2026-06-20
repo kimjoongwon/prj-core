@@ -1,11 +1,9 @@
 import { InquiryAggregate } from "@cocrepo/aggregate";
 import { DeleteInquiryCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(DeleteInquiryCommand)
-export class DeleteInquiryUseCase
-	implements ICommandHandler<DeleteInquiryCommand>
-{
+export class DeleteInquiryUseCase {
 	constructor(private readonly inquiryService: InquiryAggregate) {}
 
 	execute(command: DeleteInquiryCommand): Promise<unknown> {

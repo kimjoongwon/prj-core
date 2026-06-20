@@ -7,12 +7,12 @@ import {
 	PageTitleBar,
 	ProgramPickerModal,
 	SectionSurface,
-	Select,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Select } from "../../selection/Select/Select";
 
 const LEVEL_OPTIONS = [
 	{

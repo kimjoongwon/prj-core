@@ -1,11 +1,9 @@
 import { FolderAggregate } from "@cocrepo/aggregate";
 import { CreateFolderCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(CreateFolderCommand)
-export class CreateFolderUseCase
-	implements ICommandHandler<CreateFolderCommand>
-{
+export class CreateFolderUseCase {
 	constructor(private readonly folderService: FolderAggregate) {}
 
 	execute(command: CreateFolderCommand): Promise<unknown> {

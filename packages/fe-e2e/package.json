@@ -28,6 +28,7 @@
     "lint:fix": "echo 'Linting skipped for now'",
 		"format": "biome check --write . --no-errors-on-unmatched",
     "type-check": "tsc --noEmit",
+    "type-check:prod": "echo 'Production type check not applicable for @cocrepo/e2e'",
     "test": "vitest run --passWithNoTests",
     "clean": "rm -rf .turbo && rm -rf node_modules"
   },

@@ -8,7 +8,7 @@ import {
 	UserService,
 } from "@cocrepo/service";
 import { UnauthorizedException } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 import { plainToInstance } from "class-transformer";
 import { resolveOidcClient } from "./auth-oidc.support";
 import {
@@ -18,9 +18,7 @@ import {
 } from "./auth-support";
 
 @CommandHandler(RefreshTokenWithIdpCommand)
-export class RefreshTokenWithIdpUseCase
-	implements ICommandHandler<RefreshTokenWithIdpCommand>
-{
+export class RefreshTokenWithIdpUseCase {
 	constructor(
 		private readonly oidcClientService: OidcClientAggregate,
 		private readonly oidcClient: OidcClient,

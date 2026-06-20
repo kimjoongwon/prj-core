@@ -3,12 +3,10 @@ import { GetTimelineByIdQuery } from "@cocrepo/command";
 import { TIMELINE_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/service";
 import { UnauthorizedException } from "@nestjs/common";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetTimelineByIdQuery)
-export class GetTimelineByIdUseCase
-	implements IQueryHandler<GetTimelineByIdQuery>
-{
+export class GetTimelineByIdUseCase {
 	constructor(
 		private readonly timelinesService: TimelineAggregate,
 		private readonly spaceContext: SpaceContext,

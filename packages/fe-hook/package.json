@@ -11,6 +11,11 @@
       "import": "./index.ts",
       "default": "./index.ts"
     },
+    "./useFormField": {
+      "types": "./src/useFormField.ts",
+      "import": "./src/useFormField.ts",
+      "default": "./src/useFormField.ts"
+    },
     "./package.json": "./package.json"
   },
   "main": "./index.ts",
@@ -27,7 +32,8 @@
     "lint": "echo 'Linting skipped for now'",
     "lint:fix": "echo 'Linting skipped for now'",
     "format": "biome check --write .",
-    "type-check": "echo 'Type checking skipped due to memory constraints'",
+    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
+    "type-check:prod": "tsc --noEmit",
     "test": "vitest --passWithNoTests",
     "test:watch": "vitest --watch",
     "clean": "rm -rf .turbo && rm -rf node_modules",

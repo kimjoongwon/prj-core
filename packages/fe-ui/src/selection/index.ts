@@ -14,7 +14,7 @@ export { ListBoxSelect } from "./ListBoxSelect";
 export { MultiSelect } from "./MultiSelect";
 export { RadioGroup } from "./RadioGroup";
 export { RangeCalendar } from "./RangeCalendar";
-export { Select } from "./Select/Select";
+export { Select } from "./Select";
 export { Slider } from "./Slider";
 export { Switch } from "./Switch";
 export { ToggleButton } from "./ToggleButton";

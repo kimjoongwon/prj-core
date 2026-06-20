@@ -1,11 +1,9 @@
 import { TaskAggregate } from "@cocrepo/aggregate";
 import { GetTaskRoutinesQuery } from "@cocrepo/command";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetTaskRoutinesQuery)
-export class GetTaskRoutinesUseCase
-	implements IQueryHandler<GetTaskRoutinesQuery>
-{
+export class GetTaskRoutinesUseCase {
 	constructor(private readonly taskService: TaskAggregate) {}
 
 	execute(query: GetTaskRoutinesQuery): Promise<unknown> {

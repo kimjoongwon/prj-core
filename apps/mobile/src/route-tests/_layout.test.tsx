@@ -1,5 +1,27 @@
 import { render, screen } from "@testing-library/react-native";
 import RootLayout from "@/app/_layout";
+import type { ComponentType, ReactNode } from "react";
+
+type ChildrenProps = {
+	children?: ReactNode;
+};
+
+type HeaderProps = {
+	title?: string;
+};
+
+type StackProps = ChildrenProps & {
+	screenOptions?: {
+		header?: unknown;
+	};
+};
+
+type StackScreenProps = {
+	name: string;
+	options?: {
+		headerShown?: boolean;
+	};
+};
 
 const mockSetIdpBaseUrl = jest.fn();
 const mockSetIdpLoginRedirectUrl = jest.fn();
@@ -18,11 +40,17 @@ jest.mock("@cocrepo/mo-ui", () => {
 		);
 
 	return {
-		DesignSystemProvider: ({ children }) => {
+		DesignSystemProvider: ({ children }: ChildrenProps) => {
 			const queryClient = useQueryClient();
+			const ProviderView = View as unknown as ComponentType<
+				ChildrenProps & {
+					accessibilityLabel: string;
+					queryClientReady: boolean;
+				}
+			>;
 
 			return React.createElement(
-				View,
+				ProviderView,
 				{
 					accessibilityLabel: "design-system-provider",
 					queryClientReady: Boolean(queryClient),
@@ -30,7 +58,7 @@ jest.mock("@cocrepo/mo-ui", () => {
 				children,
 			);
 		},
-		CustomHeader: ({ title }) =>
+		CustomHeader: ({ title }: HeaderProps) =>
 			React.createElement(Text, null, `custom-header:${title ?? ""}`),
 	};
 });
@@ -41,7 +69,7 @@ jest.mock("react-native-safe-area-context", () => {
 		jest.requireActual<typeof import("react-native")>("react-native");
 
 	return {
-		SafeAreaProvider: ({ children }) =>
+		SafeAreaProvider: ({ children }: ChildrenProps) =>
 			React.createElement(
 				View,
 				{ accessibilityLabel: "safe-area-provider" },
@@ -83,7 +111,7 @@ jest.mock("@/auth/AuthSessionGate", () => {
 		jest.requireActual<typeof import("react-native")>("react-native");
 
 	return {
-		AuthSessionGate: ({ children }: { children: any }) =>
+		AuthSessionGate: ({ children }: ChildrenProps) =>
 			React.createElement(
 				View,
 				{ accessibilityLabel: "auth-session-gate" },
@@ -98,19 +126,7 @@ jest.mock("expo-router", () => {
 	const { Text, View } =
 		jest.requireActual<typeof import("react-native")>("react-native");
 
-	const Stack = ({ children, screenOptions }) =>
-		React.createElement(View, null, [
-			React.createElement(
-				Text,
-				{ key: "stack-mode" },
-				typeof screenOptions?.header === "function"
-					? "stack-custom-header"
-					: "stack",
-			),
-			children,
-		]);
-
-	const StackScreen = ({ name, options }) =>
+	const StackScreen = ({ name, options }: StackScreenProps) =>
 		React.createElement(
 			Text,
 			null,
@@ -118,7 +134,20 @@ jest.mock("expo-router", () => {
 		);
 
 	StackScreen.displayName = "StackScreen";
-	Stack.Screen = StackScreen;
+	const Stack = Object.assign(
+		({ children, screenOptions }: StackProps) =>
+			React.createElement(View, null, [
+				React.createElement(
+					Text,
+					{ key: "stack-mode" },
+					typeof screenOptions?.header === "function"
+						? "stack-custom-header"
+						: "stack",
+				),
+				children,
+			]),
+		{ Screen: StackScreen },
+	);
 
 	return {
 		usePathname: () => "/",
@@ -135,7 +164,7 @@ jest.mock("react-native-gesture-handler", () => {
 		jest.requireActual<typeof import("react-native")>("react-native");
 
 	return {
-		GestureHandlerRootView: ({ children }) =>
+		GestureHandlerRootView: ({ children }: ChildrenProps) =>
 			React.createElement(View, { accessibilityLabel: "gesture-root" }, children),
 	};
 });

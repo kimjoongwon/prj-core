@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
 import { Text } from "../../data-display/Text";
-import { DateStrip, type DateStripOption } from "./index";
+import { PureDateStrip as DateStrip, type DateStripOption } from "./index";
 
 const options: DateStripOption[] = [
   {

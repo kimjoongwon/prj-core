@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Bold, Italic, Redo2, Save, Underline, Undo2 } from "lucide-react";
 import { Button, ButtonGroup } from "../../action";
-import { ToggleButton, ToggleButtonGroup } from "../../selection";
 import { Separator } from "../Separator";
+import { ToggleButton } from "../../selection/ToggleButton/ToggleButton";
+import { ToggleButtonGroup } from "../../selection/ToggleButtonGroup/ToggleButtonGroup";
 import { Toolbar } from "./Toolbar";
 
 const meta = {

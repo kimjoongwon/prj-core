@@ -24,6 +24,7 @@
     "build": "tsc --build",
     "format": "biome check --write .",
     "type-check": "tsc --noEmit",
+    "type-check:prod": "tsc --noEmit",
     "clean": "rm -rf dist && rm -rf node_modules"
   },
   "dependencies": {

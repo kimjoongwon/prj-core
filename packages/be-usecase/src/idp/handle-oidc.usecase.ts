@@ -1,10 +1,10 @@
 import { HandleOidcCommand } from "@cocrepo/command";
 import { Inject } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 import { IDP_OIDC_PROVIDER_SERVICE, type OidcProviderPort } from "./idp.ports";
 
 @CommandHandler(HandleOidcCommand)
-export class HandleOidcUseCase implements ICommandHandler<HandleOidcCommand> {
+export class HandleOidcUseCase {
 	constructor(
 		@Inject(IDP_OIDC_PROVIDER_SERVICE)
 		private readonly oidcProviderService: OidcProviderPort,

@@ -1,13 +1,11 @@
 import { ReservationAggregate } from "@cocrepo/aggregate";
 import { CreateReservationCommand } from "@cocrepo/command";
 import { ReservationCreatedEvent } from "@cocrepo/event";
-import { CommandHandler, EventBus, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler, EventBus } from "@nestjs/cqrs";
 import { ReservationUseCaseContext } from "./reservation-context";
 
 @CommandHandler(CreateReservationCommand)
-export class CreateReservationUseCase
-	implements ICommandHandler<CreateReservationCommand>
-{
+export class CreateReservationUseCase {
 	constructor(
 		private readonly reservationService: ReservationAggregate,
 		private readonly context: ReservationUseCaseContext,

@@ -1,13 +1,11 @@
 import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { CreateOidcClientCommand } from "@cocrepo/command";
 import { Inject } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 import { IDP_OIDC_PROVIDER_SERVICE, type OidcProviderPort } from "./idp.ports";
 
 @CommandHandler(CreateOidcClientCommand)
-export class CreateOidcClientUseCase
-	implements ICommandHandler<CreateOidcClientCommand>
-{
+export class CreateOidcClientUseCase {
 	constructor(
 		private readonly oidcClientService: OidcClientAggregate,
 		@Inject(IDP_OIDC_PROVIDER_SERVICE)

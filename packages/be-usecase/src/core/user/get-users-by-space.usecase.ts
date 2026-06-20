@@ -1,12 +1,10 @@
 import { GetUsersBySpaceQuery } from "@cocrepo/command";
 import { UserService } from "@cocrepo/service";
 import { buildOffsetPaginationMeta } from "@cocrepo/toolkit";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetUsersBySpaceQuery)
-export class GetUsersBySpaceUseCase
-	implements IQueryHandler<GetUsersBySpaceQuery>
-{
+export class GetUsersBySpaceUseCase {
 	constructor(private readonly usersService: UserService) {}
 
 	async execute(query: GetUsersBySpaceQuery): Promise<unknown> {

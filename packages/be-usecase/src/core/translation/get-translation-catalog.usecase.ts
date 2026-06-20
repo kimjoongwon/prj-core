@@ -1,11 +1,9 @@
 import { TranslationCatalogAggregate } from "@cocrepo/aggregate";
 import { GetTranslationCatalogQuery } from "@cocrepo/command";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetTranslationCatalogQuery)
-export class GetTranslationCatalogUseCase
-	implements IQueryHandler<GetTranslationCatalogQuery>
-{
+export class GetTranslationCatalogUseCase {
 	constructor(
 		private readonly translationCatalogService: TranslationCatalogAggregate,
 	) {}

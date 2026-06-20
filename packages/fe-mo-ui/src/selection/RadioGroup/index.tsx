@@ -4,7 +4,7 @@ import {
   type ComponentRef,
   type ReactNode,
 } from "react";
-import { useFormField } from "@cocrepo/hook";
+import { useFormField } from "@cocrepo/hook/useFormField";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
@@ -15,7 +15,7 @@ import {
   useRadioGroupItem,
 } from "heroui-native";
 import { getTextContent, Text } from "../../data-display/Text";
-import { Radio } from "../Radio";
+import { PureRadio } from "../Radio";
 type HeroRadioGroupProps = ComponentPropsWithoutRef<typeof HeroRadioGroup>;
 type HeroRadioGroupItemProps = ComponentPropsWithoutRef<
   typeof HeroRadioGroup.Item
@@ -53,7 +53,7 @@ const PureRadioGroupComponent = forwardRef<
             ) : (
               <>
                 <Text variant="label">{label}</Text>
-                <Radio />
+                <PureRadio />
               </>
             )}
           </RadioGroupItem>
@@ -102,7 +102,7 @@ const RadioGroupItem = forwardRef<
       ) : (
         <>
           <Text variant="label">{label}</Text>
-          <Radio />
+          <PureRadio />
         </>
       )}
     </HeroRadioGroup.Item>

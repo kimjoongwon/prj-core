@@ -93,7 +93,7 @@ route `page.tsx`는 이 screen을 `ScreenSurface`로 감싸고, screen은 `VStac
 
 | 모듈 | 용도 |
 |------|------|
-| ../../feature/course | CourseConsole feature |
+| ../../feature/CourseConsole | CourseConsole feature |
 | ../../widget | PageTitleBar |
 | ../../rhythm | VStack |
 | ../../design-system | Button |

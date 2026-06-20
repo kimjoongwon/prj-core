@@ -1,7 +1,8 @@
 /// <reference types="vitest/globals" />
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { NavItem, type NavItemConfig } from "../navItem";
+import type { NavItemConfig } from "@cocrepo/type";
+import { NavItem } from "../navItem";
 import { NavigationStore } from "../navigationStore";
 
 describe("NavItem", () => {

@@ -1,9 +1,9 @@
 import { AssetAggregate } from "@cocrepo/aggregate";
 import { UploadAssetCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(UploadAssetCommand)
-export class UploadAssetUseCase implements ICommandHandler<UploadAssetCommand> {
+export class UploadAssetUseCase {
 	constructor(private readonly assetService: AssetAggregate) {}
 
 	execute(command: UploadAssetCommand): Promise<unknown> {

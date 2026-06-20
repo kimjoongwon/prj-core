@@ -1,11 +1,9 @@
 import { ActionAggregate } from "@cocrepo/aggregate";
 import { CreateActionCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(CreateActionCommand)
-export class CreateActionUseCase
-	implements ICommandHandler<CreateActionCommand>
-{
+export class CreateActionUseCase {
 	constructor(private readonly actionsService: ActionAggregate) {}
 
 	execute(command: CreateActionCommand): Promise<unknown> {

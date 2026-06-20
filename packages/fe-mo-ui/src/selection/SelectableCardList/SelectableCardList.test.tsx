@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import { DesignSystemProvider } from "../../design-system/provider";
-import { SelectableCardList } from "./index";
+import { PureSelectableCardList as SelectableCardList } from "./index";
 
 jest.mock("react-native-safe-area-context", () => ({
   SafeAreaListener: ({ children }: { children: ReactNode }) => children,

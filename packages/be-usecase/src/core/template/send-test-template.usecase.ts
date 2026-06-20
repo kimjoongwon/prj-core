@@ -1,11 +1,9 @@
 import { SendTestTemplateCommand } from "@cocrepo/command";
 import { TemplateService } from "@cocrepo/service";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(SendTestTemplateCommand)
-export class SendTestTemplateUseCase
-	implements ICommandHandler<SendTestTemplateCommand>
-{
+export class SendTestTemplateUseCase {
 	constructor(private readonly templateService: TemplateService) {}
 
 	async execute(command: SendTestTemplateCommand): Promise<unknown> {

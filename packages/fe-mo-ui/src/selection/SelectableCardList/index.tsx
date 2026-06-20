@@ -6,10 +6,13 @@ import {
   type ViewProps,
   type ViewStyle,
 } from "react-native";
+import { useFormField } from "@cocrepo/hook/useFormField";
+import { tools } from "@cocrepo/toolkit";
+import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
 import { Icon, type MobileIconName } from "../../icon";
-import { Radio } from "../Radio";
+import { PureRadio } from "../Radio";
 export interface SelectableCardItem {
   description?: ReactNode;
   disabledReason?: ReactNode;
@@ -21,7 +24,8 @@ export interface SelectableCardItem {
   title: ReactNode;
   value: string;
 }
-export interface SelectableCardListProps extends Omit<ViewProps, "children"> {
+export interface PureSelectableCardListProps
+  extends Omit<ViewProps, "children"> {
   cardStyle?: StyleProp<ViewStyle>;
   description?: ReactNode;
   disabled?: boolean;
@@ -138,7 +142,7 @@ const SelectionIndicator = ({
   });
   return (
     <View className={slotClassNames.indicator()}>
-      <Radio.Indicator className={slotClassNames.radioIndicator()} />
+      <PureRadio.Indicator className={slotClassNames.radioIndicator()} />
       <Text className={slotClassNames.indicatorText()}>
         {isSelected
           ? (config.selectedLabel ?? "Selected")
@@ -163,7 +167,7 @@ const SelectableCard = ({
     selected: isSelected,
   });
   return (
-    <Radio
+    <PureRadio
       accessibilityLabel={toAccessibleText(item.title)}
       accessibilityState={{
         checked: isSelected,
@@ -207,7 +211,7 @@ const SelectableCard = ({
       <SelectableMetaList item={item} />
       <SelectableTags item={item} />
       <DisabledReasonText item={item} />
-    </Radio>
+    </PureRadio>
   );
 };
 const SelectableCards = ({
@@ -246,8 +250,8 @@ const EmptyContent = ({
     </View>
   );
 };
-const SelectableCardListComponent = observer(
-  (props: SelectableCardListProps) => {
+const PureSelectableCardListComponent = observer(
+  (props: PureSelectableCardListProps) => {
     const {
       cardStyle,
       description,
@@ -289,6 +293,35 @@ const SelectableCardListComponent = observer(
           <EmptyContent emptyContent={emptyContent} emptyLabel={emptyLabel} />
         )}
       </View>
+    );
+  },
+);
+PureSelectableCardListComponent.displayName = "PureSelectableCardList";
+export const PureSelectableCardList = PureSelectableCardListComponent;
+export interface SelectableCardListProps<
+  TState extends object = Record<string, unknown>,
+> extends MobxProps<TState>,
+    Omit<PureSelectableCardListProps, "onSelect" | "selectedValue"> {
+  onSelect?: PureSelectableCardListProps["onSelect"];
+}
+const SelectableCardListComponent = observer(
+  <TState extends object>(props: SelectableCardListProps<TState>) => {
+    const { onSelect, path, state, ...rest } = props;
+    const field = useFormField<TState, string | null>({
+      path,
+      state,
+      value: (tools.get(state, path) ?? null) as string | null,
+    });
+    const handleSelect: PureSelectableCardListProps["onSelect"] = (value) => {
+      field.setValue(value);
+      onSelect?.(value);
+    };
+    return (
+      <PureSelectableCardList
+        {...rest}
+        onSelect={handleSelect}
+        selectedValue={field.state.value}
+      />
     );
   },
 );

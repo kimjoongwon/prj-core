@@ -1,11 +1,9 @@
 import { IdpDashboardAggregate } from "@cocrepo/aggregate";
 import { GetIdpLoginTrendQuery } from "@cocrepo/command";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetIdpLoginTrendQuery)
-export class GetIdpLoginTrendUseCase
-	implements IQueryHandler<GetIdpLoginTrendQuery>
-{
+export class GetIdpLoginTrendUseCase {
 	constructor(private readonly idpDashboardService: IdpDashboardAggregate) {}
 
 	execute(): Promise<unknown> {

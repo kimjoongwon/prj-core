@@ -1,12 +1,10 @@
 import { InquiryAggregate } from "@cocrepo/aggregate";
 import { GetInquiryByIdQuery } from "@cocrepo/command";
 import { SpaceContext } from "@cocrepo/service";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetInquiryByIdQuery)
-export class GetInquiryByIdUseCase
-	implements IQueryHandler<GetInquiryByIdQuery>
-{
+export class GetInquiryByIdUseCase {
 	constructor(
 		private readonly inquiryService: InquiryAggregate,
 		private readonly spaceContext: SpaceContext,

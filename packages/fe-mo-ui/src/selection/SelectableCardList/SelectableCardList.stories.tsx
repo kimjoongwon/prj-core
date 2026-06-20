@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
 import { Text } from "../../data-display/Text";
-import { SelectableCardList } from "./index";
+import { PureSelectableCardList as SelectableCardList } from "./index";
 
 const meta = {
   title: "selection/SelectableCardList",

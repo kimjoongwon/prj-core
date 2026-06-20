@@ -1,9 +1,9 @@
 import { RoleAggregate } from "@cocrepo/aggregate";
 import { CreateRoleCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(CreateRoleCommand)
-export class CreateRoleUseCase implements ICommandHandler<CreateRoleCommand> {
+export class CreateRoleUseCase {
 	constructor(private readonly rolesService: RoleAggregate) {}
 
 	execute(command: CreateRoleCommand): Promise<unknown> {

@@ -31,6 +31,7 @@ COPY --from=setup /app/out/full/ ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     --mount=type=cache,id=turbo,target=/app/.turbo \
     { ulimit -n "${STORYBOOK_BUILD_NOFILE}" 2>/dev/null || ulimit -n 16384 2>/dev/null || true; } && \
+    pnpm exec turbo type-check:prod --filter=tool-storybook... && \
     STORYBOOK_DISABLE_CHROMATIC="${STORYBOOK_DISABLE_CHROMATIC}" pnpm exec turbo build --filter=tool-storybook...
 
 FROM ${NGINX_BASE_IMAGE} AS runner

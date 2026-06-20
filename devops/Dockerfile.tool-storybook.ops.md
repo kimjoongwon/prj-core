@@ -16,7 +16,7 @@
 | 기본 구성 | `base -> setup -> builder -> runner` |
 | 베이스 이미지 | `docker.io/library/node:24-alpine`, `docker.io/library/nginx:1.27-alpine` |
 | setup 단계 | `COPY . .` 후 `turbo prune --scope=tool-storybook --docker` |
-| builder 단계 | prune된 워크스페이스 기준으로 `pnpm install --no-frozen-lockfile --prefer-offline` 후 `nofile` 한계를 상향하고 `STORYBOOK_DISABLE_CHROMATIC=true` 상태로 `pnpm exec turbo build --filter=tool-storybook...` 실행 |
+| builder 단계 | prune된 워크스페이스 기준으로 `pnpm install --no-frozen-lockfile --prefer-offline` 후 `nofile` 한계를 상향하고 `type-check:prod`를 먼저 실행한 뒤 `STORYBOOK_DISABLE_CHROMATIC=true` 상태로 `pnpm exec turbo build --filter=tool-storybook...` 실행 |
 | runner 단계 | fully qualified `docker.io/library/nginx:1.27-alpine` 기반 정적 파일 서빙 |
 | 런타임 포트 | `3009` |
 | 진입 경로 | `/storybook` 요청을 `/storybook/`으로 정규화하고 정적 산출물을 해당 prefix 아래에서 반환 |
@@ -25,6 +25,7 @@
 
 - [x] `turbo prune --scope=tool-storybook --docker`로 불필요한 workspace를 제거
 - [x] `out/json` 선복사 후 `pnpm install --no-frozen-lockfile`로 prune lockfile 기준 설치를 수행
+- [x] `pnpm exec turbo type-check:prod --filter=tool-storybook...`로 배포용 타입 체크를 먼저 수행
 - [x] `pnpm exec turbo build --filter=tool-storybook...`로 Storybook 의존 그래프만 빌드
 - [x] 정적 산출물 `apps/tool/storybook/storybook-static`를 nginx document root로 복사
 - [x] `/storybook` prefix 전용 nginx 라우팅 설정을 포함

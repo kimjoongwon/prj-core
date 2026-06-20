@@ -1,9 +1,9 @@
 import { ActionAggregate } from "@cocrepo/aggregate";
 import { GetActionsQuery } from "@cocrepo/command";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetActionsQuery)
-export class GetActionsUseCase implements IQueryHandler<GetActionsQuery> {
+export class GetActionsUseCase {
 	constructor(private readonly actionsService: ActionAggregate) {}
 
 	execute(query: GetActionsQuery): Promise<unknown> {

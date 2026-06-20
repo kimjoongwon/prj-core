@@ -1,11 +1,9 @@
 import { UpdateTemplateCommand } from "@cocrepo/command";
 import { TemplateService } from "@cocrepo/service";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(UpdateTemplateCommand)
-export class UpdateTemplateUseCase
-	implements ICommandHandler<UpdateTemplateCommand>
-{
+export class UpdateTemplateUseCase {
 	constructor(private readonly templateService: TemplateService) {}
 
 	execute(command: UpdateTemplateCommand): Promise<unknown> {

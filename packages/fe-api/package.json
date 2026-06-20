@@ -39,7 +39,8 @@
     "codegen:prod": "ORVAL_ENV=prod orval --config orval.config.js",
     "lint": "biome lint",
     "format": "biome check --write .",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
+    "type-check:prod": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },

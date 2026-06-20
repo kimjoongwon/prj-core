@@ -170,7 +170,10 @@ describe("PersistStore", () => {
 
 			// Then
 			expect(mockLocalStorage.setItem).toHaveBeenCalled();
-			const latestCall = mockLocalStorage.setItem.mock.calls.at(-1);
+			const latestCall =
+				mockLocalStorage.setItem.mock.calls[
+					mockLocalStorage.setItem.mock.calls.length - 1
+				];
 			expect(latestCall?.[0]).toBe(STORAGE_KEY);
 			expect(JSON.parse(latestCall?.[1] as string)).toMatchObject({
 				spaceId: "space-456",
@@ -249,7 +252,10 @@ describe("PersistStore", () => {
 
 			// Then
 			expect(mockLocalStorage.setItem).toHaveBeenCalled();
-			const latestCall = mockLocalStorage.setItem.mock.calls.at(-1);
+			const latestCall =
+				mockLocalStorage.setItem.mock.calls[
+					mockLocalStorage.setItem.mock.calls.length - 1
+				];
 			expect(latestCall?.[0]).toBe(STORAGE_KEY);
 			expect(JSON.parse(latestCall?.[1] as string)).toMatchObject({
 				accessToken: "access-token",

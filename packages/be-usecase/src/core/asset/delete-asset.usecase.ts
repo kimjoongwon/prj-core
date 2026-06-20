@@ -1,9 +1,9 @@
 import { AssetAggregate } from "@cocrepo/aggregate";
 import { DeleteAssetCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(DeleteAssetCommand)
-export class DeleteAssetUseCase implements ICommandHandler<DeleteAssetCommand> {
+export class DeleteAssetUseCase {
 	constructor(private readonly assetService: AssetAggregate) {}
 
 	async execute(command: DeleteAssetCommand): Promise<void> {

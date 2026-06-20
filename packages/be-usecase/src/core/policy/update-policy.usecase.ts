@@ -1,11 +1,9 @@
 import { PolicyAggregate } from "@cocrepo/aggregate";
 import { UpdatePolicyCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(UpdatePolicyCommand)
-export class UpdatePolicyUseCase
-	implements ICommandHandler<UpdatePolicyCommand>
-{
+export class UpdatePolicyUseCase {
 	constructor(private readonly policyService: PolicyAggregate) {}
 
 	execute(command: UpdatePolicyCommand): Promise<unknown> {

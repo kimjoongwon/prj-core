@@ -12,7 +12,9 @@ import { StatusFeedback } from "../../feedback/StatusFeedback";
 import { Icon } from "../../icon";
 import { Card } from "../../layout/Card";
 import { ScreenFrame } from "../../layout/ScreenFrame";
-import { SelectableCardList } from "../../selection/SelectableCardList";
+import {
+  PureSelectableCardList as SelectableCardList,
+} from "../../selection/SelectableCardList";
 export type ReservationPaymentCheckoutStatus =
   | "idle"
   | "loading"

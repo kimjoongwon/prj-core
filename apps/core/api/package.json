@@ -11,6 +11,7 @@
     "start:debug": "set -a; [ -f .env ] && . ./.env; set +a; APP_PORT=${CORE_API_PORT:-${APP_PORT:-3006}} nest build --webpack --webpackPath webpack.config.js --watch",
     "start:prod": "node dist/main",
     "type-check": "tsc --noEmit",
+    "type-check:prod": "tsc --noEmit -p tsconfig.build.json",
     "lint": "biome check src",
     "lint:fix": "biome check --write src",
     "format": "biome check --write src",

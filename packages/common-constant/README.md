@@ -56,9 +56,6 @@ const userDescription = API_DESCRIPTIONS.USER.CREATE;
 const defaultPagination = DEFAULT_OBJECTS.PAGINATION;
 ```
 
-> **참고**: 이 패키지는 기존 `@cocrepo/db`에서 분리되었습니다.
-> 마이그레이션 가이드: [docs/SCHEMA-REFACTORING.md](../../docs/SCHEMA-REFACTORING.md)
-
 ## Features
 
 - 🎯 **중앙화된 상수** - 공유 값의 단일 기준

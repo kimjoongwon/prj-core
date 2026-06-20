@@ -1,12 +1,10 @@
 import { InquiryAggregate } from "@cocrepo/aggregate";
 import { GetInquiryMessagesQuery } from "@cocrepo/command";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetInquiryMessagesQuery)
-export class GetInquiryMessagesUseCase
-	implements IQueryHandler<GetInquiryMessagesQuery>
-{
+export class GetInquiryMessagesUseCase {
 	constructor(private readonly inquiryService: InquiryAggregate) {}
 
 	async execute(query: GetInquiryMessagesQuery): Promise<unknown> {

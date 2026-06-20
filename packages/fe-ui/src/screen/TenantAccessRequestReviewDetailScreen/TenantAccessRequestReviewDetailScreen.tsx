@@ -13,7 +13,7 @@ import {
 	type TenantAccessRequestStatus,
 	TenantAccessRequestStatusBadge,
 	TenantAccessRequestSummary,
-} from "../../widget/tenant-access-request";
+} from "../../widget";
 
 export interface TenantAccessRequestReviewDetail {
 	id: string;

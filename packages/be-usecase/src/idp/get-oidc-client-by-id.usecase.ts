@@ -1,11 +1,9 @@
 import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { GetOidcClientQuery } from "@cocrepo/command";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetOidcClientQuery)
-export class GetOidcClientByIdUseCase
-	implements IQueryHandler<GetOidcClientQuery>
-{
+export class GetOidcClientByIdUseCase {
 	constructor(private readonly oidcClientService: OidcClientAggregate) {}
 
 	execute(query: GetOidcClientQuery): Promise<unknown> {

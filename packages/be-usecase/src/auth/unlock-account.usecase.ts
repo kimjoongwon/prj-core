@@ -1,11 +1,9 @@
 import { UnlockAccountCommand } from "@cocrepo/command";
 import { UserService } from "@cocrepo/service";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(UnlockAccountCommand)
-export class UnlockAccountUseCase
-	implements ICommandHandler<UnlockAccountCommand>
-{
+export class UnlockAccountUseCase {
 	constructor(private readonly usersService: UserService) {}
 
 	async execute(command: UnlockAccountCommand): Promise<boolean> {

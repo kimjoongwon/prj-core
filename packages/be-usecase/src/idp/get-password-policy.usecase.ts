@@ -1,15 +1,13 @@
 import { GetPasswordPolicyQuery } from "@cocrepo/command";
 import { Inject } from "@nestjs/common";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 import {
 	IDP_PASSWORD_RESET_SERVICE,
 	type PasswordResetPort,
 } from "./idp.ports";
 
 @QueryHandler(GetPasswordPolicyQuery)
-export class GetPasswordPolicyUseCase
-	implements IQueryHandler<GetPasswordPolicyQuery>
-{
+export class GetPasswordPolicyUseCase {
 	constructor(
 		@Inject(IDP_PASSWORD_RESET_SERVICE)
 		private readonly passwordResetService: PasswordResetPort,

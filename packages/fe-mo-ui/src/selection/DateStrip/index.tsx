@@ -8,6 +8,9 @@ import {
   type ViewProps,
   type ViewStyle,
 } from "react-native";
+import { useFormField } from "@cocrepo/hook/useFormField";
+import { tools } from "@cocrepo/toolkit";
+import type { MobxProps } from "@cocrepo/type";
 import { Text } from "../../data-display/Text";
 import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
@@ -19,7 +22,7 @@ export interface DateStripOption {
   isDisabled?: boolean;
   value: string;
 }
-export interface DateStripProps extends Omit<ViewProps, "children"> {
+export interface PureDateStripProps extends Omit<ViewProps, "children"> {
   contentContainerClassName?: string;
   contentContainerStyle?: StyleProp<ViewStyle>;
   disabled?: boolean;
@@ -39,7 +42,7 @@ const getAccessibilityLabel = (option: DateStripOption) =>
 const createSelectHandler = (
   option: DateStripOption,
   disabled: boolean,
-  onSelect: DateStripProps["onSelect"],
+  onSelect: PureDateStripProps["onSelect"],
 ) => {
   if (disabled || option.isDisabled) {
     return undefined;
@@ -74,7 +77,7 @@ const DateOption = ({
   onSelect,
   option,
   selectedValue,
-}: Pick<DateStripProps, "disabled" | "onSelect" | "selectedValue"> & {
+}: Pick<PureDateStripProps, "disabled" | "onSelect" | "selectedValue"> & {
   index: number;
   option: DateStripOption;
 }) => {
@@ -115,7 +118,7 @@ const DateOptions = ({
   options = [],
   selectedValue,
 }: Pick<
-  DateStripProps,
+  PureDateStripProps,
   "disabled" | "onSelect" | "options" | "selectedValue"
 >) => (
   <>
@@ -131,7 +134,7 @@ const DateOptions = ({
     ))}
   </>
 );
-const DateStripComponent = observer((props: DateStripProps) => {
+const PureDateStripComponent = observer((props: PureDateStripProps) => {
   const {
     className,
     contentContainerClassName,
@@ -178,6 +181,35 @@ const DateStripComponent = observer((props: DateStripProps) => {
     </View>
   );
 });
+PureDateStripComponent.displayName = "PureDateStrip";
+export const PureDateStrip = PureDateStripComponent;
+export interface DateStripProps<
+  TState extends object = Record<string, unknown>,
+> extends MobxProps<TState>,
+    Omit<PureDateStripProps, "onSelect" | "selectedValue"> {
+  onSelect?: PureDateStripProps["onSelect"];
+}
+const DateStripComponent = observer(
+  <TState extends object>(props: DateStripProps<TState>) => {
+    const { onSelect, path, state, ...rest } = props;
+    const field = useFormField<TState, string | null>({
+      path,
+      state,
+      value: (tools.get(state, path) ?? null) as string | null,
+    });
+    const handleSelect: PureDateStripProps["onSelect"] = (value, option) => {
+      field.setValue(value);
+      onSelect?.(value, option);
+    };
+    return (
+      <PureDateStrip
+        {...rest}
+        onSelect={handleSelect}
+        selectedValue={field.state.value}
+      />
+    );
+  },
+);
 DateStripComponent.displayName = "DateStrip";
 export const DateStrip = DateStripComponent;
 const dateStripClassNames = tv({

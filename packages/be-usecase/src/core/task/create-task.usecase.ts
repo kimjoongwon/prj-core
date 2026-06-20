@@ -1,9 +1,9 @@
 import { TaskAggregate } from "@cocrepo/aggregate";
 import { CreateTaskCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(CreateTaskCommand)
-export class CreateTaskUseCase implements ICommandHandler<CreateTaskCommand> {
+export class CreateTaskUseCase {
 	constructor(private readonly taskService: TaskAggregate) {}
 
 	execute(command: CreateTaskCommand): Promise<unknown> {

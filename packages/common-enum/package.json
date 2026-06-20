@@ -23,6 +23,8 @@
   "scripts": {
     "start:dev": "tsc --build --watch",
     "build": "tsc --build",
+    "type-check": "tsc --noEmit",
+    "type-check:prod": "tsc --noEmit",
     "format": "biome check --write ."
   },
   "keywords": [],

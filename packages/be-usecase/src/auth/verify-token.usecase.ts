@@ -2,12 +2,12 @@ import { VerifyTokenQuery } from "@cocrepo/command";
 import { CONTEXT_KEYS, SYSTEM_ROLES } from "@cocrepo/constant";
 import { VerifyTokenResponseDto } from "@cocrepo/dto";
 import { ForbiddenException, UnauthorizedException } from "@nestjs/common";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 import { ClsService } from "nestjs-cls";
 import { decodeAccessToken, type SpaceTenantLike } from "./auth-support";
 
 @QueryHandler(VerifyTokenQuery)
-export class VerifyTokenUseCase implements IQueryHandler<VerifyTokenQuery> {
+export class VerifyTokenUseCase {
 	constructor(private readonly cls: ClsService) {}
 
 	async execute(): Promise<VerifyTokenResponseDto> {

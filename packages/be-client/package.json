@@ -13,6 +13,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "type-check": "tsc --noEmit",
+    "type-check:prod": "tsc --noEmit",
     "build": "tsc --build",
     "start:dev": "tsc --build --watch",
     "format": "biome check --write .",

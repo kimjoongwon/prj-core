@@ -2,12 +2,10 @@ import { RoutineAggregate } from "@cocrepo/aggregate";
 import { CreateRoutineCommand } from "@cocrepo/command";
 import { AuthContext } from "@cocrepo/service";
 import { UnauthorizedException } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(CreateRoutineCommand)
-export class CreateRoutineUseCase
-	implements ICommandHandler<CreateRoutineCommand>
-{
+export class CreateRoutineUseCase {
 	constructor(
 		private readonly routinesService: RoutineAggregate,
 		private readonly authContext: AuthContext,

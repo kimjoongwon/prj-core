@@ -6,10 +6,10 @@ import {
 	Input,
 	PageTitleBar,
 	SectionSurface,
-	Select,
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
+import { Select } from "../../selection/Select/Select";
 export interface SpaceCreateScreenProps {
 	name: string;
 	label: string;

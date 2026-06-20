@@ -1,11 +1,9 @@
 import { PolicyAssignmentAggregate } from "@cocrepo/aggregate";
 import { GetRolePoliciesQuery } from "@cocrepo/command";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetRolePoliciesQuery)
-export class GetRolePoliciesUseCase
-	implements IQueryHandler<GetRolePoliciesQuery>
-{
+export class GetRolePoliciesUseCase {
 	constructor(
 		private readonly policyAssignmentService: PolicyAssignmentAggregate,
 	) {}

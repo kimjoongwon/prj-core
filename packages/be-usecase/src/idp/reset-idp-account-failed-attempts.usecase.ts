@@ -1,11 +1,9 @@
 import { IdpAccountAggregate } from "@cocrepo/aggregate";
 import { ResetIdpAccountFailedAttemptsCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(ResetIdpAccountFailedAttemptsCommand)
-export class ResetIdpAccountFailedAttemptsUseCase
-	implements ICommandHandler<ResetIdpAccountFailedAttemptsCommand>
-{
+export class ResetIdpAccountFailedAttemptsUseCase {
 	constructor(private readonly idpAccountService: IdpAccountAggregate) {}
 
 	async execute(command: ResetIdpAccountFailedAttemptsCommand): Promise<void> {

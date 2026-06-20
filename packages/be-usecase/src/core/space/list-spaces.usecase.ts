@@ -2,10 +2,10 @@ import { SpaceAggregate } from "@cocrepo/aggregate";
 import { ListSpacesQuery } from "@cocrepo/command";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
 import { Logger } from "@nestjs/common";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(ListSpacesQuery)
-export class ListSpacesUseCase implements IQueryHandler<ListSpacesQuery> {
+export class ListSpacesUseCase {
 	private readonly logger = new Logger(ListSpacesUseCase.name);
 
 	constructor(private readonly spaceService: SpaceAggregate) {}

@@ -1,9 +1,9 @@
 import { PolicyAggregate } from "@cocrepo/aggregate";
 import { ListPoliciesQuery } from "@cocrepo/command";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(ListPoliciesQuery)
-export class ListPoliciesUseCase implements IQueryHandler<ListPoliciesQuery> {
+export class ListPoliciesUseCase {
 	constructor(private readonly policyService: PolicyAggregate) {}
 
 	execute(): Promise<unknown> {

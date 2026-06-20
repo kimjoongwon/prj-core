@@ -16,7 +16,8 @@
     "preandroid": "pnpm run storybook:generate",
     "android": "expo start --android --port 8083",
     "storybook:generate": "sb-rn-get-stories --config-path ./.rnstorybook",
-    "type-check": "pnpm run storybook:generate && tsc --noEmit"
+    "type-check": "pnpm run storybook:generate && tsc --noEmit",
+    "type-check:prod": "pnpm run storybook:generate && tsc --noEmit"
   },
   "dependencies": {
     "@cocrepo/api": "workspace:*",

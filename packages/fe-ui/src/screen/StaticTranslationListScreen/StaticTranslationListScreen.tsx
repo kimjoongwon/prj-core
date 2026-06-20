@@ -16,7 +16,6 @@ import {
 	Input,
 	PageTitleBar,
 	SectionSurface,
-	Select,
 	TextArea,
 	useT,
 	VStack,
@@ -25,8 +24,9 @@ import { Modal, useOverlayState } from "@heroui/react";
 import { Languages, Plus, RefreshCcw } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type FormEvent, useEffect, useState } from "react";
+import { Select } from "../../selection/Select/Select";
 import { Switch } from "../../selection/Switch/Switch";
-import { ConfirmModal } from "../../widget/common/ConfirmModal";
+import { ConfirmModal } from "../../widget/ConfirmModal";
 
 export type StaticTranslationLanguageCode =
 	| "ko_KR"

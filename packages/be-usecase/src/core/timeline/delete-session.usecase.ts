@@ -1,11 +1,9 @@
 import { TimelineAggregate } from "@cocrepo/aggregate";
 import { DeleteSessionCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(DeleteSessionCommand)
-export class DeleteSessionUseCase
-	implements ICommandHandler<DeleteSessionCommand>
-{
+export class DeleteSessionUseCase {
 	constructor(private readonly timelinesService: TimelineAggregate) {}
 
 	execute(command: DeleteSessionCommand): Promise<void> {

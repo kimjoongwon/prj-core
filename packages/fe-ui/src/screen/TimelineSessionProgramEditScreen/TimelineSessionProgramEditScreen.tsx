@@ -7,12 +7,12 @@ import {
 	PageTitleBar,
 	ProgramPickerModal,
 	SectionSurface,
-	Select,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Select } from "../../selection/Select/Select";
 import type { TimelineSessionProgramCreateScreenProps } from "../TimelineSessionProgramCreateScreen/TimelineSessionProgramCreateScreen";
 
 const LEVEL_OPTIONS = [

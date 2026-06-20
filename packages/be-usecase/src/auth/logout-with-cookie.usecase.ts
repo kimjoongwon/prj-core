@@ -4,7 +4,7 @@ import { LogoutWithCookieCommand } from "@cocrepo/command";
 import { Token } from "@cocrepo/constant";
 import { TokenService, TokenStorageService } from "@cocrepo/service";
 import { Logger } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 import {
 	clearOidcProviderCookies,
 	resolveOidcClient,
@@ -17,9 +17,7 @@ import {
 } from "./auth-support";
 
 @CommandHandler(LogoutWithCookieCommand)
-export class LogoutWithCookieUseCase
-	implements ICommandHandler<LogoutWithCookieCommand>
-{
+export class LogoutWithCookieUseCase {
 	private readonly logger = new Logger(LogoutWithCookieUseCase.name);
 
 	constructor(

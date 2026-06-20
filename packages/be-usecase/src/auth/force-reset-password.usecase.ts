@@ -4,12 +4,10 @@ import {
 	TokenStorageService,
 	UserService,
 } from "@cocrepo/service";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(ForceResetPasswordCommand)
-export class ForceResetPasswordUseCase
-	implements ICommandHandler<ForceResetPasswordCommand>
-{
+export class ForceResetPasswordUseCase {
 	constructor(
 		private readonly usersService: UserService,
 		private readonly emailService: EmailService,

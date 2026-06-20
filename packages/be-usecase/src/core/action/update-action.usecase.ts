@@ -2,12 +2,10 @@ import { ActionAggregate } from "@cocrepo/aggregate";
 import { UpdateActionCommand } from "@cocrepo/command";
 import { ACTION_ERRORS } from "@cocrepo/constant";
 import { BadRequestException } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(UpdateActionCommand)
-export class UpdateActionUseCase
-	implements ICommandHandler<UpdateActionCommand>
-{
+export class UpdateActionUseCase {
 	constructor(private readonly actionsService: ActionAggregate) {}
 
 	async execute(command: UpdateActionCommand): Promise<unknown> {

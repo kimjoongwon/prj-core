@@ -1,11 +1,9 @@
 import { PreviewTemplateQuery } from "@cocrepo/command";
 import { TemplateService } from "@cocrepo/service";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(PreviewTemplateQuery)
-export class PreviewTemplateUseCase
-	implements IQueryHandler<PreviewTemplateQuery>
-{
+export class PreviewTemplateUseCase {
 	constructor(private readonly templateService: TemplateService) {}
 
 	async execute(query: PreviewTemplateQuery): Promise<unknown> {

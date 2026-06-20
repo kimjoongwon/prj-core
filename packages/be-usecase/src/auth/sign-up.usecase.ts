@@ -3,11 +3,11 @@ import { SignUpCommand } from "@cocrepo/command";
 import { UserService } from "@cocrepo/service";
 import { Email, HashedPassword, Phone, PlainPassword } from "@cocrepo/vo";
 import { BadRequestException } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 import { getSignUpSpaceOrThrow } from "./auth-account.support";
 
 @CommandHandler(SignUpCommand)
-export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
+export class SignUpUseCase {
 	constructor(
 		private readonly usersService: UserService,
 		private readonly spacesService: SpaceAggregate,

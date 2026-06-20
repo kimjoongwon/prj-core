@@ -1,12 +1,10 @@
 import { EmailVerificationAggregate } from "@cocrepo/aggregate";
 import { GetEmailVerificationsQuery } from "@cocrepo/command";
 import { PageMetaDto } from "@cocrepo/dto";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetEmailVerificationsQuery)
-export class GetEmailVerificationsUseCase
-	implements IQueryHandler<GetEmailVerificationsQuery>
-{
+export class GetEmailVerificationsUseCase {
 	constructor(
 		private readonly emailVerificationService: EmailVerificationAggregate,
 	) {}

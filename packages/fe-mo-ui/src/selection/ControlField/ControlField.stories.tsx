@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-native";
 import { Description, FieldError, Label } from "heroui-native";
 import { View } from "react-native";
 import { Text } from "../../data-display/Text";
-import { ControlField } from "./index";
+import { PureControlField as ControlField } from "./index";
 
 const meta = {
   title: "selection/ControlField",

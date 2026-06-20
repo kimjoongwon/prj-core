@@ -1,11 +1,9 @@
 import { SubjectAggregate } from "@cocrepo/aggregate";
 import { GetSubjectFieldsQuery } from "@cocrepo/command";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetSubjectFieldsQuery)
-export class GetSubjectFieldsUseCase
-	implements IQueryHandler<GetSubjectFieldsQuery>
-{
+export class GetSubjectFieldsUseCase {
 	constructor(private readonly subjectsService: SubjectAggregate) {}
 
 	async execute(query: GetSubjectFieldsQuery): Promise<unknown> {

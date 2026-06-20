@@ -1,9 +1,9 @@
 import { TaskAggregate } from "@cocrepo/aggregate";
 import { DeleteTaskCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(DeleteTaskCommand)
-export class DeleteTaskUseCase implements ICommandHandler<DeleteTaskCommand> {
+export class DeleteTaskUseCase {
 	constructor(private readonly taskService: TaskAggregate) {}
 
 	async execute(command: DeleteTaskCommand): Promise<void> {

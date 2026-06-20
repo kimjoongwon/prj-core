@@ -5,12 +5,10 @@ import { CommunityPostDto } from "@cocrepo/dto";
 import { AuthContext, SpaceContext } from "@cocrepo/service";
 import { buildOffsetPaginationMeta } from "@cocrepo/toolkit";
 import { UnauthorizedException } from "@nestjs/common";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetCommunityPostsQuery)
-export class GetCommunityPostsUseCase
-	implements IQueryHandler<GetCommunityPostsQuery>
-{
+export class GetCommunityPostsUseCase {
 	constructor(
 		private readonly contentService: ContentAggregate,
 		private readonly authContext: AuthContext,

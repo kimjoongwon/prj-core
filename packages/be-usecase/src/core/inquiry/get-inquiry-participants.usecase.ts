@@ -1,11 +1,9 @@
 import { InquiryAggregate } from "@cocrepo/aggregate";
 import { GetInquiryParticipantsQuery } from "@cocrepo/command";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetInquiryParticipantsQuery)
-export class GetInquiryParticipantsUseCase
-	implements IQueryHandler<GetInquiryParticipantsQuery>
-{
+export class GetInquiryParticipantsUseCase {
 	constructor(private readonly inquiryService: InquiryAggregate) {}
 
 	execute(query: GetInquiryParticipantsQuery): Promise<unknown> {

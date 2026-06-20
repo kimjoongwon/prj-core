@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
-import { DateStrip } from "./index";
+import { PureDateStrip as DateStrip } from "./index";
 
 describe("DateStrip", () => {
 	it("선택 가능한 날짜를 누르면 value와 option을 전달해야 한다", () => {

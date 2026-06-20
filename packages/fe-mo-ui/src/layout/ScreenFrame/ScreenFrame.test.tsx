@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 import { ScreenFrame, type ScreenFrameProps } from "./index";
 
 jest.mock("react-native", () => ({
@@ -15,12 +15,14 @@ jest.mock("react-native-safe-area-context", () => ({
 }));
 
 describe("ScreenFrame", () => {
-	const renderScreenFrame = (props: ScreenFrameProps) =>
+	const renderScreenFrame = (
+		props: ScreenFrameProps,
+	): ReactElement<ScreenFrameProps> =>
 		(
 			ScreenFrame as unknown as {
 				render: (props: ScreenFrameProps, ref: null) => ReactElement;
 			}
-		).render(props, null);
+		).render(props, null) as ReactElement<ScreenFrameProps>;
 
 	it("기본 edge safe-area padding과 배경색을 적용해야 한다", () => {
 		const frame = renderScreenFrame({
@@ -70,7 +72,10 @@ describe("ScreenFrame", () => {
 			bottomClassName: "border-t border-border",
 			children: "content",
 		});
-		const [content, bottom] = frame.props.children;
+		const [content, bottom] = frame.props.children as ReactElement<{
+			children?: ReactNode;
+			className?: string;
+		}>[];
 
 		expect(content.props.className).toBe("flex-1");
 		expect(bottom.props.className).toBe("shrink-0 border-t border-border");

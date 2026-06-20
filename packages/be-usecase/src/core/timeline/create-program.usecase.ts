@@ -1,11 +1,9 @@
 import { TimelineAggregate } from "@cocrepo/aggregate";
 import { CreateProgramCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(CreateProgramCommand)
-export class CreateProgramUseCase
-	implements ICommandHandler<CreateProgramCommand>
-{
+export class CreateProgramUseCase {
 	constructor(private readonly timelinesService: TimelineAggregate) {}
 
 	execute(command: CreateProgramCommand): Promise<unknown> {

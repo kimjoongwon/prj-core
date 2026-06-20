@@ -6,12 +6,12 @@ jest.mock("react-native", () => ({
 }));
 
 describe("HStack", () => {
-	const renderHStack = (props: HStackProps) =>
+	const renderHStack = (props: HStackProps): ReactElement<HStackProps> =>
 		(
 			HStack as unknown as {
 				render: (props: HStackProps, ref: null) => ReactElement;
 			}
-		).render(props, null);
+		).render(props, null) as ReactElement<HStackProps>;
 
 	it("기본 가로 리듬과 inline gap을 적용해야 한다", () => {
 		const stack = renderHStack({

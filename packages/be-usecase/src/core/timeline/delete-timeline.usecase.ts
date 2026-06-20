@@ -3,12 +3,10 @@ import { DeleteTimelineCommand } from "@cocrepo/command";
 import { TIMELINE_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/service";
 import { UnauthorizedException } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(DeleteTimelineCommand)
-export class DeleteTimelineUseCase
-	implements ICommandHandler<DeleteTimelineCommand>
-{
+export class DeleteTimelineUseCase {
 	constructor(
 		private readonly timelinesService: TimelineAggregate,
 		private readonly spaceContext: SpaceContext,

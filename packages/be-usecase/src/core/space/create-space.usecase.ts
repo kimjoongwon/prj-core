@@ -1,9 +1,9 @@
 import { SpaceAggregate } from "@cocrepo/aggregate";
 import { CreateSpaceCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(CreateSpaceCommand)
-export class CreateSpaceUseCase implements ICommandHandler<CreateSpaceCommand> {
+export class CreateSpaceUseCase {
 	constructor(private readonly spaceService: SpaceAggregate) {}
 
 	execute(command: CreateSpaceCommand): Promise<unknown> {

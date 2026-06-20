@@ -1,12 +1,10 @@
 import { OidcSessionAggregate } from "@cocrepo/aggregate";
 import { GetOidcSessionsQuery } from "@cocrepo/command";
 import { PageMetaDto } from "@cocrepo/dto";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetOidcSessionsQuery)
-export class GetOidcSessionsUseCase
-	implements IQueryHandler<GetOidcSessionsQuery>
-{
+export class GetOidcSessionsUseCase {
 	constructor(private readonly oidcSessionService: OidcSessionAggregate) {}
 
 	async execute(query: GetOidcSessionsQuery): Promise<unknown> {

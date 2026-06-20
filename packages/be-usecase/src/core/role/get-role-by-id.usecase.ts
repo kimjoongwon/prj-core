@@ -1,9 +1,9 @@
 import { RoleAggregate } from "@cocrepo/aggregate";
 import { GetRoleByIdQuery } from "@cocrepo/command";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetRoleByIdQuery)
-export class GetRoleByIdUseCase implements IQueryHandler<GetRoleByIdQuery> {
+export class GetRoleByIdUseCase {
 	constructor(private readonly rolesService: RoleAggregate) {}
 
 	execute(query: GetRoleByIdQuery): Promise<unknown> {

@@ -1,11 +1,9 @@
 import { TranslationCatalogAggregate } from "@cocrepo/aggregate";
 import { InvalidateTranslationLanguageCacheCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(InvalidateTranslationLanguageCacheCommand)
-export class InvalidateTranslationLanguageCacheUseCase
-	implements ICommandHandler<InvalidateTranslationLanguageCacheCommand>
-{
+export class InvalidateTranslationLanguageCacheUseCase {
 	constructor(
 		private readonly translationCatalogService: TranslationCatalogAggregate,
 	) {}

@@ -14,7 +14,8 @@
   "scripts": {
     "build": "tsc --build",
     "start:dev": "tsc --build --watch",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
+    "type-check:prod": "tsc --noEmit",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage"

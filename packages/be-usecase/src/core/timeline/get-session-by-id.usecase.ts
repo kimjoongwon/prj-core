@@ -1,11 +1,9 @@
 import { TimelineAggregate } from "@cocrepo/aggregate";
 import { GetSessionByIdQuery } from "@cocrepo/command";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetSessionByIdQuery)
-export class GetSessionByIdUseCase
-	implements IQueryHandler<GetSessionByIdQuery>
-{
+export class GetSessionByIdUseCase {
 	constructor(private readonly timelinesService: TimelineAggregate) {}
 
 	execute(query: GetSessionByIdQuery): Promise<unknown> {

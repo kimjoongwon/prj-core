@@ -1,11 +1,9 @@
 import { SecurityPolicyAggregate } from "@cocrepo/aggregate";
 import { GetSecurityPolicyQuery } from "@cocrepo/command";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetSecurityPolicyQuery)
-export class GetDefaultSecurityPolicyUseCase
-	implements IQueryHandler<GetSecurityPolicyQuery>
-{
+export class GetDefaultSecurityPolicyUseCase {
 	constructor(
 		private readonly securityPolicyService: SecurityPolicyAggregate,
 	) {}

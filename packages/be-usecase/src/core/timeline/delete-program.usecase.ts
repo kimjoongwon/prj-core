@@ -1,11 +1,9 @@
 import { TimelineAggregate } from "@cocrepo/aggregate";
 import { DeleteProgramCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(DeleteProgramCommand)
-export class DeleteProgramUseCase
-	implements ICommandHandler<DeleteProgramCommand>
-{
+export class DeleteProgramUseCase {
 	constructor(private readonly timelinesService: TimelineAggregate) {}
 
 	execute(command: DeleteProgramCommand): Promise<void> {

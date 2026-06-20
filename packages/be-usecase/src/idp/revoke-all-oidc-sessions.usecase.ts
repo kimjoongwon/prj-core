@@ -1,11 +1,9 @@
 import { OidcSessionAggregate } from "@cocrepo/aggregate";
 import { RevokeAllOidcSessionsCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(RevokeAllOidcSessionsCommand)
-export class RevokeAllOidcSessionsUseCase
-	implements ICommandHandler<RevokeAllOidcSessionsCommand>
-{
+export class RevokeAllOidcSessionsUseCase {
 	constructor(private readonly oidcSessionService: OidcSessionAggregate) {}
 
 	execute(): Promise<number> {

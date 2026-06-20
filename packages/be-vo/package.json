@@ -19,7 +19,8 @@
     }
   },
   "scripts": {
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
+    "type-check:prod": "tsc --noEmit",
     "build": "tsc --build",
     "start:dev": "tsc --build --watch",
     "format": "biome check --write .",

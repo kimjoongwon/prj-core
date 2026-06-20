@@ -11,7 +11,7 @@ import {
 	UnauthorizedException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 import { JwtService } from "@nestjs/jwt";
 import {
 	IDP_INTERACTION_LOGIN_SERVICE,
@@ -27,7 +27,7 @@ import {
 import { buildSessionId, MOBILE_NATIVE_CLIENT_ID } from "./auth-support";
 
 @CommandHandler(NativeLoginCommand)
-export class NativeLoginUseCase implements ICommandHandler<NativeLoginCommand> {
+export class NativeLoginUseCase {
 	constructor(
 		private readonly usersService: UserService,
 		private readonly tokenStorageService: TokenStorageService,

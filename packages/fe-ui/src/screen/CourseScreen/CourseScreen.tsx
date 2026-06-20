@@ -12,8 +12,8 @@ import type {
 	CourseRow,
 	CourseSection,
 	CourseSectionId,
-} from "../../feature/course";
-import { CourseConsole } from "../../feature/course";
+} from "../../feature/CourseConsole";
+import { CourseConsole } from "../../feature/CourseConsole";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 import { PageTitleBar } from "../../widget";

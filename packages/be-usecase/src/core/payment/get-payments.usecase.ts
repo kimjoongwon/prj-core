@@ -4,10 +4,10 @@ import { COMMON_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/service";
 import { buildOffsetStatsPaginatedResponse } from "@cocrepo/toolkit";
 import { UnauthorizedException } from "@nestjs/common";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetPaymentsQuery)
-export class GetPaymentsUseCase implements IQueryHandler<GetPaymentsQuery> {
+export class GetPaymentsUseCase {
 	constructor(
 		private readonly paymentService: PaymentAggregate,
 		private readonly spaceContext: SpaceContext,

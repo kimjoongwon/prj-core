@@ -1,9 +1,9 @@
 import { AssetAggregate } from "@cocrepo/aggregate";
 import { MoveAssetCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(MoveAssetCommand)
-export class MoveAssetUseCase implements ICommandHandler<MoveAssetCommand> {
+export class MoveAssetUseCase {
 	constructor(private readonly assetService: AssetAggregate) {}
 
 	execute(command: MoveAssetCommand): Promise<unknown> {

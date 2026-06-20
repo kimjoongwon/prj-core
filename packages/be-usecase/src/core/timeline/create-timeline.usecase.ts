@@ -3,12 +3,10 @@ import { CreateTimelineCommand } from "@cocrepo/command";
 import { TIMELINE_ERRORS } from "@cocrepo/constant";
 import { AuthContext, SpaceContext } from "@cocrepo/service";
 import { UnauthorizedException } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(CreateTimelineCommand)
-export class CreateTimelineUseCase
-	implements ICommandHandler<CreateTimelineCommand>
-{
+export class CreateTimelineUseCase {
 	constructor(
 		private readonly timelinesService: TimelineAggregate,
 		private readonly authContext: AuthContext,

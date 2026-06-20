@@ -2,14 +2,12 @@ import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { OidcClient } from "@cocrepo/client";
 import { GetAuthLoginRedirectCommand } from "@cocrepo/command";
 import { TokenStorageService } from "@cocrepo/service";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 import { resolveOidcClient } from "./auth-oidc.support";
 import { toProtocolClientConfig } from "./auth-support";
 
 @CommandHandler(GetAuthLoginRedirectCommand)
-export class GetAuthLoginRedirectUseCase
-	implements ICommandHandler<GetAuthLoginRedirectCommand>
-{
+export class GetAuthLoginRedirectUseCase {
 	constructor(
 		private readonly oidcClientService: OidcClientAggregate,
 		private readonly oidcClient: OidcClient,

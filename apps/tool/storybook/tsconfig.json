@@ -25,6 +25,7 @@
   },
   "include": [
     ".storybook",
+    "../../../packages/fe-ui/src/**/*.d.ts",
     "../../../packages/fe-ui/src/**/*.stories.ts",
     "../../../packages/fe-ui/src/**/*.stories.tsx",
     "**/*.ts",

@@ -6,12 +6,12 @@ import {
 	Input,
 	PageTitleBar,
 	SectionSurface,
-	Select,
 	TextArea,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
+import { Select } from "../../selection/Select/Select";
 import type {
 	TimelineSessionScreenCycleType,
 	TimelineSessionScreenDayOfWeek,

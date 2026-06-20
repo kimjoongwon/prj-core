@@ -1,11 +1,9 @@
 import { IdpAccountAggregate } from "@cocrepo/aggregate";
 import { GrantIdpAccountAccessCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(GrantIdpAccountAccessCommand)
-export class GrantIdpAccountAccessUseCase
-	implements ICommandHandler<GrantIdpAccountAccessCommand>
-{
+export class GrantIdpAccountAccessUseCase {
 	constructor(private readonly idpAccountService: IdpAccountAggregate) {}
 
 	execute(command: GrantIdpAccountAccessCommand): Promise<unknown> {

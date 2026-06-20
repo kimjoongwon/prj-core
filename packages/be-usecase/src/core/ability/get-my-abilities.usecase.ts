@@ -3,13 +3,11 @@ import { GetMyAbilitiesQuery } from "@cocrepo/command";
 import { CONTEXT_KEYS, USER_ERRORS } from "@cocrepo/constant";
 import { type UserDto } from "@cocrepo/dto";
 import { Logger, UnauthorizedException } from "@nestjs/common";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 import { ClsService } from "nestjs-cls";
 
 @QueryHandler(GetMyAbilitiesQuery)
-export class GetMyAbilitiesUseCase
-	implements IQueryHandler<GetMyAbilitiesQuery>
-{
+export class GetMyAbilitiesUseCase {
 	private readonly logger = new Logger(GetMyAbilitiesUseCase.name);
 
 	constructor(

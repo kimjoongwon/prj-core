@@ -1,11 +1,9 @@
 import { GetUserDetailForSpaceQuery } from "@cocrepo/command";
 import { UserService } from "@cocrepo/service";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetUserDetailForSpaceQuery)
-export class GetUserDetailForSpaceUseCase
-	implements IQueryHandler<GetUserDetailForSpaceQuery>
-{
+export class GetUserDetailForSpaceUseCase {
 	constructor(private readonly usersService: UserService) {}
 
 	execute(query: GetUserDetailForSpaceQuery): Promise<unknown> {

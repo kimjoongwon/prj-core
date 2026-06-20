@@ -1,11 +1,9 @@
 import { InquiryAggregate } from "@cocrepo/aggregate";
 import { FillInquiryFormWithAiQuery } from "@cocrepo/command";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(FillInquiryFormWithAiQuery)
-export class FillInquiryFormWithAiUseCase
-	implements IQueryHandler<FillInquiryFormWithAiQuery>
-{
+export class FillInquiryFormWithAiUseCase {
 	constructor(private readonly inquiryService: InquiryAggregate) {}
 
 	async execute(query: FillInquiryFormWithAiQuery): Promise<unknown> {

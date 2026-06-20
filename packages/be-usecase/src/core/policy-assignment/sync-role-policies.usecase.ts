@@ -1,11 +1,9 @@
 import { PolicyAssignmentAggregate } from "@cocrepo/aggregate";
 import { SyncRolePoliciesCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(SyncRolePoliciesCommand)
-export class SyncRolePoliciesUseCase
-	implements ICommandHandler<SyncRolePoliciesCommand>
-{
+export class SyncRolePoliciesUseCase {
 	constructor(
 		private readonly policyAssignmentService: PolicyAssignmentAggregate,
 	) {}

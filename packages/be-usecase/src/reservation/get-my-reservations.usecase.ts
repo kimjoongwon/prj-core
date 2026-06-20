@@ -2,13 +2,11 @@ import { ReservationAggregate } from "@cocrepo/aggregate";
 import { GetMyReservationsQuery } from "@cocrepo/command";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
 import type { OffsetPaginatedResponse } from "@cocrepo/type";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 import { ReservationUseCaseContext } from "./reservation-context";
 
 @QueryHandler(GetMyReservationsQuery)
-export class GetMyReservationsUseCase
-	implements IQueryHandler<GetMyReservationsQuery>
-{
+export class GetMyReservationsUseCase {
 	constructor(
 		private readonly reservationService: ReservationAggregate,
 		private readonly context: ReservationUseCaseContext,

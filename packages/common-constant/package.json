@@ -24,6 +24,8 @@
     "generate:admin-route-catalog": "node ./scripts/generate-admin-route-catalog.mjs",
     "start:dev": "node ./scripts/start-dev.mjs",
     "build": "pnpm run generate:admin-route-catalog && tsc --build --force",
+    "type-check": "tsc --noEmit",
+    "type-check:prod": "tsc --noEmit",
     "format": "biome check --write ."
   },
   "keywords": [],

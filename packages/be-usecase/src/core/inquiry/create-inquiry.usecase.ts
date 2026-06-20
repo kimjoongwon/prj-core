@@ -1,11 +1,9 @@
 import { InquiryAggregate } from "@cocrepo/aggregate";
 import { CreateInquiryCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(CreateInquiryCommand)
-export class CreateInquiryUseCase
-	implements ICommandHandler<CreateInquiryCommand>
-{
+export class CreateInquiryUseCase {
 	constructor(private readonly inquiryService: InquiryAggregate) {}
 
 	execute(command: CreateInquiryCommand): Promise<unknown> {

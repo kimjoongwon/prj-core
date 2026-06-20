@@ -15,6 +15,7 @@
   "scripts": {
     "reference:prepare": "pnpm --filter @cocrepo/constant build",
     "type-check": "tsc --noEmit",
+    "type-check:prod": "tsc --noEmit -p tsconfig.prod.json",
     "generate": "prisma generate && node ./scripts/fix-generated-client-module-format.mjs",
     "schema:check": "tsx ./scripts/validate-schema-conventions.ts",
     "build": "rm -rf dist && pnpm run schema:check && tsc --build",

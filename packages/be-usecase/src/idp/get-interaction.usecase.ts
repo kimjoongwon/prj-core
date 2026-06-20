@@ -1,12 +1,10 @@
 import { GetInteractionQuery } from "@cocrepo/command";
 import { Inject } from "@nestjs/common";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 import { IDP_INTERACTION_SERVICE, type InteractionPort } from "./idp.ports";
 
 @QueryHandler(GetInteractionQuery)
-export class GetInteractionUseCase
-	implements IQueryHandler<GetInteractionQuery>
-{
+export class GetInteractionUseCase {
 	private readonly isDev =
 		process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "staging";
 

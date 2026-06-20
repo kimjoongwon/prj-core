@@ -7,7 +7,7 @@ import {
 import { NativeRefreshToken, SessionId } from "@cocrepo/vo";
 import { UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 import { JwtService } from "@nestjs/jwt";
 import {
 	buildNativeAuthResponse,
@@ -15,9 +15,7 @@ import {
 } from "./auth-native-session.support";
 
 @CommandHandler(RefreshNativeMobileSessionCommand)
-export class RefreshNativeMobileSessionUseCase
-	implements ICommandHandler<RefreshNativeMobileSessionCommand>
-{
+export class RefreshNativeMobileSessionUseCase {
 	constructor(
 		private readonly usersService: UserService,
 		private readonly tokenStorageService: TokenStorageService,

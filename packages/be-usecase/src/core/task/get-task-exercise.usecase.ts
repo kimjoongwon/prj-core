@@ -1,12 +1,10 @@
 import { TaskAggregate } from "@cocrepo/aggregate";
 import { GetTaskExerciseQuery } from "@cocrepo/command";
 import { SpaceScope as SpaceScopeEnum } from "@cocrepo/dto";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetTaskExerciseQuery)
-export class GetTaskExerciseUseCase
-	implements IQueryHandler<GetTaskExerciseQuery>
-{
+export class GetTaskExerciseUseCase {
 	constructor(private readonly taskService: TaskAggregate) {}
 
 	execute(query: GetTaskExerciseQuery): Promise<unknown> {

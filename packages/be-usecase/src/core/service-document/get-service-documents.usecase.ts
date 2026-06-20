@@ -1,12 +1,10 @@
 import { ServiceDocumentAggregate } from "@cocrepo/aggregate";
 import { GetServiceDocumentsQuery } from "@cocrepo/command";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetServiceDocumentsQuery)
-export class GetServiceDocumentsUseCase
-	implements IQueryHandler<GetServiceDocumentsQuery>
-{
+export class GetServiceDocumentsUseCase {
 	constructor(
 		private readonly serviceDocumentService: ServiceDocumentAggregate,
 	) {}

@@ -16,7 +16,8 @@
     "test:e2e:build:ios": "detox build --configuration ios.sim.debug",
     "test:e2e:build:android": "detox build --configuration android.emu.debug",
     "doctor": "expo-doctor",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
+    "type-check:prod": "tsc --noEmit"
   },
   "dependencies": {
     "@cocrepo/api": "workspace:*",

@@ -1,9 +1,9 @@
 import { RoleAggregate } from "@cocrepo/aggregate";
 import { DeleteRoleCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(DeleteRoleCommand)
-export class DeleteRoleUseCase implements ICommandHandler<DeleteRoleCommand> {
+export class DeleteRoleUseCase {
 	constructor(private readonly rolesService: RoleAggregate) {}
 
 	execute(command: DeleteRoleCommand): Promise<unknown> {

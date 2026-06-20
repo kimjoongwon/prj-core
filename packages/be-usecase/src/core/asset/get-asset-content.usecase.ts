@@ -1,11 +1,9 @@
 import { AssetAggregate } from "@cocrepo/aggregate";
 import { GetAssetContentQuery } from "@cocrepo/command";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetAssetContentQuery)
-export class GetAssetContentUseCase
-	implements IQueryHandler<GetAssetContentQuery>
-{
+export class GetAssetContentUseCase {
 	constructor(private readonly assetService: AssetAggregate) {}
 
 	execute(query: GetAssetContentQuery): Promise<unknown> {

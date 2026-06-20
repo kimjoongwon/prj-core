@@ -7,7 +7,7 @@ import {
 import { ConfirmEmailVerificationCommand } from "@cocrepo/command";
 import { UserService } from "@cocrepo/service";
 import { BadRequestException, Logger } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 import {
 	createUserForVerifiedSignUp,
 	getClientLoginUrl,
@@ -15,9 +15,7 @@ import {
 import { buildLoginRedirectUrl, DEFAULT_OIDC_CLIENT_ID } from "./auth-support";
 
 @CommandHandler(ConfirmEmailVerificationCommand)
-export class ConfirmEmailVerificationUseCase
-	implements ICommandHandler<ConfirmEmailVerificationCommand>
-{
+export class ConfirmEmailVerificationUseCase {
 	private readonly logger = new Logger(ConfirmEmailVerificationUseCase.name);
 
 	constructor(

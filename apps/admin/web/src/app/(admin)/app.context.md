@@ -317,7 +317,7 @@ Space
 | 3 | COURSE-S3-QA-001 | `qa-fe-e2e-testing` | Course route sidecar E2E assertions for API-backed data and empty states |
 | 2 | PAYMENT-S2-BE-001 | `be-prisma-builder`, `be-entity-builder`, `be-dto-builder`, `be-repository-builder`, `be-service-builder`, `be-usecase-builder`, `be-controller-builder` | `packages/be-prisma/schema/billing/payment.prisma`, `packages/be-service/src/payment/payment.service.ts`, `apps/core/api/src/module/payments` |
 | 3 | PAYMENT-S3-API-001 | `fe-api-integrator` | `pnpm --filter=@cocrepo/api codegen:server`, generated `packages/fe-api/src/core/payments` |
-| 3 | PAYMENT-S3-FE-001 | `fe-api-integrator`, `fe-route-agent`, `fe-feature-agent`, `fe-widget-agent` | `apps/admin/web/src/app/(admin)/payments/page.tsx`, `usePaymentData`, `packages/fe-ui/src/screen/PaymentScreen`, `packages/fe-ui/src/feature/payment`, `packages/fe-ui/src/widget/payment` |
+| 3 | PAYMENT-S3-FE-001 | `fe-api-integrator`, `fe-route-agent`, `fe-feature-agent`, `fe-widget-agent` | `apps/admin/web/src/app/(admin)/payments/page.tsx`, `usePaymentData`, `packages/fe-ui/src/screen/PaymentScreen`, `packages/fe-ui/src/feature/PaymentConsole`, `packages/fe-ui/src/widget` |
 
 ## Inquiry 도메인 맥락
 

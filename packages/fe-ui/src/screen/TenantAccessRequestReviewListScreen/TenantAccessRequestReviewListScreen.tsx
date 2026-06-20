@@ -15,7 +15,7 @@ import { PageTitleBar } from "../../widget/PageTitleBar";
 import {
 	TenantAccessRequestStatusBadge,
 	TenantAccessRequestSummary,
-} from "../../widget/tenant-access-request";
+} from "../../widget";
 
 export interface TenantAccessRequestReviewListScreenProps {
 	requests?: TenantAccessRequestDto[];

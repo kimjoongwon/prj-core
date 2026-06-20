@@ -6,12 +6,12 @@ import {
 	Input,
 	PageTitleBar,
 	SectionSurface,
-	Select,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
+import { Select } from "../../selection/Select/Select";
 export interface GroundEditScreenProps {
 	groundName?: string;
 	name: string;

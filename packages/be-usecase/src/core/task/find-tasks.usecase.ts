@@ -2,10 +2,10 @@ import { TaskAggregate } from "@cocrepo/aggregate";
 import { FindTasksQuery } from "@cocrepo/command";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
 import { Logger } from "@nestjs/common";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(FindTasksQuery)
-export class FindTasksUseCase implements IQueryHandler<FindTasksQuery> {
+export class FindTasksUseCase {
 	private readonly logger = new Logger(FindTasksUseCase.name);
 
 	constructor(private readonly taskService: TaskAggregate) {}

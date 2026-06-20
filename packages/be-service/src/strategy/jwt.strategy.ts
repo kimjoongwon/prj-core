@@ -1,6 +1,5 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { User } from "@cocrepo/entity";
-import { AuthCacheService, UserService } from "@cocrepo/service";
 import type { AuthConfig } from "@cocrepo/type";
 import {
 	forwardRef,
@@ -17,8 +16,10 @@ import { Request } from "express";
 import jwksRsa from "jwks-rsa";
 import { ClsService } from "nestjs-cls";
 import { ExtractJwt, Strategy } from "passport-jwt";
+import { AuthCacheService } from "../auth/auth-cache.service";
 import type { OidcServerConfig } from "./oidc-server-config";
 import { parseJwtHeader } from "./parse-jwt-header";
+import { UserService } from "../user/user.service";
 
 @Global()
 @Injectable()

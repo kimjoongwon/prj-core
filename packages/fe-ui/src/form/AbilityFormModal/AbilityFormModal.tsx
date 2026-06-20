@@ -14,7 +14,7 @@ import { Input } from "../../input/Input/Input";
 import { Checkbox } from "../../selection/Checkbox/Checkbox";
 import { RadioGroup } from "../../selection/RadioGroup/RadioGroup";
 import { Select as HeroSelect } from "../../selection/Select/Select";
-import { ConditionEditor } from "../../widget/ability/ConditionEditor";
+import { ConditionEditor } from "../../widget/ConditionEditor";
 
 /**
  * Subject 정보

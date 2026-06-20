@@ -1,11 +1,9 @@
 import { ServiceDocumentAggregate } from "@cocrepo/aggregate";
 import { DeleteServiceDocumentCommand } from "@cocrepo/command";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(DeleteServiceDocumentCommand)
-export class DeleteServiceDocumentUseCase
-	implements ICommandHandler<DeleteServiceDocumentCommand>
-{
+export class DeleteServiceDocumentUseCase {
 	constructor(
 		private readonly serviceDocumentService: ServiceDocumentAggregate,
 	) {}

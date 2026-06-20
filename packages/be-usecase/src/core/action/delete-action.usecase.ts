@@ -2,12 +2,10 @@ import { ActionAggregate } from "@cocrepo/aggregate";
 import { DeleteActionCommand } from "@cocrepo/command";
 import { ACTION_ERRORS } from "@cocrepo/constant";
 import { BadRequestException } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(DeleteActionCommand)
-export class DeleteActionUseCase
-	implements ICommandHandler<DeleteActionCommand>
-{
+export class DeleteActionUseCase {
 	constructor(private readonly actionsService: ActionAggregate) {}
 
 	async execute(command: DeleteActionCommand): Promise<unknown> {

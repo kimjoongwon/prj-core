@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import * as utils from "../../index.ts";
+import * as utils from "../../index";
 
 describe("Index exports", () => {
 	it("should export all utility functions", () => {

@@ -28,7 +28,8 @@ COPY --from=setup /app/out/full/ ./
 # them without relying on extra runner-stage copies.
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     --mount=type=cache,id=turbo,target=/app/.turbo \
-    sh -c 'pnpm exec turbo build --filter=proposal-web... && \
+    sh -c 'pnpm exec turbo type-check:prod --filter=proposal-web... && \
+      pnpm exec turbo build --filter=proposal-web... && \
       if [ -d apps/proposal/web/.next/static ]; then \
         mkdir -p apps/proposal/web/.next/standalone/apps/proposal/web/.next && \
         cp -R apps/proposal/web/.next/static apps/proposal/web/.next/standalone/apps/proposal/web/.next/static; \

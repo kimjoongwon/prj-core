@@ -2,12 +2,10 @@ import { AbilityAggregate } from "@cocrepo/aggregate";
 import { UpdateAbilityCommand } from "@cocrepo/command";
 import { ABILITY_ERRORS } from "@cocrepo/constant";
 import { NotFoundException } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(UpdateAbilityCommand)
-export class UpdateAbilityUseCase
-	implements ICommandHandler<UpdateAbilityCommand>
-{
+export class UpdateAbilityUseCase {
 	constructor(private readonly abilitiesService: AbilityAggregate) {}
 
 	async execute(command: UpdateAbilityCommand): Promise<unknown> {

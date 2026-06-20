@@ -6,12 +6,12 @@ jest.mock("react-native", () => ({
 }));
 
 describe("VStack", () => {
-	const renderVStack = (props: VStackProps) =>
+	const renderVStack = (props: VStackProps): ReactElement<VStackProps> =>
 		(
 			VStack as unknown as {
 				render: (props: VStackProps, ref: null) => ReactElement;
 			}
-		).render(props, null);
+		).render(props, null) as ReactElement<VStackProps>;
 
 	it("기본 세로 리듬과 section gap을 적용해야 한다", () => {
 		const stack = renderVStack({

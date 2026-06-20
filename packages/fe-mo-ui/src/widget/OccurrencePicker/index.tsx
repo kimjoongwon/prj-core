@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import { tv } from "tailwind-variants";
 import { Text } from "../../data-display/Text";
 import {
-  SelectableCardList,
+  PureSelectableCardList as SelectableCardList,
   type SelectableCardItem,
 } from "../../selection/SelectableCardList";
 export type OccurrencePickerSessionType =

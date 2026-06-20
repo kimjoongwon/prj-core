@@ -8,8 +8,8 @@ import type {
 	PaymentQueryState,
 	PaymentRow,
 	PaymentSummary,
-} from "../../feature/payment";
-import { PaymentConsole } from "../../feature/payment";
+} from "../../feature/PaymentConsole";
+import { PaymentConsole } from "../../feature/PaymentConsole";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 import { PageTitleBar } from "../../widget";

@@ -3,14 +3,12 @@ import { SetCurrentSpaceCommand } from "@cocrepo/command";
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { SpaceDto, UserDto } from "@cocrepo/dto";
 import { BadRequestException, ForbiddenException } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 import { ClsService } from "nestjs-cls";
 import { getAccessibleSpacesForUser } from "./auth-account.support";
 
 @CommandHandler(SetCurrentSpaceCommand)
-export class SetCurrentSpaceUseCase
-	implements ICommandHandler<SetCurrentSpaceCommand>
-{
+export class SetCurrentSpaceUseCase {
 	constructor(
 		private readonly cls: ClsService,
 		private readonly spacesService: SpaceAggregate,

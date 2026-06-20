@@ -4,10 +4,10 @@ import { TIMELINE_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/service";
 import { buildOffsetStatsPaginatedResponse } from "@cocrepo/toolkit";
 import { UnauthorizedException } from "@nestjs/common";
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { QueryHandler } from "@nestjs/cqrs";
 
 @QueryHandler(GetTimelinesQuery)
-export class GetTimelinesUseCase implements IQueryHandler<GetTimelinesQuery> {
+export class GetTimelinesUseCase {
 	constructor(
 		private readonly timelinesService: TimelineAggregate,
 		private readonly spaceContext: SpaceContext,

@@ -3,12 +3,10 @@ import { CreateCommunityPostCommand } from "@cocrepo/command";
 import { COMMON_ERRORS } from "@cocrepo/constant";
 import { AuthContext, SpaceContext } from "@cocrepo/service";
 import { UnauthorizedException } from "@nestjs/common";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(CreateCommunityPostCommand)
-export class CreateCommunityPostUseCase
-	implements ICommandHandler<CreateCommunityPostCommand>
-{
+export class CreateCommunityPostUseCase {
 	constructor(
 		private readonly contentService: ContentAggregate,
 		private readonly authContext: AuthContext,

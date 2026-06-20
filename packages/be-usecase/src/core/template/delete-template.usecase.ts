@@ -1,11 +1,9 @@
 import { DeleteTemplateCommand } from "@cocrepo/command";
 import { TemplateService } from "@cocrepo/service";
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler } from "@nestjs/cqrs";
 
 @CommandHandler(DeleteTemplateCommand)
-export class DeleteTemplateUseCase
-	implements ICommandHandler<DeleteTemplateCommand>
-{
+export class DeleteTemplateUseCase {
 	constructor(private readonly templateService: TemplateService) {}
 
 	async execute(command: DeleteTemplateCommand): Promise<void> {

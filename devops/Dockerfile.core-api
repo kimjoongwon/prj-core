@@ -74,7 +74,8 @@ WORKDIR /app
 
 # 🏗️ Turbo를 사용한 프로젝트 빌드
 # - 모든 관련 패키지와 종속성을 최적화된 순서로 빌드
-RUN pnpm exec turbo build --concurrency=1
+RUN pnpm exec turbo type-check:prod --filter=core-api... --concurrency=1 && \
+    pnpm exec turbo build --concurrency=1
 
 # ============================================================================
 # 🚀 PRODUCTION STAGE: 운영 환경 컨테이너
